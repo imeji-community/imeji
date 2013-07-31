@@ -29,7 +29,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "conePerson", namespace = "http://imeji.org/terms/metadata")
-@XmlType(propOrder={"coneId", "person", "statement"})
+@XmlType(propOrder = { "coneId", "person", "statement" })
 public class ConePerson extends Metadata
 {
     @j2jResource("http://xmlns.com/foaf/0.1/person")

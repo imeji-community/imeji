@@ -57,7 +57,10 @@ function reset_highlight() {
  */
 function parseId(classname) {
 	var pattern = new RegExp("id_" + "\\S*");
-	return classname.match(pattern)[0].substring(3);
+	if(classname.match(pattern) != null)
+		return classname.match(pattern)[0].substring(3);
+	else 
+		return null;
 }
 
 /**

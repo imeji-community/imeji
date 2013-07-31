@@ -57,8 +57,8 @@ public class FiltersBean
             URI metadataURI = null;
             if (n != null)
             {
-                if(n.startsWith("No"))
-                    metadataURI =ObjectHelper.getURI(Statement.class, n.substring(3));
+                if (n.startsWith("No"))
+                    metadataURI = ObjectHelper.getURI(Statement.class, n.substring(3));
                 else
                     metadataURI = ObjectHelper.getURI(Statement.class, n);
             }

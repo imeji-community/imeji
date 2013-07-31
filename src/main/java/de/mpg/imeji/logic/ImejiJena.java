@@ -23,8 +23,11 @@ import com.hp.hpl.jena.query.ResultSetFormatter;
 import com.hp.hpl.jena.query.Syntax;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.shared.Lock;
+import com.hp.hpl.jena.shared.LockMRSW;
 import com.hp.hpl.jena.tdb.TDB;
 import com.hp.hpl.jena.tdb.TDBFactory;
+import com.hp.hpl.jena.tdb.sys.LockMRSWLite;
 
 import de.mpg.imeji.logic.util.Counter;
 import de.mpg.imeji.logic.util.StringHelper;
@@ -82,6 +85,7 @@ public class ImejiJena
 
     /**
      * Run the migration instruction (SPARQL Update queries defines in the migration.xml file)
+     * 
      * @throws IOException
      */
     public static void runMigration() throws IOException
@@ -104,7 +108,6 @@ public class ImejiJena
             ImejiSPARQL.execUpdate(migrationRequests);
             logger.info("Migration done!");
         }
-       
     }
 
     /**
@@ -293,7 +296,7 @@ public class ImejiJena
         try
         {
             ImejiJena.imejiDataSet.begin(ReadWrite.READ);
-            for(Iterator<String> it = ImejiJena.imejiDataSet.listNames();it.hasNext();)
+            for (Iterator<String> it = ImejiJena.imejiDataSet.listNames(); it.hasNext();)
             {
                 String s = it.next();
                 System.out.println(s);

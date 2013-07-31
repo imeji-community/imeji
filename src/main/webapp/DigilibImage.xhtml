@@ -1,0 +1,68 @@
+<f:view encoding="UTF-8" locale="#{SessionBean.locale}" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" >
+    <f:loadBundle var="lbl" basename="labels"/>
+    <f:loadBundle var="msg" basename="messages"/>
+    <html xmlns="http://www.w3.org/1999/xhtml">
+        <h:head>
+       		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+            <meta http-equiv="pragma" content="no-cache"/>
+            <meta http-equiv="cache-control" content="no-cache"/>
+            <meta http-equiv="expires" content="0"/>
+            <meta name="viewport" content="initial-scale=1.0"/>
+            
+            <title><h:outputText value="imeji - Digilib jQuery: fullscreen"/></title>
+            
+            <link rel="shortcut icon" type="image/x-ico" href="#{Navigation.applicationUrl}resources/icon/imeji.ico"/>
+            <link rel="stylesheet" href="#{Navigation.applicationUrl}resources/css/old_style/themes/skin_darkGrey/styles/theme.css" type="text/css" media="all"/>
+            <style type="text/css">
+	            body {
+	                 background: silver;
+	            }
+        	</style>
+        	<link rel="stylesheet" type="text/css" href="#{Navigation.applicationUrl}resources/digilib/jquery/jquery.digilib.css" />
+        	<link rel="stylesheet" type="text/css" href="#{Navigation.applicationUrl}resources/digilib/jquery/jquery.range.css" />
+            
+			<h:outputStylesheet library="css" name="basic.css"></h:outputStylesheet>
+			<h:outputStylesheet library="css/theme_default" name="style.css" id="themeDefault"></h:outputStylesheet>
+			
+			<script type="text/javascript" language="JavaScript">var homeURL = '<h:outputText value="#{Navigation.applicationUrl}"/>';</script>  
+			<script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/eSciDoc_inc.js"></script>
+			<script type="text/javascript" language="JavaScript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+			<script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
+			
+			<script type="text/javascript" src="#{Navigation.applicationUrl}resources/digilib/jquery/jquery.js"></script>
+	        <script type="text/javascript" src="#{Navigation.applicationUrl}resources/digilib/jquery/jquery.cookie.js"></script>
+	        <script type="text/javascript" src="#{Navigation.applicationUrl}resources/digilib/jquery/jquery.digilib.js"></script>
+	        <script type="text/javascript" src="#{Navigation.applicationUrl}resources/digilib/jquery/jquery.digilib.geometry.js"></script>
+	        <script type="text/javascript" src="#{Navigation.applicationUrl}resources/digilib/jquery/jquery.digilib.arrows.js"></script>
+	        <script type="text/javascript" src="#{Navigation.applicationUrl}resources/digilib/jquery/jquery.range.js"></script>
+	        
+	        <script type="text/javascript" src="#{Navigation.applicationUrl}resources/digilib/jquery/jquery.digilib.buttons.js"></script>
+	        <script type="text/javascript" src="#{Navigation.applicationUrl}resources/digilib/jquery/jquery.digilib.dialogs.js"></script>
+	        <script type="text/javascript" src="#{Navigation.applicationUrl}resources/digilib/jquery/jquery.digilib.sliders.js"></script>
+	        <script type="text/javascript" src="#{Navigation.applicationUrl}resources/digilib/jquery/jquery.digilib.birdseye.js"></script>
+	        <script type="text/javascript" src="#{Navigation.applicationUrl}resources/digilib/jquery/jquery.digilib.marks.js"></script>
+	        <script type="text/javascript" src="#{Navigation.applicationUrl}resources/digilib/jquery/jquery.digilib.regions.js"></script>
+
+	        <script type="text/javascript">
+	            $(document).ready(function(){
+	                var opts = {
+	                    interactionMode : 'fullscreen',
+	                    showRegionNumbers : true
+	                    };
+	                var $div = $('div#digilib');                
+	                $div.digilib(opts);
+	            });
+	
+	        </script>
+			
+        </h:head>
+        <h:body lang="#{SessionBean.locale}">
+            	
+			<div id="digilib">
+				<p>digilib doesn't work! Please switch on Javascript or notify the server administrator!</p>
+				<img src="http://digilib.berlios.de/images/digilib-logo-big.png" />
+			</div>
+                            
+        </h:body>
+    </html>
+</f:view>

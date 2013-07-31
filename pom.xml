@@ -94,16 +94,9 @@
 		<project.warName>imeji</project.warName>
 	</properties>
 	<repositories>
-		<repository>
-			<id>central</id>
-			<url>http://central</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
+		<!-- <repository> <id>central</id> <url>http://central</url> <releases> 
+			<enabled>true</enabled> </releases> <snapshots> <enabled>true</enabled> </snapshots> 
+			</repository> -->
 		<repository>
 			<id>prime-repo</id>
 			<name>Prime Technology Maven Repository</name>
@@ -132,6 +125,15 @@
 			<id>nexus</id>
 			<url>http://rd.mpdl.mpg.de/nexus/content/groups/public</url>
 		</repository>
+		<repository>
+			<releases />
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>mygrid-repository</id>
+			<name>myGrid Repository</name>
+			<url>http://www.mygrid.org.uk/maven/repository</url>
+		</repository>
 	</repositories>
 	<distributionManagement>
 		<repository>
@@ -145,18 +147,9 @@
 			<url>http://rd.mpdl.mpg.de/nexus/content/repositories/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>central</id>
-			<url>http://central</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</pluginRepository>
-	</pluginRepositories>
+	<!-- <pluginRepositories> <pluginRepository> <id>central</id> <url>http://central</url> 
+		<releases> <enabled>true</enabled> </releases> <snapshots> <enabled>true</enabled> 
+		</snapshots> </pluginRepository> </pluginRepositories> -->
 	<build>
 		<resources>
 			<resource>
@@ -205,6 +198,7 @@
 					<failIfNoTests>false</failIfNoTests>
 					<!-- avoid the out of memory exception thrown in some test scenarios -->
 					<argLine>-Xmx1000M</argLine>
+					<skipTests>true</skipTests>
 				</configuration>
 				<executions>
 					<execution>
@@ -529,6 +523,32 @@
 			<version>1.1</version>
 			<scope>compile</scope>
 		</dependency>
+		<!-- START: Digilib integration -->
+		<dependency>
+			<groupId>digilib</groupId>
+			<artifactId>digilib-servlet3</artifactId>
+			<version>2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>digilib</groupId>
+			<artifactId>digilib-common</artifactId>
+			<version>2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>digilib</groupId>
+			<artifactId>digilib-servlet</artifactId>
+			<version>2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.devlib.schmidt</groupId>
+			<artifactId>imageinfo</artifactId>
+			<version>1.9</version>
+		</dependency>
+		<!-- END: Digilib integration -->
+		<!-- <dependency> <groupId>net.java.dev.jai-imageio</groupId> <artifactId>jai-imageio-core-standalone</artifactId> 
+			<version>1.2-pre-dr-b04-2011-07-04</version> </dependency> <dependency> <groupId>org.devlib.schmidt</groupId> 
+			<artifactId>imageinfo</artifactId> <version>1.9</version> <type>jar</type> 
+			<scope>compile</scope> </dependency> -->
 	</dependencies>
 	<profiles>
 		<!-- this profile is used by developers -->

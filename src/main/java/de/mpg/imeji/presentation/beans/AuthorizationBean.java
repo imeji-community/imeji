@@ -80,7 +80,7 @@ public class AuthorizationBean
         delete = security.check(OperationsType.DELETE, user, collection);
         if (collection.getStatus().equals(Status.RELEASED) && security.isSysAdmin(user))
         {
-        	delete = false;
+            delete = false;
         }
     }
 

@@ -14,8 +14,8 @@ public class ItemValidator
     public void valid(File itemListXmlFile, MetadataProfile mdp)
     {
         // This must be changed with the real schema object, according to the chosen parser
-//        ItemSchemaFactory isf = new ItemSchemaFactory();
-//        Object itemSchema = isf.create(mdp);
+        // ItemSchemaFactory isf = new ItemSchemaFactory();
+        // Object itemSchema = isf.create(mdp);
         // TODO
         // If not valid through an exception
     }

@@ -54,6 +54,15 @@ import de.mpg.imeji.presentation.util.PropertyReader;
 @ApplicationScoped
 public class ConfigurationBean
 {
+    /**
+     * 
+     * Enumeration of available configuration 
+     *
+     * @author saquet (initial creation)
+     * @author $Author$ (last modification)
+     * @version $Revision$ $LastChangedDate$
+     *
+     */
     private enum CONFIGURATION
     {
         SNIPPET;

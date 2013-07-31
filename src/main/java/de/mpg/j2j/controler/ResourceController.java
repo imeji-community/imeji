@@ -109,7 +109,6 @@ public class ResourceController
             throw new NotFoundException("Resource " + J2JHelper.getId(o) + " not found!");
         }
         o = rdf2Java.loadResource(o);
-
         return o;
     }
 

@@ -58,7 +58,6 @@ public abstract class CollectionBean
     private int size = 0;
     private Navigation navigation;
 
-
     /**
      * New default {@link CollectionBean}
      */
@@ -68,7 +67,7 @@ public abstract class CollectionBean
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
     }
-    
+
     /**
      * Validate whether the {@link CollectionImeji} values are correct
      * 
@@ -555,7 +554,7 @@ public abstract class CollectionBean
         Authorization auth = new Authorization();
         return auth.isContainerAdmin(sessionBean.getUser(), collection);
     }
-    
+
     public String getPageUrl()
     {
         return navigation.getCollectionUrl() + id;

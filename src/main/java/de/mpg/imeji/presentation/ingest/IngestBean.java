@@ -40,8 +40,7 @@ public class IngestBean
     private String msg = "";
     private File file = null;
 
-
-	/**
+    /**
      * Default constructor
      */
     public IngestBean()
@@ -73,36 +72,40 @@ public class IngestBean
                 ic.ingest(upload(), null);
                 this.success = true;
             }
-            catch (JAXBException e) {
+            catch (JAXBException e)
+            {
                 logger.error("Error parsing item metadata. ", e);
                 error = true;
                 if (e.getLinkedException() != null)
                 {
                     logger.error("Error parsing item metadata. ", e);
                     error = true;
-                    SAXParseException se = (SAXParseException) e.getLinkedException();
+                    SAXParseException se = (SAXParseException)e.getLinkedException();
                     this.msg = se.getMessage();
                 }
                 else
                 {
-               	 this.msg = e.getMessage(); 
+                    this.msg = e.getMessage();
                 }
-			} 
-           catch (SAXParseException e) {
-               logger.error("Error parsing item metadata. ", e);
-               error = true;
-               this.msg = e.getMessage();
-			}
-            catch (ClassCastException e) {
+            }
+            catch (SAXParseException e)
+            {
+                logger.error("Error parsing item metadata. ", e);
+                error = true;
+                this.msg = e.getMessage();
+            }
+            catch (ClassCastException e)
+            {
                 logger.error("Item metadata not valid. ", e);
                 error = true;
                 this.msg = "The metadata of the items are not valid. System failed to convert them to imeji objects.";
- 			}
-           catch (Exception e) {
-               logger.error("Error during the ingest of item metadata. ", e);
-               error = true;
-               this.msg = e.getMessage();
-			}
+            }
+            catch (Exception e)
+            {
+                logger.error("Error during the ingest of item metadata. ", e);
+                error = true;
+                this.msg = e.getMessage();
+            }
         }
         else if ("profile".equals(UrlHelper.getParameterValue("start")))
         {
@@ -115,31 +118,34 @@ public class IngestBean
                 ic.ingest(null, upload());
                 this.success = true;
             }
-             catch (JAXBException e) {
-                 logger.error("Error parsing profile. ", e);
-                 error = true;
-                 if (e.getLinkedException() != null)
-                 {
-                     logger.error("Error parsing profile. ", e);
-                     error = true;
-                     SAXParseException se = (SAXParseException) e.getLinkedException();
-                     this.msg = se.getMessage();
-                 }
-                 else
-                 {
-                	 this.msg = e.getMessage(); 
-                 }
-			} 
-            catch (SAXParseException e) {
+            catch (JAXBException e)
+            {
+                logger.error("Error parsing profile. ", e);
+                error = true;
+                if (e.getLinkedException() != null)
+                {
+                    logger.error("Error parsing profile. ", e);
+                    error = true;
+                    SAXParseException se = (SAXParseException)e.getLinkedException();
+                    this.msg = se.getMessage();
+                }
+                else
+                {
+                    this.msg = e.getMessage();
+                }
+            }
+            catch (SAXParseException e)
+            {
                 logger.error("Error parsing profile. ", e);
                 error = true;
                 this.msg = e.getMessage();
-			}
-            catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 logger.error("Error during ingest. ", e);
                 error = true;
                 this.msg = e.getMessage();
-			}
+            }
         }
         else if (UrlHelper.getParameterBoolean("done"))
         {
@@ -156,15 +162,17 @@ public class IngestBean
         }
     }
 
-    public boolean isSuccess() {
-		return success;
-	}
+    public boolean isSuccess()
+    {
+        return success;
+    }
 
-	public void setSuccess(boolean success) {
-		this.success = success;
-	}
+    public void setSuccess(boolean success)
+    {
+        this.success = success;
+    }
 
-	/**
+    /**
      * Upload the files for the ingest
      * 
      * @return
@@ -172,27 +180,25 @@ public class IngestBean
      */
     public File upload() throws Exception
     {
-    	
         try
         {
-	        HttpServletRequest req = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext()
-	                .getRequest();
-	        boolean isMultipart = ServletFileUpload.isMultipartContent(req);
-	        
-	        if (isMultipart)
-	        {
-	            ServletFileUpload upload = new ServletFileUpload();
-	            // Parse the request
-	            FileItemIterator iter = upload.getItemIterator(req);
-	            while (iter.hasNext())
-	            {
-	                FileItemStream item = iter.next();
-	                if (item != null && item.getName() != null)
-	                {
-	                    file = write2File("itemListXml", item.openStream());
-	                }
-	            }
-	        }
+            HttpServletRequest req = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext()
+                    .getRequest();
+            boolean isMultipart = ServletFileUpload.isMultipartContent(req);
+            if (isMultipart)
+            {
+                ServletFileUpload upload = new ServletFileUpload();
+                // Parse the request
+                FileItemIterator iter = upload.getItemIterator(req);
+                while (iter.hasNext())
+                {
+                    FileItemStream item = iter.next();
+                    if (item != null && item.getName() != null)
+                    {
+                        file = write2File("itemListXml", item.openStream());
+                    }
+                }
+            }
         }
         catch (Exception e)
         {
@@ -304,28 +310,33 @@ public class IngestBean
         return getCollection().getImages().size();
     }
 
-	public boolean isError() {
-		return error;
-	}
+    public boolean isError()
+    {
+        return error;
+    }
 
-	public void setError(boolean error) {
-		this.error = error;
-	}
+    public void setError(boolean error)
+    {
+        this.error = error;
+    }
 
-	public String getMsg() {
-		return msg;
-	}
+    public String getMsg()
+    {
+        return msg;
+    }
 
-	public void setMsg(String msg) {
-		this.msg = msg;
-	}
+    public void setMsg(String msg)
+    {
+        this.msg = msg;
+    }
 
+    public File getFile()
+    {
+        return file;
+    }
 
-	public File getFile() {
-		return file;
-	}
-
-	public void setFile(File file) {
-		this.file = file;
-	}
+    public void setFile(File file)
+    {
+        this.file = file;
+    }
 }

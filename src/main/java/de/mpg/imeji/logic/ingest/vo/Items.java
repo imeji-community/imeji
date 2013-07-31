@@ -27,7 +27,7 @@ public class Items
     public Items(Collection<Item> items)
     {
         this.setItem(new ArrayList<Item>(items));
-    } 
+    }
 
     /**
      * @return the items

@@ -10,12 +10,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
+import com.hp.hpl.jena.sparql.util.Symbol;
+import com.hp.hpl.jena.tdb.TDB;
+
+import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.security.Security;
@@ -32,6 +38,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectCachedLoader;
 import de.mpg.imeji.presentation.util.ObjectLoader;
+import de.mpg.imeji.presentation.util.ProfileHelper;
 import de.mpg.imeji.presentation.util.UrlHelper;
 import de.mpg.j2j.misc.LocalizedString;
 
@@ -362,11 +369,23 @@ public class MdProfileBean
     public void insertMetadata()
     {
         StatementWrapper dragged = wrappers.get(getDraggedStatementPosition());
-        StatementWrapper dropped = wrappers.get(getStatementPosition());
-        dropped = setParentOfDropped(dragged, dropped);
-        dragged.getStatement().setParent(dropped.getStatement().getParent());
-        // Insert BEFORE the next statement with the same level
-        moveWrapper(dragged, getDraggedStatementPosition(), findNextStatementWithSameLevel(dropped.getStatement()) - 1);
+        int before = getStatementPosition() - 1;
+        int to = getStatementPosition();
+        int from = getDraggedStatementPosition();
+        // if (getStatementPosition() > 0)
+        // {
+        // to = getStatementPosition();
+        // }
+        // Get the statement after which the dragged statement is dropped
+        StatementWrapper dropped = wrappers.get(to > 0 ? to - 1 : 0);
+        System.out.println(from + " -> " + before);
+        boolean moved = moveWrapper1(dragged, from, to);
+        if (moved)
+        {
+            dragged.getStatement().setParent(dropped.getStatement().getParent());
+            removeDuplicate(getStatementPosition() > getDraggedStatementPosition());
+        }
+        sort();
     }
 
     /**
@@ -376,9 +395,56 @@ public class MdProfileBean
     {
         StatementWrapper dragged = wrappers.get(getDraggedStatementPosition());
         StatementWrapper dropped = wrappers.get(getStatementPosition());
-        dropped = setParentOfDropped(dragged, dropped);
-        dragged.getStatement().setParent(dropped.getStatement().getId());
-        moveWrapper(dragged, getDraggedStatementPosition(), getStatementPosition());
+        boolean moved = moveWrapper1(dragged, getDraggedStatementPosition(), getStatementPosition() + 1);
+        if (moved)
+        {
+            dropped = setParentOfDropped(dragged, dropped);
+            dragged.getStatement().setParent(dropped.getStatement().getId());
+            removeDuplicate(getStatementPosition() > getDraggedStatementPosition());
+        }
+        sort();
+    }
+
+    private boolean moveWrapper1(StatementWrapper dragged, int from, int to)
+    {
+        // Can't add a statement after a child
+        if (!isAParent(dragged, wrappers.get(to > 0 ? to - 1 : 0)))
+        {
+            if (to < wrappers.size())
+                wrappers.add(to, dragged);
+            else
+                wrappers.add(dragged);
+            moveChilds1(dragged, from, to);
+            return true;
+        }
+        return false;
+    }
+
+    private void moveChilds1(StatementWrapper dragged, int from, int to)
+    {
+        for (StatementWrapper child : getChilds(dragged))
+        {
+            moveWrapper1(child, from, to + 1);
+        }
+    }
+
+    public void removeDuplicate(boolean forward)
+    {
+        if (forward)
+            Collections.reverse(wrappers);
+        HashSet<String> set = new HashSet<String>();
+        List<StatementWrapper> cleanList = new ArrayList<StatementWrapper>();
+        for (StatementWrapper sw : wrappers)
+        {
+            if (!set.contains(sw.getStatementId()))
+            {
+                set.add(sw.getStatementId());
+                cleanList.add(sw);
+            }
+        }
+        wrappers = cleanList;
+        if (forward)
+            Collections.reverse(wrappers);
     }
 
     /**
@@ -432,15 +498,28 @@ public class MdProfileBean
      */
     private StatementWrapper findFirstChild(StatementWrapper parent)
     {
+        List<StatementWrapper> l = getChilds(parent);
+        return (l.size() > 0 ? l.get(0) : null);
+    }
+
+    /**
+     * REturn all Childs of {@link StatementWrapper}
+     * 
+     * @param parent
+     * @return
+     */
+    private List<StatementWrapper> getChilds(StatementWrapper parent)
+    {
+        List<StatementWrapper> l = new ArrayList<StatementWrapper>();
         for (StatementWrapper wrapper : wrappers)
         {
             if (wrapper.getStatement().getParent() != null
                     && wrapper.getStatement().getParent().compareTo(parent.getStatement().getId()) == 0)
             {
-                return wrapper;
+                l.add(wrapper);
             }
         }
-        return null;
+        return l;
     }
 
     /**
@@ -455,16 +534,30 @@ public class MdProfileBean
         if (to < wrappers.size())
         {
             wrappers.add(to + 1, dragged);
-            if (to < from)
-            {
-                wrappers.remove(from + 1);
-            }
-            else
-            {
-                wrappers.remove(from);
-            }
+            from = to < from ? from + 1 : from;
+            wrappers.remove(from);
+            moveChilds(dragged, from, to);
         }
         sort();
+    }
+
+    /**
+     * Move all childs of a {@link StatementWrapper} which has been moved from one to position to another
+     * 
+     * @param dragged
+     * @param from
+     * @param to
+     */
+    private void moveChilds(StatementWrapper dragged, int from, int to)
+    {
+        int i = 0;
+        for (StatementWrapper child : getChilds(dragged))
+        {
+            to = (to + 1) < wrappers.size() ? to + 1 : wrappers.size() - 1;
+            from = to < from ? from + i : from;
+            moveWrapper(child, from, to);
+            i++;
+        }
     }
 
     /**

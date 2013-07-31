@@ -183,7 +183,7 @@ public class StorageUtils
         extension = extension.toLowerCase();
         if ("tif".equals(extension))
         {
-            return "image/" + "tiff";
+            return "image/tiff";
         }
         else if ("jpg".equals(extension) || "jpeg".equals(extension))
         {
@@ -242,7 +242,23 @@ public class StorageUtils
         {
             return "application/pdf";
         }
-        return "video/" + extension;
+        else if ("fit".equals(extension))
+        {
+            return "application/fits";
+        }
+        else if ("mp3".equals(extension) || "mpeg".equals(extension))
+        {
+            return "audio/mpeg";
+        }
+        else if ("wav".equals(extension))
+        {
+            return "audio/x-wav";
+        }
+        else if ("wma".equals(extension))
+        {
+            return "audio/x-ms-wma";
+        }
+        return null;
     }
 
     public static byte[] getBytes(URL url) throws FileNotFoundException

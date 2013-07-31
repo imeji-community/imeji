@@ -3,27 +3,18 @@
  */
 package de.mpg.imeji.presentation.servlet;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Enumeration;
 import java.util.List;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
-import org.apache.log4j.lf5.util.StreamUtils;
-import org.apache.ws.security.util.Base64;
 
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
@@ -32,11 +23,8 @@ import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.StorageController;
-import de.mpg.imeji.logic.storage.impl.ExternalStorage;
-import de.mpg.imeji.logic.storage.impl.InternalStorage;
 import de.mpg.imeji.logic.storage.internal.InternalStorageManager;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
-import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -102,7 +90,6 @@ public class FileServlet extends HttpServlet
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
         String url = req.getParameter("id");
-        boolean sendToDigilib = (req.getParameter("digilib") != null && "1".equals(req.getParameter("digilib")));
         if (req.getRequestedSessionId() != null)
         {
             if (url == null)
@@ -115,15 +102,7 @@ public class FileServlet extends HttpServlet
             SessionBean session = getSession(req);
             if (security.check(OperationsType.READ, getUser(session), loadCollection(url, session)))
             {
-                if (sendToDigilib)
-                {
-                    resp.sendRedirect(digilibUrl + internalStorageRoot
-                            + url.replaceAll(navivation.getApplicationUrl() + SERVLET_PATH, ""));
-                }
-                else
-                {
-                    storageController.read(url, resp.getOutputStream(), false);
-                }
+                storageController.read(url, resp.getOutputStream(), true);
             }
             else
             {

@@ -25,14 +25,30 @@
 			<h:panelGroup styleClass="full_area0 fullItem">
 				<h:panelGroup layout="block" styleClass="full_area2 xTiny_marginLExcl"> 
 					<h:panelGroup layout="block" styleClass="full_area detailedItem">
-						<span>
-							<h:outputLink id="lnkPicFullResolution" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" target="_blank" rendered="#{(imageBean.imageFile and !Property.digilibEnabled) or !imageBean.imageFile}">
+						<span id="webResolutionImage">
+							<h:outputLink id="lnkPicFullResolution" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" target="_blank" rendered="#{(imageBean.imageFile and !Property.digilibEnabled) or imageBean.fitsFile or imageBean.pdfFile}">
 								<h:graphicImage id="picWebResolution" title="#{imageBean.image.filename}" alt="#{imageBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}" />
 							</h:outputLink>
 							<h:outputLink id="lnkPicInternalDigilib" value="#{Navigation.applicationUrl}digilibImage?fn=#{Property.internalStorageBase}/#{imageBean.image.storageId}/original/#{imageBean.itemStorageIdFilename}" target="_blank" rendered="#{imageBean.imageFile and Property.digilibEnabled and (empty Navigation.externalDigilibUrl)}">
 								<h:graphicImage id="picWebResolutionInternalDigilib" title="#{imageBean.image.filename}" alt="#{imageBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}" />
 							</h:outputLink>
 						</span>
+						<h:panelGroup rendered="#{imageBean.videoFile}">
+							<video id="imejiVideoPlayer" src="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" controls="controls" 
+							poster="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}"></video>
+						</h:panelGroup>
+						<h:panelGroup rendered="#{imageBean.audioFile}">
+							<audio id="imejiAudioPlayer" src="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" controls="controls">
+								<h:outputText value="#{lbl.playing} #{imageBean.image.filename} " />
+							</audio>
+							<script>
+								function startAudio(src){
+									$('#webResolutionImage').hide();
+									document.getElementById('imejiAudioPlayer').hidden = false;
+									document.getElementById('imejiAudioPlayer').src= src;
+									}
+							</script>
+						</h:panelGroup>
 					</h:panelGroup>
 					<h:panelGroup styleClass="free_area0 xSmall_marginLIncl" style="color:red;" rendered="#{imageBean.image.status == 'WITHDRAWN'}">
 						<h:outputText styleClass="free_area0_p8 xDouble_marginLIncl" value="#{lbl.withdraw_image_content}" /> 

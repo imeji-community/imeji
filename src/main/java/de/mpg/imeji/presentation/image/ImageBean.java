@@ -5,7 +5,6 @@ package de.mpg.imeji.presentation.image;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +45,6 @@ import de.mpg.imeji.presentation.session.SessionObjectsController;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectCachedLoader;
 import de.mpg.imeji.presentation.util.ObjectLoader;
-import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
 /**
@@ -87,7 +85,6 @@ public class ImageBean
         prettyLink = "pretty:editImage";
         labels = (MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class);
     }
-
 
     /**
      * Initialize the {@link ImageBean}
@@ -568,19 +565,61 @@ public class ImageBean
 
     /**
      * getter
+     * 
      * @return
      */
     public String getItemStorageIdFilename()
     {
         return StringHelper.normalizeFilename(this.item.getFilename());
     }
-    
+
     /**
      * True if the current file is an image
+     * 
      * @return
      */
     public boolean isImageFile()
     {
         return StorageUtils.getMimeType(FilenameUtils.getExtension(item.getFilename())).contains("image");
+    }
+
+    /**
+     * True if the current file is a video
+     * 
+     * @return
+     */
+    public boolean isVideoFile()
+    {
+        return StorageUtils.getMimeType(FilenameUtils.getExtension(item.getFilename())).contains("video");
+    }
+
+    /**
+     * True if the current file is a pdf
+     * 
+     * @return
+     */
+    public boolean isPdfFile()
+    {
+        return StorageUtils.getMimeType(FilenameUtils.getExtension(item.getFilename())).contains("application/pdf");
+    }
+
+    /**
+     * True if the current file is a fits
+     * 
+     * @return
+     */
+    public boolean isFitsFile()
+    {
+        return StorageUtils.getMimeType(FilenameUtils.getExtension(item.getFilename())).contains("application/fits");
+    }
+    
+    /**
+     * True if the current file is an audio
+     * 
+     * @return
+     */
+    public boolean isAudioFile()
+    {
+        return StorageUtils.getMimeType(FilenameUtils.getExtension(item.getFilename())).contains("audio");
     }
 }

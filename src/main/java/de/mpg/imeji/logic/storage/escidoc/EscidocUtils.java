@@ -135,17 +135,17 @@ public class EscidocUtils
 
     public static String getThumbnailUrl(Item item) throws Exception
     {
-        return getContentUrl(item, ImageUtils.getThumb());
+        return getContentUrl(item, ImageUtils.getEscidocThumbnailContentCategory());
     }
 
     public static String getWebResolutionUrl(Item item) throws Exception
     {
-        return getContentUrl(item, ImageUtils.getWeb());
+        return getContentUrl(item, ImageUtils.getEscidocWebContentCategory());
     }
 
     public static String getOriginalResolution(Item item) throws Exception
     {
-        return getContentUrl(item, ImageUtils.getOrig());
+        return getContentUrl(item, ImageUtils.getEscidocOriginalContentCategory());
     }
 
     /**

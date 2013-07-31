@@ -116,7 +116,7 @@ public class GifUtils
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             gifEncoder.start(bos);
             gifEncoder.setRepeat(0);
-            //out commented since the result is sometimes too fast
+            // out commented since the result is sometimes too fast
             // gifEncoder.setDelay(getAnimationDelay(reader, minIndex));
             for (int i = minIndex; i < numberOfImages; i++)
             {

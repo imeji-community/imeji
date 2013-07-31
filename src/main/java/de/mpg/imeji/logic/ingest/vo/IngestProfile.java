@@ -26,7 +26,7 @@ public class IngestProfile
     /**
      * @return the mdProfile
      */
-    @XmlElement(name = "metadataProfiles", namespace="http://imeji.org/terms")
+    @XmlElement(name = "metadataProfiles", namespace = "http://imeji.org/terms")
     public MetadataProfiles getMetadataProfiles()
     {
         return metadataProfiles;
@@ -43,7 +43,7 @@ public class IngestProfile
     /**
      * @return the items
      */
-    @XmlElement(name = "items", namespace="http://imeji.org/terms")
+    @XmlElement(name = "items", namespace = "http://imeji.org/terms")
     public Items getItems()
     {
         return items;

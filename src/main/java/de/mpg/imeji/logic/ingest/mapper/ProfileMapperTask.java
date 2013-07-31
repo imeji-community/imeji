@@ -15,7 +15,7 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 /**
  * @author hnguyen
  */
-public class ProfileMapperTask extends SwingWorker<Collection<MetadataProfile>,Void>
+public class ProfileMapperTask extends SwingWorker<Collection<MetadataProfile>, Void>
 {
     private DuplicatedObject<MetadataProfile, ?> dupProfiles;
     private Collection<MetadataProfile> profileList;
@@ -25,7 +25,7 @@ public class ProfileMapperTask extends SwingWorker<Collection<MetadataProfile>,V
      */
     public ProfileMapperTask(List<MetadataProfile> profileList)
     {
-    	this.profileList = profileList;
+        this.profileList = profileList;
     }
 
     public List<String> getDuplicateFilenames()
@@ -60,7 +60,7 @@ public class ProfileMapperTask extends SwingWorker<Collection<MetadataProfile>,V
 
     private DuplicatedObject<MetadataProfile, ?> process(Collection<MetadataProfile> profileList)
     {
-    	DuplicatedObject<MetadataProfile, ?> dupProfiles = new DuplicatedObject<MetadataProfile, Object>();
+        DuplicatedObject<MetadataProfile, ?> dupProfiles = new DuplicatedObject<MetadataProfile, Object>();
         for (MetadataProfile profile : profileList)
         {
             MetadataProfile profileAsFilename = dupProfiles.getHashTableFilename().get(profile.getTitle());
@@ -75,16 +75,16 @@ public class ProfileMapperTask extends SwingWorker<Collection<MetadataProfile>,V
         }
         return dupProfiles;
     }
-    
-	@Override
-	protected Collection<MetadataProfile> doInBackground() throws Exception {
-		 this.dupProfiles = this.process(profileList);
-		
-		return this.getMappedProfileObjects();
-	}
-	
-	@Override
-    public void done() {
-	    
-	}
+
+    @Override
+    protected Collection<MetadataProfile> doInBackground() throws Exception
+    {
+        this.dupProfiles = this.process(profileList);
+        return this.getMappedProfileObjects();
+    }
+
+    @Override
+    public void done()
+    {
+    }
 }

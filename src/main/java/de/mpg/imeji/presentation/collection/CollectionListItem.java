@@ -38,8 +38,7 @@ public class CollectionListItem
     private String title = "";
     private String description = "";
     private String descriptionFull = "";
-
-	private String authors = "";
+    private String authors = "";
     private int size = 0;
     private String status = Status.PENDING.toString();
     private String id = null;
@@ -406,15 +405,17 @@ public class CollectionListItem
     {
         this.thumbnail = thumbnail;
     }
-    
-    public String getDescriptionFull() {
-		return CommonUtils.removeTags(descriptionFull);
-	}
 
-	public void setDescriptionFull(String descriptionFull) {
-		this.descriptionFull = descriptionFull;
-	}  
-    
+    public String getDescriptionFull()
+    {
+        return CommonUtils.removeTags(descriptionFull);
+    }
+
+    public void setDescriptionFull(String descriptionFull)
+    {
+        this.descriptionFull = descriptionFull;
+    }
+
     public String getDescriptionWithoutHtml()
     {
         if (this.getDescription() == null)

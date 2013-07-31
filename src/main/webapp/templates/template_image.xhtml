@@ -25,19 +25,29 @@
 			<h:panelGroup styleClass="full_area0 fullItem">
 				<h:panelGroup layout="block" styleClass="full_area2 xTiny_marginLExcl"> 
 					<h:panelGroup layout="block" styleClass="full_area detailedItem">
-						<span>
-							<h:outputLink id="lnkPicFullResolution" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" target="_blank" rendered="#{imageBean.imageFile and false}">
+						<span id="webResolutionImage">
+							<h:outputLink id="lnkPicFullResolution" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" target="_blank" rendered="#{(imageBean.imageFile and !Property.digilibEnabled) or imageBean.fitsFile or imageBean.pdfFile}">
 								<h:graphicImage id="picWebResolution" title="#{imageBean.image.filename}" alt="#{imageBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}" />
 							</h:outputLink>
-							<h:outputLink id="lnkPicDigilib" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}&amp;digilib=1" target="_blank" rendered="#{imageBean.imageFile}">
-								<h:graphicImage id="picWebResolution2" title="#{imageBean.image.filename}" alt="#{imageBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}" />
+							<h:outputLink id="lnkPicInternalDigilib" value="#{Navigation.applicationUrl}digilibImage?fn=#{Property.internalStorageBase}/#{imageBean.image.storageId}/original/#{imageBean.itemStorageIdFilename}" target="_blank" rendered="#{imageBean.imageFile and Property.digilibEnabled and (empty Navigation.externalDigilibUrl)}">
+								<h:graphicImage id="picWebResolutionInternalDigilib" title="#{imageBean.image.filename}" alt="#{imageBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}" />
 							</h:outputLink>
-							<h:outputLink id="lnkPicFullResolutionPDF" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" target="_blank" rendered="#{imageBean.pdfFile}">
-								<h:graphicImage id="picWebResolutionPDF" title="#{imageBean.image.filename}" alt="#{imageBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}" />
-							</h:outputLink>
-							<h:outputLink id="lnkPicFullResolutionVideo" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" target="_blank" rendered="#{imageBean.videoFile}">
-								<h:graphicImage id="picWebResolutionVideo" title="#{imageBean.image.filename}" alt="#{imageBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}" />
-							</h:outputLink>
+						</span>
+						<h:panelGroup rendered="#{imageBean.videoFile}">
+							<video id="imejiVideoPlayer" src="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" controls="controls" 
+							poster="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}" oninvalid="alert('dsasadf');" onerror="$('#lnkDownload').show();"></video>
+						</h:panelGroup>
+						<h:panelGroup rendered="#{imageBean.audioFile}">
+							<audio id="imejiAudioPlayer" src="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" controls="controls" onerror="$('#lnkDownload').show();">
+								<h:outputText value="#{lbl.playing} #{imageBean.image.filename} " />
+							</audio>
+						</h:panelGroup>
+						<span>
+							<h2>
+								<h:outputLink id="lnkDownload" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" target="_blank" style="display:none;">
+									<h:outputText value="#{lbl.download}"/>
+								</h:outputLink>
+							</h2>
 						</span>
 					</h:panelGroup>
 					<h:panelGroup styleClass="free_area0 xSmall_marginLIncl" style="color:red;" rendered="#{imageBean.image.status == 'WITHDRAWN'}">
@@ -145,8 +155,26 @@
 							</h:panelGroup>
 							<h:panelGroup id="singleEditPanel" style="border-width:0px;" styleClass="free_area0" bodyClass="free_area0" headerClass="free_area0">
 							 	<h:panelGroup layout="block" rendered="#{imageBean.edit.toggleState == 'displayMd'}">
+							 		<ui:repeat var="statement" value="#{imageBean.profile.statements}" rows="0">
+								 		<ui:repeat var="metadata" value="#{imageBean.mds.metadata}" rows="0">
+								 			<h:panelGroup rendered="#{!metadata.isEmpty() and metadata.statement.id == statement.id}">
+											<div class="full_area0_p4 id_#{metadata.statementId}  parent_#{metadata.parent.statementId} highlight_area">
+												<b class="xLarge_area0_p8 endline labelLine clear" style="margin-left: #{metadata.hierarchyLevel}em;">
+													<h:outputText value="#{MetadataLabels.internationalizedLabels[metadata.statement.id]}" /> 
+													<span class="noDisplay">: </span>
+												</b>
+												<div class="double_area0_p2 xTiny_marginLExcl endline">
+													<ui:include src="../picturesPages/ui/MetadataOutput.xhtml">
+														<ui:param name="md" value="#{metadata}" />
+													</ui:include>
+												</div>
+											</div>
+										</h:panelGroup>
+								 		</ui:repeat>
+							 		</ui:repeat>
+							 		<!-- OLD -->
 									<ui:repeat var="metadata" value="#{imageBean.mds.metadata}" rows="0">
-										<h:panelGroup rendered="#{!metadata.isEmpty()}">
+										<h:panelGroup rendered="#{!metadata.isEmpty() and false}">
 											<div class="full_area0_p4 id_#{metadata.statementId}  parent_#{metadata.parent.statementId} highlight_area">
 												<b class="xLarge_area0_p8 endline labelLine clear" style="margin-left: #{metadata.hierarchyLevel}em;">
 													<h:outputText value="#{MetadataLabels.internationalizedLabels[metadata.statement.id]}" /> 
@@ -164,7 +192,7 @@
 								<h:panelGroup rendered="#{imageBean.edit.toggleState == 'editMd' and imageBean.editable and !imageBean.locked}">
 								<h:form>
 									<ui:repeat id="metadata" var="metadata" value="#{imageBean.edit.metadataList}" rows="0" varStatus="indexMetadata">
-										<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
+										<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder" rendered="false">
 											<b class="xLarge_area0_p8 endline labelLine clear" >
 												<h:outputText value="#{MetadataLabels.internationalizedLabels[metadata.statement.id]}"/>
 												<span class="noDisplay">: </span> 
@@ -192,6 +220,39 @@
 												</div>
 											</h:panelGroup>
 										</h:panelGroup>
+									</ui:repeat>
+									<!-- OLD -->
+									<ui:repeat id="statement" var="statement" value="#{imageBean.profile.statements}" rows="0" varStatus="indexMetadata">
+										<ui:repeat id="metadata" var="metadata" value="#{imageBean.edit.metadataList}" rows="0" varStatus="indexMetadata">
+											<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder" rendered="#{statement.id == metadata.statement.id}">
+												<b class="xLarge_area0_p8 endline labelLine clear" >
+													<h:outputText value="#{MetadataLabels.internationalizedLabels[metadata.statement.id]}"/>
+													<span class="noDisplay">: </span> 
+												</b>
+												<h:panelGroup layout="block" styleClass="huge_area0 xTiny_marginLExcl endline">
+													<div class="free_area0">
+														<ui:include src="../picturesPages/ui/MetadataInput.xhtml">
+															<ui:param name="statement" value="#{metadata.statement}"/>
+															<ui:param name="metadata" value="#{metadata}"/>
+															<ui:param name="areaClass" value="double_txtArea"/>
+															<ui:param name="hideLabel" value="true"/>
+														</ui:include>
+													</div>
+													<div class="free_area0">
+														<h:commandButton type="button" styleClass="min_imgBtn groupTool remove af_commandButton" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{imageBean.edit.removeMetadata}" value="">
+															<f:setPropertyActionListener value="#{metadata.statement}" target="#{imageBean.edit.editor.statement}" />
+															<f:setPropertyActionListener value="#{indexMetadata.index}" target="#{imageBean.edit.mdPosition}" />
+															<f:ajax execute="@form" render="@form" />
+														</h:commandButton>
+														<h:commandButton type="button" styleClass="min_imgBtn groupTool add af_commandButton" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{imageBean.edit.addMetadata}" value="">
+															<f:setPropertyActionListener value="#{metadata.statement}" target="#{imageBean.edit.editor.statement}" />
+															<f:setPropertyActionListener value="#{indexMetadata.index}" target="#{imageBean.edit.mdPosition}" />
+															<f:ajax execute="@form" render="@form" />
+														</h:commandButton>									
+													</div>
+												</h:panelGroup>
+											</h:panelGroup>
+										</ui:repeat>
 									</ui:repeat>
 									<div class="vertDist050 linebreak"></div>
 									<h:panelGroup rendered="#{imageBean.edit.toggleState == 'editMd'}" layout="block" styleClass="quad_area0_p1">

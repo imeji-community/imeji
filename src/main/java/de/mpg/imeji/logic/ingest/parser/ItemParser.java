@@ -22,7 +22,7 @@ public class ItemParser
      * @throws SAXException
      * @throws JAXBException
      */
-    public List<Item> parseItemList(File itemListXmlFile) throws JAXBException, SAXException, ClassCastException 
+    public List<Item> parseItemList(File itemListXmlFile) throws JAXBException, SAXException, ClassCastException
     {
         return new JaxbGenericObject<Items>(Items.class).unmarshal(itemListXmlFile).getItem();
     }

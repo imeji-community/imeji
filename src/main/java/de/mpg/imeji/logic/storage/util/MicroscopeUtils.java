@@ -34,9 +34,6 @@ import loci.formats.FormatException;
 import loci.formats.ImageReader;
 import loci.formats.gui.BufferedImageReader;
 
-
-
-
 /**
  * Utility class to handle Microscope data
  * 

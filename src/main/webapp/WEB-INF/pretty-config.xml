@@ -164,9 +164,9 @@
 		<view-id>/jsf/Config.xhtml</view-id>
 	</url-mapping>
 	
-	<url-mapping id="digilib">
-		<pattern value="/digilib"></pattern>
-		<view-id>/jsf/Digilib.xhtml</view-id>
+	<url-mapping id="digilibImage">
+		<pattern value="/digilibImage"></pattern>
+		<view-id>/jsf/DigilibImage.xhtml</view-id>
 	</url-mapping>
 
 </pretty-config>

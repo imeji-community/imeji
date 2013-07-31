@@ -248,7 +248,7 @@ public class AlbumImagesBean extends ImagesBean
         ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).withdraw();
         return "pretty:";
     }
-    
+
     /**
      * Listener for the discard comment
      * 

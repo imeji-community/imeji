@@ -61,7 +61,7 @@ public class SearchExplainExport extends ExplainExport
         writer.append(getRDFTagClose());
         writer.close();
     }
-    
+
     /*
      * (non-Javadoc)
      * @see de.mpg.imeji.logic.export.Export#init()

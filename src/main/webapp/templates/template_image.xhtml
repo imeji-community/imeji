@@ -191,37 +191,6 @@
 								</h:panelGroup>
 								<h:panelGroup rendered="#{imageBean.edit.toggleState == 'editMd' and imageBean.editable and !imageBean.locked}">
 								<h:form>
-									<ui:repeat id="metadata" var="metadata" value="#{imageBean.edit.metadataList}" rows="0" varStatus="indexMetadata">
-										<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder" rendered="false">
-											<b class="xLarge_area0_p8 endline labelLine clear" >
-												<h:outputText value="#{MetadataLabels.internationalizedLabels[metadata.statement.id]}"/>
-												<span class="noDisplay">: </span> 
-											</b>
-											<h:panelGroup layout="block" styleClass="huge_area0 xTiny_marginLExcl endline">
-												<div class="free_area0">
-													<ui:include src="../picturesPages/ui/MetadataInput.xhtml">
-														<ui:param name="statement" value="#{metadata.statement}"/>
-														<ui:param name="metadata" value="#{metadata}"/>
-														<ui:param name="areaClass" value="double_txtArea"/>
-														<ui:param name="hideLabel" value="true"/>
-													</ui:include>
-												</div>
-												<div class="free_area0">
-													<h:commandButton type="button" styleClass="min_imgBtn groupTool remove af_commandButton" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{imageBean.edit.removeMetadata}" value="">
-														<f:setPropertyActionListener value="#{metadata.statement}" target="#{imageBean.edit.editor.statement}" />
-														<f:setPropertyActionListener value="#{indexMetadata.index}" target="#{imageBean.edit.mdPosition}" />
-														<f:ajax execute="@form" render="@form" />
-													</h:commandButton>
-													<h:commandButton type="button" styleClass="min_imgBtn groupTool add af_commandButton" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{imageBean.edit.addMetadata}" value="">
-														<f:setPropertyActionListener value="#{metadata.statement}" target="#{imageBean.edit.editor.statement}" />
-														<f:setPropertyActionListener value="#{indexMetadata.index}" target="#{imageBean.edit.mdPosition}" />
-														<f:ajax execute="@form" render="@form" />
-													</h:commandButton>									
-												</div>
-											</h:panelGroup>
-										</h:panelGroup>
-									</ui:repeat>
-									<!-- OLD -->
 									<ui:repeat id="statement" var="statement" value="#{imageBean.profile.statements}" rows="0" varStatus="indexMetadata">
 										<ui:repeat id="metadata" var="metadata" value="#{imageBean.edit.metadataList}" rows="0" varStatus="indexMetadata">
 											<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder" rendered="#{statement.id == metadata.statement.id}">
@@ -241,12 +210,12 @@
 													<div class="free_area0">
 														<h:commandButton type="button" styleClass="min_imgBtn groupTool remove af_commandButton" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{imageBean.edit.removeMetadata}" value="">
 															<f:setPropertyActionListener value="#{metadata.statement}" target="#{imageBean.edit.editor.statement}" />
-															<f:setPropertyActionListener value="#{indexMetadata.index}" target="#{imageBean.edit.mdPosition}" />
+															<f:setPropertyActionListener value="#{metadata.pos}" target="#{imageBean.edit.mdPosition}" />
 															<f:ajax execute="@form" render="@form" />
 														</h:commandButton>
 														<h:commandButton type="button" styleClass="min_imgBtn groupTool add af_commandButton" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{imageBean.edit.addMetadata}" value="">
 															<f:setPropertyActionListener value="#{metadata.statement}" target="#{imageBean.edit.editor.statement}" />
-															<f:setPropertyActionListener value="#{indexMetadata.index}" target="#{imageBean.edit.mdPosition}" />
+															<f:setPropertyActionListener value="#{metadata.pos}" target="#{imageBean.edit.mdPosition}" />
 															<f:ajax execute="@form" render="@form" />
 														</h:commandButton>									
 													</div>

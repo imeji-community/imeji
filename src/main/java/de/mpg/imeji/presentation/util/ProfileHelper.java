@@ -79,9 +79,11 @@ public class ProfileHelper
             {
                 Statement st = ((List<Statement>)profile.getStatements()).get(i);
                 if (st.getParent() != null && st.getParent().compareTo(statement.getId()) == 0)
+                {
                     childs.add(st);
-                if (!onlyFirst)
-                    childs.addAll(getChilds(st, profile, onlyFirst));
+                    if (!onlyFirst)
+                        childs.addAll(getChilds(st, profile, false));
+                }
             }
         }
         return childs;

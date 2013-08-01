@@ -30,6 +30,7 @@ package de.mpg.imeji.presentation.metadata;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import de.mpg.imeji.logic.util.MetadataFactory;
@@ -93,6 +94,15 @@ public class MetadataSetBean
             smd.setParent(findParent(smd));
             smd.setLastParent(ProfileHelper.getLastParent(st, profile));
             metadata.add(smd);
+        }
+        // sort according to the order of the statement and the position
+        Collections.sort(metadata);
+        // reset the position according to the current order
+        int i = 0;
+        for (SuperMetadataBean smd : metadata)
+        {
+            smd.setPos(i);
+            i++;
         }
     }
 

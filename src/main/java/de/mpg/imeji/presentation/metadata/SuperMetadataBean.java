@@ -18,7 +18,7 @@ import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
  * 
  * @author saquet
  */
-public class SuperMetadataBean
+public class SuperMetadataBean implements Comparable<SuperMetadataBean>
 {
     /**
      * The {@link Metadata} defined within thie {@link SuperMetadataBean}
@@ -534,5 +534,23 @@ public class SuperMetadataBean
     public void setLastParent(URI lastParent)
     {
         this.lastParent = lastParent;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Comparable#compareTo(java.lang.Object)
+     */
+    @Override
+    public int compareTo(SuperMetadataBean o)
+    {
+        if (statement.getPos() > o.getStatement().getPos())
+            return 1;
+        else if (statement.getPos() < o.getStatement().getPos())
+            return -1;
+        else if (getPos() > o.getPos())
+            return 1;
+        else if (getPos() < o.getPos())
+            return -1;
+        return 0;
     }
 }

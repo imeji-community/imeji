@@ -83,7 +83,7 @@ public class MetadataSetBean
     public void trim()
     {
         for (SuperMetadataBean smb : metadataTree.getList())
-            if (smb.getChilds().isEmpty() && MetadataHelper.isEmpty(smb.asMetadata()))
+            if (metadataTree.getChilds(smb.getTreeIndex()).isEmpty() && MetadataHelper.isEmpty(smb.asMetadata()))
                 metadataTree.remove(smb);
     }
 

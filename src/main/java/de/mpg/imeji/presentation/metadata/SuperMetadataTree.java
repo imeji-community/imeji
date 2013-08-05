@@ -35,8 +35,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import no.uib.cipr.matrix.sparse.ISparseVector;
-
 import de.mpg.imeji.logic.vo.Metadata;
 
 /**
@@ -55,8 +53,11 @@ public class SuperMetadataTree
      */
     public SuperMetadataTree(List<SuperMetadataBean> list)
     {
+        // Sort according to profile and to previous metadata position
         Collections.sort(list);
-        list = addParent(list);
+        // A Set the parent according to the current order
+        list = setParents(list);
+        // Create the map
         map = createMap(list, null, "0");
     }
 
@@ -166,7 +167,7 @@ public class SuperMetadataTree
      * @param parentIndex
      * @return
      */
-    private List<SuperMetadataBean> getChilds(String parentIndex)
+    public List<SuperMetadataBean> getChilds(String parentIndex)
     {
         List<SuperMetadataBean> childs = new ArrayList<SuperMetadataBean>();
         for (SuperMetadataBean smb : getList())
@@ -250,12 +251,13 @@ public class SuperMetadataTree
     }
 
     /**
-     * Add the Parent {@link SuperMetadataBean} to all element of the list.
+     * Set the Parent {@link SuperMetadataBean} to all element of the list. This is made according to the current order
+     * of the list (see findBestParent() method)
      * 
      * @param flat
      * @return
      */
-    private List<SuperMetadataBean> addParent(List<SuperMetadataBean> list)
+    private List<SuperMetadataBean> setParents(List<SuperMetadataBean> list)
     {
         for (SuperMetadataBean smd : list)
         {

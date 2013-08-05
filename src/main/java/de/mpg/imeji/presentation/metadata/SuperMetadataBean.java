@@ -36,10 +36,6 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
      */
     private SuperMetadataBean parent = null;
     /**
-     * Define how many parents this {@link Metadata} has until the highest parent
-     */
-    private int hierarchyLevel = 0;
-    /**
      * Define the position if the metadata in the {@link SuperMetadataTree}
      */
     private String treeIndex = "";
@@ -480,16 +476,6 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
     public int getHierarchyLevel()
     {
         return (getTreeIndex().length() - 1) / 2;
-    }
-
-    /**
-     * setter
-     * 
-     * @param hierarchyLevel the hierarchyLevel to set
-     */
-    public void setHierarchyLevel(int hierarchyLevel)
-    {
-        this.hierarchyLevel = hierarchyLevel;
     }
 
     /**

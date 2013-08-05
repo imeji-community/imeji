@@ -219,7 +219,7 @@ public class EditImageMetadataBean
     {
         Item emtpyItem = new Item();
         emtpyItem.getMetadataSets().add(ImejiFactory.newMetadataSet(profile.getId()));
-        editorItem = new EditorItemBean(emtpyItem);
+        editorItem = new EditorItemBean(emtpyItem, profile);
     }
 
     /**
@@ -441,7 +441,7 @@ public class EditImageMetadataBean
     }
 
     /**
-     * Add a the same metadata to all item having no value defined for this statement
+     * fill all emtpy Metadata of passed {@link EditorItemBean} with the values of the current one
      * 
      * @param im
      * @return
@@ -449,14 +449,16 @@ public class EditImageMetadataBean
     private EditorItemBean pasteMetadataIfEmtpy(EditorItemBean eib)
     {
         int i = 0;
-        for (SuperMetadataBean smd : eib.getMetadata())
+        for (SuperMetadataBean smd : eib.getMds().getTree().getList())
         {
-            for (SuperMetadataBean smdNew : editorItem.getMetadata())
+            List<SuperMetadataBean> allMetadata = editorItem.getMds().getTree().getList();
+            for (SuperMetadataBean smdNew : editorItem.getMds().getTree().getList())
             {
                 if (smdNew.getStatementId().equals(smd.getStatementId()) && smd.isEmpty())
                 {
                     smdNew.setPos(i);
-                    eib.getMetadata().set(i, smdNew.copy());
+                    allMetadata.set(i, smdNew.copy());
+                    eib.getMds().initTreeFromList(allMetadata);
                 }
             }
             i++;
@@ -472,10 +474,9 @@ public class EditImageMetadataBean
      */
     private void appendEmtpyMetadataIfNecessary(EditorItemBean eib)
     {
-        int addAt = eib.getLastPosition(statement);
-        if (!eib.getMetadata().get(addAt).isEmpty())
+        if (eib.getMds().existsNotEmtpy(statement))
         {
-            eib.addMetadata(eib.getLastPosition(statement));
+            eib.getMds().appendEmtpyMetadata(statement);
         }
     }
 
@@ -511,28 +512,6 @@ public class EditImageMetadataBean
             return profile.getStatements().iterator().next();
         }
         return null;
-    }
-
-    /**
-     * Add a new emtpy {@link Metadata} into the editor
-     * 
-     * @return
-     */
-    public String addMetadata()
-    {
-        editor.addMetadata(getImagePosition(), getMdPosition());
-        return "";
-    }
-
-    /**
-     * Remove a {@link Metadata} into the editor
-     * 
-     * @return
-     */
-    public String removeMetadata()
-    {
-        editor.removeMetadata(getImagePosition(), getMdPosition());
-        return "";
     }
 
     public int getMdPosition()

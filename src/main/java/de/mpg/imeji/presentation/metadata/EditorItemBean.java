@@ -4,12 +4,10 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.mpg.imeji.logic.util.MetadataFactory;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
+import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.presentation.util.ObjectCachedLoader;
-import de.mpg.imeji.presentation.util.ProfileHelper;
 
 /**
  * Bean for item element in the metadata editors
@@ -20,17 +18,23 @@ import de.mpg.imeji.presentation.util.ProfileHelper;
  */
 public class EditorItemBean
 {
-    private List<SuperMetadataBean> metadata;
+    private MetadataSetBean mds;
     private Item item;
+    private MetadataProfile profile;
+    /**
+     * The Metadata which has been clicked
+     */
+    private SuperMetadataBean activeMetadata;
 
     /**
      * Bean for item element in the metadata editors
      * 
      * @param item
      */
-    public EditorItemBean(Item item)
+    public EditorItemBean(Item item, MetadataProfile profile)
     {
         init(item);
+        this.profile = profile;
     }
 
     /**
@@ -41,10 +45,8 @@ public class EditorItemBean
     public void init(Item item)
     {
         this.item = item;
-        metadata = new ArrayList<SuperMetadataBean>();
-        MetadataSetBean mdsb = new MetadataSetBean(item.getMetadataSet());
-        mdsb.prepareMetadataSetForEditor();
-        metadata = mdsb.getMetadata();
+        mds = new MetadataSetBean(item.getMetadataSet());
+        //mds.prepareMetadataSetForEditor();
     }
 
     /**
@@ -55,71 +57,41 @@ public class EditorItemBean
     public Item asItem()
     {
         item.getMetadataSet().getMetadata().clear();
-        for (SuperMetadataBean smdb : metadata)
+        for (SuperMetadataBean smdb : mds.getTree().getList())
         {
             item.getMetadataSet().getMetadata().add(smdb.asMetadata());
         }
         return item;
     }
 
-    /**
-     * Add a {@link Metadata} and all its childs to this {@link EditorItemBean} after the position requested
-     * 
-     * @param position
-     */
-    public void addMetadata(int position)
+    public void addMetadata()
     {
-        Statement s = metadata.get(position).getStatement();
-        List<Statement> childs = ProfileHelper.getChilds(s, ObjectCachedLoader.loadProfile(getProfile()), false);
-        // increment the position with the number of childs
-        position = position + childs.size();
-        // Add a new metadata with the same statement
-        addMetadata(s, position + 1);
-        // Add the childs
-        int i = 2;
-        for (Statement st : childs)
-        {
-            addMetadata(st, position + i);
-            i++;
-        }
-        resetPositionToMetadata();
+        SuperMetadataBean newMd = activeMetadata.copyEmpty();
+        newMd.addEmtpyChilds(profile);
+        mds.getTree().add(newMd);
     }
 
-    /**
-     * Rmove the {@link SuperMetadataBean} and all its childs at the defined position in the editor
-     * 
-     * @param position
-     */
-    public void removeMetadata(int position)
+    public void removeMetadata()
     {
-        Statement s = metadata.get(position).getStatement();
-        List<Statement> childs = ProfileHelper.getChilds(s, ObjectCachedLoader.loadProfile(getProfile()), false);
-        // remove the first metadata
-        metadata.remove(position);
-        // remove the childs
-        for (int i = 0; i < childs.size(); i++)
-        {
-            metadata.remove(position);
-        }
-        resetPositionToMetadata();
+        mds.getTree().remove(activeMetadata);
     }
 
     /**
      * Clear the {@link Metadata} for one {@link Statement}: remove all {@link Metadata} and its Childs and add an empty
-     * one
+     * one TODO Will not work, need testing - Bastien
      * 
      * @param st
      */
     public void clear(Statement st)
     {
         List<SuperMetadataBean> l = new ArrayList<SuperMetadataBean>();
-        for (SuperMetadataBean smd : metadata)
+        for (SuperMetadataBean smd : mds.getTree().getList())
         {
             if (st.getId().compareTo(smd.getStatement().getId()) != 0
                     && (smd.getLastParent() != null && st.getId().compareTo(smd.getLastParent()) != 0))
                 l.add(smd);
         }
-        metadata = l;
+        mds.initTreeFromList(l);
         init(asItem());
     }
 
@@ -132,7 +104,7 @@ public class EditorItemBean
     public int getLastPosition(Statement st)
     {
         int p = 0;
-        for (SuperMetadataBean smd : metadata)
+        for (SuperMetadataBean smd : mds.getTree().getList())
         {
             if (st.getId().compareTo(smd.getStatement().getId()) == 0 && smd.getPos() > p)
                 p = smd.getPos();
@@ -148,22 +120,9 @@ public class EditorItemBean
      */
     private void addMetadata(Statement s, int position)
     {
-        SuperMetadataBean smd = new SuperMetadataBean(MetadataFactory.createMetadata(s), s);
-        smd.setLastParent(ProfileHelper.getLastParent(s, ObjectCachedLoader.loadProfile(getProfile())));
-        metadata.add(position, smd);
-    }
-
-    /**
-     * reset the position of all {@link SuperMetadataBean}
-     */
-    private void resetPositionToMetadata()
-    {
-        int pos = 0;
-        for (SuperMetadataBean smd : metadata)
-        {
-            smd.setPos(pos);
-            pos++;
-        }
+        // SuperMetadataBean smd = new SuperMetadataBean(MetadataFactory.createMetadata(s), s);
+        // smd.setLastParent(ProfileHelper.getLastParent(s, ObjectCachedLoader.loadProfile(getProfile())));
+        // metadata.add(position, smd);
     }
 
     /**
@@ -196,23 +155,40 @@ public class EditorItemBean
         return item.getMetadataSet().getProfile();
     }
 
+//    public List<SuperMetadataBean> getMetadata()
+//    {
+//        return mds.getMetadataFlat();
+//    }
+
     /**
-     * getter
-     * 
-     * @return
+     * @return the mds
      */
-    public List<SuperMetadataBean> getMetadata()
+    public MetadataSetBean getMds()
     {
-        return metadata;
+        return mds;
     }
 
     /**
-     * setter
-     * 
-     * @param metadata
+     * @param mds the mds to set
      */
-    public void setMetadata(List<SuperMetadataBean> metadata)
+    public void setMds(MetadataSetBean mds)
     {
-        this.metadata = metadata;
+        this.mds = mds;
+    }
+
+    /**
+     * @return the newMetadata
+     */
+    public SuperMetadataBean getActiveMetadata()
+    {
+        return activeMetadata;
+    }
+
+    /**
+     * @param newMetadata the newMetadata to set
+     */
+    public void setActiveMetadata(SuperMetadataBean newMetadata)
+    {
+        this.activeMetadata = newMetadata;
     }
 }

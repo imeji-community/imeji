@@ -28,18 +28,15 @@
  */
 package de.mpg.imeji.presentation.metadata;
 
-import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import de.mpg.imeji.logic.util.MetadataFactory;
-import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.presentation.metadata.editors.MetadataEditor;
+import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
 import de.mpg.imeji.presentation.util.ObjectCachedLoader;
 import de.mpg.imeji.presentation.util.ProfileHelper;
 
@@ -52,9 +49,8 @@ import de.mpg.imeji.presentation.util.ProfileHelper;
  */
 public class MetadataSetBean
 {
-    private List<SuperMetadataBean> metadata = new ArrayList<SuperMetadataBean>();
     private MetadataProfile profile = null;
-    private MetadataSet mds = null;
+    private SuperMetadataTree metadataTree;
 
     /**
      * Constructor for a {@link MetadataSet}
@@ -63,230 +59,110 @@ public class MetadataSetBean
      */
     public MetadataSetBean(MetadataSet mds)
     {
-        this.mds = mds;
         // Get the profile
         profile = ObjectCachedLoader.loadProfile(mds.getProfile());
         // Init the list of metadata
-        initMetadataList();
+        initTreeFromList(toSuperList((List<Metadata>)mds.getMetadata()));
     }
 
     /**
-     * Prepare the {@link MetadataSet} for the {@link MetadataEditor}, i.e, add emtpy {@link Metadata} if none is
-     * defined for one {@link Statement}
+     * Initialize the {@link MetadataSetBean} with a flat {@link List} of {@link SuperMetadataBean}
+     * 
+     * @param flat
      */
-    public void prepareMetadataSetForEditor()
+    public void initTreeFromList(List<SuperMetadataBean> list)
     {
-        mds.sortMetadata();
-        mds.setMetadata(createListOfMetadataWithExistingValuesAndEmtpyValues1());
-        initMetadataList();
+        metadataTree = new SuperMetadataTree(list);
+        // metadataTree = new SuperMetadataTree(setParentAndChilds(list));
     }
 
     /**
-     * Initialize the {@link List} of {@link SuperMetadataBean} with the current {@link MetadataSet}
+     * Remove all Emtpy {@link SuperMetadataBean} of the {@link MetadataSetBean} (if and only if the
+     * {@link SuperMetadataBean} doesn't have a child)
      */
-    private void initMetadataList()
+    public void trim()
     {
-        metadata = new ArrayList<SuperMetadataBean>();
-        for (Metadata md : mds.getMetadata())
+        for (SuperMetadataBean smb : metadataTree.getList())
+            if (smb.getChilds().isEmpty() && MetadataHelper.isEmpty(smb.asMetadata()))
+                metadataTree.remove(smb);
+    }
+
+    /**
+     * Add a new emtpy {@link Metadata} for the passed statement
+     * 
+     * @param st
+     */
+    public void appendEmtpyMetadata(Statement st)
+    {
+        List<SuperMetadataBean> l = metadataTree.getList();
+        l.add(new SuperMetadataBean(MetadataFactory.createMetadata(st), st));
+        initTreeFromList(l);
+    }
+
+    /**
+     * Create a {@link List} of {@link SuperMetadataBean} from a list of {@link Metadata}
+     * 
+     * @return
+     */
+    private List<SuperMetadataBean> toSuperList(List<Metadata> l)
+    {
+        List<SuperMetadataBean> flat = new ArrayList<SuperMetadataBean>();
+        for (Metadata md : l)
         {
             Statement st = ProfileHelper.getStatement(md.getStatement(), profile);
             SuperMetadataBean smd = new SuperMetadataBean(md, st);
-            smd.setParent(findParent(smd));
-            smd.setLastParent(ProfileHelper.getLastParent(st, profile));
-            metadata.add(smd);
+            flat.add(smd);
         }
-        // sort according to the order of the statement and the position
-        Collections.sort(metadata);
-        // reset the position according to the current order
-        int i = 0;
-        for (SuperMetadataBean smd : metadata)
-        {
-            smd.setPos(i);
-            i++;
-        }
+        return flat;
     }
 
     /**
-     * Find the parent of a {@link Metadata}, and return it as {@link SuperMetadataBean}
-     * 
-     * @param md
-     * @return
+     * Add to the {@link SuperMetadataTree} new emtpy {@link SuperMetadataBean} when it hadn't been already defined one.
+     * this method does the contrary as the trim() method
      */
-    private SuperMetadataBean findParent(SuperMetadataBean smd)
+    public void addEmtpyValues()
     {
-        Statement st = ProfileHelper.getStatement(smd.getStatement().getId(), profile);
-        if (st == null)
-            return null;
-        URI parentURI = st.getParent();
-        if (parentURI == null)
-            return null;
-        // Go to the metadata list backward, and search for the parent
-        for (int i = metadata.size() - 1; i >= 0; i--)
-        {
-            // If the metadata is the defined with the parent statement, then it is the parent metadata
-            if (metadata.get(i).getStatement().getId().compareTo(parentURI) == 0)
-            {
-                return metadata.get(i);
-            }
-        }
-        return null;
-    }
-
-    /**
-     * 
-     */
-    private List<Metadata> createListOfMetadataWithExistingValuesAndEmtpyValues1()
-    {
-        List<Metadata> l = new ArrayList<Metadata>();
+        // Find the Metadata which have not be defined with a value into the Metadataset
+        List<SuperMetadataBean> l = new ArrayList<SuperMetadataBean>(metadataTree.getList());
         for (Statement st : profile.getStatements())
         {
-            boolean empty = true;
-            for (Metadata md : mds.getMetadata())
-            {
-                if (md.getStatement().compareTo(st.getId()) == 0)
-                {
-                    empty = false;
-                    l.add(md);
-                }
-            }
-            if (empty)
-            {
-                l.add(MetadataFactory.createMetadata(st));
-            }
+            if (exists(st))
+                l.add(new SuperMetadataBean(MetadataFactory.createMetadata(st), st));
         }
-        return l;
+        // Reinit the tree
+        initTreeFromList(l);
     }
 
     /**
-     * Create a new {@link List} of {@link Metadata} with the {@link Metadata} of the current {@link Item} plus, if
-     * missing according to the {@link MetadataProfile}, new emtpy {@link Metadata}
+     * True if the {@link MetadataSetBean} has one {@link Metadata} with this {@link Statement}
      * 
+     * @param st
      * @return
      */
-    // private List<Metadata> createListOfMetadataWithExistingValuesAndEmtpyValues()
-    // {
-    // List<Metadata> l = new ArrayList<Metadata>();
-    // // add the existing Metadata to the list, and if they is a missing metadata, add a new emtpy one
-    // for (Metadata md : mds.getMetadata())
-    // {
-    // if (l.isEmpty() && !isFirstStatement(md.getStatement()))
-    // {
-    // // Add all metadata that should be before the first existing metadata
-    // l.addAll(createMetadataBetween(null, md.getStatement()));
-    // }
-    // else if (!l.isEmpty() && !isNextStatement(l.get(l.size() - 1).getStatement(), md.getStatement())
-    // && !isbefore(md.getStatement(), l.get(l.size() - 1).getStatement()))
-    // {
-    // // Add all metadata that should be before the next metadata in the list
-    // l.addAll(createMetadataBetween(l.get(l.size() - 1).getStatement(), md.getStatement()));
-    // }
-    // // Add the existing metadata
-    // l.add(md);
-    // }
-    // URI lastStatement = null;
-    // if (!l.isEmpty())
-    // lastStatement = l.get(l.size() - 1).getStatement();
-    // // add all no created metadata after the last metadata
-    // l.addAll(createMetadataBetween(lastStatement, null));
-    // return setPositionToMetadata(l);
-    // }
-    /**
-     * Create new {@link Metadata} for the {@link Statement} which are ordered betweenn from and to according to the
-     * {@link MetadataProfile}
-     * 
-     * @param from
-     * @param to
-     * @return
-     */
-    // private List<Metadata> createMetadataBetween(URI from, URI to)
-    // {
-    // List<Metadata> l = new ArrayList<Metadata>();
-    // int fromPosition = 0;
-    // if (from != null)
-    // fromPosition = ProfileHelper.getStatement(from, profile).getPos() + 1;
-    // int toPosition = profile.getStatements().size();
-    // if (to != null)
-    // toPosition = ProfileHelper.getStatement(to, profile).getPos();
-    // for (Statement st : profile.getStatements())
-    // {
-    // if (st.getPos() >= fromPosition && st.getPos() < toPosition)
-    // {
-    // l.add(MetadataFactory.createMetadata(st));
-    // }
-    // }
-    // return l;
-    // }
-    //
-    // /**
-    // * True if the {@link Statement} with the give {@link URI} is the first in the current {@link MetadataProfile}
-    // *
-    // * @param st
-    // * @return
-    // */
-    // private boolean isFirstStatement(URI st)
-    // {
-    // return ProfileHelper.getStatement(st, profile).getPos() == 0;
-    // }
-    //
-    // /**
-    // * True if the {@link Statement} st2 is next to st1 according to the order in the current {@link MetadataProfile}
-    // *
-    // * @param st1
-    // * @param st2
-    // * @return
-    // */
-    // private boolean isNextStatement(URI st1, URI st2)
-    // {
-    // return ProfileHelper.getStatement(st1, profile).getPos() + 1 == ProfileHelper.getStatement(st2, profile)
-    // .getPos();
-    // }
-    //
-    // /**
-    // * True if st1 is before than st2 according to the order in the current {@link MetadataProfile}
-    // *
-    // * @param st1
-    // * @param st2
-    // * @return
-    // */
-    // private boolean isbefore(URI st1, URI st2)
-    // {
-    // return ProfileHelper.getStatement(st1, profile).getPos() < ProfileHelper.getStatement(st2, profile).getPos();
-    // }
-    //
-    // /**
-    // * /** Set the position of the {@link Metadata} according to their current order
-    // *
-    // * @param mds
-    // * @return
-    // */
-    // private List<Metadata> setPositionToMetadata(List<Metadata> l)
-    // {
-    // int pos = 0;
-    // for (Metadata md : l)
-    // {
-    // md.setPos(pos);
-    // pos++;
-    // }
-    // return l;
-    // }
-    /**
-     * getter
-     * 
-     * @return the metadata
-     */
-    public List<SuperMetadataBean> getMetadata()
+    public boolean exists(Statement st)
     {
-        return metadata;
+        for (SuperMetadataBean md : metadataTree.getList())
+        {
+            if (md.getStatement().getId().compareTo(st.getId()) == 0)
+                return true;
+        }
+        return false;
     }
 
     /**
-     * setter
+     * True if the {@link MetadataSetBean} has one {@link Metadata} with this {@link Statement} which is not emtpy
      * 
-     * @param metadata the metadata to set
+     * @param st
+     * @return
      */
-    public void setMetadata(List<SuperMetadataBean> metadata)
+    public boolean existsNotEmtpy(Statement st)
     {
-        this.metadata = metadata;
+        for (SuperMetadataBean md : metadataTree.getList())
+        {
+            if (md.getStatement().getId().compareTo(st.getId()) == 0 && !MetadataHelper.isEmpty(md.asMetadata()))
+                return true;
+        }
+        return false;
     }
 
     /**
@@ -307,5 +183,21 @@ public class MetadataSetBean
     public void setProfile(MetadataProfile profile)
     {
         this.profile = profile;
+    }
+
+    /**
+     * @return the metadataTree
+     */
+    public SuperMetadataTree getTree()
+    {
+        return metadataTree;
+    }
+
+    /**
+     * @param metadataTree the metadataTree to set
+     */
+    public void setTree(SuperMetadataTree metadataTree)
+    {
+        this.metadataTree = metadataTree;
     }
 }

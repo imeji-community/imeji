@@ -350,6 +350,20 @@ public class MdProfileBean
     }
 
     /**
+     * Method called when the user drop a metadata at the end of the list
+     */
+    public void insertLastMetadata()
+    {
+        StatementWrapper dragged = wrappers.get(getDraggedStatementPosition());
+        boolean moved = insertWrapper(dragged, getStatementPosition());
+        if (moved)
+        {
+            dragged.getStatement().setParent(null);
+        }
+        reInitWrappers();
+    }
+
+    /**
      * Method called when the user drop a metadata in "insert child" area
      */
     public void insertChild()

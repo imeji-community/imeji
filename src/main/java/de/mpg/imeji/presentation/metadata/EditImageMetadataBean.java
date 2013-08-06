@@ -443,7 +443,9 @@ public class EditImageMetadataBean
         for (EditorItemBean eib : editor.getItems())
         {
             eib.clear(statement);
+            eib.getMds().addEmtpyValues();
         }
+        
         return "";
     }
 

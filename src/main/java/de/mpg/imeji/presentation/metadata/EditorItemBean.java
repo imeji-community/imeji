@@ -94,6 +94,8 @@ public class EditorItemBean
                 smd.clear();
             }
         }
+        // Remove all emtpy values
+        mds.trim();
     }
 
     /**

@@ -125,7 +125,7 @@ public class MetadataSetBean
         List<SuperMetadataBean> l = new ArrayList<SuperMetadataBean>(metadataTree.getList());
         for (Statement st : profile.getStatements())
         {
-            if (exists(st))
+            if (!exists(st))
                 l.add(new SuperMetadataBean(MetadataFactory.createMetadata(st), st));
         }
         // Reinit the tree

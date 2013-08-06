@@ -52,7 +52,6 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
      */
     private boolean empty = false;
     private boolean preview = true;
-    private URI lastParent = null;
     // All possible fields defined for a metadata:
     private String text;
     private Person person;
@@ -107,7 +106,6 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
         metadata.setId(IdentifierUtil.newURI(Metadata.class));
         SuperMetadataBean copy = new SuperMetadataBean(MetadataFactory.copyMetadata(asMetadata()), statement);
         copy.setParent(parent);
-        copy.setLastParent(lastParent);
         copy.setTreeIndex(treeIndex);
         return copy;
     }
@@ -122,7 +120,6 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
         metadata.setId(IdentifierUtil.newURI(Metadata.class));
         SuperMetadataBean copy = new SuperMetadataBean(MetadataFactory.createMetadata(statement), statement);
         copy.setParent(parent);
-        copy.setLastParent(lastParent);
         copy.setTreeIndex(treeIndex);
         return copy;
     }
@@ -527,24 +524,12 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
     {
         this.statement = statement;
     }
-
-    /**
-     * Get the last parent {@link Statement} of the current {@link Statement}. If no parent found, return null;
-     * 
-     * @return
-     */
-    public URI getLastParent()
+    
+    public String getLastParentTreeIndex()
     {
-        return lastParent;
+        return treeIndex.split(",", 0)[0];
     }
 
-    /**
-     * @param lastParent the lastParent to set
-     */
-    public void setLastParent(URI lastParent)
-    {
-        this.lastParent = lastParent;
-    }
 
     /*
      * (non-Javadoc)

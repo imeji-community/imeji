@@ -32,6 +32,7 @@ import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectLoader;
+import de.mpg.imeji.presentation.util.ProfileHelper;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
 /**
@@ -85,7 +86,7 @@ public class EditImageMetadataBean
         reset();
         try
         {
-            allItems = initImages();
+            allItems = loadItems();
             initProfileAndStatement(allItems);
             initStatementsMenu();
             initEditor(new ArrayList<Item>(allItems));
@@ -140,12 +141,12 @@ public class EditImageMetadataBean
     }
 
     /**
-     * Load the images to be edited
+     * Load the items to be edited
      * 
      * @return
      * @throws IOException
      */
-    private List<Item> initImages() throws IOException
+    private List<Item> loadItems() throws IOException
     {
         List<String> uris = new ArrayList<String>();
         if ("selected".equals(type))
@@ -220,6 +221,7 @@ public class EditImageMetadataBean
         Item emtpyItem = new Item();
         emtpyItem.getMetadataSets().add(ImejiFactory.newMetadataSet(profile.getId()));
         editorItem = new EditorItemBean(emtpyItem, profile);
+        editorItem.getMds().addEmtpyValues();
     }
 
     /**
@@ -512,6 +514,13 @@ public class EditImageMetadataBean
             return profile.getStatements().iterator().next();
         }
         return null;
+    }
+
+    public boolean isEditableStatement(Statement st)
+    {
+        URI lastParent = ProfileHelper.getLastParent(st, profile);
+        return statement.getId().compareTo(st.getId()) == 0
+                || (lastParent != null && statement.getId().compareTo(lastParent) == 0);
     }
 
     public int getMdPosition()

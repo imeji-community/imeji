@@ -46,7 +46,6 @@ public class EditorItemBean
     {
         this.item = item;
         mds = new MetadataSetBean(item.getMetadataSet());
-        //mds.prepareMetadataSetForEditor();
     }
 
     /**
@@ -64,6 +63,9 @@ public class EditorItemBean
         return item;
     }
 
+    /**
+     * Add a Metadata of the same type as the active metadata and after it
+     */
     public void addMetadata()
     {
         SuperMetadataBean newMd = activeMetadata.copyEmpty();
@@ -71,6 +73,9 @@ public class EditorItemBean
         mds.getTree().add(newMd);
     }
 
+    /**
+     * Remove the active metadata
+     */
     public void removeMetadata()
     {
         mds.getTree().remove(activeMetadata);
@@ -85,12 +90,12 @@ public class EditorItemBean
     public void clear(Statement st)
     {
         List<SuperMetadataBean> l = new ArrayList<SuperMetadataBean>();
-        for (SuperMetadataBean smd : mds.getTree().getList())
-        {
-            if (st.getId().compareTo(smd.getStatement().getId()) != 0
-                    && (smd.getLastParent() != null && st.getId().compareTo(smd.getLastParent()) != 0))
-                l.add(smd);
-        }
+//        for (SuperMetadataBean smd : mds.getTree().getList())
+//        {
+//            if (st.getId().compareTo(smd.getStatement().getId()) != 0
+//                    && (smd.getLastParent() != null && st.getId().compareTo(smd.getLastParent()) != 0))
+//                l.add(smd);
+//        }
         mds.initTreeFromList(l);
         init(asItem());
     }
@@ -110,19 +115,6 @@ public class EditorItemBean
                 p = smd.getPos();
         }
         return p;
-    }
-
-    /**
-     * Add a {@link Metadata} to this {@link EditorItemBean} at the position requested
-     * 
-     * @param s
-     * @param position
-     */
-    private void addMetadata(Statement s, int position)
-    {
-        // SuperMetadataBean smd = new SuperMetadataBean(MetadataFactory.createMetadata(s), s);
-        // smd.setLastParent(ProfileHelper.getLastParent(s, ObjectCachedLoader.loadProfile(getProfile())));
-        // metadata.add(position, smd);
     }
 
     /**
@@ -154,11 +146,6 @@ public class EditorItemBean
     {
         return item.getMetadataSet().getProfile();
     }
-
-//    public List<SuperMetadataBean> getMetadata()
-//    {
-//        return mds.getMetadataFlat();
-//    }
 
     /**
      * @return the mds

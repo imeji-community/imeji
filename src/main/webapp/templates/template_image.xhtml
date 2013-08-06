@@ -176,10 +176,10 @@
 								<ui:repeat id="editItem" var="item" value="#{imageBean.edit.editor.items}" rows="0" varStatus="indexMetadata">
 									<ui:repeat id="metadata" var="metadata" value="#{item.mds.tree.list}" rows="0" varStatus="indexMetadata">
 												<b class="xLarge_area0_p8 endline labelLine clear" >
-													<h:outputText value="#{MetadataLabels.internationalizedLabels[metadata.statement.id]} - #{metadata.treeIndex}"/>
+													<h:outputText value="#{MetadataLabels.internationalizedLabels[metadata.statement.id]}"/>
 													<span class="noDisplay">: </span> 
 												</b>
-												<h:panelGroup layout="block" styleClass="huge_area0 xTiny_marginLExcl endline">
+												<h:panelGroup layout="block" styleClass="full_area0 xTiny_marginLExcl endline">
 													<div class="free_area0">
 														<ui:include src="../picturesPages/ui/MetadataInput.xhtml">
 															<ui:param name="statement" value="#{metadata.statement}"/>

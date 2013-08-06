@@ -286,12 +286,16 @@
 									</h:panelGroup>
 									</div>
 								</h:panelGroup>
-								<h:panelGroup id="dropMetadata" style="margin-left:#{wrapper.level}px;" styleClass="full_area0_p8 dropMetadata">
+								<h:panelGroup id="dropMetadata" style="margin-left:#{wrapper.level}px;" styleClass="full_area0_p8" rendered="#{FormularBean.hasChild(position.index +1)}">
 									<h:outputText styleClass="full_area0" value="#{lbl.add_metadata}" style="visibility:hidden;"/>
 									<h:commandButton id="dropMetadataButton" value="Insert metadata" action="#{FormularBean.insertMetadata}" style="display:none;">
 										<f:setPropertyActionListener value="#{position.index +1}" target="#{FormularBean.statementPosition}"/>
 										<f:ajax execute="@this" render=":profileForm:ajaxArea"/>
 									</h:commandButton>
+								</h:panelGroup>
+								<h:panelGroup id="dropMetadataNotAllowed" style="margin-left:#{wrapper.level}px;" styleClass="full_area0_p8 dropMetadata" rendered="#{!FormularBean.hasChild(position.index +1)}">
+									<!-- Can not a metadata here !! -->
+									<h:outputText styleClass="full_area0" value="#{lbl.add_metadata}" style="visibility:hidden;"/>
 								</h:panelGroup>
 								</h:panelGroup>
 								</ui:repeat>

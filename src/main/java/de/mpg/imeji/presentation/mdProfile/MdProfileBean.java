@@ -414,6 +414,14 @@ public class MdProfileBean
         return false;
     }
 
+    public boolean hasChild(int position)
+    {
+        if (position < wrappers.size() && wrappers.get(position).getStatement().getParent() != null)
+            return wrappers.get(position).getStatement().getParent()
+                    .compareTo(wrappers.get(position - 1).getStatement().getId()) == 0;
+        return false;
+    }
+
     /**
      * Increment all position after a position
      * 

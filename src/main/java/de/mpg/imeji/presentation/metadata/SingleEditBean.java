@@ -18,7 +18,6 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.presentation.metadata.editors.SimpleImageEditor;
-import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
 import de.mpg.imeji.presentation.metadata.util.SuggestBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -90,26 +89,10 @@ public class SingleEditBean
      */
     public String save() throws Exception
     {
-        copySuperMetadatatoItem();
-        cleanImageMetadata();
-        editor.getItems().clear();
-        editor.getItems().add(new EditorItemBean(item, profile));
         editor.save();
         reloadPage();
         cancel();
         return "";
-    }
-
-    /**
-     * Transform all {@link SuperMetadataBean} to {@link Metadata} which are going to be saved
-     */
-    private void copySuperMetadatatoItem()
-    {
-        item.getMetadataSet().getMetadata().clear();
-        for (SuperMetadataBean smb : metadataList)
-        {
-            item.getMetadataSet().getMetadata().add(smb.asMetadata());
-        }
     }
 
     /**
@@ -121,14 +104,10 @@ public class SingleEditBean
     public String cancel() throws Exception
     {
         this.toggleState = "displayMd";
-        if (editor != null && !editor.getItems().isEmpty())
-        {
-            item = editor.getItems().get(0).asItem();
-        }
-        cleanImageMetadata();
         SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         Locks.unLock(new Lock(this.item.getId().toString(), sb.getUser().getEmail()));
         reloadImage();
+        editor = new SimpleImageEditor(item, profile, null);
         return "";
     }
 
@@ -157,21 +136,6 @@ public class SingleEditBean
         {
             BeanHelper.error("Error reload image" + e.getMessage());
             e.printStackTrace();
-        }
-    }
-
-    /**
-     * Remove Metadata which are emtpy to avoid to display then
-     */
-    private void cleanImageMetadata()
-    {
-        for (int i = 0; i < item.getMetadataSet().getMetadata().size(); i++)
-        {
-            if (MetadataHelper.isEmpty(((List<Metadata>)item.getMetadataSet().getMetadata()).get(i)))
-            {
-                ((List<Metadata>)item.getMetadataSet().getMetadata()).remove(i);
-                i--;
-            }
         }
     }
 

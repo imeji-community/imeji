@@ -73,7 +73,6 @@ public class MetadataSetBean
     public void initTreeFromList(List<SuperMetadataBean> list)
     {
         metadataTree = new SuperMetadataTree(list);
-        // metadataTree = new SuperMetadataTree(setParentAndChilds(list));
     }
 
     /**
@@ -83,7 +82,7 @@ public class MetadataSetBean
     public void trim()
     {
         for (SuperMetadataBean smb : metadataTree.getList())
-            if (metadataTree.getChilds(smb.getTreeIndex()).isEmpty() && MetadataHelper.isEmpty(smb.asMetadata()))
+            if (MetadataHelper.isEmpty(smb.asMetadata()))
                 metadataTree.remove(smb);
     }
 

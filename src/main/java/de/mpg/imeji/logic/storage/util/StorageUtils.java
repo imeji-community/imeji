@@ -197,6 +197,10 @@ public class StorageUtils
         {
             return "image/gif";
         }
+        else if ("pdn".equals(extension))
+        {
+            return "image/x-paintnet";
+        }
         else if ("mov".equals(extension))
         {
             return "video/quicktime";

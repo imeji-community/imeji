@@ -28,22 +28,25 @@
  */
 package de.mpg.imeji.logic.storage.transform.impl;
 
+import java.io.File;
+
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.storage.transform.ImageGenerator;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
-import de.mpg.imeji.logic.storage.util.VideoUtils;
 
 /**
- * {@link ImageGenerator} implemted with xuggle (video, audios)
+ * Generate a simple icon for an audio file
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class XuggleImageGenerator implements ImageGenerator
+public class SimpleAudioImageGenerator implements ImageGenerator
 {
-    private static Logger logger = Logger.getLogger(XuggleImageGenerator.class);
+    private static Logger logger = Logger.getLogger(SimpleAudioImageGenerator.class);
+    private static String PATH_TO_AUDIO_ICON = "images/audio_file_icon.jpg";
 
     /*
      * (non-Javadoc)
@@ -52,15 +55,19 @@ public class XuggleImageGenerator implements ImageGenerator
     @Override
     public byte[] generateJPG(byte[] bytes, String extension)
     {
-        if (StorageUtils.getMimeType(extension).contains("video"))
+        if (StorageUtils.getMimeType(extension).contains("audio"))
         {
             try
             {
-                return VideoUtils.videoToImageBytes(bytes);
+                PATH_TO_AUDIO_ICON = "images/audio_file_icon.jpg";
+                System.out.println(FileUtils.readFileToByteArray(new File(XuggleImageGenerator.class.getClassLoader()
+                        .getResource(PATH_TO_AUDIO_ICON).toURI())));
+                return FileUtils.readFileToByteArray(new File(XuggleImageGenerator.class.getClassLoader()
+                        .getResource(PATH_TO_AUDIO_ICON).toURI()));
             }
             catch (Exception e)
             {
-                logger.debug("Error transforming a video file to an image with xuggle", e);
+                logger.debug("Error reading audio icon file", e);
             }
         }
         return null;

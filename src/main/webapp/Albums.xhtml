@@ -130,22 +130,22 @@
 								<th class="free_area0 endline status statusArea"><span
 									class="seperator"></span> <h:commandLink id="lnkStateSort"
 										styleClass="free_area0_p6"
-										rendered="#{AlbumsBean.selectedSortCriterion != 'PROPERTIES_STATUS'}">
-										<f:setPropertyActionListener value="PROPERTIES_STATUS"
+										rendered="#{AlbumsBean.selectedSortCriterion != 'status'}">
+										<f:setPropertyActionListener value="status"
 											target="#{AlbumsBean.selectedSortCriterion}" />
 										<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} " />
 										<h:outputText value="#{lbl.state}" />
 									</h:commandLink> <h:commandLink id="lnkStateSortAsc"
 										styleClass="free_area0_p6 ascSort"
 										action="#{AlbumsBean.toggleSortOrder}"
-										rendered="#{(AlbumsBean.selectedSortOrder == 'ASCENDING') and AlbumsBean.selectedSortCriterion == 'PROPERTIES_STATUS'}">
+										rendered="#{(AlbumsBean.selectedSortOrder == 'ASCENDING') and AlbumsBean.selectedSortCriterion == 'status'}">
 										<h:outputText id="txtSortBy2" styleClass="noDisplay"
 											value="#{lbl.sort_by} " />
 										<h:outputText value="#{lbl.state}" />
 									</h:commandLink> <h:commandLink id="lnkStateSortDesc"
 										styleClass="free_area0_p6 desSort"
 										action="#{AlbumsBean.toggleSortOrder}"
-										rendered="#{(AlbumsBean.selectedSortOrder != 'ASCENDING') and AlbumsBean.selectedSortCriterion == 'PROPERTIES_STATUS'}">
+										rendered="#{(AlbumsBean.selectedSortOrder != 'ASCENDING') and AlbumsBean.selectedSortCriterion == 'status'}">
 										<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} " />
 										<h:outputText value="#{lbl.state}" />
 									</h:commandLink> &#160;</th>
@@ -156,21 +156,21 @@
 							</h:panelGroup>
 							<th class="free_area0"><span class="seperator"></span> <h:commandLink
 									id="lnkNameSort" styleClass="free_area0_p8 itemHeadline"
-									rendered="#{AlbumsBean.selectedSortCriterion != 'CONTAINER_METADATA_TITLE'}">
-									<f:setPropertyActionListener value="CONTAINER_METADATA_TITLE"
+									rendered="#{AlbumsBean.selectedSortCriterion != 'cont_title'}">
+									<f:setPropertyActionListener value="cont_title"
 										target="#{AlbumsBean.selectedSortCriterion}" />
 									<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} " />
 									<h:outputText value="#{lbl.name}" />
 								</h:commandLink> <h:commandLink id="lnkNameSortAsc"
 									styleClass="free_area0_p8 ascSort itemHeadline"
 									action="#{AlbumsBean.toggleSortOrder}"
-									rendered="#{(AlbumsBean.selectedSortOrder == 'ASCENDING') and AlbumsBean.selectedSortCriterion == 'CONTAINER_METADATA_TITLE'}">
+									rendered="#{(AlbumsBean.selectedSortOrder == 'ASCENDING') and AlbumsBean.selectedSortCriterion == 'cont_title'}">
 									<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} " />
 									<h:outputText value="#{lbl.name}" />
 								</h:commandLink> <h:commandLink id="lnkNameSortDesc"
 									styleClass="free_area0_p8 desSort itemHeadline"
 									action="#{AlbumsBean.toggleSortOrder}"
-									rendered="#{(AlbumsBean.selectedSortOrder != 'ASCENDING') and AlbumsBean.selectedSortCriterion == 'CONTAINER_METADATA_TITLE'}">
+									rendered="#{(AlbumsBean.selectedSortOrder != 'ASCENDING') and AlbumsBean.selectedSortCriterion == 'cont_title'}">
 									<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} " />
 									<h:outputText value="#{lbl.name}" />
 								</h:commandLink> &#160;</th>
@@ -190,22 +190,22 @@
 							</th>
 							<th class="medium_area0"><span class="seperator"></span> <h:commandLink
 									id="lnkLmdSort" styleClass="medium_area0_p8"
-									rendered="#{AlbumsBean.selectedSortCriterion != 'PROPERTIES_LAST_MODIFICATION_DATE'}">
+									rendered="#{AlbumsBean.selectedSortCriterion != 'modified'}">
 									<f:setPropertyActionListener
-										value="PROPERTIES_LAST_MODIFICATION_DATE"
+										value="modified"
 										target="#{AlbumsBean.selectedSortCriterion}" />
 									<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} " />
 									<h:outputText value="#{lbl.last_modified}" />
 								</h:commandLink> <h:commandLink id="lnkLmdSortAsc"
 									styleClass="medium_area0_p8 ascSort"
 									action="#{AlbumsBean.toggleSortOrder}"
-									rendered="#{(AlbumsBean.selectedSortOrder == 'ASCENDING') and AlbumsBean.selectedSortCriterion == 'PROPERTIES_LAST_MODIFICATION_DATE'}">
+									rendered="#{(AlbumsBean.selectedSortOrder == 'ASCENDING') and AlbumsBean.selectedSortCriterion == 'modified'}">
 									<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} " />
 									<h:outputText value="#{lbl.last_modified}" />
 								</h:commandLink> <h:commandLink id="lnkLmdSortDesc"
 									styleClass="medium_area0_p8 desSort"
 									action="#{AlbumsBean.toggleSortOrder}"
-									rendered="#{(AlbumsBean.selectedSortOrder != 'ASCENDING') and AlbumsBean.selectedSortCriterion == 'PROPERTIES_LAST_MODIFICATION_DATE'}">
+									rendered="#{(AlbumsBean.selectedSortOrder != 'ASCENDING') and AlbumsBean.selectedSortCriterion == 'modified'}">
 									<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} " />
 									<h:outputText value="#{lbl.last_modified}" />
 								</h:commandLink></th>

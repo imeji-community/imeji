@@ -284,7 +284,7 @@
 									</b>
 									<span class="xHuge_area0 xTiny_marginLExcl endline"> 
 										<ui:repeat var="albums" value="#{imageBean.relatedAlbums}">
-											<h:outputLink value="#{albums.id}">
+											<h:outputLink value="#{Navigation.applicationUri}#{albums.id.path}">
 												<h:outputText value="#{albums.metadata.title}" />
 											</h:outputLink><br/>
 										</ui:repeat>

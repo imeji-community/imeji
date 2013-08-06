@@ -1,8 +1,6 @@
 package de.mpg.imeji.presentation.metadata;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
 
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
@@ -21,10 +19,6 @@ public class EditorItemBean
     private MetadataSetBean mds;
     private Item item;
     private MetadataProfile profile;
-    /**
-     * The Metadata which has been clicked
-     */
-    private SuperMetadataBean activeMetadata;
 
     /**
      * Bean for item element in the metadata editors
@@ -64,11 +58,11 @@ public class EditorItemBean
     }
 
     /**
-     * Add a Metadata of the same type as the active metadata and after it
+     * Add a Metadata of the same type as the passed metadata
      */
-    public void addMetadata()
+    public void addMetadata(SuperMetadataBean smb)
     {
-        SuperMetadataBean newMd = activeMetadata.copyEmpty();
+        SuperMetadataBean newMd = smb.copyEmpty();
         newMd.addEmtpyChilds(profile);
         mds.getTree().add(newMd);
     }
@@ -76,28 +70,30 @@ public class EditorItemBean
     /**
      * Remove the active metadata
      */
-    public void removeMetadata()
+    public void removeMetadata(SuperMetadataBean smb)
     {
-        mds.getTree().remove(activeMetadata);
+        mds.getTree().remove(smb);
     }
 
     /**
      * Clear the {@link Metadata} for one {@link Statement}: remove all {@link Metadata} and its Childs and add an empty
-     * one TODO Will not work, need testing - Bastien
+     * one
      * 
      * @param st
      */
     public void clear(Statement st)
     {
-        List<SuperMetadataBean> l = new ArrayList<SuperMetadataBean>();
-//        for (SuperMetadataBean smd : mds.getTree().getList())
-//        {
-//            if (st.getId().compareTo(smd.getStatement().getId()) != 0
-//                    && (smd.getLastParent() != null && st.getId().compareTo(smd.getLastParent()) != 0))
-//                l.add(smd);
-//        }
-        mds.initTreeFromList(l);
-        init(asItem());
+        for (SuperMetadataBean smd : mds.getTree().getList())
+        {
+            if (st.getId().compareTo(smd.getStatement().getId()) == 0)
+            {
+                // Clear the childs
+                for (SuperMetadataBean child : mds.getTree().getChilds(smd.getTreeIndex()))
+                    child.clear();
+                // clear the metadata
+                smd.clear();
+            }
+        }
     }
 
     /**
@@ -161,21 +157,5 @@ public class EditorItemBean
     public void setMds(MetadataSetBean mds)
     {
         this.mds = mds;
-    }
-
-    /**
-     * @return the newMetadata
-     */
-    public SuperMetadataBean getActiveMetadata()
-    {
-        return activeMetadata;
-    }
-
-    /**
-     * @param newMetadata the newMetadata to set
-     */
-    public void setActiveMetadata(SuperMetadataBean newMetadata)
-    {
-        this.activeMetadata = newMetadata;
     }
 }

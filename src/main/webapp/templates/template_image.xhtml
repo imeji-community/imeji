@@ -189,12 +189,10 @@
 														</ui:include>
 													</div>
 													<div class="free_area0">
-														<h:commandButton type="button" styleClass="min_imgBtn groupTool remove af_commandButton" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{item.removeMetadata}" value="">
-															<f:setPropertyActionListener value="#{metadata}" target="#{item.activeMetadata}" />
+														<h:commandButton type="button" styleClass="min_imgBtn groupTool remove af_commandButton" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{item.removeMetadata(metadata)}" value="">
 															<f:ajax execute="@form" render="@form" />
 														</h:commandButton>
-														<h:commandButton type="button" styleClass="min_imgBtn groupTool add af_commandButton" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{item.addMetadata}" value="">
-															<f:setPropertyActionListener value="#{metadata}" target="#{item.activeMetadata}" />
+														<h:commandButton type="button" styleClass="min_imgBtn groupTool add af_commandButton" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{item.addMetadata(metadata)}" value="">
 															<f:ajax execute="@form" render="@form" />
 														</h:commandButton>							
 													</div>

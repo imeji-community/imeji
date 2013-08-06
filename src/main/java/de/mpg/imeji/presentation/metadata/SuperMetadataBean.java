@@ -125,6 +125,14 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
     }
 
     /**
+     * Clear all values
+     */
+    public void clear()
+    {
+        ObjectHelper.copyAllFields(copyEmpty(), this);
+    }
+
+    /**
      * Retun the id (last part of the {@link URI}) of the {@link Statement}. Used for GUI representation
      * 
      * @return
@@ -524,12 +532,11 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
     {
         this.statement = statement;
     }
-    
+
     public String getLastParentTreeIndex()
     {
         return treeIndex.split(",", 0)[0];
     }
-
 
     /*
      * (non-Javadoc)

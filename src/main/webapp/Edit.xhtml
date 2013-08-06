@@ -112,12 +112,10 @@
 												</ui:include>
 												<!-- BUTTONS -->
 												<h:panelGroup layout="block">
-													<h:commandLink id="add" styleClass="small_label" action="#{item.addMetadata}" value="#{lbl.add}" rendered="#{md.statement.maxOccurs != '1'}">
-														<f:setPropertyActionListener value="#{md}" target="#{item.activeMetadata}" />
+													<h:commandLink id="add" styleClass="small_label" action="#{item.addMetadata(md)}" value="#{lbl.add}" rendered="#{md.statement.maxOccurs != '1'}">
 														<f:ajax execute="@form" render="@form" />
 													</h:commandLink>
-													<h:commandLink  id="remove" styleClass="small_label" action="#{item.removeMetadata}" value="#{lbl.remove}" rendered="#{md.statement.maxOccurs != '1'}">
-														<f:setPropertyActionListener value="#{md}" target="#{item.activeMetadata}" />
+													<h:commandLink  id="remove" styleClass="small_label" action="#{item.removeMetadata(md)}" value="#{lbl.remove}" rendered="#{md.statement.maxOccurs != '1'}">
 														<f:ajax execute="@form" render="@form" />
 													</h:commandLink>
 												</h:panelGroup>

@@ -29,6 +29,7 @@
 package de.mpg.imeji.presentation.metadata;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import de.mpg.imeji.logic.util.MetadataFactory;
@@ -94,8 +95,7 @@ public class MetadataSetBean
     public void appendEmtpyMetadata(Statement st)
     {
         List<SuperMetadataBean> l = metadataTree.getList();
-        l.add(new SuperMetadataBean(MetadataFactory.createMetadata(st), st));
-        initTreeFromList(l);
+        metadataTree.add(new SuperMetadataBean(MetadataFactory.createMetadata(st), st));
     }
 
     /**
@@ -158,8 +158,10 @@ public class MetadataSetBean
     {
         for (SuperMetadataBean md : metadataTree.getList())
         {
-            if (md.getStatement().getId().compareTo(st.getId()) == 0 && !MetadataHelper.isEmpty(md.asMetadata()))
-                return true;
+            if (!MetadataHelper.isEmpty(md.asMetadata()))
+                if (md.getStatement().getId().compareTo(st.getId()) == 0
+                        || ProfileHelper.isParent(st, md.getStatement(), profile))
+                    return true;
         }
         return false;
     }

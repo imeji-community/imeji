@@ -219,7 +219,7 @@ public class SuperMetadataTree
     /**
      * Reset the position to all Metadata according to the current order. The list should be flat
      */
-    private List<SuperMetadataBean> resetPosition(List<SuperMetadataBean> l)
+    public static List<SuperMetadataBean> resetPosition(List<SuperMetadataBean> l)
     {
         int i = 0;
         for (SuperMetadataBean smd : l)

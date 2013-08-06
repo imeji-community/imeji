@@ -112,16 +112,14 @@
 												</ui:include>
 												<!-- BUTTONS -->
 												<h:panelGroup layout="block">
-													<h:commandLink id="add" styleClass="small_label" action="#{EditImageMetadataBean.addMetadata}" value="#{lbl.add}" rendered="#{md.statement.maxOccurs != '1'}">
-														<f:setPropertyActionListener value="#{indexMetadata.index}" target="#{EditImageMetadataBean.mdPosition}" />
-														<f:setPropertyActionListener value="#{indexImage.index}" target="#{EditImageMetadataBean.imagePosition}" />
+													<h:commandLink id="add" styleClass="small_label" action="#{item.addMetadata}" value="#{lbl.add}" rendered="#{md.statement.maxOccurs != '1'}">
+														<f:setPropertyActionListener value="#{md}" target="#{item.activeMetadata}" />
 														<f:ajax execute="@form" render="@form" />
 													</h:commandLink>
-													<h:commandLink  id="remove" styleClass="small_label" action="#{EditImageMetadataBean.removeMetadata}" value="#{lbl.remove}" rendered="#{md.statement.maxOccurs != '1'}">
-														<f:setPropertyActionListener value="#{indexMetadata.index}" target="#{EditImageMetadataBean.mdPosition}" />
-														<f:setPropertyActionListener value="#{indexImage.index}" target="#{EditImageMetadataBean.imagePosition}" />
+													<h:commandLink  id="remove" styleClass="small_label" action="#{item.removeMetadata}" value="#{lbl.remove}" rendered="#{md.statement.maxOccurs != '1'}">
+														<f:setPropertyActionListener value="#{md}" target="#{item.activeMetadata}" />
 														<f:ajax execute="@form" render="@form" />
-													</h:commandLink>	
+													</h:commandLink>
 												</h:panelGroup>
 				        					</h:panelGroup>
 				        				</ui:repeat>

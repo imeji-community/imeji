@@ -193,11 +193,6 @@
 															<f:setPropertyActionListener value="#{metadata}" target="#{item.activeMetadata}" />
 															<f:ajax execute="@form" render="@form" />
 														</h:commandButton>
-														<h:commandButton type="button" styleClass="min_imgBtn groupTool add af_commandButton" rendered="#{metadata.statement.maxOccurs != '1' and false}" action="#{imageBean.edit.addMetadata}" value="">
-															<f:setPropertyActionListener value="#{metadata.statement}" target="#{imageBean.edit.editor.statement}" />
-															<f:setPropertyActionListener value="#{metadata.pos}" target="#{imageBean.edit.mdPosition}" />
-															<f:ajax execute="@form" render="@form" />
-														</h:commandButton>	
 														<h:commandButton type="button" styleClass="min_imgBtn groupTool add af_commandButton" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{item.addMetadata}" value="">
 															<f:setPropertyActionListener value="#{metadata}" target="#{item.activeMetadata}" />
 															<f:ajax execute="@form" render="@form" />
@@ -206,36 +201,6 @@
 												</h:panelGroup>
 										</ui:repeat>
 									</ui:repeat>
-									<ui:remove>
-										<ui:repeat id="metadata" var="metadata" value="#{imageBean.edit.metadataList}" rows="0" varStatus="indexMetadata" size="0">
-												<b class="xLarge_area0_p8 endline labelLine clear" >
-													<h:outputText value="#{MetadataLabels.internationalizedLabels[metadata.statement.id]} - #{metadata.parent.text}"/>
-													<span class="noDisplay">: </span> 
-												</b>
-												<h:panelGroup layout="block" styleClass="huge_area0 xTiny_marginLExcl endline">
-													<div class="free_area0">
-														<ui:include src="../picturesPages/ui/MetadataInput.xhtml">
-															<ui:param name="statement" value="#{metadata.statement}"/>
-															<ui:param name="metadata" value="#{metadata}"/>
-															<ui:param name="areaClass" value="double_txtArea"/>
-															<ui:param name="hideLabel" value="true"/>
-														</ui:include>
-													</div>
-													<div class="free_area0">
-														<h:commandButton type="button" styleClass="min_imgBtn groupTool remove af_commandButton" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{imageBean.edit.removeMetadata}" value="">
-															<f:setPropertyActionListener value="#{metadata.statement}" target="#{imageBean.edit.editor.statement}" />
-															<f:setPropertyActionListener value="#{metadata.pos}" target="#{imageBean.edit.mdPosition}" />
-															<f:ajax execute="@form" render="@form" />
-														</h:commandButton>
-														<h:commandButton type="button" styleClass="min_imgBtn groupTool add af_commandButton" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{imageBean.edit.addMetadata}" value="">
-															<f:setPropertyActionListener value="#{metadata.statement}" target="#{imageBean.edit.editor.statement}" />
-															<f:setPropertyActionListener value="#{metadata.pos}" target="#{imageBean.edit.mdPosition}" />
-															<f:ajax execute="@form" render="@form" />
-														</h:commandButton>									
-													</div>
-												</h:panelGroup>
-										</ui:repeat>
-									</ui:remove>
 									<div class="vertDist050 linebreak"></div>
 									<h:panelGroup rendered="#{imageBean.edit.toggleState == 'editMd'}" layout="block" styleClass="quad_area0_p1">
 										<div class="free_area0_p4 large_marginLExcl marginTExcl025">

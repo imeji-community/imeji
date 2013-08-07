@@ -192,6 +192,10 @@ public class StorageUtils
         {
             return "image/png";
         }
+        else if ("bmp".equals(extension))
+        {
+            return "image/bmp";
+        }
         else if ("gif".equals(extension))
         {
             return "image/gif";
@@ -261,7 +265,7 @@ public class StorageUtils
         {
             return "audio/x-ms-wma";
         }
-        return null;
+        return "application/octet-stream";
     }
 
     public static byte[] getBytes(URL url) throws FileNotFoundException

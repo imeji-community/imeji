@@ -77,12 +77,8 @@ public class MediaUtils
         cmd.setSearchPath(magickPath);
         // create the operation, add images and operators/options
         IMOperation op = new IMOperation();
-        if (StorageUtils.compareExtension("MOV", extension) || StorageUtils.compareExtension("MP4", extension)
-                || StorageUtils.compareExtension("GIF", extension) || StorageUtils.compareExtension("WMV", extension))
-        {
-            // extract the first frame
+        if (StorageUtils.getMimeType(extension).contains("video"))
             path = path + "[0]";
-        }
         op.addImage(path);
         File jpeg = File.createTempFile(bytes.toString(), ".jpg");
         op.addImage(jpeg.getAbsolutePath());

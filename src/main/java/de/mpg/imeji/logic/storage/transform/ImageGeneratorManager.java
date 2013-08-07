@@ -163,6 +163,8 @@ public class ImageGeneratorManager
     {
         byte[] jpeg = null;
         Iterator<ImageGenerator> it = generators.iterator();
+        if (StorageUtils.compareExtension(extension, "jpg"))
+            return bytes;
         while (it.hasNext() && jpeg == null)
         {
             try

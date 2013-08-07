@@ -13,6 +13,8 @@ import javax.imageio.ImageIO;
 
 import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.PDFPage;
+import com.sun.pdfview.PDFParseException;
+
 import de.mpg.imeji.logic.storage.Storage.FileResolution;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
@@ -72,13 +74,14 @@ public class PdfUtils
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public static byte[] pdfsToImageBytes(byte[] bytes) throws FileNotFoundException, IOException
+    public static byte[] pdfsToImageBytes(byte[] bytes) throws FileNotFoundException, IOException, PDFParseException
     {
-        // ByteBuffer byteBuffer = ByteBuffer.allocate(bytes.length);
-        // byteBuffer.put(bytes);
-        // PDFFile pdfFile = new PDFFile(byteBuffer);
-        // return PdfUtils.pdfFileToByteAray(pdfFile, PdfUtils.PAGENUMBERTOIMAGE, BufferedImage.TYPE_INT_RGB,
-        // PdfUtils.getResolutionDPI());
+//        ByteBuffer byteBuffer = ByteBuffer.allocate(bytes.length);
+//        byteBuffer.put(bytes);
+//        PDFFile pdfFile = null;
+//        pdfFile = new PDFFile(byteBuffer);
+//        return PdfUtils.pdfFileToByteAray(pdfFile, PdfUtils.PAGENUMBERTOIMAGE, BufferedImage.TYPE_INT_RGB,PdfUtils.getResolutionDPI());
+    	
         return PdfUtils.pdfFileToByteAray(new PDFFile(ByteBuffer.wrap(bytes)), PdfUtils.getThumbnailPage(),
                 BufferedImage.TYPE_INT_RGB, PdfUtils.getResolutionDPI());
     }
@@ -122,10 +125,19 @@ public class PdfUtils
     public static byte[] pdfFileToByteAray(PDFFile pdfFile, int pageNumber, int imageType, int resolution)
             throws IOException
     {
-        if (pageNumber < 0 || pageNumber >= pdfFile.getNumPages()) // hn: randomize a page number if provided page
-                                                                   // number is not proper
-            pageNumber = new Random().nextInt(pdfFile.getNumPages());
-        return PdfUtils.pdfPageToByteAray(pdfFile.getPage(pageNumber, true), imageType, resolution);
+//        if (pageNumber < 0 || pageNumber > pdfFile.getNumPages()) // hn: randomize a page number if provided page                                                                   
+//            pageNumber = new Random().nextInt(pdfFile.getNumPages()); // number is not proper
+
+        byte[] bytes = null;
+        
+        try {
+        	bytes = PdfUtils.pdfPageToByteAray(pdfFile.getPage(pageNumber, true), imageType, resolution);
+        } catch (Exception e) {
+        	if(pageNumber < pdfFile.getNumPages()) {        		
+        		bytes = pdfFileToByteAray(pdfFile, ++pageNumber, imageType, resolution);
+        	}
+        }
+        return bytes;
     }
 
     /**
@@ -135,9 +147,9 @@ public class PdfUtils
      * @param imageType
      * @param resolution
      * @return byte array from PDF page
-     * @throws IOException
+     * @throws Exception 
      */
-    public static byte[] pdfPageToByteAray(PDFPage page, int imageType, int resolution) throws IOException
+    public static byte[] pdfPageToByteAray(PDFPage page, int imageType, int resolution) throws Exception
     {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write(PdfUtils.convertToImage(page, imageType, resolution), PdfUtils.IMAGE_FILE_EXTENSION, baos);
@@ -156,7 +168,7 @@ public class PdfUtils
      * @return BufferedImage from PDF page
      * @throws IOException
      */
-    private static BufferedImage convertToImage(PDFPage page, int imageType, int resolution)
+    private static BufferedImage convertToImage(PDFPage page, int imageType, int resolution) throws Exception
     {
         // get the width and height for the doc at the default zoom
         int width = (int)page.getWidth();

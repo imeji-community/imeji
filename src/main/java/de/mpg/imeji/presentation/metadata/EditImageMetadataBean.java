@@ -6,6 +6,7 @@ package de.mpg.imeji.presentation.metadata;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
@@ -18,6 +19,7 @@ import de.mpg.imeji.logic.concurrency.locks.Locks;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
+import de.mpg.imeji.logic.util.MetadataFactory;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -26,12 +28,14 @@ import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.metadata.editors.MetadataEditor;
 import de.mpg.imeji.presentation.metadata.editors.MetadataMultipleEditor;
+import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
 import de.mpg.imeji.presentation.metadata.util.SuggestBean;
 import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectLoader;
+import de.mpg.imeji.presentation.util.ProfileHelper;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
 /**
@@ -85,7 +89,7 @@ public class EditImageMetadataBean
         reset();
         try
         {
-            allItems = initImages();
+            allItems = loadItems();
             initProfileAndStatement(allItems);
             initStatementsMenu();
             initEditor(new ArrayList<Item>(allItems));
@@ -140,12 +144,12 @@ public class EditImageMetadataBean
     }
 
     /**
-     * Load the images to be edited
+     * Load the items to be edited
      * 
      * @return
      * @throws IOException
      */
-    private List<Item> initImages() throws IOException
+    private List<Item> loadItems() throws IOException
     {
         List<String> uris = new ArrayList<String>();
         if ("selected".equals(type))
@@ -219,7 +223,8 @@ public class EditImageMetadataBean
     {
         Item emtpyItem = new Item();
         emtpyItem.getMetadataSets().add(ImejiFactory.newMetadataSet(profile.getId()));
-        editorItem = new EditorItemBean(emtpyItem);
+        editorItem = new EditorItemBean(emtpyItem, profile);
+        editorItem.getMds().addEmtpyValues();
     }
 
     /**
@@ -398,6 +403,8 @@ public class EditImageMetadataBean
             {
                 // remove all metadata which have the same statement
                 eib.clear(statement);
+                // Prepare the emtpy values in which the new values will be added
+                eib.getMds().addEmtpyValues();
             }
             else if ("append".equals(selectedMode))
             {
@@ -436,32 +443,52 @@ public class EditImageMetadataBean
         for (EditorItemBean eib : editor.getItems())
         {
             eib.clear(statement);
+            eib.getMds().addEmtpyValues();
         }
+        
         return "";
     }
 
     /**
-     * Add a the same metadata to all item having no value defined for this statement
+     * fill all emtpy Metadata of passed {@link EditorItemBean} with the values of the current one
      * 
      * @param im
      * @return
      */
     private EditorItemBean pasteMetadataIfEmtpy(EditorItemBean eib)
     {
-        int i = 0;
-        for (SuperMetadataBean smd : eib.getMetadata())
+        List<SuperMetadataBean> list = fillEmtpyValues(eib.getMds().getTree().getList(), editorItem.getMds().getTree()
+                .getList());
+        list = SuperMetadataTree.resetPosition(list);
+        eib.getMds().initTreeFromList(list);
+        return eib;
+    }
+
+    /**
+     * Fill l1 emtpy metadata with non emtpy metadata from l2
+     * 
+     * @param l1
+     * @param l2
+     */
+    private List<SuperMetadataBean> fillEmtpyValues(List<SuperMetadataBean> l1, List<SuperMetadataBean> l2)
+    {
+        List<SuperMetadataBean> filled = new ArrayList<SuperMetadataBean>();
+        for (SuperMetadataBean md1 : l1)
         {
-            for (SuperMetadataBean smdNew : editorItem.getMetadata())
+            boolean emtpy1 = MetadataHelper.isEmpty(md1.asMetadata());
+            for (SuperMetadataBean md2 : l2)
             {
-                if (smdNew.getStatementId().equals(smd.getStatementId()) && smd.isEmpty())
+                boolean emtpy2 = MetadataHelper.isEmpty(md2.asMetadata());
+                if (md1.getStatementId().equals(md2.getStatementId()))
                 {
-                    smdNew.setPos(i);
-                    eib.getMetadata().set(i, smdNew.copy());
+                    if (emtpy1 && !emtpy2)
+                        filled.add(md2.copy());
+                    else
+                        filled.add(md1);
                 }
             }
-            i++;
         }
-        return eib;
+        return filled;
     }
 
     /**
@@ -472,11 +499,26 @@ public class EditImageMetadataBean
      */
     private void appendEmtpyMetadataIfNecessary(EditorItemBean eib)
     {
-        int addAt = eib.getLastPosition(statement);
-        if (!eib.getMetadata().get(addAt).isEmpty())
-        {
-            eib.addMetadata(eib.getLastPosition(statement));
-        }
+        List<SuperMetadataBean> l = eib.getMds().getTree().getList();
+        for (Statement st : profile.getStatements())
+            if (hasValue(eib, st))
+                l.add(new SuperMetadataBean(MetadataFactory.createMetadata(st), st));
+        eib.getMds().initTreeFromList(SuperMetadataTree.resetPosition(l));
+    }
+
+    /**
+     * True if the {@link EditorItemBean} has a value for the {@link Statement}
+     * 
+     * @param eib
+     * @param st
+     * @return
+     */
+    private boolean hasValue(EditorItemBean eib, Statement st)
+    {
+        for (SuperMetadataBean md : eib.getMds().getTree().getList())
+            if (md.getStatement().getId().compareTo(st.getId()) == 0 && !MetadataHelper.isEmpty(md.asMetadata()))
+                return true;
+        return false;
     }
 
     /**
@@ -513,26 +555,11 @@ public class EditImageMetadataBean
         return null;
     }
 
-    /**
-     * Add a new emtpy {@link Metadata} into the editor
-     * 
-     * @return
-     */
-    public String addMetadata()
+    public boolean isEditableStatement(Statement st)
     {
-        editor.addMetadata(getImagePosition(), getMdPosition());
-        return "";
-    }
-
-    /**
-     * Remove a {@link Metadata} into the editor
-     * 
-     * @return
-     */
-    public String removeMetadata()
-    {
-        editor.removeMetadata(getImagePosition(), getMdPosition());
-        return "";
+        URI lastParent = ProfileHelper.getLastParent(st, profile);
+        return statement.getId().compareTo(st.getId()) == 0
+                || (lastParent != null && statement.getId().compareTo(lastParent) == 0);
     }
 
     public int getMdPosition()

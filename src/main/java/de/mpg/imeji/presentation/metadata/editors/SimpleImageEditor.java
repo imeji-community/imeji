@@ -55,14 +55,7 @@ public class SimpleImageEditor extends MetadataEditor
     {
         for (EditorItemBean eib : items)
         {
-            for (int i = 0; i < eib.getMetadata().size(); i++)
-            {
-                if (MetadataHelper.isEmpty(eib.getMetadata().get(i).asMetadata()))
-                {
-                    eib.getMetadata().remove(i);
-                    i = i > 0 ? i - 1 : 0;
-                }
-            }
+            eib.getMds().trim();
         }
         if (items.size() == 0)
         {
@@ -78,33 +71,4 @@ public class SimpleImageEditor extends MetadataEditor
         return true;
     }
 
-    @Override
-    public void addMetadata(int imagePos, int metadataPos)
-    {
-        if (imagePos < items.size())
-        {
-            addMetadata(items.get(imagePos), metadataPos);
-        }
-    }
-
-    @Override
-    public void addMetadata(EditorItemBean eib, int metadataPos)
-    {
-        eib.addMetadata(metadataPos);
-    }
-
-    @Override
-    public void removeMetadata(int imagePos, int metadataPos)
-    {
-        if (imagePos < items.size())
-        {
-            removeMetadata(items.get(imagePos), metadataPos);
-        }
-    }
-
-    @Override
-    public void removeMetadata(EditorItemBean eib, int metadataPos)
-    {
-        eib.removeMetadata(metadataPos);
-    }
 }

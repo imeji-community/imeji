@@ -46,7 +46,7 @@ public abstract class MetadataEditor
         items = new ArrayList<EditorItemBean>();
         for (Item item : itemList)
         {
-            items.add(new EditorItemBean(item));
+            items.add(new EditorItemBean(item, profile));
         }
         initialize();
     }
@@ -120,7 +120,7 @@ public abstract class MetadataEditor
         for (EditorItemBean eib : items)
         {
             int pos = 0;
-            for (SuperMetadataBean smb : eib.getMetadata())
+            for (SuperMetadataBean smb : eib.getMds().getTree().getList())
             {
                 smb.setPos(pos);
                 pos++;
@@ -133,14 +133,6 @@ public abstract class MetadataEditor
     public abstract boolean prepareUpdate();
 
     public abstract boolean validateMetadataofImages();
-
-    public abstract void addMetadata(int imagePos, int metadataPos);
-
-    public abstract void addMetadata(EditorItemBean item, int metadataPos);
-
-    public abstract void removeMetadata(int imagePos, int metadataPos);
-
-    public abstract void removeMetadata(EditorItemBean item, int metadataPos);
 
     /**
      * Create a new Metadata according to current Editor configuration.

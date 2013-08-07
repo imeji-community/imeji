@@ -36,26 +36,9 @@ public class MetadataMultipleEditor extends MetadataEditor
     @Override
     public void initialize()
     {
-        boolean hasStatement = (statement != null);
         for (EditorItemBean eib : items)
         {
-            boolean empty = true;
-            int position = 0;
-            boolean positionFound = false;
-            for (SuperMetadataBean smdb : eib.getMetadata())
-            {
-                if (hasStatement && smdb.getStatement() != null
-                        && smdb.getStatement().getId().compareTo(statement.getId()) == 0)
-                    empty = false;
-                if (smdb.getStatement().getPos() > statement.getPos())
-                    positionFound = true;
-                if (!positionFound)
-                    position++;
-            }
-            if (empty && hasStatement)
-            {
-                addMetadata(eib, position);
-            }
+            eib.getMds().addEmtpyValues();
         }
     }
 
@@ -64,16 +47,7 @@ public class MetadataMultipleEditor extends MetadataEditor
     {
         for (EditorItemBean eib : items)
         {
-            for (int i = 0; i < eib.getMetadata().size(); i++)
-            {
-                if (MetadataHelper.isEmpty(eib.getMetadata().get(i).asMetadata()))
-                {
-                    eib.getMetadata().remove(i);
-                    i = i > 0 ? i - 1 : 0;
-                }
-                else
-                    eib.getMetadata().get(i).setPos(i);
-            }
+            eib.getMds().trim();
         }
         if (items.size() == 0)
         {
@@ -89,41 +63,5 @@ public class MetadataMultipleEditor extends MetadataEditor
         // validator = new Validator(images.get(0).getMetadata(), profile);
         // return validator.valid();
         return true;
-    }
-
-    @Override
-    public void addMetadata(int imagePos, int metadataPos)
-    {
-        if (imagePos < items.size())
-        {
-            addMetadata(items.get(imagePos), metadataPos);
-        }
-    }
-
-    @Override
-    public void addMetadata(EditorItemBean eib, int metadataPos)
-    {
-        if (metadataPos <= eib.getMetadata().size())
-        {
-            eib.addMetadata(metadataPos);
-        }
-    }
-
-    @Override
-    public void removeMetadata(int imagePos, int metadataPos)
-    {
-        if (imagePos < items.size())
-        {
-            removeMetadata(items.get(imagePos), metadataPos);
-        }
-    }
-
-    @Override
-    public void removeMetadata(EditorItemBean eib, int metadataPos)
-    {
-        if (metadataPos < eib.getMetadata().size())
-        {
-            eib.removeMetadata(metadataPos);
-        }
     }
 }

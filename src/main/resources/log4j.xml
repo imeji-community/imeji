@@ -64,7 +64,11 @@
    <category name="org.apache">
       <priority value="INFO"/>
    </category>
-
+   
+    <category name="com.hp.hpl.jena">
+      <priority value="INFO"/>
+   </category>
+   
 
    <!-- ======================= -->
    <!-- Setup the Root category -->

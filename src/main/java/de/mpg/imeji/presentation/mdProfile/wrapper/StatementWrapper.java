@@ -24,7 +24,7 @@ import de.mpg.imeji.presentation.util.VocabularyHelper;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class StatementWrapper
+public class StatementWrapper implements Comparable<StatementWrapper>
 {
     private Statement statement;
     private boolean multiple = false;
@@ -391,5 +391,19 @@ public class StatementWrapper
     public void setUsed(boolean used)
     {
         this.used = used;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Comparable#compareTo(java.lang.Object)
+     */
+    @Override
+    public int compareTo(StatementWrapper o)
+    {
+        if (getStatement().getPos() > o.getStatement().getPos())
+            return 1;
+        else if (getStatement().getPos() < o.getStatement().getPos())
+            return -1;
+        return 0;
     }
 }

@@ -32,6 +32,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.logic.storage.Storage.FileResolution;
 import de.mpg.imeji.logic.storage.transform.impl.MagickImageGenerator;
 import de.mpg.imeji.logic.storage.transform.impl.MicroscopeImageGenerator;
@@ -52,6 +54,7 @@ import de.mpg.imeji.logic.storage.util.StorageUtils;
 public class ImageGeneratorManager
 {
     private List<ImageGenerator> generators = null;
+    private static Logger logger = Logger.getLogger(ImageGeneratorManager.class);
 
     /**
      * Default constructor of {@link ImageGeneratorManager}
@@ -140,7 +143,6 @@ public class ImageGeneratorManager
         try
         {
             return ImageUtils.resizeJPEG(toJpeg(bytes, extension), resolution);
-            // return ImageUtils.transformImage(toJpeg(bytes, extension), resolution, StorageUtils.getMimeType("jpg"));
         }
         catch (Exception e)
         {
@@ -161,8 +163,15 @@ public class ImageGeneratorManager
         Iterator<ImageGenerator> it = generators.iterator();
         while (it.hasNext() && jpeg == null)
         {
-            ImageGenerator imageGenerator = (ImageGenerator)it.next();
-            jpeg = imageGenerator.generateJPG(bytes, extension);
+            try
+            {
+                ImageGenerator imageGenerator = (ImageGenerator)it.next();
+                jpeg = imageGenerator.generateJPG(bytes, extension);
+            }
+            catch (Exception e)
+            {
+                logger.debug("Error generating image", e);
+            }
         }
         if (jpeg == null)
             throw new RuntimeException("Unsupported file format (requested was " + extension + ")");

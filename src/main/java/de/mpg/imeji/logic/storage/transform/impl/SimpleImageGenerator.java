@@ -48,6 +48,8 @@ public class SimpleImageGenerator implements ImageGenerator
     @Override
     public byte[] generateJPG(byte[] bytes, String extension)
     {
-        return ImageUtils.toJpeg(bytes, StorageUtils.getMimeType(extension));
+        if (StorageUtils.getMimeType(extension).contains("image"))
+            return ImageUtils.toJpeg(bytes, StorageUtils.getMimeType(extension));
+        return null;
     }
 }

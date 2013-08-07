@@ -79,9 +79,11 @@ public class ProfileHelper
             {
                 Statement st = ((List<Statement>)profile.getStatements()).get(i);
                 if (st.getParent() != null && st.getParent().compareTo(statement.getId()) == 0)
+                {
                     childs.add(st);
-                if (!onlyFirst)
-                    childs.addAll(getChilds(st, profile, onlyFirst));
+                    if (!onlyFirst)
+                        childs.addAll(getChilds(st, profile, false));
+                }
             }
         }
         return childs;
@@ -104,5 +106,24 @@ public class ProfileHelper
             parent = getStatement(parent, profile).getParent();
         }
         return lastParent;
+    }
+
+    /**
+     * True if {@link Statement} st1 is a parent of {@link Statement} st2
+     * 
+     * @param st1
+     * @param st2
+     * @param profile
+     * @return
+     */
+    public static boolean isParent(Statement st1, Statement st2, MetadataProfile profile)
+    {
+        boolean isParent = false;
+        while (!isParent || st2.getParent() != null)
+        {
+            isParent = st2.getParent().compareTo(st1.getId()) == 0;
+            isParent = isParent(st1, getStatement(st2.getParent(), profile), profile);
+        }
+        return isParent;
     }
 }

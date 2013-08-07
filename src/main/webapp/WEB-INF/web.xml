@@ -26,19 +26,19 @@
 	<servlet>
 		<servlet-name>Initializer Servlet</servlet-name>
 		<servlet-class>de.mpg.imeji.presentation.servlet.InitializerServlet</servlet-class>
-		<load-on-startup>4</load-on-startup>
+		<load-on-startup>2</load-on-startup>
 		<async-supported>true</async-supported> 
 	</servlet>
 	<servlet>
 		<servlet-name>File Servlet</servlet-name>
 		<servlet-class>de.mpg.imeji.presentation.servlet.FileServlet</servlet-class>
-		<load-on-startup>2</load-on-startup>
+		<load-on-startup>3</load-on-startup>
 		<async-supported>true</async-supported> 
 	</servlet>
 	<servlet>
 		<servlet-name>Export Servlet</servlet-name>
 		<servlet-class>de.mpg.imeji.presentation.servlet.ExportServlet</servlet-class>
-		<load-on-startup>3</load-on-startup>
+		<load-on-startup>4</load-on-startup>
 		<async-supported>true</async-supported> 
 	</servlet>
 	<servlet>

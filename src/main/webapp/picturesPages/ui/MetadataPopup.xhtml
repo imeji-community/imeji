@@ -31,7 +31,7 @@
 				</h:panelGroup>
 			</h:panelGroup>
 			
-			<ui:repeat var="md" value="#{item.mds.metadata}" rows="0">
+			<ui:repeat id="metadata" var="md" value="#{item.mds.tree.list}" rows="0" varStatus="indexMetadata">
 				<ui:fragment rendered="#{!md.isEmpty() and md.preview}">
 					<div class="imj_metadataSet id_#{md.statementId}  parent_#{md.parent.statementId} highlight_area">
 						<h:panelGroup layout="block" styleClass="imj_metadataLabel" style="margin-left: #{metadata.hierarchyLevel}em;">

@@ -34,16 +34,16 @@
 					</h:panelGroup>
 					<h:panelGroup class="free_area0 endline status statusArea" rendered="#{SessionBean.user != null}">
 						<span class="seperator"></span>
-						<h:commandLink id="lnkStateSort" styleClass="free_area0_p8" rendered="#{paginatorListSessionBean.selectedSortCriterion != 'PROPERTIES_STATUS'}">
-							<f:setPropertyActionListener value="PROPERTIES_STATUS" target="#{paginatorListSessionBean.selectedSortCriterion}"/>
+						<h:commandLink id="lnkStateSort" styleClass="free_area0_p4" rendered="#{paginatorListSessionBean.selectedSortCriterion != 'status'}">
+							<f:setPropertyActionListener value="status" target="#{paginatorListSessionBean.selectedSortCriterion}"/>
 							<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} "/>
 							<h:outputText value="#{lbl.state}"/>
 						</h:commandLink>
-						<h:commandLink id="lnkStateSortAsc" styleClass="free_area0_p8 ascSort"  action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{(paginatorListSessionBean.selectedSortOrder == 'ASCENDING') and paginatorListSessionBean.selectedSortCriterion == 'PROPERTIES_STATUS'}">
+						<h:commandLink id="lnkStateSortAsc" styleClass="free_area0_p4 ascSort"  action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{(paginatorListSessionBean.selectedSortOrder == 'ASCENDING') and paginatorListSessionBean.selectedSortCriterion == 'status'}">
 						<h:outputText id="txtSortBy2" styleClass="noDisplay" value="#{lbl.sort_by} "/>
 							<h:outputText value="#{lbl.state}"/>
 						</h:commandLink>
-						<h:commandLink id="lnkStateSortDesc" styleClass="free_area0_p8 desSort" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{(paginatorListSessionBean.selectedSortOrder != 'ASCENDING') and paginatorListSessionBean.selectedSortCriterion == 'PROPERTIES_STATUS'}">
+						<h:commandLink id="lnkStateSortDesc" styleClass="free_area0_p4 desSort" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{(paginatorListSessionBean.selectedSortOrder != 'ASCENDING') and paginatorListSessionBean.selectedSortCriterion == 'status'}">
 							<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} "/>
 							<h:outputText value="#{lbl.state}"/>
 						</h:commandLink>

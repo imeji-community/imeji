@@ -132,8 +132,9 @@ public class ImageBean
             loadCollection();
             loadProfile();
             labels.init(profile);
+            //mds = new MetadataSetBean(item.getMetadataSet());
             edit = new SingleEditBean(item, profile, getPageUrl());
-            mds = new MetadataSetBean(item.getMetadataSet());
+            mds = edit.getEditor().getItems().get(0).getMds();
         }
     }
 
@@ -612,7 +613,7 @@ public class ImageBean
     {
         return StorageUtils.getMimeType(FilenameUtils.getExtension(item.getFilename())).contains("application/fits");
     }
-    
+
     /**
      * True if the current file is an audio
      * 

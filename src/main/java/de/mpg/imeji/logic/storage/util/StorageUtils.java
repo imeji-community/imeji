@@ -44,7 +44,6 @@ import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.tools.ant.taskdefs.Get;
 
 import de.mpg.imeji.presentation.util.ProxyHelper;
 
@@ -217,7 +216,7 @@ public class StorageUtils
         {
             return "video/MP2T";
         }
-        else if ("mpeg".equals(extension))
+        else if ("mpg".equals(extension))
         {
             return "video/mpeg";
         }

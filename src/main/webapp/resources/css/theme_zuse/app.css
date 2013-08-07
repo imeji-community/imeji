@@ -24,6 +24,208 @@
  * ====================================================================================  */
 
 
+/* ZUSE THEME HACKS */
+
+body {
+	color: #000000 !important;
+}
+	
+a, a:visited {
+	color: #183668 !important;
+	text-decoration: none;
+}
+
+.imj_siteWrapper {
+    border-left: 1px dotted #000000 !important;
+    border-right: 1px dotted #000000 !important;
+    background-image: url("/imeji/jsf/javax.faces.resource/css/theme_zuse/images/background.gif");
+}
+
+.menuHeader {
+	color: #183668 !important;
+}
+	
+.imj_siteHeaderLogoSearchSection {
+	height:8em !important;
+}
+
+.imj_siteHeaderLogo {
+	height:8em !important;
+}
+
+.imj_mainContentHeader {
+	border-top: 0.182em solid #999999 !important;
+	background-color: transparent !important;
+	}
+
+input,
+textarea,
+select {
+    border-color: #183668 !important;
+    background-color: #FFFFFF !important;
+}
+
+.imj_simpleSearchInput:hover {
+	 color: #FFFFFF !important;
+}
+
+.imj_simpleSearchInput:focus {
+    color: #292929 !important;
+}
+
+.imj_metaMenuStandardSingleLine .imj_metaMenuSeparator {
+    border-right: solid #183668 0.090909em !important;
+}
+
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="text"],
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="password"] {
+    color: #CCCCCC !important;
+}
+
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="text"]:hover,
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="password"]:hover {
+    color: #FFFFFF !important;
+}
+
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="text"]:focus,
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="password"]:focus {
+    color: #292929 !important;
+}
+
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="submit"] {
+    background-color: #292929;
+    color: #183668 !important;
+}
+
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="submit"]:hover {
+    color: #FFFFFF !important;
+	background-color: #183668 !important;
+	padding-bottom: 0.1em !important;
+}
+
+.imj_simpleSearchButtonSubmit {
+    background-color: #183668 !important;
+    border-color: #183668 !important;
+    color: #FFFFFF !important;
+    padding-bottom: 0.1em !important;
+    border-radius: 0.51666666em !important;
+    -webkit-border-radius: 0.51666666em !important;
+    -moz-border-radius: 0.51666666em !important;
+    -o-border-radius: 0.51666666em !important;
+    -ms-border-radius: 0.51666666em !important;
+}
+
+.imj_simpleSearchButtonSubmit:hover {
+    background-color: #EEEEEE !important;
+    border-color: #183668 !important;
+    color: #183668 !important;
+}
+
+.imj_mainMenuStandard input,
+.imj_mainMenuStandard a,
+.imj_mainMenuStandard span {
+    background-color: transparent !important;
+    font-size: 1.7em !important;
+    font-weight: bold !important;
+}
+
+.imj_mainMenuStandard input:hover,
+.imj_mainMenuStandard input:focus,
+.imj_mainMenuStandard a:hover,
+.imj_mainMenuStandard a:focus {
+    color: #FFFFFF !important;
+    background-color: #183668 !important;
+    border-radius: 0.41666666em !important;
+    -webkit-border-radius: 0.41666666em !important;
+    -moz-border-radius: 0.41666666em !important;
+    -o-border-radius: 0.41666666em !important;
+    -ms-border-radius: 0.41666666em !important;
+}
+
+span.imj_contentMenuItem,
+a.imj_contentMenuItem {
+    background-color: transparent !important;
+    font-size: 1.2em !important;
+    font-weight: bold !important;
+    padding: 0.5%;
+}
+
+a.imj_contentMenuItem:hover,
+a.imj_contentMenuItem:focus {
+    background-color: #183668 !important;
+    color: #FFFFFF !important;
+    font-size: 1.2em !important;
+    padding: 0.5%;
+    border-radius: 0.31666666em !important;
+    -webkit-border-radius: 0.31666666em !important;
+    -moz-border-radius: 0.31666666em !important;
+    -o-border-radius: 0.31666666em !important;
+    -ms-border-radius: 0.31666666em !important;
+}
+
+.imj_contentMenu {
+    height: 1.8em !important;
+}
+
+.imj_contentSubMenuItem {
+    color: #183668 !important;
+}
+
+.imj_contentSubMenuItemSorting {
+	color: #000000 !important;
+}
+
+
+
+.imj_welcomeInfo {
+	color: #000000 !important;
+	background-color: #EEEEEE !important;
+}
+
+.imj_welcomeInfo .id_tabs ul li {
+    background-color: #FFFFFF !important;
+}
+
+.imj_welcomeInfo .id_tabs li.ui-state-hover,
+.imj_welcomeInfo .id_tabs li.ui-state-hover a {
+    background-color: #183668 !important;
+    color: #FFFFFF !important;
+}
+
+.imj_welcomeInfo .id_tabs li.ui-state-active,
+.imj_welcomeInfo .id_tabs li.ui-state-active a {
+    background-color: #FFFFFF !important;
+    color: #000000 !important;
+}
+
+
+/* ZUSE THEME HACKS @ component.css */
+
+.small_marginLIncl {
+    margin-left: 1em;
+}
+
+.gotoBox {
+    float: right;
+    margin-right: 3em;
+}
+
+.imj_siteContentHeadline {
+    background-color: #183668 !important;
+    border-radius: 0.91666666em !important;
+    -webkit-border-radius: 0.91666666em !important;
+    -moz-border-radius: 0.91666666em !important;
+    -o-border-radius: 0.91666666em !important;
+    -ms-border-radius: 0.91666666em !important;
+}
+
+.imj_siteContentHeadline h1 {
+    color: #FFFFFF !important;
+    font-size: 2.182em !important;
+    letter-spacing: 0.091em !important;
+    text-align: center !important;
+}
+
 /* imeji base settings
    =========================================================================  */
 

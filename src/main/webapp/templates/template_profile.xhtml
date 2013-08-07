@@ -299,7 +299,7 @@
 								</h:panelGroup>
 								</h:panelGroup>
 								</ui:repeat>
-								<h:panelGroup id="dropMetadataLast" styleClass="full_area0_p8 dropMetadata" rendered="#{FormularBean.wrappers.get(FormularBean.wrappers.size()-1).level > 0}">
+								<h:panelGroup id="dropMetadataLast" styleClass="full_area0_p8 dropMetadata" rendered="#{FormularBean.wrappers.size() > 0 and FormularBean.wrappers.get(FormularBean.wrappers.size()-1).level > 0}">
 									<h:outputText styleClass="full_area0" value="#{lbl.add_metadata}" style="visibility:hidden;"/>
 									<h:commandButton id="dropMetadataLastButton" value="Insert metadata" action="#{FormularBean.insertLastMetadata}" style="display:none;">
 										<f:setPropertyActionListener value="#{FormularBean.wrappers.size()}" target="#{FormularBean.statementPosition}"/>

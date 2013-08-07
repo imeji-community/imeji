@@ -38,6 +38,7 @@ import de.mpg.imeji.logic.storage.Storage.FileResolution;
 import de.mpg.imeji.logic.storage.transform.impl.MagickImageGenerator;
 import de.mpg.imeji.logic.storage.transform.impl.MicroscopeImageGenerator;
 import de.mpg.imeji.logic.storage.transform.impl.PdfImageGenerator;
+import de.mpg.imeji.logic.storage.transform.impl.SimpleAudioImageGenerator;
 import de.mpg.imeji.logic.storage.transform.impl.SimpleImageGenerator;
 import de.mpg.imeji.logic.storage.transform.impl.XuggleImageGenerator;
 import de.mpg.imeji.logic.storage.util.GifUtils;
@@ -63,6 +64,7 @@ public class ImageGeneratorManager
     {
         generators = new ArrayList<ImageGenerator>();
         generators.add(new PdfImageGenerator());
+        generators.add(new SimpleAudioImageGenerator());
         generators.add(new XuggleImageGenerator());
         generators.add(new MagickImageGenerator());
         generators.add(new SimpleImageGenerator());

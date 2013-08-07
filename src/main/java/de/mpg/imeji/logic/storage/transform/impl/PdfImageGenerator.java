@@ -32,6 +32,7 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.storage.transform.ImageGenerator;
 import de.mpg.imeji.logic.storage.util.PdfUtils;
+import de.mpg.imeji.logic.storage.util.StorageUtils;
 
 /**
  * {@link ImageGenerator} to generate image out of pdf
@@ -53,7 +54,8 @@ public class PdfImageGenerator implements ImageGenerator
     {
         try
         {
-            return PdfUtils.pdfsToImageBytes(bytes);
+            if (StorageUtils.getMimeType(extension).equals("application/pdf"))
+                return PdfUtils.pdfsToImageBytes(bytes);
         }
         catch (Exception e)
         {

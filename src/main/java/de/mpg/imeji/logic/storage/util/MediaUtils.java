@@ -83,7 +83,10 @@ public class MediaUtils
         File jpeg = File.createTempFile(bytes.toString(), ".jpg");
         op.addImage(jpeg.getAbsolutePath());
         cmd.run(op);
-        return FileUtils.readFileToByteArray(jpeg);
+        bytes = FileUtils.readFileToByteArray(jpeg);
+        FileUtils.deleteQuietly(tmp);
+        FileUtils.deleteQuietly(jpeg);
+        return bytes;
     }
 
     /**

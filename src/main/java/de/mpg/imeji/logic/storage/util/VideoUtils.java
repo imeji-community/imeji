@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 
+import org.apache.commons.io.FileUtils;
 import org.openimaj.feature.local.list.LocalFeatureList;
 import org.openimaj.image.ImageUtilities;
 import org.openimaj.image.MBFImage;
@@ -136,13 +137,15 @@ public class VideoUtils
         switch (VideoUtils.getSnapshotCreationMethod())
         {
             case 0:
-                return VideoUtils.videoFileToByteAray(new XuggleVideo(tempFile), threshold, fileExtention);
+                bytes = VideoUtils.videoFileToByteAray(new XuggleVideo(tempFile), threshold, fileExtention);
             case 1:
-                return VideoUtils.videoFileToByteArayUseFeatureExtraction(new XuggleVideo(tempFile), threshold,
+                bytes = VideoUtils.videoFileToByteArayUseFeatureExtraction(new XuggleVideo(tempFile), threshold,
                         fileExtention);
             default:
-                return VideoUtils.videoFileToByteAray(new XuggleVideo(tempFile), threshold, fileExtention);
+                bytes = VideoUtils.videoFileToByteAray(new XuggleVideo(tempFile), threshold, fileExtention);
         }
+        FileUtils.deleteQuietly(tempFile);
+        return bytes;
     }
 
     /**

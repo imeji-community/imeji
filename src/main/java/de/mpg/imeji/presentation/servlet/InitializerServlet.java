@@ -7,17 +7,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.logging.LogManager;
+import java.lang.management.ThreadInfo;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.lf5.util.StreamUtils;
 
 import com.hp.hpl.jena.tdb.TDB;
-import com.hp.hpl.jena.tdb.transaction.DatasetGraphTransaction;
 
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.ImejiSPARQL;
@@ -134,15 +132,17 @@ public class InitializerServlet extends HttpServlet
     public void destroy()
     {
         logger.info("Shutting down imeji!");
-        super.destroy();
         logger.info("Closing Jena TDB...");
-        ImejiJena.imejiDataSet.commit();
         ImejiJena.imejiDataSet.end();
+        TDB.sync(ImejiJena.imejiDataSet);
         ImejiJena.imejiDataSet.close();
         TDB.closedown();
         logger.info("...done");
         logger.info("Ending LockSurveyor...");
         locksSurveyor.terminate();
         logger.info("...done");
+        System.runFinalization();
+        super.destroy();
+        logger.info("imeji is down");
     }
 }

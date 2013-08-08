@@ -65,6 +65,7 @@ public class UploadBean
     private Collection<Item> itemList;
     private static Logger logger = Logger.getLogger(Upload.class);
     private String formatBlackList = "";
+    private String formatWhiteList = "";
 
     /**
      * Construct the Bean and initalize the pages
@@ -77,6 +78,7 @@ public class UploadBean
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         storageController = new StorageController("internal");
         formatBlackList = PropertyReader.getProperty("imeji.upload.blacklist");
+        formatWhiteList = PropertyReader.getProperty("imeji.upload.whitelist");
     }
 
     /**
@@ -290,19 +292,23 @@ public class UploadBean
     }
 
     /**
-     * True if the file format related to the passed extension is not blacklisted
+     * True if the file format related to the passed extension can be download
      * 
      * @param extension
      * @return
      */
     private boolean isAllowedFormat(String extension)
     {
+        // check in white list, if found then allowed
+        for (String s : formatWhiteList.split(","))
+            if (StorageUtils.compareExtension(extension, s.trim()))
+                return true;
+        // check black list, if found then forbidden
         for (String s : formatBlackList.split(","))
-        {
-            if (StorageUtils.compareExtension(extension, s))
+            if (StorageUtils.compareExtension(extension, s.trim()))
                 return false;
-        }
-        return true;
+        // Not found in both list: if white list is not empty, forbidden
+        return formatWhiteList.split(",").length == 0;
     }
 
     public String getTotalNum()

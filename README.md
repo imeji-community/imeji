@@ -13,7 +13,7 @@
 
 <h2>The imeji community</h2>  
 <p>The <a href="http://colab.mpdl.mpg.de/mediawiki/Imeji-Community" target="_blank" title="imeji community">imeji community</a> is an open source software developer community around the imeji software.</p>
-<p>Originated in March 2012 by the <a title="MPDL" href="http://mpdl.mpg.de/" target="_blank">Max Planck Digital Library</a>, the <a title="IKB" href="http://www.kunstgeschichte.hu-berlin.de/" target="_blank">Institute of Art and Visual History</a> of the Humboldt-Universität zu Berlin and the <a title="Konrad Zuse Internet Archive" href="http://zuse.zib.de" target="_blank">Konrad Zuse Internet Archive</a> of Freie Universität Berlin, the community constantly grows.</p><p>The aim is to ensure the sustainability of the imeji software and to enable further stable software development.</p>
+<p>Originated in March 2012 from the <a title="MPDL" href="http://mpdl.mpg.de/" target="_blank">Max Planck Digital Library</a>, the <a title="IKB" href="http://www.kunstgeschichte.hu-berlin.de/" target="_blank">Institute of Art and Visual History</a> of the Humboldt-Universität zu Berlin and the <a title="Konrad Zuse Internet Archive" href="http://zuse.zib.de" target="_blank">Konrad Zuse Internet Archive</a> of Freie Universität Berlin, the community constantly grows.</p><p>The aim is to ensure the sustainability of the imeji software and to enable further stable software development.</p>
 <p>We are open to everyone who wants to get involved and contribute to the imeji development. Please contact the <a href="mailto:imeji-community@gwdg.de" title="contact to the imeji community">community list</a> for further information.</p>
 
 <h2>Contact &amp; Support</h2>

@@ -307,8 +307,8 @@ public class UploadBean
         for (String s : formatBlackList.split(","))
             if (StorageUtils.compareExtension(extension, s.trim()))
                 return false;
-        // Not found in both list: if white list is not empty, forbidden
-        return formatWhiteList.split(",").length == 0;
+        // Not found in both list: if white list is empty, allowed
+        return "".equals(formatWhiteList.trim());
     }
 
     public String getTotalNum()

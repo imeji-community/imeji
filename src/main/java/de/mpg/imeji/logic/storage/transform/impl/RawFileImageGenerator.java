@@ -30,6 +30,7 @@ package de.mpg.imeji.logic.storage.transform.impl;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -57,12 +58,12 @@ public class RawFileImageGenerator implements ImageGenerator
     /**
      * Coordinates where the text is written on the image
      */
-    private static int TEXT_POSITION_X = 275;
-    private static int TEXT_POSITION_Y = 500;
+    private static int TEXT_POSITION_X = 630;
+    private static int TEXT_POSITION_Y = 700;
     /**
      * The Font size of the text
      */
-    private static int TEXT_FONT_SIZE = 140;
+    private static int TEXT_FONT_SIZE = 150;
 
     /*
      * (non-Javadoc)
@@ -101,7 +102,9 @@ public class RawFileImageGenerator implements ImageGenerator
         g2d.drawImage(old, 0, 0, null);
         g2d.setPaint(Color.WHITE);
         g2d.setFont(new Font("Serif", Font.BOLD, TEXT_FONT_SIZE));
-        g2d.drawString(formatExtension(extension), TEXT_POSITION_X, TEXT_POSITION_Y);
+        FontMetrics fm = g2d.getFontMetrics();
+        extension = formatExtension(extension);
+        g2d.drawString(extension, TEXT_POSITION_X - fm.stringWidth(extension), TEXT_POSITION_Y);
         g2d.dispose();
         return img;
     }
@@ -114,13 +117,8 @@ public class RawFileImageGenerator implements ImageGenerator
      */
     private String formatExtension(String extension)
     {
-        extension = "." + extension;
-        if (extension.length() > 4)
-            extension = extension.substring(0, 4);
-        if (extension.length() == 3)
-            extension = " " + extension;
-        if (extension.length() == 2)
-            extension = "  " + extension;
-        return extension;
+        if (extension.length() > 3)
+            extension = extension.substring(0, 3);
+        return extension.toUpperCase();
     }
 }

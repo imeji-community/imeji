@@ -44,6 +44,36 @@ a, a:visited {
 .menuHeader {
 	color: #183668 !important;
 }
+
+form {
+	display: inline !important;
+}
+
+.overlayMenu:hover .menuBody {
+    display:block !important;
+}
+
+.overlayMenu .menuBody {
+    display:none !important;
+}
+.overlayMenu .selectMenu {
+    background-color:#FFFFFF !important;
+}
+
+.imj_contentSubMenu {
+    width: 77.95% !important;
+	padding: 0.454545em 0.181818em !important;
+}
+
+.pageBrowser .seperator, .pageBrowser .actualSeperator {
+	background-color: #000000 !important;
+	border-color: #FFFFFF !important;
+}
+body .wrapper, body .footer {
+    border-left: 1px dotted #000000 !important;
+    border-right: 1px dotted #000000 !important;
+    background-image: url("/imeji/jsf/javax.faces.resource/css/theme_zuse/images/background.gif") !important;
+}
 	
 .imj_siteHeaderLogoSearchSection {
 	height:8em !important;
@@ -175,7 +205,18 @@ a.imj_contentMenuItem:focus {
 	color: #000000 !important;
 }
 
+.itemSelectArea {
+	width: 6.454em !important;
+}
 
+.min_imgBtn, .min_imgArea {
+     width: auto !important;
+}
+
+.preListHeader {
+    background-color: #999999 !important;
+    border-top: 0 !important;
+}
 
 .imj_welcomeInfo {
 	color: #000000 !important;
@@ -201,6 +242,10 @@ a.imj_contentMenuItem:focus {
 
 /* ZUSE THEME HACKS @ component.css */
 
+.full_area0, .full_area0_p0 {
+    width: 77.364em;
+}
+
 .small_marginLIncl {
     margin-left: 1em;
 }
@@ -225,6 +270,9 @@ a.imj_contentMenuItem:focus {
     letter-spacing: 0.091em !important;
     text-align: center !important;
 }
+
+/* End of Zuse Theme Hacks */
+
 
 /* imeji base settings
    =========================================================================  */

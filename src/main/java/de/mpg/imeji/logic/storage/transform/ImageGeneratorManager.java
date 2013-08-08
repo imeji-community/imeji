@@ -144,9 +144,10 @@ public class ImageGeneratorManager
      */
     private byte[] generateJpeg(byte[] bytes, String extension, FileResolution resolution)
     {
+        bytes = toJpeg(bytes, extension);
         try
         {
-            return ImageUtils.resizeJPEG(toJpeg(bytes, extension), resolution);
+            return ImageUtils.resizeJPEG(bytes, resolution);
         }
         catch (Exception e)
         {

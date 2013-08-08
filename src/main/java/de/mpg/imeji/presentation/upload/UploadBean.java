@@ -141,10 +141,13 @@ public class UploadBean
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             externalController.read(url.toString(), baos, true);
             Item item = uploadFile(baos.toByteArray());
-            UserController uc = new UserController(null);
-            user = uc.retrieve(getUser().getEmail());
-            ItemController ic = new ItemController(user);
-            ic.create(item, collection.getId());
+            if (item != null)
+            {
+                UserController uc = new UserController(null);
+                user = uc.retrieve(getUser().getEmail());
+                ItemController ic = new ItemController(user);
+                ic.create(item, collection.getId());
+            }
             externalUrl = "";
         }
         catch (Exception e)
@@ -299,6 +302,9 @@ public class UploadBean
      */
     private boolean isAllowedFormat(String extension)
     {
+        // If no extension, not possible to recognized the format
+        if ("".equals(extension.trim()))
+            return false;
         // check in white list, if found then allowed
         for (String s : formatWhiteList.split(","))
             if (StorageUtils.compareExtension(extension, s.trim()))

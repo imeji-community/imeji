@@ -158,8 +158,10 @@ public class StorageUtils
      */
     public static boolean compareExtension(String ext1, String ext2)
     {
-        String mimeType1 = getMimeType(ext1);
-        String mimeType2 = getMimeType(ext2);
+        if ("".equals(ext1.trim()) || "".equals(ext2.trim()))
+            return false;
+        String mimeType1 = getMimeType(ext1.trim());
+        String mimeType2 = getMimeType(ext2.trim());
         if (DEFAULT_MIME_TYPE.equals(mimeType1) && DEFAULT_MIME_TYPE.equals(mimeType2))
             return ext1.equalsIgnoreCase(ext2);
         return mimeType1.equals(mimeType2);

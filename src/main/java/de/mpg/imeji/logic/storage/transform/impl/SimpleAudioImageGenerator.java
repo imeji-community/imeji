@@ -59,9 +59,6 @@ public class SimpleAudioImageGenerator implements ImageGenerator
         {
             try
             {
-                PATH_TO_AUDIO_ICON = "images/audio_file_icon.jpg";
-                System.out.println(FileUtils.readFileToByteArray(new File(XuggleImageGenerator.class.getClassLoader()
-                        .getResource(PATH_TO_AUDIO_ICON).toURI())));
                 return FileUtils.readFileToByteArray(new File(XuggleImageGenerator.class.getClassLoader()
                         .getResource(PATH_TO_AUDIO_ICON).toURI()));
             }

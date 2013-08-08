@@ -63,6 +63,7 @@ public class JenaExport extends Export
             }
             catch (Exception e)
             {
+                ImejiJena.imejiDataSet.abort();
                 e.printStackTrace();
             }
             finally

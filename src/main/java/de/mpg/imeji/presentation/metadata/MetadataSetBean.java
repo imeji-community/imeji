@@ -64,6 +64,7 @@ public class MetadataSetBean
         profile = ObjectCachedLoader.loadProfile(mds.getProfile());
         // Init the list of metadata
         initTreeFromList(toSuperList((List<Metadata>)mds.getMetadata()));
+        addEmtpyValues();
     }
 
     /**
@@ -94,7 +95,6 @@ public class MetadataSetBean
      */
     public void appendEmtpyMetadata(Statement st)
     {
-        List<SuperMetadataBean> l = metadataTree.getList();
         metadataTree.add(new SuperMetadataBean(MetadataFactory.createMetadata(st), st));
     }
 

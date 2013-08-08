@@ -30,10 +30,6 @@ package de.mpg.imeji.logic.storage.util;
 
 import java.io.IOException;
 
-import loci.formats.FormatException;
-import loci.formats.ImageReader;
-import loci.formats.gui.BufferedImageReader;
-
 /**
  * Utility class to handle Microscope data
  * 
@@ -43,12 +39,4 @@ import loci.formats.gui.BufferedImageReader;
  */
 public class MicroscopeUtils
 {
-    public static void test() throws FormatException, IOException
-    {
-        ImageReader reader = new ImageReader();
-        reader.setId("/path/of/file");
-        BufferedImageReader reader2 = new BufferedImageReader();
-        reader2.setId("path/to/file");
-        reader2.openImage(0);
-    }
 }

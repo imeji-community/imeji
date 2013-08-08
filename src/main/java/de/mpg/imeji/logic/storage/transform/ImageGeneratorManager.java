@@ -38,6 +38,8 @@ import de.mpg.imeji.logic.storage.Storage.FileResolution;
 import de.mpg.imeji.logic.storage.transform.impl.MagickImageGenerator;
 import de.mpg.imeji.logic.storage.transform.impl.MicroscopeImageGenerator;
 import de.mpg.imeji.logic.storage.transform.impl.PdfImageGenerator;
+import de.mpg.imeji.logic.storage.transform.impl.RawFileImageGenerator;
+import de.mpg.imeji.logic.storage.transform.impl.SimpleAudioImageGenerator;
 import de.mpg.imeji.logic.storage.transform.impl.SimpleImageGenerator;
 import de.mpg.imeji.logic.storage.transform.impl.XuggleImageGenerator;
 import de.mpg.imeji.logic.storage.util.GifUtils;
@@ -63,10 +65,12 @@ public class ImageGeneratorManager
     {
         generators = new ArrayList<ImageGenerator>();
         generators.add(new PdfImageGenerator());
+        generators.add(new SimpleAudioImageGenerator());
         generators.add(new XuggleImageGenerator());
         generators.add(new MagickImageGenerator());
         generators.add(new SimpleImageGenerator());
         generators.add(new MicroscopeImageGenerator());
+        generators.add(new RawFileImageGenerator());
     }
 
     /**
@@ -140,9 +144,10 @@ public class ImageGeneratorManager
      */
     private byte[] generateJpeg(byte[] bytes, String extension, FileResolution resolution)
     {
+        bytes = toJpeg(bytes, extension);
         try
         {
-            return ImageUtils.resizeJPEG(toJpeg(bytes, extension), resolution);
+            return ImageUtils.resizeJPEG(bytes, resolution);
         }
         catch (Exception e)
         {
@@ -161,6 +166,8 @@ public class ImageGeneratorManager
     {
         byte[] jpeg = null;
         Iterator<ImageGenerator> it = generators.iterator();
+        if (StorageUtils.compareExtension(extension, "jpg"))
+            return bytes;
         while (it.hasNext() && jpeg == null)
         {
             try

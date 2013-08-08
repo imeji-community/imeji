@@ -435,26 +435,12 @@
 			<version>1.2.0</version>
 		</dependency>
 		<!-- Start: bio formats dependencies -->
-		<dependency>
-			<groupId>openmicroscopy</groupId>
-			<artifactId>bio-formats</artifactId>
-			<version>4.4.8</version>
-		</dependency>
-		<dependency>
-			<groupId>openmicroscopy</groupId>
-			<artifactId>loci-common</artifactId>
-			<version>4.4.8</version>
-		</dependency>
-		<dependency>
-			<groupId>openmicroscopy</groupId>
-			<artifactId>ome-xml</artifactId>
-			<version>4.4.8</version>
-		</dependency>
-		<dependency>
-			<groupId>openmicroscopy</groupId>
-			<artifactId>scifio</artifactId>
-			<version>4.4.8</version>
-		</dependency>
+		<!-- <dependency> <groupId>openmicroscopy</groupId> <artifactId>bio-formats</artifactId> 
+			<version>4.4.8</version> </dependency> <dependency> <groupId>openmicroscopy</groupId> 
+			<artifactId>loci-common</artifactId> <version>4.4.8</version> </dependency> 
+			<dependency> <groupId>openmicroscopy</groupId> <artifactId>ome-xml</artifactId> 
+			<version>4.4.8</version> </dependency> <dependency> <groupId>openmicroscopy</groupId> 
+			<artifactId>scifio</artifactId> <version>4.4.8</version> </dependency> -->
 		<!-- <dependency> <groupId>openmicroscopy</groupId> <artifactId>loci-tools</artifactId> 
 			<version>4.4.8</version> <type>pom</type> </dependency> -->
 		<!-- End: bio formats dependencies -->
@@ -472,48 +458,8 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.openimaj</groupId>
-			<artifactId>core-math</artifactId>
-			<version>1.1</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.openimaj</groupId>
-			<artifactId>core-image</artifactId>
-			<version>1.1</version>
-			<scope>compile</scope>
-			<exclusions>
-				<exclusion>  <!-- declare the exclusion here -->
-					<groupId>com.twelvemonkeys.imageio</groupId>
-					<artifactId>imageio-core</artifactId>
-				</exclusion>
-				<exclusion>  <!-- declare the exclusion here -->
-					<groupId>com.twelvemonkeys.imageio</groupId>
-					<artifactId>imageio-metadata</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<artifactId>image-processing</artifactId>
-			<groupId>org.openimaj</groupId>
-			<version>1.1</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
 			<artifactId>image-local-features</artifactId>
 			<groupId>org.openimaj</groupId>
-			<version>1.1</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.openimaj</groupId>
-			<artifactId>core-video</artifactId>
-			<version>1.1</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.openimaj</groupId>
-			<artifactId>video-processing</artifactId>
 			<version>1.1</version>
 			<scope>compile</scope>
 		</dependency>

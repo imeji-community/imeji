@@ -16,6 +16,9 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.lf5.util.StreamUtils;
 
+import com.hp.hpl.jena.tdb.TDB;
+import com.hp.hpl.jena.tdb.transaction.DatasetGraphTransaction;
+
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.concurrency.locks.LocksSurveyor;
@@ -133,8 +136,10 @@ public class InitializerServlet extends HttpServlet
         logger.info("Shutting down imeji!");
         super.destroy();
         logger.info("Closing Jena TDB...");
+        ImejiJena.imejiDataSet.commit();
         ImejiJena.imejiDataSet.end();
         ImejiJena.imejiDataSet.close();
+        TDB.closedown();
         logger.info("...done");
         logger.info("Ending LockSurveyor...");
         locksSurveyor.terminate();

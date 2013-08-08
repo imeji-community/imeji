@@ -155,7 +155,7 @@ public class ImejiJena
     {
         try
         {
-            imejiDataSet = TDBFactory.createDataset(tdbPath);
+            // imejiDataSet = TDBFactory.createDataset(tdbPath);
             // Careful: This is a read locks. A write lock would lead to corrupted graph
             imejiDataSet.begin(ReadWrite.READ);
             if (imejiDataSet.containsNamedModel(name))
@@ -168,6 +168,10 @@ public class ImejiJena
                 imejiDataSet.addNamedModel(name, m);
             }
             imejiDataSet.commit();
+        }
+        catch (Exception e)
+        {
+            imejiDataSet.abort();
         }
         finally
         {
@@ -280,6 +284,10 @@ public class ImejiJena
             imejiDataSet.getNamedModel(modelName).write(System.out, "RDF/XML-ABBREV");
             imejiDataSet.commit();
         }
+        catch (Exception e)
+        {
+            imejiDataSet.abort();
+        }
         finally
         {
             imejiDataSet.end();
@@ -305,6 +313,10 @@ public class ImejiJena
             qe.getContext().set(TDB.symUnionDefaultGraph, true);
             ResultSet rs = qe.execSelect();
             ResultSetFormatter.out(System.out, rs);
+        }
+        catch (Exception e)
+        {
+            ImejiJena.imejiDataSet.abort();
         }
         finally
         {

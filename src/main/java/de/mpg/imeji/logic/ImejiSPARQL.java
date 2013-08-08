@@ -84,6 +84,11 @@ public class ImejiSPARQL
             UpdateAction.parseExecute(query, ImejiJena.imejiDataSet);
             ImejiJena.imejiDataSet.commit();
         }
+        catch (Exception e)
+        {
+            ImejiJena.imejiDataSet.abort();
+            e.printStackTrace();
+        }
         finally
         {
             ImejiJena.imejiDataSet.end();

@@ -113,6 +113,7 @@ public abstract class RDFExport extends Export
         }
         catch (Exception e)
         {
+            ImejiJena.imejiDataSet.abort();
             throw new RuntimeException("Error in export", e);
         }
         finally

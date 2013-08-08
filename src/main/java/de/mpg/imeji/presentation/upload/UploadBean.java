@@ -4,8 +4,10 @@
 package de.mpg.imeji.presentation.upload;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -18,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.controller.ItemController;
@@ -34,6 +37,7 @@ import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectLoader;
+import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
 /**
@@ -60,14 +64,21 @@ public class UploadBean
     private StorageController storageController;
     private Collection<Item> itemList;
     private static Logger logger = Logger.getLogger(Upload.class);
+    private String formatBlackList = "";
+    private String formatWhiteList = "";
 
     /**
      * Construct the Bean and initalize the pages
+     * 
+     * @throws URISyntaxException
+     * @throws IOException
      */
-    public UploadBean()
+    public UploadBean() throws IOException, URISyntaxException
     {
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         storageController = new StorageController("internal");
+        formatBlackList = PropertyReader.getProperty("imeji.upload.blacklist");
+        formatWhiteList = PropertyReader.getProperty("imeji.upload.whitelist");
     }
 
     /**
@@ -130,16 +141,19 @@ public class UploadBean
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             externalController.read(url.toString(), baos, true);
             Item item = uploadFile(baos.toByteArray());
-            UserController uc = new UserController(null);
-            user = uc.retrieve(getUser().getEmail());
-            ItemController ic = new ItemController(user);
-            ic.create(item, collection.getId());
+            if (item != null)
+            {
+                UserController uc = new UserController(null);
+                user = uc.retrieve(getUser().getEmail());
+                ItemController ic = new ItemController(user);
+                ic.create(item, collection.getId());
+            }
             externalUrl = "";
         }
         catch (Exception e)
         {
             logger.error("Error uploading file from link: " + externalUrl, e);
-            BeanHelper.error("Error uploading file from link: " + externalUrl);
+            fFiles.add(e.getMessage() + ": " + title);
         }
         return "";
     }
@@ -186,27 +200,33 @@ public class UploadBean
     {
         try
         {
-            storageController = new StorageController();
-            UploadResult uploadResult = storageController.upload(title, bytes, id);
-            Item item = ImejiFactory.newItem(collection, user, uploadResult.getId(), title,
-                    URI.create(uploadResult.getOrginal()), URI.create(uploadResult.getThumb()),
-                    URI.create(uploadResult.getWeb()));
-            item.setChecksum(uploadResult.getChecksum());
-            sNum += 1;
-            sFiles.add(title);
-            return item;
+            if (isAllowedFormat(FilenameUtils.getExtension(title)))
+            {
+                storageController = new StorageController();
+                UploadResult uploadResult = storageController.upload(title, bytes, id);
+                Item item = ImejiFactory.newItem(collection, user, uploadResult.getId(), title,
+                        URI.create(uploadResult.getOrginal()), URI.create(uploadResult.getThumb()),
+                        URI.create(uploadResult.getWeb()));
+                item.setChecksum(uploadResult.getChecksum());
+                sNum += 1;
+                sFiles.add(title);
+                return item;
+            }
+            else
+                throw new RuntimeException(sessionBean.getMessage("upload_format_not_allowed") + " ("
+                        + FilenameUtils.getExtension(title) + ")");
         }
         catch (Exception e)
         {
             fNum += 1;
-            fFiles.add(title);
+            fFiles.add(e.getMessage() + ": " + title);
             logger.error("Error uploading image: ", e);
         }
         return null;
     }
 
     /**
-     * Create the {@link Item} fot the files which have been uploaded
+     * Create the {@link Item} for the files which have been uploaded
      */
     private void createItemForFiles()
     {
@@ -272,6 +292,29 @@ public class UploadBean
         setfNum(fNum);
         setfFiles(fFiles);
         return "";
+    }
+
+    /**
+     * True if the file format related to the passed extension can be download
+     * 
+     * @param extension
+     * @return
+     */
+    private boolean isAllowedFormat(String extension)
+    {
+        // If no extension, not possible to recognized the format
+        if ("".equals(extension.trim()))
+            return false;
+        // check in white list, if found then allowed
+        for (String s : formatWhiteList.split(","))
+            if (StorageUtils.compareExtension(extension, s.trim()))
+                return true;
+        // check black list, if found then forbidden
+        for (String s : formatBlackList.split(","))
+            if (StorageUtils.compareExtension(extension, s.trim()))
+                return false;
+        // Not found in both list: if white list is empty, allowed
+        return "".equals(formatWhiteList.trim());
     }
 
     public String getTotalNum()

@@ -23,11 +23,8 @@ import com.hp.hpl.jena.query.ResultSetFormatter;
 import com.hp.hpl.jena.query.Syntax;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.shared.Lock;
-import com.hp.hpl.jena.shared.LockMRSW;
 import com.hp.hpl.jena.tdb.TDB;
 import com.hp.hpl.jena.tdb.TDBFactory;
-import com.hp.hpl.jena.tdb.sys.LockMRSWLite;
 
 import de.mpg.imeji.logic.util.Counter;
 import de.mpg.imeji.logic.util.StringHelper;
@@ -155,7 +152,7 @@ public class ImejiJena
     {
         try
         {
-            imejiDataSet = TDBFactory.createDataset(tdbPath);
+            // imejiDataSet = TDBFactory.createDataset(tdbPath);
             // Careful: This is a read locks. A write lock would lead to corrupted graph
             imejiDataSet.begin(ReadWrite.READ);
             if (imejiDataSet.containsNamedModel(name))
@@ -168,6 +165,10 @@ public class ImejiJena
                 imejiDataSet.addNamedModel(name, m);
             }
             imejiDataSet.commit();
+        }
+        catch (Exception e)
+        {
+            imejiDataSet.abort();
         }
         finally
         {
@@ -280,6 +281,10 @@ public class ImejiJena
             imejiDataSet.getNamedModel(modelName).write(System.out, "RDF/XML-ABBREV");
             imejiDataSet.commit();
         }
+        catch (Exception e)
+        {
+            imejiDataSet.abort();
+        }
         finally
         {
             imejiDataSet.end();
@@ -305,6 +310,10 @@ public class ImejiJena
             qe.getContext().set(TDB.symUnionDefaultGraph, true);
             ResultSet rs = qe.execSelect();
             ResultSetFormatter.out(System.out, rs);
+        }
+        catch (Exception e)
+        {
+            ImejiJena.imejiDataSet.abort();
         }
         finally
         {

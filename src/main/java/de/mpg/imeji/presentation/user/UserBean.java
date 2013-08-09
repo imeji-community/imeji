@@ -23,6 +23,7 @@ public class UserBean
     private User user;
     private String newPassword = null;
     private String repeatedPassword = null;
+    private String newEmail = null;
     private boolean isAdmin;
     private SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     private String id;
@@ -47,6 +48,9 @@ public class UserBean
         return "";
     }
 
+    /**
+     * Retrieve the current user
+     */
     public void retrieveUser()
     {
         if (id != null && session.getUser() != null)
@@ -60,7 +64,18 @@ public class UserBean
             loginBean.setLogin(id);
         }
     }
+    
+    public void changeEmail()
+    {
+        System.out.println(newEmail);
+        
+    }
 
+    /**
+     * Change the password of the user
+     * 
+     * @throws Exception
+     */
     public void changePassword() throws Exception
     {
         if (user != null && newPassword != null && !"".equals(newPassword))
@@ -79,6 +94,11 @@ public class UserBean
         reloadPage();
     }
 
+    /**
+     * Revoke one Grant
+     * 
+     * @throws IOException
+     */
     public void revokeGrant() throws IOException
     {
         String grantType = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
@@ -99,6 +119,9 @@ public class UserBean
         reloadPage();
     }
 
+    /**
+     * Update the user in jena
+     */
     public void updateUser()
     {
         if (user != null)
@@ -161,5 +184,21 @@ public class UserBean
     public void setAdmin(boolean isAdmin)
     {
         this.isAdmin = isAdmin;
+    }
+
+    /**
+     * @return the newEmail
+     */
+    public String getNewEmail()
+    {
+        return newEmail;
+    }
+
+    /**
+     * @param newEmail the newEmail to set
+     */
+    public void setNewEmail(String newEmail)
+    {
+        this.newEmail = newEmail;
     }
 }

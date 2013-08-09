@@ -4,7 +4,10 @@
 package de.mpg.imeji.presentation.search;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -13,8 +16,15 @@ import java.util.Map;
 
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import javax.xml.bind.DatatypeConverter;
 
+import org.apache.axis.encoding.Base64;
+import org.apache.axis.utils.ByteArray;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.log4j.Logger;
+
+import com.sun.mail.smtp.DigestMD5;
 
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;

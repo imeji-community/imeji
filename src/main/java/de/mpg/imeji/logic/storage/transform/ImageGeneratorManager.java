@@ -28,14 +28,21 @@
  */
 package de.mpg.imeji.logic.storage.transform;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.storage.Storage.FileResolution;
 import de.mpg.imeji.logic.storage.transform.impl.MagickImageGenerator;
 import de.mpg.imeji.logic.storage.transform.impl.MicroscopeImageGenerator;
 import de.mpg.imeji.logic.storage.transform.impl.PdfImageGenerator;
+import de.mpg.imeji.logic.storage.transform.impl.RawFileImageGenerator;
+import de.mpg.imeji.logic.storage.transform.impl.SimpleAudioImageGenerator;
 import de.mpg.imeji.logic.storage.transform.impl.SimpleImageGenerator;
 import de.mpg.imeji.logic.storage.transform.impl.XuggleImageGenerator;
 import de.mpg.imeji.logic.storage.util.GifUtils;
@@ -52,6 +59,7 @@ import de.mpg.imeji.logic.storage.util.StorageUtils;
 public class ImageGeneratorManager
 {
     private List<ImageGenerator> generators = null;
+    private static Logger logger = Logger.getLogger(ImageGeneratorManager.class);
 
     /**
      * Default constructor of {@link ImageGeneratorManager}
@@ -60,10 +68,12 @@ public class ImageGeneratorManager
     {
         generators = new ArrayList<ImageGenerator>();
         generators.add(new PdfImageGenerator());
+        generators.add(new SimpleAudioImageGenerator());
         generators.add(new XuggleImageGenerator());
         generators.add(new MagickImageGenerator());
         generators.add(new SimpleImageGenerator());
         generators.add(new MicroscopeImageGenerator());
+        generators.add(new RawFileImageGenerator());
     }
 
     /**
@@ -73,9 +83,9 @@ public class ImageGeneratorManager
      * @param extension
      * @return
      */
-    public byte[] generateThumbnail(byte[] bytes, String extension)
+    public byte[] generateThumbnail(File file, String extension)
     {
-        return generate(bytes, extension, FileResolution.THUMBNAIL);
+        return generate(file, extension, FileResolution.THUMBNAIL);
     }
 
     /**
@@ -85,9 +95,9 @@ public class ImageGeneratorManager
      * @param extension
      * @return
      */
-    public byte[] generateWebResolution(byte[] bytes, String extension)
+    public byte[] generateWebResolution(File file, String extension)
     {
-        return generate(bytes, extension, FileResolution.WEB);
+        return generate(file, extension, FileResolution.WEB);
     }
 
     /**
@@ -98,13 +108,20 @@ public class ImageGeneratorManager
      * @param resolution
      * @return
      */
-    public byte[] generate(byte[] bytes, String extension, FileResolution resolution)
+    public byte[] generate(File file, String extension, FileResolution resolution)
     {
         if (StorageUtils.compareExtension("gif", extension))
         {
-            return generateGif(bytes, extension, resolution);
+            try
+            {
+                return generateGif(FileUtils.readFileToByteArray(file), extension, resolution);
+            }
+            catch (IOException e)
+            {
+                throw new RuntimeException(e);
+            }
         }
-        return generateJpeg(bytes, extension, resolution);
+        return generateJpeg(file, extension, resolution);
     }
 
     /**
@@ -135,12 +152,13 @@ public class ImageGeneratorManager
      * @param resolution
      * @return
      */
-    private byte[] generateJpeg(byte[] bytes, String extension, FileResolution resolution)
+    private byte[] generateJpeg(File file, String extension, FileResolution resolution)
     {
+        // Make a jpg out of the file
+        byte[] bytes = toJpeg(file, extension);
         try
         {
-            return ImageUtils.resizeJPEG(toJpeg(bytes, extension), resolution);
-            // return ImageUtils.transformImage(toJpeg(bytes, extension), resolution, StorageUtils.getMimeType("jpg"));
+            return ImageUtils.resizeJPEG(bytes, resolution);
         }
         catch (Exception e)
         {
@@ -155,14 +173,30 @@ public class ImageGeneratorManager
      * @param extension
      * @return
      */
-    private byte[] toJpeg(byte[] bytes, String extension)
+    private byte[] toJpeg(File file, String extension)
     {
         byte[] jpeg = null;
         Iterator<ImageGenerator> it = generators.iterator();
-        while (it.hasNext() && jpeg == null)
+        if (StorageUtils.compareExtension(extension, "jpg"))
+            try
+            {
+                return FileUtils.readFileToByteArray(file);
+            }
+            catch (IOException e)
+            {
+                throw new RuntimeException(e);
+            }
+        while (it.hasNext() && (jpeg == null || jpeg.length ==0))
         {
-            ImageGenerator imageGenerator = (ImageGenerator)it.next();
-            jpeg = imageGenerator.generateJPG(bytes, extension);
+            try
+            {
+                ImageGenerator imageGenerator = (ImageGenerator)it.next();
+                jpeg = imageGenerator.generateJPG(file, extension);
+            }
+            catch (Exception e)
+            {
+                logger.debug("Error generating image", e);
+            }
         }
         if (jpeg == null)
             throw new RuntimeException("Unsupported file format (requested was " + extension + ")");

@@ -58,22 +58,16 @@
 							<span class="seperator"/>
 							<h:panelGroup>
 								<!-- Picture status of the Collection -->
-								<div class="free_area0 itemBlockContent endline">	
+								<div class="free_area0 itemBlockContent endline">
 									<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
 										<b class="xLarge_area0_p8 endline labelLine clear">
-											<h:outputText value="#{lbl.status}"/>
+											<h:outputText value="#{lbl.title}"/>
 											<span class="noDisplay">: </span>
 										</b>
-										<h:panelGroup layout="block" styleClass="large_area0 medium_marginLExcl statusIconArea">
-											<h:panelGroup layout="block" styleClass="big_imgArea statusIcon pendingItem" rendered="#{ViewCollectionBean.collection.status == 'PENDING'}"/>
-											<h:panelGroup layout="block" styleClass="big_imgArea statusIcon releasedItem" rendered="#{ViewCollectionBean.collection.status == 'RELEASED'}"/>
-											<h:panelGroup layout="block" styleClass="big_imgArea statusIcon withdrawnItem" rendered="#{ViewCollectionBean.collection.status == 'WITHDRAWN'}"/>
-											<h:panelGroup layout="block" styleClass="medium_area0">
-												<h:outputText value="#{lbl['private']}" rendered="#{ViewCollectionBean.collection.status == 'PENDING'}"/>
-												<h:outputText value="#{lbl.published}" rendered="#{ViewCollectionBean.collection.status == 'RELEASED'}"/>
-												<h:outputText value="#{lbl.withdrawn}" rendered="#{ViewCollectionBean.collection.status == 'WITHDRAWN'}"/>
-											</h:panelGroup>
-										</h:panelGroup>
+										<span class="xHuge_area0 xTiny_marginLExcl endline">
+											<h:outputText id="collection_title" value="#{ViewCollectionBean.collection.metadata.title}" styleClass="free_area0"/>
+											<br/>
+										</span>
 									</h:panelGroup>
 									
 									<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
@@ -123,13 +117,41 @@
 													</h:panelGroup>
 												</ui:repeat>
 											</span>
-											
 										</ui:repeat>
+									</h:panelGroup>
+									<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
+										<b class="xLarge_area0_p8 endline labelLine clear">
+											<h:outputText value="#{lbl.status}"/>
+											<span class="noDisplay">: </span>
+										</b>
+										<h:panelGroup layout="block" styleClass="large_area0 medium_marginLExcl statusIconArea">
+											<h:panelGroup layout="block" styleClass="big_imgArea statusIcon pendingItem" rendered="#{ViewCollectionBean.collection.status == 'PENDING'}"/>
+											<h:panelGroup layout="block" styleClass="big_imgArea statusIcon releasedItem" rendered="#{ViewCollectionBean.collection.status == 'RELEASED'}"/>
+											<h:panelGroup layout="block" styleClass="big_imgArea statusIcon withdrawnItem" rendered="#{ViewCollectionBean.collection.status == 'WITHDRAWN'}"/>
+											<h:panelGroup layout="block" styleClass="medium_area0">
+												<h:outputText value="#{lbl['private']}" rendered="#{ViewCollectionBean.collection.status == 'PENDING'}"/>
+												<h:outputText value="#{lbl.published}" rendered="#{ViewCollectionBean.collection.status == 'RELEASED'}"/>
+												<h:outputText value="#{lbl.withdrawn}" rendered="#{ViewCollectionBean.collection.status == 'WITHDRAWN'}"/>
+											</h:panelGroup>
+										</h:panelGroup>
+									</h:panelGroup>
+									<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
+										<b class="xLarge_area0_p8 endline labelLine clear">
+											<h:outputText value="#{lbl.collection} URL"/>
+											<span class="noDisplay">: </span>
+										</b>
+										<span class="xHuge_area0 xTiny_marginLExcl endline">
+											<h:outputLink value="#{Navigation.collectionUrl}#{ViewCollectionBean.collection.idString}">			
+												<h:outputText id="collection_uri" value="#{Navigation.collectionUrl}#{ViewCollectionBean.collection.idString}" styleClass=""/>
+											</h:outputLink>
+											<br/>
+										</span>
 									</h:panelGroup>
 								</div>
 							</h:panelGroup>
 						</h:panelGroup>
-						
+							<h:panelGroup layout="block" styleClass="full_area0_p8">
+							</h:panelGroup>
 						<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 							<h3 class="xLarge_area0_p8 endline blockHeader">
 								<h:outputText value="#{lbl.collection_profile}"/>								
@@ -143,92 +165,91 @@
 								</h:outputLink>
 							</h3>
 							<span class="seperator"/>
-							<h:panelGroup>
-								<!-- Picture status of the Collection -->
-								<div class="free_area0 itemBlockContent endline">	
-									<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-										<b class="xLarge_area0_p8 endline labelLine clear">
-											<h:outputText value="URI   "/>
-											<span class="noDisplay">: </span>
-										</b>
-										<span class="xHuge_area0 xTiny_marginLExcl endline">										
-											<h:outputText id="inputCreator3" styleClass="quad_txtOutput" value="  #{ViewCollectionBean.collection.profile}"/>
-										</span>
-										<!-- Picture status of the Collection -->
-										<div class="free_area0 itemBlockContent endline">	
-											<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-												<ui:repeat var="statement" value="#{ViewCollectionBean.profile.statements}">
+							<!-- Picture status of the Collection -->
+							<div class="free_area0 itemBlockContent endline">	
+								<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
+									<b class="xLarge_area0_p8 endline labelLine clear">
+										<h:outputText value="#{lbl.profile} URI  "/>
+										<span class="noDisplay">: </span>
+									</b>
+									<span class="xHuge_area0 xTiny_marginLExcl endline">		
+										<h:outputText id="inputCreator3" styleClass="quad_txtOutput" value="  #{ViewCollectionBean.collection.profile}"/>
+									</span>
+									
+									<!-- Picture status of the Collection -->
+									<div class="free_area0 itemBlockContent endline">	
+										<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
+											<ui:repeat var="statement" value="#{ViewCollectionBean.profile.statements}">
+												
+												<b class="xLarge_area0_p8 endline labelLine clear">
+													<h:outputText value="#{lbl.metadata}"/>
+													<span class="noDisplay">: </span>
+												</b>
+												
+												<span class="xHuge_area0 xTiny_marginLExcl endline">
+													<h:outputLabel value="#{lbl.metadata_id}:   "/>
+													<h:outputText id="inputCreator3" styleClass="quad_txtOutput" value="  #{statement.id}"/>
+												</span>
+												
+												<b class="xLarge_area0_p8 endline labelLine clear">
+													<h:outputText value=" #{lbl.type} " style="visibility:hidden;"/>
+													<span class="noDisplay">: </span>
+												</b>
+												<span class="xHuge_area0 xTiny_marginLExcl endline">
+													<h:outputLabel value="#{lbl.type}:   "/>
+													<h:outputText id="inputCreator4" styleClass="quad_txtOutput" value="   #{statement.type}"/>
+												</span>
 													
+												<b class="xLarge_area0_p8 endline labelLine clear">
+													<h:outputText value=" #{lbl.labels} " style="visibility:hidden;"/>
+													<span class="noDisplay">: </span>
+												</b>
+												<span class="xHuge_area0 xTiny_marginLExcl endline">
+													<h:outputText value="#{lbl.labels}: "/>
+												
+													<ui:repeat var="label" value="#{statement.labels}" varStatus="indexO">
+														<h:panelGroup styleClass="endline">
+															<span class="endline">
+																<h:outputText value=", " rendered="#{indexO.index > 0}"/>
+																<h:outputText value="#{label.value}"/>
+																<h:outputText value=" (#{label.lang})"/>
+															</span>
+														</h:panelGroup>
+													</ui:repeat>
+												</span>
+												<h:panelGroup rendered="#{!(empty statement.literalConstraints)}">
 													<b class="xLarge_area0_p8 endline labelLine clear">
-														<h:outputText value="#{lbl.metadata}"/>
+														<h:outputText value=" #{lbl.values} " style="visibility:hidden;"/>
 														<span class="noDisplay">: </span>
 													</b>
-													
 													<span class="xHuge_area0 xTiny_marginLExcl endline">
-														<h:outputLabel value="#{lbl.metadata_id}:   "/>
-														<h:outputText id="inputCreator3" styleClass="quad_txtOutput" value="  #{statement.id}"/>
-													</span>
+														<h:outputText value="#{lbl.values} : "/>
 													
-													<b class="xLarge_area0_p8 endline labelLine clear">
-														<h:outputText value=" #{lbl.type} " style="visibility:hidden;"/>
-														<span class="noDisplay">: </span>
-													</b>
-													<span class="xHuge_area0 xTiny_marginLExcl endline">
-														<h:outputLabel value="#{lbl.type}:   "/>
-														<h:outputText id="inputCreator4" styleClass="quad_txtOutput" value="   #{statement.type}"/>
-													</span>
-														
-													<b class="xLarge_area0_p8 endline labelLine clear">
-														<h:outputText value=" #{lbl.labels} " style="visibility:hidden;"/>
-														<span class="noDisplay">: </span>
-													</b>
-													<span class="xHuge_area0 xTiny_marginLExcl endline">
-														<h:outputText value="#{lbl.labels}: "/>
-													
-														<ui:repeat var="label" value="#{statement.labels}" varStatus="indexO">
+														<ui:repeat var="value" value="#{statement.literalConstraints}" varStatus="indexO">
 															<h:panelGroup styleClass="endline">
 																<span class="endline">
 																	<h:outputText value=", " rendered="#{indexO.index > 0}"/>
-																	<h:outputText value="#{label.value}"/>
-																	<h:outputText value=" (#{label.lang})"/>
+																	<h:outputText value="#{value}"/>
 																</span>
 															</h:panelGroup>
 														</ui:repeat>
 													</span>
-													<h:panelGroup rendered="#{!(empty statement.literalConstraints)}">
-														<b class="xLarge_area0_p8 endline labelLine clear">
-															<h:outputText value=" #{lbl.values} " style="visibility:hidden;"/>
-															<span class="noDisplay">: </span>
-														</b>
-														<span class="xHuge_area0 xTiny_marginLExcl endline">
-															<h:outputText value="#{lbl.values} : "/>
-														
-															<ui:repeat var="value" value="#{statement.literalConstraints}" varStatus="indexO">
-																<h:panelGroup styleClass="endline">
-																	<span class="endline">
-																		<h:outputText value=", " rendered="#{indexO.index > 0}"/>
-																		<h:outputText value="#{value}"/>
-																	</span>
-																</h:panelGroup>
-															</ui:repeat>
-														</span>
-													</h:panelGroup>
-													<h:panelGroup rendered="#{statement.vocabulary != null}">
-														<b class="xLarge_area0_p8 endline labelLine clear">
-															<h:outputText value=" #{lbl.vocabulary} " style="visibility:hidden;"/>
-															<span class="noDisplay">: </span>
-														</b>
-														<span class="xHuge_area0 xTiny_marginLExcl endline">
-															<h:outputLabel value="#{lbl.vocabulary} :   "/>
-															<h:outputText styleClass="quad_txtOutput" value="   #{statement.vocabulary}"/>
-														</span>
-													</h:panelGroup>
-												</ui:repeat>
-											</h:panelGroup>
-										</div>
-									</h:panelGroup>
-								</div>
-							</h:panelGroup>
+												</h:panelGroup>
+												<h:panelGroup rendered="#{statement.vocabulary != null}">
+													<b class="xLarge_area0_p8 endline labelLine clear">
+														<h:outputText value=" #{lbl.vocabulary} " style="visibility:hidden;"/>
+														<span class="noDisplay">: </span>
+													</b>
+													<span class="xHuge_area0 xTiny_marginLExcl endline">
+														<h:outputLabel value="#{lbl.vocabulary} :   "/>
+														<h:outputText styleClass="quad_txtOutput" value=" #{statement.vocabulary}"/>
+													</span>
+												</h:panelGroup>
+											</ui:repeat>
+										</h:panelGroup>
+									</div>
+								</h:panelGroup>
+							</div>
 						</h:panelGroup>
 					</h:panelGroup>
 				</h:panelGroup>

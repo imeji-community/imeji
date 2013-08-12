@@ -44,7 +44,6 @@ import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.tools.ant.taskdefs.Get;
 
 import de.mpg.imeji.presentation.util.ProxyHelper;
 
@@ -58,33 +57,17 @@ import de.mpg.imeji.presentation.util.ProxyHelper;
 public class StorageUtils
 {
     /**
+     * The generic mime-type, when no mime-type is known
+     */
+    public final static String DEFAULT_MIME_TYPE = "application/octet-stream";
+
+    /**
      * Transform an {@link InputStream} to a {@link Byte} array
      * 
      * @param stream
      * @return
      */
     public static byte[] toBytes(InputStream stream)
-    {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        int b;
-        try
-        {
-            while ((b = stream.read()) != -1)
-            {
-                bos.write(b);
-            }
-            byte[] ba = bos.toByteArray();
-            bos.flush();
-            bos.close();
-            return ba;
-        }
-        catch (IOException e)
-        {
-            throw new RuntimeException("Error transforming inputstream to bytearryoutputstream", e);
-        }
-    }
-
-    public static byte[] toBytes(ImageOutputStream stream)
     {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         int b;
@@ -150,6 +133,13 @@ public class StorageUtils
         return new HttpClient(conn);
     }
 
+    /**
+     * Return a {@link GetMethod} ready to use
+     * 
+     * @param client
+     * @param url
+     * @return
+     */
     public static GetMethod newGetMethod(HttpClient client, String url)
     {
         GetMethod method = new GetMethod(url);
@@ -168,7 +158,13 @@ public class StorageUtils
      */
     public static boolean compareExtension(String ext1, String ext2)
     {
-        return getMimeType(ext1).equals(getMimeType(ext2));
+        if ("".equals(ext1.trim()) || "".equals(ext2.trim()))
+            return false;
+        String mimeType1 = getMimeType(ext1.trim());
+        String mimeType2 = getMimeType(ext2.trim());
+        if (DEFAULT_MIME_TYPE.equals(mimeType1) && DEFAULT_MIME_TYPE.equals(mimeType2))
+            return ext1.equalsIgnoreCase(ext2);
+        return mimeType1.equals(mimeType2);
     }
 
     /**
@@ -193,9 +189,17 @@ public class StorageUtils
         {
             return "image/png";
         }
+        else if ("bmp".equals(extension))
+        {
+            return "image/bmp";
+        }
         else if ("gif".equals(extension))
         {
             return "image/gif";
+        }
+        else if ("pdn".equals(extension))
+        {
+            return "image/x-paintnet";
         }
         else if ("mov".equals(extension))
         {
@@ -213,7 +217,7 @@ public class StorageUtils
         {
             return "video/MP2T";
         }
-        else if ("mpeg".equals(extension))
+        else if ("mpg".equals(extension))
         {
             return "video/mpeg";
         }
@@ -258,9 +262,16 @@ public class StorageUtils
         {
             return "audio/x-ms-wma";
         }
-        return null;
+        return "application/octet-stream";
     }
 
+    /**
+     * Return the bytes from an url
+     * 
+     * @param url
+     * @return
+     * @throws FileNotFoundException
+     */
     public static byte[] getBytes(URL url) throws FileNotFoundException
     {
         return StorageUtils.toBytes(new FileInputStream(new File(url.getFile())));

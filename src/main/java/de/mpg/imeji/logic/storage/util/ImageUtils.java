@@ -390,7 +390,12 @@ public class ImageUtils
             ImageEncoder imageEncoder = ImageCodec.createImageEncoder("JPEG", fos, jParam);
             imageEncoder.encode(ri);
             fos.flush();
-            return FileUtils.readFileToByteArray(jpgFile);
+            byte[] bytes = FileUtils.readFileToByteArray(jpgFile);
+            // Remove the files
+            f.delete();
+            jpgFile.delete();
+            // Return the bytes
+            return bytes;
         }
         catch (Exception e)
         {

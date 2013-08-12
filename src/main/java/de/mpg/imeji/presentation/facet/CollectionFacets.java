@@ -29,7 +29,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectCachedLoader;
 
 /**
- * Facets for the images browsed within a collection
+ * Facets for the item browsed within a collection
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)

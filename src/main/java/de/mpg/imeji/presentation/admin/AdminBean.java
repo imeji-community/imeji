@@ -4,12 +4,15 @@
 package de.mpg.imeji.presentation.admin;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import com.hp.hpl.jena.rdf.model.Resource;
 
@@ -27,6 +30,7 @@ import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.UploadResult;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
+import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.MetadataFactory;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
@@ -84,8 +88,11 @@ public class AdminBean
                 // Upload the file in the internal storage
                 if (out.toByteArray() != null)
                 {
-                    UploadResult result = internal.upload(item.getFilename(), out.toByteArray(),
+                    File tmp = File.createTempFile(IdentifierUtil.newRandomId(), FilenameUtils.getExtension(item.getFilename()));
+                    FileUtils.writeByteArrayToFile(tmp, out.toByteArray());
+                    UploadResult result = internal.upload(item.getFilename(),tmp,
                             ObjectHelper.getId(item.getCollection()));
+                    FileUtils.deleteQuietly(tmp);
                     item.setChecksum(result.getChecksum());
                     item.setFullImageUrl(URI.create(result.getOrginal()));
                     item.setWebImageUrl(URI.create(result.getWeb()));

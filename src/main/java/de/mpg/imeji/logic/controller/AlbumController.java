@@ -157,12 +157,12 @@ public class AlbumController extends ImejiController
         }
         else if (hasImageLocked(itemUris, user))
         {
-            throw new RuntimeException("Album has at least one image locked by an other user.");
+            throw new RuntimeException("Album has at least one item locked by an other user.");
         }
         else if (hasPendingImage(itemUris))
         {
             throw new RuntimeException(
-                    "Album has at least one image with status pending. All images have to be released to release an album");
+                    "Album has at least one item with status pending. All items have to be released to release an album");
         }
         else
         {

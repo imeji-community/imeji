@@ -278,7 +278,7 @@ public class ItemController extends ImejiController
         }
         catch (Exception e)
         {
-            throw new RuntimeException("Error loading images:", e);
+            throw new RuntimeException("Error loading items:", e);
         }
     }
 

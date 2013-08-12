@@ -28,10 +28,13 @@
  */
 package de.mpg.imeji.logic.storage.transform.impl;
 
+import java.io.File;
+
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.storage.transform.ImageGenerator;
 import de.mpg.imeji.logic.storage.util.PdfUtils;
+import de.mpg.imeji.logic.storage.util.StorageUtils;
 
 /**
  * {@link ImageGenerator} to generate image out of pdf
@@ -49,11 +52,12 @@ public class PdfImageGenerator implements ImageGenerator
      * @see de.mpg.imeji.logic.storage.transform.ImageGenerator#generateJPG(byte[], java.lang.String)
      */
     @Override
-    public byte[] generateJPG(byte[] bytes, String extension)
+    public byte[] generateJPG(File file, String extension)
     {
         try
         {
-            return PdfUtils.pdfsToImageBytes(bytes);
+            if (StorageUtils.getMimeType(extension).equals("application/pdf"))
+                return PdfUtils.pdfsToImageBytes(file);
         }
         catch (Exception e)
         {

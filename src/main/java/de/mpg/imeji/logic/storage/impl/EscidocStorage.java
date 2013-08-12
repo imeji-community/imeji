@@ -29,6 +29,7 @@
 package de.mpg.imeji.logic.storage.impl;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
@@ -97,7 +98,7 @@ public class EscidocStorage implements Storage
      * @see de.mpg.imeji.logic.storage.Storage#upload(byte[])
      */
     @Override
-    public UploadResult upload(String filename, byte[] bytes, String collectionId)
+    public UploadResult upload(String filename, File file, String collectionId)
     {
         try
         {
@@ -105,9 +106,9 @@ public class EscidocStorage implements Storage
             item = util.itemFactory(PropertyReader.getProperty("escidoc.imeji.content-model.id"),
                     PropertyReader.getProperty("escidoc.imeji.context.id"));
             // Upload the Files for the 3 resolution
-            uploadFileAndAdditToItem(bytes, FileResolution.ORIGINAL, filename);
-            uploadFileAndAdditToItem(bytes, FileResolution.WEB, filename);
-            uploadFileAndAdditToItem(bytes, FileResolution.THUMBNAIL, filename);
+            uploadFileAndAdditToItem(file, FileResolution.ORIGINAL, filename);
+            uploadFileAndAdditToItem(file, FileResolution.WEB, filename);
+            uploadFileAndAdditToItem(file, FileResolution.THUMBNAIL, filename);
             // Create the item
             item = util.createItemInEscidoc(item, auth);
             // Create the Upload result
@@ -193,12 +194,12 @@ public class EscidocStorage implements Storage
      * @throws IOException
      * @throws Exception
      */
-    private void uploadFileAndAdditToItem(byte[] bytes, FileResolution resolution, String filename) throws IOException,
+    private void uploadFileAndAdditToItem(File file, FileResolution resolution, String filename) throws IOException,
             Exception
     {
         ImageGeneratorManager imageGeneratorManager = new ImageGeneratorManager();
         // Transform the file if needed (according to the resolution), and uplod it
-        URL url = uploadViaStagingArea(imageGeneratorManager.generate(bytes, FilenameUtils.getExtension(filename),
+        URL url = uploadViaStagingArea(imageGeneratorManager.generate(file, FilenameUtils.getExtension(filename),
                 resolution));
         // Update the item with the uploaded file
         util.addImageToEscidocItem(item, url, util.getContentCategory(resolution), filename,

@@ -7,15 +7,21 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 
 public class GrantHelper
 {
+    /**
+     * Return a {@link Grant} as a readable text
+     * 
+     * @param grant
+     * @return
+     */
     public static String grantString(Grant grant)
     {
         String role = "";
-        if (grant.getGrantFor().toString().contains("album")
+        if (grant.getGrantFor() != null && grant.getGrantFor().toString().contains("album")
                 && grant.getGrantType().getFragment().equals(GrantType.CONTAINER_EDITOR.name()))
         {
             role = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_album_editor");
         }
-        else
+        else if (grant.getGrantType() != null)
         {
             if (grant.getGrantType().getFragment().equals(GrantType.VIEWER.name()))
             {

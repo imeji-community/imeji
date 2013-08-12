@@ -1,6 +1,8 @@
 package de.mpg.imeji.presentation.metadata;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 import de.mpg.imeji.logic.util.DateFormatter;
 import de.mpg.imeji.logic.util.IdentifierUtil;
@@ -34,19 +36,22 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
      */
     private SuperMetadataBean parent = null;
     /**
-     * Define how many parents this {@link Metadata} has until the highest parent
+     * Define the position if the metadata in the {@link SuperMetadataTree}
      */
-    private int hierarchyLevel = 0;
+    private String treeIndex = "";
     /**
      * The {@link Statement} of this {@link Metadata}
      */
     private Statement statement;
     /**
+     * All the childs of the metadata
+     */
+    private List<SuperMetadataBean> childs = new ArrayList<SuperMetadataBean>();
+    /**
      * True if the {@link Metadata} has no value defined
      */
     private boolean empty = false;
     private boolean preview = true;
-    private URI lastParent = null;
     // All possible fields defined for a metadata:
     private String text;
     private Person person;
@@ -71,11 +76,11 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
      */
     public SuperMetadataBean(Metadata metadata, Statement statement)
     {
+        ObjectHelper.copyAllFields(metadata, this);
         this.metadata = metadata;
         this.empty = MetadataHelper.isEmpty(metadata);
         this.preview = statement.isPreview();
         this.statement = statement;
-        ObjectHelper.copyAllFields(metadata, this);
     }
 
     /**
@@ -101,8 +106,30 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
         metadata.setId(IdentifierUtil.newURI(Metadata.class));
         SuperMetadataBean copy = new SuperMetadataBean(MetadataFactory.copyMetadata(asMetadata()), statement);
         copy.setParent(parent);
-        copy.setLastParent(lastParent);
+        copy.setTreeIndex(treeIndex);
         return copy;
+    }
+
+    /**
+     * Copy this {@link SuperMetadataBean} without the values
+     * 
+     * @return a new {@link SuperMetadataBean} with the same values
+     */
+    public SuperMetadataBean copyEmpty()
+    {
+        metadata.setId(IdentifierUtil.newURI(Metadata.class));
+        SuperMetadataBean copy = new SuperMetadataBean(MetadataFactory.createMetadata(statement), statement);
+        copy.setParent(parent);
+        copy.setTreeIndex(treeIndex);
+        return copy;
+    }
+
+    /**
+     * Clear all values
+     */
+    public void clear()
+    {
+        ObjectHelper.copyAllFields(copyEmpty(), this);
     }
 
     /**
@@ -434,8 +461,6 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
     public void setParent(SuperMetadataBean parent)
     {
         this.parent = parent;
-        if (parent != null)
-            this.hierarchyLevel = parent.getHierarchyLevel() + 1;
     }
 
     /**
@@ -455,17 +480,7 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
      */
     public int getHierarchyLevel()
     {
-        return hierarchyLevel;
-    }
-
-    /**
-     * setter
-     * 
-     * @param hierarchyLevel the hierarchyLevel to set
-     */
-    public void setHierarchyLevel(int hierarchyLevel)
-    {
-        this.hierarchyLevel = hierarchyLevel;
+        return (getTreeIndex().length() - 1) / 2;
     }
 
     /**
@@ -518,22 +533,9 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
         this.statement = statement;
     }
 
-    /**
-     * Get the last parent {@link Statement} of the current {@link Statement}. If no parent found, return null;
-     * 
-     * @return
-     */
-    public URI getLastParent()
+    public String getLastParentTreeIndex()
     {
-        return lastParent;
-    }
-
-    /**
-     * @param lastParent the lastParent to set
-     */
-    public void setLastParent(URI lastParent)
-    {
-        this.lastParent = lastParent;
+        return treeIndex.split(",", 0)[0];
     }
 
     /*
@@ -547,10 +549,75 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
             return 1;
         else if (statement.getPos() < o.getStatement().getPos())
             return -1;
-        else if (getPos() > o.getPos())
+        if (getPos() > o.getPos())
             return 1;
         else if (getPos() < o.getPos())
             return -1;
         return 0;
+    }
+
+    /**
+     * Return the higher parent
+     * 
+     * @return
+     */
+    public SuperMetadataBean lastParent()
+    {
+        SuperMetadataBean smb = this;
+        while (smb.getParent() != null)
+        {
+            smb = smb.getParent();
+        }
+        return smb;
+    }
+
+    /**
+     * @return the childs
+     */
+    public List<SuperMetadataBean> getChilds()
+    {
+        return childs;
+    }
+
+    /**
+     * @param childs the childs to set
+     */
+    public void setChilds(List<SuperMetadataBean> childs)
+    {
+        this.childs = childs;
+    }
+
+    /**
+     * Add emtpy childs according to the {@link MetadataProfile}
+     * 
+     * @param p
+     */
+    public void addEmtpyChilds(MetadataProfile p)
+    {
+        for (Statement st : p.getStatements())
+        {
+            if (st.getParent() != null && st.getParent().compareTo(statement.getId()) == 0)
+            {
+                SuperMetadataBean child = new SuperMetadataBean(MetadataFactory.createMetadata(st), st);
+                child.addEmtpyChilds(p);
+                childs.add(child);
+            }
+        }
+    }
+
+    /**
+     * @return the treeIndex
+     */
+    public String getTreeIndex()
+    {
+        return treeIndex;
+    }
+
+    /**
+     * @param treeIndex the treeIndex to set
+     */
+    public void setTreeIndex(String treeIndex)
+    {
+        this.treeIndex = treeIndex;
     }
 }

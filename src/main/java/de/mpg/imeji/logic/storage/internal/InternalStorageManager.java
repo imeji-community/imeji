@@ -29,9 +29,11 @@
 package de.mpg.imeji.logic.storage.internal;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
@@ -40,9 +42,6 @@ import de.mpg.imeji.logic.storage.Storage.FileResolution;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.storage.administrator.impl.InternalStorageAdministrator;
 import de.mpg.imeji.logic.storage.transform.ImageGeneratorManager;
-import de.mpg.imeji.logic.storage.util.ImageUtils;
-import de.mpg.imeji.logic.storage.util.MediaUtils;
-import de.mpg.imeji.logic.storage.util.PdfUtils;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.StringHelper;
@@ -96,21 +95,20 @@ public class InternalStorageManager
     /**
      * Add a new file to the internal storage
      * 
-     * @param bytes
+     * @param file
      * @param filename
      * @return
      */
-    public InternalStorageItem addFile(byte[] bytes, String filename, String collectionId)
+    public InternalStorageItem addFile(File file, String filename, String collectionId)
     {
         try
         {
             InternalStorageItem item = generateInternalStorageItem(filename, collectionId);
-            return writeItemFiles(item, bytes);
+            return writeItemFiles(item, file);
         }
         catch (Exception e)
         {
-            throw new RuntimeException("Error writing file in internal storage " + storagePath + " for file "
-                    + StringHelper.normalizeFilename(filename), e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -277,73 +275,46 @@ public class InternalStorageManager
      * @throws IOException
      * @throws Exception
      */
-    private InternalStorageItem writeItemFiles(InternalStorageItem item, byte[] bytes) throws IOException, Exception
+    private InternalStorageItem writeItemFiles(InternalStorageItem item, File file) throws IOException
     {
         ImageGeneratorManager generatorManager = new ImageGeneratorManager();
         String extension = FilenameUtils.getExtension(item.getFileName());
-        // write thumbnail in storage
-        write(generatorManager.generateThumbnail(bytes, extension), transformUrlToPath(item.getThumbnailUrl()));
-        // write we resolution file in storage
-        write(generatorManager.generateWebResolution(bytes, extension), transformUrlToPath(item.getWebUrl()));
-        // write original file in storage
-        write(bytes, transformUrlToPath(item.getOriginalUrl()));
-        // boolean enableImagemagick = Boolean.parseBoolean(PropertyReader.getProperty("imeji.imagemagick.enable"));
-        // if (enableImagemagick)
-        // {
-        // String orginalPath = transformUrlToPath(item.getOriginalUrl());
-        // write(bytes, orginalPath);
-        // if (MediaUtils.verifyMediaFormatSupport(orginalPath))
-        // {
-        // String mimeType = MediaUtils.getMimeType(orginalPath);
-        // String webPath = transformUrlToPath(item.getWebUrl());
-        // String thumbnailPath = transformUrlToPath(item.getThumbnailUrl());
-        // ImageGeneratorManager generatorManager = new ImageGeneratorManager();
-        // write(generatorManager.generateThumbnail(bytes, FilenameUtils.getExtension(item.getThumbnailUrl())),
-        // thumbnailPath);
-        // write(generatorManager.generateWebResolution(bytes, FilenameUtils.getExtension(item.getWebUrl())), webPath);
-        // //MediaUtils.resizeImage(mimeType, orginalPath, webPath, FileResolution.WEB);
-        // //MediaUtils.resizeImage(mimeType, orginalPath, thumbnailPath, FileResolution.THUMBNAIL);
-        // }
-        // else
-        // {
-        // // YE: TODO set default image for the file(e.g, with text "thumbnail not supported" )
-        // }
-        // }
-        // else
-        // {
-        // write(bytes, transformUrlToPath(item.getOriginalUrl()));
-        // // hn: pdf handling
-        // if (StorageUtils.getMimeType("pdf").endsWith(StringHelper.getFileExtension(item.getFileName())))
-        // {
-        // byte[] newBytes = PdfUtils.pdfsToImageBytes(bytes);
-        // write(ImageUtils.transformImage(newBytes, FileResolution.WEB,
-        // StorageUtils.getMimeType(StringHelper.getFileExtension(item.getWebUrl()))),
-        // transformUrlToPath(item.getWebUrl()));
-        // write(ImageUtils.transformImage(newBytes, FileResolution.THUMBNAIL,
-        // StorageUtils.getMimeType(StringHelper.getFileExtension(item.getThumbnailUrl()))),
-        // transformUrlToPath(item.getThumbnailUrl()));
-        // }
-        // else if (StringHelper.isVideo(item.getFileName()))
-        // {
-        // // byte[] newBytes = VideoUtils.videoToImageBytes(bytes);
-        // // write(ImageUtils.transformImage(newBytes, FileResolution.WEB,
-        // // StorageUtils.getMimeType(StringHelper.getFileExtension(item.getWebUrl()))),
-        // // transformUrlToPath(item.getWebUrl()));
-        // // write(ImageUtils.transformImage(newBytes, FileResolution.THUMBNAIL,
-        // // StorageUtils.getMimeType(StringHelper.getFileExtension(item.getThumbnailUrl()))),
-        // // transformUrlToPath(item.getThumbnailUrl()));
-        // }
-        // else if (StringHelper.isImage(item.getFileName()))
-        // {
-        // write(ImageUtils.transformImage(bytes, FileResolution.WEB,
-        // StorageUtils.getMimeType(StringHelper.getFileExtension(item.getFileName()))),
-        // transformUrlToPath(item.getWebUrl()));
-        // write(ImageUtils.transformImage(bytes, FileResolution.THUMBNAIL,
-        // StorageUtils.getMimeType(StringHelper.getFileExtension(item.getFileName()))),
-        // transformUrlToPath(item.getThumbnailUrl()));
-        // }
-        // }
+        // write web resolution file in storage
+        String webResolutionPath = write(generatorManager.generateWebResolution(file, extension),
+                transformUrlToPath(item.getWebUrl()));
+        // Use Web resolution to generate Thumbnail (avoid to read the original file again)
+        write(generatorManager
+                .generateThumbnail(new File(webResolutionPath), extension.equals("gif") ? "gif" : "jpg"),
+                transformUrlToPath(item.getThumbnailUrl()));
+        // write original file in storage: simple copy the tmp file to the correct path
+        copy(file, transformUrlToPath(item.getOriginalUrl()));
         return item;
+    }
+
+    /**
+     * Copy the file in the filesystem
+     * 
+     * @param bytes
+     * @param path
+     * @return
+     * @throws IOException
+     */
+    private String copy(File toCopy, String path) throws IOException
+    {
+        File dest = new File(path);
+        if (!dest.exists())
+        {
+            dest.getParentFile().mkdirs();
+            dest.createNewFile();
+            FileInputStream fis = new FileInputStream(toCopy);
+            FileOutputStream fos = new FileOutputStream(dest);
+            StorageUtils.writeInOut(fis, fos, true);
+            return dest.getAbsolutePath();
+        }
+        else
+        {
+            throw new RuntimeException("File " + path + " already exists in internal storage!");
+        }
     }
 
     /**

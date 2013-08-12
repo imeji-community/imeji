@@ -69,6 +69,15 @@ public class ThreadedTransaction extends Thread
                 running = false;
             }
         }
+        try
+        {
+            this.finalize();
+        }
+        catch (Throwable e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     /**

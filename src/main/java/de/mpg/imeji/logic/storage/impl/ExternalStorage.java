@@ -28,6 +28,7 @@
  */
 package de.mpg.imeji.logic.storage.impl;
 
+import java.io.File;
 import java.io.OutputStream;
 
 import org.apache.commons.httpclient.HttpClient;
@@ -72,7 +73,7 @@ public class ExternalStorage implements Storage
      * @see de.mpg.imeji.logic.storage.Storage#upload(byte[])
      */
     @Override
-    public UploadResult upload(String filename, byte[] bytes, String collectionId)
+    public UploadResult upload(String filename, File file, String collectionId)
     {
         // TODO Auto-generated method stub
         return null;

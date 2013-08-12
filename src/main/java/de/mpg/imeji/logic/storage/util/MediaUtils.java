@@ -6,6 +6,7 @@ package de.mpg.imeji.logic.storage.util;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -65,11 +66,9 @@ public class MediaUtils
      * @throws InterruptedException
      * @throws IM4JavaException
      */
-    public static byte[] convertToJPEG(byte[] bytes, String extension) throws IOException, URISyntaxException,
+    public static byte[] convertToJPEG(File tmp, String extension) throws IOException, URISyntaxException,
             InterruptedException, IM4JavaException
     {
-        File tmp = File.createTempFile(bytes.toString(), "." + extension);
-        FileUtils.writeByteArrayToFile(tmp, bytes);
         String path = tmp.getAbsolutePath();
         String magickPath = getImageMagickInstallationPath();
         // TODO Ye:ConvertCmd(true) to use GraphicsMagick, which is said faster
@@ -80,13 +79,17 @@ public class MediaUtils
         if (StorageUtils.getMimeType(extension).contains("video"))
             path = path + "[0]";
         op.addImage(path);
-        File jpeg = File.createTempFile(bytes.toString(), ".jpg");
-        op.addImage(jpeg.getAbsolutePath());
-        cmd.run(op);
-        bytes = FileUtils.readFileToByteArray(jpeg);
-        FileUtils.deleteQuietly(tmp);
-        FileUtils.deleteQuietly(jpeg);
-        return bytes;
+        File jpeg = File.createTempFile(UUID.randomUUID().toString(), ".jpg");
+        try
+        {
+            op.addImage(jpeg.getAbsolutePath());
+            cmd.run(op);
+            return FileUtils.readFileToByteArray(jpeg);
+        }
+        finally
+        {
+            FileUtils.deleteQuietly(jpeg);
+        }
     }
 
     /**

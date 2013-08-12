@@ -28,6 +28,8 @@
  */
 package de.mpg.imeji.logic.storage.transform.impl;
 
+import java.io.File;
+
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.storage.transform.ImageGenerator;
@@ -50,13 +52,13 @@ public class XuggleImageGenerator implements ImageGenerator
      * @see de.mpg.imeji.logic.storage.transform.ImageGenerator#generateJPG(byte[], java.lang.String)
      */
     @Override
-    public byte[] generateJPG(byte[] bytes, String extension)
+    public byte[] generateJPG(File file, String extension)
     {
         if (StorageUtils.getMimeType(extension).contains("video"))
         {
             try
             {
-                return VideoUtils.videoToImageBytes(bytes);
+                return VideoUtils.videoToImageBytes(file.toURI().toURL());
             }
             catch (Exception e)
             {

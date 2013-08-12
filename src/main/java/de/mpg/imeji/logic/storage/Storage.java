@@ -28,6 +28,7 @@
  */
 package de.mpg.imeji.logic.storage;
 
+import java.io.File;
 import java.io.OutputStream;
 
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
@@ -64,10 +65,11 @@ public interface Storage
     /**
      * Upload a file as {@link Byte} array in the {@link Storage}
      * 
-     * @param bytes
+     * @param file
      * @return - the url of the uploaded File
      */
-    public UploadResult upload(String filename, byte[] bytes, String collectionId);
+    public UploadResult upload(String filename, File file, String collectionId);
+    
 
     /**
      * Read the file stored in the passed url

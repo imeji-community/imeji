@@ -82,19 +82,19 @@ public class VideoUtils
                 VideoUtils.IMAGE_FILE_EXTENTION);
     }
 
-    /**
-     * Gets byte array of an snapshot image from provided video as byte array
-     * 
-     * @param bytes
-     * @return byte array of an image from video file
-     * @throws FileNotFoundException
-     * @throws IOException
-     */
-    public static byte[] videoToImageBytes(byte[] bytes) throws FileNotFoundException, IOException
-    {
-        return VideoUtils.videoFileToByteAray(bytes, VideoUtils.getGoodImageDetectionThreshold(),
-                VideoUtils.IMAGE_FILE_EXTENTION);
-    }
+//    /**
+//     * Gets byte array of an snapshot image from provided video as byte array
+//     * 
+//     * @param bytes
+//     * @return byte array of an image from video file
+//     * @throws FileNotFoundException
+//     * @throws IOException
+//     */
+//    public static byte[] videoToImageBytes(byte[] bytes) throws FileNotFoundException, IOException
+//    {
+//        return VideoUtils.videoFileToByteAray(bytes, VideoUtils.getGoodImageDetectionThreshold(),
+//                VideoUtils.IMAGE_FILE_EXTENTION);
+//    }
 
     /**
      * Gets byte array of an snapshot image from provided url video

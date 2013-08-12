@@ -28,6 +28,8 @@
  */
 package de.mpg.imeji.logic.storage.transform.impl;
 
+import java.io.File;
+
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.storage.transform.ImageGenerator;
@@ -66,13 +68,13 @@ public class MagickImageGenerator implements ImageGenerator
      * @see de.mpg.imeji.logic.storage.transform.ImageGenerator#generateJPG(byte[], java.lang.String)
      */
     @Override
-    public byte[] generateJPG(byte[] bytes, String extension)
+    public byte[] generateJPG(File file, String extension)
     {
         if (enabled)
         {
             try
             {
-                return MediaUtils.convertToJPEG(bytes, extension);
+                return MediaUtils.convertToJPEG(file, extension);
             }
             catch (Exception e)
             {

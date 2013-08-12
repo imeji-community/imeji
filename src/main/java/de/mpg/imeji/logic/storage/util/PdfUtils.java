@@ -4,12 +4,15 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
+
+import org.apache.commons.io.FileUtils;
 
 import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.PDFPage;
@@ -28,7 +31,6 @@ public class PdfUtils
     final static int RESOLUTION_DPI_IMAGE = 150;
 
     /**
-     * 
      * @return the pdf rendering DPI
      */
     private static int getResolutionDPI()
@@ -45,9 +47,8 @@ public class PdfUtils
         }
         return PdfUtils.RESOLUTION_DPI_IMAGE;
     }
-    
+
     /**
-     * 
      * @return the page number which will be transformed for the thumbnail image.
      */
     private static int getThumbnailPage()
@@ -62,7 +63,6 @@ public class PdfUtils
         {
             return PdfUtils.PAGENUMBERTOIMAGE;
         }
-        
         return PdfUtils.PAGENUMBERTOIMAGE;
     }
 
@@ -74,15 +74,9 @@ public class PdfUtils
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public static byte[] pdfsToImageBytes(byte[] bytes) throws FileNotFoundException, IOException, PDFParseException
+    public static byte[] pdfsToImageBytes(File file) throws FileNotFoundException, IOException, PDFParseException
     {
-//        ByteBuffer byteBuffer = ByteBuffer.allocate(bytes.length);
-//        byteBuffer.put(bytes);
-//        PDFFile pdfFile = null;
-//        pdfFile = new PDFFile(byteBuffer);
-//        return PdfUtils.pdfFileToByteAray(pdfFile, PdfUtils.PAGENUMBERTOIMAGE, BufferedImage.TYPE_INT_RGB,PdfUtils.getResolutionDPI());
-    	
-        return PdfUtils.pdfFileToByteAray(new PDFFile(ByteBuffer.wrap(bytes)), PdfUtils.getThumbnailPage(),
+        return PdfUtils.pdfFileToByteAray(new PDFFile(ByteBuffer.wrap(FileUtils.readFileToByteArray(file))), PdfUtils.getThumbnailPage(),
                 BufferedImage.TYPE_INT_RGB, PdfUtils.getResolutionDPI());
     }
 
@@ -125,17 +119,19 @@ public class PdfUtils
     public static byte[] pdfFileToByteAray(PDFFile pdfFile, int pageNumber, int imageType, int resolution)
             throws IOException
     {
-//        if (pageNumber < 0 || pageNumber > pdfFile.getNumPages()) // hn: randomize a page number if provided page                                                                   
-//            pageNumber = new Random().nextInt(pdfFile.getNumPages()); // number is not proper
-
+        // if (pageNumber < 0 || pageNumber > pdfFile.getNumPages()) // hn: randomize a page number if provided page
+        // pageNumber = new Random().nextInt(pdfFile.getNumPages()); // number is not proper
         byte[] bytes = null;
-        
-        try {
-        	bytes = PdfUtils.pdfPageToByteAray(pdfFile.getPage(pageNumber, true), imageType, resolution);
-        } catch (Exception e) {
-        	if(pageNumber < pdfFile.getNumPages()) {        		
-        		bytes = pdfFileToByteAray(pdfFile, ++pageNumber, imageType, resolution);
-        	}
+        try
+        {
+            bytes = PdfUtils.pdfPageToByteAray(pdfFile.getPage(pageNumber, true), imageType, resolution);
+        }
+        catch (Exception e)
+        {
+            if (pageNumber < pdfFile.getNumPages())
+            {
+                bytes = pdfFileToByteAray(pdfFile, ++pageNumber, imageType, resolution);
+            }
         }
         return bytes;
     }
@@ -147,7 +143,7 @@ public class PdfUtils
      * @param imageType
      * @param resolution
      * @return byte array from PDF page
-     * @throws Exception 
+     * @throws Exception
      */
     public static byte[] pdfPageToByteAray(PDFPage page, int imageType, int resolution) throws Exception
     {

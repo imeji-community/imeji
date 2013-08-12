@@ -28,6 +28,7 @@
  */
 package de.mpg.imeji.logic.storage.impl;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.OutputStream;
 
@@ -70,9 +71,9 @@ public class InternalStorage implements Storage
      * @see de.mpg.imeji.logic.storage.Storage#upload(byte[])
      */
     @Override
-    public UploadResult upload(String filename, byte[] bytes, String collectionId)
+    public UploadResult upload(String filename, File file, String collectionId)
     {
-        InternalStorageItem item = manager.addFile(bytes, filename, collectionId);
+        InternalStorageItem item = manager.addFile(file, filename, collectionId);
         return new UploadResult(item.getId(), item.getOriginalUrl(), item.getWebUrl(), item.getThumbnailUrl());
     }
 

@@ -28,6 +28,8 @@
  */
 package de.mpg.imeji.logic.storage.transform.impl;
 
+import java.io.File;
+
 import de.mpg.imeji.logic.storage.transform.ImageGenerator;
 
 /**
@@ -44,7 +46,7 @@ public class MicroscopeImageGenerator implements ImageGenerator
      * @see de.mpg.imeji.logic.storage.transform.ImageGenerator#generateJPG(byte[], java.lang.String)
      */
     @Override
-    public byte[] generateJPG(byte[] bytes, String extension)
+    public byte[] generateJPG(File file, String extension)
     {
         // TODO Auto-generated method stub
         return null;

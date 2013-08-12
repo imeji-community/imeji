@@ -65,7 +65,9 @@ public class Grant
 
     public GrantType asGrantType()
     {
-        return GrantType.valueOf(grantType.getFragment());
+        if (grantType != null)
+            return GrantType.valueOf(grantType.getFragment());
+        return null;
     }
 
     public void setGrantFor(URI grantFor)

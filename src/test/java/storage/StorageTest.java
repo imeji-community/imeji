@@ -32,6 +32,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Arrays;
 
 import junit.framework.Assert;
@@ -130,7 +131,14 @@ public class StorageTest
             e.printStackTrace();
         }
         // UPLOAD
-        UploadResult res = sc.upload(filename, original, "1");
+        File file = new File("/src/test/resources/temp");
+        try {
+			FileUtils.writeByteArrayToFile(file, original);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        UploadResult res = sc.upload(filename, file, "1");
         Assert.assertFalse(res.getOrginal() + " url is same as path",
                 res.getOrginal().equals(manager.transformUrlToPath(res.getOrginal())));
         ByteArrayOutputStream baos = new ByteArrayOutputStream();

@@ -129,7 +129,8 @@ public class ThumbnailBean
         {
             BeanHelper.error(sessionBean.getMessage("error_profile_load") + " " + uri + "  "
                     + sessionBean.getLabel("of") + " " + uri);
-            logger.error("Error load profile " + uri + " of image " + uri, e);
+            //TODO
+            logger.error("Error load profile " + uri + " of item " + uri, e);
         }
         return new ArrayList<Statement>();
     }

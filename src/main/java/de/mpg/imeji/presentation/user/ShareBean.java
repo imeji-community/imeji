@@ -96,13 +96,13 @@ public class ShareBean
         if (isCollection(uri))
         {
             grantsMenu.add(new SelectItem(GrantType.VIEWER, ((SessionBean)BeanHelper.getSessionBean(SessionBean.class))
-                    .getLabel("role_viewer"), "Can view all content for this collection"));
+                    .getLabel("role_viewer"), "Can view all content of a collection"));
             grantsMenu.add(new SelectItem(GrantType.CONTAINER_EDITOR, ((SessionBean)BeanHelper
                     .getSessionBean(SessionBean.class)).getLabel("role_collection_editor"),
-                    "Can edit informations about the collection"));
+                    "Can edit informations of a collection"));
             grantsMenu.add(new SelectItem(GrantType.IMAGE_EDITOR, ((SessionBean)BeanHelper
                     .getSessionBean(SessionBean.class)).getLabel("role_image_editor"),
-                    "Can view and edit all images for this collection"));
+                    "Can view and edit all items of a collection"));
             grantsMenu.add(new SelectItem(GrantType.PROFILE_EDITOR, ((SessionBean)BeanHelper
                     .getSessionBean(SessionBean.class)).getLabel("role_profile_editor"),
                     "Can edit the metadata profile"));

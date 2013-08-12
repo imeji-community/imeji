@@ -220,7 +220,7 @@ public class UploadBean
         {
             fNum += 1;
             fFiles.add(e.getMessage() + ": " + title);
-            logger.error("Error uploading image: ", e);
+            logger.error("Error uploading item: ", e); //TODO
         }
         return null;
     }

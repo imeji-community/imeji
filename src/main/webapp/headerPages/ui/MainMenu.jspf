@@ -58,6 +58,29 @@
 		</h:outputLink>
 		<h:outputText id="lnkAlbumssInactive" styleClass="imj_mainMenuStandardItem" value="#{lbl.header_albums}" rendered="#{HistorySession.currentPage.type.fileName == 'Albums.xhtml'}" />
 		
+		<h:panelGroup styleClass="dropDownMenu" layout="block">
+			<h:outputLink id="lnkEcyclopedia" styleClass="imj_mainMenuStandardItem dropDownMenu" title="#{lbl.goto_zuse_encyclopedia}" value="">
+				<h:outputText value="#{lbl.zuse_encyclopedia}" />
+				<h:panelGroup styleClass="items" layout="block">
+					<h:panelGroup styleClass="item" layout="block">
+						<h:outputLink id="lnkTest1" title="test1" value="">
+							<h:outputText value="test1"></h:outputText>
+						</h:outputLink>
+					</h:panelGroup>
+					<h:panelGroup styleClass="item" layout="block">
+						<h:outputLink id="lnkTest2" title="test2" value="">
+							<h:outputText value="test2"></h:outputText>
+						</h:outputLink>
+					</h:panelGroup>
+				</h:panelGroup>
+			</h:outputLink>
+		</h:panelGroup>
+		
+		<h:outputLink id="lnkResources" styleClass="imj_mainMenuStandardItem dropDownMenu" title="#{lbl.goto_zuse_resources}" value="">
+			<h:outputText value="#{lbl.zuse_resources}"></h:outputText>
+		</h:outputLink>
+		
+		
 		
 		<h:outputLink id="lnkAdmin" title="#{lbl.goto_admin}" value="#{Navigation.adminUrl}" rendered="#{SessionBean.admin}">
 			<h:outputText value="ADMIN"></h:outputText>

@@ -52,13 +52,19 @@ All rights reserved. Use is subject to license terms.
 			<h:outputText value="#{lbl.header_collections}"></h:outputText>
 		</h:outputLink>
 		<h:outputText id="lnkCollectionsInactive" styleClass="imj_mainMenuStandardItem" value="#{lbl.header_collections}" rendered="#{HistorySession.currentPage.type.fileName == 'Collections.xhtml'}" />
-		
-		
+
 		<h:outputLink id="lnkAlbums" styleClass="imj_mainMenuStandardItem" title="#{lbl.goto_albums}" value="#{Navigation.albumsUrl}?page=1" rendered="#{HistorySession.currentPage.type.fileName != 'Albums.xhtml'}">
 			<h:outputText value="#{lbl.header_albums}"></h:outputText>
 		</h:outputLink>
 		<h:outputText id="lnkAlbumssInactive" styleClass="imj_mainMenuStandardItem" value="#{lbl.header_albums}" rendered="#{HistorySession.currentPage.type.fileName == 'Albums.xhtml'}" />
+
+		<h:outputLink id="lnkEcyclopedia" styleClass="imj_mainMenuStandardItem" title="#{lbl.goto_zuse_encyclopedia}" value="">
+			<h:outputText value="#{lbl.zuse_encyclopedia}"></h:outputText>
+		</h:outputLink>
 		
+		<h:outputLink id="lnkResources" styleClass="imj_mainMenuStandardItem" title="#{lbl.goto_zuse_resources}" value="">
+			<h:outputText value="#{lbl.zuse_encyclopedia}"></h:outputText>
+		</h:outputLink>
 		
 		<h:outputLink id="lnkAdmin" title="#{lbl.goto_admin}" value="#{Navigation.adminUrl}" rendered="#{SessionBean.admin}">
 			<h:outputText value="ADMIN"></h:outputText>

@@ -33,6 +33,7 @@ import com.sun.media.jai.codec.SeekableStream;
 import com.sun.media.jai.codec.TIFFDecodeParam;
 
 import de.mpg.imeji.logic.storage.Storage.FileResolution;
+import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -300,9 +301,10 @@ public class ImageUtils
      */
     private static byte[] tiff2Jpeg(byte[] bytes)
     {
+        File tiffFile = null;
         try
         {
-            File tiffFile = File.createTempFile("upload", "tif.tmp");
+            tiffFile = File.createTempFile("upload", "tif.tmp");
             FileUtils.writeByteArrayToFile(tiffFile, bytes);
             SeekableStream s = new FileSeekableStream(tiffFile);
             TIFFDecodeParam param = new TIFFDecodeParam();
@@ -312,6 +314,10 @@ public class ImageUtils
         catch (Exception e)
         {
             throw new RuntimeException("Error transforming tiff to jpeg", e);
+        }
+        finally
+        {
+            FileUtils.deleteQuietly(tiffFile);
         }
     }
 
@@ -323,9 +329,10 @@ public class ImageUtils
      */
     private static byte[] png2Jpeg(byte[] bytes)
     {
+        File pngFile = null;
         try
         {
-            File pngFile = File.createTempFile("upload", "png.tmp");
+            pngFile = File.createTempFile("uploadPng2Jpg" + IdentifierUtil.newRandomId(), ".png");
             FileUtils.writeByteArrayToFile(pngFile, bytes);
             SeekableStream s = new FileSeekableStream(pngFile);
             PNGDecodeParam param = new PNGDecodeParam();
@@ -335,6 +342,10 @@ public class ImageUtils
         catch (Exception e)
         {
             throw new RuntimeException("Error transforming png to jpeg", e);
+        }
+        finally
+        {
+            FileUtils.deleteQuietly(pngFile);
         }
     }
 
@@ -380,10 +391,11 @@ public class ImageUtils
      */
     private static byte[] image2Jpeg(File f, ImageDecoder dec)
     {
+        File jpgFile = null;
         try
         {
             RenderedImage ri = dec.decodeAsRenderedImage(0);
-            File jpgFile = File.createTempFile("imeji_upload", "jpg.tmp");
+            jpgFile = File.createTempFile("uploadImage2Jpeg" + IdentifierUtil.newRandomId(), "jpg");
             FileOutputStream fos = new FileOutputStream(jpgFile);
             JPEGEncodeParam jParam = new JPEGEncodeParam();
             jParam.setQuality(1.0f);
@@ -391,15 +403,16 @@ public class ImageUtils
             imageEncoder.encode(ri);
             fos.flush();
             byte[] bytes = FileUtils.readFileToByteArray(jpgFile);
-            // Remove the files
-            f.delete();
-            jpgFile.delete();
             // Return the bytes
             return bytes;
         }
         catch (Exception e)
         {
             throw new RuntimeException("Error transforming image file to jpeg", e);
+        }
+        finally
+        {
+            FileUtils.deleteQuietly(jpgFile);
         }
     }
 

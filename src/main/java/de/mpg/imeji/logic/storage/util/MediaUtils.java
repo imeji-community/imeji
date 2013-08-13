@@ -14,6 +14,7 @@ import org.im4java.core.ConvertCmd;
 import org.im4java.core.IM4JavaException;
 import org.im4java.core.IMOperation;
 
+import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -69,17 +70,17 @@ public class MediaUtils
     public static byte[] convertToJPEG(File tmp, String extension) throws IOException, URISyntaxException,
             InterruptedException, IM4JavaException
     {
-        String path = tmp.getAbsolutePath();
+        String path = tmp.getAbsolutePath() + "[1]";
         String magickPath = getImageMagickInstallationPath();
         // TODO Ye:ConvertCmd(true) to use GraphicsMagick, which is said faster
         ConvertCmd cmd = new ConvertCmd(false);
         cmd.setSearchPath(magickPath);
         // create the operation, add images and operators/options
         IMOperation op = new IMOperation();
-        if (StorageUtils.getMimeType(extension).contains("video"))
-            path = path + "[0]";
+        // if (StorageUtils.getMimeType(extension).contains("video") || true)
+        // path = path + "[1]";
         op.addImage(path);
-        File jpeg = File.createTempFile(UUID.randomUUID().toString(), ".jpg");
+        File jpeg = File.createTempFile("uploadMagick" + IdentifierUtil.newRandomId(), ".jpg");
         try
         {
             op.addImage(jpeg.getAbsolutePath());
@@ -90,6 +91,12 @@ public class MediaUtils
         {
             FileUtils.deleteQuietly(jpeg);
         }
+    }
+
+    private int getNonBlankFrame(String path)
+    {
+        // convert scanned_page.pdf -shave 1%x1% -resize 40% -fuzz 10% -trim +repage info: | grep ' 1x1 '
+        return 0;
     }
 
     /**

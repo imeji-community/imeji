@@ -77,6 +77,7 @@ public class AdminBean
         ItemController ic = new ItemController(sb.getUser());
         for (Item item : ic.retrieveAll())
         {
+            File tmp = null;
             try
             {
                 // Get escidoc url for all files
@@ -88,9 +89,10 @@ public class AdminBean
                 // Upload the file in the internal storage
                 if (out.toByteArray() != null)
                 {
-                    File tmp = File.createTempFile(IdentifierUtil.newRandomId(), FilenameUtils.getExtension(item.getFilename()));
+                    tmp = File.createTempFile("import" + IdentifierUtil.newRandomId(),
+                            FilenameUtils.getExtension(item.getFilename()));
                     FileUtils.writeByteArrayToFile(tmp, out.toByteArray());
-                    UploadResult result = internal.upload(item.getFilename(),tmp,
+                    UploadResult result = internal.upload(item.getFilename(), tmp,
                             ObjectHelper.getId(item.getCollection()));
                     FileUtils.deleteQuietly(tmp);
                     item.setChecksum(result.getChecksum());
@@ -109,6 +111,10 @@ public class AdminBean
             catch (Exception e)
             {
                 logger.error("Error importing item " + item.getId(), e);
+            }
+            finally
+            {
+                FileUtils.deleteQuietly(tmp);
             }
         }
     }

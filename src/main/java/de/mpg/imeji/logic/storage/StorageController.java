@@ -30,12 +30,10 @@ package de.mpg.imeji.logic.storage;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.io.FileUtils;
 
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -90,7 +88,14 @@ public class StorageController
     public UploadResult upload(String filename, File file, String collectionId)
     {
         UploadResult result = storage.upload(filename, file, collectionId);
-        result.setChecksum(calculateChecksum(file));
+        try
+        {
+            result.setChecksum(calculateChecksum(file));
+        }
+        catch (IOException e)
+        {
+           throw new RuntimeException(e );
+        }
         return result;
     }
 
@@ -151,16 +156,23 @@ public class StorageController
      * 
      * @param bytes
      * @return
+     * @throws IOException 
      */
-    public String calculateChecksum(File file)
+    public String calculateChecksum(File file) throws IOException
     {
+        FileInputStream fis = null;
         try
         {
-            return DigestUtils.md5Hex(new FileInputStream(file));
+            fis = new FileInputStream(file);
+            return DigestUtils.md5Hex(fis);
         }
         catch (Exception e)
         {
             throw new RuntimeException("Error calculating the cheksum of the file: ", e);
+        }
+        finally
+        {
+            fis.close();
         }
     }
 

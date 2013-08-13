@@ -132,7 +132,7 @@ public class ImageBean
             loadCollection();
             loadProfile();
             labels.init(profile);
-            //mds = new MetadataSetBean(item.getMetadataSet());
+            // mds = new MetadataSetBean(item.getMetadataSet());
             edit = new SingleEditBean(item, profile, getPageUrl());
             mds = edit.getEditor().getItems().get(0).getMds();
         }
@@ -595,6 +595,16 @@ public class ImageBean
     }
 
     /**
+     * True if the File is a RAW file (a file which can not be viewed in any online tool)
+     * 
+     * @return
+     */
+    public boolean isRawFile()
+    {
+        return !isAudioFile() && !isVideoFile() && !isImageFile() && !isPdfFile();
+    }
+
+    /**
      * True if the current file is a pdf
      * 
      * @return
@@ -602,16 +612,6 @@ public class ImageBean
     public boolean isPdfFile()
     {
         return StorageUtils.getMimeType(FilenameUtils.getExtension(item.getFilename())).contains("application/pdf");
-    }
-
-    /**
-     * True if the current file is a fits
-     * 
-     * @return
-     */
-    public boolean isFitsFile()
-    {
-        return StorageUtils.getMimeType(FilenameUtils.getExtension(item.getFilename())).contains("application/fits");
     }
 
     /**

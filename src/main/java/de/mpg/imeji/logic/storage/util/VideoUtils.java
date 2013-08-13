@@ -82,20 +82,19 @@ public class VideoUtils
                 VideoUtils.IMAGE_FILE_EXTENTION);
     }
 
-//    /**
-//     * Gets byte array of an snapshot image from provided video as byte array
-//     * 
-//     * @param bytes
-//     * @return byte array of an image from video file
-//     * @throws FileNotFoundException
-//     * @throws IOException
-//     */
-//    public static byte[] videoToImageBytes(byte[] bytes) throws FileNotFoundException, IOException
-//    {
-//        return VideoUtils.videoFileToByteAray(bytes, VideoUtils.getGoodImageDetectionThreshold(),
-//                VideoUtils.IMAGE_FILE_EXTENTION);
-//    }
-
+    // /**
+    // * Gets byte array of an snapshot image from provided video as byte array
+    // *
+    // * @param bytes
+    // * @return byte array of an image from video file
+    // * @throws FileNotFoundException
+    // * @throws IOException
+    // */
+    // public static byte[] videoToImageBytes(byte[] bytes) throws FileNotFoundException, IOException
+    // {
+    // return VideoUtils.videoFileToByteAray(bytes, VideoUtils.getGoodImageDetectionThreshold(),
+    // VideoUtils.IMAGE_FILE_EXTENTION);
+    // }
     /**
      * Gets byte array of an snapshot image from provided url video
      * 
@@ -117,35 +116,6 @@ public class VideoUtils
             default:
                 return VideoUtils.videoFileToByteAray(new XuggleVideo(url), threshold, fileExtention);
         }
-    }
-
-    /**
-     * Gets byte array of an snapshot image from provided video as byte array
-     * 
-     * @param bytes
-     * @param threshold
-     * @param fileExtention
-     * @return byte array of an image from video file
-     * @throws IOException
-     */
-    public static byte[] videoFileToByteAray(byte[] bytes, float[] threshold, String fileExtention) throws IOException
-    {
-        File tempFile = File.createTempFile(bytes.toString(), "." + fileExtention);
-        FileOutputStream fos = new FileOutputStream(tempFile);
-        fos.write(bytes);
-        fos.close();
-        switch (VideoUtils.getSnapshotCreationMethod())
-        {
-            case 0:
-                bytes = VideoUtils.videoFileToByteAray(new XuggleVideo(tempFile), threshold, fileExtention);
-            case 1:
-                bytes = VideoUtils.videoFileToByteArayUseFeatureExtraction(new XuggleVideo(tempFile), threshold,
-                        fileExtention);
-            default:
-                bytes = VideoUtils.videoFileToByteAray(new XuggleVideo(tempFile), threshold, fileExtention);
-        }
-        FileUtils.deleteQuietly(tempFile);
-        return bytes;
     }
 
     /**

@@ -289,7 +289,6 @@
 									</div>
 								</h:panelGroup>
 								<!--  Drop Metadata area: only if the element has no childs -->
-								<h:outputText styleClass="full_area0" value="#{FormularBean.hasChild(position.index +1)}"/>
 								<h:panelGroup id="dropMetadata" style="margin-left:#{wrapper.level}px;" styleClass="full_area0_p8 dropMetadata" rendered="#{!FormularBean.hasChild(position.index +1)}">
 									<h:outputText styleClass="full_area0" value="#{lbl.add_metadata}" style="visibility:hidden;"/>
 									<h:commandButton id="dropMetadataButton" value="Insert metadata" action="#{FormularBean.insertMetadata}" style="display:none;">

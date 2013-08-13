@@ -36,6 +36,10 @@
 	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
 		<param name="Target" value="System.out" />
 		<param name="Threshold" value="warn" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<!-- The default pattern: Date Priority [Category] Message\n -->
+			<param name="ConversionPattern" value="%d [%t] %-5p %c- %m%n" />
+		</layout>
 	</appender>
 
 	<!-- ================ -->

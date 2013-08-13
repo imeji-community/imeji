@@ -501,6 +501,11 @@
 			<version>1.9</version>
 		</dependency>
 		<!-- END: Digilib integration -->
+		<dependency>
+			<groupId>org.apache.tika</groupId>
+			<artifactId>tika-core</artifactId>
+			<version>1.3</version>
+		</dependency>
 		<!-- <dependency> <groupId>net.java.dev.jai-imageio</groupId> <artifactId>jai-imageio-core-standalone</artifactId> 
 			<version>1.2-pre-dr-b04-2011-07-04</version> </dependency> <dependency> <groupId>org.devlib.schmidt</groupId> 
 			<artifactId>imageinfo</artifactId> <version>1.9</version> <type>jar</type> 

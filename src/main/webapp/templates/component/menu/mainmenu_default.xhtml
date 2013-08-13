@@ -58,13 +58,375 @@ All rights reserved. Use is subject to license terms.
 		</h:outputLink>
 		<h:outputText id="lnkAlbumssInactive" styleClass="imj_mainMenuStandardItem" value="#{lbl.header_albums}" rendered="#{HistorySession.currentPage.type.fileName == 'Albums.xhtml'}" />
 
-		<h:outputLink id="lnkEcyclopedia" styleClass="imj_mainMenuStandardItem" title="#{lbl.goto_zuse_encyclopedia}" value="">
-			<h:outputText value="#{lbl.zuse_encyclopedia}"></h:outputText>
-		</h:outputLink>
+		<h:panelGroup styleClass="dropDownMenu" layout="block">
+			<h:outputLink id="lnkEcyclopedia" styleClass="imj_mainMenuStandardItem" title="#{lbl.goto_zuse_encyclopedia}" value="">
+				<h:outputText value="#{lbl.zuse_encyclopedia}" />
+				<h:panelGroup styleClass="items" layout="block">
+											
+					<h:panelGroup styleClass="item" layout="block">
+						<h:outputLink id="lnkKonradZuse" title="#{lbl.goto_konrad_zuse}" value="http://zuse.zib.de/imeji/zuse">
+							<h:panelGroup styleClass="pad" layout="block">
+								<h:outputText value="#{lbl.konrad_zuse}" />
+							</h:panelGroup>
+						</h:outputLink>
+					</h:panelGroup>
+					
+					<h:panelGroup styleClass="item" layout="block">
+						<h:outputLink id="lnkZ1" title="#{lbl.goto_z1}" value="http://zuse.zib.de/imeji/z1">
+							<h:panelGroup styleClass="pad" layout="block">
+								<h:outputText value="#{lbl.z1}" />
+							</h:panelGroup>
+						</h:outputLink>
+					</h:panelGroup>
+					
+					<h:panelGroup styleClass="item" layout="block">
+						<h:outputLink id="lnkZ2" title="#{lbl.goto_z2}" value="http://zuse.zib.de/imeji/z2">
+							<h:panelGroup styleClass="pad" layout="block">
+								<h:outputText value="#{lbl.z2}" />
+							</h:panelGroup>
+						</h:outputLink>
+					</h:panelGroup>
+					
+					<h:panelGroup styleClass="item" layout="block">
+						<h:outputLink id="lnkZ3" title="#{lbl.goto_z3}" value="http://zuse.zib.de/imeji/z3">
+							<h:panelGroup styleClass="pad" layout="block">
+								<h:outputText value="#{lbl.z3}" />
+							</h:panelGroup>
+						</h:outputLink>
+					</h:panelGroup>
+					
+					<h:panelGroup styleClass="item" layout="block">
+						<h:outputLink id="lnkZ4" title="#{lbl.goto_z4}" value="http://zuse.zib.de/imeji/z4">
+							<h:panelGroup styleClass="pad" layout="block">
+								<h:outputText value="#{lbl.z4}" />
+							</h:panelGroup>
+						</h:outputLink>
+					</h:panelGroup>
+
+					<h:panelGroup styleClass="item" layout="block">
+						<h:outputLink id="lnkAssemblyLine" title="#{lbl.goto_assemly_line}" value="http://zuse.zib.de/imeji/assemblyLineSelfReplicatingSystems">
+							<h:panelGroup styleClass="pad" layout="block">
+								<h:outputText value="#{lbl.assemly_line}" />
+							</h:panelGroup>
+						</h:outputLink>
+					</h:panelGroup>
+					
+					<h:panelGroup styleClass="item" layout="block">
+						<h:outputLink id="lnkHelixTower" title="#{lbl.goto_helix_tower}" value="http://zuse.zib.de/imeji/helixTower">
+							<h:panelGroup styleClass="pad" layout="block">
+								<h:outputText value="#{lbl.helix_tower}" />
+							</h:panelGroup>
+						</h:outputLink>
+					</h:panelGroup>
+					
+					<h:panelGroup styleClass="item" layout="block">
+						<h:outputLink id="lnkMechanicalSystem" title="#{lbl.goto_mechanical_system}" value="http://zuse.zib.de/imeji/mechanicalSystem">
+							<h:panelGroup styleClass="pad" layout="block">
+								<h:outputText value="#{lbl.mechanical_system}" />
+							</h:panelGroup>
+						</h:outputLink>
+					</h:panelGroup>
+					
+					<h:panelGroup styleClass="item" layout="block">
+						<h:outputLink id="lnkElectromechanics" title="#{lbl.goto_electromechanics}" value="http://zuse.zib.de/imeji/electromechanics">
+							<h:panelGroup styleClass="pad" layout="block">
+								<h:outputText value="#{lbl.electromechanics}" />
+							</h:panelGroup>
+						</h:outputLink>
+					</h:panelGroup>
+					
+					<h:panelGroup styleClass="item" layout="block">
+						<h:outputLink id="lnkElectronics" title="#{lbl.goto_electronics}" value="http://zuse.zib.de/imeji/electronics">
+							<h:panelGroup styleClass="pad" layout="block">
+								<h:outputText value="#{lbl.electronics}" />
+							</h:panelGroup>
+						</h:outputLink>
+					</h:panelGroup>
+					
+					<h:panelGroup styleClass="item" layout="block">
+						<h:outputLink id="lnkRelay" title="#{lbl.goto_relay}" value="http://zuse.zib.de/imeji/relay">
+							<h:panelGroup styleClass="pad" layout="block">
+								<h:outputText value="#{lbl.relay}" />
+							</h:panelGroup>
+						</h:outputLink>
+					</h:panelGroup>
+
+					<h:panelGroup styleClass="item" layout="block">
+						<h:outputLink id="lnkVacuumTube" title="#{lbl.goto_vacuum_tube}" value="http://zuse.zib.de/imeji/vacuumTube">
+							<h:panelGroup styleClass="pad" layout="block">
+								<h:outputText value="#{lbl.vacuum_tube}" />
+							</h:panelGroup>
+						</h:outputLink>
+					</h:panelGroup>
+
+					<h:panelGroup styleClass="item" layout="block">
+						<h:outputLink id="lnkTransistor" title="#{lbl.goto_transistor}" value="http://zuse.zib.de/imeji/transistor">
+							<h:panelGroup styleClass="pad" layout="block">
+								<h:outputText value="#{lbl.transistor}" />
+							</h:panelGroup>
+						</h:outputLink>
+					</h:panelGroup>
+					
+					<h:panelGroup styleClass="item" layout="block">
+						<h:outputLink id="lnkBinaryNumber" title="#{lbl.goto_binary_number}" value="http://zuse.zib.de/imeji/binaryNumber">
+							<h:panelGroup styleClass="pad" layout="block">
+								<h:outputText value="#{lbl.binary_number}" />
+							</h:panelGroup>
+						</h:outputLink>
+					</h:panelGroup>
+
+					<h:panelGroup styleClass="item" layout="block">
+						<h:outputLink id="lnkBit" title="#{lbl.goto_bit}" value="http://zuse.zib.de/imeji/bit">
+							<h:panelGroup styleClass="pad" layout="block">
+								<h:outputText value="#{lbl.bit}" />
+							</h:panelGroup>
+						</h:outputLink>
+					</h:panelGroup>
+					
+					<h:panelGroup styleClass="item" layout="block">
+						<h:outputLink id="lnkPunchedTape" title="#{lbl.goto_punched_tape}" value="http://zuse.zib.de/imeji/punchedTape">
+							<h:panelGroup styleClass="pad" layout="block">
+								<h:outputText value="#{lbl.punched_tape}" />
+							</h:panelGroup>
+						</h:outputLink>
+					</h:panelGroup>
+					
+					<h:panelGroup styleClass="item" layout="block">
+						<h:outputLink id="lnkBooleanAlgebra" title="#{lbl.goto_boolean_algebra}" value="http://zuse.zib.de/imeji/booleanAlgebra">
+							<h:panelGroup styleClass="pad" layout="block">
+								<h:outputText value="#{lbl.boolean_algebra}" />
+							</h:panelGroup>
+						</h:outputLink>
+					</h:panelGroup>
+
+					<h:panelGroup styleClass="item" layout="block">
+						<h:outputLink id="lnkLogicGate" title="#{lbl.goto_logic_gate}" value="http://zuse.zib.de/imeji/logicGate">
+							<h:panelGroup styleClass="pad" layout="block">
+								<h:outputText value="#{lbl.logic_gate}" />
+							</h:panelGroup>
+						</h:outputLink>
+					</h:panelGroup>
+					
+					<h:panelGroup styleClass="item" layout="block">
+						<h:outputLink id="lnkFloatingPoint" title="#{lbl.goto_floating_point}" value="http://zuse.zib.de/imeji/floatingPoint">
+							<h:panelGroup styleClass="pad" layout="block">
+								<h:outputText value="#{lbl.floating_point}" />
+							</h:panelGroup>
+						</h:outputLink>
+					</h:panelGroup>
+							
+				</h:panelGroup>
+			</h:outputLink>
+		</h:panelGroup>
 		
-		<h:outputLink id="lnkResources" styleClass="imj_mainMenuStandardItem" title="#{lbl.goto_zuse_resources}" value="">
-			<h:outputText value="#{lbl.zuse_encyclopedia}"></h:outputText>
-		</h:outputLink>
+		
+		<h:panelGroup styleClass="dropDownMenu" layout="block">			
+			<h:outputLink id="lnkResources" styleClass="imj_mainMenuStandardItem" title="#{lbl.goto_zuse_resources}" value="">
+				<h:outputText value="#{lbl.zuse_resources}" />
+				<h:panelGroup styleClass="items" layout="block">
+				
+					<h:panelGroup styleClass="item hasChildren" layout="block">
+						<h:outputLink id="lnkSimulations" title="#{lbl.goto_simulations}" value="">
+							<h:panelGroup styleClass="pad" layout="block">
+								<h:outputText value="#{lbl.simulations}" />
+							</h:panelGroup>
+							<h:panelGroup styleClass="items" layout="block">
+								<h:panelGroup styleClass="item hasChildren" layout="block">
+									<h:outputLink id="lnkZ1Simulation" title="#{lbl.goto_z1_simulations}" value="">
+										<h:panelGroup styleClass="pad" layout="block">
+											<h:outputText value="#{lbl.z1_simulations}" />
+										</h:panelGroup>	
+										<h:panelGroup styleClass="items" layout="block">
+										
+											<h:panelGroup styleClass="item" layout="block">
+												<h:outputLink id="lnkSimuZ1SimpleMechSwitch" title="#{lbl.goto_z1_simple_mech_switch}" value="http://zuse.zib.de/infos/simulations/Z1/Z1Sim/simple.html">
+													<h:panelGroup styleClass="pad" layout="block">
+														<h:outputText value="#{lbl.z1_simple_mech_switch}" />
+													</h:panelGroup>
+												</h:outputLink>
+											</h:panelGroup>
+											
+											<h:panelGroup styleClass="item" layout="block">
+												<h:outputLink id="lnkSimuZ1ComplexMechSwitch" title="#{lbl.goto_z1_complex_mech_switch}" value="http://zuse.zib.de/infos/simulations/Z1/Z1Sim/variant.html">
+													<h:panelGroup styleClass="pad" layout="block">
+														<h:outputText value="#{lbl.z1_complex_mech_switch}" />
+													</h:panelGroup>
+												</h:outputLink>
+											</h:panelGroup>
+											
+											<h:panelGroup styleClass="item" layout="block">
+												<h:outputLink id="lnkSimuZ1Switch2CalculateEquivalance" title="#{lbl.goto_mech_switch_calc_equivalence}" value="http://zuse.zib.de/infos/simulations/Z1/Z1Sim/equiv.html">
+													<h:panelGroup styleClass="pad" layout="block">
+														<h:outputText value="#{lbl.mech_switch_calc_equivalence}" />
+													</h:panelGroup>
+												</h:outputLink>
+											</h:panelGroup>
+											
+											<h:panelGroup styleClass="item" layout="block">
+												<h:outputLink id="lnkSimuZ1Switch2MechAddUnit" title="#{lbl.goto_mech_add_unit}" value="http://zuse.zib.de/infos/simulations/Z1/Z1Adder/adder.html">
+													<h:panelGroup styleClass="pad" layout="block">
+														<h:outputText value="#{lbl.mech_add_unit}" />
+													</h:panelGroup>
+												</h:outputLink>
+											</h:panelGroup>
+
+											<h:panelGroup styleClass="item" layout="block">
+												<h:outputLink id="lnkSimuZ1AdderWgl" title="#{lbl.goto_z1_simu_add_wgl}" value="http://zuse.zib.de/infos/simulations/z1-adder-wgl">
+													<h:panelGroup styleClass="pad" layout="block">
+														<h:outputText value="#{lbl.z1_simu_add_wgl}" />
+													</h:panelGroup>
+												</h:outputLink>
+											</h:panelGroup>
+
+											<h:panelGroup styleClass="item" layout="block">
+												<h:outputLink id="lnkSimuZ1AdderLwjGl" title="#{lbl.goto_z1_simu_add_lwjgl}" value="http://zuse-z1.zib.de/simulation/adder">
+													<h:panelGroup styleClass="pad" layout="block">
+														<h:outputText value="#{lbl.z1_simu_add_lwjgl}" />
+													</h:panelGroup>
+												</h:outputLink>
+											</h:panelGroup>
+							
+											<h:panelGroup styleClass="item" layout="block">
+												<h:outputLink id="lnkSimuZ1AdderJavaApplet" title="#{lbl.goto_z1_simu_add_java_applet}" value="http://zuse.zib.de/infos/simulations/Z1/Simulation/addierer.html">
+													<h:panelGroup styleClass="pad" layout="block">
+														<h:outputText value="#{lbl.z1_simu_add_java_applet}" />
+													</h:panelGroup>
+												</h:outputLink>
+											</h:panelGroup>
+											
+										</h:panelGroup>
+									</h:outputLink>
+								</h:panelGroup>
+								<h:panelGroup styleClass="item hasChildren" layout="block">
+									<h:outputLink id="lnkZ3Simulation" title="#{lbl.goto_z3_simulations}" value="">
+										<h:panelGroup styleClass="pad" layout="block">
+											<h:outputText value="#{lbl.z3_simulations}" />
+										</h:panelGroup>	
+										<h:panelGroup styleClass="items" layout="block">
+											<h:panelGroup styleClass="item" layout="block">
+												<h:outputLink id="lnkSimuZ3Entire" title="#{lbl.goto_z3_simulations_entire}" value="http://zuse.zib.de/infos/simulations/Z3_Sim">
+													<h:panelGroup styleClass="pad" layout="block">
+														<h:outputText value="#{lbl.z3_simulations_entire}" />
+													</h:panelGroup>
+												</h:outputLink>
+											</h:panelGroup>
+											
+											<h:panelGroup styleClass="item" layout="block">
+												<h:outputLink id="lnkSimuZ33D" title="#{lbl.goto_z3_simu_3d}" value="http://zuse.zib.de/infos/simulations/Z3_3D_Sim">
+													<h:panelGroup styleClass="pad" layout="block">
+														<h:outputText value="#{lbl.z3_simu_3d}" />
+													</h:panelGroup>
+												</h:outputLink>
+											</h:panelGroup>
+											
+											<h:panelGroup styleClass="item" layout="block">
+												<h:outputLink id="lnkSimuZ3AdderCircuit" title="#{lbl.goto_z3_adder_circuit}" value="http://zuse.zib.de/infos/simulations/AdderV2/adder.html">
+													<h:panelGroup styleClass="pad" layout="block">
+														<h:outputText value="#{lbl.z3_adder_circuit}" />
+													</h:panelGroup>
+												</h:outputLink>
+											</h:panelGroup>
+											
+											<h:panelGroup styleClass="item" layout="block">
+												<h:outputLink id="lnkSimuZ3ShifterCircuit" title="#{lbl.goto_z3_shifter_circuit}" value="http://zuse.zib.de/infos/simulations/Shifter/shifter.html">
+													<h:panelGroup styleClass="pad" layout="block">
+														<h:outputText value="#{lbl.z3_shifter_circuit}" />
+													</h:panelGroup>
+												</h:outputLink>
+											</h:panelGroup>
+											
+											<h:panelGroup styleClass="item" layout="block">
+												<h:outputLink id="lnkSimuZ3NormalizerCircuit" title="#{lbl.goto_z3_normalizer_circuit}" value="http://zuse.zib.de/infos/simulations/Normalizer/normalizer.html">
+													<h:panelGroup styleClass="pad" layout="block">
+														<h:outputText value="#{lbl.z3_normalizer_circuit}" />
+													</h:panelGroup>
+												</h:outputLink>
+											</h:panelGroup>
+											
+											<h:panelGroup styleClass="item" layout="block">
+												<h:outputLink id="lnkSimuZ3Dec2BinConverter" title="#{lbl.goto_dec_to_bin_converter}" value="http://zuse.zib.de/infos/simulations/DecKey/decKey.html">
+													<h:panelGroup styleClass="pad" layout="block">
+														<h:outputText value="#{lbl.dec_to_bin_converter}" />
+													</h:panelGroup>
+												</h:outputLink>
+											</h:panelGroup>
+											
+											<h:panelGroup styleClass="item" layout="block">
+												<h:outputLink id="lnkSimuZ3DecPlaceAdjuster" title="#{lbl.goto_dec_plance_adj}" value="http://zuse.zib.de/infos/simulations/DecPlaceAdjuster/decPlaceAdjuster.html">
+													<h:panelGroup styleClass="pad" layout="block">
+														<h:outputText value="#{lbl.dec_plance_adj}" />
+													</h:panelGroup>
+												</h:outputLink>
+											</h:panelGroup>
+											
+										</h:panelGroup>
+									</h:outputLink>
+								</h:panelGroup>
+								<h:panelGroup styleClass="item hasChildren" layout="block">
+									<h:outputLink id="lnkEniac" title="#{lbl.goto_eniac}" value="http://zuse.zib.de/infos/simulations/eniac">
+										<h:panelGroup styleClass="pad" layout="block">
+											<h:outputText value="#{lbl.eniac}" />
+										</h:panelGroup>	
+									</h:outputLink>
+								</h:panelGroup>
+							</h:panelGroup>
+						</h:outputLink>
+					</h:panelGroup>
+				
+					<h:panelGroup styleClass="item hasChildren" layout="block">
+						<h:outputLink id="lnkPlankalkuel" title="#{lbl.goto_plankakuel}" value="">
+							<h:panelGroup styleClass="pad" layout="block">
+								<h:outputText value="#{lbl.plankakuel}" />
+							</h:panelGroup>
+							<h:panelGroup styleClass="items" layout="block">
+								<h:panelGroup styleClass="item hasChildren" layout="block">
+								
+									<h:outputLink id="lnkPlankalkuelCompiler" title="#{lbl.goto_plankakuel_compiler}" value="">
+										<h:panelGroup styleClass="pad" layout="block">
+											<h:outputText value="#{lbl.plankakuel_compiler}" />
+										</h:panelGroup>	
+										<h:panelGroup styleClass="items" layout="block">
+										
+											<h:panelGroup styleClass="item" layout="block">
+												<h:outputLink id="lnkPlanCompilerEditor" title="#{lbl.goto_plankakuel_editor}" value="http://zuse.zib.de/infos/simulations/Plankalkuel/Editor/pk.html">
+													<h:panelGroup styleClass="pad" layout="block">
+														<h:outputText value="#{lbl.plankakuel_editor}" />
+													</h:panelGroup>
+												</h:outputLink>
+											</h:panelGroup>
+											
+											<h:panelGroup styleClass="item" layout="block">
+												<h:outputLink id="lnkPlanCompilerCompiler" title="#{lbl.goto_plankakuel_compiler_compiler}" value="http://zuse.zib.de/infos/simulations/Plankalkuel/Compiler/plankalk.html">
+													<h:panelGroup styleClass="pad" layout="block">
+														<h:outputText value="#{lbl.plankakuel_compiler_compiler}" />
+													</h:panelGroup>
+												</h:outputLink>
+											</h:panelGroup>
+											
+										</h:panelGroup>
+									</h:outputLink>
+									
+									<h:outputLink id="lnkPlanCompilerApplications" title="#{lbl.goto_plankakuel_applications}" value="http://zuse.zib.de/infos/simulations/Plankalkuel/Chess/JavaApplet/chess.html">
+										<h:panelGroup styleClass="pad" layout="block">
+											<h:outputText value="#{lbl.plankakuel_applications}" />
+										</h:panelGroup>
+									</h:outputLink>
+								</h:panelGroup>
+							</h:panelGroup>
+						</h:outputLink>
+					</h:panelGroup>
+				
+					<h:panelGroup styleClass="item" layout="block">
+						<h:outputLink id="lnkZ3Reconstruction" title="#{lbl.goto_z3_reconstruction}" value="http://zuse.zib.de/imeji/reconstructionZ3">
+							<h:panelGroup styleClass="pad" layout="block">
+								<h:outputText value="#{lbl.z3_reconstruction}" />
+							</h:panelGroup>
+						</h:outputLink>
+					</h:panelGroup>
+				
+				</h:panelGroup>
+			</h:outputLink>
+		</h:panelGroup>
 		
 		<h:outputLink id="lnkAdmin" title="#{lbl.goto_admin}" value="#{Navigation.adminUrl}" rendered="#{SessionBean.admin}">
 			<h:outputText value="ADMIN"></h:outputText>

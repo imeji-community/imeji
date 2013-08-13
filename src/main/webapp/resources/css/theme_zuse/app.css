@@ -26,6 +26,12 @@
 
 /* ZUSE THEME HACKS */
 
+/* added by JR */
+a:hover.transimage {
+		background-color: transparent !important;
+		text-decoration: none;
+	}
+
 body {
 	color: #000000 !important;
 }
@@ -817,7 +823,7 @@ cut second ?
 }
 
 .imj_icoMagnifier_15:hover {
-	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjMagnifierTopLeft_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/777777/imjMagnifierTopLeft_15.png");
 }
 
 .imj_icoMagnifier_23 {
@@ -827,7 +833,7 @@ cut second ?
     width: 2em;
     margin-right: 0.636363em;
     margin-top: -0.1818em;
-    background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjMagnifierTopLeft_23.png");
+    background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/777777/imjmagnifiertopleft_23.png");
     
     background-position: center center;
     background-repeat: no-repeat;
@@ -850,11 +856,11 @@ cut second ?
 }
 
 .imj_buttonBrowseToFirst_15.imj_deactivated {
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonGotoFirst_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/777777/imjButtonGotoFirst_15.png");
 }
 
 .imj_buttonBrowseToFirst_15:hover {
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonGotoFirst_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/777777/imjButtonGotoFirst_15.png");
 	background-color: inherit;
 }
 
@@ -871,11 +877,11 @@ cut second ?
 }
 
 .imj_buttonBrowseBackward_15.imj_deactivated {
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonTrianglePrevious_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/777777/imjButtonTrianglePrevious_15.png");
 }
 
 .imj_buttonBrowseBackward_15:hover {
-	background-image: url("resources/imj_iconset/F0F0F0/imjButtonTrianglePrevious_15.png");
+	background-image: url("resources/imj_iconset/777777/imjButtonTrianglePrevious_15.png");
 	background-color: inherit;
 }
 
@@ -892,11 +898,11 @@ cut second ?
 }
 
 .imj_buttonBrowseForward_15.imj_deactivated {
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonTriangleNext_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/777777/imjButtonTriangleNext_15.png");
 }
 
 .imj_buttonBrowseForward_15:hover {
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonTriangleNext_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/777777/imjButtonTriangleNext_15.png");
 	background-color: inherit;
 }
 
@@ -913,11 +919,11 @@ cut second ?
 }
 
 .imj_buttonBrowseToLast_15.imj_deactivated {
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonGotoLast_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/777777/imjButtonGotoLast_15.png");
 }
 
 .imj_buttonBrowseToLast_15:hover {
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonGotoLast_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/777777/imjButtonGotoLast_15.png");
 	background-color: inherit;
 }
 
@@ -930,7 +936,7 @@ cut second ?
 }
 .imj_paginator .imj_backwardButton:hover { /*4AFF00*/
 	color: #F0F0F0;
-	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjTrianglePrevious_15.png") transparent no-repeat center left;
+	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/777777/imjTrianglePrevious_15.png") transparent no-repeat center left;
 }
 
 .imj_paginator .imj_forwardButton {
@@ -939,7 +945,7 @@ cut second ?
 }
 .imj_paginator .imj_forwardButton:hover {
 	color: #F0F0F0;
-	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjTriangleNext_15.png") transparent no-repeat center right;
+	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/777777/imjTriangleNext_15.png") transparent no-repeat center right;
 }
 
 
@@ -958,7 +964,7 @@ cut second ?
 }
 
 .imj_addButton_15:hover  {
-	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjButtonPlusBorder_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/777777/imjButtonPlusBorder_15.png");
 	background-color: inherit;
 }
 
@@ -974,7 +980,7 @@ cut second ?
 }
 
 .imj_removeButton_15:hover {
-	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjButtonMinusBorder_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/777777/imjButtonMinusBorder_15.png");
 	background-color: inherit;
 }
 
@@ -1001,7 +1007,7 @@ cut second ?
     background-color: #444444;
 }
 .imj_overlayMenuListItem:hover .imj_icoMagnifier_15 {
-	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjMagnifierTopLeft_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/777777/imjMagnifierTopLeft_15.png");
 }
 .imj_overlayMenu .imj_criticalItem:hover {
 	background-color: #D80000;
@@ -1843,7 +1849,7 @@ OLD:
 	vertical-align: middle;
 }
 .imj_iconTriangleBottomRight_15:hover {
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonTriangleLargeBottomRight_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/777777/imjButtonTriangleLargeBottomRight_15.png");
 }
 .imj_overlayMenu .imj_menuHeader {
 	color: #6CAD2F;
@@ -1853,7 +1859,7 @@ OLD:
 	color: #F0F0F0;
 }
 .imj_overlayMenu:hover .imj_iconTriangleBottomRight_15 {
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonTriangleLargeBottomRight_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/777777/imjButtonTriangleLargeBottomRight_15.png");
 }
 .imj_facetSeparator {
 	margin:0 0.25em;

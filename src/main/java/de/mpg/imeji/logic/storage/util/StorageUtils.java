@@ -37,13 +37,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 
-import javax.imageio.stream.ImageOutputStream;
-
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.tools.ant.taskdefs.Get;
 
 import de.mpg.imeji.presentation.util.ProxyHelper;
 

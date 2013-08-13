@@ -28,7 +28,7 @@
 .dropDownMenu .items .item a .pad {
 	padding: 4px;
 	padding-left: 10px;
-	font-size: 15px;
+	font-size: 13px;
 }
 
 .dropDownMenu .items a {
@@ -47,12 +47,12 @@
 }
 
 .dropDownMenu .item.hasChildren>a {
-	background: url(../images/All_Paginator_ArrowNext_15_Active.png) right
+	background: url(../resources/icon/All_Paginator_ArrowNext_15_Active.png) right
 		no-repeat;
 }
 
 .dropDownMenu .item.hasChildren:hover>a:hover {
-	background: url(../images/All_Paginator_ArrowNext_15_Hover.png) right
+	background: url(../resources/icon/All_Paginator_ArrowNext_15_Hover.png) right
 		no-repeat;
 }
 

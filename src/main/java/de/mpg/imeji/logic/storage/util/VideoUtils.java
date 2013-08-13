@@ -1,13 +1,10 @@
 package de.mpg.imeji.logic.storage.util;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 
-import org.apache.commons.io.FileUtils;
 import org.openimaj.feature.local.list.LocalFeatureList;
 import org.openimaj.image.ImageUtilities;
 import org.openimaj.image.MBFImage;

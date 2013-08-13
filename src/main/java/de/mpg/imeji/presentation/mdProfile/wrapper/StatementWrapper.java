@@ -118,9 +118,9 @@ public class StatementWrapper implements Comparable<StatementWrapper>
     public Statement getAsStatement()
     {
         if (vocabularyString != null)
-        {
             statement.setVocabulary(URI.create(vocabularyString));
-        }
+        else
+            statement.setVocabulary(null);
         return statement;
     }
 

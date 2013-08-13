@@ -6,6 +6,7 @@ package de.mpg.imeji.presentation.upload;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -131,6 +132,48 @@ public class UploadBean
     }
 
     /**
+     * Start the Upload of the items
+     * 
+     * @throws Exception
+     */
+    public void upload() throws Exception
+    {
+        UserController uc = new UserController(null);
+        user = uc.retrieve(getUser().getEmail());
+        HttpServletRequest req = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext()
+                .getRequest();
+        boolean isMultipart = ServletFileUpload.isMultipartContent(req);
+        if (isMultipart)
+        {
+            ServletFileUpload upload = new ServletFileUpload();
+            // Parse the request
+            FileItemIterator iter = upload.getItemIterator(req);
+            while (iter.hasNext())
+            {
+                FileItemStream fis = iter.next();
+                InputStream stream = fis.openStream();
+                if (!fis.isFormField())
+                {
+                    title = fis.getName();
+                    File tmp = createTmpFile();
+                    try
+                    {
+                        writeInTmpFile(tmp, stream);
+                        Item item = uploadFile(tmp);
+                        if (item != null)
+                            itemList.add(item);
+                    }
+                    finally
+                    {
+                        stream.close();
+                        FileUtils.deleteQuietly(tmp);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * Upload a file from the web
      * 
      * @return
@@ -169,47 +212,6 @@ public class UploadBean
     }
 
     /**
-     * Start the Upload of the items
-     * 
-     * @throws Exception
-     */
-    public void upload() throws Exception
-    {
-        UserController uc = new UserController(null);
-        user = uc.retrieve(getUser().getEmail());
-        HttpServletRequest req = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext()
-                .getRequest();
-        boolean isMultipart = ServletFileUpload.isMultipartContent(req);
-        if (isMultipart)
-        {
-            ServletFileUpload upload = new ServletFileUpload();
-            // Parse the request
-            FileItemIterator iter = upload.getItemIterator(req);
-            while (iter.hasNext())
-            {
-                FileItemStream fis = iter.next();
-                InputStream stream = fis.openStream();
-                if (!fis.isFormField())
-                {
-                    title = fis.getName();
-                    File tmp = createTmpFile();
-                    try
-                    {
-                        writeInTmpFile(tmp, stream);
-                        Item item = uploadFile(tmp);
-                        if (item != null)
-                            itemList.add(item);
-                    }
-                    finally
-                    {
-                        FileUtils.deleteQuietly(tmp);
-                    }
-                }
-            }
-        }
-    }
-
-    /**
      * Create a tmp file with the uploaded file
      * 
      * @param fio
@@ -219,7 +221,8 @@ public class UploadBean
     {
         try
         {
-            return File.createTempFile(IdentifierUtil.newRandomId(), "." + FilenameUtils.getExtension(title));
+            return File
+                    .createTempFile("upload", "." + FilenameUtils.getExtension(title));
         }
         catch (Exception e)
         {
@@ -233,18 +236,24 @@ public class UploadBean
      * @param tmp
      * @param fis
      * @return
+     * @throws IOException
      */
-    private File writeInTmpFile(File tmp, InputStream fis)
+    private File writeInTmpFile(File tmp, InputStream fis) throws IOException
     {
+        FileOutputStream fos = new FileOutputStream(tmp);
         try
         {
-            FileOutputStream fos = new FileOutputStream(tmp);
             StorageUtils.writeInOut(fis, fos, true);
             return tmp;
         }
         catch (Exception e)
         {
             throw new RuntimeException("Error writing uploaded File in temp file", e);
+        }
+        finally
+        {
+            fos.close();
+            fis.close();
         }
     }
 

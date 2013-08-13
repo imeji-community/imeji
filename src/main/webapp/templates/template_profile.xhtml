@@ -208,7 +208,8 @@
 													<h:outputLabel value="#{lbl.add_vocabulary}" />
 													<span style="padding-left:20px"></span>
 												</h:panelGroup>
-												<h:panelGroup rendered="#{wrapper.statement.type != 'http://imeji.org/terms/metadata#conePerson' and wrapper.statement.type != 'http://imeji.org/terms/metadata#geolocation' and  wrapper.statement.type !='http://imeji.org/terms/metadata#publication'}">
+												<h:panelGroup rendered="#{wrapper.statement.type != 'http://imeji.org/terms/metadata#conePerson' and wrapper.statement.type != 'http://imeji.org/terms/metadata#geolocation' 
+																		  and  wrapper.statement.type !='http://imeji.org/terms/metadata#publication' and wrapper.vocabularyString == null}">
 													<h:commandButton styleClass="min_imgBtn add" action="#{FormularBean.addConstraint}">
 														<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
 														<f:ajax execute="@form" render=":profileForm:ajaxArea"/>

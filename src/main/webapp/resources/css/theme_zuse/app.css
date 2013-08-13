@@ -163,6 +163,12 @@ select {
     background-color: transparent !important;
     font-size: 1.4545em !important;
     font-weight: bold !important;
+    border-radius: 0.41666666em !important;
+    -webkit-border-radius: 0.41666666em !important;
+    -moz-border-radius: 0.41666666em !important;
+    -o-border-radius: 0.41666666em !important;
+    -ms-border-radius: 0.41666666em !important;
+    padding: 5px !important;
 }
 
 .imj_mainMenuStandard input:hover,
@@ -171,11 +177,24 @@ select {
 .imj_mainMenuStandard a:focus {
     color: #FFFFFF !important;
     background-color: #183668 !important;
+    font-size: 1.4545em !important;
     border-radius: 0.41666666em !important;
     -webkit-border-radius: 0.41666666em !important;
     -moz-border-radius: 0.41666666em !important;
     -o-border-radius: 0.41666666em !important;
     -ms-border-radius: 0.41666666em !important;
+    padding: 5px !important;
+}
+
+.imj_mainMenuStandardItem a,
+.imj_mainMenuStandardItem a:hover {
+	font-size: 1.4545em !important;
+	border-radius: 0.41666666em !important;
+    -webkit-border-radius: 0.41666666em !important;
+    -moz-border-radius: 0.41666666em !important;
+    -o-border-radius: 0.41666666em !important;
+    -ms-border-radius: 0.41666666em !important;
+    padding: 0.5% !important;	
 }
 
 span.imj_contentMenuItem,

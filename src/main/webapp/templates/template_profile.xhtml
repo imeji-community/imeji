@@ -199,33 +199,35 @@
 													<h:outputLabel styleClass="free_area0" value="#{lbl.label_add}" />
 												</h:panelGroup>
 											</h:panelGroup>	
-											<h:panelGroup styleClass="full_area0 medium_marginLExcl endline" rendered="#{wrapper.constraintsSize == 0 and wrapper.vocabularyString == null}">
-												<h:commandButton styleClass="min_imgBtn add" action="#{FormularBean.addVocabulary}">
-													<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
-													<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
-												</h:commandButton>
-												<h:outputLabel styleClass="" value="#{lbl.add_vocabulary}" />
-												<span style="padding-left:20px"></span>
+											<h:panelGroup styleClass="full_area0 medium_marginLExcl endline" rendered="#{wrapper.constraintsSize == 0}">
+												<h:panelGroup rendered="#{wrapper.vocabularyString == null }">
+													<h:commandButton styleClass="min_imgBtn add" action="#{FormularBean.addVocabulary}">
+														<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
+														<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
+													</h:commandButton>
+													<h:outputLabel value="#{lbl.add_vocabulary}" />
+													<span style="padding-left:20px"></span>
+												</h:panelGroup>
 												<h:panelGroup rendered="#{wrapper.statement.type != 'http://imeji.org/terms/metadata#conePerson' and wrapper.statement.type != 'http://imeji.org/terms/metadata#geolocation' and  wrapper.statement.type !='http://imeji.org/terms/metadata#publication'}">
 													<h:commandButton styleClass="min_imgBtn add" action="#{FormularBean.addConstraint}">
 														<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
 														<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
 													</h:commandButton>
-													<h:outputLabel value="#{lbl.add_constraint}" />
+													<h:outputLabel value="#{lbl.add_constraint}"></h:outputLabel>
 												</h:panelGroup>
 											</h:panelGroup>
 											
 											<h:panelGroup styleClass="full_area0 medium_marginLExcl" rendered="#{wrapper.vocabularyString != null}">
-												<h:panelGroup styleClass="huge_area0 tiny_marginRIncl clear">
-													<h:selectOneMenu id="selectVocabulary" value="#{wrapper.vocabularyString}"  styleClass="free_txtInput" >
+												<h:outputLabel for="selectVocabulary" styleClass="free_label" value="#{lbl.vocabulary}" />
+												<h:panelGroup styleClass="xHuge_area0 tiny_marginRIncl clear">
+													<h:selectOneMenu id="selectVocabulary" value="#{wrapper.vocabularyString}"  styleClass="huge_txtInput endline" >
 														 <f:selectItems value="#{wrapper.vocabularyHelper.vocabularies}"/>
-			  										</h:selectOneMenu>
-			  										<h:outputLabel for="selectVocabulary" styleClass="free_label" value="#{lbl.vocabulary}" />
-			  										<h:outputLabel for="btnRemoveVocabulary" styleClass="free_area0" value="#{lbl.remove_vocabulary}" />
-			  										<h:commandButton id="btnRemoveVocabulary" styleClass="free_area0 min_imgBtn remove"  shortDesc="#{lbl.remove_vocabulary}" action="#{FormularBean.removeVocabulary}">
+			  										</h:selectOneMenu>					  										
+			  										<span style="padding-left:10px"></span>
+				  									<h:commandButton id="btnRemoveVocabulary" styleClass="min_imgBtn remove groupTool" action="#{FormularBean.removeVocabulary}">
 														<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
 														<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
-													</h:commandButton>
+													</h:commandButton>												
 												</h:panelGroup>
 											</h:panelGroup>	
 											

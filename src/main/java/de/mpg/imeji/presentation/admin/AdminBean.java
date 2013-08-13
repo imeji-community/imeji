@@ -89,7 +89,7 @@ public class AdminBean
                 // Upload the file in the internal storage
                 if (out.toByteArray() != null)
                 {
-                    tmp = File.createTempFile("import" + IdentifierUtil.newRandomId(),
+                    tmp = File.createTempFile("import",
                             FilenameUtils.getExtension(item.getFilename()));
                     FileUtils.writeByteArrayToFile(tmp, out.toByteArray());
                     UploadResult result = internal.upload(item.getFilename(), tmp,

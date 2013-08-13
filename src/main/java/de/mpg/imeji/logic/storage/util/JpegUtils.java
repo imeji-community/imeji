@@ -84,7 +84,7 @@ public class JpegUtils
      */
     public static BufferedImage readJpeg(byte[] bytes) throws IOException, ImageReadException
     {
-        File f = File.createTempFile("uploadReadJpeg" + IdentifierUtil.newRandomId(), ".jpg");
+        File f = File.createTempFile("uploadReadJpeg", ".jpg");
         try
         {
             StreamUtils.copyThenClose(new ByteArrayInputStream(bytes), new FileOutputStream(f));

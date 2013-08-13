@@ -332,7 +332,7 @@ public class ImageUtils
         File pngFile = null;
         try
         {
-            pngFile = File.createTempFile("uploadPng2Jpg" + IdentifierUtil.newRandomId(), ".png");
+            pngFile = File.createTempFile("uploadPng2Jpg", ".png");
             FileUtils.writeByteArrayToFile(pngFile, bytes);
             SeekableStream s = new FileSeekableStream(pngFile);
             PNGDecodeParam param = new PNGDecodeParam();
@@ -395,7 +395,7 @@ public class ImageUtils
         try
         {
             RenderedImage ri = dec.decodeAsRenderedImage(0);
-            jpgFile = File.createTempFile("uploadImage2Jpeg" + IdentifierUtil.newRandomId(), "jpg");
+            jpgFile = File.createTempFile("uploadImage2Jpeg", "jpg");
             FileOutputStream fos = new FileOutputStream(jpgFile);
             JPEGEncodeParam jParam = new JPEGEncodeParam();
             jParam.setQuality(1.0f);

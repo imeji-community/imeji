@@ -222,7 +222,7 @@ public class UploadBean
         try
         {
             return File
-                    .createTempFile("upload" + IdentifierUtil.newRandomId(), "." + FilenameUtils.getExtension(title));
+                    .createTempFile("upload", "." + FilenameUtils.getExtension(title));
         }
         catch (Exception e)
         {

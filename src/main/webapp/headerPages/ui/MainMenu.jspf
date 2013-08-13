@@ -444,7 +444,7 @@
 				<h:panelGroup styleClass="item" layout="block">
 					<h:outputLink id="lnkPartners" title="#{lbl.goto_zuse_partners}" value="">
 						<h:panelGroup styleClass="pad" layout="block">
-							<h:outputText value="#{lbl.zuse_partner}" />
+							<h:outputText value="#{lbl.zuse_partners}" />
 						</h:panelGroup>
 					</h:outputLink>
 				</h:panelGroup>

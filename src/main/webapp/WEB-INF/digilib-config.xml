@@ -4,13 +4,13 @@
 
 <digilib-config>
   <!--  Image to be sent to indicate an error or general failure. -->
-  <parameter name="error-image" value="/resources/digilib/jquery/img/digilib-error.png" />
+  <parameter name="error-image" value="resources/digilib/jquery/img/digilib-error.png" />
 
   <!--  Image to be sent to indicate an authorization failure. -->
-  <parameter name="denied-image" value="/resources/digilib/jquery/img/digilib-denied.png" />
+  <parameter name="denied-image" value="resources/digilib/jquery/img/digilib-denied.png" />
 
   <!--  Image to be sent to indicate that the request was correct, but the specified image could not be found. -->
-  <parameter name="notfound-image" value="/resources/digilib/jquery/img/digilib-notfound.png" />
+  <parameter name="notfound-image" value="resources/digilib/jquery/img/digilib-notfound.png" />
 
   <!-- List of directories where images are searched.
        Directories with low-resolution images are LAST!!! in list.

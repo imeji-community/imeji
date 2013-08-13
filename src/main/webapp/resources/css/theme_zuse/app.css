@@ -210,7 +210,7 @@ a.imj_contentMenuItem:focus {
 }
 
 .min_imgBtn, .min_imgArea {
-     width: auto !important;
+	height: 1.454545em;
 }
 
 .preListHeader {

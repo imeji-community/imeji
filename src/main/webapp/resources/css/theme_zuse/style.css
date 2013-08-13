@@ -447,8 +447,8 @@ cut second ?
     width: 2em;
     margin-right: 0.636363em;
     margin-top: -0.1818em;
-    /* background-image: url("/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjMagnifierTopLeft_23.png"); */
-    background-image: url("../resources/imj_iconset/F0F0F0/imjMagnifierTopLeft_23.png");
+    background-image: url("/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjMagnifierTopLeft_23.png"); 
+    /*background-image: url("../resources/imj_iconset/F0F0F0/imjMagnifierTopLeft_23.png");*/
     
     background-position: center center;
     background-repeat: no-repeat;

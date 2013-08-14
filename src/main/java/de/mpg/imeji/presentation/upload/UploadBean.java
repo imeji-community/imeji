@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -176,33 +178,36 @@ public class UploadBean
      */
     public String uploadFromLink()
     {
-        File tmp = createTmpFile();
         try
         {
-            StorageController externalController = new StorageController("external");
             externalUrl = URLDecoder.decode(externalUrl, "UTF-8");
             URL url = new URL(externalUrl);
             title = findFileName(url);
-            FileOutputStream fos = new FileOutputStream(tmp);
-            externalController.read(url.toString(), fos, true);
-            Item item = uploadFile(tmp);
-            if (item != null)
+            File tmp = createTmpFile();
+            try
             {
-                UserController uc = new UserController(null);
-                user = uc.retrieve(getUser().getEmail());
-                ItemController ic = new ItemController(user);
-                ic.create(item, collection.getId());
+                StorageController externalController = new StorageController("external");
+                FileOutputStream fos = new FileOutputStream(tmp);
+                externalController.read(url.toString(), fos, true);
+                Item item = uploadFile(tmp);
+                if (item != null)
+                {
+                    UserController uc = new UserController(null);
+                    user = uc.retrieve(getUser().getEmail());
+                    ItemController ic = new ItemController(user);
+                    ic.create(item, collection.getId());
+                }
+                externalUrl = "";
             }
-            externalUrl = "";
+            finally
+            {
+                FileUtils.deleteQuietly(tmp);
+            }
         }
         catch (Exception e)
         {
             logger.error("Error uploading file from link: " + externalUrl, e);
             fFiles.add(e.getMessage() + ": " + title);
-        }
-        finally
-        {
-            FileUtils.deleteQuietly(tmp);
         }
         return "";
     }

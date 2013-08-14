@@ -30,7 +30,6 @@ package de.mpg.imeji.logic.storage.transform.impl;
 
 import java.io.File;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.storage.transform.ImageGenerator;

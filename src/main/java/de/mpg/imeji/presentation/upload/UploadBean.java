@@ -13,12 +13,9 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.fileupload.FileItemIterator;
@@ -27,10 +24,6 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
-import org.apache.tika.Tika;
-import org.apache.tika.mime.MimeType;
-import org.apache.tika.mime.MimeTypes;
-import org.apache.tika.parser.Parser;
 
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.UserController;
@@ -269,8 +262,8 @@ public class UploadBean
     {
         try
         {
-            if (!hasExtension(title))
-                title += guessExtension(file);
+            if (!StorageUtils.hasExtension(title))
+                title += StorageUtils.guessExtension(file);
             if (isAllowedFormat(FilenameUtils.getExtension(title)))
             {
                 storageController = new StorageController();
@@ -294,39 +287,6 @@ public class UploadBean
             logger.error("Error uploading item: ", e);
         }
         return null;
-    }
-
-    /**
-     * True if the Filename has an extension
-     * 
-     * @param filename
-     * @return
-     */
-    private boolean hasExtension(String filename)
-    {
-        return !FilenameUtils.getExtension(filename).equals("");
-    }
-
-    /**
-     * Guess the extension of a {@link File}
-     * 
-     * @param file
-     * @return
-     */
-    private String guessExtension(File file)
-    {
-        try
-        {
-            Tika t = new Tika();
-            MimeTypes allTypes = MimeTypes.getDefaultMimeTypes();
-            MimeType type = allTypes.forName(t.detect(file));
-            return type.getExtension();
-        }
-        catch (Exception e)
-        {
-            logger.error("Error guessing file format", e);
-        }
-        return "";
     }
 
     /**

@@ -33,7 +33,6 @@ import com.sun.media.jai.codec.SeekableStream;
 import com.sun.media.jai.codec.TIFFDecodeParam;
 
 import de.mpg.imeji.logic.storage.Storage.FileResolution;
-import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**

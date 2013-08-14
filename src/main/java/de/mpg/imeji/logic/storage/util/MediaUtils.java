@@ -83,7 +83,7 @@ public class MediaUtils
         try
         {
             op.addImage(jpeg.getAbsolutePath());
-            cmd.run(op);
+                cmd.run(op);
             int frame = getNonBlankFrame(jpeg.getAbsolutePath());
             if (frame >= 0)
             {

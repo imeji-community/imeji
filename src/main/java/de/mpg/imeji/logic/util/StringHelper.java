@@ -6,6 +6,8 @@ import java.net.URISyntaxException;
 import java.security.MessageDigest;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 
 import de.mpg.imeji.presentation.util.PropertyReader;
 

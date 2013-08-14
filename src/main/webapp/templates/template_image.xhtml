@@ -27,7 +27,7 @@
 					<h:panelGroup layout="block" styleClass="full_area detailedItem">
 						<span id="webResolutionImage">
 							<h:outputLink id="lnkPicFullResolution" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" target="_blank" rendered="#{(imageBean.imageFile and !Property.digilibEnabled) or imageBean.rawFile or imageBean.pdfFile}">
-								<h:graphicImage id="picWebResolution" title="#{imageBean.image.filename}" alt="#{imageBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}" />
+								<h:graphicImage id="picWebResolution" title="#{imageBean.image.filename}" alt="#{imageBean.image.filename}" value="#{Navigation.applicationUrl}file/#{imageBean.encodedFileName}?id=#{imageBean.image.webImageUrl}" />
 							</h:outputLink>
 							<h:outputLink id="lnkPicInternalDigilib" value="#{Navigation.applicationUrl}digilibImage?fn=#{Property.internalStorageBase}/#{imageBean.image.storageId}/original/#{imageBean.itemStorageIdFilename}" target="_blank" rendered="#{imageBean.imageFile and Property.digilibEnabled and (empty Navigation.externalDigilibUrl)}">
 								<h:graphicImage id="picWebResolutionInternalDigilib" title="#{imageBean.image.filename}" alt="#{imageBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}" />
@@ -38,13 +38,16 @@
 						</span>
 						<h:panelGroup rendered="#{imageBean.videoFile}">
 							<video id="imejiVideoPlayer" src="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" controls="controls" 
-							poster="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}" oninvalid="alert('dsasadf');" ></video>
+							poster="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}" preload="auto" height="264"></video>
 						</h:panelGroup>
 						<h:panelGroup rendered="#{imageBean.audioFile}">
-							<audio id="imejiAudioPlayer" src="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" controls="controls">
+							<audio id="imejiAudioPlayer" src="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" controls="controls" preload="auto">
 								<h:outputText value="#{lbl.playing} #{imageBean.image.filename} " />
 							</audio>
 						</h:panelGroup>
+						<h:outputLink styleClass="full_area0" id="lnkDownload" value="#{Navigation.applicationUrl}file/#{imageBean.encodedFileName}?id=#{imageBean.image.fullImageUrl}" target="_blank">
+							<h:outputText value="#{lbl.fileDownload}"/>
+						</h:outputLink>
 					</h:panelGroup>
 
 					<h:panelGroup styleClass="free_area0 xSmall_marginLIncl" style="color:red;" rendered="#{imageBean.image.status == 'WITHDRAWN'}">
@@ -77,11 +80,7 @@
 									<h:outputText value="#{lbl.remove}" />
 								</h:commandLink>
 								<h:outputText styleClass="free_area0 " value=")"/>
-							</h:panelGroup>							
-							<h:outputLink  styleClass="free_label xTiny_marginLExcl" id="lnkDownload" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" target="_blank">
-								<h:outputText value="#{lbl.fileDownload}"/>
-							</h:outputLink>
-							
+							</h:panelGroup>														
 						</h:form>
 					</h:panelGroup>
 				</h:panelGroup>
@@ -266,13 +265,13 @@
 										<span class="noDisplay">: </span>
 									</b>
 									<span class="xHuge_area0 xTiny_marginLExcl endline"> 
-										<h:outputLink value="#{imageBean.image.thumbnailImageUrl}">
+										<h:outputLink value="#{Navigation.applicationUrl}file/#{imageBean.encodedFileName}?id=#{imageBean.image.thumbnailImageUrl}" target="_blank">
 											<h:outputText value="#{lbl.imageSizesThumb}" />
 										</h:outputLink> <br/>
-										<h:outputLink value="#{imageBean.image.webImageUrl}">
+										<h:outputLink value="#{Navigation.applicationUrl}file/#{imageBean.encodedFileName}?id=#{imageBean.image.webImageUrl}" target="_blank">
 											<h:outputText value="#{lbl.imageSizesWeb}" />
 										</h:outputLink> <br/>
-										<h:outputLink value="#{imageBean.image.fullImageUrl}">
+										<h:outputLink value="#{Navigation.applicationUrl}file/#{imageBean.encodedFileName}?id=#{imageBean.image.fullImageUrl}" target="_blank">
 											<h:outputText value="#{lbl.imageSizesOrg}" />
 										</h:outputLink>
 									</span>

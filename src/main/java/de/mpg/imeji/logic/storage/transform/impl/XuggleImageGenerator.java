@@ -58,11 +58,11 @@ public class XuggleImageGenerator implements ImageGenerator
         {
             try
             {
-                return VideoUtils.videoToImageBytes(file.toURI().toURL());
+                return VideoUtils.videoToImageBytes(file);
             }
             catch (Exception e)
             {
-                logger.debug("Error transforming a video file to an image with xuggle", e);
+                logger.warn("Error transforming a video file to an image with xuggle", e);
             }
         }
         return null;

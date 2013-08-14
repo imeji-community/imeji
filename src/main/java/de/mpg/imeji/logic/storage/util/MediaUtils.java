@@ -73,12 +73,11 @@ public class MediaUtils
     public static byte[] convertToJPEG(File tmp, String extension) throws IOException, URISyntaxException,
             InterruptedException, IM4JavaException
     {
-        String path = tmp.getAbsolutePath();
+        //In case the file is made of many frames, (for instance videos), generate only the frames from 0 to 48 to avoid high memory consumption 
+        String path = tmp.getAbsolutePath() + "[0-48]";
         ConvertCmd cmd = getConvert();
         // create the operation, add images and operators/options
         IMOperation op = new IMOperation();
-        // if (StorageUtils.getMimeType(extension).contains("video") || true)
-        // path = path + "[1]";
         op.addImage(path);
         File jpeg = File.createTempFile("uploadMagick", ".jpg");
         try

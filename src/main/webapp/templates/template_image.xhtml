@@ -35,13 +35,16 @@
 						</span>
 						<h:panelGroup rendered="#{imageBean.videoFile}">
 							<video id="imejiVideoPlayer" src="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" controls="controls" 
-							poster="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}" oninvalid="alert('dsasadf');" ></video>
+							poster="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}" preload="auto" height="264"></video>
 						</h:panelGroup>
 						<h:panelGroup rendered="#{imageBean.audioFile}">
-							<audio id="imejiAudioPlayer" src="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" controls="controls">
+							<audio id="imejiAudioPlayer" src="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" controls="controls" preload="auto">
 								<h:outputText value="#{lbl.playing} #{imageBean.image.filename} " />
 							</audio>
 						</h:panelGroup>
+						<h:outputLink styleClass="full_area0" id="lnkDownload" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" target="_blank">
+							<h:outputText value="#{lbl.fileDownload}"/>
+						</h:outputLink>
 					</h:panelGroup>
 
 					<h:panelGroup styleClass="free_area0 xSmall_marginLIncl" style="color:red;" rendered="#{imageBean.image.status == 'WITHDRAWN'}">
@@ -74,11 +77,7 @@
 									<h:outputText value="#{lbl.remove}" />
 								</h:commandLink>
 								<h:outputText styleClass="free_area0 " value=")"/>
-							</h:panelGroup>							
-							<h:outputLink  styleClass="free_label xTiny_marginLExcl" id="lnkDownload" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" target="_blank">
-								<h:outputText value="#{lbl.fileDownload}"/>
-							</h:outputLink>
-							
+							</h:panelGroup>														
 						</h:form>
 					</h:panelGroup>
 				</h:panelGroup>

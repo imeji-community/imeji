@@ -186,7 +186,7 @@ public class ImageGeneratorManager
             {
                 throw new RuntimeException(e);
             }
-        while (it.hasNext() && (jpeg == null || jpeg.length ==0))
+        while (it.hasNext() && (jpeg == null || jpeg.length == 0))
         {
             try
             {

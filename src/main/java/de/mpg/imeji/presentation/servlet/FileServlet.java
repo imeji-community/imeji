@@ -185,7 +185,7 @@ public class FileServlet extends HttpServlet
      */
     private SessionBean getSession(HttpServletRequest req)
     {
-        return (SessionBean)req.getSession(false).getAttribute(SessionBean.class.getSimpleName());
+        return (SessionBean)req.getSession(true).getAttribute(SessionBean.class.getSimpleName());
     }
 
     /**

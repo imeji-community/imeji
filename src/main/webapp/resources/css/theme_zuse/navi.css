@@ -3,7 +3,6 @@
 .dropDownMenu {
 	/* float: left !important; */
 	display: inline-block;
-	padding: 0.5%;
 }
 
 .dropDownMenu .items {
@@ -35,7 +34,7 @@
 .dropDownMenu .items a {
 	background: none;
 	display: inline-block;
-	width: 100%;
+ 	width: 94%;
 }
 
 .dropDownMenu .items .item:hover>a:hover {

@@ -186,17 +186,6 @@ select {
     padding: 5px !important;
 }
 
-.imj_mainMenuStandardItem a,
-.imj_mainMenuStandardItem a:hover {
-	font-size: 1.4545em !important;
-	border-radius: 0.41666666em !important;
-    -webkit-border-radius: 0.41666666em !important;
-    -moz-border-radius: 0.41666666em !important;
-    -o-border-radius: 0.41666666em !important;
-    -ms-border-radius: 0.41666666em !important;
-    padding: 0.5% !important;	
-}
-
 span.imj_contentMenuItem,
 a.imj_contentMenuItem {
     background-color: transparent !important;

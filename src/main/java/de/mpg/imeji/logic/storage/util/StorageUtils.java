@@ -251,6 +251,10 @@ public class StorageUtils
         {
             return "video/3gpp";
         }
+        else if("eps".equals(extension))
+        {
+            return "application/eps";
+        }
         else if ("ts".equals(extension))
         {
             return "video/MP2T";
@@ -326,7 +330,7 @@ public class StorageUtils
         }
         try
         {
-            // If not found, tTry with tika
+            // If not found, Try with tika
             MimeType type = MimeTypes.getDefaultMimeTypes().forName("name." + extension);
             return type.getName();
         }

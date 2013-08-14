@@ -182,7 +182,7 @@ public class UploadBean
             StorageController externalController = new StorageController("external");
             externalUrl = URLDecoder.decode(externalUrl, "UTF-8");
             URL url = new URL(externalUrl);
-            title = url.getPath().substring(url.getPath().lastIndexOf("/") + 1);
+            title = findFileName(url);
             FileOutputStream fos = new FileOutputStream(tmp);
             externalController.read(url.toString(), fos, true);
             Item item = uploadFile(tmp);
@@ -205,6 +205,29 @@ public class UploadBean
             FileUtils.deleteQuietly(tmp);
         }
         return "";
+    }
+
+    /**
+     * Find in the url the filename
+     * 
+     * @param url
+     * @return
+     */
+    private String findFileName(URL url)
+    {
+        String name = FilenameUtils.getName(url.getPath());
+        if (isWellFormedFileName(name))
+            return name;
+        name = FilenameUtils.getName(url.toString());
+        if (isWellFormedFileName(name))
+            return name;
+        return FilenameUtils.getName(url.getPath());
+    }
+
+    private boolean isWellFormedFileName(String filename)
+    {
+        return FilenameUtils.wildcardMatch(filename, "*.???") || FilenameUtils.wildcardMatch(filename, "*.??")
+                || FilenameUtils.wildcardMatch(filename, "*.?");
     }
 
     /**

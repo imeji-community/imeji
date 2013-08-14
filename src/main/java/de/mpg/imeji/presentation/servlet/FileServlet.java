@@ -100,6 +100,7 @@ public class FileServlet extends HttpServlet
         SessionBean session = getSession(req);
         if (security.check(OperationsType.READ, getUser(session), loadCollection(url, session)))
         {
+            //resp.setHeader("Content-disposition", "filename=imejiFile");
             storageController.read(url, resp.getOutputStream(), true);
         }
         else

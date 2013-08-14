@@ -60,7 +60,7 @@ All rights reserved. Use is subject to license terms.
 
 		<h:panelGroup id="lnkZuseEncyclopediaDropMenu" styleClass="dropDownMenu" layout="block">
 			<h:panelGroup styleClass="header" layout="block">
-				<h:outputLink id="lnkEcyclopedia" styleClass="imj_mainMenuStandardItem" title="#{lbl.goto_zuse_encyclopedia}" value="">
+				<h:outputLink id="lnkEncyclopedia" styleClass="imj_mainMenuStandardItem" title="#{lbl.goto_zuse_encyclopedia}" value="">
 					<h:outputText value="#{lbl.zuse_encyclopedia}" />
 				</h:outputLink>
 			</h:panelGroup>
@@ -222,9 +222,8 @@ All rights reserved. Use is subject to license terms.
 			
 		</h:panelGroup>
 		
-		
-		<h:panelGroup styleClass="dropDownMenu" layout="block">
-			<h:panelGroup styleClass="item hasChildren" layout="block">	
+		<h:panelGroup id="lnkZuseResourcesDropMenu" styleClass="dropDownMenu" layout="block">
+			<h:panelGroup styleClass="header" layout="block">	
 				<h:outputLink id="lnkResources" styleClass="imj_mainMenuStandardItem" title="#{lbl.goto_zuse_resources}" value="">
 					<h:outputText value="#{lbl.zuse_resources}" />
 				</h:outputLink>
@@ -361,7 +360,7 @@ All rights reserved. Use is subject to license terms.
 								</h:panelGroup>
 							</h:panelGroup>
 						</h:panelGroup>
-						<h:panelGroup styleClass="item hasChildren" layout="block">
+						<h:panelGroup styleClass="item" layout="block">
 							<h:outputLink id="lnkEniac" title="#{lbl.goto_eniac}" value="http://zuse.zib.de/infos/simulations/eniac">
 								<h:panelGroup styleClass="pad" layout="block">
 									<h:outputText value="#{lbl.eniac}" />
@@ -406,7 +405,7 @@ All rights reserved. Use is subject to license terms.
 								</h:panelGroup>
 							</h:panelGroup>
 						</h:panelGroup>
-						<h:panelGroup styleClass="item hasChildren" layout="block">
+						<h:panelGroup styleClass="item" layout="block">
 							<h:panelGroup layout="block">
 								<h:outputLink id="lnkPlanCompilerApplications" title="#{lbl.goto_plankalkuel_applications}" value="http://zuse.zib.de/infos/simulations/Plankalkuel/Chess/JavaApplet/chess.html">
 									<h:panelGroup styleClass="pad" layout="block">

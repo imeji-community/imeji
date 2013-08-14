@@ -41,6 +41,12 @@ a, a:visited {
 	text-decoration: none;
 }
 
+a:hover, a:focus, button:hover, button:focus {
+	color: #FFFFFF !important;
+	background-color: #183668 !important;
+}
+	
+
 .imj_siteWrapper {
     border-left: 1px dotted #000000 !important;
     border-right: 1px dotted #000000 !important;
@@ -66,11 +72,6 @@ form {
     background-color:#FFFFFF !important;
 }
 
-.imj_contentSubMenu {
-    width: 77.95% !important;
-	padding: 0.454545em 0.181818em !important;
-}
-
 .pageBrowser .seperator, .pageBrowser .actualSeperator {
 	background-color: #000000 !important;
 	border-color: #FFFFFF !important;
@@ -87,6 +88,7 @@ body .wrapper, body .footer {
 
 .imj_siteHeaderLogo {
 	height:8em !important;
+	margin: -2em 0.0909em 0 2.364em !important;
 }
 
 .imj_mainContentHeader {
@@ -157,6 +159,10 @@ select {
     color: #183668 !important;
 }
 
+.imj_mainMenuStandard {
+	margin: -1.5em 0.0909em 0 2.273em !important;
+}
+
 .imj_mainMenuStandard input,
 .imj_mainMenuStandard a,
 .imj_mainMenuStandard span {
@@ -184,6 +190,11 @@ select {
     -o-border-radius: 0.41666666em !important;
     -ms-border-radius: 0.41666666em !important;
     padding: 5px !important;
+}
+
+.imj_siteContentSubSection {
+    margin-bottom: 0em !important;
+    margin-left: 2.636em !important;
 }
 
 span.imj_contentMenuItem,
@@ -215,8 +226,32 @@ a.imj_contentMenuItem:focus {
     color: #183668 !important;
 }
 
+.imj_contentSubMenu {
+    width: 74.95% !important;
+	padding: 0.454545em 0.181818em !important;
+}
+
 .imj_contentSubMenuItemSorting {
 	color: #000000 !important;
+}
+
+.imj_siteContentHeadline {
+    background-color: #183668 !important;
+    border-radius: 1.917em 0.916667em 1.917em 0.916667em !important;
+    -webkit-border-radius: 1.917em 0.916667em 1.917em 0.916667em !important;
+    -moz-border-radius: 1.917em 0.916667em 1.917em 0.916667em !important;
+    -o-border-radius: 1.917em 0.916667em 1.917em 0.916667em !important;
+    -ms-border-radius: 1.917em 0.916667em 1.917em 0.916667em !important;
+}
+
+.imj_siteContentHeadline h1 {
+    color: #FFFFFF !important;
+    font-size: 2.382em !important;
+    letter-spacing: 0.091em !important;
+    text-align: center !important;
+    line-height: 100% !important;
+    margin-right: 0.5em;
+    margin-left: 0.5em;
 }
 
 .itemSelectArea {
@@ -267,22 +302,6 @@ a.imj_contentMenuItem:focus {
 .gotoBox {
     float: right;
     margin-right: 3em;
-}
-
-.imj_siteContentHeadline {
-    background-color: #183668 !important;
-    border-radius: 0.91666666em !important;
-    -webkit-border-radius: 0.91666666em !important;
-    -moz-border-radius: 0.91666666em !important;
-    -o-border-radius: 0.91666666em !important;
-    -ms-border-radius: 0.91666666em !important;
-}
-
-.imj_siteContentHeadline h1 {
-    color: #FFFFFF !important;
-    font-size: 2.182em !important;
-    letter-spacing: 0.091em !important;
-    text-align: center !important;
 }
 
 /* End of Zuse Theme Hacks */

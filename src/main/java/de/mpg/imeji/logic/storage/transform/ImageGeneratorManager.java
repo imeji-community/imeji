@@ -195,7 +195,7 @@ public class ImageGeneratorManager
             }
             catch (Exception e)
             {
-                logger.debug("Error generating image", e);
+                logger.warn("Error generating image", e);
             }
         }
         if (jpeg == null)

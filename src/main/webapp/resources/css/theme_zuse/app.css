@@ -77,10 +77,12 @@ form {
 	background-color: #000000 !important;
 	border-color: #FFFFFF !important;
 }
+
 body .wrapper, body .footer {
-    border-left: 1px dotted #000000 !important;
-    border-right: 1px dotted #000000 !important;
-    background-image: url("./css/theme_zuse/images/background.gif") !important;
+	margin-top: 5.5px;
+    border-top: 1px dotted #000000 !important;
+    /* border-right: 1px dotted #000000 !important; */
+    background-image: none !important;
 }
 	
 .imj_siteHeaderLogoSearchSection {
@@ -204,7 +206,7 @@ select {
 }
 
 .imj_mainContentWrapper {
-    float: none !important;    
+	margin: 0 !important;
  }
 
 .imj_siteContentSubSection {
@@ -239,7 +241,7 @@ a.imj_contentMenuItemCreateAlbum:focus {
 
 .imj_contentMenu {
     height: 2em !important;
-    width: auto !important;
+    max-width: 75% !important;
     overflow: visible !important;
 }
 
@@ -333,16 +335,20 @@ a.imj_contentMenuItemCreateAlbum:focus {
 /* ZUSE THEME HACKS @ infopage.css */
 
 .infoPage .mainSection {
-	margin-left: 2.92em !important;
+	margin-left: 2.1em !important;
+	line-height: 150% !important;
 }
 
 .infoPage {
 	line-height: 175% !important;
+    float: none !important; 
+    padding: 0 !important;
+    width: auto !important;
 }
 
 /* ZUSE THEME HACKS @ lists.css */
 
-.listItem:hover{
+.listItem:hover {
 	background-color: #EEEEEE;
 }
 

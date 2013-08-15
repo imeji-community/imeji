@@ -111,6 +111,11 @@ select {
     color: #292929 !important;
 }
 
+.imj_simpleSearchLinkAdvancedsearch {
+    margin-left: 1em !important;
+	font-size: 1.1em !important;
+}
+
 .imj_metaMenuStandardSingleLine .imj_metaMenuSeparator {
     border-right: solid #183668 0.090909em !important;
 }
@@ -138,7 +143,6 @@ select {
 .imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="submit"]:hover {
     color: #FFFFFF !important;
 	background-color: #183668 !important;
-	padding-bottom: 0.1em !important;
 }
 
 .imj_simpleSearchButtonSubmit {
@@ -160,14 +164,14 @@ select {
 }
 
 .imj_mainMenuStandard {
-	margin: -1.5em 0.0909em 0 2.273em !important;
+	margin: -1.5em 0.0909em 0 2em !important;
 }
 
 .imj_mainMenuStandard input,
 .imj_mainMenuStandard a,
 .imj_mainMenuStandard span {
     background-color: transparent !important;
-    font-size: 1.4545em !important;
+    font-size: 1.5545em !important;
     font-weight: bold !important;
     border-radius: 0.41666666em !important;
     -webkit-border-radius: 0.41666666em !important;
@@ -175,6 +179,8 @@ select {
     -o-border-radius: 0.41666666em !important;
     -ms-border-radius: 0.41666666em !important;
     padding: 5px !important;
+    letter-spacing: 0.05em !important;
+    margin-right: 0.3em !important;
 }
 
 .imj_mainMenuStandard input:hover,
@@ -183,7 +189,6 @@ select {
 .imj_mainMenuStandard a:focus {
     color: #FFFFFF !important;
     background-color: #183668 !important;
-    font-size: 1.4545em !important;
     border-radius: 0.41666666em !important;
     -webkit-border-radius: 0.41666666em !important;
     -moz-border-radius: 0.41666666em !important;
@@ -203,11 +208,13 @@ select {
 
 .imj_siteContentSubSection {
     margin-bottom: 0em !important;
-    margin-left: 2.636em !important;
+    margin-left: 2.2em !important;
 }
 
 span.imj_contentMenuItem,
-a.imj_contentMenuItem {
+a.imj_contentMenuItem,
+span.imj_contentMenuItemCreateAlbum,
+a.imj_contentMenuItemCreateAlbum {
     background-color: transparent !important;
     font-size: 1.2em !important;
     font-weight: bold !important;
@@ -215,7 +222,9 @@ a.imj_contentMenuItem {
 }
 
 a.imj_contentMenuItem:hover,
-a.imj_contentMenuItem:focus {
+a.imj_contentMenuItem:focus,
+a.imj_contentMenuItemCreateAlbum:hover,
+a.imj_contentMenuItemCreateAlbum:focus {
     background-color: #183668 !important;
     color: #FFFFFF !important;
     font-size: 1.2em !important;
@@ -229,7 +238,8 @@ a.imj_contentMenuItem:focus {
 
 .imj_contentMenu {
     height: 2em !important;
-    width: 74.95%;
+    width: auto !important;
+    overflow: visible !important;
 }
 
 .imj_contentSubMenuItem {
@@ -273,7 +283,7 @@ a.imj_contentMenuItem:focus {
 }
 
 .preListHeader {
-    background-color: #999999 !important;
+    background-color: transparent !important;
     border-top: 0 !important;
 }
 
@@ -315,7 +325,7 @@ a.imj_contentMenuItem:focus {
 }
 
 .itemTile .tileIconArea {
-	background: #999999 !important;
+	background: #CCCCCC !important;
 }
 
 /* ZUSE THEME HACKS @ infopage.css */
@@ -324,6 +334,11 @@ a.imj_contentMenuItem:focus {
 	margin-left: 2.92em !important;
 }
 
+/* ZUSE THEME HACKS @ lists.css */
+
+.listItem:hover{
+	background-color: #EEEEEE;
+}
 
 /* End of Zuse Theme Hacks */
 

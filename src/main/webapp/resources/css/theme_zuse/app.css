@@ -50,6 +50,7 @@ a:hover, a:focus, button:hover, button:focus {
 .imj_siteWrapper {
     border-left: 1px dotted #000000 !important;
     border-right: 1px dotted #000000 !important;
+    background-color: #FFFFFF !important;
     background-image: url("./css/theme_zuse/images/background.gif");
 }
 
@@ -164,14 +165,14 @@ select {
 }
 
 .imj_mainMenuStandard {
-	margin: -1.5em 0.0909em 0 2em !important;
+	margin: -0.5em 0em 1em 2em !important;
 }
 
 .imj_mainMenuStandard input,
 .imj_mainMenuStandard a,
 .imj_mainMenuStandard span {
     background-color: transparent !important;
-    font-size: 1.5545em !important;
+    font-size: 1.7em !important;
     font-weight: bold !important;
     border-radius: 0.41666666em !important;
     -webkit-border-radius: 0.41666666em !important;
@@ -179,8 +180,8 @@ select {
     -o-border-radius: 0.41666666em !important;
     -ms-border-radius: 0.41666666em !important;
     padding: 5px !important;
-    letter-spacing: 0.05em !important;
-    margin-right: 0.3em !important;
+    letter-spacing: 0 !important;
+    margin-right: 0.2em !important;
 }
 
 .imj_mainMenuStandard input:hover,
@@ -247,7 +248,7 @@ a.imj_contentMenuItemCreateAlbum:focus {
 }
 
 .imj_contentSubMenu {
-    width: 74.95% !important;
+    width: auto !important;
 	padding: 0.454545em 0 0 0.5em !important;
 }
 
@@ -333,6 +334,10 @@ a.imj_contentMenuItemCreateAlbum:focus {
 
 .infoPage .mainSection {
 	margin-left: 2.92em !important;
+}
+
+.infoPage {
+	line-height: 175% !important;
 }
 
 /* ZUSE THEME HACKS @ lists.css */

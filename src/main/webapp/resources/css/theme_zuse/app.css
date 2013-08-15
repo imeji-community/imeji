@@ -192,6 +192,15 @@ select {
     padding: 5px !important;
 }
 
+.imj_subHeaderMessageSpace {
+    margin: 0 0.0909em 0 0!important;
+    width: 60em !important;
+}
+
+.imj_mainContentWrapper {
+    float: none !important;    
+ }
+
 .imj_siteContentSubSection {
     margin-bottom: 0em !important;
     margin-left: 2.636em !important;
@@ -229,7 +238,7 @@ a.imj_contentMenuItem:focus {
 
 .imj_contentSubMenu {
     width: 74.95% !important;
-	padding: 0.454545em 0.181818em !important;
+	padding: 0.454545em 0 0 0.5em !important;
 }
 
 .imj_contentSubMenuItemSorting {
@@ -293,7 +302,7 @@ a.imj_contentMenuItem:focus {
 /* ZUSE THEME HACKS @ component.css */
 
 .full_area0, .full_area0_p0 {
-    width: 77.364em;
+    width: 100%;
 }
 
 .small_marginLIncl {
@@ -307,6 +316,12 @@ a.imj_contentMenuItem:focus {
 
 .itemTile .tileIconArea {
 	background: #999999 !important;
+}
+
+/* ZUSE THEME HACKS @ infopage.css */
+
+.infoPage .mainSection {
+	margin-left: 2.92em !important;
 }
 
 

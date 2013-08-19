@@ -140,7 +140,7 @@ public class ImageGeneratorManager
         }
         catch (Exception e)
         {
-            throw new RuntimeException("Error transforming gif:", e);
+            throw new RuntimeException("Error transforming gif", e);
         }
     }
 
@@ -162,7 +162,7 @@ public class ImageGeneratorManager
         }
         catch (Exception e)
         {
-            throw new RuntimeException("Error transforming image:", e);
+            throw new RuntimeException("Error transforming image", e);
         }
     }
 

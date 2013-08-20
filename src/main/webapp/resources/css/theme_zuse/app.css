@@ -322,6 +322,10 @@ a.imj_contentMenuItemCreateAlbum:focus {
     margin-left: 1em;
 }
 
+.small_marginLExcl {
+    margin-left: 0em;
+}
+
 .gotoBox {
     float: right;
     margin-right: 3em;

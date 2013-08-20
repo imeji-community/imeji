@@ -18,6 +18,7 @@ import com.hp.hpl.jena.tdb.TDB;
 import com.hp.hpl.jena.tdb.base.file.Location;
 import com.hp.hpl.jena.tdb.sys.TDBMaker;
 
+import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.concurrency.locks.LocksSurveyor;
@@ -133,6 +134,7 @@ public class InitializerServlet extends HttpServlet
     public void destroy()
     {
         logger.info("Shutting down imeji!");
+        ImejiBean2RDF.executors.shutdown();
         logger.info("Closing Jena TDB...");
         ImejiJena.imejiDataSet.end();
         TDB.sync(ImejiJena.imejiDataSet);

@@ -57,6 +57,8 @@ import org.apache.sanselan.common.byteSources.ByteSourceFile;
 import org.apache.sanselan.formats.jpeg.JpegImageParser;
 import org.apache.sanselan.formats.jpeg.segments.UnknownSegment;
 
+import de.mpg.imeji.logic.util.IdentifierUtil;
+
 /**
  * Utiliy class to read Jpeg images. This allow to read CMYK images
  * 
@@ -82,11 +84,17 @@ public class JpegUtils
      */
     public static BufferedImage readJpeg(byte[] bytes) throws IOException, ImageReadException
     {
-        File f = File.createTempFile("upload", "jpeg.tmp");
-        StreamUtils.copyThenClose(new ByteArrayInputStream(bytes), new FileOutputStream(f));
-        BufferedImage bi = readJpeg(f);
-        FileUtils.deleteQuietly(f);
-        return bi;
+        File f = File.createTempFile("uploadReadJpeg", ".jpg");
+        try
+        {
+            StreamUtils.copyThenClose(new ByteArrayInputStream(bytes), new FileOutputStream(f));
+            BufferedImage bi = readJpeg(f);
+            return bi;
+        }
+        finally
+        {
+            FileUtils.deleteQuietly(f);
+        }
     }
 
     /**

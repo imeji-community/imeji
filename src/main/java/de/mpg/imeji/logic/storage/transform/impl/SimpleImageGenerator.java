@@ -28,6 +28,11 @@
  */
 package de.mpg.imeji.logic.storage.transform.impl;
 
+import java.io.File;
+import java.io.IOException;
+
+import org.apache.commons.io.FileUtils;
+
 import de.mpg.imeji.logic.storage.transform.ImageGenerator;
 import de.mpg.imeji.logic.storage.util.ImageUtils;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
@@ -46,10 +51,17 @@ public class SimpleImageGenerator implements ImageGenerator
      * @see de.mpg.imeji.logic.storage.transform.ImageGenerator#generate(byte[], java.lang.String, int, int)
      */
     @Override
-    public byte[] generateJPG(byte[] bytes, String extension)
+    public byte[] generateJPG(File file, String extension)
     {
         if (StorageUtils.getMimeType(extension).contains("image"))
-            return ImageUtils.toJpeg(bytes, StorageUtils.getMimeType(extension));
+            try
+            {
+                return ImageUtils.toJpeg(FileUtils.readFileToByteArray(file), StorageUtils.getMimeType(extension));
+            }
+            catch (IOException e)
+            {
+                throw new RuntimeException(e);
+            }
         return null;
     }
 }

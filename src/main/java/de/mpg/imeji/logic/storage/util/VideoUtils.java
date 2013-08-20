@@ -7,7 +7,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 
-import org.apache.commons.io.FileUtils;
 import org.openimaj.feature.local.list.LocalFeatureList;
 import org.openimaj.image.ImageUtilities;
 import org.openimaj.image.MBFImage;
@@ -83,6 +82,20 @@ public class VideoUtils
     }
 
     /**
+     * Gets byte array of an snapshot image from provided URL video
+     * 
+     * @param url
+     * @return byte array of an image from video file
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
+    public static byte[] videoToImageBytes(File file) throws FileNotFoundException, IOException
+    {
+        return VideoUtils.videoFileToByteAray(file, VideoUtils.getGoodImageDetectionThreshold(),
+                VideoUtils.IMAGE_FILE_EXTENTION);
+    }
+
+    /**
      * Gets byte array of an snapshot image from provided video as byte array
      * 
      * @param bytes
@@ -94,6 +107,33 @@ public class VideoUtils
     {
         return VideoUtils.videoFileToByteAray(bytes, VideoUtils.getGoodImageDetectionThreshold(),
                 VideoUtils.IMAGE_FILE_EXTENTION);
+    }
+
+    /**
+     * Gets byte array of an snapshot image from provided url video
+     * 
+     * @param url
+     * @param threshold
+     * @param fileExtention
+     * @return byte array of an image from video file
+     * @throws IOException
+     */
+    public static byte[] videoFileToByteAray(byte[] bytes, float[] threshold, String fileExtention) throws IOException
+    {
+        File tempFile = File.createTempFile(bytes.toString(), "." + fileExtention);
+        FileOutputStream fos = new FileOutputStream(tempFile);
+        fos.write(bytes);
+        fos.close();
+        switch (VideoUtils.getSnapshotCreationMethod())
+        {
+            case 0:
+                return VideoUtils.videoFileToByteAray(new XuggleVideo(tempFile), threshold, fileExtention);
+            case 1:
+                return VideoUtils.videoFileToByteArayUseFeatureExtraction(new XuggleVideo(tempFile), threshold,
+                        fileExtention);
+            default:
+                return VideoUtils.videoFileToByteAray(new XuggleVideo(tempFile), threshold, fileExtention);
+        }
     }
 
     /**
@@ -120,32 +160,26 @@ public class VideoUtils
     }
 
     /**
-     * Gets byte array of an snapshot image from provided video as byte array
+     * Gets byte array of an snapshot image from provided url video
      * 
-     * @param bytes
+     * @param url
      * @param threshold
      * @param fileExtention
      * @return byte array of an image from video file
      * @throws IOException
      */
-    public static byte[] videoFileToByteAray(byte[] bytes, float[] threshold, String fileExtention) throws IOException
+    public static byte[] videoFileToByteAray(File file, float[] threshold, String fileExtention) throws IOException
     {
-        File tempFile = File.createTempFile(bytes.toString(), "." + fileExtention);
-        FileOutputStream fos = new FileOutputStream(tempFile);
-        fos.write(bytes);
-        fos.close();
         switch (VideoUtils.getSnapshotCreationMethod())
         {
             case 0:
-                bytes = VideoUtils.videoFileToByteAray(new XuggleVideo(tempFile), threshold, fileExtention);
+                return VideoUtils.videoFileToByteAray(new XuggleVideo(file), threshold, fileExtention);
             case 1:
-                bytes = VideoUtils.videoFileToByteArayUseFeatureExtraction(new XuggleVideo(tempFile), threshold,
+                return VideoUtils.videoFileToByteArayUseFeatureExtraction(new XuggleVideo(file), threshold,
                         fileExtention);
             default:
-                bytes = VideoUtils.videoFileToByteAray(new XuggleVideo(tempFile), threshold, fileExtention);
+                return VideoUtils.videoFileToByteAray(new XuggleVideo(file), threshold, fileExtention);
         }
-        FileUtils.deleteQuietly(tempFile);
-        return bytes;
     }
 
     /**

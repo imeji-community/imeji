@@ -37,13 +37,17 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 
-import javax.imageio.stream.ImageOutputStream;
-
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
+import org.apache.tika.Tika;
+import org.apache.tika.mime.MimeType;
+import org.apache.tika.mime.MimeTypeException;
+import org.apache.tika.mime.MimeTypes;
+import org.apache.tools.ant.taskdefs.Get;
 
 import de.mpg.imeji.presentation.util.ProxyHelper;
 
@@ -56,6 +60,7 @@ import de.mpg.imeji.presentation.util.ProxyHelper;
  */
 public class StorageUtils
 {
+    private static Logger logger = Logger.getLogger(StorageUtils.class);
     /**
      * The generic mime-type, when no mime-type is known
      */
@@ -150,6 +155,39 @@ public class StorageUtils
     }
 
     /**
+     * True if the Filename has an extension
+     * 
+     * @param filename
+     * @return
+     */
+    public static boolean hasExtension(String filename)
+    {
+        return !FilenameUtils.getExtension(filename).equals("");
+    }
+
+    /**
+     * Guess the extension of a {@link File}
+     * 
+     * @param file
+     * @return
+     */
+    public static String guessExtension(File file)
+    {
+        try
+        {
+            Tika t = new Tika();
+            MimeTypes allTypes = MimeTypes.getDefaultMimeTypes();
+            MimeType type = allTypes.forName(t.detect(file));
+            return type.getExtension();
+        }
+        catch (Exception e)
+        {
+            logger.error("Error guessing file format", e);
+        }
+        return "";
+    }
+
+    /**
      * True if 2 filename extension are the same (jpeg = jpeg = JPG, etc.)
      * 
      * @param ext1
@@ -213,13 +251,41 @@ public class StorageUtils
         {
             return "video/3gpp";
         }
+        else if("eps".equals(extension))
+        {
+            return "application/eps";
+        }
         else if ("ts".equals(extension))
         {
             return "video/MP2T";
         }
+        else if ("svg".equals(extension))
+        {
+            return "image/svg+xml";
+        }
+        else if ("jp2".equals(extension) || "j2k".equals(extension) || "jpf".equals(extension))
+        {
+            return "image/jp2";
+        }
+        else if ("mj2".equals(extension))
+        {
+            return "image/mj2";
+        }
+        else if ("jpf".equals(extension))
+        {
+            return "image/jpf";
+        }
+        else if ("jpx".equals(extension))
+        {
+            return "image/jpx";
+        }
         else if ("mpg".equals(extension))
         {
             return "video/mpeg";
+        }
+        else if ("nef".equals(extension))
+        {
+            return "image/x-nikon-nef";
         }
         else if ("mp4".equals(extension))
         {
@@ -246,7 +312,7 @@ public class StorageUtils
         {
             return "application/pdf";
         }
-        else if ("fit".equals(extension))
+        else if ("fit".equals(extension) || "fits".equals(extension))
         {
             return "application/fits";
         }
@@ -262,7 +328,17 @@ public class StorageUtils
         {
             return "audio/x-ms-wma";
         }
-        return "application/octet-stream";
+        try
+        {
+            // If not found, Try with tika
+            MimeType type = MimeTypes.getDefaultMimeTypes().forName("name." + extension);
+            return type.getName();
+        }
+        catch (MimeTypeException e)
+        {
+            // If still not found, return the default one
+            return "application/octet-stream";
+        }
     }
 
     /**

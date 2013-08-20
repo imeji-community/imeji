@@ -231,7 +231,7 @@ public class CollectionImagesBean extends ImagesBean
     }
 
     /**
-     * Check that at least one image is editable and if the profile is not empty
+     * Check that at least one item is editable and if the profile is not empty
      */
     @Override
     public boolean isImageEditable()

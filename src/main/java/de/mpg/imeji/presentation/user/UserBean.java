@@ -23,6 +23,7 @@ public class UserBean
     private User user;
     private String newPassword = null;
     private String repeatedPassword = null;
+    private String newEmail = null;
     private boolean isAdmin;
     private SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     private String id;
@@ -34,19 +35,32 @@ public class UserBean
 
     public UserBean(String email)
     {
-        id = email;
-        retrieveUser();
+        init(email);
     }
 
+    /**
+     * Method called from the htmal page
+     * 
+     * @return
+     */
     public String getInit()
     {
-        id = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id");
-        newPassword = null;
-        repeatedPassword = null;
-        retrieveUser();
+        init(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id"));
         return "";
     }
 
+    private void init(String id)
+    {
+        this.id = id;
+        newPassword = null;
+        repeatedPassword = null;
+        retrieveUser();
+        this.newEmail = null;
+    }
+
+    /**
+     * Retrieve the current user
+     */
     public void retrieveUser()
     {
         if (id != null && session.getUser() != null)
@@ -61,6 +75,54 @@ public class UserBean
         }
     }
 
+    /**
+     * Change the Email of the user:<br/>
+     * if the new email is valid and is not already used, then create a new user with this email and delete the old one
+     */
+    public void changeEmail()
+    {
+        User newUser = user.clone(newEmail);
+        if (!UserCreationBean.isValidEmail(newUser.getEmail()))
+        {
+            BeanHelper.error(session.getMessage("error_user_email_not_valid"));
+        }
+        else
+        {
+            try
+            {
+                if (UserCreationBean.userAlreadyExists(newUser))
+                {
+                    BeanHelper.error(session.getMessage("error_user_already_exists"));
+                }
+                else
+                {
+                    UserController uc = new UserController(session.getUser());
+                    // Create the new user
+                    uc.create(newUser);
+                    // If the edited user is the current user, put the new user in the session
+                    if (session.getUser().getEmail().equals(user.getEmail()))
+                    {
+                        session.setUser(newUser);
+                        uc = new UserController(session.getUser());
+                    }
+                    // delete the old user
+                    uc.delete(user);
+                    init(newUser.getEmail());
+                }
+                reloadPage();
+            }
+            catch (Exception e)
+            {
+                BeanHelper.error(session.getMessage("error") + ": " + e);
+            }
+        }
+    }
+
+    /**
+     * Change the password of the user
+     * 
+     * @throws Exception
+     */
     public void changePassword() throws Exception
     {
         if (user != null && newPassword != null && !"".equals(newPassword))
@@ -79,6 +141,11 @@ public class UserBean
         reloadPage();
     }
 
+    /**
+     * Revoke one Grant
+     * 
+     * @throws IOException
+     */
     public void revokeGrant() throws IOException
     {
         String grantType = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
@@ -99,6 +166,9 @@ public class UserBean
         reloadPage();
     }
 
+    /**
+     * Update the user in jena
+     */
     public void updateUser()
     {
         if (user != null)
@@ -116,11 +186,16 @@ public class UserBean
         }
     }
 
+    /**
+     * Reload the page with the current user
+     * 
+     * @throws IOException
+     */
     private void reloadPage() throws IOException
     {
         Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
         FacesContext.getCurrentInstance().getExternalContext()
-                .redirect(navigation.getApplicationUrl() + "/jsf/User.xhtml?id=" + user.getEmail());
+                .redirect(navigation.getUserUrl() + "?id=" + user.getEmail());
     }
 
     public User getUser()
@@ -161,5 +236,21 @@ public class UserBean
     public void setAdmin(boolean isAdmin)
     {
         this.isAdmin = isAdmin;
+    }
+
+    /**
+     * @return the newEmail
+     */
+    public String getNewEmail()
+    {
+        return newEmail;
+    }
+
+    /**
+     * @param newEmail the newEmail to set
+     */
+    public void setNewEmail(String newEmail)
+    {
+        this.newEmail = newEmail;
     }
 }

@@ -4,7 +4,9 @@
 package de.mpg.imeji.presentation.image;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +15,7 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.concurrency.locks.Locks;
@@ -132,7 +135,7 @@ public class ImageBean
             loadCollection();
             loadProfile();
             labels.init(profile);
-            //mds = new MetadataSetBean(item.getMetadataSet());
+            // mds = new MetadataSetBean(item.getMetadataSet());
             edit = new SingleEditBean(item, profile, getPageUrl());
             mds = edit.getEditor().getItems().get(0).getMds();
         }
@@ -208,6 +211,17 @@ public class ImageBean
     {
         labels.init(profile);
         return "";
+    }
+
+    /**
+     * Return and URL encoded version of the filename
+     * 
+     * @return
+     * @throws UnsupportedEncodingException
+     */
+    public String getEncodedFileName() throws UnsupportedEncodingException
+    {
+        return URLEncoder.encode(item.getFilename(), "UTF-8");
     }
 
     public List<String> getTechMd() throws Exception
@@ -595,6 +609,16 @@ public class ImageBean
     }
 
     /**
+     * True if the File is a RAW file (a file which can not be viewed in any online tool)
+     * 
+     * @return
+     */
+    public boolean isRawFile()
+    {
+        return !isAudioFile() && !isVideoFile() && !isImageFile() && !isPdfFile();
+    }
+
+    /**
      * True if the current file is a pdf
      * 
      * @return
@@ -602,16 +626,6 @@ public class ImageBean
     public boolean isPdfFile()
     {
         return StorageUtils.getMimeType(FilenameUtils.getExtension(item.getFilename())).contains("application/pdf");
-    }
-
-    /**
-     * True if the current file is a fits
-     * 
-     * @return
-     */
-    public boolean isFitsFile()
-    {
-        return StorageUtils.getMimeType(FilenameUtils.getExtension(item.getFilename())).contains("application/fits");
     }
 
     /**

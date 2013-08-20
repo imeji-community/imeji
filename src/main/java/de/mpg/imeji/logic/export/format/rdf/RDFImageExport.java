@@ -60,7 +60,7 @@ public class RDFImageExport extends RDFExport
     }
 
     /*
-     * Not implemented : needs of specifaction about restricted metadata (how to meke it really private...)
+     * Not implemented : needs of specification about restricted metadata (how to make it really private...)
      * @see de.mpg.imeji.logic.export.format.RDFExport#filterResources(de.mpg.imeji.logic.search.SearchResult,
      * de.mpg.imeji.logic.vo.User)
      */

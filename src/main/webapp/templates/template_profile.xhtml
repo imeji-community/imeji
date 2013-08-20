@@ -20,7 +20,7 @@
 								</h:panelGroup>
 							</h:panelGroup>
 							<h:panelGroup layout="block" styleClass="full_area0  endline itemLine clear">
-								<font color="#FF0000"><h:outputText value="#{lbl.profile_beta_info}"/></font>
+								<h:outputText value="#{lbl.profile_move_info}"/>
 							</h:panelGroup>
 							
 							<h:panelGroup styleClass="full_area0_p8" rendered="#{empty FormularBean.wrappers}">
@@ -123,7 +123,7 @@
 									</h:commandButton>
 								</h:panelGroup>
 								<ui:repeat id="profile" var="wrapper" value="#{FormularBean.wrappers}" varStatus="position" >
-								<h:panelGroup  layout="block" styleClass="free_area0 statement_area  statement_area_parent_#{wrapper.parentId} statement_area_id_#{wrapper.statementId}">
+								<h:panelGroup  layout="block" styleClass="free_area0 statement_area  statement_area_parent_#{wrapper.parentId} statement_area_id_#{wrapper.statementId}">								
 	                            <h:panelGroup layout="block" id="metadata" style="margin-left:#{wrapper.level}px; margin-top:10px;" 
 	                            class="full_area0_p0 draggable dropChild id_#{wrapper.statementId}  parent_#{wrapper.parentId} highlight_area">
 	                            	<div class="free_area0">
@@ -178,58 +178,60 @@
 												<ui:repeat id="labels" var="label" value="#{wrapper.statement.labels}" varStatus="labelPosition">
 													<h:panelGroup styleClass="free_area0 xSmall_marginRIncl">
 														<h:inputText id="inputLabel" value="#{label.value}" styleClass="xLarge_txtInput"/>
-														<h:panelGroup rendered="#{wrapper.labelsCount > 1}">
-															<h:commandButton styleClass="min_imgBtn remove" title="#{lbl.label_remove}"  action="#{FormularBean.removeLabel}">
+														<h:selectOneMenu value="#{label.lang}" immediate="true" styleClass="medium_txtInput xTiny_marginLExcl" >
+															<f:selectItems value="#{Internationalization.languages}"/>
+			  											</h:selectOneMenu>	  											<span style="padding-left:10px"></span>
+			  											<h:commandButton id="addLabel" styleClass="min_imgBtn add groupTool" action="#{FormularBean.addLabel}" title="#{lbl.label_add}">
+															<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
+															<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
+														</h:commandButton>	
+														<h:panelGroup rendered="#{wrapper.labelsCount > 1}">														
+															<h:commandButton styleClass="min_imgBtn remove groupTool" title="#{lbl.label_remove}"  action="#{FormularBean.removeLabel}">
 																<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
 																<f:setPropertyActionListener value="#{labelPosition.index}" target="#{FormularBean.labelPosition}"/>
 																<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
 															</h:commandButton>
-															<h:outputLabel styleClass="" value="#{lbl.label_remove}" />
-														</h:panelGroup>
-														<h:selectOneMenu value="#{label.lang}" immediate="true" styleClass="medium_txtInput xTiny_marginLExcl" >
-															<f:selectItems value="#{Internationalization.languages}"/>
-			  											</h:selectOneMenu>
+														</h:panelGroup>	  											
 			  										</h:panelGroup>
 												</ui:repeat>
-												<h:panelGroup styleClass="xDouble_area1 xSmall_marginRIncl">
-													<h:commandButton id="addLabel" styleClass="free_area0 min_imgBtn add" action="#{FormularBean.addLabel}" title="#{lbl.label_add}">
+
+											</h:panelGroup>	
+											
+											<h:panelGroup styleClass="full_area0 medium_marginLExcl endline" rendered="#{wrapper.constraintsSize == 0}">
+												<h:panelGroup rendered="#{wrapper.vocabularyString == null }">
+												<span style="padding-left:30px"></span>
+													<h:commandButton styleClass="min_imgBtn add" action="#{FormularBean.addVocabulary}">
 														<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
 														<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
 													</h:commandButton>
-													<h:outputLabel styleClass="free_area0" value="#{lbl.label_add}" />
+													<h:outputLabel value="#{lbl.add_vocabulary}" />
+													<span style="padding-left:20px"></span>
 												</h:panelGroup>
-											</h:panelGroup>	
-											<h:panelGroup styleClass="full_area0 medium_marginLExcl endline" rendered="#{wrapper.constraintsSize == 0 and wrapper.vocabularyString == null}">
-												<h:commandButton styleClass="min_imgBtn add" action="#{FormularBean.addVocabulary}">
-													<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
-													<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
-												</h:commandButton>
-												<h:outputLabel styleClass="" value="#{lbl.add_vocabulary}" />
-												<span style="padding-left:20px"></span>
-												<h:panelGroup rendered="#{wrapper.statement.type != 'http://imeji.org/terms/metadata#conePerson' and wrapper.statement.type != 'http://imeji.org/terms/metadata#geolocation' and  wrapper.statement.type !='http://imeji.org/terms/metadata#publication'}">
+												<h:panelGroup rendered="#{wrapper.statement.type != 'http://imeji.org/terms/metadata#conePerson' and wrapper.statement.type != 'http://imeji.org/terms/metadata#geolocation' 
+																		  and  wrapper.statement.type !='http://imeji.org/terms/metadata#publication' and wrapper.vocabularyString == null}">
 													<h:commandButton styleClass="min_imgBtn add" action="#{FormularBean.addConstraint}">
 														<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
 														<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
 													</h:commandButton>
-													<h:outputLabel value="#{lbl.add_constraint}" />
+													<h:outputLabel value="#{lbl.add_constraint}"></h:outputLabel>
 												</h:panelGroup>
 											</h:panelGroup>
 											
-											<h:panelGroup styleClass="full_area0 medium_marginLExcl" rendered="#{wrapper.vocabularyString != null}">
-												<h:panelGroup styleClass="huge_area0 tiny_marginRIncl clear">
-													<h:selectOneMenu id="selectVocabulary" value="#{wrapper.vocabularyString}"  styleClass="free_txtInput" >
+											<h:panelGroup styleClass="free_area0 large_marginLExcl" rendered="#{wrapper.vocabularyString != null}">
+												<h:outputLabel for="selectVocabulary" styleClass="free_label" value="#{lbl.vocabulary}" />
+												<h:panelGroup styleClass="xHuge_area0 tiny_marginRIncl clear">
+													<h:selectOneMenu id="selectVocabulary" value="#{wrapper.vocabularyString}"  styleClass="huge_txtInput endline" >
 														 <f:selectItems value="#{wrapper.vocabularyHelper.vocabularies}"/>
-			  										</h:selectOneMenu>
-			  										<h:outputLabel for="selectVocabulary" styleClass="free_label" value="#{lbl.vocabulary}" />
-			  										<h:outputLabel for="btnRemoveVocabulary" styleClass="free_area0" value="#{lbl.remove_vocabulary}" />
-			  										<h:commandButton id="btnRemoveVocabulary" styleClass="free_area0 min_imgBtn remove"  shortDesc="#{lbl.remove_vocabulary}" action="#{FormularBean.removeVocabulary}">
+			  										</h:selectOneMenu>					  										
+			  										<span style="padding-left:10px"></span>
+				  									<h:commandButton id="btnRemoveVocabulary" styleClass="min_imgBtn remove groupTool" action="#{FormularBean.removeVocabulary}">
 														<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
 														<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
-													</h:commandButton>
+													</h:commandButton>												
 												</h:panelGroup>
 											</h:panelGroup>	
 											
-											<h:panelGroup styleClass="full_area0 medium_marginLExcl" rendered="#{wrapper.constraintsSize > 0}">
+											<h:panelGroup styleClass="full_area0 large_marginLExcl" rendered="#{wrapper.constraintsSize > 0}">
 												<h:outputLabel styleClass="huge_label" value="#{lbl.constraints}" />
 												<ui:repeat id="constraints" var="constraint" value="#{wrapper.statement.literalConstraints}" varStatus="constraintPosition">
 													<h:panelGroup styleClass="xHuge_area0 tiny_marginRIncl clear">
@@ -281,19 +283,21 @@
 												<f:setPropertyActionListener value="#{position.index}" target="#{FormularBean.statementPosition}"/>
 												<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
 											</h:commandButton>
-											<h:outputLabel styleClass="free_area0" value="#{lbl.statement_remove}" rendered="#{FormularBean.size &gt; 1}" />
+											<h:outputLabel styleClass="free_area0 xTiny_marginRExcl" value="#{lbl.statement_remove}" rendered="#{FormularBean.size &gt; 1}" />
 										</span>
 									</h:panelGroup>
 									</div>
 								</h:panelGroup>
-								<h:panelGroup id="dropMetadata" style="margin-left:#{wrapper.level}px;" styleClass="full_area0_p8" rendered="#{FormularBean.hasChild(position.index +1)}">
+								<!--  Drop Metadata area: only if the element has no childs -->
+								<h:panelGroup id="dropMetadata" style="margin-left:#{wrapper.level}px;" styleClass="full_area0_p8 dropMetadata" rendered="#{!FormularBean.hasChild(position.index +1)}">
 									<h:outputText styleClass="full_area0" value="#{lbl.add_metadata}" style="visibility:hidden;"/>
 									<h:commandButton id="dropMetadataButton" value="Insert metadata" action="#{FormularBean.insertMetadata}" style="display:none;">
 										<f:setPropertyActionListener value="#{position.index +1}" target="#{FormularBean.statementPosition}"/>
 										<f:ajax execute="@this" render=":profileForm:ajaxArea"/>
 									</h:commandButton>
 								</h:panelGroup>
-								<h:panelGroup id="dropMetadataNotAllowed" style="margin-left:#{wrapper.level}px;" styleClass="full_area0_p8 dropMetadata" rendered="#{!FormularBean.hasChild(position.index +1)}">
+								<!--  Emtpy Drop Metadata area: if the element has no childs -->
+								<h:panelGroup id="dropMetadataNotAllowed" style="margin-left:#{wrapper.level}px;" styleClass="full_area0_p8" rendered="#{FormularBean.hasChild(position.index +1)}">
 									<!-- Can not a metadata here !! -->
 									<h:outputText styleClass="full_area0" value="#{lbl.add_metadata}" style="visibility:hidden;"/>
 								</h:panelGroup>
@@ -308,10 +312,6 @@
 								</h:panelGroup>
 							</h:panelGroup>
 						</div>
-					</h:panelGroup>
-					
-					<h:panelGroup layout="block" styleClass="free_area0  endline itemLine clear">
-						<h:outputText value="#{lbl.profile_move_info}"/>
 					</h:panelGroup>	
 					
 					<div class="fullItem full_area0_p8 itemLine">

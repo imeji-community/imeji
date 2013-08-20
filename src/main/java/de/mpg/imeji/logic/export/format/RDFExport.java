@@ -76,7 +76,7 @@ public abstract class RDFExport extends Export
     @Override
     public String getContentType()
     {
-        return "application/xml";
+        return "application/rdf+xml";
     }
 
     /**
@@ -155,7 +155,11 @@ public abstract class RDFExport extends Export
                     if (st.getLiteral().toString() != null)
                     {
                         writer.append(openTag(st, null));
-                        writer.append(st.getLiteral().getString());
+                        String literal = st.getLiteral().getString();
+                        // Enclose embedded html
+                        if (literal.contains("<html>"))
+                            literal = "<![CDATA[" + literal + "]]>";
+                        writer.append(literal);
                     }
                 }
                 catch (Exception e)

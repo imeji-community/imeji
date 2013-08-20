@@ -134,7 +134,8 @@ public class SingleEditBean
         }
         catch (Exception e)
         {
-            BeanHelper.error("Error reload image" + e.getMessage());
+        	//TODO
+            BeanHelper.error("Error reload item" + e.getMessage());
             e.printStackTrace();
         }
     }

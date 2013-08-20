@@ -28,6 +28,9 @@
  */
 package de.mpg.imeji.logic.storage;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -78,14 +81,21 @@ public class StorageController
      * Call upload method of the controlled {@link Storage}
      * 
      * @param filename
-     * @param bytes
+     * @param file
      * @param collectionId
      * @return
      */
-    public UploadResult upload(String filename, byte[] bytes, String collectionId)
+    public UploadResult upload(String filename, File file, String collectionId)
     {
-        UploadResult result = storage.upload(filename, bytes, collectionId);
-        result.setChecksum(calculateChecksum(bytes));
+        UploadResult result = storage.upload(filename, file, collectionId);
+        try
+        {
+            result.setChecksum(calculateChecksum(file));
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
         return result;
     }
 
@@ -146,10 +156,24 @@ public class StorageController
      * 
      * @param bytes
      * @return
+     * @throws IOException
      */
-    public String calculateChecksum(byte[] bytes)
+    public String calculateChecksum(File file) throws IOException
     {
-        return DigestUtils.md5Hex(bytes);
+        FileInputStream fis = null;
+        try
+        {
+            fis = new FileInputStream(file);
+            return DigestUtils.md5Hex(fis);
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Error calculating the cheksum of the file: ", e);
+        }
+        finally
+        {
+            fis.close();
+        }
     }
 
     /**

@@ -28,6 +28,8 @@
  */
 package de.mpg.imeji.logic.storage.transform;
 
+import java.io.File;
+
 /**
  * Interface for all Class used to generate Thumbnails and web resolution images out of the files
  * 
@@ -42,9 +44,9 @@ public interface ImageGenerator
      * fit, etc.)<br/>
      * If the {@link ImageGenerator} can not generate the file, return null
      * 
-     * @param bytes
+     * @param file
      * @param extension
      * @return
      */
-    public byte[] generateJPG(byte[] bytes, String extension);
+    public byte[] generateJPG(File file, String extension);
 }

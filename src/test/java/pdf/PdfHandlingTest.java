@@ -18,6 +18,7 @@ import org.junit.Test;
 import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.PDFPage;
 
+import de.mpg.imeji.logic.storage.Storage.FileResolution;
 import de.mpg.imeji.logic.storage.util.PdfUtils;
 
 public class PdfHandlingTest
@@ -129,7 +130,7 @@ public class PdfHandlingTest
     {
         File file = new File("src/test/resources/pdf/pdfWith4Pages.pdf");
         byte[] bytes = org.apache.commons.io.FileUtils.readFileToByteArray(file);
-        ByteArrayInputStream baos = new ByteArrayInputStream(PdfUtils.pdfsToImageBytes(bytes));
+        ByteArrayInputStream baos = new ByteArrayInputStream(PdfUtils.pdfsToImageBytes(bytes, FileResolution.THUMBNAIL));
         BufferedImage srcImage = ImageIO.read(baos);
         ImageIO.write(srcImage, "png", new File("src/test/resources/pdf/test.jpg"));
     }

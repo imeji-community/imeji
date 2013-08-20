@@ -38,7 +38,7 @@
 		<param name="Threshold" value="warn" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<!-- The default pattern: Date Priority [Category] Message\n -->
-			<param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%c{1}] %m%n" />
+			<param name="ConversionPattern" value="%d [%t] %-5p %c- %m%n" />
 		</layout>
 	</appender>
 
@@ -46,15 +46,14 @@
 	<!-- Limit categories -->
 	<!-- ================ -->
 	<!-- Limit the org.apache category to INFO as its DEBUG is verbose -->
-	<category name="org.apache" additivity="false">
+	<category name="org.apache">
 		<priority value="info" />
 	</category>
 
-	<category name="com.hp.hpl.jena" additivity="false">
+	<category name="com.hp.hpl.jena">
 		<priority value="warn" />
 	</category>
-	<category name="c.h.h.j.t.b"
-		additivity="false">
+	<category name="c.h.h.j.t.b">
 		<priority value="warn" />
 	</category>
 

@@ -3,9 +3,12 @@
  */
 package de.mpg.imeji.presentation.upload;
 
-import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -20,6 +23,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpConnection;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
@@ -126,39 +133,6 @@ public class UploadBean
     }
 
     /**
-     * Upload a file from the web
-     * 
-     * @return
-     */
-    public String uploadFromLink()
-    {
-        try
-        {
-            StorageController externalController = new StorageController("external");
-            externalUrl = URLDecoder.decode(externalUrl, "UTF-8");
-            URL url = new URL(externalUrl);
-            title = url.getPath().substring(url.getPath().lastIndexOf("/") + 1);
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            externalController.read(url.toString(), baos, true);
-            Item item = uploadFile(baos.toByteArray());
-            if (item != null)
-            {
-                UserController uc = new UserController(null);
-                user = uc.retrieve(getUser().getEmail());
-                ItemController ic = new ItemController(user);
-                ic.create(item, collection.getId());
-            }
-            externalUrl = "";
-        }
-        catch (Exception e)
-        {
-            logger.error("Error uploading file from link: " + externalUrl, e);
-            fFiles.add(e.getMessage() + ": " + title);
-        }
-        return "";
-    }
-
-    /**
      * Start the Upload of the items
      * 
      * @throws Exception
@@ -182,11 +156,130 @@ public class UploadBean
                 if (!fis.isFormField())
                 {
                     title = fis.getName();
-                    Item item = uploadFile(StorageUtils.toBytes(stream));
-                    if (item != null)
-                        itemList.add(item);
+                    File tmp = createTmpFile();
+                    try
+                    {
+                        writeInTmpFile(tmp, stream);
+                        Item item = uploadFile(tmp);
+                        if (item != null)
+                            itemList.add(item);
+                    }
+                    finally
+                    {
+                        stream.close();
+                        FileUtils.deleteQuietly(tmp);
+                    }
                 }
             }
+        }
+    }
+
+    /**
+     * Upload a file from the web
+     * 
+     * @return
+     */
+    public String uploadFromLink()
+    {
+        try
+        {
+            externalUrl = URLDecoder.decode(externalUrl, "UTF-8");
+            URL url = new URL(externalUrl);
+            title = findFileName(url);
+            File tmp = createTmpFile();
+            try
+            {
+                StorageController externalController = new StorageController("external");
+                FileOutputStream fos = new FileOutputStream(tmp);
+                externalController.read(url.toString(), fos, true);
+                Item item = uploadFile(tmp);
+                if (item != null)
+                {
+                    UserController uc = new UserController(null);
+                    user = uc.retrieve(getUser().getEmail());
+                    ItemController ic = new ItemController(user);
+                    ic.create(item, collection.getId());
+                }
+                externalUrl = "";
+            }
+            finally
+            {
+                FileUtils.deleteQuietly(tmp);
+            }
+        }
+        catch (Exception e)
+        {
+            logger.error("Error uploading file from link: " + externalUrl, e);
+            fFiles.add(e.getMessage() + ": " + title);
+        }
+        return "";
+    }
+
+    /**
+     * Find in the url the filename
+     * 
+     * @param url
+     * @return
+     */
+    private String findFileName(URL url)
+    {
+        String name = FilenameUtils.getName(url.getPath());
+        if (isWellFormedFileName(name))
+            return name;
+        name = FilenameUtils.getName(url.toString());
+        if (isWellFormedFileName(name))
+            return name;
+        return FilenameUtils.getName(url.getPath());
+    }
+
+    private boolean isWellFormedFileName(String filename)
+    {
+        return FilenameUtils.wildcardMatch(filename, "*.???") || FilenameUtils.wildcardMatch(filename, "*.??")
+                || FilenameUtils.wildcardMatch(filename, "*.?");
+    }
+
+    /**
+     * Create a tmp file with the uploaded file
+     * 
+     * @param fio
+     * @return
+     */
+    private File createTmpFile()
+    {
+        try
+        {
+            return File.createTempFile("upload", "." + FilenameUtils.getExtension(title));
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Error creating a temp file", e);
+        }
+    }
+
+    /**
+     * Write an {@link InputStream} in a {@link File}
+     * 
+     * @param tmp
+     * @param fis
+     * @return
+     * @throws IOException
+     */
+    private File writeInTmpFile(File tmp, InputStream fis) throws IOException
+    {
+        FileOutputStream fos = new FileOutputStream(tmp);
+        try
+        {
+            StorageUtils.writeInOut(fis, fos, true);
+            return tmp;
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Error writing uploaded File in temp file", e);
+        }
+        finally
+        {
+            fos.close();
+            fis.close();
         }
     }
 
@@ -196,14 +289,16 @@ public class UploadBean
      * @param bytes
      * @throws Exception
      */
-    private Item uploadFile(byte[] bytes)
+    private Item uploadFile(File file)
     {
         try
         {
+            if (!StorageUtils.hasExtension(title))
+                title += StorageUtils.guessExtension(file);
             if (isAllowedFormat(FilenameUtils.getExtension(title)))
             {
                 storageController = new StorageController();
-                UploadResult uploadResult = storageController.upload(title, bytes, id);
+                UploadResult uploadResult = storageController.upload(title, file, id);
                 Item item = ImejiFactory.newItem(collection, user, uploadResult.getId(), title,
                         URI.create(uploadResult.getOrginal()), URI.create(uploadResult.getThumb()),
                         URI.create(uploadResult.getWeb()));
@@ -220,7 +315,7 @@ public class UploadBean
         {
             fNum += 1;
             fFiles.add(e.getMessage() + ": " + title);
-            logger.error("Error uploading image: ", e);
+            logger.error("Error uploading item: ", e);
         }
         return null;
     }

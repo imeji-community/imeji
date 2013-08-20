@@ -12,34 +12,49 @@
 			
 				<h:panelGroup layout="block" styleClass="full_area0 fullItem">
 					<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder">
+					<script>
+						function hide_input_area_show_Links()
+						{
+							$('.inputAreaUserInfos').hide();
+							$('#userForm a').show();
+						}
+					</script>
 					<h:form id ="userForm">
 						<h:panelGroup styleClass="small_marginLExcl full_area0" rendered="#{UserBean.admin}">
-							<h:panelGroup styleClass="full_area0" rendered="#{UserBean.admin}">
+							<h:panelGroup id="userInfos" styleClass="full_area0" rendered="#{UserBean.admin}">
 								<h:panelGroup styleClass="full_area0">
 									<h:outputText styleClass="double_area0_p4" value="#{lbl.email}"/>
-									<h:outputText styleClass="half_area0_p4 endLine" value="#{UserBean.user.email}"/>
+									<h:outputText styleClass="free_area0_p4 endLine" value="#{UserBean.user.email}"/>
+									<h:outputLink id="lnkEditEmail" value="#" onclick="hide_input_area_show_Links();document.getElementById('userForm:pnlEditEmail').style.display = 'block';$(this).hide();">
+										<h:outputText styleClass="double_area0_p4" value="#{lbl.edit}"/>
+									</h:outputLink>
+									<h:panelGroup styleClass="full_area0_p4 inputAreaUserInfos" id="pnlEditEmail" style="display:none;">
+										 <h:outputText styleClass="double_area0_p4" value=" " />
+						                 <h:inputText styleClass="huge_txtInput"  value="#{UserBean.newEmail}" />
+						                 <h:commandLink action="#{UserBean.changeEmail}" value="#{lbl.save}" styleClass="free_area0" />
+									</h:panelGroup>
 								</h:panelGroup>
 								<h:panelGroup styleClass="full_area0">
 									<h:outputText styleClass="double_area0_p4" value="#{lbl.complete_name}"/>
 									<h:outputText styleClass="free_area0_p4" value="#{UserBean.user.name}"/>
-									<h:outputLink id="lnkEditName" value="#" onclick="document.getElementById('userForm:pnlEditName').style.display = 'block';document.getElementById('userForm:lnkEditNick').style.display = 'none'; this.style.visibility ='hidden';">
+									<h:outputLink id="lnkEditName" value="#" onclick="hide_input_area_show_Links();document.getElementById('userForm:pnlEditName').style.display = 'block';$(this).hide();">
 										<h:outputText styleClass="double_area0_p4" value="#{lbl.edit}"/>
 									</h:outputLink>
-									<h:panelGroup styleClass="full_area0_p4" id="pnlEditName" style="display:none;">
+									<h:panelGroup styleClass="full_area0_p4 inputAreaUserInfos" id="pnlEditName" style="display:none;">
 										 <h:outputText styleClass="double_area0_p4" value=" " />
-						                 <h:inputText styleClass="free_txtInput"  value="#{UserBean.user.name}" />
+						                 <h:inputText styleClass="huge_txtInput"  value="#{UserBean.user.name}" />
 						                 <h:commandLink action="#{UserBean.updateUser}" value="#{lbl.save}" styleClass="free_area0" />
 									</h:panelGroup>
 					            </h:panelGroup>
 					            <h:panelGroup styleClass="full_area0">
 									<h:outputText styleClass="double_area0_p4" value="#{lbl.nickname}"/>
 									<h:outputText styleClass="free_area0_p4" value="#{UserBean.user.nick}"/>
-									<h:outputLink id="lnkEditNick" value="#" onclick="document.getElementById('userForm:pnlEditNick').style.display = 'block'; document.getElementById('userForm:lnkEditName').style.display = 'none'; this.style.visibility ='hidden';">
+									<h:outputLink id="lnkEditNick" value="#" onclick="hide_input_area_show_Links();document.getElementById('userForm:pnlEditNick').style.display = 'block'; $(this).hide();">
 										<h:outputText styleClass="double_area0_p4" value="#{lbl.edit}"/>
 									</h:outputLink>
-									<h:panelGroup styleClass="full_area0_p4" id="pnlEditNick" style="display:none;">
+									<h:panelGroup styleClass="full_area0_p4 inputAreaUserInfos" id="pnlEditNick" style="display:none;">
 										 <h:outputText styleClass="double_area0_p4" value=" " />
-						                 <h:inputText styleClass="free_txtInput"  value="#{UserBean.user.nick}" />
+						                 <h:inputText styleClass="huge_txtInput"  value="#{UserBean.user.nick}" />
 						                 <h:commandLink action="#{UserBean.updateUser}" value="#{lbl.save}" styleClass="free_area0" />
 									</h:panelGroup>
 					          </h:panelGroup>

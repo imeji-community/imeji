@@ -158,10 +158,6 @@
 			</h:panelGroup>	
 		</h:panelGroup>
 		
-		
-		
-		
-		
 		<h:outputLink id="lnkAlbums" styleClass="imj_mainMenuStandardItem" title="#{lbl.goto_albums}" value="#{Navigation.albumsUrl}?page=1" rendered="#{HistorySession.currentPage.type.fileName != 'Albums.xhtml'}">
 			<h:outputText value="#{lbl.header_albums}"></h:outputText>
 		</h:outputLink>
@@ -176,7 +172,7 @@
 			<h:panelGroup styleClass="items" layout="block">
 										
 				<h:panelGroup styleClass="item" layout="block">
-					<h:outputLink id="lnkKonradZuse" title="#{lbl.goto_konrad_zuse}" value="./zuse">
+					<h:outputLink id="lnkKonradZuse" title="#{lbl.goto_konrad_zuse}" value="#{Navigation.applicationUrl}zuse">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.konrad_zuse}" />
 						</h:panelGroup>
@@ -184,7 +180,7 @@
 				</h:panelGroup>
 				
 				<h:panelGroup styleClass="item" layout="block">
-					<h:outputLink id="lnkZ1" title="#{lbl.goto_z1}" value="./z1">
+					<h:outputLink id="lnkZ1" title="#{lbl.goto_z1}" value="#{Navigation.applicationUrl}z1">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.z1}" />
 						</h:panelGroup>
@@ -192,7 +188,7 @@
 				</h:panelGroup>
 				
 				<h:panelGroup styleClass="item" layout="block">
-					<h:outputLink id="lnkZ2" title="#{lbl.goto_z2}" value="./z2">
+					<h:outputLink id="lnkZ2" title="#{lbl.goto_z2}" value="#{Navigation.applicationUrl}z2">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.z2}" />
 						</h:panelGroup>
@@ -200,7 +196,7 @@
 				</h:panelGroup>
 				
 				<h:panelGroup styleClass="item" layout="block">
-					<h:outputLink id="lnkZ3" title="#{lbl.goto_z3}" value="./z3">
+					<h:outputLink id="lnkZ3" title="#{lbl.goto_z3}" value="#{Navigation.applicationUrl}z3">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.z3}" />
 						</h:panelGroup>
@@ -208,7 +204,7 @@
 				</h:panelGroup>
 				
 				<h:panelGroup styleClass="item" layout="block">
-					<h:outputLink id="lnkZ4" title="#{lbl.goto_z4}" value="./z4">
+					<h:outputLink id="lnkZ4" title="#{lbl.goto_z4}" value="#{Navigation.applicationUrl}z4">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.z4}" />
 						</h:panelGroup>
@@ -216,7 +212,7 @@
 				</h:panelGroup>
 
 				<h:panelGroup styleClass="item" layout="block">
-					<h:outputLink id="lnkAssemblyLine" title="#{lbl.goto_assemly_line}" value="./assemblyLineSelfReplicatingSystems">
+					<h:outputLink id="lnkAssemblyLine" title="#{lbl.goto_assemly_line}" value="#{Navigation.applicationUrl}assemblyLineSelfReplicatingSystems">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.assemly_line}" />
 						</h:panelGroup>
@@ -224,7 +220,7 @@
 				</h:panelGroup>
 				
 				<h:panelGroup styleClass="item" layout="block">
-					<h:outputLink id="lnkHelixTower" title="#{lbl.goto_helix_tower}" value="./helixTower">
+					<h:outputLink id="lnkHelixTower" title="#{lbl.goto_helix_tower}" value="#{Navigation.applicationUrl}helixTower">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.helix_tower}" />
 						</h:panelGroup>
@@ -232,7 +228,7 @@
 				</h:panelGroup>
 				
 				<h:panelGroup styleClass="item" layout="block">
-					<h:outputLink id="lnkMechanicalSystem" title="#{lbl.goto_mechanical_system}" value="./mechanicalSystem">
+					<h:outputLink id="lnkMechanicalSystem" title="#{lbl.goto_mechanical_system}" value="#{Navigation.applicationUrl}mechanicalSystem">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.mechanical_system}" />
 						</h:panelGroup>
@@ -240,7 +236,7 @@
 				</h:panelGroup>
 				
 				<h:panelGroup styleClass="item" layout="block">
-					<h:outputLink id="lnkElectromechanics" title="#{lbl.goto_electromechanics}" value="./electromechanics">
+					<h:outputLink id="lnkElectromechanics" title="#{lbl.goto_electromechanics}" value="#{Navigation.applicationUrl}electromechanics">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.electromechanics}" />
 						</h:panelGroup>
@@ -248,7 +244,7 @@
 				</h:panelGroup>
 				
 				<h:panelGroup styleClass="item" layout="block">
-					<h:outputLink id="lnkElectronics" title="#{lbl.goto_electronics}" value="./electronics">
+					<h:outputLink id="lnkElectronics" title="#{lbl.goto_electronics}" value="#{Navigation.applicationUrl}electronics">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.electronics}" />
 						</h:panelGroup>
@@ -256,7 +252,7 @@
 				</h:panelGroup>
 				
 				<h:panelGroup styleClass="item" layout="block">
-					<h:outputLink id="lnkRelay" title="#{lbl.goto_relay}" value="./relay">
+					<h:outputLink id="lnkRelay" title="#{lbl.goto_relay}" value="#{Navigation.applicationUrl}relay">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.relay}" />
 						</h:panelGroup>
@@ -264,7 +260,7 @@
 				</h:panelGroup>
 
 				<h:panelGroup styleClass="item" layout="block">
-					<h:outputLink id="lnkVacuumTube" title="#{lbl.goto_vacuum_tube}" value="./vacuumTube">
+					<h:outputLink id="lnkVacuumTube" title="#{lbl.goto_vacuum_tube}" value="#{Navigation.applicationUrl}vacuumTube">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.vacuum_tube}" />
 						</h:panelGroup>
@@ -272,7 +268,7 @@
 				</h:panelGroup>
 
 				<h:panelGroup styleClass="item" layout="block">
-					<h:outputLink id="lnkTransistor" title="#{lbl.goto_transistor}" value="./transistor">
+					<h:outputLink id="lnkTransistor" title="#{lbl.goto_transistor}" value="#{Navigation.applicationUrl}transistor">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.transistor}" />
 						</h:panelGroup>
@@ -280,7 +276,7 @@
 				</h:panelGroup>
 				
 				<h:panelGroup styleClass="item" layout="block">
-					<h:outputLink id="lnkBinaryNumber" title="#{lbl.goto_binary_number}" value="./binaryNumber">
+					<h:outputLink id="lnkBinaryNumber" title="#{lbl.goto_binary_number}" value="#{Navigation.applicationUrl}binaryNumber">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.binary_number}" />
 						</h:panelGroup>
@@ -288,7 +284,7 @@
 				</h:panelGroup>
 
 				<h:panelGroup styleClass="item" layout="block">
-					<h:outputLink id="lnkBit" title="#{lbl.goto_bit}" value="./bit">
+					<h:outputLink id="lnkBit" title="#{lbl.goto_bit}" value="#{Navigation.applicationUrl}bit">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.bit}" />
 						</h:panelGroup>
@@ -296,7 +292,7 @@
 				</h:panelGroup>
 				
 				<h:panelGroup styleClass="item" layout="block">
-					<h:outputLink id="lnkPunchedTape" title="#{lbl.goto_punched_tape}" value="./punchedTape">
+					<h:outputLink id="lnkPunchedTape" title="#{lbl.goto_punched_tape}" value="#{Navigation.applicationUrl}punchedTape">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.punched_tape}" />
 						</h:panelGroup>
@@ -304,7 +300,7 @@
 				</h:panelGroup>
 				
 				<h:panelGroup styleClass="item" layout="block">
-					<h:outputLink id="lnkBooleanAlgebra" title="#{lbl.goto_boolean_algebra}" value="./booleanAlgebra">
+					<h:outputLink id="lnkBooleanAlgebra" title="#{lbl.goto_boolean_algebra}" value="#{Navigation.applicationUrl}booleanAlgebra">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.boolean_algebra}" />
 						</h:panelGroup>
@@ -312,7 +308,7 @@
 				</h:panelGroup>
 
 				<h:panelGroup styleClass="item" layout="block">
-					<h:outputLink id="lnkLogicGate" title="#{lbl.goto_logic_gate}" value="./logicGate">
+					<h:outputLink id="lnkLogicGate" title="#{lbl.goto_logic_gate}" value="#{Navigation.applicationUrl}logicGate">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.logic_gate}" />
 						</h:panelGroup>
@@ -320,7 +316,7 @@
 				</h:panelGroup>
 				
 				<h:panelGroup styleClass="item" layout="block">
-					<h:outputLink id="lnkFloatingPoint" title="#{lbl.goto_floating_point}" value="./floatingPoint">
+					<h:outputLink id="lnkFloatingPoint" title="#{lbl.goto_floating_point}" value="#{Navigation.applicationUrl}floatingPoint">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.floating_point}" />
 						</h:panelGroup>
@@ -527,7 +523,7 @@
 					</h:panelGroup>					
 				</h:panelGroup>
 				<h:panelGroup styleClass="item" layout="block">
-					<h:outputLink id="lnkZ3Reconstruction" title="#{lbl.goto_z3_reconstruction}" value="./reconstructionZ3">
+					<h:outputLink id="lnkZ3Reconstruction" title="#{lbl.goto_z3_reconstruction}" value="#{Navigation.applicationUrl}reconstructionZ3">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.z3_reconstruction}" />
 						</h:panelGroup>
@@ -543,7 +539,7 @@
 			</h:panelGroup>
 			<h:panelGroup styleClass="items" layout="block">		
 				<h:panelGroup styleClass="item" layout="block">
-					<h:outputLink id="lnkProject" title="#{lbl.goto_zuse_project}" value="./project">
+					<h:outputLink id="lnkProject" title="#{lbl.goto_zuse_project}" value="#{Navigation.applicationUrl}project">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.zuse_project}" />
 						</h:panelGroup>
@@ -551,7 +547,7 @@
 				</h:panelGroup>
 				
 				<h:panelGroup styleClass="item" layout="block">
-					<h:outputLink id="lnkPartners" title="#{lbl.goto_zuse_partners}" value="./partners">
+					<h:outputLink id="lnkPartners" title="#{lbl.goto_zuse_partners}" value="#{Navigation.applicationUrl}partners">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.zuse_partners}" />
 						</h:panelGroup>
@@ -559,7 +555,7 @@
 				</h:panelGroup>
 				
 				<h:panelGroup styleClass="item" layout="block">
-					<h:outputLink id="lnkImprint" title="#{lbl.goto_zuse_imprint}" value="./imprint">
+					<h:outputLink id="lnkImprint" title="#{lbl.goto_zuse_imprint}" value="#{Navigation.applicationUrl}imprint">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.zuse_imprint}" />
 						</h:panelGroup>

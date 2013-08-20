@@ -15,6 +15,7 @@ public class ZuseStaticContentBean extends StaticContentBean {
 	enum ZuseStaticPageEntry {
 		WELCOMEPAGE("zuse.imeji.url.welcomepage"),
 		PARTNERSANDCOLLABORATORERS("zuse.imeji.url.partnersandcollaboraters"),
+		PROJECT("zuse.imeji.url.project"),
 		IMPRINT("zuse.imeji.url.imprint"),
 		ABOUTANDCONTACT("zuse.imeji.url.aboutandcontact"),
 		KONRADZUSE("zuse.imeji.url.konradzuse"),
@@ -181,6 +182,34 @@ public class ZuseStaticContentBean extends StaticContentBean {
     	ZuseStaticPageEntry.PARTNERSANDCOLLABORATORERS.setEnabled(enable);
     }
 		
+    public String getProjectContent() throws IOException, URISyntaxException
+    {
+        String html = "";
+        String urlString = ZusePropertyReader.getProperty(ZuseStaticPageEntry.PROJECT.getUrlString());
+        try
+        {
+            html = getContent(urlString);
+        }
+        catch (Exception e)
+        {
+            html = urlString
+                    + " couldn't be loaded. Url might be either wrong or protected." + "<br/><br/>" + "Error message:"
+                    + "<br/><br/>" + e.toString();
+        }
+        return html;
+    }
+    
+    public boolean isProject()
+    {
+        return ZuseStaticPageEntry.PROJECT.getEnabled();
+    }
+
+    public void setProject(boolean enable)
+    {
+    	ZuseStaticPageEntry.PROJECT.setEnabled(enable);
+    }
+    
+    
 	public String getImprintContent() throws IOException, URISyntaxException
     {
         String html = "";

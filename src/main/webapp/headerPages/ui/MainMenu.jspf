@@ -115,16 +115,51 @@
 					</h:panelGroup>
 					<h:panelGroup styleClass="items" layout="block">
 						<h:panelGroup styleClass="item" layout="block">
-							<h:outputLink id="lnkColPdf1" title="#{lbl.goto_pdf1}" value="">
+							<h:outputLink id="lnkColPdf19351939" title="#{lbl.goto_pdf_1935_1939}" value="#{Navigation.applicationUrl}collection/umaKPuuFBlN9RBMk">
 								<h:panelGroup styleClass="pad" layout="block">
-									<h:outputText value="#{lbl.pdf1}" />
+									<h:outputText value="#{lbl.pdf_1935_1939}" />
 								</h:panelGroup>		
 							</h:outputLink>
 						</h:panelGroup>
 						<h:panelGroup styleClass="item" layout="block">
-							<h:outputLink id="lnkColPdf2" title="#{lbl.goto_pdf2}" value="">
+							<h:outputLink id="lnkColPdf19401949" title="#{lbl.goto_pdf_1940_1949}" value="#{Navigation.applicationUrl}collection/G4kArbdxEHzpD9Q">
 								<h:panelGroup styleClass="pad" layout="block">
-									<h:outputText value="#{lbl.pdf2}" />
+									<h:outputText value="#{lbl.pdf_1940_1949}" />
+								</h:panelGroup>		
+							</h:outputLink>
+						</h:panelGroup>
+						<h:panelGroup styleClass="item" layout="block">
+							<h:outputLink id="lnkColPdf19501959" title="#{lbl.goto_pdf_1950_1959}" value="#{Navigation.applicationUrl}collection/LoxnNqsYbO6wjpO5">
+								<h:panelGroup styleClass="pad" layout="block">
+									<h:outputText value="#{lbl.pdf_1950_1959}" />
+								</h:panelGroup>		
+							</h:outputLink>
+						</h:panelGroup>
+						<h:panelGroup styleClass="item" layout="block">
+							<h:outputLink id="lnkColPdf19601969" title="#{lbl.goto_pdf_1960_1969}" value="#{Navigation.applicationUrl}collection/06J5PTHfyl46kTBf">
+								<h:panelGroup styleClass="pad" layout="block">
+									<h:outputText value="#{lbl.pdf_1960_1969}" />
+								</h:panelGroup>		
+							</h:outputLink>
+						</h:panelGroup>
+						<h:panelGroup styleClass="item" layout="block">
+							<h:outputLink id="lnkColPdf19701981" title="#{lbl.goto_pdf_1970_1981}" value="#{Navigation.applicationUrl}collection/L57cr7HDtLddueaM">
+								<h:panelGroup styleClass="pad" layout="block">
+									<h:outputText value="#{lbl.pdf_1970_1981}" />
+								</h:panelGroup>		
+							</h:outputLink>
+						</h:panelGroup>
+						<h:panelGroup styleClass="item" layout="block">
+							<h:outputLink id="lnkColPdfUndated" title="#{lbl.goto_pdf_undated}" value="#{Navigation.applicationUrl}collection/SM6zuaOuIBPHJ6Mj">
+								<h:panelGroup styleClass="pad" layout="block">
+									<h:outputText value="#{lbl.pdf_undated}" />
+								</h:panelGroup>		
+							</h:outputLink>
+						</h:panelGroup>
+						<h:panelGroup styleClass="item" layout="block">
+							<h:outputLink id="lnkColPdfEssays" title="#{lbl.goto_pdf_essays}" value="#{Navigation.applicationUrl}collection/noeJomggmLFMXEOn">
+								<h:panelGroup styleClass="pad" layout="block">
+									<h:outputText value="#{lbl.pdf_essays}" />
 								</h:panelGroup>		
 							</h:outputLink>
 						</h:panelGroup>

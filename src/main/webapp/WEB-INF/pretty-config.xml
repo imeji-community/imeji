@@ -174,9 +174,13 @@
 		<pattern value="/welcomePage"></pattern>
 		<view-id>/jsf/zusePages/welcomePage.xhtml</view-id>
 	</url-mapping>
-	<url-mapping id="partnersAndCo">
-		<pattern value="/partnersAndCo"></pattern>
+	<url-mapping id="partners">
+		<pattern value="/partners"></pattern>
 		<view-id>/jsf/zusePages/partnersAndCo.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="project">
+		<pattern value="/project"></pattern>
+		<view-id>/jsf/zusePages/project.xhtml</view-id>
 	</url-mapping>
 	<url-mapping id="imprint">
 		<pattern value="/imprint"></pattern>

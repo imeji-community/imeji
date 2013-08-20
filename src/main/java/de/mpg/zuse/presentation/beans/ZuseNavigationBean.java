@@ -22,7 +22,8 @@ public class ZuseNavigationBean extends Navigation
 
 	// Pages of zuse
     public final Page ENCYCLOPEDIA = new Page("Encyclopedia", "encyclopedia");
-    //
+    
+    public final Page PROJECT = new Page("Project", "project");
     public final Page KONRADZUSE = new Page("Konrad Zuse", "zuse");
     public final Page Z1 = new Page("Z1", "z1");
     public final Page Z2 = new Page("Z2", "z2");

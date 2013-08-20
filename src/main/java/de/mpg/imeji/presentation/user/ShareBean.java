@@ -196,7 +196,7 @@ public class ShareBean
             EmailMessages emailMessages = new EmailMessages();
             sendEmail(dest, session.getMessage("email_shared_collection_subject"),
                     emailMessages.getSharedCollectionMessage(session.getUser().getName(), dest.getName(), name,
-                            getContainerHome()));
+                            getContainerHome(), role));
             BeanHelper.info(session.getMessage("success_share"));
             BeanHelper.info(message);
         }
@@ -245,7 +245,7 @@ public class ShareBean
             User dest = ObjectLoader.loadUser(email, session.getUser());
             EmailMessages emailMessages = new EmailMessages();
             sendEmail(dest, session.getMessage("email_shared_album_subject"), emailMessages.getSharedAlbumMessage(
-                    session.getUser().getName(), dest.getName(), name, getContainerHome()));
+                    session.getUser().getName(), dest.getName(), name, getContainerHome(), selectedGrant.toString()));
             BeanHelper.info(session.getMessage("success_share"));
             BeanHelper.info(message);
         }

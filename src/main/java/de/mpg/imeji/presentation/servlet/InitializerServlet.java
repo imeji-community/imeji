@@ -15,6 +15,8 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.lf5.util.StreamUtils;
 
 import com.hp.hpl.jena.tdb.TDB;
+import com.hp.hpl.jena.tdb.base.file.Location;
+import com.hp.hpl.jena.tdb.sys.TDBMaker;
 
 import de.mpg.imeji.logic.ImejiJena;
 import de.mpg.imeji.logic.ImejiSPARQL;
@@ -136,6 +138,7 @@ public class InitializerServlet extends HttpServlet
         TDB.sync(ImejiJena.imejiDataSet);
         ImejiJena.imejiDataSet.close();
         TDB.closedown();
+        TDBMaker.releaseLocation(new Location(ImejiJena.tdbPath));
         logger.info("...done");
         logger.info("Ending LockSurveyor...");
         locksSurveyor.terminate();

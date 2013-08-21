@@ -558,6 +558,13 @@
 					</h:panelGroup>					
 				</h:panelGroup>
 				<h:panelGroup styleClass="item" layout="block">
+					<h:outputLink id="lnkZ1Panorama" title="#{lbl.goto_z1_panorama}" value="http://zuse-z1.zib.de/zuse-z1-pano">
+						<h:panelGroup styleClass="pad" layout="block">
+							<h:outputText value="#{lbl.z1_panorama}" />
+						</h:panelGroup>
+					</h:outputLink>
+				</h:panelGroup>
+				<h:panelGroup styleClass="item" layout="block">
 					<h:outputLink id="lnkZ3Reconstruction" title="#{lbl.goto_z3_reconstruction}" value="#{Navigation.applicationUrl}reconstructionZ3">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.z3_reconstruction}" />

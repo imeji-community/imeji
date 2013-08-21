@@ -62,7 +62,7 @@ public class InitializerServlet extends HttpServlet
         try
         {
             Imeji.init();
-            runMigration();
+           // runMigration();
         }
         catch (Exception e)
         {

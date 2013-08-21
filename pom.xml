@@ -470,6 +470,10 @@
 			<scope>compile</scope>
 			<exclusions>
 				<exclusion>
+					<groupId>com.esotericsoftware.minlog</groupId>
+					<artifactId>minlog</artifactId>
+				</exclusion>
+				<exclusion>
 					<groupId>ch.qos.logback</groupId>
 					<artifactId>logback-core</artifactId>
 				</exclusion>

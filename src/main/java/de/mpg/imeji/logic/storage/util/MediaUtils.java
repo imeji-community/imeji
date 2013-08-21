@@ -70,7 +70,8 @@ public class MediaUtils
     public static byte[] convertToJPEG(File tmp, String extension) throws IOException, URISyntaxException,
             InterruptedException, IM4JavaException
     {
-        //In case the file is made of many frames, (for instance videos), generate only the frames from 0 to 48 to avoid high memory consumption 
+        // In case the file is made of many frames, (for instance videos), generate only the frames from 0 to 48 to
+        // avoid high memory consumption
         String path = tmp.getAbsolutePath() + "[0-48]";
         ConvertCmd cmd = getConvert();
         // create the operation, add images and operators/options
@@ -80,7 +81,7 @@ public class MediaUtils
         try
         {
             op.addImage(jpeg.getAbsolutePath());
-                cmd.run(op);
+            cmd.run(op);
             int frame = getNonBlankFrame(jpeg.getAbsolutePath());
             if (frame >= 0)
             {

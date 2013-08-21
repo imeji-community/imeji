@@ -3,9 +3,6 @@ package video;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URL;
-
-import org.junit.Test;
 import org.openimaj.feature.local.list.LocalFeatureList;
 import org.openimaj.image.DisplayUtilities;
 import org.openimaj.image.MBFImage;

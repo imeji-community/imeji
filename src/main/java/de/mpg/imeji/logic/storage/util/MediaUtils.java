@@ -6,7 +6,6 @@ package de.mpg.imeji.logic.storage.util;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -15,9 +14,7 @@ import org.im4java.core.ConvertCmd;
 import org.im4java.core.IM4JavaException;
 import org.im4java.core.IMOperation;
 import org.im4java.core.Info;
-import org.im4java.process.ArrayListOutputConsumer;
 
-import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -73,7 +70,8 @@ public class MediaUtils
     public static byte[] convertToJPEG(File tmp, String extension) throws IOException, URISyntaxException,
             InterruptedException, IM4JavaException
     {
-        //In case the file is made of many frames, (for instance videos), generate only the frames from 0 to 48 to avoid high memory consumption 
+        // In case the file is made of many frames, (for instance videos), generate only the frames from 0 to 48 to
+        // avoid high memory consumption
         String path = tmp.getAbsolutePath() + "[0-48]";
         ConvertCmd cmd = getConvert();
         // create the operation, add images and operators/options
@@ -83,7 +81,7 @@ public class MediaUtils
         try
         {
             op.addImage(jpeg.getAbsolutePath());
-                cmd.run(op);
+            cmd.run(op);
             int frame = getNonBlankFrame(jpeg.getAbsolutePath());
             if (frame >= 0)
             {
@@ -161,8 +159,7 @@ public class MediaUtils
         String dir = FilenameUtils.getFullPath(path);
         String pathBase = FilenameUtils.getBaseName(path);
         File f = new File(dir + pathBase + "-" + count + ".jpg");
-        boolean nonBlank = false;
-        while (f.exists() || nonBlank)
+        while (f.exists())
         {
             String newPath = f.getAbsolutePath().replace("-" + count, "-" + Integer.valueOf(count + 1));
             f.delete();

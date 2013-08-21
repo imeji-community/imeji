@@ -172,7 +172,8 @@ public class StorageController
         }
         finally
         {
-            fis.close();
+            if (fis != null)
+                fis.close();
         }
     }
 

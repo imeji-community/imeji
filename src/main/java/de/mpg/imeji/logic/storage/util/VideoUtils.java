@@ -120,7 +120,7 @@ public class VideoUtils
      */
     public static byte[] videoFileToByteAray(byte[] bytes, float[] threshold, String fileExtention) throws IOException
     {
-        File tempFile = File.createTempFile(bytes.toString(), "." + fileExtention);
+        File tempFile = File.createTempFile(new String(bytes), "." + fileExtention);
         FileOutputStream fos = new FileOutputStream(tempFile);
         fos.write(bytes);
         fos.close();

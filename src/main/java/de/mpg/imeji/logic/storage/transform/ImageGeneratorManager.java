@@ -69,8 +69,8 @@ public class ImageGeneratorManager
         generators = new ArrayList<ImageGenerator>();
         generators.add(new PdfImageGenerator());
         generators.add(new SimpleAudioImageGenerator());
-        generators.add(new XuggleImageGenerator());
         generators.add(new MagickImageGenerator());
+        generators.add(new XuggleImageGenerator());
         generators.add(new SimpleImageGenerator());
         generators.add(new MicroscopeImageGenerator());
         generators.add(new RawFileImageGenerator());
@@ -190,7 +190,7 @@ public class ImageGeneratorManager
         {
             try
             {
-                ImageGenerator imageGenerator = (ImageGenerator)it.next();
+                ImageGenerator imageGenerator = it.next();
                 jpeg = imageGenerator.generateJPG(file, extension);
             }
             catch (Exception e)

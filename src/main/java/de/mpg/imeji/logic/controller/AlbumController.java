@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.List;
 
 import de.mpg.imeji.logic.ImejiBean2RDF;
-import de.mpg.imeji.logic.ImejiJena;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.search.Search;
@@ -43,8 +43,8 @@ public class AlbumController extends ImejiController
     public AlbumController()
     {
         super();
-        imejiBean2RDF = new ImejiBean2RDF(ImejiJena.albumModel);
-        imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.albumModel);
+        imejiBean2RDF = new ImejiBean2RDF(Imeji.albumModel);
+        imejiRDF2Bean = new ImejiRDF2Bean(Imeji.albumModel);
     }
 
     /**
@@ -55,8 +55,8 @@ public class AlbumController extends ImejiController
     public AlbumController(User user)
     {
         super(user);
-        imejiBean2RDF = new ImejiBean2RDF(ImejiJena.albumModel);
-        imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.albumModel);
+        imejiBean2RDF = new ImejiBean2RDF(Imeji.albumModel);
+        imejiRDF2Bean = new ImejiRDF2Bean(Imeji.albumModel);
     }
 
     /**
@@ -81,7 +81,7 @@ public class AlbumController extends ImejiController
      */
     public void update(Album ic, User user) throws Exception
     {
-        imejiBean2RDF = new ImejiBean2RDF(ImejiJena.albumModel);
+        imejiBean2RDF = new ImejiBean2RDF(Imeji.albumModel);
         writeUpdateProperties(ic, user);
         imejiBean2RDF.update(imejiBean2RDF.toList(ic), user);
     }
@@ -95,7 +95,7 @@ public class AlbumController extends ImejiController
      */
     public void updateLazy(Album ic, User user) throws Exception
     {
-        imejiBean2RDF = new ImejiBean2RDF(ImejiJena.albumModel);
+        imejiBean2RDF = new ImejiBean2RDF(Imeji.albumModel);
         writeUpdateProperties(ic, user);
         imejiBean2RDF.updateLazy(imejiBean2RDF.toList(ic), user);
     }
@@ -135,7 +135,7 @@ public class AlbumController extends ImejiController
      */
     public void delete(Album album, User user) throws Exception
     {
-        imejiBean2RDF = new ImejiBean2RDF(ImejiJena.albumModel);
+        imejiBean2RDF = new ImejiBean2RDF(Imeji.albumModel);
         imejiBean2RDF.delete(imejiBean2RDF.toList(album), user);
         GrantController gc = new GrantController(user);
         gc.removeAllGrantsFor(user, album.getId());
@@ -312,7 +312,7 @@ public class AlbumController extends ImejiController
      */
     public List<Album> retrieveAll() throws Exception
     {
-        List<String> uris = ImejiSPARQL.exec(SPARQLQueries.selectAlbumAll(), ImejiJena.albumModel);
+        List<String> uris = ImejiSPARQL.exec(SPARQLQueries.selectAlbumAll(), Imeji.albumModel);
         return (List<Album>)loadAlbumsLazy(uris, -1, 0);
     }
 }

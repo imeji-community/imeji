@@ -9,8 +9,6 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.metadata.EditorItemBean;
-import de.mpg.imeji.presentation.metadata.SuperMetadataBean;
-import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
 
 /**
  * Editor for multiple edit (edit selected items or edit all item of a collection)

@@ -6,7 +6,7 @@ package de.mpg.imeji.logic.export.format.rdf;
 import java.util.Collection;
 import java.util.HashMap;
 
-import de.mpg.imeji.logic.ImejiJena;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.export.format.RDFExport;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.vo.User;
@@ -25,7 +25,7 @@ public class RDFCollectionExport extends RDFExport
     @Override
     public void init()
     {
-        modelURI = ImejiJena.collectionModel;
+        modelURI = Imeji.collectionModel;
         super.filteredTriples = this.filteredTriples;
     }
 

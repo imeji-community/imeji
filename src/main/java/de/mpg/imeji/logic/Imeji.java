@@ -9,6 +9,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Iterator;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.lf5.util.StreamUtils;
@@ -26,7 +28,6 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.tdb.TDB;
 import com.hp.hpl.jena.tdb.TDBFactory;
 
-import de.mpg.imeji.logic.util.Counter;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -37,7 +38,6 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.j2j.annotations.j2jModel;
-import de.mpg.j2j.exceptions.NotFoundException;
 
 /**
  * {@link Jena} interface for imeji
@@ -46,7 +46,7 @@ import de.mpg.j2j.exceptions.NotFoundException;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class ImejiJena
+public class Imeji
 {
     public static String tdbPath = null;
     public static String collectionModel;
@@ -55,12 +55,16 @@ public class ImejiJena
     public static String userModel;
     public static String profileModel;
     public static String counterModel = "http://imeji.org/counter";
-    public static Dataset imejiDataSet;
+    public static Dataset dataset;
     public static URI counterID = URI.create("http://imeji.org/counter/0");
-    private static Logger logger = Logger.getLogger(ImejiJena.class);
+    private static Logger logger = Logger.getLogger(Imeji.class);
     public static User adminUser;
     private static final String ADMIN_EMAIL_INIT = "admin@imeji.org";
     private static final String ADMIN_PASSWORD_INIT = "admin";
+    /**
+     * The {@link ExecutorService} which runs the thread in imeji
+     */
+    public static ExecutorService executor = Executors.newCachedThreadPool();
 
     /**
      * Initialize the {@link Jena} database according to imeji.properties<br/>
@@ -71,7 +75,6 @@ public class ImejiJena
         try
         {
             tdbPath = PropertyReader.getProperty("imeji.tdb.path");
-            // tdbPath = "C:\\Projects\\Imeji\\tdb\\testjena";
         }
         catch (Exception e)
         {
@@ -87,7 +90,7 @@ public class ImejiJena
      */
     public static void runMigration() throws IOException
     {
-        File f = new File(ImejiJena.tdbPath + StringHelper.urlSeparator + "migration.txt");
+        File f = new File(Imeji.tdbPath + StringHelper.urlSeparator + "migration.txt");
         FileInputStream in = null;
         try
         {
@@ -121,7 +124,7 @@ public class ImejiJena
         }
         tdbPath = f.getAbsolutePath();
         logger.info("Initializing Jena dataset (" + tdbPath + ")...");
-        imejiDataSet = TDBFactory.createDataset(tdbPath);
+        dataset = TDBFactory.createDataset(tdbPath);
         logger.info("... done!");
         logger.info("Initializing Jena models...");
         albumModel = getModelName(Album.class);
@@ -138,9 +141,6 @@ public class ImejiJena
         logger.info("Initializing Admin user...");
         initadminUser();
         logger.info("... done!");
-        logger.info("Initializing counter...");
-        initCounter();
-        logger.info("... done!");
     }
 
     /**
@@ -152,27 +152,26 @@ public class ImejiJena
     {
         try
         {
-            // imejiDataSet = TDBFactory.createDataset(tdbPath);
             // Careful: This is a read locks. A write lock would lead to corrupted graph
-            imejiDataSet.begin(ReadWrite.READ);
-            if (imejiDataSet.containsNamedModel(name))
+            dataset.begin(ReadWrite.READ);
+            if (dataset.containsNamedModel(name))
             {
-                imejiDataSet.getNamedModel(name);
+                dataset.getNamedModel(name);
             }
             else
             {
                 Model m = ModelFactory.createDefaultModel();
-                imejiDataSet.addNamedModel(name, m);
+                dataset.addNamedModel(name, m);
             }
-            imejiDataSet.commit();
+            dataset.commit();
         }
         catch (Exception e)
         {
-            imejiDataSet.abort();
+            dataset.abort();
         }
         finally
         {
-            imejiDataSet.end();
+            dataset.end();
         }
     }
 
@@ -200,63 +199,6 @@ public class ImejiJena
     }
 
     /**
-     * Initialized the {@link Counter}
-     */
-    public static void initCounter()
-    {
-        int counterFirstValue = 0;
-        try
-        {
-            counterFirstValue = Integer.parseInt(PropertyReader.getProperty("imeji.counter.first.value"));
-        }
-        catch (Exception e)
-        {
-            logger.warn("Property imeji.counter.first.value not found!!! Add property to your property file. (IGNORE BY UNIT TESTS)");
-        }
-        Counter c = new Counter();
-        try
-        {
-            ImejiRDF2Bean rdf2Bean = new ImejiRDF2Bean(counterModel);
-            c = (Counter)rdf2Bean.load(c.getId().toString(), adminUser, c);
-            if (c.getCounter() < counterFirstValue)
-            {
-                createNewCouter(c, counterFirstValue);
-            }
-            logger.info("IMPORTANT: Counter found with value : " + c.getCounter());
-        }
-        catch (NotFoundException e)
-        {
-            logger.warn("IMPORTANT: Counter not found, creating a new one...");
-            createNewCouter(c, counterFirstValue);
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * Create a new {@link Counter}
-     * 
-     * @param c
-     * @param counterFirstValue
-     */
-    private static void createNewCouter(Counter c, int counterFirstValue)
-    {
-        c.setCounter(counterFirstValue);
-        ImejiBean2RDF bean2rdf = new ImejiBean2RDF(counterModel);
-        try
-        {
-            bean2rdf.create(bean2rdf.toList(c), adminUser);
-            logger.warn("IMPORTANT: New Counter created with value " + c.getCounter());
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
      * Return the name of the model if defined in a {@link Class} with {@link j2jModel} annotation
      * 
      * @param voClass
@@ -277,17 +219,17 @@ public class ImejiJena
     {
         try
         {
-            imejiDataSet.begin(ReadWrite.READ);
-            imejiDataSet.getNamedModel(modelName).write(System.out, "RDF/XML-ABBREV");
-            imejiDataSet.commit();
+            dataset.begin(ReadWrite.READ);
+            dataset.getNamedModel(modelName).write(System.out, "RDF/XML-ABBREV");
+            dataset.commit();
         }
         catch (Exception e)
         {
-            imejiDataSet.abort();
+            dataset.abort();
         }
         finally
         {
-            imejiDataSet.end();
+            dataset.end();
         }
     }
 
@@ -300,24 +242,24 @@ public class ImejiJena
     {
         try
         {
-            ImejiJena.imejiDataSet.begin(ReadWrite.READ);
-            for (Iterator<String> it = ImejiJena.imejiDataSet.listNames(); it.hasNext();)
+            Imeji.dataset.begin(ReadWrite.READ);
+            for (Iterator<String> it = Imeji.dataset.listNames(); it.hasNext();)
             {
                 String s = it.next();
                 System.out.println(s);
             }
-            QueryExecution qe = QueryExecutionFactory.create(q, Syntax.syntaxARQ, ImejiJena.imejiDataSet);
+            QueryExecution qe = QueryExecutionFactory.create(q, Syntax.syntaxARQ, Imeji.dataset);
             qe.getContext().set(TDB.symUnionDefaultGraph, true);
             ResultSet rs = qe.execSelect();
             ResultSetFormatter.out(System.out, rs);
         }
         catch (Exception e)
         {
-            ImejiJena.imejiDataSet.abort();
+            Imeji.dataset.abort();
         }
         finally
         {
-            ImejiJena.imejiDataSet.end();
+            Imeji.dataset.end();
         }
     }
 }

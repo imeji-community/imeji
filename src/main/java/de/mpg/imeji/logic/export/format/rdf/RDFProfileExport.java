@@ -2,7 +2,7 @@ package de.mpg.imeji.logic.export.format.rdf;
 
 import java.util.HashMap;
 
-import de.mpg.imeji.logic.ImejiJena;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.export.format.RDFExport;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -23,7 +23,7 @@ public class RDFProfileExport extends RDFExport
     @Override
     public void init()
     {
-        modelURI = ImejiJena.profileModel;
+        modelURI = Imeji.profileModel;
         super.filteredTriples = this.filteredTriples;
     }
 

@@ -10,7 +10,6 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.metadata.EditorItemBean;
-import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
 
 /**
  * Editor for one item (by the item detail page)

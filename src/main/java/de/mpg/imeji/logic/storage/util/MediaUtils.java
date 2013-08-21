@@ -6,7 +6,6 @@ package de.mpg.imeji.logic.storage.util;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -15,9 +14,7 @@ import org.im4java.core.ConvertCmd;
 import org.im4java.core.IM4JavaException;
 import org.im4java.core.IMOperation;
 import org.im4java.core.Info;
-import org.im4java.process.ArrayListOutputConsumer;
 
-import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -161,8 +158,7 @@ public class MediaUtils
         String dir = FilenameUtils.getFullPath(path);
         String pathBase = FilenameUtils.getBaseName(path);
         File f = new File(dir + pathBase + "-" + count + ".jpg");
-        boolean nonBlank = false;
-        while (f.exists() || nonBlank)
+        while (f.exists())
         {
             String newPath = f.getAbsolutePath().replace("-" + count, "-" + Integer.valueOf(count + 1));
             f.delete();

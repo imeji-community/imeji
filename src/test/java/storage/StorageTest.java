@@ -30,11 +30,7 @@ package storage;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.Arrays;
-
 import junit.framework.Assert;
 
 import org.apache.commons.io.FileUtils;
@@ -46,7 +42,6 @@ import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.UploadResult;
 import de.mpg.imeji.logic.storage.impl.InternalStorage;
 import de.mpg.imeji.logic.storage.internal.InternalStorageManager;
-import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**

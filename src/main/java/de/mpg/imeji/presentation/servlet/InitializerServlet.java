@@ -13,15 +13,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.helpers.ThreadLocalMap;
 import org.apache.log4j.lf5.util.StreamUtils;
 
 import com.hp.hpl.jena.tdb.TDB;
 import com.hp.hpl.jena.tdb.base.file.Location;
 import com.hp.hpl.jena.tdb.sys.TDBMaker;
-import com.hp.hpl.jena.tdb.transaction.DatasetGraphTransaction;
-import com.hp.hpl.jena.tdb.transaction.Transaction;
-
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.concurrency.locks.LocksSurveyor;

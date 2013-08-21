@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 import de.mpg.imeji.logic.ImejiBean2RDF;
-import de.mpg.imeji.logic.ImejiJena;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.search.Search;
@@ -37,8 +37,8 @@ import de.mpg.j2j.helper.DateHelper;
  */
 public class ProfileController extends ImejiController
 {
-    private static ImejiRDF2Bean imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.profileModel);
-    private static ImejiBean2RDF imejiBean2RDF = new ImejiBean2RDF(ImejiJena.profileModel);
+    private static ImejiRDF2Bean imejiRDF2Bean = new ImejiRDF2Bean(Imeji.profileModel);
+    private static ImejiBean2RDF imejiBean2RDF = new ImejiBean2RDF(Imeji.profileModel);
 
     /**
      * Default Constructor
@@ -56,7 +56,7 @@ public class ProfileController extends ImejiController
      */
     public URI create(MetadataProfile mdp, User user) throws Exception
     {
-        imejiBean2RDF = new ImejiBean2RDF(ImejiJena.profileModel);
+        imejiBean2RDF = new ImejiBean2RDF(Imeji.profileModel);
         writeCreateProperties(mdp, user);
         mdp.setStatus(Status.PENDING);
         imejiBean2RDF.create(imejiBean2RDF.toList(mdp), user);
@@ -74,7 +74,7 @@ public class ProfileController extends ImejiController
      */
     public MetadataProfile retrieve(String id, User user) throws Exception
     {
-        imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.profileModel);
+        imejiRDF2Bean = new ImejiRDF2Bean(Imeji.profileModel);
         return retrieve(ObjectHelper.getURI(MetadataProfile.class, id), user);
     }
 
@@ -89,7 +89,7 @@ public class ProfileController extends ImejiController
      */
     public MetadataProfile retrieve(URI uri, User user) throws NotFoundException
     {
-        imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.profileModel);
+        imejiRDF2Bean = new ImejiRDF2Bean(Imeji.profileModel);
         MetadataProfile p;
         try
         {
@@ -112,7 +112,7 @@ public class ProfileController extends ImejiController
      */
     public void update(MetadataProfile mdp, User user) throws Exception
     {
-        imejiBean2RDF = new ImejiBean2RDF(ImejiJena.profileModel);
+        imejiBean2RDF = new ImejiBean2RDF(Imeji.profileModel);
         writeUpdateProperties(mdp, user);
         imejiBean2RDF.update(imejiBean2RDF.toList(mdp), user);
     }
@@ -140,7 +140,7 @@ public class ProfileController extends ImejiController
      */
     public void delete(MetadataProfile mdp, User user) throws Exception
     {
-        imejiBean2RDF = new ImejiBean2RDF(ImejiJena.profileModel);
+        imejiBean2RDF = new ImejiBean2RDF(Imeji.profileModel);
         imejiBean2RDF.delete(imejiBean2RDF.toList(mdp), user);
         GrantController gc = new GrantController(user);
         gc.removeAllGrantsFor(user, mdp.getId());

@@ -5,7 +5,7 @@ package de.mpg.imeji.logic.export.format.rdf;
 
 import java.util.HashMap;
 
-import de.mpg.imeji.logic.ImejiJena;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.export.format.RDFExport;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.vo.Album;
@@ -24,7 +24,7 @@ public class RDFAlbumExport extends RDFExport
     @Override
     public void init()
     {
-        modelURI = ImejiJena.albumModel;
+        modelURI = Imeji.albumModel;
         super.filteredTriples = this.filteredTriples;
     }
 

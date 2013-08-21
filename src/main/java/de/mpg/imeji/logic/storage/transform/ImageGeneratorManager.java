@@ -190,7 +190,7 @@ public class ImageGeneratorManager
         {
             try
             {
-                ImageGenerator imageGenerator = (ImageGenerator)it.next();
+                ImageGenerator imageGenerator = it.next();
                 jpeg = imageGenerator.generateJPG(file, extension);
             }
             catch (Exception e)

@@ -8,7 +8,7 @@ import java.util.Calendar;
 import java.util.List;
 import org.apache.log4j.Logger;
 import de.mpg.imeji.logic.ImejiBean2RDF;
-import de.mpg.imeji.logic.ImejiJena;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
 import de.mpg.imeji.logic.util.Counter;
@@ -189,8 +189,8 @@ public abstract class ImejiController
         {
             try
             {
-                ImejiRDF2Bean rdf2Bean = new ImejiRDF2Bean(ImejiJena.counterModel);
-                c = (Counter)rdf2Bean.load(c.getId().toString(), ImejiJena.adminUser, c);
+                ImejiRDF2Bean rdf2Bean = new ImejiRDF2Bean(Imeji.counterModel);
+                c = (Counter)rdf2Bean.load(c.getId().toString(), Imeji.adminUser, c);
                 int id = c.getCounter();
                 incrementCounter(c);
                 return id;
@@ -216,8 +216,8 @@ public abstract class ImejiController
         try
         {
             c.setCounter(c.getCounter() + 1);
-            ImejiBean2RDF bean2rdf = new ImejiBean2RDF(ImejiJena.counterModel);
-            bean2rdf.update(bean2rdf.toList(c), ImejiJena.adminUser);
+            ImejiBean2RDF bean2rdf = new ImejiBean2RDF(Imeji.counterModel);
+            bean2rdf.update(bean2rdf.toList(c), Imeji.adminUser);
         }
         catch (Exception e)
         {

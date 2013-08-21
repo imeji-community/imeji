@@ -43,7 +43,7 @@ public class SearchAndExportHelper
             Matcher matcher = ESCIDOC_ID_PATTERN.matcher(uri.toString());
             if (matcher.find())
                 itemId = matcher.group();
-            if (UrlHelper.isValidURI(searchAndExportUri))
+            if (UrlHelper.isValidURI(searchAndExportUri) && itemId != null)
             {
                 try
                 {

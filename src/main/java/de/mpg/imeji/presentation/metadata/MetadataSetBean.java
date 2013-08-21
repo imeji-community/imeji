@@ -29,7 +29,6 @@
 package de.mpg.imeji.presentation.metadata;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import de.mpg.imeji.logic.util.MetadataFactory;

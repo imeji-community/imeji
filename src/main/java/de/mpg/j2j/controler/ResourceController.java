@@ -5,7 +5,7 @@ import java.net.URI;
 import com.hp.hpl.jena.rdf.model.Model;
 
 import de.mpg.imeji.logic.ImejiBean2RDF;
-import de.mpg.imeji.logic.ImejiJena;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.exceptions.AlreadyExistsException;
@@ -38,11 +38,11 @@ public class ResourceController
     {
         if (modelURI != null)
         {
-            model = ImejiJena.imejiDataSet.getNamedModel(modelURI);
+            model = Imeji.dataset.getNamedModel(modelURI);
         }
         else
         {
-            model = ImejiJena.imejiDataSet.getDefaultModel();
+            model = Imeji.dataset.getDefaultModel();
         }
         this.java2rdf = new Java2Jena(model, lazy);
         this.rdf2Java = new Jena2Java(model, lazy);

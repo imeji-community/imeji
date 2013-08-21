@@ -8,8 +8,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.Random;
-
 import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FileUtils;
@@ -182,7 +180,7 @@ public class PdfUtils
         {
             rotationAngle -= 360;
         }
-        Rectangle rect = new Rectangle(0, 0, (int)width, (int)height);
+        Rectangle rect = new Rectangle(0, 0, width, height);
         BufferedImage retval = null;
         // swap width and height
         if (rotationAngle == 90 || rotationAngle == 270)

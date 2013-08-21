@@ -5,7 +5,7 @@ package de.mpg.imeji.logic.util;
 
 import java.net.URI;
 
-import de.mpg.imeji.logic.ImejiJena;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jResource;
@@ -14,7 +14,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jId(getMethod = "getId", setMethod = "setId")
 public class Counter
 {
-    private URI id = ImejiJena.counterID;
+    private URI id = Imeji.counterID;
     @j2jLiteral("http://imeji.org/terms/counterValue")
     private int counter;
 

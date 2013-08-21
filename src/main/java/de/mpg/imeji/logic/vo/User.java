@@ -6,8 +6,6 @@ package de.mpg.imeji.logic.vo;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jList;

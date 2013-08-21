@@ -3,16 +3,8 @@
  */
 package digilib;
 
-import static org.junit.Assert.*;
-
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
-
-import javax.imageio.ImageIO;
-
-import org.junit.Test;
 
 /**
  * @author hnguyen

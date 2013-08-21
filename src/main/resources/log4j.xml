@@ -10,8 +10,7 @@
 	<!-- A time/date based rolling appender -->
 	<appender name="FILE" class="org.apache.log4j.DailyRollingFileAppender">
 		<param name="File" value="${catalina.base}/logs/imeji.log" />
-		<param name="Append" value="true" />
-		<param name="Threshold" value="warn" />
+		<param name="Threshold" value="info" />
 		<!-- Rollover at midnight each day -->
 		<param name="DatePattern" value="'.'yyyy-MM-dd" />
 		<layout class="org.apache.log4j.PatternLayout">
@@ -35,7 +34,7 @@
 	<!-- ============================== -->
 	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
 		<param name="Target" value="System.out" />
-		<param name="Threshold" value="warn" />
+		<param name="Threshold" value="info" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<!-- The default pattern: Date Priority [Category] Message\n -->
 			<param name="ConversionPattern" value="%d [%t] %-5p %c- %m%n" />
@@ -61,8 +60,7 @@
 	<!-- Setup the Root category -->
 	<!-- ======================= -->
 	<root>
-		<priority value="warn" />
-		<appender-ref ref="CONSOLE" />
+		<level value="info" />
 		<appender-ref ref="FILE" />
 	</root>
 

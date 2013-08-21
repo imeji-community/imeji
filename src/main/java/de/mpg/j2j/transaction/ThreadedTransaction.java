@@ -1,12 +1,14 @@
 package de.mpg.j2j.transaction;
 
+import java.util.concurrent.Callable;
+
 import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.Jena;
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.tdb.TDBFactory;
 
-import de.mpg.imeji.logic.ImejiJena;
+import de.mpg.imeji.logic.Imeji;
 
 /**
  * Run a {@link Transaction} in a new {@link Thread}. A new {@link Dataset} is created for this thread <br/>
@@ -16,9 +18,8 @@ import de.mpg.imeji.logic.ImejiJena;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class ThreadedTransaction extends Thread
+public class ThreadedTransaction implements Callable<Integer>
 {
-    private boolean running = false;
     private Transaction transaction;
     protected static Logger logger = Logger.getLogger(ThreadedTransaction.class);
 
@@ -32,72 +33,23 @@ public class ThreadedTransaction extends Thread
         this.transaction = transaction;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see java.util.concurrent.Callable#call()
+     */
     @Override
-    public synchronized void start()
+    public Integer call() throws Exception
     {
-        running = true;
-        super.start();
-    }
-
-    @Override
-    public void run()
-    {
+        Dataset ds = TDBFactory.createDataset(Imeji.tdbPath);
         try
         {
-            transaction.start(TDBFactory.createDataset(ImejiJena.tdbPath));
+            transaction.start(ds);
         }
         finally
         {
-            running = false;
+            ds.close();
         }
-    }
-
-    /**
-     * Method waiting for the {@link Thread} to be finished. Used when synchronization needed
-     */
-    public void waitForEnd()
-    {
-        while (running)
-        {
-            try
-            {
-                Thread.sleep(1);
-            }
-            catch (InterruptedException e)
-            {
-                e.printStackTrace();
-                running = false;
-            }
-        }
-        try
-        {
-            this.finalize();
-        }
-        catch (Throwable e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * setter
-     * 
-     * @param running
-     */
-    public void setRunning(boolean running)
-    {
-        this.running = running;
-    }
-
-    /**
-     * getter
-     * 
-     * @return
-     */
-    public boolean isRunning()
-    {
-        return running;
+        return 1;
     }
 
     /**

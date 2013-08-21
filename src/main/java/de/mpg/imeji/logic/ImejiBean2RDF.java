@@ -6,6 +6,7 @@ package de.mpg.imeji.logic;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Future;
 
 import com.hp.hpl.jena.Jena;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -116,8 +117,10 @@ public class ImejiBean2RDF
         Transaction t = new CRUDTransaction(objects, type, modelURI, lazy);
         // Write Transaction needs to be added in a new Thread
         ThreadedTransaction ts = new ThreadedTransaction(t);
-        ts.start();
-        ts.waitForEnd();
+        Future<Integer> f = Imeji.executor.submit(ts);
+        // wait for the transaction to be finished
+        f.get();
+        // Throw exception is any
         ts.throwException();
     }
 

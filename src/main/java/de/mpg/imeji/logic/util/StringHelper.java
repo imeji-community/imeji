@@ -1,15 +1,9 @@
 package de.mpg.imeji.logic.util;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URISyntaxException;
 import java.security.MessageDigest;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-
-import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
  * Static functions to manipulate {@link String}

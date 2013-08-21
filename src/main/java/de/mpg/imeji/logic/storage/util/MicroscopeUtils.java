@@ -28,8 +28,6 @@
  */
 package de.mpg.imeji.logic.storage.util;
 
-import java.io.IOException;
-
 /**
  * Utility class to handle Microscope data
  * 

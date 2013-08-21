@@ -11,7 +11,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.ImejiBean2RDF;
-import de.mpg.imeji.logic.ImejiJena;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.search.Search;
@@ -49,8 +49,8 @@ public class CollectionController extends ImejiController
     public CollectionController()
     {
         super();
-        imejiBean2RDF = new ImejiBean2RDF(ImejiJena.collectionModel);
-        imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.collectionModel);
+        imejiBean2RDF = new ImejiBean2RDF(Imeji.collectionModel);
+        imejiRDF2Bean = new ImejiRDF2Bean(Imeji.collectionModel);
     }
 
     /**
@@ -61,8 +61,8 @@ public class CollectionController extends ImejiController
     public CollectionController(User user)
     {
         super(user);
-        imejiBean2RDF = new ImejiBean2RDF(ImejiJena.collectionModel);
-        imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.collectionModel);
+        imejiBean2RDF = new ImejiBean2RDF(Imeji.collectionModel);
+        imejiRDF2Bean = new ImejiRDF2Bean(Imeji.collectionModel);
     }
 
     /**
@@ -221,7 +221,7 @@ public class CollectionController extends ImejiController
      */
     public CollectionImeji retrieve(URI uri) throws Exception
     {
-        imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.collectionModel);
+        imejiRDF2Bean = new ImejiRDF2Bean(Imeji.collectionModel);
         return (CollectionImeji)imejiRDF2Bean.load(uri.toString(), user, new CollectionImeji());
     }
 
@@ -235,7 +235,7 @@ public class CollectionController extends ImejiController
      */
     public CollectionImeji retrieve(URI uri, User user) throws Exception
     {
-        imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.collectionModel);
+        imejiRDF2Bean = new ImejiRDF2Bean(Imeji.collectionModel);
         return (CollectionImeji)imejiRDF2Bean.load(uri.toString(), user, new CollectionImeji());
     }
 
@@ -249,7 +249,7 @@ public class CollectionController extends ImejiController
      */
     public CollectionImeji retrieveLazy(URI uri) throws Exception
     {
-        imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.collectionModel);
+        imejiRDF2Bean = new ImejiRDF2Bean(Imeji.collectionModel);
         return (CollectionImeji)imejiRDF2Bean.loadLazy(uri.toString(), user, new CollectionImeji());
     }
 
@@ -263,7 +263,7 @@ public class CollectionController extends ImejiController
      */
     public CollectionImeji retrieveLazy(URI uri, User user) throws Exception
     {
-        imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.collectionModel);
+        imejiRDF2Bean = new ImejiRDF2Bean(Imeji.collectionModel);
         return (CollectionImeji)imejiRDF2Bean.loadLazy(uri.toString(), user, new CollectionImeji());
     }
 
@@ -275,7 +275,7 @@ public class CollectionController extends ImejiController
      */
     public List<CollectionImeji> retrieveAllCollections() throws Exception
     {
-        List<String> uris = ImejiSPARQL.exec(SPARQLQueries.selectCollectionAll(), ImejiJena.collectionModel);
+        List<String> uris = ImejiSPARQL.exec(SPARQLQueries.selectCollectionAll(), Imeji.collectionModel);
         return (List<CollectionImeji>)loadCollectionsLazy(uris, -1, 0);
     }
 

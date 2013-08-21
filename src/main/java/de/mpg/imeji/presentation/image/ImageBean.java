@@ -16,7 +16,6 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.concurrency.locks.Locks;

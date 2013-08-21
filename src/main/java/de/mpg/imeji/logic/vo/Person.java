@@ -31,7 +31,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "person", namespace = "http://xmlns.com/foaf/0.1")
-public class Person
+public class Person implements Cloneable
 {
     private URI id = IdentifierUtil.newURI(Person.class);
     @j2jLiteral("http://purl.org/escidoc/metadata/terms/0.1/family-name")

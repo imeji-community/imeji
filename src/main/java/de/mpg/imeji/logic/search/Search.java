@@ -15,7 +15,7 @@ import com.hp.hpl.jena.vocabulary.RDF;
 
 import com.hp.hpl.jena.Jena;
 
-import de.mpg.imeji.logic.ImejiJena;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.search.query.SimpleQueryFactory;
 import de.mpg.imeji.logic.search.util.CollectionUtils;
@@ -284,13 +284,13 @@ public class Search
         switch (type)
         {
             case ITEM:
-                return ImejiJena.imageModel;
+                return Imeji.imageModel;
             case COLLECTION:
-                return ImejiJena.collectionModel;
+                return Imeji.collectionModel;
             case ALBUM:
-                return ImejiJena.albumModel;
+                return Imeji.albumModel;
             case PROFILE:
-                return ImejiJena.profileModel;
+                return Imeji.profileModel;
             default:
                 return null;
         }

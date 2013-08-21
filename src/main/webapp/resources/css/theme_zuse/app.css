@@ -241,7 +241,7 @@ a.imj_contentMenuItemCreateAlbum:focus {
 
 .imj_contentMenu {
     height: 2em !important;
-    max-width: 75% !important;
+    width: 70% !important;
     overflow: visible !important;
 }
 
@@ -265,12 +265,13 @@ a.imj_contentMenuItemCreateAlbum:focus {
     -moz-border-radius: 1.917em 0.916667em 1.917em 0.916667em !important;
     -o-border-radius: 1.917em 0.916667em 1.917em 0.916667em !important;
     -ms-border-radius: 1.917em 0.916667em 1.917em 0.916667em !important;
+    width: auto !important;
 }
 
 .imj_siteContentHeadline h1 {
     color: #FFFFFF !important;
     font-size: 2.382em !important;
-    letter-spacing: 0.091em !important;
+    letter-spacing: 0 !important;
     text-align: center !important;
     line-height: 100% !important;
     margin-right: 0.5em;
@@ -323,7 +324,7 @@ a.imj_contentMenuItemCreateAlbum:focus {
 }
 
 .small_marginLExcl {
-    margin-left: 0em;
+    margin-left: 2.727em;
 }
 
 .gotoBox {
@@ -353,6 +354,10 @@ a.imj_contentMenuItemCreateAlbum:focus {
 
 .listItem:hover {
 	background-color: #EEEEEE;
+}
+
+.loggedIn .listItem .itemHeader {
+	margin-bottom: 0em !important;
 }
 
 /* End of Zuse Theme Hacks */

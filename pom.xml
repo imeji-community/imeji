@@ -4,7 +4,7 @@
 	<groupId>org.imeji</groupId>
 	<name>imeji</name>
 	<packaging>war</packaging>
-	<version>1.2.0.1-SNAPSHOT</version>
+	<version>1.3.0.1-SNAPSHOT</version>
 	<url>http://imeji.org</url>
 	<description>
 		http://colab.mpdl.mpg.de/mediawiki/imeji
@@ -93,16 +93,9 @@
 		<project.warName>imeji</project.warName>
 	</properties>
 	<repositories>
-		<repository>
-			<id>central</id>
-			<url>http://central</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
+		<!-- <repository> <id>central</id> <url>http://central</url> <releases> 
+			<enabled>true</enabled> </releases> <snapshots> <enabled>true</enabled> </snapshots> 
+			</repository> -->
 		<repository>
 			<id>prime-repo</id>
 			<name>Prime Technology Maven Repository</name>
@@ -119,6 +112,27 @@
 				<enabled>true</enabled>
 			</snapshots>
 		</repository>
+		<repository>
+			<id>OpenIMAJ maven releases repository</id>
+			<url>http://maven.openimaj.org</url>
+		</repository>
+		<repository>
+			<id>xuggle repo</id>
+			<url>http://xuggle.googlecode.com/svn/trunk/repo/share/java/</url>
+		</repository>
+		<repository>
+			<id>nexus</id>
+			<url>http://rd.mpdl.mpg.de/nexus/content/groups/public</url>
+		</repository>
+		<repository>
+			<releases />
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>mygrid-repository</id>
+			<name>myGrid Repository</name>
+			<url>http://www.mygrid.org.uk/maven/repository</url>
+		</repository>
 	</repositories>
 	<distributionManagement>
 		<repository>
@@ -132,18 +146,9 @@
 			<url>http://rd.mpdl.mpg.de/nexus/content/repositories/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>central</id>
-			<url>http://central</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</pluginRepository>
-	</pluginRepositories>
+	<!-- <pluginRepositories> <pluginRepository> <id>central</id> <url>http://central</url> 
+		<releases> <enabled>true</enabled> </releases> <snapshots> <enabled>true</enabled> 
+		</snapshots> </pluginRepository> </pluginRepositories> -->
 	<build>
 		<resources>
 			<resource>
@@ -192,6 +197,7 @@
 					<failIfNoTests>false</failIfNoTests>
 					<!-- avoid the out of memory exception thrown in some test scenarios -->
 					<argLine>-Xmx1000M</argLine>
+					<skipTests>true</skipTests>
 				</configuration>
 				<executions>
 					<execution>
@@ -412,10 +418,9 @@
 		</dependency>
 		<!-- Used for CMYK images -->
 		<dependency>
-			<groupId>org.apache.commons.imaging</groupId>
+			<groupId>org.apache.sanselan</groupId>
 			<artifactId>sanselan</artifactId>
-			<version>0.97</version>
-			<classifier>incubator</classifier>
+			<version>0.97-incubator</version>
 		</dependency>
 		<!-- JAVA API lib for imagemagick -->
 		<dependency>
@@ -423,9 +428,86 @@
 			<artifactId>im4java</artifactId>
 			<version>1.2.0</version>
 		</dependency>
-		<!-- Test with bioformats jar -->
-		<!-- <dependency> <groupId>org.loci.bioformats</groupId> <artifactId>bioformats</artifactId> 
-			<version>4.4.6</version> <type>pom.lastUpdated</type> </dependency> -->
+		<!-- Start: bio formats dependencies -->
+		<!-- <dependency> <groupId>openmicroscopy</groupId> <artifactId>bio-formats</artifactId> 
+			<version>4.4.8</version> </dependency> <dependency> <groupId>openmicroscopy</groupId> 
+			<artifactId>loci-common</artifactId> <version>4.4.8</version> </dependency> 
+			<dependency> <groupId>openmicroscopy</groupId> <artifactId>ome-xml</artifactId> 
+			<version>4.4.8</version> </dependency> <dependency> <groupId>openmicroscopy</groupId> 
+			<artifactId>scifio</artifactId> <version>4.4.8</version> </dependency> -->
+		<!-- <dependency> <groupId>openmicroscopy</groupId> <artifactId>loci-tools</artifactId> 
+			<version>4.4.8</version> <type>pom</type> </dependency> -->
+		<!-- End: bio formats dependencies -->
+		<!-- pdf handling -->
+		<dependency>
+			<groupId>org.swinglabs</groupId>
+			<artifactId>pdf-renderer</artifactId>
+			<version>1.0.5</version>
+		</dependency>
+		<!-- image/video hanlding -->
+		<dependency>
+			<groupId>org.openimaj</groupId>
+			<artifactId>core</artifactId>
+			<version>1.1</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<artifactId>image-local-features</artifactId>
+			<groupId>org.openimaj</groupId>
+			<version>1.1</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openimaj</groupId>
+			<artifactId>xuggle-video</artifactId>
+			<version>1.1</version>
+			<scope>compile</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>com.esotericsoftware.minlog</groupId>
+					<artifactId>minlog</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>ch.qos.logback</groupId>
+					<artifactId>logback-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>ch.qos.logback</groupId>
+					<artifactId>logback-classic</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- START: Digilib integration -->
+		<dependency>
+			<groupId>digilib</groupId>
+			<artifactId>digilib-servlet3</artifactId>
+			<version>2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>digilib</groupId>
+			<artifactId>digilib-common</artifactId>
+			<version>2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>digilib</groupId>
+			<artifactId>digilib-servlet</artifactId>
+			<version>2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.devlib.schmidt</groupId>
+			<artifactId>imageinfo</artifactId>
+			<version>1.9</version>
+		</dependency>
+		<!-- END: Digilib integration -->
+		<dependency>
+			<groupId>org.apache.tika</groupId>
+			<artifactId>tika-core</artifactId>
+			<version>1.3</version>
+		</dependency>
+		<!-- <dependency> <groupId>net.java.dev.jai-imageio</groupId> <artifactId>jai-imageio-core-standalone</artifactId> 
+			<version>1.2-pre-dr-b04-2011-07-04</version> </dependency> <dependency> <groupId>org.devlib.schmidt</groupId> 
+			<artifactId>imageinfo</artifactId> <version>1.9</version> <type>jar</type> 
+			<scope>compile</scope> </dependency> -->
 	</dependencies>
 	<profiles>
 		<!-- this profile is used by developers -->

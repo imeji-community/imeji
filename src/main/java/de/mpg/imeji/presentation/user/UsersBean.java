@@ -107,16 +107,15 @@ public class UsersBean
         }
     }
 
-    public String grantsString (Grant grant)
+    public String grantsString(Grant grant)
     {
-    	String grantStr = "";   	
+        String grantStr = "";
         String role = GrantHelper.grantString(grant);
-    	
-        grantStr = role + " "+  ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("for") + " " + grant.getGrantFor();
-        
-    	return grantStr;
+        grantStr = role + " " + ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("for") + " "
+                + grant.getGrantFor();
+        return grantStr;
     }
-    
+
     /**
      * Delete a {@link User}
      * 
@@ -126,7 +125,6 @@ public class UsersBean
     {
         String email = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("email");
         UserController controller = new UserController(session.getUser());
-        
         try
         {
             controller.delete(ObjectLoader.loadUser(email, session.getUser()));

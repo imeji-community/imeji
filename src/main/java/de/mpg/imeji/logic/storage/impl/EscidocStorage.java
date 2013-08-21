@@ -29,6 +29,7 @@
 package de.mpg.imeji.logic.storage.impl;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
@@ -36,6 +37,7 @@ import java.net.URL;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
 import de.escidoc.core.client.Authentication;
@@ -46,9 +48,8 @@ import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.UploadResult;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.storage.escidoc.EscidocUtils;
-import de.mpg.imeji.logic.storage.util.ImageUtils;
+import de.mpg.imeji.logic.storage.transform.ImageGeneratorManager;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
-import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -97,18 +98,17 @@ public class EscidocStorage implements Storage
      * @see de.mpg.imeji.logic.storage.Storage#upload(byte[])
      */
     @Override
-    public UploadResult upload(String filename, byte[] bytes, String collectionId)
+    public UploadResult upload(String filename, File file, String collectionId)
     {
-        String mimeType = StorageUtils.getMimeType(StringHelper.getFileExtension(filename));
         try
         {
             // Construct the Item
             item = util.itemFactory(PropertyReader.getProperty("escidoc.imeji.content-model.id"),
                     PropertyReader.getProperty("escidoc.imeji.context.id"));
             // Upload the Files for the 3 resolution
-            uploadFileAndAdditToItem(bytes, FileResolution.ORIGINAL, mimeType, filename);
-            uploadFileAndAdditToItem(bytes, FileResolution.WEB, mimeType, filename);
-            uploadFileAndAdditToItem(bytes, FileResolution.THUMBNAIL, mimeType, filename);
+            uploadFileAndAdditToItem(file, FileResolution.ORIGINAL, filename);
+            uploadFileAndAdditToItem(file, FileResolution.WEB, filename);
+            uploadFileAndAdditToItem(file, FileResolution.THUMBNAIL, filename);
             // Create the item
             item = util.createItemInEscidoc(item, auth);
             // Create the Upload result
@@ -194,13 +194,16 @@ public class EscidocStorage implements Storage
      * @throws IOException
      * @throws Exception
      */
-    private void uploadFileAndAdditToItem(byte[] bytes, FileResolution resolution, String mimeType, String filename)
-            throws IOException, Exception
+    private void uploadFileAndAdditToItem(File file, FileResolution resolution, String filename) throws IOException,
+            Exception
     {
+        ImageGeneratorManager imageGeneratorManager = new ImageGeneratorManager();
         // Transform the file if needed (according to the resolution), and uplod it
-        URL url = uploadViaStagingArea(ImageUtils.transformImage(bytes, resolution, mimeType));
+        URL url = uploadViaStagingArea(imageGeneratorManager.generate(file, FilenameUtils.getExtension(filename),
+                resolution));
         // Update the item with the uploaded file
-        util.addImageToEscidocItem(item, url, util.getContentCategory(resolution), filename, mimeType);
+        util.addImageToEscidocItem(item, url, util.getContentCategory(resolution), filename,
+                StorageUtils.getMimeType(FilenameUtils.getExtension(filename)));
     }
 
     /**

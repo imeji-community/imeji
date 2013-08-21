@@ -23,6 +23,7 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.image.ThumbnailBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -40,7 +41,7 @@ public abstract class CollectionBean
 {
     public enum TabType
     {
-        COLLECTION, PROFILE, HOME;
+        COLLECTION, PROFILE, HOME, UTIL;
     }
 
     private static Logger logger = Logger.getLogger(CollectionBean.class);
@@ -55,7 +56,7 @@ public abstract class CollectionBean
     private List<SelectItem> profilesMenu = new ArrayList<SelectItem>();
     private boolean selected;
     private int size = 0;
-
+    private Navigation navigation;
 
     /**
      * New default {@link CollectionBean}
@@ -64,6 +65,7 @@ public abstract class CollectionBean
     {
         collection = new CollectionImeji();
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
     }
 
     /**
@@ -250,7 +252,7 @@ public abstract class CollectionBean
     /**
      * setter
      * 
-     * @param tab the tab to set
+     * @param the tab to set
      */
     public void setTab(TabType tab)
     {
@@ -551,5 +553,10 @@ public abstract class CollectionBean
     {
         Authorization auth = new Authorization();
         return auth.isContainerAdmin(sessionBean.getUser(), collection);
+    }
+
+    public String getPageUrl()
+    {
+        return navigation.getCollectionUrl() + id;
     }
 }

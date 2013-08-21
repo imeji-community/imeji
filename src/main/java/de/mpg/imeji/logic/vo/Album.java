@@ -26,7 +26,7 @@ public class Album extends Container
 {
     @j2jLazyList("http://imeji.org/terms/item")
     private Collection<URI> images = new ArrayList<URI>();
-    
+
     @Override
     public void setImages(Collection<URI> images)
     {

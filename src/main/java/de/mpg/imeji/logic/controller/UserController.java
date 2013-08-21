@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.List;
 
 import de.mpg.imeji.logic.ImejiBean2RDF;
-import de.mpg.imeji.logic.ImejiJena;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
@@ -27,8 +27,8 @@ import de.mpg.j2j.exceptions.NotFoundException;
  */
 public class UserController extends ImejiController
 {
-    private static ImejiRDF2Bean imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.userModel);
-    private static ImejiBean2RDF imejiBean2RDF = new ImejiBean2RDF(ImejiJena.userModel);
+    private static ImejiRDF2Bean imejiRDF2Bean = new ImejiRDF2Bean(Imeji.userModel);
+    private static ImejiBean2RDF imejiBean2RDF = new ImejiBean2RDF(Imeji.userModel);
 
     /**
      * Default constructor
@@ -58,7 +58,7 @@ public class UserController extends ImejiController
      */
     public void create(User newUser) throws Exception
     {
-        imejiBean2RDF = new ImejiBean2RDF(ImejiJena.userModel);
+        imejiBean2RDF = new ImejiBean2RDF(Imeji.userModel);
         imejiBean2RDF.create(imejiBean2RDF.toList(newUser), user);
     }
 
@@ -70,7 +70,7 @@ public class UserController extends ImejiController
      */
     public void delete(User user) throws Exception
     {
-        imejiBean2RDF = new ImejiBean2RDF(ImejiJena.userModel);
+        imejiBean2RDF = new ImejiBean2RDF(Imeji.userModel);
         // remove user grant
         imejiBean2RDF.delete(new ArrayList<Object>(user.getGrants()), this.user);
         // remove user
@@ -86,11 +86,11 @@ public class UserController extends ImejiController
      */
     public User retrieve(String email) throws Exception
     {
-        imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.userModel);
+        imejiRDF2Bean = new ImejiRDF2Bean(Imeji.userModel);
         User loadedUser = (User)imejiRDF2Bean.load(ObjectHelper.getURI(User.class, email).toString(), user, new User());
         return loadedUser;
     }
-    
+
     /**
      * Retrieve a {@link User} according to its uri (id)
      * 
@@ -100,7 +100,7 @@ public class UserController extends ImejiController
      */
     public User retrieve(URI uri) throws Exception
     {
-        imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.userModel);
+        imejiRDF2Bean = new ImejiRDF2Bean(Imeji.userModel);
         User loadedUser = (User)imejiRDF2Bean.load(uri.toString(), user, new User());
         return loadedUser;
     }
@@ -113,7 +113,7 @@ public class UserController extends ImejiController
      */
     public void update(User user) throws Exception
     {
-        imejiBean2RDF = new ImejiBean2RDF(ImejiJena.userModel);
+        imejiBean2RDF = new ImejiBean2RDF(Imeji.userModel);
         imejiBean2RDF.update(imejiBean2RDF.toList(user), this.user);
     }
 
@@ -125,7 +125,7 @@ public class UserController extends ImejiController
      */
     public Collection<User> retrieveAll()
     {
-        imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.userModel);
+        imejiRDF2Bean = new ImejiRDF2Bean(Imeji.userModel);
         Collection<User> users = new ArrayList<User>();
         Search search = new Search(SearchType.ALL, null);
         List<String> uris = search.searchSimpleForQuery(SPARQLQueries.selectUserAll(), null);

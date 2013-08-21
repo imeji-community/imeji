@@ -29,7 +29,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectCachedLoader;
 
 /**
- * Facets for the images browsed within a collection
+ * Facets for the item browsed within a collection
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
@@ -55,7 +55,7 @@ public class CollectionFacets
         MetadataProfile profile = ObjectCachedLoader.loadProfile(col.getProfile());
         Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
         String baseURI = nav.getCollectionUrl() + ObjectHelper.getId(colURI) + "/" + nav.getBrowsePath() + "?q=";
-       // ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).init(profile);
+        // ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).init(profile);
         FacetURIFactory uriFactory = new FacetURIFactory(searchQuery);
         int count = 0;
         SearchResult allImages = retrieveAllImages(searchQuery);

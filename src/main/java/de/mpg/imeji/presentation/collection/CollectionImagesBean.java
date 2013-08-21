@@ -48,7 +48,7 @@ public class CollectionImagesBean extends ImagesBean
     private CollectionImeji collection;
     private Navigation navigation;
     private SearchQuery searchQuery = new SearchQuery();
-	
+
     /**
      * Initialize the bean
      */
@@ -63,14 +63,15 @@ public class CollectionImagesBean extends ImagesBean
      * Initialize the elements of the page
      * 
      * @return
-     * @throws Exception 
+     * @throws Exception
      */
     @Override
     public String getInitPage()
     {
         uri = ObjectHelper.getURI(CollectionImeji.class, id);
         collection = ObjectLoader.loadCollectionLazy(uri, sb.getUser());
-        ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).init(ObjectCachedLoader.loadProfile(collection.getProfile()));
+        ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).init(ObjectCachedLoader
+                .loadProfile(collection.getProfile()));
         ((AuthorizationBean)BeanHelper.getSessionBean(AuthorizationBean.class)).init(collection);
         browseInit();
         browseContext = getNavigationString() + id;
@@ -230,7 +231,7 @@ public class CollectionImagesBean extends ImagesBean
     }
 
     /**
-     * Check that at least one image is editable and if the profile is not empty
+     * Check that at least one item is editable and if the profile is not empty
      */
     @Override
     public boolean isImageEditable()
@@ -252,5 +253,4 @@ public class CollectionImagesBean extends ImagesBean
         Security security = new Security();
         return security.check(OperationsType.DELETE, sb.getUser(), collection);
     }
-
 }

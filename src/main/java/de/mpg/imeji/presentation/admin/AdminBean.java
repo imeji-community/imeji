@@ -4,17 +4,20 @@
 package de.mpg.imeji.presentation.admin;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 import de.mpg.imeji.logic.ImejiBean2RDF;
-import de.mpg.imeji.logic.ImejiJena;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.controller.ItemController;
@@ -73,6 +76,7 @@ public class AdminBean
         ItemController ic = new ItemController(sb.getUser());
         for (Item item : ic.retrieveAll())
         {
+            File tmp = null;
             try
             {
                 // Get escidoc url for all files
@@ -84,8 +88,12 @@ public class AdminBean
                 // Upload the file in the internal storage
                 if (out.toByteArray() != null)
                 {
-                    UploadResult result = internal.upload(item.getFilename(), out.toByteArray(),
+                    tmp = File.createTempFile("import",
+                            FilenameUtils.getExtension(item.getFilename()));
+                    FileUtils.writeByteArrayToFile(tmp, out.toByteArray());
+                    UploadResult result = internal.upload(item.getFilename(), tmp,
                             ObjectHelper.getId(item.getCollection()));
+                    FileUtils.deleteQuietly(tmp);
                     item.setChecksum(result.getChecksum());
                     item.setFullImageUrl(URI.create(result.getOrginal()));
                     item.setWebImageUrl(URI.create(result.getWeb()));
@@ -102,6 +110,10 @@ public class AdminBean
             catch (Exception e)
             {
                 logger.error("Error importing item " + item.getId(), e);
+            }
+            finally
+            {
+                FileUtils.deleteQuietly(tmp);
             }
         }
     }
@@ -125,37 +137,37 @@ public class AdminBean
      */
     public void reIndex() throws Exception
     {
-//        List<Object> toReindex = new ArrayList<Object>();
-//        ImejiBean2RDF imejiBean2RDF;
-//        // load items
-//        ItemController ic = new ItemController();
-//        for (Item item : ic.retrieveAll())
-//        {
-//            item.indexFulltext();
-//            toReindex.add(item);
-//        }
-//        imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
-//        imejiBean2RDF.updateLazy(toReindex, sb.getUser());
-//        // Load collections
-//        toReindex = new ArrayList<Object>();
-//        CollectionController cc = new CollectionController();
-//        for (CollectionImeji c : cc.retrieveAllCollections())
-//        {
-//            c.indexFulltext();
-//            toReindex.add(c);
-//        }
-//        imejiBean2RDF = new ImejiBean2RDF(ImejiJena.collectionModel);
-//        imejiBean2RDF.updateLazy(toReindex, sb.getUser());
-//        // Load albums
-//        toReindex = new ArrayList<Object>();
-//        AlbumController ac = new AlbumController();
-//        for (Album a : ac.retrieveAll())
-//        {
-//            a.indexFulltext();
-//            toReindex.add(a);
-//        }
-//        imejiBean2RDF = new ImejiBean2RDF(ImejiJena.albumModel);
-//        imejiBean2RDF.updateLazy(toReindex, sb.getUser());
+        // List<Object> toReindex = new ArrayList<Object>();
+        // ImejiBean2RDF imejiBean2RDF;
+        // // load items
+        // ItemController ic = new ItemController();
+        // for (Item item : ic.retrieveAll())
+        // {
+        // item.indexFulltext();
+        // toReindex.add(item);
+        // }
+        // imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
+        // imejiBean2RDF.updateLazy(toReindex, sb.getUser());
+        // // Load collections
+        // toReindex = new ArrayList<Object>();
+        // CollectionController cc = new CollectionController();
+        // for (CollectionImeji c : cc.retrieveAllCollections())
+        // {
+        // c.indexFulltext();
+        // toReindex.add(c);
+        // }
+        // imejiBean2RDF = new ImejiBean2RDF(ImejiJena.collectionModel);
+        // imejiBean2RDF.updateLazy(toReindex, sb.getUser());
+        // // Load albums
+        // toReindex = new ArrayList<Object>();
+        // AlbumController ac = new AlbumController();
+        // for (Album a : ac.retrieveAll())
+        // {
+        // a.indexFulltext();
+        // toReindex.add(a);
+        // }
+        // imejiBean2RDF = new ImejiBean2RDF(ImejiJena.albumModel);
+        // imejiBean2RDF.updateLazy(toReindex, sb.getUser());
         Index index = new Index();
         index.reindex();
     }
@@ -216,7 +228,7 @@ public class AdminBean
             String[] s = SortHelper.SORT_VALUE_PATTERN.split(uri);
             List<String> l = new ArrayList<String>();
             l.add(s[0]);
-            removeResources(l, ImejiJena.imageModel, MetadataFactory.createMetadata(s[1]));
+            removeResources(l, Imeji.imageModel, MetadataFactory.createMetadata(s[1]));
         }
         logger.info("...found " + uris.size());
     }
@@ -232,7 +244,7 @@ public class AdminBean
         Search search = new Search(SearchType.ALL, null);
         List<String> uris = search.searchSimpleForQuery(SPARQLQueries.selectStatementUnbounded(), null);
         logger.info("...found " + uris.size());
-        removeResources(uris, ImejiJena.profileModel, new Statement());
+        removeResources(uris, Imeji.profileModel, new Statement());
     }
 
     /**
@@ -246,7 +258,7 @@ public class AdminBean
         Search search = new Search(SearchType.ALL, null);
         List<String> uris = search.searchSimpleForQuery(SPARQLQueries.selectGrantUnbounded(), null);
         logger.info("...found " + uris.size());
-        removeResources(uris, ImejiJena.userModel, new Grant());
+        removeResources(uris, Imeji.userModel, new Grant());
     }
 
     /**

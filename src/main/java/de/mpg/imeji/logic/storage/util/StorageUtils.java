@@ -29,16 +29,25 @@
 package de.mpg.imeji.logic.storage.util;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
-import javax.imageio.stream.ImageOutputStream;
+import java.net.URL;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
+import org.apache.tika.Tika;
+import org.apache.tika.mime.MimeType;
+import org.apache.tika.mime.MimeTypeException;
+import org.apache.tika.mime.MimeTypes;
+import org.apache.tools.ant.taskdefs.Get;
 
 import de.mpg.imeji.presentation.util.ProxyHelper;
 
@@ -51,6 +60,12 @@ import de.mpg.imeji.presentation.util.ProxyHelper;
  */
 public class StorageUtils
 {
+    private static Logger logger = Logger.getLogger(StorageUtils.class);
+    /**
+     * The generic mime-type, when no mime-type is known
+     */
+    public final static String DEFAULT_MIME_TYPE = "application/octet-stream";
+
     /**
      * Transform an {@link InputStream} to a {@link Byte} array
      * 
@@ -58,27 +73,6 @@ public class StorageUtils
      * @return
      */
     public static byte[] toBytes(InputStream stream)
-    {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        int b;
-        try
-        {
-            while ((b = stream.read()) != -1)
-            {
-                bos.write(b);
-            }
-            byte[] ba = bos.toByteArray();
-            bos.flush();
-            bos.close();
-            return ba;
-        }
-        catch (IOException e)
-        {
-            throw new RuntimeException("Error transforming inputstream to bytearryoutputstream", e);
-        }
-    }
-
-    public static byte[] toBytes(ImageOutputStream stream)
     {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         int b;
@@ -120,7 +114,7 @@ public class StorageUtils
             out.flush();
             if (close)
             {
-            	out.close();
+                out.close();
             }
         }
         catch (Exception e)
@@ -144,6 +138,13 @@ public class StorageUtils
         return new HttpClient(conn);
     }
 
+    /**
+     * Return a {@link GetMethod} ready to use
+     * 
+     * @param client
+     * @param url
+     * @return
+     */
     public static GetMethod newGetMethod(HttpClient client, String url)
     {
         GetMethod method = new GetMethod(url);
@@ -154,43 +155,201 @@ public class StorageUtils
     }
 
     /**
-     * Return the Mime Type of a file according to its format (i.e. file extension)
+     * True if the Filename has an extension
      * 
-     * @param format
+     * @param filename
      * @return
      */
-    public static String getMimeType(String format)
+    public static boolean hasExtension(String filename)
     {
-        format = format.toLowerCase();
-        if ("tif".equals(format))
+        return !FilenameUtils.getExtension(filename).equals("");
+    }
+
+    /**
+     * Guess the extension of a {@link File}
+     * 
+     * @param file
+     * @return
+     */
+    public static String guessExtension(File file)
+    {
+        try
         {
-            return "image/"+"tiff";
+            Tika t = new Tika();
+            MimeTypes allTypes = MimeTypes.getDefaultMimeTypes();
+            MimeType type = allTypes.forName(t.detect(file));
+            return type.getExtension();
         }
-        else if ("jpg".equals(format))
+        catch (Exception e)
+        {
+            logger.error("Error guessing file format", e);
+        }
+        return "";
+    }
+
+    /**
+     * True if 2 filename extension are the same (jpeg = jpeg = JPG, etc.)
+     * 
+     * @param ext1
+     * @param ext2
+     * @return
+     */
+    public static boolean compareExtension(String ext1, String ext2)
+    {
+        if ("".equals(ext1.trim()) || "".equals(ext2.trim()))
+            return false;
+        String mimeType1 = getMimeType(ext1.trim());
+        String mimeType2 = getMimeType(ext2.trim());
+        if (DEFAULT_MIME_TYPE.equals(mimeType1) && DEFAULT_MIME_TYPE.equals(mimeType2))
+            return ext1.equalsIgnoreCase(ext2);
+        return mimeType1.equals(mimeType2);
+    }
+
+    /**
+     * Return the Mime Type of a file according to its format (i.e. file extension). <br/>
+     * The File extension can be found via {@link FilenameUtils}
+     * 
+     * @param extension
+     * @return
+     */
+    public static String getMimeType(String extension)
+    {
+        extension = extension.toLowerCase();
+        if ("tif".equals(extension))
+        {
+            return "image/tiff";
+        }
+        else if ("jpg".equals(extension) || "jpeg".equals(extension))
         {
             return "image/jpeg";
         }
-        else if ("png".equals(format))
+        else if ("png".equals(extension))
         {
             return "image/png";
         }
-        else if ("png".equals(format))
+        else if ("bmp".equals(extension))
         {
-            return "image/png";
+            return "image/bmp";
         }
-        else if ("gif".equals(format))
+        else if ("gif".equals(extension))
         {
             return "image/gif";
         }
-        else if ("mov".equals(format))
+        else if ("pdn".equals(extension))
+        {
+            return "image/x-paintnet";
+        }
+        else if ("mov".equals(extension))
         {
             return "video/quicktime";
         }
-        else if ("flv".equals(format))
+        else if ("avi".equals(extension))
         {
-            //still not support directly played in browser
-        	return "video/x-flv";
+            return "video/x-msvideo";
         }
-        return "video/" + format;
+        else if ("3gp".equals(extension))
+        {
+            return "video/3gpp";
+        }
+        else if("eps".equals(extension))
+        {
+            return "application/eps";
+        }
+        else if ("ts".equals(extension))
+        {
+            return "video/MP2T";
+        }
+        else if ("svg".equals(extension))
+        {
+            return "image/svg+xml";
+        }
+        else if ("jp2".equals(extension) || "j2k".equals(extension) || "jpf".equals(extension))
+        {
+            return "image/jp2";
+        }
+        else if ("mj2".equals(extension))
+        {
+            return "image/mj2";
+        }
+        else if ("jpf".equals(extension))
+        {
+            return "image/jpf";
+        }
+        else if ("jpx".equals(extension))
+        {
+            return "image/jpx";
+        }
+        else if ("mpg".equals(extension))
+        {
+            return "video/mpeg";
+        }
+        else if ("nef".equals(extension))
+        {
+            return "image/x-nikon-nef";
+        }
+        else if ("mp4".equals(extension))
+        {
+            return "video/mp4";
+        }
+        else if ("wmv".equals(extension))
+        {
+            return "video/x-ms-wmv";
+        }
+        else if ("webm".equals(extension))
+        {
+            return "video/webm";
+        }
+        else if ("ogg".equals(extension))
+        {
+            return "video/ogg";
+        }
+        else if ("flv".equals(extension))
+        {
+            // still not support directly played in browser
+            return "video/x-flv";
+        }
+        else if ("pdf".equals(extension))
+        {
+            return "application/pdf";
+        }
+        else if ("fit".equals(extension) || "fits".equals(extension))
+        {
+            return "application/fits";
+        }
+        else if ("mp3".equals(extension) || "mpeg".equals(extension))
+        {
+            return "audio/mpeg";
+        }
+        else if ("wav".equals(extension))
+        {
+            return "audio/x-wav";
+        }
+        else if ("wma".equals(extension))
+        {
+            return "audio/x-ms-wma";
+        }
+        try
+        {
+            // If not found, Try with tika
+            MimeType type = MimeTypes.getDefaultMimeTypes().forName("name." + extension);
+            return type.getName();
+        }
+        catch (MimeTypeException e)
+        {
+            // If still not found, return the default one
+            return "application/octet-stream";
+        }
+    }
+
+    /**
+     * Return the bytes from an url
+     * 
+     * @param url
+     * @return
+     * @throws FileNotFoundException
+     */
+    public static byte[] getBytes(URL url) throws FileNotFoundException
+    {
+        return StorageUtils.toBytes(new FileInputStream(new File(url.getFile())));
     }
 }

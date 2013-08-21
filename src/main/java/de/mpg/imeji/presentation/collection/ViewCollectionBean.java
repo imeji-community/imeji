@@ -9,6 +9,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Organization;
@@ -62,7 +63,7 @@ public class ViewCollectionBean extends CollectionBean
                 ((AuthorizationBean)BeanHelper.getSessionBean(AuthorizationBean.class)).init(getCollection());
                 setProfile(ObjectLoader.loadProfile(getCollection().getProfile(), user));
                 setProfileId(ObjectHelper.getId(getProfile().getId()));
-                super.setTab(TabType.COLLECTION);
+                // super.setTab(TabType.COLLECTION);
                 persons = new ArrayList<Person>();
                 for (Person p : super.getCollection().getMetadata().getPersons())
                 {
@@ -131,5 +132,35 @@ public class ViewCollectionBean extends CollectionBean
         if (this.getCollection() == null || this.getCollection().getMetadata().getDescription() == null)
             return "";
         return this.getCollection().getMetadata().getDescription().replaceAll("\n", "<br/>");
+    }
+
+    /**
+     * Return the {@link User} having uploaded the file for this item
+     * 
+     * @return
+     * @throws Exception
+     */
+    public User getCollectionCreator() throws Exception
+    {
+        User user = null;
+        UserController uc = new UserController();
+        user = uc.retrieve(super.getCollection().getCreatedBy());
+        return user;
+    }
+
+    public int getCollectionNumberOfItems()
+    {
+        int num = 0;
+        num = super.getCollection().getImages().size();
+        return num;
+    }
+
+    public String getCitation()
+    {
+        String title = super.getCollection().getMetadata().getTitle();
+        String author = this.getPersonString();
+        String url = super.getPageUrl();
+        String citation = title + " " + sessionBean.getLabel("from") + " <i>" + author + "</i></br>" + url;
+        return citation;
     }
 }

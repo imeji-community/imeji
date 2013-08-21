@@ -256,5 +256,4 @@
 		<converter-id>DoubleConverter</converter-id>
 		<converter-class>de.mpg.imeji.presentation.converter.DoubleConverter</converter-class>
 	</converter>
-
 </faces-config>

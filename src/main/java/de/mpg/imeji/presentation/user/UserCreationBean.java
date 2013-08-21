@@ -54,7 +54,7 @@ public class UserCreationBean
         {
             try
             {
-                if (userAlreadyExists())
+                if (userAlreadyExists(user))
                 {
                     BeanHelper.error(sb.getMessage("error_user_already_exists"));
                 }
@@ -97,7 +97,7 @@ public class UserCreationBean
      * 
      * @return
      */
-    private boolean isValidEmail(String email)
+    public static boolean isValidEmail(String email)
     {
         String regexEmailMatch = "([^.@]+)(\\.[^.@]+)*@([^.@]+\\.)+([^.@]+)";
         return email.matches(regexEmailMatch);
@@ -109,11 +109,12 @@ public class UserCreationBean
      * @return
      * @throws Exception
      */
-    private boolean userAlreadyExists() throws Exception
+    public static boolean userAlreadyExists(User user) throws Exception
     {
         try
         {
-            UserController uc = new UserController(sb.getUser());
+            SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+            UserController uc = new UserController(session.getUser());
             uc.retrieve(user.getEmail());
             return true;
         }

@@ -29,17 +29,19 @@
 package de.mpg.imeji.logic.storage.internal;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.storage.Storage.FileResolution;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.storage.administrator.impl.InternalStorageAdministrator;
-import de.mpg.imeji.logic.storage.util.ImageUtils;
-import de.mpg.imeji.logic.storage.util.MediaUtils;
+import de.mpg.imeji.logic.storage.transform.ImageGeneratorManager;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.StringHelper;
@@ -93,21 +95,20 @@ public class InternalStorageManager
     /**
      * Add a new file to the internal storage
      * 
-     * @param bytes
+     * @param file
      * @param filename
      * @return
      */
-    public InternalStorageItem addFile(byte[] bytes, String filename, String collectionId)
+    public InternalStorageItem addFile(File file, String filename, String collectionId)
     {
         try
         {
             InternalStorageItem item = generateInternalStorageItem(filename, collectionId);
-            return writeItemFiles(item, bytes);
+            return writeItemFiles(item, file);
         }
         catch (Exception e)
         {
-            throw new RuntimeException("Error writing file in internal storage " + storagePath + " for file "
-                    + StringHelper.normalizeFilename(filename), e);
+            throw new RuntimeException(e);
         }
     }
 
@@ -136,7 +137,7 @@ public class InternalStorageManager
      */
     public String transformUrlToPath(String url)
     {
-        String filename = getFileName(url, StringHelper.urlSeparator);
+        // String filename = getFileName(url, StringHelper.urlSeparator);
         return url.replace(storageUrl, storagePath).replace(StringHelper.urlSeparator, StringHelper.fileSeparator);
         // .replace(filename, StringHelper.normalizeFilename(filename));
     }
@@ -173,6 +174,16 @@ public class InternalStorageManager
     public String getStorageUrl()
     {
         return storageUrl;
+    }
+
+    /**
+     * Get the storage path
+     * 
+     * @return
+     */
+    public String getStoragePath()
+    {
+        return storagePath;
     }
 
     /**
@@ -248,9 +259,10 @@ public class InternalStorageManager
     private String generateUrl(String id, String filename, FileResolution resolution)
     {
         filename = StringHelper.normalizeFilename(filename);
-        if (resolution != FileResolution.ORIGINAL) {
-			filename = filename + ".jpg";
-		}
+        if (resolution != FileResolution.ORIGINAL)
+        {
+            filename = filename + ".jpg";
+        }
         return storageUrl + id + StringHelper.urlSeparator + resolution.name().toLowerCase()
                 + StringHelper.urlSeparator + filename;
     }
@@ -263,36 +275,46 @@ public class InternalStorageManager
      * @throws IOException
      * @throws Exception
      */
-    private InternalStorageItem writeItemFiles(InternalStorageItem item, byte[] bytes) throws IOException, Exception
+    private InternalStorageItem writeItemFiles(InternalStorageItem item, File file) throws IOException
     {
-    	boolean enableImagemagick=Boolean.parseBoolean(PropertyReader.getProperty("imeji.imagemagick.enable"));
-    	if(enableImagemagick){
-    		String orginalPath = transformUrlToPath(item.getOriginalUrl());
-    		write(bytes, orginalPath);
-    		if (MediaUtils.verifyMediaFormatSupport(orginalPath)) {
-    			String mimeType = MediaUtils.getMimeType(orginalPath);
-        		String webPath = transformUrlToPath(item.getWebUrl());
-        		String thumbnailPath = transformUrlToPath(item
-        				.getThumbnailUrl());
-        		MediaUtils.resizeImage(mimeType,orginalPath, webPath,
-        				FileResolution.WEB);
-        		MediaUtils.resizeImage(mimeType,orginalPath, thumbnailPath,
-        				FileResolution.THUMBNAIL);
-    		}
-    		else {
-    			//YE: TODO set default image for the file(e.g, with text "thumbnail not supported" )
-    		}
-    	}
-    	else{
-    		write(bytes, transformUrlToPath(item.getOriginalUrl()));
-    		write(ImageUtils.transformImage(bytes, FileResolution.WEB,
-    				StorageUtils.getMimeType(StringHelper.getFileExtension(item.getFileName()))),
-    				transformUrlToPath(item.getWebUrl()));
-    		write(ImageUtils.transformImage(bytes, FileResolution.THUMBNAIL,
-    				StorageUtils.getMimeType(StringHelper.getFileExtension(item.getFileName()))),
-    				transformUrlToPath(item.getThumbnailUrl()));
-    	}
-		return item;
+        ImageGeneratorManager generatorManager = new ImageGeneratorManager();
+        String extension = FilenameUtils.getExtension(item.getFileName());
+        // write web resolution file in storage
+        String webResolutionPath = write(generatorManager.generateWebResolution(file, extension),
+                transformUrlToPath(item.getWebUrl()));
+        // Use Web resolution to generate Thumbnail (avoid to read the original file again)
+        write(generatorManager
+                .generateThumbnail(new File(webResolutionPath), extension.equals("gif") ? "gif" : "jpg"),
+                transformUrlToPath(item.getThumbnailUrl()));
+        // write original file in storage: simple copy the tmp file to the correct path
+        copy(file, transformUrlToPath(item.getOriginalUrl()));
+        return item;
+    }
+
+    /**
+     * Copy the file in the filesystem
+     * 
+     * @param bytes
+     * @param path
+     * @return
+     * @throws IOException
+     */
+    private String copy(File toCopy, String path) throws IOException
+    {
+        File dest = new File(path);
+        if (!dest.exists())
+        {
+            dest.getParentFile().mkdirs();
+            dest.createNewFile();
+            FileInputStream fis = new FileInputStream(toCopy);
+            FileOutputStream fos = new FileOutputStream(dest);
+            StorageUtils.writeInOut(fis, fos, true);
+            return dest.getAbsolutePath();
+        }
+        else
+        {
+            throw new RuntimeException("File " + path + " already exists in internal storage!");
+        }
     }
 
     /**

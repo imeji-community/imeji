@@ -13,7 +13,6 @@ import java.util.Map;
 
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
-
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.controller.CollectionController;

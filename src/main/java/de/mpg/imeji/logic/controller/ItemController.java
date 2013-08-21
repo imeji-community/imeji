@@ -13,7 +13,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.ImejiBean2RDF;
-import de.mpg.imeji.logic.ImejiJena;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.search.Search;
@@ -46,8 +46,8 @@ import de.mpg.j2j.helper.J2JHelper;
 public class ItemController extends ImejiController
 {
     private static Logger logger = Logger.getLogger(ItemController.class);
-    private static ImejiRDF2Bean imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.imageModel);
-    private static ImejiBean2RDF imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
+    private static ImejiRDF2Bean imejiRDF2Bean = new ImejiRDF2Bean(Imeji.imageModel);
+    private static ImejiBean2RDF imejiBean2RDF = new ImejiBean2RDF(Imeji.imageModel);
 
     /**
      * Controller constructor
@@ -88,7 +88,7 @@ public class ItemController extends ImejiController
     {
         CollectionController cc = new CollectionController(user);
         CollectionImeji ic = cc.retrieve(coll, user);
-        imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
+        imejiBean2RDF = new ImejiBean2RDF(Imeji.imageModel);
         for (Item img : items)
         {
             writeCreateProperties(img, user);
@@ -133,7 +133,7 @@ public class ItemController extends ImejiController
     @Deprecated
     public void update(Collection<Item> items) throws Exception
     {
-        imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
+        imejiBean2RDF = new ImejiBean2RDF(Imeji.imageModel);
         List<Object> imBeans = new ArrayList<Object>();
         for (Item item : items)
         {
@@ -166,7 +166,7 @@ public class ItemController extends ImejiController
      */
     public void update(Collection<Item> items, User user) throws Exception
     {
-        imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
+        imejiBean2RDF = new ImejiBean2RDF(Imeji.imageModel);
         List<Object> imBeans = new ArrayList<Object>();
         for (Item item : items)
         {
@@ -203,7 +203,7 @@ public class ItemController extends ImejiController
      */
     public Item retrieve(URI imgUri) throws Exception
     {
-        imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.imageModel);
+        imejiRDF2Bean = new ImejiRDF2Bean(Imeji.imageModel);
         return (Item)imejiRDF2Bean.load(imgUri.toString(), user, new Item());
     }
 
@@ -214,8 +214,8 @@ public class ItemController extends ImejiController
      */
     public Collection<Item> retrieveAll()
     {
-        imejiRDF2Bean = new ImejiRDF2Bean(ImejiJena.imageModel);
-        List<String> uris = ImejiSPARQL.exec(SPARQLQueries.selectItemAll(), ImejiJena.imageModel);
+        imejiRDF2Bean = new ImejiRDF2Bean(Imeji.imageModel);
+        List<String> uris = ImejiSPARQL.exec(SPARQLQueries.selectItemAll(), Imeji.imageModel);
         return loadItems(uris, -1, 0);
     }
 
@@ -278,7 +278,7 @@ public class ItemController extends ImejiController
         }
         catch (Exception e)
         {
-            throw new RuntimeException("Error loading images:", e);
+            throw new RuntimeException("Error loading items:", e);
         }
     }
 

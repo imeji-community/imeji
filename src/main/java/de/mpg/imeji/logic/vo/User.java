@@ -6,7 +6,6 @@ package de.mpg.imeji.logic.vo;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
-
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jList;
@@ -37,6 +36,25 @@ public class User
     @j2jList("http://imeji.org/terms/grant")
     private Collection<Grant> grants = new ArrayList<Grant>();
     private URI id;
+
+    /**
+     * Return a clone of this user, with a new email
+     * 
+     * @param email
+     * @return
+     */
+    public User clone(String email)
+    {
+        User clone = new User();
+        clone.setEmail(email);
+        clone.encryptedPassword = encryptedPassword;
+        clone.grants = new ArrayList<Grant>();
+        for (Grant g : grants)
+            clone.grants.add(new Grant(g.asGrantType(), g.getGrantFor()));
+        clone.name = name;
+        clone.nick = nick;
+        return clone;
+    }
 
     public String getEmail()
     {

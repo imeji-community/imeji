@@ -126,6 +126,7 @@ public class Facet
         return ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).getInternationalizedLabels().get(
                 metadataURI);
     }
+
     /**
      * True if the current {@link Facet} is a negation facet
      * 

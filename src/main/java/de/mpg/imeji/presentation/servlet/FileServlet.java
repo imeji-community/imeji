@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.search.Search;
@@ -22,6 +23,7 @@ import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.StorageController;
+import de.mpg.imeji.logic.storage.internal.InternalStorageManager;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.StringHelper;
@@ -30,6 +32,7 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.ObjectLoader;
+import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
  * The Servlet to Read files from imeji {@link Storage}
@@ -46,6 +49,15 @@ public class FileServlet extends HttpServlet
     private Security security;
     private Navigation navivation;
     private String domain;
+    private String digilibUrl;
+    /**
+     * If property imeji.storage.path= /data/imeji/files/ then, internalStorageRoot = files
+     */
+    private String internalStorageRoot;
+    /**
+     * The path for this servlet as defined in the web.xml
+     */
+    public static final String SERVLET_PATH = "file";
 
     @Override
     public void init()
@@ -58,6 +70,12 @@ public class FileServlet extends HttpServlet
             navivation = new Navigation();
             domain = StringHelper.normalizeURI(navivation.getDomain());
             domain = domain.substring(0, domain.length() - 1);
+            digilibUrl = PropertyReader.getProperty("digilib.imeji.instance.url");
+            if (digilibUrl != null && !digilibUrl.isEmpty())
+                digilibUrl = StringHelper.normalizeURI(digilibUrl);
+            InternalStorageManager ism = new InternalStorageManager();
+            internalStorageRoot = FilenameUtils
+                    .getBaseName(FilenameUtils.normalizeNoEndSeparator(ism.getStoragePath()));
         }
         catch (Exception e)
         {
@@ -72,31 +90,22 @@ public class FileServlet extends HttpServlet
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
         String url = req.getParameter("id");
-        if (req.getRequestedSessionId() != null)
+        if (url == null)
         {
-            if (url == null)
-            {
-                // if the id parameter is null, interpret the whole url as a direct to the file (can only work if the
-                // internal storage is used)
-                url = domain + req.getRequestURI();
-            }
-            resp.setContentType(StorageUtils.getMimeType(StringHelper.getFileExtension(url)));
-            SessionBean session = getSession(req);
-            if (security.check(OperationsType.READ, getUser(session), loadCollection(url, session)))
-            {
-                storageController.read(url, resp.getOutputStream(), false);
-            }
-            else
-            {
-                resp.sendError(403, "imeji security: You are not allowed to view this file");
-            }
+            // if the id parameter is null, interpret the whole url as a direct to the file (can only work if the
+            // internal storage is used)
+            url = domain + req.getRequestURI();
+        }
+        resp.setContentType(StorageUtils.getMimeType(StringHelper.getFileExtension(url)));
+        SessionBean session = getSession(req);
+        if (security.check(OperationsType.READ, getUser(session), loadCollection(url, session)))
+        {
+            //resp.setHeader("Content-disposition", "filename=imejiFile");
+            storageController.read(url, resp.getOutputStream(), true);
         }
         else
         {
-            // Avoid to reset the session. If the session in request has no id, this means there has been a problem
-            // (because of some redirect?). To avoid the session to be killed, this make a redirect to the correct page,
-            // where the session should be non null
-            resp.sendRedirect(req.getRequestURL().toString() + "?id=" + url);
+            resp.sendError(403, "imeji security: You are not allowed to view this file");
         }
     }
 
@@ -176,7 +185,7 @@ public class FileServlet extends HttpServlet
      */
     private SessionBean getSession(HttpServletRequest req)
     {
-        return (SessionBean)req.getSession(false).getAttribute(SessionBean.class.getSimpleName());
+        return (SessionBean)req.getSession(true).getAttribute(SessionBean.class.getSimpleName());
     }
 
     /**

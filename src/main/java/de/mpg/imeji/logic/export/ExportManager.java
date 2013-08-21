@@ -83,7 +83,7 @@ public class ExportManager
      * 
      * @param searchQuery
      * @return
-     * @throws IOException 
+     * @throws IOException
      */
     public SearchResult search() throws IOException
     {

@@ -50,14 +50,15 @@
 						</h:panelGroup>
 						<!-- COMMON METADATA -->
 						<h:panelGroup id="commonMetadata" styleClass="preListHeader full_area0_p0">
-							<h:panelGroup  styleClass="quad_area0_p0 huge_marginLExcl">
-								<ui:repeat id="metadata" var="md" value="#{EditImageMetadataBean.editorItem.metadata}"  varStatus="indexMetadata">
-		        					<h:panelGroup rendered="#{md.statement.id == EditImageMetadataBean.statement.id or EditImageMetadataBean.statement.id == md.lastParent}">
+							<h:panelGroup  styleClass="quad_area0_p0 xLarge_marginLExcl">
+								<ui:repeat id="metadata" var="md" value="#{EditImageMetadataBean.editorItem.mds.tree.list}"  varStatus="indexMetadata">
+		        					<h:panelGroup rendered="#{EditImageMetadataBean.isEditableStatement(md.statement)}">
 		        						<!-- Field -->
 		        						<ui:include src="./picturesPages/ui/MetadataInput.xhtml">
 											<ui:param name="metadata" value="#{md}"/>
 											<ui:param name="statement" value="#{md.statement}"/>
 											<ui:param name="areaClass" value="quad_txtArea"/>
+											<ui:param name="hideLabel" value="false"/>
 										</ui:include>
 		        					</h:panelGroup>
 		        				</ui:repeat>
@@ -91,35 +92,32 @@
 							</h:panelGroup>
 						</h:panelGroup>
 					</h:panelGroup>
-					<!-- IMAGES -->
+					<!-- Items -->
 					<h:panelGroup styleClass="full_area0 " rendered="#{EditImageMetadataBean.profileWithStatements}">	
 			        	<h:panelGroup id="imagesMetadata" layout="block" styleClass="free_area0 endline" rendered="#{EditImageMetadataBean.editType == 'selected'}">
-		        			<ui:repeat id="imagesList" var="image" value="#{EditImageMetadataBean.editor.items}" varStatus="indexImage">
+		        			<ui:repeat id="imagesList" var="item" value="#{EditImageMetadataBean.editor.items}" varStatus="indexImage">
 		        				<h:panelGroup styleClass="full_area0_p0 preListHeader" >
-			        				<h:panelGroup styleClass="huge_area0_p8">
-										<h:graphicImage alt="#{image.filename}" id="picThumbResolutionBrowse" url="#{Navigation.applicationUrl}file?id=#{image.thumbnail}"/>
+			        				<h:panelGroup styleClass="xLarge_area0_p8">
+										<h:graphicImage alt="#{item.filename}" id="picThumbResolutionBrowse" url="#{Navigation.applicationUrl}file?id=#{item.thumbnail}"/>
 			        				</h:panelGroup>
-			        				<h:panelGroup styleClass="half_area0" rendered="#{image.profile == EditImageMetadataBean.profile.id}">
-				        				<ui:repeat id="metadata" var="md" value="#{image.metadata}"  varStatus="indexMetadata">
-				        					<h:panelGroup rendered="#{md.statement.id == EditImageMetadataBean.statement.id or EditImageMetadataBean.statement.id == md.lastParent}">
+			        				<h:panelGroup styleClass="half_area0" rendered="#{item.profile == EditImageMetadataBean.profile.id}">
+				        				<ui:repeat id="metadata" var="md" value="#{item.mds.tree.list}"  varStatus="indexMetadata">
+				        					<h:panelGroup rendered="#{EditImageMetadataBean.isEditableStatement(md.statement)}">
 				        						<!-- Field -->
 				        						<ui:include src="./picturesPages/ui/MetadataInput.xhtml">
 													<ui:param name="metadata" value="#{md}"/>
 													<ui:param name="statement" value="#{md.statement}"/>
 													<ui:param name="areaClass" value="quad_txtArea"/>
+													<ui:param name="hideLabel" value="false"/>
 												</ui:include>
 												<!-- BUTTONS -->
 												<h:panelGroup layout="block">
-													<h:commandLink id="add" styleClass="small_label" action="#{EditImageMetadataBean.addMetadata}" value="#{lbl.add}" rendered="#{md.statement.maxOccurs != '1'}">
-														<f:setPropertyActionListener value="#{indexMetadata.index}" target="#{EditImageMetadataBean.mdPosition}" />
-														<f:setPropertyActionListener value="#{indexImage.index}" target="#{EditImageMetadataBean.imagePosition}" />
+													<h:commandLink id="add" styleClass="small_label" action="#{item.addMetadata(md)}" value="#{lbl.add}" rendered="#{md.statement.maxOccurs != '1'}">
 														<f:ajax execute="@form" render="@form" />
 													</h:commandLink>
-													<h:commandLink  id="remove" styleClass="small_label" action="#{EditImageMetadataBean.removeMetadata}" value="#{lbl.remove}" rendered="#{md.statement.maxOccurs != '1'}">
-														<f:setPropertyActionListener value="#{indexMetadata.index}" target="#{EditImageMetadataBean.mdPosition}" />
-														<f:setPropertyActionListener value="#{indexImage.index}" target="#{EditImageMetadataBean.imagePosition}" />
+													<h:commandLink  id="remove" styleClass="small_label" action="#{item.removeMetadata(md)}" value="#{lbl.remove}" rendered="#{md.statement.maxOccurs != '1'}">
 														<f:ajax execute="@form" render="@form" />
-													</h:commandLink>	
+													</h:commandLink>
 												</h:panelGroup>
 				        					</h:panelGroup>
 				        				</ui:repeat>

@@ -40,7 +40,7 @@ import java.util.zip.ZipOutputStream;
 
 import org.apache.http.client.HttpResponseException;
 
-import de.mpg.imeji.logic.ImejiJena;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.export.Export;
 import de.mpg.imeji.logic.search.SearchResult;
@@ -72,7 +72,7 @@ public class ZIPExport extends Export
         boolean supported = false;
         if ("image".equalsIgnoreCase(type))
         {
-            modelURI = ImejiJena.imageModel;
+            modelURI = Imeji.imageModel;
             supported = true;
         }
         if (!supported)

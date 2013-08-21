@@ -7,14 +7,14 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.im4java.core.ConvertCmd;
 import org.im4java.core.IM4JavaException;
 import org.im4java.core.IMOperation;
 import org.im4java.core.Info;
-import org.im4java.core.InfoException;
 
-import de.mpg.imeji.logic.storage.Storage.FileResolution;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -27,18 +27,14 @@ import de.mpg.imeji.presentation.util.PropertyReader;
 public class MediaUtils
 {
     private static Logger logger = Logger.getLogger(MediaUtils.class);
-    /**
-     * If true, the rescale will keep the better quality of the images
-     */
-    private static boolean RESCALE_HIGH_QUALITY = true;
 
-    public static void main(String[] args) throws IOException, URISyntaxException
-    {
-        verifyImageMagickInstallation();
-    }
-    
-    /*
+    /**
+     * Return true if imagemagick is installed on the current system<br/>
      * TODO Ye: Execute when upload page shows and show install ImageMagick tips
+     * 
+     * @return
+     * @throws IOException
+     * @throws URISyntaxException
      */
     public static boolean verifyImageMagickInstallation() throws IOException, URISyntaxException
     {
@@ -55,135 +51,148 @@ public class MediaUtils
         }
         catch (Exception e)
         {
-            // TODO Auto-generated catch block
-            // org.im4java.core.CommandException: java.io.FileNotFoundException:
-            // convert
-            // System.out.println("Not installed: " + e);
+            logger.debug("imagemagick not installed");
             return false;
         }
         return true;
     }
 
-    public static boolean verifyMediaFormatSupport(String filename)
-    {
-        try
-        {
-            new Info(filename, true);
-            // System.out.println("extension:"+extension.getImageFormat()+"|| "+extension.getImageHeight()+"||"+extension.getImageWidth());
-        }
-        catch (Exception e)
-        {
-            // TODO Auto-generated catch block
-            System.out.println("Not support format: " + e + "||" + filename);
-            return false;
-        }
-        return true;
-    }
-
-    public static Info getMediaInfo(String filename) throws InfoException
-    {
-        Info mediaInfo = new Info(filename, true);
-        // System.out.println("extension:"+extension.getImageFormat()+"|| "+extension.getImageHeight()+"||"+extension.getImageWidth());
-        return mediaInfo;
-    }
-
-    /*
-     * if mimeType is kind of video types, then extract first frame
+    /**
+     * User imagemagick to convert any image into a jpeg
+     * 
+     * @param bytes
+     * @param extension
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws InterruptedException
+     * @throws IM4JavaException
      */
-    public static void resizeImage(String mimeType, String orginalPath, String targetPath, FileResolution resolution)
-            throws IOException, URISyntaxException
+    public static byte[] convertToJPEG(File tmp, String extension) throws IOException, URISyntaxException,
+            InterruptedException, IM4JavaException
     {
-        File file = new File(orginalPath);
-        // the dir is required to exist in advance
-        file.getParentFile().mkdirs();
-        file = new File(targetPath);
-        file.getParentFile().mkdirs();
-        // TODO set in properties
-        String imPath = getImageMagickInstallationPath();
-        // TODO Ye:ConvertCmd(true) to use GraphicsMagick, which is said faster
-        ConvertCmd cmd = new ConvertCmd(false);
-        cmd.setSearchPath(imPath);
+        // In case the file is made of many frames, (for instance videos), generate only the frames from 0 to 48 to
+        // avoid high memory consumption
+        String path = tmp.getAbsolutePath() + "[0-48]";
+        ConvertCmd cmd = getConvert();
         // create the operation, add images and operators/options
         IMOperation op = new IMOperation();
-        if (mimeType.equals("MOV") || mimeType.equals("MP4") || mimeType.equals("GIF") || mimeType.equals("WMV"))
-        {
-            // extract the first frame
-            orginalPath = orginalPath + "[0]";
-        }
-        op.addImage(orginalPath);
-        // TODO Ye: replace with scaleImageFast method algorithm
-        int size = getResolution(resolution);
-        op.resize(size, size);
-        op.addImage(targetPath);
-        // execute the operation
+        op.addImage(path);
+        File jpeg = File.createTempFile("uploadMagick", ".jpg");
         try
         {
+            op.addImage(jpeg.getAbsolutePath());
             cmd.run(op);
+            int frame = getNonBlankFrame(jpeg.getAbsolutePath());
+            if (frame >= 0)
+            {
+                File f = new File(FilenameUtils.getFullPath(jpeg.getAbsolutePath())
+                        + FilenameUtils.getBaseName(jpeg.getAbsolutePath()) + "-" + frame + ".jpg");
+                return FileUtils.readFileToByteArray(f);
+            }
+            return FileUtils.readFileToByteArray(jpeg);
         }
-        catch (IOException e)
+        finally
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        catch (InterruptedException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        catch (IM4JavaException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            removeFilesCreatedByImageMagick(jpeg.getAbsolutePath());
+            FileUtils.deleteQuietly(jpeg);
         }
     }
 
     /**
-     * Return the maximum size of an image according to its {@link FileResolution}. The values are defined in the
-     * properties
+     * Search for the first non blank image generated by imagemagick, based on commandline: convert image.jpg -shave
+     * 1%x1% -resize 40% -fuzz 10% -trim +repage info: | grep ' 1x1 '
      * 
-     * @param FileResolution
+     * @param path
+     * @return
+     * @throws IOException
+     * @throws URISyntaxException
+     * @throws InterruptedException
+     * @throws IM4JavaException
+     */
+    private static int getNonBlankFrame(String path) throws IOException, URISyntaxException, InterruptedException,
+            IM4JavaException
+    {
+        ConvertCmd cmd = getConvert();
+        int count = 0;
+        String dir = FilenameUtils.getFullPath(path);
+        String pathBase = FilenameUtils.getBaseName(path);
+        File f = new File(dir + pathBase + "-" + count + ".jpg");
+        while (f.exists())
+        {
+            IMOperation op = new IMOperation();
+            op.addImage();
+            op.shave(1, 1, true);
+            op.fuzz(10.0, true);
+            op.trim();
+            op.addImage();
+            File trim = File.createTempFile("trim", ".jpg");
+            try
+            {
+                cmd.run(op, f.getAbsolutePath(), trim.getAbsolutePath());
+                Info info = new Info(trim.getAbsolutePath());
+                if (!info.getImageGeometry().contains("1x1"))
+                    return count;
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            finally
+            {
+                String newPath = f.getAbsolutePath().replace("-" + count, "-" + Integer.valueOf(count + 1));
+                f = new File(newPath);
+                count++;
+                trim.delete();
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Remove the files created by imagemagick.
+     * 
+     * @param path
+     */
+    private static void removeFilesCreatedByImageMagick(String path)
+    {
+        int count = 0;
+        String dir = FilenameUtils.getFullPath(path);
+        String pathBase = FilenameUtils.getBaseName(path);
+        File f = new File(dir + pathBase + "-" + count + ".jpg");
+        while (f.exists())
+        {
+            String newPath = f.getAbsolutePath().replace("-" + count, "-" + Integer.valueOf(count + 1));
+            f.delete();
+            f = new File(newPath);
+            count++;
+        }
+    }
+
+    /**
+     * Create a {@link ConvertCmd}
+     * 
      * @return
      * @throws IOException
      * @throws URISyntaxException
      */
-    private static int getResolution(FileResolution resolution) throws IOException, URISyntaxException
+    private static ConvertCmd getConvert() throws IOException, URISyntaxException
     {
-        switch (resolution)
-        {
-            case THUMBNAIL:
-                return Integer.parseInt(PropertyReader.getProperty("xsd.resolution.thumbnail"));
-            case WEB:
-                return Integer.parseInt(PropertyReader.getProperty("xsd.resolution.web"));
-            default:
-                return 0;
-        }
-    }
-
-    private static String getImageMagickInstallationPath() throws IOException, URISyntaxException
-    {
-    	return PropertyReader.getProperty("imeji.imagemagick.installpath");
+        String magickPath = getImageMagickInstallationPath();
+        // TODO Ye:ConvertCmd(true) to use GraphicsMagick, which is said faster
+        ConvertCmd cmd = new ConvertCmd(false);
+        cmd.setSearchPath(magickPath);
+        return cmd;
     }
 
     /**
-     * Return the Mime Type of a file according to im4java helper class FIXME, imagemagic not support types: mkv,
-     * ogg/ogv, webm
+     * Return property imeji.imagemagick.installpath
      * 
-     * @param format
      * @return
+     * @throws IOException
+     * @throws URISyntaxException
      */
-    public static String getMimeType(String filepath)
+    private static String getImageMagickInstallationPath() throws IOException, URISyntaxException
     {
-        Info imageInfo = null;
-        try
-        {
-            imageInfo = new Info(filepath, true);
-            return imageInfo.getImageFormat();
-        }
-        catch (InfoException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return null;
+        return PropertyReader.getProperty("imeji.imagemagick.installpath");
     }
 }

@@ -35,7 +35,9 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ColorConvertOp;
 import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -46,6 +48,7 @@ import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.lf5.util.StreamUtils;
 import org.apache.sanselan.ImageReadException;
 import org.apache.sanselan.Sanselan;
 import org.apache.sanselan.common.byteSources.ByteSource;
@@ -78,9 +81,17 @@ public class JpegUtils
      */
     public static BufferedImage readJpeg(byte[] bytes) throws IOException, ImageReadException
     {
-        File f = File.createTempFile("upload", "jpeg.tmp");
-        FileUtils.writeByteArrayToFile(f, bytes);
-        return readJpeg(f);
+        File f = File.createTempFile("uploadReadJpeg", ".jpg");
+        try
+        {
+            StreamUtils.copyThenClose(new ByteArrayInputStream(bytes), new FileOutputStream(f));
+            BufferedImage bi = readJpeg(f);
+            return bi;
+        }
+        finally
+        {
+            FileUtils.deleteQuietly(f);
+        }
     }
 
     /**
@@ -119,8 +130,10 @@ public class JpegUtils
                     convertInvertedColors(raster);
                 image = convertCmykToRgb(raster, profile);
             }
+            stream.close();
             return image;
         }
+        stream.close();
         return null;
     }
 

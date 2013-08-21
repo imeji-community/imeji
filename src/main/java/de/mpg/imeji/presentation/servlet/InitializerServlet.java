@@ -1,12 +1,13 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-package de.mpg.imeji.presentation.init;
+package de.mpg.imeji.presentation.servlet;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -14,7 +15,10 @@ import javax.servlet.http.HttpServlet;
 import org.apache.log4j.Logger;
 import org.apache.log4j.lf5.util.StreamUtils;
 
-import de.mpg.imeji.logic.ImejiJena;
+import com.hp.hpl.jena.tdb.TDB;
+import com.hp.hpl.jena.tdb.base.file.Location;
+import com.hp.hpl.jena.tdb.sys.TDBMaker;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.concurrency.locks.LocksSurveyor;
 import de.mpg.imeji.logic.controller.UserController;
@@ -28,11 +32,12 @@ import de.mpg.j2j.exceptions.AlreadyExistsException;
  */
 public class InitializerServlet extends HttpServlet
 {
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
     private static Logger logger = Logger.getLogger(InitializerServlet.class);
+    /**
+     * The {@link Thread} which controls the locking in imeji
+     */
+    private LocksSurveyor locksSurveyor = new LocksSurveyor();
 
     @Override
     public void init() throws ServletException
@@ -52,7 +57,7 @@ public class InitializerServlet extends HttpServlet
     {
         try
         {
-            ImejiJena.init();
+            Imeji.init();
             runMigration();
         }
         catch (Exception e)
@@ -66,7 +71,6 @@ public class InitializerServlet extends HttpServlet
      */
     private void startLocksSurveyor()
     {
-        LocksSurveyor locksSurveyor = new LocksSurveyor();
         locksSurveyor.start();
     }
 
@@ -77,8 +81,8 @@ public class InitializerServlet extends HttpServlet
     {
         try
         {
-            UserController uc = new UserController(ImejiJena.adminUser);
-            uc.create(ImejiJena.adminUser);
+            UserController uc = new UserController(Imeji.adminUser);
+            uc.create(Imeji.adminUser);
             logger.info("Created sysadmin successfully");
         }
         catch (AlreadyExistsException e)
@@ -105,7 +109,7 @@ public class InitializerServlet extends HttpServlet
      */
     private void runMigration() throws IOException
     {
-        File f = new File(ImejiJena.tdbPath + StringHelper.urlSeparator + "migration.txt");
+        File f = new File(Imeji.tdbPath + StringHelper.urlSeparator + "migration.txt");
         FileInputStream in = null;
         try
         {
@@ -128,6 +132,30 @@ public class InitializerServlet extends HttpServlet
     @Override
     public void destroy()
     {
+        logger.info("Shutting down imeji!");
+        logger.info("Shutting down thread executor...");
+        Imeji.executor.shutdown();
+        try
+        {
+            Imeji.executor.awaitTermination(10, TimeUnit.SECONDS);
+        }
+        catch (InterruptedException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        logger.info("executor shutdown status: " + Imeji.executor.isShutdown());
+        logger.info("Closing Jena TDB...");
+        TDB.sync(Imeji.dataset);
+        Imeji.dataset.close();
+        TDB.closedown();
+        TDBMaker.releaseLocation(new Location(Imeji.tdbPath));
+        logger.info("...done");
+        logger.info("Ending LockSurveyor...");
+        locksSurveyor.terminate();
+        logger.info("...done");
+        System.runFinalization();
         super.destroy();
+        logger.info("imeji is down");
     }
 }

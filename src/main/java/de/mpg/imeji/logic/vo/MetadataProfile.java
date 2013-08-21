@@ -30,7 +30,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "mdprofile", namespace = "http://imeji.org/terms")
 public class MetadataProfile extends Properties
-{    
+{
     @j2jLiteral("http://purl.org/dc/elements/1.1/title")
     private String title;
     @j2jLiteral("http://purl.org/dc/elements/1.1/description")
@@ -38,7 +38,7 @@ public class MetadataProfile extends Properties
     @j2jList("http://imeji.org/terms/statement")
     private Collection<Statement> statements = new ArrayList<Statement>();
 
-	@XmlElement(name = "title", namespace = "http://purl.org/dc/elements/1.1")
+    @XmlElement(name = "title", namespace = "http://purl.org/dc/elements/1.1")
     public String getTitle()
     {
         return title;
@@ -59,7 +59,7 @@ public class MetadataProfile extends Properties
     {
         this.description = description;
     }
-    
+
     @XmlElement(name = "statement", namespace = "http://imeji.org/terms")
     public Collection<Statement> getStatements()
     {

@@ -15,7 +15,7 @@ import de.mpg.imeji.logic.vo.Metadata;
 public class SearchMetadata extends SearchPair
 {
     private URI statement;
-    
+
     /**
      * Default Constructor
      */

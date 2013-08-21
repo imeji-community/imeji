@@ -1,12 +1,14 @@
 package de.mpg.j2j.transaction;
 
+import java.util.concurrent.Callable;
+
 import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.Jena;
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.tdb.TDBFactory;
 
-import de.mpg.imeji.logic.ImejiJena;
+import de.mpg.imeji.logic.Imeji;
 
 /**
  * Run a {@link Transaction} in a new {@link Thread}. A new {@link Dataset} is created for this thread <br/>
@@ -16,9 +18,8 @@ import de.mpg.imeji.logic.ImejiJena;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class ThreadedTransaction extends Thread
+public class ThreadedTransaction implements Callable<Integer>
 {
-    private boolean running = false;
     private Transaction transaction;
     protected static Logger logger = Logger.getLogger(ThreadedTransaction.class);
 
@@ -32,57 +33,23 @@ public class ThreadedTransaction extends Thread
         this.transaction = transaction;
     }
 
-    @Override
-    public synchronized void start()
-    {
-        running = true;
-        super.start();
-    }
-
-    @Override
-    public void run()
-    {
-        transaction.start(TDBFactory.createDataset(ImejiJena.tdbPath));
-        running = false;
-    }
-
-    /**
-     * Method waiting for the wait to be finished. Used when synchronization needed
+    /*
+     * (non-Javadoc)
+     * @see java.util.concurrent.Callable#call()
      */
-    public void waitForEnd()
+    @Override
+    public Integer call() throws Exception
     {
-        while (running)
+        Dataset ds = TDBFactory.createDataset(Imeji.tdbPath);
+        try
         {
-            try
-            {
-                Thread.sleep(1);
-            }
-            catch (InterruptedException e)
-            {
-                e.printStackTrace();
-                running = false;
-            }
+            transaction.start(ds);
         }
-    }
-
-    /**
-     * setter
-     * 
-     * @param running
-     */
-    public void setRunning(boolean running)
-    {
-        this.running = running;
-    }
-
-    /**
-     * getter
-     * 
-     * @return
-     */
-    public boolean isRunning()
-    {
-        return running;
+        finally
+        {
+            ds.close();
+        }
+        return 1;
     }
 
     /**

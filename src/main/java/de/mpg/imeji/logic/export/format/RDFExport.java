@@ -14,7 +14,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 
-import de.mpg.imeji.logic.ImejiJena;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.export.Export;
 import de.mpg.imeji.logic.export.format.rdf.RDFAlbumExport;
 import de.mpg.imeji.logic.export.format.rdf.RDFCollectionExport;
@@ -76,7 +76,7 @@ public abstract class RDFExport extends Export
     @Override
     public String getContentType()
     {
-        return "application/xml";
+        return "application/rdf+xml";
     }
 
     /**
@@ -87,10 +87,10 @@ public abstract class RDFExport extends Export
     private void exportIntoOut(SearchResult sr, OutputStream out)
     {
         namespaces.put("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "rdf");
-        ImejiJena.imejiDataSet.begin(ReadWrite.READ);
+        Imeji.dataset.begin(ReadWrite.READ);
         try
         {
-            Model model = ImejiJena.imejiDataSet.getNamedModel(modelURI);
+            Model model = Imeji.dataset.getNamedModel(modelURI);
             StringWriter writer = new StringWriter();
             writer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
             writer.append("<rdf:RDF");
@@ -113,11 +113,12 @@ public abstract class RDFExport extends Export
         }
         catch (Exception e)
         {
+            Imeji.dataset.abort();
             throw new RuntimeException("Error in export", e);
         }
         finally
         {
-            ImejiJena.imejiDataSet.end();
+            Imeji.dataset.end();
         }
     }
 
@@ -154,7 +155,11 @@ public abstract class RDFExport extends Export
                     if (st.getLiteral().toString() != null)
                     {
                         writer.append(openTag(st, null));
-                        writer.append(st.getLiteral().getString());
+                        String literal = st.getLiteral().getString();
+                        // Enclose embedded html
+                        if (literal.contains("<html>"))
+                            literal = "<![CDATA[" + literal + "]]>";
+                        writer.append(literal);
                     }
                 }
                 catch (Exception e)

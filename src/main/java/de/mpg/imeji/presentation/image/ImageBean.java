@@ -4,15 +4,17 @@
 package de.mpg.imeji.presentation.image;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.concurrency.locks.Locks;
@@ -24,7 +26,9 @@ import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.security.Security;
+import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
@@ -62,7 +66,7 @@ public class ImageBean
     private boolean selected;
     private CollectionImeji collection;
     private List<String> techMd;
-    private Navigation navigation;
+    protected Navigation navigation;
     private MetadataProfile profile;
     private SingleEditBean edit;
     protected String prettyLink;
@@ -129,10 +133,10 @@ public class ImageBean
         {
             loadCollection();
             loadProfile();
-            removeDeadMetadata();
             labels.init(profile);
+            // mds = new MetadataSetBean(item.getMetadataSet());
             edit = new SingleEditBean(item, profile, getPageUrl());
-            mds = new MetadataSetBean(item.getMetadataSet());
+            mds = edit.getEditor().getItems().get(0).getMds();
         }
     }
 
@@ -202,55 +206,21 @@ public class ImageBean
         }
     }
 
-    /**
-     * If a metadata is deleted in profile, or the type is changed, the metadata should be removed in image
-     * 
-     * @throws Exception
-     */
-    public void removeDeadMetadata() throws Exception
-    {
-        boolean update = false;
-        Collection<Metadata> mds = new ArrayList<Metadata>();
-        try
-        {
-            for (Metadata md : item.getMetadataSet().getMetadata())
-            {
-                boolean isStatement = false;
-                for (Statement st : profile.getStatements())
-                {
-                    if (st.getId().toString().equals(md.getStatement().toString()))
-                    {
-                        isStatement = true;
-                        if (!st.getType().toString().equals(md.getTypeNamespace()))
-                        {
-                            isStatement = false;
-                        }
-                    }
-                }
-                if (isStatement)
-                    mds.add(md);
-                else
-                    update = true;
-            }
-            if (update)
-            {
-                ItemController itemController = new ItemController(sessionBean.getUser());
-                item.getMetadataSet().setMetadata(mds);
-                List<Item> l = new ArrayList<Item>();
-                l.add(item);
-                itemController.update(l);
-            }
-        }
-        catch (Exception e)
-        {
-            /* this user has not the privileges to update the image */
-        }
-    }
-
     public String getInitLabels() throws Exception
     {
         labels.init(profile);
         return "";
+    }
+
+    /**
+     * Return and URL encoded version of the filename
+     * 
+     * @return
+     * @throws UnsupportedEncodingException
+     */
+    public String getEncodedFileName() throws UnsupportedEncodingException
+    {
+        return URLEncoder.encode(item.getFilename(), "UTF-8");
     }
 
     public List<String> getTechMd() throws Exception
@@ -605,5 +575,65 @@ public class ImageBean
     public MetadataSetBean getMds()
     {
         return mds;
+    }
+
+    /**
+     * getter
+     * 
+     * @return
+     */
+    public String getItemStorageIdFilename()
+    {
+        return StringHelper.normalizeFilename(this.item.getFilename());
+    }
+
+    /**
+     * True if the current file is an image
+     * 
+     * @return
+     */
+    public boolean isImageFile()
+    {
+        return StorageUtils.getMimeType(FilenameUtils.getExtension(item.getFilename())).contains("image");
+    }
+
+    /**
+     * True if the current file is a video
+     * 
+     * @return
+     */
+    public boolean isVideoFile()
+    {
+        return StorageUtils.getMimeType(FilenameUtils.getExtension(item.getFilename())).contains("video");
+    }
+
+    /**
+     * True if the File is a RAW file (a file which can not be viewed in any online tool)
+     * 
+     * @return
+     */
+    public boolean isRawFile()
+    {
+        return !isAudioFile() && !isVideoFile() && !isImageFile() && !isPdfFile();
+    }
+
+    /**
+     * True if the current file is a pdf
+     * 
+     * @return
+     */
+    public boolean isPdfFile()
+    {
+        return StorageUtils.getMimeType(FilenameUtils.getExtension(item.getFilename())).contains("application/pdf");
+    }
+
+    /**
+     * True if the current file is an audio
+     * 
+     * @return
+     */
+    public boolean isAudioFile()
+    {
+        return StorageUtils.getMimeType(FilenameUtils.getExtension(item.getFilename())).contains("audio");
     }
 }

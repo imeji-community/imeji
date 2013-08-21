@@ -4,7 +4,7 @@
 package de.mpg.imeji.logic.export.format.rdf;
 
 import java.util.HashMap;
-import de.mpg.imeji.logic.ImejiJena;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.export.format.RDFExport;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.vo.Item;
@@ -29,7 +29,7 @@ public class RDFImageExport extends RDFExport
     @Override
     public void init()
     {
-        modelURI = ImejiJena.imageModel;
+        modelURI = Imeji.imageModel;
         super.filteredTriples = this.filteredTriples;
     }
 
@@ -60,7 +60,7 @@ public class RDFImageExport extends RDFExport
     }
 
     /*
-     * Not implemented : needs of specifaction about restricted metadata (how to meke it really private...)
+     * Not implemented : needs of specification about restricted metadata (how to make it really private...)
      * @see de.mpg.imeji.logic.export.format.RDFExport#filterResources(de.mpg.imeji.logic.search.SearchResult,
      * de.mpg.imeji.logic.vo.User)
      */

@@ -53,7 +53,7 @@ public class SimpleQueryFactory
                 .replace("XXX_SEARCH_ELEMENT_XXX", getSearchElement(pair, rdfType))
                 .replace("XXX_SEARCH_TYPE_ELEMENT_XXX", rdfType)
                 .replace("XXX_SORT_ELEMENT_XXX",
-                        getSortElement(sortCriterion, "http://imeji.org/terms/collection".equals(rdfType)))
+                        getSortElement(sortCriterion, "http://imeji.org/terms/item".equals(rdfType)))
                 .replace("XXX_SPECIFIC_QUERY_XXX", specificQuery);
     }
 
@@ -200,7 +200,7 @@ public class SimpleQueryFactory
      * @param sortCriterion
      * @return
      */
-    private static String getSortElement(SortCriterion sortCriterion, boolean collection)
+    private static String getSortElement(SortCriterion sortCriterion, boolean item)
     {
         if (sortCriterion != null && sortCriterion.getIndex() != null)
         {
@@ -218,7 +218,7 @@ public class SimpleQueryFactory
             }
             else if (SearchIndex.names.cont_title.name().equals(sortCriterion.getIndex().getName()))
             {
-                return (collection ? " . ?s" : " . ?c")
+                return (item ? " . ?c" : " . ?s")
                         + " <http://imeji.org/terms/container/metadata> ?title . ?title <"
                         + sortCriterion.getIndex().getNamespace() + "> ?sort0";
             }

@@ -88,7 +88,26 @@
 						</h:panelGroup>
 						
 					</h:panelGroup>
-					<h:panelGroup styleClass="full_area0_p8">
+					
+					<div class="full_area0 fullItem">
+						<div class="fullItemControls">
+							<h:outputLink id="lnkViewColUtilPage" styleClass="free_area0 actual" value="#{ViewCollectionBean.pageUrl}?tab=UTIL" rendered="#{ViewCollectionBean.tab == 'UTIL'}">
+								<h:outputText value="#{lbl.view_util}"/>
+							</h:outputLink>
+							<h:outputLink id="lnkViewColUtilPage2" styleClass="free_area0" value="#{ViewCollectionBean.pageUrl}?tab=UTIL" rendered="#{ViewCollectionBean.tab != 'UTIL'}">
+								<h:outputText value="#{lbl.view_util}"/>
+							</h:outputLink>
+							<h:panelGroup styleClass="seperator" />
+							<h:outputLink id="lnkViewColPage" styleClass="free_area0 actual" value="#{ViewCollectionBean.pageUrl}?tab=HOME" rendered="#{ViewCollectionBean.tab != 'UTIL'}">
+								<h:outputText value="#{lbl.view_desc}"/>
+							</h:outputLink>
+							<h:outputLink id="lnkViewColPage2" styleClass="free_area0" value="#{ViewCollectionBean.pageUrl}?tab=HOME" rendered="#{ViewCollectionBean.tab == 'UTIL'}">
+								<h:outputText value="#{lbl.view_desc}"/>
+							</h:outputLink>
+						</div>
+					</div>
+					
+					<h:panelGroup id="description" styleClass="full_area0_p8" rendered="#{ViewCollectionBean.tab != 'UTIL'}">
 						<h:panelGroup>
 							<h2>
 								<h:outputText styleClass="full_area0_p4" value="#{ViewCollectionBean.collection.metadata.title}"/>
@@ -105,8 +124,91 @@
 							</h:panelGroup>
 						</h:panelGroup>
 					</h:panelGroup>
+					
+					<h:panelGroup id="util" styleClass="full_area0_p8" rendered="#{ViewCollectionBean.tab == 'UTIL'}">
+					<h:panelGroup layout="block" styleClass="full_area0 itemBlock">						
+							<h3 class="xLarge_area0_p8 endline blockHeader">
+								<h:outputText id="lblViewColFull_lblUtil" value="#{lbl.colUtil}" /><br/>
+							</h3>
+							<span class="seperator"></span>
+							<h:panelGroup  styleClass="free_area0 itemBlockContent endline">
+								<br/>
+								<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
+									<b class="xLarge_area0_p8 endline labelLine clear">
+										<h:outputText value="#{lbl.cite}" /> 
+										<span class="noDisplay">: </span>
+									</b>
+									<span class="xHuge_area0 xTiny_marginLExcl endline"> 
+										<h:outputText value="#{ViewCollectionBean.citation}" escape="false"/>
+									</span>
+								</h:panelGroup>	
+														
+								<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
+									<b class="xLarge_area0_p8 endline labelLine clear">
+										<h:outputText value="#{lbl.colCreator}" /> 
+										<span class="noDisplay">: </span>
+									</b>
+									<span class="xHuge_area0 xTiny_marginLExcl endline"> 
+										<h:outputText value="#{ViewCollectionBean.collectionCreator.name}" />
+									</span>
+								</h:panelGroup>		
+								
+								<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
+									<b class="xLarge_area0_p8 endline labelLine clear">
+										<h:outputText value="#{lbl.colNumItems}" /> 
+										<span class="noDisplay">: </span>
+									</b>
+									<span class="xHuge_area0 xTiny_marginLExcl endline"> 
+										<h:outputText value="#{ViewCollectionBean.collectionNumberOfItems}" />
+									</span>
+								</h:panelGroup>		
+								
+								<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
+									<b class="xLarge_area0_p8 endline labelLine clear">
+										<h:outputText value="#{lbl.identifier}" /> 
+										<span class="noDisplay">: </span>
+									</b>
+									<span class="xHuge_area0 xTiny_marginLExcl endline"> 
+										<h:outputText value="#{ViewCollectionBean.collection.id}" />
+									</span>
+								</h:panelGroup>						
+										
+								<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
+									<b class="xLarge_area0_p8 endline labelLine clear">
+										<h:outputText value="#{lbl.qrcode}" /> 
+										<span class="noDisplay">: </span>
+									</b>
+									<span class="xHuge_area0 xTiny_marginLExcl endline"> 
+										<div id="qr"></div>
+									</span>
+								</h:panelGroup>
+							</h:panelGroup>						
+					</h:panelGroup>
+				</h:panelGroup>
+					
 				</h:panelGroup>
 			</h:panelGroup>
 		</h:panelGroup>
+		
+		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/qrcode.js"/>
+		<script>
+			jQuery(document).ready(function() {
+				var qrHtml = document.getElementById('qr');
+				if (qrHtml != null){
+					qrHtml.innerHTML = create_qrcode('#{ViewCollectionBean.pageUrl}');
+				}
+			});
+			var draw_qrcode = function(text, typeNumber, errorCorrectLevel) {
+				document.write(create_qrcode(text, typeNumber, errorCorrectLevel) );
+			};
+			var create_qrcode = function(text, typeNumber, errorCorrectLevel, table) {
+				var qr = qrcode(typeNumber || 10, errorCorrectLevel || 'M');
+				qr.addData(text);
+				qr.make();
+				// return qr.createTableTag();
+				return qr.createImgTag();
+			};
+		</script>
+		
 	</ui:define>
 </ui:composition>

@@ -6,7 +6,7 @@ import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.query.ReadWrite;
 import com.hp.hpl.jena.rdf.model.Model;
 
-import de.mpg.imeji.logic.ImejiJena;
+import de.mpg.imeji.logic.Imeji;
 
 /**
  * Transaction for Jena operations
@@ -37,7 +37,7 @@ public abstract class Transaction
      */
     public void start()
     {
-        start(ImejiJena.imejiDataSet);
+        start(Imeji.imejiDataSet);
     }
 
     /**

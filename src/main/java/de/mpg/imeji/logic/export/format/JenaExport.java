@@ -12,7 +12,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 
-import de.mpg.imeji.logic.ImejiJena;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.export.Export;
 import de.mpg.imeji.logic.search.SearchResult;
 
@@ -55,20 +55,20 @@ public class JenaExport extends Export
         {
             try
             {
-                ImejiJena.imejiDataSet.begin(ReadWrite.READ);
-                Model m = ImejiJena.imejiDataSet.getNamedModel(ImejiJena.imageModel);
+                Imeji.imejiDataSet.begin(ReadWrite.READ);
+                Model m = Imeji.imejiDataSet.getNamedModel(Imeji.imageModel);
                 Resource resource = m.getResource(s);
                 exportResource(resource, exportModel);
-                ImejiJena.imejiDataSet.commit();
+                Imeji.imejiDataSet.commit();
             }
             catch (Exception e)
             {
-                ImejiJena.imejiDataSet.abort();
+                Imeji.imejiDataSet.abort();
                 e.printStackTrace();
             }
             finally
             {
-                ImejiJena.imejiDataSet.end();
+                Imeji.imejiDataSet.end();
             }
         }
         return exportModel;

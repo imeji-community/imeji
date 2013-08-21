@@ -8,7 +8,7 @@ import com.hp.hpl.jena.Jena;
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.tdb.TDBFactory;
 
-import de.mpg.imeji.logic.ImejiJena;
+import de.mpg.imeji.logic.Imeji;
 
 /**
  * Run a {@link Transaction} in a new {@link Thread}. A new {@link Dataset} is created for this thread <br/>
@@ -40,7 +40,7 @@ public class ThreadedTransaction implements Callable<Integer>
     @Override
     public Integer call() throws Exception
     {
-        transaction.start(TDBFactory.createDataset(ImejiJena.tdbPath));
+        transaction.start(TDBFactory.createDataset(Imeji.tdbPath));
         return 1;
     }
 

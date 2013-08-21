@@ -9,7 +9,7 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.tdb.TDBFactory;
 
-import de.mpg.imeji.logic.ImejiJena;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.StringHelper;
@@ -45,8 +45,8 @@ public class BasicTest
     public static void imejiInitTest() throws Exception
     {
         System.out.println("imejiInitTest started...");
-        ImejiJena.init();
-        UserController uc = new UserController(ImejiJena.adminUser);
+        Imeji.init();
+        UserController uc = new UserController(Imeji.adminUser);
         try
         {
             uc.retrieve(getTestUser().getEmail());
@@ -57,8 +57,8 @@ public class BasicTest
         }
         ProfileController pc = new ProfileController();
         pc.create(new MetadataProfile(), getTestUser());
-        ImejiJena.printModel(ImejiJena.profileModel);
-        ImejiJena.printModel(ImejiJena.userModel);
+        Imeji.printModel(Imeji.profileModel);
+        Imeji.printModel(Imeji.userModel);
         System.out.println("done...");
     }
 

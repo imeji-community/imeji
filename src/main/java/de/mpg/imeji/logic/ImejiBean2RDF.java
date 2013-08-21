@@ -6,8 +6,6 @@ package de.mpg.imeji.logic;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import com.hp.hpl.jena.Jena;
@@ -39,7 +37,6 @@ public class ImejiBean2RDF
 {
     private Security security;
     private String modelURI;
-    public static ExecutorService executors = Executors.newCachedThreadPool();
 
     /**
      * Construct one {@link ImejiBean2RDF} for one {@link Model}
@@ -120,7 +117,7 @@ public class ImejiBean2RDF
         Transaction t = new CRUDTransaction(objects, type, modelURI, lazy);
         // Write Transaction needs to be added in a new Thread
         ThreadedTransaction ts = new ThreadedTransaction(t);
-        Future<Integer> f = executors.submit(ts);
+        Future<Integer> f = Imeji.executor.submit(ts);
         // wait for the transaction to be finished
         f.get();
         // Throw exception is any

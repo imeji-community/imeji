@@ -17,7 +17,7 @@ import org.apache.log4j.Logger;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 import de.mpg.imeji.logic.ImejiBean2RDF;
-import de.mpg.imeji.logic.ImejiJena;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.controller.ItemController;
@@ -229,7 +229,7 @@ public class AdminBean
             String[] s = SortHelper.SORT_VALUE_PATTERN.split(uri);
             List<String> l = new ArrayList<String>();
             l.add(s[0]);
-            removeResources(l, ImejiJena.imageModel, MetadataFactory.createMetadata(s[1]));
+            removeResources(l, Imeji.imageModel, MetadataFactory.createMetadata(s[1]));
         }
         logger.info("...found " + uris.size());
     }
@@ -245,7 +245,7 @@ public class AdminBean
         Search search = new Search(SearchType.ALL, null);
         List<String> uris = search.searchSimpleForQuery(SPARQLQueries.selectStatementUnbounded(), null);
         logger.info("...found " + uris.size());
-        removeResources(uris, ImejiJena.profileModel, new Statement());
+        removeResources(uris, Imeji.profileModel, new Statement());
     }
 
     /**
@@ -259,7 +259,7 @@ public class AdminBean
         Search search = new Search(SearchType.ALL, null);
         List<String> uris = search.searchSimpleForQuery(SPARQLQueries.selectGrantUnbounded(), null);
         logger.info("...found " + uris.size());
-        removeResources(uris, ImejiJena.userModel, new Grant());
+        removeResources(uris, Imeji.userModel, new Grant());
     }
 
     /**

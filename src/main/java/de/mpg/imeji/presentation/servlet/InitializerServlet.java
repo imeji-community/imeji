@@ -18,8 +18,7 @@ import com.hp.hpl.jena.tdb.TDB;
 import com.hp.hpl.jena.tdb.base.file.Location;
 import com.hp.hpl.jena.tdb.sys.TDBMaker;
 
-import de.mpg.imeji.logic.ImejiBean2RDF;
-import de.mpg.imeji.logic.ImejiJena;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.concurrency.locks.LocksSurveyor;
 import de.mpg.imeji.logic.controller.UserController;
@@ -58,7 +57,7 @@ public class InitializerServlet extends HttpServlet
     {
         try
         {
-            ImejiJena.init();
+            Imeji.init();
             runMigration();
         }
         catch (Exception e)
@@ -82,8 +81,8 @@ public class InitializerServlet extends HttpServlet
     {
         try
         {
-            UserController uc = new UserController(ImejiJena.adminUser);
-            uc.create(ImejiJena.adminUser);
+            UserController uc = new UserController(Imeji.adminUser);
+            uc.create(Imeji.adminUser);
             logger.info("Created sysadmin successfully");
         }
         catch (AlreadyExistsException e)
@@ -110,7 +109,7 @@ public class InitializerServlet extends HttpServlet
      */
     private void runMigration() throws IOException
     {
-        File f = new File(ImejiJena.tdbPath + StringHelper.urlSeparator + "migration.txt");
+        File f = new File(Imeji.tdbPath + StringHelper.urlSeparator + "migration.txt");
         FileInputStream in = null;
         try
         {
@@ -134,13 +133,13 @@ public class InitializerServlet extends HttpServlet
     public void destroy()
     {
         logger.info("Shutting down imeji!");
-        ImejiBean2RDF.executors.shutdown();
+        Imeji.executor.shutdown();
         logger.info("Closing Jena TDB...");
-        ImejiJena.imejiDataSet.end();
-        TDB.sync(ImejiJena.imejiDataSet);
-        ImejiJena.imejiDataSet.close();
+        Imeji.imejiDataSet.end();
+        TDB.sync(Imeji.imejiDataSet);
+        Imeji.imejiDataSet.close();
         TDB.closedown();
-        TDBMaker.releaseLocation(new Location(ImejiJena.tdbPath));
+        TDBMaker.releaseLocation(new Location(Imeji.tdbPath));
         logger.info("...done");
         logger.info("Ending LockSurveyor...");
         locksSurveyor.terminate();

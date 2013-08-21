@@ -55,7 +55,7 @@ public class Imeji
     public static String userModel;
     public static String profileModel;
     public static String counterModel = "http://imeji.org/counter";
-    public static Dataset imejiDataSet;
+    public static Dataset dataset;
     public static URI counterID = URI.create("http://imeji.org/counter/0");
     private static Logger logger = Logger.getLogger(Imeji.class);
     public static User adminUser;
@@ -124,7 +124,7 @@ public class Imeji
         }
         tdbPath = f.getAbsolutePath();
         logger.info("Initializing Jena dataset (" + tdbPath + ")...");
-        imejiDataSet = TDBFactory.createDataset(tdbPath);
+        dataset = TDBFactory.createDataset(tdbPath);
         logger.info("... done!");
         logger.info("Initializing Jena models...");
         albumModel = getModelName(Album.class);
@@ -153,25 +153,25 @@ public class Imeji
         try
         {
             // Careful: This is a read locks. A write lock would lead to corrupted graph
-            imejiDataSet.begin(ReadWrite.READ);
-            if (imejiDataSet.containsNamedModel(name))
+            dataset.begin(ReadWrite.READ);
+            if (dataset.containsNamedModel(name))
             {
-                imejiDataSet.getNamedModel(name);
+                dataset.getNamedModel(name);
             }
             else
             {
                 Model m = ModelFactory.createDefaultModel();
-                imejiDataSet.addNamedModel(name, m);
+                dataset.addNamedModel(name, m);
             }
-            imejiDataSet.commit();
+            dataset.commit();
         }
         catch (Exception e)
         {
-            imejiDataSet.abort();
+            dataset.abort();
         }
         finally
         {
-            imejiDataSet.end();
+            dataset.end();
         }
     }
 
@@ -219,17 +219,17 @@ public class Imeji
     {
         try
         {
-            imejiDataSet.begin(ReadWrite.READ);
-            imejiDataSet.getNamedModel(modelName).write(System.out, "RDF/XML-ABBREV");
-            imejiDataSet.commit();
+            dataset.begin(ReadWrite.READ);
+            dataset.getNamedModel(modelName).write(System.out, "RDF/XML-ABBREV");
+            dataset.commit();
         }
         catch (Exception e)
         {
-            imejiDataSet.abort();
+            dataset.abort();
         }
         finally
         {
-            imejiDataSet.end();
+            dataset.end();
         }
     }
 
@@ -242,24 +242,24 @@ public class Imeji
     {
         try
         {
-            Imeji.imejiDataSet.begin(ReadWrite.READ);
-            for (Iterator<String> it = Imeji.imejiDataSet.listNames(); it.hasNext();)
+            Imeji.dataset.begin(ReadWrite.READ);
+            for (Iterator<String> it = Imeji.dataset.listNames(); it.hasNext();)
             {
                 String s = it.next();
                 System.out.println(s);
             }
-            QueryExecution qe = QueryExecutionFactory.create(q, Syntax.syntaxARQ, Imeji.imejiDataSet);
+            QueryExecution qe = QueryExecutionFactory.create(q, Syntax.syntaxARQ, Imeji.dataset);
             qe.getContext().set(TDB.symUnionDefaultGraph, true);
             ResultSet rs = qe.execSelect();
             ResultSetFormatter.out(System.out, rs);
         }
         catch (Exception e)
         {
-            Imeji.imejiDataSet.abort();
+            Imeji.dataset.abort();
         }
         finally
         {
-            Imeji.imejiDataSet.end();
+            Imeji.dataset.end();
         }
     }
 }

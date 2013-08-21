@@ -37,7 +37,7 @@ public abstract class Transaction
      */
     public void start()
     {
-        start(Imeji.imejiDataSet);
+        start(Imeji.dataset);
     }
 
     /**

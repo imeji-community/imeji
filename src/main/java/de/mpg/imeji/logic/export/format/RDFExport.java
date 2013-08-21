@@ -87,10 +87,10 @@ public abstract class RDFExport extends Export
     private void exportIntoOut(SearchResult sr, OutputStream out)
     {
         namespaces.put("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "rdf");
-        Imeji.imejiDataSet.begin(ReadWrite.READ);
+        Imeji.dataset.begin(ReadWrite.READ);
         try
         {
-            Model model = Imeji.imejiDataSet.getNamedModel(modelURI);
+            Model model = Imeji.dataset.getNamedModel(modelURI);
             StringWriter writer = new StringWriter();
             writer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
             writer.append("<rdf:RDF");
@@ -113,12 +113,12 @@ public abstract class RDFExport extends Export
         }
         catch (Exception e)
         {
-            Imeji.imejiDataSet.abort();
+            Imeji.dataset.abort();
             throw new RuntimeException("Error in export", e);
         }
         finally
         {
-            Imeji.imejiDataSet.end();
+            Imeji.dataset.end();
         }
     }
 

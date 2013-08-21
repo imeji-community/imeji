@@ -7,16 +7,20 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.helpers.ThreadLocalMap;
 import org.apache.log4j.lf5.util.StreamUtils;
 
 import com.hp.hpl.jena.tdb.TDB;
 import com.hp.hpl.jena.tdb.base.file.Location;
 import com.hp.hpl.jena.tdb.sys.TDBMaker;
+import com.hp.hpl.jena.tdb.transaction.DatasetGraphTransaction;
+import com.hp.hpl.jena.tdb.transaction.Transaction;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
@@ -133,11 +137,21 @@ public class InitializerServlet extends HttpServlet
     public void destroy()
     {
         logger.info("Shutting down imeji!");
+        logger.info("Shutting down thread executor...");
         Imeji.executor.shutdown();
+        try
+        {
+            Imeji.executor.awaitTermination(10, TimeUnit.SECONDS);
+        }
+        catch (InterruptedException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        logger.info("executor shutdown status: " + Imeji.executor.isShutdown());
         logger.info("Closing Jena TDB...");
-        Imeji.imejiDataSet.end();
-        TDB.sync(Imeji.imejiDataSet);
-        Imeji.imejiDataSet.close();
+        TDB.sync(Imeji.dataset);
+        Imeji.dataset.close();
         TDB.closedown();
         TDBMaker.releaseLocation(new Location(Imeji.tdbPath));
         logger.info("...done");

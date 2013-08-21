@@ -38,11 +38,11 @@ public class ResourceController
     {
         if (modelURI != null)
         {
-            model = Imeji.imejiDataSet.getNamedModel(modelURI);
+            model = Imeji.dataset.getNamedModel(modelURI);
         }
         else
         {
-            model = Imeji.imejiDataSet.getDefaultModel();
+            model = Imeji.dataset.getDefaultModel();
         }
         this.java2rdf = new Java2Jena(model, lazy);
         this.rdf2Java = new Jena2Java(model, lazy);

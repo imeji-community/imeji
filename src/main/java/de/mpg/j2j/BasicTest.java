@@ -85,6 +85,7 @@ public class BasicTest
             printModel(ds, name1);
             printModel(ds, name2);
         }
+        ds.close();
         System.out.println("done...");
     }
 

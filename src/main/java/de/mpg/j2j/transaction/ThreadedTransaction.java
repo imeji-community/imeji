@@ -40,7 +40,15 @@ public class ThreadedTransaction implements Callable<Integer>
     @Override
     public Integer call() throws Exception
     {
-        transaction.start(TDBFactory.createDataset(Imeji.tdbPath));
+        Dataset ds = TDBFactory.createDataset(Imeji.tdbPath);
+        try
+        {
+            transaction.start(ds);
+        }
+        finally
+        {
+            ds.close();
+        }
         return 1;
     }
 

@@ -78,20 +78,20 @@ public class ImejiSPARQL
      */
     public static void execUpdate(String query)
     {
-        Imeji.imejiDataSet.begin(ReadWrite.WRITE);
+        Imeji.dataset.begin(ReadWrite.WRITE);
         try
         {
-            UpdateAction.parseExecute(query, Imeji.imejiDataSet);
-            Imeji.imejiDataSet.commit();
+            UpdateAction.parseExecute(query, Imeji.dataset);
+            Imeji.dataset.commit();
         }
         catch (Exception e)
         {
-            Imeji.imejiDataSet.abort();
+            Imeji.dataset.abort();
             e.printStackTrace();
         }
         finally
         {
-            Imeji.imejiDataSet.end();
+            Imeji.dataset.end();
         }
     }
 }

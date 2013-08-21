@@ -44,6 +44,11 @@ a, a:visited {
 a:hover, a:focus, button:hover, button:focus {
 	color: #FFFFFF !important;
 	background-color: #183668 !important;
+	border-radius: 0.41666666em !important;
+    -webkit-border-radius: 0.41666666em !important;
+    -moz-border-radius: 0.41666666em !important;
+    -o-border-radius: 0.41666666em !important;
+    -ms-border-radius: 0.41666666em !important;
 }
 	
 
@@ -139,13 +144,20 @@ select {
 }
 
 .imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="submit"] {
-    background-color: #292929;
     color: #183668 !important;
+    padding-left: 1px !important;
+    padding-right: 1px !important;
 }
 
 .imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="submit"]:hover {
     color: #FFFFFF !important;
 	background-color: #183668 !important;
+	border-radius: 0.41666666em !important;
+    -webkit-border-radius: 0.41666666em !important;
+    -moz-border-radius: 0.41666666em !important;
+    -o-border-radius: 0.41666666em !important;
+    -ms-border-radius: 0.41666666em !important;
+    padding: 1px !important;
 }
 
 .imj_simpleSearchButtonSubmit {
@@ -206,7 +218,9 @@ select {
 }
 
 .imj_mainContentWrapper {
+	width: 100% !important;
 	margin: 0 !important;
+	padding: 0 !important;
  }
 
 .imj_siteContentSubSection {
@@ -323,9 +337,9 @@ a.imj_contentMenuItemCreateAlbum:focus {
     margin-left: 1em;
 }
 
-.small_marginLExcl {
+/* .small_marginLExcl {
     margin-left: 2.727em;
-}
+} */
 
 .gotoBox {
     float: right;
@@ -334,7 +348,17 @@ a.imj_contentMenuItemCreateAlbum:focus {
 
 .itemTile .tileIconArea {
 	background: #CCCCCC !important;
+	border-radius: 0.41666666em !important;
+    -webkit-border-radius: 0.41666666em !important;
+    -moz-border-radius: 0.41666666em !important;
+    -o-border-radius: 0.41666666em !important;
+    -ms-border-radius: 0.41666666em !important;
 }
+
+.itemTile .tileIconArea:hover, .itemTile .tileIconArea:focus {
+	background: #777777 !important;
+}
+
 
 /* ZUSE THEME HACKS @ infopage.css */
 
@@ -358,6 +382,38 @@ a.imj_contentMenuItemCreateAlbum:focus {
 
 .loggedIn .listItem .itemHeader {
 	margin-bottom: 0em !important;
+}
+
+/* ZUSE THEME HACKS @ images.css */
+
+.pageBrowser .skipToFirst:hover, .pageBrowser .skipToFirst:focus,
+.pageBrowser .backward:hover, .pageBrowser .backward:focus,
+.pageBrowser .forward:hover, .pageBrowser .forward:focus,
+.pageBrowser .skipToLast:hover, .pageBrowser .skipToLast:focus {
+	color: #FFFFFF !important;
+	background-color: #183668 !important;
+	border-radius: 0.41666666em !important;
+    -webkit-border-radius: 0.41666666em !important;
+    -moz-border-radius: 0.41666666em !important;
+    -o-border-radius: 0.41666666em !important;
+    -ms-border-radius: 0.41666666em !important;
+} 
+
+.pageBrowser *:disabled, .pageBrowser *:disabled:hover, .pageBrowser *:disabled:focus, .pageBrowser .deactivated, .pageBrowser .deactivated:hover, .pageBrowser .deactivated:focus {
+    background-color: transparent !important;
+    color: #777777 !important;
+    cursor: default;
+}
+
+.pageBrowser input:hover, .pageBrowser button:hover, .pageBrowser a:hover, .pageBrowser input:focus, .pageBrowser button:focus, .pageBrowser a:focus {
+    background-color: #183668 !important;
+    color: #FFFFFF !important;
+    cursor: pointer;
+    border-radius: 0.41666666em !important;
+    -webkit-border-radius: 0.41666666em !important;
+    -moz-border-radius: 0.41666666em !important;
+    -o-border-radius: 0.41666666em !important;
+    -ms-border-radius: 0.41666666em !important;
 }
 
 /* End of Zuse Theme Hacks */

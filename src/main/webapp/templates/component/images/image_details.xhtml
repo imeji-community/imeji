@@ -1,4 +1,4 @@
-﻿<ui:composition 
+<ui:composition 
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
@@ -6,23 +6,27 @@
 
 	<!-- MediaDisplayContainer - START -->
 	<h:panelGroup layout="block" styleClass="imj_mediaDisplayContainer">
-		<h:outputLink id="lnkPicFullResolution" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" target="_blank" rendered="#{imageBean.imageFile and false}">
-			<h:graphicImage id="picWebResolution" title="#{imageBean.image.filename}" alt="#{imageBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}"/>
+		<h:outputLink id="lnkPicFullResolution" value="#{Navigation.applicationUrl}file/#{imageBean.encodedFileName}?id=#{imageBean.image.fullImageUrl}" target="_blank" rendered="#{(imageBean.imageFile and !Property.digilibEnabled) or imageBean.rawFile or imageBean.pdfFile}">
+			<h:graphicImage id="picWebResolution" title="#{imageBean.image.filename}" alt="#{imageBean.image.filename}" value="#{Navigation.applicationUrl}file/#{imageBean.encodedFileName}?id=#{imageBean.image.webImageUrl}" />
 		</h:outputLink>
-		<h:outputLink id="lnkPicDigilib" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}&amp;digilib=1" target="_blank" rendered="#{imageBean.imageFile}">
-			<h:graphicImage id="picWebResolution2" title="#{imageBean.image.filename}" alt="#{imageBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}"/>
+		<h:outputLink id="lnkPicInternalDigilib" value="#{Navigation.applicationUrl}digilibImage?fn=#{Property.internalStorageBase}/#{imageBean.image.storageId}/original/#{imageBean.itemStorageIdFilename}" target="_blank" rendered="#{imageBean.imageFile and Property.digilibEnabled and (empty Navigation.externalDigilibUrl)}">
+			<h:graphicImage id="picWebResolutionInternalDigilib" title="#{imageBean.image.filename}" alt="#{imageBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}" />
 		</h:outputLink>
-		<h:outputLink id="lnkPicFullResolutionPDF" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" target="_blank" rendered="#{imageBean.pdfFile}">
-			<h:graphicImage id="picWebResolutionPDF" title="#{imageBean.image.filename}" alt="#{imageBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}"/>
-		</h:outputLink>
-		<h:outputLink id="lnkPicFullResolutionVideo" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" target="_blank" rendered="#{imageBean.videoFile}">
-			<h:graphicImage id="picWebResolutionVideo" title="#{imageBean.image.filename}" alt="#{imageBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}"/>
-		</h:outputLink>
-	
+		<h:panelGroup rendered="#{imageBean.videoFile}">
+			<video id="imejiVideoPlayer" src="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" controls="controls" 
+			poster="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}" preload="auto" height="264"></video>
+		</h:panelGroup>
+		<h:panelGroup rendered="#{imageBean.audioFile}">
+			<audio id="imejiAudioPlayer" src="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" controls="controls" preload="auto">
+				<h:outputText value="#{lbl.playing} #{imageBean.image.filename} " />
+			</audio>
+		</h:panelGroup>
 		<h:panelGroup layout="block" styleClass="imj_mediaWithdrawn" rendered="#{imageBean.image.status == 'WITHDRAWN'}">
 			<h:outputText styleClass="" value="#{lbl.withdraw_image_content}"/>
 		</h:panelGroup>
-
+		<h:outputLink styleClass="full_area0" id="lnkDownload" value="#{Navigation.applicationUrl}file/#{imageBean.encodedFileName}?id=#{imageBean.image.fullImageUrl}" target="_blank">
+			<h:outputText value="#{lbl.fileDownload}"/>
+		</h:outputLink>
 
 		<!-- MediaEditPanel - select, add, remove media items -->
 		<h:panelGroup id="image" layout="block" rendered="#{imageBean.image.status != 'WITHDRAWN'}" styleClass="imj_mediaEditPanel">
@@ -146,10 +150,9 @@
 
 						<!-- MetaDataList - further metadata - single edit panel - Wrapper -->				
 						<h:panelGroup id="singleEditPanel" layout="block" class="imj_metadataWrapper">
-					
 							<!-- MetaDataList - show further MetaData -->
 							<ui:fragment rendered="#{imageBean.edit.toggleState == 'displayMd'}">
-								<ui:repeat var="metadata" value="#{imageBean.mds.metadata}" rows="0">
+								<ui:repeat var="metadata" value="#{imageBean.mds.tree.list}" rows="0">
 									<h:panelGroup layout="block" rendered="#{!metadata.isEmpty()}" styleClass="imj_metadataSet id_#{metadata.statementId}  parent_#{metadata.parent.statementId} highlight_area">
 									<!-- MetaDataList - MetaData Hierachy Hardcoded! -->
 										<div class="imj_metadataLabel" style="margin-left: #{metadata.hierarchyLevel}em;">
@@ -168,39 +171,37 @@
 							
 							<!-- MetaDataList - EDIT MetaData - panel START -->
 							<ui:fragment rendered="#{imageBean.edit.toggleState == 'editMd' and imageBean.editable and !imageBean.locked}">
-								<ui:repeat id="metadata" var="metadata" value="#{imageBean.edit.metadataList}" rows="0" varStatus="indexMetadata">
-									
-									<!-- MetaDataList - edit panel container set -->
-									<div class="imj_metadataSet">
-										<div class="imj_metadataLabel">
-											<h:outputText value="#{MetadataLabels.internationalizedLabels[metadata.statement.id]}"/>
-											<span class="imj_invisible">: </span>
-										</div>
-										<div class="imj_metadataValue">
-											<div class="imj_metadataValueEntry">
-												<!-- MetaDataInput -->
-												<ui:include src="MetadataInput.xhtml">
-													<ui:param name="statement" value="#{metadata.statement}"/>
-													<ui:param name="metadata" value="#{metadata}"/>
-													<ui:param name="areaClass" value="double_txtArea"/>
-													<ui:param name="hideLabel" value="true"/>
-												</ui:include>
+								<ui:repeat id="editItem" var="item" value="#{imageBean.edit.editor.items}" rows="0" varStatus="indexMetadata">
+									<ui:repeat id="metadata" var="metadata" value="#{item.mds.tree.list}" rows="0" varStatus="indexMetadata">
+										
+										<!-- MetaDataList - edit panel container set -->
+										<div class="imj_metadataSet">
+											<div class="imj_metadataLabel">
+												<h:outputText value="#{MetadataLabels.internationalizedLabels[metadata.statement.id]}"/>
+												<span class="imj_invisible">: </span>
 											</div>
-											<!-- imj_multipleButtons (-) (+) command buttons -->
-											<div class="imj_metadataEditButtonArea">
-												<h:commandButton type="button" styleClass="imj_removeButton_15" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{imageBean.edit.removeMetadata}" value="">
-													<f:setPropertyActionListener value="#{metadata.statement}" target="#{imageBean.edit.editor.statement}"/>
-													<f:setPropertyActionListener value="#{indexMetadata.index}" target="#{imageBean.edit.mdPosition}"/>
-													<f:ajax execute="@form" render="@form"/>
-												</h:commandButton>
-												<h:commandButton type="button" styleClass="imj_addButton_15" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{imageBean.edit.addMetadata}" value="">
-													<f:setPropertyActionListener value="#{metadata.statement}" target="#{imageBean.edit.editor.statement}"/>
-													<f:setPropertyActionListener value="#{indexMetadata.index}" target="#{imageBean.edit.mdPosition}"/>
-													<f:ajax execute="@form" render="@form"/>
-												</h:commandButton>
+											<div class="imj_metadataValue">
+												<div class="imj_metadataValueEntry">
+													<!-- MetaDataInput -->
+													<ui:include src="MetadataInput.xhtml">
+														<ui:param name="statement" value="#{metadata.statement}"/>
+														<ui:param name="metadata" value="#{metadata}"/>
+														<ui:param name="areaClass" value="double_txtArea"/>
+														<ui:param name="hideLabel" value="true"/>
+													</ui:include>
+												</div>
+												<!-- imj_multipleButtons (-) (+) command buttons -->
+												<div class="imj_metadataEditButtonArea">
+													<h:commandButton type="button" styleClass="imj_removeButton_15" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{item.removeMetadata(metadata)}" value="">
+														<f:ajax execute="@form" render="@form"/>
+													</h:commandButton>
+													<h:commandButton type="button" styleClass="imj_addButton_15" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{item.addMetadata(metadata)}" value="">
+														<f:ajax execute="@form" render="@form"/>
+													</h:commandButton>
+												</div>
 											</div>
 										</div>
-									</div>
+									</ui:repeat>
 								</ui:repeat>
 																
 								<!-- MetaDataList - EDIT - imj_submitPanel - cancel + submit command buttons -->
@@ -210,7 +211,7 @@
 											<h:outputText value="#{lbl.cancel}"/>
 									</h:commandLink>
 									<h:commandButton type="submit" styleClass="imj_submitButton"  action="#{imageBean.edit.save}" value="#{lbl.save}">
-										<f:setPropertyActionListener value="#{statement}" target="#{imageBean.edit.editor.statement}"/>
+											<f:ajax execute="@form" render="@all"/>
 									</h:commandButton>
 								</h:panelGroup>
 							</ui:fragment> <!-- MetaDataList - EDIT MetaData - panel END -->

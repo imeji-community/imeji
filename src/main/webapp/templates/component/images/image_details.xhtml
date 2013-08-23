@@ -17,19 +17,19 @@
 			poster="#{Navigation.applicationUrl}file?id=#{imageBean.image.webImageUrl}" preload="auto" height="264"></video>
 		</h:panelGroup>
 		<h:panelGroup rendered="#{imageBean.audioFile}">
-			<audio id="imejiAudioPlayer" src="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" controls="controls" preload="auto">
+			<audio id="imejiAudioPlayer" src="#{Navigation.applicationUrl}file?id=#{imageBean.image.fullImageUrl}" controls="controls"  preload="auto">
 				<h:outputText value="#{lbl.playing} #{imageBean.image.filename} " />
 			</audio>
 		</h:panelGroup>
 		<h:panelGroup layout="block" styleClass="imj_mediaWithdrawn" rendered="#{imageBean.image.status == 'WITHDRAWN'}">
 			<h:outputText styleClass="" value="#{lbl.withdraw_image_content}"/>
 		</h:panelGroup>
-		<h:outputLink styleClass="full_area0" id="lnkDownload" value="#{Navigation.applicationUrl}file/#{imageBean.encodedFileName}?id=#{imageBean.image.fullImageUrl}" target="_blank">
-			<h:outputText value="#{lbl.fileDownload}"/>
-		</h:outputLink>
-
+		
 		<!-- MediaEditPanel - select, add, remove media items -->
 		<h:panelGroup id="image" layout="block" rendered="#{imageBean.image.status != 'WITHDRAWN'}" styleClass="imj_mediaEditPanel">
+			<h:outputLink styleClass="full_area0" id="lnkDownload" value="#{Navigation.applicationUrl}file/#{imageBean.encodedFileName}?id=#{imageBean.image.fullImageUrl}" target="_blank">
+				<h:outputText value="#{lbl.fileDownload}"/>
+			</h:outputLink>
 			<h:form id="itemForm">
 				<h:outputText value=":" styleClass="imj_invisible"/>
 				<h:selectBooleanCheckbox styleClass="imj_mediaEditPanelItem imj_selectMedia" id="pictureCheckbox" value="#{imageBean.selected}" valueChangeListener="#{imageBean.selectedChanged}" rendered="#{SessionBean.user != null}">
@@ -181,7 +181,7 @@
 												<span class="imj_invisible">: </span>
 											</div>
 											<div class="imj_metadataValue">
-												<div class="imj_metadataValueEntry">
+												<div class="imj_metadataValueEntry" style="margin-left: #{metadata.hierarchyLevel}em;">
 													<!-- MetaDataInput -->
 													<ui:include src="MetadataInput.xhtml">
 														<ui:param name="statement" value="#{metadata.statement}"/>
@@ -208,7 +208,7 @@
 								<h:panelGroup layout="block" styleClass="imj_submitPanel">
 									<h:commandLink styleClass="imj_cancelButton" action="#{imageBean.edit.cancel}">
 										<f:ajax execute="@this" render="@form"/>
-											<h:outputText value="#{lbl.cancel}"/>
+										<h:outputText value="#{lbl.cancel}"/>
 									</h:commandLink>
 									<h:commandButton type="submit" styleClass="imj_submitButton"  action="#{imageBean.edit.save}" value="#{lbl.save}">
 											<f:ajax execute="@form" render="@all"/>

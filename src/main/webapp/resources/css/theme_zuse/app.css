@@ -44,11 +44,11 @@ a, a:visited {
 a:hover, a:focus, button:hover, button:focus {
 	color: #FFFFFF !important;
 	background-color: #183668 !important;
-	border-radius: 0.41666666em !important;
-    -webkit-border-radius: 0.41666666em !important;
-    -moz-border-radius: 0.41666666em !important;
-    -o-border-radius: 0.41666666em !important;
-    -ms-border-radius: 0.41666666em !important;
+	border-radius: 0.31666666em !important;
+    -webkit-border-radius: 0.31666666em !important;
+    -moz-border-radius: 0.31666666em !important;
+    -o-border-radius: 0.31666666em !important;
+    -ms-border-radius: 0.31666666em !important;
 }
 	
 
@@ -305,6 +305,10 @@ a.imj_contentMenuItemCreateAlbum:focus {
     border-top: 0 !important;
 }
 
+.fullItem, .tiledList, .listBackground, .listBackground .seperator {
+    background-color: #EEEEEE;
+}
+
 .imj_welcomeInfo {
 	color: #000000 !important;
 	background-color: #EEEEEE !important;
@@ -326,6 +330,33 @@ a.imj_contentMenuItemCreateAlbum:focus {
     color: #000000 !important;
 }
 
+.bordst0 {
+	-moz-border-radius:6px 6px 6px 6px;
+	-webkit-border-radius:6px 6px 6px 6px;
+	border-radius:6px 6px 6px 6px;
+	border:1px;
+} /* border-radius = CSS3 */
+
+.shadst1 {
+	-moz-box-shadow:5px 5px 5px #111111;
+	box-shadow:5px 5px 5px #111111;
+	-webkit-box-shadow:5px 5px 5px #111111;
+	background-color: #EEEEEE !important;
+} /* CSS3 in: FF > 3.5, Safari + Chrome */
+
+.fullItem .fullItemControls .actual {
+    background-color: #183668 !important;
+    color: #FFFFFF !important;
+    border-radius: 0.41666666em !important;
+    -webkit-border-radius: 0.41666666em !important;
+    -moz-border-radius: 0.41666666em !important;
+    -o-border-radius: 0.41666666em !important;
+    -ms-border-radius: 0.41666666em !important;
+}
+
+.full_area0_p4 {
+	background-color: transparent !important;
+}
 
 /* ZUSE THEME HACKS @ component.css */
 

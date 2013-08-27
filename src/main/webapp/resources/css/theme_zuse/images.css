@@ -614,7 +614,7 @@
 		background-position: center center;
 	}
 	
-	.remove:hover, remove:focus {
+	.remove:hover, .remove:focus {
 		background-image: url('./css/theme_zuse/images/All_Complete_MinusRemove_15_Hover.png');
 		background-repeat: no-repeat;
 		background-position: center center;

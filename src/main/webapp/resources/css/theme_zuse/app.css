@@ -50,7 +50,11 @@ a:hover, a:focus, button:hover, button:focus {
     -o-border-radius: 0.31666666em !important;
     -ms-border-radius: 0.31666666em !important;
 }
-	
+
+h2 {
+	color: #183668;
+	font-weight: bold;
+}
 
 .imj_siteWrapper {
     border-left: 1px dotted #000000 !important;
@@ -411,7 +415,7 @@ a.imj_contentMenuItemCreateAlbum:focus {
 .cancelButton:hover {
 	color: #183668 !important;
 	background-color: #FFFFFF !important;
-	border-color: #183668  !important;
+	border-color: #183668 !important;
 	border-radius: 0.41666666em !important;
     -webkit-border-radius: 0.41666666em !important;
     -moz-border-radius: 0.41666666em !important;
@@ -448,9 +452,27 @@ a.imj_contentMenuItemCreateAlbum:focus {
 }
 
 .itemTile .tileIconArea:hover, .itemTile .tileIconArea:focus {
-	background: #777777 !important;
+	background: #183668 !important;
 }
 
+.tileIconAreaSelected {
+	background: #777777 !important;	
+	border-radius: 0.41666666em !important;
+    -webkit-border-radius: 0.41666666em !important;
+    -moz-border-radius: 0.41666666em !important;
+    -o-border-radius: 0.41666666em !important;
+    -ms-border-radius: 0.41666666em !important;
+}
+
+.tileIconAreaSelected:hover,
+.tileIconAreaSelected:focus {
+	background: #183668 !important;	
+	border-radius: 0.41666666em !important;
+    -webkit-border-radius: 0.41666666em !important;
+    -moz-border-radius: 0.41666666em !important;
+    -o-border-radius: 0.41666666em !important;
+    -ms-border-radius: 0.41666666em !important;
+}
 
 /* ZUSE THEME HACKS @ infopage.css */
 

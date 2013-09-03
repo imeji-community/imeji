@@ -185,9 +185,9 @@
 									</h:outputLink>
 								</h:panelGroup>
 								<h:panelGroup styleClass="item" layout="block">
-									<h:outputLink id="lnkColZ3Reconstruction" title="#{lbl.goto_z3_reconstruction}" value="#{Navigation.applicationUrl}collection/bwDKvHpLfCN8RZ6t">
+									<h:outputLink id="lnkColZ3Reconstruction" title="#{lbl.goto_z3_reconstruction_col}" value="#{Navigation.applicationUrl}collection/bwDKvHpLfCN8RZ6t">
 										<h:panelGroup styleClass="pad" layout="block">
-											<h:outputText value="#{lbl.z3_reconstruction}" />
+											<h:outputText value="#{lbl.z3_reconstruction_col}" />
 										</h:panelGroup>		
 									</h:outputLink>
 								</h:panelGroup>
@@ -216,9 +216,9 @@
 						</h:panelGroup>
 					
 						<h:panelGroup styleClass="item" layout="block">
-							<h:outputLink id="lnkColAssemblyLine" title="#{lbl.goto_assembly_line}" value="#{Navigation.applicationUrl}collection/xXfqdPRibMGzHLv">
+							<h:outputLink id="lnkColAssemblyLine" title="#{lbl.goto_assembly_line_col}" value="#{Navigation.applicationUrl}collection/xXfqdPRibMGzHLv">
 								<h:panelGroup styleClass="pad" layout="block">
-									<h:outputText value="#{lbl.assembly_line}" />
+									<h:outputText value="#{lbl.assembly_line_col}" />
 								</h:panelGroup>		
 							</h:outputLink>
 						</h:panelGroup>

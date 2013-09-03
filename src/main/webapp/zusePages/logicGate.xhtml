@@ -48,16 +48,17 @@
 						value="#{ZuseStaticContent.logicGateContent}" />
 				</div>
 			</div>
-			<h:panelGroup styleClass="xDouble_marginLExcl pageBrowser">
-				<h:outputLink value="#{Navigation.zuseUrl}"
+			<h:panelGroup styleClass="full_area2_p8 pageBrowser">
+				<h:outputText value=" " style="width: 18.0em;" />
+				<h:outputLink value="#{Navigation.applicationUrl}booleanAlgebra"
 					styleClass="backward small_marginLExcl">
 					<h:outputText
-						value="#{lbl.paginator_previous} #{lbl.zuse_menu_konrad_zuse}" />
+						value="#{lbl.paginator_previous} | #{lbl.boolean_algebra}" />
 				</h:outputLink>
-				<h:outputText value=" " style="width: 16.0em;" />
-				<h:outputLink value="#{Navigation.zuseZ2Url}"
+				<h:outputText value=" " style="width: 12.0em;" />
+				<h:outputLink value="#{Navigation.applicationUrl}floatingPoint"
 					styleClass="forward small_marginLExcl">
-					<h:outputText value="#{lbl.zuse_menu_z2} #{lbl.paginator_next}" />
+					<h:outputText value="#{lbl.floating_point} | #{lbl.paginator_next}" />
 				</h:outputLink>
 			</h:panelGroup>
 		</ui:define>

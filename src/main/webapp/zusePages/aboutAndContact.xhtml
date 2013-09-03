@@ -39,22 +39,13 @@
 		<ui:param name="headline" value="#{lbl.zuse_project}"/>		
 				
 				<ui:define name="mainContent">
-					<div class="full_area0_p8 infoPage">
+				<div class="full_area0_p8 infoPage">
+					<!-- Main Content -->
+					<div align="justify" style="font-size: 12pt; margin-left: 30px" >
 						<!-- Main Content -->
-						<div align="justify" style="font-size: 12pt; margin-left: 30px" >
-							<!-- Main Content -->
-							<h:outputText escape="false" value="#{ZuseStaticContent.aboutAndContactContent}" />  
-						</div>
+						<h:outputText escape="false" value="#{ZuseStaticContent.aboutAndContactContent}" />  
 					</div>
-					<h:panelGroup styleClass="xDouble_marginLExcl pageBrowser">
-						<h:outputLink value="#{Navigation.zuseUrl}" styleClass="backward small_marginLExcl">
-							<h:outputText value="#{lbl.paginator_previous} #{lbl.zuse_menu_konrad_zuse}"/>
-						</h:outputLink>
-						<h:outputText value=" " style="width: 16.0em;"/>				
-						<h:outputLink value="#{Navigation.zuseZ2Url}" styleClass="forward small_marginLExcl">
-							<h:outputText value="#{lbl.zuse_menu_z2} #{lbl.paginator_next}"/>
-						</h:outputLink>
-					</h:panelGroup>
+				</div>	
 				</ui:define>
 		</ui:composition>
 	</body>

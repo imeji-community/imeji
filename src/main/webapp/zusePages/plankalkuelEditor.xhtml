@@ -3,9 +3,10 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
 <ui:remove>
-<!--
+	<!--
 
  CDDL HEADER START
 
@@ -34,19 +35,32 @@
  All rights reserved. Use is subject to license terms.
 -->
 </ui:remove>
-	<body>
-		<ui:composition template="../templates/template.xhtml">	
-		<ui:param name="headline" value="#{lbl.plankalkuel_editor}"/>		
-				
-				<ui:define name="mainContent">
-				<div class="full_area0_p8 infoPage">
+<body>
+	<ui:composition template="../templates/template.xhtml">
+		<ui:param name="headline" value="#{lbl.plankalkuel_editor}" />
+
+		<ui:define name="mainContent">
+			<div class="full_area0_p8 infoPage">
+				<!-- Main Content -->
+				<div align="justify" style="font-size: 12pt; margin-left: 30px">
 					<!-- Main Content -->
-					<div align="justify" style="font-size: 12pt; margin-left: 30px" >
-						<!-- Main Content -->
-						<h:outputText escape="false" value="#{ZuseStaticContent.plankalkuelEditorContent}" />  
-					</div>
-				</div>	
-				</ui:define>
-		</ui:composition>
-	</body>
+					<h:outputText escape="false"
+						value="#{ZuseStaticContent.plankalkuelEditorContent}" />
+				</div>
+			</div>
+			<h:panelGroup styleClass="xDouble_marginLExcl pageBrowser">
+				<h:outputLink value="#{Navigation.zuseUrl}"
+					styleClass="backward small_marginLExcl">
+					<h:outputText
+						value="#{lbl.paginator_previous} #{lbl.zuse_menu_konrad_zuse}" />
+				</h:outputLink>
+				<h:outputText value=" " style="width: 16.0em;" />
+				<h:outputLink value="#{Navigation.zuseZ2Url}"
+					styleClass="forward small_marginLExcl">
+					<h:outputText value="#{lbl.zuse_menu_z2} #{lbl.paginator_next}" />
+				</h:outputLink>
+			</h:panelGroup>
+		</ui:define>
+	</ui:composition>
+</body>
 </html>

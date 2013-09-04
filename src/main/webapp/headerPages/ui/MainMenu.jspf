@@ -330,9 +330,9 @@
 							</h:outputLink>
 						</h:panelGroup>
 						<h:panelGroup styleClass="item" layout="block">
-							<h:outputLink id="lnkColPhotoZ3" title="#{lbl.goto_photo_z3}" value="">
+							<h:outputLink id="lnkColPhotoZ3ReconProject" title="#{lbl.goto_photo_z3_recon_project}" value="">
 								<h:panelGroup styleClass="pad" layout="block">
-									<h:outputText value="#{lbl.goto_photo_z3}" />
+									<h:outputText value="#{lbl.photo_z3_recon_project}" />
 								</h:panelGroup>		
 							</h:outputLink>
 						</h:panelGroup>

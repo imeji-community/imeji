@@ -370,4 +370,12 @@
 		<pattern value="/reconstructionZ3"></pattern>
 		<view-id>/jsf/zusePages/reconstructionZ3.xhtml</view-id>
 	</url-mapping>
+	<url-mapping id="tou">
+		<pattern value="/tou"></pattern>
+		<view-id>/jsf/zusePages/tou.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="toc">
+		<pattern value="/toc"></pattern>
+		<view-id>/jsf/zusePages/tou.xhtml</view-id>
+	</url-mapping>
 </pretty-config>

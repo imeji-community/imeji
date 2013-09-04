@@ -62,7 +62,9 @@ public class ZuseStaticContentBean extends StaticContentBean {
 		PLANKALKUELEDITOR("zuse.imeji.url.planeditor"),
 		PLANKALKUELCOMPILER("zuse.imeji.url.plancompiler"),
 		PLANKALKUELAPPLICATIONS("zuse.imeji.url.planapps"),
+		TOU("zuse.imeji.url.tou"),
 		RECONSTRUCTIONZ3("zuse.imeji.url.recontructionz3");
+		
 		
 		boolean enabled;
 		String urlString;
@@ -1373,6 +1375,31 @@ public class ZuseStaticContentBean extends StaticContentBean {
 
 	public void setPlankalkuelapplication(boolean plankalkuelapplication) {
 		ZuseStaticPageEntry.PLANKALKUELAPPLICATIONS.setEnabled(plankalkuelapplication);
+	}
+	
+	public String getTouContent() throws IOException, URISyntaxException
+    {
+        String html = "";
+        String urlString = ZusePropertyReader.getProperty(ZuseStaticPageEntry.TOU.getUrlString());
+        try
+        {
+            html = getContent(urlString);
+        }
+        catch (Exception e)
+        {
+            html = urlString
+                    + " couldn't be loaded. Url might be either wrong or protected." + "<br/><br/>" + "Error message:"
+                    + "<br/><br/>" + e.toString();
+        }
+        return html;
+    }
+	
+	public boolean isTou() {
+		return ZuseStaticPageEntry.TOU.getEnabled();
+	}
+
+	public void setTou(boolean tou) {
+		ZuseStaticPageEntry.TOU.setEnabled(tou);
 	}
 	
 	public String getReconstructionZ3Content() throws IOException, URISyntaxException

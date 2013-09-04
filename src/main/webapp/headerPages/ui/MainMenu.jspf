@@ -430,10 +430,65 @@
 			</h:panelGroup>	
 		</h:panelGroup>
 		
-		<h:outputLink id="lnkAlbums" styleClass="imj_mainMenuStandardItem" title="#{lbl.goto_albums}" value="#{Navigation.albumsUrl}?page=1" rendered="#{HistorySession.currentPage.type.fileName != 'Albums.xhtml'}">
-			<h:outputText value="#{lbl.header_albums}"></h:outputText>
-		</h:outputLink>
-		<h:outputText id="lnkAlbumssInactive" styleClass="imj_mainMenuStandardItem" value="#{lbl.header_albums}" rendered="#{HistorySession.currentPage.type.fileName == 'Albums.xhtml'}" />
+		<h:panelGroup id="lnkAlbumsDropMenu" styleClass="dropDownMenu" layout="block">
+			<h:panelGroup styleClass="header" layout="block">
+				<h:outputLink id="lnkAlbums" styleClass="imj_mainMenuStandardItem" title="#{lbl.goto_albums}" value="#{Navigation.albumsUrl}?page=1" rendered="#{HistorySession.currentPage.type.fileName != 'Albums.xhtml'}">
+					<h:outputText value="#{lbl.header_albums}"></h:outputText>
+				</h:outputLink>
+				<h:outputText id="lnkAlbumssInactive" styleClass="imj_mainMenuStandardItem" value="#{lbl.header_albums}" rendered="#{HistorySession.currentPage.type.fileName == 'Albums.xhtml'}" />
+			</h:panelGroup>	
+			<h:panelGroup styleClass="items" layout="block">
+				<h:panelGroup styleClass="item" layout="block">
+					<h:outputLink id="lnkAlbZ1" title="#{lbl.goto_z1}" value="#{Navigation.applicationUrl}z1">
+						<h:panelGroup styleClass="pad" layout="block">
+							<h:outputText value="#{lbl.z1}" />
+						</h:panelGroup>
+					</h:outputLink>
+				</h:panelGroup>
+				<h:panelGroup styleClass="item" layout="block">
+					<h:outputLink id="lnkAlbZ2" title="#{lbl.goto_z2}" value="#{Navigation.applicationUrl}z2">
+						<h:panelGroup styleClass="pad" layout="block">
+							<h:outputText value="#{lbl.z2}" />
+						</h:panelGroup>
+					</h:outputLink>
+				</h:panelGroup>
+				<h:panelGroup styleClass="item" layout="block">
+					<h:outputLink id="lnkAlbZ3" title="#{lbl.goto_z3}" value="#{Navigation.applicationUrl}z3">
+						<h:panelGroup styleClass="pad" layout="block">
+							<h:outputText value="#{lbl.z3}" />
+						</h:panelGroup>
+					</h:outputLink>
+				</h:panelGroup>
+				<h:panelGroup styleClass="item" layout="block">
+					<h:outputLink id="lnkAlbZ4" title="#{lbl.goto_z4}" value="#{Navigation.applicationUrl}z4">
+						<h:panelGroup styleClass="pad" layout="block">
+							<h:outputText value="#{lbl.z4}" />
+						</h:panelGroup>
+					</h:outputLink>
+				</h:panelGroup>
+				<h:panelGroup styleClass="item" layout="block">
+					<h:outputLink id="lnkAlbPlankalk" title="#{lbl.goto_plankalkuel}" value="#{Navigation.applicationUrl}z4">
+						<h:panelGroup styleClass="pad" layout="block">
+							<h:outputText value="#{lbl.plankalkuel}" />
+						</h:panelGroup>
+					</h:outputLink>
+				</h:panelGroup>
+				<h:panelGroup styleClass="item" layout="block">
+					<h:outputLink id="lnkAlbInfAndSoc" title="#{lbl.goto_inf_and_soc}" value="#{Navigation.applicationUrl}z4">
+						<h:panelGroup styleClass="pad" layout="block">
+							<h:outputText value="#{lbl.inf_and_soc}" />
+						</h:panelGroup>
+					</h:outputLink>
+				</h:panelGroup>
+				<h:panelGroup styleClass="item" layout="block">
+					<h:outputLink id="lnkAlbBio" title="#{lbl.goto_biography}" value="#{Navigation.applicationUrl}z4">
+						<h:panelGroup styleClass="pad" layout="block">
+							<h:outputText value="#{lbl.biography}" />
+						</h:panelGroup>
+					</h:outputLink>
+				</h:panelGroup>
+			</h:panelGroup>
+		</h:panelGroup>
 		
 		<h:panelGroup id="lnkZuseEncyclopediaDropMenu" styleClass="dropDownMenu" layout="block">
 			<h:panelGroup styleClass="header" layout="block">
@@ -596,7 +651,6 @@
 				</h:panelGroup>
 						
 			</h:panelGroup>
-			
 		</h:panelGroup>
 		
 		
@@ -823,23 +877,29 @@
 							<h:outputText value="#{lbl.zuse_project}" />
 						</h:panelGroup>
 					</h:outputLink>
-				</h:panelGroup>
-				
+				</h:panelGroup>				
 				<h:panelGroup styleClass="item" layout="block">
 					<h:outputLink id="lnkPartners" title="#{lbl.goto_zuse_partners}" value="#{Navigation.applicationUrl}partners">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.zuse_partners}" />
 						</h:panelGroup>
 					</h:outputLink>
-				</h:panelGroup>
-				
+				</h:panelGroup>				
 				<h:panelGroup styleClass="item" layout="block">
 					<h:outputLink id="lnkImprint" title="#{lbl.goto_zuse_imprint}" value="#{Navigation.applicationUrl}imprint">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.zuse_imprint}" />
 						</h:panelGroup>
 					</h:outputLink>
+				</h:panelGroup>				
+				<h:panelGroup styleClass="item" layout="block">
+					<h:outputLink id="lnkTOU" title="#{lbl.goto_zuse_tou}" value="#{Navigation.applicationUrl}tou">
+						<h:panelGroup styleClass="pad" layout="block">
+							<h:outputText value="#{lbl.zuse_toux}" />
+						</h:panelGroup>
+					</h:outputLink>
 				</h:panelGroup>
+		
 			</h:panelGroup>
 		</h:panelGroup>
 		

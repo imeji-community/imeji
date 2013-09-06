@@ -90,7 +90,7 @@
 			of richfaces. -->
 		<org.richfaces.bom.version>4.2.2.Final</org.richfaces.bom.version>
 		<!-- Used by Tomcat to trip version Nr when deploy WAR package, e.g., imeji_1.0_screenshot->imeji -->
-		<project.warName>imeji</project.warName>
+		<project.warName>ROOT</project.warName>
 	</properties>
 	<repositories>
 <!-- 		<repository>

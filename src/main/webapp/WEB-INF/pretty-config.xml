@@ -13,7 +13,7 @@
 
 	<url-mapping id="home">
 		<pattern value="/" />
-		<view-id>/jsf/Welcome.xhtml</view-id>
+		<view-id>/jsf/maintenance/index.html</view-id>
 	</url-mapping>
 	<url-mapping id="albums">
 		<pattern value="/albums" />

@@ -48,11 +48,11 @@ if (typeof console === 'undefined') {
         // homepage url (behind logo)
         'homeUrl' : '/',
         // base URL to digilib webapp (e.g. 'http://digilib.mpiwg-berlin.mpg.de/digitallibrary')
-        'digilibBaseUrl' : '/imeji/resources/digilib',
+        'digilibBaseUrl' : '/resources/digilib',
         // path to digilib frontend page (inside digilibBaseUrl)
-        'digilibFrontendPath' : '/imeji/digilibImage',
+        'digilibFrontendPath' : '/digilibImage',
         // base URL to Scaler servlet (usually digilibBaseUrl+'/servlet/Scaler')
-        'scalerBaseUrl' : '/imeji/digilib',
+        'scalerBaseUrl' : '/digilib',
         // prefix of digilib classes in CSS styles
         'cssPrefix' : 'dl-',
         // list of Scaler parameters

@@ -56,6 +56,10 @@ h2 {
 	font-weight: bold;
 }
 
+b {
+    font-weight: bold;
+}
+
 .imj_siteWrapper {
     border-left: 1px dotted #000000 !important;
     border-right: 1px dotted #000000 !important;

@@ -3,9 +3,10 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
 <ui:remove>
-<!--
+	<!--
 
  CDDL HEADER START
 
@@ -34,19 +35,33 @@
  All rights reserved. Use is subject to license terms.
 -->
 </ui:remove>
-	<body>
-		<ui:composition template="../templates/template.xhtml">	
-		<ui:param name="headline" value="#{lbl.zuse_project}"/>		
-				
-				<ui:define name="mainContent">
-				<div class="full_area0_p8 infoPage">
+<body>
+	<ui:composition template="../templates/template.xhtml">
+		<ui:param name="headline" value="#{lbl.zuse_tou}" />
+
+		<ui:define name="mainContent">
+			<div class="full_area0_p8 infoPage">
+				<!-- Main Content -->
+				<div align="justify" style="font-size: 12pt; margin-left: 30px">
 					<!-- Main Content -->
-					<div align="justify" style="font-size: 12pt; margin-left: 30px" >
-						<!-- Main Content -->
-						<h:outputText escape="false" value="#{ZuseStaticContent.aboutAndContactContent}" />  
-					</div>
-				</div>	
-				</ui:define>
-		</ui:composition>
-	</body>
+					<h:outputText escape="false"
+						value="#{ZuseStaticContent.touContent}" />
+				</div>
+			</div>
+			<h:panelGroup styleClass="full_area0_p8 pageBrowser">
+			<h:outputText value=" " style="width: 20.0em;" />
+				<h:outputLink value="#{Navigation.applicationUrl}imprint"
+					styleClass="backward small_marginLExcl">
+					<h:outputText
+						value="#{lbl.paginator_previous} | #{lbl.zuse_imprint}" />
+				</h:outputLink>
+				<h:outputText value=" " style="width: 16.0em;" />
+				<h:outputLink value="#{Navigation.applicationUrl}project"
+					styleClass="forward small_marginLExcl">
+					<h:outputText value="#{lbl.zuse_project} | #{lbl.paginator_next}" />
+				</h:outputLink>
+			</h:panelGroup>
+		</ui:define>
+	</ui:composition>
+</body>
 </html>

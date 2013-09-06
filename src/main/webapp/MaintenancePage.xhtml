@@ -1,0 +1,162 @@
+<f:view encoding="UTF-8" locale="#{SessionBean.locale}"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	<f:loadBundle var="lbl" basename="labels" />
+	<f:loadBundle var="msg" basename="messages" />
+	<html xmlns="http://www.w3.org/1999/xhtml">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="pragma" content="no-cache" />
+	<meta http-equiv="cache-control" content="no-cache" />
+	<meta http-equiv="expires" content="0" />
+	<meta name="viewport" content="initial-scale=1.0" />
+
+	<link rel="stylesheet"
+		href="#{Navigation.applicationUrl}resources/maintenance/style.css"
+		type="text/css" media="screen" />
+	<link rel="Stylesheet" type="text/css"
+		href="#{Navigation.applicationUrl}resources/maintenance/style/main.css"></link>
+	<!--[if IE 6]><link rel="stylesheet" href="#{Navigation.applicationUrl}resources/maintenance/style.ie6.css" type="text/css" media="screen" /><![endif]-->
+	<!--[if IE 7]><link rel="stylesheet" href="#{Navigation.applicationUrl}resources/maintenance/style.ie7.css" type="text/css" media="screen" /><![endif]-->
+	<link rel="shortcut icon"
+		href="#{Navigation.applicationUrl}resources/maintenance/favicon.ico"
+		type="image/x-icon" />
+	<script type="text/javascript"
+		src="#{Navigation.applicationUrl}resources/maintenance/jquery.js"></script>
+	<script type="text/javascript"
+		src="#{Navigation.applicationUrl}resources/maintenance/script.js"></script>
+	<script type="text/javascript" 
+		src="#{Navigation.applicationUrl}resources/maintenance/js/jquery.lwtCountdown-1.0.js"></script>
+	<script type="text/javascript"
+		src="#{Navigation.applicationUrl}resources/maintenance/js/misc.js"></script>
+
+	<title><h:outputText value="Maintenance Page" /></title>
+</h:head>
+<h:body lang="#{SessionBean.locale}">
+
+	<div id="art-main">
+		<div class="cleared reset-box"></div>
+		<div class="art-box art-sheet">
+			<div class="art-box-body art-sheet-body">
+				<div class="art-layout-wrapper">
+					<div class="art-content-layout">
+						<div class="art-content-layout-row">
+							<div class="art-layout-cell art-content">
+								<div class="art-box art-post">
+									<div class="art-box-body art-post-body">
+										<div class="art-post-inner art-article">
+											<h2 class="art-postheader"></h2>
+											<div class="art-postcontent"></div>
+											<div class="cleared"></div>
+										</div>
+
+										<div class="cleared"></div>
+									</div>
+								</div>
+
+								<div class="cleared"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="cleared"></div>
+				<div class="art-footer">
+					<div class="art-footer-body">
+						<div class="art-footer-text">
+							<p style="text-align: auto;">
+								<img width="990" height="149" alt=""
+									src="#{Navigation.applicationUrl}resources/maintenance/images/banner-2-2.png" /><span
+									style="border-collapse: collapse; font-size: 13px; line-height: normal;"><br /></span>
+							</p>
+
+							<p style="text-align: auto;">
+								<br />
+							</p>
+
+							<p>
+								<span style="font-weight: bold;"><span
+									style="font-size: 24px;">THIS WEBSITE IS CURRENTLY NOT
+										AVAILABLE DUE TO MAINTENANCE!</span></span><span style="font-weight: bold;"><span
+									style="font-size: 24px;"><br /></span></span>
+							</p>
+
+							<p>
+								<span style="font-weight: bold;"><span
+									style="font-size: 24px;"><br /></span></span>
+							</p>
+
+
+							<p>
+								<span style="font-weight: bold;"><span
+									style="font-size: 24px;">PLEASE COME BACK IN ... </span></span>
+							</p>
+
+
+							<div id="container">
+
+								<div id="countdown_dashboard">
+									<div class="dash weeks_dash">
+										<span class="dash_title">weeks</span>
+										<div class="digit">0</div>
+										<div class="digit">0</div>
+									</div>
+
+									<div class="dash days_dash">
+										<span class="dash_title">days</span>
+										<div class="digit">0</div>
+										<div class="digit">0</div>
+									</div>
+
+									<div class="dash hours_dash">
+										<span class="dash_title">hours</span>
+										<div class="digit">0</div>
+										<div class="digit">0</div>
+									</div>
+
+									<div class="dash minutes_dash">
+										<span class="dash_title">minutes</span>
+										<div class="digit">0</div>
+										<div class="digit">0</div>
+									</div>
+
+									<div class="dash seconds_dash">
+										<span class="dash_title">seconds</span>
+										<div class="digit">0</div>
+										<div class="digit">0</div>
+									</div>
+
+								</div>
+								<script type="text/javascript">
+									jQuery(document).ready(function() {
+										$('#countdown_dashboard').countDown({
+											targetDate: {
+												'day': 		30,
+												'month': 	9,
+												'year': 	2013,
+												'hour': 	12,
+												'min': 		0,
+												'sec': 		0
+											}
+										});
+									});
+								</script>
+							</div>
+						</div>
+
+
+
+
+					</div>
+				</div>
+				<div class="cleared"></div>
+			</div>
+		</div>
+		<div class="cleared"></div>
+		<p class="art-page-footer"></p>
+		<div class="cleared"></div>
+	</div>
+
+</h:body>
+	</html>
+</f:view>

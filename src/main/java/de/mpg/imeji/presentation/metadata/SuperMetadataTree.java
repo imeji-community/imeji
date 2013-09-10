@@ -60,7 +60,7 @@ public class SuperMetadataTree
         // Create the map
         map = createMap(list, null, "0");
         // Set the childs
-        for(SuperMetadataBean smb : map.values())
+        for (SuperMetadataBean smb : map.values())
             smb.setChilds(getChilds(smb.getTreeIndex()));
     }
 

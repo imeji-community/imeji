@@ -1,6 +1,6 @@
 /*
  *
- * CDDL HEADER START
+metadataTree.remove(smb);metadataTree.remove(smb); * CDDL HEADER START
  *
  * The contents of this file are subject to the terms of the
  * Common Development and Distribution License, Version 1.0 only
@@ -59,6 +59,9 @@ public class SuperMetadataTree
         list = setParents(list);
         // Create the map
         map = createMap(list, null, "0");
+        // Set the childs
+        for(SuperMetadataBean smb : map.values())
+            smb.setChilds(getChilds(smb.getTreeIndex()));
     }
 
     /**

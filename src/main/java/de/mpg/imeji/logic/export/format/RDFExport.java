@@ -121,6 +121,7 @@ public abstract class RDFExport extends Export
             Imeji.dataset.end();
         }
     }
+    
 
     /**
      * Write a {@link Resource} in rdf
@@ -182,7 +183,7 @@ public abstract class RDFExport extends Export
         String tag = "<" + getNamespace(st.getPredicate().getNameSpace()) + ":" + st.getPredicate().getLocalName();
         if (resourceURI != null)
         {
-            tag += " rdf:resource=\"" + resourceURI + "\"";
+            tag += " rdf:resource=\"" + resourceURI+ "\"";
         }
         tag += ">";
         return tag;

@@ -490,7 +490,11 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
      */
     public boolean isEmpty()
     {
-        return empty;
+         //return empty;
+        for(SuperMetadataBean smb : childs)
+            if(!smb.isEmpty())
+                return false;
+        return MetadataHelper.isEmpty(asMetadata());
     }
 
     /**

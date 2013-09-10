@@ -261,7 +261,7 @@ public class InternalStorageManager
         filename = StringHelper.normalizeFilename(filename);
         if (resolution != FileResolution.ORIGINAL)
         {
-            filename = filename + ".jpg";
+            filename = FilenameUtils.removeExtension(filename) + ".jpg";
         }
         return storageUrl + id + StringHelper.urlSeparator + resolution.name().toLowerCase()
                 + StringHelper.urlSeparator + filename;
@@ -283,8 +283,7 @@ public class InternalStorageManager
         String webResolutionPath = write(generatorManager.generateWebResolution(file, extension),
                 transformUrlToPath(item.getWebUrl()));
         // Use Web resolution to generate Thumbnail (avoid to read the original file again)
-        write(generatorManager
-                .generateThumbnail(new File(webResolutionPath), extension.equals("gif") ? "gif" : "jpg"),
+        write(generatorManager.generateThumbnail(new File(webResolutionPath), extension.equals("gif") ? "gif" : "jpg"),
                 transformUrlToPath(item.getThumbnailUrl()));
         // write original file in storage: simple copy the tmp file to the correct path
         copy(file, transformUrlToPath(item.getOriginalUrl()));

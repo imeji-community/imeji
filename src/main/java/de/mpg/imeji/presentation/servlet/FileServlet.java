@@ -90,6 +90,7 @@ public class FileServlet extends HttpServlet
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
         String url = req.getParameter("id");
+        boolean download = "1".equals(req.getParameter("download"));
         if (url == null)
         {
             // if the id parameter is null, interpret the whole url as a direct to the file (can only work if the
@@ -100,7 +101,8 @@ public class FileServlet extends HttpServlet
         SessionBean session = getSession(req);
         if (security.check(OperationsType.READ, getUser(session), loadCollection(url, session)))
         {
-            //resp.setHeader("Content-disposition", "filename=imejiFile");
+            if (download)
+                resp.setHeader("Content-disposition", "attachment;");
             storageController.read(url, resp.getOutputStream(), true);
         }
         else

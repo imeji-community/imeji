@@ -49,7 +49,7 @@
 		
 		<!-- METADATA TYPE PUBLICATION -->
 		<h:panelGroup rendered="#{metadata.typeNamespace=='http://imeji.org/terms/metadata#publication'}">
-			<h:inputText id="inputPublicationURI" styleClass="imj_metadataEditPublication" value="#{metadata.uri}"  rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}" onfocus="this.select(); getDatasourceUrl('#{statement.vocabulary}', '#{Navigation.autocompleteUrl}')">
+			<h:inputText id="inputPublicationURI" styleClass="imj_metadataEditPublication" value="#{metadata.uri}"  rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}" onfocus="this.select(); getDatasourceUrl('#{statement.vocabulary}', '#{Navigation.autocompleteUrl}')" valueChangeListener="#{metadata.citationUriListener}">
 				<f:converter converterId="URIConverter" />
 			</h:inputText>
 			<h:selectOneMenu styleClass="imj_metadataEditPublication" immediate="true" value="#{metadata.uri}" rendered="#{SuggestBean.suggests[statement.id].hasRestrictedValues}">
@@ -58,7 +58,7 @@
 			<div class="imj_metadataValueEntryLabel">
 				<h:outputLabel value="#{lbl.export_formats}"/>
 			</div>
-			<h:selectOneMenu value="#{metadata.exportFormat}">
+			<h:selectOneMenu value="#{metadata.exportFormat}" valueChangeListener="#{metadata.citationUriListener}">
 				<f:selectItem itemLabel="APA" itemValue="APA"></f:selectItem>
 				<f:selectItem itemLabel="AJP" itemValue="AJP"></f:selectItem>
 				<f:selectItem itemLabel="JUS" itemValue="JUS"></f:selectItem>

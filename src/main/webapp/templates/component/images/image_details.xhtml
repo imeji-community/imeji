@@ -27,7 +27,7 @@
 		
 		<!-- MediaEditPanel - select, add, remove media items -->
 		<h:panelGroup id="image" layout="block" rendered="#{imageBean.image.status != 'WITHDRAWN'}" styleClass="imj_mediaEditPanel">
-			<h:outputLink styleClass="full_area0" id="lnkDownload" value="#{Navigation.applicationUrl}file/#{imageBean.encodedFileName}?id=#{imageBean.image.fullImageUrl}" target="_blank">
+			<h:outputLink styleClass="full_area0" id="lnkDownload" value="#{Navigation.applicationUrl}file/#{imageBean.encodedFileName}?id=#{imageBean.image.fullImageUrl}&amp;download=1" target="_blank">
 				<h:outputText value="#{lbl.fileDownload}"/>
 			</h:outputLink>
 			<h:form id="itemForm">

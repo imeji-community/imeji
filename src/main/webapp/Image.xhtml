@@ -8,20 +8,6 @@
 	<ui:param name="currentMainMenu" value="mediaEntry"/>
 	<ui:param name="browseToAllItemsUrl" value="#{Navigation.browseUrl}?q="/>
 	
-	<ui:define name="paginatorTop">
-		<h:panelGroup layout="block" id="paginatorTop" styleClass="imj_paginator">
-			<h:panelGroup styleClass="imj_simplePageBrowser">
-				<h:outputLink value="#{imageBean.browse.previous}" styleClass="imj_backwardButton" disabled="#{imageBean.browse.previous == null}">
-					<h:outputText value="#{lbl.paginator_previous} #{lbl.image} #{imageBean.initLabels}"/>
-				</h:outputLink>
-				
-				<h:outputLink value="#{imageBean.browse.next}" styleClass="imj_forwardButton" disabled="#{imageBean.browse.next == null}">
-					<h:outputText value="#{lbl.paginator_next} #{lbl.image}"/>
-				</h:outputLink>
-			</h:panelGroup>
-		</h:panelGroup>
-	</ui:define>
-	
 	
 	<ui:remove>
 		<ui:define name="preListHeader">

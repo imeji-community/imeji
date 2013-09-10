@@ -9,7 +9,8 @@
 	</ui:define>
 	
 	<!-- Main Content - Image Detail View -->
-	<ui:define name="mainContent">		
+	<ui:define name="mainContent">
+	   
 		<ui:fragment rendered="#{imageBean.image != null}">
 			<ui:include src="../../include/History.xhtml"></ui:include>
 			
@@ -18,12 +19,34 @@
 				<imjc:selectionInfoPanel fSession="#{FiltersSession}" facetBean="#{imageBean}" currentMainMenu="#{currentMainMenu}" browseToAllUrl="#{browseToAllItemsUrl}" numberOfElements="0"/>
 			</h:panelGroup>
 			
-			<ui:insert name="paginatorTop"/>
-			<ui:include src="../component/images/image_details.xhtml"/>
+			<ui:fragment rendered="#{imageBean.visible}">
+				<!-- pagination top -->
+				<h:panelGroup layout="block" id="paginatorTop" styleClass="imj_paginator">
+					<h:panelGroup styleClass="imj_simplePageBrowser">
+						<h:outputLink value="#{imageBean.browse.previous}&amp;tab=#{imageBean.tab}" styleClass="imj_backwardButton" disabled="#{imageBean.browse.previous == null}">
+							<h:outputText value="#{lbl.paginator_previous} #{lbl.image} #{imageBean.initLabels}"/>
+						</h:outputLink>
+						
+						<h:outputLink value="#{imageBean.browse.next}&amp;tab=#{imageBean.tab}" styleClass="imj_forwardButton" disabled="#{imageBean.browse.next == null}">
+							<h:outputText value="#{lbl.paginator_next} #{lbl.image}"/>
+						</h:outputLink>
+					</h:panelGroup>
+				</h:panelGroup>
+				<ui:include src="../component/images/image_details.xhtml"/>
+			</ui:fragment>
 			
 		</ui:fragment>
+		
+		<!-- item not found -->
 		<h:panelGroup layout="block" styleClass="third_area0_p0 messageArea errorMessageArea xTiny_marginLExcl" rendered="#{imageBean.image == null}">
             <h2><h:outputText value="404 #{lbl.not_found}" styleClass="tiny_marginLExcl"/></h2>
         </h:panelGroup>
+        
+        <!-- User not allowed to view item -->
+        <h:panelGroup layout="block" styleClass="full_area0_p0 messageArea errorMessageArea xTiny_marginLExcl" rendered="#{!imageBean.visible}">
+			<h:outputText value="#{lbl.view_page_disallowed}" styleClass="tiny_marginLExcl" rendered="#{SessionBean.user == null}"/>
+        	<h:outputText value="#{lbl.view_page_disallowed2}" styleClass="tiny_marginLExcl" rendered="#{SessionBean.user != null}"/>
+		</h:panelGroup>
+		
 	</ui:define>	
 </ui:composition>

@@ -39,7 +39,7 @@ public class EditorItemBean
     public void init(Item item)
     {
         this.item = item;
-        mds = new MetadataSetBean(item.getMetadataSet());
+        mds = new MetadataSetBean(item.getMetadataSet(), true);
     }
 
     /**

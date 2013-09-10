@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.event.ValueChangeEvent;
+
 import de.mpg.imeji.logic.util.DateFormatter;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.MetadataFactory;
@@ -13,7 +15,9 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
+import de.mpg.imeji.presentation.util.SearchAndExportHelper;
 
 /**
  * Bean for all Metadata types. This bean should have all variable that have been defined in all metadata types.
@@ -92,7 +96,6 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
     {
         ObjectHelper.copyAllFields(this, metadata);
         MetadataHelper.setConeID(metadata);
-        MetadataHelper.setCitationForPublication(metadata);
         return metadata;
     }
 
@@ -130,6 +133,11 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
     public void clear()
     {
         ObjectHelper.copyAllFields(copyEmpty(), this);
+    }
+
+    public void citationUriListener()
+    {
+        citation = SearchAndExportHelper.getCitation((Publication)metadata);
     }
 
     /**
@@ -490,9 +498,9 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
      */
     public boolean isEmpty()
     {
-         //return empty;
-        for(SuperMetadataBean smb : childs)
-            if(!smb.isEmpty())
+        // return empty;
+        for (SuperMetadataBean smb : childs)
+            if (!smb.isEmpty())
                 return false;
         return MetadataHelper.isEmpty(asMetadata());
     }

@@ -74,6 +74,10 @@ public class SearchIndexInitializer
         indexes = put(indexes, new SearchIndex(SearchIndex.names.prof.name(), "http://imeji.org/terms/mdprofile",
                 indexes.get(SearchIndex.names.col.name())));
         /**
+         * Album indexes
+         */
+        indexes = put(indexes, new SearchIndex(SearchIndex.names.alb.name(), "http://imeji.org/terms/album"));
+        /**
          * Container metadata indexes
          */
         indexes = put(indexes, new SearchIndex(SearchIndex.names.cont_md.name(),

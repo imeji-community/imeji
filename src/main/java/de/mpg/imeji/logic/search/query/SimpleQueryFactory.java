@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.util.SearchIndexInitializer;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchMetadata;
 import de.mpg.imeji.logic.search.vo.SearchPair;
@@ -89,15 +90,21 @@ public class SimpleQueryFactory
             return "";
             // return "FILTER(" + getSimpleFilter(pair, "status") + ")";
         }
-        else if (SearchIndex.names.col.name().equals(pair.getIndex().getName()))
+        else if (SearchIndex.names.col.name().equals(pair.getIndex().getName())
+                || SearchIndex.names.alb.name().equals(pair.getIndex().getName()))
         {
-            return " FILTER(" + getSimpleFilter(pair, "c") + ") .";
+            return " FILTER(" + getSimpleFilter(pair, SimpleSecurityQuery.getVariableName(rdfType)) + ") .";
+            // return " FILTER(" + getSimpleFilter(pair, "c") + ") .";
         }
         else if (SearchIndex.names.user.name().equals(pair.getIndex().getName()))
         {
             return "<" + pair.getValue() + ">"
-                    + " <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> "
+                    + " <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> ?"
                     + SimpleSecurityQuery.getVariableName(rdfType) + " .";
+        }
+        else if (SearchIndex.names.prof.name().equals(pair.getIndex().getName()))
+        {
+            return " FILTER(" + getSimpleFilter(pair, "s") + ") . ?c <" + Search.getIndex(SearchIndex.names.prof).getNamespace() + "> ?s .";
         }
         else if (SearchIndex.names.cont_title.name().equals(pair.getIndex().getName()))
         {
@@ -125,7 +132,7 @@ public class SimpleQueryFactory
         }
         else if (SearchIndex.names.profile.name().equals(pair.getIndex().getName()))
         {
-            searchQuery = " .?s <http://imeji.org/terms/mdprofile> ?el";
+            searchQuery = " ?s <http://imeji.org/terms/mdprofile> ?el";
         }
         else if (SearchIndex.names.type.name().equals(pair.getIndex().getName()))
         {
@@ -218,8 +225,7 @@ public class SimpleQueryFactory
             }
             else if (SearchIndex.names.cont_title.name().equals(sortCriterion.getIndex().getName()))
             {
-                return (item ? " . ?c" : " . ?s")
-                        + " <http://imeji.org/terms/container/metadata> ?title . ?title <"
+                return (item ? " . ?c" : " . ?s") + " <http://imeji.org/terms/container/metadata> ?title . ?title <"
                         + sortCriterion.getIndex().getNamespace() + "> ?sort0";
             }
         }

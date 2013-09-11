@@ -6,6 +6,8 @@ package de.mpg.imeji.logic.vo;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
+
+import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jList;
@@ -115,5 +117,16 @@ public class User
     public URI getId()
     {
         return id;
+    }
+
+    /**
+     * True if the current user is the system administrator
+     * 
+     * @return
+     */
+    public boolean isAdmin()
+    {
+        Security security = new Security();
+        return security.isSysAdmin(this);
     }
 }

@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.hp.hpl.jena.Jena;
 
+import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.j2j.helper.SortHelper;
 
@@ -37,7 +38,11 @@ public class SearchResult
     {
         numberOfRecords = unsortedResults.size();
         if (sort != null)
+        {
+            if (sort.getIndex() != null && sort.getIndex().getName().equals(SearchIndex.names.cont_title.name()))
+                sort.toggle();
             this.sort = sort;
+        }
         results = SortHelper.sort(unsortedResults, this.sort.getSortOrder());
     }
 

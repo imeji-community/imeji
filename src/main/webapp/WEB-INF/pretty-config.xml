@@ -6,9 +6,11 @@
 
 	<!-- Begin RewriteRules -->
 	<rewrite trailingSlash="remove" />
-		
+
 	<!-- <rewrite match="^/old-url/(\w+)/$" substitute="/new_url/$1/" redirect="301" 
 		/> -->
+	<rewrite match="/metadataProfile/(.+)" substitute="/profile/$1"
+		redirect="301" />
 	<!-- Begin UrlMappings -->
 
 	<url-mapping id="home">
@@ -148,22 +150,22 @@
 		<pattern value="/user/browse"></pattern>
 		<view-id>/jsf/Users.xhtml</view-id>
 	</url-mapping>
-	
+
 	<url-mapping id="share">
 		<pattern value="/share"></pattern>
 		<view-id>/jsf/Share.xhtml</view-id>
 	</url-mapping>
-	
+
 	<url-mapping id="admin">
 		<pattern value="/admin"></pattern>
 		<view-id>/jsf/UserAdministrationPage.xhtml</view-id>
 	</url-mapping>
-	
+
 	<url-mapping id="config">
 		<pattern value="/config"></pattern>
 		<view-id>/jsf/Config.xhtml</view-id>
 	</url-mapping>
-	
+
 	<url-mapping id="digilibImage">
 		<pattern value="/digilibImage"></pattern>
 		<view-id>/jsf/DigilibImage.xhtml</view-id>

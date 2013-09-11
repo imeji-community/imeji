@@ -65,58 +65,58 @@
 					</h:panelGroup>
 					<h:panelGroup styleClass="items" layout="block">
 						<h:panelGroup styleClass="item" layout="block">
-							<h:outputLink id="lnkColCorporateDocuments" title="#{lbl.goto_corporate_documents}" value="#{Navigation.applicationUrl}collection/D6MvVK1CDDAtm9SY">
+							<h:outputLink id="lnkColCorporateDocuments" title="#{lbl.goto_corporate_documents}" value="#{Navigation.applicationUrl}collection/4aRnKcR0Fy7sD4b">
 								<h:panelGroup styleClass="pad" layout="block">
 									<h:outputText value="#{lbl.corporate_documents}" />
 								</h:panelGroup>		
 							</h:outputLink>
 						</h:panelGroup>
 						<h:panelGroup styleClass="item" layout="block">
-							<h:outputLink id="lnkColLectures" title="#{lbl.goto_lectures}" value="#{Navigation.applicationUrl}oKMkVg6AJvgMsAH">
-								<h:panelGroup styleClass="pad" layout="block">
-									<h:outputText value="#{lbl.lectures}" />
-								</h:panelGroup>		
-							</h:outputLink>
-						</h:panelGroup>
-						<h:panelGroup styleClass="item" layout="block">
-							<h:outputLink id="lnkColLectureNotes" title="#{lbl.goto_lecture_notes}" value="#{Navigation.applicationUrl}collection/tHGa9nJNLXk78PLV">
-								<h:panelGroup styleClass="pad" layout="block">
-									<h:outputText value="#{lbl.lecture_notes}" />
-								</h:panelGroup>		
-							</h:outputLink>
-						</h:panelGroup>
-						<h:panelGroup styleClass="item" layout="block">
-							<h:outputLink id="lnkColSketches" title="#{lbl.goto_sketches}" value="#{Navigation.applicationUrl}collection/54gONjmRXk2KRM_W">
-								<h:panelGroup styleClass="pad" layout="block">
-									<h:outputText value="#{lbl.sketches}" />
-								</h:panelGroup>		
-							</h:outputLink>
-						</h:panelGroup>
-						<h:panelGroup styleClass="item" layout="block">
-							<h:outputLink id="lnkColManuscriptsTD" title="#{lbl.goto_manuscripts_td}" value="#{Navigation.applicationUrl}collection/saGOHiSmVUqZXwpy">
+							<h:outputLink id="lnkColManuscriptsTD" title="#{lbl.goto_manuscripts_td}" value="#{Navigation.applicationUrl}collection/iuHqt0T4UpI6Auvw">
 								<h:panelGroup styleClass="pad" layout="block">
 									<h:outputText value="#{lbl.manuscripts_td}" />
 								</h:panelGroup>		
 							</h:outputLink>
 						</h:panelGroup>
 						<h:panelGroup styleClass="item" layout="block">
-							<h:outputLink id="lnkColMiscManu" title="#{lbl.goto_misc_manu}" value="#{Navigation.applicationUrl}collection/LMPUwn_NaE9e8Rnc">
+							<h:outputLink id="lnkColLectures" title="#{lbl.goto_lectures}" value="#{Navigation.applicationUrl}collection/xmLhJSyfmHRdg4C6">
 								<h:panelGroup styleClass="pad" layout="block">
-									<h:outputText value="#{lbl.misc_manu}" />
+									<h:outputText value="#{lbl.lectures}" />
 								</h:panelGroup>		
 							</h:outputLink>
 						</h:panelGroup>
 						<h:panelGroup styleClass="item" layout="block">
-							<h:outputLink id="lnkColNotes" title="#{lbl.goto_notes}" value="#{Navigation.applicationUrl}collection/ll4_BWnz7MCLmsXh">
+							<h:outputLink id="lnkColLectureNotes" title="#{lbl.goto_lecture_notes}" value="#{Navigation.applicationUrl}collection/0lG3D1AwkBq7oEZi">
+								<h:panelGroup styleClass="pad" layout="block">
+									<h:outputText value="#{lbl.lecture_notes}" />
+								</h:panelGroup>		
+							</h:outputLink>
+						</h:panelGroup>
+						<h:panelGroup styleClass="item" layout="block">
+							<h:outputLink id="lnkColMiscManu" title="#{lbl.goto_misc_manu}" value="#{Navigation.applicationUrl}collection/x05hqINDcEvHJTi5">
+								<h:panelGroup styleClass="pad" layout="block">
+									<h:outputText value="#{lbl.misc_manu}" />
+								</h:panelGroup>		
+							</h:outputLink>
+						</h:panelGroup>												
+						<h:panelGroup styleClass="item" layout="block">
+							<h:outputLink id="lnkColNotes" title="#{lbl.goto_notes}" value="#{Navigation.applicationUrl}collection/WVNyPq7lp4nleCf">
 								<h:panelGroup styleClass="pad" layout="block">
 									<h:outputText value="#{lbl.notes}" />
 								</h:panelGroup>		
 							</h:outputLink>
 						</h:panelGroup>
 						<h:panelGroup styleClass="item" layout="block">
-							<h:outputLink id="lnkColPublicationDrafts" title="#{lbl.goto_publication_drafts}" value="#{Navigation.applicationUrl}collection/40UJEfFhixHngcp">
+							<h:outputLink id="lnkColPublicationDrafts" title="#{lbl.goto_publication_drafts}" value="#{Navigation.applicationUrl}collection/IMPhXqgW9kuhfIM">
 								<h:panelGroup styleClass="pad" layout="block">
 									<h:outputText value="#{lbl.publication_drafts}" />
+								</h:panelGroup>		
+							</h:outputLink>
+						</h:panelGroup>
+						<h:panelGroup styleClass="item" layout="block">
+							<h:outputLink id="lnkColSketches" title="#{lbl.goto_sketches}" value="#{Navigation.applicationUrl}collection/upfrv3_O0IrP_p0a">
+								<h:panelGroup styleClass="pad" layout="block">
+									<h:outputText value="#{lbl.sketches}" />
 								</h:panelGroup>		
 							</h:outputLink>
 						</h:panelGroup>
@@ -143,70 +143,70 @@
 							</h:panelGroup>
 							<h:panelGroup styleClass="items" layout="block">
 								<h:panelGroup styleClass="item" layout="block">
-									<h:outputLink id="lnkColTeachingComputer" title="#{lbl.goto_teaching_computer}" value="#{Navigation.applicationUrl}collection/RncPMSDAwRN1MpiX">
+									<h:outputLink id="lnkColTeachingComputer" title="#{lbl.goto_teaching_computer}" value="#{Navigation.applicationUrl}collection/6wftM3q0KCPlzpbk">
 										<h:panelGroup styleClass="pad" layout="block">
 											<h:outputText value="#{lbl.teaching_computer}" />
 										</h:panelGroup>		
 									</h:outputLink>
 								</h:panelGroup>
 								<h:panelGroup styleClass="item" layout="block">
-									<h:outputLink id="lnkColZ1Reconstruction" title="#{lbl.goto_z1_reconstruction}" value="#{Navigation.applicationUrl}collection/Jb8tp1hHzXrJlnz">
+									<h:outputLink id="lnkColZ1Reconstruction" title="#{lbl.goto_z1_reconstruction}" value="#{Navigation.applicationUrl}collection/y1GYkXQb4c9lyf5K">
 										<h:panelGroup styleClass="pad" layout="block">
 											<h:outputText value="#{lbl.z1_reconstruction}" />
 										</h:panelGroup>		
 									</h:outputLink>
 								</h:panelGroup>
 								<h:panelGroup styleClass="item" layout="block">
-									<h:outputLink id="lnkColZ11" title="#{lbl.goto_z11}" value="#{Navigation.applicationUrl}collection/R5ONNYLJuTWBkSh">
+									<h:outputLink id="lnkColZ11" title="#{lbl.goto_z11}" value="#{Navigation.applicationUrl}collection/Z8UF2sWAkjvuNRhY">
 										<h:panelGroup styleClass="pad" layout="block">
 											<h:outputText value="#{lbl.goto_z11}" />
 										</h:panelGroup>		
 									</h:outputLink>
 								</h:panelGroup>
 								<h:panelGroup styleClass="item" layout="block">
-									<h:outputLink id="lnkColZ2" title="#{lbl.goto_z2}" value="#{Navigation.applicationUrl}collection/nyY_nzqD3aIiYppe">
+									<h:outputLink id="lnkColZ2" title="#{lbl.goto_z2}" value="#{Navigation.applicationUrl}collection/asGKMc8kyWrQBeeD">
 										<h:panelGroup styleClass="pad" layout="block">
 											<h:outputText value="#{lbl.goto_z2}" />
 										</h:panelGroup>		
 									</h:outputLink>
 								</h:panelGroup>
 								<h:panelGroup styleClass="item" layout="block">
-									<h:outputLink id="lnkColZ20" title="#{lbl.goto_z20}" value="#{Navigation.applicationUrl}collection/TADxy7a_5NJv1Xdz">
+									<h:outputLink id="lnkColZ20" title="#{lbl.goto_z20}" value="#{Navigation.applicationUrl}collection/MVkGF7erICfaeKap">
 										<h:panelGroup styleClass="pad" layout="block">
 											<h:outputText value="#{lbl.goto_z20}" />
 										</h:panelGroup>		
 									</h:outputLink>
 								</h:panelGroup>
 								<h:panelGroup styleClass="item" layout="block">
-									<h:outputLink id="lnkColZ22" title="#{lbl.goto_z22}" value="#{Navigation.applicationUrl}collection/ZXnAUjtpXGmzwu">
+									<h:outputLink id="lnkColZ22" title="#{lbl.goto_z22}" value="#{Navigation.applicationUrl}collection/Qj3Ayn8yiRTz6DQr">
 										<h:panelGroup styleClass="pad" layout="block">
 											<h:outputText value="#{lbl.goto_z22}" />
 										</h:panelGroup>		
 									</h:outputLink>
 								</h:panelGroup>
 								<h:panelGroup styleClass="item" layout="block">
-									<h:outputLink id="lnkColZ3Reconstruction" title="#{lbl.goto_z3_reconstruction_col}" value="#{Navigation.applicationUrl}collection/bwDKvHpLfCN8RZ6t">
+									<h:outputLink id="lnkColZ3Reconstruction" title="#{lbl.goto_z3_reconstruction_col}" value="#{Navigation.applicationUrl}collection/W0ngKnSp_19tEz_v">
 										<h:panelGroup styleClass="pad" layout="block">
 											<h:outputText value="#{lbl.z3_reconstruction_col}" />
 										</h:panelGroup>		
 									</h:outputLink>
 								</h:panelGroup>
 								<h:panelGroup styleClass="item" layout="block">
-									<h:outputLink id="lnkColZ31" title="#{lbl.goto_z31}" value="#{Navigation.applicationUrl}collection/uQtgL1PJLfFJ5OwT">
+									<h:outputLink id="lnkColZ31" title="#{lbl.goto_z31}" value="#{Navigation.applicationUrl}collection/bygv1GlMJ7GtPTbJ">
 										<h:panelGroup styleClass="pad" layout="block">
 											<h:outputText value="#{lbl.goto_z31}" />
 										</h:panelGroup>		
 									</h:outputLink>
 								</h:panelGroup>
 								<h:panelGroup styleClass="item" layout="block">
-									<h:outputLink id="lnkColZ4" title="#{lbl.goto_z4}" value="#{Navigation.applicationUrl}collection/q1d6WdNUJnDnMEwo">
+									<h:outputLink id="lnkColZ4" title="#{lbl.goto_z4}" value="#{Navigation.applicationUrl}collection/XU2YlxntsfYRDG2l">
 										<h:panelGroup styleClass="pad" layout="block">
 											<h:outputText value="#{lbl.goto_z4}" />
 										</h:panelGroup>		
 									</h:outputLink>
 								</h:panelGroup>
 								<h:panelGroup styleClass="item" layout="block">
-									<h:outputLink id="lnkColZ71" title="#{lbl.goto_z71}" value="#{Navigation.applicationUrl}collection/TfuOle6rS14m2Lu">
+									<h:outputLink id="lnkColZ71" title="#{lbl.goto_z71}" value="#{Navigation.applicationUrl}collection/16uoStK0pP_wYW0o">
 										<h:panelGroup styleClass="pad" layout="block">
 											<h:outputText value="#{lbl.goto_z71}" />
 										</h:panelGroup>
@@ -216,56 +216,56 @@
 						</h:panelGroup>
 					
 						<h:panelGroup styleClass="item" layout="block">
-							<h:outputLink id="lnkColAssemblyLine" title="#{lbl.goto_assembly_line_col}" value="#{Navigation.applicationUrl}collection/xXfqdPRibMGzHLv">
+							<h:outputLink id="lnkColAssemblyLine" title="#{lbl.goto_assembly_line_col}" value="#{Navigation.applicationUrl}collection/OZEmFNfjsYP1RFLw">
 								<h:panelGroup styleClass="pad" layout="block">
 									<h:outputText value="#{lbl.assembly_line_col}" />
 								</h:panelGroup>		
 							</h:outputLink>
 						</h:panelGroup>
 						<h:panelGroup styleClass="item" layout="block">
-							<h:outputLink id="lnkColBZ1" title="#{lbl.goto_bz1}" value="#{Navigation.applicationUrl}collection/8UJ5UxozTwiM9cUA">
+							<h:outputLink id="lnkColBZ1" title="#{lbl.goto_bz1}" value="#{Navigation.applicationUrl}collection/ZjlRuybf_ceAGXH">
 								<h:panelGroup styleClass="pad" layout="block">
 									<h:outputText value="#{lbl.goto_bz1}" />
 								</h:panelGroup>		
 							</h:outputLink>
 						</h:panelGroup>
 						<h:panelGroup styleClass="item" layout="block">
-							<h:outputLink id="lnkColHelixTower1" title="#{lbl.goto_helix_tower_1}" value="#{Navigation.applicationUrl}collection/wHg4XSkhKJ5djaCW">
+							<h:outputLink id="lnkColHelixTower1" title="#{lbl.goto_helix_tower_1}" value="#{Navigation.applicationUrl}collection/P1ASpJ7VsME_El9_">
 								<h:panelGroup styleClass="pad" layout="block">
 									<h:outputText value="#{lbl.helix_tower_1}" />
 								</h:panelGroup>		
 							</h:outputLink>
 						</h:panelGroup>
 						<h:panelGroup styleClass="item" layout="block">
-							<h:outputLink id="lnkColHelixTower2" title="#{lbl.goto_helix_tower_2}" value="#{Navigation.applicationUrl}collection/aO80ynpDWZUts8S_">
+							<h:outputLink id="lnkColHelixTower2" title="#{lbl.goto_helix_tower_2}" value="#{Navigation.applicationUrl}collection/qaHl2hn3Zph7z7aO">
 								<h:panelGroup styleClass="pad" layout="block">
 									<h:outputText value="#{lbl.helix_tower_2}" />
 								</h:panelGroup>		
 							</h:outputLink>
 						</h:panelGroup>
 						<h:panelGroup styleClass="item" layout="block">
-							<h:outputLink id="lnkColMisc" title="#{lbl.goto_miscellaneous}" value="#{Navigation.applicationUrl}collection/3me0rz8FNwH4meD">
+							<h:outputLink id="lnkColMisc" title="#{lbl.goto_miscellaneous}" value="#{Navigation.applicationUrl}collection/lLHSpSVWPGlz6cl">
 								<h:panelGroup styleClass="pad" layout="block">
 									<h:outputText value="#{lbl.miscellaneous}" />
 								</h:panelGroup>		
 							</h:outputLink>
 						</h:panelGroup>
 						<h:panelGroup styleClass="item" layout="block">
-							<h:outputLink id="lnkColS1" title="#{lbl.goto_s1}" value="#{Navigation.applicationUrl}collection/k3FGwx_TLdwbuX7q">
+							<h:outputLink id="lnkColS1" title="#{lbl.goto_s1}" value="#{Navigation.applicationUrl}collection/sUF5kL19sqDrAf1x">
 								<h:panelGroup styleClass="pad" layout="block">
 									<h:outputText value="#{lbl.goto_s1}" />
 								</h:panelGroup>		
 							</h:outputLink>
 						</h:panelGroup>
 						<h:panelGroup styleClass="item" layout="block">
-							<h:outputLink id="lnkColS2" title="#{lbl.goto_s2}" value="#{Navigation.applicationUrl}collection/tW3nLrfOR2YDgLUp">
+							<h:outputLink id="lnkColS2" title="#{lbl.goto_s2}" value="#{Navigation.applicationUrl}collection/4AIaQb4pBCOELC_S">
 								<h:panelGroup styleClass="pad" layout="block">
 									<h:outputText value="#{lbl.goto_s2}" />
 								</h:panelGroup>		
 							</h:outputLink>
 						</h:panelGroup>
 						<h:panelGroup styleClass="item" layout="block">
-								<h:outputLink id="lnkColZ64Graphomat" title="#{lbl.goto_z64_graphomat}" value="#{Navigation.applicationUrl}collection/q1d6WdNUJnDnMEwo">
+								<h:outputLink id="lnkColZ64Graphomat" title="#{lbl.goto_z64_graphomat}" value="#{Navigation.applicationUrl}collection/pAoBxfOvcrDyPOxW">
 									<h:panelGroup styleClass="pad" layout="block">
 										<h:outputText value="#{lbl.z64_graphomat}" />
 									</h:panelGroup>		
@@ -283,21 +283,21 @@
 					</h:panelGroup>
 					<h:panelGroup styleClass="items" layout="block">
 					<h:panelGroup styleClass="item" layout="block">
-							<h:outputLink id="lnkColNetworkAutomaton" title="#{lbl.goto_typescripts_network_automaton}" value="">
+							<h:outputLink id="lnkColNetworkAutomaton" title="#{lbl.goto_typescripts_network_automaton}" value="#{Navigation.applicationUrl}collection/uSzQtjPFOR0tJGj">
 								<h:panelGroup styleClass="pad" layout="block">
 									<h:outputText value="#{lbl.typescripts_network_automaton}" />
 								</h:panelGroup>		
 							</h:outputLink>
 					</h:panelGroup>
 					<h:panelGroup styleClass="item" layout="block">
-							<h:outputLink id="lnkColTypeZ22" title="#{lbl.goto_typescripts_z22}" value="">
+							<h:outputLink id="lnkColTypeZ22" title="#{lbl.goto_typescripts_z22}" value="#{Navigation.applicationUrl}collection/n51zCyMbQn8MQND">
 								<h:panelGroup styleClass="pad" layout="block">
 									<h:outputText value="#{lbl.goto_typescripts_z22}" />
 								</h:panelGroup>		
 							</h:outputLink>
 					</h:panelGroup>
 					<h:panelGroup styleClass="item" layout="block">
-							<h:outputLink id="lnkColTypeZ22R" title="#{lbl.goto_typescripts_z22r}" value="">
+							<h:outputLink id="lnkColTypeZ22R" title="#{lbl.goto_typescripts_z22r}" value="#{Navigation.applicationUrl}collection/W6_R4HHzKIJKpaNx">
 								<h:panelGroup styleClass="pad" layout="block">
 									<h:outputText value="#{lbl.goto_typescripts_z22r}" />
 								</h:panelGroup>		
@@ -316,49 +316,49 @@
 					</h:panelGroup>
 					<h:panelGroup styleClass="items" layout="block">
 					<h:panelGroup styleClass="item" layout="block">
-							<h:outputLink id="lnkColPhotoZ1" title="#{lbl.goto_photo_z1}" value="">
-								<h:panelGroup styleClass="pad" layout="block">
-									<h:outputText value="#{lbl.goto_photo_z1}" />
-								</h:panelGroup>		
-							</h:outputLink>
-					</h:panelGroup>
-						<h:panelGroup styleClass="item" layout="block">
-							<h:outputLink id="lnkColPhotoZ22R" title="#{lbl.goto_photo_z22r}" value="">
-								<h:panelGroup styleClass="pad" layout="block">
-									<h:outputText value="#{lbl.goto_photo_z22r}" />
-								</h:panelGroup>		
-							</h:outputLink>
-						</h:panelGroup>
-						<h:panelGroup styleClass="item" layout="block">
-							<h:outputLink id="lnkColPhotoZ3ReconProject" title="#{lbl.goto_photo_z3_recon_project}" value="">
+							<h:outputLink id="lnkColPhotoZ3ReconProject" title="#{lbl.goto_photo_z3_recon_project}" value="#{Navigation.applicationUrl}collection/HGrKDg9F4U_2e6h">
 								<h:panelGroup styleClass="pad" layout="block">
 									<h:outputText value="#{lbl.photo_z3_recon_project}" />
 								</h:panelGroup>		
 							</h:outputLink>
 						</h:panelGroup>
 						<h:panelGroup styleClass="item" layout="block">
-							<h:outputLink id="lnkColPhotoZ3Recon" title="#{lbl.goto_photo_z3_recon}" value="">
+							<h:outputLink id="lnkColPhotoS1S2" title="#{lbl.goto_photo_s1s2}" value="#{Navigation.applicationUrl}collection/6Us9ttXDOMyWRSt">
+								<h:panelGroup styleClass="pad" layout="block">
+									<h:outputText value="#{lbl.goto_photo_s1s2}" />
+								</h:panelGroup>		
+							</h:outputLink>
+						</h:panelGroup>
+					<h:panelGroup styleClass="item" layout="block">
+							<h:outputLink id="lnkColPhotoZ1" title="#{lbl.goto_photo_z1}" value="#{Navigation.applicationUrl}collection/dBpgxc3SwjqySuNm">
+								<h:panelGroup styleClass="pad" layout="block">
+									<h:outputText value="#{lbl.goto_photo_z1}" />
+								</h:panelGroup>		
+							</h:outputLink>
+					</h:panelGroup>						
+						<h:panelGroup styleClass="item" layout="block">
+							<h:outputLink id="lnkColPhotoZ22R" title="#{lbl.goto_photo_z22r}" value="#{Navigation.applicationUrl}collection/kUSx0T92Tvhni8SK">
+								<h:panelGroup styleClass="pad" layout="block">
+									<h:outputText value="#{lbl.goto_photo_z22r}" />
+								</h:panelGroup>		
+							</h:outputLink>
+						</h:panelGroup>						
+						<h:panelGroup styleClass="item" layout="block">
+							<h:outputLink id="lnkColPhotoZ3Recon" title="#{lbl.goto_photo_z3_recon}" value="#{Navigation.applicationUrl}collection/mWvX5YnJVxq0zUnf">
 								<h:panelGroup styleClass="pad" layout="block">
 									<h:outputText value="#{lbl.photo_z3_recon}" />
 								</h:panelGroup>		
 							</h:outputLink>
 						</h:panelGroup>
 						<h:panelGroup styleClass="item" layout="block">
-							<h:outputLink id="lnkColPhotoZ4" title="#{lbl.goto_photo_z4}" value="">
+							<h:outputLink id="lnkColPhotoZ4" title="#{lbl.goto_photo_z4}" value="#{Navigation.applicationUrl}collection/wI8DzIy1lQAmx4Jl">
 								<h:panelGroup styleClass="pad" layout="block">
 									<h:outputText value="#{lbl.goto_photo_z4}" />
 								</h:panelGroup>		
 							</h:outputLink>
-						</h:panelGroup>
+						</h:panelGroup>						
 						<h:panelGroup styleClass="item" layout="block">
-							<h:outputLink id="lnkColPhotoS1S2" title="#{lbl.goto_photo_s1s2}" value="">
-								<h:panelGroup styleClass="pad" layout="block">
-									<h:outputText value="#{lbl.goto_photo_s1s2}" />
-								</h:panelGroup>		
-							</h:outputLink>
-						</h:panelGroup>
-						<h:panelGroup styleClass="item" layout="block">
-							<h:outputLink id="lnkColPhotoOther" title="#{lbl.goto_photo_other}" value="">
+							<h:outputLink id="lnkColPhotoOther" title="#{lbl.goto_photo_other}" value="#{Navigation.applicationUrl}collection/a2J9UnWH9rFB1q1F">
 								<h:panelGroup styleClass="pad" layout="block">
 									<h:outputText value="#{lbl.photo_other}" />
 								</h:panelGroup>		
@@ -376,49 +376,49 @@
 					</h:panelGroup>
 					<h:panelGroup styleClass="items" layout="block">
 						<h:panelGroup styleClass="item" layout="block">
-							<h:outputLink id="lnkColPdf19351939" title="#{lbl.goto_pdf_1935_1939}" value="#{Navigation.applicationUrl}collection/umaKPuuFBlN9RBMk">
+							<h:outputLink id="lnkColPdf19351939" title="#{lbl.goto_pdf_1935_1939}" value="#{Navigation.applicationUrl}collection/_CPhfGKf2b7eV8UJ">
 								<h:panelGroup styleClass="pad" layout="block">
 									<h:outputText value="#{lbl.pdf_1935_1939}" />
 								</h:panelGroup>		
 							</h:outputLink>
 						</h:panelGroup>
 						<h:panelGroup styleClass="item" layout="block">
-							<h:outputLink id="lnkColPdf19401949" title="#{lbl.goto_pdf_1940_1949}" value="#{Navigation.applicationUrl}collection/G4kArbdxEHzpD9Q">
+							<h:outputLink id="lnkColPdf19401949" title="#{lbl.goto_pdf_1940_1949}" value="#{Navigation.applicationUrl}collection/uLGmtIeKsGIIM3CY">
 								<h:panelGroup styleClass="pad" layout="block">
 									<h:outputText value="#{lbl.pdf_1940_1949}" />
 								</h:panelGroup>		
 							</h:outputLink>
 						</h:panelGroup>
 						<h:panelGroup styleClass="item" layout="block">
-							<h:outputLink id="lnkColPdf19501959" title="#{lbl.goto_pdf_1950_1959}" value="#{Navigation.applicationUrl}collection/LoxnNqsYbO6wjpO5">
+							<h:outputLink id="lnkColPdf19501959" title="#{lbl.goto_pdf_1950_1959}" value="#{Navigation.applicationUrl}collection/B05nI3oHiLnmEhCb">
 								<h:panelGroup styleClass="pad" layout="block">
 									<h:outputText value="#{lbl.pdf_1950_1959}" />
 								</h:panelGroup>		
 							</h:outputLink>
 						</h:panelGroup>
 						<h:panelGroup styleClass="item" layout="block">
-							<h:outputLink id="lnkColPdf19601969" title="#{lbl.goto_pdf_1960_1969}" value="#{Navigation.applicationUrl}collection/06J5PTHfyl46kTBf">
+							<h:outputLink id="lnkColPdf19601969" title="#{lbl.goto_pdf_1960_1969}" value="#{Navigation.applicationUrl}collection/Ubu4wKzNK42T66_Y">
 								<h:panelGroup styleClass="pad" layout="block">
 									<h:outputText value="#{lbl.pdf_1960_1969}" />
 								</h:panelGroup>		
 							</h:outputLink>
 						</h:panelGroup>
 						<h:panelGroup styleClass="item" layout="block">
-							<h:outputLink id="lnkColPdf19701981" title="#{lbl.goto_pdf_1970_1981}" value="#{Navigation.applicationUrl}collection/L57cr7HDtLddueaM">
+							<h:outputLink id="lnkColPdf19701981" title="#{lbl.goto_pdf_1970_1981}" value="#{Navigation.applicationUrl}collection/xg5AalOVyt16YFB">
 								<h:panelGroup styleClass="pad" layout="block">
 									<h:outputText value="#{lbl.pdf_1970_1981}" />
 								</h:panelGroup>		
 							</h:outputLink>
 						</h:panelGroup>
 						<h:panelGroup styleClass="item" layout="block">
-							<h:outputLink id="lnkColPdfUndated" title="#{lbl.goto_pdf_undated}" value="#{Navigation.applicationUrl}collection/SM6zuaOuIBPHJ6Mj">
+							<h:outputLink id="lnkColPdfUndated" title="#{lbl.goto_pdf_undated}" value="#{Navigation.applicationUrl}collection/g5Tn2WYuTbQD6UVJ">
 								<h:panelGroup styleClass="pad" layout="block">
 									<h:outputText value="#{lbl.pdf_undated}" />
 								</h:panelGroup>		
 							</h:outputLink>
 						</h:panelGroup>
 						<h:panelGroup styleClass="item" layout="block">
-							<h:outputLink id="lnkColPdfEssays" title="#{lbl.goto_pdf_essays}" value="#{Navigation.applicationUrl}collection/noeJomggmLFMXEOn">
+							<h:outputLink id="lnkColPdfEssays" title="#{lbl.goto_pdf_essays}" value="#{Navigation.applicationUrl}collection/eCqPR1l7Kevc0ral">
 								<h:panelGroup styleClass="pad" layout="block">
 									<h:outputText value="#{lbl.pdf_essays}" />
 								</h:panelGroup>		
@@ -682,49 +682,49 @@
 							</h:panelGroup>		
 							<h:panelGroup styleClass="items" layout="block">
 								<h:panelGroup styleClass="item" layout="block">
-									<h:outputLink id="lnkSimuZ1SimpleMechSwitch" title="#{lbl.goto_z1_simple_mech_switch}" value="http://zuse.zib.de/infos/simulations/Z1/Z1Sim/simple.html">
+									<h:outputLink id="lnkSimuZ1SimpleMechSwitch" title="#{lbl.goto_z1_simple_mech_switch}" value="http://zuse-z1.zib.de/simulations/z1/switches/simple.html" target="_blank">
 										<h:panelGroup styleClass="pad" layout="block">
 											<h:outputText value="#{lbl.z1_simple_mech_switch}" />
 										</h:panelGroup>
 									</h:outputLink>
 								</h:panelGroup>
 								<h:panelGroup styleClass="item" layout="block">
-									<h:outputLink id="lnkSimuZ1ComplexMechSwitch" title="#{lbl.goto_z1_complex_mech_switch}" value="http://zuse.zib.de/infos/simulations/Z1/Z1Sim/variant.html">
+									<h:outputLink id="lnkSimuZ1ComplexMechSwitch" title="#{lbl.goto_z1_complex_mech_switch}" value="http://zuse-z1.zib.de/simulations/z1/switches/variant.html" target="_blank">
 										<h:panelGroup styleClass="pad" layout="block">
 											<h:outputText value="#{lbl.z1_complex_mech_switch}" />
 										</h:panelGroup>
 									</h:outputLink>
 								</h:panelGroup>
 								<h:panelGroup styleClass="item" layout="block">
-									<h:outputLink id="lnkSimuZ1Switch2CalculateEquivalance" title="#{lbl.goto_mech_switch_calc_equivalence}" value="http://zuse.zib.de/infos/simulations/Z1/Z1Sim/equiv.html">
+									<h:outputLink id="lnkSimuZ1Switch2CalculateEquivalance" title="#{lbl.goto_mech_switch_calc_equivalence}" value="http://zuse-z1.zib.de/simulations/z1/switches/equiv.html" target="_blank">
 										<h:panelGroup styleClass="pad" layout="block">
 											<h:outputText value="#{lbl.mech_switch_calc_equivalence}" />
 										</h:panelGroup>
 									</h:outputLink>
 								</h:panelGroup>
 								<h:panelGroup styleClass="item" layout="block">
-									<h:outputLink id="lnkSimuZ1Switch2MechAddUnit" title="#{lbl.goto_mech_add_unit}" value="http://zuse.zib.de/infos/simulations/Z1/Z1Adder/adder.html">
+									<h:outputLink id="lnkSimuZ1Switch2MechAddUnit" title="#{lbl.goto_mech_add_unit}" value="http://zuse-z1.zib.de/simulations/z1/adders/mechanical-addition-unit" target="_blank">
 										<h:panelGroup styleClass="pad" layout="block">
 											<h:outputText value="#{lbl.mech_add_unit}" />
 										</h:panelGroup>
 									</h:outputLink>
 								</h:panelGroup>
 								<h:panelGroup styleClass="item" layout="block">
-									<h:outputLink id="lnkSimuZ1AdderWgl" title="#{lbl.goto_z1_simu_add_wgl}" value="http://zuse.zib.de/infos/simulations/z1-adder-wgl">
+									<h:outputLink id="lnkSimuZ1AdderWgl" title="#{lbl.goto_z1_simu_add_wgl}" value="http://zuse-z1.zib.de/simulations/z1/adders/wgl" target="_blank">
 										<h:panelGroup styleClass="pad" layout="block">
 											<h:outputText value="#{lbl.z1_simu_add_wgl}" />
 										</h:panelGroup>
 									</h:outputLink>
 								</h:panelGroup>
 								<h:panelGroup styleClass="item" layout="block">
-									<h:outputLink id="lnkSimuZ1AdderLwjGl" title="#{lbl.goto_z1_simu_add_lwjgl}" value="http://zuse-z1.zib.de/simulation/adder">
+									<h:outputLink id="lnkSimuZ1AdderLwjGl" title="#{lbl.goto_z1_simu_add_lwjgl}" value="http://zuse-z1.zib.de/simulations/z1/adders/lwjgl" target="_blank">
 										<h:panelGroup styleClass="pad" layout="block">
 											<h:outputText value="#{lbl.z1_simu_add_lwjgl}" />
 										</h:panelGroup>
 									</h:outputLink>
 								</h:panelGroup>
 								<h:panelGroup styleClass="item" layout="block">
-									<h:outputLink id="lnkSimuZ1AdderJavaApplet" title="#{lbl.goto_z1_simu_add_java_applet}" value="http://zuse.zib.de/infos/simulations/Z1/Simulation/addierer.html">
+									<h:outputLink id="lnkSimuZ1AdderJavaApplet" title="#{lbl.goto_z1_simu_add_java_applet}" value="http://zuse-z1.zib.de/simulations/z1/adders/applet/addierer.html" target="_blank">
 										<h:panelGroup styleClass="pad" layout="block">
 											<h:outputText value="#{lbl.z1_simu_add_java_applet}" />
 										</h:panelGroup>
@@ -742,49 +742,49 @@
 							</h:panelGroup>			
 							<h:panelGroup styleClass="items" layout="block">
 								<h:panelGroup styleClass="item" layout="block">
-									<h:outputLink id="lnkSimuZ3Entire" title="#{lbl.goto_z3_simulations_entire}" value="http://zuse.zib.de/infos/simulations/Z3_Sim">
+									<h:outputLink id="lnkSimuZ3Entire" title="#{lbl.goto_z3_simulations_entire}" value="http://zuse-z1.zib.de/simulations/z3/entire" target="_blank">
 										<h:panelGroup styleClass="pad" layout="block">
 											<h:outputText value="#{lbl.z3_simulations_entire}" />
 										</h:panelGroup>
 									</h:outputLink>
 								</h:panelGroup>
 								<h:panelGroup styleClass="item" layout="block">
-									<h:outputLink id="lnkSimuZ33D" title="#{lbl.goto_z3_simu_3d}" value="http://zuse.zib.de/infos/simulations/Z3_3D_Sim">
+									<h:outputLink id="lnkSimuZ33D" title="#{lbl.goto_z3_simu_3d}" value="http://zuse-z1.zib.de/simulations/z3/3d" target="_blank">
 										<h:panelGroup styleClass="pad" layout="block">
 											<h:outputText value="#{lbl.z3_simu_3d}" />
 										</h:panelGroup>
 									</h:outputLink>
 								</h:panelGroup>
 								<h:panelGroup styleClass="item" layout="block">
-									<h:outputLink id="lnkSimuZ3AdderCircuit" title="#{lbl.goto_z3_adder_circuit}" value="http://zuse.zib.de/infos/simulations/AdderV2/adder.html">
+									<h:outputLink id="lnkSimuZ3AdderCircuit" title="#{lbl.goto_z3_adder_circuit}" value="http://zuse-z1.zib.de/simulations/z3/adder/adder.html" target="_blank">
 										<h:panelGroup styleClass="pad" layout="block">
 											<h:outputText value="#{lbl.z3_adder_circuit}" />
 										</h:panelGroup>
 									</h:outputLink>
 								</h:panelGroup>
 								<h:panelGroup styleClass="item" layout="block">
-									<h:outputLink id="lnkSimuZ3ShifterCircuit" title="#{lbl.goto_z3_shifter_circuit}" value="http://zuse.zib.de/infos/simulations/Shifter/shifter.html">
+									<h:outputLink id="lnkSimuZ3ShifterCircuit" title="#{lbl.goto_z3_shifter_circuit}" value="http://zuse-z1.zib.de/simulations/z3/shifter/shifter.html" target="_blank">
 										<h:panelGroup styleClass="pad" layout="block">
 											<h:outputText value="#{lbl.z3_shifter_circuit}" />
 										</h:panelGroup>
 									</h:outputLink>
 								</h:panelGroup>
 								<h:panelGroup styleClass="item" layout="block">
-									<h:outputLink id="lnkSimuZ3NormalizerCircuit" title="#{lbl.goto_z3_normalizer_circuit}" value="http://zuse.zib.de/infos/simulations/Normalizer/normalizer.html">
+									<h:outputLink id="lnkSimuZ3NormalizerCircuit" title="#{lbl.goto_z3_normalizer_circuit}" value="http://zuse-z1.zib.de/simulations/z3/normalizer/normalizer.html" target="_blank">
 										<h:panelGroup styleClass="pad" layout="block">
 											<h:outputText value="#{lbl.z3_normalizer_circuit}" />
 										</h:panelGroup>
 									</h:outputLink>
 								</h:panelGroup>
 								<h:panelGroup styleClass="item" layout="block">
-									<h:outputLink id="lnkSimuZ3Dec2BinConverter" title="#{lbl.goto_dec_to_bin_converter}" value="http://zuse.zib.de/infos/simulations/DecKey/decKey.html">
+									<h:outputLink id="lnkSimuZ3Dec2BinConverter" title="#{lbl.goto_dec_to_bin_converter}" value="http://zuse-z1.zib.de/simulations/z3/dec-to-bin/decKey.html" target="_blank">
 										<h:panelGroup styleClass="pad" layout="block">
 											<h:outputText value="#{lbl.dec_to_bin_converter}" />
 										</h:panelGroup>
 									</h:outputLink>
 								</h:panelGroup>
 								<h:panelGroup styleClass="item" layout="block">
-									<h:outputLink id="lnkSimuZ3DecPlaceAdjuster" title="#{lbl.goto_dec_plance_adj}" value="http://zuse.zib.de/infos/simulations/DecPlaceAdjuster/decPlaceAdjuster.html">
+									<h:outputLink id="lnkSimuZ3DecPlaceAdjuster" title="#{lbl.goto_dec_plance_adj}" value="http://zuse-z1.zib.de/simulations/z3/dec-place-adjuster/decPlaceAdjuster.html" target="_blank">
 										<h:panelGroup styleClass="pad" layout="block">
 											<h:outputText value="#{lbl.dec_plance_adj}" />
 										</h:panelGroup>
@@ -793,7 +793,7 @@
 							</h:panelGroup>
 						</h:panelGroup>
 						<h:panelGroup styleClass="item" layout="block">
-							<h:outputLink id="lnkEniac" title="#{lbl.goto_eniac}" value="http://zuse.zib.de/infos/simulations/eniac">
+							<h:outputLink id="lnkEniac" title="#{lbl.goto_eniac}" value="http://zuse-z1.zib.de/simulations/eniac" target="_blank">
 								<h:panelGroup styleClass="pad" layout="block">
 									<h:outputText value="#{lbl.eniac}" />
 								</h:panelGroup>	
@@ -822,14 +822,14 @@
 							</h:panelGroup>	
 							<h:panelGroup styleClass="items" layout="block">
 								<h:panelGroup styleClass="item" layout="block">
-									<h:outputLink id="lnkPlanCompilerEditor" title="#{lbl.goto_plankalkuel_editor}" value="http://zuse.zib.de/infos/simulations/Plankalkuel/Editor/pk.html">
+									<h:outputLink id="lnkPlanCompilerEditor" title="#{lbl.goto_plankalkuel_editor}" value="http://zuse-z1.zib.de/simulations/plankalkuel/editor/pk.html" target="_blank">
 										<h:panelGroup styleClass="pad" layout="block">
 											<h:outputText value="#{lbl.plankalkuel_editor}" />
 										</h:panelGroup>
 									</h:outputLink>
 								</h:panelGroup>
 								<h:panelGroup styleClass="item" layout="block">
-									<h:outputLink id="lnkPlanCompilerCompiler" title="#{lbl.goto_plankalkuel_compiler_compiler}" value="http://zuse.zib.de/infos/simulations/Plankalkuel/Compiler/plankalk.html">
+									<h:outputLink id="lnkPlanCompilerCompiler" title="#{lbl.goto_plankalkuel_compiler_compiler}" value="http://zuse-z1.zib.de/simulations/plankalkuel/compiler/plankalk.html" target="_blank">
 										<h:panelGroup styleClass="pad" layout="block">
 											<h:outputText value="#{lbl.plankalkuel_compiler_compiler}" />
 										</h:panelGroup>
@@ -839,7 +839,7 @@
 						</h:panelGroup>
 						<h:panelGroup styleClass="item" layout="block">
 							<h:panelGroup layout="block">
-								<h:outputLink id="lnkPlanCompilerApplications" title="#{lbl.goto_plankalkuel_applications}" value="http://zuse.zib.de/infos/simulations/Plankalkuel/Chess/JavaApplet/chess.html">
+								<h:outputLink id="lnkPlanCompilerApplications" title="#{lbl.goto_plankalkuel_applications}" value="http://zuse-z1.zib.de/simulations/plankalkuel/chess/applet/chess.html" target="_blank">
 									<h:panelGroup styleClass="pad" layout="block">
 										<h:outputText value="#{lbl.plankalkuel_applications}" />
 									</h:panelGroup>
@@ -849,7 +849,7 @@
 					</h:panelGroup>					
 				</h:panelGroup>
 				<h:panelGroup styleClass="item" layout="block">
-					<h:outputLink id="lnkZ1Panorama" title="#{lbl.goto_z1_panorama}" value="http://zuse-z1.zib.de/zuse-z1-pano">
+					<h:outputLink id="lnkZ1Panorama" title="#{lbl.goto_z1_panorama}" value="http://zuse-z1.zib.de/zuse-z1-pano" target="_blank">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.z1_panorama}" />
 						</h:panelGroup>

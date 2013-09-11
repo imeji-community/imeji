@@ -56,14 +56,16 @@ public class MetadataSetBean
      * Constructor for a {@link MetadataSet}
      * 
      * @param mds
+     * @param addEmtpyValue if true, add an emtpy metadata for all {@link Statement} which don't have any value
      */
-    public MetadataSetBean(MetadataSet mds)
+    public MetadataSetBean(MetadataSet mds, boolean addEmtpyValue)
     {
         // Get the profile
         profile = ObjectCachedLoader.loadProfile(mds.getProfile());
         // Init the list of metadata
         initTreeFromList(toSuperList((List<Metadata>)mds.getMetadata()));
-        addEmtpyValues();
+        if (addEmtpyValue)
+            addEmtpyValues();
     }
 
     /**
@@ -83,8 +85,10 @@ public class MetadataSetBean
     public void trim()
     {
         for (SuperMetadataBean smb : metadataTree.getList())
-            if (MetadataHelper.isEmpty(smb.asMetadata()))
+        {
+            if (smb.isEmpty())
                 metadataTree.remove(smb);
+        }
     }
 
     /**

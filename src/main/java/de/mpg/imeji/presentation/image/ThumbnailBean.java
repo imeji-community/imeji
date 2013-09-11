@@ -77,7 +77,7 @@ public class ThumbnailBean
             isInActiveAlbum = sessionBean.getActiveAlbum().getImages().contains(item.getId());
         }
         initSecurity(item);
-        mds = new MetadataSetBean(item.getMetadataSet());
+        mds = new MetadataSetBean(item.getMetadataSet(), false);
     }
 
     /**

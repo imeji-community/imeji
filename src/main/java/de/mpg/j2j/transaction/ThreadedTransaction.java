@@ -1,6 +1,8 @@
 package de.mpg.j2j.transaction;
 
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 import org.apache.log4j.Logger;
 
@@ -60,5 +62,20 @@ public class ThreadedTransaction implements Callable<Integer>
     public void throwException() throws Exception
     {
         transaction.throwException();
+    }
+
+    /**
+     * Run a {@link ThreadedTransaction} with the {@link ExecutorService} of imeji
+     * 
+     * @param t
+     * @throws Exception
+     */
+    public static void run(ThreadedTransaction t) throws Exception
+    {
+        Future<Integer> f = Imeji.executor.submit(t);
+        // wait for the transaction to be finished
+        f.get();
+        // Throw exception is any
+        t.throwException();
     }
 }

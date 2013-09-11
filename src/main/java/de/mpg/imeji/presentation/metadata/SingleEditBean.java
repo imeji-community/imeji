@@ -90,7 +90,6 @@ public class SingleEditBean
     public String save() throws Exception
     {
         editor.save();
-        reloadPage();
         cancel();
         return "";
     }
@@ -105,7 +104,7 @@ public class SingleEditBean
     {
         this.toggleState = "displayMd";
         SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        Locks.unLock(new Lock(this.item.getId().toString(), sb.getUser().getEmail()));
+        Locks.unLock(new Lock(item.getId().toString(), sb.getUser().getEmail()));
         reloadImage();
         editor = new SimpleImageEditor(item, profile, null);
         return "";

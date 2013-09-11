@@ -45,6 +45,7 @@ import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.metadata.MetadataSetBean;
 import de.mpg.imeji.presentation.metadata.SingleEditBean;
 import de.mpg.imeji.presentation.metadata.extractors.BasicExtractor;
+import de.mpg.imeji.presentation.metadata.extractors.TikaExtractor;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.session.SessionObjectsController;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -154,7 +155,8 @@ public class ImageBean
         try
         {
             techMd = new ArrayList<String>();
-            techMd = BasicExtractor.extractTechMd(item);
+            techMd = TikaExtractor.extract(item);
+            //techMd = BasicExtractor.extractTechMd(item);
         }
         catch (Exception e)
         {

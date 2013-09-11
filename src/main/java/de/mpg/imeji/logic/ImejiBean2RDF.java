@@ -116,12 +116,7 @@ public class ImejiBean2RDF
         index(objects);
         Transaction t = new CRUDTransaction(objects, type, modelURI, lazy);
         // Write Transaction needs to be added in a new Thread
-        ThreadedTransaction ts = new ThreadedTransaction(t);
-        Future<Integer> f = Imeji.executor.submit(ts);
-        // wait for the transaction to be finished
-        f.get();
-        // Throw exception is any
-        ts.throwException();
+        ThreadedTransaction.run(new ThreadedTransaction(t));
     }
 
     /**

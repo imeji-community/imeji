@@ -49,11 +49,11 @@
 }
 
 .dropDownMenu .item.hasChildren>a {
-	background: url('./recources/css/theme_zuse/images/All_Paginator_ArrowNext_15_Active.png') right no-repeat;
+	background: url('./resources/css/theme_zuse/images/All_Paginator_ArrowNext_15_Active.png') right no-repeat;
 }
 
 .dropDownMenu .item.hasChildren:hover>a:hover {
-	background: url('./recources/css/theme_zuse/images/All_Paginator_ArrowNext_15_Hover.png') right no-repeat;
+	background: url('./resources/css/theme_zuse/images/All_Paginator_ArrowNext_15_Hover.png') right no-repeat;
 }
 
 .dropDownMenu .item.hasChildren .items {

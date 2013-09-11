@@ -6,17 +6,20 @@
 		<h:outputText value="#{imageBean.init}"/>
 	</ui:define>
 	<ui:define name="mainContent" >
-		<h:panelGroup layout="block" styleClass="third_area0_p0 messageArea errorMessageArea xTiny_marginLExcl" rendered="#{imageBean.image == null}">
-            <h2><h:outputText value="404 #{lbl.not_found}" styleClass="tiny_marginLExcl"/></h2>
+        <h:panelGroup layout="block" styleClass="full_area0" rendered="#{imageBean.image != null and !imageBean.visible}">
+            <h2>
+            	<h:outputText value="#{lbl.view_page_disallowed}" styleClass="tiny_marginLExcl" rendered="#{SessionBean.user == null}"/>
+            	<h:outputText value="#{lbl.view_page_disallowed2}" styleClass="tiny_marginLExcl" rendered="#{SessionBean.user != null}"/>
+            </h2>
         </h:panelGroup>
-		<h:panelGroup rendered="#{imageBean.image != null}">
+		<h:panelGroup rendered="#{imageBean.image != null and imageBean.visible}">
 			<div class="full_area0 paginator">
 				<h:panelGroup styleClass="xDouble_marginLExcl pageBrowser">
-					<h:outputLink value="#{imageBean.browse.previous}" styleClass="backward small_marginLExcl" disabled="#{imageBean.browse.previous == null}">
+					<h:outputLink value="#{imageBean.browse.previous}&amp;tab=#{imageBean.tab}" styleClass="backward small_marginLExcl" disabled="#{imageBean.browse.previous == null}">
 						<h:outputText value="#{lbl.paginator_previous} #{lbl.image} #{imageBean.initLabels}"/>
 					</h:outputLink>
 					<h:outputText value=" " styleClass="small_area0"/>
-					<h:outputLink value="#{imageBean.browse.next}" styleClass="forward small_marginLExcl"  disabled="#{imageBean.browse.next == null}">
+					<h:outputLink value="#{imageBean.browse.next}&amp;tab=#{imageBean.tab}" styleClass="forward small_marginLExcl"  disabled="#{imageBean.browse.next == null}">
 						<h:outputText value="#{lbl.paginator_next} #{lbl.image}"/>
 					</h:outputLink>
 				</h:panelGroup>
@@ -42,7 +45,7 @@
 								<h:outputText value="#{lbl.playing} #{imageBean.image.filename} " />
 							</audio>
 						</h:panelGroup>
-						<h:outputLink styleClass="full_area0" id="lnkDownload" value="#{Navigation.applicationUrl}file/#{imageBean.encodedFileName}?id=#{imageBean.image.fullImageUrl}" target="_blank">
+						<h:outputLink styleClass="full_area0" id="lnkDownload" value="#{Navigation.applicationUrl}file/#{imageBean.encodedFileName}?id=#{imageBean.image.fullImageUrl}&amp;download=1" target="_blank">
 							<h:outputText value="#{lbl.fileDownload}"/>
 						</h:outputLink>
 					</h:panelGroup>

@@ -413,7 +413,8 @@ public class MdProfileBean
     }
 
     /**
-     * True if the Metadata at this position in the list has a child 
+     * True if the Metadata at this position in the list has a child
+     * 
      * @param position
      * @return
      */
@@ -657,7 +658,7 @@ public class MdProfileBean
     {
         if (!wrappers.get(getStatementPosition()).isUsed())
         {
-            wrappers.remove(getStatementPosition());
+            removeStatementWithChilds(wrappers.get(getStatementPosition()));
         }
         else
         {
@@ -686,8 +687,22 @@ public class MdProfileBean
      */
     public void forceRemoveStatement()
     {
-        wrappers.remove(getStatementPosition());
+        removeStatementWithChilds(wrappers.get(getStatementPosition()));
         cleanMetadata = true;
+    }
+
+    /**
+     * Remove a {@link StatementWrapper} and all its childs from the {@link MetadataProfile}
+     */
+    private void removeStatementWithChilds(StatementWrapper parent)
+    {
+        List<StatementWrapper> toDelete = getChilds(parent, false);
+        toDelete.add(wrappers.get(getStatementPosition()));
+        List<StatementWrapper> l = new ArrayList<StatementWrapper>();
+        for (StatementWrapper sw : wrappers)
+            if (!toDelete.contains(sw))
+                l.add(sw);
+        wrappers = l;
     }
 
     /**

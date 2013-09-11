@@ -34,6 +34,14 @@ public class SortCriterion
         this.sortOrder = SortOrder.ASCENDING;
     }
 
+    /**
+     * Toggle the order the the {@link SortCriterion}
+     */
+    public void toggle()
+    {
+        sortOrder = (SortOrder.ASCENDING.equals(sortOrder) ? SortOrder.DESCENDING : SortOrder.ASCENDING);
+    }
+
     public void setSortOrder(SortOrder sortOrder)
     {
         this.sortOrder = sortOrder;

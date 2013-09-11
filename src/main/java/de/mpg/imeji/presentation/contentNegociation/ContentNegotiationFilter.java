@@ -29,20 +29,16 @@
 package de.mpg.imeji.presentation.contentNegociation;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Enumeration;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -51,10 +47,9 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.presentation.servlet.ExportServlet;
-import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
- * TODO Description
+ * Filter for the content negociation
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
@@ -63,7 +58,6 @@ import de.mpg.imeji.presentation.util.PropertyReader;
 public class ContentNegotiationFilter implements Filter
 {
     private FilterConfig filterConfig = null;
-    private ServletContext servletContext;
 
     /*
      * (non-Javadoc)
@@ -95,7 +89,6 @@ public class ContentNegotiationFilter implements Filter
                 if (type != null)
                 {
                     url += "&type=" + type + "&" + getQuery(request);
-                    System.out.println(url);
                     forwardToExport(url, request, resp);
                 }
             }
@@ -140,7 +133,8 @@ public class ContentNegotiationFilter implements Filter
         if (path.startsWith("/album/"))
             return "q=" + SearchIndex.names.alb.name() + "==\"" + ObjectHelper.getURI(Album.class, getID(path)) + "\"";
         if (path.startsWith("/profile/"))
-            return "q=" + SearchIndex.names.prof.name() + "==\"" + ObjectHelper.getURI(MetadataProfile.class, getID(path)) + "\"";
+            return "q=" + SearchIndex.names.prof.name() + "==\""
+                    + ObjectHelper.getURI(MetadataProfile.class, getID(path)) + "\"";
         return request.getQueryString();
     }
 
@@ -160,6 +154,15 @@ public class ContentNegotiationFilter implements Filter
         return request.getHeader("Accept").startsWith("application/rdf+xml");
     }
 
+    /**
+     * Forward to the exporturl
+     * 
+     * @param exportUrl
+     * @param aRequest
+     * @param aResponse
+     * @throws ServletException
+     * @throws IOException
+     */
     private void forwardToExport(String exportUrl, HttpServletRequest aRequest, ServletResponse aResponse)
             throws ServletException, IOException
     {

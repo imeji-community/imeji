@@ -11,14 +11,17 @@ import java.util.Date;
 import java.util.List;
 
 import de.mpg.imeji.logic.search.Search;
-import de.mpg.imeji.logic.search.util.SearchIndexInitializer;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchMetadata;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.util.DateFormatter;
+import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;
+import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.j2j.helper.J2JHelper;
 
 /**
  * Factory to created Sparql query from a {@link SearchPair}
@@ -104,7 +107,14 @@ public class SimpleQueryFactory
         }
         else if (SearchIndex.names.prof.name().equals(pair.getIndex().getName()))
         {
-            return " FILTER(" + getSimpleFilter(pair, "s") + ") . ?c <" + Search.getIndex(SearchIndex.names.prof).getNamespace() + "> ?s .";
+            // In case the search is for a profile
+            if (J2JHelper.getResourceNamespace(new MetadataProfile()).equals(rdfType))
+                return " FILTER(" + getSimpleFilter(pair, "s") + ") . ?c <"
+                        + Search.getIndex(SearchIndex.names.prof).getNamespace() + "> ?s .";
+            else if(J2JHelper.getResourceNamespace(new CollectionImeji()).equals(rdfType))
+                searchQuery = " ?s <http://imeji.org/terms/mdprofile> ?el";
+            else if(J2JHelper.getResourceNamespace(new Item()).equals(rdfType))
+                searchQuery = " ?c <http://imeji.org/terms/mdprofile> ?el";
         }
         else if (SearchIndex.names.cont_title.name().equals(pair.getIndex().getName()))
         {
@@ -129,10 +139,6 @@ public class SimpleQueryFactory
         else if (SearchIndex.names.cont_person_org_name.name().equals(pair.getIndex().getName()))
         {
             searchQuery = " .OPTIONAL {?s <http://imeji.org/terms/container/metadata> ?cmd . OPTIONAL{?cmd <http://purl.org/escidoc/metadata/terms/0.1/creator> ?p . OPTIONAL{ ?p <http://purl.org/escidoc/metadata/profiles/0.1/organizationalunit> ?org .OPTIONAL{?org <http://purl.org/dc/elements/1.1/title> ?el}}}}";
-        }
-        else if (SearchIndex.names.profile.name().equals(pair.getIndex().getName()))
-        {
-            searchQuery = " ?s <http://imeji.org/terms/mdprofile> ?el";
         }
         else if (SearchIndex.names.type.name().equals(pair.getIndex().getName()))
         {

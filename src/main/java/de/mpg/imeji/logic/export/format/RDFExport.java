@@ -84,6 +84,12 @@ public abstract class RDFExport extends Export
      */
     protected abstract void initNamespaces();
 
+    /**
+     * Write the {@link SearchResult} in an {@link OutputStream}
+     * 
+     * @param sr
+     * @param out
+     */
     private void exportIntoOut(SearchResult sr, OutputStream out)
     {
         namespaces.put("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "rdf");
@@ -121,7 +127,6 @@ public abstract class RDFExport extends Export
             Imeji.dataset.end();
         }
     }
-    
 
     /**
      * Write a {@link Resource} in rdf
@@ -183,7 +188,7 @@ public abstract class RDFExport extends Export
         String tag = "<" + getNamespace(st.getPredicate().getNameSpace()) + ":" + st.getPredicate().getLocalName();
         if (resourceURI != null)
         {
-            tag += " rdf:resource=\"" + resourceURI+ "\"";
+            tag += " rdf:resource=\"" + resourceURI + "\"";
         }
         tag += ">";
         return tag;

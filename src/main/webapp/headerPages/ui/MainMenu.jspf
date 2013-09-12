@@ -358,7 +358,7 @@
 							</h:outputLink>
 						</h:panelGroup>						
 						<h:panelGroup styleClass="item" layout="block">
-							<h:outputLink id="lnkColPhotoOther" title="#{lbl.goto_photo_other}" value="#{Navigation.applicationUrl}collection/a2J9UnWH9rFB1q1F">
+							<h:outputLink id="lnkColPhotoOther" title="#{lbl.goto_photo_other}" value="#{Navigation.applicationUrl}collection/rWli68cB84t8TRU">
 								<h:panelGroup styleClass="pad" layout="block">
 									<h:outputText value="#{lbl.photo_other}" />
 								</h:panelGroup>		

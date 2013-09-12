@@ -197,7 +197,7 @@ public class StaticContentBean
      * @return
      * @throws Exception
      */
-    private String getContent(URL url) throws Exception
+    protected String getContent(URL url) throws Exception
     {
         BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
         String inputLine = "";
@@ -212,6 +212,18 @@ public class StaticContentBean
         }
         in.close();
         return content;
+    }
+    
+    /**
+     * Get the html content of an {@link URL} String
+     * 
+     * @param url
+     * @return
+     * @throws Exception
+     */
+    protected String getContent(String urlString) throws Exception
+    {
+        return getContent(new URL(urlString));
     }
 
     public boolean isAbout()

@@ -1,0 +1,62 @@
+@CHARSET "UTF-8";
+
+.dropDownMenu {
+	/* float: left !important; */
+	display: inline-block;
+}
+
+.dropDownMenu .items {
+	display: none;
+	z-index: 1;
+}
+
+.dropDownMenu:hover>.items {
+	display: block;
+}
+
+.dropDownMenu .items .item.hasChildren:hover>.items {
+	display: block;
+}
+
+.dropDownMenu .items {
+	width: 200px;
+	border: solid #000000;
+	border-width: 0px 1px 1px 1px;
+	position: absolute;
+	background: #FFFFFF;
+	margin-top: 3px;
+}
+
+.dropDownMenu .items .item a .pad {
+	padding-left: 5px;
+	font-size: 14px;
+	letter-spacing: 0;
+}
+
+.dropDownMenu .items a {
+	background: none;
+	display: inline-block;
+ 	width: 95%;
+}
+
+.dropDownMenu .items .item:hover>a:hover {
+	color: white !important;
+}
+
+.dropDownMenu .items .item {
+	position: relative;
+	border-top: 1px solid #000000;
+}
+
+.dropDownMenu .item.hasChildren>a {
+	background: url('./resources/css/theme_zuse/images/All_Paginator_ArrowNext_15_Active.png') right no-repeat;
+}
+
+.dropDownMenu .item.hasChildren:hover>a:hover {
+	background: url('./resources/css/theme_zuse/images/All_Paginator_ArrowNext_15_Hover.png') right no-repeat;
+}
+
+.dropDownMenu .item.hasChildren .items {
+  	top: -1px;
+	left: 200px;
+}

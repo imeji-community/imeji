@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="../templates/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+
+	<ui:param name="headline" value="#{lbl.HomePage}"/>
+	
+	<ui:define name="mainContent">
+		 <h:panelGroup layout="block" styleClass="full_area0 itemList" style="border-bottom-width:0 !important;">
+		 	<ui:include src="../include/History.xhtml" />
+		 </h:panelGroup>
+		
+		<h:panelGroup styleClass="full_area0 infoPage" layout="block">
+					
+			<h:panelGroup id="defaultHome" styleClass="half_area0_p8 mainSection">
+				<h:panelGroup layout="block" styleClass="free_area1" style="padding: 0px 10px 10px 0px; width: 100%;">
+					<h:outputText escape="false" value="#{ZuseStaticContent.welcomePageContent}" />
+				</h:panelGroup>	
+			</h:panelGroup>		
+			
+			<h:panelGroup styleClass="sideSectionArea">				
+				<h:panelGroup styleClass="free_area0_p8 sideSection">
+					<h:outputLink id="lnkZuseImage" styleClass="imj_mainMenuStandardItem transimage" target="_self" title="#{lbl.goto_images}" value="./zuse">
+	  					<h:graphicImage value="#{Navigation.applicationUrl}resources/images/zuse.png"/>
+	  				</h:outputLink>
+				</h:panelGroup>
+				 
+			</h:panelGroup>
+
+		</h:panelGroup>
+	</ui:define>	
+	
+</ui:composition>
+

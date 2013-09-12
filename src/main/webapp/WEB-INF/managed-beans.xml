@@ -208,8 +208,18 @@
 		<managed-bean-scope>application</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
+		<managed-bean-name>ZuseNavigation</managed-bean-name>
+		<managed-bean-class>de.mpg.zuse.presentation.beans.ZuseNavigationBean</managed-bean-class>
+		<managed-bean-scope>application</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
 		<managed-bean-name>StaticContent</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.beans.StaticContentBean</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>ZuseStaticContent</managed-bean-name>
+		<managed-bean-class>de.mpg.zuse.presentation.beans.ZuseStaticContentBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>

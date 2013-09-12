@@ -31,11 +31,23 @@ All rights reserved. Use is subject to license terms.
             <meta http-equiv="pragma" content="no-cache"/>
             <meta http-equiv="cache-control" content="no-cache"/>
             <meta http-equiv="expires" content="0"/>
-            <title><h:outputText value="imeji - #{HistorySession.currentPage.internationalizedName}"/></title>
-            <link rel="shortcut icon" type="image/x-ico" href="#{Navigation.applicationUrl}resources/icon/imeji.ico"/>
-            <link rel="stylesheet" href="#{Navigation.applicationUrl}resources/css/old_style/themes/skin_darkGrey/styles/theme.css" type="text/css" media="all"/>
-			<h:outputStylesheet library="css" name="basic.css"></h:outputStylesheet>
-			<h:outputStylesheet library="css/theme_default" name="style.css" id="themeDefault"></h:outputStylesheet>
+            <title><h:outputText value="Konrad Zuse Internet Archive - #{HistorySession.currentPage.internationalizedName}"/></title>
+            <link rel="shortcut icon" type="image/x-ico" href="#{Navigation.applicationUrl}resources/css/theme_zuse/images/favicon.ico"/>
+            <!-- <link rel="stylesheet" href="#{Navigation.applicationUrl}resources/css/old_style/themes/skin_zuse/styles/theme.css" type="text/css" media="all"/> -->
+
+            <h:outputStylesheet library="css/theme_zuse/globalCSS" name="eSciDoc_core_em.css" />
+            <h:outputStylesheet library="css/theme_zuse/componentCSS" name="header.css" />
+            <h:outputStylesheet library="css/theme_zuse/componentCSS" name="infoPage.css" />
+            <h:outputStylesheet library="css/theme_zuse/componentCSS" name="extPaginator.css" />
+            <h:outputStylesheet library="css/theme_zuse/componentCSS" name="lists.css" />
+            <h:outputStylesheet library="css/theme_zuse/componentCSS" name="fullItem.css" />
+            <h:outputStylesheet library="css/theme_zuse/componentCSS" name="externalOverrides.css" />
+
+            <h:outputStylesheet library="css/theme_zuse" name="navi.css" />
+            <h:outputStylesheet library="css/theme_zuse" name="app.css" id="themeZuse" />
+            <h:outputStylesheet library="css/theme_zuse" name="images.css" />
+            
+			
 			<script type="text/javascript" language="JavaScript">var homeURL = '<h:outputText value="#{Navigation.applicationUrl}"/>';</script>  
 			<script type="text/javascript" language="JavaScript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/eSciDoc_inc.js"></script>
 			<script type="text/javascript" language="JavaScript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>

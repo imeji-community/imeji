@@ -672,7 +672,6 @@
 					</h:panelGroup>
 					
 					<h:panelGroup styleClass="items" layout="block">
-						<h:panelGroup styleClass="item hasChildren" layout="block">
 							<h:panelGroup styleClass="item hasChildren" layout="block">
 								<h:outputLink id="lnkZ1Simulation" title="#{lbl.goto_z1_simulations}" value="">
 									<h:panelGroup styleClass="pad" layout="block">
@@ -731,7 +730,7 @@
 									</h:outputLink>
 								</h:panelGroup>
 							</h:panelGroup>
-						</h:panelGroup>
+
 						<h:panelGroup styleClass="item hasChildren" layout="block">
 							<h:panelGroup layout="block">
 								<h:outputLink id="lnkZ3Simulation" title="#{lbl.goto_z3_simulations}" value="">

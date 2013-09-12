@@ -159,6 +159,8 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     @Override
     public List<ThumbnailBean> retrieveList(int offset, int limit)
     {
+        if(searchResult == null)
+            browseInit();
         // load the item
         Collection<Item> items = loadImages(searchResult.getResults(), offset, limit);
         // Init the labels for the item

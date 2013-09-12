@@ -21,25 +21,25 @@
 		<servlet-name>Faces Servlet</servlet-name>
 		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
-		<async-supported>true</async-supported> 
+		<async-supported>true</async-supported>
 	</servlet>
 	<servlet>
 		<servlet-name>Initializer Servlet</servlet-name>
 		<servlet-class>de.mpg.imeji.presentation.servlet.InitializerServlet</servlet-class>
 		<load-on-startup>2</load-on-startup>
-		<async-supported>true</async-supported> 
+		<async-supported>true</async-supported>
 	</servlet>
 	<servlet>
 		<servlet-name>File Servlet</servlet-name>
 		<servlet-class>de.mpg.imeji.presentation.servlet.FileServlet</servlet-class>
 		<load-on-startup>3</load-on-startup>
-		<async-supported>true</async-supported> 
+		<async-supported>true</async-supported>
 	</servlet>
 	<servlet>
 		<servlet-name>Export Servlet</servlet-name>
 		<servlet-class>de.mpg.imeji.presentation.servlet.ExportServlet</servlet-class>
 		<load-on-startup>4</load-on-startup>
-		<async-supported>true</async-supported> 
+		<async-supported>true</async-supported>
 	</servlet>
 	<servlet>
 		<servlet-name>Digilib Servlet</servlet-name>
@@ -56,7 +56,7 @@
 	<filter>
 		<filter-name>History Filter</filter-name>
 		<filter-class>de.mpg.imeji.presentation.history.HistoryFilter</filter-class>
-		<async-supported>true</async-supported> 
+		<async-supported>true</async-supported>
 	</filter>
 	<!-- Mappings -->
 	<servlet-mapping>
@@ -170,5 +170,29 @@
 	<servlet-mapping>
 		<servlet-name>Scaler</servlet-name>
 		<url-pattern>/Scaler/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>cgi</servlet-name>
+		<servlet-class>org.apache.catalina.servlets.CGIServlet</servlet-class>
+		<init-param>
+			<param-name>clientInputTimeout</param-name>
+			<param-value>100</param-value>
+		</init-param>
+		<init-param>
+			<param-name>debug</param-name>
+			<param-value>6</param-value>
+		</init-param>
+		<init-param>
+			<param-name>cgiPathPrefix</param-name>
+			<param-value>WEB-INF/cgi</param-value>
+		</init-param>
+		<load-on-startup>7</load-on-startup>
+	</servlet>
+
+	<!-- The mapping for the CGI Gateway servlet -->
+	<servlet-mapping>
+		<servlet-name>cgi</servlet-name>
+		<url-pattern>/awstats/*</url-pattern>
 	</servlet-mapping>
 </web-app>

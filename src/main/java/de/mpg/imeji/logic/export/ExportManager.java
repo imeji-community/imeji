@@ -15,6 +15,7 @@ import org.apache.http.client.HttpResponseException;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
@@ -23,6 +24,7 @@ import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.search.URLQueryTransformer;
+import de.mpg.j2j.helper.SortHelper;
 
 /**
  * Manage {@link Export}
@@ -111,9 +113,10 @@ public class ExportManager
         }
         else if ("profile".equals(searchType))
         {
-            List<String> uris = new ArrayList<String>();
-            uris.add(id);
-            result = new SearchResult(uris, new SortCriterion());
+            // List<String> uris = new ArrayList<String>();
+            // result = new SearchResult(uris, new SortCriterion());
+            ProfileController pc = new ProfileController();
+            result = pc.search(searchQuery, user);
         }
         else if ("image".equals(searchType))
         {

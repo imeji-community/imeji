@@ -36,6 +36,7 @@ import javax.faces.bean.ManagedBean;
 
 import org.apache.commons.io.FilenameUtils;
 
+import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -57,6 +58,11 @@ public class PropertyBean
      * The base of the path to the internal storage
      */
     private String internalStorageBase = "files";
+    /**
+     * The base of the uri of imeji objects
+     */
+    private static String baseURI;
+    private static String applicationURL;
 
     /**
      * Default constructor
@@ -68,10 +74,35 @@ public class PropertyBean
             this.digilibEnabled = Boolean.parseBoolean(PropertyReader.getProperty("imeji.digilib.enable"));
             this.internalStorageBase = FilenameUtils.getBaseName(FilenameUtils.normalizeNoEndSeparator(PropertyReader
                     .getProperty("imeji.storage.path")));
+            applicationURL = StringHelper.normalizeURI(PropertyReader.getProperty("escidoc.imeji.instance.url"));
+            readBaseUri();
         }
         catch (Exception e)
         {
             throw new RuntimeException("Error reading properties: ", e);
+        }
+    }
+
+    /**
+     * Read in the property the base Uri
+     */
+    private void readBaseUri()
+    {
+        try
+        {
+            baseURI = StringHelper.normalizeURI(PropertyReader.getProperty("imeji.jena.resource.base_uri"));
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Error reading properties: ", e);
+        }
+        if (baseURI == null || baseURI.trim().equals("/"))
+        {
+            baseURI = applicationURL;
+        }
+        if (baseURI == null)
+        {
+            throw new RuntimeException("Error in properties. Check property: escidoc.imeji.instance.url");
         }
     }
 
@@ -85,13 +116,49 @@ public class PropertyBean
 
     /**
      * @return the internalStorageBase
-     * @throws URISyntaxException 
-     * @throws IOException 
+     * @throws URISyntaxException
+     * @throws IOException
      */
     public String getInternalStorageBase() throws IOException, URISyntaxException
     {
         this.internalStorageBase = FilenameUtils.getBaseName(FilenameUtils.normalizeNoEndSeparator(PropertyReader
                 .getProperty("imeji.storage.path")));
         return internalStorageBase;
+    }
+
+    /**
+     * @return the baseURI
+     */
+    public String getBaseURI()
+    {
+        return baseURI;
+    }
+
+    /**
+     * Static getter
+     * 
+     * @return
+     */
+    public static String baseURI()
+    {
+        return baseURI;
+    }
+
+    /**
+     * @return the applicationURL
+     */
+    public static String getApplicationURL()
+    {
+        return applicationURL;
+    }
+
+    /**
+     * Static getter
+     * 
+     * @return
+     */
+    public static String applicationURL()
+    {
+        return applicationURL;
     }
 }

@@ -2,7 +2,6 @@ package de.mpg.imeji.logic.ingest.controller;
 
 import java.io.File;
 
-import org.apache.log4j.Logger;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -17,7 +16,6 @@ import de.mpg.imeji.logic.vo.User;
  */
 public class IngestController
 {
-    private static Logger logger = Logger.getLogger(IngestController.class);
     /**
      * The collection in with the ingest will be done.
      */

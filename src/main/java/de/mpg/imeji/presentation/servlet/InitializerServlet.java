@@ -23,6 +23,7 @@ import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.concurrency.locks.LocksSurveyor;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.StringHelper;
+import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.j2j.exceptions.AlreadyExistsException;
 
 /**
@@ -46,6 +47,7 @@ public class InitializerServlet extends HttpServlet
         initModel();
         startLocksSurveyor();
         createSysadminUser();
+        new PropertyBean();
         // EscidocInitializer escidocInitializer = new EscidocInitializer();
         // escidocInitializer.run();
     }

@@ -12,9 +12,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
-
-import de.mpg.imeji.presentation.util.PropertyReader;
+import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.j2j.annotations.j2jModel;
 import de.mpg.j2j.annotations.j2jResource;
 
@@ -27,8 +25,6 @@ import de.mpg.j2j.annotations.j2jResource;
  */
 public class ObjectHelper
 {
-    private static Logger logger = Logger.getLogger(ObjectHelper.class);
-
     /**
      * Get the {@link URI} of {@link Object} according to its {@link Class} and the id (not uri)
      * 
@@ -37,25 +33,7 @@ public class ObjectHelper
      */
     public static URI getURI(Class<?> c, String id)
     {
-        String baseURI = null;
-        String applicationURL = null;
-        try
-        {
-            applicationURL = StringHelper.normalizeURI(PropertyReader.getProperty("escidoc.imeji.instance.url"));
-            baseURI = StringHelper.normalizeURI(PropertyReader.getProperty("imeji.jena.resource.base_uri"));
-        }
-        catch (Exception e)
-        {
-            logger.error("Error reading properties:", e);
-        }
-        if (baseURI == null || baseURI.trim().equals("/"))
-        {
-            baseURI = applicationURL;
-        }
-        if (baseURI == null)
-        {
-            throw new RuntimeException("Error in properties. Check property: escidoc.imeji.instance.url");
-        }
+        String baseURI = PropertyBean.baseURI();
         j2jModel modelName = c.getAnnotation(j2jModel.class);
         if (modelName != null)
         {

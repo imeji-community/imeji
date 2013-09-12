@@ -29,6 +29,8 @@
 package de.mpg.imeji.presentation.contentNegociation;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
@@ -121,20 +123,24 @@ public class ContentNegotiationFilter implements Filter
      * 
      * @param request
      * @return
+     * @throws UnsupportedEncodingException
      */
-    private String getQuery(HttpServletRequest request)
+    private String getQuery(HttpServletRequest request) throws UnsupportedEncodingException
     {
         String path = request.getServletPath();
         if (path.startsWith("/item/"))
-            return "q=" + SearchIndex.names.item.name() + "==\"" + ObjectHelper.getURI(Item.class, getID(path)) + "\"";
+            return "q=" + SearchIndex.names.item.name() + "==\""
+                    + URLEncoder.encode(ObjectHelper.getURI(Item.class, getID(path)).toString(), "UTF-8") + "\"";
         if (path.startsWith("/collection/"))
             return "q=" + SearchIndex.names.col.name() + "==\""
                     + ObjectHelper.getURI(CollectionImeji.class, getID(path)) + "\"";
         if (path.startsWith("/album/"))
-            return "q=" + SearchIndex.names.alb.name() + "==\"" + ObjectHelper.getURI(Album.class, getID(path)) + "\"";
+            return "q=" + SearchIndex.names.alb.name() + "==\""
+                    + URLEncoder.encode(ObjectHelper.getURI(Album.class, getID(path)).toString(), "UTF-8") + "\"";
         if (path.startsWith("/profile/"))
             return "q=" + SearchIndex.names.prof.name() + "==\""
-                    + ObjectHelper.getURI(MetadataProfile.class, getID(path)) + "\"";
+                    + URLEncoder.encode(ObjectHelper.getURI(MetadataProfile.class, getID(path)).toString(), "UTF-8")
+                    + "\"";
         return request.getQueryString();
     }
 

@@ -9,7 +9,7 @@
 
 	<!-- <rewrite match="^/old-url/(\w+)/$" substitute="/new_url/$1/" redirect="301" 
 		/> -->
-	<rewrite match="/metadataprofile/(.+)" substitute="/profile/$1"
+	<rewrite match="/metadataProfile/(.+)" substitute="/profile/$1"
 		redirect="301" />
 	<!-- Begin UrlMappings -->
 

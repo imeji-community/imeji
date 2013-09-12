@@ -21,7 +21,9 @@ import de.mpg.imeji.logic.export.format.rdf.RDFCollectionExport;
 import de.mpg.imeji.logic.export.format.rdf.RDFImageExport;
 import de.mpg.imeji.logic.export.format.rdf.RDFProfileExport;
 import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.beans.PropertyBean;
 
 /**
  * {@link Export} in rdf
@@ -109,7 +111,7 @@ public abstract class RDFExport extends Export
             {
                 Resource resource = model.getResource(s);
                 newLine(writer);
-                writer.append(openTagResource(s));
+                writer.append(openTagResource(toUrl(s)));
                 writer.append(exportResource(resource).getBuffer());
                 writer.append(closeTagResource());
             }
@@ -149,7 +151,7 @@ public abstract class RDFExport extends Export
             {
                 try
                 {
-                    writer.append(openTag(st, st.getResource().getURI()));
+                    writer.append(openTag(st, toUrl(st.getResource().getURI())));
                     writer.append(exportResource(st.getResource()).getBuffer());
                 }
                 catch (Exception e)
@@ -179,10 +181,39 @@ public abstract class RDFExport extends Export
         return writer;
     }
 
+    /**
+     * TRansform an uri (used as id in rdf) to a real url
+     * 
+     * @param uri
+     * @return
+     */
+    private String toUrl(String uri)
+    {
+        return uri.replace(PropertyBean.baseURI(), PropertyBean.applicationURL());
+    }
+
+    /**
+     * Open an html tag for an rdf resource
+     * 
+     * @param uri
+     * @return
+     */
     protected abstract String openTagResource(String uri);
 
+    /**
+     * Close an html tag for an rdf resource
+     * 
+     * @return
+     */
     protected abstract String closeTagResource();
 
+    /**
+     * Open an html tag for statement
+     * 
+     * @param st
+     * @param resourceURI
+     * @return
+     */
     private String openTag(Statement st, String resourceURI)
     {
         String tag = "<" + getNamespace(st.getPredicate().getNameSpace()) + ":" + st.getPredicate().getLocalName();
@@ -194,11 +225,23 @@ public abstract class RDFExport extends Export
         return tag;
     }
 
+    /**
+     * Close an html tag for statement
+     * 
+     * @param st
+     * @return
+     */
     private String closeTag(Statement st)
     {
         return "</" + getNamespace(st.getPredicate().getNameSpace()) + ":" + st.getPredicate().getLocalName() + ">";
     }
 
+    /**
+     * return the namespace
+     * 
+     * @param ns
+     * @return
+     */
     private String getNamespace(String ns)
     {
         String ns1 = namespaces.get(ns);
@@ -209,6 +252,11 @@ public abstract class RDFExport extends Export
         return ns;
     }
 
+    /**
+     * Add a new line separator
+     * 
+     * @param writer
+     */
     private void newLine(StringWriter writer)
     {
         writer.append("\n");

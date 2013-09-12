@@ -44,7 +44,7 @@ if (typeof console === 'undefined') {
         // version of this script
         'version' : 'jquery.digilib.js 2.2.0a',
         // logo url
-        'logoUrl' : 'img/digilib-logo-text1.png',
+        'logoUrl' : '/resources/digilib/jquery/img/digilib-logo-text1.png',
         // homepage url (behind logo)
         'homeUrl' : '/',
         // base URL to digilib webapp (e.g. 'http://digilib.mpiwg-berlin.mpg.de/digitallibrary')

@@ -21,7 +21,6 @@ import de.mpg.imeji.logic.export.format.rdf.RDFCollectionExport;
 import de.mpg.imeji.logic.export.format.rdf.RDFImageExport;
 import de.mpg.imeji.logic.export.format.rdf.RDFProfileExport;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.PropertyBean;
 

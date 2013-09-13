@@ -56,9 +56,11 @@
 						value="#{lbl.paginator_previous} | #{lbl.zuse_partners}" />
 				</h:outputLink>
 				<h:outputText value=" " style="width: 16.0em;" />
-				<h:outputLink value="#{Navigation.applicationUrl}tou"
+				<!-- <h:outputLink value="#{Navigation.applicationUrl}tou" styleClass="forward small_marginLExcl"> -->
+				<h:outputLink value="#{Navigation.applicationUrl}project"
 					styleClass="forward small_marginLExcl">
-					<h:outputText value="#{lbl.zuse_toux} | #{lbl.paginator_next}" />
+					<h:outputText value="#{lbl.zuse_project} | #{lbl.paginator_next}" />
+					<!-- <h:outputText value="#{lbl.zuse_toux} | #{lbl.paginator_next}" /> -->
 				</h:outputLink>
 			</h:panelGroup>
 		</ui:define>

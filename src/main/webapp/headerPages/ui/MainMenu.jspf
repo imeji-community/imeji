@@ -273,7 +273,7 @@
 						</h:panelGroup>
 					</h:panelGroup>
 				</h:panelGroup>
-				<!-- h:panelGroup styleClass="item hasChildren" layout="block">
+				<h:panelGroup styleClass="item hasChildren" layout="block">
 					<h:panelGroup layout="block">
 						<h:outputLink id="lnkColTypescripts" title="#{lbl.goto_typescripts}" value="">
 							<h:panelGroup styleClass="pad" layout="block">
@@ -283,7 +283,7 @@
 					</h:panelGroup>
 					<h:panelGroup styleClass="items" layout="block">
 					<h:panelGroup styleClass="item" layout="block">
-							<h:outputLink id="lnkColNetworkAutomaton" title="#{lbl.goto_typescripts_network_automaton}" value="#{Navigation.applicationUrl}collection/i2_vfgPVXxS4CE">
+							<h:outputLink id="lnkColTypeNetworkAutomaton" title="#{lbl.goto_typescripts_network_automaton}" value="#{Navigation.applicationUrl}collection/i2_vfgPVXxS4CE">
 								<h:panelGroup styleClass="pad" layout="block">
 									<h:outputText value="#{lbl.typescripts_network_automaton}" />
 								</h:panelGroup>		
@@ -304,7 +304,7 @@
 							</h:outputLink>
 					</h:panelGroup>				
 					</h:panelGroup>
-				</h:panelGroup -->
+				</h:panelGroup>
 				
 				<h:panelGroup styleClass="item hasChildren" layout="block">
 					<h:panelGroup layout="block">

@@ -16,6 +16,7 @@ import de.mpg.imeji.logic.search.vo.SearchMetadata;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.util.DateFormatter;
+import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;
@@ -109,11 +110,14 @@ public class SimpleQueryFactory
         {
             // In case the search is for a profile
             if (J2JHelper.getResourceNamespace(new MetadataProfile()).equals(rdfType))
+            {
+                pair.setValue(normalizeURI(MetadataProfile.class, pair.getValue()));
                 return " FILTER(" + getSimpleFilter(pair, "s") + ") . ?c <"
                         + Search.getIndex(SearchIndex.names.prof).getNamespace() + "> ?s .";
-            else if(J2JHelper.getResourceNamespace(new CollectionImeji()).equals(rdfType))
+            }
+            else if (J2JHelper.getResourceNamespace(new CollectionImeji()).equals(rdfType))
                 searchQuery = " ?s <http://imeji.org/terms/mdprofile> ?el";
-            else if(J2JHelper.getResourceNamespace(new Item()).equals(rdfType))
+            else if (J2JHelper.getResourceNamespace(new Item()).equals(rdfType))
                 searchQuery = " ?c <http://imeji.org/terms/mdprofile> ?el";
         }
         else if (SearchIndex.names.cont_title.name().equals(pair.getIndex().getName()))
@@ -179,6 +183,22 @@ public class SimpleQueryFactory
                     + "> ?p" + parentNumber + " . ?p" + parentNumber;
         }
         return q;
+    }
+
+    /**
+     * If the uri has been corrupted (for instance /profile/ instead /metadataProfile/), return the correct uri
+     * 
+     * @param c
+     * @param uri
+     * @return
+     */
+    private static String normalizeURI(Class c, String uri)
+    {
+        if (isURL(uri))
+        {
+            return ObjectHelper.getURI(c, ObjectHelper.getId(URI.create(uri))).toString();
+        }
+        return uri;
     }
 
     /**

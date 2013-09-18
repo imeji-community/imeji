@@ -43,7 +43,7 @@
 								<h:outputText value="#{MetadataLabels.internationalizedLabels[md.statement.id]}" />
 							</h:panelGroup>
 							<h:panelGroup layout="block" styleClass="double_area0_p2 xTiny_marginLExcl">
-								<h:outputText value="#{md.text}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#text'}" />
+								<h:outputText value="#{md.text}" escape="false" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#text'}" />
 								<h:outputText value="#{md.number}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#number'}" />
 								<h:outputText value="#{md.date}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#date'}" />
 								<h:outputLink value="#{md.uri}" target="_blank" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#publication' or md.typeNamespace == 'http://imeji.org/terms/metadata#link'}">

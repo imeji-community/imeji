@@ -336,13 +336,13 @@
 								</h:panelGroup>		
 							</h:outputLink>
 					</h:panelGroup>						
-						<h:panelGroup styleClass="item" layout="block">
+						<!-- <h:panelGroup styleClass="item" layout="block">
 							<h:outputLink id="lnkColPhotoZ22R" title="#{lbl.goto_photo_z22r}" value="#{Navigation.applicationUrl}collection/xS964bFNpMFDgfPz">
 								<h:panelGroup styleClass="pad" layout="block">
 									<h:outputText value="#{lbl.goto_photo_z22r}" />
 								</h:panelGroup>		
 							</h:outputLink>
-						</h:panelGroup>						
+						</h:panelGroup>	 -->					
 						<h:panelGroup styleClass="item" layout="block">
 							<h:outputLink id="lnkColPhotoZ3Recon" title="#{lbl.goto_photo_z3_recon}" value="#{Navigation.applicationUrl}collection/Bk6f17vragaY1eY">
 								<h:panelGroup styleClass="pad" layout="block">

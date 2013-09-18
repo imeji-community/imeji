@@ -5,7 +5,7 @@
       >
 	<h:panelGroup layout="block" styleClass="free_area0">
 		<h:panelGroup layout="block" styleClass="free_area0_p0 endline">
-			<h:outputText styleClass="free_area0" value="#{md.text}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#text' and md.text != null  }"/>
+			<h:outputText styleClass="free_area0" escape="false" value="#{md.text}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#text' and md.text != null  }"/>
 			<h:outputText styleClass="free_area0 endline" value="#{md.number}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#number' and md.number != null}"/>
 			<h:outputText styleClass="free_area0 endline" value="#{md.date}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#date'  and md.date != null}"/>
 			<h:outputLink value="#{md.uri}" target="_blank" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#link'}">

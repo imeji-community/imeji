@@ -318,7 +318,7 @@ public class UploadBean
                 // if the checkNameUnique is checked, check that two files with the same name is not possible
                 if ((importImageToFile || uploadFileToItem) && filenameExistsInCurrentUpload())
                     throw new RuntimeException("There is already at least one item with the filename ");
-                else if (filenameExistsInCollection(title) || filenameExistsInCurrentUpload())
+                else if (!((importImageToFile || uploadFileToItem)) && filenameExistsInCollection(title) || filenameExistsInCurrentUpload())
                     throw new RuntimeException("There is already at least one item with the filename ");
             }
             if (!isAllowedFormat(FilenameUtils.getExtension(title)))
@@ -385,6 +385,7 @@ public class UploadBean
     {
         item = replaceWebResolutionAndThumbnailOfItem(item, uploadResult);
         item.setFullImageUrl(URI.create(uploadResult.getOrginal()));
+        item.setStorageId(uploadResult.getId());
         return item;
     }
 

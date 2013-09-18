@@ -30,6 +30,7 @@ package de.mpg.imeji.logic.storage.impl;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 
 import de.mpg.imeji.logic.storage.Storage;
@@ -73,7 +74,7 @@ public class InternalStorage implements Storage
     @Override
     public UploadResult upload(String filename, File file, String collectionId)
     {
-        InternalStorageItem item = manager.addFile(file, filename, collectionId);
+        InternalStorageItem item = manager.createItem(file, filename, collectionId);
         return new UploadResult(item.getId(), item.getOriginalUrl(), item.getWebUrl(), item.getThumbnailUrl());
     }
 
@@ -103,7 +104,7 @@ public class InternalStorage implements Storage
     @Override
     public void delete(String id)
     {
-        manager.removeFile(new InternalStorageItem(id));
+        manager.removeItem(new InternalStorageItem(id));
     }
 
     /*
@@ -111,9 +112,17 @@ public class InternalStorage implements Storage
      * @see de.mpg.imeji.logic.storage.Storage#update(java.lang.String, byte[])
      */
     @Override
-    public void update(String url, byte[] bytes)
+    public void update(String url, File file)
     {
-        // return upload(url, bytes);
+        try
+        {
+            manager.replaceFile(file, url);
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException("Error updating file " + manager.transformUrlToPath(url)
+                    + " in internal storage: ", e);
+        }
     }
 
     /*

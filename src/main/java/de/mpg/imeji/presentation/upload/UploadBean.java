@@ -79,6 +79,7 @@ public class UploadBean
     private boolean importImageToFile = false;
     private boolean uploadFileToItem = false;
     private boolean checkNameUnique = true;
+    private List<String> filesToRemove = new ArrayList<String>();
 
     /**
      * Construct the Bean and initalize the pages
@@ -318,27 +319,26 @@ public class UploadBean
                 // if the checkNameUnique is checked, check that two files with the same name is not possible
                 if ((importImageToFile || uploadFileToItem) && filenameExistsInCurrentUpload())
                     throw new RuntimeException("There is already at least one item with the filename ");
-                else if (!((importImageToFile || uploadFileToItem)) && filenameExistsInCollection(title) || filenameExistsInCurrentUpload())
+                else if (!((importImageToFile || uploadFileToItem)) && filenameExistsInCollection(title)
+                        || filenameExistsInCurrentUpload())
                     throw new RuntimeException("There is already at least one item with the filename ");
             }
             if (!isAllowedFormat(FilenameUtils.getExtension(title)))
                 throw new RuntimeException(sessionBean.getMessage("upload_format_not_allowed") + " ("
                         + FilenameUtils.getExtension(title) + ")");
             storageController = new StorageController();
-            UploadResult uploadResult = storageController.upload(title, file, id);
             Item item = null;
             if (importImageToFile)
             {
-                item = findItemByFileName(title);
-                item = replaceWebResolutionAndThumbnailOfItem(item, uploadResult);
+                item = replaceWebResolutionAndThumbnailOfItem(findItemByFileName(title), file);
             }
             else if (uploadFileToItem)
             {
-                item = findItemByFileName(title);
-                item = replaceFileOfItem(item, uploadResult);
+                item = replaceFileOfItem(findItemByFileName(title), file);
             }
             else
             {
+                UploadResult uploadResult = storageController.upload(title, file, id);
                 item = ImejiFactory.newItem(collection, user, uploadResult.getId(), title,
                         URI.create(uploadResult.getOrginal()), URI.create(uploadResult.getThumb()),
                         URI.create(uploadResult.getWeb()));
@@ -366,10 +366,10 @@ public class UploadBean
      * @return
      * @throws Exception
      */
-    private Item replaceWebResolutionAndThumbnailOfItem(Item item, UploadResult uploadResult) throws Exception
+    private Item replaceWebResolutionAndThumbnailOfItem(Item item, File file) throws Exception
     {
-        item.setWebImageUrl(URI.create(uploadResult.getWeb()));
-        item.setThumbnailImageUrl(URI.create(uploadResult.getThumb()));
+        storageController.update(item.getWebImageUrl().toString(), file);
+        storageController.update(item.getThumbnailImageUrl().toString(), file);
         return item;
     }
 
@@ -381,11 +381,11 @@ public class UploadBean
      * @return
      * @throws Exception
      */
-    private Item replaceFileOfItem(Item item, UploadResult uploadResult) throws Exception
+    private Item replaceFileOfItem(Item item, File file) throws Exception
     {
-        item = replaceWebResolutionAndThumbnailOfItem(item, uploadResult);
-        item.setFullImageUrl(URI.create(uploadResult.getOrginal()));
-        item.setStorageId(uploadResult.getId());
+        storageController.update(item.getFullImageUrl().toString(), file);
+        item.setChecksum(storageController.calculateChecksum(file));
+        replaceWebResolutionAndThumbnailOfItem(item, file);
         return item;
     }
 

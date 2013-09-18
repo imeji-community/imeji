@@ -92,7 +92,7 @@ public class JenaTextSearch
     private void addIndex(String namespace) throws IOException
     {
         EntityDefinition entDef = new EntityDefinition("uri", "text", RDFS.label);
-        // Lucene, in memory.
+        // Lucene
         Directory dir = new SimpleFSDirectory(new File(Imeji.tdbPath));
         // Join together into a dataset
         TextDatasetFactory.createLucene(Imeji.dataset, dir, entDef);

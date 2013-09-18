@@ -38,6 +38,7 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.j2j.annotations.j2jModel;
+import de.mpg.j2j.search.JenaTextSearch;
 
 /**
  * {@link Jena} interface for imeji
@@ -66,6 +67,11 @@ public class Imeji
      */
     public static ExecutorService executor = Executors.newCachedThreadPool();
 
+    
+    public static void main(String[] args)
+    {
+        init("/data/imejitest/tdb");
+    }
     /**
      * Initialize the {@link Jena} database according to imeji.properties<br/>
      * Called when the server (Tomcat of JBoss) is started

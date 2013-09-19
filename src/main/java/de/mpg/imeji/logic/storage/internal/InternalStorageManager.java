@@ -34,8 +34,17 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
+import javax.faces.component.FacesComponent;
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletRegistration;
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
+
+import com.ocpsoft.pretty.PrettyContext;
 
 import de.mpg.imeji.logic.storage.Storage.FileResolution;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
@@ -45,6 +54,10 @@ import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.user.LoginBean;
+import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -68,6 +81,7 @@ public class InternalStorageManager
      * The {@link InternalStorageAdministrator}
      */
     private InternalStorageAdministrator administrator;
+    private static Logger logger = Logger.getLogger(InternalStorageManager.class);
 
     /**
      * Constructor for a specific path and url
@@ -151,26 +165,15 @@ public class InternalStorageManager
      */
     public void removeFile(String url)
     {
-        try
+        File f = new File(transformUrlToPath(url));
+        if (f.exists())
         {
-            File f = new File(transformUrlToPath(url));
-            if (f.exists())
+            boolean deleted = FileUtils.deleteQuietly(f);
+            if (!deleted)
             {
-                boolean deleted = FileUtils.deleteQuietly(f);
-                if (!deleted)
-                {
-                    // Couldn't be deleted, probably because of not close stream (probably digilib)
-                    System.gc();
-                    // Wait 1 second, to be sure that the gc is done
-                    Thread.sleep(1000);
-                    // finally delete the file
-                    FileUtils.forceDelete(f);
-                }
+                throw new RuntimeException(
+                        "Impossible to delete the exsiting file. Please close all Digilib pages and try later.");
             }
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException("File " + url + " couldn't be deleted", e);
         }
     }
 

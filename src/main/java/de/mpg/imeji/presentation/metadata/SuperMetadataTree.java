@@ -249,7 +249,8 @@ public class SuperMetadataTree
         @Override
         public int compare(SuperMetadataBean md1, SuperMetadataBean md2)
         {
-            return md1.getTreeIndex().compareTo(md2.getTreeIndex());
+        	return md1.compareTo(md2);
+            //return md1.getTreeIndex().compareTo(md2.getTreeIndex());
         }
     }
 

@@ -438,7 +438,7 @@ public class UploadBean
         SearchQuery sq = new SearchQuery();
         Search.getIndex(SearchIndex.names.filename);
         sq.addPair(new SearchPair(Search.getIndex(SearchIndex.names.filename), SearchOperators.REGEX, "^"
-                + FilenameUtils.getBaseName(filename) + ".*"));
+                + FilenameUtils.getBaseName(filename) + "\\\\..+"));
         return sq;
     }
 

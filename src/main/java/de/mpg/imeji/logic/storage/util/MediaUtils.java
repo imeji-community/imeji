@@ -76,6 +76,7 @@ public class MediaUtils
         ConvertCmd cmd = getConvert();
         // create the operation, add images and operators/options
         IMOperation op = new IMOperation();
+        op.colorspace("RGB");
         op.addImage(path);
         File jpeg = File.createTempFile("uploadMagick", ".jpg");
         try

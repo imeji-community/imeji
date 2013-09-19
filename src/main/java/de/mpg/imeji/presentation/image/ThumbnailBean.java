@@ -19,6 +19,7 @@ import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
 import de.mpg.imeji.presentation.metadata.MetadataSetBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.session.SessionObjectsController;
@@ -151,6 +152,8 @@ public class ThumbnailBean
                 {
                     if (md.getStatement().equals(s.getId()))
                     {
+                        if(md instanceof Link)
+                            return ((Link)md).getLabel();
                         return md.asFulltext();
                     }
                 }

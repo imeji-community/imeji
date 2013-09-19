@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.fileupload.FileItemIterator;
@@ -23,10 +24,17 @@ import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.BooleanUtils;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.vo.SearchIndex;
+import de.mpg.imeji.logic.search.vo.SearchOperators;
+import de.mpg.imeji.logic.search.vo.SearchPair;
+import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.UploadResult;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
@@ -68,6 +76,10 @@ public class UploadBean
     private static Logger logger = Logger.getLogger(Upload.class);
     private String formatBlackList = "";
     private String formatWhiteList = "";
+    private boolean importImageToFile = false;
+    private boolean uploadFileToItem = false;
+    private boolean checkNameUnique = true;
+    private List<String> filesToRemove = new ArrayList<String>();
 
     /**
      * Construct the Bean and initalize the pages
@@ -90,6 +102,9 @@ public class UploadBean
     {
         if (UrlHelper.getParameterBoolean("init"))
         {
+            importImageToFile = false;
+            uploadFileToItem = false;
+            checkNameUnique = true;
             removeFiles();
             loadCollection();
             ((AuthorizationBean)BeanHelper.getSessionBean(AuthorizationBean.class)).init(collection);
@@ -115,7 +130,10 @@ public class UploadBean
         {
             try
             {
-                createItemForFiles();
+                if (importImageToFile || uploadFileToItem)
+                    updateItemForFiles();
+                else
+                    createItemForFiles();
                 totalNum = UrlHelper.getParameterValue("totalNum");
                 loadCollection();
                 report();
@@ -227,6 +245,12 @@ public class UploadBean
         return FilenameUtils.getName(url.getPath());
     }
 
+    /**
+     * true if the filename is well formed, i.e. has an extension
+     * 
+     * @param filename
+     * @return
+     */
     private boolean isWellFormedFileName(String filename)
     {
         return FilenameUtils.wildcardMatch(filename, "*.???") || FilenameUtils.wildcardMatch(filename, "*.??")
@@ -290,29 +314,133 @@ public class UploadBean
         {
             if (!StorageUtils.hasExtension(title))
                 title += StorageUtils.guessExtension(file);
-            if (isAllowedFormat(FilenameUtils.getExtension(title)))
+            if (checkNameUnique)
             {
-                storageController = new StorageController();
+                // if the checkNameUnique is checked, check that two files with the same name is not possible
+                if ((importImageToFile || uploadFileToItem) && filenameExistsInCurrentUpload())
+                    throw new RuntimeException("There is already at least one item with the filename ");
+                else if (!((importImageToFile || uploadFileToItem)) && filenameExistsInCollection(title)
+                        || filenameExistsInCurrentUpload())
+                    throw new RuntimeException("There is already at least one item with the filename ");
+            }
+            if (!isAllowedFormat(FilenameUtils.getExtension(title)))
+                throw new RuntimeException(sessionBean.getMessage("upload_format_not_allowed") + " ("
+                        + FilenameUtils.getExtension(title) + ")");
+            storageController = new StorageController();
+            Item item = null;
+            if (importImageToFile)
+            {
+                item = replaceWebResolutionAndThumbnailOfItem(findItemByFileName(title), file);
+            }
+            else if (uploadFileToItem)
+            {
+                item = replaceFileOfItem(findItemByFileName(title), file);
+            }
+            else
+            {
                 UploadResult uploadResult = storageController.upload(title, file, id);
-                Item item = ImejiFactory.newItem(collection, user, uploadResult.getId(), title,
+                item = ImejiFactory.newItem(collection, user, uploadResult.getId(), title,
                         URI.create(uploadResult.getOrginal()), URI.create(uploadResult.getThumb()),
                         URI.create(uploadResult.getWeb()));
                 item.setChecksum(uploadResult.getChecksum());
-                sNum += 1;
-                sFiles.add(title);
-                return item;
             }
-            else
-                throw new RuntimeException(sessionBean.getMessage("upload_format_not_allowed") + " ("
-                        + FilenameUtils.getExtension(title) + ")");
+            sNum += 1;
+            sFiles.add(title);
+            return item;
         }
         catch (Exception e)
         {
             fNum += 1;
             fFiles.add(e.getMessage() + ": " + title);
             logger.error("Error uploading item: ", e);
+            e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * Replace the web resolution and thumbnail files with the one the the upload result
+     * 
+     * @param item
+     * @param uploadResult
+     * @return
+     * @throws Exception
+     */
+    private Item replaceWebResolutionAndThumbnailOfItem(Item item, File file) throws Exception
+    {
+        storageController.update(item.getWebImageUrl().toString(), file);
+        storageController.update(item.getThumbnailImageUrl().toString(), file);
+        return item;
+    }
+
+    /**
+     * Replace the File of an Item
+     * 
+     * @param item
+     * @param uploadResult
+     * @return
+     * @throws Exception
+     */
+    private Item replaceFileOfItem(Item item, File file) throws Exception
+    {
+        storageController.update(item.getFullImageUrl().toString(), file);
+        item.setChecksum(storageController.calculateChecksum(file));
+        replaceWebResolutionAndThumbnailOfItem(item, file);
+        return item;
+    }
+
+    /**
+     * Search for an item in the current collection with the same filename. The filename must be unique!
+     * 
+     * @param filename
+     * @return
+     */
+    private Item findItemByFileName(String filename)
+    {
+        ItemController ic = new ItemController(user);
+        SearchQuery sq = new SearchQuery();
+        Search.getIndex(SearchIndex.names.filename);
+        sq.addPair(new SearchPair(Search.getIndex(SearchIndex.names.filename), SearchOperators.EQUALS, filename));
+        SearchResult sr = ic.searchItemInContainer(collection.getId(), sq, null);
+        if (sr.getNumberOfRecords() == 0)
+            throw new RuntimeException("No item found with the filename ");
+        if (sr.getNumberOfRecords() > 1)
+            throw new RuntimeException("Filename " + filename + " not unique (" + sr.getNumberOfRecords() + " found).");
+        return ic.loadItems(sr.getResults(), 1, 0).iterator().next();
+    }
+
+    /**
+     * True if the filename is already used by an {@link Item} in this {@link CollectionImeji}
+     * 
+     * @param filename
+     * @return
+     */
+    private boolean filenameExistsInCollection(String filename)
+    {
+        ItemController ic = new ItemController(user);
+        SearchQuery sq = new SearchQuery();
+        Search.getIndex(SearchIndex.names.filename);
+        sq.addPair(new SearchPair(Search.getIndex(SearchIndex.names.filename), SearchOperators.EQUALS, filename));
+        // Check already existing item
+        SearchResult sr = ic.searchItemInContainer(collection.getId(), sq, null);
+        // Check currently uploaded item
+        for (Item item : itemList)
+            if (item.getFilename().equals(title))
+                sr.setNumberOfRecords(1);
+        return sr.getNumberOfRecords() > 0;
+    }
+
+    /**
+     * True if 2 files in the current upload have the same name.
+     * 
+     * @return
+     */
+    private boolean filenameExistsInCurrentUpload()
+    {
+        for (Item item : itemList)
+            if (item.getFilename().equals(title))
+                return true;
+        return false;
     }
 
     /**
@@ -324,6 +452,23 @@ public class UploadBean
         try
         {
             ic.create(itemList, collection.getId());
+            itemList = new ArrayList<Item>();
+        }
+        catch (Exception e)
+        {
+            logger.error("Error creating files for upload", e);
+        }
+    }
+
+    /**
+     * Update the {@link Item} for the files which have been uploaded
+     */
+    private void updateItemForFiles()
+    {
+        ItemController ic = new ItemController(user);
+        try
+        {
+            ic.update(itemList, user);
             itemList = new ArrayList<Item>();
         }
         catch (Exception e)
@@ -505,5 +650,63 @@ public class UploadBean
     public void setExternalUrl(String externalUrl)
     {
         this.externalUrl = externalUrl;
+    }
+
+    /**
+     * @return the importImageToFile
+     */
+    public boolean isImportImageToFile()
+    {
+        return importImageToFile;
+    }
+
+    /**
+     * @param importImageToFile the importImageToFile to set
+     */
+    public void setImportImageToFile(boolean importImageToFile)
+    {
+        this.importImageToFile = importImageToFile;
+    }
+
+    /**
+     * @return the uploadFileToItem
+     */
+    public boolean isUploadFileToItem()
+    {
+        return uploadFileToItem;
+    }
+
+    /**
+     * @param uploadFileToItem the uploadFileToItem to set
+     */
+    public void setUploadFileToItem(boolean uploadFileToItem)
+    {
+        this.uploadFileToItem = uploadFileToItem;
+    }
+
+    public void uploadFileToItemListener()
+    {
+        importImageToFile = false;
+    }
+
+    public void importImageToFileListener()
+    {
+        uploadFileToItem = false;
+    }
+
+    /**
+     * @return the checkNameUnique
+     */
+    public boolean isCheckNameUnique()
+    {
+        return checkNameUnique;
+    }
+
+    /**
+     * @param checkNameUnique the checkNameUnique to set
+     */
+    public void setCheckNameUnique(boolean checkNameUnique)
+    {
+        this.checkNameUnique = checkNameUnique;
     }
 }

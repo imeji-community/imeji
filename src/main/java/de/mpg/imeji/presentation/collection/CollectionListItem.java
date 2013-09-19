@@ -71,7 +71,7 @@ public class CollectionListItem
         try
         {
             title = collection.getMetadata().getTitle();
-            description = collection.getMetadata().getDescription();
+            description = CommonUtils.removeTags(collection.getMetadata().getDescription());
             descriptionFull = description;
             if (description != null && description.length() > DESCRIPTION_MAX_SIZE)
             {
@@ -408,18 +408,11 @@ public class CollectionListItem
 
     public String getDescriptionFull()
     {
-        return CommonUtils.removeTags(descriptionFull);
+        return descriptionFull;
     }
 
     public void setDescriptionFull(String descriptionFull)
     {
         this.descriptionFull = descriptionFull;
-    }
-
-    public String getDescriptionWithoutHtml()
-    {
-        if (this.getDescription() == null)
-            return "";
-        return CommonUtils.removeTags(this.getDescription());
     }
 }

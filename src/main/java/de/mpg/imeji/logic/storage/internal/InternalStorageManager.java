@@ -34,9 +34,17 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
+import javax.faces.component.FacesComponent;
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletRegistration;
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
+
+import com.ocpsoft.pretty.PrettyContext;
 
 import de.mpg.imeji.logic.storage.Storage.FileResolution;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
@@ -45,6 +53,11 @@ import de.mpg.imeji.logic.storage.transform.ImageGeneratorManager;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.StringHelper;
+import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.user.LoginBean;
+import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -93,13 +106,13 @@ public class InternalStorageManager
     }
 
     /**
-     * Add a new file to the internal storage
+     * Create {@link InternalStorageItem} for one {@link File}
      * 
      * @param file
      * @param filename
      * @return
      */
-    public InternalStorageItem addFile(File file, String filename, String collectionId)
+    public InternalStorageItem createItem(File file, String filename, String collectionId)
     {
         try
         {
@@ -113,18 +126,53 @@ public class InternalStorageManager
     }
 
     /**
-     * Remove a file from the internal storage
+     * Replace the {@link File} stored at the passed url by the passed {@link File}
+     * 
+     * @param url
+     * @param fileName
+     * @throws IOException
+     */
+    public void replaceFile(File file, String url) throws IOException
+    {
+        String extension = FilenameUtils.getExtension(url);
+        ImageGeneratorManager generatorManager = new ImageGeneratorManager();
+        removeFile(url);
+        if (url.contains(FileResolution.ORIGINAL.name().toLowerCase()))
+            copy(file, transformUrlToPath(url));
+        else if (url.contains(FileResolution.WEB.name().toLowerCase()))
+            write(generatorManager.generateWebResolution(file, extension), transformUrlToPath(url));
+        else if (url.contains(FileResolution.THUMBNAIL.name().toLowerCase()))
+            write(generatorManager.generateThumbnail(file, extension), transformUrlToPath(url));
+    }
+
+    /**
+     * Remove a {@link InternalStorageItem} from the internal storage (i.e. removes all resolutuion of the {@link Item})
      * 
      * @param item
      */
-    public void removeFile(InternalStorageItem item)
+    public void removeItem(InternalStorageItem item)
     {
         if (item.getId() != null && !item.getId().trim().equals(""))
         {
-            File file = new File(storagePath + item.getId());
-            if (!FileUtils.deleteQuietly(file))
+            removeFile(storagePath + item.getId());
+        }
+    }
+
+    /**
+     * Rmove a single {@link File}
+     * 
+     * @param url
+     */
+    public void removeFile(String url)
+    {
+        File f = new File(transformUrlToPath(url));
+        if (f.exists())
+        {
+            boolean deleted = FileUtils.deleteQuietly(f);
+            if (!deleted)
             {
-                logger.error("File " + file.getAbsolutePath() + " could not be deleted!!!");
+                throw new RuntimeException(
+                        "Impossible to delete the exsiting file. Please close all Digilib pages and try later.");
             }
         }
     }
@@ -291,7 +339,7 @@ public class InternalStorageManager
     }
 
     /**
-     * Copy the file in the filesystem
+     * Copy the file in the file system
      * 
      * @param bytes
      * @param path
@@ -331,10 +379,7 @@ public class InternalStorageManager
         {
             file.getParentFile().mkdirs();
             file.createNewFile();
-            FileOutputStream fos = new FileOutputStream(file);
-            fos.write(bytes);
-            fos.flush();
-            fos.close();
+            FileUtils.writeByteArrayToFile(file, bytes);
             return file.getAbsolutePath();
         }
         else

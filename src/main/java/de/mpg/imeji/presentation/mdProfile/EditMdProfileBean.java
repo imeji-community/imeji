@@ -6,7 +6,10 @@ import javax.faces.event.ValueChangeEvent;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.controller.ProfileController;
+import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.collection.ViewCollectionBean;
@@ -129,8 +132,8 @@ public class EditMdProfileBean extends MdProfileBean
             {
                 ProfileController profileController = new ProfileController();
                 profileController.update(getProfile(), session.getUser());
-                if (cleanMetadata)
-                    profileController.removeMetadataWithoutStatement();
+                ImejiSPARQL.execUpdate(SPARQLQueries.cleanStatement());
+                profileController.removeMetadataWithoutStatement();
                 session.getProfileCached().clear();
                 BeanHelper.info(session.getMessage("success_profile_save"));
             }

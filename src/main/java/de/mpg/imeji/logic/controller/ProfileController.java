@@ -176,9 +176,10 @@ public class ProfileController extends ImejiController
         UserController uc = new UserController(user);
         return uc.retrieve(user.getEmail());
     }
-    
+
     /**
      * Search for a profile
+     * 
      * @param query
      * @param user
      * @return

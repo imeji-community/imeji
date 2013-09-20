@@ -196,7 +196,6 @@ public class EditImageMetadataBean
             {
                 initEmtpyEditorItem();
                 editor = new MetadataMultipleEditor(items, profile, getSelectedStatement());
-                lockImages(items);
                 ((SuggestBean)BeanHelper.getSessionBean(SuggestBean.class)).init(profile);
             }
             else
@@ -222,7 +221,7 @@ public class EditImageMetadataBean
     {
         Item emtpyItem = new Item();
         emtpyItem.getMetadataSets().add(ImejiFactory.newMetadataSet(profile.getId()));
-        editorItem = new EditorItemBean(emtpyItem, profile);
+        editorItem = new EditorItemBean(emtpyItem, profile, true);
         editorItem.getMds().addEmtpyValues();
     }
 
@@ -444,7 +443,6 @@ public class EditImageMetadataBean
             eib.clear(statement);
             eib.getMds().addEmtpyValues();
         }
-        
         return "";
     }
 

@@ -173,7 +173,8 @@ public class SuperMetadataTree
     public List<SuperMetadataBean> getChilds(String parentIndex)
     {
         List<SuperMetadataBean> childs = new ArrayList<SuperMetadataBean>();
-        for (SuperMetadataBean smb : getList())
+        // for (SuperMetadataBean smb : getList())
+        for (SuperMetadataBean smb : map.values())
             if (isParent(parentIndex, smb.getTreeIndex()))
                 childs.add(smb);
         return childs;

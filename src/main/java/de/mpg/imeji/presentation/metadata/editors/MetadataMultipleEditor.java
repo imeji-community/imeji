@@ -28,7 +28,7 @@ public class MetadataMultipleEditor extends MetadataEditor
      */
     public MetadataMultipleEditor(List<Item> items, MetadataProfile profile, Statement statement)
     {
-        super(items, profile, statement);
+        super(items, profile, statement, false);
     }
 
     @Override

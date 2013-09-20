@@ -103,7 +103,10 @@ public class ProfileHelper
         while (parent != null)
         {
             lastParent = parent;
-            parent = getStatement(parent, profile).getParent();
+            Statement parentStatement = getStatement(parent, profile);
+            if (parentStatement == null)
+                break;
+            parent = parentStatement.getParent();
         }
         return lastParent;
     }

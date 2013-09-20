@@ -3,17 +3,25 @@
  */
 package de.mpg.imeji.logic.storage.util;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.net.URISyntaxException;
+import java.util.Enumeration;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+import org.apache.log4j.lf5.util.StreamUtils;
 import org.im4java.core.ConvertCmd;
 import org.im4java.core.IM4JavaException;
 import org.im4java.core.IMOperation;
+import org.im4java.core.IdentifyCmd;
 import org.im4java.core.Info;
+import org.im4java.process.ArrayListOutputConsumer;
+import org.im4java.process.OutputConsumer;
 
 import de.mpg.imeji.presentation.util.PropertyReader;
 
@@ -76,8 +84,10 @@ public class MediaUtils
         ConvertCmd cmd = getConvert();
         // create the operation, add images and operators/options
         IMOperation op = new IMOperation();
-        op.colorspace("RGBA");
+        op.colorspace(findColorSpace(tmp));
+        op.strip();
         op.addImage(path);
+        // op.colorspace("RGB");
         File jpeg = File.createTempFile("uploadMagick", ".jpg");
         try
         {
@@ -97,6 +107,31 @@ public class MediaUtils
             removeFilesCreatedByImageMagick(jpeg.getAbsolutePath());
             FileUtils.deleteQuietly(jpeg);
         }
+    }
+
+    public static byte[] resize()
+    {
+        return null;
+    }
+
+    /**
+     * Find the colorspace of the file
+     * 
+     * @param tmp
+     * @return
+     * @throws IOException
+     * @throws InterruptedException
+     * @throws IM4JavaException
+     * @throws URISyntaxException
+     */
+    public static String findColorSpace(File tmp) throws IOException, InterruptedException, IM4JavaException,
+            URISyntaxException
+    {
+        Info imageInfo = new Info(tmp.getAbsolutePath());
+        String cs = imageInfo.getProperty("Colorspace");
+        if (cs != null)
+            return cs;
+        return "RGB";
     }
 
     /**

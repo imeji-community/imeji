@@ -71,7 +71,7 @@ public class ImejiSPARQL
     }
 
     /**
-     * execute a sparql update (this is not implemented in multi-thread manner, so only use to admin purpose)
+     * execute a sparql update
      * 
      * @param query
      */

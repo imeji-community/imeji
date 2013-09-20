@@ -79,7 +79,6 @@ public class UploadBean
     private boolean importImageToFile = false;
     private boolean uploadFileToItem = false;
     private boolean checkNameUnique = true;
-    private List<String> filesToRemove = new ArrayList<String>();
 
     /**
      * Construct the Bean and initalize the pages
@@ -321,7 +320,8 @@ public class UploadBean
                     throw new RuntimeException("There is already at least one item with the filename ");
                 else if (!((importImageToFile || uploadFileToItem)) && filenameExistsInCollection(title)
                         || filenameExistsInCurrentUpload())
-                    throw new RuntimeException("There is already at least one item with the filename ");
+                    throw new RuntimeException("There is already at least one item with the filename "
+                            + FilenameUtils.getBaseName(title));
             }
             if (!isAllowedFormat(FilenameUtils.getExtension(title)))
                 throw new RuntimeException(sessionBean.getMessage("upload_format_not_allowed") + " ("
@@ -351,7 +351,7 @@ public class UploadBean
         catch (Exception e)
         {
             fNum += 1;
-            fFiles.add(e.getMessage() + ": " + title);
+            fFiles.add(" File " + title + " not uploaded: " + e.getMessage());
             logger.error("Error uploading item: ", e);
             e.printStackTrace();
         }
@@ -398,14 +398,13 @@ public class UploadBean
     private Item findItemByFileName(String filename)
     {
         ItemController ic = new ItemController(user);
-        SearchQuery sq = new SearchQuery();
-        Search.getIndex(SearchIndex.names.filename);
-        sq.addPair(new SearchPair(Search.getIndex(SearchIndex.names.filename), SearchOperators.EQUALS, filename));
-        SearchResult sr = ic.searchItemInContainer(collection.getId(), sq, null);
+        SearchResult sr = ic.searchItemInContainer(collection.getId(), getQueryToFindCollectionByFilename(filename),
+                null);
         if (sr.getNumberOfRecords() == 0)
-            throw new RuntimeException("No item found with the filename ");
+            throw new RuntimeException("No item found with the filename " + FilenameUtils.getBaseName(filename));
         if (sr.getNumberOfRecords() > 1)
-            throw new RuntimeException("Filename " + filename + " not unique (" + sr.getNumberOfRecords() + " found).");
+            throw new RuntimeException("Filename " + FilenameUtils.getBaseName(filename) + " not unique ("
+                    + sr.getNumberOfRecords() + " found).");
         return ic.loadItems(sr.getResults(), 1, 0).iterator().next();
     }
 
@@ -418,16 +417,29 @@ public class UploadBean
     private boolean filenameExistsInCollection(String filename)
     {
         ItemController ic = new ItemController(user);
-        SearchQuery sq = new SearchQuery();
-        Search.getIndex(SearchIndex.names.filename);
-        sq.addPair(new SearchPair(Search.getIndex(SearchIndex.names.filename), SearchOperators.EQUALS, filename));
         // Check already existing item
-        SearchResult sr = ic.searchItemInContainer(collection.getId(), sq, null);
+        SearchResult sr = ic.searchItemInContainer(collection.getId(), getQueryToFindCollectionByFilename(filename),
+                null);
         // Check currently uploaded item
         for (Item item : itemList)
-            if (item.getFilename().equals(title))
+            if (FilenameUtils.getBaseName(item.getFilename()).equals(FilenameUtils.getBaseName(title)))
                 sr.setNumberOfRecords(1);
         return sr.getNumberOfRecords() > 0;
+    }
+
+    /**
+     * Make a query which to find a {@link CollectionImeji} by its filename
+     * 
+     * @param filename
+     * @return
+     */
+    private SearchQuery getQueryToFindCollectionByFilename(String filename)
+    {
+        SearchQuery sq = new SearchQuery();
+        Search.getIndex(SearchIndex.names.filename);
+        sq.addPair(new SearchPair(Search.getIndex(SearchIndex.names.filename), SearchOperators.REGEX, "^"
+                + FilenameUtils.getBaseName(filename) + "\\\\..+"));
+        return sq;
     }
 
     /**

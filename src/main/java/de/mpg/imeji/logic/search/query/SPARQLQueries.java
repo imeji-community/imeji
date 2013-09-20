@@ -28,6 +28,7 @@
  */
 package de.mpg.imeji.logic.search.query;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Grant;
@@ -160,18 +161,29 @@ public class SPARQLQueries
     }
 
     /**
+     * Clean the statement: <br/>
+     * - Remove Statement which parent doesn't exist
+     * 
+     * @return
+     */
+    public static String cleanStatement()
+    {
+        return "WITH <" + Imeji.profileModel + "> " + "DELETE {?s ?p ?o} " + "USING <" + Imeji.profileModel + "> "
+                + "WHERE {?s ?p ?o . ?s <http://imeji.org/terms/parent> ?parent  . not exists{?parent ?pr ?ob}}";
+    }
+
+    /**
      * Update all {@link Item}. Remove the {@link Metadata} which have a non existing {@link Statement}
      * 
      * @return
      */
     public static String updateRemoveAllMetadataWithoutStatement()
     {
-        return "WITH <http://imeji.org/item> "
-                + "DELETE {?mds <http://imeji.org/terms/metadata> ?s . ?s ?p ?o } "
-                + "USING <http://imeji.org/item> "
-                + "USING <http://imeji.org/metadataProfile> "
-                + "WHERE {?mds <http://imeji.org/terms/metadata> ?s . ?s <http://imeji.org/terms/statement> ?st . ?s ?p ?o "
-                + "NOT EXISTS{?profile a <http://imeji.org/terms/mdprofile> . ?profile <http://imeji.org/terms/statement> ?st}}";
+        return "WITH <http://imeji.org/item> " + "DELETE {?mds <http://imeji.org/terms/metadata> ?s . ?s ?p ?o } "
+                + "USING <http://imeji.org/item> " + "USING <http://imeji.org/metadataProfile> "
+                + "WHERE {NOT EXISTS{?profile a <http://imeji.org/terms/mdprofile> . "
+                + "?profile <http://imeji.org/terms/statement> ?st} ?mds <http://imeji.org/terms/metadata> ?s . "
+                + "?s <http://imeji.org/terms/statement> ?st . ?s ?p ?o }";
     }
 
     /**

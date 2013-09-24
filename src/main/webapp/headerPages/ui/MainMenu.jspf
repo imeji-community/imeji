@@ -46,7 +46,6 @@
 	  	</h:outputLink>
 		<h:outputText id="txtBrowseInactive" styleClass="imj_mainMenuStandardItem" value="#{lbl.header_browse}" rendered="#{HistorySession.currentPage.type.fileName == 'Images.xhtml'}" />
 		
-		
 		<h:panelGroup id="lnkCollectionsDropMenu" styleClass="dropDownMenu" layout="block">
 			<h:panelGroup styleClass="header" layout="block">
 				<h:outputLink id="lnkCollections" styleClass="imj_mainMenuStandardItem" title="#{lbl.goto_collections}" value="#{Navigation.collectionsUrl}?page=1&amp;q=" rendered="#{HistorySession.currentPage.type.fileName != 'Collections.xhtml'}">
@@ -54,7 +53,7 @@
 				</h:outputLink>
 				<h:outputText id="lnkCollectionsInactive" styleClass="imj_mainMenuStandardItem" value="#{lbl.header_collections}" rendered="#{HistorySession.currentPage.type.fileName == 'Collections.xhtml'}" />
 			</h:panelGroup>
-			<h:panelGroup styleClass="items" layout="block" rendered="true">
+			<h:panelGroup styleClass="items" layout="block">
 				<h:panelGroup styleClass="item hasChildren" layout="block">
 					<h:panelGroup layout="block">
 						<h:outputLink id="lnkColManuscripts" title="#{lbl.goto_manuscripts}" value="">
@@ -130,7 +129,6 @@
 							</h:panelGroup>
 						</h:outputLink>
 					</h:panelGroup>
-					
 					<h:panelGroup styleClass="items" layout="block">
 										
 						<h:panelGroup styleClass="item hasChildren" layout="block">
@@ -312,7 +310,6 @@
 					</h:panelGroup>				
 					</h:panelGroup>
 				</h:panelGroup>
-				
 				<h:panelGroup styleClass="item hasChildren" layout="block">
 					<h:panelGroup layout="block">
 						<h:outputLink id="lnkColPhotos" title="#{lbl.goto_photos}" value="">
@@ -322,7 +319,7 @@
 						</h:outputLink>
 					</h:panelGroup>
 					<h:panelGroup styleClass="items" layout="block">
-					<h:panelGroup styleClass="item" layout="block">
+						<h:panelGroup styleClass="item" layout="block">
 							<h:outputLink id="lnkColPhotoZ3ReconProject" title="#{lbl.goto_photo_z3_recon_project}" value="#{Navigation.applicationUrl}collection/J04cSsYDG6YXhBnW">
 								<h:panelGroup styleClass="pad" layout="block">
 									<h:outputText value="#{lbl.photo_z3_recon_project}" />
@@ -336,13 +333,13 @@
 								</h:panelGroup>		
 							</h:outputLink>
 						</h:panelGroup>
-					<h:panelGroup styleClass="item" layout="block">
+						<h:panelGroup styleClass="item" layout="block">
 							<h:outputLink id="lnkColPhotoZ1" title="#{lbl.goto_photo_z1}" value="#{Navigation.applicationUrl}collection/vb_dSKa5AwRFNsH">
 								<h:panelGroup styleClass="pad" layout="block">
 									<h:outputText value="#{lbl.goto_photo_z1}" />
 								</h:panelGroup>		
 							</h:outputLink>
-					</h:panelGroup>						
+						</h:panelGroup>						
 						<h:panelGroup styleClass="item" layout="block">
 							<h:outputLink id="lnkColPhotoZ22R" title="#{lbl.goto_photo_z22r}" value="#{Navigation.applicationUrl}collection/xS964bFNpMFDgfPz">
 								<h:panelGroup styleClass="pad" layout="block">
@@ -373,7 +370,8 @@
 						</h:panelGroup>
 					</h:panelGroup>
 				</h:panelGroup>
-				<!-- <h:panelGroup styleClass="item hasChildren" layout="block">
+				<!-- 
+				<h:panelGroup styleClass="item hasChildren" layout="block">
 					<h:panelGroup layout="block">
 						<h:outputLink id="lnkColPdfs" title="#{lbl.goto_pdfs}" value="">
 							<h:panelGroup styleClass="pad" layout="block">
@@ -432,12 +430,14 @@
 							</h:outputLink>
 						</h:panelGroup>
 					</h:panelGroup>
-				</h:panelGroup> -->
-				
-			</h:panelGroup>	
+				</h:panelGroup>
+				-->
+			</h:panelGroup>
 		</h:panelGroup>
 		
-		<h:panelGroup id="lnkAlbumsDropMenu" styleClass="dropDownMenu" layout="block">
+		<h:panelGroup id="lnkAlbumsDropMenu2" styleClass="dropDownMenu" layout="block" />
+		
+		<h:panelGroup id="lnkAlbumsDropMenu" styleClass="dropDownMenu" layout="block">	
 			<h:panelGroup styleClass="header" layout="block">
 				<h:outputLink id="lnkAlbums" styleClass="imj_mainMenuStandardItem" title="#{lbl.goto_albums}" value="#{Navigation.albumsUrl}?page=1" rendered="#{HistorySession.currentPage.type.fileName != 'Albums.xhtml'}">
 					<h:outputText value="#{lbl.header_albums}"></h:outputText>
@@ -659,8 +659,7 @@
 						
 			</h:panelGroup>
 		</h:panelGroup>
-		
-		
+				
 		<h:panelGroup id="lnkZuseResourcesDropMenu" styleClass="dropDownMenu" layout="block">
 			<h:panelGroup styleClass="header" layout="block">	
 				<h:outputLink id="lnkResources" styleClass="imj_mainMenuStandardItem" title="#{lbl.goto_zuse_resources}" value="">
@@ -866,6 +865,7 @@
 				</h:panelGroup>
 			</h:panelGroup>
 		</h:panelGroup>
+		
 		<h:panelGroup id="lnkZuseAboutDropDownMenu" styleClass="dropDownMenu" layout="block">
 			<h:panelGroup styleClass="header" layout="block">
 				<h:outputLink id="lnkAbout" styleClass="imj_mainMenuStandardItem" title="#{lbl.goto_zuse_about}" value="">
@@ -894,7 +894,7 @@
 						</h:panelGroup>
 					</h:outputLink>
 				</h:panelGroup>				
-				<<h:panelGroup styleClass="item" layout="block">
+				<h:panelGroup styleClass="item" layout="block">
 					<h:outputLink id="lnkTOU" title="#{lbl.goto_zuse_tou}" value="#{Navigation.applicationUrl}tou">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.zuse_toux}" />

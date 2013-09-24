@@ -433,9 +433,7 @@
 				</h:panelGroup>
 				-->
 			</h:panelGroup>
-		</h:panelGroup>
-		
-		<h:panelGroup id="lnkAlbumsDropMenu2" styleClass="dropDownMenu" layout="block" />
+		</h:panelGroup>		
 		
 		<h:panelGroup id="lnkAlbumsDropMenu" styleClass="dropDownMenu" layout="block">	
 			<h:panelGroup styleClass="header" layout="block">

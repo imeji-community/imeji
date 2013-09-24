@@ -370,7 +370,6 @@
 						</h:panelGroup>
 					</h:panelGroup>
 				</h:panelGroup>
-				<!-- 
 				<h:panelGroup styleClass="item hasChildren" layout="block">
 					<h:panelGroup layout="block">
 						<h:outputLink id="lnkColPdfs" title="#{lbl.goto_pdfs}" value="">
@@ -430,8 +429,7 @@
 							</h:outputLink>
 						</h:panelGroup>
 					</h:panelGroup>
-				</h:panelGroup>
-				-->
+				</h:panelGroup>			
 			</h:panelGroup>
 		</h:panelGroup>		
 		

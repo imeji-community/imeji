@@ -189,7 +189,7 @@ public class SuperMetadataTree
      */
     private boolean isParent(String index1, String index2)
     {
-        return index2.startsWith(index1) && index1.length() < index2.length();
+    	return index2.startsWith(index1 + ",") && index1.length() < index2.length();
     }
 
     /**

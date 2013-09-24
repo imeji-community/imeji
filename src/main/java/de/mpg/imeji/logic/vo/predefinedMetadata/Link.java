@@ -93,6 +93,8 @@ public class Link extends Metadata
     @Override
     public String asFulltext()
     {
-        return label + " " + uri.toString();
+        if (uri != null)
+            return label + " " + uri.toString();
+        return label;
     }
 }

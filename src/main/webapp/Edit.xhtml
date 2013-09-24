@@ -14,7 +14,7 @@
 		<!-- Initialize the Edit form -->
 		<script>
 			jQuery(document).ready(function() {
-				document.getElementById('batchEditForm:editInitialized').click();			
+				document.getElementById('batchEditForm:editInitialized').click();
 				});
 		</script>
 		<h:outputText value="#{EditImageMetadataBean.urlParameters}"/>
@@ -40,7 +40,7 @@
 					</h:panelGroup>
 					<h:panelGroup styleClass="half_area0_p0 huge_marginLExcl">
 						<h:outputLabel for="selStatement" styleClass="full_area0_p0" value="#{lbl.metadata_type_select}"/>
-						<h:selectOneMenu styleClass="huge_area0" id="selStatement" value="#{EditImageMetadataBean.selectedStatementName}">
+						<h:selectOneMenu styleClass="huge_area0" id="selStatement" value="#{EditImageMetadataBean.selectedStatementName}" onchange="document.getElementById('batchEditForm:ajaxContent').style.opacity='0.2';">
 							<f:selectItems value="#{EditImageMetadataBean.statementMenu}"/>
 							<f:ajax event="change" execute="@this" render="ajaxContent" listener="#{EditImageMetadataBean.changeStatement}"/>
 						</h:selectOneMenu>
@@ -62,7 +62,7 @@
 										</ui:include>
 		        					</h:panelGroup>
 		        				</ui:repeat>
-								<h:commandButton styleClass="xLarge_area1_p8 activeButton"  rendered="#{EditImageMetadataBean.editType == 'selected'}" action="#{EditImageMetadataBean.addToAll}" value="#{lbl.add_to_all}">
+								<h:commandButton styleClass="xLarge_area1_p8 activeButton"  rendered="#{EditImageMetadataBean.editType == 'selected'}" action="#{EditImageMetadataBean.addToAll}" value="#{lbl.add_to_all}" onclick="document.getElementById('batchEditForm:ajaxContent').style.opacity='0.2';">
 									<f:ajax render="ajaxContent" execute="@form"/>
 								</h:commandButton>
 								<h:panelGroup id="modeRadioMenu" styleClass="full_area0 ">

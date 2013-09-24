@@ -157,6 +157,7 @@ public class InitializerServlet extends HttpServlet
         locksSurveyor.terminate();
         logger.info("...done");
         System.runFinalization();
+        System.gc();
         super.destroy();
         logger.info("imeji is down");
     }

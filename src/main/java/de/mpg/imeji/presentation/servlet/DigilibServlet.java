@@ -262,4 +262,13 @@ public class DigilibServlet extends Scaler
     {
         return (SessionBean)req.getSession(false).getAttribute(SessionBean.class.getSimpleName());
     }
+    
+    /* (non-Javadoc)
+     * @see javax.servlet.GenericServlet#destroy()
+     */
+    @Override
+    public void destroy()
+    {
+        super.destroy();
+    }
 }

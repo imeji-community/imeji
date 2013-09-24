@@ -303,7 +303,8 @@ public class SuperMetadataTree
         List<SuperMetadataBean> candidates = new ArrayList<SuperMetadataBean>();
         // the position in the list of metadata with the same statement
         int position = 0;
-        // When the current child is found in the list, set to true
+        // When the current statement (i.e the child for which we are searching the parent) is found in the list, set to
+        // true
         boolean found = false;
         // Find all candidates
         for (SuperMetadataBean md : list)

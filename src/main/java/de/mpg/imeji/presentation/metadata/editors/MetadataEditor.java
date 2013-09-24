@@ -52,6 +52,13 @@ public abstract class MetadataEditor
     }
 
     /**
+     * Default editor
+     */
+    public MetadataEditor()
+    {
+    }
+
+    /**
      * Reset all value to empty state
      */
     public void reset()
@@ -59,6 +66,18 @@ public abstract class MetadataEditor
         items = new ArrayList<EditorItemBean>();
         statement = null;
         profile = null;
+    }
+
+    /**
+     * Clone as a {@link MetadataMultipleEditor}
+     */
+    public MetadataEditor clone()
+    {
+        MetadataEditor editor = new MetadataMultipleEditor();
+        editor.setItems(items);
+        editor.setProfile(profile);
+        editor.setStatement(statement);
+        return editor;
     }
 
     /**

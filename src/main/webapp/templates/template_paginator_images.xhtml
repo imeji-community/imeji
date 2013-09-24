@@ -250,7 +250,7 @@
 		<!-- FACETS -->
 		<h:form id="facetForm">
 			<h:panelGroup layout="block" styleClass="full_area0 preListHeader">
-				<h:panelGroup id="facetGroup" layout="block" styleClass="third_area1_p8 small_marginLIncl" rendered="#{ paginatorListSessionBean.navigationString != 'pretty:albumBrowse'}">
+				<h:panelGroup id="facetGroup" layout="block" styleClass="third_area1_p8 small_marginLIncl" rendered="#{paginatorListSessionBean.navigationString != 'pretty:albumBrowse'}">
 					<ui:repeat var="groups" value="#{paginatorListSessionBean.facets.facets}" rowKeyVar="index">
 						<h:panelGroup layout="block" style="margin:0 0.9090em;" styleClass="free_area0">
 							<ui:repeat var="facets" value="#{groups}" rowKeyVar="index">

@@ -184,6 +184,13 @@
 										</h:panelGroup>		
 									</h:outputLink>
 								</h:panelGroup>
+								<!-- h:panelGroup styleClass="item" layout="block">
+									<h:outputLink id="lnkColZ22R" title="#{lbl.goto_z22r}" value="#{Navigation.applicationUrl}collection/">
+										<h:panelGroup styleClass="pad" layout="block">
+											<h:outputText value="#{lbl.goto_z22r}" />
+										</h:panelGroup>		
+									</h:outputLink>
+								</h:panelGroup -->
 								<h:panelGroup styleClass="item" layout="block">
 									<h:outputLink id="lnkColZ3Reconstruction" title="#{lbl.goto_z3_reconstruction_col}" value="#{Navigation.applicationUrl}collection/0QqmQvmGCkOG1bWl">
 										<h:panelGroup styleClass="pad" layout="block">
@@ -336,13 +343,13 @@
 								</h:panelGroup>		
 							</h:outputLink>
 					</h:panelGroup>						
-						<!-- <h:panelGroup styleClass="item" layout="block">
+						<h:panelGroup styleClass="item" layout="block">
 							<h:outputLink id="lnkColPhotoZ22R" title="#{lbl.goto_photo_z22r}" value="#{Navigation.applicationUrl}collection/xS964bFNpMFDgfPz">
 								<h:panelGroup styleClass="pad" layout="block">
 									<h:outputText value="#{lbl.goto_photo_z22r}" />
 								</h:panelGroup>		
 							</h:outputLink>
-						</h:panelGroup>	 -->					
+						</h:panelGroup>					
 						<h:panelGroup styleClass="item" layout="block">
 							<h:outputLink id="lnkColPhotoZ3Recon" title="#{lbl.goto_photo_z3_recon}" value="#{Navigation.applicationUrl}collection/Bk6f17vragaY1eY">
 								<h:panelGroup styleClass="pad" layout="block">
@@ -439,49 +446,49 @@
 			</h:panelGroup>	
 			<h:panelGroup styleClass="items" layout="block">
 				<h:panelGroup styleClass="item" layout="block">
-					<h:outputLink id="lnkAlbZ1" title="#{lbl.goto_z1}" value="#{Navigation.applicationUrl}z1">
+					<h:outputLink id="lnkAlbZ1" title="#{lbl.goto_z1}" value="#{Navigation.applicationUrl}/album/Uc4YiqKixaG2NAnK">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.z1}" />
 						</h:panelGroup>
 					</h:outputLink>
 				</h:panelGroup>
 				<h:panelGroup styleClass="item" layout="block">
-					<h:outputLink id="lnkAlbZ2" title="#{lbl.goto_z2}" value="#{Navigation.applicationUrl}z2">
+					<h:outputLink id="lnkAlbZ2" title="#{lbl.goto_z2}" value="#{Navigation.applicationUrl}/album/L_mJ5UpkPtlVDghh">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.z2}" />
 						</h:panelGroup>
 					</h:outputLink>
 				</h:panelGroup>
 				<h:panelGroup styleClass="item" layout="block">
-					<h:outputLink id="lnkAlbZ3" title="#{lbl.goto_z3}" value="#{Navigation.applicationUrl}z3">
+					<h:outputLink id="lnkAlbZ3" title="#{lbl.goto_z3}" value="#{Navigation.applicationUrl}/album/FlVuMso6tRv1vCj1">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.z3}" />
 						</h:panelGroup>
 					</h:outputLink>
 				</h:panelGroup>
 				<h:panelGroup styleClass="item" layout="block">
-					<h:outputLink id="lnkAlbZ4" title="#{lbl.goto_z4}" value="#{Navigation.applicationUrl}z4">
+					<h:outputLink id="lnkAlbZ4" title="#{lbl.goto_z4}" value="#{Navigation.applicationUrl}/album/PprzcbHVPby43AdV">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.z4}" />
 						</h:panelGroup>
 					</h:outputLink>
 				</h:panelGroup>
 				<h:panelGroup styleClass="item" layout="block">
-					<h:outputLink id="lnkAlbPlankalk" title="#{lbl.goto_plankalkuel}" value="#{Navigation.applicationUrl}z4">
+					<h:outputLink id="lnkAlbPlankalk" title="#{lbl.goto_plankalkuel}" value="#{Navigation.applicationUrl}/album/ImvGLEqrWp9c9LA">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.plankalkuel}" />
 						</h:panelGroup>
 					</h:outputLink>
 				</h:panelGroup>
 				<h:panelGroup styleClass="item" layout="block">
-					<h:outputLink id="lnkAlbInfAndSoc" title="#{lbl.goto_inf_and_soc}" value="#{Navigation.applicationUrl}z4">
+					<h:outputLink id="lnkAlbCSAndSoc" title="#{lbl.goto_inf_and_soc}" value="#{Navigation.applicationUrl}/album/9UX_tXtCnYKa5kN">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.inf_and_soc}" />
 						</h:panelGroup>
 					</h:outputLink>
 				</h:panelGroup>
 				<h:panelGroup styleClass="item" layout="block">
-					<h:outputLink id="lnkAlbBio" title="#{lbl.goto_biography}" value="#{Navigation.applicationUrl}z4">
+					<h:outputLink id="lnkAlbBio" title="#{lbl.goto_biography}" value="#{Navigation.applicationUrl}/album/HiY8P9Dj3ekr8AQn">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.biography}" />
 						</h:panelGroup>

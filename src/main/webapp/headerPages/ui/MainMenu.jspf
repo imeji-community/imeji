@@ -887,13 +887,13 @@
 						</h:panelGroup>
 					</h:outputLink>
 				</h:panelGroup>				
-				<!-- <h:panelGroup styleClass="item" layout="block">
+				<<h:panelGroup styleClass="item" layout="block">
 					<h:outputLink id="lnkTOU" title="#{lbl.goto_zuse_tou}" value="#{Navigation.applicationUrl}tou">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.zuse_toux}" />
 						</h:panelGroup>
 					</h:outputLink>
-				</h:panelGroup> -->
+				</h:panelGroup>
 		
 			</h:panelGroup>
 		</h:panelGroup>

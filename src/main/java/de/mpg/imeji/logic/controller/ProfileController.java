@@ -215,7 +215,7 @@ public class ProfileController extends ImejiController
      */
     public void removeMetadataWithoutStatement()
     {
-        ImejiSPARQL.execUpdate(SPARQLQueries.updateRemoveAllMetadataWithoutStatement());
-        ImejiSPARQL.execUpdate(SPARQLQueries.updateEmptyMetadata());
+//        ImejiSPARQL.execUpdate(SPARQLQueries.updateRemoveAllMetadataWithoutStatement());
+//        ImejiSPARQL.execUpdate(SPARQLQueries.updateEmptyMetadata());
     }
 }

@@ -9,10 +9,13 @@ import java.util.List;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
+import com.hp.hpl.jena.rdf.model.StatementTripleBoundary;
+
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.logic.vo.predefinedMetadata.util.MetadataTypesHelper;
 import de.mpg.imeji.presentation.mdProfile.MdProfileBean;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.VocabularyHelper;
@@ -195,6 +198,14 @@ public class StatementWrapper implements Comparable<StatementWrapper>
         {
             statement.setType(URI.create(event.getNewValue().toString()));
         }
+    }
+
+    /**
+     * Is called when the user select a statement or a language in the drop down list
+     */
+    public void select()
+    {
+        // do nothing
     }
 
     /**

@@ -442,49 +442,49 @@
 			</h:panelGroup>	
 			<h:panelGroup styleClass="items" layout="block">
 				<h:panelGroup styleClass="item" layout="block">
-					<h:outputLink id="lnkAlbZ1" title="#{lbl.goto_z1}" value="#{Navigation.applicationUrl}/album/Uc4YiqKixaG2NAnK">
+					<h:outputLink id="lnkAlbZ1" title="#{lbl.goto_z1}" value="#{Navigation.applicationUrl}album/Uc4YiqKixaG2NAnK">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.z1}" />
 						</h:panelGroup>
 					</h:outputLink>
 				</h:panelGroup>
 				<h:panelGroup styleClass="item" layout="block">
-					<h:outputLink id="lnkAlbZ2" title="#{lbl.goto_z2}" value="#{Navigation.applicationUrl}/album/L_mJ5UpkPtlVDghh">
+					<h:outputLink id="lnkAlbZ2" title="#{lbl.goto_z2}" value="#{Navigation.applicationUrl}album/L_mJ5UpkPtlVDghh">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.z2}" />
 						</h:panelGroup>
 					</h:outputLink>
 				</h:panelGroup>
 				<h:panelGroup styleClass="item" layout="block">
-					<h:outputLink id="lnkAlbZ3" title="#{lbl.goto_z3}" value="#{Navigation.applicationUrl}/album/FlVuMso6tRv1vCj1">
+					<h:outputLink id="lnkAlbZ3" title="#{lbl.goto_z3}" value="#{Navigation.applicationUrl}album/FlVuMso6tRv1vCj1">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.z3}" />
 						</h:panelGroup>
 					</h:outputLink>
 				</h:panelGroup>
 				<h:panelGroup styleClass="item" layout="block">
-					<h:outputLink id="lnkAlbZ4" title="#{lbl.goto_z4}" value="#{Navigation.applicationUrl}/album/PprzcbHVPby43AdV">
+					<h:outputLink id="lnkAlbZ4" title="#{lbl.goto_z4}" value="#{Navigation.applicationUrl}album/PprzcbHVPby43AdV">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.z4}" />
 						</h:panelGroup>
 					</h:outputLink>
 				</h:panelGroup>
 				<h:panelGroup styleClass="item" layout="block">
-					<h:outputLink id="lnkAlbPlankalk" title="#{lbl.goto_plankalkuel}" value="#{Navigation.applicationUrl}/album/ImvGLEqrWp9c9LA">
+					<h:outputLink id="lnkAlbPlankalk" title="#{lbl.goto_plankalkuel}" value="#{Navigation.applicationUrl}album/ImvGLEqrWp9c9LA">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.plankalkuel}" />
 						</h:panelGroup>
 					</h:outputLink>
 				</h:panelGroup>
 				<h:panelGroup styleClass="item" layout="block">
-					<h:outputLink id="lnkAlbCSAndSoc" title="#{lbl.goto_inf_and_soc}" value="#{Navigation.applicationUrl}/album/9UX_tXtCnYKa5kN">
+					<h:outputLink id="lnkAlbCSAndSoc" title="#{lbl.goto_inf_and_soc}" value="#{Navigation.applicationUrl}album/9UX_tXtCnYKa5kN">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.inf_and_soc}" />
 						</h:panelGroup>
 					</h:outputLink>
 				</h:panelGroup>
 				<h:panelGroup styleClass="item" layout="block">
-					<h:outputLink id="lnkAlbBio" title="#{lbl.goto_biography}" value="#{Navigation.applicationUrl}/album/HiY8P9Dj3ekr8AQn">
+					<h:outputLink id="lnkAlbBio" title="#{lbl.goto_biography}" value="#{Navigation.applicationUrl}album/HiY8P9Dj3ekr8AQn">
 						<h:panelGroup styleClass="pad" layout="block">
 							<h:outputText value="#{lbl.biography}" />
 						</h:panelGroup>

@@ -806,7 +806,7 @@
 								<h:panelGroup styleClass="item" layout="block">
 									<h:outputLink id="lnkLogicGateOr" title="#{lbl.goto_logic_gates_or}" value="http://zuse-z1.zib.de/simulations/logic-gates/or" target="_blank">
 										<h:panelGroup styleClass="pad" layout="block">
-											<h:outputText value="#{lbl.logic_gates_and}" />
+											<h:outputText value="#{lbl.logic_gates_or}" />
 										</h:panelGroup>
 									</h:outputLink>
 								</h:panelGroup>

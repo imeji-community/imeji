@@ -797,23 +797,23 @@
 							</h:outputLink>		
 							<h:panelGroup styleClass="items" layout="block">
 								<h:panelGroup styleClass="item" layout="block">
-									<h:outputLink id="lnkLogicGateAnd" title="#{lbl.goto_logic_gate_and}" value="http://zuse-z1.zib.de/simulations/logic-gates/and" target="_blank">
+									<h:outputLink id="lnkLogicGateAnd" title="#{lbl.goto_logic_gates_and}" value="http://zuse-z1.zib.de/simulations/logic-gates/and" target="_blank">
 										<h:panelGroup styleClass="pad" layout="block">
-											<h:outputText value="#{lbl.logic_gate_and}" />
+											<h:outputText value="#{lbl.logic_gates_and}" />
 										</h:panelGroup>
 									</h:outputLink>
 								</h:panelGroup>
 								<h:panelGroup styleClass="item" layout="block">
-									<h:outputLink id="lnkLogicGateOr" title="#{lbl.goto_logic_gate_or}" value="http://zuse-z1.zib.de/simulations/logic-gates/or" target="_blank">
+									<h:outputLink id="lnkLogicGateOr" title="#{lbl.goto_logic_gates_or}" value="http://zuse-z1.zib.de/simulations/logic-gates/or" target="_blank">
 										<h:panelGroup styleClass="pad" layout="block">
-											<h:outputText value="#{lbl.logic_gate_and}" />
+											<h:outputText value="#{lbl.logic_gates_and}" />
 										</h:panelGroup>
 									</h:outputLink>
 								</h:panelGroup>
 								<h:panelGroup styleClass="item" layout="block">
-									<h:outputLink id="lnkLogicGateNot" title="#{lbl.goto_logic_gate_not}" value="http://zuse-z1.zib.de/simulations/logic-gates/not" target="_blank">
+									<h:outputLink id="lnkLogicGateNot" title="#{lbl.goto_logic_gates_not}" value="http://zuse-z1.zib.de/simulations/logic-gates/not" target="_blank">
 										<h:panelGroup styleClass="pad" layout="block">
-											<h:outputText value="#{lbl.logic_gate_not}" />
+											<h:outputText value="#{lbl.logic_gates_not}" />
 										</h:panelGroup>
 									</h:outputLink>
 								</h:panelGroup>

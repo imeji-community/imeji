@@ -1420,7 +1420,9 @@ OLD:
 }
 
 
-/* * metadataLists (image_deatails.xhtml)
+/* * metadataLists (image_deatails.xhtml) 
+   * infodataLists (entryPageTabList.xhtml)
+   * admindataLists (userCreate.xhtml)
    ================================================== */
 
 .imj_metadataList {
@@ -1469,7 +1471,7 @@ OLD:
 	
 }
 
- .imj_metadataSubPanelItem {
+ .imj_metadataSubPanelItem, .imj_adminSubPanelItem {
 	font-weight: bold;
 	border-bottom: solid #BAB4B3 0.0909em;
  }
@@ -1484,20 +1486,20 @@ OLD:
 	background-color: #393939;
 }
 
-.imj_metadataSet, .imj_infodataSet {
+.imj_metadataSet, .imj_infodataSet, .imj_admindataSet {
 	width: 100%;
 	display: inline-block;
 	padding-bottom: 1em;
 }
 
-.imj_metadataLabel, .imj_infodataLabel {
+.imj_metadataLabel, .imj_infodataLabel, .imj_admindataLabel {
 	font-weight: bold;
 	display: inline-block;
 	min-width: 16%;
 	vertical-align: top;
 }
 
-.imj_metadataValue, .imj_infodataValue  {
+.imj_metadataValue, .imj_infodataValue, .imj_admindataValue  {
 	display: inline-block;
 	margin-left: 1.0em;
 	max-width: 77%;
@@ -1893,6 +1895,58 @@ min-height: 6em;
 	color: #F0F0F0;
     line-height: 130%;
 }
+
+
+/* ===[ Admin Pages ]===
+	UserAdministrationPage.xhtml
+	UserCreate.xhtml
+   ======================================================== */
+
+.imj_administrationTiledList {
+	width: 91.95%;
+	padding: 2%; /*4%*/
+}
+.imj_administrationTiledList .imj_listBody {
+	width: 100%;
+}
+.imj_administrationTiledList .imj_listBody {
+	/*text-align: center;*/
+}
+.imj_adminPanel {
+	display: inline-block;
+	max-width: 24.89%;
+	padding: 0 2%;
+	vertical-align: top;
+	margin-bottom: 2em;
+	text-align: left;
+}
+.imj_adminPanel h2 {
+	font-size: 140%;
+	line-height: normal;
+}
+.imj_adminPanel .imj_headline {
+	width: 91.95%;
+	padding: 0.454545em 0.81818181em;
+	text-align: center;
+	background-color: #292929;
+	border-radius: 10px 10px 0 0;
+	border-radius: 0.90909090em 0.90909090em 0 0;
+	border: 1px solid #292929;
+	border: 0.0909090909em solid #292929;
+}
+.imj_adminPanel .imj_content {
+	width: 91.95%;
+	padding: 0.454545em 0.81818181em;
+	min-height: 10em;
+	border-radius: 0 0 10px 10px;
+	border-radius: 0 0 0.90909090em 0.90909090em;
+	border: 1px solid #292929;
+	border: 0.0909090909em solid #292929;
+}
+.imj_adminPanel ul {
+	line-height: 150%;
+}
+			
 
 
 /* ===[ Dialog - .messageArea - .messageArea .half_area2_p6 ]===

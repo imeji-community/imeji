@@ -1,4 +1,4 @@
-<ui:composition template="templates/template.xhtml"
+<ui:composition template="templates/template_site.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
@@ -13,39 +13,48 @@
 			<h:panelGroup layout="block" styleClass="full_area0 fullItem" rendered="#{SessionBean.admin}">
 				<h:form>
 					<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder">
-						<h3 class="xLarge_area0_p8 endline blockHeader">
-							<h:outputText value="#{lbl.admin_user_info}"/>
-						</h3>
-						<span class="seperator"></span>
-						<div class="free_area0 itemBlockContent endline">
-							<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-								<b class="xLarge_area0_p8 endline labelLine clear">
+						
+															
+						<!-- Admin User Info-->
+						<h:panelGroup layout="block" styleClass="imj_metadataSubPanel">
+							<span class="imj_adminSubPanelItem">
+								<h:outputText value="#{lbl.admin_user_info}"/>
+							</span>
+						</h:panelGroup>	
+												
+							<!-- AdminDataList - Email -->
+							<h:panelGroup layout="block" styleClass="imj_admindataSet">
+								<div class="imj_admindataLabel">
 									<h:outputText value="Email"/>
-									<span class="noDisplay">: </span>
-								</b>
-								<span class="xHuge_area0 xTiny_marginLExcl endline">
-									<h:inputText id="inputEmailText" styleClass="quad_txtInput" value="#{UserCreationBean.user.email}" required="true"/>
-								</span>
+									<span class="imj_invisible">: </span>
+								</div>
+								<div class="imj_admindataValue">
+									<h:inputText id="inputEmailText" value="#{UserCreationBean.user.email}" required="true"/>
+								</div>
 							</h:panelGroup>
 							
-							<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-								<b class="xLarge_area0_p8 endline labelLine clear">
+													
+							<!-- AdminDataList - Name -->
+							<h:panelGroup layout="block" styleClass="imj_admindataSet">
+								<div class="imj_admindataLabel">
 									<h:outputText value="Name"/>
-									<span class="noDisplay">: </span>
-								</b>
-								<span class="xHuge_area0 xTiny_marginLExcl endline">
-									<h:inputText id="inputNameText" styleClass="quad_txtInput" value="#{UserCreationBean.user.name}" required="true"/>
-								</span>
+									<span class="imj_invisible">: </span>
+								</div>
+								<div class="imj_admindataValue">
+									<h:inputText id="inputNameText" value="#{UserCreationBean.user.name}" required="true"/>
+								</div>
 							</h:panelGroup>
 							
-							<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-								<b class="xLarge_area0_p8 endline labelLine clear">
+							
+							<!-- AdminDataList - Nickname -->
+							<h:panelGroup layout="block" styleClass="imj_admindataSet">
+								<div class="imj_admindataLabel">
 									<h:outputText value="Nickname"/>
-									<span class="noDisplay">: </span>
-								</b>
-								<span class="xHuge_area0 xTiny_marginLExcl endline">
-									<h:inputText id="inputNickText" styleClass="quad_txtInput" value="#{UserCreationBean.user.nick}" required="true"/>
-								</span>
+									<span class="imj_invisible">: </span>
+								</div>
+								<div class="imj_admindataValue">
+									<h:inputText id="inputNickText" value="#{UserCreationBean.user.nick}" required="true"/>
+								</div>
 							</h:panelGroup>
 							
 							<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
@@ -58,15 +67,20 @@
 								</span>
 							</h:panelGroup>
 							
-						</div>
+						<!-- </div> -->
 					</h:panelGroup>
-					<div class="full_area0 formButtonArea">
-						
-						<h:outputLink value="#{Navigation.applicationUrl}jsf/UserAdministrationPage.xhtml" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl" >
+					
+									
+					
+					<!-- AdminDataList - imj_submitPanel - cancel link + submit command buttons -->
+					<h:panelGroup layout="block" styleClass="imj_submitPanel">
+						<h:outputLink value="#{Navigation.applicationUrl}jsf/UserAdministrationPage.xhtml" styleClass="imj_cancelButton">
 							<h:outputText value="#{lbl.cancel}" />
 						</h:outputLink>
-						<h:commandButton action="#{UserCreationBean.create}" value="#{lbl.save}" styleClass="free_area1_p8 activeButton"/>					
-					</div>
+						<h:commandButton action="#{UserCreationBean.create}" value="#{lbl.save}" styleClass="imj_submitButton"/>
+					</h:panelGroup>						
+					
+					
 				</h:form>
 			</h:panelGroup>
 		</ui:define>

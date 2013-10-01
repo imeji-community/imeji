@@ -7,58 +7,12 @@
 	<ui:param name="headline" value="imeji Administration"/>
 	<ui:param name="currentMainMenu" value="admin"/>
 	
-	
 	<ui:define name="mainContent">
+		
 		<!-- Breadcrumb - History -->
 		<ui:include src="include/History.xhtml"></ui:include>
 		
-		<style type="text/css">
-			.imj_administrationTiledList {
-				width: 91.95%;
-				padding: 2% 4%;
-			}
-			.imj_administrationTiledList .imj_listBody {
-				width: 100%;
-			}
-			.imj_administrationTiledList .imj_listBody {
-				text-align: center;
-			}
-			.imj_adminPanel {
-				display: inline-block;
-				max-width: 24.89%;
-				padding: 0 2%;
-				vertical-align: top;
-				margin-bottom: 2em;
-				text-align: left;
-			}
-			.imj_adminPanel h2 {
-				font-size: 140%;
-				line-height: normal;
-			}
-			.imj_adminPanel .imj_headline {
-				width: 91.95%;
-				padding: 0.454545em 0.81818181em;
-				text-align: center;
-				background-color: #292929;
-				border-radius: 10px 10px 0 0;
-				border-radius: 0.90909090em 0.90909090em 0 0;
-				border: 1px solid #292929;
-				border: 0.0909090909em solid #292929;
-			}
-			.imj_adminPanel .imj_content {
-				width: 91.95%;
-				padding: 0.454545em 0.81818181em;
-				min-height: 10em;
-				border-radius: 0 0 10px 10px;
-				border-radius: 0 0 0.90909090em 0.90909090em;
-				border: 1px solid #292929;
-				border: 0.0909090909em solid #292929;
-			}
-			.imj_adminPanel ul {
-				line-height: 150%;
-			}
-			
-		</style>
+		<!-- Admin - TiledList -->
 		<div class="imj_administrationTiledList">
 		
 			<div class="imj_listBody">
@@ -88,8 +42,7 @@
 							<h:outputText value="You are not allowed to view this page" />
 						</h2>
 					</ui:fragment>
-				</h:panelGroup>
-				
+				</h:panelGroup>				
 				
 				<h:panelGroup layout="block" styleClass="imj_adminPanel imj_config">
 						<div class="imj_headline">
@@ -104,8 +57,7 @@
 								</li>
 							</ul>
 						</div>
-				</h:panelGroup>
-				
+				</h:panelGroup>				
 				
 				<h:panelGroup layout="block" styleClass="imj_adminPanel imj_storageConfig">
 						<div class="imj_headline">
@@ -147,8 +99,11 @@
 							</h:form>
 						</div>
 				</h:panelGroup>
+				
 			</div>
+			
 		</div>
+		
 	</ui:define>
 	
 </ui:composition>

@@ -139,7 +139,7 @@ public class EditMdProfileBean extends MdProfileBean
             }
             catch (Exception e)
             {
-                BeanHelper.error(session.getMessage("error_profile_save"));
+                BeanHelper.error(session.getMessage("error_profile_save"), e.getMessage());
                 logger.error(session.getMessage("error_profile_save"), e);
             }
             cancel();

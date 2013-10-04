@@ -14,6 +14,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.mpg.imeji.logic.util.IdentifierUtil;
+import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jList;
 import de.mpg.j2j.annotations.j2jLiteral;
@@ -204,5 +205,26 @@ public class Statement implements Comparable<Statement>
     public void setRestricted(boolean restricted)
     {
         this.restricted = restricted;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#clone()
+     */
+    public Statement clone()
+    {
+        Statement clone = ImejiFactory.newStatement();
+        clone.isDescription = isDescription;
+        clone.isPreview = isPreview;
+        clone.labels = labels;
+        clone.literalConstraints = literalConstraints;
+        clone.maxOccurs = maxOccurs;
+        clone.minOccurs = minOccurs;
+        clone.parent = parent;
+        clone.pos = pos;
+        clone.restricted = restricted;
+        clone.type = type;
+        clone.vocabulary = vocabulary;
+        return clone;
     }
 }

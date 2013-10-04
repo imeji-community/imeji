@@ -38,12 +38,10 @@
 								<h:outputText value=" #{lbl.profile_use_template} " />
 								<span class="xTiny_marginLExcl"> <h:selectOneMenu
 										value="#{FormularBean.template}"
-										onchange="getElementById('profileForm:changeTemplate').click();"
+										onchange="submit();"
 										valueChangeListener="#{FormularBean.templateListener}">
 										<f:selectItems value="#{FormularBean.profilesMenu}" />
-									</h:selectOneMenu> <h:commandButton id="changeTemplate"
-										action="#{FormularBean.changeTemplate}"
-										style="visibility:hidden" />
+									</h:selectOneMenu>
 								</span>
 							</h:panelGroup>
 						</h:panelGroup>
@@ -67,7 +65,6 @@
 									<h:panelGroup layout="block" id="metadata"
 										style="margin-left:#{wrapper.level}px; margin-top:10px;"
 										class="full_area0_p0 draggable dropChild id_#{wrapper.statementId}  parent_#{wrapper.parentId} highlight_area">
-
 										<h:commandButton id="dropChildButton" value="Insert metadata"
 											action="#{FormularBean.insertChild}" style="display:none;">
 											<f:setPropertyActionListener value="#{position.index}"

@@ -3,14 +3,18 @@
  */
 package de.mpg.imeji.logic.vo;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jList;
 import de.mpg.j2j.annotations.j2jLiteral;
@@ -69,5 +73,27 @@ public class MetadataProfile extends Properties
     public void setStatements(Collection<Statement> statements)
     {
         this.statements = statements;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#clone()
+     */
+    public MetadataProfile clone()
+    {
+        MetadataProfile clone = ImejiFactory.newProfile();
+        // the mapping between the new uris (created by cloning) and the old uris
+        Map<String, URI> idMapping = new HashMap<String, URI>();
+        for (Statement s : statements)
+        {
+            Statement c = s.clone();
+            clone.getStatements().add(c);
+            idMapping.put(s.getId().toString(), c.getId());
+        }
+        // Set the new parent
+        for (Statement s : clone.statements)
+            if (s.getParent() != null)
+                s.setParent(idMapping.get(s.getParent().toString()));
+        return clone;
     }
 }

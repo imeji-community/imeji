@@ -6,6 +6,9 @@ package de.mpg.imeji.logic.vo;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -100,7 +103,9 @@ public class Statement implements Comparable<Statement>
     @XmlElement(name = "literalConstraint", namespace = "http://imeji.org/terms")
     public Collection<String> getLiteralConstraints()
     {
-        return literalConstraints;
+        List<String> constraints = new ArrayList<String>(literalConstraints);
+        Collections.sort(constraints, new SortIgnoreCase());
+        return constraints;
     }
 
     public void setLiteralConstraints(Collection<String> literalConstraints)
@@ -226,5 +231,24 @@ public class Statement implements Comparable<Statement>
         clone.type = type;
         clone.vocabulary = vocabulary;
         return clone;
+    }
+
+    /**
+     * Comparator to sort String ignoring the case
+     * 
+     * @author saquet (initial creation)
+     * @author $Author$ (last modification)
+     * @version $Revision$ $LastChangedDate$
+     */
+    public class SortIgnoreCase implements Comparator<Object>
+    {
+        /*
+         * (non-Javadoc)
+         * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+         */
+        public int compare(Object o1, Object o2)
+        {
+            return ((String)o1).compareToIgnoreCase((String)o2);
+        }
     }
 }

@@ -51,10 +51,6 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
      * All the childs of the metadata
      */
     private List<SuperMetadataBean> childs = new ArrayList<SuperMetadataBean>();
-    /**
-     * True if the {@link Metadata} has no value defined
-     */
-    private boolean empty = false;
     private boolean preview = true;
     // All possible fields defined for a metadata:
     private String text;
@@ -82,7 +78,6 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
     {
         ObjectHelper.copyAllFields(metadata, this);
         this.metadata = metadata;
-        this.empty = MetadataHelper.isEmpty(metadata);
         this.preview = statement.isPreview();
         this.statement = statement;
     }
@@ -133,6 +128,18 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
     public void clear()
     {
         ObjectHelper.copyAllFields(copyEmpty(), this);
+    }
+
+    /**
+     * Listener that check when a select menu has been set to null
+     * 
+     * @param vce
+     */
+    public void predefinedValueListener(ValueChangeEvent vce)
+    {
+        if (vce.getNewValue() == null)
+            clear();
+        text = "c";
     }
 
     public void citationUriListener()
@@ -567,7 +574,6 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
             return -1;
         return 0;
     }
-
 
     /**
      * Return the higher parent

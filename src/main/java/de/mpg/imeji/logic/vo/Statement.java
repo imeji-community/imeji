@@ -105,7 +105,8 @@ public class Statement implements Comparable<Statement>
     {
         List<String> constraints = new ArrayList<String>(literalConstraints);
         Collections.sort(constraints, new SortIgnoreCase());
-        return constraints;
+        literalConstraints = constraints;
+        return literalConstraints;
     }
 
     public void setLiteralConstraints(Collection<String> literalConstraints)

@@ -38,7 +38,7 @@
 		<!-- METADATA TYPE TEXT -->
 		<h:panelGroup layout="block" class="#{areaClass}" rendered="#{metadata.typeNamespace =='http://imeji.org/terms/metadata#text'}">
 			<h:inputTextarea id="inputText" name="inputText" styleClass="full_area0 inputTxtArea" value="#{metadata.text}" rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}" onfocus="getDatasourceUrl('#{statement.vocabulary}', '#{Navigation.autocompleteUrl}')"/>
-			<h:selectOneMenu styleClass="#{areaClass}" value="#{metadata.text}" rendered="#{SuggestBean.suggests[statement.id].hasRestrictedValues}">
+			<h:selectOneMenu styleClass="#{areaClass}" value="#{metadata.text}" rendered="#{SuggestBean.suggests[statement.id].hasRestrictedValues}" valueChangeListener="#{metadata.predefinedValueListener}">
 				<f:selectItems value="#{SuggestBean.suggests[statement.id].restrictedValues}"/>
 			</h:selectOneMenu>
 		</h:panelGroup>

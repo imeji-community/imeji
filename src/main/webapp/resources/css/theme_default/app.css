@@ -1682,6 +1682,11 @@ min-height: 6em;
     border: solid #990000;
     padding: 0 0.3333333em;
     margin: 0 1em;
+	border-radius: 0.3em;
+    -webkit-border-radius: 0.3em;
+    -moz-border-radius: 0.3em;
+    -o-border-radius: 0.3em;
+    -ms-border-radius: 0.3em;
 	/*float: left;*/
 }
 
@@ -1697,6 +1702,11 @@ min-height: 6em;
 	border: solid #6CAD2F;
 	padding: 0 0.3333333em;
 	margin-left: 1em;
+	border-radius: 0.3em;
+    -webkit-border-radius: 0.3em;
+    -moz-border-radius: 0.3em;
+    -o-border-radius: 0.3em;
+    -ms-border-radius: 0.3em;
 	/*float: right;*/
 }
 
@@ -2003,7 +2013,39 @@ min-height: 6em;
 .imj_adminPanel ul {
 	line-height: 150%;
 }
-			
+		
+
+.imj_backPanel {
+	display: inline-block;
+	width: 100%;
+	text-align: left;
+	margin: 0.5em 0 1em 0;
+	padding: 0 2%;
+}
+
+.imj_backButton {
+	color: #FFFFFF;
+	background-color: #6CAD2F;
+	border: solid #6CAD2F;
+	padding: 0 0.3333333em;
+	margin-left: 1em;
+	border-radius: 0.3em;
+    -webkit-border-radius: 0.3em;
+    -moz-border-radius: 0.3em;
+    -o-border-radius: 0.3em;
+    -ms-border-radius: 0.3em;
+}
+
+.imj_backButton:hover {
+	color: #000000;
+    background-color: #4AFF00;
+    border: solid #4AFF00;
+}
+
+
+
+
+		
 
 /* ===[ Dialog - .messageArea - .messageArea .half_area2_p6 ]===
    ======================================================== */

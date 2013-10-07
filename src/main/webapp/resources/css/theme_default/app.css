@@ -150,17 +150,17 @@ select {
     border-color: #6CAD2F;
     border-style: solid;
     background-color: #F0F0F0; /*#F3F8FA*/
+	border-radius: 0.3em;
+    -webkit-border-radius: 0.3em;
+    -moz-border-radius: 0.3em;
+    -o-border-radius: 0.3em;
+    -ms-border-radius: 0.3em;
 }
 
 input[type="text"],
 textarea,
 select {
     background-color: #F0F0F0; /*#F3F8FA*/
-	border-radius: 0.3em;
-    -webkit-border-radius: 0.3em;
-    -moz-border-radius: 0.3em;
-    -o-border-radius: 0.3em;
-    -ms-border-radius: 0.3em;
 }
 
 input[type="radio"] {
@@ -1454,11 +1454,12 @@ OLD:
 }
 
 
-/* ===[ Content - EDIT METADATA + ADMIN DATA]===
+/* ===[ Content - EDIT METADATA + ADMIN + USER ]===
    ================================================== */
 /* * metadataLists (image_deatails.xhtml) 
    * infodataLists (entryPageTabList.xhtml)
    * admindataLists (userCreate.xhtml)
+   * usersList (Users.xhtml)
    ================================================== */
 
 .imj_metadataList {
@@ -1580,6 +1581,8 @@ OLD:
 	display: inline-block;
 }
 
+
+
 /* * mediaEditPanel - METADATA INPUT PANEL ***
     (was hardcoded in MetadataInput.xhtml)
    ================================================== */
@@ -1643,7 +1646,6 @@ OLD:
 .imj_metadataEditLicence, .imj_metadataEditNumber, .imj_metadataEditGeo, .imj_admindataEdit {
 	width: 25em;
 }
-
 
 .imj_metadataEditDate {
 	width: 7em;
@@ -1956,6 +1958,8 @@ min-height: 6em;
 /* ===[ Admin Pages ]===
 	UserAdministrationPage.xhtml
 	UserCreate.xhtml
+	Users.xhtml
+	AdminStorage.xhtml
    ======================================================== */
 
 .imj_administrationTiledList {
@@ -1973,7 +1977,7 @@ min-height: 6em;
     display: inline-block;
     float: left;
     margin-bottom: 2em;
-    max-width: 55.55%;
+    max-width: 99.99%; /*55.55%;*/
     padding: 0 2%;
     text-align: left;
     vertical-align: top;
@@ -1991,6 +1995,7 @@ min-height: 6em;
 	font-size: 140%;
 	line-height: normal;
 }
+
 .imj_adminPanel .imj_headline {
 	width: 91.95%;
 	padding: 0.454545em 0.81818181em;
@@ -2014,6 +2019,18 @@ min-height: 6em;
 	line-height: 150%;
 }
 		
+.imj_adminEditPanel {
+	margin: 0.5em 0 2em 0;
+    padding: 0 0 2em 0;
+	border-bottom: 0.0909091em solid #292929;
+	text-align: right;
+}		
+
+.imj_usersList {
+	/*white-space: pre;
+	float: left;*/
+	display: inline-block;
+}
 
 .imj_backPanel {
 	display: inline-block;
@@ -2024,6 +2041,19 @@ min-height: 6em;
 }
 
 .imj_backButton {
+	color: #FFFFFF;
+	/*background-color: #6CAD2F;*/
+	border: solid #6CAD2F;
+	padding: 0 0.3333333em;
+	margin-left: 1em;
+	border-radius: 0.3em;
+    -webkit-border-radius: 0.3em;
+    -moz-border-radius: 0.3em;
+    -o-border-radius: 0.3em;
+    -ms-border-radius: 0.3em;
+}
+
+.imj_editButton {
 	color: #FFFFFF;
 	background-color: #6CAD2F;
 	border: solid #6CAD2F;
@@ -2036,7 +2066,8 @@ min-height: 6em;
     -ms-border-radius: 0.3em;
 }
 
-.imj_backButton:hover {
+
+.imj_backButton:hover, .imj_editButton:hover  {
 	color: #000000;
     background-color: #4AFF00;
     border: solid #4AFF00;

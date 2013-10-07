@@ -1,41 +1,97 @@
-<ui:composition template="templates/template.xhtml" 
+<ui:composition template="templates/template_site.xhtml" 
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
-			<ui:param name="headline" value="#{lbl.admin_users_head}"/>
-			<ui:param name="currentMainMenu" value="admin"/>
+	<ui:param name="headline" value="#{lbl.admin_users_head}"/>
+	<ui:param name="currentMainMenu" value="admin"/>
+	
+	<ui:define name="mainContent">
+		
+		<!-- Breadcrumb - History -->
+		<ui:include src="include/History.xhtml"></ui:include>
+		
+		<ui:fragment rendered="#{!UsersBean.sysAdmin}">
+			<h2>
+				<h:outputText value="You are not allowed to view this page"/> <!-- internationalized info message lbl -->
+			</h2>
+		</ui:fragment>
+		
+		<ui:fragment rendered="#{UsersBean.sysAdmin}">
+			<!-- Are You Admin? Maybe include this check / message as a rendering condition in template_site to create a internationalized info message for admin pages ? -->			
 			
-			<ui:define name="mainContent">
-				<h:panelGroup layout="block" styleClass="full_area0 endline itemLine noTopBorder" rendered="#{!UsersBean.sysAdmin}">
-					<h2><h:outputText value="You are not allowed to view this page"/></h2>
-				</h:panelGroup>
-				<h:panelGroup layout="block" styleClass="full_area0 endline itemLine noTopBorder" rendered="#{UsersBean.sysAdmin}">
-					<ui:repeat id="userList" var="user" value="#{UsersBean.users}" rows="0">
-					<h:panelGroup layout="block" styleClass="full_area0_p4 listItem noTopBorder">
-						<h:panelGroup layout="block" styleClass="huge_area0_p4">
-							<h:outputText styleClass="huge_area0_p1" value="#{user.name} (#{user.email})"/>
-						</h:panelGroup>
-						<h:panelGroup layout="block" styleClass="quad_area0_p1">
-							<ui:repeat id="grantList" var="grant" value="#{user.grants}" rows="0" >
-								<h:outputText  styleClass="xHuge_area0_p0" value="#{UsersBean.grantsString(grant)}"/>
+			<!-- Only for Admins -->
+			<div class="imj_userConfig">
+		
+				<!-- Admin - TiledList -->
+				<div class="imj_administrationTiledList">
+				
+					<div class="imj_listBody">
+					
+						<h:panelGroup layout="block" styleClass="imj_adminPanel imj_userConfig" rendered="#{UsersBean.sysAdmin}">						
+							<div class="imj_headline">
+								<h2><h:outputText value="#{lbl.admin_user_info} - #{lbl.admin_user_view}"/></h2>
+							</div>
+														
+							<div class="imj_content">
+							
+							<ui:repeat id="userList" var="user" value="#{UsersBean.users}" rows="0">
+								<!-- AdminDataList - Users List - Name -->
+								<h:panelGroup layout="block" styleClass="imj_admindataSet">
+									<div class="imj_admindataLabel">
+										<h2><h:outputText value="#{user.name} (#{user.email})"/></h2>
+										<span class="imj_invisible">: </span>
+									</div>
+									<!-- AdminDataList - User Grants -->
+									
+									<div class="imj_admindataValue">										
+										<div class="imj_admindataValueEntry">									
+											<ui:repeat id="grantList" var="grant" value="#{user.grants}" rows="0">
+											<h:outputText styleClass="imj_usersList" value="#{UsersBean.grantsString(grant)}"/>
+											</ui:repeat>
+											<!-- <h:inputText id="inputEmailText" styleClass="imj_admindataEdit" value="#{UserCreationBean.user.email}" required="true"/> -->
+										</div>										
+									</div>
+									
+								</h:panelGroup>								
+								
+								<h:panelGroup layout="block" styleClass="imj_adminEditPanel">								
+								
+								<h:outputLink value="#{Navigation.applicationUrl}user?id=#{user.email}">
+									<h:outputText value="#{lbl.user_admin_edit}" styleClass="imj_editButton"/>
+								</h:outputLink>
+															
+								<h:form>
+									
+										<h:commandLink styleClass="imj_editButton" action="#{UsersBean.sendPassword}" value="#{lbl.user_admin_newPwd}" onclick="if (confirm('Do you really want to reset the password? (A message will be sent to the user)')) return true; return false;">
+											<f:param name="email" value="#{user.email}"/>
+										</h:commandLink>
+										<h:commandLink styleClass="imj_cancelButton" action="#{UsersBean.deleteUser}" value="#{lbl.user_admin_delete}" onclick="if (confirm('Do you really want to delete this user?')) return true; return false;">
+											<f:param name="email" value="#{user.email}"/>
+										</h:commandLink>
+								</h:form>		
+								
+								</h:panelGroup>
+								
 							</ui:repeat>
-						</h:panelGroup>
-						<h:panelGroup layout="block" styleClass="large_area0_p0">
-							<h:outputLink styleClass="huge_area0_p1" value="#{Navigation.applicationUrl}user?id=#{user.email}">
-								<h:outputText value="#{lbl.user_admin_edit}"/>
-							</h:outputLink>
-							<h:form>
-								<h:commandLink styleClass="huge_area0_p1" action="#{UsersBean.sendPassword}" value="#{lbl.user_admin_newPwd}" onclick="if (confirm('Do you really want to reset the password? (A message will be sent to the user)')) return true; return false;">
-									<f:param name="email" value="#{user.email}"/>
-								</h:commandLink>
-								<h:commandLink styleClass="huge_area0_p1" action="#{UsersBean.deleteUser}" value="#{lbl.user_admin_delete}" onclick="if (confirm('Do you really want to delete this user?')) return true; return false;">
-									<f:param name="email" value="#{user.email}"/>
-								</h:commandLink>
-							</h:form>
-						</h:panelGroup>
-					</h:panelGroup>
-					</ui:repeat>
-				</h:panelGroup>
-			</ui:define>
+								
+								
+							</div>												
+						</h:panelGroup>				
+			
+					</div>	<!-- END LIST BODY -->	
+					
+				</div> <!-- END ADMIN LIST -->
+				
+			</div> <!-- END USER CONFIG -->
+			
+			<!-- AdminDataList - Back Button -->
+			<h:panelGroup layout="block" styleClass="imj_backPanel">
+				<h:outputLink value="#{Navigation.adminUrl}">
+					<h:outputText value="#{lbl.back_to_admin}" styleClass="imj_backButton"/>
+				</h:outputLink>
+			</h:panelGroup>
+			
+		</ui:fragment>
+	</ui:define>
 </ui:composition>

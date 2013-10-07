@@ -3,85 +3,116 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
-			<ui:param name="headline" value="#{lbl.admin_user_new}"/>
-			<ui:param name="currentMainMenu" value="admin"/>
+	<ui:param name="headline" value="#{lbl.admin_user_new}"/>
+	<ui:param name="currentMainMenu" value="admin"/>
 			
-			<ui:define name="mainContent">
-			<h:panelGroup layout="block" styleClass="full_area0 endline itemLine noTopBorder" rendered="#{!SessionBean.admin}">
-				<h2><h:outputText value="You are not allowed to view this page"/></h2>
-			</h:panelGroup>
-			<h:panelGroup layout="block" styleClass="full_area0 fullItem" rendered="#{SessionBean.admin}">
-				<h:form>
-					<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder">
-						
-															
-						<!-- Admin User Info-->
-						<h:panelGroup layout="block" styleClass="imj_metadataSubPanel">
-							<span class="imj_adminSubPanelItem">
-								<h:outputText value="#{lbl.admin_user_info}"/>
-							</span>
-						</h:panelGroup>	
-												
-							<!-- AdminDataList - Email -->
-							<h:panelGroup layout="block" styleClass="imj_admindataSet">
-								<div class="imj_admindataLabel">
-									<h:outputText value="Email"/>
-									<span class="imj_invisible">: </span>
-								</div>
-								<div class="imj_admindataValue">
-									<h:inputText id="inputEmailText" value="#{UserCreationBean.user.email}" required="true"/>
-								</div>
-							</h:panelGroup>
-							
-													
-							<!-- AdminDataList - Name -->
-							<h:panelGroup layout="block" styleClass="imj_admindataSet">
-								<div class="imj_admindataLabel">
-									<h:outputText value="Name"/>
-									<span class="imj_invisible">: </span>
-								</div>
-								<div class="imj_admindataValue">
-									<h:inputText id="inputNameText" value="#{UserCreationBean.user.name}" required="true"/>
-								</div>
-							</h:panelGroup>
-							
-							
-							<!-- AdminDataList - Nickname -->
-							<h:panelGroup layout="block" styleClass="imj_admindataSet">
-								<div class="imj_admindataLabel">
-									<h:outputText value="Nickname"/>
-									<span class="imj_invisible">: </span>
-								</div>
-								<div class="imj_admindataValue">
-									<h:inputText id="inputNickText" value="#{UserCreationBean.user.nick}" required="true"/>
-								</div>
-							</h:panelGroup>
-							
-							<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-								<b class="xLarge_area0_p8 endline labelLine clear">
-									<h:outputText value="#{lbl.user_send_mail}"/>
-									<span class="noDisplay">: </span>
-								</b>
-								<span class="xHuge_area0 xTiny_marginLExcl endline">
-									<h:selectBooleanCheckbox value="#{UserCreationBean.sendEmail}"/>
-								</span>
-							</h:panelGroup>
-							
-						<!-- </div> -->
-					</h:panelGroup>
+		<ui:define name="mainContent">
+			
+			<!-- Breadcrumb - History -->
+			<ui:include src="include/History.xhtml"></ui:include>			
+			
+			<ui:fragment rendered="#{!UserCreationBean.sysAdmin}">
+				<h2>
+					<h:outputText value="You are not allowed to view this page"/> <!-- internationalized info message -->
+				</h2>			
+			</ui:fragment>
+				
+			<ui:fragment rendered="#{UserCreationBean.sysAdmin}">	
+				<!-- Are You Admin? Maybe include this check / message as a rendering condition in template_site to create a internationalized info message for admin pages ? -->			
+			
+				<!-- Only for Admins -->
+				
+				<div class="imj_userConfig">
 					
+					<!-- Admin - TiledList -->		
+					<div class="imj_administrationTiledList">
+					
+						<div class="imj_listBody">
+							
+							<h:panelGroup layout="block" styleClass="imj_adminPanel imj_userConfig" rendered="#{SessionBean.admin}">
+								<h:form>
 									
+									<!-- Admin User Info-->
+									<div class="imj_headline">
+										<h2>
+											<h:outputText value="#{lbl.admin_user_info}"/> - <h:outputText value="#{lbl.admin_user_new}"/>
+										</h2>
+									</div>
+										
+									<div class="imj_content">						
+										<!-- AdminDataList - Email -->
+										<h:panelGroup layout="block" styleClass="imj_admindataSet">
+											<div class="imj_admindataLabel">
+												<h:outputText value="Email"/>
+												<span class="imj_invisible">: </span>
+											</div>
+											<div class="imj_admindataValue">
+												<div class="imj_admindataValueEntry">
+													<h:inputText id="inputEmailText" styleClass="imj_admindataEdit" value="#{UserCreationBean.user.email}" required="true"/>
+												</div>
+											</div>
+										</h:panelGroup>
+											
+																	
+										<!-- AdminDataList - Name -->
+										<h:panelGroup layout="block" styleClass="imj_admindataSet">
+											<div class="imj_admindataLabel">
+												<h:outputText value="Name"/>
+												<span class="imj_invisible">: </span>
+											</div>				
+											<div class="imj_admindataValue">
+												<div class="imj_admindataValueEntry">
+													<h:inputText id="inputNameText" styleClass="imj_admindataEdit" value="#{UserCreationBean.user.name}" required="true"/>
+												</div>
+											</div>
+										</h:panelGroup>											
+										
+										<!-- AdminDataList - Nickname -->
+										<h:panelGroup layout="block" styleClass="imj_admindataSet">
+											<div class="imj_admindataLabel">
+												<h:outputText value="Nickname"/>
+												<span class="imj_invisible">: </span>
+											</div>
+											<div class="imj_admindataValue">
+												<div class="imj_admindataValueEntry">
+													<h:inputText id="inputNickText" styleClass="imj_admindataEdit" value="#{UserCreationBean.user.nick}" required="true"/>
+												</div>
+											</div>
+										</h:panelGroup>
+										
+										<!-- AdminDataList - SendEmail CheckBox-->
+										<h:panelGroup layout="block" styleClass="imj_admindataSet">
+											<div class="imj_admindataValueCheckBox">
+												<div class="imj_admindataValueEntry">
+													<h:selectBooleanCheckbox value="#{UserCreationBean.sendEmail}" styleClass="imj_admindataCheckbox"/>
+												</div>													
+											</div>
+											<div class="imj_admindataLabel">
+												<h:outputText value="#{lbl.user_send_mail}"/>
+												<span class="imj_invisible">: </span>
+											</div>										
+										</h:panelGroup>
+											
+									</div>
+									
+									<!-- AdminDataList - imj_submitPanel - cancel link + submit command buttons -->
+									<h:panelGroup layout="block" styleClass="imj_submitPanel">
+										<h:outputLink value="#{Navigation.applicationUrl}jsf/UserAdministrationPage.xhtml" styleClass="imj_cancelButton">
+											<h:outputText value="#{lbl.cancel}" />
+										</h:outputLink>
+										<h:commandButton action="#{UserCreationBean.create}" value="#{lbl.save}" styleClass="imj_submitButton"/>
+									</h:panelGroup>
+									
+								</h:form>
+							</h:panelGroup>
+							
+						</div>	<!-- END LIST BODY -->	
+						
+					</div> <!-- END ADMIN LIST -->
 					
-					<!-- AdminDataList - imj_submitPanel - cancel link + submit command buttons -->
-					<h:panelGroup layout="block" styleClass="imj_submitPanel">
-						<h:outputLink value="#{Navigation.applicationUrl}jsf/UserAdministrationPage.xhtml" styleClass="imj_cancelButton">
-							<h:outputText value="#{lbl.cancel}" />
-						</h:outputLink>
-						<h:commandButton action="#{UserCreationBean.create}" value="#{lbl.save}" styleClass="imj_submitButton"/>
-					</h:panelGroup>						
-					
-					
-				</h:form>
-			</h:panelGroup>
+				</div>
+				
+			</ui:fragment>
+			
 		</ui:define>
 </ui:composition>

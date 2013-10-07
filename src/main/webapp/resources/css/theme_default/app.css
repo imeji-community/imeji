@@ -156,12 +156,38 @@ input[type="text"],
 textarea,
 select {
     background-color: #F0F0F0; /*#F3F8FA*/
+	border-radius: 0.3em;
+    -webkit-border-radius: 0.3em;
+    -moz-border-radius: 0.3em;
+    -o-border-radius: 0.3em;
+    -ms-border-radius: 0.3em;
 }
-
 
 input[type="radio"] {
     margin: 0; 
 }
+
+select:focus, textarea:focus, input[type="text"]:focus, input[type="radio"]:focus {
+    border-color: #BBBBBB;
+}
+
+/*input[type="search"]:focus, input[type="password"]:focus, input[type="email"]:focus, input[type="file"]:focus, input[type="number"]:focus, , input[type="tel"]:focus, input[type="url"]:focus  */
+
+
+input[type="checkbox"]  {
+    margin: 0.1em 0 0;
+    /*vertical-align: text-top;*/
+}
+
+.imj_admindataCheckbox {
+    margin-left: 0;
+}
+
+
+label, .imj_metadataLabel, .imj_infodataLabel, .imj_admindataLabel {
+    cursor: pointer;
+}
+
 
 
 /* styles for imej startpage - Welcome.xhtml - wrapper
@@ -830,9 +856,13 @@ cut second ?
 }
 
 .imj_simpleSearchButtonSubmit:hover {
-    background-color: #393939;
+    /*background-color: #393939;
     border-color: #393939;
-    color: #FFFFFF;
+    color: #FFFFFF;*/
+	color: #000000;
+    background-color: #4AFF00;
+    border-color: #4AFF00;
+	
 }
 
 .imj_simpleSearch input[type=radio] {
@@ -1374,6 +1404,10 @@ OLD:
 		
 }
 
+
+/* ===[ Content - EDIT ]===
+   ================================================== */
+
 /* * mediaEditPanel + Items 
 	(image_deatails.xhtml)
    ================================================== */
@@ -1420,6 +1454,8 @@ OLD:
 }
 
 
+/* ===[ Content - EDIT METADATA + ADMIN DATA]===
+   ================================================== */
 /* * metadataLists (image_deatails.xhtml) 
    * infodataLists (entryPageTabList.xhtml)
    * admindataLists (userCreate.xhtml)
@@ -1505,7 +1541,11 @@ OLD:
 	max-width: 77%;
 }
 
-.imj_metadataValueEntry {
+.imj_admindataValueCheckBox {
+	display: inline-block;
+}
+
+.imj_metadataValueEntry, .imj_admindataValueEntry {
 	display: inline-block;
 }
 
@@ -1513,7 +1553,6 @@ OLD:
 	min-height: 6em;
     width: 55em;
 }
-
 
 .imj_metadataValueEntryViewMap {
 	display: block;
@@ -1597,9 +1636,14 @@ OLD:
 	width: 55em;
 	min-height: 6em;
 }
-.imj_metadataEditNumber, .imj_metadataEditLink, .imj_metadataEditPublication, .imj_metadataEditLicence, .imj_metadataEditPerson, .imj_metadataEditGeo {
+.imj_metadataEditLink, .imj_metadataEditPerson, .imj_metadataEditPublication {
 	width: 55em;
 }
+
+.imj_metadataEditLicence, .imj_metadataEditNumber, .imj_metadataEditGeo, .imj_admindataEdit {
+	width: 25em;
+}
+
 
 .imj_metadataEditDate {
 	width: 7em;
@@ -1638,6 +1682,7 @@ min-height: 6em;
     border: solid #990000;
     padding: 0 0.3333333em;
     margin: 0 1em;
+	/*float: left;*/
 }
 
 .imj_cancelButton:hover {
@@ -1652,6 +1697,7 @@ min-height: 6em;
 	border: solid #6CAD2F;
 	padding: 0 0.3333333em;
 	margin-left: 1em;
+	/*float: right;*/
 }
 
 .imj_submitButton:hover {
@@ -1904,14 +1950,25 @@ min-height: 6em;
 
 .imj_administrationTiledList {
 	width: 91.95%;
-	padding: 2%; /*4%*/
+	padding: 2% 4%;
 }
 .imj_administrationTiledList .imj_listBody {
 	width: 100%;
 }
 .imj_administrationTiledList .imj_listBody {
-	/*text-align: center;*/
+	text-align: center;
 }
+
+.imj_userConfig .imj_adminPanel {
+    display: inline-block;
+    float: left;
+    margin-bottom: 2em;
+    max-width: 55.55%;
+    padding: 0 2%;
+    text-align: left;
+    vertical-align: top;
+}
+
 .imj_adminPanel {
 	display: inline-block;
 	max-width: 24.89%;
@@ -1947,7 +2004,6 @@ min-height: 6em;
 	line-height: 150%;
 }
 			
-
 
 /* ===[ Dialog - .messageArea - .messageArea .half_area2_p6 ]===
    ======================================================== */

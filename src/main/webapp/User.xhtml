@@ -1,4 +1,4 @@
-<ui:composition template="templates/template.xhtml" 
+<ui:composition template="templates/template_site.xhtml" 
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
@@ -10,91 +10,195 @@
 		<ui:define name="mainContent">
 			<h:outputText value="#{UserBean.init}"/>
 			
-				<h:panelGroup layout="block" styleClass="full_area0 fullItem">
-					<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder">
-					<script>
-						function hide_input_area_show_Links()
-						{
-							$('.inputAreaUserInfos').hide();
-							$('#userForm a').show();
-						}
-					</script>
-					<h:form id ="userForm">
-						<h:panelGroup styleClass="small_marginLExcl full_area0" rendered="#{UserBean.admin}">
-							<h:panelGroup id="userInfos" styleClass="full_area0" rendered="#{UserBean.admin}">
-								<h:panelGroup styleClass="full_area0">
-									<h:outputText styleClass="double_area0_p4" value="#{lbl.email}"/>
-									<h:outputText styleClass="free_area0_p4 endLine" value="#{UserBean.user.email}"/>
-									<h:outputLink id="lnkEditEmail" value="#" onclick="hide_input_area_show_Links();document.getElementById('userForm:pnlEditEmail').style.display = 'block';$(this).hide();">
-										<h:outputText styleClass="double_area0_p4" value="#{lbl.edit}"/>
-									</h:outputLink>
-									<h:panelGroup styleClass="full_area0_p4 inputAreaUserInfos" id="pnlEditEmail" style="display:none;">
-										 <h:outputText styleClass="double_area0_p4" value=" " />
-						                 <h:inputText styleClass="huge_txtInput"  value="#{UserBean.newEmail}" />
-						                 <h:commandLink action="#{UserBean.changeEmail}" value="#{lbl.save}" styleClass="free_area0" />
-									</h:panelGroup>
-								</h:panelGroup>
-								<h:panelGroup styleClass="full_area0">
-									<h:outputText styleClass="double_area0_p4" value="#{lbl.complete_name}"/>
-									<h:outputText styleClass="free_area0_p4" value="#{UserBean.user.name}"/>
-									<h:outputLink id="lnkEditName" value="#" onclick="hide_input_area_show_Links();document.getElementById('userForm:pnlEditName').style.display = 'block';$(this).hide();">
-										<h:outputText styleClass="double_area0_p4" value="#{lbl.edit}"/>
-									</h:outputLink>
-									<h:panelGroup styleClass="full_area0_p4 inputAreaUserInfos" id="pnlEditName" style="display:none;">
-										 <h:outputText styleClass="double_area0_p4" value=" " />
-						                 <h:inputText styleClass="huge_txtInput"  value="#{UserBean.user.name}" />
-						                 <h:commandLink action="#{UserBean.updateUser}" value="#{lbl.save}" styleClass="free_area0" />
-									</h:panelGroup>
-					            </h:panelGroup>
-					            <h:panelGroup styleClass="full_area0">
-									<h:outputText styleClass="double_area0_p4" value="#{lbl.nickname}"/>
-									<h:outputText styleClass="free_area0_p4" value="#{UserBean.user.nick}"/>
-									<h:outputLink id="lnkEditNick" value="#" onclick="hide_input_area_show_Links();document.getElementById('userForm:pnlEditNick').style.display = 'block'; $(this).hide();">
-										<h:outputText styleClass="double_area0_p4" value="#{lbl.edit}"/>
-									</h:outputLink>
-									<h:panelGroup styleClass="full_area0_p4 inputAreaUserInfos" id="pnlEditNick" style="display:none;">
-										 <h:outputText styleClass="double_area0_p4" value=" " />
-						                 <h:inputText styleClass="huge_txtInput"  value="#{UserBean.user.nick}" />
-						                 <h:commandLink action="#{UserBean.updateUser}" value="#{lbl.save}" styleClass="free_area0" />
-									</h:panelGroup>
-					          </h:panelGroup>
+			<!-- Breadcrumb - History -->
+			<ui:include src="include/History.xhtml"></ui:include>
+			
+			<ui:fragment rendered="#{!UsersBean.sysAdmin}">
+			<h2>
+				<h:outputText value="You are not allowed to view this page"/> <!-- internationalized info message lbl - check included LoginFormular.xhtml for message ! -->
+			</h2>
+			</ui:fragment>	
+			
+			<ui:fragment rendered="#{UsersBean.sysAdmin}">
+			<!-- Are You Admin? Maybe include this check / message as a rendering condition in template_site to create a internationalized info message for admin pages ? -->	
+				
+				<!-- Only for Admins -->
+				<div class="imj_userConfig">
+				
+					<!-- Admin - TiledList -->
+					<div class="imj_administrationTiledList">
+					
+						<div class="imj_listBody">			
+			
+							<h:panelGroup layout="block" styleClass="imj_adminPanel imj_userConfig">
+							
+								<div class="imj_headline">
+									<h2><h:outputText value="#{headline} - #{UserBean.user.name}"/></h2>
+								</div>
+								
+								<div class="imj_content">
+
+									<script>
+										function hide_input_area_show_Links()
+										{
+											$('.inputAreaUserInfos').hide();
+											$('#userForm a').show();
+										}
+									</script>
+									
+									<h:form id ="userForm">
+									
+										<h:panelGroup layout="block" rendered="#{UserBean.admin}">
+										
+											<h:panelGroup id="userInfos" rendered="#{UserBean.admin}">					
+												
+												<!-- User Edit - Email -->
+												<h:panelGroup layout="block" styleClass="imj_admindataSetEdit">
+													<div class="imj_admindataLabel">
+														<h:outputText value="#{lbl.email}"/>
+														<span class="imj_invisible">: </span>
+													</div>
+													<div class="imj_admindataValue">
+														<div class="imj_admindataValueEntry">
+															<h:outputText value="#{UserBean.user.email}"/>
+														</div>
+													</div>
+													<div class="imj_admindataValue">
+														<div class="imj_admindataValueEntry">
+															<h:outputLink id="lnkEditEmail" value="#" onclick="hide_input_area_show_Links();document.getElementById('userForm:pnlEditEmail').style.display = 'block';$(this).hide();">
+																<h:outputText value="#{lbl.edit}" styleClass="imj_editButton"/>
+															</h:outputLink>
+														</div>
+													</div>
+												</h:panelGroup>
+												<h:panelGroup id="pnlEditEmail" styleClass="imj_noDisplay">
+														<h:outputText value=" " />
+														<h:inputText value="#{UserBean.newEmail}" styleClass="imj_admindataEdit"/>
+														<h:commandLink action="#{UserBean.changeEmail}" value="#{lbl.save}" styleClass="imj_editButton" />
+												</h:panelGroup>	
+												<!-- Cancel Button ? -->
+												
+												<!-- User Edit - Username -->
+												<h:panelGroup layout="block" styleClass="imj_admindataSetEdit">
+													<div class="imj_admindataLabel">
+														<h:outputText value="#{lbl.complete_name}"/>
+														<span class="imj_invisible">: </span>
+													</div>
+													<div class="imj_admindataValue">
+														<div class="imj_admindataValueEntry">
+															<h:outputText value="#{UserBean.user.name}"/>
+														</div>
+													</div>
+													<div class="imj_admindataValue">
+														<div class="imj_admindataValueEntry">
+															<h:outputLink id="lnkEditName" value="#" onclick="hide_input_area_show_Links();document.getElementById('userForm:pnlEditName').style.display = 'block';$(this).hide();">
+																<h:outputText value="#{lbl.edit}" styleClass="imj_editButton"/>
+															</h:outputLink>
+														</div>
+													</div>
+												</h:panelGroup>
+												<h:panelGroup id="pnlEditName" styleClass="imj_noDisplay">
+													<h:outputText value=" " />
+													<h:inputText value="#{UserBean.user.name}" styleClass="imj_admindataEdit"/>
+													<h:commandLink action="#{UserBean.updateUser}" value="#{lbl.save}" styleClass="imj_editButton"/>
+												</h:panelGroup>
+												<!-- Cancel Button ? -->
+												
+												<!-- User Edit - Nickname -->
+												<h:panelGroup layout="block" styleClass="imj_admindataSetEdit">
+													<div class="imj_admindataLabel">
+														<h:outputText value="#{lbl.nickname}"/>
+														<span class="imj_invisible">: </span>
+													</div>
+													<div class="imj_admindataValue">
+														<div class="imj_admindataValueEntry">
+															<h:outputText value="#{UserBean.user.nick}"/>
+														</div>
+													</div>
+													<div class="imj_admindataValue">
+														<div class="imj_admindataValueEntry">
+															<h:outputLink id="lnkEditNick" value="#" onclick="hide_input_area_show_Links();document.getElementById('userForm:pnlEditNick').style.display = 'block'; $(this).hide();">
+																<h:outputText value="#{lbl.edit}" styleClass="imj_editButton"/>
+															</h:outputLink>
+														</div>
+													</div>
+												</h:panelGroup>
+												<h:panelGroup id="pnlEditNick" styleClass="imj_noDisplay">
+													<h:outputText value=" " />
+													<h:inputText value="#{UserBean.user.nick}" styleClass="imj_admindataEdit"/>
+													<h:commandLink action="#{UserBean.updateUser}" value="#{lbl.save}" styleClass="imj_editButton"/>
+												</h:panelGroup>
+												<!-- Cancel Button ? -->
+												
+											</h:panelGroup>
+											
+							
+											<!-- User Edit - Password -->
+												<h:panelGroup layout="block" styleClass="imj_admindataSetEdit">
+												<div class="imj_admindataLabel">
+														<h:outputLabel for="inputPassword" value="#{lbl.password_new}"/>
+														<span class="imj_invisible">: </span>
+													</div>
+													<div class="imj_admindataValue">
+														<div class="imj_admindataValueEntry">
+															<h:inputSecret id="inputPassword" value="#{UserBean.newPassword}"/>
+														</div>
+													</div>
+												</h:panelGroup>
+												<h:panelGroup layout="block" styleClass="imj_admindataSetEdit">
+												<div class="imj_admindataLabel">
+														<h:outputLabel for="inputRespeated" value="#{lbl.password_repeat}"/>
+														<span class="imj_invisible">: </span>
+													</div>
+													<div class="imj_admindataValue">
+														<div class="imj_admindataValueEntry">
+															<h:inputSecret id="inputRespeated" value="#{UserBean.repeatedPassword}"/>
+														</div>
+													</div>
+												</h:panelGroup>
+																							
+												<h:commandButton action="#{UserBean.changePassword}" value="#{lbl.password_change}" styleClass="imj_editButton"/>
+												
+												<h:panelGroup layout="block" styleClass="imj_admindataSetEdit">
+													<div class="imj_admindataLabel">
+														<h2><h:outputText value="#{UserBean.user.name} #{lbl.grants_has_following}:"/></h2>
+													</div>
+													<div class="imj_admindataValue">
+														<div class="imj_admindataValueEntry">
+															<ui:repeat id="grantList" var="grant" value="#{UserBean.user.grants}" rows="0">
+																<h:panelGroup rendered="#{grant.grantFor != null}">
+																	<h:outputText value="#{UsersBean.grantsString(grant)}" styleClass="imj_admindataEdit"/>
+																	<h:commandLink action="#{UserBean.revokeGrant}" value="#{lbl.revoke}" styleClass="imj_editButton" onclick="if(confirm('Are you sure you want to revoke this grant?'))return true;return false;">
+																		<f:param name="grantType" value="#{grant.grantType}"/>
+																		<f:param name="grantFor" value="#{grant.grantFor}" />
+																	</h:commandLink>
+																</h:panelGroup>
+															</ui:repeat>
+														</div>
+													</div>
+												</h:panelGroup>							
+
+										</h:panelGroup>
+										
+									</h:form>
+										<h:panelGroup rendered="#{!UserBean.admin and SessionBean.user == null}">
+											<ui:include src="./include/LoginFormular.xhtml" />
+										</h:panelGroup>
+
+									
+								</div>
 							</h:panelGroup>
 							
-							<h:panelGroup styleClass="half_area0">
-								<h:panelGroup styleClass="full_area0_p4">
-									<h:outputLabel for="inputPassword" styleClass="double_area0_p0" value="#{lbl.password_new}"/>
-									<h:inputSecret id="inputPassword" styleClass="huge_txtInput" value="#{UserBean.newPassword}"/>
-								</h:panelGroup>
-								<h:panelGroup styleClass="full_area0_p4">
-									<h:outputLabel for="inputRespeated" styleClass="double_area0_p0" value="#{lbl.password_repeat}"/>
-									<h:inputSecret id="inputRespeated" styleClass="huge_txtInput" value="#{UserBean.repeatedPassword}"/>
-								</h:panelGroup>
-								<h:commandButton action="#{UserBean.changePassword}" value="#{lbl.password_change}" styleClass="large_area1_p0 activeButton"/>
-							</h:panelGroup>
-							<br/><br/>
-							<h:panelGroup styleClass="full_area0_p4 listItem noTopBorder">
-								<b>
-									<h:outputText styleClass="xHuge_area0_p0" value="#{UserBean.user.name} #{lbl.grants_has_following}:"/>
-								</b>
-								<br/>
-								<ui:repeat id="grantList" var="grant" value="#{UserBean.user.grants}" rows="0">
-								<h:panelGroup rendered="#{grant.grantFor != null}">
-									<h:outputText value="#{UsersBean.grantsString(grant)}" styleClass="xHuge_area0_p0"/>										
-									<h:commandLink action="#{UserBean.revokeGrant}" value="#{lbl.revoke}" styleClass="xTiny_marginLExcl free_area0" onclick="if(confirm('Are you sure you want to revoke this grant?'))return true;return false;">
-										<f:param name="grantType" value="#{grant.grantType}" />  
-										<f:param name="grantFor" value="#{grant.grantFor}" />  
-									</h:commandLink>
-								</h:panelGroup>
-								</ui:repeat>
-							</h:panelGroup>
-						</h:panelGroup>
-						</h:form>
-						<h:panelGroup rendered="#{!UserBean.admin and SessionBean.user == null}">
-							<ui:include src="./include/LoginFormular.xhtml" />
-						</h:panelGroup>
-					</h:panelGroup>
-				</h:panelGroup>		
+						</div> <!-- END LIST BODY -->	
+						
+					</div> <!-- END ADMIN LIST -->
+					
+				</div> <!-- END USER CONFIG -->
+				
+			</ui:fragment>	
+			
 		</ui:define>
+		
 </ui:composition>
 
 

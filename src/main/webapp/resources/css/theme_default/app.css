@@ -165,13 +165,14 @@ select {
 
 input[type="radio"] {
     margin: 0; 
+	
 }
 
-select:focus, textarea:focus, input[type="text"]:focus, input[type="radio"]:focus {
-    border-color: #BBBBBB;
+select:focus, textarea:focus, input[type="text"]:focus, input[type="password"]:focus {
+    border-color: #F0F0F0;
 }
 
-/*input[type="search"]:focus, input[type="password"]:focus, input[type="email"]:focus, input[type="file"]:focus, input[type="number"]:focus, , input[type="tel"]:focus, input[type="url"]:focus  */
+/*input[type="search"]:focus, input[type="email"]:focus, input[type="file"]:focus, input[type="number"]:focus, , input[type="tel"]:focus, input[type="url"]:focus, input[type="radio"]:focus  */
 
 
 input[type="checkbox"]  {
@@ -1529,6 +1530,10 @@ OLD:
 	padding-bottom: 1em;
 }
 
+.imj_admindataSetEdit{
+	margin: 1em 0;
+}
+
 .imj_metadataLabel, .imj_infodataLabel, .imj_admindataLabel {
 	font-weight: bold;
 	display: inline-block;
@@ -2020,10 +2025,10 @@ min-height: 6em;
 }
 		
 .imj_adminEditPanel {
-	margin: 0.5em 0 2em 0;
+	margin: 0.5em 0em 1em -1em;
     padding: 0 0 2em 0;
 	border-bottom: 0.0909091em solid #292929;
-	text-align: right;
+	/*text-align: right;*/
 }		
 
 .imj_usersList {
@@ -2043,7 +2048,7 @@ min-height: 6em;
 .imj_backButton {
 	color: #FFFFFF;
 	/*background-color: #6CAD2F;*/
-	border: solid #6CAD2F;
+	border: thin solid #6CAD2F;
 	padding: 0 0.3333333em;
 	margin-left: 1em;
 	border-radius: 0.3em;
@@ -2053,10 +2058,10 @@ min-height: 6em;
     -ms-border-radius: 0.3em;
 }
 
-.imj_editButton {
+.imj_editButton, a.imj_editButton {
 	color: #FFFFFF;
 	background-color: #6CAD2F;
-	border: solid #6CAD2F;
+	border: thin solid #6CAD2F;
 	padding: 0 0.3333333em;
 	margin-left: 1em;
 	border-radius: 0.3em;
@@ -2064,13 +2069,17 @@ min-height: 6em;
     -moz-border-radius: 0.3em;
     -o-border-radius: 0.3em;
     -ms-border-radius: 0.3em;
+}
+
+.imj_editButton[type="submit"]  {
+	margin-left: 0;
 }
 
 
 .imj_backButton:hover, .imj_editButton:hover  {
 	color: #000000;
     background-color: #4AFF00;
-    border: solid #4AFF00;
+    border: thin solid #4AFF00;
 }
 
 

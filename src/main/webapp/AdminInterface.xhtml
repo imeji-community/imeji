@@ -11,13 +11,13 @@
 		<!-- Breadcrumb - History -->
 		<ui:include src="include/History.xhtml"></ui:include>			
 		
-		<ui:fragment rendered="#{!UserCreationBean.sysAdmin}">
+		<ui:fragment rendered="#{!UsersBean.sysAdmin}">
 			<h2>
 				<h:outputText value="You are not allowed to view this page"/> <!-- internationalized info message lbl -->
 			</h2>			
 		</ui:fragment>
 		
-		<ui:fragment rendered="#{SessionBean.admin}">	
+		<ui:fragment rendered="#{UsersBean.sysAdmin}">	
 			<!-- Are You Admin? Maybe include this check / message as a rendering condition in template_site to create a internationalized info message for admin pages ? -->			
 			
 			<!-- Only for Admins -->			

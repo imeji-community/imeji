@@ -11,7 +11,7 @@
 		<!-- Breadcrumb - History -->
 		<ui:include src="include/History.xhtml"></ui:include>			
 		
-		<ui:fragment rendered="#{!UserCreationBean.sysAdmin}">
+		<ui:fragment rendered="#{!UsersBean.sysAdmin}">
 			<h2>
 				<h:outputText value="You are not allowed to view this page"/> <!-- internationalized info message lbl -->
 			</h2>			
@@ -34,7 +34,7 @@
 								<!-- Admin User Info-->
 								<div class="imj_headline">
 									<h2>
-										<h:outputText value="#{lbl.admin_user_info}"/> - <h:outputText value="#{lbl.admin_user_new}"/>
+										<h:outputText value="#{lbl.admin_user_info} - #{lbl.admin_user_new}"/>
 									</h2>
 								</div>
 									

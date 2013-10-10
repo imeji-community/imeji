@@ -195,6 +195,13 @@
 					
 				</div> <!-- END USER CONFIG -->
 				
+				<!-- AdminDataList - Back Button -->
+				<h:panelGroup layout="block" styleClass="imj_backPanel">
+					<h:outputLink value="#{Navigation.adminUrl}">
+						<h:outputText value="#{lbl.back_to_admin}" styleClass="imj_backButton"/>
+					</h:outputLink>
+				</h:panelGroup>
+				
 			</ui:fragment>	
 			
 		</ui:define>

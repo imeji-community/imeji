@@ -35,7 +35,7 @@
 		</h:panelGroup>
 		<!-- content menu END -->
 		
-		<h:panelGroup styleClass="full_area0"> <!-- This panelGroup is needed for IE -->
+		<h:panelGroup> <!-- This panelGroup is needed for IE -->
 			<!-- content sub-menu starts here -->
 			<h:panelGroup layout="block" styleClass="imj_contentSubMenu" rendered="#{ViewCollectionBean.visible}">
 				<h:outputLink styleClass="imj_contentSubMenuItem" value="#{Navigation.shareUrl}?uri=#{ViewCollectionBean.collection.id}" rendered="#{ViewCollectionBean.collection.status!='WITHDRAWN' and ViewCollectionBean.admin}" >

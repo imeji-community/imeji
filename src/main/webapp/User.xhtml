@@ -161,13 +161,13 @@
 												
 												<h:panelGroup layout="block" styleClass="imj_admindataSetEdit">
 													<div class="imj_admindataLabel">
-														<h2><h:outputText value="#{UserBean.user.name} #{lbl.grants_has_following}:"/></h2>
+														<h:outputText value="#{UserBean.user.name} #{lbl.grants_has_following}:"/>
 													</div>
 													<div class="imj_admindataValue">
 														<div class="imj_admindataValueEntry">
 															<ui:repeat id="grantList" var="grant" value="#{UserBean.user.grants}" rows="0">
 																<h:panelGroup rendered="#{grant.grantFor != null}">
-																	<h:outputText value="#{UsersBean.grantsString(grant)}" styleClass="imj_admindataEdit"/>
+																	<h:outputText value="#{UsersBean.grantsString(grant)}" styleClass="imj_userGrantList"/>
 																	<h:commandLink action="#{UserBean.revokeGrant}" value="#{lbl.revoke}" styleClass="imj_editButton" onclick="if(confirm('Are you sure you want to revoke this grant?'))return true;return false;">
 																		<f:param name="grantType" value="#{grant.grantType}"/>
 																		<f:param name="grantFor" value="#{grant.grantFor}" />

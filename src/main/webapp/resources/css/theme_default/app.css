@@ -2031,10 +2031,11 @@ min-height: 6em;
 	/*text-align: right;*/
 }		
 
-.imj_usersList {
+.imj_userGrantList {
 	/*white-space: pre;
 	float: left;*/
 	display: inline-block;
+	margin: 0.5em 0;
 }
 
 .imj_backPanel {

@@ -46,7 +46,7 @@
 									<div class="imj_admindataValue">										
 										<div class="imj_admindataValueEntry">									
 											<ui:repeat id="grantList" var="grant" value="#{user.grants}" rows="0">
-											<h:outputText styleClass="imj_usersList" value="#{UsersBean.grantsString(grant)}"/>
+											<h:outputText styleClass="imj_userGrantList" value="#{UsersBean.grantsString(grant)}"/>
 											</ui:repeat>
 											<!-- <h:inputText id="inputEmailText" styleClass="imj_admindataEdit" value="#{UserCreationBean.user.email}" required="true"/> -->
 										</div>										

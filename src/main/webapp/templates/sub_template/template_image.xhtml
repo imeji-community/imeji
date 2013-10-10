@@ -12,7 +12,8 @@
 	<ui:define name="mainContent">
 	   
 		<ui:fragment rendered="#{imageBean.image != null}">
-			<ui:include src="../../include/History.xhtml"></ui:include>
+			<!-- Breadcrumb - History -->
+			<ui:include src="../../include/History.xhtml"></ui:include> 
 			
 			<h:panelGroup layout="block" id="selectionInfoPanel">
 				<!-- Selection Info Panel -->
@@ -37,15 +38,15 @@
 			
 		</ui:fragment>
 		
-		<!-- item not found -->
-		<h:panelGroup layout="block" styleClass="third_area0_p0 messageArea errorMessageArea xTiny_marginLExcl" rendered="#{imageBean.image == null}">
-            <h2><h:outputText value="404 #{lbl.not_found}" styleClass="tiny_marginLExcl"/></h2>
+		<!-- item not found - remove ? -->
+		<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{imageBean.image == null}">
+            <h2><h:outputText value="404 #{lbl.not_found}" styleClass="imj_messageError"/></h2>
         </h:panelGroup>
         
         <!-- User not allowed to view item -->
-        <h:panelGroup layout="block" styleClass="full_area0_p0 messageArea errorMessageArea xTiny_marginLExcl" rendered="#{!imageBean.visible}">
-			<h:outputText value="#{lbl.view_page_disallowed}" styleClass="tiny_marginLExcl" rendered="#{SessionBean.user == null}"/>
-        	<h:outputText value="#{lbl.view_page_disallowed2}" styleClass="tiny_marginLExcl" rendered="#{SessionBean.user != null}"/>
+        <h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!imageBean.visible}">
+			<h:outputText value="#{lbl.view_page_disallowed}" styleClass="imj_messageInfo" rendered="#{SessionBean.user == null}"/>
+        	<h:outputText value="#{lbl.view_page_disallowed2}" styleClass="imj_messageInfo" rendered="#{SessionBean.user != null}"/>
 		</h:panelGroup>
 		
 	</ui:define>	

@@ -1,4 +1,5 @@
-<ui:composition template="../template_site.xhtml"  xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition template="../template_site.xhtml"  
+	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
@@ -26,11 +27,23 @@
 				<ui:param name="listSize" value="#{ViewCollectionBean.size}"/>
 			</ui:fragment>
 			
+			<ui:remove>
+			<!-- Album TODO: modify for album - AlbumBean is not working here - produces conflict in entryPagePreviewTiledList.xhtml ! 
+				ERROR: The class 'de.mpg.imeji.presentation.collection.ViewCollectionBean' does not have the property 'album'. 
+				ERROR: /resources/components/entryPagePreviewTiledList.xhtml @23,225 rendered="#{cc.attrs.mediaLogicBean.collection.status != 'WITHDRAWN'}": The class 'de.mpg.imeji.presentation.album.AlbumBean' does not have the property 'collection'.
+						
+			<ui:fragment rendered="#{currentMainMenu == 'album'}">
+				<ui:param name="logicBean" value="#{AlbumBean}"/> 
+				<ui:param name="listSize" value="#{AlbumBean.size}"/>
+			</ui:fragment> -->
+			</ui:remove>
+			
 			<!-- Album TODO: modify for album -->
 			<ui:fragment rendered="#{currentMainMenu == 'album'}">
 				<ui:param name="logicBean" value="#{ViewCollectionBean}"/>
 				<ui:param name="listSize" value="#{ViewCollectionBean.size}"/>
 			</ui:fragment>
+			
 			
 			<!-- EntryPagePreviewTiledList -->
 			<ui:fragment rendered="#{logicBean.visible}">
@@ -38,8 +51,8 @@
 					<imjc:entryPagePreviewTiledList mediaLogicBean="#{logicBean}" lbl="#{lbl}" referenceUrl="#{Navigation.collectionUrl}" applicationUrl="#{Navigation.applicationUrl}" browsePath="#{Navigation.browsePath}"/>
 				</ui:fragment>
 				<ui:fragment rendered="#{listSize == null or listSize == 0}">
-					<h:panelGroup layout="block" styleClass="third_area0_p0 messageArea errorMessageArea xTiny_marginLExcl" rendered="#{imageBean.image == null}">
-						<h2><h:outputText value="404 #{lbl.not_found}" styleClass="tiny_marginLExcl"/></h2>
+					<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{imageBean.image == null}">
+						<h2><h:outputText value="404 #{lbl.not_found}" styleClass="imj_messageError"/></h2>
 					</h:panelGroup>
 				</ui:fragment>
 			</ui:fragment>

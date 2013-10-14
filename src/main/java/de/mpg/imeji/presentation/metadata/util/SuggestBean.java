@@ -5,8 +5,6 @@ package de.mpg.imeji.presentation.metadata.util;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +13,7 @@ import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.presentation.util.CommonUtils;
 
 /**
  * JSF Bean for the the auto suggest feature <br/>
@@ -99,10 +98,10 @@ public class SuggestBean
             if (statement.getLiteralConstraints() != null && statement.getLiteralConstraints().size() > 0)
             {
                 List<SelectItem> list = new ArrayList<SelectItem>();
-                list.add(new SelectItem("", "-"));
+                list.add(new SelectItem(null, "-"));
                 for (String str : statement.getLiteralConstraints())
                 {
-                    list.add(new SelectItem(str, str));
+                    list.add(new SelectItem(str, CommonUtils.extractFieldValue("name", str)));
                 }
                 return list;
             }

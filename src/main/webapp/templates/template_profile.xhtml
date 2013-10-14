@@ -37,8 +37,7 @@
 							<h:panelGroup styleClass="full_area0_p8 huge_marginLExcl">
 								<h:outputText value=" #{lbl.profile_use_template} " />
 								<span class="xTiny_marginLExcl"> <h:selectOneMenu
-										value="#{FormularBean.template}"
-										onchange="submit();"
+										value="#{FormularBean.template}" onchange="submit();"
 										valueChangeListener="#{FormularBean.templateListener}">
 										<f:selectItems value="#{FormularBean.profilesMenu}" />
 									</h:selectOneMenu>
@@ -132,7 +131,8 @@
 														action="#{wrapper.select()}"
 														value="#{wrapper.statement.type}" type="button"
 														style="display:none;">
-														<f:ajax execute="@this inHiddenStatement" render="@none" />
+														<f:ajax execute="@this inHiddenStatement"
+															render="addConstraints" />
 													</h:commandButton>
 													<h:inputHidden id="inHiddenStatement"
 														value="#{wrapper.statement.type}" converter="URIConverter" />
@@ -186,7 +186,8 @@
 												</h:panelGroup>
 												<h:panelGroup
 													styleClass="full_area0 medium_marginLExcl endline"
-													rendered="#{wrapper.constraintsSize == 0}">
+													rendered="#{wrapper.constraintsSize == 0}"
+													id="addConstraints">
 													<h:panelGroup
 														rendered="#{wrapper.vocabularyString == null }">
 														<span style="padding-left: 30px"></span>
@@ -200,8 +201,10 @@
 														<span style="padding-left: 20px"></span>
 													</h:panelGroup>
 													<h:panelGroup
-														rendered="#{wrapper.statement.type != 'http://imeji.org/terms/metadata#conePerson' and wrapper.statement.type != 'http://imeji.org/terms/metadata#geolocation' 
-																		  and  wrapper.statement.type !='http://imeji.org/terms/metadata#publication' and wrapper.vocabularyString == null}">
+														rendered="#{wrapper.statement.type != 'http://imeji.org/terms/metadata#conePerson'
+																		  and  wrapper.statement.type !='http://imeji.org/terms/metadata#publication' 
+																		  and wrapper.statement.type !='http://imeji.org/terms/metadata#geolocation' 
+																		  and wrapper.vocabularyString == null}">
 														<h:commandButton styleClass="min_imgBtn add"
 															action="#{FormularBean.addConstraint}">
 															<f:setPropertyActionListener value="#{position.index}"
@@ -397,23 +400,24 @@
 			}
 		</script>
 		<style>
-			.dropMetadataActive,.dropChildActive {
-				border-color: green !important;
-			}
-			
-			.drop-hover {
-				background-color: #515151 !important;
-			}
-			
-			.dropMetadata {
-				
-			}
-			.highlight_area {
-				border-color: #313131;
-				border-style: dotted;
-				border-width: 1px !important;
-				background-color: #292929;
-			}
-		</style>
+.dropMetadataActive,.dropChildActive {
+	border-color: green !important;
+}
+
+.drop-hover {
+	background-color: #515151 !important;
+}
+
+.dropMetadata {
+	
+}
+
+.highlight_area {
+	border-color: #313131;
+	border-style: dotted;
+	border-width: 1px !important;
+	background-color: #292929;
+}
+</style>
 	</ui:define>
 </ui:composition>

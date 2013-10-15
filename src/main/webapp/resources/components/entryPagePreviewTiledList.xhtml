@@ -24,7 +24,11 @@
 				
 				<!-- MEDIA - Link to Collection -->
 				<ui:fragment rendered="#{ViewCollectionBean.visible}">		
-					<h:outputLink styleClass="imj_entryPagePreviewTiledListLink" value="#{cc.attrs.referenceUrl}#{cc.attrs.mediaLogicBean.id}/#{cc.attrs.browsePath}?q=" rendered="#{cc.attrs.mediaLogicBean.collection.status != 'WITHDRAWN'}">
+						<ui:remove>
+							<!-- <h:outputLink styleClass="imj_entryPagePreviewTiledListLink" value="#{cc.attrs.referenceUrl}#{cc.attrs.mediaLogicBean.id}/#{cc.attrs.browsePath}?q=" rendered="#{cc.attrs.mediaLogicBean.collection.status != 'WITHDRAWN'}"> -->
+						</ui:remove>
+					
+					<h:outputLink styleClass="imj_entryPagePreviewTiledListLink" value="#{cc.attrs.referenceUrl}#{cc.attrs.mediaLogicBean.id}/#{cc.attrs.browsePath}?q=">
 						<h:outputText value ="#{cc.attrs.lbl.collection_view_all_images}"/>
 						<span class="imj_entryPagePreviewTiledListLinkArrow"> </span>
 							<!-- <h:graphicImage value="/resources/imj_iconset/6CAD2F/imjArrowThinRight_23.png" styleClass="imj_entryPagePreviewTiledListLinkArrow"/> -->
@@ -34,7 +38,11 @@
 
 				<!-- MEDIA - Link to Album - Check ! -->
 				<ui:fragment rendered="#{AlbumBean.visible}">
-					<h:outputLink styleClass="imj_entryPagePreviewTiledListLink" value="#{cc.attrs.referenceUrl}#{cc.attrs.mediaLogicBean.id}/#{cc.attrs.browsePath}?q=" rendered="#{cc.attrs.mediaLogicBean.album.status != 'WITHDRAWN'}">
+						<ui:remove>
+							<!-- <h:outputLink styleClass="imj_entryPagePreviewTiledListLink" value="#{cc.attrs.referenceUrl}#{cc.attrs.mediaLogicBean.id}/#{cc.attrs.browsePath}?q=" rendered="#{cc.attrs.mediaLogicBean.album.status != 'WITHDRAWN'}"> -->
+						</ui:remove>
+					
+					<h:outputLink styleClass="imj_entryPagePreviewTiledListLink" value="#{cc.attrs.referenceUrl}#{cc.attrs.mediaLogicBean.id}/#{cc.attrs.browsePath}?q="> 
 						<h:outputText value ="#{cc.attrs.lbl.album_view_all_images}"/>
 						<span class="imj_entryPagePreviewTiledListLinkArrow"> </span>
 					</h:outputLink>	
@@ -42,16 +50,18 @@
 				 
 			</h:outputLink>	
 			
+			<ui:remove>
 			<!-- Collection Withdrawn -->
-			<ui:fragment rendered="#{ViewCollectionBean.visible}">
-				<h:panelGroup styleClass="imj_mediaWithdrawn" rendered="#{cc.attrs.mediaLogicBean.collection.status == 'WITHDRAWN'}">
-					<h:panelGroup styleClass="big_imgArea statusIcon withdrawnItem"/>
-						<br/>
-						<h:outputText value="#{cc.attrs.lbl.withdrawn}"/>
-				</h:panelGroup>	
-			</ui:fragment>
+				<ui:fragment rendered="#{ViewCollectionBean.visible}">
+					<h:panelGroup styleClass="imj_mediaWithdrawn" rendered="#{cc.attrs.mediaLogicBean.collection.status == 'WITHDRAWN'}">
+						<h:panelGroup styleClass="big_imgArea statusIcon withdrawnItem"/>
+							<br/>
+							<h:outputText value="#{cc.attrs.lbl.withdrawn}"/>
+					</h:panelGroup>	
+				</ui:fragment>
+			</ui:remove>
 			
-			
+			<ui:remove>
 			<!-- Album Withdrawn - Check ! -->
 			<ui:fragment rendered="#{AlbumBean.visible}">
 				<h:panelGroup styleClass="imj_mediaWithdrawn" rendered="#{cc.attrs.mediaLogicBean.album.status == 'WITHDRAWN'}">
@@ -60,6 +70,7 @@
 						<h:outputText value="#{cc.attrs.lbl.withdrawn}"/>
 				</h:panelGroup>	 
 			</ui:fragment>
+			</ui:remove>
 								
 		</h:panelGroup>	
 	

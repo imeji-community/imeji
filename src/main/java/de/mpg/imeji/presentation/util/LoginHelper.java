@@ -16,38 +16,25 @@ import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.commons.httpclient.cookie.CookieSpec;
 import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.log4j.Logger;
 
-import de.mpg.imeji.presentation.session.SessionBean;
-
+/**
+ * Helper class for the login
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
 public class LoginHelper
 {
-    private static SessionBean sessionBean = null;
-    private static Logger logger = Logger.getLogger(LoginHelper.class);
-
     /**
-     * Get handle of System administrator of eSciDoc instance.
+     * Log in in eSciDoc
      * 
+     * @param userName
+     * @param password
      * @return
+     * @throws Exception
      */
-    // public static String loginSystemAdmin()
-    // {
-    // String handle = null;
-    // try
-    // {
-    // handle = login(PropertyReader.getProperty("framework.admin.username"),
-    // PropertyReader.getProperty("framework.admin.password"));
-    // }
-    // catch (Exception e)
-    // {
-    // sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-    // BeanHelper
-    // .info(sessionBean.getLabel("error") + ", wrong administrator user. Check config file or FW: " + e);
-    // logger.error("Error escidoc admin login", e);
-    // }
-    // return handle;
-    // }
-    public static String login(String userName, String password) throws Exception
+    public static String loginInEscidoc(String userName, String password) throws Exception
     {
         String frameworkUrl = PropertyReader.getProperty("escidoc.framework_access.framework.url");
         StringTokenizer tokens = new StringTokenizer(frameworkUrl, "//");

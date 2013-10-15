@@ -7,6 +7,8 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -142,6 +144,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         initBackPage();
         initFilters();
         cleanFacets();
+        initFacets();
     }
 
     /**
@@ -159,7 +162,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     @Override
     public List<ThumbnailBean> retrieveList(int offset, int limit)
     {
-        if(searchResult == null)
+        if (searchResult == null)
             browseInit();
         // load the item
         Collection<Item> items = loadImages(searchResult.getResults(), offset, limit);
@@ -300,10 +303,20 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
      * @return
      * @throws Exception
      */
-    public String initFacets() throws Exception
+    public void initFacets()
     {
-        this.setFacets(new FacetsBean(URLQueryTransformer.parseStringQuery(query)));
-        return "pretty";
+        try
+        {
+            this.setFacets(new FacetsBean(URLQueryTransformer.parseStringQuery(query)));
+            System.out.println("calling");
+            ExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+            executor.submit(facets);
+            System.out.println("submitted");
+        }
+        catch (Exception e)
+        {
+            logger.error("Error ínitializing the facets", e);
+        }
     }
 
     /**

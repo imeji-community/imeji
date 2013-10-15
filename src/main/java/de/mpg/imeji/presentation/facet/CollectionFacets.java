@@ -3,6 +3,7 @@
  */
 package de.mpg.imeji.presentation.facet;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,23 +36,34 @@ import de.mpg.imeji.presentation.util.ObjectCachedLoader;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class CollectionFacets
+public class CollectionFacets extends Facets
 {
     private SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     private FiltersSession fs = (FiltersSession)BeanHelper.getSessionBean(FiltersSession.class);
     private List<List<Facet>> facets = new ArrayList<List<Facet>>();
     private URI colURI = null;
+    private CollectionImeji col;
+    private SearchQuery searchQuery;
 
     /**
      * Constructor for the {@link Facet}s of one {@link CollectionImeji} with one {@link SearchQuery}
      * 
      * @param col
      * @param searchQuery
-     * @throws Exception
      */
-    public CollectionFacets(CollectionImeji col, SearchQuery searchQuery) throws Exception
+    public CollectionFacets(CollectionImeji col, SearchQuery searchQuery)
     {
         this.colURI = col.getId();
+        this.col = col;
+        this.searchQuery = searchQuery;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see de.mpg.imeji.presentation.facet.Facets#init()
+     */
+    public void init()
+    {
         MetadataProfile profile = ObjectCachedLoader.loadProfile(col.getProfile());
         Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
         String baseURI = nav.getCollectionUrl() + ObjectHelper.getId(colURI) + "/" + nav.getBrowsePath() + "?q=";
@@ -60,28 +72,35 @@ public class CollectionFacets
         int count = 0;
         SearchResult allImages = retrieveAllImages(searchQuery);
         int sizeAllImages = allImages.getNumberOfRecords();
-        for (Statement st : profile.getStatements())
+        try
         {
-            List<Facet> group = new ArrayList<Facet>();
-            if (st.isPreview() && !fs.isFilter(getName(st.getId())))
+            for (Statement st : profile.getStatements())
             {
-                SearchPair pair = new SearchPair(Search.getIndex(SearchIndex.names.statement), SearchOperators.EQUALS,
-                        st.getId().toString());
-                count = getCount(searchQuery, pair, allImages.getResults());
-                if (count > 0 || true)
+                List<Facet> group = new ArrayList<Facet>();
+                if (st.isPreview() && !fs.isFilter(getName(st.getId())))
                 {
-                    group.add(new Facet(uriFactory.createFacetURI(baseURI, pair, getName(st.getId()),
-                            FacetType.COLLECTION), getName(st.getId()), count, FacetType.COLLECTION, st.getId()));
+                    SearchPair pair = new SearchPair(Search.getIndex(SearchIndex.names.statement),
+                            SearchOperators.EQUALS, st.getId().toString());
+                    count = getCount(searchQuery, pair, allImages.getResults());
+                    if (count > 0 || true)
+                    {
+                        group.add(new Facet(uriFactory.createFacetURI(baseURI, pair, getName(st.getId()),
+                                FacetType.COLLECTION), getName(st.getId()), count, FacetType.COLLECTION, st.getId()));
+                    }
+                    if (count < sizeAllImages)
+                    {
+                        pair.setNot(true);
+                        group.add(new Facet(uriFactory.createFacetURI(baseURI, pair, "No " + getName(st.getId()),
+                                FacetType.COLLECTION), "No " + getName(st.getId()), sizeAllImages - count,
+                                FacetType.COLLECTION, st.getId()));
+                    }
                 }
-                if (count < sizeAllImages)
-                {
-                    pair.setNot(true);
-                    group.add(new Facet(uriFactory.createFacetURI(baseURI, pair, "No " + getName(st.getId()),
-                            FacetType.COLLECTION), "No " + getName(st.getId()), sizeAllImages - count,
-                            FacetType.COLLECTION, st.getId()));
-                }
+                facets.add(group);
             }
-            facets.add(group);
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
         }
     }
 
@@ -121,6 +140,9 @@ public class CollectionFacets
         // return ic.search(colURI, searchQuery, new SortCriterion(), null);
     }
 
+    /*
+     * 
+     */
     public List<List<Facet>> getFacets()
     {
         return facets;

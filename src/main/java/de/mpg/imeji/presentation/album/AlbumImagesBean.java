@@ -85,10 +85,9 @@ public class AlbumImagesBean extends ImagesBean
     }
 
     @Override
-    public String initFacets() throws Exception
+    public void initFacets()
     {
         // NO FACETs FOR ALBUMS
-        return "";
     }
 
     /**

@@ -102,11 +102,17 @@ public class CollectionImagesBean extends ImagesBean
     }
 
     @Override
-    public String initFacets() throws Exception
+    public void initFacets()
     {
-        searchQuery = URLQueryTransformer.parseStringQuery(getQuery());
-        setFacets(new FacetsBean(collection, searchQuery));
-        return "";
+        try
+        {
+            searchQuery = URLQueryTransformer.parseStringQuery(getQuery());
+            setFacets(new FacetsBean(collection, searchQuery));
+        }
+        catch (Exception e)
+        {
+            logger.error("Error initialising the facets", e);
+        }
     }
 
     /**

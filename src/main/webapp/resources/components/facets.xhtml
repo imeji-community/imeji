@@ -6,11 +6,9 @@
 	<composite:interface>
 		<composite:attribute name="paginatorBean"/>
 	</composite:interface>
-	
 	<composite:implementation>
-		<!-- FACETS -->
-		<ui:fragment rendered="#{cc.attrs.paginatorBean.navigationString != 'pretty:albumBrowse'}">
-			<h:form id="facetForm">
+		<ui:fragment rendered="#{cc.attrs.paginatorBean.navigationString != 'pretty:albumBrowse'}" >
+			<h:form id="form">
 				<h:panelGroup id="facetGroup" layout="block" styleClass="imj_facetArea imj_facetGroup">
 					<ui:repeat var="groups" value="#{cc.attrs.paginatorBean.facets.facets}" varStatus="index">
 						<h:outputText value="|" styleClass="imj_facetSeparator" rendered="#{index.index > 0 }"/>
@@ -22,7 +20,30 @@
 						</ui:repeat>
 					</ui:repeat>
 				</h:panelGroup>
-			</h:form>	
+				<h:selectBooleanCheckbox id="refresh" value="false" style="display:none">
+					<f:ajax event="change" render="@form"/>
+				</h:selectBooleanCheckbox>
+				<h:selectBooleanCheckbox id="running" value="#{cc.attrs.paginatorBean.facets.running}" style="display:none">
+					<f:ajax event="change" render="@form"/>
+				</h:selectBooleanCheckbox>
+			</h:form>
+			<script>
+				/*
+				When the page is loaded...
+				*/
+				jQuery(document).ready(function() {
+					displayFacetsWhenReady();
+				});
+				/*
+				Check every second if the facets are loaded. Process is stoped when the Facets have been loaded
+				*/
+				function displayFacetsWhenReady(){
+					if(document.getElementById('facets:form:running').checked){
+						setTimeout(function() {displayFacetsWhenReady();}, 1000);
+					}
+					document.getElementById('facets:form:refresh').click();
+				}
+			</script>
 		</ui:fragment>
 	</composite:implementation>
 </html>

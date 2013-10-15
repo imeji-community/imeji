@@ -6,11 +6,8 @@
 	<composite:interface>
 		<composite:attribute name="picList"/>
 	</composite:interface>
-	
 	<composite:implementation>
-		
 		<h:panelGroup layout="block" styleClass="imj_tiledMediaList">
-			
 			<ui:fragment rendered="#{SessionBean.user != null}">
 				<div class="imj_listHeader">
 					<div class="imj_overlayMenu">
@@ -40,7 +37,6 @@
 					</div>
 				</div>
 			</ui:fragment>
-			
 			<div class="imj_listBody">
 				<ul id="ajaxList">
 					<!-- Images -->
@@ -79,10 +75,7 @@
 				</ul>
 			</div>
 		</h:panelGroup>
-		
-		
 		<div id="log"></div>
-
 		<script>
 			/*
 			Reload the page if selected images don't have the correct style
@@ -101,9 +94,6 @@
 					}
 				});
 			});
-			
 		</script>
-	
-		
 	</composite:implementation>
 </html>

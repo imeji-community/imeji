@@ -58,19 +58,9 @@
 			
 			<!-- Facets -->
 			<h:panelGroup layout="block" id="imj_ajaxFacets">
-				<imjc:facets paginatorBean="#{paginatorListSessionBean}"/>
+				<imjc:facets id="facets" paginatorBean="#{paginatorListSessionBean}"/>
 			</h:panelGroup>
-			
-			
-			<h:selectBooleanCheckbox id="facetInitialized" value="false" style="visibility:hidden" styleClass="imj_activateFacets">
-				<f:ajax event="change" execute="@this" render=":imj_ajaxFacets" listener="#{paginatorListSessionBean.initFacets}"/>
-			</h:selectBooleanCheckbox>
-			<script type="text/javascript">
-				$(function(){
-					$(".imj_activateFacets").click().remove();
-				});
-			</script>			
-			
+				
 			<!-- Page Browser GotoBox -->
 			<imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}"/>
 			

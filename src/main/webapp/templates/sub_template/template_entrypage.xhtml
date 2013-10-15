@@ -35,13 +35,19 @@
 			<ui:fragment rendered="#{currentMainMenu == 'album'}">
 				<ui:param name="logicBean" value="#{AlbumBean}"/> 
 				<ui:param name="listSize" value="#{AlbumBean.size}"/>
-			</ui:fragment> -->
+			</ui:fragment>
+			
+			<ui:fragment rendered="#{currentMainMenu == 'album'}">
+				<ui:param name="logicBean" value="#{ViewCollectionBean}"/>
+				<ui:param name="listSize" value="#{ViewCollectionBean.size}"/>
+			</ui:fragment>  -->
+			
 			</ui:remove>
 			
 			<!-- Album TODO: modify for album -->
 			<ui:fragment rendered="#{currentMainMenu == 'album'}">
-				<ui:param name="logicBean" value="#{ViewCollectionBean}"/>
-				<ui:param name="listSize" value="#{ViewCollectionBean.size}"/>
+				<ui:param name="logicBean" value="#{AlbumBean}"/>
+				<ui:param name="listSize" value="#{AlbumBean.size}"/>
 			</ui:fragment>
 			
 			

@@ -12,44 +12,54 @@
 	</composite:interface>
 	
 	<composite:implementation>
-		<h:panelGroup layout="block" styleClass="imj_entryPagePreviewTiledList">
-			<!-- MEDIA - Entry Page - Thumbnails -->
+		<h:panelGroup layout="block" styleClass="imj_entryPagePreviewTiledList">			
+			
 			<h:outputLink value="#{cc.attrs.referenceUrl}#{cc.attrs.mediaLogicBean.id}/#{cc.attrs.browsePath}?q=">
+				
+				<!-- MEDIA - Entry Page - Thumbnails -->
 				<ui:repeat var="thumb" value="#{cc.attrs.mediaLogicBean.thumbnails}">
 					<h:graphicImage styleClass="imj_entryPagePreviewTiledListItem" value="#{cc.attrs.applicationUrl}file?id=#{thumb.link}"/>
 				</ui:repeat>
 				
-				<!-- MEDIA - Link to Collection / Album -->				
-				<h:outputLink styleClass="imj_entryPagePreviewTiledListLink" value="#{cc.attrs.referenceUrl}#{cc.attrs.mediaLogicBean.id}/#{cc.attrs.browsePath}?q=" rendered="#{cc.attrs.mediaLogicBean.collection.status != 'WITHDRAWN'}">
-					<h:outputText value ="#{cc.attrs.lbl.collection_view_all_images}"/>
-					<span class="imj_entryPagePreviewTiledListLinkArrow"> </span>
-						<!-- <h:graphicImage value="/resources/imj_iconset/6CAD2F/imjArrowThinRight_23.png" styleClass="imj_entryPagePreviewTiledListLinkArrow"/> -->
-				</h:outputLink>	
+				
+				<!-- MEDIA - Link to Collection -->
+				<ui:fragment rendered="#{ViewCollectionBean.visible}">		
+					<h:outputLink styleClass="imj_entryPagePreviewTiledListLink" value="#{cc.attrs.referenceUrl}#{cc.attrs.mediaLogicBean.id}/#{cc.attrs.browsePath}?q=" rendered="#{cc.attrs.mediaLogicBean.collection.status != 'WITHDRAWN'}">
+						<h:outputText value ="#{cc.attrs.lbl.collection_view_all_images}"/>
+						<span class="imj_entryPagePreviewTiledListLinkArrow"> </span>
+							<!-- <h:graphicImage value="/resources/imj_iconset/6CAD2F/imjArrowThinRight_23.png" styleClass="imj_entryPagePreviewTiledListLinkArrow"/> -->
+					</h:outputLink>	
+				</ui:fragment>
+			
 
-				<ui:remove>
 				<!-- MEDIA - Link to Album - Check ! -->
-				<h:outputLink styleClass="imj_entryPagePreviewTiledListLink" value="#{cc.attrs.referenceUrl}#{cc.attrs.mediaLogicBean.id}/#{cc.attrs.browsePath}?q=" rendered="#{cc.attrs.mediaLogicBean.album.status != 'WITHDRAWN'}">
-					<h:outputText value ="#{cc.attrs.lbl.album_view_all_images}"/>
-					<span class="imj_entryPagePreviewTiledListLinkArrow"> </span>
-				</h:outputLink>	
-				</ui:remove>
+				<ui:fragment rendered="#{AlbumBean.visible}">
+					<h:outputLink styleClass="imj_entryPagePreviewTiledListLink" value="#{cc.attrs.referenceUrl}#{cc.attrs.mediaLogicBean.id}/#{cc.attrs.browsePath}?q=" rendered="#{cc.attrs.mediaLogicBean.album.status != 'WITHDRAWN'}">
+						<h:outputText value ="#{cc.attrs.lbl.album_view_all_images}"/>
+						<span class="imj_entryPagePreviewTiledListLinkArrow"> </span>
+					</h:outputLink>	
+				</ui:fragment>
 				 
 			</h:outputLink>	
-
-			<h:panelGroup styleClass="imj_mediaWithdrawn" rendered="#{cc.attrs.mediaLogicBean.collection.status == 'WITHDRAWN'}">
-				<h:panelGroup styleClass="big_imgArea statusIcon withdrawnItem"/>
-					<br/>
-					<h:outputText value="#{cc.attrs.lbl.withdrawn}"/>
-			</h:panelGroup>	
 			
-			<ui:remove>
+			<!-- Collection Withdrawn -->
+			<ui:fragment rendered="#{ViewCollectionBean.visible}">
+				<h:panelGroup styleClass="imj_mediaWithdrawn" rendered="#{cc.attrs.mediaLogicBean.collection.status == 'WITHDRAWN'}">
+					<h:panelGroup styleClass="big_imgArea statusIcon withdrawnItem"/>
+						<br/>
+						<h:outputText value="#{cc.attrs.lbl.withdrawn}"/>
+				</h:panelGroup>	
+			</ui:fragment>
+			
+			
 			<!-- Album Withdrawn - Check ! -->
-			<h:panelGroup styleClass="imj_mediaWithdrawn" rendered="#{cc.attrs.mediaLogicBean.album.status == 'WITHDRAWN'}">
-				<h:panelGroup styleClass="big_imgArea statusIcon withdrawnItem"/>
-					<br/>
-					<h:outputText value="#{cc.attrs.lbl.withdrawn}"/>
-			</h:panelGroup>	 
-			</ui:remove>
+			<ui:fragment rendered="#{AlbumBean.visible}">
+				<h:panelGroup styleClass="imj_mediaWithdrawn" rendered="#{cc.attrs.mediaLogicBean.album.status == 'WITHDRAWN'}">
+					<h:panelGroup styleClass="big_imgArea statusIcon withdrawnItem"/>
+						<br/>
+						<h:outputText value="#{cc.attrs.lbl.withdrawn}"/>
+				</h:panelGroup>	 
+			</ui:fragment>
 								
 		</h:panelGroup>	
 	

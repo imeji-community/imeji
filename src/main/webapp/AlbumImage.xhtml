@@ -14,11 +14,15 @@
 			<h:outputLink id="lnkViewHome" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumImageBean.albumId}">
 				<h:outputText value="#{lbl.album_home}"/>
 			</h:outputLink>
-				<h:outputText styleClass="imj_contentMenuSeparator"/>
+			
+			<h:outputText styleClass="imj_contentMenuSeparator"/>
+			
 			<h:outputLink id="lnkViewCollectionAllImages" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumImageBean.albumId}/#{Navigation.browsePath}?q=">
 				<h:outputText value="#{lbl.view_images}"/>
 			</h:outputLink>
+			
 			<h:outputText styleClass="imj_contentMenuSeparator"/>
+			
 			<h:outputLink id="lnkViewCollectionDetail" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumImageBean.albumId}/#{Navigation.infosPath}?init=1">
 				<h:outputText value="#{lbl.album_metadata}"/>
 			</h:outputLink>		

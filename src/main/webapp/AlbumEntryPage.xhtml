@@ -54,6 +54,7 @@
 			<imjc:DiscardContainer id="dialDiscardContainer" bean="#{AlbumBean}" discardComment="#{AlbumBean.album.discardComment}"/>
 		</h:panelGroup>		
 		
+
 		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/qrcode.js"/>
 		<script>
 			jQuery(document).ready(function() {
@@ -73,158 +74,284 @@
 				return qr.createImgTag();
 			};
 		</script>
+
 		
 		
 	</ui:define> <!-- ALBUM Menu END -->
 	
 	
-		<!-- <ui:remove> -->
+	
 		<!-- Temporary Workaround - for details check template_entrypage.xhtml and entryPagePreviewTiledList.xhtml -->
 		
 	<ui:define name="mainContent">
-		<!-- Breadcrumb - History -->
-		<ui:include src="include/History.xhtml"></ui:include>		
+	
+		<ui:remove>
+			<!-- Breadcrumb - History -->
+			<ui:include src="include/History.xhtml"></ui:include>		
+			
+			
+			<h:panelGroup layout="block" styleClass="full_area0 fullItem" rendered="#{!AlbumBean.visible}">
+				<ui:include src="./include/LoginFormular.xhtml" />
+			</h:panelGroup>
+		</ui:remove>
+			
+		<!-- MetaDataList - START -->
+		<div class="imj_metadataList">
 		
-		
-		<h:panelGroup layout="block" styleClass="full_area0 fullItem" rendered="#{!AlbumBean.visible}">
-		 	<ui:include src="./include/LoginFormular.xhtml" />
-		 </h:panelGroup>
-		<h:panelGroup layout="block" styleClass="full_area0" rendered="#{AlbumBean.visible}">
-			<h:panelGroup layout="block" styleClass="full_area0 fullItem">
-				<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder">
-					<ui:remove>
-					<!-- ALBUM TITLE -->
-					<h:panelGroup styleClass="full_area0_p8">
-						<h1><h:outputText value="#{AlbumBean.album.metadata.title}"/> </h1>
-					</h:panelGroup>
-					</ui:remove>
-					<h:panelGroup styleClass="full_area1_p8 small_marginLExcl">
-						<!-- ALBUM IMAGES -->
-						<h:outputLink value="#{Navigation.albumUrl}#{AlbumBean.id}/#{Navigation.browsePath}?q=" style="color:transparent;" styleClass="xTiny">
-							<f:param value="#{AlbumBean.id}"/>
-								<ui:repeat var="thumb" value="#{AlbumBean.thumbnails}" rendered="#{AlbumBean.album.status != 'WITHDRAWN'}">
-									<h:graphicImage style="padding: 5px" value="#{Navigation.applicationUrl}file?id=#{thumb.link}"/>
-								</ui:repeat>
-								<h:graphicImage styleClass="free_area0" title="Image withdrawn" rendered="#{AlbumBean.album.status == 'WITHDRAWN'}" url="../../../resources/cssFramework/themes/skin_darkGreen/images/All_Status_ItemWithdrawn_31_Static.gif"/>
-							
-							<h:outputLink  styleClass="medium_txtArea medium_marginRExcl" style="float:right;" value="#{Navigation.albumUrl}#{AlbumBean.id}/#{Navigation.browsePath}?q=" rendered="#{AlbumBean.album.status != 'WITHDRAWN'}" >
-								<h:outputText value ="#{lbl.album_view_all_images}"/> <br/>
-								<h:graphicImage value="/resources/imj_iconset/6CAD2F/imjArrowThinRight_23.png" style="float:right"/>
-							</h:outputLink>	
-						</h:outputLink>
-						
-						<h:panelGroup styleClass="free_area0" style="text-align:center;" rendered="#{AlbumBean.album.status == 'WITHDRAWN'}">
-							<h:panelGroup styleClass="big_imgArea statusIcon withdrawnItem"/>
-							<br/>
-							<h:outputText value="#{lbl.withdrawn}"/>							
-						</h:panelGroup>
-						
-					</h:panelGroup>
-					
-					<div class="full_area0 fullItem">
-						<div class="fullItemControls">
-							<h:outputLink id="lnkViewAlbumUtilPage" styleClass="free_area0 actual" value="#{AlbumBean.pageUrl}?tab=UTIL" rendered="#{AlbumBean.tab == 'UTIL'}">
-								<h:outputText value="#{lbl.view_util}"/>
-							</h:outputLink>
-							<h:outputLink id="lnkViewAlbumUtilPage2" styleClass="free_area0" value="#{AlbumBean.pageUrl}?tab=UTIL" rendered="#{AlbumBean.tab != 'UTIL'}">
-								<h:outputText value="#{lbl.view_util}"/>
-							</h:outputLink>
-							<h:panelGroup styleClass="seperator" />
-							<h:outputLink id="lnkViewAlbumPage" styleClass="free_area0 actual" value="#{AlbumBean.pageUrl}?tab=HOME" rendered="#{AlbumBean.tab != 'UTIL'}">
-								<h:outputText value="#{lbl.view_desc}"/>
-							</h:outputLink>
-							<h:outputLink id="lnkViewAlbumPage2" styleClass="free_area0" value="#{AlbumBean.pageUrl}?tab=HOME" rendered="#{AlbumBean.tab == 'UTIL'}">
-								<h:outputText value="#{lbl.view_desc}"/>
-							</h:outputLink>
-						</div>
-					</div>
+			<!-- MetaDataTypes - ListHeader - show media meta data, info, description, other -->
+			<div class="imj_listHeader">
+				<h:outputLink id="lnkViewAlbumUtilPage" styleClass="imj_active" value="#{cc.attrs.infoLogicBean.pageUrl}?tab=UTIL" rendered="#{cc.attrs.infoLogicBean.tab == 'UTIL'}">
+					<h:outputText value="#{lbl.view_util}"/>
+				</h:outputLink>
+				<h:outputLink id="lnkViewAlbumUtilPage2" styleClass="" value="#{cc.attrs.infoLogicBean.pageUrl}?tab=UTIL" rendered="#{cc.attrs.infoLogicBean.tab != 'UTIL'}">
+					<h:outputText value="#{lbl.view_util}"/>
+				</h:outputLink>
+				<h:panelGroup styleClass="imj_separator"/>
+				<h:outputLink id="lnkViewAlbumPage" styleClass="imj_active" value="#{cc.attrs.infoLogicBean.pageUrl}?tab=HOME" rendered="#{cc.attrs.infoLogicBean.tab != 'UTIL'}">
+					<h:outputText value="#{lbl.view_desc}"/>
+				</h:outputLink>
+				<h:outputLink id="lnkViewAlbumPage2" styleClass="" value="#{cc.attrs.infoLogicBean.pageUrl}?tab=HOME" rendered="#{cc.attrs.infoLogicBean.tab == 'UTIL'}">
+					<h:outputText value="#{lbl.view_desc}"/>
+				</h:outputLink>
+			</div>
+			
+			<!-- MetaDataList - LIST BODY START -->		
+			<h:panelGroup id="metadata" layout="block" styleClass="imj_listBody">
 
+				<!-- MetaDataList - Tab Description - Title -->	
+				<h:panelGroup id="description" layout="block" rendered="#{cc.attrs.infoLogicBean.tab != 'UTIL'}">
+					<h2 class="imj_entryPageTitle">
+						<!-- <h:outputText value="#{cc.attrs.infoLogicBean.album.metadata.title}"/>-->
+						<h:outputText value="#{AlbumBean.album.metadata.title}"/>
+					</h2>
+						
+					<!-- Withdrawn is in progress --> 
+					<h:panelGroup styleClass="imj_mediaWithdrawn" rendered="#{cc.attrs.infoLogicBean.album.discardComment != null and cc.attrs.infoLogicBean.album.discardComment != ''}">
+						<br/>
+						<h:outputText value="#{lbl.withdraw_comment}:"/>
+						<br/>
+						<h:outputText value="#{cc.attrs.infoLogicBean.album.discardComment}"/>
+					</h:panelGroup>						
 					
+					<!-- MetaDataList - Tab Description - Description -->	
+					<h:panelGroup>
+					<h3 class="imj_entryPageDescription">
+						<h:outputText escape="false" value="#{cc.attrs.infoLogicBean.album.formattedDescription}"/>
+					</h3>
+					</h:panelGroup>
+				</h:panelGroup>	
 					
-					<h:panelGroup styleClass="full_area0_p8" rendered="#{AlbumBean.tab != 'UTIL'}">
-						<h:panelGroup>
-							<h2>
-								<h:outputText styleClass="full_area0" value="#{AlbumBean.album.metadata.title}"/>
-							</h2>
-							<h:panelGroup styleClass="full_area0" style="color:red;" rendered="#{AlbumBean.album.status == 'WITHDRAWN'}">
+										
+				<!-- Utilities List Body - Tab Utilities -->
+				<h:panelGroup id="util" layout="block" rendered="#{cc.attrs.infoLogicBean.tab == 'UTIL'}">
+				
+					<h:panelGroup layout="block" styleClass="imj_infodataWrapper">
+					
+						<h:panelGroup layout="block" styleClass="imj_metadataSubPanel">
+							<h:outputText id="lblViewColFull_lblUtil" value="#{lbl.colUtil}" styleClass="imj_metadataSubPanelItem"/>
+						</h:panelGroup>	
+							
+						<!-- Tab Utilities - Citation -->	
+						<h:panelGroup styleClass="imj_infodataSet">
+							<span class="imj_infodataLabel">
+								<h:outputText value="#{lbl.cite}" />
+									<span class="imj_invisible">: </span>
+							</span>
+							<span class="imj_infodataValue">
+								<h:outputText value="#{cc.attrs.infoLogicBean.citation}" escape="false"/>
+							</span>
+						</h:panelGroup>	
+						
+						<!-- Tab Utilities - Creator -->
+						<h:panelGroup styleClass="imj_infodataSet">
+							<span class="imj_infodataLabel">
+								<h:outputText value="#{lbl.albumCreator}" />
+									<span class="imj_invisible">: </span>
+							</span>
+							<span class="imj_infodataValue">
+								<h:outputText value="#{cc.attrs.infoLogicBean.albumCreator.name}" escape="false"/>
+							</span>
+						</h:panelGroup>	
+						
+						<!-- Tab Utilities - Number of items -->		
+						<h:panelGroup styleClass="imj_infodataSet">
+							<span class="imj_infodataLabel">
+								<h:outputText value="#{lbl.albumNumItems}" />
+									<span class="imj_invisible">: </span>
+							</span>
+							<span class="imj_infodataValue">
+								<h:outputText value="#{cc.attrs.infoLogicBean.albumNumberOfItems}" escape="false"/>
+							</span>
+						</h:panelGroup>			
+														
+						<!-- Tab Utilities - Identifier -->
+						<h:panelGroup styleClass="imj_infodataSet">
+							<span class="imj_infodataLabel">
+								<h:outputText value="#{lbl.identifier}" />
+									<span class="imj_invisible">: </span>
+							</span>
+							<span class="imj_infodataValue">
+								<h:outputText value="#{cc.attrs.infoLogicBean.album.id}" escape="false"/>
+							</span>
+						</h:panelGroup>						
+						
+						<!-- Tab Utilities - QR-Tag --> 						
+						<h:panelGroup styleClass="imj_infodataSet">
+							<span class="imj_infodataLabel">
+								<h:outputText value="#{lbl.qrcode}" />
+								<span class="imj_invisible">: </span>
+							</span>
+							<span class="imj_infodataValue" id="qr"> </span>
+						</h:panelGroup>
+					
+					</h:panelGroup>	
+				</h:panelGroup>	
+			</h:panelGroup> <!-- END LIST BODY -->			
+		</div> <!-- END LIST -->
+	</ui:define>
+
+			
+			
+			
+		<ui:remove>
+		
+			<h:panelGroup layout="block" styleClass="full_area0" rendered="#{AlbumBean.visible}">
+				<h:panelGroup layout="block" styleClass="full_area0 fullItem">
+					<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder">
+						<ui:remove>
+						<!-- ALBUM TITLE -->
+						<h:panelGroup styleClass="full_area0_p8">
+							<h1><h:outputText value="#{AlbumBean.album.metadata.title}"/> </h1>
+						</h:panelGroup>
+						</ui:remove>
+						<h:panelGroup styleClass="full_area1_p8 small_marginLExcl">
+							<!-- ALBUM IMAGES -->
+							<h:outputLink value="#{Navigation.albumUrl}#{AlbumBean.id}/#{Navigation.browsePath}?q=" style="color:transparent;" styleClass="xTiny">
+								<f:param value="#{AlbumBean.id}"/>
+									<ui:repeat var="thumb" value="#{AlbumBean.thumbnails}" rendered="#{AlbumBean.album.status != 'WITHDRAWN'}">
+										<h:graphicImage style="padding: 5px" value="#{Navigation.applicationUrl}file?id=#{thumb.link}"/>
+									</ui:repeat>
+									<h:graphicImage styleClass="free_area0" title="Image withdrawn" rendered="#{AlbumBean.album.status == 'WITHDRAWN'}" url="../../../resources/cssFramework/themes/skin_darkGreen/images/All_Status_ItemWithdrawn_31_Static.gif"/>
+								
+								<h:outputLink  styleClass="medium_txtArea medium_marginRExcl" style="float:right;" value="#{Navigation.albumUrl}#{AlbumBean.id}/#{Navigation.browsePath}?q=" rendered="#{AlbumBean.album.status != 'WITHDRAWN'}" >
+									<h:outputText value ="#{lbl.album_view_all_images}"/> <br/>
+									<h:graphicImage value="/resources/imj_iconset/6CAD2F/imjArrowThinRight_23.png" style="float:right"/>
+								</h:outputLink>	
+							</h:outputLink>
+							
+							<h:panelGroup styleClass="free_area0" style="text-align:center;" rendered="#{AlbumBean.album.status == 'WITHDRAWN'}">
+								<h:panelGroup styleClass="big_imgArea statusIcon withdrawnItem"/>
 								<br/>
-								<h:outputText styleClass="free_area0" value="#{lbl.withdraw_comment} : "/>
-								<h:outputText styleClass="free_area0" value="#{AlbumBean.album.discardComment}"/>
+								<h:outputText value="#{lbl.withdrawn}"/>							
 							</h:panelGroup>
-							<h:panelGroup styleClass="full_area0">
-								<br/>
-								<h:outputText escape="false" value="#{AlbumBean.formattedDescription}"/>
-								<br/>
+							
+						</h:panelGroup>
+						
+						<div class="full_area0 fullItem">
+							<div class="fullItemControls">
+								<h:outputLink id="lnkViewAlbumUtilPage" styleClass="free_area0 actual" value="#{AlbumBean.pageUrl}?tab=UTIL" rendered="#{AlbumBean.tab == 'UTIL'}">
+									<h:outputText value="#{lbl.view_util}"/>
+								</h:outputLink>
+								<h:outputLink id="lnkViewAlbumUtilPage2" styleClass="free_area0" value="#{AlbumBean.pageUrl}?tab=UTIL" rendered="#{AlbumBean.tab != 'UTIL'}">
+									<h:outputText value="#{lbl.view_util}"/>
+								</h:outputLink>
+								<h:panelGroup styleClass="seperator" />
+								<h:outputLink id="lnkViewAlbumPage" styleClass="free_area0 actual" value="#{AlbumBean.pageUrl}?tab=HOME" rendered="#{AlbumBean.tab != 'UTIL'}">
+									<h:outputText value="#{lbl.view_desc}"/>
+								</h:outputLink>
+								<h:outputLink id="lnkViewAlbumPage2" styleClass="free_area0" value="#{AlbumBean.pageUrl}?tab=HOME" rendered="#{AlbumBean.tab == 'UTIL'}">
+									<h:outputText value="#{lbl.view_desc}"/>
+								</h:outputLink>
+							</div>
+						</div>
+
+						
+						
+						<h:panelGroup styleClass="full_area0_p8" rendered="#{AlbumBean.tab != 'UTIL'}">
+							<h:panelGroup>
+								<h2>
+									<h:outputText styleClass="full_area0" value="#{AlbumBean.album.metadata.title}"/>
+								</h2>
+								<h:panelGroup styleClass="full_area0" style="color:red;" rendered="#{AlbumBean.album.status == 'WITHDRAWN'}">
+									<br/>
+									<h:outputText styleClass="free_area0" value="#{lbl.withdraw_comment} : "/>
+									<h:outputText styleClass="free_area0" value="#{AlbumBean.album.discardComment}"/>
+								</h:panelGroup>
+								<h:panelGroup styleClass="full_area0">
+									<br/>
+									<h:outputText escape="false" value="#{AlbumBean.formattedDescription}"/>
+									<br/>
+								</h:panelGroup>
 							</h:panelGroup>
 						</h:panelGroup>
-					</h:panelGroup>
-					
-					<h:panelGroup id="util" styleClass="full_area0_p8" rendered="#{AlbumBean.tab == 'UTIL'}">
-					<h:panelGroup layout="block" styleClass="full_area0 itemBlock">						
-							<h3 class="xLarge_area0_p8 endline blockHeader">
-								<h:outputText id="lblViewColFull_lblUtil" value="#{lbl.colUtil}" /><br/>
-							</h3>
-							<span class="seperator"></span>
-							<h:panelGroup  styleClass="free_area0 itemBlockContent endline">
-							
-								<br/>
-								<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
-									<b class="xLarge_area0_p8 endline labelLine clear">
-										<h:outputText value="#{lbl.cite}" /> 
-										<span class="noDisplay">: </span>
-									</b>
-									<span class="xHuge_area0 xTiny_marginLExcl endline"> 
-										<h:outputText value="#{AlbumBean.citation}" escape="false"/>
-									</span>
-								</h:panelGroup>
-														
-								<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
-									<b class="xLarge_area0_p8 endline labelLine clear">
-										<h:outputText value="#{lbl.albumCreator}" /> 
-										<span class="noDisplay">: </span>
-									</b>
-									<span class="xHuge_area0 xTiny_marginLExcl endline"> 
-										<h:outputText value="#{AlbumBean.albumCreator.name}" />
-									</span>
-								</h:panelGroup>		
+						
+						<h:panelGroup id="util" styleClass="full_area0_p8" rendered="#{AlbumBean.tab == 'UTIL'}">
+						<h:panelGroup layout="block" styleClass="full_area0 itemBlock">						
+								<h3 class="xLarge_area0_p8 endline blockHeader">
+									<h:outputText id="lblViewColFull_lblUtil" value="#{lbl.colUtil}" /><br/>
+								</h3>
+								<span class="seperator"></span>
+								<h:panelGroup  styleClass="free_area0 itemBlockContent endline">
 								
-								<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
-									<b class="xLarge_area0_p8 endline labelLine clear">
-										<h:outputText value="#{lbl.albumNumItems}" /> 
-										<span class="noDisplay">: </span>
-									</b>
-									<span class="xHuge_area0 xTiny_marginLExcl endline"> 
-										<h:outputText value="#{AlbumBean.size}" />
-									</span>
-								</h:panelGroup>							
-								
-								<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
-									<b class="xLarge_area0_p8 endline labelLine clear">
-										<h:outputText value="#{lbl.identifier}" /> 
-										<span class="noDisplay">: </span>
-									</b>
-									<span class="xHuge_area0 xTiny_marginLExcl endline"> 
-										<h:outputText value="#{AlbumBean.album.id}" />
-									</span>
-								</h:panelGroup>		
+									<br/>
+									<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
+										<b class="xLarge_area0_p8 endline labelLine clear">
+											<h:outputText value="#{lbl.cite}" /> 
+											<span class="noDisplay">: </span>
+										</b>
+										<span class="xHuge_area0 xTiny_marginLExcl endline"> 
+											<h:outputText value="#{AlbumBean.citation}" escape="false"/>
+										</span>
+									</h:panelGroup>
+															
+									<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
+										<b class="xLarge_area0_p8 endline labelLine clear">
+											<h:outputText value="#{lbl.albumCreator}" /> 
+											<span class="noDisplay">: </span>
+										</b>
+										<span class="xHuge_area0 xTiny_marginLExcl endline"> 
+											<h:outputText value="#{AlbumBean.albumCreator.name}" />
+										</span>
+									</h:panelGroup>		
 									
-								<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
-									<b class="xLarge_area0_p8 endline labelLine clear">
-										<h:outputText value="#{lbl.qrcode}" /> 
-										<span class="noDisplay">: </span>
-									</b>
-									<span class="xHuge_area0 xTiny_marginLExcl endline"> 
-										<div id="qr"></div>
-									</span>
-								</h:panelGroup>
-							</h:panelGroup>						
+									<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
+										<b class="xLarge_area0_p8 endline labelLine clear">
+											<h:outputText value="#{lbl.albumNumItems}" /> 
+											<span class="noDisplay">: </span>
+										</b>
+										<span class="xHuge_area0 xTiny_marginLExcl endline"> 
+											<h:outputText value="#{AlbumBean.size}" />
+										</span>
+									</h:panelGroup>							
+									
+									<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
+										<b class="xLarge_area0_p8 endline labelLine clear">
+											<h:outputText value="#{lbl.identifier}" /> 
+											<span class="noDisplay">: </span>
+										</b>
+										<span class="xHuge_area0 xTiny_marginLExcl endline"> 
+											<h:outputText value="#{AlbumBean.album.id}" />
+										</span>
+									</h:panelGroup>		
+										
+									<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
+										<b class="xLarge_area0_p8 endline labelLine clear">
+											<h:outputText value="#{lbl.qrcode}" /> 
+											<span class="noDisplay">: </span>
+										</b>
+										<span class="xHuge_area0 xTiny_marginLExcl endline"> 
+											<div id="qr"></div>
+										</span>
+									</h:panelGroup>
+								</h:panelGroup>						
+						</h:panelGroup>
 					</h:panelGroup>
-				</h:panelGroup>
-					
+						
+					</h:panelGroup>
 				</h:panelGroup>
 			</h:panelGroup>
-		</h:panelGroup>
-	
-	</ui:define>
-		
+
+		</ui:remove>
+			
+
 </ui:composition>

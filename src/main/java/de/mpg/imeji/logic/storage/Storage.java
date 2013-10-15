@@ -92,7 +92,7 @@ public interface Storage
      * @param url
      * @param bytes
      */
-    public void update(String url, byte[] bytes);
+    public void update(String url, File file);
 
     /**
      * Return a {@link StorageAdministrator} for this {@link Storage}

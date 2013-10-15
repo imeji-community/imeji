@@ -16,8 +16,13 @@ import de.mpg.imeji.logic.search.vo.SearchMetadata;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.util.DateFormatter;
+import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;
+import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.j2j.helper.J2JHelper;
 
 /**
  * Factory to created Sparql query from a {@link SearchPair}
@@ -28,8 +33,8 @@ import de.mpg.imeji.logic.vo.User;
  */
 public class SimpleQueryFactory
 {
-    private static String PATTERN_SELECT = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 WHERE {?s a <XXX_SEARCH_TYPE_ELEMENT_XXX> . "
-            + "?s <http://imeji.org/terms/properties> ?props . ?props <http://imeji.org/terms/status> ?status XXX_SPECIFIC_QUERY_XXX XXX_SECURITY_FILTER_XXX XXX_SEARCH_ELEMENT_XXX XXX_SORT_ELEMENT_XXX} ";
+    private static String PATTERN_SELECT = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 WHERE {XXX_SEARCH_ELEMENT_XXX XXX_SPECIFIC_QUERY_XXX "
+                + "?s <http://imeji.org/terms/status> ?status  XXX_SECURITY_FILTER_XXX XXX_SORT_ELEMENT_XXX}";
 
     /**
      * Create a SPARQL query
@@ -89,15 +94,31 @@ public class SimpleQueryFactory
             return "";
             // return "FILTER(" + getSimpleFilter(pair, "status") + ")";
         }
-        else if (SearchIndex.names.col.name().equals(pair.getIndex().getName()))
+        else if (SearchIndex.names.col.name().equals(pair.getIndex().getName())
+                || SearchIndex.names.alb.name().equals(pair.getIndex().getName()))
         {
-            return " FILTER(" + getSimpleFilter(pair, "c") + ") .";
+            return " FILTER(" + getSimpleFilter(pair, SimpleSecurityQuery.getVariableName(rdfType)) + ") .";
+            // return " FILTER(" + getSimpleFilter(pair, "c") + ") .";
         }
         else if (SearchIndex.names.user.name().equals(pair.getIndex().getName()))
         {
             return "<" + pair.getValue() + ">"
-                    + " <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> "
+                    + " <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> ?"
                     + SimpleSecurityQuery.getVariableName(rdfType) + " .";
+        }
+        else if (SearchIndex.names.prof.name().equals(pair.getIndex().getName()))
+        {
+            // In case the search is for a profile
+            if (J2JHelper.getResourceNamespace(new MetadataProfile()).equals(rdfType))
+            {
+                pair.setValue(normalizeURI(MetadataProfile.class, pair.getValue()));
+                return " FILTER(" + getSimpleFilter(pair, "s") + ") . ?c <"
+                        + Search.getIndex(SearchIndex.names.prof).getNamespace() + "> ?s .";
+            }
+            else if (J2JHelper.getResourceNamespace(new CollectionImeji()).equals(rdfType))
+                searchQuery = " ?s <http://imeji.org/terms/mdprofile> ?el";
+            else if (J2JHelper.getResourceNamespace(new Item()).equals(rdfType))
+                searchQuery = " ?c <http://imeji.org/terms/mdprofile> ?el";
         }
         else if (SearchIndex.names.cont_title.name().equals(pair.getIndex().getName()))
         {
@@ -122,10 +143,6 @@ public class SimpleQueryFactory
         else if (SearchIndex.names.cont_person_org_name.name().equals(pair.getIndex().getName()))
         {
             searchQuery = " .OPTIONAL {?s <http://imeji.org/terms/container/metadata> ?cmd . OPTIONAL{?cmd <http://purl.org/escidoc/metadata/terms/0.1/creator> ?p . OPTIONAL{ ?p <http://purl.org/escidoc/metadata/profiles/0.1/organizationalunit> ?org .OPTIONAL{?org <http://purl.org/dc/elements/1.1/title> ?el}}}}";
-        }
-        else if (SearchIndex.names.profile.name().equals(pair.getIndex().getName()))
-        {
-            searchQuery = " .?s <http://imeji.org/terms/mdprofile> ?el";
         }
         else if (SearchIndex.names.type.name().equals(pair.getIndex().getName()))
         {
@@ -166,6 +183,22 @@ public class SimpleQueryFactory
                     + "> ?p" + parentNumber + " . ?p" + parentNumber;
         }
         return q;
+    }
+
+    /**
+     * If the uri has been corrupted (for instance /profile/ instead /metadataProfile/), return the correct uri
+     * 
+     * @param c
+     * @param uri
+     * @return
+     */
+    private static String normalizeURI(Class c, String uri)
+    {
+        if (isURL(uri))
+        {
+            return ObjectHelper.getURI(c, ObjectHelper.getId(URI.create(uri))).toString();
+        }
+        return uri;
     }
 
     /**
@@ -218,8 +251,7 @@ public class SimpleQueryFactory
             }
             else if (SearchIndex.names.cont_title.name().equals(sortCriterion.getIndex().getName()))
             {
-                return (item ? " . ?c" : " . ?s")
-                        + " <http://imeji.org/terms/container/metadata> ?title . ?title <"
+                return (item ? " . ?c" : " . ?s") + " <http://imeji.org/terms/container/metadata> ?title . ?title <"
                         + sortCriterion.getIndex().getNamespace() + "> ?sort0";
             }
         }

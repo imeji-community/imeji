@@ -126,9 +126,9 @@ public class StorageController
      * @param url
      * @param bytes
      */
-    public void update(String url, byte[] bytes)
+    public void update(String url, File file)
     {
-        storage.update(url, bytes);
+        storage.update(url, file);
     }
 
     /**

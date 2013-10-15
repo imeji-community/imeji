@@ -35,61 +35,81 @@ import de.mpg.imeji.presentation.util.ObjectCachedLoader;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class CollectionFacets
+public class CollectionFacets extends Facets
 {
     private SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     private FiltersSession fs = (FiltersSession)BeanHelper.getSessionBean(FiltersSession.class);
     private List<List<Facet>> facets = new ArrayList<List<Facet>>();
     private URI colURI = null;
+    private SearchQuery searchQuery;
+    private Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
+    private SearchResult allImages = ((CollectionImagesBean)BeanHelper.getSessionBean(CollectionImagesBean.class))
+            .getSearchResult();
+    private MetadataProfile profile;
 
     /**
      * Constructor for the {@link Facet}s of one {@link CollectionImeji} with one {@link SearchQuery}
      * 
      * @param col
      * @param searchQuery
-     * @throws Exception
      */
-    public CollectionFacets(CollectionImeji col, SearchQuery searchQuery) throws Exception
+    public CollectionFacets(CollectionImeji col, SearchQuery searchQuery)
     {
         this.colURI = col.getId();
-        MetadataProfile profile = ObjectCachedLoader.loadProfile(col.getProfile());
-        Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
+        this.searchQuery = searchQuery;
+        this.profile = ObjectCachedLoader.loadProfile(col.getProfile());
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see de.mpg.imeji.presentation.facet.Facets#init()
+     */
+    public void init()
+    {
         String baseURI = nav.getCollectionUrl() + ObjectHelper.getId(colURI) + "/" + nav.getBrowsePath() + "?q=";
-        // ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).init(profile);
         FacetURIFactory uriFactory = new FacetURIFactory(searchQuery);
         int count = 0;
-        SearchResult allImages = retrieveAllImages(searchQuery);
         int sizeAllImages = allImages.getNumberOfRecords();
-        for (Statement st : profile.getStatements())
+        try
         {
-            List<Facet> group = new ArrayList<Facet>();
-            if (st.isPreview() && !fs.isFilter(getName(st.getId())))
+            for (Statement st : profile.getStatements())
             {
-                SearchPair pair = new SearchPair(Search.getIndex(SearchIndex.names.statement), SearchOperators.EQUALS,
-                        st.getId().toString());
-                count = getCount(searchQuery, pair, allImages.getResults());
-                if (count > 0 || true)
+                List<Facet> group = new ArrayList<Facet>();
+                if (st.isPreview() && !fs.isFilter(getName(st.getId())))
                 {
-                    group.add(new Facet(uriFactory.createFacetURI(baseURI, pair, getName(st.getId()),
-                            FacetType.COLLECTION), getName(st.getId()), count, FacetType.COLLECTION, st.getId()));
+                    SearchPair pair = new SearchPair(Search.getIndex(SearchIndex.names.statement),
+                            SearchOperators.EQUALS, st.getId().toString());
+                    count = getCount(searchQuery, pair, allImages.getResults());
+                    if (count > 0 || true)
+                    {
+                        group.add(new Facet(uriFactory.createFacetURI(baseURI, pair, getName(st.getId()),
+                                FacetType.COLLECTION), getName(st.getId()), count, FacetType.COLLECTION, st.getId()));
+                    }
+                    if (count < sizeAllImages)
+                    {
+                        pair.setNot(true);
+                        group.add(new Facet(uriFactory.createFacetURI(baseURI, pair, "No " + getName(st.getId()),
+                                FacetType.COLLECTION), "No " + getName(st.getId()), sizeAllImages - count,
+                                FacetType.COLLECTION, st.getId()));
+                    }
                 }
-                if (count < sizeAllImages)
-                {
-                    pair.setNot(true);
-                    group.add(new Facet(uriFactory.createFacetURI(baseURI, pair, "No " + getName(st.getId()),
-                            FacetType.COLLECTION), "No " + getName(st.getId()), sizeAllImages - count,
-                            FacetType.COLLECTION, st.getId()));
-                }
+                facets.add(group);
             }
-            facets.add(group);
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
         }
     }
 
+    /**
+     * Get
+     * 
+     * @param uri
+     * @return
+     */
     public String getName(URI uri)
     {
-        // MetadataLabels metadataLabels = (MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class);
-        // String name = metadataLabels.getLabels().get(uri);
-        // return name;
         return ObjectHelper.getId(uri);
     }
 
@@ -104,7 +124,6 @@ public class CollectionFacets
     public int getCount(SearchQuery searchQuery, SearchPair pair, List<String> collectionImages)
     {
         ItemController ic = new ItemController(sb.getUser());
-        // SearchQuery sq = new SearchQuery(searchQuery.getElements());
         SearchQuery sq = new SearchQuery();
         if (pair != null)
         {
@@ -114,20 +133,12 @@ public class CollectionFacets
         return ic.search(colURI, sq, null, collectionImages).getNumberOfRecords();
     }
 
-    public SearchResult retrieveAllImages(SearchQuery searchQuery)
-    {
-        return ((CollectionImagesBean)BeanHelper.getSessionBean(CollectionImagesBean.class)).getSearchResult();
-        // ItemController ic = new ItemController(sb.getUser());
-        // return ic.search(colURI, searchQuery, new SortCriterion(), null);
-    }
-
+    /*
+     * (non-Javadoc)
+     * @see de.mpg.imeji.presentation.facet.Facets#getFacets()
+     */
     public List<List<Facet>> getFacets()
     {
         return facets;
-    }
-
-    public void setFacets(List<List<Facet>> facets)
-    {
-        this.facets = facets;
     }
 }

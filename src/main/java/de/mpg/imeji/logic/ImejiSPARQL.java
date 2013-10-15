@@ -6,10 +6,9 @@ package de.mpg.imeji.logic;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.hp.hpl.jena.query.ReadWrite;
-import com.hp.hpl.jena.update.UpdateAction;
-
+import de.mpg.j2j.transaction.SPARQLUpdateTransaction;
 import de.mpg.j2j.transaction.SearchTransaction;
+import de.mpg.j2j.transaction.ThreadedTransaction;
 
 /**
  * Manage search (sparql) transaction
@@ -72,26 +71,19 @@ public class ImejiSPARQL
     }
 
     /**
-     * execute a sparql update (this is not implemented in multi-thread manner, so only use to admin purpose)
+     * execute a sparql update
      * 
      * @param query
      */
     public static void execUpdate(String query)
     {
-        Imeji.dataset.begin(ReadWrite.WRITE);
         try
         {
-            UpdateAction.parseExecute(query, Imeji.dataset);
-            Imeji.dataset.commit();
+            ThreadedTransaction.run(new ThreadedTransaction(new SPARQLUpdateTransaction(null, query)));
         }
         catch (Exception e)
         {
-            Imeji.dataset.abort();
-            e.printStackTrace();
-        }
-        finally
-        {
-            Imeji.dataset.end();
+            throw new RuntimeException(e);
         }
     }
 }

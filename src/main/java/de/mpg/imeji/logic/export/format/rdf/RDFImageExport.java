@@ -24,7 +24,8 @@ public class RDFImageExport extends RDFExport
     private String[] filteredTriples = { "http://imeji.org/terms/metadata/pos",
             "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "http://imeji.org/terms/metadata/id",
             "http://imeji.org/terms/id", "http://imeji.org/terms/metadata/searchValue",
-            "http://purl.org/escidoc/metadata/profiles/0.1/pos", "http://imeji.org/terms/fulltext" };
+            "http://purl.org/escidoc/metadata/profiles/0.1/pos", "http://imeji.org/terms/fulltext",
+            "http://purl.org/dc/terms/creator", "http://imeji.org/terms/modifiedBy" };
 
     @Override
     public void init()

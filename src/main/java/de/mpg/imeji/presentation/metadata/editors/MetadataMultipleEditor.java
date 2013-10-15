@@ -20,6 +20,14 @@ import de.mpg.imeji.presentation.metadata.EditorItemBean;
 public class MetadataMultipleEditor extends MetadataEditor
 {
     /**
+     * Default Constructor
+     */
+    public MetadataMultipleEditor()
+    {
+        super();
+    }
+
+    /**
      * Editor for multiple edit (edit selected items or edit all items of a collection)
      * 
      * @param items
@@ -28,7 +36,7 @@ public class MetadataMultipleEditor extends MetadataEditor
      */
     public MetadataMultipleEditor(List<Item> items, MetadataProfile profile, Statement statement)
     {
-        super(items, profile, statement);
+        super(items, profile, statement, false);
     }
 
     @Override

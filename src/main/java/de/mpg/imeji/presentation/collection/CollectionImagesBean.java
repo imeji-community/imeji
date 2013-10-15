@@ -6,6 +6,8 @@ package de.mpg.imeji.presentation.collection;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
@@ -102,11 +104,19 @@ public class CollectionImagesBean extends ImagesBean
     }
 
     @Override
-    public String initFacets() throws Exception
+    public void initFacets()
     {
-        searchQuery = URLQueryTransformer.parseStringQuery(getQuery());
-        setFacets(new FacetsBean(collection, searchQuery));
-        return "";
+        try
+        {
+            searchQuery = URLQueryTransformer.parseStringQuery(getQuery());
+            setFacets(new FacetsBean(collection, searchQuery));
+            ExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+            executor.submit(getFacets());
+        }
+        catch (Exception e)
+        {
+            logger.error("Error initialising the facets", e);
+        }
     }
 
     /**

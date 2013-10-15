@@ -99,7 +99,7 @@ public class DigilibServlet extends Scaler
         storageController = new StorageController();
         InternalStorageManager ism = new InternalStorageManager();
         internalStorageBase = FilenameUtils.getBaseName(FilenameUtils.normalizeNoEndSeparator(ism.getStoragePath()));
-        // Copy tihe digilib-config.xml before initialising the digilib servlet, which needs this file
+        // Copy the digilib-config.xml before initialising the digilib servlet, which needs this file
         copyFile(getDigilibConfigPath(), config.getServletContext().getRealPath("/WEB-INF"));
         super.init(config);
     }
@@ -261,5 +261,14 @@ public class DigilibServlet extends Scaler
     private SessionBean getSession(HttpServletRequest req)
     {
         return (SessionBean)req.getSession(false).getAttribute(SessionBean.class.getSimpleName());
+    }
+    
+    /* (non-Javadoc)
+     * @see javax.servlet.GenericServlet#destroy()
+     */
+    @Override
+    public void destroy()
+    {
+        super.destroy();
     }
 }

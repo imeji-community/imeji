@@ -43,8 +43,10 @@ public class AlbumImagesBean extends ImagesBean
     private SessionBean session;
     private CollectionImeji collection;
     private Navigation navigation;
-    private List<String> itemsUris = new ArrayList<String>();
 
+    /**
+     * Constructor
+     */
     public AlbumImagesBean()
     {
         super();
@@ -85,10 +87,9 @@ public class AlbumImagesBean extends ImagesBean
     }
 
     @Override
-    public String initFacets() throws Exception
+    public void initFacets()
     {
         // NO FACETs FOR ALBUMS
-        return "";
     }
 
     /**

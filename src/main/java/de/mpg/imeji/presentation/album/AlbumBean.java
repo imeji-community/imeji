@@ -89,7 +89,7 @@ public class AlbumBean
         AlbumController ac = new AlbumController();
         this.album = (Album)ac.loadContainerItems(album, sessionBean.getUser(), -1, 0);
         description = album.getMetadata().getDescription();
-        smallDescription = description;
+        smallDescription = CommonUtils.removeTags(description);
         if (smallDescription != null && smallDescription.length() > DESCRIPTION_MAX_SIZE)
         {
             smallDescription = smallDescription.substring(0, DESCRIPTION_MAX_SIZE) + "...";

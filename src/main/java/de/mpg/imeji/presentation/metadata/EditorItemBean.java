@@ -25,9 +25,9 @@ public class EditorItemBean
      * 
      * @param item
      */
-    public EditorItemBean(Item item, MetadataProfile profile)
+    public EditorItemBean(Item item, MetadataProfile profile, boolean addEmtpyValue)
     {
-        init(item);
+        init(item, addEmtpyValue);
         this.profile = profile;
     }
 
@@ -36,10 +36,10 @@ public class EditorItemBean
      * 
      * @param item
      */
-    public void init(Item item)
+    public void init(Item item, boolean addEmtpyValue)
     {
         this.item = item;
-        mds = new MetadataSetBean(item.getMetadataSet(), true);
+        mds = new MetadataSetBean(item.getMetadataSet(), addEmtpyValue);
     }
 
     /**

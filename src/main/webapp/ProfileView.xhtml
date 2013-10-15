@@ -10,12 +10,10 @@
 		</ui:define>
 		
 		<ui:define name="contentMenu">
-			<h:outputLink id="lnkViewRelatedCollections" styleClass="free_area0" value="#{Navigation.applicationUrl}collections?q=#{ViewMdProfileBean.encodedId}">
+			<h:outputLink id="lnkViewRelatedCollections" styleClass="free_area0" value="#{Navigation.applicationUrl}collections?q=prof==&quot;#{ViewMdProfileBean.encodedId}&quot;">
 				<h:outputText value="#{lbl.profile_related_collection}"></h:outputText>
 			</h:outputLink>
 		</ui:define>			
-	
-
 		
 		<ui:define name="mainContent">
 			<h:panelGroup layout="block" styleClass="full_area0">

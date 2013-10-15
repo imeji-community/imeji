@@ -35,7 +35,7 @@ public class MetadataHelper
     {
         if (md instanceof Text)
         {
-            if (((Text)md).getText() == null || "".equals(((Text)md).getText()))
+            if (((Text)md).getText() == null || "".equals(((Text)md).getText().trim()))
                 return true;
         }
         else if (md instanceof Date)

@@ -56,9 +56,6 @@ public class AdvancedSearchBean
     public AdvancedSearchBean()
     {
         session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        operatorsMenu = new ArrayList<SelectItem>();
-        operatorsMenu.add(new SelectItem(LOGICAL_RELATIONS.AND, session.getLabel("and")));
-        operatorsMenu.add(new SelectItem(LOGICAL_RELATIONS.OR, session.getLabel("or")));
     }
 
     /**
@@ -68,6 +65,7 @@ public class AdvancedSearchBean
      */
     public String getNewSearch()
     {
+        initMenus();
         try
         {
             String query = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("q");
@@ -83,6 +81,16 @@ public class AdvancedSearchBean
             BeanHelper.error("Error initializing advanced search");
         }
         return "";
+    }
+
+    /**
+     * Init the menus of the page
+     */
+    private void initMenus()
+    {
+        operatorsMenu = new ArrayList<SelectItem>();
+        operatorsMenu.add(new SelectItem(LOGICAL_RELATIONS.AND, session.getLabel("and_small")));
+        operatorsMenu.add(new SelectItem(LOGICAL_RELATIONS.OR, session.getLabel("or_small")));
     }
 
     /**

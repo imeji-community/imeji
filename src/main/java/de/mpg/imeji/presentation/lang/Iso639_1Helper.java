@@ -13,6 +13,7 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.presentation.util.PropertyReader;
+import de.mpg.imeji.presentation.util.ProxyHelper;
 
 /**
  * Utility class for Iso638_1 languages vocabulary
@@ -44,10 +45,13 @@ public class Iso639_1Helper
     {
         try
         {
+            System.out.println("get VocabularyString");
+           
             HttpClient client = new HttpClient();
             GetMethod getMethod = new GetMethod(PropertyReader.getProperty("escidoc.cone.isos639_1.all")
                     + "?format=options");
-            client.executeMethod(getMethod);
+            //client.executeMethod(getMethod);
+            ProxyHelper.executeMethod(client, getMethod);
             return getMethod.getResponseBodyAsString();
         }
         catch (Exception e)

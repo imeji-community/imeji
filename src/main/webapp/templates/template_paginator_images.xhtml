@@ -235,7 +235,6 @@
 								var tooltip =  $(this).find("#tooltip");
 								var top =  tooltip.parent().offset().top + 150;
 								var left =  tooltip.parent().offset().left - 60;
-								
 								 $(this).find("#tooltip").css({ top: top, left: left})
 								 $(this).find("#tooltip").show();
 								 $(this).mouseleave(function(){
@@ -252,7 +251,7 @@
 		<!-- FACETS -->
 		<h:form id="facetForm">
 			<h:panelGroup layout="block" styleClass="full_area0 preListHeader">
-				<h:panelGroup id="facetGroup" layout="block" styleClass="third_area1_p8 small_marginLIncl" rendered="#{ paginatorListSessionBean.navigationString != 'pretty:albumBrowse'}">
+				<h:panelGroup id="facetGroup" layout="block" styleClass="third_area1_p8 small_marginLIncl" rendered="#{paginatorListSessionBean.navigationString != 'pretty:albumBrowse'}">
 					<ui:repeat var="groups" value="#{paginatorListSessionBean.facets.facets}" rowKeyVar="index">
 						<h:panelGroup layout="block" style="margin:0 0.9090em;" styleClass="free_area0">
 							<ui:repeat var="facets" value="#{groups}" rowKeyVar="index">
@@ -265,13 +264,14 @@
 					</ui:repeat>
 				</h:panelGroup>
 			</h:panelGroup>
-			
-			<h:selectBooleanCheckbox id="facetInitialized" value="false" style="visibility:hidden">
-				<f:ajax event="change" execute="@this" render=":facetForm:facetGroup" listener="#{paginatorListSessionBean.initFacets}"/>
+			<h:selectBooleanCheckbox id="facetsRefresh" value="false" style="display:none">
+				<f:ajax event="change" render="@form"/>
+			</h:selectBooleanCheckbox>
+			<h:selectBooleanCheckbox id="facetsRunning" value="#{paginatorListSessionBean.facets.running}" style="display:none">
+				<f:ajax event="change" render="@form"/>
 			</h:selectBooleanCheckbox>
 		</h:form>
 		<div id="log"></div>
-
 		<script>
 			/*
 			Reload the page if selected images don't have the correct style
@@ -280,7 +280,6 @@
 			jQuery(document).ready(function() {
 				var $checkbox = jQuery(".fullBrowse input:checkbox");
 				var $images = jQuery(".fullBrowse .itemTile");
-				
 				$images.each(function(i){
 					var $selectBox = jQuery(".shiftCheckbox", this);
 					var $style = jQuery(".matrixItem", this);
@@ -290,14 +289,21 @@
 					}
 				});
 			});
-			
 			/*
-			Initialize the facets
+			When the page is loaded...
 			*/
 			jQuery(document).ready(function() {
-				document.getElementById('facetForm:facetInitialized').click();
+				displayFacetsWhenReady();
 			});
-
+			/*
+			Check every second if the facets are loaded. Process is stoped when the Facets have been loaded
+			*/
+			function displayFacetsWhenReady(){
+				if(document.getElementById('facetForm:facetsRunning').checked){
+					setTimeout(function() {displayFacetsWhenReady();}, 1000);
+					}
+				document.getElementById('facetForm:facetsRefresh').click();
+				}
 		</script>
 	</ui:define>
 </ui:composition>

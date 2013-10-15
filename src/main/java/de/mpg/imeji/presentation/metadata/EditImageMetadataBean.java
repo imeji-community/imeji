@@ -46,7 +46,10 @@ public class EditImageMetadataBean
 {
     // objects
     private List<Item> allItems;
+    // The Metadateditor which is used to edit
     private MetadataEditor editor = null;
+    // The editor before the user made any modification
+    private MetadataEditor noChangesEditor = null;
     private MetadataProfile profile = null;
     private Statement statement = null;
     /**
@@ -94,6 +97,7 @@ public class EditImageMetadataBean
             initEditor(new ArrayList<Item>(allItems));
             ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).init(profile);
             initialized = true;
+            noChangesEditor = editor.clone();
         }
         catch (Exception e)
         {
@@ -196,7 +200,6 @@ public class EditImageMetadataBean
             {
                 initEmtpyEditorItem();
                 editor = new MetadataMultipleEditor(items, profile, getSelectedStatement());
-                lockImages(items);
                 ((SuggestBean)BeanHelper.getSessionBean(SuggestBean.class)).init(profile);
             }
             else
@@ -222,7 +225,7 @@ public class EditImageMetadataBean
     {
         Item emtpyItem = new Item();
         emtpyItem.getMetadataSets().add(ImejiFactory.newMetadataSet(profile.getId()));
-        editorItem = new EditorItemBean(emtpyItem, profile);
+        editorItem = new EditorItemBean(emtpyItem, profile, true);
         editorItem.getMds().addEmtpyValues();
     }
 
@@ -271,7 +274,9 @@ public class EditImageMetadataBean
     {
         statement = getSelectedStatement();
         // Reset the original items
-        initEditor(new ArrayList<Item>(allItems));
+        // initEditor(new ArrayList<Item>(allItems));
+        // initEmtpyEditorItem();
+        editor = noChangesEditor.clone();
         return "";
     }
 
@@ -444,7 +449,6 @@ public class EditImageMetadataBean
             eib.clear(statement);
             eib.getMds().addEmtpyValues();
         }
-        
         return "";
     }
 
@@ -554,6 +558,11 @@ public class EditImageMetadataBean
         return null;
     }
 
+    /**
+     * True if the {@link Statement} can be edited
+     * @param st
+     * @return
+     */
     public boolean isEditableStatement(Statement st)
     {
         URI lastParent = ProfileHelper.getLastParent(st, profile);

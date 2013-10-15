@@ -384,7 +384,15 @@ public class ItemController extends ImejiController
     private void removeFileFromStorage(String id)
     {
         StorageController storageController = new StorageController();
-        storageController.delete(id);
+        try
+        {
+            storageController.delete(id);
+        }
+        catch(Exception e)
+        {
+            logger.error("error deleting file" , e);
+        }
+       
     }
 
     /**

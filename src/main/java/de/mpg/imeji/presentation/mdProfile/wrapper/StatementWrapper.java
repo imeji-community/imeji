@@ -198,6 +198,14 @@ public class StatementWrapper implements Comparable<StatementWrapper>
     }
 
     /**
+     * Is called when the user select a statement or a language in the drop down list
+     */
+    public void select()
+    {
+        // do nothing
+    }
+
+    /**
      * Listener for the preview select box
      * 
      * @param event

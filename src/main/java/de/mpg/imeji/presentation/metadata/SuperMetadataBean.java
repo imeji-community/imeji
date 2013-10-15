@@ -3,6 +3,8 @@ package de.mpg.imeji.presentation.metadata;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.faces.event.ValueChangeEvent;
 
@@ -17,6 +19,7 @@ import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
+import de.mpg.imeji.presentation.util.CommonUtils;
 import de.mpg.imeji.presentation.util.SearchAndExportHelper;
 
 /**
@@ -51,11 +54,8 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
      * All the childs of the metadata
      */
     private List<SuperMetadataBean> childs = new ArrayList<SuperMetadataBean>();
-    /**
-     * True if the {@link Metadata} has no value defined
-     */
-    private boolean empty = false;
     private boolean preview = true;
+    private boolean toNull = false;
     // All possible fields defined for a metadata:
     private String text;
     private Person person;
@@ -72,6 +72,10 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
     private double number = Double.NaN;
     private String license = null;
     private URI externalUri;
+    /**
+     * A field where it is possible to define many other fields
+     */
+    private String customField;
 
     /**
      * Bean for all Metadata types. This bean should have all variable that have been defined in all metadata types.
@@ -82,9 +86,9 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
     {
         ObjectHelper.copyAllFields(metadata, this);
         this.metadata = metadata;
-        this.empty = MetadataHelper.isEmpty(metadata);
         this.preview = statement.isPreview();
         this.statement = statement;
+        this.customField = CommonUtils.toStringCustomField(metadata);
     }
 
     /**
@@ -135,6 +139,61 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
         ObjectHelper.copyAllFields(copyEmpty(), this);
     }
 
+    /**
+     * Listener that check when a select menu has been set to null
+     * 
+     * @param vce
+     */
+    public void predefinedValueListener(ValueChangeEvent vce)
+    {
+        Object newValue = vce.getNewValue();
+        if (newValue == null)
+        {
+            clear();
+            toNull = true;
+        }
+        else if (newValue instanceof String)
+            patternParser((String)newValue);
+    }
+
+    /**
+     * Parse the input for a pattern like: uri:http://url.com, and set the value (in this case the uri value)
+     * 
+     * @param s
+     */
+    private void patternParser(String s)
+    {
+        String uriString = CommonUtils.extractFieldValue("uri", s);
+        String nameString = CommonUtils.extractFieldValue("name", s);
+        String longString = CommonUtils.extractFieldValue("long", s);
+        String latString = CommonUtils.extractFieldValue("lat", s);
+        if (uriString != null)
+        {
+            uri = URI.create(uriString);
+            externalUri = URI.create(uriString);
+        }
+        if (nameString != null)
+        {
+            this.label = nameString;
+            this.name = nameString;
+            this.license = nameString;
+        }
+        if (longString != null)
+            this.longitude = Double.parseDouble(longString);
+        if (latString != null)
+            this.latitude = Double.parseDouble(latString);
+        toNull = uriString != null || nameString != null || longString != null || latString != null;
+        if (!toNull)
+        {
+            name = s;
+            label = s;
+            license = s;
+        }
+    }
+
+    /**
+     * Citation for a citation uri
+     */
     public void citationUriListener()
     {
         citation = SearchAndExportHelper.getCitation((Publication)metadata);
@@ -177,7 +236,8 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
      */
     public void setText(String text)
     {
-        this.text = text;
+        if (!toNull)
+            this.text = text;
     }
 
     /**
@@ -237,7 +297,8 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
      */
     public void setUri(URI uri)
     {
-        this.uri = uri;
+        if (!toNull)
+            this.uri = uri;
     }
 
     /**
@@ -277,12 +338,15 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
      */
     public void setDate(String date)
     {
-        if (date != null && !"".equals(date))
+        if (!toNull)
         {
-            time = DateFormatter.getTime(date);
+            if (date != null && !"".equals(date))
+            {
+                time = DateFormatter.getTime(date);
+                this.date = date;
+            }
             this.date = date;
         }
-        this.date = date;
     }
 
     /**
@@ -342,7 +406,8 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
      */
     public void setName(String name)
     {
-        this.name = name;
+        if (!toNull)
+            this.name = name;
     }
 
     /**
@@ -402,7 +467,8 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
      */
     public void setNumber(double number)
     {
-        this.number = number;
+        if (!toNull)
+            this.number = number;
     }
 
     /**
@@ -422,7 +488,25 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
      */
     public void setLicense(String license)
     {
-        this.license = license;
+        if (!toNull)
+            this.license = license;
+    }
+
+    /**
+     * @return the externalUri
+     */
+    public URI getExternalUri()
+    {
+        return externalUri;
+    }
+
+    /**
+     * @param externalUri the externalUri to set
+     */
+    public void setExternalUri(URI externalUri)
+    {
+        if (!toNull)
+            this.externalUri = externalUri;
     }
 
     /**
@@ -443,22 +527,6 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
     public void setPos(int pos)
     {
         this.pos = pos;
-    }
-
-    /**
-     * @return the externalUri
-     */
-    public URI getExternalUri()
-    {
-        return externalUri;
-    }
-
-    /**
-     * @param externalUri the externalUri to set
-     */
-    public void setExternalUri(URI externalUri)
-    {
-        this.externalUri = externalUri;
     }
 
     /**
@@ -631,5 +699,22 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
     public void setTreeIndex(String treeIndex)
     {
         this.treeIndex = treeIndex;
+    }
+
+    /**
+     * @return the customField
+     */
+    public String getCustomField()
+    {
+        return customField;
+    }
+
+    /**
+     * @param customField the customField to set
+     */
+    public void setCustomField(String customField)
+    {
+        if (!toNull)
+            this.customField = customField;
     }
 }

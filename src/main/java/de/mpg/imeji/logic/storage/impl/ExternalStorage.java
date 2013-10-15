@@ -125,7 +125,7 @@ public class ExternalStorage implements Storage
      * @see de.mpg.imeji.logic.storage.Storage#update(java.lang.String, byte[])
      */
     @Override
-    public void update(String url, byte[] bytes)
+    public void update(String url, File file)
     {
         // TODO Auto-generated method stub
     }

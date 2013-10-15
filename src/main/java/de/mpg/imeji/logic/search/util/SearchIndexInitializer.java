@@ -71,8 +71,10 @@ public class SearchIndexInitializer
          * Collection indexes
          */
         indexes = put(indexes, new SearchIndex(SearchIndex.names.col.name(), "http://imeji.org/terms/collection"));
-        indexes = put(indexes, new SearchIndex(SearchIndex.names.prof.name(), "http://imeji.org/terms/mdprofile",
-                indexes.get(SearchIndex.names.col.name())));
+        /**
+         * Album indexes
+         */
+        indexes = put(indexes, new SearchIndex(SearchIndex.names.alb.name(), "http://imeji.org/terms/album"));
         /**
          * Container metadata indexes
          */
@@ -109,7 +111,7 @@ public class SearchIndexInitializer
         /**
          * Metadata profile indexes
          */
-        indexes = put(indexes, new SearchIndex(SearchIndex.names.profile.name(), "http://imeji.org/terms/mdprofile"));
+        indexes = put(indexes, new SearchIndex(SearchIndex.names.prof.name(), "http://imeji.org/terms/mdprofile"));
         /**
          * Image Metadata indexes
          */

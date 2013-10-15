@@ -19,8 +19,8 @@ import javax.faces.model.SelectItem;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.security.Security;
-import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.vo.Metadata;
+import de.mpg.imeji.logic.vo.Metadata.Types;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
@@ -31,7 +31,6 @@ import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectCachedLoader;
-import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.UrlHelper;
 import de.mpg.j2j.misc.LocalizedString;
 
@@ -99,7 +98,8 @@ public class MdProfileBean
         }
         if (UrlHelper.getParameterBoolean("init"))
         {
-            loadtemplates();
+            if (profile.getStatements().isEmpty())
+                loadtemplates();
             initStatementWrappers(profile);
         }
         return "";
@@ -117,6 +117,23 @@ public class MdProfileBean
             mdTypesMenu.add(new SelectItem(t.getClazzNamespace(), ((SessionBean)BeanHelper
                     .getSessionBean(SessionBean.class)).getLabel("facet_" + t.name().toLowerCase())));
         }
+    }
+
+    /**
+     * Return the label of a {@link Types}
+     * 
+     * @param uri
+     * @return
+     */
+    public String getTypeLabel(String uri)
+    {
+        for (Metadata.Types t : Metadata.Types.values())
+        {
+            if (t.getClazzNamespace().equals(uri))
+                return ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("facet_"
+                        + t.name().toLowerCase());
+        }
+        return uri;
     }
 
     /**
@@ -194,33 +211,6 @@ public class MdProfileBean
     }
 
     /**
-     * Change the template, when the user select one
-     * 
-     * @return
-     * @throws Exception
-     */
-    public String changeTemplate() throws Exception
-    {
-        profile.getStatements().clear();
-        MetadataProfile tp = ObjectLoader.loadProfile(URI.create(this.template), sessionBean.getUser());
-        if (!tp.getStatements().isEmpty())
-        {
-            profile.setStatements(tp.getStatements());
-        }
-        else
-        {
-            profile.getStatements().add(ImejiFactory.newStatement());
-        }
-        for (Statement s : profile.getStatements())
-        {
-            s.setId(IdentifierUtil.newURI(Statement.class));
-        }
-        collectionSession.setProfile(profile);
-        initStatementWrappers(profile);
-        return getNavigationString();
-    }
-
-    /**
      * Check all profile elements, and return true if all are valid. Error messages are logged for the user to help him
      * to find why is profile not valid
      * 
@@ -283,8 +273,10 @@ public class MdProfileBean
         {
             this.template = event.getNewValue().toString();
             MetadataProfile tp = ObjectCachedLoader.loadProfile(URI.create(this.template));
-            profile.getStatements().clear();
-            profile.setStatements(tp.getStatements());
+            if (tp.getStatements().isEmpty())
+                profile.getStatements().add(ImejiFactory.newStatement());
+            else
+                profile.setStatements(tp.clone().getStatements());
             collectionSession.setProfile(profile);
             initStatementWrappers(profile);
         }
@@ -1015,5 +1007,13 @@ public class MdProfileBean
     public int getDraggedStatementPosition()
     {
         return draggedStatementPosition;
+    }
+
+    public String getMdTypesMenuAsString()
+    {
+        String s = "";
+        for (SelectItem si : mdTypesMenu)
+            s += si.getValue() + "," + si.getLabel() + "|";
+        return s;
     }
 }

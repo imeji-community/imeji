@@ -25,21 +25,44 @@ import de.mpg.imeji.presentation.image.ImagesBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
-public class TechnicalFacets
+/**
+ * Initiliaze all technical {@link Facet}
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
+public class TechnicalFacets extends Facets
 {
     private SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     private FiltersSession fs = (FiltersSession)BeanHelper.getSessionBean(FiltersSession.class);
     private List<List<Facet>> facets = new ArrayList<List<Facet>>();
+    private SearchQuery searchQuery;
+    private SearchResult allImages = ((ImagesBean)BeanHelper.getSessionBean(ImagesBean.class)).getSearchResult();
+    private String baseURI = ((Navigation)BeanHelper.getApplicationBean(Navigation.class)).getBrowseUrl() + "?q=";
 
+    /**
+     * Constructor
+     * 
+     * @param searchQuery
+     */
     public TechnicalFacets(SearchQuery searchQuery)
     {
+        this.searchQuery = searchQuery;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see de.mpg.imeji.presentation.facet.Facets#init()
+     * 
+     */
+    @Override
+    public void init()
+    {
         FacetURIFactory uriFactory = new FacetURIFactory(searchQuery);
-        Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-        String baseURI = nav.getBrowseUrl() + "?q=";
         List<Facet> techFacets = new ArrayList<Facet>();
         try
         {
-            SearchResult allImages = retrieveAllImages(searchQuery);
             int count = 0;
             int sizeAllImages = allImages.getNumberOfRecords();
             if (sizeAllImages > 0)
@@ -139,6 +162,10 @@ public class TechnicalFacets
         return ic.search(null, sq, null, allImages).getNumberOfRecords();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see de.mpg.imeji.presentation.facet.Facets#getFacets()
+     */
     public List<List<Facet>> getFacets()
     {
         return facets;

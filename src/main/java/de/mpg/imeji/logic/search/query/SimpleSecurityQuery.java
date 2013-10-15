@@ -52,7 +52,8 @@ public class SimpleSecurityQuery
             return " .FILTER(?status=<" + Status.RELEASED.getUri() + ">) . ?s a <" + rdfType + ">";
         }
         // else, check the grant and add the status filter...
-        return getUserGrantsAsFilter(user, rdfType) + statusFilter + " . ?s a <" + rdfType + "> ";
+        // return getUserGrantsAsFilter(user, rdfType) + statusFilter + " . ?s a <" + rdfType + "> ";
+        return getUserGrantsAsFilterSimple(user, rdfType) + statusFilter + " . ?s a <" + rdfType + "> ";
     }
 
     /**
@@ -71,6 +72,23 @@ public class SimpleSecurityQuery
         {
             return " . FILTER (?status=<" + status.getUri() + ">)";
         }
+    }
+
+    /**
+     * Simple Security query (is experimental, must be tested)
+     * 
+     * @param user
+     * @param rdfType
+     * @return
+     */
+    private static String getUserGrantsAsFilterSimple(User user, String rdfType)
+    {
+        if (user.isAdmin())
+            return "";
+        return ". OPTIONAL{ <" + user.getId()
+                + "> <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> " + "?"
+                + getVariableName(rdfType)
+                + "} . filter(bound(?g) || ?status=<http://imeji.org/terms/status#RELEASED>)";
     }
 
     /**
@@ -99,7 +117,7 @@ public class SimpleSecurityQuery
                     {
                         privileges += " || ";
                     }
-                    privileges += getVariableName(rdfType) + "=<" + g.getGrantFor() + ">";
+                    privileges += "?" + getVariableName(rdfType) + "=<" + g.getGrantFor() + ">";
                     count++;
                 }
                 else if (GrantType.SYSADMIN.equals(g.asGrantType()))
@@ -127,14 +145,13 @@ public class SimpleSecurityQuery
     public static String getVariableName(String rdfType)
     {
         if (J2JHelper.getResourceNamespace(new CollectionImeji()).equals(rdfType)
-                || J2JHelper.getResourceNamespace(new Album()).equals(rdfType)
-                || J2JHelper.getResourceNamespace(new MetadataProfile()).equals(rdfType))
+                || J2JHelper.getResourceNamespace(new Album()).equals(rdfType))
         {
-            return "?s";
+            return "s";
         }
         else
         {
-            return "?c";
+            return "c";
         }
     }
 }

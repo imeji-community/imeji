@@ -20,6 +20,7 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
 import de.mpg.j2j.exceptions.NotFoundException;
 
 /**
@@ -111,6 +112,7 @@ public class IngestItemController
 
     /**
      * Copy the {@link Metadata} of mds1 into mds2, if: <br/>
+     * - the {@link Metadata} is not emtpy <br/>
      * - the {@link Metadata} doens't exist in mds2 <br/>
      * - the {@link Metadata} exists and has the same {@link Statement} in mds2
      * 
@@ -123,16 +125,19 @@ public class IngestItemController
         List<Metadata> l = new ArrayList<Metadata>();
         for (Metadata md : mds1.getMetadata())
         {
-            Metadata copyTo = findMetadata(md.getId(), mds2);
-            if (copyTo == null)
+            if (!MetadataHelper.isEmpty(md))
             {
-                // If the metadata doesn't exist, give it a new id
-                md.setId(IdentifierUtil.newURI(Metadata.class));
-                l.add(md);
-            }
-            else if (copyTo != null && copyTo.getStatement().compareTo(md.getStatement()) == 0)
-            {
-                l.add(md);
+                Metadata copyTo = findMetadata(md.getId(), mds2);
+                if (copyTo == null)
+                {
+                    // If the metadata doesn't exist, give it a new id
+                    md.setId(IdentifierUtil.newURI(Metadata.class));
+                    l.add(md);
+                }
+                else if (copyTo != null && copyTo.getStatement().compareTo(md.getStatement()) == 0)
+                {
+                    l.add(md);
+                }
             }
         }
         mds2.setMetadata(l);

@@ -26,6 +26,7 @@ import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
+import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
@@ -453,7 +454,14 @@ public class URLQueryTransformer
      */
     private static String searchLogicalRelation2PrettyQuery(SearchLogicalRelation rel)
     {
-        return " " + rel.getLogicalRelation().name() + " ";
+        SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        switch (rel.getLogicalRelation())
+        {
+            case AND:
+                return " " + session.getLabel("and_big") + " ";
+            default:
+                return " " + session.getLabel("or_big") + " ";
+        }
     }
 
     /**
@@ -495,11 +503,12 @@ public class URLQueryTransformer
      */
     private static String removeUseLessLogicalOperation(String q)
     {
+        SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         if (q.endsWith(" "))
             q = q.substring(0, q.length() - 1);
-        if (q.endsWith(" AND"))
+        if (q.endsWith(" " + session.getLabel("and_big")))
             q = q.substring(0, q.length() - 4);
-        if (q.endsWith(" OR"))
+        if (q.endsWith(" " + session.getLabel("or_big")))
             q = q.substring(0, q.length() - 3);
         return q;
     }

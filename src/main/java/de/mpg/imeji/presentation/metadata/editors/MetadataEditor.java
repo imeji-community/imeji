@@ -39,16 +39,23 @@ public abstract class MetadataEditor
      * @param items
      * @param statement
      */
-    public MetadataEditor(List<Item> itemList, MetadataProfile profile, Statement statement)
+    public MetadataEditor(List<Item> itemList, MetadataProfile profile, Statement statement, boolean addEmtpyValue)
     {
         this.statement = statement;
         this.profile = profile;
         items = new ArrayList<EditorItemBean>();
         for (Item item : itemList)
         {
-            items.add(new EditorItemBean(item, profile));
+            items.add(new EditorItemBean(item, profile, addEmtpyValue));
         }
         initialize();
+    }
+
+    /**
+     * Default editor
+     */
+    public MetadataEditor()
+    {
     }
 
     /**
@@ -59,6 +66,18 @@ public abstract class MetadataEditor
         items = new ArrayList<EditorItemBean>();
         statement = null;
         profile = null;
+    }
+
+    /**
+     * Clone as a {@link MetadataMultipleEditor}
+     */
+    public MetadataEditor clone()
+    {
+        MetadataEditor editor = new MetadataMultipleEditor();
+        editor.setItems(items);
+        editor.setProfile(profile);
+        editor.setStatement(statement);
+        return editor;
     }
 
     /**

@@ -5,6 +5,7 @@ package de.mpg.imeji.presentation.facet;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -18,9 +19,25 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class FacetsBean
+public class FacetsBean implements Callable<Boolean>
 {
     private List<List<Facet>> facets = new ArrayList<List<Facet>>();
+    private boolean running = false;
+    private Facets facetsClass;
+
+    /*
+     * (non-Javadoc)
+     * @see java.util.concurrent.Callable#call()
+     */
+    @Override
+    public Boolean call() throws Exception
+    {
+        running = true;
+        facetsClass.init();
+        facets = facetsClass.getFacets();
+        running = false;
+        return running;
+    }
 
     /**
      * Initialize the {@link FacetsBean} for one {@link SearchQuery} from the item browse page
@@ -31,7 +48,7 @@ public class FacetsBean
     {
         try
         {
-            facets = new TechnicalFacets(searchQuery).getFacets();
+            facetsClass = new TechnicalFacets(searchQuery);
         }
         catch (Exception e)
         {
@@ -51,7 +68,7 @@ public class FacetsBean
     {
         try
         {
-            facets = new CollectionFacets(col, searchQuery).getFacets();
+            facetsClass = new CollectionFacets(col, searchQuery);
         }
         catch (Exception e)
         {
@@ -61,13 +78,32 @@ public class FacetsBean
         }
     }
 
+    /**
+     * getter
+     * 
+     * @return
+     */
     public List<List<Facet>> getFacets()
     {
         return facets;
     }
 
+    /**
+     * setter
+     * 
+     * @param facets
+     */
     public void setFacets(List<List<Facet>> facets)
     {
         this.facets = facets;
+    }
+
+
+    /**
+     * @return the running
+     */
+    public boolean isRunning()
+    {
+        return running;
     }
 }

@@ -29,7 +29,7 @@ public class SimpleImageEditor extends MetadataEditor
      */
     public SimpleImageEditor(List<Item> items, MetadataProfile profile, Statement statement)
     {
-        super(items, profile, statement);
+        super(items, profile, statement, true);
     }
 
     /**
@@ -41,7 +41,7 @@ public class SimpleImageEditor extends MetadataEditor
      */
     public SimpleImageEditor(Item item, MetadataProfile profile, Statement statement)
     {
-        super(Arrays.asList(item), profile, statement);
+        super(Arrays.asList(item), profile, statement, true);
     }
 
     @Override

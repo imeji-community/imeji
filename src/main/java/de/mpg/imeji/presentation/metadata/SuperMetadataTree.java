@@ -173,14 +173,16 @@ public class SuperMetadataTree
     public List<SuperMetadataBean> getChilds(String parentIndex)
     {
         List<SuperMetadataBean> childs = new ArrayList<SuperMetadataBean>();
-        for (SuperMetadataBean smb : getList())
+        // for (SuperMetadataBean smb : getList())
+        for (SuperMetadataBean smb : map.values())
             if (isParent(parentIndex, smb.getTreeIndex()))
                 childs.add(smb);
         return childs;
     }
 
     /**
-     * True if the index1 is a parent of the index2 (not necessary the direct parent)
+     * True if the index1 is a parent of the index2 (not necessary the direct parent):<br/>
+     *  - 1 is parent of all index 1,....
      * 
      * @param index1
      * @param index2
@@ -188,7 +190,7 @@ public class SuperMetadataTree
      */
     private boolean isParent(String index1, String index2)
     {
-        return index2.startsWith(index1) && index1.length() < index2.length();
+        return index2.startsWith(index1 + ",") && index1.length() < index2.length();
     }
 
     /**
@@ -249,7 +251,23 @@ public class SuperMetadataTree
         @Override
         public int compare(SuperMetadataBean md1, SuperMetadataBean md2)
         {
-            return md1.getTreeIndex().compareTo(md2.getTreeIndex());
+            String[] index1 = md1.getTreeIndex().split(",");
+            String[] index2 = md2.getTreeIndex().split(",");
+            int minLength = (index1.length < index2.length ? index1.length : index2.length);
+            for (int i = 0; i < minLength; i++)
+            {
+                int v1 = Integer.parseInt(index1[i]);
+                int v2 = Integer.parseInt(index2[i]);
+                if (v1 > v2)
+                    return 1;
+                else if (v1 < v2)
+                    return -1;
+            }
+            if (index1.length > index2.length)
+                return 1;
+            else if (index1.length < index2.length)
+                return -1;
+            return 0;
         }
     }
 
@@ -286,7 +304,8 @@ public class SuperMetadataTree
         List<SuperMetadataBean> candidates = new ArrayList<SuperMetadataBean>();
         // the position in the list of metadata with the same statement
         int position = 0;
-        // When the current child is found in the list, set to true
+        // When the current statement (i.e the child for which we are searching the parent) is found in the list, set to
+        // true
         boolean found = false;
         // Find all candidates
         for (SuperMetadataBean md : list)

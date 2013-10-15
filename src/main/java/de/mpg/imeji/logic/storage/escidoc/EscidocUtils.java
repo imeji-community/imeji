@@ -263,7 +263,7 @@ public class EscidocUtils
      */
     public static String getNewEscidocUserHandle() throws IOException, URISyntaxException, Exception
     {
-        return LoginHelper.login(PropertyReader.getProperty("imeji.escidoc.user"),
+        return LoginHelper.loginInEscidoc(PropertyReader.getProperty("imeji.escidoc.user"),
                 PropertyReader.getProperty("imeji.escidoc.password"));
     }
 }

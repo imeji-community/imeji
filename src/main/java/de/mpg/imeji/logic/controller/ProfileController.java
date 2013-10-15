@@ -178,6 +178,20 @@ public class ProfileController extends ImejiController
     }
 
     /**
+     * Search for a profile
+     * 
+     * @param query
+     * @param user
+     * @return
+     */
+    public SearchResult search(SearchQuery query, User user)
+    {
+        Search search = new Search(SearchType.PROFILE, null);
+        SearchResult result = search.search(query, null, user);
+        return result;
+    }
+
+    /**
      * Search all profile allowed for the current user. Not sorted.
      * 
      * @return

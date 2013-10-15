@@ -20,7 +20,8 @@ public class RDFCollectionExport extends RDFExport
 {
     private String[] filteredTriples = { "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
             "http://purl.org/escidoc/metadata/profiles/0.1/pos", "http://imeji.org/terms/id",
-            "http://imeji.org/terms/metadata/id" };
+            "http://imeji.org/terms/metadata/id", "http://purl.org/dc/terms/creator",
+            "http://imeji.org/terms/modifiedBy" };
 
     @Override
     public void init()

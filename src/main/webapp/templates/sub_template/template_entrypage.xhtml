@@ -4,57 +4,19 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:imjc="http://java.sun.com/jsf/composite/components">
-	
-	<ui:define name="init">
-		<h:outputText value="#{imageBean.init}"/>
-	</ui:define>
-	
 	<!-- Main Content - Entry Page -->
-	<ui:define name="mainContent">		
-		
+	<ui:define name="mainContent">	
 			<!-- Breadcrumb - History -->
-			<ui:include src="../../include/History.xhtml"></ui:include>				
-				
+			<ui:include src="../../include/History.xhtml"/>
 			<!-- Login Formular -->
-			<h:panelGroup layout="block" styleClass="full_area0 fullItem" rendered="#{!ViewCollectionBean.visible}">
+			<h:panelGroup layout="block" styleClass="full_area0 fullItem" rendered="#{!logicBean.visible}">
 				<ui:include src="../../include/LoginFormular.xhtml"/>
 			</h:panelGroup>
-			<h:outputText value=""/>
-			
-			<!-- Collection -->
-			<ui:fragment rendered="#{currentMainMenu == 'collection'}">
-				<ui:param name="logicBean" value="#{ViewCollectionBean}"/>
-				<ui:param name="listSize" value="#{ViewCollectionBean.size}"/>
-			</ui:fragment>
-			
-			<ui:remove>
-			<!-- Album TODO: modify for album - AlbumBean is not working here - produces conflict in entryPagePreviewTiledList.xhtml ! 
-				ERROR: The class 'de.mpg.imeji.presentation.collection.ViewCollectionBean' does not have the property 'album'. 
-				ERROR: /resources/components/entryPagePreviewTiledList.xhtml @23,225 rendered="#{cc.attrs.mediaLogicBean.collection.status != 'WITHDRAWN'}": The class 'de.mpg.imeji.presentation.album.AlbumBean' does not have the property 'collection'.
-						
-			<ui:fragment rendered="#{currentMainMenu == 'album'}">
-				<ui:param name="logicBean" value="#{AlbumBean}"/> 
-				<ui:param name="listSize" value="#{AlbumBean.size}"/>
-			</ui:fragment>
-			
-			<ui:fragment rendered="#{currentMainMenu == 'album'}">
-				<ui:param name="logicBean" value="#{ViewCollectionBean}"/>
-				<ui:param name="listSize" value="#{ViewCollectionBean.size}"/>
-			</ui:fragment>  -->
-			
-			</ui:remove>
-			
-			<!-- Album TODO: modify for album -->
-			<ui:fragment rendered="#{currentMainMenu == 'album'}">
-				<ui:param name="logicBean" value="#{AlbumBean}"/>
-				<ui:param name="listSize" value="#{AlbumBean.size}"/>
-			</ui:fragment>
-			
-			
 			<!-- EntryPagePreviewTiledList -->
 			<ui:fragment rendered="#{logicBean.visible}">
 				<ui:fragment rendered="#{listSize != 0}">
-					<imjc:entryPagePreviewTiledList mediaLogicBean="#{logicBean}" lbl="#{lbl}" referenceUrl="#{Navigation.collectionUrl}" applicationUrl="#{Navigation.applicationUrl}" browsePath="#{Navigation.browsePath}"/>
+					<imjc:entryPagePreviewTiledList mediaLogicBean="#{logicBean}" lbl="#{lbl}" referenceUrl="#{Navigation.collectionUrl}" 
+					applicationUrl="#{Navigation.applicationUrl}" browsePath="#{Navigation.browsePath}"/>
 				</ui:fragment>
 				<ui:fragment rendered="#{listSize == null or listSize == 0}">
 					<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{imageBean.image == null}">
@@ -62,10 +24,7 @@
 					</h:panelGroup>
 				</ui:fragment>
 			</ui:fragment>
-			
 			<!-- EntryPageTabList -->
-			<imjc:entryPageTabList infoLogicBean="#{logicBean}" applicationUrl="#{Navigation.applicationUrl}" lbl="#{lbl}"/>
-
+			<imjc:entryPageTabList infoLogicBean="#{logicBean}" applicationUrl="#{Navigation.applicationUrl}" lbl="#{lbl}" />
 	</ui:define>	
-
 </ui:composition>

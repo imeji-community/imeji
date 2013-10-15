@@ -4,10 +4,10 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:imjc="http://java.sun.com/jsf/composite/components">
-	
-	<ui:param name="imageBean" value="#{imageBean}"/>
 	<ui:param name="headline" value="#{ViewCollectionBean.collection.metadata.title}"/>
 	<ui:param name="currentMainMenu" value="collection"/>
+	<ui:param name="logicBean" value="#{ViewCollectionBean}"/>
+	<ui:param name="listSize" value="#{ViewCollectionBean.size}"/>
 	
 	<ui:define name="actionsMenu">
 	

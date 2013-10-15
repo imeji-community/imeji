@@ -43,8 +43,10 @@ public class AlbumImagesBean extends ImagesBean
     private SessionBean session;
     private CollectionImeji collection;
     private Navigation navigation;
-    private List<String> itemsUris = new ArrayList<String>();
 
+    /**
+     * Constructor
+     */
     public AlbumImagesBean()
     {
         super();

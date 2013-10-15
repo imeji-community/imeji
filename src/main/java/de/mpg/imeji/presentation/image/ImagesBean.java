@@ -308,10 +308,8 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         try
         {
             this.setFacets(new FacetsBean(URLQueryTransformer.parseStringQuery(query)));
-            System.out.println("calling");
             ExecutorService executor = Executors.newSingleThreadScheduledExecutor();
             executor.submit(facets);
-            System.out.println("submitted");
         }
         catch (Exception e)
         {

@@ -6,10 +6,6 @@ package de.mpg.imeji.presentation.facet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -26,7 +22,6 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 public class FacetsBean implements Callable<Boolean>
 {
     private List<List<Facet>> facets = new ArrayList<List<Facet>>();
-    private boolean loaded = false;
     private boolean running = false;
     private Facets facetsClass;
 
@@ -37,14 +32,11 @@ public class FacetsBean implements Callable<Boolean>
     @Override
     public Boolean call() throws Exception
     {
-        System.out.println("loading");
         running = true;
         facetsClass.init();
         facets = facetsClass.getFacets();
-        loaded = true;
         running = false;
-        System.out.println("Done");
-        return loaded;
+        return running;
     }
 
     /**
@@ -56,7 +48,6 @@ public class FacetsBean implements Callable<Boolean>
     {
         try
         {
-            loaded = false;
             facetsClass = new TechnicalFacets(searchQuery);
         }
         catch (Exception e)
@@ -77,7 +68,6 @@ public class FacetsBean implements Callable<Boolean>
     {
         try
         {
-            loaded = false;
             facetsClass = new CollectionFacets(col, searchQuery);
         }
         catch (Exception e)
@@ -108,14 +98,6 @@ public class FacetsBean implements Callable<Boolean>
         this.facets = facets;
     }
 
-    /**
-     * @return the loaded
-     */
-    public boolean isLoaded()
-    {
-        System.out.println(loaded);
-        return loaded;
-    }
 
     /**
      * @return the running

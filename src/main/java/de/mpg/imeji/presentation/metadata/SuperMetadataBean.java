@@ -3,8 +3,6 @@ package de.mpg.imeji.presentation.metadata;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.faces.event.ValueChangeEvent;
 
@@ -56,6 +54,7 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
     private List<SuperMetadataBean> childs = new ArrayList<SuperMetadataBean>();
     private boolean preview = true;
     private boolean toNull = false;
+    private boolean fetchCitation = false;
     // All possible fields defined for a metadata:
     private String text;
     private Person person;
@@ -100,6 +99,11 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
     {
         ObjectHelper.copyAllFields(this, metadata);
         MetadataHelper.setConeID(metadata);
+        if (fetchCitation)
+        {
+            System.out.println("DASASDASD");
+            ((Publication)metadata).setCitation(SearchAndExportHelper.getCitation((Publication)metadata));
+        }
         return metadata;
     }
 
@@ -192,11 +196,11 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
     }
 
     /**
-     * Citation for a citation uri
+     * Called if a publication has been changed
      */
-    public void citationUriListener()
+    public void citationListener()
     {
-        citation = SearchAndExportHelper.getCitation((Publication)metadata);
+        fetchCitation = true;
     }
 
     /**

@@ -1,16 +1,7 @@
 package de.mpg.imeji.presentation.util;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URLEncoder;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URLEncodedUtils;
-
-import com.ocpsoft.pretty.faces.url.URLPatternParser;
 
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;

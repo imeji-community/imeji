@@ -67,21 +67,21 @@
 		<!-- METADATA TYPE PUBLICATION -->
 		<h:panelGroup layout="block" class="#{areaClass}" rendered="#{metadata.typeNamespace=='http://imeji.org/terms/metadata#publication'}">
 			<h:inputText id="inputPublicationURI" styleClass="full_txtInput" value="#{metadata.uri}"  rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}" 
-			onfocus="this.select(); getDatasourceUrl('#{statement.vocabulary}', '#{Navigation.autocompleteUrl}')" valueChangeListener="#{metadata.citationUriListener}">
+			onfocus="this.select(); getDatasourceUrl('#{statement.vocabulary}', '#{Navigation.autocompleteUrl}')" valueChangeListener="#{metadata.citationListener}">
 				<f:converter converterId="URIConverter" />
 			</h:inputText>
 			<h:selectOneMenu styleClass="#{areaClass}" immediate="true" value="#{metadata.uri}" rendered="#{SuggestBean.suggests[statement.id].hasRestrictedValues}">
 				<f:selectItems value="#{SuggestBean.suggests[statement.id].restrictedValues}"/>
 			</h:selectOneMenu>
 			<h:outputLabel value="#{lbl.export_formats}" styleClass="xHuge_label"/>
-			<h:selectOneMenu value="#{metadata.exportFormat}" styleClass="xLarge_select" valueChangeListener="#{metadata.citationUriListener}">
+			<h:selectOneMenu value="#{metadata.exportFormat}" styleClass="xLarge_select" valueChangeListener="#{metadata.citationListener}">
 				<f:selectItem itemLabel="APA" itemValue="APA"></f:selectItem>
 				<f:selectItem itemLabel="AJP" itemValue="AJP"></f:selectItem>
 				<f:selectItem itemLabel="JUS" itemValue="JUS"></f:selectItem>
 			</h:selectOneMenu>
 		</h:panelGroup>
 		<!-- METADATA TYPE DATE -->
-		<h:panelGroup  layout="block" class="#{areaClass}" rendered="#{metadata.typeNamespace =='http://imeji.org/terms/metadata#date' and !SuggestBean.suggests[statement.id].hasRestrictedValues}">
+		<h:panelGroup layout="block" class="#{areaClass}" rendered="#{metadata.typeNamespace =='http://imeji.org/terms/metadata#date' and !SuggestBean.suggests[statement.id].hasRestrictedValues}">
 			<h:inputText styleClass="full_txtInput" value="#{metadata.date}" immediate="false" onfocus="getDatasourceUrl('#{statement.vocabulary}', '#{Navigation.autocompleteUrl}');"/>
 			<h:outputLabel value="YYYY-MM-DD" styleClass="medium_label"/>		
 		</h:panelGroup>

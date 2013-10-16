@@ -35,7 +35,7 @@ public class Publication extends Metadata
     @j2jResource("http://imeji.org/terms/uri")
     private URI uri;
     @j2jLiteral("http://imeji.org/terms/citationStyle")
-    private String exportFormat;
+    private String exportFormat = "APA";
     @j2jLiteral("http://imeji.org/terms/citation")
     private String citation;
     @j2jResource("http://imeji.org/terms/statement")

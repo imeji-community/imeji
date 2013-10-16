@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
+import com.hp.hpl.jena.sparql.util.StringUtils;
+
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchMetadata;
@@ -34,7 +38,7 @@ import de.mpg.j2j.helper.J2JHelper;
 public class SimpleQueryFactory
 {
     private static String PATTERN_SELECT = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 WHERE {XXX_SEARCH_ELEMENT_XXX XXX_SPECIFIC_QUERY_XXX "
-                + "?s <http://imeji.org/terms/status> ?status  XXX_SECURITY_FILTER_XXX XXX_SORT_ELEMENT_XXX}";
+            + "?s <http://imeji.org/terms/status> ?status  XXX_SECURITY_FILTER_XXX XXX_SORT_ELEMENT_XXX}";
 
     /**
      * Create a SPARQL query
@@ -278,7 +282,7 @@ public class SimpleQueryFactory
             switch (pair.getOperator())
             {
                 case REGEX:
-                    filter += "regex(" + variable + ", '" + pair.getValue() + "', 'i')";
+                    filter += "regex(" + variable + ", '" + escapeApostroph(pair.getValue()) + "', 'i')";
                     break;
                 case EQUALS:
                     filter += variable + "=" + getSearchValueInSPARQL(pair.getValue());
@@ -328,7 +332,7 @@ public class SimpleQueryFactory
         {
             return "'" + Double.valueOf(str) + "'^^<http://www.w3.org/2001/XMLSchema#double>";
         }
-        return "'" + str + "'";
+        return "'" + escapeApostroph(str) + "'";
     }
 
     /**
@@ -420,8 +424,19 @@ public class SimpleQueryFactory
             {
                 filter += " || ";
             }
-            filter += "regex(?" + variable + ", '" + str + "', 'i')";
+            filter += "regex(?" + variable + ", '" + escapeApostroph(str) + "', 'i')";
         }
         return filter.trim();
+    }
+
+    /**
+     * Escape the Apostroph in String
+     * 
+     * @param s
+     * @return
+     */
+    private static String escapeApostroph(String s)
+    {
+        return s.replace("'", "\\'");
     }
 }

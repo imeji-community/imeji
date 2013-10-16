@@ -45,8 +45,6 @@ public class Iso639_1Helper
     {
         try
         {
-            System.out.println("get VocabularyString");
-           
             HttpClient client = new HttpClient();
             GetMethod getMethod = new GetMethod(PropertyReader.getProperty("escidoc.cone.isos639_1.all")
                     + "?format=options");

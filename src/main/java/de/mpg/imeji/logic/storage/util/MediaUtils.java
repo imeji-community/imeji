@@ -3,25 +3,17 @@
  */
 package de.mpg.imeji.logic.storage.util;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.net.URISyntaxException;
-import java.util.Enumeration;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
-import org.apache.log4j.lf5.util.StreamUtils;
 import org.im4java.core.ConvertCmd;
 import org.im4java.core.IM4JavaException;
 import org.im4java.core.IMOperation;
-import org.im4java.core.IdentifyCmd;
 import org.im4java.core.Info;
-import org.im4java.process.ArrayListOutputConsumer;
-import org.im4java.process.OutputConsumer;
 
 import de.mpg.imeji.presentation.util.PropertyReader;
 
@@ -124,13 +116,19 @@ public class MediaUtils
      * @throws IM4JavaException
      * @throws URISyntaxException
      */
-    public static String findColorSpace(File tmp) throws IOException, InterruptedException, IM4JavaException,
-            URISyntaxException
+    public static String findColorSpace(File tmp)
     {
-        Info imageInfo = new Info(tmp.getAbsolutePath());
-        String cs = imageInfo.getProperty("Colorspace");
-        if (cs != null)
-            return cs;
+        try
+        {
+            Info imageInfo = new Info(tmp.getAbsolutePath());
+            String cs = imageInfo.getProperty("Colorspace");
+            if (cs != null)
+                return cs;
+        }
+        catch (Exception e)
+        {
+            logger.error("No color space found!", e);
+        }
         return "RGB";
     }
 

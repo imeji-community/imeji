@@ -54,7 +54,7 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
     private List<SuperMetadataBean> childs = new ArrayList<SuperMetadataBean>();
     private boolean preview = true;
     private boolean toNull = false;
-    private boolean fetchCitation = false;
+    private boolean resetCitation = false;
     // All possible fields defined for a metadata:
     private String text;
     private Person person;
@@ -97,13 +97,10 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
      */
     public Metadata asMetadata()
     {
+        if(resetCitation)
+            resetCitation();
         ObjectHelper.copyAllFields(this, metadata);
         MetadataHelper.setConeID(metadata);
-        if (fetchCitation)
-        {
-            System.out.println("DASASDASD");
-            ((Publication)metadata).setCitation(SearchAndExportHelper.getCitation((Publication)metadata));
-        }
         return metadata;
     }
 
@@ -196,14 +193,6 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
     }
 
     /**
-     * Called if a publication has been changed
-     */
-    public void citationListener()
-    {
-        fetchCitation = true;
-    }
-
-    /**
      * Retun the id (last part of the {@link URI}) of the {@link Statement}. Used for GUI representation
      * 
      * @return
@@ -211,6 +200,26 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
     public String getStatementId()
     {
         return ObjectHelper.getId(getStatement().getId());
+    }
+
+    /**
+     * JSF listener when a citation has been changed
+     */
+    public void resetCitationListener()
+    {
+        System.out.println("listener");
+        resetCitation = true;
+    }
+
+    /**
+     * Reset the citation of a publication
+     * 
+     * @param smb
+     */
+    public void resetCitation()
+    {
+        citation = SearchAndExportHelper.getCitation(uri, exportFormat);
+        System.out.println(citation);
     }
 
     /**

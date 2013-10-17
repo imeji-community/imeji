@@ -14,7 +14,6 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.SearchAndExportHelper;
 
 /**
  * Uitlity class to {@link Metadata}
@@ -100,23 +99,6 @@ public class MetadataHelper
                         + " CONE ID");
             }
             ((ConePerson)md).setConeId(null);
-        }
-        return md;
-    }
-
-    /**
-     * Use the search and export interface of PubMan to set a styled citation, if none found, set the link as citation
-     * 
-     * @param md
-     * @return
-     */
-    public static Metadata setCitationForPublication(Metadata md)
-    {
-        if (md instanceof Publication)
-        {
-            String citation = SearchAndExportHelper.getCitation((Publication)md);
-            if (citation != null)
-                ((Publication)md).setCitation(citation);
         }
         return md;
     }

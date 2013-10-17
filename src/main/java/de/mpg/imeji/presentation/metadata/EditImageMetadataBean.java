@@ -560,6 +560,7 @@ public class EditImageMetadataBean
 
     /**
      * True if the {@link Statement} can be edited
+     * 
      * @param st
      * @return
      */

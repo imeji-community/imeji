@@ -213,7 +213,7 @@ public class ImageBean
         labels.init(profile);
         return "";
     }
-
+    
     /**
      * Return and URL encoded version of the filename
      * 

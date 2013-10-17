@@ -24,7 +24,7 @@ public class CommonUtils
             return string;
         }
         Matcher m = REMOVE_TAGS.matcher(string);
-        return m.replaceAll("");
+        return m.replaceAll("").trim();
     }
 
     /**

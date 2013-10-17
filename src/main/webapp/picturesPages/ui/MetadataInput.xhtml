@@ -54,7 +54,7 @@
 		<!-- METADATA TYPE LINK -->
 		<h:panelGroup layout="block" class="#{areaClass}" rendered="#{metadata.typeNamespace =='http://imeji.org/terms/metadata#link'}">
 				<h:outputLabel value="#{lbl.title}" styleClass="free_label " rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}"/>
-				<h:inputText id="inputLinkLabel" styleClass="full_txtInput" value="#{metadata.label}" immediate="true"  rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}" onfocus="this.select(); getDatasourceUrl('#{statement.vocabulary}','#{Navigation.autocompleteUrl}')"/>
+				<h:inputText id="inputLinkLabel" styleClass="full_txtInput" value="#{metadata.label}" immediate="false"  rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}" onfocus="this.select(); getDatasourceUrl('#{statement.vocabulary}','#{Navigation.autocompleteUrl}')"/>
 				<h:outputLabel value="#{lbl.url}" styleClass="free_label" rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}"/>
 				<h:inputText id="inputURI" styleClass="full_txtInput" value="#{metadata.uri}" rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}" onfocus="this.select();">
 					<f:converter converterId="URIConverter" />
@@ -67,17 +67,19 @@
 		<!-- METADATA TYPE PUBLICATION -->
 		<h:panelGroup layout="block" class="#{areaClass}" rendered="#{metadata.typeNamespace=='http://imeji.org/terms/metadata#publication'}">
 			<h:inputText id="inputPublicationURI" styleClass="full_txtInput" value="#{metadata.uri}"  rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}" 
-			onfocus="this.select(); getDatasourceUrl('#{statement.vocabulary}', '#{Navigation.autocompleteUrl}')" valueChangeListener="#{metadata.citationListener}">
+			onfocus="this.select(); getDatasourceUrl('#{statement.vocabulary}', '#{Navigation.autocompleteUrl}')" valueChangeListener="#{metadata.resetCitationListener}">
 				<f:converter converterId="URIConverter" />
+				<f:ajax listener="#{metadata.resetCitationListener}" immediate="true"/>
 			</h:inputText>
-			<h:selectOneMenu styleClass="#{areaClass}" immediate="true" value="#{metadata.uri}" rendered="#{SuggestBean.suggests[statement.id].hasRestrictedValues}">
+			<h:selectOneMenu styleClass="#{areaClass}" immediate="false" value="#{metadata.uri}" rendered="#{SuggestBean.suggests[statement.id].hasRestrictedValues}">
 				<f:selectItems value="#{SuggestBean.suggests[statement.id].restrictedValues}"/>
 			</h:selectOneMenu>
 			<h:outputLabel value="#{lbl.export_formats}" styleClass="xHuge_label"/>
-			<h:selectOneMenu value="#{metadata.exportFormat}" styleClass="xLarge_select" valueChangeListener="#{metadata.citationListener}">
+			<h:selectOneMenu value="#{metadata.exportFormat}" styleClass="xLarge_select">
 				<f:selectItem itemLabel="APA" itemValue="APA"></f:selectItem>
 				<f:selectItem itemLabel="AJP" itemValue="AJP"></f:selectItem>
 				<f:selectItem itemLabel="JUS" itemValue="JUS"></f:selectItem>
+				<f:ajax listener="#{metadata.resetCitationListener}" />
 			</h:selectOneMenu>
 		</h:panelGroup>
 		<!-- METADATA TYPE DATE -->

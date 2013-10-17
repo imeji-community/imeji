@@ -33,9 +33,8 @@ public class SearchAndExportHelper
      * @param publication
      * @return
      */
-    public static String getCitation(Publication publication)
+    public static String getCitation(URI uri, String format)
     {
-        URI uri = publication.getUri();
         if (uri != null)
         {
             URI searchAndExportUri = URI.create("http://" + uri.getHost() + "/search/SearchAndExport");
@@ -51,8 +50,7 @@ public class SearchAndExportHelper
                     String exportUri = searchAndExportUri.toString()
                             + "?cqlQuery="
                             + URLEncoder.encode("escidoc.objid=" + itemId + " or escidoc.property.version.objid="
-                                    + itemId, "UTF-8") + "&exportFormat=" + publication.getExportFormat()
-                            + "&outputFormat=html_linked";
+                                    + itemId, "UTF-8") + "&exportFormat=" + format + "&outputFormat=html_linked";
                     GetMethod method = new GetMethod(exportUri);
                     client.executeMethod(method);
                     return method.getResponseBodyAsString();

@@ -73,7 +73,7 @@
 							</h:panelGroup>
 							<h:panelGroup rendered="#{EditImageMetadataBean.editType != 'selected'}" styleClass="full_area0">
 								<h:commandButton styleClass="free_area1_p8 cancelButton"  action="#{EditImageMetadataBean.cancel}" value=" #{lbl.cancel}"/>
-								<h:commandButton styleClass="free_area1_p8 activeButton small_marginRExcl"  onclick="openDialog('dialogWait');" immediate="true" action="#{EditImageMetadataBean.addToAllSaveAndRedirect}" value=" #{lbl.save}"/>
+								<h:commandButton styleClass="free_area1_p8 activeButton small_marginRExcl"  onclick="openDialog('dialogWait');" action="#{EditImageMetadataBean.addToAllSaveAndRedirect}" value=" #{lbl.save}"/>
 							</h:panelGroup>	
 						</h:panelGroup>
 						<h:panelGroup styleClass="full_area0_p8 preListHeader"  rendered="#{EditImageMetadataBean.editType == 'selected'}">
@@ -105,7 +105,7 @@
 				        					<h:panelGroup rendered="#{EditImageMetadataBean.isEditableStatement(md.statement)}">
 				        						<!-- Field -->
 				        						<ui:include src="./picturesPages/ui/MetadataInput.xhtml">
-													<ui:param name="metadata" value="#{md}"/>
+				        							<ui:param name="metadata" value="#{md}"/>											
 													<ui:param name="statement" value="#{md.statement}"/>
 													<ui:param name="areaClass" value="quad_txtArea"/>
 													<ui:param name="hideLabel" value="false"/>

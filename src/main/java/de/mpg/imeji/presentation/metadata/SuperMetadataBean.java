@@ -15,7 +15,6 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
 import de.mpg.imeji.presentation.util.CommonUtils;
 import de.mpg.imeji.presentation.util.SearchAndExportHelper;
@@ -207,7 +206,6 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
      */
     public void resetCitationListener()
     {
-        System.out.println("listener");
         resetCitation = true;
     }
 
@@ -219,7 +217,6 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
     public void resetCitation()
     {
         citation = SearchAndExportHelper.getCitation(uri, exportFormat);
-        System.out.println(citation);
     }
 
     /**

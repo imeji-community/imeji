@@ -29,6 +29,8 @@
 package de.mpg.imeji.logic.storage.transform.impl;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -53,19 +55,12 @@ public class SimpleAudioImageGenerator implements ImageGenerator
      * @see de.mpg.imeji.logic.storage.transform.ImageGenerator#generateJPG(byte[], java.lang.String)
      */
     @Override
-    public byte[] generateJPG(File file, String extension)
+    public byte[] generateJPG(File file, String extension) throws IOException, URISyntaxException
     {
         if (StorageUtils.getMimeType(extension).contains("audio"))
         {
-            try
-            {
-                return FileUtils.readFileToByteArray(new File(XuggleImageGenerator.class.getClassLoader()
-                        .getResource(PATH_TO_AUDIO_ICON).toURI()));
-            }
-            catch (Exception e)
-            {
-                logger.debug("Error reading audio icon file", e);
-            }
+            return FileUtils.readFileToByteArray(new File(XuggleImageGenerator.class.getClassLoader()
+                    .getResource(PATH_TO_AUDIO_ICON).toURI()));
         }
         return null;
     }

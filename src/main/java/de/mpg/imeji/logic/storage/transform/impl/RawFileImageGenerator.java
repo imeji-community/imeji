@@ -34,6 +34,9 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 import javax.imageio.ImageIO;
 import javax.imageio.stream.FileImageInputStream;
@@ -70,20 +73,13 @@ public class RawFileImageGenerator implements ImageGenerator
      * @see de.mpg.imeji.logic.storage.transform.ImageGenerator#generateJPG(byte[], java.lang.String)
      */
     @Override
-    public byte[] generateJPG(File file, String extension)
+    public byte[] generateJPG(File file, String extension) throws FileNotFoundException, IOException,
+            URISyntaxException
     {
-        try
-        {
-            BufferedImage icon = ImageIO.read(new FileImageInputStream(new File(RawFileImageGenerator.class
-                    .getClassLoader().getResource(PATH_TO_DEFAULT_IMAGE).toURI())));
-            icon = writeTextOnImage(icon, extension);
-            return ImageUtils.toBytes(icon, StorageUtils.getMimeType("jpg"));
-        }
-        catch (Exception e)
-        {
-            logger.debug("Error reading default image file", e);
-        }
-        return null;
+        BufferedImage icon = ImageIO.read(new FileImageInputStream(new File(RawFileImageGenerator.class
+                .getClassLoader().getResource(PATH_TO_DEFAULT_IMAGE).toURI())));
+        icon = writeTextOnImage(icon, extension);
+        return ImageUtils.toBytes(icon, StorageUtils.getMimeType("jpg"));
     }
 
     /**

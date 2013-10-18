@@ -29,8 +29,12 @@
 package de.mpg.imeji.logic.storage.transform.impl;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import org.apache.log4j.Logger;
+
+import com.sun.pdfview.PDFParseException;
 
 import de.mpg.imeji.logic.storage.transform.ImageGenerator;
 import de.mpg.imeji.logic.storage.util.PdfUtils;
@@ -52,17 +56,10 @@ public class PdfImageGenerator implements ImageGenerator
      * @see de.mpg.imeji.logic.storage.transform.ImageGenerator#generateJPG(byte[], java.lang.String)
      */
     @Override
-    public byte[] generateJPG(File file, String extension)
+    public byte[] generateJPG(File file, String extension) throws FileNotFoundException, PDFParseException, IOException
     {
-        try
-        {
-            if (StorageUtils.getMimeType(extension).equals("application/pdf"))
-                return PdfUtils.pdfsToImageBytes(file);
-        }
-        catch (Exception e)
-        {
-            logger.debug("Error transforming a pdf to an image", e);
-        }
+        if (StorageUtils.getMimeType(extension).equals("application/pdf"))
+            return PdfUtils.pdfsToImageBytes(file);
         return null;
     }
 }

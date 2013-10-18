@@ -29,6 +29,8 @@
 package de.mpg.imeji.logic.storage.transform.impl;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import org.apache.log4j.Logger;
 
@@ -52,18 +54,11 @@ public class XuggleImageGenerator implements ImageGenerator
      * @see de.mpg.imeji.logic.storage.transform.ImageGenerator#generateJPG(byte[], java.lang.String)
      */
     @Override
-    public byte[] generateJPG(File file, String extension)
+    public byte[] generateJPG(File file, String extension) throws FileNotFoundException, IOException
     {
         if (StorageUtils.getMimeType(extension).contains("video"))
         {
-            try
-            {
-                return VideoUtils.videoToImageBytes(file);
-            }
-            catch (Exception e)
-            {
-                logger.warn("Error transforming a video file to an image with xuggle", e);
-            }
+            return VideoUtils.videoToImageBytes(file);
         }
         return null;
     }

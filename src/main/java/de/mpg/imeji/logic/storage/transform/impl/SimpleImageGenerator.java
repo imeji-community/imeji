@@ -51,17 +51,10 @@ public class SimpleImageGenerator implements ImageGenerator
      * @see de.mpg.imeji.logic.storage.transform.ImageGenerator#generate(byte[], java.lang.String, int, int)
      */
     @Override
-    public byte[] generateJPG(File file, String extension)
+    public byte[] generateJPG(File file, String extension) throws IOException
     {
         if (StorageUtils.getMimeType(extension).contains("image"))
-            try
-            {
-                return ImageUtils.toJpeg(FileUtils.readFileToByteArray(file), StorageUtils.getMimeType(extension));
-            }
-            catch (IOException e)
-            {
-                throw new RuntimeException(e);
-            }
+            return ImageUtils.toJpeg(FileUtils.readFileToByteArray(file), StorageUtils.getMimeType(extension));
         return null;
     }
 }

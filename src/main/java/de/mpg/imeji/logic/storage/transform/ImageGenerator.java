@@ -48,5 +48,5 @@ public interface ImageGenerator
      * @param extension
      * @return
      */
-    public byte[] generateJPG(File file, String extension);
+    public byte[] generateJPG(File file, String extension) throws Exception;
 }

@@ -29,8 +29,11 @@
 package de.mpg.imeji.logic.storage.transform.impl;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 import org.apache.log4j.Logger;
+import org.im4java.core.IM4JavaException;
 
 import de.mpg.imeji.logic.storage.transform.ImageGenerator;
 import de.mpg.imeji.logic.storage.util.MediaUtils;
@@ -68,19 +71,11 @@ public class MagickImageGenerator implements ImageGenerator
      * @see de.mpg.imeji.logic.storage.transform.ImageGenerator#generateJPG(byte[], java.lang.String)
      */
     @Override
-    public byte[] generateJPG(File file, String extension)
+    public byte[] generateJPG(File file, String extension) throws IOException, URISyntaxException, InterruptedException, IM4JavaException
     {
         if (enabled)
         {
-            try
-            {
-                return MediaUtils.convertToJPEG(file, extension);
-            }
-            catch (Exception e)
-            {
-                logger.warn("Error transforming image with imagemagick", e);
-                return null;
-            }
+            return MediaUtils.convertToJPEG(file, extension);
         }
         return null;
     }

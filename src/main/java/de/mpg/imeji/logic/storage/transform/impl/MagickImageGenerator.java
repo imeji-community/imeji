@@ -79,6 +79,7 @@ public class MagickImageGenerator implements ImageGenerator
             catch (Exception e)
             {
                 logger.warn("Error transforming image with imagemagick", e);
+                return null;
             }
         }
         return null;

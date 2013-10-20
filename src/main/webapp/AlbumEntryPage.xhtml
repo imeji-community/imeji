@@ -4,12 +4,14 @@
 	xmlns:h="http://java.sun.com/jsf/html" 
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:imjc="http://java.sun.com/jsf/composite/components">
+	
 	<ui:param name="headline" value="#{AlbumBean.album.metadata.title}"/>
 	<ui:param name="currentMainMenu" value="album"/>
 	<ui:param name="logicBean" value="#{AlbumBean}"/>
 	<ui:param name="listSize" value="#{AlbumBean.size}"/>
 	
 	<ui:define name="actionsMenu">
+	
 		<!-- Album - content menu starts here -->	
 		<h:panelGroup rendered="#{AlbumBean.visible}">
 			<div class="imj_contentMenu">
@@ -25,6 +27,7 @@
 			</div>
 		</h:panelGroup>
 		<!-- content menu END -->	
+		
 		<!-- content sub-menu starts here -->
 		<h:panelGroup layout="block" styleClass="imj_contentSubMenu">
 			<h:panelGroup>
@@ -48,7 +51,9 @@
 				<ui:param name="bean" value="#{AlbumBean}"/>
 			</ui:include>
 			<imjc:DiscardContainer id="dialDiscardContainer" bean="#{AlbumBean}" discardComment="#{AlbumBean.album.discardComment}"/>
-		</h:panelGroup>		
+		</h:panelGroup>
+		<!-- content sub-menu END -->
+		
 		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/qrcode.js"/>
 		<script>
 			jQuery(document).ready(function() {
@@ -68,6 +73,8 @@
 				return qr.createImgTag();
 			};
 		</script>
+		
 	</ui:define> 
 	<!-- ALBUM Menu END -->
+	
 </ui:composition>

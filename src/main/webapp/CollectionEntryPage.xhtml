@@ -4,6 +4,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:imjc="http://java.sun.com/jsf/composite/components">
+	
 	<ui:param name="headline" value="#{ViewCollectionBean.collection.metadata.title}"/>
 	<ui:param name="currentMainMenu" value="collection"/>
 	<ui:param name="logicBean" value="#{ViewCollectionBean}"/>
@@ -51,6 +52,7 @@
 					<h:outputText value="#{lbl.delete}"/>
 				</h:outputLink>
 			</h:panelGroup>
+			<!-- content sub-menu END -->
 		</h:panelGroup>
 		
 		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/qrcode.js"/>

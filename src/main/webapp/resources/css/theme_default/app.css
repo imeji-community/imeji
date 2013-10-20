@@ -222,7 +222,6 @@ label, .imj_metadataLabel, .imj_infodataLabel, .imj_admindataLabel {
 /* styles for imej startpage - Welcome.xhtml - content tabs 
    =========================================================================  */ 
 
-
 .imj_welcomeInfo .id_tabs ul {
     padding: 0;
     margin-top: 0;
@@ -252,7 +251,6 @@ label, .imj_metadataLabel, .imj_infodataLabel, .imj_admindataLabel {
     /*margin-top: 5%;*/
 }
 
-
 .imj_welcomeInfo .id_tabs li.ui-state-active {
     background-color: #383838;
     color: #F0F0F0;
@@ -266,7 +264,6 @@ label, .imj_metadataLabel, .imj_infodataLabel, .imj_admindataLabel {
     display: none;
 }
 
-
 .imj_welcomeInfoTabContentText {
 	margin-bottom: 1%;
 }
@@ -274,7 +271,6 @@ label, .imj_metadataLabel, .imj_infodataLabel, .imj_admindataLabel {
 
 /* styles for imej startpage - Welcome.xhtml - image carousel
    =========================================================================  */ 
-
 
 .imj_startpage_carouselWrapper {
     float: left;
@@ -358,7 +354,6 @@ iframe#twitter-widget-0 div.root div.stream {
 	clear: both;
 	padding: 1.000em 0;
 }
-
 
 .imj_startpageFooter img {
     border: 0 none;
@@ -694,7 +689,6 @@ cut second ?
 }
 
 
-
 /* * Paginator Buttons (Image.xhtml)
    ================================================== */
 
@@ -944,7 +938,6 @@ cut second ?
 }
 
 
-
 /* .mainMenu input, .mainMenu a, .mainMenu span
    ==================================================
    ================================================== */
@@ -968,7 +961,6 @@ cut second ?
     -o-border-radius: 0.41666666em;
     -ms-border-radius: 0.41666666em;
 }
-
 
 .imj_mainMenuStandardItem {
 	color: #6CAD2F;
@@ -1070,8 +1062,6 @@ cut second ?
     padding: 0;
     /* background-color: #6CAD2F; */
 }
-
-
 
 
 /* ===[ Content - SubMenu ]=== *** actionsMenu ***
@@ -1203,7 +1193,7 @@ OLD:
 
   */
 
-/* ===[ Messages ]=== */
+/* ===[ Messages - OLD !]=== */
 
 .singleMessage {
     list-style-position: outside;
@@ -1220,8 +1210,6 @@ OLD:
 .messageStatus {
     color: #00712B;
 }
-
-
 
 
 /* ===[ Content - Main Content - Content Header]===
@@ -1400,7 +1388,6 @@ OLD:
 	margin-bottom: 0.545em;
 }   
 
-
 .imj_mediaDisplayContainerItem {
 		
 }
@@ -1436,7 +1423,6 @@ OLD:
 	color: #D80000; 
 	text-align: center;
 }
-
 
 
 /* item-styles - .imj_removeMedia, .imj_addMedia , .imj_activeMedia, .imj_selectMedia */
@@ -1494,13 +1480,11 @@ OLD:
     color: #F0F0F0;
 }
 
-
 .imj_metadataList .imj_listBody {
 	width: 100%;
 	border-top: solid #BAB4B3 0.0909em;
 	clear: both;
 }
-
 
 .imj_metadataSubPanel {
 	text-align: left;
@@ -1574,7 +1558,6 @@ OLD:
 	width: 100%;
 }
 
-
 .imj_techdataList {
 	width: 100%;
 	background-color: #494949;
@@ -1585,7 +1568,6 @@ OLD:
 	white-space: pre;
 	display: inline-block;
 }
-
 
 
 /* * mediaEditPanel - METADATA INPUT PANEL ***
@@ -1618,7 +1600,6 @@ OLD:
 	background-color:#6CAD2F !important;
 }
 .ui-helper-hidden-accessible { display:none; }
-
 
 
 .imj_metadataInputPanel {
@@ -1656,7 +1637,6 @@ OLD:
 	width: 7em;
 }
 
-
 /* inputTxtArea
 
 .double_txtArea {
@@ -1670,7 +1650,6 @@ width: 55em;
 min-height: 6em;
 }
 */
-
 
 
 /* * SubmitPanel (image_deatails.xhtml)
@@ -2076,16 +2055,11 @@ min-height: 6em;
 	margin-left: 0;
 }
 
-
 .imj_backButton:hover, .imj_editButton:hover  {
 	color: #000000;
     background-color: #4AFF00;
     border: thin solid #4AFF00;
 }
-
-
-
-
 		
 
 /* ===[ Dialog - .messageArea - .messageArea .half_area2_p6 ]===
@@ -2138,7 +2112,6 @@ min-height: 6em;
 	color: #D80000;
 	background-color: #DDDDDD;
 }
-
 
 
 /* ===[ Dialog - modalDialogBoxes  ]===

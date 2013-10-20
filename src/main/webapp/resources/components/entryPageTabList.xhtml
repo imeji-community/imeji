@@ -3,14 +3,18 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:composite="http://java.sun.com/jsf/composite">
+	
 	<composite:interface>
 		<composite:attribute name="infoLogicBean" required="false"/>
 		<composite:attribute name="applicationUrl" required="false"/>
 		<composite:attribute name="lbl" required="false"/>
 	</composite:interface>
+	
 	<composite:implementation>
+	
 		<!-- MetaDataList - START -->
 		<div class="imj_metadataList">
+		
 			<!-- MetaDataTypes - ListHeader - show media meta data, info, description, other -->
 			<div class="imj_listHeader">
 				<h:outputLink id="lnkViewColUtilPage" styleClass="imj_active" value="#{cc.attrs.infoLogicBean.pageUrl}?tab=UTIL" rendered="#{cc.attrs.infoLogicBean.tab == 'UTIL'}">

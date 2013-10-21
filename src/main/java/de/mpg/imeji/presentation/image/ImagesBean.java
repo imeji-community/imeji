@@ -310,6 +310,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
             this.setFacets(new FacetsBean(URLQueryTransformer.parseStringQuery(query)));
             ExecutorService executor = Executors.newSingleThreadScheduledExecutor();
             executor.submit(facets);
+            executor.shutdown();
         }
         catch (Exception e)
         {

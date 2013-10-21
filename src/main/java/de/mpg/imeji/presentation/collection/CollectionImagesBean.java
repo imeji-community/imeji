@@ -112,6 +112,7 @@ public class CollectionImagesBean extends ImagesBean
             setFacets(new FacetsBean(collection, searchQuery));
             ExecutorService executor = Executors.newSingleThreadScheduledExecutor();
             executor.submit(getFacets());
+            executor.shutdown();
         }
         catch (Exception e)
         {

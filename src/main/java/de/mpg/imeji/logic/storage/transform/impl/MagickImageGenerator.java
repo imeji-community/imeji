@@ -71,11 +71,20 @@ public class MagickImageGenerator implements ImageGenerator
      * @see de.mpg.imeji.logic.storage.transform.ImageGenerator#generateJPG(byte[], java.lang.String)
      */
     @Override
-    public byte[] generateJPG(File file, String extension) throws IOException, URISyntaxException, InterruptedException, IM4JavaException
+    public byte[] generateJPG(File file, String extension) throws IOException, URISyntaxException,
+            InterruptedException, IM4JavaException
     {
         if (enabled)
         {
-            return MediaUtils.convertToJPEG(file, extension);
+            try
+            {
+                return MediaUtils.convertToJPEG(file, extension);
+            }
+            catch (Exception e)
+            {
+                logger.warn("Error with imagemagick: ", e);
+                return null;
+            }
         }
         return null;
     }

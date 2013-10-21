@@ -140,6 +140,7 @@ public class UploadBean
             catch (Exception e)
             {
                 logger.error("Error upload", e);
+                e.printStackTrace();
             }
         }
     }
@@ -302,17 +303,13 @@ public class UploadBean
     }
 
     /**
-     * Upload one File and create the {@link de.mpg.imeji.logic.vo.Item}
-     * 
-     * @param bytes
-     * @throws Exception
+     * Throws an {@link Exception} if the file ca be upload. Works only if the file has an extension (therefore, for
+     * file without extension, the validation will only occur when the file has been stored locally)
      */
-    private Item uploadFile(File file)
+    private void validateName()
     {
-        try
+        if (StorageUtils.hasExtension(title))
         {
-            if (!StorageUtils.hasExtension(title))
-                title += StorageUtils.guessExtension(file);
             if (checkNameUnique)
             {
                 // if the checkNameUnique is checked, check that two files with the same name is not possible
@@ -326,6 +323,22 @@ public class UploadBean
             if (!isAllowedFormat(FilenameUtils.getExtension(title)))
                 throw new RuntimeException(sessionBean.getMessage("upload_format_not_allowed") + " ("
                         + FilenameUtils.getExtension(title) + ")");
+        }
+    }
+
+    /**
+     * Upload one File and create the {@link de.mpg.imeji.logic.vo.Item}
+     * 
+     * @param bytes
+     * @throws Exception
+     */
+    private Item uploadFile(File file)
+    {
+        try
+        {
+            if (!StorageUtils.hasExtension(title))
+                title += StorageUtils.guessExtension(file);
+            validateName();
             storageController = new StorageController();
             Item item = null;
             if (importImageToFile)

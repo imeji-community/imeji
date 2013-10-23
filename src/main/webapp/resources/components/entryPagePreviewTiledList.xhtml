@@ -6,15 +6,14 @@
 	
 	<composite:interface>
 		<composite:attribute name="mediaLogicBean" required="false"/>
-		<composite:attribute name="referenceUrl" required="false"/>
 		<composite:attribute name="applicationUrl" required="false"/>
 		<composite:attribute name="browsePath" required="false"/>
 		<composite:attribute name="lbl" required="false"/>
 	</composite:interface>
 	
 	<composite:implementation>
-		<div class="imj_entryPagePreviewTiledList">	
-			<h:outputLink value="#{cc.attrs.referenceUrl}#{cc.attrs.mediaLogicBean.id}/#{cc.attrs.browsePath}?q=">
+		<div class="imj_entryPagePreviewTiledList">
+			<h:outputLink value="#{cc.attrs.mediaLogicBean.id}/#{cc.attrs.browsePath}?q=">
 				<!-- MEDIA - Entry Page - Thumbnails -->
 				<ui:repeat var="thumb" value="#{cc.attrs.mediaLogicBean.thumbnails}">
 					<h:graphicImage styleClass="imj_entryPagePreviewTiledListItem" value="#{cc.attrs.applicationUrl}file?id=#{thumb.link}"/>

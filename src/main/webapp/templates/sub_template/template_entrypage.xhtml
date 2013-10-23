@@ -19,8 +19,7 @@
 			<!-- EntryPagePreviewTiledList -->
 			<ui:fragment rendered="#{logicBean.visible}">
 				<ui:fragment rendered="#{listSize != 0}">
-					<imjc:entryPagePreviewTiledList mediaLogicBean="#{logicBean}" lbl="#{lbl}" referenceUrl="#{cc.attrs.infoLogicBean}" applicationUrl="#{Navigation.applicationUrl}" browsePath="#{Navigation.browsePath}"/> 
-					<!-- referenceUrl="#{Navigation.albumUrl}" referenceUrl="#{Navigation.collectionUrl}" referenceUrl="#{cc.attrs.infoLogicBean.NagivationUrl}" -->
+					<imjc:entryPagePreviewTiledList mediaLogicBean="#{logicBean}" lbl="#{lbl}" applicationUrl="#{Navigation.applicationUrl}" browsePath="#{Navigation.browsePath}"/> 
 				</ui:fragment>
 				<ui:fragment rendered="#{listSize == null or listSize == 0}">
 					<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{imageBean.image == null}">

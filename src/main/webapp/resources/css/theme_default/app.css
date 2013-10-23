@@ -2008,7 +2008,11 @@ min-height: 6em;
     padding: 0 0 2em 0;
 	border-bottom: 0.0909091em solid #292929;
 	/*text-align: right;*/
-}		
+}
+
+.imj_administrationTiledList.imj_maxWidth .imj_adminPanel {
+	width:100%;
+}
 
 .imj_userGrantList {
 	/*white-space: pre;

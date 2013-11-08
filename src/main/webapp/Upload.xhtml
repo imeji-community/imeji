@@ -139,15 +139,15 @@
 								id="selUploadThumb" value="#{UploadBean.importImageToFile}" valueChangeListener="#{UploadBean.importImageToFileListener}">
 								<f:ajax event="click" render="@form"/>
 							</h:selectBooleanCheckbox>
-							<h:outputLabel styleClass="free_area_p8 xTiny_marginLExcl"
+							<h:outputLabel styleClass="free_area_p8"
 								value="#{lbl.upload_item_thumbnail}" for="selUploadThumb" />
 						</div>
 						<div class="huge_area0_p8">
-							<h:selectBooleanCheckbox styleClass="free_area_p8 "
+							<h:selectBooleanCheckbox styleClass="free_area0_p8 "
 								id="selUploadFile" value="#{UploadBean.uploadFileToItem}" valueChangeListener="#{UploadBean.uploadFileToItemListener}">
 								<f:ajax event="click" render="@form"/>
 							</h:selectBooleanCheckbox>
-							<h:outputLabel styleClass="free_area_p8 xTiny_marginLExcl"
+							<h:outputLabel styleClass="free_area_p8"
 								value="#{lbl.upload_item_file}" for="selUploadFile" />
 						</div>
 						<div class="huge_area0_p8">
@@ -155,7 +155,7 @@
 								id="selUniqueNames" value="#{UploadBean.checkNameUnique}">
 								<f:ajax event="click" render="@form"/>
 							</h:selectBooleanCheckbox>
-							<h:outputLabel styleClass="free_area_p8 xTiny_marginLExcl"
+							<h:outputLabel styleClass="free_area_p8"
 								value="#{lbl.upload_unique_filename}" for="selUniqueNames" />
 						</div>
 					</h:form>

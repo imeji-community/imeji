@@ -198,7 +198,7 @@ public class ImageGeneratorManager
                 logger.warn("Error generating image", e);
             }
         }
-        if (jpeg == null)
+        if (jpeg == null || jpeg.length == 0)
             throw new RuntimeException("Unsupported file format (requested was " + extension + ")");
         return jpeg;
     }

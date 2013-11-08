@@ -18,6 +18,7 @@ import org.apache.log4j.lf5.util.StreamUtils;
 import com.hp.hpl.jena.tdb.TDB;
 import com.hp.hpl.jena.tdb.base.file.Location;
 import com.hp.hpl.jena.tdb.sys.TDBMaker;
+
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.concurrency.locks.LocksSurveyor;
@@ -44,10 +45,10 @@ public class InitializerServlet extends HttpServlet
     public void init() throws ServletException
     {
         super.init();
+        new PropertyBean();
         initModel();
         startLocksSurveyor();
         createSysadminUser();
-        new PropertyBean();
         // EscidocInitializer escidocInitializer = new EscidocInitializer();
         // escidocInitializer.run();
     }
@@ -85,17 +86,17 @@ public class InitializerServlet extends HttpServlet
         {
             UserController uc = new UserController(Imeji.adminUser);
             uc.create(Imeji.adminUser);
-            logger.info("Created sysadmin successfully");
+            logger.info("Created sysadmin successfully:" + Imeji.adminUser.getEmail());
         }
         catch (AlreadyExistsException e)
         {
-            logger.info("sysadmin already exists 1");
+            logger.warn(Imeji.adminUser.getEmail() + " already exists");
         }
         catch (Exception e)
         {
             if (e.getCause() instanceof AlreadyExistsException)
             {
-                logger.info("sysadmin already exists 2");
+                logger.warn(Imeji.adminUser.getEmail() + " already exists");
             }
             else
             {

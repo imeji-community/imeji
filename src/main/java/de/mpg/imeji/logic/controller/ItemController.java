@@ -412,7 +412,7 @@ public class ItemController extends ImejiController
         for (Grant g : user.getGrants())
         {
             if (GrantType.SYSADMIN.equals(g.asGrantType()))
-            {
+            {   
                 simplifiedUser.getGrants().add(g);
             }
             else if (containerUri != null && containerUri.toString().contains("collection")

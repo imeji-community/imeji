@@ -430,6 +430,15 @@
 						</h:panelGroup>
 					</h:panelGroup>
 				</h:panelGroup>			
+				<h:panelGroup styleClass="item" layout="block">
+					<h:panelGroup layout="block">
+						<h:outputLink id="lnkColPdfDocumentEssays" title="#{lbl.goto_pdf_document_essays}" value="#{Navigation.applicationUrl}collection/trJ1nquciiskKrG2">
+							<h:panelGroup styleClass="pad" layout="block">
+								<h:outputText value="#{lbl.pdf_document_essays}" />
+							</h:panelGroup>
+						</h:outputLink>
+					</h:panelGroup>
+				</h:panelGroup>	
 			</h:panelGroup>
 		</h:panelGroup>		
 		

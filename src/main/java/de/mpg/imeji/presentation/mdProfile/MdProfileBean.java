@@ -21,6 +21,7 @@ import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.vo.Metadata;
+import de.mpg.imeji.logic.vo.Metadata.Types;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
@@ -117,6 +118,23 @@ public class MdProfileBean
             mdTypesMenu.add(new SelectItem(t.getClazzNamespace(), ((SessionBean)BeanHelper
                     .getSessionBean(SessionBean.class)).getLabel("facet_" + t.name().toLowerCase())));
         }
+    }
+
+    /**
+     * Return the label of a {@link Types}
+     * 
+     * @param uri
+     * @return
+     */
+    public String getTypeLabel(String uri)
+    {
+        for (Metadata.Types t : Metadata.Types.values())
+        {
+            if (t.getClazzNamespace().equals(uri))
+                return ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("facet_"
+                        + t.name().toLowerCase());
+        }
+        return uri;
     }
 
     /**
@@ -1015,5 +1033,13 @@ public class MdProfileBean
     public int getDraggedStatementPosition()
     {
         return draggedStatementPosition;
+    }
+
+    public String getMdTypesMenuAsString()
+    {
+        String s = "";
+        for (SelectItem si : mdTypesMenu)
+            s += si.getValue() + "," + si.getLabel() + "|";
+        return s;
     }
 }

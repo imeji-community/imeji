@@ -181,7 +181,8 @@ public class SuperMetadataTree
     }
 
     /**
-     * True if the index1 is a parent of the index2 (not necessary the direct parent)
+     * True if the index1 is a parent of the index2 (not necessary the direct parent):<br/>
+     *  - 1 is parent of all index 1,....
      * 
      * @param index1
      * @param index2
@@ -189,7 +190,7 @@ public class SuperMetadataTree
      */
     private boolean isParent(String index1, String index2)
     {
-    	return index2.startsWith(index1 + ",") && index1.length() < index2.length();
+        return index2.startsWith(index1 + ",") && index1.length() < index2.length();
     }
 
     /**

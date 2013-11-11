@@ -25,6 +25,7 @@ public class InternationalizationBean
 {
     private List<SelectItem> languages = null;
     private List<SelectItem> isolanguages = null;
+    private String languagesAsString = "";
     private String currentLanguage = "en";
     private SessionBean session = null;
     private List<SelectItem> internationalizedLanguages;
@@ -75,6 +76,9 @@ public class InternationalizationBean
         languages.add(new SelectItem(null, "--"));
         // Add the other languages (non supported)
         languages.addAll(getsupportedLanguages(false));
+        // init the string of all languages
+        for(SelectItem s : languages)
+            languagesAsString += s.getValue() + "," + s.getLabel() + "|"; 
     }
 
     /**
@@ -140,6 +144,22 @@ public class InternationalizationBean
             }
         }
         return l;
+    }
+
+    /**
+     * Return the label of the language
+     * 
+     * @param lang
+     * @return
+     */
+    public String getLanguageLabel(String lang)
+    {
+        for (SelectItem iso : isolanguages)
+        {
+            if (((String)iso.getValue()).equals(lang))
+                return iso.getLabel();
+        }
+        return lang;
     }
 
     /**
@@ -232,5 +252,13 @@ public class InternationalizationBean
     public void setInternationalizedLanguages(List<SelectItem> internationalizedLanguages)
     {
         this.internationalizedLanguages = internationalizedLanguages;
+    }
+    
+    /**
+     * @return the languagesAsString
+     */
+    public String getLanguagesAsString()
+    {
+        return languagesAsString;
     }
 }

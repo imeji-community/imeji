@@ -381,4 +381,8 @@
 		<pattern value="/toc"></pattern>
 		<view-id>/jsf/zusePages/tou.xhtml</view-id>
 	</url-mapping>
+	<url-mapping id="pdfs">
+		<pattern value="/pdfs"></pattern>
+		<view-id>/jsf/zusePages/pdfs.xhtml</view-id>
+	</url-mapping>
 </pretty-config>

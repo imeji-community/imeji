@@ -182,13 +182,13 @@
 										</h:panelGroup>		
 									</h:outputLink>
 								</h:panelGroup>
-								<!-- h:panelGroup styleClass="item" layout="block">
-									<h:outputLink id="lnkColZ22R" title="#{lbl.goto_z22r}" value="#{Navigation.applicationUrl}collection/">
+								<h:panelGroup styleClass="item" layout="block">
+									<h:outputLink id="lnkColZ22R" title="#{lbl.goto_z22r}" value="#{Navigation.applicationUrl}collection/yzeyYhwB_QTbks3">
 										<h:panelGroup styleClass="pad" layout="block">
 											<h:outputText value="#{lbl.goto_z22r}" />
 										</h:panelGroup>		
 									</h:outputLink>
-								</h:panelGroup -->
+								</h:panelGroup>
 								<h:panelGroup styleClass="item" layout="block">
 									<h:outputLink id="lnkColZ3Reconstruction" title="#{lbl.goto_z3_reconstruction_col}" value="#{Navigation.applicationUrl}collection/0QqmQvmGCkOG1bWl">
 										<h:panelGroup styleClass="pad" layout="block">
@@ -435,6 +435,15 @@
 						<h:outputLink id="lnkColPdfDocumentEssays" title="#{lbl.goto_pdf_document_essays}" value="#{Navigation.applicationUrl}collection/trJ1nquciiskKrG2">
 							<h:panelGroup styleClass="pad" layout="block">
 								<h:outputText value="#{lbl.pdf_document_essays}" />
+							</h:panelGroup>
+						</h:outputLink>
+					</h:panelGroup>
+				</h:panelGroup>
+				<h:panelGroup styleClass="item" layout="block">
+					<h:panelGroup layout="block">
+						<h:outputLink id="lnkColPdfDocumentList" title="#{lbl.goto_pdf_document_list}" value="#{Navigation.applicationUrl}pdfs">
+							<h:panelGroup styleClass="pad" layout="block">
+								<h:outputText value="#{lbl.pdf_document_list}" />
 							</h:panelGroup>
 						</h:outputLink>
 					</h:panelGroup>

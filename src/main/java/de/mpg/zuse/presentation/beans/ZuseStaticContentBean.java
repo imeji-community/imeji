@@ -64,6 +64,7 @@ public class ZuseStaticContentBean extends StaticContentBean {
 		PLANKALKUELCOMPILER("zuse.imeji.url.plancompiler"),
 		PLANKALKUELAPPLICATIONS("zuse.imeji.url.planapps"),
 		TOU("zuse.imeji.url.tou"),
+		PDFS("zuse.imeji.url.pdfs"),
 		RECONSTRUCTIONZ3("zuse.imeji.url.recontructionz3");
 		
 		
@@ -1376,6 +1377,31 @@ public class ZuseStaticContentBean extends StaticContentBean {
 
 	public void setPlankalkuelapplication(boolean plankalkuelapplication) {
 		ZuseStaticPageEntry.PLANKALKUELAPPLICATIONS.setEnabled(plankalkuelapplication);
+	}
+	
+	public String getPdfsContent() throws IOException, URISyntaxException
+    {
+        String html = "";
+        String urlString = ZusePropertyReader.getProperty(ZuseStaticPageEntry.PDFS.getUrlString());
+        try
+        {
+            html = getContent(urlString);
+        }
+        catch (Exception e)
+        {
+            html = urlString
+                    + " couldn't be loaded. Url might be either wrong or protected." + "<br/><br/>" + "Error message:"
+                    + "<br/><br/>" + e.toString();
+        }
+        return html;
+    }
+	
+	public boolean isPdfs() {
+		return ZuseStaticPageEntry.PDFS.getEnabled();
+	}
+
+	public void setPdfs(boolean pdfs) {
+		ZuseStaticPageEntry.PDFS.setEnabled(pdfs);
 	}
 	
 	public String getTouContent() throws IOException, URISyntaxException

@@ -77,6 +77,8 @@ public class ZuseNavigationBean extends Navigation
     public final Page PLANKALKUELAPPLICATIONS = new Page("Applications", "plankalkuelApplication"); // http://zuse.zib.de/infos/simulations/Plankalkuel/Chess/JavaApplet/chess.html
     
     public final Page RECONSTRUCTIONZ3 = new Page("Recontruction of the Z3", "reconstructionZ3");
+    
+    public final Page PDFS = new Page("PDF Documents", "pdfs");
 
     
     // session

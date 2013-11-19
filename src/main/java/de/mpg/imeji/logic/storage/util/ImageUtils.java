@@ -82,6 +82,7 @@ public class ImageUtils
     {
         try
         {
+        	System.out.println(mimeType);
             if (mimeType.equals(StorageUtils.getMimeType("tif")))
             {
                 return ImageUtils.tiff2Jpeg(bytes);

@@ -1,12 +1,12 @@
 package de.mpg.imeji.presentation.mdProfile;
 
 import java.io.IOException;
+
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
@@ -133,7 +133,7 @@ public class EditMdProfileBean extends MdProfileBean
                 ProfileController profileController = new ProfileController();
                 profileController.update(getProfile(), session.getUser());
                 ImejiSPARQL.execUpdate(SPARQLQueries.cleanStatement());
-                profileController.removeMetadataWithoutStatement();
+                profileController.removeMetadataWithoutStatement(getProfile());
                 session.getProfileCached().clear();
                 BeanHelper.info(session.getMessage("success_profile_save"));
             }

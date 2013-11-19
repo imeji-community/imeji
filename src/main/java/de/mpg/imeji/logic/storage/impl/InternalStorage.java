@@ -50,7 +50,7 @@ import de.mpg.imeji.logic.storage.util.StorageUtils;
 public class InternalStorage implements Storage
 {
     private final String name = "internal";
-    private InternalStorageManager manager;
+    protected InternalStorageManager manager;
 
     /**
      * Default Constructor

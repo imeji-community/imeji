@@ -134,7 +134,8 @@ public class InternalStorageManager
      */
     public void replaceFile(File file, String url) throws IOException
     {
-        String extension = FilenameUtils.getExtension(url);
+    	//Get the filextension for the thumbnail and preview generation (can be jpg, gif etc.)
+    	String extension = file.getName().substring(file.getName().lastIndexOf(".")+1, file.getName().length());
         ImageGeneratorManager generatorManager = new ImageGeneratorManager();
         removeFile(url);
         if (url.contains(FileResolution.ORIGINAL.name().toLowerCase()))

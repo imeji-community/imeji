@@ -169,7 +169,7 @@ public class SPARQLQueries
     public static String cleanStatement()
     {
         return "WITH <" + Imeji.profileModel + "> " + "DELETE {?s ?p ?o} " + "USING <" + Imeji.profileModel + "> "
-                + "WHERE {?s ?p ?o . ?s <http://imeji.org/terms/parent> ?parent  . not exists{?parent ?pr ?ob}}";
+                + "WHERE { ?s <http://imeji.org/terms/parent> ?parent  . not exists{?parent ?pr ?ob} . ?s ?p ?o }";
     }
 
     /**
@@ -195,6 +195,6 @@ public class SPARQLQueries
     {
         return "WITH <http://imeji.org/item> " + "DELETE {?mds <http://imeji.org/terms/metadata> ?s} "
                 + "USING <http://imeji.org/item> "
-                + "WHERE {?mds <http://imeji.org/terms/metadata> ?s . FILTER NOT EXISTS{?s ?p ?o}}";
+                + "WHERE {?mds <http://imeji.org/terms/metadata> ?s . NOT EXISTS{?s ?p ?o}}";
     }
 }

@@ -204,9 +204,10 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
     /**
      * JSF listener when a citation has been changed
      */
-    public void resetCitationListener()
+    public void resetCitationListener(ValueChangeEvent vce)
     {
         resetCitation = true;
+        this.predefinedValueListener(vce);
     }
 
     /**

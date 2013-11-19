@@ -152,7 +152,7 @@ function unSelectUnique(index) {
 function write_options(select, optionsString) {
 	select.innerHTML = '';
 	var options = optionsString.split('|');
-	for (var i = 0; i < options.length; i++) {
+	for ( var i = 0; i < options.length; i++) {
 		var option = document.createElement("option");
 		option.value = options[i].split(',')[0];
 		option.text = options[i].split(',')[1];

@@ -209,7 +209,7 @@
 												</h:commandLink>
 											</div>
 											<div class="small_txtBtn xTiny_marginLExcl">
-												<h:commandButton type="submit" styleClass="free_area0_p0 medium_marginLExcl small_txtBtn dialogActiveButton"  action="#{imageBean.edit.save}" value="#{lbl.save}">
+												<h:commandButton type="submit" onclick="openDialog('dialogWait');"  styleClass="free_area0_p0 medium_marginLExcl small_txtBtn dialogActiveButton"  action="#{imageBean.edit.save}" value="#{lbl.save}">
 													<f:ajax execute="@form" render="@all"/>
 												</h:commandButton>
 											</div>

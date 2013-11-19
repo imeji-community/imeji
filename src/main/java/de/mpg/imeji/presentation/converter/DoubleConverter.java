@@ -19,7 +19,7 @@ public class DoubleConverter implements Converter
     {
         try
         {
-            return Double.parseDouble(arg2.toString());
+            return Double.parseDouble(arg2.replace(",", "."));
         }
         catch (Exception e)
         {

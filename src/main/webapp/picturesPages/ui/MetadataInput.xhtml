@@ -3,7 +3,8 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       >
-      <script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/autocomplete.js"></script>	
+      <script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/autocomplete.js"></script>
+      <script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/datepicker.js"></script>
    <!-- CSS class for autocomplete component-->
    <style type="text/css">
    	.ui-menu {
@@ -31,7 +32,15 @@
 		background-color:#6CAD2F !important;
 	}
 	.ui-helper-hidden-accessible { display:none; }
-   </style>
+	/* style for date keeper*/
+	.ui-datepicker,.ui-datepicker-calendar,.ui-datepicker-rtl {
+		background-color: #292929;
+		width: 210px;
+	}
+	.ui-datepicker-next {
+		float: right;
+	}
+	</style>
 	<h:panelGroup layout="block" styleClass="free_area0_p4" style="margin-left: #{metadata.hierarchyLevel}em;">
 		<h:outputLabel value="#{MetadataLabels.internationalizedLabels[metadata.statement.id]} (#{MetadataLabels.lang})" rendered="#{hideLabel == false}" styleClass="free_label"/>
 		<h:outputLabel value=" " rendered="#{hideLabel == true}" styleClass="xLarge_label"/>
@@ -56,7 +65,7 @@
 				<h:outputLabel value="#{lbl.title}" styleClass="free_label " rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}"/>
 				<h:inputText id="inputLinkLabel" styleClass="full_txtInput" value="#{metadata.label}" immediate="false"  rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}" onfocus="this.select(); getDatasourceUrl('#{statement.vocabulary}','#{Navigation.autocompleteUrl}')"/>
 				<h:outputLabel value="#{lbl.url}" styleClass="free_label" rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}"/>
-				<h:inputText id="inputURI" styleClass="full_txtInput" value="#{metadata.uri}" rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}" onfocus="this.select();">
+				<h:inputText id="inputURI" styleClass="full_txtInput" value="#{metadata.uri}" rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}" onfocus="this.select();" valueChangeListener="#{metadata.predefinedValueListener}">
 					<f:converter converterId="URIConverter" />
 				</h:inputText>
 				<h:selectOneMenu styleClass="#{areaClass}" value="#{metadata.uri}" rendered="#{SuggestBean.suggests[statement.id].hasRestrictedValues}" valueChangeListener="#{metadata.predefinedValueListener}">
@@ -69,7 +78,6 @@
 			<h:inputText id="inputPublicationURI" styleClass="full_txtInput" value="#{metadata.uri}"  rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}" 
 			onfocus="this.select(); getDatasourceUrl('#{statement.vocabulary}', '#{Navigation.autocompleteUrl}')" valueChangeListener="#{metadata.resetCitationListener}">
 				<f:converter converterId="URIConverter" />
-				<f:ajax listener="#{metadata.resetCitationListener}" immediate="true"/>
 			</h:inputText>
 			<h:selectOneMenu styleClass="#{areaClass}" immediate="false" value="#{metadata.uri}" rendered="#{SuggestBean.suggests[statement.id].hasRestrictedValues}">
 				<f:selectItems value="#{SuggestBean.suggests[statement.id].restrictedValues}"/>
@@ -84,8 +92,8 @@
 		</h:panelGroup>
 		<!-- METADATA TYPE DATE -->
 		<h:panelGroup layout="block" class="#{areaClass}" rendered="#{metadata.typeNamespace =='http://imeji.org/terms/metadata#date' and !SuggestBean.suggests[statement.id].hasRestrictedValues}">
-			<h:inputText styleClass="full_txtInput" value="#{metadata.date}" immediate="false" onfocus="getDatasourceUrl('#{statement.vocabulary}', '#{Navigation.autocompleteUrl}');"/>
-			<h:outputLabel value="YYYY-MM-DD" styleClass="medium_label"/>		
+			<h:inputText styleClass="full_txtInput datepicker" value="#{metadata.date}" immediate="false" onfocus="getDatasourceUrl('#{statement.vocabulary}', '#{Navigation.autocompleteUrl}');"/>
+			<h:outputLabel value="YYYY-MM-DD" styleClass="medium_label"/>
 		</h:panelGroup>
 		<h:selectOneMenu styleClass="#{areaClass}" immediate="true" value="#{metadata.date}" rendered="#{metadata.typeNamespace =='http://imeji.org/terms/metadata#date' and SuggestBean.suggests[statement.id].hasRestrictedValues}" valueChangeListener="#{metadata.predefinedValueListener}">
 			<f:selectItems value="#{SuggestBean.suggests[statement.id].restrictedValues}"/>

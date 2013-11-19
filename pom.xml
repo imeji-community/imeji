@@ -489,7 +489,7 @@
 		<!-- START: Digilib integration -->
 		<dependency>
 			<groupId>digilib</groupId>
-			<artifactId>digilib-servlet3</artifactId>
+			<artifactId>digilib-servlet2</artifactId>
 			<version>2.2</version>
 		</dependency>
 		<dependency>

@@ -177,13 +177,13 @@ public class SPARQLQueries
      * 
      * @return
      */
-    public static String updateRemoveAllMetadataWithoutStatement()
+    public static String updateRemoveAllMetadataWithoutStatement(String profileURI)
     {
         return "WITH <http://imeji.org/item> " + "DELETE {?mds <http://imeji.org/terms/metadata> ?s . ?s ?p ?o } "
                 + "USING <http://imeji.org/item> " + "USING <http://imeji.org/metadataProfile> "
-                + "WHERE {NOT EXISTS{?profile a <http://imeji.org/terms/mdprofile> . "
-                + "?profile <http://imeji.org/terms/statement> ?st} ?mds <http://imeji.org/terms/metadata> ?s . "
-                + "?s <http://imeji.org/terms/statement> ?st . ?s ?p ?o }";
+                + "WHERE {?mds <http://imeji.org/terms/mdprofile> <" + profileURI
+                + "> . ?mds <http://imeji.org/terms/metadata> ?s . ?s <http://imeji.org/terms/statement> ?st"
+                + " . NOT EXISTS{<" + profileURI + "> <http://imeji.org/terms/statement> ?st}" + " . ?s ?p ?o }";
     }
 
     /**
@@ -195,6 +195,6 @@ public class SPARQLQueries
     {
         return "WITH <http://imeji.org/item> " + "DELETE {?mds <http://imeji.org/terms/metadata> ?s} "
                 + "USING <http://imeji.org/item> "
-                + "WHERE {?mds <http://imeji.org/terms/metadata> ?s . NOT EXISTS{?s ?p ?o}}";
+                + "WHERE {?mds <http://imeji.org/terms/metadata> ?s . FILTER NOT EXISTS{?s ?p ?o}}";
     }
 }

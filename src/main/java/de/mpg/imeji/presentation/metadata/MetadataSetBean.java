@@ -31,6 +31,8 @@ package de.mpg.imeji.presentation.metadata;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.logic.util.MetadataFactory;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -51,6 +53,7 @@ public class MetadataSetBean
 {
     private MetadataProfile profile = null;
     private SuperMetadataTree metadataTree;
+    private static final Logger logger = Logger.getLogger(MetadataSetBean.class);
 
     /**
      * Constructor for a {@link MetadataSet}
@@ -112,8 +115,18 @@ public class MetadataSetBean
         for (Metadata md : l)
         {
             Statement st = ProfileHelper.getStatement(md.getStatement(), profile);
-            SuperMetadataBean smd = new SuperMetadataBean(md, st);
-            flat.add(smd);
+            if (st != null)
+            {
+                SuperMetadataBean smd = new SuperMetadataBean(md, st);
+                flat.add(smd);
+            }
+            else
+            {
+                System.out.println("A metadata " + md.getId() + " is defined with a non existing statement in profile "
+                        + this.profile.getId());
+                logger.error("A metadata " + md.getId() + " is defined with a non existing statement in profile "
+                        + this.profile.getId());
+            }
         }
         return flat;
     }

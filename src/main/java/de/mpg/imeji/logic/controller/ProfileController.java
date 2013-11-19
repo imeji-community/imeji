@@ -213,9 +213,9 @@ public class ProfileController extends ImejiController
      * Remove all the {@link Metadata} not having a {@link Statement}. This happens when a {@link Statement} has been
      * removed from a {@link MetadataProfile}.
      */
-    public void removeMetadataWithoutStatement()
+    public void removeMetadataWithoutStatement(MetadataProfile p)
     {
-        ImejiSPARQL.execUpdate(SPARQLQueries.updateRemoveAllMetadataWithoutStatement());
+        ImejiSPARQL.execUpdate(SPARQLQueries.updateRemoveAllMetadataWithoutStatement((p.getId().toString())));
         ImejiSPARQL.execUpdate(SPARQLQueries.updateEmptyMetadata());
     }
 }

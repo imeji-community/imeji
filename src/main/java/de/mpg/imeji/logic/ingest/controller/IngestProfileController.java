@@ -57,7 +57,7 @@ public class IngestProfileController
         {
             throw new RuntimeException(e);
         }
-        pc.removeMetadataWithoutStatement();
+        pc.removeMetadataWithoutStatement(original);
     }
 
     /**

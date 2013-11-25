@@ -92,6 +92,7 @@ public class EditImageMetadataBean
         try
         {
             allItems = loadItems();
+            lockImages(allItems);
             initProfileAndStatement(allItems);
             initStatementsMenu();
             initEditor(new ArrayList<Item>(allItems));

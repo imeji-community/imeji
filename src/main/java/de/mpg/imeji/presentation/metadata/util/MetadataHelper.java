@@ -48,7 +48,8 @@ public class MetadataHelper
         }
         else if (md instanceof License)
         {
-            if (((License)md).getLicense() == null || "".equals(((License)md).getLicense()))
+            if ((((License)md).getLicense() == null || "".equals(((License)md).getLicense().trim()))
+                    && ((License)md).getExternalUri() == null)
                 return true;
         }
         else if (md instanceof Publication)

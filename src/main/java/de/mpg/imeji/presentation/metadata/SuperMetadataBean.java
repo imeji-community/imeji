@@ -520,6 +520,12 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
             this.externalUri = externalUri;
     }
 
+    public void externalURIListener(ValueChangeEvent vce)
+    {
+        this.externalUri = (URI)vce.getNewValue();
+        toNull = true;
+    }
+
     /**
      * getter
      * 

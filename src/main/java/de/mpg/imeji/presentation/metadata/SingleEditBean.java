@@ -3,11 +3,8 @@
  */
 package de.mpg.imeji.presentation.metadata;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.faces.context.FacesContext;
 
 import de.mpg.imeji.logic.concurrency.locks.Lock;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
@@ -108,16 +105,6 @@ public class SingleEditBean
         reloadImage();
         editor = new SimpleImageEditor(item, profile, null);
         return "";
-    }
-
-    /**
-     * Reload the current page
-     * 
-     * @throws IOException
-     */
-    private void reloadPage() throws IOException
-    {
-        FacesContext.getCurrentInstance().getExternalContext().redirect(pageUrl + "?init=1");
     }
 
     /**

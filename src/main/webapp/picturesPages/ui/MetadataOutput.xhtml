@@ -16,7 +16,7 @@
 				<h:outputText styleClass="free_area0 endline" value="#{md.license}" rendered="#{md.externalUri== null and md.license != null}"/>
 				<h:outputLink rendered="#{md.externalUri != null}" value="#{md.externalUri}">
 					<h:outputText styleClass="free_area0 endline" value="#{md.license}" rendered="#{md.license != null}"/>
-					<h:outputText styleClass="free_area0 endline" value="#{md.externalUri}" rendered="#{md.license == null}"/>
+					<h:outputText styleClass="free_area0 endline" value="#{md.externalUri}" rendered="#{md.license == null or md.license== ''}"/>
 				</h:outputLink>
 			</h:panelGroup>	
 			<h:outputLink value="#{md.coneId}" target="_blank" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#conePerson' and md.coneId != null}" >

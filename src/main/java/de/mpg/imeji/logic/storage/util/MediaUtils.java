@@ -38,7 +38,6 @@ public class MediaUtils
      */
     public static boolean verifyImageMagickInstallation() throws IOException, URISyntaxException
     {
-        // TODO set in properties
         String imPath = getImageMagickInstallationPath();
         ConvertCmd cmd = new ConvertCmd(false);
         cmd.setSearchPath(imPath);
@@ -51,7 +50,7 @@ public class MediaUtils
         }
         catch (Exception e)
         {
-            logger.debug("imagemagick not installed");
+            logger.error("imagemagick not installed", e);
             return false;
         }
         return true;

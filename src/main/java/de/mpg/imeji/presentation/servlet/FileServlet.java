@@ -5,6 +5,7 @@ package de.mpg.imeji.presentation.servlet;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -16,6 +17,9 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.ImejiSPARQL;
+import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
@@ -117,9 +121,12 @@ public class FileServlet extends HttpServlet
      * @param uri
      * @param user
      * @return
+     * @throws Exception
      */
     private CollectionImeji loadCollection(String url, SessionBean session)
     {
+        if (session == null)
+            return loadCollection(url);
         URI collectionURI = getCollectionURI(url);
         if (collectionURI == null)
             return null;
@@ -138,6 +145,29 @@ public class FileServlet extends HttpServlet
             }
         }
         return collection;
+    }
+
+    /**
+     * Load a {@link CollectionImeji} when the session is null
+     * 
+     * @param url
+     * @return
+     */
+    private CollectionImeji loadCollection(String url)
+    {
+        List<String> l = ImejiSPARQL.exec(SPARQLQueries.selectCollectionIdOfFile(url), null);
+        if (l.size() == 0)
+            throw new RuntimeException("File " + url + " couldn't be found");
+        CollectionController c = new CollectionController();
+        try
+        {
+            return c.retrieve(URI.create(l.get(0)), null);
+        }
+        catch (Exception e)
+        {
+            logger.error(e);
+        }
+        return null;
     }
 
     /**

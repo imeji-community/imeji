@@ -157,7 +157,9 @@ public class ContentNegotiationFilter implements Filter
      */
     private boolean rdfNegotiated(HttpServletRequest request)
     {
-        return request.getHeader("Accept").startsWith("application/rdf+xml");
+        if (request != null && request.getHeader("Accept") != null)
+            return request.getHeader("Accept").startsWith("application/rdf+xml");
+        return false;
     }
 
     /**

@@ -40,6 +40,7 @@ import javax.faces.bean.ManagedBean;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.logic.storage.util.MediaUtils;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -55,13 +56,11 @@ import de.mpg.imeji.presentation.util.PropertyReader;
 public class ConfigurationBean
 {
     /**
+     * Enumeration of available configuration
      * 
-     * Enumeration of available configuration 
-     *
      * @author saquet (initial creation)
      * @author $Author$ (last modification)
      * @version $Revision$ $LastChangedDate$
-     *
      */
     private enum CONFIGURATION
     {
@@ -152,5 +151,10 @@ public class ConfigurationBean
     public String getSnippet()
     {
         return (String)config.get(CONFIGURATION.SNIPPET.name());
+    }
+
+    public boolean isImageMagickInstalled() throws IOException, URISyntaxException
+    {
+        return MediaUtils.verifyImageMagickInstallation();
     }
 }

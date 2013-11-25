@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
@@ -39,6 +41,7 @@ public class ProfileController extends ImejiController
 {
     private static ImejiRDF2Bean imejiRDF2Bean = new ImejiRDF2Bean(Imeji.profileModel);
     private static ImejiBean2RDF imejiBean2RDF = new ImejiBean2RDF(Imeji.profileModel);
+    private static Logger logger = Logger.getLogger(ProfileController.class);
 
     /**
      * Default Constructor
@@ -204,7 +207,14 @@ public class ProfileController extends ImejiController
         List<MetadataProfile> l = new ArrayList<MetadataProfile>();
         for (String uri : result.getResults())
         {
-            l.add(retrieve(URI.create(uri), user));
+            try
+            {
+                l.add(retrieve(URI.create(uri), user));
+            }
+            catch (Exception e)
+            {
+                logger.error(e);
+            }
         }
         return l;
     }

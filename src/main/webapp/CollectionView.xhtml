@@ -3,45 +3,33 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core" >
-			
 			<ui:define name="headline">
 				<h1>
 					<h:outputText value="#{ViewCollectionBean.collection.metadata.title}"/> 
 				</h1>
 			</ui:define>
-			
 			<ui:define name="contentMenu">
 				<h:outputLink id="lnkViewCollectionStart" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}" rendered="true">
 					<h:outputText value="#{lbl.collection_home}"/>
-				</h:outputLink>			
-				
+				</h:outputLink>
 				<h:outputText styleClass="imj_contentMenuSeparator" />
-				
 				<h:outputLink id="lnkViewCollectionAllImages" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.browsePath}?q=" rendered="#{ViewCollectionBean.size > 0}">
 					<h:outputText value="#{lbl.view_images}"/>
 				</h:outputLink>
-				
 				<h:outputText styleClass="imj_contentMenuSeparator" rendered="#{ViewCollectionBean.size > 0}"/>
-				
-				
 				<h:outputText styleClass="imj_contentMenuItem" value="#{lbl.collection_metadata}"/>
-				
 				<h:outputText styleClass="imj_contentMenuSeparator" />
-
 				<h:outputLink id="lnkUploadImages" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.uploadPath}?init=1" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status != 'WITHDRAWN'}">
 					<h:outputText value="#{lbl.upload_images}"></h:outputText>
 				</h:outputLink>
-				
 				<h:outputText styleClass="imj_contentMenuSeparator"	rendered="#{AuthorizationBean.admin}" />
-				
 				<h:outputLink id="lnkIngest" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/ingest?init=1" rendered="#{AuthorizationBean.admin}">
 					<h:outputText value="#{lbl.ingest}" />
 				</h:outputLink>
 			</ui:define>
-			
-			
-			<ui:define name="mainContent">
-				<h:panelGroup layout="block" styleClass="full_area0">
+			<ui:define name="mainContent" >
+				<h:outputText value="#{lbl.view_page_disallowed2}" rendered="#{!ViewCollectionBean.visible}" styleClass="full_area0 fullItem"/>
+				<h:panelGroup layout="block" styleClass="full_area0" rendered="#{ViewCollectionBean.visible}">
 					<h:panelGroup layout="block" styleClass="full_area0 fullItem">
 					
 						<h:panelGroup layout="block" styleClass="full_area0 preListHeader" style="border-width: 0px !important;">
@@ -69,7 +57,6 @@
 											<br/>
 										</span>
 									</h:panelGroup>
-									
 									<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
 										<b class="xLarge_area0_p8 endline labelLine clear">
 											<h:outputText value="#{lbl.description}"/>
@@ -80,19 +67,16 @@
 											<br/>
 										</span>
 									</h:panelGroup>
-									
 									<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
 										<ui:repeat var="creator" rowKeyVar="status" value="#{ViewCollectionBean.persons}">
 											<b class="xLarge_area0_p8 endline labelLine clear">
 												<h:outputText value="#{lbl.authors}"/>
 												<span class="noDisplay">: </span>
 											</b>
-											
 											<span class="xHuge_area0 xTiny_marginLExcl endline">
 												<h:outputLabel value="#{lbl.family_name}:   "/>
 												<h:outputText id="inputCreator" styleClass="quad_txtOutput" value="  #{creator.familyName}"/>
 											</span>
-											
 											<b class="xLarge_area0_p8 endline labelLine clear">
 												<h:outputText value="#{lbl.first_name}" style="visibility:hidden;"/>
 												<span class="noDisplay">: </span>
@@ -101,7 +85,6 @@
 												<h:outputLabel value="#{lbl.first_name}:   "/>
 												<h:outputText id="inputCreator2" styleClass="quad_txtOutput" value="   #{creator.givenName}"/>
 											</span>
-												
 											<b class="xLarge_area0_p8 endline labelLine clear">
 												<h:outputText value="#{lbl.organization}" style="visibility:hidden;"/>
 												<span class="noDisplay">: </span>

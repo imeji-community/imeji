@@ -151,7 +151,7 @@ public class ImageBean
         {
             techMd = new ArrayList<String>();
             techMd = TikaExtractor.extract(item);
-            //techMd = BasicExtractor.extractTechMd(item);
+            // techMd = BasicExtractor.extractTechMd(item);
         }
         catch (Exception e)
         {
@@ -212,7 +212,7 @@ public class ImageBean
         labels.init(profile);
         return "";
     }
-    
+
     /**
      * Return and URL encoded version of the filename
      * 
@@ -596,6 +596,17 @@ public class ImageBean
     public boolean isImageFile()
     {
         return StorageUtils.getMimeType(FilenameUtils.getExtension(item.getFilename())).contains("image");
+    }
+
+    /**
+     * True if the file is a Fits
+     * 
+     * @return
+     */
+    public boolean isFitsFile()
+    {
+        return StorageUtils.getMimeType(FilenameUtils.getExtension(item.getFilename())).equals(
+                StorageUtils.getMimeType("fit"));
     }
 
     /**

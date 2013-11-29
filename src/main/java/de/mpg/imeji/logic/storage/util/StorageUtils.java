@@ -214,7 +214,8 @@ public class StorageUtils
      */
     public static String getMimeType(String extension)
     {
-        extension = extension.toLowerCase();
+        if (extension != null)
+            extension = extension.toLowerCase();
         if ("tif".equals(extension))
         {
             return "image/tiff";
@@ -251,7 +252,7 @@ public class StorageUtils
         {
             return "video/3gpp";
         }
-        else if("eps".equals(extension))
+        else if ("eps".equals(extension))
         {
             return "application/eps";
         }

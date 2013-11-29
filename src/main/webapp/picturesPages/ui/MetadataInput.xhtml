@@ -132,9 +132,13 @@
 				<f:selectItems value="#{SuggestBean.suggests[statement.id].restrictedValues}"/>
 			</h:selectOneMenu>
 			<h:outputLabel value="#{lbl.geolocation_latitude}" styleClass="free_label" />
-			<h:inputText id="inputLatitude" styleClass="full_txtInput" value="#{metadata.latitude}"  immediate="true" onfocus="getDatasourceUrl('#{statement.vocabulary}', '#{Navigation.autocompleteUrl}')"/>
+			<h:inputText id="inputLatitude" styleClass="full_txtInput" value="#{metadata.latitude}"  immediate="true" onfocus="getDatasourceUrl('#{statement.vocabulary}', '#{Navigation.autocompleteUrl}')">
+				<f:converter converterId="DoubleConverter" />
+			</h:inputText>
 			<h:outputLabel value="#{lbl.geolocation_longitude}" styleClass="huge_label" />
-			<h:inputText id="inputLongitude" styleClass="full_txtInput" value="#{metadata.longitude}" immediate="true" onfocus="getDatasourceUrl('#{statement.vocabulary}', '#{Navigation.autocompleteUrl}')"/>
+			<h:inputText id="inputLongitude" styleClass="full_txtInput" value="#{metadata.longitude}" immediate="true" onfocus="getDatasourceUrl('#{statement.vocabulary}', '#{Navigation.autocompleteUrl}')">
+				<f:converter converterId="DoubleConverter" />
+			</h:inputText>
 		</h:panelGroup>
 	</h:panelGroup>
 </ui:composition>

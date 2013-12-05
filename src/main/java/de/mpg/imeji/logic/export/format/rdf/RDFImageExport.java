@@ -3,11 +3,27 @@
  */
 package de.mpg.imeji.logic.export.format.rdf;
 
+import java.io.OutputStream;
+import java.io.StringWriter;
+import java.net.URI;
 import java.util.HashMap;
+import java.util.List;
+
+import com.hp.hpl.jena.query.ReadWrite;
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
+
 import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.ImejiRDF2Bean;
+import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.export.format.RDFExport;
 import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.query.SPARQLQueries;
+import de.mpg.imeji.logic.util.MetadataFactory;
 import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.User;
 
 /**
@@ -59,6 +75,13 @@ public class RDFImageExport extends RDFExport
     {
         return "</imeji:image>";
     }
+
+    private boolean isMetadata(Resource r)
+    {
+        return r.getNameSpace().contains("http://imeji.org/terms/metadata");
+    }
+
+   
 
     /*
      * Not implemented : needs of specification about restricted metadata (how to make it really private...)

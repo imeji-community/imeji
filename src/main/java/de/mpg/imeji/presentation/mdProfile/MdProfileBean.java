@@ -16,8 +16,6 @@ import java.util.Map;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.security.Security;

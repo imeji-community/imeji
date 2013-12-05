@@ -62,6 +62,8 @@ public class Statement implements Comparable<Statement>
     private int pos = 0;
     @j2jLiteral("http://imeji.org/terms/restricted")
     private boolean restricted = false;
+    @j2jResource("http://imeji.org/terms/namespace")
+    private URI namespace;
 
     public Statement()
     {
@@ -211,6 +213,22 @@ public class Statement implements Comparable<Statement>
     public void setRestricted(boolean restricted)
     {
         this.restricted = restricted;
+    }
+
+    /**
+     * @param namespace the namespace to set
+     */
+    public void setNamespace(URI namespace)
+    {
+        this.namespace = namespace;
+    }
+
+    /**
+     * @return the namespace
+     */
+    public URI getNamespace()
+    {
+        return namespace;
     }
 
     /*

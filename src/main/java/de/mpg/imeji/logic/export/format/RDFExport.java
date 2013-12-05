@@ -91,13 +91,14 @@ public abstract class RDFExport extends Export
      * @param sr
      * @param out
      */
-    private void exportIntoOut(SearchResult sr, OutputStream out)
+    protected void exportIntoOut(SearchResult sr, OutputStream out)
     {
         namespaces.put("http://www.w3.org/1999/02/22-rdf-syntax-ns#", "rdf");
         Imeji.dataset.begin(ReadWrite.READ);
         try
         {
             Model model = Imeji.dataset.getNamedModel(modelURI);
+            Imeji.dataset.commit();
             StringWriter writer = new StringWriter();
             writer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
             writer.append("<rdf:RDF");
@@ -120,7 +121,7 @@ public abstract class RDFExport extends Export
         }
         catch (Exception e)
         {
-            Imeji.dataset.abort();
+            // Imeji.dataset.abort();
             throw new RuntimeException("Error in export", e);
         }
         finally
@@ -135,7 +136,7 @@ public abstract class RDFExport extends Export
      * @param r
      * @return
      */
-    private StringWriter exportResource(Resource r)
+    protected StringWriter exportResource(Resource r)
     {
         StringWriter writer = new StringWriter();
         if (isFilteredResource(r))
@@ -186,7 +187,7 @@ public abstract class RDFExport extends Export
      * @param uri
      * @return
      */
-    private String toUrl(String uri)
+    protected String toUrl(String uri)
     {
         return uri.replace(PropertyBean.baseURI(), PropertyBean.applicationURL());
     }
@@ -241,7 +242,7 @@ public abstract class RDFExport extends Export
      * @param ns
      * @return
      */
-    private String getNamespace(String ns)
+    protected String getNamespace(String ns)
     {
         String ns1 = namespaces.get(ns);
         if (ns1 != null)
@@ -256,7 +257,7 @@ public abstract class RDFExport extends Export
      * 
      * @param writer
      */
-    private void newLine(StringWriter writer)
+    protected void newLine(StringWriter writer)
     {
         writer.append("\n");
     }

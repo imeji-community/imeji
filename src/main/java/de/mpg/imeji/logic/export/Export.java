@@ -60,12 +60,16 @@ public abstract class Export
      * @return
      * @throws HttpResponseException
      */
-    public final static Export factory(Map<String, String[]> params) throws HttpResponseException
+    public static Export factory(Map<String, String[]> params) throws HttpResponseException
     {
         Export export = null;
         String format = getParam(params, "format");
         String type = getParam(params, "type");
-        if ("rdf".equals(format))
+        if(format == null || "".equals(format))
+        {
+            export = RDFExport.factory(type);
+        }
+        else if ("rdf".equals(format))
         {
             export = RDFExport.factory(type);
         }

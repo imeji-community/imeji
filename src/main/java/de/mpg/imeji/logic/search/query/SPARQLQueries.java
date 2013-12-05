@@ -28,6 +28,8 @@
  */
 package de.mpg.imeji.logic.search.query;
 
+import java.net.URI;
+
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -58,6 +60,18 @@ public class SPARQLQueries
                 + " . ?it <http://imeji.org/terms/collection> ?sort0"
                 + ". ?it <http://imeji.org/terms/metadataSet> ?mds . ?mds <http://imeji.org/terms/metadata> ?s . ?s <http://imeji.org/terms/statement> ?st"
                 + " . ?st <http://imeji.org/terms/restricted> ?r  .FILTER(?r='true'^^<http://www.w3.org/2001/XMLSchema#boolean>) }";
+    }
+
+    /**
+     * REturn the namespace of a {@link Metadata} if defined in the {@link MetadataProfile}
+     * 
+     * @param uri
+     * @return
+     */
+    public static String selectMetadataNamespace(String uri)
+    {
+        return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE { <" + uri
+                + "> <http://imeji.org/terms/statement> ?st . ?st <http://imeji.org/terms/namespace> ?s }";
     }
 
     /**

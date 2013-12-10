@@ -17,6 +17,7 @@ import javax.faces.model.SelectItem;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
@@ -538,7 +539,7 @@ public class ImageBean
             List<String> res = s.searchSimpleForQuery(SPARQLQueries.selectAlbumIdOfFile(item.getId().toString()), null);
             for (int i = 0; i < res.size(); i++)
             {
-                albums.add(ac.retrieveLazy(new URI(res.get(i)), sessionBean.getUser()));
+                albums.add(ac.retrieveLazy(new URI(res.get(i)), Imeji.adminUser));
             }
         }
         return albums;

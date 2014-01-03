@@ -1990,6 +1990,12 @@ min-height: 6em;
 	border: 1px solid #292929;
 	border: 0.0909090909em solid #292929;
 }
+
+.imj_headline  h2 {
+    font-size: 140%;
+    line-height: normal;
+	padding: 0.454545em 0.81818181em;
+}
 .imj_adminPanel .imj_content {
 	width: 91.95%;
 	padding: 0.454545em 0.81818181em;
@@ -2002,11 +2008,11 @@ min-height: 6em;
 .imj_adminPanel ul {
 	line-height: 150%;
 }
-		
+
 .imj_adminEditPanel {
 	margin: 0.5em 0em 1em -1em;
     padding: 0 0 2em 0;
-	border-bottom: 0.0909091em solid #292929;
+	/*border-bottom: 0.0909091em solid #292929;*/
 	/*text-align: right;*/
 }
 
@@ -2064,7 +2070,7 @@ min-height: 6em;
     background-color: #4AFF00;
     border: thin solid #4AFF00;
 }
-		
+
 
 /* ===[ Dialog - .messageArea - .messageArea .half_area2_p6 ]===
    ======================================================== */

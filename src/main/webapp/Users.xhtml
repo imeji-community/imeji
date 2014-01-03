@@ -7,7 +7,7 @@
 	<ui:param name="currentMainMenu" value="admin"/>
 	
 	<ui:define name="mainContent">
-		
+	
 		<!-- Breadcrumb - History -->
 		<ui:include src="include/History.xhtml"></ui:include>
 		
@@ -24,19 +24,18 @@
 		
 				<!-- Admin - TiledList -->
 				<div class="imj_administrationTiledList imj_maxWidth">
+				
 					<div class="imj_listHeader">
 						<div class="imj_headline">
 							<h2><h:outputText value="#{lbl.admin_user_info} - #{lbl.admin_user_view}"/></h2>
 						</div>
 					</div>
-					<div class="imj_listBody">
-						
+					
+					<div class="imj_listBody">					
 						<ui:repeat id="userList" var="user" value="#{UsersBean.users}" rows="0">
-						
 							<h:panelGroup layout="block" styleClass="imj_adminPanel imj_userConfig" rendered="#{UsersBean.sysAdmin}">
 								<!-- AdminDataList - Users List - Name -->
-								<h:panelGroup layout="block" styleClass="imj_admindataSet">
-									
+								<h:panelGroup layout="block" styleClass="imj_admindataSet">									
 									<div class="imj_headline">
 										<h2><h:outputText value="#{user.name} (#{user.email})"/></h2>
 										<span class="imj_invisible">: </span>
@@ -50,12 +49,10 @@
 												</ui:repeat>
 											</div>										
 										</div>
-										<h:panelGroup layout="block" styleClass="imj_adminEditPanel">								
-								
+										<h:panelGroup layout="block" styleClass="imj_adminEditPanel">
 											<h:outputLink value="#{Navigation.applicationUrl}user?id=#{user.email}">
 												<h:outputText value="#{lbl.user_admin_edit}" styleClass="imj_editButton"/>
 											</h:outputLink>
-																		
 											<h:form>
 												<h:commandLink styleClass="imj_editButton" action="#{UsersBean.sendPassword}" value="#{lbl.user_admin_newPwd}" onclick="if (confirm('Do you really want to reset the password? (A message will be sent to the user)')) return true; return false;">
 													<f:param name="email" value="#{user.email}"/>
@@ -63,16 +60,12 @@
 												<h:commandLink styleClass="imj_cancelButton" action="#{UsersBean.deleteUser}" value="#{lbl.user_admin_delete}" onclick="if (confirm('Do you really want to delete this user?')) return true; return false;">
 													<f:param name="email" value="#{user.email}"/>
 												</h:commandLink>
-											</h:form>		
-										
+											</h:form>
 										</h:panelGroup>
 									</div>
 								</h:panelGroup>								
-								
-								
 							</h:panelGroup>
-						</ui:repeat>
-						
+						</ui:repeat>						
 					</div>	<!-- END LIST BODY -->	
 					
 				</div> <!-- END ADMIN LIST -->

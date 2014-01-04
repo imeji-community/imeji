@@ -26,7 +26,9 @@
 /******************************* OLD STYLES **************************************/
 /********************** css hot fixes for release 1.2.0.0 ************************/
 /* ================================================== */
-.free_txtInput, .xHuge_txtInput, .xHuge_txtInput input {
+.free_txtInput, 
+.xHuge_txtInput, 
+.xHuge_txtInput input {
     width: 98%;
 }
 
@@ -73,7 +75,8 @@
 /* imeji base settings - set body width and height to 100% for all pages 
    =========================================================================  */
 
-html, body {
+html, 
+body {
 	background-color: #292929;
 	height: 100%;
 	width: 100%;
@@ -96,7 +99,11 @@ body {
 }
 
 
-label, input, button, select, textarea {
+label, 
+input, 
+button, 
+select, 
+textarea {
     font-size: 11px; 
 }
 
@@ -121,7 +128,10 @@ a:visited {
 	text-decoration: none;
 }
 
-a:hover, a:focus, button:hover, button:focus {
+a:hover, 
+a:focus, 
+button:hover, 
+button:focus {
 	color: #EEEEEE;
 	text-decoration: none;
 }
@@ -168,7 +178,10 @@ input[type="radio"] {
 	
 }
 
-select:focus, textarea:focus, input[type="text"]:focus, input[type="password"]:focus {
+select:focus, 
+textarea:focus, 
+input[type="text"]:focus, 
+input[type="password"]:focus {
     border-color: #F0F0F0;
 }
 
@@ -185,7 +198,10 @@ input[type="checkbox"]  {
 }
 
 
-label, .imj_metadataLabel, .imj_infodataLabel, .imj_admindataLabel {
+label, 
+.imj_metadataLabel, 
+.imj_infodataLabel, 
+.imj_admindataLabel {
     cursor: pointer;
 }
 
@@ -543,7 +559,7 @@ cut second ?
     padding: 0;
 }
 
-/* half_area0 themePark - header.jspf   */
+/* half_area0 themePark - header.jspf - OLD !  */
 
 /* .themePark {
     background-attachment: inherit;
@@ -594,8 +610,7 @@ cut second ?
     width: 2em;
     margin-right: 0.636363em;
     margin-top: -0.1818em;
-    background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjMagnifierTopLeft_23.png");
-    
+    background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjMagnifierTopLeft_23.png");    
     background-position: center center;
     background-repeat: no-repeat;
 }
@@ -696,7 +711,7 @@ cut second ?
 	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAD2F/imjTrianglePrevious_15.png") transparent no-repeat center left;
 	padding-left: 1.5em;
 }
-.imj_paginator .imj_backwardButton:hover { /*4AFF00*/
+.imj_paginator .imj_backwardButton:hover {
 	color: #F0F0F0;
 	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjTrianglePrevious_15.png") transparent no-repeat center left;
 }
@@ -877,21 +892,17 @@ cut second ?
 }
 
 
-
 /* * site content - sections - header
    * mainMenu, metaMenu, contentMenu, contentSubMenu 
    ==================================================
    ================================================== */
 
-
 /* ===[ Site Content ]===
    ================================================== */
 
 /* id="content" class="imj_clear full_area0" 
-
     margin-top: 0.5454em;
     margin-bottom: 0.9090em;
-
 */
 
 .imj_siteContent {
@@ -1040,10 +1051,8 @@ cut second ?
 *  Images.xhtml - template_paginator_albums.xhtml *    
 
     margin-left: 0.46em;
-    margin-right: 0.46em;
-    
+    margin-right: 0.46em;    
     background-color: #292929;
-     
     border-right-width: 0px;
     border-left-width: 0px;
     border-top-width: 0.18em;
@@ -1072,10 +1081,7 @@ cut second ?
     float: left;
     line-height: normal;
 }
-
 */
-
-/* *** Images.xhtml *** */
 
 .imj_contentSubMenu {
     clear:left;
@@ -1099,13 +1105,11 @@ cut second ?
     color: #6CAD2F;
 }
 
-
 /* SubMenu - Sort by - Filter by */
 .imj_contentSubMenuItem span,
 .imj_contentSubMenuItem a {
     margin-right: 0.364em;
 } 
-
 
 /* template_paginator_containers.xhtml - Images.xhtml */
 
@@ -1388,10 +1392,6 @@ OLD:
 	margin-bottom: 0.545em;
 }   
 
-.imj_mediaDisplayContainerItem {
-		
-}
-
 
 /* ===[ Content - EDIT ]===
    ================================================== */
@@ -1399,7 +1399,6 @@ OLD:
 /* * mediaEditPanel + Items 
 	(image_deatails.xhtml)
    ================================================== */
-
 
 .imj_mediaEditPanel {
 	width: 100%;
@@ -1424,14 +1423,14 @@ OLD:
 	text-align: center;
 }
 
-
 /* item-styles - .imj_removeMedia, .imj_addMedia , .imj_activeMedia, .imj_selectMedia */
 
 .imj_selectMedia {
 	margin-right: 0.636em; 
 }
 
-.imj_activeMedia:hover, .imj_addMedia:hover {
+.imj_activeMedia:hover, 
+.imj_addMedia:hover {
 	background-color: #444444;
 }
  
@@ -1521,7 +1520,7 @@ OLD:
 .imj_metadataLabel, .imj_infodataLabel, .imj_admindataLabel {
 	font-weight: bold;
 	display: inline-block;
-	min-width: 16%;
+	min-width: 24%;
 	vertical-align: top;
 }
 
@@ -1612,9 +1611,6 @@ OLD:
 	display: inline-block;
 }
 
-.imj_metadataValueEntryLabel {
-}
-
 
 /* .imj_metadataLabelInputWrapper {
 	display: inline-block;
@@ -1625,11 +1621,16 @@ OLD:
 	width: 55em;
 	min-height: 6em;
 }
-.imj_metadataEditLink, .imj_metadataEditPerson, .imj_metadataEditPublication {
+.imj_metadataEditLink, 
+.imj_metadataEditPerson, 
+.imj_metadataEditPublication {
 	width: 55em;
 }
 
-.imj_metadataEditLicence, .imj_metadataEditNumber, .imj_metadataEditGeo, .imj_admindataEdit {
+.imj_metadataEditLicence, 
+.imj_metadataEditNumber, 
+.imj_metadataEditGeo, 
+.imj_admindataEdit {
 	width: 25em;
 }
 
@@ -1712,6 +1713,7 @@ min-height: 6em;
 .imj_tiledMediaList {
 	padding-left: 0.545454em;
 }
+
 .imj_tiledMediaList .imj_listHeader {
 	min-height: 2em;
 }
@@ -1719,21 +1721,25 @@ min-height: 6em;
 .imj_tiledMediaList .imj_tileItem {
 	vertical-align: top;
 }
+
 .imj_tiledMediaList .imj_tileItem {
 	display:inline-block;
 	width:12em;
 	padding-bottom: 2em;
 	margin-right: 0.818181em;
 }
+
 .imj_tiledMediaList .imj_tileItem:hover .imj_tileThumbnailArea {
 	background-color: #6CAD2F;
 }
+
 .imj_tiledMediaList .imj_tileItem .imj_tooltip {
 	display:none;
 	position:absolute;
 	z-index:10;
 	width:30em;
 }
+
 .imj_tiledMediaList .imj_tileItem:hover .imj_tooltip {
 	display:inline-block;
 }
@@ -1745,9 +1751,11 @@ min-height: 6em;
 	text-align: center;
 	padding: 0.725em;
 }
+
 .imj_tileThumbnailArea.imj_selected {
 	background-color: #6CAD2F;
 }
+
 .imj_tileThumbnailArea img {
 	width: 10.545454em;
 	height: 10.545454em;
@@ -1759,19 +1767,24 @@ min-height: 6em;
 	height: 1.363636em;
 	vertical-align: middle;
 }
+
 .imj_iconTriangleBottomRight_15:hover {
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonTriangleLargeBottomRight_15.png");
 }
+
 .imj_overlayMenu .imj_menuHeader {
 	color: #6CAD2F;
 	cursor: pointer;
 }
+
 .imj_overlayMenu:hover .imj_menuHeader {
 	color: #F0F0F0;
 }
+
 .imj_overlayMenu:hover .imj_iconTriangleBottomRight_15 {
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonTriangleLargeBottomRight_15.png");
 }
+
 .imj_facetSeparator {
 	margin:0 0.25em;
 	color: #F0F0F0; 
@@ -1788,9 +1801,11 @@ min-height: 6em;
     color: #6CAD2F;
     padding: 0 1em;
 }
+
 .imj_singlePageBrowser .imj_pageNumber:hover {
 	color: #F0F0F0;
 }
+
 .imj_singlePageBrowser .imj_currentPageNumber {
 	background-color: inherit;
     border: 0 none;
@@ -1801,22 +1816,28 @@ min-height: 6em;
 .imj_rangeSelector {
 	float: left;
 }
+
 .imj_rangeSelector .imj_rangeSelectorLabel {
 	margin-left: 0.41414141em;
 }
+
 .imj_singlePageBrowser {
 	display: inline-block;
 }
+
 .imj_gotoBox {
 	float: right;
 }
+
 .imj_gotoBox .imj_pageInput {
 	width: 3em;
 	text-align: center;
 }
+
 .imj_gotoBox .imj_pageInput {
 	margin-right: 0.41414141em;
 }
+
 .imj_gotoBox .imj_submitButton {
 	margin-left: 0.41414141em;
 }
@@ -1913,8 +1934,7 @@ min-height: 6em;
 	height: 2em;
     width: 2em;
 	margin-top: 1em;
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAD2F/imjArrowThinRight_23.png");
-		
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAD2F/imjArrowThinRight_23.png");		
 	background-color: inherit;
 	background-position: right;
 	background-repeat: no-repeat;
@@ -2048,7 +2068,8 @@ min-height: 6em;
     -ms-border-radius: 0.3em;
 }
 
-.imj_editButton, a.imj_editButton {
+.imj_editButton, 
+a.imj_editButton {
 	color: #FFFFFF;
 	background-color: #6CAD2F;
 	border: thin solid #6CAD2F;
@@ -2065,7 +2086,8 @@ min-height: 6em;
 	margin-left: 0;
 }
 
-.imj_backButton:hover, .imj_editButton:hover  {
+.imj_backButton:hover, 
+.imj_editButton:hover  {
 	color: #000000;
     background-color: #4AFF00;
     border: thin solid #4AFF00;

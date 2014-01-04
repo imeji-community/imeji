@@ -19,8 +19,7 @@
 		</h:panelGroup>
 
 		<ui:fragment rendered="#{UsersBean.sysAdmin}">
-
-			<!-- Only for Admins -->				
+		<!-- Only for Admins -->				
 		
 			<!-- Admin - TiledList -->
 			<div class="imj_administrationTiledList">
@@ -28,24 +27,24 @@
 				<div class="imj_listBody">
 				
 					<h:panelGroup layout="block" styleClass="imj_adminPanel imj_userConfig">						
-							<div class="imj_headline">
-								<h2><h:outputText value="#{lbl.admin_user_info}"/></h2>
-							</div>
-							<div class="imj_content">
-								<ul>
-									<li>
-										<a href="#{Navigation.applicationUri}/jsf/UserCreate.xhtml" title="#{lbl.admin_user_new}">
-											<h:outputText value="#{lbl.admin_user_new}"/>
-										</a>
-									</li>
-									<li>
-										<a href="#{Navigation.applicationUrl}jsf/Users.xhtml" title="#{lbl.admin_user_view}">
-											<h:outputText value="#{lbl.admin_user_view}" />
-										</a>
-									</li>
-									<li></li>
-								</ul>
-							</div>												
+						<div class="imj_headline">
+							<h2><h:outputText value="#{lbl.admin_user_info}"/></h2>
+						</div>
+						<div class="imj_content">
+							<ul>
+								<li>
+									<a href="#{Navigation.applicationUri}/jsf/UserCreate.xhtml" title="#{lbl.admin_user_new}">
+										<h:outputText value="#{lbl.admin_user_new}"/>
+									</a>
+								</li>
+								<li>
+									<a href="#{Navigation.applicationUrl}jsf/Users.xhtml" title="#{lbl.admin_user_view}">
+										<h:outputText value="#{lbl.admin_user_view}" />
+									</a>
+								</li>
+								<li></li>
+							</ul>
+						</div>												
 					</h:panelGroup>				
 				
 					<h:panelGroup layout="block" styleClass="imj_adminPanel imj_config">

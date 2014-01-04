@@ -18,8 +18,8 @@
 		</h:panelGroup>
 		
 		<ui:fragment rendered="#{UsersBean.sysAdmin}">
-			
-			<!-- Only for Admins -->
+		<!-- Only for Admins -->
+		
 			<div class="imj_userConfig">
 		
 				<!-- Admin - TiledList -->
@@ -31,7 +31,8 @@
 						</div>
 					</div>
 					
-					<div class="imj_listBody">					
+					<div class="imj_listBody">
+					
 						<ui:repeat id="userList" var="user" value="#{UsersBean.users}" rows="0">
 							<h:panelGroup layout="block" styleClass="imj_adminPanel imj_userConfig" rendered="#{UsersBean.sysAdmin}">
 								<!-- AdminDataList - Users List - Name -->
@@ -49,10 +50,12 @@
 												</ui:repeat>
 											</div>										
 										</div>
+										<!-- AdminDataList - User Email -->
 										<h:panelGroup layout="block" styleClass="imj_adminEditPanel">
 											<h:outputLink value="#{Navigation.applicationUrl}user?id=#{user.email}">
 												<h:outputText value="#{lbl.user_admin_edit}" styleClass="imj_editButton"/>
 											</h:outputLink>
+											<!-- AdminDataList - User Password -->
 											<h:form>
 												<h:commandLink styleClass="imj_editButton" action="#{UsersBean.sendPassword}" value="#{lbl.user_admin_newPwd}" onclick="if (confirm('Do you really want to reset the password? (A message will be sent to the user)')) return true; return false;">
 													<f:param name="email" value="#{user.email}"/>
@@ -62,10 +65,11 @@
 												</h:commandLink>
 											</h:form>
 										</h:panelGroup>
-									</div>
+									</div> <!-- END CONTENT -->
 								</h:panelGroup>								
 							</h:panelGroup>
-						</ui:repeat>						
+						</ui:repeat>
+						
 					</div>	<!-- END LIST BODY -->	
 					
 				</div> <!-- END ADMIN LIST -->

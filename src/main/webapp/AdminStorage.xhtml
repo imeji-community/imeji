@@ -18,13 +18,12 @@
 		</h:panelGroup>
 	
 		<ui:fragment rendered="#{UsersBean.sysAdmin}">
-		
-			<!-- Only for Admins -->			
+		<!-- Only for Admins -->			
 			
 			<div class="imj_userConfig">
 				
 				<!-- Admin - TiledList -->		
-				<div class="imj_administrationTiledList">
+				<div class="imj_administrationTiledList imj_maxWidth">
 				
 					<div class="imj_listBody">
 					
@@ -38,15 +37,11 @@
 							</div>
 							
 							<div class="imj_content">
-								<h:form>
-								
-									<h:outputText value="Important: Please make sure to do a backup before running this method. When the import is done (check in the log file), restart imeji with the correct storage!"/> <!-- internationalized info message lbl -->
-											
+								<h:form>								
+									<h:outputText value="Important: Please make sure to do a backup before running this method! When the import is done (check in the log file), restart imeji with the correct storage!"/> <!-- internationalized info message lbl missing -->
 									<h:panelGroup layout="block" styleClass="imj_adminEditPanel">
 										<h:commandLink styleClass="imj_editButton" action="#{AdminBean.importToInternalStorage}" value="#{lbl.import_to_internal}: #{AdminBean.internalStorageLocation}"/>
-										<!-- <h:outputText value="#{AdminBean.internalStorageLocation}" styleClass="imj_backButton"/> -->
 									</h:panelGroup>
-							
 								</h:form>
 							</div>
 							
@@ -56,7 +51,7 @@
 				
 				</div> <!-- END ADMIN LIST -->
 			
-			</div>
+			</div> <!-- END USER CONFIG -->
 		
 		
 			<!-- AdminDataList - Back Button -->

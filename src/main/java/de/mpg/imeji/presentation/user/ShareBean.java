@@ -175,24 +175,24 @@ public class ShareBean
         }
         if (!GrantType.PROFILE_EDITOR.equals(selectedGrant))
         {
-            shared = sm.share(retrieveCollection(id), session.getUser(), email, selectedGrant, true);
-            message = session.getLabel("collection") + " " + id + " " + session.getLabel("shared_with") + " " + email
+            shared = sm.share(retrieveCollection(id), session.getUser(), this.getEmail(), selectedGrant, true);
+            message = session.getLabel("collection") + " " + id + " " + session.getLabel("shared_with") + " " + this.getEmail()
                     + " " + session.getLabel("share_as") + " " + role;
         }
         else
         {
-            shared = sm.share(retrieveProfile(id), session.getUser(), email, selectedGrant, true);
-            message = session.getLabel("profile") + " " + id + " " + session.getLabel("shared_with") + " " + email
+            shared = sm.share(retrieveProfile(id), session.getUser(), this.getEmail(), selectedGrant, true);
+            message = session.getLabel("profile") + " " + id + " " + session.getLabel("shared_with") + " " + this.getEmail()
                     + " " + session.getLabel("share_as") + " " + role;
             // Add grant VIEWER so the user can see the collection
             if (GrantType.PROFILE_EDITOR.equals(selectedGrant))
             {
-                shared = sm.share(retrieveCollection(id), session.getUser(), email, GrantType.VIEWER, true);
+                shared = sm.share(retrieveCollection(id), session.getUser(), this.getEmail(), GrantType.VIEWER, true);
             }
         }
         if (shared)
         {
-            User dest = ObjectLoader.loadUser(email, session.getUser());
+            User dest = ObjectLoader.loadUser(this.getEmail(), session.getUser());
             EmailMessages emailMessages = new EmailMessages();
             sendEmail(dest, session.getMessage("email_shared_collection_subject"),
                     emailMessages.getSharedCollectionMessage(session.getUser().getName(), dest.getName(), name,
@@ -237,12 +237,12 @@ public class ShareBean
         SharingManager sm = new SharingManager();
         boolean shared = false;
         String message = "";
-        shared = sm.share(retrieveAlbum(id), session.getUser(), email, selectedGrant, true);
-        message = session.getLabel("album") + " " + id + " " + session.getLabel("shared_with") + " " + email + " "
+        shared = sm.share(retrieveAlbum(id), session.getUser(), this.getEmail(), selectedGrant, true);
+        message = session.getLabel("album") + " " + id + " " + session.getLabel("shared_with") + " " + this.getEmail() + " "
                 + session.getLabel("as") + " " + selectedGrant.toString();
         if (shared)
         {
-            User dest = ObjectLoader.loadUser(email, session.getUser());
+            User dest = ObjectLoader.loadUser(this.getEmail(), session.getUser());
             EmailMessages emailMessages = new EmailMessages();
             sendEmail(dest, session.getMessage("email_shared_album_subject"), emailMessages.getSharedAlbumMessage(
                     session.getUser().getName(), dest.getName(), name, getContainerHome(), selectedGrant.toString()));
@@ -328,7 +328,10 @@ public class ShareBean
      */
     public String getEmail()
     {
-        return email;
+    	if (email == null || email.equals(""))
+    			{return email;}
+    	else
+    			{return email.toLowerCase();}
     }
 
     /**

@@ -68,7 +68,7 @@ public class UploadBean
     private String totalNum;
     private int sNum;
     private int fNum;
-    private List<String> sFiles;
+    private List<Item> sFiles;
     private List<String> fFiles;
     private String externalUrl;
     private StorageController storageController;
@@ -110,7 +110,7 @@ public class UploadBean
             totalNum = "";
             sNum = 0;
             fNum = 0;
-            sFiles = new ArrayList<String>();
+            sFiles = new ArrayList<Item>();
             fFiles = new ArrayList<String>();
             externalUrl = "";
         }
@@ -358,7 +358,7 @@ public class UploadBean
                 item.setChecksum(uploadResult.getChecksum());
             }
             sNum += 1;
-            sFiles.add(title);
+            sFiles.add(item);
             return item;
         }
         catch (Exception e)
@@ -607,12 +607,12 @@ public class UploadBean
         this.fNum = fNum;
     }
 
-    public List<String> getsFiles()
+    public List<Item> getsFiles()
     {
         return sFiles;
     }
 
-    public void setsFiles(List<String> sFiles)
+    public void setsFiles(List<Item> sFiles)
     {
         this.sFiles = sFiles;
     }

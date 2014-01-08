@@ -184,7 +184,9 @@
 							<br />
 						</h2>
 						<ui:repeat id="sFile" var="sFile" value="#{UploadBean.sFiles}">
-							<h:outputText value="#{sFile}" styleClass="messageStatus" />
+							<h:outputLink value="#{sFile.id}">
+								<h:outputText value="#{sFile.filename}" styleClass="messageStatus" />
+							</h:outputLink>
 							<br />
 						</ui:repeat>
 					</h:panelGroup>

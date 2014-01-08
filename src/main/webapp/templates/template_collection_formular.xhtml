@@ -44,13 +44,13 @@
 								<ui:repeat var="creator" value="#{FormularBean.collection.metadata.persons}" varStatus="indexA">
 									<h:panelGroup>
 										<b class="xLarge_area0_p8 endline labelLine clear">
-											<h:outputText value="#{lbl.author}*"/>
+											<h:outputText value="#{lbl.author}"/>
 											<span class="noDisplay">: </span>
 										</b>
 										
 										<!-- Family Name -->
 										<span class="xHuge_area0 xTiny_marginLExcl endline">
-											<h:outputLabel styleClass="full_area0" value="#{lbl.family_name}"/>
+											<h:outputLabel styleClass="full_area0" value="#{lbl.family_name}*"/>
 											<h:inputText id="inputFamiliyName" styleClass="quad_txtInput" value="#{creator.familyName}"/>
 										</span>
 										<br/>
@@ -110,6 +110,12 @@
 									</h:panelGroup>
 								</ui:repeat>
 							</h:panelGroup>
+							<b class="huge_area0 xTiny_marginLExcl endline">
+								<h:outputText value="* #{lbl.mandatory}"/>
+								<span class="noDisplay">: </span>
+								<br/><br/>
+							</b>
+							
 						</div>
 					</h:panelGroup>
 						

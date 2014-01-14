@@ -64,6 +64,11 @@ public class LocalizedString
     @XmlAttribute(name = "lang")
     public String getLang()
     {
+    	//Set en as default language
+    	if (lang == null || lang.equals(""))
+    	{
+    		lang = "en";
+    	}
         return lang;
     }
 

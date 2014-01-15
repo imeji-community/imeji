@@ -5,7 +5,7 @@
 	xmlns:f="http://java.sun.com/jsf/core">
 	<ui:param name="headline" value="Administration" />
 	<ui:define name="mainContent">
-		<h:panelGroup layout="block" styleClass="full_area0 endline" rendered="#{SessionBean.admin}">
+		<h:panelGroup layout="block" styleClass="full_area0 endline" rendered="#{Auth.admin}">
 			<div class="full_area0">
 				<h2>
 					<h:outputText value="#{lbl.import_to_internal}" />

@@ -50,7 +50,7 @@
 									</h:commandLink>
 									<!-- Edit all -->
 									<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom" value="#{Navigation.applicationUrl}edit?type=all&amp;c=#{paginatorListSessionBean.collection.id}&amp;q=#{paginatorListSessionBean.query}" id="lnkSelectEdit2" 
-												  rendered="#{paginatorListSessionBean.navigationString == 'pretty:collectionBrowse' and paginatorListSessionBean.collection != null and paginatorListSessionBean.imageEditable}">
+												  rendered="#{paginatorListSessionBean.navigationString == 'pretty:collectionBrowse' and paginatorListSessionBean.collection != null and Auth.updateContent(paginatorListSessionBean.collection)}">
 										<h:outputText value="#{lbl.edit_all}"/>
 									</h:outputLink>
 									<!-- Delete/Discard all from collection-->
@@ -58,19 +58,19 @@
 										<h:outputLink 	styleClass="xLarge_area0_p8 noPaddingTopBottom criticalItem" 
 														value="#" 
 														onclick="openDialog('dialogDeleteAll')" 
-													  	rendered="#{paginatorListSessionBean.deletable}">
+													  	rendered="#{Auth.deleteContent(paginatorListSessionBean.collection)}">
 											<h:outputText value="#{lbl.delete_all}"/>
 										</h:outputLink>
 										<h:outputLink 	styleClass="xLarge_area0_p8 noPaddingTopBottom criticalItem" 
 														value="#" 
 														onclick="openDialog('dialogWithdrawAll')" 
-													  	rendered="#{paginatorListSessionBean.collection != null and paginatorListSessionBean.editable  and paginatorListSessionBean.collection.status == 'RELEASED'}">
+													  	rendered="#{paginatorListSessionBean.collection != null and auth.admin(paginatorListSessionBean.collection)  and paginatorListSessionBean.collection.status == 'RELEASED'}">
 											<h:outputText value="#{lbl.withdraw_all}"/>
 										</h:outputLink>
 									</h:panelGroup>
 									<!-- Remove all from album -->
 									<h:panelGroup rendered="#{paginatorListSessionBean.navigationString == 'pretty:albumBrowse'}">
-										<h:commandLink styleClass="xLarge_area0_p8 noPaddingTopBottom" value="#{lbl.remove_from_album_all}" action="#{paginatorListSessionBean.removeAllFromAlbum}" rendered="#{paginatorListSessionBean.deletable}">
+										<h:commandLink styleClass="xLarge_area0_p8 noPaddingTopBottom" value="#{lbl.remove_from_album_all}" action="#{paginatorListSessionBean.removeAllFromAlbum}" rendered="#{Auth.deleteContent(paginatorListSessionBean.album)}">
 										</h:commandLink>				
 									</h:panelGroup>
 								</div>
@@ -106,24 +106,24 @@
 											</h:commandLink>
 											<!-- Edit selected -->
 											<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom" value="#{Navigation.applicationUrl}edit?type=selected&amp;c=#{paginatorListSessionBean.collection.id}&amp;q=#{paginatorListSessionBean.query}" id="lnkSelectEdit" 
-														  rendered="#{paginatorListSessionBean.navigationString == 'pretty:collectionBrowse' and paginatorListSessionBean.collection != null and paginatorListSessionBean.imageEditable}">
+														  rendered="#{paginatorListSessionBean.navigationString == 'pretty:collectionBrowse' and paginatorListSessionBean.collection != null and Auth.updateContent(paginatorListSessionBean.collection)}">
 												<h:outputText value="#{lbl.edit_selected}"/>
 											</h:outputLink>
 											<!-- Delete/Discard selected images -->
 											<h:panelGroup rendered="#{paginatorListSessionBean.navigationString == 'pretty:collectionBrowse' and paginatorListSessionBean.collection != null}">
 												<h:outputLink onclick="openDialog('dialogDeleteSelected')" styleClass="xLarge_area0_p8 noPaddingTopBottom criticalItem" value="#" 
-															  rendered="#{paginatorListSessionBean.imageDeletable}">
+															  rendered="#{Auth.deleteContent(paginatorListSessionBean.collection)}">
 													<h:outputText value="#{lbl.delete_selectedImages}"/>
 												</h:outputLink>
 												<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom criticalItem" value="#" onclick="openDialog('dialogWithdrawSelected')" 
-															  rendered="#{paginatorListSessionBean.editable and paginatorListSessionBean.collection.status == 'RELEASED'}">
+															  rendered="#{Auth.admin(paginatorListSessionBean.collection) and paginatorListSessionBean.collection.status == 'RELEASED'}">
 													<h:outputText value="#{lbl.withdraw_selected}"/>
 												</h:outputLink>
 											</h:panelGroup>
 											<!-- Remove selected from album -->
 											<h:panelGroup rendered="#{paginatorListSessionBean.navigationString == 'pretty:albumBrowse'}">
 												<h:commandLink styleClass="xLarge_area0_p8 noPaddingTopBottom"  value="#{lbl.remove_from_album}" action="#{paginatorListSessionBean.removeFromAlbum}" 
-															  rendered="#{paginatorListSessionBean.deletable}">
+															  rendered="#{Auth.deleteContent(paginatorListSessionBean.album)}">
 												</h:commandLink>	
 											</h:panelGroup>
 										</h:panelGroup>

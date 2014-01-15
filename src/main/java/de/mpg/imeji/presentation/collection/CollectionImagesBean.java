@@ -18,13 +18,10 @@ import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
-import de.mpg.imeji.logic.security.Operations.OperationsType;
-import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.beans.AuthorizationBean;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.facet.FacetsBean;
 import de.mpg.imeji.presentation.image.ImagesBean;
@@ -74,7 +71,6 @@ public class CollectionImagesBean extends ImagesBean
         collection = ObjectLoader.loadCollectionLazy(uri, sb.getUser());
         ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).init(ObjectCachedLoader
                 .loadProfile(collection.getProfile()));
-        ((AuthorizationBean)BeanHelper.getSessionBean(AuthorizationBean.class)).init(collection);
         browseInit();
         browseContext = getNavigationString() + id;
         return "";
@@ -229,39 +225,5 @@ public class CollectionImagesBean extends ImagesBean
             logger.error("Error discarding collection", e);
         }
         return "pretty:";
-    }
-
-    /**
-     * True if the {@link CollectionImeji} is updatable for this {@link User}
-     */
-    @Override
-    public boolean isEditable()
-    {
-        Security security = new Security();
-        return security.check(OperationsType.UPDATE, sb.getUser(), collection);
-    }
-
-    /**
-     * Check that at least one item is editable and if the profile is not empty
-     */
-    @Override
-    public boolean isImageEditable()
-    {
-        return super.isImageEditable()
-                && ObjectCachedLoader.loadProfile(collection.getProfile()).getStatements().size() > 0;
-    }
-
-    @Override
-    public boolean isVisible()
-    {
-        Security security = new Security();
-        return security.check(OperationsType.READ, sb.getUser(), collection);
-    }
-
-    @Override
-    public boolean isDeletable()
-    {
-        Security security = new Security();
-        return security.check(OperationsType.DELETE, sb.getUser(), collection);
     }
 }

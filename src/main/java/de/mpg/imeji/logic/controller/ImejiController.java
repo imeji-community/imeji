@@ -122,15 +122,6 @@ public abstract class ImejiController
         properties.setStatus(Status.WITHDRAWN);
     }
 
-    public User addCreatorGrant(URI id, User user) throws Exception
-    {
-        GrantController gc = new GrantController(user);
-        Grant grant = new Grant(GrantType.CONTAINER_ADMIN, id);
-        gc.addGrant(user, grant);
-        UserController uc = new UserController(user);
-        return uc.retrieve(user.getEmail());
-    }
-
     /**
      * load items of a container. Perform a search to load all items: is faster than to read the complete container
      * 

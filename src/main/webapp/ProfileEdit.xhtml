@@ -34,7 +34,7 @@
 	
 		<h:outputText styleClass="imj_contentMenuSeparator"/>
 	
-		<h:outputLink id="lnkUploadImages" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{EditMdProfileBean.colId}/#{Navigation.uploadPath}?init=1" rendered="#{ViewCollectionBean.editable}">
+		<h:outputLink id="lnkUploadImages" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{EditMdProfileBean.colId}/#{Navigation.uploadPath}?init=1" rendered="#{Auth.update(ViewCollectionBean.collection.profile)}">
 			<h:outputText value="#{lbl.upload_images}"></h:outputText>
 		</h:outputLink>
 	

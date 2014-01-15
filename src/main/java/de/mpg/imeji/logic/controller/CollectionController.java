@@ -14,6 +14,7 @@ import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
 import de.mpg.imeji.logic.ImejiSPARQL;
+import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchResult;
@@ -71,12 +72,14 @@ public class CollectionController extends ImejiController
      * @param ic
      * @param user
      */
-    public URI create(CollectionImeji ic, URI profile, User user) throws Exception
+    public URI create(CollectionImeji ic, URI profileURI, User user) throws Exception
     {
         writeCreateProperties(ic, user);
-        ic.setProfile(profile);
+        ic.setProfile(profileURI);
         imejiBean2RDF.create(imejiBean2RDF.toList(ic), user);
-        addCreatorGrant(ic.getId(), user);
+        GrantController gc = new GrantController();
+        gc.addGrants(user,
+                AuthorizationPredefinedRoles.collectionCreator(ic.getId().toString(), profileURI.toString()), user);
         return ic.getId();
     }
 
@@ -145,8 +148,6 @@ public class CollectionController extends ImejiController
             ProfileController pc = new ProfileController();
             pc.delete(pc.retrieve(collection.getProfile(), user), user);
             imejiBean2RDF.delete(imejiBean2RDF.toList(collection), user);
-            GrantController gc = new GrantController(user);
-            gc.removeAllGrantsFor(user, collection.getId());
         }
     }
 

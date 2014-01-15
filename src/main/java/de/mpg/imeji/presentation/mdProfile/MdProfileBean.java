@@ -17,8 +17,6 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.logic.controller.ProfileController;
-import de.mpg.imeji.logic.security.Operations.OperationsType;
-import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.Metadata.Types;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -939,39 +937,6 @@ public class MdProfileBean
     public void setTemplate(String template)
     {
         this.template = template;
-    }
-
-    /**
-     * getter
-     * 
-     * @return
-     */
-    public boolean isEditable()
-    {
-        Security security = new Security();
-        return security.check(OperationsType.UPDATE, sessionBean.getUser(), profile);
-    }
-
-    /**
-     * setter
-     * 
-     * @return
-     */
-    public boolean isVisible()
-    {
-        Security security = new Security();
-        return security.check(OperationsType.READ, sessionBean.getUser(), profile);
-    }
-
-    /**
-     * getter
-     * 
-     * @return
-     */
-    public boolean isDeletable()
-    {
-        Security security = new Security();
-        return security.check(OperationsType.DELETE, sessionBean.getUser(), profile);
     }
 
     /**

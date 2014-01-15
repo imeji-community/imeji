@@ -18,11 +18,11 @@
 		<ui:define name="mainContent">
 			<h:panelGroup layout="block" styleClass="full_area0">
 				
-				<h:panelGroup layout="block" styleClass="full_area0 fullItem" rendered="#{!ViewMdProfileBean.visible}">
+				<h:panelGroup layout="block" styleClass="full_area0 fullItem" rendered="#{!Auth.read(ViewMdProfileBean.profile)}">
 					<h2><h:outputText value="You are not allow to see this profile"/></h2>
 				</h:panelGroup>
 								
-				<h:panelGroup layout="block" styleClass="full_area0 fullItem" rendered="#{ViewMdProfileBean.visible}">
+				<h:panelGroup layout="block" styleClass="full_area0 fullItem" rendered="#{Auth.read(ViewMdProfileBean.profile)}">
 					
 					<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 						<h3 class="xLarge_area0_p8 endline blockHeader">

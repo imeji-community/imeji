@@ -6,13 +6,13 @@
 		<h:outputText value="#{imageBean.init}"/>
 	</ui:define>
 	<ui:define name="mainContent" >
-        <h:panelGroup layout="block" styleClass="full_area0" rendered="#{imageBean.image != null and !imageBean.visible}">
+        <h:panelGroup layout="block" styleClass="full_area0" rendered="#{imageBean.image != null and !Auth.readContent(imageBean.collection)}">
             <h2>
             	<h:outputText value="#{lbl.view_page_disallowed}" styleClass="tiny_marginLExcl" rendered="#{SessionBean.user == null}"/>
             	<h:outputText value="#{lbl.view_page_disallowed2}" styleClass="tiny_marginLExcl" rendered="#{SessionBean.user != null}"/>
             </h2>
         </h:panelGroup>
-		<h:panelGroup rendered="#{imageBean.image != null and imageBean.visible}">
+		<h:panelGroup rendered="#{imageBean.image != null and Auth.readContent(imageBean.collection)}">
 			<div class="full_area0 paginator">
 				<h:panelGroup styleClass="xDouble_marginLExcl pageBrowser">
 					<h:outputLink value="#{imageBean.browse.previous}&amp;tab=#{imageBean.tab}" styleClass="backward small_marginLExcl" disabled="#{imageBean.browse.previous == null}">
@@ -63,10 +63,10 @@
 								<f:ajax execute="@this" render=":preListHeader"/>
 							</h:selectBooleanCheckbox>
 							<h:outputText styleClass="free_label" value="#{lbl.selected}" rendered="#{SessionBean.user != null}"/>
-							<h:commandLink styleClass="free_label xTiny_marginLExcl" id="lnkPicRemove" action="#{imageBean.remove}" rendered="#{imageBean.deletable}">
+							<h:commandLink styleClass="free_label xTiny_marginLExcl" id="lnkPicRemove" action="#{imageBean.remove}" rendered="#{Auth.delete(imageBean.image)}">
 								<h:outputText value="#{lbl.remove_from_col}" />
 							</h:commandLink>
-							<h:commandLink styleClass="free_label xTiny_marginLExcl" id="lnkPicRemoveFromAlbum" action="#{imageBean.removeFromAlbum}" rendered="#{imageBean.editable and imageBean.navigationString == 'pretty:albumItem'}">
+							<h:commandLink styleClass="free_label xTiny_marginLExcl" id="lnkPicRemoveFromAlbum" action="#{imageBean.removeFromAlbum}" rendered="#{Auth.update(imageBean.image) and imageBean.navigationString == 'pretty:albumItem'}">
 								<h:outputText value="#{lbl.remove_from_album}" />
 							</h:commandLink>
 							<h:commandLink styleClass="free_label xTiny_marginLExcl" id="lnkPicFullResolution2" action="#{imageBean.addToActiveAlbum}" rendered="#{!imageBean.isInActiveAlbum and SessionBean.activeAlbum != null}">
@@ -115,14 +115,16 @@
 				<h:panelGroup id="metadata" styleClass="full_area0" rendered="#{imageBean.tab != 'techmd' and imageBean.tab != 'util'}">
 					<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 						<h3 class="xLarge_area0_p8 endline blockHeader">
-							<h:outputText id="lblViewItemFull_lblBasic" value="#{lbl.metadata}" /><br/>
-								<h:form>
-									<h:commandLink rendered="#{imageBean.editable and !imageBean.locked and imageBean.edit.toggleState == 'displayMd'}" value="#{lbl.edit}" action="#{imageBean.edit.showEditor}">
-										<f:ajax execute="@this" render=":metadata"/>
-									</h:commandLink>
-								</h:form>
-							<h:outputText value="Image locked " rendered="#{imageBean.editable and imageBean.locked}"/>
-							<h:outputLink value="#" title="#{msg.warning_locked}" rendered="#{imageBean.editable and imageBean.locked}">[info]</h:outputLink>
+							<ui:fragment rendered="#{Auth.updateContent(imageBean.collection)}">
+								<h:outputText id="lblViewItemFull_lblBasic" value="#{lbl.metadata}" /><br/>
+									<h:form>
+										<h:commandLink rendered="#{!imageBean.locked and imageBean.edit.toggleState == 'displayMd'}" value="#{lbl.edit}" action="#{imageBean.edit.showEditor}">
+											<f:ajax execute="@this" render=":metadata"/>
+										</h:commandLink>
+									</h:form>
+								<h:outputText value="Image locked " rendered="#{imageBean.locked}"/>
+								<h:outputLink value="#" title="#{msg.warning_locked}" rendered="#{imageBean.locked}">[info]</h:outputLink>
+							</ui:fragment>
 							<br/>
 						</h3>
 						<span class="seperator"></span>
@@ -174,7 +176,7 @@
 										</h:panelGroup>
 									</ui:repeat>
 								</h:panelGroup>
-								<h:panelGroup rendered="#{imageBean.edit.toggleState == 'editMd' and imageBean.editable and !imageBean.locked}">
+								<h:panelGroup rendered="#{imageBean.edit.toggleState == 'editMd' and Auth.updateContent(imageBean.collection) and !imageBean.locked}">
 								<h:form>
 								<ui:repeat id="editItem" var="item" value="#{imageBean.edit.editor.items}" rows="0" varStatus="indexMetadata">
 									<ui:repeat id="metadata" var="metadata" value="#{item.mds.tree.list}" rows="0" varStatus="indexMetadata">

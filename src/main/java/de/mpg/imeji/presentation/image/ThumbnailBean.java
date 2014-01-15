@@ -11,8 +11,6 @@ import javax.faces.event.ValueChangeEvent;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.security.Operations.OperationsType;
-import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
@@ -49,10 +47,6 @@ public class ThumbnailBean
     private boolean selected = false;
     private boolean isInActiveAlbum = false;
     private String collectionName = "";
-    // security
-    private boolean editable = false;
-    private boolean visible = false;
-    private boolean deletable = false;
     private SessionBean sessionBean;
     private static Logger logger = Logger.getLogger(ThumbnailBean.class);
     private MetadataSetBean mds;
@@ -79,7 +73,6 @@ public class ThumbnailBean
         {
             isInActiveAlbum = sessionBean.getActiveAlbum().getImages().contains(item.getId());
         }
-        initSecurity(item);
         mds = new MetadataSetBean(item.getMetadataSet(), false);
     }
 
@@ -96,20 +89,6 @@ public class ThumbnailBean
         im.getMetadataSets().add(ImejiFactory.newMetadataSet(profile));
         l.add(im);
         return "";
-    }
-
-    /**
-     * Initialize security parameters of this item.
-     * 
-     * @param item
-     */
-    private void initSecurity(Item item)
-    {
-        Security security = new Security();
-        editable = security.check(OperationsType.UPDATE, sessionBean.getUser(), item) && item != null
-                && !item.getStatus().equals(Status.WITHDRAWN);
-        visible = security.check(OperationsType.READ, sessionBean.getUser(), item);
-        deletable = security.check(OperationsType.DELETE, sessionBean.getUser(), item);
     }
 
     /**
@@ -154,9 +133,9 @@ public class ThumbnailBean
                 {
                     if (md.getStatement().equals(s.getId()))
                     {
-                        if(md instanceof Link)
+                        if (md instanceof Link)
                             return ((Link)md).getLabel();
-                        if(md instanceof Publication)
+                        if (md instanceof Publication)
                             return CommonUtils.removeTags(((Publication)md).getCitation());
                         return md.asFulltext();
                     }
@@ -344,66 +323,6 @@ public class ThumbnailBean
     public void setInActiveAlbum(boolean isInActiveAlbum)
     {
         this.isInActiveAlbum = isInActiveAlbum;
-    }
-
-    /**
-     * getter
-     * 
-     * @return
-     */
-    public boolean isEditable()
-    {
-        return editable;
-    }
-
-    /**
-     * setter
-     * 
-     * @param editable
-     */
-    public void setEditable(boolean editable)
-    {
-        this.editable = editable;
-    }
-
-    /**
-     * getter
-     * 
-     * @return
-     */
-    public boolean isVisible()
-    {
-        return visible;
-    }
-
-    /**
-     * setter
-     * 
-     * @param visible
-     */
-    public void setVisible(boolean visible)
-    {
-        this.visible = visible;
-    }
-
-    /**
-     * getter
-     * 
-     * @return
-     */
-    public boolean isDeletable()
-    {
-        return deletable;
-    }
-
-    /**
-     * setter
-     * 
-     * @param deletable
-     */
-    public void setDeletable(boolean deletable)
-    {
-        this.deletable = deletable;
     }
 
     /**

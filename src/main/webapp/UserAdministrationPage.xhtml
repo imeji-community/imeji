@@ -7,12 +7,12 @@
 	<ui:define name="mainContent">
 		<h:panelGroup layout="block"
 			styleClass="full_area0 endline itemLine noTopBorder"
-			rendered="#{!UserCreationBean.sysAdmin}">
+			rendered="#{!Auth.admin}">
 			<h2>
 				<h:outputText value="You are not allowed to view this page" />
 			</h2>
 		</h:panelGroup>
-		<h:panelGroup layout="block" styleClass="#{SessionBean.admin}">
+		<h:panelGroup layout="block" styleClass="#{Auth.admin}">
 			<h:panelGroup layout="block"
 				styleClass="full_area0_p8 endline medium_marginLExcl">
 				<h2>

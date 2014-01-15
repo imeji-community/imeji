@@ -18,9 +18,6 @@ import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.ingest.vo.Items;
-import de.mpg.imeji.logic.security.Authorization;
-import de.mpg.imeji.logic.security.Operations.OperationsType;
-import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Item;
@@ -100,7 +97,7 @@ public class AlbumBean
             ItemController ic = new ItemController();
             try
             {
-                thumbnail = new ThumbnailBean(ic.retrieve(album.getImages().iterator().next()));
+                thumbnail = new ThumbnailBean(ic.retrieve(album.getImages().iterator().next(), sessionBean.getUser()));
             }
             catch (Exception e)
             {
@@ -680,50 +677,6 @@ public class AlbumBean
         else
             sessionBean.getSelectedAlbums().remove(album.getId());
         this.selected = selected;
-    }
-
-    /**
-     * True if the current {@link User} is allowed to edit the {@link Album}
-     * 
-     * @return
-     */
-    public boolean isEditable()
-    {
-        Security security = new Security();
-        return security.check(OperationsType.UPDATE, sessionBean.getUser(), album);
-    }
-
-    /**
-     * True if the current {@link User} is allowed to view the {@link Album}
-     * 
-     * @return
-     */
-    public boolean isVisible()
-    {
-        Security security = new Security();
-        return security.check(OperationsType.READ, sessionBean.getUser(), album);
-    }
-
-    /**
-     * True if the current {@link User} is allowed to delete the {@link Album}
-     * 
-     * @return
-     */
-    public boolean isDeletable()
-    {
-        Security security = new Security();
-        return security.check(OperationsType.DELETE, sessionBean.getUser(), album);
-    }
-
-    /**
-     * True if the current {@link User} has administration priviliges for this {@link Album}
-     * 
-     * @return
-     */
-    public boolean isAdmin()
-    {
-        Authorization auth = new Authorization();
-        return auth.isContainerAdmin(sessionBean.getUser(), album);
     }
 
     /**

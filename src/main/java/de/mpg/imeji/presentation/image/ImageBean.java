@@ -25,8 +25,6 @@ import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
-import de.mpg.imeji.logic.security.Operations.OperationsType;
-import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.StringHelper;
@@ -474,25 +472,6 @@ public class ImageBean
     public boolean isLocked()
     {
         return Locks.isLocked(this.item.getId().toString(), sessionBean.getUser().getEmail());
-    }
-
-    public boolean isEditable()
-    {
-        Security security = new Security();
-        return security.check(OperationsType.UPDATE, sessionBean.getUser(), item) && item != null
-                && !item.getStatus().equals(Status.WITHDRAWN) && profile.getStatements().size() > 0;
-    }
-
-    public boolean isVisible()
-    {
-        Security security = new Security();
-        return security.check(OperationsType.READ, sessionBean.getUser(), item);
-    }
-
-    public boolean isDeletable()
-    {
-        Security security = new Security();
-        return security.check(OperationsType.DELETE, sessionBean.getUser(), item);
     }
 
     public SingleImageBrowse getBrowse()

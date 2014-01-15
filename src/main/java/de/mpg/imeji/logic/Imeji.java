@@ -30,6 +30,8 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.tdb.TDB;
 import com.hp.hpl.jena.tdb.TDBFactory;
 
+import de.mpg.imeji.logic.auth.Authorization;
+import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -38,6 +40,7 @@ import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.j2j.annotations.j2jModel;
 
@@ -194,10 +197,7 @@ public class Imeji
         {
             throw new RuntimeException("error creating admin user: ", e);
         }
-        Grant grant = new Grant();
-        grant.setGrantType(URI.create("http://imeji.org/terms/grantType#" + GrantType.SYSADMIN.name()));
-        grant.setGrantFor(URI.create("http://imeji.org/"));
-        adminUser.getGrants().add(grant);
+        adminUser.getGrants().addAll(AuthorizationPredefinedRoles.imejiAdministrator(adminUser.getId().toString()));
     }
 
     /**

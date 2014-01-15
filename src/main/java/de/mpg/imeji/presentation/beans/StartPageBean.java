@@ -1,11 +1,14 @@
 package de.mpg.imeji.presentation.beans;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import de.mpg.imeji.logic.auth.Authorization;
+import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchResult;
@@ -13,6 +16,7 @@ import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.image.ThumbnailBean;
 import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.session.SessionBean;

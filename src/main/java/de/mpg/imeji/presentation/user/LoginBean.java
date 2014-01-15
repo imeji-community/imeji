@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.User;
@@ -62,10 +63,11 @@ public class LoginBean
 
     public void doLogin() throws Exception
     {
-        UserController uc = new UserController(null);
+        UserController uc = new UserController(Imeji.adminUser);
         try
         {
             User user = uc.retrieve(getLogin());
+            System.out.println(user.getEmail());
             if (user.getEncryptedPassword().equals(StringHelper.convertToMD5(getPasswd())))
             {
                 sb.setUser(user);

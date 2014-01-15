@@ -30,6 +30,8 @@ import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.UploadResult;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
+import de.mpg.imeji.logic.storage.internal.InternalStorageItem;
+import de.mpg.imeji.logic.storage.internal.InternalStorageManager;
 import de.mpg.imeji.logic.util.MetadataFactory;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
@@ -88,8 +90,7 @@ public class AdminBean
                 // Upload the file in the internal storage
                 if (out.toByteArray() != null)
                 {
-                    tmp = File.createTempFile("import",
-                            FilenameUtils.getExtension(item.getFilename()));
+                    tmp = File.createTempFile("import", FilenameUtils.getExtension(item.getFilename()));
                     FileUtils.writeByteArrayToFile(tmp, out.toByteArray());
                     UploadResult result = internal.upload(item.getFilename(), tmp,
                             ObjectHelper.getId(item.getCollection()));

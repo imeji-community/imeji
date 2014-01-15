@@ -23,7 +23,7 @@
 		
 		<h:outputText styleClass="imj_contentMenuSeparator" />
 		
-		<h:outputLink id="lnkUploadImages" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{CollectionImagesBean.id}/#{Navigation.uploadPath}?init=1" rendered="#{CollectionImagesBean.editable}">
+		<h:outputLink id="lnkUploadImages" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{CollectionImagesBean.id}/#{Navigation.uploadPath}?init=1" rendered="#{Auth.create(CollectionImagesBean.collection)}">
 			<h:outputText value="#{lbl.upload_images}"></h:outputText>
 		</h:outputLink>
 	</ui:define>

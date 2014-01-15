@@ -10,7 +10,7 @@
 		</h1>
 	</ui:define>
 	<ui:define name="contentMenu">
-		<h:panelGroup rendered="#{ViewCollectionBean.visible}">
+		<h:panelGroup rendered="#{Auth.read(ViewCollectionBean.collection)}">
 		<!-- removed styleClass="half_area0" -->
 			<h:outputText styleClass="imj_contentMenuItem" value="#{lbl.collection_home}"/>
 			<h:outputText styleClass="imj_contentMenuSeparator"/>
@@ -22,28 +22,28 @@
 				<h:outputText value="#{lbl.collection_metadata}"/>
 			</h:outputLink>
 			<h:outputText styleClass="imj_contentMenuSeparator"/>
-			<h:outputLink id="lnkUploadImages" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.uploadPath}?init=1" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status != 'WITHDRAWN'}">
+			<h:outputLink id="lnkUploadImages" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.uploadPath}?init=1" rendered="#{Auth.update(ViewCollectionBean.collection) and ViewCollectionBean.collection.status != 'WITHDRAWN'}">
 				<h:outputText value="#{lbl.upload_images}"></h:outputText>
 			</h:outputLink>
-			<h:outputText styleClass="imj_contentMenuSeparator"	rendered="#{AuthorizationBean.admin}" />
-			<h:outputLink id="lnkIngest" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/ingest?init=1" rendered="#{AuthorizationBean.admin}">
+			<h:outputText styleClass="imj_contentMenuSeparator"	rendered="#{Auth.admin}" />
+			<h:outputLink id="lnkIngest" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/ingest?init=1" rendered="#{Auth.admin}">
 				<h:outputText value="#{lbl.ingest}" />
 			</h:outputLink>
 		</h:panelGroup>
 	</ui:define>
 	<ui:define name="actionsMenu">
 		<h:panelGroup styleClass="full_area0"> <!-- This panelGroup is needed for IE -->
-		<h:panelGroup layout="block" styleClass="imj_contentSubMenu" rendered="#{ViewCollectionBean.visible}">
-      		<h:outputLink styleClass="imj_contentSubMenuItem" value="#{Navigation.shareUrl}?uri=#{ViewCollectionBean.collection.id}" rendered="#{ViewCollectionBean.collection.status!='WITHDRAWN' and ViewCollectionBean.admin}" >
+		<h:panelGroup layout="block" styleClass="imj_contentSubMenu" rendered="#{Auth.read(ViewCollectionBean.collection)}">
+      		<h:outputLink styleClass="imj_contentSubMenuItem" value="#{Navigation.shareUrl}?uri=#{ViewCollectionBean.collection.id}" rendered="#{ViewCollectionBean.collection.status!='WITHDRAWN' and Auth.admin(ViewCollectionBean.collection)}" >
 				<h:outputText value="#{lbl.collection_share}"/>		
 			</h:outputLink>
-			<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialogRelease');"  rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status=='PENDING'}">
+			<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialogRelease');"  rendered="#{Auth.update(ViewCollectionBean.collection) and ViewCollectionBean.collection.status=='PENDING'}">
 				<h:outputText value="#{lbl.collection_release}"/>
 			</h:outputLink>
-			<h:outputLink id="lnkWithdrawCollection" styleClass="imj_contentSubMenuItem" onclick="openDialog('dialDiscardContainer:dialogWithdraw');"  value="#" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status=='RELEASED'}">
+			<h:outputLink id="lnkWithdrawCollection" styleClass="imj_contentSubMenuItem" onclick="openDialog('dialDiscardContainer:dialogWithdraw');"  value="#" rendered="#{Auth.update(ViewCollectionBean.collection) and ViewCollectionBean.collection.status=='RELEASED'}">
 				<h:outputText value="#{lbl.withdraw}"/>
 			</h:outputLink>
-			<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialogDelete');" rendered="#{ViewCollectionBean.deletable}">
+			<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialogDelete');" rendered="#{Auth.delete(ViewCollectionBean.collection)}">
 				<h:outputText value="#{lbl.delete}"/>
 			</h:outputLink>
 		</h:panelGroup>
@@ -62,10 +62,10 @@
 				 	<ui:include src="./include/History.xhtml"></ui:include>
 			 </h:panelGroup>
 		</div>
-		<h:panelGroup layout="block" styleClass="full_area0 fullItem" rendered="#{!ViewCollectionBean.visible}">
+		<h:panelGroup layout="block" styleClass="full_area0 fullItem" rendered="#{!Auth.read(ViewCollectionBean.collection)}">
 		 	<ui:include src="./include/LoginFormular.xhtml"/>
 		 </h:panelGroup>
-		<h:panelGroup layout="block" styleClass="full_area0" rendered="#{ViewCollectionBean.visible}">
+		<h:panelGroup layout="block" styleClass="full_area0" rendered="#{Auth.read(ViewCollectionBean.collection)}">
 			<h:panelGroup layout="block" styleClass="full_area0 fullItem">
 				<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder">
 					<h:panelGroup styleClass="full_area1_p8 small_marginLExcl">

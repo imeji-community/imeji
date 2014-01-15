@@ -24,7 +24,6 @@ public class UserBean
     private String newPassword = null;
     private String repeatedPassword = null;
     private String newEmail = null;
-    private boolean isAdmin;
     private SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     private String id;
 
@@ -66,7 +65,6 @@ public class UserBean
         if (id != null && session.getUser() != null)
         {
             user = ObjectLoader.loadUser(id, session.getUser());
-            isAdmin = (session.isAdmin() || (user.getEmail().equals(session.getUser().getEmail())));
         }
         else if (id != null && session.getUser() == null)
         {
@@ -226,16 +224,6 @@ public class UserBean
     public void setRepeatedPassword(String repeatedPassword)
     {
         this.repeatedPassword = repeatedPassword;
-    }
-
-    public boolean isAdmin()
-    {
-        return isAdmin;
-    }
-
-    public void setAdmin(boolean isAdmin)
-    {
-        this.isAdmin = isAdmin;
     }
 
     /**

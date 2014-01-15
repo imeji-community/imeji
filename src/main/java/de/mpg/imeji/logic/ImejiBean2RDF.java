@@ -4,17 +4,21 @@
 package de.mpg.imeji.logic;
 
 import java.net.URI;
+import java.security.Security;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Future;
+
+import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.Jena;
 import com.hp.hpl.jena.rdf.model.Model;
 
+import de.mpg.imeji.logic.auth.exception.NotAllowedError;
+import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.search.FulltextIndex;
-import de.mpg.imeji.logic.security.Operations.OperationsType;
-import de.mpg.imeji.logic.security.Security;
+import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.vo.Container;
+import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
@@ -35,8 +39,8 @@ import de.mpg.j2j.transaction.Transaction;
  */
 public class ImejiBean2RDF
 {
-    private Security security;
     private String modelURI;
+    private static Logger logger = Logger.getLogger(ImejiBean2RDF.class);
 
     /**
      * Construct one {@link ImejiBean2RDF} for one {@link Model}
@@ -45,7 +49,6 @@ public class ImejiBean2RDF
      */
     public ImejiBean2RDF(String modelURI)
     {
-        security = new Security();
         this.modelURI = modelURI;
     }
 
@@ -58,8 +61,8 @@ public class ImejiBean2RDF
      */
     public void create(List<Object> objects, User user) throws Exception
     {
-        checkSecurity(objects, user, OperationsType.CREATE);
-        runTransaction(objects, OperationsType.CREATE, false);
+        checkSecurity(objects, user, GrantType.CREATE);
+        runTransaction(objects, GrantType.CREATE, false);
     }
 
     /**
@@ -71,8 +74,10 @@ public class ImejiBean2RDF
      */
     public void delete(List<Object> objects, User user) throws Exception
     {
-        checkSecurity(objects, user, OperationsType.DELETE);
-        runTransaction(objects, OperationsType.DELETE, false);
+        checkSecurity(objects, user, GrantType.DELETE);
+        runTransaction(objects, GrantType.DELETE, false);
+        for (Object o : objects)
+            ImejiSPARQL.execUpdate(SPARQLQueries.updateRemoveGrantsFor(extractID(o).toString()));
     }
 
     /**
@@ -84,8 +89,8 @@ public class ImejiBean2RDF
      */
     public void update(List<Object> objects, User user) throws Exception
     {
-        checkSecurity(objects, user, OperationsType.UPDATE);
-        runTransaction(objects, OperationsType.UPDATE, false);
+        checkSecurity(objects, user, GrantType.UPDATE);
+        runTransaction(objects, GrantType.UPDATE, false);
     }
 
     /**
@@ -99,8 +104,8 @@ public class ImejiBean2RDF
      */
     public void updateLazy(List<Object> objects, User user) throws Exception
     {
-        checkSecurity(objects, user, OperationsType.UPDATE);
-        runTransaction(objects, OperationsType.UPDATE, true);
+        checkSecurity(objects, user, GrantType.UPDATE);
+        runTransaction(objects, GrantType.UPDATE, true);
     }
 
     /**
@@ -111,7 +116,7 @@ public class ImejiBean2RDF
      * @param lazy
      * @throws Exception
      */
-    private void runTransaction(List<Object> objects, OperationsType type, boolean lazy) throws Exception
+    private void runTransaction(List<Object> objects, GrantType type, boolean lazy) throws Exception
     {
         index(objects);
         Transaction t = new CRUDTransaction(objects, type, modelURI, lazy);
@@ -125,16 +130,44 @@ public class ImejiBean2RDF
      * @param list
      * @param user
      * @param opType
+     * @throws NotAllowedError
      */
-    private void checkSecurity(List<Object> list, User user, OperationsType opType)
+    private void checkSecurity(List<Object> list, User user, GrantType gt) throws NotAllowedError
     {
         for (Object o : list)
         {
-            if (!security.check(opType, user, o))
+            switch (gt)
             {
-                throw new RuntimeException("imeji Security exception: " + user.getEmail() + " not allowed to "
-                        + opType.name() + " " + extractID(o));
+                case CREATE:
+                    throwAuthorizationException(AuthUtil.staticAuth().create(user, o), user.getEmail()
+                            + " not allowed to create " + extractID(o));
+                    break;
+                case DELETE:
+                    throwAuthorizationException(AuthUtil.staticAuth().delete(user, o), user.getEmail()
+                            + " not allowed to delete " + extractID(o));
+                    break;
+                case UPDATE:
+                    throwAuthorizationException(AuthUtil.staticAuth().update(user, o), user.getEmail()
+                            + " not allowed to update " + extractID(o));
+                    break;
             }
+        }
+    }
+
+    /**
+     * If false, throw a {@link NotAllowedError}
+     * 
+     * @param b
+     * @param message
+     * @throws NotAllowedError
+     */
+    private void throwAuthorizationException(boolean allowed, String message) throws NotAllowedError
+    {
+        if (!allowed)
+        {
+            NotAllowedError e = new NotAllowedError(message);
+            logger.error(e);
+            throw e;
         }
     }
 

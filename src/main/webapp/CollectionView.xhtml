@@ -19,17 +19,17 @@
 				<h:outputText styleClass="imj_contentMenuSeparator" rendered="#{ViewCollectionBean.size > 0}"/>
 				<h:outputText styleClass="imj_contentMenuItem" value="#{lbl.collection_metadata}"/>
 				<h:outputText styleClass="imj_contentMenuSeparator" />
-				<h:outputLink id="lnkUploadImages" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.uploadPath}?init=1" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status != 'WITHDRAWN'}">
+				<h:outputLink id="lnkUploadImages" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.uploadPath}?init=1" rendered="#{Auth.update(ViewCollectionBean.collection) and ViewCollectionBean.collection.status != 'WITHDRAWN'}">
 					<h:outputText value="#{lbl.upload_images}"></h:outputText>
 				</h:outputLink>
-				<h:outputText styleClass="imj_contentMenuSeparator"	rendered="#{AuthorizationBean.admin}" />
-				<h:outputLink id="lnkIngest" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/ingest?init=1" rendered="#{AuthorizationBean.admin}">
+				<h:outputText styleClass="imj_contentMenuSeparator"	rendered="#{Auth.admin}" />
+				<h:outputLink id="lnkIngest" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/ingest?init=1" rendered="#{Auth.admin}">
 					<h:outputText value="#{lbl.ingest}" />
 				</h:outputLink>
 			</ui:define>
 			<ui:define name="mainContent" >
-				<h:outputText value="#{lbl.view_page_disallowed2}" rendered="#{!ViewCollectionBean.visible}" styleClass="full_area0 fullItem"/>
-				<h:panelGroup layout="block" styleClass="full_area0" rendered="#{ViewCollectionBean.visible}">
+				<h:outputText value="#{lbl.view_page_disallowed2}" rendered="#{!Auth.read(ViewCollectionBean.collection)}" styleClass="full_area0 fullItem"/>
+				<h:panelGroup layout="block" styleClass="full_area0" rendered="#{Auth.read(ViewCollectionBean.collection)}">
 					<h:panelGroup layout="block" styleClass="full_area0 fullItem">
 					
 						<h:panelGroup layout="block" styleClass="full_area0 preListHeader" style="border-width: 0px !important;">
@@ -39,7 +39,7 @@
 						<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
 							<h3 class="xLarge_area0_p8 endline blockHeader">
 								<h:outputText value="#{lbl.collection_basics}"/>
-								<h:outputLink id="lnkEditMetadata" styleClass="large_area0" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.editPath}?init=1" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status != 'WITHDRAWN'}">
+								<h:outputLink id="lnkEditMetadata" styleClass="large_area0" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.editPath}?init=1" rendered="#{Auth.update(ViewCollectionBean.collection) and ViewCollectionBean.collection.status != 'WITHDRAWN'}">
 									<h:outputText value="#{lbl.edit}"/>
 								</h:outputLink>
 							</h3>
@@ -143,7 +143,7 @@
 									<h:outputText value="#{lbl.collection_profile_view}"/>
 								</h:outputLink>
 								
-								<h:outputLink id="lnkViewProfile" styleClass="large_area0" value="#{Navigation.profileUrl}#{ViewCollectionBean.profileId}/#{Navigation.editPath}?init=1&amp;col=#{ViewCollectionBean.id}" rendered="#{ViewCollectionBean.profileEditor and ViewCollectionBean.collection.status != 'WITHDRAWN'}">
+								<h:outputLink id="lnkViewProfile" styleClass="large_area0" value="#{Navigation.profileUrl}#{ViewCollectionBean.profileId}/#{Navigation.editPath}?init=1&amp;col=#{ViewCollectionBean.id}" rendered="#{Auth.update(ViewCollectionBean.collection.profile) and ViewCollectionBean.collection.status != 'WITHDRAWN'}">
 									<h:outputText value="#{lbl.edit}"></h:outputText>
 								</h:outputLink>
 							</h3>

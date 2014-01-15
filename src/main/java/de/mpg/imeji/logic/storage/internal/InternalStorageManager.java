@@ -250,7 +250,7 @@ public class InternalStorageManager
      * @return
      * @throws UnsupportedEncodingException
      */
-    private InternalStorageItem generateInternalStorageItem(String filename, String collectionId)
+    public InternalStorageItem generateInternalStorageItem(String filename, String collectionId)
     {
         String id = generateIdWithVersion(collectionId);
         InternalStorageItem item = new InternalStorageItem();

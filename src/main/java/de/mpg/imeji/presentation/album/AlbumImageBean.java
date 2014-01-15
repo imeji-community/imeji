@@ -77,12 +77,6 @@ public class AlbumImageBean extends ImageBean
         return "pretty:albumBrowse";
     }
 
-    @Override
-    public boolean isDeletable()
-    {
-        return false;
-    }
-
     public String getAlbumId()
     {
         return albumId;

@@ -52,6 +52,10 @@ public class GrantHelper
             {
                 role = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_owner");
             }
+            else
+            {
+                role = grant.asGrantType().name();
+            }
         }
         return role;
     }

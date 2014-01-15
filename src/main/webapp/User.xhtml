@@ -5,8 +5,7 @@
 	xmlns:f="http://java.sun.com/jsf/core">
 			<ui:param name="headline" value="User Page"/>
 			<ui:define name="mainContent">
-			<h:outputText value="#{UserBean.init}"/>
-			
+				<h:outputText value="#{UserBean.init}"/>
 				<h:panelGroup layout="block" styleClass="full_area0 fullItem">
 					<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder">
 					<script>
@@ -17,8 +16,8 @@
 						}
 					</script>
 					<h:form id ="userForm">
-						<h:panelGroup styleClass="small_marginLExcl full_area0" rendered="#{UserBean.admin}">
-							<h:panelGroup id="userInfos" styleClass="full_area0" rendered="#{UserBean.admin}">
+						<h:panelGroup styleClass="small_marginLExcl full_area0" rendered="#{Auth.admin or Auth.update(UserBean.user)}">
+							<h:panelGroup id="userInfos" styleClass="full_area0">
 								<h:panelGroup styleClass="full_area0">
 									<h:outputText styleClass="double_area0_p4" value="#{lbl.email}"/>
 									<h:outputText styleClass="free_area0_p4 endLine" value="#{UserBean.user.email}"/>
@@ -76,7 +75,10 @@
 								<br/>
 								<ui:repeat id="grantList" var="grant" value="#{UserBean.user.grants}" rows="0">
 								<h:panelGroup rendered="#{grant.grantFor != null}">
-									<h:outputText value="#{UsersBean.grantsString(grant)}" styleClass="xHuge_area0_p0"/>										
+									<span class="xHuge_area0_p0">
+										<h:outputText value="#{grant.asGrantType()} " styleClass="medium_area0_p0"/>	
+										<h:outputLink value="#{grant.grantFor}" styleClass="free_area0"><h:outputText value="#{grant.grantFor}"/></h:outputLink>	
+									</span>							
 									<h:commandLink action="#{UserBean.revokeGrant}" value="#{lbl.revoke}" styleClass="xTiny_marginLExcl free_area0" onclick="if(confirm('Are you sure you want to revoke this grant?'))return true;return false;">
 										<f:param name="grantType" value="#{grant.grantType}" />  
 										<f:param name="grantFor" value="#{grant.grantFor}" />  
@@ -85,8 +87,8 @@
 								</ui:repeat>
 							</h:panelGroup>
 						</h:panelGroup>
-						</h:form>
-						<h:panelGroup rendered="#{!UserBean.admin and SessionBean.user == null}">
+					</h:form>
+						<h:panelGroup rendered="#{!Auth.admin and Auth.loggedIn == null}">
 							<ui:include src="./include/LoginFormular.xhtml" />
 						</h:panelGroup>
 					</h:panelGroup>

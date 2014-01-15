@@ -14,6 +14,7 @@ import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
 import de.mpg.imeji.logic.ImejiSPARQL;
+import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchResult;
@@ -63,7 +64,6 @@ public class ProfileController extends ImejiController
         writeCreateProperties(mdp, user);
         mdp.setStatus(Status.PENDING);
         imejiBean2RDF.create(imejiBean2RDF.toList(mdp), user);
-        addCreatorGrant(mdp, user);
         return mdp.getId();
     }
 
@@ -145,8 +145,6 @@ public class ProfileController extends ImejiController
     {
         imejiBean2RDF = new ImejiBean2RDF(Imeji.profileModel);
         imejiBean2RDF.delete(imejiBean2RDF.toList(mdp), user);
-        GrantController gc = new GrantController(user);
-        gc.removeAllGrantsFor(user, mdp.getId());
     }
 
     /**
@@ -161,23 +159,6 @@ public class ProfileController extends ImejiController
         mdp.setStatus(Status.WITHDRAWN);
         mdp.setVersionDate(DateHelper.getCurrentDate());
         update(mdp, user);
-    }
-
-    /**
-     * Add Creator {@link Grant} to a {@link User}
-     * 
-     * @param p
-     * @param user
-     * @return
-     * @throws Exception
-     */
-    private User addCreatorGrant(MetadataProfile p, User user) throws Exception
-    {
-        GrantController gc = new GrantController(user);
-        Grant grant = new Grant(GrantType.PROFILE_ADMIN, p.getId());
-        gc.addGrant(user, grant);
-        UserController uc = new UserController(user);
-        return uc.retrieve(user.getEmail());
     }
 
     /**

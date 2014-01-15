@@ -12,9 +12,10 @@ import org.apache.log4j.Logger;
 import com.hp.hpl.jena.Jena;
 import com.hp.hpl.jena.rdf.model.Model;
 
-import de.mpg.imeji.logic.security.Operations.OperationsType;
-import de.mpg.imeji.logic.security.Security;
+import de.mpg.imeji.logic.auth.exception.NotAllowedError;
+import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.j2j.helper.J2JHelper;
 import de.mpg.j2j.transaction.CRUDTransaction;
 import de.mpg.j2j.transaction.Transaction;
@@ -34,7 +35,6 @@ public class ImejiRDF2Bean
 {
     private String modelURI;
     private boolean lazy = false;
-    private Security security = null;
     private static Logger logger = Logger.getLogger(ImejiRDF2Bean.class);
 
     /**
@@ -45,7 +45,6 @@ public class ImejiRDF2Bean
     public ImejiRDF2Bean(String modelURI)
     {
         this.modelURI = modelURI;
-        security = new Security();
     }
 
     /**
@@ -95,10 +94,10 @@ public class ImejiRDF2Bean
      */
     public List<Object> load(List<Object> objects, User user) throws Exception
     {
-        Transaction t = new CRUDTransaction(objects, OperationsType.READ, modelURI, lazy);
+        Transaction t = new CRUDTransaction(objects, GrantType.READ, modelURI, lazy);
         t.start();
         t.throwException();
-        checkSecurity(objects, user, OperationsType.READ);
+        checkSecurity(objects, user);
         return objects;
     }
 
@@ -123,19 +122,19 @@ public class ImejiRDF2Bean
      * @param list
      * @param user
      * @param opType
+     * @throws NotAllowedError 
      */
-    private void checkSecurity(List<Object> list, User user, OperationsType opType)
+    private void checkSecurity(List<Object> list, User user) throws NotAllowedError
     {
         for (int i = 0; i < list.size(); i++)
         {
-            if (!security.check(opType, user, list.get(i)))
+            if (!AuthUtil.staticAuth().read(user, list.get(i)))
             {
                 String id = J2JHelper.getId(list.get(i)).toString();
                 String email = "Not logged in";
                 if (user != null)
                     email = user.getEmail();
-                throw new RuntimeException("imeji Security exception: " + email + " not allowed to " + opType.name()
-                        + " " + id);
+                throw new NotAllowedError(email + " not allowed to read " + id);
             }
         }
     }

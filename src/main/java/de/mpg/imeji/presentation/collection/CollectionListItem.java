@@ -14,8 +14,6 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.security.Operations.OperationsType;
-import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Person;
@@ -49,10 +47,6 @@ public class CollectionListItem
     private String creationDate = null;
     private String lastModificationDate = null;
     private String versionDate = null;
-    // security
-    private boolean visible = false;
-    private boolean deletable = false;
-    private boolean editable = false;
     private static Logger logger = Logger.getLogger(CollectionListItem.class);
     private ThumbnailBean thumbnail = null;
     /**
@@ -112,26 +106,11 @@ public class CollectionListItem
             // initializations
             initSize(user);
             initSelected();
-            initSecurity(collection, user);
         }
         catch (Exception e)
         {
             logger.error("Error creating collectionListItem", e);
         }
-    }
-
-    /**
-     * Initialize security parameters
-     * 
-     * @param collection
-     * @param user
-     */
-    private void initSecurity(CollectionImeji collection, User user)
-    {
-        Security security = new Security();
-        visible = security.check(OperationsType.READ, user, collection);
-        deletable = security.check(OperationsType.DELETE, user, collection);
-        editable = security.check(OperationsType.UPDATE, user, collection);
     }
 
     /**
@@ -344,36 +323,6 @@ public class CollectionListItem
         else
             sessionBean.getSelectedCollections().remove(uri);
         this.selected = selected;
-    }
-
-    public boolean isVisible()
-    {
-        return visible;
-    }
-
-    public void setVisible(boolean visible)
-    {
-        this.visible = visible;
-    }
-
-    public boolean isDeletable()
-    {
-        return deletable;
-    }
-
-    public void setDeletable(boolean deletable)
-    {
-        this.deletable = deletable;
-    }
-
-    public boolean isEditable()
-    {
-        return editable;
-    }
-
-    public void setEditable(boolean editable)
-    {
-        this.editable = editable;
     }
 
     public URI getUri()

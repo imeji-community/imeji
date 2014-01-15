@@ -11,7 +11,6 @@ import javax.faces.context.FacesContext;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.User;
@@ -34,7 +33,6 @@ public class UsersBean
 {
     private List<User> users;
     private SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-    private boolean sysAdmin = false;
     private static Logger logger = Logger.getLogger(UserBean.class);
 
     /**
@@ -42,11 +40,7 @@ public class UsersBean
      */
     public UsersBean()
     {
-        if (session.isAdmin())
-        {
-            sysAdmin = true;
-            retrieveUsers();
-        }
+        retrieveUsers();
     }
 
     /**
@@ -55,14 +49,10 @@ public class UsersBean
     public void retrieveUsers()
     {
         UserController controller = new UserController(session.getUser());
-        Security security = new Security();
         users = new ArrayList<User>();
         for (User user : controller.retrieveAll())
         {
-            if (!security.isSysAdmin(user))
-            {
-                users.add(user);
-            }
+            users.add(user);
         }
     }
 
@@ -156,25 +146,5 @@ public class UsersBean
     public void setUsers(List<User> users)
     {
         this.users = users;
-    }
-
-    /**
-     * getter
-     * 
-     * @return
-     */
-    public boolean isSysAdmin()
-    {
-        return sysAdmin;
-    }
-
-    /**
-     * setter
-     * 
-     * @param sysAdmin
-     */
-    public void setSysAdmin(boolean sysAdmin)
-    {
-        this.sysAdmin = sysAdmin;
     }
 }

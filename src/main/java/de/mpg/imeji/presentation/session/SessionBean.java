@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -246,17 +245,6 @@ public class SessionBean
     public void setCurrentPage(Page currentPage)
     {
         this.currentPage = currentPage;
-    }
-
-    /**
-     * True if the current user is the system administrator
-     * 
-     * @return
-     */
-    public boolean isAdmin()
-    {
-        Security security = new Security();
-        return security.isSysAdmin(user);
     }
 
     /**

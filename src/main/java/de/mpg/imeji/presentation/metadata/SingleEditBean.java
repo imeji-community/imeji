@@ -6,11 +6,11 @@ package de.mpg.imeji.presentation.metadata;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.mpg.imeji.logic.auth.Authorization;
+import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.concurrency.locks.Lock;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.security.Operations.OperationsType;
-import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -120,7 +120,7 @@ public class SingleEditBean
         }
         catch (Exception e)
         {
-        	//TODO
+            // TODO
             BeanHelper.error("Error reload item" + e.getMessage());
             e.printStackTrace();
         }
@@ -134,8 +134,7 @@ public class SingleEditBean
     public String showEditor()
     {
         SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        Security security = new Security();
-        if (security.check(OperationsType.UPDATE, sb.getUser(), item))
+        if (AuthUtil.staticAuth().update(sb.getUser(), item))
         {
             this.toggleState = "editMd";
             try

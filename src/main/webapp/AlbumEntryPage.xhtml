@@ -10,7 +10,7 @@
 		</h1>
 	</ui:define>
 	<ui:define name="contentMenu">
-		<h:panelGroup rendered="#{AlbumBean.visible}">
+		<h:panelGroup rendered="#{Auth.read(AlbumBean.album)}">
 			<h:outputText value="#{lbl.album_home}" styleClass="imj_contentMenuItem"/>
 			<h:outputText styleClass="imj_contentMenuSeparator" />
 			<h:outputLink id="lnkViewCollectionAllImages" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumBean.id}/#{Navigation.browsePath}?q=" rendered="#{AlbumBean.size > 0}">
@@ -28,10 +28,10 @@
 				 	<ui:include src="./include/History.xhtml"></ui:include>
 			 </h:panelGroup>
 		</div>
-		<h:panelGroup layout="block" styleClass="full_area0 fullItem" rendered="#{!AlbumBean.visible}">
+		<h:panelGroup layout="block" styleClass="full_area0 fullItem" rendered="#{!Auth.read(AlbumBean.album)}">
 		 	<ui:include src="./include/LoginFormular.xhtml" />
 		 </h:panelGroup>
-		<h:panelGroup layout="block" styleClass="full_area0" rendered="#{AlbumBean.visible}">
+		<h:panelGroup layout="block" styleClass="full_area0" rendered="#{Auth.read(AlbumBean.album)}">
 			<h:panelGroup layout="block" styleClass="full_area0 fullItem">
 				<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder">
 					<ui:remove>
@@ -189,16 +189,16 @@
 	<ui:define name="actionsMenu">
 		<h:panelGroup layout="block" styleClass="imj_contentSubMenu">
 			<h:panelGroup>
-				<h:outputLink styleClass="imj_contentSubMenuItem" value="#{Navigation.shareUrl}?uri=#{AlbumBean.album.id}"  rendered="#{AlbumBean.album.status=='PENDING' and AlbumBean.admin}">
+				<h:outputLink styleClass="imj_contentSubMenuItem" value="#{Navigation.shareUrl}?uri=#{AlbumBean.album.id}"  rendered="#{AlbumBean.album.status=='PENDING' and Auth.admin}">
 					<h:outputText value="#{lbl.album_share}"/>
 				</h:outputLink>
-				<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialogRelease');" rendered="#{AlbumBean.editable and AlbumBean.album.status=='PENDING'}">
+				<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialogRelease');" rendered="#{Auth.admin(AlbumBean.album) and AlbumBean.album.status=='PENDING'}">
 					<h:outputText value="#{lbl.release}"/>
 				</h:outputLink>
-				<h:outputLink id="lnkWithdrawCollection" styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialDiscardContainer:dialogWithdraw');"  rendered="#{AlbumBean.editable and AlbumBean.album.status=='RELEASED'}">
+				<h:outputLink id="lnkWithdrawCollection" styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialDiscardContainer:dialogWithdraw');"  rendered="#{Auth.admin(AlbumBean.album) and AlbumBean.album.status=='RELEASED'}">
 					<h:outputText value="#{lbl.withdraw}"/>
 				</h:outputLink>
-				<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialogDelete');" rendered="#{AlbumBean.deletable}">
+				<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialogDelete');" rendered="#{Auth.delete(AlbumBean.album)}">
 					<h:outputText value="#{lbl.delete}"/>
 				</h:outputLink>
 			</h:panelGroup>

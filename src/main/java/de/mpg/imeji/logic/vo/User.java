@@ -7,8 +7,13 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import de.mpg.imeji.logic.security.Security;
+import org.apache.commons.math.fraction.ProperBigFractionFormat;
+
+import de.mpg.imeji.logic.auth.Authorization;
+import de.mpg.imeji.logic.auth.exception.NotAllowedError;
+import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jList;
 import de.mpg.j2j.annotations.j2jLiteral;
@@ -126,7 +131,6 @@ public class User
      */
     public boolean isAdmin()
     {
-        Security security = new Security();
-        return security.isSysAdmin(this);
+        return AuthUtil.isSysAdmin(this);
     }
 }

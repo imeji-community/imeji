@@ -29,19 +29,19 @@
 		</h:outputLink>
 
 		<h:outputText styleClass="imj_contentMenuSeparator" />
-
+		
 		<h:outputLink id="lnkUploadImages" styleClass="imj_contentMenuItem"
 			value="#{Navigation.collectionUrl}#{CollectionImagesBean.id}/#{Navigation.uploadPath}?init=1"
-			rendered="#{CollectionImagesBean.editable}">
+			rendered="#{Auth.create(CollectionImagesBean.collection)}">
 			<h:outputText value="#{lbl.upload_images}"></h:outputText>
 		</h:outputLink>
 		
 		<h:outputText styleClass="imj_contentMenuSeparator"
-			rendered="#{AuthorizationBean.admin}" />
+			rendered="#{Auth.admin}" />
 			
 		<h:outputLink id="lnkIngest" styleClass="imj_contentMenuItem"
 			value="#{Navigation.collectionUrl}#{CollectionImagesBean.id}/ingest?init=1"
-			rendered="#{AuthorizationBean.admin}">
+			rendered="#{Auth.admin}">
 			<h:outputText value="#{lbl.ingest}" />
 		</h:outputLink>
 		
@@ -74,19 +74,19 @@
 
 			<h:outputLink styleClass="imj_SubMenuItem" value="#"
 				onclick="openDialog('dialogRelease');"
-				rendered="#{CollectionImagesBean.editable and CollectionImagesBean.collection.status=='PENDING'}">
+				rendered="#{Auth.admin(CollectionImagesBean.collection) and CollectionImagesBean.collection.status=='PENDING'}">
 				<h:outputText value="#{lbl.collection_release}" />
 			</h:outputLink>
 			<h:outputLink id="lnkWithdrawCollection"
 				styleClass="imj_SubMenuItem" value="#"
 				onclick="openDialog('dialDiscardContainer:dialogWithdraw');"
-				rendered="#{CollectionImagesBean.editable and CollectionImagesBean.collection.status=='RELEASED'}">
+				rendered="#{Auth.admin(CollectionImagesBean.collection) and CollectionImagesBean.collection.status=='RELEASED'}">
 				<h:outputText value="#{lbl.withdraw}" />
 			</h:outputLink>
 
 			<h:outputLink styleClass="imj_SubMenuItem" value="#"
 				onclick="openDialog('dialogDelete');"
-				rendered="#{CollectionImagesBean.deletable}">
+				rendered="#{Auth.delete(CollectionImagesBean.collection)}">
 				<h:outputText value="#{lbl.delete}" />
 			</h:outputLink>
 			<h:panelGroup layout="block" styleClass="free_area0_p0 endline overlayMenu">

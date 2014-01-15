@@ -14,9 +14,6 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.security.Authorization;
-import de.mpg.imeji.logic.security.Operations.OperationsType;
-import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -498,61 +495,6 @@ public abstract class CollectionBean
     public void setProfileId(String profileId)
     {
         this.profileId = profileId;
-    }
-
-    /**
-     * true if current {@link User} can UPDATE the {@link CollectionImeji}
-     * 
-     * @return
-     */
-    public boolean isEditable()
-    {
-        Security security = new Security();
-        return security.check(OperationsType.UPDATE, sessionBean.getUser(), collection);
-    }
-
-    /**
-     * true if current {@link User} can VIEW the {@link CollectionImeji}
-     * 
-     * @return
-     */
-    public boolean isVisible()
-    {
-        Security security = new Security();
-        return security.check(OperationsType.READ, sessionBean.getUser(), collection);
-    }
-
-    /**
-     * true if current {@link User} can DELETE the {@link CollectionImeji}
-     * 
-     * @return
-     */
-    public boolean isDeletable()
-    {
-        Security security = new Security();
-        return security.check(OperationsType.DELETE, sessionBean.getUser(), collection);
-    }
-
-    /**
-     * true if current {@link User} can EDIT the {@link MetadataProfile} of the {@link CollectionImeji}
-     * 
-     * @return
-     */
-    public boolean isProfileEditor()
-    {
-        Security security = new Security();
-        return security.check(OperationsType.UPDATE, sessionBean.getUser(), profile);
-    }
-
-    /**
-     * True if the current {@link User} is SYSADMIN
-     * 
-     * @return
-     */
-    public boolean isAdmin()
-    {
-        Authorization auth = new Authorization();
-        return auth.isContainerAdmin(sessionBean.getUser(), collection);
     }
 
     public String getPageUrl()

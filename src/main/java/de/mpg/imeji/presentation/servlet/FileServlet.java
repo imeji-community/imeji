@@ -19,12 +19,11 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
+import de.mpg.imeji.logic.auth.Authorization;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
-import de.mpg.imeji.logic.security.Operations.OperationsType;
-import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.internal.InternalStorageManager;
@@ -50,7 +49,7 @@ public class FileServlet extends HttpServlet
     private static final long serialVersionUID = 5502546330318540997L;
     private static Logger logger = Logger.getLogger(FileServlet.class);
     private StorageController storageController;
-    private Security security;
+    private Authorization authorization;
     private Navigation navivation;
     private String domain;
     private String digilibUrl;
@@ -70,7 +69,7 @@ public class FileServlet extends HttpServlet
         {
             storageController = new StorageController();
             logger.info("ImageServlet initialized");
-            security = new Security();
+            authorization = new Authorization();
             navivation = new Navigation();
             domain = StringHelper.normalizeURI(navivation.getDomain());
             domain = domain.substring(0, domain.length() - 1);
@@ -103,7 +102,7 @@ public class FileServlet extends HttpServlet
         }
         resp.setContentType(StorageUtils.getMimeType(StringHelper.getFileExtension(url)));
         SessionBean session = getSession(req);
-        if (security.check(OperationsType.READ, getUser(session), loadCollection(url, session)))
+        if (authorization.read(getUser(session), loadCollection(url, session)))
         {
             if (download)
                 resp.setHeader("Content-disposition", "attachment;");

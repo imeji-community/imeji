@@ -628,33 +628,6 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         return getNavigationString();
     }
 
-    /**
-     * Check that at leat one image is editable
-     */
-    public boolean isImageEditable()
-    {
-        for (ThumbnailBean tb : getCurrentPartList())
-        {
-            if (tb.isEditable())
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean isImageDeletable()
-    {
-        for (ThumbnailBean tb : getCurrentPartList())
-        {
-            if (tb.isDeletable())
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public boolean isEditable()
     {
         return false;

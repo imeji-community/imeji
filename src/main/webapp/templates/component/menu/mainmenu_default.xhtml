@@ -60,7 +60,7 @@ All rights reserved. Use is subject to license terms.
 		<h:outputText id="lnkAlbumssInactive" styleClass="imj_mainMenuStandardItem" value="#{lbl.header_albums}" rendered="#{HistorySession.currentPage.type.fileName == 'Albums.xhtml'}" />
 		
 		
-		<h:outputLink id="lnkAdmin" title="#{lbl.goto_admin}" value="#{Navigation.adminUrl}" rendered="#{SessionBean.admin}">
+		<h:outputLink id="lnkAdmin" title="#{lbl.goto_admin}" value="#{Navigation.adminUrl}" rendered="#{Auth.admin}">
 			<h:outputText value="ADMIN"></h:outputText>
 		</h:outputLink>
 		

@@ -28,8 +28,6 @@
  */
 package de.mpg.imeji.logic.search.query;
 
-import java.net.URI;
-
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -142,6 +140,19 @@ public class SPARQLQueries
     {
         return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE { ?s <http://imeji.org/terms/grantType> ?type"
                 + " . not exists{ ?user <http://imeji.org/terms/grant> ?s}}";
+    }
+
+    /**
+     * Delete all grants granting for the given uri
+     * 
+     * @param uri
+     * @return
+     */
+    public static String updateRemoveGrantsFor(String uri)
+    {
+        return "WITH <http://imeji.org/user> DELETE {?user <http://imeji.org/terms/grant> ?s . ?s ?p ?o } "
+                + "USING <http://imeji.org/user>  WHERE {?user <http://imeji.org/terms/grant> ?s . ?s <http://imeji.org/terms/grantFor> <"
+                + uri + ">}";
     }
 
     /**

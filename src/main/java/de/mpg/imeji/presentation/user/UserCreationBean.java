@@ -5,6 +5,7 @@ package de.mpg.imeji.presentation.user;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.User;
@@ -88,6 +89,7 @@ public class UserCreationBean
         PasswordGenerator generator = new PasswordGenerator();
         String password = generator.generatePassword();
         user.setEncryptedPassword(StringHelper.convertToMD5(password));
+        user.setGrants(AuthorizationPredefinedRoles.defaultUser(user.getId().toString()));
         uc.create(user);
         return password;
     }
@@ -164,16 +166,6 @@ public class UserCreationBean
     public User getUser()
     {
         return user;
-    }
-
-    /**
-     * True if the user has sysadmin Rights
-     * 
-     * @return
-     */
-    public boolean isSysAdmin()
-    {
-        return sb.isAdmin();
     }
 
     /**

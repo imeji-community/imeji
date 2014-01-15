@@ -5,10 +5,10 @@
 	xmlns:f="http://java.sun.com/jsf/core">
 			<ui:param name="headline" value="#{lbl.admin_users_head}"/>
 			<ui:define name="mainContent">
-				<h:panelGroup layout="block" styleClass="full_area0 endline itemLine noTopBorder" rendered="#{!UsersBean.sysAdmin}">
+				<h:panelGroup layout="block" styleClass="full_area0 endline itemLine noTopBorder" rendered="#{!Auth.admin}">
 					<h2><h:outputText value="You are not allowed to view this page"/></h2>
 				</h:panelGroup>
-				<h:panelGroup layout="block" styleClass="full_area0 endline itemLine noTopBorder" rendered="#{UsersBean.sysAdmin}">
+				<h:panelGroup layout="block" styleClass="full_area0 endline itemLine noTopBorder" rendered="#{Auth.admin}">
 					<ui:repeat id="userList" var="user" value="#{UsersBean.users}" rows="0">
 					<h:panelGroup layout="block" styleClass="full_area0_p4 listItem noTopBorder">
 						<h:panelGroup layout="block" styleClass="huge_area0_p4">

@@ -206,6 +206,19 @@ public class ItemController extends ImejiController
         imejiRDF2Bean = new ImejiRDF2Bean(Imeji.imageModel);
         return (Item)imejiRDF2Bean.load(imgUri.toString(), user, new Item());
     }
+    
+    /**
+     * User ObjectLoader to load image
+     * 
+     * @param imgUri
+     * @return
+     * @throws Exception
+     */
+    public Item retrieve(URI imgUri, User user) throws Exception
+    {
+        imejiRDF2Bean = new ImejiRDF2Bean(Imeji.imageModel);
+        return (Item)imejiRDF2Bean.load(imgUri.toString(), user, new Item());
+    }
 
     /**
      * Retrieve all {@link Item} (all status, all users) in imeji

@@ -29,10 +29,10 @@
 		<h:outputText styleClass="imj_contentMenuItem"
 			value="#{lbl.upload_images}" />
 		<h:outputText styleClass="imj_contentMenuSeparator"
-			rendered="#{AuthorizationBean.admin}" />
+			rendered="#{Auth.admin}" />
 		<h:outputLink id="lnkUploadImages" styleClass="imj_contentMenuItem"
 			value="#{Navigation.collectionUrl}#{UploadBean.id}/ingest?init=1"
-			rendered="#{AuthorizationBean.admin}">
+			rendered="#{Auth.admin}">
 			<h:outputText value="#{lbl.ingest}" />
 		</h:outputLink>
 
@@ -40,7 +40,7 @@
 
 	<ui:define name="mainContent">
 		<h:panelGroup layout="block" styleClass="full_area0"
-			rendered="#{AuthorizationBean.edit}">
+			rendered="#{Auth.update(UploadBean.collection)}">
 			<h:panelGroup layout="block" styleClass="full_area0 itemList"
 				style="border-bottom-width:0 !important;">
 				<ui:include src="./include/History.xhtml"></ui:include>

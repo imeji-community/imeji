@@ -6,7 +6,7 @@ import java.util.List;
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.query.ReadWrite;
 
-import de.mpg.imeji.logic.security.Operations.OperationsType;
+import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.j2j.controler.ResourceController;
 
 /**
@@ -19,7 +19,7 @@ import de.mpg.j2j.controler.ResourceController;
 public class CRUDTransaction extends Transaction
 {
     private List<Object> objects = new ArrayList<Object>();
-    private OperationsType type;
+    private GrantType type;
     private boolean lazy = false;
 
     /**
@@ -30,7 +30,7 @@ public class CRUDTransaction extends Transaction
      * @param modelURI
      * @param lazy
      */
-    public CRUDTransaction(List<Object> objects, OperationsType type, String modelURI, boolean lazy)
+    public CRUDTransaction(List<Object> objects, GrantType type, String modelURI, boolean lazy)
     {
         super(modelURI);
         this.objects = objects;

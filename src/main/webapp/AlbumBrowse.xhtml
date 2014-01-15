@@ -34,13 +34,13 @@
 						<h:outputText styleClass="imj_contentMenuSeparator" />
 						<!-- SORTING content menu lower line ends here -->
 					</h:panelGroup>
-					<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialogRelease');" rendered="#{AlbumImagesBean.editable and AlbumImagesBean.album.status=='PENDING'}">
+					<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialogRelease');" rendered="#{Auth.admin(AlbumImagesBean.album) and AlbumImagesBean.album.status=='PENDING'}">
 						<h:outputText value="#{lbl.release}"/>
 					</h:outputLink>
-					<h:outputLink id="lnkWithdrawCollection" styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialDiscardContainer:dialogWithdraw');" rendered="#{AlbumImagesBean.editable and AlbumImagesBean.album.status=='RELEASED'}">
+					<h:outputLink id="lnkWithdrawCollection" styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialDiscardContainer:dialogWithdraw');" rendered="#{Auth.admin(AlbumImagesBean.album) and AlbumImagesBean.album.status=='RELEASED'}">
 						<h:outputText value="#{lbl.withdraw}"/>
 					</h:outputLink>
-					<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialogDelete');" rendered="#{AlbumImagesBean.deletable}">
+					<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialogDelete');" rendered="#{Auth.delete(AlbumImagesBean.album)}">
 						<h:outputText value="#{lbl.delete}"/>
 					</h:outputLink>
 			<h:panelGroup layout="block" styleClass="free_area0_p0 endline overlayMenu">

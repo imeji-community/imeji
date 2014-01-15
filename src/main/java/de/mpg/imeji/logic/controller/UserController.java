@@ -44,7 +44,6 @@ public class UserController extends ImejiController
      * @deprecated
      * @param user
      */
-    @Deprecated
     public UserController(User user)
     {
         super(user);
@@ -115,6 +114,19 @@ public class UserController extends ImejiController
     {
         imejiBean2RDF = new ImejiBean2RDF(Imeji.userModel);
         imejiBean2RDF.update(imejiBean2RDF.toList(user), this.user);
+    }
+
+    /**
+     * Update a {@link User}
+     * 
+     * @param updatedUser : The user who is updated in the database
+     * @param currentUSer : The user who does the update
+     * @throws Exception
+     */
+    public void update(User updatedUser, User currentUser) throws Exception
+    {
+        imejiBean2RDF = new ImejiBean2RDF(Imeji.userModel);
+        imejiBean2RDF.update(imejiBean2RDF.toList(updatedUser), currentUser);
     }
 
     /**

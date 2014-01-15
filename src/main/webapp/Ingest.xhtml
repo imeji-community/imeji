@@ -36,7 +36,7 @@
 
 		<h:outputLink id="lnkUploadImages" styleClass="imj_contentMenuItem"
 			value="#{Navigation.collectionUrl}#{IngestBean.collectionId}/#{Navigation.uploadPath}?init=1"
-			rendered="#{AuthorizationBean.edit}">
+			rendered="#{Auth.update(IngestBean.collection)}">
 			<h:outputText value="#{lbl.upload_images}"></h:outputText>
 		</h:outputLink>
 
@@ -66,13 +66,13 @@
 			</h:panelGroup>
 
 		</div>
-		<h:panelGroup rendered="#{!AuthorizationBean.admin}"
+		<h:panelGroup rendered="#{!Auth.admin}"
 			styleClass="full_area0_p8 itemList">
 			<h2>
 				<h:outputText value="#{lbl.view_page_disallowed2}" />
 			</h2>
 		</h:panelGroup>
-		<h:panelGroup rendered="#{AuthorizationBean.admin}">
+		<h:panelGroup rendered="#{Auth.admin}">
 			<h:panelGroup layout="block" styleClass="full_area0 itemList"
 				style="border-bottom-width:0 !important;">
 				<ui:include src="./include/History.xhtml"></ui:include>

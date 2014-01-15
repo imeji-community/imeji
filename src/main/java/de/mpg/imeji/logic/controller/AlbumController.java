@@ -12,6 +12,7 @@ import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
 import de.mpg.imeji.logic.ImejiSPARQL;
+import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchResult;
@@ -69,7 +70,8 @@ public class AlbumController extends ImejiController
     {
         writeCreateProperties(album, user);
         imejiBean2RDF.create(imejiBean2RDF.toList(album), user);
-        addCreatorGrant(album.getId(), user);
+        GrantController gc = new GrantController();
+        gc.addGrants(user, AuthorizationPredefinedRoles.albumCreator(album.getId().toString()), user);
     }
 
     /**
@@ -137,8 +139,6 @@ public class AlbumController extends ImejiController
     {
         imejiBean2RDF = new ImejiBean2RDF(Imeji.albumModel);
         imejiBean2RDF.delete(imejiBean2RDF.toList(album), user);
-        GrantController gc = new GrantController(user);
-        gc.removeAllGrantsFor(user, album.getId());
     }
 
     /**

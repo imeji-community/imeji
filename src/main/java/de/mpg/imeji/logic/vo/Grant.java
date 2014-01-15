@@ -29,7 +29,7 @@ public class Grant
      */
     public enum GrantType
     {
-        SYSADMIN, CONTAINER_ADMIN, CONTAINER_EDITOR, IMAGE_UPLOADER, IMAGE_EDITOR, VIEWER, PROFILE_ADMIN, PROFILE_EDITOR, PROFILE_VIEWER;
+        CREATE, READ, UPDATE, DELETE, ADMIN, READ_CONTENT, UPDATE_CONTENT, DELETE_CONTENT, SYSADMIN, CONTAINER_ADMIN, CONTAINER_EDITOR, IMAGE_UPLOADER, IMAGE_EDITOR, VIEWER, PROFILE_ADMIN, PROFILE_EDITOR, PROFILE_VIEWER;
     }
 
     @j2jResource("http://imeji.org/terms/grantType")
@@ -63,11 +63,30 @@ public class Grant
         this.grantFor = gf;
     }
 
+    /**
+     * REturn the {@link Grant} as a {@link GrantType}
+     * 
+     * @return
+     */
     public GrantType asGrantType()
     {
         if (grantType != null)
             return GrantType.valueOf(grantType.getFragment());
         return null;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj instanceof Grant)
+        {
+            return grantFor.equals(((Grant)obj).getGrantFor()) && grantType.equals(((Grant)obj).getGrantType());
+        }
+        return false;
     }
 
     public void setGrantFor(URI grantFor)

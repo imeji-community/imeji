@@ -16,7 +16,6 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
-import javax.faces.event.ValueChangeEvent;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.fileupload.FileItemIterator;
@@ -24,7 +23,6 @@ import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang.BooleanUtils;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.controller.ItemController;
@@ -42,7 +40,6 @@ import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.beans.AuthorizationBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
@@ -106,7 +103,6 @@ public class UploadBean
             checkNameUnique = true;
             removeFiles();
             loadCollection();
-            ((AuthorizationBean)BeanHelper.getSessionBean(AuthorizationBean.class)).init(collection);
             totalNum = "";
             sNum = 0;
             fNum = 0;
@@ -152,7 +148,7 @@ public class UploadBean
      */
     public void upload() throws Exception
     {
-        UserController uc = new UserController(null);
+        UserController uc = new UserController(sessionBean.getUser());
         user = uc.retrieve(getUser().getEmail());
         HttpServletRequest req = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext()
                 .getRequest();
@@ -208,7 +204,7 @@ public class UploadBean
                 Item item = uploadFile(tmp);
                 if (item != null)
                 {
-                    UserController uc = new UserController(null);
+                    UserController uc = new UserController(sessionBean.getUser());
                     user = uc.retrieve(getUser().getEmail());
                     ItemController ic = new ItemController(user);
                     ic.create(item, collection.getId());

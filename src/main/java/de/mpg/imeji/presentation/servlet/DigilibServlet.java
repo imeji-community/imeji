@@ -42,11 +42,10 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
+import de.mpg.imeji.logic.auth.Authorization;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
-import de.mpg.imeji.logic.security.Operations.OperationsType;
-import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.internal.InternalStorageManager;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -75,7 +74,7 @@ public class DigilibServlet extends Scaler
     /**
      * imeji authentification and authorization
      */
-    private Security security;
+    private Authorization authorization;
     private String internalStorageBase;
     private StorageController storageController;
     private Navigation navigation;
@@ -87,7 +86,7 @@ public class DigilibServlet extends Scaler
     @Override
     public void init(ServletConfig config) throws ServletException
     {
-        security = new Security();
+        authorization = new Authorization();
         try
         {
             navigation = new Navigation();
@@ -131,7 +130,7 @@ public class DigilibServlet extends Scaler
         {
             SessionBean session = getSession(req);
             url = navigation.getApplicationUrl() + FileServlet.SERVLET_PATH + fn.replace(internalStorageBase, "");
-            if (security.check(OperationsType.READ, getUser(session), loadCollection(url, session)))
+            if (authorization.read(getUser(session), loadCollection(url, session)))
             {
                 super.doGet(req, resp);
             }
@@ -262,8 +261,9 @@ public class DigilibServlet extends Scaler
     {
         return (SessionBean)req.getSession(false).getAttribute(SessionBean.class.getSimpleName());
     }
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
      * @see javax.servlet.GenericServlet#destroy()
      */
     @Override

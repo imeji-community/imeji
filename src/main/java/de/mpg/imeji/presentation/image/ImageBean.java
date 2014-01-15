@@ -15,7 +15,6 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
@@ -33,7 +32,6 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
@@ -57,7 +55,6 @@ import de.mpg.imeji.presentation.util.UrlHelper;
  */
 public class ImageBean
 {
-    private static Logger logger = Logger.getLogger(ImageBean.class);
     private String tab;
     private SessionBean sessionBean;
     private Item item;
@@ -532,9 +529,8 @@ public class ImageBean
      */
     public User getImageUploader() throws Exception
     {
-        User user = null;
-        UserController uc = new UserController();
-        user = uc.retrieve(item.getCreatedBy());
+        UserController uc = new UserController(sessionBean.getUser());
+        User user = uc.retrieve(item.getCreatedBy());
         return user;
     }
 

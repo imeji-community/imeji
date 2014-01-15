@@ -227,7 +227,7 @@
 											class="free_area0_p8 endline itemSelectArea"> <h:selectBooleanCheckbox
 													styleClass="itemCheckBox" id="conCheckbox"
 													value="#{container.selected}"
-													rendered="#{Auth.delete(container)}"
+													rendered="#{Auth.delete(container.album)}"
 													disabled="#{container.album.status=='RELEASED'}">
 													<f:ajax event="change" />
 												</h:selectBooleanCheckbox> &#160;
@@ -294,9 +294,9 @@
 										<td class="free_area0 endline"><span class="seperator"></span>
 											<span class="medium_area0_p8"> <h:commandLink
 													value="#{lbl.make_active}" action="#{container.makeActive}"
-													rendered="#{!container.active and container.album.status=='PENDING' and Auth.create(container)}" />
+													rendered="#{!container.active and container.album.status=='PENDING' and Auth.createUri(container.album)}" />
 												<h:outputText value="Only View allowed"
-													rendered="#{!container.active and container.album.status=='PENDING' and !Auth.create(container)}" />
+													rendered="#{!container.active and container.album.status=='PENDING' and !Auth.create(container.album)}" />
 												<h:commandLink value="#{lbl.make_inactive}"
 													action="#{container.makeInactive}"
 													rendered="#{container.active}" />

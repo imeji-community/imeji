@@ -12,10 +12,10 @@ import javax.faces.event.ValueChangeEvent;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
@@ -46,10 +46,10 @@ public class ThumbnailBean
     private List<Statement> statements = new ArrayList<Statement>();
     private boolean selected = false;
     private boolean isInActiveAlbum = false;
-    private String collectionName = "";
     private SessionBean sessionBean;
     private static Logger logger = Logger.getLogger(ThumbnailBean.class);
     private MetadataSetBean mds;
+    private CollectionImeji collection;
 
     /**
      * Bean for Thumbnail list elements. Each element of a list with thumbnail is an instance of a {@link ThumbnailBean}
@@ -64,7 +64,7 @@ public class ThumbnailBean
         link = item.getThumbnailImageUrl().toString();
         profile = item.getMetadataSet().getProfile();
         filename = item.getFilename();
-        collectionName = ObjectCachedLoader.loadCollection(item.getCollection()).getMetadata().getTitle();
+        setCollection(ObjectCachedLoader.loadCollection(item.getCollection()));
         metadata = (List<Metadata>)item.getMetadataSet().getMetadata();
         statements = loadStatements(item.getMetadataSet().getProfile());
         caption = findCaption();
@@ -364,18 +364,18 @@ public class ThumbnailBean
     }
 
     /**
-     * @return the collectionName
+     * @return the collection
      */
-    public String getCollectionName()
+    public CollectionImeji getCollection()
     {
-        return collectionName;
+        return collection;
     }
 
     /**
-     * @param collectionName the collectionName to set
+     * @param collection the collection to set
      */
-    public void setCollectionName(String collectionName)
+    public void setCollection(CollectionImeji collection)
     {
-        this.collectionName = collectionName;
+        this.collection = collection;
     }
 }

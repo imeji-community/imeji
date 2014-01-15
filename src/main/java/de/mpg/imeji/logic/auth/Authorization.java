@@ -41,6 +41,7 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.PropertyBean;
+import de.mpg.imeji.presentation.image.ThumbnailBean;
 
 /**
  * Authorization rules for imeji objects (defined by their uri) for one {@link User}
@@ -344,7 +345,7 @@ public class Authorization
         if (g == null)
         {
             System.out.println("grant null " + user);
-            return true;
+            // return true;
         }
         List<Grant> all = getAllGrants(user);
         if (all.contains(g))
@@ -386,6 +387,8 @@ public class Authorization
             return ((MetadataProfile)obj).getId().toString();
         else if (obj instanceof User)
             return ((User)obj).getId().toString();
+        else if (obj instanceof URI)
+            return obj.toString();
         return null;
     }
 

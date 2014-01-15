@@ -30,18 +30,10 @@ public class UserController extends ImejiController
     private static ImejiRDF2Bean imejiRDF2Bean = new ImejiRDF2Bean(Imeji.userModel);
     private static ImejiBean2RDF imejiBean2RDF = new ImejiBean2RDF(Imeji.userModel);
 
-    /**
-     * Default constructor
-     */
-    public UserController()
-    {
-        super();
-    }
 
     /**
-     * TODO remove this constructor and add to all methods of controller the user as parameter
+     * Constructor
      * 
-     * @deprecated
      * @param user
      */
     public UserController(User user)

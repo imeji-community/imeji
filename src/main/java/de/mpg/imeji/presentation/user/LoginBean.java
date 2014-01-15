@@ -67,7 +67,6 @@ public class LoginBean
         try
         {
             User user = uc.retrieve(getLogin());
-            System.out.println(user.getEmail());
             if (user.getEncryptedPassword().equals(StringHelper.convertToMD5(getPasswd())))
             {
                 sb.setUser(user);

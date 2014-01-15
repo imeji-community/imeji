@@ -15,7 +15,7 @@
 					</h:outputLink>
 				</h:panelGroup>
 				<h:panelGroup styleClass="editFileIcon xTiny_marginLExcl"
-					rendered="#{Auth.update(item)}">
+					rendered="#{Auth.updateContent(item.collection)}">
 					<h:outputLink
 						value="#{paginatorListSessionBean.imageBaseUrl}/#{Navigation.itemPath}/#{item.id}?edit=1">
 						<h:outputText value="#{lbl.metadata_edit}" />

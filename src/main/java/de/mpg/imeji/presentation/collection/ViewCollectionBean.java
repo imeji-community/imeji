@@ -140,9 +140,8 @@ public class ViewCollectionBean extends CollectionBean
      */
     public User getCollectionCreator() throws Exception
     {
-        User user = null;
-        UserController uc = new UserController();
-        user = uc.retrieve(super.getCollection().getCreatedBy());
+        UserController uc = new UserController(sessionBean.getUser());
+        User user = uc.retrieve(super.getCollection().getCreatedBy());
         return user;
     }
 

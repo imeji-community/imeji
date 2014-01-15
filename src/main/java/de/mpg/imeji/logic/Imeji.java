@@ -248,7 +248,6 @@ public class Imeji
             for (Iterator<String> it = Imeji.dataset.listNames(); it.hasNext();)
             {
                 String s = it.next();
-                System.out.println(s);
             }
             QueryExecution qe = QueryExecutionFactory.create(q, Syntax.syntaxARQ, Imeji.dataset);
             qe.getContext().set(TDB.symUnionDefaultGraph, true);

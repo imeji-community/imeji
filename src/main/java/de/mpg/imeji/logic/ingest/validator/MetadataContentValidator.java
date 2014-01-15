@@ -44,7 +44,6 @@ public class MetadataContentValidator
                 {
                     if (propertyDescriptor.getWriteMethod() == null)
                         continue;
-                    System.out.println(propertyDescriptor.getName());
                     if (!notRequiredList.contains(propertyDescriptor.getName()))
                     {
                         if (metadata.getValueFromMethod(propertyDescriptor.getReadMethod().getName()) == null

@@ -122,8 +122,6 @@ public class MetadataSetBean
             }
             else
             {
-                System.out.println("A metadata " + md.getId() + " is defined with a non existing statement in profile "
-                        + this.profile.getId());
                 logger.error("A metadata " + md.getId() + " is defined with a non existing statement in profile "
                         + this.profile.getId());
             }

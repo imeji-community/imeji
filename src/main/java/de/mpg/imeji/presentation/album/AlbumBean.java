@@ -737,9 +737,8 @@ public class AlbumBean
 
     public User getAlbumCreator() throws Exception
     {
-        User user = null;
-        UserController uc = new UserController();
-        user = uc.retrieve(album.getCreatedBy());
+        UserController uc = new UserController(sessionBean.getUser());
+        User user = uc.retrieve(album.getCreatedBy());
         return user;
     }
 

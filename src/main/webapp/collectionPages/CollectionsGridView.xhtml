@@ -64,7 +64,7 @@
 						<div class="free_area0 itemHeader">
 							<h:panelGroup styleClass="free_area0_p8 endline itemSelectArea">
 								<h:form>
-									<h:selectBooleanCheckbox styleClass="itemCheckBox" id="conCheckbox" rendered="#{Auth.loggedIn != null and Auth.delete(container)}" value="#{container.selected}" disabled="#{container.status=='RELEASED'}">
+									<h:selectBooleanCheckbox styleClass="itemCheckBox" id="conCheckbox" rendered="#{Auth.loggedIn != null and Auth.deleteUri(container.uri)}" value="#{container.selected}" disabled="#{container.status=='RELEASED'}">
 										<f:ajax event="change"/>
 									</h:selectBooleanCheckbox>
 								</h:form>
@@ -137,16 +137,16 @@
 									<h:outputLink id="lnkViewCollectionDetail" styleClass="free_Area0 xTiny_marginRIncl" value="#{Navigation.collectionUrl}#{container.id}/#{Navigation.infosPath}?init=1">
 										<h:outputText value="#{lbl.view_md}"/>
 									</h:outputLink>
-									<h:outputLink id="lnkUploadImages" styleClass="free_Area0 xTiny_marginRIncl" value="#{Navigation.collectionUrl}#{container.id}/#{Navigation.uploadPath}?init=1" rendered="#{Auth.update(container) and container.status != 'WITHDRAWN'}">
+									<h:outputLink id="lnkUploadImages" styleClass="free_Area0 xTiny_marginRIncl" value="#{Navigation.collectionUrl}#{container.id}/#{Navigation.uploadPath}?init=1" rendered="#{Auth.updateUri(container.uri) and container.status != 'WITHDRAWN'}">
 									<h:outputText value="#{lbl.upload_images}"></h:outputText>
 									</h:outputLink>
-									<h:outputLink styleClass="free_Area0 xTiny_marginRIncl" value="#" onclick="openDialog('list:#{index.index}:dialogRelease');" rendered="#{Auth.update(container) and container.status == 'PENDING'}">
+									<h:outputLink styleClass="free_Area0 xTiny_marginRIncl" value="#" onclick="openDialog('list:#{index.index}:dialogRelease');" rendered="#{Auth.updateUri(container.uri) and container.status == 'PENDING'}">
 										<h:outputText value="#{lbl.collection_release}"/>
 									</h:outputLink>
-									<h:outputLink id="lnkWithdrawCollection" styleClass="free_Area0 xTiny_marginRIncl" value="#" onclick="openDialog('list:#{index.index}:dialDiscardContainer:dialogWithdraw');" rendered="#{Auth.update(container) and container.status == 'RELEASED'}">
+									<h:outputLink id="lnkWithdrawCollection" styleClass="free_Area0 xTiny_marginRIncl" value="#" onclick="openDialog('list:#{index.index}:dialDiscardContainer:dialogWithdraw');" rendered="#{Auth.updateUri(container.uri) and container.status == 'RELEASED'}">
 										<h:outputText value="#{lbl.withdraw}"/>
 									</h:outputLink>
-									<h:outputLink styleClass="free_Area0 xTiny_marginRIncl" value="#" onclick="openDialog('list:#{index.index}:dialogDelete');" rendered="#{Auth.delete(container)}" >
+									<h:outputLink styleClass="free_Area0 xTiny_marginRIncl" value="#" onclick="openDialog('list:#{index.index}:dialogDelete');" rendered="#{Auth.deleteUri(container.uri)}" >
 										<h:outputText value="#{lbl.delete}"/>
 									</h:outputLink>								
 									<imjc:DiscardContainer id="dialDiscardContainer" bean="#{container}" discardComment="#{container.discardComment}" index="#{index.index}"/>

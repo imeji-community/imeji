@@ -404,7 +404,7 @@ public class AdminBean
      */
     public List<User> getAllUsers()
     {
-        UserController uc = new UserController();
+        UserController uc = new UserController(Imeji.adminUser);
         return (List<User>)uc.retrieveAll();
     }
 

@@ -121,7 +121,7 @@ public class AuthorizationPredefinedRoles
     private static List<Grant> containerCreator(String uri)
     {
         GrantType[] g = { GrantType.CREATE, GrantType.READ, GrantType.UPDATE, GrantType.DELETE, GrantType.ADMIN,
-                GrantType.READ_CONTENT, GrantType.UPDATE_CONTENT, GrantType.DELETE_CONTENT };
+                GrantType.READ_CONTENT, GrantType.UPDATE_CONTENT, GrantType.DELETE_CONTENT, GrantType.ADMIN_CONTENT };
         return toGrantList(g, uri);
     }
 

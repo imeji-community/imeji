@@ -3,9 +3,6 @@
  */
 package de.mpg.imeji.logic.controller;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import de.mpg.imeji.logic.ImejiSPARQL;

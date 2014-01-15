@@ -342,11 +342,6 @@ public class Authorization
      */
     private boolean hasGrant(User user, Grant g)
     {
-        if (g == null)
-        {
-            System.out.println("grant null " + user);
-            // return true;
-        }
         List<Grant> all = getAllGrants(user);
         if (all.contains(g))
             return true;

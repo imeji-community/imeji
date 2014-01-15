@@ -205,7 +205,6 @@ public class BasicTest
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
-        adminUser.getGrants().add(new Grant(GrantType.SYSADMIN, URI.create("http://imeji.org/")));
         return adminUser;
     }
 }

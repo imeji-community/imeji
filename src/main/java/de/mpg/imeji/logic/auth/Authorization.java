@@ -169,6 +169,20 @@ public class Authorization
     }
 
     /**
+     * Return true if the user can administrate the content of the object defined by the uri
+     * 
+     * @param user
+     * @param uri
+     * @return
+     */
+    public boolean adminContent(User user, String uri)
+    {
+        if (hasGrant(user, toGrant(uri, GrantType.ADMIN_CONTENT)))
+            return true;
+        return false;
+    }
+
+    /**
      * Return true if the {@link User} can create the object
      * 
      * @param user
@@ -290,6 +304,20 @@ public class Authorization
     }
 
     /**
+     * Return true if the user can administrate the content of the object
+     * 
+     * @param user
+     * @param uri
+     * @return
+     */
+    public boolean adminContent(User user, Object obj)
+    {
+        if (hasGrant(user, toGrant(getRelevantURIForSecurity(obj, false), GrantType.ADMIN_CONTENT)))
+            return true;
+        return false;
+    }
+
+    /**
      * Return all {@link Grant} of one {@link User} (including the one in groups)
      * 
      * @param user
@@ -314,7 +342,10 @@ public class Authorization
     private boolean hasGrant(User user, Grant g)
     {
         if (g == null)
+        {
+            System.out.println("grant null " + user);
             return true;
+        }
         List<Grant> all = getAllGrants(user);
         if (all.contains(g))
             return true;

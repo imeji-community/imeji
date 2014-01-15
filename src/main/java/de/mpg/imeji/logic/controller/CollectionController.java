@@ -10,8 +10,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
@@ -22,8 +22,6 @@ import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Grant;
-import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
@@ -292,35 +290,7 @@ public class CollectionController extends ImejiController
     public SearchResult search(SearchQuery searchQuery, SortCriterion sortCri, int limit, int offset)
     {
         Search search = new Search(SearchType.COLLECTION, null);
-        return search.search(searchQuery, sortCri, simplifyUser());
-    }
-
-    /**
-     * Increase performance by restricting grants to the only grants needed
-     * 
-     * @param user
-     * @return
-     */
-    public User simplifyUser()
-    {
-        if (user == null)
-        {
-            return null;
-        }
-        User simplifiedUser = new User();
-        simplifiedUser.setId(user.getId());
-        for (Grant g : user.getGrants())
-        {
-            if (GrantType.SYSADMIN.equals(g.asGrantType()))
-            {
-                simplifiedUser.getGrants().add(g);
-            }
-            else if (g.getGrantFor() != null && g.getGrantFor().toString().contains("collection"))
-            {
-                simplifiedUser.getGrants().add(g);
-            }
-        }
-        return simplifiedUser;
+        return search.search(searchQuery, sortCri, user);
     }
 
     /**

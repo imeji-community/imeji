@@ -5,9 +5,6 @@ package de.mpg.imeji.logic.search.query;
 
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Grant;
-import de.mpg.imeji.logic.vo.Grant.GrantType;
-import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.j2j.helper.J2JHelper;
@@ -89,51 +86,6 @@ public class SimpleSecurityQuery
                 + "> <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> " + "?"
                 + getVariableName(rdfType)
                 + "} . filter(bound(?g) || ?status=<http://imeji.org/terms/status#RELEASED>)";
-    }
-
-    /**
-     * Return a SPARQL Filter with all Grants of one {@link User}
-     * 
-     * @param user
-     * @param rdfType
-     * @return
-     */
-    public static String getUserGrantsAsFilter(User user, String rdfType)
-    {
-        String privileges = "";
-        if (user != null && user.getGrants() != null && !user.getGrants().isEmpty())
-        {
-            int count = 0;
-            for (Grant g : user.getGrants())
-            {
-                if (GrantType.CONTAINER_ADMIN.equals(g.asGrantType())
-                        || GrantType.CONTAINER_EDITOR.equals(g.asGrantType())
-                        || GrantType.VIEWER.equals(g.asGrantType())
-                        || GrantType.IMAGE_EDITOR.equals(g.asGrantType())
-                        || (J2JHelper.getResourceNamespace(new MetadataProfile()).equals(rdfType) && GrantType.PROFILE_ADMIN
-                                .equals(g.asGrantType())))
-                {
-                    if (count > 0)
-                    {
-                        privileges += " || ";
-                    }
-                    privileges += "?" + getVariableName(rdfType) + "=<" + g.getGrantFor() + ">";
-                    count++;
-                }
-                else if (GrantType.SYSADMIN.equals(g.asGrantType()))
-                {
-                    if (count > 0)
-                        privileges += " || ";
-                    privileges += "true";
-                    count++;
-                }
-            }
-        }
-        if (!"".equals(privileges))
-        {
-            return " . FILTER(" + privileges + " || ?status=<http://imeji.org/terms/status#RELEASED>)";
-        }
-        return " . FILTER(?status=<http://imeji.org/terms/status#RELEASED>)";
     }
 
     /**

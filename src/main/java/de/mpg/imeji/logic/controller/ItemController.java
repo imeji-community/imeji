@@ -12,8 +12,8 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.search.Search;
@@ -26,8 +26,6 @@ import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Container;
-import de.mpg.imeji.logic.vo.Grant;
-import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Item.Visibility;
 import de.mpg.imeji.logic.vo.Metadata;
@@ -206,7 +204,7 @@ public class ItemController extends ImejiController
         imejiRDF2Bean = new ImejiRDF2Bean(Imeji.imageModel);
         return (Item)imejiRDF2Bean.load(imgUri.toString(), user, new Item());
     }
-    
+
     /**
      * User ObjectLoader to load image
      * 
@@ -243,7 +241,7 @@ public class ItemController extends ImejiController
     public SearchResult searchItemInContainer(URI containerUri, SearchQuery searchQuery, SortCriterion sortCri)
     {
         Search search = new Search(SearchType.ITEM, containerUri.toString());
-        return search.search(searchQuery, sortCri, simplifyUser(containerUri));
+        return search.search(searchQuery, sortCri, user);
     }
 
     /**
@@ -261,7 +259,7 @@ public class ItemController extends ImejiController
         if (containerUri != null)
             uriString = containerUri.toString();
         Search search = new Search(SearchType.ITEM, uriString);
-        return search.search(uris, searchQuery, sortCri, simplifyUser(containerUri));
+        return search.search(uris, searchQuery, sortCri, user);
     }
 
     /**
@@ -401,53 +399,9 @@ public class ItemController extends ImejiController
         {
             storageController.delete(id);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
-            logger.error("error deleting file" , e);
+            logger.error("error deleting file", e);
         }
-       
-    }
-
-    /**
-     * Increase performance by restricting grants to the only grants needed
-     * 
-     * @param user
-     * @return
-     */
-    private User simplifyUser(URI containerUri)
-    {
-        if (user == null)
-        {
-            return null;
-        }
-        User simplifiedUser = new User();
-        simplifiedUser.setId(user.getId());
-        for (Grant g : user.getGrants())
-        {
-            if (GrantType.SYSADMIN.equals(g.asGrantType()))
-            {   
-                simplifiedUser.getGrants().add(g);
-            }
-            else if (containerUri != null && containerUri.toString().contains("collection")
-                    && containerUri.toString().equals(g.getGrantFor().toString()))
-            {
-                simplifiedUser.getGrants().add(g);
-            }
-            else if (containerUri != null && containerUri.toString().contains("album")
-                    && g.getGrantFor().toString().contains("collection"))
-            {
-                simplifiedUser.getGrants().add(g);
-            }
-            else if (containerUri == null && g.getGrantFor() != null
-                    && g.getGrantFor().toString().contains("collection"))
-            {
-                simplifiedUser.getGrants().add(g);
-            }
-            else
-            {
-                // simplifiedUser.getGrants().add(g);
-            }
-        }
-        return simplifiedUser;
     }
 }

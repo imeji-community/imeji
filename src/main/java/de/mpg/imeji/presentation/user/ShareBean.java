@@ -5,7 +5,6 @@ package de.mpg.imeji.presentation.user;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
@@ -91,30 +90,7 @@ public class ShareBean
      */
     public void initMenus(URI uri)
     {
-        selectedGrant = GrantType.VIEWER;
-        grantsMenu = new ArrayList<SelectItem>();
-        if (isCollection(uri))
-        {
-            grantsMenu.add(new SelectItem(GrantType.VIEWER, ((SessionBean)BeanHelper.getSessionBean(SessionBean.class))
-                    .getLabel("role_viewer"), "Can view all content of a collection"));
-            grantsMenu.add(new SelectItem(GrantType.CONTAINER_EDITOR, ((SessionBean)BeanHelper
-                    .getSessionBean(SessionBean.class)).getLabel("role_collection_editor"),
-                    "Can edit informations of a collection"));
-            grantsMenu.add(new SelectItem(GrantType.IMAGE_EDITOR, ((SessionBean)BeanHelper
-                    .getSessionBean(SessionBean.class)).getLabel("role_image_editor"),
-                    "Can view and edit all items of a collection"));
-            grantsMenu.add(new SelectItem(GrantType.PROFILE_EDITOR, ((SessionBean)BeanHelper
-                    .getSessionBean(SessionBean.class)).getLabel("role_profile_editor"),
-                    "Can edit the metadata profile"));
-        }
-        else
-        {
-            grantsMenu.add(new SelectItem(GrantType.VIEWER, ((SessionBean)BeanHelper.getSessionBean(SessionBean.class))
-                    .getLabel("role_viewer"), "Can view all images for this collection"));
-            grantsMenu.add(new SelectItem(GrantType.CONTAINER_EDITOR, ((SessionBean)BeanHelper
-                    .getSessionBean(SessionBean.class)).getLabel("role_album_editor"),
-                    "Can edit information about the collection"));
-        }
+        //TODO implemtents new or remove this method
     }
 
     /**
@@ -157,39 +133,6 @@ public class ShareBean
         boolean shared = false;
         String message = "";
         String role = "";
-        if (selectedGrant.toString().equals(GrantType.VIEWER.name()))
-        {
-            role = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_viewer");
-        }
-        if (selectedGrant.toString().equals(GrantType.CONTAINER_EDITOR.name()))
-        {
-            role = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_collection_editor");
-        }
-        if (selectedGrant.toString().equals(GrantType.IMAGE_EDITOR.name()))
-        {
-            role = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_image_editor");
-        }
-        if (selectedGrant.toString().equals(GrantType.PROFILE_EDITOR.name()))
-        {
-            role = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_profile_editor");
-        }
-        if (!GrantType.PROFILE_EDITOR.equals(selectedGrant))
-        {
-            shared = sm.share(retrieveCollection(id), session.getUser(), this.getEmail(), selectedGrant, true);
-            message = session.getLabel("collection") + " " + id + " " + session.getLabel("shared_with") + " " + this.getEmail()
-                    + " " + session.getLabel("share_as") + " " + role;
-        }
-        else
-        {
-            shared = sm.share(retrieveProfile(id), session.getUser(), this.getEmail(), selectedGrant, true);
-            message = session.getLabel("profile") + " " + id + " " + session.getLabel("shared_with") + " " + this.getEmail()
-                    + " " + session.getLabel("share_as") + " " + role;
-            // Add grant VIEWER so the user can see the collection
-            if (GrantType.PROFILE_EDITOR.equals(selectedGrant))
-            {
-                shared = sm.share(retrieveCollection(id), session.getUser(), this.getEmail(), GrantType.VIEWER, true);
-            }
-        }
         if (shared)
         {
             User dest = ObjectLoader.loadUser(this.getEmail(), session.getUser());

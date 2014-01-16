@@ -119,7 +119,8 @@ p {
 /* imeji base settings - link colors and text decoration - button colors
    =========================================================================  */
 
-a {
+a,
+button {
 	color: #6CAD2F;
 	text-decoration: none;
 }
@@ -128,11 +129,16 @@ a:visited {
 	text-decoration: none;
 }
 
+button {
+	background-color: transparent;
+	border: 0 none;
+}
+
 a:hover, 
 a:focus, 
 button:hover, 
 button:focus {
-	color: #EEEEEE;
+	color: #F0F0F0;
 	text-decoration: none;
 }
 
@@ -738,6 +744,7 @@ cut second ?
     width: 1.3636em;
     margin-right: 0.182em;	
 	border: 0 none;
+	display: inline-block;
 }
 
 .imj_addButton_15:hover  {
@@ -754,12 +761,52 @@ cut second ?
     width: 1.3636em;
     margin-right: 0.182em;	
 	border: 0 none;
+	display: inline-block;
 }
 
 .imj_removeButton_15:hover {
 	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjButtonMinusBorder_15.png");
 	background-color: inherit;
 }
+
+
+/* * Expand & Collapse Buttons - e.g. Collection List
+   ================================================== */
+.imj_collapse {
+	background-color: transparent;
+	border: 0 none;
+	color: #6CAD2F;
+}
+.imj_collapse .imj_addButton_15 {
+	vertical-align: top;
+}
+.imj_collapse:hover {
+	background-color: transparent;
+	border: 0 none;
+	color: #F0F0F0;
+}
+.imj_collapse:hover .imj_removeButton_15 {
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjButtonMinusBorder_15.png");
+}
+.imj_expand {
+	background-color: transparent;
+	border: 0 none;
+	color: #6CAD2F;
+}
+.imj_expand .imj_addButton_15 {
+	vertical-align: top;
+}
+.imj_expand:hover {
+	background-color: transparent;
+	border: 0 none;
+	color: #F0F0F0;
+}
+.imj_expand:hover .imj_addButton_15 {
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjButtonPlusBorder_15.png");
+}
+
+
+   
 
 
 /* ===[ Overlay Menu ]===
@@ -785,6 +832,13 @@ cut second ?
 }
 .imj_overlayMenu .imj_criticalItem:hover {
 	background-color: #D80000;
+}
+
+.imj_overlayMenu .imj_menuBody select+.imj_buttonOrderByAsc_15 {
+	margin-left: 1em;
+}
+.imj_overlayMenu .imj_menuBody select+.imj_buttonOrderByDesc_15 {
+	margin-left: 1em;
 }
 
 
@@ -1102,6 +1156,7 @@ cut second ?
 .imj_contentSubMenuItem {
     display: inline-block;
     padding: 0;
+    margin-right: 1em;
     color: #6CAD2F;
 }
 
@@ -1442,7 +1497,7 @@ OLD:
 
 /* ===[ Content - EDIT METADATA + ADMIN + USER ]===
    ================================================== */
-/* * metadataLists (image_deatails.xhtml) 
+/* * metadataLists (image_details.xhtml) 
    * infodataLists (entryPageTabList.xhtml)
    * admindataLists (userCreate.xhtml)
    * usersList (Users.xhtml)
@@ -1527,7 +1582,7 @@ OLD:
 .imj_metadataValue, .imj_infodataValue, .imj_admindataValue  {
 	display: inline-block;
 	margin-left: 1.0em;
-	max-width: 77%;
+	max-width: 73.25%;
 }
 
 .imj_admindataValueCheckBox {
@@ -1903,6 +1958,207 @@ min-height: 6em;
 	margin-top: 1em;
 	width: 97.95%;
 	padding: 0 1%;
+}
+
+
+/* * bibliographicList - 
+	component (bibliographicListTwoColumn.xhtml, bibliographicListThreeColumn.xhtml)
+   ==================================================================================
+   ================================================================================== */
+.imj_bibliographicList {
+	width: 100%;
+}
+
+.imj_bibliographicList .imj_listHeader,
+.imj_bibliographicList .imj_listFooter {
+	width: 91.95%;
+	padding: 0.25em 4% 0.5em 4%;
+}
+.imj_bibliographicList .imj_listHeader > div,
+.imj_bibliographicList .imj_listFooter > div {
+	vertical-align: middle;
+}
+
+.imj_bibliographicList .imj_listHeader .imj_globalDisplaySwitchArea,
+.imj_bibliographicList .imj_listFooter .imj_globalDisplaySwitchArea {
+	display: inline-block;
+	width: 77.95%;
+}
+
+.imj_bibliographicList .imj_listFooter {
+	border-top: 0.090909em inset #BBBBBB;
+}
+
+.imj_bibliographicList .imj_listBody {
+	width: 100%;
+}
+
+.imj_bibliographicList .imj_bibliographicListItem {
+	width: 91.95%;
+	padding: 0 4% 1em 4%;
+	display: inline-block;
+}
+.imj_bibliographicListItem:nth-child(2n+1) {
+	background-color: #292929;
+}
+
+.imj_bibliographicList .imj_bibliographicListItem .imj_previewArea {
+	width: 20%;
+	min-width: 12em;
+	display: inline-block;
+	vertical-align: top;
+	text-align: center;
+}
+.imj_bibliographicList .imj_bibliographicListItem .imj_previewArea img {
+	float: left;
+	position: relative;
+	width: 100%;
+	height: 100%;
+	border: 2px solid #F0F8FF;
+	background: #ccd3d7; 
+	z-index: 100;
+}
+.imj_bibliographicList .imj_bibliographicListItem .imj_informationContent {
+	width: 77.25%;
+	display: inline-block;
+	vertical-align: top;
+}
+.imj_bibliographicList .imj_bibliographicListItem .imj_previewArea+.imj_informationContent {
+	width: 79.25%;
+}
+.imj_bibliographicList .imj_bibliographicListItem .imj_itemHeadline {
+	padding: 0.5em 0;
+/*	font-weight: bold; */
+	font-size: 120%;
+	line-height: 145%;
+}
+.imj_bibliographicList .imj_bibliographicListItem .imj_metadataLabel {
+	font-weight: normal;
+}
+.imj_bibliographicList .imj_bibliographicListItem .imj_itemActionArea { 
+	width: 100%;
+}
+.imj_bibliographicList .imj_bibliographicListItem .imj_itemActionArea li { 
+	display: inline-block; 
+	padding: 0 0.545454em; 
+}
+
+/* imj_interactiveArea = the first column of the item, in front of status symbol */
+.imj_bibliographicList .imj_interactiveArea {
+	width: 5%;
+	min-width: 1.5em;
+	display: inline-block;
+}
+.imj_bibliographicList .imj_bibliographicListItem .imj_interactiveArea {
+	padding-top: 0.75em;
+	vertical-align: top;
+}
+.imj_bibliographicList .imj_statusArea {
+	width: 16%;
+	min-width: 9em;
+	text-align: center;
+	display: inline-block;
+	overflow: hidden;
+}
+.imj_bibliographicList .imj_statusArea .imj_statusIconArea {
+	width: 100%;
+	margin: 0.5em 0;
+	text-align: center;
+}
+
+
+.imj_bibliographicList .imj_bibliographicListItem .imj_informationContent .imj_metadataSet {
+	padding-bottom: 0.25em;
+}
+.imj_bibliographicList .imj_bibliographicListItem .imj_informationContent .imj_metadataSet:hover {
+	background-color: #3C3C3C;
+}
+.imj_bibliographicList .imj_bibliographicListItem .imj_informationContent .imj_itemActionArea+.imj_metadataSet {
+	margin-top: 0.5em;
+}
+.imj_bibliographicList .imj_bibliographicListItem .imj_informationContent .imj_metadataSet label.imj_metadataLabel {
+	cursor: default;
+	min-width: 0;
+	width: 24%;
+}
+.imj_bibliographicList .imj_bibliographicListItem .imj_informationContent .imj_metadataSet p.imj_metadataValue {
+	margin: 0 0 0 1em;
+}
+.imj_bibliographicList .imj_bibliographicListItem .imj_informationContent .imj_additionalInfoArea .imj_displaySwitchArea a {
+	cursor: pointer;
+}
+.imj_bibliographicList .imj_bibliographicListItem .imj_informationContent .imj_additionalInfoArea .imj_metadataContent {
+	display: none;
+	padding-top: 0.5em;
+}
+
+
+/* * image / picture / media - stack - 
+	component (bibliographicGridList.xhtml)
+   ==================================================
+   ================================================== */
+.imj_imageStack:before {
+    background: none repeat scroll 0 0 #EFF4DE;
+    border: 2px solid #FFFFFF;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    content: "";
+    height: 100px;
+    left: -6px;
+    position: absolute;
+    top: -2px;
+    transform: rotate(-5deg);
+    width: 100px;
+}
+.imj_imageStack:after {
+    background: none repeat scroll 0 0 #768590;
+    border: 2px solid #FFFFFF;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    content: "";
+    height: 100px;
+    left: -6px;
+    position: absolute;
+    top: -2px;
+    transform: rotate(4deg);
+    width: 100px;
+}
+.imj_imageStack {
+    border: 2px solid #FFFFFF;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    float: left;
+    height: 100px;
+    margin: 15px;
+    position: relative;
+    width: 100px;
+    z-index: 100;
+}
+
+/* * icons for different status - 
+	component (bibliographicGridList.xhtml - logged in)
+   ==================================================
+   ================================================== */
+.imj_icoStatusWidthdrawn_32 {
+	width: 2.90909090em;
+	height: 2.90909090em;
+	background-image: url("/imeji/jsf/javax.faces.resources/css/old_style/themes/skin_darkGrey/images/All_Status_ItemWithdrawn_31_Static.gif");
+	background-position: left center;
+	background-repeat: no-repeat;
+	display: inline-block;
+}
+.imj_icoStatusPending_32 {
+	width: 2.90909090em;
+	height: 2.90909090em;
+    background-image: url("/imeji/jsf/javax.faces.resources/css/old_style/themes/skin_darkGrey/images/All_Status_ItemPending_31_Static.gif");
+    background-position: left center;
+    background-repeat: no-repeat;
+    display: inline-block;
+}
+.imj_icoStatusReleased_32 {
+	width: 2.90909090em;
+	height: 2.90909090em;
+    background-image: url("/imeji/jsf/javax.faces.resources/css/old_style/themes/skin_darkGrey/images/All_Status_ItemReleased_31_Static.gif");
+    background-position: left center;
+    background-repeat: no-repeat;
+    display: inline-block;
 }
 
 

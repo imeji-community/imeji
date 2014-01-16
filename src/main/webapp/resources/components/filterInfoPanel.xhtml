@@ -1,0 +1,41 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:composite="http://java.sun.com/jsf/composite">
+	
+	<composite:interface>
+		<composite:attribute name="fSession" required="false"/>
+		<composite:attribute name="filterBean" required="false"/>
+		<composite:attribute name="currentMainMenu" required="true"/>
+		<composite:attribute name="browseToAllUrl" required="true"/>
+		<composite:attribute name="numberOfElements" required="true"/>
+	</composite:interface>
+	
+	<composite:implementation>
+		
+		<h:panelGroup layout="block" id="selectionInfoPanel" styleClass="imj_selectionInfoPanel">
+			<h:form id="preListForm">
+				<h:outputLink value="?q=&amp;f=all">
+					<h:outputText value="#{lbl.all}"/>
+				</h:outputLink>
+				
+				<h:outputText value="#{lbl.search}" rendered="#{cc.attrs.filterBean.query != ''}"/>
+				
+				<h:outputLink value="?q=" rendered="#{cc.attrs.filterBean.query != ''}" styleClass="imj_mainContentPreListHeaderItemFilter">
+					<h:outputText value="[x]"/>
+				</h:outputLink>
+				
+				<h:outputText value="#{cc.attrs.filterBean.filterLabel}" rendered="#{cc.attrs.filterBean.selectedFilter != 'all'}"/>
+				
+				<h:outputLink value="?f=all" rendered="#{cc.attrs.filterBean.selectedFilter != 'all'}" styleClass="imj_mainContentPreListHeaderItemFilter">
+					<h:outputText value="[x]"/>
+				</h:outputLink>
+				
+				<h:outputText value=" (#{cc.attrs.filterBean.totalNumberOfElements})"/>
+			</h:form>
+		</h:panelGroup>
+		
+		
+	</composite:implementation>
+</html>

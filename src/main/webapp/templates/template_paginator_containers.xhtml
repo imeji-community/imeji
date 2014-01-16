@@ -8,33 +8,20 @@
 		<h:outputText value="#{paginatorListSessionBean.init}" />
 	</ui:define>
 	<ui:define name="prelistHeader">
-		<h:outputLink styleClass="imj_mainContentPreListHeaderItemAll" 
-			value="?q=&amp;f=all">
+		<h:outputLink styleClass="imj_mainContentPreListHeaderItemAll" value="?q=&amp;f=all">
 			<h:outputText value="#{lbl.all}" />
 		</h:outputLink>
-		<h:outputText value="#{lbl.search}"
-			styleClass="imj_mainContentPreListHeaderItemFilter"
-			rendered="#{paginatorListSessionBean.query != ''}" />
-		<h:outputLink value="?q="
-			rendered="#{paginatorListSessionBean.query != ''}"
-			styleClass="imj_mainContentPreListHeaderItemFilter">
+		<h:outputText value="#{lbl.search}" styleClass="imj_mainContentPreListHeaderItemFilter" rendered="#{paginatorListSessionBean.query != ''}" />
+		<h:outputLink value="?q=" rendered="#{paginatorListSessionBean.query != ''}" styleClass="imj_mainContentPreListHeaderItemFilter">
 			<h:outputText value="[x]" styleClass="imj_mainContentPreListHeaderItemFilter" />
 		</h:outputLink>
-		<h:outputText value="#{paginatorListSessionBean.filterLabel}"
-			styleClass="imj_mainContentPreListHeaderItemFilter"
-			rendered="#{paginatorListSessionBean.selectedFilter != 'all'}" />
-		<h:outputLink value="?f=all"
-			rendered="#{paginatorListSessionBean.selectedFilter != 'all'}"
-			styleClass="imj_mainContentPreListHeaderItemFilter">
+		<h:outputText value="#{paginatorListSessionBean.filterLabel}" styleClass="imj_mainContentPreListHeaderItemFilter" rendered="#{paginatorListSessionBean.selectedFilter != 'all'}" />
+		<h:outputLink value="?f=all" rendered="#{paginatorListSessionBean.selectedFilter != 'all'}" styleClass="imj_mainContentPreListHeaderItemFilter">
 			<h:outputText value="[x]" styleClass="imj_mainContentPreListHeaderItemFilter" />
 		</h:outputLink>
-		<h:outputText styleClass="imj_mainContentPreListHeaderItemCounter"
-			value=" (#{paginatorListSessionBean.totalNumberOfElements})" />
-		<h:outputLink styleClass="imj_mainContentPreListHeaderItemDelete"
-			value="#"
-			onclick="openDialog('dialogDeleteSelectedContainer');">
-			<h:outputText value="#{lbl.delete_selected_collections}"
-				rendered="#{SessionBean.user != null}" />
+		<h:outputText styleClass="imj_mainContentPreListHeaderItemCounter" value=" (#{paginatorListSessionBean.totalNumberOfElements})" />
+		<h:outputLink styleClass="imj_mainContentPreListHeaderItemDelete" value="#" onclick="openDialog('dialogDeleteSelectedContainer');">
+			<h:outputText value="#{lbl.delete_selected_collections}" rendered="#{SessionBean.user != null}" />
 		</h:outputLink>
 	</ui:define>
 	<ui:define name="list">

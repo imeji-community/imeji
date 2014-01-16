@@ -150,7 +150,6 @@ public class StorageUtils
         GetMethod method = new GetMethod(url);
         method.addRequestHeader("Cache-Control", "public");
         method.setRequestHeader("Connection", "close");
-        ProxyHelper.setProxy(client, url);
         return method;
     }
 

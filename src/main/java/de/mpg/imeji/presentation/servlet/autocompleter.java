@@ -26,6 +26,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import de.mpg.imeji.logic.storage.util.StorageUtils;
+import de.mpg.imeji.presentation.util.ProxyHelper;
 
 /**
  * Servlet implementation class autocompleter
@@ -68,7 +69,8 @@ public class autocompleter extends HttpServlet
             GetMethod getMethod = new GetMethod(datasource + URLEncoder.encode(suggest.toString(), "UTF-8"));
             try
             {
-                client.executeMethod(getMethod);
+                //client.executeMethod(getMethod);
+                ProxyHelper.executeMethod(client, getMethod);
                 responseString = new String(StorageUtils.toBytes(getMethod.getResponseBodyAsStream()), "UTF-8");
                 if (datasource != null && responseString != null)
                     responseString = passResult(responseString, datasource);

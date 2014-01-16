@@ -55,7 +55,8 @@ public class LoginHelper
         login.addParameter("j_password", password);
         try
         {
-            client.executeMethod(login);
+            //client.executeMethod(login);
+            ProxyHelper.executeMethod(client, login);
         }
         catch (Exception e)
         {
@@ -69,7 +70,8 @@ public class LoginHelper
         PostMethod postMethod = new PostMethod("/aa/login");
         postMethod.addParameter("target", frameworkUrl);
         client.getState().addCookie(sessionCookie);
-        client.executeMethod(postMethod);
+        //client.executeMethod(postMethod);
+        ProxyHelper.executeMethod(client, postMethod);
         if (HttpServletResponse.SC_SEE_OTHER != postMethod.getStatusCode())
         {
             throw new HttpException("Wrong status code: " + postMethod.getStatusCode());

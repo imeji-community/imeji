@@ -60,7 +60,8 @@ public class UrlHelper
         {
             HttpClient client = new HttpClient();
             GetMethod method = new GetMethod(uri.toString());
-            client.executeMethod(method);
+            // client.executeMethod(method);
+            ProxyHelper.executeMethod(client, method);
             return true;
         }
         catch (Exception e)

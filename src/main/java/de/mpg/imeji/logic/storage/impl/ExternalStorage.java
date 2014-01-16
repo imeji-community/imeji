@@ -38,6 +38,7 @@ import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.UploadResult;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
+import de.mpg.imeji.presentation.util.ProxyHelper;
 
 /**
  * The {@link Storage} implementation for external Storages. Can only read files (if the files are publicly available).
@@ -90,13 +91,15 @@ public class ExternalStorage implements Storage
         get.setFollowRedirects(true);
         try
         {
-            client.executeMethod(get);
+            //client.executeMethod(get);
+            ProxyHelper.executeMethod(client, get);
             if (get.getStatusCode() == 302)
             {
                 // Login in escidoc is not valid anymore, log in again an read again
                 get.releaseConnection();
                 get = StorageUtils.newGetMethod(client, url);
-                client.executeMethod(get);
+                //client.executeMethod(get);
+                ProxyHelper.executeMethod(client, get);
             }
             StorageUtils.writeInOut(get.getResponseBodyAsStream(), out, close);
         }

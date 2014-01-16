@@ -52,7 +52,8 @@ public class SearchAndExportHelper
                             + URLEncoder.encode("escidoc.objid=" + itemId + " or escidoc.property.version.objid="
                                     + itemId, "UTF-8") + "&exportFormat=" + format + "&outputFormat=html_linked";
                     GetMethod method = new GetMethod(exportUri);
-                    client.executeMethod(method);
+                    //client.executeMethod(method);
+                    ProxyHelper.executeMethod(client, method);
                     return method.getResponseBodyAsString();
                 }
                 catch (Exception e)

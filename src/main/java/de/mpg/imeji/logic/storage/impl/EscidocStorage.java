@@ -51,6 +51,7 @@ import de.mpg.imeji.logic.storage.escidoc.EscidocUtils;
 import de.mpg.imeji.logic.storage.transform.ImageGeneratorManager;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.presentation.util.PropertyReader;
+import de.mpg.imeji.presentation.util.ProxyHelper;
 
 /**
  * eSciDoc Storage implementation. Implements {@link Storage} with eSciDoc Methods
@@ -133,7 +134,8 @@ public class EscidocStorage implements Storage
         get.addRequestHeader("Cookie", getEscidocCookie());
         try
         {
-            client.executeMethod(get);
+            //client.executeMethod(get);
+            ProxyHelper.executeMethod(client, get);
             if (get.getStatusCode() == 302)
             {
                 // Login in escidoc is not valid anymore, log in again an read again
@@ -141,7 +143,8 @@ public class EscidocStorage implements Storage
                 login();
                 get = StorageUtils.newGetMethod(client, url);
                 get.addRequestHeader("Cookie", getEscidocCookie());
-                client.executeMethod(get);
+                //client.executeMethod(get);
+                ProxyHelper.executeMethod(client, get);
             }
             StorageUtils.writeInOut(get.getResponseBodyAsStream(), out, close);
         }

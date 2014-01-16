@@ -8,7 +8,7 @@
 		<div class="full_area0 itemList loggedIn collectionList">
 			<div class="full_area0 listHeader">
 				<h:form id="headerForm">
-					<h:panelGroup layout="block" styleClass="free_area0_p8 endline overlayMenu noPaddingTopBottom" rendered="#{SessionBean.user != null}">
+					<h:panelGroup layout="block" styleClass="free_area0_p8 endline overlayMenu noPaddingTopBottom" rendered="#{Auth.loggedIn}">
 						<h:panelGroup layout="block" styleClass="menuHeader free_area0">
 							<h:panelGroup styleClass="free_area0">
 								<h:outputText styleClass="free_area0" value="#{lbl.select}&#160;"/>
@@ -29,10 +29,10 @@
 							&#160;
 						</h:panelGroup>
 					</h:panelGroup>
-					<h:panelGroup styleClass="free_area0_p8 endline itemSelectArea" rendered="#{SessionBean.user == null}">
+					<h:panelGroup styleClass="free_area0_p8 endline itemSelectArea" rendered="#{!Auth.loggedIn}">
 						&#160;
 					</h:panelGroup>
-					<h:panelGroup class="free_area0 endline status statusArea" rendered="#{SessionBean.user != null}">
+					<h:panelGroup class="free_area0 endline status statusArea" rendered="#{Auth.loggedIn}">
 						<span class="seperator"></span>
 						<h:commandLink id="lnkStateSort" styleClass="free_area0_p4" rendered="#{paginatorListSessionBean.selectedSortCriterion != 'status'}">
 							<f:setPropertyActionListener value="status" target="#{paginatorListSessionBean.selectedSortCriterion}"/>
@@ -64,14 +64,14 @@
 						<div class="free_area0 itemHeader">
 							<h:panelGroup styleClass="free_area0_p8 endline itemSelectArea">
 								<h:form>
-									<h:selectBooleanCheckbox styleClass="itemCheckBox" id="conCheckbox" rendered="#{Auth.loggedIn != null and Auth.deleteUri(container.uri)}" value="#{container.selected}" disabled="#{container.status=='RELEASED'}">
+									<h:selectBooleanCheckbox styleClass="itemCheckBox" id="conCheckbox" rendered="#{Auth.loggedIn and Auth.deleteUri(container.uri)}" value="#{container.selected}" disabled="#{container.status=='RELEASED'}">
 										<f:ajax event="change"/>
 									</h:selectBooleanCheckbox>
 								</h:form>
 								&#160;
 							</h:panelGroup>
 							<!-- Status display for logged in users -->
-							<h:panelGroup class="free_area0_p0 endline statusArea" rendered="#{SessionBean.user != null}">
+							<h:panelGroup class="free_area0_p0 endline statusArea" rendered="#{Auth.loggedIn}">
 								<span class="seperator"></span>
 								<span class="noDisplay">(</span>
 								<h:panelGroup styleClass="big_imgArea statusIcon withdrawnItem" rendered="#{container.status == 'WITHDRAWN'}"/>
@@ -91,7 +91,7 @@
 								</h:outputLabel>								
 							</h:panelGroup>
 							<!-- Image stack display for not logged in users -->
-							<h:panelGroup class="free_area0_p0 endline" rendered="#{SessionBean.user == null}">									
+							<h:panelGroup class="free_area0_p0 endline" rendered="#{!Auth.loggedIn}">									
 								<div class="imj_stack">	
 									<h:outputLink value="#{Navigation.collectionUrl}#{container.id}">						
 										<h:graphicImage style="border: 2px solid #F0F8FF; float: left; background: #ccd3d7; z-index: 100; position: relative;" 

@@ -4,8 +4,8 @@
 	xmlns:f="http://java.sun.com/jsf/core">
 	<h:panelGroup styleClass="small_marginLExcl quad_area0_p8">
 		<h3>
-			<h:outputText rendered="#{SessionBean.user == null}" styleClass="free_area0_p8" value="#{lbl.view_page_disallowed}"/>
-			<h:outputText rendered="#{SessionBean.user != null}" styleClass="free_area0_p8" value="#{lbl.view_page_disallowed2}"/>
+			<h:outputText rendered="#{!Auth.loggedIn}" styleClass="free_area0_p8" value="#{lbl.view_page_disallowed}"/>
+			<h:outputText rendered="#{Auth.loggedIn}" styleClass="free_area0_p8" value="#{lbl.view_page_disallowed2}"/>
 		</h3>
 		<h:form>
 			<h:panelGroup styleClass="full_area0_p8">

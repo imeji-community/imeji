@@ -6,9 +6,9 @@
 		class="half_area0_p8 bordst0 shadst1 dialogbox" style="display: none;">
 		<div class="half_area0_p8">
 			<h:outputText value="#{lbl.delete_selected_collections}?"
-				rendered="#{HistorySession.currentPage.type == 'COLLECTIONS' and SessionBean.user != null}" />
+				rendered="#{HistorySession.currentPage.type == 'COLLECTIONS' and Auth.loggedIn}" />
 			<h:outputText value="#{lbl.delete_selected_albums}?"
-				rendered="#{HistorySession.currentPage.type == 'ALBUMS' and SessionBean.user != null}" />
+				rendered="#{HistorySession.currentPage.type == 'ALBUMS' and Auth.loggedIn}" />
 		</div>
 		<div class="half_area0_p8">
 			<div class="large_txtBtn">
@@ -20,12 +20,12 @@
 			<div class="xLarge_txtBtn tiny_marginLExcl">
 				<h:form id="delSelForm">
 					<h:commandButton id="btnDelColl"
-						rendered="#{HistorySession.currentPage.type == 'COLLECTIONS' and SessionBean.user != null}"
+						rendered="#{HistorySession.currentPage.type == 'COLLECTIONS' and Auth.loggedIn}"
 						value="#{lbl.delete}"
 						styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn dialogActiveButton"
 						action="#{CollectionsBean.deleteAll}" />
 					<h:commandButton  id="btnDelAlb"
-						rendered="#{HistorySession.currentPage.type == 'ALBUMS' and SessionBean.user != null}"
+						rendered="#{HistorySession.currentPage.type == 'ALBUMS' and Auth.loggedIn}"
 						value="#{lbl.delete}"
 						styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn dialogActiveButton"
 						action="#{AlbumsBean.deleteAll}" />

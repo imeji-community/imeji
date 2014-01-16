@@ -34,7 +34,7 @@
 			value="#"
 			onclick="openDialog('dialogDeleteSelectedContainer');">
 			<h:outputText value="#{lbl.delete_selected_collections}"
-				rendered="#{SessionBean.user != null}" />
+				rendered="#{Auth.loggedIn}" />
 		</h:outputLink>
 	</ui:define>
 	<ui:define name="list">

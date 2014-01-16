@@ -48,7 +48,7 @@ All rights reserved. Use is subject to license terms.
 	<h:panelGroup layout="block" styleClass="imj_metaMenuStandardSingleLine">
 		<h:panelGroup styleClass="imj_metaMenuItemsAlign">
 			<!-- Username if logged in -->
-			<ui:fragment rendered="#{SessionBean.user != null}">
+			<ui:fragment rendered="#{Auth.loggedIn}">
 				<h:outputLink id="txtAccountUserName" title="#{lbl.goto_user_profile}" styleClass="imj_metaMenuItem" value="#{Navigation.applicationUrl}user?id=#{SessionBean.user.email}">
 					<h:outputText value="#{SessionBean.user.name}"/>
 				</h:outputLink>
@@ -58,13 +58,13 @@ All rights reserved. Use is subject to license terms.
 			
 			<!-- LogIn, LogOut -->
 			<h:form id="loginForm">
-				<h:panelGroup rendered="#{SessionBean.user == null}" styleClass="imj_metaMenuItem">
+				<h:panelGroup rendered="#{!Auth.loggedIn}" styleClass="imj_metaMenuItem">
 					<h:inputText value="#{LoginBean.login}"/>
 					<h:inputSecret value="#{LoginBean.passwd}"/>
 					<h:commandButton id="lnkLogin" title="#{lbl.login}" value="#{lbl.login}" action="#{LoginBean.doLogin}"/>
 				</h:panelGroup>
 				
-				<h:commandLink id="lnkLogout" title="#{lbl.logout}" action ="#{LoginBean.logout}" styleClass="imj_metaMenuItem" rendered="#{SessionBean.user != null}">
+				<h:commandLink id="lnkLogout" title="#{lbl.logout}" action ="#{LoginBean.logout}" styleClass="imj_metaMenuItem" rendered="#{Auth.loggedIn}">
 			    	<h:outputText value="#{lbl.logout}"></h:outputText>
 			    </h:commandLink>
 			</h:form>

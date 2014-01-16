@@ -53,7 +53,6 @@
 	
 		<div class="imj_siteHeader">
 		<!-- begin: header section (including meta menu, logo, searchMenu and main menu)-->
-		
 			<!-- import meta menu here -->
 			<ui:include src="ui/MetaMenu.jspf"/>
 		

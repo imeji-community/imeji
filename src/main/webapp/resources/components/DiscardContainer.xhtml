@@ -14,18 +14,18 @@
 		<h:form id="discardForm">
 			<h:panelGroup styleClass="half_area0_p8">
 				<h:outputText value="#{msg.confirmation_withdraw_collection}"
-					rendered="#{(HistorySession.currentPage.type == 'COLLECTION_HOME' or HistorySession.currentPage.type == 'COLLECTIONS' or HistorySession.currentPage.type == 'COLLECTION_IMAGES') and SessionBean.user != null}" />
+					rendered="#{(HistorySession.currentPage.type == 'COLLECTION_HOME' or HistorySession.currentPage.type == 'COLLECTIONS' or HistorySession.currentPage.type == 'COLLECTION_IMAGES') and Auth.loggedIn}" />
 				<h:outputText value="#{msg.confirmation_withdraw_album}"
-					rendered="#{(HistorySession.currentPage.type == 'ALBUM_HOME' or HistorySession.currentPage.type == 'ALBUM_IMAGES') and SessionBean.user != null}" />
+					rendered="#{(HistorySession.currentPage.type == 'ALBUM_HOME' or HistorySession.currentPage.type == 'ALBUM_IMAGES') and Auth.loggedIn}" />
 				<h:outputText id="errorMessage"
 					styleClass="quad_area0_p0 messageError" value="" />
 				<br/>
 				<h:outputText value="#{lbl.images_withdraw_comment_col}"
 						      styleClass="messageError"
-						      rendered="#{(HistorySession.currentPage.type == 'COLLECTION_HOME' or HistorySession.currentPage.type == 'COLLECTIONS' or HistorySession.currentPage.type == 'COLLECTION_IMAGES') and SessionBean.user != null}"/>
+						      rendered="#{(HistorySession.currentPage.type == 'COLLECTION_HOME' or HistorySession.currentPage.type == 'COLLECTIONS' or HistorySession.currentPage.type == 'COLLECTION_IMAGES') and Auth.loggedIn}"/>
 				<h:outputText value="#{lbl.images_withdraw_comment_alb}"
 						      styleClass="messageError"
-						      rendered="#{(HistorySession.currentPage.type == 'ALBUM_HOME' or HistorySession.currentPage.type == 'ALBUM_IMAGES') and SessionBean.user != null}"/>				
+						      rendered="#{(HistorySession.currentPage.type == 'ALBUM_HOME' or HistorySession.currentPage.type == 'ALBUM_IMAGES') and Auth.loggedIn}"/>				
 				<h:inputTextarea id="discardComment"
 					value="#{cc.attrs.discardComment}"
 					valueChangeListener="#{cc.attrs.bean.discardCommentListener}"

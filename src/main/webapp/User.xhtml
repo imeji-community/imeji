@@ -88,7 +88,7 @@
 							</h:panelGroup>
 						</h:panelGroup>
 					</h:form>
-						<h:panelGroup rendered="#{!Auth.admin and Auth.loggedIn == null}">
+						<h:panelGroup rendered="#{!Auth.loggedIn}">
 							<ui:include src="./include/LoginFormular.xhtml" />
 						</h:panelGroup>
 					</h:panelGroup>

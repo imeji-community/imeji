@@ -25,10 +25,10 @@
 		<h:panelGroup styleClass="full_area0 itemList " >	
 			<br/>
 			<h:panelGroup id="ajaxContent">
-				<h:panelGroup id="editorInitializing" styleClass="full_area0 huge_marginLExcl" rendered="#{!EditImageMetadataBean.initialized and SessionBean.user != null}">
+				<h:panelGroup id="editorInitializing" styleClass="full_area0 huge_marginLExcl" rendered="#{!EditImageMetadataBean.initialized and Auth.loggedIn}">
 					<h2><h:outputText stylClass="full_area0_p8 text-align:center" value="Preparing editor! Please a wait a few seconds..."/></h2>
 				</h:panelGroup>
-				<h:panelGroup id="editor" styleClass="full_area0 small_marginLExcl" rendered="#{EditImageMetadataBean.initialized and SessionBean.user != null}">	
+				<h:panelGroup id="editor" styleClass="full_area0 small_marginLExcl" rendered="#{EditImageMetadataBean.initialized and Auth.loggedIn}">	
 					<h:panelGroup rendered="#{!EditImageMetadataBean.profileWithStatements}">
 						<h2><h:outputText value="#{lbl.profile_empty}"/></h2>
 						<h:outputLink value="#{HistorySession.previousPage.uri}" styleClass="free_area1_p8">

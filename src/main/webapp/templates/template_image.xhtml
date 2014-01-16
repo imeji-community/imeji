@@ -8,8 +8,8 @@
 	<ui:define name="mainContent" >
         <h:panelGroup layout="block" styleClass="full_area0" rendered="#{imageBean.image != null and !Auth.readContent(imageBean.collection)}">
             <h2>
-            	<h:outputText value="#{lbl.view_page_disallowed}" styleClass="tiny_marginLExcl" rendered="#{SessionBean.user == null}"/>
-            	<h:outputText value="#{lbl.view_page_disallowed2}" styleClass="tiny_marginLExcl" rendered="#{SessionBean.user != null}"/>
+            	<h:outputText value="#{lbl.view_page_disallowed}" styleClass="tiny_marginLExcl" rendered="#{!Auth.loggedIn}"/>
+            	<h:outputText value="#{lbl.view_page_disallowed2}" styleClass="tiny_marginLExcl" rendered="#{Auth.loggedIn}"/>
             </h2>
         </h:panelGroup>
 		<h:panelGroup rendered="#{imageBean.image != null and Auth.readContent(imageBean.collection)}">
@@ -59,10 +59,10 @@
 					<h:panelGroup id="image" layout="block" rendered="#{imageBean.image.status != 'WITHDRAWN'}">
 						<h:form id="itemForm">
 							<h:outputText value=":" style="visibility:hidden" styleClass="small_area0"/>
-							<h:selectBooleanCheckbox styleClass="xDouble_marginLIncl tiny_checkbox" id="pictureCheckbox" value="#{imageBean.selected}" valueChangeListener="#{imageBean.selectedChanged}" rendered="#{SessionBean.user != null}">
+							<h:selectBooleanCheckbox styleClass="xDouble_marginLIncl tiny_checkbox" id="pictureCheckbox" value="#{imageBean.selected}" valueChangeListener="#{imageBean.selectedChanged}" rendered="#{Auth.loggedIn}">
 								<f:ajax execute="@this" render=":preListHeader"/>
 							</h:selectBooleanCheckbox>
-							<h:outputText styleClass="free_label" value="#{lbl.selected}" rendered="#{SessionBean.user != null}"/>
+							<h:outputText styleClass="free_label" value="#{lbl.selected}" rendered="#{Auth.loggedIn}"/>
 							<h:commandLink styleClass="free_label xTiny_marginLExcl" id="lnkPicRemove" action="#{imageBean.remove}" rendered="#{Auth.delete(imageBean.image)}">
 								<h:outputText value="#{lbl.remove_from_col}" />
 							</h:commandLink>

@@ -18,7 +18,7 @@
 		<h:outputText styleClass="imj_contentMenuSeparator" />
 		<h:outputLink id="lnkFilter" styleClass="imj_contentMenuItem"
 			value="?tab=FILTER"
-			rendered="#{AlbumsBean.selectedMenu != 'FILTER' and SessionBean.user != null}">
+			rendered="#{AlbumsBean.selectedMenu != 'FILTER' and Auth.loggedIn}">
 			<h:outputText value="#{lbl.filter}" />
 		</h:outputLink>
 		<h:outputText id="txtFilterLink" styleClass="imj_contentMenuItem"
@@ -26,7 +26,7 @@
 			rendered="#{AlbumsBean.selectedMenu == 'FILTER'}" />
 		<h:outputText styleClass="imj_contentMenuSeparator" />
 		<h:outputLink value="#{Navigation.createAlbumUrl}"
-			rendered="#{SessionBean.user != null}"
+			rendered="#{Auth.loggedIn}"
 			styleClass="imj_contentMenuItemCreateAlbum">
 			<h:outputText value="#{lbl.album_create}" />
 		</h:outputLink>
@@ -54,7 +54,7 @@
 				<h:outputText styleClass="imj_contentMenuSeparator" />
 			</h:panelGroup>
 			<h:panelGroup
-				rendered="#{AlbumsBean.selectedMenu == 'FILTER' and SessionBean.user != null}">
+				rendered="#{AlbumsBean.selectedMenu == 'FILTER' and Auth.loggedIn}">
 				<h:outputText id="txtFilter" value="#{lbl.filter_by}"
 					styleClass="imj_contentSubMenuItemFiltering" />
 				<h:selectOneMenu id="selFilter" value="#{AlbumsBean.selectedFilter}"
@@ -86,7 +86,7 @@
 		<h:outputLink styleClass="imj_mainContentPreListHeaderItemDelete"
 			value="#" onclick="openDialog('dialogDeleteSelectedContainer');">
 			<h:outputText value="#{lbl.delete_selected_albums}"
-				rendered="#{SessionBean.user != null}" />
+				rendered="#{Auth.loggedIn}" />
 		</h:outputLink>
 	</ui:define>
 
@@ -98,9 +98,8 @@
 					<thead class="listHeader"
 						style="text-align: left; vertical-align: top;">
 						<tr class="full_area0">
-							<h:panelGroup rendered="#{SessionBean.user != null}">
+							<h:panelGroup rendered="#{Auth.loggedIn}">
 								<th class="free_area0_p8 endline itemSelectArea"><h:panelGroup
-										rendered="#{SessionBean.user != null}"
 										styleClass="overlayMenu">
 										<h:panelGroup styleClass="menuHeader">
 											<input type="button" class="min_imgBtn checkboxSelectButton" />
@@ -150,7 +149,7 @@
 										<h:outputText value="#{lbl.state}" />
 									</h:commandLink> &#160;</th>
 							</h:panelGroup>
-							<h:panelGroup rendered="#{SessionBean.user == null}"
+							<h:panelGroup rendered="#{!Auth.loggedIn}"
 								styleClass="large_area0">
 								<th class="large_area0 endline"></th>
 							</h:panelGroup>
@@ -183,7 +182,7 @@
 									styleClass="small_area0_p8" value="#{lbl.images}" />
 							</th>
 							<th
-								class="#{SessionBean.user != null ? 'large_area0' : 'double_area0'}">
+								class="#{Auth.loggedIn ? 'large_area0' : 'double_area0'}">
 								<!-- Currently disabled bacause not possible to sort by this criterium at the moment -->
 								<span class="seperator"></span> <h:outputText
 									styleClass="free_area0_p8" value="#{lbl.description}" />
@@ -209,7 +208,7 @@
 									<h:outputText styleClass="noDisplay" value="#{lbl.sort_by} " />
 									<h:outputText value="#{lbl.last_modified}" />
 								</h:commandLink></th>
-							<h:panelGroup rendered="#{SessionBean.user != null}"
+							<h:panelGroup rendered="#{Auth.loggedIn}"
 								styleClass="large_area0">
 								<th class="medium_area0"><span class="seperator"></span> <h:outputText
 										styleClass="free_area0_p8" value="#{lbl.active}" /></th>
@@ -222,7 +221,7 @@
 							<h:panelGroup>
 								<tr
 									class="full_0area0 listItem #{container.active ? 'activeAlbum' : ''}">
-									<h:panelGroup rendered="#{SessionBean.user != null}">
+									<h:panelGroup rendered="#{Auth.loggedIn}">
 										<td class="free_area0 endline"><span
 											class="free_area0_p8 endline itemSelectArea"> <h:selectBooleanCheckbox
 													styleClass="itemCheckBox" id="conCheckbox"
@@ -253,7 +252,7 @@
 												</h:outputLabel>
 										</span></td>
 									</h:panelGroup>
-									<h:panelGroup rendered="#{SessionBean.user == null}">
+									<h:panelGroup rendered="#{!Auth.loggedIn}">
 										<td class="large_area0_p0 endline">
 											<div class="imj_stack">
 												<h:outputLink value="#{Navigation.albumUrl}#{container.id}">
@@ -281,7 +280,7 @@
 									</span></td>
 									<td class="free_area0 endline"><span class="seperator"></span>
 										<h:outputText
-											styleClass="#{SessionBean.user != null ? 'large_area0' : 'double_area0_p8'} "
+											styleClass="#{Auth.loggedIn ? 'large_area0' : 'double_area0_p8'} "
 											title="#{container.description}"
 											value="#{container.smallDescription} &#160;" /></td>
 
@@ -289,7 +288,7 @@
 										<span class="medium_area0_p8"> <h:outputText
 												value="#{container.album.modified.time}" />&#160;
 									</span></td>
-									<h:panelGroup rendered="#{SessionBean.user != null}"
+									<h:panelGroup rendered="#{Auth.loggedIn}"
 										styleClass="large_area0">
 										<td class="free_area0 endline"><span class="seperator"></span>
 											<span class="medium_area0_p8"> <h:commandLink
@@ -317,7 +316,7 @@
 			style="float:right" value="#"
 			onclick="openDialog('dialogDeleteSelectedContainer');">
 			<h:outputText value="#{lbl.delete_selected_albums}"
-				rendered="#{SessionBean.user != null}" />
+				rendered="#{Auth.loggedIn}" />
 		</h:outputLink>
 		<ui:include src="confirmationPages/SelectedContainerDelete.xhtml" />
 	</ui:define>

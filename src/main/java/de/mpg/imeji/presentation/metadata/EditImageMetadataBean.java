@@ -91,14 +91,24 @@ public class EditImageMetadataBean
         reset();
         try
         {
-            allItems = loadItems();
-            lockImages(allItems);
+            List<String> uris = findItems();
+            if (uris != null)
+            {
+                lockImages(uris);
+                allItems = loaditems(uris.subList(0, 1));
+                if ("selected".equals(type))
+                    allItems = loaditems(uris);
+                else
+                    allItems = loaditems(uris.subList(0, 1));
+            }
             initProfileAndStatement(allItems);
             initStatementsMenu();
+            initEmtpyEditorItem();
             initEditor(new ArrayList<Item>(allItems));
             ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).init(profile);
             initialized = true;
             noChangesEditor = editor.clone();
+            initModeMenu();
         }
         catch (Exception e)
         {
@@ -148,27 +158,22 @@ public class EditImageMetadataBean
     }
 
     /**
-     * Load the items to be edited
+     * Find the uri of the {@link Item} which are edited
      * 
      * @return
      * @throws IOException
      */
-    private List<Item> loadItems() throws IOException
+    private List<String> findItems() throws IOException
     {
-        List<String> uris = new ArrayList<String>();
         if ("selected".equals(type))
         {
-            uris = getSelectedItems();
+            return getSelectedItems();
         }
         else if ("all".equals(type) && query != null && collectionId != null)
         {
-            uris = searchItems();
+            return searchItems();
         }
-        else
-        {
-            return allItems;
-        }
-        return loaditems(uris);
+        return null;
     }
 
     /**
@@ -190,16 +195,14 @@ public class EditImageMetadataBean
      * Init the {@link MetadataEditor}
      * 
      * @param items
-     * @return
      */
-    private String initEditor(List<Item> items)
+    private void initEditor(List<Item> items)
     {
         try
         {
             isProfileWithStatements = true;
             if (statement != null)
             {
-                initEmtpyEditorItem();
                 editor = new MetadataMultipleEditor(items, profile, getSelectedStatement());
                 ((SuggestBean)BeanHelper.getSessionBean(SuggestBean.class)).init(profile);
             }
@@ -209,14 +212,12 @@ public class EditImageMetadataBean
                 isProfileWithStatements = false;
                 BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("profile_empty"));
             }
-            initModeMenu();
         }
         catch (Exception e)
         {
             BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("error") + " " + e);
             logger.error("Error init Edit page", e);
         }
-        return "";
     }
 
     /**
@@ -341,6 +342,8 @@ public class EditImageMetadataBean
      */
     public String addToAllSaveAndRedirect() throws IOException
     {
+        // First, re-initialize the editor with all items (for batch, editor has been initialized with only one item)
+        initEditor(new ArrayList<Item>(loaditems(findItems())));
         addToAll();
         saveAndRedirect();
         return "";
@@ -365,18 +368,18 @@ public class EditImageMetadataBean
      * 
      * @param items
      */
-    private void lockImages(List<Item> items)
+    private void lockImages(List<String> uris)
     {
         lockedImages = 0;
-        for (int i = 0; i < items.size(); i++)
+        for (int i = 0; i < uris.size(); i++)
         {
             try
             {
-                Locks.lock(new Lock(items.get(i).getId().toString(), session.getUser().getEmail()));
+                Locks.lock(new Lock(uris.get(i), session.getUser().getEmail()));
             }
             catch (Exception e)
             {
-                editor.getItems().remove(i);
+                uris.remove(i);
                 lockedImages++;
                 i--;
             }

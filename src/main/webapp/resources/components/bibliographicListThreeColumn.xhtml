@@ -2,261 +2,267 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:composite="http://java.sun.com/jsf/composite">
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:imjc="http://java.sun.com/jsf/composite/components"
+	xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs">
 	
 	<composite:interface>
 		<composite:attribute name="mediaList"/>
+		<composite:attribute name="releaseItemConfirmationText"/>
+		<composite:attribute name="deleteItemConfirmationText"/>
+		<composite:attribute name="globalDeleteDialogId"/>
 	</composite:interface>
 	
 	<composite:implementation>
-		<h:panelGroup layout="block" id="ajaxList">
 		
-		<!-- TODO: class definitions, search for "xxx" -->
-		 
-			<div class="imj_bibliographicList">
-				<div class="imj_listHeader">
-					<div class="imj_interactiveArea">
-						<input type="checkbox" onchange="$('.imj_bibliographicList .imj_interactiveArea input[type=checkbox]').prop('checked', (this.checked));"/>
-					</div>
+		<div class="imj_bibliographicList">
+			<div class="imj_listHeader">
+				<div class="imj_interactiveArea">
+					<input type="checkbox" onchange="$('.imj_bibliographicList .imj_interactiveArea input[type=checkbox]').prop('checked', (this.checked));"/>
+				</div>
+				
+				<div class="imj_statusArea">
+					<h:form>
+						<h:commandLink id="lnkStateSort" action="#{cc.attrs.mediaList.toggleSortOrder}">
+							<f:setPropertyActionListener value="status" target="#{cc.attrs.mediaList.selectedSortCriterion}"/>
+							<h:outputText styleClass="imj_noDisplay" value="#{lbl.sort_by} "/>
+							<h:outputText value="#{lbl.state}"/>
+							<ui:fragment rendered="#{(cc.attrs.mediaList.selectedSortOrder != 'ASCENDING')}">
+								<span class="imj_buttonSortDescending_16">&#160;</span>
+							</ui:fragment>
+							<ui:fragment rendered="#{(cc.attrs.mediaList.selectedSortOrder == 'ASCENDING')}">
+								<span class="imj_buttonSortAscending_16">&#160;</span>
+							</ui:fragment>
+						</h:commandLink>
+					</h:form>
+				</div>
+				
+				<div class="imj_globalDisplaySwitchArea">
+					<button class="imj_collapse imj_noDisplay" title="#{msg.show_all_items_in_short_view}" onclick="$('.imj_listBody .imj_collapse:visible').click(); $('.imj_globalDisplaySwitchArea .imj_collapse').hide().next().show();">
+						<span class="imj_noDisplay"><h:outputText value="#{lbl.show}: "/></span>
+						<span class="imj_removeButton_15">&#160;</span>
+						<h:outputText value="#{lbl.short_view} (#{lbl.all_items})"/>
+					</button>
+					<button class="imj_expand" title="#{msg.show_all_items_in_medium_view}" onclick="$('.imj_listBody .imj_expand:visible').click(); $('.imj_globalDisplaySwitchArea .imj_expand').hide().prev().show();">
+						<span class="imj_noDisplay"><h:outputText value="#{lbl.show}: "/></span>
+						<span class="imj_addButton_15">&#160;</span>
+						<h:outputText value="#{lbl.medium_view} (#{lbl.all_items})"/>
+					</button>
 					
-					<div class="imj_statusArea">
-						<h:form>
-							<h:commandLink id="lnkStateSort" styleClass="xxxxxxxxx" rendered="#{cc.attrs.mediaList.selectedSortCriterion != 'status'}">
-								<f:setPropertyActionListener value="status" target="#{cc.attrs.mediaList.selectedSortCriterion}"/>
-								<h:outputText styleClass="imj_noDisplay" value="#{lbl.sort_by} "/>
-								<h:outputText value="#{lbl.state}"/>
-							</h:commandLink>
-							<h:commandLink id="lnkStateSortAsc" styleClass="xxxxxxx ascSort"  action="#{cc.attrs.mediaList.toggleSortOrder}" rendered="#{(cc.attrs.mediaList.selectedSortOrder == 'ASCENDING') and cc.attrs.mediaList.selectedSortCriterion == 'status'}">
-								<h:outputText id="txtSortBy2" styleClass="imj_noDisplay" value="#{lbl.sort_by} "/>
-								<h:outputText value="#{lbl.state}"/>
-							</h:commandLink>
-							<h:commandLink id="lnkStateSortDesc" styleClass="xxxxxxx desSort" action="#{cc.attrs.mediaList.toggleSortOrder}" rendered="#{(cc.attrs.mediaList.selectedSortOrder != 'ASCENDING') and cc.attrs.mediaList.selectedSortCriterion == 'status'}">
-								<h:outputText styleClass="imj_noDisplay" value="#{lbl.sort_by} "/>
-								<h:outputText value="#{lbl.state}"/>
-							</h:commandLink>
-						</h:form>
-					</div>
-					
-					<div class="imj_globalDisplaySwitchArea">
-						<button class="imj_collapse imj_noDisplay" title="#{msg.show_all_items_in_short_view}" onclick="$('.imj_listBody .imj_collapse:visible').click(); $('.imj_globalDisplaySwitchArea .imj_collapse').hide().next().show();">
-							<span class="imj_noDisplay"><h:outputText value="#{lbl.show}: "/></span>
-							<span class="imj_removeButton_15">&#160;</span>
-							<h:outputText value="#{lbl.short_view} (#{lbl.all_items})"/>
-						</button>
-						<button class="imj_expand" title="#{msg.show_all_items_in_medium_view}" onclick="$('.imj_listBody .imj_expand:visible').click(); $('.imj_globalDisplaySwitchArea .imj_expand').hide().prev().show();">
-							<span class="imj_noDisplay"><h:outputText value="#{lbl.show}: "/></span>
-							<span class="imj_addButton_15">&#160;</span>
-							<h:outputText value="#{lbl.medium_view} (#{lbl.all_items})"/>
-						</button>
-						
+					<ui:fragment rendered="#{SessionBean.user != null}">
 						<div style="float:right;">
-							<h:outputLink value="#" onclick="openDialog('dialogDeleteSelectedContainer');">
-								<h:outputText value="#{lbl.delete_selected_collections}" rendered="#{SessionBean.user != null}" />
+							<h:outputLink value="#" onclick="openDialog('#{cc.attrs.globalDeleteDialogId}');">
+								<h:outputText value="#{lbl.delete_selected_collections}"/>
 							</h:outputLink>
 						</div>
-					</div>
+					</ui:fragment>
 				</div>
-				<ui:remove>
-				<!-- END LISTHEADER -->
-				
-				<!-- START LISTBODY -->
-				</ui:remove>
-				<div class="imj_listBody">
-					<ul>
-						<ui:repeat var="container" value="#{cc.attrs.mediaList.currentPartList}" id="list" rows="0"  varStatus="index">
-							<li class="imj_bibliographicListItem">
+			</div>
+			<ui:remove>
+			<!-- END LISTHEADER -->
+			
+			<!-- START LISTBODY -->
+			</ui:remove>
+			<div class="imj_listBody">
+				<ul>
+					<ui:repeat var="container" value="#{cc.attrs.mediaList.currentPartList}" id="list" rows="0"  varStatus="index">
+						<li class="imj_bibliographicListItem">
+							
+							<div class="imj_interactiveArea">
+								<h:form>
+									<h:selectBooleanCheckbox styleClass="imj_itemCheckBox" id="conCheckbox" rendered="#{container.deletable}" value="#{container.selected}" disabled="#{container.status=='RELEASED'}">
+										<f:ajax event="change"/>
+									</h:selectBooleanCheckbox>
+									<h:outputText value=" " rendered="#{not container.deletable}"/>
+								</h:form>
+							</div>
+							
+							<div class="imj_statusArea">
+								<ui:fragment rendered="#{container.status == 'PENDING'}">
+									<div class="imj_statusIconArea">
+										<h:panelGroup styleClass="imj_icoStatusPending_32"/>
+									</div>
+									<h:outputText value="#{lbl['private']}"/>
+								</ui:fragment>
 								
-								<div class="imj_interactiveArea">
-									<h:form>
-										<h:selectBooleanCheckbox styleClass="imj_itemCheckBox" id="conCheckbox" rendered="#{container.deletable}" value="#{container.selected}" disabled="#{container.status=='RELEASED'}">
-											<f:ajax event="change"/>
-										</h:selectBooleanCheckbox>
-									</h:form>
-								</div>
+								<ui:fragment rendered="#{container.status == 'RELEASED'}">
+									<div class="imj_statusIconArea">
+										<h:panelGroup styleClass="imj_icoStatusReleased_32"/>
+									</div>
+									<h:outputText value="#{lbl.published}"/>
+								</ui:fragment>
 								
-								<div class="imj_statusArea">
-									<ui:fragment rendered="#{container.status == 'PENDING'}">
-										<div class="imj_statusIconArea">
-											<h:panelGroup styleClass="imj_icoStatusPending_32"/>
-										</div>
-										<h:outputText value="#{lbl['private']}"/>
-									</ui:fragment>
-									
-									<ui:fragment rendered="#{container.status == 'RELEASED'}">
-										<div class="imj_statusIconArea">
-											<h:panelGroup styleClass="imj_icoStatusReleased_32"/>
-										</div>
-										<h:outputText value="#{lbl.published}"/>
-									</ui:fragment>
-									
-									<ui:fragment rendered="#{container.status == 'WITHDRAWN'}">
-										<div class="imj_statusIconArea">
-											<h:panelGroup styleClass="imj_icoStatusWithdrawn_32"/>
-										</div>
-										<h:outputText value="#{lbl.withdrawn}"/>
-									</ui:fragment>			
-								</div>
-								
-								<div class="imj_informationContent">
-									<!-- description area - includes default values - START -->
-									<div class="imj_descriptionArea">
-										<h3 class="imj_itemHeadline">
-											<ui:fragment rendered="#{container.size > 0}">
-												<h:outputLink value="#{Navigation.collectionUrl}#{container.id}" title="#{container.title}">
-													<h:outputText value="#{container.title}"/>
-												</h:outputLink>
-											</ui:fragment>
-											<ui:fragment rendered="#{container.size == 0}">
+								<ui:fragment rendered="#{container.status == 'WITHDRAWN'}">
+									<div class="imj_statusIconArea">
+										<h:panelGroup styleClass="imj_icoStatusWithdrawn_32"/>
+									</div>
+									<h:outputText value="#{lbl.withdrawn}"/>
+								</ui:fragment>			
+							</div>
+							
+							<div class="imj_informationContent">
+								<!-- description area - includes default values - START -->
+								<div class="imj_descriptionArea">
+									<h3 class="imj_itemHeadline">
+										<ui:fragment rendered="#{container.size > 0}">
+											<h:outputLink value="#{Navigation.collectionUrl}#{container.id}" title="#{container.title}">
 												<h:outputText value="#{container.title}"/>
-											</ui:fragment>
-										</h3>
-										<div class="imj_metadataContent">
-											<div class="imj_itemActionArea">
-												<ul>
-													<ui:fragment rendered="#{container.size > 0}">
-														<li>
-															<h:outputLink value="#{Navigation.collectionUrl}#{container.id}/#{Navigation.browsePath}?q=">
-																<h:outputText value="#{lbl.view_images}"/>
-															</h:outputLink>
-														</li>
-													</ui:fragment>
+											</h:outputLink>
+										</ui:fragment>
+										<ui:fragment rendered="#{container.size == 0}">
+											<h:outputText value="#{container.title}"/>
+										</ui:fragment>
+									</h3>
+									<div class="imj_metadataContent">
+										<div class="imj_itemActionArea">
+											<ul>
+												<ui:fragment rendered="#{container.size > 0}">
 													<li>
-														<h:outputLink id="lnkViewCollectionDetail" value="#{Navigation.collectionUrl}#{container.id}/#{Navigation.infosPath}?init=1">
-															<h:outputText value="#{lbl.view_md}"/>
+														<h:outputLink value="#{Navigation.collectionUrl}#{container.id}/#{Navigation.browsePath}?q=">
+															<h:outputText value="#{lbl.view_images}"/>
 														</h:outputLink>
 													</li>
-													<ui:fragment rendered="#{container.editable and container.status != 'WITHDRAWN'}">
-														<li>
-															<h:outputLink id="lnkUploadImages" value="#{Navigation.collectionUrl}#{container.id}/#{Navigation.uploadPath}?init=1">
-																<h:outputText value="#{lbl.upload_images}"/>
-															</h:outputLink>
-														</li>
-													</ui:fragment>
-													<ui:fragment rendered="#{container.size > 0 and container.editable and container.status == 'PENDING'}">
-														<li>
-															<h:outputLink value="#" onclick="openDialog('list:#{index.index}:dialogRelease');">
-																<h:outputText value="#{lbl.collection_release}"/>
-															</h:outputLink>
-														</li>
-													</ui:fragment>
-													<ui:fragment rendered="#{container.editable and container.status == 'RELEASED'}">
-														<li>
-															<h:outputLink id="lnkWithdrawCollection" value="#" onclick="openDialog('list:#{index.index}:dialDiscardContainer:dialogWithdraw');">
-																<h:outputText value="#{lbl.withdraw}"/>
-															</h:outputLink>
-														</li>
-													</ui:fragment>
-													<ui:fragment rendered="#{container.deletable}">
-														<li>
-															<h:outputLink value="#" onclick="openDialog('list:#{index.index}:dialogDelete');">
-																<h:outputText value="#{lbl.delete}"/>
-															</h:outputLink>
-														</li>
-													</ui:fragment>
-												</ul>
-											</div>
-											<div class="imj_metadataSet">
-												<label class="imj_metadataLabel"><h:outputText value="#{lbl.creator_s}"/><span class="imj_noDisplay">: </span></label>
-												<span class="imj_metadataValue"><h:outputText value="#{container.authors}"/></span>
-											</div>
-											<h:panelGroup layout="block" class="imj_metadataSet" rendered="#{not empty container.description}">
-												<label class="imj_metadataLabel"><h:outputText value="#{lbl.description}"/><span class="imj_noDisplay">: </span></label>
-												<p class="imj_metadataValue"><h:outputText value="#{container.description}"/></p>
-											</h:panelGroup>
-											<div class="imj_metadataSet">
-												<label class="imj_metadataLabel"><h:outputText value="#{lbl.images}"/><span class="imj_noDisplay">: </span></label>
-												<span class="imj_metadataValue"><h:outputText value="#{container.size}"/></span>
-											</div>
+												</ui:fragment>
+												<li>
+													<h:outputLink id="lnkViewCollectionDetail" value="#{Navigation.collectionUrl}#{container.id}/#{Navigation.infosPath}?init=1">
+														<h:outputText value="#{lbl.view_md}"/>
+													</h:outputLink>
+												</li>
+												<ui:fragment rendered="#{container.editable and container.status != 'WITHDRAWN'}">
+													<li>
+														<h:outputLink id="lnkUploadImages" value="#{Navigation.collectionUrl}#{container.id}/#{Navigation.uploadPath}?init=1">
+															<h:outputText value="#{lbl.upload_images}"/>
+														</h:outputLink>
+													</li>
+												</ui:fragment>
+												<ui:fragment rendered="#{container.size > 0 and container.editable and container.status == 'PENDING'}">
+													<li>
+														<h:outputLink value="#" onclick="openDialog('release-#{index.index}-dialog');">
+															<h:outputText value="#{lbl.collection_release}"/>
+														</h:outputLink>
+														<dialog:confirmationDialog bean="#{container}" submitAction="release" confirmationText="#{cc.attrs.releaseItemConfirmationText}" submitLabel="#{lbl.delete}" dialogId="release-#{index.index}-dialog"/>
+													</li>
+												</ui:fragment>
+												<ui:fragment rendered="#{container.editable and container.status == 'RELEASED'}">
+													<li>
+														<h:outputLink id="lnkWithdrawCollection" value="#" onclick="openDialog('list:#{index.index}:dialDiscardContainer:dialogWithdraw');">
+															<h:outputText value="#{lbl.withdraw}"/>
+														</h:outputLink>
+														<imjc:DiscardContainer id="dialDiscardContainer" bean="#{container}" discardComment="#{container.discardComment}" index="#{index.index}"/>
+													</li>
+												</ui:fragment>
+												
+												<ui:fragment rendered="#{container.deletable}">
+													<li>
+														<h:outputLink value="#" onclick="openDialog('delete-#{index.index}-dialog');">
+															<h:outputText value="#{lbl.delete}"/>
+														</h:outputLink>
+														<dialog:confirmationDialog bean="#{container}" submitAction="delete" confirmationText="#{cc.attrs.deleteItemConfirmationText}" submitLabel="#{lbl.delete}" dialogId="delete-#{index.index}-dialog"/>
+													</li>
+												</ui:fragment>
+											</ul>
+										</div>
+										<div class="imj_metadataSet">
+											<label class="imj_metadataLabel"><h:outputText value="#{lbl.creator_s}"/><span class="imj_noDisplay">: </span></label>
+											<span class="imj_metadataValue"><h:outputText value="#{container.authors}"/></span>
+										</div>
+										<h:panelGroup layout="block" class="imj_metadataSet" rendered="#{not empty container.description}">
+											<label class="imj_metadataLabel"><h:outputText value="#{lbl.description}"/><span class="imj_noDisplay">: </span></label>
+											<p class="imj_metadataValue"><h:outputText value="#{container.description}"/></p>
+										</h:panelGroup>
+										<div class="imj_metadataSet">
+											<label class="imj_metadataLabel"><h:outputText value="#{lbl.images}"/><span class="imj_noDisplay">: </span></label>
+											<span class="imj_metadataValue"><h:outputText value="#{container.size}"/></span>
 										</div>
 									</div>
-									<!-- description area - includes default values - END -->
-									
-									<!-- description area - includes additional values - START -->
-									<div class="imj_additionalInfoArea">
-										<div class="imj_displaySwitchArea">
-											<button class="imj_collapse imj_noDisplay" onclick="jQuery(this).parent().next().hide(); jQuery(this).hide().next().show();" title="#{lbl.show} Details">
-												<span class="imj_removeButton_15">&#160;</span>
-												<h:outputText value="#{lbl.less}"/>
-											</button>
-											<button class="imj_expand" onclick="jQuery(this).parent().next().show(); jQuery(this).hide().prev().show();" title="#{lbl.show} Details">
-												<span class="imj_addButton_15">&#160;</span>
-												<h:outputText value="#{lbl.more}"/>
-											</button>
-										</div>
-										<div class="imj_metadataContent">
-											<div class="imj_metadataSet">
-												<label class="imj_metadataLabel"><h:outputText value="#{lbl.date_creation}"/><span class="imj_noDisplay">: </span></label>
-												<span class="imj_metadataValue"><h:outputText value="#{container.creationDate}"/></span>
-											</div>
-											<div class="imj_metadataSet">
-												<label class="imj_metadataLabel"><h:outputText value="#{lbl.date_last_modification}"/><span class="imj_noDisplay">: </span></label>												
-												<span class="imj_metadataValue"><h:outputText value="#{container.lastModificationDate}"/></span>
-											</div>
-											<h:panelGroup layout="block" class="imj_metadataSet" rendered="#{container.status == 'RELEASED'}">
-												<label class="imj_metadataLabel"><h:outputText value="#{lbl.date_released}"/><span class="imj_noDisplay">: </span></label>
-												<span class="imj_metadataValue"><h:outputText value="#{container.versionDate}"/></span>
-											</h:panelGroup>
-											<h:panelGroup layout="block" class="imj_metadataSet" rendered="#{container.status == 'WITHDRAWN'}">
-												<label class="imj_metadataLabel"><h:outputText value="#{lbl.date_withdraw}"/><span class="imj_noDisplay">: </span></label>
-												<span class="imj_metadataValue"><h:outputText value="#{container.versionDate}"/></span>
-											</h:panelGroup>
-										</div>
-									</div>
-									<!-- description area - includes additional values - END -->
 								</div>
-							</li>
-						</ui:repeat>
-					</ul>
-				</div><!-- END OF LISTBODY -->
-				<div class="imj_listFooter">
-					<div class="imj_interactiveArea">
-						<input type="checkbox" onchange="$('.imj_bibliographicList .imj_interactiveArea input[type=checkbox]').prop('checked', (this.checked));"/>
-					</div>
+								<!-- description area - includes default values - END -->
+								
+								<!-- description area - includes additional values - START -->
+								<div class="imj_additionalInfoArea">
+									<div class="imj_displaySwitchArea">
+										<button class="imj_collapse imj_noDisplay" onclick="jQuery(this).parent().next().hide(); jQuery(this).hide().next().show();" title="#{lbl.show} Details">
+											<span class="imj_removeButton_15">&#160;</span>
+											<h:outputText value="#{lbl.less}"/>
+										</button>
+										<button class="imj_expand" onclick="jQuery(this).parent().next().show(); jQuery(this).hide().prev().show();" title="#{lbl.show} Details">
+											<span class="imj_addButton_15">&#160;</span>
+											<h:outputText value="#{lbl.more}"/>
+										</button>
+									</div>
+									<div class="imj_metadataContent">
+										<div class="imj_metadataSet">
+											<label class="imj_metadataLabel"><h:outputText value="#{lbl.date_creation}"/><span class="imj_noDisplay">: </span></label>
+											<span class="imj_metadataValue"><h:outputText value="#{container.creationDate}"/></span>
+										</div>
+										<div class="imj_metadataSet">
+											<label class="imj_metadataLabel"><h:outputText value="#{lbl.date_last_modification}"/><span class="imj_noDisplay">: </span></label>												
+											<span class="imj_metadataValue"><h:outputText value="#{container.lastModificationDate}"/></span>
+										</div>
+										<h:panelGroup layout="block" class="imj_metadataSet" rendered="#{container.status == 'RELEASED'}">
+											<label class="imj_metadataLabel"><h:outputText value="#{lbl.date_released}"/><span class="imj_noDisplay">: </span></label>
+											<span class="imj_metadataValue"><h:outputText value="#{container.versionDate}"/></span>
+										</h:panelGroup>
+										<h:panelGroup layout="block" class="imj_metadataSet" rendered="#{container.status == 'WITHDRAWN'}">
+											<label class="imj_metadataLabel"><h:outputText value="#{lbl.date_withdraw}"/><span class="imj_noDisplay">: </span></label>
+											<span class="imj_metadataValue"><h:outputText value="#{container.versionDate}"/></span>
+										</h:panelGroup>
+									</div>
+								</div>
+								<!-- description area - includes additional values - END -->
+							</div>
+						</li>
+					</ui:repeat>
+				</ul>
+			</div>
+			<ui:remove>
+			<!-- END OF LISTBODY -->
+			
+			<!-- START OF LISTFOOTER -->
+			</ui:remove>
+			<div class="imj_listFooter">
+				<div class="imj_interactiveArea">
+					<input type="checkbox" onchange="$('.imj_bibliographicList .imj_interactiveArea input[type=checkbox]').prop('checked', (this.checked));"/>
+				</div>
+				
+				<div class="imj_statusArea">
+					<h:form>
+						<h:commandLink id="lnkStateSort" action="#{cc.attrs.mediaList.toggleSortOrder}">
+							<f:setPropertyActionListener value="status" target="#{cc.attrs.mediaList.selectedSortCriterion}"/>
+							<h:outputText styleClass="imj_noDisplay" value="#{lbl.sort_by} "/>
+							<h:outputText value="#{lbl.state}"/>
+							<ui:fragment rendered="#{(cc.attrs.mediaList.selectedSortOrder != 'ASCENDING')}">
+								<span class="imj_buttonSortDescending_16">&#160;</span>
+							</ui:fragment>
+							<ui:fragment rendered="#{(cc.attrs.mediaList.selectedSortOrder == 'ASCENDING')}">
+								<span class="imj_buttonSortAscending_16">&#160;</span>
+							</ui:fragment>
+						</h:commandLink>
+					</h:form>
+				</div>
+				
+				<div class="imj_globalDisplaySwitchArea">
+					<button class="imj_collapse imj_noDisplay" title="#{msg.show_all_items_in_short_view}" onclick="$('.imj_listBody .imj_collapse:visible').click(); $('.imj_globalDisplaySwitchArea .imj_collapse').hide().next().show();">
+						<span class="imj_noDisplay"><h:outputText value="#{lbl.show}: "/></span>
+						<span class="imj_removeButton_15">&#160;</span>
+						<h:outputText value="#{lbl.short_view} (#{lbl.all_items})"/>
+					</button>
+					<button class="imj_expand" title="#{msg.show_all_items_in_medium_view}" onclick="$('.imj_listBody .imj_expand:visible').click(); $('.imj_globalDisplaySwitchArea .imj_expand').hide().prev().show();">
+						<span class="imj_noDisplay"><h:outputText value="#{lbl.show}: "/></span>
+						<span class="imj_addButton_15">&#160;</span>
+						<h:outputText value="#{lbl.medium_view} (#{lbl.all_items})"/>
+					</button>
 					
-					<div class="imj_statusArea">
-						<h:form>
-							<h:commandLink id="lnkStateSort" styleClass="xxxxxxxxx" rendered="#{cc.attrs.mediaList.selectedSortCriterion != 'status'}">
-								<f:setPropertyActionListener value="status" target="#{cc.attrs.mediaList.selectedSortCriterion}"/>
-								<h:outputText styleClass="imj_noDisplay" value="#{lbl.sort_by} "/>
-								<h:outputText value="#{lbl.state}"/>
-							</h:commandLink>
-							<h:commandLink id="lnkStateSortAsc" styleClass="xxxxxxx ascSort"  action="#{cc.attrs.mediaList.toggleSortOrder}" rendered="#{(cc.attrs.mediaList.selectedSortOrder == 'ASCENDING') and cc.attrs.mediaList.selectedSortCriterion == 'status'}">
-								<h:outputText id="txtSortBy2" styleClass="imj_noDisplay" value="#{lbl.sort_by} "/>
-								<h:outputText value="#{lbl.state}"/>
-							</h:commandLink>
-							<h:commandLink id="lnkStateSortDesc" styleClass="xxxxxxx desSort" action="#{cc.attrs.mediaList.toggleSortOrder}" rendered="#{(cc.attrs.mediaList.selectedSortOrder != 'ASCENDING') and cc.attrs.mediaList.selectedSortCriterion == 'status'}">
-								<h:outputText styleClass="imj_noDisplay" value="#{lbl.sort_by} "/>
-								<h:outputText value="#{lbl.state}"/>
-							</h:commandLink>
-						</h:form>
-					</div>
-					
-					<div class="imj_globalDisplaySwitchArea">
-						<button class="imj_collapse imj_noDisplay" title="#{msg.show_all_items_in_short_view}" onclick="$('.imj_listBody .imj_collapse:visible').click(); $('.imj_globalDisplaySwitchArea .imj_collapse').hide().next().show();">
-							<span class="imj_noDisplay"><h:outputText value="#{lbl.show}: "/></span>
-							<span class="imj_removeButton_15">&#160;</span>
-							<h:outputText value="#{lbl.short_view} (#{lbl.all_items})"/>
-						</button>
-						<button class="imj_expand" title="#{msg.show_all_items_in_medium_view}" onclick="$('.imj_listBody .imj_expand:visible').click(); $('.imj_globalDisplaySwitchArea .imj_expand').hide().prev().show();">
-							<span class="imj_noDisplay"><h:outputText value="#{lbl.show}: "/></span>
-							<span class="imj_addButton_15">&#160;</span>
-							<h:outputText value="#{lbl.medium_view} (#{lbl.all_items})"/>
-						</button>
-						
+					<ui:fragment rendered="#{SessionBean.user != null}">
 						<div style="float:right;">
-							<h:outputLink value="#" onclick="openDialog('dialogDeleteSelectedContainer');">
-								<h:outputText value="#{lbl.delete_selected_collections}" rendered="#{SessionBean.user != null}" />
+							<h:outputLink value="#" onclick="openDialog('#{cc.attrs.globalDeleteDialogId}');">
+								<h:outputText value="#{lbl.delete_selected_collections}"/>
 							</h:outputLink>
 						</div>
-					</div>
+					</ui:fragment>
 				</div>
-			</div> <!-- END OF BIBLIOGRAPHIC LIST -->
+			</div>
+		</div> <!-- END OF BIBLIOGRAPHIC LIST -->
 	
-		</h:panelGroup>
-		
-		
-		<ui:remove>
-			
-		</ui:remove>
 	</composite:implementation>
 </html>

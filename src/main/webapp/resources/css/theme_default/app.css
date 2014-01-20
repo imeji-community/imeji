@@ -593,6 +593,31 @@ cut second ?
 
 /* ===[ ICONS - Buttons ]===
    ================================================== */
+
+/* * Sort Buttons
+   ================================================== */  
+.imj_buttonSortDescending_16 {
+	display: inline-block;
+	width: 1.45454545em;
+	height: 1.45454545em;
+	margin-right: 0.5em;
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAD2F/imjButtonTriangleSortDesc_15.png");
+	vertical-align: middle;
+}
+.imj_buttonSortDescending_16:hover {
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjButtonTriangleSortDesc_15.png");
+}
+.imj_buttonSortAscending_16 {
+	display: inline-block;
+	width: 1.45454545em;
+	height: 1.45454545em;
+	margin-right: 0.5em;
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAD2F/imjButtonTriangleSortAsc_15.png");
+	vertical-align: middle;
+}
+.imj_buttonSortAscending_16:hover {
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjButtonTriangleSortAsc_15.png");
+}
    
 /* * Search Buttons
    ================================================== */   
@@ -1409,12 +1434,22 @@ OLD:
 	width: 91.75%;
 	padding: 0 4%;
 	margin-bottom: 0.5em;
-	/*border-bottom: solid #6CAD2F 0.0909em;*/
-	/*border-bottom: 0.1818em solid #6CAD2F;*/
 }
 
 .imj_selectionInfoPanelItemSelect {
 	float: right;
+}
+
+/* * filter info panel (overview pages - Collections, Albums)
+   ==========================================================
+   ========================================================== */
+.imj_filterInfoPanel {
+	width: 91.75%;
+	padding: 0 4%;
+	margin-bottom: 0.5em;
+}
+.imj_filterInfoPanel .imj_removeFilterButton {
+	margin: 0 0.25em;
 }
 
 /* * paginator component (Image.xhtml)
@@ -1986,7 +2021,7 @@ min-height: 6em;
 }
 
 .imj_bibliographicList .imj_listFooter {
-	border-top: 0.090909em inset #BBBBBB;
+	border-top: 0.090909em inset #292929;
 }
 
 .imj_bibliographicList .imj_listBody {
@@ -1997,8 +2032,9 @@ min-height: 6em;
 	width: 91.95%;
 	padding: 0 4% 1em 4%;
 	display: inline-block;
+	border-top: 0.090909em solid #292929;
 }
-.imj_bibliographicListItem:nth-child(2n+1) {
+.imj_bibliographicList .imj_bibliographicListItem:hover {
 	background-color: #292929;
 }
 
@@ -2423,6 +2459,7 @@ a.imj_editButton {
 	padding: 0.72727272em;
 	background-color: #434343;
 	display: none;
+	z-index: 5000;
 	
 	/* CSS3 enhancements */
 	box-shadow: 0.545454em 0.545454em 0.545454em #000000;

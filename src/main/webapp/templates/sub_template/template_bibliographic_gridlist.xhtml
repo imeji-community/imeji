@@ -3,7 +3,8 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:imjc="http://java.sun.com/jsf/composite/components">
+	xmlns:imjc="http://java.sun.com/jsf/composite/components"
+	xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs">
 	
 	<ui:define name="init">
 		<h:outputText value="#{paginatorListSessionBean.init}"/>
@@ -12,7 +13,7 @@
 	
 	<ui:define name="modalDialogs_from_template">
 		<!-- Confirmation Pages -->
-		
+		<dialog:confirmationDialog bean="#{paginatorListSessionBean}" submitAction="deleteAll" confirmationText="#{deleteSelectedItemsConfirmationText}" submitLabel="#{lbl.delete_all}" dialogId="colbiblist-selected-deleteDialog"/>
 	</ui:define>
 	
 	
@@ -30,14 +31,14 @@
 									 browseToAllUrl="#{browseToAllItemsUrl}" numberOfElements="#{paginatorListSessionBean.totalNumberOfElements}"/>
 			
 			<!-- Page Browser GotoBox -->
-			<imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}"/>
+			<imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}" addJSFunctions="yes"/>
 			
 			<!-- List -->
 			<ui:fragment rendered="#{SessionBean.user == null}">
 				<imjc:bibliographicListTwoColumn mediaList="#{paginatorListSessionBean}"/>
 			</ui:fragment>
 			<ui:fragment rendered="#{SessionBean.user != null}">
-				<imjc:bibliographicListThreeColumn mediaList="#{paginatorListSessionBean}"/>
+				<imjc:bibliographicListThreeColumn mediaList="#{paginatorListSessionBean}" deleteItemConfirmationText="#{deleteItemConfirmationText}" releaseItemConfirmationText="#{releaseItemConfirmationText}" globalDeleteDialogId="colbiblist-selected-deleteDialog"/>
 			</ui:fragment>
 			
 			<!-- Page Browser GotoBox -->

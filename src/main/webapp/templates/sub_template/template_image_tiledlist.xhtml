@@ -30,16 +30,6 @@
 	<!-- Main Content - Image tiled list - START -->
 	<ui:define name="mainContent">
 		
-		<script type="text/javascript">
-			function setOpacityToImages()
-			{
-				$("#ajaxList").css({opacity:0.3});
-				/*try {document.getElementById('ajaxList').style.opacity = 0.3;}
-				catch (e) {/* No opacity*/
-				return true;
-			};
-		</script>
-		
 		<!-- Breadcrumb - History -->
 		<ui:include src="../../include/History.xhtml"></ui:include>
 		
@@ -51,7 +41,7 @@
 									 browseToAllUrl="#{browseToAllItemsUrl}" numberOfElements="#{paginatorListSessionBean.totalNumberOfElements}"/>
 			
 			<!-- Page Browser GotoBox -->
-			<imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}"/>
+			<imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}" addJSFunctions="yes"/>
 			
 			<!-- Media List -->
 			<imjc:tiledMediaList picList="#{paginatorListSessionBean}"/>

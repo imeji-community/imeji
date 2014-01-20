@@ -14,25 +14,38 @@
 	
 	<composite:implementation>
 		
-		<h:panelGroup layout="block" id="selectionInfoPanel" styleClass="imj_selectionInfoPanel">
+		<h:panelGroup layout="block" id="filterInfoPanel" styleClass="imj_filterInfoPanel">
 			<h:form id="preListForm">
 				<h:outputLink value="?q=&amp;f=all">
 					<h:outputText value="#{lbl.all}"/>
 				</h:outputLink>
 				
-				<h:outputText value="#{lbl.search}" rendered="#{cc.attrs.filterBean.query != ''}"/>
+				<ui:fragment rendered="#{cc.attrs.filterBean.query != ''}">
+					<span class="imj_facetSeparator">
+						<h:outputText value=" / "/>
+					</span>
+					
+					<h:outputText value="#{lbl.search}"/>
+					
+					<h:outputLink value="?q=" styleClass="imj_removeFilterButton">
+						<h:outputText value="[x]"/>
+					</h:outputLink>
+				</ui:fragment>
 				
-				<h:outputLink value="?q=" rendered="#{cc.attrs.filterBean.query != ''}" styleClass="imj_mainContentPreListHeaderItemFilter">
-					<h:outputText value="[x]"/>
-				</h:outputLink>
-				
-				<h:outputText value="#{cc.attrs.filterBean.filterLabel}" rendered="#{cc.attrs.filterBean.selectedFilter != 'all'}"/>
-				
-				<h:outputLink value="?f=all" rendered="#{cc.attrs.filterBean.selectedFilter != 'all'}" styleClass="imj_mainContentPreListHeaderItemFilter">
-					<h:outputText value="[x]"/>
-				</h:outputLink>
-				
+				<ui:fragment rendered="#{cc.attrs.filterBean.selectedFilter != 'all'}">
+					<span class="imj_facetSeparator">
+						<h:outputText value=" / "/>
+					</span>
+					
+					<h:outputText value="#{cc.attrs.filterBean.filterLabel}"/>
+					
+					<h:outputLink value="?f=all" styleClass="imj_removeFilterButton">
+						<h:outputText value="[x]"/>
+					</h:outputLink>
+				</ui:fragment>
+					
 				<h:outputText value=" (#{cc.attrs.filterBean.totalNumberOfElements})"/>
+				
 			</h:form>
 		</h:panelGroup>
 		

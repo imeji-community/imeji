@@ -9,141 +9,133 @@
 	</composite:interface>
 	
 	<composite:implementation>
-		<h:panelGroup layout="block" id="ajaxList">
 		
-		<!-- TODO: class definitions, search for "xxx" -->
-		 
-			<div class="imj_bibliographicList">
-				<div class="imj_listHeader">
-					<div class="imj_displaySwitchArea">
-						<button class="imj_collapse imj_noDisplay" title="#{msg.show_all_items_in_short_view}" onclick="$('.imj_listBody .imj_collapse:visible').click(); $(this).hide().next().show();">
-							<span class="imj_noDisplay"><h:outputText value="#{lbl.show}: "/></span>
-							<span class="imj_removeButton_15">&#160;</span>
-							<h:outputText value="#{lbl.short_view} (#{lbl.all_items})"/>
-						</button>
-						<button class="imj_expand" title="#{msg.show_all_items_in_medium_view}" onclick="$('.imj_listBody .imj_expand:visible').click(); $(this).hide().prev().show();">
-							<span class="imj_noDisplay"><h:outputText value="#{lbl.show}: "/></span>
-							<span class="imj_addButton_15">&#160;</span>
-							<h:outputText value="#{lbl.medium_view} (#{lbl.all_items})"/>
-						</button>
-					</div>
+		<div class="imj_bibliographicList">
+			<div class="imj_listHeader">
+				<div class="imj_globalDisplaySwitchArea">
+					<button class="imj_collapse imj_noDisplay" title="#{msg.show_all_items_in_short_view}" onclick="$('.imj_listBody .imj_collapse:visible').click(); $('.imj_globalDisplaySwitchArea .imj_collapse').hide().next().show();">
+						<span class="imj_noDisplay"><h:outputText value="#{lbl.show}: "/></span>
+						<span class="imj_removeButton_15">&#160;</span>
+						<h:outputText value="#{lbl.short_view} (#{lbl.all_items})"/>
+					</button>
+					<button class="imj_expand" title="#{msg.show_all_items_in_medium_view}" onclick="$('.imj_listBody .imj_expand:visible').click(); $('.imj_globalDisplaySwitchArea .imj_expand').hide().prev().show();">
+						<span class="imj_noDisplay"><h:outputText value="#{lbl.show}: "/></span>
+						<span class="imj_addButton_15">&#160;</span>
+						<h:outputText value="#{lbl.medium_view} (#{lbl.all_items})"/>
+					</button>
 				</div>
-				<ui:remove>
-				<!-- END LISTHEADER -->
-				
-				<!-- START LISTBODY -->
-				</ui:remove>
-				<div class="imj_listBody">
-					<ul>
-						<ui:repeat var="container" value="#{cc.attrs.mediaList.currentPartList}" id="list" rows="0"  varStatus="index">
-							<li class="imj_bibliographicListItem">
-								<div class="imj_previewArea">
-									<div class="imj_previewImage imj_imageStack">
-										<h:outputLink value="#{Navigation.collectionUrl}#{container.id}">						
-											<h:graphicImage value="#{Navigation.applicationUrl}file?id=#{container.thumbnail.link}" alt="preview picture"/>
+			</div>
+			<ui:remove>
+			<!-- END LISTHEADER -->
+			
+			<!-- START LISTBODY -->
+			</ui:remove>
+			<div class="imj_listBody">
+				<ul>
+					<ui:repeat var="container" value="#{cc.attrs.mediaList.currentPartList}" id="list" rows="0"  varStatus="index">
+						<li class="imj_bibliographicListItem">
+							<div class="imj_previewArea">
+								<div class="imj_previewImage imj_imageStack">
+									<h:outputLink value="#{Navigation.collectionUrl}#{container.id}">						
+										<h:graphicImage value="#{Navigation.applicationUrl}file?id=#{container.thumbnail.link}" alt="preview picture"/>
+									</h:outputLink>
+								</div>
+							</div>
+							<div class="imj_informationContent">
+								<!-- description area - includes default values - START -->
+								<div class="imj_descriptionArea">
+									<h3 class="imj_itemHeadline">
+										<h:outputLink value="#{Navigation.collectionUrl}#{container.id}" title="#{container.title}">
+											<h:outputText value="#{container.title}"/>
 										</h:outputLink>
+									</h3>
+									<div class="imj_metadataContent">
+										<div class="imj_itemActionArea">
+											<ul>
+												<li>
+													<h:outputLink value="#{Navigation.collectionUrl}#{container.id}/#{Navigation.browsePath}?q=" rendered="#{container.size > 0}">
+														<h:outputText value="#{lbl.view_images}"/>
+													</h:outputLink>
+												</li>
+												<li>
+													<h:outputLink id="lnkViewCollectionDetail" value="#{Navigation.collectionUrl}#{container.id}/#{Navigation.infosPath}?init=1">
+														<h:outputText value="#{lbl.view_md}"/>
+													</h:outputLink>
+												</li>
+											</ul>
+										</div>
+										<div class="imj_metadataSet">
+											<label class="imj_metadataLabel"><h:outputText value="#{lbl.creator_s}"/><span class="imj_noDisplay">: </span></label>
+											<span class="imj_metadataValue"><h:outputText value="#{container.authors}"/></span>
+										</div>
+										<h:panelGroup layout="block" class="imj_metadataSet" rendered="#{not empty container.description}">
+											<label class="imj_metadataLabel"><h:outputText value="#{lbl.description}"/><span class="imj_noDisplay">: </span></label>
+											<p class="imj_metadataValue"><h:outputText value="#{container.description}"/></p>
+										</h:panelGroup>
+										<div class="imj_metadataSet">
+											<label class="imj_metadataLabel"><h:outputText value="#{lbl.images}"/><span class="imj_noDisplay">: </span></label>
+											<span class="imj_metadataValue"><h:outputText value="#{container.size}"/></span>
+										</div>
 									</div>
 								</div>
-								<div class="imj_informationContent">
-									<!-- description area - includes default values - START -->
-									<div class="imj_descriptionArea">
-										<h3 class="imj_itemHeadline">
-											<h:outputLink value="#{Navigation.collectionUrl}#{container.id}" title="#{container.title}">
-												<h:outputText value="#{container.title}"/>
-											</h:outputLink>
-										</h3>
-										<div class="imj_metadataContent">
-											<div class="imj_itemActionArea">
-												<ul>
-													<li>
-														<h:outputLink value="#{Navigation.collectionUrl}#{container.id}/#{Navigation.browsePath}?q=" rendered="#{container.size > 0}">
-															<h:outputText value="#{lbl.view_images}"/>
-														</h:outputLink>
-													</li>
-													<li>
-														<h:outputLink id="lnkViewCollectionDetail" value="#{Navigation.collectionUrl}#{container.id}/#{Navigation.infosPath}?init=1">
-															<h:outputText value="#{lbl.view_md}"/>
-														</h:outputLink>
-													</li>
-													<li>
-														<h:outputLink id="lnkUploadImages" value="#{Navigation.collectionUrl}#{container.id}/#{Navigation.uploadPath}?init=1" rendered="#{container.editable and container.status != 'WITHDRAWN'}">
-															<h:outputText value="#{lbl.upload_images}"/>
-														</h:outputLink>
-													</li>
-													<li>
-														<h:outputLink value="#" onclick="openDialog('list:#{index.index}:dialogRelease');" rendered="#{container.editable and container.status == 'PENDING'}">
-															<h:outputText value="#{lbl.collection_release}"/>
-														</h:outputLink>
-													</li>
-													<li>
-														<h:outputLink id="lnkWithdrawCollection" value="#" onclick="openDialog('list:#{index.index}:dialDiscardContainer:dialogWithdraw');" rendered="#{container.editable and container.status == 'RELEASED'}">
-															<h:outputText value="#{lbl.withdraw}"/>
-														</h:outputLink>
-													</li>
-													<li>
-														<h:outputLink value="#" onclick="openDialog('list:#{index.index}:dialogDelete');" rendered="#{container.deletable}" >
-															<h:outputText value="#{lbl.delete}"/>
-														</h:outputLink>
-													</li>
-													<li>
-														
-													</li>
-												</ul>
-											</div>
-											<div class="imj_metadataSet">
-												<label class="imj_metadataLabel"><h:outputText value="#{lbl.creator_s}"/><span class="imj_noDisplay">: </span></label>
-												<span class="imj_metadataValue"><h:outputText value="#{container.authors}"/></span>
-											</div>
-											<h:panelGroup layout="block" class="imj_metadataSet" rendered="#{not empty container.description}">
-												<label class="imj_metadataLabel"><h:outputText value="#{lbl.description}"/><span class="imj_noDisplay">: </span></label>
-												<p class="imj_metadataValue"><h:outputText value="#{container.description}"/></p>
-											</h:panelGroup>
-											<div class="imj_metadataSet">
-												<label class="imj_metadataLabel"><h:outputText value="#{lbl.images}"/><span class="imj_noDisplay">: </span></label>
-												<span class="imj_metadataValue"><h:outputText value="#{container.size}"/></span>
-											</div>
-										</div>
+								<!-- description area - includes default values - END -->
+								
+								<!-- description area - includes additional values - START -->
+								<div class="imj_additionalInfoArea">
+									<div class="imj_displayArea">
+										<button class="imj_collapse imj_noDisplay" onclick="jQuery(this).parent().next().hide(); jQuery(this).hide().next().show();" title="#{lbl.show} Details">
+											<span class="imj_removeButton_15">&#160;</span>
+											<h:outputText value="#{lbl.less}"/>
+										</button>
+										<button class="imj_expand" onclick="jQuery(this).parent().next().show(); jQuery(this).hide().prev().show();" title="#{lbl.show} Details">
+											<span class="imj_addButton_15">&#160;</span>
+											<h:outputText value="#{lbl.more}"/>
+										</button>
 									</div>
-									<!-- description area - includes default values - END -->
-									
-									<!-- description area - includes additional values - START -->
-									<div class="imj_additionalInfoArea">
-										<div class="imj_displayArea">
-											<button class="imj_collapse imj_noDisplay" onclick="jQuery(this).parent().next().hide(); jQuery(this).hide().next().show();" title="#{lbl.show} Details">
-												<span class="imj_removeButton_15">&#160;</span>
-												<h:outputText value="#{lbl.less}"/>
-											</button>
-											<button class="imj_expand" onclick="jQuery(this).parent().next().show(); jQuery(this).hide().prev().show();" title="#{lbl.show} Details">
-												<span class="imj_addButton_15">&#160;</span>
-												<h:outputText value="#{lbl.more}"/>
-											</button>
+									<div class="imj_metadataContent">
+										<div class="imj_metadataSet">
+											<label class="imj_metadataLabel"><h:outputText value="#{lbl.date_creation}"/><span class="imj_noDisplay">: </span></label>
+											<span class="imj_metadataValue"><h:outputText value="#{container.creationDate}"/></span>
 										</div>
-										<div class="imj_metadataContent">
-											<div class="imj_metadataSet">
-												<label class="imj_metadataLabel"><h:outputText value="#{lbl.date_creation}"/><span class="imj_noDisplay">: </span></label>
-												<span class="imj_metadataValue"><h:outputText value="#{container.creationDate}"/></span>
-											</div>
-											<div class="imj_metadataSet">
-												<label class="imj_metadataLabel"><h:outputText value="#{lbl.date_last_modification}"/><span class="imj_noDisplay">: </span></label>												
-												<span class="imj_metadataValue"><h:outputText value="#{container.lastModificationDate}"/></span>
-											</div>
-											<h:panelGroup layout="block" class="imj_metadataSet" rendered="#{container.status == 'RELEASED'}">
-												<label class="imj_metadataLabel"><h:outputText value="#{lbl.date_released}"/><span class="imj_noDisplay">: </span></label>
-												<span class="imj_metadataValue"><h:outputText value="#{container.versionDate}"/></span>
-											</h:panelGroup>
-											<h:panelGroup layout="block" class="imj_metadataSet" rendered="#{container.status == 'WITHDRAWN'}">
-												<label class="imj_metadataLabel"><h:outputText value="#{lbl.date_withdraw}"/><span class="imj_noDisplay">: </span></label>
-												<span class="imj_metadataValue"><h:outputText value="#{container.versionDate}"/></span>
-											</h:panelGroup>
+										<div class="imj_metadataSet">
+											<label class="imj_metadataLabel"><h:outputText value="#{lbl.date_last_modification}"/><span class="imj_noDisplay">: </span></label>												
+											<span class="imj_metadataValue"><h:outputText value="#{container.lastModificationDate}"/></span>
 										</div>
+										<h:panelGroup layout="block" class="imj_metadataSet" rendered="#{container.status == 'RELEASED'}">
+											<label class="imj_metadataLabel"><h:outputText value="#{lbl.date_released}"/><span class="imj_noDisplay">: </span></label>
+											<span class="imj_metadataValue"><h:outputText value="#{container.versionDate}"/></span>
+										</h:panelGroup>
+										<h:panelGroup layout="block" class="imj_metadataSet" rendered="#{container.status == 'WITHDRAWN'}">
+											<label class="imj_metadataLabel"><h:outputText value="#{lbl.date_withdraw}"/><span class="imj_noDisplay">: </span></label>
+											<span class="imj_metadataValue"><h:outputText value="#{container.versionDate}"/></span>
+										</h:panelGroup>
 									</div>
-									<!-- description area - includes additional values - END -->
 								</div>
-							</li>
-						</ui:repeat>
-					</ul>
-				</div><!-- END OF LISTBODY -->
-			</div> <!-- END OF BIBLIOGRAPHIC LIST -->
-		</h:panelGroup>
+								<!-- description area - includes additional values - END -->
+							</div>
+						</li>
+					</ui:repeat>
+				</ul>
+			</div>
+			<ui:remove>
+			<!-- END LISTHEADER -->
+			
+			<!-- START LISTFOOTER -->
+			</ui:remove>
+			<div class="imj_listFooter">
+				<div class="imj_globalDisplaySwitchArea">
+					<button class="imj_collapse imj_noDisplay" title="#{msg.show_all_items_in_short_view}" onclick="$('.imj_listBody .imj_collapse:visible').click(); $('.imj_globalDisplaySwitchArea .imj_collapse').hide().next().show();">
+						<span class="imj_noDisplay"><h:outputText value="#{lbl.show}: "/></span>
+						<span class="imj_removeButton_15">&#160;</span>
+						<h:outputText value="#{lbl.short_view} (#{lbl.all_items})"/>
+					</button>
+					<button class="imj_expand" title="#{msg.show_all_items_in_medium_view}" onclick="$('.imj_listBody .imj_expand:visible').click(); $('.imj_globalDisplaySwitchArea .imj_expand').hide().prev().show();">
+						<span class="imj_noDisplay"><h:outputText value="#{lbl.show}: "/></span>
+						<span class="imj_addButton_15">&#160;</span>
+						<h:outputText value="#{lbl.medium_view} (#{lbl.all_items})"/>
+					</button>
+				</div>
+			</div>
+		</div> <!-- END OF BIBLIOGRAPHIC LIST -->
 	</composite:implementation>
 </html>

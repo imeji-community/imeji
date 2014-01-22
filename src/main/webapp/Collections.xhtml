@@ -1,16 +1,20 @@
-<ui:composition template="templates/sub_template/template_bibliographic_gridlist.xhtml"
+<ui:composition template="templates/sub_template/template_bibliographicList.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
 	
-	<ui:param name="paginatorListSessionBean" value="#{CollectionsBean}" />
-	<ui:param name="headline" value="#{msg.collections_headline}" />
+	<ui:param name="paginatorListSessionBean" value="#{CollectionsBean}"/>
+	<ui:param name="headline" value="#{msg.collections_headline}"/>
 	<ui:param name="currentMainMenu" value="collection"/>
 	<ui:param name="browseToAllItemsUrl" value="?q=&amp;f=all"/>
 	<ui:param name="releaseItemConfirmationText" value="#{msg.confirmation_release_collection}?"/>
 	<ui:param name="deleteItemConfirmationText" value="#{msg.confirmation_delete_collection}?"/>
 	<ui:param name="deleteSelectedItemsConfirmationText" value="#{lbl.delete_selected_collections}?"/>
+	<ui:param name="filterBeanHasQuery" value="yes"/>
+	<ui:param name="isActivatable" value="no"/>
+	<ui:param name="globalDisplayLinkText" value="#{lbl.all_items}"/>
+	<ui:param name="globalDeleteLinkText" value="#{lbl.delete_selected_collections}"/>
 	
 	
 	<ui:define name="actionsMenu">
@@ -23,8 +27,8 @@
 				<div class="imj_menuBody">
 					<h:outputText value="#{lbl.sort_by}: "/>
 					<h:form>
-						<h:selectOneMenu id="selSort" value="#{paginatorListSessionBean.selectedSortCriterion}" styleClass="free_select" onchange="submit();">
-							<f:selectItems id="sortItem" value="#{paginatorListSessionBean.sortMenu}" />
+						<h:selectOneMenu id="selSort" value="#{paginatorListSessionBean.selectedSortCriterion}" onchange="submit();">
+							<f:selectItems id="sortItem" value="#{paginatorListSessionBean.sortMenu}"/>
 						</h:selectOneMenu>
 						<h:commandLink id="lnkSortAsc" styleClass="imj_buttonOrderByAsc_15" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{paginatorListSessionBean.selectedSortOrder == 'ASCENDING'}">&#160;</h:commandLink>
 						<h:commandLink id="lnkSortDesc" styleClass="imj_buttonOrderByDesc_15" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{paginatorListSessionBean.selectedSortOrder != 'ASCENDING'}">&#160;</h:commandLink>
@@ -40,13 +44,13 @@
 					<div class="imj_menuBody">
 						<h:outputText value="#{lbl.filter_by}: "/>
 						<h:selectOneMenu id="selFilter" value="#{paginatorListSessionBean.selectedFilter}" onchange="window.location.href = '?f=' + this.value" readonly="true">
-							<f:selectItems id="filterItem" value="#{paginatorListSessionBean.filterMenu}" />
+							<f:selectItems id="filterItem" value="#{paginatorListSessionBean.filterMenu}"/>
 						</h:selectOneMenu>
 					</div>
 				</h:panelGroup>
 				
 				<h:outputLink id="lnkCreate" styleClass="imj_contentSubMenuItem" value="#{Navigation.createCollectionUrl}?reset=1">
-					<h:outputText value="#{lbl.collection_create}" />
+					<h:outputText value="#{lbl.collection_create}"/>
 				</h:outputLink>
 			</ui:fragment>
 		</h:panelGroup>

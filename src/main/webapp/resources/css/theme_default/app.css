@@ -2039,7 +2039,7 @@ min-height: 6em;
 }
 
 .imj_bibliographicList .imj_bibliographicListItem .imj_previewArea {
-	width: 20%;
+	width: 21.5%;
 	min-width: 12em;
 	display: inline-block;
 	vertical-align: top;
@@ -2058,9 +2058,6 @@ min-height: 6em;
 	width: 77.25%;
 	display: inline-block;
 	vertical-align: top;
-}
-.imj_bibliographicList .imj_bibliographicListItem .imj_previewArea+.imj_informationContent {
-	width: 79.25%;
 }
 .imj_bibliographicList .imj_bibliographicListItem .imj_itemHeadline {
 	padding: 0.5em 0;

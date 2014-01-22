@@ -12,8 +12,8 @@
 	</ui:define>
 	
 	<ui:define name="modalDialogs_from_template">
-		<!-- Confirmation Pages -->
-		<dialog:confirmationDialog bean="#{paginatorListSessionBean}" submitAction="deleteAll" confirmationText="#{deleteSelectedItemsConfirmationText}" submitLabel="#{lbl.delete_all}" dialogId="colbiblist-selected-deleteDialog"/>
+		<!-- Confirmation Page: globalDeleteDialog -->
+		<dialog:confirmationDialog bean="#{paginatorListSessionBean}" submitAction="deleteAll" confirmationText="#{deleteSelectedItemsConfirmationText}" submitLabel="#{lbl.delete_all}" dialogId="#{currentMainMenu}List-selected-deleteDialog"/>
 	</ui:define>
 	
 	
@@ -28,17 +28,17 @@
 			
 			<!-- Selection Info Panel -->
 			<imjc:filterInfoPanel fSession="#{FiltersSession}" filterBean="#{paginatorListSessionBean}" currentMainMenu="#{currentMainMenu}" 
-									 browseToAllUrl="#{browseToAllItemsUrl}" numberOfElements="#{paginatorListSessionBean.totalNumberOfElements}"/>
+									 browseToAllUrl="#{browseToAllItemsUrl}" numberOfElements="#{paginatorListSessionBean.totalNumberOfElements}" filterBeanHasQuery="#{filterBeanHasQuery}"/>
 			
 			<!-- Page Browser GotoBox -->
 			<imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}" addJSFunctions="yes"/>
 			
 			<!-- List -->
 			<ui:fragment rendered="#{SessionBean.user == null}">
-				<imjc:bibliographicListTwoColumn mediaList="#{paginatorListSessionBean}"/>
+				<imjc:bibliographicList_loggedOut mediaList="#{paginatorListSessionBean}" globalDisplayLinkText="#{globalDisplayLinkText}"/>
 			</ui:fragment>
 			<ui:fragment rendered="#{SessionBean.user != null}">
-				<imjc:bibliographicListThreeColumn mediaList="#{paginatorListSessionBean}" deleteItemConfirmationText="#{deleteItemConfirmationText}" releaseItemConfirmationText="#{releaseItemConfirmationText}" globalDeleteDialogId="colbiblist-selected-deleteDialog"/>
+				<imjc:bibliographicList_loggedIn mediaList="#{paginatorListSessionBean}" deleteItemConfirmationText="#{deleteItemConfirmationText}" releaseItemConfirmationText="#{releaseItemConfirmationText}" globalDeleteDialogId="#{currentMainMenu}List-selected-deleteDialog" isActivatable="#{isActivatable}" globalDeleteLinkText="#{globalDeleteLinkText}" globalDisplayLinkText="#{globalDisplayLinkText}"/>
 			</ui:fragment>
 			
 			<!-- Page Browser GotoBox -->

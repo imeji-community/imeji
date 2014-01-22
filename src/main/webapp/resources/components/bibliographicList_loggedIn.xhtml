@@ -1,0 +1,41 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:list="http://java.sun.com/jsf/composite/components/list">
+	
+	<composite:interface>
+		<composite:attribute name="mediaList"/>
+		<composite:attribute name="releaseItemConfirmationText"/>
+		<composite:attribute name="deleteItemConfirmationText"/>
+		<composite:attribute name="globalDeleteDialogId"/>
+		<composite:attribute name="isActivatable"/>
+		<composite:attribute name="globalDeleteLinkText"/>
+		<composite:attribute name="globalDisplayLinkText"/>
+	</composite:interface>
+	
+	<composite:implementation>
+		
+		<div class="imj_bibliographicList">
+			
+			<list:listHeaderFooter_checkStatusDetailsDelete containerClass="imj_listHeader" mediaList="#{cc.attrs.mediaList}" globalDeleteDialogId="#{cc.attrs.globalDeleteDialogId}" addJSFunctions="yes" deleteLinkText="#{cc.attrs.globalDeleteLinkText}" displayLinkText="#{cc.attrs.globalDisplayLinkText}"/>
+			
+			<div class="imj_listBody">
+				<ul>
+					<ui:repeat var="container" value="#{cc.attrs.mediaList.currentPartList}" id="list" rows="0"  varStatus="index">
+						<ui:fragment rendered="#{container.status != 'RELEASED'}">
+							<list:bibListItem_draft itemClass="imj_bibliographicListItem" item="#{container}" deleteItemConfirmationText="#{cc.attrs.deleteItemConfirmationText}" releaseItemConfirmationText="#{cc.attrs.releaseItemConfirmationText}" isActivatable="#{cc.attrs.isActivatable}"/>
+						</ui:fragment>
+						<ui:fragment rendered="#{container.status == 'RELEASED'}">
+							<list:bibListItem_released itemClass="imj_bibliographicListItem" item="#{container}"/>
+						</ui:fragment>
+					</ui:repeat>
+				</ul>
+			</div>
+			
+			<list:listHeaderFooter_checkStatusDetailsDelete containerClass="imj_listFooter" mediaList="#{cc.attrs.mediaList}" globalDeleteDialogId="#{cc.attrs.globalDeleteDialogId}" addJSFunctions="no" deleteLinkText="#{cc.attrs.globalDeleteLinkText}" displayLinkText="#{cc.attrs.globalDisplayLinkText}"/>
+		</div> <!-- END OF BIBLIOGRAPHIC LIST -->
+	
+	</composite:implementation>
+</html>

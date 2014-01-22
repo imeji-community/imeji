@@ -6,6 +6,7 @@ package de.mpg.imeji.presentation.album;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
@@ -27,6 +28,7 @@ import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
+import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.ContainerBean;
 import de.mpg.imeji.presentation.beans.Navigation;
@@ -819,5 +821,35 @@ public class AlbumBean extends ContainerBean
     public Container getContainer()
     {
         return album;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * following getter functions are for standardization and simplification the 
+     * output of album data in a general template system
+     */
+    public String getTitle() 
+    {
+    	return this.getContainer().getMetadata().getTitle();
+    }
+    public String getAuthors() 
+    {
+    	return this.getPersonString();
+    }
+    public Date getCreationDate() 
+    {
+    	return this.getContainer().getCreated().getTime();
+    }
+    public Date getLastModificationDate() 
+    {
+    	return this.getContainer().getModified().getTime();
+    }
+    public Date getVersionDate() 
+    {
+    	return this.getContainer().getVersionDate().getTime();
+    }
+    public Status getStatus()
+    {
+    	return this.getContainer().getStatus();
     }
 }

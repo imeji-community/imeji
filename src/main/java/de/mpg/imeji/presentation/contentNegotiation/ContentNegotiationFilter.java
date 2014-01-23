@@ -26,7 +26,7 @@
  * Gesellschaft zur Förderung der Wissenschaft e.V.
  * All rights reserved. Use is subject to license terms.
  */
-package de.mpg.imeji.presentation.contentNegociation;
+package de.mpg.imeji.presentation.contentNegotiation;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

@@ -8,6 +8,7 @@
 	<composite:interface>
 		<composite:attribute name="formularBean" required="true"/>
 		<composite:attribute name="formularContextBean" required="true"/>
+		<composite:attribute name="headline" required="true"/>
 	</composite:interface>
 	
 	<composite:implementation>
@@ -16,7 +17,7 @@
 			<h:form id="containerForm">
 				<div class="imj_headline">
 					<h3>
-						<h:outputText value="#{lbl.album_information}"/>
+						<h:outputText value="#{cc.attrs.headline}"/>
 					</h3>
 				</div>
 				<div class="imj_descriptionArea">	

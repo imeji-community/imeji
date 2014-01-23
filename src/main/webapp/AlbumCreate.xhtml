@@ -1,10 +1,13 @@
-<ui:composition template="templates/template_album_formular.xhtml"
+<ui:composition template="templates/sub_template/template_create_container.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
-	<ui:param name="headline" value="#{lbl.createAlbum}" />
-	<ui:param name="FormularBean" value="#{AlbumBean}" />
-	<ui:define name="contentMenu">
-	</ui:define>
+	
+	<ui:param name="formularBean" value="#{AlbumBean}"/>
+	<ui:param name="formularContextBean" value="#{formularBean.album}"/>
+	<ui:param name="headline" value="#{lbl.createAlbum}"/>
+	<ui:param name="currentMainMenu" value="album"/>
+	
+	
 </ui:composition>

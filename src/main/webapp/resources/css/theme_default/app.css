@@ -2125,9 +2125,43 @@ min-height: 6em;
 	padding-top: 0.5em;
 }
 
+/* * create new container, e.g. album or collection
+	component (createNewContainer.xhtml)
+   ==================================================
+   ================================================== */
+.imj_createNewMediaContainer {
+	margin-bottom: 0.5em;
+	padding: 0 4%;
+	width: 91.75%;
+}
+.imj_createNewMediaContainer .imj_headline {
+	width: 100%;
+	border-top: 0.090909em solid #6CAD2F;
+}
+.imj_createNewMediaContainer .imj_headline h3 {
+	font-size: 120%;
+	margin: 1% 0;
+}
+.imj_createNewMediaContainer textarea.imj_metadataValue,
+.imj_createNewMediaContainer input.imj_metadataValue {
+	width: 73.25%;
+}
+.imj_createNewMediaContainer .imj_addRemoveMetadataset {
+	white-space: nowrap;
+}
+.imj_createNewMediaContainer .imj_authorMetadataSet {
+	background-color: rgba(0,0,0,0.2);
+	margin-bottom: 0.272727em;
+	padding: 0.5em 1%;
+}
+.imj_createNewMediaContainer .imj_sectionHeadline {
+	margin-bottom: 0.545454em;
+	font-size:110%; 
+	font-style:italic;
+}
 
 /* * image / picture / media - stack - 
-	component (bibliographicGridList.xhtml)
+	component (bibliographicList.xhtml)
    ==================================================
    ================================================== */
 .imj_imageStack:before {

@@ -8,6 +8,7 @@
 	<composite:interface>
 		<composite:attribute name="mediaList"/>
 		<composite:attribute name="globalDisplayLinkText"/>
+		<composite:attribute name="metadataNavigationURL"/>
 	</composite:interface>
 	
 	<composite:implementation>
@@ -19,7 +20,7 @@
 			<div class="imj_listBody">
 				<ul>
 					<ui:repeat var="container" value="#{cc.attrs.mediaList.currentPartList}" id="list" rows="0"  varStatus="index">
-						<list:bibListItem_released itemClass="imj_bibliographicListItem" item="#{container}"/>
+						<list:bibListItem_released itemClass="imj_bibliographicListItem" item="#{container}" metadataNavigationURL="#{cc.attrs.metadataNavigationURL}"/>
 					</ui:repeat>
 				</ul>
 			</div>

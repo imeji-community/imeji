@@ -9,8 +9,9 @@
 	<composite:interface>
 		<composite:attribute name="itemClass" required="true"/>
 		<composite:attribute name="item" required="true"/>
-		<composite:attribute name="releaseItemConfirmationText"/>
-		<composite:attribute name="deleteItemConfirmationText"/>
+		<composite:attribute name="releaseItemConfirmationText" required="true"/>
+		<composite:attribute name="deleteItemConfirmationText" required="true"/>
+		<composite:attribute name="metadataNavigationURL" type="java.lang.String" required="true"/>
 		<composite:attribute name="isActivatable"/>
 	</composite:interface>
 	
@@ -54,7 +55,7 @@
 				<div class="imj_descriptionArea">
 					<h3 class="imj_itemHeadline">
 						<ui:fragment rendered="#{cc.attrs.item.size > 0}">
-							<h:outputLink value="#{Navigation.collectionUrl}#{cc.attrs.item.id}" title="#{cc.attrs.item.title}">
+							<h:outputLink value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}" title="#{cc.attrs.item.title}">
 								<h:outputText value="#{cc.attrs.item.title}"/>
 							</h:outputLink>
 						</ui:fragment>
@@ -67,23 +68,26 @@
 							<ul>
 								<ui:fragment rendered="#{cc.attrs.item.size > 0}">
 									<li>
-										<h:outputLink value="#{Navigation.collectionUrl}#{cc.attrs.item.id}/#{Navigation.browsePath}?q=">
+										<h:outputLink value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}/#{Navigation.browsePath}?q=">
 											<h:outputText value="#{lbl.view_images}"/>
 										</h:outputLink>
 									</li>
 								</ui:fragment>
+								
 								<li>
-									<h:outputLink id="lnkViewCollectionDetail" value="#{Navigation.collectionUrl}#{cc.attrs.item.id}/#{Navigation.infosPath}?init=1">
+									<h:outputLink id="lnkViewMetadataDetail" value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}/#{Navigation.infosPath}?init=1">
 										<h:outputText value="#{lbl.view_md}"/>
 									</h:outputLink>
 								</li>
-								<ui:fragment rendered="#{cc.attrs.item.editable and cc.attrs.item.status != 'WITHDRAWN'}">
+								
+								<ui:fragment rendered="#{cc.attrs.metadataNavigationURL.contains('collection') and cc.attrs.item.editable and cc.attrs.item.status != 'WITHDRAWN'}">
 									<li>
-										<h:outputLink id="lnkUploadImages" value="#{Navigation.collectionUrl}#{cc.attrs.item.id}/#{Navigation.uploadPath}?init=1">
+										<h:outputLink id="lnkUploadImages" value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}/#{Navigation.uploadPath}?init=1">
 											<h:outputText value="#{lbl.upload_images}"/>
 										</h:outputLink>
 									</li>
 								</ui:fragment>
+								
 								<ui:fragment rendered="#{cc.attrs.item.size > 0 and cc.attrs.item.editable and cc.attrs.item.status == 'PENDING'}">
 									<li>
 										<h:outputLink value="#" onclick="openDialog('release-#{index.index}-dialog');">

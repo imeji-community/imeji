@@ -59,7 +59,7 @@ public class Navigation
         frameworkUrl = PropertyReader.getProperty("escidoc.framework_access.framework.url");
         if (frameworkUrl != null)
             frameworkUrl = StringHelper.normalizeURI(frameworkUrl);
-        applicationUrl = StringHelper.normalizeURI(PropertyReader.getProperty("escidoc.imeji.instance.url"));
+        applicationUrl = StringHelper.normalizeURI(PropertyReader.getProperty("imeji.instance.url"));
         externalDigilibUrl = PropertyReader.getProperty("digilib.imeji.instance.url");
     }
 

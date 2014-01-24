@@ -74,7 +74,7 @@ public class PropertyBean
             this.digilibEnabled = Boolean.parseBoolean(PropertyReader.getProperty("imeji.digilib.enable"));
             this.internalStorageBase = FilenameUtils.getBaseName(FilenameUtils.normalizeNoEndSeparator(PropertyReader
                     .getProperty("imeji.storage.path")));
-            applicationURL = StringHelper.normalizeURI(PropertyReader.getProperty("escidoc.imeji.instance.url"));
+            applicationURL = StringHelper.normalizeURI(PropertyReader.getProperty("imeji.instance.url"));
             readBaseUri();
         }
         catch (Exception e)
@@ -102,7 +102,7 @@ public class PropertyBean
         }
         if (baseURI == null)
         {
-            throw new RuntimeException("Error in properties. Check property: escidoc.imeji.instance.url");
+            throw new RuntimeException("Error in properties. Check property: imeji.instance.url");
         }
     }
 

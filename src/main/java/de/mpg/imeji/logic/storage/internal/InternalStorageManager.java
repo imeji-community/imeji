@@ -95,7 +95,7 @@ public class InternalStorageManager
         {
             File storageDir = new File(PropertyReader.getProperty("imeji.storage.path"));
             storagePath = StringHelper.normalizePath(storageDir.getAbsolutePath());
-            storageUrl = StringHelper.normalizeURI(PropertyReader.getProperty("escidoc.imeji.instance.url")) + "file"
+            storageUrl = StringHelper.normalizeURI(PropertyReader.getProperty("imeji.instance.url")) + "file"
                     + StringHelper.urlSeparator;
             administrator = new InternalStorageAdministrator(storagePath);
         }

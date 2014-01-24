@@ -91,14 +91,14 @@ public class StaticContentBean
         String html = "";
         try
         {
-            String helpProp = PropertyReader.getProperty("escidoc.imeji.help.url");
+            String helpProp = PropertyReader.getProperty("imeji.help.url");
             String supportEmail = PropertyReader.getProperty("imeji.support.email");
             html = getContent(new URL(helpProp));
             html = html.replaceAll("XXX_SUPPORT_EMAIL_XXX", supportEmail);
         }
         catch (Exception e)
         {
-            html = PropertyReader.getProperty("escidoc.imeji.help.url")
+            html = PropertyReader.getProperty("imeji.help.url")
                     + " couldn't be loaded. Url might be either wrong or protected." + "<br/><br/>" + "Error message:"
                     + "<br/><br/>" + e.toString();
         }
@@ -121,7 +121,7 @@ public class StaticContentBean
         }
         catch (Exception e)
         {
-            html = PropertyReader.getProperty("escidoc.imeji.help.url")
+            html = PropertyReader.getProperty("imeji.help.url")
                     + " couldn't be loaded. Url might be either wrong or protected." + "<br/><br/>" + "Error message:"
                     + "<br/><br/>" + e.toString();
         }
@@ -144,7 +144,7 @@ public class StaticContentBean
         }
         catch (Exception e)
         {
-            html = PropertyReader.getProperty("escidoc.imeji.help.url")
+            html = PropertyReader.getProperty("imeji.help.url")
                     + " couldn't be loaded. Url might be either wrong or protected." + "<br/><br/>" + "Error message:"
                     + "<br/><br/>" + e.toString();
         }
@@ -167,7 +167,7 @@ public class StaticContentBean
         }
         catch (Exception e)
         {
-            html = PropertyReader.getProperty("escidoc.imeji.help.url")
+            html = PropertyReader.getProperty("imeji.help.url")
                     + " couldn't be loaded. Url might be either wrong or protected." + "<br/><br/>" + "Error message:"
                     + "<br/><br/>" + e.toString();
         }

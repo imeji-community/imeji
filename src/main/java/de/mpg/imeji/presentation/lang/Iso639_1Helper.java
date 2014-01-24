@@ -46,7 +46,7 @@ public class Iso639_1Helper
         try
         {
             HttpClient client = new HttpClient();
-            GetMethod getMethod = new GetMethod(PropertyReader.getProperty("escidoc.cone.isos639_1.all")
+            GetMethod getMethod = new GetMethod(PropertyReader.getProperty("cone.isos639_1.all")
                     + "?format=options");
             //client.executeMethod(getMethod);
             ProxyHelper.executeMethod(client, getMethod);

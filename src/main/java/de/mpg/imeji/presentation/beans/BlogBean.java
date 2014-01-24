@@ -19,7 +19,7 @@ public class BlogBean
     {
         try
         {
-            rssFeedUrl = PropertyReader.getProperty("escidoc.imeji.blog.rss.url");
+            rssFeedUrl = PropertyReader.getProperty("imeji.blog.rss.url");
         }
         catch (Exception e)
         {

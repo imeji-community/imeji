@@ -92,7 +92,7 @@ public class PropertyReader
             InputStream in = getInputStream("solution.properties");
             solProperties.load(in);
             String appname = solProperties.getProperty("appname");
-            version = solProperties.getProperty("escidoc.application.version");
+            version = solProperties.getProperty("imeji.application.version");
             propertiesFile = appname + ".properties";
         }
         else

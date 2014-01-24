@@ -37,7 +37,7 @@ public class BlogBean
     {
         try
         {
-            blogUrl = PropertyReader.getProperty("escidoc.imeji.blog.url");
+            blogUrl = PropertyReader.getProperty("imeji.blog.url");
         }
         catch (Exception e)
         {
@@ -55,7 +55,7 @@ public class BlogBean
     {
         try
         {
-            googleKey = PropertyReader.getProperty("escidoc.imeji.blog.rss.google.key");
+            googleKey = PropertyReader.getProperty("imeji.blog.rss.google.key");
         }
         catch (Exception e)
         {

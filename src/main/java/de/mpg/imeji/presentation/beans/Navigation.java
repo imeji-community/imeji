@@ -155,7 +155,7 @@ public class Navigation
 
     public String getBlogUrl() throws IOException, URISyntaxException
     {
-        return PropertyReader.getProperty("escidoc.imeji.blog.url");
+        return PropertyReader.getProperty("imeji.blog.url");
     }
 
     public String getShareUrl()

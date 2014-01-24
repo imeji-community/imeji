@@ -79,7 +79,6 @@ public class PropertyBean
             applicationURL = StringHelper.normalizeURI(PropertyReader.getProperty("imeji.instance.url"));
             readBaseUri();
             this.appName = PropertyReader.getProperty("imeji.instance.name");
-            System.out.println(appName);
         }
         catch (Exception e)
         {

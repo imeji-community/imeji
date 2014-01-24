@@ -73,9 +73,9 @@ public class InternationalizationBean
         languages.add(new SelectItem(null, "--"));
         languages.addAll(getsupportedLanguages(true));
         // add a separator
-        languages.add(new SelectItem(null, "--"));
+        //languages.add(new SelectItem(null, "--"));
         // Add the other languages (non supported)
-        languages.addAll(getsupportedLanguages(false));
+        //languages.addAll(getsupportedLanguages(false));
         // init the string of all languages
         for(SelectItem s : languages)
             languagesAsString += s.getValue() + "," + s.getLabel() + "|"; 

@@ -3,9 +3,14 @@
  */
 package de.mpg.imeji.presentation.user.util;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+
 import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
  * List of text (messages) sent from imeji to users via email
@@ -39,7 +44,13 @@ public class EmailMessages
      */
     public String getNewPasswordMessage(String password, String email, String username)
     {
-        return getEmailMessage(password, email, username, "email_new_password");
+    	String msg = "";
+        try {
+			return getEmailMessage(password, email, username, "email_new_password").replace("XXX_INSTANCE_NAME_XXX", PropertyReader.getProperty("imeji.instance.name"));
+		} catch (Exception e) {
+			System.out.println(e);
+			return msg;
+		} 
     }
 
     /**

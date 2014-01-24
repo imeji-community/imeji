@@ -208,6 +208,11 @@
 		<managed-bean-scope>application</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
+		<managed-bean-name>PropertyBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.presentation.beans.PropertyBean</managed-bean-class>
+		<managed-bean-scope>application</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
 		<managed-bean-name>StaticContent</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.beans.StaticContentBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>

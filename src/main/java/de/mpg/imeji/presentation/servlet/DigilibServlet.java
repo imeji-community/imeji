@@ -138,7 +138,7 @@ public class DigilibServlet extends Scaler
             {
                 try
                 {
-                    resp.sendError(403, "imeji security: You are not allowed to view this file");
+                    resp.sendError(403, "Security warning: You are not allowed to view this file.");
                 }
                 catch (IOException e)
                 {

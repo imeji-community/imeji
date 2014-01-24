@@ -63,8 +63,10 @@ public class PropertyBean
      */
     private static String baseURI;
     private static String applicationURL;
+    private String appName;
 
-    /**
+
+	/**
      * Default constructor
      */
     public PropertyBean()
@@ -76,6 +78,8 @@ public class PropertyBean
                     .getProperty("imeji.storage.path")));
             applicationURL = StringHelper.normalizeURI(PropertyReader.getProperty("imeji.instance.url"));
             readBaseUri();
+            this.appName = PropertyReader.getProperty("imeji.instance.name");
+            System.out.println(appName);
         }
         catch (Exception e)
         {
@@ -161,4 +165,13 @@ public class PropertyBean
     {
         return applicationURL;
     }
+    
+
+    public String getAppName() {
+		return this.appName;
+	}
+
+	public  void setAppName(String appName) {
+		this.appName = appName;
+	}
 }

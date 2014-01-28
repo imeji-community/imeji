@@ -979,11 +979,6 @@ cut second ?
 /* ===[ Site Content ]===
    ================================================== */
 
-/* id="content" class="imj_clear full_area0" 
-    margin-top: 0.5454em;
-    margin-bottom: 0.9090em;
-*/
-
 .imj_siteContent {
     clear: both;
     float: left;
@@ -1794,6 +1789,48 @@ min-height: 6em;
 }
 
 
+/* * advanced search
+   ==================================================
+   ================================================== */
+.imj_advancedSearch { 
+	width:91.25%; 
+	padding:0 4%;
+	border-top: 1px solid #6CAD2F; 
+}
+.imj_advancedSearch .imj_logicalSearchGroup {
+	white-space: nowrap;
+}
+.imj_advancedSearch .imj_searchUnit {
+	width: 100%;
+	margin-top: 1em;
+}
+.imj_advancedSearch .imj_searchUnit > div {
+	display: inline-block;
+}
+.imj_advancedSearch .imj_searchUnit .imj_logicalConnector {
+	min-width: 3em;
+}
+.imj_advancedSearch .imj_searchUnit .imj_logicalDetailConnector { 
+	margin-left: 10%;
+	margin-top: 0.5em;
+	display: block;
+}
+.imj_advancedSearch .imj_searchUnit .imj_inlineButtonGroup {
+	min-width: 3.5em;
+}
+.imj_advancedSearch .imj_searchUnit .imj_searchDetails { 
+	width: 92%; 
+	margin-left: 7%; 
+	margin-top: 0.5em;
+}
+.imj_advancedSearch .imj_searchUnit .imj_searchDetails .imj_inlineButtonGroup {
+	margin-left: 0.5em;
+}
+.imj_advancedSearch .imj_searchUnit .imj_compareLabel { 
+	padding: 0 0.5em; 
+}
+					
+
 /* * tiledMediaList + overlayMenu + singlePageBrowser
 	+ Buttons + rangeSelector + infoLayer
 	(template_image_tiledlist.xhtml)
@@ -1995,6 +2032,14 @@ min-height: 6em;
 	padding: 0 1%;
 }
 
+/* * general button group definitions
+	used in: createNewMediaContainer.xhtml, SearchAdvanced.xhtml)
+	==================================================================================
+   ================================================================================== */
+.imj_inlineButtonGroup {
+	white-space: nowrap;
+}
+
 
 /* * bibliographicList - 
 	component (bibliographicListTwoColumn.xhtml, bibliographicListThreeColumn.xhtml)
@@ -2133,10 +2178,10 @@ min-height: 6em;
 	margin-bottom: 0.5em;
 	padding: 0 4%;
 	width: 91.75%;
+	border-top: 0.090909em solid #6CAD2F;
 }
 .imj_createNewMediaContainer .imj_headline {
 	width: 100%;
-	border-top: 0.090909em solid #6CAD2F;
 }
 .imj_createNewMediaContainer .imj_headline h3 {
 	font-size: 120%;
@@ -2146,12 +2191,9 @@ min-height: 6em;
 .imj_createNewMediaContainer input.imj_metadataValue {
 	width: 73.25%;
 }
-.imj_createNewMediaContainer .imj_addRemoveMetadataset {
-	white-space: nowrap;
-}
 .imj_createNewMediaContainer .imj_authorMetadataSet {
-	background-color: rgba(0,0,0,0.2);
-	margin-bottom: 0.272727em;
+	background-color: rgba(0,0,0,0.15);
+	margin-bottom: 0.36363636em;
 	padding: 0.5em 1%;
 }
 .imj_createNewMediaContainer .imj_sectionHeadline {

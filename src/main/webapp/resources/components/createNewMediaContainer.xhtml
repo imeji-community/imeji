@@ -45,7 +45,7 @@
 							<div class="imj_sectionHeadline">
 								<h4>
 									<!-- Add/Remove Author buttons -->		
-									<span class="imj_addRemoveMetadataset">
+									<span class="imj_inlineButtonGroup">
 										<h:commandButton styleClass="imj_addButton_15" title="#{lbl.add_author}" action="#{cc.attrs.formularBean.addAuthor}">
 											<f:setPropertyActionListener value="#{indexA.index}" target="#{cc.attrs.formularBean.authorPosition}"/>
 										</h:commandButton>
@@ -82,7 +82,7 @@
 									<label class="imj_metadataLabel">
 										<h:outputText value="#{lbl.organization}*"/>
 										<span class="imj_noDisplay">: </span>
-										<span class="imj_addRemoveMetadataset">
+										<span class="imj_inlineButtonGroup">
 											<h:commandButton styleClass="imj_addButton_15" title="#{lbl.add_organization}" action="#{cc.attrs.formularBean.addOrganization}">
 												<f:setPropertyActionListener value="#{indexA.index}" target="#{cc.attrs.formularBean.authorPosition}"/>
 												<f:setPropertyActionListener value="#{indexO.index}" target="#{cc.attrs.formularBean.organizationPosition}"/>

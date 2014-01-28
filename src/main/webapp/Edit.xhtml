@@ -72,11 +72,13 @@
 								</h:panelGroup>
 							</h:panelGroup>
 							<h:panelGroup rendered="#{EditImageMetadataBean.editType != 'selected'}" styleClass="full_area0">
-								<h:commandButton styleClass="free_area1_p8 cancelButton"  action="#{EditImageMetadataBean.cancel}" value=" #{lbl.cancel}"/>
-								<h:commandButton styleClass="free_area1_p8 activeButton small_marginRExcl"  onclick="openDialog('dialogWait');" action="#{EditImageMetadataBean.addToAllSaveAndRedirect}" value=" #{lbl.save}"/>
+								<h:commandButton styleClass="free_area1_p8 cancelButton"  action="#{EditImageMetadataBean.cancel}" value=" #{lbl.back_to_pictures}"/>
+								<h:commandButton styleClass="free_area1_p8 activeButton small_marginRExcl"  onclick="openDialog('dialogWait');" action="#{EditImageMetadataBean.addToAllSave}" value=" #{lbl.save}"/>
 							</h:panelGroup>	
 						</h:panelGroup>
 						<h:panelGroup styleClass="full_area0_p8 preListHeader"  rendered="#{EditImageMetadataBean.editType == 'selected'}">
+							
+							<h:commandButton styleClass="free_area1_p8 cancelButton"  action="#{EditImageMetadataBean.cancel}" value=" #{lbl.back_to_pictures}"/>
 							<h:panelGroup styleClass="free_area0" style="float:right; margin-right:6em;">
 								<h:commandButton  styleClass="free_area1_p8 cancelButton"  action="#{EditImageMetadataBean.clearAll}" value="#{lbl.clear_all}">
 									<f:ajax render="ajaxContent"/>
@@ -87,8 +89,8 @@
 								<h:outputLink value="" rendered="false" styleClass="free_area1_p8 cancelButton xTiny_marginLIncl">
 									<h:outputText value="#{lbl.reset_changes}" />
 								</h:outputLink>
-								<h:commandButton styleClass="free_area1_p8 cancelButton xTiny_marginLIncl"  action="#{EditImageMetadataBean.cancel}" value=" #{lbl.cancel}"/>
-								<h:commandButton styleClass="free_area1_p8 activeButton small_marginLIncl" onclick="openDialog('dialogWait');" action="#{EditImageMetadataBean.saveAndRedirect}" value=" #{lbl.save} "/>
+								
+								<h:commandButton styleClass="free_area1_p8 activeButton small_marginLIncl" onclick="openDialog('dialogWait');" action="#{EditImageMetadataBean.save}" value=" #{lbl.save} "/>
 							</h:panelGroup>
 						</h:panelGroup>
 					</h:panelGroup>
@@ -128,6 +130,7 @@
 			        </h:panelGroup>
 			        <!-- SAVE BUTTON -->
 					<h:panelGroup styleClass="full_area0_p8 preListHeader"  rendered="#{EditImageMetadataBean.profileWithStatements and EditImageMetadataBean.editType == 'selected'}">
+						<h:commandButton styleClass="free_area1_p8 cancelButton" action="#{EditImageMetadataBean.cancel}" value="#{lbl.back_to_pictures}"/>
 						<h:panelGroup styleClass="free_area0" style="float:right; margin-right:6em;">
 							<h:commandButton  styleClass="free_area1_p8 cancelButton"  action="#{EditImageMetadataBean.clearAll}" type="button" value="#{lbl.clear_all}">
 								<f:ajax render="ajaxContent"/>
@@ -136,8 +139,8 @@
 								<h:outputText value="#{lbl.reset_changes}" />
 							</h:outputLink>
 							<h:messages />
-							<h:commandButton styleClass="free_area1_p8 cancelButton xTiny_marginLIncl" action="#{EditImageMetadataBean.cancel}" value="#{lbl.cancel}"/>
-							<h:commandButton styleClass="free_area1_p8 activeButton small_marginLIncl" onclick="openDialog('dialogWait');" action="#{EditImageMetadataBean.saveAndRedirect}" value=" #{lbl.save} " rendered="#{EditImageMetadataBean.editType == 'selected'}"/>
+							
+							<h:commandButton styleClass="free_area1_p8 activeButton small_marginLIncl" onclick="openDialog('dialogWait');" action="#{EditImageMetadataBean.save}" value=" #{lbl.save} " rendered="#{EditImageMetadataBean.editType == 'selected'}"/>
 						</h:panelGroup>
 					</h:panelGroup>		
 					  	

@@ -23,6 +23,8 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.presentation.beans.BasePaginatorListSessionBean.PaginatorPage;
+import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.metadata.editors.MetadataEditor;
@@ -145,7 +147,7 @@ public class EditImageMetadataBean
     }
 
     /**
-     * Read the url paramameters when the page is first called. This method ios called directly from the xhtml page
+     * Read the url paramameters when the page is first called. This method is called directly from the xhtml page
      * 
      * @return
      */
@@ -348,6 +350,21 @@ public class EditImageMetadataBean
         saveAndRedirect();
         return "";
     }
+    
+    /**
+     * For batch edit: Add the same values to all images and save.
+     * 
+     * @return
+     * @throws Exception 
+     */
+    public String addToAllSave() throws Exception
+    {
+        // First, re-initialize the editor with all items (for batch, editor has been initialized with only one item)
+        initEditor(new ArrayList<Item>(loaditems(findItems())));
+        addToAll();
+        save();
+        return "";
+    }
 
     /**
      * For the Multiple Edit: Save the current values
@@ -361,6 +378,21 @@ public class EditImageMetadataBean
         redirectToView();
         return "";
     }
+    
+    /**
+     * For the Multiple Edit: Save the current values
+     * 
+     * @return
+     * @throws Exception 
+     */
+    public String save() throws Exception
+    {   	
+        editor.save();
+        Navigation navi = new Navigation();       
+        FacesContext.getCurrentInstance().getExternalContext()
+        .redirect(navi.applicationUrl+"edit?type="+this.type+"&amp;c="+ this.collectionId+"&amp;q="+this.query);
+        return "";
+   }
 
     /**
      * Lock the {@link Item} which are currently in the editor. This prevent other users to make concurrent
@@ -434,7 +466,7 @@ public class EditImageMetadataBean
      */
     public void redirectToView() throws IOException
     {
-        initialized = false;
+        this.reset();
         unlockImages();
         HistorySession hs = (HistorySession)BeanHelper.getSessionBean(HistorySession.class);
         FacesContext.getCurrentInstance().getExternalContext()

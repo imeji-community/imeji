@@ -6,7 +6,6 @@ package de.mpg.imeji.presentation.metadata;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.mpg.imeji.logic.auth.Authorization;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.concurrency.locks.Lock;
 import de.mpg.imeji.logic.concurrency.locks.Locks;

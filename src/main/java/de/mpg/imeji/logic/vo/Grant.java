@@ -21,8 +21,6 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jId(getMethod = "getId", setMethod = "setId")
 public class Grant implements Serializable
 {
-    private static final long serialVersionUID = -6318969286926194883L;
-
     /**
      * The types of possible {@link Grant} in imeji
      * 

@@ -17,12 +17,16 @@
 				styleClass="full_area0_p8 endline medium_marginLExcl">
 				<h2>
 					<h:outputLink styleClass="free_area0 "
-						value="#{Navigation.applicationUri}/jsf/UserCreate.xhtml">
+						value="#{Navigation.applicationUri}/createuser">
 						<h:outputText value="#{lbl.admin_user_new}" />
 					</h:outputLink>
-					<h:outputLink value="#{Navigation.applicationUrl}jsf/Users.xhtml"
+					<h:outputLink value="#{Navigation.applicationUrl}users"
 						styleClass="free_area0 xSmall_marginLExcl">
 						<h:outputText value="#{lbl.admin_user_view}" />
+					</h:outputLink>
+					<h:outputLink value="#{Navigation.applicationUrl}usergroups"
+						styleClass="free_area0 xSmall_marginLExcl">
+						<h:outputText value="#{lbl.admin_userGroups_view}" />
 					</h:outputLink>
 				</h2>
 			</h:panelGroup>

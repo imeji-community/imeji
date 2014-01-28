@@ -146,9 +146,24 @@
 		<view-id>/jsf/UserCreate.xhtml</view-id>
 	</url-mapping>
 
-	<url-mapping id="userbrowse">
-		<pattern value="/user/browse"></pattern>
+	<url-mapping id="users">
+		<pattern value="/users"></pattern>
 		<view-id>/jsf/Users.xhtml</view-id>
+	</url-mapping>
+	
+	<url-mapping id="userGroup">
+		<pattern value="/usergroup"></pattern>
+		<view-id>/jsf/UserGroup.xhtml</view-id>
+	</url-mapping>
+	
+	<url-mapping id="userGroups">
+		<pattern value="/usergroups"></pattern>
+		<view-id>/jsf/UserGroups.xhtml</view-id>
+	</url-mapping>
+	
+	<url-mapping id="createUserGroup" >
+		<pattern value="/createusergroup" ></pattern>
+		<view-id>/jsf/UserGroupCreate.xhtml</view-id>
 	</url-mapping>
 
 	<url-mapping id="share">

@@ -22,6 +22,7 @@ import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.j2j.transaction.CRUDTransaction;
 import de.mpg.j2j.transaction.ThreadedTransaction;
 import de.mpg.j2j.transaction.Transaction;
@@ -223,6 +224,10 @@ public class ImejiBean2RDF
         else if (o instanceof User)
         {
             return URI.create(((User)o).getEmail());
+        }
+        else if (o instanceof UserGroup)
+        {
+            return ((UserGroup)o).getId();
         }
         return null;
     }

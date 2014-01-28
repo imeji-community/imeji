@@ -37,6 +37,7 @@ import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.vo.UserGroup;
 
 /**
  * SPARQL queries for imeji
@@ -80,6 +81,17 @@ public class SPARQLQueries
     public static String selectUserAll()
     {
         return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s a <http://imeji.org/terms/user> }";
+    }
+
+    /**
+     * Select all {@link UserGroup}
+     * 
+     * @return
+     */
+    public static String selectUSerGroupAll(String name)
+    {
+        return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s a <http://imeji.org/terms/userGroup> . ?s <http://xmlns.com/foaf/0.1/name> ?name . filter(regex(?name, '"
+                + name + "'))}";
     }
 
     /**

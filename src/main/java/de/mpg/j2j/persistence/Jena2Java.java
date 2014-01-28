@@ -273,14 +273,15 @@ public class Jena2Java
     }
 
     /**
-     * True if the {@link Resource} is a {@link RDF}.type
+     * True if the {@link Resource} is a {@link RDF}.type. This type must define the Java class of the resource, 
      * 
      * @param r
      * @return
      */
     private boolean isTypedResource(Resource r)
     {
-        return r.getProperty(RDF.type) != null;
+        Statement type = r.getProperty(RDF.type);
+        return type != null && type.getProperty(RDF.type).getObject().isLiteral();
     }
 
     /**

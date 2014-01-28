@@ -141,11 +141,6 @@
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<!-- Users bean -->
-	<managed-bean>
-		<managed-bean-name>UsersBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.user.UsersBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
 
 	<managed-bean>
 		<managed-bean-name>UserBean</managed-bean-name>

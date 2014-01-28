@@ -55,7 +55,7 @@
 	</filter>
 	<filter>
 		<filter-name>Content Negotiation Filter</filter-name>
-		<filter-class>de.mpg.imeji.presentation.contentNegociation.ContentNegotiationFilter</filter-class>
+		<filter-class>de.mpg.imeji.presentation.contentNegotiation.ContentNegotiationFilter</filter-class>
 		<async-supported>true</async-supported> 
 	</filter>
 	<filter>

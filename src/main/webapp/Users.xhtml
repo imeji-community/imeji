@@ -1,40 +1,72 @@
-<ui:composition template="templates/template.xhtml" 
+<ui:composition template="templates/template.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
-			<ui:param name="headline" value="#{lbl.admin_users_head}"/>
-			<ui:define name="mainContent">
-				<h:panelGroup layout="block" styleClass="full_area0 endline itemLine noTopBorder" rendered="#{!Auth.admin}">
-					<h2><h:outputText value="You are not allowed to view this page"/></h2>
-				</h:panelGroup>
-				<h:panelGroup layout="block" styleClass="full_area0 endline itemLine noTopBorder" rendered="#{Auth.admin}">
-					<ui:repeat id="userList" var="user" value="#{UsersBean.users}" rows="0">
-					<h:panelGroup layout="block" styleClass="full_area0_p4 listItem noTopBorder">
-						<h:panelGroup layout="block" styleClass="huge_area0_p4">
-							<h:outputText styleClass="huge_area0_p1" value="#{user.name} (#{user.email})"/>
-						</h:panelGroup>
-						<h:panelGroup layout="block" styleClass="quad_area0_p1">
-							<ui:repeat id="grantList" var="grant" value="#{user.grants}" rows="0" >
-								<h:outputText styleClass="medium_area0" value="#{grant.asGrantType()}"/>
-								<h:outputLink styleClass="xDouble_area0_p0" value="#{grant.grantFor}"><h:outputText value="#{grant.grantFor}"/></h:outputLink>
-							</ui:repeat>
-						</h:panelGroup>
-						<h:panelGroup layout="block" styleClass="large_area0_p0">
-							<h:outputLink styleClass="huge_area0_p1" value="#{Navigation.applicationUrl}user?id=#{user.email}">
-								<h:outputText value="#{lbl.user_admin_edit}"/>
-							</h:outputLink>
-							<h:form>
-								<h:commandLink styleClass="huge_area0_p1" action="#{UsersBean.sendPassword}" value="#{lbl.user_admin_newPwd}" onclick="if (confirm('Do you really want to reset the password? (A message will be sent to the user)')) return true; return false;">
-									<f:param name="email" value="#{user.email}"/>
-								</h:commandLink>
-								<h:commandLink styleClass="huge_area0_p1" action="#{UsersBean.deleteUser}" value="#{lbl.user_admin_delete}" onclick="if (confirm('Do you really want to delete this user?')) return true; return false;">
-									<f:param name="email" value="#{user.email}"/>
-								</h:commandLink>
-							</h:form>
-						</h:panelGroup>
+	<ui:param name="headline" value="#{lbl.admin_users_head}" />
+	<ui:define name="mainContent">
+		<h:panelGroup layout="block"
+			styleClass="full_area0 endline itemLine noTopBorder"
+			rendered="#{!Auth.admin}">
+			<h2>
+				<h:outputText value="You are not allowed to view this page" />
+			</h2>
+		</h:panelGroup>
+		<h:panelGroup layout="block"
+			styleClass="full_area0 endline itemLine noTopBorder"
+			rendered="#{Auth.admin}">
+			<ui:fragment rendered="#{UsersBean.group != null}">
+				<div class="full_area0_p4">
+					<h2>
+						<h:outputText value="Adding user to group #{UsersBean.group.name}" />
+					</h2>
+				</div>
+			</ui:fragment>
+			<ui:repeat id="userList" var="user" value="#{UsersBean.users}"
+				rows="0">
+				<h:panelGroup layout="block"
+					styleClass="full_area0_p4 listItem noTopBorder">
+					<h:panelGroup layout="block" styleClass="huge_area0_p4">
+						<h:outputText styleClass="huge_area0_p1"
+							value="#{user.name} (#{user.email})" />
 					</h:panelGroup>
-					</ui:repeat>
+					<h:panelGroup layout="block" styleClass="quad_area0_p1" rendered="#{UsersBean.group == null}">
+						<ui:repeat id="grantList" var="grant" value="#{user.grants}"
+							rows="0">
+							<h:outputText styleClass="medium_area0"
+								value="#{grant.asGrantType()}" />
+							<h:outputLink styleClass="xDouble_area0_p0"
+								value="#{grant.grantFor}">
+								<h:outputText value="#{grant.grantFor}" />
+							</h:outputLink>
+						</ui:repeat>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="large_area0_p0">
+						<h:outputLink styleClass="huge_area0_p1"
+							value="#{Navigation.applicationUrl}user?id=#{user.email}" rendered="#{UsersBean.group == null}">
+							<h:outputText value="#{lbl.user_admin_edit}" />
+						</h:outputLink>
+						<h:form>
+							<h:commandLink styleClass="huge_area0_p1"
+								action="#{UsersBean.sendPassword}"
+								value="#{lbl.user_admin_newPwd}"
+								onclick="if (confirm('Do you really want to reset the password? (A message will be sent to the user)')) return true; return false;" rendered="#{UsersBean.group == null}">
+								<f:param name="email" value="#{user.email}" />
+							</h:commandLink>
+							<h:commandLink styleClass="huge_area0_p1"
+								action="#{UsersBean.deleteUser}"
+								value="#{lbl.user_admin_delete}"
+								onclick="if (confirm('Do you really want to delete this user?')) return true; return false;" rendered="#{UsersBean.group == null}">
+								<f:param name="email" value="#{user.email}" />
+							</h:commandLink>
+							<h:commandLink styleClass="huge_area0_p1"
+								action="#{UsersBean.addToGroup}" value="Add to #{UsersBean.group.name}" rendered="#{UsersBean.group != null}">
+								<f:param name="email" value="#{user.email}" />
+							</h:commandLink>
+						</h:form>
+					</h:panelGroup>
 				</h:panelGroup>
-			</ui:define>
+			</ui:repeat>
+		</h:panelGroup>
+	</ui:define>
 </ui:composition>

@@ -1,0 +1,47 @@
+<ui:composition template="templates/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<ui:param name="headline" value="User groups" />
+	<ui:define name="mainContent">
+		<ui:fragment rendered="#{!Auth.admin}">
+			<ui:include src="./include/LoginFormular.xhtml" />
+		</ui:fragment>
+		<ui:fragment rendered="#{Auth.admin}">
+			<div class="full_area0_p4" style="text-align: right">
+				<h:outputLink value="#{Navigation.applicationUrl}createusergroup">
+					<h:outputText value="Create New User Group" />
+				</h:outputLink>
+			</div>
+			<div class="free_area0_p4">
+				<h:form>
+					<h:inputText value="#{UserGroups.query}"
+						styleClass="xDouble_area0_p2" />
+					<h:commandButton action="#{UserGroups.search()}"
+						value="#{lbl.search}" styleClass="free_area1_p8 activeButton" />
+				</h:form>
+			</div>
+			<div class="full_area0 endline itemLine noTopBorder">
+				<ui:repeat var="group" value="#{UserGroups.userGroups}">
+					<div class="full_area0_p4 listItem noTopBorder">
+						<h:outputLink
+							value="#{Navigation.applicationUrl}usergroup?id=#{group.id}">
+							<h:outputText value="#{group.name}" styleClass="xHuge_area0" />
+						</h:outputLink>
+						<h:form>
+							<h:commandLink value="#{lbl.remove}"
+								action="#{UserGroups.remove(group)}" styleClass="free_area0" />
+						</h:form>
+					</div>
+				</ui:repeat>
+			</div>
+		</ui:fragment>
+	</ui:define>
+</ui:composition>
+
+
+
+
+
+

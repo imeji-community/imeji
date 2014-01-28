@@ -3,22 +3,30 @@
  */
 package de.mpg.imeji.presentation.user;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.controller.UserGroupController;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.logic.vo.UserGroup;
+import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.user.util.EmailClient;
 import de.mpg.imeji.presentation.user.util.EmailMessages;
 import de.mpg.imeji.presentation.user.util.PasswordGenerator;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
+import de.mpg.imeji.presentation.util.UrlHelper;
 
 /**
  * Java Bean for the view users page
@@ -27,18 +35,25 @@ import de.mpg.imeji.presentation.util.ObjectLoader;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class UsersBean
+@ManagedBean(name = "UsersBean")
+@ViewScoped
+public class UsersBean implements Serializable
 {
+    private static final long serialVersionUID = 909531319532057429L;
     private List<User> users;
-    private SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+    private UserGroup group;
+    @ManagedProperty(value = "#{SessionBean.user}")
+    private User sessionUser;
     private static Logger logger = Logger.getLogger(UserBean.class);
 
     /**
      * Initialize the bean
      */
-    public UsersBean()
+    @PostConstruct
+    public void init()
     {
         retrieveUsers();
+        retrieveGroup();
     }
 
     /**
@@ -46,11 +61,32 @@ public class UsersBean
      */
     public void retrieveUsers()
     {
-        UserController controller = new UserController(session.getUser());
+        UserController controller = new UserController(sessionUser);
         users = new ArrayList<User>();
         for (User user : controller.retrieveAll())
         {
             users.add(user);
+        }
+    }
+
+    /**
+     * If the parameter group in the url is not null, try to retrieve this group. This happens when the admin want to
+     * add a {@link User} to a {@link UserGroup}
+     */
+    public void retrieveGroup()
+    {
+        if (UrlHelper.getParameterValue("group") != null)
+        {
+            UserGroupController c = new UserGroupController();
+            try
+            {
+                setGroup(c.read(UrlHelper.getParameterValue("group"), sessionUser));
+            }
+            catch (Exception e)
+            {
+                BeanHelper.error("error loading user group " + UrlHelper.getParameterValue("group"));
+                logger.error(e);
+            }
         }
     }
 
@@ -91,7 +127,7 @@ public class UsersBean
         catch (Exception e)
         {
             logger.error("Error sending email", e);
-            BeanHelper.error(session.getMessage("error") + ": Email not sent");
+            BeanHelper.error("Error: Email not sent");
         }
     }
 
@@ -103,10 +139,10 @@ public class UsersBean
     public String deleteUser()
     {
         String email = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("email");
-        UserController controller = new UserController(session.getUser());
+        UserController controller = new UserController(sessionUser);
         try
         {
-            controller.delete(ObjectLoader.loadUser(email, session.getUser()));
+            controller.delete(ObjectLoader.loadUser(email, sessionUser));
         }
         catch (Exception e)
         {
@@ -114,6 +150,32 @@ public class UsersBean
             logger.error("Error Deleting user", e);
         }
         retrieveUsers();
+        return "";
+    }
+
+    /**
+     * Add a {@link User} to a {@link UserGroup} and then redirect to the {@link UserGroup} page
+     * 
+     * @param user
+     */
+    public String addToGroup()
+    {
+        Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
+        String email = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("email");
+        try
+        {
+            UserController uc = new UserController(sessionUser);
+            User user = uc.retrieve(email);
+            group.getUsers().add(user.getId());
+            UserGroupController c = new UserGroupController();
+            c.update(group, sessionUser);
+            FacesContext.getCurrentInstance().getExternalContext()
+                    .redirect(nav.getApplicationUrl() + "usergroup?id=" + group.getId());
+        }
+        catch (Exception e)
+        {
+            BeanHelper.error(e.getMessage());
+        }
         return "";
     }
 
@@ -135,5 +197,37 @@ public class UsersBean
     public void setUsers(List<User> users)
     {
         this.users = users;
+    }
+
+    /**
+     * @return the group
+     */
+    public UserGroup getGroup()
+    {
+        return group;
+    }
+
+    /**
+     * @param group the group to set
+     */
+    public void setGroup(UserGroup group)
+    {
+        this.group = group;
+    }
+
+    /**
+     * @return the sessionUser
+     */
+    public User getSessionUser()
+    {
+        return sessionUser;
+    }
+
+    /**
+     * @param sessionUser the sessionUser to set
+     */
+    public void setSessionUser(User sessionUser)
+    {
+        this.sessionUser = sessionUser;
     }
 }

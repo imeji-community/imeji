@@ -1,0 +1,79 @@
+<ui:composition template="templates/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<ui:param name="headline" value="Create User Group" />
+	<ui:define name="mainContent">
+		<ui:fragment rendered="#{!Auth.admin}">
+			<ui:include src="./include/LoginFormular.xhtml" />
+		</ui:fragment>
+		<ui:fragment rendered="#{Auth.admin}">
+			<div class="full_area0_p4 fullItem">
+				<h:form>
+					<div class="full_area0 itemBlock noTopBorder">
+						<b class="xLarge_area0_p8 endline labelLine clear"> <h:outputText
+								value="User Group Name" /> <span class="noDisplay">: </span>
+						</b>
+						<h:inputText value="#{UserGroup.userGroup.name}"
+							styleClass="half_area0_p2" />
+					</div>
+					<div class="full_area0_p8 formButtonArea">
+						<h:outputLink value="#{Navigation.applicationUrl}usergroups"
+							styleClass="free_area1_p8 cancelButton xLarge_marginLIncl">
+							<h:outputText value="#{lbl.cancel}" />
+						</h:outputLink>
+						<h:commandButton value="#{lbl.save}" action="#{UserGroup.save()}"
+							styleClass="free_area1_p8 activeButton xDouble_marginRIncl" />
+					</div>
+				</h:form>
+
+				<div class="full_area0_p2 itemBlock noTopBorder">
+					<b class="xLarge_area0_p8 endline labelLine clear"> <h:outputText
+							value="Users" /> <span class="noDisplay">: </span> <h:outputLink
+							value="#{Navigation.applicationUrl}users?group=#{UserGroup.userGroup.id}">Add</h:outputLink>
+					</b>
+					<h:outputText value="No users"
+						rendered="#{UserGroup.users.size() == 0}" />
+					<h:panelGroup id="userArea">
+						<ui:repeat var="user" value="#{UserGroup.users}">
+							<div class="xHuge_area0_p0">
+								<h:outputText styleClass="xDouble_area0_p0"
+									value="#{user.name} (#{user.email})" />
+								<h:form>
+									<h:commandLink value="#{lbl.remove}"
+										action="#{UserGroup.removeUserGromGroup(user.id)}">
+									</h:commandLink>
+								</h:form>
+							</div>
+						</ui:repeat>
+					</h:panelGroup>
+				</div>
+				<div class="full_area0 itemBlock noTopBorder">
+					<b class="xLarge_area0_p8 endline labelLine clear"> <h:outputText
+							value="Grants" /> <span class="noDisplay">: </span>
+					</b>
+					<h:outputText value="No grants"
+						rendered="#{UserGroup.userGroup.grants.size() == 0}" />
+					<ui:repeat var="grant" value="#{UserGroup.userGroup.grants}"
+						rows="0">
+						<div class="huge_area0_p4">
+							<h:outputText styleClass="medium_area0"
+								value="#{grant.asGrantType()}" />
+							<h:outputLink styleClass="xDouble_area0_p0"
+								value="#{grant.grantFor}">
+								<h:outputText value="#{grant.grantFor}" />
+							</h:outputLink>
+						</div>
+					</ui:repeat>
+				</div>
+			</div>
+		</ui:fragment>
+	</ui:define>
+</ui:composition>
+
+
+
+
+
+

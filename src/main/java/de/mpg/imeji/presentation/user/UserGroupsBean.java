@@ -1,0 +1,175 @@
+/*
+ *
+ * CDDL HEADER START
+ *
+ * The contents of this file are subject to the terms of the
+ * Common Development and Distribution License, Version 1.0 only
+ * (the "License"). You may not use this file except in compliance
+ * with the License.
+ *
+ * You can obtain a copy of the license at license/ESCIDOC.LICENSE
+ * or http://www.escidoc.de/license.
+ * See the License for the specific language governing permissions
+ * and limitations under the License.
+ *
+ * When distributing Covered Code, include this CDDL HEADER in each
+ * file and include the License file at license/ESCIDOC.LICENSE.
+ * If applicable, add the following below this CDDL HEADER, with the
+ * fields enclosed by brackets "[]" replaced with your own identifying
+ * information: Portions Copyright [yyyy] [name of copyright owner]
+ *
+ * CDDL HEADER END
+ */
+/*
+ * Copyright 2006-2007 Fachinformationszentrum Karlsruhe Gesellschaft
+ * für wissenschaftlich-technische Information mbH and Max-Planck-
+ * Gesellschaft zur Förderung der Wissenschaft e.V.
+ * All rights reserved. Use is subject to license terms.
+ */
+package de.mpg.imeji.presentation.user;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.Collection;
+
+import javax.annotation.PostConstruct;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+
+import org.apache.log4j.Logger;
+
+import de.mpg.imeji.logic.controller.UserGroupController;
+import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.vo.UserGroup;
+import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.UrlHelper;
+
+/**
+ * JSF Bean to browse {@link UserGroup}
+ * 
+ * @author saquet (initial creation)
+ * @author $Author$ (last modification)
+ * @version $Revision$ $LastChangedDate$
+ */
+@ManagedBean(name = "UserGroups")
+@ViewScoped
+public class UserGroupsBean implements Serializable
+{
+    private static final long serialVersionUID = -7449016567355739362L;
+    private Collection<UserGroup> userGroups;
+    @ManagedProperty(value = "#{SessionBean.user}")
+    private User sessionUser;
+    private String query;
+    private static Logger logger = Logger.getLogger(UserGroupsBean.class);
+
+    @PostConstruct
+    public void init()
+    {
+        String q = UrlHelper.getParameterValue("q");
+        query = q == null ? "" : q;
+        doSearch();
+    }
+
+    /**
+     * Trigger the search to users Groups
+     */
+    public void search()
+    {
+        Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
+        try
+        {
+            FacesContext.getCurrentInstance().getExternalContext()
+                    .redirect(nav.getApplicationUrl() + "usergroups?q=" + query);
+        }
+        catch (IOException e)
+        {
+            BeanHelper.error(e.getMessage());
+            logger.error(e);
+        }
+    }
+
+    /**
+     * Do the search
+     */
+    public void doSearch()
+    {
+        UserGroupController controller = new UserGroupController();
+        userGroups = controller.retrieveAll(query, sessionUser);
+    }
+
+    /**
+     * Remove a {@link UserGroup}
+     * 
+     * @param group
+     * @return
+     */
+    public String remove(UserGroup group)
+    {
+        if (group != null)
+        {
+            UserGroupController controller = new UserGroupController();
+            try
+            {
+                controller.delete(group, sessionUser);
+            }
+            catch (Exception e)
+            {
+                BeanHelper.error("Error removing group");
+                logger.error(e);
+                e.printStackTrace();
+            }
+        }
+        return "pretty:";
+    }
+
+    /**
+     * @return the userGroups
+     */
+    public Collection<UserGroup> getUserGroups()
+    {
+        return userGroups;
+    }
+
+    /**
+     * @param userGroups the userGroups to set
+     */
+    public void setUserGroups(Collection<UserGroup> userGroups)
+    {
+        this.userGroups = userGroups;
+    }
+
+    /**
+     * @return the sessionUser
+     */
+    public User getSessionUser()
+    {
+        return sessionUser;
+    }
+
+    /**
+     * @param sessionUser the sessionUser to set
+     */
+    public void setSessionUser(User sessionUser)
+    {
+        this.sessionUser = sessionUser;
+    }
+
+    /**
+     * @return the query
+     */
+    public String getQuery()
+    {
+        return query;
+    }
+
+    /**
+     * @param query the query to set
+     */
+    public void setQuery(String query)
+    {
+        this.query = query;
+    }
+}

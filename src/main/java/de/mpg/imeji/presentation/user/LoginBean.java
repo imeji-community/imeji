@@ -18,6 +18,7 @@ import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.history.Page;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
  * Bean for login features
@@ -74,14 +75,14 @@ public class LoginBean
             }
             else
             {
-                BeanHelper.error(sb.getMessage("error_log_in"));
-                BeanHelper.error(sb.getMessage("error_log_in_description"));
+                BeanHelper.error(sb.getMessage("error_log_in").replace("XXX_INSTANCE_NAME_XXX", PropertyReader.getProperty("imeji.instance.name")));
+                BeanHelper.error(sb.getMessage("error_log_in_description").replace("XXX_INSTANCE_NAME_XXX", PropertyReader.getProperty("imeji.instance.name")));
             }
         }
         catch (Exception e)
         {
-            BeanHelper.error(sb.getMessage("error_log_in"));
-            BeanHelper.error(sb.getMessage("error_log_in_description"));
+            BeanHelper.error(sb.getMessage("error_log_in").replace("XXX_INSTANCE_NAME_XXX", PropertyReader.getProperty("imeji.instance.name")));
+            BeanHelper.error(sb.getMessage("error_log_in_description").replace("XXX_INSTANCE_NAME_XXX", PropertyReader.getProperty("imeji.instance.name")));
             logger.error("Problem logging in User", e);
         }
         Page current = ((HistorySession)BeanHelper.getSessionBean(HistorySession.class)).getCurrentPage();

@@ -90,6 +90,7 @@ public class CollectionImagesBean extends ImagesBean
         sortMenu.add(new SelectItem(null, "--"));
         sortMenu.add(new SelectItem(SearchIndex.names.created, sb.getLabel("sort_img_date_created")));
         sortMenu.add(new SelectItem(SearchIndex.names.modified, sb.getLabel("sort_img_date_mod")));
+        sortMenu.add(new SelectItem(SearchIndex.names.filename, sb.getLabel("sort_img_filename")));
         setSortMenu(sortMenu);
     }
 

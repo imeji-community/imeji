@@ -104,17 +104,6 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>
     }
 
     /**
-     * Return the {@link Metadata} which has been used to initialize this {@link SuperMetadataBean} Not to use to save
-     * the {@link SuperMetadataBean} as a {@link Metadata} in the database. In this case use the asMetadata() method
-     * 
-     * @return
-     */
-    public Metadata getMetadata()
-    {
-        return metadata;
-    }
-
-    /**
      * Change the Id of the {@link Metadata} which will force the create a new {@link Metadata} resource in the database
      * 
      * @return a new {@link SuperMetadataBean} with the same values

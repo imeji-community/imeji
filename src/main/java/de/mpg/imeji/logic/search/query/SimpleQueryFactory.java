@@ -254,6 +254,10 @@ public class SimpleQueryFactory
                 return (item ? " . ?c" : " . ?s") + " <http://imeji.org/terms/container/metadata> ?title . ?title <"
                         + sortCriterion.getIndex().getNamespace() + "> ?sort0";
             }
+            else if (SearchIndex.names.filename.name().equals(sortCriterion.getIndex().getName()))
+            {
+            	return ". ?s <" + sortCriterion.getIndex().getNamespace() + "> ?sort0";
+            }
         }
         return "";
     }
@@ -426,7 +430,7 @@ public class SimpleQueryFactory
     }
 
     /**
-     * Escape the Apostroph in String
+     * Escape the Apostrophe in String
      * 
      * @param s
      * @return

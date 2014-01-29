@@ -78,67 +78,17 @@ public class SuperMetadataTree
         Map<String, SuperMetadataBean> map = new HashMap<String, SuperMetadataBean>();
         for (SuperMetadataBean smd : list)
         {
-            /* SLOW IMPLEMENTATION */
-            // if ((smd.getParent() == null && parent == null)
-            // || (smd.getParent() != null && parent != null && smd.getParent().asMetadata().getId()
-            // .compareTo(parent.asMetadata().getId()) == 0))
-            // {
-            // smd.setTreeIndex(index);
-            // map.put(smd.getTreeIndex(), smd);
-            // map.putAll(createMap(list, smd, addIndex(index, "0")));
-            // index = incrementIndex(index);
-            // }
-            /* FAST IMPLEMENTATION */
-            if (isRootMetadata(smd) || isChild(smd, parent))
+            if ((smd.getParent() == null && parent == null)
+                    || (smd.getParent() != null && parent != null && smd.getParent().asMetadata().getId()
+                            .compareTo(parent.asMetadata().getId()) == 0))
             {
                 smd.setTreeIndex(index);
                 map.put(smd.getTreeIndex(), smd);
-                map.putAll(createMap(removeFromList(list, smd), smd, addIndex(index, "0")));
+                map.putAll(createMap(list, smd, addIndex(index, "0")));
                 index = incrementIndex(index);
             }
         }
         return map;
-    }
-
-    /**
-     * True if the {@link SuperMetadataBean} is a root metadata
-     * 
-     * @param smb
-     * @return
-     */
-    private boolean isRootMetadata(SuperMetadataBean smb)
-    {
-        return smb.getParent() == null;
-    }
-
-    /**
-     * True if the {@link SuperMetadataBean} smb is child of parent
-     * 
-     * @param smb
-     * @param parent
-     * @return
-     */
-    private boolean isChild(SuperMetadataBean smb, SuperMetadataBean parent)
-    {
-        if (parent == null || smb.getParent() == null)
-            return false;
-        else
-            return smb.getParent().getMetadata().getId().compareTo(parent.getMetadata().getId()) == 0;
-    }
-
-    /**
-     * Remove the {@link SuperMetadataBean} smb from the {@link List}. A new list is returned, which allows to use this
-     * method within the for loop on the list elements
-     * 
-     * @param list
-     * @param smb
-     * @return
-     */
-    private List<SuperMetadataBean> removeFromList(List<SuperMetadataBean> list, SuperMetadataBean smb)
-    {
-        List<SuperMetadataBean> subList = new ArrayList<SuperMetadataBean>(list);
-        subList.remove(smb);
-        return subList;
     }
 
     /**
@@ -232,7 +182,7 @@ public class SuperMetadataTree
 
     /**
      * True if the index1 is a parent of the index2 (not necessary the direct parent):<br/>
-     * - 1 is parent of all index 1,....
+     *  - 1 is parent of all index 1,....
      * 
      * @param index1
      * @param index2
@@ -360,7 +310,7 @@ public class SuperMetadataTree
         // Find all candidates
         for (SuperMetadataBean md : list)
         {
-            if (child.getMetadata().getId().compareTo(md.getMetadata().getId()) == 0)
+            if (child.asMetadata().getId().compareTo(md.asMetadata().getId()) == 0)
                 found = true;
             if (child.getStatement().getParent().compareTo(md.getStatement().getId()) == 0)
                 candidates.add(md);

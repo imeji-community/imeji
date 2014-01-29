@@ -1,11 +1,41 @@
-<ui:composition template="templates/template.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core">			
-	<ui:define name="headline">
+<ui:composition template="templates/sub_template/template_metadata_mediaContainer.xhtml" 
+				xmlns="http://www.w3.org/1999/xhtml" 
+				xmlns:ui="http://java.sun.com/jsf/facelets" 
+				xmlns:h="http://java.sun.com/jsf/html" 
+				xmlns:f="http://java.sun.com/jsf/core">
+	
+	<ui:param name="currentMainMenu" value="album"/>
+	<ui:param name="metadataView" value="yes"/>
+	
+	<ui:param name="containerHeadline" value="#{lbl.album_information}"/>
+	<ui:param name="metadataBean" value="#{AlbumBean}"/>
+	<ui:param name="metadataContextBean" value="#{metadataBean.album}"/>
+	<ui:param name="headline" value="#{metadataContextBean.metadata.title}"/>
+	<ui:param name="navigationContextURL" value="#{Navigation.albumUrl}"/>
+	
+	
+	<ui:define name="actionsMenu">
+		<h:panelGroup layout="block" styleClass="imj_contentSubMenu">
+			<h:outputLink id="lnkViewHome" styleClass="imj_contentSubMenuItem" value="#{Navigation.albumUrl}#{AlbumBean.id}" rendered="#{AlbumBean.size > 0}">
+				<h:outputText value="#{lbl.album_home}"/>
+			</h:outputLink>
+		
+			<h:outputLink id="lnkViewCollectionAllImages" styleClass="imj_contentSubMenuItem" value="#{Navigation.albumUrl}#{AlbumBean.id}/#{Navigation.browsePath}?q=" rendered="#{AlbumBean.size > 0}">
+				<h:outputText value="#{lbl.view_images}"/>
+			</h:outputLink>
+			
+			<h:outputText value="#{lbl.album_metadata}" styleClass="imj_contentSubMenuItem imj_active"/>
+		</h:panelGroup>
+	</ui:define>
+	
+	
+	<ui:define name="headline_old">
 		<h1>
 			<h:outputText value="#{AlbumBean.album.metadata.title}"/> 
 		</h1>
 	</ui:define>	
 	
-	<ui:define name="contentMenu">
+	<ui:define name="contentMenu_old">
 	
 		<h:outputLink id="lnkViewHome" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumBean.id}" rendered="true">
 			<h:outputText value="#{lbl.album_home}"/>
@@ -23,7 +53,7 @@
 		
 	</ui:define>
 	
-	<ui:define name="mainContent">
+	<ui:define name="mainContent_old">
 		<h:panelGroup layout="block" styleClass="full_area0">
 			<h:panelGroup layout="block" styleClass="full_area0 fullItem">
 			

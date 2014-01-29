@@ -15,7 +15,14 @@
 		
 		<!-- AJAX Wrapper - START -->
 		<h:panelGroup layout="block" id="imj_ajaxWrapper">
-			<imjc:createNewMediaContainer formularContextBean="#{formularContextBean}" formularBean="#{formularBean}" headline="#{containerHeadline}"/>
+			
+			<ui:fragment rendered="#{SessionBean.user != null and metadataView != 'yes'}">
+				<imjc:mediaContainer_editMetadata formularContextBean="#{formularContextBean}" formularBean="#{formularBean}" headline="#{containerHeadline}"/>
+			</ui:fragment>
+			<ui:fragment rendered="#{metadataView == 'yes'}">
+				<imjc:mediaContainer_viewMetadata metadataContextBean="#{metadataContextBean}" headline="#{containerHeadline}" metadataBean="#{metadataBean}" navigationContextURL="#{navigationContextURL}"/>
+			</ui:fragment>
+			
 		</h:panelGroup>
 	</ui:define>
 </ui:composition>

@@ -204,14 +204,6 @@ input[type="checkbox"]  {
 }
 
 
-label, 
-.imj_metadataLabel, 
-.imj_infodataLabel, 
-.imj_admindataLabel {
-    cursor: pointer;
-}
-
-
 
 /* styles for imej startpage - Welcome.xhtml - wrapper
    =========================================================================  */ 
@@ -1179,6 +1171,9 @@ cut second ?
     margin-right: 1em;
     color: #6CAD2F;
 }
+.imj_contentSubMenuItem.imj_active {
+	color: #F0F0F0;
+}
 
 /* SubMenu - Sort by - Filter by */
 .imj_contentSubMenuItem span,
@@ -1602,17 +1597,23 @@ OLD:
 	margin: 1em 0;
 }
 
-.imj_metadataLabel, .imj_infodataLabel, .imj_admindataLabel {
-	font-weight: bold;
+label, .imj_metadataLabel, .imj_infodataLabel, .imj_admindataLabel {
 	display: inline-block;
 	min-width: 24%;
 	vertical-align: top;
+	cursor: pointer;
+}
+.imj_metadataLabel, .imj_infodataLabel, .imj_admindataLabel {
+	font-weight: bold;
 }
 
 .imj_metadataValue, .imj_infodataValue, .imj_admindataValue  {
 	display: inline-block;
 	margin-left: 1.0em;
 	max-width: 73.25%;
+}
+p.imj_metadataValue {
+	margin: 0 0 0 1em;
 }
 
 .imj_admindataValueCheckBox {
@@ -2033,7 +2034,7 @@ min-height: 6em;
 }
 
 /* * general button group definitions
-	used in: createNewMediaContainer.xhtml, SearchAdvanced.xhtml)
+	used in: mediaContainer_editMetadata.xhtml, SearchAdvanced.xhtml)
 	==================================================================================
    ================================================================================== */
 .imj_inlineButtonGroup {
@@ -2159,9 +2160,6 @@ min-height: 6em;
 	min-width: 0;
 	width: 24%;
 }
-.imj_bibliographicList .imj_bibliographicListItem .imj_informationContent .imj_metadataSet p.imj_metadataValue {
-	margin: 0 0 0 1em;
-}
 .imj_bibliographicList .imj_bibliographicListItem .imj_informationContent .imj_additionalInfoArea .imj_displaySwitchArea a {
 	cursor: pointer;
 }
@@ -2170,36 +2168,62 @@ min-height: 6em;
 	padding-top: 0.5em;
 }
 
-/* * create new container, e.g. album or collection
+/* * create new or edit container, e.g. album or collection
 	component (createNewContainer.xhtml)
    ==================================================
    ================================================== */
-.imj_createNewMediaContainer {
+.imj_mediaContainerEditMD,
+.imj_mediaContainerViewMD {
 	margin-bottom: 0.5em;
 	padding: 0 4%;
 	width: 91.75%;
 	border-top: 0.090909em solid #6CAD2F;
 }
-.imj_createNewMediaContainer .imj_headline {
+.imj_mediaContainerEditMD .imj_headline,
+.imj_mediaContainerViewMD .imj_headline {
 	width: 100%;
 }
-.imj_createNewMediaContainer .imj_headline h3 {
+.imj_mediaContainerEditMD .imj_headline h3,
+.imj_mediaContainerViewMD .imj_headline h3 {
 	font-size: 120%;
 	margin: 1% 0;
 }
-.imj_createNewMediaContainer textarea.imj_metadataValue,
-.imj_createNewMediaContainer input.imj_metadataValue {
+.imj_mediaContainerEditMD textarea.imj_metadataValue,
+.imj_mediaContainerEditMD input.imj_metadataValue {
 	width: 73.25%;
 }
-.imj_createNewMediaContainer .imj_authorMetadataSet {
+.imj_mediaContainerEditMD .imj_authorMetadataSet,
+.imj_mediaContainerViewMD .imj_authorMetadataSet  {
 	background-color: rgba(0,0,0,0.15);
 	margin-bottom: 0.36363636em;
 	padding: 0.5em 1%;
 }
-.imj_createNewMediaContainer .imj_sectionHeadline {
+.imj_mediaContainerEditMD .imj_sectionHeadline,
+.imj_mediaContainerViewMD .imj_sectionHeadline {
 	margin-bottom: 0.545454em;
 	font-size:110%; 
 	font-style:italic;
+}
+.imj_mediaContainerViewMD .imj_metadataLabel {
+	cursor: default;
+}
+.imj_mediaContainerViewMD .imj_statusIconArea {
+	vertical-align: top;
+}
+.imj_mediaContainerViewMD .imj_editMetadataButton {
+	margin-left: 1em;
+}
+
+table.imj_metadataAuthorList thead th {
+	font-weight: bold;
+}
+table.imj_metadataAuthorList th,
+table.imj_metadataAuthorList td {
+	padding-right: 0.75em;
+	vertical-align: top;
+}
+table.imj_metadataAuthorList tbody tr {
+	line-height: 200%;
 }
 
 /* * image / picture / media - stack - 

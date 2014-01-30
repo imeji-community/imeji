@@ -5,6 +5,7 @@
 				xmlns:f="http://java.sun.com/jsf/core">
 	
 	<ui:param name="currentMainMenu" value="album"/>
+	
 	<ui:param name="metadataView" value="yes"/>
 	
 	<ui:param name="containerHeadline" value="#{lbl.album_information}"/>
@@ -12,6 +13,7 @@
 	<ui:param name="metadataContextBean" value="#{metadataBean.album}"/>
 	<ui:param name="headline" value="#{metadataContextBean.metadata.title}"/>
 	<ui:param name="navigationContextURL" value="#{Navigation.albumUrl}"/>
+	
 	
 	
 	<ui:define name="actionsMenu">

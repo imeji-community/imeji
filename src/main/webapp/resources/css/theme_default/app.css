@@ -929,7 +929,7 @@ cut second ?
 
 .imj_simpleSearchButtonSubmit {
     height: 1.818em; /*1.7272em*/
-    margin-left: 0.455em; /*0.37em*/
+    margin-left: 0.455em; /*0.363636em*/
     padding: 0.091em 1em; /* 0.0909em 1em*/
     background-color: #6CAD2F;
     border-color: #6CAD2F;
@@ -1230,7 +1230,7 @@ cut second ?
   
     /*height: 0.9474em;
     max-height: 0.9474em;
-    margin: -0.11em 0 0 0.28em; */
+    margin: -0.11em 0 0 0.27272727em; */
 }
 
 /* ===[ Content - Sub Header Message Space ]===
@@ -1323,7 +1323,7 @@ OLD:
    ================================================== */
 
 /* prelistHeader - free_area0 small_marginLExcl * -- must be redefined in img_selectionInfoPanel and imj_breadcrumpHistory
-   hardcoded style - style="margin-right:0.36em; 
+   hardcoded style - style="margin-right:0.363636em; 
    in template_paginator_albums.xhtml and template_paginator_containers.xhtml  */
 
 .preListHeader {
@@ -1336,7 +1336,7 @@ OLD:
     border: 0;
 }
 
-/* element.style - hardcoded - margin-right: 0.36em;
+/* element.style - hardcoded - margin-right: 0.363636em;
  * div - free_area0 - small_marginLExcl 
  * template_paginator_albums.xhtml - template_paginator_containers.xhtml   */
 
@@ -1519,6 +1519,81 @@ OLD:
     background-color: #990000;
 }
 
+/* ===[ Content - EDIT + VIEW PROFILE OF METADATA ]===
+   ================================================================ */
+/* * metadataProfileLists (metadataProvile_view.xhtml) 
+   * metadataListMediaContainer (mediaContainer_viewMetadata.xhtml)
+   ================================================================ */
+.imj_metadataProfileList,
+.imj_metadataListMediaContainer {
+	width: 91.25%;
+	padding: 0 4%;
+}
+.imj_metadataProfileList .imj_listHeader,
+.imj_metadataListMediaContainer .imj_listHeader {
+	padding: 1% 0;
+}
+.imj_metadataProfileList .imj_listHeader .imj_listHeaderMenu,
+.imj_metadataListMediaContainer .imj_listHeader .imj_listHeaderMenu {
+	float: right;
+	display:inline-block;
+}
+.imj_metadataProfileList .imj_listHeader .imj_listHeaderMenu a,
+.imj_metadataListMediaContainer .imj_listHeader .imj_listHeaderMenu a {
+	margin: 0.363636em 0.27272727em 0.363636em;
+	padding: 0 0.363636em;
+}
+.imj_metadataProfileList .imj_listHeader .imj_headline,
+.imj_metadataListMediaContainer .imj_listHeader .imj_headline {
+	display: inline-block;
+	margin-right: 1em;
+	font-size: 125%;
+}
+.imj_metadataProfileList .imj_metadataProfileItem .imj_sectionHeadline,
+.imj_metadataListMediaContainer .imj_sectionHeadline {
+	width: 100%;
+	display: inline-block;
+	font-size: 110%;
+	font-style: italic;
+	
+	/* IE9 SVG, needs conditional override of 'filter' to 'none' */
+	background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzAwMDAwMCIgc3RvcC1vcGFjaXR5PSIwLjIiLz4KICAgIDxzdG9wIG9mZnNldD0iMSUiIHN0b3AtY29sb3I9IiMwMDAwMDAiIHN0b3Atb3BhY2l0eT0iMC4yIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjYzJSIgc3RvcC1jb2xvcj0iIzAwMDAwMCIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgPC9saW5lYXJHcmFkaWVudD4KICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMSIgaGVpZ2h0PSIxIiBmaWxsPSJ1cmwoI2dyYWQtdWNnZy1nZW5lcmF0ZWQpIiAvPgo8L3N2Zz4=);
+	background: -moz-linear-gradient(left,  rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.2) 1%, rgba(0,0,0,0) 63%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(0,0,0,0.2)), color-stop(1%,rgba(0,0,0,0.2)), color-stop(63%,rgba(0,0,0,0))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(left,  rgba(0,0,0,0.2) 0%,rgba(0,0,0,0.2) 1%,rgba(0,0,0,0) 63%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(left,  rgba(0,0,0,0.2) 0%,rgba(0,0,0,0.2) 1%,rgba(0,0,0,0) 63%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(left,  rgba(0,0,0,0.2) 0%,rgba(0,0,0,0.2) 1%,rgba(0,0,0,0) 63%); /* IE10+ */
+	background: linear-gradient(to right,  rgba(0,0,0,0.2) 0%,rgba(0,0,0,0.2) 1%,rgba(0,0,0,0) 63%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#33000000', endColorstr='#00000000',GradientType=1 ); /* IE6-8 */
+}
+.imj_metadataProfileItem {
+	margin-top: 0.545454em;
+}
+
+.imj_metadataListMediaContainer .imj_listBody .imj_statusIconArea {
+	vertical-align: top;
+}
+
+.imj_metadataListMediaContainer table.imj_metadataAuthorList thead th {
+	font-weight: bold;
+}
+.imj_metadataListMediaContainer table.imj_metadataAuthorList th,
+.imj_metadataListMediaContainer table.imj_metadataAuthorList td {
+	padding-right: 0.75em;
+	vertical-align: top;
+}
+.imj_metadataListMediaContainer table.imj_metadataAuthorList tbody tr {
+	line-height: 200%;
+}
+
+/* specific border definitions */
+#imj_ajaxWrapper > .imj_metadataListMediaContainer {
+	border-top: 0.090909em solid #6CAD2F;
+}
+.imj_metadataListMediaContainer + .imj_metadataProfileList {
+	border-top: 0.090909em dashed #6CAD2F;
+}
+
 
 /* ===[ Content - EDIT METADATA + ADMIN + USER ]===
    ================================================== */
@@ -1537,8 +1612,8 @@ OLD:
 }
 
 .imj_metadataList .imj_listHeader a {
-	margin: 0.37em 0.28em 0.36em;
-	padding: 0 0.37em;
+	margin: 0.363636em 0.27272727em 0.363636em;
+	padding: 0 0.363636em;
 	float: right;
 }
 
@@ -1572,14 +1647,14 @@ OLD:
 	
 }
 
- .imj_metadataSubPanelItem, .imj_adminSubPanelItem {
+.imj_metadataSubPanelItem, .imj_adminSubPanelItem {
 	font-weight: bold;
 	border-bottom: solid #BAB4B3 0.0909em;
- }
+}
  
-  .imj_metadataSubPanelItem a:hover  {
+.imj_metadataSubPanelItem a:hover  {
 	background-color: #6CAD2F;
- }
+}
  
 /*h3 class="xLarge_area0_p8 endline blockHeader"*/
  
@@ -1611,6 +1686,10 @@ label, .imj_metadataLabel, .imj_infodataLabel, .imj_admindataLabel {
 	display: inline-block;
 	margin-left: 1.0em;
 	max-width: 73.25%;
+}
+textarea.imj_metadataValue,
+input.imj_metadataValue {
+	width: 73.25%;
 }
 p.imj_metadataValue {
 	margin: 0 0 0 1em;
@@ -2172,59 +2251,30 @@ min-height: 6em;
 	component (createNewContainer.xhtml)
    ==================================================
    ================================================== */
-.imj_mediaContainerEditMD,
-.imj_mediaContainerViewMD {
+.imj_mediaContainerEditMD {
 	margin-bottom: 0.5em;
 	padding: 0 4%;
 	width: 91.75%;
 	border-top: 0.090909em solid #6CAD2F;
 }
-.imj_mediaContainerEditMD .imj_headline,
-.imj_mediaContainerViewMD .imj_headline {
+.imj_mediaContainerEditMD .imj_headline {
 	width: 100%;
 }
-.imj_mediaContainerEditMD .imj_headline h3,
-.imj_mediaContainerViewMD .imj_headline h3 {
+.imj_mediaContainerEditMD .imj_headline h3 {
 	font-size: 120%;
 	margin: 1% 0;
 }
-.imj_mediaContainerEditMD textarea.imj_metadataValue,
-.imj_mediaContainerEditMD input.imj_metadataValue {
-	width: 73.25%;
-}
-.imj_mediaContainerEditMD .imj_authorMetadataSet,
-.imj_mediaContainerViewMD .imj_authorMetadataSet  {
+.imj_mediaContainerEditMD .imj_authorMetadataSet {
 	background-color: rgba(0,0,0,0.15);
-	margin-bottom: 0.36363636em;
+	margin-bottom: 0.363636em;
 	padding: 0.5em 1%;
 }
-.imj_mediaContainerEditMD .imj_sectionHeadline,
-.imj_mediaContainerViewMD .imj_sectionHeadline {
+.imj_mediaContainerEditMD .imj_sectionHeadline {
 	margin-bottom: 0.545454em;
 	font-size:110%; 
 	font-style:italic;
 }
-.imj_mediaContainerViewMD .imj_metadataLabel {
-	cursor: default;
-}
-.imj_mediaContainerViewMD .imj_statusIconArea {
-	vertical-align: top;
-}
-.imj_mediaContainerViewMD .imj_editMetadataButton {
-	margin-left: 1em;
-}
 
-table.imj_metadataAuthorList thead th {
-	font-weight: bold;
-}
-table.imj_metadataAuthorList th,
-table.imj_metadataAuthorList td {
-	padding-right: 0.75em;
-	vertical-align: top;
-}
-table.imj_metadataAuthorList tbody tr {
-	line-height: 200%;
-}
 
 /* * image / picture / media - stack - 
 	component (bibliographicList.xhtml)

@@ -11,17 +11,19 @@
 	<ui:define name="mainContent">
 		
 		<!-- Breadcrumb - History -->
-		<ui:include src="../../include/History.xhtml"></ui:include>
+		<ui:include src="../../include/History.xhtml"/>
 		
 		<!-- AJAX Wrapper - START -->
 		<h:panelGroup layout="block" id="imj_ajaxWrapper">
 			
 			<ui:fragment rendered="#{SessionBean.user != null and metadataView != 'yes'}">
-				<imjc:mediaContainer_editMetadata formularContextBean="#{formularContextBean}" formularBean="#{formularBean}" headline="#{containerHeadline}"/>
+				<imjc:mediaContainer_editMetadata formularContextBean="#{metadataContextBean}" formularBean="#{metadataBean}" headline="#{containerHeadline}"/>
 			</ui:fragment>
 			<ui:fragment rendered="#{metadataView == 'yes'}">
-				<imjc:mediaContainer_viewMetadata metadataContextBean="#{metadataContextBean}" headline="#{containerHeadline}" metadataBean="#{metadataBean}" navigationContextURL="#{navigationContextURL}"/>
+				<imjc:mediaContainer_viewMetadata metadataContextBean="#{metadataContextBean}" metadataBean="#{metadataBean}" headline="#{containerHeadline}" navigationContextURL="#{navigationContextURL}"/>
 			</ui:fragment>
+			
+			<ui:insert name="metadataProfile"/>
 			
 		</h:panelGroup>
 	</ui:define>

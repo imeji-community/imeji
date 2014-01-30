@@ -13,17 +13,20 @@
 	</composite:interface>
 	
 	<composite:implementation>
-		
-		<div class="imj_mediaContainerViewMD">
-			<div class="imj_headline">
-				<h3>
+		<div class="imj_metadataListMediaContainer">
+			<div class="imj_listHeader">
+				<h3 class="imj_headline">
 					<h:outputText value="#{cc.attrs.headline}"/>
+				</h3>
+				
+				<div class="imj_listHeaderMenu">
+					<!-- EDIT -->
 					<h:outputLink value="#{cc.attrs.navigationContextURL}#{cc.attrs.metadataBean.id}/#{Navigation.editPath}?init=1" styleClass="imj_editMetadataButton" rendered="#{cc.attrs.metadataBean.editable and cc.attrs.metadataContextBean.status != 'WITHDRAWN'}">
 						<h:outputText value="#{lbl.edit}"/>
 					</h:outputLink>
-				</h3>
+				</div>
 			</div>
-			<div class="imj_descriptionArea">
+			<div class="imj_listBody">
 				
 				<!-- Status -->
 				<div class="imj_metadataSet">
@@ -79,7 +82,7 @@
 				
 				<!-- Authors -->
 				<div class="imj_metadataSet">
-					<label class="imj_metadataLabel" title="">
+					<label class="imj_metadataLabel">
 						<h:outputText value="#{lbl.authors}"/>
 						<span class="imj_noDisplay">: </span>
 					</label>

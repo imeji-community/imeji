@@ -19,8 +19,8 @@
 		</ui:fragment>
 		
 		<div class="imj_paginator">
-			<h:outputText value="#{cc.attrs.paginatorBean.urlParameters}" styleClass="imj_invisible"/>
-			<h:outputText value="#{cc.attrs.paginatorBean.initPaginator}" styleClass="imj_invisible"/>
+			<h:outputText value="#{cc.attrs.paginatorBean.urlParameters}" styleClass="imj_noDisplay"/>
+			<h:outputText value="#{cc.attrs.paginatorBean.initPaginator}" styleClass="imj_noDisplay"/>
 			
 		 	<div id="imj_rangeSelector" class="imj_rangeSelector">
 			 	<h:form>
@@ -34,7 +34,7 @@
 		 	
 		 	
 		 	<div class="imj_singlePageBrowser">
-		 		<label id="lblPage" class="imj_invisible">Page: </label>
+		 		<label id="lblPage" class="imj_noDisplay">Page: </label>
 		 		
 		 		<!-- ajax mode -->
 		 		<h:commandButton id="btPartListSizeAjax" onclick="setContentLoadingStatus();"  styleClass="imj_buttonBrowseToFirst_15" value=" " title="#{lbl.paginator_results} 1 - #{cc.attrs.paginatorBean.partListSize}" action="#{cc.attrs.paginatorBean.goToFirstPage}" rendered="#{cc.attrs.paginatorBean.ajaxMode and cc.attrs.paginatorBean.currentPageNumber != 1}">

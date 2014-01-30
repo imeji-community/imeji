@@ -87,7 +87,19 @@ public class EditCollectionBean extends CollectionBean
         }
         return "";
     }
-
+    
+    /**
+     * Return the link for the Cancel button
+     * 
+     * @return
+     */
+    public String getCancel()
+    {
+        Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
+        
+        return nav.getCollectionUrl() + ObjectHelper.getId(getCollection().getId()) + "/" + nav.getInfosPath() + "?init=1";
+    }
+    
     @Override
     protected String getNavigationString()
     {

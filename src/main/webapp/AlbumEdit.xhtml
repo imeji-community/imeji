@@ -1,14 +1,13 @@
-<ui:composition template="templates/template_album_formular.xhtml"
+<ui:composition template="templates/sub_template/template_metadata_mediaContainer.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
-	<ui:param name="headline" value="#{lbl.edit}" />
-	<ui:param name="FormularBean" value="#{AlbumBean}" />
+	
+	<ui:param name="metadataBean" value="#{AlbumBean}"/>
+	<ui:param name="metadataContextBean" value="#{metadataBean.album}"/>
+	<ui:param name="headline" value="#{lbl.edit}: #{metadataContextBean.metadata.title}"/>
+	<ui:param name="currentMainMenu" value="album"/>
+	<ui:param name="containerHeadline" value="#{lbl.album_information}"/>
+	
 </ui:composition>
-
-
-
-
-
-

@@ -1,10 +1,13 @@
-<ui:composition template="templates/template_collection_formular.xhtml"  
+<ui:composition template="templates/sub_template/template_metadata_mediaContainer.xhtml"  
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
-		<ui:param name="FormularBean" value="#{EditCollectionBean}" />
-		<ui:param name="headline" value="#{lbl.edit} #{EditCollectionBean.collection.metadata.title}"/>
-		<ui:define name="contentMenu">
-		</ui:define>
+	
+	<ui:param name="metadataBean" value="#{EditCollectionBean}"/>
+	<ui:param name="metadataContextBean" value="#{metadataBean.collection}"/>
+	<ui:param name="headline" value="#{lbl.edit}: #{metadataContextBean.metadata.title}"/>
+	<ui:param name="currentMainMenu" value="collection"/>
+	<ui:param name="containerHeadline" value="#{lbl.collection_info}"/>
+	
 </ui:composition>

@@ -2404,7 +2404,8 @@ min-height: 6em;
  * =====================*/
 .imj_shareForm,
 .imj_legalPage,
-.imj_aboutPage {
+.imj_aboutPage,
+.imj_helpPage {
 	width: 91.25%;
 	padding: 1% 4%;
 	border-top: 0.090909em solid #6CAD2F;

@@ -2397,6 +2397,18 @@ min-height: 6em;
     line-height: 130%;
 }
 
+/* === [ Small Content Pages ]===
+ *	Share.xhtml
+ *  Legal.xhtml
+ *  About.xhtml
+ * =====================*/
+.imj_shareForm,
+.imj_legalPage,
+.imj_aboutPage {
+	width: 91.25%;
+	padding: 1% 4%;
+	border-top: 0.090909em solid #6CAD2F;
+}
 
 /* ===[ Admin Pages ]===
 	UserAdministrationPage.xhtml

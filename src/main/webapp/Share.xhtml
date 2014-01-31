@@ -1,14 +1,54 @@
-<ui:composition template="templates/template.xhtml"
+<ui:composition template="templates/template_site.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
-	<ui:param name="headline"
-		value="#{lbl.share} #{ShareBean.container.metadata.title}" />
+	
+	<ui:param name="headline" value="#{lbl.share} #{ShareBean.container.metadata.title}" />
+	
 	<ui:define name="init">
 		<h:outputText value="#{ShareBean.init}" />
 	</ui:define>
+	
 	<ui:define name="mainContent">
+		
+		<ui:include src="./include/History.xhtml"/>
+		
+		<h:panelGroup layout="block" id="imj_ajaxWrapper" class="imj_shareForm">
+			<h:form id="shareForm">
+				<div class="imj_emailInput">
+					<div class="imj_metadataSet">
+						<h:outputLabel for="shareForm:emails" value="#{lbl.share_email}" styleClass="imj_metadataLabel"/>
+						<h:inputTextarea id="emails" value="#{ShareBean.email}" class="imj_metadataValue"/>
+					</div>
+					<div class="imj_metadataSet">
+						<h:outputLabel for="shareForm:grantsMenu" styleClass="imj_metadataLabel" value="#{lbl.share_as}"/>
+						<div class="imj_metadataValue">
+							<h:selectOneMenu id="grantsMenu" value="#{ShareBean.selectedGrant}">
+								<f:selectItems value="#{ShareBean.grantsMenu}"/>
+							</h:selectOneMenu>
+						</div>
+					</div>
+				</div>
+				
+				<div class="imj_submitPanel">
+					<h:outputLink value="#{ShareBean.containerHome}" styleClass="imj_cancelButton" title="#{lbl.cancel}">
+						<h:outputText value="#{lbl.cancel}"/>
+					</h:outputLink>
+					<h:commandButton action="#{ShareBean.share}" value="#{lbl.album_share}" styleClass="imj_submitButton"
+						onclick="if (confirm('Do you really want to share the album (An email will be sent to the user)')) return true; return false;"
+						rendered="#{ShareBean.album}"/>
+					<h:commandButton action="#{ShareBean.share}" value="#{lbl.collection_share}" styleClass="imj_submitButton"
+						onclick="if (confirm('Do you really want to share the collection (An email will be sent to the user)')) return true; return false;"
+						rendered="#{!ShareBean.album}"/>
+				</div>
+			</h:form>
+		</h:panelGroup>
+		
+	</ui:define>
+	
+	
+	<ui:define name="mainContent_old">
 		<h:panelGroup layout="block" styleClass="full_area0 itemList"
 			style="border-bottom-width:0 !important;">
 			<ui:include src="./include/History.xhtml"></ui:include>

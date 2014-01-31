@@ -1,8 +1,10 @@
 <ui:composition template="templates/sub_template/template_metadata_mediaContainer.xhtml" 
-				xmlns="http://www.w3.org/1999/xhtml" 
-				xmlns:ui="http://java.sun.com/jsf/facelets" 
-				xmlns:h="http://java.sun.com/jsf/html" 
-				xmlns:f="http://java.sun.com/jsf/core">
+	xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:imjc="http://java.sun.com/jsf/composite/components"
+	xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs">
 	
 	<ui:param name="currentMainMenu" value="album"/>
 	
@@ -27,6 +29,29 @@
 			</h:outputLink>
 			
 			<h:outputText value="#{lbl.album_metadata}" styleClass="imj_contentSubMenuItem imj_active"/>
+			
+			<h:outputLink styleClass="imj_contentSubMenuItem" value="#{Navigation.shareUrl}?uri=#{AlbumBean.album.id}" rendered="#{AlbumBean.album.status=='PENDING' and AlbumBean.admin}">
+				<h:outputText value="#{lbl.album_share}"/>
+			</h:outputLink>
+			
+			<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('release-item-dialog');" rendered="#{AlbumBean.editable and AlbumBean.album.status=='PENDING' and AlbumBean.size > 0}">
+				<h:outputText value="#{lbl.release}"/>
+			</h:outputLink>
+			
+			<h:outputLink id="lnkWithdrawCollection" styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('item:dialDiscardContainer:dialogWithdraw');" rendered="#{AlbumBean.editable and AlbumBean.album.status=='RELEASED'}">
+				<h:outputText value="#{lbl.withdraw}"/>
+			</h:outputLink>
+			
+			<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('delete-item-dialog');" rendered="#{AlbumBean.deletable}">
+				<h:outputText value="#{lbl.delete}"/>
+			</h:outputLink>
 		</h:panelGroup>
+		
+	</ui:define>
+	
+	<ui:define name="modalDialogs_from_site">
+		<dialog:confirmationDialog bean="#{AlbumBean.album}" submitAction="release" confirmationText="#{msg.confirmation_release_album}?" submitLabel="#{lbl.release}" dialogId="release-item-dialog" rendered="#{AlbumBean.editable and AlbumBean.album.status=='PENDING' and AlbumBean.size > 0}"/>
+		<dialog:confirmationDialog bean="#{AlbumBean.album}" submitAction="delete" confirmationText="#{msg.confirmation_delete_album}" submitLabel="#{lbl.delete}" dialogId="delete-item-dialog" rendered="#{AlbumBean.deletable}"/>
+		<imjc:DiscardContainer id="dialDiscardContainer" bean="#{AlbumBean.album}" discardComment="#{AlbumBean.album.discardComment}" index="item" rendered="#{AlbumBean.editable and AlbumBean.album.status=='RELEASED'}"/>
 	</ui:define>
 </ui:composition>

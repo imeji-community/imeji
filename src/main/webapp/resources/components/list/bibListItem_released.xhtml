@@ -3,15 +3,20 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:composite="http://java.sun.com/jsf/composite"
-	xmlns:imjc="http://java.sun.com/jsf/composite/components">
+	xmlns:imjc="http://java.sun.com/jsf/composite/components"
+	xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs">
 	
 	<composite:interface>
 		<composite:attribute name="itemClass" required="true"/>
 		<composite:attribute name="item" required="true"/>
+		<composite:attribute name="itemIndex" required="true"/>
 		<composite:attribute name="metadataNavigationURL" required="true"/>
+		<composite:attribute name="withdrawConfirmationText" required="true"/>
 	</composite:interface>
 	
 	<composite:implementation>
+		<ui:param name="withdrawID" value="listItem-#{cc.attrs.itemIndex}-dialDiscardContainer-dialogWithdraw"/>
+		
 		<li class="#{cc.attrs.itemClass}">
 			<div class="imj_previewArea">
 				<div class="imj_previewImage imj_imageStack">
@@ -43,10 +48,10 @@
 								</li>
 								<ui:fragment rendered="#{cc.attrs.item.editable and cc.attrs.item.status == 'RELEASED'}">
 									<li>
-										<h:outputLink id="lnkWithdrawCollection" value="#" onclick="openDialog('list:#{index.index}:dialDiscardContainer:dialogWithdraw');">
+										<h:outputLink id="lnkWithdrawCollection" value="#" onclick="openDialog('#{withdrawID}');">
 											<h:outputText value="#{lbl.withdraw}"/>
 										</h:outputLink>
-										<imjc:DiscardContainer id="dialDiscardContainer" bean="#{container}" discardComment="#{cc.attrs.item.discardComment}" index="#{index.index}"/>
+										<dialog:confirmationReasonedDialog submitAction="withdraw" bean="#{cc.attrs.item}" confirmationText="#{cc.attrs.withdrawConfirmationText}" submitLabel="#{lbl.withdraw}" dialogId="#{withdrawID}"/>
 									</li>
 								</ui:fragment>
 							</ul>

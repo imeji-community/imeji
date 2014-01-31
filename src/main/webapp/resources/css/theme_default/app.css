@@ -2626,9 +2626,12 @@ a.imj_editButton {
 .imj_modalDialogBox .imj_submitPanel {
 	display: block;
 }
-
+.imj_modalDialogBox .imj_confirmationReasonTextarea label {
+	display: block;
+}
 .imj_modalDialogBox .imj_dialogReasonText {
 	width: 50em;
+	resize: vertical;
 }
 
 .imj_modalDialogBox .imj_confirmationText p {

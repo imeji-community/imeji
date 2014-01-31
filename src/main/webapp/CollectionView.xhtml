@@ -8,7 +8,6 @@
 	<ui:param name="currentMainMenu" value="collection"/>
 	
 	<ui:param name="metadataView" value="yes"/>
-	<ui:param name="metadataProfileHeadline" value="#{lbl.collection_profile}"/>
 	
 	<ui:param name="containerHeadline" value="#{lbl.collection_basics}"/>
 	<ui:param name="metadataBean" value="#{ViewCollectionBean}"/>
@@ -31,17 +30,18 @@
 			<h:outputText value="#{lbl.collection_metadata}" styleClass="imj_contentSubMenuItem imj_active"/>
 			
 			<h:outputLink id="lnkUploadImages" styleClass="imj_contentSubMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.uploadPath}?init=1" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status != 'WITHDRAWN'}">
-				<h:outputText value="#{lbl.upload_images}"></h:outputText>
+				<h:outputText value="#{lbl.upload_images}"/>
 			</h:outputLink>
 			
 			<h:outputLink id="lnkIngest" styleClass="imj_contentSubMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/ingest?init=1" rendered="#{AuthorizationBean.admin}">
-				<h:outputText value="#{lbl.ingest}" />
+				<h:outputText value="#{lbl.ingest}"/>
 			</h:outputLink>
+			
 		</h:panelGroup>
 	</ui:define>
 			
 	<ui:define name="metadataProfile">
-		<imjc:metadataProfile_view headline="#{metadataProfileHeadline}" metadataBean="#{metadataBean}" metadataContextBean="#{metadataContextBean}"/>
+		<imjc:metadataProfile_view headline="#{lbl.collection_profile}" metadataBean="#{metadataBean}" metadataContextBean="#{metadataContextBean}"/>
 	</ui:define>		
 			
 			

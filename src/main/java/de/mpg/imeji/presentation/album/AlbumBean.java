@@ -24,6 +24,7 @@ import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
+import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Organization;
@@ -32,6 +33,7 @@ import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.ContainerBean;
 import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.collection.CollectionBean;
 import de.mpg.imeji.presentation.image.ThumbnailBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -108,7 +110,7 @@ public class AlbumBean extends ContainerBean
             }
             catch (Exception e)
             {
-                logger.error("Erro loading thumbnail of album", e);
+                logger.error("Error loading thumbnail of album", e);
             }
         }
     }
@@ -310,7 +312,10 @@ public class AlbumBean extends ContainerBean
      */
     public void discardCommentListener(ValueChangeEvent event)
     {
-        album.setDiscardComment(event.getNewValue().toString());
+        if (event.getNewValue() != null)
+        {
+            album.setDiscardComment(event.getNewValue().toString());
+        }
     }
 
     /**
@@ -632,7 +637,7 @@ public class AlbumBean extends ContainerBean
     }
 
     /**
-     * Withdraw an {@link Album}
+     * Discard the {@link AlbumImeji} of this {@link Album}
      * 
      * @return
      * @throws Exception
@@ -852,4 +857,13 @@ public class AlbumBean extends ContainerBean
     {
     	return this.getContainer().getStatus();
     }
+
+	public String getDiscardComment() 
+	{
+		return this.getContainer().getDiscardComment();
+	}
+	public void setDiscardComment(String comment)
+	{
+		this.getContainer().setDiscardComment(comment);
+	}
 }

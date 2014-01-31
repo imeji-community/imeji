@@ -9,6 +9,7 @@
 		<composite:attribute name="mediaList"/>
 		<composite:attribute name="releaseItemConfirmationText"/>
 		<composite:attribute name="deleteItemConfirmationText"/>
+		<composite:attribute name="withdrawItemConfirmationText"/>
 		<composite:attribute name="globalDeleteDialogId"/>
 		<composite:attribute name="isActivatable"/>
 		<composite:attribute name="globalDeleteLinkText"/>
@@ -26,10 +27,10 @@
 				<ul>
 					<ui:repeat var="container" value="#{cc.attrs.mediaList.currentPartList}" id="list" rows="0"  varStatus="index">
 						<ui:fragment rendered="#{container.status != 'RELEASED'}">
-							<list:bibListItem_draft itemClass="imj_bibliographicListItem" item="#{container}" deleteItemConfirmationText="#{cc.attrs.deleteItemConfirmationText}" releaseItemConfirmationText="#{cc.attrs.releaseItemConfirmationText}" isActivatable="#{cc.attrs.isActivatable}" metadataNavigationURL="#{cc.attrs.metadataNavigationURL}"/>
+							<list:bibListItem_draft itemClass="imj_bibliographicListItem" item="#{container}" itemIndex="#{index.index}" deleteItemConfirmationText="#{cc.attrs.deleteItemConfirmationText}" releaseItemConfirmationText="#{cc.attrs.releaseItemConfirmationText}" isActivatable="#{cc.attrs.isActivatable}" metadataNavigationURL="#{cc.attrs.metadataNavigationURL}" withdrawConfirmationText="#{cc.attrs.withdrawItemConfirmationText}"/>
 						</ui:fragment>
 						<ui:fragment rendered="#{container.status == 'RELEASED'}">
-							<list:bibListItem_released itemClass="imj_bibliographicListItem" item="#{container}" metadataNavigationURL="#{cc.attrs.metadataNavigationURL}"/>
+							<list:bibListItem_released itemClass="imj_bibliographicListItem" item="#{container}" itemIndex="#{index.index}" metadataNavigationURL="#{cc.attrs.metadataNavigationURL}" withdrawConfirmationText="#{cc.attrs.withdrawItemConfirmationText}"/>
 						</ui:fragment>
 					</ui:repeat>
 				</ul>

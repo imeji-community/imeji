@@ -44,49 +44,5 @@
 				</div>
 			</h:form>
 		</h:panelGroup>
-		
-	</ui:define>
-	
-	
-	<ui:define name="mainContent_old">
-		<h:panelGroup layout="block" styleClass="full_area0 itemList"
-			style="border-bottom-width:0 !important;">
-			<ui:include src="./include/History.xhtml"></ui:include>
-		</h:panelGroup>
-		<div class="full_area0_p8 small_marginLExcl">
-			<h:form id="shareForm">
-				<div class="full_area0_p0">
-					<h:outputLabel for="shareForm:emails" styleClass="full_area0"
-						value="#{lbl.share_email}" />
-					<div class="full_area0">
-						<h:inputTextarea id="emails" styleClass="huge_area0_p0 selected"
-							value="#{ShareBean.email}" />
-						<h:outputText styleClass="tiny_marginLExcl medium_area0_p8"
-							value="#{lbl.share_as}" />
-						<h:selectOneMenu id="grantsMenu"
-							value="#{ShareBean.selectedGrant}" styleClass="huge_area0">
-							<f:selectItems value="#{ShareBean.grantsMenu}" />
-						</h:selectOneMenu>
-					</div>
-				</div>
-				<div class="full_area0_p8"></div>
-				<div class="huge_area0_p0">
-					<h:outputLink value="#{ShareBean.containerHome}"
-						styleClass="free_area1_p8 cancelButton"
-						title="#{lbl.back_to_home}">
-						<h:outputText value="#{lbl.cancel}" />
-					</h:outputLink>
-					<h:commandButton action="#{ShareBean.share}"
-						value="#{lbl.album_share}" styleClass="free_area1_p8 activeButton"
-						onclick="if (confirm('Do you really want to share the collection (An email will be sent to the user)')) return true; return false;"
-						rendered="#{ShareBean.album}" />
-					<h:commandButton action="#{ShareBean.share}"
-						value="#{lbl.collection_share}"
-						styleClass="free_area1_p8 activeButton"
-						onclick="if (confirm('Do you really want to share the collection (An email will be sent to the user)')) return true; return false;"
-						rendered="#{!ShareBean.album}" />
-				</div>
-			</h:form>
-		</div>
 	</ui:define>
 </ui:composition>

@@ -2275,6 +2275,34 @@ min-height: 6em;
 	font-style:italic;
 }
 
+/* === Upload Page ===
+ * Upload.xhtml
+ */
+.imj_upload {
+	width: 91.25%;
+	padding: 1% 4%;
+	border-top: 0.090909em solid #6CAD2F;
+}
+.imj_upload .imj_headline {
+	font-size: 200%;
+}
+.imj_upload .imj_sectionHeadline {
+	font-size: 110%;
+}
+.imj_upload .imj_optionSet {
+	margin-bottom: 1em;
+}
+.imj_upload .imj_optionSet .imj_optionCheckbox {
+	margin-right: 0.272727em;
+}
+.imj_upload .imj_subHeaderMessageSpace {
+	width: 100%;
+}
+.imj_upload .imj_uploadMessageSpace .imj_fileErrorMessageArea,
+.imj_upload .imj_uploadMessageSpace .imj_fileSuccessMessageArea {
+	width: 44%;
+	padding: 1% 2.5%;
+}
 
 /* * image / picture / media - stack - 
 	component (bibliographicList.xhtml)
@@ -2401,6 +2429,7 @@ min-height: 6em;
  *	Share.xhtml
  *  Legal.xhtml
  *  About.xhtml
+ *  Help.xhtml
  * =====================*/
 .imj_shareForm,
 .imj_legalPage,

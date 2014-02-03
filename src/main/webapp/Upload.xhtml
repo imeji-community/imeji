@@ -5,6 +5,7 @@
 	xmlns:f="http://java.sun.com/jsf/core">
 	
 	<ui:param name="headline" value="#{UploadBean.collection.metadata.title}"/>
+	<ui:param name="currentMainMenu" value="collection"/>
 	
 	<ui:define name="actionsMenu">
 		<h:panelGroup layout="block" styleClass="imj_contentSubMenu">
@@ -93,9 +94,9 @@
 					<div id="uploader" class="imj_uploadDropArea">
 						Your browser doesn't support native upload!<br /> 
 						Please use HTML5 compatible browser (Firefox 4.x, Safari 4, Chrome) or download following tools:<br /> 
-						<a href="http://www.microsoft.com/germany/silverlight/downloads.aspx" target="_blank"> Download Siverlight </a> 
+						<a href="http://www.microsoft.com/germany/silverlight/downloads.aspx" target="_blank">Download Siverlight</a> 
 						<h:outputText value=" #{lbl.or_small} "/> 
-						<a href="http://get.adobe.com/de/flashplayer/download/" target="_blank"> Download Flash </a>
+						<a href="http://get.adobe.com/de/flashplayer/download/" target="_blank">Download Flash</a>
 					</div>
 					
 					<div class="imj_uploadUrlReference">

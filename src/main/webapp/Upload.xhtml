@@ -20,7 +20,7 @@
 				<h:outputText value="#{lbl.collection_metadata}"/>
 			</h:outputLink>
 			
-			<h:outputText styleClass="imj_contentSubMenuItem" value="#{lbl.upload_images}"/>
+			<h:outputText styleClass="imj_contentSubMenuItem imj_active" value="#{lbl.upload_images}"/>
 			
 			<h:outputLink id="lnkUploadImages" styleClass="imj_contentSubMenuItem" value="#{Navigation.collectionUrl}#{UploadBean.id}/ingest?init=1" rendered="#{AuthorizationBean.admin}">
 				<h:outputText value="#{lbl.ingest}"/>
@@ -89,26 +89,29 @@
 					</h2>
 				</div>
 				
-				<div id="uploader" class="imj_uploadDropArea">
-					Your browser doens't support native upload!<br /> 
-					Please use HTML5 compatible browser (Firefox 4.x, Safari 4, Chrome) or download following tools:<br /> 
-					<a href="http://www.microsoft.com/germany/silverlight/downloads.aspx" target="_blank"> Download Siverlight </a> 
-					<br /> or <br />
-					<a href="http://get.adobe.com/de/flashplayer/download/" target="_blank"> Download Flash </a>
+				<div class="imj_uploadInputWrapper">
+					<div id="uploader" class="imj_uploadDropArea">
+						Your browser doens't support native upload!<br /> 
+						Please use HTML5 compatible browser (Firefox 4.x, Safari 4, Chrome) or download following tools:<br /> 
+						<a href="http://www.microsoft.com/germany/silverlight/downloads.aspx" target="_blank"> Download Siverlight </a> 
+						<br /> or <br />
+						<a href="http://get.adobe.com/de/flashplayer/download/" target="_blank"> Download Flash </a>
+					</div>
+					
+					<div class="imj_uploadUrlReference">
+						<h:form>
+							<h:outputText value="#{lbl.or_big}"/>
+							<h:outputLabel value="#{lbl.upload_from_link}" for="uploadInputText"/>
+							<h:inputText value="#{UploadBean.externalUrl}" id="uploadInputText"/>
+						
+							<div class="imj_submitPanel">
+								<h:commandLink value="#{lbl.upload_start}" action="#{UploadBean.uploadFromLink}" styleClass="imj_submitButton" onclick="openDialog('dialogWait');"/>
+							</div>
+						</h:form>
+					</div>
 				</div>
 				
-				<div class="imj_uploadUrlReference">
-					<h:form>
-						<h:outputText value="#{lbl.or_big}"/>
-						<h:outputLabel value="#{lbl.upload_from_link}" for="uploadInputText"/>
-						<h:inputText value="#{UploadBean.externalUrl}" id="uploadInputText"/>
-					
-						<div class="imj_submitPanel">
-							<h:commandLink value="#{lbl.upload_start}" action="#{UploadBean.uploadFromLink}" styleClass="imj_submitButton" onclick="openDialog('dialogWait');"/>
-						</div>
-					</h:form>
-				</div>
-			
+				
 				<div class="imj_uploadOptionsArea">
 					
 					<h3 class="imj_sectionHeadline">
@@ -139,32 +142,37 @@
 					</h:form>
 				</div>
 				
-				<div class="imj_uploadMessageSpace">
-					<h:panelGroup styleClass="imj_fileErrorMessageArea" rendered="#{UploadBean.fNum > 0}">
-						<h3 class="imj_sectionHeadline">
-							<h:outputText value="#{UploadBean.fNum} #{msg.error_upload}:"/>
-						</h3>
-						<ul class="imj_messageList">
-							<ui:repeat id="fFile" var="fFile" value="#{UploadBean.fFiles}">
-								<li class="imj_messageError">
-									<h:outputText value="#{fFile}"/>
-								</li>
-							</ui:repeat>
-						</ul>
-					</h:panelGroup>
-					<h:panelGroup styleClass="imj_fileSuccessMessageArea" rendered="#{UploadBean.sNum > 0}">
-						<h3 class="imj_sectionHeadline">
-							<h:outputText value="#{UploadBean.sNum} #{msg.success_upload}:" />
-						</h3>
-						<ul class="imj_messageList">
-							<ui:repeat id="sFile" var="sFile" value="#{UploadBean.sFiles}">
-								<li class="imj_messageStatus">
-									<h:outputText value="#{sFile}"/>
-								</li>
-							</ui:repeat>
-						</ul>
-					</h:panelGroup>
-				</div>
+				<ui:fragment rendered="#{UploadBean.fNum > 0 or UploadBean.sNum > 0}">
+					<div class="imj_uploadMessageSpace">
+						<h2 class="imj_headline">
+							<h:outputText value="#{lbl.info_lblMessageHeader}"/>
+						</h2>
+						<h:panelGroup layout="block" styleClass="imj_fileErrorMessageArea" rendered="#{UploadBean.fNum > 0}">
+							<h3 class="imj_sectionHeadline">
+								<h:outputText value="#{UploadBean.fNum} #{msg.error_upload}:"/>
+							</h3>
+							<ol class="imj_messageList">
+								<ui:repeat id="fFile" var="fFile" value="#{UploadBean.fFiles}">
+									<li class="imj_messageError">
+										<h:outputText value="#{fFile}"/>
+									</li>
+								</ui:repeat>
+							</ol>
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="imj_fileSuccessMessageArea" rendered="#{UploadBean.sNum > 0}">
+							<h3 class="imj_sectionHeadline">
+								<h:outputText value="#{UploadBean.sNum} #{msg.success_upload}:" />
+							</h3>
+							<ol class="imj_messageList">
+								<ui:repeat id="sFile" var="sFile" value="#{UploadBean.sFiles}">
+									<li class="imj_messageInfo">
+										<h:outputText value="#{sFile}"/>
+									</li>
+								</ui:repeat>
+							</ol>
+						</h:panelGroup>
+					</div>
+				</ui:fragment>
 			</h:panelGroup>
 		</h:panelGroup>
 	</ui:define>

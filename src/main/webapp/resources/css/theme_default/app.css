@@ -2231,6 +2231,10 @@ min-height: 6em;
 	font-size: 120%;
 	line-height: 145%;
 }
+.imj_bibliographicList .imj_bibliographicListItem .imj_itemHeadline .imj_messageWarn {
+	padding: 0 1%; 
+	margin-right:0.5454em;
+}
 .imj_bibliographicList .imj_bibliographicListItem .imj_metadataLabel {
 	font-weight: normal;
 }
@@ -2313,6 +2317,25 @@ min-height: 6em;
 	margin-bottom: 0.545454em;
 }
 
+/* === Ingest Page ===
+ * Ingest.xhtml
+ * ============================================ */
+.imj_ingestWrapper {
+	width: 91.25%;
+	padding: 0 4% 2em 4%;
+	border-top: 0.090909em solid #6CAD2F;
+}
+.imj_uploadDropArea + .imj_headline {
+	border-top: 0.090909em dashed #6CAD2F;
+	border-bottom: 0.090909em dashed #6CAD2F;
+	margin: 2em 0 1em 0;
+}
+.imj_ingestMessageArea {
+	width: 100%;
+	border-bottom: 0.090909em solid #6CAD2F;
+	margin-bottom: 3em;
+}
+
 /* === Upload Page ===
  * Upload.xhtml
  * ============================================ */
@@ -2364,31 +2387,31 @@ min-height: 6em;
 	margin-bottom: 1em;
 }
 
-.imj_uploadMessageSpace {
+.imj_uploadMessageArea {
 	width: 100%;
 	margin-top: 4em;
 }
-.imj_uploadMessageSpace .imj_fileErrorMessageArea,
-.imj_uploadMessageSpace .imj_fileSuccessMessageArea {
+.imj_uploadMessageArea .imj_fileErrorMessageArea,
+.imj_uploadMessageArea .imj_fileSuccessMessageArea {
 	width: 48%;
 	padding: 1% 0.8%;
 	display: inline-block;
 	max-height: 17em;
 	overflow: auto;
 }
-.imj_uploadMessageSpace .imj_fileErrorMessageArea .imj_messageList,
-.imj_uploadMessageSpace .imj_fileSuccessMessageArea .imj_messageList {
+.imj_uploadMessageArea .imj_fileErrorMessageArea .imj_messageList,
+.imj_uploadMessageArea .imj_fileSuccessMessageArea .imj_messageList {
 	width: 84%;
 	max-height: 21em;
 	padding: 0 0 0 15.25%;
 	list-style: decimal-leading-zero;
 	overflow: auto;
 }
-.imj_uploadMessageSpace .imj_fileErrorMessageArea {
+.imj_uploadMessageArea .imj_fileErrorMessageArea {
 	background-color: #757575; 
 	background-color: rgba(255, 255, 255, 0.33);
 }
-.imj_uploadMessageSpace .imj_fileSuccessMessageArea {
+.imj_uploadMessageArea .imj_fileSuccessMessageArea {
 	background-color: #272727;
 	background-color: rgba(0,0,0, 0.2);
 }
@@ -2525,7 +2548,7 @@ min-height: 6em;
 	component (bibliographicGridList.xhtml - logged in)
    ==================================================
    ================================================== */
-.imj_icoStatusWidthdrawn_32 {
+.imj_icoStatusWithdrawn_32 {
 	width: 2.90909090em;
 	height: 2.90909090em;
 	background-image: url("/imeji/jsf/javax.faces.resources/css/old_style/themes/skin_darkGrey/images/All_Status_ItemWithdrawn_31_Static.gif");
@@ -2749,9 +2772,11 @@ a.imj_editButton {
 
 
 /* ===[ Dialog - .messageArea - .messageArea .half_area2_p6 ]===
+ * === imj_contentMessageArea used in: Ingest.xhtml
    ======================================================== */
 
-.imj_pageMessageArea {
+.imj_pageMessageArea,
+.imj_contentMessageArea {
     width: 87.95%;
     display: inline-block;
     color: #F0F0F0;

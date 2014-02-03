@@ -17,6 +17,18 @@
 		<ui:fragment rendered="#{SessionBean.user != null}">
 			
 			<div id="#{cc.attrs.dialogId}" class="imj_modalDialogBox" style="display:none;">
+				<script type="text/javascript">
+					if (typeof checkReason != 'function') {
+						function checkReason(obj) {
+							var reason = $.trim($('#'+obj+' .imj_confirmationReasonText textarea').val());
+							if( reason.length === 0) {
+								return false;
+							} else {
+								return true;
+							}
+						}
+					};
+				</script>
 				<h:form id="discardForm">
 					<div class="imj_confirmationText">
 						<p>
@@ -34,7 +46,7 @@
 							<h:outputText value="#{lbl.cancel}"/>
 						</button>
 						
-				 		<h:commandButton id="btnDiscardContainer" action="#{cc.attrs.bean[cc.attrs.submitAction]}" value="#{cc.attrs.submitLabel}" styleClass="imj_submitButton" onclick="if($.trim($('##{cc.attrs.dialogId} .imj_confirmationReasonText textarea').val()) === '') {return false;}"/>
+				 		<h:commandButton id="btnDiscardContainer" action="#{cc.attrs.bean[cc.attrs.submitAction]}" value="#{cc.attrs.submitLabel}" styleClass="imj_submitButton" onclick="checkReason('#{cc.attrs.dialogId}');"/>
 					</h:panelGroup>
 				</h:form>
 			</div>

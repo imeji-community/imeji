@@ -1,13 +1,205 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition template="templates/template.xhtml"
+<ui:composition template="templates/template_site.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
 
-	<ui:param name="headline"
-		value="#{IngestBean.collection.metadata.title}" />
-	<ui:define name="contentMenu">
+	<ui:param name="headline" value="#{IngestBean.collection.metadata.title}" />
+	
+	<ui:define name="actionsMenu">
+		<h:panelGroup layout="block" styleClass="imj_contentSubMenu">
+			<h:outputLink id="lnkViewCollectionStart" styleClass="imj_contentSubMenuItem" value="#{Navigation.collectionUrl}#{UploadBean.id}">
+				<h:outputText value="#{lbl.collection_home}"/>
+			</h:outputLink>
+			
+			<h:outputLink id="lnkViewCollectionAllImages" styleClass="imj_contentSubMenuItem" value="#{Navigation.collectionUrl}#{UploadBean.id}/#{Navigation.browsePath}?q=" rendered="#{UploadBean.collectionSize > 0}">
+				<h:outputText value="#{lbl.view_images}"/>
+			</h:outputLink>
+			
+			<h:outputLink id="lnkViewCollectionDetail" styleClass="imj_contentSubMenuItem" value="#{Navigation.collectionUrl}#{UploadBean.id}/#{Navigation.infosPath}?init=1">
+				<h:outputText value="#{lbl.collection_metadata}"/>
+			</h:outputLink>
+			
+			<h:outputLink id="lnkUploadImages" styleClass="imj_contentSubMenuItem" value="#{Navigation.collectionUrl}#{IngestBean.collectionId}/#{Navigation.uploadPath}?init=1" rendered="#{AuthorizationBean.edit}">
+				<h:outputText value="#{lbl.upload_images}"></h:outputText>
+			</h:outputLink>
+			
+			<h:outputLink id="lnkIngest" styleClass="imj_contentSubMenuItem imj_active" value="#{Navigation.collectionUrl}#{UploadBean.id}/ingest?init=1" rendered="#{AuthorizationBean.admin}">
+				<h:outputText value="#{lbl.ingest}"/>
+			</h:outputLink>
+		</h:panelGroup>
+	</ui:define>
+	
+	<ui:define name="additonalHeaderScripts">
+		<!-- Load Queue widget CSS and jQuery -->
+		<!-- style type="text/css">@import url(#{Navigation.applicationUrl}resources/eSciDoc_CSS/plupload/styles/plupload.queue.css);</style -->
+		<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+		<!-- Load plupload and all it's runtimes and finally the jQuery queue widget -->
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload_1_5_5/js/plupload.full.js"></script>
+		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload_1_5_5/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
+		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload_1_5_5/js/i18n/#{Internationalization.currentLanguage}.js"></script>
+		<script type="text/javascript">
+			$(function() {
+				// Setup html5 version
+				$("#uploaderProfile").pluploadQueue({
+					// General settings
+					runtimes : 'html5,silverlight,flash,html4',
+					url : location.pathname  + "?start=profile",
+					//max_file_size : '10mb',
+					multi_selection : false,
+					//chunk_size : '1mb',
+					unique_names : false,
+					flash_swf_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/eSciDoc_JavaScript/plupload/plupload.flash.swf',
+					silverlight_xap_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/eSciDoc_JavaScript/plupload/plupload.silverlight.xap',
+					filters : [{
+						title : "Item list xml", 
+						extensions : "xml,XML"}
+					],
+					init : {
+						 StateChanged: function(up) {
+								// Called when the state of the queue is changed
+								if( up.state == plupload.STOPPED){
+									report();
+								}
+								if( up.state == plupload.STARTED){
+									openDialog('dialogWait');
+								}
+							},
+					 }
+					});
+			});
+			
+			$(function() {
+				// Setup html5 version
+				$("#uploadMetadata").pluploadQueue({
+					// General settings
+					runtimes : 'html5,silverlight,flash,html4',
+					url : location.pathname  + "?start=itemlist",
+					//max_file_size : '10mb',
+					multi_selection : false,
+					//chunk_size : '1mb',
+					unique_names : false,
+					flash_swf_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/eSciDoc_JavaScript/plupload/plupload.flash.swf',
+					silverlight_xap_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/eSciDoc_JavaScript/plupload/plupload.silverlight.xap',
+					filters : [{
+						title : "Item list xml", 
+						extensions : "xml,XML"}
+					],
+					init : {
+						 StateChanged: function(up) {
+								// Called when the state of the queue is changed
+								if( up.state == plupload.STOPPED){
+									report();
+								}
+								if( up.state == plupload.STARTED){
+									openDialog('dialogWait');
+								}
+							},
+					 }
+					});
+			});
+	
+			function report(){
+				window.location.href = location.pathname + "?done=1";
+			}
+			
+			plupload.addI18n({
+			    'Add files' : '<h:outputText value="#{lbl.uploadStart}" />', 			    
+			    'Drag files here.' : ' <h:outputText value="#{lbl.uploadDrag}" />',				    
+			});
+		</script>
+	</ui:define>
+	
+	<ui:define name="mainContent">
+		<!-- Breadcrumb - History -->
+		<ui:include src="./include/History.xhtml"/>
+		
+		<h:panelGroup layout="block" rendered="#{!AuthorizationBean.admin}">
+			<h2>
+				<h:outputText value="#{lbl.view_page_disallowed2}"/>
+			</h2>
+		</h:panelGroup>
+		
+		<!-- AJAX Wrapper - START -->
+		<h:panelGroup layout="block" id="imj_ajaxWrapper" rendered="#{AuthorizationBean.admin}">
+			
+			<!-- START INGEST -->
+			<h:panelGroup layout="block" styleClass="imj_ingestWrapper">
+				
+				<ui:fragment rendered="#{IngestBean.error or IngestBean.success}">
+					<div class="imj_ingestMessageArea">
+						<ul class="imj_messageList">
+							<ui:fragment rendered="#{IngestBean.error}">
+								<li class="imj_messageError">
+									<h:outputText value="#{lbl.ingestFail}:"/>
+								</li>
+								<li>
+									<h:outputText styleClass="imj_messageError" value="#{IngestBean.msg}"/>
+								</li>
+							</ui:fragment>
+							<ui:fragment rendered="#{IngestBean.success}">
+								<li class="imj_messageInfo">
+									<h:outputText value="#{lbl.ingestSuccess}" />
+								</li>
+							</ui:fragment>
+						</ul>
+					</div>
+				</ui:fragment>
+				
+				<div class="imj_uploadDropArea">
+					<div class="imj_headline">
+						<h2>
+							<h:outputText value="1. #{lbl.uploadProfile}"/>
+						</h2>
+					</div>
+					<div class="imj_contentMessageArea">
+						<ul class="imj_messageList">
+							<li class="imj_messageStatus"><h:outputText value="(#{lbl.ingest_profile} #{IngestBean.collection.metadata.title})"/></li>
+							<li class="imj_messageWarn"><h:outputText value="#{lbl.ingest_warning}"/></li>
+						</ul>
+					</div>
+					<div id="uploaderProfile">
+						Your browser doens't support native upload!<br /> 
+						Please use HTML5 compatible browser (Firefox 4.x, Safari 4, Chrome) or download following tools:<br /> 
+						<a href="http://www.microsoft.com/germany/silverlight/downloads.aspx" target="_blank">Download Siverlight</a> 
+						<h:outputText value=" #{lbl.or_small} "/> 
+						<a href="http://get.adobe.com/de/flashplayer/download/" target="_blank"> Download Flash </a>
+					</div>
+				</div>
+				
+				<h2 class="imj_headline">
+					<h:outputText value="#{lbl.or_big}"/>
+					<h:outputText value=": " styleClass="imj_noDisplay"/>
+				</h2>
+				
+				<div class="imj_uploadDropArea">
+					<h2 class="imj_headline">
+						<h:outputText value="2. #{lbl.uploadMd}"/>
+					</h2>
+					<div class="imj_contentMessageArea">
+						<ul class="imj_messageList">
+							<li class="imj_messageStatus"><h:outputText value="(#{lbl.ingest_item}  #{IngestBean.collection.metadata.title})"/></li>
+							<li class="imj_messageWarn"><h:outputText value="#{lbl.ingest_warning}"/></li>
+						</ul>
+					</div>
+					<div id="uploadMetadata">
+						Your browser doens't support native upload!<br /> 
+						Please use HTML5 compatible browser (Firefox 4.x, Safari 4, Chrome) or download following tools:<br /> 
+						<a href="http://www.microsoft.com/germany/silverlight/downloads.aspx" target="_blank">Download Siverlight</a> 
+						<h:outputText value=" #{lbl.or_small} "/> 
+						<a href="http://get.adobe.com/de/flashplayer/download/" target="_blank"> Download Flash </a>
+					</div>
+				</div>
+			</h:panelGroup>
+		</h:panelGroup>
+	</ui:define>
+	
+	
+	
+	
+	<ui:define name="contentMenu_old">
 		<h:outputLink id="lnkViewCollectionStart"
 			styleClass="imj_contentMenuItem"
 			value="#{Navigation.collectionUrl}#{IngestBean.collectionId}">
@@ -46,7 +238,7 @@
 
 	</ui:define>
 
-	<ui:define name="mainContent">
+	<ui:define name="mainContent_old">
 		<div class="imj_subHeaderMessageSpace">
 			<h:panelGroup styleClass="full_area0_p6 messageArea errorMessageArea small_marginLExcl" rendered="#{IngestBean.error}">
 				<br/>

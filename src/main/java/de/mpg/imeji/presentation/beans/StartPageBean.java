@@ -121,7 +121,7 @@ public class StartPageBean
             if (sr.getResults().size() < CAROUSSEL_SIZE)
                 sublistSize = sr.getResults().size();
             if (sublistSize > 0)
-                uris = sr.getResults().subList(0, sublistSize - 1);
+                uris = sr.getResults().subList(0, sublistSize);
         }
         List<Item> items = (List<Item>)ic.loadItems(uris, -1, 0);
         carousselImages = ImejiFactory.imageListToThumbList(items);

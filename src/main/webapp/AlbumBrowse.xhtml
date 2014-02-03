@@ -24,10 +24,10 @@
 					<h:panelGroup styleClass="imj_contentSubMenuItem">
 						<!-- SORTING content menu lower line starts here -->
 						<h:outputText id="txtSort" value="#{lbl.sort_by}" styleClass="free_area0" />
+						<h:form>
 						<h:selectOneMenu id="selSort" value="#{AlbumImagesBean.selectedSortCriterion}" styleClass="free_select" onchange="submit();">
 							<f:selectItems id="sortItem" value="#{AlbumImagesBean.sortMenu}" />
-						</h:selectOneMenu>
-						<h:form>
+						</h:selectOneMenu>						
 							<h:commandLink id="lnkSortAsc" styleClass="ascSort" action="#{AlbumImagesBean.toggleSortOrder}" rendered="#{AlbumImagesBean.selectedSortOrder == 'ASCENDING'}">&#160;</h:commandLink>
 							<h:commandLink id="lnkSortDesc" styleClass="desSort" action="#{AlbumImagesBean.toggleSortOrder}" rendered="#{AlbumImagesBean.selectedSortOrder != 'ASCENDING'}">&#160;</h:commandLink>
 						</h:form>

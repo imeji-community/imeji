@@ -7,9 +7,12 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.collection.CollectionImageBean;
 import de.mpg.imeji.presentation.filter.Filter;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.ObjectLoader;
 
 /**
  * An imeji web page
@@ -146,10 +149,33 @@ public class Page
     {
         try
         {
+        	Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
             String s = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel(name);
-            if (id != null)
-                s += " id " + id;
-            return s;
+            String title = "";
+            if (id!= null)
+            {
+	            if (type==ImejiPages.COLLECTION_IMAGES || type==ImejiPages.COLLECTION_HOME || type==ImejiPages.COLLECTION_INFO || type==ImejiPages.UPLOAD)
+	            {
+	            	title= " "+ObjectLoader.loadCollectionLazy(URI.create(navigation.getCollectionUrl() + id), 
+	            			((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getUser()).getMetadata().getTitle();
+	            }
+	            else if (type==ImejiPages.ALBUM_HOME || type==ImejiPages.ALBUM_IMAGES)
+	            {
+	            	title= " "+ObjectLoader.loadAlbumLazy(URI.create(navigation.getAlbumUrl() + id), 
+	            			((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getUser()).getMetadata().getTitle();
+	            }
+	            else if (type==ImejiPages.IMAGE)
+	            {
+	            	title= " "+ObjectLoader.loadItem(URI.create(navigation.getItemUrl() + id), ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getUser()).getFilename();
+	            }
+            }
+
+            //Cut the name of the object
+            if (title.length() > 20)
+            {
+            	title = title.substring(0, 20) + "...";
+            }
+            return s + title;
         }
         catch (Exception e)
         {

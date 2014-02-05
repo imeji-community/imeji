@@ -1,20 +1,56 @@
-<ui:composition template="templates/template_profile.xhtml"
+<ui:composition template="templates/sub_template/template_metadata_profileEdit.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
-	<ui:param name="FormularBean" value="#{EditMdProfileBean}"/>	
-	<ui:define name="init">
-		<h:outputText value="#{EditMdProfileBean.init}"/>
+	
+	<ui:param name="metadataBean" value="#{EditMdProfileBean}"/>
+	<ui:param name="metadataContextBean" value="#{metadataBean.collection}"/>
+	<ui:param name="headline" value="#{lbl.edit} #{EditMdProfileBean.profile.title}"/>
+	<ui:param name="currentMainMenu" value="collection"/>
+	<ui:param name="containerHeadline" value="#{lbl.collection_info}"/>
+	
+	
+	<ui:define name="actionsMenu">
+		<h:panelGroup layout="block" styleClass="imj_contentSubMenu">
+			<h:outputLink id="lnkViewCollectionStart" styleClass="imj_contentSubMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}" rendered="#{ViewCollectionBean.size > 0}">
+				<h:outputText value="#{lbl.collection_home}"/>
+			</h:outputLink>
+			
+			<h:outputLink id="lnkViewCollectionAllImages" styleClass="imj_contentSubMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.browsePath}?q=" rendered="#{ViewCollectionBean.size > 0}">
+				<h:outputText value="#{lbl.view_images}"/>
+			</h:outputLink>
+			
+			<h:outputLink id="lnkViewCollectionDetail" styleClass="imj_contentSubMenuItem imj_active" value="#{Navigation.collectionUrl}#{EditMdProfileBean.colId}/#{Navigation.infosPath}?init=1">
+				<h:outputText value="#{lbl.collection_metadata}"/>
+			</h:outputLink>
+			
+			<h:outputLink id="lnkUploadImages" styleClass="imj_contentSubMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.uploadPath}?init=1" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status != 'WITHDRAWN'}">
+				<h:outputText value="#{lbl.upload_images}"/>
+			</h:outputLink>
+			
+			<h:outputLink id="lnkIngest" styleClass="imj_contentSubMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/ingest?init=1" rendered="#{AuthorizationBean.admin}">
+				<h:outputText value="#{lbl.ingest}"/>
+			</h:outputLink>
+			
+		</h:panelGroup>
 	</ui:define>
 	
-	<ui:define name="headline">
+	
+	
+	
+	
+	
+	
+	
+	
+	<ui:define name="headline_old">
 		<h1>
 			<h:outputText value="#{lbl.edit} #{EditMdProfileBean.profile.title}"/> 
 		</h1>
 	</ui:define>
-			
-	<ui:define name="contentMenu">
+	
+	<ui:define name="contentMenu_old">
 	
 		<h:outputLink id="lnkViewCollectionStart" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{EditMdProfileBean.colId}" rendered="true">
 			<h:outputText value="#{lbl.collection_home}"/>
@@ -40,6 +76,6 @@
 	
 	</ui:define>
 	
-	<ui:define name="actionsMenu">
+	<ui:define name="actionsMenu_old">
 	</ui:define>	
 </ui:composition>

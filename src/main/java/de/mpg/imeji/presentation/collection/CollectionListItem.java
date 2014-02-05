@@ -97,7 +97,7 @@ public class CollectionListItem
             CollectionImeji fullCollection = ObjectLoader.loadCollectionLazy(
                     ObjectHelper.getURI(CollectionImeji.class, id), user);
             SessionBean sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-            if (fullCollection != null && fullCollection.getId() != null && user == null)
+            if (fullCollection != null && fullCollection.getId() != null && fullCollection.getStatus().toString() == "RELEASED")
             {
                 ItemController ic = new ItemController(sessionBean.getUser());
                 ic.loadContainerItems(fullCollection, user, 1, 0);

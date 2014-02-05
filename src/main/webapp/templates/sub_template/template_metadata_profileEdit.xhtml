@@ -1,0 +1,383 @@
+<ui:composition template="../template_site.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	
+	<ui:define name="init">
+		<h:outputText value="#{metadataBean.init}"/>
+	</ui:define>
+	
+	<ui:define name="additonalHeaderScripts">
+		<script type="text/javascript">
+			// avoid to have many times the whole iso langages defined on the page. Relevant for profiles with many metadata
+			function write_language_options(select) {
+				write_options(select, '#{Internationalization.languagesAsString}');
+			}
+			function write_metadata_type_options(select) {
+				write_options(select, '#{metadataBean.mdTypesMenuAsString}');
+			}
+		</script>
+		<style type="text/css">
+			.dropMetadataActive,.dropChildActive {
+				border-color: green !important;
+			}
+			.drop-hover {
+				background-color: #515151 !important;
+			}
+			.dropMetadata {}
+			.highlight_area {
+				border-color: #313131;
+				border-style: dotted;
+				border-width: 1px !important;
+				background-color: #292929;
+			}
+			.imj_ajaxWrapper > .imj_metadataProfileList.imj_edit {
+				border-top: 0.090909em solid #6CAD2F;
+			}
+			.imj_metadataProfileList.imj_edit > .imj_listHeader {
+				margin-bottom: 1em;
+				width: 100%;
+			}
+			.imj_metadataProfileList.imj_edit > .imj_listHeader > .imj_listHeaderMenu {
+				float: none;
+				display: inline-block;
+			}
+			.imj_metadataProfileList.imj_edit > .imj_listHeader > .imj_listHeaderMenu > * {
+				display: inline;
+			}
+			.imj_metadataProfileList.imj_edit > .imj_listHeader > .imj_listHeaderMenu select {
+				margin: 0 0.181818em;
+			}
+			.imj_metadataProfileList.imj_edit .imj_metadataTypeSelection { 
+				width: 9em;
+			}
+			.imj_metadataProfileList.imj_edit .imj_metadataLanguageSelection {
+				width: 7em;
+			}
+			.imj_metadataProfileList.imj_edit .imj_itemHeader {
+				width: 98%;
+				padding: 0.5% 1%;
+			}
+			.imj_metadataProfileList.imj_edit .imj_itemHeader .imj_inlineButtonGroup {
+				margin-right: 0.272727em;
+			}
+			.imj_metadataProfileList.imj_edit .imj_itemHeader .imj_optionList {
+				display: inline;
+				margin-left: 0.727272em;
+			}
+			.imj_metadataProfileList.imj_edit .imj_itemHeader .imj_optionList .imj_optionSet {
+				display: inline;
+			}
+			.imj_metadataProfileList.imj_edit .imj_itemHeader .imj_optionList .imj_optionSet + .imj_optionSet {
+				margin-left: 0.545454em;
+			}
+			.imj_metadataProfileList.imj_edit .imj_itemHeader .imj_optionList .imj_optionLabel {
+				min-width: 0;
+				width: auto;
+			}
+		</style>
+	</ui:define>
+	
+	
+	<!-- Main Content - bibliographic grid list - START -->
+	<ui:define name="mainContent">
+		
+		<!-- Breadcrumb - History -->
+		<ui:include src="../../include/History.xhtml"/>
+		
+		<!-- AJAX Wrapper - START -->
+		<h:panelGroup layout="block" id="imj_ajaxWrapper">
+			<div class="imj_metadataProfileList imj_edit">
+				<div class="imj_listHeader">
+					<ui:fragment rendered="#{empty metadataBean.wrappers}">
+						<div class="imj_listHeaderMenu">
+							<h:form>
+								<h:commandLink id="addFirstStatement" action="#{metadataBean.addFirstStatement}">
+									<h:outputText value="#{lbl.profile_start_new}"/>
+								</h:commandLink>
+								
+								<span class="imj_inlineButtonGroup">
+									<h:outputLabel value="#{lbl.or_small} #{lbl.profile_use_template}" for="chooseGivenTemplate"/>
+									<h:selectOneMenu value="#{metadataBean.template}" id="chooseGivenTemplate" onchange="submit();" valueChangeListener="#{metadataBean.templateListener}">
+										<f:selectItems value="#{metadataBean.profilesMenu}"/>
+									</h:selectOneMenu>
+								</span>
+							</h:form>
+						</div>
+					</ui:fragment>
+					<ui:fragment rendered="#{!(empty metadataBean.wrappers)}">
+						<h2 class="imj_headline"><h:outputText value="#{lbl.profile_move_info}"/></h2>
+					</ui:fragment>
+				</div>
+				<div class="imj_listBody">
+					
+					<h:form id="profileForm">
+						
+						<div class="imj_metadataSet">
+							<h:outputLabel styleClass="imj_metadataLabel" for="mdProfileTitle">
+								<h:outputText value="#{lbl.title}"/>
+								<span class="imj_noDisplay">: </span>
+							</h:outputLabel>
+							<h:inputText value="#{metadataBean.profile.title}" id="mdProfileTitle" valueChangeListener="#{metadataBean.titleListener}" styleClass="imj_metadataValue"/>
+						</div>
+						
+						<ui:fragment rendered="#{!(empty metadataBean.wrappers)}">
+							
+							<!-- START ajaxArea -->
+							<h:panelGroup layout="block" id="ajaxArea">
+								<script type="text/javascript">dragAndDrop();highlighter();</script>
+								
+								<h:panelGroup id="dropMetadata" styleClass="full_area0_p8 dropMetadata">
+									<h:outputText styleClass="full_area0" value="#{lbl.add_metadata}" style="visibility:hidden;"/>
+									<h:commandButton id="dropMetadataButton" value="Insert metadata" action="#{metadataBean.insertMetadata}" class="imj_noDisplay">
+										<f:setPropertyActionListener value="0" target="#{metadataBean.statementPosition}"/>
+										<f:ajax execute="@this" render=":profileForm:ajaxArea"/>
+									</h:commandButton>
+								</h:panelGroup>
+								
+								<ui:repeat id="profile" var="wrapper" value="#{metadataBean.wrappers}" varStatus="position">
+									<h:panelGroup layout="block" styleClass="imj_metadataListItem statement_area  statement_area_parent_#{wrapper.parentId} statement_area_id_#{wrapper.statementId}">
+										<h:panelGroup layout="block" id="metadata" style="margin-left:#{wrapper.level}px; margin-top:1em;" styleClass="draggable dropChild id_#{wrapper.statementId}  parent_#{wrapper.parentId} highlight_area">
+											
+											<h:commandButton id="dropChildButton" value="Insert metadata" action="#{metadataBean.insertChild}" style="display:none;">
+												<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
+												<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
+											</h:commandButton>
+											<h:commandButton id="metadataDragButton" value="Insert metadata" action="#{metadataBean.dragStart}" style="display:none;">
+												<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.draggedStatementPosition}"/>
+												<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
+											</h:commandButton>
+											
+											<h:panelGroup layout="block" styleClass="imj_itemHeader">
+												<span class="imj_inlineButtonGroup">
+													<!-- Buttons to add new or remove current metadata statement -->
+													<h:commandButton styleClass="imj_addButton_15" title="#{lbl.add_metadata}" action="#{metadataBean.addStatement}">
+														<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
+														<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
+													</h:commandButton>
+													<h:commandButton styleClass="imj_removeButton_15" rendered="#{metadataBean.size &gt; 1}" title="#{lbl.statement_remove}" action="#{metadataBean.removeStatement}">
+														<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
+														<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
+													</h:commandButton>
+												</span>
+												<h:outputText value="#{lbl.metadata}"/>
+												<h:outputText value=": " styleClass="imj_noDisplay"/>
+											
+											
+												<ul class="imj_optionList">
+													<li class="imj_optionSet">
+														<h:selectBooleanCheckbox id="uniqueSelect" value="#{wrapper.statement.description}" valueChangeListener="#{wrapper.descriptionListener}" styleClass="imj_optionCheckbox"/>
+														<h:outputLabel styleClass="imj_optionLabel" value="#{lbl.use_as_description}" for="uniqueSelect"/>
+													</li>
+													<li class="imj_optionSet">
+														<h:selectBooleanCheckbox id="useAsMultipleMD" value="#{wrapper.multiple}" valueChangeListener="#{wrapper.multipleListener}" styleClass="imj_optionCheckbox"/>
+														<h:outputLabel styleClass="imj_optionLabel" value="#{lbl.multiple}" for="useAsMultipleMD"/>
+													</li>
+													<li class="imj_optionSet">
+														<h:selectBooleanCheckbox id="useForPreview" value="#{wrapper.statement.preview}" valueChangeListener="#{wrapper.previewListener}" styleClass="imj_optionCheckbox"/>
+														<h:outputLabel styleClass="imj_optionLabel" value="#{lbl.preview}" for="useForPreview"/>
+													</li>
+												</ul>
+											</h:panelGroup> <!-- END imj_itemHeader -->
+											
+											<h:panelGroup layout="block" styleClass="imj_itemBody imj_metadataSetGroup">
+												<h:panelGroup class="imj_metadataSet">
+													
+													<h:panelGroup layout="block" styleClass="imj_metadataLabel">
+														<label for="mdProfileType"><h:outputText value="#{lbl.type}"/></label>
+														<ui:param name="disabledStatus" value="#{(wrapper.used) ? 'disabled' : ''}"/>
+														<select id="mdProfileType" title="#{wrapper.used ? lbl.statement_used : lbl.statement_change_type}" onfocus="write_metadata_type_options(this)" disabled="#{disabledStatus}" class="imj_metadataTypeSelection"  
+															onchange="document.getElementById('profileForm:profile:#{position.index}:inHiddenStatement').value = this.value; $(this).parents('.imj_metadataLabel').find('.imj_ajaxButton').click();">
+															<option value="#{wrapper.statement.type}" selected="selected">#{metadataBean.getTypeLabel(wrapper.statement.type)}</option>
+														</select>
+														<h:commandButton id="btnChangeStatement" action="#{wrapper.select()}" value="#{wrapper.statement.type}" type="button" styleClass="imj_noDisplay imj_ajaxButton">
+															<f:ajax execute="@this inHiddenStatement" render="addConstraints"/>
+														</h:commandButton>
+														<h:inputHidden id="inHiddenStatement" value="#{wrapper.statement.type}" converter="URIConverter"/>
+													</h:panelGroup>
+													
+													
+													<div class="imj_metadataValue">
+														<div class="imj_metadataSet">
+															<!-- START Label - Language Paring -->
+															<div class="imj_metadataLabel">
+																<h:outputText value="#{lbl.name}"/>
+																<h:outputText value=": " styleClass="imj_noDisplay"/>
+															</div>
+															
+															<div class="imj_metadataValue">
+																<ui:repeat id="labels" var="label" value="#{wrapper.statement.labels}" varStatus="labelPosition">
+																	<h:panelGroup styleClass="imj_metadataSet">
+																		<h:inputText id="inputLabel" value="#{label.value}"/>
+																		<select onfocus="write_language_options(this);" class="imj_metadataLanguageSelection"
+																			onchange="document.getElementById('profileForm:profile:#{position.index}:labels:#{labelPosition.index}:inHiddenLang').value = this.value;
+																					$(this).parents('.imj_metadataSet').find('.imj_ajaxButton').click();">
+																			<option value="#{label.lang}" selected="selected">#{Internationalization.getLanguageLabel(label.lang)}</option>
+																		</select>
+																		<h:commandButton id="btnChangeLang" action="#{wrapper.select()}" value="#{wrapper.statement.type}" type="button" styleClass="imj_noDisplay imj_ajaxButton">
+																			<f:ajax execute="@this inHiddenLang" render="@none"/>
+																		</h:commandButton>
+																		<h:inputHidden id="inHiddenLang" value="#{label.lang}"/>
+																		
+																		
+																		<span class="imj_inlineButtonGroup">
+																			<h:commandButton id="addLabel" styleClass="imj_addButton_15" action="#{metadataBean.addLabel}" title="#{lbl.label_add}">
+																				<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
+																				<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
+																			</h:commandButton>
+																			<h:commandButton styleClass="imj_removeButton_15" action="#{metadataBean.removeLabel}" title="#{lbl.label_remove}" rendered="#{wrapper.labelsCount > 1}">
+																				<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
+																				<f:setPropertyActionListener value="#{labelPosition.index}" target="#{metadataBean.labelPosition}"/>
+																				<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
+																			</h:commandButton>
+																		</span>
+																	</h:panelGroup>
+																</ui:repeat>
+															</div>
+														</div> <!-- END Label - Language Paring -->
+														
+														<h:panelGroup styleClass="imj_metadataSet" id="addVocabulary">
+															<!-- START - add vocabulary constraints -->
+															<div class="imj_metadataLabel">
+																<h:outputLabel value="#{lbl.vocabulary}" for="selectVocabulary"/>
+															</div>
+															<div class="imj_metadataValue">
+																
+																<ui:fragment rendered="#{wrapper.vocabularyString == null }">
+																	<h:commandButton styleClass="imj_addButton_15" action="#{metadataBean.addVocabulary}">
+																		<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
+																		<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
+																	</h:commandButton>
+																	<h:outputLabel value="#{lbl.add_vocabulary}"/>
+																</ui:fragment>
+																
+																<ui:fragment rendered="#{wrapper.vocabularyString != null}">
+																	<h:panelGroup styleClass="xHuge_area0 tiny_marginRIncl clear">
+																		<h:selectOneMenu id="selectVocabulary" value="#{wrapper.vocabularyString}">
+																			<f:selectItems value="#{wrapper.vocabularyHelper.vocabularies}"/>
+																		</h:selectOneMenu>
+																		<h:commandButton id="btnRemoveVocabulary" styleClass="imj_removeButton_15" action="#{metadataBean.removeVocabulary}">
+																			<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
+																			<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
+																		</h:commandButton>
+																	</h:panelGroup>
+																</ui:fragment>
+															</div><!-- END - add vocabulary constraints -->
+														</h:panelGroup>
+														
+														<h:panelGroup styleClass="imj_metadataSet" id="addConstraints">
+															<!-- START - add constraints -->
+															<div class="imj_metadataLabel">
+																<h:outputLabel value="#{lbl.constraints}" for="constraints"/>
+															</div>
+															<div class="imj_metadataValue">
+																<ui:fragment rendered="#{wrapper.constraintsSize == 0}">
+																	<ui:fragment rendered="#{wrapper.statement.type != 'http://imeji.org/terms/metadata#conePerson'
+																					  and  wrapper.statement.type !='http://imeji.org/terms/metadata#publication' 
+																					  and wrapper.statement.type !='http://imeji.org/terms/metadata#geolocation' 
+																					  and wrapper.vocabularyString == null}">
+																		<h:commandButton styleClass="imj_addButton_15" action="#{metadataBean.addConstraint}">
+																			<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
+																			<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
+																		</h:commandButton>
+																		<h:outputLabel value="#{lbl.add_constraint}"/>
+																	</ui:fragment>
+																</ui:fragment>
+																
+																<ui:fragment rendered="#{wrapper.constraintsSize > 0}">
+																	<ui:repeat id="constraints" var="constraint" value="#{wrapper.statement.literalConstraints}" varStatus="constraintPosition">
+																		<h:inputText styleClass="huge_txtInput endline" value="#{constraint}" valueChangeListener="#{wrapper.constraintListener}">
+																			<f:attribute name="position" value="#{constraintPosition.index}"/>
+																		</h:inputText>
+																		<span class="imj_inlineButtonGroup">
+																			<h:commandButton styleClass="imj_addButton_15" title="#{lbl.add_constraint}" action="#{metadataBean.addConstraint}">
+																				<f:setPropertyActionListener value="#{constraintPosition.index}" target="#{metadataBean.constraintPosition}"/>
+																				<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
+																				<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
+																			</h:commandButton>
+																			<h:commandButton styleClass="imj_removeButton_15" title="#{lbl.remove_constraint}" action="#{metadataBean.removeConstraint}">
+																				<f:setPropertyActionListener value="#{constraintPosition.index}" target="#{metadataBean.constraintPosition}"/>
+																				<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
+																				<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
+																			</h:commandButton>
+																		</span>
+																	</ui:repeat>
+																</ui:fragment>
+															</div>
+														</h:panelGroup><!-- END - add constraints -->
+														
+														
+														<ui:fragment rendered="#{wrapper.showRemoveWarning}">
+															<div class="imj_contentMessageArea">
+																<ul class="imj_messageList">
+																	<li class="imj_messageWarn"><h:outputText value="#{msg.remove_statement_used}"/></li>
+																</ul>
+																<div class="imj_submitPanel">
+																	<h:commandButton action="#{metadataBean.closeRemoveWarning}" value="#{lbl.no}" styleClass="imj_cancelButton">
+																		<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
+																		<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
+																	</h:commandButton>
+																	<h:commandButton styleClass="imj_submitButton" value="#{lbl.yes}" action="#{metadataBean.forceRemoveStatement}" render="ajaxArea">
+																		<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
+																		<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
+																	</h:commandButton>
+																</div>
+															</div>
+														</ui:fragment>
+														
+														<h:panelGroup layout="block" styleClass="imj_submitPanel">
+															<h:commandButton styleClass="imj_submitButton" title="#{lbl.add_child}" action="#{metadataBean.addStatementChild}" id="addChildMetadata" value="#{lbl.statement_add_child}">
+																<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
+																<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
+															</h:commandButton>
+														</h:panelGroup>
+														
+														
+													</div>
+												</h:panelGroup>
+											</h:panelGroup> <!-- END of imj_metadataSetGroup -->
+										</h:panelGroup> <!-- END of draggable dropChild -->
+										
+										<ui:fragment rendered="#{!metadataBean.hasChild(position.index +1)}">
+											<!--  Drop Metadata area: only if the element has childs -->
+											<h:panelGroup id="dropMetadata" style="margin-left:#{wrapper.level}px;" styleClass="dropMetadata">
+												<h:outputText value="#{lbl.add_metadata}" style="visibility:hidden;"/>
+												<h:commandButton id="dropMetadataButton" value="Insert metadata" action="#{metadataBean.insertMetadata}" styleClass="imj_noDisplay">
+													<f:setPropertyActionListener value="#{position.index +1}" target="#{metadataBean.statementPosition}"/>
+													<f:ajax execute="@this" render=":profileForm:ajaxArea"/>
+												</h:commandButton>
+											</h:panelGroup>
+											
+											<!--  Emtpy Drop Metadata area: if the element has no childs -->
+											<h:panelGroup id="dropMetadataNotAllowed" style="margin-left:#{wrapper.level}px;">
+												<!-- Can not a metadata here !! -->
+												<h:outputText value="#{lbl.add_metadata}" style="visibility:hidden;"/>
+											</h:panelGroup>
+										</ui:fragment>
+									
+										<ui:fragment rendered="#{metadataBean.wrappers.size() > 0 and metadataBean.wrappers.get(metadataBean.wrappers.size()-1).level > 0}">
+											<h:panelGroup id="dropMetadataLast" styleClass="dropMetadata">
+												<h:outputText styleClass="full_area0" value="#{lbl.add_metadata}" style="visibility:hidden;"/>
+												<h:commandButton id="dropMetadataLastButton" value="Insert metadata" action="#{metadataBean.insertLastMetadata}" styleClass="imj_noDisplay">
+													<f:setPropertyActionListener value="#{metadataBean.wrappers.size()}" target="#{metadataBean.statementPosition}"/>
+													<f:ajax execute="@this" render=":profileForm:ajaxArea"/>
+												</h:commandButton>
+											</h:panelGroup>
+										</ui:fragment>
+										
+									</h:panelGroup> <!-- END of imj_metadataListItem -->
+								</ui:repeat>
+							</h:panelGroup> <!-- END ajaxArea -->
+						</ui:fragment>
+						
+						<div class="imj_submitPanel">
+							<h:commandButton action="#{metadataBean.cancel}" value="#{lbl.cancel}" styleClass="imj_cancelButton"/>
+							<h:commandButton action="#{metadataBean.save}" value="#{lbl.save}" styleClass="imj_submitButton"/>
+						</div>
+					</h:form>
+				</div>
+			</div>
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

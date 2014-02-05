@@ -63,6 +63,9 @@ public class PropertyBean
      */
     private static String baseURI;
     private static String applicationURL;
+    
+    private static String css_light;
+	private static String css_dark;
 
     /**
      * Default constructor
@@ -75,6 +78,8 @@ public class PropertyBean
             this.internalStorageBase = FilenameUtils.getBaseName(FilenameUtils.normalizeNoEndSeparator(PropertyReader
                     .getProperty("imeji.storage.path")));
             applicationURL = StringHelper.normalizeURI(PropertyReader.getProperty("escidoc.imeji.instance.url"));
+            this.css_light = PropertyReader.getProperty("imeji.layout.css_light");
+            this.css_dark = PropertyReader.getProperty("imeji.layout.css_dark");
             readBaseUri();
         }
         catch (Exception e)
@@ -161,4 +166,20 @@ public class PropertyBean
     {
         return applicationURL;
     }
+    
+    public static String getCss_light() {
+		return css_light;
+	}
+
+	public static void setCss_light(String css_light) {
+		PropertyBean.css_light = css_light;
+	}
+
+	public static String getCss_dark() {
+		return css_dark;
+	}
+
+	public static void setCss_dark(String css_dark) {
+		PropertyBean.css_dark = css_dark;
+	}
 }

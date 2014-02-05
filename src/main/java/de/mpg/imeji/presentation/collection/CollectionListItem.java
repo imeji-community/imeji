@@ -93,7 +93,7 @@ public class CollectionListItem
             {
                 versionDate = collection.getVersionDate().getTime().toString();
             }
-            // Load collection to get first thumbnail (only in preview for not logged in users)
+            // Load collection to get first thumbnail if the collection status is 'released'
             CollectionImeji fullCollection = ObjectLoader.loadCollectionLazy(
                     ObjectHelper.getURI(CollectionImeji.class, id), user);
             SessionBean sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);

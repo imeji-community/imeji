@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.activation.MimetypesFileTypeMap;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
@@ -347,10 +348,13 @@ public class UploadBean
             }
             else
             {
+            	MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
+            	String mimeType = mimeTypesMap.getContentType(file);
+            	
                 UploadResult uploadResult = storageController.upload(title, file, id);
                 item = ImejiFactory.newItem(collection, user, uploadResult.getId(), title,
                         URI.create(uploadResult.getOrginal()), URI.create(uploadResult.getThumb()),
-                        URI.create(uploadResult.getWeb()));
+                        URI.create(uploadResult.getWeb()), mimeType);
                 item.setChecksum(uploadResult.getChecksum());
             }
             sNum += 1;

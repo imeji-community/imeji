@@ -141,7 +141,7 @@ public class ImejiFactory
      * @return
      */
     public static Item newItem(CollectionImeji collection, User user, String storageId, String title, URI fullImageURI,
-            URI thumbnailURI, URI webURI)
+            URI thumbnailURI, URI webURI, String filetype)
     {
         Item item = ImejiFactory.newItem(collection);
         item.setFullImageUrl(fullImageURI);
@@ -149,6 +149,7 @@ public class ImejiFactory
         item.setWebImageUrl(webURI);
         item.setVisibility(Visibility.PUBLIC);
         item.setFilename(title);
+        item.setFiletype(filetype);
         if (storageId != null)
         {
             item.setStorageId(storageId);

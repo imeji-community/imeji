@@ -20,6 +20,8 @@
   <xs:element name="escidocId" type="xs:string"/>
 
   <xs:element name="filename" type="xs:string"/>
+  
+  <xs:element name="filetype" type="xs:string"/>
 
   <xs:element name="fullImageUrl" type="xs:string"/>
 

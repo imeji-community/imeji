@@ -51,6 +51,7 @@
 					<xs:element ref="imeji:collection" minOccurs="0" />
 					<xs:element ref="imeji:escidocId" minOccurs="0" />
 					<xs:element ref="imeji:filename" minOccurs="0" />
+					<xs:element ref="imeji:filetype" minOccurs="0" />
 					<xs:element ref="imeji:fullImageUrl" minOccurs="0" />
 					<xs:element ref="imeji:fulltext" minOccurs="0" />
 					<xs:element ref="imeji:metadataSet" minOccurs="0"

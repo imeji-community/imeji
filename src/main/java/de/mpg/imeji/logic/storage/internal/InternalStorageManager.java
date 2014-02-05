@@ -34,17 +34,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
-import javax.faces.component.FacesComponent;
-import javax.faces.context.FacesContext;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletRegistration;
-import javax.servlet.http.HttpSession;
+import javax.activation.MimetypesFileTypeMap;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
-
-import com.ocpsoft.pretty.PrettyContext;
 
 import de.mpg.imeji.logic.storage.Storage.FileResolution;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
@@ -54,10 +48,6 @@ import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.user.LoginBean;
-import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -116,7 +106,11 @@ public class InternalStorageManager
     {
         try
         {
-            InternalStorageItem item = generateInternalStorageItem(filename, collectionId);
+        	MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
+        	String mimeType = mimeTypesMap.getContentType(file);
+        	
+            InternalStorageItem item = generateInternalStorageItem(filename, mimeType, collectionId);
+            System.out.println(item.getFileType());
             return writeItemFiles(item, file);
         }
         catch (Exception e)
@@ -250,12 +244,13 @@ public class InternalStorageManager
      * @return
      * @throws UnsupportedEncodingException
      */
-    public InternalStorageItem generateInternalStorageItem(String filename, String collectionId)
+    public InternalStorageItem generateInternalStorageItem(String filename, String filetype, String collectionId)
     {
         String id = generateIdWithVersion(collectionId);
         InternalStorageItem item = new InternalStorageItem();
         item.setId(id);
         item.setFileName(filename);
+        item.setFileType(filetype);
         item.setOriginalUrl(generateUrl(id, filename, FileResolution.ORIGINAL));
         item.setThumbnailUrl(generateUrl(id, filename, FileResolution.THUMBNAIL));
         item.setWebUrl(generateUrl(id, filename, FileResolution.WEB));

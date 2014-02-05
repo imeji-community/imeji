@@ -55,6 +55,8 @@ public class Item extends Properties implements FulltextIndex
     private URI visibility = URI.create("http://imeji.org/terms/visibility#" + Visibility.PRIVATE.name());
     @j2jLiteral("http://imeji.org/terms/filename")
     private String filename;
+    @j2jLiteral("http://imeji.org/terms/filetype")
+    private String filetype;
     @j2jLiteral("http://imeji.org/terms/escidocId")
     private String escidocId;
     @j2jLiteral("http://imeji.org/terms/storageId")
@@ -155,6 +157,17 @@ public class Item extends Properties implements FulltextIndex
     public String getFilename()
     {
         return filename;
+    }
+    
+    public void setFiletype(String filetype)
+    {
+        this.filetype = filetype;
+    }
+
+    @XmlElement(name = "filetype", namespace = "http://imeji.org/terms")
+    public String getFiletype()
+    {
+        return filetype;
     }
 
     /**

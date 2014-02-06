@@ -2,7 +2,9 @@
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets">
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:mdprofile="http://java.sun.com/jsf/composite/components/mdProfile">
 	
 	<ui:define name="init">
 		<h:outputText value="#{metadataBean.init}"/>
@@ -145,6 +147,7 @@
 							<!-- START ajaxArea -->
 							<h:panelGroup layout="block" id="ajaxArea">
 								<script type="text/javascript">dragAndDrop();highlighter();</script>
+								
 								
 								<h:panelGroup layout="block" id="dropMetadata" styleClass="dropMetadata imj_dropArea">
 									<h:outputText value="#{lbl.add_metadata}" style="visibility:hidden;" styleClass="imj_orderInfo"/>

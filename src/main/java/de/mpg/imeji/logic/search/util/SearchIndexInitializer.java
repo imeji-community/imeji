@@ -36,7 +36,6 @@ public class SearchIndexInitializer
      */
     private static Map<String, SearchIndex> initBasisIndexes()
     {
-    	System.out.println("test");
         Map<String, SearchIndex> indexes = new HashMap<String, SearchIndex>();
         indexes = put(indexes, new SearchIndex(SearchIndex.names.item.name(), "http://imeji.org/terms/id"));
         indexes = put(indexes, new SearchIndex(SearchIndex.names.user.name(), "http://imeji.org/terms/user"));

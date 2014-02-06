@@ -69,7 +69,7 @@ public class SingleEditBean
 
     /**
      * Initialize the page
-     */
+     */ 
     public void init()
     {
         editor = new SimpleImageEditor(item, profile, null);
@@ -83,7 +83,7 @@ public class SingleEditBean
      * 
      * @return
      * @throws Exception
-     */
+     */ 
     public String save() throws Exception
     {
         editor.save();

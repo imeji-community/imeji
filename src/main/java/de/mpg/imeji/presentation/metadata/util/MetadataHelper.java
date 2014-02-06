@@ -44,7 +44,7 @@ public class MetadataHelper
         }
         else if (md instanceof Geolocation)
         {
-            return Double.isNaN(((Geolocation)md).getLatitude()) || Double.isNaN(((Geolocation)md).getLongitude());
+        	return Double.isNaN(((Geolocation)md).getLatitude()) || Double.isNaN(((Geolocation)md).getLongitude());
         }
         else if (md instanceof License)
         {
@@ -74,6 +74,7 @@ public class MetadataHelper
         }
         return false;
     }
+    
 
     /**
      * Set the CoNE id of a {@link ConePerson}

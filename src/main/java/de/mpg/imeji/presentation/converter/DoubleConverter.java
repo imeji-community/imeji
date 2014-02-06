@@ -3,9 +3,13 @@
  */
 package de.mpg.imeji.presentation.converter;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
+import javax.faces.convert.ConverterException;
+
+import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * Converter for Double: Display NaN as empty string, and transform empty String as NaN
@@ -14,7 +18,6 @@ import javax.faces.convert.Converter;
  */
 public class DoubleConverter implements Converter
 {
-    @Override
     public Object getAsObject(FacesContext arg0, UIComponent arg1, String arg2)
     {
         try
@@ -31,6 +34,7 @@ public class DoubleConverter implements Converter
     @Override
     public String getAsString(FacesContext arg0, UIComponent arg1, Object arg2)
     {
+    	
         double d = Double.parseDouble(arg2.toString());
         if (Double.compare(Double.NaN, d) == 0)
             return "";

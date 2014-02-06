@@ -89,13 +89,14 @@ public abstract class MetadataEditor
         ItemController ic = new ItemController(sb.getUser());
         try
         {
-            if (prepareUpdate())
+
+        	if (validateMetadataofImages())
             {
-                if (validateMetadataofImages())
+                if (prepareUpdate())
                 {
                     try
                     {
-                        addPositionToMetadata();
+                    	addPositionToMetadata();
                         List<Item> itemList = new ArrayList<Item>();
                         for (EditorItemBean eib : items)
                         {

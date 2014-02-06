@@ -51,22 +51,23 @@ public class SimpleImageEditor extends MetadataEditor
 
     @Override
     public boolean prepareUpdate()
-    {
+    {  
         for (EditorItemBean eib : items)
-        {
-            eib.getMds().trim();
+        {	
+        	eib.getMds().trim();
         }
+        
         if (items.size() == 0)
         {
             return false;
         }
         return true;
     }
-
+  
     @Override
     public boolean validateMetadataofImages()
     {
-        // TODO Auto-generated method stub
+    	// TODO Auto-generated method stub
         return true;
     }
 

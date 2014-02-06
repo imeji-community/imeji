@@ -29,7 +29,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "number", namespace = "http://imeji.org/terms/metadata")
-@XmlType(propOrder = { "number", "statement" })
+@XmlType(propOrder={"number", "statement"})
 public class Number extends Metadata
 {
     @j2jLiteral("http://imeji.org/terms/number")

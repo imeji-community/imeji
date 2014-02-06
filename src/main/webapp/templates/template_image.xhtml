@@ -118,7 +118,7 @@
 							<ui:fragment rendered="#{Auth.updateContent(imageBean.collection)}">
 								<h:outputText id="lblViewItemFull_lblBasic" value="#{lbl.metadata}" /><br/>
 									<h:form>
-										<h:commandLink rendered="#{!imageBean.locked and imageBean.edit.toggleState == 'displayMd'}" value="#{lbl.edit}" action="#{imageBean.edit.showEditor}">
+										<h:commandLink id="editLink" rendered="#{!imageBean.locked and imageBean.edit.toggleState == 'displayMd'}" value="#{lbl.edit}" action="#{imageBean.edit.showEditor}">
 											<f:ajax execute="@this" render=":metadata"/>
 										</h:commandLink>
 									</h:form>

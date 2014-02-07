@@ -2406,6 +2406,7 @@ min-height: 6em;
 	display: inline-block;
 	max-height: 17em;
 	overflow: auto;
+	vertical-align: top;
 }
 .imj_uploadMessageArea .imj_fileErrorMessageArea .imj_messageList,
 .imj_uploadMessageArea .imj_fileSuccessMessageArea .imj_messageList {
@@ -2507,6 +2508,22 @@ min-height: 6em;
 	color: #000000;
     background-color: #4AFF00;
     border: solid #4AFF00;
+}
+/* for every file in list, which is not uploaded */
+.plupload_delete:hover {
+	background-color: rgba(0,0,0, 0.1);
+}
+.plupload_delete .plupload_file_action {
+	vertical-align: text-top;
+}
+.plupload_delete .plupload_file_action a {
+	display: inline-block;
+	width: 1.363636em;
+	height: 1.363636em;
+	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/D80000/imjButtonMinusBorder_15.png") no-repeat scroll 0 0 transparent;
+}
+.plupload_delete .plupload_file_action a:hover {
+	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/FF7F00/imjButtonMinusBorder_15.png") no-repeat scroll 0 0 transparent;
 }
 
 

@@ -314,7 +314,7 @@ public class AlbumBean extends ContainerBean
     {
     	if (event.getNewValue() != null && event.getNewValue().toString().trim().length() > 0)
         {
-            album.setDiscardComment(event.getNewValue().toString());
+            album.setDiscardComment(event.getNewValue().toString().trim());
         }
     }
 

@@ -1908,13 +1908,32 @@ min-height: 6em;
     -moz-border-radius: 0.3em;
     -o-border-radius: 0.3em;
     -ms-border-radius: 0.3em;
-	/*float: right;*/
 }
 
 .imj_submitButton:hover {
 	color: #000000;
     background-color: #4AFF00;
     border: solid #4AFF00;
+}
+
+.imj_disabledButton {
+	color: #FFFFFF;
+	background-color: #292929;
+	border: solid #292929;
+	padding: 0 0.3333333em;
+	margin-left: 1em;
+	cursor: default;
+	border-radius: 0.3em;
+    -webkit-border-radius: 0.3em;
+    -moz-border-radius: 0.3em;
+    -o-border-radius: 0.3em;
+    -ms-border-radius: 0.3em;
+}
+.imj_disabledButton:hover {
+	color: #FFFFFF;
+	background-color: #292929;
+	border: solid #292929;
+	cursor: default;
 }
 
 

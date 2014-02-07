@@ -233,7 +233,11 @@ public class CollectionListItem
      */
     public void discardCommentListener(ValueChangeEvent event)
     {
-        setDiscardComment(event.getNewValue().toString());
+    	
+    	if (event.getNewValue() != null && event.getNewValue().toString().trim().length() > 0) 
+    	{
+    		setDiscardComment(event.getNewValue().toString().trim());
+    	}
     }
 
     public String getTitle()

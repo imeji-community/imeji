@@ -312,7 +312,7 @@ public class AlbumBean extends ContainerBean
      */
     public void discardCommentListener(ValueChangeEvent event)
     {
-        if (event.getNewValue() != null)
+    	if (event.getNewValue() != null && event.getNewValue().toString().trim().length() > 0)
         {
             album.setDiscardComment(event.getNewValue().toString());
         }

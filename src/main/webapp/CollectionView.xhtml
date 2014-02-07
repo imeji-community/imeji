@@ -3,7 +3,8 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:imjc="http://java.sun.com/jsf/composite/components">
+	xmlns:imjc="http://java.sun.com/jsf/composite/components"
+	xmlns:menu="http://java.sun.com/jsf/composite/components/menu">
 	
 	<ui:param name="currentMainMenu" value="collection"/>
 	
@@ -18,26 +19,7 @@
 	
 	
 	<ui:define name="actionsMenu">
-		<h:panelGroup layout="block" styleClass="imj_contentSubMenu">
-			<h:outputLink id="lnkViewCollectionStart" styleClass="imj_contentSubMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}" rendered="#{ViewCollectionBean.size > 0}">
-				<h:outputText value="#{lbl.collection_home}"/>
-			</h:outputLink>
-			
-			<h:outputLink id="lnkViewCollectionAllImages" styleClass="imj_contentSubMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.browsePath}?q=" rendered="#{ViewCollectionBean.size > 0}">
-				<h:outputText value="#{lbl.view_images}"/>
-			</h:outputLink>
-			
-			<h:outputText value="#{lbl.collection_metadata}" styleClass="imj_contentSubMenuItem imj_active"/>
-			
-			<h:outputLink id="lnkUploadImages" styleClass="imj_contentSubMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.uploadPath}?init=1" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status != 'WITHDRAWN'}">
-				<h:outputText value="#{lbl.upload_images}"/>
-			</h:outputLink>
-			
-			<h:outputLink id="lnkIngest" styleClass="imj_contentSubMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/ingest?init=1" rendered="#{AuthorizationBean.admin}">
-				<h:outputText value="#{lbl.ingest}"/>
-			</h:outputLink>
-			
-		</h:panelGroup>
+		<menu:actionMenu_collectionContext bean="#{ViewCollectionBean}" userHasAdminRights="#{AuthorizationBean.admin}" userHasEditRights="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status != 'WITHDRAWN'}" hasContent="#{ViewCollectionBean.size > 0}" navBean="#{Navigation}" menuClass="imj_contentSubMenu" activeMenu="metadata"/>
 	</ui:define>
 			
 	<ui:define name="metadataProfile">

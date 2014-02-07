@@ -1063,135 +1063,65 @@ cut second ?
     margin-left: 5.636em; /* 5.8181em*/
 }
 
-/* ===[ Content - Menu ]=== * AlbumImage.xhmtl
-   ================================================== */
-/*
-.imj_contentMenuWrapper {
-    margin-top: 0.500em;
-    padding-top: 0;
-}
+/* ===[ Content - Menu ]=== *** navigation menu, e.g. to collection startpage, upload, ... ***
+ * ===[ Content - SubMenu ]=== *** actionsMenu ***
+ * =========================================================================================== */
 
-.imj_contentMenuWrapper * {
-    float: left;
-    /*line-height: normal;
-}
-
-*/
-
-/* .contentMenu .sub  */
-
-.imj_contentMenu {
+.imj_contentMenu,
+.imj_contentSubMenu {
 	clear: both;
 	width: 86.95%;
 	padding: 0 6.5%;
+	letter-spacing: 0.045em;
+}
+.imj_contentMenu {
 	text-transform: uppercase;
-	letter-spacing: 0.045em; /*0.091em;*/
-	
 }
 
-/* free_area0 span - template_paginator_containers.xhtml   */
-
-.imj_contentMenuItem {
-    display: inline;
-    float: left;
-    overflow: hidden;
-    margin: 0;
-    padding: 0;
+.imj_contentMenu + .imj_contentSubMenu{
+	margin-top: 0.272727em;
 }
-
-.imj_contentMenuItemCreateAlbum {
-    /* margin-left: 11.455em; 10.455em*/
-} 
- 
-.imj_contentMenuItem.imj_active {
-	color: #F0F0F0;
-	background-color: #323232;
-    border-radius: 0.41666666em;
-    -webkit-border-radius: 0.41666666em;
-    -moz-border-radius: 0.41666666em;
-    -o-border-radius: 0.41666666em;
-    -ms-border-radius: 0.41666666em;
-}
-
-/* .contentMenu .seperator .void- template_paginator_containers.xhtml - 
-*  Images.xhtml - template_paginator_albums.xhtml *    
-
-    margin-left: 0.46em;
-    margin-right: 0.46em;    
-    background-color: #292929;
-    border-right-width: 0px;
-    border-left-width: 0px;
-    border-top-width: 0.18em;
-    border-top-style: solid;
-    border-bottom-width: 0.97em;
-    border-bottom-style: solid; 
-    border-color: #292929;
-   ==================================================
-   ================================================== */
 
 .imj_contentMenu .imj_contentMenuSeparator {
-    float: left;
-    width: 0.091em; /*0.10em*/
-    height: 1.091em; /* 1.15em*/
+	display: inline-block;
+    width: 0.090909em; /*0.10em*/
+    height: 1.090909em; /* 1.15em*/
     margin: 0 0.318em; /* 0.364 0.636em 0.455em*/
     padding: 0;
     /* background-color: #6CAD2F; */
 }
 
-
-/* ===[ Content - SubMenu ]=== *** actionsMenu ***
-   ================================================== */
-
-/* .contentMenu * !!!
-.imj_contentMenu * {
-    float: left;
-    line-height: normal;
-}
-*/
-
-.imj_contentSubMenu {
-    clear:left;
-	width: 86.95%;
-	padding: 0 6.5%;
-	text-transform: none;
-    letter-spacing: 0.045em; /*0.091em*/
-    color: #F0F0F0;
-}
-
-.imj_contentSubMenu a {
-    margin-right: 1.000em; /*0.364em*/
-}
-
-/* free_area0 - template_paginator_containers.xhtml - Images.xhtml 
- * free_area0 xTiny_marginLInc - AlbumEntryPage.xhtml - AlbumBrowse.xhtml  */
-
+.imj_contentMenuItem,
 .imj_contentSubMenuItem {
     display: inline-block;
     padding: 0;
     margin-right: 1em;
     color: #6CAD2F;
 }
+.imj_contentMenuItem.imj_active,
 .imj_contentSubMenuItem.imj_active {
 	color: #F0F0F0;
 }
 
 /* SubMenu - Sort by - Filter by */
+.imj_contentMenuItem span,
+.imj_contentMenuItem a,
 .imj_contentSubMenuItem span,
 .imj_contentSubMenuItem a {
-    margin-right: 0.364em;
+    margin-right: 0.363636em;
 } 
 
 /* template_paginator_containers.xhtml - Images.xhtml */
 
 .imj_contentMenuItemSorting {
-    margin: 0 0.364em 0 0;
+    margin: 0 0.363636em 0 0;
     color: #F0F0F0;
 }
 
 /* template_paginator_containers.xhtml - template_paginator_albums.xhtml   */
 
 .imj_contentMenuItemFiltering {
-    margin: 0.18em 0.364em 0 0; /*6.364em 6.000em*/
+    margin: 0.181818em 0.363636em 0 0; /*6.364em 6.000em*/
 }
 
 
@@ -2058,6 +1988,16 @@ min-height: 6em;
 
 .imj_overlayMenu:hover .imj_iconTriangleBottomRight_15 {
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonTriangleLargeBottomRight_15.png");
+}
+
+.imj_overlayMenu .imj_listItemSeparator {
+	border-top: 0.090909em solid #6CAD2F;
+	padding-top: 0.181818em;
+}
+
+.imj_contentMenu .imj_overlayMenu .imj_overlayMenuList li,
+.imj_contentSubMenu .imj_overlayMenu .imj_overlayMenuList li {
+	line-height: 175%;
 }
 
 .imj_facetSeparator {

@@ -105,7 +105,7 @@
 										<h:outputLink id="lnkWithdrawCollection" value="#" onclick="openDialog('#{withdrawID}');">
 											<h:outputText value="#{lbl.withdraw}"/>
 										</h:outputLink>
-										<dialog:confirmationReasonedDialog submitAction="withdraw" bean="#{cc.attrs.item}" confirmationText="#{cc.attrs.item.discardComment}" submitLabel="#{lbl.withdraw}" dialogId="#{withdrawID}"/>
+										<dialog:confirmationReasonedDialog submitAction="withdraw" bean="#{cc.attrs.item}" confirmationText="#{cc.attrs.withdrawConfirmationText}" submitLabel="#{lbl.withdraw}" dialogId="#{withdrawID}"/>
 										<imjc:DiscardContainer id="#{withdrawID}" bean="#{cc.attrs.item}" discardComment="#{cc.attrs.item.discardComment}" index="#{cc.attrs.itemIndex}"/>
 									</li>
 								</ui:fragment>

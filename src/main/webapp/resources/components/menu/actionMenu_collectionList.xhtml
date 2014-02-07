@@ -1,0 +1,54 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:composite="http://java.sun.com/jsf/composite">
+	
+	<composite:interface>
+		<composite:attribute name="navBean" required="true"/>
+		<composite:attribute name="filterBean" required="true"/>
+		<composite:attribute name="sortBean" required="true"/>
+		<composite:attribute name="menuClass" type="java.lang.String" value="" required="true"/>
+		<composite:attribute name="isUserLoggedIn" type="java.lang.Boolean" value="false" required="true"/>
+	</composite:interface>
+	
+	<composite:implementation>
+		<div class="#{cc.attrs.menuClass}">
+			
+			<div class="imj_overlayMenu #{cc.attrs.menuClass}Item">
+				<div class="imj_menuHeader">
+					<h:outputText id="txtSort" value="#{lbl.sorting}" styleClass="imj_headerEntry"/>
+				</div>
+				<div class="imj_menuBody">
+					<h:outputText value="#{lbl.sort_by}: "/>
+					<h:form>
+						<h:selectOneMenu id="selSort" value="#{cc.attrs.sortBean.selectedSortCriterion}" onchange="submit();">
+							<f:selectItems id="sortItem" value="#{cc.attrs.sortBean.sortMenu}"/>
+						</h:selectOneMenu>
+						<h:commandLink id="lnkSortAsc" value="&#160;" styleClass="imj_buttonOrderByAsc_15" action="#{cc.attrs.sortBean.toggleSortOrder}" rendered="#{cc.attrs.sortBean.selectedSortOrder == 'ASCENDING'}"/>
+						<h:commandLink id="lnkSortDesc" value="&#160;" styleClass="imj_buttonOrderByDesc_15" action="#{cc.attrs.sortBean.toggleSortOrder}" rendered="#{cc.attrs.sortBean.selectedSortOrder != 'ASCENDING'}"/>
+					</h:form>
+				</div>
+			</div>
+			
+			<ui:fragment rendered="#{cc.attrs.isUserLoggedIn}">
+				
+				<h:panelGroup layout="block" styleClass="imj_overlayMenu #{cc.attrs.menuClass}Item">
+					<div class="imj_menuHeader">
+						<h:outputText id="txtFilter" value="#{lbl.filter}" styleClass="imj_headerEntry"/>
+					</div>
+					<div class="imj_menuBody">
+						<h:outputText value="#{lbl.filter_by}: "/>
+						<h:selectOneMenu id="selFilter" value="#{cc.attrs.filterBean.selectedFilter}" onchange="window.location.href = '?f=' + this.value" readonly="true">
+							<f:selectItems id="filterItem" value="#{cc.attrs.filterBean.filterMenu}"/>
+						</h:selectOneMenu>
+					</div>
+				</h:panelGroup>
+				
+				<h:outputLink id="lnkCreate" styleClass="imj_contentSubMenuItem" value="#{cc.attrs.navBean.createCollectionUrl}?reset=1">
+					<h:outputText value="#{lbl.collection_create}"/>
+				</h:outputLink>
+			</ui:fragment>
+		</div>
+	</composite:implementation>
+</html>

@@ -4,24 +4,29 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:composite="http://java.sun.com/jsf/composite">
 	
-	<composite:interface>
-		<composite:attribute name="menuClass" type="java.lang.String" value="" required="true"/>
-		<composite:attribute name="isUserLoggedIn" type="java.lang.Boolean" value="false" required="true"/>
-		<composite:attribute name="navBean" required="true"/>
-		<composite:attribute name="sortBean" type="java.lang.Object" required="false"/>
-		<composite:attribute name="filterBean" type="java.lang.Object" required="false"/>
-		<composite:attribute name="collectionId" type="java.lang.String" value="" required="false"/>
-		<composite:attribute name="exportQuery" type="java.lang.String" value="" required="false"/>
-		<composite:attribute name="collectionStatus" type="java.lang.String" value="PENDING" required="false"/>
-		<composite:attribute name="isEditable" type="java.lang.Boolean" value="false" required="false"/>
-		<composite:attribute name="isDeletable" type="java.lang.Boolean" value="false" required="false"/>
-		<composite:attribute name="hasContent" type="java.lang.Boolean" value="false" required="false"/>
+	<composite:interface shortDescription="Menu for context interactions as sorting, filter, download, etc. / @require attributes: isUserLoggedIn, navBean">
+		
+		<composite:attribute name="isUserLoggedIn" type="java.lang.Boolean" default="false" required="true" shortDescription="@type: Boolean"/>
+		<composite:attribute name="navBean" type="java.lang.Object" required="true" shortDescription="@type: Object, used for several URL paths"/>
+		
+		<composite:attribute name="sortBean" type="java.lang.Object" required="false" shortDescription="@type: Object, used for sorting elements (e.g. in bibliographic list - order elements ascending)"/>
+		<composite:attribute name="filterBean" type="java.lang.Object" required="false" shortDescription="@type: Object, used for filtering elements (e.g. in bibliographic list - my items without withdrawed items)"/>
+		
+		<composite:attribute name="menuClass" type="java.lang.String" default="imj_contentSubMenu" required="false" shortDescription="@type: String, used for the component and will be extended with 'Item' for every menu entry"/>
+		<composite:attribute name="collectionId" type="java.lang.String" default="" required="false" shortDescription="@type: String, required for Download"/>
+		<composite:attribute name="exportQuery" type="java.lang.String" default="" required="false" shortDescription="@type: String, @dependency: collectionId for Download"/>
+		<composite:attribute name="collectionStatus" type="java.lang.String" default="PENDING" required="false" shortDescription="@type: String, for menu handling in case of withdraw, release, delete, ..."/>
+		
+		<composite:attribute name="isEditable" type="java.lang.Boolean" default="false" required="false" shortDescription="@type: Boolean, required for rights managment"/>
+		<composite:attribute name="isDeletable" type="java.lang.Boolean" default="false" required="false" shortDescription="@type: Boolean, required for rights managment"/>
+		<composite:attribute name="hasContent" type="java.lang.Boolean" default="false" required="false" shortDescription="@type: Boolean, required to show menus (e.g. only release items with content)"/>
 	</composite:interface>
 	
 	<composite:implementation>
-		<div class="#{cc.attrs.menuClass}">
+		
+		<div class="#{cc.attrs.menuClass.trim()}">
 			
-			<h:panelGroup layout="block" styleClass="imj_overlayMenu #{cc.attrs.menuClass}Item" rendered="#{cc.attrs.sortBean != null}">
+			<h:panelGroup layout="block" styleClass="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item" rendered="#{cc.attrs.sortBean != null}">
 				<div class="imj_menuHeader">
 					<h:outputText id="txtSort" value="#{lbl.sorting}" styleClass="imj_headerEntry"/>
 				</div>
@@ -39,7 +44,7 @@
 			
 			<ui:fragment rendered="#{cc.attrs.isUserLoggedIn}">
 				
-				<h:panelGroup layout="block" styleClass="imj_overlayMenu #{cc.attrs.menuClass}Item" rendered="#{cc.attrs.filterBean != null}">
+				<h:panelGroup layout="block" styleClass="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item" rendered="#{cc.attrs.filterBean != null}">
 					<div class="imj_menuHeader">
 						<h:outputText id="txtFilter" value="#{lbl.filter}" styleClass="imj_headerEntry"/>
 					</div>
@@ -52,7 +57,7 @@
 				</h:panelGroup>
 				
 				
-				<div class="imj_overlayMenu #{cc.attrs.menuClass}Item">
+				<div class="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item">
 					<div class="imj_menuHeader">
 						<h:outputText value="#{lbl.actions}" styleClass="imj_headerEntry"/>
 					</div>
@@ -94,25 +99,25 @@
 				
 				
 				
-				<ui:fragment rendered="#{cc.attrs.collectionId.trim() != ''}">
-					<div class="imj_overlayMenu #{cc.attrs.menuClass}Item">
+				<ui:fragment rendered="#{cc.attrs.collectionId.trim().length() > 0}">
+					<div class="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item">
 						<div class="imj_menuHeader">
 							<h:outputText value="#{lbl.download}" styleClass="imj_headerEntry"/>
 						</div>
 						<div class="imj_menuBody">
 							<ul class="imj_overlayMenuList">
 								<li>
-									<h:outputLink value="#{cc.attrs.navBean.applicationUrl}export?format=zip&amp;type=image&amp;n=10000&amp;col=#{cc.attrs.collectionId}&amp;q=#{cc.attrs.exportQuery.trim()}" target="_blank">
+									<h:outputLink value="#{cc.attrs.navBean.applicationUrl}export?format=zip&amp;type=image&amp;n=10000&amp;col=#{cc.attrs.collectionId.trim()}&amp;q=#{cc.attrs.exportQuery.trim()}" target="_blank">
 										<h:outputText value="#{lbl.export_zip}"/>
 									</h:outputLink>
 								</li>
 								<li>
-									<h:outputLink value="#{cc.attrs.navBean.applicationUrl}export?format=rdf&amp;type=image&amp;n=10000&amp;col=#{cc.attrs.collectionId}&amp;q=#{cc.attrs.exportQuery.trim()}" target="_blank">
+									<h:outputLink value="#{cc.attrs.navBean.applicationUrl}export?format=rdf&amp;type=image&amp;n=10000&amp;col=#{cc.attrs.collectionId.trim()}&amp;q=#{cc.attrs.exportQuery.trim()}" target="_blank">
 										<h:outputText value="#{lbl.export_rdf}"/>
 									</h:outputLink>
 								</li>
 								<li>
-									<h:outputLink value="#{cc.attrs.navBean.applicationUrl}export?format=xml&amp;type=image&amp;n=10000&amp;col=#{cc.attrs.collectionId}&amp;q=#{cc.attrs.exportQuery.trim()}" target="_blank">
+									<h:outputLink value="#{cc.attrs.navBean.applicationUrl}export?format=xml&amp;type=image&amp;n=10000&amp;col=#{cc.attrs.collectionId.trim()}&amp;q=#{cc.attrs.exportQuery.trim()}" target="_blank">
 										<h:outputText value="#{lbl.export_native}"/>
 									</h:outputLink>
 								</li>

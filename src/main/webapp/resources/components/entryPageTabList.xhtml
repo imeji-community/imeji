@@ -42,7 +42,7 @@
 					</h2>
 						
 					<!-- Withdrawn is in progress --> 
-					<h:panelGroup styleClass="imj_mediaWithdrawn" rendered="#{cc.attrs.infoLogicBean.container.discardComment != null and cc.attrs.infoLogicBean.container.discardComment != ''}">
+					<h:panelGroup styleClass="imj_mediaWithdrawn" rendered="#{cc.attrs.infoLogicBean.container.discardComment.toString().length() > 0 and cc.attrs.infoLogicBean.container.status.toString().toUpperCase() == 'WITHDRAWN'}">
 						<br/>
 						<h:outputText value="#{lbl.withdraw_comment}:"/>
 						<br/>

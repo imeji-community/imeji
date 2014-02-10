@@ -4,6 +4,7 @@
 package de.mpg.imeji.logic.export;
 
 import java.io.OutputStream;
+import java.io.StringWriter;
 import java.util.Map;
 
 import org.apache.http.client.HttpResponseException;
@@ -24,6 +25,8 @@ import de.mpg.imeji.logic.vo.User;
  */
 public abstract class Export
 {
+    private StringWriter writer;
+	
     /**
      * The {@link User} doing the export
      */

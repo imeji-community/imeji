@@ -5,6 +5,8 @@ package de.mpg.imeji.logic.export;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -36,10 +38,11 @@ import de.mpg.j2j.helper.SortHelper;
 public class ExportManager
 {
     private OutputStream out;
-    private Export export;
+	private Export export;
     private User user;
 
-    /**
+
+	/**
      * Create a new {@link ExportManager} with url parameters, and perform the {@link Export} in the specified
      * {@link OutputStream}
      * 
@@ -79,7 +82,7 @@ public class ExportManager
             }
         }
     }
-
+    
     /**
      * Search the element to export
      * 
@@ -151,4 +154,5 @@ public class ExportManager
     {
         return export.getContentType();
     }
+
 }

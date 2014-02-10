@@ -19,12 +19,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.http.client.HttpResponseException;
 
 import de.mpg.imeji.logic.export.ExportManager;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.user.LoginBean;
 
 public class ExportServlet extends HttpServlet
 {
@@ -39,14 +41,31 @@ public class ExportServlet extends HttpServlet
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException
     {
-        // String query = req.getParameter("q");
         SessionBean session = getSessionBean(req, resp);
-        User user = session.getUser();
         String instanceName = session.getInstanceName();
-        // SearchQuery searchQuery = new SearchQuery();
+        User user = null;
+        
         try
-        {
-            // searchQuery = URLQueryTransformer.parseStringQuery(query);
+        {        
+	        // Authentication ---------------------------------------------
+	        String usernamePassword = this.getUsernamePassword(req);
+	        if (usernamePassword == null)
+	        {
+	        	//Take the already logged in user
+	        	user = session.getUser();
+	        }
+	        else
+	        {
+	            int p = usernamePassword.indexOf(":");
+	            if (p != -1)
+	            {
+	            	LoginBean loginBean = new LoginBean();
+	            	loginBean.setLogin(usernamePassword.substring(0, p));
+	            	loginBean.setPasswd(usernamePassword.substring(p + 1));
+	            	loginBean.doLogin();
+	            	user = session.getUser();
+	            }
+	        }
             ExportManager exportManager = new ExportManager(resp.getOutputStream(), user, req.getParameterMap());
             String exportName = instanceName + "_";
             exportName += new Date().toString().replace(" ", "_").replace(":", "-");
@@ -61,8 +80,10 @@ public class ExportServlet extends HttpServlet
             resp.setHeader("Connection", "close");
             resp.setHeader("Content-Type", exportManager.getContentType());
             resp.setHeader("Content-disposition", "filename=" + exportName);
+            resp.setStatus(200);
             SearchResult result = exportManager.search();
             exportManager.export(result);
+            resp.getOutputStream().flush();
         }
         catch (HttpResponseException he)
         {
@@ -71,7 +92,10 @@ public class ExportServlet extends HttpServlet
         catch (IOException e)
         {
             resp.sendError(500, e.getMessage());
-        }
+        } catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     /**
@@ -132,5 +156,28 @@ public class ExportServlet extends HttpServlet
         {
             FacesContext.setCurrentInstance(facesContext);
         }
+    }
+    
+
+    /**
+     * Utiliy method to return the username and password
+     * (separated by a colon).
+     * 
+     * @param request
+     * @return The username and password combination
+     */
+    private String getUsernamePassword(HttpServletRequest request)
+    {
+        try {
+            String authHeader = request.getHeader("Authorization");
+            if (authHeader != null) 
+            {
+                        String userPass = new String(Base64.decodeBase64(authHeader.getBytes()));
+                        return userPass;
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
 }

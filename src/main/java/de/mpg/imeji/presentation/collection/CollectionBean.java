@@ -231,10 +231,10 @@ public abstract class CollectionBean extends ContainerBean
      */
     public void discardCommentListener(ValueChangeEvent event)
     {
-        if (event.getNewValue() != null)
-        {
-            collection.setDiscardComment(event.getNewValue().toString());
-        }
+    	if (event.getNewValue() != null && event.getNewValue().toString().trim().length() > 0) 
+    	{
+    		getContainer().setDiscardComment(event.getNewValue().toString().trim());
+    	}
     }
 
     /**
@@ -580,4 +580,13 @@ public abstract class CollectionBean extends ContainerBean
     {
         return collection;
     }
+    
+    public String getDiscardComment() 
+	{
+		return this.getContainer().getDiscardComment();
+	}
+	public void setDiscardComment(String comment)
+	{
+		this.getContainer().setDiscardComment(comment);
+	}
 }

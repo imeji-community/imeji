@@ -19,7 +19,7 @@
 	
 	
 	<ui:define name="actionsMenu">
-		<menu:actionMenu_collectionContext bean="#{ViewCollectionBean}" userHasAdminRights="#{AuthorizationBean.admin}" userHasEditRights="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status != 'WITHDRAWN'}" hasContent="#{ViewCollectionBean.size > 0}" navBean="#{Navigation}" menuClass="imj_contentMenu" activeMenu="metadata"/>
+		<menu:context_subNavigation bean="#{ViewCollectionBean}" userHasAdminRights="#{AuthorizationBean.admin}" userHasEditRights="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status != 'WITHDRAWN'}" hasContent="#{ViewCollectionBean.size > 0}" navBean="#{Navigation}" menuClass="imj_contentMenu" activeMenu="metadata"/>
 		
 		<menu:context_actionMenu isUserLoggedIn="#{SessionBean.user != null}" navBean="#{Navigation}" collectionStatus="#{ViewCollectionBean.collection.status}" collectionId="#{ViewCollectionBean.id}" isDeletable="#{ViewCollectionBean.deletable}" isEditable="#{ViewCollectionBean.editable}" hasContent="#{ViewCollectionBean.size > 0}"/>
 	</ui:define>

@@ -14,18 +14,18 @@
 	
 	<ui:define name="actionsMenu">
 		
-		<menu:context_subNavigation bean="#{CollectionImagesBean}" userHasAdminRights="#{AuthorizationBean.admin}" userHasEditRights="#{CollectionImagesBean.editable}" hasContent="#{CollectionImagesBean.totalNumberOfElements > 0}" navBean="#{Navigation}" menuClass="imj_contentMenu" activeMenu="images"/>
+		<menu:context_subNavigation contextId="#{paginatorListSessionBean.id}" contextUrl="#{Navigation.collectionUrl}" curMainMenu="#{currentMainMenu}" userHasAdminRights="#{AuthorizationBean.admin}" userHasEditRights="#{paginatorListSessionBean.editable}" hasContent="#{paginatorListSessionBean.totalNumberOfElements > 0}" navBean="#{Navigation}" activeMenu="content"/>
 		
 		<menu:context_actionMenu isUserLoggedIn="#{SessionBean.user != null}" sortBean="#{paginatorListSessionBean}" navBean="#{Navigation}" exportQuery="#{paginatorListSessionBean.query}" 
-			collectionStatus="#{paginatorListSessionBean.collection.status}" collectionId="#{paginatorListSessionBean.id}" isDeletable="#{paginatorListSessionBean.deletable}" isEditable="#{paginatorListSessionBean.editable}"/>
+			collectionStatus="#{paginatorListSessionBean.collection.status}" contextId="#{paginatorListSessionBean.id}" isDeletable="#{paginatorListSessionBean.deletable}" isEditable="#{paginatorListSessionBean.editable}"/>
 		
 	</ui:define>
 	
 	
 	<ui:define name="modalDialogs_from_site">
-		<dialog:confirmationDialog submitAction="release" bean="#{CollectionImagesBean}" confirmationText="#{msg.confirmation_release_collection}?" submitLabel="#{lbl.release}" dialogId="releaseMenuItemDialog" rendered="#{paginatorListSessionBean.editable and paginatorListSessionBean.collection.status.toString().toUpperCase() == 'PENDING' and CollectionImagesBean.totalNumberOfElements > 0}"/>
-		<dialog:confirmationDialog submitAction="delete" bean="#{CollectionImagesBean}" confirmationText="#{msg.confirmation_delete_collection}?" submitLabel="#{lbl.delete}" dialogId="deleteMenuItemDialog" rendered="#{paginatorListSessionBean.deletable}"/>
-		<dialog:confirmationReasonedDialog submitAction="withdraw" bean="#{CollectionImagesBean}" confirmationText="#{msg.confirmation_withdraw_collection}" submitLabel="#{lbl.withdraw}" dialogId="withdrawMenuItemDialog" rendered="#{paginatorListSessionBean.editable and paginatorListSessionBean.collection.status.toString().toUpperCase() == 'RELEASED'}"/>
+		<dialog:confirmationDialog submitAction="release" bean="#{paginatorListSessionBean}" confirmationText="#{msg.confirmation_release_collection}?" submitLabel="#{lbl.release}" dialogId="releaseMenuItemDialog" rendered="#{paginatorListSessionBean.editable and paginatorListSessionBean.collection.status.toString().toUpperCase() == 'PENDING' and paginatorListSessionBean.totalNumberOfElements > 0}"/>
+		<dialog:confirmationDialog submitAction="delete" bean="#{paginatorListSessionBean}" confirmationText="#{msg.confirmation_delete_collection}?" submitLabel="#{lbl.delete}" dialogId="deleteMenuItemDialog" rendered="#{paginatorListSessionBean.deletable}"/>
+		<dialog:confirmationReasonedDialog submitAction="withdraw" bean="#{paginatorListSessionBean}" confirmationText="#{msg.confirmation_withdraw_collection}" submitLabel="#{lbl.withdraw}" dialogId="withdrawMenuItemDialog" rendered="#{paginatorListSessionBean.editable and paginatorListSessionBean.collection.status.toString().toUpperCase() == 'RELEASED'}"/>
 	</ui:define>
 	
 </ui:composition>

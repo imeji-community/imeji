@@ -1099,7 +1099,9 @@ cut second ?
     color: #6CAD2F;
 }
 .imj_contentMenuItem.imj_active,
-.imj_contentSubMenuItem.imj_active {
+.imj_contentMenuItem .imj_active,
+.imj_contentSubMenuItem.imj_active,
+.imj_contentSubMenuItem .imj_active {
 	color: #F0F0F0;
 }
 
@@ -1109,7 +1111,17 @@ cut second ?
 .imj_contentSubMenuItem span,
 .imj_contentSubMenuItem a {
     margin-right: 0.363636em;
-} 
+}
+li.imj_contentMenuItem span,
+li.imj_contentMenuItem a,
+li.imj_contentSubMenuItem span,
+li.imj_contentSubMenuItem a {
+    margin-right: 0;
+}
+li.imj_contentMenuItem,
+li.imj_contentSubMenuItem {
+	margin-right: 0.363636em;
+}
 
 /* template_paginator_containers.xhtml - Images.xhtml */
 

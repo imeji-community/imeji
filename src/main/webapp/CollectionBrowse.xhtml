@@ -16,8 +16,8 @@
 		
 		<menu:actionMenu_collectionContext bean="#{CollectionImagesBean}" userHasAdminRights="#{AuthorizationBean.admin}" userHasEditRights="#{CollectionImagesBean.editable}" hasContent="#{CollectionImagesBean.totalNumberOfElements > 0}" navBean="#{Navigation}" menuClass="imj_contentMenu" activeMenu="images"/>
 		
-		<menu:actionMenu_collectionList isUserLoggedIn="#{SessionBean.user != null}" sortBean="#{paginatorListSessionBean}" navBean="#{Navigation}" menuClass="imj_contentSubMenu"
-			collectionStatus="#{paginatorListSessionBean.collection.status}" collectionId="#{paginatorListSessionBean.id}" isDeletable="#{paginatorListSessionBean.deletable}" isEditable="#{paginatorListSessionBean.editable}" exportQuery="#{paginatorListSessionBean.query}"/>
+		<menu:context_actionMenu isUserLoggedIn="#{SessionBean.user != null}" sortBean="#{paginatorListSessionBean}" navBean="#{Navigation}" exportQuery="#{paginatorListSessionBean.query}" 
+			collectionStatus="#{paginatorListSessionBean.collection.status}" collectionId="#{paginatorListSessionBean.id}" isDeletable="#{paginatorListSessionBean.deletable}" isEditable="#{paginatorListSessionBean.editable}"/>
 		
 	</ui:define>
 	

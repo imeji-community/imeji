@@ -3,33 +3,17 @@
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core">
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:menu="http://java.sun.com/jsf/composite/components/menu"
+	xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs">
 
 	<ui:param name="headline" value="#{IngestBean.collection.metadata.title}"/>
 	<ui:param name="currentMainMenu" value="collection"/>
 	
 	<ui:define name="actionsMenu">
-		<h:panelGroup layout="block" styleClass="imj_contentSubMenu">
-			<h:outputLink id="lnkViewCollectionStart" styleClass="imj_contentSubMenuItem" value="#{Navigation.collectionUrl}#{UploadBean.id}">
-				<h:outputText value="#{lbl.collection_home}"/>
-			</h:outputLink>
-			
-			<h:outputLink id="lnkViewCollectionAllImages" styleClass="imj_contentSubMenuItem" value="#{Navigation.collectionUrl}#{UploadBean.id}/#{Navigation.browsePath}?q=" rendered="#{UploadBean.collectionSize > 0}">
-				<h:outputText value="#{lbl.view_images}"/>
-			</h:outputLink>
-			
-			<h:outputLink id="lnkViewCollectionDetail" styleClass="imj_contentSubMenuItem" value="#{Navigation.collectionUrl}#{UploadBean.id}/#{Navigation.infosPath}?init=1">
-				<h:outputText value="#{lbl.collection_metadata}"/>
-			</h:outputLink>
-			
-			<h:outputLink id="lnkUploadImages" styleClass="imj_contentSubMenuItem" value="#{Navigation.collectionUrl}#{IngestBean.collectionId}/#{Navigation.uploadPath}?init=1" rendered="#{AuthorizationBean.edit}">
-				<h:outputText value="#{lbl.upload_images}"></h:outputText>
-			</h:outputLink>
-			
-			<h:outputLink id="lnkIngest" styleClass="imj_contentSubMenuItem imj_active" value="#{Navigation.collectionUrl}#{UploadBean.id}/ingest?init=1" rendered="#{AuthorizationBean.admin}">
-				<h:outputText value="#{lbl.ingest}"/>
-			</h:outputLink>
-		</h:panelGroup>
+		<menu:context_subNavigation contextId="#{IngestBean.collectionId}" contextUrl="#{Navigation.collectionUrl}" curMainMenu="#{currentMainMenu}" userHasAdminRights="#{AuthorizationBean.admin}" userHasEditRights="#{IngestBean.editable}" navBean="#{Navigation}" activeMenu="ingest" hasContent="#{IngestBean.collectionSize > 0}"/>
+		
+		<menu:context_actionMenu isUserLoggedIn="#{SessionBean.user != null}" curMainMenu="#{currentMainMenu}" navBean="#{Navigation}" collectionStatus="#{IngestBean.collection.status}" contextId="#{IngestBean.collectionId}" hasContent="#{IngestBean.collectionSize > 0}" isEditable="false" isDeletable="false" contextDownloadParam="&amp;col=#{IngestBean.collectionId}"/>
 	</ui:define>
 	
 	<ui:define name="additonalHeaderScripts">
@@ -198,206 +182,9 @@
 	</ui:define>
 	
 	
-	
-	
-	<ui:define name="contentMenu_old">
-		<h:outputLink id="lnkViewCollectionStart"
-			styleClass="imj_contentMenuItem"
-			value="#{Navigation.collectionUrl}#{IngestBean.collectionId}">
-			<h:outputText value="#{lbl.collection_home}" />
-		</h:outputLink>
-
-		<h:outputText styleClass="imj_contentMenuSeparator" />
-
-		<h:outputLink id="lnkViewCollectionAllImages"
-			styleClass="imj_contentMenuItem"
-			value="#{Navigation.collectionUrl}#{IngestBean.collectionId}/#{Navigation.browsePath}?q="
-			rendered="#{IngestBean.collectionSize > 0}">
-			<h:outputText value="#{lbl.view_images}" />
-		</h:outputLink>
-
-		<h:outputText styleClass="imj_contentMenuSeparator"
-			rendered="#{IngestBean.collectionSize > 0}" />
-
-		<h:outputLink id="lnkViewCollectionDetail"
-			styleClass="imj_contentMenuItem"
-			value="#{Navigation.collectionUrl}#{IngestBean.collectionId}/#{Navigation.infosPath}?init=1">
-			<h:outputText value="#{lbl.collection_metadata}" />
-		</h:outputLink>
-
-		<h:outputText styleClass="imj_contentMenuSeparator" />
-
-		<h:outputLink id="lnkUploadImages" styleClass="imj_contentMenuItem"
-			value="#{Navigation.collectionUrl}#{IngestBean.collectionId}/#{Navigation.uploadPath}?init=1"
-			rendered="#{AuthorizationBean.edit}">
-			<h:outputText value="#{lbl.upload_images}"></h:outputText>
-		</h:outputLink>
-
-		<h:outputText styleClass="imj_contentMenuSeparator" />
-
-		<h:outputText styleClass="imj_contentMenuItem" value="#{lbl.ingest}"></h:outputText>
-
-	</ui:define>
-
-	<ui:define name="mainContent_old">
-		<div class="imj_subHeaderMessageSpace">
-			<h:panelGroup styleClass="full_area0_p6 messageArea errorMessageArea small_marginLExcl" rendered="#{IngestBean.error}">
-				<br/>
-				<h2>
-					<h:outputText value="#{lbl.ingestFail}:" />
-				<br/>
-				</h2>
-	
-				<h:outputText styleClass="messageError" value="#{IngestBean.msg}" />
-				<br />
-			</h:panelGroup>
-			<h:panelGroup styleClass="half_area2_p6 messageArea infoMessageArea small_marginLExcl" rendered="#{IngestBean.success}">
-				<h2>
-					<h:outputText value="#{lbl.ingestSuccess}" />
-				<br />
-				</h2>
-			</h:panelGroup>
-
-		</div>
-		<h:panelGroup rendered="#{!AuthorizationBean.admin}"
-			styleClass="full_area0_p8 itemList">
-			<h2>
-				<h:outputText value="#{lbl.view_page_disallowed2}" />
-			</h2>
-		</h:panelGroup>
-		<h:panelGroup rendered="#{AuthorizationBean.admin}">
-			<h:panelGroup layout="block" styleClass="full_area0 itemList"
-				style="border-bottom-width:0 !important;">
-				<ui:include src="./include/History.xhtml"></ui:include>
-			</h:panelGroup>
-
-			<!-- Load Queue widget CSS and jQuery -->
-			<script type="text/javascript" src="http://www.google.com/jsapi"></script>
-			<!-- Load plupload and all it's runtimes and finally the jQuery queue widget -->
-			<script type="text/javascript"
-				src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
-			<script type="text/javascript"
-				src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload_1_5_5/js/plupload.full.js"></script>
-			<script type="text/javascript"
-				src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload_1_5_5/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
-			<script type="text/javascript"
-				src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload_1_5_5/js/i18n/#{Internationalization.currentLanguage}.js"></script>
-
-			<script>
-			
-				$(function() {
-					// Setup html5 version
-					$("#uploader").pluploadQueue({
-						// General settings
-						runtimes : 'html5,silverlight,flash,html4',
-						url : location.pathname  + "?start=itemlist",
-						//max_file_size : '10mb',
-						multi_selection : false,
-						//chunk_size : '1mb',
-						unique_names : false,
-						flash_swf_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/eSciDoc_JavaScript/plupload/plupload.flash.swf',
-						silverlight_xap_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/eSciDoc_JavaScript/plupload/plupload.silverlight.xap',
-						filters : [{
-							title : "Item list xml", 
-							extensions : "xml,XML"}
-						],
-						init : {
-							 StateChanged: function(up) {
-									// Called when the state of the queue is changed
-									if( up.state == plupload.STOPPED){
-										report();
-									}
-									if( up.state == plupload.STARTED){
-										openDialog('dialogWait');
-									}
-								},
-						 }
-						});
-				});
-
-				$(function() {
-					// Setup html5 version
-					$("#uploaderProfile").pluploadQueue({
-						// General settings
-						runtimes : 'html5,silverlight,flash,html4',
-						url : location.pathname  + "?start=profile",
-						//max_file_size : '10mb',
-						multi_selection : false,
-						//chunk_size : '1mb',
-						unique_names : false,
-						flash_swf_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/eSciDoc_JavaScript/plupload/plupload.flash.swf',
-						silverlight_xap_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/eSciDoc_JavaScript/plupload/plupload.silverlight.xap',
-						filters : [{
-							title : "Item list xml", 
-							extensions : "xml,XML"}
-						],
-						init : {
-							 StateChanged: function(up) {
-									// Called when the state of the queue is changed
-									if( up.state == plupload.STOPPED){
-										report();
-									}
-									if( up.state == plupload.STARTED){
-										openDialog('dialogWait');
-									}
-								},
-						 }
-						});
-				});
-
-				function report(){
-					window.location.href = location.pathname + "?done=1";
-				}
-				
-				plupload.addI18n({
-				    'Add files' : '<h:outputText value="#{lbl.uploadStart}" />', 			    
-				    'Drag files here.' : ' <h:outputText value="#{lbl.uploadDrag}" />',				    
-				});
-				
-				</script>
-			<style>
-.plupload_filelist {
-	height: 2em;
-	overflow-y: auto:
-}
-</style>
-			<div class="full_area0  infoPage">
-
-				<h2><h:outputText value="1. #{lbl.uploadProfile}" styleClass="full_area0_p2" /></h2>
-				<h:outputText value="(#{lbl.ingest_profile} #{IngestBean.collection.metadata.title})" styleClass="full_area0_p2"/>
-				<font color="#FF0000"><h:outputText value="#{lbl.ingest_warning}" styleClass="full_area0_p2"/></font>
-				<div class="xHuge_area0 double_marginLExcl">
-					<div id="uploaderProfile">
-						Your browser doens't support native upload!<br /> Please use HTML5
-						compatible browser (Firefox 4.x, Safari 4, Chrome) or download
-						following tools:<br /> <a
-							href="http://www.microsoft.com/germany/silverlight/downloads.aspx"
-							target="_blank"> Download Siverlight </a> <br /> or <br /> <a
-							href="http://get.adobe.com/de/flashplayer/download/"
-							target="_blank"> Download Flash </a>
-					</div>
-				</div>
-				
-				<b><h:outputText value="#{lbl.or_big}" styleClass="half_area0_p8" /></b>
-				
-				<br style="clear: both" />
-				<br />
-				<h2><h:outputText value="2. #{lbl.uploadMd}" styleClass="full_area0_p2" /></h2>
-				<h:outputText value="(#{lbl.ingest_item}  #{IngestBean.collection.metadata.title})" styleClass="full_area0_p2" />
-				<font color="#FF0000"><h:outputText value="#{lbl.ingest_warning}" styleClass="full_area0_p2"/></font>
-				<div class="xHuge_area0 double_marginLExcl listBackground">
-					<div id="uploader">
-						Your browser doens't support native upload!<br /> Please use HTML5
-						compatible browser (Firefox 4.x, Safari 4, Chrome) or download
-						following tools:<br /> <a
-							href="http://www.microsoft.com/germany/silverlight/downloads.aspx"
-							target="_blank"> Download Siverlight </a> <br /> or <br /> <a
-							href="http://get.adobe.com/de/flashplayer/download/"
-							target="_blank"> Download Flash </a>
-					</div>
-				</div>
-			</div>
-		</h:panelGroup>
-		<!-- Select item -->
+	<ui:define name="modalDialogs_from_site">
+		<dialog:confirmationDialog submitAction="release" bean="#{IngestBean}" confirmationText="#{msg.confirmation_release_collection}?" submitLabel="#{lbl.release}" dialogId="releaseMenuItemDialog" rendered="false"/>
+		<dialog:confirmationDialog submitAction="delete" bean="#{IngestBean}" confirmationText="#{msg.confirmation_delete_collection}?" submitLabel="#{lbl.delete}" dialogId="deleteMenuItemDialog" rendered="false"/>
+		<dialog:confirmationReasonedDialog submitAction="withdraw" bean="#{IngestBean.collection}" confirmationText="#{msg.confirmation_withdraw_collection}" submitLabel="#{lbl.withdraw}" dialogId="withdrawMenuItemDialog" rendered="false"/>
 	</ui:define>
 </ui:composition>

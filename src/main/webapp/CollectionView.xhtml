@@ -21,7 +21,7 @@
 	<ui:define name="actionsMenu">
 		<menu:context_subNavigation contextId="#{metadataBean.id}" contextUrl="#{Navigation.collectionUrl}" curMainMenu="#{currentMainMenu}" userHasAdminRights="#{AuthorizationBean.admin}" userHasEditRights="#{metadataBean.editable and metadataContextBean.status != 'WITHDRAWN'}" hasContent="#{metadataBean.size > 0}" navBean="#{Navigation}" activeMenu="metadata"/>
 		
-		<menu:context_actionMenu isUserLoggedIn="#{SessionBean.user != null}" navBean="#{Navigation}" collectionStatus="#{metadataContextBean.status}" contextId="#{metadataBean.id}" isDeletable="#{metadataBean.deletable}" isEditable="#{metadataBean.editable}" hasContent="#{metadataBean.size > 0}"/>
+		<menu:context_actionMenu isUserLoggedIn="#{SessionBean.user != null}" curMainMenu="#{currentMainMenu}" navBean="#{Navigation}" collectionStatus="#{metadataContextBean.status}" contextId="#{metadataBean.id}" isDeletable="#{metadataBean.deletable}" isEditable="#{metadataBean.editable}" hasContent="#{metadataBean.size > 0}" contextDownloadParam="&amp;col=#{metadataBean.id}"/>
 	</ui:define>
 			
 	<ui:define name="metadataProfile">

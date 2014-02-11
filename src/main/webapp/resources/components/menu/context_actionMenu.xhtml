@@ -16,10 +16,13 @@
 		<composite:attribute name="contextId" type="java.lang.String" default="" required="false" shortDescription="@type: String, required for Download"/>
 		<composite:attribute name="exportQuery" type="java.lang.String" default="" required="false" shortDescription="@type: String, @dependencies: contextId and navBean for Download"/>
 		<composite:attribute name="collectionStatus" type="java.lang.String" default="PENDING" required="false" shortDescription="@type: String, for menu handling in case of withdraw, release, delete, ..."/>
+		<composite:attribute name="curMainMenu" type="java.lang.String" default="" required="false" shortDescription="@type String, required to get the right download"/>
+		<composite:attribute name="contextDownloadParam" type="java.lang.String" default="" required="false" shortDescription="@type String, e.g. &amp;col=abcdefghi"/>
 		
-		<composite:attribute name="isEditable" type="java.lang.Boolean" default="false" required="false" shortDescription="@type: Boolean, required for rights managment"/>
-		<composite:attribute name="isDeletable" type="java.lang.Boolean" default="false" required="false" shortDescription="@type: Boolean, required for rights managment"/>
-		<composite:attribute name="hasContent" type="java.lang.Boolean" default="false" required="false" shortDescription="@type: Boolean, required to show menus (e.g. only release items with content)"/>
+		<composite:attribute name="isEditable" type="java.lang.Boolean" default="false" required="false" shortDescription="@type: Boolean, required to release, delete, withdraw item"/>
+		<composite:attribute name="isDeletable" type="java.lang.Boolean" default="false" required="false" shortDescription="@type: Boolean, required to check if item is deletable"/>
+		<composite:attribute name="hasContent" type="java.lang.Boolean" default="false" required="false" shortDescription="@type: Boolean, required to show menus (e.g. start page, content page)"/>
+		<composite:attribute name="downloadEnabled" type="java.lang.Boolean" default="true" required="false" shortDescription="@type: Boolean, param to disable the download menu on special pages (e.g. on collection overview, ...))"/>
 	</composite:interface>
 	
 	<composite:implementation>
@@ -100,8 +103,8 @@
 				</div>
 				
 				
-				
-				<ui:fragment rendered="#{cc.attrs.contextId.trim().length() > 0 and cc.attrs.navBean != null}">
+				<ui:fragment rendered="#{cc.attrs.navBean != null and cc.attrs.downloadEnabled}">
+					
 					<div class="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item">
 						<div class="imj_menuHeader">
 							<h:outputText value="#{lbl.download}" styleClass="imj_headerEntry"/>
@@ -109,17 +112,17 @@
 						<div class="imj_menuBody">
 							<ul class="imj_overlayMenuList">
 								<li>
-									<h:outputLink value="#{cc.attrs.navBean.applicationUrl}export?format=zip&amp;type=image&amp;n=10000&amp;col=#{cc.attrs.contextId.trim()}&amp;q=#{cc.attrs.exportQuery.trim()}" target="_blank">
+									<h:outputLink value="#{cc.attrs.navBean.applicationUrl}export?format=zip&amp;type=image&amp;n=10000#{cc.attrs.contextDownloadParam.trim()}&amp;q=#{cc.attrs.exportQuery.trim()}" target="_blank">
 										<h:outputText value="#{lbl.export_zip}"/>
 									</h:outputLink>
 								</li>
 								<li>
-									<h:outputLink value="#{cc.attrs.navBean.applicationUrl}export?format=rdf&amp;type=image&amp;n=10000&amp;col=#{cc.attrs.contextId.trim()}&amp;q=#{cc.attrs.exportQuery.trim()}" target="_blank">
+									<h:outputLink value="#{cc.attrs.navBean.applicationUrl}export?format=rdf&amp;type=image&amp;n=10000#{cc.attrs.contextDownloadParam.trim()}&amp;q=#{cc.attrs.exportQuery.trim()}" target="_blank">
 										<h:outputText value="#{lbl.export_rdf}"/>
 									</h:outputLink>
 								</li>
 								<li>
-									<h:outputLink value="#{cc.attrs.navBean.applicationUrl}export?format=xml&amp;type=image&amp;n=10000&amp;col=#{cc.attrs.contextId.trim()}&amp;q=#{cc.attrs.exportQuery.trim()}" target="_blank">
+									<h:outputLink value="#{cc.attrs.navBean.applicationUrl}export?format=xml&amp;type=image&amp;n=10000#{cc.attrs.contextDownloadParam.trim()}&amp;q=#{cc.attrs.exportQuery.trim()}" target="_blank">
 										<h:outputText value="#{lbl.export_native}"/>
 									</h:outputLink>
 								</li>

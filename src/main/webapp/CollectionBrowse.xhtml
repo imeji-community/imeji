@@ -12,13 +12,12 @@
 	<ui:param name="currentMainMenu" value="collection"/>
 	<ui:param name="browseToAllItemsUrl" value="#{Navigation.collectionUrl}#{CollectionImagesBean.id}/browse?q="/>
 	
+	
 	<ui:define name="actionsMenu">
-		
 		<menu:context_subNavigation contextId="#{paginatorListSessionBean.id}" contextUrl="#{Navigation.collectionUrl}" curMainMenu="#{currentMainMenu}" userHasAdminRights="#{AuthorizationBean.admin}" userHasEditRights="#{paginatorListSessionBean.editable}" hasContent="#{paginatorListSessionBean.totalNumberOfElements > 0}" navBean="#{Navigation}" activeMenu="content"/>
 		
-		<menu:context_actionMenu isUserLoggedIn="#{SessionBean.user != null}" sortBean="#{paginatorListSessionBean}" navBean="#{Navigation}" exportQuery="#{paginatorListSessionBean.query}" 
-			collectionStatus="#{paginatorListSessionBean.collection.status}" contextId="#{paginatorListSessionBean.id}" isDeletable="#{paginatorListSessionBean.deletable}" isEditable="#{paginatorListSessionBean.editable}"/>
-		
+		<menu:context_actionMenu isUserLoggedIn="#{SessionBean.user != null}" sortBean="#{paginatorListSessionBean}" curMainMenu="#{currentMainMenu}" navBean="#{Navigation}" exportQuery="#{paginatorListSessionBean.query}" 
+			collectionStatus="#{paginatorListSessionBean.collection.status}" contextId="#{paginatorListSessionBean.id}" isDeletable="#{paginatorListSessionBean.deletable}" isEditable="#{paginatorListSessionBean.editable}" contextDownloadParam="&amp;col=#{paginatorListSessionBean.id}"/>
 	</ui:define>
 	
 	

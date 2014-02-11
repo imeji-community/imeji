@@ -12,10 +12,14 @@
 	<ui:param name="logicBean" value="#{ViewCollectionBean}"/>
 	<ui:param name="listSize" value="#{ViewCollectionBean.size}"/>
 	
+	<ui:define name="init">
+		<h:outputText value="#{ViewCollectionBean.init()}"/>
+	</ui:define>
+	
 	<ui:define name="actionsMenu">
 		<menu:context_subNavigation contextId="#{logicBean.id}" contextUrl="#{Navigation.collectionUrl}" curMainMenu="#{currentMainMenu}" userHasAdminRights="#{AuthorizationBean.admin}" userHasEditRights="#{logicBean.editable and logicBean.collection.status != 'WITHDRAWN'}" hasContent="#{logicBean.size > 0}" navBean="#{Navigation}" activeMenu="start"/>
 		
-		<menu:context_actionMenu isUserLoggedIn="#{SessionBean.user != null}" navBean="#{Navigation}" collectionStatus="#{logicBean.collection.status}" contextId="#{logicBean.id}" isDeletable="#{logicBean.deletable}" isEditable="#{logicBean.editable}" hasContent="#{logicBean.size > 0}"/>
+		<menu:context_actionMenu isUserLoggedIn="#{SessionBean.user != null}" curMainMenu="#{currentMainMenu}" navBean="#{Navigation}" collectionStatus="#{logicBean.collection.status}" contextId="#{logicBean.id}" isDeletable="#{logicBean.deletable}" isEditable="#{logicBean.editable}" hasContent="#{logicBean.size > 0}" contextDownloadParam="&amp;col=#{logicBean.id}"/>
 	</ui:define>
 	
 	<ui:define name="additonalHeaderScripts">

@@ -21,6 +21,6 @@
 	
 	
 	<ui:define name="actionsMenu">
-		<menu:context_actionMenu isUserLoggedIn="#{SessionBean.user != null}" filterBean="#{paginatorListSessionBean}" sortBean="#{paginatorListSessionBean}" navBean="#{Navigation}"/>
+		<menu:context_actionMenu isUserLoggedIn="#{SessionBean.user != null}" curMainMenu="#{currentMainMenu}" downloadEnabled="false" filterBean="#{paginatorListSessionBean}" sortBean="#{paginatorListSessionBean}" navBean="#{Navigation}"/>
 	</ui:define>
 </ui:composition>

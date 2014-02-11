@@ -2,53 +2,17 @@
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core">
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:menu="http://java.sun.com/jsf/composite/components/menu"
+	xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs">
+	
 	<ui:param name="paginatorListSessionBean" value="#{ImagesBean}"/>
 	<ui:param name="headline" value="#{lbl.images}"/>
 	<ui:param name="currentMainMenu" value="mediaEntry"/>
 	<ui:param name="browseToAllItemsUrl" value="#{Navigation.browseUrl}?q="/>
 	
 	<ui:define name="actionsMenu">
-		
-		<h:panelGroup layout="block" styleClass="imj_contentSubMenu">
-			<!-- SORTING content menu lower line starts here -->
-			<h:outputText id="txtSort" value="#{lbl.sort_by}" styleClass="imj_contentSubMenuItemSorting"/>
-			<h:form>
-				<h:selectOneMenu id="selSort"
-					value="#{ImagesBean.selectedSortCriterion}"
-					styleClass="free_select" onchange="submit();">
-					<f:selectItems id="sortItem" value="#{ImagesBean.sortMenu}"/>
-				</h:selectOneMenu>
-				<h:commandLink id="lnkSortAsc" styleClass="imj_buttonOrderByAsc_15" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{paginatorListSessionBean.selectedSortOrder == 'ASCENDING'}">&#160;</h:commandLink>
-				<h:commandLink id="lnkSortDesc" styleClass="imj_buttonOrderByDesc_15" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{paginatorListSessionBean.selectedSortOrder != 'ASCENDING'}">&#160;</h:commandLink>
-			</h:form>
-			<!-- SORTING content menu lower line ends here -->
-			
-			<div class="imj_overlayMenu imj_contentSubMenuItem">
-				<div class="imj_menuHeader">
-					<h:outputText value="#{lbl.download}" styleClass="imj_headerEntry"/>
-				</div>
-				<div class="imj_menuBody">
-					<ul class="imj_overlayMenuList">
-						<li>
-							<h:outputLink value="#{Navigation.applicationUrl}export?format=zip&amp;n=10000&amp;type=image&amp;q=#{ImagesBean.query}" target="_blank">
-								<h:outputText value="#{lbl.export_zip}"/>
-							</h:outputLink>
-						</li>
-						<li>
-							<h:outputLink value="#{Navigation.applicationUrl}export?format=rdf&amp;n=10000&amp;type=image&amp;q=#{ImagesBean.query}" target="_blank">
-								<h:outputText value="#{lbl.export_rdf}"/>
-							</h:outputLink>
-						</li>
-						<li>
-							<h:outputLink value="#{Navigation.applicationUrl}export?format=xml&amp;n=10000&amp;type=image&amp;q=#{ImagesBean.query}" target="_blank">
-								<h:outputText value="#{lbl.export_native}"/>
-							</h:outputLink>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</h:panelGroup>
+		<menu:context_actionMenu isUserLoggedIn="#{SessionBean.user != null}" curMainMenu="#{currentMainMenu}" sortBean="#{paginatorListSessionBean}" navBean="#{Navigation}"/>
 	</ui:define>
 
 	<ui:define name="searchQuery">
@@ -66,7 +30,4 @@
 			</h:panelGroup>
 		</h:panelGroup>
 	</ui:define>
-	
-	
-	
 </ui:composition>

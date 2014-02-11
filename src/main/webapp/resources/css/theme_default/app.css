@@ -1932,7 +1932,7 @@ min-height: 6em;
    ================================================== */
 
 .imj_tiledMediaList {
-	padding-left: 0.545454em;
+	padding: 1% 4%;
 }
 
 .imj_tiledMediaList .imj_listHeader {
@@ -1944,10 +1944,11 @@ min-height: 6em;
 }
 
 .imj_tiledMediaList .imj_tileItem {
-	display:inline-block;
-	width:12em;
+	display: inline-block;
+	width: 16%;
+	max-width: 11em;
 	padding-bottom: 2em;
-	margin-right: 0.818181em;
+	margin: 0 0.545454%;
 }
 
 .imj_tiledMediaList .imj_tileItem:hover .imj_tileThumbnailArea {
@@ -1966,20 +1967,21 @@ min-height: 6em;
 }
 
 .imj_tileThumbnailArea {
-	width: 10.545454em;
-	height: 10.545454em;
 	background-color: #444444;
-	text-align: center;
-	padding: 0.725em;
 }
-
+.imj_tileThumbnailArea label {
+	max-width: 100%;
+	overflow-x: hidden;
+}
 .imj_tileThumbnailArea.imj_selected {
 	background-color: #6CAD2F;
 }
 
 .imj_tileThumbnailArea img {
-	width: 10.545454em;
-	height: 10.545454em;
+	width: 84%;
+	height: 85%;
+	padding: 8%;
+	margin-top: 3%;
 }
 .imj_iconTriangleBottomRight_15 {
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAD2F/imjButtonTriangleLargeBottomRight_15.png");

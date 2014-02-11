@@ -30,9 +30,6 @@ import de.mpg.imeji.presentation.user.LoginBean;
 
 public class ExportServlet extends HttpServlet
 {
-    /**
-     * 
-     */
     private static final long serialVersionUID = -777947169051357999L;
 
     /**
@@ -80,7 +77,7 @@ public class ExportServlet extends HttpServlet
             resp.setHeader("Connection", "close");
             resp.setHeader("Content-Type", exportManager.getContentType());
             resp.setHeader("Content-disposition", "filename=" + exportName);
-            resp.setStatus(200);
+            resp.setStatus(HttpServletResponse.SC_OK);
             SearchResult result = exportManager.search();
             exportManager.export(result);
             resp.getOutputStream().flush();
@@ -89,12 +86,9 @@ public class ExportServlet extends HttpServlet
         {
             resp.sendError(he.getStatusCode(), he.getMessage());
         }
-        catch (IOException e)
+        catch (Exception e) 
         {
-            resp.sendError(500, e.getMessage());
-        } catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+        	resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
 		}
     }
 
@@ -160,7 +154,7 @@ public class ExportServlet extends HttpServlet
     
 
     /**
-     * Utiliy method to return the username and password
+     * Utility method to return the username and password
      * (separated by a colon).
      * 
      * @param request
@@ -168,15 +162,11 @@ public class ExportServlet extends HttpServlet
      */
     private String getUsernamePassword(HttpServletRequest request)
     {
-        try {
-            String authHeader = request.getHeader("Authorization");
-            if (authHeader != null) 
-            {
-                        String userPass = new String(Base64.decodeBase64(authHeader.getBytes()));
-                        return userPass;
-            }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null) 
+        {
+        	String userPass = new String(Base64.decodeBase64(authHeader.getBytes()));
+            return userPass;
         }
         return null;
     }

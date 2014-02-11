@@ -52,8 +52,6 @@ public class InitializerServlet extends HttpServlet
         initModel();
         startLocksSurveyor();
         createSysadminUser();
-        // EscidocInitializer escidocInitializer = new EscidocInitializer();
-        // escidocInitializer.run();
     }
 
     /**
@@ -87,9 +85,15 @@ public class InitializerServlet extends HttpServlet
     {
         try
         {
-            UserController uc = new UserController(Imeji.adminUser);
-            uc.create(Imeji.adminUser);
-            logger.info("Created sysadmin successfully:" + Imeji.adminUser.getEmail());
+        	if (!UserController.adminUserExist())
+        	{
+        		logger.info("Create new admin user");
+        		UserController uc = new UserController(Imeji.adminUser);
+        		uc.create(Imeji.adminUser);
+        		logger.info("Created admin user successfully:" + Imeji.adminUser.getEmail());
+        	}
+        	else 
+        	{logger.info("Admin user already exists.");}
         }
         catch (AlreadyExistsException e)
         {

@@ -141,4 +141,17 @@ public class UserController
         }
         return users;
     }
+    
+    /**
+     * This method checks if a admin user exists for this instance
+     * @return true of no admin user exists, false otherwise
+     */
+    public static boolean adminUserExist()
+    {
+    	boolean exist = false;
+        Search search = new Search(SearchType.ALL, null);
+        List<String> uris = search.searchSimpleForQuery(SPARQLQueries.selectUserAll(), null);
+        if (uris != null && uris.size() > 0) {exist = true;}
+    	return exist;
+    }
 }

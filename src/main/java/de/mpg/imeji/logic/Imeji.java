@@ -137,9 +137,7 @@ public class Imeji
         initModel(userModel);
         initModel(profileModel);
         initModel(counterModel);
-        logger.info("Initializing Admin user...");
         initadminUser();
-        logger.info("... done!");
     }
 
     /**

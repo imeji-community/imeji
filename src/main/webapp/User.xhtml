@@ -21,9 +21,11 @@
 								<h:panelGroup styleClass="full_area0">
 									<h:outputText styleClass="double_area0_p4" value="#{lbl.email}"/>
 									<h:outputText styleClass="free_area0_p4 endLine" value="#{UserBean.user.email}"/>
+									<!-- The user should not be allowed to change the email, as it is his id
 									<h:outputLink id="lnkEditEmail" value="#" onclick="hide_input_area_show_Links();document.getElementById('userForm:pnlEditEmail').style.display = 'block';$(this).hide();">
 										<h:outputText styleClass="double_area0_p4" value="#{lbl.edit}"/>
 									</h:outputLink>
+									 -->
 									<h:panelGroup styleClass="full_area0_p4 inputAreaUserInfos" id="pnlEditEmail" style="display:none;">
 										 <h:outputText styleClass="double_area0_p4" value=" " />
 						                 <h:inputText styleClass="huge_txtInput"  value="#{UserBean.newEmail}" />

@@ -23,6 +23,9 @@ import javax.mail.internet.MimeMultipart;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.presentation.beans.MessagesBean;
+import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -163,6 +166,8 @@ public class EmailClient
         }
         catch (MessagingException e)
         {
+        	SessionBean sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        	BeanHelper.error(sessionBean.getMessage("email_error") + ": " + e);
             logger.error("Error in sendMail(...)", e);
         }
         return status;

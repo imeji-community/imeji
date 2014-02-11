@@ -110,7 +110,7 @@ public class PropertyBean
     }
 
     /**
-     * @return the magickEnabled
+     * @return the digilibEnabled
      */
     public boolean isDigilibEnabled()
     {

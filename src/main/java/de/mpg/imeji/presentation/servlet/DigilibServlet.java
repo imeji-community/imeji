@@ -52,6 +52,7 @@ import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.PropertyReader;
@@ -86,21 +87,26 @@ public class DigilibServlet extends Scaler
     @Override
     public void init(ServletConfig config) throws ServletException
     {
-        authorization = new Authorization();
-        try
+    	PropertyBean propBean = new PropertyBean();
+        if (propBean.isDigilibEnabled())
         {
-            navigation = new Navigation();
+	        try
+	        {
+	        	authorization = new Authorization();
+	            navigation = new Navigation();
+	        }
+	        catch (Exception e)
+	        {
+	            throw new RuntimeException(e);
+	        }
+	        storageController = new StorageController();
+	        InternalStorageManager ism = new InternalStorageManager();
+	        internalStorageBase = FilenameUtils.getBaseName(FilenameUtils.normalizeNoEndSeparator(ism.getStoragePath()));
+	        // Copy the digilib-config.xml before initialising the digilib servlet, which needs this file
+	        copyFile(getDigilibConfigPath(), config.getServletContext().getRealPath("/WEB-INF"));
+	        super.init(config);
         }
-        catch (Exception e)
-        {
-            throw new RuntimeException(e);
-        }
-        storageController = new StorageController();
-        InternalStorageManager ism = new InternalStorageManager();
-        internalStorageBase = FilenameUtils.getBaseName(FilenameUtils.normalizeNoEndSeparator(ism.getStoragePath()));
-        // Copy the digilib-config.xml before initialising the digilib servlet, which needs this file
-        copyFile(getDigilibConfigPath(), config.getServletContext().getRealPath("/WEB-INF"));
-        super.init(config);
+        else {logger.info("Digilib Viewer is disabled.");}
     }
 
     /*

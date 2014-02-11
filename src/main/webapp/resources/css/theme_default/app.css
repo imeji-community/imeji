@@ -128,7 +128,9 @@ a:visited {
 	color: #6CAD2F;
 	text-decoration: none;
 }
-
+a:active {
+	outline: none;
+}
 button {
 	background-color: transparent;
 	border: 0 none;
@@ -180,8 +182,9 @@ select {
 }
 
 input[type="radio"] {
-    margin: 0; 
-	
+    margin: 0;
+    outline: none;
+    background-color: transparent;
 }
 
 select:focus, 
@@ -520,9 +523,12 @@ margin-bottom: 0.9090em;  */
     border: none 0;
     padding-top: 0.1818em;
 }
-
 .imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="submit"]:hover {
     color: #FFFFFF
+}
+
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="password"] + input[type="submit"] {
+	margin-left: 0.545454em;
 }
 
 /* ===[ SiteHeader - Logo + Search Area]===
@@ -956,6 +962,7 @@ cut second ?
 }
 
 .imj_simpleSearch input[type=radio]+label {
+	margin-left: 0.181818em;
     margin-right: 1em
 }
 
@@ -1434,6 +1441,23 @@ OLD:
 }
 
 
+/* * imj_mediaEntryDetailPage
+	(sub_template/template_image.xhtml)
+   ==================================================
+   ================================================== */
+.imj_mediaEntryDetailPage {
+	
+}
+.imj_mediaEntryDetailPage > .imj_metadataList,
+.imj_mediaEntryDetailPage > .imj_mediaDisplayContainer {
+	width: 91.25%;
+	margin: 1% 4%;
+}
+
+
+
+
+
 /* * mediaDisplayContainer + mediaEditPanel 
 	MetaDataList + Submit Panel + Buttons
 	(image_deatails.xhtml)
@@ -1445,7 +1469,9 @@ OLD:
 	text-align: center;
 	border-bottom: solid #6CAD2F 0.0909em;
 	margin-bottom: 0.545em;
-}   
+}
+
+
 
 
 /* ===[ Content - EDIT ]===
@@ -1726,6 +1752,7 @@ p.imj_metadataValue {
 	width: 100%;
 	white-space: pre;
 	display: inline-block;
+	overflow-x: auto;
 }
 
 
@@ -1945,12 +1972,14 @@ min-height: 6em;
 
 .imj_tiledMediaList .imj_tileItem {
 	display: inline-block;
-	width: 16%;
-	max-width: 11em;
+	width: 15.75%;
 	padding-bottom: 2em;
-	margin: 0 0.545454%;
+	margin: 0 0.25%;
 }
-
+.imj_tileItem label {
+	max-width: 100%;
+	overflow-x: hidden;
+}
 .imj_tiledMediaList .imj_tileItem:hover .imj_tileThumbnailArea {
 	background-color: #6CAD2F;
 }
@@ -1961,7 +1990,6 @@ min-height: 6em;
 	z-index:10;
 	width:30em;
 }
-
 .imj_tiledMediaList .imj_tileItem:hover .imj_tooltip {
 	display:inline-block;
 }
@@ -1969,10 +1997,7 @@ min-height: 6em;
 .imj_tileThumbnailArea {
 	background-color: #444444;
 }
-.imj_tileThumbnailArea label {
-	max-width: 100%;
-	overflow-x: hidden;
-}
+
 .imj_tileThumbnailArea.imj_selected {
 	background-color: #6CAD2F;
 }

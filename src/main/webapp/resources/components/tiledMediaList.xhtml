@@ -62,7 +62,7 @@
 											<f:ajax event="change" execute="@this" render="@form :imj_ajaxWrapper"/>
 										</h:selectBooleanCheckbox>
 									</ui:fragment>
-									<h:outputLabel for="pictureCheckbox" value="#{item.caption}"/>
+									<h:outputLabel for="pictureCheckbox" value="#{item.caption}" title="#{item.caption}"/>
 								</h:form>
 								<div class="imj_tooltip">
 									<ui:include src="../../picturesPages/ui/MetadataPopup.xhtml"/>

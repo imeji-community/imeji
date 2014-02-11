@@ -15,26 +15,29 @@
 			<!-- Breadcrumb - History -->
 			<ui:include src="../../include/History.xhtml"></ui:include> 
 			
-			<h:panelGroup layout="block" id="selectionInfoPanel">
-				<!-- Selection Info Panel -->
-				<imjc:selectionInfoPanel fSession="#{FiltersSession}" facetBean="#{imageBean}" currentMainMenu="#{currentMainMenu}" browseToAllUrl="#{browseToAllItemsUrl}" numberOfElements="0"/>
-			</h:panelGroup>
-			
-			<ui:fragment rendered="#{imageBean.visible}">
-				<!-- pagination top -->
-				<h:panelGroup layout="block" id="paginatorTop" styleClass="imj_paginator">
-					<h:panelGroup styleClass="imj_simplePageBrowser">
-						<h:outputLink value="#{imageBean.browse.previous}&amp;tab=#{imageBean.tab}" styleClass="imj_backwardButton" disabled="#{imageBean.browse.previous == null}">
-							<h:outputText value="#{lbl.paginator_previous} #{lbl.image} #{imageBean.initLabels}"/>
-						</h:outputLink>
-						
-						<h:outputLink value="#{imageBean.browse.next}&amp;tab=#{imageBean.tab}" styleClass="imj_forwardButton" disabled="#{imageBean.browse.next == null}">
-							<h:outputText value="#{lbl.paginator_next} #{lbl.image}"/>
-						</h:outputLink>
-					</h:panelGroup>
+			<!-- AJAX Wrapper - START -->
+			<h:panelGroup layout="block" id="imj_ajaxWrapper" styleClass="imj_mediaEntryDetailPage">
+				<h:panelGroup layout="block" id="selectionInfoPanel">
+					<!-- Selection Info Panel -->
+					<imjc:selectionInfoPanel fSession="#{FiltersSession}" facetBean="#{imageBean}" currentMainMenu="#{currentMainMenu}" browseToAllUrl="#{browseToAllItemsUrl}" numberOfElements="0"/>
 				</h:panelGroup>
-				<ui:include src="../component/images/image_details.xhtml"/>
-			</ui:fragment>
+				
+				<ui:fragment rendered="#{imageBean.visible}">
+					<!-- pagination top -->
+					<h:panelGroup layout="block" id="paginatorTop" styleClass="imj_paginator">
+						<h:panelGroup styleClass="imj_simplePageBrowser">
+							<h:outputLink value="#{imageBean.browse.previous}&amp;tab=#{imageBean.tab}" styleClass="imj_backwardButton" disabled="#{imageBean.browse.previous == null}">
+								<h:outputText value="#{lbl.paginator_previous} #{lbl.image} #{imageBean.initLabels}"/>
+							</h:outputLink>
+							
+							<h:outputLink value="#{imageBean.browse.next}&amp;tab=#{imageBean.tab}" styleClass="imj_forwardButton" disabled="#{imageBean.browse.next == null}">
+								<h:outputText value="#{lbl.paginator_next} #{lbl.image}"/>
+							</h:outputLink>
+						</h:panelGroup>
+					</h:panelGroup>
+					<ui:include src="../component/images/image_details.xhtml"/>
+				</ui:fragment>
+			</h:panelGroup>
 			
 		</ui:fragment>
 		

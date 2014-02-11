@@ -21,6 +21,7 @@ import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.user.util.EmailClient;
 import de.mpg.imeji.presentation.user.util.EmailMessages;
 import de.mpg.imeji.presentation.user.util.PasswordGenerator;
@@ -96,15 +97,26 @@ public class UsersBean implements Serializable
      * @return
      * @throws Exception
      */
-    public String sendPassword() throws Exception
+    public String sendPassword()
     {
         String email = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("email");
-        PasswordGenerator generator = new PasswordGenerator();
-        String newPassword = generator.generatePassword();
+        PasswordGenerator generator = new PasswordGenerator();       
         UserBean userBean = new UserBean(email);
-        userBean.getUser().setEncryptedPassword(StringHelper.convertToMD5(newPassword));
-        userBean.updateUser();
-        sendEmail(email, newPassword, userBean.getUser().getName());
+        SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        
+        try 
+        {
+        	String newPassword = generator.generatePassword();
+			userBean.getUser().setEncryptedPassword(StringHelper.convertToMD5(newPassword));
+	        userBean.updateUser();
+	        sendEmail(email, newPassword, userBean.getUser().getName());
+		} 
+        catch (Exception e) 
+        {	
+			e.printStackTrace();
+		}
+
+        BeanHelper.info(session.getMessage("success_email"));
         return "";
     }
 

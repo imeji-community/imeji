@@ -78,24 +78,5 @@
 			</div>
 		</h:panelGroup>
 		<div id="log"></div>
-		<script>
-			/*
-			Reload the page if selected images don't have the correct style
-			Happening by back button
-			*/
-			jQuery(document).ready(function() {
-				var $checkbox = jQuery(".imj_tiledMediaList .imj_listBody input:checkbox");
-				var $images = jQuery(".imj_tiledMediaList .imj_tileItem");
-				
-				$images.each(function(i){
-					var $selectBox = jQuery(".shiftCheckbox", this);
-					var $style = jQuery(".imj_tileThumbnailArea", this);
-					if (jQuery($style).is('.imj_tileThumbnailArea.imj_selected') != jQuery($selectBox).is(':checked')) {
-						location.reload();
-						return false;
-					}
-				});
-			});
-		</script>
 	</composite:implementation>
 </html>

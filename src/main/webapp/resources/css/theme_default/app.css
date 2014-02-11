@@ -209,14 +209,15 @@ input[type="checkbox"]  {
    =========================================================================  */ 
 
 #imj_welcomeInfoWrapper {
-    float: left;
+    display: inline-block;
+    width: 48%;
 }
 
 .imj_welcomeInfo {
     min-height: 34.8333333em;
     width: 37.85%;
     padding: 1%;
-    margin: 1.5em 0 2em 0;
+    margin: 1% 0;
     overflow: hidden;
     background-color: #292929;
     border-radius: 0.41666666em;
@@ -227,14 +228,11 @@ input[type="checkbox"]  {
 }
 
 
-/* .xSmall_negMarginLExcl {
-    margin-left: -2.8181em;
-}*/ 
-
-
-
 /* styles for imej startpage - Welcome.xhtml - content tabs 
    =========================================================================  */ 
+.imj_welcomeInfo .id_tabs .imj_tabMenu {
+	width: 100%;
+}
 
 .imj_welcomeInfo .id_tabs ul {
     padding: 0;
@@ -257,12 +255,26 @@ input[type="checkbox"]  {
     -ms-border-radius: 0.41666666em;
 }
 
-.imj_welcomeInfo .id_tabs .tab_content {
-    float: left;
-    height: 90%;
+.imj_welcomeInfo .id_tabs .imj_tabContent {
+	width: 100%;
+    min-height: 30em;
     overflow: auto;
-    font-size: 1.0909em;
-    /*margin-top: 5%;*/
+    font-size: 110%;
+}
+.imj_welcomeInfo .id_tabs .imj_tabContent .imj_headline,
+.imj_welcomeInfo .id_tabs .imj_tabContent .imj_sectionHeadline {
+	margin-top: 1em;
+}
+.imj_welcomeInfo .id_tabs .imj_tabContent ul {
+	margin-bottom: 3em;
+}
+.imj_welcomeInfo .id_tabs .imj_tabContent li {
+	display: block;
+	padding-left: 2%;
+	text-align: left;
+}
+.imj_welcomeInfo .id_tabs .imj_tabContent ul .imj_iconGoTo {
+	vertical-align: top;
 }
 
 .imj_welcomeInfo .id_tabs li.ui-state-active {
@@ -287,11 +299,18 @@ input[type="checkbox"]  {
    =========================================================================  */ 
 
 .imj_startpage_carouselWrapper {
-    float: left;
-    margin-top: 3em;
+	float: right;
+	margin-top: 2em;
+    width: 48%;
+    display: inline-block;
+    vertical-align: top;
+}
+.imj_startpage_carouselWrapper:after {
+	clear: right;
 }
 
 .imj_startpage_carousel {
+	width: 100%;
     min-height: 33.333333em;
     overflow: hidden;
 }
@@ -314,6 +333,9 @@ input[type="checkbox"]  {
 
 .imj_startpage_carousel #cloudinfoText {
     display: none;
+}
+.imj_startpage_carousel .imj_cloudInfoTitle {
+	font-weight: bold;
 }
 
 .dynamicCloudinfo {
@@ -341,31 +363,13 @@ iframe#twitter-widget-0 div.root div.stream {
 }
 
 
-/* styles for imej startpage - Welcome.xhtml - content container
-   =========================================================================  */ 
-
-.imj_cont_1 {
-    width: 100%;
-}
-
-.imj_cont_1_2 {
-    width: 49.85%;
-}
-
-.imj_cont_2_5 {
-    width: 39.85%;
-}
-
-.imj_cont_3_5 {
-    width: 59.85%;
-}
-
 
 /* styles for imej startpage - Welcome.xhtml - footer, logos
    =========================================================================  */ 
 
 .imj_startpageFooter {
 	clear: both;
+	width: 100%;
 	padding: 1.000em 0;
 }
 
@@ -375,6 +379,7 @@ iframe#twitter-widget-0 div.root div.stream {
 }
 
 .imj_startpageFooterLogos {
+	width: 100%;
     padding: 1em 1.25em 1.25em 1em;
     text-align: center;
 }

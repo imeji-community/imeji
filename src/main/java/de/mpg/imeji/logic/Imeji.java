@@ -8,7 +8,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
-import java.util.Iterator;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -17,15 +16,9 @@ import org.apache.log4j.lf5.util.StreamUtils;
 
 import com.hp.hpl.jena.Jena;
 import com.hp.hpl.jena.query.Dataset;
-import com.hp.hpl.jena.query.QueryExecution;
-import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.ReadWrite;
-import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.query.ResultSetFormatter;
-import com.hp.hpl.jena.query.Syntax;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
-import com.hp.hpl.jena.tdb.TDB;
 import com.hp.hpl.jena.tdb.TDBFactory;
 
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
@@ -224,35 +217,6 @@ public class Imeji
         finally
         {
             dataset.end();
-        }
-    }
-
-    /**
-     * For testing/debugging purpose: run a select query an display the result
-     * 
-     * @param q
-     */
-    public static void selectQueryForTesting(String q)
-    {
-        try
-        {
-            Imeji.dataset.begin(ReadWrite.READ);
-            for (Iterator<String> it = Imeji.dataset.listNames(); it.hasNext();)
-            {
-                String s = it.next();
-            }
-            QueryExecution qe = QueryExecutionFactory.create(q, Syntax.syntaxARQ, Imeji.dataset);
-            qe.getContext().set(TDB.symUnionDefaultGraph, true);
-            ResultSet rs = qe.execSelect();
-            ResultSetFormatter.out(System.out, rs);
-        }
-        catch (Exception e)
-        {
-            Imeji.dataset.abort();
-        }
-        finally
-        {
-            Imeji.dataset.end();
         }
     }
 }

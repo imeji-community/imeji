@@ -50,11 +50,11 @@ All rights reserved. Use is subject to license terms.
 				
 				<ui:insert name="actionsMenu"/>
 				
-				<div class="imj_siteContentHeadline">
+				<h:panelGroup layout="bock" styleClass="imj_siteContentHeadline" rendered="#{headline.toString().trim().length() > 0}">
 					<h1>
-						<h:outputText value="#{headline}"/>
+						<h:outputText value="#{headline.toString().trim()}"/>
 					</h1>
-				</div>
+				</h:panelGroup>
 				
 				<h:panelGroup id="imj_pageMessageArea" layout="block" styleClass="imj_pageMessageArea" rendered="#{MessagesBean.hasMessages or (SessionBean.activeAlbum != null and HistorySession.currentPage.type.fileName != 'Help.xhtml')}">
 					

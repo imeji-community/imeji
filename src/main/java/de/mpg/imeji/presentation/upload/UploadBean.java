@@ -77,6 +77,7 @@ public class UploadBean
     private boolean importImageToFile = false;
     private boolean uploadFileToItem = false;
     private boolean checkNameUnique = true;
+    private boolean uploadFinished= false;
 
     /**
      * Construct the Bean and initalize the pages
@@ -97,6 +98,16 @@ public class UploadBean
      */
     public void status()
     {
+    	if(uploadFinished)
+    	{
+    		uploadFinished = false;
+            removeFiles();
+            totalNum = "";
+            sNum = 0;
+            fNum = 0;
+            sFiles = new ArrayList<Item>();
+            fFiles = new ArrayList<String>();
+    	}
         if (UrlHelper.getParameterBoolean("init"))
         {
             importImageToFile = false;
@@ -139,6 +150,7 @@ public class UploadBean
                 logger.error("Error upload", e);
                 e.printStackTrace();
             }
+
         }
     }
 
@@ -551,6 +563,7 @@ public class UploadBean
         setsFiles(sFiles);
         setfNum(fNum);
         setfFiles(fFiles);
+        setUploadFinished(true);
         return "";
     }
 
@@ -734,4 +747,14 @@ public class UploadBean
     {
         this.checkNameUnique = checkNameUnique;
     }
+
+	public boolean isUploadFinished() {
+		return uploadFinished;
+	}
+
+	public void setUploadFinished(boolean uploadFinished) {
+		this.uploadFinished = uploadFinished;
+	}
+    
+    
 }

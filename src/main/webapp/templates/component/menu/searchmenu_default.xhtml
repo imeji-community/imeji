@@ -59,6 +59,7 @@ All rights reserved. Use is subject to license terms.
 				<h:selectOneRadio id="quickSearchRadioBox" value="#{QuickSearchBean.selectedSearchType}" valueChangeListener="#{QuickSearchBean.selectedSearchTypeListener}">
 					<f:selectItem id="selIm" itemLabel="#{lbl.images}" itemValue="images"/>
 					<f:selectItem id="selCol" itemLabel="#{lbl.collections}" itemValue="collections"/>
+					<f:selectItem id="selAlb" itemLabel="#{lbl.history_albums}" itemValue="albums"/>
 				</h:selectOneRadio>
 			</h:panelGroup>
 			
@@ -67,6 +68,7 @@ All rights reserved. Use is subject to license terms.
 			<h:outputLink id="lnkAdvancedSearch" title="#{lbl.goto_adv_search}" styleClass="imj_simpleSearchLinkAdvancedsearch" value="#{Navigation.searchUrl}">
 		   		<h:outputText value="#{lbl.advanced_search}"/>
 		   	</h:outputLink>
+		   	
 		</h:form>
 	</h:panelGroup>
 	

@@ -56,13 +56,15 @@
 									
 									<!-- Browse / Search Result / All Pictures of one Person Pages / resource -->
 									
-									<!-- Album Selected -->
-									<ui:fragment rendered="#{SessionBean.user != null}">
-										<h:selectBooleanCheckbox styleClass="shiftCheckbox" id="pictureCheckbox" value="#{item.selected}" valueChangeListener="#{item.selectedChanged}">
-											<f:ajax event="change" execute="@this" render="@form :imj_ajaxWrapper"/>
-										</h:selectBooleanCheckbox>
-									</ui:fragment>
-									<h:outputLabel for="pictureCheckbox" value="#{item.caption}" title="#{item.caption}"/>
+									<span class="imj_optionSet">
+										<!-- Album Selected -->
+										<ui:fragment rendered="#{SessionBean.user != null}">
+											<h:selectBooleanCheckbox styleClass="imj_optionCheckbox" id="pictureCheckbox" value="#{item.selected}" valueChangeListener="#{item.selectedChanged}">
+												<f:ajax event="change" execute="@this" render="@form :imj_ajaxWrapper"/>
+											</h:selectBooleanCheckbox>
+										</ui:fragment>
+										<h:outputLabel for="pictureCheckbox" value="#{item.caption}" title="#{item.caption}" styleClass="imj_optionLabel"/>
+									</span>
 								</h:form>
 								<div class="imj_tooltip">
 									<ui:include src="../../picturesPages/ui/MetadataPopup.xhtml"/>

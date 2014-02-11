@@ -3,6 +3,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:imjc="http://java.sun.com/jsf/composite/components"
 	xmlns:menu="http://java.sun.com/jsf/composite/components/menu"
 	xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs">
 	
@@ -16,18 +17,6 @@
 	</ui:define>
 
 	<ui:define name="searchQuery">
-		<h:panelGroup styleClass="full_area0 small_marginLExcl" rendered="#{paginatorListSessionBean.searchFilter != null}">
-			<h:outputText value="#{lbl.search_query}: " styleClass="free_area0_p2"/>
-			<h:panelGroup styleClass="xHuge_area0">
-				<h:outputText value="#{lbl.search_for}" styleClass="free_area0_p2" rendered="#{paginatorListSessionBean.simpleSearch}"/>
-				<h:outputText value="#{ImagesBean.simpleQuery}" styleClass="free_area0_p2"/>
-				<h:outputLink
-					value="#{Navigation.searchUrl}?q=#{paginatorListSessionBean.query}"
-					rendered="#{!paginatorListSessionBean.simpleSearch}"
-					styleClass="xHuge_area0_p2 ">
-					<h:outputText value="#{lbl.search_revise}"/>
-				</h:outputLink>
-			</h:panelGroup>
-		</h:panelGroup>
+		<imjc:searchQueryDisplayArea searchBean="#{paginatorListSessionBean}" navBean="#{Navigation}" rendered="#{paginatorListSessionBean.searchFilter != null}"/>
 	</ui:define>
 </ui:composition>

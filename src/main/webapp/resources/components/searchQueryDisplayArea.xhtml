@@ -1,0 +1,43 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:composite="http://java.sun.com/jsf/composite">
+	
+	<composite:interface>
+		<composite:attribute name="searchBean" type="java.lang.Object" required="true" shortDescription="@type: Object, bean which includes the searchFilter, query, simpleQuery and simpleSearch"/>
+		<composite:attribute name="navBean" type="java.lang.Object" required="true" shortDescription="@type: Object, used to get searchUrl"/>
+	</composite:interface>
+	
+	<composite:implementation>
+		<style type="text/css">
+			.imj_searchQueryDisplay {
+				width: 91.25%;
+				padding: 1% 4%;
+			}
+			.imj_searchQueryDisplay > fieldset {
+				padding: 1% 1%;
+				border-top-style: inset;
+				border-bottom-style: outset;
+				border-color: rgba(255,255,255, 0.15);
+			}
+			.imj_searchQueryDisplay > fieldset legend {
+				margin: 0 1%;
+				padding: 0 1%;
+				font-size: 110%;
+			}
+		</style>
+		<h:panelGroup layout="block" styleClass="imj_searchQueryDisplay" rendered="#{cc.attrs.searchBean.searchFilter != null}">
+			<fieldset>
+    			<legend><h:outputText value="#{lbl.search_query}"/></legend>
+				<span class="imj_searchQueryText">
+					<h:outputText value="#{lbl.search_for}" rendered="#{cc.attrs.searchBean.simpleSearch}"/>
+					<h:outputText value="#{cc.attrs.searchBean.simpleQuery}"/>
+				</span>
+				<h:outputLink value="#{cc.attrs.navBean.searchUrl}?q=#{cc.attrs.searchBean.query}" styleClass="imj_submitButton" rendered="#{!cc.attrs.searchBean.simpleSearch}">
+					<h:outputText value="#{lbl.search_revise}"/>
+				</h:outputLink>
+			</fieldset>
+		</h:panelGroup>
+	</composite:implementation>
+</html>

@@ -155,7 +155,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         sortMenu = new ArrayList<SelectItem>();
         sortMenu.add(new SelectItem(null, "--"));
         sortMenu.add(new SelectItem(SearchIndex.names.created, session.getLabel("sort_img_date_created")));
-        sortMenu.add(new SelectItem(SearchIndex.names.modified, session.getLabel("sort_img_date_mod")));
+        sortMenu.add(new SelectItem(SearchIndex.names.modified, session.getLabel("sort_date_mod")));
         sortMenu.add(new SelectItem(SearchIndex.names.cont_title, session.getLabel("sort_img_collection")));
         sortMenu.add(new SelectItem(SearchIndex.names.filename, session.getLabel("sort_img_filename")));
     }

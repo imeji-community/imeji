@@ -125,39 +125,9 @@ All rights reserved. Use is subject to license terms.
                     <div id="dialogs"></div>
                 </h:panelGroup>
                   &#160;
-               	<ui:include src="/footerPages/Footer.xhtml"/>
-                <script type="text/javascript" language="javascript">   
-                //<![CDATA[
-                /* validate input values */
-				function isValid(id) {
-                	var errorMessage="";
-                	var valid = true;
-                	$(".inputLatitude").each(function(i1){
-                		var latitude = this.value;
-                		$(".inputLongitude").each(function(i2){
-                			var logitude = this.value;
-                			if(i1 == i2){
-                				if(latitude.length != 0 && logitude.length == 0){
-                					valid = false;
-                					errorMessage += "input logitude for latitude = " + latitude;
-                				}
-                				else if(latitude.length == 0 && logitude.length != 0){
-                					valid = false;
-                					errorMessage += "input latitude for logitude = " + logitude;
-                				}
-                			}
-                		});
-
-                		
-                	});
-                	if(!valid){
-                		location.reload();
-                		$(".errorMessageArea").show();
-                		$(".errorMessageArea").html(errorMessage);
-                	}
-                	else
-                		openDialog(id);           	
-				 }
+               		<ui:include src="/footerPages/Footer.xhtml"/>
+                <script type="text/javascript">
+                
 
                 
                 
@@ -211,7 +181,7 @@ All rights reserved. Use is subject to license terms.
 				        }
 				    });
 				})(jQuery);
-				 //]]>
+				
                 </script>	
         </h:body>
     </html>

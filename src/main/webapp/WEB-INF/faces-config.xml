@@ -30,6 +30,9 @@
 	<lifecycle>
 		<phase-listener id="facesMessagesListener">de.mpg.imeji.presentation.util.FacesMessagesPhaseListener</phase-listener>
 	</lifecycle>
+	<lifecycle>
+    	<phase-listener id="nocache">de.mpg.imeji.presentation.util.CacheControlPhaseListener</phase-listener>
+	</lifecycle>
 	<converter>
 		<converter-id>URIConverter</converter-id>
 		<converter-class>de.mpg.imeji.presentation.converter.URIConverter</converter-class>

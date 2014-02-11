@@ -48,6 +48,7 @@
 		<async-supported>true</async-supported>
 	</servlet>
 	<!-- Filters (order is important) -->
+	
 	<filter>
 		<filter-name>Encoder Filter</filter-name>
 		<filter-class>de.mpg.imeji.presentation.util.EncoderFilter</filter-class>

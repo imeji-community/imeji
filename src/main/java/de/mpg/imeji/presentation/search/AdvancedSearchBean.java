@@ -13,6 +13,8 @@ import java.util.Map;
 
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.controller.CollectionController;
@@ -148,7 +150,15 @@ public class AdvancedSearchBean
      */
     private Map<String, MetadataProfile> loadProfilesAndInitCollectionsMenu(Collection<CollectionImeji> collections)
     {
-        collectionsMenu = new ArrayList<SelectItem>();
+//    	HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+//        // Set standard HTTP/1.1 no-cache headers.
+//        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+//        // Set standard HTTP/1.0 no-cache header.
+//        response.setHeader("Pragma", "no-cache");
+//        //Proxies
+//        response.setDateHeader("Expires", 0);
+        
+    	collectionsMenu = new ArrayList<SelectItem>();
         collectionsMenu.add(new SelectItem(null, session.getLabel("select_collection")));
         Map<String, MetadataProfile> map = new HashMap<String, MetadataProfile>();
         for (CollectionImeji c : collections)

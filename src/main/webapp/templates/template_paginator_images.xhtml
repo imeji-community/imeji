@@ -250,16 +250,21 @@
 		<h:form id="facetForm">
 			<h:panelGroup layout="block" styleClass="full_area0 preListHeader">
 				<h:panelGroup id="facetGroup" layout="block" styleClass="third_area1_p8 small_marginLIncl" rendered="#{paginatorListSessionBean.navigationString != 'pretty:albumBrowse'}">
-					<ui:repeat var="groups" value="#{paginatorListSessionBean.facets.facets}" rowKeyVar="index">
+					<ui:repeat var="groups" value="#{paginatorListSessionBean.facets.facets}"  varStatus="var">
 						<h:panelGroup layout="block" style="margin:0 0.9090em;" styleClass="free_area0">
-							<ui:repeat var="facets" value="#{groups}" rowKeyVar="index">
-								<h:outputText value="|&#160;" rendered="#{index &gt; 0}" style="color:#486131;"/>
+							<h:outputText value="&#160;&#160;|&#160;&#160;" rendered="#{var.index &gt; 0}" style="color:#486131;"/>	
+							<ui:repeat var="facets" value="#{groups}" varStatus="var2">	
+							<h:outputText value="&#160;&#160;|&#160;&#160;" rendered="#{var2.index &gt; 0 and facets.type == 'TECHNICAL'}" style="color:#486131;"/>							
+								<h:outputText value="#{facets.internationalizedLabel} (" rendered="#{!facets.notDefine}"/>
 								<h:outputLink value="#{facets.uri}">
-									<h:outputText value="#{facets.internationalizedLabel} (#{facets.count}) "/>
+									<h:outputText value="#{facets.count}" rendered="#{!facets.notDefine}" title="#{lbl.facet_mdtrue_tooltip}"/>
+									<h:outputText value="/#{facets.count}" rendered="#{facets.notDefine}" title="#{lbl.facet_mdfalse_tooltip}"/>
 								</h:outputLink>
-							</ui:repeat>
-						</h:panelGroup>
-					</ui:repeat>
+								<h:outputText value=")" rendered="#{facets.notDefine and facets.type == 'COLLECTION'}"/>
+								<h:outputText value=")" rendered="#{facets.type == 'TECHNICAL'}"/>
+							</ui:repeat>							
+						</h:panelGroup>						
+					</ui:repeat>					
 				</h:panelGroup>
 			</h:panelGroup>
 			<h:selectBooleanCheckbox id="facetsRefresh" value="false" style="display:none">

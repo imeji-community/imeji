@@ -67,7 +67,7 @@ public class SessionBean
         selectedAlbums = new ArrayList<URI>();
         profileCached = new HashMap<URI, MetadataProfile>();
         collectionCached = new HashMap<URI, CollectionImeji>();
-        selectedCss = PropertyBean.getCss_light();
+        selectedCss = PropertyBean.getCss_default();
         initLocale();
     }
 
@@ -433,11 +433,11 @@ public class SessionBean
 
     public int getCssCount() {
     	int count = 0;
-    	if (PropertyBean.getCss_dark()!= null && !PropertyBean.getCss_dark().equals(""))
+    	if (PropertyBean.getCss_alternate()!= null && !PropertyBean.getCss_alternate().equals(""))
     	{
     		count++;
     	}
-    	if (PropertyBean.getCss_light()!= null && !PropertyBean.getCss_light().equals(""))
+    	if (PropertyBean.getCss_default()!= null && !PropertyBean.getCss_default().equals(""))
     	{
     		count++;
     	}
@@ -454,13 +454,13 @@ public class SessionBean
 	
 	public String toggleCss()
 	{
-		if (selectedCss!= null && selectedCss.equals(PropertyBean.getCss_light()))
+		if (selectedCss!= null && selectedCss.equals(PropertyBean.getCss_default()))
 		{
-			selectedCss = PropertyBean.getCss_dark();
+			selectedCss = PropertyBean.getCss_alternate();
 		}
-		else if (selectedCss!= null && selectedCss.equals(PropertyBean.getCss_dark()))
+		else if (selectedCss!= null && selectedCss.equals(PropertyBean.getCss_alternate()))
 		{
-			selectedCss = PropertyBean.getCss_light();
+			selectedCss = PropertyBean.getCss_default();
 		}
 		return "";
 	}

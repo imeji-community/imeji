@@ -11,17 +11,6 @@
 	<ui:param name="currentMainMenu" value="welcome"/>
 	
 	<ui:define name="additonalHeaderScripts">
-		<ui:fragment rendered="#{SessionBean.locale == 'en' or SessionBean.locale == 'es'}">
-			<script type="text/javascript">var placeholder_username = 'username'; var placeholder_password = 'password'; var placeholder_simpleSearch = 'search for ...';</script>
-		</ui:fragment>
-		<ui:fragment rendered="#{SessionBean.locale == 'de'}">
-			<script type="text/javascript">var placeholder_username = 'Benutzername'; var placeholder_password = 'Passwort'; var placeholder_simpleSearch = 'Suche nach ...';</script>
-		</ui:fragment>
-		<ui:fragment rendered="#{SessionBean.locale == 'jp' or SessionBean.locale == 'ja'}">
-			<script type="text/javascript">var placeholder_username = 'username'; var placeholder_password = 'password'; var placeholder_simpleSearch = '検索キーワード...';</script>
-		</ui:fragment>
-		
-		
 		<script src="http://www.google.com/jsapi" type="text/javascript"> </script>
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
 		<script type="text/javascript">
@@ -77,18 +66,6 @@
 				jQuery( ".id_tabs" ).tabs();
 				createCarousel();
 			};
-		</script>
-	</ui:define>
-	
-	<ui:define name="additonalFooterScripts">
-		<script type="text/javascript">
-			//add placeholder for login menu
-			jQuery(".imj_metaMenuStandardSingleLine input[type='text']").attr("placeholder", placeholder_username);
-			jQuery(".imj_metaMenuStandardSingleLine input[type='password']").attr("placeholder", placeholder_password);
-			jQuery(".imj_simpleSearchInput").attr("placeholder", placeholder_simpleSearch);
-			
-			//delete the page title on welcome page
-			jQuery("div#contentSkipLinkAnchor.headLine").remove();
 		</script>
 	</ui:define>
 	

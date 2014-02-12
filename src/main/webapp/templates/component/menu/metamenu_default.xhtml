@@ -36,17 +36,17 @@ All rights reserved. Use is subject to license terms.
 </ui:remove>
 	<!-- meta Menu starts here -->
 	
-	<!-- username and password placeholders if not logged in -->
-	<h:panelGroup rendered="#{SessionBean.locale == 'en' or SessionBean.locale == 'es' or SessionBean.locale == 'jp' or SessionBean.locale == 'ja'}">
-		<script type="text/javascript">var placeholder_username = 'username'; var placeholder_password = 'password';</script>
-	</h:panelGroup>
-	
-	<h:panelGroup rendered="#{SessionBean.locale == 'de'}">
-		<script type="text/javascript">var placeholder_username = 'Benutzername'; var placeholder_password = 'Passwort';</script>
-	</h:panelGroup>
-	
 	<h:panelGroup layout="block" styleClass="imj_metaMenuStandardSingleLine">
+		
 		<h:panelGroup styleClass="imj_metaMenuItemsAlign">
+			
+			<!-- CSS Switcher -->
+			<ui:fragment rendered="#{SessionBean.cssCount > 1}">
+				<h:form>
+					<h:commandButton value="SWITCH" action="#{SessionBean.toggleCss()}" styleClass="imj_metaMenuItem imj_StyleSwitcher"/>
+				</h:form>
+			</ui:fragment>
+			
 			<!-- Username if logged in -->
 			<ui:fragment rendered="#{SessionBean.user != null}">
 				<h:outputLink id="txtAccountUserName" title="#{lbl.goto_user_profile}" styleClass="imj_metaMenuItem" value="#{Navigation.applicationUrl}user?id=#{SessionBean.user.email}">
@@ -59,8 +59,8 @@ All rights reserved. Use is subject to license terms.
 			<!-- LogIn, LogOut -->
 			<h:form id="loginForm">
 				<h:panelGroup rendered="#{SessionBean.user == null}" styleClass="imj_metaMenuItem">
-					<h:inputText value="#{LoginBean.login}"/>
-					<h:inputSecret value="#{LoginBean.passwd}"/>
+					<h:inputText value="#{LoginBean.login}" placeholder="marco"/>
+					<h:inputSecret value="#{LoginBean.passwd}" placeholder="schlender"/>
 					<h:commandButton id="lnkLogin" title="#{lbl.login}" value="#{lbl.login}" action="#{LoginBean.doLogin}"/>
 				</h:panelGroup>
 				
@@ -86,12 +86,6 @@ All rights reserved. Use is subject to license terms.
 			</h:form>
 		</h:panelGroup>
 	</h:panelGroup>
-	
-	<script type="text/javascript">
-	//add placeholders for meta menu - username and password
-	jQuery(".imj_metaMenuStandardSingleLine input[type='text']").attr("placeholder", placeholder_username);
-	jQuery(".imj_metaMenuStandardSingleLine input[type='password']").attr("placeholder", placeholder_password);
-	</script>
 	
 	<!-- meta Menu ends here -->
 </ui:composition>

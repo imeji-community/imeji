@@ -463,6 +463,16 @@ margin-bottom: 0.9090em;  */
 	text-align: center;
 }
 
+.imj_StyleSwitcher {
+	background-color: transparent;
+	border: 0 none;
+	outline: none;
+	color: #F0F0F0;
+}
+.imj_StyleSwitcher:hover {
+	background-color: transparent;
+}
+
 
 /* ===[ MetaMenu - SiteHeader top right]===
    ================================================== */

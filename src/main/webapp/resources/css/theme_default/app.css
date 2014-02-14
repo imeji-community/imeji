@@ -29,6 +29,22 @@
 /******************************* NEW STYLES **************************************/
 /*********************************************************************************/
 
+/*
+ * global color styles:
+ * for every color exist one folder in imj_iconset
+ * =========================================================================
+ * links: 6CAE2F
+ * hover: F0F0F0
+ * static: F0F0F0
+ * error: D80000
+ * deactivated: BBBBBB
+ * 
+ * page background: 292929
+ * content background: 313131
+ * default font color: F0F0F0
+ * font color input fields: 000000
+ */
+
 /* imeji base settings
    =========================================================================  */
 
@@ -223,7 +239,7 @@ input[type="password"]:focus {
     padding: 1%;
     display: inline;
     font-size: 1.0909em;
-    background-color: #323232;
+    background-color: #313131;
     border-radius: 0.41666666em;
     -webkit-border-radius: 0.41666666em;
     -moz-border-radius: 0.41666666em;
@@ -434,14 +450,17 @@ margin-bottom: 0.9090em;  */
 	text-align: center;
 }
 
-.imj_StyleSwitcher {
-	background-color: transparent;
+.imj_buttonStyleSwitcher {
+	width: 1.454545em;
+	height: 1.454545em;
+	margin: 0 0.727272em;
+	display: inline-block;
+	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAE2F/imjButtonMonitorColor_16.png") no-repeat scroll 0 0 transparent;
 	border: 0 none;
 	outline: none;
-	color: #F0F0F0;
 }
-.imj_StyleSwitcher:hover {
-	background-color: transparent;
+.imj_buttonStyleSwitcher:hover {
+	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjButtonMonitorColor_16.png") no-repeat scroll 0 0 transparent;
 }
 
 
@@ -567,22 +586,28 @@ margin-bottom: 0.9090em;  */
 	width: 1.45454545em;
 	height: 1.45454545em;
 	margin-right: 0.5em;
-	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAE2F/imjButtonTriangleSortDesc_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAE2F/imjButtonTriangleSortDesc_16.png");
 	vertical-align: middle;
 }
+a:hover .imj_buttonSortDescending_16 {
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjButtonTriangleSortDesc_16.png");
+}
 .imj_buttonSortDescending_16:hover {
-	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjButtonTriangleSortDesc_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjButtonTriangleSortDesc_16.png");
 }
 .imj_buttonSortAscending_16 {
 	display: inline-block;
 	width: 1.45454545em;
 	height: 1.45454545em;
 	margin-right: 0.5em;
-	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAE2F/imjButtonTriangleSortAsc_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAE2F/imjButtonTriangleSortAsc_16.png");
 	vertical-align: middle;
 }
+a:hover .imj_buttonSortAscending_16 {
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjButtonTriangleSortAsc_16.png");
+}
 .imj_buttonSortAscending_16:hover {
-	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjButtonTriangleSortAsc_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjButtonTriangleSortAsc_16.png");
 }
    
 /* * Search Buttons
@@ -593,12 +618,12 @@ margin-bottom: 0.9090em;  */
 	width: 1.36363636em;
 	height: 1.36363636em;
 	margin-right: 0.5em;
-	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAE2F/imjMagnifierTopLeft_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAE2F/imjMagnifierTopLeft_16.png");
 	vertical-align: middle;
 }
 
 .imj_iconMagnifier_16:hover {
-	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjMagnifierTopLeft_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjMagnifierTopLeft_16.png");
 }
 
 .imj_iconMagnifier_24 {
@@ -608,7 +633,7 @@ margin-bottom: 0.9090em;  */
     width: 2em;
     margin-right: 0.636363em;
     margin-top: -0.1818em;
-    background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjMagnifierTopLeft_23.png");    
+    background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjMagnifierTopLeft_24.png");    
     background-position: center center;
     background-repeat: no-repeat;
 }
@@ -621,106 +646,116 @@ margin-bottom: 0.9090em;  */
 	display: inline-block;
 	width: 2.363636em;
 	height: 1.363636em;
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjButtonGotoFirst_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjGotoFirst_16.png");
 	background-color: inherit;
 	background-repeat: no-repeat;
 	background-position: left;
 	vertical-align: middle;
     border: 0 none;
 }
-
-.imj_buttonBrowseToFirst_16.imj_deactivated {
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonGotoFirst_15.png");
-}
-
 .imj_buttonBrowseToFirst_16:hover {
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonGotoFirst_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjGotoFirst_16.png");
 	background-color: inherit;
+}
+.imj_buttonBrowseToFirst_16.imj_deactivated {
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/BBBBBB/imjGotoFirst_16.png");
+}
+.imj_buttonBrowseToFirst_16:hover.imj_deactivated {
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/BBBBBB/imjGotoFirst_16.png");
 }
 
 .imj_buttonBrowseBackward_16 {
 	display: inline-block;
 	width: 2.363636em;
 	height: 1.363636em;
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjButtonTrianglePrevious_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjTrianglePrevious_16.png");
 	background-color: inherit;
 	background-repeat: no-repeat;
 	background-position: left;
 	vertical-align: middle;
     border: 0 none;
 }
-
-.imj_buttonBrowseBackward_16.imj_deactivated {
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonTrianglePrevious_15.png");
-}
-
 .imj_buttonBrowseBackward_16:hover {
-	background-image: url("resources/imj_iconset/F0F0F0/imjButtonTrianglePrevious_15.png");
+	background-image: url("resources/imj_iconset/F0F0F0/imjTrianglePrevious_16.png");
 	background-color: inherit;
 }
+.imj_buttonBrowseBackward_16.imj_deactivated {
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/BBBBBB/imjTrianglePrevious_16.png");
+}
+.imj_buttonBrowseBackward_16:hover.imj_deactivated {
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/BBBBBB/imjTrianglePrevious_16.png");
+}
+
+
 
 .imj_buttonBrowseForward_16 {
 	display: inline-block;
 	width: 2.363636em;
 	height: 1.363636em;
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjButtonTriangleNext_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjTriangleNext_16.png");
 	background-color: inherit;
 	background-repeat: no-repeat;
 	background-position: right;
 	vertical-align: middle;
     border: 0 none;
 }
-
-.imj_buttonBrowseForward_16.imj_deactivated {
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonTriangleNext_15.png");
-}
-
 .imj_buttonBrowseForward_16:hover {
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonTriangleNext_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjTriangleNext_16.png");
 	background-color: inherit;
 }
+.imj_buttonBrowseForward_16.imj_deactivated {
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/BBBBBB/imjTriangleNext_16.png");
+}
+.imj_buttonBrowseForward_16:hover.imj_deactivated {
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/BBBBBB/imjTriangleNext_16.png");
+}
+
+
 
 .imj_buttonBrowseToLast_16 {
 	display: inline-block;
 	width: 2.363636em;
 	height: 1.363636em;
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjButtonGotoLast_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjGotoLast_16.png");
 	background-color: inherit;
 	background-repeat: no-repeat;
 	background-position: right;
 	vertical-align: middle;
     border: 0 none;
 }
-
-.imj_buttonBrowseToLast_16.imj_deactivated {
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonGotoLast_15.png");
-}
-
 .imj_buttonBrowseToLast_16:hover {
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonGotoLast_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjGotoLast_16.png");
 	background-color: inherit;
 }
+.imj_buttonBrowseToLast_16.imj_deactivated {
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/BBBBBB/imjGotoLast_16.png");
+}
+.imj_buttonBrowseToLast_16:hover.imj_deactivated {
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/BBBBBB/imjGotoLast_16.png");
+}
+
+
 
 
 /* * Paginator Buttons (Image.xhtml)
    ================================================== */
 
 .imj_paginator .imj_backwardButton {
-	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAE2F/imjTrianglePrevious_15.png") transparent no-repeat center left;
+	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAE2F/imjTrianglePrevious_16.png") transparent no-repeat center left;
 	padding-left: 1.5em;
 }
 .imj_paginator .imj_backwardButton:hover {
 	color: #F0F0F0;
-	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjTrianglePrevious_15.png") transparent no-repeat center left;
+	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjTrianglePrevious_16.png") transparent no-repeat center left;
 }
 
 .imj_paginator .imj_forwardButton {
-	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAE2F/imjTriangleNext_15.png") transparent no-repeat center right;
+	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAE2F/imjTriangleNext_16.png") transparent no-repeat center right;
 	padding-right: 1.5em;
 }
 .imj_paginator .imj_forwardButton:hover {
 	color: #F0F0F0;
-	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjTriangleNext_15.png") transparent no-repeat center right;
+	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjTriangleNext_16.png") transparent no-repeat center right;
 }
 
 
@@ -728,7 +763,7 @@ margin-bottom: 0.9090em;  */
    ================================================== */
 
 .imj_buttonAdd_16 {
-	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAE2F/imjButtonPlusBorder_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAE2F/imjButtonPlusBorderOpen_16.png");
     vertical-align: middle;
     background-repeat: no-repeat;
     background-color: inherit;
@@ -740,12 +775,12 @@ margin-bottom: 0.9090em;  */
 }
 
 .imj_buttonAdd_16:hover  {
-	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjButtonPlusBorder_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjButtonPlusBorderOpen_16.png");
 	background-color: inherit;
 }
 
 .imj_buttonRemove_16 {
-	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAE2F/imjButtonMinusBorder_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAE2F/imjButtonMinusRoundedBorderOpen_16.png");
     vertical-align: middle;
     background-repeat: no-repeat;
     background-color: inherit;
@@ -757,7 +792,7 @@ margin-bottom: 0.9090em;  */
 }
 
 .imj_buttonRemove_16:hover {
-	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjButtonMinusBorder_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjButtonMinusRoundedBorderOpen_16.png");
 	background-color: inherit;
 }
 
@@ -769,32 +804,43 @@ margin-bottom: 0.9090em;  */
 	border: 0 none;
 	color: #6CAE2F;
 }
-.imj_collapse .imj_buttonAdd_16 {
-	vertical-align: top;
-}
 .imj_collapse:hover {
 	background-color: transparent;
 	border: 0 none;
 	color: #F0F0F0;
 }
-.imj_collapse:hover .imj_buttonRemove_16 {
-	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjButtonMinusBorder_15.png");
+.imj_collapse .imj_buttonRemove_16 {
+	margin-right: 0.272727em;
+	vertical-align: top;
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAE2F/imjButtonMinusRoundedBorder_16.png");
 }
+.imj_collapse:hover .imj_buttonRemove_16 {
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjButtonMinusRoundedBorder_16.png");
+}
+.imj_collapse .imj_buttonRemove_16:hover {
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjButtonMinusRoundedBorder_16.png");
+}
+
 .imj_expand {
 	background-color: transparent;
 	border: 0 none;
 	color: #6CAE2F;
-}
-.imj_expand .imj_buttonAdd_16 {
-	vertical-align: top;
 }
 .imj_expand:hover {
 	background-color: transparent;
 	border: 0 none;
 	color: #F0F0F0;
 }
+.imj_expand .imj_buttonAdd_16 {
+	margin-right: 0.272727em;
+	vertical-align: top;
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAE2F/imjButtonPlusBorder_16.png");
+}
 .imj_expand:hover .imj_buttonAdd_16 {
-	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjButtonPlusBorder_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjButtonPlusBorder_16.png");
+}
+.imj_expand .imj_buttonAdd_16:hover {
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjButtonPlusBorder_16.png");
 }
 
 
@@ -820,7 +866,7 @@ margin-bottom: 0.9090em;  */
     background-color: #444444;
 }
 .imj_overlayMenuListItem:hover .imj_iconMagnifier_16 {
-	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjMagnifierTopLeft_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjMagnifierTopLeft_16.png");
 }
 .imj_overlayMenu .imj_criticalItem:hover {
 	background-color: #D80000;
@@ -841,7 +887,7 @@ margin-bottom: 0.9090em;  */
 	display: inline-block;
 	width: 2.363636em;
 	height: 1.363636em;
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjButtonTriangleSortDesc_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjButtonTriangleSortDesc_16.png");
 	background-color: inherit;
 	background-repeat: no-repeat;
 	background-position: left;
@@ -852,7 +898,7 @@ margin-bottom: 0.9090em;  */
 	display: inline-block;
 	width: 2.363636em;
 	height: 1.363636em;
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonTriangleSortDesc_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonTriangleSortDesc_16.png");
 	background-color: inherit;
 	background-repeat: no-repeat;
 	background-position: left;
@@ -863,7 +909,7 @@ margin-bottom: 0.9090em;  */
 	display: inline-block;
 	width: 2.363636em;
 	height: 1.363636em;
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjButtonTriangleSortAsc_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjButtonTriangleSortAsc_16.png");
 	background-color: inherit;
 	background-repeat: no-repeat;
 	background-position: left;
@@ -874,7 +920,7 @@ margin-bottom: 0.9090em;  */
 	display: inline-block;
 	width: 2.363636em;
 	height: 1.363636em;
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonTriangleSortAsc_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonTriangleSortAsc_16.png");
 	background-color: inherit;
 	background-repeat: no-repeat;
 	background-position: left;
@@ -1001,7 +1047,7 @@ margin-bottom: 0.9090em;  */
     text-align: left;
     letter-spacing: 0.091em;
     padding: 0.4%;
-    background-color: #323232;
+    background-color: #313131;
     border-radius: 0.41666666em;
     -webkit-border-radius: 0.41666666em;
     -moz-border-radius: 0.41666666em;
@@ -1119,7 +1165,7 @@ li.imj_contentSubMenuItem {
     max-width: 24em;
     margin: 0;
     padding: 0.5% 6.5% 0.5% 1%;
-    background-color: #323232;
+    background-color: #313131;
     text-align: right;
     word-break: hyphenate;
     
@@ -1853,9 +1899,9 @@ min-height: 6em;
 }
 
 .imj_disabledButton {
-	color: #FFFFFF;
-	background-color: #292929;
-	border: solid #292929;
+	color: #000000;
+	background-color: #BBBBBB;
+	border: solid #BBBBBB;
 	padding: 0 0.3333333em;
 	margin-left: 1em;
 	cursor: default;
@@ -1866,9 +1912,9 @@ min-height: 6em;
     -ms-border-radius: 0.3em;
 }
 .imj_disabledButton:hover {
-	color: #FFFFFF;
-	background-color: #292929;
-	border: solid #292929;
+	color: #000000;
+	background-color: #BBBBBB;
+	border: solid #BBBBBB;
 	cursor: default;
 }
 
@@ -1975,7 +2021,7 @@ min-height: 6em;
 	margin-top: 3%;
 }
 .imj_iconTriangleBottomRight_16 {
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjButtonTriangleLargeBottomRight_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjTriangleLargeBottomRight_16.png");
 	display: inline-block;
 	width: 1.363636em;
 	height: 1.363636em;
@@ -1983,7 +2029,7 @@ min-height: 6em;
 }
 
 .imj_iconTriangleBottomRight_16:hover {
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonTriangleLargeBottomRight_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjTriangleLargeBottomRight_16.png");
 }
 
 .imj_overlayMenu .imj_menuHeader {
@@ -1996,7 +2042,7 @@ min-height: 6em;
 }
 
 .imj_overlayMenu:hover .imj_iconTriangleBottomRight_16 {
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonTriangleLargeBottomRight_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjTriangleLargeBottomRight_16.png");
 }
 
 .imj_overlayMenu .imj_listItemSeparator {
@@ -2087,15 +2133,15 @@ min-height: 6em;
 }
 
 .imj_imageInfoLayer .imj_infoNavigation a:hover .imj_iconEyeOpen_16 { 
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjEyeOpen_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjEyeOpen_16.png");
 }
 
 .imj_imageInfoLayer .imj_infoNavigation a:hover .imj_buttonEdit_16 {
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonEdit_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjEditPen_16.png");
 }
 
 .imj_iconEyeOpen_16 {
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjEyeOpen_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjEyeOpen_16.png");
 	background-color: inherit;
 	background-position: left;
 	background-repeat: no-repeat;
@@ -2107,11 +2153,12 @@ min-height: 6em;
 }
 
 .imj_iconEyeOpen_16:hover { 
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjEyeOpen_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjEyeOpen_16.png");
 }
 
+/* imj_buttonEdit_16 - used in picturePages/ui/MetadataPopup.xhtml */
 .imj_buttonEdit_16 {
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjButtonEdit_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjEditPen_16.png");
 	background-color: inherit;
 	background-position: left;
 	background-repeat: no-repeat;
@@ -2123,7 +2170,7 @@ min-height: 6em;
 }
 
 .imj_buttonEdit_16:hover {
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonEdit_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjEditPen_16.png");
 }
 
 .imj_messageStatus {
@@ -2491,10 +2538,10 @@ min-height: 6em;
 	display: inline-block;
 	width: 1.363636em;
 	height: 1.363636em;
-	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/D80000/imjButtonMinusBorder_15.png") no-repeat scroll 0 0 transparent;
+	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/D80000/imjButtonMinusRoundedBorderOpen_16.png") no-repeat scroll 0 0 transparent;
 }
 .plupload_delete .plupload_file_action a:hover {
-	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/FF7F00/imjButtonMinusBorder_15.png") no-repeat scroll 0 0 transparent;
+	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjButtonMinusRoundedBorderOpen_16.png") no-repeat scroll 0 0 #000000;
 }
 
 
@@ -2547,7 +2594,7 @@ min-height: 6em;
 .imj_icoStatusWithdrawn_32 {
 	width: 2.90909090em;
 	height: 2.90909090em;
-	background-image: url("/imeji/jsf/javax.faces.resources/css/old_style/themes/skin_darkGrey/images/All_Status_ItemWithdrawn_31_Static.gif");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjDocumentDelete_32.png");
 	background-position: left center;
 	background-repeat: no-repeat;
 	display: inline-block;
@@ -2555,7 +2602,7 @@ min-height: 6em;
 .imj_icoStatusPending_32 {
 	width: 2.90909090em;
 	height: 2.90909090em;
-    background-image: url("/imeji/jsf/javax.faces.resources/css/old_style/themes/skin_darkGrey/images/All_Status_ItemPending_31_Static.gif");
+    background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjDocumentPending_32.png");
     background-position: left center;
     background-repeat: no-repeat;
     display: inline-block;
@@ -2563,7 +2610,7 @@ min-height: 6em;
 .imj_icoStatusReleased_32 {
 	width: 2.90909090em;
 	height: 2.90909090em;
-    background-image: url("/imeji/jsf/javax.faces.resources/css/old_style/themes/skin_darkGrey/images/All_Status_ItemReleased_31_Static.gif");
+    background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjDocumentPublished_32.png");
     background-position: left center;
     background-repeat: no-repeat;
     display: inline-block;

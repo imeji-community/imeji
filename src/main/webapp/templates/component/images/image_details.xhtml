@@ -192,10 +192,10 @@
 												</div>
 												<!-- imj_multipleButtons (-) (+) command buttons -->
 												<div class="imj_metadataEditButtonArea">
-													<h:commandButton type="button" styleClass="imj_removeButton_15" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{item.removeMetadata(metadata)}" value="">
+													<h:commandButton type="button" styleClass="imj_buttonRemove_16" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{item.removeMetadata(metadata)}" value="">
 														<f:ajax execute="@form" render="@form"/>
 													</h:commandButton>
-													<h:commandButton type="button" styleClass="imj_addButton_15" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{item.addMetadata(metadata)}" value="">
+													<h:commandButton type="button" styleClass="imj_buttonAdd_16" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{item.addMetadata(metadata)}" value="">
 														<f:ajax execute="@form" render="@form"/>
 													</h:commandButton>
 												</div>

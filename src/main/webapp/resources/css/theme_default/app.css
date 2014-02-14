@@ -23,42 +23,11 @@
  * Karsten Asshauer & Marco Schlender for the imeji community * http://imeji.org *
  * ====================================================================================  */
 
-/******************************* OLD STYLES **************************************/
-/********************** css hot fixes for release 1.2.0.0 ************************/
-/* ================================================== */
-.free_txtInput, 
-.xHuge_txtInput, 
-.xHuge_txtInput input {
-    width: 98%;
-}
-
-.menuHeader {
-	color: #6CAD2F;
-}
-/*********************************************************************************/
 
 
 /*********************************************************************************/
 /******************************* NEW STYLES **************************************/
 /*********************************************************************************/
-
-/* ========================================================================== 
- ***************************** imeji basic styles ***************************
- * Global CSS Helpers
- * ========================================================================== */
-
-.imj_clear {
-	clear: both;	
-}
-
-.imj_invisible {
-	visibility: hidden; 
-}
-
-.imj_noDisplay {
-	display: none;
-}
-
 
 /* imeji base settings
    =========================================================================  */
@@ -121,11 +90,11 @@ p {
 
 a,
 button {
-	color: #6CAD2F;
+	color: #6CAE2F;
 	text-decoration: none;
 }
 a:visited {
-	color: #6CAD2F;
+	color: #6CAE2F;
 	text-decoration: none;
 }
 a:active {
@@ -147,27 +116,14 @@ button:focus {
 
 /* imeji base settings - input, textarea, select fields colors
    =========================================================================  */
-
-input {
-    background-color: #CCCCCC;
-}
-
-input:hover {
-    color: 000000;
-    background-color: #FFFFFF;
-}
-
-input:focus {
-    color: #000000;
-    background-color: #FFFFFF;
-}
-
 input,
 textarea,
 select {
-    border-color: #6CAD2F;
+    color: 000000;
+    background-color: #F0F0F0;
+    
+    border-color: transparent;
     border-style: solid;
-    background-color: #F0F0F0; /*#F3F8FA*/
 	border-radius: 0.3em;
     -webkit-border-radius: 0.3em;
     -moz-border-radius: 0.3em;
@@ -175,10 +131,14 @@ select {
     -ms-border-radius: 0.3em;
 }
 
-input[type="text"],
-textarea,
-select {
-    background-color: #F0F0F0; /*#F3F8FA*/
+input:hover {
+    border-color: #6CAE2F;
+    border-style: solid;
+}
+
+input:focus {
+    border-color: #6CAE2F;
+    border-style: solid;
 }
 
 input[type="radio"],
@@ -193,20 +153,31 @@ select:focus,
 textarea:focus, 
 input[type="text"]:focus, 
 input[type="password"]:focus {
-    border-color: #F0F0F0;
+    border-color: #6CAE2F;
+    border-style: solid;
 }
 
-/*input[type="search"]:focus, input[type="email"]:focus, input[type="file"]:focus, input[type="number"]:focus, , input[type="tel"]:focus, input[type="url"]:focus, input[type="radio"]:focus  */
-
-
-input[type="checkbox"]  {
-    /* margin: 0.1em 0 0 0;*/
-    /*vertical-align: text-top;*/
+/* ========================================================================== 
+ ***************************** imeji basic styles ***************************
+ * Global CSS Helpers
+ * ========================================================================== */
+.imj_clear {
+	clear: both;	
 }
 
-.imj_admindataCheckbox {
-    margin-left: 0;
+.imj_invisible {
+	visibility: hidden; 
 }
+
+.imj_noDisplay {
+	display: none;
+}
+
+
+
+
+
+
 
 
 
@@ -375,7 +346,7 @@ iframe#twitter-widget-0 div.root div.stream {
 .imj_startpageFooter {
 	clear: both;
 	width: 100%;
-	padding: 1.000em 0;
+	padding: 1em 0;
 }
 
 .imj_startpageFooter img {
@@ -423,8 +394,8 @@ iframe#twitter-widget-0 div.root div.stream {
     min-height: 100%;
     margin: 0 auto;
     margin-bottom: -2.001em;
-    border-left: 1px dotted #6CAD2F;
-    border-right: 1px dotted #6CAD2F;
+    border-left: 1px dotted #6CAE2F;
+    border-right: 1px dotted #6CAE2F;
 }
 
 .imj_siteWrapper input[type="text"],
@@ -493,7 +464,7 @@ margin-bottom: 0.9090em;  */
     height: 1.5454em;
     width: 0.0909em;
     margin: 0 0.72727em;
-    border-right: solid #6CAD2F 0.090909em;
+    border-right: solid #6CAE2F 0.090909em;
     display: inline-block;
 }
 
@@ -502,18 +473,18 @@ margin-bottom: 0.9090em;  */
 }
 
 .imj_metaMenuStandardSingleLine .imj_metaMenuItem:not[select] {
-    color: #6CAD2F;
+    color: #6CAE2F;
     display: inline;
 }
 
 .imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="text"],
 .imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="password"] {
     background-color: #292929;
-    color: #6CAD2F;
+    color: #6CAE2F;
     /*font-size: 0.75em;*/
     height: 1.4545em;
     width: 10.2727em;
-    border: solid #6CAD2F 0.0909em;
+    border: solid #6CAE2F 0.0909em;
     margin-right: 0.1818em;
 }
 
@@ -529,7 +500,7 @@ margin-bottom: 0.9090em;  */
 
 .imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="submit"] {
     background-color: #292929;
-    color: #6CAD2F;
+    color: #6CAE2F;
     padding: 0;
     height: 1.5454em; /*1.4545em*/
     border: none 0;
@@ -546,8 +517,6 @@ margin-bottom: 0.9090em;  */
 /* ===[ SiteHeader - Logo + Search Area]===
    ================================================== */
 
-/* full_area0 LogoNSearch   */
-
 .imj_siteHeaderLogoSearchSection {
     float: left;
     display: inline;
@@ -558,9 +527,7 @@ margin-bottom: 0.9090em;  */
     padding: 0;
 }
 
-/* xTiny_marginLExcl half_area0 headerLogo 
-cut second ?  
-  */
+
 
 /* ===[ SiteHeader - Logo ]===
    ================================================== */
@@ -578,21 +545,6 @@ cut second ?
     margin: -1.500em 0.0909em 0 1.3636em;
     padding: 0;
 }
-
-/* half_area0 themePark - header.jspf - OLD !  */
-
-/* .themePark {
-    background-attachment: inherit;
-    background-clip: inherit;
-    background-color: inherit;
-    background-image: inherit;
-    background-origin: inherit;
-    background-position: left top;
-    background-repeat: no-repeat;
-    background-size: inherit;
-}
-   ==================================================
-   ================================================== */
 
 .imj_siteHeaderLogoTheme {
     float: left;
@@ -615,7 +567,7 @@ cut second ?
 	width: 1.45454545em;
 	height: 1.45454545em;
 	margin-right: 0.5em;
-	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAD2F/imjButtonTriangleSortDesc_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAE2F/imjButtonTriangleSortDesc_15.png");
 	vertical-align: middle;
 }
 .imj_buttonSortDescending_16:hover {
@@ -626,7 +578,7 @@ cut second ?
 	width: 1.45454545em;
 	height: 1.45454545em;
 	margin-right: 0.5em;
-	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAD2F/imjButtonTriangleSortAsc_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAE2F/imjButtonTriangleSortAsc_15.png");
 	vertical-align: middle;
 }
 .imj_buttonSortAscending_16:hover {
@@ -634,21 +586,22 @@ cut second ?
 }
    
 /* * Search Buttons
+   * used in: selectionInfoPanel, simpleSearch
    ================================================== */   
-.imj_icoMagnifier_15 {
+.imj_iconMagnifier_16 {
 	display: inline-block;
 	width: 1.36363636em;
 	height: 1.36363636em;
 	margin-right: 0.5em;
-	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAD2F/imjMagnifierTopLeft_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAE2F/imjMagnifierTopLeft_15.png");
 	vertical-align: middle;
 }
 
-.imj_icoMagnifier_15:hover {
+.imj_iconMagnifier_16:hover {
 	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjMagnifierTopLeft_15.png");
 }
 
-.imj_icoMagnifier_23 {
+.imj_iconMagnifier_24 {
     float: left;
     display: inline-block;
     height: 2em;
@@ -664,11 +617,11 @@ cut second ?
 /* * Paginator Buttons (Tiled List)
    ================================================== */ 
 
-.imj_buttonBrowseToFirst_15 {
+.imj_buttonBrowseToFirst_16 {
 	display: inline-block;
 	width: 2.363636em;
 	height: 1.363636em;
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAD2F/imjButtonGotoFirst_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjButtonGotoFirst_15.png");
 	background-color: inherit;
 	background-repeat: no-repeat;
 	background-position: left;
@@ -676,20 +629,20 @@ cut second ?
     border: 0 none;
 }
 
-.imj_buttonBrowseToFirst_15.imj_deactivated {
+.imj_buttonBrowseToFirst_16.imj_deactivated {
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonGotoFirst_15.png");
 }
 
-.imj_buttonBrowseToFirst_15:hover {
+.imj_buttonBrowseToFirst_16:hover {
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonGotoFirst_15.png");
 	background-color: inherit;
 }
 
-.imj_buttonBrowseBackward_15 {
+.imj_buttonBrowseBackward_16 {
 	display: inline-block;
 	width: 2.363636em;
 	height: 1.363636em;
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAD2F/imjButtonTrianglePrevious_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjButtonTrianglePrevious_15.png");
 	background-color: inherit;
 	background-repeat: no-repeat;
 	background-position: left;
@@ -697,20 +650,20 @@ cut second ?
     border: 0 none;
 }
 
-.imj_buttonBrowseBackward_15.imj_deactivated {
+.imj_buttonBrowseBackward_16.imj_deactivated {
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonTrianglePrevious_15.png");
 }
 
-.imj_buttonBrowseBackward_15:hover {
+.imj_buttonBrowseBackward_16:hover {
 	background-image: url("resources/imj_iconset/F0F0F0/imjButtonTrianglePrevious_15.png");
 	background-color: inherit;
 }
 
-.imj_buttonBrowseForward_15 {
+.imj_buttonBrowseForward_16 {
 	display: inline-block;
 	width: 2.363636em;
 	height: 1.363636em;
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAD2F/imjButtonTriangleNext_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjButtonTriangleNext_15.png");
 	background-color: inherit;
 	background-repeat: no-repeat;
 	background-position: right;
@@ -718,20 +671,20 @@ cut second ?
     border: 0 none;
 }
 
-.imj_buttonBrowseForward_15.imj_deactivated {
+.imj_buttonBrowseForward_16.imj_deactivated {
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonTriangleNext_15.png");
 }
 
-.imj_buttonBrowseForward_15:hover {
+.imj_buttonBrowseForward_16:hover {
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonTriangleNext_15.png");
 	background-color: inherit;
 }
 
-.imj_buttonBrowseToLast_15 {
+.imj_buttonBrowseToLast_16 {
 	display: inline-block;
 	width: 2.363636em;
 	height: 1.363636em;
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAD2F/imjButtonGotoLast_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjButtonGotoLast_15.png");
 	background-color: inherit;
 	background-repeat: no-repeat;
 	background-position: right;
@@ -739,11 +692,11 @@ cut second ?
     border: 0 none;
 }
 
-.imj_buttonBrowseToLast_15.imj_deactivated {
+.imj_buttonBrowseToLast_16.imj_deactivated {
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonGotoLast_15.png");
 }
 
-.imj_buttonBrowseToLast_15:hover {
+.imj_buttonBrowseToLast_16:hover {
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonGotoLast_15.png");
 	background-color: inherit;
 }
@@ -753,7 +706,7 @@ cut second ?
    ================================================== */
 
 .imj_paginator .imj_backwardButton {
-	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAD2F/imjTrianglePrevious_15.png") transparent no-repeat center left;
+	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAE2F/imjTrianglePrevious_15.png") transparent no-repeat center left;
 	padding-left: 1.5em;
 }
 .imj_paginator .imj_backwardButton:hover {
@@ -762,7 +715,7 @@ cut second ?
 }
 
 .imj_paginator .imj_forwardButton {
-	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAD2F/imjTriangleNext_15.png") transparent no-repeat center right;
+	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAE2F/imjTriangleNext_15.png") transparent no-repeat center right;
 	padding-right: 1.5em;
 }
 .imj_paginator .imj_forwardButton:hover {
@@ -774,8 +727,8 @@ cut second ?
 /* * Add + Remove Buttons - MetaData List
    ================================================== */
 
-.imj_addButton_15 {
-	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAD2F/imjButtonPlusBorder_15.png");
+.imj_buttonAdd_16 {
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAE2F/imjButtonPlusBorder_15.png");
     vertical-align: middle;
     background-repeat: no-repeat;
     background-color: inherit;
@@ -786,13 +739,13 @@ cut second ?
 	display: inline-block;
 }
 
-.imj_addButton_15:hover  {
+.imj_buttonAdd_16:hover  {
 	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjButtonPlusBorder_15.png");
 	background-color: inherit;
 }
 
-.imj_removeButton_15 {
-	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAD2F/imjButtonMinusBorder_15.png");
+.imj_buttonRemove_16 {
+	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAE2F/imjButtonMinusBorder_15.png");
     vertical-align: middle;
     background-repeat: no-repeat;
     background-color: inherit;
@@ -803,7 +756,7 @@ cut second ?
 	display: inline-block;
 }
 
-.imj_removeButton_15:hover {
+.imj_buttonRemove_16:hover {
 	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjButtonMinusBorder_15.png");
 	background-color: inherit;
 }
@@ -814,9 +767,9 @@ cut second ?
 .imj_collapse {
 	background-color: transparent;
 	border: 0 none;
-	color: #6CAD2F;
+	color: #6CAE2F;
 }
-.imj_collapse .imj_addButton_15 {
+.imj_collapse .imj_buttonAdd_16 {
 	vertical-align: top;
 }
 .imj_collapse:hover {
@@ -824,15 +777,15 @@ cut second ?
 	border: 0 none;
 	color: #F0F0F0;
 }
-.imj_collapse:hover .imj_removeButton_15 {
+.imj_collapse:hover .imj_buttonRemove_16 {
 	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjButtonMinusBorder_15.png");
 }
 .imj_expand {
 	background-color: transparent;
 	border: 0 none;
-	color: #6CAD2F;
+	color: #6CAE2F;
 }
-.imj_expand .imj_addButton_15 {
+.imj_expand .imj_buttonAdd_16 {
 	vertical-align: top;
 }
 .imj_expand:hover {
@@ -840,7 +793,7 @@ cut second ?
 	border: 0 none;
 	color: #F0F0F0;
 }
-.imj_expand:hover .imj_addButton_15 {
+.imj_expand:hover .imj_buttonAdd_16 {
 	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjButtonPlusBorder_15.png");
 }
 
@@ -866,17 +819,17 @@ cut second ?
     padding: 0.25em 1em;
     background-color: #444444;
 }
-.imj_overlayMenuListItem:hover .imj_icoMagnifier_15 {
+.imj_overlayMenuListItem:hover .imj_iconMagnifier_16 {
 	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjMagnifierTopLeft_15.png");
 }
 .imj_overlayMenu .imj_criticalItem:hover {
 	background-color: #D80000;
 }
 
-.imj_overlayMenu .imj_menuBody select+.imj_buttonOrderByAsc_15 {
+.imj_overlayMenu .imj_menuBody select+.imj_buttonOrderByAsc_16 {
 	margin-left: 1em;
 }
-.imj_overlayMenu .imj_menuBody select+.imj_buttonOrderByDesc_15 {
+.imj_overlayMenu .imj_menuBody select+.imj_buttonOrderByDesc_16 {
 	margin-left: 1em;
 }
 
@@ -884,18 +837,18 @@ cut second ?
 /* * Order by Buttons (sub menu)
  CollectionBrowse.xhtml + Images.xhtml ...
 ================================================== */
-.imj_buttonOrderByDesc_15 {
+.imj_buttonOrderByDesc_16 {
 	display: inline-block;
 	width: 2.363636em;
 	height: 1.363636em;
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAD2F/imjButtonTriangleSortDesc_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjButtonTriangleSortDesc_15.png");
 	background-color: inherit;
 	background-repeat: no-repeat;
 	background-position: left;
 	vertical-align: middle;
 	border: 0 none;
 }
-.imj_buttonOrderByDesc_15:hover {
+.imj_buttonOrderByDesc_16:hover {
 	display: inline-block;
 	width: 2.363636em;
 	height: 1.363636em;
@@ -906,18 +859,18 @@ cut second ?
 	vertical-align: middle;
 	border: 0 none;
 }
-.imj_buttonOrderByAsc_15 {
+.imj_buttonOrderByAsc_16 {
 	display: inline-block;
 	width: 2.363636em;
 	height: 1.363636em;
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAD2F/imjButtonTriangleSortAsc_15.png");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjButtonTriangleSortAsc_15.png");
 	background-color: inherit;
 	background-repeat: no-repeat;
 	background-position: left;
 	vertical-align: middle;
 	border: 0 none;
 }
-.imj_buttonOrderByAsc_15:hover {
+.imj_buttonOrderByAsc_16:hover {
 	display: inline-block;
 	width: 2.363636em;
 	height: 1.363636em;
@@ -953,8 +906,8 @@ cut second ?
     height: 1.818em; /*1.7272em*/
     margin-left: 0.455em; /*0.363636em*/
     padding: 0.091em 1em; /* 0.0909em 1em*/
-    background-color: #6CAD2F;
-    border-color: #6CAD2F;
+    background-color: #6CAE2F;
+    border-color: #6CAE2F;
     color: #F0F0F0;
 }
 
@@ -1023,8 +976,6 @@ cut second ?
    ==================================================
    ================================================== */
 
-/* full_area0 mainMenu   */
-
 .imj_mainMenuStandard {
     float: left;
     display: inline;
@@ -1034,7 +985,7 @@ cut second ?
     max-height: 3.0em; /*2.4545em;*/
     margin: -0.500em 0.0909em 0 5.273em; /*5.74em*/
     padding: 0.2727em 0 0 0;
-    /* text-transform: uppercase;*/ 
+    text-transform: uppercase;
 }
 
 
@@ -1049,10 +1000,6 @@ cut second ?
     margin-right: 0.636em; /*0.8181em*/
     text-align: left;
     letter-spacing: 0.091em;
-    /* margin-left: 1%;
-    padding: 1%;
-    display: inline;
-    font-size: 1.0909em;*/
     padding: 0.4%;
     background-color: #323232;
     border-radius: 0.41666666em;
@@ -1063,7 +1010,7 @@ cut second ?
 }
 
 .imj_mainMenuStandardItem {
-	color: #6CAD2F;
+	color: #6CAE2F;
 	text-decoration: none;
 }
 .imj_mainMenuStandardItem:hover {
@@ -1111,7 +1058,7 @@ cut second ?
     height: 1.090909em; /* 1.15em*/
     margin: 0 0.318em; /* 0.364 0.636em 0.455em*/
     padding: 0;
-    /* background-color: #6CAD2F; */
+    /* background-color: #6CAE2F; */
 }
 
 .imj_contentMenuItem,
@@ -1119,7 +1066,7 @@ cut second ?
     display: inline-block;
     padding: 0;
     margin-right: 1em;
-    color: #6CAD2F;
+    color: #6CAE2F;
 }
 .imj_contentMenuItem.imj_active,
 .imj_contentMenuItem .imj_active,
@@ -1310,7 +1257,7 @@ OLD:
     padding: 0 0 0.455em 0;
     /*padding-top: 0.09em; ;
     padding-bottom: 0.4545em;*/
-    border-top: 0.182em /*0.1818em*/ solid #6CAD2F; background-color: #313131;
+    border-top: 0.182em /*0.1818em*/ solid #6CAE2F; background-color: #313131;
 }
 
 /* ===[ Content - Content Header]=== 
@@ -1322,7 +1269,7 @@ OLD:
 
 .preListHeader {
     background-color: #313131;
-    border-top: 0.09em solid #6CAD2F; /*#292929*/
+    border-top: 0.09em solid #6CAE2F; /*#292929*/
     padding: 0.19em 0 0.19em 0;
 }
 
@@ -1441,11 +1388,11 @@ OLD:
    ================================================== */
 .imj_paginator {
 	width: 91.75%;
-	margin-top: 1.000em;
-	margin-bottom: 1.000em;
+	margin-top: 1em;
+	margin-bottom: 1em;
 	padding: 0.636363em 4%;	
 	text-align: center;
-	border-top: solid #6CAD2F 0.0909em;
+	border-top: solid #6CAE2F 0.0909em;
 }
 
 .imj_simplePageBrowser .imj_backwardButton+.imj_forwardButton {
@@ -1477,9 +1424,9 @@ OLD:
    ================================================== */
    
 .imj_mediaDisplayContainer {
-	padding: 1.000em 0;
+	padding: 1em 0;
 	text-align: center;
-	border-bottom: solid #6CAD2F 0.0909em;
+	border-bottom: solid #6CAE2F 0.0909em;
 	margin-bottom: 0.545em;
 }
 
@@ -1505,9 +1452,7 @@ OLD:
     -moz-border-radius: 0.41666666em;
     -o-border-radius: 0.41666666em;
     -ms-border-radius: 0.41666666em;
-	margin: 1.000em 0.273em 0 2.000em;
-    /*text-align: left;
-	margin-left: 2.000em;*/
+	margin: 1em 0.273em 0 2.000em;
 }
 
 .imj_mediaWithdrawn {
@@ -1598,10 +1543,10 @@ OLD:
 
 /* specific border definitions */
 #imj_ajaxWrapper > .imj_metadataListMediaContainer {
-	border-top: 0.090909em solid #6CAD2F;
+	border-top: 0.090909em solid #6CAE2F;
 }
 .imj_metadataListMediaContainer + .imj_metadataProfileList {
-	border-top: 0.090909em dashed #6CAD2F;
+	border-top: 0.090909em dashed #6CAE2F;
 }
 
 
@@ -1643,7 +1588,7 @@ OLD:
 
 .imj_metadataList .imj_listHeader {
 	width: 100%;
-	/*border-bottom: solid #6CAD2F 0.0909em;*/	
+	/*border-bottom: solid #6CAE2F 0.0909em;*/	
 }
 
 .imj_metadataList .imj_listHeader a {
@@ -1653,19 +1598,19 @@ OLD:
 }
 
 .imj_metadataList .imj_listHeader a:hover {
-	background-color: #6CAD2F;
+	background-color: #6CAE2F;
 }
 
 .imj_metadataList  .imj_listHeader .imj_separator {
     width: 0.0909em;
     float: right;
-    border: solid #6CAD2F;
+    border: solid #6CAE2F;
     border-width: 1.3em 0 0;
     margin-top: 0.45em;
 }
 
 .imj_metadataList .imj_listHeader .imj_active {
-    background-color: #6CAD2F;
+    background-color: #6CAE2F;
     color: #F0F0F0;
 }
 
@@ -1688,12 +1633,13 @@ OLD:
 }
  
 .imj_metadataSubPanelItem a:hover  {
-	background-color: #6CAD2F;
+	background-color: #6CAE2F;
 }
  
 .highlight_area:hover {
 	background-color: #393939;
 }
+
 
 .imj_metadataSet, .imj_infodataSet, .imj_admindataSet {
 	width: 100%;
@@ -1720,6 +1666,11 @@ label, .imj_metadataLabel, .imj_infodataLabel, .imj_admindataLabel {
 	margin-left: 1.0em;
 	max-width: 73.25%;
 }
+
+.imj_admindataCheckbox {
+    margin-left: 0;
+}
+
 textarea.imj_metadataValue,
 input.imj_metadataValue {
 	width: 73.25%;
@@ -1795,7 +1746,7 @@ p.imj_metadataValue {
 	z-index:4000 !important
 }
 .ui-autocomplete-loading { 
-	background-color:#6CAD2F !important;
+	background-color:#6CAE2F !important;
 }
 .ui-helper-hidden-accessible { display:none; }
 
@@ -1884,8 +1835,8 @@ min-height: 6em;
 
 .imj_submitButton {
 	color: #FFFFFF;
-	background-color: #6CAD2F;
-	border: solid #6CAD2F;
+	background-color: #6CAE2F;
+	border: solid #6CAE2F;
 	padding: 0 0.3333333em;
 	margin-left: 1em;
 	border-radius: 0.3em;
@@ -1928,7 +1879,7 @@ min-height: 6em;
 .imj_advancedSearch { 
 	width:91.25%; 
 	padding:0 4%;
-	border-top: 1px solid #6CAD2F; 
+	border-top: 1px solid #6CAE2F; 
 }
 .imj_advancedSearch .imj_logicalSearchGroup {
 	white-space: nowrap;
@@ -1996,7 +1947,7 @@ min-height: 6em;
 	max-width: 88%;
 }
 .imj_tiledMediaList .imj_tileItem:hover .imj_tileThumbnailArea {
-	background-color: #6CAD2F;
+	background-color: #6CAE2F;
 }
 
 .imj_tiledMediaList .imj_tileItem .imj_tooltip {
@@ -2014,7 +1965,7 @@ min-height: 6em;
 }
 
 .imj_tileThumbnailArea.imj_selected {
-	background-color: #6CAD2F;
+	background-color: #6CAE2F;
 }
 
 .imj_tileThumbnailArea img {
@@ -2023,20 +1974,20 @@ min-height: 6em;
 	padding: 8%;
 	margin-top: 3%;
 }
-.imj_iconTriangleBottomRight_15 {
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAD2F/imjButtonTriangleLargeBottomRight_15.png");
+.imj_iconTriangleBottomRight_16 {
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjButtonTriangleLargeBottomRight_15.png");
 	display: inline-block;
 	width: 1.363636em;
 	height: 1.363636em;
 	vertical-align: middle;
 }
 
-.imj_iconTriangleBottomRight_15:hover {
+.imj_iconTriangleBottomRight_16:hover {
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonTriangleLargeBottomRight_15.png");
 }
 
 .imj_overlayMenu .imj_menuHeader {
-	color: #6CAD2F;
+	color: #6CAE2F;
 	cursor: pointer;
 }
 
@@ -2044,12 +1995,12 @@ min-height: 6em;
 	color: #F0F0F0;
 }
 
-.imj_overlayMenu:hover .imj_iconTriangleBottomRight_15 {
+.imj_overlayMenu:hover .imj_iconTriangleBottomRight_16 {
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonTriangleLargeBottomRight_15.png");
 }
 
 .imj_overlayMenu .imj_listItemSeparator {
-	border-top: 0.090909em solid #6CAD2F;
+	border-top: 0.090909em solid #6CAE2F;
 	padding-top: 0.181818em;
 }
 
@@ -2074,7 +2025,7 @@ min-height: 6em;
 .imj_singlePageBrowser .imj_pageNumber {
 	background-color: inherit;
     border: 0 none;
-    color: #6CAD2F;
+    color: #6CAE2F;
     padding: 0 1em;
 }
 
@@ -2135,16 +2086,16 @@ min-height: 6em;
 	margin-bottom: 1.454545em;
 }
 
-.imj_imageInfoLayer .imj_infoNavigation a:hover .imj_iconEyeOpen_15 { 
+.imj_imageInfoLayer .imj_infoNavigation a:hover .imj_iconEyeOpen_16 { 
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjEyeOpen_15.png");
 }
 
-.imj_imageInfoLayer .imj_infoNavigation a:hover .imj_buttonEdit_15 {
+.imj_imageInfoLayer .imj_infoNavigation a:hover .imj_buttonEdit_16 {
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonEdit_15.png");
 }
 
-.imj_iconEyeOpen_15 {
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAD2F/imjEyeOpen_15.png");
+.imj_iconEyeOpen_16 {
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjEyeOpen_15.png");
 	background-color: inherit;
 	background-position: left;
 	background-repeat: no-repeat;
@@ -2155,12 +2106,12 @@ min-height: 6em;
 	vertical-align: middle;
 }
 
-.imj_iconEyeOpen_15:hover { 
+.imj_iconEyeOpen_16:hover { 
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjEyeOpen_15.png");
 }
 
-.imj_buttonEdit_15 {
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAD2F/imjButtonEdit_15.png");
+.imj_buttonEdit_16 {
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjButtonEdit_15.png");
 	background-color: inherit;
 	background-position: left;
 	background-repeat: no-repeat;
@@ -2171,7 +2122,7 @@ min-height: 6em;
 	vertical-align: middle;
 }
 
-.imj_buttonEdit_15:hover {
+.imj_buttonEdit_16:hover {
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonEdit_15.png");
 }
 
@@ -2328,7 +2279,7 @@ min-height: 6em;
 	margin-bottom: 0.5em;
 	padding: 0 4%;
 	width: 91.75%;
-	border-top: 0.090909em solid #6CAD2F;
+	border-top: 0.090909em solid #6CAE2F;
 }
 .imj_mediaContainerEditMD .imj_headline {
 	width: 100%;
@@ -2351,16 +2302,16 @@ min-height: 6em;
 .imj_ingestWrapper {
 	width: 91.25%;
 	padding: 0 4% 2em 4%;
-	border-top: 0.090909em solid #6CAD2F;
+	border-top: 0.090909em solid #6CAE2F;
 }
 .imj_uploadDropArea + .imj_headline {
-	border-top: 0.090909em dashed #6CAD2F;
-	border-bottom: 0.090909em dashed #6CAD2F;
+	border-top: 0.090909em dashed #6CAE2F;
+	border-bottom: 0.090909em dashed #6CAE2F;
 	margin: 2em 0 1em 0;
 }
 .imj_ingestMessageArea {
 	width: 100%;
-	border-bottom: 0.090909em solid #6CAD2F;
+	border-bottom: 0.090909em solid #6CAE2F;
 	margin-bottom: 3em;
 }
 
@@ -2370,7 +2321,7 @@ min-height: 6em;
 .imj_upload {
 	width: 91.25%;
 	padding: 1% 4%;
-	border-top: 0.090909em solid #6CAD2F;
+	border-top: 0.090909em solid #6CAE2F;
 }
 .imj_upload .imj_uploadInputWrapper {
 	width: 70%;
@@ -2517,8 +2468,8 @@ min-height: 6em;
 	vertical-align: top;
 }
 .plupload_buttons a {
-	background-color: #6CAD2F;
-	border: medium solid #6CAD2F;
+	background-color: #6CAE2F;
+	border: medium solid #6CAE2F;
 	border-radius: 0.3em;
 	color: #FFFFFF;
 	margin-left: 1em;
@@ -2647,7 +2598,7 @@ min-height: 6em;
 	height: 2em;
     width: 2em;
 	margin-top: 1em;
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAD2F/imjArrowThinRight_23.png");		
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjArrowThinRight_23.png");		
 	background-color: inherit;
 	background-position: right;
 	background-repeat: no-repeat;
@@ -2683,7 +2634,7 @@ min-height: 6em;
 .imj_helpPage {
 	width: 91.25%;
 	padding: 1% 4%;
-	border-top: 0.090909em solid #6CAD2F;
+	border-top: 0.090909em solid #6CAE2F;
 }
 
 /* ===[ Admin Pages ]===
@@ -2779,8 +2730,8 @@ min-height: 6em;
 
 .imj_backButton {
 	color: #FFFFFF;
-	/*background-color: #6CAD2F;*/
-	border: thin solid #6CAD2F;
+	/*background-color: #6CAE2F;*/
+	border: thin solid #6CAE2F;
 	padding: 0 0.3333333em;
 	margin-left: 1em;
 	border-radius: 0.3em;
@@ -2793,8 +2744,8 @@ min-height: 6em;
 .imj_editButton, 
 a.imj_editButton {
 	color: #FFFFFF;
-	background-color: #6CAD2F;
-	border: thin solid #6CAD2F;
+	background-color: #6CAE2F;
+	border: thin solid #6CAE2F;
 	padding: 0 0.3333333em;
 	margin-left: 1em;
 	border-radius: 0.3em;
@@ -2840,17 +2791,17 @@ a.imj_editButton {
 }
 
 .imj_messageStatus a {
-    color: #6CAD2F;
+    color: #6CAE2F;
 }
 .imj_messageInfo {
-	color: #6CAD2F;
+	color: #6CAE2F;
 	background-color: #444444;
 }
 .imj_messageTitleInfo {
 	width: 97.95%;
 	padding: 0 1% 0.125em 1%;
 	font-size:125%;
-	color: #6CAD2F;
+	color: #6CAE2F;
 	background-color: #444444;
 }
 

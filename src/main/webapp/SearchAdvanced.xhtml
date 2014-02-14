@@ -44,11 +44,11 @@
 						</div>
 						
 						<div class="imj_inlineButtonGroup">
-							<h:commandButton type="button" value="" action="#{AdvancedSearchBean.addGroup}" render="imj_ajaxWrapper :imj_searchQueryMessageArea" styleClass="imj_addButton_15" title="#{lbl.add_collection}">
+							<h:commandButton type="button" value="" action="#{AdvancedSearchBean.addGroup}" render="imj_ajaxWrapper :imj_searchQueryMessageArea" styleClass="imj_buttonAdd_16" title="#{lbl.add_collection}">
 								<f:ajax execute="@form" render="@form :imj_searchQueryMessageArea"/>
 								<f:param name="gPos" value="#{gIndex.index}"/>
 							</h:commandButton>
-							<h:commandButton type="button" value="" action="#{AdvancedSearchBean.removeGroup}" render="imj_ajaxWrapper :imj_searchQueryMessageArea" styleClass="imj_removeButton_15" title="#{lbl.remove_collection}">
+							<h:commandButton type="button" value="" action="#{AdvancedSearchBean.removeGroup}" render="imj_ajaxWrapper :imj_searchQueryMessageArea" styleClass="imj_buttonRemove_16" title="#{lbl.remove_collection}">
 								<f:ajax execute="@form" render="@form :imj_searchQueryMessageArea"/>
 								<f:param name="gPos" value="#{gIndex.index}"/>
 							</h:commandButton>
@@ -87,12 +87,12 @@
 								</h:panelGroup>
 								
 								<h:panelGroup styleClass="imj_inlineButtonGroup"> <!-- This panelGroup is needed for IE -->
-									<h:commandButton type="button" value="" action="#{AdvancedSearchBean.addElement}" render="imj_ajaxWrapper, imj_searchQueryMessageArea" styleClass="imj_addButton_15">
+									<h:commandButton type="button" value="" action="#{AdvancedSearchBean.addElement}" render="imj_ajaxWrapper, imj_searchQueryMessageArea" styleClass="imj_buttonAdd_16">
 										<f:ajax execute="@form" render="@form :imj_searchQueryMessageArea"/>
 										<f:param name="gPos" value="#{gIndex.index}"/>
 										<f:param name="elPos" value="#{elIndex.index}"/>
 									</h:commandButton>
-									<h:commandButton type="button" value="" action="#{AdvancedSearchBean.removeElement}" render="imj_ajaxWrapper, imj_searchQueryMessageArea" styleClass="imj_removeButton_15">
+									<h:commandButton type="button" value="" action="#{AdvancedSearchBean.removeElement}" render="imj_ajaxWrapper, imj_searchQueryMessageArea" styleClass="imj_buttonRemove_16">
 										<f:ajax execute="@form" render="@form :imj_searchQueryMessageArea"/>
 										<f:param name="gPos" value="#{gIndex.index}"/>
 										<f:param name="elPos" value="#{elIndex.index}"/>

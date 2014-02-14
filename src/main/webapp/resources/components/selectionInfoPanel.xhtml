@@ -54,7 +54,7 @@
 						<div class="imj_menuHeader">
 							<h:outputText value="( "/>
 							<h:outputText value="#{cc.attrs.numberOfElements} #{lbl.images}"/>
-							<span class="imj_iconTriangleBottomRight_15"/>
+							<span class="imj_iconTriangleBottomRight_16"/>
 							<h:outputText value=" )"/>
 						</div>
 						<div class="imj_menuBody">
@@ -63,7 +63,7 @@
 									<!-- No active album selected -->
 									<li class="imj_overlayMenuListItem">
 										<h:outputLink value="#{Navigation.albumsUrl}" title="#{lbl.activate}">
-											<h:panelGroup styleClass="imj_icoMagnifier_15"/>
+											<h:panelGroup styleClass="imj_iconMagnifier_16"/>
 											<h:outputText value="#{lbl.no_album_selected}" title="#{lbl.album_please_activate}"/>
 										</h:outputLink>
 									</li>
@@ -119,7 +119,7 @@
 				<h:panelGroup layout="block" styleClass="imj_overlayMenu imj_selectionInfoPanelItemSelect" rendered="#{SessionBean.user != null}">
 					<h:panelGroup layout="block" id="preListHeaderSelected" styleClass="imj_menuHeader">
 						<h:outputText id="lblSelectedSize" value="#{SessionBean.selectedSize} #{lbl.selected}"/>
-						<span class="imj_iconTriangleBottomRight_15"/>
+						<span class="imj_iconTriangleBottomRight_16"/>
 					</h:panelGroup>
 					
 					<h:panelGroup layout="block" styleClass="imj_menuBody">
@@ -132,7 +132,7 @@
 									<li class="imj_overlayMenuListItem">
 										<!-- No active album selected -->
 										<h:outputLink value="#{Navigation.albumsUrl}" title="#{lbl.activate}">
-											<h:panelGroup styleClass="imj_icoMagnifier_15"/>
+											<h:panelGroup styleClass="imj_iconMagnifier_16"/>
 											<h:outputText value="#{lbl.no_album_selected}" title="#{lbl.album_please_activate}"/>
 										</h:outputLink>
 									</li>

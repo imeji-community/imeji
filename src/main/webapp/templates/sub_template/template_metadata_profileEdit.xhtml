@@ -181,11 +181,11 @@
 											<h:panelGroup layout="block" styleClass="imj_itemHeader">
 												<span class="imj_inlineButtonGroup">
 													<!-- Buttons to add new or remove current metadata statement -->
-													<h:commandButton styleClass="imj_addButton_15" title="#{lbl.add_metadata}" action="#{metadataBean.addStatement}">
+													<h:commandButton styleClass="imj_buttonAdd_16" title="#{lbl.add_metadata}" action="#{metadataBean.addStatement}">
 														<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
 														<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
 													</h:commandButton>
-													<h:commandButton styleClass="imj_removeButton_15" rendered="#{metadataBean.size &gt; 1}" title="#{lbl.statement_remove}" action="#{metadataBean.removeStatement}">
+													<h:commandButton styleClass="imj_buttonRemove_16" rendered="#{metadataBean.size &gt; 1}" title="#{lbl.statement_remove}" action="#{metadataBean.removeStatement}">
 														<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
 														<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
 													</h:commandButton>
@@ -251,11 +251,11 @@
 																		
 																		
 																		<span class="imj_inlineButtonGroup">
-																			<h:commandButton id="addLabel" styleClass="imj_addButton_15" action="#{metadataBean.addLabel}" title="#{lbl.label_add}">
+																			<h:commandButton id="addLabel" styleClass="imj_buttonAdd_16" action="#{metadataBean.addLabel}" title="#{lbl.label_add}">
 																				<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
 																				<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
 																			</h:commandButton>
-																			<h:commandButton styleClass="imj_removeButton_15" action="#{metadataBean.removeLabel}" title="#{lbl.label_remove}" rendered="#{wrapper.labelsCount > 1}">
+																			<h:commandButton styleClass="imj_buttonRemove_16" action="#{metadataBean.removeLabel}" title="#{lbl.label_remove}" rendered="#{wrapper.labelsCount > 1}">
 																				<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
 																				<f:setPropertyActionListener value="#{labelPosition.index}" target="#{metadataBean.labelPosition}"/>
 																				<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
@@ -274,7 +274,7 @@
 															<div class="imj_metadataValue">
 																<div class="imj_metadataSet">
 																	<ui:fragment rendered="#{wrapper.vocabularyString == null }">
-																		<h:commandButton styleClass="imj_addButton_15" action="#{metadataBean.addVocabulary}">
+																		<h:commandButton styleClass="imj_buttonAdd_16" action="#{metadataBean.addVocabulary}">
 																			<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
 																			<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
 																		</h:commandButton>
@@ -285,7 +285,7 @@
 																		<h:selectOneMenu id="selectVocabulary" value="#{wrapper.vocabularyString}">
 																			<f:selectItems value="#{wrapper.vocabularyHelper.vocabularies}"/>
 																		</h:selectOneMenu>
-																		<h:commandButton id="btnRemoveVocabulary" styleClass="imj_removeButton_15" action="#{metadataBean.removeVocabulary}">
+																		<h:commandButton id="btnRemoveVocabulary" styleClass="imj_buttonRemove_16" action="#{metadataBean.removeVocabulary}">
 																			<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
 																			<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
 																		</h:commandButton>
@@ -305,7 +305,7 @@
 																					  and  wrapper.statement.type !='http://imeji.org/terms/metadata#publication' 
 																					  and wrapper.statement.type !='http://imeji.org/terms/metadata#geolocation' 
 																					  and wrapper.vocabularyString == null}">
-																		<h:commandButton styleClass="imj_addButton_15" action="#{metadataBean.addConstraint}">
+																		<h:commandButton styleClass="imj_buttonAdd_16" action="#{metadataBean.addConstraint}">
 																			<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
 																			<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
 																		</h:commandButton>
@@ -320,12 +320,12 @@
 																				<f:attribute name="position" value="#{constraintPosition.index}"/>
 																			</h:inputText>
 																			<span class="imj_inlineButtonGroup">
-																				<h:commandButton styleClass="imj_addButton_15" title="#{lbl.add_constraint}" action="#{metadataBean.addConstraint}">
+																				<h:commandButton styleClass="imj_buttonAdd_16" title="#{lbl.add_constraint}" action="#{metadataBean.addConstraint}">
 																					<f:setPropertyActionListener value="#{constraintPosition.index}" target="#{metadataBean.constraintPosition}"/>
 																					<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
 																					<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
 																				</h:commandButton>
-																				<h:commandButton styleClass="imj_removeButton_15" title="#{lbl.remove_constraint}" action="#{metadataBean.removeConstraint}">
+																				<h:commandButton styleClass="imj_buttonRemove_16" title="#{lbl.remove_constraint}" action="#{metadataBean.removeConstraint}">
 																					<f:setPropertyActionListener value="#{constraintPosition.index}" target="#{metadataBean.constraintPosition}"/>
 																					<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
 																					<f:ajax execute="@form" render=":profileForm:ajaxArea"/>

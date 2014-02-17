@@ -2091,7 +2091,8 @@ min-height: 6em;
 }
 
 .imj_rangeSelector .imj_rangeSelectorLabel {
-	margin-left: 0.41414141em;
+	margin-left: 0.363636em;
+	vertical-align: baseline;
 }
 
 .imj_singlePageBrowser {
@@ -2101,18 +2102,18 @@ min-height: 6em;
 .imj_gotoBox {
 	float: right;
 }
-
+.imj_gotoBox label {
+	vertical-align: baseline;
+}
 .imj_gotoBox .imj_pageInput {
 	width: 3em;
+	margin-left: 0.363636em;
+	margin-right: 0.363636em;
 	text-align: center;
 }
 
-.imj_gotoBox .imj_pageInput {
-	margin-right: 0.41414141em;
-}
-
 .imj_gotoBox .imj_submitButton {
-	margin-left: 0.41414141em;
+	margin-left: 0.545454em;
 }
 
 .imj_imageInfoLayer {

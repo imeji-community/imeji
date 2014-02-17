@@ -2179,6 +2179,15 @@ min-height: 6em;
 	width: 97.95%;
 	padding: 0 1%;
 }
+/* * general error page definitions
+	used in: errorPages/...
+	==================================================================================
+   ================================================================================== */
+.imj_errorPage {
+	width: 91.25%;
+	padding: 1% 4%;
+}
+
 
 /* * general button group definitions
 	used in: mediaContainer_editMetadata.xhtml, SearchAdvanced.xhtml)

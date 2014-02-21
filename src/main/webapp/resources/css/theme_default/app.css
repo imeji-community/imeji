@@ -2372,6 +2372,7 @@ min-height: 6em;
 }
 .imj_editGlobalAssignment .imj_dataAssignmentPanel {
 	display: inline-block;
+	margin-top: 1em;
 }
 
 .imj_batchEditItemList {
@@ -2393,6 +2394,12 @@ min-height: 6em;
 	display: inline-block;
 	vertical-align: top;
 }
+
+.imj_singleStatementEdit {
+	width: 100%;
+	padding-bottom: 1em;
+}
+
 
 
 /* === Ingest Page ===

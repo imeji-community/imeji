@@ -1,74 +1,22 @@
-<ui:composition template="templates/template_paginator_images.xhtml"
+<ui:composition template="templates/sub_template/template_image_tiledlist.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core">
-	<ui:param name="paginatorListSessionBean" value="#{ImagesBean}" />
-	<ui:param name="headline" value="#{lbl.images}" />
-
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:imjc="http://java.sun.com/jsf/composite/components"
+	xmlns:menu="http://java.sun.com/jsf/composite/components/menu"
+	xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs">
+	
+	<ui:param name="paginatorListSessionBean" value="#{ImagesBean}"/>
+	<ui:param name="headline" value="#{lbl.images}"/>
+	<ui:param name="currentMainMenu" value="mediaEntry"/>
+	<ui:param name="browseToAllItemsUrl" value="#{Navigation.browseUrl}?q="/>
+	
 	<ui:define name="actionsMenu">
-		<h:panelGroup layout="block" styleClass="imj_contentSubMenu">
-			<!-- SORTING content menu lower line starts here -->
-			<h:outputText id="txtSort" value="#{lbl.sort_by}"
-				styleClass="imj_contentSubMenuItemSorting" />
-			<h:form>
-				<h:selectOneMenu id="selSort"
-					value="#{ImagesBean.selectedSortCriterion}"
-					styleClass="free_select" onchange="submit();">
-					<f:selectItems id="sortItem" value="#{ImagesBean.sortMenu}" />
-				</h:selectOneMenu>
-				<h:commandLink id="lnkSortAsc" styleClass="ascSort"
-					action="#{paginatorListSessionBean.toggleSortOrder}"
-					rendered="#{paginatorListSessionBean.selectedSortOrder == 'ASCENDING'}">&#160;</h:commandLink>
-				<h:commandLink id="lnkSortDesc" styleClass="desSort"
-					action="#{paginatorListSessionBean.toggleSortOrder}"
-					rendered="#{paginatorListSessionBean.selectedSortOrder != 'ASCENDING'}">&#160;</h:commandLink>
-			</h:form>
-			<h:outputText styleClass="imj_contentMenuSeparator" />
-			<!-- SORTING content menu lower line ends here -->
-			<h:panelGroup layout="block" styleClass="free_area0_p0 endline overlayMenu" rendered="#{ImagesBean.totalNumberOfRecords > 0}">
-				<h:panelGroup layout="block" styleClass="menuHeader free_area0">
-					<h:panelGroup styleClass="free_area0">
-						<h:outputText value="#{lbl.download} " styleClass="free_area0 "/>
-					</h:panelGroup>
-				</h:panelGroup>
-				<h:panelGroup layout="block" styleClass="clear menuBody xLarge_area0" style="margin-top:-1.9090em;">
-					<div class="selectMenu xLarge_area2 bordst2">
-						<h:outputLink value="#{Navigation.applicationUrl}export?format=zip&amp;n=10000&amp;type=image&amp;q=#{ImagesBean.query}"
-									  styleClass="imj_SubMenuItem" target="_blank">
-							<h:outputText value="#{lbl.export_zip}" />
-						</h:outputLink>
-						<h:outputLink value="#{Navigation.applicationUrl}export?format=rdf&amp;n=10000&amp;type=image&amp;q=#{ImagesBean.query}"
-									  styleClass="imj_SubMenuItem" target="_blank">
-							<h:outputText value="#{lbl.export_rdf}" />
-						</h:outputLink>
-						<h:outputLink value="#{Navigation.applicationUrl}export?format=xml&amp;n=10000&amp;type=image&amp;q=#{ImagesBean.query}"
-									  styleClass="imj_SubMenuItem" target="_blank">
-							<h:outputText value="#{lbl.export_native}" />
-						</h:outputLink>
-					</div>
-				</h:panelGroup>
-			</h:panelGroup>
-		</h:panelGroup>
+		<menu:context_actionMenu isUserLoggedIn="#{SessionBean.user != null}" curMainMenu="#{currentMainMenu}" sortBean="#{paginatorListSessionBean}" navBean="#{Navigation}"/>
 	</ui:define>
 
 	<ui:define name="searchQuery">
-		<h:panelGroup styleClass="full_area0 small_marginLExcl"
-			rendered="#{paginatorListSessionBean.searchFilter != null}">
-			<h:outputText value="#{lbl.search_query}: "
-				styleClass="free_area0_p2" />
-			<h:panelGroup styleClass="xHuge_area0">
-				<h:outputText value="#{lbl.search_for}" styleClass="free_area0_p2"
-					rendered="#{paginatorListSessionBean.simpleSearch}" />
-				<h:outputText value="#{ImagesBean.simpleQuery}"
-					styleClass="free_area0_p2" />
-				<h:outputLink
-					value="#{Navigation.searchUrl}?q=#{paginatorListSessionBean.query}"
-					rendered="#{!paginatorListSessionBean.simpleSearch}"
-					styleClass="xHuge_area0_p2 ">
-					<h:outputText value="#{lbl.search_revise}" />
-				</h:outputLink>
-			</h:panelGroup>
-		</h:panelGroup>
+		<imjc:searchQueryDisplayArea searchBean="#{paginatorListSessionBean}" navBean="#{Navigation}" rendered="#{paginatorListSessionBean.searchFilter != null}"/>
 	</ui:define>
 </ui:composition>

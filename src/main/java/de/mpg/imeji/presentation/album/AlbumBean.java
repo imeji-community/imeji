@@ -6,6 +6,7 @@ package de.mpg.imeji.presentation.album;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
@@ -23,11 +24,16 @@ import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
+import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.beans.ContainerBean;
 import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.collection.CollectionBean;
 import de.mpg.imeji.presentation.image.ThumbnailBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -43,7 +49,7 @@ import de.mpg.imeji.presentation.util.UrlHelper;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class AlbumBean
+public class AlbumBean extends ContainerBean
 {
     private SessionBean sessionBean = null;
     private Album album = null;
@@ -104,7 +110,7 @@ public class AlbumBean
             }
             catch (Exception e)
             {
-                logger.error("Erro loading thumbnail of album", e);
+                logger.error("Error loading thumbnail of album", e);
             }
         }
     }
@@ -306,7 +312,10 @@ public class AlbumBean
      */
     public void discardCommentListener(ValueChangeEvent event)
     {
-        album.setDiscardComment(event.getNewValue().toString());
+    	if (event.getNewValue() != null && event.getNewValue().toString().trim().length() > 0)
+        {
+            album.setDiscardComment(event.getNewValue().toString().trim());
+        }
     }
 
     /**
@@ -628,7 +637,7 @@ public class AlbumBean
     }
 
     /**
-     * Withdraw an {@link Album}
+     * Discard the {@link AlbumImeji} of this {@link Album}
      * 
      * @return
      * @throws Exception
@@ -798,4 +807,63 @@ public class AlbumBean
         String citation = title + " " + sessionBean.getLabel("from") + " <i>" + author + "</i></br>" + url;
         return citation;
     }
+
+    /*
+     * (non-Javadoc)
+     * @see de.mpg.imeji.presentation.beans.ContainerBean#getType()
+     */
+    @Override
+    public String getType()
+    {
+        return CONTAINER_TYPE.ALBUM.name();
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see de.mpg.imeji.presentation.beans.ContainerBean#getContainer()
+     */
+    @Override
+    public Container getContainer()
+    {
+        return album;
+    }
+    
+    /*
+     * (non-Javadoc)
+     * following getter functions are for standardization and simplification the 
+     * output of album data in a general template system
+     */
+    public String getTitle() 
+    {
+    	return this.getContainer().getMetadata().getTitle();
+    }
+    public String getAuthors() 
+    {
+    	return this.getPersonString();
+    }
+    public Date getCreationDate() 
+    {
+    	return this.getContainer().getCreated().getTime();
+    }
+    public Date getLastModificationDate() 
+    {
+    	return this.getContainer().getModified().getTime();
+    }
+    public Date getVersionDate() 
+    {
+    	return this.getContainer().getVersionDate().getTime();
+    }
+    public Status getStatus()
+    {
+    	return this.getContainer().getStatus();
+    }
+
+	public String getDiscardComment() 
+	{
+		return this.getContainer().getDiscardComment();
+	}
+	public void setDiscardComment(String comment)
+	{
+		this.getContainer().setDiscardComment(comment);
+	}
 }

@@ -87,7 +87,19 @@ public class CreateCollectionBean extends CollectionBean
         else
             return "";
     }
-
+    
+    /**
+     * Return the link for the Cancel button
+     * 
+     * @return
+     */
+    public String getCancel()
+    {
+        Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
+        this.reset();
+        return nav.getCollectionsUrl() + "?q=";
+    }
+    
     /**
      * Method for Rest button. Reset all form value to empty value
      */

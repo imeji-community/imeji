@@ -1,127 +1,30 @@
-<ui:composition template="templates/template_paginator_images.xhtml"
+<ui:composition template="templates/sub_template/template_image_tiledlist.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:imjc="http://java.sun.com/jsf/composite/components">
+	xmlns:imjc="http://java.sun.com/jsf/composite/components"
+	xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs"
+	xmlns:menu="http://java.sun.com/jsf/composite/components/menu">
 	
-	<ui:param name="paginatorListSessionBean"
-		value="#{CollectionImagesBean}" />
-	<ui:param name="headline"
-		value="#{CollectionImagesBean.collection.metadata.title}" />
-	<ui:define name="contentMenu">
-		<h:outputLink id="lnkViewCollectionStart" styleClass="imj_contentMenuItem"
-			value="#{Navigation.collectionUrl}#{CollectionImagesBean.id}"
-			rendered="true">
-			<h:outputText value="#{lbl.collection_home}" />
-		</h:outputLink>
-
-		<h:outputText styleClass="imj_contentMenuSeparator" />
-
-		<h:outputText value="#{lbl.view_images}" styleClass="imj_contentMenuItem" />
-
-		<h:outputText styleClass="imj_contentMenuSeparator" />
-
-		<h:outputLink id="lnkViewCollectionDetail" styleClass="imj_contentMenuItem"
-			value="#{Navigation.collectionUrl}#{CollectionImagesBean.id}/#{Navigation.infosPath}?init=1"
-			rendered="true">
-			<h:outputText value="#{lbl.collection_metadata}" />
-		</h:outputLink>
-
-		<h:outputText styleClass="imj_contentMenuSeparator" />
-
-		<h:outputLink id="lnkUploadImages" styleClass="imj_contentMenuItem"
-			value="#{Navigation.collectionUrl}#{CollectionImagesBean.id}/#{Navigation.uploadPath}?init=1"
-			rendered="#{CollectionImagesBean.editable}">
-			<h:outputText value="#{lbl.upload_images}"></h:outputText>
-		</h:outputLink>
-		
-		<h:outputText styleClass="imj_contentMenuSeparator"
-			rendered="#{AuthorizationBean.admin}" />
-			
-		<h:outputLink id="lnkIngest" styleClass="imj_contentMenuItem"
-			value="#{Navigation.collectionUrl}#{CollectionImagesBean.id}/ingest?init=1"
-			rendered="#{AuthorizationBean.admin}">
-			<h:outputText value="#{lbl.ingest}" />
-		</h:outputLink>
-		
-	</ui:define>
+	<ui:param name="paginatorListSessionBean" value="#{CollectionImagesBean}"/>
+	<ui:param name="headline" value="#{CollectionImagesBean.collection.metadata.title}"/>
+	<ui:param name="currentMainMenu" value="collection"/>
+	<ui:param name="browseToAllItemsUrl" value="#{Navigation.collectionUrl}#{CollectionImagesBean.id}/browse?q="/>
+	
+	
 	<ui:define name="actionsMenu">
-	<h:panelGroup styleClass="full_area0"> <!-- This panelGroup is needed for IE -->
-		<h:panelGroup layout="block" styleClass="imj_contentSubMenu">
-
-			<h:panelGroup styleClass="imj_contentSubMenuItem">
-				<!-- SORTING content menu lower line starts here -->
-				<h:outputText id="txtSort" value="#{lbl.sort_by}"
-					styleClass="imj_contentSubMenuItemSorting" />
-				<h:form>
-					<h:selectOneMenu id="selSort"
-						value="#{CollectionImagesBean.selectedSortCriterion}"
-						styleClass="free_select" onchange="submit();">
-						<f:selectItems id="sortItem"
-							value="#{CollectionImagesBean.sortMenu}" />
-					</h:selectOneMenu>
-					<h:commandLink id="lnkSortAsc" styleClass="ascSort"
-						action="#{CollectionImagesBean.toggleSortOrder}"
-						rendered="#{CollectionImagesBean.selectedSortOrder == 'ASCENDING'}">&#160;</h:commandLink>
-					<h:commandLink id="lnkSortDesc" styleClass="desSort"
-						action="#{CollectionImagesBean.toggleSortOrder}"
-						rendered="#{CollectionImagesBean.selectedSortOrder != 'ASCENDING'}">&#160;</h:commandLink>
-				</h:form>
-				<h:outputText styleClass="imj_contentMenuSeparator" />
-				<!-- SORTING content menu lower line ends here -->
-			</h:panelGroup>
-
-			<h:outputLink styleClass="imj_SubMenuItem" value="#"
-				onclick="openDialog('dialogRelease');"
-				rendered="#{CollectionImagesBean.editable and CollectionImagesBean.collection.status=='PENDING'}">
-				<h:outputText value="#{lbl.collection_release}" />
-			</h:outputLink>
-			<h:outputLink id="lnkWithdrawCollection"
-				styleClass="imj_SubMenuItem" value="#"
-				onclick="openDialog('dialDiscardContainer:dialogWithdraw');"
-				rendered="#{CollectionImagesBean.editable and CollectionImagesBean.collection.status=='RELEASED'}">
-				<h:outputText value="#{lbl.withdraw}" />
-			</h:outputLink>
-
-			<h:outputLink styleClass="imj_SubMenuItem" value="#"
-				onclick="openDialog('dialogDelete');"
-				rendered="#{CollectionImagesBean.deletable}">
-				<h:outputText value="#{lbl.delete}" />
-			</h:outputLink>
-			<h:panelGroup layout="block" styleClass="free_area0_p0 endline overlayMenu">
-				<h:panelGroup layout="block" styleClass="menuHeader free_area0">
-					<h:panelGroup styleClass="free_area0">
-						<h:outputText value="#{lbl.download} " styleClass="free_area0 "/>
-					</h:panelGroup>
-				</h:panelGroup>
-				<h:panelGroup layout="block" styleClass="clear menuBody xLarge_area0" style="margin-top:-1.9090em;">
-					<div class="selectMenu xLarge_area2 bordst2">
-						<h:outputLink value="#{Navigation.applicationUrl}export?format=zip&amp;type=image&amp;n=10000&amp;col=#{CollectionImagesBean.id}&amp;q=#{paginatorListSessionBean.query}"
-									  styleClass="imj_SubMenuItem" target="_blank">
-							<h:outputText value="#{lbl.export_zip}" />
-						</h:outputLink>
-						<h:outputLink value="#{Navigation.applicationUrl}export?format=rdf&amp;type=image&amp;n=10000&amp;col=#{CollectionImagesBean.id}&amp;q=#{paginatorListSessionBean.query}"
-									  styleClass="imj_SubMenuItem" target="_blank">
-							<h:outputText value="#{lbl.export_rdf}" />
-						</h:outputLink>
-						<h:outputLink value="#{Navigation.applicationUrl}export?format=xml&amp;type=image&amp;n=10000&amp;col=#{CollectionImagesBean.id}&amp;q=#{paginatorListSessionBean.query}"
-									  styleClass="imj_SubMenuItem" target="_blank">
-							<h:outputText value="#{lbl.export_native}" />
-						</h:outputLink>
-					</div>
-				</h:panelGroup>
-			</h:panelGroup>
-		</h:panelGroup>
-		<ui:include src="confirmationPages/ContainerRelease.xhtml">
-			<ui:param name="bean" value="#{CollectionImagesBean}" />
-		</ui:include>
-		<ui:include src="confirmationPages/ContainerDelete.xhtml">
-			<ui:param name="bean" value="#{CollectionImagesBean}" />
-		</ui:include>
-		<imjc:DiscardContainer id="dialDiscardContainer"
-			bean="#{CollectionImagesBean}"
-			discardComment="#{CollectionImagesBean.collection.discardComment}" />
-	</h:panelGroup>
+		<menu:context_subNavigation contextId="#{paginatorListSessionBean.id}" contextUrl="#{Navigation.collectionUrl}" curMainMenu="#{currentMainMenu}" userHasAdminRights="#{AuthorizationBean.admin}" userHasEditRights="#{paginatorListSessionBean.editable}" hasContent="#{paginatorListSessionBean.totalNumberOfElements > 0}" navBean="#{Navigation}" activeMenu="content"/>
+		
+		<menu:context_actionMenu isUserLoggedIn="#{SessionBean.user != null}" sortBean="#{paginatorListSessionBean}" curMainMenu="#{currentMainMenu}" navBean="#{Navigation}" exportQuery="#{paginatorListSessionBean.query}" 
+			collectionStatus="#{paginatorListSessionBean.collection.status}" contextId="#{paginatorListSessionBean.id}" isDeletable="#{paginatorListSessionBean.deletable}" isEditable="#{paginatorListSessionBean.editable}" contextDownloadParam="&amp;col=#{paginatorListSessionBean.id}"/>
 	</ui:define>
+	
+	
+	<ui:define name="modalDialogs_from_site">
+		<dialog:confirmationDialog submitAction="release" bean="#{paginatorListSessionBean}" confirmationText="#{msg.confirmation_release_collection}?" submitLabel="#{lbl.release}" dialogId="releaseMenuItemDialog" rendered="#{paginatorListSessionBean.editable and paginatorListSessionBean.collection.status.toString().toUpperCase() == 'PENDING' and paginatorListSessionBean.totalNumberOfElements > 0}"/>
+		<dialog:confirmationDialog submitAction="delete" bean="#{paginatorListSessionBean}" confirmationText="#{msg.confirmation_delete_collection}?" submitLabel="#{lbl.delete}" dialogId="deleteMenuItemDialog" rendered="#{paginatorListSessionBean.deletable}"/>
+		<dialog:confirmationReasonedDialog submitAction="withdraw" bean="#{paginatorListSessionBean}" confirmationText="#{msg.confirmation_withdraw_collection}" submitLabel="#{lbl.withdraw}" dialogId="withdrawMenuItemDialog" rendered="#{paginatorListSessionBean.editable and paginatorListSessionBean.collection.status.toString().toUpperCase() == 'RELEASED'}"/>
+	</ui:define>
+	
 </ui:composition>

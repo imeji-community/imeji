@@ -35,6 +35,8 @@ import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchOperators;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
+import de.mpg.imeji.logic.security.Security;
+import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.UploadResult;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
@@ -734,4 +736,35 @@ public class UploadBean
     {
         this.checkNameUnique = checkNameUnique;
     }
+    
+    /**
+     * true if current {@link User} can UPDATE the {@link CollectionImeji}
+     * 
+     * @return
+     */
+    public boolean isEditable()
+    {
+        Security security = new Security();
+        return security.check(OperationsType.UPDATE, sessionBean.getUser(), collection);
+    }
+    
+    /**
+     * true if current {@link User} can DELETE the {@link CollectionImeji}
+     * 
+     * @return
+     */
+    public boolean isDeletable()
+    {
+        Security security = new Security();
+        return security.check(OperationsType.DELETE, sessionBean.getUser(), collection);
+    }
+    
+    public String getDiscardComment() 
+	{
+		return collection.getDiscardComment();
+	}
+	public void setDiscardComment(String comment)
+	{
+		collection.setDiscardComment(comment);
+	}
 }

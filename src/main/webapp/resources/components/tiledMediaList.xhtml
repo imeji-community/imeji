@@ -1,0 +1,82 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:composite="http://java.sun.com/jsf/composite">
+	<composite:interface>
+		<composite:attribute name="picList"/>
+	</composite:interface>
+	<composite:implementation>
+		<h:panelGroup layout="block" styleClass="imj_tiledMediaList">
+			<ui:fragment rendered="#{SessionBean.user != null}">
+				<div class="imj_listHeader">
+					<div class="imj_overlayMenu">
+						<h:form id="selectMenuForm">
+							<div class="imj_menuHeader">
+								<h:outputText value="#{lbl.select}:&#160;"/>
+								<span class="imj_iconTriangleBottomRight_16"/>
+							</div>
+							<div class="imj_menuBody">
+								<ul class="imj_overlayMenuList">
+									<li>
+										<h:outputText value="#{lbl.select_item}:"/>
+									</li>
+									<li>
+										<h:commandLink action="#{cc.attrs.picList.selectAll}" id="lnkSelectAllOnPage" title="#{lbl.select_all}" immediate="true" styleClass="selectAll">
+											<h:outputText value="#{lbl.all_on_page}"/>
+										</h:commandLink>
+									</li>
+									<li>
+										<h:commandLink action="#{cc.attrs.picList.selectNone}" id="lnkSelectNone" title="#{lbl.select_none}" immediate="true" styleClass="selectNone">
+											<h:outputText value="#{lbl.none}"/>
+										</h:commandLink>
+									</li>
+								</ul>
+							</div>
+						</h:form>
+					</div>
+				</div>
+			</ui:fragment>
+			<div class="imj_listBody">
+				<ul id="ajaxList">
+					<!-- Images -->
+						<h:outputText value="#{msg.no_images_found}!" rendered="#{cc.attrs.picList.totalNumberOfElements == 0}"/>
+						
+						<ui:repeat id="pictureList" var="item" value="#{cc.attrs.picList.currentPartList}" offset="0" varStatus="index">
+							
+							<li class="imj_tileItem">
+								<h:form id="itemSelectForm">
+									
+									<h:panelGroup layout="block" id="imgFrame" styleClass="#{item.selected ? 'imj_selected'  : ''} imj_tileThumbnailArea #{item.inActiveAlbum ? 'inAlbum' : ''}">
+										<!-- Image with link to the details view -->
+										<h:outputLink id="lnkPicDetailBrowse" value="#{cc.attrs.picList.imageBaseUrl}/item/#{item.id}">
+											<h:graphicImage alt="#{item.caption}" title="#{item.caption}" id="thumbnail" url="#{Navigation.applicationUrl}file?id=#{item.link}"/>		
+										</h:outputLink>
+									</h:panelGroup>
+									
+									<!-- Browse / Search Result / All Pictures of one Person Pages / resource -->
+									
+									<span class="imj_optionSet">
+										<!-- Album Selected -->
+										<ui:fragment rendered="#{SessionBean.user != null}">
+											<h:selectBooleanCheckbox styleClass="imj_optionCheckbox" id="pictureCheckbox" value="#{item.selected}" valueChangeListener="#{item.selectedChanged}">
+												<f:ajax event="change" execute="@this" render="@form :imj_ajaxWrapper"/>
+											</h:selectBooleanCheckbox>
+										</ui:fragment>
+										<h:outputLabel for="pictureCheckbox" value="#{item.caption}" title="#{item.caption}" styleClass="imj_optionLabel"/>
+									</span>
+								</h:form>
+								<div class="imj_tooltip">
+									<ui:include src="../../picturesPages/ui/MetadataPopup.xhtml"/>
+								</div>
+							</li>
+						</ui:repeat><!-- End images -->
+						<!-- 
+							Show/hide metadata popup Needs to be defined in ajax area to rebind the DOM objects
+						-->
+				</ul>
+			</div>
+		</h:panelGroup>
+		<div id="log"></div>
+	</composite:implementation>
+</html>

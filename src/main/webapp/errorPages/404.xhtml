@@ -1,23 +1,19 @@
-<ui:composition template="../templates/template.xhtml" 
+<ui:composition template="../templates/template_site.xhtml" 
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core" >
 	
 	<ui:param name="headline" value="#{lbl.ErrorPage404}"/>
+	
 	<ui:define name="mainContent">
-		<h:panelGroup layout="block" styleClass="full_area0 fullItem">
-			<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder">		
-				<h3 class="xLarge_area0_p8 endline blockHeader">
-					<h:outputText value="#{lbl.errorNote}"/>
-				</h3>				
-				<span class="seperator"></span>				
-				<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-					<div class="Huge_area0_p8 endline clear">
-						<h:outputText value="#{lbl.error404}"/>
-					</div>
-				</h:panelGroup>					
-			</h:panelGroup>		
-		</h:panelGroup>
+		<div class="imj_errorPage">
+			<h3 class="imj_headline">
+				<h:outputText value="#{lbl.errorNote}"/>
+			</h3>				
+			<p class="imj_errorText">
+				<h:outputText value="#{lbl.error404}"/>
+			</p>					
+		</div>
 	</ui:define>
 </ui:composition>

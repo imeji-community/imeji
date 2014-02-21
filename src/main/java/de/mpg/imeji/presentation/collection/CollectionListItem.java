@@ -93,11 +93,11 @@ public class CollectionListItem
             {
                 versionDate = collection.getVersionDate().getTime().toString();
             }
-            // Load collection to get first thumbnail (only in preview for not logged in users)
+            // Load collection to get first thumbnail if the collection status is 'released'
             CollectionImeji fullCollection = ObjectLoader.loadCollectionLazy(
                     ObjectHelper.getURI(CollectionImeji.class, id), user);
             SessionBean sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-            if (fullCollection != null && fullCollection.getId() != null && user == null)
+            if (fullCollection != null && fullCollection.getId() != null && fullCollection.getStatus().toString() == "RELEASED")
             {
                 ItemController ic = new ItemController(sessionBean.getUser());
                 ic.loadContainerItems(fullCollection, user, 1, 0);
@@ -233,7 +233,11 @@ public class CollectionListItem
      */
     public void discardCommentListener(ValueChangeEvent event)
     {
-        setDiscardComment(event.getNewValue().toString());
+    	
+    	if (event.getNewValue() != null && event.getNewValue().toString().trim().length() > 0) 
+    	{
+    		setDiscardComment(event.getNewValue().toString().trim());
+    	}
     }
 
     public String getTitle()

@@ -24,7 +24,9 @@ import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.beans.Navigation.Page;
+import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -52,8 +54,10 @@ public class SessionBean
     private Map<URI, MetadataProfile> profileCached;
     private Map<URI, CollectionImeji> collectionCached;
     private String selectedImagesContext = null;
+    private String selectedCss = null;
 
-    /**
+
+	/**
      * The session Bean for imeji
      */
     public SessionBean()
@@ -63,6 +67,7 @@ public class SessionBean
         selectedAlbums = new ArrayList<URI>();
         profileCached = new HashMap<URI, MetadataProfile>();
         collectionCached = new HashMap<URI, CollectionImeji>();
+        selectedCss = PropertyBean.getCss_default();
         initLocale();
     }
 
@@ -424,4 +429,39 @@ public class SessionBean
     {
         this.collectionCached = collectionCached;
     }
+    
+
+    public int getCssCount() {
+    	int count = 0;
+    	if (PropertyBean.getCss_alternate()!= null && !PropertyBean.getCss_alternate().equals(""))
+    	{
+    		count++;
+    	}
+    	if (PropertyBean.getCss_default()!= null && !PropertyBean.getCss_default().equals(""))
+    	{
+    		count++;
+    	}
+		return count;
+	}
+    
+    public String getSelectedCss() {
+		return selectedCss;
+	}
+
+	public void setSelectedCss(String selectedCss) {
+		this.selectedCss = selectedCss;
+	}
+	
+	public String toggleCss()
+	{
+		if (selectedCss!= null && selectedCss.equals(PropertyBean.getCss_default()))
+		{
+			selectedCss = PropertyBean.getCss_alternate();
+		}
+		else if (selectedCss!= null && selectedCss.equals(PropertyBean.getCss_alternate()))
+		{
+			selectedCss = PropertyBean.getCss_default();
+		}
+		return "";
+	}
 }

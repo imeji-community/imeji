@@ -1,240 +1,36 @@
-<ui:composition template="templates/template.xhtml" 
+<ui:composition template="templates/sub_template/template_metadata_mediaContainer.xhtml" 
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core" >
-			<ui:define name="headline">
-				<h1>
-					<h:outputText value="#{ViewCollectionBean.collection.metadata.title}"/> 
-				</h1>
-			</ui:define>
-			<ui:define name="contentMenu">
-				<h:outputLink id="lnkViewCollectionStart" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}" rendered="true">
-					<h:outputText value="#{lbl.collection_home}"/>
-				</h:outputLink>
-				<h:outputText styleClass="imj_contentMenuSeparator" />
-				<h:outputLink id="lnkViewCollectionAllImages" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.browsePath}?q=" rendered="#{ViewCollectionBean.size > 0}">
-					<h:outputText value="#{lbl.view_images}"/>
-				</h:outputLink>
-				<h:outputText styleClass="imj_contentMenuSeparator" rendered="#{ViewCollectionBean.size > 0}"/>
-				<h:outputText styleClass="imj_contentMenuItem" value="#{lbl.collection_metadata}"/>
-				<h:outputText styleClass="imj_contentMenuSeparator" />
-				<h:outputLink id="lnkUploadImages" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.uploadPath}?init=1" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status != 'WITHDRAWN'}">
-					<h:outputText value="#{lbl.upload_images}"></h:outputText>
-				</h:outputLink>
-				<h:outputText styleClass="imj_contentMenuSeparator"	rendered="#{AuthorizationBean.admin}" />
-				<h:outputLink id="lnkIngest" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/ingest?init=1" rendered="#{AuthorizationBean.admin}">
-					<h:outputText value="#{lbl.ingest}" />
-				</h:outputLink>
-			</ui:define>
-			<ui:define name="mainContent" >
-				<h:outputText value="#{lbl.view_page_disallowed2}" rendered="#{!ViewCollectionBean.visible}" styleClass="full_area0 fullItem"/>
-				<h:panelGroup layout="block" styleClass="full_area0" rendered="#{ViewCollectionBean.visible}">
-					<h:panelGroup layout="block" styleClass="full_area0 fullItem">
-					
-						<h:panelGroup layout="block" styleClass="full_area0 preListHeader" style="border-width: 0px !important;">
-						 	<ui:include src="./include/History.xhtml"></ui:include>
-						 </h:panelGroup>
-						
-						<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
-							<h3 class="xLarge_area0_p8 endline blockHeader">
-								<h:outputText value="#{lbl.collection_basics}"/>
-								<h:outputLink id="lnkEditMetadata" styleClass="large_area0" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.editPath}?init=1" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status != 'WITHDRAWN'}">
-									<h:outputText value="#{lbl.edit}"/>
-								</h:outputLink>
-							</h3>
-							<span class="seperator"/>
-							<h:panelGroup>
-								<!-- Picture status of the Collection -->
-								<div class="free_area0 itemBlockContent endline">
-									<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-										<b class="xLarge_area0_p8 endline labelLine clear">
-											<h:outputText value="#{lbl.title}"/>
-											<span class="noDisplay">: </span>
-										</b>
-										<span class="xHuge_area0 xTiny_marginLExcl endline">
-											<h:outputText id="collection_title" value="#{ViewCollectionBean.collection.metadata.title}" styleClass="free_area0"/>
-											<br/>
-										</span>
-									</h:panelGroup>
-									<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-										<b class="xLarge_area0_p8 endline labelLine clear">
-											<h:outputText value="#{lbl.description}"/>
-											<span class="noDisplay">: </span>
-										</b>
-										<span class="xHuge_area0 xTiny_marginLExcl endline">
-											<h:outputText id="description" escape="false" value="#{ViewCollectionBean.formattedDescription}" styleClass=""/>
-											<br/>
-										</span>
-									</h:panelGroup>
-									<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-										<ui:repeat var="creator" rowKeyVar="status" value="#{ViewCollectionBean.persons}">
-											<b class="xLarge_area0_p8 endline labelLine clear">
-												<h:outputText value="#{lbl.authors}"/>
-												<span class="noDisplay">: </span>
-											</b>
-											<span class="xHuge_area0 xTiny_marginLExcl endline">
-												<h:outputLabel value="#{lbl.family_name}:   "/>
-												<h:outputText id="inputCreator" styleClass="quad_txtOutput" value="  #{creator.familyName}"/>
-											</span>
-											<b class="xLarge_area0_p8 endline labelLine clear">
-												<h:outputText value="#{lbl.first_name}" style="visibility:hidden;"/>
-												<span class="noDisplay">: </span>
-											</b>
-											<span class="xHuge_area0 xTiny_marginLExcl endline">
-												<h:outputLabel value="#{lbl.first_name}:   "/>
-												<h:outputText id="inputCreator2" styleClass="quad_txtOutput" value="   #{creator.givenName}"/>
-											</span>
-											<b class="xLarge_area0_p8 endline labelLine clear">
-												<h:outputText value="#{lbl.organization}" style="visibility:hidden;"/>
-												<span class="noDisplay">: </span>
-											</b>
-											<span class="xHuge_area0 xTiny_marginLExcl endline">
-												<h:outputText value="#{lbl.organization}: "/>
-												<ui:repeat var="organization" value="#{creator.organizations}" varStatus="indexO">
-													<h:panelGroup styleClass="endline">
-														<span class="endline">
-															<h:outputText value=",  " rendered="#{indexO.index > 0}"/>
-															<h:outputText value=" #{organization.name}"/>
-														</span>
-													</h:panelGroup>
-												</ui:repeat>
-											</span>
-										</ui:repeat>
-									</h:panelGroup>
-									<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-										<b class="xLarge_area0_p8 endline labelLine clear">
-											<h:outputText value="#{lbl.status}"/>
-											<span class="noDisplay">: </span>
-										</b>
-										<h:panelGroup layout="block" styleClass="large_area0 medium_marginLExcl statusIconArea">
-											<h:panelGroup layout="block" styleClass="big_imgArea statusIcon pendingItem" rendered="#{ViewCollectionBean.collection.status == 'PENDING'}"/>
-											<h:panelGroup layout="block" styleClass="big_imgArea statusIcon releasedItem" rendered="#{ViewCollectionBean.collection.status == 'RELEASED'}"/>
-											<h:panelGroup layout="block" styleClass="big_imgArea statusIcon withdrawnItem" rendered="#{ViewCollectionBean.collection.status == 'WITHDRAWN'}"/>
-											<h:panelGroup layout="block" styleClass="medium_area0">
-												<h:outputText value="#{lbl['private']}" rendered="#{ViewCollectionBean.collection.status == 'PENDING'}"/>
-												<h:outputText value="#{lbl.published}" rendered="#{ViewCollectionBean.collection.status == 'RELEASED'}"/>
-												<h:outputText value="#{lbl.withdrawn}" rendered="#{ViewCollectionBean.collection.status == 'WITHDRAWN'}"/>
-											</h:panelGroup>
-										</h:panelGroup>
-									</h:panelGroup>
-									<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-										<b class="xLarge_area0_p8 endline labelLine clear">
-											<h:outputText value="#{lbl.collection} URL"/>
-											<span class="noDisplay">: </span>
-										</b>
-										<span class="xHuge_area0 xTiny_marginLExcl endline">
-											<h:outputLink value="#{Navigation.collectionUrl}#{ViewCollectionBean.collection.idString}">			
-												<h:outputText id="collection_uri" value="#{Navigation.collectionUrl}#{ViewCollectionBean.collection.idString}" styleClass=""/>
-											</h:outputLink>
-											<br/>
-										</span>
-									</h:panelGroup>
-								</div>
-							</h:panelGroup>
-						</h:panelGroup>
-							<h:panelGroup layout="block" styleClass="full_area0_p8">
-							</h:panelGroup>
-						<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
-							<h3 class="xLarge_area0_p8 endline blockHeader">
-								<h:outputText value="#{lbl.collection_profile}"/>								
-
-								<h:outputLink value="#{Navigation.applicationUrl}export?format=xml&amp;type=profile&amp;q=prof==&quot;#{ViewCollectionBean.collection.profile}&quot;" styleClass="large_area0" target="_blank">
-									<h:outputText value="#{lbl.collection_profile_view}"/>
-								</h:outputLink>
-								
-								<h:outputLink id="lnkViewProfile" styleClass="large_area0" value="#{Navigation.profileUrl}#{ViewCollectionBean.profileId}/#{Navigation.editPath}?init=1&amp;col=#{ViewCollectionBean.id}" rendered="#{ViewCollectionBean.profileEditor and ViewCollectionBean.collection.status != 'WITHDRAWN'}">
-									<h:outputText value="#{lbl.edit}"></h:outputText>
-								</h:outputLink>
-							</h3>
-							<span class="seperator"/>
-							<!-- Picture status of the Collection -->
-							<div class="free_area0 itemBlockContent endline">	
-								<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-									<b class="xLarge_area0_p8 endline labelLine clear">
-										<h:outputText value="#{lbl.profile} URI  "/>
-										<span class="noDisplay">: </span>
-									</b>
-									<span class="xHuge_area0 xTiny_marginLExcl endline">		
-										<h:outputText id="inputCreator3" styleClass="quad_txtOutput" value="  #{ViewCollectionBean.collection.profile}"/>
-									</span>
-									
-									<!-- Picture status of the Collection -->
-									<div class="free_area0 itemBlockContent endline">	
-										<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-											<ui:repeat var="statement" value="#{ViewCollectionBean.profile.statements}">
-												
-												<b class="xLarge_area0_p8 endline labelLine clear">
-													<h:outputText value="#{lbl.metadata}"/>
-													<span class="noDisplay">: </span>
-												</b>
-												
-												<span class="xHuge_area0 xTiny_marginLExcl endline">
-													<h:outputLabel value="#{lbl.metadata_id}:   "/>
-													<h:outputText id="inputCreator3" styleClass="quad_txtOutput" value="  #{statement.id}"/>
-												</span>
-												
-												<b class="xLarge_area0_p8 endline labelLine clear">
-													<h:outputText value=" #{lbl.type} " style="visibility:hidden;"/>
-													<span class="noDisplay">: </span>
-												</b>
-												<span class="xHuge_area0 xTiny_marginLExcl endline">
-													<h:outputLabel value="#{lbl.type}:   "/>
-													<h:outputText id="inputCreator4" styleClass="quad_txtOutput" value="   #{statement.type}"/>
-												</span>
-													
-												<b class="xLarge_area0_p8 endline labelLine clear">
-													<h:outputText value=" #{lbl.labels} " style="visibility:hidden;"/>
-													<span class="noDisplay">: </span>
-												</b>
-												<span class="xHuge_area0 xTiny_marginLExcl endline">
-													<h:outputText value="#{lbl.labels}: "/>
-												
-													<ui:repeat var="label" value="#{statement.labels}" varStatus="indexO">
-														<h:panelGroup styleClass="endline">
-															<span class="endline">
-																<h:outputText value=", " rendered="#{indexO.index > 0}"/>
-																<h:outputText value="#{label.value}"/>
-																<h:outputText value=" (#{label.lang})"/>
-															</span>
-														</h:panelGroup>
-													</ui:repeat>
-												</span>
-												<h:panelGroup rendered="#{!(empty statement.literalConstraints)}">
-													<b class="xLarge_area0_p8 endline labelLine clear">
-														<h:outputText value=" #{lbl.values} " style="visibility:hidden;"/>
-														<span class="noDisplay">: </span>
-													</b>
-													<span class="xHuge_area0 xTiny_marginLExcl endline">
-														<h:outputText value="#{lbl.values} : "/>
-													
-														<ui:repeat var="value" value="#{statement.literalConstraints}" varStatus="indexO">
-															<h:panelGroup styleClass="endline">
-																<span class="endline">
-																	<h:outputText value=", " rendered="#{indexO.index > 0}"/>
-																	<h:outputText value="#{value}"/>
-																</span>
-															</h:panelGroup>
-														</ui:repeat>
-													</span>
-												</h:panelGroup>
-												<h:panelGroup rendered="#{statement.vocabulary != null}">
-													<b class="xLarge_area0_p8 endline labelLine clear">
-														<h:outputText value=" #{lbl.vocabulary} " style="visibility:hidden;"/>
-														<span class="noDisplay">: </span>
-													</b>
-													<span class="xHuge_area0 xTiny_marginLExcl endline">
-														<h:outputLabel value="#{lbl.vocabulary} :   "/>
-														<h:outputText styleClass="quad_txtOutput" value=" #{statement.vocabulary}"/>
-													</span>
-												</h:panelGroup>
-											</ui:repeat>
-										</h:panelGroup>
-									</div>
-								</h:panelGroup>
-							</div>
-						</h:panelGroup>
-					</h:panelGroup>
-				</h:panelGroup>
-			</ui:define>
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:imjc="http://java.sun.com/jsf/composite/components"
+	xmlns:menu="http://java.sun.com/jsf/composite/components/menu"
+	xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs">
+	
+	<ui:param name="currentMainMenu" value="collection"/>
+	
+	<ui:param name="metadataView" value="yes"/>
+	
+	<ui:param name="containerHeadline" value="#{lbl.collection_basics}"/>
+	<ui:param name="metadataBean" value="#{ViewCollectionBean}"/>
+	<ui:param name="metadataContextBean" value="#{ViewCollectionBean.collection}"/>
+	<ui:param name="headline" value="#{metadataContextBean.metadata.title}"/>
+	<ui:param name="navigationContextURL" value="#{Navigation.collectionUrl}"/>
+	
+	
+	<ui:define name="actionsMenu">
+		<menu:context_subNavigation contextId="#{metadataBean.id}" contextUrl="#{Navigation.collectionUrl}" curMainMenu="#{currentMainMenu}" userHasAdminRights="#{AuthorizationBean.admin}" userHasEditRights="#{metadataBean.editable and metadataContextBean.status != 'WITHDRAWN'}" hasContent="#{metadataBean.size > 0}" navBean="#{Navigation}" activeMenu="metadata"/>
+		
+		<menu:context_actionMenu isUserLoggedIn="#{SessionBean.user != null}" curMainMenu="#{currentMainMenu}" navBean="#{Navigation}" collectionStatus="#{metadataContextBean.status}" contextId="#{metadataBean.id}" isDeletable="#{metadataBean.deletable}" isEditable="#{metadataBean.editable}" hasContent="#{metadataBean.size > 0}" contextDownloadParam="&amp;col=#{metadataBean.id}"/>
+	</ui:define>
+			
+	<ui:define name="metadataProfile">
+		<imjc:metadataProfile_view headline="#{lbl.collection_profile}" metadataBean="#{metadataBean}" metadataContextBean="#{metadataContextBean}"/>
+	</ui:define>
+	
+	<ui:define name="modalDialogs_from_site">
+		<dialog:confirmationDialog submitAction="release" bean="#{metadataBean}" confirmationText="#{msg.confirmation_release_collection}?" submitLabel="#{lbl.release}" dialogId="releaseMenuItemDialog" rendered="#{metadataBean.editable and metadataBean.collection.status.toString().toUpperCase() == 'PENDING' and metadataBean.size > 0}"/>
+		<dialog:confirmationDialog submitAction="delete" bean="#{metadataBean}" confirmationText="#{msg.confirmation_delete_collection}?" submitLabel="#{lbl.delete}" dialogId="deleteMenuItemDialog" rendered="#{metadataBean.deletable}"/>
+		<dialog:confirmationReasonedDialog submitAction="withdraw" bean="#{metadataBean}" confirmationText="#{msg.confirmation_withdraw_collection}" submitLabel="#{lbl.withdraw}" dialogId="withdrawMenuItemDialog" rendered="#{metadataBean.editable and metadataBean.collection.status.toString().toUpperCase() == 'RELEASED'}"/>
+	</ui:define>
 </ui:composition>

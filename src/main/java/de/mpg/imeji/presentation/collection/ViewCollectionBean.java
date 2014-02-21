@@ -9,7 +9,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Organization;
@@ -127,6 +126,10 @@ public class ViewCollectionBean extends CollectionBean
         }
     }
 
+    /**
+     * 
+     * @return
+     */
     public String getFormattedDescription()
     {
         if (this.getCollection() == null || this.getCollection().getMetadata().getDescription() == null)
@@ -135,26 +138,9 @@ public class ViewCollectionBean extends CollectionBean
     }
 
     /**
-     * Return the {@link User} having uploaded the file for this item
      * 
      * @return
-     * @throws Exception
      */
-    public User getCollectionCreator() throws Exception
-    {
-        User user = null;
-        UserController uc = new UserController();
-        user = uc.retrieve(super.getCollection().getCreatedBy());
-        return user;
-    }
-
-    public int getCollectionNumberOfItems()
-    {
-        int num = 0;
-        num = super.getCollection().getImages().size();
-        return num;
-    }
-
     public String getCitation()
     {
         String title = super.getCollection().getMetadata().getTitle();

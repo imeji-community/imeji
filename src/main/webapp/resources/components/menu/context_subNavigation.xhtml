@@ -1,0 +1,75 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:composite="http://java.sun.com/jsf/composite">
+	
+	<composite:interface>
+		
+		<composite:attribute name="contextId" type="java.lang.String" default="" required="true" shortDescription="@type String, required to set sub navigation for the right context"/>
+		<composite:attribute name="contextUrl" type="java.lang.String" default="" required="true" shortDescription="@type String, (URL to startpage without '/' as last character), required to set sub navigation for the right context"/>
+		<composite:attribute name="activeMenu" type="java.lang.String" default="" required="true" shortDescription="@type: String, @values: start, content, metadata, upload, ingest; required to highlight the current sub navigation, important for usability"/>
+		
+		<composite:attribute name="navBean" type="java.lang.Object" required="true" shortDescription="@type: Object, used for several URL paths"/>
+		
+		<composite:attribute name="menuClass" type="java.lang.String" default="imj_contentMenu" required="false" shortDescription="@type: String, used for the component and will be extended with 'Item' for every menu entry, @default: imj_contentMenu"/>
+		<composite:attribute name="curMainMenu" type="java.lang.String" default="" required="false" shortDescription="@type String, required to en-/disable upload and or ingest if user has rights"/>
+		
+		<composite:attribute name="userHasAdminRights" type="java.lang.Boolean" default="false" required="false" shortDescription="@type: Boolean, @dependencies: curMainMenu, required for ingest"/>
+		<composite:attribute name="userHasEditRights" type="java.lang.Boolean" default="false" required="false" shortDescription="@type: Boolean, @dependencies: curMainMenu, required for upload"/>
+		<composite:attribute name="hasContent" type="java.lang.Boolean" default="false" required="false" shortDescription="@type: Boolean, required to show menus (e.g. content startpage, show images)"/>
+	</composite:interface>
+	
+	<composite:implementation>
+		<ui:fragment rendered="#{cc.attrs.contextId.trim().length() > 0 and cc.attrs.contextUrl.trim().length() > 0}">
+			
+			<ui:param name="curContextUrl" value="#{cc.attrs.contextUrl.trim()}#{cc.attrs.contextId.trim()}"/>
+			<ui:param name="curMenuClass" value="#{cc.attrs.menuClass.trim()}"/>
+			<ui:param name="activeMenuValue" value="#{cc.attrs.activeMenu.trim().toLowerCase()}"/>
+			
+			<div class="#{curMenuClass}">
+				<ul>
+					<ui:fragment rendered="#{cc.attrs.hasContent}">
+						<li class="#{curMenuClass}Item">
+							<h:outputLink value="#{curContextUrl}" title="#{lbl.startpage}" styleClass="#{(activeMenuValue == 'start') ? 'imj_active' : ''}">
+								<h:outputText value="#{lbl.startpage}"/>
+							</h:outputLink>
+						</li>
+						
+						<ui:fragment rendered="#{cc.attrs.navBean != null}">
+							<li class="#{curMenuClass}Item">
+								<h:outputLink value="#{curContextUrl}/#{cc.attrs.navBean.browsePath}?q=" title="#{lbl.view_images}" styleClass="#{(activeMenuValue == 'content') ? 'imj_active' : ''}">
+									<h:outputText value="#{lbl.view_images}"/>
+								</h:outputLink>
+							</li>
+						</ui:fragment>
+					</ui:fragment>
+					
+					<li class="#{curMenuClass}Item">
+						<h:outputLink value="#{curContextUrl}/infos?init=1" title="#{lbl.metadata}" styleClass="#{(activeMenuValue == 'metadata') ? 'imj_active' : ''}">
+							<h:outputText value="#{lbl.metadata}"/>
+						</h:outputLink>
+					</li>
+					
+					<ui:fragment rendered="#{cc.attrs.curMainMenu.trim().toLowerCase() == 'collection'}">
+						<ui:fragment rendered="#{cc.attrs.userHasEditRights and cc.attrs.navBean != null}">
+							<li class="#{curMenuClass}Item">
+								<h:outputLink value="#{curContextUrl}/#{cc.attrs.navBean.uploadPath}?init=1" title="#{lbl.upload_images}" styleClass="#{(activeMenuValue == 'upload') ? ' imj_active' : ''}">
+									<h:outputText value="#{lbl.upload_images}"/>
+								</h:outputLink>
+							</li>
+						</ui:fragment>
+						
+						<ui:fragment rendered="#{cc.attrs.userHasAdminRights}">
+							<li class="#{curMenuClass}Item">
+								<h:outputLink value="#{curContextUrl}/ingest?init=1" title="#{lbl.ingest}" styleClass="#{(activeMenuValue == 'ingest') ? ' imj_active' : ''}">
+									<h:outputText value="#{lbl.ingest}"/>
+								</h:outputLink>
+							</li>
+						</ui:fragment>
+					</ui:fragment>
+				</ul>
+			</div>
+		</ui:fragment>
+	</composite:implementation>
+</html>

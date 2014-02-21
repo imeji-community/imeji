@@ -19,10 +19,12 @@ import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.beans.ContainerBean;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.image.ThumbnailBean;
 import de.mpg.imeji.presentation.session.SessionBean;
@@ -37,7 +39,7 @@ import de.mpg.imeji.presentation.util.UrlHelper;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public abstract class CollectionBean
+public abstract class CollectionBean extends ContainerBean
 {
     public enum TabType
     {
@@ -229,10 +231,10 @@ public abstract class CollectionBean
      */
     public void discardCommentListener(ValueChangeEvent event)
     {
-        if (event.getNewValue() != null)
-        {
-            collection.setDiscardComment(event.getNewValue().toString());
-        }
+    	if (event.getNewValue() != null && event.getNewValue().toString().trim().length() > 0) 
+    	{
+    		getContainer().setDiscardComment(event.getNewValue().toString().trim());
+    	}
     }
 
     /**
@@ -559,4 +561,32 @@ public abstract class CollectionBean
     {
         return navigation.getCollectionUrl() + id;
     }
+
+    /*
+     * (non-Javadoc)
+     * @see de.mpg.imeji.presentation.beans.ContainerBean#getType()
+     */
+    @Override
+    public String getType()
+    {
+        return CONTAINER_TYPE.COLLECTION.name();
+    }
+    
+    /* (non-Javadoc)
+     * @see de.mpg.imeji.presentation.beans.ContainerBean#getContainer()
+     */
+    @Override
+    public Container getContainer()
+    {
+        return collection;
+    }
+    
+    public String getDiscardComment() 
+	{
+		return this.getContainer().getDiscardComment();
+	}
+	public void setDiscardComment(String comment)
+	{
+		this.getContainer().setDiscardComment(comment);
+	}
 }

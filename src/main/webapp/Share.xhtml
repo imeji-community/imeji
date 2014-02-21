@@ -1,52 +1,48 @@
-<ui:composition template="templates/template.xhtml"
+<ui:composition template="templates/template_site.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
-	<ui:param name="headline"
-		value="#{lbl.share} #{ShareBean.container.metadata.title}" />
+	
+	<ui:param name="headline" value="#{lbl.share} #{ShareBean.container.metadata.title}" />
+	
 	<ui:define name="init">
 		<h:outputText value="#{ShareBean.init}" />
 	</ui:define>
+	
 	<ui:define name="mainContent">
-		<h:panelGroup layout="block" styleClass="full_area0 itemList"
-			style="border-bottom-width:0 !important;">
-			<ui:include src="./include/History.xhtml"></ui:include>
-		</h:panelGroup>
-		<div class="full_area0_p8 small_marginLExcl">
+		
+		<ui:include src="./include/History.xhtml"/>
+		
+		<h:panelGroup layout="block" id="imj_ajaxWrapper" class="imj_shareForm">
 			<h:form id="shareForm">
-				<div class="full_area0_p0">
-					<h:outputLabel for="shareForm:emails" styleClass="full_area0"
-						value="#{lbl.share_email}" />
-					<div class="full_area0">
-						<h:inputTextarea id="emails" styleClass="huge_area0_p0 selected"
-							value="#{ShareBean.email}" />
-						<h:outputText styleClass="tiny_marginLExcl medium_area0_p8"
-							value="#{lbl.share_as}" />
-						<h:selectOneMenu id="grantsMenu"
-							value="#{ShareBean.selectedGrant}" styleClass="huge_area0">
-							<f:selectItems value="#{ShareBean.grantsMenu}" />
-						</h:selectOneMenu>
+				<div class="imj_emailInput">
+					<div class="imj_metadataSet">
+						<h:outputLabel for="shareForm:emails" value="#{lbl.share_email}" styleClass="imj_metadataLabel"/>
+						<h:inputTextarea id="emails" value="#{ShareBean.email}" class="imj_metadataValue"/>
+					</div>
+					<div class="imj_metadataSet">
+						<h:outputLabel for="shareForm:grantsMenu" styleClass="imj_metadataLabel" value="#{lbl.share_as}"/>
+						<div class="imj_metadataValue">
+							<h:selectOneMenu id="grantsMenu" value="#{ShareBean.selectedGrant}">
+								<f:selectItems value="#{ShareBean.grantsMenu}"/>
+							</h:selectOneMenu>
+						</div>
 					</div>
 				</div>
-				<div class="full_area0_p8"></div>
-				<div class="huge_area0_p0">
-					<h:outputLink value="#{ShareBean.containerHome}"
-						styleClass="free_area1_p8 cancelButton"
-						title="#{lbl.back_to_home}">
-						<h:outputText value="#{lbl.cancel}" />
+				
+				<div class="imj_submitPanel">
+					<h:outputLink value="#{ShareBean.containerHome}" styleClass="imj_cancelButton" title="#{lbl.cancel}">
+						<h:outputText value="#{lbl.cancel}"/>
 					</h:outputLink>
-					<h:commandButton action="#{ShareBean.share}"
-						value="#{lbl.album_share}" styleClass="free_area1_p8 activeButton"
+					<h:commandButton action="#{ShareBean.share}" value="#{lbl.album_share}" styleClass="imj_submitButton"
+						onclick="if (confirm('Do you really want to share the album (An email will be sent to the user)')) return true; return false;"
+						rendered="#{ShareBean.album}"/>
+					<h:commandButton action="#{ShareBean.share}" value="#{lbl.collection_share}" styleClass="imj_submitButton"
 						onclick="if (confirm('Do you really want to share the collection (An email will be sent to the user)')) return true; return false;"
-						rendered="#{ShareBean.album}" />
-					<h:commandButton action="#{ShareBean.share}"
-						value="#{lbl.collection_share}"
-						styleClass="free_area1_p8 activeButton"
-						onclick="if (confirm('Do you really want to share the collection (An email will be sent to the user)')) return true; return false;"
-						rendered="#{!ShareBean.album}" />
+						rendered="#{!ShareBean.album}"/>
 				</div>
 			</h:form>
-		</div>
+		</h:panelGroup>
 	</ui:define>
 </ui:composition>

@@ -1,0 +1,57 @@
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+	<!-- MetaDataOutput START -->
+	<h:outputText styleClass="imj_metadataValueEntry" value="#{md.text}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#text' and md.text != null}"/>
+	<h:outputText styleClass="imj_metadataValueEntry" value="#{md.number}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#number' and md.number != null}"/>
+	<h:outputText styleClass="imj_metadataValueEntry" value="#{md.date}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#date' and md.date != null}"/>
+	
+	<!-- MetaDataOutput - Link -->
+	<h:outputLink value="#{md.uri}" target="_blank" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#link'}">
+		<h:outputText value="#{md.uri}" rendered="#{md.label == ''}"/>
+		<h:outputText value="#{md.label}" rendered="#{md.label != ''}"/>
+	</h:outputLink>
+			
+	<!-- MetaDataOutput - Licence -->
+	<ui:fragment rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#license'}">
+		<h:outputText styleClass="imj_metadataValueEntry" value="#{md.license}" rendered="#{md.externalUri== null and md.license != null}"/>
+		<h:outputLink rendered="#{md.externalUri != null}" value="#{md.externalUri}">
+			<h:outputText styleClass="imj_metadataValueEntry" value="#{md.license}" rendered="#{md.license != null}"/>
+			<h:outputText styleClass="imj_metadataValueEntry" value="#{md.externalUri}" rendered="#{md.license == null}"/>
+		</h:outputLink>
+	</ui:fragment>
+			
+	<!-- MetaDataOutput - CoNE Author -->
+	<h:outputLink value="#{md.coneId}" target="_blank" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#conePerson' and md.coneId != null}" >
+		<h:outputText styleClass="imj_metadataValueEntry" value="#{md.person.familyName}, #{md.person.givenName}"/>
+		<h:outputText styleClass="imj_metadataValueEntry" value="(#{md.person.organizationString})" rendered="#{md.person.organizationString != ''}"/>
+	</h:outputLink>
+			
+	<!-- MetaDataOutput - Person -->
+	<ui:fragment rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#conePerson' and md.coneId == null and md.person.familyName != null}">
+		<h:outputText styleClass="imj_metadataValueEntry" value="#{md.person.familyName}, #{md.person.givenName}"/>
+		<h:outputText styleClass="imj_metadataValueEntry" value=" (#{md.person.organizationString})" rendered="#{md.person.organizationString != ''}"/>
+	</ui:fragment>
+			
+	<!-- MetaDataOutput - Publication -->
+	<ui:fragment rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#publication'}">
+		<h:outputText styleClass="imj_metadataValueEntry" value="#{md.citation}" rendered="#{md.citation != ''}" escape="false"/>
+			<h:outputLink styleClass="imj_metadataValueEntry" value="#{md.uri}" target="_blank">
+				<h:outputText styleClass="imj_metadataValueEntry" value="#{md.uri}" rendered="#{md.citation == ''}"/>
+			</h:outputLink>
+	</ui:fragment>
+			
+	<!-- MetaDataOutput - Geolocation -->
+	<ui:fragment rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation'}">
+		<h:outputText value="#{md.name} (" rendered="#{md.name != null}"/>
+		<h:outputText value="#{md.longitude}/#{md.latitude}"/>
+		<h:outputText value=")" rendered="#{md.name != null}"/>
+		<h:outputLink value="http://maps.google.com/maps?q=#{md.latitude},#{md.longitude}" target="_blank">
+			<h:outputText styleClass="imj_metadataValueEntryViewMap" value="View in Google maps"/>
+		</h:outputLink>
+	</ui:fragment>
+			
+<!-- MetaDataOutput END -->
+</ui:composition>

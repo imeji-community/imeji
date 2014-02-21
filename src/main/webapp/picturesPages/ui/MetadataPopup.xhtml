@@ -3,75 +3,69 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
 	<f:subview id="Details">
-		<div class="marginTExcl075 linebreak">&#160;</div>
-		<div class="quad_area_p8">
-			<h:outputText value="#{item.initPopup}" />
-			<h:panelGroup layout="block" class="free_area0_p4 medium_marginRExcl"
-				style="float:right">
-				<h:panelGroup styleClass="viewFileIcon">
-					<h:outputLink
-						value="#{paginatorListSessionBean.imageBaseUrl}/#{Navigation.itemPath}/#{item.id}">
-						<h:outputText value="#{lbl.view_detail}" />
-					</h:outputLink>
+		<!-- TODO: build up as component -->
+		<ui:param name="navigationPath" value="#{cc.attrs.picList.imageBaseUrl}/#{Navigation.itemPath}/#{item.id}"/>
+		
+		<div class="imj_imageInfoLayer">
+			<h:outputText value="#{item.initPopup}"/>
+			
+			<h:panelGroup layout="block" class="imj_infoNavigation">
+				
+				<h:outputLink value="#{navigationPath}">
+					<h:panelGroup styleClass="imj_iconEyeOpen_16"/>
+					<h:outputText value=" #{lbl.view_detail}" />
+				</h:outputLink>
+				<h:outputLink value="#{navigationPath}?edit=1" rendered="#{item.editable}">
+					<h:panelGroup styleClass="imj_buttonEdit_16"/>
+					<h:outputText value="#{lbl.metadata_edit}" />
+				</h:outputLink>
+			</h:panelGroup>
+			
+			
+			<h:panelGroup layout="block" class="imj_metadataSet">
+				<h:panelGroup styleClass="imj_metadataLabel">
+					<h:outputText value="#{lbl.filename}"/>
 				</h:panelGroup>
-				<h:panelGroup styleClass="editFileIcon xTiny_marginLExcl"
-					rendered="#{item.editable}">
-					<h:outputLink
-						value="#{paginatorListSessionBean.imageBaseUrl}/#{Navigation.itemPath}/#{item.id}?edit=1">
-						<h:outputText value="#{lbl.metadata_edit}" />
-					</h:outputLink>
+				<h:panelGroup styleClass="imj_metadataValue">
+					<h:outputText value="#{item.filename}"/>
 				</h:panelGroup>
 			</h:panelGroup>
-			<div class="marginTExcl075 linebreak">&#160;</div>
-			<div class="marginTExcl075 linebreak">&#160;</div>
-			<div class="marginTExcl075 linebreak">&#160;</div>
-			<h:panelGroup layout="block" class="quad_area0_p8">
-				<h:panelGroup styleClass="xLarge_area0_p8 noPaddingTopBottom"
-					style="text-align:right;">
-					<h:outputText value="#{lbl.filename}" />
-				</h:panelGroup>
-				<h:panelGroup layout="block"
-					styleClass="double_area0_p0 xTiny_marginLExcl">
-					<h:outputText value="#{item.filename}" />
-				</h:panelGroup>
-			</h:panelGroup>
-			<div class="marginTExcl075 linebreak">&#160;</div>
-				<ui:repeat id="metadata" var="md" value="#{item.mds.tree.list}" rows="0" varStatus="indexMetadata">
-					<h:panelGroup rendered="#{!md.isEmpty() and md.preview}">
-						<div class="full_area0 id_#{md.statementId}  parent_#{md.parent.statementId} highlight_area">
-							<h:panelGroup layout="block" styleClass="xLarge_area0_p4 noPaddingTopBottom" style="text-align:right; margin-left: #{metadata.hierarchyLevel}em;">
-								<h:outputText value="#{MetadataLabels.internationalizedLabels[md.statement.id]}" />
+			
+			<ui:repeat id="metadata" var="md" value="#{item.mds.tree.list}" rows="0" varStatus="indexMetadata">
+				<ui:fragment rendered="#{!md.isEmpty() and md.preview}">
+					<div class="imj_metadataSet id_#{md.statementId}  parent_#{md.parent.statementId} highlight_area">
+						<h:panelGroup layout="block" styleClass="imj_metadataLabel" style="margin-left: #{metadata.hierarchyLevel}em;">
+							<h:outputText value="#{MetadataLabels.internationalizedLabels[md.statement.id]}" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="imj_metadataValue">
+							<h:outputText value="#{md.text}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#text'}" />
+							<h:outputText value="#{md.number}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#number'}" />
+							<h:outputText value="#{md.date}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#date'}" />
+							<h:outputLink value="#{md.uri}" target="_blank" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#publication' or md.typeNamespace == 'http://imeji.org/terms/metadata#link'}">
+								<h:outputText value="Link" rendered="#{md.label == ''}" />
+								<h:outputText value="#{md.label}" rendered="#{md.label != ''}" />
+							</h:outputLink>
+							<h:outputText value="#{md.license}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#license'}" />
+							<h:panelGroup rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#conePerson'}">
+								<h:outputText value="#{md.person.familyName}, #{md.person.givenName}" />
+								<h:outputText value="(#{md.person.organizationString})" rendered="#{md.person.organizationString} != ''" />
 							</h:panelGroup>
-							<h:panelGroup layout="block" styleClass="double_area0_p2 xTiny_marginLExcl">
-								<h:outputText value="#{md.text}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#text'}" />
-								<h:outputText value="#{md.number}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#number'}" />
-								<h:outputText value="#{md.date}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#date'}" />
-								<h:outputLink value="#{md.uri}" target="_blank" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#publication' or md.typeNamespace == 'http://imeji.org/terms/metadata#link'}">
-									<h:outputText value="Link" rendered="#{md.label == ''}" />
-									<h:outputText value="#{md.label}" rendered="#{md.label != ''}" />
+							<h:outputLink value="http://maps.google.com/maps?q=#{md.latitude},#{md.longitude}" target="_blank" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation'}">
+								<h:outputText value="#{md.name} (" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation' and md.name != null}" />
+								<h:outputText value="#{md.longitude}/#{md.latitude}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation'}" />
+								<h:outputText value=")" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation' and md.name != null}" />
+							</h:outputLink>
+							<h:panelGroup styleClass="free_area0 endline" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#publication'}">
+								<h:outputText value="#{md.citation}" rendered="#{md.citation != ''}" styleClass="free_area0 endline" escape="false"/>
+								<h:outputLink value="#{md.uri}" target="_blank" styleClass="free_area0 endline">
+									<h:outputText value="#{md.uri}" rendered="#{md.citation == ''}" styleClass="free_area0 endline"/>
 								</h:outputLink>
-								<h:outputText value="#{md.license}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#license'}" />
-								<h:panelGroup rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#conePerson'}">
-									<h:outputText value="#{md.person.familyName}, #{md.person.givenName}" />
-									<h:outputText value="(#{md.person.organizationString})" rendered="#{md.person.organizationString} != ''" />
-								</h:panelGroup>
-								<h:outputLink value="http://maps.google.com/maps?q=#{md.latitude},#{md.longitude}" target="_blank" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation'}">
-									<h:outputText value="#{md.name} (" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation' and md.name != null}" />
-									<h:outputText value="#{md.longitude}/#{md.latitude}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation'}" />
-									<h:outputText value=")" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation' and md.name != null}" />
-								</h:outputLink>
-								<h:panelGroup styleClass="free_area0 endline" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#publication'}">
-									<h:outputText value="#{md.citation}" rendered="#{md.citation != ''}" styleClass="free_area0 endline" escape="false"/>
-									<h:outputLink value="#{md.uri}" target="_blank" styleClass="free_area0 endline">
-										<h:outputText value="#{md.uri}" rendered="#{md.citation == ''}" styleClass="free_area0 endline"/>
-									</h:outputLink>
-								</h:panelGroup>
-								<br/>
 							</h:panelGroup>
-						</div>
-					</h:panelGroup>
-				</ui:repeat>
-			<div class="marginTExcl075 linebreak">&#160;</div>
+							<br/>
+						</h:panelGroup>
+					</div>
+				</ui:fragment>
+			</ui:repeat>
 		</div>
 	</f:subview>
 </div>

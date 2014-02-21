@@ -1,22 +1,68 @@
-<ui:composition template="templates/template.xhtml"
+<ui:composition template="templates/template_site.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
 	<ui:param name="headline" value="Administration" />
+	<ui:param name="currentMainMenu" value="admin"/>
+	
 	<ui:define name="mainContent">
-		<h:panelGroup layout="block" styleClass="full_area0 endline" rendered="#{SessionBean.admin}">
-			<div class="full_area0">
-				<h2>
-					<h:outputText value="#{lbl.import_to_internal}" />
-				</h2>
-				<h:form>
-					<div class="free_area0_p8">
-						<h:outputText styleClass="free_area0" style="color:red;" value="Important: Please make sure to do a backup before running this method. When the import is done (check in the log file), restart imeji with the correct storage" />
-						<h:commandLink styleClass="free_area0" action="#{AdminBean.importToInternalStorage}" value="#{lbl.import_to_internal} (#{AdminBean.internalStorageLocation})" />
-					</div>
-				</h:form>
-			</div>
+	
+		<!-- Breadcrumb - History -->
+		<ui:include src="include/History.xhtml"></ui:include>			
+		
+		<!-- Are You Admin? -->	
+		<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!UsersBean.sysAdmin}">
+			<h:outputText value="#{lbl.view_page_disallowed}" styleClass="imj_messageInfo" rendered="#{SessionBean.user == null}"/>
+			<h:outputText value="#{lbl.view_page_disallowed2}" styleClass="imj_messageInfo" rendered="#{SessionBean.user != null}"/>
 		</h:panelGroup>
+	
+		<ui:fragment rendered="#{UsersBean.sysAdmin}">
+		<!-- Only for Admins -->			
+			
+			<div class="imj_userConfig">
+				
+				<!-- Admin - TiledList -->		
+				<div class="imj_administrationTiledList imj_maxWidth">
+				
+					<div class="imj_listBody">
+					
+						<h:panelGroup layout="block" styleClass="imj_adminPanel imj_userConfig" rendered="#{SessionBean.admin}">
+					
+							<!-- Admin - Import -->
+							<div class="imj_headline">
+								<h2>
+									<h:outputText value="#{lbl.import_to_internal}"/>
+								</h2>
+							</div>
+							
+							<div class="imj_content">
+								<h:form>								
+									<h:outputText value="Important: Please make sure to do a backup before running this method! When the import is done (check in the log file), restart imeji with the correct storage!"/> <!-- internationalized info message lbl missing -->
+									<h:panelGroup layout="block" styleClass="imj_adminEditPanel">
+										<h:commandLink styleClass="imj_editButton" action="#{AdminBean.importToInternalStorage}" value="#{lbl.import_to_internal}: #{AdminBean.internalStorageLocation}"/>
+									</h:panelGroup>
+								</h:form>
+							</div>
+							
+						</h:panelGroup>
+					
+					</div> <!-- END LIST BODY -->	
+				
+				</div> <!-- END ADMIN LIST -->
+			
+			</div> <!-- END USER CONFIG -->
+		
+		
+			<!-- AdminDataList - Back Button -->
+			<h:panelGroup layout="block" styleClass="imj_backPanel">
+				<h:outputLink value="#{Navigation.adminUrl}">
+					<h:outputText value="#{lbl.back_to_admin}" styleClass="imj_backButton"/>
+				</h:outputLink>
+			</h:panelGroup>
+		
+		</ui:fragment>
+		
 	</ui:define>
+	
 </ui:composition>

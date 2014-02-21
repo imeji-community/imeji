@@ -1,0 +1,112 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:list="http://java.sun.com/jsf/composite/components/list">
+	
+	<composite:interface>
+		<composite:attribute name="formularBean" required="true"/>
+		<composite:attribute name="formularContextBean" required="true"/>
+		<composite:attribute name="headline" required="true"/>
+	</composite:interface>
+	
+	<composite:implementation>
+		
+		<div class="imj_mediaContainerEditMD">
+			<h:form id="mediaContainerForm">
+				<div class="imj_headline">
+					<h3>
+						<h:outputText value="#{cc.attrs.headline}"/>
+					</h3>
+				</div>
+				<div class="imj_descriptionArea">	
+					<!-- Title -->
+					<div class="imj_metadataSet">
+						<label class="imj_metadataLabel">
+							<h:outputText value="#{lbl.title}*"/>
+							<span class="imj_noDisplay">: </span>
+						</label>
+						<h:inputText id="inputTitleText" styleClass="imj_metadataValue" value="#{cc.attrs.formularContextBean.metadata.title}"/>
+					</div>
+							
+					<!-- Description -->
+					<div class="imj_metadataSet">
+						<label class="imj_metadataLabel">
+							<h:outputText value="#{lbl.description}"/>
+							<span class="imj_noDisplay">: </span>
+						</label>
+						<h:inputTextarea id="inputDescription" styleClass="imj_metadataValue" value="#{cc.attrs.formularContextBean.metadata.description}"/>
+					</div>
+					
+					<!-- Author data -->
+					<ui:repeat var="creator" value="#{cc.attrs.formularContextBean.metadata.persons}" varStatus="indexA">
+						<h:panelGroup layout="block" styleClass="imj_authorMetadataSet">
+							<div class="imj_sectionHeadline">
+								<h4>
+									<!-- Add/Remove Author buttons -->		
+									<span class="imj_inlineButtonGroup">
+										<h:commandButton styleClass="imj_buttonAdd_16" title="#{lbl.add_author}" action="#{cc.attrs.formularBean.addAuthor}">
+											<f:setPropertyActionListener value="#{indexA.index}" target="#{cc.attrs.formularBean.authorPosition}"/>
+										</h:commandButton>
+										<h:commandButton styleClass="imj_buttonRemove_16" title="#{lbl.remove_author}" action="#{cc.attrs.formularBean.removeAuthor}">
+											<f:setPropertyActionListener value="#{indexA.index}" target="#{cc.attrs.formularBean.authorPosition}"/>
+										</h:commandButton>
+									</span>
+									<h:outputText value=" #{lbl.author} *"/>
+									<span class="imj_noDisplay">: </span>	
+								</h4>
+							</div>
+							
+							<!-- Family Name -->
+							<div class="imj_metadataSet">
+								<label class="imj_metadataLabel">
+									<h:outputText value="#{lbl.family_name}"/>
+									<span class="imj_noDisplay">: </span>
+								</label>
+								<h:inputText id="inputFamiliyName" styleClass="imj_metadataValue" value="#{creator.familyName}"/>
+							</div>
+							
+							<!-- Given Name -->
+							<div class="imj_metadataSet">
+								<label class="imj_metadataLabel">
+									<h:outputText value="#{lbl.first_name}"/>
+									<span class="imj_noDisplay">: </span>
+								</label>
+								<h:inputText id="inputGivenName" styleClass="imj_metadataValue" value="#{creator.givenName}"/>
+							</div>
+							
+							<!-- Organizations -->
+							<ui:repeat var="organization" value="#{creator.organizations}" varStatus="indexO">
+								<div class="imj_metadataSet">
+									<label class="imj_metadataLabel">
+										<h:outputText value="#{lbl.organization}*"/>
+										<span class="imj_noDisplay">: </span>
+										<span class="imj_inlineButtonGroup">
+											<h:commandButton styleClass="imj_buttonAdd_16" title="#{lbl.add_organization}" action="#{cc.attrs.formularBean.addOrganization}">
+												<f:setPropertyActionListener value="#{indexA.index}" target="#{cc.attrs.formularBean.authorPosition}"/>
+												<f:setPropertyActionListener value="#{indexO.index}" target="#{cc.attrs.formularBean.organizationPosition}"/>
+											</h:commandButton>
+											<h:commandButton styleClass="imj_buttonRemove_16" title="#{lbl.remove_organization}" action="#{cc.attrs.formularBean.removeOrganization}">
+												<f:setPropertyActionListener value="#{indexA.index}" target="#{cc.attrs.formularBean.authorPosition}"/>
+												<f:setPropertyActionListener value="#{indexO.index}" target="#{cc.attrs.formularBean.organizationPosition}"/>
+											</h:commandButton>
+										</span>
+									</label>
+									<h:inputText id="inputCreator" styleClass="imj_metadataValue" value="#{organization.name}"/>
+								</div>
+							</ui:repeat>
+						</h:panelGroup>
+					</ui:repeat>
+				</div>
+				
+				<div class="imj_submitPanel">
+					<h:outputLink value="#{cc.attrs.formularBean.cancel}" styleClass="imj_cancelButton">
+						<h:outputText value="#{lbl.cancel}" />
+					</h:outputLink>
+					<h:commandButton action="#{cc.attrs.formularBean.save}" value="#{lbl.save}" styleClass="imj_submitButton" onclick="openDialog('dialogWait');"/>
+				</div>
+			</h:form>
+		</div>
+	</composite:implementation>
+</html>

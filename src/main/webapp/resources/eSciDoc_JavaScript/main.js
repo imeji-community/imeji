@@ -23,6 +23,7 @@ jQuery(document).ready(function() {
  * 
  * @param id
  */
+/* TODO: DELETE FUNCTION HIGHLIGHT + DEPENDENCIES and create/use css definitions */
 function highlight(id) {
 	jQuery('.id_' + id).css('background-color', '#393939 !important');
 	highlight_childs(id);
@@ -43,7 +44,7 @@ function highlight_childs(id) {
 	});
 }
 /**
- * Reset highlighted element to their original value. Sould be triggered on
+ * Reset highlighted element to their original value. Should be triggered on
  * mouse out
  */
 function reset_highlight() {
@@ -357,7 +358,7 @@ function submitPanel(panelId, message) {
 
 /**
  * Part of the Patch for jsf
- */
+ *//*
 var currentViewState;
 jsf.ajax
 		.addOnEvent(function(e) {
@@ -398,10 +399,10 @@ jsf.ajax
 			}
 
 		});
-
+*/
 /**
  * JSF patch for jsf for reaload of ajax component after ajax request
- */
+ *//*
 var patchJSF = function() {
 	jsf.ajax
 			.addOnEvent(function(e) {
@@ -430,4 +431,22 @@ var patchJSF = function() {
 									});
 				}
 			});
+};
+*/
+/* open a dialog
+ * functions are shifted and modified from old template.xhtml
+ */
+function openDialog(id) {
+	/*set the dialog in center of the screen*/
+	var dialog = $(document.getElementById(id));
+	dialog.css("left", Math.max(0, Math.round(($(window).width() - $(dialog).outerWidth()) / 2) + $(window).scrollLeft()) + "px");
+	/*open the dialog*/
+	dialog.show();
+	$(".imj_modalDialogBackground").show();
+}
+/*close a dialog*/
+function closeDialog(id) {
+	var dialog = $(document.getElementById(id));
+	$(".imj_modalDialogBackground").hide();
+	dialog.hide();
 }

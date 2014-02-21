@@ -1,22 +1,19 @@
-<ui:composition template="templates/template.xhtml" 
+<ui:composition template="templates/template_site.xhtml" 
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core" >
+	
+	<ui:param name="headline" value="#{lbl.help}"/>
+	
 	<ui:define name="mainContent">
-		<div class="full_area0_p8">
-			<h:panelGroup rendered="#{SessionBean.locale.language == 'en'}">
-				<h:outputText  escape="false" value="#{StaticContent.helpContent}"></h:outputText>
-			</h:panelGroup>
-			<h:panelGroup rendered="#{SessionBean.locale.language == 'de'}">
-				<h:outputText escape="false" value="#{StaticContent.helpContent}"></h:outputText>
-			</h:panelGroup>	
-			<h:panelGroup rendered="#{SessionBean.locale.language == 'ja'}">
-				<h:outputText escape="false" value="#{StaticContent.helpContent}"></h:outputText>
-			</h:panelGroup>	
-			<h:panelGroup rendered="#{SessionBean.locale.language == 'es'}">
-				<h:outputText escape="false" value="#{StaticContent.helpContent}"></h:outputText>
-			</h:panelGroup>				
-		</div>
+		<ui:include src="./include/History.xhtml"/>
+		
+		<h:panelGroup layout="block" id="imj_ajaxWrapper" class="imj_helpPage">
+			<h:outputText escape="false" value="#{StaticContent.helpContent}" rendered="#{SessionBean.locale.language == 'en'}"/>
+			<h:outputText escape="false" value="#{StaticContent.helpContent}" rendered="#{SessionBean.locale.language == 'de'}"/>
+			<h:outputText escape="false" value="#{StaticContent.helpContent}" rendered="#{SessionBean.locale.language == 'ja'}"/>
+			<h:outputText escape="false" value="#{StaticContent.helpContent}" rendered="#{SessionBean.locale.language == 'es'}"/>
+		</h:panelGroup>
 	</ui:define>
 </ui:composition>

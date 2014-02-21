@@ -13,7 +13,7 @@
  * but is *in use* for the running release!
  * 
  * Please check out the new styles in app.css 
- * and also basic.css (with normalize.css and additional CSS-resets).
+ * and basic.css (with normalize.css and additional CSS-resets).
  * 
  * New imeji style prefix for all classes and ids: imj_
  *
@@ -88,13 +88,73 @@ html, body {
 
 
 
+ /* OLD STYLES */
+/* ******** css hot fixes for release 1.2.0.0 ***********
+ * ================================================== */
+.free_txtInput, .xHuge_txtInput, .xHuge_txtInput input {
+    width: 98%;
+}
+
+.menuHeader {
+	color: #6CAD2F;
+}
+
+/*
+.imj_mainContentPreListHeaderItemDelete:hover {
+	background-color: #D80000;
+	border-radius: 0.41666666em;
+    -webkit-border-radius: 0.41666666em;
+    -moz-border-radius: 0.41666666em;
+    -o-border-radius: 0.41666666em;
+    -ms-border-radius: 0.41666666em;
+}
+*/
+
+/*********************************************************************************/
+/*********************************************************************************/
+/*********************************************************************************/
+
+
+/* NEW STYLES */
+
+
+/* ========================================================================== 
+ ***************************** imeji basic styles ***************************
+ * Global CSS Helpers
+ * ========================================================================== */
+
+.imj_clear {
+	clear: both;	
+}
+
+.imj_invisible {
+	visibility: hidden; 
+}
+
+.imj_noDisplay {
+	display: none;
+}
 
 /* overwrite of the old font-family style (in apperance.css) 
  * with font-family: 'Open Sans',sans-serif; 
  * loaded via Google-Webfonts 
+ * choose your own font here!
    =========================================================================  */
    
 @import url(http://fonts.googleapis.com/css?family=Open+Sans); 
+
+
+/* imeji base settings - set body width and height to 100% for all pages 
+   =========================================================================  */
+
+html, body {
+	background-color: #292929;
+	height: 100%;
+	width: 100%;
+	margin: 0px;
+ 	padding: 0px;
+}
+
 
 body, label, input, textarea, select, button, input.numberLabel, h1, h2, h3, h4, h5, h6, a, p {
     font-family: 'Open Sans',sans-serif;
@@ -152,7 +212,6 @@ select {
 input[type="radio"] {
     margin: 0; 
 }
-
 
 
 /* special styles for welcome-page - start-page 

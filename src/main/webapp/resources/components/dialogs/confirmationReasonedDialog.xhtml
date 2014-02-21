@@ -1,0 +1,42 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:composite="http://java.sun.com/jsf/composite">
+	
+	<composite:interface>
+		<composite:attribute name="bean" required="true"/>
+		<composite:attribute name="submitAction" required="true" type="java.lang.String"/>
+		<composite:attribute name="submitLabel" required="true" type="java.lang.String"/>
+		<composite:attribute name="confirmationText" required="true" type="java.lang.String"/>
+		<composite:attribute name="dialogId" required="true" type="java.lang.String"/>
+		<composite:attribute name="confirmationLabel" type="java.lang.String"/>
+	</composite:interface>
+	
+	<composite:implementation>
+		<ui:fragment rendered="#{SessionBean.user != null}">
+			<div id="#{cc.attrs.dialogId}" class="imj_modalDialogBox" style="display:none;">
+				<h:form id="discardForm">
+					<div class="imj_confirmationText">
+						<p>
+							<h:outputText value="#{cc.attrs.confirmationText}"/>
+						</p>
+					</div>
+					<div class="imj_confirmationReasonTextarea">
+						<h:outputLabel value="#{lbl.withdraw_comment}" for="discardComment"/>
+						<h:inputTextarea id="discardComment" value="#{cc.attrs.bean.discardComment}" valueChangeListener="#{cc.attrs.bean.discardCommentListener}" styleClass="imj_dialogReasonText">
+							<f:ajax execute="@this" render="buttonDiscard" event="keyup"/>
+						</h:inputTextarea>
+					</div>
+					<h:panelGroup layout="block" styleClass="imj_submitPanel" id="buttonDiscard">
+						<button onclick="closeDialog('#{cc.attrs.dialogId}');" class="imj_cancelButton">
+							<h:outputText value="#{lbl.cancel}"/>
+						</button>
+						<h:commandButton value="#{cc.attrs.submitLabel}" action="#" styleClass="imj_disabledButton" onclick="return false" rendered="#{cc.attrs.bean.discardComment == ''}"/>
+				 		<h:commandButton id="btnDiscardContainer" action="#{cc.attrs.bean[cc.attrs.submitAction]}" value="#{cc.attrs.submitLabel}" styleClass="imj_submitButton" rendered="#{cc.attrs.bean.discardComment != ''}"/>
+					</h:panelGroup>
+				</h:form>
+			</div>
+		</ui:fragment>
+	</composite:implementation>
+</html>

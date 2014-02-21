@@ -1,118 +1,57 @@
-<ui:composition template="templates/template.xhtml" xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core">			
-	<ui:define name="headline">
-		<h1>
-			<h:outputText value="#{AlbumBean.album.metadata.title}"/> 
-		</h1>
-	</ui:define>	
+<ui:composition template="templates/sub_template/template_metadata_mediaContainer.xhtml" 
+	xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:imjc="http://java.sun.com/jsf/composite/components"
+	xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs">
 	
-	<ui:define name="contentMenu">
+	<ui:param name="currentMainMenu" value="album"/>
 	
-		<h:outputLink id="lnkViewHome" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumBean.id}" rendered="true">
-			<h:outputText value="#{lbl.album_home}"/>
-		</h:outputLink>
+	<ui:param name="metadataView" value="yes"/>
+	
+	<ui:param name="containerHeadline" value="#{lbl.album_information}"/>
+	<ui:param name="metadataBean" value="#{AlbumBean}"/>
+	<ui:param name="metadataContextBean" value="#{metadataBean.album}"/>
+	<ui:param name="headline" value="#{metadataContextBean.metadata.title}"/>
+	<ui:param name="navigationContextURL" value="#{Navigation.albumUrl}"/>
+	
+	
+	
+	<ui:define name="actionsMenu">
+		<h:panelGroup layout="block" styleClass="imj_contentSubMenu">
+			<h:outputLink id="lnkViewHome" styleClass="imj_contentSubMenuItem" value="#{Navigation.albumUrl}#{AlbumBean.id}" rendered="#{AlbumBean.size > 0}">
+				<h:outputText value="#{lbl.album_home}"/>
+			</h:outputLink>
 		
-		<h:outputText styleClass="imj_contentMenuSeparator" />
-		
-		<h:outputLink id="lnkViewCollectionAllImages" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumBean.id}/#{Navigation.browsePath}?q=" rendered="#{AlbumBean.size > 0}">
-			<h:outputText value="#{lbl.view_images}"/>
-		</h:outputLink>
-		
-		<h:outputText styleClass="imj_contentMenuSeparator" rendered="#{AlbumBean.size > 0}"/>
-		
-		<h:outputText value="#{lbl.album_metadata}" styleClass="imj_contentMenuItem"/>
+			<h:outputLink id="lnkViewCollectionAllImages" styleClass="imj_contentSubMenuItem" value="#{Navigation.albumUrl}#{AlbumBean.id}/#{Navigation.browsePath}?q=" rendered="#{AlbumBean.size > 0}">
+				<h:outputText value="#{lbl.view_images}"/>
+			</h:outputLink>
+			
+			<h:outputText value="#{lbl.album_metadata}" styleClass="imj_contentSubMenuItem imj_active"/>
+			
+			<h:outputLink styleClass="imj_contentSubMenuItem" value="#{Navigation.shareUrl}?uri=#{AlbumBean.album.id}" rendered="#{AlbumBean.album.status=='PENDING' and AlbumBean.admin}">
+				<h:outputText value="#{lbl.album_share}"/>
+			</h:outputLink>
+			
+			<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('release-item-dialog');" rendered="#{AlbumBean.editable and AlbumBean.album.status=='PENDING' and AlbumBean.size > 0}">
+				<h:outputText value="#{lbl.release}"/>
+			</h:outputLink>
+			
+			<h:outputLink id="lnkWithdrawCollection" styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('item:dialDiscardContainer:dialogWithdraw');" rendered="#{AlbumBean.editable and AlbumBean.album.status=='RELEASED'}">
+				<h:outputText value="#{lbl.withdraw}"/>
+			</h:outputLink>
+			
+			<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('delete-item-dialog');" rendered="#{AlbumBean.deletable}">
+				<h:outputText value="#{lbl.delete}"/>
+			</h:outputLink>
+		</h:panelGroup>
 		
 	</ui:define>
 	
-	<ui:define name="mainContent">
-		<h:panelGroup layout="block" styleClass="full_area0">
-			<h:panelGroup layout="block" styleClass="full_area0 fullItem">
-			
-			<h:panelGroup layout="block" styleClass="full_area0 preListHeader" style="border-width: 0px !important;">
-				 	<ui:include src="./include/History.xhtml"></ui:include>
-				 </h:panelGroup>
-				
-				<h:panelGroup layout="block" styleClass="full_area0 itemBlock">
-					<h3 class="xLarge_area0_p8 endline blockHeader">
-						<h:outputText value="#{lbl.metadata}"/>
-						<h:outputLink id="lnkEditMetadata" styleClass="large_area0" value="#{Navigation.albumUrl}#{AlbumBean.id}/#{Navigation.editPath}?init=1" rendered="#{AlbumBean.editable and AlbumBean.album.status != 'WITHDRAWN'}">
-							<h:outputText value="#{lbl.edit}"/>
-						</h:outputLink>
-					</h3>
-					<span class="seperator"/>
-					<h:panelGroup>
-						<!-- Picture status of the Collection -->
-						<div class="free_area0 itemBlockContent endline">	
-							<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-								<b class="xLarge_area0_p8 endline labelLine clear">
-									<h:outputText value="#{lbl.status}"/>
-									<span class="noDisplay">: </span>
-								</b>
-								<h:panelGroup layout="block" styleClass="large_area0 medium_marginLExcl statusIconArea">
-									<h:panelGroup layout="block" styleClass="big_imgArea statusIcon pendingItem" rendered="#{AlbumBean.album.status == 'PENDING'}"/>
-									<h:panelGroup layout="block" styleClass="big_imgArea statusIcon releasedItem" rendered="#{AlbumBean.album.status == 'RELEASED'}"/>
-									<h:panelGroup layout="block" styleClass="big_imgArea statusIcon withdrawnItem" rendered="#{AlbumBean.album.status == 'WITHDRAWN'}"/>
-									<h:panelGroup layout="block" styleClass="medium_area0">
-										<h:outputText value="#{lbl['private']}" rendered="#{AlbumBean.album.status == 'PENDING'}"/>
-										<h:outputText value="#{lbl.published}" rendered="#{AlbumBean.album.status == 'RELEASED'}"/>
-										<h:outputText value="#{lbl.withdrawn}" rendered="#{AlbumBean.album.status == 'WITHDRAWN'}"/>
-									</h:panelGroup>
-								</h:panelGroup>
-							</h:panelGroup>
-							
-							<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-								<b class="xLarge_area0_p8 endline labelLine clear">
-									<h:outputText value="#{lbl.description}"/>
-									<span class="noDisplay">: </span>
-								</b>
-								<span class="xHuge_area0 xTiny_marginLExcl endline">
-									<h:outputText id="description" escape="false" value="#{AlbumBean.album.metadata.description}" styleClass=""/>
-									<br/>
-								</span>
-							</h:panelGroup>
-							
-							<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-								<ui:repeat var="creator" value="#{AlbumBean.album.metadata.persons}">
-									<b class="xLarge_area0_p8 endline labelLine clear">
-										<h:outputText value="#{lbl.authors}"/>
-										<span class="noDisplay">: </span>
-									</b>
-									
-									<span class="xHuge_area0 xTiny_marginLExcl endline">
-										<h:outputLabel value="#{lbl.family_name} :   "/>
-										<h:outputText id="inputCreator" styleClass="quad_txtOutput" value="  #{creator.familyName}"/>
-									</span>
-									
-									<b class="xLarge_area0_p8 endline labelLine clear">
-										<h:outputText value=" #{lbl.first_name} " style="visibility:hidden;"/>
-										<span class="noDisplay">: </span>
-									</b>
-									<span class="xHuge_area0 xTiny_marginLExcl endline">
-										<h:outputLabel value="#{lbl.first_name} :   "/>
-										<h:outputText id="inputCreator2" styleClass="quad_txtOutput" value="   #{creator.givenName}"/>
-									</span>
-										
-									<b class="xLarge_area0_p8 endline labelLine clear">
-										<h:outputText value=" #{lbl.organization} " style="visibility:hidden;"/>
-										<span class="noDisplay">: </span>
-									</b>
-									<span class="xHuge_area0 xTiny_marginLExcl endline">
-										<h:outputText value="#{lbl.organization} : "/>
-										<ui:repeat var="organization" value="#{creator.organizations}" varStatus="indexO">
-											<h:panelGroup styleClass="endline">
-												<span class="endline">
-													<h:outputText value=",  " rendered="#{indexO.index > 0}"/>
-													<h:outputText value=" #{organization.name}"/>
-												</span>
-											</h:panelGroup>
-										</ui:repeat>
-									</span>
-									
-								</ui:repeat>
-							</h:panelGroup>
-						</div>
-					</h:panelGroup>
-				</h:panelGroup>
-			</h:panelGroup>
-		</h:panelGroup>
+	<ui:define name="modalDialogs_from_site">
+		<dialog:confirmationDialog bean="#{AlbumBean.album}" submitAction="release" confirmationText="#{msg.confirmation_release_album}?" submitLabel="#{lbl.release}" dialogId="release-item-dialog" rendered="#{AlbumBean.editable and AlbumBean.album.status=='PENDING' and AlbumBean.size > 0}"/>
+		<dialog:confirmationDialog bean="#{AlbumBean.album}" submitAction="delete" confirmationText="#{msg.confirmation_delete_album}" submitLabel="#{lbl.delete}" dialogId="delete-item-dialog" rendered="#{AlbumBean.deletable}"/>
+		<imjc:DiscardContainer id="dialDiscardContainer" bean="#{AlbumBean.album}" discardComment="#{AlbumBean.album.discardComment}" index="item" rendered="#{AlbumBean.editable and AlbumBean.album.status=='RELEASED'}"/>
 	</ui:define>
 </ui:composition>

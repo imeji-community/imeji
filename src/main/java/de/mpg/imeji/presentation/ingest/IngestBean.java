@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.JAXBException;
+
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -15,7 +16,10 @@ import org.apache.log4j.Logger;
 import org.xml.sax.SAXParseException;
 
 import de.mpg.imeji.logic.ingest.controller.IngestController;
+import de.mpg.imeji.logic.security.Security;
+import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.AuthorizationBean;
 import de.mpg.imeji.presentation.collection.ViewCollectionBean;
 import de.mpg.imeji.presentation.session.SessionBean;
@@ -338,5 +342,27 @@ public class IngestBean
     public void setFile(File file)
     {
         this.file = file;
+    }
+    
+    /**
+     * true if current {@link User} can UPDATE the {@link CollectionImeji}
+     * 
+     * @return
+     */
+    public boolean isEditable()
+    {
+        Security security = new Security();
+        return security.check(OperationsType.UPDATE, session.getUser(), collection);
+    }
+    
+    /**
+     * true if current {@link User} can DELETE the {@link CollectionImeji}
+     * 
+     * @return
+     */
+    public boolean isDeletable()
+    {
+        Security security = new Security();
+        return security.check(OperationsType.DELETE, session.getUser(), collection);
     }
 }

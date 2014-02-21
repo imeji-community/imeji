@@ -5,6 +5,7 @@
 	xmlns:imjc="http://java.sun.com/jsf/composite/components">
 	<ui:remove><!-- License: src/main/resources/license/escidoc.license --></ui:remove>
 	<h:panelGroup id="ajaxList">
+	<!-- TODO: deprecated composition -->
 		<div class="full_area0 itemList loggedIn collectionList">
 			<div class="full_area0 listHeader">
 				<h:form id="headerForm">
@@ -151,10 +152,13 @@
 									<h:outputLink styleClass="free_Area0 xTiny_marginRIncl" value="#" onclick="openDialog('list:#{index.index}:dialogDelete');" rendered="#{container.deletable}" >
 										<h:outputText value="#{lbl.delete}"/>
 									</h:outputLink>								
+									
 									<imjc:DiscardContainer id="dialDiscardContainer" bean="#{container}" discardComment="#{container.discardComment}" index="#{index.index}"/>
+									
 									<ui:include src="../confirmationPages/ContainerDelete.xhtml">
 										<ui:param name="bean" value="#{container}"/>
 									</ui:include>
+									
 									<ui:include src="../confirmationPages/ContainerRelease.xhtml">
 										<ui:param name="bean" value="#{container}"/>											
 									</ui:include>
@@ -191,6 +195,7 @@
 				</ui:repeat>
 			</ol>
 		</div>
+	
 		<script type="text/javascript">
 			setListDefaultStatus();
 		/*	jQuery(document).ready(function(){

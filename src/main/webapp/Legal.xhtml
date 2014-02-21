@@ -1,13 +1,17 @@
-<ui:composition template="templates/template.xhtml"
+<ui:composition template="templates/template_site.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
-	<ui:param name="headline" value="#{lbl.legal}" />
+	
+	<ui:param name="headline" value="#{lbl.legal}"/>
+	
 	<ui:define name="mainContent">
-		<div class="full_area0_p8 infoPage">
+		<ui:include src="./include/History.xhtml"/>
+		
+		<h:panelGroup layout="block" id="imj_ajaxWrapper" class="imj_legalPage">
 			<!-- Main Content -->
 			<h:outputText escape="false" value="#{StaticContent.legalContent}" />
-		</div>
+		</h:panelGroup>
 	</ui:define>
 </ui:composition>

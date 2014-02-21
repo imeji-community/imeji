@@ -1,0 +1,63 @@
+<ui:composition template="../template_site.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:imjc="http://java.sun.com/jsf/composite/components">
+	
+	<ui:define name="init">
+		<h:outputText value="#{paginatorListSessionBean.initPage}"/>
+		<h:outputText value="#{paginatorListSessionBean.initPaginator}"/>
+	</ui:define>
+	
+	<ui:define name="modalDialogs_from_template">
+		<!-- Confirmation Pages -->
+		<ui:include src="../../confirmationPages/AllDelete.xhtml">
+			<ui:param name="bean" value="#{paginatorListSessionBean}"/>
+		</ui:include>
+		<ui:include src="../../confirmationPages/AllWithdraw.xhtml">
+			<ui:param name="bean" value="#{paginatorListSessionBean}"/>
+		</ui:include>
+		<ui:include src="../../confirmationPages/SelectedDelete.xhtml">
+			<ui:param name="bean" value="#{paginatorListSessionBean}"/>
+		</ui:include>
+		<ui:include src="../../confirmationPages/SelectedWithdraw.xhtml">
+			<ui:param name="bean" value="#{paginatorListSessionBean}"/>
+		</ui:include>
+	</ui:define>
+	
+	
+	<!-- Main Content - Image tiled list - START -->
+	<ui:define name="mainContent">
+		
+		<!-- Breadcrumb - History -->
+		<ui:include src="../../include/History.xhtml"></ui:include>
+		
+		<!-- AJAX Wrapper - START -->
+		<h:panelGroup layout="block" id="imj_ajaxWrapper">
+			
+			<!-- Selection Info Panel -->
+			<imjc:selectionInfoPanel fSession="#{FiltersSession}" facetBean="#{paginatorListSessionBean}" currentMainMenu="#{currentMainMenu}" 
+									 browseToAllUrl="#{browseToAllItemsUrl}" numberOfElements="#{paginatorListSessionBean.totalNumberOfElements}"/>
+			
+			<!-- Page Browser GotoBox -->
+			<imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}" addJSFunctions="yes"/>
+			
+			<!-- Media List -->
+			<imjc:tiledMediaList picList="#{paginatorListSessionBean}"/>
+			
+			<!-- Facets -->
+			<h:panelGroup layout="block" id="imj_ajaxFacets">
+				<imjc:facets id="facets" paginatorBean="#{paginatorListSessionBean}"/>
+			</h:panelGroup>
+				
+			<!-- Page Browser GotoBox -->
+			<imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}"/>
+			
+		</h:panelGroup>
+		<!-- AJAX Wrapper - END -->
+		
+	</ui:define>
+	<!-- Main Content - END -->
+	
+</ui:composition>

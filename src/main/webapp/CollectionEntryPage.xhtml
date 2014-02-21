@@ -1,197 +1,30 @@
-<ui:composition template="templates/template.xhtml" 
+<ui:composition template="templates/sub_template/template_entrypage.xhtml" 
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:imjc="http://java.sun.com/jsf/composite/components">
-	<ui:define name="headline">
-		<h1>
-			<h:outputText value="#{ViewCollectionBean.collection.metadata.title}"/> 
-		</h1>
+	xmlns:imjc="http://java.sun.com/jsf/composite/components"
+	xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs"
+	xmlns:menu="http://java.sun.com/jsf/composite/components/menu">
+	
+	<ui:param name="headline" value="#{ViewCollectionBean.collection.metadata.title}"/>
+	<ui:param name="currentMainMenu" value="collection"/>
+	<ui:param name="logicBean" value="#{ViewCollectionBean}"/>
+	<ui:param name="listSize" value="#{ViewCollectionBean.size}"/>
+	
+	<ui:define name="init">
+		<h:outputText value="#{ViewCollectionBean.init()}"/>
 	</ui:define>
-	<ui:define name="contentMenu">
-		<h:panelGroup rendered="#{ViewCollectionBean.visible}">
-		<!-- removed styleClass="half_area0" -->
-			<h:outputText styleClass="imj_contentMenuItem" value="#{lbl.collection_home}"/>
-			<h:outputText styleClass="imj_contentMenuSeparator"/>
-			<h:outputLink id="lnkViewCollectionAllImages" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.browsePath}?q=" rendered="#{ViewCollectionBean.size > 0}">
-				<h:outputText value="#{lbl.view_images}"/>
-			</h:outputLink>
-			<h:outputText styleClass="imj_contentMenuSeparator" rendered="#{ViewCollectionBean.size > 0}"/>
-			<h:outputLink id="lnkViewCollectionDetail" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/infos?init=1" rendered="true">
-				<h:outputText value="#{lbl.collection_metadata}"/>
-			</h:outputLink>
-			<h:outputText styleClass="imj_contentMenuSeparator"/>
-			<h:outputLink id="lnkUploadImages" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.uploadPath}?init=1" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status != 'WITHDRAWN'}">
-				<h:outputText value="#{lbl.upload_images}"></h:outputText>
-			</h:outputLink>
-			<h:outputText styleClass="imj_contentMenuSeparator"	rendered="#{AuthorizationBean.admin}" />
-			<h:outputLink id="lnkIngest" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/ingest?init=1" rendered="#{AuthorizationBean.admin}">
-				<h:outputText value="#{lbl.ingest}" />
-			</h:outputLink>
-		</h:panelGroup>
-	</ui:define>
+	
 	<ui:define name="actionsMenu">
-		<h:panelGroup styleClass="full_area0"> <!-- This panelGroup is needed for IE -->
-		<h:panelGroup layout="block" styleClass="imj_contentSubMenu" rendered="#{ViewCollectionBean.visible}">
-      		<h:outputLink styleClass="imj_contentSubMenuItem" value="#{Navigation.shareUrl}?uri=#{ViewCollectionBean.collection.id}" rendered="#{ViewCollectionBean.collection.status!='WITHDRAWN' and ViewCollectionBean.admin}" >
-				<h:outputText value="#{lbl.collection_share}"/>		
-			</h:outputLink>
-			<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialogRelease');"  rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status=='PENDING'}">
-				<h:outputText value="#{lbl.collection_release}"/>
-			</h:outputLink>
-			<h:outputLink id="lnkWithdrawCollection" styleClass="imj_contentSubMenuItem" onclick="openDialog('dialDiscardContainer:dialogWithdraw');"  value="#" rendered="#{ViewCollectionBean.editable and ViewCollectionBean.collection.status=='RELEASED'}">
-				<h:outputText value="#{lbl.withdraw}"/>
-			</h:outputLink>
-			<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialogDelete');" rendered="#{ViewCollectionBean.deletable}">
-				<h:outputText value="#{lbl.delete}"/>
-			</h:outputLink>
-		</h:panelGroup>
-		</h:panelGroup>
-		<ui:include src="confirmationPages/ContainerRelease.xhtml">
-			<ui:param name="bean" value="#{ViewCollectionBean}"/>
-		</ui:include>
-		<ui:include src="confirmationPages/ContainerDelete.xhtml">
-			<ui:param name="bean" value="#{ViewCollectionBean}"/>
-		</ui:include>
-		<imjc:DiscardContainer id="dialDiscardContainer" bean="#{ViewCollectionBean}" discardComment="#{ViewCollectionBean.collection.discardComment}"/>
-	</ui:define>
-	<ui:define name="mainContent">
-		<div id="preListHeader" class="full_area0 itemList" style="border-width: 0px !important;">
-			<h:panelGroup layout="block" styleClass="full_area0 itemList" style="border-bottom-width:0 !important;">
-				 	<ui:include src="./include/History.xhtml"></ui:include>
-			 </h:panelGroup>
-		</div>
-		<h:panelGroup layout="block" styleClass="full_area0 fullItem" rendered="#{!ViewCollectionBean.visible}">
-		 	<ui:include src="./include/LoginFormular.xhtml"/>
-		 </h:panelGroup>
-		<h:panelGroup layout="block" styleClass="full_area0" rendered="#{ViewCollectionBean.visible}">
-			<h:panelGroup layout="block" styleClass="full_area0 fullItem">
-				<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder">
-					<h:panelGroup styleClass="full_area1_p8 small_marginLExcl">
-						<!-- COLLECTION IMAGES -->
-						<h:outputLink value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.browsePath}?q=" style="color:transparent;" styleClass="xTiny">
-							<ui:repeat var="thumb" value="#{ViewCollectionBean.thumbnails}">
-								<h:graphicImage style="padding: 5px" value="#{Navigation.applicationUrl}file?id=#{thumb.link}"/>
-							</ui:repeat>	
-						
-							<h:outputLink  styleClass="medium_txtArea medium_marginRExcl" style="float:right;" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/#{Navigation.browsePath}?q=" rendered="#{ViewCollectionBean.collection.status != 'WITHDRAWN'}" >
-								<h:outputText value ="#{lbl.collection_view_all_images}"/> <br/>
-								<h:graphicImage value="/resources/imj_iconset/6CAD2F/imjArrowThinRight_23.png" style="float:right"/>
-							</h:outputLink>							
-						</h:outputLink>	
-
-						<h:panelGroup styleClass="free_area0" style="text-align:center;" rendered="#{ViewCollectionBean.collection.status == 'WITHDRAWN'}">
-							<h:panelGroup styleClass="big_imgArea statusIcon withdrawnItem"/>
-							<br/>
-							<h:outputText value="#{lbl.withdrawn}"/>							
-						</h:panelGroup>
-						
-					</h:panelGroup>
-					
-					<div class="full_area0 fullItem">
-						<div class="fullItemControls">
-							<h:outputLink id="lnkViewColUtilPage" styleClass="free_area0 actual" value="#{ViewCollectionBean.pageUrl}?tab=UTIL" rendered="#{ViewCollectionBean.tab == 'UTIL'}">
-								<h:outputText value="#{lbl.view_util}"/>
-							</h:outputLink>
-							<h:outputLink id="lnkViewColUtilPage2" styleClass="free_area0" value="#{ViewCollectionBean.pageUrl}?tab=UTIL" rendered="#{ViewCollectionBean.tab != 'UTIL'}">
-								<h:outputText value="#{lbl.view_util}"/>
-							</h:outputLink>
-							<h:panelGroup styleClass="seperator" />
-							<h:outputLink id="lnkViewColPage" styleClass="free_area0 actual" value="#{ViewCollectionBean.pageUrl}?tab=HOME" rendered="#{ViewCollectionBean.tab != 'UTIL'}">
-								<h:outputText value="#{lbl.view_desc}"/>
-							</h:outputLink>
-							<h:outputLink id="lnkViewColPage2" styleClass="free_area0" value="#{ViewCollectionBean.pageUrl}?tab=HOME" rendered="#{ViewCollectionBean.tab == 'UTIL'}">
-								<h:outputText value="#{lbl.view_desc}"/>
-							</h:outputLink>
-						</div>
-					</div>
-					
-					<h:panelGroup id="description" styleClass="full_area0_p8" rendered="#{ViewCollectionBean.tab != 'UTIL'}">
-						<h:panelGroup>
-							<h2>
-								<h:outputText styleClass="full_area0_p4" value="#{ViewCollectionBean.collection.metadata.title}"/>
-							</h2>
-							<h:panelGroup styleClass="full_area0_p8" style="color:red;" rendered="#{ViewCollectionBean.collection.discardComment != null and ViewCollectionBean.collection.discardComment != ''}">
-								<br/>
-								<h:outputText value="#{lbl.withdraw_comment}:"/><br/>
-								<h:outputText value="#{ViewCollectionBean.collection.discardComment}"/>
-							</h:panelGroup>
-							<h:panelGroup styleClass="full_area0">
-								<br/>
-								<h:outputText escape="false" value="#{ViewCollectionBean.formattedDescription}"/>
-								<br/>
-							</h:panelGroup>
-						</h:panelGroup>
-					</h:panelGroup>
-					
-					<h:panelGroup id="util" styleClass="full_area0_p8" rendered="#{ViewCollectionBean.tab == 'UTIL'}">
-					<h:panelGroup layout="block" styleClass="full_area0 itemBlock">						
-							<h3 class="xLarge_area0_p8 endline blockHeader">
-								<h:outputText id="lblViewColFull_lblUtil" value="#{lbl.colUtil}" /><br/>
-							</h3>
-							<span class="seperator"></span>
-							<h:panelGroup  styleClass="free_area0 itemBlockContent endline">
-								<br/>
-								<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
-									<b class="xLarge_area0_p8 endline labelLine clear">
-										<h:outputText value="#{lbl.cite}" /> 
-										<span class="noDisplay">: </span>
-									</b>
-									<span class="xHuge_area0 xTiny_marginLExcl endline"> 
-										<h:outputText value="#{ViewCollectionBean.citation}" escape="false"/>
-									</span>
-								</h:panelGroup>	
-														
-								<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
-									<b class="xLarge_area0_p8 endline labelLine clear">
-										<h:outputText value="#{lbl.colCreator}" /> 
-										<span class="noDisplay">: </span>
-									</b>
-									<span class="xHuge_area0 xTiny_marginLExcl endline"> 
-										<h:outputText value="#{ViewCollectionBean.collectionCreator.name}" />
-									</span>
-								</h:panelGroup>		
-								
-								<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
-									<b class="xLarge_area0_p8 endline labelLine clear">
-										<h:outputText value="#{lbl.colNumItems}" /> 
-										<span class="noDisplay">: </span>
-									</b>
-									<span class="xHuge_area0 xTiny_marginLExcl endline"> 
-										<h:outputText value="#{ViewCollectionBean.collectionNumberOfItems}" />
-									</span>
-								</h:panelGroup>		
-								
-								<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
-									<b class="xLarge_area0_p8 endline labelLine clear">
-										<h:outputText value="#{lbl.identifier}" /> 
-										<span class="noDisplay">: </span>
-									</b>
-									<span class="xHuge_area0 xTiny_marginLExcl endline"> 
-										<h:outputText value="#{ViewCollectionBean.collection.id}" />
-									</span>
-								</h:panelGroup>						
-										
-								<h:panelGroup styleClass="free_area0 endline itemLine noTopBorder">
-									<b class="xLarge_area0_p8 endline labelLine clear">
-										<h:outputText value="#{lbl.qrcode}" /> 
-										<span class="noDisplay">: </span>
-									</b>
-									<span class="xHuge_area0 xTiny_marginLExcl endline"> 
-										<div id="qr"></div>
-									</span>
-								</h:panelGroup>
-							</h:panelGroup>						
-					</h:panelGroup>
-				</h:panelGroup>
-					
-				</h:panelGroup>
-			</h:panelGroup>
-		</h:panelGroup>
+		<menu:context_subNavigation contextId="#{logicBean.id}" contextUrl="#{Navigation.collectionUrl}" curMainMenu="#{currentMainMenu}" userHasAdminRights="#{AuthorizationBean.admin}" userHasEditRights="#{logicBean.editable and logicBean.collection.status != 'WITHDRAWN'}" hasContent="#{logicBean.size > 0}" navBean="#{Navigation}" activeMenu="start"/>
 		
-		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/qrcode.js"/>
-		<script>
+		<menu:context_actionMenu isUserLoggedIn="#{SessionBean.user != null}" curMainMenu="#{currentMainMenu}" navBean="#{Navigation}" collectionStatus="#{logicBean.collection.status}" contextId="#{logicBean.id}" isDeletable="#{logicBean.deletable}" isEditable="#{logicBean.editable}" hasContent="#{logicBean.size > 0}" contextDownloadParam="&amp;col=#{logicBean.id}"/>
+	</ui:define>
+	
+	<ui:define name="additonalHeaderScripts">
+		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/qrcode.js"></script>
+		<script type="text/javascript">
 			jQuery(document).ready(function() {
 				var qrHtml = document.getElementById('qr');
 				if (qrHtml != null){
@@ -211,4 +44,13 @@
 		</script>
 		
 	</ui:define>
+	<!-- COLLECTION Menu END -->
+	
+	<!-- ModalDialogs - Confirmation Pages -->
+	<ui:define name="modalDialogs_from_site">
+		<dialog:confirmationDialog submitAction="release" bean="#{logicBean}" confirmationText="#{msg.confirmation_release_collection}?" submitLabel="#{lbl.release}" dialogId="releaseMenuItemDialog" rendered="#{logicBean.editable and logicBean.collection.status.toString().toUpperCase() == 'PENDING' and logicBean.size > 0}"/>
+		<dialog:confirmationDialog submitAction="delete" bean="#{logicBean}" confirmationText="#{msg.confirmation_delete_collection}?" submitLabel="#{lbl.delete}" dialogId="deleteMenuItemDialog" rendered="#{logicBean.deletable}"/>
+		<dialog:confirmationReasonedDialog submitAction="withdraw" bean="#{logicBean}" confirmationText="#{msg.confirmation_withdraw_collection}" submitLabel="#{lbl.withdraw}" dialogId="withdrawMenuItemDialog" rendered="#{logicBean.editable and logicBean.collection.status.toString().toUpperCase() == 'RELEASED'}"/>
+	</ui:define>
+	
 </ui:composition>

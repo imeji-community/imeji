@@ -24,7 +24,7 @@
 	<ui:define name="modalDialogs_from_site">
 		<dialog:confirmationDialog submitAction="release" bean="#{paginatorListSessionBean}" confirmationText="#{msg.confirmation_release_album}?" submitLabel="#{lbl.release}" dialogId="releaseMenuItemDialog" rendered="#{paginatorListSessionBean.editable and paginatorListSessionBean.album.status.toString().toUpperCase() == 'PENDING' and paginatorListSessionBean.totalNumberOfElements > 0}"/>
 		<dialog:confirmationDialog submitAction="delete" bean="#{paginatorListSessionBean}" confirmationText="#{msg.confirmation_delete_album}?" submitLabel="#{lbl.delete}" dialogId="deleteMenuItemDialog" rendered="#{paginatorListSessionBean.deletable}"/>
-		<dialog:confirmationReasonedDialog submitAction="withdraw" bean="#{paginatorListSessionBean}" confirmationText="#{msg.confirmation_withdraw_collection}" submitLabel="#{lbl.withdraw}" dialogId="withdrawMenuItemDialog" rendered="#{paginatorListSessionBean.editable and paginatorListSessionBean.album.status.toString().toUpperCase() == 'RELEASED'}"/>
+		<dialog:confirmationReasonedDialog submitAction="withdraw" bean="#{paginatorListSessionBean}" confirmationText="#{msg.confirmation_withdraw_album}" submitLabel="#{lbl.withdraw}" dialogId="withdrawMenuItemDialog" rendered="#{paginatorListSessionBean.editable and paginatorListSessionBean.album.status.toString().toUpperCase() == 'RELEASED'}"/>
 	</ui:define>
 	
 </ui:composition>

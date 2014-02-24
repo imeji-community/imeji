@@ -1461,6 +1461,9 @@ OLD:
 	width: 91.25%;
 	margin: 1% 4%;
 }
+.imj_entryPagePreviewTiledList + .imj_metadataList {
+	padding: 1% 4%;
+}
 
 
 
@@ -2757,8 +2760,8 @@ min-height: 6em;
 
 .imj_entryPagePreviewTiledList {
 	margin-bottom: 0.5em;
-    padding: 0 4%;
-    /*width: 91.75%;*/
+    padding: 1% 4%;
+    border-top: 0.090909em solid #6CAE2F;
 }
 
 .imj_entryPagePreviewTiledListItem {
@@ -2778,15 +2781,16 @@ min-height: 6em;
 	height: 2em;
     width: 2em;
 	margin-top: 1em;
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjArrowThinRight_23.png");		
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjArrowThinRight_24.png");		
 	background-color: inherit;
 	background-position: right;
 	background-repeat: no-repeat;
-	border: 0 none;		
+	border: 0 none;
 }
 
-.imj_entryPagePreviewTiledListLinkArrow:hover {	
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjArrowThinRight_23.png");
+.imj_entryPagePreviewTiledListLinkArrow:hover,
+a:hover .imj_entryPagePreviewTiledListLinkArrow {	
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjArrowThinRight_24.png");
 }
 
 .imj_entryPageTitle { 

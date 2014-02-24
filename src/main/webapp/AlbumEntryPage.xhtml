@@ -3,78 +3,28 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets" 
 	xmlns:h="http://java.sun.com/jsf/html" 
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:imjc="http://java.sun.com/jsf/composite/components">
+	xmlns:imjc="http://java.sun.com/jsf/composite/components"
+	xmlns:menu="http://java.sun.com/jsf/composite/components/menu"
+	xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs">
 	
 	<ui:param name="headline" value="#{AlbumBean.album.metadata.title}"/>
 	<ui:param name="currentMainMenu" value="album"/>
 	<ui:param name="logicBean" value="#{AlbumBean}"/>
 	<ui:param name="listSize" value="#{AlbumBean.size}"/>
 	
-	<ui:define name="actionsMenu">
 	
-		<!-- Album - content menu starts here -->	
-		<h:panelGroup rendered="#{AlbumBean.visible}">
-			<div class="imj_contentMenu">
-				<h:outputText value="#{lbl.album_home}" styleClass="imj_contentMenuItem"/>
-				<h:outputText styleClass="imj_contentMenuSeparator"/>
-				<h:outputLink id="lnkViewCollectionAllImages" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumBean.id}/#{Navigation.browsePath}?q=" rendered="#{AlbumBean.size > 0}">
-					<h:outputText value="#{lbl.view_images}"/>
-				</h:outputLink>
-				<h:outputText styleClass="imj_contentMenuSeparator" rendered="#{AlbumBean.size > 0}"/>
-				<h:outputLink id="lnkViewCollectionDetail" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumBean.id}/#{Navigation.infosPath}?init=1" rendered="true">
-					<h:outputText value="#{lbl.album_metadata}"/>
-				</h:outputLink>
-			</div>
-		</h:panelGroup>
-		<!-- content menu END -->	
+	
+	<ui:define name="actionsMenu">
+		<menu:context_subNavigation contextId="#{logicBean.id}" contextUrl="#{Navigation.albumUrl}" curMainMenu="#{currentMainMenu}" userHasAdminRights="#{AuthorizationBean.admin}" userHasEditRights="#{logicBean.editable and logicBean.album.status != 'WITHDRAWN'}" hasContent="#{logicBean.size > 0}" navBean="#{Navigation}" activeMenu="start"/>
 		
-		<!-- content sub-menu starts here -->
-		<h:panelGroup layout="block" styleClass="imj_contentSubMenu">
-			<h:panelGroup>
-				<h:outputLink styleClass="imj_contentSubMenuItem" value="#{Navigation.shareUrl}?uri=#{AlbumBean.album.id}"  rendered="#{AlbumBean.album.status=='PENDING' and AlbumBean.admin}">
-					<h:outputText value="#{lbl.album_share}"/>
-				</h:outputLink>
-				<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialogRelease');" rendered="#{AlbumBean.editable and AlbumBean.album.status=='PENDING'}">
-					<h:outputText value="#{lbl.release}"/>
-				</h:outputLink>
-				<h:outputLink id="lnkWithdrawCollection" styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialDiscardContainer:dialogWithdraw');"  rendered="#{AlbumBean.editable and AlbumBean.album.status=='RELEASED'}">
-					<h:outputText value="#{lbl.withdraw}"/>
-				</h:outputLink>
-				<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialogDelete');" rendered="#{AlbumBean.deletable}">
-					<h:outputText value="#{lbl.delete}"/>
-				</h:outputLink>
-			</h:panelGroup>
-			<ui:include src="confirmationPages/ContainerRelease.xhtml">
-				<ui:param name="bean" value="#{AlbumBean}"/>
-			</ui:include>
-			<ui:include src="confirmationPages/ContainerDelete.xhtml">
-				<ui:param name="bean" value="#{AlbumBean}"/>
-			</ui:include>
-			<imjc:DiscardContainer id="dialDiscardContainer" bean="#{AlbumBean}" discardComment="#{AlbumBean.album.discardComment}"/>
-		</h:panelGroup>
-		<!-- content sub-menu END -->
-		
-		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/qrcode.js"/>
-		<script>
-			jQuery(document).ready(function() {
-				var qrHtml = document.getElementById('qr');
-				if (qrHtml != null){
-					qrHtml.innerHTML = create_qrcode('#{AlbumBean.pageUrl}');
-				}
-			});
-			var draw_qrcode = function(text, typeNumber, errorCorrectLevel) {
-				document.write(create_qrcode(text, typeNumber, errorCorrectLevel) );
-			};
-			var create_qrcode = function(text, typeNumber, errorCorrectLevel, table) {
-				var qr = qrcode(typeNumber || 10, errorCorrectLevel || 'M');
-				qr.addData(text);
-				qr.make();
-				// return qr.createTableTag();
-				return qr.createImgTag();
-			};
-		</script>
-		
-	</ui:define> 
-	<!-- ALBUM Menu END -->
+		<menu:context_actionMenu isUserLoggedIn="#{SessionBean.user != null}" curMainMenu="#{currentMainMenu}" navBean="#{Navigation}" collectionStatus="#{logicBean.album.status}" contextId="#{logicBean.id}" isDeletable="#{logicBean.deletable}" isEditable="#{logicBean.editable}" hasContent="#{logicBean.size > 0}" contextDownloadParam="&amp;album=#{logicBean.id}"/>
+	</ui:define>
+	
+	<!-- ModalDialogs - Confirmation Pages -->
+	<ui:define name="modalDialogs_from_site">
+		<dialog:confirmationDialog submitAction="release" bean="#{logicBean}" confirmationText="#{msg.confirmation_release_album}?" submitLabel="#{lbl.release}" dialogId="releaseMenuItemDialog" rendered="#{logicBean.editable and logicBean.album.status.toString().toUpperCase() == 'PENDING' and logicBean.size > 0}"/>
+		<dialog:confirmationDialog submitAction="delete" bean="#{logicBean}" confirmationText="#{msg.confirmation_delete_album}?" submitLabel="#{lbl.delete}" dialogId="deleteMenuItemDialog" rendered="#{logicBean.deletable}"/>
+		<dialog:confirmationReasonedDialog submitAction="withdraw" bean="#{logicBean}" confirmationText="#{msg.confirmation_withdraw_album}" submitLabel="#{lbl.withdraw}" dialogId="withdrawMenuItemDialog" rendered="#{logicBean.editable and logicBean.album.status.toString().toUpperCase() == 'RELEASED'}"/>
+	</ui:define>
 	
 </ui:composition>

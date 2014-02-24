@@ -73,6 +73,7 @@ public class CollectionImagesBean extends ImagesBean
                 .loadProfile(collection.getProfile()));
         browseInit();
         browseContext = getNavigationString() + id;
+        sb.setSelected(new ArrayList<String>());
         return "";
     }
 

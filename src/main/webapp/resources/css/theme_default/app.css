@@ -1609,6 +1609,9 @@ OLD:
 .imj_optionSet .imj_optionLabel {
 	white-space: normal;
 }
+table.imj_optionSet td label {
+	white-space: normal;
+}
 
 .imj_highlightArea {
 	border-color: #313131;
@@ -2352,6 +2355,52 @@ min-height: 6em;
 .imj_mediaContainerEditMD .imj_sectionHeadline {
 	margin-bottom: 0.545454em;
 }
+
+
+
+/* * batchEditItemList - 
+	file (BatchEdit.xhtml)
+   ==================================================================================
+   ================================================================================== */
+.imj_editGlobalAssignment {
+	width: 91.25%;
+	padding: 1% 4%;
+}
+.imj_editGlobalAssignment .imj_metadataLabel label {
+	display: inline-block;
+	width: 100%;
+}
+.imj_editGlobalAssignment .imj_dataAssignmentPanel {
+	display: inline-block;
+	margin-top: 1em;
+}
+
+.imj_batchEditItemList {
+	width: 91.25%;
+	padding: 1% 4%;
+}
+.imj_editGlobalAssignment + .imj_batchEditItemList {
+	border-top: 0.090909em dashed #6CAE2F;
+}
+.imj_batchEditItemList .imj_previewArea {
+	width: 21.5%;
+	min-width: 12em;
+	display: inline-block;
+	vertical-align: top;
+	text-align: center;
+}
+.imj_batchEditItemList .imj_informationContent {
+	width: 77.25%;
+	display: inline-block;
+	vertical-align: top;
+}
+
+.imj_singleStatementEdit {
+	width: 100%;
+	padding-bottom: 1em;
+}
+
+
 
 /* === Ingest Page ===
  * Ingest.xhtml

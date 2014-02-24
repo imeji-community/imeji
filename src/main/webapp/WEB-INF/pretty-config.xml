@@ -31,7 +31,7 @@
 	</url-mapping>
 	<url-mapping id="editPage">
 		<pattern value="/edit"></pattern>
-		<view-id>/jsf/Edit.xhtml</view-id>
+		<view-id>/jsf/BatchEdit.xhtml</view-id>
 	</url-mapping>
 	<url-mapping id="item">
 		<pattern value="/item/#{ImageBean.id}" />

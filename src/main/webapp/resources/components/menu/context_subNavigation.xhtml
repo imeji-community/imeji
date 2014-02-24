@@ -18,6 +18,8 @@
 		<composite:attribute name="userHasAdminRights" type="java.lang.Boolean" default="false" required="false" shortDescription="@type: Boolean, @dependencies: curMainMenu, required for ingest"/>
 		<composite:attribute name="userHasEditRights" type="java.lang.Boolean" default="false" required="false" shortDescription="@type: Boolean, @dependencies: curMainMenu, required for upload"/>
 		<composite:attribute name="hasContent" type="java.lang.Boolean" default="false" required="false" shortDescription="@type: Boolean, required to show menus (e.g. content startpage, show images)"/>
+		
+		<composite:attribute name="allowedToShare" type="java.lang.Boolean" default="false" required="false" shortDescription="@type: Boolean: depends on logged in status"/>
 	</composite:interface>
 	
 	<composite:implementation>
@@ -67,6 +69,15 @@
 								</h:outputLink>
 							</li>
 						</ui:fragment>
+					</ui:fragment>
+					
+					<ui:fragment rendered="#{cc.attrs.allowedToShare}">
+						<li class="#{curMenuClass}Item">
+							<h:outputLink value="#{cc.attrs.navBean.shareUrl}?uri=#{cc.attrs.navBean.applicationUrl}#{cc.attrs.curMainMenu}/#{cc.attrs.contextId}" >
+								<h:outputText value="#{lbl.album_share}" rendered="#{cc.attrs.curMainMenu == 'album'}"/>
+								<h:outputText value="#{lbl.collection_share}" rendered="#{cc.attrs.curMainMenu == 'collection'}"/>
+							</h:outputLink>
+						</li>
 					</ui:fragment>
 				</ul>
 			</div>

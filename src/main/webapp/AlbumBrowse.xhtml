@@ -14,7 +14,7 @@
 	
 	
 	<ui:define name="actionsMenu">
-		<menu:context_subNavigation contextId="#{paginatorListSessionBean.id}" contextUrl="#{Navigation.albumUrl}" curMainMenu="#{currentMainMenu}" userHasAdminRights="#{AuthorizationBean.admin}" userHasEditRights="#{paginatorListSessionBean.editable}" hasContent="#{paginatorListSessionBean.totalNumberOfElements > 0}" navBean="#{Navigation}" activeMenu="content"/>
+		<menu:context_subNavigation contextId="#{paginatorListSessionBean.id}" contextUrl="#{Navigation.albumUrl}" curMainMenu="#{currentMainMenu}" userHasAdminRights="#{AuthorizationBean.admin}" userHasEditRights="#{paginatorListSessionBean.editable}" hasContent="#{paginatorListSessionBean.totalNumberOfElements > 0}" navBean="#{Navigation}" activeMenu="content" allowedToShare="#{AlbumImagesBean.album.status=='PENDING' and AlbumImagesBean.admin}"/>
 		
 		<menu:context_actionMenu isUserLoggedIn="#{SessionBean.user != null}" sortBean="#{paginatorListSessionBean}" curMainMenu="#{currentMainMenu}" navBean="#{Navigation}" exportQuery="#{paginatorListSessionBean.query}" 
 			collectionStatus="#{paginatorListSessionBean.album.status}" contextId="#{paginatorListSessionBean.id}" isDeletable="#{paginatorListSessionBean.deletable}" isEditable="#{paginatorListSessionBean.editable}" contextDownloadParam="&amp;album=#{paginatorListSessionBean.id}"/>

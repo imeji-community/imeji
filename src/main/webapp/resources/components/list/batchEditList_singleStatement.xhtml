@@ -5,8 +5,10 @@
 	xmlns:composite="http://java.sun.com/jsf/composite">
 	
 	<composite:interface>
+		<composite:attribute name="formObject" required="false"/>
 		<composite:attribute name="navBean" required="true"/>
 		<composite:attribute name="suggestBean" required="true"/>
+		<composite:attribute name="listItem" required="true"/>
 		<composite:attribute name="itemBean" required="true"/>
 		<composite:attribute name="itemStatement" required="true"/>
 		<composite:attribute name="itemLabelBean" required="true"/>
@@ -14,37 +16,6 @@
 	</composite:interface>
 	
 	<composite:implementation>
-		<script type="text/javascript" src="#{cc.attrs.navBean.applicationUrl}resources/js/autocomplete.js"></script>	
-		<!-- CSS class for autocomplete component-->
-		<style type="text/css">
-			.ui-menu {
-				color: #292929;
-				width: 300px;
-				background-color:#292929;
-			}
-			.ui-menu-item{
-				background-color:#292929;
-				width: 300px;
-				font-weight: bold;
-				border-left: 5px;
-			}
-			.ui-corner-all{ }
-			.ui-widget-content{ }
-			.ui-widget{ }
-			.ui-autocomplete{
-				position:absolute;
-				z-index:4000 !important
-			}
-			.ui-autocomplete-loading {
-				background-color:#6CAD2F !important;
-			}
-			.ui-helper-hidden-accessible { 
-				display:none; 
-			}
-		</style>
-		
-		
-		
 		<div class="imj_singleStatementEdit">
 			
 			<ui:fragment rendered="#{cc.attrs.hideLabel == false}">
@@ -209,6 +180,19 @@
 					<h:outputLabel value="#{lbl.geolocation_longitude}" styleClass="imj_metadataLabel"/>
 					<h:inputText id="inputLongitude" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.longitude}" immediate="true" onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')"/>
 				</div>
+			</ui:fragment>
+			
+			
+			<ui:fragment rendered="#{cc.attrs.formObject != null and cc.attrs.formObject != '' and cc.attrs.listItem != null}">
+				<!-- BUTTONS -->
+				<h:panelGroup styleClass="imj_inlineButtonGroup">
+					<h:commandLink id="add" styleClass="imj_buttonAdd_16" action="#{cc.attrs.listItem.addMetadata(md)}" title="#{lbl.add}" value=" " rendered="#{cc.attrs.itemBean.statement.maxOccurs != '1'}">
+						<f:ajax execute="#{cc.attrs.formObject}" render="#{cc.attrs.formObject}" />
+					</h:commandLink>
+					<h:commandLink  id="remove" styleClass="imj_buttonRemove_16" action="#{cc.attrs.listItem.removeMetadata(md)}" title="#{lbl.remove}" value=" " rendered="#{cc.attrs.itemBean.statement.maxOccurs != '1'}">
+						<f:ajax execute="#{cc.attrs.formObject}" render="#{cc.attrs.formObject}" />
+					</h:commandLink>
+				</h:panelGroup>
 			</ui:fragment>
 		</div>
 	</composite:implementation>

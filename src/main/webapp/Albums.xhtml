@@ -2,7 +2,8 @@
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core">
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:menu="http://java.sun.com/jsf/composite/components/menu">
 	
 	<ui:param name="paginatorListSessionBean" value="#{AlbumsBean}"/>
 	<ui:param name="headline" value="#{msg.albums_headline}"/>
@@ -20,41 +21,7 @@
 	
 	
 	<ui:define name="actionsMenu">
-		<h:panelGroup layout="block" styleClass="imj_contentSubMenu">
-		
-			<div class="imj_overlayMenu imj_contentSubMenuItem">
-				<div class="imj_menuHeader">
-					<h:outputText id="txtSort" value="#{lbl.sorting}" styleClass="imj_headerEntry"/>
-				</div>
-				<div class="imj_menuBody">
-					<h:outputText value="#{lbl.sort_by}: "/>
-					<h:form>
-						<h:selectOneMenu id="selSort" value="#{paginatorListSessionBean.selectedSortCriterion}" onchange="submit();">
-							<f:selectItems id="sortItem" value="#{paginatorListSessionBean.sortMenu}"/>
-						</h:selectOneMenu>
-						<h:commandLink id="lnkSortAsc" styleClass="imj_buttonOrderByAsc_16" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{paginatorListSessionBean.selectedSortOrder == 'ASCENDING'}">&#160;</h:commandLink>
-						<h:commandLink id="lnkSortDesc" styleClass="imj_buttonOrderByDesc_16" action="#{paginatorListSessionBean.toggleSortOrder}" rendered="#{paginatorListSessionBean.selectedSortOrder != 'ASCENDING'}">&#160;</h:commandLink>
-					</h:form>
-				</div>
-			</div>
-			
-			<ui:fragment rendered="#{SessionBean.user != null}">
-				<h:panelGroup layout="block" styleClass="imj_overlayMenu imj_contentSubMenuItem">
-					<div class="imj_menuHeader">
-						<h:outputText id="txtFilter" value="#{lbl.filter}" styleClass="imj_headerEntry"/>
-					</div>
-					<div class="imj_menuBody">
-						<h:outputText value="#{lbl.filter_by}: "/>
-						<h:selectOneMenu id="selFilter" value="#{paginatorListSessionBean.selectedFilter}" onchange="window.location.href = '?f=' + this.value" readonly="true">
-							<f:selectItems id="filterItem" value="#{paginatorListSessionBean.filterMenu}"/>
-						</h:selectOneMenu>
-					</div>
-				</h:panelGroup>
-				
-				<h:outputLink id="lnkCreate" styleClass="imj_contentSubMenuItem" value="#{Navigation.createAlbumUrl}">
-					<h:outputText value="#{lbl.album_create}"/>
-				</h:outputLink>
-			</ui:fragment>
-		</h:panelGroup>
+		<menu:context_actionMenu isUserLoggedIn="#{SessionBean.user != null}" curMainMenu="#{currentMainMenu}" downloadEnabled="false" filterBean="#{paginatorListSessionBean}" sortBean="#{paginatorListSessionBean}" navBean="#{Navigation}"/>
 	</ui:define>
+	
 </ui:composition>

@@ -19,6 +19,7 @@ import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
+import de.mpg.imeji.logic.security.Authorization;
 import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -262,5 +263,15 @@ public class CollectionImagesBean extends ImagesBean
     {
         Security security = new Security();
         return security.check(OperationsType.DELETE, sb.getUser(), collection);
+    }
+    /**
+     * True if the current {@link User} is SYSADMIN
+     * 
+     * @return
+     */
+    public boolean isAdmin()
+    {
+        Authorization auth = new Authorization();
+        return auth.isContainerAdmin(sb.getUser(), collection);
     }
 }

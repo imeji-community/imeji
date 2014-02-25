@@ -435,9 +435,7 @@ margin-top: 0.5454em;
 margin-bottom: 0.9090em;  */
 
 .imj_siteHeader {
-    width: 81.3636em;
-    margin: 0 0.0909em 0 0;
-    padding: 0;
+    padding: 0 4%;
 }
 
 
@@ -476,11 +474,9 @@ margin-bottom: 0.9090em;  */
 
 .imj_metaMenuStandardSingleLine {
     width: 100%;
+    text-align: right;
 }
 
-.imj_metaMenuStandardSingleLine .imj_metaMenuItemsAlign {
-    float: right;
-}
 
 .imj_metaMenuStandardSingleLine .imj_metaMenuSeparator {
     height: 1.5454em;
@@ -538,44 +534,74 @@ margin-bottom: 0.9090em;  */
 
 /* ===[ SiteHeader - Logo + Search Area]===
    ================================================== */
-
 .imj_siteHeaderLogoSearchSection {
-    float: left;
-    display: inline;
-    overflow: hidden;
-    width: 81.3636em;
-    height: 5.7272em;
-    margin: 0 0.0909em 0 0;
+    width: 100%;
     padding: 0;
+    margin: 0.454545em 0;
 }
-
-
 
 /* ===[ SiteHeader - Logo ]===
    ================================================== */
-
+.imj_siteHeaderLogoArea {
+	display: inline-block;
+	padding: 0 2em 0 0;
+}
 .imj_siteHeaderLogo {
-    background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/logo_imeji.gif");
-    /* ?!? url("../../imj_iconset/logo_imeji.gif"); ?!? */
-    background-position: left top;
-    background-repeat: no-repeat;
-    float: left;
-    display: inline;
-    overflow: hidden;
-    width: 40.6363em;
-    height: 5em;
-    margin: -1.500em 0.0909em 0 1.3636em;
-    padding: 0;
+	width: 13em;
+	height: 5em;
+	padding: 0;
+	display: inline-block;
+    background: url("/imeji/jsf/javax.faces.resource/imj_iconset/logo_imeji.gif") no-repeat scroll -2.545454em 0 transparent;
 }
 
-.imj_siteHeaderLogoTheme {
-    float: left;
-    display: inline;
-    overflow: hidden;
-    width: 40.6363em;
-    height: 5em;
-    margin: 0 0.0909em 0 0;
-    padding: 0;
+/* ===[ SiteHeader - SimpleSearch ]===
+   ================================================== */
+.imj_simpleSearch {
+    float: right;
+    margin: 1.5em 0 0 0;
+    overflow: visible;
+}
+
+.imj_simpleSearchInputWrapper {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.imj_simpleSearchInput {
+    width: 17em;
+    padding: 0.1em;
+}
+
+.imj_simpleSearchButtonSubmit {
+    height: 1.818em; /*1.7272em*/
+    margin-left: 0.455em; /*0.363636em*/
+    padding: 0.091em 1em; /* 0.0909em 1em*/
+    background-color: #6CAE2F;
+    border-color: #6CAE2F;
+    color: #F0F0F0;
+}
+
+.imj_simpleSearchButtonSubmit:hover {
+	color: #000000;
+    background-color: #4AFF00;
+    border-color: #4AFF00;
+}
+
+.imj_simpleSearch input[type=radio] {
+    border: 0 none;
+    margin: 0.091em 0 0 0.091em;
+}
+
+.imj_simpleSearch input[type=radio]+label {
+	margin-left: 0.181818em;
+    margin-right: 1em
+}
+
+.imj_simpleSearchLinkAdvancedsearch {
+    margin-top: 0.18em;
+    margin-left: 2.0909em;
+    white-space: nowrap;
+    display: inline-block;
 }
 
 
@@ -932,60 +958,6 @@ a:hover .imj_buttonSortAscending_16 {
 }
 
 
-/* ===[ SiteHeader - SimpleSearch ]===
-   ================================================== */
-
-.imj_simpleSearch {
-    float: right;
-    margin: 1.5em 0 0 0;
-    overflow: visible;
-}
-
-.imj_simpleSearchInputWrapper {
-    display: inline-block;
-    vertical-align: top;
-}
-
-.imj_simpleSearchInput {
-    width: 17em;
-    padding: 0.1em;
-}
-
-.imj_simpleSearchButtonSubmit {
-    height: 1.818em; /*1.7272em*/
-    margin-left: 0.455em; /*0.363636em*/
-    padding: 0.091em 1em; /* 0.0909em 1em*/
-    background-color: #6CAE2F;
-    border-color: #6CAE2F;
-    color: #F0F0F0;
-}
-
-.imj_simpleSearchButtonSubmit:hover {
-    /*background-color: #393939;
-    border-color: #393939;
-    color: #FFFFFF;*/
-	color: #000000;
-    background-color: #4AFF00;
-    border-color: #4AFF00;
-	
-}
-
-.imj_simpleSearch input[type=radio] {
-    border: 0 none;
-    margin: 0.091em 0 0 0.091em;
-}
-
-.imj_simpleSearch input[type=radio]+label {
-	margin-left: 0.181818em;
-    margin-right: 1em
-}
-
-.imj_simpleSearchLinkAdvancedsearch {
-    margin-top: 0.18em;
-    margin-left: 2.0909em;
-    white-space: nowrap;
-    display: inline-block;
-}
 
 
 /* * site content - sections - header
@@ -1027,8 +999,8 @@ a:hover .imj_buttonSortAscending_16 {
 
 .imj_mainMenuStandard {
     display: inline-block;
-    width: 90.5%;
-    padding: 0 6.5%;
+    width: 98%;
+    padding: 0 2%;
 	margin-bottom: 0.454545em;
     font-size: 135%;
     letter-spacing: 0.090909em;

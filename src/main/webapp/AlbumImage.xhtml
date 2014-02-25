@@ -6,7 +6,8 @@
 	xmlns:menu="http://java.sun.com/jsf/composite/components/menu">
 	
 	<ui:param name="imageBean" value="#{AlbumImageBean}"/>
-	<ui:param name="headline" value="#{lbl.details}"/>
+	<ui:param name="headline" value="#{lbl.details}:"/>
+	<ui:param name="headlineSecondRow" value="#{AlbumImageBean.album.metadata.title}"/>
 	<ui:param name="currentMainMenu" value="album"/>
 	<ui:param name="browseToAllItemsUrl" value="#{Navigation.albumUrl}#{AlbumImageBean.albumId}/browse?q="/>
 	

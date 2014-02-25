@@ -2146,7 +2146,7 @@ a.imj_submitButton,
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjEyeOpen_16.png");
 }
 
-/* imj_buttonEdit_16 - used in picturePages/ui/MetadataPopup.xhtml */
+/* imj_buttonEdit_16 - used in templates/component/images/MetadataPopup.xhtml */
 .imj_buttonEdit_16 {
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjEditPen_16.png");
 	background-color: inherit;

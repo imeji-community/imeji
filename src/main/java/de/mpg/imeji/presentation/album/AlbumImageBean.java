@@ -9,9 +9,11 @@ import java.util.List;
 import javax.faces.context.FacesContext;
 
 import de.mpg.imeji.logic.controller.AlbumController;
+import de.mpg.imeji.logic.security.Authorization;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.image.ImageBean;
 import de.mpg.imeji.presentation.image.SingleImageBrowse;
@@ -31,6 +33,7 @@ public class AlbumImageBean extends ImageBean
     private String albumId;
     private Navigation navigation;
     private SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+    private Album album;
 
     public AlbumImageBean() throws Exception
     {
@@ -46,6 +49,7 @@ public class AlbumImageBean extends ImageBean
                 .get("AlbumImagesBean.id");
         setBrowse(new SingleImageBrowse((AlbumImagesBean)BeanHelper.getSessionBean(AlbumImagesBean.class), getImage(),
                 "album", tempId));
+        this.setAlbum(this.loadAlbum());
     }
 
     private Album loadAlbum()
@@ -104,4 +108,23 @@ public class AlbumImageBean extends ImageBean
     {
         return "pretty:albumItem";
     }
+    
+    
+    /**
+     * True if the current {@link User} has administration priviliges for this {@link Album}
+     * 
+     * @return
+     */
+    public boolean isAdmin()
+    {
+        Authorization auth = new Authorization();
+        return auth.isContainerAdmin(session.getUser(), album);
+    }
+	public Album getAlbum() {
+		return album;
+	}
+
+	public void setAlbum(Album album) {
+		this.album = album;
+	}
 }

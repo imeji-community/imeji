@@ -2,32 +2,18 @@
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core">
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:menu="http://java.sun.com/jsf/composite/components/menu">
+	
 	<ui:param name="imageBean" value="#{AlbumImageBean}"/>
 	<ui:param name="headline" value="#{lbl.details}"/>
 	<ui:param name="currentMainMenu" value="album"/>
 	<ui:param name="browseToAllItemsUrl" value="#{Navigation.albumUrl}#{AlbumImageBean.albumId}/browse?q="/>
 	
+	
+	
 	<ui:define name="actionsMenu">
-		<!-- content menu starts here -->
-		<h:panelGroup layout="block" styleClass="imj_contentMenu">
-			<h:outputLink id="lnkViewHome" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumImageBean.albumId}">
-				<h:outputText value="#{lbl.album_home}"/>
-			</h:outputLink>
-			
-			<h:outputText styleClass="imj_contentMenuSeparator"/>
-			
-			<h:outputLink id="lnkViewCollectionAllImages" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumImageBean.albumId}/#{Navigation.browsePath}?q=">
-				<h:outputText value="#{lbl.view_images}"/>
-			</h:outputLink>
-			
-			<h:outputText styleClass="imj_contentMenuSeparator"/>
-			
-			<h:outputLink id="lnkViewCollectionDetail" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumImageBean.albumId}/#{Navigation.infosPath}?init=1">
-				<h:outputText value="#{lbl.album_metadata}"/>
-			</h:outputLink>		
-		</h:panelGroup>		
-		<!-- content menu END -->
+		<menu:context_subNavigation contextId="#{imageBean.albumId}" contextUrl="#{Navigation.albumUrl}" curMainMenu="#{currentMainMenu}" userHasAdminRights="#{AuthorizationBean.admin}" userHasEditRights="#{imageBean.editable}" hasContent="true" navBean="#{Navigation}" activeMenu="item" allowedToShare="#{imageBean.album.status=='PENDING' and imageBean.admin}"/>
 	</ui:define>
 	
 </ui:composition>

@@ -73,7 +73,7 @@
 					
 					<ui:fragment rendered="#{cc.attrs.allowedToShare}">
 						<li class="#{curMenuClass}Item">
-							<h:outputLink value="#{cc.attrs.navBean.shareUrl}?uri=#{cc.attrs.navBean.applicationUrl}#{cc.attrs.curMainMenu}/#{cc.attrs.contextId}" >
+							<h:outputLink value="#{cc.attrs.navBean.shareUrl}?uri=#{cc.attrs.navBean.applicationUrl}#{cc.attrs.curMainMenu}/#{cc.attrs.contextId}" styleClass="#{(activeMenuValue == 'share') ? 'imj_active' : ''}">
 								<h:outputText value="#{lbl.album_share}" rendered="#{cc.attrs.curMainMenu == 'album'}"/>
 								<h:outputText value="#{lbl.collection_share}" rendered="#{cc.attrs.curMainMenu == 'collection'}"/>
 							</h:outputLink>

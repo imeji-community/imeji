@@ -2,9 +2,17 @@
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core">
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:menu="http://java.sun.com/jsf/composite/components/menu">
 	
-	<ui:param name="headline" value="#{lbl.share} #{ShareBean.container.metadata.title}" />
+	<ui:param name="headline" value="#{lbl.share.toString().trim()}:" />
+	<ui:param name="headlineSecondRow" value="#{ShareBean.container.metadata.title}"/>
+	<ui:param name="currentMainMenu" value="#{(ShareBean.album) ? 'album' : 'collection'}"/>
+	<ui:param name="contUrl" value="#{(ShareBean.album) ? Navigation.albumUrl : Navigation.collectionUrl}"/>
+	
+	<ui:define name="actionsMenu">
+		<menu:context_subNavigation contextId="#{ShareBean.container.idString}" contextUrl="#{contUrl}" curMainMenu="#{currentMainMenu}" userHasAdminRights="#{AuthorizationBean.admin}" userHasEditRights="true" hasContent="true" navBean="#{Navigation}" activeMenu="share" allowedToShare="true"/>
+	</ui:define>
 	
 	<ui:define name="init">
 		<h:outputText value="#{ShareBean.init}" />

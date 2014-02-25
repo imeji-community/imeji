@@ -2,38 +2,17 @@
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core">
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:menu="http://java.sun.com/jsf/composite/components/menu">
+	
 	<ui:param name="imageBean" value="#{CollectionImageBean}"/>
-	<ui:param name="headline" value="#{lbl.details}"/>
+	<ui:param name="headline" value="#{lbl.details}:"/>
+	<ui:param name="headlineSecondRow" value="#{CollectionImageBean.collection.metadata.title}"/>
 	<ui:param name="currentMainMenu" value="collection"/>
 	<ui:param name="browseToAllItemsUrl" value="#{Navigation.collectionUrl}#{CollectionImageBean.collectionId}/browse?q="/>
 	
 	<ui:define name="actionsMenu">
-		<!-- content menu starts here -->
-		<h:panelGroup layout="block" styleClass="imj_contentMenu">
-			<h:outputLink id="lnkViewCollectionStart" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{CollectionImagesBean.id}" rendered="true">
-				<h:outputText value="#{lbl.collection_home}"/>
-			</h:outputLink>
-		
-			<h:outputText styleClass="imj_contentMenuSeparator"/>
-			
-			<h:outputLink value="#{Navigation.collectionUrl}#{CollectionImageBean.collectionId}/#{Navigation.browsePath}?q=" styleClass="imj_contentMenuItem">
-				<h:outputText value="#{lbl.view_images}"/>
-			</h:outputLink>
-		
-			<h:outputText styleClass="imj_contentMenuSeparator"/>
-		
-			<h:outputLink id="lnkViewCollectionDetail" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{CollectionImagesBean.id}/#{Navigation.infosPath}?init=1" rendered="true">
-				<h:outputText value="#{lbl.collection_metadata}"/>
-			</h:outputLink>
-		
-			<h:outputText styleClass="imj_contentMenuSeparator"/>
-		
-			<h:outputLink id="lnkUploadImages" styleClass="imj_contentMenuItem" value="#{Navigation.collectionUrl}#{CollectionImagesBean.id}/#{Navigation.uploadPath}?init=1" rendered="#{CollectionImagesBean.editable}">
-				<h:outputText value="#{lbl.upload_images}"></h:outputText>
-			</h:outputLink>
-		</h:panelGroup>
-		<!-- content menu END -->
+		<menu:context_subNavigation contextId="#{CollectionImageBean.collectionId}" contextUrl="#{Navigation.collectionUrl}" curMainMenu="#{currentMainMenu}" userHasAdminRights="#{AuthorizationBean.admin}" userHasEditRights="#{CollectionImageBean.editable}" hasContent="true" navBean="#{Navigation}" activeMenu="item" allowedToShare="#{CollectionImageBean.collection.status=='PENDING' and CollectionImageBean.admin}"/>
 	</ui:define>
 	
 </ui:composition>

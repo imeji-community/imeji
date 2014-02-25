@@ -38,6 +38,9 @@
  * static: F0F0F0
  * error: D80000
  * deactivated: BBBBBB
+ * reset-background: FF7700
+ * reset-hover: FFC999
+ * reset-font-color: 000000
  * 
  * page background: 292929
  * content background: 313131
@@ -1458,6 +1461,9 @@ OLD:
 	width: 91.25%;
 	margin: 1% 4%;
 }
+.imj_entryPagePreviewTiledList + .imj_metadataList {
+	padding: 1% 4%;
+}
 
 
 
@@ -1921,6 +1927,19 @@ min-height: 6em;
 	cursor: default;
 }
 
+/* * resetButton used in: e.g. batch edit */
+.imj_resetButton {
+	padding: 0 0.3333333em;
+	color: #000000;
+	background-color: #FF7700;
+	border: solid #FF7700;
+}
+.imj_resetButton:hover {
+	color: #000000;
+	background-color: #FFC999;
+	border: solid #FFC999;
+}
+
 
 /* * advanced search
    ==================================================
@@ -1969,13 +1988,37 @@ min-height: 6em;
 	(template_image_tiledlist.xhtml)
    ==================================================
    ================================================== */
+/* * overlayMenu */
 
+.imj_overlayMenu .imj_menuHeader {
+	color: #6CAE2F;
+	cursor: pointer;
+}
+
+.imj_overlayMenu:hover .imj_menuHeader {
+	color: #F0F0F0;
+}
+.imj_overlayMenu:hover .imj_iconTriangleBottomRight_16 {
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjTriangleLargeBottomRight_16.png");
+}
+.imj_overlayMenu .imj_listItemSeparator {
+	border-top: 0.090909em solid #6CAE2F;
+	padding-top: 0.181818em;
+}
+
+/* * tiledMediaList */
 .imj_tiledMediaList {
 	padding: 1% 4%;
 }
 
 .imj_tiledMediaList .imj_listHeader {
 	min-height: 2em;
+}
+.imj_tiledMediaList .imj_listHeader .imj_overlayMenu .imj_menuBody{
+	border: 0.272727em outset #F0F0F0;
+	-webkit-border-radius: 0.454545em;
+	-moz-border-radius: 0.454545em;
+	border-radius: 0.454545em;
 }
 
 .imj_tiledMediaList .imj_tileItem {
@@ -2035,23 +2078,7 @@ min-height: 6em;
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjTriangleLargeBottomRight_16.png");
 }
 
-.imj_overlayMenu .imj_menuHeader {
-	color: #6CAE2F;
-	cursor: pointer;
-}
 
-.imj_overlayMenu:hover .imj_menuHeader {
-	color: #F0F0F0;
-}
-
-.imj_overlayMenu:hover .imj_iconTriangleBottomRight_16 {
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjTriangleLargeBottomRight_16.png");
-}
-
-.imj_overlayMenu .imj_listItemSeparator {
-	border-top: 0.090909em solid #6CAE2F;
-	padding-top: 0.181818em;
-}
 
 .imj_contentMenu .imj_overlayMenu .imj_overlayMenuList li,
 .imj_contentSubMenu .imj_overlayMenu .imj_overlayMenuList li {
@@ -2065,6 +2092,9 @@ min-height: 6em;
 	margin:0 0.25em;
 	color: #F0F0F0; 
 }
+
+
+/* * singlePageBrowser */
 
 .imj_singlePageBrowser .imj_separator {
 	display: inline-block;
@@ -2365,11 +2395,20 @@ min-height: 6em;
 .imj_editGlobalAssignment {
 	width: 91.25%;
 	padding: 1% 4%;
+	border-top: 0.090909em solid #6CAE2F;
 }
-.imj_editGlobalAssignment .imj_metadataLabel label {
+.imj_editGlobalAssignment > .imj_metadataSet > .imj_metadataLabel label {
 	display: inline-block;
 	width: 100%;
 }
+.imj_editGlobalAssignment > .imj_metadataSet > .imj_metadataValue {
+	width: 69.25%;
+	max-width: 69.25%;
+}
+.imj_editGlobalAssignment > .imj_metadataSet > .imj_metadataValue > .imj_singleStatementEdit > textarea.imj_metadataValue {
+	width: 100%;
+}
+
 .imj_editGlobalAssignment .imj_dataAssignmentPanel {
 	display: inline-block;
 	margin-top: 1em;
@@ -2395,9 +2434,47 @@ min-height: 6em;
 	vertical-align: top;
 }
 
+
+/* * START - CSS class for autocomplete component */
+.imj_batchEditItemList .ui-menu {
+	color: #292929;
+	width: 300px;
+	background-color:#292929;
+}
+.imj_batchEditItemList .ui-menu-item {
+	background-color:#292929;
+	width: 300px;
+	font-weight: bold;
+	border-left: 5px;
+}
+.imj_batchEditItemList .ui-corner-all { }
+.imj_batchEditItemList .ui-widget-content { }
+.imj_batchEditItemList .ui-widget { }
+.imj_batchEditItemList .ui-autocomplete {
+	position:absolute;
+	z-index:4000 !important
+}
+.imj_batchEditItemList .ui-autocomplete-loading {
+	background-color:#6CAD2F !important;
+}
+.imj_batchEditItemList .ui-helper-hidden-accessible { 
+	display:none; 
+}
+/* * END - CSS class for autocomplete component */
+
+.imj_batchEditListItem {
+	margin-bottom: 1em;
+}
+
 .imj_singleStatementEdit {
 	width: 100%;
-	padding-bottom: 1em;
+	margin-bottom: 1em;
+}
+.imj_singleStatementEdit .imj_inlineButtonGroup {
+	margin-left: 1%;
+}
+.imj_singleStatementEdit textarea {
+	resize: vertical;
 }
 
 
@@ -2683,8 +2760,8 @@ min-height: 6em;
 
 .imj_entryPagePreviewTiledList {
 	margin-bottom: 0.5em;
-    padding: 0 4%;
-    /*width: 91.75%;*/
+    padding: 1% 4%;
+    border-top: 0.090909em solid #6CAE2F;
 }
 
 .imj_entryPagePreviewTiledListItem {
@@ -2704,15 +2781,16 @@ min-height: 6em;
 	height: 2em;
     width: 2em;
 	margin-top: 1em;
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjArrowThinRight_23.png");		
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjArrowThinRight_24.png");		
 	background-color: inherit;
 	background-position: right;
 	background-repeat: no-repeat;
-	border: 0 none;		
+	border: 0 none;
 }
 
-.imj_entryPagePreviewTiledListLinkArrow:hover {	
-	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjArrowThinRight_23.png");
+.imj_entryPagePreviewTiledListLinkArrow:hover,
+a:hover .imj_entryPagePreviewTiledListLinkArrow {	
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjArrowThinRight_24.png");
 }
 
 .imj_entryPageTitle { 

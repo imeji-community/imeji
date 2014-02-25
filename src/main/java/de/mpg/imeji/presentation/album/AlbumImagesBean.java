@@ -16,11 +16,13 @@ import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
+import de.mpg.imeji.logic.security.Authorization;
 import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.image.ImagesBean;
 import de.mpg.imeji.presentation.session.SessionBean;
@@ -305,5 +307,16 @@ public class AlbumImagesBean extends ImagesBean
     public Album getAlbum()
     {
         return album;
+    }
+    
+    /**
+     * True if the current {@link User} has administration priviliges for this {@link Album}
+     * 
+     * @return
+     */
+    public boolean isAdmin()
+    {
+        Authorization auth = new Authorization();
+        return auth.isContainerAdmin(session.getUser(), album);
     }
 }

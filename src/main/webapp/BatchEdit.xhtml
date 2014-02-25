@@ -8,9 +8,16 @@
 	
 	<ui:param name="headline" value="#{lbl.edit_images}"/>
 	
+	<ui:define name="additonalHeaderScripts">
+		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/autocomplete.js"></script>
+		<script type="text/javascript">
+			jQuery(document).ready(function() {
+				document.getElementById('batchEditForm:editInitialized').click();
+			});
+		</script>
+	</ui:define>
 	
 	<ui:define name="actionsMenu"></ui:define>
-	
 	
 	<ui:define name="mainContent">
 		<!-- Breadcrumb - History -->
@@ -19,11 +26,7 @@
 		<!-- AJAX Wrapper - START -->
 		<h:panelGroup layout="block" id="imj_ajaxWrapper">
 			<!-- Initialize the Edit form -->
-			<script type="text/javascript">
-				jQuery(document).ready(function() {
-					document.getElementById('batchEditForm:editInitialized').click();
-					});
-			</script>
+			
 			<h:outputText value="#{EditImageMetadataBean.urlParameters}"/>
 			
 			<h:form id="batchEditForm">
@@ -104,7 +107,7 @@
 									<h:commandButton  styleClass="imj_cancelButton" action="#{EditImageMetadataBean.clearAll}" value="#{lbl.clear_all}">
 										<f:ajax render="ajaxContent"/>
 									</h:commandButton >
-									<h:commandButton styleClass="imj_cancelButton" action="#{EditImageMetadataBean.resetChanges}" value="#{lbl.reset_changes}">
+									<h:commandButton styleClass="imj_resetButton" action="#{EditImageMetadataBean.resetChanges}" value="#{lbl.reset_changes}">
 										<f:ajax render="ajaxContent"/>
 									</h:commandButton>
 									
@@ -123,17 +126,7 @@
 					        				<ui:repeat id="metadata" var="md" value="#{item.mds.tree.list}" varStatus="indexMetadata">
 					        					<h:panelGroup rendered="#{EditImageMetadataBean.isEditableStatement(md.statement)}">
 					        						<!-- Field -->
-					        						<list:batchEditList_singleStatement itemBean="#{md}" itemStatement="#{md.statement}" itemLabelBean="#{MetadataLabels}" hideLabel="false" navBean="#{Navigation}" suggestBean="#{SuggestBean}"/>
-													
-													<!-- BUTTONS -->
-													<h:panelGroup layout="block" styleClass="imj_inlineButtonGroup">
-														<h:commandLink id="add" styleClass="imj_buttonAdd_16" action="#{item.addMetadata(md)}" title="#{lbl.add}" value=" " rendered="#{md.statement.maxOccurs != '1'}">
-															<f:ajax execute="@form" render="@form" />
-														</h:commandLink>
-														<h:commandLink  id="remove" styleClass="imj_buttonRemove_16" action="#{item.removeMetadata(md)}" title="#{lbl.remove}" value=" " rendered="#{md.statement.maxOccurs != '1'}">
-															<f:ajax execute="@form" render="@form" />
-														</h:commandLink>
-													</h:panelGroup>
+					        						<list:batchEditList_singleStatement listItem="#{item}" itemBean="#{md}" itemStatement="#{md.statement}" itemLabelBean="#{MetadataLabels}" hideLabel="false" navBean="#{Navigation}" suggestBean="#{SuggestBean}" formObject="@form"/>
 					        					</h:panelGroup>
 					        				</ui:repeat>
 				        				</h:panelGroup>
@@ -146,9 +139,9 @@
 									<h:commandButton  styleClass="imj_cancelButton" action="#{EditImageMetadataBean.clearAll}" type="button" value="#{lbl.clear_all}">
 										<f:ajax render="ajaxContent"/>
 									</h:commandButton >
-									<h:outputLink value="" styleClass="imj_cancelButton">
-										<h:outputText value="#{lbl.reset_changes}" />
-									</h:outputLink>
+									<h:commandButton styleClass="imj_resetButton" action="#{EditImageMetadataBean.resetChanges}" value="#{lbl.reset_changes}">
+										<f:ajax render="ajaxContent"/>
+									</h:commandButton>
 									<h:messages />
 									<h:commandButton styleClass="imj_cancelButton" action="#{EditImageMetadataBean.cancel}" value="#{lbl.cancel}"/>
 									<h:commandButton styleClass="imj_submitButton" action="#{EditImageMetadataBean.saveAndRedirect}" value="#{lbl.save}" onclick="openDialog('dialogWait');"/>
@@ -171,7 +164,7 @@
 	
 	
 	
-	<ui:define name="contentMenu"></ui:define>
+	<ui:define name="contentMenu_old"></ui:define>
 	
 	<ui:define name="mainContent_old">
 		<h:panelGroup layout="block" styleClass="full_area0 itemList">

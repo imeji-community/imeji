@@ -22,30 +22,6 @@
 		<menu:context_actionMenu isUserLoggedIn="#{SessionBean.user != null}" curMainMenu="#{currentMainMenu}" navBean="#{Navigation}" collectionStatus="#{logicBean.collection.status}" contextId="#{logicBean.id}" isDeletable="#{logicBean.deletable}" isEditable="#{logicBean.editable}" hasContent="#{logicBean.size > 0}" contextDownloadParam="&amp;col=#{logicBean.id}"/>
 	</ui:define>
 	
-	<ui:define name="additonalHeaderScripts">
-		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/qrcode.js"></script>
-		<script type="text/javascript">
-			jQuery(document).ready(function() {
-				var qrHtml = document.getElementById('qr');
-				if (qrHtml != null){
-					qrHtml.innerHTML = create_qrcode('#{ViewCollectionBean.pageUrl}');
-				}
-			});
-			var draw_qrcode = function(text, typeNumber, errorCorrectLevel) {
-				document.write(create_qrcode(text, typeNumber, errorCorrectLevel) );
-			};
-			var create_qrcode = function(text, typeNumber, errorCorrectLevel, table) {
-				var qr = qrcode(typeNumber || 10, errorCorrectLevel || 'M');
-				qr.addData(text);
-				qr.make();
-				// return qr.createTableTag();
-				return qr.createImgTag();
-			};
-		</script>
-		
-	</ui:define>
-	<!-- COLLECTION Menu END -->
-	
 	<!-- ModalDialogs - Confirmation Pages -->
 	<ui:define name="modalDialogs_from_site">
 		<dialog:confirmationDialog submitAction="release" bean="#{logicBean}" confirmationText="#{msg.confirmation_release_collection}?" submitLabel="#{lbl.release}" dialogId="releaseMenuItemDialog" rendered="#{logicBean.editable and logicBean.collection.status.toString().toUpperCase() == 'PENDING' and logicBean.size > 0}"/>

@@ -3,163 +3,28 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:imjc="http://java.sun.com/jsf/composite/components">
+	xmlns:imjc="http://java.sun.com/jsf/composite/components"
+	xmlns:menu="http://java.sun.com/jsf/composite/components/menu"
+	xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs">
 	
 	<ui:param name="paginatorListSessionBean" value="#{AlbumImagesBean}"/>
 	<ui:param name="headline" value="#{AlbumImagesBean.album.metadata.title}"/>
 	<ui:param name="currentMainMenu" value="album"/>
 	<ui:param name="browseToAllItemsUrl" value="#{Navigation.albumUrl}#{AlbumImagesBean.id}/browse?q="/>
 	
+	
 	<ui:define name="actionsMenu">
-		<div class="imj_contentMenu">
-			<h:outputLink id="lnkViewHome" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumImagesBean.id}">
-				<h:outputText value="#{lbl.album_home}"/>
-			</h:outputLink>
-			<h:outputText styleClass="imj_contentMenuSeparator"/>
-			
-			<h:outputText styleClass="imj_contentMenuItem imj_active" value="#{lbl.view_images}"/>
-			
-			<h:outputText styleClass="imj_contentMenuSeparator"/>
-			
-			<h:outputLink id="lnkViewCollectionDetail" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumImagesBean.id}/#{Navigation.infosPath}?init=1">
-				<h:outputText value="#{lbl.album_metadata}"/>
-			</h:outputLink>
-		</div>
-		<div class="imj_contentSubMenu">
-			<h:outputText id="txtSort" value="#{lbl.sort_by}" styleClass="imj_contentMenuItemSorting"/>
-			<h:panelGroup styleClass="imj_SubMenuItem">
-				<h:form>
-					<h:selectOneMenu id="selSort" value="#{AlbumImagesBean.selectedSortCriterion}" onchange="submit();">
-						<f:selectItems id="sortItem" value="#{AlbumImagesBean.sortMenu}"/>
-					</h:selectOneMenu>
-					<h:commandLink id="lnkSortAsc" styleClass="imj_buttonOrderByAsc_16" action="#{AlbumImagesBean.toggleSortOrder}" rendered="#{AlbumImagesBean.selectedSortOrder == 'ASCENDING'}">&#160;</h:commandLink>
-					<h:commandLink id="lnkSortDesc" styleClass="imj_buttonOrderByDesc_16" action="#{AlbumImagesBean.toggleSortOrder}" rendered="#{AlbumImagesBean.selectedSortOrder != 'ASCENDING'}">&#160;</h:commandLink>
-				</h:form>
-			</h:panelGroup>
-			
-			<h:outputLink styleClass="imj_SubMenuItem" value="#" onclick="openDialog('dialogRelease');" rendered="#{AlbumImagesBean.editable and AlbumImagesBean.album.status=='PENDING'}">
-				<h:outputText value="#{lbl.release}"/>
-			</h:outputLink>
-			<h:outputLink id="lnkWithdrawCollection" styleClass="imj_SubMenuItem" value="#" onclick="openDialog('dialDiscardContainer:dialogWithdraw');" rendered="#{AlbumImagesBean.editable and AlbumImagesBean.album.status=='RELEASED'}">
-				<h:outputText value="#{lbl.withdraw}"/>
-			</h:outputLink>
-			<h:outputLink styleClass="imj_SubMenuItem" value="#" onclick="openDialog('dialogDelete');" rendered="#{AlbumImagesBean.deletable}">
-				<h:outputText value="#{lbl.delete}"/>
-			</h:outputLink>
-			
-			<div class="imj_overlayMenu imj_contentSubMenuItem">
-				<div class="imj_menuHeader">
-					<h:outputText value="#{lbl.download}" styleClass="imj_headerEntry"/>
-				</div>
-				<div class="imj_menuBody">
-					<ul class="imj_overlayMenuList">
-						<li>
-							<h:outputLink value="#{Navigation.applicationUrl}export?format=zip&amp;type=image&amp;n=10000&amp;alb=#{AlbumImagesBean.id}&amp;q=#{paginatorListSessionBean.query}" target="_blank">
-								<h:outputText value="#{lbl.export_zip}"/>
-							</h:outputLink>
-						</li>
-						<li>
-							<h:outputLink value="#{Navigation.applicationUrl}export?format=rdf&amp;type=image&amp;n=10000&amp;alb=#{AlbumImagesBean.id}&amp;q=#{paginatorListSessionBean.query}" target="_blank">
-								<h:outputText value="#{lbl.export_rdf}"/>
-							</h:outputLink>
-						</li>
-						<li>
-							<h:outputLink value="#{Navigation.applicationUrl}export?format=xml&amp;type=image&amp;n=10000&amp;alb=#{AlbumImagesBean.id}&amp;q=#{paginatorListSessionBean.query}" target="_blank">
-								<h:outputText value="#{lbl.export_native}"/>
-							</h:outputLink>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</div>
+		<menu:context_subNavigation contextId="#{paginatorListSessionBean.id}" contextUrl="#{Navigation.albumUrl}" curMainMenu="#{currentMainMenu}" userHasAdminRights="#{AuthorizationBean.admin}" userHasEditRights="#{paginatorListSessionBean.editable}" hasContent="#{paginatorListSessionBean.totalNumberOfElements > 0}" navBean="#{Navigation}" activeMenu="content" allowedToShare="#{AlbumImagesBean.album.status=='PENDING' and AlbumImagesBean.admin}"/>
+		
+		<menu:context_actionMenu isUserLoggedIn="#{SessionBean.user != null}" sortBean="#{paginatorListSessionBean}" curMainMenu="#{currentMainMenu}" navBean="#{Navigation}" exportQuery="#{paginatorListSessionBean.query}" 
+			collectionStatus="#{paginatorListSessionBean.album.status}" contextId="#{paginatorListSessionBean.id}" isDeletable="#{paginatorListSessionBean.deletable}" isEditable="#{paginatorListSessionBean.editable}" contextDownloadParam="&amp;album=#{paginatorListSessionBean.id}"/>
 	</ui:define>
+	
 	
 	<ui:define name="modalDialogs_from_site">
-		<ui:fragment rendered="#{SessionBean.user != null}">
-			<ui:include src="confirmationPages/ContainerDelete.xhtml">
-				<ui:param name="bean" value="#{AlbumImagesBean}"/>
-			</ui:include>
-			<ui:include src="confirmationPages/ContainerRelease.xhtml">
-				<ui:param name="bean" value="#{AlbumImagesBean}"/>
-			</ui:include>
-			<imjc:DiscardContainer id="dialDiscardContainer" bean="#{AlbumImagesBean}" discardComment="#{AlbumImagesBean.album.discardComment}"/>
-		</ui:fragment>
+		<dialog:confirmationDialog submitAction="release" bean="#{paginatorListSessionBean}" confirmationText="#{msg.confirmation_release_album}?" submitLabel="#{lbl.release}" dialogId="releaseMenuItemDialog" rendered="#{paginatorListSessionBean.editable and paginatorListSessionBean.album.status.toString().toUpperCase() == 'PENDING' and paginatorListSessionBean.totalNumberOfElements > 0}"/>
+		<dialog:confirmationDialog submitAction="delete" bean="#{paginatorListSessionBean}" confirmationText="#{msg.confirmation_delete_album}?" submitLabel="#{lbl.delete}" dialogId="deleteMenuItemDialog" rendered="#{paginatorListSessionBean.deletable}"/>
+		<dialog:confirmationReasonedDialog submitAction="withdraw" bean="#{paginatorListSessionBean}" confirmationText="#{msg.confirmation_withdraw_album}" submitLabel="#{lbl.withdraw}" dialogId="withdrawMenuItemDialog" rendered="#{paginatorListSessionBean.editable and paginatorListSessionBean.album.status.toString().toUpperCase() == 'RELEASED'}"/>
 	</ui:define>
 	
-	
-	
-	
-	<ui:remove>
-		<ui:define name="contentMenu">
-			<h:outputLink id="lnkViewHome" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumImagesBean.id}" rendered="true">
-				<h:outputText value="#{lbl.album_home}"/>
-			</h:outputLink>
-			<h:outputText styleClass="imj_contentMenuSeparator"/>
-			<h:outputText styleClass="imj_contentMenuItem" value="#{lbl.view_images}"/>
-			<h:outputText styleClass="imj_contentMenuSeparator"/>
-			<h:outputLink id="lnkViewCollectionDetail" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumImagesBean.id}/#{Navigation.infosPath}?init=1" rendered="true">
-				<h:outputText value="#{lbl.album_metadata}"/>
-			</h:outputLink>
-		</ui:define>
-		<ui:define name="actionsMenu">
-			<h:panelGroup styleClass="full_area0"> <!-- This panelGroup is needed for IE -->
-			<h:panelGroup layout="block" styleClass="imj_contentSubMenu">
-				<h:panelGroup>
-					<h:panelGroup styleClass="imj_contentSubMenuItem">
-						<!-- SORTING content menu lower line starts here -->
-						<h:outputText id="txtSort" value="#{lbl.sort_by}" styleClass="free_area0"/>
-						<h:selectOneMenu id="selSort" value="#{AlbumImagesBean.selectedSortCriterion}" styleClass="free_select" onchange="submit();">
-							<f:selectItems id="sortItem" value="#{AlbumImagesBean.sortMenu}"/>
-						</h:selectOneMenu>
-						<h:form>
-							<h:commandLink id="lnkSortAsc" styleClass="ascSort" action="#{AlbumImagesBean.toggleSortOrder}" rendered="#{AlbumImagesBean.selectedSortOrder == 'ASCENDING'}">&#160;</h:commandLink>
-							<h:commandLink id="lnkSortDesc" styleClass="desSort" action="#{AlbumImagesBean.toggleSortOrder}" rendered="#{AlbumImagesBean.selectedSortOrder != 'ASCENDING'}">&#160;</h:commandLink>
-						</h:form>
-						<h:outputText styleClass="imj_contentMenuSeparator"/>
-						<!-- SORTING content menu lower line ends here -->
-					</h:panelGroup>
-					<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialogRelease');" rendered="#{AlbumImagesBean.editable and AlbumImagesBean.album.status=='PENDING'}">
-						<h:outputText value="#{lbl.release}"/>
-					</h:outputLink>
-					<h:outputLink id="lnkWithdrawCollection" styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialDiscardContainer:dialogWithdraw');" rendered="#{AlbumImagesBean.editable and AlbumImagesBean.album.status=='RELEASED'}">
-						<h:outputText value="#{lbl.withdraw}"/>
-					</h:outputLink>
-					<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialogDelete');" rendered="#{AlbumImagesBean.deletable}">
-						<h:outputText value="#{lbl.delete}"/>
-					</h:outputLink>
-			<h:panelGroup layout="block" styleClass="free_area0_p0 endline overlayMenu">
-				<h:panelGroup layout="block" styleClass="menuHeader free_area0">
-					<h:panelGroup styleClass="free_area0">
-						<h:outputText value="#{lbl.download} " styleClass="free_area0 "/>
-					</h:panelGroup>
-				</h:panelGroup>
-				<h:panelGroup layout="block" styleClass="clear menuBody xLarge_area0" style="margin-top:-1.9090em;">
-					<div class="selectMenu xLarge_area2 bordst2">
-						<h:outputLink value="#{Navigation.applicationUrl}export?format=zip&amp;type=image&amp;n=10000&amp;alb=#{AlbumImagesBean.id}&amp;q=#{paginatorListSessionBean.query}"
-									  styleClass="imj_SubMenuItem" target="_blank">
-							<h:outputText value="#{lbl.export_zip}"/>
-						</h:outputLink>
-						<h:outputLink value="#{Navigation.applicationUrl}export?format=rdf&amp;type=image&amp;n=10000&amp;alb=#{AlbumImagesBean.id}&amp;q=#{paginatorListSessionBean.query}"
-									  styleClass="imj_SubMenuItem" target="_blank">
-							<h:outputText value="#{lbl.export_rdf}"/>
-						</h:outputLink>
-						<h:outputLink value="#{Navigation.applicationUrl}export?format=xml&amp;type=image&amp;n=10000&amp;alb=#{AlbumImagesBean.id}&amp;q=#{paginatorListSessionBean.query}"
-									  styleClass="imj_SubMenuItem" target="_blank">
-							<h:outputText value="#{lbl.export_native}"/>
-						</h:outputLink>
-					</div>
-				</h:panelGroup>
-			</h:panelGroup>
-				</h:panelGroup>	
-			</h:panelGroup>
-			<ui:include src="confirmationPages/ContainerDelete.xhtml">
-				<ui:param name="bean" value="#{AlbumImagesBean}"/>
-			</ui:include>
-			<ui:include src="confirmationPages/ContainerRelease.xhtml">
-				<ui:param name="bean" value="#{AlbumImagesBean}"/>
-			</ui:include>
-			<imjc:DiscardContainer id="dialDiscardContainer" bean="#{AlbumImagesBean}" discardComment="#{AlbumImagesBean.album.discardComment}"/>
-		</h:panelGroup>	
-		</ui:define>
-	</ui:remove>
 </ui:composition>

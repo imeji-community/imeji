@@ -70,7 +70,7 @@
 								</ui:fragment>
 								
 								<!-- Add all to active album -->
-								<ui:fragment rendered="#{SessionBean.activeAlbum != null}">
+								<ui:fragment rendered="#{SessionBean.activeAlbum != null and cc.attrs.currentMainMenu != 'album'}">
 									<li>
 										<h:commandLink action="#{cc.attrs.facetBean.addAllToActiveAlbum}">
 											<h:outputText value="#{lbl.add_to_active_album_all}"/>
@@ -138,7 +138,7 @@
 									</li>
 								</ui:fragment>
 								
-								<ui:fragment rendered="#{SessionBean.activeAlbum != null}">
+								<ui:fragment rendered="#{SessionBean.activeAlbum != null and cc.attrs.currentMainMenu != 'album'}">
 									<li class="imj_overlayMenuListItem">
 										<!-- Add to active album -->
 										<h:commandLink action="#{cc.attrs.facetBean.addSelectedToActiveAlbum}">

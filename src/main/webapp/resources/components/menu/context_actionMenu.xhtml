@@ -69,7 +69,7 @@
 							
 							<ui:fragment rendered="#{cc.attrs.isEditable and cc.attrs.collectionStatus.trim().toUpperCase() == 'PENDING' and cc.attrs.hasContent}">
 								<li>
-									<h:outputLink styleClass="imj_SubMenuItem" value="#" onclick="openDialog('releaseMenuItemDialog');">
+									<h:outputLink value="#" onclick="openDialog('releaseMenuItemDialog');" title="#{lbl.collection_release}">
 										<h:outputText value="#{lbl.collection_release}"/>
 									</h:outputLink>
 								</li>
@@ -77,7 +77,7 @@
 							
 							<ui:fragment rendered="#{cc.attrs.isEditable and cc.attrs.collectionStatus.trim().toUpperCase() == 'RELEASED'}">
 								<li>
-									<h:outputLink id="lnkWithdrawCollection" value="#" onclick="openDialog('withdrawMenuItemDialog');">
+									<h:outputLink id="lnkWithdrawCollection" value="#" onclick="openDialog('withdrawMenuItemDialog');" title="#{lbl.withdraw}">
 										<h:outputText value="#{lbl.withdraw}"/>
 									</h:outputLink>
 								</li>
@@ -85,7 +85,7 @@
 							
 							<ui:fragment rendered="#{cc.attrs.isDeletable}">
 								<li>
-									<h:outputLink styleClass="imj_SubMenuItem" value="#" onclick="openDialog('deleteMenuItemDialog');">
+									<h:outputLink value="#" onclick="openDialog('deleteMenuItemDialog');">
 										<h:outputText value="#{lbl.delete}"/>
 									</h:outputLink>
 								</li>
@@ -93,8 +93,13 @@
 							
 							<ui:fragment rendered="#{cc.attrs.navBean != null}">
 								<li class="imj_listItemSeparator">
-									<h:outputLink id="lnkCreate" value="#{cc.attrs.navBean.createCollectionUrl}?reset=1">
+									<h:outputLink value="#{cc.attrs.navBean.createCollectionUrl}?reset=1" title="#{lbl.collection_create}">
 										<h:outputText value="#{lbl.collection_create}"/>
+									</h:outputLink>
+								</li>
+								<li>
+									<h:outputLink value="#{cc.attrs.navBean.createAlbumUrl}" title="#{lbl.album_create}">
+										<h:outputText value="#{lbl.album_create}"/>
 									</h:outputLink>
 								</li>
 							</ui:fragment>
@@ -112,17 +117,17 @@
 						<div class="imj_menuBody">
 							<ul class="imj_overlayMenuList">
 								<li>
-									<h:outputLink value="#{cc.attrs.navBean.applicationUrl}export?format=zip&amp;type=image&amp;n=10000#{cc.attrs.contextDownloadParam.trim()}&amp;q=#{cc.attrs.exportQuery.trim()}" target="_blank">
+									<h:outputLink title="#{lbl.export_zip}" value="#{cc.attrs.navBean.applicationUrl}export?format=zip&amp;type=image&amp;n=10000#{cc.attrs.contextDownloadParam.trim()}&amp;q=#{cc.attrs.exportQuery.trim()}" target="_blank">
 										<h:outputText value="#{lbl.export_zip}"/>
 									</h:outputLink>
 								</li>
 								<li>
-									<h:outputLink value="#{cc.attrs.navBean.applicationUrl}export?format=rdf&amp;type=image&amp;n=10000#{cc.attrs.contextDownloadParam.trim()}&amp;q=#{cc.attrs.exportQuery.trim()}" target="_blank">
+									<h:outputLink title="#{lbl.export_rdf}" value="#{cc.attrs.navBean.applicationUrl}export?format=rdf&amp;type=image&amp;n=10000#{cc.attrs.contextDownloadParam.trim()}&amp;q=#{cc.attrs.exportQuery.trim()}" target="_blank">
 										<h:outputText value="#{lbl.export_rdf}"/>
 									</h:outputLink>
 								</li>
 								<li>
-									<h:outputLink value="#{cc.attrs.navBean.applicationUrl}export?format=xml&amp;type=image&amp;n=10000#{cc.attrs.contextDownloadParam.trim()}&amp;q=#{cc.attrs.exportQuery.trim()}" target="_blank">
+									<h:outputLink title="#{lbl.export_native}" value="#{cc.attrs.navBean.applicationUrl}export?format=xml&amp;type=image&amp;n=10000#{cc.attrs.contextDownloadParam.trim()}&amp;q=#{cc.attrs.exportQuery.trim()}" target="_blank">
 										<h:outputText value="#{lbl.export_native}"/>
 									</h:outputLink>
 								</li>

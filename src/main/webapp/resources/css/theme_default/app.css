@@ -1771,17 +1771,12 @@ p.imj_metadataValue {
 	width: 100%;
 }
 
-/* "huge_label" */
 
 .imj_metadataLabelInput {
 	display: inline-block;
 }
 
 
-/* .imj_metadataLabelInputWrapper {
-	display: inline-block;
-}
-*/
 
 .imj_metadataEditText {
 	width: 55em;
@@ -1804,19 +1799,7 @@ p.imj_metadataValue {
 	width: 7em;
 }
 
-/* inputTxtArea
 
-.double_txtArea {
-    width: 18.3636em;
-	 height: 4em;
-    min-height: 4em;
-}
-
-.double_txtArea {
-width: 55em;
-min-height: 6em;
-}
-*/
 
 
 /* * SubmitPanel (image_deatails.xhtml)
@@ -1829,6 +1812,7 @@ min-height: 6em;
 	margin-top: 1em;
 }
 
+a.imj_cancelButton,
 .imj_cancelButton {
 	color: #FFFFFF;
 	background-color: #990000;
@@ -1849,6 +1833,7 @@ min-height: 6em;
 	border: solid #D80000;
 }
 
+a.imj_submitButton, 
 .imj_submitButton {
 	color: #FFFFFF;
 	background-color: #6CAE2F;
@@ -1900,6 +1885,16 @@ min-height: 6em;
 	background-color: #FFC999;
 	border: solid #FFC999;
 }
+
+/* * login form
+	loginFormSite is includes on page content, not in menu!
+	================================================= */
+.imj_loginFormSite {
+	width:91.25%; 
+	padding: 1% 4%;
+	border-top: 0.090909em solid #6CAE2F;
+}
+
 
 
 /* * advanced search

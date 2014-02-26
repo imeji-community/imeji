@@ -53,6 +53,10 @@ All rights reserved. Use is subject to license terms.
 				<h:panelGroup layout="bock" styleClass="imj_siteContentHeadline" rendered="#{headline.toString().trim().length() > 0}">
 					<h1>
 						<h:outputText value="#{headline.toString().trim()}"/>
+						<ui:fragment rendered="#{headlineSecondRow != null and headlineSecondRow.toString().trim().length() > 0}">
+							<br/>
+							<h:outputText value="#{headlineSecondRow.toString().trim()}"/>
+						</ui:fragment>
 					</h1>
 				</h:panelGroup>
 				

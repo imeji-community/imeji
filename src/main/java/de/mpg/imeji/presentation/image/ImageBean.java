@@ -25,6 +25,7 @@ import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
+import de.mpg.imeji.logic.security.Authorization;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
@@ -648,5 +649,16 @@ public class ImageBean
     public boolean isAudioFile()
     {
         return StorageUtils.getMimeType(FilenameUtils.getExtension(item.getFilename())).contains("audio");
+    }
+    
+    /**
+     * True if the current {@link User} has administration priviliges for this {@link Album}
+     * 
+     * @return
+     */
+    public boolean isAdmin()
+    {
+        Authorization auth = new Authorization();
+        return auth.isContainerAdmin(sessionBean.getUser(), collection);
     }
 }

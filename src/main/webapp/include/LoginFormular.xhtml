@@ -2,25 +2,24 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
-	<h:panelGroup styleClass="small_marginLExcl quad_area0_p8">
-		<h3>
-			<h:outputText rendered="#{SessionBean.user == null}" styleClass="free_area0_p8" value="#{lbl.view_page_disallowed}"/>
-			<h:outputText rendered="#{SessionBean.user != null}" styleClass="free_area0_p8" value="#{lbl.view_page_disallowed2}"/>
+	
+	<div class="imj_loginFormSite">
+		<h3 class="imj_headline">
+			<h:outputText rendered="#{SessionBean.user == null}" value="#{lbl.view_page_disallowed}"/>
+			<h:outputText rendered="#{SessionBean.user != null}" value="#{lbl.view_page_disallowed2}"/>
 		</h3>
 		<h:form>
-			<h:panelGroup styleClass="full_area0_p8">
-				<h:panelGroup styleClass="double_area0">
-					<h:outputLabel for="inputEmail" styleClass="free_label" value="Email"/>
-					<h:inputText id="inputEmail" styleClass="double_txtInput" value="#{LoginBean.login}"/>
-				</h:panelGroup>
-				<h:panelGroup styleClass="double_area0 tiny_marginLExcl">
-					<h:outputLabel for="inputPasswd" styleClass="free_label " value="#{lbl.admin_pwd}"/>
-					<h:inputSecret id="inputPasswd" styleClass="double_txtInput" value="#{LoginBean.passwd}"/>
-				</h:panelGroup>
-			</h:panelGroup>
-			<h:panelGroup styleClass="quad_area0_p8">
-				<h:commandLink id="lnkLogin" styleClass="small_area1_p8 activeButton" value="#{lbl.login}" action ="#{LoginBean.doLogin}"/>
-			</h:panelGroup>
+			<div class="imj_metadataSet">
+				<h:outputLabel for="inputEmail" styleClass="imj_metadataLabel" value="Email"/>
+				<h:inputText id="inputEmail" styleClass="imj_metadataValue" value="#{LoginBean.login}"/>
+			</div>
+			<div class="imj_metadataSet">
+				<h:outputLabel for="inputPasswd" styleClass="imj_metadataLabel " value="#{lbl.admin_pwd}"/>
+				<h:inputSecret id="inputPasswd" styleClass="imj_metadataValue" value="#{LoginBean.passwd}"/>
+			</div>
+			<div class="imj_submitPanel">
+				<h:commandLink id="lnkLogin" styleClass="imj_submitButton" value="#{lbl.login}" action ="#{LoginBean.doLogin}"/>
+			</div>
 		</h:form>
-	</h:panelGroup>
+	</div>
 </ui:composition>

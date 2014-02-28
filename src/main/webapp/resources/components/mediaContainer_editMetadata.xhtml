@@ -8,6 +8,7 @@
 	<composite:interface>
 		<composite:attribute name="formularBean" required="true"/>
 		<composite:attribute name="formularContextBean" required="true"/>
+		<composite:attribute name="metadataBean" required="true"/>
 		<composite:attribute name="headline" required="true"/>
 	</composite:interface>
 	
@@ -27,7 +28,7 @@
 							<h:outputText value="#{lbl.title}*"/>
 							<span class="imj_noDisplay">: </span>
 						</label>
-						<h:inputText id="inputTitleText" styleClass="imj_metadataValue" value="#{cc.attrs.formularContextBean.metadata.title}"/>
+						<h:inputText id="inputTitleText" styleClass="imj_metadataValue" value="#{cc.attrs.metadataBean.title}"/>
 					</div>
 							
 					<!-- Description -->
@@ -36,11 +37,11 @@
 							<h:outputText value="#{lbl.description}"/>
 							<span class="imj_noDisplay">: </span>
 						</label>
-						<h:inputTextarea id="inputDescription" styleClass="imj_metadataValue" value="#{cc.attrs.formularContextBean.metadata.description}"/>
+						<h:inputTextarea id="inputDescription" styleClass="imj_metadataValue" value="#{cc.attrs.metadataBean.description}"/>
 					</div>
 					
 					<!-- Author data -->
-					<ui:repeat var="creator" value="#{cc.attrs.formularContextBean.metadata.persons}" varStatus="indexA">
+					<ui:repeat var="creator" value="#{cc.attrs.metadataBean.persons}" varStatus="indexA">
 						<h:panelGroup layout="block" styleClass="imj_authorMetadataSet">
 							<div class="imj_sectionHeadline">
 								<h4>

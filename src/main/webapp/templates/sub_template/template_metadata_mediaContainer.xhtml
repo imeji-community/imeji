@@ -3,8 +3,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:imjc="http://java.sun.com/jsf/composite/components"
-	xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs">
+	xmlns:imjc="http://java.sun.com/jsf/composite/components">
 
 
 	<!-- Main Content - bibliographic grid list - START -->
@@ -17,10 +16,10 @@
 		<h:panelGroup layout="block" id="imj_ajaxWrapper">
 			
 			<ui:fragment rendered="#{SessionBean.user != null and metadataView != 'yes'}">
-				<imjc:mediaContainer_editMetadata formularContextBean="#{metadataContextBean}" formularBean="#{metadataBean}" headline="#{containerHeadline}"/>
+				<imjc:mediaContainer_editMetadata formularContextBean="#{itemContextBean}" formularBean="#{itemBean}" metadataBean="#{metadataBean}" headline="#{containerHeadline}"/>
 			</ui:fragment>
 			<ui:fragment rendered="#{metadataView == 'yes'}">
-				<imjc:mediaContainer_viewMetadata metadataContextBean="#{metadataContextBean}" metadataBean="#{metadataBean}" headline="#{containerHeadline}" navigationContextURL="#{navigationContextURL}"/>
+				<imjc:mediaContainer_viewMetadata itemContextBean="#{itemContextBean}" itemBean="#{itemBean}" metadata="#{metadataBean}" headline="#{containerHeadline}" navigationContextURL="#{navigationContextURL}"/>
 			</ui:fragment>
 			
 			<ui:insert name="metadataProfile"/>

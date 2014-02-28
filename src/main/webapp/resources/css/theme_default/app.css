@@ -1499,6 +1499,7 @@ OLD:
 .imj_metadataListMediaContainer {
 	width: 91.25%;
 	padding: 0 4%;
+	border-top: 0.090909em solid #6CAE2F;
 }
 .imj_metadataProfileList .imj_listHeader,
 .imj_metadataListMediaContainer .imj_listHeader {

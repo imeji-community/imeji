@@ -13,14 +13,7 @@
 		<!-- Breadcrumb - History -->
 		<ui:include src="include/History.xhtml"></ui:include>
 		
-		<!-- Are You Admin? -->
-		<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!UsersBean.sysAdmin}">
-			<h:outputText value="#{lbl.view_page_disallowed}" styleClass="imj_messageInfo" rendered="#{SessionBean.user == null}"/>
-			<h:outputText value="#{lbl.view_page_disallowed2}" styleClass="imj_messageInfo" rendered="#{SessionBean.user != null}"/>
-		</h:panelGroup>
-		
-		<ui:fragment rendered="#{UsersBean.sysAdmin}">
-		<!-- Only for Admins -->
+		<ui:fragment rendered="#{UserBean.admin}">
 		
 			<div class="imj_userConfig">
 				

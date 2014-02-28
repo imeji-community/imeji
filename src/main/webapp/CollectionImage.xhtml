@@ -12,7 +12,14 @@
 	<ui:param name="browseToAllItemsUrl" value="#{Navigation.collectionUrl}#{CollectionImageBean.collectionId}/browse?q="/>
 	
 	<ui:define name="actionsMenu">
-		<menu:context_subNavigation contextId="#{CollectionImageBean.collectionId}" contextUrl="#{Navigation.collectionUrl}" curMainMenu="#{currentMainMenu}" userHasAdminRights="#{AuthorizationBean.admin}" userHasEditRights="#{CollectionImageBean.editable}" hasContent="true" navBean="#{Navigation}" activeMenu="item" allowedToShare="#{CollectionImageBean.collection.status=='PENDING' and CollectionImageBean.admin}"/>
+		<menu:context_subNavigation contextId="#{CollectionImageBean.collectionId}" 
+									contextUrl="#{Navigation.collectionUrl}" 
+									curMainMenu="#{currentMainMenu}" 
+									userHasAdminRights="#{AuthorizationBean.admin}" 
+									userHasEditRights="#{CollectionImageBean.editable}" 
+									hasContent="true" 
+									navBean="#{Navigation}" 
+									activeMenu="item"/>
 	</ui:define>
 	
 </ui:composition>

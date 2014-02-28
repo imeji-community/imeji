@@ -10,9 +10,25 @@
 	<ui:param name="currentMainMenu" value="collection"/>
 	
 	<ui:define name="actionsMenu">
-		<menu:context_subNavigation contextId="#{UploadBean.id}" contextUrl="#{Navigation.collectionUrl}" curMainMenu="#{currentMainMenu}" userHasAdminRights="#{AuthorizationBean.admin}" userHasEditRights="#{UploadBean.editable}" navBean="#{Navigation}" activeMenu="upload" hasContent="#{UploadBean.collectionSize > 0}"/>
+		<menu:context_subNavigation contextId="#{UploadBean.id}" 
+									contextUrl="#{Navigation.collectionUrl}" 
+									curMainMenu="#{currentMainMenu}" 
+									userHasAdminRights="#{AuthorizationBean.admin}" 
+									userHasEditRights="#{UploadBean.editable}" 
+									navBean="#{Navigation}" 
+									activeMenu="upload" 
+									hasContent="#{UploadBean.collectionSize > 0}"/>
 		
-		<menu:context_actionMenu isUserLoggedIn="#{SessionBean.user != null}" curMainMenu="#{currentMainMenu}" navBean="#{Navigation}" collectionStatus="#{UploadBean.collection.status}" contextId="#{UploadBean.id}" hasContent="#{UploadBean.collectionSize > 0}" isEditable="false" isDeletable="false" contextDownloadParam="&amp;col=#{UploadBean.id}"/>
+		<menu:context_actionMenu 	isUserLoggedIn="#{SessionBean.user != null}" 
+									curMainMenu="#{currentMainMenu}" 
+									navBean="#{Navigation}" 
+									collectionStatus="#{UploadBean.collection.status}" 
+									contextId="#{UploadBean.id}" 
+									hasContent="#{UploadBean.collectionSize > 0}" 
+									isEditable="#{UploadBean.editable}" 
+									isDeletable="#{UploadBean.deletable}" 
+									contextDownloadParam="&amp;col=#{UploadBean.id}"
+									allowedToShare="#{UploadBean.collection.status !='WITHDRAWN'}"/>
 	</ui:define>
 	
 	<ui:define name="additonalHeaderScripts">

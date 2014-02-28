@@ -19,9 +19,25 @@
 	
 	
 	<ui:define name="actionsMenu">
-		<menu:context_subNavigation contextId="#{metadataBean.id}" contextUrl="#{Navigation.collectionUrl}" curMainMenu="#{currentMainMenu}" userHasAdminRights="#{AuthorizationBean.admin}" userHasEditRights="#{metadataBean.editable and metadataContextBean.status != 'WITHDRAWN'}" hasContent="#{metadataBean.size > 0}" navBean="#{Navigation}" activeMenu="metadata" allowedToShare="#{metadataContextBean.status=='PENDING' and metadataBean.admin}"/>
+		<menu:context_subNavigation contextId="#{metadataBean.id}" 
+									contextUrl="#{Navigation.collectionUrl}" 
+									curMainMenu="#{currentMainMenu}" 
+									userHasAdminRights="#{AuthorizationBean.admin}" 
+									userHasEditRights="#{metadataBean.editable and metadataContextBean.status != 'WITHDRAWN'}" 
+									hasContent="#{metadataBean.size > 0}" 
+									navBean="#{Navigation}" 
+									activeMenu="metadata" />
 		
-		<menu:context_actionMenu isUserLoggedIn="#{SessionBean.user != null}" curMainMenu="#{currentMainMenu}" navBean="#{Navigation}" collectionStatus="#{metadataContextBean.status}" contextId="#{metadataBean.id}" isDeletable="#{metadataBean.deletable}" isEditable="#{metadataBean.editable}" hasContent="#{metadataBean.size > 0}" contextDownloadParam="&amp;col=#{metadataBean.id}"/>
+		<menu:context_actionMenu 	isUserLoggedIn="#{SessionBean.user != null}" 
+									curMainMenu="#{currentMainMenu}" 
+									navBean="#{Navigation}" 
+									collectionStatus="#{metadataContextBean.status}" 
+									contextId="#{metadataBean.id}" 
+									isDeletable="#{metadataBean.deletable}" 
+									isEditable="#{metadataBean.editable}" 
+									hasContent="#{metadataBean.size > 0}" 
+									contextDownloadParam="&amp;col=#{metadataBean.id}" 
+									allowedToShare="#{metadataContextBean.status != 'WITHDRAWN' and metadataBean.admin}"/>
 	</ui:define>
 			
 	<ui:define name="metadataProfile">

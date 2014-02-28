@@ -23,27 +23,40 @@
 		<composite:attribute name="isDeletable" type="java.lang.Boolean" default="false" required="false" shortDescription="@type: Boolean, required to check if item is deletable"/>
 		<composite:attribute name="hasContent" type="java.lang.Boolean" default="false" required="false" shortDescription="@type: Boolean, required to show menus (e.g. start page, content page)"/>
 		<composite:attribute name="downloadEnabled" type="java.lang.Boolean" default="true" required="false" shortDescription="@type: Boolean, param to disable the download menu on special pages (e.g. on collection overview, ...))"/>
+		<composite:attribute name="allowedToShare" type="java.lang.Boolean" default="false" required="false" shortDescription="@type: Boolean: depends on logged in status"/>
+		
 	</composite:interface>
 	
 	<composite:implementation>
 		
-		<div class="#{cc.attrs.menuClass.trim()}">
-			
-			<h:panelGroup layout="block" styleClass="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item" rendered="#{cc.attrs.sortBean != null}">
-				<div class="imj_menuHeader">
-					<h:outputText id="txtSort" value="#{lbl.sorting}" styleClass="imj_headerEntry"/>
-				</div>
-				<div class="imj_menuBody">
-					<h:outputText value="#{lbl.sort_by}: "/>
-					<h:form>
-						<h:selectOneMenu id="selSort" value="#{cc.attrs.sortBean.selectedSortCriterion}" onchange="submit();">
-							<f:selectItems id="sortItem" value="#{cc.attrs.sortBean.sortMenu}"/>
-						</h:selectOneMenu>
-						<h:commandLink id="lnkSortAsc" value="&#160;" styleClass="imj_buttonOrderByAsc_16" action="#{cc.attrs.sortBean.toggleSortOrder}" rendered="#{cc.attrs.sortBean.selectedSortOrder == 'ASCENDING'}"/>
-						<h:commandLink id="lnkSortDesc" value="&#160;" styleClass="imj_buttonOrderByDesc_16" action="#{cc.attrs.sortBean.toggleSortOrder}" rendered="#{cc.attrs.sortBean.selectedSortOrder != 'ASCENDING'}"/>
-					</h:form>
-				</div>
-			</h:panelGroup>
+		<div class="#{cc.attrs.menuClass.trim()}">			
+					
+			<ui:fragment rendered="#{cc.attrs.navBean != null and cc.attrs.downloadEnabled}">					
+					<div class="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item">
+						<div class="imj_menuHeader">
+							<h:outputText value="#{lbl.download}" styleClass="imj_headerEntry"/>
+						</div>
+						<div class="imj_menuBody">
+							<ul class="imj_overlayMenuList">
+								<li>
+									<h:outputLink title="#{lbl.export_zip}" value="#{cc.attrs.navBean.applicationUrl}export?format=zip&amp;type=image&amp;n=10000#{cc.attrs.contextDownloadParam.trim()}&amp;q=#{cc.attrs.exportQuery.trim()}" target="_blank">
+										<h:outputText value="#{lbl.export_zip}"/>
+									</h:outputLink>
+								</li>
+								<li>
+									<h:outputLink title="#{lbl.export_rdf}" value="#{cc.attrs.navBean.applicationUrl}export?format=rdf&amp;type=image&amp;n=10000#{cc.attrs.contextDownloadParam.trim()}&amp;q=#{cc.attrs.exportQuery.trim()}" target="_blank">
+										<h:outputText value="#{lbl.export_rdf}"/>
+									</h:outputLink>
+								</li>
+								<li>
+									<h:outputLink title="#{lbl.export_native}" value="#{cc.attrs.navBean.applicationUrl}export?format=xml&amp;type=image&amp;n=10000#{cc.attrs.contextDownloadParam.trim()}&amp;q=#{cc.attrs.exportQuery.trim()}" target="_blank">
+										<h:outputText value="#{lbl.export_native}"/>
+									</h:outputLink>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</ui:fragment>
 			
 			<ui:fragment rendered="#{cc.attrs.isUserLoggedIn}">
 				
@@ -66,6 +79,15 @@
 					</div>
 					<div class="imj_menuBody">
 						<ul class="imj_overlayMenuList">
+							
+							<ui:fragment rendered="#{cc.attrs.allowedToShare}">
+								<li class="#{curMenuClass}Item">
+									<h:outputLink value="#{cc.attrs.navBean.shareUrl}?uri=#{cc.attrs.navBean.applicationUrl}#{cc.attrs.curMainMenu}/#{cc.attrs.contextId}" styleClass="#{(activeMenuValue == 'share') ? 'imj_active' : ''}">
+										<h:outputText value="#{lbl.album_share}" rendered="#{cc.attrs.curMainMenu == 'album'}"/>
+										<h:outputText value="#{lbl.collection_share}" rendered="#{cc.attrs.curMainMenu == 'collection'}"/>
+									</h:outputLink>
+								</li>
+							</ui:fragment>
 							
 							<ui:fragment rendered="#{cc.attrs.isEditable and cc.attrs.collectionStatus.trim().toUpperCase() == 'PENDING' and cc.attrs.hasContent}">
 								<li>
@@ -105,40 +127,25 @@
 							</ui:fragment>
 						</ul>
 					</div>
-				</div>
-				
-				
-				<ui:fragment rendered="#{cc.attrs.navBean != null and cc.attrs.downloadEnabled}">
-					
-					<div class="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item">
-						<div class="imj_menuHeader">
-							<h:outputText value="#{lbl.download}" styleClass="imj_headerEntry"/>
-						</div>
-						<div class="imj_menuBody">
-							<ul class="imj_overlayMenuList">
-								<li>
-									<h:outputLink title="#{lbl.export_zip}" value="#{cc.attrs.navBean.applicationUrl}export?format=zip&amp;type=image&amp;n=10000#{cc.attrs.contextDownloadParam.trim()}&amp;q=#{cc.attrs.exportQuery.trim()}" target="_blank">
-										<h:outputText value="#{lbl.export_zip}"/>
-									</h:outputLink>
-								</li>
-								<li>
-									<h:outputLink title="#{lbl.export_rdf}" value="#{cc.attrs.navBean.applicationUrl}export?format=rdf&amp;type=image&amp;n=10000#{cc.attrs.contextDownloadParam.trim()}&amp;q=#{cc.attrs.exportQuery.trim()}" target="_blank">
-										<h:outputText value="#{lbl.export_rdf}"/>
-									</h:outputLink>
-								</li>
-								<li>
-									<h:outputLink title="#{lbl.export_native}" value="#{cc.attrs.navBean.applicationUrl}export?format=xml&amp;type=image&amp;n=10000#{cc.attrs.contextDownloadParam.trim()}&amp;q=#{cc.attrs.exportQuery.trim()}" target="_blank">
-										<h:outputText value="#{lbl.export_native}"/>
-									</h:outputLink>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</ui:fragment>
-				
-				
-				
+				</div>			
 			</ui:fragment> <!-- END if user logged in -->
+			
+			<h:panelGroup layout="block" styleClass="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item" rendered="#{cc.attrs.sortBean != null}">
+				<div class="imj_menuHeader">
+					<h:outputText id="txtSort" value="#{lbl.sorting}" styleClass="imj_headerEntry"/>
+				</div>
+				<div class="imj_menuBody">
+					<h:outputText value="#{lbl.sort_by}: "/>
+					<h:form>
+						<h:selectOneMenu id="selSort" value="#{cc.attrs.sortBean.selectedSortCriterion}" onchange="submit();">
+							<f:selectItems id="sortItem" value="#{cc.attrs.sortBean.sortMenu}"/>
+						</h:selectOneMenu>
+						<h:commandLink id="lnkSortAsc" value="&#160;" styleClass="imj_buttonOrderByAsc_16" action="#{cc.attrs.sortBean.toggleSortOrder}" rendered="#{cc.attrs.sortBean.selectedSortOrder == 'ASCENDING'}"/>
+						<h:commandLink id="lnkSortDesc" value="&#160;" styleClass="imj_buttonOrderByDesc_16" action="#{cc.attrs.sortBean.toggleSortOrder}" rendered="#{cc.attrs.sortBean.selectedSortOrder != 'ASCENDING'}"/>
+					</h:form>
+				</div>
+			</h:panelGroup>
+			
 		</div>
 	</composite:implementation>
 </html>

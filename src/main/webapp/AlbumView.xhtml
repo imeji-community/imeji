@@ -39,37 +39,6 @@
 									contextDownloadParam="&amp;album=#{metadataBean.id}"/>
 	</ui:define>
 	
-	<ui:define name="actionsMenu_old">
-		<h:panelGroup layout="block" styleClass="imj_contentSubMenu">
-			<h:outputLink id="lnkViewHome" styleClass="imj_contentSubMenuItem" value="#{Navigation.albumUrl}#{AlbumBean.id}" rendered="#{AlbumBean.size > 0}">
-				<h:outputText value="#{lbl.album_home}"/>
-			</h:outputLink>
-		
-			<h:outputLink id="lnkViewCollectionAllImages" styleClass="imj_contentSubMenuItem" value="#{Navigation.albumUrl}#{AlbumBean.id}/#{Navigation.browsePath}?q=" rendered="#{AlbumBean.size > 0}">
-				<h:outputText value="#{lbl.view_images}"/>
-			</h:outputLink>
-			
-			<h:outputText value="#{lbl.album_metadata}" styleClass="imj_contentSubMenuItem imj_active"/>
-			
-			<h:outputLink styleClass="imj_contentSubMenuItem" value="#{Navigation.shareUrl}?uri=#{AlbumBean.album.id}" rendered="#{AlbumBean.album.status=='PENDING' and AlbumBean.admin}">
-				<h:outputText value="#{lbl.album_share}"/>
-			</h:outputLink>
-			
-			<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('release-item-dialog');" rendered="#{AlbumBean.editable and AlbumBean.album.status=='PENDING' and AlbumBean.size > 0}">
-				<h:outputText value="#{lbl.release}"/>
-			</h:outputLink>
-			
-			<h:outputLink id="lnkWithdrawCollection" styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('item:dialDiscardContainer:dialogWithdraw');" rendered="#{AlbumBean.editable and AlbumBean.album.status=='RELEASED'}">
-				<h:outputText value="#{lbl.withdraw}"/>
-			</h:outputLink>
-			
-			<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('delete-item-dialog');" rendered="#{AlbumBean.deletable}">
-				<h:outputText value="#{lbl.delete}"/>
-			</h:outputLink>
-		</h:panelGroup>
-		
-	</ui:define>
-	
 	<ui:define name="modalDialogs_from_site">
 		<dialog:confirmationDialog submitAction="release" bean="#{metadataBean}" confirmationText="#{msg.confirmation_release_album}?" submitLabel="#{lbl.release}" dialogId="releaseMenuItemDialog" rendered="#{metadataBean.editable and metadataBean.album.status.toString().toUpperCase() == 'PENDING' and metadataBean.size > 0}"/>
 		<dialog:confirmationDialog submitAction="delete" bean="#{metadataBean}" confirmationText="#{msg.confirmation_delete_album}?" submitLabel="#{lbl.delete}" dialogId="deleteMenuItemDialog" rendered="#{metadataBean.deletable}"/>

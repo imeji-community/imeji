@@ -1,24 +1,12 @@
 /* =====================================================================================
  ****************************** imeji theme_default styles ***************************** 
  * 
- * New imeji styles for theme_default 
- * 
- * Please note: This style sheet is a first revision, a workaround in progress (!) 
- * of the original imeji theme/template based on the eSciDoc GUI V2 (core and appearance 
- * styles - http://colab.mpdl.mpg.de/mediawiki/images/0/02/MPDL_StyleGuide.pdf).
- *
- * Since we are developing a new template and styles in a parallel run, in branch 
- * "gui-restructure" - https://github.com/imeji-community/imeji/tree/gui-restructure 
- * this style-sheet contains only *new* imeji styles (and some additional hot fixes for 
- * the original theme)!
+ * imeji styles for theme_default 
  * 
  * Please check the new base.css with normalize.css and additional CSS-resets.
  * 
- * New imeji style prefix for all classes and ids: imj_
+ * imeji style prefix for all classes and ids: imj_
  *
- * New naming - list of the renamed styles 
- * old version -> new version (file.name)
- * (are documented in changes.css)  
  * 
  * Karsten Asshauer & Marco Schlender for the imeji community * http://imeji.org *
  * ====================================================================================  */
@@ -426,14 +414,6 @@ textarea {
 
 /* ===[ SiteHeader ]===
    ================================================== */
-
-/* header wrapper (header.jspf - template.xhtml)   */
-
-/* full_area0 header imj_clear - header.jspf 
-
-margin-top: 0.5454em;
-margin-bottom: 0.9090em;  */
-
 .imj_siteHeader {
     padding: 0 4%;
 }
@@ -1198,25 +1178,6 @@ h4.imj_sectionHeadline {
     width: 81.3636em;
 }
 
-/* span .subHeader - no style
-
-OLD: 
-
-.subHeaderSection .subHeader {
-    float:left;
-    margin-top:1.6363em; 
-    padding-top:0.3636em;
-    clear:all;
-}
-    
-/* 
-.fullItem .itemBlockSubHeader {
-    float: left;
-    white-space: nowrap;
-    margin-left: -0.74em;
-}
-
-  */
 
 /* ===[ Messages - OLD !]=== */
 

@@ -38,10 +38,12 @@
 				<imjc:bibliographicList_loggedOut mediaList="#{paginatorListSessionBean}" globalDisplayLinkText="#{globalDisplayLinkText}" metadataNavigationURL="#{metadataNavigationURL}"/>
 			</ui:fragment>
 			<ui:fragment rendered="#{SessionBean.user != null}">
-				<imjc:bibliographicList_loggedIn mediaList="#{paginatorListSessionBean}" isActivatable="#{isActivatable}" metadataNavigationURL="#{metadataNavigationURL}" 
-												releaseItemConfirmationText="#{releaseItemConfirmationText}" deleteItemConfirmationText="#{deleteItemConfirmationText}"
-												globalDeleteDialogId="#{currentMainMenu}List-selected-deleteDialog" withdrawItemConfirmationText="#{withdrawItemConfirmationText}"
-												globalDeleteLinkText="#{globalDeleteLinkText}" globalDisplayLinkText="#{globalDisplayLinkText}"/>
+				<imjc:bibliographicList_loggedIn mediaList="#{paginatorListSessionBean}" isActivatable="#{isActivatable}" 
+												 metadataNavigationURL="#{metadataNavigationURL}" releaseItemConfirmationText="#{releaseItemConfirmationText}" 
+												 deleteItemConfirmationText="#{deleteItemConfirmationText}"
+												 globalDeleteDialogId="#{currentMainMenu}List-selected-deleteDialog" 
+												 withdrawItemConfirmationText="#{withdrawItemConfirmationText}"
+												 globalDeleteLinkText="#{globalDeleteLinkText}" globalDisplayLinkText="#{globalDisplayLinkText}"/>
 			</ui:fragment>
 			
 			<!-- Page Browser GotoBox -->

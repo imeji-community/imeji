@@ -11,7 +11,15 @@
 	<ui:param name="contUrl" value="#{(ShareBean.album) ? Navigation.albumUrl : Navigation.collectionUrl}"/>
 	
 	<ui:define name="actionsMenu">
-		<menu:context_subNavigation contextId="#{ShareBean.container.idString}" contextUrl="#{contUrl}" curMainMenu="#{currentMainMenu}" userHasAdminRights="#{AuthorizationBean.admin}" userHasEditRights="true" hasContent="true" navBean="#{Navigation}" activeMenu="share" allowedToShare="true"/>
+		<menu:context_subNavigation contextId="#{ShareBean.container.idString}" 
+									contextUrl="#{contUrl}" 
+									curMainMenu="#{currentMainMenu}" 
+									userHasAdminRights="#{AuthorizationBean.admin}" 
+									userHasEditRights="true" 
+									hasContent="true" 
+									navBean="#{Navigation}" 
+									activeMenu="share" 
+									allowedToShare="true"/>
 	</ui:define>
 	
 	<ui:define name="init">

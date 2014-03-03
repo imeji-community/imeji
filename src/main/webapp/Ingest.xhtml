@@ -195,11 +195,4 @@
 			</h:panelGroup>
 		</h:panelGroup>
 	</ui:define>
-	
-	
-	<ui:define name="modalDialogs_from_site">
-		<dialog:confirmationDialog submitAction="release" bean="#{IngestBean}" confirmationText="#{msg.confirmation_release_collection}?" submitLabel="#{lbl.release}" dialogId="releaseMenuItemDialog" rendered="false"/>
-		<dialog:confirmationDialog submitAction="delete" bean="#{IngestBean}" confirmationText="#{msg.confirmation_delete_collection}?" submitLabel="#{lbl.delete}" dialogId="deleteMenuItemDialog" rendered="false"/>
-		<dialog:confirmationReasonedDialog submitAction="withdraw" bean="#{IngestBean.collection}" confirmationText="#{msg.confirmation_withdraw_collection}" submitLabel="#{lbl.withdraw}" dialogId="withdrawMenuItemDialog" rendered="false"/>
-	</ui:define>
 </ui:composition>

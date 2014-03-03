@@ -12,36 +12,38 @@
 	<ui:param name="metadataView" value="yes"/>
 	
 	<ui:param name="containerHeadline" value="#{lbl.album_information}"/>
-	<ui:param name="metadataBean" value="#{AlbumBean}"/>
-	<ui:param name="metadataContextBean" value="#{metadataBean.album}"/>
-	<ui:param name="headline" value="#{metadataContextBean.metadata.title}"/>
+	<ui:param name="itemBean" value="#{AlbumBean}"/>
+	<ui:param name="itemContextBean" value="#{itemBean.album}"/>
+	<ui:param name="metadataBean" value="#{itemContextBean.metadata}"/>
+	<ui:param name="headline" value="#{metadataBean.title}"/>
 	<ui:param name="navigationContextURL" value="#{Navigation.albumUrl}"/>
 	
 	<ui:define name="actionsMenu">
-		<menu:context_subNavigation contextId="#{metadataBean.id}" 
+<<<<<<< HEAD
+		<menu:context_subNavigation contextId="#{itemBean.id}" 
 									contextUrl="#{Navigation.albumUrl}" 
 									curMainMenu="#{currentMainMenu}" 
 									userHasAdminRights="#{AuthorizationBean.admin}" 
-									userHasEditRights="#{metadataBean.editable and metadataContextBean.status != 'WITHDRAWN'}" 
-									hasContent="#{metadataBean.size > 0}" 
+									userHasEditRights="#{itemBean.editable and itemContextBean.status != 'WITHDRAWN'}" 
+									hasContent="#{itemBean.size > 0}" 
 									navBean="#{Navigation}" 
 									activeMenu="metadata" />
 		
 		<menu:context_actionMenu 	isUserLoggedIn="#{SessionBean.user != null}" 
 									curMainMenu="#{currentMainMenu}" 
 									navBean="#{Navigation}" 
-									collectionStatus="#{metadataContextBean.status}" 
-									contextId="#{metadataBean.id}" 
-									isDeletable="#{metadataBean.deletable}" 
-									isEditable="#{metadataBean.editable}" 
-									hasContent="#{metadataBean.size > 0}" 
-									allowedToShare="#{metadataContextBean.status!='WITHDRAWN' and metadataBean.admin}"
-									contextDownloadParam="&amp;album=#{metadataBean.id}"/>
+									collectionStatus="#{itemContextBean.status}" 
+									contextId="#{itemBean.id}" 
+									isDeletable="#{itemBean.deletable}" 
+									isEditable="#{itemBean.editable}" 
+									hasContent="#{itemBean.size > 0}" 
+									allowedToShare="#{itemContextBean.status!='WITHDRAWN' and itemBean.admin}"
+									contextDownloadParam="&amp;album=#{itemBean.id}"/>
 	</ui:define>
 	
 	<ui:define name="modalDialogs_from_site">
-		<dialog:confirmationDialog submitAction="release" bean="#{metadataBean}" confirmationText="#{msg.confirmation_release_album}?" submitLabel="#{lbl.release}" dialogId="releaseMenuItemDialog" rendered="#{metadataBean.editable and metadataBean.album.status.toString().toUpperCase() == 'PENDING' and metadataBean.size > 0}"/>
-		<dialog:confirmationDialog submitAction="delete" bean="#{metadataBean}" confirmationText="#{msg.confirmation_delete_album}?" submitLabel="#{lbl.delete}" dialogId="deleteMenuItemDialog" rendered="#{metadataBean.deletable}"/>
-		<dialog:confirmationReasonedDialog submitAction="withdraw" bean="#{metadataBean}" confirmationText="#{msg.confirmation_withdraw_album}" submitLabel="#{lbl.withdraw}" dialogId="withdrawMenuItemDialog" rendered="#{metadataBean.editable and metadataBean.album.status.toString().toUpperCase() == 'RELEASED'}"/>
+		<dialog:confirmationDialog submitAction="release" bean="#{itemBean}" confirmationText="#{msg.confirmation_release_album}?" submitLabel="#{lbl.release}" dialogId="releaseMenuItemDialog" rendered="#{itemBean.editable and itemBean.album.status.toString().toUpperCase() == 'PENDING' and itemBean.size > 0}"/>
+		<dialog:confirmationDialog submitAction="delete" bean="#{itemBean}" confirmationText="#{msg.confirmation_delete_album}?" submitLabel="#{lbl.delete}" dialogId="deleteMenuItemDialog" rendered="#{itemBean.deletable}"/>
+		<dialog:confirmationReasonedDialog submitAction="withdraw" bean="#{itemBean}" confirmationText="#{msg.confirmation_withdraw_album}" submitLabel="#{lbl.withdraw}" dialogId="withdrawMenuItemDialog" rendered="#{itemBean.editable and itemBean.album.status.toString().toUpperCase() == 'RELEASED'}"/>
 	</ui:define>
 </ui:composition>

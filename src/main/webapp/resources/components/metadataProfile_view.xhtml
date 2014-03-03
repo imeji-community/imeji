@@ -8,6 +8,12 @@
 	<composite:interface>
 		<composite:attribute name="metadataBean" required="true"/>
 		<composite:attribute name="metadataContextBean" required="true"/>
+		<composite:attribute name="metadataProfile" required="true"/>
+		<composite:attribute name="profileUrl" default="" type="java.lang.String" required="false"/>
+		<composite:attribute name="exportUrl" default="" type="java.lang.String" required="false"/>
+		<composite:attribute name="editable" default="false" type="java.lang.Boolean" required="false"/>
+		<composite:attribute name="editUrl" default="" type="java.lang.String" required="false"/>
+		<composite:attribute name="relatedCollectionsUrl" default="" type="java.lang.String" required="false"/>
 		<composite:attribute name="headline" required="true"/>
 	</composite:interface>
 	
@@ -21,14 +27,17 @@
 				
 				<div class="imj_listHeaderMenu">
 					<!-- EDIT -->
-					<ui:fragment rendered="#{cc.attrs.metadataBean.profileEditor and cc.attrs.metadataContextBean.status != 'WITHDRAWN'}">
-						<h:outputLink value="#{Navigation.profileUrl}#{cc.attrs.metadataBean.profileId}/#{Navigation.editPath}?init=1&amp;col=#{cc.attrs.metadataBean.id}">
-							<h:outputText value="#{lbl.edit}"/>
-						</h:outputLink>
-					</ui:fragment>
+					<h:outputLink value="#{cc.attrs.editUrl.trim()}" title="#{lbl.edit}" rendered="#{cc.attrs.editable and cc.attrs.editUrl.trim().length() > 0}">
+						<h:outputText value="#{lbl.edit}"/>
+					</h:outputLink>
+					
+					<!-- Related collections -->
+					<h:outputLink value="#{cc.attrs.relatedCollectionsUrl.trim()}" rendered="#{cc.attrs.relatedCollectionsUrl.trim().length() > 0}">
+						<h:outputText value="#{lbl.profile_related_collection}"/>
+					</h:outputLink>
 					
 					<!-- Export -->
-					<h:outputLink value="#{Navigation.applicationUrl}export?format=xml&amp;type=profile&amp;q=prof==&quot;#{cc.attrs.metadataContextBean.profile}&quot;" target="_blank">
+					<h:outputLink value="#{cc.attrs.exportUrl.trim()}" target="_blank" rendered="#{cc.attrs.exportUrl.trim().length() > 0}">
 						<h:outputText value="#{lbl.metadata_profile_view}"/>
 					</h:outputLink>
 				</div>
@@ -36,17 +45,19 @@
 			<div class="imj_listBody">
 				<!-- Metadata Profile -->
 				
-				<div class="imj_metadataSet">
+				<h:panelGroup layout="block" styleClass="imj_metadataSet" rendered="#{cc.attrs.profileUrl.trim().length() > 0}">
 					<label class="imj_metadataLabel">							
 						<h:outputText value="#{lbl.profile} URI"/>
 						<span class="imj_noDisplay">: </span>
 					</label>
 					<span class="imj_metadataValue">
-						<h:outputText value="#{cc.attrs.metadataContextBean.profile}"/>
+						<a href="#{cc.attrs.profileUrl.trim()}" title="#{cc.attrs.profileUrl.trim()}">
+							<h:outputText value="#{cc.attrs.profileUrl.trim()}"/>
+						</a>
 					</span>
-				</div>
+				</h:panelGroup>
 				
-				<ui:repeat var="statement" value="#{cc.attrs.metadataBean.profile.statements}">
+				<ui:repeat var="statement" value="#{cc.attrs.metadataProfile.statements}">
 					<div class="imj_metadataProfileItem">
 						<div class="imj_sectionHeadline">
 							<h4>

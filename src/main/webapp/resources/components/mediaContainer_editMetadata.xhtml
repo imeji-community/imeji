@@ -28,7 +28,7 @@
 							<h:outputText value="#{lbl.title}*"/>
 							<span class="imj_noDisplay">: </span>
 						</label>
-						<h:inputText id="inputTitleText" styleClass="imj_metadataValue" value="#{cc.attrs.metadataBean.title}"/>
+						<h:inputText id="inputTitleText" styleClass="imj_metadataValue" value="#{cc.attrs.formularContextBean.metadata.title}"/>
 					</div>
 							
 					<!-- Description -->
@@ -37,11 +37,11 @@
 							<h:outputText value="#{lbl.description}"/>
 							<span class="imj_noDisplay">: </span>
 						</label>
-						<h:inputTextarea id="inputDescription" styleClass="imj_metadataValue" value="#{cc.attrs.metadataBean.description}"/>
+						<h:inputTextarea id="inputDescription" styleClass="imj_metadataValue" value="#{cc.attrs.formularContextBean.metadata.description}"/>
 					</div>
 					
 					<!-- Author data -->
-					<ui:repeat var="creator" value="#{cc.attrs.metadataBean.persons}" varStatus="indexA">
+					<ui:repeat var="creator" value="#{cc.attrs.formularContextBean.metadata.persons}" varStatus="indexA">
 						<h:panelGroup layout="block" styleClass="imj_authorMetadataSet">
 							<div class="imj_sectionHeadline">
 								<h4>

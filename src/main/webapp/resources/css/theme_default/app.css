@@ -1631,7 +1631,7 @@ table.imj_optionSet td label {
 
 label, .imj_metadataLabel, .imj_infodataLabel, .imj_admindataLabel {
 	display: inline-block;
-	min-width: 24%;
+	width: 24%;
 	vertical-align: top;
 	cursor: pointer;
 }

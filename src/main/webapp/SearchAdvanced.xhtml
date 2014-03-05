@@ -63,7 +63,7 @@
 									</h:selectOneMenu>
 								</h:panelGroup>
 								<h:panelGroup class="imj_searchStatement">	
-									<h:selectOneMenu id="selStatement" value="#{el.namespace}" onchange="$(this).parent().find('.imj_ajaxChangeElementButton').click();">
+									<h:selectOneMenu id="selStatement" value="#{el.namespace}" onchange="$(this).parent().find('changeEl').click();">
 										<f:selectItems value="#{g.statementMenu}"/>
 									</h:selectOneMenu>
 								</h:panelGroup>
@@ -79,11 +79,11 @@
 									</h:selectOneMenu>
 								</h:panelGroup>	
 								<h:panelGroup class="imj_searchInput">						
-								<h:inputText id="input" autocomplete="false" value="#{el.searchValue}" rendered="#{el.predefinedValues == null}" onkeyup="$(this).parent().find('.imj_ajaxUpdateElementButton').click();">
-										<f:validateRegex pattern="[0-9]+" disabled="#{el.type != 'DATE'}" />										
-								</h:inputText>									
-								<h:selectOneMenu id="select" value="#{el.searchValue}" rendered="#{el.predefinedValues != null}" onchange="$(this).parent().find('.imj_ajaxUpdateElementButton').click();">
-									<f:selectItems value="#{el.predefinedValues}"/>
+									<h:inputText id="input" autocomplete="false" value="#{el.searchValue}" rendered="#{el.predefinedValues == null}" onkeyup="$(this).parent().find('.imj_ajaxUpdateElementButton').click();">
+											<f:validateRegex pattern="[0-9]+" disabled="#{el.type != 'DATE'}" />										
+									</h:inputText>									
+									<h:selectOneMenu id="select" value="#{el.searchValue}" rendered="#{el.predefinedValues != null}" onchange="$(this).parent().find('.imj_ajaxUpdateElementButton').click();">
+										<f:selectItems value="#{el.predefinedValues}"/>
 									</h:selectOneMenu>
 								</h:panelGroup>
 								

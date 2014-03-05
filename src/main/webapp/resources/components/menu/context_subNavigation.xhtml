@@ -59,9 +59,9 @@
 							</li>
 						</ui:fragment>
 						
-						<ui:fragment rendered="#{cc.attrs.userHasAdminRights}">
+						<ui:fragment rendered="#{AuthorizationBean.admin}">
 							<li class="#{curMenuClass}Item">
-								<h:outputLink value="#{curContextUrl}/ingest?init=1" title="#{lbl.ingest}" styleClass="#{(activeMenuValue == 'ingest') ? ' imj_active' : ''}">
+								<h:outputLink value="#{curContextUrl}/ingest?init=1" title="#{lbl.ingest}">
 									<h:outputText value="#{lbl.ingest}"/>
 								</h:outputLink>
 							</li>

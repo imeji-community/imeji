@@ -5,11 +5,7 @@
 	
 	<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/autocomplete.js"></script>	
 	<!-- METADATA INPUT PANEL <h:panelGroup layout="block" styleClass="imj_metadataInputPanel"> -->
-		
-		<div class="imj_metadataValueEntryLabel">
-			<h:outputLabel value="#{MetadataLabels.internationalizedLabels[metadata.statement.id]} (#{MetadataLabels.lang})" rendered="#{hideLabel == true}"/>
-		</div>
-	
+
 		<!-- METADATA TYPE TEXT -->
 		<h:panelGroup rendered="#{metadata.typeNamespace =='http://imeji.org/terms/metadata#text'}">
 			<h:inputTextarea id="inputText" name="inputText" styleClass="imj_metadataEditText" value="#{metadata.text}" rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}" onfocus="getDatasourceUrl('#{statement.vocabulary}', '#{Navigation.autocompleteUrl}')"/>
@@ -49,19 +45,20 @@
 		
 		<!-- METADATA TYPE PUBLICATION -->
 		<h:panelGroup rendered="#{metadata.typeNamespace=='http://imeji.org/terms/metadata#publication'}">
-			<h:inputText id="inputPublicationURI" styleClass="imj_metadataEditPublication" value="#{metadata.uri}"  rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}" onfocus="this.select(); getDatasourceUrl('#{statement.vocabulary}', '#{Navigation.autocompleteUrl}')" valueChangeListener="#{metadata.citationUriListener}">
+			<h:inputText id="inputPublicationURI" styleClass="imj_metadataEditPublication" value="#{metadata.uri}"  rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}" onfocus="this.select(); getDatasourceUrl('#{statement.vocabulary}', '#{Navigation.autocompleteUrl}')" valueChangeListener="#{metadata.citationListener}">
 				<f:converter converterId="URIConverter" />
 			</h:inputText>
-			<h:selectOneMenu styleClass="imj_metadataEditPublication" immediate="true" value="#{metadata.uri}" rendered="#{SuggestBean.suggests[statement.id].hasRestrictedValues}">
+			<h:selectOneMenu styleClass="imj_metadataEditPublication" immediate="false" value="#{metadata.uri}" rendered="#{SuggestBean.suggests[statement.id].hasRestrictedValues}">
 				<f:selectItems value="#{SuggestBean.suggests[statement.id].restrictedValues}"/>
 			</h:selectOneMenu>
 			<div class="imj_metadataValueEntryLabel">
 				<h:outputLabel value="#{lbl.export_formats}"/>
 			</div>
-			<h:selectOneMenu value="#{metadata.exportFormat}" valueChangeListener="#{metadata.citationUriListener}">
+			<h:selectOneMenu value="#{metadata.exportFormat}" >
 				<f:selectItem itemLabel="APA" itemValue="APA"></f:selectItem>
 				<f:selectItem itemLabel="AJP" itemValue="AJP"></f:selectItem>
 				<f:selectItem itemLabel="JUS" itemValue="JUS"></f:selectItem>
+				<f:ajax listener="#{metadata.resetCitationListener}" />
 			</h:selectOneMenu>
 		</h:panelGroup>
 			

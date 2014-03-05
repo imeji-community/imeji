@@ -2488,9 +2488,7 @@ a.imj_submitButton,
 .imj_uploadMessageArea .imj_fileSuccessMessageArea {
 	width: 48%;
 	padding: 1% 0.8%;
-	display: inline-block;
-	max-height: 17em;
-	overflow: auto;
+	display: inline-block;	
 	vertical-align: top;
 }
 .imj_uploadMessageArea .imj_fileErrorMessageArea .imj_messageList,

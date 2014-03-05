@@ -1869,6 +1869,7 @@ a.imj_submitButton,
 }
 .imj_advancedSearch .imj_logicalSearchGroup {
 	white-space: nowrap;
+	margin-right: 5%;
 }
 .imj_advancedSearch .imj_searchUnit {
 	width: 100%;
@@ -1878,7 +1879,7 @@ a.imj_submitButton,
 	display: inline-block;
 }
 .imj_advancedSearch .imj_searchUnit .imj_logicalConnector {
-	min-width: 3em;
+	min-width: 3em;	
 }
 .imj_advancedSearch .imj_searchUnit .imj_logicalDetailConnector { 
 	margin-left: 10%;
@@ -1898,8 +1899,20 @@ a.imj_submitButton,
 }
 .imj_advancedSearch .imj_searchUnit .imj_compareLabel { 
 	padding: 0 0.5em; 
+	margin-right: -20%;
 }
-					
+
+.imj_advancedSearch .imj_searchUnit .imj_searchSelectbox > select {
+	max-width: 30em;
+}
+
+.imj_advancedSearch .imj_searchUnit .imj_searchDetails .imj_searchStatement > select { 
+	width: 15em;
+}
+
+.imj_advancedSearch .imj_searchUnit .imj_searchDetails .imj_searchInput > input{
+	width: 20em;
+}
 
 /* * tiledMediaList + overlayMenu + singlePageBrowser
 	+ Buttons + rangeSelector + infoLayer

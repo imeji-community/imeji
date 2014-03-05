@@ -194,7 +194,7 @@ public class MdProfileBean
             ProfileController pc = new ProfileController();
             for (MetadataProfile mdp : pc.search(sessionBean.getUser()))
             {
-                if (!mdp.getId().toString().equals(profile.getId().toString()) && !profile.getStatements().isEmpty())
+                if (!mdp.getId().toString().equals(profile.getId().toString()) && !mdp.getStatements().isEmpty())
                 {
                     profilesMenu.add(new SelectItem(mdp.getId().toString(), mdp.getTitle()));
                 }

@@ -319,4 +319,11 @@ public class AlbumImagesBean extends ImagesBean
         Authorization auth = new Authorization();
         return auth.isContainerAdmin(session.getUser(), album);
     }
+    
+    @Override
+    public boolean isVisible()
+    {
+        Security security = new Security();
+        return security.check(OperationsType.READ, session.getUser(), album);
+    }
 }

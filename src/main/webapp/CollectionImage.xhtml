@@ -12,7 +12,8 @@
 	<ui:param name="browseToAllItemsUrl" value="#{Navigation.collectionUrl}#{CollectionImageBean.collectionId}/browse?q="/>
 	
 	<ui:define name="actionsMenu">
-		<menu:context_subNavigation contextId="#{CollectionImageBean.collectionId}" 
+		<ui:fragment rendered="#{CollectionImageBean.visible}">
+			<menu:context_subNavigation contextId="#{CollectionImageBean.collectionId}" 
 									contextUrl="#{Navigation.collectionUrl}" 
 									curMainMenu="#{currentMainMenu}" 
 									userHasAdminRights="#{AuthorizationBean.admin}" 
@@ -20,6 +21,7 @@
 									hasContent="true" 
 									navBean="#{Navigation}" 
 									activeMenu="item"/>
+		</ui:fragment>
 	</ui:define>
 	
 </ui:composition>

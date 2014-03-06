@@ -164,6 +164,13 @@ public class IngestBean
                 this.msg = e.getMessage();
             }
         }
+        if(error)
+        {
+            BeanHelper.error(session.getLabel("ingestFail"));
+            BeanHelper.error(msg);
+        }
+        else if (success)
+            BeanHelper.info(session.getLabel("ingestSuccess"));
     }
 
     public boolean isSuccess()

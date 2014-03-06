@@ -70,10 +70,10 @@ public class AlbumBean extends ContainerBean
     /**
      * A small description when the description of the {@link Album} is too large for the list view
      */
-    //private String smallDescription = null;
+    // private String smallDescription = null;
     private String description = "";
     private String descriptionFull = null;
-	private ThumbnailBean thumbnail;
+    private ThumbnailBean thumbnail;
     private Navigation navigation;
 
     /**
@@ -98,7 +98,7 @@ public class AlbumBean extends ContainerBean
         description = CommonUtils.removeTags(description);
         if (description != null && description.length() > DESCRIPTION_MAX_SIZE)
         {
-        	description = description.substring(0, DESCRIPTION_MAX_SIZE) + "...";
+            description = description.substring(0, DESCRIPTION_MAX_SIZE) + "...";
         }
         // Init the thumbnail
         if (!album.getImages().isEmpty())
@@ -312,7 +312,7 @@ public class AlbumBean extends ContainerBean
      */
     public void discardCommentListener(ValueChangeEvent event)
     {
-    	if (event.getNewValue() != null && event.getNewValue().toString().trim().length() > 0)
+        if (event.getNewValue() != null && event.getNewValue().toString().trim().length() > 0)
         {
             album.setDiscardComment(event.getNewValue().toString().trim());
         }
@@ -407,7 +407,9 @@ public class AlbumBean extends ContainerBean
      */
     public int getSize()
     {
-        return album.getImages().size();
+        if (album != null)
+            return album.getImages().size();
+        return 0;
     }
 
     /**
@@ -762,14 +764,16 @@ public class AlbumBean extends ContainerBean
         return description;
     }
 
-    public String getDescriptionFull() {
-		return descriptionFull;
-	}
+    public String getDescriptionFull()
+    {
+        return descriptionFull;
+    }
 
-	public void setDescriptionFull(String descriptionFull) {
-		this.descriptionFull = descriptionFull;
-	}
-    
+    public void setDescriptionFull(String descriptionFull)
+    {
+        this.descriptionFull = descriptionFull;
+    }
+
     public String getTab()
     {
         if (UrlHelper.getParameterValue("tab") != null)
@@ -825,43 +829,50 @@ public class AlbumBean extends ContainerBean
     {
         return album;
     }
-    
+
     /*
-     * (non-Javadoc)
-     * following getter functions are for standardization and simplification the 
-     * output of album data in a general template system
+     * (non-Javadoc) following getter functions are for standardization and simplification the output of album data in a
+     * general template system
      */
-    public String getTitle() 
+    public String getTitle()
     {
-    	return this.getContainer().getMetadata().getTitle();
-    }
-    public String getAuthors() 
-    {
-    	return this.getPersonString();
-    }
-    public Date getCreationDate() 
-    {
-    	return this.getContainer().getCreated().getTime();
-    }
-    public Date getLastModificationDate() 
-    {
-    	return this.getContainer().getModified().getTime();
-    }
-    public Date getVersionDate() 
-    {
-    	return this.getContainer().getVersionDate().getTime();
-    }
-    public Status getStatus()
-    {
-    	return this.getContainer().getStatus();
+        if (getContainer() != null)
+            return getContainer().getMetadata().getTitle();
+        return null;
     }
 
-	public String getDiscardComment() 
-	{
-		return this.getContainer().getDiscardComment();
-	}
-	public void setDiscardComment(String comment)
-	{
-		this.getContainer().setDiscardComment(comment);
-	}
+    public String getAuthors()
+    {
+        return this.getPersonString();
+    }
+
+    public Date getCreationDate()
+    {
+        return this.getContainer().getCreated().getTime();
+    }
+
+    public Date getLastModificationDate()
+    {
+        return this.getContainer().getModified().getTime();
+    }
+
+    public Date getVersionDate()
+    {
+        return this.getContainer().getVersionDate().getTime();
+    }
+
+    public Status getStatus()
+    {
+        return this.getContainer().getStatus();
+    }
+
+    public String getDiscardComment()
+    {
+        return this.getContainer().getDiscardComment();
+    }
+
+    public void setDiscardComment(String comment)
+    {
+        this.getContainer().setDiscardComment(comment);
+    }
 }

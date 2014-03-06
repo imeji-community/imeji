@@ -10,12 +10,12 @@
 	<ui:param name="headline" value="#{AlbumBean.album.metadata.title}"/>
 	<ui:param name="currentMainMenu" value="album"/>
 	<ui:param name="logicBean" value="#{AlbumBean}"/>
-	<ui:param name="listSize" value="#{AlbumBean.size}"/>
 	
 	
 	
 	<ui:define name="actionsMenu">
-		<menu:context_subNavigation contextId="#{logicBean.id}" 
+		<ui:fragment rendered="#{logicBean.visible}">
+			<menu:context_subNavigation contextId="#{logicBean.id}" 
 									contextUrl="#{Navigation.albumUrl}" 
 									curMainMenu="#{currentMainMenu}" 
 									userHasAdminRights="#{AuthorizationBean.admin}" 
@@ -24,7 +24,7 @@
 									navBean="#{Navigation}" 
 									activeMenu="start"/>
 		
-		<menu:context_actionMenu 	isUserLoggedIn="#{SessionBean.user != null}" 
+			<menu:context_actionMenu 	isUserLoggedIn="#{SessionBean.user != null}" 
 									curMainMenu="#{currentMainMenu}" 
 									navBean="#{Navigation}" 
 									collectionStatus="#{logicBean.album.status}" 
@@ -32,8 +32,10 @@
 									isDeletable="#{logicBean.deletable}" 
 									isEditable="#{logicBean.editable}" 
 									hasContent="#{logicBean.size > 0}" 
+									downloadEnabled="#{logicBean.size > 0}"
 									contextDownloadParam="&amp;album=#{logicBean.id}"
 									allowedToShare="#{logicBean.album.status!='WITHDRAWN' and logicBean.admin}"/>
+		</ui:fragment>
 	</ui:define>
 	
 	<!-- ModalDialogs - Confirmation Pages -->

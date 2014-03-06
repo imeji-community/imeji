@@ -127,27 +127,7 @@
 			
 			<!-- START INGEST -->
 			<h:panelGroup layout="block" styleClass="imj_ingestWrapper">
-				
-				<ui:fragment rendered="#{IngestBean.error or IngestBean.success}">
-					<div class="imj_ingestMessageArea">
-						<ul class="imj_messageList">
-							<ui:fragment rendered="#{IngestBean.error}">
-								<li class="imj_messageError">
-									<h:outputText value="#{lbl.ingestFail}:"/>
-								</li>
-								<li>
-									<h:outputText styleClass="imj_messageError" value="#{IngestBean.msg}"/>
-								</li>
-							</ui:fragment>
-							<ui:fragment rendered="#{IngestBean.success}">
-								<li class="imj_messageInfo">
-									<h:outputText value="#{lbl.ingestSuccess}" />
-								</li>
-							</ui:fragment>
-						</ul>
-					</div>
-				</ui:fragment>
-				
+								
 				<div class="imj_uploadDropArea">
 					<div class="imj_headline">
 						<h2>

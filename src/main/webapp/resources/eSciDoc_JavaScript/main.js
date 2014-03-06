@@ -358,7 +358,7 @@ function submitPanel(panelId, message) {
 
 /**
  * Part of the Patch for jsf
- *//*
+ */
 var currentViewState;
 jsf.ajax
 		.addOnEvent(function(e) {
@@ -399,10 +399,10 @@ jsf.ajax
 			}
 
 		});
-*/
+
 /**
  * JSF patch for jsf for reaload of ajax component after ajax request
- *//*
+ */
 var patchJSF = function() {
 	jsf.ajax
 			.addOnEvent(function(e) {
@@ -432,7 +432,7 @@ var patchJSF = function() {
 				}
 			});
 };
-*/
+
 /* open a dialog
  * functions are shifted and modified from old template.xhtml
  */

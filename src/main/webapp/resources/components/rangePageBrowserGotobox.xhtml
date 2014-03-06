@@ -9,88 +9,83 @@
 	</composite:interface>
 	
 	<composite:implementation>
-		<ui:fragment rendered="#{cc.attrs.addJSFunctions == 'yes'}">
-			<script type="text/javascript">
-				function setContentLoadingStatus() {
-					$("#imj_ajaxWrapper").css({opacity:0.3});
-					return true;
-				};
-			</script>
-		</ui:fragment>
+		<h:form id="nav">
+			<ui:fragment rendered="#{cc.attrs.addJSFunctions == 'yes'}">
+				<script type="text/javascript">
+					function setContentLoadingStatus() {
+						$("#imj_listBody").css({opacity:0.3});
+						return true;
+					};
+				</script>
+			</ui:fragment>
 		
-		<div class="imj_paginator">
-			<h:outputText value="#{cc.attrs.paginatorBean.urlParameters}" styleClass="imj_noDisplay"/>
-			<h:outputText value="#{cc.attrs.paginatorBean.initPaginator}" styleClass="imj_noDisplay"/>
-			
-		 	<div id="imj_rangeSelector" class="imj_rangeSelector">
-			 	<h:form>
-			 		<h:selectOneMenu id="extSelectTop" value="#{cc.attrs.paginatorBean.elementsPerPageTop}" valueChangeListener="#{cc.attrs.paginatorBean.elementsPerPageTopListener}" onchange="setContentLoadingStatus();">
-			 			<f:selectItems value="#{cc.attrs.paginatorBean.elementsPerPageSelectItems}"/>
-			 			<f:ajax execute="@form" event="change" render=":imj_ajaxWrapper"/>
-			 		</h:selectOneMenu>
-					<h:outputLabel id="lblItemList_ObjectsPerPage" for="extSelectTop" value="#{lbl.paginator_objectsPerPage}" styleClass="imj_rangeSelectorLabel"/>  
-		 		</h:form>
-		 	</div>
-		 	
-		 	
-		 	<div class="imj_singlePageBrowser">
-		 		<label id="lblPage" class="imj_noDisplay">Page: </label>
-		 		
-		 		<!-- ajax mode -->
-		 		<h:commandButton id="btPartListSizeAjax" onclick="setContentLoadingStatus();"  styleClass="imj_buttonBrowseToFirst_16" value=" " title="#{lbl.paginator_results} 1 - #{cc.attrs.paginatorBean.partListSize}" action="#{cc.attrs.paginatorBean.goToFirstPage}" rendered="#{cc.attrs.paginatorBean.ajaxMode and cc.attrs.paginatorBean.currentPageNumber != 1}">
-		 			<f:ajax disabled="#{!cc.attrs.paginatorBean.ajaxMode}" execute="@this" render=":imj_ajaxWrapper :imj_pageMessageArea"/>
-		 		</h:commandButton>
-		 		<h:panelGroup styleClass="imj_buttonBrowseToFirst_16 imj_deactivated" rendered="#{cc.attrs.paginatorBean.ajaxMode and cc.attrs.paginatorBean.currentPageNumber == 1}">
-		 			<h:outputText value=" "/>
-		 		</h:panelGroup>
-		 		<h:commandButton id="btList_lkPreviousAjax"  onclick="setContentLoadingStatus();" styleClass="imj_buttonBrowseBackward_16" value=" " alt="#{lbl.paginator_previous}" title="#{lbl.paginator_results} #{cc.attrs.paginatorBean.offset + 1 - cc.attrs.paginatorBean.elementsPerPage} - #{cc.attrs.paginatorBean.offset}" action="#{cc.attrs.paginatorBean.goToPreviousPage}" rendered="#{cc.attrs.paginatorBean.ajaxMode and cc.attrs.paginatorBean.currentPageNumber != 1}">
-		 			<f:ajax disabled="#{!cc.attrs.paginatorBean.ajaxMode}" execute="@this" render=":imj_ajaxWrapper :imj_pageMessageArea"/>
-		 		</h:commandButton>
-		 		<h:panelGroup styleClass="imj_buttonBrowseBackward_16 imj_deactivated" rendered="#{cc.attrs.paginatorBean.ajaxMode and cc.attrs.paginatorBean.currentPageNumber == 1}"/>
-		 		
-		 		<h:outputText value="|" styleClass="imj_separator"/>
-		 		
-		 		<ui:repeat id="paginator" var="paginatorPage" value="#{cc.attrs.paginatorBean.paginatorPages}" varStatus="var">
-		 			<h:panelGroup rendered="#{var.index &gt; (cc.attrs.paginatorBean.firstPaginatorPageNumber - 2) and var.index &lt; (cc.attrs.paginatorBean.firstPaginatorPageNumber + 6)}">
-			 			
-			 			<h:panelGroup styleClass="imj_currentPageNumber" rendered="#{paginatorPage.number == cc.attrs.paginatorBean.currentPageNumber}">
-			 				<h:outputText value="#{paginatorPage.number}"/>
-			 			</h:panelGroup>
-			 			
-			 			<h:commandButton id="btPageNumberAjax" onclick="setContentLoadingStatus();" styleClass="imj_pageNumber" value="#{paginatorPage.number}" title="#{lbl.paginator_results} #{(paginatorPage.number-1) * cc.attrs.paginatorBean.elementsPerPage +1} -  #{paginatorPage.number*cc.attrs.paginatorBean.elementsPerPage}" action="#{paginatorPage.goToPage}" rendered="#{cc.attrs.paginatorBean.ajaxMode and !(paginatorPage.number == cc.attrs.paginatorBean.currentPageNumber)}">
-			 				<f:ajax disabled="#{!cc.attrs.paginatorBean.ajaxMode}" execute="@this" render=":imj_ajaxWrapper :imj_pageMessageArea"/>
-			 			</h:commandButton>
-			 			
-			 			<h:outputText value="|" styleClass="imj_separator"/>
-			 			
-		 			</h:panelGroup>
-		 		</ui:repeat>
-		 		
-		 		<h:commandButton id="btList_lkNextAjax" onclick="setContentLoadingStatus();" styleClass="imj_buttonBrowseForward_16" value=" " alt="#{lbl.paginator_next}" title="#{lbl.paginator_results} #{cc.attrs.paginatorBean.offset + 1 + cc.attrs.paginatorBean.elementsPerPage} -  #{cc.attrs.paginatorBean.offset + 1 + 2*cc.attrs.paginatorBean.elementsPerPage}" action="#{cc.attrs.paginatorBean.goToNextPage}" rendered="#{cc.attrs.paginatorBean.ajaxMode and cc.attrs.paginatorBean.currentPageNumber != cc.attrs.paginatorBean.paginatorPageSize}">
-		 			<f:ajax disabled="#{!cc.attrs.paginatorBean.ajaxMode}" execute="@this" render=":imj_ajaxWrapper :imj_pageMessageArea"/>
-		 		</h:commandButton>
-		 		<h:panelGroup styleClass="imj_buttonBrowseForward_16 imj_deactivated" rendered="#{cc.attrs.paginatorBean.ajaxMode and cc.attrs.paginatorBean.currentPageNumber == cc.attrs.paginatorBean.paginatorPageSize}"/>
-		 		
-		 		
-		 		<ui:fragment rendered="#{cc.attrs.paginatorBean.ajaxMode and cc.attrs.paginatorBean.currentPageNumber != cc.attrs.paginatorBean.paginatorPageSize}">
-			 		<h:commandButton id="btLinkForLastPageAjax" onclick="setContentLoadingStatus();" styleClass="imj_buttonBrowseToLast_16" value=" " title="#{lbl.paginator_results} #{((cc.attrs.paginatorBean.paginatorPageSize-1) * cc.attrs.paginatorBean.elementsPerPage + 1)} - #{cc.attrs.paginatorBean.totalNumberOfElements}" action="#{cc.attrs.paginatorBean.goToLastPage}">
-			 			<f:ajax disabled="#{!cc.attrs.paginatorBean.ajaxMode}" execute="@this" render=":imj_ajaxWrapper :imj_pageMessageArea"/>
+			<div class="imj_paginator">
+				<h:outputText value="#{cc.attrs.paginatorBean.urlParameters}" styleClass="imj_noDisplay"/>
+				<h:outputText value="#{cc.attrs.paginatorBean.initPaginator}" styleClass="imj_noDisplay"/>
+				
+			 	<div id="imj_rangeSelector" class="imj_rangeSelector">
+				 		<h:selectOneMenu id="extSelectTop" value="#{cc.attrs.paginatorBean.elementsPerPageTop}" valueChangeListener="#{cc.attrs.paginatorBean.elementsPerPageTopListener}" onchange="setContentLoadingStatus();">
+				 			<f:selectItems value="#{cc.attrs.paginatorBean.elementsPerPageSelectItems}"/>
+				 			<f:ajax execute="@form" event="change" render="@form :mediaList"/>
+				 		</h:selectOneMenu>
+						<h:outputLabel id="lblItemList_ObjectsPerPage" for="extSelectTop" value="#{lbl.paginator_objectsPerPage}" styleClass="imj_rangeSelectorLabel"/>  
+			 	</div>
+			 	<div class="imj_singlePageBrowser">
+			 		<label id="lblPage" class="imj_noDisplay">Page: </label>
+			 		
+			 		<!-- ajax mode -->
+			 		<h:commandButton id="btPartListSizeAjax" onclick="setContentLoadingStatus();"  styleClass="imj_buttonBrowseToFirst_16" value=" " title="#{lbl.paginator_results} 1 - #{cc.attrs.paginatorBean.partListSize}" action="#{cc.attrs.paginatorBean.goToFirstPage}" rendered="#{cc.attrs.paginatorBean.ajaxMode and cc.attrs.paginatorBean.currentPageNumber != 1}">
+			 			<f:ajax disabled="#{!cc.attrs.paginatorBean.ajaxMode}" execute="@this" render="@form :mediaList :imj_pageMessageArea"/>
 			 		</h:commandButton>
-			 	</ui:fragment>
-		 		<h:panelGroup styleClass="imj_buttonBrowseToLast_16 imj_deactivated" rendered="#{cc.attrs.paginatorBean.ajaxMode and cc.attrs.paginatorBean.currentPageNumber == cc.attrs.paginatorBean.paginatorPageSize}"/>
-		 	</div>
-			
-			
-		 	<div class="imj_gotoBox">
-			 	<h:form>
-			 		<h:outputLabel for="inpGoToPageTop"><h:outputText id="lblList_lblGoToPage" value="#{lbl.paginator_goToPage} "/></h:outputLabel>
-			 		<h:inputText id="inpGoToPageTop" styleClass="imj_pageInput" value="#{cc.attrs.paginatorBean.goToPageTop}"/>
-			 		<h:outputText id="lblItemList_of" value="#{lbl.paginator_of} "/>
-			 		<h:outputText id="lblPaginatorPageSize" value="#{cc.attrs.paginatorBean.paginatorPageSize}"/>
-			 		<h:commandButton id="btList_btGo" styleClass="imj_submitButton" value="#{lbl.paginator_go}" title="#{tip.List_btGo}" action="#{cc.attrs.paginatorBean.goToPageTop}" onclick="setContentLoadingStatus();"/>
-			 	</h:form>
-		 	</div>
-		 	
-		 </div>
+			 		<h:panelGroup styleClass="imj_buttonBrowseToFirst_16 imj_deactivated" rendered="#{cc.attrs.paginatorBean.ajaxMode and cc.attrs.paginatorBean.currentPageNumber == 1}">
+			 			<h:outputText value=" "/>
+			 		</h:panelGroup>
+			 		<h:commandButton id="btList_lkPreviousAjax"  onclick="setContentLoadingStatus();" styleClass="imj_buttonBrowseBackward_16" value=" " alt="#{lbl.paginator_previous}" title="#{lbl.paginator_results} #{cc.attrs.paginatorBean.offset + 1 - cc.attrs.paginatorBean.elementsPerPage} - #{cc.attrs.paginatorBean.offset}" action="#{cc.attrs.paginatorBean.goToPreviousPage}" rendered="#{cc.attrs.paginatorBean.ajaxMode and cc.attrs.paginatorBean.currentPageNumber != 1}">
+			 			<f:ajax disabled="#{!cc.attrs.paginatorBean.ajaxMode}" execute="@this" render="@form :mediaList :imj_pageMessageArea"/>
+			 		</h:commandButton>
+			 		<h:panelGroup styleClass="imj_buttonBrowseBackward_16 imj_deactivated" rendered="#{cc.attrs.paginatorBean.ajaxMode and cc.attrs.paginatorBean.currentPageNumber == 1}"/>
+			 		
+			 		<h:outputText value="|" styleClass="imj_separator"/>
+			 		
+			 		<ui:repeat id="paginator" var="paginatorPage" value="#{cc.attrs.paginatorBean.paginatorPages}" varStatus="var">
+			 			<h:panelGroup rendered="#{var.index &gt; (cc.attrs.paginatorBean.firstPaginatorPageNumber - 2) and var.index &lt; (cc.attrs.paginatorBean.firstPaginatorPageNumber + 6)}">
+				 			
+				 			<h:panelGroup styleClass="imj_currentPageNumber" rendered="#{paginatorPage.number == cc.attrs.paginatorBean.currentPageNumber}">
+				 				<h:outputText value="#{paginatorPage.number}"/>
+				 			</h:panelGroup>
+				 			
+				 			<h:commandButton id="btPageNumberAjax" onclick="setContentLoadingStatus();" styleClass="imj_pageNumber" value="#{paginatorPage.number}" title="#{lbl.paginator_results} #{(paginatorPage.number-1) * cc.attrs.paginatorBean.elementsPerPage +1} -  #{paginatorPage.number*cc.attrs.paginatorBean.elementsPerPage}" action="#{paginatorPage.goToPage}" rendered="#{cc.attrs.paginatorBean.ajaxMode and !(paginatorPage.number == cc.attrs.paginatorBean.currentPageNumber)}">
+				 				<f:ajax disabled="#{!cc.attrs.paginatorBean.ajaxMode}" execute="@this" render="@form :mediaList :imj_pageMessageArea"/>
+				 			</h:commandButton>
+				 			
+				 			<h:outputText value="|" styleClass="imj_separator"/>
+				 			
+			 			</h:panelGroup>
+			 		</ui:repeat>
+			 		
+			 		<h:commandButton id="btList_lkNextAjax" onclick="setContentLoadingStatus();" styleClass="imj_buttonBrowseForward_16" value=" " alt="#{lbl.paginator_next}" title="#{lbl.paginator_results} #{cc.attrs.paginatorBean.offset + 1 + cc.attrs.paginatorBean.elementsPerPage} -  #{cc.attrs.paginatorBean.offset + 1 + 2*cc.attrs.paginatorBean.elementsPerPage}" action="#{cc.attrs.paginatorBean.goToNextPage}" rendered="#{cc.attrs.paginatorBean.ajaxMode and cc.attrs.paginatorBean.currentPageNumber != cc.attrs.paginatorBean.paginatorPageSize}">
+			 			<f:ajax disabled="#{!cc.attrs.paginatorBean.ajaxMode}" execute="@this" render="@form :mediaList :imj_pageMessageArea"/>
+			 		</h:commandButton>
+			 		<h:panelGroup styleClass="imj_buttonBrowseForward_16 imj_deactivated" rendered="#{cc.attrs.paginatorBean.ajaxMode and cc.attrs.paginatorBean.currentPageNumber == cc.attrs.paginatorBean.paginatorPageSize}"/>
+			 		
+			 		
+			 		<ui:fragment rendered="#{cc.attrs.paginatorBean.ajaxMode and cc.attrs.paginatorBean.currentPageNumber != cc.attrs.paginatorBean.paginatorPageSize}">
+				 		<h:commandButton id="btLinkForLastPageAjax" onclick="setContentLoadingStatus();" styleClass="imj_buttonBrowseToLast_16" value=" " title="#{lbl.paginator_results} #{((cc.attrs.paginatorBean.paginatorPageSize-1) * cc.attrs.paginatorBean.elementsPerPage + 1)} - #{cc.attrs.paginatorBean.totalNumberOfElements}" action="#{cc.attrs.paginatorBean.goToLastPage}">
+				 			<f:ajax disabled="#{!cc.attrs.paginatorBean.ajaxMode}" execute="@this" render="@form :mediaList :imj_pageMessageArea"/>
+				 		</h:commandButton>
+				 	</ui:fragment>
+			 		<h:panelGroup styleClass="imj_buttonBrowseToLast_16 imj_deactivated" rendered="#{cc.attrs.paginatorBean.ajaxMode and cc.attrs.paginatorBean.currentPageNumber == cc.attrs.paginatorBean.paginatorPageSize}"/>
+			 	</div>				
+			 	<div class="imj_gotoBox">
+				 	<h:form>
+				 		<h:outputLabel for="inpGoToPageTop"><h:outputText id="lblList_lblGoToPage" value="#{lbl.paginator_goToPage} "/></h:outputLabel>
+				 		<h:inputText id="inpGoToPageTop" styleClass="imj_pageInput" value="#{cc.attrs.paginatorBean.goToPageTop}"/>
+				 		<h:outputText id="lblItemList_of" value="#{lbl.paginator_of} "/>
+				 		<h:outputText id="lblPaginatorPageSize" value="#{cc.attrs.paginatorBean.paginatorPageSize}"/>
+				 		<h:commandButton id="btList_btGo" styleClass="imj_submitButton" value="#{lbl.paginator_go}" title="#{tip.List_btGo}" action="#{cc.attrs.paginatorBean.goToPageTop}" onclick="setContentLoadingStatus();"/>
+				 	</h:form>
+			 	</div>
+			 </div>
+		 </h:form>
 	</composite:implementation>
 </html>

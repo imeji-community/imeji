@@ -26,36 +26,30 @@
 		</ui:include>
 	</ui:define>
 	
-	
 	<!-- Main Content - Image tiled list - START -->
 	<ui:define name="mainContent">
-		
 		<!-- Breadcrumb - History -->
 		<ui:include src="../../include/History.xhtml"></ui:include>
+			
+		<!-- Selection Info Panel -->
+		<imjc:selectionInfoPanel id="selPanel" fSession="#{FiltersSession}" facetBean="#{paginatorListSessionBean}" currentMainMenu="mediaEntry" 
+								 browseToAllUrl="#{browseToAllItemsUrl}" numberOfElements="#{paginatorListSessionBean.totalNumberOfElements}"/>
 		
-		<!-- AJAX Wrapper - START -->
-		<h:panelGroup layout="block" id="imj_ajaxWrapper">
-			
-			<!-- Selection Info Panel -->
-			<imjc:selectionInfoPanel fSession="#{FiltersSession}" facetBean="#{paginatorListSessionBean}" currentMainMenu="#{currentMainMenu}" 
-									 browseToAllUrl="#{browseToAllItemsUrl}" numberOfElements="#{paginatorListSessionBean.totalNumberOfElements}"/>
-			
-			<!-- Page Browser GotoBox -->
-			<imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}" addJSFunctions="yes"/>
-			
-			<!-- Media List -->
-			<imjc:tiledMediaList picList="#{paginatorListSessionBean}"/>
-			
-			<!-- Facets -->
-			<h:panelGroup layout="block" id="imj_ajaxFacets">
-				<imjc:facets id="facets" paginatorBean="#{paginatorListSessionBean}"/>
-			</h:panelGroup>
-				
-			<!-- Page Browser GotoBox -->
-			<imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}"/>
-			
+		<!-- Page Browser GotoBox -->
+		<imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}" addJSFunctions="yes"/>
+		
+		<!-- Media List -->
+		<h:panelGroup id ="mediaList">
+			<imjc:tiledMediaList  picList="#{paginatorListSessionBean}"/>
 		</h:panelGroup>
-		<!-- AJAX Wrapper - END -->
+		
+		<!-- Facets -->
+		<h:panelGroup layout="block" id="imj_ajaxFacets">
+			<imjc:facets id="facets" paginatorBean="#{paginatorListSessionBean}"/>
+		</h:panelGroup>
+			
+		<!-- Page Browser GotoBox -->
+		<imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}"/>
 		
 	</ui:define>
 	<!-- Main Content - END -->

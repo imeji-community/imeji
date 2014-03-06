@@ -1641,8 +1641,9 @@ label, .imj_metadataLabel, .imj_infodataLabel, .imj_admindataLabel {
 
 .imj_metadataValue, .imj_infodataValue, .imj_admindataValue  {
 	display: inline-block;
-	margin-left: 1.0em;
-	max-width: 73.25%;
+	margin: 1.0em;
+	max-width: 90%;
+	word-wrap: break-word;
 }
 
 .imj_admindataCheckbox {
@@ -1967,7 +1968,7 @@ a.imj_submitButton,
 	overflow-x: hidden;
 }
 .imj_tileItem .imj_optionCheckbox + label.imj_optionLabel {
-	max-width: 88%;
+	width: 88%;
 }
 .imj_tiledMediaList .imj_tileItem:hover .imj_tileThumbnailArea {
 	background-color: #6CAE2F;

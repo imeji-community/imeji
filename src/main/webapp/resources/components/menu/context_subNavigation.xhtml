@@ -28,20 +28,18 @@
 			
 			<div class="#{curMenuClass}">
 				<ul>
-					<ui:fragment rendered="#{cc.attrs.hasContent}">
+					
 						<li class="#{curMenuClass}Item">
 							<h:outputLink value="#{curContextUrl}" title="#{lbl.startpage}" styleClass="#{(activeMenuValue == 'start') ? 'imj_active' : ''}">
 								<h:outputText value="#{lbl.startpage}"/>
 							</h:outputLink>
 						</li>
-						
-						<ui:fragment rendered="#{cc.attrs.navBean != null}">
-							<li class="#{curMenuClass}Item">
-								<h:outputLink value="#{curContextUrl}/#{cc.attrs.navBean.browsePath}?q=" title="#{lbl.view_images}" styleClass="#{(activeMenuValue == 'content') ? 'imj_active' : ''}">
-									<h:outputText value="#{lbl.view_images}"/>
-								</h:outputLink>
-							</li>
-						</ui:fragment>
+					<ui:fragment rendered="#{cc.attrs.hasContent and cc.attrs.navBean != null}">
+						<li class="#{curMenuClass}Item">
+							<h:outputLink value="#{curContextUrl}/#{cc.attrs.navBean.browsePath}?q=" title="#{lbl.view_images}" styleClass="#{(activeMenuValue == 'content') ? 'imj_active' : ''}">
+								<h:outputText value="#{lbl.view_images}"/>
+							</h:outputLink>
+						</li>
 					</ui:fragment>
 					
 					<li class="#{curMenuClass}Item">

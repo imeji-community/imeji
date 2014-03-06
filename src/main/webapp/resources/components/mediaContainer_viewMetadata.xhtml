@@ -6,7 +6,6 @@
 	xmlns:list="http://java.sun.com/jsf/composite/components/list">
 	
 	<composite:interface>
-		<composite:attribute name="metadataBean" required="true"/>
 		<composite:attribute name="metadataContextBean" required="true"/>
 		<composite:attribute name="metadata" required="true"/>
 		<composite:attribute name="headline" required="true"/>
@@ -22,7 +21,7 @@
 				
 				<div class="imj_listHeaderMenu">
 					<!-- EDIT -->
-					<h:outputLink value="#{cc.attrs.navigationContextURL}#{cc.attrs.metadataBean.id}/#{Navigation.editPath}?init=1" styleClass="imj_editMetadataButton" rendered="#{cc.attrs.metadataBean.editable and cc.attrs.metadataContextBean.status != 'WITHDRAWN'}">
+					<h:outputLink value="#{cc.attrs.navigationContextURL}#{cc.attrs.metadata.id}/#{Navigation.editPath}?init=1" styleClass="imj_editMetadataButton" rendered="#{cc.attrs.metadata.editable and cc.attrs.metadataContextBean.status != 'WITHDRAWN'}">
 						<h:outputText value="#{lbl.edit}"/>
 					</h:outputLink>
 				</div>
@@ -77,7 +76,7 @@
 						<span class="imj_noDisplay">: </span>
 					</label>
 					<p class="imj_metadataValue">
-						<h:outputText value="#{cc.attrs.metadataContextBean.metadata.description}"/>
+						<h:outputText value="#{cc.attrs.metadataContextBean.metadata.description}" escape="false"/>
 					</p>
 				</div>
 				
@@ -129,8 +128,8 @@
 							<h:outputText value=": " styleClass="imj_noDisplay"/>
 						</label>
 						<span class="imj_metadataValue">
-							<h:outputLink value="#{cc.attrs.navigationContextURL}#{cc.attrs.metadataBean.id}">
-								<h:outputText value="#{cc.attrs.navigationContextURL}#{cc.attrs.metadataBean.id}"/>
+							<h:outputLink value="#{cc.attrs.navigationContextURL}#{cc.attrs.metadata.id}">
+								<h:outputText value="#{cc.attrs.navigationContextURL}#{cc.attrs.metadata.id}"/>
 							</h:outputLink>
 						</span>
 					</div>

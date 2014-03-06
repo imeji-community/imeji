@@ -46,12 +46,27 @@
 										<h:outputText value="#{lbl.view_md}"/>
 									</h:outputLink>
 								</li>
+								<ui:fragment rendered="#{cc.attrs.metadataNavigationURL.contains('collection') and cc.attrs.item.editable and cc.attrs.item.status != 'WITHDRAWN'}">
+									<li>
+										<h:outputLink id="lnkUploadImages" value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}/#{Navigation.uploadPath}?init=1">
+											<h:outputText value="#{lbl.upload_images}"/>
+										</h:outputLink>
+									</li>
+								</ui:fragment>
 								<ui:fragment rendered="#{cc.attrs.item.editable and cc.attrs.item.status == 'RELEASED'}">
 									<li>
 										<h:outputLink id="lnkWithdrawCollection" value="#" onclick="openDialog('#{withdrawID}');">
 											<h:outputText value="#{lbl.withdraw}"/>
 										</h:outputLink>
 										<dialog:confirmationReasonedDialog submitAction="withdraw" bean="#{cc.attrs.item}" confirmationText="#{cc.attrs.withdrawConfirmationText}" submitLabel="#{lbl.withdraw}" dialogId="#{withdrawID}"/>
+									</li>
+								</ui:fragment>
+								<ui:fragment rendered="#{cc.attrs.item.deletable}">
+									<li>
+										<h:outputLink value="#" onclick="openDialog('delete-#{cc.attrs.itemIndex}-dialog');">
+											<h:outputText value="#{lbl.delete}"/>
+										</h:outputLink>
+										<dialog:confirmationDialog bean="#{cc.attrs.item}" submitAction="delete" confirmationText="#{cc.attrs.deleteItemConfirmationText}" submitLabel="#{lbl.delete}" dialogId="delete-#{cc.attrs.itemIndex}-dialog"/>
 									</li>
 								</ui:fragment>
 							</ul>

@@ -14,7 +14,7 @@
 		<h:outputText value="#{md.label}" rendered="#{md.label != ''}"/>
 	</h:outputLink>
 			
-	<!-- MetaDataOutput - Licence -->
+	<!-- MetaDataOutput - License -->
 	<ui:fragment rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#license'}">
 		<h:outputText styleClass="imj_metadataValueEntry" value="#{md.license}" rendered="#{md.externalUri== null and md.license != null}"/>
 		<h:outputLink rendered="#{md.externalUri != null}" value="#{md.externalUri}">
@@ -38,9 +38,9 @@
 	<!-- MetaDataOutput - Publication -->
 	<ui:fragment rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#publication'}">
 		<h:outputText styleClass="imj_metadataValueEntry" value="#{md.citation}" rendered="#{md.citation != ''}" escape="false"/>
-			<h:outputLink styleClass="imj_metadataValueEntry" value="#{md.uri}" target="_blank">
-				<h:outputText styleClass="imj_metadataValueEntry" value="#{md.uri}" rendered="#{md.citation == ''}"/>
-			</h:outputLink>
+		<h:outputLink styleClass="imj_metadataValueEntry" value="#{md.uri}" target="_blank">
+			<h:outputText styleClass="imj_metadataValueEntry" value="#{md.uri}" rendered="#{md.citation == ''}"/>
+		</h:outputLink>
 	</ui:fragment>
 			
 	<!-- MetaDataOutput - Geolocation -->

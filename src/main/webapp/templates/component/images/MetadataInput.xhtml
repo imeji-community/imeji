@@ -45,7 +45,7 @@
 		
 		<!-- METADATA TYPE PUBLICATION -->
 		<h:panelGroup rendered="#{metadata.typeNamespace=='http://imeji.org/terms/metadata#publication'}">
-			<h:inputText id="inputPublicationURI" styleClass="imj_metadataEditPublication" value="#{metadata.uri}"  rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}" onfocus="this.select(); getDatasourceUrl('#{statement.vocabulary}', '#{Navigation.autocompleteUrl}')" valueChangeListener="#{metadata.citationListener}">
+			<h:inputText id="inputPublicationURI" styleClass="imj_metadataEditPublication" value="#{metadata.uri}"  rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}" onfocus="this.select(); getDatasourceUrl('#{statement.vocabulary}', '#{Navigation.autocompleteUrl}')" valueChangeListener="#{metadata.resetCitationListener}">
 				<f:converter converterId="URIConverter" />
 			</h:inputText>
 			<h:selectOneMenu styleClass="imj_metadataEditPublication" immediate="false" value="#{metadata.uri}" rendered="#{SuggestBean.suggests[statement.id].hasRestrictedValues}">

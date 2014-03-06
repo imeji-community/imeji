@@ -144,7 +144,7 @@
 						</div>
 						<h:panelGroup layout="block" class="imj_metadataSet" rendered="#{not empty cc.attrs.item.description}">
 							<label class="imj_metadataLabel"><h:outputText value="#{lbl.description}"/><span class="imj_noDisplay">: </span></label>
-							<p class="imj_metadataValue"><h:outputText value="#{cc.attrs.item.description}"/></p>
+							<p class="imj_metadataValue"><h:outputText value="#{cc.attrs.item.description}" title="#{cc.attrs.item.descriptionFull}"/></p>
 						</h:panelGroup>
 						<div class="imj_metadataSet">
 							<label class="imj_metadataLabel"><h:outputText value="#{lbl.images}"/><span class="imj_noDisplay">: </span></label>

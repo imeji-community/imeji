@@ -68,13 +68,14 @@ public class AlbumBean extends ContainerBean
     /**
      * Maximum number of character displayed in the list for the description
      */
-    private static final int DESCRIPTION_MAX_SIZE = 100;
+    private static final int DESCRIPTION_MAX_SIZE = 300;
     /**
      * A small description when the description of the {@link Album} is too large for the list view
      */
-    private String smallDescription = null;
+    //private String smallDescription = null;
     private String description = "";
-    private ThumbnailBean thumbnail;
+    private String descriptionFull = null;
+	private ThumbnailBean thumbnail;
     private Navigation navigation;
 
     /**
@@ -95,10 +96,11 @@ public class AlbumBean extends ContainerBean
         AlbumController ac = new AlbumController();
         this.album = (Album)ac.loadContainerItems(album, sessionBean.getUser(), -1, 0);
         description = album.getMetadata().getDescription();
-        smallDescription = CommonUtils.removeTags(description);
-        if (smallDescription != null && smallDescription.length() > DESCRIPTION_MAX_SIZE)
+        descriptionFull = description;
+        description = CommonUtils.removeTags(description);
+        if (description != null && description.length() > DESCRIPTION_MAX_SIZE)
         {
-            smallDescription = smallDescription.substring(0, DESCRIPTION_MAX_SIZE) + "...";
+        	description = description.substring(0, DESCRIPTION_MAX_SIZE) + "...";
         }
         // Init the thumbnail
         if (!album.getImages().isEmpty())
@@ -408,16 +410,6 @@ public class AlbumBean extends ContainerBean
     public int getSize()
     {
         return album.getImages().size();
-    }
-
-    /**
-     * getter
-     * 
-     * @return
-     */
-    public String getSmallDescription()
-    {
-        return CommonUtils.removeTags(smallDescription);
     }
 
     /**
@@ -772,6 +764,14 @@ public class AlbumBean extends ContainerBean
         return description;
     }
 
+    public String getDescriptionFull() {
+		return descriptionFull;
+	}
+
+	public void setDescriptionFull(String descriptionFull) {
+		this.descriptionFull = descriptionFull;
+	}
+    
     public String getTab()
     {
         if (UrlHelper.getParameterValue("tab") != null)

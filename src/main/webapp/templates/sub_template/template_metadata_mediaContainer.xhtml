@@ -19,7 +19,7 @@
 				<imjc:mediaContainer_editMetadata formularContextBean="#{metadataContextBean}" formularBean="#{metadataBean}" headline="#{containerHeadline}"/>
 			</ui:fragment>
 			<ui:fragment rendered="#{metadataView == 'yes'}">
-				<imjc:mediaContainer_viewMetadata itemContextBean="#{metadataContextBean}" metadata="#{metadataBean}" headline="#{containerHeadline}" navigationContextURL="#{navigationContextURL}"/>
+				<imjc:mediaContainer_viewMetadata metadataContextBean="#{metadataContextBean}" metadata="#{metadataBean}" headline="#{containerHeadline}" navigationContextURL="#{navigationContextURL}"/>
 			</ui:fragment>
 			
 			<ui:insert name="metadataProfile"/>

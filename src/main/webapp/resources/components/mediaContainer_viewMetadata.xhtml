@@ -6,8 +6,8 @@
 	xmlns:list="http://java.sun.com/jsf/composite/components/list">
 	
 	<composite:interface>
-		<composite:attribute name="itemBean" required="true"/>
-		<composite:attribute name="itemContextBean" required="true"/>
+		<composite:attribute name="metadataBean" required="true"/>
+		<composite:attribute name="metadataContextBean" required="true"/>
 		<composite:attribute name="metadata" required="true"/>
 		<composite:attribute name="headline" required="true"/>
 		<composite:attribute name="navigationContextURL" required="true"/>
@@ -22,18 +22,18 @@
 				
 				<div class="imj_listHeaderMenu">
 					<!-- EDIT -->
-					<h:outputLink value="#{cc.attrs.navigationContextURL}#{cc.attrs.itemBean.id}/#{Navigation.editPath}?init=1" styleClass="imj_editMetadataButton" rendered="#{cc.attrs.itemBean.editable and cc.attrs.itemContextBean.status != 'WITHDRAWN'}">
+					<h:outputLink value="#{cc.attrs.navigationContextURL}#{cc.attrs.metadataBean.id}/#{Navigation.editPath}?init=1" styleClass="imj_editMetadataButton" rendered="#{cc.attrs.metadataBean.editable and cc.attrs.metadataContextBean.status != 'WITHDRAWN'}">
 						<h:outputText value="#{lbl.edit}"/>
 					</h:outputLink>
 				</div>
 			</div>
 			<div class="imj_listBody">
-				
+
 				<!-- Status -->
 				<div class="imj_metadataSet">
 					<label class="imj_metadataLabel">
 						<h:outputText value="#{lbl.status}"/>
-						<span class="imj_noDisplay">: </span>
+						<span class="imj_noDisplay">:</span>
 					</label>
 					<span class="imj_metadataValue">
 						<span class="imj_statusArea">

@@ -20,7 +20,7 @@
 	<composite:implementation>
 		<ui:param name="withdrawID" value="listItem-#{cc.attrs.itemIndex}-dialDiscardContainer-dialogWithdraw"/>
 		
-		<li class="#{cc.attrs.itemClass} #{cc.attrs.item.active ? 'imj_activeAlbum' : ''}">
+		<li class="#{cc.attrs.itemClass} #{cc.attrs.isActivatable == 'yes' and cc.attrs.item.active ? 'imj_activeAlbum' : ''}">
 							
 			<div class="imj_interactiveArea">
 				<h:form>

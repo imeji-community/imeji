@@ -30,27 +30,25 @@
 	<ui:define name="mainContent">
 		<!-- Breadcrumb - History -->
 		<ui:include src="../../include/History.xhtml"></ui:include>
+		<h:panelGroup layout="block" id ="ajaxWrapper">
+			<!-- Selection Info Panel -->
+			<imjc:selectionInfoPanel id="selPanel" fSession="#{FiltersSession}" facetBean="#{paginatorListSessionBean}" currentMainMenu="mediaEntry" 
+									 browseToAllUrl="#{browseToAllItemsUrl}" numberOfElements="#{paginatorListSessionBean.totalNumberOfElements}"/>
 			
-		<!-- Selection Info Panel -->
-		<imjc:selectionInfoPanel id="selPanel" fSession="#{FiltersSession}" facetBean="#{paginatorListSessionBean}" currentMainMenu="mediaEntry" 
-								 browseToAllUrl="#{browseToAllItemsUrl}" numberOfElements="#{paginatorListSessionBean.totalNumberOfElements}"/>
-		
-		<!-- Page Browser GotoBox -->
-		<imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}" addJSFunctions="yes"/>
-		
-		<!-- Media List -->
-		<h:panelGroup id ="mediaList">
+			<!-- Page Browser GotoBox -->
+			<imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}" addJSFunctions="yes"/>
+			
+			<!-- Media List -->
 			<imjc:tiledMediaList  picList="#{paginatorListSessionBean}"/>
-		</h:panelGroup>
-		
-		<!-- Facets -->
-		<h:panelGroup layout="block" id="imj_ajaxFacets">
-			<imjc:facets id="facets" paginatorBean="#{paginatorListSessionBean}"/>
-		</h:panelGroup>
 			
-		<!-- Page Browser GotoBox -->
-		<imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}"/>
-		
+			<!-- Facets -->
+			<h:panelGroup layout="block" id="imj_ajaxFacets">
+				<imjc:facets id="facets" paginatorBean="#{paginatorListSessionBean}"/>
+			</h:panelGroup>
+				
+			<!-- Page Browser GotoBox -->
+			<imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}"/>
+		</h:panelGroup>
 	</ui:define>
 	<!-- Main Content - END -->
 	

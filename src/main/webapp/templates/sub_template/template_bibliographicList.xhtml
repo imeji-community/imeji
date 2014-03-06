@@ -22,33 +22,30 @@
 		
 		<!-- Breadcrumb - History -->
 		<ui:include src="../../include/History.xhtml"></ui:include>
-		
-		<!-- Selection Info Panel -->
-		<imjc:filterInfoPanel fSession="#{FiltersSession}" filterBean="#{paginatorListSessionBean}" currentMainMenu="#{currentMainMenu}" 
-								 browseToAllUrl="#{browseToAllItemsUrl}" numberOfElements="#{paginatorListSessionBean.totalNumberOfElements}" filterBeanHasQuery="#{filterBeanHasQuery}"/>
-		
-		<!-- Page Browser GotoBox -->
-		<imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}" addJSFunctions="yes"/>
-		
-		<!-- List -->
-		<h:panelGroup id="mediaList">
-			<h:panelGroup id="ajaxList">
-				<ui:fragment rendered="#{SessionBean.user == null}">
-					<imjc:bibliographicList_loggedOut mediaList="#{paginatorListSessionBean}" globalDisplayLinkText="#{globalDisplayLinkText}" metadataNavigationURL="#{metadataNavigationURL}"/>
-				</ui:fragment>
-				<ui:fragment rendered="#{SessionBean.user != null}">
-					<imjc:bibliographicList_loggedIn mediaList="#{paginatorListSessionBean}" isActivatable="#{isActivatable}" 
-													 metadataNavigationURL="#{metadataNavigationURL}" releaseItemConfirmationText="#{releaseItemConfirmationText}" 
-													 deleteItemConfirmationText="#{deleteItemConfirmationText}"
-													 globalDeleteDialogId="#{currentMainMenu}List-selected-deleteDialog" 
-													 withdrawItemConfirmationText="#{withdrawItemConfirmationText}"
-													 globalDeleteLinkText="#{globalDeleteLinkText}" globalDisplayLinkText="#{globalDisplayLinkText}"/>
-				</ui:fragment>
-			</h:panelGroup>
-		</h:panelGroup>
-		<!-- Page Browser GotoBox -->
-		<imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}"/>
+		<h:panelGroup layout="block" id ="ajaxWrapper">
+			<!-- Selection Info Panel -->
+			<imjc:filterInfoPanel fSession="#{FiltersSession}" filterBean="#{paginatorListSessionBean}" currentMainMenu="#{currentMainMenu}" 
+									 browseToAllUrl="#{browseToAllItemsUrl}" numberOfElements="#{paginatorListSessionBean.totalNumberOfElements}" filterBeanHasQuery="#{filterBeanHasQuery}"/>
 			
+			<!-- Page Browser GotoBox -->
+			<imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}" addJSFunctions="yes"/>
+			
+			<!-- List -->
+			<ui:fragment rendered="#{SessionBean.user == null}">
+				<imjc:bibliographicList_loggedOut mediaList="#{paginatorListSessionBean}" globalDisplayLinkText="#{globalDisplayLinkText}" metadataNavigationURL="#{metadataNavigationURL}"/>
+			</ui:fragment>
+			<ui:fragment rendered="#{SessionBean.user != null}">
+				<imjc:bibliographicList_loggedIn mediaList="#{paginatorListSessionBean}" isActivatable="#{isActivatable}" 
+												 metadataNavigationURL="#{metadataNavigationURL}" releaseItemConfirmationText="#{releaseItemConfirmationText}" 
+												 deleteItemConfirmationText="#{deleteItemConfirmationText}"
+												 globalDeleteDialogId="#{currentMainMenu}List-selected-deleteDialog" 
+												 withdrawItemConfirmationText="#{withdrawItemConfirmationText}"
+												 globalDeleteLinkText="#{globalDeleteLinkText}" globalDisplayLinkText="#{globalDisplayLinkText}"/>
+			</ui:fragment>
+			
+			<!-- Page Browser GotoBox -->
+			<imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}"/>
+		</h:panelGroup>
 	</ui:define>
 	<!-- Main Content - END -->
 </ui:composition>

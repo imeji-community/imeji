@@ -124,10 +124,10 @@
 										<ui:fragment rendered="#{cc.attrs.item.editable}">
 											<h:form>
 												<h:commandButton id="btnActivate" value="#{lbl.make_active}" action="#{cc.attrs.item.makeActive}" styleClass="imj_submitButton" rendered="#{!cc.attrs.item.active}">
-													<f:ajax execute="@this" render=":mediaList :imj_pageMessageArea"/>
+													<f:ajax execute="@this" render="@form :imj_pageMessageArea"/>
 												</h:commandButton>
 												<h:commandButton id="btnDeactivate" value="#{lbl.make_inactive}" action="#{cc.attrs.item.makeInactive}" styleClass="imj_submitButton" rendered="#{cc.attrs.item.active}">
-													<f:ajax execute="@this" render=":imj_pageMessageArea :mediaList"/>
+													<f:ajax execute="@this" render="@form :imj_pageMessageArea"/>
 												</h:commandButton>
 											</h:form>
 										</ui:fragment>

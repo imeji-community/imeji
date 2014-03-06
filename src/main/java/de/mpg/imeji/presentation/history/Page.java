@@ -34,7 +34,7 @@ public class Page
                 "Welcome.xhtml", "history_home"), IMAGE("Image.xhtml", "history_image"), COLLECTIONS(
                 "Collections.xhtml", "history_collections"), ALBUMS("Albums.xhtml", "history_albums"), COLLECTION_HOME(
                 "CollectionEntryPage.xhtml", "collection"), SEARCH_RESULTS_IMAGES("Images.xhtml",
-                "history_search_result"), EDIT("Edit.xhtml", "edit_images"), COLLECTION_IMAGE("CollectionImage.xhtml",
+                "history_search_result"), EDIT("BatchEdit.xhtml", "edit_images"), COLLECTION_IMAGE("CollectionImage.xhtml",
                 "history_image"), ALBUM_IMAGES("AlbumBrowse.xhtml", "history_images_album"), ALBUM_HOME(
                 "AlbumEntryPage.xhtml", "history_album"), ALBUM_IMAGE("AlbumImage.xhtml", "history_image"), HELP(
                 "Help.xhtml", "help"), COLLECTION_INFO("CollectionView.xhtml", "history_collection_info"), UPLOAD(

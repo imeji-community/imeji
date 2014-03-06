@@ -1631,7 +1631,7 @@ table.imj_optionSet td label {
 
 label, .imj_metadataLabel, .imj_infodataLabel, .imj_admindataLabel {
 	display: inline-block;
-	width: 24%;
+	min-width: 24%;
 	vertical-align: top;
 	cursor: pointer;
 }
@@ -1641,9 +1641,13 @@ label, .imj_metadataLabel, .imj_infodataLabel, .imj_admindataLabel {
 
 .imj_metadataValue, .imj_infodataValue, .imj_admindataValue  {
 	display: inline-block;
-	margin: 1.0em;
-	max-width: 90%;
+	margin-left: 1.0em;
+	max-width: 73.25%;
 	word-wrap: break-word;
+}
+
+.imj_keepFormat{
+	white-space: pre-wrap;
 }
 
 .imj_admindataCheckbox {
@@ -1968,7 +1972,7 @@ a.imj_submitButton,
 	overflow-x: hidden;
 }
 .imj_tileItem .imj_optionCheckbox + label.imj_optionLabel {
-	width: 88%;
+	max-width: 88%;
 }
 .imj_tiledMediaList .imj_tileItem:hover .imj_tileThumbnailArea {
 	background-color: #6CAE2F;

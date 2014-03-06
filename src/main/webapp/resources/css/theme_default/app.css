@@ -2992,4 +2992,10 @@ a.imj_editButton {
 	max-width: 50em;
 }
 
+/* ====== Extensions =======*/
+
+.imj_activeAlbum{
+	background-color: rgba(74, 255, 0, 0.1);
+}
+
 

@@ -20,7 +20,7 @@
 	<composite:implementation>
 		<ui:param name="withdrawID" value="listItem-#{cc.attrs.itemIndex}-dialDiscardContainer-dialogWithdraw"/>
 		
-		<li class="#{cc.attrs.itemClass}">
+		<li class="#{cc.attrs.itemClass} #{cc.attrs.item.active ? 'imj_activeAlbum' : ''}">
 							
 			<div class="imj_interactiveArea">
 				<h:form>
@@ -58,14 +58,9 @@
 				<!-- description area - includes default values - START -->
 				<div class="imj_descriptionArea">
 					<h3 class="imj_itemHeadline">
-						<ui:fragment rendered="#{cc.attrs.item.size > 0}">
-							<h:outputLink value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}" title="#{cc.attrs.item.title}">
-								<h:outputText value="#{cc.attrs.item.title}"/>
-							</h:outputLink>
-						</ui:fragment>
-						<ui:fragment rendered="#{cc.attrs.item.size == 0}">
+						<h:outputLink value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}" title="#{cc.attrs.item.title}">
 							<h:outputText value="#{cc.attrs.item.title}"/>
-						</ui:fragment>
+						</h:outputLink>
 					</h3>
 					<div class="imj_metadataContent">
 						<div class="imj_itemActionArea">

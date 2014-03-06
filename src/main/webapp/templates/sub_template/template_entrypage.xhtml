@@ -18,14 +18,8 @@
 		
 		<!-- EntryPagePreviewTiledList -->
 		<ui:fragment rendered="#{logicBean.visible}">
-			<ui:fragment rendered="#{listSize != 0}">
-				<imjc:entryPagePreviewTiledList mediaLogicBean="#{logicBean}" lbl="#{lbl}" applicationUrl="#{Navigation.applicationUrl}" browsePath="#{Navigation.browsePath}"/> 
-			</ui:fragment>
-			<ui:fragment rendered="#{listSize == null or listSize == 0}">
-				<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{imageBean.image == null}">
-					<h2><h:outputText value="404 #{lbl.not_found}" styleClass="imj_messageError"/></h2>
-				</h:panelGroup>
-			</ui:fragment>
+		
+			<imjc:entryPagePreviewTiledList mediaLogicBean="#{logicBean}" lbl="#{lbl}" applicationUrl="#{Navigation.applicationUrl}" browsePath="#{Navigation.browsePath}" listSize="#{listSize}"/> 
 			
 			<!-- EntryPageTabList -->
 			<imjc:entryPageTabList infoLogicBean="#{logicBean}" applicationUrl="#{Navigation.applicationUrl}" lbl="#{lbl}"/>

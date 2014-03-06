@@ -9,22 +9,38 @@
 		<composite:attribute name="applicationUrl" required="false"/>
 		<composite:attribute name="browsePath" required="false"/>
 		<composite:attribute name="lbl" required="false"/>
+		<composite:attribute name="listSize" required="false"/>
 	</composite:interface>
 	
 	<composite:implementation>
 		<div class="imj_entryPagePreviewTiledList">
-			<h:outputLink value="#{cc.attrs.mediaLogicBean.id}/#{cc.attrs.browsePath}?q=">
+			
+			<h:outputLink value="#{cc.attrs.mediaLogicBean.id}/#{cc.attrs.browsePath}?q=" rendered="#{listSize != null and listSize != 0}">
 				<!-- MEDIA - Entry Page - Thumbnails -->
 				<ui:repeat var="thumb" value="#{cc.attrs.mediaLogicBean.thumbnails}">
 					<h:graphicImage styleClass="imj_entryPagePreviewTiledListItem" value="#{cc.attrs.applicationUrl}file?id=#{thumb.link}"/>
 				</ui:repeat>
 				<!-- MEDIA - Link to Collection -->
-				<span class="imj_entryPagePreviewTiledListLink">
+				<h:panelGroup styleClass="imj_entryPagePreviewTiledListLink">
 					<h:outputText value ="#{cc.attrs.lbl.collection_view_all_images}" rendered="#{cc.attrs.mediaLogicBean.type == 'COLLECTION'}"/>
 					<h:outputText value ="#{cc.attrs.lbl.album_view_all_images}" rendered="#{cc.attrs.mediaLogicBean.type == 'ALBUM'}"/>
 					<span class="imj_entryPagePreviewTiledListLinkArrow"> </span>
-				</span>
-			</h:outputLink>	
+				</h:panelGroup>
+			</h:outputLink>
+			
+			<h:outputLink value="#{cc.attrs.mediaLogicBean.id}/#{Navigation.uploadPath}?init=1" rendered="#{(listSize == null or listSize == 0) and cc.attrs.mediaLogicBean.type == 'COLLECTION'}">
+				<h:panelGroup styleClass="imj_entryPagePreviewTiledListLink">
+					<h:outputText value ="#{lbl.uploadFiles}"/>
+					<span class="imj_entryPagePreviewTiledListLinkArrow"> </span>
+				</h:panelGroup>				
+			</h:outputLink>
+			
+			<ui:fragment rendered="#{listSize == null or listSize == 0}">
+				<h:panelGroup  styleClass="imj_entryPagePreviewTiledListItem">
+					<h2><h:outputText value="#{lbl.no_item} "/></h2>
+				</h:panelGroup>
+			</ui:fragment>
+			
 			<ui:remove>
 			<!-- Collection Withdrawn -->
 				<ui:fragment rendered="#{ViewCollectionBean.visible}">

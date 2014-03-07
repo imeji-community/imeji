@@ -2453,6 +2453,7 @@ a.imj_submitButton,
 .imj_uploadDropArea + .imj_uploadUrlReference {
 	margin-top: 4em;
 }
+
 .imj_uploadUrlReference {
 	width: 98%;
 	min-width: 30em;

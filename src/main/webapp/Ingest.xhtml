@@ -106,13 +106,21 @@
 			}
 			
 			plupload.addI18n({
-			    'Add files' : '<h:outputText value="#{lbl.uploadStart}" />', 			    
-			    'Drag files here.' : ' <h:outputText value="#{lbl.uploadDrag}" />',				    
+			    'Add file' : '<h:outputText value="#{lbl.uploadStart}" />', 			    
+			    'Drag file here.' : ' <h:outputText value="#{lbl.uploadDrag}" />',				    
 			});
 		</script>
+
 	</ui:define>
 	
 	<ui:define name="mainContent">
+	
+			<style>
+				.plupload_filelist {
+					height: 5em;
+					overflow-y: auto:
+				}
+			</style>
 		<!-- Breadcrumb - History -->
 		<ui:include src="./include/History.xhtml"/>
 		
@@ -164,7 +172,7 @@
 							<li class="imj_messageWarn"><h:outputText value="#{lbl.ingest_warning}"/></li>
 						</ul>
 					</div>
-					<div id="uploadMetadata">
+					<div id="uploadMetadata" class="imj_uploadDropAreaSmall">
 						Your browser doesn't support native upload!<br /> 
 						Please use HTML5 compatible browser (Firefox 4.x, Safari 4, Chrome) or download following tools:<br /> 
 						<a href="http://www.microsoft.com/germany/silverlight/downloads.aspx" target="_blank">Download Siverlight</a> 

@@ -57,13 +57,13 @@
 						<ui:repeat id="els" var="el" value="#{g.searchElementForms}" rows="0" varStatus="elIndex">
 							<div class="imj_searchDetails">
 								<h:panelGroup class="imj_logicalSearchGroup">
-									<h:selectOneMenu id="selNot" value="#{el.inverse}" styleClass="imj_notSelector" onchange="$(this).parent().find('.imj_ajaxUpdateElementButton').click();">
+									<h:selectOneMenu id="selNot" value="#{el.inverse}" styleClass="imj_notSelector" onchange="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();">
 										<f:selectItem itemValue="false" itemLabel="--"/>
 										<f:selectItem itemValue="true" itemLabel="#{lbl.NOT}"/>
 									</h:selectOneMenu>
 								</h:panelGroup>
 								<h:panelGroup class="imj_searchStatement">	
-									<h:selectOneMenu id="selStatement" value="#{el.namespace}" onchange="$(this).parent().find('changeEl').click();">
+									<h:selectOneMenu id="selStatement" value="#{el.namespace}" onchange="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':changeEl').click();">
 										<f:selectItems value="#{g.statementMenu}"/>
 									</h:selectOneMenu>
 								</h:panelGroup>
@@ -74,15 +74,15 @@
 									<h:outputText value=" = " style="visibility:hidden;"/>
 								</h:panelGroup>
 								<h:panelGroup class="imj_logicalSearchGroup">
-									<h:selectOneMenu id="selFilter" value="#{el.operator}" rendered="#{el.operatorMenu != null}" onchange="$(this).parent().find('.imj_ajaxUpdateElementButton').click();">
+									<h:selectOneMenu id="selFilter" value="#{el.operator}" rendered="#{el.operatorMenu != null}" onchange="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();">
 										<f:selectItems value="#{el.operatorMenu}"/>
 									</h:selectOneMenu>
 								</h:panelGroup>	
 								<h:panelGroup class="imj_searchInput">						
-									<h:inputText id="input" autocomplete="false" value="#{el.searchValue}" rendered="#{el.predefinedValues == null}" onkeyup="$(this).parent().find('.imj_ajaxUpdateElementButton').click();">
+									<h:inputText id="input" autocomplete="false" value="#{el.searchValue}" rendered="#{el.predefinedValues == null}" onkeyup="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();">
 											<f:validateRegex pattern="[0-9]+" disabled="#{el.type != 'DATE'}" />										
 									</h:inputText>									
-									<h:selectOneMenu id="select" value="#{el.searchValue}" rendered="#{el.predefinedValues != null}" onchange="$(this).parent().find('.imj_ajaxUpdateElementButton').click();">
+									<h:selectOneMenu id="select" value="#{el.searchValue}" rendered="#{el.predefinedValues != null}" onchange="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();">
 										<f:selectItems value="#{el.predefinedValues}"/>
 									</h:selectOneMenu>
 								</h:panelGroup>
@@ -112,7 +112,7 @@
 								</h:commandButton>
 								
 								<h:panelGroup layout="block" styleClass="imj_logicalDetailConnector" rendered="#{elIndex.index &lt; (g.size - 1)}">
-									<h:selectOneMenu id="selLogicalRelation" value="#{el.logicalRelation}" styleClass="tiny_marginLExcl small_area0" onchange="$(this).parents('.imj_searchDetails').find('.imj_ajaxUpdateElementButton').click();">
+									<h:selectOneMenu id="selLogicalRelation" value="#{el.logicalRelation}" styleClass="tiny_marginLExcl small_area0" onchange="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();">
 										<f:selectItems value="#{AdvancedSearchBean.operatorsMenu}"/>
 									</h:selectOneMenu>
 								</h:panelGroup>

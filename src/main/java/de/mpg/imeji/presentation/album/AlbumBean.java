@@ -49,7 +49,7 @@ import de.mpg.imeji.presentation.util.UrlHelper;
  */
 public class AlbumBean extends ContainerBean
 {
-    private SessionBean sessionBean = null;
+    protected SessionBean sessionBean = null;
     private Album album = null;
     private String id = null;
     private int authorPosition;
@@ -60,7 +60,7 @@ public class AlbumBean extends ContainerBean
     /**
      * True if the {@link AlbumBean} is used for the create page, else false
      */
-    private boolean create;
+    // protected boolean create;
     private boolean selected;
     private static Logger logger = Logger.getLogger(AlbumBean.class);
     /**
@@ -163,7 +163,6 @@ public class AlbumBean extends ContainerBean
         try
         {
             setAlbum(ac.retrieveLazy(ObjectHelper.getURI(Album.class, id), sessionBean.getUser()));
-            create = false;
             if (sessionBean.getActiveAlbum() != null
                     && sessionBean.getActiveAlbum().getId().toString().equals(album.getId().toString()))
             {
@@ -177,16 +176,6 @@ public class AlbumBean extends ContainerBean
         }
     }
 
-    public void initCreate()
-    {
-        setAlbum(new Album());
-        getAlbum().getMetadata().setTitle("");
-        getAlbum().getMetadata().setDescription("");
-        getAlbum().getMetadata().getPersons().clear();
-        getAlbum().getMetadata().getPersons().add(ImejiFactory.newPerson());
-        create = true;
-    }
-
     /**
      * Return the link for the Cancel button
      * 
@@ -195,10 +184,6 @@ public class AlbumBean extends ContainerBean
     public String getCancel()
     {
         Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-        if (create)
-        {
-            return nav.getAlbumsUrl();
-        }
         return nav.getAlbumUrl() + id + "/" + nav.getInfosPath();
     }
 
@@ -456,22 +441,7 @@ public class AlbumBean extends ContainerBean
      */
     public String save() throws Exception
     {
-        if (create)
-        {
-            AlbumController ac = new AlbumController();
-            if (valid())
-            {
-                ac.create(getAlbum(), sessionBean.getUser());
-                UserController uc = new UserController(sessionBean.getUser());
-                sessionBean.setUser(uc.retrieve(sessionBean.getUser().getEmail()));
-                BeanHelper.info(sessionBean.getMessage("success_album_create"));
-                return "pretty:albums";
-            }
-        }
-        else
-        {
-            update();
-        }
+        update();
         return "";
     }
 

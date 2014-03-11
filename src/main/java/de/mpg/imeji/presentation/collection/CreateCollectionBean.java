@@ -87,7 +87,7 @@ public class CreateCollectionBean extends CollectionBean
         else
             return "";
     }
-    
+
     /**
      * Return the link for the Cancel button
      * 
@@ -99,7 +99,7 @@ public class CreateCollectionBean extends CollectionBean
         this.reset();
         return nav.getCollectionsUrl() + "?q=";
     }
-    
+
     /**
      * Method for Rest button. Reset all form value to empty value
      */
@@ -130,5 +130,15 @@ public class CreateCollectionBean extends CollectionBean
     public void setReset(String reset)
     {
         this.reset = reset;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see de.mpg.imeji.presentation.collection.CollectionBean#isVisible()
+     */
+    @Override
+    public boolean isVisible()
+    {
+        return true;
     }
 }

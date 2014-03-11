@@ -4,8 +4,9 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
 	
-	<ui:param name="metadataBean" value="#{CreateCollectionBean}"/>
-	<ui:param name="metadataContextBean" value="#{metadataBean.collection}"/>
+	<ui:param name="itemBean" value="#{CreateCollectionBean}"/>
+	<ui:param name="itemContextBean" value="#{metadataBean.collection}"/>
+	<ui:param name="metadataBean" value="#{itemContextBean.metadata}"/>
 	<ui:param name="headline" value="#{lbl.collection_create}"/>
 	<ui:param name="currentMainMenu" value="collection"/>
 	<ui:param name="containerHeadline" value="#{lbl.collection_info}"/>

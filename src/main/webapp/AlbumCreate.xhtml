@@ -4,8 +4,9 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
 	
-	<ui:param name="metadataBean" value="#{AlbumBean}"/>
-	<ui:param name="metadataContextBean" value="#{metadataBean.album}"/>
+	<ui:param name="itemBean" value="#{AlbumBean}"/>
+	<ui:param name="itemContextBean" value="#{metadataBean.album}"/>
+	<ui:param name="metadataBean" value="#{itemContextBean.metadata}"/>
 	<ui:param name="headline" value="#{lbl.createAlbum}"/>
 	<ui:param name="currentMainMenu" value="album"/>
 	<ui:param name="containerHeadline" value="#{lbl.album_information}"/>

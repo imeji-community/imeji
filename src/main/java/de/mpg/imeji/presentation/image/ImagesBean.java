@@ -316,7 +316,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         }
         catch (Exception e)
         {
-            logger.error("Error ínitializing the facets", e);
+            logger.error("Error Initializing the facets", e);
         }
     }
 

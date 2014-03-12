@@ -2551,6 +2551,9 @@ a.imj_submitButton,
 	background-color: rgba(255,255,255,0.33);
 	overflow: auto;
 }
+.imj_ingestWrapper .plupload_filelist {
+	height: 2em;
+}
 .plupload_file_name {
 	width: 60%;
 	padding: 0 1%;

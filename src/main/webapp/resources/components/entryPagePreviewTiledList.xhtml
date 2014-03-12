@@ -13,7 +13,7 @@
 	
 	<composite:implementation>
 		<div class="imj_entryPagePreviewTiledList">
-			<ui:fragment rendered="#{cc.attrs.mediaLogicBean.collection.status != 'WITHDRAWN'}">
+			<ui:fragment rendered="#{cc.attrs.mediaLogicBean.container.status != 'WITHDRAWN'}">
 				<h:outputLink value="#{cc.attrs.mediaLogicBean.id}/#{cc.attrs.browsePath}?q=" rendered="#{cc.attrs.mediaLogicBean.thumbnails.size() != null and cc.attrs.mediaLogicBean.thumbnails.size() != 0}">
 					<!-- MEDIA - Entry Page - Thumbnails -->
 					<ui:repeat var="thumb" value="#{cc.attrs.mediaLogicBean.thumbnails}">
@@ -40,7 +40,7 @@
 					</h:panelGroup>
 				</ui:fragment>
 			</ui:fragment>
-			<ui:fragment rendered="#{cc.attrs.mediaLogicBean.collection.status == 'WITHDRAWN'}">
+			<ui:fragment rendered="#{cc.attrs.mediaLogicBean.container.status == 'WITHDRAWN'}">
 				<h:panelGroup styleClass="imj_mediaWithdrawn" rendered="#{cc.attrs.mediaLogicBean.container.discardComment.toString().length() > 0 and cc.attrs.mediaLogicBean.container.status.toString().toUpperCase() == 'WITHDRAWN'}">
 						<span class="imj_statusArea">						
 							<span class="imj_statusIconArea">

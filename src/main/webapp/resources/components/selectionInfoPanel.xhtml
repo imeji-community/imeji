@@ -6,7 +6,6 @@
 	<composite:interface>
 		<composite:attribute name="fSession" required="false"/>
 		<composite:attribute name="facetBean" required="false"/>
-		<composite:attribute name="currentMainMenu" required="true"/>
 		<composite:attribute name="browseToAllUrl" required="true"/>
 		<composite:attribute name="numberOfElements" required="true"/>
 	</composite:interface>
@@ -68,7 +67,7 @@
 								</ui:fragment>
 								
 								<!-- Add all to active album -->
-								<ui:fragment rendered="#{SessionBean.activeAlbum != null and cc.attrs.currentMainMenu != 'album'}">
+								<ui:fragment rendered="#{SessionBean.activeAlbum != null and SessionBean.activeAlbumId != cc.attrs.facetBean.id}">
 									<li>
 										<h:commandLink action="#{cc.attrs.facetBean.addAllToActiveAlbum}">
 											<h:outputText value="#{lbl.add_to_active_album_all}"/>
@@ -136,7 +135,7 @@
 									</li>
 								</ui:fragment>
 								
-								<ui:fragment rendered="#{SessionBean.activeAlbum != null and cc.attrs.currentMainMenu != 'album'}">
+								<ui:fragment rendered="#{SessionBean.activeAlbum != null and SessionBean.activeAlbumId != cc.attrs.facetBean.id}">
 									<li class="imj_overlayMenuListItem">
 										<!-- Add to active album -->
 										<h:commandLink action="#{cc.attrs.facetBean.addSelectedToActiveAlbum}">

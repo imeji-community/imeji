@@ -32,8 +32,12 @@
 		<ui:include src="../../include/History.xhtml"></ui:include>
 		<h:panelGroup layout="block" id ="ajaxWrapper">
 			<!-- Selection Info Panel -->
-			<imjc:selectionInfoPanel id="selPanel" fSession="#{FiltersSession}" facetBean="#{paginatorListSessionBean}" currentMainMenu="mediaEntry" 
-									 browseToAllUrl="#{browseToAllItemsUrl}" numberOfElements="#{paginatorListSessionBean.totalNumberOfElements}"/>
+			<imjc:selectionInfoPanel 	id="selPanel" 
+										fSession="#{FiltersSession}" 
+										facetBean="#{paginatorListSessionBean}" 
+										currentMainMenu="mediaEntry" 
+									 	browseToAllUrl="#{browseToAllItemsUrl}" 
+									 	numberOfElements="#{paginatorListSessionBean.totalNumberOfElements}"/>
 			
 			<!-- Page Browser GotoBox -->
 			<imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}" addJSFunctions="yes"/>

@@ -231,6 +231,7 @@ input[type="password"]:focus {
     display: inline;
     font-size: 1.0909em;
     background-color: #313131;
+    background-color: rgba(255, 255, 255, 0.035);
     border-radius: 0.41666666em;
     -webkit-border-radius: 0.41666666em;
     -moz-border-radius: 0.41666666em;

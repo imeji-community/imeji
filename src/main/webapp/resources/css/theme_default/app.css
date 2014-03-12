@@ -2208,6 +2208,12 @@ a.imj_submitButton,
 .imj_bibliographicList .imj_bibliographicListItem:hover {
 	background-color: #292929;
 }
+.imj_bibliographicList .imj_bibliographicListItem.imj_active {
+	background-color: rgba(255, 255, 255, 0.1); /* white shade */
+}
+.imj_bibliographicList .imj_bibliographicListItem.imj_active:hover {
+	background-color: rgba(255, 255, 255, 0.15); /* white shade */
+}
 
 .imj_bibliographicList .imj_bibliographicListItem .imj_previewArea {
 	width: 21.5%;
@@ -2993,10 +2999,5 @@ a.imj_editButton {
 	max-width: 50em;
 }
 
-/* ====== Extensions =======*/
-
-.imj_activeAlbum{
-	background-color: rgba(74, 255, 0, 0.1);
-}
 
 

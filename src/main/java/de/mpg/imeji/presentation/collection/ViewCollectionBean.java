@@ -48,7 +48,6 @@ public class ViewCollectionBean extends CollectionBean
      */
     public void init()
     {
-        System.out.println("init view");
         try
         {
             User user = super.sessionBean.getUser();

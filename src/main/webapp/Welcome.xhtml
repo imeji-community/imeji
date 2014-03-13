@@ -3,12 +3,21 @@
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core">
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:menu="http://java.sun.com/jsf/composite/components/menu">
 	<ui:remove>
 		<ui:param name="headline" value="#{lbl.HomePage}"/>
 	</ui:remove>
 	<ui:param name="headline" value=""/>
 	<ui:param name="currentMainMenu" value="welcome"/>
+	
+	<ui:define name="actionsMenu">
+		<menu:context_actionMenu isUserLoggedIn="#{SessionBean.user != null}" 
+								 curMainMenu="#{currentMainMenu}" 
+								 downloadEnabled="false"
+								 actionEnabled="false"
+								 navBean="#{Navigation}"  />
+	</ui:define>
 	
 	<ui:define name="additonalHeaderScripts">
 		<script src="http://www.google.com/jsapi" type="text/javascript"> </script>
@@ -70,6 +79,8 @@
 	</ui:define>
 	
 	<ui:define name="mainContent">
+	
+	
 		<div class="imj_mainContentWrapper">
 			<!-- Main Content -->							
 			<div id="imj_welcomeInfoWrapper" class="imj_welcomeInfo">

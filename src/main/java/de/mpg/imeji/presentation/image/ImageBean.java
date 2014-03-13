@@ -409,6 +409,15 @@ public class ImageBean
     }
 
     /**
+     * True if the current item page is part of the current album
+     * @return
+     */
+    public boolean isActiveAlbum()
+    {
+        return false;
+    }
+
+    /**
      * Redirect to the browse page
      * 
      * @throws IOException
@@ -650,7 +659,7 @@ public class ImageBean
     {
         return StorageUtils.getMimeType(FilenameUtils.getExtension(item.getFilename())).contains("audio");
     }
-    
+
     /**
      * True if the current {@link User} has administration priviliges for this {@link Album}
      * 

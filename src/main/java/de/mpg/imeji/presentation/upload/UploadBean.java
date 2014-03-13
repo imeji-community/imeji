@@ -16,7 +16,6 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
-import javax.faces.event.ValueChangeEvent;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.fileupload.FileItemIterator;
@@ -24,7 +23,6 @@ import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang.BooleanUtils;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.controller.ItemController;
@@ -35,8 +33,8 @@ import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchOperators;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
-import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
+import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.UploadResult;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
@@ -45,6 +43,7 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.AuthorizationBean;
+import de.mpg.imeji.presentation.collection.CollectionBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
@@ -59,7 +58,7 @@ import de.mpg.imeji.presentation.util.UrlHelper;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class UploadBean
+public class UploadBean extends CollectionBean
 {
     private CollectionImeji collection;
     private int collectionSize = 0;
@@ -103,6 +102,7 @@ public class UploadBean
     {
         if (UrlHelper.getParameterBoolean("init"))
         {
+           
             importImageToFile = false;
             uploadFileToItem = false;
             checkNameUnique = true;
@@ -145,6 +145,7 @@ public class UploadBean
                 e.printStackTrace();
             }
         }
+        super.setCollection(collection);
     }
 
     /**
@@ -736,7 +737,7 @@ public class UploadBean
     {
         this.checkNameUnique = checkNameUnique;
     }
-    
+
     /**
      * true if current {@link User} can UPDATE the {@link CollectionImeji}
      * 
@@ -747,7 +748,7 @@ public class UploadBean
         Security security = new Security();
         return security.check(OperationsType.UPDATE, sessionBean.getUser(), collection);
     }
-    
+
     /**
      * true if current {@link User} can DELETE the {@link CollectionImeji}
      * 
@@ -758,13 +759,25 @@ public class UploadBean
         Security security = new Security();
         return security.check(OperationsType.DELETE, sessionBean.getUser(), collection);
     }
-    
-    public String getDiscardComment() 
-	{
-		return collection.getDiscardComment();
-	}
-	public void setDiscardComment(String comment)
-	{
-		collection.setDiscardComment(comment);
-	}
+
+    public String getDiscardComment()
+    {
+        return collection.getDiscardComment();
+    }
+
+    public void setDiscardComment(String comment)
+    {
+        collection.setDiscardComment(comment);
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see de.mpg.imeji.presentation.beans.ContainerBean#getNavigationString()
+     */
+    @Override
+    protected String getNavigationString()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

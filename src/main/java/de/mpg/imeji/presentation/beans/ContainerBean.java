@@ -28,11 +28,19 @@
  */
 package de.mpg.imeji.presentation.beans;
 
+import java.util.List;
+
 import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Container;
+import de.mpg.imeji.logic.vo.Organization;
+import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.album.AlbumBean;
 import de.mpg.imeji.presentation.collection.CollectionBean;
+import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.ImejiFactory;
 
 /**
  * Super Java Bean for containers bean {@link AlbumBean} and {@link CollectionBean}
@@ -43,6 +51,9 @@ import de.mpg.imeji.presentation.collection.CollectionBean;
  */
 public abstract class ContainerBean
 {
+    private int authorPosition;
+    private int organizationPosition;
+
     /**
      * Types of containers
      * 
@@ -68,7 +79,21 @@ public abstract class ContainerBean
      * @return
      */
     public abstract Container getContainer();
-    
+
+    /**
+     * Return the String used for redirection
+     * 
+     * @return
+     */
+    protected abstract String getNavigationString();
+
+    /**
+     * Return the bundle of the message when not orga is set
+     * 
+     * @return
+     */
+    protected abstract String getErrorMessageNoAuthor();
+
     /**
      * Return the {@link User} having uploaded the file for this item
      * 
@@ -81,5 +106,105 @@ public abstract class ContainerBean
         UserController uc = new UserController();
         user = uc.retrieve(getContainer().getCreatedBy());
         return user;
+    }
+
+    /**
+     * Add a new author to the {@link CollectionImeji}
+     * 
+     * @param authorPosition
+     * @return
+     */
+    public String addAuthor(int authorPosition)
+    {
+        List<Person> c = (List<Person>)getContainer().getMetadata().getPersons();
+        Person p = ImejiFactory.newPerson();
+        p.setPos(authorPosition + 1);
+        c.add(authorPosition + 1, p);
+        return "";
+    }
+
+    /**
+     * Remove an author of the {@link CollectionImeji}
+     * 
+     * @return
+     */
+    public String removeAuthor(int authorPosition)
+    {
+        List<Person> c = (List<Person>)getContainer().getMetadata().getPersons();
+        if (c.size() > 1)
+            c.remove(authorPosition);
+        else
+            BeanHelper.error(getErrorMessageNoAuthor());
+        return "";
+    }
+
+    /**
+     * Add an organization to an author of the {@link CollectionImeji}
+     * 
+     * @param authorPosition
+     * @param organizationPosition
+     * @return
+     */
+    public String addOrganization(int authorPosition, int organizationPosition)
+    {
+        List<Person> persons = (List<Person>)getContainer().getMetadata().getPersons();
+        List<Organization> orgs = (List<Organization>)persons.get(authorPosition).getOrganizations();
+        Organization o = ImejiFactory.newOrganization();
+        o.setPos(organizationPosition + 1);
+        orgs.add(organizationPosition + 1, o);
+        return "";
+    }
+
+    /**
+     * Remove an organization to an author of the {@link CollectionImeji}
+     * 
+     * @return
+     */
+    public String removeOrganization(int authorPosition, int organizationPosition)
+    {
+        List<Person> persons = (List<Person>)getContainer().getMetadata().getPersons();
+        List<Organization> orgs = (List<Organization>)persons.get(authorPosition).getOrganizations();
+        if (orgs.size() > 1)
+            orgs.remove(organizationPosition);
+        else
+            BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class))
+                    .getMessage("error_author_need_one_organization"));
+        return "";
+    }
+
+    /**
+     * getter
+     * 
+     * @return
+     */
+    public int getAuthorPosition()
+    {
+        return authorPosition;
+    }
+
+    /**
+     * setter
+     * 
+     * @param pos
+     */
+    public void setAuthorPosition(int pos)
+    {
+        this.authorPosition = pos;
+    }
+
+    /**
+     * @return the collectionPosition
+     */
+    public int getOrganizationPosition()
+    {
+        return organizationPosition;
+    }
+
+    /**
+     * @param collectionPosition the collectionPosition to set
+     */
+    public void setOrganizationPosition(int organizationPosition)
+    {
+        this.organizationPosition = organizationPosition;
     }
 }

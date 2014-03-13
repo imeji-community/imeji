@@ -60,6 +60,7 @@ public class CreateAlbumBean extends AlbumBean
     /**
      * Called when bean page is called
      */
+
     public void init()
     {
         setAlbum(new Album());

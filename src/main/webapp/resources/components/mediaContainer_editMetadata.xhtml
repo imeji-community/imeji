@@ -13,7 +13,7 @@
 	
 	<composite:implementation>
 		
-		<div class="imj_mediaContainerEditMD">
+		<h:panelGroup layout="block" class="imj_mediaContainerEditMD">
 			<h:form id="mediaContainerForm">
 				<div class="imj_headline">
 					<h3>
@@ -38,19 +38,18 @@
 						</label>
 						<h:inputTextarea id="inputDescription" styleClass="imj_metadataValue" value="#{cc.attrs.formularContextBean.metadata.description}"/>
 					</div>
-					
 					<!-- Author data -->
 					<ui:repeat var="creator" value="#{cc.attrs.formularContextBean.metadata.persons}" varStatus="indexA">
 						<h:panelGroup layout="block" styleClass="imj_authorMetadataSet">
 							<div class="imj_sectionHeadline">
 								<h4>
-									<!-- Add/Remove Author buttons -->		
+									<!-- Add/Remove Author buttons -->
 									<span class="imj_inlineButtonGroup">
-										<h:commandButton styleClass="imj_buttonAdd_16" title="#{lbl.add_author}" action="#{cc.attrs.formularBean.addAuthor}">
-											<f:setPropertyActionListener value="#{indexA.index}" target="#{cc.attrs.formularBean.authorPosition}"/>
+										<h:commandButton styleClass="imj_buttonAdd_16" title="#{lbl.add_author}" action="#{cc.attrs.formularBean.addAuthor(indexA.index)}">
+											<f:ajax render="@form"/>
 										</h:commandButton>
-										<h:commandButton styleClass="imj_buttonRemove_16" title="#{lbl.remove_author}" action="#{cc.attrs.formularBean.removeAuthor}">
-											<f:setPropertyActionListener value="#{indexA.index}" target="#{cc.attrs.formularBean.authorPosition}"/>
+										<h:commandButton styleClass="imj_buttonRemove_16" title="#{lbl.remove_author}" action="#{cc.attrs.formularBean.removeAuthor(indexA.index)}">
+											<f:ajax render="@form"/>
 										</h:commandButton>
 									</span>
 									<h:outputText value=" #{lbl.author} *"/>
@@ -83,13 +82,11 @@
 										<h:outputText value="#{lbl.organization}*"/>
 										<span class="imj_noDisplay">: </span>
 										<span class="imj_inlineButtonGroup">
-											<h:commandButton styleClass="imj_buttonAdd_16" title="#{lbl.add_organization}" action="#{cc.attrs.formularBean.addOrganization}">
-												<f:setPropertyActionListener value="#{indexA.index}" target="#{cc.attrs.formularBean.authorPosition}"/>
-												<f:setPropertyActionListener value="#{indexO.index}" target="#{cc.attrs.formularBean.organizationPosition}"/>
+											<h:commandButton styleClass="imj_buttonAdd_16" title="#{lbl.add_organization}" action="#{cc.attrs.formularBean.addOrganization(indexA.index,indexO.index)}">
+												<f:ajax execute="@form" render="@form"/>
 											</h:commandButton>
-											<h:commandButton styleClass="imj_buttonRemove_16" title="#{lbl.remove_organization}" action="#{cc.attrs.formularBean.removeOrganization}">
-												<f:setPropertyActionListener value="#{indexA.index}" target="#{cc.attrs.formularBean.authorPosition}"/>
-												<f:setPropertyActionListener value="#{indexO.index}" target="#{cc.attrs.formularBean.organizationPosition}"/>
+											<h:commandButton styleClass="imj_buttonRemove_16" title="#{lbl.remove_organization}" action="#{cc.attrs.formularBean.removeOrganization(indexA.index,indexO.index)}">
+												<f:ajax execute="@form" render="@form"/>
 											</h:commandButton>
 										</span>
 									</label>
@@ -107,6 +104,6 @@
 					<h:commandButton action="#{cc.attrs.formularBean.save}" value="#{lbl.save}" styleClass="imj_submitButton" onclick="openDialog('dialogWait');"/>
 				</div>
 			</h:form>
-		</div>
+		</h:panelGroup>
 	</composite:implementation>
 </html>

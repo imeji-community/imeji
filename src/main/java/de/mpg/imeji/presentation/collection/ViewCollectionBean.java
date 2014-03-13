@@ -6,6 +6,9 @@ package de.mpg.imeji.presentation.collection;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
+
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.controller.ItemController;
@@ -15,7 +18,6 @@ import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.AuthorizationBean;
-import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 
@@ -26,9 +28,10 @@ import de.mpg.imeji.presentation.util.ObjectLoader;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
+@ManagedBean(name = "ViewCollectionBean")
+@RequestScoped
 public class ViewCollectionBean extends CollectionBean
 {
-    private SessionBean sessionBean = null;
     private List<Person> persons = null;
     private static Logger logger = Logger.getLogger(ViewCollectionBean.class);
 
@@ -38,7 +41,6 @@ public class ViewCollectionBean extends CollectionBean
     public ViewCollectionBean()
     {
         super();
-        sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     }
 
     /**
@@ -46,14 +48,15 @@ public class ViewCollectionBean extends CollectionBean
      */
     public void init()
     {
+        System.out.println("init view");
         try
         {
-            User user = sessionBean.getUser();
+            User user = super.sessionBean.getUser();
             String id = getId();
             setCollection(ObjectLoader.loadCollectionLazy(ObjectHelper.getURI(CollectionImeji.class, id), user));
             if (getCollection() != null && getCollection().getId() != null)
             {
-                ItemController ic = new ItemController(sessionBean.getUser());
+                ItemController ic = new ItemController(user);
                 ic.loadContainerItems(getCollection(), user, 13, 0);
                 setSize(getCollection().getImages().size());
             }
@@ -127,7 +130,6 @@ public class ViewCollectionBean extends CollectionBean
     }
 
     /**
-     * 
      * @return
      */
     public String getFormattedDescription()
@@ -138,7 +140,6 @@ public class ViewCollectionBean extends CollectionBean
     }
 
     /**
-     * 
      * @return
      */
     public String getCitation()

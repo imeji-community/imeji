@@ -4,6 +4,7 @@
 package de.mpg.imeji.presentation.session;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;

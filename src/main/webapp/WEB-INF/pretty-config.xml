@@ -2,8 +2,6 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://ocpsoft.org/xml/ns/prettyfaces/ocpsoft-pretty-faces-3.3.3.xsd">
 
-
-
 	<!-- Begin RewriteRules -->
 	<rewrite trailingSlash="remove" />
 
@@ -67,14 +65,15 @@
 			value="/collection/#{CollectionImageBean.collectionId}/item/#{CollectionImageBean.id}" />
 		<view-id>/jsf/CollectionImage.xhtml</view-id>
 	</url-mapping>
-	<url-mapping id="createCollection">
-		<pattern value="/createcollection" />
-		<view-id>/jsf/CollectionCreate.xhtml</view-id>
-	</url-mapping>
 	<url-mapping id="editCollection">
 		<pattern value="/collection/#{EditCollectionBean.id}/edit" />
 		<view-id>/jsf/CollectionEdit.xhtml</view-id>
 		<action onPostback="false">#{EditCollectionBean.init}</action>
+	</url-mapping>
+	<url-mapping id="createCollection">
+		<pattern value="/createcollection" />
+		<view-id>/jsf/CollectionCreate.xhtml</view-id>
+		<action onPostback="false">#{CreateCollectionBean.init}</action>
 	</url-mapping>
 	<!-- Profile Pages -->
 	<url-mapping id="viewProfile">

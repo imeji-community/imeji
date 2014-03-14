@@ -77,12 +77,13 @@ public class ShareBean
         if (isCollection(uri))
         {
             this.isAlbum = false;
-            container = ObjectLoader.loadCollectionLazy(uri, session.getUser());
+            container = ObjectLoader.loadCollectionLazy(ObjectHelper.normalizeURI(CollectionImeji.class, uri),
+                    session.getUser());
         }
         else
         {
             this.isAlbum = true;
-            container = ObjectLoader.loadAlbumLazy(uri, session.getUser());
+            container = ObjectLoader.loadAlbumLazy(ObjectHelper.normalizeURI(Album.class, uri), session.getUser());
         }
     }
 
@@ -282,10 +283,14 @@ public class ShareBean
     public String getContainerHome()
     {
         Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-        String id = ObjectHelper.getId(container.getId());
-        if (isAlbum)
-            return navigation.getAlbumUrl() + id;
-        return navigation.getCollectionUrl() + id;
+        if (container != null)
+        {
+            String id = ObjectHelper.getId(container.getId());
+            if (isAlbum)
+                return navigation.getAlbumUrl() + id;
+            return navigation.getCollectionUrl() + id;
+        }
+        return "";
     }
 
     /**

@@ -490,7 +490,7 @@ public class ImageBean
     {
         Security security = new Security();
         return security.check(OperationsType.UPDATE, sessionBean.getUser(), item) && item != null
-                && !item.getStatus().equals(Status.WITHDRAWN) && profile.getStatements().size() > 0;
+                && !item.getStatus().equals(Status.WITHDRAWN);
     }
 
     public boolean isVisible()

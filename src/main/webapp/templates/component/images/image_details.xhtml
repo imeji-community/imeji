@@ -98,7 +98,7 @@
 					<h:panelGroup layout="block" styleClass="imj_metadataSubPanel">
 						<span class="imj_metadataSubPanelItem">
 							<h:outputText id="lblViewItemFull_lblBasic" value="#{lbl.metadata} "/>
-								<h:commandLink rendered="#{imageBean.editable and !imageBean.locked and imageBean.edit.toggleState == 'displayMd'}" value="#{lbl.edit}" action="#{imageBean.edit.showEditor}">
+								<h:commandLink rendered="#{imageBean.editable and !imageBean.locked and imageBean.edit.toggleState == 'displayMd' and imageBean.profile.statements.size() > 0}" value="#{lbl.edit}" action="#{imageBean.edit.showEditor}">
 								<f:ajax execute="@this" render="@form"/>
 								</h:commandLink>
 						</span>

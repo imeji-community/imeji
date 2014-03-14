@@ -20,8 +20,6 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 @SessionScoped
 public class EditCollectionBean extends CollectionBean
 {
-    private CollectionSessionBean collectionSession = null;
-
     public EditCollectionBean()
     {
         super();
@@ -29,7 +27,6 @@ public class EditCollectionBean extends CollectionBean
 
     public void init() throws Exception
     {
-        System.out.println("init edit");
         super.setTab(TabType.COLLECTION);
         String id = super.getId();
         if (id != null)

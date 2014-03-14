@@ -31,7 +31,6 @@
 			<fieldset>
     			<legend><h:outputText value="#{lbl.search_query}"/></legend>
 				<span class="imj_searchQueryText">
-					<h:outputText value="#{lbl.search_for}" rendered="#{cc.attrs.searchBean.simpleSearch}"/>
 					<h:outputText value="#{cc.attrs.searchBean.simpleQuery}"/>
 				</span>
 				<h:outputLink value="#{cc.attrs.navBean.searchUrl}?q=#{cc.attrs.searchBean.query}" styleClass="imj_submitButton" rendered="#{!cc.attrs.searchBean.simpleSearch}">

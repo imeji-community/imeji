@@ -28,6 +28,7 @@
 									isEditable="#{UploadBean.editable}" 
 									isDeletable="#{UploadBean.deletable}" 
 									contextDownloadParam="&amp;col=#{UploadBean.id}"
+									downloadEnabled="#{UploadBean.size > 0}"
 									allowedToShare="#{UploadBean.collection.status !='WITHDRAWN'}"/>
 	</ui:define>
 	

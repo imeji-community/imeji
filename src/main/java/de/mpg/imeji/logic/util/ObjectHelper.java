@@ -26,6 +26,18 @@ import de.mpg.j2j.annotations.j2jResource;
 public class ObjectHelper
 {
     /**
+     * Ensure that the {@link URI} uses the correct base uri (see property imeji.jena.resource.base_uri)
+     * 
+     * @param c
+     * @param uri
+     * @return
+     */
+    public static URI normalizeURI(Class<?> c, URI uri)
+    {
+        return getURI(c, getId(uri));
+    }
+
+    /**
      * Get the {@link URI} of {@link Object} according to its {@link Class} and the id (not uri)
      * 
      * @param o

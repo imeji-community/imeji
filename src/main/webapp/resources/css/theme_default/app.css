@@ -628,7 +628,7 @@ a:hover .imj_buttonSortAscending_16 {
 	width: 2.363636em;
 	height: 1.363636em;
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjGotoFirst_16.png");
-	background-color: inherit;
+	background-color: transparent;
 	background-repeat: no-repeat;
 	background-position: left;
 	vertical-align: middle;
@@ -637,7 +637,7 @@ a:hover .imj_buttonSortAscending_16 {
 
 .imj_buttonBrowseToFirst_16:hover {
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjGotoFirst_16.png");
-	background-color: inherit;
+	background-color: transparent;
 }
 
 .imj_buttonBrowseToFirst_16.imj_deactivated {
@@ -653,7 +653,7 @@ a:hover .imj_buttonSortAscending_16 {
 	width: 2.363636em;
 	height: 1.363636em;
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjTrianglePrevious_16.png");
-	background-color: inherit;
+	background-color: transparent;
 	background-repeat: no-repeat;
 	background-position: left;
 	vertical-align: middle;
@@ -662,7 +662,7 @@ a:hover .imj_buttonSortAscending_16 {
 
 .imj_buttonBrowseBackward_16:hover {
 	background-image: url("resources/imj_iconset/F0F0F0/imjTrianglePrevious_16.png");
-	background-color: inherit;
+	background-color: transparent;
 }
 
 .imj_buttonBrowseBackward_16.imj_deactivated {
@@ -678,7 +678,7 @@ a:hover .imj_buttonSortAscending_16 {
 	width: 2.363636em;
 	height: 1.363636em;
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjTriangleNext_16.png");
-	background-color: inherit;
+	background-color: transparent;
 	background-repeat: no-repeat;
 	background-position: right;
 	vertical-align: middle;
@@ -687,7 +687,7 @@ a:hover .imj_buttonSortAscending_16 {
 
 .imj_buttonBrowseForward_16:hover {
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjTriangleNext_16.png");
-	background-color: inherit;
+	background-color: transparent;
 }
 
 .imj_buttonBrowseForward_16.imj_deactivated {
@@ -703,7 +703,7 @@ a:hover .imj_buttonSortAscending_16 {
 	width: 2.363636em;
 	height: 1.363636em;
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjGotoLast_16.png");
-	background-color: inherit;
+	background-color: transparent;
 	background-repeat: no-repeat;
 	background-position: right;
 	vertical-align: middle;
@@ -712,7 +712,7 @@ a:hover .imj_buttonSortAscending_16 {
 
 .imj_buttonBrowseToLast_16:hover {
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjGotoLast_16.png");
-	background-color: inherit;
+	background-color: transparent;
 }
 
 .imj_buttonBrowseToLast_16.imj_deactivated {
@@ -751,7 +751,7 @@ a:hover .imj_buttonSortAscending_16 {
 	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAE2F/imjButtonPlusBorderOpen_16.png");
 	vertical-align: middle;
 	background-repeat: no-repeat;
-	background-color: inherit;
+	background-color: transparent;
 	height: 1.363636em;
 	width: 1.363636em;
 	margin-right: 0.181818em;
@@ -761,14 +761,14 @@ a:hover .imj_buttonSortAscending_16 {
 
 .imj_buttonAdd_16:hover {
 	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjButtonPlusBorderOpen_16.png");
-	background-color: inherit;
+	background-color: transparent;
 }
 
 .imj_buttonRemove_16 {
 	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAE2F/imjButtonMinusRoundedBorderOpen_16.png");
 	vertical-align: middle;
 	background-repeat: no-repeat;
-	background-color: inherit;
+	background-color: transparent;
 	height: 1.3636em;
 	width: 1.3636em;
 	margin-right: 0.182em;
@@ -778,7 +778,7 @@ a:hover .imj_buttonSortAscending_16 {
 
 .imj_buttonRemove_16:hover {
 	background-image: url("/imeji/jsf/javax.faces.resource/imj_iconset/F0F0F0/imjButtonMinusRoundedBorderOpen_16.png");
-	background-color: inherit;
+	background-color: transparent;
 }
 
 /* * Expand & Collapse Buttons - e.g. Collection List
@@ -881,7 +881,7 @@ a:hover .imj_buttonSortAscending_16 {
 	width: 2.363636em;
 	height: 1.363636em;
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjButtonTriangleSortDesc_16.png");
-	background-color: inherit;
+	background-color: transparent;
 	background-repeat: no-repeat;
 	background-position: left;
 	vertical-align: middle;
@@ -893,7 +893,7 @@ a:hover .imj_buttonSortAscending_16 {
 	width: 2.363636em;
 	height: 1.363636em;
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonTriangleSortDesc_16.png");
-	background-color: inherit;
+	background-color: transparent;
 	background-repeat: no-repeat;
 	background-position: left;
 	vertical-align: middle;
@@ -905,7 +905,7 @@ a:hover .imj_buttonSortAscending_16 {
 	width: 2.363636em;
 	height: 1.363636em;
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjButtonTriangleSortAsc_16.png");
-	background-color: inherit;
+	background-color: transparent;
 	background-repeat: no-repeat;
 	background-position: left;
 	vertical-align: middle;
@@ -917,7 +917,7 @@ a:hover .imj_buttonSortAscending_16 {
 	width: 2.363636em;
 	height: 1.363636em;
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjButtonTriangleSortAsc_16.png");
-	background-color: inherit;
+	background-color: transparent;
 	background-repeat: no-repeat;
 	background-position: left;
 	vertical-align: middle;
@@ -1915,7 +1915,7 @@ a.imj_submitButton,
 }
 
 .imj_singlePageBrowser .imj_pageNumber {
-	background-color: inherit;
+	background-color: transparent;
 	border: 0 none;
 	color: #6CAE2F;
 	padding: 0 1em;
@@ -1926,7 +1926,7 @@ a.imj_submitButton,
 }
 
 .imj_singlePageBrowser .imj_currentPageNumber {
-	background-color: inherit;
+	background-color: transparent;
 	border: 0 none;
 	color: #F0F0F0;
 	padding: 0 1em;
@@ -1991,7 +1991,7 @@ a.imj_submitButton,
 
 .imj_iconEyeOpen_16 {
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjEyeOpen_16.png");
-	background-color: inherit;
+	background-color: transparent;
 	background-position: left;
 	background-repeat: no-repeat;
 	border: 0 none;
@@ -2008,7 +2008,7 @@ a.imj_submitButton,
 /* imj_buttonEdit_16 - used in templates/component/images/MetadataPopup.xhtml */
 .imj_buttonEdit_16 {
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjEditPen_16.png");
-	background-color: inherit;
+	background-color: transparent;
 	background-position: left;
 	background-repeat: no-repeat;
 	border: 0 none;
@@ -2669,7 +2669,7 @@ a.imj_submitButton,
 	width: 2em;
 	margin-top: 1em;
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/6CAE2F/imjArrowThinRight_24.png");
-	background-color: inherit;
+	background-color: transparent;
 	background-position: right;
 	background-repeat: no-repeat;
 	border: 0 none;

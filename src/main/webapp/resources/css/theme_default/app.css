@@ -1829,7 +1829,9 @@ a.imj_submitButton,
 	-moz-border-radius: 0.454545em;
 	border-radius: 0.454545em;
 }
-
+.imj_tiledMediaList > .imj_listBody {
+	margin: 0 auto;
+}
 .imj_tiledMediaList .imj_tileItem {
 	vertical-align: top;
 }
@@ -1837,6 +1839,7 @@ a.imj_submitButton,
 .imj_tiledMediaList .imj_tileItem {
 	display: inline-block;
 	width: 15.75%;
+	max-width: 11.545454em;
 	padding-bottom: 2em;
 	margin: 0 0.25%;
 }

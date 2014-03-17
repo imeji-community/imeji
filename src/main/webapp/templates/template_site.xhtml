@@ -46,10 +46,8 @@ All rights reserved. Use is subject to license terms.
 			
 			<div class="imj_siteWrapper">
 				<ui:insert name="init"/>
-				<ui:include src="component/header/header_default.xhtml"/>			
-				
+				<ui:include src="component/header/header_default.xhtml"/>
 				<ui:insert name="actionsMenu"/>
-				
 				<h:panelGroup layout="bock" styleClass="imj_siteContentHeadline" rendered="#{headline.toString().trim().length() > 0}">
 					<h1>
 						<h:outputText value="#{headline.toString().trim()}"/>

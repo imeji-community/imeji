@@ -147,6 +147,19 @@ public class BeanHelper
     }
 
     /**
+     * Remove a Bean from the application map. Can be used to force a bean to be reinitialized
+     * 
+     * @param cls
+     */
+    public static synchronized void removeBeanFromMap(final Class<?> cls)
+    {
+        String name = cls.getSimpleName();
+        Object result = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().get(name);
+        if (result != null)
+            FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().remove(name);
+    }
+
+    /**
      * @param summary summary text
      */
     public static void info(String summary)

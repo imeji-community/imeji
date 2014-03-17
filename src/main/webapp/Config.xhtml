@@ -34,9 +34,9 @@
 									<h:outputText value="#{lbl.snippet}"/>
 								</h2>
 							</div>
-							
-							<div class="imj_content">
-								<h:form>									
+							<h:form>					
+								<div class="imj_content">
+												
 									<!-- Admin - Snippet Insert -->	
 									<h:panelGroup layout="block" styleClass="imj_admindataSet">
 										<div class="imj_admindataLabel">
@@ -49,12 +49,46 @@
 											</div>
 										</div>
 									</h:panelGroup>
-									<!-- AdminDataList - imj_submitPanel - cancel link + submit command buttons -->
-									<h:panelGroup layout="block" styleClass="imj_submitPanel">
-										<h:commandButton action="#{Configuration.saveConfig}" value="#{lbl.configuration_save}" styleClass="imj_editButton"/>
+								</div> 
+							
+								<div class="imj_headline">
+									<h2>
+										<h:outputText value="CSS"/>
+									</h2>
+								</div>
+							
+								<div class="imj_content">					
+									<!-- Admin - Snippet Insert -->	
+									<h:panelGroup layout="block" styleClass="imj_admindataSet">
+										<div class="imj_admindataLabel">
+											<h:outputText value="Default CSS URL"/>
+											<span class="imj_invisible">: </span>
+										</div>
+										<div class="imj_admindataValue">
+											<div class="imj_admindataValueEntry">
+												<h:inputText value="#{Configuration.defaultCss}" styleClass="imj_admindataEdit" valueChangeListener="#{SessionBean.cssConfigurationListener}"/>
+											</div>
+										</div>
 									</h:panelGroup>
-								</h:form>							
-							</div> <!-- END CONTENT -->
+									<h:panelGroup layout="block" styleClass="imj_admindataSet" rendered="#{Configuration.defaultCss != null and Configuration.defaultCss != ''}">
+										<div class="imj_admindataLabel">
+											<h:outputText value="Alternative CSS URL"/>
+											<span class="imj_invisible">: </span>
+										</div>
+										<div class="imj_admindataValue">
+											<div class="imj_admindataValueEntry">
+												<h:inputText value="#{Configuration.alternativeCss}" styleClass="imj_admindataEdit" valueChangeListener="#{SessionBean.cssConfigurationListener}"/>
+											</div>
+										</div>
+									</h:panelGroup>														
+								</div>
+							
+								<!-- AdminDataList - imj_submitPanel - cancel link + submit command buttons -->
+								<h:panelGroup layout="block" styleClass="imj_submitPanel">
+									<h:commandButton action="#{Configuration.saveConfig}" value="#{lbl.configuration_save}" styleClass="imj_editButton"/>
+								</h:panelGroup>
+							</h:form>	
+							<!-- END CONTENT -->
 						
 						</h:panelGroup>
 					

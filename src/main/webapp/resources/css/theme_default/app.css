@@ -499,9 +499,8 @@ iframe#twitter-widget-0 div.root div.stream {
 	height: 5em;
 	padding: 0;
 	display: inline-block;
-	background:
-		url("/imeji/jsf/javax.faces.resource/imj_iconset/logo_imeji.gif")
-		no-repeat scroll -2.545454em 0 transparent;
+	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/logo_imeji.gif")
+		no-repeat scroll -1.909090em 0 transparent;
 }
 
 /* ===[ SiteHeader - SimpleSearch ]===
@@ -934,7 +933,7 @@ a:hover .imj_buttonSortAscending_16 {
 .imj_mainMenuStandard {
 	display: inline-block;
 	width: 98%;
-	padding: 0 2%;
+	padding: 0 3%;
 	margin-bottom: 0.454545em;
 	font-size: 135%;
 	letter-spacing: 0.090909em;
@@ -972,8 +971,8 @@ a:hover .imj_buttonSortAscending_16 {
  * =========================================================================================== */
 .imj_contentMenu,.imj_contentSubMenu {
 	clear: both;
-	width: 86.95%;
-	padding: 0 6.5%;
+	width: 84.95%;
+	padding: 0 7.5%;
 	letter-spacing: 0.045em;
 }
 

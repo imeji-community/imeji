@@ -220,6 +220,7 @@ public class CollectionImagesBean extends ImagesBean
         CollectionController cc = new CollectionController();
         try
         {
+            collection.setDiscardComment(getDiscardComment());
             cc.withdraw(collection, sb.getUser());
             BeanHelper.info(sb.getMessage("success_collection_withdraw"));
         }

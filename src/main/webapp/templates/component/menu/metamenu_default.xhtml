@@ -41,7 +41,7 @@ All rights reserved. Use is subject to license terms.
 		<h:panelGroup styleClass="imj_metaMenuItemsAlign">
 			
 			<!-- CSS Switcher -->
-			<ui:fragment rendered="#{SessionBean.cssCount > 1}">
+			<ui:fragment rendered="#{SessionBean.enableCssSwitcher}">
 				<h:form>
 					<h:commandButton value="&#160;" action="#{SessionBean.toggleCss()}" styleClass="imj_metaMenuItem imj_buttonStyleSwitcher"/>
 				</h:form>

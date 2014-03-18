@@ -48,8 +48,7 @@
         
         <!-- User not allowed to view item -->
         <h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!imageBean.visible}">
-			<h:outputText value="#{lbl.view_page_disallowed}" styleClass="imj_messageInfo" rendered="#{SessionBean.user == null}"/>
-        	<h:outputText value="#{lbl.view_page_disallowed2}" styleClass="imj_messageInfo" rendered="#{SessionBean.user != null}"/>
+        	<ui:include src="../../include/LoginFormular.xhtml"/>
 		</h:panelGroup>
 		
 	</ui:define>	

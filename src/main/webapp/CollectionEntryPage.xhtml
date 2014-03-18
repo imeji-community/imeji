@@ -46,7 +46,7 @@
 	<ui:define name="modalDialogs_from_site">
 		<dialog:confirmationDialog submitAction="release" bean="#{logicBean}" confirmationText="#{msg.confirmation_release_collection}?" submitLabel="#{lbl.release}" dialogId="releaseMenuItemDialog" rendered="#{logicBean.editable and logicBean.collection.status.toString().toUpperCase() == 'PENDING' and logicBean.size > 0}"/>
 		<dialog:confirmationDialog submitAction="delete" bean="#{logicBean}" confirmationText="#{msg.confirmation_delete_collection}?" submitLabel="#{lbl.delete}" dialogId="deleteMenuItemDialog" rendered="#{logicBean.deletable}"/>
-		<dialog:confirmationReasonedDialog submitAction="withdraw" bean="#{logicBean}" confirmationText="#{msg.confirmation_withdraw_collection}" submitLabel="#{lbl.withdraw}" dialogId="withdrawMenuItemDialog" rendered="#{logicBean.editable and logicBean.collection.status.toString().toUpperCase() == 'RELEASED'}"/>
+		<dialog:confirmationReasonedDialog submitAction="withdraw" bean="#{logicBean}" confirmationText="#{msg.confirmation_withdraw_collection}" submitLabel="#{lbl.withdraw}" dialogId="withdrawMenuItemDialog" rendered="#{logicBean.editable and logicBean.collection.status.toString().toUpperCase() == 'RELEASED'}"/>		
 	</ui:define>
 	
 </ui:composition>

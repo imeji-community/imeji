@@ -5,7 +5,6 @@ package de.mpg.imeji.presentation.album;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -52,8 +51,6 @@ public class AlbumBean extends ContainerBean
     protected SessionBean sessionBean = null;
     private Album album = null;
     private String id = null;
-    private int authorPosition;
-    private int organizationPosition;
     private List<SelectItem> profilesMenu = new ArrayList<SelectItem>();
     private boolean active;
     private String tab;
@@ -234,60 +231,10 @@ public class AlbumBean extends ContainerBean
         return valid;
     }
 
-    /**
-     * Add a {@link Person} as an author of the album
-     * 
-     * @return
-     */
-    public String addAuthor()
+    @Override
+    protected String getErrorMessageNoAuthor()
     {
-        List<Person> list = (List<Person>)getAlbum().getMetadata().getPersons();
-        list.add(authorPosition + 1, ImejiFactory.newPerson());
-        return "";
-    }
-
-    /**
-     * Remvoe a {@link Person} as an author of the album
-     * 
-     * @return
-     */
-    public String removeAuthor()
-    {
-        List<Person> list = (List<Person>)getAlbum().getMetadata().getPersons();
-        if (list.size() > 1)
-            list.remove(authorPosition);
-        else
-            BeanHelper.error(sessionBean.getMessage("error_album_need_one_author"));
-        return "";
-    }
-
-    /**
-     * add an {@link Organization} to the author
-     * 
-     * @return
-     */
-    public String addOrganization()
-    {
-        Collection<Person> persons = getAlbum().getMetadata().getPersons();
-        List<Organization> orgs = (List<Organization>)((List<Person>)persons).get(authorPosition).getOrganizations();
-        orgs.add(organizationPosition + 1, ImejiFactory.newOrganization());
-        return "";
-    }
-
-    /**
-     * Remove an {@link Organization} to the author
-     * 
-     * @return
-     */
-    public String removeOrganization()
-    {
-        List<Person> persons = (List<Person>)getAlbum().getMetadata().getPersons();
-        List<Organization> orgs = (List<Organization>)persons.get(authorPosition).getOrganizations();
-        if (orgs.size() > 1)
-            orgs.remove(organizationPosition);
-        else
-            BeanHelper.error(sessionBean.getMessage("error_author_need_one_organization"));
-        return "";
+        return "error_album_need_one_author";
     }
 
     /**
@@ -311,42 +258,6 @@ public class AlbumBean extends ContainerBean
     protected String getNavigationString()
     {
         return "pretty:";
-    }
-
-    /**
-     * getter
-     * 
-     * @return
-     */
-    public int getAuthorPosition()
-    {
-        return authorPosition;
-    }
-
-    /**
-     * setter
-     * 
-     * @param pos
-     */
-    public void setAuthorPosition(int pos)
-    {
-        this.authorPosition = pos;
-    }
-
-    /**
-     * @return the collectionPosition
-     */
-    public int getOrganizationPosition()
-    {
-        return organizationPosition;
-    }
-
-    /**
-     * @param collectionPosition the collectionPosition to set
-     */
-    public void setOrganizationPosition(int organizationPosition)
-    {
-        this.organizationPosition = organizationPosition;
     }
 
     /**
@@ -797,7 +708,7 @@ public class AlbumBean extends ContainerBean
     @Override
     public Container getContainer()
     {
-        return album;
+        return getAlbum();
     }
 
     /*

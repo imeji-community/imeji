@@ -360,7 +360,8 @@ function submitPanel(panelId, message) {
  * Part of the Patch for jsf
  */
 var currentViewState;
-jsf.ajax
+if (typeof jsf !== 'undefined') {
+	jsf.ajax
 		.addOnEvent(function(e) {
 			var xml = e.responseXML;
 			var source = e.source;
@@ -399,38 +400,41 @@ jsf.ajax
 			}
 
 		});
+}
 
 /**
- * JSF patch for jsf for reaload of ajax component after ajax request
+ * JSF patch for jsf for reload of ajax component after ajax request
  */
 var patchJSF = function() {
-	jsf.ajax
-			.addOnEvent(function(e) {
-				if (e.status === 'success') {
-					$(
-							"partial-response:first changes:first update[id='javax.faces.ViewState']",
-							e.responseXML)
-							.each(
-									function(i, u) {
-										// update all forms
-										$(document.forms)
-												.each(
-														function(i, f) {
-															var field = $(
-																	"input[name='javax.faces.ViewState']",
-																	f);
-															if (field.length == 0) {
-																field = $(
-																		"<input type=\"hidden\" name=\"javax.faces.ViewState\" />")
-																		.appendTo(
-																				f);
-															}
-															field
-																	.val(u.firstChild.data);
-														});
-									});
-				}
-			});
+	if (typeof jsf !== 'undefined') {
+		jsf.ajax
+				.addOnEvent(function(e) {
+					if (e.status === 'success') {
+						$(
+								"partial-response:first changes:first update[id='javax.faces.ViewState']",
+								e.responseXML)
+								.each(
+										function(i, u) {
+											// update all forms
+											$(document.forms)
+													.each(
+															function(i, f) {
+																var field = $(
+																		"input[name='javax.faces.ViewState']",
+																		f);
+																if (field.length == 0) {
+																	field = $(
+																			"<input type=\"hidden\" name=\"javax.faces.ViewState\" />")
+																			.appendTo(
+																					f);
+																}
+																field
+																		.val(u.firstChild.data);
+															});
+										});
+					}
+				});
+	}
 };
 
 /* open a dialog

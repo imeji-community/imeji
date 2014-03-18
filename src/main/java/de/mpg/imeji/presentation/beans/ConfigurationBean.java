@@ -64,7 +64,7 @@ public class ConfigurationBean
      */
     private enum CONFIGURATION
     {
-        SNIPPET;
+        SNIPPET, CSS_DEFAULT, CSS_ALT;
     }
 
     private Properties config;
@@ -156,5 +156,41 @@ public class ConfigurationBean
     public boolean isImageMagickInstalled() throws IOException, URISyntaxException
     {
         return MediaUtils.verifyImageMagickInstallation();
+    }
+    
+    /**
+     * Set the url of the default CSS
+     * @param url
+     */
+    public void setDefaultCss(String url)
+    {
+        setProperty(CONFIGURATION.CSS_DEFAULT.name(), url);
+    }
+    
+    /**
+     * Return the url of the default CSS
+     * @return
+     */
+    public String getDefaultCss()
+    {
+        return (String)config.get(CONFIGURATION.CSS_DEFAULT.name());
+    }
+    
+    /**
+     * Set the url of the default CSS
+     * @param url
+     */
+    public void setAlternativeCss(String url)
+    {
+        setProperty(CONFIGURATION.CSS_ALT.name(), url);
+    }
+    
+    /**
+     * Return the url of the default CSS
+     * @return
+     */
+    public String getAlternativeCss()
+    {
+        return (String)config.get(CONFIGURATION.CSS_ALT.name());
     }
 }

@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -24,9 +25,9 @@ import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.beans.Navigation.Page;
-import de.mpg.imeji.presentation.beans.PropertyBean;
+import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -55,9 +56,10 @@ public class SessionBean
     private Map<URI, CollectionImeji> collectionCached;
     private String selectedImagesContext = null;
     private String selectedCss = null;
+    private boolean initCss = false;
+    private int countCss = 0;
 
-
-	/**
+    /**
      * The session Bean for imeji
      */
     public SessionBean()
@@ -67,8 +69,8 @@ public class SessionBean
         selectedAlbums = new ArrayList<URI>();
         profileCached = new HashMap<URI, MetadataProfile>();
         collectionCached = new HashMap<URI, CollectionImeji>();
-        selectedCss = PropertyBean.getCss_default();
         initLocale();
+        initCss();
     }
 
     /**
@@ -429,39 +431,112 @@ public class SessionBean
     {
         this.collectionCached = collectionCached;
     }
-    
 
-    public int getCssCount() {
-    	int count = 0;
-    	if (PropertyBean.getCss_alternate()!= null && !PropertyBean.getCss_alternate().equals(""))
-    	{
-    		count++;
-    	}
-    	if (PropertyBean.getCss_default()!= null && !PropertyBean.getCss_default().equals(""))
-    	{
-    		count++;
-    	}
-		return count;
-	}
-    
-    public String getSelectedCss() {
-		return selectedCss;
-	}
+    /**
+     * Initialize the css properties
+     * 
+     * @throws URISyntaxException
+     * @throws IOException
+     */
+    private void initCss()
+    {
+        BeanHelper.removeBeanFromMap(ConfigurationBean.class);
+        ConfigurationBean config = (ConfigurationBean)BeanHelper.getApplicationBean(ConfigurationBean.class);
+        countCss = 0;
+        selectedCss = null;
+        if (config.getAlternativeCss() != null && !config.getAlternativeCss().equals(""))
+        {
+            selectedCss = config.getAlternativeCss();
+            countCss++;
+        }
+        if (config.getDefaultCss() != null && !config.getDefaultCss().equals(""))
+        {
+            selectedCss = config.getDefaultCss();
+            countCss++;
+        }
+        initCss = false;
+    }
 
-	public void setSelectedCss(String selectedCss) {
-		this.selectedCss = selectedCss;
-	}
-	
-	public String toggleCss()
-	{
-		if (selectedCss!= null && selectedCss.equals(PropertyBean.getCss_default()))
-		{
-			selectedCss = PropertyBean.getCss_alternate();
-		}
-		else if (selectedCss!= null && selectedCss.equals(PropertyBean.getCss_alternate()))
-		{
-			selectedCss = PropertyBean.getCss_default();
-		}
-		return "";
-	}
+    /**
+     * Listener for the CSS configuration. Reinitialize to css to null as soon as the css config is changed, to force
+     * the the selected css to be updated.
+     * 
+     * @param event
+     */
+    public void cssConfigurationListener(ValueChangeEvent event)
+    {
+        initCss = true;
+    }
+
+    /**
+     * getter
+     * 
+     * @return
+     * @throws URISyntaxException
+     * @throws IOException
+     */
+    public String getSelectedCss()
+    {
+        return selectedCss;
+    }
+
+    /**
+     * @return the initCss
+     * @throws URISyntaxException
+     * @throws IOException
+     */
+    public boolean isInitCss() throws IOException, URISyntaxException
+    {
+        if (initCss)
+            initCss();
+        return initCss;
+    }
+
+    /**
+     * setter
+     * 
+     * @param selectedCss
+     */
+    public void setSelectedCss(String selectedCss)
+    {
+        this.selectedCss = selectedCss;
+    }
+
+    /**
+     * true if 2 CSS have been defined in the configuration
+     */
+    public boolean isEnableCssSwitcher()
+    {
+        return countCss == 2;
+    }
+
+    /**
+     * True if at least one CSS has been defined in the configuration
+     * 
+     * @return
+     */
+    public boolean isCssDefined()
+    {
+        return countCss > 0;
+    }
+
+    /**
+     * Toggle the selected css
+     * 
+     * @return
+     */
+    public String toggleCss()
+    {
+        BeanHelper.removeBeanFromMap(ConfigurationBean.class);
+        ConfigurationBean config = (ConfigurationBean)BeanHelper.getApplicationBean(ConfigurationBean.class);
+        if (selectedCss != null && selectedCss.equals(config.getDefaultCss()))
+        {
+            selectedCss = config.getAlternativeCss();
+        }
+        else if (selectedCss != null && selectedCss.equals(config.getAlternativeCss()))
+        {
+            selectedCss = config.getDefaultCss();
+        }
+        return "";
+    }
 }

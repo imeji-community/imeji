@@ -8,12 +8,11 @@
 		<composite:attribute name="facetBean" required="false"/>
 		<composite:attribute name="browseToAllUrl" required="true"/>
 		<composite:attribute name="numberOfElements" required="true"/>
+		<composite:attribute name="containerId" required="false"/>
 	</composite:interface>
 	
 	<composite:implementation>
-		
 		<h:panelGroup layout="block" id="selectionInfoPanel" styleClass="imj_selectionInfoPanel">
-			
 			<ui:fragment rendered="#{ cc.attrs.currentMainMenu == 'mediaEntry' }">
 				<h:outputLink value="#{cc.attrs.browseToAllUrl}" title="#{lbl.images_all}">
 					<h:outputText value="#{lbl.images_all}"/>
@@ -65,9 +64,9 @@
 										</h:outputLink>
 									</li>
 								</ui:fragment>
-								
 								<!-- Add all to active album -->
-								<ui:fragment rendered="#{SessionBean.activeAlbum != null and SessionBean.activeAlbumId != cc.attrs.facetBean.id}">
+								
+								<ui:fragment rendered="#{SessionBean.activeAlbum != null and SessionBean.activeAlbumId != cc.attrs.containerId}">
 									<li>
 										<h:commandLink action="#{cc.attrs.facetBean.addAllToActiveAlbum}">
 											<h:outputText value="#{lbl.add_to_active_album_all}"/>
@@ -135,7 +134,7 @@
 									</li>
 								</ui:fragment>
 								
-								<ui:fragment rendered="#{SessionBean.activeAlbum != null and SessionBean.activeAlbumId != cc.attrs.facetBean.id}">
+								<ui:fragment rendered="#{SessionBean.activeAlbum != null and SessionBean.activeAlbumId != cc.attrs.containerId}">
 									<li class="imj_overlayMenuListItem">
 										<!-- Add to active album -->
 										<h:commandLink action="#{cc.attrs.facetBean.addSelectedToActiveAlbum}">

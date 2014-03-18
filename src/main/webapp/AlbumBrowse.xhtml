@@ -11,7 +11,7 @@
 	<ui:param name="headline" value="#{AlbumImagesBean.album.metadata.title}"/>
 	<ui:param name="currentMainMenu" value="album"/>
 	<ui:param name="browseToAllItemsUrl" value="#{Navigation.albumUrl}#{AlbumImagesBean.id}/browse?q="/>
-	
+	<ui:param name="containerId" value="#{paginatorListSessionBean.id}"/>
 	
 	<ui:define name="actionsMenu">
 		<ui:fragment rendered="#{paginatorListSessionBean.visible}">

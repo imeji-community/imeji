@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.event.ValueChangeEvent;
-import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
 
@@ -48,14 +47,11 @@ public abstract class CollectionBean extends ContainerBean
 
     private static Logger logger = Logger.getLogger(CollectionBean.class);
     private TabType tab = TabType.HOME;
-    private SessionBean sessionBean;
+    protected SessionBean sessionBean;
     private CollectionImeji collection;
     private MetadataProfile profile;
     private String id;
     private String profileId;
-    private int authorPosition;
-    private int organizationPosition;
-    private List<SelectItem> profilesMenu = new ArrayList<SelectItem>();
     private boolean selected;
     private int size = 0;
     private Navigation navigation;
@@ -121,107 +117,10 @@ public abstract class CollectionBean extends ContainerBean
         return true;
     }
 
-    /**
-     * Add a new author to the {@link CollectionImeji}
-     * 
-     * @return
-     */
-    public String addAuthor()
+    @Override
+    protected String getErrorMessageNoAuthor()
     {
-        List<Person> c = (List<Person>)collection.getMetadata().getPersons();
-        Person p = ImejiFactory.newPerson();
-        p.setPos(authorPosition + 1);
-        c.add(authorPosition + 1, p);
-        return getNavigationString();
-    }
-
-    /**
-     * Remove an author of the {@link CollectionImeji}
-     * 
-     * @return
-     */
-    public String removeAuthor()
-    {
-        List<Person> c = (List<Person>)collection.getMetadata().getPersons();
-        if (c.size() > 1)
-            c.remove(authorPosition);
-        else
-            BeanHelper.error(sessionBean.getMessage("error_collection_need_one_author"));
-        return getNavigationString();
-    }
-
-    /**
-     * Add an organization to an author of the {@link CollectionImeji}
-     * 
-     * @return
-     */
-    public String addOrganization()
-    {
-        List<Person> persons = (List<Person>)collection.getMetadata().getPersons();
-        List<Organization> orgs = (List<Organization>)persons.get(authorPosition).getOrganizations();
-        Organization o = ImejiFactory.newOrganization();
-        o.setPos(organizationPosition + 1);
-        orgs.add(organizationPosition + 1, o);
-        return getNavigationString();
-    }
-
-    /**
-     * Remove an organization to an author of the {@link CollectionImeji}
-     * 
-     * @return
-     */
-    public String removeOrganization()
-    {
-        List<Person> persons = (List<Person>)collection.getMetadata().getPersons();
-        List<Organization> orgs = (List<Organization>)persons.get(authorPosition).getOrganizations();
-        if (orgs.size() > 1)
-            orgs.remove(organizationPosition);
-        else
-            BeanHelper.error(sessionBean.getMessage("error_author_need_one_organization"));
-        return getNavigationString();
-    }
-
-    /**
-     * return the navigation value (according to jsf2 standard) of the current page
-     * 
-     * @return
-     */
-    protected abstract String getNavigationString();
-
-    /**
-     * getter
-     * 
-     * @return
-     */
-    public int getAuthorPosition()
-    {
-        return authorPosition;
-    }
-
-    /**
-     * setter
-     * 
-     * @param pos
-     */
-    public void setAuthorPosition(int pos)
-    {
-        this.authorPosition = pos;
-    }
-
-    /**
-     * @return the collectionPosition
-     */
-    public int getOrganizationPosition()
-    {
-        return organizationPosition;
-    }
-
-    /**
-     * @param collectionPosition the collectionPosition to set
-     */
-    public void setOrganizationPosition(int organizationPosition)
-    {
-        this.organizationPosition = organizationPosition;
+        return "error_collection_need_one_author";
     }
 
     /**
@@ -231,10 +130,10 @@ public abstract class CollectionBean extends ContainerBean
      */
     public void discardCommentListener(ValueChangeEvent event)
     {
-    	if (event.getNewValue() != null && event.getNewValue().toString().trim().length() > 0) 
-    	{
-    		getContainer().setDiscardComment(event.getNewValue().toString().trim());
-    	}
+        if (event.getNewValue() != null && event.getNewValue().toString().trim().length() > 0)
+        {
+            getContainer().setDiscardComment(event.getNewValue().toString().trim());
+        }
     }
 
     /**
@@ -291,26 +190,6 @@ public abstract class CollectionBean extends ContainerBean
     public void setId(String id)
     {
         this.id = id;
-    }
-
-    /**
-     * getter
-     * 
-     * @return
-     */
-    public List<SelectItem> getProfilesMenu()
-    {
-        return profilesMenu;
-    }
-
-    /**
-     * setter
-     * 
-     * @param profilesMenu
-     */
-    public void setProfilesMenu(List<SelectItem> profilesMenu)
-    {
-        this.profilesMenu = profilesMenu;
     }
 
     /**
@@ -571,8 +450,9 @@ public abstract class CollectionBean extends ContainerBean
     {
         return CONTAINER_TYPE.COLLECTION.name();
     }
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
      * @see de.mpg.imeji.presentation.beans.ContainerBean#getContainer()
      */
     @Override
@@ -580,13 +460,14 @@ public abstract class CollectionBean extends ContainerBean
     {
         return collection;
     }
-    
-    public String getDiscardComment() 
-	{
-		return this.getContainer().getDiscardComment();
-	}
-	public void setDiscardComment(String comment)
-	{
-		this.getContainer().setDiscardComment(comment);
-	}
+
+    public String getDiscardComment()
+    {
+        return this.getContainer().getDiscardComment();
+    }
+
+    public void setDiscardComment(String comment)
+    {
+        this.getContainer().setDiscardComment(comment);
+    }
 }

@@ -63,7 +63,6 @@ public class PropertyBean
      */
     private static String baseURI;
     private static String applicationURL;
-    
     private static String css_default;
     private static String css_alternate;
 
@@ -78,8 +77,8 @@ public class PropertyBean
             this.internalStorageBase = FilenameUtils.getBaseName(FilenameUtils.normalizeNoEndSeparator(PropertyReader
                     .getProperty("imeji.storage.path")));
             applicationURL = StringHelper.normalizeURI(PropertyReader.getProperty("escidoc.imeji.instance.url"));
-            this.css_default = PropertyReader.getProperty("imeji.layout.css_default");
-            this.css_alternate = PropertyReader.getProperty("imeji.layout.css_alternate");
+            css_default = PropertyReader.getProperty("imeji.layout.css_default");
+            css_alternate = PropertyReader.getProperty("imeji.layout.css_alternate");
             readBaseUri();
         }
         catch (Exception e)
@@ -166,20 +165,24 @@ public class PropertyBean
     {
         return applicationURL;
     }
-    
-    public static String getCss_default() {
-		return css_default;
-	}
 
-	public static void setCss_default(String css_default) {
-		PropertyBean.css_default = css_default;
-	}
+    public static String getCss_default()
+    {
+        return css_default;
+    }
 
-	public static String getCss_alternate() {
-		return css_alternate;
-	}
+    public static void setCss_default(String css_default)
+    {
+        PropertyBean.css_default = css_default;
+    }
 
-	public static void setCss_dark(String css_alternate) {
-		PropertyBean.css_alternate = css_alternate;
-	}
+    public static String getCss_alternate()
+    {
+        return css_alternate;
+    }
+
+    public static void setCss_dark(String css_alternate)
+    {
+        PropertyBean.css_alternate = css_alternate;
+    }
 }

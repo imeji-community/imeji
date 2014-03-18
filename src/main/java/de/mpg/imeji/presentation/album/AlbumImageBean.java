@@ -65,7 +65,7 @@ public class AlbumImageBean extends ImageBean
      */
     public String removeFromAlbum() throws Exception
     {
-        if (session.getActiveAlbum() != null && albumId.equals(session.getActiveAlbumId()))
+        if (isActiveAlbum())
         {
             super.removeFromActiveAlbum();
         }
@@ -74,11 +74,18 @@ public class AlbumImageBean extends ImageBean
             AlbumController ac = new AlbumController();
             List<String> l = new ArrayList<String>();
             l.add(getImage().getId().toString());
-            ac.removeFromAlbum(loadAlbum(), l, session.getUser());
+            Album album = ObjectLoader.loadAlbum(getAlbum().getId(), session.getUser());
+            ac.removeFromAlbum(album, l, session.getUser());
             BeanHelper.info(session.getLabel("image") + " " + getImage().getFilename() + " "
                     + session.getMessage("success_album_remove_from"));
         }
         return "pretty:albumBrowse";
+    }
+
+    @Override
+    public boolean isActiveAlbum()
+    {
+        return session.getActiveAlbum() != null && albumId.equals(session.getActiveAlbumId());
     }
 
     @Override
@@ -108,8 +115,7 @@ public class AlbumImageBean extends ImageBean
     {
         return "pretty:albumItem";
     }
-    
-    
+
     /**
      * True if the current {@link User} has administration priviliges for this {@link Album}
      * 
@@ -120,11 +126,14 @@ public class AlbumImageBean extends ImageBean
         Authorization auth = new Authorization();
         return auth.isContainerAdmin(session.getUser(), album);
     }
-	public Album getAlbum() {
-		return album;
-	}
 
-	public void setAlbum(Album album) {
-		this.album = album;
-	}
+    public Album getAlbum()
+    {
+        return album;
+    }
+
+    public void setAlbum(Album album)
+    {
+        this.album = album;
+    }
 }

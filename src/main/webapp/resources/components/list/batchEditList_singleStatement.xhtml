@@ -16,6 +16,8 @@
 	</composite:interface>
 	
 	<composite:implementation>
+		
+		
 		<div class="imj_singleStatementEdit">
 			
 			<ui:fragment rendered="#{cc.attrs.hideLabel == false}">
@@ -100,9 +102,9 @@
 			
 			<!-- METADATA TYPE DATE -->
 			<ui:fragment rendered="#{cc.attrs.itemBean.typeNamespace =='http://imeji.org/terms/metadata#date'}">
-				<h:panelGroup layout="block" styleClass="imj_metadataSet" rendered="#{!cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
-					<h:outputLabel value="YYYY-MM-DD" styleClass="imj_metadataLabel"/>
-					<h:inputText styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.date}" immediate="false" onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}');"/>
+				<h:panelGroup layout="block" styleClass="imj_metadataSet " rendered="#{!cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
+					<h:outputLabel value="YYYY-MM-DD" styleClass="imj_metadataLabel "/>
+					<h:inputText styleClass="imj_metadataValue datepicker" value="#{cc.attrs.itemBean.date}" immediate="false" onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}');"/>
 				</h:panelGroup>
 				<h:panelGroup layout="block" styleClass="imj_metadataValue" rendered="#{cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
 					<h:selectOneMenu immediate="true" value="#{cc.attrs.itemBean.date}" valueChangeListener="#{cc.attrs.itemBean.predefinedValueListener}">

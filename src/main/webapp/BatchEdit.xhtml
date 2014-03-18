@@ -5,16 +5,15 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:list="http://java.sun.com/jsf/composite/components/list">
 	
-	
 	<ui:param name="headline" value="#{lbl.edit_images}"/>
 	
 	<ui:define name="additonalHeaderScripts">
-		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/autocomplete.js"></script>
 		<script type="text/javascript">
 			jQuery(document).ready(function() {
 				document.getElementById('batchEditForm:editInitialized').click();
 			});
 		</script>
+			
 	</ui:define>
 	
 	<ui:define name="actionsMenu"></ui:define>
@@ -35,11 +34,12 @@
 				</h:selectBooleanCheckbox>
 				
 				<h:panelGroup layout="block" id="ajaxContent" styleClass="imj_batchEditList">
+					<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/datepicker.js"></script>
+					<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/autocomplete.js"></script>
 					
 					<ui:fragment rendered="#{!EditImageMetadataBean.initialized and SessionBean.user != null}">
 						<h2 class="imj_headline"><h:outputText value="Preparing editor! Please wait a little ..."/></h2>
 					</ui:fragment>
-					
 					
 					<h:panelGroup layout="block" id="editor" rendered="#{EditImageMetadataBean.initialized and SessionBean.user != null}">	
 						

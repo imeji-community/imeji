@@ -1352,6 +1352,90 @@ li.imj_contentMenuItem,li.imj_contentSubMenuItem {
 	border-top: 0.090909em dashed #6CAE2F;
 }
 
+/*==================
+ * profile editing *
+ =================== */
+#imj_ajaxWrapper > .imj_metadataProfileList.imj_edit {
+	border-top: 0.090909em solid #6CAD2F;
+}
+.imj_metadataProfileList.imj_edit > .imj_listHeader {
+	margin-bottom: 1em;
+	width: 100%;
+}
+.imj_metadataProfileList.imj_edit > .imj_listHeader > .imj_listHeaderMenu {
+	float: none;
+	display: inline-block;
+}
+.imj_metadataProfileList.imj_edit > .imj_listHeader > .imj_listHeaderMenu > * {
+	display: inline;
+}
+.imj_metadataProfileList.imj_edit > .imj_listHeader > .imj_listHeaderMenu select {
+	margin: 0 0.181818em;
+}
+.imj_metadataProfileList.imj_edit .imj_metadataTypeSelection { 
+	width: 9em;
+}
+.imj_metadataProfileList.imj_edit .imj_metadataLanguageSelection {
+	width: 10em;
+}
+.imj_metadataProfileList.imj_edit .imj_itemHeader {
+	width: 98%;
+	padding: 0.5% 1%;
+}
+.imj_metadataProfileList.imj_edit .imj_itemHeader .imj_inlineButtonGroup {
+	margin-right: 0.272727em;
+}
+.imj_metadataProfileList.imj_edit .imj_itemHeader .imj_optionList {
+	display: inline;
+	margin-left: 0.727272em;
+}
+.imj_metadataProfileList.imj_edit .imj_itemHeader .imj_optionList .imj_optionSet {
+	display: inline;
+}
+.imj_metadataProfileList.imj_edit .imj_itemHeader .imj_optionList .imj_optionSet + .imj_optionSet {
+	margin-left: 0.545454em;
+}
+.imj_metadataProfileList.imj_edit .imj_itemHeader .imj_optionList .imj_optionLabel {
+	min-width: 0;
+	width: auto;
+}
+
+.statement_area {
+	width: 100%;
+	overflow: none;
+}
+.dropMetadataActive,
+.dropChildActive {
+	border-color: #6CAE2F !important;
+}
+.drop-hover {
+	background-color: #BBBBBB !important;
+}
+.dropMetadata {}
+.drop-hover {
+	min-height: 1em;
+}
+.highlight_area {
+	border-color: #BBBBBB;
+	border-style: dotted;
+	border-width: 1px !important;
+	background-color: #292929;
+}
+.highlight_area:hover {
+	background-color: #444444;
+}
+.imj_dropArea {
+	display: block;
+	min-width: 85%;
+}
+.imj_dropArea .imj_orderInfo {
+	display: none;
+}
+.imj_dropArea:hover .imj_orderInfo {
+	display: inline;
+}
+
+
 /* ==================================
  * global definitions for datasets 
  * ================================== */
@@ -1446,10 +1530,6 @@ table.imj_optionSet td label {
 
 .imj_metadataSubPanelItem a:hover {
 	background-color: #6CAE2F;
-}
-
-.highlight_area:hover {
-	background-color: #393939;
 }
 
 .imj_metadataSet,

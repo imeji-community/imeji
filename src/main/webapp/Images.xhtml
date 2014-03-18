@@ -13,7 +13,7 @@
 	<ui:param name="browseToAllItemsUrl" value="#{Navigation.browseUrl}?q="/>
 	
 	<ui:define name="actionsMenu">
-		<menu:context_actionMenu isUserLoggedIn="#{SessionBean.user != null}" curMainMenu="#{currentMainMenu}" sortBean="#{paginatorListSessionBean}" navBean="#{Navigation}"  actionEnabled="false"/>
+		<menu:context_actionMenu isUserLoggedIn="#{SessionBean.user != null}" curMainMenu="#{currentMainMenu}" sortBean="#{paginatorListSessionBean}" navBean="#{Navigation}"  actionEnabled="false" exportQuery="#{paginatorListSessionBean.query}"/>
 	</ui:define>
 
 	<ui:define name="searchQuery">

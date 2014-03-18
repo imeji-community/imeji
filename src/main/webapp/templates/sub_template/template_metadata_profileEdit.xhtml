@@ -82,10 +82,7 @@
 									
 									<h:panelGroup layout="block" styleClass="imj_metadataListItem statement_area  statement_area_parent_#{wrapper.parentId} statement_area_id_#{wrapper.statementId}">
 										
-										<h:panelGroup styleClass="imj_itemLevelLabel" rendered="#{itemLevel > 0}" style="position:absolute; padding-left:#{(itemLevel / 1.5)}em;">
-											<h:outputText value="#{itemLevel}" converter="javax.faces.Integer"/>
-										</h:panelGroup>
-										
+																	
 										<h:panelGroup layout="block" id="metadata" style="margin-left:#{wrapper.level}px; margin-top:0.5em;" styleClass="draggable dropChild id_#{wrapper.statementId} parent_#{wrapper.parentId} highlight_area">
 											
 											<h:commandButton id="dropChildButton" type="button" value="Insert metadata" action="#{metadataBean.insertChild}" styleClass="imj_noDisplay">

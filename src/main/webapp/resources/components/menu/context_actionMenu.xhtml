@@ -82,7 +82,7 @@
 					</div>
 				</ui:fragment>
 			
-			<ui:fragment rendered="#{cc.attrs.isUserLoggedIn  }">
+			<ui:fragment rendered="#{cc.attrs.isUserLoggedIn}">
 				
 				<h:panelGroup layout="block" styleClass="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item" rendered="#{cc.attrs.filterBean != null}">
 					<div class="imj_menuHeader">
@@ -96,7 +96,7 @@
 					</div>
 				</h:panelGroup>
 				
-				<ui:fragment rendered="#{cc.attrs.actionEnabled and cc.attrs.collectionStatus.trim().toUpperCase() != 'WITHDRAWN'}">
+				<ui:fragment rendered="#{cc.attrs.actionEnabled and cc.attrs.isEditable and cc.attrs.collectionStatus.trim().toUpperCase() != 'WITHDRAWN'}">
 					<div class="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item">
 						<div class="imj_menuHeader">
 							<h:outputText value="#{lbl.actions}" styleClass="imj_headerEntry"/>

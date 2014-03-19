@@ -171,6 +171,30 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
     }
 
     /**
+     * needed for searchQueryDisplayArea.xhtml component
+     * 
+     * @return
+     */
+    public String getSimpleQuery()
+    {
+        if (query != null)
+        {
+            return query;
+        }
+        return "";
+    }
+
+    /**
+     * Collection search is always a simple search (needed for searchQueryDisplayArea.xhtml component)
+     * 
+     * @return
+     */
+    public boolean isSimpleSearch()
+    {
+        return true;
+    }
+
+    /**
      * setter
      * 
      * @param query

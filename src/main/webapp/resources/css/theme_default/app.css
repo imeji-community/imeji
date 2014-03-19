@@ -2231,8 +2231,7 @@ a.imj_submitButton,
 	z-index: 100;
 }
 
-.imj_bibliographicList .imj_bibliographicListItem .imj_informationContent
-	{
+.imj_bibliographicList .imj_bibliographicListItem .imj_informationContent {
 	width: 77.25%;
 	display: inline-block;
 	vertical-align: top;
@@ -2244,9 +2243,14 @@ a.imj_submitButton,
 	font-size: 120%;
 	line-height: 145%;
 }
+.imj_bibliographicList .imj_bibliographicListItem .imj_itemHeadline a {
+	display: inline-block;
+	max-width: 100%;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
 
-.imj_bibliographicList .imj_bibliographicListItem .imj_itemHeadline .imj_messageWarn
-	{
+.imj_bibliographicList .imj_bibliographicListItem .imj_itemHeadline .imj_messageWarn {
 	padding: 0 1%;
 	margin-right: 0.5454em;
 }
@@ -2259,8 +2263,7 @@ a.imj_submitButton,
 	width: 100%;
 }
 
-.imj_bibliographicList .imj_bibliographicListItem .imj_itemActionArea li
-	{
+.imj_bibliographicList .imj_bibliographicListItem .imj_itemActionArea li {
 	display: inline-block;
 	padding: 0 0.545454em;
 }

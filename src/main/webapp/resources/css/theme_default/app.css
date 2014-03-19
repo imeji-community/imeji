@@ -1445,9 +1445,13 @@ li.imj_contentMenuItem,li.imj_contentSubMenuItem {
 	background-color: rgba(255, 255, 255, 0.05);
 }
 
-/* ==================================
+/* ==========================================
  * global definitions for datasets 
- * ================================== */
+ * - could be more defined in usage context
+ * ========================================== */
+ /* imj_optionSet used in 
+ * tiledMediaList.xhtml, template_metada_profileEdit.xhtml, BatchEdit.xhtml, Upload.xhtml
+ */
 .imj_optionSet {
 	max-width: 100%;
 	margin-bottom: 1em;
@@ -1467,6 +1471,13 @@ li.imj_contentMenuItem,li.imj_contentSubMenuItem {
 
 table.imj_optionSet td label {
 	white-space: normal;
+}
+
+/* imj_optionList used in 
+ * image_details.xhtml, template_metada_profileEdit.xhtml
+ */
+.imj_optionList li {
+	padding-bottom: 0.272727em;
 }
 
 .imj_highlightArea {

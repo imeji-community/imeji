@@ -264,27 +264,31 @@
 					</h:panelGroup>
 					
 					<!-- InfoDataList - Images File Sizes -->						
-					<h:panelGroup styleClass="imj_infodataSet">
-						<span class="imj_infodataLabel">
+					<div class="imj_infodataSet">
+						<div class="imj_infodataLabel">
 							<h:outputText value="#{lbl.imageSizes}"/>
 							<span class="imj_invisible">: </span>
-						</span>
-						<span class="imj_infodataValue">
-							<h:outputLink value="#{imageBean.image.thumbnailImageUrl}" target="_blank">
-								<h:outputText value="#{lbl.imageSizesThumb}"/>
-							</h:outputLink>
-						</span>
-						<span class="imj_infodataValue">
-							<h:outputLink value="#{imageBean.image.webImageUrl}" target="_blank">
-								<h:outputText value="#{lbl.imageSizesWeb}"/>
-							</h:outputLink>
-						</span>
-						<span class="imj_infodataValue">
-							<h:outputLink value="#{imageBean.image.fullImageUrl}" target="_blank">
-								<h:outputText value="#{lbl.imageSizesOrg}"/>
-							</h:outputLink>
-						</span>
-					</h:panelGroup>				
+						</div>
+						<div class="imj_infodataValue">
+							<ul class="imj_optionList">
+								<li>
+									<h:outputLink value="#{imageBean.image.thumbnailImageUrl}" target="_blank">
+										<h:outputText value="#{lbl.imageSizesThumb}"/>
+									</h:outputLink>
+								</li>
+								<li>
+									<h:outputLink value="#{imageBean.image.webImageUrl}" target="_blank">
+										<h:outputText value="#{lbl.imageSizesWeb}"/>
+									</h:outputLink>
+								</li>
+								<li>
+									<h:outputLink value="#{imageBean.image.fullImageUrl}" target="_blank">
+										<h:outputText value="#{lbl.imageSizesOrg}"/>
+									</h:outputLink>
+								</li>
+							</ul>
+						</div>
+					</div>				
 					
 					<!-- InfoDataList - Image Album Info -->
 					<ui:fragment rendered="#{imageBean.relatedAlbums != null}">

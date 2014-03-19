@@ -26,15 +26,17 @@
  * 6CAE2F		links, border, submit buttons - background
  * F0F0F0		default text color, link hover
  * BBBBBB		deactivated elements, border for sub components
- * 292929		page - background, date picker - background, meta menu input fields - background
+ * 292929		page - background, date picker - background, "meta-menu input buttons" - background
  * D80000		error messages, critical elements
  *
  * FF7700		reset button - background
  * FFC999		reset button - background hover
- * 000000		reset button - font color, input fields - font color
+ * 000000		reset button - font color
  * 
  * -- shades
  *==========
+ * 010101		input fields, select boxes - font color
+ * F2F2F2		input fields, select boxes - background-color
  * 313131		content - background
  * 393939		highlight area - background hover
  * 444444		overlay menu - background
@@ -118,9 +120,11 @@ a:hover,a:focus,button:hover,button:focus {
 
 /* imeji base settings - input, textarea, select fields colors
    =========================================================================  */
-input,textarea,select {
-	color: 000000;
-	background-color: #F0F0F0;
+input,
+textarea,
+select {
+	color: #010101;
+	background-color: #F2F2F2;
 	border-color: transparent;
 	border-style: solid;
 	border-radius: 0.3em;
@@ -434,10 +438,6 @@ iframe#twitter-widget-0 div.root div.stream {
 	margin: 0 0.72727em;
 	border-right: solid #6CAE2F 0.090909em;
 	display: inline-block;
-}
-
-.imj_metaMenuStandardSingleLine select.imj_metaMenuItem {
-	color: #000000;
 }
 
 .imj_metaMenuStandardSingleLine .imj_metaMenuItem:not[select] {

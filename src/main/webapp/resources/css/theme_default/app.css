@@ -342,6 +342,7 @@ iframe#twitter-widget-0 div.root div.stream {
 	height: 20em !important;
 }
 
+
 /* styles for imej startpage - Welcome.xhtml - footer, logos
    =========================================================================  */
 .imj_startpageFooter {
@@ -2000,6 +2001,12 @@ a.imj_submitButton,
 	height: 85%;
 	padding: 8%;
 	margin-top: 3%;
+}
+/* general bug fix for webkit browser, because of wrong interpretation in responsive image scaling */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    .imj_tileThumbnailArea img {
+        height: auto;
+    }
 }
 
 .imj_iconTriangleBottomRight_16 {

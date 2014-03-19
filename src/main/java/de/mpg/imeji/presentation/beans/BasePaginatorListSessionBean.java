@@ -355,6 +355,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
         try
         {
             int goToPage = Integer.parseInt(getGoToPageTop());
+            System.out.println(goToPage);
             if (goToPage > 0 && goToPage <= getPaginatorPageSize())
             {
                 setCurrentPageNumber(goToPage);

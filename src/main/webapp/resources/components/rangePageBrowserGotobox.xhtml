@@ -9,17 +9,18 @@
 	</composite:interface>
 	
 	<composite:implementation>
-		<h:form>
-			<ui:fragment rendered="#{cc.attrs.addJSFunctions == 'yes'}">
-				<script type="text/javascript">
-					function setContentLoadingStatus() {
-						$("#imj_listBody").css({opacity:0.3});
-						return true;
-					};
-				</script>
-			</ui:fragment>
-		
-			<div class="imj_paginator">
+
+		<ui:fragment rendered="#{cc.attrs.addJSFunctions == 'yes'}">
+			<script type="text/javascript">
+				function setContentLoadingStatus() {
+					$("#imj_listBody").css({opacity:0.3});
+					return true;
+				};
+			</script>
+		</ui:fragment>
+	
+		<div class="imj_paginator">
+			<h:form>
 				<h:outputText value="#{cc.attrs.paginatorBean.urlParameters}" styleClass="imj_noDisplay"/>
 				<h:outputText value="#{cc.attrs.paginatorBean.initPaginator}" styleClass="imj_noDisplay"/>
 				
@@ -75,15 +76,18 @@
 				 		</h:commandButton>
 				 	</ui:fragment>
 			 		<h:panelGroup styleClass="imj_buttonBrowseToLast_16 imj_deactivated" rendered="#{cc.attrs.paginatorBean.ajaxMode and cc.attrs.paginatorBean.currentPageNumber == cc.attrs.paginatorBean.paginatorPageSize}"/>
-			 	</div>				
-			 	<div class="imj_gotoBox">
+			 	</div>
+			 </h:form>			
+			 <div class="imj_gotoBox">
+			 	<h:form>
 			 		<h:outputLabel for="inpGoToPageTop"><h:outputText id="lblList_lblGoToPage" value="#{lbl.paginator_goToPage} "/></h:outputLabel>
 			 		<h:inputText id="inpGoToPageTop" styleClass="imj_pageInput" value="#{cc.attrs.paginatorBean.goToPageTop}"/>
 			 		<h:outputText id="lblItemList_of" value="#{lbl.paginator_of} "/>
 			 		<h:outputText id="lblPaginatorPageSize" value="#{cc.attrs.paginatorBean.paginatorPageSize}"/>
 			 		<h:commandButton id="btList_btGo" styleClass="imj_submitButton" value="#{lbl.paginator_go}" title="#{tip.List_btGo}" action="#{cc.attrs.paginatorBean.goToPageTop}" onclick="setContentLoadingStatus();"/>
-			 	</div>
+			 	</h:form>
 			 </div>
-		 </h:form>
+		</div>
+		
 	</composite:implementation>
 </html>

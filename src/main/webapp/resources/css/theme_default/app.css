@@ -1963,6 +1963,8 @@ a.imj_submitButton,
 .imj_tileItem label {
 	max-width: 100%;
 	overflow-x: hidden;
+	text-overflow: ellipsis;
+	display:inline-block;
 }
 
 .imj_tileItem .imj_optionCheckbox+label.imj_optionLabel {

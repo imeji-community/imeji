@@ -1613,8 +1613,12 @@ p.imj_metadataValue {
 	display: inline-block;
 }
 
-.imj_metadataValueEntry,.imj_admindataValueEntry {
+.imj_metadataValueEntry,
+.imj_admindataValueEntry {
 	display: inline-block;
+}
+.imj_metadataValueEntry p:first-child {
+	margin-top: 0;
 }
 
 .imj_infodataValueEntryEmbed {
@@ -2370,8 +2374,7 @@ a.imj_submitButton,
 	max-width: 69.25%;
 }
 
-.imj_editGlobalAssignment>.imj_metadataSet>.imj_metadataValue>.imj_singleStatementEdit>textarea.imj_metadataValue
-	{
+.imj_editGlobalAssignment>.imj_metadataSet>.imj_metadataValue>.imj_singleStatementEdit>textarea.imj_metadataValue {
 	width: 100%;
 }
 

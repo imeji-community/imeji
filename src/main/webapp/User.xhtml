@@ -55,6 +55,16 @@
 														<h:outputText value="#{UserBean.user.email}"/>
 													</div>
 												</div>
+												<ui:remove>
+												<!-- TODO: implement the change email feature -->
+													<div class="imj_admindataValue">
+														<div class="imj_admindataValueEntry">
+															<h:outputLink id="lnkEditEmail" value="#" onclick="hide_input_area_show_Links();document.getElementById('userForm:pnlEditEmail').style.display = 'block'; $(this).hide();">
+																<h:outputText value="#{lbl.edit}" styleClass="imj_editButton"/>
+															</h:outputLink>
+														</div>
+													</div>
+												</ui:remove>
 											</h:panelGroup>
 											<h:panelGroup id="pnlEditEmail" styleClass="imj_noDisplay">
 													<h:outputText value=" " />

@@ -19,7 +19,7 @@
 			<h:panelGroup layout="block" id="imj_ajaxWrapper" styleClass="imj_mediaEntryDetailPage">
 				<h:panelGroup layout="block" id="selectionInfoPanel">
 					<!-- Selection Info Panel -->
-					<imjc:selectionInfoPanel fSession="#{FiltersSession}" facetBean="#{imageBean}" currentMainMenu="#{currentMainMenu}" browseToAllUrl="#{browseToAllItemsUrl}" numberOfElements="0"/>
+					<imjc:selectionInfoPanel fSession="#{FiltersSession}" facetBean="#{imageBean}" currentMainMenu="#{currentMainMenu}" browseToAllUrl="#{browseToAllItemsUrl}" numberOfElements="0" showSelectMenu="false"/>
 				</h:panelGroup>
 				
 				<ui:fragment rendered="#{imageBean.visible}">

@@ -48,7 +48,7 @@
 				<h:panelGroup rendered="#{imageBean.isInActiveAlbum and SessionBean.activeAlbum != null and !imageBean.activeAlbum}">
 					<h:outputText styleClass="imj_mediaEditPanelItem" value="(Image in"/>
 					<h:outputText value=":" styleClass="imj_invisible"/>
-					<h:outputLink styleClass="imj_activeMedia" value="#{Navigation.applicationUri}#{SessionBean.activeAlbum.id.path}">
+					<h:outputLink styleClass="imj_activeMedia" value="#{Navigation.albumUrl}#{SessionBean.activeAlbumId}">
 						<h:outputText value="#{lbl.active_album}"/>
 					</h:outputLink>
 					<h:outputText value=" - "/>

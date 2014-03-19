@@ -211,7 +211,10 @@
 														<h:panelGroup styleClass="imj_metadataSet" id="addConstraints" rendered="#{wrapper.vocabularyString == null }">
 															<!-- START - add constraints -->
 															<div class="imj_metadataLabel">
-																<h:outputLabel value="#{lbl.constraints}" for="constraints"/>
+																<h:outputLabel value="#{lbl.constraints}" for="constraints" rendered="#{wrapper.statement.type != 'http://imeji.org/terms/metadata#conePerson'
+																					  and  wrapper.statement.type !='http://imeji.org/terms/metadata#publication' 
+																					  and wrapper.statement.type !='http://imeji.org/terms/metadata#geolocation' 
+																					  and wrapper.vocabularyString == null}"/>
 															</div>
 															<div class="imj_metadataValue">
 																<ui:fragment rendered="#{wrapper.constraintsSize == 0}">

@@ -144,17 +144,26 @@ input:focus {
 	border-style: solid;
 }
 
-input[type="radio"],input[type="checkbox"] {
+input[type="radio"],
+input[type="checkbox"] {
 	margin: 0;
 	outline: none;
 	background-color: transparent;
 	border: 0;
 }
 
-select:focus,textarea:focus,input[type="text"]:focus,input[type="password"]:focus
-	{
+select:focus,
+textarea:focus,
+input[type="text"]:focus,
+input[type="password"]:focus {
 	border-color: #6CAE2F;
 	border-style: solid;
+}
+
+/* bugfix for google chrome */
+input:-webkit-autofill {
+    -webkit-box-shadow:0 0 0 5em #F2F2F2 inset;
+    -webkit-text-fill-color: #010101;
 }
 
 /* ========================================================================== 
@@ -441,25 +450,16 @@ iframe#twitter-widget-0 div.root div.stream {
 }
 
 .imj_metaMenuStandardSingleLine .imj_metaMenuItem:not[select] {
-	color: #6CAE2F;
 	display: inline;
 }
 
-.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="text"],.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="password"] {
-	background-color: #292929;
-	color: #6CAE2F;
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="text"],
+.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="password"] {
+	background-color: #F2F2F2;
 	height: 1.4545em;
 	width: 10.2727em;
 	border: solid #6CAE2F 0.0909em;
 	margin-right: 0.1818em;
-}
-
-.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="text"]:hover,.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="password"]:hover {
-	color: #F0F0F0;
-}
-
-.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="text"]:focus,.imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="password"]:focus {
-	color: #F0F0F0;
 }
 
 .imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="submit"] {

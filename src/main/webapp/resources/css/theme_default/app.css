@@ -2384,7 +2384,9 @@ a.imj_submitButton,
 	width: 91.25%;
 	padding: 1% 4%;
 }
-
+.imj_batchEditItemList .imj_listHeader {
+	padding-bottom: 1em;
+}
 .imj_editGlobalAssignment+.imj_batchEditItemList {
 	border-top: 0.090909em dashed #6CAE2F;
 }

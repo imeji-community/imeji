@@ -37,7 +37,7 @@
 					</h:outputLink>
 					
 					<!-- Export -->
-					<h:outputLink value="#{cc.attrs.exportUrl.trim()}" target="_blank" rendered="#{cc.attrs.exportUrl.trim().length() > 0}">
+					<h:outputLink value="#{cc.attrs.exportUrl.trim()}" target="_blank" rendered="#{cc.attrs.exportUrl.trim().length() > 0 and cc.attrs.metadataProfile.status != 'WITHDRAWN' }">
 						<h:outputText value="#{lbl.metadata_profile_view}"/>
 					</h:outputLink>
 				</div>

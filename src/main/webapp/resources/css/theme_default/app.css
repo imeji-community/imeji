@@ -2029,13 +2029,39 @@ a.imj_submitButton,
 	line-height: 175%;
 }
 
+
+/* ================================
+ * facets, used for lited item list
+ * - facets.xhtml
+ * ================================ */
 #imj_ajaxFacets {
 	padding: 1% 4%;
 }
-
+.imj_facetArea {
+	line-height: 175%;
+}
+.imj_facetGroup {
+	display: inline-block;
+	margin-right: 1.545454em;
+	padding: 0 0.181818em;
+}
+.imj_facetGroup:hover {
+	background-color: rgba(255, 255, 255, 0.1);
+}
 .imj_facetSeparator {
-	margin: 0 0.25em;
+	margin: 0 0.272727em;
 	color: #F0F0F0;
+}
+.imj_facetGroupItem {
+	white-space: nowrap;
+}
+.imj_facetGroupOpener {
+	margin-right: 0.181818em;
+	display: none;
+}
+.imj_facetGroupCloser {
+	margin-left: 0.181818em;
+	display: none;
 }
 
 /* * singlePageBrowser */

@@ -40,14 +40,9 @@
 			</h:panelGroup>
 			
 		</ui:fragment>
-		
-		<!-- item not found - remove ? -->
-		<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{imageBean.image == null}">
-            <h2><h:outputText value="404 #{lbl.not_found}" styleClass="imj_messageError"/></h2>
-        </h:panelGroup>
         
         <!-- User not allowed to view item -->
-        <h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!imageBean.visible}">
+        <h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!imageBean.visible and SessionBean.user == null and !MessagesBean.hasMessages}">
         	<ui:include src="../../include/LoginFormular.xhtml"/>
 		</h:panelGroup>
 		

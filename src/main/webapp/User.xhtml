@@ -30,11 +30,28 @@
 							
 							<div class="imj_content">
 
-								<script>
-									function hide_input_area_show_Links()
-									{
-										$('.imj_admindataEdit').parent().hide();
-										$('#userForm a').show();
+								<script type="text/javascript">
+									function hide_input_area_show_Links() {
+										var showElements = '.imj_userGlobalInformation .imj_admindataValue .imj_admindataEdit';
+										showElements += ', .imj_userGlobalInformation .imj_submitPanel .imj_submitButton';
+										showElements += ', .imj_userGlobalInformation .imj_submitPanel .imj_cancelButton';
+										
+										var hideElements = '.imj_userGlobalInformation .imj_admindataValue .imj_admindataValueEntry';
+										hideElements += ', .imj_userGlobalInformation .imj_submitPanel .imj_editButton';
+										
+										$(hideElements).hide();
+										$(showElements).show();
+									}
+									function cancelUserEdit() {
+										var hideElements = '.imj_userGlobalInformation .imj_admindataValue .imj_admindataEdit';
+										hideElements += ', .imj_userGlobalInformation .imj_submitPanel .imj_submitButton';
+										hideElements += ', .imj_userGlobalInformation .imj_submitPanel .imj_cancelButton';
+										
+										var showElements = '.imj_userGlobalInformation .imj_admindataValue .imj_admindataValueEntry';
+										showElements += ', .imj_userGlobalInformation .imj_submitPanel .imj_editButton';
+										
+										$(hideElements).hide();
+										$(showElements).show();
 									}
 								</script>
 								
@@ -42,117 +59,119 @@
 								
 									<h:panelGroup layout="block" rendered="#{UserBean.admin}">
 									
-										<h:panelGroup id="userInfos" rendered="#{UserBean.admin}">					
-											
-											<!-- User Edit - Email -->
-											<h:panelGroup layout="block" styleClass="imj_admindataSetEdit">
-												<div class="imj_admindataLabel">
-													<h:outputText value="#{lbl.email}"/>
-													<span class="imj_invisible">: </span>
-												</div>
-												<div class="imj_admindataValue">
-													<div class="imj_admindataValueEntry">
-														<h:outputText value="#{UserBean.user.email}"/>
+										<h:panelGroup layout="block" id="userInfos" class="imj_userGlobalInformation">					
+											<fieldset>
+												<!-- User Edit - Email -->
+												<h:panelGroup layout="block" styleClass="imj_admindataSet">
+													<div class="imj_admindataLabel">
+														<h:outputText value="#{lbl.email}"/>
+														<span class="imj_invisible">: </span>
 													</div>
-												</div>
-												<ui:remove>
-												<!-- TODO: implement the change email feature -->
 													<div class="imj_admindataValue">
 														<div class="imj_admindataValueEntry">
-															<h:outputLink id="lnkEditEmail" value="#" onclick="hide_input_area_show_Links();document.getElementById('userForm:pnlEditEmail').style.display = 'block'; $(this).hide();">
-																<h:outputText value="#{lbl.edit}" styleClass="imj_editButton"/>
-															</h:outputLink>
+															<h:outputText value="#{UserBean.user.email}"/>
+														</div>
+														<div class="imj_admindataSetEdit">
+										<!-- TODO: implement the change email feature -->
+															<h:inputText value="#{UserBean.user.email}" styleClass="imj_admindataEdit imj_noDisplay"/>
 														</div>
 													</div>
-												</ui:remove>
-											</h:panelGroup>
-											<h:panelGroup id="pnlEditEmail" styleClass="imj_noDisplay">
-													<h:outputText value=" " />
-													<h:inputText value="#{UserBean.newEmail}" styleClass="imj_admindataEdit"/>
-													<h:commandLink action="#{UserBean.changeEmail}" value="#{lbl.save}" styleClass="imj_editButton" />
-											</h:panelGroup>	
-											<!-- Cancel Button ? -->
-											
-											<!-- User Edit - Username -->
-											<h:panelGroup layout="block" styleClass="imj_admindataSetEdit">
-												<div class="imj_admindataLabel">
-													<h:outputText value="#{lbl.complete_name}"/>
-													<span class="imj_invisible">: </span>
-												</div>
-												<div class="imj_admindataValue">
-													<div class="imj_admindataValueEntry">
-														<h:outputText value="#{UserBean.user.name}"/>
+													<ui:remove>
+													<!-- TODO: implement the change email feature -->
+														<div class="imj_admindataValue">
+															<div class="imj_admindataValueEntry">
+																<h:outputLink id="lnkEditEmail" value="#" onclick="hide_input_area_show_Links();document.getElementById('userForm:pnlEditEmail').style.display = 'block'; $(this).hide();">
+																	<h:outputText value="#{lbl.edit}" styleClass="imj_editButton"/>
+																</h:outputLink>
+															</div>
+														</div>
+													</ui:remove>
+												</h:panelGroup>
+												<ui:remove>
+													<h:panelGroup id="pnlEditEmail" styleClass="imj_noDisplay">
+														<h:inputText value="#{UserBean.newEmail}" styleClass="imj_admindataEdit"/>
+														<h:commandLink action="#{UserBean.changeEmail}" value="#{lbl.save}" styleClass="imj_editButton" />
+													</h:panelGroup>
+												</ui:remove>	
+												
+												<!-- User Edit - Username -->
+												<h:panelGroup layout="block" styleClass="imj_admindataSet">
+													<div class="imj_admindataLabel">
+														<h:outputText value="#{lbl.complete_name}"/>
+														<span class="imj_invisible">: </span>
 													</div>
-												</div>
-												<div class="imj_admindataValue">
-													<div class="imj_admindataValueEntry">
-														<h:outputLink id="lnkEditName" value="#" onclick="hide_input_area_show_Links();document.getElementById('userForm:pnlEditName').style.display = 'block';$(this).hide();">
-															<h:outputText value="#{lbl.edit}" styleClass="imj_editButton"/>
-														</h:outputLink>
+													<div class="imj_admindataValue">
+														<div class="imj_admindataValueEntry">
+															<h:outputText value="#{UserBean.user.name}"/>
+														</div>
+														
+														<div class="imj_admindataSetEdit">
+															<h:inputText value="#{UserBean.user.name}" styleClass="imj_admindataEdit imj_noDisplay"/>
+														</div>
 													</div>
-												</div>
-											</h:panelGroup>
-											<h:panelGroup id="pnlEditName" styleClass="imj_noDisplay">
-												<h:outputText value=" " />
-												<h:inputText value="#{UserBean.user.name}" styleClass="imj_admindataEdit"/>
-												<h:commandLink action="#{UserBean.updateUser}" value="#{lbl.save}" styleClass="imj_editButton"/>
-											</h:panelGroup>
-											<!-- Cancel Button ? -->
-											
-											<!-- User Edit - Nickname -->
-											<h:panelGroup layout="block" styleClass="imj_admindataSetEdit">
-												<div class="imj_admindataLabel">
-													<h:outputText value="#{lbl.nickname}"/>
-													<span class="imj_invisible">: </span>
-												</div>
-												<div class="imj_admindataValue">
-													<div class="imj_admindataValueEntry">
-														<h:outputText value="#{UserBean.user.nick}"/>
+												</h:panelGroup>
+												
+												<!-- User Edit - Nickname -->
+												<h:panelGroup layout="block" styleClass="imj_admindataSet">
+													<div class="imj_admindataLabel">
+														<h:outputText value="#{lbl.nickname}"/>
+														<span class="imj_invisible">: </span>
 													</div>
-												</div>
-												<div class="imj_admindataValue">
-													<div class="imj_admindataValueEntry">
-														<h:outputLink id="lnkEditNick" value="#" onclick="hide_input_area_show_Links();document.getElementById('userForm:pnlEditNick').style.display = 'block'; $(this).hide();">
-															<h:outputText value="#{lbl.edit}" styleClass="imj_editButton"/>
-														</h:outputLink>
+													<div class="imj_admindataValue">
+														<div class="imj_admindataValueEntry">
+															<h:outputText value="#{UserBean.user.nick}"/>
+														</div>
+														
+														<div class="imj_admindataSetEdit">
+															<h:inputText value="#{UserBean.user.nick}" styleClass="imj_admindataEdit imj_noDisplay"/>
+														</div>
 													</div>
+												</h:panelGroup>
+												
+												
+												<!-- submit panel -->
+												<div class="imj_submitPanel">
+													<h:outputLink id="lnkEditUserdata" value="#" onclick="hide_input_area_show_Links(); $(this).hide();" styleClass="imj_editButton">
+														<h:outputText value="#{lbl.edit}"/>
+													</h:outputLink>
+													<h:outputLink id="lnkCancelEditUserdata" value="#" onclick="cancelUserEdit(); $(this).hide();" styleClass="imj_cancelButton imj_noDisplay">
+														<h:outputText value="#{lbl.cancel}"/>
+													</h:outputLink>
+													<h:commandLink action="#{UserBean.updateUser}" value="#{lbl.save}" styleClass="imj_submitButton imj_noDisplay"/>
 												</div>
-											</h:panelGroup>
-											<h:panelGroup id="pnlEditNick" styleClass="imj_noDisplay">
-												<h:outputText value=" " />
-												<h:inputText value="#{UserBean.user.nick}" styleClass="imj_admindataEdit"/>
-												<h:commandLink action="#{UserBean.updateUser}" value="#{lbl.save}" styleClass="imj_editButton"/>
-											</h:panelGroup>
-											<!-- Cancel Button ? -->
-											
-										</h:panelGroup>
+											</fieldset>
+										</h:panelGroup> <!-- END user infos -->
 										
-						
+										
+									
 										<!-- User Edit - Password -->
-										<h:panelGroup layout="block" styleClass="imj_admindataSetEdit">
-										<div class="imj_admindataLabel">
-												<h:outputLabel for="inputPassword" value="#{lbl.password_new}"/>
-												<span class="imj_invisible">: </span>
-											</div>
-											<div class="imj_admindataValue">
-												<div class="imj_admindataValueEntry">
-													<h:inputSecret id="inputPassword" value="#{UserBean.newPassword}"/>
+										<div class="imj_admindataSetEdit">
+											<div class="imj_admindataSetEdit">
+												<div class="imj_admindataLabel">
+													<h:outputLabel for="inputPassword" value="#{lbl.password_new}"/>
+													<span class="imj_invisible">: </span>
+												</div>
+												<div class="imj_admindataValue">
+													<div class="imj_admindataValueEntry">
+														<h:inputSecret id="inputPassword" value="#{UserBean.newPassword}" styleClass="imj_admindataEdit"/>
+													</div>
 												</div>
 											</div>
-										</h:panelGroup>
-										<h:panelGroup layout="block" styleClass="imj_admindataSetEdit">
-										<div class="imj_admindataLabel">
-												<h:outputLabel for="inputRespeated" value="#{lbl.password_repeat}"/>
-												<span class="imj_invisible">: </span>
-											</div>
-											<div class="imj_admindataValue">
-												<div class="imj_admindataValueEntry">
-													<h:inputSecret id="inputRespeated" value="#{UserBean.repeatedPassword}"/>
+											<div class="imj_admindataSetEdit">
+												<div class="imj_admindataLabel">
+													<h:outputLabel for="inputRespeated" value="#{lbl.password_repeat}"/>
+													<span class="imj_invisible">: </span>
+												</div>
+												<div class="imj_admindataValue">
+													<div class="imj_admindataValueEntry">
+														<h:inputSecret id="inputRespeated" value="#{UserBean.repeatedPassword}" styleClass="imj_admindataEdit"/>
+													</div>
+													<h:commandButton action="#{UserBean.changePassword}" value="#{lbl.password_change}" styleClass="imj_editButton"/>
 												</div>
 											</div>
-										</h:panelGroup>
+										</div>
 																					
-										<h:commandButton action="#{UserBean.changePassword}" value="#{lbl.password_change}" styleClass="imj_editButton"/>
+										
 										
 										<h:panelGroup layout="block" styleClass="imj_admindataSetEdit">
 											<div class="imj_admindataLabel">

@@ -1614,6 +1614,9 @@ table.imj_optionSet td label {
 .imj_admindataSetEdit {
 	margin: 1em 0;
 }
+.imj_admindataSet .imj_admindataValue .imj_admindataSetEdit {
+	margin: 0;
+}
 
 label {
 	min-width: 24%;
@@ -2898,29 +2901,6 @@ a:hover .imj_entryPagePreviewTiledListLinkArrow {
 	Users.xhtml
 	AdminStorage.xhtml
    ======================================================== */
-.imj_administrationTiledList {
-	width: 91.95%;
-	padding: 2% 4%;
-}
-
-.imj_administrationTiledList .imj_listBody {
-	width: 100%;
-}
-
-.imj_administrationTiledList .imj_listBody {
-	text-align: center;
-}
-
-.imj_userConfig .imj_adminPanel {
-	display: inline-block;
-	float: left;
-	margin-bottom: 2em;
-	max-width: 99.99%;
-	padding: 0 2%;
-	text-align: left;
-	vertical-align: top;
-}
-
 .imj_adminPanel {
 	display: inline-block;
 	max-width: 24.89%;
@@ -2963,6 +2943,47 @@ a:hover .imj_entryPagePreviewTiledListLinkArrow {
 .imj_adminEditPanel {
 	margin: 0.5em 0em 1em -1em;
 	padding: 0 0 2em 0;
+}
+
+.imj_administrationTiledList {
+	width: 91.95%;
+	padding: 2% 4%;
+}
+
+.imj_administrationTiledList .imj_listBody {
+	width: 100%;
+}
+
+.imj_administrationTiledList .imj_listBody {
+	text-align: center;
+}
+
+.imj_userConfig .imj_adminPanel {
+	display: inline-block;
+	float: left;
+	margin-bottom: 2em;
+	max-width: 99.99%;
+	padding: 0 2%;
+	text-align: left;
+	vertical-align: top;
+}
+.imj_userConfig .imj_userGlobalInformation > fieldset {
+	padding: 2%;
+	border-color: #444444;
+	border-radius: 0.545454em;
+}
+.imj_userConfig .imj_userGlobalInformation > fieldset .imj_submitPanel {
+	margin-top: 0;
+}
+
+.imj_userConfig .imj_userGlobalInformation + .imj_admindataSetEdit {
+	margin: 1em 0;
+	padding: 1em 0;
+	border-bottom: 0.090909em dashed #6CAE2F;
+}
+
+.imj_userConfig .imj_admindataValueEntry + .imj_editButton {
+	float:right;
 }
 
 .imj_administrationTiledList.imj_maxWidth .imj_adminPanel {

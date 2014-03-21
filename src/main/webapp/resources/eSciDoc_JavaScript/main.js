@@ -448,3 +448,19 @@ $(window).resize(function(evt){
 		dialog.css("left", Math.max(0, Math.round(($(window).width() - $(dialog).outerWidth()) / 2) + $(window).scrollLeft()) + "px");
 	}
 });
+
+/*
+ * Extended usability function to set the content width of
+ * overlay menu to the minimum of the trigger width.
+ * It will be called one time after page loading is finished
+ */
+$(function(){
+	$('.imj_overlayMenu').each(function(i, obj){
+		var menuHeaderWidth = $(this).find(".imj_menuHeader").width();
+		var menuBody = $(this).find(".imj_menuBody");
+		if (menuHeaderWidth > menuBody.width()) {
+			menuBody.width(menuHeaderWidth);
+		}
+		
+	});
+});

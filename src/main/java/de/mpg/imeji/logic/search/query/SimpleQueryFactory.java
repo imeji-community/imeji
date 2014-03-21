@@ -84,6 +84,10 @@ public class SimpleQueryFactory
         {
             searchQuery = " ?s <" + pair.getIndex().getNamespace() + "> ?el";
         }
+        else if (SearchIndex.names.checksum.name().equals(pair.getIndex().getName()))
+        {
+            searchQuery = " ?s <" + pair.getIndex().getNamespace() + "> ?el";
+        }
         else if (SearchIndex.names.item.name().equals(pair.getIndex().getName()))
         {
             return " FILTER(" + getSimpleFilter(pair, "s") + ") .";

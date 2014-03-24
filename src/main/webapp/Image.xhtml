@@ -7,6 +7,6 @@
 	<ui:param name="imageBean" value="#{ImageBean}"/>
 	<ui:param name="headline" value="#{lbl.details}"/>
 	<ui:param name="currentMainMenu" value="mediaEntry"/>
-	<ui:param name="browseToAllItemsUrl" value="#{Navigation.browseUrl}?q="/>
+	<ui:param name="browseToAllItemsUrl" value="#{Navigation.browseUrl}?q=#{ImagesBean.query}"/>
 	
 </ui:composition>

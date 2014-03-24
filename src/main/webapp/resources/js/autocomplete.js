@@ -34,8 +34,7 @@ function extractLast(term) {
 }
 $(function() {
 	// This add auto-complete to all input fields on page,
-	// i.e, field has class "xHuge_txtInput"
-	$(":input")
+	$(":input[type=text], textarea")
 			// don't navigate away from the field on tab when selecting an item
 			.bind(
 					"keydown",

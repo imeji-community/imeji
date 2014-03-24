@@ -23,7 +23,10 @@ public class URIConverter implements Converter
     {
         if (arg2 == null || "".equals(arg2.trim()))
             return null;
-        return URI.create(arg2.trim());
+        URI uri = URI.create(arg2.trim());
+        if (!uri.isAbsolute())
+            uri = URI.create("http://" + arg2);
+        return uri;
     }
 
     @Override

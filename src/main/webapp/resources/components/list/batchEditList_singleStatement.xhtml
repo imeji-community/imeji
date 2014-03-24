@@ -86,7 +86,7 @@
 					
 					<ui:fragment rendered="#{!cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
 						<h:inputText id="inputPublicationURI" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.uri}" 
-									 onfocus="this.select(); getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')" valueChangeListener="#{cc.attrs.itemBean.citationUriListener}">
+									 onfocus="this.select(); getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')" valueChangeListener="#{cc.attrs.itemBean.resetCitationListener}">
 							<f:converter converterId="URIConverter"/>
 						</h:inputText>
 					</ui:fragment>

@@ -3197,3 +3197,17 @@ a:hover .imj_entryPagePreviewTiledListLinkArrow {
 .ui-datepicker-calendar td {
 	text-align: right;
 }
+
+.imj_disabled {
+	color: #000000;
+	background-color: #BBBBBB;
+	border: solid #BBBBBB;
+	cursor: default;
+}
+
+.imj_disabled:hover {
+	color: #000000;
+	background-color: #BBBBBB;
+	border: solid #BBBBBB;
+	cursor: default;
+}

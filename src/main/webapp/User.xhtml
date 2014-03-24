@@ -72,27 +72,10 @@
 															<h:outputText value="#{UserBean.user.email}"/>
 														</div>
 														<div class="imj_admindataSetEdit">
-										<!-- TODO: implement the change email feature -->
-															<h:inputText value="#{UserBean.user.email}" styleClass="imj_admindataEdit imj_noDisplay"/>
+															<h:inputText value="#{UserBean.user.email}" styleClass="imj_admindataEdit imj_noDisplay #{!SessionBean.admin ? 'imj_disabled' : ''}" disabled="#{!SessionBean.admin}" readonly="#{!SessionBean.admin}"/>
 														</div>
 													</div>
-													<ui:remove>
-													<!-- TODO: implement the change email feature -->
-														<div class="imj_admindataValue">
-															<div class="imj_admindataValueEntry">
-																<h:outputLink id="lnkEditEmail" value="#" onclick="hide_input_area_show_Links();document.getElementById('userForm:pnlEditEmail').style.display = 'block'; $(this).hide();">
-																	<h:outputText value="#{lbl.edit}" styleClass="imj_editButton"/>
-																</h:outputLink>
-															</div>
-														</div>
-													</ui:remove>
 												</h:panelGroup>
-												<ui:remove>
-													<h:panelGroup id="pnlEditEmail" styleClass="imj_noDisplay">
-														<h:inputText value="#{UserBean.newEmail}" styleClass="imj_admindataEdit"/>
-														<h:commandLink action="#{UserBean.changeEmail}" value="#{lbl.save}" styleClass="imj_editButton" />
-													</h:panelGroup>
-												</ui:remove>	
 												
 												<!-- User Edit - Username -->
 												<h:panelGroup layout="block" styleClass="imj_admindataSet">

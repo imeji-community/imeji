@@ -35,6 +35,7 @@ import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 

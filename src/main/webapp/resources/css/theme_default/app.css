@@ -1758,6 +1758,9 @@ p.imj_metadataValue {
 	width: 55em;
 	min-height: 6em;
 }
+select.imj_metadataEditText {
+	min-height: 0;
+}
 
 .imj_metadataEditLink,
 .imj_metadataEditPerson,

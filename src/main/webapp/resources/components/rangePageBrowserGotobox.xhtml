@@ -21,9 +21,6 @@
 	
 		<div class="imj_paginator">
 			<h:form>
-				<h:outputText value="#{cc.attrs.paginatorBean.urlParameters}" styleClass="imj_noDisplay"/>
-				<h:outputText value="#{cc.attrs.paginatorBean.initPaginator}" styleClass="imj_noDisplay"/>
-				
 			 	<div id="imj_rangeSelector" class="imj_rangeSelector">
 				 		<h:selectOneMenu id="extSelectTop" value="#{cc.attrs.paginatorBean.elementsPerPageTop}" valueChangeListener="#{cc.attrs.paginatorBean.elementsPerPageTopListener}" onchange="setContentLoadingStatus();">
 				 			<f:selectItems value="#{cc.attrs.paginatorBean.elementsPerPageSelectItems}"/>

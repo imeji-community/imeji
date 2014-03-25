@@ -93,16 +93,17 @@ public class CollectionListItem
             {
                 versionDate = collection.getVersionDate().getTime().toString();
             }
-            // Load collection to get first thumbnail if the collection status is 'released'
-            CollectionImeji fullCollection = ObjectLoader.loadCollectionLazy(
+            // Load collection in lazy modus (i.e. don't load the item)
+            CollectionImeji lazyCol = ObjectLoader.loadCollectionLazy(
                     ObjectHelper.getURI(CollectionImeji.class, id), user);
             SessionBean sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-            if (fullCollection != null && fullCollection.getId() != null && fullCollection.getStatus().toString() == "RELEASED")
+            // Get first thumbnail of the collection
+            if (lazyCol != null && lazyCol.getId() != null && lazyCol.getStatus().toString().equals("RELEASED"))
             {
                 ItemController ic = new ItemController(sessionBean.getUser());
-                ic.loadContainerItems(fullCollection, user, 1, 0);
+                ic.loadContainerItems(lazyCol, user, 1, 0);
                 List<String> uri = new ArrayList<String>();
-                uri.add(fullCollection.getImages().toArray()[0].toString());
+                uri.add(lazyCol.getImages().toArray()[0].toString());
                 if (uri != null && uri.size() > 0)
                 {
                     ic = new ItemController(sessionBean.getUser());

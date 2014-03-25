@@ -1774,6 +1774,11 @@ select.imj_metadataEditText {
 .imj_admindataEdit {
 	width: 25em;
 }
+.imj_admindataValue .imj_additionalCodeSnippet{
+	width: 25em;
+	min-height: 7em;
+	resize: vertical;
+}
 
 .imj_metadataEditDate {
 	width: 7em;

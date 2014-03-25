@@ -1797,10 +1797,18 @@ a.imj_cancelButton,
 	-moz-border-radius: 0.3em;
 	-o-border-radius: 0.3em;
 	-ms-border-radius: 0.3em;
-	/*float: left;*/
 }
-
 .imj_cancelButton:hover {
+	color: #F0F0F0;
+	background-color: #D80000;
+	border: solid #D80000;
+}
+.imj_cancelButton:active {
+	color: #F0F0F0;
+	background-color: #D80000;
+	border: solid #D80000;
+}
+.imj_cancelButton:focus {
 	color: #F0F0F0;
 	background-color: #D80000;
 	border: solid #D80000;
@@ -1819,8 +1827,17 @@ a.imj_submitButton,
 	-o-border-radius: 0.3em;
 	-ms-border-radius: 0.3em;
 }
-
 .imj_submitButton:hover {
+	color: #000000;
+	background-color: #4AFF00;
+	border: solid #4AFF00;
+}
+.imj_submitButton:active {
+	color: #000000;
+	background-color: #4AFF00;
+	border: solid #4AFF00;
+}
+.imj_submitButton:focus {
 	color: #000000;
 	background-color: #4AFF00;
 	border: solid #4AFF00;
@@ -1839,8 +1856,19 @@ a.imj_submitButton,
 	-o-border-radius: 0.3em;
 	-ms-border-radius: 0.3em;
 }
-
 .imj_disabledButton:hover {
+	color: #000000;
+	background-color: #BBBBBB;
+	border: solid #BBBBBB;
+	cursor: default;
+}
+.imj_disabledButton:active {
+	color: #000000;
+	background-color: #BBBBBB;
+	border: solid #BBBBBB;
+	cursor: default;
+}
+.imj_disabledButton:focus {
 	color: #000000;
 	background-color: #BBBBBB;
 	border: solid #BBBBBB;
@@ -1854,12 +1882,22 @@ a.imj_submitButton,
 	background-color: #FF7700;
 	border: solid #FF7700;
 }
-
 .imj_resetButton:hover {
 	color: #000000;
 	background-color: #FFC999;
 	border: solid #FFC999;
 }
+.imj_resetButton:active {
+	color: #000000;
+	background-color: #FFC999;
+	border: solid #FFC999;
+}
+.imj_resetButton:focus {
+	color: #000000;
+	background-color: #FFC999;
+	border: solid #FFC999;
+}
+
 
 /* * login form
 	loginFormSite is includes on page content, not in menu!
@@ -3015,7 +3053,8 @@ a:hover .imj_entryPagePreviewTiledListLinkArrow {
 	-ms-border-radius: 0.3em;
 }
 
-.imj_editButton,a.imj_editButton {
+.imj_editButton,
+a.imj_editButton {
 	color: #F0F0F0;
 	background-color: #6CAE2F;
 	border: thin solid #6CAE2F;
@@ -3032,7 +3071,20 @@ a:hover .imj_entryPagePreviewTiledListLinkArrow {
 	margin-left: 0;
 }
 
-.imj_backButton:hover,.imj_editButton:hover {
+.imj_backButton:hover,
+.imj_editButton:hover {
+	color: #000000;
+	background-color: #4AFF00;
+	border: thin solid #4AFF00;
+}
+.imj_backButton:active,
+.imj_editButton:active {
+	color: #000000;
+	background-color: #4AFF00;
+	border: thin solid #4AFF00;
+}
+.imj_backButton:focus,
+.imj_editButton:focus {
 	color: #000000;
 	background-color: #4AFF00;
 	border: thin solid #4AFF00;

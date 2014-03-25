@@ -1636,6 +1636,11 @@ label {
 	font-weight: bold;
 }
 
+.imj_admindataLabel {
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
 .imj_metadataValue,
 .imj_infodataValue,
 .imj_admindataValue {

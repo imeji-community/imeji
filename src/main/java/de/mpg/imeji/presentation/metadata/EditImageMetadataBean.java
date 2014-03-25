@@ -278,6 +278,7 @@ public class EditImageMetadataBean
         // initEditor(new ArrayList<Item>(allItems));
         // initEmtpyEditorItem();
         editor = noChangesEditor.clone();
+        initModeMenu();
         return "";
     }
 

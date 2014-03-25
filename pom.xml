@@ -377,10 +377,7 @@
 			<artifactId>junit</artifactId>
 			<version>4.8.2</version>
 		</dependency>
-		<!-- richfaces 4 libs -->
-		<!-- <dependency> <groupId>org.richfaces.ui</groupId> <artifactId>richfaces-components-ui</artifactId> 
-			</dependency> <dependency> <groupId>org.richfaces.core</groupId> <artifactId>richfaces-core-impl</artifactId> 
-			</dependency> -->
+		<!-- START JSF 2 -->
 		<dependency>
 			<groupId>javax.faces</groupId>
 			<artifactId>javax.faces-api</artifactId>
@@ -410,8 +407,7 @@
 			<groupId>javax.servlet.jsp.jstl</groupId>
 			<artifactId>jstl-api</artifactId>
 		</dependency>
-		<!--<dependency> <groupId>net.sf.ehcache</groupId> <artifactId>ehcache</artifactId> 
-			</dependency> -->
+		<!-- END JSF 2 -->
 		<!-- json simple: to read vocabularies -->
 		<dependency>
 			<groupId>com.googlecode.json-simple</groupId>

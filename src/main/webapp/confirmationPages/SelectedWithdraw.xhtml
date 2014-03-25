@@ -8,6 +8,7 @@
 			<h:form>
 				<div class="imj_confirmationText">
 					<h:outputText value="#{lbl.withdraw_images}"/>
+					<br/>
 					<h:outputText value="#{lbl.images_withdraw_comment}" styleClass="imj_messageError"/>
 					<h:outputText value="#{paginatorListSessionBean.initComment}"/>
 				</div>
@@ -18,7 +19,10 @@
 					<a href="#" class="imj_cancelButton" onclick="closeDialog('dialogWithdrawSelected');"> 
 						<h:outputText value="#{lbl.cancel}"/>
 					</a>
-					<h:commandButton id="buttonDiscardSW" action="#{paginatorListSessionBean.withdrawSelected}" rendered="#{paginatorListSessionBean.discardComment != ''}" value="#{lbl.withdraw}" styleClass="imj_submitButton"/>
+					<h:commandButton id="buttonDiscardSW" 
+						action="#{paginatorListSessionBean.withdrawSelected}" 
+						value="#{lbl.withdraw}" 
+						styleClass="#{paginatorListSessionBean.discardComment == ''  ? 'imj_disabledButton' : 'imj_submitButton'}" />
 				</div>
 			</h:form>
 		</div>

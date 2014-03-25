@@ -2,7 +2,8 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:composite="http://java.sun.com/jsf/composite">
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs">
 	<composite:interface>
 		<composite:attribute name="fSession" required="false"/>
 		<composite:attribute name="facetBean" required="false"/>
@@ -14,19 +15,19 @@
 	
 	<composite:implementation>
 		<h:panelGroup layout="block" id="selectionInfoPanel" styleClass="imj_selectionInfoPanel">
-			<ui:fragment rendered="#{ cc.attrs.currentMainMenu == 'mediaEntry' }">
+			<ui:fragment rendered="#cc.attrs.currentMainMenu == 'mediaEntry' }">
 				<h:outputLink value="#{cc.attrs.browseToAllUrl}" title="#{lbl.images_all}">
 					<h:outputText value="#{lbl.images_all}"/>
 				</h:outputLink>
 			</ui:fragment>
 			
-			<ui:fragment rendered="#{ cc.attrs.currentMainMenu == 'album'}">
+			<ui:fragment rendered="#{cc.attrs.currentMainMenu == 'album'}">
 				<h:outputLink value="#{cc.attrs.browseToAllUrl}" title="#{lbl.album_back_to_images}">
 					<h:outputText value="#{lbl.album_back_to_images}"/>
 				</h:outputLink>
 			</ui:fragment>
 			
-			<ui:fragment rendered="#{ cc.attrs.currentMainMenu == 'collection'}">
+			<ui:fragment rendered="#{cc.attrs.currentMainMenu == 'collection'}">
 				<h:outputLink value="#{cc.attrs.browseToAllUrl}" title="#{lbl.collection_back_to_images}">
 					<h:outputText value="#{lbl.collection_back_to_images}"/>
 				</h:outputLink>
@@ -93,7 +94,7 @@
 												<h:outputText value="#{lbl.delete_all}"/>
 											</h:outputLink>
 											
-											<h:outputLink styleClass="imj_criticalItem" value="#" onclick="openDialog('dialogDeleteAll')"
+											<h:outputLink styleClass="imj_criticalItem" value="#" onclick="openDialog('dialogWithdrawAll')"
 															rendered="#{cc.attrs.facetBean.collection != null and cc.attrs.facetBean.editable  and cc.attrs.facetBean.collection.status == 'RELEASED'}">
 												<h:outputText value="#{lbl.withdraw_all}"/>
 											</h:outputLink>
@@ -161,10 +162,10 @@
 														  rendered="#{cc.attrs.facetBean.navigationString == 'pretty:collectionBrowse' and  cc.attrs.facetBean.imageDeletable and cc.attrs.facetBean.collection.status == 'PENDING'}">
 												<h:outputText value="#{lbl.delete_selectedImages}"/>
 											</h:outputLink>
-											<h:outputLink styleClass="imj_criticalItem" value="#" onclick="openDialog('dialogDeleteSelected')" 
+											<h:outputLink styleClass="imj_criticalItem" value="#" onclick="openDialog('dialogWithdrawSelected')" 
 														  rendered="#{cc.attrs.facetBean.navigationString == 'pretty:collectionBrowse' and  cc.attrs.facetBean.editable and cc.attrs.facetBean.collection.status == 'RELEASED'}">
 												<h:outputText value="#{lbl.withdraw_selected}"/>
-											</h:outputLink>
+											</h:outputLink>	
 										</li>
 									</ui:fragment>
 									

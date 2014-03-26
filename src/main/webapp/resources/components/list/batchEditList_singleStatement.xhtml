@@ -28,7 +28,7 @@
 					<h:inputTextarea id="inputText" name="inputText" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.text}" rendered="#{!cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}" onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')"/>
 					
 					<h:panelGroup layout="block" styleClass="imj_metadataValue" rendered="#{cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
-						<h:selectOneMenu value="#{cc.attrs.itemBean.text}" valueChangeListener="#{cc.attrs.itemBean.predefinedValueListener}">
+						<h:selectOneMenu value="#{cc.attrs.itemBean.text}" valueChangeListener="#{cc.attrs.itemBean.predefinedValueListener}" >
 							<f:selectItems value="#{cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].restrictedValues}"/>
 						</h:selectOneMenu>
 					</h:panelGroup>
@@ -61,11 +61,11 @@
 				<ui:fragment rendered="#{!cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
 					<h:panelGroup layout="block" styleClass="imj_metadataSet">
 						<h:outputLabel for="inputLinkLabel" value="#{lbl.title}" styleClass="imj_metadataLabel"/>
-						<h:inputText id="inputLinkLabel" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.label}" immediate="true" onfocus="this.select(); getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}','#{cc.attrs.navBean.autocompleteUrl}')"/>
+						<h:inputText id="inputLinkLabel" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.label}" immediate="true"  onfocus="this.select(); getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}','#{cc.attrs.navBean.autocompleteUrl}')"/>
 					</h:panelGroup>
 					<h:panelGroup layout="block" styleClass="imj_metadataSet">
 						<h:outputLabel for="inputURI" value="#{lbl.url}" styleClass="imj_metadataLabel"/>
-						<h:inputText id="inputURI" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.uri}" onfocus="this.select();">
+						<h:inputText id="inputURI" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.uri}" onfocus="this.select();" valueChangeListener="#{cc.attrs.itemBean.predefinedValueListener}">
 							<f:converter converterId="URIConverter"/>
 						</h:inputText>
 					</h:panelGroup>
@@ -92,7 +92,7 @@
 					</ui:fragment>
 					
 					<ui:fragment rendered="#{cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
-						<h:selectOneMenu styleClass="#{areaClass}" immediate="true" value="#{cc.attrs.itemBean.uri}">
+						<h:selectOneMenu styleClass="#{areaClass}" immediate="true" value="#{cc.attrs.itemBean.uri}" valueChangeListener="#{cc.attrs.itemBean.predefinedValueListener}">
 							<f:selectItems value="#{cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].restrictedValues}"/>
 						</h:selectOneMenu>
 					</ui:fragment>

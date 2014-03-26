@@ -9,8 +9,8 @@
 
 		<!-- METADATA TYPE TEXT -->
 		<h:panelGroup rendered="#{metadata.typeNamespace =='http://imeji.org/terms/metadata#text'}">
-			<h:inputTextarea id="inputText" name="inputText" styleClass="imj_metadataEditText" value="#{metadata.text}" rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}" onfocus="getDatasourceUrl('#{statement.vocabulary}', '#{Navigation.autocompleteUrl}')"/>
-			<h:selectOneMenu styleClass="imj_metadataEditText" value="#{metadata.text}" rendered="#{SuggestBean.suggests[statement.id].hasRestrictedValues}">
+			<h:inputTextarea id="inputText" name="inputText" styleClass="imj_metadataEditText" value="#{metadata.text}" rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}"  onfocus="getDatasourceUrl('#{statement.vocabulary}', '#{Navigation.autocompleteUrl}')"/>
+			<h:selectOneMenu styleClass="imj_metadataEditText" value="#{metadata.text}" rendered="#{SuggestBean.suggests[statement.id].hasRestrictedValues}" valueChangeListener="#{metadata.predefinedValueListener}">
 				<f:selectItems value="#{SuggestBean.suggests[statement.id].restrictedValues}"/>
 			</h:selectOneMenu>
 		</h:panelGroup>
@@ -20,7 +20,7 @@
 			<h:inputText styleClass="imj_metadataEditNumber" immediate="false" onfocus="this.select(); getDatasourceUrl('#{statement.vocabulary}', '#{Navigation.autocompleteUrl}')" value="#{metadata.number}" rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}">
 				<f:converter converterId="DoubleConverter" />
 			</h:inputText>
-			<h:selectOneMenu styleClass="imj_metadataEditNumber" immediate="true" value="#{metadata.number}" rendered="#{SuggestBean.suggests[statement.id].hasRestrictedValues}">
+			<h:selectOneMenu styleClass="imj_metadataEditNumber" immediate="true" value="#{metadata.number}" rendered="#{SuggestBean.suggests[statement.id].hasRestrictedValues}" valueChangeListener="#{metadata.predefinedValueListener}">
 				<f:selectItems value="#{SuggestBean.suggests[statement.id].restrictedValues}"/>
 			</h:selectOneMenu>
 		</h:panelGroup>
@@ -30,15 +30,15 @@
 			<div class="imj_metadataValueEntryLabel">
 				<h:outputLabel value="#{lbl.title}" rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}"/>
 			</div>
-			<h:inputText id="inputLinkLabel" styleClass="imj_metadataEditLink" value="#{metadata.label}" immediate="true"  rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}" onfocus="this.select(); getDatasourceUrl('#{statement.vocabulary}','#{Navigation.autocompleteUrl}')">
+			<h:inputText id="inputLinkLabel" styleClass="imj_metadataEditLink" value="#{metadata.label}" rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}" onfocus="this.select(); getDatasourceUrl('#{statement.vocabulary}','#{Navigation.autocompleteUrl}')">
 			</h:inputText>
 			<div class="imj_metadataValueEntryLabel">
 				<h:outputLabel value="#{lbl.url}" rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}"/>
 			</div>
-			<h:inputText id="inputURI" styleClass="imj_metadataEditLink" value="#{metadata.uri}" rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}" onfocus="this.select();">
+			<h:inputText id="inputURI" styleClass="imj_metadataEditLink" value="#{metadata.uri}"  rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}" onfocus="this.select();" valueChangeListener="#{metadata.predefinedValueListener}">
 				<f:converter converterId="URIConverter" />
 			</h:inputText>
-			<h:selectOneMenu styleClass="imj_metadataEditLink" value="#{metadata.uri}" rendered="#{SuggestBean.suggests[statement.id].hasRestrictedValues}">
+			<h:selectOneMenu styleClass="imj_metadataEditLink" value="#{metadata.uri}" rendered="#{SuggestBean.suggests[statement.id].hasRestrictedValues}" valueChangeListener="#{metadata.predefinedValueListener}">
 				<f:converter converterId="URIConverter" />
 				<f:selectItems value="#{SuggestBean.suggests[statement.id].restrictedValues}"/>
 			</h:selectOneMenu>
@@ -70,7 +70,7 @@
 				<h:outputLabel value="YYYY-MM-DD"/>
 			</div>
 		</h:panelGroup>
-		<h:selectOneMenu styleClass="imj_metadataEditDate" immediate="true" value="#{metadata.date}" rendered="#{metadata.typeNamespace =='http://imeji.org/terms/metadata#date' and SuggestBean.suggests[statement.id].hasRestrictedValues}">
+		<h:selectOneMenu styleClass="imj_metadataEditDate" immediate="true" value="#{metadata.date}" valueChangeListener="#{metadata.predefinedValueListener}" rendered="#{metadata.typeNamespace =='http://imeji.org/terms/metadata#date' and SuggestBean.suggests[statement.id].hasRestrictedValues}">
 			<f:selectItems value="#{SuggestBean.suggests[statement.id].restrictedValues}"/>
 		</h:selectOneMenu>
 		
@@ -86,7 +86,7 @@
 			<h:inputText id="inputLicenseId" styleClass="imj_metadataEditLicence" value="#{metadata.externalUri}" rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}" immediate="true" onfocus="this.select(); getDatasourceUrl('#{statement.vocabulary}', '#{Navigation.autocompleteUrl}')">
 				<f:converter converterId="URIConverter"/>
 			</h:inputText>
-			<h:selectOneMenu styleClass="imj_metadataEditLicence" immediate="true" value="#{metadata.uri}" rendered="#{SuggestBean.suggests[statement.id].hasRestrictedValues}">
+			<h:selectOneMenu styleClass="imj_metadataEditLicence" immediate="true" value="#{metadata.uri}" rendered="#{SuggestBean.suggests[statement.id].hasRestrictedValues}" valueChangeListener="#{metadata.predefinedValueListener}">
 				<f:selectItems value="#{SuggestBean.suggests[statement.id].restrictedValues}"/>
 			</h:selectOneMenu>
 		</h:panelGroup>

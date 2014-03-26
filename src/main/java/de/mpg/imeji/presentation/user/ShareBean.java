@@ -13,6 +13,10 @@ import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
 
+import com.hp.hpl.jena.sparql.pfunction.library.container;
+
+import de.mpg.imeji.logic.controller.CollectionController;
+import de.mpg.imeji.logic.controller.ImejiController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -46,6 +50,7 @@ public class ShareBean
     private Container container;
     private static Logger logger = Logger.getLogger(ShareBean.class);
     private boolean isAlbum = false;
+    private boolean isContainerEmpty = true;
 
     /**
      * Construct the {@link ShareBean}
@@ -64,6 +69,7 @@ public class ShareBean
         if (uri != null)
         {
             loadContainer(uri);
+            isContainerEmpty = getContainerSize(container) == 0;
             initMenus(uri);
         }
         return "";
@@ -85,6 +91,18 @@ public class ShareBean
             this.isAlbum = true;
             container = ObjectLoader.loadAlbumLazy(ObjectHelper.normalizeURI(Album.class, uri), session.getUser());
         }
+    }
+
+    /**
+     * Return the size of the container
+     * 
+     * @param container
+     * @return
+     */
+    private int getContainerSize(Container container)
+    {
+        CollectionController c = new CollectionController();
+        return c.countContainerSize(container.getId());
     }
 
     /**
@@ -424,5 +442,21 @@ public class ShareBean
     public boolean isAlbum()
     {
         return this.isAlbum;
+    }
+
+    /**
+     * @return the isContainerEmpty
+     */
+    public boolean isContainerEmpty()
+    {
+        return isContainerEmpty;
+    }
+
+    /**
+     * @param isContainerEmpty the isContainerEmpty to set
+     */
+    public void setContainerEmpty(boolean isContainerEmpty)
+    {
+        this.isContainerEmpty = isContainerEmpty;
     }
 }

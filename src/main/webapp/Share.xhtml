@@ -16,7 +16,7 @@
 									curMainMenu="#{currentMainMenu}" 
 									userHasAdminRights="#{AuthorizationBean.admin}" 
 									userHasEditRights="true" 
-									hasContent="true" 
+									hasContent="#{!ShareBean.containerEmpty}" 
 									navBean="#{Navigation}" 
 									activeMenu="share" 
 									allowedToShare="true"/>

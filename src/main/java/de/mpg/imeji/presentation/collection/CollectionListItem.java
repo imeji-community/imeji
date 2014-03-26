@@ -12,8 +12,11 @@ import javax.faces.event.ValueChangeEvent;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.security.Security;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -93,20 +96,16 @@ public class CollectionListItem
             {
                 versionDate = collection.getVersionDate().getTime().toString();
             }
-            // Load collection in lazy modus (i.e. don't load the item)
-            CollectionImeji lazyCol = ObjectLoader.loadCollectionLazy(
-                    ObjectHelper.getURI(CollectionImeji.class, id), user);
-            SessionBean sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
             // Get first thumbnail of the collection
-            if (lazyCol != null && lazyCol.getId() != null && lazyCol.getStatus().toString().equals("RELEASED"))
+            if (collection.getStatus().equals(Status.RELEASED))
             {
-                ItemController ic = new ItemController(sessionBean.getUser());
-                ic.loadContainerItems(lazyCol, user, 1, 0);
+                ItemController ic = new ItemController(user);
+                ic.loadContainerItems(collection, user, 1, 0);
                 List<String> uri = new ArrayList<String>();
-                uri.add(lazyCol.getImages().toArray()[0].toString());
+                uri.add(collection.getImages().toArray()[0].toString());
                 if (uri != null && uri.size() > 0)
                 {
-                    ic = new ItemController(sessionBean.getUser());
+                    ic = new ItemController(user);
                     this.thumbnail = ImejiFactory.imageListToThumbList(ic.loadItems(uri, 1, 0)).get(0);
                 }
             }
@@ -143,7 +142,7 @@ public class CollectionListItem
     private void initSize(User user)
     {
         ItemController ic = new ItemController(user);
-        size = ic.search(uri, null, null, null).getNumberOfRecords();
+        size= ic.countContainerSize(uri);
     }
 
     /**

@@ -213,7 +213,7 @@ public class Search
      */
     private List<String> simple(SearchPair pair, SortCriterion sortCri, User user)
     {
-        String sparqlQuery = SimpleQueryFactory.getQuery(getRDFType(type), pair, sortCri, user, (containerURI != null),
+        String sparqlQuery = SimpleQueryFactory.getQuery(getModelName(type), getRDFType(type), pair, sortCri, user, (containerURI != null),
                 getSpecificQuery());
         return ImejiSPARQL.exec(sparqlQuery, null);
     }

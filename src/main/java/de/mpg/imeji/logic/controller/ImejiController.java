@@ -10,7 +10,9 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
+import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
+import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.util.Counter;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -147,6 +149,35 @@ public abstract class ImejiController
             c.getImages().add(URI.create(s));
         }
         return c;
+    }
+
+    /**
+     * Load items from a {@link Container} without any ordering. This is faster than loadContainerItem Method.
+     * 
+     * @param c
+     * @param size
+     * @return
+     */
+    public Container findContainerItems(Container c, User user, int size)
+    {
+        List<String> newUris = ImejiSPARQL.exec(SPARQLQueries.selectContainerItem(c.getId(), user, size), null);
+        c.getImages().clear();
+        for (String s : newUris)
+        {
+            c.getImages().add(URI.create(s));
+        }
+        return c;
+    }
+
+    /**
+     * Return the size of a {@link Container}
+     * 
+     * @param c
+     * @return
+     */
+    public int countContainerSize(URI uri)
+    {
+        return ImejiSPARQL.execCount(SPARQLQueries.countContainerSize(uri), null);
     }
 
     /**

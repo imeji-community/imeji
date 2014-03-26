@@ -7,8 +7,7 @@
 	xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs">
 	
 	<ui:define name="init">
-		<h:outputText value="#{paginatorListSessionBean.init}"/>
-		<h:outputText value="#{paginatorListSessionBean.initPaginator}"/>
+			<h:outputText value="#{paginatorListSessionBean.init}"/>
 	</ui:define>
 	
 	<ui:define name="modalDialogs_from_template">
@@ -23,6 +22,8 @@
 		<!-- Breadcrumb - History -->
 		<ui:include src="../../include/History.xhtml"></ui:include>
 		<h:panelGroup layout="block" id ="ajaxWrapper">
+		
+			<h:outputText value="#{paginatorListSessionBean.initPaginator}"/>
 			<!-- Selection Info Panel -->
 			<imjc:filterInfoPanel fSession="#{FiltersSession}" filterBean="#{paginatorListSessionBean}" currentMainMenu="#{currentMainMenu}" 
 									 browseToAllUrl="#{browseToAllItemsUrl}" numberOfElements="#{paginatorListSessionBean.totalNumberOfElements}" filterBeanHasQuery="#{filterBeanHasQuery}"/>
@@ -38,17 +39,19 @@
 			
 			<!-- List -->
 			<ui:fragment rendered="#{paginatorListSessionBean.totalNumberOfRecords > 0}">
-				<ui:fragment rendered="#{SessionBean.user == null}">
-					<imjc:bibliographicList_loggedOut mediaList="#{paginatorListSessionBean}" globalDisplayLinkText="#{globalDisplayLinkText}" metadataNavigationURL="#{metadataNavigationURL}"/>
-				</ui:fragment>
-				<ui:fragment rendered="#{SessionBean.user != null}">
-					<imjc:bibliographicList_loggedIn mediaList="#{paginatorListSessionBean}" isActivatable="#{isActivatable}" 
-													 metadataNavigationURL="#{metadataNavigationURL}" releaseItemConfirmationText="#{releaseItemConfirmationText}" 
-													 deleteItemConfirmationText="#{deleteItemConfirmationText}"
-													 globalDeleteDialogId="#{currentMainMenu}List-selected-deleteDialog" 
-													 withdrawItemConfirmationText="#{withdrawItemConfirmationText}"
-													 globalDeleteLinkText="#{globalDeleteLinkText}" globalDisplayLinkText="#{globalDisplayLinkText}"/>
-				</ui:fragment>
+				<div id="imj_listBody">
+					<ui:fragment rendered="#{SessionBean.user == null}">
+						<imjc:bibliographicList_loggedOut mediaList="#{paginatorListSessionBean}" globalDisplayLinkText="#{globalDisplayLinkText}" metadataNavigationURL="#{metadataNavigationURL}"/>
+					</ui:fragment>
+					<ui:fragment rendered="#{SessionBean.user != null}">
+						<imjc:bibliographicList_loggedIn mediaList="#{paginatorListSessionBean}" isActivatable="#{isActivatable}" 
+														 metadataNavigationURL="#{metadataNavigationURL}" releaseItemConfirmationText="#{releaseItemConfirmationText}" 
+														 deleteItemConfirmationText="#{deleteItemConfirmationText}"
+														 globalDeleteDialogId="#{currentMainMenu}List-selected-deleteDialog" 
+														 withdrawItemConfirmationText="#{withdrawItemConfirmationText}"
+														 globalDeleteLinkText="#{globalDeleteLinkText}" globalDisplayLinkText="#{globalDisplayLinkText}"/>
+					</ui:fragment>
+				</div>
 			</ui:fragment>
 			
 			<!-- Page Browser GotoBox -->

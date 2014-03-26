@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.ctc.wstx.dtd.ModelNode;
+
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchMetadata;
@@ -33,8 +36,8 @@ import de.mpg.j2j.helper.J2JHelper;
  */
 public class SimpleQueryFactory
 {
-    private static String PATTERN_SELECT = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 WHERE {XXX_SEARCH_ELEMENT_XXX XXX_SPECIFIC_QUERY_XXX "
-            + "?s <http://imeji.org/terms/status> ?status  XXX_SECURITY_FILTER_XXX XXX_SORT_ELEMENT_XXX}";
+    private static String PATTERN_SELECT = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 XXX_MODEL_NAMES_XXX WHERE {XXX_SEARCH_ELEMENT_XXX XXX_SPECIFIC_QUERY_XXX "
+                + "?s <http://imeji.org/terms/status> ?status  XXX_SECURITY_FILTER_XXX XXX_SORT_ELEMENT_XXX}";
 
     /**
      * Create a SPARQL query
@@ -47,12 +50,13 @@ public class SimpleQueryFactory
      * @param specificQuery
      * @return
      */
-    public static String getQuery(String rdfType, SearchPair pair, SortCriterion sortCriterion, User user,
-            boolean isCollection, String specificQuery)
+    public static String getQuery(String modelName, String rdfType, SearchPair pair, SortCriterion sortCriterion,
+            User user, boolean isCollection, String specificQuery)
     {
-        PATTERN_SELECT = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 WHERE {XXX_SEARCH_ELEMENT_XXX XXX_SPECIFIC_QUERY_XXX "
+        PATTERN_SELECT = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 XXX_MODEL_NAMES_XXX WHERE {XXX_SEARCH_ELEMENT_XXX XXX_SPECIFIC_QUERY_XXX "
                 + "?s <http://imeji.org/terms/status> ?status  XXX_SECURITY_FILTER_XXX XXX_SORT_ELEMENT_XXX}";
         return PATTERN_SELECT
+                .replace("XXX_MODEL_NAMES_XXX", getModelNames(modelName))
                 .replace("XXX_SECURITY_FILTER_XXX",
                         SimpleSecurityQuery.queryFactory(user, rdfType, getFilterStatus(pair)))
                 .replace("XXX_SEARCH_ELEMENT_XXX", getSearchElement(pair, rdfType))
@@ -60,6 +64,18 @@ public class SimpleQueryFactory
                 .replace("XXX_SORT_ELEMENT_XXX",
                         getSortElement(sortCriterion, "http://imeji.org/terms/item".equals(rdfType)))
                 .replace("XXX_SPECIFIC_QUERY_XXX", specificQuery);
+    }
+
+    /**
+     * Return the names of the dataset (model) of the query
+     * @param modelName
+     * @return
+     */
+    private static String getModelNames(String modelName)
+    {
+        if (modelName != null && !modelName.equals(""))
+            return "FROM <" + modelName + "> FROM <" + Imeji.userModel + ">";
+        return "";
     }
 
     /**

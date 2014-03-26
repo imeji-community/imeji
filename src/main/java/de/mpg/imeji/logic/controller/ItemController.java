@@ -247,7 +247,7 @@ public class ItemController extends ImejiController
         String uriString = null;
         if (containerUri != null)
             uriString = containerUri.toString();
-        Search search = new Search(SearchType.ITEM, uriString);
+        Search search = new Search(SearchType.ALL, uriString);
         return search.search(uris, searchQuery, sortCri, simplifyUser(containerUri));
     }
 

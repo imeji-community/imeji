@@ -7,10 +7,6 @@
 	xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs"
 	xmlns:menu="http://java.sun.com/jsf/composite/components/menu">
 	
-	<ui:define name="init">
-		<h:outputText value="#{ViewCollectionBean.init()}"/>
-	</ui:define>
-	
 	<ui:param name="headline" value="#{ViewCollectionBean.collection.metadata.title}"/>
 	<ui:param name="currentMainMenu" value="collection"/>
 	<ui:param name="logicBean" value="#{ViewCollectionBean}"/>

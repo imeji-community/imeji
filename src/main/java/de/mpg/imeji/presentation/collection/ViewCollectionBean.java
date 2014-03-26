@@ -56,7 +56,7 @@ public class ViewCollectionBean extends CollectionBean
             if (getCollection() != null && getCollection().getId() != null)
             {
                 ItemController ic = new ItemController(user);
-                ic.loadContainerItems(getCollection(), user, 13, 0);
+                ic.findContainerItems(getCollection(), user, 13);
                 setSize(getCollection().getImages().size());
             }
             if (getCollection() != null)

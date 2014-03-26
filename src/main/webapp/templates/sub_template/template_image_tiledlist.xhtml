@@ -31,6 +31,8 @@
 		<!-- Breadcrumb - History -->
 		<ui:include src="../../include/History.xhtml"></ui:include>
 		<h:panelGroup layout="block" id ="ajaxWrapper">
+			<h:outputText value="#{paginatorListSessionBean.urlParameters}" styleClass="imj_noDisplay"/>
+			<h:outputText value="#{paginatorListSessionBean.initPaginator}" styleClass="imj_noDisplay"/>
 			<!-- Selection Info Panel -->
 			<imjc:selectionInfoPanel 	id="selPanel" 
 										fSession="#{FiltersSession}" 

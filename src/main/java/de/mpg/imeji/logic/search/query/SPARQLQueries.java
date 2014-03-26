@@ -30,9 +30,12 @@ package de.mpg.imeji.logic.search.query;
 
 import java.net.URI;
 
+import com.hp.hpl.jena.sparql.pfunction.library.container;
+
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
@@ -210,5 +213,27 @@ public class SPARQLQueries
         return "WITH <http://imeji.org/item> " + "DELETE {?mds <http://imeji.org/terms/metadata> ?s} "
                 + "USING <http://imeji.org/item> "
                 + "WHERE {?mds <http://imeji.org/terms/metadata> ?s . NOT EXISTS{?s ?p ?o}}";
+    }
+    
+    /**
+     * Count all {@link Item} of a {@link container}
+     * @param uri
+     * @return
+     */
+    public static String countContainerSize(URI uri)
+    {
+        return "SELECT count(DISTINCT ?s) WHERE {?s <http://imeji.org/terms/collection> <" + uri.toString() +"> . ?s <http://imeji.org/terms/status> ?status . FILTER (?status!=<http://imeji.org/terms/status#WITHDRAWN>)}";
+    }
+    
+    /**
+     * Return all the {@link Item} of a {@link container}
+     * @param uri
+     * @param limit
+     * @return
+     */
+    public static String selectContainerItem(URI uri, User user, int limit)
+    {
+        return "SELECT DISTINCT ?s WHERE {?s <http://imeji.org/terms/collection> <" + uri.toString() +"> . ?s <http://imeji.org/terms/status> ?status . OPTIONAL{<"+ user.getId().toString()+ "> <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> ?c} . filter(bound(?g) || ?status=<http://imeji.org/terms/status#RELEASED>) . FILTER (?status!=<http://imeji.org/terms/status#WITHDRAWN>)} LIMIT " + limit;
+
     }
 }

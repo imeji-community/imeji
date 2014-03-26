@@ -12,6 +12,7 @@ import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.CookieUtils;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -77,8 +78,8 @@ public class InternationalizationBean
         // Add the other languages (non supported)
         languages.addAll(getsupportedLanguages(false));
         // init the string of all languages
-        for(SelectItem s : languages)
-            languagesAsString += s.getValue() + "," + s.getLabel() + "|"; 
+        for (SelectItem s : languages)
+            languagesAsString += s.getValue() + "," + s.getLabel() + "|";
     }
 
     /**
@@ -178,6 +179,7 @@ public class InternationalizationBean
             currentLanguage = "en";
         }
         session.setLocale(new Locale(currentLanguage));
+        CookieUtils.updateCookie(SessionBean.langCookieName, session.getLocale().getLanguage());
         internationalizeLanguages();
     }
 
@@ -253,7 +255,7 @@ public class InternationalizationBean
     {
         this.internationalizedLanguages = internationalizedLanguages;
     }
-    
+
     /**
      * @return the languagesAsString
      */

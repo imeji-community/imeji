@@ -12,13 +12,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.concurrent.TimeUnit;
 
 import javax.faces.context.FacesContext;
-import javax.faces.event.ValueChangeEvent;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
@@ -28,9 +24,7 @@ import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.beans.Navigation.Page;
-import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CookieUtils;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
@@ -48,7 +42,6 @@ public class SessionBean
         NONE, DEFAULT, ALTERNATIVE;
     }
 
-    private static Logger logger = Logger.getLogger(SessionBean.class);
     private User user = null;
     // Bundle
     public static final String LABEL_BUNDLE = "labels";
@@ -65,8 +58,8 @@ public class SessionBean
     private Map<URI, CollectionImeji> collectionCached;
     private String selectedImagesContext = null;
     private Style selectedCss = Style.NONE;
-    private final static String styleCookieName = "IMEJI_STYLE";
-    private final static String langCookieName = "IMEJI_LANG";
+    public final static String styleCookieName = "IMEJI_STYLE";
+    public final static String langCookieName = "IMEJI_LANG";
 
     /**
      * The session Bean for imeji
@@ -180,7 +173,8 @@ public class SessionBean
     }
 
     /**
-     * Read the language in the Request, and set it as current local, Called when the session is new
+     * First read the {@link Locale} in the request. This is the default value.Then read the cookie. If the cookie is
+     * null, it is set to the default value, else the cookie value is used
      */
     private void initLocale()
     {
@@ -194,6 +188,7 @@ public class SessionBean
         {
             locale = new Locale("en");
         }
+        locale = new Locale(CookieUtils.readNonNull(langCookieName, locale.getLanguage()));
     }
 
     /**

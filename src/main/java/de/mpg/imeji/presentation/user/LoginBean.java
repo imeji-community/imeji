@@ -104,14 +104,12 @@ public class LoginBean
 
     public String logout()
     {
-        Locale locale = sb.getLocale();
         sb.setUser(null);
         BeanHelper.info(sb.getMessage("success_log_out"));
         FacesContext fc = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession)fc.getExternalContext().getSession(false);
         session.invalidate();
         sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        sb.setLocale(locale);
         return "pretty:home";
     }
 }

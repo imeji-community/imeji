@@ -106,8 +106,15 @@ public class CookieUtils
     public static void updateCookie(String name, String value)
     {
         Cookie c = readCookie(name);
-        c.setValue(value);
-        updateCookie(c);
+        if (c == null)
+        {
+            addCookie(name, value);
+        }
+        else
+        {
+            c.setValue(value);
+            updateCookie(c);
+        }
     }
 
     /**

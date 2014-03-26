@@ -39,16 +39,21 @@ All rights reserved. Use is subject to license terms.
 	<meta http-equiv="cache-control" content="no-cache"/>
 	<meta http-equiv="expires" content="0"/>
 	<title><h:outputText value="imeji - #{HistorySession.currentPage.internationalizedName}"/></title>
-	
-	<h:outputText value="#{SessionBean.initCss}" style="display:none"/>
-	
+		
 	<link type="text/css" rel="stylesheet" href="/imeji/jsf/javax.faces.resource/basic.css?ln=css" />
 	
-	<ui:fragment rendered="#{SessionBean.selectedCss != null}">
-		<link type="text/css" rel="stylesheet" href="#{SessionBean.selectedCss}" id="themeDefault"/>
+	<h:inputHidden value="#{SessionBean.checkCss(Configuration.defaultCss, Configuration.alternativeCss)}" />
+	
+	<ui:fragment rendered="#{SessionBean.selectedCss != 'NONE'}">
+		<ui:fragment rendered="#{SessionBean.selectedCss == 'DEFAULT'}">
+			<link type="text/css" rel="stylesheet" href="#{Configuration.defaultCss}" id="themeDefault"/>
+		</ui:fragment>
+		<ui:fragment rendered="#{SessionBean.selectedCss == 'ALTERNATIVE'}">
+			<link type="text/css" rel="stylesheet" href="#{Configuration.alternativeCss}" id="themeDefault"/>
+		</ui:fragment>
 	</ui:fragment>
 	
-	<h:outputStylesheet library="css/theme_default" name="app.css" id="themeDefault" rendered="#{SessionBean.selectedCss == null}"/>
+	<h:outputStylesheet library="css/theme_default" name="app.css" id="themeDefault" rendered="#{SessionBean.selectedCss == 'NONE'}"/>
 	
 	<link rel="shortcut icon" type="image/x-ico" href="#{Navigation.applicationUrl}resources/icon/imeji.ico"/>
 	<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>

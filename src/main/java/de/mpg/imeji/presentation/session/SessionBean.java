@@ -12,10 +12,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
@@ -28,6 +31,7 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.beans.Navigation.Page;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.CookieUtils;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -39,6 +43,11 @@ import de.mpg.imeji.presentation.util.PropertyReader;
  */
 public class SessionBean
 {
+    public enum Style
+    {
+        NONE, DEFAULT, ALTERNATIVE;
+    }
+
     private static Logger logger = Logger.getLogger(SessionBean.class);
     private User user = null;
     // Bundle
@@ -46,7 +55,7 @@ public class SessionBean
     public static final String MESSAGES_BUNDLE = "messages";
     public static final String METADATA_BUNDLE = "metadata";
     // imeji locale
-    private Locale locale;
+    private Locale locale = new Locale("en");
     private Page currentPage;
     private List<String> selected;
     private List<URI> selectedCollections;
@@ -55,9 +64,9 @@ public class SessionBean
     private Map<URI, MetadataProfile> profileCached;
     private Map<URI, CollectionImeji> collectionCached;
     private String selectedImagesContext = null;
-    private String selectedCss = null;
-    private boolean initCss = false;
-    private int countCss = 0;
+    private Style selectedCss = Style.NONE;
+    private final static String styleCookieName = "IMEJI_STYLE";
+    private final static String langCookieName = "IMEJI_LANG";
 
     /**
      * The session Bean for imeji
@@ -70,7 +79,15 @@ public class SessionBean
         profileCached = new HashMap<URI, MetadataProfile>();
         collectionCached = new HashMap<URI, CollectionImeji>();
         initLocale();
-        initCss();
+        initCssWithCookie();
+    }
+
+    /**
+     * Initialize the CSS value with the Cookie value
+     */
+    private void initCssWithCookie()
+    {
+        selectedCss = Style.valueOf(CookieUtils.readNonNull(styleCookieName, Style.NONE.name()));
     }
 
     /**
@@ -433,43 +450,33 @@ public class SessionBean
     }
 
     /**
-     * Initialize the css properties
+     * Check if the selected CSS is correct according to the configuration value. If errors are found, then change the
+     * selected CSS
      * 
-     * @throws URISyntaxException
-     * @throws IOException
+     * @param defaultCss - the value of the default css in the config
+     * @param alternativeCss - the value of the alternative css in the config
      */
-    private void initCss()
+    public void checkCss(String defaultCss, String alternativeCss)
     {
-        BeanHelper.removeBeanFromMap(ConfigurationBean.class);
-        ConfigurationBean config = (ConfigurationBean)BeanHelper.getApplicationBean(ConfigurationBean.class);
-        countCss = 0;
-        selectedCss = null;
-        if (config.getAlternativeCss() != null && !config.getAlternativeCss().equals(""))
+        if (selectedCss == Style.ALTERNATIVE && (alternativeCss == null || "".equals(alternativeCss)))
         {
-            selectedCss = config.getAlternativeCss();
-            countCss++;
+            // alternative css doesn't exist, therefore set to default
+            selectedCss = Style.DEFAULT;
         }
-        if (config.getDefaultCss() != null && !config.getDefaultCss().equals(""))
+        if (selectedCss == Style.DEFAULT && (defaultCss == null || "".equals(defaultCss)))
         {
-            selectedCss = config.getDefaultCss();
-            countCss++;
+            // default css doesn't exist, therefore set to none
+            selectedCss = Style.NONE;
         }
-        initCss = false;
+        if (selectedCss == Style.NONE && defaultCss != null && !"".equals(defaultCss))
+        {
+            // default css exists, therefore set to default
+            selectedCss = Style.DEFAULT;
+        }
     }
 
     /**
-     * Listener for the CSS configuration. Reinitialize to css to null as soon as the css config is changed, to force
-     * the the selected css to be updated.
-     * 
-     * @param event
-     */
-    public void cssConfigurationListener(ValueChangeEvent event)
-    {
-        initCss = true;
-    }
-
-    /**
-     * getter
+     * Get the the selected {@link Style}
      * 
      * @return
      * @throws URISyntaxException
@@ -477,47 +484,7 @@ public class SessionBean
      */
     public String getSelectedCss()
     {
-        return selectedCss;
-    }
-
-    /**
-     * @return the initCss
-     * @throws URISyntaxException
-     * @throws IOException
-     */
-    public boolean isInitCss() throws IOException, URISyntaxException
-    {
-        if (initCss)
-            initCss();
-        return initCss;
-    }
-
-    /**
-     * setter
-     * 
-     * @param selectedCss
-     */
-    public void setSelectedCss(String selectedCss)
-    {
-        this.selectedCss = selectedCss;
-    }
-
-    /**
-     * true if 2 CSS have been defined in the configuration
-     */
-    public boolean isEnableCssSwitcher()
-    {
-        return countCss == 2;
-    }
-
-    /**
-     * True if at least one CSS has been defined in the configuration
-     * 
-     * @return
-     */
-    public boolean isCssDefined()
-    {
-        return countCss > 0;
+        return selectedCss.name();
     }
 
     /**
@@ -525,18 +492,9 @@ public class SessionBean
      * 
      * @return
      */
-    public String toggleCss()
+    public void toggleCss()
     {
-        BeanHelper.removeBeanFromMap(ConfigurationBean.class);
-        ConfigurationBean config = (ConfigurationBean)BeanHelper.getApplicationBean(ConfigurationBean.class);
-        if (selectedCss != null && selectedCss.equals(config.getDefaultCss()))
-        {
-            selectedCss = config.getAlternativeCss();
-        }
-        else if (selectedCss != null && selectedCss.equals(config.getAlternativeCss()))
-        {
-            selectedCss = config.getDefaultCss();
-        }
-        return "";
+        selectedCss = selectedCss == Style.DEFAULT ? Style.ALTERNATIVE : Style.DEFAULT;
+        CookieUtils.updateCookie(styleCookieName, selectedCss.name());
     }
 }

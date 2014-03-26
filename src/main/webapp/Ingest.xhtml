@@ -7,9 +7,8 @@
 	xmlns:menu="http://java.sun.com/jsf/composite/components/menu"
 	xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs">
 
-	<ui:param name="headline" value="#{IngestBean.collection.metadata.title}"/>
+	<ui:param name="headline" value="#{IngestBean.collection.metadata.title}#{IngestBean.collectionSize > 0}"/>
 	<ui:param name="currentMainMenu" value="collection"/>
-	
 	<ui:define name="actionsMenu">
 		<menu:context_subNavigation contextId="#{IngestBean.collectionId}" 
 									contextUrl="#{Navigation.collectionUrl}" 
@@ -26,6 +25,7 @@
 									collectionStatus="#{IngestBean.collection.status}" 
 									contextId="#{IngestBean.collectionId}" 
 									hasContent="#{IngestBean.collectionSize > 0}" 
+									downloadEnabled="#{IngestBean.collectionSize > 0}"
 									isEditable="false" 
 									isDeletable="false" 
 									contextDownloadParam="&amp;col=#{IngestBean.collectionId}"/>

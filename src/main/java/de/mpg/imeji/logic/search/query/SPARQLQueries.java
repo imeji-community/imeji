@@ -214,26 +214,39 @@ public class SPARQLQueries
                 + "USING <http://imeji.org/item> "
                 + "WHERE {?mds <http://imeji.org/terms/metadata> ?s . NOT EXISTS{?s ?p ?o}}";
     }
-    
+
     /**
      * Count all {@link Item} of a {@link container}
+     * 
      * @param uri
      * @return
      */
     public static String countContainerSize(URI uri)
     {
-        return "SELECT count(DISTINCT ?s) WHERE {?s <http://imeji.org/terms/collection> <" + uri.toString() +"> . ?s <http://imeji.org/terms/status> ?status . FILTER (?status!=<http://imeji.org/terms/status#WITHDRAWN>)}";
+        return "SELECT count(DISTINCT ?s) WHERE {?s <http://imeji.org/terms/collection> <"
+                + uri.toString()
+                + "> . ?s <http://imeji.org/terms/status> ?status . FILTER (?status!=<http://imeji.org/terms/status#WITHDRAWN>)}";
     }
-    
+
     /**
      * Return all the {@link Item} of a {@link container}
+     * 
      * @param uri
      * @param limit
      * @return
      */
     public static String selectContainerItem(URI uri, User user, int limit)
     {
-        return "SELECT DISTINCT ?s WHERE {?s <http://imeji.org/terms/collection> <" + uri.toString() +"> . ?s <http://imeji.org/terms/status> ?status . OPTIONAL{<"+ user.getId().toString()+ "> <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> ?c} . filter(bound(?g) || ?status=<http://imeji.org/terms/status#RELEASED>) . FILTER (?status!=<http://imeji.org/terms/status#WITHDRAWN>)} LIMIT " + limit;
-
+        if (user == null)
+            return "SELECT DISTINCT ?s WHERE {?s <http://imeji.org/terms/collection> <"
+                    + uri.toString()
+                    + "> . ?s <http://imeji.org/terms/status> ?status .  filter(?status=<http://imeji.org/terms/status#RELEASED>) . FILTER (?status!=<http://imeji.org/terms/status#WITHDRAWN>)} LIMIT "
+                    + limit;
+        return "SELECT DISTINCT ?s WHERE {?s <http://imeji.org/terms/collection> <"
+                + uri.toString()
+                + "> . ?s <http://imeji.org/terms/status> ?status . OPTIONAL{<"
+                + user.getId().toString()
+                + "> <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> ?c} . filter(bound(?g) || ?status=<http://imeji.org/terms/status#RELEASED>) . FILTER (?status!=<http://imeji.org/terms/status#WITHDRAWN>)} LIMIT "
+                + limit;
     }
 }

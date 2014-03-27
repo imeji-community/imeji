@@ -38,22 +38,22 @@ public class SimpleSecurityQuery
         {
             // If searching for released or withdrawn objects, no grant filter is needed (released and withdrawn objects
             // are all public)
-            return statusFilter + " . ?s a <" + rdfType + "> ";
+            return statusFilter + " .";
         }
         else if (user != null && user.getGrants().isEmpty() && Status.PENDING.equals(status))
         {
             // special case: a user without grants wants to see private objects: not possible
-            return ".FILTER(false)";
+            return "FILTER(false) .";
         }
         //
         else if ((user == null || user.getGrants().isEmpty()))
         {
             // if user is null or has no rights, then can only see the released objects
-            return " .FILTER(?status=<" + Status.RELEASED.getUri() + ">) . ?s a <" + rdfType + ">";
+            return "FILTER(?status=<" + Status.RELEASED.getUri() + ">) .";
         }
         // else, check the grant and add the status filter...
         // return getUserGrantsAsFilter(user, rdfType) + statusFilter + " . ?s a <" + rdfType + "> ";
-        return getUserGrantsAsFilterSimple(user, rdfType) + statusFilter + " . ?s a <" + rdfType + "> ";
+        return getUserGrantsAsFilterSimple(user, rdfType) + statusFilter + " .";
     }
 
     /**
@@ -66,11 +66,11 @@ public class SimpleSecurityQuery
     {
         if (status == null)
         {
-            return " . FILTER (?status!=<" + Status.WITHDRAWN.getUri() + ">)";
+            return "FILTER (?status!=<" + Status.WITHDRAWN.getUri() + ">)";
         }
         else
         {
-            return " . FILTER (?status=<" + status.getUri() + ">)";
+            return "FILTER (?status=<" + status.getUri() + ">)";
         }
     }
 
@@ -85,10 +85,10 @@ public class SimpleSecurityQuery
     {
         if (user.isAdmin())
             return "";
-        return ". OPTIONAL{ <" + user.getId()
+        return "OPTIONAL{ <" + user.getId()
                 + "> <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> " + "?"
                 + getVariableName(rdfType)
-                + "} . filter(bound(?g) || ?status=<http://imeji.org/terms/status#RELEASED>)";
+                + "} . filter(bound(?g) || ?status=<http://imeji.org/terms/status#RELEASED>) .";
     }
 
     /**

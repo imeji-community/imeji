@@ -213,8 +213,17 @@ public class Search
      */
     private List<String> simple(SearchPair pair, SortCriterion sortCri, User user)
     {
-        String sparqlQuery = SimpleQueryFactory.getQuery(getModelName(type), getRDFType(type), pair, sortCri, user, (containerURI != null),
-                getSpecificQuery());
+        String sparqlQuery = SimpleQueryFactory.getQuery(getModelName(type), getRDFType(type), pair, sortCri, user,
+                (containerURI != null), getSpecificQuery());
+         System.out.println(sparqlQuery);
+        // sparqlQuery =
+        // "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 WHERE {  OPTIONAL{ <http://imeji.nims.go.jp/user/saquet%40mpdl.mpg.de> <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> ?c} . filter(bound(?g) || ?status=<http://imeji.org/terms/status#RELEASED>) . FILTER (?status!=<http://imeji.org/terms/status#WITHDRAWN>) . ?s <http://imeji.org/terms/collection> ?c .  ?s <http://imeji.org/terms/status> ?status  . ?s a <http://imeji.org/terms/item> . ?s <http://purl.org/dc/terms/created> ?sort0}";
+        // sparqlQuery =
+        // "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 WHERE {  OPTIONAL{ <http://imeji.nims.go.jp/user/saquet%40mpdl.mpg.de> <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> ?c} . filter(bound(?g) || ?status=<http://imeji.org/terms/status#RELEASED>) . FILTER (?status!=<http://imeji.org/terms/status#WITHDRAWN>) . ?s a <http://imeji.org/terms/item> .  ?s <http://imeji.org/terms/collection> ?c  . ?s <http://imeji.org/terms/status> ?status . ?s <http://purl.org/dc/terms/created> ?sort0}";
+        // long a = System.currentTimeMillis();
+        // ImejiSPARQL.exec(sparqlQuery, null);
+        // long b = System.currentTimeMillis();
+        // System.out.println(b - a);
         return ImejiSPARQL.exec(sparqlQuery, null);
     }
 
@@ -254,17 +263,17 @@ public class Search
             String id = ObjectHelper.getId(URI.create(containerURI));
             if (containerURI.equals(ObjectHelper.getURI(CollectionImeji.class, id).toString()))
             {
-                specificQuery = " ?s <http://imeji.org/terms/collection> <" + containerURI + "> . ";
+                specificQuery = "?s <http://imeji.org/terms/collection> <" + containerURI + ">  .";
             }
             else if (containerURI.equals(ObjectHelper.getURI(Album.class, id).toString()))
             {
                 type = SearchType.ALL;
-                specificQuery = " <" + containerURI + "> <http://imeji.org/terms/item> ?s . ";
+                specificQuery = "<" + containerURI + "> <http://imeji.org/terms/item> ?s .";
             }
         }
         if (SearchType.ITEM.equals(type) || SearchType.ALL.equals(type))
         {
-            specificQuery += " ?s <http://imeji.org/terms/collection> ?c . ";
+            specificQuery += "?s <http://imeji.org/terms/collection> ?c .";
         }
         if (SearchType.PROFILE.equals(type))
         {

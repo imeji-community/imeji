@@ -216,6 +216,7 @@ public class Search
         String sparqlQuery = SimpleQueryFactory.getQuery(getModelName(type), getRDFType(type), pair, sortCri, user,
                 (containerURI != null), getSpecificQuery());
          System.out.println(sparqlQuery);
+         //sparqlQuery ="PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 FROM <http://imeji.org/metadataProfile> FROM <http://imeji.org/collection> FROM <http://imeji.org/user> WHERE {FILTER(?s=<http://imeji.nims.go.jp/metadataProfile/k3VtMHmEYozWNxL>) . ?c <http://imeji.org/terms/mdprofile> ?s .  ?s a <http://imeji.org/terms/mdprofile> .  ?s <http://imeji.org/terms/status> ?status }";
         // sparqlQuery =
         // "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 WHERE {  OPTIONAL{ <http://imeji.nims.go.jp/user/saquet%40mpdl.mpg.de> <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> ?c} . filter(bound(?g) || ?status=<http://imeji.org/terms/status#RELEASED>) . FILTER (?status!=<http://imeji.org/terms/status#WITHDRAWN>) . ?s <http://imeji.org/terms/collection> ?c .  ?s <http://imeji.org/terms/status> ?status  . ?s a <http://imeji.org/terms/item> . ?s <http://purl.org/dc/terms/created> ?sort0}";
         // sparqlQuery =

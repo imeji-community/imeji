@@ -82,9 +82,12 @@ public class SimpleQueryFactory
      */
     private static String getModelNames(String modelName)
     {
+        String names = "";
         if (modelName != null && !modelName.equals(""))
-            return "FROM <" + modelName + "> FROM <" + Imeji.userModel + ">";
-        return "";
+            names = "FROM <" + modelName + "> FROM <" + Imeji.userModel + ">";
+        if (Imeji.profileModel.equals(modelName))
+            names += "FROM <" + Imeji.collectionModel + ">";
+        return names;
     }
 
     /**

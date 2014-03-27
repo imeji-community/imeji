@@ -213,7 +213,7 @@ public class autocompleter extends HttpServlet
 
     private String parseCCLicense(String str)
     {
-        str = "<licences>" + str + "</licences>";
+        str = "<licences>" + str.trim() + "</licences>";
         try
         {
             JSONArray json = new JSONArray();

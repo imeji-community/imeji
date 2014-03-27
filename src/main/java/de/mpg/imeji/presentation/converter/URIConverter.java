@@ -26,7 +26,6 @@ public class URIConverter implements Converter
         URI uri = URI.create(arg2.trim());
         if (!uri.isAbsolute())
             uri = URI.create("http://" + arg2);
-        System.out.println("uri:" + uri);
         return uri;
     }
 
@@ -35,6 +34,6 @@ public class URIConverter implements Converter
     {
         if (arg2 == null)
             return "";
-        return arg2.toString();
+        return arg2.toString().trim();
     }
 }

@@ -135,7 +135,7 @@ $(function() {
 		}
 	}).focus(function() {
 		// if the offset is 0, then show results on focus
-		if (offset == 0) {
+		if (offset == 0 && datasourceUrl != '') {
 			this.value = " ";
 			$(this).autocomplete("search");
 		}

@@ -74,17 +74,6 @@ public class CookieUtils
     }
 
     /**
-     * Add a new cookie
-     * 
-     * @param name
-     * @param value
-     */
-    public static void addCookie(String name, String value)
-    {
-        updateCookie(new Cookie(value, value));
-    }
-
-    /**
      * Update a cookie (the max age is updated too)
      * 
      * @param c
@@ -93,7 +82,7 @@ public class CookieUtils
     {
         if (c != null)
         {
-            setCookieMaxAge(c);
+            setCookieProperties(c);
             ((HttpServletResponse)FacesContext.getCurrentInstance().getExternalContext().getResponse()).addCookie(c);
         }
     }
@@ -103,27 +92,25 @@ public class CookieUtils
      * 
      * @param c
      */
-    public static void updateCookie(String name, String value)
+    public static void updateCookieValue(String name, String newValue)
     {
         Cookie c = readCookie(name);
         if (c == null)
         {
-            addCookie(name, value);
+            c = new Cookie(name, newValue);
         }
-        else
-        {
-            c.setValue(value);
-            updateCookie(c);
-        }
+        c.setValue(newValue);
+        updateCookie(c);
     }
 
     /**
-     * Set the max age of a cookie to 30 days
+     * Set the max age of a cookie to 30 days, set the cookie Path
      * 
      * @param c
      */
-    public static void setCookieMaxAge(Cookie c)
+    public static void setCookieProperties(Cookie c)
     {
         c.setMaxAge((int)(TimeUnit.SECONDS.convert(30, TimeUnit.DAYS)));
+        c.setPath("/");
     }
 }

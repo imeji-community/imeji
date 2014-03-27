@@ -490,6 +490,6 @@ public class SessionBean
     public void toggleCss()
     {
         selectedCss = selectedCss == Style.DEFAULT ? Style.ALTERNATIVE : Style.DEFAULT;
-        CookieUtils.updateCookie(styleCookieName, selectedCss.name());
+        CookieUtils.updateCookieValue(styleCookieName, selectedCss.name());
     }
 }

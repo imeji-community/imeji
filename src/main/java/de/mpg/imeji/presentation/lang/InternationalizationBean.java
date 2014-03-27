@@ -179,7 +179,7 @@ public class InternationalizationBean
             currentLanguage = "en";
         }
         session.setLocale(new Locale(currentLanguage));
-        CookieUtils.updateCookie(SessionBean.langCookieName, session.getLocale().getLanguage());
+        CookieUtils.updateCookieValue(SessionBean.langCookieName, session.getLocale().getLanguage());
         internationalizeLanguages();
     }
 

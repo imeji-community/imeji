@@ -415,7 +415,7 @@ public class UploadBean extends CollectionBean
     private Item findItemByFileName(String filename)
     {
         Search s = new Search(SearchType.ITEM, null);
-        List<String> sr = s.searchSimpleForQuery(SPARQLQueries.selectContainerItemByFilename(collection.getId(), filename), null);
+        List<String> sr = s.searchSimpleForQuery(SPARQLQueries.selectContainerItemByFilename(collection.getId(), FilenameUtils.getBaseName(filename)), null);
         if (sr.size() == 0)
             throw new RuntimeException("No item found with the filename " + FilenameUtils.getBaseName(filename));
         if (sr.size() > 1)
@@ -433,7 +433,7 @@ public class UploadBean extends CollectionBean
     private boolean filenameExistsInCollection(String filename)
     {
         Search s = new Search(SearchType.ITEM, null);
-        return s.searchSimpleForQuery(SPARQLQueries.selectContainerItemByFilename(collection.getId(), filename), null)
+        return s.searchSimpleForQuery(SPARQLQueries.selectContainerItemByFilename(collection.getId(), FilenameUtils.getBaseName(filename)), null)
                 .size() > 0;
     }
 

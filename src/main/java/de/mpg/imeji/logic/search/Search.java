@@ -116,7 +116,6 @@ public class Search
     public List<String> searchSimpleForQuery(String sparqlQuery, SortCriterion sortCri)
     {
         SearchResult sr = new SearchResult(ImejiSPARQL.exec(sparqlQuery, getModelName(type)), sortCri);
-        System.out.println(sparqlQuery);
         return sr.getResults();
     }
 

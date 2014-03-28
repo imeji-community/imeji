@@ -3013,6 +3013,19 @@ a:hover .imj_entryPagePreviewTiledListLinkArrow {
 	text-align: center;
 }
 
+/* for information about the storage content 
+ * the values needs less space as usual
+*/
+.imj_adminPanel.imj_storageInformation {
+	max-width: 33em;
+}
+.imj_adminPanel.imj_storageInformation .imj_admindataLabel {
+	width: 33%;
+}
+.imj_adminPanel.imj_storageInformation .imj_admindataValue {
+	width: 61%;
+}
+
 .imj_userConfig .imj_adminPanel {
 	display: inline-block;
 	float: left;

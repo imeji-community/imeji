@@ -249,4 +249,13 @@ public class SPARQLQueries
                 + "> <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> ?c} . filter(bound(?g) || ?status=<http://imeji.org/terms/status#RELEASED>) . FILTER (?status!=<http://imeji.org/terms/status#WITHDRAWN>)} LIMIT "
                 + limit;
     }
+
+    public static String selectContainerItemByFilename(URI containerURI, String filename)
+    {
+        return "SELECT DISTINCT ?s WHERE {?s <http://imeji.org/terms/filename> ?el . FILTER(regex(?el, '^"
+                + filename
+                + "\\\\..+', 'i')) .?s <http://imeji.org/terms/collection> <"
+                + containerURI.toString()
+                + "> . ?s <http://imeji.org/terms/status> ?status . FILTER (?status!=<http://imeji.org/terms/status#WITHDRAWN>)} LIMIT 2";
+    }
 }

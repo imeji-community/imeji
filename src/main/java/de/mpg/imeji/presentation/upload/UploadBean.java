@@ -29,6 +29,8 @@ import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.Search.SearchType;
+import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchOperators;
 import de.mpg.imeji.logic.search.vo.SearchPair;
@@ -102,7 +104,6 @@ public class UploadBean extends CollectionBean
     {
         if (UrlHelper.getParameterBoolean("init"))
         {
-           
             importImageToFile = false;
             uploadFileToItem = false;
             checkNameUnique = true;
@@ -413,15 +414,14 @@ public class UploadBean extends CollectionBean
      */
     private Item findItemByFileName(String filename)
     {
-        ItemController ic = new ItemController(user);
-        SearchResult sr = ic.searchItemInContainer(collection.getId(), getQueryToFindCollectionByFilename(filename),
-                null);
-        if (sr.getNumberOfRecords() == 0)
+        Search s = new Search(SearchType.ITEM, null);
+        List<String> sr = s.searchSimpleForQuery(SPARQLQueries.selectContainerItemByFilename(collection.getId(), filename), null);
+        if (sr.size() == 0)
             throw new RuntimeException("No item found with the filename " + FilenameUtils.getBaseName(filename));
-        if (sr.getNumberOfRecords() > 1)
+        if (sr.size() > 1)
             throw new RuntimeException("Filename " + FilenameUtils.getBaseName(filename) + " not unique ("
-                    + sr.getNumberOfRecords() + " found).");
-        return ic.loadItems(sr.getResults(), 1, 0).iterator().next();
+                    + sr.size() + " found).");
+        return ObjectLoader.loadItem(URI.create(sr.get(0)), user);
     }
 
     /**
@@ -432,30 +432,9 @@ public class UploadBean extends CollectionBean
      */
     private boolean filenameExistsInCollection(String filename)
     {
-        ItemController ic = new ItemController(user);
-        // Check already existing item
-        SearchResult sr = ic.searchItemInContainer(collection.getId(), getQueryToFindCollectionByFilename(filename),
-                null);
-        // Check currently uploaded item
-        for (Item item : itemList)
-            if (FilenameUtils.getBaseName(item.getFilename()).equals(FilenameUtils.getBaseName(title)))
-                sr.setNumberOfRecords(1);
-        return sr.getNumberOfRecords() > 0;
-    }
-
-    /**
-     * Make a query which to find a {@link CollectionImeji} by its filename
-     * 
-     * @param filename
-     * @return
-     */
-    private SearchQuery getQueryToFindCollectionByFilename(String filename)
-    {
-        SearchQuery sq = new SearchQuery();
-        Search.getIndex(SearchIndex.names.filename);
-        sq.addPair(new SearchPair(Search.getIndex(SearchIndex.names.filename), SearchOperators.REGEX, "^"
-                + FilenameUtils.getBaseName(filename) + "\\\\..+"));
-        return sq;
+        Search s = new Search(SearchType.ITEM, null);
+        return s.searchSimpleForQuery(SPARQLQueries.selectContainerItemByFilename(collection.getId(), filename), null)
+                .size() > 0;
     }
 
     /**

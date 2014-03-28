@@ -96,17 +96,14 @@ public class CollectionListItem
             {
                 versionDate = collection.getVersionDate().getTime().toString();
             }
-            // Get first thumbnail of the collection
             if (collection.getStatus().equals(Status.RELEASED))
             {
+                // Get first thumbnail of the collection
                 ItemController ic = new ItemController(user);
-                ic.loadContainerItems(collection, user, 1, 0);
-                List<String> uri = new ArrayList<String>();
-                uri.add(collection.getImages().toArray()[0].toString());
-                if (uri != null && uri.size() > 0)
+                URI uri = ic.findContainerItems(collection, user, 1).getImages().iterator().next();
+                if (uri != null)
                 {
-                    ic = new ItemController(user);
-                    this.thumbnail = ImejiFactory.imageListToThumbList(ic.loadItems(uri, 1, 0)).get(0);
+                    this.thumbnail = new ThumbnailBean(ic.retrieve(uri));
                 }
             }
             // initializations
@@ -142,7 +139,7 @@ public class CollectionListItem
     private void initSize(User user)
     {
         ItemController ic = new ItemController(user);
-        size= ic.countContainerSize(uri);
+        size = ic.countContainerSize(uri);
     }
 
     /**
@@ -233,11 +230,10 @@ public class CollectionListItem
      */
     public void discardCommentListener(ValueChangeEvent event)
     {
-    	
-    	if (event.getNewValue() != null && event.getNewValue().toString().trim().length() > 0) 
-    	{
-    		setDiscardComment(event.getNewValue().toString().trim());
-    	}
+        if (event.getNewValue() != null && event.getNewValue().toString().trim().length() > 0)
+        {
+            setDiscardComment(event.getNewValue().toString().trim());
+        }
     }
 
     public String getTitle()

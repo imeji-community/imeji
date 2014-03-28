@@ -1252,6 +1252,7 @@ h4.imj_sectionHeadline {
 }
 
 .imj_entryPagePreviewTiledList+.imj_metadataList {
+	clear: both;
 	padding: 1% 4%;
 }
 
@@ -2902,9 +2903,9 @@ a.imj_submitButton,
 .imj_entryPagePreviewTiledListLink {
 	float: right;
 	width: 8em;
-
-	/* 	vertical-align: top;
-    margin-left: 4em; */
+}
+.imj_entryPagePreviewTiledListLink:after {
+	clear:both;
 }
 
 .imj_entryPagePreviewTiledListLinkArrow {

@@ -25,7 +25,8 @@ jQuery(document).ready(function() {
  */
 /* TODO: DELETE FUNCTION HIGHLIGHT + DEPENDENCIES and create/use css definitions */
 function highlight(id) {
-	jQuery('.id_' + id).css('background-color', '#393939 !important');
+	/*jQuery('.id_' + id).css('background-color', '#393939 !important');*/
+	jQuery('.id_' + id).css('background-color', getHighlightedColor(id) + ' !important');
 	highlight_childs(id);
 }
 /**
@@ -36,12 +37,26 @@ function highlight(id) {
  */
 function highlight_childs(id) {
 	var childs = jQuery('.parent_' + id);
-	childs.css('background-color', '#494949');
+	
 	childs.each(function() {
 		// find all non space character after the string "id_"
 		var childId = parseId(jQuery(this).attr('class'));
+		childs.css('background-color', getHighlightedColor(childId) + ' !important');
 		highlight_childs(childId);
 	});
+}
+/**
+ * Read the background-color of the div and calculate the rgba value with 0.5 opacity
+ * @param id
+ * @returns {String}
+ */
+function getHighlightedColor(id){
+	var color = jQuery('.id_' + id).css('background-color');
+	var rgbaCol = 'rgba(' + parseInt(color.slice(-6,-4),16)
+    + ',' + parseInt(color.slice(-4,-2),16)
+    + ',' + parseInt(color.slice(-2),16)
+    +',0.7)';
+	return rgbaCol;
 }
 /**
  * Reset highlighted element to their original value. Should be triggered on

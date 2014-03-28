@@ -15,7 +15,6 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
@@ -25,6 +24,11 @@ import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
+import de.mpg.imeji.logic.search.util.SearchIndexInitializer;
+import de.mpg.imeji.logic.search.vo.SearchIndex;
+import de.mpg.imeji.logic.search.vo.SearchOperators;
+import de.mpg.imeji.logic.search.vo.SearchPair;
+import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.security.Authorization;
 import de.mpg.imeji.logic.security.Operations.OperationsType;
 import de.mpg.imeji.logic.security.Security;
@@ -60,7 +64,6 @@ import de.mpg.imeji.presentation.util.UrlHelper;
  */
 public class ImageBean
 {
-    private static Logger logger = Logger.getLogger(ImageBean.class);
     private String tab;
     private SessionBean sessionBean;
     private Item item;
@@ -75,6 +78,7 @@ public class ImageBean
     private MetadataLabels labels;
     private SingleImageBrowse browse = null;
     private MetadataSetBean mds;
+    private List<Album> relatedAlbums;
 
     /**
      * Construct a default {@link ImageBean}
@@ -108,7 +112,7 @@ public class ImageBean
             }
             else if ("util".equals(tab))
             {
-                // TODO
+                initUtilTab();
             }
             else
             {
@@ -122,6 +126,21 @@ public class ImageBean
             edit = null;
         }
         return "";
+    }
+
+    /**
+     * Initialize the util tab
+     * 
+     * @throws Exception
+     */
+    private void initUtilTab() throws Exception
+    {
+        relatedAlbums = new ArrayList<Album>();
+        AlbumController ac = new AlbumController(sessionBean.getUser());
+        SearchQuery q = new SearchQuery();
+        q.addPair(new SearchPair(Search.getIndex(SearchIndex.names.item), SearchOperators.EQUALS, getImage().getId()
+                .toString()));
+        relatedAlbums = (List<Album>)ac.loadAlbumsLazy(ac.search(q, null, -1, 0).getResults(), -1, 0);
     }
 
     /**
@@ -410,6 +429,7 @@ public class ImageBean
 
     /**
      * True if the current item page is part of the current album
+     * 
      * @return
      */
     public boolean isActiveAlbum()
@@ -541,18 +561,7 @@ public class ImageBean
      */
     public List<Album> getRelatedAlbums() throws Exception
     {
-        List<Album> albums = new ArrayList<Album>();
-        AlbumController ac = new AlbumController();
-        Search s = new Search(SearchType.ALL, null);
-        if (item != null)
-        {
-            List<String> res = s.searchSimpleForQuery(SPARQLQueries.selectAlbumIdOfFile(item.getId().toString()), null);
-            for (int i = 0; i < res.size(); i++)
-            {
-                albums.add(ac.retrieveLazy(new URI(res.get(i)), Imeji.adminUser));
-            }
-        }
-        return albums;
+        return relatedAlbums;
     }
 
     /**

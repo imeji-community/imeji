@@ -18,6 +18,7 @@ import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.util.DateFormatter;
 import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -53,7 +54,7 @@ public class SimpleQueryFactory
     {
         PATTERN_SELECT = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 XXX_MODEL_NAMES_XXX WHERE {XXX_SEARCH_ELEMENT_XXX XXX_SECURITY_FILTER_XXX XXX_SPECIFIC_QUERY_XXX XXX_SEARCH_TYPE_ELEMENT_XXX  ?s <http://imeji.org/terms/status> ?status XXX_SORT_ELEMENT_XXX}";
         return PATTERN_SELECT
-                .replace("XXX_MODEL_NAMES_XXX", getModelNames(modelName))
+                .replace("XXX_MODEL_NAMES_XXX", getModelNames(modelName, pair))
                 .replace("XXX_SECURITY_FILTER_XXX", SimpleSecurityQuery.queryFactory(user, rdfType, getFilterStatus(pair)))
                 .replace("XXX_SEARCH_ELEMENT_XXX", getSearchElement(pair, rdfType))
                 .replace("XXX_SEARCH_TYPE_ELEMENT_XXX", getRdfType(rdfType))
@@ -80,13 +81,21 @@ public class SimpleQueryFactory
      * @param modelName
      * @return
      */
-    private static String getModelNames(String modelName)
+    private static String getModelNames(String modelName, SearchPair pair)
     {
         String names = "";
         if (modelName != null && !modelName.equals(""))
+        {
             names = "FROM <" + modelName + "> FROM <" + Imeji.userModel + ">";
-        if (Imeji.profileModel.equals(modelName))
-            names += "FROM <" + Imeji.collectionModel + ">";
+            if (Imeji.profileModel.equals(modelName))
+            {
+                names += " FROM <" + Imeji.collectionModel + ">";
+            }
+            if (pair != null && SearchIndex.names.item.name().equals(pair.getIndex().getName()) && !Imeji.imageModel.equals(modelName))
+            {
+                names += " FROM <" + Imeji.imageModel + ">";
+            }
+        }
         return names;
     }
 
@@ -121,8 +130,17 @@ public class SimpleQueryFactory
         }
         else if (SearchIndex.names.item.name().equals(pair.getIndex().getName()))
         {
-            // Search for and item by id (uri)
-            return "FILTER(" + getSimpleFilter(pair, "s") + ") .";
+            if (J2JHelper.getResourceNamespace(new CollectionImeji()).equals(rdfType)
+                    || J2JHelper.getResourceNamespace(new Album()).equals(rdfType))
+            {
+                searchQuery = "?s <" + pair.getIndex().getNamespace() + "> ?el";
+            }
+            else
+            {
+                // Search for and item by id (uri)
+                pair.setValue(normalizeURI(Item.class, pair.getValue()));
+                return "FILTER(" + getSimpleFilter(pair, "s") + ") .";
+            }
         }
         else if (SearchIndex.names.status.name().equals(pair.getIndex().getName()))
         {
@@ -138,9 +156,7 @@ public class SimpleQueryFactory
         else if (SearchIndex.names.user.name().equals(pair.getIndex().getName()))
         {
             // Search for all objects of rdfType for which the user (pair.getValue) has a Grant
-            return "<" + pair.getValue()
-                    + "> <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> ?"
-                    + SimpleSecurityQuery.getVariableName(rdfType) + " .";
+            return "<" + pair.getValue() + "> <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> ?" + SimpleSecurityQuery.getVariableName(rdfType) + " .";
         }
         else if (SearchIndex.names.prof.name().equals(pair.getIndex().getName()))
         {
@@ -148,8 +164,7 @@ public class SimpleQueryFactory
             if (J2JHelper.getResourceNamespace(new MetadataProfile()).equals(rdfType))
             {
                 pair.setValue(normalizeURI(MetadataProfile.class, pair.getValue()));
-                return "FILTER(" + getSimpleFilter(pair, "s") + ") . ?c <"
-                        + Search.getIndex(SearchIndex.names.prof).getNamespace() + "> ?s .";
+                return "FILTER(" + getSimpleFilter(pair, "s") + ") . ?c <" + Search.getIndex(SearchIndex.names.prof).getNamespace() + "> ?s .";
             }
             else if (J2JHelper.getResourceNamespace(new CollectionImeji()).equals(rdfType))
             {
@@ -248,7 +263,7 @@ public class SimpleQueryFactory
         {
             return ObjectHelper.getURI(c, ObjectHelper.getId(URI.create(uri))).toString();
         }
-        return uri;
+        return ObjectHelper.getURI(c, uri).toString();
     }
 
     /**
@@ -485,4 +500,5 @@ public class SimpleQueryFactory
     {
         return s.replace("'", "\\'");
     }
+    
 }

@@ -302,7 +302,7 @@
 								<ui:repeat var="albums" value="#{imageBean.relatedAlbums}">
 									<ul class="imj_optionList">
 										<li>
-											<h:outputLink value="#{albums.id}">
+											<h:outputLink value="#{Navigation.albumUrl}#{albums.idString}">
 												<h:outputText value="#{albums.metadata.title}"/>
 											</h:outputLink>
 										</li>

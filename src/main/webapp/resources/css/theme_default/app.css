@@ -863,12 +863,12 @@ a:hover .imj_buttonSortAscending_16 {
 
 .imj_overlayMenu .imj_menuBody {
 	display: none;
-}
-.imj_overlayMenu:hover .imj_menuBody {
 	position: absolute;
-	display: block;
 	padding: 0.272727em 1em;
 	background-color: #444444;
+}
+.imj_overlayMenu:hover .imj_menuBody {
+	display: block;
 }
 
 .imj_overlayMenu .imj_menuBody select+.imj_buttonOrderByAsc_16 {
@@ -2050,6 +2050,9 @@ a.imj_submitButton,
 	overflow-x: hidden;
 	text-overflow: ellipsis;
 	display:inline-block;
+}
+.imj_tileItem label.imj_optionLabel {
+	white-space: nowrap;
 }
 
 .imj_tileItem .imj_optionCheckbox+label.imj_optionLabel {

@@ -124,10 +124,10 @@ public class ZIPExport extends Export
     public void exportAllImages(SearchResult sr, OutputStream out) throws URISyntaxException, Exception
     {
         List<String> source = sr.getResults();
+        ZipOutputStream zip = new ZipOutputStream(out);
         try
         {
             // Create the ZIP file
-            ZipOutputStream zip = new ZipOutputStream(out);
             for (int i = 0; i < source.size(); i++)
             {
                 SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
@@ -153,12 +153,15 @@ public class ZIPExport extends Export
                     }
                 }
             }
-            // Complete the ZIP file
-            zip.close();
         }
         catch (IOException e)
         {
             e.printStackTrace();
+        }
+        finally
+        {
+            // Complete the ZIP file
+            zip.close();
         }
     }
 }

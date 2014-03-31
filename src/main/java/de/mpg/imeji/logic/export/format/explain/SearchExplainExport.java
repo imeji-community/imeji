@@ -53,13 +53,19 @@ public class SearchExplainExport extends ExplainExport
     public void export(OutputStream out, SearchResult sr)
     {
         PrintWriter writer = new PrintWriter(out);
-        writer.append(getRDFTagOpen());
-        for (SearchIndex index : Search.indexes.values())
+        try
         {
-            writer.append(getIndexTag(index.getName(), index.getNamespace()));
+            writer.append(getRDFTagOpen());
+            for (SearchIndex index : Search.indexes.values())
+            {
+                writer.append(getIndexTag(index.getName(), index.getNamespace()));
+            }
+            writer.append(getRDFTagClose());
         }
-        writer.append(getRDFTagClose());
-        writer.close();
+        finally
+        {
+            writer.close();
+        }
     }
 
     /*

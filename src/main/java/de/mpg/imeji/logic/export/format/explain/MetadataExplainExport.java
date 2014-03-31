@@ -57,21 +57,27 @@ public class MetadataExplainExport extends ExplainExport
     public void export(OutputStream out, SearchResult sr)
     {
         PrintWriter writer = new PrintWriter(out);
-        writer.append(getRDFTagOpen());
-        for (String colURI : sr.getResults())
+        try
         {
-            CollectionImeji col = ObjectCachedLoader.loadCollection(URI.create(colURI));
-            for (Statement st : ObjectCachedLoader.loadProfile(col.getProfile()).getStatements())
+            writer.append(getRDFTagOpen());
+            for (String colURI : sr.getResults())
             {
-                for (SearchIndex index : SearchIndex.getAllIndexForStatement(st))
+                CollectionImeji col = ObjectCachedLoader.loadCollection(URI.create(colURI));
+                for (Statement st : ObjectCachedLoader.loadProfile(col.getProfile()).getStatements())
                 {
-                    writer.append(getIndexTag(URLQueryTransformer.transformStatementToIndex(st.getId(), index),
-                            index.getNamespace()));
+                    for (SearchIndex index : SearchIndex.getAllIndexForStatement(st))
+                    {
+                        writer.append(getIndexTag(URLQueryTransformer.transformStatementToIndex(st.getId(), index),
+                                index.getNamespace()));
+                    }
                 }
             }
+            writer.append(getRDFTagClose());
         }
-        writer.append(getRDFTagClose());
-        writer.close();
+        finally
+        {
+            writer.close();
+        }
     }
 
     /*

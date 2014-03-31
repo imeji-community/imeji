@@ -2222,6 +2222,10 @@ a.imj_submitButton,
 	margin-bottom: 1.454545em;
 }
 
+.imj_imageInfoLayer .imj_metadataValue {
+	width: 72.33%;
+}
+
 .imj_imageInfoLayer .imj_infoNavigation a:hover .imj_iconEyeOpen_16 {
 	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjEyeOpen_16.png");
 }

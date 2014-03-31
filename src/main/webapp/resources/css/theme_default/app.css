@@ -671,7 +671,7 @@ a:hover .imj_buttonSortAscending_16 {
 }
 
 .imj_buttonBrowseBackward_16:hover {
-	background-image: url("resources/imj_iconset/F0F0F0/imjTrianglePrevious_16.png");
+	background-image: url("/imeji/jsf/javax.faces.resources/imj_iconset/F0F0F0/imjTrianglePrevious_16.png");
 	background-color: transparent;
 }
 
@@ -1256,6 +1256,10 @@ h4.imj_sectionHeadline {
 	padding: 1% 4%;
 }
 
+.imj_mediaEntryDetailPage .highlight_area.imj_highlightDependencies {
+	background-color: rgba(255,255,255,0.05);
+}
+
 /* * mediaDisplayContainer + mediaEditPanel 
 	MetaDataList + Submit Panel + Buttons
 	(image_details.xhtml)
@@ -1488,6 +1492,10 @@ h4.imj_sectionHeadline {
 	display: inline;
 }
 
+.imj_metadataProfileList.imj_edit .highlight_area.imj_highlightDependencies,
+.imj_metadataProfileList.imj_edit .highlight_area .imj_highlightDependencies {
+	background-color: rgba(255,255,255,0.05);
+}
 
 /*
 	highlight_area usage:
@@ -2224,6 +2232,10 @@ a.imj_submitButton,
 
 .imj_imageInfoLayer .imj_metadataValue {
 	width: 72.33%;
+}
+
+.imj_imageInfoLayer .highlight_area.imj_highlightDependencies {
+	background-color: rgba(255,255,255,0.05);
 }
 
 .imj_imageInfoLayer .imj_infoNavigation a:hover .imj_iconEyeOpen_16 {

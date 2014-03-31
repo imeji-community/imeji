@@ -1,10 +1,17 @@
 /**
  * JQuery event for Highlight methods
  */
+
 function highlighter() {
 	jQuery(function() {
 		jQuery(".highlight_area").mouseover(function() {
-			highlight(parseId(jQuery(this).attr('class')));
+			var itemId = parseId(jQuery(this).attr('class'));
+			var prntId = parseId(jQuery(this).attr('class'), 'parent_');
+			highlight(itemId);	// highlight the current element
+			highlight(itemId, 'parent_'); // highlight the child elements of the current item, if it's given
+			if (prntId) { //check if the current item is a child of another
+				highlight(prntId, 'id_'); // hightlight the next parent item, if the current item is a child
+			}
 		}).mouseout(function() {
 			reset_highlight();
 		});
@@ -22,61 +29,41 @@ jQuery(document).ready(function() {
  * is then recognized by the css class "id_ +id"
  * 
  * @param id
+ * [@param alter]
  */
-/* TODO: DELETE FUNCTION HIGHLIGHT + DEPENDENCIES and create/use css definitions */
-function highlight(id) {
-	/*jQuery('.id_' + id).css('background-color', '#393939 !important');*/
-	jQuery('.id_' + id).css('background-color', getHighlightedColor(id) + ' !important');
-	highlight_childs(id);
-}
-/**
- * Highlight the child of an element defined by the id passed in the parameters.
- * the children are recognized when they defined the css class 'parent_ + id'
- * 
- * @param id
- */
-function highlight_childs(id) {
-	var childs = jQuery('.parent_' + id);
-	
-	childs.each(function() {
-		// find all non space character after the string "id_"
-		var childId = parseId(jQuery(this).attr('class'));
-		childs.css('background-color', getHighlightedColor(childId) + ' !important');
-		highlight_childs(childId);
-	});
-}
-/**
- * Read the background-color of the div and calculate the rgba value with 0.5 opacity
- * @param id
- * @returns {String}
- */
-function getHighlightedColor(id){
-	var color = jQuery('.id_' + id).css('background-color');
-	var rgbaCol = 'rgba(' + parseInt(color.slice(-6,-4),16)
-    + ',' + parseInt(color.slice(-4,-2),16)
-    + ',' + parseInt(color.slice(-2),16)
-    +',0.7)';
-	return rgbaCol;
+function highlight(id, alter) {
+	var items;
+	items = (alter) ? jQuery('.'+alter+id) : jQuery('.id_' + id);
+	items.addClass("imj_highlightDependencies");
 }
 /**
  * Reset highlighted element to their original value. Should be triggered on
  * mouse out
+ * DELETE FUNCTION HIGHLIGHT + DEPENDENCIES and create/use css definitions
  */
 function reset_highlight() {
-	jQuery('.highlight_area').css('background-color', '');
+	$('.imj_highlightDependencies').removeClass("imj_highlightDependencies");
 }
 /**
  * Parse the id define in the css class by id_class
  * 
  * @param classname
+ * [@param classRef]
  * @returns
  */
-function parseId(classname) {
-	var pattern = new RegExp("id_" + "\\S*");
-	if (classname.match(pattern) != null)
-		return classname.match(pattern)[0].substring(3);
-	else
-		return null;
+function parseId(classname, classRef) {
+	var ptn;
+	if (classRef) {
+		ptn = new RegExp(classRef+'(\\S*)');
+	} else {
+		ptn = /id_(\S*)/;
+	}
+	ptn.exec(classname);
+	if (RegExp.$1 != "") {
+		return RegExp.$1;
+	} else {
+		 return false;
+	}
 }
 
 /*******************************************************************************
@@ -121,8 +108,7 @@ function dragAndDrop() {
 					activeClass : "dropChildActive",
 					drop : function(event, ui) {
 						setOpacity();
-						var id = $(this).attr('id').replace("metadata",
-								"dropChildButton");
+						var id = $(this).attr('id').replace("metadata", "dropChildButton");
 						document.getElementById(dragged).click();
 						document.getElementById(id).click();
 					}
@@ -227,6 +213,7 @@ function hide_childs(id) {
  * @param button
  * @param message
  */
+//seems to be unused - March 31th, 2014
 function submitPanel(panelId, message) {
 	var panel = document.getElementById(panelId);
 	if (panel != null) {

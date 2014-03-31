@@ -74,22 +74,31 @@ public class StorageUtils
      */
     public static byte[] toBytes(InputStream stream)
     {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
         int b;
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
         try
         {
             while ((b = stream.read()) != -1)
             {
                 bos.write(b);
             }
-            byte[] ba = bos.toByteArray();
-            bos.flush();
-            bos.close();
-            return ba;
+            return bos.toByteArray();
         }
         catch (IOException e)
         {
             throw new RuntimeException("Error transforming inputstream to bytearryoutputstream", e);
+        }
+        finally
+        {
+            try
+            {
+                bos.flush();
+                bos.close();
+            }
+            catch (IOException e)
+            {
+                logger.error(e);
+            }
         }
     }
 

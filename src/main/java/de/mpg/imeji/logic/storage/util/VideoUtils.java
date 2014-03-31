@@ -122,8 +122,14 @@ public class VideoUtils
     {
         File tempFile = File.createTempFile(new String(bytes), "." + fileExtention);
         FileOutputStream fos = new FileOutputStream(tempFile);
-        fos.write(bytes);
-        fos.close();
+        try
+        {
+            fos.write(bytes);
+        }
+        finally
+        {
+            fos.close();
+        }
         switch (VideoUtils.getSnapshotCreationMethod())
         {
             case 0:
@@ -220,10 +226,16 @@ public class VideoUtils
             if (m >= lb && m <= ub)
             {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                baos.flush();
-                ImageUtilities.write(mbfImage, fileExtention, baos);
-                baos.close();
-                return baos.toByteArray();
+                try
+                {
+                    ImageUtilities.write(mbfImage, fileExtention, baos);
+                    return baos.toByteArray();
+                }
+                finally
+                {
+                    baos.flush();
+                    baos.close();
+                }
             }
         }
         return null;
@@ -249,10 +261,16 @@ public class VideoUtils
             if (queryKeypoints.size() > (int)threshold[0])
             {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                baos.flush();
-                ImageUtilities.write(mbfImage, fileExtention, baos);
-                baos.close();
-                return baos.toByteArray();
+                try
+                {
+                    ImageUtilities.write(mbfImage, fileExtention, baos);
+                    return baos.toByteArray();
+                }
+                finally
+                {
+                    baos.flush();
+                    baos.close();
+                }
             }
         }
         return null;

@@ -132,10 +132,6 @@ public class JpegUtils
                         convertInvertedColors(raster);
                     image = convertCmykToRgb(raster, profile);
                 }
-                finally
-                {
-                    stream.close();
-                }
                 return image;
             }
         }

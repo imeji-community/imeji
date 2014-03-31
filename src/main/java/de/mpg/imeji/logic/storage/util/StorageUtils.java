@@ -119,16 +119,27 @@ public class StorageUtils
             {
                 out.write(buffer, 0, numRead);
             }
-            in.close();
-            out.flush();
-            if (close)
-            {
-                out.close();
-            }
         }
         catch (Exception e)
         {
             throw new RuntimeException("Error writing inputstream in outputstream: ", e);
+        }
+        finally
+        {
+            try
+            {
+                in.close();
+                out.flush();
+                if (close)
+                {
+                    out.close();
+                }
+            }
+            catch (IOException e)
+            {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
     }
 

@@ -32,10 +32,14 @@
 			</h:outputLink>
 			<h:form id="itemForm">
 				<h:outputText value=":" styleClass="imj_invisible"/>
-				<h:selectBooleanCheckbox styleClass="imj_mediaEditPanelItem imj_selectMedia" id="pictureCheckbox" value="#{imageBean.selected}" valueChangeListener="#{imageBean.selectedChanged}" rendered="#{SessionBean.user != null}">
-					<f:ajax execute="@this" render=":selectionInfoPanel :paginatorTop"/>
-				</h:selectBooleanCheckbox>
-				<h:outputText value="#{lbl.selected}" rendered="#{SessionBean.user != null}"/>
+				
+				<span class="imj_optionSet">
+					<h:selectBooleanCheckbox styleClass="imj_mediaEditPanelItem imj_selectMedia imj_optionCheckbox" id="pictureCheckbox" value="#{imageBean.selected}" valueChangeListener="#{imageBean.selectedChanged}" rendered="#{SessionBean.user != null}">
+						<f:ajax execute="@this" render=":selectionInfoPanel :paginatorTop"/>
+					</h:selectBooleanCheckbox>
+					<h:outputLabel value="#{lbl.selected}" for="pictureCheckbox" styleClass="imj_optionLabel" rendered="#{SessionBean.user != null}"/>
+				</span>
+				
 				<h:commandLink styleClass="imj_mediaEditPanelItem imj_removeMedia" id="lnkPicRemove" action="#{imageBean.remove}" rendered="#{imageBean.deletable}">
 					<h:outputText value="#{lbl.remove_from_col}"/>
 				</h:commandLink>
@@ -45,6 +49,7 @@
 				<h:commandLink styleClass="imj_mediaEditPanelItem imj_addMedia" id="lnkPicFullResolution2" action="#{imageBean.addToActiveAlbum}" rendered="#{!imageBean.isInActiveAlbum and SessionBean.activeAlbum != null}">
 					<h:outputText value="#{lbl.add_to_active_album}"/>
 				</h:commandLink>
+				
 				<h:panelGroup rendered="#{imageBean.isInActiveAlbum and SessionBean.activeAlbum != null and !imageBean.activeAlbum}">
 					<h:outputText styleClass="imj_mediaEditPanelItem" value="(Image in"/>
 					<h:outputText value=":" styleClass="imj_invisible"/>

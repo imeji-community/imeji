@@ -8,6 +8,7 @@ var result;
 var servlet;
 // After how many character the suggest is started
 var offset = 2;
+var id;
 /*
  * Update remote calling source url Called when input field focus:
  * onfocus="getDatasourceUrl('#{statement.vocabulary}')"
@@ -42,6 +43,7 @@ function setInputValue(inputId, value) {
 	}
 }
 $(function() {
+
 	// This add auto-complete to all input fields on page,
 	$(":input[type=text], textarea")
 	// don't navigate away from the field on tab when selecting an item
@@ -51,7 +53,7 @@ $(function() {
 				if (datasourceUrl != null && datasourceUrl != ''
 						&& event.keyCode === $.ui.keyCode.TAB
 						&& $(this).data("autocomplete").menu.active) {
-					event.preventDefault();
+					event.getPreventDefault();
 				}
 			})
 
@@ -93,7 +95,6 @@ $(function() {
 			// custom minLength, currently start query after
 			// entering x
 			// characters,
-
 			var term = extractLast(this.value);
 			if (term.length < offset) {
 				return false;
@@ -102,6 +103,7 @@ $(function() {
 		focus : function() {
 			// prevent value inserted on focus
 			return false;
+			
 		},
 		/**
 		 * Action triggered when a value is selected in the autocomplete. Fill
@@ -135,9 +137,12 @@ $(function() {
 		}
 	}).focus(function() {
 		// if the offset is 0, then show results on focus
-		if (offset == 0 && datasourceUrl != '') {
+		if (offset == 0 && datasourceUrl != null && datasourceUrl != '') {
 			this.value = " ";
 			$(this).autocomplete("search");
+			// force an error (event is null) to avoid more calls on focus
+			event.getPreventDefault();
 		}
+
 	});
 });

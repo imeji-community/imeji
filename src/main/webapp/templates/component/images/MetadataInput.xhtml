@@ -35,7 +35,7 @@
 			<div class="imj_metadataValueEntryLabel">
 				<h:outputLabel value="#{lbl.url}" rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}"/>
 			</div>
-			<h:inputText id="inputURI" styleClass="imj_metadataEditLink" value="#{metadata.uri}"  rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}" onfocus="this.select();" valueChangeListener="#{metadata.predefinedValueListener}">
+			<h:inputText id="inputURI" styleClass="imj_metadataEditLink" value="#{metadata.uri}" rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}" onfocus="this.select();getDatasourceUrl('#{statement.vocabulary}','#{Navigation.autocompleteUrl}');" valueChangeListener="#{metadata.predefinedValueListener}">
 				<f:converter converterId="URIConverter" />
 			</h:inputText>
 			<h:selectOneMenu styleClass="imj_metadataEditLink" value="#{metadata.uri}" rendered="#{SuggestBean.suggests[statement.id].hasRestrictedValues}" valueChangeListener="#{metadata.predefinedValueListener}">
@@ -83,7 +83,7 @@
 			<div class="imj_metadataValueEntryLabel">
 				<h:outputLabel value="#{lbl.url}"/>
 			</div>
-			<h:inputText id="inputLicenseId" styleClass="imj_metadataEditLicence" value="#{metadata.externalUri}" rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}" immediate="true" onfocus="this.select(); getDatasourceUrl('#{statement.vocabulary}', '#{Navigation.autocompleteUrl}')">
+			<h:inputText id="inputLicenseId" styleClass="imj_metadataEditLicence" value="#{metadata.externalUri}" rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}" immediate="true" onfocus="this.select();getDatasourceUrlWithFixedDelay('#{statement.vocabulary}', '#{Navigation.autocompleteUrl}', 0)">
 				<f:converter converterId="URIConverter"/>
 			</h:inputText>
 			<h:selectOneMenu styleClass="imj_metadataEditLicence" immediate="true" value="#{metadata.uri}" rendered="#{SuggestBean.suggests[statement.id].hasRestrictedValues}" valueChangeListener="#{metadata.predefinedValueListener}">

@@ -27,11 +27,11 @@
 					<h:panelGroup layout="block" id="paginatorTop" styleClass="imj_paginator">
 						<h:panelGroup styleClass="imj_simplePageBrowser">
 							<h:outputLink value="#{imageBean.browse.previous}&amp;tab=#{imageBean.tab}" styleClass="imj_backwardButton" disabled="#{imageBean.browse.previous == null}">
-								<h:outputText value="#{lbl.paginator_previous} #{lbl.image} #{imageBean.initLabels}"/>
+								<h:outputText value="#{lbl.paginator_previous} #{imageBean.initLabels}"/>
 							</h:outputLink>
 							
 							<h:outputLink value="#{imageBean.browse.next}&amp;tab=#{imageBean.tab}" styleClass="imj_forwardButton" disabled="#{imageBean.browse.next == null}">
-								<h:outputText value="#{lbl.paginator_next} #{lbl.image}"/>
+								<h:outputText value="#{lbl.paginator_next}"/>
 							</h:outputLink>
 						</h:panelGroup>
 					</h:panelGroup>

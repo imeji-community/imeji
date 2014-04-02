@@ -17,6 +17,7 @@ import com.hp.hpl.jena.Jena;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
+import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.query.SimpleQueryFactory;
 import de.mpg.imeji.logic.search.util.CollectionUtils;
 import de.mpg.imeji.logic.search.util.SearchIndexInitializer;
@@ -255,7 +256,8 @@ public class Search
             String id = ObjectHelper.getId(URI.create(containerURI));
             if (containerURI.equals(ObjectHelper.getURI(CollectionImeji.class, id).toString()))
             {
-                specificQuery = "?s <http://imeji.org/terms/collection> <" + containerURI + ">  .";
+                //specificQuery = "?s <http://imeji.org/terms/collection> <" + containerURI + ">  .";
+                specificQuery = "FILTER (?c=<"+ containerURI+">) .";
             }
             else if (containerURI.equals(ObjectHelper.getURI(Album.class, id).toString()))
             {

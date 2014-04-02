@@ -18,7 +18,7 @@
 			}
 			function write_metadata_type_options(select) {
 				write_options(select, '#{metadataBean.mdTypesMenuAsString}');
-			}
+			}			
 		</script>
 	</ui:define>
 	
@@ -65,7 +65,7 @@
 							
 							<!-- START ajaxArea -->
 							<h:panelGroup layout="block" id="ajaxArea">
-								<script type="text/javascript">dragAndDrop();highlighter();</script>
+								<script type="text/javascript">$(function(){dragAndDrop();highlighter();});</script>
 								
 								
 								<h:panelGroup layout="block" id="dropMetadata" styleClass="dropMetadata imj_dropArea">

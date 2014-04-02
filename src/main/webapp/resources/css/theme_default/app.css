@@ -475,7 +475,8 @@ iframe#twitter-widget-0 div.root div.stream {
 }
 .imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="submit"] {
 	color: #6CAE2F;
-	padding: 0.181818em 0 0 0.272727em;
+	padding: 0;
+	margin-left: 0.272727em;
 	border: none 0;
 }
 .imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="submit"]:hover {

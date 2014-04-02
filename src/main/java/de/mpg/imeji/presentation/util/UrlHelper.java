@@ -65,9 +65,7 @@ public class UrlHelper
         }
         catch (Exception e)
         {
-            BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getMessage("error")
-                    + " (Non valid URL): " + e);
+            return false;
         }
-        return false;
     }
 }

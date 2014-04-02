@@ -1,50 +1,4 @@
 /**
- * JQuery event for Highlight methods
- */
-
-function highlighter() {
-	jQuery(function() {
-		jQuery(".highlight_area").mouseover(function() {
-			var itemId = parseId(jQuery(this).attr('class'));
-			var prntId = parseId(jQuery(this).attr('class'), 'parent_');
-			highlight(itemId);	// highlight the current element
-			highlight(itemId, 'parent_'); // highlight the child elements of the current item, if it's given
-			if (prntId) { //check if the current item is a child of another
-				highlight(prntId, 'id_'); // hightlight the next parent item, if the current item is a child
-			}
-		}).mouseout(function() {
-			reset_highlight();
-		});
-	});
-}
-/**
- * Trigger the highlight on page load
- */
-jQuery(document).ready(function() {
-	highlighter();
-});
-/**
- * Highlight the element wit th id passed in the parameter. If it has children
- * highlight them. This method should be triggered on mouse over. This element
- * is then recognized by the css class "id_ +id"
- * 
- * @param id
- * [@param alter]
- */
-function highlight(id, alter) {
-	var items;
-	items = (alter) ? jQuery('.'+alter+id) : jQuery('.id_' + id);
-	items.addClass("imj_highlightDependencies");
-}
-/**
- * Reset highlighted element to their original value. Should be triggered on
- * mouse out
- * DELETE FUNCTION HIGHLIGHT + DEPENDENCIES and create/use css definitions
- */
-function reset_highlight() {
-	$('.imj_highlightDependencies').removeClass("imj_highlightDependencies");
-}
-/**
  * Parse the id define in the css class by id_class
  * 
  * @param classname
@@ -65,6 +19,78 @@ function parseId(classname, classRef) {
 		 return false;
 	}
 }
+
+/**
+ * JQuery event for Highlight methods
+ */
+function highlighter() {
+	jQuery(function() {
+		jQuery(".highlight_area").mouseover(function() {
+			var itemId = parseId(jQuery(this).attr('class'));
+			var prntId = parseId(jQuery(this).attr('class'), 'parent_');
+			highlight(itemId);	// highlight the current element
+			checkForChilds(itemId);// highlight the child elements - recursive - of the current item, if it's given
+			if (prntId) { //check if the current item is a child of another
+				highlight(prntId, 'id_'); // hightlight the next parent item, if the current item is a child
+			}
+		}).mouseout(function() {
+			reset_highlight();
+		});
+	});
+}
+/**
+ * check if items given with the parent id.
+ * It's triggered through mouse-over event in highlighter function.
+ * @param id
+ */
+function checkForChilds(id) {
+	var childs, curId;
+	//all childs have a parent-class with the parent id
+	childs = jQuery('.parent_'+id);
+	
+	if (childs.length > 0) {	// if childs given
+		childs.each(function(i, obj){	// loop through the childs an check if themselves have also childs
+			jQuery(this).addClass('imj_highlightDependencies');
+			curId = parseId(jQuery(this).attr('class'));
+			if (curId) {
+				checkForChilds(curId);
+			}
+		});
+	}
+}
+
+/**
+ * Highlight the element with id passed in the parameter. If it has children
+ * highlight them. This method should be triggered on mouse over. This element
+ * is then recognized by the css class "id_ +id"
+ * 
+ * @param id
+ * [@param alter]
+ */
+function highlight(id, alter) {
+	var items;
+	items = (alter) ? jQuery('.'+alter+id) : jQuery('.id_' + id);
+	items.addClass("imj_highlightDependencies");
+}
+/**
+ * Reset highlighted element to their original value. Should be triggered on
+ * mouse out
+ * DELETE FUNCTION HIGHLIGHT + DEPENDENCIES and create/use css definitions
+ */
+function reset_highlight() {
+	$('.imj_highlightDependencies').removeClass("imj_highlightDependencies");
+}
+
+
+
+
+/**
+ * Trigger the highlight on page load
+ */
+jQuery(document).ready(function() {
+	highlighter();
+});
+
 
 /*******************************************************************************
  * START : Function for the Metadata Profile pages:

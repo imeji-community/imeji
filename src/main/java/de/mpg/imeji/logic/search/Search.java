@@ -10,14 +10,12 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import com.hp.hpl.jena.Jena;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.vocabulary.RDF;
 
-import com.hp.hpl.jena.Jena;
-
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
-import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.query.SimpleQueryFactory;
 import de.mpg.imeji.logic.search.util.CollectionUtils;
 import de.mpg.imeji.logic.search.util.SearchIndexInitializer;
@@ -216,7 +214,7 @@ public class Search
     private List<String> simple(SearchPair pair, SortCriterion sortCri, User user)
     {
         String sparqlQuery = SimpleQueryFactory.getQuery(getModelName(type), getRDFType(type), pair, sortCri, user,
-                (containerURI != null), getSpecificQuery());
+                (containerURI != null), getSpecificQuery(user));
         return ImejiSPARQL.exec(sparqlQuery, null);
     }
 
@@ -248,7 +246,7 @@ public class Search
      * 
      * @return
      */
-    private String getSpecificQuery()
+    private String getSpecificQuery(User user)
     {
         String specificQuery = "";
         if (containerURI != null)
@@ -267,7 +265,8 @@ public class Search
         }
         if (SearchType.ITEM.equals(type) || SearchType.ALL.equals(type))
         {
-            specificQuery += "?s <http://imeji.org/terms/collection> ?c .";
+            if (containerURI != null || user != null)
+                specificQuery += "?s <http://imeji.org/terms/collection> ?c .";
         }
         if (SearchType.PROFILE.equals(type))
         {

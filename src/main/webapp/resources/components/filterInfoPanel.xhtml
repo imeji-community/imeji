@@ -23,7 +23,7 @@
 				
 				<ui:fragment rendered="#{cc.attrs.filterBeanHasQuery == 'yes' and cc.attrs.filterBean.query != ''}">
 					<span class="imj_facetSeparator">
-						<h:outputText value=" / "/>
+						<h:outputText value="/"/>
 					</span>
 					
 					<h:outputText value="#{lbl.search}"/>
@@ -35,7 +35,7 @@
 				
 				<ui:fragment rendered="#{cc.attrs.filterBean.selectedFilter != 'all'}">
 					<span class="imj_facetSeparator">
-						<h:outputText value=" / "/>
+						<h:outputText value="/"/>
 					</span>
 					
 					<h:outputText value="#{cc.attrs.filterBean.filterLabel}"/>

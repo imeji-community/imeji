@@ -1181,18 +1181,18 @@ h4.imj_sectionHeadline {
 }
 
 .imj_breadcrumpHistory .imj_breadcrumpTitle {
-	margin-right: 0.3636em;
-	font-size: 1.091em;
+	margin-right: 0.363636em;
+	font-size: 1.090909em;
 }
 
 .imj_breadcrumpHistory .imj_breadcrumpItem {
-	line-height: 2.000em; /*2.18em*/
-	font-size: 1.091em;
+	line-height: 2em; /*2.18em*/
+	font-size: 1.090909em;
 }
 
 .imj_breadcrumpHistory .imj_breadcrumpSeparator {
-	margin-left: 0.364em; /*0.3636em*/
-	margin-right: 0.364em;
+	margin-left: 0.363636em;
+	margin-right: 0.363636em;
 }
 
 /* * info panel (Image.xhtml)
@@ -1207,8 +1207,12 @@ h4.imj_sectionHeadline {
 .imj_selectionInfoPanelItemSelect {
 	float: right;
 }
+.imj_selectionInfoPanel .imj_removeFacetButton {
+	margin-left: 0.272727em;
+}
 
 /* * filter info panel (overview pages - Collections, Albums)
+   * filterInfoPanel.xhtml
    ==========================================================
    ========================================================== */
 .imj_filterInfoPanel {
@@ -1218,7 +1222,7 @@ h4.imj_sectionHeadline {
 }
 
 .imj_filterInfoPanel .imj_removeFilterButton {
-	margin: 0 0.25em;
+	margin: 0 0.272727em;
 }
 
 /* * paginator component (Image.xhtml)
@@ -2124,7 +2128,7 @@ a.imj_submitButton,
 
 /* ================================
  * facets, used for lited item list
- * - facets.xhtml
+ * - facets.xhtml, selectionInfoPanel.xhtml
  * ================================ */
 #imj_ajaxFacets {
 	padding: 1% 4%;

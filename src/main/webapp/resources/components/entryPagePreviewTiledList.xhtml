@@ -27,7 +27,7 @@
 					</h:panelGroup>
 				</h:outputLink>
 				
-				<h:outputLink value="#{cc.attrs.mediaLogicBean.id}/#{Navigation.uploadPath}?init=1" rendered="#{(cc.attrs.mediaLogicBean.thumbnails.size() == null or cc.attrs.mediaLogicBean.thumbnails.size() == 0) and cc.attrs.mediaLogicBean.type == 'COLLECTION'}">
+				<h:outputLink value="#{cc.attrs.mediaLogicBean.id}/#{Navigation.uploadPath}?init=1" rendered="#{cc.attrs.mediaLogicBean.editable and (cc.attrs.mediaLogicBean.thumbnails.size() == null or cc.attrs.mediaLogicBean.thumbnails.size() == 0) and cc.attrs.mediaLogicBean.type == 'COLLECTION'}">
 					<h:panelGroup styleClass="imj_entryPagePreviewTiledListLink">
 						<h:outputText value ="#{lbl.uploadFiles}"/>
 						<span class="imj_entryPagePreviewTiledListLinkArrow"> </span>

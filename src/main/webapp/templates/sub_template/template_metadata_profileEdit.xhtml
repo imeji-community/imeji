@@ -11,6 +11,7 @@
 	</ui:define>
 	
 	<ui:define name="additonalHeaderScripts">
+		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/main.js"></script>
 		<script type="text/javascript">
 			// avoid to have many times the whole iso langages defined on the page. Relevant for profiles with many metadata
 			function write_language_options(select) {
@@ -65,7 +66,7 @@
 							
 							<!-- START ajaxArea -->
 							<h:panelGroup layout="block" id="ajaxArea">
-								<script type="text/javascript">$(function(){dragAndDrop();highlighter();});</script>
+								<script type="text/javascript">dragAndDrop(); highlighter();</script>
 								
 								
 								<h:panelGroup layout="block" id="dropMetadata" styleClass="dropMetadata imj_dropArea">

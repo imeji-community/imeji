@@ -192,23 +192,28 @@ public class ShareBean
         {
             role = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_profile_editor");
         }
-        if (!GrantType.PROFILE_EDITOR.equals(selectedGrant))
+        if (UserCreationBean.isValidEmail(email.trim()))
         {
-            shared = sm.share(retrieveCollection(id), session.getUser(), email, selectedGrant, true);
-            message = session.getLabel("collection") + " " + id + " " + session.getLabel("shared_with") + " " + email
-                    + " " + session.getLabel("share_as") + " " + role;
-        }
-        else
-        {
-            shared = sm.share(retrieveProfile(id), session.getUser(), email, selectedGrant, true);
-            message = session.getLabel("profile") + " " + id + " " + session.getLabel("shared_with") + " " + email
-                    + " " + session.getLabel("share_as") + " " + role;
-            // Add grant VIEWER so the user can see the collection
-            if (GrantType.PROFILE_EDITOR.equals(selectedGrant))
+            if (!GrantType.PROFILE_EDITOR.equals(selectedGrant))
             {
-                shared = sm.share(retrieveCollection(id), session.getUser(), email, GrantType.VIEWER, true);
+                shared = sm.share(retrieveCollection(id), session.getUser(), email, selectedGrant, true);
+                message = session.getLabel("collection") + " " + id + " " + session.getLabel("shared_with") + " "
+                        + email + " " + session.getLabel("share_as") + " " + role;
+            }
+            else
+            {
+                shared = sm.share(retrieveProfile(id), session.getUser(), email, selectedGrant, true);
+                message = session.getLabel("profile") + " " + id + " " + session.getLabel("shared_with") + " " + email
+                        + " " + session.getLabel("share_as") + " " + role;
+                // Add grant VIEWER so the user can see the collection
+                if (GrantType.PROFILE_EDITOR.equals(selectedGrant))
+                {
+                    shared = sm.share(retrieveCollection(id), session.getUser(), email, GrantType.VIEWER, true);
+                }
             }
         }
+        else
+            BeanHelper.error("\"" + email + "\" : " + session.getMessage("error_user_email_not_valid"));
         if (shared)
         {
             User dest = ObjectLoader.loadUser(email, session.getUser());
@@ -219,6 +224,12 @@ public class ShareBean
             BeanHelper.info(session.getMessage("success_share"));
             BeanHelper.info(message);
         }
+    }
+
+    public static void main(String[] args)
+    {
+        String email = "";
+        System.out.println(email.trim().matches("^.*@.*\\n"));
     }
 
     /**

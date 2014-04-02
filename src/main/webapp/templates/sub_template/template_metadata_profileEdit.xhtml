@@ -67,6 +67,7 @@
 							<!-- START ajaxArea -->
 							<h:panelGroup layout="block" id="ajaxArea">
 								<script type="text/javascript">dragAndDrop(); highlighter();</script>
+								<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/datepicker.js"></script>
 								
 								
 								<h:panelGroup layout="block" id="dropMetadata" styleClass="dropMetadata imj_dropArea">
@@ -234,7 +235,7 @@
 																<ui:fragment rendered="#{wrapper.constraintsSize > 0}">
 																	<ui:repeat id="constraints" var="constraint" value="#{wrapper.statement.literalConstraints}" varStatus="constraintPosition">
 																		<div class="imj_metadataSet">
-																			<h:inputText value="#{constraint}" valueChangeListener="#{wrapper.constraintListener}">
+																			<h:inputText value="#{constraint}" valueChangeListener="#{wrapper.constraintListener}" styleClass="#{wrapper.statement.type == 'http://imeji.org/terms/metadata#date' ? 'datepicker' : ''}">
 																				<f:attribute name="position" value="#{constraintPosition.index}"/>
 																			</h:inputText>
 																			<span class="imj_inlineButtonGroup">

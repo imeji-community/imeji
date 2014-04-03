@@ -2333,7 +2333,7 @@ a.imj_submitButton,
 }
 
 .imj_bibliographicList .imj_listFooter {
-	border-top: 0.090909em inset #292929;
+	border-top: 0.090909em solid #292929;
 }
 
 .imj_bibliographicList .imj_listBody {

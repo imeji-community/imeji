@@ -57,7 +57,7 @@ public class ViewCollectionBean extends CollectionBean
             {
                 ItemController ic = new ItemController(user);
                 ic.findContainerItems(getCollection(), user, 13);
-                setSize(getCollection().getImages().size());
+                setSize(ic.countContainerSize(getCollection().getId()));
             }
             if (getCollection() != null)
             {

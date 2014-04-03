@@ -192,7 +192,8 @@ public class ShareBean
         {
             role = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("role_profile_editor");
         }
-        if (UserCreationBean.isValidEmail(email.trim()))
+        email = email.trim();
+        if (UserCreationBean.isValidEmail(email))
         {
             if (!GrantType.PROFILE_EDITOR.equals(selectedGrant))
             {

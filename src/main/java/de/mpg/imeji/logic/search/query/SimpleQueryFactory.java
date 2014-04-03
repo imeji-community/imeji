@@ -55,13 +55,15 @@ public class SimpleQueryFactory
         PATTERN_SELECT = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 XXX_MODEL_NAMES_XXX WHERE {XXX_SECURITY_FILTER_XXX XXX_SEARCH_ELEMENT_XXX XXX_SPECIFIC_QUERY_XXX XXX_SEARCH_TYPE_ELEMENT_XXX  ?s <http://imeji.org/terms/status> ?status XXX_SORT_ELEMENT_XXX}";
         return PATTERN_SELECT
                 .replace("XXX_MODEL_NAMES_XXX", getModelNames(modelName, pair))
-                .replace("XXX_SECURITY_FILTER_XXX", SimpleSecurityQuery.queryFactory(user, rdfType, getFilterStatus(pair)))
+                .replace("XXX_SECURITY_FILTER_XXX",
+                        SimpleSecurityQuery.queryFactory(user, rdfType, getFilterStatus(pair)))
                 .replace("XXX_SEARCH_ELEMENT_XXX", getSearchElement(pair, rdfType))
                 .replace("XXX_SEARCH_TYPE_ELEMENT_XXX", getRdfType(rdfType))
-                .replace("XXX_SORT_ELEMENT_XXX",  getSortElement(sortCriterion, "http://imeji.org/terms/item".equals(rdfType)))
+                .replace("XXX_SORT_ELEMENT_XXX",
+                        getSortElement(sortCriterion, "http://imeji.org/terms/item".equals(rdfType)))
                 .replace("XXX_SPECIFIC_QUERY_XXX", specificQuery);
     }
-    
+
     /**
      * Return the RDF Type of the search objects
      * 
@@ -91,7 +93,8 @@ public class SimpleQueryFactory
             {
                 names += " FROM <" + Imeji.collectionModel + ">";
             }
-            if (pair != null && SearchIndex.names.item.name().equals(pair.getIndex().getName()) && !Imeji.imageModel.equals(modelName))
+            if (pair != null && SearchIndex.names.item.name().equals(pair.getIndex().getName())
+                    && !Imeji.imageModel.equals(modelName))
             {
                 names += " FROM <" + Imeji.imageModel + ">";
             }
@@ -119,6 +122,12 @@ public class SimpleQueryFactory
             searchQuery = "?s <" + pair.getIndex().getNamespace() + "> ?el";
         }
         else if (SearchIndex.names.filename.name().equals(pair.getIndex().getName()))
+        {
+            // Search for filename
+            searchQuery = "?s <" + pair.getIndex().getNamespace() + "> ?el";
+        }
+        else if (SearchIndex.names.created.name().equals(pair.getIndex().getName())
+                || SearchIndex.names.modified.name().equals(pair.getIndex().getName()))
         {
             // Search for filename
             searchQuery = "?s <" + pair.getIndex().getNamespace() + "> ?el";
@@ -156,7 +165,9 @@ public class SimpleQueryFactory
         else if (SearchIndex.names.user.name().equals(pair.getIndex().getName()))
         {
             // Search for all objects of rdfType for which the user (pair.getValue) has a Grant
-            return "<" + pair.getValue() + "> <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> ?" + SimpleSecurityQuery.getVariableName(rdfType) + " .";
+            return "<" + pair.getValue()
+                    + "> <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> ?"
+                    + SimpleSecurityQuery.getVariableName(rdfType) + " .";
         }
         else if (SearchIndex.names.prof.name().equals(pair.getIndex().getName()))
         {
@@ -164,7 +175,8 @@ public class SimpleQueryFactory
             if (J2JHelper.getResourceNamespace(new MetadataProfile()).equals(rdfType))
             {
                 pair.setValue(normalizeURI(MetadataProfile.class, pair.getValue()));
-                return "FILTER(" + getSimpleFilter(pair, "s") + ") . ?c <" + Search.getIndex(SearchIndex.names.prof).getNamespace() + "> ?s .";
+                return "FILTER(" + getSimpleFilter(pair, "s") + ") . ?c <"
+                        + Search.getIndex(SearchIndex.names.prof).getNamespace() + "> ?s .";
             }
             else if (J2JHelper.getResourceNamespace(new CollectionImeji()).equals(rdfType))
             {
@@ -208,7 +220,8 @@ public class SimpleQueryFactory
         else if (SearchIndex.names.type.name().equals(pair.getIndex().getName()))
         {
             // Search for metadata type (i.e. the type the statement with wicht the metadata is defined)
-            return "?s <http://imeji.org/terms/metadataSet> ?mds . ?mds <http://imeji.org/terms/metadata> ?md  . ?md a <" + pair.getValue() + "> .";
+            return "?s <http://imeji.org/terms/metadataSet> ?mds . ?mds <http://imeji.org/terms/metadata> ?md  . ?md a <"
+                    + pair.getValue() + "> .";
         }
         else
         {
@@ -223,13 +236,15 @@ public class SimpleQueryFactory
         if (pair.isNot())
         {
             // If the pair is a negation
-            return searchQuery.replace("OPTIONAL_FOR_NOT {", "OPTIONAL {") + " . FILTER(" + getSimpleFilter(pair, variable) + ")} . FILTER (!bound(?el) ) .";
+            return searchQuery.replace("OPTIONAL_FOR_NOT {", "OPTIONAL {") + " . FILTER("
+                    + getSimpleFilter(pair, variable) + ")} . FILTER (!bound(?el) ) .";
         }
         else
         {
             // If the pair is not a negation
-            return searchQuery.replace("OPTIONAL_FOR_NOT {", "") + " . FILTER(" + getSimpleFilter(pair, variable) + ") .";
-        }  
+            return searchQuery.replace("OPTIONAL_FOR_NOT {", "") + " . FILTER(" + getSimpleFilter(pair, variable)
+                    + ") .";
+        }
     }
 
     /**
@@ -346,13 +361,13 @@ public class SimpleQueryFactory
                     filter += "regex(" + variable + ", '" + escapeApostroph(pair.getValue()) + "', 'i')";
                     break;
                 case EQUALS:
-                    filter += variable + "=" + getSearchValueInSPARQL(pair.getValue());
+                    filter += variable + "=" + getSearchValueInSPARQL(pair.getValue(), isRDFDate(pair));
                     break;
                 case GREATER:
-                    filter += variable + ">=" + getSearchValueInSPARQL(pair.getValue());
+                    filter += variable + ">=" + getSearchValueInSPARQL(pair.getValue(), isRDFDate(pair));
                     break;
                 case LESSER:
-                    filter += variable + "<=" + getSearchValueInSPARQL(pair.getValue());
+                    filter += variable + "<=" + getSearchValueInSPARQL(pair.getValue(), isRDFDate(pair));
                     break;
                 default:
                     if (pair.getValue().startsWith("\"") && pair.getValue().endsWith("\""))
@@ -379,7 +394,7 @@ public class SimpleQueryFactory
      * @param str
      * @return
      */
-    private static String getSearchValueInSPARQL(String str)
+    private static String getSearchValueInSPARQL(String str, boolean dateAsTime)
     {
         if (isURL(str))
         {
@@ -387,7 +402,10 @@ public class SimpleQueryFactory
         }
         else if (isDate(str))
         {
-            return "'" + DateFormatter.getTime(str) + "'^^<http://www.w3.org/2001/XMLSchema#double>";
+            if (dateAsTime)
+                return "'" + DateFormatter.getTime(str) + "'^^<http://www.w3.org/2001/XMLSchema#double>";
+            else
+                return "'" + DateFormatter.formatToSparqlDateTime(str) + "'^^<http://www.w3.org/2001/XMLSchema#dateTime>";
         }
         else if (isNumber(str))
         {
@@ -491,7 +509,7 @@ public class SimpleQueryFactory
     }
 
     /**
-     * Escape the Apostroph in String
+     * Escape the Apostrophe in String
      * 
      * @param s
      * @return
@@ -500,5 +518,16 @@ public class SimpleQueryFactory
     {
         return s.replace("'", "\\'");
     }
-    
+
+    /**
+     * True if the pair used a rdf date format
+     * 
+     * @param pair
+     * @return
+     */
+    private static boolean isRDFDate(SearchPair pair)
+    {
+        return !(SearchIndex.names.created.name().equals(pair.getIndex().getName())
+                || SearchIndex.names.modified.name().equals(pair.getIndex().getName()));
+    }
 }

@@ -161,7 +161,7 @@
 																			<option value="#{label.lang}" selected="selected">#{Internationalization.getLanguageLabel(label.lang)}</option>
 																		</select>
 																		<h:commandButton id="btnChangeLang" action="#{wrapper.select()}" value="#{wrapper.statement.type}" type="button" styleClass="imj_noDisplay imj_ajaxButton">
-																			<f:ajax execute="@this inHiddenLang" render=":profileForm:ajaxArea"/>
+																			<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
 																		</h:commandButton>
 																		<h:inputHidden id="inHiddenLang" value="#{label.lang}"/>
 																		

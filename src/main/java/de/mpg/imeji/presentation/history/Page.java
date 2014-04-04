@@ -6,6 +6,7 @@ package de.mpg.imeji.presentation.history;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import de.mpg.imeji.presentation.filter.Filter;
 import de.mpg.imeji.presentation.session.SessionBean;
@@ -20,80 +21,25 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  */
 public class Page
 {
-    /**
-     * Enumeration of all imeji {@link Page}
-     * 
-     * @author saquet (initial creation)
-     * @author $Author$ (last modification)
-     * @version $Revision$ $LastChangedDate$
-     */
-    public enum ImejiPages
-    {
-        IMAGES("Images.xhtml", "history_images"), COLLECTION_IMAGES("CollectionBrowse.xhtml",
-                "history_images_collection"), SEARCH("SearchAdvanced.xhtml", "history_advanced_search"), HOME(
-                "Welcome.xhtml", "history_home"), IMAGE("Image.xhtml", "history_image"), COLLECTIONS(
-                "Collections.xhtml", "history_collections"), ALBUMS("Albums.xhtml", "history_albums"), COLLECTION_HOME(
-                "CollectionEntryPage.xhtml", "collection"), SEARCH_RESULTS_IMAGES("Images.xhtml",
-                "history_search_result"), EDIT("BatchEdit.xhtml", "edit_images"), COLLECTION_IMAGE("CollectionImage.xhtml",
-                "history_image"), ALBUM_IMAGES("AlbumBrowse.xhtml", "history_images_album"), ALBUM_HOME(
-                "AlbumEntryPage.xhtml", "history_album"), ALBUM_IMAGE("AlbumImage.xhtml", "history_image"), HELP(
-                "Help.xhtml", "help"), COLLECTION_INFO("CollectionView.xhtml", "history_collection_info"), UPLOAD(
-                "Upload.xhtml", "history_upload"), USER("User.xhtml", "user"), ADMIN("UserAdministrationPage.xhtml",
-                "Admin");
-        private String fileName = "";
-        private String label;
-
-        /**
-         * Construct an {@link ImejiPages} object
-         * 
-         * @param fileName
-         * @param label
-         */
-        private ImejiPages(String fileName, String label)
-        {
-            this.fileName = fileName;
-            this.label = label;
-        }
-
-        /**
-         * The label of the {@link ImejiPages}
-         * 
-         * @return
-         */
-        public String getLabel()
-        {
-            return label;
-        }
-
-        /**
-         * The filename of the {@link ImejiPages}
-         * 
-         * @return
-         */
-        public String getFileName()
-        {
-            return fileName;
-        }
-    }
-
-    private ImejiPages type;
-    private URI uri;
     private String name;
     private List<Filter> filters = new ArrayList<Filter>();
     private String query = "";
     private String id = null;
-
+    private Map<String, String[]> params;
+    private int pos = 0;
+    private String url;
+    
+    
     /**
-     * Construct a new imeji web page
-     * 
-     * @param type
+     * Constructor with for one {@link URI} 
      * @param uri
      */
-    public Page(ImejiPages type, URI uri)
+    public Page(String url, String label, Map<String, String[]> params)
     {
-        this.uri = uri;
-        this.type = type;
-        this.name = type.getLabel();
+    	this.setUrl(url);
+    	name = label;
+    	this.params = params;
+    	id = PageURIHelper.extractId(url);
     }
 
     /**
@@ -104,37 +50,19 @@ public class Page
      */
     public boolean isSame(Page page)
     {
-        if (isNull() && page.isNull())
-            return true;
-        else if (isNull() || page == null || page.isNull())
+    	if (isNull() || page == null || page.isNull())
             return false;
+    	else if (isNull() && page.isNull())
+            return true; 
         else
-            return (type.equals(page.getType()) && uri.equals(page.getUri()));
+            //return (type.equals(page.getType()) && uri.equals(page.getUri()));
+        	return page.getCompleteUrl().equals(getCompleteUrl());
     }
 
     public boolean isNull()
     {
-        return (type == null && uri == null);
-    }
-
-    public URI getUri()
-    {
-        return uri;
-    }
-
-    public void setUri(URI uri)
-    {
-        this.uri = uri;
-    }
-
-    public ImejiPages getType()
-    {
-        return type;
-    }
-
-    public void setType(ImejiPages type)
-    {
-        this.type = type;
+       // return (type == null && uri == null);
+    	return url == null;
     }
 
     public String getName()
@@ -191,4 +119,42 @@ public class Page
     {
         this.id = id;
     }
+
+	public int getPos() {
+		return pos;
+	}
+
+	public void setPos(int pos) {
+		this.pos = pos;
+	}
+	
+	public String getCompleteUrlWithHistory()
+	{
+		String delim = params.isEmpty() ? "?" : "&";
+		return getCompleteUrl() + delim + "h="+ pos;
+	}
+	
+	public String getCompleteUrl()
+	{
+		return url + getParamsAsString();
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	
+	private String getParamsAsString()
+	{
+		String s = "";
+		for(String key : params.keySet())
+		{
+			String delim = "".equals(s) ? "?" : "&";
+			s+= delim + key + "="+ params.get(key)[0];
+		}
+		return s;
+	}
 }

@@ -3,8 +3,6 @@
  */
 package de.mpg.imeji.presentation.user;
 
-import java.util.Locale;
-
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
@@ -87,7 +85,7 @@ public class LoginBean
         String redirectAfterLogin = "";
         if (current != null)
         {
-            redirectAfterLogin = current.getUri().toString().replace("?h=", "");
+            redirectAfterLogin = current.getCompleteUrl();
         }
         FacesContext.getCurrentInstance().getExternalContext().redirect(redirectAfterLogin);
     }

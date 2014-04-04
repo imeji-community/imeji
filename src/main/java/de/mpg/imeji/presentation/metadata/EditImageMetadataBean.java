@@ -436,7 +436,7 @@ public class EditImageMetadataBean
         unlockImages();
         HistorySession hs = (HistorySession)BeanHelper.getSessionBean(HistorySession.class);
         FacesContext.getCurrentInstance().getExternalContext()
-                .redirect(hs.getPreviousPage().getUri().toString().replace("?h=", ""));
+                .redirect(hs.getPreviousPage().getCompleteUrl());
     }
 
     /**

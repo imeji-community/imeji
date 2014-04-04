@@ -6,8 +6,6 @@ package de.mpg.imeji.presentation.history;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.mpg.imeji.presentation.history.Page.ImejiPages;
-
 /**
  * JavaBean for the http session object related to the history
  * 
@@ -34,20 +32,6 @@ public class HistorySession
     }
 
     /**
-     * Add a new {@link Page} to the History
-     * 
-     * @param filename
-     * @param query
-     * @param id
-     */
-    public void add(String filename, String query, String[] id)
-    {
-        Page newPage = createPage(filename, query, id);
-        addPage(newPage);
-        removeOldPages();
-    }
-
-    /**
      * Add a {@link Page} to the history
      * 
      * @param page
@@ -59,59 +43,13 @@ public class HistorySession
         {
             if (!page.isSame(getCurrentPage()))
             {
+            	page.setPos(pages.size());
                 pages.add(page);
+                removeOldPages();
             }
         }
     }
 
-    /**
-     * Create {@link Page} according to the url
-     * 
-     * @param filename: the name of the xhtml file
-     * @param query the current query (defined by parameter q)
-     * @param id - the ids found in the url
-     * @return
-     */
-    private Page createPage(String filename, String query, String[] id)
-    {
-        for (ImejiPages type : ImejiPages.values())
-        {
-            if (type.getFileName().equals(filename))
-            {
-                try
-                {
-                    if (ImejiPages.IMAGES.equals(type) && query != null && !"".equals(query))
-                    {
-                        // If a browse page has a query, change the type of the page to search result
-                        type = ImejiPages.SEARCH_RESULTS_IMAGES;
-                    }
-                    else if (ImejiPages.SEARCH_RESULTS_IMAGES.equals(type) && ("".equals(query) || query == null))
-                    {
-                        // If a searchPage doesn't have a query, change the type to Browse page
-                        type = ImejiPages.IMAGES;
-                    }
-                    Page page = new Page(type, PageURIHelper.getPageURI(type, query, id));
-                    if (id != null)
-                    {
-                        if (id.length == 2)
-                        {
-                            page.setId(id[1]);
-                        }
-                        if (id.length == 1)
-                        {
-                            page.setId(id[0]);
-                        }
-                    }
-                    return page;
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return null;
-    }
 
     /**
      * Remove {@link Page} of the history, when the size of the history is greater thant the maximum size

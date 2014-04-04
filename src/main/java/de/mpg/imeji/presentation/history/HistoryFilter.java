@@ -4,8 +4,7 @@
 package de.mpg.imeji.presentation.history;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 import javax.faces.FactoryFinder;
 import javax.faces.component.UIViewRoot;
@@ -22,6 +21,10 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+
+import com.ocpsoft.pretty.PrettyContext;
+
+import de.mpg.imeji.presentation.beans.Navigation;
 
 /**
  * {@link Filter} for the imeji history
@@ -67,32 +70,19 @@ public class HistoryFilter implements Filter
     private void dofilterImpl(HttpServletRequest request, ServletResponse resp)
     {
         HistorySession hs = getHistorySession(request, resp);
-        String q = request.getParameter("q");
+        Navigation nav = getNavigation(request, resp);
+        String label =  PageURIHelper.getPageLabel(PrettyContext.getCurrentInstance(request).getRequestURL().toURL());
         String h = request.getParameter("h");
-        String f = request.getParameter("f");
-        String id = request.getParameter("id");
-        // Parameter used by pretty query to pass parameter defined in pretty-config in the url pattern
-        String[] ids = request.getParameterValues("com.ocpsoft.vP_0");
-        if (id != null)
+        String uri = nav.getApplicationUri() + PrettyContext.getCurrentInstance(request).getRequestURL().toURL();
+        Map<String, String[]> params =  PrettyContext.getCurrentInstance(request).getRequestQueryString().getParameterMap();
+        Page p = new Page(uri, label, params);
+        if(request.getParameter("h") == null)
         {
-            // The id has been defined as a url parameter
-            List<String> l = new ArrayList<String>();
-            l.add(id);
-            ids = l.toArray(new String[1]);
+        	hs.addPage(p);
         }
-        // If f exists, then it is a filter, not added to history
-        if (f == null && request.getPathInfo() != null)
+        else
         {
-            if (h == null)
-            {
-                // if h not defined, then it is a new page
-                hs.add(request.getPathInfo().replaceAll("/", ""), q, ids);
-            }
-            else if (!"".equals(h))
-            {
-                // If h defined, then it is an history link
-                hs.remove(Integer.parseInt(h));
-            }
+        	hs.remove(Integer.parseInt(h));
         }
     }
 
@@ -111,16 +101,27 @@ public class HistoryFilter implements Filter
      */
     private HistorySession getHistorySession(ServletRequest request, ServletResponse resp)
     {
-        String name = HistorySession.class.getSimpleName();
+    	return (HistorySession)getBean(HistorySession.class, request, resp);
+    }
+    
+    private Navigation getNavigation(ServletRequest request, ServletResponse resp)
+    {
+    	return (Navigation)getBean(Navigation.class, request, resp);
+    }
+    
+    private Object getBean(Class<?> c, ServletRequest request, ServletResponse resp)
+    {
+
+        String name = c.getSimpleName();
         FacesContext fc = getFacesContext(request, resp);
         Object result = fc.getExternalContext().getSessionMap().get(name);
         if (result == null)
         {
             try
             {
-                HistorySession newBean = HistorySession.class.newInstance();
-                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(name, newBean);
-                return newBean;
+            	Object b = c.newInstance();
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(name, b);
+                return b;
             }
             catch (Exception e)
             {
@@ -129,7 +130,7 @@ public class HistoryFilter implements Filter
         }
         else
         {
-            return (HistorySession)result;
+            return result;
         }
     }
 
@@ -157,6 +158,7 @@ public class HistoryFilter implements Filter
         facesContext.setViewRoot(view);
         return facesContext;
     }
+    
 
     public FilterConfig getFilterConfig()
     {

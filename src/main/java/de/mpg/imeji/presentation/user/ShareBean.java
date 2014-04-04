@@ -13,10 +13,7 @@ import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
 
-import com.hp.hpl.jena.sparql.pfunction.library.container;
-
 import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.controller.ImejiController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -156,7 +153,7 @@ public class ShareBean
         try
         {
             FacesContext.getCurrentInstance().getExternalContext()
-                    .redirect(historySession.getCurrentPage().getUri().toString());
+                    .redirect(historySession.getCurrentPage().getCompleteUrl());
         }
         catch (IOException e)
         {

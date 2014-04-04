@@ -71,7 +71,6 @@ public class InternationalizationBean
     {
         // Add first languages out of properties
         languages = new ArrayList<SelectItem>();
-        languages.add(new SelectItem(null, "--"));
         languages.addAll(getsupportedLanguages(true));
         // add a separator
         languages.add(new SelectItem(null, "--"));
@@ -127,7 +126,7 @@ public class InternationalizationBean
 
     /**
      * Return: <br/>
-     * - the supported languages if the parameter is set to true <br/>
+     * - the supported languages (i.e languages with a translation for labels and messages) if the parameter is set to true <br/>
      * - the non supported languages if the parameter is set to false
      * 
      * @param supported
@@ -138,11 +137,13 @@ public class InternationalizationBean
         List<SelectItem> l = new ArrayList<SelectItem>();
         for (SelectItem iso : isolanguages)
         {
-            if (supported && isSupported(iso.getValue().toString())
+
+        	if (supported && isSupported(iso.getValue().toString())
                     || (!supported && !isSupported(iso.getValue().toString())))
-            {
-                l.add(iso);
-            }
+		    {
+        		l.add(iso);
+		    }
+  
         }
         return l;
     }

@@ -16,6 +16,7 @@ import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.mdProfile.MdProfileBean;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.VocabularyHelper;
+import de.mpg.j2j.misc.LocalizedString;
 
 /**
  * Wrapper for {@link Statement}, used in java bean {@link MdProfileBean}
@@ -72,6 +73,9 @@ public class StatementWrapper implements Comparable<StatementWrapper>
         used = ImejiSPARQL
                 .exec("PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s <http://imeji.org/terms/metadata> ?md . ?md <http://imeji.org/terms/statement> <"
                         + statement.getId() + ">} LIMIT 1 ", null).size() > 0;
+        for(LocalizedString s : statement.getLabels())
+        	if(s.getLang() == null)
+        		s.setLang("en");
     }
 
     /**

@@ -46,7 +46,7 @@
 						<!-- no metadata statements defined -->
 						<ui:fragment rendered="#{!EditImageMetadataBean.profileWithStatements}">
 							<h2 class="imj_headline"><h:outputText value="#{lbl.profile_empty}"/></h2>
-							<h:outputLink value="#{HistorySession.previousPage.uri}" title="#{lbl.back_to_pictures}">
+							<h:outputLink value="#{HistorySession.previousPage.completePageWithHistory}" title="#{lbl.back_to_pictures}">
 								<h:outputText value="#{lbl.back_to_pictures}"/>
 							</h:outputLink>	
 						</ui:fragment>

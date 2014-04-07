@@ -98,7 +98,7 @@
 				</div>
 				
 				<div class="imj_submitPanel">
-					<h:outputLink value="#{HistorySession.currentPage.uri}" styleClass="imj_cancelButton">
+					<h:outputLink value="#{HistorySession.previousPage.completeUrlWithHistory}" styleClass="imj_cancelButton">
 						<h:outputText value="#{lbl.cancel}" />
 					</h:outputLink>
 					<h:commandButton action="#{cc.attrs.formularBean.save}" value="#{lbl.save}" styleClass="imj_submitButton" onclick="openDialog('dialogWait');"/>

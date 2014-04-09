@@ -59,7 +59,11 @@ All rights reserved. Use is subject to license terms.
 		</h:outputLink>
 		<h:outputText id="lnkAlbumssInactive" styleClass="imj_mainMenuStandardItem" value="#{lbl.header_albums}" rendered="#{HistorySession.currentPage.type.fileName == 'Albums.xhtml'}" />
 		
-		
+<ui:remove>
+		<h:outputLink id="lnkShare" styleClass="imj_mainMenuStandardItem" title="#{lbl.goto_share}" value="#{Navigation.shareUrl}" rendered="#{Auth.loggedIn}">
+			<h:outputText value="#{lbl.header_share}"></h:outputText>
+		</h:outputLink>
+</ui:remove>				
 		<h:outputLink id="lnkAdmin" title="#{lbl.goto_admin}" value="#{Navigation.adminUrl}" rendered="#{Auth.admin}">
 			<h:outputText value="ADMIN"></h:outputText>
 		</h:outputLink>

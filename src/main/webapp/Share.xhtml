@@ -2,51 +2,130 @@
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core">
-	<ui:param name="headline"
-		value="#{lbl.share} #{ShareBean.container.metadata.title}" />
-	<ui:define name="init">
-		<h:outputText value="#{ShareBean.init}" />
-	</ui:define>
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+	<ui:param name="headline" value="#{lbl.share} #{ShareBean.title}" />
+
+
 	<ui:define name="mainContent">
-		<h:panelGroup layout="block" styleClass="full_area0 itemList"
-			style="border-bottom-width:0 !important;">
+		<h:panelGroup layout="block" styleClass="full_area0 itemList" style="border-bottom-width:0 !important;">
 			<ui:include src="./include/History.xhtml"></ui:include>
 		</h:panelGroup>
-		<div class="full_area0_p8 small_marginLExcl">
+			<div class="full_area0_p8 small_marginLExcl">
+		<h:panelGroup layout="block" >
 			<h:form id="shareForm">
-				<div class="full_area0_p0">
-					<h:outputLabel for="shareForm:emails" styleClass="full_area0"
-						value="#{lbl.share_email}" />
-					<div class="full_area0">
-						<h:inputTextarea id="emails" styleClass="huge_area0_p0 selected"
-							value="#{ShareBean.email}" />
-						<h:outputText styleClass="tiny_marginLExcl medium_area0_p8"
-							value="#{lbl.share_as}" />
-						<h:selectOneMenu id="grantsMenu"
-							value="#{ShareBean.selectedGrant}" styleClass="huge_area0">
-							<f:selectItems value="#{ShareBean.grantsMenu}" />
-						</h:selectOneMenu>
-					</div>
-				</div>
-				<div class="full_area0_p8"></div>
-				<div class="huge_area0_p0">
-					<h:outputLink value="#{ShareBean.containerHome}"
-						styleClass="free_area1_p8 cancelButton"
-						title="#{lbl.back_to_home}">
-						<h:outputText value="#{lbl.cancel}" />
-					</h:outputLink>
-					<h:commandButton action="#{ShareBean.share}"
-						value="#{lbl.album_share}" styleClass="free_area1_p8 activeButton"
-						onclick="if (confirm('Do you really want to share the collection (An email will be sent to the user)')) return true; return false;"
-						rendered="#{ShareBean.album}" />
-					<h:commandButton action="#{ShareBean.share}"
-						value="#{lbl.collection_share}"
-						styleClass="free_area1_p8 activeButton"
-						onclick="if (confirm('Do you really want to share the collection (An email will be sent to the user)')) return true; return false;"
-						rendered="#{!ShareBean.album}" />
-				</div>
+				<h:panelGroup layout="block" sytleClass="small_marginLExcl full_area0">	
+						<h:panelGroup layout="block" styleClass="full_area0">
+							<h:outputLabel for="shareForm:emailInput" styleClass="full_area0" value="#{lbl.share_email}"/>
+							<h:inputTextarea id="emailInput"  value="#{ShareBean.emailInput}" />							
+							<a4j:commandButton value="#{lbl.btn_share_with}" action="#{ShareBean.checkInputEmail}" render=":out" /> 
+						</h:panelGroup>
+						
+						<h:panelGroup layout = "block" >
+	    					<a4j:outputPanel id="out">
+	    						<h:panelGroup block="layout" rendered="#{ShareBean.emailList.size() > 0}">
+	    							<h:outputLabel styleClass="full_area0" value="#{lbl.share_collection_with}"/>
+									<a4j:repeat value="#{ShareBean.emailList}" var="email">
+										<h:outputText value="#{email}" />
+									</a4j:repeat>
+									<h:panelGroup layout="block" id="shareOptions">
+										<h:selectManyCheckbox id="selectedGrants" class="selectGrants" value="#{ShareBean.selectedGrants}" layout="pageDirection">
+											<f:selectItems value="#{ShareBean.grantItems}" />
+											<f:ajax render="out"/>
+										</h:selectManyCheckbox>
+									</h:panelGroup>
+									<h:panelGroup layout="block" styleClass="full_area0 formButtonArea">					
+										<h:commandButton value="#{lbl.reset}" title="#{lbl.reset}" action="#{ShareBean.reset}">
+											<f:ajax render="out"/>
+										</h:commandButton>	
+										<h:commandButton value="#{lbl.save}" action="#{ShareBean.save}" />			
+									</h:panelGroup>
+								</h:panelGroup>
+								
+								<h:panelGroup layout = "block" id="sharedWithNew" styleClass="imj_subHeaderMessageSpace" rendered="#{ShareBean.sharedWithNew.size() > 0}">
+									<h:outputLabel styleClass="full_area0" value="#{lbl.share_collection_with_message}"/>
+									<ui:repeat id="sharedHistoryNew" var="shn" value="#{ShareBean.sharedWithNew}" rows="0">
+										<h:panelGroup layout="block" >
+												<br />
+												<h:outputText value="#{shn.user.name} " styleClass="medium_area0_p0"/>	
+												<h:outputText value="#{shn.user.email}" styleClass ="medium_area0_p0" />
+												<br />
+
+												<h:panelGroup layout="block" id="shareOptions">
+													<h:selectManyCheckbox id="stn" class="stn" value="#{shn.sharedType}" layout="pageDirection">
+														<f:selectItems value="#{ShareBean.grantItems}" />
+														<a4j:ajax render=":#{component.parent.clientId}" />
+													</h:selectManyCheckbox>
+												</h:panelGroup>
+												<h:panelGroup layout="block" styleClass="full_area0 formButtonArea">					
+													<h:commandButton value="#{lbl.save}" action="#{shn.update}" >
+													</h:commandButton>			
+												</h:panelGroup>				
+												<br />
+										</h:panelGroup>
+									</ui:repeat>
+									
+									<h:commandButton value="#{lbl.clearMessage}" action="#{ShareBean.clearNewHistory}" >
+										<f:ajax render="sharedWithNew"/>
+									</h:commandButton>
+									<h:commandButton value="#{lbl.updateSharedWithNew}" action="#{ShareBean.updateSharedWithNew}" >
+									</h:commandButton>	
+									
+									<rich:popupPanel id="confirmRevoke" autosized="true">
+										<h:panelGroup layout="block" >
+											<h:outputText value="#{msg.collection_share_confirmRevoke}"/>
+										</h:panelGroup>
+										<h:panelGroup layout="block">
+											<a4j:commandButton value="#{lbl.cancel}" onclick="#{rich:component('confirmRevoke')}.hide(); return false;"/>
+											<a4j:commandButton value="#{lbl.revoke}" execute="@this" action="#{ShareBean.revoke}" />
+										</h:panelGroup>
+									</rich:popupPanel>	
+								</h:panelGroup>
+							</a4j:outputPanel>
+						</h:panelGroup>				
+
+						
+						<h:panelGroup id="sharedHistory" layout = "block">						
+							<a4j:commandLink id="showHideHistory" value="#{lbl.collection_shared_history_show_hide}" action="#{ShareBean.retrieveSharedUserWithGrants}" render=":history" />
+							<a4j:outputPanel id="history">							
+							<h:panelGroup block="layout" rendered="#{ShareBean.sharedWith.size() >0}">
+								<h:outputLabel styleClass="full_area0" value="#{lbl.share_collection_with_message}"/>
+								<ui:repeat id="sh" var="sh" value="#{ShareBean.sharedWith}" rows="0">
+									<h:panelGroup layout="block" >
+											<br />
+											<h:outputText value="#{sh.user.name} " styleClass="medium_area0_p0"/>	
+											<h:outputText value="#{sh.user.email}" styleClass ="medium_area0_p0" />
+											<br />
+
+											<h:panelGroup layout="block" id="shareOptions">
+												<h:selectManyCheckbox id="st" class="st" value="#{sh.sharedType}" layout="pageDirection">
+													<f:selectItems value="#{ShareBean.grantItems}" />
+													<a4j:ajax render=":#{component.parent.clientId}" />
+												</h:selectManyCheckbox>
+											</h:panelGroup>
+											<h:panelGroup layout="block" styleClass="full_area0 formButtonArea">					
+												<h:commandButton value="#{lbl.save}" action="#{sh.update}" >
+												</h:commandButton>			
+											</h:panelGroup>
+
+									</h:panelGroup>
+								</ui:repeat>
+								<h:commandButton value="#{lbl.updateSharedWith}" action="#{ShareBean.updateSharedWith}" >
+								</h:commandButton>	
+							</h:panelGroup>
+							
+							</a4j:outputPanel>
+						</h:panelGroup>
+				</h:panelGroup>
 			</h:form>
+		</h:panelGroup>
+		
+		<script type="text/javascript">
+  		</script>
+  				
 		</div>
+		
+
 	</ui:define>
 </ui:composition>

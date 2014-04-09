@@ -51,7 +51,9 @@
 				</div>
 				<div class="full_area0 itemBlock noTopBorder">
 					<b class="xLarge_area0_p8 endline labelLine clear"> <h:outputText
-							value="Grants" /> <span class="noDisplay">: </span>
+							value="Grants" /> <span class="noDisplay">: </span><h:outputLink
+							value="#{Navigation.applicationUrl}users?group=#{UserGroup.userGroup.id}">Add</h:outputLink>
+					
 					</b>
 					<h:outputText value="No grants"
 						rendered="#{UserGroup.userGroup.grants.size() == 0}" />

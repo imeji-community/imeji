@@ -1,369 +1,669 @@
-/**
- * License: src/main/resources/license/escidoc.license
- */
 package de.mpg.imeji.presentation.user;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.auth.Authorization;
+import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
+import de.mpg.imeji.logic.controller.GrantController;
+import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Container;
-import de.mpg.imeji.logic.vo.Grant.GrantType;
-import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.user.util.EmailClient;
-import de.mpg.imeji.presentation.user.util.EmailMessages;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
-import de.mpg.imeji.presentation.util.UrlHelper;
 
-/**
- * Bean for the share page
- * 
- * @author saquet (initial creation)
- * @author $Author$ (last modification)
- * @version $Revision$ $LastChangedDate$
- */
-public class ShareBean
-{
-    private SessionBean session;
-    private String email;
-    private List<SelectItem> grantsMenu;
-    private GrantType selectedGrant;
-    private String colId;
-    private Container container;
-    private static Logger logger = Logger.getLogger(ShareBean.class);
-    private boolean isAlbum = false;
+@ManagedBean(name = "ShareBean")
+@SessionScoped
+public class ShareBean {
+	private static Logger logger = Logger.getLogger(ShareBean.class);
+	
+    private SessionBean sb;
+    
 
-    /**
-     * Construct the {@link ShareBean}
-     */
+	@ManagedProperty(value = "#{SessionBean.user}")
+	private User user;
+    private String id;	
+    private String oldID;
+    
+    private String containerUri;
+    private boolean isCollection;
+    
+    private String title;
+
+    private String profileUri;
+
+    private String emailInput;
+	private List<String> emailList = new ArrayList<String>();
+	private List<String> errorList = new ArrayList<String>();
+	
+	private List<SharedHistory> sharedWithNew = new ArrayList<SharedHistory >();
+	private List<SharedHistory >  sharedWith = new ArrayList<SharedHistory >();
+	
+    private static Authorization auth = new Authorization();
+    private boolean isAdmin;
+    private List<SelectItem> grantItems = new ArrayList<SelectItem>();
+    private List<String> selectedGrants = new ArrayList<String>();
+    
+
+
+    
+    public enum ShareType
+    {
+    	READ, ADD, UPLOAD, EDIT, DELETE, EDIT_COLLECTION, EDIT_PROFILE, EDIT_ALBUM, ADMIN
+    }
+    
     public ShareBean()
     {
-        session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        super();
+        sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+		if(sb == null || sb.getUser() == null)
+		{
+			try {
+				ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+				ec.redirect(ec.getRequestContextPath() + "/");
+			} catch (IOException e) {
+				logger.error("Could not load ShareCollcetionBean", e);
+				e.printStackTrace();
+			} 
+		}
     }
-
-    /**
-     * Called when the page is viewed
-     */
-    public String getInit()
+    
+    public void init()
     {
-        URI uri = readURI();
-        if (uri != null)
-        {
-            loadContainer(uri);
-            initMenus(uri);
-        }
-        return "";
-    }
-
-    /**
-     * Load the container (album or collection) to be shared
-     */
-    public void loadContainer(URI uri)
-    {
-        if (isCollection(uri))
-        {
-            this.isAlbum = false;
-            container = ObjectLoader.loadCollectionLazy(uri, session.getUser());
-        }
-        else
-        {
-            this.isAlbum = true;
-            container = ObjectLoader.loadAlbumLazy(uri, session.getUser());
-        }
-    }
-
-    /**
-     * Initialize the menus of the page
-     */
-    public void initMenus(URI uri)
-    {
-        //TODO implemtents new or remove this method
-    }
-
-    /**
-     * share the {@link Container}
-     */
-    public void share()
-    {
-        if (container != null)
-        {
-            if (container instanceof CollectionImeji)
-            {
-                shareCollection(container.getId().toString(), container.getMetadata().getTitle());
-            }
-            else if (container instanceof Album)
-            {
-                shareAlbum(container.getId().toString(), container.getMetadata().getTitle());
-            }
-        }
-        HistorySession historySession = (HistorySession)BeanHelper.getSessionBean(HistorySession.class);
-        try
-        {
-            FacesContext.getCurrentInstance().getExternalContext()
-                    .redirect(historySession.getCurrentPage().getUri().toString());
-        }
-        catch (IOException e)
-        {
-            logger.error("Error redirecting to previous page");
-        }
-    }
-
-    /**
-     * Share a {@link CollectionImeji}
-     * 
-     * @param id
-     * @param name
-     */
-    private void shareCollection(String id, String name)
-    {
-        SharingManager sm = new SharingManager();
-        boolean shared = false;
-        String message = "";
-        String role = "";
-        if (shared)
-        {
-            User dest = ObjectLoader.loadUser(this.getEmail(), session.getUser());
-            EmailMessages emailMessages = new EmailMessages();
-            sendEmail(dest, session.getMessage("email_shared_collection_subject"),
-                    emailMessages.getSharedCollectionMessage(session.getUser().getName(), dest.getName(), name,
-                            getContainerHome(), role));
-            BeanHelper.info(session.getMessage("success_share"));
-            BeanHelper.info(message);
-        }
-    }
-
-    /**
-     * Check if an imeji object with the given {@link URI} is a {@link CollectionImeji}
-     * 
-     * @param uri
-     * @return
-     */
-    public boolean isCollection(URI uri)
-    {
-        return uri.getPath().contains("/collection/");
-    }
-
-    /**
-     * Read the uri parameter in the url
-     * 
-     * @return
-     */
-    private URI readURI()
-    {
-        String str = UrlHelper.getParameterValue("uri");
-        if (str != null)
-            return URI.create(str);
-        return null;
-    }
-
-    /**
-     * Share an {@link Album}
-     * 
-     * @param id
-     * @param name
-     */
-    private void shareAlbum(String id, String name)
-    {
-        SharingManager sm = new SharingManager();
-        boolean shared = false;
-        String message = "";
-        shared = sm.share(retrieveAlbum(id), session.getUser(), this.getEmail(), selectedGrant, true);
-        message = session.getLabel("album") + " " + id + " " + session.getLabel("shared_with") + " " + this.getEmail() + " "
-                + session.getLabel("as") + " " + selectedGrant.toString();
-        if (shared)
-        {
-            User dest = ObjectLoader.loadUser(this.getEmail(), session.getUser());
-            EmailMessages emailMessages = new EmailMessages();
-            sendEmail(dest, session.getMessage("email_shared_album_subject"), emailMessages.getSharedAlbumMessage(
-                    session.getUser().getName(), dest.getName(), name, getContainerHome(), selectedGrant.toString()));
-            BeanHelper.info(session.getMessage("success_share"));
-            BeanHelper.info(message);
-        }
-    }
-
-    /**
-     * Send email to the person to share with
-     * 
-     * @param dest
-     * @param subject
-     * @param message
-     */
-    private void sendEmail(User dest, String subject, String message)
-    {
-        EmailClient emailClient = new EmailClient();
-        try
-        {
-            emailClient.sendMail(dest.getEmail(), null,
-                    subject.replaceAll("XXX_INSTANCE_NAME_XXX", session.getInstanceName()), message);
-        }
-        catch (Exception e)
-        {
-            logger.error("Error sending email", e);
-            BeanHelper.error(session.getMessage("error") + ": Email not sent");
-        }
-    }
-
-    /**
-     * Get url of the {@link Container} Home page
-     * 
-     * @param id
-     * @return
-     */
-    public String getContainerHome()
-    {
-        Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-        String id = ObjectHelper.getId(container.getId());
-        if (isAlbum)
-            return navigation.getAlbumUrl() + id;
-        return navigation.getCollectionUrl() + id;
-    }
-
-    /**
-     * Retrieve the collection to share with the specified Id in the url
-     * 
-     * @param id
-     * @return
-     */
-    public CollectionImeji retrieveCollection(String id)
-    {
-        return ObjectLoader.loadCollectionLazy(URI.create(id), session.getUser());
-    }
-
-    /**
-     * Retrieve the profile to share with the specified collection Id in the url
-     * 
-     * @param collId
-     * @return
-     */
-    public MetadataProfile retrieveProfile(String collId)
-    {
-        return ObjectLoader.loadProfile(retrieveCollection(collId).getProfile(), session.getUser());
-    }
-
-    /**
-     * Retrieve the album to share with the specified Id in the url
-     * 
-     * @param albId
-     * @return
-     */
-    public Album retrieveAlbum(String albId)
-    {
-        return ObjectLoader.loadAlbumLazy(URI.create(albId), session.getUser());
-    }
-
-    /**
-     * getter
-     * 
-     * @return
-     */
-    public String getEmail()
-    {
-    	if (email == null || email.equals(""))
-    			{return email;}
+    	if(user == null && sb != null && sb.getUser() != null)
+    		user = sb.getUser();
+    	if((oldID == null && getId() != null) || (oldID != null && !oldID.equals(getId())))
+    	{
+    		loadContainer(getId());
+    		setOldID(getId());
+    		this.isAdmin = auth.administrate(this.user, containerUri);
+    	}
     	else
-    			{return email.toLowerCase();}
+    	{
+    		this.emailInput = "";
+//    		this.emailList.clear();
+//    		this.selectedGrants.clear();
+
+    	}
+    	
     }
 
-    /**
-     * setter
-     * 
-     * @param email
-     */
-    public void setEmail(String email)
+    
+    public void loadContainer(String id)
     {
-        this.email = email;
+		this.sharedWith.clear();
+		this.sharedWithNew.clear();
+    	CollectionImeji collection = ObjectLoader.loadCollection(ObjectHelper.getURI(CollectionImeji.class, getId()), user);
+		if(collection != null)
+		{
+			this.isCollection = true;
+        	this.containerUri = collection.getId() .toString(); 
+        	this.profileUri = collection.getProfile().toString();
+        	this.grantItems = sb.getShareCollectionGrantItems();
+        	this.title = collection.getMetadata().getTitle();
+		}
+    	else
+    	{
+    		Album album = ObjectLoader.loadAlbum(ObjectHelper.getURI(Album.class, getId()), user);
+    		if(album != null)
+    		{
+    			this.containerUri = album.getId().toString();
+    			this.isCollection = false;
+        		this.grantItems = sb.getShareAlbumGrantItems();   
+        		this.title = album.getMetadata().getTitle();
+    		}    		
+
+    	}
+    	
+    }
+    
+
+    public String checkInputEmail()
+    {
+    	if(getEmailInput() != null)
+    	{ 
+        	List<String> emails = Arrays.asList(getEmailInput().split("\\s*;\\s*"));
+        	for(String e : emails)
+        	{
+        		Pattern p = Pattern.compile(".+@.+\\.[a-z]+");
+        		Matcher m = p.matcher(e);
+        		if(!m.matches())
+        		{
+        			this.errorList.add(e + " -- invalid Input");   			
+                    BeanHelper.error(e + " -- invalid Input");
+        			logger.error(e + " -- invalid Input");
+        		}
+        		else
+        		{
+//        			UserController uc = new UserController(Imeji.adminUser);
+        			UserController uc = new UserController(Imeji.adminUser);
+        			try {
+    					User u = uc.retrieve(e);  
+    					this.emailList.add(e);
+    				} catch (Exception e1) {
+    					BeanHelper.error(e + " -- this user doesn't exist");
+    					logger.error(e + " -- this user doesn't exist", e1);
+    				}
+        			/*
+        			if(e.equalsIgnoreCase(user.getEmail()))
+        			{
+        				this.errorList.add("try to share own collection");
+                        BeanHelper.error("try to share own collection");
+        				logger.error("try to share own collection");
+        			}
+        			
+        			else
+        			{
+        			
+            			UserController uc = new UserController(Imeji.adminUser);
+            			try {
+        					User u = uc.retrieve(e);  
+        					this.emailList.add(e);
+        				} catch (Exception e1) {
+        					BeanHelper.error(e + " -- this user doesn't exist");
+        					logger.error(e + " -- this user doesn't exist", e1);
+        				}
+        			}
+        			*/
+
+        		}
+        	}
+    	}
+
+    	return "pretty:shareCollection";
+    }
+    
+    public String retrieveSharedUserWithGrants()
+    {
+    	UserController uc = new UserController(Imeji.adminUser);
+    	Collection<User> allUser = uc.retrieveAll();
+
+    	if(isCollection)
+    	{
+	    	for(User u : allUser)
+	    	{
+	        	SharedHistory sh = new SharedHistory();
+	    		if(hasReadGrants(u, containerUri, profileUri))
+	    		{
+	    			sh.setUser(u);
+	    			sh.getSharedType().add(ShareType.READ.toString());
+	    		}
+	    		if(hasUploadGrants(u, containerUri))
+	    		{
+	    			sh.setUser(u);
+	    			sh.getSharedType().add(ShareType.UPLOAD.toString());
+	    		}
+	    		if(hasEditGrants(u, containerUri))
+	    		{
+	    			sh.setUser(u);
+	    			sh.getSharedType().add(ShareType.EDIT.toString());
+	    		}
+	    		if(hasDeleteGrants(u, containerUri))
+	    		{
+	    			sh.setUser(u);
+	    			sh.getSharedType().add(ShareType.DELETE.toString());
+	    		}
+	    		if(hasEditContainerGrants(u, containerUri))
+	    		{
+	    			sh.setUser(u);
+	    			sh.getSharedType().add(ShareType.EDIT_COLLECTION.toString());
+	    		}
+	    		if(hasEditPrifileGrants(u, profileUri))
+	    		{
+	    			sh.setUser(u);
+	    			sh.getSharedType().add(ShareType.EDIT_PROFILE.toString());
+	    		}
+	    		if(hasAdminGrants(u, containerUri, profileUri))
+	    		{
+	    			sh.setUser(u);
+	    			sh.getSharedType().add(ShareType.ADMIN.toString());
+	    		}
+	    		if(sh.getUser()!=null)
+	    			this.sharedWith.add(sh);  			
+	    			
+	    	}
+    	}
+    	else
+    	{
+	    	for(User u : allUser)
+	    	{
+	        	SharedHistory sh = new SharedHistory();
+	    		if(hasReadGrants(u, containerUri))
+	    		{
+	    			sh.setUser(u);
+	    			sh.getSharedType().add(ShareType.READ.toString());
+	    		}
+	    		if(hasAddGrants(u, containerUri))
+	    		{
+	    			sh.setUser(u);
+	    			sh.getSharedType().add(ShareType.ADD.toString());
+	    		}
+	    		if(hasDeleteGrants(u, containerUri))
+	    		{
+	    			sh.setUser(u);
+	    			sh.getSharedType().add(ShareType.DELETE.toString());
+	    		}
+	    		if(hasEditContainerGrants(u, containerUri))
+	    		{
+	    			sh.setUser(u);
+	    			sh.getSharedType().add(ShareType.EDIT_ALBUM.toString());
+	    		}
+	    		if(hasAdminGrants(u, containerUri))
+	    		{
+	    			sh.setUser(u);
+	    			sh.getSharedType().add(ShareType.ADMIN.toString());
+	    		}
+	    		if(sh.getUser()!=null)
+	    			this.sharedWith.add(sh);  			
+	    			
+	    	}
+    	}
+    	return "pretty:shareCollection";
+    }
+    
+    public static boolean hasAddGrants(User user, String containerUri)
+    {
+    	List<Grant> grants = AuthorizationPredefinedRoles.add(containerUri);
+    	return !grantNotExist(user, grants);
+    	
+    }
+    
+    public static boolean hasReadGrants(User user, String containerUri, String profileUri)
+    {
+    	List<Grant> grants = AuthorizationPredefinedRoles.read(containerUri, profileUri);
+    	return !grantNotExist(user, grants);
+    	
+    }
+    
+    
+    
+    public static boolean hasReadGrants(User user, String containerUri)
+    {
+    	List<Grant> grants = AuthorizationPredefinedRoles.read(containerUri);
+    	return !grantNotExist(user, grants);
+    	
+    }
+    
+    public static boolean hasUploadGrants(User user, String containerUri)
+    {
+    	List<Grant> grants = AuthorizationPredefinedRoles.upload(containerUri);
+    	return !grantNotExist(user, grants);
+    }
+    
+    public static boolean hasEditGrants(User user, String containerUri)
+    {
+    	List<Grant> grants = AuthorizationPredefinedRoles.upload(containerUri);
+    	return !grantNotExist(user, grants);
     }
 
-    /**
-     * gettet
-     * 
-     * @return
-     */
-    public GrantType getSelectedGrant()
+    public static boolean hasDeleteGrants(User user, String containerUri)
     {
-        return selectedGrant;
+    	List<Grant> grants = AuthorizationPredefinedRoles.delete(containerUri);
+    	return !grantNotExist(user, grants);
+    }
+    
+    public static boolean hasEditContainerGrants(User user, String containerUri)
+    {
+    	List<Grant> grants = AuthorizationPredefinedRoles.editContainer(containerUri);
+    	return !grantNotExist(user, grants);
+    }
+    
+    public static boolean hasEditPrifileGrants(User user, String profileUri)
+    {
+    	List<Grant> grants = AuthorizationPredefinedRoles.editProfile(profileUri);
+    	return !grantNotExist(user, grants);
+    }
+    
+    public static boolean hasAdminGrants(User user, String containerUri, String profileUri)
+    {
+    	List<Grant> grants = AuthorizationPredefinedRoles.admin(containerUri, profileUri);
+    	return !grantNotExist(user, grants);
+    }
+    public static boolean hasAdminGrants(User user, String containerUri)
+    {
+    	List<Grant> grants = AuthorizationPredefinedRoles.admin(containerUri);
+    	return !grantNotExist(user, grants);
+    }
+    
+    public String save()
+    {
+
+    	this.sharedWithNew.clear();
+    	UserController uc = new UserController(Imeji.adminUser);
+    	if(isCollection)
+    	{
+        	for(String e : emailList)
+        	{
+        		try {
+    				User u = uc.retrieve(e);
+    				GrantController gc = new GrantController();
+    				List<String> sharedType = new ArrayList<String>(); 
+    				
+    				for(String g : selectedGrants)
+    				{	
+    					List<Grant> newGrants = new ArrayList<Grant>();
+
+    					switch (g)
+    					{  
+    					case "READ":
+    						newGrants = AuthorizationPredefinedRoles.read(containerUri, profileUri);
+    						break;
+    					case "UPLOAD":
+    						newGrants = AuthorizationPredefinedRoles.upload(containerUri);
+    						break;
+    					case "EDIT": 
+    						newGrants = AuthorizationPredefinedRoles.edit(containerUri);
+    						break;
+    					case "DELETE": 
+    						newGrants = AuthorizationPredefinedRoles.delete(containerUri);
+    						break;
+    					case "EDIT_COLLECTION":
+    						newGrants = AuthorizationPredefinedRoles.editContainer(containerUri);
+    						break;
+    					case "EDIT_PROFILE":
+    						newGrants = AuthorizationPredefinedRoles.editProfile(profileUri);
+    						break;
+    					case "ADMIN": 
+    						newGrants = AuthorizationPredefinedRoles.admin(containerUri, profileUri);
+    						break;
+    					}
+    					if(grantNotExist(u, newGrants))
+    					{
+    						gc.addGrants(u, newGrants, u);
+    					}
+    					sharedType.add(g);
+    				}
+    				SharedHistory csh = new SharedHistory(u, isCollection, containerUri, profileUri, sharedType);
+    				sharedWithNew.add(csh);
+    			} catch (Exception e1) {
+    				logger.error("CollectionSharedHistory--could not update User (email: " + user.getEmail() + " ) ", e1);
+    			}
+        		
+        	} 
+    	}else{
+
+        	for(String e : emailList)
+        	{
+        		try {
+    				User u = uc.retrieve(e);
+    				GrantController gc = new GrantController();
+    				List<String> sharedType = new ArrayList<String>(); 
+    				
+    				for(String g : selectedGrants)
+    				{	
+    					List<Grant> newGrants = new ArrayList<Grant>();
+
+    					switch (g)
+    					{  
+    					case "READ":
+    						newGrants = AuthorizationPredefinedRoles.read(containerUri);
+    						break;
+    					case "ADD":
+    						newGrants = AuthorizationPredefinedRoles.add(containerUri);
+    						break;
+    					case "DELETE": 
+    						newGrants = AuthorizationPredefinedRoles.delete(containerUri);
+    						break;
+    					case "EDIT_ALBUM":
+    						newGrants = AuthorizationPredefinedRoles.editContainer(containerUri);
+    						break;
+    					case "ADMIN": 
+    						newGrants = AuthorizationPredefinedRoles.admin(containerUri);
+    						break;
+    					}
+    					if(grantNotExist(u, newGrants))
+    					{
+    						gc.addGrants(u, newGrants, u);
+    					}
+    					sharedType.add(g);
+    				}
+    				SharedHistory csh = new SharedHistory(u, isCollection, containerUri, profileUri, sharedType);
+    				sharedWithNew.add(csh);
+    			} catch (Exception e1) {
+    				logger.error("CollectionSharedHistory--could not update User (email: " + user.getEmail() + " ) ", e1);
+    			}
+        		
+        	} 
+    		
+    		
+    		
+    	}
+  	
+    	reset();
+    	clearError();
+    	return "pretty:shareCollection";
+    }
+    
+    public static boolean grantNotExist(User u, List<Grant> grantList)
+    {
+    	boolean b = false;
+    	List<Grant> userGrants = (List<Grant>) u.getGrants();
+    	for(Grant g : grantList)
+    		if(!userGrants.contains(g))
+    			b = true;
+		return b; 					
+    }
+    
+    public void reset()
+    {
+        setEmailInput("");
+        emailList.clear();
+        selectedGrants.clear();
+    }
+    
+    public void clearError()
+    {
+        errorList.clear();
     }
 
-    /**
-     * setter
-     * 
-     * @param selectedGrant
-     */
-    public void setSelectedGrant(GrantType selectedGrant)
-    {
-        this.selectedGrant = selectedGrant;
-    }
+    	
+	protected String getNavigationString() {
+		return null;
+	}
 
-    /**
-     * getter
-     * 
-     * @return
-     */
-    public String getColId()
-    {
-        return colId;
-    }
+	public User getUser() {
+		return user;
+	}
 
-    /**
-     * getter
-     * 
-     * @return
-     */
-    public List<SelectItem> getGrantsMenu()
-    {
-        return grantsMenu;
-    }
+	public void setUser(User user) {
+		this.user = user;
+	}
 
-    /**
-     * setter
-     * 
-     * @param grantsMenu
-     */
-    public void setGrantsMenu(List<SelectItem> grantsMenu)
-    {
-        this.grantsMenu = grantsMenu;
-    }
+	public String getId() {
+		return id;
+	}
 
-    /**
-     * getter
-     * 
-     * @return
-     */
-    public Container getContainer()
-    {
-        return container;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    /**
-     * setter
-     * 
-     * @param container
-     */
-    public void setContainer(Container container)
-    {
-        this.container = container;
-    }
+	public String getOldID() {
+		return oldID;
+	}
 
-    /**
-     * getter
-     * 
-     * @return
-     */
-    public boolean isAlbum()
-    {
-        return this.isAlbum;
-    }
+	public void setOldID(String oldID) {
+		this.oldID = oldID;
+	}
+
+	public String getEmailInput() {
+		return emailInput;
+	}
+
+	public void setEmailInput(String emailInput) {
+		this.emailInput = emailInput;
+	}
+
+	public List<String> getEmailList() {
+		return emailList;
+	}
+
+	public void setEmailList(List<String> emailList) {
+		this.emailList = emailList;
+	}
+
+	public List<String> getErrorList() {
+		return errorList;
+	}
+
+	public void setErrorList(List<String> errorList) {
+		this.errorList = errorList;
+	}
+
+	public boolean isAdmin() {
+		return isAdmin;
+	}
+
+	public void setAdmin(boolean isAdmin) {
+		this.isAdmin = isAdmin;
+	}
+
+	public List<SelectItem> getGrantItems() {
+		return grantItems;
+	}
+
+	public void setGrantItems(List<SelectItem> grantItems) {
+		this.grantItems = grantItems;
+	}
+ 
+	public List<String> getSelectedGrants() {
+		if(isCollection)
+		{
+			if(selectedGrants.contains("ADMIN"))
+	        { 
+	        	this.selectedGrants.clear();
+	        	this.selectedGrants.add(ShareType.READ.toString());
+	        	this.selectedGrants.add(ShareType.UPLOAD.toString());
+	        	this.selectedGrants.add(ShareType.EDIT.toString());
+	        	this.selectedGrants.add(ShareType.DELETE.toString());
+	        	this.selectedGrants.add(ShareType.EDIT_COLLECTION.toString());
+	        	this.selectedGrants.add(ShareType.EDIT_PROFILE.toString());
+	        	this.selectedGrants.add(ShareType.ADMIN.toString());     	
+	        }
+			else 
+			{
+				if(!selectedGrants.contains("READ"))
+					selectedGrants.add(ShareType.READ.toString());
+			}
+		}
+		else
+		{
+			if(selectedGrants.contains("ADMIN"))
+	        { 
+	        	this.selectedGrants.clear();
+	        	this.selectedGrants.add(ShareType.READ.toString());
+	        	this.selectedGrants.add(ShareType.ADD.toString());
+	        	this.selectedGrants.add(ShareType.DELETE.toString());
+	        	this.selectedGrants.add(ShareType.EDIT_ALBUM.toString());
+	        	this.selectedGrants.add(ShareType.ADMIN.toString());     	
+	        }
+			else 
+			{
+				if(!selectedGrants.contains("READ"))
+					selectedGrants.add(ShareType.READ.toString());
+			}
+		}
+		return selectedGrants;
+	}
+
+	public void setSelectedGrants(List<String> selectedGrants) {
+		this.selectedGrants = selectedGrants;
+	}
+
+	public String getContainerUri() {
+		return containerUri;
+	}
+
+	public void setContainerUri(String containerUri) {
+		this.containerUri= containerUri;
+	}
+
+	public String getProfileUri() {
+		return profileUri;
+	}
+
+	public void setProfileUri(String profileUri) {
+		this.profileUri = profileUri;
+	} 
+ 
+	public List<SharedHistory> getSharedWithNew() {
+		return sharedWithNew;
+	}
+
+	public void setSharedWithNew(List<SharedHistory> sharedWithNew) {
+		this.sharedWithNew = sharedWithNew;
+	}
+
+	public List<SharedHistory> getSharedWith() {
+		return sharedWith;
+	}
+
+	public void setSharedWith(List<SharedHistory> sharedWith) {
+		this.sharedWith = sharedWith;
+	}
+
+	
+	public String clearNewHistory()
+	{
+		this.sharedWithNew.clear();
+		return "pretty:shareCollection";
+	}
+	
+	public String updateSharedWithNew()
+	{
+		for(SharedHistory shn : sharedWithNew)
+		{
+			shn.update();
+		}
+		return "pretty:shareCollection";
+	}
+	
+	public String updateSharedWith()
+	{
+		for(SharedHistory sh : sharedWith)
+		{
+			sh.update();
+		}
+		return "pretty:shareCollection";
+	}
+
+	public boolean isCollection() {
+		return isCollection;
+	}
+
+	public void setAlbum(boolean isCollection) {
+		this.isCollection = isCollection;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	
+
 }

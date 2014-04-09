@@ -40,7 +40,7 @@ public class CRUDTransaction extends Transaction
 
     @Override
     protected void execute(Dataset ds) throws Exception
-    {
+    {  
         ResourceController rc = new ResourceController(getModel(ds), lazy);
         for (Object o : objects)
         {

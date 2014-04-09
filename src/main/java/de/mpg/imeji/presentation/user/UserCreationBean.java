@@ -3,6 +3,8 @@
  */
 package de.mpg.imeji.presentation.user;
 
+import java.util.Collection;
+
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
@@ -38,7 +40,7 @@ public class UserCreationBean
         sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         this.setUser(new User());
     }
-
+    
     /**
      * Method called when user create a new user
      * 
@@ -47,6 +49,7 @@ public class UserCreationBean
      */
     public String create()
     {
+
         if (!isValidEmail(user.getEmail()))
         {
             BeanHelper.error(sb.getMessage("error_user_email_not_valid"));

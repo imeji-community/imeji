@@ -111,7 +111,7 @@
 											</h:outputLink>
 											<!-- Delete/Discard selected images -->
 											<h:panelGroup rendered="#{paginatorListSessionBean.navigationString == 'pretty:collectionBrowse' and paginatorListSessionBean.collection != null}">
-												<h:outputLink onclick="openDialog('dialogDeleteSelected')" styleClass="xLarge_area0_p8 noPaddingTopBottom criticalItem" value="#" 
+												<h:outputLink styleClass="xLarge_area0_p8 noPaddingTopBottom criticalItem" value="#" onclick="openDialog('dialogDeleteSelected')"  
 															  rendered="#{Auth.deleteContent(paginatorListSessionBean.collection) and paginatorListSessionBean.collection.status == 'PENDING'}">
 													<h:outputText value="#{lbl.delete_selectedImages}"/>
 												</h:outputLink>

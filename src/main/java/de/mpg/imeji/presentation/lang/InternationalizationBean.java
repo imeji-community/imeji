@@ -6,7 +6,11 @@ package de.mpg.imeji.presentation.lang;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Observable;
+import java.util.ResourceBundle;
 
+import javax.faces.application.Application;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
@@ -31,6 +35,11 @@ public class InternationalizationBean
     private List<SelectItem> internationalizedLanguages;
     // The languages supported in imeji (defined in the properties)
     private String[] supportedLanguages;
+    
+    public static final String LABEL_BUNDLE = "labels";
+    public static final String MESSAGES_BUNDLE = "messages";
+    
+    private Locale userLocale = FacesContext.getCurrentInstance().getExternalContext().getRequestLocale();
 
     /**
      * Constructor
@@ -261,4 +270,40 @@ public class InternationalizationBean
     {
         return languagesAsString;
     }
+    
+//    public List<SelectItem> getShareCollectionGrantItems()
+//    {
+//    	List<SelectItem> itemList = new ArrayList<SelectItem>();
+//    			
+//    	itemList.add(new SelectItem("read", getLabel("")));
+//    	itemList.add(new SelectItem("upload", getLabel("")));
+//    	itemList.add(new SelectItem("edit", getLabel("")));
+//    	itemList.add(new SelectItem("delete",getLabel("")));
+//    	itemList.add(new SelectItem("edit_collection", getLabel("")));
+//    	itemList.add(new SelectItem("edit_profile", getLabel("")));
+//    	itemList.add(new SelectItem("admin", getLabel("")));
+//    	
+//    	return itemList;
+//    }
+//    
+//    
+//	public static String getLabel (String name)
+//    {
+//    	return getResource("label", name);
+//    }
+//	
+//	 public static String getResource (String bundle, String name)
+//    {
+//    	try{
+//    	Application application = FacesContext.getCurrentInstance().getApplication();
+//	    InternationalizationBean iBean = (InternationalizationBean) application.getVariableResolver().resolveVariable(FacesContext.getCurrentInstance(), "internationalizationHelper");
+//	    ResourceBundle rBundle = ResourceBundle.getBundle(bundle, iBean.getUserLocale());
+//	    return rBundle.getString(name);
+//    	}
+//    	catch(Exception e)
+//    	{
+//    		//logger.warn("Value: " + name + " not found in resource bundle: " + bundle);
+//    		return name;
+//    	}
+//    }
 }

@@ -14,14 +14,16 @@
 					<h:outputText value="Create New User Group" />
 				</h:outputLink>
 			</div>
+			
+		
 			<div class="free_area0_p4">
-				<h:form>
-					<h:inputText value="#{UserGroups.query}"
-						styleClass="xDouble_area0_p2" />
-					<h:commandButton action="#{UserGroups.search()}"
-						value="#{lbl.search}" styleClass="free_area1_p8 activeButton" />
+				<h:form id="new">
+					<h:inputText value="#{UserGroups.query}" styleClass="xDouble_area0_p2" />
+					<h:commandButton action="#{UserGroups.search()}" value="#{lbl.search}" styleClass="free_area1_p8 activeButton" />
 				</h:form>
 			</div>
+			
+		
 			<div class="full_area0 endline itemLine noTopBorder">
 				<ui:repeat var="group" value="#{UserGroups.userGroups}">
 					<div class="full_area0_p4 listItem noTopBorder">
@@ -36,6 +38,8 @@
 					</div>
 				</ui:repeat>
 			</div>
+
+
 		</ui:fragment>
 	</ui:define>
 </ui:composition>

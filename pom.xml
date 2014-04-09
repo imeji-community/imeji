@@ -84,8 +84,8 @@
 	</mailingLists>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>1.6</maven.compiler.source>
-		<maven.compiler.target>1.6</maven.compiler.target>
+		<maven.compiler.source>1.7</maven.compiler.source>
+		<maven.compiler.target>1.7</maven.compiler.target>
 		<!-- Setting this property so that generated project uses correct version 
 			of richfaces. -->
 		<org.richfaces.bom.version>4.2.2.Final</org.richfaces.bom.version>
@@ -367,9 +367,15 @@
 			<version>4.8.2</version>
 		</dependency>
 		<!-- richfaces 4 libs -->
-		<!-- <dependency> <groupId>org.richfaces.ui</groupId> <artifactId>richfaces-components-ui</artifactId> 
-			</dependency> <dependency> <groupId>org.richfaces.core</groupId> <artifactId>richfaces-core-impl</artifactId> 
-			</dependency> -->
+		<dependency> 
+			<groupId>org.richfaces.ui</groupId> 
+			<artifactId>richfaces-components-ui</artifactId> 
+		</dependency> 
+			
+		<dependency> 
+			<groupId>org.richfaces.core</groupId> 
+			<artifactId>richfaces-core-impl</artifactId> 
+			</dependency>
 		<dependency>
 			<groupId>javax.faces</groupId>
 			<artifactId>javax.faces-api</artifactId>
@@ -559,7 +565,9 @@
 								<phase>install</phase>
 								<configuration>
 									<tasks>
-										<copy file="${project.build.directory}/${project.warName}.war" tofile="${tomcat.webapps}/${project.warName}.war" />
+										<delete quiet="true" file="${tomcat.webapps}/${project.warName}.war" />
+										<delete quiet="true" dir="${tomcat.webapps}/${project.warName}" />
+										<copy overwrite="true" file="${project.build.directory}/${project.warName}.war" tofile="${tomcat.webapps}/${project.warName}.war" />
 									</tasks>
 								</configuration>
 								<goals>

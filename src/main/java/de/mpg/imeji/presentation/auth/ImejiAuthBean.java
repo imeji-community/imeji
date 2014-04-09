@@ -29,12 +29,26 @@
 package de.mpg.imeji.presentation.auth;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
 import de.mpg.imeji.logic.auth.Authorization;
+import de.mpg.imeji.logic.controller.CollectionController;
+import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.vo.SearchIndex;
+import de.mpg.imeji.logic.search.vo.SearchOperators;
+import de.mpg.imeji.logic.search.vo.SearchPair;
+import de.mpg.imeji.logic.search.vo.SearchQuery;
+import de.mpg.imeji.logic.search.vo.SortCriterion;
+import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
+import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
+import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.PropertyBean;
 
@@ -306,7 +320,7 @@ public class ImejiAuthBean implements Serializable
      * @return
      */
     public boolean admin(User user, Object obj)
-    {
+    { 
         return auth.administrate(user, obj);
     }
 
@@ -463,6 +477,7 @@ public class ImejiAuthBean implements Serializable
     {
         return sessionUser != null;
     }
+    
 
     /**
      * @return the sessionUser
@@ -479,4 +494,5 @@ public class ImejiAuthBean implements Serializable
     {
         ImejiAuthBean.sessionUser = sessionUser;
     }
+    
 }

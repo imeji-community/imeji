@@ -6,6 +6,7 @@ package de.mpg.imeji.presentation.user;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.faces.context.FacesContext;
 
@@ -26,7 +27,7 @@ public class UserBean
     private String newEmail = null;
     private SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     private String id;
-
+    
     public UserBean()
     {
         // TODO Auto-generated constructor stub

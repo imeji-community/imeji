@@ -64,6 +64,7 @@
 		<filter-class>de.mpg.imeji.presentation.history.HistoryFilter</filter-class>
 		<async-supported>true</async-supported> 
 	</filter>
+	
 	<!-- Mappings -->
 	<servlet-mapping>
 		<servlet-name>Faces Servlet</servlet-name>
@@ -151,6 +152,21 @@
 		<param-name>javax.faces.FACELETS_REFRESH_PERIOD</param-name>
 		<param-value>-1</param-value>
 	</context-param>
+	<context-param>
+	    <param-name>org.richfaces.enableControlSkinning</param-name>
+	    <param-value>false</param-value>
+	 </context-param>
+	 <context-param>
+	    <param-name>org.richfaces.enableControlSkinningClasses</param-name>
+	    <param-value>false</param-value>
+	 </context-param>
+	 <context-param>
+	    <param-name>org.richfaces.skin</param-name>
+	    <param-value>blueSky</param-value>
+  	 </context-param>
+	
+	
+	
 	<session-config>
 		<session-timeout>180</session-timeout>
 	</session-config>

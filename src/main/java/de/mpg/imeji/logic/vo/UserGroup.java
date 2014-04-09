@@ -52,14 +52,16 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jId(getMethod = "getId", setMethod = "setId")
 public class UserGroup implements Serializable
 {
-    private static final long serialVersionUID = 7770992777121385741L;
+    private URI id = IdentifierUtil.newURI(UserGroup.class);
+    
     @j2jLiteral("http://xmlns.com/foaf/0.1/name")
     private String name;
     @j2jList("http://imeji.org/terms/grant")
     private Collection<Grant> grants = new ArrayList<Grant>();
     @j2jList("http://xmlns.com/foaf/0.1/member")
     private Collection<URI> users = new ArrayList<URI>();
-    private URI id = IdentifierUtil.newURI(UserGroup.class);
+    
+
 
     /**
      * @return the name

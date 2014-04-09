@@ -4,6 +4,8 @@
 package de.mpg.imeji.presentation.session;
 
 import java.io.IOException;
+
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ import java.util.ResourceBundle;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -26,6 +29,7 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation.Page;
+import de.mpg.imeji.presentation.user.ShareBean.ShareType;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -415,5 +419,31 @@ public class SessionBean
     public void setCollectionCached(Map<URI, CollectionImeji> collectionCached)
     {
         this.collectionCached = collectionCached;
+    }
+    
+    public List<SelectItem> getShareCollectionGrantItems()
+    {
+    	List<SelectItem> itemList = new ArrayList<SelectItem>();
+    			
+    	itemList.add(new SelectItem(ShareType.READ, getLabel("collection_share_read")));
+    	itemList.add(new SelectItem(ShareType.UPLOAD, getLabel("collection_share_image_upload")));
+    	itemList.add(new SelectItem(ShareType.EDIT, getLabel("collection_share_image_edit")));
+    	itemList.add(new SelectItem(ShareType.DELETE,getLabel("collection_share_image_delete")));
+    	itemList.add(new SelectItem(ShareType.EDIT_COLLECTION, getLabel("collection_share_collection_edit")));
+    	itemList.add(new SelectItem(ShareType.EDIT_PROFILE, getLabel("collection_share_profile_edit")));
+    	itemList.add(new SelectItem(ShareType.ADMIN, getLabel("collection_share_admin")));    	
+    	return itemList;
+    }
+    
+    public List<SelectItem> getShareAlbumGrantItems()
+    {
+    	List<SelectItem> itemList = new ArrayList<SelectItem>();
+    			
+    	itemList.add(new SelectItem(ShareType.READ, getLabel("album_share_read")));
+    	itemList.add(new SelectItem(ShareType.ADD, getLabel("album_share_image_add")));
+    	itemList.add(new SelectItem(ShareType.DELETE,getLabel("album_share_image_delete")));
+    	itemList.add(new SelectItem(ShareType.EDIT_ALBUM, getLabel("album_share_album_edit")));
+    	itemList.add(new SelectItem(ShareType.ADMIN, getLabel("album_share_admin")));    	
+    	return itemList;
     }
 }

@@ -76,6 +76,19 @@
 		<view-id>/jsf/CollectionEdit.xhtml</view-id>
 		<action onPostback="false">#{EditCollectionBean.init}</action>
 	</url-mapping>
+	
+	<url-mapping id="shareCollection">
+		<pattern value="/collection/#{ShareBean.id}/share"></pattern>
+		<view-id>/jsf/Share.xhtml</view-id>
+		<action onPostback="false">#{ShareBean.init}</action>
+	</url-mapping>
+	
+	<url-mapping id="shareAlbum">
+		<pattern value="/album/#{ShareBean.id}/share"></pattern>
+		<view-id>/jsf/Share.xhtml</view-id>
+		<action onPostback="false">#{ShareBean.init}</action>
+	</url-mapping>
+	
 	<!-- Profile Pages -->
 	<url-mapping id="viewProfile">
 		<pattern value="/profile/#{ViewMdProfileBean.id}" />
@@ -136,6 +149,11 @@
 		<view-id>/jsf/User.xhtml</view-id>
 	</url-mapping>
 
+	<url-mapping id="privatePage">
+		<pattern value="/private"></pattern>
+		<view-id>/jsf/Private.xhtml</view-id>
+	</url-mapping>
+
 	<url-mapping id="administration">
 		<pattern value="/admin"></pattern>
 		<view-id>/jsf/UserAdministrationPage.xhtml</view-id>
@@ -166,10 +184,7 @@
 		<view-id>/jsf/UserGroupCreate.xhtml</view-id>
 	</url-mapping>
 
-	<url-mapping id="share">
-		<pattern value="/share"></pattern>
-		<view-id>/jsf/Share.xhtml</view-id>
-	</url-mapping>
+
 
 	<url-mapping id="admin">
 		<pattern value="/admin"></pattern>

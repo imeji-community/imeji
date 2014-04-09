@@ -3,6 +3,8 @@
 		xmlns:ui="http://java.sun.com/jsf/facelets" 
 		xmlns:h="http://java.sun.com/jsf/html" 
 		xmlns:f="http://java.sun.com/jsf/core"
+		xmlns:a4j="http://richfaces.org/a4j"
+		xmlns:rich="http://richfaces.org/rich"
 		xmlns:imjc="http://java.sun.com/jsf/composite/components">
 	<ui:define name="headline">
 		<h1>
@@ -189,9 +191,10 @@
 	<ui:define name="actionsMenu">
 		<h:panelGroup layout="block" styleClass="imj_contentSubMenu">
 			<h:panelGroup>
-				<h:outputLink styleClass="imj_contentSubMenuItem" value="#{Navigation.shareUrl}?uri=#{AlbumBean.album.id}"  rendered="#{AlbumBean.album.status=='PENDING' and Auth.admin}">
-					<h:outputText value="#{lbl.album_share}"/>
-				</h:outputLink>
+      		<h:outputLink styleClass="imj_contentSubMenuItem" value="#{Navigation.albumUrl}#{AlbumBean.id}/share" rendered="#{Auth.admin(AlbumBean.album)}" >
+				<h:outputText value="#{lbl.album_share}"/>		
+			</h:outputLink>
+			
 				<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialogRelease');" rendered="#{Auth.admin(AlbumBean.album) and AlbumBean.album.status=='PENDING'}">
 					<h:outputText value="#{lbl.release}"/>
 				</h:outputLink>

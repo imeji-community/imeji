@@ -46,6 +46,7 @@ public class Navigation
     public final Page USER = new Page("User", "user");
     public final Page ADMIN = new Page("Admin", "admin");
     public final Page DIGILIB = new Page("Digilib", "digilib");
+
     // session
     private SessionBean sessionBean = null;
 
@@ -172,6 +173,8 @@ public class Navigation
     {
         return applicationUrl + ADMIN.getPath();
     }
+    
+
 
     public String getAutocompleteUrl()
     {

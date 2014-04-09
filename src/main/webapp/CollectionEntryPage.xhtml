@@ -3,6 +3,8 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
 	xmlns:imjc="http://java.sun.com/jsf/composite/components">
 	<ui:define name="headline">
 		<h1>
@@ -34,7 +36,7 @@
 	<ui:define name="actionsMenu">
 		<h:panelGroup styleClass="full_area0"> <!-- This panelGroup is needed for IE -->
 		<h:panelGroup layout="block" styleClass="imj_contentSubMenu" rendered="#{Auth.read(ViewCollectionBean.collection)}">
-      		<h:outputLink styleClass="imj_contentSubMenuItem" value="#{Navigation.shareUrl}?uri=#{ViewCollectionBean.collection.id}" rendered="#{ViewCollectionBean.collection.status!='WITHDRAWN' and Auth.admin(ViewCollectionBean.collection)}" >
+      		<h:outputLink styleClass="imj_contentSubMenuItem" value="#{Navigation.collectionUrl}#{ViewCollectionBean.id}/share" rendered="#{ViewCollectionBean.collection.status!='WITHDRAWN' and Auth.admin(ViewCollectionBean.collection)}" >
 				<h:outputText value="#{lbl.collection_share}"/>		
 			</h:outputLink>
 			<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialogRelease');"  rendered="#{Auth.update(ViewCollectionBean.collection) and ViewCollectionBean.collection.status=='PENDING'}">

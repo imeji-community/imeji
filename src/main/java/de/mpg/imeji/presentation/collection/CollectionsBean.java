@@ -4,6 +4,7 @@
 package de.mpg.imeji.presentation.collection;
 
 import java.net.URI;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -15,6 +16,7 @@ import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
+import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
@@ -84,10 +86,11 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
         {
             searchQuery = URLQueryTransformer.parseStringQuery(query);
         }
-        if (getFilter() != null)
+        SearchPair sp = getFilter();
+        if (sp != null)
         {
             searchQuery.addLogicalRelation(LOGICAL_RELATIONS.AND);
-            searchQuery.addPair(getFilter());
+            searchQuery.addPair(sp);
         }
         SortCriterion sortCriterion = new SortCriterion();
         sortCriterion.setIndex(Search.getIndex(getSelectedSortCriterion()));

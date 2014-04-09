@@ -1,6 +1,9 @@
 package de.mpg.j2j;
 
+
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.query.ReadWrite;
@@ -10,14 +13,16 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.tdb.TDBFactory;
 
 import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Grant;
-import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.vo.Grant.GrantType;
+import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.j2j.exceptions.NotFoundException;
 
@@ -33,10 +38,13 @@ public class BasicTest
     public static void main(String[] args) throws Exception
     {
         jenaInitTest();
-        imejiInitTest();
+//        imejiInitTest();
+
         System.out.println("all done.");
     }
 
+    
+    
     /**
      * If this test works, then imeji should be abble to run (Should be run twice)
      * 
@@ -62,6 +70,8 @@ public class BasicTest
         System.out.println("done...");
     }
 
+    
+
     /**
      * Test to understand problems in imeji initialization. Should do the same thing like imejiInitTest but with simple
      * jena methods
@@ -71,7 +81,8 @@ public class BasicTest
     public static void jenaInitTest() throws Exception
     {
         System.out.println("jenaInitTest started...");
-        Dataset ds = TDBFactory.createDataset("C:\\Projects\\Imeji\\tdb\\testing");
+    	String directory = "C:\\data\\imeji\\tdb\\";
+        Dataset ds = TDBFactory.createDataset(directory);
         String name1 = "http://test.com/model1";
         String name2 = "http://test.com/model2";
         initModel(ds, name1);

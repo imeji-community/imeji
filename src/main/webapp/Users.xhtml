@@ -46,7 +46,12 @@
 										<div class="imj_admindataValue">										
 											<div class="imj_admindataValueEntry">									
 												<ui:repeat id="grantList" var="grant" value="#{user.grants}" rows="0">
-													<h:outputText styleClass="imj_userGrantList" value="#{UsersBean.grantsString(grant)}"/>
+													<span class="imj_userGrantList">
+														<h:outputText styleClass="" value="#{grant.asGrantType()}" />
+														<h:outputLink styleClass="" value="#{grant.grantFor}">
+															<h:outputText value="#{grant.grantFor}" />
+														</h:outputLink>
+													</span>
 												</ui:repeat>
 											</div>										
 										</div>

@@ -25,7 +25,10 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.user.util.EmailClient;
+import de.mpg.imeji.presentation.user.util.EmailMessages;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 
@@ -50,6 +53,7 @@ public class ShareBean
     private boolean isAdmin;
     private List<SelectItem> grantItems = new ArrayList<SelectItem>();
     private List<String> selectedGrants = new ArrayList<String>();
+    private boolean sendEmail = true;
 
     public enum ShareType
     {
@@ -106,12 +110,35 @@ public class ShareBean
     }
 
     /**
+     * Check the input and add all correct entry to the list of elements to be saved
+     */
+    public void share()
+    {
+        shareTo(checkInputEmail());
+        init();
+    }
+
+    /**
+     * Unshare the {@link Container} for one {@link User} (i.e, remove all {@link Grant} of this {@link User} related to
+     * the {@link container})
+     * 
+     * @param sh
+     */
+    public void unshare(SharedHistory sh)
+    {
+        sh.getSharedType().clear();
+        sh.update();
+        init();
+    }
+
+    /**
      * Check the input values with the emails
      * 
      * @return
      */
-    public String checkInputEmail()
+    public List<String> checkInputEmail()
     {
+        List<String> emailList = new ArrayList<>();
         if (getEmailInput() != null)
         {
             List<String> emails = Arrays.asList(getEmailInput().split("\\s*;\\s*"));
@@ -129,7 +156,7 @@ public class ShareBean
                     try
                     {
                         uc.retrieve(e);
-                        this.emailList.add(e);
+                        emailList.add(e);
                     }
                     catch (Exception e1)
                     {
@@ -138,25 +165,23 @@ public class ShareBean
                     }
                 }
             }
-            emailInput = "";
         }
-        return ":";
+        return emailList;
     }
 
     /**
-     * Retrieve all {@link User} with {@link Grant} for the current {@link Container} TODO make a correct search and
-     * avoid retrieveAll
+     * Retrieve all {@link User} with {@link Grant} for the current {@link Container}
      */
     public void retrieveSharedUserWithGrants()
     {
         UserController uc = new UserController(Imeji.adminUser);
-        Collection<User> allUser = uc.retrieveAll();
+        Collection<User> allUser = uc.retrieveUserWithGrantFor(containerUri);
         sharedWith = new ArrayList<>();
         if (isCollection)
         {
             for (User u : allUser)
             {
-                SharedHistory sh = new SharedHistory();
+                SharedHistory sh = new SharedHistory(u, true, containerUri, profileUri, new ArrayList<String>());
                 if (hasReadGrants(u, containerUri, profileUri))
                 {
                     sh.setUser(u);
@@ -193,14 +218,14 @@ public class ShareBean
                     sh.getSharedType().add(ShareType.ADMIN.toString());
                 }
                 if (sh.getUser() != null)
-                    this.sharedWith.add(sh);
+                    sharedWith.add(sh);
             }
         }
         else
         {
             for (User u : allUser)
             {
-                SharedHistory sh = new SharedHistory();
+                SharedHistory sh = new SharedHistory(u, false, containerUri, null, new ArrayList<String>());
                 if (hasReadGrants(u, containerUri))
                 {
                     sh.setUser(u);
@@ -231,17 +256,27 @@ public class ShareBean
             }
         }
     }
-
+    
     /**
-     * Unshare the {@link Container} for one {@link User} (i.e, remove all {@link Grant} of this {@link User} related to
-     * the {@link container})
+     * Send email to the person to share with
      * 
-     * @param sh
+     * @param dest
+     * @param subject
+     * @param message
      */
-    public void unshare(SharedHistory sh)
+    private void sendEmail(User dest, String subject, String message)
     {
-        sh.getSharedType().clear();
-        sh.update();
+        EmailClient emailClient = new EmailClient();
+        try
+        {
+            emailClient.sendMail(dest.getEmail(), null,
+                    subject.replaceAll("XXX_INSTANCE_NAME_XXX", sb.getInstanceName()), message);
+        }
+        catch (Exception e)
+        {
+            logger.error("Error sending email", e);
+            BeanHelper.error(sb.getMessage("error") + ": Email not sent");
+        }
     }
 
     public static boolean hasAddGrants(User user, String containerUri)
@@ -270,7 +305,7 @@ public class ShareBean
 
     public static boolean hasEditGrants(User user, String containerUri)
     {
-        List<Grant> grants = AuthorizationPredefinedRoles.upload(containerUri);
+        List<Grant> grants = AuthorizationPredefinedRoles.edit(containerUri);
         return !grantNotExist(user, grants);
     }
 
@@ -304,7 +339,13 @@ public class ShareBean
         return !grantNotExist(user, grants);
     }
 
-    public String save()
+    /**
+     * Share the {@link Container} with the {@link List} of {@link User} and {@link UserGroup}
+     * 
+     * @param emailList
+     * @return
+     */
+    public void shareTo(List<String> emailList)
     {
         if (isCollection)
         {
@@ -348,7 +389,12 @@ public class ShareBean
                         }
                         sharedType.add(g);
                     }
-                    ;
+                    if(sendEmail)
+                    {
+                        EmailMessages emailMessages = new EmailMessages();
+                        sendEmail(u, sb.getMessage("email_shared_album_subject"), emailMessages.getSharedCollectionMessage(user.getName(), u.getName(), title, containerUri));
+                    }
+                 
                 }
                 catch (Exception e1)
                 {
@@ -393,6 +439,11 @@ public class ShareBean
                         }
                         sharedType.add(g);
                     }
+                    if(sendEmail)
+                    {
+                        EmailMessages emailMessages = new EmailMessages();
+                        sendEmail(u, sb.getMessage("email_shared_album_subject"), emailMessages.getSharedAlbumMessage(user.getName(), u.getName(), title, containerUri));
+                    }
                 }
                 catch (Exception e1)
                 {
@@ -403,7 +454,6 @@ public class ShareBean
         }
         reset();
         clearError();
-        return "pretty:shareCollection";
     }
 
     public static boolean grantNotExist(User u, List<Grant> grantList)
@@ -613,5 +663,21 @@ public class ShareBean
     public void setTitle(String title)
     {
         this.title = title;
+    }
+
+    /**
+     * @return the sendEmail
+     */
+    public boolean isSendEmail()
+    {
+        return sendEmail;
+    }
+
+    /**
+     * @param sendEmail the sendEmail to set
+     */
+    public void setSendEmail(boolean sendEmail)
+    {
+        this.sendEmail = sendEmail;
     }
 }

@@ -28,87 +28,73 @@
 		
 		<div class="imj_shareForm">
 			<div class="imj_submitPanel">
-				<h:commandButton value="Share With New Users" action="#" styleClass="imj_submitButton" type="button" onclick="$('#share').show();$(this).hide();"/>
+				<h:commandButton value="#{lbl.share_new}" action="#" styleClass="imj_submitButton" type="button" onclick="$('#share').show();$(this).hide();"/>
 			</div>
 			<div id="share" class="imj_noDisplay">
-				<h:form>
+				<h:form prependId="false">
 					<div class="imj_emailInput">
 						<div class="imj_metadataSet">
 							<h:outputLabel for="emailInput" styleClass="imj_metadataLabel" value="#{lbl.share_email}"/>
 							<h:inputTextarea id="emailInput" value="#{ShareBean.emailInput}" styleClass="imj_metadataValue"/>	
 						</div>
 					</div>
+					
+					<div class="imj_metadataLabel">
+						
+					</div>
+					<h:panelGroup layout="block" id="shareOptions" styleClass="imj_metadataValue">
+						<h:selectManyCheckbox id="selectedGrants" class="selectGrants" value="#{ShareBean.selectedGrants}" layout="lineDirection" onclick="document.getElementById('checkGrants').click();">
+							<f:selectItems value="#{ShareBean.grantItems}" />
+						</h:selectManyCheckbox>
+						<h:commandButton id="checkGrants" value="Check Grants" action="#{ShareBean.checkGrants(ShareBean.selectedGrants)}" styleClass="imj_noDisplay">
+							<f:ajax execute="@form" render="@form"/>
+						</h:commandButton>
+					</h:panelGroup>
 					<div class="imj_submitPanel">
 						<h:outputLink value="#{History.previousPage}" styleClass="imj_cancelButton" title="#{lbl.cancel}">
 							<h:outputText value="#{lbl.cancel}"/>
 						</h:outputLink>
-						<h:commandButton value="#{lbl.btn_share_with}" action="#{ShareBean.checkInputEmail}" styleClass="imj_submitButton">
-							<f:ajax execute="@form" render=":out @form"/>
-						</h:commandButton>
+						<h:commandButton value="#{lbl.share}" action="#{ShareBean.share}" styleClass="imj_submitButton"/>
+						<h:selectBooleanCheckbox value="#{ShareBean.sendEmail}" id="selSendEmail"/>
+						<h:outputLabel for="selSendEmail" value="#{lbl.user_send_mail}"/>
 					</div>
 				</h:form>
-				<h:panelGroup layout="block" styleClass="imj_metadataSet" id="out">
-					<ui:fragment rendered="#{ShareBean.emailList.size() > 0}">
-						<div class="imj_metadataLabel">
-							<h:outputLabel value="#{lbl.share_collection_with}"/>
-						</div>
-						<div class="imj_metadataValue">
-						<!-- here should come the top of the list -->
-						</div>
-						<h:form prependId="false">
-							<ui:repeat value="#{ShareBean.emailList}" var="email">
-								<div class="imj_metadataLabel">
-									<h:outputText value="#{email}" />
-								</div>
-							</ui:repeat>
-							<h:panelGroup layout="block" id="shareOptions" styleClass="imj_metadataValue">
-								<h:selectManyCheckbox id="selectedGrants" class="selectGrants" value="#{ShareBean.selectedGrants}" layout="lineDirection" onclick="document.getElementById('checkGrants').click();">
-									<f:selectItems value="#{ShareBean.grantItems}" />
-								</h:selectManyCheckbox>
-								<h:commandButton id="checkGrants" value="Check Grants" action="#{ShareBean.checkGrants(ShareBean.selectedGrants)}" styleClass="imj_noDisplay">
-									<f:ajax execute="@form" render="@form"/>
-								</h:commandButton>
-							</h:panelGroup>
-							<div class="imj_submitPanel">
-								<h:commandButton value="#{lbl.reset}" title="#{lbl.reset}" action="#{ShareBean.reset}" styleClass="imj_cancelButton">
-									<f:ajax render="@form"/>
-								</h:commandButton>	
-								<h:commandButton value="#{lbl.save}" action="#{ShareBean.save}" styleClass="imj_submitButton"/>	
-							</div>
-						</h:form>
-					</ui:fragment>
-				</h:panelGroup>
 			</div>
 			
 			<!-- List of user with have Grants for the current container -->
+			<h2 class="imj_entryPageTitle">
+				<h:outputText value="#{lbl.shared_with}"/>
+			</h2>
 			<div id="history" class="imj_metadataSet">
-				<div class="imj_metadataLabel">	
-					<h:outputLabel value="#{lbl.share_collection_with_message}"/>
-				</div>
-				<div class="imj_metadataValue">
-				<!-- here should come the top of the list -->
-				</div>
+				<span class="imj_metadataLabel"></span>
+				<h:outputText value="#{lbl.collection_share_read}" />
+				<h:outputText value="#{lbl.collection_share_image_upload}" />
+				<h:outputText value="#{lbl.collection_share_image_edit}" />
+				<h:outputText value="#{lbl.collection_share_image_delete}"/>
+				<h:outputText value="#{lbl.collection_share_collection_edit}"/>
+				<h:outputText value="#{lbl.collection_share_profile_edit}"/>
+				<h:outputText value="#{lbl.collection_share_admin}"/>
+				<span class="imj_metadataLabel"></span>
 				<ui:repeat id="users" var="sh" value="#{ShareBean.sharedWith}" rows="0" varStatus="pos">
-					<div class="imj_metadataLabel">
-						<h:outputText value="#{sh.user.name}"/>
-					</div>
+					<h:outputText value="#{sh.user.name}" styleClass="imj_metadataLabel"/>
 					<h:form prependId="false">
 						<div class="imj_metadataValue">
-							<h:selectManyCheckbox id="role" value="#{sh.sharedType}" enabledClass="" layout="lineDirection" onclick="document.getElementById('users:#{pos.index}:checkGrants').click();">
+							<h:selectManyCheckbox id="role" value="#{sh.sharedType}" style="width:20px;" enabledClass="imj_invisible" layout="lineDirection" onclick="document.getElementById('users:#{pos.index}:checkGrants').click();">
 								<f:selectItems value="#{ShareBean.grantItems}" />
 							</h:selectManyCheckbox>
 							<h:commandButton id="checkGrants" value="Check Grants" action="#{ShareBean.checkGrants(sh.sharedType)}" styleClass="imj_noDisplay">
 								<f:ajax execute="@form" render="@form"/>
 							</h:commandButton>
 						</div>
-						<div class="imj_submitPanel">
-							<h:commandButton value="#{lbl.remove}" action="#{ShareBean.unshare(sh)}" styleClass="imj_cancelButton"/>
-						</div>
+						<h:commandButton value="#{lbl.remove}" action="#{ShareBean.unshare(sh)}" styleClass="imj_cancelButton"/>
 					</h:form>
 				</ui:repeat>
 				<div class="imj_submitPanel">
+					<h:outputLink value="#{History.currentPage}" styleClass="imj_cancelButton" title="#{lbl.reset}">
+						<h:outputText value="#{lbl.reset}"/>
+					</h:outputLink>
 					<h:form>
-						<h:commandButton value="#{lbl.updateSharedWith}" action="#{ShareBean.updateSharedWith}"  styleClass="imj_submitButton"/>
+						<h:commandButton value="#{lbl.save}" action="#{ShareBean.updateSharedWith}"  styleClass="imj_submitButton"/>
 					</h:form>
 				</div>
 			</div>

@@ -3,6 +3,7 @@ package de.mpg.imeji.presentation.user;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.escidoc.core.resources.aa.useraccount.Grants;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.controller.GrantController;
 import de.mpg.imeji.logic.vo.Grant;
@@ -30,14 +31,6 @@ public class SharedHistory
         this.sharedType = sharedType;
     }
 
-    /**
-     * 
-     */
-    public SharedHistory()
-    {
-        // TODO Auto-generated constructor stub
-    }
-
     public User getUser()
     {
         return user;
@@ -46,26 +39,6 @@ public class SharedHistory
     public void setUser(User user)
     {
         this.user = user;
-    }
-
-    public String getContainerUri()
-    {
-        return containerUri;
-    }
-
-    public void setContainerUri(String containerUri)
-    {
-        this.containerUri = containerUri;
-    }
-
-    public String getProfileUri()
-    {
-        return profileUri;
-    }
-
-    public void setProfileUri(String profileUri)
-    {
-        this.profileUri = profileUri;
     }
 
     public List<String> getSharedType()
@@ -118,47 +91,54 @@ public class SharedHistory
         this.sharedType = sharedType;
     }
 
+    /**
+     * Update {@link Grants} the {@link SharedHistory} according to the new roles
+     * 
+     * @return
+     */
     public String update()
     {
         GrantController gc = new GrantController();
-        for (String g : sharedType)
+        try
         {
+            // Remove all Grant for the current container
+            gc.removeGrants(getUser(), AuthorizationPredefinedRoles.all(containerUri, profileUri), user);
+            // Find all new Grants according to the shareType
             List<Grant> newGrants = new ArrayList<Grant>();
-            switch (g)
+            for (String g : sharedType)
             {
-                case "READ":
-                    newGrants = AuthorizationPredefinedRoles.read(containerUri, profileUri);
-                    break;
-                case "UPLOAD":
-                    newGrants = AuthorizationPredefinedRoles.upload(containerUri);
-                    break;
-                case "EDIT":
-                    newGrants = AuthorizationPredefinedRoles.edit(containerUri);
-                    break;
-                case "DELETE":
-                    newGrants = AuthorizationPredefinedRoles.delete(containerUri);
-                    break;
-                case "EDIT_COLLECTION":
-                    newGrants = AuthorizationPredefinedRoles.editContainer(containerUri);
-                    break;
-                case "EDIT_PROFILE":
-                    newGrants = AuthorizationPredefinedRoles.editProfile(profileUri);
-                    break;
-                case "ADMIN":
-                    newGrants = AuthorizationPredefinedRoles.admin(containerUri, profileUri);
-                    break;
-            }
-            if (ShareBean.grantNotExist(user, newGrants))
-            {
-                try
+                switch (g)
                 {
-                    gc.addGrants(user, newGrants, user);
-                }
-                catch (Exception e)
-                {
-                    logger.error("CollectionSharedHistory--could not update User (email: " + user.getEmail() + " ) ", e);
+                    case "READ":
+                        newGrants.addAll(AuthorizationPredefinedRoles.read(containerUri, profileUri));
+                        break;
+                    case "UPLOAD":
+                        newGrants.addAll(AuthorizationPredefinedRoles.upload(containerUri));
+                        break;
+                    case "EDIT":
+                        newGrants.addAll(AuthorizationPredefinedRoles.edit(containerUri));
+                        break;
+                    case "DELETE":
+                        newGrants.addAll(AuthorizationPredefinedRoles.delete(containerUri));
+                        break;
+                    case "EDIT_COLLECTION":
+                        newGrants.addAll(AuthorizationPredefinedRoles.editContainer(containerUri));
+                        break;
+                    case "EDIT_PROFILE":
+                        newGrants.addAll(AuthorizationPredefinedRoles.editProfile(profileUri));
+                        break;
+                    case "ADMIN":
+                        newGrants.addAll(AuthorizationPredefinedRoles.admin(containerUri, profileUri));
+                        break;
                 }
             }
+            // Save the new Grants
+            gc.addGrants(user, newGrants, user);
+        }
+        catch (Exception e)
+        {
+            logger.error(e);
+            throw new RuntimeException(e);
         }
         return "pretty:shareCollection";
     }

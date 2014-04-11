@@ -110,7 +110,7 @@ public class UserGroupController
     {
         Collection<UserGroup> userGroups = new ArrayList<UserGroup>();
         Search search = new Search(SearchType.ALL, null);
-        List<String> uris = search.searchSimpleForQuery(SPARQLQueries.selectUSerGroupAll(q), null);
+        List<String> uris = search.searchSimpleForQuery(SPARQLQueries.selectUserGroupAll(q), null);
         for (String uri : uris)
         {
             try

@@ -3,6 +3,7 @@
  */
 package de.mpg.imeji.logic.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.mpg.imeji.logic.ImejiSPARQL;
@@ -28,9 +29,49 @@ public class GrantController extends ImejiController
      */
     public void addGrants(User user, List<Grant> g, User currentUser) throws Exception
     {
-        user.getGrants().addAll(g);
+        user.getGrants().addAll(getNewGrants(currentUser, g));
         UserController c = new UserController(currentUser);
         c.update(user, currentUser);
+    }
+
+    /**
+     * Remove {@link List} of {@link Grant} from the {@link User} {@link Grant}
+     * 
+     * @param user
+     * @param g
+     * @param grantFor
+     * @param currentUser
+     * @throws Exception
+     */
+    public void removeGrants(User user, List<Grant> toRemove, User currentUser) throws Exception
+    {
+        List<Grant> notRemovedGrants = new ArrayList<>();
+        for (Grant g : user.getGrants())
+        {
+            if (!toRemove.contains(g))
+                notRemovedGrants.add(g);
+        }
+        user.setGrants(notRemovedGrants);
+        UserController c = new UserController(currentUser);
+        c.update(user, currentUser);
+    }
+
+    /**
+     * Return the {@link Grant} which are new for the {@link User}
+     * 
+     * @param user
+     * @param l
+     * @return
+     */
+    public List<Grant> getNewGrants(User user, List<Grant> l)
+    {
+        List<Grant> newGrants = new ArrayList<>();
+        for (Grant g : l)
+        {
+            if (!user.getGrants().contains(g))
+                newGrants.add(g);
+        }
+        return newGrants;
     }
 
     /**
@@ -39,7 +80,7 @@ public class GrantController extends ImejiController
      * @param uri
      * @throws Exception
      */
-    public void removeGrants(String uri)
+    public void removeAllGrants(String uri)
     {
         ImejiSPARQL.execUpdate(SPARQLQueries.updateRemoveGrantsFor(uri));
     }

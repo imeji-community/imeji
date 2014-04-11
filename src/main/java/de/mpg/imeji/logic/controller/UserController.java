@@ -121,9 +121,25 @@ public class UserController
      */
     public Collection<User> retrieveAll()
     {
-        Collection<User> users = new ArrayList<User>();
         Search search = new Search(SearchType.ALL, null);
-        List<String> uris = search.searchSimpleForQuery(SPARQLQueries.selectUserAll(), null);
+        return loadUsers(search.searchSimpleForQuery(SPARQLQueries.selectUserAll(), null));
+    }
+
+    public Collection<User> retrieveUserWithGrantFor(String grantFor)
+    {
+        Search search = new Search(SearchType.ALL, null);
+        return loadUsers(search.searchSimpleForQuery(SPARQLQueries.selectUserWithGrantFor(grantFor), null));
+    }
+
+    /**
+     * Load all {@link User}
+     * 
+     * @param uris
+     * @return
+     */
+    public Collection<User> loadUsers(List<String> uris)
+    {
+        Collection<User> users = new ArrayList<User>();
         for (String uri : uris)
         {
             try
@@ -141,17 +157,21 @@ public class UserController
         }
         return users;
     }
-    
+
     /**
      * This method checks if a admin user exists for this instance
+     * 
      * @return true of no admin user exists, false otherwise
      */
     public static boolean adminUserExist()
     {
-    	boolean exist = false;
+        boolean exist = false;
         Search search = new Search(SearchType.ALL, null);
         List<String> uris = search.searchSimpleForQuery(SPARQLQueries.selectUserAll(), null);
-        if (uris != null && uris.size() > 0) {exist = true;}
-    	return exist;
+        if (uris != null && uris.size() > 0)
+        {
+            exist = true;
+        }
+        return exist;
     }
 }

@@ -21,7 +21,6 @@ import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.facet.FacetsBean;
 import de.mpg.imeji.presentation.image.ImagesBean;
@@ -217,6 +216,7 @@ public class CollectionImagesBean extends ImagesBean
         CollectionController cc = new CollectionController();
         try
         {
+            collection.setDiscardComment(getDiscardComment());
             cc.withdraw(collection, sb.getUser());
             BeanHelper.info(sb.getMessage("success_collection_withdraw"));
         }

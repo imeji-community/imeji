@@ -1,0 +1,188 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs">
+	<composite:interface>
+		<composite:attribute name="fSession" required="false"/>
+		<composite:attribute name="facetBean" required="false"/>
+		<composite:attribute name="browseToAllUrl" required="true"/>
+		<composite:attribute name="numberOfElements" required="true"/>
+		<composite:attribute name="containerId" required="false"/>
+		<composite:attribute name="showSelectMenu" required="false" default="true"/>
+	</composite:interface>
+	
+	<composite:implementation>
+		<h:panelGroup layout="block" id="selectionInfoPanel" styleClass="imj_selectionInfoPanel">
+			<ui:fragment rendered="#cc.attrs.currentMainMenu == 'mediaEntry' }">
+				<h:outputLink value="#{cc.attrs.browseToAllUrl}" title="#{lbl.images_all}">
+					<h:outputText value="#{lbl.images_all}"/>
+				</h:outputLink>
+			</ui:fragment>
+			
+			<ui:fragment rendered="#{cc.attrs.currentMainMenu == 'album'}">
+				<h:outputLink value="#{cc.attrs.browseToAllUrl}" title="#{lbl.album_back_to_images}">
+					<h:outputText value="#{lbl.album_back_to_images}"/>
+				</h:outputLink>
+			</ui:fragment>
+			
+			<ui:fragment rendered="#{cc.attrs.currentMainMenu == 'collection'}">
+				<h:outputLink value="#{cc.attrs.browseToAllUrl}" title="#{lbl.collection_back_to_images}">
+					<h:outputText value="#{lbl.collection_back_to_images}"/>
+				</h:outputLink>
+			</ui:fragment>
+			
+			<ui:fragment rendered="#{cc.attrs.showSelectMenu}">
+				<h:form id="preListForm">
+					<ui:repeat id="filterList" var="filter" value="#{cc.attrs.fSession.filters}" offset="0" varStatus="index">
+						<h:outputText value="/" styleClass="imj_facetSeparator"/>
+						<h:outputText value="#{filter.internationalizedLabel}"/>
+						<h:outputText value="(#{filter.notDefineType})" rendered="#{filter.notDefine}"/>
+						<h:outputLink styleClass="imj_removeFacetButton" value="#{Navigation.browseUrl}?q=#{filter.removeQuery}" rendered="#{cc.attrs.facetBean.navigationString == 'pretty:browse'}">
+							<h:outputText value="[x]"/>
+						</h:outputLink>
+						<h:outputLink styleClass="imj_removeFacetButton" value="#{Navigation.collectionUrl}#{cc.attrs.facetBean.id}/#{Navigation.browsePath}?q=#{filter.removeQuery}" rendered="#{cc.attrs.facetBean.navigationString != 'pretty:browse' and cc.attrs.facetBean.collection != null}">
+							<h:outputText value="[x]"/>
+						</h:outputLink>
+					</ui:repeat>
+					
+					<!-- Select menu for all images [LEFT] -->
+					<h:panelGroup rendered="#{Auth.loggedIn}">
+						<h:panelGroup layout="block" styleClass="imj_overlayMenu" rendered="#{cc.attrs.numberOfElements > 0}">
+							<div class="imj_menuHeader">
+								<h:outputText value="( "/>
+								<h:outputText value="#{cc.attrs.numberOfElements} #{lbl.images}"/>
+								<span class="imj_iconTriangleBottomRight_16"/>
+								<h:outputText value=" )"/>
+							</div>
+							<div class="imj_menuBody">
+								<ul class="imj_overlayMenuList">
+									<ui:fragment rendered="#{SessionBean.activeAlbum == null}">
+										<!-- No active album selected -->
+										<li class="imj_overlayMenuListItem">
+											<h:outputLink value="#{Navigation.albumsUrl}" title="#{lbl.activate}">
+												<h:panelGroup styleClass="imj_iconMagnifier_16"/>
+												<h:outputText value="#{lbl.no_album_selected}" title="#{lbl.album_please_activate}"/>
+											</h:outputLink>
+										</li>
+									</ui:fragment>
+									<!-- Add all to active album -->
+									
+									<ui:fragment rendered="#{SessionBean.activeAlbum != null and SessionBean.activeAlbumId != cc.attrs.containerId}">
+										<li>
+											<h:commandLink action="#{cc.attrs.facetBean.addAllToActiveAlbum}">
+												<h:outputText value="#{lbl.add_to_active_album_all}"/>
+											</h:commandLink>
+										</li>
+									</ui:fragment>
+									
+									<!-- Edit all -->
+									<ui:fragment rendered="#{cc.attrs.facetBean.navigationString == 'pretty:collectionBrowse' and cc.attrs.facetBean.collection != null and Auth.updateContent(cc.attrs.facetBean.collection)}">
+										<li>
+											<h:outputLink value="#{Navigation.applicationUrl}edit?type=all&amp;c=#{cc.attrs.facetBean.collection.id}&amp;q=#{cc.attrs.facetBean.query}" id="lnkSelectEdit2">
+												<h:outputText value="#{lbl.edit_all}"/>
+											</h:outputLink>
+										</li>
+									</ui:fragment>
+									
+									<!-- Delete/Discard all from collection-->
+									<ui:fragment rendered="#{cc.attrs.facetBean.navigationString == 'pretty:collectionBrowse' and cc.attrs.facetBean.collection != null}">
+										<li>
+											<h:outputLink styleClass="imj_criticalItem" value="#" onclick="openDialog('dialogDeleteAll')" 
+															rendered="#{Auth.updateContent(cc.attrs.facetBean.collection) and cc.attrs.facetBean.collection.status == 'PENDING'}">
+												<h:outputText value="#{lbl.delete_all}"/>
+											</h:outputLink>
+											
+											<h:outputLink styleClass="imj_criticalItem" value="#" onclick="openDialog('dialogWithdrawAll')"
+															rendered="#{cc.attrs.facetBean.collection != null and Auth.update(cc.attrs.facetBean.collection)  and cc.attrs.facetBean.collection.status == 'RELEASED'}">
+												<h:outputText value="#{lbl.withdraw_all}"/>
+											</h:outputLink>
+										</li>
+									</ui:fragment>
+									
+									<!-- Remove all from album -->
+									<ui:fragment rendered="#{cc.attrs.facetBean.navigationString == 'pretty:albumBrowse' and Auth.delete(cc.attrs.facetBean.album)}">
+										<li>
+											<h:commandLink value="#{lbl.remove_from_album_all}" action="#{cc.attrs.facetBean.removeAllFromAlbum}">
+											</h:commandLink>
+										</li>
+									</ui:fragment>
+								</ul>
+							</div>
+						</h:panelGroup>
+					</h:panelGroup>
+					
+					
+					<!-- Select menu for selected images [RIGHT] -->
+					<h:panelGroup layout="block" id="preListHeaderSelected" styleClass="imj_overlayMenu imj_selectionInfoPanelItemSelect" rendered="#{Auth.loggedIn}">
+						<h:panelGroup layout="block"  styleClass="imj_menuHeader">
+							<h:outputText id="lblSelectedSize" value="#{SessionBean.selectedSize} #{lbl.selected}"/>
+							<span class="imj_iconTriangleBottomRight_16"/>
+						</h:panelGroup>
+						
+						<h:panelGroup layout="block" styleClass="imj_menuBody">
+							
+							<h:outputText styleClass="free_area0" value="#{lbl.no_image_selected}" rendered="#{SessionBean.selectedSize == 0}"/>
+							
+							<ui:fragment rendered="#{SessionBean.selectedSize > 0}">
+								<ul class="imj_overlayMenuList">
+									<ui:fragment rendered="#{SessionBean.activeAlbum == null}">
+										<li class="imj_overlayMenuListItem">
+											<!-- No active album selected -->
+											<h:outputLink value="#{Navigation.albumsUrl}" title="#{lbl.activate}">
+												<h:panelGroup styleClass="imj_iconMagnifier_16"/>
+												<h:outputText value="#{lbl.no_album_selected}" title="#{lbl.album_please_activate}"/>
+											</h:outputLink>
+										</li>
+									</ui:fragment>
+									
+									<ui:fragment rendered="#{SessionBean.activeAlbum != null and SessionBean.activeAlbumId != cc.attrs.containerId}">
+										<li class="imj_overlayMenuListItem">
+											<!-- Add to active album -->
+											<h:commandLink action="#{cc.attrs.facetBean.addSelectedToActiveAlbum}">
+												<h:outputText value="#{lbl.add_to_active_album}"/>
+											</h:commandLink>
+										</li>
+									</ui:fragment>
+									
+									<ui:fragment rendered="#{cc.attrs.facetBean.navigationString == 'pretty:collectionBrowse' and cc.attrs.facetBean.collection != null and Auth.updateContent(cc.attrs.facetBean.collection)}">
+										<li class="imj_overlayMenuListItem">
+											<!-- Edit selected -->
+											<h:outputLink value="#{Navigation.applicationUrl}edit?type=selected&amp;c=#{cc.attrs.facetBean.collection.id}&amp;q=#{cc.attrs.facetBean.query}" id="lnkSelectEdit">
+												<h:outputText value="#{lbl.edit_selected}"/>
+											</h:outputLink>
+										</li>
+									</ui:fragment>
+									
+									<ui:fragment rendered="#{cc.attrs.facetBean.navigationString == 'pretty:collectionBrowse' and cc.attrs.facetBean.collection != null}">
+										<li class="imj_overlayMenuListItem">
+											<!-- Delete/Discard selected images -->
+											<h:outputLink onclick="openDialog('dialogDeleteSelected')" styleClass="imj_criticalItem" value="#" 
+														  rendered="#{cc.attrs.facetBean.navigationString == 'pretty:collectionBrowse' and  cc.attrs.facetBean.imageDeletable and cc.attrs.facetBean.collection.status == 'PENDING'}">
+												<h:outputText value="#{lbl.delete_selectedImages}"/>
+											</h:outputLink>
+											<h:outputLink styleClass="imj_criticalItem" value="#" onclick="openDialog('dialogWithdrawSelected')" 
+														  rendered="#{cc.attrs.facetBean.navigationString == 'pretty:collectionBrowse' and  Auth.update(cc.attrs.facetBean.collection) and cc.attrs.facetBean.collection.status == 'RELEASED'}">
+												<h:outputText value="#{lbl.withdraw_selected}"/>
+											</h:outputLink>	
+										</li>
+									</ui:fragment>
+									
+									<ui:fragment rendered="#{cc.attrs.facetBean.navigationString == 'pretty:albumBrowse' and Auth.delete(cc.attrs.facetBean.album)}">
+										<li class="imj_overlayMenuListItem">
+											<!-- Remove selected from album -->
+											<h:commandLink value="#{lbl.remove_from_album}" action="#{cc.attrs.facetBean.removeFromAlbum}"/>
+										</li>
+									</ui:fragment>
+								</ul>
+							</ui:fragment>
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:form>
+			</ui:fragment>
+		</h:panelGroup>
+		
+		
+	</composite:implementation>
+</html>

@@ -16,6 +16,7 @@ import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.CookieUtils;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -79,15 +80,14 @@ public class InternationalizationBean
     {
         // Add first languages out of properties
         languages = new ArrayList<SelectItem>();
-        languages.add(new SelectItem(null, "--"));
         languages.addAll(getsupportedLanguages(true));
         // add a separator
         //languages.add(new SelectItem(null, "--"));
         // Add the other languages (non supported)
         //languages.addAll(getsupportedLanguages(false));
         // init the string of all languages
-        for(SelectItem s : languages)
-            languagesAsString += s.getValue() + "," + s.getLabel() + "|"; 
+        for (SelectItem s : languages)
+            languagesAsString += s.getValue() + "," + s.getLabel() + "|";
     }
 
     /**
@@ -135,7 +135,7 @@ public class InternationalizationBean
 
     /**
      * Return: <br/>
-     * - the supported languages if the parameter is set to true <br/>
+     * - the supported languages (i.e languages with a translation for labels and messages) if the parameter is set to true <br/>
      * - the non supported languages if the parameter is set to false
      * 
      * @param supported
@@ -146,11 +146,13 @@ public class InternationalizationBean
         List<SelectItem> l = new ArrayList<SelectItem>();
         for (SelectItem iso : isolanguages)
         {
-            if (supported && isSupported(iso.getValue().toString())
+
+        	if (supported && isSupported(iso.getValue().toString())
                     || (!supported && !isSupported(iso.getValue().toString())))
-            {
-                l.add(iso);
-            }
+		    {
+        		l.add(iso);
+		    }
+  
         }
         return l;
     }
@@ -187,6 +189,7 @@ public class InternationalizationBean
             currentLanguage = "en";
         }
         session.setLocale(new Locale(currentLanguage));
+        CookieUtils.updateCookieValue(SessionBean.langCookieName, session.getLocale().getLanguage());
         internationalizeLanguages();
     }
 
@@ -262,7 +265,7 @@ public class InternationalizationBean
     {
         this.internationalizedLanguages = internationalizedLanguages;
     }
-    
+
     /**
      * @return the languagesAsString
      */

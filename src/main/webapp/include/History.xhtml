@@ -7,7 +7,7 @@
 		<h:outputText value="#{lbl.history}:" styleClass="imj_breadcrumpTitle"/>
 		<ui:repeat var="page" value="#{HistorySession.pages}" rows="0" varStatus="index">
 			<h:panelGroup rendered="#{index.index + 6 &gt; HistorySession.historySize}" styleClass="imj_breadcrumpItem">
-				<h:outputLink value="#{page.uri}#{index.index}">
+				<h:outputLink value="#{page.completeUrlWithHistory}">
 					<h:outputText value="#{page.internationalizedName}"/>
 				</h:outputLink>
 				<h:outputText value="/" styleClass="imj_breadcrumpSeparator"/>

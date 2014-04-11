@@ -150,14 +150,24 @@ public class AnimatedGifEncoder
         {
             out.write(0x3b); // gif trailer
             out.flush();
-            if (closeStream)
-            {
-                out.close();
-            }
         }
         catch (IOException e)
         {
             ok = false;
+        }
+        finally
+        {
+            if (closeStream)
+            {
+                try
+                {
+                    out.close();
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
         }
         // reset for subsequent use
         transIndex = 0;

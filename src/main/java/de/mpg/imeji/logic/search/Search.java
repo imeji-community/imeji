@@ -10,10 +10,9 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import com.hp.hpl.jena.Jena;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.vocabulary.RDF;
-
-import com.hp.hpl.jena.Jena;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
@@ -145,6 +144,7 @@ public class Search
      */
     private List<String> advanced(List<String> previousResults, SearchQuery sq, SortCriterion sortCri, User user)
     {
+        indexes = SearchIndexInitializer.init();
         // Set null parameters
         if (sq == null)
             sq = new SearchQuery();
@@ -213,9 +213,8 @@ public class Search
      */
     private List<String> simple(SearchPair pair, SortCriterion sortCri, User user)
     {
-        String sparqlQuery = SimpleQueryFactory.getQuery(getRDFType(type), pair, sortCri, user, (containerURI != null),
-                getSpecificQuery());
-        //System.out.println(sparqlQuery);
+        String sparqlQuery = SimpleQueryFactory.getQuery(getModelName(type), getRDFType(type), pair, sortCri, user,
+                (containerURI != null), getSpecificQuery(user));
         return ImejiSPARQL.exec(sparqlQuery, null);
     }
 
@@ -247,7 +246,7 @@ public class Search
      * 
      * @return
      */
-    private String getSpecificQuery()
+    private String getSpecificQuery(User user)
     {
         String specificQuery = "";
         if (containerURI != null)
@@ -255,17 +254,19 @@ public class Search
             String id = ObjectHelper.getId(URI.create(containerURI));
             if (containerURI.equals(ObjectHelper.getURI(CollectionImeji.class, id).toString()))
             {
-                specificQuery = " ?s <http://imeji.org/terms/collection> <" + containerURI + "> . ";
+                //specificQuery = "?s <http://imeji.org/terms/collection> <" + containerURI + ">  .";
+                specificQuery = "FILTER (?c=<"+ containerURI+">) .";
             }
             else if (containerURI.equals(ObjectHelper.getURI(Album.class, id).toString()))
             {
                 type = SearchType.ALL;
-                specificQuery = " <" + containerURI + "> <http://imeji.org/terms/item> ?s . ";
+                specificQuery = "<" + containerURI + "> <http://imeji.org/terms/item> ?s .";
             }
         }
         if (SearchType.ITEM.equals(type) || SearchType.ALL.equals(type))
         {
-            specificQuery += " ?s <http://imeji.org/terms/collection> ?c . ";
+            if (containerURI != null || user != null)
+                specificQuery += "?s <http://imeji.org/terms/collection> ?c .";
         }
         if (SearchType.PROFILE.equals(type))
         {

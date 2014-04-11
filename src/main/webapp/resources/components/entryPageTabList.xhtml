@@ -1,0 +1,140 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:composite="http://java.sun.com/jsf/composite">
+	
+	<composite:interface>
+		<composite:attribute name="infoLogicBean" required="false"/>
+		<composite:attribute name="applicationUrl" required="false"/>
+		<composite:attribute name="lbl" required="false"/>
+	</composite:interface>
+	
+	<composite:implementation>
+	
+		<!-- MetaDataList - START -->
+		<div class="imj_metadataList">
+		
+			<!-- MetaDataTypes - ListHeader - show media meta data, info, description, other -->
+			<div class="imj_listHeader">
+				<h:outputLink id="lnkViewColUtilPage" styleClass="imj_active" value="#{cc.attrs.infoLogicBean.pageUrl}?tab=UTIL" rendered="#{cc.attrs.infoLogicBean.tab == 'UTIL'}">
+					<h:outputText value="#{lbl.view_util}"/>
+				</h:outputLink>
+				<h:outputLink id="lnkViewColUtilPage2" styleClass="" value="#{cc.attrs.infoLogicBean.pageUrl}?tab=UTIL" rendered="#{cc.attrs.infoLogicBean.tab != 'UTIL'}">
+					<h:outputText value="#{lbl.view_util}"/>
+				</h:outputLink>
+				<h:panelGroup styleClass="imj_separator"/>
+				<h:outputLink id="lnkViewColPage" styleClass="imj_active" value="#{cc.attrs.infoLogicBean.pageUrl}?tab=HOME" rendered="#{cc.attrs.infoLogicBean.tab != 'UTIL'}">
+					<h:outputText value="#{lbl.view_desc}"/>
+				</h:outputLink>
+				<h:outputLink id="lnkViewColPage2" styleClass="" value="#{cc.attrs.infoLogicBean.pageUrl}?tab=HOME" rendered="#{cc.attrs.infoLogicBean.tab == 'UTIL'}">
+					<h:outputText value="#{lbl.view_desc}"/>
+				</h:outputLink>
+			</div>
+			
+			<!-- MetaDataList - LIST BODY START -->		
+			<h:panelGroup id="metadata" layout="block" styleClass="imj_listBody">
+			
+				<!-- MetaDataList - Tab Description - Title -->	
+				<h:panelGroup id="description" layout="block" rendered="#{cc.attrs.infoLogicBean.tab != 'UTIL'}">
+					<h2 class="imj_entryPageTitle">
+						<h:outputText value="#{cc.attrs.infoLogicBean.container.metadata.title}"/>
+					</h2>
+					
+					<!-- MetaDataList - Tab Description - Description -->
+					<p class="imj_entryPageDescription">
+						<h:outputText escape="false" value="#{cc.attrs.infoLogicBean.formattedDescription}"/>
+					</p>
+				</h:panelGroup>
+				
+				
+				<!-- Utilities List Body - Tab Utilities -->
+				<h:panelGroup id="util" layout="block" rendered="#{cc.attrs.infoLogicBean.tab == 'UTIL'}">
+					
+					<h:panelGroup layout="block" styleClass="imj_infodataWrapper">
+						
+						<h:panelGroup layout="block" styleClass="imj_metadataSubPanel">
+							<h:outputText id="lblViewColFull_lblUtil" value="#{lbl.colUtil}" styleClass="imj_metadataSubPanelItem"/>
+						</h:panelGroup>
+						
+						<!-- Tab Utilities - Citation -->
+						<h:panelGroup styleClass="imj_infodataSet">
+							<span class="imj_infodataLabel">
+								<h:outputText value="#{lbl.cite}"/>
+								<span class="imj_invisible">: </span>
+							</span>
+							<span class="imj_infodataValue">
+								<h:outputText value="#{cc.attrs.infoLogicBean.citation}" escape="false"/>
+							</span>
+						</h:panelGroup>
+						
+						<!-- Tab Utilities - Creator -->
+						<h:panelGroup styleClass="imj_infodataSet">
+							<span class="imj_infodataLabel">
+								<h:outputText value="#{cc.attrs.infoLogicBean.type == 'COLLECTION' ? lbl.colCreator : lbl.albumCreator}"/>
+								<span class="imj_invisible">: </span>
+							</span>
+							<span class="imj_infodataValue">
+								<h:outputText value="#{cc.attrs.infoLogicBean.creator.name}"/>
+							</span>
+						</h:panelGroup>
+								
+						<!-- Tab Utilities - Number of items -->
+						<h:panelGroup styleClass="imj_infodataSet">
+							<span class="imj_infodataLabel">
+								<h:outputText value="#{cc.attrs.infoLogicBean.type == 'COLLECTION' ? lbl.colNumItems : lbl.albumNumItems}"/>
+								<span class="imj_invisible">: </span>
+							</span>
+							<span class="imj_infodataValue">
+								<h:outputText value="#{cc.attrs.infoLogicBean.size}"/>
+							</span>
+						</h:panelGroup>
+						
+						<!-- Tab Utilities - Identifier -->
+						<h:panelGroup styleClass="imj_infodataSet">
+							<span class="imj_infodataLabel">
+								<h:outputText value="#{lbl.identifier}"/>
+								<span class="imj_invisible">: </span>
+							</span>
+							<span class="imj_infodataValue">
+								<h:outputText value="#{cc.attrs.infoLogicBean.container.id}"/>
+							</span>
+						</h:panelGroup>
+						
+						<!-- Tab Utilities - QR-Tag -->
+						<h:panelGroup styleClass="imj_infodataSet">
+							<span class="imj_infodataLabel">
+								<h:outputText value="#{lbl.qrcode}"/>
+								<span class="imj_invisible">: </span>
+							</span>
+							<span class="imj_infodataValue" id="qr"> </span>
+						</h:panelGroup>
+						
+					</h:panelGroup>
+					
+				</h:panelGroup>
+				
+			</h:panelGroup> <!-- END LIST BODY -->
+		</div> <!-- END LIST -->
+		
+		<script type="text/javascript" src="#{cc.attrs.applicationUrl}resources/js/qrcode.js"> </script>
+		<script type="text/javascript">
+			jQuery(document).ready(function() {
+				var qrHtml = document.getElementById('qr');
+				if (qrHtml != null){
+					qrHtml.innerHTML = create_qrcode('#{cc.attrs.infoLogicBean.pageUrl}');
+				}
+			});
+			var draw_qrcode = function(text, typeNumber, errorCorrectLevel) {
+				document.write(create_qrcode(text, typeNumber, errorCorrectLevel) );
+			};
+			var create_qrcode = function(text, typeNumber, errorCorrectLevel, table) {
+				var qr = qrcode(typeNumber || 7, errorCorrectLevel || 'M');
+				qr.addData(text);
+				qr.make();
+				// return qr.createTableTag();
+				return qr.createImgTag();
+			};
+		</script>
+	</composite:implementation>
+</html>

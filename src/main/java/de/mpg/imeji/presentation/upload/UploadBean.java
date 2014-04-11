@@ -29,11 +29,8 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.search.Search;
-import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.vo.SearchIndex;
-import de.mpg.imeji.logic.search.vo.SearchOperators;
-import de.mpg.imeji.logic.search.vo.SearchPair;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
+import de.mpg.imeji.logic.search.Search.SearchType;
+import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.UploadResult;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
@@ -41,6 +38,7 @@ import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.collection.CollectionBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
@@ -55,7 +53,7 @@ import de.mpg.imeji.presentation.util.UrlHelper;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class UploadBean
+public class UploadBean extends CollectionBean
 {
     private CollectionImeji collection;
     private int collectionSize = 0;
@@ -77,7 +75,7 @@ public class UploadBean
     private boolean importImageToFile = false;
     private boolean uploadFileToItem = false;
     private boolean checkNameUnique = true;
-    private boolean uploadFinished= false;
+    private boolean uploadFinished = false;
 
     /**
      * Construct the Bean and initalize the pages
@@ -98,16 +96,16 @@ public class UploadBean
      */
     public void status()
     {
-    	if(uploadFinished)
-    	{
-    		uploadFinished = false;
+        if (uploadFinished)
+        {
+            uploadFinished = false;
             removeFiles();
             totalNum = "";
             sNum = 0;
             fNum = 0;
             sFiles = new ArrayList<Item>();
             fFiles = new ArrayList<String>();
-    	}
+        }
         if (UrlHelper.getParameterBoolean("init"))
         {
             importImageToFile = false;
@@ -150,8 +148,8 @@ public class UploadBean
                 logger.error("Error upload", e);
                 e.printStackTrace();
             }
-
         }
+        super.setCollection(collection);
     }
 
     /**
@@ -195,7 +193,7 @@ public class UploadBean
             }
         }
     }
- 
+
     /**
      * Upload a file from the web
      * 
@@ -360,9 +358,8 @@ public class UploadBean
             }
             else
             {
-            	MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
-            	String mimeType = mimeTypesMap.getContentType(file);
-            	
+                MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
+                String mimeType = mimeTypesMap.getContentType(file);
                 UploadResult uploadResult = storageController.upload(title, file, id);
                 item = ImejiFactory.newItem(collection, user, uploadResult.getId(), title,
                         URI.create(uploadResult.getOrginal()), URI.create(uploadResult.getThumb()),
@@ -422,15 +419,16 @@ public class UploadBean
      */
     private Item findItemByFileName(String filename)
     {
-        ItemController ic = new ItemController(user);
-        SearchResult sr = ic.searchItemInContainer(collection.getId(), getQueryToFindCollectionByFilename(filename),
+        Search s = new Search(SearchType.ITEM, null);
+        List<String> sr = s.searchSimpleForQuery(
+                SPARQLQueries.selectContainerItemByFilename(collection.getId(), FilenameUtils.getBaseName(filename)),
                 null);
-        if (sr.getNumberOfRecords() == 0)
+        if (sr.size() == 0)
             throw new RuntimeException("No item found with the filename " + FilenameUtils.getBaseName(filename));
-        if (sr.getNumberOfRecords() > 1)
-            throw new RuntimeException("Filename " + FilenameUtils.getBaseName(filename) + " not unique ("
-                    + sr.getNumberOfRecords() + " found).");
-        return ic.loadItems(sr.getResults(), 1, 0).iterator().next();
+        if (sr.size() > 1)
+            throw new RuntimeException("Filename " + FilenameUtils.getBaseName(filename) + " not unique (" + sr.size()
+                    + " found).");
+        return ObjectLoader.loadItem(URI.create(sr.get(0)), user);
     }
 
     /**
@@ -441,30 +439,10 @@ public class UploadBean
      */
     private boolean filenameExistsInCollection(String filename)
     {
-        ItemController ic = new ItemController(user);
-        // Check already existing item
-        SearchResult sr = ic.searchItemInContainer(collection.getId(), getQueryToFindCollectionByFilename(filename),
-                null);
-        // Check currently uploaded item
-        for (Item item : itemList)
-            if (FilenameUtils.getBaseName(item.getFilename()).equals(FilenameUtils.getBaseName(title)))
-                sr.setNumberOfRecords(1);
-        return sr.getNumberOfRecords() > 0;
-    }
-
-    /**
-     * Make a query which to find a {@link CollectionImeji} by its filename
-     * 
-     * @param filename
-     * @return
-     */
-    private SearchQuery getQueryToFindCollectionByFilename(String filename)
-    {
-        SearchQuery sq = new SearchQuery();
-        Search.getIndex(SearchIndex.names.filename);
-        sq.addPair(new SearchPair(Search.getIndex(SearchIndex.names.filename), SearchOperators.REGEX, "^"
-                + FilenameUtils.getBaseName(filename) + "\\\\..+"));
-        return sq;
+        Search s = new Search(SearchType.ITEM, null);
+        return s.searchSimpleForQuery(
+                SPARQLQueries.selectContainerItemByFilename(collection.getId(), FilenameUtils.getBaseName(filename)),
+                null).size() > 0;
     }
 
     /**
@@ -541,7 +519,7 @@ public class UploadBean
             if (collection != null && getCollection().getId() != null)
             {
                 ItemController ic = new ItemController(sessionBean.getUser());
-                collectionSize = ic.search(getCollection().getId(), null, null, null).getNumberOfRecords();
+                collectionSize = ic.countContainerSize(collection.getId());
             }
         }
         else
@@ -748,13 +726,40 @@ public class UploadBean
         this.checkNameUnique = checkNameUnique;
     }
 
-	public boolean isUploadFinished() {
-		return uploadFinished;
-	}
+    public String getDiscardComment()
+    {
+        return collection.getDiscardComment();
+    }
 
-	public void setUploadFinished(boolean uploadFinished) {
-		this.uploadFinished = uploadFinished;
-	}
-    
-    
+    public void setDiscardComment(String comment)
+    {
+        collection.setDiscardComment(comment);
+    }
+
+    /**
+     * @return the uploadFinished
+     */
+    public boolean isUploadFinished()
+    {
+        return uploadFinished;
+    }
+
+    /**
+     * @param uploadFinished the uploadFinished to set
+     */
+    public void setUploadFinished(boolean uploadFinished)
+    {
+        this.uploadFinished = uploadFinished;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see de.mpg.imeji.presentation.beans.ContainerBean#getNavigationString()
+     */
+    @Override
+    protected String getNavigationString()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

@@ -1,0 +1,235 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:composite="http://java.sun.com/jsf/composite">
+	
+	<composite:interface>
+		<composite:attribute name="formObject" required="false"/>
+		<composite:attribute name="navBean" required="true"/>
+		<composite:attribute name="suggestBean" required="true"/>
+		<composite:attribute name="listItem" required="true"/>
+		<composite:attribute name="itemBean" required="true"/>
+		<composite:attribute name="itemStatement" required="true"/>
+		<composite:attribute name="itemLabelBean" required="true"/>
+		<composite:attribute name="hideLabel" type="java.lang.Boolean" default="false" required="false"/>
+	</composite:interface>
+	
+	<composite:implementation>
+		
+		
+		<div class="imj_singleStatementEdit">
+			
+			<!-- METADATA TYPE TEXT -->
+			<ui:fragment rendered="#{cc.attrs.itemBean.typeNamespace =='http://imeji.org/terms/metadata#text'}">
+				<div class="imj_metadataSet">
+					<h:outputText value="#{cc.attrs.itemLabelBean.internationalizedLabels[cc.attrs.itemStatement.id]} (#{cc.attrs.itemLabelBean.lang})" styleClass="imj_metadataLabel" rendered="#{cc.attrs.hideLabel == false}"/>
+					
+					<h:inputTextarea id="inputText" name="inputText" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.text}" rendered="#{!cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}" onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')"/>
+					
+					<h:panelGroup layout="block" styleClass="imj_metadataValue" rendered="#{cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
+						<h:selectOneMenu value="#{cc.attrs.itemBean.text}" valueChangeListener="#{cc.attrs.itemBean.predefinedValueListener}" >
+							<f:selectItems value="#{cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].restrictedValues}"/>
+						</h:selectOneMenu>
+					</h:panelGroup>
+				</div>
+			</ui:fragment>
+			
+			<!-- METADATA TYPE NUMBER -->
+			<ui:fragment rendered="#{cc.attrs.itemBean.typeNamespace =='http://imeji.org/terms/metadata#number'}">
+				<div class="imj_metadataSet">
+					<h:outputText value="#{cc.attrs.itemLabelBean.internationalizedLabels[cc.attrs.itemStatement.id]} (#{cc.attrs.itemLabelBean.lang})" styleClass="imj_metadataLabel" rendered="#{cc.attrs.hideLabel == false}"/>
+					
+					<h:inputText immediate="false" onfocus="this.select(); getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.number}" rendered="#{!cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
+						<f:converter converterId="DoubleConverter"/>
+					</h:inputText>
+					<h:panelGroup layout="block" styleClass="imj_metadataValue" rendered="#{cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
+						<h:selectOneMenu styleClass="imj_statementValue" value="#{cc.attrs.itemBean.number}" valueChangeListener="#{cc.attrs.itemBean.predefinedValueListener}">
+							<f:selectItems value="#{cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].restrictedValues}"/>
+						</h:selectOneMenu>
+					</h:panelGroup>
+				</div>
+			</ui:fragment>
+			
+			<!-- METADATA TYPE LINK -->
+			<ui:fragment rendered="#{cc.attrs.itemBean.typeNamespace =='http://imeji.org/terms/metadata#link'}">
+				<ui:fragment rendered="#{cc.attrs.hideLabel == false}">
+					<h4 class="imj_sectionHeadline">
+						<h:outputText value="#{cc.attrs.itemLabelBean.internationalizedLabels[cc.attrs.itemStatement.id]} (#{cc.attrs.itemLabelBean.lang})"/>
+					</h4>
+				</ui:fragment>
+				<ui:fragment rendered="#{!cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
+					<h:panelGroup layout="block" styleClass="imj_metadataSet">
+						<h:outputLabel for="inputLinkLabel" value="#{lbl.title}" styleClass="imj_metadataLabel"/>
+						<h:inputText id="inputLinkLabel" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.label}" immediate="true"  onfocus="this.select(); getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}','#{cc.attrs.navBean.autocompleteUrl}')"/>
+					</h:panelGroup>
+					<h:panelGroup layout="block" styleClass="imj_metadataSet">
+						<h:outputLabel for="inputURI" value="#{lbl.url}" styleClass="imj_metadataLabel"/>
+						<h:inputText id="inputURI" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.uri}" onfocus="this.select();" valueChangeListener="#{cc.attrs.itemBean.predefinedValueListener}">
+							<f:converter converterId="URIConverter"/>
+						</h:inputText>
+					</h:panelGroup>
+				</ui:fragment>
+				
+				<h:panelGroup layout="block" styleClass="imj_metadataValue" rendered="#{cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
+					<h:selectOneMenu value="#{cc.attrs.itemBean.uri}" valueChangeListener="#{cc.attrs.itemBean.predefinedValueListener}">
+						<f:converter converterId="URIConverter"/>
+						<f:selectItems value="#{cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].restrictedValues}"/>
+					</h:selectOneMenu>
+				</h:panelGroup>
+			</ui:fragment>
+			
+			<!-- METADATA TYPE PUBLICATION -->
+			<ui:fragment rendered="#{cc.attrs.itemBean.typeNamespace=='http://imeji.org/terms/metadata#publication'}">
+				<div class="imj_metadataSet">
+					<h:outputText value="#{cc.attrs.itemLabelBean.internationalizedLabels[cc.attrs.itemStatement.id]} (#{cc.attrs.itemLabelBean.lang})" styleClass="imj_metadataLabel" rendered="#{cc.attrs.hideLabel == false}"/>
+					
+					<ui:fragment rendered="#{!cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
+						<h:inputText id="inputPublicationURI" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.uri}" 
+									 onfocus="this.select(); getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')" valueChangeListener="#{cc.attrs.itemBean.resetCitationListener}">
+							<f:converter converterId="URIConverter"/>
+						</h:inputText>
+					</ui:fragment>
+					
+					<ui:fragment rendered="#{cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
+						<h:selectOneMenu styleClass="#{areaClass}" immediate="true" value="#{cc.attrs.itemBean.uri}" valueChangeListener="#{cc.attrs.itemBean.predefinedValueListener}">
+							<f:selectItems value="#{cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].restrictedValues}"/>
+						</h:selectOneMenu>
+					</ui:fragment>
+				</div>
+				
+				<div class="imj_metadataSet">
+					<h:outputLabel for="exportFormatSelection" value="#{lbl.export_formats}" styleClass="imj_metadataLabel"/>
+					<div class="imj_metadataValue">
+						<h:selectOneMenu id="exportFormatSelection" value="#{cc.attrs.itemBean.exportFormat}" valueChangeListener="#{cc.attrs.itemBean.citationUriListener}">
+							<f:selectItem itemLabel="APA" itemValue="APA"/>
+							<f:selectItem itemLabel="AJP" itemValue="AJP"/>
+							<f:selectItem itemLabel="JUS" itemValue="JUS"/>
+						</h:selectOneMenu>
+					</div>
+				</div>
+			</ui:fragment>
+			
+			<!-- METADATA TYPE DATE -->
+			<ui:fragment rendered="#{cc.attrs.itemBean.typeNamespace =='http://imeji.org/terms/metadata#date'}">
+				<ui:fragment rendered="#{cc.attrs.hideLabel == false}">
+					<h4 class="imj_sectionHeadline">
+						<h:outputText value="#{cc.attrs.itemLabelBean.internationalizedLabels[cc.attrs.itemStatement.id]} (#{cc.attrs.itemLabelBean.lang})"/>
+					</h4>
+				</ui:fragment>
+				
+				<h:panelGroup layout="block" styleClass="imj_metadataSet " rendered="#{!cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
+					<h:outputLabel value="YYYY-MM-DD" styleClass="imj_metadataLabel "/>
+					<h:inputText styleClass="imj_metadataValue datepicker" value="#{cc.attrs.itemBean.date}" immediate="false" onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}');"/>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="imj_metadataValue" rendered="#{cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
+					<h:selectOneMenu immediate="true" value="#{cc.attrs.itemBean.date}" valueChangeListener="#{cc.attrs.itemBean.predefinedValueListener}">
+						<f:selectItems value="#{cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].restrictedValues}"/>
+					</h:selectOneMenu>
+				</h:panelGroup>
+			</ui:fragment>
+			
+			<!-- METADATA TYPE LICENSE -->
+			<ui:fragment rendered="#{cc.attrs.itemBean.typeNamespace =='http://imeji.org/terms/metadata#license'}">
+				<ui:fragment rendered="#{cc.attrs.hideLabel == false}">
+					<h4 class="imj_sectionHeadline">
+						<h:outputText value="#{cc.attrs.itemLabelBean.internationalizedLabels[cc.attrs.itemStatement.id]} (#{cc.attrs.itemLabelBean.lang})"/>
+					</h4>
+				</ui:fragment>
+				
+				<ui:fragment rendered="#{!cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
+					<div class="imj_metadataSet">
+						<h:outputLabel value="#{lbl.name}" styleClass="imj_metadataLabel"/>
+						<h:inputText id="inputLicense" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.license}" immediate="true" onfocus="this.select(); getDatasourceUrlWithFixedDelay('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}', 0)"/>
+					</div>
+					<div class="imj_metadataSet">
+						<h:outputLabel value="#{lbl.url}" styleClass="imj_metadataLabel"/>
+						<div class="imj_metadataValue">
+							<h:inputText id="inputLicenseId" value="#{cc.attrs.itemBean.externalUri}" immediate="true" onfocus="this.select();">
+								<f:converter converterId="URIConverter"/>
+							</h:inputText>
+						</div>
+					</div>
+				</ui:fragment>
+				
+				<h:panelGroup layout="block" styleClass="imj_metadataValue" rendered="#{cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
+					<h:selectOneMenu value="#{cc.attrs.itemBean.license}" valueChangeListener="#{cc.attrs.itemBean.predefinedValueListener}">
+						<f:selectItems value="#{cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].restrictedValues}"/>
+					</h:selectOneMenu>
+				</h:panelGroup>
+			</ui:fragment>
+			
+			<!-- METADATA TYPE CONE AUTHOR -->
+			<ui:fragment rendered="#{cc.attrs.itemBean.typeNamespace =='http://imeji.org/terms/metadata#conePerson'}">
+				<ui:fragment rendered="#{cc.attrs.hideLabel == false}">
+					<h4 class="imj_sectionHeadline">
+						<h:outputText value="#{cc.attrs.itemLabelBean.internationalizedLabels[cc.attrs.itemStatement.id]} (#{cc.attrs.itemLabelBean.lang})"/>
+					</h4>
+				</ui:fragment>
+				
+				<div class="imj_metadataSet">
+					<h:outputLabel value="#{lbl.family_name}" styleClass="imj_metadataLabel"/>
+					<h:inputText id="inputFamilyName" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.person.familyName}" immediate="true" onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')"/>
+				</div>
+				<div class="imj_metadataSet">
+					<h:outputLabel value="#{lbl.first_name}" styleClass="imj_metadataLabel"/>
+					<h:inputText id="inputFirstName" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.person.givenName}" immediate="true"  onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')"/>
+				</div>
+				<div class="imj_metadataSet">
+					<h:outputLabel value="#{lbl.alternative_name}" styleClass="imj_metadataLabel"/>
+					<h:inputText id="inputAlternative" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.person.alternativeName}" immediate="true" onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')"/>
+				</div>
+				<div class="imj_metadataSet">
+					<h:outputLabel value="#{lbl.identifier}" styleClass="imj_metadataLabel"/>
+					<h:inputText id="inputIdentifier" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.person.identifier}" immediate="true" onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')"/>
+				</div>
+				<div class="imj_metadataSet">
+					<h:outputLabel value="#{lbl.organization}" styleClass="imj_metadataLabel"/>
+					<h:inputText id="inputOrganization" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.person.organizations[0].name}" immediate="true" onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')"/>
+				</div>
+			</ui:fragment>
+			
+			<!-- METADATA TYPE GEOLOCATION -->
+			<ui:fragment rendered="#{cc.attrs.itemBean.typeNamespace =='http://imeji.org/terms/metadata#geolocation'}">
+				<ui:fragment rendered="#{cc.attrs.hideLabel == false}">
+					<h4 class="imj_sectionHeadline">
+						<h:outputText value="#{cc.attrs.itemLabelBean.internationalizedLabels[cc.attrs.itemStatement.id]} (#{cc.attrs.itemLabelBean.lang})"/>
+					</h4>
+				</ui:fragment>
+				
+				<div class="imj_metadataSet">
+					<h:outputLabel value="#{lbl.name}" styleClass="imj_metadataLabel"/>
+					<ui:fragment rendered="#{!cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
+						<h:inputText id="inputLocationName" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.name}" immediate="true" onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}'); "/>
+					</ui:fragment>
+					<h:panelGroup layout="block" styleClass="imj_metadataValue" rendered="#{cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
+						<h:selectOneMenu immediate="true" value="#{cc.attrs.itemBean.name}">
+							<f:selectItems value="#{cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].restrictedValues}"/>
+						</h:selectOneMenu>
+					</h:panelGroup>
+				</div>
+				<div class="imj_metadataSet">
+					<h:outputLabel value="#{lbl.geolocation_latitude}" styleClass="imj_metadataLabel"/>
+					<h:inputText id="inputLatitude" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.latitude}" immediate="true" onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')"/>
+				</div>
+				<div class="imj_metadataSet">
+					<h:outputLabel value="#{lbl.geolocation_longitude}" styleClass="imj_metadataLabel"/>
+					<h:inputText id="inputLongitude" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.longitude}" immediate="true" onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')"/>
+				</div>
+			</ui:fragment>
+			
+			
+			<ui:fragment rendered="#{cc.attrs.formObject != null and cc.attrs.formObject != '' and cc.attrs.listItem != null}">
+				<!-- BUTTONS -->
+				<h:panelGroup styleClass="imj_inlineButtonGroup">
+					<h:commandLink id="add" styleClass="imj_buttonAdd_16" action="#{cc.attrs.listItem.addMetadata(md)}" title="#{lbl.add}" value=" " rendered="#{cc.attrs.itemBean.statement.maxOccurs != '1'}">
+						<f:ajax execute="#{cc.attrs.formObject}" render="#{cc.attrs.formObject}" />
+					</h:commandLink>
+					<h:commandLink  id="remove" styleClass="imj_buttonRemove_16" action="#{cc.attrs.listItem.removeMetadata(md)}" title="#{lbl.remove}" value=" " rendered="#{cc.attrs.itemBean.statement.maxOccurs != '1'}">
+						<f:ajax execute="#{cc.attrs.formObject}" render="#{cc.attrs.formObject}" />
+					</h:commandLink>
+				</h:panelGroup>
+			</ui:fragment>
+		</div>
+	</composite:implementation>
+</html>

@@ -50,6 +50,7 @@ public class ThumbnailBean
     private static Logger logger = Logger.getLogger(ThumbnailBean.class);
     private MetadataSetBean mds;
     private CollectionImeji collection;
+    private String collectionName = "";
 
     /**
      * Bean for Thumbnail list elements. Each element of a list with thumbnail is an instance of a {@link ThumbnailBean}
@@ -67,6 +68,7 @@ public class ThumbnailBean
         setCollection(ObjectCachedLoader.loadCollection(item.getCollection()));
         metadata = (List<Metadata>)item.getMetadataSet().getMetadata();
         statements = loadStatements(item.getMetadataSet().getProfile());
+        collectionName = ObjectCachedLoader.loadCollection(item.getCollection()).getMetadata().getTitle();
         caption = findCaption();
         selected = sessionBean.getSelected().contains(uri.toString());
         if (sessionBean.getActiveAlbum() != null)
@@ -377,5 +379,21 @@ public class ThumbnailBean
     public void setCollection(CollectionImeji collection)
     {
         this.collection = collection;
+    }
+
+    /**
+     * @return the collectionName
+     */
+    public String getCollectionName()
+    {
+        return collectionName;
+    }
+
+    /**
+     * @param collectionName the collectionName to set
+     */
+    public void setCollectionName(String collectionName)
+    {
+        this.collectionName = collectionName;
     }
 }

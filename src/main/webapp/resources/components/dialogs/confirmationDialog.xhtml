@@ -1,0 +1,34 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:composite="http://java.sun.com/jsf/composite">
+	
+	<composite:interface>
+		<composite:attribute name="bean" required="true" type="java.lang.Object"/>
+		<composite:attribute name="submitAction" required="true" type="java.lang.String"/>
+		<composite:attribute name="submitLabel" required="true" type="java.lang.String"/>
+		<composite:attribute name="confirmationText" required="true" type="java.lang.String"/>
+		<composite:attribute name="dialogId" required="true" type="java.lang.String"/>
+	</composite:interface>
+	
+	<composite:implementation>
+		<ui:fragment rendered="#{Auth.loggedIn}">
+			
+			<div id="#{cc.attrs.dialogId}" class="imj_modalDialogBox" style="display:none;">
+				<div class="imj_confirmationText">
+					<h:outputText value="#{cc.attrs.confirmationText}"/>
+				</div>
+				<div class="imj_submitPanel">
+					<button onclick="closeDialog('#{cc.attrs.dialogId}');" class="imj_cancelButton">
+						<h:outputText value="#{lbl.cancel}"/>
+					</button>
+					
+					<h:form>
+				 		<h:commandButton action="#{cc.attrs.bean[cc.attrs.submitAction]}" value="#{cc.attrs.submitLabel}" styleClass="imj_submitButton"/>
+				 	</h:form>
+				</div>
+			</div>
+		</ui:fragment>
+	</composite:implementation>
+</html>

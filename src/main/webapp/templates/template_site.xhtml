@@ -1,5 +1,4 @@
 <!DOCTYPE HTML>
-
 <!--
 /* 
 CDDL HEADER START
@@ -29,8 +28,6 @@ Gesellschaft zur Foerderung der Wissenschaft e.V.
 All rights reserved. Use is subject to license terms.
 */
 -->
-
-
 <f:view encoding="UTF-8" locale="#{SessionBean.locale}" 
 	xmlns:f="http://java.sun.com/jsf/core" 
 	xmlns:h="http://java.sun.com/jsf/html" 
@@ -38,21 +35,80 @@ All rights reserved. Use is subject to license terms.
 	
 	<f:loadBundle var="lbl" basename="labels"/>
 	<f:loadBundle var="msg" basename="messages"/>
-	<html xmlns="http://www.w3.org/1999/xhtml">
 	
+	<html xmlns="http://www.w3.org/1999/xhtml">
+		
 		<h:head>
 			<ui:include src="component/header/html_head_default.xhtml"/>
 		</h:head>
-	
+		
 		<h:body lang="#{SessionBean.locale}">
-			<h:panelGroup layout="block" styleClass="imj_siteWrapper">
+			
+			<div class="imj_siteWrapper">
 				<ui:insert name="init"/>
 				<ui:include src="component/header/header_default.xhtml"/>
+				<ui:insert name="actionsMenu"/>
+				<h:panelGroup layout="block" styleClass="imj_siteContentHeadline" rendered="#{headline.toString().trim().length() > 0}">
+					<h1>
+						<h:outputText value="#{headline.toString().trim()}"/>
+						<ui:fragment rendered="#{headlineSecondRow != null and headlineSecondRow.toString().trim().length() > 0}">
+							<br/>
+							<h:outputText value="#{headlineSecondRow.toString().trim()}"/>
+						</ui:fragment>
+					</h1>
+				</h:panelGroup>
 				
-				<ui:insert name="mainContent"/>
+				<h:panelGroup id="imj_pageMessageArea">
+					<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{MessagesBean.hasMessages or (SessionBean.activeAlbum != null and HistorySession.currentPage.type.fileName != 'Help.xhtml')}">
+						
+						<ui:fragment rendered="#{MessagesBean.hasMessages}">
+							<ui:fragment rendered="#{MessagesBean.numberOfMessages == 1}">
+									<h:messages styleClass="imj_messageList"
+												errorClass="imj_messageError" warnClass="imj_messageWarn" fatalClass="imj_messageFatal" infoClass="imj_messageInfo" 
+												layout="list" globalOnly="false" showDetail="false" showSummary="true"/>
+							</ui:fragment>
+							
+							<ui:fragment rendered="#{MessagesBean.numberOfMessages != 1}">
+								<ui:fragment rendered="#{MessagesBean.hasErrorMessages}">
+									<div class="imj_messageTitleWarn"><h:outputText value="#{lbl.warning_lblMessageHeader}"/></div>
+									<h:messages styleClass="imj_messageList"
+												errorClass="imj_messageError" warnClass="imj_messageWarn" fatalClass="imj_messageFatal" infoClass="imj_messageInfo" 
+												layout="list" globalOnly="false" showDetail="false" showSummary="true"/>
+								</ui:fragment>
+							
+								<ui:fragment rendered="#{!MessagesBean.hasErrorMessages}">
+									<div class="imj_messageTitleInfo"><h:outputText value="#{lbl.info_lblMessageHeader}"/></div>
+									<h:messages styleClass="imj_messageList"
+												errorClass="imj_messageError" warnClass="imj_messageWarn" fatalClass="imj_messageFatal" infoClass="imj_messageInfo" 
+												layout="list" globalOnly="false" showDetail="false" showSummary="true"/>
+								</ui:fragment>
+							</ui:fragment>
+						</ui:fragment>
+						
+						<ui:fragment rendered="#{SessionBean.activeAlbum != null and HistorySession.currentPage.type.fileName != 'Help.xhtml'}">
+							<h:panelGroup id="preListHeaderActiveAlbum1" layout="block" styleClass="imj_messageStatus">
+								<h:outputText value="#{lbl.active_album}: "/>
+								<h:outputLink value="#{Navigation.albumUrl}#{SessionBean.activeAlbumId}/#{Navigation.browsePath}">
+									<h:outputText value="#{SessionBean.activeAlbum.metadata.title} (#{SessionBean.activeAlbumSize})"/>
+								</h:outputLink>
+							</h:panelGroup>
+						</ui:fragment>
+					</h:panelGroup>
+				</h:panelGroup>
+				
+				
+				<div class="imj_mainContentWrapper">
+					<ui:insert name="searchQuery"/>
+					<ui:insert name="mainContent"/>
+				</div>
 				
 				<ui:include src="component/footer/footer_default.xhtml"/>
-			</h:panelGroup>
+			</div>
+			
+			<div class="imj_modalDialogBackground">&#160;</div>
+			
+			<ui:insert name="modalDialogs_from_template"/>
+			<ui:insert name="modalDialogs_from_site"/>
 		</h:body>
 	</html>
 </f:view>

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -57,8 +58,11 @@ public class URLQueryTransformer
     public static SearchQuery parseStringQuery(String query) throws IOException
     {
         if (query == null)
+        {
             query = "";
-        return parseStringQueryDecoded(URLDecoder.decode(query, "UTF-8"));
+        }
+        String decodedQuery = URLDecoder.decode(query, "UTF-8");
+        return parseStringQueryDecoded(decodedQuery);
     }
 
     /**

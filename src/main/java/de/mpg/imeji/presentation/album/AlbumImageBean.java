@@ -12,6 +12,7 @@ import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.image.ImageBean;
 import de.mpg.imeji.presentation.image.SingleImageBrowse;
@@ -31,6 +32,7 @@ public class AlbumImageBean extends ImageBean
     private String albumId;
     private Navigation navigation;
     private SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+    private Album album;
 
     public AlbumImageBean() throws Exception
     {
@@ -46,6 +48,7 @@ public class AlbumImageBean extends ImageBean
                 .get("AlbumImagesBean.id");
         setBrowse(new SingleImageBrowse((AlbumImagesBean)BeanHelper.getSessionBean(AlbumImagesBean.class), getImage(),
                 "album", tempId));
+        this.setAlbum(this.loadAlbum());
     }
 
     private Album loadAlbum()
@@ -61,7 +64,7 @@ public class AlbumImageBean extends ImageBean
      */
     public String removeFromAlbum() throws Exception
     {
-        if (session.getActiveAlbum() != null && albumId.equals(session.getActiveAlbumId()))
+        if (isActiveAlbum())
         {
             super.removeFromActiveAlbum();
         }
@@ -70,11 +73,18 @@ public class AlbumImageBean extends ImageBean
             AlbumController ac = new AlbumController();
             List<String> l = new ArrayList<String>();
             l.add(getImage().getId().toString());
-            ac.removeFromAlbum(loadAlbum(), l, session.getUser());
+            Album album = ObjectLoader.loadAlbum(getAlbum().getId(), session.getUser());
+            ac.removeFromAlbum(album, l, session.getUser());
             BeanHelper.info(session.getLabel("image") + " " + getImage().getFilename() + " "
                     + session.getMessage("success_album_remove_from"));
         }
         return "pretty:albumBrowse";
+    }
+
+    @Override
+    public boolean isActiveAlbum()
+    {
+        return session.getActiveAlbum() != null && albumId.equals(session.getActiveAlbumId());
     }
 
     public String getAlbumId()
@@ -97,5 +107,15 @@ public class AlbumImageBean extends ImageBean
     public String getNavigationString()
     {
         return "pretty:albumItem";
+    }
+
+    public Album getAlbum()
+    {
+        return album;
+    }
+
+    public void setAlbum(Album album)
+    {
+        this.album = album;
     }
 }

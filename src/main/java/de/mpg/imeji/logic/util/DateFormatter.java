@@ -3,8 +3,10 @@
  */
 package de.mpg.imeji.logic.util;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Pattern;
 
@@ -76,5 +78,24 @@ public class DateFormatter
         }
         else
             throw new RuntimeException("Wrong date format");
+    }
+
+    /**
+     * Return a date in a conform format for SPARQL Queries (for instance: 2014-04-02T15:17:22.833Z)
+     * 
+     * @param str
+     * @return
+     */
+    public static String formatToSparqlDateTime(String str)
+    {
+        Date d = parseDate(str, "yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        if (d == null)
+            d = parseDate(str, "yyyy-MM-dd'T'HH:mm:ss.SSS");
+        if (d == null)
+            d = parseDate(str, "yyyy-MM-dd'T'HH:mm:ss");
+        if (d == null)
+            d = new Date(getTime(str));
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        return sdf.format(d);
     }
 }

@@ -37,7 +37,7 @@ public class SearchIndexInitializer
     private static Map<String, SearchIndex> initBasisIndexes()
     {
         Map<String, SearchIndex> indexes = new HashMap<String, SearchIndex>();
-        indexes = put(indexes, new SearchIndex(SearchIndex.names.item.name(), "http://imeji.org/terms/id"));
+        indexes = put(indexes, new SearchIndex(SearchIndex.names.item.name(), "http://imeji.org/terms/item"));
         indexes = put(indexes, new SearchIndex(SearchIndex.names.user.name(), "http://imeji.org/terms/user"));
         /**
          * Fulltext search index
@@ -51,6 +51,7 @@ public class SearchIndexInitializer
         indexes = put(indexes, new SearchIndex(SearchIndex.names.created.name(), "http://purl.org/dc/terms/created"));
         indexes = put(indexes, new SearchIndex(SearchIndex.names.modified.name(), "http://purl.org/dc/terms/modified"));
         indexes = put(indexes, new SearchIndex(SearchIndex.names.status.name(), "http://imeji.org/terms/status"));
+        indexes = put(indexes, new SearchIndex(SearchIndex.names.checksum.name(), "http://imeji.org/terms/checksum"));
         /**
          * Grant indexes
          */

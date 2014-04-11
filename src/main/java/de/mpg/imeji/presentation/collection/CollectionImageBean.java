@@ -58,6 +58,7 @@ public class CollectionImageBean extends ImageBean
                 .redirect(navigation.getCollectionUrl() + collectionId + "/" + navigation.getBrowsePath());
     }
 
+
     public String getCollectionId()
     {
         return collectionId;

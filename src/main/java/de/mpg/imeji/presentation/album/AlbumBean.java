@@ -5,7 +5,7 @@ package de.mpg.imeji.presentation.album;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
@@ -20,10 +20,13 @@ import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.ingest.vo.Items;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
+import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
+import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.beans.ContainerBean;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.image.ThumbnailBean;
 import de.mpg.imeji.presentation.session.SessionBean;
@@ -40,31 +43,30 @@ import de.mpg.imeji.presentation.util.UrlHelper;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class AlbumBean
+public class AlbumBean extends ContainerBean
 {
-    private SessionBean sessionBean = null;
+    protected SessionBean sessionBean = null;
     private Album album = null;
     private String id = null;
-    private int authorPosition;
-    private int organizationPosition;
     private List<SelectItem> profilesMenu = new ArrayList<SelectItem>();
     private boolean active;
     private String tab;
     /**
      * True if the {@link AlbumBean} is used for the create page, else false
      */
-    private boolean create;
+    // protected boolean create;
     private boolean selected;
     private static Logger logger = Logger.getLogger(AlbumBean.class);
     /**
      * Maximum number of character displayed in the list for the description
      */
-    private static final int DESCRIPTION_MAX_SIZE = 100;
+    private static final int DESCRIPTION_MAX_SIZE = 300;
     /**
      * A small description when the description of the {@link Album} is too large for the list view
      */
-    private String smallDescription = null;
+    // private String smallDescription = null;
     private String description = "";
+    private String descriptionFull = null;
     private ThumbnailBean thumbnail;
     private Navigation navigation;
 
@@ -86,10 +88,11 @@ public class AlbumBean
         AlbumController ac = new AlbumController();
         this.album = (Album)ac.loadContainerItems(album, sessionBean.getUser(), -1, 0);
         description = album.getMetadata().getDescription();
-        smallDescription = CommonUtils.removeTags(description);
-        if (smallDescription != null && smallDescription.length() > DESCRIPTION_MAX_SIZE)
+        descriptionFull = description;
+        description = CommonUtils.removeTags(description);
+        if (description != null && description.length() > DESCRIPTION_MAX_SIZE)
         {
-            smallDescription = smallDescription.substring(0, DESCRIPTION_MAX_SIZE) + "...";
+            description = description.substring(0, DESCRIPTION_MAX_SIZE) + "...";
         }
         // Init the thumbnail
         if (!album.getImages().isEmpty())
@@ -101,7 +104,7 @@ public class AlbumBean
             }
             catch (Exception e)
             {
-                logger.error("Erro loading thumbnail of album", e);
+                logger.error("Error loading thumbnail of album", e);
             }
         }
     }
@@ -154,7 +157,6 @@ public class AlbumBean
         try
         {
             setAlbum(ac.retrieveLazy(ObjectHelper.getURI(Album.class, id), sessionBean.getUser()));
-            create = false;
             if (sessionBean.getActiveAlbum() != null
                     && sessionBean.getActiveAlbum().getId().toString().equals(album.getId().toString()))
             {
@@ -168,16 +170,6 @@ public class AlbumBean
         }
     }
 
-    public void initCreate()
-    {
-        setAlbum(new Album());
-        getAlbum().getMetadata().setTitle("");
-        getAlbum().getMetadata().setDescription("");
-        getAlbum().getMetadata().getPersons().clear();
-        getAlbum().getMetadata().getPersons().add(ImejiFactory.newPerson());
-        create = true;
-    }
-
     /**
      * Return the link for the Cancel button
      * 
@@ -186,10 +178,6 @@ public class AlbumBean
     public String getCancel()
     {
         Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-        if (create)
-        {
-            return nav.getAlbumsUrl();
-        }
         return nav.getAlbumUrl() + id + "/" + nav.getInfosPath();
     }
 
@@ -240,60 +228,10 @@ public class AlbumBean
         return valid;
     }
 
-    /**
-     * Add a {@link Person} as an author of the album
-     * 
-     * @return
-     */
-    public String addAuthor()
+    @Override
+    protected String getErrorMessageNoAuthor()
     {
-        List<Person> list = (List<Person>)getAlbum().getMetadata().getPersons();
-        list.add(authorPosition + 1, ImejiFactory.newPerson());
-        return "";
-    }
-
-    /**
-     * Remvoe a {@link Person} as an author of the album
-     * 
-     * @return
-     */
-    public String removeAuthor()
-    {
-        List<Person> list = (List<Person>)getAlbum().getMetadata().getPersons();
-        if (list.size() > 1)
-            list.remove(authorPosition);
-        else
-            BeanHelper.error(sessionBean.getMessage("error_album_need_one_author"));
-        return "";
-    }
-
-    /**
-     * add an {@link Organization} to the author
-     * 
-     * @return
-     */
-    public String addOrganization()
-    {
-        Collection<Person> persons = getAlbum().getMetadata().getPersons();
-        List<Organization> orgs = (List<Organization>)((List<Person>)persons).get(authorPosition).getOrganizations();
-        orgs.add(organizationPosition + 1, ImejiFactory.newOrganization());
-        return "";
-    }
-
-    /**
-     * Remove an {@link Organization} to the author
-     * 
-     * @return
-     */
-    public String removeOrganization()
-    {
-        List<Person> persons = (List<Person>)getAlbum().getMetadata().getPersons();
-        List<Organization> orgs = (List<Organization>)persons.get(authorPosition).getOrganizations();
-        if (orgs.size() > 1)
-            orgs.remove(organizationPosition);
-        else
-            BeanHelper.error(sessionBean.getMessage("error_author_need_one_organization"));
-        return "";
+        return "error_album_need_one_author";
     }
 
     /**
@@ -303,7 +241,10 @@ public class AlbumBean
      */
     public void discardCommentListener(ValueChangeEvent event)
     {
-        album.setDiscardComment(event.getNewValue().toString());
+        if (event.getNewValue() != null && event.getNewValue().toString().trim().length() > 0)
+        {
+            album.setDiscardComment(event.getNewValue().toString().trim());
+        }
     }
 
     /**
@@ -314,42 +255,6 @@ public class AlbumBean
     protected String getNavigationString()
     {
         return "pretty:";
-    }
-
-    /**
-     * getter
-     * 
-     * @return
-     */
-    public int getAuthorPosition()
-    {
-        return authorPosition;
-    }
-
-    /**
-     * setter
-     * 
-     * @param pos
-     */
-    public void setAuthorPosition(int pos)
-    {
-        this.authorPosition = pos;
-    }
-
-    /**
-     * @return the collectionPosition
-     */
-    public int getOrganizationPosition()
-    {
-        return organizationPosition;
-    }
-
-    /**
-     * @param collectionPosition the collectionPosition to set
-     */
-    public void setOrganizationPosition(int organizationPosition)
-    {
-        this.organizationPosition = organizationPosition;
     }
 
     /**
@@ -395,17 +300,9 @@ public class AlbumBean
      */
     public int getSize()
     {
-        return album.getImages().size();
-    }
-
-    /**
-     * getter
-     * 
-     * @return
-     */
-    public String getSmallDescription()
-    {
-        return CommonUtils.removeTags(smallDescription);
+        if (album != null)
+            return album.getImages().size();
+        return 0;
     }
 
     /**
@@ -452,22 +349,7 @@ public class AlbumBean
      */
     public String save() throws Exception
     {
-        if (create)
-        {
-            AlbumController ac = new AlbumController();
-            if (valid())
-            {
-                ac.create(getAlbum(), sessionBean.getUser());
-                UserController uc = new UserController(sessionBean.getUser());
-                sessionBean.setUser(uc.retrieve(sessionBean.getUser().getEmail()));
-                BeanHelper.info(sessionBean.getMessage("success_album_create"));
-                return "pretty:albums";
-            }
-        }
-        else
-        {
-            update();
-        }
+        update();
         return "";
     }
 
@@ -625,7 +507,7 @@ public class AlbumBean
     }
 
     /**
-     * Withdraw an {@link Album}
+     * Discard the {@link AlbumImeji} of this {@link Album}
      * 
      * @return
      * @throws Exception
@@ -716,6 +598,16 @@ public class AlbumBean
         return description;
     }
 
+    public String getDescriptionFull()
+    {
+        return descriptionFull;
+    }
+
+    public void setDescriptionFull(String descriptionFull)
+    {
+        this.descriptionFull = descriptionFull;
+    }
+
     public String getTab()
     {
         if (UrlHelper.getParameterValue("tab") != null)
@@ -749,5 +641,71 @@ public class AlbumBean
         String url = this.getPageUrl();
         String citation = title + " " + sessionBean.getLabel("from") + " <i>" + author + "</i></br>" + url;
         return citation;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see de.mpg.imeji.presentation.beans.ContainerBean#getType()
+     */
+    @Override
+    public String getType()
+    {
+        return CONTAINER_TYPE.ALBUM.name();
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see de.mpg.imeji.presentation.beans.ContainerBean#getContainer()
+     */
+    @Override
+    public Container getContainer()
+    {
+        return getAlbum();
+    }
+
+    /*
+     * (non-Javadoc) following getter functions are for standardization and simplification the output of album data in a
+     * general template system
+     */
+    public String getTitle()
+    {
+        if (getContainer() != null)
+            return getContainer().getMetadata().getTitle();
+        return null;
+    }
+
+    public String getAuthors()
+    {
+        return this.getPersonString();
+    }
+
+    public Date getCreationDate()
+    {
+        return this.getContainer().getCreated().getTime();
+    }
+
+    public Date getLastModificationDate()
+    {
+        return this.getContainer().getModified().getTime();
+    }
+
+    public Date getVersionDate()
+    {
+        return this.getContainer().getVersionDate().getTime();
+    }
+
+    public Status getStatus()
+    {
+        return this.getContainer().getStatus();
+    }
+
+    public String getDiscardComment()
+    {
+        return this.getContainer().getDiscardComment();
+    }
+
+    public void setDiscardComment(String comment)
+    {
+        this.getContainer().setDiscardComment(comment);
     }
 }

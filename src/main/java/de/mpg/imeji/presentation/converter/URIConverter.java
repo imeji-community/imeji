@@ -23,7 +23,11 @@ public class URIConverter implements Converter
     {
         if (arg2 == null || "".equals(arg2.trim()))
             return null;
-        return URI.create(arg2.trim());
+        arg2 = arg2.replaceAll(" ", "");
+        URI uri = URI.create(arg2);
+        if (!uri.isAbsolute())
+            uri = URI.create("http://" + arg2);
+        return uri;
     }
 
     @Override
@@ -31,6 +35,6 @@ public class URIConverter implements Converter
     {
         if (arg2 == null)
             return "";
-        return arg2.toString();
+        return arg2.toString().trim();
     }
 }

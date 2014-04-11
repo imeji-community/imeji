@@ -108,32 +108,37 @@ public class JpegUtils
         hasAdobeMarker = false;
         ImageInputStream stream = ImageIO.createImageInputStream(file);
         Iterator<ImageReader> iter = ImageIO.getImageReaders(stream);
-        while (iter.hasNext())
+        try
         {
-            ImageReader reader = iter.next();
-            reader.setInput(stream);
-            BufferedImage image = null;
-            ICC_Profile profile = null;
-            try
+            while (iter.hasNext())
             {
-                image = reader.read(0);
+                ImageReader reader = iter.next();
+                reader.setInput(stream);
+                BufferedImage image = null;
+                ICC_Profile profile = null;
+                try
+                {
+                    image = reader.read(0);
+                }
+                catch (IIOException e)
+                {
+                    colorType = COLOR_TYPE_CMYK;
+                    checkAdobeMarker(file);
+                    profile = Sanselan.getICCProfile(file);
+                    WritableRaster raster = (WritableRaster)reader.readRaster(0, null);
+                    if (colorType == COLOR_TYPE_YCCK)
+                        convertYcckToCmyk(raster);
+                    if (hasAdobeMarker)
+                        convertInvertedColors(raster);
+                    image = convertCmykToRgb(raster, profile);
+                }
+                return image;
             }
-            catch (IIOException e)
-            {
-                colorType = COLOR_TYPE_CMYK;
-                checkAdobeMarker(file);
-                profile = Sanselan.getICCProfile(file);
-                WritableRaster raster = (WritableRaster)reader.readRaster(0, null);
-                if (colorType == COLOR_TYPE_YCCK)
-                    convertYcckToCmyk(raster);
-                if (hasAdobeMarker)
-                    convertInvertedColors(raster);
-                image = convertCmykToRgb(raster, profile);
-            }
-            stream.close();
-            return image;
         }
-        stream.close();
+        finally
+        {
+            stream.close();
+        }
         return null;
     }
 

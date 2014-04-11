@@ -3,58 +3,40 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:composite="http://java.sun.com/jsf/composite">
-<composite:interface>
-	<composite:attribute name="bean" />
-	<composite:attribute name="discardComment" />
-	<composite:attribute name="index" />
-</composite:interface>
-<composite:implementation>
-	<h:panelGroup id="dialogWithdraw"
-		class="half_area0_p8 bordst0 shadst1 dialogbox" style="display: none;">
-		<h:form id="discardForm">
-			<h:panelGroup styleClass="half_area0_p8">
-				<h:outputText value="#{msg.confirmation_withdraw_collection}"
-					rendered="#{(HistorySession.currentPage.type == 'COLLECTION_HOME' or HistorySession.currentPage.type == 'COLLECTIONS' or HistorySession.currentPage.type == 'COLLECTION_IMAGES') and Auth.loggedIn}" />
-				<h:outputText value="#{msg.confirmation_withdraw_album}"
-					rendered="#{(HistorySession.currentPage.type == 'ALBUM_HOME' or HistorySession.currentPage.type == 'ALBUM_IMAGES') and Auth.loggedIn}" />
-				<h:outputText id="errorMessage"
-					styleClass="quad_area0_p0 messageError" value="" />
-				<br/>
-				<h:outputText value="#{lbl.images_withdraw_comment_col}"
-						      styleClass="messageError"
-						      rendered="#{(HistorySession.currentPage.type == 'COLLECTION_HOME' or HistorySession.currentPage.type == 'COLLECTIONS' or HistorySession.currentPage.type == 'COLLECTION_IMAGES') and Auth.loggedIn}"/>
-				<h:outputText value="#{lbl.images_withdraw_comment_alb}"
-						      styleClass="messageError"
-						      rendered="#{(HistorySession.currentPage.type == 'ALBUM_HOME' or HistorySession.currentPage.type == 'ALBUM_IMAGES') and Auth.loggedIn}"/>				
-				<h:inputTextarea id="discardComment"
-					value="#{cc.attrs.discardComment}"
-					valueChangeListener="#{cc.attrs.bean.discardCommentListener}"
-					rows="6" styleClass="quad_area0_p0">
-					<f:ajax execute="@this" render="buttonDiscard" event="keyup" />
-				</h:inputTextarea>				
-			</h:panelGroup>
-			<h:panelGroup class="half_area0_p8" id="buttonDiscard">
-				<div class="large_txtBtn">
-					<h:outputLink href="#" class="large_txtBtn dialogCancelButton"
-						rendered="#{cc.attrs.index == null}"
-						onclick="closeDialog('dialDiscardContainer:dialogWithdraw');">
-						<h:outputText value="#{lbl.cancel}" />
-					</h:outputLink>
-					<h:outputLink href="#" class="large_txtBtn dialogCancelButton"
-						rendered="#{cc.attrs.index != null}"
-						onclick="closeDialog('list:#{cc.attrs.index}:dialDiscardContainer:dialogWithdraw');">
-						<h:outputText value="#{lbl.cancel}" />
-					</h:outputLink>
+	<composite:interface>
+		<composite:attribute name="bean"/>
+		<composite:attribute name="discardComment"/>
+		<composite:attribute name="index"/>
+	</composite:interface>
+	<composite:implementation>
+
+		<h:panelGroup layout="block" id="dialogWithdraw" class="imj_modalDialogBox" style="display:none;" rendered="#{Auth.loggedIn}">
+			<h:form id="discardForm">
+				<div class="imj_confirmationText">
+					<p>
+						<h:outputText value="#{msg.confirmation_withdraw_collection}" rendered="#{(HistorySession.currentPage.type == 'COLLECTION_HOME' or HistorySession.currentPage.type == 'COLLECTIONS' or HistorySession.currentPage.type == 'COLLECTION_IMAGES') and Auth.loggedIn}"/>
+						<h:outputText value="#{msg.confirmation_withdraw_album}" rendered="#{(HistorySession.currentPage.type == 'ALBUM_HOME' or HistorySession.currentPage.type == 'ALBUM_IMAGES') and Auth.loggedIn}"/>
+						<h:outputText id="errorMessage" styleClass="quad_area0_p0 messageError" value=""/>
+						<h:outputText value="#{lbl.images_withdraw_comment_col}" styleClass="messageError" rendered="#{(HistorySession.currentPage.type == 'COLLECTION_HOME' or HistorySession.currentPage.type == 'COLLECTIONS' or HistorySession.currentPage.type == 'COLLECTION_IMAGES') and Auth.loggedIn}"/>
+						<h:outputText value="#{lbl.images_withdraw_comment_alb}" styleClass="messageError" rendered="#{(HistorySession.currentPage.type == 'ALBUM_HOME' or HistorySession.currentPage.type == 'ALBUM_IMAGES') and Auth.loggedIn}"/>
+					</p>				
 				</div>
-				<h:panelGroup styleClass="xLarge_txtBtn tiny_marginLExcl">
-					<h:commandButton id="btnDiscardContainer"
-						action="#{cc.attrs.bean.withdraw}"
-						value="#{lbl.withdraw}"
-						styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn activeButton"
-						onclick="if(#{cc.attrs.discardComment == ''}){return false};"/>
+				<h:inputTextarea id="discardComment" value="#{cc.attrs.discardComment}" valueChangeListener="#{cc.attrs.bean.discardCommentListener}" rows="2" styleClass="imj_dialogReasonText">
+					<f:ajax execute="@this" render="buttonDiscard" event="keyup"/>
+				</h:inputTextarea>
+				
+				
+				<h:panelGroup layout="block" styleClass="imj_submitPanel" id="buttonDiscard">
+					<h:outputLink href="#" class="imj_cancelButton" rendered="#{cc.attrs.index == null}" onclick="closeDialog('dialDiscardContainer:dialogWithdraw');">
+						<h:outputText value="#{lbl.cancel}"/>
+					</h:outputLink>
+					<h:outputLink href="#" class="imj_cancelButton" rendered="#{cc.attrs.index != null}" onclick="closeDialog('list:#{cc.attrs.index}:dialDiscardContainer:dialogWithdraw');">
+						<h:outputText value="#{lbl.cancel}"/>
+					</h:outputLink>
+				
+					<h:commandButton id="btnDiscardContainer" action="#{cc.attrs.bean.withdraw}" value="#{lbl.withdraw}" styleClass="imj_submitButton" onclick="if(#{cc.attrs.discardComment == ''}){return false};"/>
 				</h:panelGroup>
-			</h:panelGroup>
-		</h:form>
-	</h:panelGroup>
-</composite:implementation>
+			</h:form>
+		</h:panelGroup>
+	</composite:implementation>
 </html>

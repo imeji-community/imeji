@@ -200,18 +200,24 @@ public class StaticContentBean
     private String getContent(URL url) throws Exception
     {
         BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
-        String inputLine = "";
-        String content = "";
-        while (inputLine != null)
+        try
         {
-            inputLine = in.readLine();
-            if (inputLine != null)
+            String inputLine = "";
+            String content = "";
+            while (inputLine != null)
             {
-                content += inputLine + "  ";
+                inputLine = in.readLine();
+                if (inputLine != null)
+                {
+                    content += inputLine + "  ";
+                }
             }
+            return content;
         }
-        in.close();
-        return content;
+        finally
+        {
+            in.close();
+        }
     }
 
     public boolean isAbout()

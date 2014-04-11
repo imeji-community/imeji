@@ -109,9 +109,10 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
      */
     public String getInitPage()
     {
-        isSimpleSearch = URLQueryTransformer.isSimpleSearch(searchQuery);
         browseInit();
+        isSimpleSearch = URLQueryTransformer.isSimpleSearch(searchQuery);
         browseContext = getNavigationString();
+        super.update();
         return "";
     }
 
@@ -315,7 +316,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         }
         catch (Exception e)
         {
-            logger.error("Error ínitializing the facets", e);
+            logger.error("Error Initializing the facets", e);
         }
     }
 

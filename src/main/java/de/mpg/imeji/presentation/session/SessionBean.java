@@ -5,7 +5,6 @@ package de.mpg.imeji.presentation.session;
 
 import java.io.IOException;
 
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -30,6 +29,7 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation.Page;
 import de.mpg.imeji.presentation.user.ShareBean.ShareType;
+import de.mpg.imeji.presentation.util.CookieUtils;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -43,14 +43,18 @@ import de.mpg.imeji.presentation.util.PropertyReader;
 @SessionScoped
 public class SessionBean
 {
-    private static Logger logger = Logger.getLogger(SessionBean.class);
+    public enum Style
+    {
+        NONE, DEFAULT, ALTERNATIVE;
+    }
+
     private User user = null;
     // Bundle
     public static final String LABEL_BUNDLE = "labels";
     public static final String MESSAGES_BUNDLE = "messages";
     public static final String METADATA_BUNDLE = "metadata";
     // imeji locale
-    private Locale locale;
+    private Locale locale = new Locale("en");
     private Page currentPage;
     private List<String> selected;
     private List<URI> selectedCollections;
@@ -59,6 +63,9 @@ public class SessionBean
     private Map<URI, MetadataProfile> profileCached;
     private Map<URI, CollectionImeji> collectionCached;
     private String selectedImagesContext = null;
+    private Style selectedCss = Style.NONE;
+    public final static String styleCookieName = "IMEJI_STYLE";
+    public final static String langCookieName = "IMEJI_LANG";
 
     /**
      * The session Bean for imeji
@@ -71,6 +78,15 @@ public class SessionBean
         profileCached = new HashMap<URI, MetadataProfile>();
         collectionCached = new HashMap<URI, CollectionImeji>();
         initLocale();
+        initCssWithCookie();
+    }
+
+    /**
+     * Initialize the CSS value with the Cookie value
+     */
+    private void initCssWithCookie()
+    {
+        selectedCss = Style.valueOf(CookieUtils.readNonNull(styleCookieName, Style.NONE.name()));
     }
 
     /**
@@ -163,7 +179,8 @@ public class SessionBean
     }
 
     /**
-     * Read the language in the Request, and set it as current local, Called when the session is new
+     * First read the {@link Locale} in the request. This is the default value.Then read the cookie. If the cookie is
+     * null, it is set to the default value, else the cookie value is used
      */
     private void initLocale()
     {
@@ -177,6 +194,7 @@ public class SessionBean
         {
             locale = new Locale("en");
         }
+        locale = new Locale(CookieUtils.readNonNull(langCookieName, locale.getLanguage()));
     }
 
     /**
@@ -420,30 +438,86 @@ public class SessionBean
     {
         this.collectionCached = collectionCached;
     }
-    
+
+    /**
+     * Check if the selected CSS is correct according to the configuration value. If errors are found, then change the
+     * selected CSS
+     * 
+     * @param defaultCss - the value of the default css in the config
+     * @param alternativeCss - the value of the alternative css in the config
+     */
+    public void checkCss(String defaultCss, String alternativeCss)
+    {
+        if (selectedCss == Style.ALTERNATIVE && (alternativeCss == null || "".equals(alternativeCss)))
+        {
+            // alternative css doesn't exist, therefore set to default
+            selectedCss = Style.DEFAULT;
+        }
+        if (selectedCss == Style.DEFAULT && (defaultCss == null || "".equals(defaultCss)))
+        {
+            // default css doesn't exist, therefore set to none
+            selectedCss = Style.NONE;
+        }
+        if (selectedCss == Style.NONE && defaultCss != null && !"".equals(defaultCss))
+        {
+            // default css exists, therefore set to default
+            selectedCss = Style.DEFAULT;
+        }
+    }
+
+    /**
+     * Get the the selected {@link Style}
+     * 
+     * @return
+     * @throws URISyntaxException
+     * @throws IOException
+     */
+    public String getSelectedCss()
+    {
+        return selectedCss.name();
+    }
+
+    /**
+     * Toggle the selected css
+     * 
+     * @return
+     */
+    public void toggleCss()
+    {
+        selectedCss = selectedCss == Style.DEFAULT ? Style.ALTERNATIVE : Style.DEFAULT;
+        CookieUtils.updateCookieValue(styleCookieName, selectedCss.name());
+    }
+
     public List<SelectItem> getShareCollectionGrantItems()
     {
-    	List<SelectItem> itemList = new ArrayList<SelectItem>();
-    			
-    	itemList.add(new SelectItem(ShareType.READ, getLabel("collection_share_read")));
-    	itemList.add(new SelectItem(ShareType.UPLOAD, getLabel("collection_share_image_upload")));
-    	itemList.add(new SelectItem(ShareType.EDIT, getLabel("collection_share_image_edit")));
-    	itemList.add(new SelectItem(ShareType.DELETE,getLabel("collection_share_image_delete")));
-    	itemList.add(new SelectItem(ShareType.EDIT_COLLECTION, getLabel("collection_share_collection_edit")));
-    	itemList.add(new SelectItem(ShareType.EDIT_PROFILE, getLabel("collection_share_profile_edit")));
-    	itemList.add(new SelectItem(ShareType.ADMIN, getLabel("collection_share_admin")));    	
-    	return itemList;
+        List<SelectItem> itemList = new ArrayList<SelectItem>();
+//        itemList.add(new SelectItem(ShareType.READ, getLabel("collection_share_read")));
+//        itemList.add(new SelectItem(ShareType.UPLOAD, getLabel("collection_share_image_upload")));
+//        itemList.add(new SelectItem(ShareType.EDIT, getLabel("collection_share_image_edit")));
+//        itemList.add(new SelectItem(ShareType.DELETE, getLabel("collection_share_image_delete")));
+//        itemList.add(new SelectItem(ShareType.EDIT_COLLECTION, getLabel("collection_share_collection_edit")));
+//        itemList.add(new SelectItem(ShareType.EDIT_PROFILE, getLabel("collection_share_profile_edit")));
+//        itemList.add(new SelectItem(ShareType.ADMIN, getLabel("collection_share_admin")));
+        
+        itemList.add(new SelectItem(ShareType.READ));
+        itemList.add(new SelectItem(ShareType.UPLOAD));
+        itemList.add(new SelectItem(ShareType.EDIT));
+        itemList.add(new SelectItem(ShareType.DELETE));
+        itemList.add(new SelectItem(ShareType.EDIT_COLLECTION));
+        itemList.add(new SelectItem(ShareType.EDIT_PROFILE));
+        itemList.add(new SelectItem(ShareType.ADMIN));
+        
+        return itemList;
     }
-    
+
     public List<SelectItem> getShareAlbumGrantItems()
     {
-    	List<SelectItem> itemList = new ArrayList<SelectItem>();
-    			
-    	itemList.add(new SelectItem(ShareType.READ, getLabel("album_share_read")));
-    	itemList.add(new SelectItem(ShareType.ADD, getLabel("album_share_image_add")));
-    	itemList.add(new SelectItem(ShareType.DELETE,getLabel("album_share_image_delete")));
-    	itemList.add(new SelectItem(ShareType.EDIT_ALBUM, getLabel("album_share_album_edit")));
-    	itemList.add(new SelectItem(ShareType.ADMIN, getLabel("album_share_admin")));    	
-    	return itemList;
+        List<SelectItem> itemList = new ArrayList<SelectItem>();
+        itemList.add(new SelectItem(ShareType.READ, getLabel("album_share_read")));
+        itemList.add(new SelectItem(ShareType.ADD, getLabel("album_share_image_add")));
+        itemList.add(new SelectItem(ShareType.DELETE, getLabel("album_share_image_delete")));
+        itemList.add(new SelectItem(ShareType.EDIT_ALBUM, getLabel("album_share_album_edit")));
+        itemList.add(new SelectItem(ShareType.ADMIN, getLabel("album_share_admin")));
+        return itemList;
     }
 }

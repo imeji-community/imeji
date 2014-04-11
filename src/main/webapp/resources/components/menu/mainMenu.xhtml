@@ -1,0 +1,49 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:composite="http://java.sun.com/jsf/composite">
+	
+	<composite:interface>
+		<composite:attribute name="navBean" type="java.lang.Object" required="true" shortDescription="@type: Object, used for several URL paths"/>
+		
+		<composite:attribute name="menuClass" type="java.lang.String" default="imj_contentMenu" required="true" shortDescription="@type: String, used for the component and will be extended with 'Item' for every menu entry, @default: imj_contentMenu"/>
+		<composite:attribute name="curMainMenu" type="java.lang.String" default="" required="true" shortDescription="@type String, required for menu highlight and to en-/disable upload and or ingest if user has rights"/>
+		
+		<composite:attribute name="userHasAdminRights" type="java.lang.Boolean" default="false" required="false" shortDescription="@type: Boolean, @dependencies: curMainMenu, required for ingest"/>
+	</composite:interface>
+	
+	<composite:implementation>
+		<ul id="mainMenuSkipLinkAnchor" class="#{cc.attrs.menuClass.trim()}">
+			<!-- main Menu starts here -->
+			<li class="#{cc.attrs.menuClass.trim()}Item#{ (cc.attrs.curMainMenu == 'welcome') ? ' imj_active' : ''}">
+				<h:outputLink id="lnkHome" title="#{lbl.goto_startpage}" value="#{cc.attrs.navBean.homeUrl}">
+					<h:outputText value="#{lbl.home}"/>
+				</h:outputLink>
+			</li>
+			<li class="#{cc.attrs.menuClass.trim()}Item#{ (cc.attrs.curMainMenu == 'mediaEntry') ? ' imj_active' : ''}">
+				<h:outputLink id="lnkBrowse" title="#{lbl.goto_images}" value="#{cc.attrs.navBean.browseUrl}?page=1&amp;q=">
+			  		<h:outputText value="#{lbl.header_browse}"/>
+			  	</h:outputLink>
+			</li>
+			<li class="#{cc.attrs.menuClass.trim()}Item#{ (cc.attrs.curMainMenu == 'collection') ? ' imj_active' : ''}">
+				<h:outputLink id="lnkCollections" title="#{lbl.goto_collections}" value="#{cc.attrs.navBean.collectionsUrl}?page=1&amp;q=">
+					<h:outputText value="#{lbl.header_collections}"/>
+				</h:outputLink>
+			</li>
+			<li class="#{cc.attrs.menuClass.trim()}Item#{ (cc.attrs.curMainMenu == 'album') ? ' imj_active' : ''}">
+				<h:outputLink id="lnkAlbums" title="#{lbl.goto_albums}" value="#{cc.attrs.navBean.albumsUrl}?page=1">
+					<h:outputText value="#{lbl.header_albums}"/>
+				</h:outputLink>
+			</li>
+			<ui:fragment rendered="#{cc.attrs.userHasAdminRights}">
+				<li class="#{cc.attrs.menuClass.trim()}Item#{ (cc.attrs.curMainMenu == 'admin') ? ' imj_active' : ''}">
+					<h:outputLink id="lnkAdmin" title="#{lbl.goto_admin}" value="#{cc.attrs.navBean.adminUrl}">
+						<h:outputText value="ADMIN"/>
+					</h:outputLink>
+				</li>
+			</ui:fragment>
+			<!-- main Menu ends here -->
+		</ul>
+	</composite:implementation>
+</html>

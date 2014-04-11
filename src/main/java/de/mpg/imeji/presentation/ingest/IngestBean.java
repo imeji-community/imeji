@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.JAXBException;
+
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -158,6 +159,13 @@ public class IngestBean
                 this.msg = e.getMessage();
             }
         }
+        if (error)
+        {
+            BeanHelper.error(session.getLabel("ingestFail"));
+            BeanHelper.error(msg);
+        }
+        else if (success)
+            BeanHelper.info(session.getLabel("ingestSuccess"));
     }
 
     public boolean isSuccess()

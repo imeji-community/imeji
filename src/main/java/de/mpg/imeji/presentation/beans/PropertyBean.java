@@ -58,12 +58,14 @@ public class PropertyBean
      * The base of the path to the internal storage
      */
     private String internalStorageBase = "files";
+    private String appName;
     /**
      * The base of the uri of imeji objects
      */
     private static String baseURI;
     private static String applicationURL;
-    private String appName;
+    private static String css_default;
+    private static String css_alternate;
 
 
 	/**
@@ -77,6 +79,8 @@ public class PropertyBean
             this.internalStorageBase = FilenameUtils.getBaseName(FilenameUtils.normalizeNoEndSeparator(PropertyReader
                     .getProperty("imeji.storage.path")));
             applicationURL = StringHelper.normalizeURI(PropertyReader.getProperty("imeji.instance.url"));
+            css_default = PropertyReader.getProperty("imeji.layout.css_default");
+            css_alternate = PropertyReader.getProperty("imeji.layout.css_alternate");
             readBaseUri();
             this.appName = PropertyReader.getProperty("imeji.instance.name");
         }
@@ -164,13 +168,24 @@ public class PropertyBean
     {
         return applicationURL;
     }
-    
 
-    public String getAppName() {
-		return this.appName;
-	}
+    public static String getCss_default()
+    {
+        return css_default;
+    }
 
-	public  void setAppName(String appName) {
-		this.appName = appName;
-	}
+    public static void setCss_default(String css_default)
+    {
+        PropertyBean.css_default = css_default;
+    }
+
+    public static String getCss_alternate()
+    {
+        return css_alternate;
+    }
+
+    public static void setCss_dark(String css_alternate)
+    {
+        PropertyBean.css_alternate = css_alternate;
+    }
 }

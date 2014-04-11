@@ -2,34 +2,29 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
-	<div id="dialogWithdrawAll" class="half_area0_p8 bordst0 shadst1 dialogbox" style="display:none;">
-		<h:form>
-			<div class="half_area0_p8">
-	       		<h:outputText value="#{lbl.withdraw_images}" />
-		        <br/>
-				<h:outputText value="#{lbl.images_withdraw_comment}"
-						      styleClass="messageError"/>
-		        
-		        <h:outputText id="errorMessageA" styleClass="xDouble_area0_p0 messageError" value=""/>
-		        <h:inputTextarea id="discardCommentA" value="#{paginatorListSessionBean.discardComment}" 
-		        				 rows="6" styleClass="quad_area0_p0" valueChangeListener="#{paginatorListSessionBean.discardCommentListener}" >
-		        	<f:ajax execute="@this" render="buttonDiscard" event="keyup" />
+	
+	<ui:fragment rendered="#{Auth.loggedIn}">
+		<div id="dialogWithdrawAll" class="imj_modalDialogBox" style="display:none;">
+			<h:form>
+				<div class="imj_confirmationText">
+		       		<h:outputText value="#{lbl.withdraw_images}"/>
+		       		<br/>
+					<h:outputText value="#{lbl.images_withdraw_comment}" styleClass="imj_messageError"/>
+		        	<h:outputText id="errorMessageA" styleClass="imj_messageError" value=""/>
+		    	</div>
+		    	<h:inputTextarea id="discardCommentA" value="#{paginatorListSessionBean.discardComment}" rows="2" styleClass="imj_dialogReasonText" valueChangeListener="#{paginatorListSessionBean.discardCommentListener}" >
+		        	<f:ajax execute="@this" render="btnDiscard" event="keyup"/>
 		        </h:inputTextarea>
-		    </div>
-			<div class="half_area0_p8 ">
-				<div class="large_txtBtn">
-	      				<a href="#" class="large_txtBtn dialogCancelButton" onclick="closeDialog('dialogWithdrawAll');">
-	      					<h:outputText value="#{lbl.cancel}"/>
-	      				</a>
-	      		</div>
-				<h:panelGroup class="xLarge_txtBtn tiny_marginLExcl" id="buttonDiscard" >			
-					<h:commandButton id="btnDiscard"
-								action="#{paginatorListSessionBean.withdrawAll}"
-								rendered="#{paginatorListSessionBean.discardComment != ''}"
-								value="#{lbl.withdraw}"
-								styleClass="xLarge_area0_p0 xTiny_marginLExcl xLarge_txtBtn activeButton" />
-			 	</h:panelGroup>
-			</div>
-		</h:form>
-	</div>
+		    	<div class="imj_submitPanel">
+      				<a href="#" class="imj_cancelButton" onclick="closeDialog('dialogWithdrawAll');">
+      					<h:outputText value="#{lbl.cancel}"/>
+      				</a>
+					<h:commandButton id="btnDiscard" 
+						action="#{paginatorListSessionBean.withdrawAll}"
+						value="#{lbl.withdraw}" 
+						styleClass="#{paginatorListSessionBean.discardComment == ''  ? 'imj_disabledButton' : 'imj_submitButton'}"/>
+				</div>
+			</h:form>
+		</div>
+	</ui:fragment>
 </ui:composition>

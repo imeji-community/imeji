@@ -44,7 +44,7 @@ public class XMLMdProfileExport extends XMLExport
         }
         else
         {
-            throw new RuntimeException(sr.getNumberOfRecords() + " profile(s) found. Only 1 profile sould be found");
+            throw new RuntimeException(sr.getNumberOfRecords() + " profile(s) found. Only 1 profile should be found");
         }
     }
 }

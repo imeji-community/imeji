@@ -1,80 +1,49 @@
-<ui:composition template="templates/template_paginator_images.xhtml"  
+<ui:composition template="templates/sub_template/template_image_tiledlist.xhtml"  
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:imjc="http://java.sun.com/jsf/composite/components">	
-		<ui:param name="paginatorListSessionBean" value="#{AlbumImagesBean}" />
-		<ui:param name="headline" value="#{AlbumImagesBean.album.metadata.title}"/>
-		<ui:define name="contentMenu">
-			<h:outputLink id="lnkViewHome" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumImagesBean.id}" rendered="true">
-				<h:outputText value="#{lbl.album_home}"/>
-			</h:outputLink>
-			<h:outputText styleClass="imj_contentMenuSeparator" />
-			<h:outputText styleClass="imj_contentMenuItem" value="#{lbl.view_images}"/>
-			<h:outputText styleClass="imj_contentMenuSeparator" />
-			<h:outputLink id="lnkViewCollectionDetail" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumImagesBean.id}/#{Navigation.infosPath}?init=1" rendered="true">
-				<h:outputText value="#{lbl.album_metadata}"/>
-			</h:outputLink>
-		</ui:define>
-		<ui:define name="actionsMenu">
-			<h:panelGroup styleClass="full_area0"> <!-- This panelGroup is needed for IE -->
-			<h:panelGroup layout="block" styleClass="imj_contentSubMenu">
-				<h:panelGroup>
-					<h:panelGroup styleClass="imj_contentSubMenuItem">
-						<!-- SORTING content menu lower line starts here -->
-						<h:outputText id="txtSort" value="#{lbl.sort_by}" styleClass="free_area0" />
-						<h:form>
-						<h:selectOneMenu id="selSort" value="#{AlbumImagesBean.selectedSortCriterion}" styleClass="free_select" onchange="submit();">
-							<f:selectItems id="sortItem" value="#{AlbumImagesBean.sortMenu}" />
-						</h:selectOneMenu>						
-							<h:commandLink id="lnkSortAsc" styleClass="ascSort" action="#{AlbumImagesBean.toggleSortOrder}" rendered="#{AlbumImagesBean.selectedSortOrder == 'ASCENDING'}">&#160;</h:commandLink>
-							<h:commandLink id="lnkSortDesc" styleClass="desSort" action="#{AlbumImagesBean.toggleSortOrder}" rendered="#{AlbumImagesBean.selectedSortOrder != 'ASCENDING'}">&#160;</h:commandLink>
-						</h:form>
-						<h:outputText styleClass="imj_contentMenuSeparator" />
-						<!-- SORTING content menu lower line ends here -->
-					</h:panelGroup>
-					<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialogRelease');" rendered="#{Auth.admin(AlbumImagesBean.album) and AlbumImagesBean.album.status=='PENDING'}">
-						<h:outputText value="#{lbl.release}"/>
-					</h:outputLink>
-					<h:outputLink id="lnkWithdrawCollection" styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialDiscardContainer:dialogWithdraw');" rendered="#{Auth.admin(AlbumImagesBean.album) and AlbumImagesBean.album.status=='RELEASED'}">
-						<h:outputText value="#{lbl.withdraw}"/>
-					</h:outputLink>
-					<h:outputLink styleClass="imj_contentSubMenuItem" value="#" onclick="openDialog('dialogDelete');" rendered="#{Auth.delete(AlbumImagesBean.album)}">
-						<h:outputText value="#{lbl.delete}"/>
-					</h:outputLink>
-			<h:panelGroup layout="block" styleClass="free_area0_p0 endline overlayMenu">
-				<h:panelGroup layout="block" styleClass="menuHeader free_area0">
-					<h:panelGroup styleClass="free_area0">
-						<h:outputText value="#{lbl.download} " styleClass="free_area0 "/>
-					</h:panelGroup>
-				</h:panelGroup>
-				<h:panelGroup layout="block" styleClass="clear menuBody xLarge_area0" style="margin-top:-1.9090em;">
-					<div class="selectMenu xLarge_area2 bordst2">
-						<h:outputLink value="#{Navigation.applicationUrl}export?format=zip&amp;type=image&amp;n=10000&amp;alb=#{AlbumImagesBean.id}&amp;q=#{paginatorListSessionBean.query}"
-									  styleClass="imj_SubMenuItem" target="_blank">
-							<h:outputText value="#{lbl.export_zip}" />
-						</h:outputLink>
-						<h:outputLink value="#{Navigation.applicationUrl}export?format=rdf&amp;type=image&amp;n=10000&amp;alb=#{AlbumImagesBean.id}&amp;q=#{paginatorListSessionBean.query}"
-									  styleClass="imj_SubMenuItem" target="_blank">
-							<h:outputText value="#{lbl.export_rdf}" />
-						</h:outputLink>
-						<h:outputLink value="#{Navigation.applicationUrl}export?format=xml&amp;type=image&amp;n=10000&amp;alb=#{AlbumImagesBean.id}&amp;q=#{paginatorListSessionBean.query}"
-									  styleClass="imj_SubMenuItem" target="_blank">
-							<h:outputText value="#{lbl.export_native}" />
-						</h:outputLink>
-					</div>
-				</h:panelGroup>
-			</h:panelGroup>
-				</h:panelGroup>	
-			</h:panelGroup>
-			<ui:include src="confirmationPages/ContainerDelete.xhtml">
-				<ui:param name="bean" value="#{AlbumImagesBean}"/>
-			</ui:include>
-			<ui:include src="confirmationPages/ContainerRelease.xhtml">
-				<ui:param name="bean" value="#{AlbumImagesBean}"/>
-			</ui:include>
-			<imjc:DiscardContainer id="dialDiscardContainer" bean="#{AlbumImagesBean}" discardComment="#{AlbumImagesBean.album.discardComment}"/>
-		</h:panelGroup>	
-		</ui:define>
+	xmlns:imjc="http://java.sun.com/jsf/composite/components"
+	xmlns:menu="http://java.sun.com/jsf/composite/components/menu"
+	xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs">
+	
+	<ui:param name="paginatorListSessionBean" value="#{AlbumImagesBean}"/>
+	<ui:param name="headline" value="#{AlbumImagesBean.album.metadata.title}"/>
+	<ui:param name="currentMainMenu" value="album"/>
+	<ui:param name="browseToAllItemsUrl" value="#{Navigation.albumUrl}#{AlbumImagesBean.id}/browse?q="/>
+	<ui:param name="containerId" value="#{paginatorListSessionBean.id}"/>
+	
+	<ui:define name="actionsMenu">
+		<ui:fragment rendered="#{Auth.read(paginatorListSessionBean.album)}">
+			<menu:context_subNavigation contextId="#{paginatorListSessionBean.id}" 
+									contextUrl="#{Navigation.albumUrl}" 
+									curMainMenu="#{currentMainMenu}" 
+									userHasAdminRights="#{Auth.admin}" 
+									userHasEditRights="#{Auth.update(paginatorListSessionBean.album)}" 
+									hasContent="#{paginatorListSessionBean.totalNumberOfElements > 0}" 
+									navBean="#{Navigation}" 
+									activeMenu="content"/>
+		
+			<menu:context_actionMenu 	isUserLoggedIn="#{Auth.loggedIn}" 
+									sortBean="#{paginatorListSessionBean}" 
+									curMainMenu="#{currentMainMenu}" 
+									navBean="#{Navigation}" 
+									exportQuery="#{paginatorListSessionBean.query}" 
+									collectionStatus="#{paginatorListSessionBean.album.status}" 
+									contextId="#{paginatorListSessionBean.id}" 
+									isDeletable="#{Auth.delete(paginatorListSessionBean.album)}" 
+									isEditable="#{Auth.update(paginatorListSessionBean.album)}" 
+									hasContent="#{paginatorListSessionBean.totalNumberOfElements > 0}"
+									contextDownloadParam="&amp;album=#{paginatorListSessionBean.id}"
+									allowedToShare="#{AlbumImagesBean.album.status!='WITHDRAWN' and Auth.admin(paginatorListSessionBean.album)}"/>
+		</ui:fragment>
+	</ui:define>
+	
+	
+	<ui:define name="modalDialogs_from_site">
+		<dialog:confirmationDialog submitAction="release" bean="#{paginatorListSessionBean}" confirmationText="#{msg.confirmation_release_album}?" submitLabel="#{lbl.release}" dialogId="releaseMenuItemDialog" rendered="#{Auth.update(paginatorListSessionBean.album) and paginatorListSessionBean.album.status.toString().toUpperCase() == 'PENDING' and paginatorListSessionBean.totalNumberOfElements > 0}"/>
+		<dialog:confirmationDialog submitAction="delete" bean="#{paginatorListSessionBean}" confirmationText="#{msg.confirmation_delete_album}?" submitLabel="#{lbl.delete}" dialogId="deleteMenuItemDialog" rendered="#{Auth.delete(paginatorListSessionBean.album)}"/>
+		<dialog:confirmationReasonedDialog submitAction="withdraw" bean="#{paginatorListSessionBean}" confirmationText="#{msg.confirmation_withdraw_album}" submitLabel="#{lbl.withdraw}" dialogId="withdrawMenuItemDialog" rendered="#{Auth.update(paginatorListSessionBean.album)and paginatorListSessionBean.album.status.toString().toUpperCase() == 'RELEASED'}"/>
+	</ui:define>
+	
 </ui:composition>

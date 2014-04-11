@@ -1,0 +1,71 @@
+<div xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<f:subview id="Details">
+		<!-- TODO: build up as component -->
+		<ui:param name="navigationPath" value="#{cc.attrs.picList.imageBaseUrl}/#{Navigation.itemPath}/#{item.id}"/>
+		
+		<div class="imj_imageInfoLayer">
+			<h:outputText value="#{item.initPopup}"/>
+			
+			<h:panelGroup layout="block" class="imj_infoNavigation">
+				
+				<h:outputLink value="#{navigationPath}">
+					<h:panelGroup styleClass="imj_iconEyeOpen_16"/>
+					<h:outputText value=" #{lbl.view_detail}" />
+				</h:outputLink>
+				<h:outputLink value="#{navigationPath}?edit=1" rendered="#{Auth.updateUri(item.uri) and item.statements.size() >0 }">
+					<h:panelGroup styleClass="imj_buttonEdit_16"/>
+					<h:outputText value="#{lbl.metadata_edit}" />
+				</h:outputLink>
+			</h:panelGroup>
+			
+			
+			<h:panelGroup layout="block" class="imj_metadataSet">
+				<h:panelGroup styleClass="imj_metadataLabel">
+					<h:outputText value="#{lbl.filename}"/>
+				</h:panelGroup>
+				<h:panelGroup styleClass="imj_metadataValue">
+					<h:outputText value="#{item.filename}"/>
+				</h:panelGroup>
+			</h:panelGroup>
+			
+			<ui:repeat id="metadata" var="md" value="#{item.mds.tree.list}" rows="0" varStatus="indexMetadata">
+				<ui:fragment rendered="#{!md.isEmpty() and md.preview}">
+					<div class="imj_metadataSet id_#{md.statementId}  parent_#{md.parent.statementId} highlight_area">
+						<h:panelGroup layout="block" styleClass="imj_metadataLabel" style="margin-left: #{metadata.hierarchyLevel}em;">
+							<h:outputText value="#{MetadataLabels.internationalizedLabels[md.statement.id]}" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" styleClass="imj_metadataValue">
+							<h:outputText value="#{md.text}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#text'}" />
+							<h:outputText value="#{md.number}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#number'}" />
+							<h:outputText value="#{md.date}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#date'}" />
+							<h:outputLink value="#{md.uri}" target="_blank" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#publication' or md.typeNamespace == 'http://imeji.org/terms/metadata#link'}">
+								<h:outputText value="Link" rendered="#{md.label == ''}" />
+								<h:outputText value="#{md.label}" rendered="#{md.label != ''}" />
+							</h:outputLink>
+							<h:outputText value="#{md.license}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#license'}" />
+							<h:panelGroup rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#conePerson'}">
+								<h:outputText value="#{md.person.familyName}, #{md.person.givenName}" />
+								<h:outputText value="(#{md.person.organizationString})" rendered="#{md.person.organizationString} != ''" />
+							</h:panelGroup>
+							<h:outputLink value="http://maps.google.com/maps?q=#{md.latitude},#{md.longitude}" target="_blank" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation'}">
+								<h:outputText value="#{md.name} (" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation' and md.name != null}" />
+								<h:outputText value="#{md.longitude}/#{md.latitude}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation'}" />
+								<h:outputText value=")" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation' and md.name != null}" />
+							</h:outputLink>
+							<h:panelGroup styleClass="free_area0 endline" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#publication'}">
+								<h:outputText value="#{md.citation}" rendered="#{md.citation != ''}" styleClass="free_area0 endline" escape="false"/>
+								<h:outputLink value="#{md.uri}" target="_blank" styleClass="free_area0 endline">
+									<h:outputText value="#{md.uri}" rendered="#{md.citation == ''}" styleClass="free_area0 endline"/>
+								</h:outputLink>
+							</h:panelGroup>
+							<br/>
+						</h:panelGroup>
+					</div>
+				</ui:fragment>
+			</ui:repeat>
+		</div>
+	</f:subview>
+</div>

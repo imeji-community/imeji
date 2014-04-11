@@ -5,15 +5,15 @@ package de.mpg.imeji.presentation.collection;
 
 import java.net.URI;
 
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.UrlHelper;
@@ -25,37 +25,25 @@ import de.mpg.imeji.presentation.util.UrlHelper;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
+@ManagedBean(name = "CreateCollectionBean")
+@SessionScoped
 public class CreateCollectionBean extends CollectionBean
 {
-    private String reset;
-    private SessionBean sessionBean = null;
-    private CollectionSessionBean collectionSession = null;
-
     /**
      * Bean Constructor
      */
     public CreateCollectionBean()
     {
         super();
-        collectionSession = (CollectionSessionBean)BeanHelper.getSessionBean(CollectionSessionBean.class);
-        sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        super.setTab(TabType.COLLECTION);
-        super.setCollection(collectionSession.getActive());
-        super.getProfilesMenu().add(new SelectItem("sdsdss", "sdsad"));
-        if (UrlHelper.getParameterBoolean("reset"))
-        {
-            this.reset();
-        }
     }
 
     /**
-     * Load the Profile TODO check if this is used...
-     * 
-     * @return
+     * Method called when paged is loaded (defined in pretty-config.xml)
      */
-    public String loadProfile()
+    public void init()
     {
-        return getNavigationString();
+        if (UrlHelper.getParameterBoolean("reset"))
+            setCollection(ImejiFactory.newCollection());
     }
 
     /**
@@ -89,34 +77,20 @@ public class CreateCollectionBean extends CollectionBean
     }
 
     /**
-     * Method for Rest button. Reset all form value to empty value
+     * Return the link for the Cancel button
+     * 
+     * @return
      */
-    public void reset()
+    public String getCancel()
     {
-        setCollection(ImejiFactory.newCollection());
-        collectionSession.setActive(super.getCollection());
-        reset = "0";
+        Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
+        this.init();
+        return nav.getCollectionsUrl() + "?q=";
     }
 
     @Override
     protected String getNavigationString()
     {
         return "pretty:createCollection";
-    }
-
-    /**
-     * @return the reset
-     */
-    public String getReset()
-    {
-        return reset;
-    }
-
-    /**
-     * @param reset the reset to set
-     */
-    public void setReset(String reset)
-    {
-        this.reset = reset;
     }
 }

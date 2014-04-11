@@ -1,19 +1,13 @@
-<ui:composition template="templates/template_profile.xhtml"
+<ui:composition template="templates/sub_template/template_metadata_profileEdit.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
-	<ui:param name="FormularBean" value="#{EditMdProfileBean}"/>	
-	<ui:define name="init">
-		<h:outputText value="#{EditMdProfileBean.init}"/>
-	</ui:define>
-	<ui:define name="headline">
-		<h1>
-			<h:outputText value="#{lbl.edit} #{EditMdProfileBean.profile.title}"/> 
-		</h1>
-	</ui:define>
-	<ui:define name="contentMenu">
-	</ui:define>
-	<ui:define name="actionsMenu">
-	</ui:define>	
+	
+	<ui:param name="metadataBean" value="#{EditMdProfileBean}"/>
+	<ui:param name="metadataContextBean" value="#{metadataBean.collection}"/>
+	<ui:param name="headline" value="#{lbl.edit} #{EditMdProfileBean.profile.title}"/>
+	<ui:param name="currentMainMenu" value="collection"/>
+	<ui:param name="containerHeadline" value="#{lbl.collection_info}"/>
+	
 </ui:composition>

@@ -86,9 +86,15 @@ public class autocompleter extends HttpServlet
         }
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
-        out.print(responseString);
-        out.flush();
-        out.close();
+        try
+        {
+            out.print(responseString);
+        }
+        finally
+        {
+            out.flush();
+            out.close();
+        }
     }
 
     /**
@@ -215,7 +221,7 @@ public class autocompleter extends HttpServlet
 
     private String parseCCLicense(String str)
     {
-        str = "<licences>" + str + "</licences>";
+        str = "<licences>" + str.trim() + "</licences>";
         try
         {
             JSONArray json = new JSONArray();

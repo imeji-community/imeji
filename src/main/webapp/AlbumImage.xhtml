@@ -1,38 +1,30 @@
-<ui:composition template="templates/template_image.xhtml" 
+<ui:composition template="templates/sub_template/template_image.xhtml" 
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core">
-	<ui:param name="imageBean" value="#{AlbumImageBean}" />
-	<ui:param name="headline" value="#{lbl.details}" />
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:menu="http://java.sun.com/jsf/composite/components/menu">
 	
-	<ui:define name="contentMenu">
-			<h:outputLink id="lnkViewHome" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumImageBean.albumId}">
-				<h:outputText value="#{lbl.album_home}"/>
-			</h:outputLink>
-			
-			<h:outputText styleClass="imj_contentMenuSeparator" />
-			
-			<h:outputLink id="lnkViewCollectionAllImages" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumImageBean.albumId}/#{Navigation.browsePath}?q=">
-				<h:outputText value="#{lbl.view_images}"/>
-			</h:outputLink>
-			
-			<h:outputText styleClass="imj_contentMenuSeparator" />
-			
-			<h:outputLink id="lnkViewCollectionDetail" styleClass="imj_contentMenuItem" value="#{Navigation.albumUrl}#{AlbumImageBean.albumId}/#{Navigation.infosPath}?init=1">
-				<h:outputText value="#{lbl.album_metadata}"/>
-			</h:outputLink>
-			
-		</ui:define>
-			
-	<ui:define name="preListHeader">
+	<ui:param name="imageBean" value="#{AlbumImageBean}"/>
+	<ui:param name="headline" value="#{lbl.details}:"/>
+	<ui:param name="headlineSecondRow" value="#{AlbumImageBean.album.metadata.title}"/>
+	<ui:param name="currentMainMenu" value="album"/>
+	<ui:param name="browseToAllItemsUrl" value="#{Navigation.albumUrl}#{AlbumImageBean.albumId}/browse?q="/>
 	
-		<h:panelGroup id="preListHeader" layout="block" styleClass="full_area0 preListHeader">
-		<ui:include src="./include/History.xhtml"></ui:include><br/>
-			<h:outputLink value="#{Navigation.albumUrl}#{AlbumImageBean.albumId}/#{Navigation.browsePath}" styleClass="free_area1_p6 small_marginLIncl">
-				<h:outputText value="#{lbl.album_view_all_images}"/>
-			</h:outputLink>
-		</h:panelGroup>
+	
+	
+	<ui:define name="actionsMenu">
+		<ui:fragment rendered="#{Auth.read(imageBean.image)}">
+			<menu:context_subNavigation contextId="#{imageBean.albumId}" 
+									contextUrl="#{Navigation.albumUrl}" 
+									curMainMenu="#{currentMainMenu}" 
+									userHasAdminRights="#{Auth.admin}" 
+									userHasEditRights="#{Auth.update(imageBean.image)}" 
+									hasContent="true" 
+									navBean="#{Navigation}" 
+									activeMenu="item" />
+		</ui:fragment>
 	</ui:define>
+	
 </ui:composition>
 

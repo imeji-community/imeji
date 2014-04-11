@@ -2,8 +2,6 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://ocpsoft.org/xml/ns/prettyfaces/ocpsoft-pretty-faces-3.3.3.xsd">
 
-
-
 	<!-- Begin RewriteRules -->
 	<rewrite trailingSlash="remove" />
 
@@ -31,7 +29,7 @@
 	</url-mapping>
 	<url-mapping id="editPage">
 		<pattern value="/edit"></pattern>
-		<view-id>/jsf/Edit.xhtml</view-id>
+		<view-id>/jsf/BatchEdit.xhtml</view-id>
 	</url-mapping>
 	<url-mapping id="item">
 		<pattern value="/item/#{ImageBean.id}" />
@@ -67,28 +65,21 @@
 			value="/collection/#{CollectionImageBean.collectionId}/item/#{CollectionImageBean.id}" />
 		<view-id>/jsf/CollectionImage.xhtml</view-id>
 	</url-mapping>
-	<url-mapping id="createCollection">
-		<pattern value="/createcollection" />
-		<view-id>/jsf/CollectionCreate.xhtml</view-id>
-	</url-mapping>
 	<url-mapping id="editCollection">
 		<pattern value="/collection/#{EditCollectionBean.id}/edit" />
 		<view-id>/jsf/CollectionEdit.xhtml</view-id>
 		<action onPostback="false">#{EditCollectionBean.init}</action>
 	</url-mapping>
-	
+	<url-mapping id="createCollection">
+		<pattern value="/createcollection" />
+		<view-id>/jsf/CollectionCreate.xhtml</view-id>
+		<action onPostback="false">#{CreateCollectionBean.init}</action>
+	</url-mapping>
 	<url-mapping id="shareCollection">
 		<pattern value="/collection/#{ShareBean.id}/share"></pattern>
 		<view-id>/jsf/Share.xhtml</view-id>
-		<action onPostback="false">#{ShareBean.init}</action>
+		<action onPostback="false">#{ShareBean.initShareCollection}</action>
 	</url-mapping>
-	
-	<url-mapping id="shareAlbum">
-		<pattern value="/album/#{ShareBean.id}/share"></pattern>
-		<view-id>/jsf/Share.xhtml</view-id>
-		<action onPostback="false">#{ShareBean.init}</action>
-	</url-mapping>
-	
 	<!-- Profile Pages -->
 	<url-mapping id="viewProfile">
 		<pattern value="/profile/#{ViewMdProfileBean.id}" />
@@ -102,7 +93,7 @@
 	<url-mapping id="createalbum">
 		<pattern value="/createalbum" />
 		<view-id>/jsf/AlbumCreate.xhtml</view-id>
-		<action onPostback="false">#{AlbumBean.initCreate}</action>
+		<action onPostback="false">#{CreateAlbumBean.init}</action>
 	</url-mapping>
 
 	<url-mapping id="editAlbum">
@@ -126,6 +117,11 @@
 	<url-mapping id="albumBrowse">
 		<pattern value="/album/#{AlbumImagesBean.id}/browse" />
 		<view-id>/jsf/AlbumBrowse.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="shareAlbum">
+		<pattern value="/album/#{ShareBean.id}/share"></pattern>
+		<view-id>/jsf/Share.xhtml</view-id>
+		<action onPostback="false">#{ShareBean.initShareAlbum}</action>
 	</url-mapping>
 
 	<url-mapping id="albumItem">
@@ -183,8 +179,6 @@
 		<pattern value="/createusergroup" ></pattern>
 		<view-id>/jsf/UserGroupCreate.xhtml</view-id>
 	</url-mapping>
-
-
 
 	<url-mapping id="admin">
 		<pattern value="/admin"></pattern>

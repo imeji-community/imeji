@@ -86,10 +86,17 @@ public class GifUtils
         g2d.drawImage(bufferedImage, 0, 0, bufferedImage.getWidth(), bufferedImage.getHeight(), backgroundColor, null);
         ByteArrayOutputStream osByteArray = new ByteArrayOutputStream();
         ImageOutputStream outputStream = ImageIO.createImageOutputStream(osByteArray);
-        ImageIO.write(newBi, "jpg", outputStream);
-        outputStream.flush();
-        outputStream.close();
-        return osByteArray.toByteArray();
+        try
+        {
+            ImageIO.write(newBi, "jpg", outputStream);
+            return osByteArray.toByteArray();
+        }
+        finally
+        {
+            outputStream.flush();
+            outputStream.close();
+            osByteArray.close();
+        }
     }
 
     /**

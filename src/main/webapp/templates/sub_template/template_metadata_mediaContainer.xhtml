@@ -1,0 +1,34 @@
+<ui:composition template="../template_site.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:imjc="http://java.sun.com/jsf/composite/components">
+
+
+	<!-- Main Content - bibliographic grid list - START -->
+	<ui:define name="mainContent">
+		
+		<!-- Breadcrumb - History -->
+		<ui:include src="../../include/History.xhtml"/>
+		
+		<ui:fragment rendered="#{metadataContextBean.id != null and !Auth.read(metadataContextBean)}">
+			<ui:include src="../../include/LoginFormular.xhtml"/>
+		</ui:fragment>
+		
+		<!-- EntryPagePreviewTiledList -->
+		<ui:fragment rendered="#{metadataContextBean.id == null or Auth.read(metadataContextBean)}">
+			
+			<!-- AJAX Wrapper - START -->
+			<h:panelGroup layout="block" id="imj_ajaxWrapper">
+				<ui:fragment rendered="#{Auth.loggedIn and metadataView != 'yes'}">
+					<imjc:mediaContainer_editMetadata formularContextBean="#{metadataContextBean}" formularBean="#{metadataBean}" headline="#{containerHeadline}"/>
+				</ui:fragment>
+				<ui:fragment rendered="#{metadataView == 'yes'}">
+					<imjc:mediaContainer_viewMetadata metadataContextBean="#{metadataContextBean}" metadata="#{metadataBean}" headline="#{containerHeadline}" navigationContextURL="#{navigationContextURL}"/>
+				</ui:fragment>
+				<ui:insert name="metadataProfile"/>
+			</h:panelGroup>
+		</ui:fragment>
+	</ui:define>
+</ui:composition>

@@ -1,71 +1,118 @@
-<ui:composition template="templates/template.xhtml"
+<ui:composition template="templates/template_site.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
-			<ui:param name="headline" value="#{lbl.admin_user_new}"/>
-			<ui:define name="mainContent">
-			<h:panelGroup layout="block" styleClass="full_area0 endline itemLine noTopBorder" rendered="#{!Auth.admin}">
-				<h2><h:outputText value="You are not allowed to view this page"/></h2>
-			</h:panelGroup>
-			<h:panelGroup layout="block" styleClass="full_area0 fullItem" rendered="#{Auth.admin}">
-				<h:form>
-					<h:panelGroup layout="block" styleClass="full_area0 itemBlock noTopBorder">
-						<h3 class="xLarge_area0_p8 endline blockHeader">
-							<h:outputText value="#{lbl.admin_user_info}"/>
-						</h3>
-						<span class="seperator"></span>
-						<div class="free_area0 itemBlockContent endline">
-							<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-								<b class="xLarge_area0_p8 endline labelLine clear">
-									<h:outputText value="Email"/>
-									<span class="noDisplay">: </span>
-								</b>
-								<span class="xHuge_area0 xTiny_marginLExcl endline">
-									<h:inputText id="inputEmailText" styleClass="quad_txtInput" value="#{UserCreationBean.user.email}" required="true"/>
-								</span>
-							</h:panelGroup>
-							
-							<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-								<b class="xLarge_area0_p8 endline labelLine clear">
-									<h:outputText value="Name"/>
-									<span class="noDisplay">: </span>
-								</b>
-								<span class="xHuge_area0 xTiny_marginLExcl endline">
-									<h:inputText id="inputNameText" styleClass="quad_txtInput" value="#{UserCreationBean.user.name}" required="true"/>
-								</span>
-							</h:panelGroup>
-							
-							<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-								<b class="xLarge_area0_p8 endline labelLine clear">
-									<h:outputText value="Nickname"/>
-									<span class="noDisplay">: </span>
-								</b>
-								<span class="xHuge_area0 xTiny_marginLExcl endline">
-									<h:inputText id="inputNickText" styleClass="quad_txtInput" value="#{UserCreationBean.user.nick}" required="true"/>
-								</span>
-							</h:panelGroup>
-							
-							<h:panelGroup layout="block" styleClass="free_area0 endline itemLine noTopBorder">
-								<b class="xLarge_area0_p8 endline labelLine clear">
-									<h:outputText value="#{lbl.user_send_mail}"/>
-									<span class="noDisplay">: </span>
-								</b>
-								<span class="xHuge_area0 xTiny_marginLExcl endline">
-									<h:selectBooleanCheckbox value="#{UserCreationBean.sendEmail}"/>
-								</span>
-							</h:panelGroup>
-							
-						</div>
-					</h:panelGroup>
-					<div class="full_area0 formButtonArea">
+	<ui:param name="headline" value="#{lbl.admin_user_new}"/>
+	<ui:param name="currentMainMenu" value="admin"/>
+			
+	<ui:define name="mainContent">
+		
+		<!-- Breadcrumb - History -->
+		<ui:include src="include/History.xhtml"></ui:include>			
+		
+		<!-- Are You Admin? -->	
+		<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!Auth.admin}">
+			<h:outputText value="#{lbl.view_page_disallowed}" styleClass="imj_messageInfo" rendered="#{SessionBean.user == null}"/>
+			<h:outputText value="#{lbl.view_page_disallowed2}" styleClass="imj_messageInfo" rendered="#{Auth.loggedIn}"/>
+		</h:panelGroup>
+			
+		<ui:fragment rendered="#{Auth.admin}">
+		<!-- Only for Admins -->
+			
+			<div class="imj_userConfig">
+				
+				<!-- Admin - TiledList -->		
+				<div class="imj_administrationTiledList imj_maxWidth">
+				
+					<div class="imj_listBody">
 						
-						<h:outputLink value="#{Navigation.applicationUrl}jsf/UserAdministrationPage.xhtml" styleClass="free_area1_p8 cancelButton xLarge_marginLIncl" >
-							<h:outputText value="#{lbl.cancel}" />
-						</h:outputLink>
-						<h:commandButton action="#{UserCreationBean.create}" value="#{lbl.save}" styleClass="free_area1_p8 activeButton"/>					
-					</div>
-				</h:form>
-			</h:panelGroup>
-		</ui:define>
+						<h:panelGroup layout="block" styleClass="imj_adminPanel imj_userConfig" rendered="#{Auth.admin}">
+							<h:form>
+								
+								<!-- Admin User Info-->
+								<div class="imj_headline">
+									<h2>
+										<h:outputText value="#{lbl.admin_user_info} - #{lbl.admin_user_new}"/>
+									</h2>
+								</div>
+									
+								<div class="imj_content">						
+									<!-- AdminDataList - Email -->
+									<h:panelGroup layout="block" styleClass="imj_admindataSet">
+										<div class="imj_admindataLabel">
+											<h:outputText value="Email"/>
+											<span class="imj_invisible">: </span>
+										</div>
+										<div class="imj_admindataValue">
+											<div class="imj_admindataValueEntry">
+												<h:inputText id="inputEmailText" styleClass="imj_admindataEdit" value="#{UserCreationBean.user.email}" required="true"/>
+											</div>
+										</div>
+									</h:panelGroup>
+										
+																
+									<!-- AdminDataList - Name -->
+									<h:panelGroup layout="block" styleClass="imj_admindataSet">
+										<div class="imj_admindataLabel">
+											<h:outputText value="Name"/>
+											<span class="imj_invisible">: </span>
+										</div>				
+										<div class="imj_admindataValue">
+											<div class="imj_admindataValueEntry">
+												<h:inputText id="inputNameText" styleClass="imj_admindataEdit" value="#{UserCreationBean.user.name}" required="true"/>
+											</div>
+										</div>
+									</h:panelGroup>											
+									
+									<!-- AdminDataList - Nickname -->
+									<h:panelGroup layout="block" styleClass="imj_admindataSet">
+										<div class="imj_admindataLabel">
+											<h:outputText value="Nickname"/>
+											<span class="imj_invisible">: </span>
+										</div>
+										<div class="imj_admindataValue">
+											<div class="imj_admindataValueEntry">
+												<h:inputText id="inputNickText" styleClass="imj_admindataEdit" value="#{UserCreationBean.user.nick}" required="true"/>
+											</div>
+										</div>
+									</h:panelGroup>
+									
+									<!-- AdminDataList - SendEmail CheckBox-->
+									<h:panelGroup layout="block" styleClass="imj_admindataSet">
+										<div class="imj_admindataValueCheckBox">
+											<div class="imj_admindataValueEntry">
+												<h:selectBooleanCheckbox value="#{UserCreationBean.sendEmail}" styleClass="imj_admindataCheckbox"/>
+											</div>													
+										</div>
+										<div class="imj_admindataLabel">
+											<h:outputText value="#{lbl.user_send_mail}"/>
+											<span class="imj_invisible">: </span>
+										</div>										
+									</h:panelGroup>
+										
+								</div> <!-- END CONTENT -->	
+								
+								<!-- AdminDataList - imj_submitPanel - cancel link + submit command buttons -->
+								<h:panelGroup layout="block" styleClass="imj_submitPanel">
+									<h:outputLink value="#{Navigation.applicationUrl}jsf/UserAdministrationPage.xhtml" styleClass="imj_cancelButton">
+										<h:outputText value="#{lbl.cancel}" />
+									</h:outputLink>
+									<h:commandButton action="#{UserCreationBean.create}" value="#{lbl.save}" styleClass="imj_submitButton"/> 
+									<!-- Create a new label value for "Create User" instead of "Save" -->
+								</h:panelGroup>
+								
+							</h:form>
+						</h:panelGroup>
+						
+					</div>	<!-- END LIST BODY -->	
+					
+				</div> <!-- END ADMIN LIST -->
+				
+			</div> <!-- END USER CONFIG -->
+			
+		</ui:fragment>
+		
+	</ui:define>
+		
 </ui:composition>

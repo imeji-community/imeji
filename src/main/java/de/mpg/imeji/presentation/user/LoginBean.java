@@ -3,8 +3,6 @@
  */
 package de.mpg.imeji.presentation.user;
 
-import java.util.Locale;
-
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
@@ -89,7 +87,7 @@ public class LoginBean
         String redirectAfterLogin = "";
         if (current != null)
         {
-            redirectAfterLogin = current.getUri().toString().replace("?h=", "");
+            redirectAfterLogin = current.getCompleteUrl();
         }
         FacesContext.getCurrentInstance().getExternalContext().redirect(redirectAfterLogin);
     }
@@ -106,14 +104,12 @@ public class LoginBean
 
     public String logout()
     {
-        Locale locale = sb.getLocale();
         sb.setUser(null);
         BeanHelper.info(sb.getMessage("success_log_out"));
         FacesContext fc = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession)fc.getExternalContext().getSession(false);
         session.invalidate();
         sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        sb.setLocale(locale);
         return "pretty:home";
     }
 }

@@ -1,83 +1,37 @@
-<ui:composition template="templates/template_paginator_containers.xhtml"
+<ui:composition template="templates/sub_template/template_bibliographicList.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core">
-	<ui:param name="paginatorListSessionBean" value="#{CollectionsBean}" />
-	<ui:param name="headline" value="#{msg.collections_headline}" />
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:menu="http://java.sun.com/jsf/composite/components/menu"
+	xmlns:imjc="http://java.sun.com/jsf/composite/components">
 	
-	<ui:define name="contentMenu">
-		<h:outputLink id="lnkSort" styleClass="imj_contentMenuItem"
-			value="#{Navigation.collectionsUrl}?tab=SORTING"
-			rendered="#{paginatorListSessionBean.selectedMenu != 'SORTING'}">
-			<h:outputText value="#{lbl.sorting}" />
-		</h:outputLink>
-		<h:outputText id="txtSortLink" styleClass="imj_contentMenuItem"
-			value="#{lbl.sorting}"
-			rendered="#{paginatorListSessionBean.selectedMenu == 'SORTING'}" />
-		<h:outputText styleClass="imj_contentMenuSeparator" />
-		<h:outputLink id="lnkFilter" styleClass="imj_contentMenuItem"
-			value="#{Navigation.collectionsUrl}?tab=FILTER"
-			rendered="#{paginatorListSessionBean.selectedMenu != 'FILTER' and Auth.loggedIn}">
-			<h:outputText value="#{lbl.filter}" />
-		</h:outputLink>
-		<h:outputText id="txtFilterLink" styleClass="imj_contentMenuItem"
-			value="#{lbl.filter}"
-			rendered="#{paginatorListSessionBean.selectedMenu == 'FILTER' }" />
-		<h:outputText styleClass="imj_contentMenuSeparator" />
-		<h:outputLink id="lnkCreate" styleClass="imj_contentMenuItem"
-			value="#{Navigation.createCollectionUrl}?reset=1"
-			rendered="#{Auth.loggedIn}">
-			<h:outputText value="#{lbl.collection_create}" />
-		</h:outputLink>
-		<h:outputText styleClass="imj_contentMenuSeparator" />
-	</ui:define>
+	<ui:param name="paginatorListSessionBean" value="#{CollectionsBean}"/>
+	<ui:param name="headline" value="#{msg.collections_headline}"/>
+	<ui:param name="currentMainMenu" value="collection"/>
+	<ui:param name="browseToAllItemsUrl" value="?q=&amp;f=all"/>
+	<ui:param name="releaseItemConfirmationText" value="#{msg.confirmation_release_collection}?"/>
+	<ui:param name="deleteItemConfirmationText" value="#{msg.confirmation_delete_collection}?"/>
+	<ui:param name="deleteSelectedItemsConfirmationText" value="#{lbl.delete_selected_collections}?"/>
+	<ui:param name="withdrawItemConfirmationText" value="#{msg.confirmation_withdraw_collection}"/>
+	<ui:param name="filterBeanHasQuery" value="yes"/>
+	<ui:param name="isActivatable" value="no"/>
+	<ui:param name="globalDisplayLinkText" value="#{lbl.all_items}"/>
+	<ui:param name="globalDeleteLinkText" value="#{lbl.delete_selected_collections}"/>
+	<ui:param name="metadataNavigationURL" value="#{Navigation.collectionUrl}"/>
+	
+	
 	<ui:define name="actionsMenu">
-		<h:panelGroup layout="block" styleClass="imj_contentSubMenu">
-			<h:panelGroup
-				rendered="#{paginatorListSessionBean.selectedMenu == 'SORTING'}"
-				styleClass="imj_contentSubMenuItem">
-				<h:outputText id="txtSort" value="#{lbl.sort_by}"
-					styleClass="imj_contentSubMenuItemSorting" />
-				<h:form>
-					<h:selectOneMenu id="selSort"
-						value="#{paginatorListSessionBean.selectedSortCriterion}"
-						styleClass="free_select" onchange="submit();">
-						<f:selectItems id="sortItem"
-							value="#{paginatorListSessionBean.sortMenu}" />
-					</h:selectOneMenu>
-					<h:commandLink id="lnkSortAsc" styleClass="ascSort"
-						action="#{paginatorListSessionBean.toggleSortOrder}"
-						rendered="#{paginatorListSessionBean.selectedSortOrder == 'ASCENDING'}">&#160;</h:commandLink>
-					<h:commandLink id="lnkSortDesc" styleClass="desSort"
-						action="#{paginatorListSessionBean.toggleSortOrder}"
-						rendered="#{paginatorListSessionBean.selectedSortOrder != 'ASCENDING'}">&#160;</h:commandLink>
-				</h:form>
-				<h:outputText styleClass="imj_contentMenuSeparator" />
-			</h:panelGroup>
-			<h:panelGroup
-				rendered="#{paginatorListSessionBean.selectedMenu == 'FILTER' and Auth.loggedIn}"
-				styleClass="imj_contentSubMenuItem"> <!-- xHuge_area0 -->
-				<h:outputText id="txtFilter" value="#{lbl.filter_by}"
-					styleClass="imj_contentSubMenuItemFiltering" />
-				<h:selectOneMenu id="selFilter"
-					value="#{paginatorListSessionBean.selectedFilter}"
-					styleClass="free_select"
-					onchange="window.location.href = '?f=' + this.value" readonly="true">
-					<f:selectItems id="filterItem"
-						value="#{paginatorListSessionBean.filterMenu}" />
-				</h:selectOneMenu>
-				<h:outputText styleClass="imj_contentMenuSeparator" />
-			</h:panelGroup>
-		</h:panelGroup>
+		<menu:context_actionMenu 	isUserLoggedIn="#{Auth.loggedIn}" 
+									curMainMenu="#{currentMainMenu}" 
+									downloadEnabled="false" 
+									filterBean="#{paginatorListSessionBean}" 
+									sortBean="#{paginatorListSessionBean}" 
+									navBean="#{Navigation}"
+									actionEnabled="false"/>
 	</ui:define>
-	<ui:define name="listFooter">
-		<h:outputLink styleClass="free_area0 xTiny_marginRIncl"
-			style="float:right" value="#"
-			onclick="openDialog('dialogDeleteSelectedContainer');">
-			<h:outputText value="#{lbl.delete_selected_collections}"
-				rendered="#{Auth.loggedIn}" />
-		</h:outputLink>
-		<ui:include src="confirmationPages/SelectedContainerDelete.xhtml" />
+	
+	<ui:define name="searchQuery">
+		<imjc:searchQueryDisplayArea searchBean="#{paginatorListSessionBean}" navBean="#{Navigation}" rendered="#{paginatorListSessionBean.simpleQuery != ''}"/>
 	</ui:define>
 </ui:composition>

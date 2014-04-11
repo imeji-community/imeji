@@ -74,8 +74,8 @@ public class PdfUtils
      */
     public static byte[] pdfsToImageBytes(File file) throws FileNotFoundException, IOException, PDFParseException
     {
-        return PdfUtils.pdfFileToByteAray(new PDFFile(ByteBuffer.wrap(FileUtils.readFileToByteArray(file))), PdfUtils.getThumbnailPage(),
-                BufferedImage.TYPE_INT_RGB, PdfUtils.getResolutionDPI());
+        return PdfUtils.pdfFileToByteAray(new PDFFile(ByteBuffer.wrap(FileUtils.readFileToByteArray(file))),
+                PdfUtils.getThumbnailPage(), BufferedImage.TYPE_INT_RGB, PdfUtils.getResolutionDPI());
     }
 
     /**
@@ -146,11 +146,16 @@ public class PdfUtils
     public static byte[] pdfPageToByteAray(PDFPage page, int imageType, int resolution) throws Exception
     {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(PdfUtils.convertToImage(page, imageType, resolution), PdfUtils.IMAGE_FILE_EXTENSION, baos);
-        baos.flush();
-        byte[] bytes = baos.toByteArray();
-        baos.close();
-        return bytes;
+        try
+        {
+            ImageIO.write(PdfUtils.convertToImage(page, imageType, resolution), PdfUtils.IMAGE_FILE_EXTENSION, baos);
+            baos.flush();
+            return baos.toByteArray();
+        }
+        finally
+        {
+            baos.close();
+        }
     }
 
     /**

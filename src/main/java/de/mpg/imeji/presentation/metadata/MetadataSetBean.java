@@ -52,7 +52,7 @@ import de.mpg.imeji.presentation.util.ProfileHelper;
 public class MetadataSetBean
 {
     private MetadataProfile profile = null;
-    private SuperMetadataTree metadataTree;
+    private SuperMetadataTree metadataTree = null;
     private static final Logger logger = Logger.getLogger(MetadataSetBean.class);
 
     /**
@@ -172,7 +172,7 @@ public class MetadataSetBean
     {
         for (SuperMetadataBean md : metadataTree.getList())
         {
-            if (!MetadataHelper.isEmpty(md.asMetadata()))
+            if (!MetadataHelper.isEmpty(md.getMetadata()))
                 if (md.getStatement().getId().compareTo(st.getId()) == 0
                         || ProfileHelper.isParent(st, md.getStatement(), profile))
                     return true;

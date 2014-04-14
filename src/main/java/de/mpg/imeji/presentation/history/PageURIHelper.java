@@ -103,6 +103,10 @@ public class PageURIHelper
     	{
     		return "user";
     	}
+    	if(url.equals("/createuser"))
+        {
+            return "admin_user_new";
+        }
     	if(url.equals("/help"))
     	{
     		return "help";
@@ -115,6 +119,18 @@ public class PageURIHelper
     	{
     		return "edit_images";
     	}
+    	if(url.equals("/createusergroup"))
+        {
+            return "admin_userGroup_new";
+        }
+    	if(url.equals("/usergroup"))
+        {
+            return "admin_userGroup";
+        }
+    	if(url.equals("/usergroups"))
+        {
+            return "admin_userGroups_view";
+        }
     	return "history_home";
     }
 }

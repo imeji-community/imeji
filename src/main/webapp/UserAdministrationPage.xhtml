@@ -33,16 +33,25 @@
 						<div class="imj_content">
 							<ul>
 								<li>
-									<a href="#{Navigation.applicationUri}/jsf/UserCreate.xhtml" title="#{lbl.admin_user_new}">
+									<a href="#{Navigation.applicationUrl}createuser" title="#{lbl.admin_user_new}">
 										<h:outputText value="#{lbl.admin_user_new}"/>
 									</a>
 								</li>
 								<li>
-									<a href="#{Navigation.applicationUrl}jsf/Users.xhtml" title="#{lbl.admin_user_view}">
+									<a href="#{Navigation.applicationUrl}users" title="#{lbl.admin_user_view}">
 										<h:outputText value="#{lbl.admin_user_view}" />
 									</a>
 								</li>
-								<li></li>
+								<li>
+									<a href="#{Navigation.applicationUrl}createusergroup" title="#{lbl.admin_group_new}">
+										<h:outputText value="#{lbl.admin_userGroup_new}" />
+									</a>
+								</li>
+								<li>
+									<a href="#{Navigation.applicationUrl}usergroups" title="#{lbl.admin_groups_view}">
+										<h:outputText value="#{lbl.admin_userGroups_view}" />
+									</a>
+								</li>
 							</ul>
 						</div>												
 					</h:panelGroup>				

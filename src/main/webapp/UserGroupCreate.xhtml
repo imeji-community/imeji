@@ -1,33 +1,53 @@
-<ui:composition template="templates/template.xhtml"
+<ui:composition template="templates/template_site.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
-	<ui:param name="headline" value="Create User Group" />
+	<ui:param name="headline" value="#{lbl.admin_userGroup_new}" />
+	<ui:param name="currentMainMenu" value="admin"/>
+	
 	<ui:define name="mainContent">
-		<ui:fragment rendered="#{!Auth.admin}">
-			<ui:include src="./include/LoginFormular.xhtml" />
-		</ui:fragment>
+		<!-- Are You Admin? -->	
+		<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!Auth.admin}">
+			<h:outputText value="#{lbl.view_page_disallowed}" styleClass="imj_messageInfo" rendered="#{SessionBean.user == null}"/>
+			<h:outputText value="#{lbl.view_page_disallowed2}" styleClass="imj_messageInfo" rendered="#{Auth.loggedIn}"/>
+		</h:panelGroup>
+			
 		<ui:fragment rendered="#{Auth.admin}">
-			<div class="full_area0_p4 fullItem">
-				<h:form>
-					<div class="full_area0 itemBlock noTopBorder">
-						<b class="xLarge_area0_p8 endline labelLine clear"> <h:outputText
-								value="User Group Name" /> <span class="noDisplay">: </span>
-						</b>
-						<h:inputText value="#{UserGroup.userGroup.name}"
-							styleClass="half_area0_p2" />
+			<div class="imj_userConfig">
+				<div class="imj_administrationTiledList imj_maxWidth">
+					<div class="imj_listBody">
+						<div class="imj_adminPanel imj_userConfig">
+							<div class="imj_headline">
+								<h2>
+									<h:outputText value="Create new user group"/>
+								</h2>
+							</div>
+							<h:form>
+								<div class="imj_content">						
+								<!-- AdminDataList - Email -->
+									<h:panelGroup layout="block" styleClass="imj_admindataSet">
+										<div class="imj_admindataLabel">
+											<h:outputText value="Name"/>
+											<span class="imj_invisible">: </span>
+										</div>
+										<div class="imj_admindataValue">
+											<div class="imj_admindataValueEntry">
+												<h:inputText styleClass="imj_admindataEdit" value="#{UserGroup.userGroup.name}" required="true"/>
+											</div>
+										</div>
+									</h:panelGroup>
+								</div>
+								<div class="imj_submitPanel">
+									<h:outputLink value="#{HistorySession.previousPage.completeUrlWithHistory}" styleClass="imj_cancelButton">
+										<h:outputText value="#{lbl.cancel}" />
+									</h:outputLink>
+									<h:commandButton action="#{UserGroup.create()}" value="#{lbl.save}" styleClass="imj_submitButton"/> 
+								</div>
+							</h:form>
+						</div>
 					</div>
-					<div class="full_area0_p8 formButtonArea">
-						<h:outputLink value="#{Navigation.applicationUrl}usergroups"
-							styleClass="free_area1_p8 cancelButton xLarge_marginLIncl">
-							<h:outputText value="#{lbl.cancel}" />
-						</h:outputLink>
-						<h:commandButton value="#{lbl.save}"
-							action="#{UserGroup.create()}"
-							styleClass="free_area1_p8 activeButton xDouble_marginRIncl" />
-					</div>
-				</h:form>
+				</div>
 			</div>
 		</ui:fragment>
 	</ui:define>

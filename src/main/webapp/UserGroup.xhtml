@@ -1,73 +1,134 @@
-<ui:composition template="templates/template.xhtml"
+<ui:composition template="templates/template_site.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core">
-	<ui:param name="headline" value="Create User Group" />
+	<ui:param name="headline" value="#{lbl.admin_userGroup} #{UserGroup.userGroup.name}" />
 	<ui:define name="mainContent">
+		
+		<ui:include src="include/History.xhtml"></ui:include>			
+		
 		<ui:fragment rendered="#{!Auth.admin}">
 			<ui:include src="./include/LoginFormular.xhtml" />
 		</ui:fragment>
+		
+		
 		<ui:fragment rendered="#{Auth.admin}">
-			<div class="full_area0_p4 fullItem">
-				<h:form>
-					<div class="full_area0 itemBlock noTopBorder">
-						<b class="xLarge_area0_p8 endline labelLine clear"> <h:outputText
-								value="User Group Name" /> <span class="noDisplay">: </span>
-						</b>
-						<h:inputText value="#{UserGroup.userGroup.name}"
-							styleClass="half_area0_p2" />
-					</div>
-					<div class="full_area0_p8 formButtonArea">
-						<h:outputLink value="#{Navigation.applicationUrl}usergroups"
-							styleClass="free_area1_p8 cancelButton xLarge_marginLIncl">
-							<h:outputText value="#{lbl.cancel}" />
-						</h:outputLink>
-						<h:commandButton value="#{lbl.save}" action="#{UserGroup.save()}"
-							styleClass="free_area1_p8 activeButton xDouble_marginRIncl" />
-					</div>
-				</h:form>
-
-				<div class="full_area0_p2 itemBlock noTopBorder">
-					<b class="xLarge_area0_p8 endline labelLine clear"> <h:outputText
-							value="Users" /> <span class="noDisplay">: </span> <h:outputLink
-							value="#{Navigation.applicationUrl}users?group=#{UserGroup.userGroup.id}">Add</h:outputLink>
-					</b>
-					<h:outputText value="No users"
-						rendered="#{UserGroup.users.size() == 0}" />
-					<h:panelGroup id="userArea">
-						<ui:repeat var="user" value="#{UserGroup.users}">
-							<div class="xHuge_area0_p0">
-								<h:outputText styleClass="xDouble_area0_p0"
-									value="#{user.name} (#{user.email})" />
-								<h:form>
-									<h:commandLink value="#{lbl.remove}"
-										action="#{UserGroup.removeUserGromGroup(user.id)}">
-									</h:commandLink>
+		
+			<div class="imj_userConfig">
+				
+				<!-- Admin - TiledList -->
+				<div class="imj_administrationTiledList imj_maxWidth">
+				
+					<div class="imj_listBody">			
+		
+						<div class="imj_adminPanel imj_userConfig">
+						
+							<div class="imj_headline">
+								<h2><h:outputText value="#{UserGroup.userGroup.name}"/></h2>
+							</div>
+							
+							<div class="imj_content">
+								<script type="text/javascript">
+								function hide_input_area_show_Links() {
+									var showElements = '.imj_userGlobalInformation .imj_admindataValue .imj_admindataEdit';
+									showElements += ', .imj_userGlobalInformation .imj_submitPanel .imj_submitButton';
+									showElements += ', .imj_userGlobalInformation .imj_submitPanel .imj_cancelButton';
+									
+									var hideElements = '.imj_userGlobalInformation .imj_admindataValue .imj_admindataValueEntry';
+									hideElements += ', .imj_userGlobalInformation .imj_submitPanel .imj_editButton';
+									
+									$(hideElements).hide();
+									$(showElements).show();
+								}
+								function cancelUserEdit() {
+									var hideElements = '.imj_userGlobalInformation .imj_admindataValue .imj_admindataEdit';
+									hideElements += ', .imj_userGlobalInformation .imj_submitPanel .imj_submitButton';
+									hideElements += ', .imj_userGlobalInformation .imj_submitPanel .imj_cancelButton';
+									
+									var showElements = '.imj_userGlobalInformation .imj_admindataValue .imj_admindataValueEntry';
+									showElements += ', .imj_userGlobalInformation .imj_submitPanel .imj_editButton';
+									
+									$(hideElements).hide();
+									$(showElements).show();
+								}
+								</script>
+								
+								<h:form id ="userForm">
+							
+									<div class="imj_userGlobalInformation">					
+										<fieldset>
+											<!-- User Edit - Email -->
+											<div class="imj_admindataSet">
+												<div class="imj_admindataLabel">
+													<h:outputText value="#{lbl.title}"/>
+													<span class="imj_invisible">: </span>
+												</div>
+												<div class="imj_admindataValue">
+													<div class="imj_admindataValueEntry">
+														<h:outputText value="#{UserGroup.userGroup.name}"/>
+													</div>
+													<div class="imj_admindataSetEdit">
+														<h:inputText value="#{UserGroup.userGroup.name}" styleClass="imj_admindataEdit imj_noDisplay"/>
+													</div>
+												</div>												
+											</div>
+											<div class="imj_submitPanel">
+												<h:outputLink id="lnkEditUserdata" value="#" onclick="hide_input_area_show_Links(); $(this).hide();" styleClass="imj_editButton">
+													<h:outputText value="#{lbl.edit}"/>
+												</h:outputLink>
+												<h:outputLink id="lnkCancelEditUserdata" value="#" onclick="cancelUserEdit(); $(this).hide();" styleClass="imj_cancelButton imj_noDisplay">
+													<h:outputText value="#{lbl.cancel}"/>
+												</h:outputLink>
+												<h:commandLink action="#{UserGroup.save()}" value="#{lbl.save}" styleClass="imj_submitButton imj_noDisplay"/>
+											</div>
+										</fieldset>
+									</div>
+									<div class="imj_admindataSetEdit">
+										<div class="imj_admindataLabel">
+											<h:outputText value="#{lbl.users}"/>
+										</div>
+										<div class="imj_admindataValue">
+											<div class="imj_admindataValueEntry">
+												<h:outputLink value="#{Navigation.applicationUrl}users?group=#{UserGroup.userGroup.id}" styleClass="imj_submitButton">
+														<h:outputText value="#{lbl.add_user}" />
+												</h:outputLink>
+											</div>
+										</div>
+										<div class="imj_admindataLabel"></div>
+										<div class="imj_admindataValue">
+											<div class="imj_admindataValueEntry">
+												<ui:repeat  var="user" value="#{UserGroup.users}" rows="0">
+													<div class="imj_userGrantList">
+														<h:outputText value="#{user.name} (#{user.email})" />
+														<h:form>
+															<h:commandLink value="#{lbl.remove}" action="#{UserGroup.removeUserGromGroup(user.id)}" styleClass="imj_cancelButton"/>
+														</h:form>
+													</div>
+												</ui:repeat>
+											</div>
+										</div>
+									</div>	
+									<div class="imj_admindataSetEdit">
+										<div class="imj_admindataLabel">
+											<h:outputText value="#{UserGroup.userGroup.name} #{lbl.grants_has_following}:"/>
+										</div>
+										<div class="imj_admindataValue">
+											<div class="imj_admindataValueEntry">
+												<ui:repeat id="grantList" var="grant" value="#{UserGroup.userGroup.grants}" rows="0">
+													<h:panelGroup styleClass="imj_userGrantList" rendered="#{grant.grantFor != null}">
+														<h:outputText value="#{grant.asGrantType()} " />	
+														<h:outputLink value="#{grant.grantFor}"><h:outputText value="#{grant.grantFor}"/></h:outputLink>	
+														<h:commandLink action="#" value="#{lbl.revoke}" styleClass="imj_cancelButton"/>
+													</h:panelGroup>
+												</ui:repeat>
+											</div>
+										</div>
+									</div>
 								</h:form>
 							</div>
-						</ui:repeat>
-					</h:panelGroup>
-				</div>
-				<div class="full_area0 itemBlock noTopBorder">
-					<b class="xLarge_area0_p8 endline labelLine clear"> <h:outputText
-							value="Grants" /> <span class="noDisplay">: </span><h:outputLink
-							value="#{Navigation.applicationUrl}users?group=#{UserGroup.userGroup.id}">Add</h:outputLink>
-					
-					</b>
-					<h:outputText value="No grants"
-						rendered="#{UserGroup.userGroup.grants.size() == 0}" />
-					<ui:repeat var="grant" value="#{UserGroup.userGroup.grants}"
-						rows="0">
-						<div class="huge_area0_p4">
-							<h:outputText styleClass="medium_area0"
-								value="#{grant.asGrantType()}" />
-							<h:outputLink styleClass="xDouble_area0_p0"
-								value="#{grant.grantFor}">
-								<h:outputText value="#{grant.grantFor}" />
-							</h:outputLink>
 						</div>
-					</ui:repeat>
+					</div>
 				</div>
 			</div>
 		</ui:fragment>

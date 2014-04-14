@@ -107,7 +107,7 @@ public class SPARQLQueries
     public static String selectUserGroupAll(String name)
     {
         return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s a <http://imeji.org/terms/userGroup> . ?s <http://xmlns.com/foaf/0.1/name> ?name . filter(regex(?name, '"
-                + name + "'))}";
+                + name + "','i'))}";
     }
 
     /**

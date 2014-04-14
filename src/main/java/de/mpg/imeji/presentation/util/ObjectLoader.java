@@ -11,11 +11,13 @@ import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.controller.UserGroupController;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.j2j.exceptions.NotFoundException;
 
@@ -55,8 +57,6 @@ public class ObjectLoader
         }
         return null;
     }
-
-   
 
     /**
      * Load a {@link CollectionImeji} without its {@link Item}
@@ -150,6 +150,31 @@ public class ObjectLoader
         catch (NotFoundException e)
         {
             writeErrorNotFound("image", id);
+        }
+        catch (Exception e)
+        {
+            writeException(e, id.toString());
+        }
+        return null;
+    }
+
+    /**
+     * Load an {@link UserGroup}
+     * 
+     * @param id
+     * @param user
+     * @return
+     */
+    public static UserGroup loadUserGroupLazy(String id, User user)
+    {
+        try
+        {
+            UserGroupController c = new UserGroupController();
+            return c.read(id, user);
+        }
+        catch (NotFoundException e)
+        {
+            writeErrorNotFound("usergroup", URI.create(id));
         }
         catch (Exception e)
         {

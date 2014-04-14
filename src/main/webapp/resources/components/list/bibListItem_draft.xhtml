@@ -19,7 +19,7 @@
 	
 	<composite:implementation>
 		<ui:param name="withdrawID" value="listItem-#{cc.attrs.itemIndex}-dialDiscardContainer-dialogWithdraw"/>
-		
+
 		<li class="#{cc.attrs.itemClass}#{cc.attrs.isActivatable == 'yes' and cc.attrs.item.active ? ' imj_active' : ''}">
 							
 			<div class="imj_interactiveArea">
@@ -79,14 +79,14 @@
 									</h:outputLink>
 								</li>
 								
-								<ui:fragment rendered="#{cc.attrs.metadataNavigationURL.contains('collection') and Auth.update(cc.attrs.item) and cc.attrs.item.status != 'WITHDRAWN'}">
+								<ui:fragment rendered="#{cc.attrs.metadataNavigationURL.contains('collection') and Auth.create(cc.attrs.item) and cc.attrs.item.status != 'WITHDRAWN'}">
 									<li>
 										<h:outputLink id="lnkUploadImages" value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}/#{Navigation.uploadPath}?init=1">
 											<h:outputText value="#{lbl.upload_images}"/>
 										</h:outputLink>
 									</li>
 								</ui:fragment>
-								
+
 								<ui:fragment rendered="#{cc.attrs.item.size > 0 and Auth.update(cc.attrs.item) and cc.attrs.item.status == 'PENDING'}">
 									<li>
 										<h:outputLink value="#" onclick="openDialog('release-#{cc.attrs.itemIndex}-dialog');">
@@ -95,17 +95,8 @@
 										<dialog:confirmationDialog bean="#{cc.attrs.item}" submitAction="release" confirmationText="#{cc.attrs.releaseItemConfirmationText}" submitLabel="#{lbl.release}" dialogId="release-#{cc.attrs.itemIndex}-dialog"/>
 									</li>
 								</ui:fragment>
-								<ui:fragment rendered="#{Auth.update(cc.attrs.item) and cc.attrs.item.status == 'RELEASED'}">
-									<li>
-										<h:outputLink id="lnkWithdrawCollection" value="#" onclick="openDialog('#{withdrawID}');">
-											<h:outputText value="#{lbl.withdraw}"/>
-										</h:outputLink>
-										<dialog:confirmationReasonedDialog submitAction="withdraw" bean="#{cc.attrs.item}" confirmationText="#{cc.attrs.withdrawConfirmationText}" submitLabel="#{lbl.withdraw}" dialogId="#{withdrawID}"/>
-										<imjc:DiscardContainer id="#{withdrawID}" bean="#{cc.attrs.item}" discardComment="#{cc.attrs.item.discardComment}" index="#{cc.attrs.itemIndex}"/>
-									</li>
-								</ui:fragment>
 								
-								<ui:fragment rendered="#{Auth.delete(cc.attrs.item)}">
+								<ui:fragment rendered="#{Auth.delete(cc.attrs.item) and cc.attrs.item.status == 'PENDING'}">
 									<li>
 										<h:outputLink value="#" onclick="openDialog('delete-#{cc.attrs.itemIndex}-dialog');">
 											<h:outputText value="#{lbl.delete}"/>
@@ -116,7 +107,7 @@
 								
 								<ui:fragment rendered="#{cc.attrs.isActivatable == 'yes' and cc.attrs.item.status=='PENDING'}">
 									<li>
-										<ui:fragment rendered="#{Auth.update(cc.attrs.item)}">
+										<ui:fragment rendered="#{Auth.create(cc.attrs.item)}">
 											<h:form>
 												<h:commandButton id="btnActivate" value="#{lbl.make_active}" action="#{cc.attrs.item.makeActive}" styleClass="imj_submitButton" rendered="#{!cc.attrs.item.active}">
 													<f:ajax execute="@this" render="@form :imj_pageMessageArea"/>
@@ -126,7 +117,7 @@
 												</h:commandButton>
 											</h:form>
 										</ui:fragment>
-										<ui:fragment rendered="#{!Auth.update(cc.attrs.item) and !cc.attrs.item.active}">
+										<ui:fragment rendered="#{!Auth.create(cc.attrs.item) and !cc.attrs.item.active}">
 											<h:outputText value="Only View allowed"/>
 										</ui:fragment>
 									</li>

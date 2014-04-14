@@ -40,7 +40,9 @@ import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.album.AlbumBean;
 import de.mpg.imeji.presentation.beans.PropertyBean;
+import de.mpg.imeji.presentation.collection.CollectionListItem;
 import de.mpg.imeji.presentation.image.ThumbnailBean;
 
 /**
@@ -378,6 +380,10 @@ public class Authorization
             return ((Item)obj).getCollection().toString();
         else if (obj instanceof Container)
             return ((Container)obj).getId().toString();
+        else if (obj instanceof CollectionListItem)
+            return ((CollectionListItem)obj).getUri().toString();
+        else if(obj instanceof AlbumBean)
+            return ((AlbumBean)obj).getAlbum().getId().toString();
         else if (obj instanceof MetadataProfile)
             return ((MetadataProfile)obj).getId().toString();
         else if (obj instanceof User)

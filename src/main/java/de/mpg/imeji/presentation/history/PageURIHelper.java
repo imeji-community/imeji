@@ -7,6 +7,13 @@ import java.net.URI;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.vo.Album;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.vo.UserGroup;
+
 /**
  * Helper for {@link URI} of {@link Page}
  * 
@@ -20,28 +27,28 @@ public class PageURIHelper
     private static Pattern findCollectionId = Pattern.compile(".*/collection/(\\w+)");
     private static Pattern findAlbumId = Pattern.compile(".*/album/(\\w+)");
     private static Pattern findUserGroupId = Pattern.compile(".*/userGroup/(\\w+)&?");
-    private static Pattern findUserId = Pattern.compile(".*/user.*id=(.*)&?");
+    private static Pattern findUserId = Pattern.compile(".*/user\\?id=(.*)&?");
 
     /**
      * Extract the id of an imeji object from the url
      **/
-    public static String extractId(String url)
+    public static URI extractId(String url)
     {
         Matcher m = findItemId.matcher(url);
         if (m.find())
-            return m.group(1);
+            return ObjectHelper.getURI(Item.class, m.group(1));
         m = findCollectionId.matcher(url);
         if (m.find())
-            return m.group(1);
+            return ObjectHelper.getURI(CollectionImeji.class, m.group(1));
         m = findAlbumId.matcher(url);
         if (m.find())
-            return m.group(1);
+            return ObjectHelper.getURI(Album.class, m.group(1));
         m = findUserId.matcher(url);
         if (m.find())
-            return m.group(1);
+            return ObjectHelper.getURI(User.class, m.group(1));
         m = findUserGroupId.matcher(url);
         if (m.find())
-            return m.group(1);
+            return ObjectHelper.getURI(UserGroup.class, m.group(1));
         return null;
     }
 
@@ -108,6 +115,10 @@ public class PageURIHelper
         if (url.equals("/user"))
         {
             return "user";
+        }
+        if (url.equals("/users"))
+        {
+            return "admin_info_users";
         }
         if (url.equals("/createuser"))
         {

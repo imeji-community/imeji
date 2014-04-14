@@ -28,6 +28,7 @@
  */
 package de.mpg.imeji.logic.controller;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -74,7 +75,19 @@ public class UserGroupController
      */
     public UserGroup read(String uri, User user) throws Exception
     {
-        return (UserGroup)imejiRDF2Bean.load(uri.toString(), user, new UserGroup());
+        return (UserGroup)imejiRDF2Bean.load(uri, user, new UserGroup());
+    }
+
+    /**
+     * Read a {@link UserGroup} with the given {@link URI}
+     * 
+     * @param uri
+     * @return
+     * @throws Exception
+     */
+    public UserGroup read(URI uri, User user) throws Exception
+    {
+        return read(uri.toString(), user);
     }
 
     /**

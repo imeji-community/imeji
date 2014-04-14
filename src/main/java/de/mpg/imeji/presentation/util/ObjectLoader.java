@@ -165,7 +165,7 @@ public class ObjectLoader
      * @param user
      * @return
      */
-    public static UserGroup loadUserGroupLazy(String id, User user)
+    public static UserGroup loadUserGroupLazy(URI id, User user)
     {
         try
         {
@@ -174,11 +174,36 @@ public class ObjectLoader
         }
         catch (NotFoundException e)
         {
-            writeErrorNotFound("usergroup", URI.create(id));
+            writeErrorNotFound("usergroup", id);
         }
         catch (Exception e)
         {
             writeException(e, id.toString());
+        }
+        return null;
+    }
+
+    /**
+     * Load a {@link User}
+     * 
+     * @param email
+     * @param user
+     * @return
+     */
+    public static User loadUser(URI uri, User user)
+    {
+        try
+        {
+            UserController uc = new UserController(user);
+            return uc.retrieve(uri);
+        }
+        catch (NotFoundException e)
+        {
+            writeErrorNotFound("user", uri);
+        }
+        catch (Exception e)
+        {
+            writeException(e, uri.toString());
         }
         return null;
     }

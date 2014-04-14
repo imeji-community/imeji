@@ -78,18 +78,7 @@ public class SuperMetadataTree
         Map<String, SuperMetadataBean> map = new HashMap<String, SuperMetadataBean>();
         for (SuperMetadataBean smd : list)
         {
-            /* SLOW IMPLEMENTATION */
-            // if ((smd.getParent() == null && parent == null)
-            // || (smd.getParent() != null && parent != null && smd.getParent().asMetadata().getId()
-            // .compareTo(parent.asMetadata().getId()) == 0))
-            // {
-            // smd.setTreeIndex(index);
-            // map.put(smd.getTreeIndex(), smd);
-            // map.putAll(createMap(list, smd, addIndex(index, "0")));
-            // index = incrementIndex(index);
-            // }
-            /* FAST IMPLEMENTATION */
-            if (isRootMetadata(smd) || isChild(smd, parent))
+            if ((parent == null && isRootMetadata(smd)) || isChild(smd, parent))
             {
                 smd.setTreeIndex(index);
                 map.put(smd.getTreeIndex(), smd);

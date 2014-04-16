@@ -15,6 +15,7 @@ import javax.faces.model.SelectItem;
 
 import org.apache.commons.io.FilenameUtils;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
@@ -544,7 +545,7 @@ public class ImageBean
      */
     public User getImageUploader() throws Exception
     {
-        UserController uc = new UserController(sessionBean.getUser());
+        UserController uc = new UserController(Imeji.adminUser);
         User user = uc.retrieve(item.getCreatedBy());
         return user;
     }

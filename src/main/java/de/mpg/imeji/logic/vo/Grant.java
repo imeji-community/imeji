@@ -6,6 +6,7 @@ package de.mpg.imeji.logic.vo;
 import java.io.Serializable;
 import java.net.URI;
 
+import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jResource;
@@ -62,7 +63,7 @@ public class Grant implements Serializable
             throw new NullPointerException("Impossible to created a grant with a null value! Granttype: " + gt
                     + " , and GrantFor: " + gf);
         }
-        this.setGrantType(URI.create("http://imeji.org/terms/grantType#" + gt.name()));
+        this.setGrantType(AuthUtil.toGrantTypeURI(gt));
         this.grantFor = gf;
     }
 

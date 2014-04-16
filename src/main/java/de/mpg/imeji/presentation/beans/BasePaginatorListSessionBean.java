@@ -171,6 +171,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
         {
             BeanHelper.error(e.getMessage());
             logger.error("Error paginator list update ", e);
+            e.printStackTrace();
         }
     }
 
@@ -314,20 +315,21 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
         setCurrentPageNumber(((currentPageNumber - 1 * elementsPerPage + 1) / (elementsPerPage)) + 1);
         return getPrettyNavigation();
     }
-    
+
     /**
      * Listener for elementsPerPageTop
+     * 
      * @param event
      * @throws Exception
      */
     public void elementsPerPageTopListener(ValueChangeEvent event) throws Exception
     {
-    	if(event != null)
-    	{
-    		setElementsPerPage((Integer) event.getNewValue());
+        if (event != null)
+        {
+            setElementsPerPage((Integer)event.getNewValue());
             // set new PageNumber to a number where the first element of the current Page is still displayed
             setCurrentPageNumber(((currentPageNumber - 1 * elementsPerPage + 1) / (elementsPerPage)) + 1);
-    	}
+        }
     }
 
     /**

@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -39,6 +40,7 @@ public class User implements Serializable
     @j2jList("http://imeji.org/terms/grant")
     private Collection<Grant> grants = new ArrayList<Grant>();
     private URI id;
+    private List<UserGroup> groups = new ArrayList<>();
 
     /**
      * Return a clone of this user, with a new email
@@ -118,6 +120,22 @@ public class User implements Serializable
     public URI getId()
     {
         return id;
+    }
+
+    /**
+     * @return the groups
+     */
+    public List<UserGroup> getGroups()
+    {
+        return groups;
+    }
+
+    /**
+     * @param groups the groups to set
+     */
+    public void setGroups(List<UserGroup> groups)
+    {
+        this.groups = groups;
     }
 
     /**

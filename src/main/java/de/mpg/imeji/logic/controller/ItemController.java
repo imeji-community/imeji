@@ -289,7 +289,7 @@ public class ItemController extends ImejiController
         }
         catch (Exception e)
         {
-            throw new RuntimeException("Error loading items:", e);
+            throw new RuntimeException("Error loading items: " + e.getMessage(), e);
         }
     }
 

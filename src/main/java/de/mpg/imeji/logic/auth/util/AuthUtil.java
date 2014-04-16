@@ -28,8 +28,17 @@
  */
 package de.mpg.imeji.logic.auth.util;
 
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+
 import de.mpg.imeji.logic.auth.Authorization;
+import de.mpg.imeji.logic.vo.Album;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Grant;
+import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.presentation.beans.PropertyBean;
 
 /**
@@ -55,11 +64,77 @@ public class AuthUtil
 
     /**
      * True if the user is Administrator of Imeji
+     * 
      * @param user
      * @return
      */
     public static boolean isSysAdmin(User user)
     {
         return authorization.administrate(user, PropertyBean.baseURI());
+    }
+
+    /**
+     * Return the {@link List} of uri of all {@link CollectionImeji}, the {@link User} is allowed to see
+     * 
+     * @param user
+     * @return
+     */
+    public static List<String> getListOfAllowedCollections(User user)
+    {
+        List<String> uris = new ArrayList<>();
+        for (Grant g : getAllGrantsOfUser(user))
+        {
+            if (g.getGrantFor().toString().contains("/collection/")
+                    && g.getGrantType().equals(toGrantTypeURI(GrantType.READ)))
+                uris.add(g.getGrantFor().toString());
+        }
+        return uris;
+    }
+
+    /**
+     * Return the {@link List} of uri of all {@link Album}, the {@link User} is allowed to see
+     * 
+     * @param user
+     * @return
+     */
+    public static List<String> getListOfAllowedAlbums(User user)
+    {
+        List<String> uris = new ArrayList<>();
+        for (Grant g : getAllGrantsOfUser(user))
+        {
+            if (g.getGrantFor().toString().contains("/album/")
+                    && g.getGrantType().equals(toGrantTypeURI(GrantType.READ)))
+                uris.add(g.getGrantFor().toString());
+        }
+        return uris;
+    }
+
+    /**
+     * Return all {@link Grant} of {@link User} including those from the {@link UserGroup} he is member of.
+     * 
+     * @param u
+     * @return
+     */
+    public static List<Grant> getAllGrantsOfUser(User user)
+    {
+        if (user != null)
+        {
+            List<Grant> l = new ArrayList<>(user.getGrants());
+            for (UserGroup ug : user.getGroups())
+                l.addAll(ug.getGrants());
+            return l;
+        }
+        return new ArrayList<>();
+    }
+
+    /**
+     * Transform a {@link GrantType} into an {@link URI}
+     * 
+     * @param type
+     * @return
+     */
+    public static URI toGrantTypeURI(GrantType type)
+    {
+        return URI.create("http://imeji.org/terms/grantType#" + type.name());
     }
 }

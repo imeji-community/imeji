@@ -33,17 +33,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
+import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
-import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.album.AlbumBean;
 import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.collection.CollectionListItem;
-import de.mpg.imeji.presentation.image.ThumbnailBean;
 
 /**
  * Authorization rules for imeji objects (defined by their uri) for one {@link User}
@@ -320,20 +320,7 @@ public class Authorization
         return false;
     }
 
-    /**
-     * Return all {@link Grant} of one {@link User} (including the one in groups)
-     * 
-     * @param user
-     * @return
-     */
-    private List<Grant> getAllGrants(User user)
-    {
-        if (user == null)
-            return new ArrayList<Grant>();
-        List<Grant> l = new ArrayList<Grant>(user.getGrants());
-        // TODO : add grants from groups
-        return l;
-    }
+   
 
     /**
      * True if the {@link User} has the given {@link Grant} or if the {@link User} is system Administrator
@@ -344,7 +331,7 @@ public class Authorization
      */
     private boolean hasGrant(User user, Grant g)
     {
-        List<Grant> all = getAllGrants(user);
+        List<Grant> all = AuthUtil.getAllGrantsOfUser(user);
         if (all.contains(g))
             return true;
         if (all.contains(toGrant(PropertyBean.baseURI(), GrantType.ADMIN)))

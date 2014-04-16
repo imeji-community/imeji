@@ -3,6 +3,12 @@
  */
 package de.mpg.imeji.logic.search.query;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.hp.hpl.jena.sparql.pfunction.library.container;
+
+import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Properties.Status;
@@ -82,10 +88,37 @@ public class SimpleSecurityQuery
     {
         if (user.isAdmin())
             return "";
-        return "OPTIONAL{ <" + user.getId()
-                + "> <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> " + "?"
-                + getVariableName(rdfType)
-                + "} . filter(bound(?g) || ?status=<http://imeji.org/terms/status#RELEASED>) .";
+        String comtainerFilter = getAllowedContainersFilter(user, rdfType);
+        return "filter(" + comtainerFilter + (comtainerFilter.equals("") ? "" : "|| ")
+                + "?status=<http://imeji.org/terms/status#RELEASED>) .";
+    }
+
+    /**
+     * Return ths SPARQL filter with all container the {@link User} is allowed to view
+     * 
+     * @param user
+     * @param rdfType
+     * @return
+     */
+    private static String getAllowedContainersFilter(User user, String rdfType)
+    {
+        List<String> uris = new ArrayList<>();
+        if (J2JHelper.getResourceNamespace(new Album()).equals(rdfType))
+        {
+            uris = AuthUtil.getListOfAllowedAlbums(user);
+        }
+        else
+        {
+            uris = AuthUtil.getListOfAllowedCollections(user);
+        }
+        String s = "";
+        for (String uri : uris)
+        {
+            if (!"".equals(s))
+                s += " || ";
+            s += "?" + getVariableName(rdfType) + "=<" + uri + ">";
+        }
+        return s;
     }
 
     /**

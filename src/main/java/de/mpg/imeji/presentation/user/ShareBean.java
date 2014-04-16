@@ -1,5 +1,6 @@
 package de.mpg.imeji.presentation.user;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -18,17 +19,19 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.Authorization;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.controller.GrantController;
+import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.controller.UserGroupController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Grant;
+import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.user.util.EmailClient;
-import de.mpg.imeji.presentation.user.util.EmailMessages;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 
@@ -52,7 +55,7 @@ public class ShareBean
     private static Authorization auth = new Authorization();
     private boolean isAdmin;
     private List<SelectItem> grantItems = new ArrayList<SelectItem>();
-    private List<String> selectedGrants = new ArrayList<String>();
+    private List<String> selectedRoles = new ArrayList<String>();
     private boolean sendEmail = true;
 
     public enum ShareType
@@ -102,8 +105,8 @@ public class ShareBean
         sharedWith = new ArrayList<SharedHistory>();
         emailList = new ArrayList<String>();
         errorList = new ArrayList<String>();
-        selectedGrants = new ArrayList<String>();
-        checkGrants(selectedGrants);
+        selectedRoles = new ArrayList<String>();
+        checkGrants(selectedRoles);
         retrieveSharedUserWithGrants();
         this.emailInput = "";
         this.isAdmin = auth.administrate(this.user, containerUri);
@@ -114,7 +117,7 @@ public class ShareBean
      */
     public void share()
     {
-        shareTo(checkInputEmail());
+        shareTo(checkInput());
         init();
     }
 
@@ -136,37 +139,62 @@ public class ShareBean
      * 
      * @return
      */
-    public List<String> checkInputEmail()
+    private List<String> checkInput()
     {
         List<String> emailList = new ArrayList<>();
         if (getEmailInput() != null)
         {
-            List<String> emails = Arrays.asList(getEmailInput().split("\\s*;\\s*"));
-            for (String e : emails)
+            List<String> inputValues = Arrays.asList(getEmailInput().split("\\s*[|,;\\n]\\s*"));
+            for (String value : inputValues)
             {
-                if (!UserCreationBean.isValidEmail(e))
+                if (UserCreationBean.isValidEmail(value) && isExistingUser(value))
                 {
-                    this.errorList.add(e + " -- invalid Input");
-                    BeanHelper.error(e + " -- invalid Input");
-                    logger.error(e + " -- invalid Input");
+                    emailList.add(value);
+                }
+                else if (isExistingUserGroup(value))
+                {
+                    emailList.add(value);
                 }
                 else
                 {
-                    UserController uc = new UserController(Imeji.adminUser);
-                    try
-                    {
-                        uc.retrieve(e);
-                        emailList.add(e);
-                    }
-                    catch (Exception e1)
-                    {
-                        BeanHelper.error(e + " -- this user doesn't exist");
-                        logger.error(e + " -- this user doesn't exist", e1);
-                    }
+                    this.errorList.add(value + " -- invalid Input");
+                    BeanHelper.error(value + " -- invalid Input");
+                    logger.error(value + " -- invalid Input");
                 }
             }
         }
         return emailList;
+    }
+
+    /**
+     * True if the email fits to an existing {@link User}
+     * 
+     * @param email
+     * @return
+     */
+    private boolean isExistingUser(String email)
+    {
+        try
+        {
+            UserController uc = new UserController(Imeji.adminUser);
+            uc.retrieve(email);
+            return true;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+    }
+
+    /**
+     * True if the name fits the name of an existing {@link UserGroup}
+     * 
+     * @param name
+     * @return
+     */
+    private boolean isExistingUserGroup(String name)
+    {
+        return searchGroup(name) != null;
     }
 
     /**
@@ -177,86 +205,68 @@ public class ShareBean
         UserController uc = new UserController(Imeji.adminUser);
         Collection<User> allUser = uc.retrieveUserWithGrantFor(containerUri);
         sharedWith = new ArrayList<>();
-        if (isCollection)
+        for (User u : allUser)
         {
-            for (User u : allUser)
-            {
-                SharedHistory sh = new SharedHistory(u, true, containerUri, profileUri, new ArrayList<String>());
-                if (hasReadGrants(u, containerUri, profileUri))
-                {
-                    sh.setUser(u);
-                    sh.getSharedType().add(ShareType.READ.toString());
-                }
-                if (hasUploadGrants(u, containerUri))
-                {
-                    sh.setUser(u);
-                    sh.getSharedType().add(ShareType.UPLOAD.toString());
-                }
-                if (hasEditGrants(u, containerUri))
-                {
-                    sh.setUser(u);
-                    sh.getSharedType().add(ShareType.EDIT.toString());
-                }
-                if (hasDeleteGrants(u, containerUri))
-                {
-                    sh.setUser(u);
-                    sh.getSharedType().add(ShareType.DELETE.toString());
-                }
-                if (hasEditContainerGrants(u, containerUri))
-                {
-                    sh.setUser(u);
-                    sh.getSharedType().add(ShareType.EDIT_COLLECTION.toString());
-                }
-                if (hasEditPrifileGrants(u, profileUri))
-                {
-                    sh.setUser(u);
-                    sh.getSharedType().add(ShareType.EDIT_PROFILE.toString());
-                }
-                if (hasAdminGrants(u, containerUri, profileUri))
-                {
-                    sh.setUser(u);
-                    sh.getSharedType().add(ShareType.ADMIN.toString());
-                }
-                if (sh.getUser() != null)
-                    sharedWith.add(sh);
-            }
+            SharedHistory sh = new SharedHistory(u, true, containerUri, profileUri, new ArrayList<String>());
+            sh.getSharedType().addAll(parseShareTypes((List<Grant>)u.getGrants(), containerUri, profileUri));
+            sharedWith.add(sh);
         }
-        else
+        UserGroupController ugc = new UserGroupController();
+        Collection<UserGroup> groups = ugc.searchByGrantFor(containerUri, Imeji.adminUser);
+        for (UserGroup group : groups)
         {
-            for (User u : allUser)
-            {
-                SharedHistory sh = new SharedHistory(u, false, containerUri, null, new ArrayList<String>());
-                if (hasReadGrants(u, containerUri))
-                {
-                    sh.setUser(u);
-                    sh.getSharedType().add(ShareType.READ.toString());
-                }
-                if (hasAddGrants(u, containerUri))
-                {
-                    sh.setUser(u);
-                    sh.getSharedType().add(ShareType.ADD.toString());
-                }
-                if (hasDeleteGrants(u, containerUri))
-                {
-                    sh.setUser(u);
-                    sh.getSharedType().add(ShareType.DELETE.toString());
-                }
-                if (hasEditContainerGrants(u, containerUri))
-                {
-                    sh.setUser(u);
-                    sh.getSharedType().add(ShareType.EDIT_ALBUM.toString());
-                }
-                if (hasAdminGrants(u, containerUri))
-                {
-                    sh.setUser(u);
-                    sh.getSharedType().add(ShareType.ADMIN.toString());
-                }
-                if (sh.getUser() != null)
-                    this.sharedWith.add(sh);
-            }
+            SharedHistory sh = new SharedHistory(group, true, containerUri, profileUri, new ArrayList<String>());
+            sh.getSharedType().addAll(parseShareTypes((List<Grant>)group.getGrants(), containerUri, profileUri));
+            sharedWith.add(sh);
         }
     }
-    
+
+    /**
+     * Parse the {@link ShareType} out of the {@link List} of {@link Grant} and the current {@link container} and
+     * {@link MetadataProfile}
+     * 
+     * @param grants
+     * @param containerUri
+     * @param profileUri
+     * @return
+     */
+    private List<String> parseShareTypes(List<Grant> grants, String containerUri, String profileUri)
+    {
+        List<String> l = new ArrayList<>();
+        if (hasReadGrants(grants, containerUri, profileUri))
+        {
+            l.add(ShareType.READ.toString());
+        }
+        if (hasUploadGrants(grants, containerUri))
+        {
+            if (isCollection)
+                l.add(ShareType.UPLOAD.toString());
+            else
+                l.add(ShareType.ADD.toString());
+        }
+        if (hasEditGrants(grants, containerUri))
+        {
+            l.add(ShareType.EDIT.toString());
+        }
+        if (hasDeleteGrants(grants, containerUri))
+        {
+            l.add(ShareType.DELETE.toString());
+        }
+        if (hasEditContainerGrants(grants, containerUri))
+        {
+            l.add(ShareType.EDIT_COLLECTION.toString());
+        }
+        if (hasEditProfileGrants(grants, profileUri))
+        {
+            l.add(ShareType.EDIT_PROFILE.toString());
+        }
+        if (hasAdminGrants(grants, containerUri, profileUri))
+        {
+            l.add(ShareType.ADMIN.toString());
+        }
+        return l;
+    }
+
     /**
      * Send email to the person to share with
      * 
@@ -279,187 +289,175 @@ public class ShareBean
         }
     }
 
-    public static boolean hasAddGrants(User user, String containerUri)
+    /**
+     * Send an Emailto all {@link User} of a {@link UserGroup}
+     * 
+     * @param group
+     * @param subject
+     * @param message
+     */
+    private void sendEmailToGroup(UserGroup group, String subject, String message)
     {
-        List<Grant> grants = AuthorizationPredefinedRoles.add(containerUri);
-        return !grantNotExist(user, grants);
+        UserController c = new UserController(Imeji.adminUser);
+        for (URI uri : group.getUsers())
+        {
+            try
+            {
+                sendEmail(c.retrieve(uri), subject, message);
+            }
+            catch (Exception e)
+            {
+                logger.error("Error sending email", e);
+                BeanHelper.error(sb.getMessage("error") + ": Email not sent");
+            }
+        }
     }
 
-    public static boolean hasReadGrants(User user, String containerUri, String profileUri)
+    public static boolean hasReadGrants(List<Grant> userGrants, String containerUri, String profileUri)
     {
         List<Grant> grants = AuthorizationPredefinedRoles.read(containerUri, profileUri);
-        return !grantNotExist(user, grants);
+        return !grantNotExist(userGrants, grants);
     }
 
-    public static boolean hasReadGrants(User user, String containerUri)
-    {
-        List<Grant> grants = AuthorizationPredefinedRoles.read(containerUri);
-        return !grantNotExist(user, grants);
-    }
-
-    public static boolean hasUploadGrants(User user, String containerUri)
+    public static boolean hasUploadGrants(List<Grant> userGrants, String containerUri)
     {
         List<Grant> grants = AuthorizationPredefinedRoles.upload(containerUri);
-        return !grantNotExist(user, grants);
+        return !grantNotExist(userGrants, grants);
     }
 
-    public static boolean hasEditGrants(User user, String containerUri)
+    public static boolean hasEditGrants(List<Grant> userGrants, String containerUri)
     {
         List<Grant> grants = AuthorizationPredefinedRoles.edit(containerUri);
-        return !grantNotExist(user, grants);
+        return !grantNotExist(userGrants, grants);
     }
 
-    public static boolean hasDeleteGrants(User user, String containerUri)
+    public static boolean hasDeleteGrants(List<Grant> userGrants, String containerUri)
     {
         List<Grant> grants = AuthorizationPredefinedRoles.delete(containerUri);
-        return !grantNotExist(user, grants);
+        return !grantNotExist(userGrants, grants);
     }
 
-    public static boolean hasEditContainerGrants(User user, String containerUri)
+    public static boolean hasEditContainerGrants(List<Grant> userGrants, String containerUri)
     {
         List<Grant> grants = AuthorizationPredefinedRoles.editContainer(containerUri);
-        return !grantNotExist(user, grants);
+        return !grantNotExist(userGrants, grants);
     }
 
-    public static boolean hasEditPrifileGrants(User user, String profileUri)
+    public static boolean hasEditProfileGrants(List<Grant> userGrants, String profileUri)
     {
         List<Grant> grants = AuthorizationPredefinedRoles.editProfile(profileUri);
-        return !grantNotExist(user, grants);
+        return !grantNotExist(userGrants, grants);
     }
 
-    public static boolean hasAdminGrants(User user, String containerUri, String profileUri)
+    public static boolean hasAdminGrants(List<Grant> userGrants, String containerUri, String profileUri)
     {
         List<Grant> grants = AuthorizationPredefinedRoles.admin(containerUri, profileUri);
-        return !grantNotExist(user, grants);
+        return !grantNotExist(userGrants, grants);
     }
 
-    public static boolean hasAdminGrants(User user, String containerUri)
+    /**
+     * Get the {@link List} of {@link Grant} which are required accoding to the selected Roles
+     * 
+     * @return
+     */
+    private List<Grant> getGrantsAccordingtoSelectedRoles()
     {
-        List<Grant> grants = AuthorizationPredefinedRoles.admin(containerUri);
-        return !grantNotExist(user, grants);
+        List<Grant> grants = new ArrayList<Grant>();
+        for (String g : selectedRoles)
+        {
+            switch (g)
+            {
+                case "READ":
+                    grants.addAll(AuthorizationPredefinedRoles.read(containerUri, profileUri));
+                    break;
+                case "UPLOAD":
+                    grants.addAll(AuthorizationPredefinedRoles.upload(containerUri));
+                    break;
+                case "EDIT":
+                    grants.addAll(AuthorizationPredefinedRoles.edit(containerUri));
+                    break;
+                case "DELETE":
+                    grants.addAll(AuthorizationPredefinedRoles.delete(containerUri));
+                    break;
+                case "EDIT_COLLECTION":
+                    grants.addAll(AuthorizationPredefinedRoles.editContainer(containerUri));
+                    break;
+                case "EDIT_PROFILE":
+                    grants.addAll(AuthorizationPredefinedRoles.editProfile(profileUri));
+                    break;
+                case "ADMIN":
+                    grants.addAll(AuthorizationPredefinedRoles.admin(containerUri, profileUri));
+                    break;
+                case "EDIT_ALBUM":
+                    grants.addAll(AuthorizationPredefinedRoles.editContainer(containerUri));
+            }
+        }
+        return grants;
     }
 
     /**
      * Share the {@link Container} with the {@link List} of {@link User} and {@link UserGroup}
      * 
-     * @param emailList
+     * @param toList
      * @return
      */
-    public void shareTo(List<String> emailList)
+    public void shareTo(List<String> toList)
     {
-        if (isCollection)
+        List<Grant> grants = getGrantsAccordingtoSelectedRoles();
+        for (String to : toList)
         {
-            for (String e : emailList)
+            try
             {
-                try
+                GrantController gc = new GrantController();
+                if (UserCreationBean.isValidEmail(to))
                 {
-                    User u = ObjectLoader.loadUser(e, Imeji.adminUser);
-                    GrantController gc = new GrantController();
-                    List<String> sharedType = new ArrayList<String>();
-                    for (String g : selectedGrants)
-                    {
-                        List<Grant> newGrants = new ArrayList<Grant>();
-                        switch (g)
-                        {
-                            case "READ":
-                                newGrants = AuthorizationPredefinedRoles.read(containerUri, profileUri);
-                                break;
-                            case "UPLOAD":
-                                newGrants = AuthorizationPredefinedRoles.upload(containerUri);
-                                break;
-                            case "EDIT":
-                                newGrants = AuthorizationPredefinedRoles.edit(containerUri);
-                                break;
-                            case "DELETE":
-                                newGrants = AuthorizationPredefinedRoles.delete(containerUri);
-                                break;
-                            case "EDIT_COLLECTION":
-                                newGrants = AuthorizationPredefinedRoles.editContainer(containerUri);
-                                break;
-                            case "EDIT_PROFILE":
-                                newGrants = AuthorizationPredefinedRoles.editProfile(profileUri);
-                                break;
-                            case "ADMIN":
-                                newGrants = AuthorizationPredefinedRoles.admin(containerUri, profileUri);
-                                break;
-                        }
-                        if (grantNotExist(u, newGrants))
-                        {
-                            gc.addGrants(u, newGrants, u);
-                        }
-                        sharedType.add(g);
-                    }
-                    if(sendEmail)
-                    {
-                        EmailMessages emailMessages = new EmailMessages();
-                        sendEmail(u, sb.getMessage("email_shared_album_subject"), emailMessages.getSharedCollectionMessage(user.getName(), u.getName(), title, containerUri));
-                    }
-                 
+                    User u = ObjectLoader.loadUser(to, Imeji.adminUser);
+                    gc.addGrants(u, grants, u);
+                    if (sendEmail)
+                        sendEmail(u, title, containerUri);
                 }
-                catch (Exception e1)
+                else
                 {
-                    logger.error("CollectionSharedHistory--could not update User (email: " + user.getEmail() + " ) ",
-                            e1);
+                    UserGroup g = searchGroup(to);
+                    gc.addGrants(g, grants, Imeji.adminUser);
+                    if (sendEmail)
+                        sendEmailToGroup(g, title, containerUri);
                 }
             }
-        }
-        else
-        {
-            for (String e : emailList)
+            catch (Exception e)
             {
-                try
-                {
-                    User u = ObjectLoader.loadUser(e, Imeji.adminUser);
-                    GrantController gc = new GrantController();
-                    List<String> sharedType = new ArrayList<String>();
-                    for (String g : selectedGrants)
-                    {
-                        List<Grant> newGrants = new ArrayList<Grant>();
-                        switch (g)
-                        {
-                            case "READ":
-                                newGrants = AuthorizationPredefinedRoles.read(containerUri);
-                                break;
-                            case "ADD":
-                                newGrants = AuthorizationPredefinedRoles.add(containerUri);
-                                break;
-                            case "DELETE":
-                                newGrants = AuthorizationPredefinedRoles.delete(containerUri);
-                                break;
-                            case "EDIT_ALBUM":
-                                newGrants = AuthorizationPredefinedRoles.editContainer(containerUri);
-                                break;
-                            case "ADMIN":
-                                newGrants = AuthorizationPredefinedRoles.admin(containerUri);
-                                break;
-                        }
-                        if (grantNotExist(u, newGrants))
-                        {
-                            gc.addGrants(u, newGrants, u);
-                        }
-                        sharedType.add(g);
-                    }
-                    if(sendEmail)
-                    {
-                        EmailMessages emailMessages = new EmailMessages();
-                        sendEmail(u, sb.getMessage("email_shared_album_subject"), emailMessages.getSharedAlbumMessage(user.getName(), u.getName(), title, containerUri));
-                    }
-                }
-                catch (Exception e1)
-                {
-                    logger.error("CollectionSharedHistory--could not update User (email: " + user.getEmail() + " ) ",
-                            e1);
-                }
+                logger.error("CollectionSharedHistory--could not update User (email: " + user.getEmail() + " ) ", e);
             }
         }
         reset();
         clearError();
     }
 
-    public static boolean grantNotExist(User u, List<Grant> grantList)
+    /**
+     * Search a {@link UserGroup} by name
+     * 
+     * @param q
+     * @return
+     */
+    private UserGroup searchGroup(String q)
+    {
+        UserGroupController c = new UserGroupController();
+        List<UserGroup> found = (List<UserGroup>)c.searchByName(q, Imeji.adminUser);
+        if (found.size() > 0)
+            return found.get(0);
+        return null;
+    }
+
+    /**
+     * True if ???
+     * 
+     * @param userGrants
+     * @param grantList
+     * @return
+     */
+    public static boolean grantNotExist(List<Grant> userGrants, List<Grant> grantList)
     {
         boolean b = false;
-        List<Grant> userGrants = (List<Grant>)u.getGrants();
         for (Grant g : grantList)
             if (!userGrants.contains(g))
                 b = true;
@@ -470,17 +468,12 @@ public class ShareBean
     {
         setEmailInput("");
         emailList.clear();
-        selectedGrants.clear();
+        selectedRoles.clear();
     }
 
     public void clearError()
     {
         errorList.clear();
-    }
-
-    protected String getNavigationString()
-    {
-        return null;
     }
 
     public User getUser()
@@ -598,12 +591,12 @@ public class ShareBean
 
     public List<String> getSelectedGrants()
     {
-        return selectedGrants;
+        return selectedRoles;
     }
 
     public void setSelectedGrants(List<String> selectedGrants)
     {
-        this.selectedGrants = selectedGrants;
+        this.selectedRoles = selectedGrants;
     }
 
     public String getContainerUri()

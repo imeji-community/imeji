@@ -39,6 +39,7 @@ import de.mpg.imeji.logic.ImejiRDF2Bean;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
+import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.j2j.exceptions.NotFoundException;
@@ -115,15 +116,49 @@ public class UserGroupController
     }
 
     /**
+     * Search all {@link UserGroup} having a {@link Grant} for the object defined in grantFor
+     * 
+     * @param grantFor
+     * @param user
+     * @return
+     */
+    public Collection<UserGroup> searchByGrantFor(String grantFor, User user)
+    {
+        return searchBySPARQLQuery(SPARQLQueries.selectUserGroupWithGrantFor(grantFor), user);
+    }
+
+    /**
      * Retrieve all {@link UserGroup} Only allowed for System administrator
      * 
      * @return
      */
-    public Collection<UserGroup> retrieveAll(String q, User user)
+    public Collection<UserGroup> searchByName(String q, User user)
+    {
+        return searchBySPARQLQuery(SPARQLQueries.selectUserGroupAll(q), user);
+    }
+    
+    /**
+     * Retrieve all {@link UserGroup} a user is member of
+     * 
+     * @return
+     */
+    public Collection<UserGroup> searchByUser(User member, User user)
+    {
+        return searchBySPARQLQuery(SPARQLQueries.selectUserGroupOfUser(member), Imeji.adminUser);
+    }
+
+    /**
+     * Search {@link UserGroup} according a SPARQL Query
+     * 
+     * @param q
+     * @param user
+     * @return
+     */
+    private Collection<UserGroup> searchBySPARQLQuery(String q, User user)
     {
         Collection<UserGroup> userGroups = new ArrayList<UserGroup>();
         Search search = new Search(SearchType.ALL, null);
-        List<String> uris = search.searchSimpleForQuery(SPARQLQueries.selectUserGroupAll(q), null);
+        List<String> uris = search.searchSimpleForQuery(q, null);
         for (String uri : uris)
         {
             try

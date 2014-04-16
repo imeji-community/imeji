@@ -16,6 +16,7 @@ import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.j2j.exceptions.NotFoundException;
 
 /**
@@ -75,7 +76,10 @@ public class UserController
      */
     public User retrieve(String email) throws Exception
     {
-        return (User)imejiRDF2Bean.load(ObjectHelper.getURI(User.class, email).toString(), user, new User());
+        User u = (User)imejiRDF2Bean.load(ObjectHelper.getURI(User.class, email).toString(), user, new User());
+        UserGroupController ugc = new UserGroupController();
+        u.setGroups((List<UserGroup>)ugc.searchByUser(u, user));
+        return u;
     }
 
     /**
@@ -87,7 +91,10 @@ public class UserController
      */
     public User retrieve(URI uri) throws Exception
     {
-        return (User)imejiRDF2Bean.load(uri.toString(), user, new User());
+        User u = (User)imejiRDF2Bean.load(uri.toString(), user, new User());
+        UserGroupController ugc = new UserGroupController();
+        u.setGroups((List<UserGroup>)ugc.searchByUser(u, user));
+        return u;
     }
 
     /**

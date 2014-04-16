@@ -97,7 +97,7 @@ public class UserGroupsBean implements Serializable
     public void doSearch()
     {
         UserGroupController controller = new UserGroupController();
-        userGroups = controller.retrieveAll(query, sessionUser);
+        userGroups = controller.searchByName(query, sessionUser);
     }
 
     /**

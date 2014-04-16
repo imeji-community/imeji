@@ -125,7 +125,8 @@ public class AuthorizationPredefinedRoles
     {
         GrantType[] g = { GrantType.READ, GrantType.READ_CONTENT };
         List<Grant> l = toGrantList(g, containerUri);
-        l.addAll(toGrantList(g, profileUri));
+        if (profileUri != null)
+            l.addAll(toGrantList(g, profileUri));
         return l;
     }
 
@@ -169,26 +170,6 @@ public class AuthorizationPredefinedRoles
             g[g.length - 1] = GrantType.DELETE_CONTENT;
             l.addAll(toGrantList(g, profileUri));
         }
-        return l;
-    }
-
-    public static List<Grant> read(String containerUri)
-    {
-        GrantType[] g = { GrantType.READ, GrantType.READ_CONTENT };
-        return toGrantList(g, containerUri);
-    }
-
-    public static List<Grant> add(String containerUri)
-    {
-        GrantType[] g = { GrantType.CREATE };
-        List<Grant> l = toGrantList(g, containerUri);
-        return l;
-    }
-
-    public static List<Grant> admin(String containerUri)
-    {
-        GrantType[] g = { GrantType.DELETE, GrantType.ADMIN, GrantType.ADMIN_CONTENT };
-        List<Grant> l = toGrantList(g, containerUri);
         return l;
     }
 

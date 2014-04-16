@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.escidoc.core.resources.aa.useraccount.Grants;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.controller.GrantController;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.presentation.user.ShareBean.ShareType;
 
 import org.apache.log4j.Logger;
@@ -16,15 +18,44 @@ public class SharedHistory
 {
     private static Logger logger = Logger.getLogger(SharedHistory.class);
     private User user;
+    private UserGroup group;
     private String containerUri;
     private String profileUri;
     private boolean isCollection;
     private List<String> sharedType = new ArrayList<String>();
 
+    /**
+     * Constructor with a {@link User}
+     * 
+     * @param user
+     * @param isCollection
+     * @param containerUri
+     * @param profileUri
+     * @param sharedType
+     */
     public SharedHistory(User user, boolean isCollection, String containerUri, String profileUri,
             List<String> sharedType)
     {
         this.user = user;
+        this.isCollection = isCollection;
+        this.containerUri = containerUri;
+        this.profileUri = profileUri;
+        this.sharedType = sharedType;
+    }
+
+    /**
+     * Constructor with a {@link UserGroup}
+     * 
+     * @param group
+     * @param isCollection
+     * @param containerUri
+     * @param profileUri
+     * @param sharedType
+     */
+    public SharedHistory(UserGroup group, boolean isCollection, String containerUri, String profileUri,
+            List<String> sharedType)
+    {
+        this.setGroup(group);
         this.isCollection = isCollection;
         this.containerUri = containerUri;
         this.profileUri = profileUri;
@@ -102,7 +133,10 @@ public class SharedHistory
         try
         {
             // Remove all Grant for the current container
-            gc.removeGrants(getUser(), AuthorizationPredefinedRoles.all(containerUri, profileUri), user);
+            if (user != null)
+                gc.removeGrants(getUser(), AuthorizationPredefinedRoles.all(containerUri, profileUri), user);
+            else if (group != null)
+                gc.removeGrants(group, AuthorizationPredefinedRoles.all(containerUri, profileUri), Imeji.adminUser);
             // Find all new Grants according to the shareType
             List<Grant> newGrants = new ArrayList<Grant>();
             for (String g : sharedType)
@@ -133,7 +167,10 @@ public class SharedHistory
                 }
             }
             // Save the new Grants
-            gc.addGrants(user, newGrants, user);
+            if (user != null)
+                gc.addGrants(user, newGrants, user);
+            else if (group != null)
+                gc.addGrants(group, newGrants,  Imeji.adminUser);
         }
         catch (Exception e)
         {
@@ -141,5 +178,21 @@ public class SharedHistory
             throw new RuntimeException(e);
         }
         return "pretty:shareCollection";
+    }
+
+    /**
+     * @return the group
+     */
+    public UserGroup getGroup()
+    {
+        return group;
+    }
+
+    /**
+     * @param group the group to set
+     */
+    public void setGroup(UserGroup group)
+    {
+        this.group = group;
     }
 }

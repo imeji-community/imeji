@@ -30,6 +30,8 @@ package de.mpg.imeji.logic.search.query;
 
 import java.net.URI;
 
+import org.opensaml.ws.wssecurity.Username;
+
 import com.hp.hpl.jena.sparql.pfunction.library.container;
 
 import de.mpg.imeji.logic.Imeji;
@@ -78,13 +80,14 @@ public class SPARQLQueries
     }
 
     /**
-     * Select all {@link User}
+     * Select all {@link Username}
      * 
      * @return
      */
-    public static String selectUserAll()
+    public static String selectUserAll(String name)
     {
-        return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s a <http://imeji.org/terms/user> }";
+        return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s a <http://imeji.org/terms/user> . ?s <http://xmlns.com/foaf/0.1/name> ?name . filter(regex(?name, '"
+                + name + "','i'))}";
     }
 
     /**
@@ -93,6 +96,18 @@ public class SPARQLQueries
      * @return
      */
     public static String selectUserWithGrantFor(String uri)
+    {
+        return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {OPTIONAL{ ?s <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> <"
+                + uri
+                + ">} . filter(bound(?g)) . ?s a <http://imeji.org/terms/user> . ?s <http://xmlns.com/foaf/0.1/name> ?name } ORDER BY DESC(?name)";
+    }
+
+    /**
+     * Select {@link User} having a {@link Grant} for an object defined by its uri
+     * 
+     * @return
+     */
+    public static String selectUserBy(String uri)
     {
         return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {OPTIONAL{ ?s <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> <"
                 + uri

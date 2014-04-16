@@ -3,6 +3,7 @@
  */
 package de.mpg.imeji.presentation.user;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,7 @@ public class UsersBean implements Serializable
     private static final long serialVersionUID = 909531319532057429L;
     private List<User> users;
     private UserGroup group;
+    private String query;
     @ManagedProperty(value = "#{SessionBean.user}")
     private User sessionUser;
     private static Logger logger = Logger.getLogger(UserBean.class);
@@ -53,18 +55,38 @@ public class UsersBean implements Serializable
     @PostConstruct
     public void init()
     {
-        retrieveUsers();
+        String q = UrlHelper.getParameterValue("q");
+        query = q == null ? "" : q;
+        doSearch();
         retrieveGroup();
+    }
+
+    /**
+     * Trigger the search to users Groups
+     */
+    public void search()
+    {
+        Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
+        try
+        {
+            FacesContext.getCurrentInstance().getExternalContext()
+                    .redirect(nav.getApplicationUrl() + "users?q=" + query);
+        }
+        catch (IOException e)
+        {
+            BeanHelper.error(e.getMessage());
+            logger.error(e);
+        }
     }
 
     /**
      * Retrieve all users
      */
-    public void retrieveUsers()
+    public void doSearch()
     {
         UserController controller = new UserController(sessionUser);
         users = new ArrayList<User>();
-        for (User user : controller.retrieveAll())
+        for (User user : controller.retrieveAll(query))
         {
             users.add(user);
         }
@@ -100,22 +122,20 @@ public class UsersBean implements Serializable
     public String sendPassword()
     {
         String email = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("email");
-        PasswordGenerator generator = new PasswordGenerator();       
+        PasswordGenerator generator = new PasswordGenerator();
         UserBean userBean = new UserBean(email);
         SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        
-        try 
+        try
         {
-        	String newPassword = generator.generatePassword();
-			userBean.getUser().setEncryptedPassword(StringHelper.convertToMD5(newPassword));
-	        userBean.updateUser();
-	        sendEmail(email, newPassword, userBean.getUser().getName());
-		} 
-        catch (Exception e) 
-        {	
-			e.printStackTrace();
-		}
-
+            String newPassword = generator.generatePassword();
+            userBean.getUser().setEncryptedPassword(StringHelper.convertToMD5(newPassword));
+            userBean.updateUser();
+            sendEmail(email, newPassword, userBean.getUser().getName());
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         BeanHelper.info(session.getMessage("success_email"));
         return "";
     }
@@ -161,7 +181,7 @@ public class UsersBean implements Serializable
             BeanHelper.error("Error Deleting user");
             logger.error("Error Deleting user", e);
         }
-        retrieveUsers();
+        doSearch();
         return "";
     }
 
@@ -241,5 +261,21 @@ public class UsersBean implements Serializable
     public void setSessionUser(User sessionUser)
     {
         this.sessionUser = sessionUser;
+    }
+
+    /**
+     * @return the query
+     */
+    public String getQuery()
+    {
+        return query;
+    }
+
+    /**
+     * @param query the query to set
+     */
+    public void setQuery(String query)
+    {
+        this.query = query;
     }
 }

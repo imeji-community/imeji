@@ -14,10 +14,10 @@
 	<composite:implementation>
 		<div class="imj_entryPagePreviewTiledList">
 			<ui:fragment rendered="#{cc.attrs.mediaLogicBean.container.status != 'WITHDRAWN'}">
-				<h:outputLink value="#{cc.attrs.mediaLogicBean.id}/#{cc.attrs.browsePath}?q=" rendered="#{cc.attrs.mediaLogicBean.thumbnails.size() != null and cc.attrs.mediaLogicBean.thumbnails.size() != 0}">
+				<h:outputLink value="#{cc.attrs.mediaLogicBean.id}/#{cc.attrs.browsePath}?q=" rendered="#{cc.attrs.mediaLogicBean.items.size() > 0}">
 					<!-- MEDIA - Entry Page - Thumbnails -->
-					<ui:repeat var="thumb" value="#{cc.attrs.mediaLogicBean.thumbnails}">
-						<h:graphicImage styleClass="imj_entryPagePreviewTiledListItem" value="#{cc.attrs.applicationUrl}file?id=#{thumb.link}"/>
+					<ui:repeat var="thumb" value="#{cc.attrs.mediaLogicBean.items}">
+						<h:graphicImage styleClass="imj_entryPagePreviewTiledListItem" value="#{cc.attrs.applicationUrl}file?id=#{thumb.thumbnailImageUrl}"/>
 					</ui:repeat>
 					<!-- MEDIA - Link to Collection -->
 					<h:panelGroup styleClass="imj_entryPagePreviewTiledListLink">
@@ -34,7 +34,7 @@
 					</h:panelGroup>				
 				</h:outputLink>
 				
-				<ui:fragment rendered="#{cc.attrs.mediaLogicBean.thumbnails.size() == null or cc.attrs.mediaLogicBean.thumbnails.size() == 0}">
+				<ui:fragment rendered="#{cc.attrs.mediaLogicBean.items.size() == 0}">
 					<h:panelGroup  styleClass="imj_entryPagePreviewTiledListItem">
 						<h2><h:outputText value="#{lbl.no_item} "/></h2>
 					</h:panelGroup>

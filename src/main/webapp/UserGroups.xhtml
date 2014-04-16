@@ -34,6 +34,7 @@
 						<h:outputLink value="#{Navigation.applicationUrl}usergroups" title="#{lbl.clear}" rendered="#{UserGroups.query != ''}" styleClass="imj_cancelButton">
 							<h:outputText value="#{lbl.clear}" />
 						</h:outputLink>
+						<h:outputText value="(#{UserGroups.userGroups.size()} #{lbl.admin_userGroups})" />
 					</div>
 					<div class="imj_listBody">
 						<ui:repeat var="group" value="#{UserGroups.userGroups}">
@@ -46,28 +47,13 @@
 										</h2>
 										<span class="imj_invisible">: </span>
 									</div>
-									<div class="imj_content">
-										<!-- AdminDataList - User Grants -->									
-										<div class="imj_admindataValue">										
-											<div class="imj_admindataValueEntry">
-												<ui:repeat id="grantList" var="grant" value="#{group.grants}" rows="0">
-													<span class="imj_userGrantList">
-														<h:outputText styleClass="" value="#{grant.asGrantType()}" />
-														<h:outputLink styleClass="" value="#{grant.grantFor}">
-															<h:outputText value="#{grant.grantFor}" />
-														</h:outputLink>
-													</span>
-												</ui:repeat>
-											</div>
-										</div>
-										<div class="imj_adminEditPanel">
-											<h:outputLink value="#{Navigation.applicationUrl}usergroup?id=#{group.id}" styleClass="imj_editButton">
-												<h:outputText value="#{lbl.edit}"/>
-											</h:outputLink>
-											<h:form>
-												<h:commandLink styleClass="imj_cancelButton" value="#{lbl.delete}" action="#{UserGroups.remove(group)}"/>
-											</h:form>
-										</div>
+									<div class="imj_adminEditPanel">
+										<h:outputLink value="#{Navigation.applicationUrl}usergroup?id=#{group.id}" styleClass="imj_editButton">
+											<h:outputText value="#{lbl.view_detail}"/>
+										</h:outputLink>
+										<h:form>
+											<h:commandLink styleClass="imj_cancelButton" value="#{lbl.delete}" action="#{UserGroups.remove(group)}" onclick="if (confirm('Do you really want to delete this user group?')) return true; return false;"/>
+										</h:form>
 									</div>
 								</div>
 							</div>

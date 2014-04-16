@@ -3,6 +3,7 @@
  */
 package de.mpg.imeji.presentation.collection;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,9 +12,11 @@ import javax.faces.bean.RequestScoped;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
@@ -33,6 +36,7 @@ public class ViewCollectionBean extends CollectionBean
 {
     private List<Person> persons = null;
     private static Logger logger = Logger.getLogger(ViewCollectionBean.class);
+    private List<Item> items;
 
     /**
      * Construct a default {@link ViewCollectionBean}
@@ -56,6 +60,7 @@ public class ViewCollectionBean extends CollectionBean
             {
                 ItemController ic = new ItemController(user);
                 ic.findContainerItems(getCollection(), user, 13);
+                loadItems();
                 setSize(ic.countContainerSize(getCollection().getId()));
             }
             if (getCollection() != null)
@@ -81,6 +86,24 @@ public class ViewCollectionBean extends CollectionBean
         {
             BeanHelper.error(e.getMessage());
             logger.error("Error init of collection home page", e);
+        }
+    }
+
+    /**
+     * Load the {@link Item} of the start page
+     */
+    private void loadItems()
+    {
+        items = new ArrayList<Item>();
+        if (getCollection() != null)
+        {
+            List<String> uris = new ArrayList<String>();
+            for (URI uri : getCollection().getImages())
+            {
+                uris.add(uri.toString());
+            }
+            ItemController ic = new ItemController(sessionBean.getUser());
+            setItems((List<Item>)ic.loadItems(uris, -1, 0));
         }
     }
 
@@ -146,5 +169,21 @@ public class ViewCollectionBean extends CollectionBean
         String url = super.getPageUrl();
         String citation = title + " " + sessionBean.getLabel("from") + " <i>" + author + "</i></br>" + url;
         return citation;
+    }
+
+    /**
+     * @return the items
+     */
+    public List<Item> getItems()
+    {
+        return items;
+    }
+
+    /**
+     * @param items the items to set
+     */
+    public void setItems(List<Item> items)
+    {
+        this.items = items;
     }
 }

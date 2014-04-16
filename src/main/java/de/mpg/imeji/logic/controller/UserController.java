@@ -126,11 +126,12 @@ public class UserController
      * 
      * @return
      */
-    public Collection<User> retrieveAll()
+    public Collection<User> retrieveAll(String name)
     {
         Search search = new Search(SearchType.ALL, null);
-        return loadUsers(search.searchSimpleForQuery(SPARQLQueries.selectUserAll(), null));
+        return loadUsers(search.searchSimpleForQuery(SPARQLQueries.selectUserAll(name), null));
     }
+    
 
     public Collection<User> retrieveUserWithGrantFor(String grantFor)
     {
@@ -174,7 +175,7 @@ public class UserController
     {
         boolean exist = false;
         Search search = new Search(SearchType.ALL, null);
-        List<String> uris = search.searchSimpleForQuery(SPARQLQueries.selectUserAll(), null);
+        List<String> uris = search.searchSimpleForQuery(SPARQLQueries.selectUserAll(""), null);
         if (uris != null && uris.size() > 0)
         {
             exist = true;

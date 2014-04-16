@@ -28,12 +28,21 @@
 					<div class="imj_listHeader">
 						<div class="imj_headline">
 							<h2>
-								<h:outputText value="#{lbl.admin_user_info} - #{lbl.admin_user_view}" rendered="#{UsersBean.group == null}"/>
+								<h:outputText value="#{lbl.admin_user_info} - #{lbl.admin_user_view} " rendered="#{UsersBean.group == null}"/>
 								<h:outputText value="#{lbl.add_to_group} #{UsersBean.group.name}" rendered="#{UsersBean.group != null}"/>
 							</h2>
 						</div>
 					</div>
-					
+					<div class="imj_listBody">
+						<h:form id="new">
+							<h:inputText value="#{UsersBean.query}" styleClass="imj_simpleSearchInput" />
+							<h:commandButton action="#{UsersBean.search()}" value="#{lbl.search}" styleClass="imj_simpleSearchButtonSubmit" />
+						</h:form>
+						<h:outputLink value="#{Navigation.applicationUrl}users" title="#{lbl.clear}" rendered="#{UsersBean.query != ''}" styleClass="imj_cancelButton">
+							<h:outputText value="#{lbl.clear}" />
+						</h:outputLink>
+						<h:outputText value="(#{UsersBean.users.size()} #{lbl.users})" />
+					</div>
 					<div class="imj_listBody">
 					
 						<ui:repeat id="userList" var="user" value="#{UsersBean.users}" rows="0">
@@ -45,36 +54,21 @@
 										<span class="imj_invisible">: </span>
 									</div>
 									<ui:fragment rendered="#{UsersBean.group == null}">
-										<div class="imj_content">
-											<!-- AdminDataList - User Grants -->									
-											<div class="imj_admindataValue">										
-												<div class="imj_admindataValueEntry">									
-													<ui:repeat id="grantList" var="grant" value="#{user.grants}" rows="0">
-														<span class="imj_userGrantList">
-															<h:outputText styleClass="" value="#{grant.asGrantType()}" />
-															<h:outputLink styleClass="" value="#{grant.grantFor}">
-																<h:outputText value="#{grant.grantFor}" />
-															</h:outputLink>
-														</span>
-													</ui:repeat>
-												</div>										
-											</div>
-											<!-- AdminDataList - User Email -->
-											<div class="imj_adminEditPanel">
-												<h:outputLink value="#{Navigation.applicationUrl}user?id=#{user.email}">
-													<h:outputText value="#{lbl.user_admin_edit}" styleClass="imj_editButton"/>
-												</h:outputLink>
-												<!-- AdminDataList - User Password -->
-												<h:form>
-													<h:commandLink styleClass="imj_editButton" action="#{UsersBean.sendPassword}" value="#{lbl.user_admin_newPwd}" onclick="if (confirm('Do you really want to reset the password? (A message will be sent to the user)')) return true; return false;">
-														<f:param name="email" value="#{user.email}"/>
-													</h:commandLink>
-													<h:commandLink styleClass="imj_cancelButton" action="#{UsersBean.deleteUser}" value="#{lbl.user_admin_delete}" onclick="if (confirm('Do you really want to delete this user?')) return true; return false;">
-														<f:param name="email" value="#{user.email}"/>
-													</h:commandLink>
-												</h:form>
-											</div>
-										</div> <!-- END CONTENT -->
+										<!-- AdminDataList - User Email -->
+										<div class="imj_adminEditPanel">
+											<h:outputLink value="#{Navigation.applicationUrl}user?id=#{user.email}">
+												<h:outputText value="#{lbl.view_detail}" styleClass="imj_editButton"/>
+											</h:outputLink>
+											<!-- AdminDataList - User Password -->
+											<h:form>
+												<h:commandLink styleClass="imj_editButton" action="#{UsersBean.sendPassword}" value="#{lbl.user_admin_newPwd}" onclick="if (confirm('Do you really want to reset the password? (A message will be sent to the user)')) return true; return false;">
+													<f:param name="email" value="#{user.email}"/>
+												</h:commandLink>
+												<h:commandLink styleClass="imj_cancelButton" action="#{UsersBean.deleteUser}" value="#{lbl.user_admin_delete}" onclick="if (confirm('Do you really want to delete this user?')) return true; return false;">
+													<f:param name="email" value="#{user.email}"/>
+												</h:commandLink>
+											</h:form>
+										</div>
 									</ui:fragment>
 									<ui:fragment rendered="#{UsersBean.group != null}">
 										<h:form>

@@ -1,10 +1,6 @@
 package de.mpg.j2j;
 
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.query.ReadWrite;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -13,16 +9,12 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.tdb.TDBFactory;
 
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.logic.vo.Grant.GrantType;
-import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.j2j.exceptions.NotFoundException;
 

@@ -254,8 +254,8 @@ public class Search
             String id = ObjectHelper.getId(URI.create(containerURI));
             if (containerURI.equals(ObjectHelper.getURI(CollectionImeji.class, id).toString()))
             {
-                //specificQuery = "?s <http://imeji.org/terms/collection> <" + containerURI + ">  .";
-                specificQuery = "FILTER (?c=<"+ containerURI+">) .";
+                // specificQuery = "?s <http://imeji.org/terms/collection> <" + containerURI + ">  .";
+                specificQuery = "FILTER (?c=<" + containerURI + ">) .";
             }
             else if (containerURI.equals(ObjectHelper.getURI(Album.class, id).toString()))
             {

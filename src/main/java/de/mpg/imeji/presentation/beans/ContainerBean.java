@@ -30,6 +30,7 @@ package de.mpg.imeji.presentation.beans;
 
 import java.util.List;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Container;
@@ -103,7 +104,7 @@ public abstract class ContainerBean
     public User getCreator() throws Exception
     {
         User user = null;
-        UserController uc = new UserController(null);;
+        UserController uc = new UserController(Imeji.adminUser);;
         user = uc.retrieve(getContainer().getCreatedBy());
         return user;
     }

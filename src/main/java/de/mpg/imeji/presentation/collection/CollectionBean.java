@@ -317,28 +317,6 @@ public abstract class CollectionBean extends ContainerBean
     }
 
     /**
-     * Return the 5 {@link ThumbnailBean} for the {@link CollectionImeji} startpage. Use a specific sparql query with a
-     * limit, to increase performance
-     * 
-     * @return
-     * @throws Exception
-     */
-    public List<ThumbnailBean> getThumbnails() throws Exception
-    {
-        if (collection != null)
-        {
-            List<String> uris = new ArrayList<String>();
-            for (URI uri : getCollection().getImages())
-            {
-                uris.add(uri.toString());
-            }
-            ItemController ic = new ItemController(sessionBean.getUser());
-            return ImejiFactory.imageListToThumbList(ic.loadItems(uris, 13, 0));
-        }
-        return null;
-    }
-
-    /**
      * getter
      * 
      * @return

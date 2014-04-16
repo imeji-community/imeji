@@ -28,31 +28,33 @@
  */
 package de.mpg.imeji.logic.auth.authentication;
 
-import de.mpg.imeji.logic.Imeji;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.codec.binary.Base64;
+
 import de.mpg.imeji.logic.auth.Authentication;
-import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.User;
 
 /**
- * Simple {@link Authentication} in the local database
+ * {@link Authentification} for {@link HttpServletRequest}
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class SimpleAuthentication implements Authentication
+public class HttpAuthentication implements Authentication
 {
-    private String login = null;
-    private String pwd = null;
+    /**
+     * The content of the http header
+     */
+    private String usernamePassword = null;
 
     /**
      * Constructor
      */
-    public SimpleAuthentication(String login, String pwd)
+    public HttpAuthentication(HttpServletRequest request)
     {
-        this.login = login;
-        this.pwd = pwd;
+        usernamePassword = getUsernamePassword(request);
     }
 
     /*
@@ -62,16 +64,32 @@ public class SimpleAuthentication implements Authentication
     @Override
     public User doLogin()
     {
-        UserController uc = new UserController(Imeji.adminUser);
-        try
+        if (usernamePassword != null)
         {
-            User user = uc.retrieve(login);
-            if (user.getEncryptedPassword().equals(StringHelper.convertToMD5(pwd)))
-                return user;
+            int p = usernamePassword.indexOf(":");
+            if (p != -1)
+            {
+                SimpleAuthentication simpleAuthentification = new SimpleAuthentication(getUserLogin(),
+                        getUserPassword());
+                return simpleAuthentification.doLogin();
+            }
         }
-        catch (Exception e)
+        return null;
+    }
+
+    /**
+     * Utility method to read the username and password in the {@link HttpServletRequest} (separated by a colon).
+     * 
+     * @param request
+     * @return The username and password combination
+     */
+    private String getUsernamePassword(HttpServletRequest request)
+    {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null)
         {
-            logger.error("Error SimpleAuthentification", e);
+            String userPass = new String(Base64.decodeBase64(authHeader.getBytes()));
+            return userPass;
         }
         return null;
     }
@@ -83,7 +101,14 @@ public class SimpleAuthentication implements Authentication
     @Override
     public String getUserLogin()
     {
-        // TODO Auto-generated method stub
+        if (usernamePassword != null)
+        {
+            int p = usernamePassword.indexOf(":");
+            if (p != -1)
+            {
+                return usernamePassword.substring(0, p);
+            }
+        }
         return null;
     }
 
@@ -94,7 +119,14 @@ public class SimpleAuthentication implements Authentication
     @Override
     public String getUserPassword()
     {
-        // TODO Auto-generated method stub
+        if (usernamePassword != null)
+        {
+            int p = usernamePassword.indexOf(":");
+            if (p != -1)
+            {
+                return usernamePassword.substring(p + 1);
+            }
+        }
         return null;
     }
 }

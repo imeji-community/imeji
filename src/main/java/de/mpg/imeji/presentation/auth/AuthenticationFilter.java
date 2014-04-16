@@ -1,10 +1,34 @@
-/**
- * License: src/main/resources/license/escidoc.license
+/*
+ *
+ * CDDL HEADER START
+ *
+ * The contents of this file are subject to the terms of the
+ * Common Development and Distribution License, Version 1.0 only
+ * (the "License"). You may not use this file except in compliance
+ * with the License.
+ *
+ * You can obtain a copy of the license at license/ESCIDOC.LICENSE
+ * or http://www.escidoc.de/license.
+ * See the License for the specific language governing permissions
+ * and limitations under the License.
+ *
+ * When distributing Covered Code, include this CDDL HEADER in each
+ * file and include the License file at license/ESCIDOC.LICENSE.
+ * If applicable, add the following below this CDDL HEADER, with the
+ * fields enclosed by brackets "[]" replaced with your own identifying
+ * information: Portions Copyright [yyyy] [name of copyright owner]
+ *
+ * CDDL HEADER END
  */
-package de.mpg.imeji.presentation.history;
+/*
+ * Copyright 2006-2007 Fachinformationszentrum Karlsruhe Gesellschaft
+ * für wissenschaftlich-technische Information mbH and Max-Planck-
+ * Gesellschaft zur Förderung der Wissenschaft e.V.
+ * All rights reserved. Use is subject to license terms.
+ */
+package de.mpg.imeji.presentation.auth;
 
 import java.io.IOException;
-import java.util.Map;
 
 import javax.faces.FactoryFinder;
 import javax.faces.component.UIViewRoot;
@@ -24,73 +48,70 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.ocpsoft.pretty.PrettyContext;
 
-import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.logic.auth.authentication.HttpAuthentication;
+import de.mpg.imeji.presentation.history.HistorySession;
+import de.mpg.imeji.presentation.session.SessionBean;
 
 /**
- * {@link Filter} for the imeji history
+ * {@link Filter} for imeji authentification
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class HistoryFilter implements Filter
+public class AuthenticationFilter implements Filter
 {
     private FilterConfig filterConfig = null;
     private ServletContext servletContext;
 
+    /*
+     * (non-Javadoc)
+     * @see javax.servlet.Filter#destroy()
+     */
     @Override
     public void destroy()
     {
         setFilterConfig(null);
     }
 
+    /*
+     * (non-Javadoc)
+     * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse,
+     * javax.servlet.FilterChain)
+     */
     @Override
     public void doFilter(ServletRequest serv, ServletResponse resp, FilterChain chain) throws IOException,
             ServletException
     {
-        // Limit the case to filter: dispachertype only forward, and only HTTP GET method
-        if (DispatcherType.FORWARD.compareTo(serv.getDispatcherType()) == 0)
+        HttpServletRequest request = (HttpServletRequest)serv;
+        SessionBean session = getSession(request, resp);
+        if (session.getUser() == null)
         {
-            HttpServletRequest request = (HttpServletRequest)serv;
-            if ("GET".equals(request.getMethod()))
-            {
-                servletContext = request.getSession().getServletContext();
-                dofilterImpl(request, resp);
-            }
+            servletContext = request.getSession().getServletContext();
+            HttpAuthentication httpAuthentification = new HttpAuthentication(request);
+            session.setUser(httpAuthentification.doLogin());
         }
         chain.doFilter(serv, resp);
     }
 
-    /**
-     * Implement the History filter
-     * 
-     * @param request
-     * @param resp
+    /*
+     * (non-Javadoc)
+     * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
      */
-    private void dofilterImpl(HttpServletRequest request, ServletResponse resp)
-    {
-        HistorySession hs = getHistorySession(request, resp);
-        Navigation nav = getNavigation(request, resp);
-        String label = PageURIHelper.getPageLabel(PrettyContext.getCurrentInstance(request).getRequestURL().toURL());
-        String h = request.getParameter("h");
-        String uri = nav.getApplicationUri() + PrettyContext.getCurrentInstance(request).getRequestURL().toURL();
-        Map<String, String[]> params = PrettyContext.getCurrentInstance(request).getRequestQueryString()
-                .getParameterMap();
-        Page p = new Page(uri, label, params);
-        if (request.getParameter("h") == null)
-        {
-            hs.addPage(p);
-        }
-        else
-        {
-            hs.remove(Integer.parseInt(h));
-        }
-    }
-
     @Override
     public void init(FilterConfig arg0) throws ServletException
     {
         this.setFilterConfig(arg0);
+    }
+
+    public FilterConfig getFilterConfig()
+    {
+        return filterConfig;
+    }
+
+    public void setFilterConfig(FilterConfig filterConfig)
+    {
+        this.filterConfig = filterConfig;
     }
 
     /**
@@ -100,16 +121,17 @@ public class HistoryFilter implements Filter
      * @param resp
      * @return
      */
-    private HistorySession getHistorySession(ServletRequest request, ServletResponse resp)
+    private SessionBean getSession(ServletRequest request, ServletResponse resp)
     {
-        return (HistorySession)getBean(HistorySession.class, request, resp);
+        return (SessionBean)getBean(SessionBean.class, request, resp);
     }
 
-    private Navigation getNavigation(ServletRequest request, ServletResponse resp)
-    {
-        return (Navigation)getBean(Navigation.class, request, resp);
-    }
-
+    /**
+     * @param c
+     * @param request
+     * @param resp
+     * @return
+     */
     private Object getBean(Class<?> c, ServletRequest request, ServletResponse resp)
     {
         String name = c.getSimpleName();
@@ -157,16 +179,6 @@ public class HistoryFilter implements Filter
         UIViewRoot view = facesContext.getApplication().getViewHandler().createView(facesContext, "imeji");
         facesContext.setViewRoot(view);
         return facesContext;
-    }
-
-    public FilterConfig getFilterConfig()
-    {
-        return filterConfig;
-    }
-
-    public void setFilterConfig(FilterConfig filterConfig)
-    {
-        this.filterConfig = filterConfig;
     }
 
     public abstract static class InnerFacesContext extends FacesContext

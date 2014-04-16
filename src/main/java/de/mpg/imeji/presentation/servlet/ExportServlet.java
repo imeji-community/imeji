@@ -26,7 +26,6 @@ import de.mpg.imeji.logic.export.ExportManager;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.user.LoginBean;
 
 public class ExportServlet extends HttpServlet
 {
@@ -40,29 +39,9 @@ public class ExportServlet extends HttpServlet
     {
         SessionBean session = getSessionBean(req, resp);
         String instanceName = session.getInstanceName();
-        User user = null;
-        
+        User user = session.getUser();
         try
-        {        
-	        // Authentication ---------------------------------------------
-	        String usernamePassword = this.getUsernamePassword(req);
-	        if (usernamePassword == null)
-	        {
-	        	//Take the already logged in user
-	        	user = session.getUser();
-	        }
-	        else
-	        {
-	            int p = usernamePassword.indexOf(":");
-	            if (p != -1)
-	            {
-	            	LoginBean loginBean = new LoginBean();
-	            	loginBean.setLogin(usernamePassword.substring(0, p));
-	            	loginBean.setPasswd(usernamePassword.substring(p + 1));
-	            	loginBean.doLogin();
-	            	user = session.getUser();
-	            }
-	        }
+        {
             ExportManager exportManager = new ExportManager(resp.getOutputStream(), user, req.getParameterMap());
             String exportName = instanceName + "_";
             exportName += new Date().toString().replace(" ", "_").replace(":", "-");
@@ -86,10 +65,10 @@ public class ExportServlet extends HttpServlet
         {
             resp.sendError(he.getStatusCode(), he.getMessage());
         }
-        catch (Exception e) 
+        catch (Exception e)
         {
-        	resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
-		}
+            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+        }
     }
 
     /**
@@ -151,11 +130,9 @@ public class ExportServlet extends HttpServlet
             FacesContext.setCurrentInstance(facesContext);
         }
     }
-    
 
     /**
-     * Utility method to return the username and password
-     * (separated by a colon).
+     * Utility method to return the username and password (separated by a colon).
      * 
      * @param request
      * @return The username and password combination
@@ -163,9 +140,9 @@ public class ExportServlet extends HttpServlet
     private String getUsernamePassword(HttpServletRequest request)
     {
         String authHeader = request.getHeader("Authorization");
-        if (authHeader != null) 
+        if (authHeader != null)
         {
-        	String userPass = new String(Base64.decodeBase64(authHeader.getBytes()));
+            String userPass = new String(Base64.decodeBase64(authHeader.getBytes()));
             return userPass;
         }
         return null;

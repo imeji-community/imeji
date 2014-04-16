@@ -55,6 +55,11 @@
 		<async-supported>true</async-supported>
 	</filter>
 	<filter>
+		<filter-name>Authentication Filter</filter-name>
+		<filter-class>de.mpg.imeji.presentation.auth.AuthenticationFilter</filter-class>
+		<async-supported>true</async-supported>
+	</filter>
+	<filter>
 		<filter-name>Content Negotiation Filter</filter-name>
 		<filter-class>de.mpg.imeji.presentation.contentNegotiation.ContentNegotiationFilter</filter-class>
 		<async-supported>true</async-supported>
@@ -66,6 +71,22 @@
 	</filter>
 	
 	<!-- Mappings -->
+	<filter-mapping>
+		<filter-name>Encoder Filter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>Content Negotiation Filter</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>Authentication Filter</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+	</filter-mapping>
 	<servlet-mapping>
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>/jsf/*</url-pattern>
@@ -86,16 +107,7 @@
 		<servlet-name>Digilib Servlet</servlet-name>
 		<url-pattern>/digilib</url-pattern>
 	</servlet-mapping>
-	<filter-mapping>
-		<filter-name>Encoder Filter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-	<filter-mapping>
-		<filter-name>Content Negotiation Filter</filter-name>
-		<url-pattern>/*</url-pattern>
-		<dispatcher>REQUEST</dispatcher>
-		<dispatcher>FORWARD</dispatcher>
-	</filter-mapping>
+	
 	<filter-mapping>
 		<filter-name>History Filter</filter-name>
 		<url-pattern>/*</url-pattern>

@@ -28,6 +28,8 @@
  */
 package de.mpg.imeji.logic.auth;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.logic.vo.User;
 
 /**
@@ -37,8 +39,10 @@ import de.mpg.imeji.logic.vo.User;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public abstract class Authentication
+public interface Authentication
 {
+    static Logger logger = Logger.getLogger(Authentication.class);
+
     /**
      * Log in a user with a login (email or user name) and password
      * 
@@ -46,12 +50,19 @@ public abstract class Authentication
      * @param pwd
      * @return
      */
-    public abstract User login(String login, String pwd);
+    public User doLogin();
 
     /**
-     * Logout the user from the system
+     * Get the user Login
      * 
-     * @param user
+     * @return
      */
-    public abstract void logout(User user);
+    public String getUserLogin();
+
+    /**
+     * Get the user password
+     * 
+     * @return
+     */
+    public String getUserPassword();
 }

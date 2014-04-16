@@ -19,7 +19,7 @@
 									contextUrl="#{Navigation.albumUrl}" 
 									curMainMenu="#{currentMainMenu}" 
 									userHasAdminRights="#{Auth.admin}" 
-									userHasEditRights="#{Auth.update(logicBean.album) and logicBean.album.status != 'WITHDRAWN'}" 
+									userHasUploadRights="#{Auth.create(logicBean.album) and logicBean.album.status != 'WITHDRAWN'}" 
 									hasContent="#{logicBean.size > 0}" 
 									navBean="#{Navigation}" 
 									activeMenu="start"/>

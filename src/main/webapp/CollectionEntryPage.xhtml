@@ -19,7 +19,7 @@
 										contextUrl="#{Navigation.collectionUrl}" 
 										curMainMenu="#{currentMainMenu}" 
 										userHasAdminRights="#{Auth.admin}" 
-										userHasEditRights="#{Auth.update(logicBean.collection) and logicBean.collection.status != 'WITHDRAWN'}" 
+										userHasUploadRights="#{Auth.create(logicBean.collection) and logicBean.collection.status != 'WITHDRAWN'}" 
 										hasContent="#{logicBean.size > 0}" 
 										navBean="#{Navigation}" 
 										activeMenu="start"/>

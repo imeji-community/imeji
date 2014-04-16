@@ -14,7 +14,7 @@
 									contextUrl="#{Navigation.collectionUrl}" 
 									curMainMenu="#{currentMainMenu}" 	
 									userHasAdminRights="#{Auth.admin}" 
-									userHasEditRights="#{Auth.update(IngestBean.collection)}" 
+									userHasUploadRights="#{Auth.create(IngestBean.collection)}" 
 									navBean="#{Navigation}" 
 									activeMenu="ingest" 
 									hasContent="#{IngestBean.collectionSize > 0}"/>

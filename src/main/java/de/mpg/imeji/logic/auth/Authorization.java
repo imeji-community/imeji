@@ -64,7 +64,7 @@ public class Authorization
      */
     public boolean create(User user, String uri)
     {
-        if (hasGrant(user, toGrant(uri, GrantType.CREATE)))
+        if (hasGrant(user, toGrant(uri, getGrantTypeAccordingToObjectType(uri, GrantType.CREATE))))
             return true;
         return false;
     }
@@ -79,7 +79,7 @@ public class Authorization
      */
     public boolean read(User user, String uri)
     {
-        if (hasGrant(user, toGrant(uri, GrantType.READ)))
+        if (hasGrant(user, toGrant(uri, getGrantTypeAccordingToObjectType(uri, GrantType.READ))))
             return true;
         return false;
     }
@@ -94,7 +94,7 @@ public class Authorization
      */
     public boolean update(User user, String uri)
     {
-        if (hasGrant(user, toGrant(uri, GrantType.UPDATE)))
+        if (hasGrant(user, toGrant(uri,getGrantTypeAccordingToObjectType(uri, GrantType.UPDATE))))
             return true;
         return false;
     }
@@ -109,7 +109,7 @@ public class Authorization
      */
     public boolean delete(User user, String uri)
     {
-        if (hasGrant(user, toGrant(uri, GrantType.DELETE)))
+        if (hasGrant(user, toGrant(uri, getGrantTypeAccordingToObjectType(uri, GrantType.DELETE))))
             return true;
         return false;
     }
@@ -124,7 +124,7 @@ public class Authorization
      */
     public boolean administrate(User user, String uri)
     {
-        if (hasGrant(user, toGrant(uri, GrantType.ADMIN)))
+        if (hasGrant(user, toGrant(uri, getGrantTypeAccordingToObjectType(uri, GrantType.ADMIN))))
             return true;
         return false;
     }
@@ -212,7 +212,8 @@ public class Authorization
     {
         if (isPublic(obj))
             return true;
-        else if (hasGrant(user, toGrant(getRelevantURIForSecurity(obj, false), GrantType.READ)))
+        else if (hasGrant(user,
+                toGrant(getRelevantURIForSecurity(obj, false), getGrantTypeAccordingToObjectType(obj, GrantType.READ))))
             return true;
         return false;
     }
@@ -227,7 +228,9 @@ public class Authorization
      */
     public boolean update(User user, Object obj)
     {
-        if (hasGrant(user, toGrant(getRelevantURIForSecurity(obj, false), GrantType.UPDATE)))
+        if (hasGrant(
+                user,
+                toGrant(getRelevantURIForSecurity(obj, false), getGrantTypeAccordingToObjectType(obj, GrantType.UPDATE))))
             return true;
         return false;
     }
@@ -242,7 +245,9 @@ public class Authorization
      */
     public boolean delete(User user, Object obj)
     {
-        if (hasGrant(user, toGrant(getRelevantURIForSecurity(obj, false), GrantType.DELETE)))
+        if (hasGrant(
+                user,
+                toGrant(getRelevantURIForSecurity(obj, false), getGrantTypeAccordingToObjectType(obj, GrantType.DELETE))))
             return true;
         return false;
     }
@@ -257,7 +262,8 @@ public class Authorization
      */
     public boolean administrate(User user, Object obj)
     {
-        if (hasGrant(user, toGrant(getRelevantURIForSecurity(obj, false), GrantType.ADMIN)))
+        if (hasGrant(user,
+                toGrant(getRelevantURIForSecurity(obj, false), getGrantTypeAccordingToObjectType(obj, GrantType.ADMIN))))
             return true;
         return false;
     }
@@ -320,8 +326,6 @@ public class Authorization
         return false;
     }
 
-   
-
     /**
      * True if the {@link User} has the given {@link Grant} or if the {@link User} is system Administrator
      * 
@@ -361,15 +365,13 @@ public class Authorization
      */
     private String getRelevantURIForSecurity(Object obj, boolean create)
     {
-        if (create && !(obj instanceof Item))
-            return PropertyBean.baseURI();
-        else if (obj instanceof Item)
+        if (obj instanceof Item)
             return ((Item)obj).getCollection().toString();
         else if (obj instanceof Container)
             return ((Container)obj).getId().toString();
         else if (obj instanceof CollectionListItem)
             return ((CollectionListItem)obj).getUri().toString();
-        else if(obj instanceof AlbumBean)
+        else if (obj instanceof AlbumBean)
             return ((AlbumBean)obj).getAlbum().getId().toString();
         else if (obj instanceof MetadataProfile)
             return ((MetadataProfile)obj).getId().toString();
@@ -377,7 +379,47 @@ public class Authorization
             return ((User)obj).getId().toString();
         else if (obj instanceof URI)
             return obj.toString();
-        return null;
+        return PropertyBean.baseURI();
+    }
+
+    /**
+     * If the Object is an {@link Item} then the {@link GrantType} must be changed to fit the authorization on container
+     * level
+     * 
+     * @param obj
+     * @param type
+     * @return
+     */
+    private GrantType getGrantTypeAccordingToObjectType(Object obj, GrantType type)
+    {
+        if (obj instanceof Item || isItemUri(obj.toString()))
+        {
+            switch (type)
+            {
+                case UPDATE:
+                    return GrantType.UPDATE_CONTENT;
+                case READ:
+                    return GrantType.READ_CONTENT;
+                case DELETE:
+                    return GrantType.DELETE_CONTENT;
+                case ADMIN:
+                    return GrantType.ADMIN_CONTENT;
+                default:
+                    return type;
+            }
+        }
+        return type;
+    }
+
+    /**
+     * True if the uri is the uri of an {@link Item}
+     * 
+     * @param uri
+     * @return
+     */
+    private boolean isItemUri(String uri)
+    {
+        return uri.contains("/item/");
     }
 
     /**

@@ -17,7 +17,7 @@
 									contextUrl="#{Navigation.collectionUrl}" 
 									curMainMenu="#{currentMainMenu}" 
 									userHasAdminRights="#{Auth.admin}" 
-									userHasEditRights="#{Auth.update(imageBean.image)}" 
+									userHasUploadRights="#{Auth.create(imageBean.image)}" 
 									hasContent="true" 
 									navBean="#{Navigation}" 
 									activeMenu="item"/>

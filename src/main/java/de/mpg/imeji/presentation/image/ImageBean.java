@@ -15,7 +15,6 @@ import javax.faces.model.SelectItem;
 
 import org.apache.commons.io.FilenameUtils;
 
-import de.mpg.imeji.logic.auth.Authorization;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;

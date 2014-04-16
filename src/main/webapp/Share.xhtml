@@ -15,7 +15,7 @@
 									contextUrl="#{contUrl}" 
 									curMainMenu="#{currentMainMenu}" 
 									userHasAdminRights="#{Auth.admin}" 
-									userHasEditRights="true" 
+									userHasUploadRights="#{Auth.createUri(ShareBean.containerUri)}" 
 									hasContent="false" 
 									navBean="#{Navigation}" 
 									activeMenu="share" 

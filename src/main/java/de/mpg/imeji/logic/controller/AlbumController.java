@@ -69,9 +69,9 @@ public class AlbumController extends ImejiController
     public void create(Album album, User user) throws Exception
     {
         writeCreateProperties(album, user);
-        imejiBean2RDF.create(imejiBean2RDF.toList(album), user);
         GrantController gc = new GrantController();
         gc.addGrants(user, AuthorizationPredefinedRoles.albumCreator(album.getId().toString()), user);
+        imejiBean2RDF.create(imejiBean2RDF.toList(album), user);
     }
 
     /**

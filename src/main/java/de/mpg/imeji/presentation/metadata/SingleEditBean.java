@@ -134,7 +134,7 @@ public class SingleEditBean
     public String showEditor()
     {
         SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        if (AuthUtil.staticAuth().update(sb.getUser(), item))
+        if (AuthUtil.staticAuth().updateContent(sb.getUser(), item))
         {
             this.toggleState = "editMd";
             try

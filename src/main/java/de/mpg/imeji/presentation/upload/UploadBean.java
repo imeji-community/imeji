@@ -57,7 +57,6 @@ public class UploadBean extends CollectionBean
 {
     private CollectionImeji collection;
     private int collectionSize = 0;
-    private SessionBean sessionBean;
     private String id;
     private User user;
     private String title;

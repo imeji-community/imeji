@@ -110,7 +110,6 @@ public class InternalStorageManager
         	String mimeType = mimeTypesMap.getContentType(file);
         	
             InternalStorageItem item = generateInternalStorageItem(filename, mimeType, collectionId);
-            System.out.println(item.getFileType());
             return writeItemFiles(item, file);
         }
         catch (Exception e)

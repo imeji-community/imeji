@@ -3,6 +3,7 @@
  */
 package de.mpg.imeji.logic.vo;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,7 +23,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jResource("http://imeji.org/terms/collection")
 @j2jModel("collection")
 @j2jId(getMethod = "getId", setMethod = "setId")
-public class CollectionImeji extends Container
+public class CollectionImeji extends Container implements Serializable
 {
     @j2jResource("http://imeji.org/terms/mdprofile")
     private URI profile = null;

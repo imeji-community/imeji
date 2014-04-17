@@ -1,19 +1,26 @@
 package de.mpg.imeji.presentation.user;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import javax.faces.application.NavigationHandler;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.sparql.pfunction.library.container;
+import com.ocpsoft.pretty.PrettyContext;
+import com.ocpsoft.pretty.PrettyFilter;
+import com.ocpsoft.pretty.faces.application.PrettyNavigationHandler;
+import com.ocpsoft.pretty.faces.servlet.PrettyFacesWrappedRequest;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.Authorization;
@@ -29,10 +36,12 @@ import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
+import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.user.util.EmailClient;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
+import de.mpg.imeji.presentation.util.UrlHelper;
 
 @ManagedBean(name = "ShareBean")
 @SessionScoped
@@ -109,6 +118,44 @@ public class ShareBean
         retrieveSharedUserWithGrants();
         this.emailInput = "";
         this.isAdmin = auth.administrate(this.user, containerUri);
+        initShareWithGroup();
+    }
+
+    /**
+     * Check in the url if a {@link UserGroup} should be shared with the current {@link Container}
+     */
+    private void initShareWithGroup()
+    {
+        String groupToShareWithUri = UrlHelper.getParameterValue("group");
+        if (groupToShareWithUri != null && isExistingUserGroup(groupToShareWithUri))
+        {
+            List<String> uri = new ArrayList<String>();
+            uri.add(groupToShareWithUri);
+            selectedRoles.add("READ");
+            shareTo(uri);
+            FacesContext context = FacesContext.getCurrentInstance();
+            NavigationHandler navigator = context.getApplication().getNavigationHandler();
+            navigator.handleNavigation(context, null, PrettyContext.getCurrentInstance().getCurrentViewId());
+            try
+            {
+                // reload the page
+                Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
+                String id = ObjectHelper.getId(URI.create(containerUri));
+                if (containerUri.contains("/album/"))
+                {
+                    FacesContext.getCurrentInstance().getExternalContext().redirect(nav.getAlbumUrl() + id + "/share");
+                }
+                else if (containerUri.contains("/collection/"))
+                {
+                    FacesContext.getCurrentInstance().getExternalContext()
+                            .redirect(nav.getCollectionUrl() + id + "/share");
+                }
+            }
+            catch (Exception e)
+            {
+                logger.error("Error reloading the page", e);
+            }
+        }
     }
 
     /**
@@ -174,10 +221,6 @@ public class ShareBean
                 {
                     emailList.add(value);
                 }
-                else if (isExistingUserGroup(value))
-                {
-                    emailList.add(value);
-                }
                 else
                 {
                     this.errorList.add(value + " -- invalid Input");
@@ -210,14 +253,16 @@ public class ShareBean
     }
 
     /**
-     * True if the name fits the name of an existing {@link UserGroup}
+     * True if the uri fits a real {@link UserGroup} and if the {@link UserGroup} has not already {@link Grant} for the
+     * current {@link container}
      * 
      * @param name
      * @return
      */
-    private boolean isExistingUserGroup(String name)
+    private boolean isExistingUserGroup(String uri)
     {
-        return searchGroup(name) != null;
+        UserGroup group = retrieveGroup(uri);
+        return group != null && !hasReadGrants((List<Grant>)group.getGrants(), containerUri, profileUri);
     }
 
     /**
@@ -310,7 +355,7 @@ public class ShareBean
     }
 
     /**
-     * Send an Emailto all {@link User} of a {@link UserGroup}
+     * Send an Email to all {@link User} of a {@link UserGroup}
      * 
      * @param group
      * @param subject
@@ -394,10 +439,7 @@ public class ShareBean
                 }
                 else
                 {
-                    UserGroup g = searchGroup(to);
-                    gc.addGrants(g, grants, Imeji.adminUser);
-                    if (sendEmail)
-                        sendEmailToGroup(g, title, containerUri);
+                    gc.addGrants(retrieveGroup(to), grants, Imeji.adminUser);
                 }
             }
             catch (Exception e)
@@ -415,13 +457,17 @@ public class ShareBean
      * @param q
      * @return
      */
-    private UserGroup searchGroup(String q)
+    private UserGroup retrieveGroup(String uri)
     {
         UserGroupController c = new UserGroupController();
-        List<UserGroup> found = (List<UserGroup>)c.searchByName(q, Imeji.adminUser);
-        if (found.size() > 0)
-            return found.get(0);
-        return null;
+        try
+        {
+            return c.read(uri, Imeji.adminUser);
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
     }
 
     private boolean hasReadGrants(List<Grant> userGrants, String containerUri, String profileUri)

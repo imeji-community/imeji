@@ -3,6 +3,7 @@
  */
 package de.mpg.imeji.logic.vo;
 
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
@@ -34,7 +35,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "metadataSet", namespace = "http://imeji.org/terms")
-public class MetadataSet
+public class MetadataSet implements Serializable
 {
     @j2jList("http://imeji.org/terms/metadata")
     private Collection<Metadata> metadata = new ArrayList<Metadata>();

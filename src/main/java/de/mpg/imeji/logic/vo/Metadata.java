@@ -3,6 +3,7 @@
  */
 package de.mpg.imeji.logic.vo;
 
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
@@ -41,7 +42,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @XmlRootElement(name = "metadata", namespace = "http://imeji.org/terms")
 @XmlSeeAlso({ Text.class, Number.class, ConePerson.class, Date.class, Geolocation.class, License.class, Link.class,
         Publication.class })
-public abstract class Metadata implements Comparable<Metadata>
+public abstract class Metadata implements Comparable<Metadata>, Serializable
 {
     // private URI id = URI.create("http://imeji.org/terms/metadata/" + UUID.randomUUID());
     private URI id = IdentifierUtil.newURI(Metadata.class);

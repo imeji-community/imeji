@@ -3,6 +3,7 @@
  */
 package de.mpg.imeji.logic.vo;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,7 +22,7 @@ import de.mpg.j2j.annotations.j2jResource;
  */
 @j2jResource("http://imeji.org/terms/container/metadata")
 @j2jId(getMethod = "getId", setMethod = "setId")
-public class ContainerMetadata
+public class ContainerMetadata implements Serializable
 {
     @j2jLiteral("http://purl.org/dc/elements/1.1/title")
     private String title;

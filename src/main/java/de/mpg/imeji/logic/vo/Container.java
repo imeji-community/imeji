@@ -3,6 +3,7 @@
  */
 package de.mpg.imeji.logic.vo;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,7 +22,7 @@ import de.mpg.j2j.annotations.j2jResource;
  */
 @j2jResource("http://imeji.org/terms/container")
 @j2jId(getMethod = "getId", setMethod = "setId")
-public class Container extends Properties implements FulltextIndex
+public class Container extends Properties implements FulltextIndex, Serializable
 {
     private Collection<URI> images = new ArrayList<URI>();
     @j2jResource("http://imeji.org/terms/container/metadata")

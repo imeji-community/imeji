@@ -9,12 +9,11 @@
 		<ui:include src="include/History.xhtml"></ui:include>
 		
 		<!-- Are You Admin? -->	
-		<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!Auth.admin}">
-			<h:outputText value="#{lbl.view_page_disallowed}" styleClass="imj_messageInfo" rendered="#{SessionBean.user == null}"/>
-			<h:outputText value="#{lbl.view_page_disallowed2}" styleClass="imj_messageInfo" rendered="#{Auth.loggedIn}"/>
+		<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!Auth.loggedIn}">
+			<h:outputText value="#{lbl.view_page_disallowed}" styleClass="imj_messageInfo"/>
 		</h:panelGroup>
 		
-		<ui:fragment rendered="#{Auth.admin}">
+		<ui:fragment rendered="#{Auth.loggedIn}">
 			<div class="imj_userConfig">
 		
 				<!-- Admin - TiledList -->
@@ -31,7 +30,7 @@
 							<h:inputText value="#{UserGroups.query}" styleClass="imj_simpleSearchInput" />
 							<h:commandButton action="#{UserGroups.search()}" value="#{lbl.search}" styleClass="imj_simpleSearchButtonSubmit" />
 						</h:form>
-						<h:outputLink value="#{Navigation.applicationUrl}usergroups" title="#{lbl.clear}" rendered="#{UserGroups.query != ''}" styleClass="imj_cancelButton">
+						<h:outputLink value="#{Navigation.applicationUrl}usergroups?back=#{UserGroups.backContainerUrl}" title="#{lbl.clear}" rendered="#{UserGroups.query != ''}" styleClass="imj_cancelButton">
 							<h:outputText value="#{lbl.clear}" />
 						</h:outputLink>
 						<h:outputText value="(#{UserGroups.userGroups.size()} #{lbl.admin_userGroups})" />
@@ -48,11 +47,14 @@
 										<span class="imj_invisible">: </span>
 									</div>
 									<div class="imj_adminEditPanel">
-										<h:outputLink value="#{Navigation.applicationUrl}usergroup?id=#{group.id}" styleClass="imj_editButton">
+										<h:outputLink value="#{UserGroups.backContainerUrl}?group=#{group.id}" styleClass="imj_editButton" rendered="#{UserGroups.backContainerUrl != null}">
+											<h:outputText value="#{lbl.share_with}"/>
+										</h:outputLink>
+										<h:outputLink value="#{Navigation.applicationUrl}usergroup?id=#{group.id}" styleClass="imj_editButton" rendered="#{Auth.admin}">
 											<h:outputText value="#{lbl.view_detail}"/>
 										</h:outputLink>
 										<h:form>
-											<h:commandLink styleClass="imj_cancelButton" value="#{lbl.delete}" action="#{UserGroups.remove(group)}" onclick="if (confirm('Do you really want to delete this user group?')) return true; return false;"/>
+											<h:commandLink styleClass="imj_cancelButton" value="#{lbl.delete}" action="#{UserGroups.remove(group)}" rendered="#{Auth.admin}" onclick="if (confirm('Do you really want to delete this user group?')) return true; return false;"/>
 										</h:form>
 									</div>
 								</div>

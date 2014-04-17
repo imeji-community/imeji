@@ -40,6 +40,7 @@ import javax.faces.context.FacesContext;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.UserGroupController;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
@@ -64,11 +65,30 @@ public class UserGroupsBean implements Serializable
     private User sessionUser;
     private String query;
     private static Logger logger = Logger.getLogger(UserGroupsBean.class);
+    private String backContainerUrl;
+
+    /**
+     * @return the backContainerUrl
+     */
+    public String getBackContainerUrl()
+    {
+        return backContainerUrl;
+    }
+
+    /**
+     * @param backContainerUrl the backContainerUrl to set
+     */
+    public void setBackContainerUrl(String backContainerUrl)
+    {
+        this.backContainerUrl = backContainerUrl;
+    }
 
     @PostConstruct
     public void init()
     {
         String q = UrlHelper.getParameterValue("q");
+        String back = UrlHelper.getParameterValue("back");
+        backContainerUrl = back == null || "".equals(back) ? null : back;
         query = q == null ? "" : q;
         doSearch();
     }
@@ -81,8 +101,12 @@ public class UserGroupsBean implements Serializable
         Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
         try
         {
-            FacesContext.getCurrentInstance().getExternalContext()
-                    .redirect(nav.getApplicationUrl() + "usergroups?q=" + query);
+            FacesContext
+                    .getCurrentInstance()
+                    .getExternalContext()
+                    .redirect(
+                            nav.getApplicationUrl() + "usergroups?q=" + query
+                                    + (backContainerUrl != null ? "&back=" + backContainerUrl : ""));
         }
         catch (IOException e)
         {
@@ -97,7 +121,7 @@ public class UserGroupsBean implements Serializable
     public void doSearch()
     {
         UserGroupController controller = new UserGroupController();
-        userGroups = controller.searchByName(query, sessionUser);
+        userGroups = controller.searchByName(query, Imeji.adminUser);
     }
 
     /**

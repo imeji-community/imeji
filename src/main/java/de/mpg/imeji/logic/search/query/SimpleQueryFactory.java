@@ -57,7 +57,7 @@ public class SimpleQueryFactory
                 .replace("XXX_MODEL_NAMES_XXX", getModelNames(modelName, pair))
                 .replace("XXX_SECURITY_FILTER_XXX",
                         SimpleSecurityQuery.queryFactory(user, rdfType, getFilterStatus(pair), isUserSearchPair(pair)))
-                .replace("XXX_SEARCH_ELEMENT_XXX", getSearchElement(pair, rdfType))
+                .replace("XXX_SEARCH_ELEMENT_XXX", getSearchElement(pair, rdfType, user))
                 .replace("XXX_SEARCH_TYPE_ELEMENT_XXX", getRdfType(rdfType))
                 .replace("XXX_SORT_ELEMENT_XXX",
                         getSortElement(sortCriterion, "http://imeji.org/terms/item".equals(rdfType)))
@@ -108,7 +108,7 @@ public class SimpleQueryFactory
      * @param pair
      * @return
      */
-    private static String getSearchElement(SearchPair pair, String rdfType)
+    private static String getSearchElement(SearchPair pair, String rdfType, User user)
     {
         String searchQuery = "";
         String variable = "el";
@@ -168,8 +168,15 @@ public class SimpleQueryFactory
         }
         else if (SearchIndex.names.user.name().equals(pair.getIndex().getName()))
         {
-            // Search for all objects of rdfType for which the user (pair.getValue) has a Grant: done via the simplesecurityquery
-            return "";
+            // Search for all objects of rdfType for which the user (pair.getValue) has a Grant
+            // If user is same as searchpair value, then the security query will be enough else Search for all objects
+            // of rdfType for which the user (pair.getValue) has a Grant
+            if (user != null && pair.getValue().equals(user.getId().toString()))
+                return "";
+            else
+                return "<" + pair.getValue()
+                        + "> <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> ?"
+                        + SimpleSecurityQuery.getVariableName(rdfType) + " .";
         }
         else if (SearchIndex.names.prof.name().equals(pair.getIndex().getName()))
         {

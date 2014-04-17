@@ -56,7 +56,7 @@ public class SimpleQueryFactory
         return PATTERN_SELECT
                 .replace("XXX_MODEL_NAMES_XXX", getModelNames(modelName, pair))
                 .replace("XXX_SECURITY_FILTER_XXX",
-                        SimpleSecurityQuery.queryFactory(user, rdfType, getFilterStatus(pair)))
+                        SimpleSecurityQuery.queryFactory(user, rdfType, getFilterStatus(pair), isUserSearchPair(pair)))
                 .replace("XXX_SEARCH_ELEMENT_XXX", getSearchElement(pair, rdfType))
                 .replace("XXX_SEARCH_TYPE_ELEMENT_XXX", getRdfType(rdfType))
                 .replace("XXX_SORT_ELEMENT_XXX",
@@ -168,10 +168,8 @@ public class SimpleQueryFactory
         }
         else if (SearchIndex.names.user.name().equals(pair.getIndex().getName()))
         {
-            // Search for all objects of rdfType for which the user (pair.getValue) has a Grant
-            return "<" + pair.getValue()
-                    + "> <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> ?"
-                    + SimpleSecurityQuery.getVariableName(rdfType) + " .";
+            // Search for all objects of rdfType for which the user (pair.getValue) has a Grant: done via the simplesecurityquery
+            return "";
         }
         else if (SearchIndex.names.prof.name().equals(pair.getIndex().getName()))
         {
@@ -276,7 +274,7 @@ public class SimpleQueryFactory
      * @param uri
      * @return
      */
-    private static String normalizeURI(Class c, String uri)
+    private static String normalizeURI(Class<?> c, String uri)
     {
         if (isURL(uri))
         {
@@ -312,6 +310,17 @@ public class SimpleQueryFactory
     }
 
     /**
+     * True if th {@link SearchPair} is searching for a {@link User}
+     * 
+     * @param pair
+     * @return
+     */
+    private static boolean isUserSearchPair(SearchPair pair)
+    {
+        return pair != null && SearchIndex.names.user.name().equals(pair.getIndex().getName());
+    }
+
+    /**
      * Return the sparql elements needed for the search
      * 
      * @param sortCriterion
@@ -340,7 +349,7 @@ public class SimpleQueryFactory
             }
             else if (SearchIndex.names.filename.name().equals(sortCriterion.getIndex().getName()))
             {
-            	return ". ?s <" + sortCriterion.getIndex().getNamespace() + "> ?sort0";
+                return ". ?s <" + sortCriterion.getIndex().getNamespace() + "> ?sort0";
             }
         }
         return "";
@@ -413,7 +422,8 @@ public class SimpleQueryFactory
             if (dateAsTime)
                 return "'" + DateFormatter.getTime(str) + "'^^<http://www.w3.org/2001/XMLSchema#double>";
             else
-                return "'" + DateFormatter.formatToSparqlDateTime(str) + "'^^<http://www.w3.org/2001/XMLSchema#dateTime>";
+                return "'" + DateFormatter.formatToSparqlDateTime(str)
+                        + "'^^<http://www.w3.org/2001/XMLSchema#dateTime>";
         }
         else if (isNumber(str))
         {
@@ -535,7 +545,7 @@ public class SimpleQueryFactory
      */
     private static boolean isRDFDate(SearchPair pair)
     {
-        return !(SearchIndex.names.created.name().equals(pair.getIndex().getName())
-                || SearchIndex.names.modified.name().equals(pair.getIndex().getName()));
+        return !(SearchIndex.names.created.name().equals(pair.getIndex().getName()) || SearchIndex.names.modified
+                .name().equals(pair.getIndex().getName()));
     }
 }

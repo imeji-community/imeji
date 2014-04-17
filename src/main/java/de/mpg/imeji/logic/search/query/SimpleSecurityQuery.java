@@ -6,8 +6,6 @@ package de.mpg.imeji.logic.search.query;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.hp.hpl.jena.sparql.pfunction.library.container;
-
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -34,7 +32,7 @@ public class SimpleSecurityQuery
      * @param includeWithdrawn
      * @return
      */
-    public static String queryFactory(User user, String rdfType, Status status)
+    public static String queryFactory(User user, String rdfType, Status status, boolean isUserSearch)
     {
         String statusFilter = getStatusAsFilter(status);
         if (Status.RELEASED.equals(status) || Status.WITHDRAWN.equals(status))
@@ -56,7 +54,7 @@ public class SimpleSecurityQuery
         }
         // else, check the grant and add the status filter...
         // return getUserGrantsAsFilter(user, rdfType) + statusFilter + " . ?s a <" + rdfType + "> ";
-        return getUserGrantsAsFilterSimple(user, rdfType) + statusFilter + " .";
+        return getUserGrantsAsFilterSimple(user, rdfType, isUserSearch) + statusFilter + " .";
     }
 
     /**
@@ -84,13 +82,16 @@ public class SimpleSecurityQuery
      * @param rdfType
      * @return
      */
-    private static String getUserGrantsAsFilterSimple(User user, String rdfType)
+    private static String getUserGrantsAsFilterSimple(User user, String rdfType, boolean isUserSearch)
     {
         if (user.isAdmin())
             return "";
-        String comtainerFilter = getAllowedContainersFilter(user, rdfType);
-        return "filter(" + comtainerFilter + (comtainerFilter.equals("") ? "" : "|| ")
-                + "?status=<http://imeji.org/terms/status#RELEASED>) .";
+        String containerFilter = getAllowedContainersFilter(user, rdfType);
+        if (!isUserSearch)
+            return "filter(" + containerFilter + (containerFilter.equals("") ? "" : "|| ")
+                    + "?status=<http://imeji.org/terms/status#RELEASED>) .";
+        else
+            return containerFilter.equals("") ? "" : "filter(" + containerFilter +") .";
     }
 
     /**

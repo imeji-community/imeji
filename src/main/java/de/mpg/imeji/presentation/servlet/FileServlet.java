@@ -5,7 +5,6 @@ package de.mpg.imeji.presentation.servlet;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -17,7 +16,6 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.Authorization;
 import de.mpg.imeji.logic.controller.CollectionController;

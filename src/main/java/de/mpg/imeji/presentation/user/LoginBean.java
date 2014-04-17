@@ -8,9 +8,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.util.StringHelper;
+import de.mpg.imeji.logic.auth.Authentication;
+import de.mpg.imeji.logic.auth.AuthenticationFactory;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.history.Page;
@@ -62,26 +61,19 @@ public class LoginBean
 
     public void doLogin() throws Exception
     {
-        UserController uc = new UserController(Imeji.adminUser);
-        try
+        Authentication auth = AuthenticationFactory.factory(getLogin(), getPasswd());
+        User user = auth.doLogin();
+        if (user != null)
         {
-            User user = uc.retrieve(getLogin());
-            if (user.getEncryptedPassword().equals(StringHelper.convertToMD5(getPasswd())))
-            {
-                sb.setUser(user);
-                BeanHelper.info(sb.getMessage("success_log_in"));
-            }
-            else
-            {
-                BeanHelper.error(sb.getMessage("error_log_in").replace("XXX_INSTANCE_NAME_XXX", PropertyReader.getProperty("imeji.instance.name")));
-                BeanHelper.error(sb.getMessage("error_log_in_description").replace("XXX_INSTANCE_NAME_XXX", PropertyReader.getProperty("imeji.instance.name")));
-            }
+            sb.setUser(user);
+            BeanHelper.info(sb.getMessage("success_log_in"));
         }
-        catch (Exception e)
+        else
         {
-            BeanHelper.error(sb.getMessage("error_log_in").replace("XXX_INSTANCE_NAME_XXX", PropertyReader.getProperty("imeji.instance.name")));
-            BeanHelper.error(sb.getMessage("error_log_in_description").replace("XXX_INSTANCE_NAME_XXX", PropertyReader.getProperty("imeji.instance.name")));
-            logger.error("Problem logging in User", e);
+            BeanHelper.error(sb.getMessage("error_log_in").replace("XXX_INSTANCE_NAME_XXX",
+                    PropertyReader.getProperty("imeji.instance.name")));
+            BeanHelper.error(sb.getMessage("error_log_in_description").replace("XXX_INSTANCE_NAME_XXX",
+                    PropertyReader.getProperty("imeji.instance.name")));
         }
         Page current = ((HistorySession)BeanHelper.getSessionBean(HistorySession.class)).getCurrentPage();
         String redirectAfterLogin = "";

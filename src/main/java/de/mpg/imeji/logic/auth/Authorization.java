@@ -29,7 +29,6 @@
 package de.mpg.imeji.logic.auth;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;

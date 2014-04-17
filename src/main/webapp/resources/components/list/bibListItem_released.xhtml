@@ -53,7 +53,7 @@
 										</h:outputLink>
 									</li>
 								</ui:fragment>
-								<ui:fragment rendered="#{Auth.update(cc.attrs.item) and cc.attrs.item.status == 'RELEASED'}">
+								<ui:fragment rendered="#{Auth.admin(cc.attrs.item) and cc.attrs.item.status == 'RELEASED'}">
 									<li>
 										<h:outputLink id="lnkWithdrawCollection" value="#" onclick="openDialog('#{withdrawID}');">
 											<h:outputText value="#{lbl.withdraw}"/>

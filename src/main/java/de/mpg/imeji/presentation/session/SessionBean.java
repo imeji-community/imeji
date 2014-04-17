@@ -500,10 +500,10 @@ public class SessionBean
 //        itemList.add(new SelectItem(ShareType.ADMIN, getLabel("collection_share_admin")));
         
         itemList.add(new SelectItem(ShareType.READ));
-        itemList.add(new SelectItem(ShareType.UPLOAD));
-        itemList.add(new SelectItem(ShareType.EDIT));
+        itemList.add(new SelectItem(ShareType.CREATE));
+        itemList.add(new SelectItem(ShareType.EDIT_ITEM));
         itemList.add(new SelectItem(ShareType.DELETE));
-        itemList.add(new SelectItem(ShareType.EDIT_COLLECTION));
+        itemList.add(new SelectItem(ShareType.EDIT_CONTAINER));
         itemList.add(new SelectItem(ShareType.EDIT_PROFILE));
         itemList.add(new SelectItem(ShareType.ADMIN));
         
@@ -514,9 +514,8 @@ public class SessionBean
     {
         List<SelectItem> itemList = new ArrayList<SelectItem>();
         itemList.add(new SelectItem(ShareType.READ, getLabel("album_share_read")));
-        itemList.add(new SelectItem(ShareType.ADD, getLabel("album_share_image_add")));
-        itemList.add(new SelectItem(ShareType.DELETE, getLabel("album_share_image_delete")));
-        itemList.add(new SelectItem(ShareType.EDIT_ALBUM, getLabel("album_share_album_edit")));
+        itemList.add(new SelectItem(ShareType.CREATE, getLabel("album_share_image_add")));
+        itemList.add(new SelectItem(ShareType.EDIT_CONTAINER, getLabel("album_share_album_edit")));
         itemList.add(new SelectItem(ShareType.ADMIN, getLabel("album_share_admin")));
         return itemList;
     }

@@ -74,7 +74,7 @@ public class AuthenticationFilter implements Filter
     {
         HttpServletRequest request = (HttpServletRequest)serv;
         SessionBean session = getSession(request);
-        if (session.getUser() == null)
+        if (session != null && session.getUser() == null)
         {
             HttpAuthentication httpAuthentification = new HttpAuthentication(request);
             session.setUser(httpAuthentification.doLogin());

@@ -153,31 +153,31 @@ public class PrivateBean extends SuperContainerBean<CollectionListItem>
                                 if ("read".equalsIgnoreCase(col.getSelectedGrant()))
                                 {
                                     GrantController gc = new GrantController();
-                                    gc.addGrants(u, AuthorizationPredefinedRoles.collectionReadOnly(col.getId(), col
-                                            .getProfileURI().toString()), u);
+                                    gc.addGrants(u, AuthorizationPredefinedRoles.read(col.getId(), col.getProfileURI()
+                                            .toString()), u);
                                 }
                                 else if ("upload".equalsIgnoreCase(col.getSelectedGrant()))
                                 {
                                     GrantController gc = new GrantController();
-                                    gc.addGrants(u, AuthorizationPredefinedRoles.collectionReadAndUpload(col.getId(),
-                                            col.getProfileURI().toString()), u);
+                                    gc.addGrants(u, AuthorizationPredefinedRoles.upload(col.getUri().toString(), col
+                                            .getProfileURI().toString()), u);
                                 }
                                 else if ("write".equalsIgnoreCase(col.getSelectedGrant()))
                                 {
                                     GrantController gc = new GrantController();
-                                    gc.addGrants(u, AuthorizationPredefinedRoles.collectionEditable(col.getId(), col
+                                    gc.addGrants(u, AuthorizationPredefinedRoles.edit(col.getUri().toString(), col
                                             .getProfileURI().toString()), u);
                                 }
                                 else if ("delete".equalsIgnoreCase(col.getSelectedGrant()))
                                 {
                                     GrantController gc = new GrantController();
-                                    gc.addGrants(u, AuthorizationPredefinedRoles.collectionDeletable(col.getId(), col
+                                    gc.addGrants(u, AuthorizationPredefinedRoles.delete(col.getUri().toString(), col
                                             .getProfileURI().toString()), u);
                                 }
                                 else if ("admin".equalsIgnoreCase(col.getSelectedGrant()))
                                 {
                                     GrantController gc = new GrantController();
-                                    gc.addGrants(u, AuthorizationPredefinedRoles.collectionAdmin(col.getId(), col
+                                    gc.addGrants(u, AuthorizationPredefinedRoles.admin(col.getUri().toString(), col
                                             .getProfileURI().toString()), u);
                                 }
                             }

@@ -21,6 +21,7 @@
 		
 		<composite:attribute name="isEditable" type="java.lang.Boolean" default="false" required="false" shortDescription="@type: Boolean, required to release, delete, withdraw item"/>
 		<composite:attribute name="isDeletable" type="java.lang.Boolean" default="false" required="false" shortDescription="@type: Boolean, required to check if item is deletable"/>
+		<composite:attribute name="isAdmin" type="java.lang.Boolean" default="false" required="false" shortDescription="@type: Boolean, required to check if user is admin of container"/>
 		<composite:attribute name="hasContent" type="java.lang.Boolean" default="false" required="false" shortDescription="@type: Boolean, required to show menus (e.g. start page, content page)"/>
 		<composite:attribute name="downloadEnabled" type="java.lang.Boolean" default="true" required="false" shortDescription="@type: Boolean, param to disable the download menu on special pages (e.g. on collection overview, ...))"/>
 		<composite:attribute name="allowedToShare" type="java.lang.Boolean" default="false" required="false" shortDescription="@type: Boolean: depends on logged in status"/>
@@ -101,8 +102,8 @@
 						</h:form>
 					</div>
 				</h:panelGroup>
-				
-				<ui:fragment rendered="#{cc.attrs.actionEnabled and cc.attrs.isEditable and cc.attrs.collectionStatus.trim().toUpperCase() != 'WITHDRAWN'}">
+			
+				<ui:fragment rendered="#{cc.attrs.actionEnabled and (cc.attrs.isAdmin or cc.attrs.isDeletable) and cc.attrs.collectionStatus.trim().toUpperCase() != 'WITHDRAWN'}">
 					<div class="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item">
 						<div class="imj_menuHeader">
 							<h:outputText value="#{lbl.actions}" styleClass="imj_headerEntry"/>
@@ -122,7 +123,7 @@
 									</li>
 								</ui:fragment>
 								
-								<ui:fragment rendered="#{cc.attrs.isEditable and cc.attrs.collectionStatus.trim().toUpperCase() == 'PENDING' and cc.attrs.hasContent}">
+								<ui:fragment rendered="#{cc.attrs.isAdmin and cc.attrs.collectionStatus.trim().toUpperCase() == 'PENDING' and cc.attrs.hasContent}">
 									<li>
 										<h:outputLink value="#" onclick="openDialog('releaseMenuItemDialog');" title="#{lbl.collection_release}">
 											<h:outputText value="#{lbl.collection_release}"/>
@@ -130,7 +131,7 @@
 									</li>
 								</ui:fragment>
 								
-								<ui:fragment rendered="#{cc.attrs.isEditable and cc.attrs.collectionStatus.trim().toUpperCase() == 'RELEASED'}">
+								<ui:fragment rendered="#{cc.attrs.isAdmin and cc.attrs.collectionStatus.trim().toUpperCase() == 'RELEASED'}">
 									<li>
 										<h:outputLink id="lnkWithdrawCollection" value="#" onclick="openDialog('withdrawMenuItemDialog');" title="#{lbl.withdraw}">
 											<h:outputText value="#{lbl.withdraw}"/>
@@ -145,8 +146,6 @@
 										</h:outputLink>
 									</li>
 								</ui:fragment>
-								
-								
 							</ul>
 						</div>
 					</div>

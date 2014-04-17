@@ -36,6 +36,7 @@
 									contextId="#{metadataBean.id}" 
 									isDeletable="#{Auth.delete(metadataBean.album)}" 
 									isEditable="#{Auth.update(metadataBean.album)}" 
+									isAdmin="#{Auth.admin(metadataBean.album)}"
 									hasContent="#{metadataBean.size > 0}" 
 									downloadEnabled="#{metadataBean.size > 0}"
 									allowedToShare="#{metadataContextBean.status!='WITHDRAWN' and Auth.admin(metadataBean.album)}"

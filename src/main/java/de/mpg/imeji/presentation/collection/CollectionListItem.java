@@ -46,32 +46,9 @@ public class CollectionListItem
     private String versionDate = null;
     private static Logger logger = Logger.getLogger(CollectionListItem.class);
     private ThumbnailBean thumbnail = null;
-    
     private String selectedGrant;
     private URI profileURI;
-
-    public String getSelectedGrant() {
-		return selectedGrant;
-	}
-
-	public void setSelectedGrant(String selectedGrant) {
-		this.selectedGrant = selectedGrant;
-	}
-	
-
-
-
-
-	public URI getProfileURI() {
-		return profileURI;
-	}
-
-	public void setProfileURI(URI profileURI) {
-		this.profileURI = profileURI;
-	}
-
-
-	/**
+    /**
      * Maximum number of character displayed in the list for the description
      */
     private static final int DESCRIPTION_MAX_SIZE = 300;
@@ -385,6 +362,23 @@ public class CollectionListItem
         this.descriptionFull = descriptionFull;
     }
 
+    public String getSelectedGrant()
+    {
+        return selectedGrant;
+    }
 
-    
+    public void setSelectedGrant(String selectedGrant)
+    {
+        this.selectedGrant = selectedGrant;
+    }
+
+    public URI getProfileURI()
+    {
+        return profileURI;
+    }
+
+    public void setProfileURI(URI profileURI)
+    {
+        this.profileURI = profileURI;
+    }
 }

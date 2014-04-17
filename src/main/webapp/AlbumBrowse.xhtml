@@ -20,7 +20,7 @@
 									curMainMenu="#{currentMainMenu}" 
 									userHasAdminRights="#{Auth.admin}" 
 									userHasUploadRights="#{Auth.create(paginatorListSessionBean.album)}" 
-									hasContent="#{paginatorListSessionBean.totalNumberOfElements > 0}" 
+									hasContent="#{paginatorListSessionBean.totalNumberOfRecords > 0}" 
 									navBean="#{Navigation}" 
 									activeMenu="content"/>
 		
@@ -32,7 +32,8 @@
 									collectionStatus="#{paginatorListSessionBean.album.status}" 
 									contextId="#{paginatorListSessionBean.id}" 
 									isDeletable="#{Auth.delete(paginatorListSessionBean.album)}" 
-									isEditable="#{Auth.update(paginatorListSessionBean.album)}" 
+									isEditable="#{Auth.update(paginatorListSessionBean.album)}"
+									isAdmin="#{Auth.admin(paginatorListSessionBean.album)}"
 									hasContent="#{paginatorListSessionBean.totalNumberOfElements > 0}"
 									contextDownloadParam="&amp;album=#{paginatorListSessionBean.id}"
 									allowedToShare="#{AlbumImagesBean.album.status!='WITHDRAWN' and Auth.admin(paginatorListSessionBean.album)}"/>

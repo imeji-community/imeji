@@ -28,12 +28,16 @@
  */
 package de.mpg.imeji.presentation.beans;
 
+import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Container;
+import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
@@ -54,6 +58,7 @@ public abstract class ContainerBean
 {
     private int authorPosition;
     private int organizationPosition;
+    private List<Item> items;
 
     /**
      * Types of containers
@@ -94,6 +99,24 @@ public abstract class ContainerBean
      * @return
      */
     protected abstract String getErrorMessageNoAuthor();
+    
+    /**
+     * Load the {@link Item} of the start page
+     */
+    protected void loadItems(User user)
+    {
+        setItems(new ArrayList<Item>());
+        if (getContainer() != null)
+        {
+            List<String> uris = new ArrayList<String>();
+            for (URI uri : getContainer().getImages())
+            {
+                uris.add(uri.toString());
+            }
+            ItemController ic = new ItemController(user);
+            setItems((List<Item>)ic.loadItems(uris, -1, 0));
+        }
+    }
 
     /**
      * Return the {@link User} having uploaded the file for this item
@@ -207,5 +230,21 @@ public abstract class ContainerBean
     public void setOrganizationPosition(int organizationPosition)
     {
         this.organizationPosition = organizationPosition;
+    }
+
+    /**
+     * @return the items
+     */
+    public List<Item> getItems()
+    {
+        return items;
+    }
+
+    /**
+     * @param items the items to set
+     */
+    public void setItems(List<Item> items)
+    {
+        this.items = items;
     }
 }

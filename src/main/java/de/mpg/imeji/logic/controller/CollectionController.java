@@ -77,7 +77,7 @@ public class CollectionController extends ImejiController
         imejiBean2RDF.create(imejiBean2RDF.toList(ic), user);
         GrantController gc = new GrantController();
         gc.addGrants(user,
-                AuthorizationPredefinedRoles.collectionCreator(ic.getId().toString(), profileURI.toString()), user);
+                AuthorizationPredefinedRoles.admin(ic.getId().toString(), profileURI.toString()), user);
         return ic.getId();
     }
 

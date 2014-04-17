@@ -31,6 +31,7 @@
 									contextId="#{logicBean.id}" 
 									isDeletable="#{Auth.delete(logicBean.album)}" 
 									isEditable="#{Auth.update(logicBean.album)}" 
+									isAdmin="#{Auth.admin(logicBean.album)}"
 									hasContent="#{logicBean.size > 0}" 
 									downloadEnabled="#{logicBean.size > 0}"
 									contextDownloadParam="&amp;album=#{logicBean.id}"

@@ -27,6 +27,7 @@
 									hasContent="#{UploadBean.collectionSize > 0}" 
 									isEditable="#{Auth.update(UploadBean.collection)}" 
 									isDeletable="#{Auth.delete(UploadBean.collection)}" 
+									isAdmin="#{Auth.admin(UploadBean.collection)}" 
 									contextDownloadParam="&amp;col=#{UploadBean.id}"
 									downloadEnabled="#{UploadBean.size > 0}"
 									allowedToShare="#{UploadBean.collection.status !='WITHDRAWN'}"/>

@@ -95,10 +95,10 @@ public class SharedHistory
             {
                 sharedType.clear();
                 sharedType.add(ShareType.READ.toString());
-                sharedType.add(ShareType.UPLOAD.toString());
-                sharedType.add(ShareType.EDIT.toString());
+                sharedType.add(ShareType.CREATE.toString());
+                sharedType.add(ShareType.EDIT_ITEM.toString());
                 sharedType.add(ShareType.DELETE.toString());
-                sharedType.add(ShareType.EDIT_COLLECTION.toString());
+                sharedType.add(ShareType.EDIT_CONTAINER.toString());
                 sharedType.add(ShareType.EDIT_PROFILE.toString());
                 sharedType.add(ShareType.ADMIN.toString());
             }
@@ -111,9 +111,8 @@ public class SharedHistory
             {
                 sharedType.clear();
                 sharedType.add(ShareType.READ.toString());
-                sharedType.add(ShareType.ADD.toString());
-                sharedType.add(ShareType.DELETE.toString());
-                sharedType.add(ShareType.EDIT_ALBUM.toString());
+                sharedType.add(ShareType.CREATE.toString());
+                sharedType.add(ShareType.EDIT_CONTAINER.toString());
                 sharedType.add(ShareType.ADMIN.toString());
             }
             else if (sharedType.size() > 1 && !sharedType.contains("READ"))
@@ -134,43 +133,16 @@ public class SharedHistory
         {
             // Remove all Grant for the current container
             if (user != null)
-                gc.removeGrants(getUser(), AuthorizationPredefinedRoles.all(containerUri, profileUri), user);
+                gc.removeGrants(getUser(), AuthorizationPredefinedRoles.admin(containerUri, profileUri), user);
             else if (group != null)
-                gc.removeGrants(group, AuthorizationPredefinedRoles.all(containerUri, profileUri), Imeji.adminUser);
+                gc.removeGrants(group, AuthorizationPredefinedRoles.admin(containerUri, profileUri), Imeji.adminUser);
             // Find all new Grants according to the shareType
-            List<Grant> newGrants = new ArrayList<Grant>();
-            for (String g : sharedType)
-            {
-                switch (g)
-                {
-                    case "READ":
-                        newGrants.addAll(AuthorizationPredefinedRoles.read(containerUri, profileUri));
-                        break;
-                    case "UPLOAD":
-                        newGrants.addAll(AuthorizationPredefinedRoles.upload(containerUri));
-                        break;
-                    case "EDIT":
-                        newGrants.addAll(AuthorizationPredefinedRoles.edit(containerUri));
-                        break;
-                    case "DELETE":
-                        newGrants.addAll(AuthorizationPredefinedRoles.delete(containerUri));
-                        break;
-                    case "EDIT_COLLECTION":
-                        newGrants.addAll(AuthorizationPredefinedRoles.editContainer(containerUri));
-                        break;
-                    case "EDIT_PROFILE":
-                        newGrants.addAll(AuthorizationPredefinedRoles.editProfile(profileUri));
-                        break;
-                    case "ADMIN":
-                        newGrants.addAll(AuthorizationPredefinedRoles.admin(containerUri, profileUri));
-                        break;
-                }
-            }
+            List<Grant> newGrants = ShareBean.getGrantsAccordingtoRoles(sharedType, containerUri, profileUri);
             // Save the new Grants
             if (user != null)
                 gc.addGrants(user, newGrants, user);
             else if (group != null)
-                gc.addGrants(group, newGrants,  Imeji.adminUser);
+                gc.addGrants(group, newGrants, Imeji.adminUser);
         }
         catch (Exception e)
         {

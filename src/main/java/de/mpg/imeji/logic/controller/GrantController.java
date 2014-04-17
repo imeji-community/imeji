@@ -5,6 +5,8 @@ package de.mpg.imeji.logic.controller;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import de.escidoc.core.resources.aa.useraccount.Grants;
@@ -113,7 +115,7 @@ public class GrantController extends ImejiController
         List<Grant> newGrants = new ArrayList<>();
         for (Grant g : toAdd)
         {
-            if (!current.contains(g))
+            if (!current.contains(g) && !newGrants.contains(g))
                 newGrants.add(g);
         }
         return newGrants;

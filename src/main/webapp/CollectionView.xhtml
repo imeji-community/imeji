@@ -34,6 +34,7 @@
 										contextId="#{metadataBean.id}" 
 										isDeletable="#{Auth.delete(metadataBean.collection)}" 
 										isEditable="#{Auth.update(metadataBean.collection)}" 
+										isAdmin="#{Auth.admin(metadataBean.collection)}" 
 										hasContent="#{metadataBean.size > 0}" 
 										downloadEnabled="#{metadataBean.size > 0}"
 										contextDownloadParam="&amp;col=#{metadataBean.id}" 

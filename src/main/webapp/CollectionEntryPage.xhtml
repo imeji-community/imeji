@@ -23,7 +23,7 @@
 										hasContent="#{logicBean.size > 0}" 
 										navBean="#{Navigation}" 
 										activeMenu="start"/>
-			
+
 			<menu:context_actionMenu 	isUserLoggedIn="#{Auth.loggedIn}" 
 										curMainMenu="#{currentMainMenu}" 
 										navBean="#{Navigation}" 
@@ -31,6 +31,7 @@
 										contextId="#{logicBean.id}" 
 										isDeletable="#{Auth.delete(logicBean.collection)}" 
 										isEditable="#{Auth.update(logicBean.collection)}" 
+										isAdmin="#{Auth.admin(logicBean.collection)}"
 										hasContent="#{logicBean.size > 0}" 
 										downloadEnabled="#{logicBean.size > 0}"
 										contextDownloadParam="&amp;col=#{logicBean.id}"

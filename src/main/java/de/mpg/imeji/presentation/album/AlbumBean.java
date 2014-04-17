@@ -87,6 +87,7 @@ public class AlbumBean extends ContainerBean
         }
         AlbumController ac = new AlbumController();
         this.album = (Album)ac.loadContainerItems(album, sessionBean.getUser(), -1, 0);
+        loadItems(sessionBean.getUser());
         description = album.getMetadata().getDescription();
         descriptionFull = description;
         description = CommonUtils.removeTags(description);

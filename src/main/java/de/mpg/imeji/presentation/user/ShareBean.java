@@ -19,7 +19,6 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.Authorization;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.controller.GrantController;
-import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserGroupController;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -60,7 +59,7 @@ public class ShareBean
 
     public enum ShareType
     {
-        READ, ADD, UPLOAD, EDIT, DELETE, EDIT_COLLECTION, EDIT_PROFILE, EDIT_ALBUM, ADMIN
+        READ, CREATE, EDIT_ITEM, DELETE, EDIT_CONTAINER, EDIT_PROFILE, ADMIN
     }
 
     /**
@@ -68,14 +67,14 @@ public class ShareBean
      */
     public void initShareCollection()
     {
+        isCollection = true;
+        grantItems = sb.getShareCollectionGrantItems();
         CollectionImeji collection = ObjectLoader.loadCollectionLazy(
                 ObjectHelper.getURI(CollectionImeji.class, getId()), user);
         if (collection != null)
         {
-            isCollection = true;
             containerUri = collection.getId().toString();
             profileUri = collection.getProfile().toString();
-            grantItems = sb.getShareCollectionGrantItems();
             title = collection.getMetadata().getTitle();
         }
         init();
@@ -86,12 +85,12 @@ public class ShareBean
      */
     public void initShareAlbum()
     {
+        this.grantItems = sb.getShareAlbumGrantItems();
+        this.isCollection = false;
         Album album = ObjectLoader.loadAlbumLazy(ObjectHelper.getURI(Album.class, getId()), user);
         if (album != null)
         {
             this.containerUri = album.getId().toString();
-            this.isCollection = false;
-            this.grantItems = sb.getShareAlbumGrantItems();
             this.title = album.getMetadata().getTitle();
         }
         init();
@@ -110,6 +109,30 @@ public class ShareBean
         retrieveSharedUserWithGrants();
         this.emailInput = "";
         this.isAdmin = auth.administrate(this.user, containerUri);
+    }
+
+    /**
+     * Update the page accodring to new changes
+     * 
+     * @return
+     */
+    public String update()
+    {
+        for (SharedHistory sh : sharedWith)
+        {
+            sh.update();
+        }
+        return "pretty:";
+    }
+
+    /**
+     * Reset all values of the page
+     */
+    public void reset()
+    {
+        setEmailInput("");
+        emailList.clear();
+        selectedRoles.clear();
     }
 
     /**
@@ -207,7 +230,7 @@ public class ShareBean
         sharedWith = new ArrayList<>();
         for (User u : allUser)
         {
-            SharedHistory sh = new SharedHistory(u, true, containerUri, profileUri, new ArrayList<String>());
+            SharedHistory sh = new SharedHistory(u, isCollection, containerUri, profileUri, new ArrayList<String>());
             sh.getSharedType().addAll(parseShareTypes((List<Grant>)u.getGrants(), containerUri, profileUri));
             sharedWith.add(sh);
         }
@@ -215,7 +238,7 @@ public class ShareBean
         Collection<UserGroup> groups = ugc.searchByGrantFor(containerUri, Imeji.adminUser);
         for (UserGroup group : groups)
         {
-            SharedHistory sh = new SharedHistory(group, true, containerUri, profileUri, new ArrayList<String>());
+            SharedHistory sh = new SharedHistory(group, isCollection, containerUri, profileUri, new ArrayList<String>());
             sh.getSharedType().addAll(parseShareTypes((List<Grant>)group.getGrants(), containerUri, profileUri));
             sharedWith.add(sh);
         }
@@ -239,24 +262,21 @@ public class ShareBean
         }
         if (hasUploadGrants(grants, containerUri))
         {
-            if (isCollection)
-                l.add(ShareType.UPLOAD.toString());
-            else
-                l.add(ShareType.ADD.toString());
+            l.add(ShareType.CREATE.toString());
         }
-        if (hasEditGrants(grants, containerUri))
+        if (isCollection && hasEditItemGrants(grants, containerUri))
         {
-            l.add(ShareType.EDIT.toString());
+            l.add(ShareType.EDIT_ITEM.toString());
         }
-        if (hasDeleteGrants(grants, containerUri))
+        if (isCollection && hasDeleteItemGrants(grants, containerUri))
         {
             l.add(ShareType.DELETE.toString());
         }
         if (hasEditContainerGrants(grants, containerUri))
         {
-            l.add(ShareType.EDIT_COLLECTION.toString());
+            l.add(ShareType.EDIT_CONTAINER.toString());
         }
-        if (hasEditProfileGrants(grants, profileUri))
+        if (isCollection && hasEditProfileGrants(grants, profileUri))
         {
             l.add(ShareType.EDIT_PROFILE.toString());
         }
@@ -313,74 +333,32 @@ public class ShareBean
         }
     }
 
-    public static boolean hasReadGrants(List<Grant> userGrants, String containerUri, String profileUri)
-    {
-        List<Grant> grants = AuthorizationPredefinedRoles.read(containerUri, profileUri);
-        return !grantNotExist(userGrants, grants);
-    }
-
-    public static boolean hasUploadGrants(List<Grant> userGrants, String containerUri)
-    {
-        List<Grant> grants = AuthorizationPredefinedRoles.upload(containerUri);
-        return !grantNotExist(userGrants, grants);
-    }
-
-    public static boolean hasEditGrants(List<Grant> userGrants, String containerUri)
-    {
-        List<Grant> grants = AuthorizationPredefinedRoles.edit(containerUri);
-        return !grantNotExist(userGrants, grants);
-    }
-
-    public static boolean hasDeleteGrants(List<Grant> userGrants, String containerUri)
-    {
-        List<Grant> grants = AuthorizationPredefinedRoles.delete(containerUri);
-        return !grantNotExist(userGrants, grants);
-    }
-
-    public static boolean hasEditContainerGrants(List<Grant> userGrants, String containerUri)
-    {
-        List<Grant> grants = AuthorizationPredefinedRoles.editContainer(containerUri);
-        return !grantNotExist(userGrants, grants);
-    }
-
-    public static boolean hasEditProfileGrants(List<Grant> userGrants, String profileUri)
-    {
-        List<Grant> grants = AuthorizationPredefinedRoles.editProfile(profileUri);
-        return !grantNotExist(userGrants, grants);
-    }
-
-    public static boolean hasAdminGrants(List<Grant> userGrants, String containerUri, String profileUri)
-    {
-        List<Grant> grants = AuthorizationPredefinedRoles.admin(containerUri, profileUri);
-        return !grantNotExist(userGrants, grants);
-    }
-
     /**
      * Get the {@link List} of {@link Grant} which are required accoding to the selected Roles
      * 
      * @return
      */
-    private List<Grant> getGrantsAccordingtoSelectedRoles()
+    public static List<Grant> getGrantsAccordingtoRoles(List<String> roles, String containerUri, String profileUri)
     {
         List<Grant> grants = new ArrayList<Grant>();
-        for (String g : selectedRoles)
+        for (String g : roles)
         {
             switch (g)
             {
                 case "READ":
                     grants.addAll(AuthorizationPredefinedRoles.read(containerUri, profileUri));
                     break;
-                case "UPLOAD":
-                    grants.addAll(AuthorizationPredefinedRoles.upload(containerUri));
+                case "CREATE":
+                    grants.addAll(AuthorizationPredefinedRoles.upload(containerUri, profileUri));
                     break;
-                case "EDIT":
-                    grants.addAll(AuthorizationPredefinedRoles.edit(containerUri));
+                case "EDIT_ITEM":
+                    grants.addAll(AuthorizationPredefinedRoles.edit(containerUri, profileUri));
                     break;
                 case "DELETE":
-                    grants.addAll(AuthorizationPredefinedRoles.delete(containerUri));
+                    grants.addAll(AuthorizationPredefinedRoles.delete(containerUri, profileUri));
                     break;
-                case "EDIT_COLLECTION":
-                    grants.addAll(AuthorizationPredefinedRoles.editContainer(containerUri));
+                case "EDIT_CONTAINER":
+                    grants.addAll(AuthorizationPredefinedRoles.editContainer(containerUri, profileUri));
                     break;
                 case "EDIT_PROFILE":
                     grants.addAll(AuthorizationPredefinedRoles.editProfile(profileUri));
@@ -388,8 +366,6 @@ public class ShareBean
                 case "ADMIN":
                     grants.addAll(AuthorizationPredefinedRoles.admin(containerUri, profileUri));
                     break;
-                case "EDIT_ALBUM":
-                    grants.addAll(AuthorizationPredefinedRoles.editContainer(containerUri));
             }
         }
         return grants;
@@ -403,7 +379,7 @@ public class ShareBean
      */
     public void shareTo(List<String> toList)
     {
-        List<Grant> grants = getGrantsAccordingtoSelectedRoles();
+        List<Grant> grants = getGrantsAccordingtoRoles(selectedRoles, containerUri, profileUri);
         for (String to : toList)
         {
             try
@@ -448,6 +424,48 @@ public class ShareBean
         return null;
     }
 
+    private boolean hasReadGrants(List<Grant> userGrants, String containerUri, String profileUri)
+    {
+        List<Grant> grants = AuthorizationPredefinedRoles.read(containerUri, profileUri);
+        return !grantNotExist(userGrants, grants);
+    }
+
+    private boolean hasUploadGrants(List<Grant> userGrants, String containerUri)
+    {
+        List<Grant> grants = AuthorizationPredefinedRoles.upload(containerUri, null);
+        return !grantNotExist(userGrants, grants);
+    }
+
+    private boolean hasEditItemGrants(List<Grant> userGrants, String containerUri)
+    {
+        List<Grant> grants = AuthorizationPredefinedRoles.edit(containerUri, null);
+        return !grantNotExist(userGrants, grants);
+    }
+
+    private boolean hasDeleteItemGrants(List<Grant> userGrants, String containerUri)
+    {
+        List<Grant> grants = AuthorizationPredefinedRoles.delete(containerUri, null);
+        return !grantNotExist(userGrants, grants);
+    }
+
+    private boolean hasEditContainerGrants(List<Grant> userGrants, String containerUri)
+    {
+        List<Grant> grants = AuthorizationPredefinedRoles.editContainer(containerUri, null);
+        return !grantNotExist(userGrants, grants);
+    }
+
+    private boolean hasEditProfileGrants(List<Grant> userGrants, String profileUri)
+    {
+        List<Grant> grants = AuthorizationPredefinedRoles.editProfile(profileUri);
+        return !grantNotExist(userGrants, grants);
+    }
+
+    private boolean hasAdminGrants(List<Grant> userGrants, String containerUri, String profileUri)
+    {
+        List<Grant> grants = AuthorizationPredefinedRoles.admin(containerUri, profileUri);
+        return !grantNotExist(userGrants, grants);
+    }
+
     /**
      * True if ???
      * 
@@ -462,13 +480,6 @@ public class ShareBean
             if (!userGrants.contains(g))
                 b = true;
         return b;
-    }
-
-    public void reset()
-    {
-        setEmailInput("");
-        emailList.clear();
-        selectedRoles.clear();
     }
 
     public void clearError()
@@ -557,10 +568,10 @@ public class ShareBean
             {
                 selectedGrants.clear();
                 selectedGrants.add(ShareType.READ.toString());
-                selectedGrants.add(ShareType.UPLOAD.toString());
-                selectedGrants.add(ShareType.EDIT.toString());
+                selectedGrants.add(ShareType.CREATE.toString());
+                selectedGrants.add(ShareType.EDIT_ITEM.toString());
                 selectedGrants.add(ShareType.DELETE.toString());
-                selectedGrants.add(ShareType.EDIT_COLLECTION.toString());
+                selectedGrants.add(ShareType.EDIT_CONTAINER.toString());
                 selectedGrants.add(ShareType.EDIT_PROFILE.toString());
                 selectedGrants.add(ShareType.ADMIN.toString());
             }
@@ -576,9 +587,8 @@ public class ShareBean
             {
                 selectedGrants.clear();
                 selectedGrants.add(ShareType.READ.toString());
-                selectedGrants.add(ShareType.ADD.toString());
-                selectedGrants.add(ShareType.DELETE.toString());
-                selectedGrants.add(ShareType.EDIT_ALBUM.toString());
+                selectedGrants.add(ShareType.CREATE.toString());
+                selectedGrants.add(ShareType.EDIT_CONTAINER.toString());
                 selectedGrants.add(ShareType.ADMIN.toString());
             }
             else
@@ -627,15 +637,6 @@ public class ShareBean
     public void setSharedWith(List<SharedHistory> sharedWith)
     {
         this.sharedWith = sharedWith;
-    }
-
-    public String updateSharedWith()
-    {
-        for (SharedHistory sh : sharedWith)
-        {
-            sh.update();
-        }
-        return "pretty:shareCollection";
     }
 
     public boolean isCollection()

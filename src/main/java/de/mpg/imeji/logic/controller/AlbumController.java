@@ -23,6 +23,7 @@ import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.auth.ImejiAuthBean;
 import de.mpg.j2j.helper.DateHelper;
 import de.mpg.j2j.helper.J2JHelper;
 
@@ -70,7 +71,7 @@ public class AlbumController extends ImejiController
     {
         writeCreateProperties(album, user);
         GrantController gc = new GrantController();
-        gc.addGrants(user, AuthorizationPredefinedRoles.albumCreator(album.getId().toString()), user);
+        gc.addGrants(user, AuthorizationPredefinedRoles.admin(album.getId().toString(), null), user);
         imejiBean2RDF.create(imejiBean2RDF.toList(album), user);
     }
 
@@ -202,7 +203,8 @@ public class AlbumController extends ImejiController
         {
             album.getImages().add(URI.create(uri));
         }
-        update(album, user);
+        // Force admin user since th user might not have right to edit the album
+        update(album, Imeji.adminUser);
         return notAddedUris;
     }
 
@@ -226,7 +228,8 @@ public class AlbumController extends ImejiController
                 album.getImages().add(uri);
             }
         }
-        update(album, user);
+        // Force admin user since th user might not have right to edit the album
+        update(album, Imeji.adminUser);
         return inAlbums.size() - album.getImages().size();
     }
 

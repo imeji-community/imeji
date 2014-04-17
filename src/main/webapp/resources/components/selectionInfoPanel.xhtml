@@ -90,19 +90,19 @@
 									<ui:fragment rendered="#{cc.attrs.facetBean.navigationString == 'pretty:collectionBrowse' and cc.attrs.facetBean.collection != null}">
 										<li>
 											<h:outputLink styleClass="imj_criticalItem" value="#" onclick="openDialog('dialogDeleteAll')" 
-															rendered="#{Auth.updateContent(cc.attrs.facetBean.collection) and cc.attrs.facetBean.collection.status == 'PENDING'}">
+															rendered="#{Auth.deleteContent(cc.attrs.facetBean.collection) and cc.attrs.facetBean.collection.status == 'PENDING'}">
 												<h:outputText value="#{lbl.delete_all}"/>
 											</h:outputLink>
 											
 											<h:outputLink styleClass="imj_criticalItem" value="#" onclick="openDialog('dialogWithdrawAll')"
-															rendered="#{cc.attrs.facetBean.collection != null and Auth.update(cc.attrs.facetBean.collection)  and cc.attrs.facetBean.collection.status == 'RELEASED'}">
+															rendered="#{cc.attrs.facetBean.collection != null and Auth.updateContent(cc.attrs.facetBean.collection)  and cc.attrs.facetBean.collection.status == 'RELEASED'}">
 												<h:outputText value="#{lbl.withdraw_all}"/>
 											</h:outputLink>
 										</li>
 									</ui:fragment>
 									
 									<!-- Remove all from album -->
-									<ui:fragment rendered="#{cc.attrs.facetBean.navigationString == 'pretty:albumBrowse' and Auth.delete(cc.attrs.facetBean.album)}">
+									<ui:fragment rendered="#{cc.attrs.facetBean.navigationString == 'pretty:albumBrowse' and Auth.create(cc.attrs.facetBean.album)}">
 										<li>
 											<h:commandLink value="#{lbl.remove_from_album_all}" action="#{cc.attrs.facetBean.removeAllFromAlbum}">
 											</h:commandLink>
@@ -159,17 +159,17 @@
 										<li class="imj_overlayMenuListItem">
 											<!-- Delete/Discard selected images -->
 											<h:outputLink onclick="openDialog('dialogDeleteSelected')" styleClass="imj_criticalItem" value="#" 
-														  rendered="#{cc.attrs.facetBean.navigationString == 'pretty:collectionBrowse' and  cc.attrs.facetBean.imageDeletable and cc.attrs.facetBean.collection.status == 'PENDING'}">
+														  rendered="#{cc.attrs.facetBean.navigationString == 'pretty:collectionBrowse' and Auth.deleteContent(cc.attrs.facetBean.collection) and cc.attrs.facetBean.collection.status == 'PENDING'}">
 												<h:outputText value="#{lbl.delete_selectedImages}"/>
 											</h:outputLink>
 											<h:outputLink styleClass="imj_criticalItem" value="#" onclick="openDialog('dialogWithdrawSelected')" 
-														  rendered="#{cc.attrs.facetBean.navigationString == 'pretty:collectionBrowse' and  Auth.update(cc.attrs.facetBean.collection) and cc.attrs.facetBean.collection.status == 'RELEASED'}">
+														  rendered="#{cc.attrs.facetBean.navigationString == 'pretty:collectionBrowse' and  Auth.updateContent(cc.attrs.facetBean.collection) and cc.attrs.facetBean.collection.status == 'RELEASED'}">
 												<h:outputText value="#{lbl.withdraw_selected}"/>
 											</h:outputLink>	
 										</li>
 									</ui:fragment>
 									
-									<ui:fragment rendered="#{cc.attrs.facetBean.navigationString == 'pretty:albumBrowse' and Auth.delete(cc.attrs.facetBean.album)}">
+									<ui:fragment rendered="#{cc.attrs.facetBean.navigationString == 'pretty:albumBrowse' and Auth.create(cc.attrs.facetBean.album)}">
 										<li class="imj_overlayMenuListItem">
 											<!-- Remove selected from album -->
 											<h:commandLink value="#{lbl.remove_from_album}" action="#{cc.attrs.facetBean.removeFromAlbum}"/>

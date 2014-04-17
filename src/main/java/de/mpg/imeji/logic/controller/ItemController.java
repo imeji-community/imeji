@@ -317,14 +317,6 @@ public class ItemController extends ImejiController
             }
         }
         imejiBean2RDF.delete(toDelete, user);
-        // Remove items from their collections
-        for (URI uri : cMap.values())
-        {
-            CollectionController cc = new CollectionController(user);
-            CollectionImeji c = cc.retrieveLazy(uri);
-            c = (CollectionImeji)loadContainerItems(c, user, -1, 0);
-            cc.update(c);
-        }
         return count;
     }
 

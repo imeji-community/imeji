@@ -30,12 +30,8 @@ package de.mpg.imeji.logic.auth.authorization;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import de.mpg.imeji.logic.vo.Album;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.User;
@@ -50,6 +46,28 @@ import de.mpg.imeji.presentation.beans.PropertyBean;
  */
 public class AuthorizationPredefinedRoles
 {
+    /**
+     * Roles for the share Page
+     */
+    // Can read a container (default role)
+    private static GrantType[] read = { GrantType.READ };
+    // Can upload items in a collection or add/remove item in an album
+    private static GrantType[] upload = { GrantType.READ, GrantType.CREATE };
+    // Can edit the item metadata
+    private static GrantType[] edit_items = { GrantType.READ, GrantType.UPDATE_CONTENT };
+    // Can delete the items
+    private static GrantType[] delete_items = { GrantType.READ, GrantType.DELETE_CONTENT };
+    // Can edit container metadata
+    private static GrantType[] edit_container = { GrantType.READ, GrantType.UPDATE };
+    // Can edit a profile
+    private static GrantType[] edit_profile = { GrantType.READ, GrantType.UPDATE };
+    // Can administrate an album
+    private static GrantType[] admin_album = { GrantType.READ, GrantType.ADMIN, GrantType.CREATE, GrantType.DELETE,
+            GrantType.UPDATE };
+    // Can administrate a collection
+    private static GrantType[] admin_collection = { GrantType.READ, GrantType.ADMIN, GrantType.ADMIN_CONTENT,
+            GrantType.CREATE, GrantType.DELETE, GrantType.DELETE_CONTENT, GrantType.UPDATE, GrantType.UPDATE_CONTENT };
+
     /**
      * The default {@link User} role in imeji can create (collection/album) in imeji
      * 
@@ -90,243 +108,58 @@ public class AuthorizationPredefinedRoles
         return l;
     }
 
-    /**
-     * Return the {@link Grant} of a {@link User} who creates a {@link CollectionImeji}
-     * 
-     * @param uri
-     * @return
-     */
-    public static List<Grant> collectionCreator(String collectionUri, String profileUri)
-    {
-        List<Grant> l = containerCreator(collectionUri);
-        l.addAll(containerCreator(profileUri));
-        return l;
-    }
-
-    /**
-     * Return all possible {@link Grant} for a {@link Container}
-     * 
-     * @param containerUri
-     * @param profileUri
-     * @return
-     */
-    public static List<Grant> all(String containerUri, String profileUri)
-    {
-        GrantType[] g = { GrantType.READ, GrantType.READ_CONTENT, GrantType.ADMIN, GrantType.ADMIN_CONTENT,
-                GrantType.CREATE, GrantType.DELETE, GrantType.DELETE_CONTENT, GrantType.UPDATE,
-                GrantType.UPDATE_CONTENT };
-        List<Grant> l = toGrantList(g, containerUri);
-        if (profileUri != null)
-            l.addAll(toGrantList(g, profileUri));
-        return l;
-    }
-
     public static List<Grant> read(String containerUri, String profileUri)
     {
-        GrantType[] g = { GrantType.READ, GrantType.READ_CONTENT };
-        List<Grant> l = toGrantList(g, containerUri);
+        List<Grant> l = toGrantList(read, containerUri);
         if (profileUri != null)
-            l.addAll(toGrantList(g, profileUri));
+            l.addAll(toGrantList(read, profileUri));
         return l;
     }
 
-    public static List<Grant> upload(String containerUri)
+    public static List<Grant> upload(String containerUri, String profileUri)
     {
-        GrantType[] g = { GrantType.CREATE };
-        return toGrantList(g, containerUri);
+        List<Grant> l = toGrantList(upload, containerUri);
+        if (profileUri != null)
+            l.addAll(toGrantList(read, profileUri));
+        return l;
     }
 
-    public static List<Grant> edit(String containerUri)
+    public static List<Grant> edit(String containerUri, String profileUri)
     {
-        GrantType[] g = { GrantType.UPDATE_CONTENT };
-        return toGrantList(g, containerUri);
+        List<Grant> l = toGrantList(edit_items, containerUri);
+        if (profileUri != null)
+            l.addAll(toGrantList(read, profileUri));
+        return l;
     }
 
-    public static List<Grant> delete(String containerUri)
+    public static List<Grant> delete(String containerUri, String profileUri)
     {
-        GrantType[] g = { GrantType.DELETE_CONTENT };
-        return toGrantList(g, containerUri);
+        List<Grant> l = toGrantList(delete_items, containerUri);
+        if (profileUri != null)
+            l.addAll(toGrantList(read, profileUri));
+        return l;
     }
 
-    public static List<Grant> editContainer(String containerUri)
+    public static List<Grant> editContainer(String containerUri, String profileUri)
     {
-        GrantType[] g = { GrantType.UPDATE };
-        return toGrantList(g, containerUri);
+        List<Grant> l = toGrantList(edit_container, containerUri);
+        if (profileUri != null)
+            l.addAll(toGrantList(read, profileUri));
+        return l;
     }
 
     public static List<Grant> editProfile(String profileUri)
     {
-        GrantType[] g = { GrantType.UPDATE, GrantType.UPDATE_CONTENT };
-        return toGrantList(g, profileUri);
+        return profileUri != null ? toGrantList(edit_profile, profileUri) : new ArrayList<Grant>();
     }
 
     public static List<Grant> admin(String containerUri, String profileUri)
     {
-        GrantType[] g = { GrantType.DELETE, GrantType.ADMIN, GrantType.ADMIN_CONTENT };
-        List<Grant> l = toGrantList(g, containerUri);
+        List<Grant> l = profileUri == null ? toGrantList(admin_album, containerUri) : toGrantList(admin_collection,
+                containerUri);
         if (profileUri != null)
-        {
-            g = Arrays.copyOf(g, g.length + 1);
-            g[g.length - 1] = GrantType.DELETE_CONTENT;
-            l.addAll(toGrantList(g, profileUri));
-        }
+            l.addAll(toGrantList(edit_profile, profileUri));
         return l;
-    }
-
-    /**
-     * Return the {@link Grant}List of a {@link User} who can just read a {@link CollectionImeji}
-     * 
-     * @param collectionUri
-     * @param profileUri
-     * @return
-     */
-    public static List<Grant> collectionReadOnly(String collectionUri, String profileUri)
-    {
-        List<Grant> l = containerReadOnly(collectionUri);
-        l.addAll(containerReadOnly(profileUri));
-        return l;
-    }
-
-    /**
-     * Return the {@link Grant}List of a {@link User} who can read a {@link CollectionImeji} and upload Images
-     * 
-     * @param collectionUri
-     * @param profileUri
-     * @return
-     */
-    public static List<Grant> collectionReadAndUpload(String collectionUri, String profileUri)
-    {
-        List<Grant> l = containerReadAndUpload(collectionUri);
-        l.addAll(containerReadOnly(profileUri));
-        return l;
-    }
-
-    /**
-     * Return the {@link Grant}List of a {@link User} who can edit a {@link CollectionImeji}
-     * 
-     * @param collectionUri
-     * @param profileUri
-     * @return
-     */
-    public static List<Grant> collectionEditable(String collectionUri, String profileUri)
-    {
-        List<Grant> l = containerEditable(collectionUri);
-        l.addAll(containerEditable(profileUri));
-        return l;
-    }
-
-    /**
-     * Return the {@link Grant}List of a {@link User} who can publish/delete a {@link CollectionImeji}
-     * 
-     * @param collectionUri
-     * @param profileUri
-     * @return
-     */
-    public static List<Grant> collectionDeletable(String collectionUri, String profileUri)
-    {
-        List<Grant> l = containerDeletable(collectionUri);
-        l.addAll(containerDeletable(profileUri));
-        return l;
-    }
-
-    /**
-     * Return the {@link Grant}List of {@link CollectionImeji}Admin
-     * 
-     * @param collectionUri
-     * @param profileUri
-     * @return
-     */
-    public static List<Grant> collectionAdmin(String collectionUri, String profileUri)
-    {
-        List<Grant> l = containerAdmin(collectionUri);
-        l.addAll(containerAdmin(profileUri));
-        return l;
-    }
-
-    /**
-     * Return the {@link Grant} of a {@link User} who creates an {@link Album}
-     * 
-     * @param albumUri
-     * @return
-     */
-    public static List<Grant> albumCreator(String albumUri)
-    {
-        return containerCreator(albumUri);
-    }
-
-    /**
-     * Return the {@link List} of {@link Grant} needed to create a container
-     * 
-     * @param uri
-     * @return
-     */
-    private static List<Grant> containerCreator(String uri)
-    {
-        GrantType[] g = { GrantType.CREATE, GrantType.READ, GrantType.UPDATE, GrantType.DELETE, GrantType.ADMIN,
-                GrantType.READ_CONTENT, GrantType.UPDATE_CONTENT, GrantType.DELETE_CONTENT, GrantType.ADMIN_CONTENT };
-        return toGrantList(g, uri);
-    }
-
-    /**
-     * Return the {@link List} of {@link Grant} for readOnly Right
-     * 
-     * @param uri
-     * @return
-     */
-    private static List<Grant> containerReadOnly(String uri)
-    {
-        GrantType[] g = { GrantType.READ, GrantType.READ_CONTENT };
-        return toGrantList(g, uri);
-    }
-
-    /**
-     * Return the {@link List} of {@link Grant} for image Uploading Right
-     * 
-     * @param uri
-     * @return
-     */
-    private static List<Grant> containerReadAndUpload(String uri)
-    {
-        GrantType[] g = { GrantType.READ, GrantType.READ_CONTENT, GrantType.UPDATE_CONTENT };
-        return toGrantList(g, uri);
-    }
-
-    /**
-     * Return the {@link List} of {@link Grant} for editing Right
-     * 
-     * @param uri
-     * @return
-     */
-    private static List<Grant> containerEditable(String uri)
-    {
-        GrantType[] g = { GrantType.READ, GrantType.UPDATE, GrantType.READ_CONTENT, GrantType.UPDATE_CONTENT };
-        return toGrantList(g, uri);
-    }
-
-    /**
-     * Return the {@link List} of {@link Grant} for deleting Right
-     * 
-     * @param uri
-     * @return
-     */
-    private static List<Grant> containerDeletable(String uri)
-    {
-        GrantType[] g = { GrantType.READ, GrantType.UPDATE, GrantType.DELETE, GrantType.READ_CONTENT,
-                GrantType.UPDATE_CONTENT, GrantType.DELETE_CONTENT };
-        return toGrantList(g, uri);
-    }
-
-    /**
-     * Return the {@link List} of Admin {@link Grant}s
-     * 
-     * @param uri
-     * @return
-     */
-    private static List<Grant> containerAdmin(String uri)
-    {
-        GrantType[] g = { GrantType.READ, GrantType.UPDATE, GrantType.DELETE, GrantType.ADMIN, GrantType.READ_CONTENT,
-                GrantType.UPDATE_CONTENT, GrantType.DELETE_CONTENT, GrantType.ADMIN_CONTENT };
-        return toGrantList(g, uri);
     }
 
     /**

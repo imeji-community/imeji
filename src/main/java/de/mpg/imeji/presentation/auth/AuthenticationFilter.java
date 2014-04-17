@@ -45,6 +45,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import com.ocpsoft.pretty.PrettyContext;
 
@@ -62,7 +63,6 @@ import de.mpg.imeji.presentation.session.SessionBean;
 public class AuthenticationFilter implements Filter
 {
     private FilterConfig filterConfig = null;
-    private ServletContext servletContext;
 
     /*
      * (non-Javadoc)
@@ -84,10 +84,9 @@ public class AuthenticationFilter implements Filter
             ServletException
     {
         HttpServletRequest request = (HttpServletRequest)serv;
-        SessionBean session = getSession(request, resp);
+        SessionBean session = getSession(request);
         if (session.getUser() == null)
         {
-            servletContext = request.getSession().getServletContext();
             HttpAuthentication httpAuthentification = new HttpAuthentication(request);
             session.setUser(httpAuthentification.doLogin());
         }
@@ -115,77 +114,13 @@ public class AuthenticationFilter implements Filter
     }
 
     /**
-     * Get the {@link HistorySession} from the {@link FacesContext}
+     * Return the {@link SessionBean} form the {@link HttpSession}
      * 
-     * @param request
-     * @param resp
+     * @param req
      * @return
      */
-    private SessionBean getSession(ServletRequest request, ServletResponse resp)
+    private SessionBean getSession(HttpServletRequest req)
     {
-        return (SessionBean)getBean(SessionBean.class, request, resp);
-    }
-
-    /**
-     * @param c
-     * @param request
-     * @param resp
-     * @return
-     */
-    private Object getBean(Class<?> c, ServletRequest request, ServletResponse resp)
-    {
-        String name = c.getSimpleName();
-        FacesContext fc = getFacesContext(request, resp);
-        Object result = fc.getExternalContext().getSessionMap().get(name);
-        if (result == null)
-        {
-            try
-            {
-                Object b = c.newInstance();
-                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(name, b);
-                return b;
-            }
-            catch (Exception e)
-            {
-                throw new RuntimeException("Error creating History Session", e);
-            }
-        }
-        else
-        {
-            return result;
-        }
-    }
-
-    /**
-     * Get {@link FacesContext} from Filter
-     * 
-     * @param request
-     * @param response
-     * @return
-     */
-    private FacesContext getFacesContext(ServletRequest request, ServletResponse response)
-    {
-        // Try to get it first
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        // if (facesContext != null) return facesContext;
-        FacesContextFactory contextFactory = (FacesContextFactory)FactoryFinder
-                .getFactory(FactoryFinder.FACES_CONTEXT_FACTORY);
-        LifecycleFactory lifecycleFactory = (LifecycleFactory)FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
-        Lifecycle lifecycle = lifecycleFactory.getLifecycle(LifecycleFactory.DEFAULT_LIFECYCLE);
-        facesContext = contextFactory.getFacesContext(servletContext, request, response, lifecycle);
-        // Set using our inner class
-        InnerFacesContext.setFacesContextAsCurrentInstance(facesContext);
-        // set a new viewRoot, otherwise context.getViewRoot returns null
-        UIViewRoot view = facesContext.getApplication().getViewHandler().createView(facesContext, "imeji");
-        facesContext.setViewRoot(view);
-        return facesContext;
-    }
-
-    public abstract static class InnerFacesContext extends FacesContext
-    {
-        protected static void setFacesContextAsCurrentInstance(FacesContext facesContext)
-        {
-            FacesContext.setCurrentInstance(facesContext);
-        }
+        return (SessionBean)req.getSession(true).getAttribute(SessionBean.class.getSimpleName());
     }
 }

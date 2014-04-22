@@ -104,7 +104,7 @@ public abstract class MetadataEditor
                         }
                         ic.update(itemList);
                         ImejiSPARQL.execUpdate(SPARQLQueries.updateEmptyMetadata());
-                        BeanHelper.info(sb.getMessage("success_editor_edit"));
+                        //BeanHelper.info(sb.getMessage("success_editor_edit"));
                         String str = items.size() + " " + sb.getMessage("success_editor_images");
                         if (items.size() == 1)
                             str = sb.getMessage("success_editor_image");

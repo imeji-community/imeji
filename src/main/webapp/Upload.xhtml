@@ -178,7 +178,10 @@
 							<ol class="imj_messageList">
 								<ui:repeat id="sFile" var="sFile" value="#{UploadBean.sFiles}">
 									<li class="imj_messageInfo">
-										<h:outputText value="#{sFile}"/>
+										<h:outputLink value="#{sFile.id}">
+											<h:outputText value="#{sFile.filename}"/>		
+										</h:outputLink>
+										
 									</li>
 								</ui:repeat>
 							</ol>

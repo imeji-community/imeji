@@ -43,13 +43,12 @@ public class HistorySession
         {
             if (!page.isSame(getCurrentPage()))
             {
-            	page.setPos(pages.size());
+                page.setPos(pages.size());
                 pages.add(page);
                 removeOldPages();
             }
         }
     }
-
 
     /**
      * Remove {@link Page} of the history, when the size of the history is greater thant the maximum size
@@ -102,7 +101,7 @@ public class HistorySession
     {
         if (!pages.isEmpty())
         {
-            return pages.get(pages.size() - 2);
+            return pages.size() > 2 ? pages.get(pages.size() - 2) : pages.get(0);
         }
         return null;
     }

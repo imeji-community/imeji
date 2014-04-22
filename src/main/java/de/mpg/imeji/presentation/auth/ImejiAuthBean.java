@@ -119,18 +119,6 @@ public class ImejiAuthBean implements Serializable
     }
 
     /**
-     * True if the {@link User} can read the content uri
-     * 
-     * @param user
-     * @param uri
-     * @return
-     */
-    public boolean readContentUri(User user, String uri)
-    {
-        return auth.readContent(user, uri);
-    }
-
-    /**
      * True if the {@link User} can update the content the uri
      * 
      * @param user
@@ -215,18 +203,6 @@ public class ImejiAuthBean implements Serializable
     }
 
     /**
-     * True if the {@link User} can read the content uri
-     * 
-     * @param user
-     * @param uri
-     * @return
-     */
-    public boolean readContentUri(String uri)
-    {
-        return auth.readContent(sessionUser, uri);
-    }
-
-    /**
      * True if the {@link User} can update the content the uri
      * 
      * @param user
@@ -306,20 +282,8 @@ public class ImejiAuthBean implements Serializable
      * @return
      */
     public boolean admin(User user, Object obj)
-    { 
-        return auth.administrate(user, obj);
-    }
-
-    /**
-     * True if the {@link User} can read the content of the object
-     * 
-     * @param user
-     * @param uri
-     * @return
-     */
-    public boolean readContent(User user, Object obj)
     {
-        return auth.readContent(user, obj);
+        return auth.administrate(user, obj);
     }
 
     /**
@@ -407,18 +371,6 @@ public class ImejiAuthBean implements Serializable
     }
 
     /**
-     * True if the {@link User} can read the content of the object
-     * 
-     * @param user
-     * @param uri
-     * @return
-     */
-    public boolean readContent(Object obj)
-    {
-        return auth.readContent(sessionUser, obj);
-    }
-
-    /**
      * True if the {@link User} can update the content of the object
      * 
      * @param user
@@ -463,7 +415,6 @@ public class ImejiAuthBean implements Serializable
     {
         return sessionUser != null;
     }
-    
 
     /**
      * @return the sessionUser
@@ -480,5 +431,4 @@ public class ImejiAuthBean implements Serializable
     {
         ImejiAuthBean.sessionUser = sessionUser;
     }
-    
 }

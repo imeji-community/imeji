@@ -33,7 +33,7 @@ public class Grant implements Serializable
      */
     public enum GrantType
     {
-        CREATE, READ, UPDATE, DELETE, ADMIN, READ_CONTENT, UPDATE_CONTENT, DELETE_CONTENT, ADMIN_CONTENT;
+        CREATE, READ, UPDATE, DELETE, ADMIN, UPDATE_CONTENT, DELETE_CONTENT, ADMIN_CONTENT;
     }
 
     @j2jResource("http://imeji.org/terms/grantType")

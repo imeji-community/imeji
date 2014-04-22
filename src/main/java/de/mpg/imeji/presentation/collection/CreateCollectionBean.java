@@ -9,7 +9,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
+import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.controller.CollectionController;
+import de.mpg.imeji.logic.controller.GrantController;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -56,11 +58,13 @@ public class CreateCollectionBean extends CollectionBean
     {
         if (valid())
         {
-            ProfileController profileController = new ProfileController();
             MetadataProfile mdp = new MetadataProfile();
+            // Create profile
+            ProfileController profileController = new ProfileController();
             mdp.setDescription(getCollection().getMetadata().getDescription());
             mdp.setTitle(getCollection().getMetadata().getTitle());
             URI profile = profileController.create(mdp, sessionBean.getUser());
+            // Create collection
             CollectionController collectionController = new CollectionController();
             collectionController.create(getCollection(), profile, sessionBean.getUser());
             BeanHelper.info(sessionBean.getMessage("success_collection_create"));

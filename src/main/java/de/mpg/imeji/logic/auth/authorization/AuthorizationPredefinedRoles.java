@@ -50,23 +50,25 @@ public class AuthorizationPredefinedRoles
      * Roles for the share Page
      */
     // Can read a container (default role)
-    private static GrantType[] read = { GrantType.READ };
+    private static final GrantType[] read = { GrantType.READ };
     // Can upload items in a collection or add/remove item in an album
-    private static GrantType[] upload = { GrantType.READ, GrantType.CREATE };
+    private static final GrantType[] upload = { GrantType.READ, GrantType.CREATE };
     // Can edit the item metadata
-    private static GrantType[] edit_items = { GrantType.READ, GrantType.UPDATE_CONTENT };
+    private static final GrantType[] edit_items = { GrantType.READ, GrantType.UPDATE_CONTENT };
     // Can delete the items
-    private static GrantType[] delete_items = { GrantType.READ, GrantType.DELETE_CONTENT };
+    private static final GrantType[] delete_items = { GrantType.READ, GrantType.DELETE_CONTENT };
     // Can edit container metadata
-    private static GrantType[] edit_container = { GrantType.READ, GrantType.UPDATE };
+    private static final GrantType[] edit_container = { GrantType.READ, GrantType.UPDATE };
     // Can edit a profile
-    private static GrantType[] edit_profile = { GrantType.READ, GrantType.UPDATE };
+    private static final GrantType[] edit_profile = { GrantType.READ, GrantType.UPDATE };
     // Can administrate an album
-    private static GrantType[] admin_album = { GrantType.READ, GrantType.ADMIN, GrantType.CREATE, GrantType.DELETE,
+    private static final GrantType[] admin_album = { GrantType.READ, GrantType.ADMIN, GrantType.CREATE, GrantType.DELETE,
             GrantType.UPDATE };
     // Can administrate a collection
-    private static GrantType[] admin_collection = { GrantType.READ, GrantType.ADMIN, GrantType.ADMIN_CONTENT,
+    private static final GrantType[] admin_collection = { GrantType.READ, GrantType.ADMIN, GrantType.ADMIN_CONTENT,
             GrantType.CREATE, GrantType.DELETE, GrantType.DELETE_CONTENT, GrantType.UPDATE, GrantType.UPDATE_CONTENT };
+    
+    public static final String IMEJI_GLOBAL_URI = PropertyBean.baseURI();
 
     /**
      * The default {@link User} role in imeji can create (collection/album) in imeji
@@ -78,7 +80,7 @@ public class AuthorizationPredefinedRoles
     {
         // Add the Grant to create a collection
         GrantType[] g = { GrantType.CREATE };
-        List<Grant> l = toGrantList(g, PropertyBean.baseURI());
+        List<Grant> l = toGrantList(g, IMEJI_GLOBAL_URI);
         l.addAll(restrictedUser(uri));
         return l;
     }
@@ -103,7 +105,7 @@ public class AuthorizationPredefinedRoles
     public static List<Grant> imejiAdministrator(String uri)
     {
         GrantType[] g = { GrantType.ADMIN };
-        List<Grant> l = toGrantList(g, PropertyBean.baseURI());
+        List<Grant> l = toGrantList(g, IMEJI_GLOBAL_URI);
         l.addAll(defaultUser(uri));
         return l;
     }

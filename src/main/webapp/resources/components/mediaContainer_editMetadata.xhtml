@@ -24,7 +24,7 @@
 					<!-- Title -->
 					<div class="imj_metadataSet">
 						<label class="imj_metadataLabel">
-							<h:outputText value="#{lbl.title}*"/>
+							<h:outputText value="#{lbl.title} *"/>
 							<span class="imj_noDisplay">: </span>
 						</label>
 						<h:inputText id="inputTitleText" styleClass="imj_metadataValue" value="#{cc.attrs.formularContextBean.metadata.title}"/>
@@ -52,7 +52,7 @@
 											<f:ajax execute="@form"  render="@form"/>
 										</h:commandButton>
 									</span>
-									<h:outputText value=" #{lbl.author} *"/>
+									<h:outputText value=" #{lbl.author}"/>
 									<span class="imj_noDisplay">: </span>	
 								</h4>
 							</div>
@@ -60,7 +60,7 @@
 							<!-- Family Name -->
 							<div class="imj_metadataSet">
 								<label class="imj_metadataLabel">
-									<h:outputText value="#{lbl.family_name}"/>
+									<h:outputText value="#{lbl.family_name} *"/>
 									<span class="imj_noDisplay">: </span>
 								</label>
 								<h:inputText id="inputFamiliyName" styleClass="imj_metadataValue" value="#{creator.familyName}"/>
@@ -79,7 +79,7 @@
 							<ui:repeat var="organization" value="#{creator.organizations}" varStatus="indexO">
 								<div class="imj_metadataSet">
 									<label class="imj_metadataLabel">
-										<h:outputText value="#{lbl.organization}*"/>
+										<h:outputText value="#{lbl.organization} *"/>
 										<span class="imj_noDisplay">: </span>
 										<span class="imj_inlineButtonGroup">
 											<h:commandButton styleClass="imj_buttonAdd_16" title="#{lbl.add_organization}" action="#{cc.attrs.formularBean.addOrganization(indexA.index,indexO.index)}">
@@ -95,6 +95,7 @@
 							</ui:repeat>
 						</h:panelGroup>
 					</ui:repeat>
+					<h:outputText value="* #{lbl.mandatory}"/>
 				</div>
 				
 				<div class="imj_submitPanel">

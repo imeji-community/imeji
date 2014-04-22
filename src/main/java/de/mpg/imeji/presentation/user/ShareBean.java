@@ -1,6 +1,5 @@
 package de.mpg.imeji.presentation.user;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,9 +17,6 @@ import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.sparql.pfunction.library.container;
 import com.ocpsoft.pretty.PrettyContext;
-import com.ocpsoft.pretty.PrettyFilter;
-import com.ocpsoft.pretty.faces.application.PrettyNavigationHandler;
-import com.ocpsoft.pretty.faces.servlet.PrettyFacesWrappedRequest;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.Authorization;
@@ -65,6 +61,7 @@ public class ShareBean
     private List<SelectItem> grantItems = new ArrayList<SelectItem>();
     private List<String> selectedRoles = new ArrayList<String>();
     private boolean sendEmail = true;
+    private UserGroup userGroup;
 
     public enum ShareType
     {
@@ -127,35 +124,16 @@ public class ShareBean
     private void initShareWithGroup()
     {
         String groupToShareWithUri = UrlHelper.getParameterValue("group");
-        if (groupToShareWithUri != null && isExistingUserGroup(groupToShareWithUri))
+        if (groupToShareWithUri != null)
         {
-            List<String> uri = new ArrayList<String>();
-            uri.add(groupToShareWithUri);
-            selectedRoles.add("READ");
-            shareTo(uri);
-            FacesContext context = FacesContext.getCurrentInstance();
-            NavigationHandler navigator = context.getApplication().getNavigationHandler();
-            navigator.handleNavigation(context, null, PrettyContext.getCurrentInstance().getCurrentViewId());
-            try
+            UserGroup group = retrieveGroup(groupToShareWithUri);
+            if (group != null && !hasReadGrants((List<Grant>)group.getGrants(), containerUri, profileUri))
             {
-                // reload the page
-                Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-                String id = ObjectHelper.getId(URI.create(containerUri));
-                if (containerUri.contains("/album/"))
-                {
-                    FacesContext.getCurrentInstance().getExternalContext().redirect(nav.getAlbumUrl() + id + "/share");
-                }
-                else if (containerUri.contains("/collection/"))
-                {
-                    FacesContext.getCurrentInstance().getExternalContext()
-                            .redirect(nav.getCollectionUrl() + id + "/share");
-                }
-            }
-            catch (Exception e)
-            {
-                logger.error("Error reloading the page", e);
+                userGroup = group;
             }
         }
+        else
+            userGroup = null;
     }
 
     /**
@@ -188,6 +166,17 @@ public class ShareBean
     public void share()
     {
         shareTo(checkInput());
+        init();
+    }
+
+    /**
+     * Called when user share with a group
+     */
+    public void shareWithGroup()
+    {
+        List<String> l = new ArrayList<String>();
+        l.add(userGroup.getId().toString());
+        shareTo(l);
         init();
     }
 
@@ -250,19 +239,6 @@ public class ShareBean
         {
             return false;
         }
-    }
-
-    /**
-     * True if the uri fits a real {@link UserGroup} and if the {@link UserGroup} has not already {@link Grant} for the
-     * current {@link container}
-     * 
-     * @param name
-     * @return
-     */
-    private boolean isExistingUserGroup(String uri)
-    {
-        UserGroup group = retrieveGroup(uri);
-        return group != null && !hasReadGrants((List<Grant>)group.getGrants(), containerUri, profileUri);
     }
 
     /**
@@ -719,5 +695,21 @@ public class ShareBean
     public void setSendEmail(boolean sendEmail)
     {
         this.sendEmail = sendEmail;
+    }
+
+    /**
+     * @return the userGroup
+     */
+    public UserGroup getUserGroup()
+    {
+        return userGroup;
+    }
+
+    /**
+     * @param userGroup the userGroup to set
+     */
+    public void setUserGroup(UserGroup userGroup)
+    {
+        this.userGroup = userGroup;
     }
 }

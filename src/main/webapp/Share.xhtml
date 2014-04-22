@@ -40,6 +40,29 @@
 						<h:outputText value="#{lbl.share_with_group}" />
 					</h:outputLink>
 				</div>
+				<ui:fragment rendered="#{ShareBean.userGroup != null}">
+					<div class="imj_metadataLabel">
+						<h:outputText value="#{lbl.share_with} #{ShareBean.userGroup.name}" />		
+					</div>
+					<h:form prependId="false">
+						<h:panelGroup layout="block" styleClass="imj_metadataValue">
+							<h:selectManyCheckbox styleClass="selectGrants" value="#{ShareBean.selectedGrants}" layout="lineDirection" onclick="document.getElementById('checkGrantsForGroup').click();">
+								<f:selectItems value="#{ShareBean.grantItems}" />
+							</h:selectManyCheckbox>
+							<h:commandButton id="checkGrantsForGroup" value="Check Grants" action="#{ShareBean.checkGrants(ShareBean.selectedGrants)}" styleClass="imj_noDisplay">
+								<f:ajax execute="@form" render="@form"/>
+							</h:commandButton>
+							<div class="imj_submitPanel">
+								<h:outputLink value="#{History.previousPage}" styleClass="imj_cancelButton" title="#{lbl.cancel}">
+									<h:outputText value="#{lbl.cancel}"/>
+								</h:outputLink>
+								<h:commandButton value="#{lbl.share}" action="#{ShareBean.shareWithGroup}" styleClass="imj_submitButton"/>
+								<h:selectBooleanCheckbox value="#{ShareBean.sendEmail}" id="selSendEmailToGroup"/>
+								<h:outputLabel for="selSendEmailToGroup" value="#{lbl.user_send_mail}"/>
+							</div>
+						</h:panelGroup>
+					</h:form>
+				</ui:fragment>
 				<div id="share" class="imj_noDisplay">
 					<h:form prependId="false">
 						<div class="imj_emailInput">
@@ -48,12 +71,9 @@
 								<h:inputTextarea id="emailInput" value="#{ShareBean.emailInput}" styleClass="imj_metadataValue"/>	
 							</div>
 						</div>
-						
-						<div class="imj_metadataLabel">
-							
-						</div>
+						<div class="imj_metadataLabel"></div>
 						<h:panelGroup layout="block" id="shareOptions" styleClass="imj_metadataValue">
-							<h:selectManyCheckbox id="selectedGrants" class="selectGrants" value="#{ShareBean.selectedGrants}" layout="lineDirection" onclick="document.getElementById('checkGrants').click();">
+							<h:selectManyCheckbox id="selectedGrants" styleClass="selectGrants" value="#{ShareBean.selectedGrants}" layout="lineDirection" onclick="document.getElementById('checkGrants').click();">
 								<f:selectItems value="#{ShareBean.grantItems}" />
 							</h:selectManyCheckbox>
 							<h:commandButton id="checkGrants" value="Check Grants" action="#{ShareBean.checkGrants(ShareBean.selectedGrants)}" styleClass="imj_noDisplay">

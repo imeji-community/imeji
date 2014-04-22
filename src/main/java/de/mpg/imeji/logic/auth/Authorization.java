@@ -31,6 +31,7 @@ package de.mpg.imeji.logic.auth;
 import java.net.URI;
 import java.util.List;
 
+import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.vo.Container;
@@ -93,7 +94,7 @@ public class Authorization
      */
     public boolean update(User user, String uri)
     {
-        if (hasGrant(user, toGrant(uri,getGrantTypeAccordingToObjectType(uri, GrantType.UPDATE))))
+        if (hasGrant(user, toGrant(uri, getGrantTypeAccordingToObjectType(uri, GrantType.UPDATE))))
             return true;
         return false;
     }
@@ -128,19 +129,6 @@ public class Authorization
         return false;
     }
 
-    /**
-     * Return true if the user can read the content of the object defined by the uri
-     * 
-     * @param user
-     * @param uri
-     * @return
-     */
-    public boolean readContent(User user, String uri)
-    {
-        if (hasGrant(user, toGrant(uri, GrantType.READ_CONTENT)))
-            return true;
-        return false;
-    }
 
     /**
      * Return true if the user can update the content of the object defined by the uri
@@ -268,22 +256,6 @@ public class Authorization
     }
 
     /**
-     * Return true if the user can read the content of the object
-     * 
-     * @param user
-     * @param uri
-     * @return
-     */
-    public boolean readContent(User user, Object obj)
-    {
-        if (isPublic(obj))
-            return true;
-        else if (hasGrant(user, toGrant(getRelevantURIForSecurity(obj, false), GrantType.READ_CONTENT)))
-            return true;
-        return false;
-    }
-
-    /**
      * Return true if the user can update the content of the object
      * 
      * @param user
@@ -367,13 +339,13 @@ public class Authorization
         if (obj instanceof Item)
             return ((Item)obj).getCollection().toString();
         else if (obj instanceof Container)
-            return ((Container)obj).getId().toString();
+            return create ? AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI : ((Container)obj).getId().toString();
         else if (obj instanceof CollectionListItem)
             return ((CollectionListItem)obj).getUri().toString();
         else if (obj instanceof AlbumBean)
             return ((AlbumBean)obj).getAlbum().getId().toString();
         else if (obj instanceof MetadataProfile)
-            return ((MetadataProfile)obj).getId().toString();
+            return create ? AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI : ((MetadataProfile)obj).getId().toString();
         else if (obj instanceof User)
             return ((User)obj).getId().toString();
         else if (obj instanceof URI)
@@ -397,8 +369,6 @@ public class Authorization
             {
                 case UPDATE:
                     return GrantType.UPDATE_CONTENT;
-                case READ:
-                    return GrantType.READ_CONTENT;
                 case DELETE:
                     return GrantType.DELETE_CONTENT;
                 case ADMIN:

@@ -122,7 +122,7 @@ public class ImejiRDF2Bean
      * @param list
      * @param user
      * @param opType
-     * @throws NotAllowedError 
+     * @throws NotAllowedError
      */
     private void checkSecurity(List<Object> list, User user) throws NotAllowedError
     {

@@ -91,7 +91,7 @@ public class SimpleSecurityQuery
             return "filter(" + containerFilter + (containerFilter.equals("") ? "" : "|| ")
                     + "?status=<http://imeji.org/terms/status#RELEASED>) .";
         else
-            return containerFilter.equals("") ? "" : "filter(" + containerFilter +") .";
+            return containerFilter.equals("") ? "filter(?status=<http://imeji.org/terms/status#RELEASED>)" : "filter(" + containerFilter +") .";
     }
 
     /**

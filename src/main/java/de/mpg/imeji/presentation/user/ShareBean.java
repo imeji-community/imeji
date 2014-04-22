@@ -6,17 +6,14 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import javax.faces.application.NavigationHandler;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.sparql.pfunction.library.container;
-import com.ocpsoft.pretty.PrettyContext;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.Authorization;
@@ -32,7 +29,6 @@ import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
-import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.user.util.EmailClient;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -73,6 +69,8 @@ public class ShareBean
      */
     public void initShareCollection()
     {
+        this.containerUri = null;
+        this.profileUri = null;
         isCollection = true;
         grantItems = sb.getShareCollectionGrantItems();
         CollectionImeji collection = ObjectLoader.loadCollectionLazy(
@@ -91,6 +89,8 @@ public class ShareBean
      */
     public void initShareAlbum()
     {
+        this.containerUri = null;
+        this.profileUri = null;
         this.grantItems = sb.getShareAlbumGrantItems();
         this.isCollection = false;
         Album album = ObjectLoader.loadAlbumLazy(ObjectHelper.getURI(Album.class, getId()), user);
@@ -123,6 +123,7 @@ public class ShareBean
      */
     private void initShareWithGroup()
     {
+        userGroup = null;
         String groupToShareWithUri = UrlHelper.getParameterValue("group");
         if (groupToShareWithUri != null)
         {
@@ -132,8 +133,6 @@ public class ShareBean
                 userGroup = group;
             }
         }
-        else
-            userGroup = null;
     }
 
     /**

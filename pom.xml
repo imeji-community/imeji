@@ -7,7 +7,7 @@
 	<version>1.4.0.1-SNAPSHOT</version>
 	<url>http://imeji.org</url>
 	<description>
-		http://colab.mpdl.mpg.de/mediawiki/imeji
+		http://imeji.org
 	</description>
 	<licenses>
 		<license>
@@ -606,7 +606,7 @@
 					encoding Cp1252, i.e. build is platform dependent! -->
 				<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 				<!-- the jdk version to use -->
-				<jdk.version>1.6</jdk.version>
+				<jdk.version>1.7</jdk.version>
 			</properties>
 		</profile>
 	</profiles>

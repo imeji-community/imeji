@@ -560,7 +560,7 @@ public class ShareBean
 
     public void setEmailInput(String emailInput)
     {
-        this.emailInput = emailInput;
+        this.emailInput = emailInput.toLowerCase();
     }
 
     public List<String> getEmailList()

@@ -127,7 +127,7 @@ public class ShareBean
         if (groupToShareWithUri != null)
         {
             UserGroup group = retrieveGroup(groupToShareWithUri);
-            if (group != null && !hasReadGrants((List<Grant>)group.getGrants(), containerUri, profileUri))
+            if (group != null)
             {
                 userGroup = group;
             }
@@ -153,11 +153,12 @@ public class ShareBean
     /**
      * Reset all values of the page
      */
-    public void reset()
+    public String reset()
     {
         setEmailInput("");
         emailList.clear();
         selectedRoles.clear();
+        return "pretty:";
     }
 
     /**
@@ -446,6 +447,14 @@ public class ShareBean
         }
     }
 
+    /**
+     * True if {@link List} of {@link Grant} allows to read the containeruri and the profile uri
+     * 
+     * @param userGrants
+     * @param containerUri
+     * @param profileUri
+     * @return
+     */
     private boolean hasReadGrants(List<Grant> userGrants, String containerUri, String profileUri)
     {
         List<Grant> grants = AuthorizationPredefinedRoles.read(containerUri, profileUri);

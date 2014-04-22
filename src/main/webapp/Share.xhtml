@@ -33,13 +33,15 @@
 		
 		<ui:fragment rendered="#{Auth.adminUri(ShareBean.containerUri)}">
 			<div class="imj_shareForm">
-				<div id="shareButtons" class="imj_submitPanel">
-					<h:commandButton value="#{lbl.share_new}" action="#" styleClass="imj_submitButton" type="button" onclick="$('#share').show();$('#shareButtons').hide();"/>
-					<h:outputText value=" #{lbl.or_big}" />
-					<h:outputLink value="#{Navigation.applicationUrl}usergroups?back=#{Navigation.collectionUrl}#{ShareBean.id}/share" styleClass="imj_submitButton">
-						<h:outputText value="#{lbl.share_with_group}" />
-					</h:outputLink>
-				</div>
+				<ui:fragment rendered="#{ShareBean.userGroup == null}">
+					<div id="shareButtons" class="imj_submitPanel">
+						<h:commandButton value="#{lbl.share_new}" action="#" styleClass="imj_submitButton" type="button" onclick="$('#share').show();$('#shareButtons').hide();"/>
+						<h:outputText value=" #{lbl.or_big}" />
+						<h:outputLink value="#{Navigation.applicationUrl}usergroups?back=#{Navigation.collectionUrl}#{ShareBean.id}/share" styleClass="imj_submitButton">
+							<h:outputText value="#{lbl.share_with_group}" />
+						</h:outputLink>
+					</div>
+				</ui:fragment>
 				<ui:fragment rendered="#{ShareBean.userGroup != null}">
 					<div class="imj_metadataLabel">
 						<h:outputText value="#{lbl.share_with} #{ShareBean.userGroup.name}" />		
@@ -53,9 +55,7 @@
 								<f:ajax execute="@form" render="@form"/>
 							</h:commandButton>
 							<div class="imj_submitPanel">
-								<h:outputLink value="#{History.previousPage}" styleClass="imj_cancelButton" title="#{lbl.cancel}">
-									<h:outputText value="#{lbl.cancel}"/>
-								</h:outputLink>
+								<h:commandButton value="#{lbl.cancel}" action="#{ShareBean.reset}" styleClass="imj_cancelButton"/>
 								<h:commandButton value="#{lbl.share}" action="#{ShareBean.shareWithGroup}" styleClass="imj_submitButton"/>
 								<h:selectBooleanCheckbox value="#{ShareBean.sendEmail}" id="selSendEmailToGroup"/>
 								<h:outputLabel for="selSendEmailToGroup" value="#{lbl.user_send_mail}"/>
@@ -81,9 +81,7 @@
 							</h:commandButton>
 						</h:panelGroup>
 						<div class="imj_submitPanel">
-							<h:outputLink value="#{History.previousPage}" styleClass="imj_cancelButton" title="#{lbl.cancel}">
-								<h:outputText value="#{lbl.cancel}"/>
-							</h:outputLink>
+								<h:commandButton value="#{lbl.cancel}" action="#{ShareBean.reset}" styleClass="imj_cancelButton"/>
 							<h:commandButton value="#{lbl.share}" action="#{ShareBean.share}" styleClass="imj_submitButton"/>
 							<h:selectBooleanCheckbox value="#{ShareBean.sendEmail}" id="selSendEmail"/>
 							<h:outputLabel for="selSendEmail" value="#{lbl.user_send_mail}"/>

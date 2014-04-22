@@ -73,8 +73,8 @@ public class CollectionListItem
             for (Person p : collection.getMetadata().getPersons())
             {
                 if (!"".equals(authors))
-                    authors += ", ";
-                authors += p.getFamilyName() + " " + p.getGivenName();
+                    authors += "; ";
+                authors +=  p.getFamilyName() + ", " +  p.getGivenName();
             }
             profileURI = collection.getProfile();
             uri = collection.getId();

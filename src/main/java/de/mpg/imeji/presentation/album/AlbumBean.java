@@ -410,9 +410,9 @@ public class AlbumBean extends ContainerBean
         {
             if (!"".equals(personString))
             {
-                personString += ", ";
+                personString += "; ";
             }
-            personString += p.getFamilyName() + " " + p.getGivenName();
+            personString +=  p.getFamilyName() + ", " +  p.getGivenName();
         }
         return personString;
     }

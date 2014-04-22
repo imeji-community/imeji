@@ -518,7 +518,7 @@ public class UploadBean extends CollectionBean
             if (collection != null && getCollection().getId() != null)
             {
                 ItemController ic = new ItemController(sessionBean.getUser());
-                collectionSize = ic.countContainerSize(collection.getId());
+                collectionSize = ic.countContainerSize(collection);
             }
         }
         else

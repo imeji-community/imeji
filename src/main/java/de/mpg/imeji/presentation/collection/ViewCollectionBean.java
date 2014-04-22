@@ -54,10 +54,9 @@ public class ViewCollectionBean extends CollectionBean
             setCollection(ObjectLoader.loadCollectionLazy(ObjectHelper.getURI(CollectionImeji.class, id), user));
             if (getCollection() != null && getCollection().getId() != null)
             {
-                ItemController ic = new ItemController(user);
-                ic.findContainerItems(getCollection(), user, 13);
+                findItems(user, 13);
                 loadItems(user);
-                setSize(ic.countContainerSize(getCollection().getId()));
+                countItems(user);
             }
             if (getCollection() != null)
             {

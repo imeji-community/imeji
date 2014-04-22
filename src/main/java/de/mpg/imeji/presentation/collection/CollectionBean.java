@@ -46,7 +46,6 @@ public abstract class CollectionBean extends ContainerBean
     private String id;
     private String profileId;
     private boolean selected;
-    private int size = 0;
     private Navigation navigation;
 
     /**
@@ -210,26 +209,6 @@ public abstract class CollectionBean extends ContainerBean
         else
             sessionBean.getSelectedCollections().remove(collection.getId());
         this.selected = selected;
-    }
-
-    /**
-     * setter
-     * 
-     * @param size
-     */
-    public void setSize(int size)
-    {
-        this.size = size;
-    }
-
-    /**
-     * getter (get size of collection)
-     * 
-     * @return
-     */
-    public int getSize()
-    {
-        return size;
     }
 
     /**

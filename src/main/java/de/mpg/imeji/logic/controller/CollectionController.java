@@ -22,6 +22,7 @@ import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
@@ -325,4 +326,6 @@ public class CollectionController extends ImejiController
         imejiRDF2Bean.loadLazy(J2JHelper.cast2ObjectList(cols), user);
         return cols;
     }
+
+   
 }

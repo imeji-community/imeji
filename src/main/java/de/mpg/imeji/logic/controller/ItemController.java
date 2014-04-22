@@ -32,6 +32,7 @@ import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.collection.CollectionListItem;
 import de.mpg.j2j.helper.J2JHelper;
 
 /**
@@ -377,6 +378,56 @@ public class ItemController extends ImejiController
             c = (CollectionImeji)loadContainerItems(c, user, -1, 0);
             cc.update(c);
         }
+    }
+
+    /**
+     * load items of a container. Perform a search to load all items: is faster than to read the complete container
+     * 
+     * @param c
+     * @param user
+     */
+    public Container loadContainerItems(Container c, User user, int limit, int offset)
+    {
+        ItemController ic = new ItemController(user);
+        List<String> newUris = ic.search(c.getId(), null, null, null).getResults();
+        c.getImages().clear();
+        for (String s : newUris)
+        {
+            c.getImages().add(URI.create(s));
+        }
+        return c;
+    }
+
+    /**
+     * Load items from a {@link Container} without any ordering. This is faster than loadContainerItem Method.
+     * 
+     * @param c
+     * @param size
+     * @return
+     */
+    public Container findContainerItems(Container c, User user, int size)
+    {
+        String q = c instanceof CollectionImeji ? SPARQLQueries.selectCollectionItems(c.getId(), user, size) : SPARQLQueries
+                .selectAlbumItems(c.getId(), user, size);
+        c.getImages().clear();
+        for (String s : ImejiSPARQL.exec(q, null))
+        {
+            c.getImages().add(URI.create(s));
+        }
+        return c;
+    }
+
+    /**
+     * Return the size of a {@link Container}
+     * 
+     * @param c
+     * @return
+     */
+    public int countContainerSize(Container c)
+    {
+        String q = c instanceof CollectionImeji ? SPARQLQueries.countCollectionSize(c.getId()) : SPARQLQueries
+                .countAlbumSize(c.getId());
+        return ImejiSPARQL.execCount(q, null);
     }
 
     /**

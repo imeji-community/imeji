@@ -98,7 +98,7 @@ public class CollectionListItem
                 }
             }
             // initializations
-            initSize(user);
+            initSize(collection, user);
             initSelected();
         }
         catch (Exception e)
@@ -112,10 +112,10 @@ public class CollectionListItem
      * 
      * @param user
      */
-    private void initSize(User user)
+    private void initSize(CollectionImeji collection, User user)
     {
         ItemController ic = new ItemController(user);
-        size = ic.countContainerSize(uri);
+        size = ic.countContainerSize(collection);
     }
 
     /**

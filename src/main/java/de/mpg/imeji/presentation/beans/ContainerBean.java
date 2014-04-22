@@ -58,6 +58,7 @@ public abstract class ContainerBean
 {
     private int authorPosition;
     private int organizationPosition;
+    private int size;
     private List<Item> items;
 
     /**
@@ -99,9 +100,33 @@ public abstract class ContainerBean
      * @return
      */
     protected abstract String getErrorMessageNoAuthor();
-    
+
     /**
-     * Load the {@link Item} of the start page
+     * Find the first {@link Item} of the current {@link Container} (fast method)
+     * 
+     * @param user
+     * @param size
+     */
+    protected void findItems(User user, int size)
+    {
+        ItemController ic = new ItemController(user);
+        ic.findContainerItems(getContainer(), user, size);
+    }
+
+    /**
+     * Count the size the {@link Container}
+     * 
+     * @param user
+     * @return
+     */
+    protected void countItems(User user)
+    {
+        ItemController ic = new ItemController(user);
+        size = ic.countContainerSize(getContainer());
+    }
+
+    /**
+     * Load the {@link Item} of the {@link Container}
      */
     protected void loadItems(User user)
     {
@@ -127,7 +152,7 @@ public abstract class ContainerBean
     public User getCreator() throws Exception
     {
         User user = null;
-        UserController uc = new UserController(Imeji.adminUser);;
+        UserController uc = new UserController(Imeji.adminUser);
         user = uc.retrieve(getContainer().getCreatedBy());
         return user;
     }
@@ -246,5 +271,21 @@ public abstract class ContainerBean
     public void setItems(List<Item> items)
     {
         this.items = items;
+    }
+
+    /**
+     * @return the size
+     */
+    public int getSize()
+    {
+        return size;
+    }
+
+    /**
+     * @param size the size to set
+     */
+    public void setSize(int size)
+    {
+        this.size = size;
     }
 }

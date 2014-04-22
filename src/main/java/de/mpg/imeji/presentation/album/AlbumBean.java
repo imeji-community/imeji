@@ -3,7 +3,6 @@
  */
 package de.mpg.imeji.presentation.album;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,9 +14,7 @@ import javax.faces.model.SelectItem;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.controller.AlbumController;
-import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.ingest.vo.Items;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Container;
@@ -32,7 +29,6 @@ import de.mpg.imeji.presentation.image.ThumbnailBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CommonUtils;
-import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
@@ -68,7 +64,7 @@ public class AlbumBean extends ContainerBean
     private String description = "";
     private String descriptionFull = null;
     private ThumbnailBean thumbnail;
-    private Navigation navigation;
+    private Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
 
     /**
      * Construct an {@link AlbumBean} from an {@link Album}
@@ -78,35 +74,27 @@ public class AlbumBean extends ContainerBean
     public AlbumBean(Album album)
     {
         this.album = album;
-        sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
         this.id = ObjectHelper.getId(album.getId());
+        // album = ObjectLoader.loadAlbumLazy(ObjectHelper.getURI(Album.class, id), sessionBean.getUser());
+        sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         if (sessionBean.getActiveAlbum() != null && sessionBean.getActiveAlbum().getId().equals(album.getId()))
         {
             active = true;
         }
-        AlbumController ac = new AlbumController();
-        this.album = (Album)ac.loadContainerItems(album, sessionBean.getUser(), -1, 0);
-        loadItems(sessionBean.getUser());
-        description = album.getMetadata().getDescription();
-        descriptionFull = description;
-        description = CommonUtils.removeTags(description);
-        if (description != null && description.length() > DESCRIPTION_MAX_SIZE)
+        if (album != null && album.getId() != null)
         {
-            description = description.substring(0, DESCRIPTION_MAX_SIZE) + "...";
-        }
-        // Init the thumbnail
-        if (!album.getImages().isEmpty())
-        {
-            ItemController ic = new ItemController();
-            try
+            findItems(sessionBean.getUser(), 1);
+            loadItems(sessionBean.getUser());
+            countItems(sessionBean.getUser());
+            description = album.getMetadata().getDescription();
+            descriptionFull = description;
+            description = CommonUtils.removeTags(description);
+            if (description != null && description.length() > DESCRIPTION_MAX_SIZE)
             {
-                thumbnail = new ThumbnailBean(ic.retrieve(album.getImages().iterator().next(), sessionBean.getUser()));
+                description = description.substring(0, DESCRIPTION_MAX_SIZE) + "...";
             }
-            catch (Exception e)
-            {
-                logger.error("Error loading thumbnail of album", e);
-            }
+            if (!getItems().isEmpty())
+                thumbnail = new ThumbnailBean(getItems().get(0));
         }
     }
 
@@ -123,29 +111,20 @@ public class AlbumBean extends ContainerBean
      */
     public void initView()
     {
-        navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-        try
+        if (id != null)
         {
-            if (id != null)
+            album = ObjectLoader.loadAlbumLazy(ObjectHelper.getURI(Album.class, id), sessionBean.getUser());
+            findItems(sessionBean.getUser(), 13);
+            loadItems(sessionBean.getUser());
+            countItems(sessionBean.getUser());
+            if (album != null)
             {
-                Album a = ObjectLoader.loadAlbumLazy(ObjectHelper.getURI(Album.class, id), sessionBean.getUser());
-                ItemController ic = new ItemController(sessionBean.getUser());
-                ic.loadContainerItems(a, sessionBean.getUser(), 1, 0);
-                setAlbum(a);
-                if (album != null)
+                if (sessionBean.getActiveAlbum() != null && sessionBean.getActiveAlbum().getId().equals(album.getId()))
                 {
-                    if (sessionBean.getActiveAlbum() != null
-                            && sessionBean.getActiveAlbum().getId().equals(album.getId()))
-                    {
-                        active = true;
-                        sessionBean.setActiveAlbum(album);
-                    }
+                    active = true;
+                    sessionBean.setActiveAlbum(album);
                 }
             }
-        }
-        catch (Exception e)
-        {
-            logger.error("Error init album view", e);
         }
     }
 
@@ -295,18 +274,6 @@ public class AlbumBean extends ContainerBean
     }
 
     /**
-     * return thr number of item in the album
-     * 
-     * @return
-     */
-    public int getSize()
-    {
-        if (album != null)
-            return album.getImages().size();
-        return 0;
-    }
-
-    /**
      * True if the current user is the owner of the albun
      * 
      * @return
@@ -319,27 +286,6 @@ public class AlbumBean extends ContainerBean
         }
         else
             return false;
-    }
-
-    /**
-     * Load the 5 first {@link Items} of the {@link Album} as {@link ThumbnailBean}
-     * 
-     * @return
-     * @throws Exception
-     */
-    public List<ThumbnailBean> getThumbnails() throws Exception
-    {
-        ItemController ic = new ItemController(sessionBean.getUser());
-        if (album != null)
-        {
-            List<String> uris = new ArrayList<String>();
-            for (URI uri : album.getImages())
-            {
-                uris.add(uri.toString());
-            }
-            return ImejiFactory.imageListToThumbList(ic.loadItems(uris, 13, 0));
-        }
-        return null;
     }
 
     /**

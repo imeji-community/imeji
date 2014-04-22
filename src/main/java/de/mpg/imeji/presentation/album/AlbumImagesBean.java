@@ -169,8 +169,9 @@ public class AlbumImagesBean extends ImagesBean
         }
         else
         {
+            ItemController ic = new ItemController();
+            album = (Album)ic.loadContainerItems(album, session.getUser(), -1, 0);
             AlbumController ac = new AlbumController();
-            album = (Album)ac.loadContainerItems(album, session.getUser(), -1, 0);
             int deletedCount = ac.removeFromAlbum(album, uris, session.getUser());
             BeanHelper.info(deletedCount + " " + session.getMessage("success_album_remove_images"));
         }

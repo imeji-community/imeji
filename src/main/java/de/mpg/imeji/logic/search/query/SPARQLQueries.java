@@ -301,11 +301,24 @@ public class SPARQLQueries
      * @param uri
      * @return
      */
-    public static String countContainerSize(URI uri)
+    public static String countCollectionSize(URI uri)
     {
         return "SELECT count(DISTINCT ?s) WHERE {?s <http://imeji.org/terms/collection> <"
                 + uri.toString()
                 + "> . ?s <http://imeji.org/terms/status> ?status . FILTER (?status!=<http://imeji.org/terms/status#WITHDRAWN>)}";
+    }
+
+    /**
+     * Count all {@link Item} of a {@link Album}
+     * 
+     * @param uri
+     * @return
+     */
+    public static String countAlbumSize(URI uri)
+    {
+        return "SELECT count(DISTINCT ?s) WHERE {<"
+                + uri.toString()
+                + "> <http://imeji.org/terms/item> ?s . ?s <http://imeji.org/terms/status> ?status . FILTER (?status!=<http://imeji.org/terms/status#WITHDRAWN>)}";
     }
 
     /**
@@ -315,7 +328,7 @@ public class SPARQLQueries
      * @param limit
      * @return
      */
-    public static String selectContainerItem(URI uri, User user, int limit)
+    public static String selectCollectionItems(URI uri, User user, int limit)
     {
         if (user == null)
             return "SELECT DISTINCT ?s WHERE {?s <http://imeji.org/terms/collection> <"
@@ -325,6 +338,29 @@ public class SPARQLQueries
         return "SELECT DISTINCT ?s WHERE {?s <http://imeji.org/terms/collection> <"
                 + uri.toString()
                 + "> . ?s <http://imeji.org/terms/status> ?status . OPTIONAL{<"
+                + user.getId().toString()
+                + "> <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> ?c} . filter(bound(?g) || ?status=<http://imeji.org/terms/status#RELEASED>) . FILTER (?status!=<http://imeji.org/terms/status#WITHDRAWN>)} LIMIT "
+                + limit;
+    }
+
+    /**
+     * Return all the {@link Item} of a {@link Album}
+     * 
+     * @param uri
+     * @param user
+     * @param limit
+     * @return
+     */
+    public static String selectAlbumItems(URI uri, User user, int limit)
+    {
+        if (user == null)
+            return "SELECT DISTINCT ?s WHERE {<"
+                    + uri.toString()
+                    + "> <http://imeji.org/terms/item> ?s . ?s <http://imeji.org/terms/status> ?status .  filter(?status=<http://imeji.org/terms/status#RELEASED>) . FILTER (?status!=<http://imeji.org/terms/status#WITHDRAWN>)} LIMIT "
+                    + limit;
+        return "SELECT DISTINCT ?s WHERE {<"
+                + uri.toString()
+                + "> <http://imeji.org/terms/item> ?s . ?s <http://imeji.org/terms/status> ?status . OPTIONAL{<"
                 + user.getId().toString()
                 + "> <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> ?c} . filter(bound(?g) || ?status=<http://imeji.org/terms/status#RELEASED>) . FILTER (?status!=<http://imeji.org/terms/status#WITHDRAWN>)} LIMIT "
                 + limit;

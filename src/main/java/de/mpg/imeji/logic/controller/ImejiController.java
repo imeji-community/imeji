@@ -124,53 +124,9 @@ public abstract class ImejiController
         properties.setStatus(Status.WITHDRAWN);
     }
 
-    /**
-     * load items of a container. Perform a search to load all items: is faster than to read the complete container
-     * 
-     * @param c
-     * @param user
-     */
-    public Container loadContainerItems(Container c, User user, int limit, int offset)
-    {
-        ItemController ic = new ItemController(user);
-        List<String> newUris = ic.search(c.getId(), null, null, null).getResults();
-        c.getImages().clear();
-        for (String s : newUris)
-        {
-            c.getImages().add(URI.create(s));
-        }
-        return c;
-    }
+   
 
-    /**
-     * Load items from a {@link Container} without any ordering. This is faster than loadContainerItem Method.
-     * 
-     * @param c
-     * @param size
-     * @return
-     */
-    public Container findContainerItems(Container c, User user, int size)
-    {
-        List<String> newUris = ImejiSPARQL.exec(SPARQLQueries.selectContainerItem(c.getId(), user, size), null);
-        c.getImages().clear();
-        for (String s : newUris)
-        {
-            c.getImages().add(URI.create(s));
-        }
-        return c;
-    }
-
-    /**
-     * Return the size of a {@link Container}
-     * 
-     * @param c
-     * @return
-     */
-    public int countContainerSize(URI uri)
-    {
-        return ImejiSPARQL.execCount(SPARQLQueries.countContainerSize(uri), null);
-    }
-
+  
     /**
      * True if at least one {@link Item} is locked by another {@link User}
      * 

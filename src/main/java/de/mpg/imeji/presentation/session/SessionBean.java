@@ -491,21 +491,21 @@ public class SessionBean
     public List<SelectItem> getShareCollectionGrantItems()
     {
         List<SelectItem> itemList = new ArrayList<SelectItem>();
-//        itemList.add(new SelectItem(ShareType.READ, getLabel("collection_share_read")));
-//        itemList.add(new SelectItem(ShareType.UPLOAD, getLabel("collection_share_image_upload")));
-//        itemList.add(new SelectItem(ShareType.EDIT, getLabel("collection_share_image_edit")));
-//        itemList.add(new SelectItem(ShareType.DELETE, getLabel("collection_share_image_delete")));
-//        itemList.add(new SelectItem(ShareType.EDIT_COLLECTION, getLabel("collection_share_collection_edit")));
-//        itemList.add(new SelectItem(ShareType.EDIT_PROFILE, getLabel("collection_share_profile_edit")));
-//        itemList.add(new SelectItem(ShareType.ADMIN, getLabel("collection_share_admin")));
+        itemList.add(new SelectItem(ShareType.READ, getLabel("collection_share_read")));
+        itemList.add(new SelectItem(ShareType.CREATE, getLabel("collection_share_image_upload")));
+        itemList.add(new SelectItem(ShareType.EDIT_ITEM, getLabel("collection_share_image_edit")));
+        itemList.add(new SelectItem(ShareType.DELETE, getLabel("collection_share_image_delete")));
+        itemList.add(new SelectItem(ShareType.EDIT_CONTAINER, getLabel("collection_share_collection_edit")));
+        itemList.add(new SelectItem(ShareType.EDIT_PROFILE, getLabel("collection_share_profile_edit")));
+        itemList.add(new SelectItem(ShareType.ADMIN, getLabel("collection_share_admin")));
         
-        itemList.add(new SelectItem(ShareType.READ));
-        itemList.add(new SelectItem(ShareType.CREATE));
-        itemList.add(new SelectItem(ShareType.EDIT_ITEM));
-        itemList.add(new SelectItem(ShareType.DELETE));
-        itemList.add(new SelectItem(ShareType.EDIT_CONTAINER));
-        itemList.add(new SelectItem(ShareType.EDIT_PROFILE));
-        itemList.add(new SelectItem(ShareType.ADMIN));
+//        itemList.add(new SelectItem(ShareType.READ));
+//        itemList.add(new SelectItem(ShareType.CREATE));
+//        itemList.add(new SelectItem(ShareType.EDIT_ITEM));
+//        itemList.add(new SelectItem(ShareType.DELETE));
+//        itemList.add(new SelectItem(ShareType.EDIT_CONTAINER));
+//        itemList.add(new SelectItem(ShareType.EDIT_PROFILE));
+//        itemList.add(new SelectItem(ShareType.ADMIN));
         
         return itemList;
     }

@@ -79,10 +79,12 @@ All rights reserved. Use is subject to license terms.
 			<h:outputText styleClass="imj_metaMenuSeparator" value="&#160;"/>
 			
 			<!-- Language -->
-			<h:form id="langForm">
-				<h:selectOneMenu value="#{Internationalization.currentLanguage}" onchange="submit();" valueChangeListener="#{Internationalization.currentlanguageListener}" styleClass="imj_metaMenuItem">
+			<h:form id="langForm" onsubmit="setTimeout(function () { window.location.reload(); }, 10);">
+				<h:selectOneMenu  value="#{Internationalization.currentLanguage}" onchange="document.getElementById('Header:langForm:submitLang').click();" valueChangeListener="#{Internationalization.currentlanguageListener}" styleClass="imj_metaMenuItem">
 					<f:selectItems value="#{Internationalization.internationalizedLanguages}"/>
 				</h:selectOneMenu>
+				<h:commandButton id="submitLang" action="#{Internationalization.changeLanguage}" value="Change language" styleClass="imj_noDisplay">
+				</h:commandButton>
 			</h:form>
 		</h:panelGroup>
 	</h:panelGroup>

@@ -14,6 +14,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
+import com.ocpsoft.pretty.PrettyContext;
+
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CookieUtils;
@@ -203,7 +205,17 @@ public class InternationalizationBean
         if (event != null && !event.getNewValue().toString().equals(event.getOldValue().toString()))
         {
             changeLanguage(event.getNewValue().toString());
+            PrettyContext.getCurrentInstance().getRequestURL().toString();
         }
+    }
+    
+    /**
+     * Method called when the user changed the language. The new language is setted via the listener
+     * @return
+     */
+    public String changeLanguage()
+    {
+        return "pretty:";
     }
 
     /**

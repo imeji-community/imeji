@@ -14,6 +14,7 @@ import javax.faces.model.SelectItem;
 import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.sparql.pfunction.library.container;
+import com.ocpsoft.pretty.PrettyContext;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.Authorization;
@@ -26,9 +27,11 @@ import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Grant;
+import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
+import de.mpg.imeji.presentation.history.PageURIHelper;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.user.util.EmailClient;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -45,6 +48,7 @@ public class ShareBean
     private User user;
     private String id;
     private String containerUri;
+    private String itemUri;
     private boolean isCollection;
     private String title;
     private String profileUri;
@@ -58,6 +62,12 @@ public class ShareBean
     private List<String> selectedRoles = new ArrayList<String>();
     private boolean sendEmail = true;
     private UserGroup userGroup;
+    private SharedObjectType type;
+
+    public enum SharedObjectType
+    {
+        COLLECTION, ALBUM, ITEM
+    }
 
     public enum ShareType
     {
@@ -71,8 +81,9 @@ public class ShareBean
     {
         this.containerUri = null;
         this.profileUri = null;
-        isCollection = true;
-        grantItems = sb.getShareCollectionGrantItems();
+        this.isCollection = true;
+        this.type = SharedObjectType.COLLECTION;
+        this.grantItems = sb.getShareCollectionGrantItems();
         CollectionImeji collection = ObjectLoader.loadCollectionLazy(
                 ObjectHelper.getURI(CollectionImeji.class, getId()), user);
         if (collection != null)
@@ -89,6 +100,7 @@ public class ShareBean
      */
     public void initShareAlbum()
     {
+        this.type = SharedObjectType.ALBUM;
         this.containerUri = null;
         this.profileUri = null;
         this.grantItems = sb.getShareAlbumGrantItems();
@@ -100,6 +112,27 @@ public class ShareBean
             this.title = album.getMetadata().getTitle();
         }
         init();
+    }
+
+    /**
+     * Loaded when the shre component is called from the item page
+     * 
+     * @return
+     */
+    public String getInitShareItem()
+    {
+        this.type = SharedObjectType.ITEM;
+        this.grantItems = sb.getShareItemGrantItems();
+        URI itemURI = PageURIHelper.extractId(PrettyContext.getCurrentInstance().getRequestURL().toString());
+        Item item = ObjectLoader.loadItem(itemURI, user);
+        if (item != null)
+        {
+            this.itemUri = itemURI.toString();
+            this.containerUri = item.getCollection().toString();
+            this.title = item.getFilename();
+        }
+        init();
+        return "";
     }
 
     /**

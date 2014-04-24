@@ -38,10 +38,8 @@ public class InternationalizationBean
     private List<SelectItem> internationalizedLanguages;
     // The languages supported in imeji (defined in the properties)
     private String[] supportedLanguages;
-    
     public static final String LABEL_BUNDLE = "labels";
     public static final String MESSAGES_BUNDLE = "messages";
-    
     private Locale userLocale = FacesContext.getCurrentInstance().getExternalContext().getRequestLocale();
 
     /**
@@ -84,9 +82,9 @@ public class InternationalizationBean
         languages = new ArrayList<SelectItem>();
         languages.addAll(getsupportedLanguages(true));
         // add a separator
-        //languages.add(new SelectItem(null, "--"));
+        // languages.add(new SelectItem(null, "--"));
         // Add the other languages (non supported)
-        //languages.addAll(getsupportedLanguages(false));
+        // languages.addAll(getsupportedLanguages(false));
         // init the string of all languages
         for (SelectItem s : languages)
             languagesAsString += s.getValue() + "," + s.getLabel() + "|";
@@ -137,7 +135,8 @@ public class InternationalizationBean
 
     /**
      * Return: <br/>
-     * - the supported languages (i.e languages with a translation for labels and messages) if the parameter is set to true <br/>
+     * - the supported languages (i.e languages with a translation for labels and messages) if the parameter is set to
+     * true <br/>
      * - the non supported languages if the parameter is set to false
      * 
      * @param supported
@@ -148,13 +147,11 @@ public class InternationalizationBean
         List<SelectItem> l = new ArrayList<SelectItem>();
         for (SelectItem iso : isolanguages)
         {
-
-        	if (supported && isSupported(iso.getValue().toString())
+            if (supported && isSupported(iso.getValue().toString())
                     || (!supported && !isSupported(iso.getValue().toString())))
-		    {
-        		l.add(iso);
-		    }
-  
+            {
+                l.add(iso);
+            }
         }
         return l;
     }
@@ -208,9 +205,10 @@ public class InternationalizationBean
             PrettyContext.getCurrentInstance().getRequestURL().toString();
         }
     }
-    
+
     /**
      * Method called when the user changed the language. The new language is setted via the listener
+     * 
      * @return
      */
     public String changeLanguage()
@@ -285,40 +283,4 @@ public class InternationalizationBean
     {
         return languagesAsString;
     }
-    
-//    public List<SelectItem> getShareCollectionGrantItems()
-//    {
-//    	List<SelectItem> itemList = new ArrayList<SelectItem>();
-//    			
-//    	itemList.add(new SelectItem("read", getLabel("")));
-//    	itemList.add(new SelectItem("upload", getLabel("")));
-//    	itemList.add(new SelectItem("edit", getLabel("")));
-//    	itemList.add(new SelectItem("delete",getLabel("")));
-//    	itemList.add(new SelectItem("edit_collection", getLabel("")));
-//    	itemList.add(new SelectItem("edit_profile", getLabel("")));
-//    	itemList.add(new SelectItem("admin", getLabel("")));
-//    	
-//    	return itemList;
-//    }
-//    
-//    
-//	public static String getLabel (String name)
-//    {
-//    	return getResource("label", name);
-//    }
-//	
-//	 public static String getResource (String bundle, String name)
-//    {
-//    	try{
-//    	Application application = FacesContext.getCurrentInstance().getApplication();
-//	    InternationalizationBean iBean = (InternationalizationBean) application.getVariableResolver().resolveVariable(FacesContext.getCurrentInstance(), "internationalizationHelper");
-//	    ResourceBundle rBundle = ResourceBundle.getBundle(bundle, iBean.getUserLocale());
-//	    return rBundle.getString(name);
-//    	}
-//    	catch(Exception e)
-//    	{
-//    		//logger.warn("Value: " + name + " not found in resource bundle: " + bundle);
-//    		return name;
-//    	}
-//    }
 }

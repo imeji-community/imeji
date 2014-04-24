@@ -2,7 +2,8 @@
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core">
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:imjc="http://java.sun.com/jsf/composite/components">
 
 	<!-- MediaDisplayContainer - START -->
 	<h:panelGroup layout="block" styleClass="imj_mediaDisplayContainer">
@@ -72,6 +73,13 @@
 	
 		<!-- MetaDataTypes ListHeader - show media meta data, tech., other -->
 		<div class="imj_listHeader">
+			<h:outputLink id="lnkShareItem" styleClass="imj_active" value="#{imageBean.pageUrl}?tab=share" rendered="#{imageBean.tab == 'share'}">
+				<h:outputText value="#{lbl.share}"/>
+			</h:outputLink>
+			<h:outputLink id="lnkShareItem2" value="#{imageBean.pageUrl}?tab=share" rendered="#{imageBean.tab != 'share'}">
+				<h:outputText value="#{lbl.share}"/>
+			</h:outputLink>
+			<h:panelGroup styleClass="imj_separator"/>
 			<h:outputLink id="lnkViewItemUtilPage" styleClass="imj_active" value="#{imageBean.pageUrl}?tab=util" rendered="#{imageBean.tab == 'util'}">
 				<h:outputText value="#{lbl.view_util}"/>
 			</h:outputLink>
@@ -86,10 +94,10 @@
 				<h:outputText value="#{lbl.view_tech_md}"/>
 			</h:outputLink>
 			<h:panelGroup styleClass="imj_separator"/>
-			<h:outputLink id="lnkViewItemPage" styleClass="imj_active" value="#{imageBean.pageUrl}" rendered="#{imageBean.tab != 'techmd' and imageBean.tab != 'util'}">
+			<h:outputLink id="lnkViewItemPage" styleClass="imj_active" value="#{imageBean.pageUrl}" rendered="#{imageBean.tab == null}">
 				<h:outputText value="#{lbl.view_md}"/>
 			</h:outputLink>
-			<h:outputLink id="lnkViewItemPage2" value="#{imageBean.pageUrl}" rendered="#{imageBean.tab == 'techmd' or imageBean.tab == 'util'}">
+			<h:outputLink id="lnkViewItemPage2" value="#{imageBean.pageUrl}" rendered="#{imageBean.tab != null}">
 				<h:outputText value="#{lbl.view_md}"/>
 			</h:outputLink>
 			<h:outputText value="#{imageBean.edit.checkToggleState}"/>
@@ -97,7 +105,7 @@
 		
 		<!-- MetaDataList - LIST BODY START -->
 		<h:panelGroup id="metadata" layout="block" styleClass="imj_listBody">
-			<ui:fragment rendered="#{imageBean.tab != 'techmd' and imageBean.tab != 'util'}">
+			<ui:fragment rendered="#{imageBean.tab == null}">
 				<h:form>
 					<!-- For future - panel / sub action menu - link to edit metadata -->
 					<h:panelGroup layout="block" styleClass="imj_metadataSubPanel">
@@ -342,7 +350,12 @@
 					
 					
 				</h:panelGroup>
-			</ui:fragment>		
+			</ui:fragment>
+			
+			<ui:fragment rendered="#{imageBean.tab == 'share'}">
+				<h:outputText value="#{ShareBean.initShareItem}" />
+				<imjc:share />
+			</ui:fragment>
 		
 			<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/qrcode.js"> </script>
 			<script type="text/javascript">

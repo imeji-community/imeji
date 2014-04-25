@@ -90,7 +90,15 @@ public class PropertyBean
         }
     }
 
-    /**
+    public String getAppName() {
+		return appName;
+	}
+
+	public void setAppName(String appName) {
+		this.appName = appName;
+	}
+
+	/**
      * Read in the property the base Uri
      */
     private void readBaseUri()

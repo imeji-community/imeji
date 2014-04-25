@@ -39,7 +39,8 @@ public class User implements Serializable
     private String encryptedPassword;
     @j2jList("http://imeji.org/terms/grant")
     private Collection<Grant> grants = new ArrayList<Grant>();
-    private URI id;
+
+	private URI id;
     private List<UserGroup> groups = new ArrayList<>();
 
     /**
@@ -55,7 +56,9 @@ public class User implements Serializable
         clone.encryptedPassword = encryptedPassword;
         clone.grants = new ArrayList<Grant>();
         for (Grant g : grants)
+        {
             clone.grants.add(new Grant(g.asGrantType(), g.getGrantFor()));
+        }
         clone.name = name;
         clone.nick = nick;
         return clone;
@@ -112,6 +115,20 @@ public class User implements Serializable
         return grants;
     }
 
+    public Collection<Grant> getGrantsWithoutUser() {
+    	
+        Collection<Grant> grantsWithoutUser = new ArrayList<Grant>();
+    	for (Grant g : grants)
+    	{
+            if (!g.getGrantFor().getPath().contains("user"))
+            {
+            	grantsWithoutUser.add(new Grant(g.asGrantType(), g.getGrantFor()));
+            }
+    	}   	
+		return grantsWithoutUser;
+	}
+
+    
     public void setId(URI id)
     {
         this.id = id;

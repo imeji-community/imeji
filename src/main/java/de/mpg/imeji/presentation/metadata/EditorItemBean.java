@@ -27,19 +27,9 @@ public class EditorItemBean
      */
     public EditorItemBean(Item item, MetadataProfile profile, boolean addEmtpyValue)
     {
-        init(item, addEmtpyValue);
         this.profile = profile;
-    }
-
-    /**
-     * Intialize the {@link EditorItemBean} with an {@link Item}
-     * 
-     * @param item
-     */
-    public void init(Item item, boolean addEmtpyValue)
-    {
         this.item = item;
-        mds = new MetadataSetBean(item.getMetadataSet(), addEmtpyValue);
+        mds = new MetadataSetBean(this.item.getMetadataSet(), this.profile, addEmtpyValue);
     }
 
     /**

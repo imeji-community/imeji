@@ -29,6 +29,7 @@ import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Properties;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.presentation.history.PageURIHelper;
@@ -47,7 +48,9 @@ public class ShareBean
     @ManagedProperty(value = "#{SessionBean.user}")
     private User user;
     private String id;
-    private String shareToUri;
+    // The object (collection, album or item) which is going to be shared
+    private Object shareTo;
+    // private String shareToUri;
     // the user whom the shareto object belongs
     private URI owner;
     private String title;
@@ -64,26 +67,8 @@ public class ShareBean
     private SharedObjectType type;
     // The url of the current share page (used for back link)
     private String pageUrl;
-     
-    public String getPageUrl() {
-		return pageUrl;
-	}
 
-	public void setPageUrl(String pageUrl) {
-		this.pageUrl = pageUrl;
-	}
-
-	public SharedObjectType getType() 
-    {
-		return type;
-	}
-
-	public void setType(SharedObjectType type) 
-	{
-		this.type = type;
-	}
-
-	public enum SharedObjectType
+    public enum SharedObjectType
     {
         COLLECTION, ALBUM, ITEM
     }
@@ -98,7 +83,7 @@ public class ShareBean
      */
     public void initShareCollection()
     {
-        this.shareToUri = null;
+        this.shareTo = null;
         this.profileUri = null;
         this.type = SharedObjectType.COLLECTION;
         this.grantItems = sb.getShareCollectionGrantItems();
@@ -106,7 +91,7 @@ public class ShareBean
                 ObjectHelper.getURI(CollectionImeji.class, getId()), user);
         if (collection != null)
         {
-            this.shareToUri = collection.getId().toString();
+            this.shareTo = collection;
             this.profileUri = collection.getProfile().toString();
             this.title = collection.getMetadata().getTitle();
             this.owner = collection.getCreatedBy();
@@ -120,13 +105,13 @@ public class ShareBean
     public void initShareAlbum()
     {
         this.type = SharedObjectType.ALBUM;
-        this.shareToUri = null;
+        this.shareTo = null;
         this.profileUri = null;
         this.grantItems = sb.getShareAlbumGrantItems();
         Album album = ObjectLoader.loadAlbumLazy(ObjectHelper.getURI(Album.class, getId()), user);
         if (album != null)
         {
-            this.shareToUri = album.getId().toString();
+            this.shareTo = album;
             this.title = album.getMetadata().getTitle();
             this.owner = album.getCreatedBy();
         }
@@ -143,12 +128,12 @@ public class ShareBean
         this.type = SharedObjectType.ITEM;
         this.grantItems = sb.getShareItemGrantItems();
         this.profileUri = null;
-        this.shareToUri = null;
+        this.shareTo = null;
         URI itemURI = PageURIHelper.extractId(PrettyContext.getCurrentInstance().getRequestURL().toString());
         Item item = ObjectLoader.loadItem(itemURI, user);
         if (item != null)
         {
-            this.shareToUri = item.getCollection().toString();
+            this.shareTo = item;
             this.title = item.getFilename();
             this.owner = item.getCreatedBy();
         }
@@ -167,8 +152,9 @@ public class ShareBean
         this.selectedRoles = checkGrants(type, new ArrayList<String>());
         this.retrieveSharedUserWithGrants();
         this.emailInput = "";
-        this.isAdmin = AuthUtil.staticAuth().administrate(this.user, shareToUri);
-        this.pageUrl = PrettyContext.getCurrentInstance().getRequestURL().toString() + PrettyContext.getCurrentInstance().getRequestQueryString();
+        this.isAdmin = AuthUtil.staticAuth().administrate(this.user, shareTo);
+        this.pageUrl = PrettyContext.getCurrentInstance().getRequestURL().toString()
+                + PrettyContext.getCurrentInstance().getRequestQueryString();
         this.initShareWithGroup();
     }
 
@@ -301,24 +287,24 @@ public class ShareBean
     public void retrieveSharedUserWithGrants()
     {
         UserController uc = new UserController(Imeji.adminUser);
-        Collection<User> allUser = uc.retrieveUserWithGrantFor(shareToUri);
+        Collection<User> allUser = uc.retrieveUserWithGrantFor(getShareToUri());
         sharedWith = new ArrayList<>();
         for (User u : allUser)
         {
-            //Do not display the creator of this collection here
+            // Do not display the creator of this collection here
             if (!u.getId().toString().equals(owner.toString()))
-            {	
-	            SharedHistory sh = new SharedHistory(u, type, shareToUri, profileUri, new ArrayList<String>());
-	            sh.getSharedType().addAll(parseShareTypes((List<Grant>)u.getGrants(), shareToUri, profileUri));
-	            sharedWith.add(sh);
+            {
+                SharedHistory sh = new SharedHistory(u, type, getShareToUri(), profileUri, new ArrayList<String>());
+                sh.getSharedType().addAll(parseShareTypes((List<Grant>)u.getGrants(), getShareToUri(), profileUri));
+                sharedWith.add(sh);
             }
         }
         UserGroupController ugc = new UserGroupController();
-        Collection<UserGroup> groups = ugc.searchByGrantFor(shareToUri, Imeji.adminUser);
+        Collection<UserGroup> groups = ugc.searchByGrantFor(getShareToUri(), Imeji.adminUser);
         for (UserGroup group : groups)
         {
-            SharedHistory sh = new SharedHistory(group, type, shareToUri, profileUri, new ArrayList<String>());
-            sh.getSharedType().addAll(parseShareTypes((List<Grant>)group.getGrants(), shareToUri, profileUri));
+            SharedHistory sh = new SharedHistory(group, type, getShareToUri(), profileUri, new ArrayList<String>());
+            sh.getSharedType().addAll(parseShareTypes((List<Grant>)group.getGrants(), getShareToUri(), profileUri));
             sharedWith.add(sh);
         }
     }
@@ -347,7 +333,7 @@ public class ShareBean
         {
             l.add(ShareType.EDIT_ITEM.toString());
         }
-        if (type == SharedObjectType.COLLECTION  && hasDeleteItemGrants(grants, containerUri))
+        if (type == SharedObjectType.COLLECTION && hasDeleteItemGrants(grants, containerUri))
         {
             l.add(ShareType.DELETE.toString());
         }
@@ -355,7 +341,7 @@ public class ShareBean
         {
             l.add(ShareType.EDIT_CONTAINER.toString());
         }
-        if (type == SharedObjectType.COLLECTION  && hasEditProfileGrants(grants, profileUri))
+        if (type == SharedObjectType.COLLECTION && hasEditProfileGrants(grants, profileUri))
         {
             l.add(ShareType.EDIT_PROFILE.toString());
         }
@@ -458,7 +444,7 @@ public class ShareBean
      */
     public void shareTo(List<String> toList)
     {
-        List<Grant> grants = getGrantsAccordingtoRoles(selectedRoles, shareToUri, profileUri);
+        List<Grant> grants = getGrantsAccordingtoRoles(selectedRoles, getShareToUri(), profileUri);
         for (String to : toList)
         {
             try
@@ -469,7 +455,7 @@ public class ShareBean
                     User u = ObjectLoader.loadUser(to, Imeji.adminUser);
                     gc.addGrants(u, grants, u);
                     if (sendEmail)
-                        sendEmail(u, title, shareToUri);
+                        sendEmail(u, title, getShareToUri());
                 }
                 else
                 {
@@ -647,56 +633,55 @@ public class ShareBean
 
     public void checkGrants(List<String> selectedGrants)
     {
-    	this.selectedRoles = checkGrants(type, selectedGrants);
+        this.selectedRoles = checkGrants(type, selectedGrants);
     }
-    
+
     /**
      * Check that Grants are consistent
      */
     public static List<String> checkGrants(SharedObjectType type, List<String> selectedGrants)
     {
-    	switch (type) 
-    	{
-			case COLLECTION:
-				if (selectedGrants.contains("ADMIN"))
-	            {
-	                selectedGrants.clear();
-	                selectedGrants.add(ShareType.READ.toString());
-	                selectedGrants.add(ShareType.CREATE.toString());
-	                selectedGrants.add(ShareType.EDIT_ITEM.toString());
-	                selectedGrants.add(ShareType.DELETE.toString());
-	                selectedGrants.add(ShareType.EDIT_CONTAINER.toString());
-	                selectedGrants.add(ShareType.EDIT_PROFILE.toString());
-	                selectedGrants.add(ShareType.ADMIN.toString());
-	            }
-	            else
-	            {
-	                if (!selectedGrants.contains("READ"))
-	                    selectedGrants.add(ShareType.READ.toString());
-	            }
-				break;
-			case ALBUM:
-				if (selectedGrants.contains("ADMIN"))
-	            {
-	                selectedGrants.clear();
-	                selectedGrants.add(ShareType.READ.toString());
-	                selectedGrants.add(ShareType.CREATE.toString());
-	                selectedGrants.add(ShareType.EDIT_CONTAINER.toString());
-	                selectedGrants.add(ShareType.ADMIN.toString());
-	            }
-	            else
-	            {
-	                if (!selectedGrants.contains("READ"))
-	                    selectedGrants.add(ShareType.READ.toString());
-	            }
-				break;
-			case ITEM:
-				 selectedGrants.clear();
-	             selectedGrants.add(ShareType.READ.toString());
-				break;
-		}
-    	return selectedGrants;
-
+        switch (type)
+        {
+            case COLLECTION:
+                if (selectedGrants.contains("ADMIN"))
+                {
+                    selectedGrants.clear();
+                    selectedGrants.add(ShareType.READ.toString());
+                    selectedGrants.add(ShareType.CREATE.toString());
+                    selectedGrants.add(ShareType.EDIT_ITEM.toString());
+                    selectedGrants.add(ShareType.DELETE.toString());
+                    selectedGrants.add(ShareType.EDIT_CONTAINER.toString());
+                    selectedGrants.add(ShareType.EDIT_PROFILE.toString());
+                    selectedGrants.add(ShareType.ADMIN.toString());
+                }
+                else
+                {
+                    if (!selectedGrants.contains("READ"))
+                        selectedGrants.add(ShareType.READ.toString());
+                }
+                break;
+            case ALBUM:
+                if (selectedGrants.contains("ADMIN"))
+                {
+                    selectedGrants.clear();
+                    selectedGrants.add(ShareType.READ.toString());
+                    selectedGrants.add(ShareType.CREATE.toString());
+                    selectedGrants.add(ShareType.EDIT_CONTAINER.toString());
+                    selectedGrants.add(ShareType.ADMIN.toString());
+                }
+                else
+                {
+                    if (!selectedGrants.contains("READ"))
+                        selectedGrants.add(ShareType.READ.toString());
+                }
+                break;
+            case ITEM:
+                selectedGrants.clear();
+                selectedGrants.add(ShareType.READ.toString());
+                break;
+        }
+        return selectedGrants;
     }
 
     public List<String> getSelectedGrants()
@@ -709,14 +694,21 @@ public class ShareBean
         this.selectedRoles = selectedGrants;
     }
 
-    public String getContainerUri()
+    public String getShareToUri()
     {
-        return shareToUri;
+        if (shareTo instanceof Properties)
+            return ((Properties)shareTo).getId().toString();
+        return null;
     }
 
-    public void setContainerUri(String containerUri)
+    public Object getShareTo()
     {
-        this.shareToUri = containerUri;
+        return shareTo;
+    }
+
+    public void setShareToUri(Object shareTo)
+    {
+        this.shareTo = shareTo;
     }
 
     public String getProfileUri()
@@ -779,5 +771,25 @@ public class ShareBean
     public void setUserGroup(UserGroup userGroup)
     {
         this.userGroup = userGroup;
+    }
+
+    public String getPageUrl()
+    {
+        return pageUrl;
+    }
+
+    public void setPageUrl(String pageUrl)
+    {
+        this.pageUrl = pageUrl;
+    }
+
+    public SharedObjectType getType()
+    {
+        return type;
+    }
+
+    public void setType(SharedObjectType type)
+    {
+        this.type = type;
     }
 }

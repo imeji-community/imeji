@@ -11,6 +11,8 @@ import javax.faces.event.ValueChangeEvent;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
@@ -26,6 +28,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CommonUtils;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectCachedLoader;
+import de.mpg.imeji.presentation.util.ObjectLoader;
 
 /**
  * Bean for Thumbnail list elements. Each element of a list with thumbnail is an instance of a {@link ThumbnailBean}
@@ -41,7 +44,7 @@ public class ThumbnailBean
     private String caption = "";
     private URI uri = null;
     private String id;
-    private URI profile = null;
+    // private URI profile = null;
     private List<Metadata> metadata = new ArrayList<Metadata>();
     private List<Statement> statements = new ArrayList<Statement>();
     private boolean selected = false;
@@ -51,6 +54,7 @@ public class ThumbnailBean
     private MetadataSetBean mds;
     private CollectionImeji collection;
     private String collectionName = "";
+    private MetadataProfile profile;
 
     /**
      * Bean for Thumbnail list elements. Each element of a list with thumbnail is an instance of a {@link ThumbnailBean}
@@ -59,23 +63,31 @@ public class ThumbnailBean
      */
     public ThumbnailBean(Item item)
     {
-        sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        uri = item.getId();
-        id = ObjectHelper.getId(uri);
+        this.sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        this.uri = item.getId();
+        this.id = ObjectHelper.getId(uri);
         link = item.getThumbnailImageUrl().toString();
-        profile = item.getMetadataSet().getProfile();
-        filename = item.getFilename();
-        setCollection(ObjectCachedLoader.loadCollection(item.getCollection()));
-        metadata = (List<Metadata>)item.getMetadataSet().getMetadata();
-        statements = loadStatements(item.getMetadataSet().getProfile());
-        collectionName = ObjectCachedLoader.loadCollection(item.getCollection()).getMetadata().getTitle();
-        caption = findCaption();
-        selected = sessionBean.getSelected().contains(uri.toString());
+        if (AuthUtil.canReadItemButNotCollection(sessionBean.getUser(), item))
+        {
+            this.profile =  ObjectLoader.loadProfile(item.getMetadataSet().getProfile(), Imeji.adminUser);
+            this.collection = ObjectLoader.loadCollection(item.getCollection(), Imeji.adminUser);
+        }
+        else
+        {
+            this.profile = ObjectCachedLoader.loadProfile(item.getMetadataSet().getProfile());
+            this.collection = ObjectCachedLoader.loadCollection(item.getCollection());
+        }
+        this.filename = item.getFilename();
+        this.metadata = (List<Metadata>)item.getMetadataSet().getMetadata();
+        this.statements = loadStatements(item.getMetadataSet().getProfile());
+        this.collectionName = this.collection.getMetadata().getTitle();
+        this.caption = findCaption();
+        this.selected = sessionBean.getSelected().contains(uri.toString());
         if (sessionBean.getActiveAlbum() != null)
         {
-            isInActiveAlbum = sessionBean.getActiveAlbum().getImages().contains(item.getId());
+            this.isInActiveAlbum = sessionBean.getActiveAlbum().getImages().contains(item.getId());
         }
-        mds = new MetadataSetBean(item.getMetadataSet(), false);
+        this.mds = new MetadataSetBean(item.getMetadataSet(), profile, false);
     }
 
     /**
@@ -88,7 +100,7 @@ public class ThumbnailBean
     {
         List<Item> l = new ArrayList<Item>();
         Item im = new Item();
-        im.getMetadataSets().add(ImejiFactory.newMetadataSet(profile));
+        im.getMetadataSets().add(ImejiFactory.newMetadataSet(profile.getId()));
         l.add(im);
         return "";
     }
@@ -103,7 +115,6 @@ public class ThumbnailBean
     {
         try
         {
-            MetadataProfile profile = ObjectCachedLoader.loadProfile(uri);
             if (profile != null)
             {
                 return (List<Statement>)profile.getStatements();

@@ -34,6 +34,7 @@ import java.util.List;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
+import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
@@ -129,7 +130,6 @@ public class Authorization
         return false;
     }
 
-
     /**
      * Return true if the user can update the content of the object defined by the uri
      * 
@@ -182,7 +182,7 @@ public class Authorization
      */
     public boolean create(User user, Object obj)
     {
-        if (hasGrant(user, toGrant(getRelevantURIForSecurity(obj, true), GrantType.CREATE)))
+        if (hasGrant(user, toGrant(getRelevantURIForSecurity(obj, true, true), GrantType.CREATE)))
             return true;
         return false;
     }
@@ -199,8 +199,15 @@ public class Authorization
     {
         if (isPublic(obj))
             return true;
-        else if (hasGrant(user,
-                toGrant(getRelevantURIForSecurity(obj, false), getGrantTypeAccordingToObjectType(obj, GrantType.READ))))
+        else if (hasGrant(
+                user,
+                toGrant(getRelevantURIForSecurity(obj, false, true),
+                        getGrantTypeAccordingToObjectType(obj, GrantType.READ))))
+            return true;
+        else if (hasGrant(
+                user,
+                toGrant(getRelevantURIForSecurity(obj, false, false),
+                        getGrantTypeAccordingToObjectType(obj, GrantType.READ))))
             return true;
         return false;
     }
@@ -217,7 +224,8 @@ public class Authorization
     {
         if (hasGrant(
                 user,
-                toGrant(getRelevantURIForSecurity(obj, false), getGrantTypeAccordingToObjectType(obj, GrantType.UPDATE))))
+                toGrant(getRelevantURIForSecurity(obj, false, true),
+                        getGrantTypeAccordingToObjectType(obj, GrantType.UPDATE))))
             return true;
         return false;
     }
@@ -234,7 +242,8 @@ public class Authorization
     {
         if (hasGrant(
                 user,
-                toGrant(getRelevantURIForSecurity(obj, false), getGrantTypeAccordingToObjectType(obj, GrantType.DELETE))))
+                toGrant(getRelevantURIForSecurity(obj, false, true),
+                        getGrantTypeAccordingToObjectType(obj, GrantType.DELETE))))
             return true;
         return false;
     }
@@ -249,8 +258,10 @@ public class Authorization
      */
     public boolean administrate(User user, Object obj)
     {
-        if (hasGrant(user,
-                toGrant(getRelevantURIForSecurity(obj, false), getGrantTypeAccordingToObjectType(obj, GrantType.ADMIN))))
+        if (hasGrant(
+                user,
+                toGrant(getRelevantURIForSecurity(obj, false, true),
+                        getGrantTypeAccordingToObjectType(obj, GrantType.ADMIN))))
             return true;
         return false;
     }
@@ -264,7 +275,7 @@ public class Authorization
      */
     public boolean updateContent(User user, Object obj)
     {
-        if (hasGrant(user, toGrant(getRelevantURIForSecurity(obj, false), GrantType.UPDATE_CONTENT)))
+        if (hasGrant(user, toGrant(getRelevantURIForSecurity(obj, false, true), GrantType.UPDATE_CONTENT)))
             return true;
         return false;
     }
@@ -278,7 +289,7 @@ public class Authorization
      */
     public boolean deleteContent(User user, Object obj)
     {
-        if (hasGrant(user, toGrant(getRelevantURIForSecurity(obj, false), GrantType.DELETE_CONTENT)))
+        if (hasGrant(user, toGrant(getRelevantURIForSecurity(obj, false, true), GrantType.DELETE_CONTENT)))
             return true;
         return false;
     }
@@ -292,7 +303,7 @@ public class Authorization
      */
     public boolean adminContent(User user, Object obj)
     {
-        if (hasGrant(user, toGrant(getRelevantURIForSecurity(obj, false), GrantType.ADMIN_CONTENT)))
+        if (hasGrant(user, toGrant(getRelevantURIForSecurity(obj, false, true), GrantType.ADMIN_CONTENT)))
             return true;
         return false;
     }
@@ -334,10 +345,10 @@ public class Authorization
      * @param obj
      * @return
      */
-    private String getRelevantURIForSecurity(Object obj, boolean create)
+    private String getRelevantURIForSecurity(Object obj, boolean create, boolean getContainer)
     {
         if (obj instanceof Item)
-            return ((Item)obj).getCollection().toString();
+            return getContainer ? ((Item)obj).getCollection().toString() : ((Item)obj).getId().toString();
         else if (obj instanceof Container)
             return create ? AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI : ((Container)obj).getId().toString();
         else if (obj instanceof CollectionListItem)
@@ -363,6 +374,8 @@ public class Authorization
      */
     private GrantType getGrantTypeAccordingToObjectType(Object obj, GrantType type)
     {
+        if (obj == null)
+            return type;
         if (obj instanceof Item || isItemUri(obj.toString()))
         {
             switch (type)

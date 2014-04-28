@@ -16,9 +16,11 @@ import javax.faces.model.SelectItem;
 import org.apache.commons.io.FilenameUtils;
 
 import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
@@ -144,12 +146,20 @@ public class ImageBean
     {
         if (item != null)
         {
-            loadCollection();
-            loadProfile();
+            User user = sessionBean.getUser();
+            if (AuthUtil.canReadItemButNotCollection(user, item))
+            {
+                // User has right to read the item, but not collection and the profile
+                user = Imeji.adminUser;
+            }
+            loadCollection(user);
+            loadProfile(user);
             labels.init(profile);
-            // mds = new MetadataSetBean(item.getMetadataSet());
-            edit = new SingleEditBean(item, profile, getPageUrl());
-            mds = edit.getEditor().getItems().get(0).getMds();
+            if (profile.getId() != null)
+            {
+                edit = new SingleEditBean(item, profile, getPageUrl());
+                mds = edit.getEditor().getItems().get(0).getMds();
+            }
         }
     }
 
@@ -194,11 +204,11 @@ public class ImageBean
     /**
      * Load the collection according to the identifier defined in the URL
      */
-    public void loadCollection()
+    public void loadCollection(User user)
     {
         try
         {
-            collection = ObjectLoader.loadCollectionLazy(item.getCollection(), sessionBean.getUser());
+            collection = ObjectLoader.loadCollectionLazy(item.getCollection(), user);
         }
         catch (Exception e)
         {
@@ -211,9 +221,9 @@ public class ImageBean
     /**
      * Load the {@link MetadataProfile} of the {@link Item}
      */
-    public void loadProfile()
+    public void loadProfile(User user)
     {
-        profile = ObjectCachedLoader.loadProfile(item.getMetadataSet().getProfile());
+        profile = ObjectLoader.loadProfile(item.getMetadataSet().getProfile(), user);
         if (profile == null)
         {
             profile = new MetadataProfile();
@@ -474,7 +484,7 @@ public class ImageBean
         List<SelectItem> statementMenu = new ArrayList<SelectItem>();
         if (profile == null)
         {
-            loadProfile();
+            loadProfile(sessionBean.getUser());
         }
         for (Statement s : profile.getStatements())
         {

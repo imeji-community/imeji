@@ -39,7 +39,6 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
-import de.mpg.imeji.presentation.util.ObjectCachedLoader;
 import de.mpg.imeji.presentation.util.ProfileHelper;
 
 /**
@@ -61,10 +60,9 @@ public class MetadataSetBean
      * @param mds
      * @param addEmtpyValue if true, add an emtpy metadata for all {@link Statement} which don't have any value
      */
-    public MetadataSetBean(MetadataSet mds, boolean addEmtpyValue)
+    public MetadataSetBean(MetadataSet mds, MetadataProfile profile, boolean addEmtpyValue)
     {
-        // Get the profile
-        profile = ObjectCachedLoader.loadProfile(mds.getProfile());
+        this.profile = profile;
         // Init the list of metadata
         initTreeFromList(toSuperList((List<Metadata>)mds.getMetadata()));
         if (addEmtpyValue)

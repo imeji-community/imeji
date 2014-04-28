@@ -29,8 +29,10 @@ import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.history.PageURIHelper;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.PropertyReader;
@@ -100,7 +102,8 @@ public class FileServlet extends HttpServlet
         }
         resp.setContentType(StorageUtils.getMimeType(StringHelper.getFileExtension(url)));
         SessionBean session = getSession(req);
-        if (authorization.read(getUser(session), loadCollection(url, session)))
+        if (authorization.read(getUser(session), loadCollection(url, session))
+                || authorization.read(getUser(session), getItemURI(url)))
         {
             if (download)
                 resp.setHeader("Content-disposition", "attachment;");
@@ -189,6 +192,22 @@ public class FileServlet extends HttpServlet
             else
                 return null;
         }
+    }
+
+    /**
+     * Find the {@link Item} which is owner of the file
+     * 
+     * @param url
+     * @return
+     */
+    private String getItemURI(String url)
+    {
+        Search s = new Search(SearchType.ALL, null);
+        List<String> r = s.searchSimpleForQuery(SPARQLQueries.selectItemIdOfFile(url), null);
+        if (!r.isEmpty())
+            return r.get(0);
+        else
+            return null;
     }
 
     /**

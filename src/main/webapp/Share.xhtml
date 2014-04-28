@@ -9,14 +9,14 @@
 	<ui:param name="headline" value="#{lbl.share.toString().trim()}:"/>
 	<ui:param name="headlineSecondRow" value="#{ShareBean.title}"/>
 	<ui:param name="currentMainMenu" value="#{ShareBean.type}"/>
-	<ui:param name="contUrl" value="unknown"/>
+	<ui:param name="contUrl" value="#{ShareBean.type == 'COLLECTION' ? Navigation.collectionUrl : Navigation.albumUrl}"/>
 	
 	<ui:define name="actionsMenu">
 		<menu:context_subNavigation contextId="#{ShareBean.id}" 
 									contextUrl="#{contUrl}" 
 									curMainMenu="#{currentMainMenu}" 
 									userHasAdminRights="#{Auth.admin}" 
-									userHasUploadRights="#{Auth.createUri(ShareBean.containerUri)}" 
+									userHasUploadRights="#{Auth.create(ShareBean.shareTo)}" 
 									hasContent="false" 
 									navBean="#{Navigation}" 
 									activeMenu="share" 

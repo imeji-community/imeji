@@ -36,6 +36,7 @@ import de.mpg.imeji.logic.auth.Authorization;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Grant;
+import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
@@ -74,6 +75,18 @@ public class AuthUtil
     }
 
     /**
+     * True if the {@link User} has read Grant for a single {@link Item} but not to its {@link CollectionImeji}
+     * 
+     * @param user
+     * @param item
+     * @return
+     */
+    public static boolean canReadItemButNotCollection(User user, Item item)
+    {
+        return staticAuth().read(user, item) && !staticAuth().read(user, item.getCollection().toString());
+    }
+
+    /**
      * Return the {@link List} of uri of all {@link CollectionImeji}, the {@link User} is allowed to see
      * 
      * @param user
@@ -85,6 +98,24 @@ public class AuthUtil
         for (Grant g : getAllGrantsOfUser(user))
         {
             if (g.getGrantFor().toString().contains("/collection/")
+                    && g.getGrantType().equals(toGrantTypeURI(GrantType.READ)))
+                uris.add(g.getGrantFor().toString());
+        }
+        return uris;
+    }
+
+    /**
+     * Return the {@link List} of uri of all {@link Item}, , the {@link User} has got an extra read {@link Grant} for.
+     * 
+     * @param user
+     * @return
+     */
+    public static List<String> getListOfAllowedItem(User user)
+    {
+        List<String> uris = new ArrayList<>();
+        for (Grant g : getAllGrantsOfUser(user))
+        {
+            if (g.getGrantFor().toString().contains("/item/")
                     && g.getGrantType().equals(toGrantTypeURI(GrantType.READ)))
                 uris.add(g.getGrantFor().toString());
         }

@@ -171,6 +171,18 @@ public class SPARQLQueries
      * @param fileUrl
      * @return
      */
+    public static String selectItemIdOfFile(String fileUrl)
+    {
+        return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {" + "optional{"
+                + "?s <http://imeji.org/terms/webImageUrl> <" + fileUrl
+                + ">} . optional {?s <http://imeji.org/terms/thumbnailImageUrl> <" + fileUrl
+                + ">} . optional{ ?s <http://imeji.org/terms/fullImageUrl> <" + fileUrl + ">}} LIMIT 1 ";
+    }
+
+    /**
+     * @param fileUrl
+     * @return
+     */
     public static String selectAlbumIdOfFile(String id)
     {
         return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {"

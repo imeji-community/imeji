@@ -1792,8 +1792,9 @@ select.imj_metadataEditText {
 	resize: vertical;
 }
 
-.imj_metadataEditDate {
-	width: 7em;
+.imj_metadataEditDate { /* used in metadataInput.xhtml */
+	width: 7.545454em;
+	text-align: center;
 }
 
 /* * SubmitPanel (image_deatails.xhtml)

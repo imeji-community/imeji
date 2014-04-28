@@ -94,6 +94,7 @@ public class SimpleSecurityQuery
         else
             return containerFilter.equals("") ? "filter(?status=<http://imeji.org/terms/status#RELEASED>)" : "filter(" + containerFilter +") .";
     }
+    
 
     /**
      * Return ths SPARQL filter with all container the {@link User} is allowed to view

@@ -3,30 +3,22 @@
  */
 package de.mpg.imeji.logic.controller;
 
-import java.net.URI;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
 import org.apache.log4j.Logger;
-import de.mpg.imeji.logic.ImejiBean2RDF;
-import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.ImejiRDF2Bean;
-import de.mpg.imeji.logic.ImejiSPARQL;
+
 import de.mpg.imeji.logic.concurrency.locks.Locks;
-import de.mpg.imeji.logic.search.query.SPARQLQueries;
-import de.mpg.imeji.logic.util.Counter;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Container;
-import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.j2j.exceptions.NotFoundException;
 import de.mpg.j2j.helper.DateHelper;
 import de.mpg.j2j.helper.J2JHelper;
 
@@ -124,9 +116,6 @@ public abstract class ImejiController
         properties.setStatus(Status.WITHDRAWN);
     }
 
-   
-
-  
     /**
      * True if at least one {@link Item} is locked by another {@link User}
      * 
@@ -146,60 +135,16 @@ public abstract class ImejiController
         return false;
     }
 
-    // /**
-    // * Create universal unique id (no counter involved)
-    // *
-    // * @return
-    // */
-    // public static String getUniqueId()
-    // {
-    // return UUID.randomUUID().toString();
-    // }
     /**
-     * Create a unique id for this instance based on a counter
+     * Return a single object as a list of object
      * 
+     * @param o
      * @return
      */
-    public synchronized static int getUniqueIdOld()
+    public List<?> toList(Object o)
     {
-        Counter c = new Counter();
-        if (Locks.tryLockCounter())
-        {
-            try
-            {
-                ImejiRDF2Bean rdf2Bean = new ImejiRDF2Bean(Imeji.counterModel);
-                c = (Counter)rdf2Bean.load(c.getId().toString(), Imeji.adminUser, c);
-                int id = c.getCounter();
-                incrementCounter(c);
-                return id;
-            }
-            catch (NotFoundException e)
-            {
-                throw new RuntimeException("Fatal error: Counter not found. Please restart your server. ", e);
-            }
-            catch (Exception e)
-            {
-                throw new RuntimeException(e);
-            }
-            finally
-            {
-                Locks.releaseCounter();
-            }
-        }
-        throw new RuntimeException("Counter locked, couldn't create new id");
-    }
-
-    private synchronized static void incrementCounter(Counter c)
-    {
-        try
-        {
-            c.setCounter(c.getCounter() + 1);
-            ImejiBean2RDF bean2rdf = new ImejiBean2RDF(Imeji.counterModel);
-            bean2rdf.update(bean2rdf.toList(c), Imeji.adminUser);
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException("Fatal error: Counter not found. Please restart your server. ", e);
-        }
+        List<Object> list = new ArrayList<Object>();
+        list.add(o);
+        return list;
     }
 }

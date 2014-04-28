@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.Authorization;
 import de.mpg.imeji.logic.controller.CollectionController;
+import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
@@ -103,7 +104,7 @@ public class FileServlet extends HttpServlet
         resp.setContentType(StorageUtils.getMimeType(StringHelper.getFileExtension(url)));
         SessionBean session = getSession(req);
         if (authorization.read(getUser(session), loadCollection(url, session))
-                || authorization.read(getUser(session), getItemURI(url)))
+                || authorization.read(getUser(session), getItem(url, getUser(session))))
         {
             if (download)
                 resp.setHeader("Content-disposition", "attachment;");
@@ -200,14 +201,23 @@ public class FileServlet extends HttpServlet
      * @param url
      * @return
      */
-    private String getItemURI(String url)
+    private Item getItem(String url, User user)
     {
         Search s = new Search(SearchType.ALL, null);
         List<String> r = s.searchSimpleForQuery(SPARQLQueries.selectItemIdOfFile(url), null);
         if (!r.isEmpty())
-            return r.get(0);
-        else
-            return null;
+        {
+            ItemController c = new ItemController();
+            try
+            {
+                return c.retrieve(URI.create(r.get(0)), user);
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+        return null;
     }
 
     /**

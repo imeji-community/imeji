@@ -1,5 +1,6 @@
 package de.mpg.imeji.presentation.user;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,6 +10,7 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
@@ -32,6 +34,7 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
+import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.history.PageURIHelper;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.user.util.EmailClient;
@@ -62,7 +65,7 @@ public class ShareBean
     private boolean isAdmin;
     private List<SelectItem> grantItems = new ArrayList<SelectItem>();
     private List<String> selectedRoles = new ArrayList<String>();
-    private boolean sendEmail = true;
+    private boolean sendEmail = false;
     private UserGroup userGroup;
     private SharedObjectType type;
     // The url of the current share page (used for back link)
@@ -180,24 +183,13 @@ public class ShareBean
      * 
      * @return
      */
-    public String update()
+    public void update()
     {
         for (SharedHistory sh : sharedWith)
         {
             sh.update();
         }
-        return "pretty:";
-    }
-
-    /**
-     * Reset all values of the page
-     */
-    public String reset()
-    {
-        setEmailInput("");
-        emailList.clear();
-        selectedRoles.clear();
-        return "pretty:";
+        reloadPage();
     }
 
     /**
@@ -206,7 +198,21 @@ public class ShareBean
     public void share()
     {
         shareTo(checkInput());
-        init();
+        // init();
+        reloadPage();
+    }
+
+    private void reloadPage()
+    {
+        try
+        {
+            Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
+            FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getApplicationUri() + pageUrl);
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Error reloading page " + pageUrl);
+        }
     }
 
     /**
@@ -230,7 +236,7 @@ public class ShareBean
     {
         sh.getSharedType().clear();
         sh.update();
-        init();
+        reloadPage();
     }
 
     /**
@@ -467,7 +473,6 @@ public class ShareBean
                 logger.error("CollectionSharedHistory--could not update User (email: " + user.getEmail() + " ) ", e);
             }
         }
-        reset();
         clearError();
     }
 

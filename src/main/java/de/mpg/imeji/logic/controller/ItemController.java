@@ -338,7 +338,23 @@ public class ItemController extends ImejiController
                 item.setVisibility(Visibility.PUBLIC);
             }
         }
-        update(l);
+        update(l, user);
+    }
+
+    /**
+     * Make the Items private
+     * 
+     * @param l
+     * @param user
+     * @throws Exception
+     */
+    public void unRelease(List<Item> l, User user) throws Exception
+    {
+        for (Item item : l)
+        {
+            item.setStatus(Status.PENDING);
+        }
+        update(l, user);
     }
 
     /**

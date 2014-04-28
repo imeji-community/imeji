@@ -326,6 +326,4 @@ public class CollectionController extends ImejiController
         imejiRDF2Bean.loadLazy(J2JHelper.cast2ObjectList(cols), user);
         return cols;
     }
-
-   
 }

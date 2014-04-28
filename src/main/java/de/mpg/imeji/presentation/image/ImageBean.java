@@ -20,7 +20,6 @@ import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
@@ -45,7 +44,6 @@ import de.mpg.imeji.presentation.metadata.extractors.TikaExtractor;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.session.SessionObjectsController;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ObjectCachedLoader;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
@@ -97,6 +95,8 @@ public class ImageBean
     public String getInit() throws Exception
     {
         tab = UrlHelper.getParameterValue("tab");
+        if ("".equals(tab))
+            tab = null;
         loadImage();
         if (item != null)
         {
@@ -341,6 +341,20 @@ public class ImageBean
     public void setSessionBean(SessionBean sessionBean)
     {
         this.sessionBean = sessionBean;
+    }
+
+    @SuppressWarnings("unchecked")
+    public void makePublic() throws Exception
+    {
+        ItemController c = new ItemController();
+        c.release((List<Item>)c.toList(item), sessionBean.getUser());
+    }
+
+    @SuppressWarnings("unchecked")
+    public void makePrivate() throws Exception
+    {
+        ItemController c = new ItemController();
+        c.unRelease((List<Item>)c.toList(item), sessionBean.getUser());
     }
 
     /**

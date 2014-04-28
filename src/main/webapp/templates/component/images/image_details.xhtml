@@ -73,10 +73,10 @@
 	
 		<!-- MetaDataTypes ListHeader - show media meta data, tech., other -->
 		<div class="imj_listHeader">
-			<h:outputLink id="lnkShareItem" styleClass="imj_active" value="#{imageBean.pageUrl}?tab=share" rendered="#{imageBean.tab == 'share'}">
+			<h:outputLink id="lnkShareItem" styleClass="imj_active" value="#{imageBean.pageUrl}?tab=share" rendered="#{ imageBean.tab == 'share'}">
 				<h:outputText value="#{lbl.share}"/>
 			</h:outputLink>
-			<h:outputLink id="lnkShareItem2" value="#{imageBean.pageUrl}?tab=share" rendered="#{imageBean.tab != 'share'}">
+			<h:outputLink id="lnkShareItem2" value="#{imageBean.pageUrl}?tab=share" rendered="#{Auth.admin(imageBean.image) and imageBean.tab != 'share'}">
 				<h:outputText value="#{lbl.share}"/>
 			</h:outputLink>
 			<h:panelGroup styleClass="imj_separator"/>
@@ -115,7 +115,7 @@
 									<f:ajax execute="@this" render="@form"/>
 								</h:commandLink>
 						</span>
-							<h:outputText value="Image locked " rendered="#{Auth.updateContent(imageBean.image)and imageBean.locked}"/>
+							<h:outputText value="Image locked " rendered="#{Auth.updateContent(imageBean.image) and imageBean.locked}"/>
 							<h:outputLink value="#" title="#{msg.warning_locked}" rendered="#{Auth.updateContent(imageBean.image) and imageBean.locked}">[info]</h:outputLink>
 					</h:panelGroup>
 					
@@ -353,8 +353,46 @@
 			</ui:fragment>
 			
 			<ui:fragment rendered="#{imageBean.tab == 'share'}">
-				<h:outputText value="#{ShareBean.initShareItem}" />
-				<imjc:share />
+				<h:panelGroup id="sharePanel">
+					<div class="imj_infodataWrapper">
+						<div class="imj_metadataSubPanel">
+							<h:outputText styleClass="imj_metadataSubPanelItem" value="#{lbl.visibility}"/>
+						</div>
+						<h:panelGroup styleClass="imj_infodataSet" rendered="#{imageBean.image.status == 'PENDING'}">
+							<span class="imj_infodataLabel">
+								<h:outputText  value="#{lbl['item_private']}"/>
+								<span class="imj_invisible">: </span>
+							</span>
+							<span class="imj_infodataValue">
+								<h:form>
+									<h:commandButton value="#{lbl.make_public}" action="#{imageBean.makePublic}" styleClass="imj_submitButton">
+										<f:ajax render=":sharePanel"/>
+									</h:commandButton>
+								</h:form>
+							</span>
+						</h:panelGroup>
+						<h:panelGroup styleClass="imj_infodataSet" rendered="#{imageBean.image.status == 'RELEASED' and imageBean.collection.status == 'PENDING'}">
+							<span class="imj_infodataLabel">
+								<h:outputText  value="#{lbl['item_public']}"/>
+								<span class="imj_invisible">: </span>
+							</span>
+							<span class="imj_infodataValue">
+								<h:form>
+									<h:commandButton value="#{lbl.make_private}" action="#{imageBean.makePrivate}" styleClass="imj_submitButton">
+										<f:ajax render=":sharePanel"/>
+									</h:commandButton>
+								</h:form>
+							</span>
+						</h:panelGroup>
+					</div>
+					<h:panelGroup   styleClass="imj_infodataWrapper" rendered="#{imageBean.image.status == 'PENDING'}">
+						<div class="imj_metadataSubPanel">
+							<h:outputText styleClass="imj_metadataSubPanelItem" value="#{lbl.share}"/>
+						</div>				
+						<h:outputText value="#{ShareBean.initShareItem}" />
+						<imjc:share id="share"/>
+					</h:panelGroup>
+				</h:panelGroup>
 			</ui:fragment>
 		
 			<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/qrcode.js"> </script>

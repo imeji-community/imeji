@@ -34,12 +34,13 @@ import java.util.List;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
-import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
+import de.mpg.imeji.logic.vo.Item.Visibility;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Properties;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.album.AlbumBean;
@@ -413,9 +414,9 @@ public class Authorization
     private boolean isPublic(Object obj)
     {
         if (obj instanceof Item)
-            return ((Item)obj).getStatus().equals(Status.RELEASED);
+            return ((Item)obj).getVisibility().equals(Visibility.PUBLIC);
         else if (obj instanceof Container)
-            return ((Container)obj).getStatus().equals(Status.RELEASED);
+            return ((Container)obj).equals(Status.RELEASED);
         else if (obj instanceof MetadataProfile)
             return ((MetadataProfile)obj).getStatus().equals(Status.RELEASED);
         return false;

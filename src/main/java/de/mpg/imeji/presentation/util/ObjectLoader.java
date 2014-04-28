@@ -4,7 +4,6 @@
 package de.mpg.imeji.presentation.util;
 
 import java.net.URI;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -14,9 +13,6 @@ import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserGroupController;
-import de.mpg.imeji.logic.search.Search;
-import de.mpg.imeji.logic.search.Search.SearchType;
-import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
@@ -187,7 +183,7 @@ public class ObjectLoader
         }
         return null;
     }
-    
+
     /**
      * Load a {@link User}
      * 
@@ -253,13 +249,9 @@ public class ObjectLoader
             MetadataProfile p = pc.retrieve(id, user);
             return p;
         }
-        catch (NotFoundException e)
-        {
-            writeErrorNotFound("profile", id);
-        }
         catch (Exception e)
         {
-            writeException(e, id.toString());
+            // do nothing
         }
         return null;
     }

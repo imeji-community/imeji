@@ -152,19 +152,10 @@ public class AlbumController extends ImejiController
     public void release(Album album, User user) throws Exception
     {
         ItemController ic = new ItemController(user);
-        List<String> itemUris = ic.search(album.getId(), null, null, null).getResults();
-        if (itemUris.isEmpty())
+        album = (Album)ic.loadContainerItems(album, user, -1, 0);
+        if (album.getImages().isEmpty())
         {
             throw new RuntimeException("An empty album can not be released!");
-        }
-        else if (hasImageLocked(itemUris, user))
-        {
-            throw new RuntimeException("Album has at least one item locked by an other user.");
-        }
-        else if (hasPendingImage(itemUris))
-        {
-            throw new RuntimeException(
-                    "Album has at least one item with status pending. All items have to be released to release an album");
         }
         else
         {
@@ -232,26 +223,6 @@ public class AlbumController extends ImejiController
         // Force admin user since th user might not have right to edit the album
         update(album, Imeji.adminUser);
         return inAlbums.size() - album.getImages().size();
-    }
-
-    /**
-     * True if an {@link Item} of the {@link List} of {@link URI} has the {@link Status} "pending", else false
-     * 
-     * @param uris
-     * @return
-     * @throws Exception
-     */
-    public synchronized boolean hasPendingImage(List<String> uris) throws Exception
-    {
-        ItemController c = new ItemController(user);
-        for (Item item : c.loadItems(uris, -1, 0))
-        {
-            if (Status.PENDING.equals(item.getStatus()))
-            {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**

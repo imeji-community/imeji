@@ -414,9 +414,9 @@ public class Authorization
     private boolean isPublic(Object obj)
     {
         if (obj instanceof Item)
-            return ((Item)obj).getVisibility().equals(Visibility.PUBLIC);
+            return ((Item)obj).getStatus().equals(Status.RELEASED);
         else if (obj instanceof Container)
-            return ((Container)obj).equals(Status.RELEASED);
+            return ((Container)obj).getStatus().equals(Status.RELEASED);
         else if (obj instanceof MetadataProfile)
             return ((MetadataProfile)obj).getStatus().equals(Status.RELEASED);
         return false;

@@ -55,13 +55,11 @@ public class CollectionImeji extends Container implements Serializable
         this.metadataSet = metadataSet;
     }
 
-    @Override
     public void setImages(Collection<URI> images)
     {
         this.images = images;
     }
 
-    @Override
     public Collection<URI> getImages()
     {
         return images;

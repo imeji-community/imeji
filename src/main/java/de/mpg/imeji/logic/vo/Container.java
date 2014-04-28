@@ -5,7 +5,6 @@ package de.mpg.imeji.logic.vo;
 
 import java.io.Serializable;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.Collection;
 
 import de.mpg.imeji.logic.search.FulltextIndex;
@@ -20,11 +19,10 @@ import de.mpg.j2j.annotations.j2jResource;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-@j2jResource("http://imeji.org/terms/container")
-@j2jId(getMethod = "getId", setMethod = "setId")
-public class Container extends Properties implements FulltextIndex, Serializable
+ @j2jResource("http://imeji.org/terms/container")
+ @j2jId(getMethod = "getId", setMethod = "setId")
+public abstract class Container extends Properties implements FulltextIndex, Serializable
 {
-    private Collection<URI> images = new ArrayList<URI>();
     @j2jResource("http://imeji.org/terms/container/metadata")
     private ContainerMetadata metadata = new ContainerMetadata();
     @j2jLiteral("http://imeji.org/terms/fulltext")
@@ -40,15 +38,9 @@ public class Container extends Properties implements FulltextIndex, Serializable
         return metadata;
     }
 
-    public void setImages(Collection<URI> images)
-    {
-        this.images = images;
-    }
+    public abstract void setImages(Collection<URI> images);
 
-    public Collection<URI> getImages()
-    {
-        return images;
-    }
+    public abstract Collection<URI> getImages();
 
     @Override
     public void setFulltextIndex(String fulltext)

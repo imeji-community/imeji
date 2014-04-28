@@ -79,7 +79,7 @@
 			<h:outputLink id="lnkShareItem2" value="#{imageBean.pageUrl}?tab=share" rendered="#{Auth.admin(imageBean.image) and imageBean.tab != 'share'}">
 				<h:outputText value="#{lbl.share}"/>
 			</h:outputLink>
-			<h:panelGroup styleClass="imj_separator"/>
+			<h:panelGroup styleClass="imj_separator" rendered="#{Auth.admin(imageBean.image)}"/>
 			<h:outputLink id="lnkViewItemUtilPage" styleClass="imj_active" value="#{imageBean.pageUrl}?tab=util" rendered="#{imageBean.tab == 'util'}">
 				<h:outputText value="#{lbl.view_util}"/>
 			</h:outputLink>

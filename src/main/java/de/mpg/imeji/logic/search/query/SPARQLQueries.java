@@ -35,6 +35,7 @@ import org.opensaml.ws.wssecurity.Username;
 import com.hp.hpl.jena.sparql.pfunction.library.container;
 
 import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Grant;
@@ -44,6 +45,7 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
+import de.mpg.j2j.helper.J2JHelper;
 
 /**
  * SPARQL queries for imeji
@@ -345,7 +347,7 @@ public class SPARQLQueries
         if (user == null)
             return "SELECT DISTINCT ?s WHERE {?s <http://imeji.org/terms/collection> <"
                     + uri.toString()
-                    + "> . ?s <http://imeji.org/terms/status> ?status .  filter(?status=<http://imeji.org/terms/status#RELEASED>) . FILTER (?status!=<http://imeji.org/terms/status#WITHDRAWN>)} LIMIT "
+                    + "> . ?s <http://imeji.org/terms/status> ?status .  filter(?status=<http://imeji.org/terms/status#RELEASED>)} LIMIT "
                     + limit;
         return "SELECT DISTINCT ?s WHERE {?s <http://imeji.org/terms/collection> <"
                 + uri.toString()
@@ -368,14 +370,11 @@ public class SPARQLQueries
         if (user == null)
             return "SELECT DISTINCT ?s WHERE {<"
                     + uri.toString()
-                    + "> <http://imeji.org/terms/item> ?s . ?s <http://imeji.org/terms/status> ?status .  filter(?status=<http://imeji.org/terms/status#RELEASED>) . FILTER (?status!=<http://imeji.org/terms/status#WITHDRAWN>)} LIMIT "
+                    + "> <http://imeji.org/terms/item> ?s . ?s <http://imeji.org/terms/status> ?status .  filter(?status=<http://imeji.org/terms/status#RELEASED>)} LIMIT "
                     + limit;
-        return "SELECT DISTINCT ?s WHERE {<"
-                + uri.toString()
-                + "> <http://imeji.org/terms/item> ?s . ?s <http://imeji.org/terms/status> ?status . OPTIONAL{<"
-                + user.getId().toString()
-                + "> <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> ?c} . filter(bound(?g) || ?status=<http://imeji.org/terms/status#RELEASED>) . FILTER (?status!=<http://imeji.org/terms/status#WITHDRAWN>)} LIMIT "
-                + limit;
+        return "SELECT DISTINCT ?s WHERE {<" + uri.toString() + "> <http://imeji.org/terms/item> ?s . "
+                + SimpleSecurityQuery.queryFactory(user, J2JHelper.getResourceNamespace(new Item()), null, false)
+                + " ?s <http://imeji.org/terms/collection> ?c . ?c <http://imeji.org/terms/status> ?status}LIMIT " + limit;
     }
 
     public static String selectContainerItemByFilename(URI containerURI, String filename)

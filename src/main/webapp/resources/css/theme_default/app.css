@@ -26,7 +26,7 @@
  * 6CAE2F		links, border, submit buttons - background
  * F0F0F0		default text color, link hover
  * BBBBBB		deactivated elements, border for sub components
- * 292929		page - background, date picker - background, "meta-menu input" - background
+ * 292929		page - background, date picker - background, "meta-menu input" - background, imj_breadcrumpLongDescription - background
  * D80000		error messages, critical elements
  *
  * FF7700		reset button - background
@@ -1185,17 +1185,39 @@ h4.imj_sectionHeadline {
 .imj_breadcrumpHistory .imj_breadcrumpTitle {
 	margin-right: 0.363636em;
 	font-size: 1.090909em;
+	line-height: 2em;
+	vertical-align: top;
 }
-
 .imj_breadcrumpHistory .imj_breadcrumpItem {
-	line-height: 2em; /*2.18em*/
+	display: inline-block;
+	max-width: 11em;
+	line-height: 2em;
 	font-size: 1.090909em;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	vertical-align: top;
 }
-
 .imj_breadcrumpHistory .imj_breadcrumpSeparator {
 	margin-left: 0.363636em;
 	margin-right: 0.363636em;
+	line-height: 2em;
+	font-size: 1.090909em;
+	vertical-align: top;
 }
+.imj_breadcrumpLongDescription {
+	display:none;
+	max-width: 10.272727em;
+	padding: 0 0.363636em;
+	white-space: normal;
+	background-color: #292929;
+}
+.imj_breadcrumpItem:hover .imj_breadcrumpLongDescription {
+	position:absolute;
+	display:block;
+	z-index: 10;
+}
+
 
 /* * info panel (Image.xhtml)
    ==================================================

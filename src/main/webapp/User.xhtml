@@ -164,7 +164,7 @@
 														<h:panelGroup styleClass="imj_userGrantList" rendered="#{grant.grantFor != null}">
 															<h:outputText value="#{grant.asGrantType()} " styleClass="medium_area0_p0"/>	
 															<h:outputLink value="#{grant.grantFor}" styleClass="free_area0"><h:outputText value="#{grant.grantFor}"/></h:outputLink>	
-															<h:commandLink action="#{UserBean.revokeGrant}" value="#{lbl.revoke}" styleClass="imj_editButton" onclick="if(confirm('Are you sure you want to revoke this grant?'))return true;return false;">
+															<h:commandLink action="#{UserBean.revokeGrant}" value="#{lbl.revoke}" styleClass="imj_cancelButton" onclick="if(confirm('Are you sure you want to revoke this grant?'))return true;return false;">
 																<f:param name="grantType" value="#{grant.grantType}"/>
 																<f:param name="grantFor" value="#{grant.grantFor}" />
 															</h:commandLink>

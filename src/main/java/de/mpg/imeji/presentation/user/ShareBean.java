@@ -14,10 +14,11 @@ import javax.faces.model.SelectItem;
 import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.sparql.pfunction.library.container;
+import com.ocpsoft.pretty.PrettyContext;
 
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.auth.Authorization;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
+import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.GrantController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserGroupController;
@@ -26,9 +27,11 @@ import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Grant;
+import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
+import de.mpg.imeji.presentation.history.PageURIHelper;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.user.util.EmailClient;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -44,21 +47,46 @@ public class ShareBean
     @ManagedProperty(value = "#{SessionBean.user}")
     private User user;
     private String id;
-    private String containerUri;
-    private boolean isCollection;
+    private String shareToUri;
+    // the user whom the shareto object belongs
+    private URI owner;
     private String title;
     private String profileUri;
     private String emailInput;
     private List<String> emailList = new ArrayList<String>();
     private List<String> errorList = new ArrayList<String>();
     private List<SharedHistory> sharedWith = new ArrayList<SharedHistory>();
-    private static Authorization auth = new Authorization();
     private boolean isAdmin;
     private List<SelectItem> grantItems = new ArrayList<SelectItem>();
     private List<String> selectedRoles = new ArrayList<String>();
     private boolean sendEmail = true;
     private UserGroup userGroup;
-    private CollectionImeji collection;
+    private SharedObjectType type;
+    // The url of the current share page (used for back link)
+    private String pageUrl;
+     
+    public String getPageUrl() {
+		return pageUrl;
+	}
+
+	public void setPageUrl(String pageUrl) {
+		this.pageUrl = pageUrl;
+	}
+
+	public SharedObjectType getType() 
+    {
+		return type;
+	}
+
+	public void setType(SharedObjectType type) 
+	{
+		this.type = type;
+	}
+
+	public enum SharedObjectType
+    {
+        COLLECTION, ALBUM, ITEM
+    }
 
     public enum ShareType
     {
@@ -70,19 +98,20 @@ public class ShareBean
      */
     public void initShareCollection()
     {
-        this.containerUri = null;
+        this.shareToUri = null;
         this.profileUri = null;
-        isCollection = true;
-        grantItems = sb.getShareCollectionGrantItems();
-        this.collection = ObjectLoader.loadCollectionLazy(
+        this.type = SharedObjectType.COLLECTION;
+        this.grantItems = sb.getShareCollectionGrantItems();
+        CollectionImeji collection = ObjectLoader.loadCollectionLazy(
                 ObjectHelper.getURI(CollectionImeji.class, getId()), user);
-        if (this.collection != null)
+        if (collection != null)
         {
-            containerUri = this.collection.getId().toString();
-            profileUri = this.collection.getProfile().toString();
-            title = this.collection.getMetadata().getTitle();
+            this.shareToUri = collection.getId().toString();
+            this.profileUri = collection.getProfile().toString();
+            this.title = collection.getMetadata().getTitle();
+            this.owner = collection.getCreatedBy();
         }
-        init();
+        this.init();
     }
 
     /**
@@ -90,17 +119,41 @@ public class ShareBean
      */
     public void initShareAlbum()
     {
-        this.containerUri = null;
+        this.type = SharedObjectType.ALBUM;
+        this.shareToUri = null;
         this.profileUri = null;
         this.grantItems = sb.getShareAlbumGrantItems();
-        this.isCollection = false;
         Album album = ObjectLoader.loadAlbumLazy(ObjectHelper.getURI(Album.class, getId()), user);
         if (album != null)
         {
-            this.containerUri = album.getId().toString();
+            this.shareToUri = album.getId().toString();
             this.title = album.getMetadata().getTitle();
+            this.owner = album.getCreatedBy();
         }
-        init();
+        this.init();
+    }
+
+    /**
+     * Loaded when the shre component is called from the item page
+     * 
+     * @return
+     */
+    public String getInitShareItem()
+    {
+        this.type = SharedObjectType.ITEM;
+        this.grantItems = sb.getShareItemGrantItems();
+        this.profileUri = null;
+        this.shareToUri = null;
+        URI itemURI = PageURIHelper.extractId(PrettyContext.getCurrentInstance().getRequestURL().toString());
+        Item item = ObjectLoader.loadItem(itemURI, user);
+        if (item != null)
+        {
+            this.shareToUri = item.getCollection().toString();
+            this.title = item.getFilename();
+            this.owner = item.getCreatedBy();
+        }
+        this.init();
+        return "";
     }
 
     /**
@@ -108,15 +161,15 @@ public class ShareBean
      */
     public void init()
     {
-        sharedWith = new ArrayList<SharedHistory>();
-        emailList = new ArrayList<String>();
-        errorList = new ArrayList<String>();
-        selectedRoles = new ArrayList<String>();
-        checkGrants(selectedRoles);
-        retrieveSharedUserWithGrants();
+        this.sharedWith = new ArrayList<SharedHistory>();
+        this.emailList = new ArrayList<String>();
+        this.errorList = new ArrayList<String>();
+        this.selectedRoles = checkGrants(type, new ArrayList<String>());
+        this.retrieveSharedUserWithGrants();
         this.emailInput = "";
-        this.isAdmin = auth.administrate(this.user, containerUri);
-        initShareWithGroup();
+        this.isAdmin = AuthUtil.staticAuth().administrate(this.user, shareToUri);
+        this.pageUrl = PrettyContext.getCurrentInstance().getRequestURL().toString() + PrettyContext.getCurrentInstance().getRequestQueryString();
+        this.initShareWithGroup();
     }
 
     /**
@@ -124,7 +177,7 @@ public class ShareBean
      */
     private void initShareWithGroup()
     {
-        userGroup = null;
+        this.userGroup = null;
         String groupToShareWithUri = UrlHelper.getParameterValue("group");
         if (groupToShareWithUri != null)
         {
@@ -248,24 +301,24 @@ public class ShareBean
     public void retrieveSharedUserWithGrants()
     {
         UserController uc = new UserController(Imeji.adminUser);
-        Collection<User> allUser = uc.retrieveUserWithGrantFor(containerUri);
+        Collection<User> allUser = uc.retrieveUserWithGrantFor(shareToUri);
         sharedWith = new ArrayList<>();
         for (User u : allUser)
         {
             //Do not display the creator of this collection here
-            if (!u.getId().getPath().equals(this.collection.getCreatedBy().getPath()))
+            if (!u.getId().toString().equals(owner.toString()))
             {	
-	            SharedHistory sh = new SharedHistory(u, isCollection, containerUri, profileUri, new ArrayList<String>());
-	            sh.getSharedType().addAll(parseShareTypes((List<Grant>)u.getGrants(), containerUri, profileUri));
+	            SharedHistory sh = new SharedHistory(u, type, shareToUri, profileUri, new ArrayList<String>());
+	            sh.getSharedType().addAll(parseShareTypes((List<Grant>)u.getGrants(), shareToUri, profileUri));
 	            sharedWith.add(sh);
             }
         }
         UserGroupController ugc = new UserGroupController();
-        Collection<UserGroup> groups = ugc.searchByGrantFor(containerUri, Imeji.adminUser);
+        Collection<UserGroup> groups = ugc.searchByGrantFor(shareToUri, Imeji.adminUser);
         for (UserGroup group : groups)
         {
-            SharedHistory sh = new SharedHistory(group, isCollection, containerUri, profileUri, new ArrayList<String>());
-            sh.getSharedType().addAll(parseShareTypes((List<Grant>)group.getGrants(), containerUri, profileUri));
+            SharedHistory sh = new SharedHistory(group, type, shareToUri, profileUri, new ArrayList<String>());
+            sh.getSharedType().addAll(parseShareTypes((List<Grant>)group.getGrants(), shareToUri, profileUri));
             sharedWith.add(sh);
         }
     }
@@ -290,11 +343,11 @@ public class ShareBean
         {
             l.add(ShareType.CREATE.toString());
         }
-        if (isCollection && hasEditItemGrants(grants, containerUri))
+        if (type == SharedObjectType.COLLECTION && hasEditItemGrants(grants, containerUri))
         {
             l.add(ShareType.EDIT_ITEM.toString());
         }
-        if (isCollection && hasDeleteItemGrants(grants, containerUri))
+        if (type == SharedObjectType.COLLECTION  && hasDeleteItemGrants(grants, containerUri))
         {
             l.add(ShareType.DELETE.toString());
         }
@@ -302,7 +355,7 @@ public class ShareBean
         {
             l.add(ShareType.EDIT_CONTAINER.toString());
         }
-        if (isCollection && hasEditProfileGrants(grants, profileUri))
+        if (type == SharedObjectType.COLLECTION  && hasEditProfileGrants(grants, profileUri))
         {
             l.add(ShareType.EDIT_PROFILE.toString());
         }
@@ -405,7 +458,7 @@ public class ShareBean
      */
     public void shareTo(List<String> toList)
     {
-        List<Grant> grants = getGrantsAccordingtoRoles(selectedRoles, containerUri, profileUri);
+        List<Grant> grants = getGrantsAccordingtoRoles(selectedRoles, shareToUri, profileUri);
         for (String to : toList)
         {
             try
@@ -416,7 +469,7 @@ public class ShareBean
                     User u = ObjectLoader.loadUser(to, Imeji.adminUser);
                     gc.addGrants(u, grants, u);
                     if (sendEmail)
-                        sendEmail(u, title, containerUri);
+                        sendEmail(u, title, shareToUri);
                 }
                 else
                 {
@@ -592,46 +645,58 @@ public class ShareBean
         this.grantItems = grantItems;
     }
 
+    public void checkGrants(List<String> selectedGrants)
+    {
+    	this.selectedRoles = checkGrants(type, selectedGrants);
+    }
+    
     /**
      * Check that Grants are consistent
      */
-    public void checkGrants(List<String> selectedGrants)
+    public static List<String> checkGrants(SharedObjectType type, List<String> selectedGrants)
     {
-        if (isCollection)
-        {
-            if (selectedGrants.contains("ADMIN"))
-            {
-                selectedGrants.clear();
-                selectedGrants.add(ShareType.READ.toString());
-                selectedGrants.add(ShareType.CREATE.toString());
-                selectedGrants.add(ShareType.EDIT_ITEM.toString());
-                selectedGrants.add(ShareType.DELETE.toString());
-                selectedGrants.add(ShareType.EDIT_CONTAINER.toString());
-                selectedGrants.add(ShareType.EDIT_PROFILE.toString());
-                selectedGrants.add(ShareType.ADMIN.toString());
-            }
-            else
-            {
-                if (!selectedGrants.contains("READ"))
-                    selectedGrants.add(ShareType.READ.toString());
-            }
-        }
-        else
-        {
-            if (selectedGrants.contains("ADMIN"))
-            {
-                selectedGrants.clear();
-                selectedGrants.add(ShareType.READ.toString());
-                selectedGrants.add(ShareType.CREATE.toString());
-                selectedGrants.add(ShareType.EDIT_CONTAINER.toString());
-                selectedGrants.add(ShareType.ADMIN.toString());
-            }
-            else
-            {
-                if (!selectedGrants.contains("READ"))
-                    selectedGrants.add(ShareType.READ.toString());
-            }
-        }
+    	switch (type) 
+    	{
+			case COLLECTION:
+				if (selectedGrants.contains("ADMIN"))
+	            {
+	                selectedGrants.clear();
+	                selectedGrants.add(ShareType.READ.toString());
+	                selectedGrants.add(ShareType.CREATE.toString());
+	                selectedGrants.add(ShareType.EDIT_ITEM.toString());
+	                selectedGrants.add(ShareType.DELETE.toString());
+	                selectedGrants.add(ShareType.EDIT_CONTAINER.toString());
+	                selectedGrants.add(ShareType.EDIT_PROFILE.toString());
+	                selectedGrants.add(ShareType.ADMIN.toString());
+	            }
+	            else
+	            {
+	                if (!selectedGrants.contains("READ"))
+	                    selectedGrants.add(ShareType.READ.toString());
+	            }
+				break;
+			case ALBUM:
+				if (selectedGrants.contains("ADMIN"))
+	            {
+	                selectedGrants.clear();
+	                selectedGrants.add(ShareType.READ.toString());
+	                selectedGrants.add(ShareType.CREATE.toString());
+	                selectedGrants.add(ShareType.EDIT_CONTAINER.toString());
+	                selectedGrants.add(ShareType.ADMIN.toString());
+	            }
+	            else
+	            {
+	                if (!selectedGrants.contains("READ"))
+	                    selectedGrants.add(ShareType.READ.toString());
+	            }
+				break;
+			case ITEM:
+				 selectedGrants.clear();
+	             selectedGrants.add(ShareType.READ.toString());
+				break;
+		}
+    	return selectedGrants;
+
     }
 
     public List<String> getSelectedGrants()
@@ -646,12 +711,12 @@ public class ShareBean
 
     public String getContainerUri()
     {
-        return containerUri;
+        return shareToUri;
     }
 
     public void setContainerUri(String containerUri)
     {
-        this.containerUri = containerUri;
+        this.shareToUri = containerUri;
     }
 
     public String getProfileUri()
@@ -672,16 +737,6 @@ public class ShareBean
     public void setSharedWith(List<SharedHistory> sharedWith)
     {
         this.sharedWith = sharedWith;
-    }
-
-    public boolean isCollection()
-    {
-        return isCollection;
-    }
-
-    public void setAlbum(boolean isCollection)
-    {
-        this.isCollection = isCollection;
     }
 
     public String getTitle()

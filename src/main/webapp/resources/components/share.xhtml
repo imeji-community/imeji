@@ -20,7 +20,7 @@
 					<div id="shareButtons" class="imj_submitPanel">
 						<h:commandButton value="#{lbl.share_new}" action="#" styleClass="imj_submitButton" type="button" onclick="$('#share').show();$('#shareButtons').hide();"/>
 						<h:outputText value="#{lbl.or_big}" styleClass="imj_submitPanelSeparator"/>
-						<h:outputLink value="#{Navigation.applicationUrl}usergroups?back=#{Navigation.applicationUrl}#{ShareBean.collection ? 'collection' : 'album'}/#{ShareBean.id}/share" styleClass="imj_submitButton">
+						<h:outputLink value="#{Navigation.applicationUrl}usergroups?back=#{Navigation.applicationUri}#{ShareBean.pageUrl}" styleClass="imj_submitButton">
 							<h:outputText value="#{lbl.share_with_group}"/>
 						</h:outputLink>
 					</div>
@@ -105,7 +105,7 @@
 											<h:outputText value="#{sh.group.name}" rendered="#{sh.group != null}"/>
 										</td>
 										<td colspan="7">
-											<h:selectManyCheckbox id="role" value="#{sh.sharedType}" enabledClass="imj_noDisplay" layout="lineDirection" onclick="document.getElementById('users:#{pos.index}:checkGrants').click();">
+											<h:selectManyCheckbox id="role" value="#{sh.sharedType}" enabledClass="imj_noDisplay" layout="lineDirection" onclick="document.getElementById('share:users:#{pos.index}:checkGrants').click();">
 												<f:selectItems value="#{ShareBean.grantItems}"/>
 											</h:selectManyCheckbox>
 											<h:commandButton id="checkGrants" value="Check Grants" action="#{ShareBean.checkGrants(sh.sharedType)}" styleClass="imj_noDisplay">

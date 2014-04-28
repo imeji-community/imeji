@@ -35,7 +35,7 @@ public class GrantController extends ImejiController
     public void addGrants(User user, List<Grant> g, User currentUser) throws Exception
     {
         user.getGrants().addAll(getNewGrants(user.getGrants(), g));
-        UserController c = new UserController(currentUser);
+    	UserController c = new UserController(currentUser);
         c.update(user, currentUser);
     }
 

@@ -8,8 +8,8 @@
 	
 	<ui:param name="headline" value="#{lbl.share.toString().trim()}:"/>
 	<ui:param name="headlineSecondRow" value="#{ShareBean.title}"/>
-	<ui:param name="currentMainMenu" value="#{(ShareBean.isCollection()) ? 'collection' : 'album'}"/>
-	<ui:param name="contUrl" value="#{(ShareBean.isCollection()) ?  Navigation.collectionUrl :Navigation.albumUrl}"/>
+	<ui:param name="currentMainMenu" value="#{ShareBean.type}"/>
+	<ui:param name="contUrl" value="unknown"/>
 	
 	<ui:define name="actionsMenu">
 		<menu:context_subNavigation contextId="#{ShareBean.id}" 
@@ -27,7 +27,8 @@
 	
 		<ui:include src="./include/History.xhtml"/>
 	
-		<imjc:share />
+		<!-- ID must not be changed. The share page would not work anymore -->
+		<imjc:share id="share" />
 		
 	</ui:define>
 </ui:composition>

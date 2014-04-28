@@ -1643,15 +1643,7 @@ label {
 	width: 24%;
 	vertical-align: top;
 	cursor: pointer;
-}
-
-.imj_metadataLabel,
-.imj_infodataLabel,
-.imj_admindataLabel {
 	font-weight: bold;
-}
-
-.imj_admindataLabel {
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
@@ -2100,6 +2092,11 @@ a.imj_submitButton,
 .imj_tiledMediaList .imj_tileItem:hover .imj_tooltip {
 	display: block;
 }
+.imj_tiledMediaList .imj_tileItem .imj_tooltip .imj_metadataPublicationArea .imj_citation p:first-child {
+	margin-top: 0;
+	padding-top: 0;
+}
+
 
 .imj_tileThumbnailArea {
 	background-color: #444444;
@@ -2246,6 +2243,7 @@ a.imj_submitButton,
 
 .imj_imageInfoLayer .imj_metadataValue {
 	width: 72.33%;
+	margin-left: 0.727272em;
 }
 
 .imj_imageInfoLayer .highlight_area.imj_highlightDependencies {

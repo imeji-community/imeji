@@ -17,7 +17,7 @@
 									curMainMenu="#{currentMainMenu}" 
 									userHasAdminRights="#{Auth.admin}" 
 									userHasUploadRights="#{Auth.create(ShareBean.shareTo)}" 
-									hasContent="false" 
+									hasContent="#{ShareBean.hasContent}" 
 									navBean="#{Navigation}" 
 									activeMenu="share" 
 									allowedToShare="true"/>

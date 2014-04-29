@@ -21,6 +21,7 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.GrantController;
+import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserGroupController;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -69,6 +70,7 @@ public class ShareBean
     private SharedObjectType type;
     // The url of the current share page (used for back link)
     private String pageUrl;
+    private boolean hasContent = false;
 
     public enum SharedObjectType
     {
@@ -97,6 +99,7 @@ public class ShareBean
             this.profileUri = collection.getProfile().toString();
             this.title = collection.getMetadata().getTitle();
             this.owner = collection.getCreatedBy();
+            this.hasContent = hasContent(collection);
         }
         this.init();
     }
@@ -116,6 +119,7 @@ public class ShareBean
             this.shareTo = album;
             this.title = album.getMetadata().getTitle();
             this.owner = album.getCreatedBy();
+            this.hasContent = hasContent(album);
         }
         this.init();
     }
@@ -564,6 +568,18 @@ public class ShareBean
         return b;
     }
 
+    /**
+     * REturn true if the {@link Container} has item
+     * 
+     * @param c
+     * @return
+     */
+    private boolean hasContent(Container c)
+    {
+        ItemController ic = new ItemController(user);
+        return ic.findContainerItems(c, user, 1).getImages().size() > 0;
+    }
+
     public void clearError()
     {
         errorList.clear();
@@ -799,5 +815,21 @@ public class ShareBean
     public void setType(SharedObjectType type)
     {
         this.type = type;
+    }
+
+    /**
+     * @return the hasContent
+     */
+    public boolean isHasContent()
+    {
+        return hasContent;
+    }
+
+    /**
+     * @param hasContent the hasContent to set
+     */
+    public void setHasContent(boolean hasContent)
+    {
+        this.hasContent = hasContent;
     }
 }

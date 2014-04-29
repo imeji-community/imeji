@@ -31,6 +31,8 @@ public class SearchForm
     private Map<String, MetadataProfile> profilesMap;
     private List<SearchGroupForm> groups;
     private static Logger logger = Logger.getLogger(SearchForm.class);
+    
+    private enum fileType  {IMAGE, VIDEO, AUDIO, OTHER;}
 
     /**
      * Default Constructor

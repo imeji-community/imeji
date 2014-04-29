@@ -85,11 +85,12 @@ public class Page
                     title = ObjectLoader.loadUser(id,
                             ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getUser()).getName();
                 }
-                // Cut the name of the object
-                if (title != null && title.length() > 20)
-                {
-                    title = title.substring(0, 20) + "...";
-                }
+//                Is now done in html page
+//                // Cut the name of the object
+//                if (title != null && title.length() > 20)
+//                {
+//                    title = title.substring(0, 20) + "...";
+//                }
             }
             catch (Exception e)
             {

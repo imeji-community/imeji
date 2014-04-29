@@ -98,14 +98,16 @@
 										<div class="imj_admindataLabel"></div>
 										<div class="imj_admindataValue">
 											<div class="imj_admindataValueEntry">
+											<h:form>
 												<ui:repeat  var="user" value="#{UserGroup.users}" rows="0">
 													<div class="imj_userGrantList">
 														<h:outputText value="#{user.name} (#{user.email})" />
-														<h:form>
-															<h:commandLink value="#{lbl.remove}" action="#{UserGroup.removeUserGromGroup(user.id)}" styleClass="imj_cancelButton"/>
-														</h:form>
+														
+															<h:commandButton value="#{lbl.remove}" action="#{UserGroup.removeUserGromGroup(user.id)}" styleClass="imj_cancelButton"/>
+														
 													</div>
 												</ui:repeat>
+												</h:form>
 											</div>
 										</div>
 									</div>	

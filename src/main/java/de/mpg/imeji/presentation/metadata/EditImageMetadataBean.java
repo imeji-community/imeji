@@ -12,6 +12,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.varia.ReloadingPropertyConfigurator;
 
 import de.mpg.imeji.logic.concurrency.locks.Lock;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
@@ -23,7 +24,6 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.presentation.beans.BasePaginatorListSessionBean.PaginatorPage;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
@@ -97,7 +97,6 @@ public class EditImageMetadataBean
             if (uris != null)
             {
                 lockImages(uris);
-                allItems = loaditems(uris.subList(0, 1));
                 if ("selected".equals(type))
                     allItems = loaditems(uris);
                 else
@@ -351,20 +350,19 @@ public class EditImageMetadataBean
         saveAndRedirect();
         return "";
     }
-    
+
     /**
      * For batch edit: Add the same values to all images and save.
      * 
      * @return
-     * @throws Exception 
+     * @throws Exception
      */
-    public String addToAllSave() throws Exception
+    public void addToAllSave() throws Exception
     {
         // First, re-initialize the editor with all items (for batch, editor has been initialized with only one item)
         initEditor(new ArrayList<Item>(loaditems(findItems())));
         addToAll();
         save();
-        return "";
     }
 
     /**
@@ -373,27 +371,23 @@ public class EditImageMetadataBean
      * @return
      * @throws IOException
      */
-    public String saveAndRedirect() throws IOException
+    public void saveAndRedirect() throws IOException
     {
         editor.save();
         redirectToView();
-        return "";
     }
-    
+
     /**
      * For the Multiple Edit: Save the current values
      * 
      * @return
-     * @throws Exception 
+     * @throws Exception
      */
-    public String save() throws Exception
-    {   	
+    public void save() throws Exception
+    {
         editor.save();
-        Navigation navi = new Navigation();       
-        FacesContext.getCurrentInstance().getExternalContext()
-        .redirect(navi.applicationUrl+"edit?type="+this.type+"&amp;c="+ this.collectionId+"&amp;q="+this.query);
-        return "";
-   }
+        reload();
+    }
 
     /**
      * Lock the {@link Item} which are currently in the editor. This prevent other users to make concurrent
@@ -436,7 +430,7 @@ public class EditImageMetadataBean
      * 
      * @return
      */
-    public String addToAll()
+    public void addToAll()
     {
         for (EditorItemBean eib : editor.getItems())
         {
@@ -457,7 +451,6 @@ public class EditImageMetadataBean
         }
         // Make a new Emtpy Metadata of the same statement
         initEmtpyEditorItem();
-        return "";
     }
 
     /**
@@ -470,8 +463,19 @@ public class EditImageMetadataBean
         this.reset();
         unlockImages();
         HistorySession hs = (HistorySession)BeanHelper.getSessionBean(HistorySession.class);
-        FacesContext.getCurrentInstance().getExternalContext()
-                .redirect(hs.getPreviousPage().getCompleteUrl());
+        FacesContext.getCurrentInstance().getExternalContext().redirect(hs.getPreviousPage().getCompleteUrl());
+    }
+
+    /**
+     * redirect to previous page
+     * 
+     * @throws IOException
+     */
+    public void reload() throws IOException
+    {
+        HistorySession hs = (HistorySession)BeanHelper.getSessionBean(HistorySession.class);
+        System.out.println(hs.getCurrentPage().getCompleteUrl());
+        FacesContext.getCurrentInstance().getExternalContext().redirect(hs.getCurrentPage().getCompleteUrl());
     }
 
     /**

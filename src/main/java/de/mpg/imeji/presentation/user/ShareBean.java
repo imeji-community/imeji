@@ -1,6 +1,5 @@
 package de.mpg.imeji.presentation.user;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -203,6 +202,9 @@ public class ShareBean
         reloadPage();
     }
 
+    /**
+     * Reload the current page
+     */
     private void reloadPage()
     {
         try

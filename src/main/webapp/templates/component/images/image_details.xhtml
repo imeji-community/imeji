@@ -371,21 +371,21 @@
 								</h:form>
 							</span>
 						</h:panelGroup>
-						<h:panelGroup styleClass="imj_infodataSet" rendered="#{imageBean.image.status == 'RELEASED' and imageBean.collection.status == 'PENDING'}">
+						<h:panelGroup styleClass="imj_infodataSet" rendered="#{imageBean.image.status == 'RELEASED'}">
 							<span class="imj_infodataLabel">
 								<h:outputText  value="#{lbl['item_public']}"/>
 								<span class="imj_invisible">: </span>
 							</span>
-							<span class="imj_infodataValue">
+							<h:panelGroup class="imj_infodataValue" rendered="#{imageBean.collection.status == 'PENDING'}">
 								<h:form>
 									<h:commandButton value="#{lbl.make_private}" action="#{imageBean.makePrivate}" styleClass="imj_submitButton">
 										<f:ajax render=":sharePanel"/>
 									</h:commandButton>
 								</h:form>
-							</span>
+							</h:panelGroup>
 						</h:panelGroup>
 					</div>
-					<h:panelGroup   styleClass="imj_infodataWrapper" rendered="#{imageBean.image.status == 'PENDING'}">
+					<h:panelGroup styleClass="imj_infodataWrapper" rendered="#{imageBean.image.status == 'PENDING'}">
 						<div class="imj_metadataSubPanel">
 							<h:outputText styleClass="imj_metadataSubPanelItem" value="#{lbl.share}"/>
 						</div>				

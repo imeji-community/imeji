@@ -41,7 +41,7 @@
 							<h:outputText value="#{md.text}" title="#{md.text}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#text'}"/>
 							<h:outputText value="#{md.number}" title="#{md.number}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#number'}"/>
 							<h:outputText value="#{md.date}" title="#{md.date}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#date'}"/>
-							<h:outputLink value="#{md.uri}" title="#{md.uri}" target="_blank" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#publication' or md.typeNamespace == 'http://imeji.org/terms/metadata#link'}">
+							<h:outputLink value="#{md.uri}" title="#{md.uri}" target="_blank" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#link'}">
 								<h:outputText value="Link" rendered="#{md.label == ''}"/>
 								<h:outputText value="#{md.label}" rendered="#{md.label != ''}"/>
 							</h:outputLink>

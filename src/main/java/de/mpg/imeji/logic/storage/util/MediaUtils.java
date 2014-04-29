@@ -75,8 +75,12 @@ public class MediaUtils
         ConvertCmd cmd = getConvert();
         // create the operation, add images and operators/options
         IMOperation op = new IMOperation();
-        op.colorspace(findColorSpace(tmp));
+        if (isImage(extension))
+            op.colorspace(findColorSpace(tmp));
         op.strip();
+        // TODO test if quality and depth can improve performance for big images
+        op.quality(50D);
+        op.depth(8);
         op.addImage(path);
         // op.colorspace("RGB");
         File jpeg = File.createTempFile("uploadMagick", ".jpg");
@@ -98,6 +102,17 @@ public class MediaUtils
             removeFilesCreatedByImageMagick(jpeg.getAbsolutePath());
             FileUtils.deleteQuietly(jpeg);
         }
+    }
+
+    /**
+     * True if the extension correspond to an image file
+     * 
+     * @param extension
+     * @return
+     */
+    private static boolean isImage(String extension)
+    {
+        return StorageUtils.getMimeType(extension).contains("image");
     }
 
     public static byte[] resize()

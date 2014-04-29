@@ -370,7 +370,7 @@
 										<f:ajax render=":sharePanel"/>
 									</h:commandButton>
 								</h:form>
-								<h:form rendered="#{imageBean.image.status == 'RELEASED'}">
+								<h:form rendered="#{imageBean.image.status == 'RELEASED' and imageBean.collection.status != 'RELEASED'}">
 									<h:commandButton value="#{lbl.make_private}" action="#{imageBean.makePrivate}" styleClass="imj_submitButton">
 										<f:ajax render=":sharePanel"/>
 									</h:commandButton>

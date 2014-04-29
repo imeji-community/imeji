@@ -181,10 +181,26 @@ public class Authorization
      */
     public boolean create(User user, Object obj)
     {
+        if (hasGrant(user, toGrant(getRelevantURIForSecurity(obj, false, true), GrantType.CREATE)))
+            return true;
+        return false;
+    }
+    
+    /**
+     * Check if the object can be created when the object is not existing
+     * 
+     * @param user
+     * @param uri
+     * @return
+     * @throws NotAllowedError
+     */
+    public boolean createNew(User user, Object obj)
+    {
         if (hasGrant(user, toGrant(getRelevantURIForSecurity(obj, true, true), GrantType.CREATE)))
             return true;
         return false;
     }
+
 
     /**
      * Return true if the {@link User} can read the object
@@ -344,18 +360,18 @@ public class Authorization
      * @param obj
      * @return
      */
-    private String getRelevantURIForSecurity(Object obj, boolean create, boolean getContainer)
+    private String getRelevantURIForSecurity(Object obj, boolean createNew, boolean getContainer)
     {
         if (obj instanceof Item)
             return getContainer ? ((Item)obj).getCollection().toString() : ((Item)obj).getId().toString();
         else if (obj instanceof Container)
-            return create ? AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI : ((Container)obj).getId().toString();
+            return createNew ? AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI : ((Container)obj).getId().toString();
         else if (obj instanceof CollectionListItem)
             return ((CollectionListItem)obj).getUri().toString();
         else if (obj instanceof AlbumBean)
             return ((AlbumBean)obj).getAlbum().getId().toString();
         else if (obj instanceof MetadataProfile)
-            return create ? AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI : ((MetadataProfile)obj).getId().toString();
+            return createNew ? AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI : ((MetadataProfile)obj).getId().toString();
         else if (obj instanceof User)
             return ((User)obj).getId().toString();
         else if (obj instanceof URI)

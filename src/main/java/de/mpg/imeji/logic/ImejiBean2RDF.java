@@ -140,7 +140,7 @@ public class ImejiBean2RDF
             switch (gt)
             {
                 case CREATE:
-                    throwAuthorizationException(AuthUtil.staticAuth().create(user, o), user.getEmail()
+                    throwAuthorizationException(AuthUtil.staticAuth().createNew(user, o), user.getEmail()
                             + " not allowed to create " + extractID(o));
                     break;
                 case DELETE:

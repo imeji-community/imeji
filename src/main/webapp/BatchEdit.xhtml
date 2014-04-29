@@ -94,7 +94,8 @@
 							
 							<h:panelGroup layout="block" styleClass="imj_submitPanel" rendered="#{EditImageMetadataBean.editType != 'selected'}">
 								<h:commandButton styleClass="imj_cancelButton" action="#{EditImageMetadataBean.cancel}" value="#{lbl.cancel}"/>
-								<h:commandButton styleClass="imj_submitButton" action="#{EditImageMetadataBean.addToAllSaveAndRedirect}" value="#{lbl.save}" onclick="openDialog('dialogWait');"/>
+								<h:commandButton styleClass="imj_submitButton" action="#{EditImageMetadataBean.addToAllSave}" value="#{lbl.save}" onclick="openDialog('dialogWait');"/>
+								<h:commandButton styleClass="imj_submitButton" action="#{EditImageMetadataBean.addToAllSaveAndRedirect}" value="#{lbl.save_and_return_to_view}" onclick="openDialog('dialogWait');"/>
 							</h:panelGroup>
 						</div>
 						
@@ -110,9 +111,9 @@
 									<h:commandButton styleClass="imj_resetButton" action="#{EditImageMetadataBean.resetChanges}" value="#{lbl.reset_changes}">
 										<f:ajax render="ajaxContent"/>
 									</h:commandButton>
-									
 									<h:commandButton styleClass="imj_cancelButton" action="#{EditImageMetadataBean.cancel}" value="#{lbl.cancel}"/>
-									<h:commandButton styleClass="imj_submitButton" action="#{EditImageMetadataBean.addToAllSaveAndRedirect}" value="#{lbl.save}" onclick="openDialog('dialogWait');"/>
+									<h:commandButton styleClass="imj_submitButton" action="#{EditImageMetadataBean.save}" value="#{lbl.save}" onclick="openDialog('dialogWait');"/>
+									<h:commandButton styleClass="imj_submitButton" action="#{EditImageMetadataBean.saveAndRedirect}" value="#{lbl.save_and_return_to_view}" onclick="openDialog('dialogWait');"/>
 								</div>
 							</div>
 							
@@ -144,7 +145,8 @@
 									</h:commandButton>
 									<h:messages />
 									<h:commandButton styleClass="imj_cancelButton" action="#{EditImageMetadataBean.cancel}" value="#{lbl.cancel}"/>
-									<h:commandButton styleClass="imj_submitButton" action="#{EditImageMetadataBean.addToAllSaveAndRedirect}" value="#{lbl.save}" onclick="openDialog('dialogWait');"/>
+									<h:commandButton styleClass="imj_submitButton" action="#{EditImageMetadataBean.save}" value="#{lbl.save}" onclick="openDialog('dialogWait');"/>
+									<h:commandButton styleClass="imj_submitButton" action="#{EditImageMetadataBean.saveAndRedirect}" value="#{lbl.save_and_return_to_view}" onclick="openDialog('dialogWait');"/>
 								</div>
 							</div>
 				        </h:panelGroup> <!-- END imj_batchEditItemList -->

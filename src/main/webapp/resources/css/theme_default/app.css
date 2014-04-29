@@ -3000,6 +3000,11 @@ a:hover .imj_entryPagePreviewTiledListLinkArrow {
 	padding: 1% 4%;
 	border-top: 0.090909em solid #6CAE2F;
 }
+#sharePanel .imj_shareForm {
+	border: 0 none;
+	width: 100%;
+	padding: 0;
+}
 
 /* ===[ Share Pages ]===
 	Share.xhtml
@@ -3031,10 +3036,23 @@ a:hover .imj_entryPagePreviewTiledListLinkArrow {
 	background-color: rgba(255,255,255,0.1);
 }
 .imj_rightsTableForNewUser td {
-	padding-right: 0.818181em; 
+	padding-right: 0.818181em;
+	vertical-align: top;
 }
 .imj_rightsTableForNewUser input[type=checkbox] {
 	display: block;
+}
+
+fieldset.imj_shareInformationFieldset {
+	padding: 1% 1%;
+	border-top-style: inset;
+	border-bottom-style: outset;
+	border-color: rgba(255,255,255, 0.15);
+}
+fieldset.imj_shareInformationFieldset > legend {
+	margin: 0 1%;
+	padding: 0 1%;
+	font-size: 110%;
 }
 
 /* ===[ Admin Pages ]===

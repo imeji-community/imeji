@@ -30,6 +30,7 @@ package de.mpg.imeji.presentation.user;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.URI;
 import java.util.Collection;
 
 import javax.annotation.PostConstruct;
@@ -67,28 +68,19 @@ public class UserGroupsBean implements Serializable
     private static Logger logger = Logger.getLogger(UserGroupsBean.class);
     private String backContainerUrl;
 
-    /**
-     * @return the backContainerUrl
-     */
-    public String getBackContainerUrl()
-    {
-        return backContainerUrl;
-    }
-
-    /**
-     * @param backContainerUrl the backContainerUrl to set
-     */
-    public void setBackContainerUrl(String backContainerUrl)
-    {
-        this.backContainerUrl = backContainerUrl;
-    }
-
     @PostConstruct
     public void init()
     {
         String q = UrlHelper.getParameterValue("q");
         String back = UrlHelper.getParameterValue("back");
         backContainerUrl = back == null || "".equals(back) ? null : back;
+        if (backContainerUrl != null)
+        {
+            if (URI.create(back).getQuery() != null)
+                backContainerUrl += "&";
+            else
+                backContainerUrl += "?";
+        }
         query = q == null ? "" : q;
         doSearch();
     }
@@ -195,5 +187,21 @@ public class UserGroupsBean implements Serializable
     public void setQuery(String query)
     {
         this.query = query;
+    }
+
+    /**
+     * @return the backContainerUrl
+     */
+    public String getBackContainerUrl()
+    {
+        return backContainerUrl;
+    }
+
+    /**
+     * @param backContainerUrl the backContainerUrl to set
+     */
+    public void setBackContainerUrl(String backContainerUrl)
+    {
+        this.backContainerUrl = backContainerUrl;
     }
 }

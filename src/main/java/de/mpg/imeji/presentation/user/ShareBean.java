@@ -158,6 +158,7 @@ public class ShareBean
         this.isAdmin = AuthUtil.staticAuth().administrate(this.user, shareTo);
         this.pageUrl = PrettyContext.getCurrentInstance().getRequestURL().toString()
                 + PrettyContext.getCurrentInstance().getRequestQueryString();
+        this.pageUrl = this.pageUrl.split("&group=")[0];
         this.initShareWithGroup();
     }
 

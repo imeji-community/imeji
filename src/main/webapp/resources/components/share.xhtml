@@ -26,7 +26,7 @@
 				</ui:fragment>
 				<ui:fragment rendered="#{ShareBean.userGroup != null}">
 					<div class="imj_metadataLabel">
-						<h:outputText value="#{lbl.share_with} #{ShareBean.userGroup.name}"/>		
+						<h:outputText value="#{lbl.share_with} #{ShareBean.userGroup.name}"/>
 					</div>
 					<h:form prependId="false">
 						<h:panelGroup layout="block" styleClass="imj_metadataValue">
@@ -37,7 +37,9 @@
 								<f:ajax execute="@form" render="@form"/>
 							</h:commandButton>
 							<div class="imj_submitPanel">
-								<h:commandButton value="#{lbl.cancel}" action="#{ShareBean.reset}" styleClass="imj_cancelButton"/>
+								<h:outputLink value="#{Navigation.applicationUri}#{ShareBean.pageUrl}" styleClass="imj_cancelButton" title="#{lbl.reset}">
+									<h:outputText value="#{lbl.cancel}"/>
+								</h:outputLink>
 								<h:commandButton value="#{lbl.share}" action="#{ShareBean.shareWithGroup}" styleClass="imj_submitButton"/>
 								<h:selectBooleanCheckbox value="#{ShareBean.sendEmail}" id="selSendEmailToGroup"/>
 								<h:outputLabel for="selSendEmailToGroup" value="#{lbl.user_send_mail}"/>
@@ -56,7 +58,7 @@
 							<div class="imj_metadataSet">
 								<div class="imj_metadataLabel"></div>
 								<h:panelGroup layout="block" id="shareOptions" styleClass="imj_metadataValue">
-									<h:selectManyCheckbox id="selectedGrantsn" styleClass="imj_rightsTableForNewUser" selectedClass="imj_optionLabel" value="#{ShareBean.selectedGrants}" layout="lineDirection" onclick="document.getElementById('checkGrants').click();">
+									<h:selectManyCheckbox id="selectedGrants" styleClass="imj_rightsTableForNewUser" selectedClass="imj_optionLabel" value="#{ShareBean.selectedGrants}" layout="lineDirection" onclick="document.getElementById('checkGrants').click();">
 										<f:selectItems value="#{ShareBean.grantItems}"/>
 									</h:selectManyCheckbox>
 									<h:commandButton id="checkGrants" value="Check Grants" action="#{ShareBean.checkGrants(ShareBean.selectedGrants)}" styleClass="imj_noDisplay">
@@ -69,7 +71,7 @@
 								<h:outputLabel for="selSendEmail" value="#{lbl.user_send_mail}"/>
 							</div>
 							<div class="imj_submitPanel">
-								<h:outputLink value="#{History.currentPage}" styleClass="imj_cancelButton" title="#{lbl.reset}">
+								<h:outputLink value="#{Navigation.applicationUri}#{ShareBean.pageUrl}" styleClass="imj_cancelButton" title="#{lbl.reset}">
 									<h:outputText value="#{lbl.cancel}"/>
 								</h:outputLink>
 								<h:commandButton value="#{lbl.share}" action="#{ShareBean.share}" styleClass="imj_submitButton"/>
@@ -123,7 +125,7 @@
 					</h:form>
 					
 					<div class="imj_submitPanel">
-						<h:outputLink value="#{History.currentPage}" styleClass="imj_cancelButton" title="#{lbl.reset}">
+						<h:outputLink value="#{Navigation.applicationUri}#{ShareBean.pageUrl}" styleClass="imj_cancelButton" title="#{lbl.reset}">
 							<h:outputText value="#{lbl.reset}"/>
 						</h:outputLink>
 						<h:form>

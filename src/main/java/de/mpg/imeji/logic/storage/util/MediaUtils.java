@@ -78,6 +78,7 @@ public class MediaUtils
         if (isImage(extension))
             op.colorspace(findColorSpace(tmp));
         op.strip();
+        op.flatten();
         op.addImage(path);
         // op.colorspace("RGB");
         File jpeg = File.createTempFile("uploadMagick", ".jpg");

@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.Authorization;
 import de.mpg.imeji.logic.controller.CollectionController;
@@ -32,6 +33,7 @@ import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.auth.ImejiAuthBean;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.history.PageURIHelper;
 import de.mpg.imeji.presentation.session.SessionBean;
@@ -137,7 +139,7 @@ public class FileServlet extends HttpServlet
             try
             {
                 // important to use lazy load, otherwise high performance issue
-                collection = ObjectLoader.loadCollectionLazy(collectionURI, session.getUser());
+                collection = ObjectLoader.loadCollectionLazy(collectionURI, Imeji.adminUser);
                 session.getCollectionCached().put(collection.getId(), collection);
             }
             catch (Exception e)

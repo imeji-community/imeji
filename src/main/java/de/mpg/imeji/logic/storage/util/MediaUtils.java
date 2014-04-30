@@ -78,9 +78,6 @@ public class MediaUtils
         if (isImage(extension))
             op.colorspace(findColorSpace(tmp));
         op.strip();
-        // TODO test if quality and depth can improve performance for big images
-        op.quality(50D);
-        op.depth(8);
         op.addImage(path);
         // op.colorspace("RGB");
         File jpeg = File.createTempFile("uploadMagick", ".jpg");

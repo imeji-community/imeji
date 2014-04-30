@@ -35,6 +35,11 @@
 			
 			<ui:fragment rendered="#{cc.attrs.showSelectMenu}">
 				<h:form id="preListForm">
+					
+					<h:outputLink styleClass="imj_removeFacetButton" value="#{cc.attrs.browseToAllUrl}">
+						<h:outputText value="#{lbl.all}"/>
+					</h:outputLink>
+						
 					<ui:repeat id="filterList" var="filter" value="#{cc.attrs.fSession.filters}" offset="0" varStatus="index">
 						<h:outputText value="/" styleClass="imj_facetSeparator"/>
 						<h:outputText value="#{filter.internationalizedLabel}"/>
@@ -47,8 +52,16 @@
 						</h:outputLink>
 					</ui:repeat>
 					
+					<ui:fragment rendered="#{!Auth.loggedIn}">
+						<div class="imj_overlayMenu imj_menuHeader">
+							<h:outputText value="( "/>
+							<h:outputText value="#{cc.attrs.numberOfElements} #{lbl.images}"/>
+							<h:outputText value=" )"/>
+						</div>
+					</ui:fragment>
+					
 					<!-- Select menu for all images [LEFT] -->
-					<h:panelGroup rendered="#{Auth.loggedIn}">
+					<ui:fragment rendered="#{Auth.loggedIn}">
 						<h:panelGroup layout="block" styleClass="imj_overlayMenu" rendered="#{cc.attrs.numberOfElements > 0}">
 							<div class="imj_menuHeader">
 								<h:outputText value="( "/>
@@ -111,7 +124,7 @@
 								</ul>
 							</div>
 						</h:panelGroup>
-					</h:panelGroup>
+					</ui:fragment>
 					
 					
 					<!-- Select menu for selected images [RIGHT] -->

@@ -33,6 +33,7 @@ import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -42,8 +43,13 @@ import javax.faces.context.FacesContext;
 
 import org.apache.log4j.Logger;
 
+import com.hp.hpl.jena.sparql.pfunction.library.container;
+
+import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserGroupController;
+import de.mpg.imeji.logic.vo.Container;
+import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.presentation.beans.Navigation;
@@ -66,6 +72,7 @@ public class UserGroupBean implements Serializable
     @ManagedProperty(value = "#{SessionBean.user}")
     private User sessionUser;
     private static Logger logger = Logger.getLogger(UserGroupsBean.class);
+    private List<SharedHistory> roles = new ArrayList<SharedHistory>();
 
     @PostConstruct
     public void init()
@@ -76,8 +83,9 @@ public class UserGroupBean implements Serializable
             UserGroupController c = new UserGroupController();
             try
             {
-                userGroup = c.read(groupId, sessionUser);
-                setUsers(loadUsers(userGroup));
+                this.userGroup = c.read(groupId, sessionUser);
+                this.users = loadUsers(userGroup);
+                this.roles = AuthUtil.getAllRoles(userGroup, sessionUser);
             }
             catch (Exception e)
             {
@@ -112,14 +120,38 @@ public class UserGroupBean implements Serializable
      * 
      * @param remove
      * @return
-     * @throws IOException 
+     * @throws IOException
      */
     public void removeUserGromGroup(URI remove) throws IOException
     {
         userGroup.getUsers().remove(remove);
         save();
+    }
+
+    /**
+     * Unshare the {@link Container} for one {@link UserGroup} (i.e, remove all {@link Grant} of this {@link User}
+     * related to the {@link container})
+     * 
+     * @param sh
+     * @throws IOException
+     */
+    public void revokeGrants(SharedHistory sh) throws IOException
+    {
+        sh.getSharedType().clear();
+        sh.update();
+        reload();
+    }
+
+    /**
+     * Reload the page
+     * 
+     * @throws IOException
+     */
+    private void reload() throws IOException
+    {
         Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-        FacesContext.getCurrentInstance().getExternalContext().redirect(nav.getApplicationUrl() + "usergroup?id=" + userGroup.getId());
+        FacesContext.getCurrentInstance().getExternalContext()
+                .redirect(nav.getApplicationUrl() + "usergroup?id=" + userGroup.getId());
     }
 
     /**
@@ -202,5 +234,21 @@ public class UserGroupBean implements Serializable
     public void setUsers(Collection<User> users)
     {
         this.users = users;
+    }
+
+    /**
+     * @return the roles
+     */
+    public List<SharedHistory> getRoles()
+    {
+        return roles;
+    }
+
+    /**
+     * @param roles the roles to set
+     */
+    public void setRoles(List<SharedHistory> roles)
+    {
+        this.roles = roles;
     }
 }

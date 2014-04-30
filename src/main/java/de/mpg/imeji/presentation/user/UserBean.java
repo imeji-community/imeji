@@ -5,17 +5,16 @@ package de.mpg.imeji.presentation.user;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-
 import javax.faces.context.FacesContext;
-
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
+import com.hp.hpl.jena.sparql.pfunction.library.container;
+import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.StringHelper;
+import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -29,10 +28,10 @@ public class UserBean
     private String newEmail = null;
     private SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     private String id;
-    
+    private List<SharedHistory> roles = new ArrayList<SharedHistory>();
+
     public UserBean()
     {
-        // TODO Auto-generated constructor stub
     }
 
     public UserBean(String email)
@@ -53,12 +52,22 @@ public class UserBean
 
     private void init(String id)
     {
-        this.id = id;
-        newPassword = null;
-        repeatedPassword = null;
-        retrieveUser();
-        this.newEmail = null;
+        try
+        {
+            this.id = id;
+            newPassword = null;
+            repeatedPassword = null;
+            retrieveUser();
+            this.roles = AuthUtil.getAllRoles(user, session.getUser());
+            this.newEmail = null;
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
     }
+
+   
 
     /**
      * Retrieve the current user
@@ -143,28 +152,15 @@ public class UserBean
     }
 
     /**
-     * Revoke one Grant
+     * Unshare the {@link Container} for one {@link User} (i.e, remove all {@link Grant} of this {@link User} related to
+     * the {@link container})
      * 
-     * @throws IOException
+     * @param sh
      */
-    public void revokeGrant() throws IOException
+    public void revokeGrants(SharedHistory sh)
     {
-        String grantType = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
-                .get("grantType");
-        String grantFor = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
-                .get("grantFor");
-        Collection<Grant> newGrants = new ArrayList<Grant>();
-        for (Grant g : user.getGrants())
-        {
-            if (!g.getGrantFor().toString().equals(grantFor) && !g.asGrantType().toString().equals(grantType))
-            {
-                newGrants.add(g);
-            }
-        }
-        user.setGrants(newGrants);
-        updateUser();
-        BeanHelper.info("Grant revoked");
-        reloadPage();
+        sh.getSharedType().clear();
+        sh.update();
     }
     
     public void allowedToCreateCollection()throws IOException
@@ -258,5 +254,21 @@ public class UserBean
     public void setNewEmail(String newEmail)
     {
         this.newEmail = newEmail;
+    }
+
+    /**
+     * @return the roles
+     */
+    public List<SharedHistory> getRoles()
+    {
+        return roles;
+    }
+
+    /**
+     * @param roles the roles to set
+     */
+    public void setRoles(List<SharedHistory> roles)
+    {
+        this.roles = roles;
     }
 }

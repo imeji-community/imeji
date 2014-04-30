@@ -17,7 +17,7 @@
 									curMainMenu="#{currentMainMenu}" 
 									userHasAdminRights="#{Auth.admin}" 
 									userHasUploadRights="#{Auth.create(ShareBean.shareTo)}" 
-									hasContent="false" 
+									hasContent="#{ShareBean.hasContent}" 
 									navBean="#{Navigation}" 
 									activeMenu="share" 
 									allowedToShare="true"/>
@@ -26,9 +26,8 @@
 	<ui:define name="mainContent">
 	
 		<ui:include src="./include/History.xhtml"/>
-	
 		<!-- ID must not be changed. The share page would not work anymore -->
-		<imjc:share id="share" />
+		<imjc:share id="share" roles="#{ShareBean.type == 'COLLECTION' ? SessionBean.shareCollectionGrantItems : SessionBean.shareAlbumGrantItems}"/>
 		
 	</ui:define>
 </ui:composition>

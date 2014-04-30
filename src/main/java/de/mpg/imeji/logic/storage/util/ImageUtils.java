@@ -110,7 +110,6 @@ public class ImageUtils
         return null;
     }
 
-
     /**
      * Scale a {@link BufferedImage} to new size. Is faster than the basic {@link ImageUtils}.scaleImage method, has the
      * same quality. If it is a thumbnail, cut the images to fit into the raster
@@ -128,11 +127,12 @@ public class ImageUtils
         int height = image.getHeight(null);
         BufferedImage newImg = null;
         Image rescaledImage;
+        int colorSpace = (image.getTransparency() == Transparency.OPAQUE) ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
         if (width > height)
         {
             if (FileResolution.THUMBNAIL.equals(resolution))
             {
-                newImg = new BufferedImage(height, height, BufferedImage.TYPE_INT_RGB);
+                newImg = new BufferedImage(height, height, colorSpace);
                 Graphics g1 = newImg.createGraphics();
                 g1.drawImage(image, (height - width) / 2, 0, null);
                 if (height > size)
@@ -149,7 +149,7 @@ public class ImageUtils
         {
             if (FileResolution.THUMBNAIL.equals(resolution))
             {
-                newImg = new BufferedImage(width, width, BufferedImage.TYPE_INT_RGB);
+                newImg = new BufferedImage(width, width, colorSpace);
                 Graphics g1 = newImg.createGraphics();
                 g1.drawImage(image, 0, (width - height) / 2, null);
                 if (width > size)
@@ -163,7 +163,7 @@ public class ImageUtils
                         RenderingHints.VALUE_INTERPOLATION_BILINEAR, RESCALE_HIGH_QUALITY);
         }
         BufferedImage rescaledBufferedImage = new BufferedImage(rescaledImage.getWidth(null),
-                rescaledImage.getHeight(null), BufferedImage.TYPE_INT_RGB);
+                rescaledImage.getHeight(null), colorSpace);
         Graphics g2 = rescaledBufferedImage.getGraphics();
         g2.drawImage(rescaledImage, 0, 0, null);
         return rescaledBufferedImage;

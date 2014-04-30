@@ -49,8 +49,6 @@ import org.apache.tika.mime.MimeTypeException;
 import org.apache.tika.mime.MimeTypes;
 import org.apache.tools.ant.taskdefs.Get;
 
-import de.mpg.imeji.presentation.util.ProxyHelper;
-
 /**
  * Util class fore the storage package
  * 

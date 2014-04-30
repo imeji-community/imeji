@@ -353,44 +353,34 @@
 			</ui:fragment>
 			
 			<ui:fragment rendered="#{imageBean.tab == 'share'}">
-				<h:panelGroup id="sharePanel">
-					<div class="imj_infodataWrapper">
+				<h:panelGroup layout="block" id="sharePanel">
+					<h:panelGroup styleClass="imj_infodataWrapper">
 						<div class="imj_metadataSubPanel">
-							<h:outputText styleClass="imj_metadataSubPanelItem" value="#{lbl.visibility}"/>
-						</div>
-						<h:panelGroup styleClass="imj_infodataSet" rendered="#{imageBean.image.status == 'PENDING'}">
-							<span class="imj_infodataLabel">
-								<h:outputText  value="#{lbl['item_private']}"/>
-								<span class="imj_invisible">: </span>
-							</span>
-							<span class="imj_infodataValue">
-								<h:form>
+							<fieldset class="imj_shareInformationFieldset">
+								<legend>
+									<h:outputText styleClass="" value="#{lbl.info_lblMessageHeader}"/>
+								</legend>
+								<h:outputText value="#{lbl.visibility}: "/>
+								<h:outputText value="#{lbl['item_private']}" rendered="#{imageBean.image.status == 'PENDING'}"/>
+								<h:outputText value="#{lbl['item_public']}" rendered="#{imageBean.image.status == 'RELEASED'}"/>
+								<span class="imj_noDisplay">: </span>
+								
+								<h:form rendered="#{imageBean.image.status == 'PENDING'}">
 									<h:commandButton value="#{lbl.make_public}" action="#{imageBean.makePublic}" styleClass="imj_submitButton">
 										<f:ajax render=":sharePanel"/>
 									</h:commandButton>
 								</h:form>
-							</span>
-						</h:panelGroup>
-						<h:panelGroup styleClass="imj_infodataSet" rendered="#{imageBean.image.status == 'RELEASED'}">
-							<span class="imj_infodataLabel">
-								<h:outputText  value="#{lbl['item_public']}"/>
-								<span class="imj_invisible">: </span>
-							</span>
-							<h:panelGroup class="imj_infodataValue" rendered="#{imageBean.collection.status == 'PENDING'}">
-								<h:form>
+								<h:form rendered="#{imageBean.image.status == 'RELEASED' and imageBean.collection.status != 'RELEASED'}">
 									<h:commandButton value="#{lbl.make_private}" action="#{imageBean.makePrivate}" styleClass="imj_submitButton">
 										<f:ajax render=":sharePanel"/>
 									</h:commandButton>
 								</h:form>
-							</h:panelGroup>
-						</h:panelGroup>
-					</div>
-					<h:panelGroup styleClass="imj_infodataWrapper" rendered="#{imageBean.image.status == 'PENDING'}">
-						<div class="imj_metadataSubPanel">
-							<h:outputText styleClass="imj_metadataSubPanelItem" value="#{lbl.share}"/>
-						</div>				
-						<h:outputText value="#{ShareBean.initShareItem}" />
-						<imjc:share id="share"/>
+							</fieldset>
+						</div>
+						<ui:fragment rendered="#{imageBean.image.status == 'PENDING'}">
+							<h:outputText value="#{ShareBean.initShareItem}" />
+							<imjc:share id="share" roles="#{sessionBean.shareItemGrantItems}"/>
+						</ui:fragment>
 					</h:panelGroup>
 				</h:panelGroup>
 			</ui:fragment>

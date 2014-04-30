@@ -93,7 +93,7 @@ public class RawFileImageGenerator implements ImageGenerator
     {
         int w = old.getWidth();
         int h = old.getHeight();
-        BufferedImage img = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage img = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = img.createGraphics();
         g2d.drawImage(old, 0, 0, null);
         g2d.setPaint(Color.WHITE);

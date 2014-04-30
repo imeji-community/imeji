@@ -109,7 +109,6 @@ public class MdProfileBean
     private void initMenus()
     {
         mdTypesMenu = new ArrayList<SelectItem>();
-        mdTypesMenu.add(new SelectItem(null, sessionBean.getLabel("select")));
         for (Metadata.Types t : Metadata.Types.values())
         {
             mdTypesMenu.add(new SelectItem(t.getClazzNamespace(), ((SessionBean)BeanHelper

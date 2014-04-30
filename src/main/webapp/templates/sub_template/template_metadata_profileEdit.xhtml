@@ -14,11 +14,11 @@
 		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/main.js"></script>
 		<script type="text/javascript">
 			// avoid to have many times the whole iso langages defined on the page. Relevant for profiles with many metadata
-			function write_language_options(select) {
-				write_options(select, '#{Internationalization.languagesAsString}');
+			function write_language_options(select, value) {
+				write_options(select, value, '#{Internationalization.languagesAsString}');
 			}
-			function write_metadata_type_options(select) {
-				write_options(select, '#{metadataBean.mdTypesMenuAsString}');
+			function write_metadata_type_options(select, value) {
+				write_options(select,value, '#{metadataBean.mdTypesMenuAsString}');
 			}			
 		</script>
 	</ui:define>
@@ -40,7 +40,6 @@
 								<h:commandLink id="addFirstStatement" action="#{metadataBean.addFirstStatement}" type="button">
 									<h:outputText value="#{lbl.profile_start_new}"/>
 								</h:commandLink>
-								
 								<span class="imj_inlineButtonGroup">
 									<h:outputLabel value="#{lbl.or_small} #{lbl.profile_use_template}" for="chooseGivenTemplate"/>
 									<h:selectOneMenu value="#{metadataBean.template}" id="chooseGivenTemplate" onchange="submit();" valueChangeListener="#{metadataBean.templateListener}">
@@ -132,7 +131,7 @@
 												<h:panelGroup class="imj_metadataSet">
 													<h:panelGroup layout="block" styleClass="imj_metadataLabel">
 														<label for="mdProfileType"><h:outputText value="#{lbl.type}"/></label>
-														<select id="mdProfileType" title="#{wrapper.used ? lbl.statement_used : lbl.statement_change_type}" onfocus="write_metadata_type_options(this)" disabled="#{wrapper.used ? 'disabled' : ''}" class="imj_metadataTypeSelection"  
+														<select id="mdProfileType" title="#{wrapper.used ? lbl.statement_used : lbl.statement_change_type}" onfocus="write_metadata_type_options(this, this.value)" disabled="#{wrapper.used ? 'disabled' : ''}" class="imj_metadataTypeSelection"  
 															onchange="document.getElementById('profileForm:profile:#{position.index}:inHiddenStatement').value = this.value; $(this).parents('.imj_metadataLabel').find('.imj_ajaxButton').click();">
 															<option value="#{wrapper.statement.type}" selected="selected">#{metadataBean.getTypeLabel(wrapper.statement.type)}</option>
 														</select>
@@ -155,8 +154,8 @@
 																<ui:repeat id="labels" var="label" value="#{wrapper.statement.labels}" varStatus="labelPosition">
 																	<h:panelGroup styleClass="imj_metadataSet">
 																		<h:inputText id="inputLabel" value="#{label.value}"/>
-																		<select onfocus="write_language_options(this);" class="imj_metadataLanguageSelection"
-																			onchange="document.getElementById('profileForm:profile:#{position.index}:labels:#{labelPosition.index}:inHiddenLang').value = this.value;
+																		<select onfocus="write_language_options(this, this.value);" class="imj_metadataLanguageSelection" 
+																				onchange="document.getElementById('profileForm:profile:#{position.index}:labels:#{labelPosition.index}:inHiddenLang').value = this.value;
 																					$(this).parents('.imj_metadataSet').find('.imj_ajaxButton').click();">
 																			<option value="#{label.lang}" selected="selected">#{Internationalization.getLanguageLabel(label.lang)}</option>
 																		</select>

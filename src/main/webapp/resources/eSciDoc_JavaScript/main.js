@@ -178,7 +178,7 @@ function unSelectUnique(index) {
  * @param optionsString -
  *            the options as string
  */
-function write_options(select, optionsString) {
+function write_options(select,value, optionsString) {
 	select.innerHTML = '';
 	var options = optionsString.split('|');
 	for ( var i = 0; i < options.length; i++) {
@@ -188,7 +188,11 @@ function write_options(select, optionsString) {
 		if (option.value != '') {
 			select.appendChild(option);
 		}
+		if(option.value == value){
+			option.selected = 'selected';
+		}
 	}
+	select.value = value;
 }
 /**
  * Set the whole form opacity

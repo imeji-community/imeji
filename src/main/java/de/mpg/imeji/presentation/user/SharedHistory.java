@@ -1,5 +1,6 @@
 package de.mpg.imeji.presentation.user;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.presentation.user.ShareBean.SharedObjectType;
 
-public class SharedHistory
+public class SharedHistory implements Serializable
 {
     private static Logger logger = Logger.getLogger(SharedHistory.class);
     private User user;
@@ -60,7 +61,7 @@ public class SharedHistory
         this.shareToUri = containerUri;
         this.profileUri = profileUri;
         this.title = title;
-        this.sharedType = ShareBean.parseShareTypes((List<Grant>)user.getGrants(), containerUri, profileUri, type);
+        this.sharedType = ShareBean.parseShareTypes((List<Grant>)group.getGrants(), containerUri, profileUri, type);
     }
 
     public User getUser()

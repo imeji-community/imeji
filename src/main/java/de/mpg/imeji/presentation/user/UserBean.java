@@ -4,7 +4,6 @@
 package de.mpg.imeji.presentation.user;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,18 +11,14 @@ import javax.faces.context.FacesContext;
 
 import com.hp.hpl.jena.sparql.pfunction.library.container;
 
-import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.StringHelper;
-import de.mpg.imeji.logic.vo.Album;
-import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Grant;
-import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.user.ShareBean.SharedObjectType;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 
@@ -39,6 +34,11 @@ public class UserBean
 
     public UserBean()
     {
+    }
+
+    public UserBean(String email)
+    {
+        init(email);
     }
 
     /**
@@ -60,7 +60,7 @@ public class UserBean
             newPassword = null;
             repeatedPassword = null;
             retrieveUser();
-            initRoles();
+            this.roles = AuthUtil.getAllRoles(user, session.getUser());
             this.newEmail = null;
         }
         catch (Exception e)
@@ -69,36 +69,7 @@ public class UserBean
         }
     }
 
-    private void initRoles() throws Exception
-    {
-        List<String> shareToList = new ArrayList<String>();
-        for (Grant g : user.getGrants())
-        {
-            if (!shareToList.contains(g.getGrantFor().toString()))
-                shareToList.add(g.getGrantFor().toString());
-        }
-        roles = new ArrayList<SharedHistory>();
-        for (String sharedWith : shareToList)
-        {
-            if (sharedWith.contains("/collection/"))
-            {
-                CollectionImeji c = ObjectLoader.loadCollectionLazy(URI.create(sharedWith), user);
-                roles.add(new SharedHistory(user, SharedObjectType.COLLECTION, sharedWith, c.getProfile().toString(), c
-                        .getMetadata().getTitle()));
-            }
-            else if (sharedWith.contains("/album/"))
-            {
-                Album a = ObjectLoader.loadAlbumLazy(URI.create(sharedWith), user);
-                roles.add(new SharedHistory(user, SharedObjectType.ALBUM, sharedWith, null, a.getMetadata().getTitle()));
-            }
-            else if (sharedWith.contains("/item/"))
-            {
-                ItemController c = new ItemController();
-                Item it = c.retrieve(URI.create(sharedWith), user);
-                roles.add(new SharedHistory(user, SharedObjectType.ITEM, sharedWith, null, it.getFilename()));
-            }
-        }
-    }
+   
 
     /**
      * Retrieve the current user
@@ -192,7 +163,6 @@ public class UserBean
     {
         sh.getSharedType().clear();
         sh.update();
-        // reloadPage();
     }
 
     /**

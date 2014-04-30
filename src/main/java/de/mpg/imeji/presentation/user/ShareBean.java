@@ -1,5 +1,6 @@
 package de.mpg.imeji.presentation.user;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,7 +44,7 @@ import de.mpg.imeji.presentation.util.UrlHelper;
 
 @ManagedBean(name = "ShareBean")
 @SessionScoped
-public class ShareBean
+public class ShareBean implements Serializable
 {
     private static Logger logger = Logger.getLogger(ShareBean.class);
     @ManagedProperty(value = "#{SessionBean.user}")

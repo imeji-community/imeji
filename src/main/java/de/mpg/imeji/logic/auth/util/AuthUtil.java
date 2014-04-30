@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.mpg.imeji.logic.auth.Authorization;
+import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Grant;
@@ -41,6 +42,9 @@ import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.presentation.beans.PropertyBean;
+import de.mpg.imeji.presentation.user.SharedHistory;
+import de.mpg.imeji.presentation.user.ShareBean.SharedObjectType;
+import de.mpg.imeji.presentation.util.ObjectLoader;
 
 /**
  * Utility class for the package auth
@@ -167,5 +171,81 @@ public class AuthUtil
     public static URI toGrantTypeURI(GrantType type)
     {
         return URI.create("http://imeji.org/terms/grantType#" + type.name());
+    }
+
+    /**
+     * Read the role of the {@link User}
+     * 
+     * @return
+     * @throws Exception
+     */
+    public static List<SharedHistory> getAllRoles(User user, User sessionUser) throws Exception
+    {
+        List<String> shareToList = new ArrayList<String>();
+        for (Grant g : user.getGrants())
+        {
+            if (!shareToList.contains(g.getGrantFor().toString()))
+                shareToList.add(g.getGrantFor().toString());
+        }
+        List<SharedHistory> roles = new ArrayList<SharedHistory>();
+        for (String sharedWith : shareToList)
+        {
+            if (sharedWith.contains("/collection/"))
+            {
+                CollectionImeji c = ObjectLoader.loadCollectionLazy(URI.create(sharedWith), sessionUser);
+                roles.add(new SharedHistory(user, SharedObjectType.COLLECTION, sharedWith, c.getProfile().toString(), c
+                        .getMetadata().getTitle()));
+            }
+            else if (sharedWith.contains("/album/"))
+            {
+                Album a = ObjectLoader.loadAlbumLazy(URI.create(sharedWith), sessionUser);
+                roles.add(new SharedHistory(user, SharedObjectType.ALBUM, sharedWith, null, a.getMetadata().getTitle()));
+            }
+            else if (sharedWith.contains("/item/"))
+            {
+                ItemController c = new ItemController();
+                Item it = c.retrieve(URI.create(sharedWith), sessionUser);
+                roles.add(new SharedHistory(user, SharedObjectType.ITEM, sharedWith, null, it.getFilename()));
+            }
+        }
+        return roles;
+    }
+
+    /**
+     * Read the role of the {@link UserGroup}
+     * 
+     * @return
+     * @throws Exception
+     */
+    public static List<SharedHistory> getAllRoles(UserGroup group, User sessionUser) throws Exception
+    {
+        List<String> shareToList = new ArrayList<String>();
+        for (Grant g : group.getGrants())
+        {
+            if (!shareToList.contains(g.getGrantFor().toString()))
+                shareToList.add(g.getGrantFor().toString());
+        }
+        List<SharedHistory> roles = new ArrayList<SharedHistory>();
+        for (String sharedWith : shareToList)
+        {
+            if (sharedWith.contains("/collection/"))
+            {
+                CollectionImeji c = ObjectLoader.loadCollectionLazy(URI.create(sharedWith), sessionUser);
+                roles.add(new SharedHistory(group, SharedObjectType.COLLECTION, sharedWith, c.getProfile().toString(),
+                        c.getMetadata().getTitle()));
+            }
+            else if (sharedWith.contains("/album/"))
+            {
+                Album a = ObjectLoader.loadAlbumLazy(URI.create(sharedWith), sessionUser);
+                roles.add(new SharedHistory(group, SharedObjectType.ALBUM, sharedWith, null, a.getMetadata().getTitle()));
+            }
+            else if (sharedWith.contains("/item/"))
+            {
+                ItemController c = new ItemController();
+                Item it = c.retrieve(URI.create(sharedWith), sessionUser);
+                roles.add(new SharedHistory(group, SharedObjectType.ITEM, sharedWith, null, it.getFilename()));
+            }
+        }
+        return roles;
     }
 }

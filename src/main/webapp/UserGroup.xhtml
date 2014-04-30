@@ -54,9 +54,10 @@
 								}
 								</script>
 								
-								<h:form id ="userForm">
-							
-									<div class="imj_userGlobalInformation">					
+								
+								<h:form id="userForm">			
+									<div class="imj_userGlobalInformation">		
+									
 										<fieldset>
 											<!-- User Edit - Email -->
 											<div class="imj_admindataSet">
@@ -84,50 +85,55 @@
 											</div>
 										</fieldset>
 									</div>
-									<div class="imj_admindataSetEdit">
-										<div class="imj_admindataLabel">
-											<h:outputText value="#{lbl.users}"/>
+								</h:form>
+								<div class="imj_admindataSetEdit">
+									<div class="imj_admindataLabel">
+										<h:outputText value="#{lbl.users}"/>
+									</div>
+									<div class="imj_admindataValue">
+										<div class="imj_admindataValueEntry">
+											<h:outputLink value="#{Navigation.applicationUrl}users?group=#{UserGroup.userGroup.id}" styleClass="imj_submitButton">
+													<h:outputText value="#{lbl.add_user}" />
+											</h:outputLink>
 										</div>
-										<div class="imj_admindataValue">
-											<div class="imj_admindataValueEntry">
-												<h:outputLink value="#{Navigation.applicationUrl}users?group=#{UserGroup.userGroup.id}" styleClass="imj_submitButton">
-														<h:outputText value="#{lbl.add_user}" />
-												</h:outputLink>
-											</div>
-										</div>
-										<div class="imj_admindataLabel"></div>
-										<div class="imj_admindataValue">
-											<div class="imj_admindataValueEntry">
+									</div>
+									<div class="imj_admindataLabel"></div>
+									<div class="imj_admindataValue">
+										<div class="imj_admindataValueEntry">
 											<h:form>
 												<ui:repeat  var="user" value="#{UserGroup.users}" rows="0">
 													<div class="imj_userGrantList">
 														<h:outputText value="#{user.name} (#{user.email})" />
-														
-															<h:commandButton value="#{lbl.remove}" action="#{UserGroup.removeUserGromGroup(user.id)}" styleClass="imj_cancelButton"/>
-														
+														<h:commandButton value="#{lbl.remove}" action="#{UserGroup.removeUserGromGroup(user.id)}" styleClass="imj_cancelButton"/>
 													</div>
 												</ui:repeat>
-												</h:form>
-											</div>
-										</div>
-									</div>	
-									<div class="imj_admindataSetEdit">
-										<div class="imj_admindataLabel">
-											<h:outputText value="#{UserGroup.userGroup.name} #{lbl.grants_has_following}:"/>
-										</div>
-										<div class="imj_admindataValue">
-											<div class="imj_admindataValueEntry">
-												<ui:repeat id="grantList" var="grant" value="#{UserGroup.userGroup.grants}" rows="0">
-													<h:panelGroup styleClass="imj_userGrantList" rendered="#{grant.grantFor != null}">
-														<h:outputText value="#{grant.asGrantType()} " />	
-														<h:outputLink value="#{grant.grantFor}"><h:outputText value="#{grant.grantFor}"/></h:outputLink>	
-														<h:commandLink action="#" value="#{lbl.revoke}" styleClass="imj_cancelButton"/>
-													</h:panelGroup>
-												</ui:repeat>
-											</div>
+											</h:form>
 										</div>
 									</div>
-								</h:form>
+								</div>	
+								<div class="imj_admindataSetEdit">
+									<div class="imj_admindataLabel">
+										<h:outputText value="#{UserGroup.userGroup.name} #{lbl.grants_has_following}:"/>
+									</div>
+									<div class="imj_admindataValue">
+										<div class="imj_admindataValueEntry">
+											<h:form>
+												<ui:repeat var="sh" value="#{UserGroup.roles}">
+													<ui:param name="roles" value="#{sh.type == 'COLLECTION' ? SessionBean.shareCollectionGrantItems : SessionBean.shareAlbumGrantItems}"/>
+													<ui:param name="roles" value="#{sh.type == 'ITEM' ? SessionBean.shareItemGrantItems : roles}"/>
+													<div>
+														<h:outputText value="Grant for #{sh.title}" styleClass="imj_admindataValueEntry"/>
+														<h:commandButton action="#{UserGroup.revokeGrants(sh)}" value="#{lbl.revoke}" styleClass="imj_cancelButton"/>
+														<h:selectManyCheckbox id="role" value="#{sh.sharedType}" disabled="true" layout="pageDirection">
+															<f:selectItems value="#{roles}" />
+														</h:selectManyCheckbox>
+													</div>
+													<br/>
+												</ui:repeat>
+											</h:form>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>

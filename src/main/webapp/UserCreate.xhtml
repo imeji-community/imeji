@@ -41,7 +41,7 @@
 									<!-- AdminDataList - Email -->
 									<h:panelGroup layout="block" styleClass="imj_admindataSet">
 										<div class="imj_admindataLabel">
-											<h:outputText value="Email"/>
+											<h:outputText value="#{lbl.email}"/>
 											<span class="imj_invisible">: </span>
 										</div>
 										<div class="imj_admindataValue">
@@ -55,7 +55,7 @@
 									<!-- AdminDataList - Name -->
 									<h:panelGroup layout="block" styleClass="imj_admindataSet">
 										<div class="imj_admindataLabel">
-											<h:outputText value="Name"/>
+											<h:outputText value="#{lbl.name}"/>
 											<span class="imj_invisible">: </span>
 										</div>				
 										<div class="imj_admindataValue">
@@ -68,7 +68,7 @@
 									<!-- AdminDataList - Nickname -->
 									<h:panelGroup layout="block" styleClass="imj_admindataSet">
 										<div class="imj_admindataLabel">
-											<h:outputText value="Nickname"/>
+											<h:outputText value="#{lbl.nickname}"/>
 											<span class="imj_invisible">: </span>
 										</div>
 										<div class="imj_admindataValue">
@@ -76,6 +76,19 @@
 												<h:inputText id="inputNickText" styleClass="imj_admindataEdit" value="#{UserCreationBean.user.nick}" required="true"/>
 											</div>
 										</div>
+									</h:panelGroup>
+									
+									<!-- AdminDataList - allowedToCreateCollection -->
+									<h:panelGroup layout="block" styleClass="imj_admindataSet">
+										<div class="imj_admindataValueCheckBox">
+											<div class="imj_admindataValueEntry">
+												<h:selectBooleanCheckbox value="#{UserCreationBean.user.allowedToCreateCollection}" styleClass="imj_admindataCheckbox"/>
+											</div>													
+										</div>
+										<div class="imj_admindataLabel">
+											<h:outputText value="#{lbl.allowedToCreateCollection}"/>
+											<span class="imj_invisible">: </span>
+										</div>										
 									</h:panelGroup>
 									
 									<!-- AdminDataList - SendEmail CheckBox-->

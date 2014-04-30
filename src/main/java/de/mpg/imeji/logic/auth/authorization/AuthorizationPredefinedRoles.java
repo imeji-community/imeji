@@ -74,15 +74,29 @@ public class AuthorizationPredefinedRoles
      * The default {@link User} role in imeji can create (collection/album) in imeji
      * 
      * @param uri
+     * @param allowedToCreateCollection
      * @return
      */
-    public static List<Grant> defaultUser(String uri)
+    public static List<Grant> defaultUser(String uri, boolean allowedToCreateCollection)
+    {
+
+        List<Grant> l = new ArrayList<Grant>();
+        if(allowedToCreateCollection)
+        {
+            // Add the Grant to create a collection
+            GrantType[] g = { GrantType.CREATE };
+        	l = toGrantList(g, IMEJI_GLOBAL_URI);
+        }
+        l.addAll(restrictedUser(uri));
+        return l;
+    }
+    
+    public static List<Grant> allowedToCreateCollection()
     {
         // Add the Grant to create a collection
         GrantType[] g = { GrantType.CREATE };
-        List<Grant> l = toGrantList(g, IMEJI_GLOBAL_URI);
-        l.addAll(restrictedUser(uri));
-        return l;
+    	List<Grant> l = toGrantList(g, IMEJI_GLOBAL_URI);
+    	return l;
     }
 
     /**
@@ -106,7 +120,7 @@ public class AuthorizationPredefinedRoles
     {
         GrantType[] g = { GrantType.ADMIN };
         List<Grant> l = toGrantList(g, IMEJI_GLOBAL_URI);
-        l.addAll(defaultUser(uri));
+        l.addAll(defaultUser(uri,true));
         return l;
     }
 

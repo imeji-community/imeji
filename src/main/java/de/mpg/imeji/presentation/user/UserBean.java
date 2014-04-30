@@ -6,11 +6,9 @@ package de.mpg.imeji.presentation.user;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.faces.context.FacesContext;
-
+import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import com.hp.hpl.jena.sparql.pfunction.library.container;
-
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.StringHelper;
@@ -163,6 +161,21 @@ public class UserBean
     {
         sh.getSharedType().clear();
         sh.update();
+    }
+    
+    public void allowedToCreateCollection()throws IOException
+    {
+    	if(user.isAllowedToCreateCollection())
+    	{    		
+            List<Grant> newGrants = new ArrayList<Grant>();
+           	newGrants = AuthorizationPredefinedRoles.allowedToCreateCollection();
+           	newGrants.addAll(user.getGrants());
+            user.setGrants(newGrants);
+    	}
+        updateUser();
+        BeanHelper.info("Grant edited");
+        reloadPage();
+    		
     }
 
     /**

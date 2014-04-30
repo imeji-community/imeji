@@ -15,7 +15,7 @@
 	
 	<composite:implementation>
 		<h:panelGroup layout="block" id="selectionInfoPanel" styleClass="imj_selectionInfoPanel">
-			<ui:fragment rendered="#cc.attrs.currentMainMenu == 'mediaEntry' }">
+			<ui:fragment rendered="#{cc.attrs.currentMainMenu == 'mediaEntry' }">
 				<h:outputLink value="#{cc.attrs.browseToAllUrl}" title="#{lbl.images_all}">
 					<h:outputText value="#{lbl.images_all}"/>
 				</h:outputLink>
@@ -36,10 +36,6 @@
 			<ui:fragment rendered="#{cc.attrs.showSelectMenu}">
 				<h:form id="preListForm">
 					
-					<h:outputLink styleClass="imj_removeFacetButton" value="#{cc.attrs.browseToAllUrl}">
-						<h:outputText value="#{lbl.all}"/>
-					</h:outputLink>
-						
 					<ui:repeat id="filterList" var="filter" value="#{cc.attrs.fSession.filters}" offset="0" varStatus="index">
 						<h:outputText value="/" styleClass="imj_facetSeparator"/>
 						<h:outputText value="#{filter.internationalizedLabel}"/>

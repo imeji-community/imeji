@@ -42,6 +42,7 @@ public class User implements Serializable
 
 	private URI id;
     private List<UserGroup> groups = new ArrayList<>();
+    private boolean allowedToCreateCollection;
 
     /**
      * Return a clone of this user, with a new email
@@ -121,8 +122,10 @@ public class User implements Serializable
     	for (Grant g : grants)
     	{
             if (!g.getGrantFor().getPath().contains("user"))
-            {
+            {            	
             	grantsWithoutUser.add(new Grant(g.asGrantType(), g.getGrantFor()));
+            	if(!g.getGrantFor().getPath().contains("collection"))
+            		this.allowedToCreateCollection = true;
             }
     	}   	
 		return grantsWithoutUser;
@@ -164,4 +167,14 @@ public class User implements Serializable
     {
         return AuthUtil.isSysAdmin(this);
     }
+
+	public boolean isAllowedToCreateCollection() {
+		return allowedToCreateCollection;
+	}
+
+	public void setAllowedToCreateCollection(boolean allowedToCreateCollection) {
+		this.allowedToCreateCollection = allowedToCreateCollection;
+	}
+    
+    
 }

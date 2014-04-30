@@ -170,6 +170,25 @@
 															</h:commandLink>
 														</h:panelGroup>
 													</ui:repeat>
+													
+													<h:panelGroup layout="block" rendered="#{!UserBean.user.allowedToCreateCollection}">
+													
+														<div class="imj_admindataSetEdit">
+															<div class="imj_admindataValueCheckBox">
+																<div class="imj_admindataValueEntry">
+																	<h:selectBooleanCheckbox value="#{UserBean.user.allowedToCreateCollection}" styleClass="imj_admindataCheckbox"/>
+																</div>													
+															</div>
+															<div class="imj_admindataLabel">
+																<h:outputText value="#{lbl.allowedToCreateCollection}"/>
+																<span class="imj_invisible">: </span>
+															</div>
+															<h:commandButton action="#{UserBean.allowedToCreateCollection}" value="#{lbl.save}" styleClass="imj_editButton"/>
+														</div>
+
+													</h:panelGroup>
+
+													
 												</div>
 											</div>
 										</h:panelGroup>		

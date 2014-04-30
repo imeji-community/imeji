@@ -92,7 +92,7 @@ public class UserCreationBean
         PasswordGenerator generator = new PasswordGenerator();
         String password = generator.generatePassword();
         user.setEncryptedPassword(StringHelper.convertToMD5(password));
-        user.setGrants(AuthorizationPredefinedRoles.defaultUser(user.getId().toString()));
+        user.setGrants(AuthorizationPredefinedRoles.defaultUser(user.getId().toString(), user.isAllowedToCreateCollection()));
         uc.create(user);
         return password;
     }

@@ -10,7 +10,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
 
@@ -47,7 +46,6 @@ import de.mpg.imeji.presentation.util.UrlHelper;
 public class ShareBean
 {
     private static Logger logger = Logger.getLogger(ShareBean.class);
-    private SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     @ManagedProperty(value = "#{SessionBean.user}")
     private User user;
     private String id;
@@ -63,7 +61,7 @@ public class ShareBean
     private List<String> errorList = new ArrayList<String>();
     private List<SharedHistory> sharedWith = new ArrayList<SharedHistory>();
     private boolean isAdmin;
-    private List<SelectItem> grantItems = new ArrayList<SelectItem>();
+    // private List<SelectItem> grantItems = new ArrayList<SelectItem>();
     private List<String> selectedRoles = new ArrayList<String>();
     private boolean sendEmail = false;
     private UserGroup userGroup;
@@ -90,7 +88,6 @@ public class ShareBean
         this.shareTo = null;
         this.profileUri = null;
         this.type = SharedObjectType.COLLECTION;
-        this.grantItems = sb.getShareCollectionGrantItems();
         CollectionImeji collection = ObjectLoader.loadCollectionLazy(
                 ObjectHelper.getURI(CollectionImeji.class, getId()), user);
         if (collection != null)
@@ -112,7 +109,6 @@ public class ShareBean
         this.type = SharedObjectType.ALBUM;
         this.shareTo = null;
         this.profileUri = null;
-        this.grantItems = sb.getShareAlbumGrantItems();
         Album album = ObjectLoader.loadAlbumLazy(ObjectHelper.getURI(Album.class, getId()), user);
         if (album != null)
         {
@@ -132,7 +128,6 @@ public class ShareBean
     public String getInitShareItem()
     {
         this.type = SharedObjectType.ITEM;
-        this.grantItems = sb.getShareItemGrantItems();
         this.profileUri = null;
         this.shareTo = null;
         URI itemURI = PageURIHelper.extractId(PrettyContext.getCurrentInstance().getRequestURL().toString());
@@ -307,18 +302,14 @@ public class ShareBean
             // Do not display the creator of this collection here
             if (!u.getId().toString().equals(owner.toString()))
             {
-                SharedHistory sh = new SharedHistory(u, type, getShareToUri(), profileUri, new ArrayList<String>());
-                sh.getSharedType().addAll(parseShareTypes((List<Grant>)u.getGrants(), getShareToUri(), profileUri));
-                sharedWith.add(sh);
+                sharedWith.add(new SharedHistory(u, type, getShareToUri(), profileUri, null));
             }
         }
         UserGroupController ugc = new UserGroupController();
         Collection<UserGroup> groups = ugc.searchByGrantFor(getShareToUri(), Imeji.adminUser);
         for (UserGroup group : groups)
         {
-            SharedHistory sh = new SharedHistory(group, type, getShareToUri(), profileUri, new ArrayList<String>());
-            sh.getSharedType().addAll(parseShareTypes((List<Grant>)group.getGrants(), getShareToUri(), profileUri));
-            sharedWith.add(sh);
+            sharedWith.add(new SharedHistory(group, type, getShareToUri(), profileUri, null));
         }
     }
 
@@ -331,7 +322,8 @@ public class ShareBean
      * @param profileUri
      * @return
      */
-    private List<String> parseShareTypes(List<Grant> grants, String containerUri, String profileUri)
+    public static List<String> parseShareTypes(List<Grant> grants, String containerUri, String profileUri,
+            SharedObjectType type)
     {
         List<String> l = new ArrayList<>();
         if (hasReadGrants(grants, containerUri, profileUri))
@@ -375,6 +367,7 @@ public class ShareBean
     private void sendEmail(User dest, String subject, String message)
     {
         EmailClient emailClient = new EmailClient();
+        SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         try
         {
             emailClient.sendMail(dest.getEmail(), null,
@@ -397,6 +390,7 @@ public class ShareBean
     private void sendEmailToGroup(UserGroup group, String subject, String message)
     {
         UserController c = new UserController(Imeji.adminUser);
+        SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         for (URI uri : group.getUsers())
         {
             try
@@ -510,43 +504,43 @@ public class ShareBean
      * @param profileUri
      * @return
      */
-    private boolean hasReadGrants(List<Grant> userGrants, String containerUri, String profileUri)
+    private static boolean hasReadGrants(List<Grant> userGrants, String containerUri, String profileUri)
     {
         List<Grant> grants = AuthorizationPredefinedRoles.read(containerUri, profileUri);
         return !grantNotExist(userGrants, grants);
     }
 
-    private boolean hasUploadGrants(List<Grant> userGrants, String containerUri)
+    private static boolean hasUploadGrants(List<Grant> userGrants, String containerUri)
     {
         List<Grant> grants = AuthorizationPredefinedRoles.upload(containerUri, null);
         return !grantNotExist(userGrants, grants);
     }
 
-    private boolean hasEditItemGrants(List<Grant> userGrants, String containerUri)
+    private static boolean hasEditItemGrants(List<Grant> userGrants, String containerUri)
     {
         List<Grant> grants = AuthorizationPredefinedRoles.edit(containerUri, null);
         return !grantNotExist(userGrants, grants);
     }
 
-    private boolean hasDeleteItemGrants(List<Grant> userGrants, String containerUri)
+    private static boolean hasDeleteItemGrants(List<Grant> userGrants, String containerUri)
     {
         List<Grant> grants = AuthorizationPredefinedRoles.delete(containerUri, null);
         return !grantNotExist(userGrants, grants);
     }
 
-    private boolean hasEditContainerGrants(List<Grant> userGrants, String containerUri)
+    private static boolean hasEditContainerGrants(List<Grant> userGrants, String containerUri)
     {
         List<Grant> grants = AuthorizationPredefinedRoles.editContainer(containerUri, null);
         return !grantNotExist(userGrants, grants);
     }
 
-    private boolean hasEditProfileGrants(List<Grant> userGrants, String profileUri)
+    private static boolean hasEditProfileGrants(List<Grant> userGrants, String profileUri)
     {
         List<Grant> grants = AuthorizationPredefinedRoles.editProfile(profileUri);
         return !grantNotExist(userGrants, grants);
     }
 
-    private boolean hasAdminGrants(List<Grant> userGrants, String containerUri, String profileUri)
+    private static boolean hasAdminGrants(List<Grant> userGrants, String containerUri, String profileUri)
     {
         List<Grant> grants = AuthorizationPredefinedRoles.admin(containerUri, profileUri);
         return !grantNotExist(userGrants, grants);
@@ -643,16 +637,6 @@ public class ShareBean
     public void setAdmin(boolean isAdmin)
     {
         this.isAdmin = isAdmin;
-    }
-
-    public List<SelectItem> getGrantItems()
-    {
-        return grantItems;
-    }
-
-    public void setGrantItems(List<SelectItem> grantItems)
-    {
-        this.grantItems = grantItems;
     }
 
     public void checkGrants(List<String> selectedGrants)

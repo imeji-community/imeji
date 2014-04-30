@@ -3,6 +3,8 @@ package de.mpg.imeji.presentation.user;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import de.escidoc.core.resources.aa.useraccount.Grants;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
@@ -10,10 +12,7 @@ import de.mpg.imeji.logic.controller.GrantController;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
-import de.mpg.imeji.presentation.user.ShareBean.ShareType;
 import de.mpg.imeji.presentation.user.ShareBean.SharedObjectType;
-
-import org.apache.log4j.Logger;
 
 public class SharedHistory
 {
@@ -24,6 +23,7 @@ public class SharedHistory
     private String profileUri;
     private SharedObjectType type;
     private List<String> sharedType = new ArrayList<String>();
+    private String title;
 
     /**
      * Constructor with a {@link User}
@@ -34,14 +34,14 @@ public class SharedHistory
      * @param profileUri
      * @param sharedType
      */
-    public SharedHistory(User user, SharedObjectType type, String containerUri, String profileUri,
-            List<String> sharedType)
+    public SharedHistory(User user, SharedObjectType type, String containerUri, String profileUri, String title)
     {
         this.user = user;
         this.type = type;
         this.shareToUri = containerUri;
         this.profileUri = profileUri;
-        this.sharedType = sharedType;
+        this.title = title;
+        this.sharedType = ShareBean.parseShareTypes((List<Grant>)user.getGrants(), containerUri, profileUri, type);
     }
 
     /**
@@ -53,14 +53,14 @@ public class SharedHistory
      * @param profileUri
      * @param sharedType
      */
-    public SharedHistory(UserGroup group, SharedObjectType type, String containerUri, String profileUri,
-            List<String> sharedType)
+    public SharedHistory(UserGroup group, SharedObjectType type, String containerUri, String profileUri, String title)
     {
         this.setGroup(group);
         this.type = type;
         this.shareToUri = containerUri;
         this.profileUri = profileUri;
-        this.sharedType = sharedType;
+        this.title = title;
+        this.sharedType = ShareBean.parseShareTypes((List<Grant>)user.getGrants(), containerUri, profileUri, type);
     }
 
     public User getUser()
@@ -128,5 +128,53 @@ public class SharedHistory
     public void setGroup(UserGroup group)
     {
         this.group = group;
+    }
+
+    /**
+     * @return the shareToUri
+     */
+    public String getShareToUri()
+    {
+        return shareToUri;
+    }
+
+    /**
+     * @param shareToUri the shareToUri to set
+     */
+    public void setShareToUri(String shareToUri)
+    {
+        this.shareToUri = shareToUri;
+    }
+
+    /**
+     * @return the type
+     */
+    public SharedObjectType getType()
+    {
+        return type;
+    }
+
+    /**
+     * @param type the type to set
+     */
+    public void setType(SharedObjectType type)
+    {
+        this.type = type;
+    }
+
+    /**
+     * @return the title
+     */
+    public String getTitle()
+    {
+        return title;
+    }
+
+    /**
+     * @param title the title to set
+     */
+    public void setTitle(String title)
+    {
+        this.title = title;
     }
 }

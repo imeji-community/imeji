@@ -150,8 +150,7 @@
 													<h:commandButton action="#{UserBean.changePassword}" value="#{lbl.password_change}" styleClass="imj_editButton"/>
 												</div>
 											</div>
-										</div>
-																					
+										</div>						
 										
 										<!-- User Grants -->
 										<h:panelGroup layout="block" styleClass="imj_admindataSetEdit">
@@ -160,15 +159,17 @@
 											</div>
 											<div class="imj_admindataValue">
 												<div class="imj_admindataValueEntry">
-													<ui:repeat id="grantList" var="grant" value="#{UserBean.user.grantsWithoutUser}" rows="0">
-														<h:panelGroup styleClass="imj_userGrantList" rendered="#{grant.grantFor != null}">
-															<h:outputText value="#{grant.asGrantType()} " styleClass="medium_area0_p0"/>	
-															<h:outputLink value="#{grant.grantFor}" styleClass="free_area0"><h:outputText value="#{grant.grantFor}"/></h:outputLink>	
-															<h:commandLink action="#{UserBean.revokeGrant}" value="#{lbl.revoke}" styleClass="imj_cancelButton" onclick="if(confirm('Are you sure you want to revoke this grant?'))return true;return false;">
-																<f:param name="grantType" value="#{grant.grantType}"/>
-																<f:param name="grantFor" value="#{grant.grantFor}" />
-															</h:commandLink>
-														</h:panelGroup>
+													<ui:repeat var="sh" value="#{UserBean.roles}" rows="0">
+														<ui:param name="roles" value="#{sh.type == 'COLLECTION' ? SessionBean.shareCollectionGrantItems : SessionBean.shareAlbumGrantItems}"/>
+														<ui:param name="roles" value="#{sh.type == 'ITEM' ? SessionBean.shareItemGrantItems : roles}"/>
+														<div>
+															<h:outputText value="Grant for #{sh.title}" styleClass="imj_admindataValueEntry"/>
+															<h:commandButton action="#{UserBean.revokeGrants(sh)}" value="#{lbl.revoke}" styleClass="imj_cancelButton" onclick="if(confirm('Are you sure you want to revoke this grant?'))return true;return false;"/>
+															<h:selectManyCheckbox id="role" value="#{sh.sharedType}"  disabled="true" layout="pageDirection">
+																<f:selectItems value="#{roles}" />
+															</h:selectManyCheckbox>
+														</div>
+														<br/>
 													</ui:repeat>
 												</div>
 											</div>

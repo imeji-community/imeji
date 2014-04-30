@@ -379,7 +379,7 @@
 						</div>
 						<ui:fragment rendered="#{imageBean.image.status == 'PENDING'}">
 							<h:outputText value="#{ShareBean.initShareItem}" />
-							<imjc:share id="share"/>
+							<imjc:share id="share" roles="#{sessionBean.shareItemGrantItems}"/>
 						</ui:fragment>
 					</h:panelGroup>
 				</h:panelGroup>

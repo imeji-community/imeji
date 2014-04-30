@@ -5,6 +5,7 @@
 	xmlns:composite="http://java.sun.com/jsf/composite">
 	
 	<composite:interface>
+		<composite:attribute name="cc.attrs.roles"/>
 	</composite:interface>
 	
 	<composite:implementation>
@@ -32,7 +33,7 @@
 						<h:panelGroup layout="block" styleClass="imj_metadataValue">
 							<div class="imj_metadataSet">
 								<h:selectManyCheckbox styleClass="imj_rightsTableForNewUser" value="#{ShareBean.selectedGrants}" layout="lineDirection" onclick="document.getElementById('checkGrantsForGroup').click();">
-									<f:selectItems value="#{ShareBean.grantItems}"/>
+									<f:selectItems value="#{cc.attrs.roles}"/>
 								</h:selectManyCheckbox>
 								<h:commandButton id="checkGrantsForGroup" value="Check Grants" action="#{ShareBean.checkGrants(ShareBean.selectedGrants)}" styleClass="imj_noDisplay">
 									<f:ajax execute="@form" render="@form"/>
@@ -63,7 +64,7 @@
 								<div class="imj_metadataLabel"></div>
 								<h:panelGroup layout="block" id="shareOptions" styleClass="imj_metadataValue">
 									<h:selectManyCheckbox id="selectedGrants" styleClass="imj_rightsTableForNewUser" selectedClass="imj_optionLabel" value="#{ShareBean.selectedGrants}" layout="lineDirection" onclick="document.getElementById('checkGrants').click();">
-										<f:selectItems value="#{ShareBean.grantItems}"/>
+										<f:selectItems value="#{cc.attrs.roles}"/>
 									</h:selectManyCheckbox>
 									<h:commandButton id="checkGrants" value="Check Grants" action="#{ShareBean.checkGrants(ShareBean.selectedGrants)}" styleClass="imj_noDisplay">
 										<f:ajax execute="@form" render="@form"/>
@@ -94,7 +95,7 @@
 									<th>
 										<h:outputText value="#{lbl.shared_with} #{lbl.admin_info_users}"/>
 									</th>
-									<ui:repeat var="tableHead" value="#{ShareBean.grantItems}">
+									<ui:repeat var="tableHead" value="#{cc.attrs.roles}">
 										<th>
 											<h:outputText value="#{tableHead.label}"/>
 										</th>
@@ -113,7 +114,7 @@
 										</td>
 										<td colspan="7">
 											<h:selectManyCheckbox id="role" value="#{sh.sharedType}" enabledClass="imj_noDisplay" layout="lineDirection" onclick="document.getElementById('share:users:#{pos.index}:checkGrants').click();">
-												<f:selectItems value="#{ShareBean.grantItems}"/>
+												<f:selectItems value="#{cc.attrs.roles}"/>
 											</h:selectManyCheckbox>
 											<h:commandButton id="checkGrants" value="Check Grants" action="#{ShareBean.checkGrants(sh.sharedType)}" styleClass="imj_noDisplay">
 												<f:ajax execute="@form" render="@form"/>

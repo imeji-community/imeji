@@ -62,12 +62,11 @@ public class AuthorizationPredefinedRoles
     // Can edit a profile
     private static final GrantType[] edit_profile = { GrantType.READ, GrantType.UPDATE };
     // Can administrate an album
-    private static final GrantType[] admin_album = { GrantType.READ, GrantType.ADMIN, GrantType.CREATE, GrantType.DELETE,
-            GrantType.UPDATE };
+    private static final GrantType[] admin_album = { GrantType.READ, GrantType.ADMIN, GrantType.CREATE,
+            GrantType.DELETE, GrantType.UPDATE };
     // Can administrate a collection
     private static final GrantType[] admin_collection = { GrantType.READ, GrantType.ADMIN, GrantType.ADMIN_CONTENT,
             GrantType.CREATE, GrantType.DELETE, GrantType.DELETE_CONTENT, GrantType.UPDATE, GrantType.UPDATE_CONTENT };
-    
     public static final String IMEJI_GLOBAL_URI = PropertyBean.baseURI();
 
     /**
@@ -79,24 +78,10 @@ public class AuthorizationPredefinedRoles
      */
     public static List<Grant> defaultUser(String uri, boolean allowedToCreateCollection)
     {
-
-        List<Grant> l = new ArrayList<Grant>();
-        if(allowedToCreateCollection)
-        {
-            // Add the Grant to create a collection
-            GrantType[] g = { GrantType.CREATE };
-        	l = toGrantList(g, IMEJI_GLOBAL_URI);
-        }
+        GrantType[] g = { GrantType.CREATE };
+        List<Grant> l = toGrantList(g, IMEJI_GLOBAL_URI);
         l.addAll(restrictedUser(uri));
         return l;
-    }
-    
-    public static List<Grant> allowedToCreateCollection()
-    {
-        // Add the Grant to create a collection
-        GrantType[] g = { GrantType.CREATE };
-    	List<Grant> l = toGrantList(g, IMEJI_GLOBAL_URI);
-    	return l;
     }
 
     /**
@@ -120,7 +105,7 @@ public class AuthorizationPredefinedRoles
     {
         GrantType[] g = { GrantType.ADMIN };
         List<Grant> l = toGrantList(g, IMEJI_GLOBAL_URI);
-        l.addAll(defaultUser(uri,true));
+        l.addAll(defaultUser(uri, true));
         return l;
     }
 

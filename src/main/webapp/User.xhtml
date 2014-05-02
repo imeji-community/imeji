@@ -2,11 +2,20 @@
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core">
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:menu="http://java.sun.com/jsf/composite/components/menu">
 	
 	<ui:param name="headline" value="User Page"/>
 	<ui:param name="currentMainMenu" value="admin"/>
-		
+	
+	<ui:define name="actionsMenu">
+		<menu:context_actionMenu isUserLoggedIn="#{Auth.loggedIn}" 
+								 curMainMenu="#{currentMainMenu}" 
+								 downloadEnabled="false"
+								 actionEnabled="false"
+								 navBean="#{Navigation}"  />
+	</ui:define>
+	
 	<ui:define name="mainContent">
 		<h:outputText value="#{UserBean.init}"/>
 		
@@ -14,6 +23,11 @@
 		<ui:include src="include/History.xhtml"></ui:include>
 		
 		<ui:fragment rendered="#{Auth.admin(UserBean.user)}">
+			<h:panelGroup layout="block" styleClass="imj_backPanel" rendered="#{Auth.admin}">
+				<a href="#{Navigation.applicationUrl}users" title="#{lbl.admin_user_view}">
+					<h:outputText value="#{lbl.admin_user_view}" styleClass="imj_backButton" />
+				</a>
+			</h:panelGroup>
 		
 			<div class="imj_userConfig">
 				
@@ -123,8 +137,6 @@
 											</fieldset>
 										</h:panelGroup> <!-- END user infos -->
 										
-										
-									
 										<!-- User Edit - Password -->
 										<div class="imj_admindataSetEdit">
 											<div class="imj_admindataSetEdit">
@@ -159,6 +171,19 @@
 											</div>
 											<div class="imj_admindataValue">
 												<div class="imj_admindataValueEntry">
+													<ui:fragment rendered="#{SessionBean.user.admin}">
+														<div>
+															<h:selectBooleanCheckbox value="#{UserBean.user.allowedToCreateCollection}" styleClass="imj_admindataCheckbox" onchange="document.getElementById('userForm:toggleCreate').click()"/>
+															<h:outputText value="#{lbl.allowedToCreateCollection}"/>
+															<span class="imj_invisible">: </span>
+														</div>
+														<div>
+															<h:selectBooleanCheckbox value="#{UserBean.user.admin}" styleClass="imj_admindataCheckbox"  onchange="document.getElementById('userForm:toggleAdmin').click();"/>
+															<h:outputText value="#{lbl.isAdmin}"/>
+															<span class="imj_invisible">: </span>
+														</div>
+														<br/>
+													</ui:fragment>
 													<ui:repeat var="sh" value="#{UserBean.roles}" rows="0">
 														<ui:param name="roles" value="#{sh.type == 'COLLECTION' ? SessionBean.shareCollectionGrantItems : SessionBean.shareAlbumGrantItems}"/>
 														<ui:param name="roles" value="#{sh.type == 'ITEM' ? SessionBean.shareItemGrantItems : roles}"/>
@@ -171,25 +196,12 @@
 														</div>
 														<br/>
 													</ui:repeat>
-													
-													<h:panelGroup layout="block" rendered="#{!UserBean.user.allowedToCreateCollection}">
-													
-														<div class="imj_admindataSetEdit">
-															<div class="imj_admindataValueCheckBox">
-																<div class="imj_admindataValueEntry">
-																	<h:selectBooleanCheckbox value="#{UserBean.user.allowedToCreateCollection}" styleClass="imj_admindataCheckbox"/>
-																</div>													
-															</div>
-															<div class="imj_admindataLabel">
-																<h:outputText value="#{lbl.allowedToCreateCollection}"/>
-																<span class="imj_invisible">: </span>
-															</div>
-															<h:commandButton action="#{UserBean.allowedToCreateCollection}" value="#{lbl.save}" styleClass="imj_editButton"/>
-														</div>
-
-													</h:panelGroup>
-
-													
+													<h:commandButton id="toggleCreate" action="#{UserBean.toggleCreateCollection}" value="toggle create col" styleClass="imj_noDisplay">
+														<f:ajax render="@none"/>
+													</h:commandButton>
+													<h:commandButton id="toggleAdmin" action="#{UserBean.toggleAdmin}" value="toggle admin" styleClass="imj_noDisplay" onclick="if(confirm('Do you want to remove the admin role'))return true;return false;">
+														<f:ajax render="@form"/>
+													</h:commandButton>
 												</div>
 											</div>
 										</h:panelGroup>		
@@ -205,13 +217,6 @@
 				</div> <!-- END ADMIN LIST -->
 					
 			</div> <!-- END USER CONFIG -->
-				
-			<!-- AdminDataList - Back Button -->
-			<h:panelGroup layout="block" styleClass="imj_backPanel" rendered="#{Auth.admin}">
-				<h:outputLink value="#{Navigation.adminUrl}">
-					<h:outputText value="#{lbl.back_to_admin}" styleClass="imj_backButton"/>
-				</h:outputLink>
-			</h:panelGroup>
 				
 		</ui:fragment>	
 		

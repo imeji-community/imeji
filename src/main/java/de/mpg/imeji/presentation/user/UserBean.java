@@ -4,18 +4,22 @@
 package de.mpg.imeji.presentation.user;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.context.FacesContext;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import com.hp.hpl.jena.sparql.pfunction.library.container;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
+import de.mpg.imeji.logic.controller.GrantController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
@@ -66,8 +70,6 @@ public class UserBean
             throw new RuntimeException(e);
         }
     }
-
-   
 
     /**
      * Retrieve the current user
@@ -162,20 +164,64 @@ public class UserBean
         sh.getSharedType().clear();
         sh.update();
     }
-    
-    public void allowedToCreateCollection()throws IOException
+
+    /**
+     * Save the user {@link Grant}
+     * 
+     * @throws IOException
+     */
+    public void saveGrants() throws IOException
     {
-    	if(user.isAllowedToCreateCollection())
-    	{    		
+        if (user.isAllowedToCreateCollection())
+        {
             List<Grant> newGrants = new ArrayList<Grant>();
-           	newGrants = AuthorizationPredefinedRoles.allowedToCreateCollection();
-           	newGrants.addAll(user.getGrants());
+            newGrants = AuthorizationPredefinedRoles.allowedToCreateCollection();
+            newGrants.addAll(user.getGrants());
             user.setGrants(newGrants);
-    	}
+        }
         updateUser();
         BeanHelper.info("Grant edited");
         reloadPage();
-    		
+    }
+
+    /**
+     * Toggle the Admin Role of the {@link User}
+     * 
+     * @throws Exception
+     */
+    @SuppressWarnings("unchecked")
+    public void toggleAdmin() throws Exception
+    {
+        GrantController gc = new GrantController();
+        Grant g = new Grant(GrantType.ADMIN, URI.create(PropertyBean.baseURI()));
+        if (user.isAdmin())
+        {
+            gc.removeGrants(user, (List<Grant>)gc.toList(g), session.getUser());
+        }
+        else
+        {
+            gc.addGrants(user, (List<Grant>)gc.toList(g), session.getUser());
+        }
+    }
+
+    /**
+     * Toggle the create collction role of the {@link User}
+     * 
+     * @throws Exception
+     */
+    @SuppressWarnings("unchecked")
+    public void toggleCreateCollection() throws Exception
+    {
+        GrantController gc = new GrantController();
+        Grant g = new Grant(GrantType.CREATE, URI.create(PropertyBean.baseURI()));
+        if (user.isAllowedToCreateCollection())
+        {
+            gc.removeGrants(user, (List<Grant>)gc.toList(g), session.getUser());
+        }
+        else
+        {
+            gc.addGrants(user, (List<Grant>)gc.toList(g), session.getUser());
+        }
     }
 
     /**

@@ -79,6 +79,17 @@ public class AuthUtil
     }
 
     /**
+     * True if a {@link User} can create an collection
+     * 
+     * @param user
+     * @return
+     */
+    public static boolean isAllowedToCreateCollection(User user)
+    {
+        return authorization.create(user, PropertyBean.baseURI());
+    }
+
+    /**
      * True if the {@link User} has read Grant for a single {@link Item} but not to its {@link CollectionImeji}
      * 
      * @param user

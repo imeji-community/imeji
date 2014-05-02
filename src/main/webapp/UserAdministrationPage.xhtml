@@ -2,10 +2,19 @@
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core">
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:menu="http://java.sun.com/jsf/composite/components/menu">
 	
 	<ui:param name="headline" value="#{PropertyBean.appName} Administration"/>
 	<ui:param name="currentMainMenu" value="admin"/>
+	
+	<ui:define name="actionsMenu">
+		<menu:context_actionMenu isUserLoggedIn="#{Auth.loggedIn}" 
+								 curMainMenu="#{currentMainMenu}" 
+								 downloadEnabled="false"
+								 actionEnabled="false"
+								 navBean="#{Navigation}"  />
+	</ui:define>
 	
 	<ui:define name="mainContent">
 	
@@ -33,18 +42,8 @@
 						<div class="imj_content">
 							<ul>
 								<li>
-									<a href="#{Navigation.applicationUrl}createuser" title="#{lbl.admin_user_new}">
-										<h:outputText value="#{lbl.admin_user_new}"/>
-									</a>
-								</li>
-								<li>
 									<a href="#{Navigation.applicationUrl}users" title="#{lbl.admin_user_view}">
 										<h:outputText value="#{lbl.admin_user_view}" />
-									</a>
-								</li>
-								<li>
-									<a href="#{Navigation.applicationUrl}createusergroup" title="#{lbl.admin_group_new}">
-										<h:outputText value="#{lbl.admin_userGroup_new}" />
 									</a>
 								</li>
 								<li>

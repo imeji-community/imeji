@@ -34,6 +34,7 @@ import java.util.List;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
+import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
@@ -196,6 +197,8 @@ public class Authorization
      */
     public boolean createNew(User user, Object obj)
     {
+        if(user != null && obj instanceof Album)
+            return true;
         if (hasGrant(user, toGrant(getRelevantURIForSecurity(obj, true, true), GrantType.CREATE)))
             return true;
         return false;

@@ -3,13 +3,14 @@
  */
 package de.mpg.imeji.presentation.user;
 
-import java.util.Collection;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.StringHelper;
+import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.user.util.EmailClient;
@@ -31,6 +32,7 @@ public class UserCreationBean
     private SessionBean sb;
     private boolean sendEmail = false;
     private static Logger logger = Logger.getLogger(UserCreationBean.class);
+    private boolean allowedToCreateCollection = true;
 
     /**
      * Construct new bean
@@ -40,7 +42,7 @@ public class UserCreationBean
         sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         this.setUser(new User());
     }
-    
+
     /**
      * Method called when user create a new user
      * 
@@ -49,7 +51,6 @@ public class UserCreationBean
      */
     public String create()
     {
-
         if (!isValidEmail(user.getEmail()))
         {
             BeanHelper.error(sb.getMessage("error_user_email_not_valid"));
@@ -71,6 +72,7 @@ public class UserCreationBean
                     }
                     logger.info("New user created: " + user.getEmail());
                     BeanHelper.info(sb.getMessage("success_user_create"));
+                    return "pretty:users";
                 }
             }
             catch (Exception e)
@@ -92,7 +94,10 @@ public class UserCreationBean
         PasswordGenerator generator = new PasswordGenerator();
         String password = generator.generatePassword();
         user.setEncryptedPassword(StringHelper.convertToMD5(password));
-        user.setGrants(AuthorizationPredefinedRoles.defaultUser(user.getId().toString(), user.isAllowedToCreateCollection()));
+        List<Grant> g = allowedToCreateCollection ? AuthorizationPredefinedRoles.defaultUser(user.getId().toString(),
+                user.isAllowedToCreateCollection()) : AuthorizationPredefinedRoles.restrictedUser(user.getId()
+                .toString());
+        user.setGrants(g);
         uc.create(user);
         return password;
     }
@@ -189,5 +194,21 @@ public class UserCreationBean
     public void setSendEmail(boolean sendEmail)
     {
         this.sendEmail = sendEmail;
+    }
+
+    /**
+     * @return the allowedToCreateCollection
+     */
+    public boolean isAllowedToCreateCollection()
+    {
+        return allowedToCreateCollection;
+    }
+
+    /**
+     * @param allowedToCreateCollection the allowedToCreateCollection to set
+     */
+    public void setAllowedToCreateCollection(boolean allowedToCreateCollection)
+    {
+        this.allowedToCreateCollection = allowedToCreateCollection;
     }
 }

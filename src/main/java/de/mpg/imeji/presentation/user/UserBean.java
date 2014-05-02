@@ -7,17 +7,19 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.faces.context.FacesContext;
-import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
+
 import com.hp.hpl.jena.sparql.pfunction.library.container;
+
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.GrantController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Grant;
-import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.session.SessionBean;
@@ -163,25 +165,6 @@ public class UserBean
     {
         sh.getSharedType().clear();
         sh.update();
-    }
-
-    /**
-     * Save the user {@link Grant}
-     * 
-     * @throws IOException
-     */
-    public void saveGrants() throws IOException
-    {
-        if (user.isAllowedToCreateCollection())
-        {
-            List<Grant> newGrants = new ArrayList<Grant>();
-            newGrants = AuthorizationPredefinedRoles.allowedToCreateCollection();
-            newGrants.addAll(user.getGrants());
-            user.setGrants(newGrants);
-        }
-        updateUser();
-        BeanHelper.info("Grant edited");
-        reloadPage();
     }
 
     /**

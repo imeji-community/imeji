@@ -1,22 +1,23 @@
 package de.mpg.imeji.presentation.beans;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
-import de.mpg.imeji.logic.auth.Authorization;
-import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.vo.SearchIndex;
+import de.mpg.imeji.logic.search.vo.SearchOperators;
+import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
+import de.mpg.imeji.logic.util.DateFormatter;
 import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.image.ThumbnailBean;
 import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.session.SessionBean;
@@ -36,6 +37,8 @@ public class StartPageBean
     private List<ThumbnailBean> carousselImages = new ArrayList<ThumbnailBean>();
     private SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     private final static int CAROUSSEL_SIZE = 6;
+    // in hours
+    private int searchforItemCreatedForLessThan = 0;
 
     /**
      * Constructor for the bean
@@ -98,7 +101,27 @@ public class StartPageBean
     private SearchResult searchItems(SearchQuery sq, SortCriterion sc)
     {
         ItemController ic = new ItemController(session.getUser());
+        if (sq.isEmpty() && searchforItemCreatedForLessThan > 0)
+        {
+            // Search for item which have been for less than n hours
+            sq.addPair(new SearchPair(Search.getIndex(SearchIndex.names.created), SearchOperators.GREATER,
+                    getTimeforNDaybeforeNow(searchforItemCreatedForLessThan)));
+            return new SearchResult(ic.search(null, sq, sc, null).getResults(), null);
+        }
         return ic.search(null, sq, sc, null);
+    }
+
+    /**
+     * Return the time of the nth day before the current time
+     * 
+     * @param day
+     * @return
+     */
+    private String getTimeforNDaybeforeNow(int n)
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.HOUR, -n);
+        return DateFormatter.formatToSparqlDateTime(cal);
     }
 
     /**

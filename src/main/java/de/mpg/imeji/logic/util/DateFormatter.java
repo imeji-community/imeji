@@ -98,4 +98,16 @@ public class DateFormatter
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         return sdf.format(d);
     }
+    
+    /**
+     * Return a date in a conform format for SPARQL Queries (for instance: 2014-04-02T15:17:22.833Z)
+     * 
+     * @param str
+     * @return
+     */
+    public static String formatToSparqlDateTime(Calendar cal)
+    {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        return sdf.format(cal.getTime());
+    }
 }

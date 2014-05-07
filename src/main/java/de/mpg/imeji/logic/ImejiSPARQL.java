@@ -28,8 +28,8 @@ public class ImejiSPARQL
      */
     public static List<String> exec(String query, String modelName)
     {
-    	//??? Magic Number
-        List<String> results = new ArrayList<String>(1000);
+        // ??? Magic Number
+        List<String> results = new ArrayList<String>();
         SearchTransaction transaction = new SearchTransaction(modelName, query, results, false);
         transaction.start();
         try

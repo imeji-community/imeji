@@ -39,12 +39,18 @@ public class SearchResult
         numberOfRecords = unsortedResults.size();
         if (sort != null)
         {
-        	//???
+            // ???
             if (sort.getIndex() != null && sort.getIndex().getName().equals(SearchIndex.names.cont_title.name()))
-                {sort.toggle();}
+            {
+                sort.toggle();
+            }
             this.sort = sort;
+            results = SortHelper.sort(unsortedResults, this.sort.getSortOrder());
         }
-        results = SortHelper.sort(unsortedResults, this.sort.getSortOrder());
+        else
+        {
+            results = unsortedResults;
+        }
     }
 
     public int getNumberOfRecords()

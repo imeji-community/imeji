@@ -35,8 +35,7 @@ import de.mpg.j2j.helper.J2JHelper;
  */
 public class SimpleQueryFactory
 {
-    private static String PATTERN_SELECT = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 XXX_MODEL_NAMES_XXX WHERE {XXX_SEARCH_ELEMENT_XXX XXX_SPECIFIC_QUERY_XXX "
-            + "?s <http://imeji.org/terms/status> ?status  XXX_SECURITY_FILTER_XXX XXX_SORT_ELEMENT_XXX}";
+    private static String PATTERN_SELECT = "";
 
     /**
      * Create a SPARQL query
@@ -255,7 +254,8 @@ public class SimpleQueryFactory
                     + ") .";
         }
     }
-
+    
+    
     /**
      * Return all parent search element (according to {@link SearchIndex}) of a search element, as a sparql query
      * 

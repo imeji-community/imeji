@@ -374,7 +374,8 @@ public class SPARQLQueries
                     + limit;
         return "SELECT DISTINCT ?s WHERE {<" + uri.toString() + "> <http://imeji.org/terms/item> ?s . "
                 + SimpleSecurityQuery.queryFactory(user, J2JHelper.getResourceNamespace(new Item()), null, false)
-                + " ?s <http://imeji.org/terms/collection> ?c . ?c <http://imeji.org/terms/status> ?status}LIMIT " + limit;
+                + " ?s <http://imeji.org/terms/collection> ?c . ?c <http://imeji.org/terms/status> ?status}LIMIT "
+                + limit;
     }
 
     public static String selectContainerItemByFilename(URI containerURI, String filename)

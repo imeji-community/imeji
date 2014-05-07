@@ -32,6 +32,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Serializable;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -46,7 +47,7 @@ import de.mpg.imeji.presentation.util.PropertyReader;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class StorageController
+public class StorageController implements Serializable
 {
     private Storage storage;
 

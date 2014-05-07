@@ -28,6 +28,8 @@
  */
 package de.mpg.imeji.logic.storage.administrator;
 
+import java.io.Serializable;
+
 import de.mpg.imeji.logic.storage.Storage;
 
 /**
@@ -37,7 +39,7 @@ import de.mpg.imeji.logic.storage.Storage;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public interface StorageAdministrator
+public interface StorageAdministrator extends Serializable
 {
     /**
      * Return the number of files of the Storage for a certain path.

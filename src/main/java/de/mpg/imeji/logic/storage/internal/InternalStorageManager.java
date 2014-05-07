@@ -32,6 +32,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 
 import javax.activation.MimetypesFileTypeMap;
@@ -57,7 +58,7 @@ import de.mpg.imeji.presentation.util.PropertyReader;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class InternalStorageManager
+public class InternalStorageManager implements Serializable
 {
     /**
      * The directory path where files are stored

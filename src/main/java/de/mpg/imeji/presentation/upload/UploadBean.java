@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -16,6 +17,10 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.activation.MimetypesFileTypeMap;
+import javax.annotation.PostConstruct;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
@@ -24,10 +29,12 @@ import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.BooleanUtils;
 import org.apache.log4j.Logger;
 
+import com.ocpsoft.pretty.PrettyContext;
+
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
@@ -38,12 +45,12 @@ import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.collection.CollectionBean;
+import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.history.PageURIHelper;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectLoader;
-import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
 /**
@@ -53,28 +60,25 @@ import de.mpg.imeji.presentation.util.UrlHelper;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class UploadBean extends CollectionBean
+@ManagedBean(name = "UploadBean")
+@ViewScoped
+public class UploadBean implements Serializable
 {
-    private CollectionImeji collection;
+    private static final long serialVersionUID = -2731118794797476328L;
+    private static Logger logger = Logger.getLogger(UploadBean.class);
+    private CollectionImeji collection = new CollectionImeji();
+    private StorageController storageController;
     private int collectionSize = 0;
     private String id;
-    private User user;
-    private String title;
-    private String totalNum;
-    private int sNum;
-    private int fNum;
-    private List<Item> sFiles;
-    private List<String> fFiles;
+    private String localDirectory = null;
     private String externalUrl;
-    private StorageController storageController;
-    private Collection<Item> itemList;
-    private static Logger logger = Logger.getLogger(Upload.class);
+    @ManagedProperty(value = "#{SessionBean.user}")
+    private User user;
+    @ManagedProperty(value = "#{UploadSession.formatBlackList}")
     private String formatBlackList = "";
+    @ManagedProperty(value = "#{UploadSession.formatWhiteList}")
     private String formatWhiteList = "";
-    private boolean importImageToFile = false;
-    private boolean uploadFileToItem = false;
-    private boolean checkNameUnique = true;
-    private boolean uploadFinished = false;
+    private boolean recursive;
 
     /**
      * Construct the Bean and initalize the pages
@@ -84,71 +88,41 @@ public class UploadBean extends CollectionBean
      */
     public UploadBean() throws IOException, URISyntaxException
     {
-        sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        storageController = new StorageController("internal");
-        formatBlackList = PropertyReader.getProperty("imeji.upload.blacklist");
-        formatWhiteList = PropertyReader.getProperty("imeji.upload.whitelist");
+        storageController = new StorageController();
     }
 
     /**
      * Method checking the url parameters and triggering then the {@link UploadBean} methods
      */
+    @PostConstruct
     public void status()
     {
-        if (uploadFinished)
-        {
-            uploadFinished = false;
-            removeFiles();
-            totalNum = "";
-            sNum = 0;
-            fNum = 0;
-            sFiles = new ArrayList<Item>();
-            fFiles = new ArrayList<String>();
-        }
+        readId();
+        loadCollection();
         if (UrlHelper.getParameterBoolean("init"))
         {
-            importImageToFile = false;
-            uploadFileToItem = false;
-            checkNameUnique = true;
-            removeFiles();
-            loadCollection();
-            totalNum = "";
-            sNum = 0;
-            fNum = 0;
-            sFiles = new ArrayList<Item>();
-            fFiles = new ArrayList<String>();
-            externalUrl = "";
+            ((UploadSession)BeanHelper.getSessionBean(UploadSession.class)).reset();
+            externalUrl = null;
+            localDirectory = null;
         }
         else if (UrlHelper.getParameterBoolean("start"))
         {
-            try
-            {
-                upload();
-            }
-            catch (Exception e)
-            {
-                logger.error("Error upload", e);
-            }
+            upload();
         }
         else if (UrlHelper.getParameterBoolean("done"))
         {
-            try
-            {
-                if (importImageToFile || uploadFileToItem)
-                    updateItemForFiles();
-                else
-                    createItemForFiles();
-                totalNum = UrlHelper.getParameterValue("totalNum");
-                loadCollection();
-                report();
-            }
-            catch (Exception e)
-            {
-                logger.error("Error upload", e);
-                e.printStackTrace();
-            }
+            // do nothing
         }
-        super.setCollection(collection);
+    }
+
+    /**
+     * Read the id of the collection from the url
+     */
+    private void readId()
+    {
+        URI uri = PageURIHelper.extractId(PrettyContext.getCurrentInstance().getRequestURL().toString());
+        if (uri != null)
+            this.id = ObjectHelper.getId(uri);
     }
 
     /**
@@ -156,40 +130,77 @@ public class UploadBean extends CollectionBean
      * 
      * @throws Exception
      */
-    public void upload() throws Exception
+    public void upload()
     {
-        UserController uc = new UserController(sessionBean.getUser());
-        user = uc.retrieve(getUser().getEmail());
         HttpServletRequest req = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext()
                 .getRequest();
         boolean isMultipart = ServletFileUpload.isMultipartContent(req);
         if (isMultipart)
         {
+            List<Item> itemList = new ArrayList<Item>();
             ServletFileUpload upload = new ServletFileUpload();
             // Parse the request
-            FileItemIterator iter = upload.getItemIterator(req);
-            while (iter.hasNext())
+            try
             {
-                FileItemStream fis = iter.next();
-                InputStream stream = fis.openStream();
-                if (!fis.isFormField())
+                FileItemIterator iter = upload.getItemIterator(req);
+                while (iter.hasNext())
                 {
-                    title = fis.getName();
-                    File tmp = createTmpFile();
-                    try
+                    FileItemStream fis = iter.next();
+                    InputStream stream = fis.openStream();
+                    if (!fis.isFormField())
                     {
-                        writeInTmpFile(tmp, stream);
-                        Item item = uploadFile(tmp);
-                        if (item != null)
-                            itemList.add(item);
-                    }
-                    finally
-                    {
-                        stream.close();
-                        FileUtils.deleteQuietly(tmp);
+                        File tmp = createTmpFile(fis.getName());
+                        try
+                        {
+                            writeInTmpFile(tmp, stream);
+                            Item item = uploadFile(tmp, fis.getName());
+                            if (item != null)
+                                itemList.add(item);
+                        }
+                        finally
+                        {
+                            stream.close();
+                            FileUtils.deleteQuietly(tmp);
+                        }
                     }
                 }
             }
+            catch (Exception e)
+            {
+                throw new RuntimeException(e);
+            }
+            createOrUpdateItem(itemList);
+        }
+    }
+
+    /**
+     * Upload all Files from a directory
+     * 
+     * @param path
+     * @throws Exception
+     */
+    public void uploadFromLocalDirectory() throws Exception
+    {
+        System.out.println(recursive);
+        try
+        {
+            File dir = new File(localDirectory);
+            List<Item> itemList = new ArrayList<>();
+            if (dir.isDirectory())
+            {
+                for (File f : FileUtils.listFiles(dir, null, recursive))
+                {
+                    Item item = uploadFile(f, f.getName());
+                    if (item != null)
+                        itemList.add(item);
+                }
+                createOrUpdateItem(itemList);
+            }
+            BeanHelper.info(itemList.size() + " files uploaded from " + localDirectory);
+        }
+        finally
+        {
+            reloadToDonePage();
         }
     }
 
@@ -197,41 +208,67 @@ public class UploadBean extends CollectionBean
      * Upload a file from the web
      * 
      * @return
+     * @throws Exception
      */
-    public String uploadFromLink()
+    public void uploadFromLink() throws Exception
     {
+        URL url = new URL(URLDecoder.decode(externalUrl, "UTF-8"));
         try
         {
-            externalUrl = URLDecoder.decode(externalUrl, "UTF-8");
-            URL url = new URL(externalUrl);
-            title = findFileName(url);
-            File tmp = createTmpFile();
+            File tmp = createTmpFile(findFileName(url));
             try
             {
                 StorageController externalController = new StorageController("external");
                 FileOutputStream fos = new FileOutputStream(tmp);
                 externalController.read(url.toString(), fos, true);
-                Item item = uploadFile(tmp);
+                Item item = uploadFile(tmp, findFileName(url));
                 if (item != null)
                 {
-                    UserController uc = new UserController(sessionBean.getUser());
-                    user = uc.retrieve(getUser().getEmail());
-                    ItemController ic = new ItemController(user);
-                    ic.create(item, collection.getId());
+                    List<Item> itemList = new ArrayList<>();
+                    itemList.add(item);
+                    createOrUpdateItem(itemList);
                 }
-                externalUrl = "";
+                externalUrl = null;
+            }
+            catch (Exception e)
+            {
+                logger.error("Error uploading file from link: " + externalUrl, e);
+                getfFiles().add(e.getMessage() + ": " + findFileName(url));
             }
             finally
             {
                 FileUtils.deleteQuietly(tmp);
             }
         }
-        catch (Exception e)
+        finally
         {
-            logger.error("Error uploading file from link: " + externalUrl, e);
-            fFiles.add(e.getMessage() + ": " + title);
+            reloadToDonePage();
         }
-        return "";
+    }
+
+    /**
+     * According to choosed options, create or update the item
+     * 
+     * @param itemList
+     */
+    private void createOrUpdateItem(List<Item> itemList)
+    {
+        if (isImportImageToFile() || isUploadFileToItem())
+            updateItemForFiles(itemList);
+        else
+            createItemForFiles(itemList);
+    }
+
+    /**
+     * Reload the page with the done status
+     * 
+     * @throws IOException
+     */
+    private void reloadToDonePage() throws IOException
+    {
+        Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
+        FacesContext.getCurrentInstance().getExternalContext()
+                .redirect(navigation.getCollectionUrl() + getId() + "/" + navigation.getUploadPath() + "?done=1");
     }
 
     /**
@@ -269,7 +306,7 @@ public class UploadBean extends CollectionBean
      * @param fio
      * @return
      */
-    private File createTmpFile()
+    private File createTmpFile(String title)
     {
         try
         {
@@ -312,23 +349,23 @@ public class UploadBean extends CollectionBean
      * Throws an {@link Exception} if the file ca be upload. Works only if the file has an extension (therefore, for
      * file without extension, the validation will only occur when the file has been stored locally)
      */
-    private void validateName()
+    private void validateName(String title)
     {
         if (StorageUtils.hasExtension(title))
         {
-            if (checkNameUnique)
+            if (isCheckNameUnique())
             {
                 // if the checkNameUnique is checked, check that two files with the same name is not possible
-                if ((importImageToFile || uploadFileToItem) && filenameExistsInCurrentUpload())
-                    throw new RuntimeException("There is already at least one item with the filename ");
-                else if (!((importImageToFile || uploadFileToItem)) && filenameExistsInCollection(title)
-                        || filenameExistsInCurrentUpload())
+                if (!((isImportImageToFile() || isUploadFileToItem())) && filenameExistsInCollection(title))
                     throw new RuntimeException("There is already at least one item with the filename "
                             + FilenameUtils.getBaseName(title));
             }
             if (!isAllowedFormat(FilenameUtils.getExtension(title)))
+            {
+                SessionBean sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
                 throw new RuntimeException(sessionBean.getMessage("upload_format_not_allowed") + " ("
                         + FilenameUtils.getExtension(title) + ")");
+            }
         }
     }
 
@@ -338,20 +375,20 @@ public class UploadBean extends CollectionBean
      * @param bytes
      * @throws Exception
      */
-    private Item uploadFile(File file)
+    private Item uploadFile(File file, String title)
     {
         try
         {
             if (!StorageUtils.hasExtension(title))
                 title += StorageUtils.guessExtension(file);
-            validateName();
+            validateName(title);
             storageController = new StorageController();
             Item item = null;
-            if (importImageToFile)
+            if (isImportImageToFile())
             {
                 item = replaceWebResolutionAndThumbnailOfItem(findItemByFileName(title), file);
             }
-            else if (uploadFileToItem)
+            else if (isUploadFileToItem())
             {
                 item = replaceFileOfItem(findItemByFileName(title), file);
             }
@@ -365,18 +402,16 @@ public class UploadBean extends CollectionBean
                         URI.create(uploadResult.getWeb()), mimeType);
                 item.setChecksum(uploadResult.getChecksum());
             }
-            sNum += 1;
-            sFiles.add(item);
+            getsFiles().add(item);
             return item;
         }
         catch (Exception e)
         {
-            fNum += 1;
-            fFiles.add(" File " + title + " not uploaded: " + e.getMessage());
+            getfFiles().add(" File " + title + " not uploaded: " + e.getMessage());
             logger.error("Error uploading item: ", e);
             e.printStackTrace();
+            return null;
         }
-        return null;
     }
 
     /**
@@ -445,28 +480,14 @@ public class UploadBean extends CollectionBean
     }
 
     /**
-     * True if 2 files in the current upload have the same name.
-     * 
-     * @return
-     */
-    private boolean filenameExistsInCurrentUpload()
-    {
-        for (Item item : itemList)
-            if (item.getFilename().equals(title))
-                return true;
-        return false;
-    }
-
-    /**
      * Create the {@link Item} for the files which have been uploaded
      */
-    private void createItemForFiles()
+    private void createItemForFiles(Collection<Item> itemList)
     {
         ItemController ic = new ItemController(user);
         try
         {
             ic.create(itemList, collection.getId());
-            itemList = new ArrayList<Item>();
         }
         catch (Exception e)
         {
@@ -477,33 +498,17 @@ public class UploadBean extends CollectionBean
     /**
      * Update the {@link Item} for the files which have been uploaded
      */
-    private void updateItemForFiles()
+    private void updateItemForFiles(Collection<Item> itemList)
     {
         ItemController ic = new ItemController(user);
         try
         {
             ic.update(itemList, user);
-            itemList = new ArrayList<Item>();
         }
         catch (Exception e)
         {
             logger.error("Error creating files for upload", e);
         }
-    }
-
-    /**
-     * Rmove the files which don't have been created with an {@link Item}. Ca happen if the upload is interrupted
-     */
-    private void removeFiles()
-    {
-        if (itemList != null)
-        {
-            for (Item item : itemList)
-            {
-                storageController.delete(item.getStorageId());
-            }
-        }
-        itemList = new ArrayList<Item>();
     }
 
     /**
@@ -513,35 +518,18 @@ public class UploadBean extends CollectionBean
     {
         if (id != null)
         {
-            collection = ObjectLoader.loadCollectionLazy(ObjectHelper.getURI(CollectionImeji.class, id),
-                    sessionBean.getUser());
+            collection = ObjectLoader.loadCollectionLazy(ObjectHelper.getURI(CollectionImeji.class, id), user);
             if (collection != null && getCollection().getId() != null)
             {
-                ItemController ic = new ItemController(sessionBean.getUser());
+                ItemController ic = new ItemController(user);
                 collectionSize = ic.countContainerSize(collection);
             }
         }
         else
         {
+            SessionBean sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
             BeanHelper.error(sessionBean.getLabel("error") + "No ID in URL");
         }
-    }
-
-    /**
-     * Write the report about the upload results
-     * 
-     * @return
-     * @throws Exception
-     */
-    public String report() throws Exception
-    {
-        setTotalNum(totalNum);
-        setsNum(sNum);
-        setsFiles(sFiles);
-        setfNum(fNum);
-        setfFiles(fFiles);
-        setUploadFinished(true);
-        return "";
     }
 
     /**
@@ -567,56 +555,6 @@ public class UploadBean extends CollectionBean
         return "".equals(formatWhiteList.trim());
     }
 
-    public String getTotalNum()
-    {
-        return totalNum;
-    }
-
-    public void setTotalNum(String totalNum)
-    {
-        this.totalNum = totalNum;
-    }
-
-    public int getsNum()
-    {
-        return sNum;
-    }
-
-    public void setsNum(int sNum)
-    {
-        this.sNum = sNum;
-    }
-
-    public int getfNum()
-    {
-        return fNum;
-    }
-
-    public void setfNum(int fNum)
-    {
-        this.fNum = fNum;
-    }
-
-    public List<Item> getsFiles()
-    {
-        return sFiles;
-    }
-
-    public void setsFiles(List<Item> sFiles)
-    {
-        this.sFiles = sFiles;
-    }
-
-    public List<String> getfFiles()
-    {
-        return fFiles;
-    }
-
-    public void setfFiles(List<String> fFiles)
-    {
-        this.fFiles = fFiles;
-    }
-
     public CollectionImeji getCollection()
     {
         return collection;
@@ -639,7 +577,7 @@ public class UploadBean extends CollectionBean
 
     public User getUser()
     {
-        return sessionBean.getUser();
+        return user;
     }
 
     public void setUser(User user)
@@ -668,63 +606,144 @@ public class UploadBean extends CollectionBean
     }
 
     /**
-     * @return the importImageToFile
+     * @return the formatBlackList
      */
-    public boolean isImportImageToFile()
+    public String getFormatBlackList()
     {
-        return importImageToFile;
+        return formatBlackList;
     }
 
     /**
-     * @param importImageToFile the importImageToFile to set
+     * @param formatBlackList the formatBlackList to set
      */
-    public void setImportImageToFile(boolean importImageToFile)
+    public void setFormatBlackList(String formatBlackList)
     {
-        this.importImageToFile = importImageToFile;
+        this.formatBlackList = formatBlackList;
     }
 
     /**
-     * @return the uploadFileToItem
+     * @return the formatWhiteList
      */
-    public boolean isUploadFileToItem()
+    public String getFormatWhiteList()
     {
-        return uploadFileToItem;
+        return formatWhiteList;
     }
 
     /**
-     * @param uploadFileToItem the uploadFileToItem to set
+     * @param formatWhiteList the formatWhiteList to set
      */
-    public void setUploadFileToItem(boolean uploadFileToItem)
+    public void setFormatWhiteList(String formatWhiteList)
     {
-        this.uploadFileToItem = uploadFileToItem;
+        this.formatWhiteList = formatWhiteList;
     }
 
-    public void uploadFileToItemListener()
+    private List<String> getfFiles()
     {
-        importImageToFile = false;
+        return ((UploadSession)BeanHelper.getSessionBean(UploadSession.class)).getfFiles();
     }
 
-    public void importImageToFileListener()
+    private List<Item> getsFiles()
     {
-        uploadFileToItem = false;
+        return ((UploadSession)BeanHelper.getSessionBean(UploadSession.class)).getsFiles();
     }
 
-    /**
-     * @return the checkNameUnique
-     */
-    public boolean isCheckNameUnique()
+    private boolean isCheckNameUnique()
     {
-        return checkNameUnique;
+        return ((UploadSession)BeanHelper.getSessionBean(UploadSession.class)).isCheckNameUnique();
     }
 
-    /**
-     * @param checkNameUnique the checkNameUnique to set
-     */
-    public void setCheckNameUnique(boolean checkNameUnique)
+    private boolean isImportImageToFile()
     {
-        this.checkNameUnique = checkNameUnique;
+        return ((UploadSession)BeanHelper.getSessionBean(UploadSession.class)).isImportImageToFile();
     }
 
+    private boolean isUploadFileToItem()
+    {
+        return ((UploadSession)BeanHelper.getSessionBean(UploadSession.class)).isUploadFileToItem();
+    }
+
+    // public void uploadFileToItemListener()
+    // {
+    // this.importImageToFile = BooleanUtils.negate(importImageToFile);
+    // }
+    //
+    // public void importImageToFileListener()
+    // {
+    // this.uploadFileToItem = BooleanUtils.negate(uploadFileToItem);
+    // }
+    //
+    // public void checkNameUniqueListener()
+    // {
+    // this.checkNameUnique = BooleanUtils.negate(checkNameUnique);
+    // }
+    //
+    // /**
+    // * @return the importImageToFile
+    // */
+    // public boolean isImportImageToFile()
+    // {
+    // return importImageToFile;
+    // }
+    //
+    // /**
+    // * @param importImageToFile the importImageToFile to set
+    // */
+    // public void setImportImageToFile(boolean importImageToFile)
+    // {
+    // this.importImageToFile = importImageToFile;
+    // }
+    //
+    // /**
+    // * @return the uploadFileToItem
+    // */
+    // public boolean isUploadFileToItem()
+    // {
+    // return uploadFileToItem;
+    // }
+    //
+    // /**
+    // * @param uploadFileToItem the uploadFileToItem to set
+    // */
+    // public void setUploadFileToItem(boolean uploadFileToItem)
+    // {
+    // this.uploadFileToItem = uploadFileToItem;
+    // }
+    //
+    // /**
+    // * @return the checkNameUnique
+    // */
+    // public boolean isCheckNameUnique()
+    // {
+    // return checkNameUnique;
+    // }
+    //
+    // /**
+    // * @param checkNameUnique the checkNameUnique to set
+    // */
+    // public void setCheckNameUnique(boolean checkNameUnique)
+    // {
+    // this.checkNameUnique = checkNameUnique;
+    // }
+    //
+    // public List<Item> getsFiles()
+    // {
+    // return sFiles;
+    // }
+    //
+    // public void setsFiles(List<Item> sFiles)
+    // {
+    // this.sFiles = sFiles;
+    // }
+    //
+    // public List<String> getfFiles()
+    // {
+    // return fFiles;
+    // }
+    //
+    // public void setfFiles(List<String> fFiles)
+    // {
+    // this.fFiles = fFiles;
+    // }
     public String getDiscardComment()
     {
         return collection.getDiscardComment();
@@ -736,29 +755,34 @@ public class UploadBean extends CollectionBean
     }
 
     /**
-     * @return the uploadFinished
+     * @return the localDirectory
      */
-    public boolean isUploadFinished()
+    public String getLocalDirectory()
     {
-        return uploadFinished;
+        return localDirectory;
     }
 
     /**
-     * @param uploadFinished the uploadFinished to set
+     * @param localDirectory the localDirectory to set
      */
-    public void setUploadFinished(boolean uploadFinished)
+    public void setLocalDirectory(String localDirectory)
     {
-        this.uploadFinished = uploadFinished;
+        this.localDirectory = localDirectory;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see de.mpg.imeji.presentation.beans.ContainerBean#getNavigationString()
+    /**
+     * @return the recursive
      */
-    @Override
-    protected String getNavigationString()
+    public boolean isRecursive()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return recursive;
+    }
+
+    /**
+     * @param recursive the recursive to set
+     */
+    public void setRecursive(boolean recursive)
+    {
+        this.recursive = recursive;
     }
 }

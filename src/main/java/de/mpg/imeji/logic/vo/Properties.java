@@ -3,6 +3,7 @@
  */
 package de.mpg.imeji.logic.vo;
 
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
@@ -30,7 +31,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "properties", namespace = "http://imeji.org/terms")
 @XmlSeeAlso({ Item.class, MetadataProfile.class })
-public class Properties
+public class Properties implements Serializable
 {
     private URI id;
     @j2jResource("http://purl.org/dc/terms/creator")

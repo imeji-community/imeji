@@ -30,11 +30,6 @@
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
-		<managed-bean-name>UploadBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.upload.UploadBean</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
 		<managed-bean-name>IngestBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.ingest.IngestBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>

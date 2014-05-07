@@ -3,6 +3,7 @@
  */
 package de.mpg.imeji.logic.vo;
 
+import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "item", namespace = "http://imeji.org/terms")
-public class Item extends Properties implements FulltextIndex
+public class Item extends Properties implements FulltextIndex, Serializable
 {
     public enum Visibility
     {

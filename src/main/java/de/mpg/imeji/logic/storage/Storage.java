@@ -30,6 +30,7 @@ package de.mpg.imeji.logic.storage;
 
 import java.io.File;
 import java.io.OutputStream;
+import java.io.Serializable;
 
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -41,7 +42,7 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public interface Storage
+public interface Storage extends Serializable
 {
     /**
      * The possible resolution of a file in imeji

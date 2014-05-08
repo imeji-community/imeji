@@ -168,12 +168,14 @@
 							<h:outputLabel styleClass="imj_optionLabel" value="#{lbl.upload_unique_filename}" for="selUniqueNames"/>
 						</div>
 						
-						<div class="imj_optionSet right">
-							<h:selectBooleanCheckbox styleClass="imj_optionCheckbox" id="selRecursive" value="#{UploadBean.recursive}">
-								<f:ajax event="click" render="@none"/>
-							</h:selectBooleanCheckbox>
-							<h:outputLabel styleClass="imj_optionLabel" value="#{lbl.upload_directory_recursive}" for="selRecursive"/>
-						</div>
+						<ui:fragment rendered="#{Auth.admin}">
+							<div class="imj_optionSet right">
+								<h:selectBooleanCheckbox styleClass="imj_optionCheckbox" id="selRecursive" value="#{UploadBean.recursive}">
+									<f:ajax event="click" render="@none"/>
+								</h:selectBooleanCheckbox>
+								<h:outputLabel styleClass="imj_optionLabel" value="#{lbl.upload_directory_recursive}" for="selRecursive"/>
+							</div>
+						</ui:fragment>
 									
 					</h:form>
 				</div>

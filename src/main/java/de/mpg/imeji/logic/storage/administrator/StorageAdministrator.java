@@ -29,6 +29,7 @@
 package de.mpg.imeji.logic.storage.administrator;
 
 import java.io.Serializable;
+import java.util.List;
 
 import de.mpg.imeji.logic.storage.Storage;
 
@@ -62,4 +63,11 @@ public interface StorageAdministrator extends Serializable
      * @return
      */
     public long getFreeSpace();
+
+    /**
+     * Clean the {@link Storage} (remove files which are not used)
+     * 
+     * @return the number of removed files
+     */
+    public int clean();
 }

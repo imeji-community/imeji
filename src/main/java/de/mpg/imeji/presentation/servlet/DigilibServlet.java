@@ -87,26 +87,30 @@ public class DigilibServlet extends Scaler
     @Override
     public void init(ServletConfig config) throws ServletException
     {
-    	PropertyBean propBean = new PropertyBean();
+        PropertyBean propBean = new PropertyBean();
         if (propBean.isDigilibEnabled())
         {
-	        try
-	        {
-	        	authorization = new Authorization();
-	            navigation = new Navigation();
-	        }
-	        catch (Exception e)
-	        {
-	            throw new RuntimeException(e);
-	        }
-	        storageController = new StorageController();
-	        InternalStorageManager ism = new InternalStorageManager();
-	        internalStorageBase = FilenameUtils.getBaseName(FilenameUtils.normalizeNoEndSeparator(ism.getStoragePath()));
-	        // Copy the digilib-config.xml before initialising the digilib servlet, which needs this file
-	        copyFile(getDigilibConfigPath(), config.getServletContext().getRealPath("/WEB-INF"));
-	        super.init(config);
+            try
+            {
+                authorization = new Authorization();
+                navigation = new Navigation();
+            }
+            catch (Exception e)
+            {
+                throw new RuntimeException(e);
+            }
+            storageController = new StorageController();
+            InternalStorageManager ism = new InternalStorageManager();
+            internalStorageBase = FilenameUtils
+                    .getBaseName(FilenameUtils.normalizeNoEndSeparator(ism.getStoragePath()));
+            // Copy the digilib-config.xml before initialising the digilib servlet, which needs this file
+            copyFile(getDigilibConfigPath(), config.getServletContext().getRealPath("/WEB-INF"));
+            super.init(config);
         }
-        else {logger.info("Digilib Viewer is disabled.");}
+        else
+        {
+            logger.info("Digilib Viewer is disabled.");
+        }
     }
 
     /*

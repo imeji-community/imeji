@@ -199,7 +199,7 @@
 													<h:commandButton id="toggleCreate" action="#{UserBean.toggleCreateCollection}" value="toggle create col" styleClass="imj_noDisplay">
 														<f:ajax render="@none"/>
 													</h:commandButton>
-													<h:commandButton id="toggleAdmin" action="#{UserBean.toggleAdmin}" value="toggle admin" styleClass="imj_noDisplay" onclick="if(confirm('Do you want to remove the admin role'))return true;return false;">
+													<h:commandButton id="toggleAdmin" action="#{UserBean.toggleAdmin}" value="toggle admin" styleClass="imj_noDisplay">
 														<f:ajax render="@form"/>
 													</h:commandButton>
 												</div>

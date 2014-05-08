@@ -85,15 +85,17 @@ public class InitializerServlet extends HttpServlet
     {
         try
         {
-        	if (!UserController.adminUserExist())
-        	{
-        		logger.info("Create new admin user");
-        		UserController uc = new UserController(Imeji.adminUser);
-        		uc.create(Imeji.adminUser);
-        		logger.info("Created admin user successfully:" + Imeji.adminUser.getEmail());
-        	}
-        	else 
-        	{logger.info("Admin user already exists.");}
+            if (!UserController.adminUserExist())
+            {
+                logger.info("Create new admin user");
+                UserController uc = new UserController(Imeji.adminUser);
+                uc.create(Imeji.adminUser);
+                logger.info("Created admin user successfully:" + Imeji.adminUser.getEmail());
+            }
+            else
+            {
+                logger.info("Admin user already exists.");
+            }
         }
         catch (AlreadyExistsException e)
         {
@@ -143,17 +145,11 @@ public class InitializerServlet extends HttpServlet
     public void destroy()
     {
         logger.info("Shutting down imeji!");
+        logger.info("Make Garbage collector!");
+        System.gc();
+        System.runFinalization();
         logger.info("Shutting down thread executor...");
         Imeji.executor.shutdown();
-        try
-        {
-            Imeji.executor.awaitTermination(10, TimeUnit.SECONDS);
-        }
-        catch (InterruptedException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
         logger.info("executor shutdown status: " + Imeji.executor.isShutdown());
         logger.info("Closing Jena TDB...");
         TDB.sync(Imeji.dataset);
@@ -164,9 +160,8 @@ public class InitializerServlet extends HttpServlet
         logger.info("Ending LockSurveyor...");
         locksSurveyor.terminate();
         logger.info("...done");
-        System.runFinalization();
-        System.gc();
         super.destroy();
         logger.info("imeji is down");
+        System.exit(0);
     }
 }

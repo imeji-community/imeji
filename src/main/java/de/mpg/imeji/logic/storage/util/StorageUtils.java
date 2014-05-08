@@ -42,6 +42,7 @@ import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.apache.tika.Tika;
 import org.apache.tika.mime.MimeType;
@@ -109,36 +110,50 @@ public class StorageUtils
      */
     public static void writeInOut(InputStream in, OutputStream out, boolean close)
     {
-        byte[] buffer = new byte[1024];
-        int numRead;
         try
         {
-            while ((numRead = in.read(buffer)) != -1)
-            {
-                out.write(buffer, 0, numRead);
-            }
+            IOUtils.copy(in, out);
         }
-        catch (Exception e)
+        catch (IOException e)
         {
             throw new RuntimeException("Error writing inputstream in outputstream: ", e);
         }
         finally
         {
-            try
-            {
-                in.close();
-                out.flush();
-                if (close)
-                {
-                    out.close();
-                }
-            }
-            catch (IOException e)
-            {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            IOUtils.closeQuietly(in);
+            if (close)
+                IOUtils.closeQuietly(out);
         }
+//        byte[] buffer = new byte[1024];
+//        int numRead;
+//        try
+//        {
+//            while ((numRead = in.read(buffer)) != -1)
+//            {
+//                out.write(buffer, 0, numRead);
+//            }
+//        }
+//        catch (Exception e)
+//        {
+//            throw new RuntimeException("Error writing inputstream in outputstream: ", e);
+//        }
+//        finally
+//        {
+//            try
+//            {
+//                in.close();
+//                out.flush();
+//                if (close)
+//                {
+//                    out.close();
+//                }
+//            }
+//            catch (IOException e)
+//            {
+//                // TODO Auto-generated catch block
+//                e.printStackTrace();
+//            }
+ //       }
     }
 
     /**

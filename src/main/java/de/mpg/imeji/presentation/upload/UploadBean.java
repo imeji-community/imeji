@@ -29,7 +29,6 @@ import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang.BooleanUtils;
 import org.apache.log4j.Logger;
 
 import com.ocpsoft.pretty.PrettyContext;
@@ -179,9 +178,8 @@ public class UploadBean implements Serializable
      * @param path
      * @throws Exception
      */
-    public void uploadFromLocalDirectory() throws Exception
+    public String uploadFromLocalDirectory() throws Exception
     {
-        System.out.println(recursive);
         try
         {
             File dir = new File(localDirectory);
@@ -198,10 +196,11 @@ public class UploadBean implements Serializable
             }
             BeanHelper.info(itemList.size() + " files uploaded from " + localDirectory);
         }
-        finally
+        catch (Exception e)
         {
-            reloadToDonePage();
+            BeanHelper.error(e.getMessage());
         }
+        return "pretty:";
     }
 
     /**
@@ -210,11 +209,11 @@ public class UploadBean implements Serializable
      * @return
      * @throws Exception
      */
-    public void uploadFromLink() throws Exception
+    public String uploadFromLink() throws Exception
     {
-        URL url = new URL(URLDecoder.decode(externalUrl, "UTF-8"));
         try
         {
+            URL url = new URL(URLDecoder.decode(externalUrl, "UTF-8"));
             File tmp = createTmpFile(findFileName(url));
             try
             {
@@ -232,7 +231,6 @@ public class UploadBean implements Serializable
             }
             catch (Exception e)
             {
-                logger.error("Error uploading file from link: " + externalUrl, e);
                 getfFiles().add(e.getMessage() + ": " + findFileName(url));
             }
             finally
@@ -240,10 +238,12 @@ public class UploadBean implements Serializable
                 FileUtils.deleteQuietly(tmp);
             }
         }
-        finally
+        catch (Exception e)
         {
-            reloadToDonePage();
+            logger.error("Error uploading file from link: " + externalUrl, e);
+            BeanHelper.error(e.getMessage());
         }
+        return "pretty:";
     }
 
     /**
@@ -257,18 +257,6 @@ public class UploadBean implements Serializable
             updateItemForFiles(itemList);
         else
             createItemForFiles(itemList);
-    }
-
-    /**
-     * Reload the page with the done status
-     * 
-     * @throws IOException
-     */
-    private void reloadToDonePage() throws IOException
-    {
-        Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-        FacesContext.getCurrentInstance().getExternalContext()
-                .redirect(navigation.getCollectionUrl() + getId() + "/" + navigation.getUploadPath() + "?done=1");
     }
 
     /**

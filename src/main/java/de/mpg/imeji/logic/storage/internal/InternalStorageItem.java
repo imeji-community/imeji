@@ -42,7 +42,7 @@ public class InternalStorageItem
     private String thumbnailUrl;
     private String fileName;
     private String fileType;
-	private String id;
+    private String id;
     private int version;
 
     /**
@@ -121,12 +121,14 @@ public class InternalStorageItem
     {
         this.thumbnailUrl = thumbnailUrl;
     }
-    
-    public String getFileType() {
-		return fileType;
-	}
 
-	public void setFileType(String fileType) {
-		this.fileType = fileType;
-	}
+    public String getFileType()
+    {
+        return fileType;
+    }
+
+    public void setFileType(String fileType)
+    {
+        this.fileType = fileType;
+    }
 }

@@ -42,7 +42,8 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
- * Session for the upload page
+ * Session for the upload page for the parameter which must be in a sesion (because of the upload which call the page
+ * many times)
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
@@ -100,7 +101,7 @@ public class UploadSession
     {
         this.checkNameUnique = BooleanUtils.negate(checkNameUnique);
     }
- 
+
     /**
      * @return the sFiles
      */

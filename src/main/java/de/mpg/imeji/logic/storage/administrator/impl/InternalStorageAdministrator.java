@@ -29,13 +29,19 @@
 package de.mpg.imeji.logic.storage.administrator.impl;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
+import de.mpg.imeji.logic.ImejiSPARQL;
+import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.storage.impl.InternalStorage;
+import de.mpg.imeji.logic.storage.internal.InternalStorageManager;
 import de.mpg.imeji.logic.util.StringHelper;
 
 /**
@@ -47,6 +53,7 @@ import de.mpg.imeji.logic.util.StringHelper;
  */
 public class InternalStorageAdministrator implements StorageAdministrator
 {
+    private static final long serialVersionUID = -2854550843193929384L;
     /**
      * The directory in file system of the {@link InternalStorage}
      */
@@ -111,5 +118,33 @@ public class InternalStorageAdministrator implements StorageAdministrator
     public long getFreeSpace()
     {
         return storageDir.getUsableSpace();
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see de.mpg.imeji.logic.storage.administrator.StorageAdministrator#getAllFiles()
+     */
+    @Override
+    public int clean()
+    {
+        int deleted = 0;
+        System.out.println("Start cleaning...");
+        System.gc();
+        for (File f : FileUtils.listFiles(storageDir, null, true))
+        {
+            if (f.isFile())
+            {
+                InternalStorageManager m = new InternalStorageManager();
+                String url = m.transformPathToUrl(f.getPath());
+                if (ImejiSPARQL.exec(SPARQLQueries.selectItemIdOfFile(url), null).size() == 0)
+                {
+                    // file doesn't exist, remove it
+                    m.removeFile(url);
+                    deleted++;
+                }
+            }
+        }
+        System.out.println("...done: " + deleted + " files deleted");
+        return deleted;
     }
 }

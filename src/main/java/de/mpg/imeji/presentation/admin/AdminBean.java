@@ -28,6 +28,7 @@ import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.StorageController;
+import de.mpg.imeji.logic.storage.StorageFactory;
 import de.mpg.imeji.logic.storage.UploadResult;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.storage.internal.InternalStorageItem;
@@ -71,7 +72,7 @@ public class AdminBean
      * 
      * @throws Exception
      */
-    public void importToInternalStorage() throws Exception
+    public String importToInternalStorage() throws Exception
     {
         StorageController internal = new StorageController("internal");
         StorageController escidoc = new StorageController("escidoc");
@@ -118,6 +119,19 @@ public class AdminBean
                 FileUtils.deleteQuietly(tmp);
             }
         }
+        return "";
+    }
+
+    /**
+     * Clean the {@link Storage}
+     * 
+     * @return
+     */
+    public String cleanStorage()
+    {
+        StorageController controller = new StorageController();
+        controller.getAdministrator().clean();
+        return "pretty:";
     }
 
     /**

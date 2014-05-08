@@ -37,10 +37,17 @@
 							</div>
 							
 							<div class="imj_content">
-								<h:form>								
-									<h:outputText value="Important: Please make sure to do a backup before running this method! When the import is done (check in the log file), restart imeji with the correct storage!"/> <!-- internationalized info message lbl missing -->
+								<h:form>
 									<h:panelGroup layout="block" styleClass="imj_adminEditPanel">
-										<h:commandLink styleClass="imj_editButton" action="#{AdminBean.importToInternalStorage}" value="#{lbl.import_to_internal}: #{AdminBean.internalStorageLocation}"/>
+										<h:commandLink styleClass="imj_editButton" action="#{AdminBean.cleanStorage}" value="#{lbl.admin_clean_storage}: #{AdminBean.internalStorageLocation}"  onclick="openDialog('dialogWait');">
+											<f:ajax/>
+										</h:commandLink>
+									</h:panelGroup>		
+									<h:outputText value="Important: Please make sure to do a backup before running this method! When the import is done (check in the log file), restart imeji with the correct storage!"/> <!-- internationalized info message lbl missing -->					
+									<h:panelGroup layout="block" styleClass="imj_adminEditPanel">
+										<h:commandLink styleClass="imj_editButton" action="#{AdminBean.importToInternalStorage}" value="#{lbl.import_to_internal}: #{AdminBean.internalStorageLocation}"  onclick="openDialog('dialogWait');">
+											<f:ajax/>
+										</h:commandLink>
 									</h:panelGroup>
 								</h:form>
 							</div>

@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -21,12 +20,9 @@ import com.hp.hpl.jena.tdb.sys.TDBMaker;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
-import de.mpg.imeji.logic.auth.Authorization;
-import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.concurrency.locks.LocksSurveyor;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.StringHelper;
-import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.j2j.exceptions.AlreadyExistsException;
 

@@ -32,7 +32,7 @@
 					<h:form prependId="false">
 						<h:panelGroup layout="block" styleClass="imj_metadataValue">
 							<div class="imj_metadataSet">
-								<h:selectManyCheckbox styleClass="imj_rightsTableForNewUser" value="#{ShareBean.selectedGrants}" layout="lineDirection" onclick="document.getElementById('checkGrantsForGroup').click();">
+								<h:selectManyCheckbox styleClass="imj_rightsTableForNewUser" value="#{ShareBean.selectedGrants}" layout="lineDirection" onclick="document.getElementById('share:checkGrantsForGroup').click();">
 									<f:selectItems value="#{cc.attrs.roles}"/>
 								</h:selectManyCheckbox>
 								<h:commandButton id="checkGrantsForGroup" value="Check Grants" action="#{ShareBean.checkGrants(ShareBean.selectedGrants)}" styleClass="imj_noDisplay">
@@ -63,7 +63,7 @@
 							<div class="imj_metadataSet">
 								<div class="imj_metadataLabel"></div>
 								<h:panelGroup layout="block" id="shareOptions" styleClass="imj_metadataValue">
-									<h:selectManyCheckbox id="selectedGrants" styleClass="imj_rightsTableForNewUser" selectedClass="imj_optionLabel" value="#{ShareBean.selectedGrants}" layout="lineDirection" onclick="document.getElementById('checkGrants').click();">
+									<h:selectManyCheckbox id="selectedGrants" styleClass="imj_rightsTableForNewUser" selectedClass="imj_optionLabel" value="#{ShareBean.selectedGrants}" layout="lineDirection" onclick="document.getElementById('share:checkGrants').click();">
 										<f:selectItems value="#{cc.attrs.roles}"/>
 									</h:selectManyCheckbox>
 									<h:commandButton id="checkGrants" value="Check Grants" action="#{ShareBean.checkGrants(ShareBean.selectedGrants)}" styleClass="imj_noDisplay">

@@ -69,6 +69,23 @@ public class EmailMessages
                 .replace("XXX_LINK_XXX", collectionLink).replace("XXX_SENDER_NAME_XXX", sender);
         return message;
     }
+    
+    /**
+     * Email content when an item has been shared with the addressee by the sender
+     * 
+     * @param sender
+     * @param dest
+     * @param collectionName
+     * @param collectionLink
+     * @return
+     */
+    public String getSharedItemMessage(String sender, String dest, String itemName, String itemLink)
+    {
+        String message = getBundle("email_shared_item");
+        message = message.replace("XXX_USER_NAME_XXX,", dest).replace("XXX_NAME_XXX", itemName)
+                .replace("XXX_LINK_XXX", itemLink).replace("XXX_SENDER_NAME_XXX", sender);
+        return message;
+    }
 
     /**
      * Email content when an album has been shared with the addressee by the sender

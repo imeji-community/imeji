@@ -226,7 +226,8 @@ public class ShareBean implements Serializable
         List<String> l = new ArrayList<String>();
         l.add(userGroup.getId().toString());
         shareTo(l);
-        init();
+        //init();
+        reloadPage();
     }
 
     /**

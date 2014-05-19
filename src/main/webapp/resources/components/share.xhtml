@@ -5,7 +5,8 @@
 	xmlns:composite="http://java.sun.com/jsf/composite">
 	
 	<composite:interface>
-		<composite:attribute name="cc.attrs.roles"/>
+		<composite:attribute name="roles"/>
+		<composite:attribute name="type"/>
 	</composite:interface>
 	
 	<composite:implementation>
@@ -130,7 +131,7 @@
 					</h:form>
 					
 					<div class="imj_submitPanel">
-						<h:outputLink value="#{Navigation.applicationUri}#{ShareBean.pageUrl}" styleClass="imj_cancelButton" title="#{lbl.reset}">
+						<h:outputLink value="#{Navigation.applicationUri}#{ShareBean.pageUrl}" styleClass="imj_cancelButton" title="#{lbl.reset}" rendered="#{cc.attrs.type != 'item'}">
 							<h:outputText value="#{lbl.reset}"/>
 						</h:outputLink>
 						<h:form>

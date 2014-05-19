@@ -258,12 +258,12 @@ public class Authorization
      */
     public boolean delete(User user, Object obj)
     {
-        if (hasGrant(
+        if (!isPublic(obj) && hasGrant(
                 user,
                 toGrant(getRelevantURIForSecurity(obj, false, true),
                         getGrantTypeAccordingToObjectType(obj, GrantType.DELETE))))
             return true;
-        return false;
+        return AuthUtil.isSysAdmin(user);
     }
 
     /**
@@ -307,9 +307,9 @@ public class Authorization
      */
     public boolean deleteContent(User user, Object obj)
     {
-        if (hasGrant(user, toGrant(getRelevantURIForSecurity(obj, false, true), GrantType.DELETE_CONTENT)))
+        if (!isPublic(obj) && hasGrant(user, toGrant(getRelevantURIForSecurity(obj, false, true), GrantType.DELETE_CONTENT)))
             return true;
-        return false;
+        return AuthUtil.isSysAdmin(user);
     }
 
     /**

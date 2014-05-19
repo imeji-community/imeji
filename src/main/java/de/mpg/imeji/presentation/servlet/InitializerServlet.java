@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -22,6 +24,8 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.concurrency.locks.LocksSurveyor;
 import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.storage.util.StorageUtils;
+import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.j2j.exceptions.AlreadyExistsException;
@@ -34,7 +38,7 @@ import de.mpg.j2j.exceptions.AlreadyExistsException;
 public class InitializerServlet extends HttpServlet
 {
     private static final long serialVersionUID = 1L;
-    private static Logger logger = Logger.getLogger(InitializerServlet.class);
+    private final static Logger logger = Logger.getLogger(InitializerServlet.class);
     /**
      * The {@link Thread} which controls the locking in imeji
      */
@@ -125,16 +129,31 @@ public class InitializerServlet extends HttpServlet
         }
         catch (FileNotFoundException e)
         {
-            logger.info("No" + f.getAbsolutePath() + " found, no migration runs");
+            logger.info("No " + f.getAbsolutePath() + " found, no migration runs");
         }
         if (in != null)
         {
             String migrationRequests = new String(StreamUtils.getBytes(in), "UTF-8");
+            migrationRequests = migrationRequests.replaceAll("XXX_BASE_URI_XXX", PropertyBean.baseURI());
+            migrationRequests = addNewIdToMigration(migrationRequests);
             logger.info("Running migration with query: ");
             logger.info(migrationRequests);
             ImejiSPARQL.execUpdate(migrationRequests);
             logger.info("Migration done!");
         }
+    }
+
+    private String addNewIdToMigration(String migrationRequests)
+    {
+        Pattern p = Pattern.compile("XXX_NEW_ID_XXX");
+        Matcher m = p.matcher(migrationRequests);
+        StringBuffer sb = new StringBuffer();
+        while (m.find())
+        {
+            m.appendReplacement(sb, IdentifierUtil.newId());
+        }
+        m.appendTail(sb);
+        return sb.toString();
     }
 
     @Override

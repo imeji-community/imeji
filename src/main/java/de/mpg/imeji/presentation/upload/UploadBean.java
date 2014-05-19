@@ -33,6 +33,7 @@ import org.apache.log4j.Logger;
 
 import com.ocpsoft.pretty.PrettyContext;
 
+import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
@@ -45,6 +46,7 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.collection.CollectionBean;
 import de.mpg.imeji.presentation.history.PageURIHelper;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -541,6 +543,75 @@ public class UploadBean implements Serializable
                 return false;
         // Not found in both list: if white list is empty, allowed
         return "".equals(formatWhiteList.trim());
+    }
+
+    /**
+     * release the {@link CollectionImeji}
+     * 
+     * @return
+     */
+    public String release()
+    {
+        CollectionController cc = new CollectionController();
+        SessionBean sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        try
+        {
+            cc.release(collection, user);
+            BeanHelper.info(sessionBean.getMessage("success_collection_release"));
+        }
+        catch (Exception e)
+        {
+            BeanHelper.error(sessionBean.getMessage("error_collection_release"));
+            BeanHelper.error(e.getMessage());
+            e.printStackTrace();
+        }
+        return "pretty:";
+    }
+
+    /**
+     * Delete the {@link CollectionImeji}
+     * 
+     * @return
+     */
+    public String delete()
+    {
+        CollectionController cc = new CollectionController();
+        SessionBean sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        try
+        {
+            cc.delete(collection, sessionBean.getUser());
+            BeanHelper.info(sessionBean.getMessage("success_collection_delete"));
+        }
+        catch (Exception e)
+        {
+            BeanHelper.error(sessionBean.getMessage("error_collection_delete"));
+            logger.error("Error delete collection", e);
+        }
+        return "pretty:collections";
+    }
+
+    /**
+     * Discard the {@link CollectionImeji} of this {@link CollectionBean}
+     * 
+     * @return
+     * @throws Exception
+     */
+    public String withdraw() throws Exception
+    {
+        CollectionController cc = new CollectionController();
+        SessionBean sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        try
+        {
+            cc.withdraw(collection, sessionBean.getUser());
+            BeanHelper.info(sessionBean.getMessage("success_collection_withdraw"));
+        }
+        catch (Exception e)
+        {
+            BeanHelper.error(sessionBean.getMessage("error_collection_withdraw"));
+            BeanHelper.error(e.getMessage());
+            logger.error("Error discarding collection:", e);
+        }
+        return "pretty:";
     }
 
     public CollectionImeji getCollection()

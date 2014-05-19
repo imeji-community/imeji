@@ -38,6 +38,7 @@ import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.history.PageURIHelper;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.user.util.EmailClient;
+import de.mpg.imeji.presentation.user.util.EmailMessages;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.UrlHelper;
@@ -226,7 +227,8 @@ public class ShareBean implements Serializable
         List<String> l = new ArrayList<String>();
         l.add(userGroup.getId().toString());
         shareTo(l);
-        init();
+        //init();
+        reloadPage();
     }
 
     /**
@@ -460,10 +462,15 @@ public class ShareBean implements Serializable
                 GrantController gc = new GrantController();
                 if (UserCreationBean.isValidEmail(to))
                 {
+                	
                     User u = ObjectLoader.loadUser(to, Imeji.adminUser);
                     gc.addGrants(u, grants, u);
                     if (sendEmail)
-                        sendEmail(u, title, getShareToUri());
+                    {
+                    	this.getEmailMessage(this.user.getName(), u.getName(), title,getShareToUri());
+                        //sendEmail(u, title, getShareToUri());
+                    	sendEmail(u, title, this.emailInput);
+                    }
                 }
                 else
                 {
@@ -478,6 +485,24 @@ public class ShareBean implements Serializable
         clearError();
     }
 
+    private void getEmailMessage(String from, String to, String name, String link)
+    {
+    	EmailMessages emailMessages = new EmailMessages();
+    	
+    	if (this.type.equals(SharedObjectType.COLLECTION))
+    	{
+    		this.emailInput = emailMessages.getSharedCollectionMessage(from, to, name, link);
+    	}
+    	if (this.type.equals(SharedObjectType.ALBUM))
+    	{
+    		this.emailInput = emailMessages.getSharedAlbumMessage(from, to, name, link);
+    	}
+    	if (this.type.equals(SharedObjectType.ITEM))
+    	{
+    		this.emailInput = emailMessages.getSharedItemMessage(from, to, name, link);
+    	}
+    }
+    
     /**
      * Search a {@link UserGroup} by name
      * 

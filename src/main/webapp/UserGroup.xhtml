@@ -103,30 +103,31 @@
 										</fieldset>
 									</div>
 								</h:form>
-								<div class="imj_admindataSetEdit">
-									<div class="imj_admindataLabel">
-										<h:outputText value="#{lbl.users}"/>
-									</div>
-									<div class="imj_admindataValue">
-										<div class="imj_admindataValueEntry">
+								<div class="imj_userGlobalInformation">
+									<fieldset>
+										<div class="imj_admindataLabel">
+											<h:outputText value="#{lbl.users}"/>
+										</div>																				
+										<div class="imj_admindataValue">
+											<div class="imj_admindataValueEntry">
+												<h:form>
+													<ui:repeat  var="user" value="#{UserGroup.users}" rows="0">
+														<div class="imj_userGrantList">
+															<h:outputText value="#{user.name} (#{user.email})" />
+															<h:commandButton value="#{lbl.remove}" action="#{UserGroup.removeUserGromGroup(user.id)}" styleClass="imj_cancelButton"/>
+														</div>
+														<br/>
+													</ui:repeat>
+												</h:form>
+											</div>
+										</div>
+										<div class="imj_admindataLabel"></div>
+										<div class="imj_submitPanel">											
 											<h:outputLink value="#{Navigation.applicationUrl}users?group=#{UserGroup.userGroup.id}" styleClass="imj_submitButton">
 													<h:outputText value="#{lbl.add_user}" />
-											</h:outputLink>
+											</h:outputLink>											
 										</div>
-									</div>
-									<div class="imj_admindataLabel"></div>
-									<div class="imj_admindataValue">
-										<div class="imj_admindataValueEntry">
-											<h:form>
-												<ui:repeat  var="user" value="#{UserGroup.users}" rows="0">
-													<div class="imj_userGrantList">
-														<h:outputText value="#{user.name} (#{user.email})" />
-														<h:commandButton value="#{lbl.remove}" action="#{UserGroup.removeUserGromGroup(user.id)}" styleClass="imj_cancelButton"/>
-													</div>
-												</ui:repeat>
-											</h:form>
-										</div>
-									</div>
+									</fieldset>
 								</div>	
 								<div class="imj_admindataSetEdit">
 									<div class="imj_admindataLabel">

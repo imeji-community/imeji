@@ -173,8 +173,9 @@ public class UserGroupBean implements Serializable
 
     /**
      * Update the current {@link UserGroup}
+     * @throws IOException 
      */
-    public String save()
+    public void save() throws IOException
     {
         UserGroupController c = new UserGroupController();
         try
@@ -185,7 +186,8 @@ public class UserGroupBean implements Serializable
         {
             BeanHelper.error("Error updating user group");
         }
-        return "pretty:userGroups";
+        reload();
+        //return "pretty:userGroups";
     }
 
     /**

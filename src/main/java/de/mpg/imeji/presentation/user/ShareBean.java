@@ -474,8 +474,11 @@ public class ShareBean implements Serializable
                 }
                 else
                 {
-                    //gc.addGrants(retrieveGroup(to), grants, Imeji.adminUser);
-                    sendEmailToGroup(retrieveGroup(to), title, this.emailInput);
+                    gc.addGrants(retrieveGroup(to), grants, Imeji.adminUser);
+                    if (sendEmail)
+                    { 
+                    	sendEmailToGroup(retrieveGroup(to), title, this.emailInput);
+                    }
                 }
             }
             catch (Exception e)

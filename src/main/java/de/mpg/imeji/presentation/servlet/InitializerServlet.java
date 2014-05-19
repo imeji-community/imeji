@@ -22,6 +22,7 @@ import com.hp.hpl.jena.tdb.sys.TDBMaker;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
+import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.concurrency.locks.LocksSurveyor;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
@@ -89,7 +90,14 @@ public class InitializerServlet extends HttpServlet
             {
                 logger.info("Create new admin user");
                 UserController uc = new UserController(Imeji.adminUser);
-                uc.create(Imeji.adminUser);
+                if (uc.retrieve(Imeji.adminUser.getEmail()) != null)
+                {
+                    uc.update(Imeji.adminUser);
+                }
+                else
+                {
+                    uc.create(Imeji.adminUser);
+                }
                 logger.info("Created admin user successfully:" + Imeji.adminUser.getEmail());
             }
             else

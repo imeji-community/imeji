@@ -35,16 +35,19 @@ import org.opensaml.ws.wssecurity.Username;
 import com.hp.hpl.jena.sparql.pfunction.library.container;
 
 import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Grant;
+import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
+import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.j2j.helper.J2JHelper;
 
 /**
@@ -90,6 +93,19 @@ public class SPARQLQueries
     {
         return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s a <http://imeji.org/terms/user> . ?s <http://xmlns.com/foaf/0.1/name> ?name . filter(regex(?name, '"
                 + name + "','i'))}";
+    }
+
+    /**
+     * Find all the user which have SysAdmin rights for imeji
+     * 
+     * @return
+     */
+    public static String selectUserSysAdmin()
+    {
+        return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {OPTIONAL{ ?s <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantType> <"
+                + AuthUtil.toGrantTypeURI(GrantType.ADMIN).toString()
+                + ">. ?g <http://imeji.org/terms/grantFor> <"
+                + PropertyBean.baseURI() + ">} . filter(bound(?g)) . ?s a <http://imeji.org/terms/user>}";
     }
 
     /**

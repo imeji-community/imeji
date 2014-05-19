@@ -15,6 +15,7 @@ import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.j2j.exceptions.NotFoundException;
@@ -175,7 +176,7 @@ public class UserController
     {
         boolean exist = false;
         Search search = new Search(SearchType.ALL, null);
-        List<String> uris = search.searchSimpleForQuery(SPARQLQueries.selectUserAll(""), null);
+        List<String> uris = search.searchSimpleForQuery(SPARQLQueries.selectUserSysAdmin(), null);
         if (uris != null && uris.size() > 0)
         {
             exist = true;

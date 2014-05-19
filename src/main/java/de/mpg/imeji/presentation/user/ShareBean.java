@@ -371,6 +371,7 @@ public class ShareBean implements Serializable
     {
         EmailClient emailClient = new EmailClient();
         SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        this.getEmailMessage(this.user.getName(), dest.getName(), title,getShareToUri());
         try
         {
             emailClient.sendMail(dest.getEmail(), null,
@@ -466,15 +467,15 @@ public class ShareBean implements Serializable
                     User u = ObjectLoader.loadUser(to, Imeji.adminUser);
                     gc.addGrants(u, grants, u);
                     if (sendEmail)
-                    {
-                    	this.getEmailMessage(this.user.getName(), u.getName(), title,getShareToUri());
+                    {                  	
                         //sendEmail(u, title, getShareToUri());
                     	sendEmail(u, title, this.emailInput);
                     }
                 }
                 else
                 {
-                    gc.addGrants(retrieveGroup(to), grants, Imeji.adminUser);
+                    //gc.addGrants(retrieveGroup(to), grants, Imeji.adminUser);
+                    sendEmailToGroup(retrieveGroup(to), title, this.emailInput);
                 }
             }
             catch (Exception e)

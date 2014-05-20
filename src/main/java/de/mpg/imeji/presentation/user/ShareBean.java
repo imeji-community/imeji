@@ -367,7 +367,7 @@ public class ShareBean implements Serializable
      * @param subject
      * @param message
      */
-    private void sendEmail(User dest, String subject, String message)
+    private void sendEmail(User dest, String subject)
     {
         EmailClient emailClient = new EmailClient();
         SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
@@ -391,7 +391,7 @@ public class ShareBean implements Serializable
      * @param subject
      * @param message
      */
-    private void sendEmailToGroup(UserGroup group, String subject, String message)
+    private void sendEmailToGroup(UserGroup group, String subject)
     {
         UserController c = new UserController(Imeji.adminUser);
         SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
@@ -399,7 +399,7 @@ public class ShareBean implements Serializable
         {
             try
             {
-                sendEmail(c.retrieve(uri), subject, message);
+                sendEmail(c.retrieve(uri), subject);
             }
             catch (Exception e)
             {
@@ -469,7 +469,7 @@ public class ShareBean implements Serializable
                     if (sendEmail)
                     {                  	
                         //sendEmail(u, title, getShareToUri());
-                    	sendEmail(u, title, this.emailInput);
+                    	sendEmail(u, title);
                     }
                 }
                 else
@@ -477,7 +477,7 @@ public class ShareBean implements Serializable
                     gc.addGrants(retrieveGroup(to), grants, Imeji.adminUser);
                     if (sendEmail)
                     { 
-                    	sendEmailToGroup(retrieveGroup(to), title, this.emailInput);
+                    	sendEmailToGroup(retrieveGroup(to), title);
                     }
                 }
             }

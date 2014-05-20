@@ -375,7 +375,7 @@ public class ShareBean implements Serializable
         try
         {
             emailClient.sendMail(dest.getEmail(), null,
-                    subject.replaceAll("XXX_INSTANCE_NAME_XXX", sb.getInstanceName()), message);
+                    subject.replaceAll("XXX_INSTANCE_NAME_XXX", sb.getInstanceName()), this.emailInput);
         }
         catch (Exception e)
         {

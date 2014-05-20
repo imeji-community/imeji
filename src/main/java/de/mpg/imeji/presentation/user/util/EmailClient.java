@@ -86,6 +86,7 @@ public class EmailClient
     {
         logger.debug("EmailHandlingBean sendMail...");
         String status = "not sent";
+        String to = "";
         try
         {
             // Setup mail server
@@ -106,6 +107,7 @@ public class EmailClient
                 if (ra != null && !ra.trim().equals(""))
                 {
                     message.addRecipient(Message.RecipientType.TO, new InternetAddress(ra));
+                    to = ra;
                     logger.debug(">>> recipientTO: " + ra);
                 }
             }
@@ -167,7 +169,7 @@ public class EmailClient
         catch (MessagingException e)
         {
         	SessionBean sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        	BeanHelper.error(sessionBean.getMessage("email_error") + ": " + e);
+        	BeanHelper.error(sessionBean.getMessage("email_error").replace("XXX_USER_EMAIL_XXX", to) + ": " + e);
             logger.error("Error in sendMail(...)", e);
         }
         return status;

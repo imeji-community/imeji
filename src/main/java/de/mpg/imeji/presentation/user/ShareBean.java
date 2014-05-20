@@ -10,6 +10,7 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 import org.apache.log4j.Logger;
@@ -44,7 +45,7 @@ import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
 @ManagedBean(name = "ShareBean")
-@SessionScoped
+@ViewScoped
 public class ShareBean implements Serializable
 {
     private static Logger logger = Logger.getLogger(ShareBean.class);

@@ -364,17 +364,18 @@
 								<h:outputText value="#{lbl['item_private']}" rendered="#{imageBean.image.status == 'PENDING'}"/>
 								<h:outputText value="#{lbl['item_public']}" rendered="#{imageBean.image.status == 'RELEASED'}"/>
 								<span class="imj_noDisplay">: </span>
-								
-								<h:form rendered="#{imageBean.image.status == 'PENDING'}">
-									<h:commandButton value="#{lbl.make_public}" action="#{imageBean.makePublic}" styleClass="imj_submitButton">
-										<f:ajax render=":sharePanel"/>
-									</h:commandButton>
-								</h:form>
-								<h:form rendered="#{imageBean.image.status == 'RELEASED' and imageBean.collection.status != 'RELEASED'}">
-									<h:commandButton value="#{lbl.make_private}" action="#{imageBean.makePrivate}" styleClass="imj_submitButton">
-										<f:ajax render=":sharePanel"/>
-									</h:commandButton>
-								</h:form>
+								<ui:fragment rendered="#{Auth.admin(imageBean.image)}">
+									<h:form rendered="#{imageBean.image.status == 'PENDING'}">
+										<h:commandButton value="#{lbl.make_public}" action="#{imageBean.makePublic}" styleClass="imj_submitButton">
+											<f:ajax render=":sharePanel"/>
+										</h:commandButton>
+									</h:form>
+									<h:form rendered="#{imageBean.image.status == 'RELEASED' and imageBean.collection.status != 'RELEASED'}">
+										<h:commandButton value="#{lbl.make_private}" action="#{imageBean.makePrivate}" styleClass="imj_submitButton">
+											<f:ajax render=":sharePanel"/>
+										</h:commandButton>
+									</h:form>
+								</ui:fragment>
 							</fieldset>
 						</div>
 						<ui:fragment rendered="#{imageBean.image.status == 'PENDING'}">

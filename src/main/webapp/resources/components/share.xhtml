@@ -10,7 +10,6 @@
 	</composite:interface>
 	
 	<composite:implementation>
-		
 		<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!Auth.admin(ShareBean.shareTo)}">
 			<h:outputText value="#{lbl.view_page_disallowed}" styleClass="imj_messageInfo" rendered="#{SessionBean.user == null}"/>
 			<h:outputText value="#{lbl.view_page_disallowed2}" styleClass="imj_messageInfo" rendered="#{Auth.loggedIn}"/>

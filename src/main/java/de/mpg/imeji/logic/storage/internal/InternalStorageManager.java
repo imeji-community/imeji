@@ -88,9 +88,9 @@ public class InternalStorageManager implements Serializable
         {
             File storageDir = new File(PropertyReader.getProperty("imeji.storage.path"));
             storagePath = StringHelper.normalizePath(storageDir.getAbsolutePath());
-            // storageUrl = StringHelper.normalizeURI(PropertyReader.getProperty("imeji.instance.url")) + "file"
-            // + StringHelper.urlSeparator;
-            storageUrl = StringHelper.normalizeURI(PropertyBean.baseURI()) + "file" + StringHelper.urlSeparator;
+            storageUrl = StringHelper.normalizeURI(PropertyReader.getProperty("imeji.instance.url")) + "file"
+                    + StringHelper.urlSeparator;
+            // storageUrl = StringHelper.normalizeURI(PropertyBean.baseURI()) + "file" + StringHelper.urlSeparator;
             administrator = new InternalStorageAdministrator(storagePath);
         }
         catch (Exception e)

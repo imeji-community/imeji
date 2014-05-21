@@ -120,6 +120,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
      */
     protected void browseInit()
     {
+        System.out.println("init...");
         try
         {
             String q = UrlHelper.getParameterValue("q");
@@ -139,6 +140,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         searchResult.setQuery(getQuery());
         searchResult.setSort(sortCriterion);
         totalNumberOfRecords = searchResult.getNumberOfRecords();
+        System.out.println("...done");
         initMenus();
         cleanSelectItems();
         initBackPage();
@@ -220,6 +222,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     @Override
     public int getTotalNumberOfRecords()
     {
+        System.out.println("gettotal " + totalNumberOfRecords);
         return totalNumberOfRecords;
     }
 

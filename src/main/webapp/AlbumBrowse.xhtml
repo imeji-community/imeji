@@ -24,7 +24,7 @@
 									navBean="#{Navigation}" 
 									activeMenu="content"/>
 		
-			<menu:context_actionMenu 	isUserLoggedIn="#{Auth.loggedIn}" 
+			<menu:context_actionMenu isUserLoggedIn="#{Auth.loggedIn}" 
 									sortBean="#{paginatorListSessionBean}" 
 									curMainMenu="#{currentMainMenu}" 
 									navBean="#{Navigation}" 
@@ -34,7 +34,7 @@
 									isDeletable="#{Auth.delete(paginatorListSessionBean.album)}" 
 									isEditable="#{Auth.update(paginatorListSessionBean.album)}"
 									isAdmin="#{Auth.admin(paginatorListSessionBean.album)}"
-									hasContent="#{paginatorListSessionBean.totalNumberOfElements > 0}"
+									hasContent="#{paginatorListSessionBean.totalNumberOfRecords > 0}"
 									contextDownloadParam="&amp;album=#{paginatorListSessionBean.id}"
 									allowedToShare="#{AlbumImagesBean.album.status!='WITHDRAWN' and Auth.admin(paginatorListSessionBean.album)}"/>
 		</ui:fragment>

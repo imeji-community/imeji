@@ -34,7 +34,7 @@
 									isDeletable="#{Auth.delete(paginatorListSessionBean.collection)}" 
 									isEditable="#{Auth.update(paginatorListSessionBean.collection)}" 
 									isAdmin="#{Auth.admin(paginatorListSessionBean.collection)}" 
-									hasContent="#{paginatorListSessionBean.totalNumberOfElements > 0}"
+									hasContent="#{paginatorListSessionBean.totalNumberOfRecords > 0}"
 									contextDownloadParam="&amp;col=#{paginatorListSessionBean.id}" 
 									allowedToShare="#{paginatorListSessionBean.collection.status !='WITHDRAWN' and Auth.admin(paginatorListSessionBean.collection)}"/>
 		</ui:fragment>

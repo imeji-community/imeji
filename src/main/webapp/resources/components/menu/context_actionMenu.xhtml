@@ -136,7 +136,7 @@
 										</h:outputLink>
 									</li>
 								</ui:fragment>
-								
+
 								<ui:fragment rendered="#{cc.attrs.isAdmin and cc.attrs.collectionStatus.trim().toUpperCase() == 'PENDING' and cc.attrs.hasContent}">
 									<li>
 										<h:outputLink value="#" onclick="openDialog('releaseMenuItemDialog');" title="#{lbl.collection_release}">

@@ -96,7 +96,7 @@ public class SearchGroupForm
      */
     public SearchGroup getAsSearchGroup()
     {
-        SearchGroup searchGroup = new SearchGroup();
+        // SearchGroup searchGroup = new SearchGroup();
         // searchGroup
         // .addPair(new SearchPair(Search.getIndex(SearchIndex.names.col), SearchOperators.EQUALS, collectionId));
         // searchGroup.addLogicalRelation(LOGICAL_RELATIONS.AND);

@@ -162,8 +162,12 @@ public class SimpleQueryFactory
         else if (SearchIndex.names.col.name().equals(pair.getIndex().getName())
                 || SearchIndex.names.alb.name().equals(pair.getIndex().getName()))
         {
+            // If not logged in, we need to add the the path to collection or to the album
+            if (user == null && J2JHelper.getResourceNamespace(new Item()).equals(rdfType))
+                searchQuery = " ?s <" + pair.getIndex().getNamespace() + "> ?c .";
             // Search for one collection or one album by id (uri)
-            return "FILTER(" + getSimpleFilter(pair, SimpleSecurityQuery.getVariableName(rdfType)) + ") .";
+            return "FILTER(" + getSimpleFilter(pair, SimpleSecurityQuery.getVariableName(rdfType)) + ") ."
+                    + searchQuery;
         }
         else if (SearchIndex.names.user.name().equals(pair.getIndex().getName()))
         {
@@ -254,8 +258,7 @@ public class SimpleQueryFactory
                     + ") .";
         }
     }
-    
-    
+
     /**
      * Return all parent search element (according to {@link SearchIndex}) of a search element, as a sparql query
      * 

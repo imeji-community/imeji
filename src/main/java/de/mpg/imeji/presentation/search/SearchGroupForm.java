@@ -10,15 +10,11 @@ import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.vo.SearchElement;
 import de.mpg.imeji.logic.search.vo.SearchElement.SEARCH_ELEMENTS;
 import de.mpg.imeji.logic.search.vo.SearchGroup;
-import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchLogicalRelation;
-import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
-import de.mpg.imeji.logic.search.vo.SearchOperators;
-import de.mpg.imeji.logic.search.vo.SearchPair;
+import de.mpg.imeji.logic.search.vo.SearchMetadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
@@ -34,7 +30,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 public class SearchGroupForm
 {
     private List<SearchMetadataForm> elements;
-    private String collectionId;
+    private String profileId;
     private List<SelectItem> statementMenu;
     private static Logger logger = Logger.getLogger(SearchGroupForm.class);
 
@@ -54,10 +50,10 @@ public class SearchGroupForm
      * @param profile
      * @param collectionId
      */
-    public SearchGroupForm(SearchGroup searchGroup, MetadataProfile profile, String collectionId)
+    public SearchGroupForm(SearchGroup searchGroup, MetadataProfile profile, String profileId)
     {
         this();
-        this.collectionId = collectionId;
+        this.setProfileId(profileId);
         for (SearchElement se : searchGroup.getElements())
         {
             if (se.getType().equals(SEARCH_ELEMENTS.GROUP))
@@ -70,12 +66,24 @@ public class SearchGroupForm
                     {
                         elements.add(new SearchMetadataForm((SearchGroup)mde, profile));
                     }
+                    else if (mde.getType().equals(SEARCH_ELEMENTS.METADATA))
+                    {
+                        elements.add(new SearchMetadataForm((SearchMetadata)mde, profile));
+                    }
                     else if (elements.size() > 0 && mde.getType().equals(SEARCH_ELEMENTS.LOGICAL_RELATIONS))
                     {
                         elements.get(elements.size() - 1).setLogicalRelation(
                                 ((SearchLogicalRelation)mde).getLogicalRelation());
                     }
                 }
+            }
+            else if (se.getType().equals(SEARCH_ELEMENTS.METADATA))
+            {
+                elements.add(new SearchMetadataForm((SearchMetadata)se, profile));
+            }
+            else if (elements.size() > 0 && se.getType().equals(SEARCH_ELEMENTS.LOGICAL_RELATIONS))
+            {
+                elements.get(elements.size() - 1).setLogicalRelation(((SearchLogicalRelation)se).getLogicalRelation());
             }
         }
         initStatementsMenu(profile);
@@ -89,17 +97,18 @@ public class SearchGroupForm
     public SearchGroup getAsSearchGroup()
     {
         SearchGroup searchGroup = new SearchGroup();
-        searchGroup
-                .addPair(new SearchPair(Search.getIndex(SearchIndex.names.col), SearchOperators.EQUALS, collectionId));
-        searchGroup.addLogicalRelation(LOGICAL_RELATIONS.AND);
+        // searchGroup
+        // .addPair(new SearchPair(Search.getIndex(SearchIndex.names.col), SearchOperators.EQUALS, collectionId));
+        // searchGroup.addLogicalRelation(LOGICAL_RELATIONS.AND);
         SearchGroup groupWithAllMetadata = new SearchGroup();
         for (SearchMetadataForm e : elements)
         {
             groupWithAllMetadata.addGroup(e.getAsSearchGroup());
             groupWithAllMetadata.addLogicalRelation(e.getLogicalRelation());
         }
-        searchGroup.addGroup(groupWithAllMetadata);
-        return searchGroup;
+        return groupWithAllMetadata;
+        // searchGroup.addGroup(groupWithAllMetadata);
+        // return searchGroup;
     }
 
     /**
@@ -135,16 +144,6 @@ public class SearchGroupForm
         this.elements = elements;
     }
 
-    public String getCollectionId()
-    {
-        return collectionId;
-    }
-
-    public void setCollectionId(String collectionId)
-    {
-        this.collectionId = collectionId;
-    }
-
     public List<SelectItem> getStatementMenu()
     {
         return statementMenu;
@@ -153,5 +152,21 @@ public class SearchGroupForm
     public void setStatementMenu(List<SelectItem> statementMenu)
     {
         this.statementMenu = statementMenu;
+    }
+
+    /**
+     * @return the profileId
+     */
+    public String getProfileId()
+    {
+        return profileId;
+    }
+
+    /**
+     * @param profileId the profileId to set
+     */
+    public void setProfileId(String profileId)
+    {
+        this.profileId = profileId;
     }
 }

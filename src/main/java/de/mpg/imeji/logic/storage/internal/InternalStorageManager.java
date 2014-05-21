@@ -41,6 +41,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.storage.Storage.FileResolution;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.storage.administrator.impl.InternalStorageAdministrator;
@@ -49,6 +50,7 @@ import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -86,8 +88,9 @@ public class InternalStorageManager implements Serializable
         {
             File storageDir = new File(PropertyReader.getProperty("imeji.storage.path"));
             storagePath = StringHelper.normalizePath(storageDir.getAbsolutePath());
-            storageUrl = StringHelper.normalizeURI(PropertyReader.getProperty("imeji.instance.url")) + "file"
-                    + StringHelper.urlSeparator;
+            // storageUrl = StringHelper.normalizeURI(PropertyReader.getProperty("imeji.instance.url")) + "file"
+            // + StringHelper.urlSeparator;
+            storageUrl = StringHelper.normalizeURI(PropertyBean.baseURI()) + "file" + StringHelper.urlSeparator;
             administrator = new InternalStorageAdministrator(storagePath);
         }
         catch (Exception e)

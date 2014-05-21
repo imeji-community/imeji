@@ -34,8 +34,8 @@
 			    		</div>
 						
 						<div class="imj_searchSelectbox">
-							<h:selectOneMenu id="selCollection" value="#{g.collectionId}" onchange="$(this).next().click();">
-								<f:selectItems value="#{AdvancedSearchBean.collectionsMenu}"/>
+							<h:selectOneMenu id="selCollection" value="#{g.profileId}" onchange="$(this).next().click();">
+								<f:selectItems value="#{AdvancedSearchBean.profilesMenu}"/>
 							</h:selectOneMenu>
 							<h:commandButton type="button" id="changeGroup" action="#{AdvancedSearchBean.changeGroup}" style="visibility:hidden;">
 								<f:ajax execute="@form" render="@form :imj_searchQueryMessageArea"/>

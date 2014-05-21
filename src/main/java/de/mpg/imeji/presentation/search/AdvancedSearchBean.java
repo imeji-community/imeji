@@ -13,13 +13,12 @@ import java.util.Map;
 
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.vo.SearchGroup;
+import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -43,7 +42,7 @@ public class AdvancedSearchBean
 {
     private SearchForm formular = null;
     // Menus
-    private List<SelectItem> collectionsMenu;
+    private List<SelectItem> profilesMenu;
     private List<SelectItem> operatorsMenu;
     /**
      * True if the query got an error (for instance wrong date format). Then the message is written in red
@@ -81,6 +80,7 @@ public class AdvancedSearchBean
         {
             logger.error("Error initializing advanced search", e);
             BeanHelper.error("Error initializing advanced search");
+            e.printStackTrace();
         }
         return "";
     }
@@ -104,7 +104,7 @@ public class AdvancedSearchBean
     public void initForm(SearchQuery searchQuery) throws Exception
     {
         Map<String, CollectionImeji> cols = loadCollections();
-        Map<String, MetadataProfile> profs = loadProfilesAndInitCollectionsMenu(cols.values());
+        Map<String, MetadataProfile> profs = loadProfilesAndInitMenu(cols.values());
         ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).init1((new ArrayList<MetadataProfile>(profs
                 .values())));
         formular = new SearchForm(searchQuery, cols, profs);
@@ -148,26 +148,18 @@ public class AdvancedSearchBean
      * @param collections
      * @return
      */
-    private Map<String, MetadataProfile> loadProfilesAndInitCollectionsMenu(Collection<CollectionImeji> collections)
+    private Map<String, MetadataProfile> loadProfilesAndInitMenu(Collection<CollectionImeji> collections)
     {
-//    	HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-//        // Set standard HTTP/1.1 no-cache headers.
-//        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-//        // Set standard HTTP/1.0 no-cache header.
-//        response.setHeader("Pragma", "no-cache");
-//        //Proxies
-//        response.setDateHeader("Expires", 0);
-        
-    	collectionsMenu = new ArrayList<SelectItem>();
-        collectionsMenu.add(new SelectItem(null, session.getLabel("select_collection")));
+        profilesMenu = new ArrayList<SelectItem>();
+        profilesMenu.add(new SelectItem(null, session.getLabel("select_collection")));
         Map<String, MetadataProfile> map = new HashMap<String, MetadataProfile>();
         for (CollectionImeji c : collections)
         {
             MetadataProfile p = ObjectLoader.loadProfile(c.getProfile(), session.getUser());
             if (p.getStatements().size() > 0)
             {
-                map.put(c.getId().toString(), p);
-                collectionsMenu.add(new SelectItem(c.getId().toString(), c.getMetadata().getTitle()));
+                map.put(p.getId().toString(), p);
+                profilesMenu.add(new SelectItem(p.getId().toString(), p.getTitle()));
             }
         }
         return map;
@@ -325,9 +317,9 @@ public class AdvancedSearchBean
      * 
      * @return
      */
-    public List<SelectItem> getCollectionsMenu()
+    public List<SelectItem> getProfilesMenu()
     {
-        return collectionsMenu;
+        return profilesMenu;
     }
 
     /**
@@ -335,9 +327,9 @@ public class AdvancedSearchBean
      * 
      * @param collectionsMenu
      */
-    public void setCollectionsMenu(List<SelectItem> collectionsMenu)
+    public void setProfilesMenu(List<SelectItem> profilesMenu)
     {
-        this.collectionsMenu = collectionsMenu;
+        this.profilesMenu = profilesMenu;
     }
 
     /**

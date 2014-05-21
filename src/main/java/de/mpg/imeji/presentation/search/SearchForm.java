@@ -31,8 +31,11 @@ public class SearchForm
     private Map<String, MetadataProfile> profilesMap;
     private List<SearchGroupForm> groups;
     private static Logger logger = Logger.getLogger(SearchForm.class);
-    
-    private enum fileType  {IMAGE, VIDEO, AUDIO, OTHER;}
+
+    private enum fileType
+    {
+        IMAGE, VIDEO, AUDIO, OTHER;
+    }
 
     /**
      * Default Constructor
@@ -61,7 +64,9 @@ public class SearchForm
         {
             if (se.getType().equals(SEARCH_ELEMENTS.GROUP))
             {
-                String collectionId = SearchFormularHelper.getCollectionId((SearchGroup)se);
+                // String collectionId = SearchFormularHelper.getCollectionId((SearchGroup)se);
+                String collectionId = SearchFormularHelper.getProfileIdFromStatement((SearchGroup)se,
+                        profilesMap.values());
                 groups.add(new SearchGroupForm((SearchGroup)se, profilesMap.get(collectionId), collectionId));
             }
         }
@@ -114,9 +119,9 @@ public class SearchForm
         SearchGroupForm fg = groups.get(pos);
         fg.getStatementMenu().clear();
         fg.setSearchElementForms(new ArrayList<SearchMetadataForm>());
-        if (fg.getCollectionId() != null)
+        if (fg.getProfileId() != null)
         {
-            fg.initStatementsMenu(profilesMap.get(fg.getCollectionId()));
+            fg.initStatementsMenu(profilesMap.get(fg.getProfileId()));
             addElement(pos, 0);
         }
     }
@@ -143,7 +148,7 @@ public class SearchForm
         SearchMetadataForm fe = new SearchMetadataForm();
         String namespace = (String)group.getStatementMenu().get(0).getValue();
         fe.setNamespace(namespace);
-        fe.initStatement(profilesMap.get(group.getCollectionId()), namespace);
+        fe.initStatement(profilesMap.get(group.getProfileId()), namespace);
         fe.initOperatorMenu();
         if (elPos >= group.getSearchElementForms().size())
         {
@@ -165,9 +170,9 @@ public class SearchForm
     {
         SearchGroupForm group = groups.get(groupPos);
         SearchMetadataForm fe = group.getSearchElementForms().get(elPos);
-        String collectionId = group.getCollectionId();
+        String profileId = group.getProfileId();
         String namespace = fe.getNamespace();
-        fe.initStatement(profilesMap.get(collectionId), namespace);
+        fe.initStatement(profilesMap.get(profileId), namespace);
         fe.initOperatorMenu();
         if (!keepValue)
         {

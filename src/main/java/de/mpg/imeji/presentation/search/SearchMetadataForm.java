@@ -88,6 +88,17 @@ public class SearchMetadataForm
         initOperatorMenu();
     }
 
+    public SearchMetadataForm(SearchMetadata metadata, MetadataProfile profile)
+    {
+        this();
+        operator = metadata.getOperator();
+        searchValue = metadata.getValue();
+        not = metadata.isNot();
+        namespace = metadata.getStatement().toString();
+        initStatement(profile, namespace);
+        initOperatorMenu();
+    }
+
     /**
      * Intialize the filtrsMenu
      */

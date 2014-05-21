@@ -57,7 +57,7 @@
 							</li>
 						</ui:fragment>
 						
-						<ui:fragment rendered="#{Auth.admin}">
+						<ui:fragment rendered="#{Auth.admin and cc.attrs.userHasUploadRights}">
 							<li class="#{curMenuClass}Item">
 								<h:outputLink value="#{curContextUrl}/ingest?init=1" title="#{lbl.ingest}">
 									<h:outputText value="#{lbl.ingest}"/>

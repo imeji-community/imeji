@@ -14,7 +14,7 @@
 									contextUrl="#{Navigation.collectionUrl}" 
 									curMainMenu="#{currentMainMenu}" 
 									userHasAdminRights="#{Auth.admin}" 
-									userHasUploadRights="#{Auth.create(UploadBean.collection)}" 
+									userHasUploadRights="#{Auth.create(UploadBean.collection) and UploadBean.collection.status !='WITHDRAWN'}" 
 									navBean="#{Navigation}" 
 									activeMenu="upload" 
 									hasContent="#{UploadBean.collectionSize > 0}"/>

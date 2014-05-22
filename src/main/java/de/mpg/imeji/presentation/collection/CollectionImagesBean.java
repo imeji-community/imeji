@@ -70,9 +70,8 @@ public class CollectionImagesBean extends ImagesBean
         collection = ObjectLoader.loadCollectionLazy(uri, sb.getUser());
         ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).init(ObjectCachedLoader
                 .loadProfile(collection.getProfile()));
-        super.browseInit();
+        browseInit();
         browseContext = getNavigationString() + id;
-        //sb.setSelected(new ArrayList<String>());
         return "";
     }
 

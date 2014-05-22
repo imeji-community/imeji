@@ -16,7 +16,9 @@ import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.controller.CollectionController;
+import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.vo.SearchGroup;
 import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
@@ -156,13 +158,24 @@ public class AdvancedSearchBean
         for (CollectionImeji c : collections)
         {
             MetadataProfile p = ObjectLoader.loadProfile(c.getProfile(), session.getUser());
-            if (p.getStatements().size() > 0)
+            if (p.getStatements().size() > 0 && !isEmpty(c))
             {
                 map.put(p.getId().toString(), p);
-                profilesMenu.add(new SelectItem(p.getId().toString(), p.getTitle()));
+                profilesMenu.add(new SelectItem(p.getId().toString(), c.getMetadata().getTitle()));
             }
         }
         return map;
+    }
+
+    /**
+     * True if the {@link CollectionImeji} is empty
+     * 
+     * @param c
+     * @return
+     */
+    private boolean isEmpty(CollectionImeji c)
+    {
+        return ImejiSPARQL.exec(SPARQLQueries.selectCollectionItems(c.getId(), session.getUser(), 1), null).size() == 0;
     }
 
     /**

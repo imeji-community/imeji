@@ -139,7 +139,6 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
         searchResult.setQuery(getQuery());
         searchResult.setSort(sortCriterion);
         totalNumberOfRecords = searchResult.getNumberOfRecords();
-        System.out.println("...done");
         initMenus();
         cleanSelectItems();
         initBackPage();

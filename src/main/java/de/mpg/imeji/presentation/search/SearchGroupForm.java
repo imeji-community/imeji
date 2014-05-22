@@ -58,28 +58,8 @@ public class SearchGroupForm
         {
             if (se.getType().equals(SEARCH_ELEMENTS.GROUP))
             {
-                // Go through the search group with the collection
-                for (SearchElement mde : se.getElements())
-                {
-                    // Add the group with the metadata
-                    if (mde.getType().equals(SEARCH_ELEMENTS.GROUP))
-                    {
-                        elements.add(new SearchMetadataForm((SearchGroup)mde, profile));
-                    }
-                    else if (mde.getType().equals(SEARCH_ELEMENTS.METADATA))
-                    {
-                        elements.add(new SearchMetadataForm((SearchMetadata)mde, profile));
-                    }
-                    else if (elements.size() > 0 && mde.getType().equals(SEARCH_ELEMENTS.LOGICAL_RELATIONS))
-                    {
-                        elements.get(elements.size() - 1).setLogicalRelation(
-                                ((SearchLogicalRelation)mde).getLogicalRelation());
-                    }
-                }
-            }
-            else if (se.getType().equals(SEARCH_ELEMENTS.METADATA))
-            {
-                elements.add(new SearchMetadataForm((SearchMetadata)se, profile));
+                // the searchgroup contains the metadata sarch (md=seachvalue)
+                elements.add(new SearchMetadataForm((SearchGroup)se, profile));
             }
             else if (elements.size() > 0 && se.getType().equals(SEARCH_ELEMENTS.LOGICAL_RELATIONS))
             {

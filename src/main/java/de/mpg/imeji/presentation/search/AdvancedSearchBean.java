@@ -18,10 +18,14 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.controller.CollectionController;
+import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.vo.SearchGroup;
+import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
+import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
+import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
@@ -105,11 +109,10 @@ public class AdvancedSearchBean
      */
     public void initForm(SearchQuery searchQuery) throws Exception
     {
-        Map<String, CollectionImeji> cols = loadCollections();
-        Map<String, MetadataProfile> profs = loadProfilesAndInitMenu(cols.values());
+        Map<String, MetadataProfile> profs = loadProfilesAndInitMenu(loadCollections());
         ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).init1((new ArrayList<MetadataProfile>(profs
                 .values())));
-        formular = new SearchForm(searchQuery, cols, profs);
+        formular = new SearchForm(searchQuery, profs);
         if (formular.getGroups().size() == 0)
         {
             formular.addSearchGroup(0);
@@ -132,16 +135,19 @@ public class AdvancedSearchBean
      * 
      * @return
      */
-    private Map<String, CollectionImeji> loadCollections()
+    private List<CollectionImeji> loadCollections()
     {
         CollectionController cc = new CollectionController(session.getUser());
-        Map<String, CollectionImeji> map = new HashMap<String, CollectionImeji>();
-        for (String uri : cc.search(new SearchQuery(), null, -1, 0).getResults())
+        List<CollectionImeji> l = new ArrayList<>();
+        SortCriterion sortCriterion = new SortCriterion();
+        sortCriterion.setIndex(Search.getIndex(SearchIndex.names.cont_title.name()));
+        sortCriterion.setSortOrder(SortOrder.valueOf(SortOrder.DESCENDING.name()));
+        for (String uri : cc.search(new SearchQuery(), sortCriterion, -1, 0).getResults())
         {
             CollectionImeji c = ObjectLoader.loadCollectionLazy(URI.create(uri), session.getUser());
-            map.put(uri, c);
+            l.add(c);
         }
-        return map;
+        return l;
     }
 
     /**

@@ -27,7 +27,6 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
  */
 public class SearchForm
 {
-    private Map<String, CollectionImeji> collectionsMap;
     private Map<String, MetadataProfile> profilesMap;
     private List<SearchGroupForm> groups;
     private static Logger logger = Logger.getLogger(SearchForm.class);
@@ -43,7 +42,6 @@ public class SearchForm
     public SearchForm()
     {
         groups = new ArrayList<SearchGroupForm>();
-        collectionsMap = new HashMap<String, CollectionImeji>();
         profilesMap = new HashMap<String, MetadataProfile>();
     }
 
@@ -54,11 +52,9 @@ public class SearchForm
      * @param collectionsMap
      * @param profilesMap
      */
-    public SearchForm(SearchQuery searchQuery, Map<String, CollectionImeji> collectionsMap,
-            Map<String, MetadataProfile> profilesMap)
+    public SearchForm(SearchQuery searchQuery, Map<String, MetadataProfile> profilesMap)
     {
         this();
-        this.collectionsMap = collectionsMap;
         this.profilesMap = profilesMap;
         for (SearchElement se : searchQuery.getElements())
         {
@@ -193,16 +189,6 @@ public class SearchForm
     public void setGroups(List<SearchGroupForm> groups)
     {
         this.groups = groups;
-    }
-
-    public Map<String, CollectionImeji> getCollectionsMap()
-    {
-        return collectionsMap;
-    }
-
-    public void setCollectionsMap(Map<String, CollectionImeji> collectionsMap)
-    {
-        this.collectionsMap = collectionsMap;
     }
 
     public Map<String, MetadataProfile> getProfilesMap()

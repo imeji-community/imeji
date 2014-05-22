@@ -24,12 +24,15 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.concurrency.locks.LocksSurveyor;
+import de.mpg.imeji.logic.controller.GrantController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.StringHelper;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.j2j.exceptions.AlreadyExistsException;
+import de.mpg.j2j.exceptions.NotFoundException;
 
 /**
  * Initialize application on server start
@@ -88,17 +91,21 @@ public class InitializerServlet extends HttpServlet
         {
             if (!UserController.adminUserExist())
             {
-                logger.info("Create new admin user");
                 UserController uc = new UserController(Imeji.adminUser);
-                if (uc.retrieve(Imeji.adminUser.getEmail()) != null)
+                try
                 {
-                    uc.update(Imeji.adminUser);
+                    User admin = uc.retrieve(Imeji.adminUser.getEmail());
+                    logger.info("Add admin grant to admin@imeji.org user");
+                    GrantController gc = new GrantController();
+                    gc.addGrants(admin, AuthorizationPredefinedRoles.imejiAdministrator(admin.getId().toString()),
+                            admin);
                 }
-                else
+                catch (NotFoundException e)
                 {
+                    logger.info("!!! IMPORTANT !!! Create admin@imeji.org as system administrator with password admin. !!! CHANGE PASSWORD !!!");
                     uc.create(Imeji.adminUser);
+                    logger.info("Created admin user successfully:" + Imeji.adminUser.getEmail());
                 }
-                logger.info("Created admin user successfully:" + Imeji.adminUser.getEmail());
             }
             else
             {

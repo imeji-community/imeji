@@ -159,7 +159,7 @@ public class AuthorizationPredefinedRoles
         List<Grant> l = profileUri == null ? toGrantList(admin_album, containerUri) : toGrantList(admin_collection,
                 containerUri);
         if (profileUri != null)
-            l.addAll(toGrantList(edit_profile, profileUri));
+            l.addAll(toGrantList(admin_album, profileUri));
         return l;
     }
 

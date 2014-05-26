@@ -178,7 +178,7 @@
 														<span class="imj_invisible">: </span>
 													</div>
 													<div>
-														<h:selectBooleanCheckbox value="#{UserBean.user.admin}" styleClass="imj_admindataCheckbox"  onchange="document.getElementById('grantForm:toggleAdmin').click();"/>
+														<h:selectBooleanCheckbox title="#{UserBean.user.admin and UserBean.uniqueAdmin ? lbl.user_unique_admin : lbl.user_toggle_admin_role}" value="#{UserBean.user.admin}" styleClass="imj_admindataCheckbox"  onchange="document.getElementById('grantForm:toggleAdmin').click();" disabled="#{UserBean.user.admin and UserBean.uniqueAdmin}"/>
 														<h:outputText value="#{lbl.isAdmin}"/>
 														<span class="imj_invisible">: </span>
 													</div>

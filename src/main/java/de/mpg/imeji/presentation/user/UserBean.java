@@ -12,9 +12,12 @@ import javax.faces.context.FacesContext;
 
 import com.hp.hpl.jena.sparql.pfunction.library.container;
 
+import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.GrantController;
 import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Grant;
@@ -185,6 +188,11 @@ public class UserBean
         {
             gc.addGrants(user, (List<Grant>)gc.toList(g), session.getUser());
         }
+    }
+
+    public boolean isUniqueAdmin()
+    {
+        return ImejiSPARQL.exec(SPARQLQueries.selectUserSysAdmin(), Imeji.userModel).size() == 1;
     }
 
     /**

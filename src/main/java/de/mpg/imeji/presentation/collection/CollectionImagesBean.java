@@ -21,6 +21,7 @@ import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.facet.FacetsBean;
 import de.mpg.imeji.presentation.image.ImagesBean;
@@ -44,6 +45,7 @@ public class CollectionImagesBean extends ImagesBean
     private URI uri;
     private SessionBean sb = null;
     private CollectionImeji collection;
+    private MetadataProfile profile;
     private Navigation navigation;
     private SearchQuery searchQuery = new SearchQuery();
 
@@ -68,8 +70,8 @@ public class CollectionImagesBean extends ImagesBean
     {
         uri = ObjectHelper.getURI(CollectionImeji.class, id);
         collection = ObjectLoader.loadCollectionLazy(uri, sb.getUser());
-        ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).init(ObjectCachedLoader
-                .loadProfile(collection.getProfile()));
+        this.profile = ObjectCachedLoader.loadProfile(collection.getProfile());
+        ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).init(profile);
         browseInit();
         browseContext = getNavigationString() + id;
         return "";
@@ -226,5 +228,21 @@ public class CollectionImagesBean extends ImagesBean
             logger.error("Error discarding collection", e);
         }
         return "pretty:";
+    }
+
+    /**
+     * @return the profile
+     */
+    public MetadataProfile getProfile()
+    {
+        return profile;
+    }
+
+    /**
+     * @param profile the profile to set
+     */
+    public void setProfile(MetadataProfile profile)
+    {
+        this.profile = profile;
     }
 }

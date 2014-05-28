@@ -14,10 +14,11 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
+
 import com.hp.hpl.jena.rdf.model.Resource;
 
-import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.controller.ItemController;
@@ -28,11 +29,8 @@ import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.StorageController;
-import de.mpg.imeji.logic.storage.StorageFactory;
 import de.mpg.imeji.logic.storage.UploadResult;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
-import de.mpg.imeji.logic.storage.internal.InternalStorageItem;
-import de.mpg.imeji.logic.storage.internal.InternalStorageManager;
 import de.mpg.imeji.logic.util.MetadataFactory;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
@@ -153,37 +151,6 @@ public class AdminBean
      */
     public void reIndex() throws Exception
     {
-        // List<Object> toReindex = new ArrayList<Object>();
-        // ImejiBean2RDF imejiBean2RDF;
-        // // load items
-        // ItemController ic = new ItemController();
-        // for (Item item : ic.retrieveAll())
-        // {
-        // item.indexFulltext();
-        // toReindex.add(item);
-        // }
-        // imejiBean2RDF = new ImejiBean2RDF(ImejiJena.imageModel);
-        // imejiBean2RDF.updateLazy(toReindex, sb.getUser());
-        // // Load collections
-        // toReindex = new ArrayList<Object>();
-        // CollectionController cc = new CollectionController();
-        // for (CollectionImeji c : cc.retrieveAllCollections())
-        // {
-        // c.indexFulltext();
-        // toReindex.add(c);
-        // }
-        // imejiBean2RDF = new ImejiBean2RDF(ImejiJena.collectionModel);
-        // imejiBean2RDF.updateLazy(toReindex, sb.getUser());
-        // // Load albums
-        // toReindex = new ArrayList<Object>();
-        // AlbumController ac = new AlbumController();
-        // for (Album a : ac.retrieveAll())
-        // {
-        // a.indexFulltext();
-        // toReindex.add(a);
-        // }
-        // imejiBean2RDF = new ImejiBean2RDF(ImejiJena.albumModel);
-        // imejiBean2RDF.updateLazy(toReindex, sb.getUser());
         Index index = new Index();
         index.reindex();
     }
@@ -236,7 +203,7 @@ public class AdminBean
     private void cleanMetadata() throws Exception
     {
         logger.info("Searching not bounded metadata...");
-        // Don't use search to be abble to get the type of the metadata defined as sort0 in the query
+        // Don't use search to be able to get the type of the metadata defined as sort0 in the query
         List<String> uris = ImejiSPARQL.exec(SPARQLQueries.selectMetadataUnbounded(), null);
         for (String uri : uris)
         {
@@ -272,9 +239,18 @@ public class AdminBean
     {
         logger.info("Searching not bounded grants...");
         Search search = new Search(SearchType.ALL, null);
-        List<String> uris = search.searchSimpleForQuery(SPARQLQueries.selectGrantUnbounded(), null);
+        List<String> uris = search.searchSimpleForQuery(SPARQLQueries.selectGrantWithoutUser(), null);
         logger.info("...found " + uris.size());
         removeResources(uris, Imeji.userModel, new Grant());
+        logger.info("Searching broken grants...");
+        uris = search.searchSimpleForQuery(SPARQLQueries.selectGrantBroken(), null);
+        logger.info("...found " + uris.size());
+        removeResources(uris, Imeji.userModel, new Grant());
+        logger.info("Searching emtpy grants...");
+        if (clean)
+            ImejiSPARQL.execUpdate(SPARQLQueries.removeGrantEmtpy());
+        uris = search.searchSimpleForQuery(SPARQLQueries.selectGrantEmtpy(), null);
+        logger.info("...found " + uris.size());
     }
 
     /**
@@ -302,13 +278,14 @@ public class AdminBean
      */
     private List<Object> loadResourcesAsObjects(List<String> uris, String modelName, Object obj)
     {
-        ImejiRDF2Bean reader = new ImejiRDF2Bean(modelName);
+        ImejiRDF2Bean reader = new ImejiRDF2Bean(null);
         List<Object> l = new ArrayList<Object>();
         for (String uri : uris)
         {
             try
             {
                 logger.info("Resource to be removed: " + uri);
+                System.out.println(uri);
                 l.add(reader.load(uri, sb.getUser(), obj.getClass().newInstance()));
             }
             catch (Exception e)

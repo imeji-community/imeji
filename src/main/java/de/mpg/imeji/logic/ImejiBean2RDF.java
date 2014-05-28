@@ -78,7 +78,11 @@ public class ImejiBean2RDF
         checkSecurity(objects, user, GrantType.DELETE);
         runTransaction(objects, GrantType.DELETE, false);
         for (Object o : objects)
-            ImejiSPARQL.execUpdate(SPARQLQueries.updateRemoveGrantsFor(extractID(o).toString()));
+        {
+            URI uri = extractID(o);
+            if (uri != null)
+                ImejiSPARQL.execUpdate(SPARQLQueries.updateRemoveGrantsFor(uri.toString()));
+        }
     }
 
     /**

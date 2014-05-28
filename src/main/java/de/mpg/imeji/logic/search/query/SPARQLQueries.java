@@ -238,10 +238,42 @@ public class SPARQLQueries
      * 
      * @return
      */
-    public static String selectGrantUnbounded()
+    public static String selectGrantWithoutUser()
     {
         return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE { ?s <http://imeji.org/terms/grantType> ?type"
                 + " . not exists{ ?user <http://imeji.org/terms/grant> ?s}}";
+    }
+
+    /**
+     * Select {@link Grant} which don't have any triple
+     * 
+     * @return
+     */
+    public static String selectGrantEmtpy()
+    {
+        return "SELECT DISTINCT ?s WHERE {?user <http://imeji.org/terms/grant> ?s . not exists{?s ?p ?o}}";
+    }
+
+    /**
+     * Remove the emtpy Grants
+     * 
+     * @return
+     */
+    public static String removeGrantEmtpy()
+    {
+        return "WITH <http://imeji.org/user> DELETE {?user <http://imeji.org/terms/grant> ?s} USING <http://imeji.org/user> WHERE {?user <http://imeji.org/terms/grant> ?s . not exists{?s ?p ?o}}";
+    }
+
+    /**
+     * Select Grant which don't have a grantfor
+     * 
+     * @return
+     */
+    public static String selectGrantBroken()
+    {
+        return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s <http://imeji.org/terms/grantFor> ?for"
+                + " . not exists{?for ?p ?o} .filter (?for!= <http://imeji.org/> &&  ?for != <"
+                + PropertyBean.baseURI() + ">)}";
     }
 
     /**

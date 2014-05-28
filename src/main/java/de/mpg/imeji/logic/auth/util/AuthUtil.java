@@ -30,7 +30,10 @@ package de.mpg.imeji.logic.auth.util;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.auth.Authorization;
 import de.mpg.imeji.logic.controller.ItemController;
@@ -56,6 +59,7 @@ import de.mpg.imeji.presentation.util.ObjectLoader;
 public class AuthUtil
 {
     private static Authorization authorization = new Authorization();
+    private static final Logger logger = Logger.getLogger(AuthUtil.class);
 
     /**
      * Return the {@link Authorization} as static
@@ -165,12 +169,29 @@ public class AuthUtil
     {
         if (user != null)
         {
-            List<Grant> l = new ArrayList<>(user.getGrants());
+            List<Grant> l = new ArrayList<>(filterUnvalidGrants(user.getGrants()));
             for (UserGroup ug : user.getGroups())
-                l.addAll(ug.getGrants());
+                l.addAll(filterUnvalidGrants(ug.getGrants()));
             return l;
         }
         return new ArrayList<>();
+    }
+
+    /**
+     * Remove the grants which are not valid to avoid error in further methods
+     * 
+     * @param user
+     * @return
+     */
+    private static Collection<Grant> filterUnvalidGrants(Collection<Grant> l)
+    {
+        Collection<Grant> nl = new ArrayList<Grant>();
+        for (Grant g : l)
+            if (g.getGrantFor() != null && g.getGrantType() != null)
+                nl.add(g);
+            else
+                System.out.println(g.getId());
+        return nl;
     }
 
     /**
@@ -195,8 +216,11 @@ public class AuthUtil
         List<String> shareToList = new ArrayList<String>();
         for (Grant g : user.getGrants())
         {
-            if (!shareToList.contains(g.getGrantFor().toString()))
-                shareToList.add(g.getGrantFor().toString());
+            if (g.getGrantFor() != null)
+            {
+                if (!shareToList.contains(g.getGrantFor().toString()))
+                    shareToList.add(g.getGrantFor().toString());
+            }
         }
         List<SharedHistory> roles = new ArrayList<SharedHistory>();
         for (String sharedWith : shareToList)

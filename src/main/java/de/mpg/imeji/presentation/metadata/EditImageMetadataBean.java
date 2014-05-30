@@ -474,7 +474,6 @@ public class EditImageMetadataBean
     public void reload() throws IOException
     {
         HistorySession hs = (HistorySession)BeanHelper.getSessionBean(HistorySession.class);
-        System.out.println(hs.getCurrentPage().getCompleteUrl());
         FacesContext.getCurrentInstance().getExternalContext().redirect(hs.getCurrentPage().getCompleteUrl());
     }
 

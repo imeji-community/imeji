@@ -285,7 +285,6 @@ public class AdminBean
             try
             {
                 logger.info("Resource to be removed: " + uri);
-                System.out.println(uri);
                 l.add(reader.load(uri, sb.getUser(), obj.getClass().newInstance()));
             }
             catch (Exception e)

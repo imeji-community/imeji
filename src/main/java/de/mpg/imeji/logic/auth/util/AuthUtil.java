@@ -189,8 +189,6 @@ public class AuthUtil
         for (Grant g : l)
             if (g.getGrantFor() != null && g.getGrantType() != null)
                 nl.add(g);
-            else
-                System.out.println(g.getId());
         return nl;
     }
 

@@ -48,7 +48,7 @@ public class EmailMessages
         try {
 			return getEmailMessage(password, email, username, "email_new_password").replace("XXX_INSTANCE_NAME_XXX", PropertyReader.getProperty("imeji.instance.name"));
 		} catch (Exception e) {
-			System.out.println(e);
+			e.printStackTrace();
 			return msg;
 		} 
     }

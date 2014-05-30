@@ -46,7 +46,7 @@
 										<h:outputText value="#{lbl.view_md}"/>
 									</h:outputLink>
 								</li>
-								<ui:fragment rendered="#{cc.attrs.metadataNavigationURL.contains('collection') and Auth.update(cc.attrs.item) and cc.attrs.item.status != 'WITHDRAWN'}">
+								<ui:fragment rendered="#{cc.attrs.metadataNavigationURL.contains('collection') and Auth.create(cc.attrs.item) and cc.attrs.item.status != 'WITHDRAWN'}">
 									<li>
 										<h:outputLink id="lnkUploadImages" value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}/#{Navigation.uploadPath}?init=1">
 											<h:outputText value="#{lbl.upload_images}"/>

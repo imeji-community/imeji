@@ -132,12 +132,20 @@ public class SPARQLQueries
                 + ">} . filter(bound(?g)) . ?s a <http://imeji.org/terms/user> . ?s <http://xmlns.com/foaf/0.1/name> ?name } ORDER BY DESC(?name)";
     }
 
+    /**
+     * Return th {@link UserGroup} which have {@link Grant} for the object defined by the passed uri
+     * 
+     * @param uri
+     * @return
+     */
     public static String selectUserGroupWithGrantFor(String uri)
     {
         return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {OPTIONAL{ ?s <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> <"
                 + uri
                 + ">} . filter(bound(?g)) . ?s a <http://imeji.org/terms/userGroup> . ?s <http://xmlns.com/foaf/0.1/name> ?name } ORDER BY DESC(?name)";
     }
+    
+   
 
     /**
      * Select all {@link UserGroup}

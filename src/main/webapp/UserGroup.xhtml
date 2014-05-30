@@ -71,11 +71,8 @@
 								}
 								</script>
 								
-								
 								<h:form id="userForm">			
-									<div class="imj_userGlobalInformation">		
-									
-										<fieldset>
+									<div class="imj_userGlobalInformation">
 											<!-- User Edit - Email -->
 											<div class="imj_admindataSet">
 												<div class="imj_admindataLabel">
@@ -98,9 +95,8 @@
 												<h:outputLink id="lnkCancelEditUserdata" value="#" onclick="cancelUserEdit(); $(this).hide();" styleClass="imj_cancelButton imj_noDisplay">
 													<h:outputText value="#{lbl.cancel}"/>
 												</h:outputLink>
-												<h:commandLink action="#{UserGroup.save()}" value="#{lbl.save}" styleClass="imj_submitButton imj_noDisplay"/>
+												<h:commandButton action="#{UserGroup.save()}" type="submit" value="#{lbl.save}" styleClass="imj_submitButton imj_noDisplay"/>
 											</div>
-										</fieldset>
 									</div>						
 									<div class="imj_admindataSetEdit">									
 											<div class="imj_admindataLabel">

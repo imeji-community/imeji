@@ -45,14 +45,17 @@ import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.sparql.pfunction.library.container;
 
+import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserGroupController;
+import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
@@ -162,13 +165,35 @@ public class UserGroupBean implements Serializable
         UserGroupController c = new UserGroupController();
         try
         {
-            c.create(userGroup, sessionUser);
+        	if(groupNameAlreadyExists(userGroup))
+        	{
+        		BeanHelper.warn(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("group_name_already_exists"));
+        		return "";
+        	}
+        	else
+        		c.create(userGroup, sessionUser);
         }
         catch (Exception e)
         {
             BeanHelper.error("Error creating user group");
         }
         return "pretty:userGroups";
+    }
+    
+    /**
+     * True if {@link UserGroup} name already used by another {@link UserGroup}
+     * 
+     * @param group
+     * @return
+     */
+    public boolean groupNameAlreadyExists(UserGroup g)
+    {
+    	for(String id : ImejiSPARQL.exec(SPARQLQueries.selectUserGroupAll(g.getName()), null))
+    	{
+    		if(!id.equals(g.getId().toString()))
+    			return true;
+    	}
+    	return false;
     }
 
     /**
@@ -180,14 +205,18 @@ public class UserGroupBean implements Serializable
         UserGroupController c = new UserGroupController();
         try
         {
-            c.update(userGroup, sessionUser);
+        	if(groupNameAlreadyExists(userGroup))
+        	{
+        		BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("group_name_already_exists"));
+        	}
+        	else
+        		c.update(userGroup, sessionUser);
         }
         catch (Exception e)
         {
             BeanHelper.error("Error updating user group");
         }
         reload();
-        //return "pretty:userGroups";
     }
 
     /**

@@ -241,16 +241,19 @@ public class AdminBean
         Search search = new Search(SearchType.ALL, null);
         List<String> uris = search.searchSimpleForQuery(SPARQLQueries.selectGrantWithoutUser(), null);
         logger.info("...found " + uris.size());
+        System.out.println(uris.size());
         removeResources(uris, Imeji.userModel, new Grant());
         logger.info("Searching broken grants...");
         uris = search.searchSimpleForQuery(SPARQLQueries.selectGrantBroken(), null);
         logger.info("...found " + uris.size());
+        System.out.println(uris.size());
         removeResources(uris, Imeji.userModel, new Grant());
         logger.info("Searching emtpy grants...");
         if (clean)
             ImejiSPARQL.execUpdate(SPARQLQueries.removeGrantEmtpy());
         uris = search.searchSimpleForQuery(SPARQLQueries.selectGrantEmtpy(), null);
         logger.info("...found " + uris.size());
+        System.out.println(uris.size());
     }
 
     /**
@@ -278,7 +281,7 @@ public class AdminBean
      */
     private List<Object> loadResourcesAsObjects(List<String> uris, String modelName, Object obj)
     {
-        ImejiRDF2Bean reader = new ImejiRDF2Bean(null);
+        ImejiRDF2Bean reader = new ImejiRDF2Bean(modelName);
         List<Object> l = new ArrayList<Object>();
         for (String uri : uris)
         {

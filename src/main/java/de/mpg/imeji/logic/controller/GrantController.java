@@ -10,11 +10,14 @@ import java.util.HashSet;
 import java.util.List;
 
 import de.escidoc.core.resources.aa.useraccount.Grants;
+import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
+import de.mpg.imeji.presentation.auth.ImejiAuthBean;
 
 /**
  * Controller for {@link Grant}
@@ -25,6 +28,8 @@ import de.mpg.imeji.logic.vo.UserGroup;
  */
 public class GrantController extends ImejiController
 {
+    private static ImejiBean2RDF imejiBean2RDF = new ImejiBean2RDF(Imeji.userModel);
+
     /**
      * Add to the {@link User} the {@link List} of {@link Grant} and update the user in the database
      * 
@@ -35,7 +40,7 @@ public class GrantController extends ImejiController
     public void addGrants(User user, List<Grant> g, User currentUser) throws Exception
     {
         user.getGrants().addAll(getNewGrants(user.getGrants(), g));
-    	UserController c = new UserController(currentUser);
+        UserController c = new UserController(currentUser);
         c.update(user, currentUser);
     }
 
@@ -67,6 +72,7 @@ public class GrantController extends ImejiController
         user.setGrants(getNotRemovedGrants(user.getGrants(), toRemove));
         UserController c = new UserController(currentUser);
         c.update(user, currentUser);
+        imejiBean2RDF.delete(new ArrayList<Object>(toRemove), currentUser);
     }
 
     /**

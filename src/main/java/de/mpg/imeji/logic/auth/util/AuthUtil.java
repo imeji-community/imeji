@@ -178,6 +178,26 @@ public class AuthUtil
     }
 
     /**
+     * Return all {@link Grant} which have the passed grant for
+     * 
+     * @param user
+     * @param grantForUri
+     * @return
+     */
+    public static List<Grant> getGrantsFor(List<Grant> grants, String grantForUri, String profileUri)
+    {
+        List<Grant> l = new ArrayList<Grant>();
+        for (Grant g : filterUnvalidGrants(grants))
+        {
+            if (g.getGrantFor().toString().equals(grantForUri))
+                l.add(g);
+            else if (profileUri != null && g.getGrantFor().toString().equals(profileUri))
+                l.add(g);
+        }
+        return l;
+    }
+
+    /**
      * Remove the grants which are not valid to avoid error in further methods
      * 
      * @param user

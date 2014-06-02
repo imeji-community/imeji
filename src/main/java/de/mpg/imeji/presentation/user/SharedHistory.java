@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import de.escidoc.core.resources.aa.useraccount.Grants;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
+import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.GrantController;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.User;
@@ -96,9 +97,11 @@ public class SharedHistory implements Serializable
         {
             // Remove all Grant for the current container
             if (user != null)
-                gc.removeGrants(getUser(), AuthorizationPredefinedRoles.admin(shareToUri, profileUri), user);
+                gc.removeGrants(getUser(),
+                        AuthUtil.getGrantsFor((List<Grant>)user.getGrants(), shareToUri, profileUri), Imeji.adminUser);
             else if (group != null)
-                gc.removeGrants(group, AuthorizationPredefinedRoles.admin(shareToUri, profileUri), Imeji.adminUser);
+                gc.removeGrants(group, AuthUtil.getGrantsFor((List<Grant>)group.getGrants(), shareToUri, profileUri),
+                        Imeji.adminUser);
             // Find all new Grants according to the shareType
             List<Grant> newGrants = ShareBean.getGrantsAccordingtoRoles(sharedType, shareToUri, profileUri);
             // Save the new Grants

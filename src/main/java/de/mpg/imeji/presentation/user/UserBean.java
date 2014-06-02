@@ -179,13 +179,15 @@ public class UserBean
     public void toggleAdmin() throws Exception
     {
         GrantController gc = new GrantController();
-        Grant g = new Grant(GrantType.ADMIN, URI.create(PropertyBean.baseURI()));
         if (user.isAdmin())
         {
+            Grant g = AuthUtil.extractGrant((List<Grant>)user.getGrants(), PropertyBean.baseURI(), null,
+                    GrantType.ADMIN);
             gc.removeGrants(user, (List<Grant>)gc.toList(g), session.getUser());
         }
         else
         {
+            Grant g = new Grant(GrantType.ADMIN, URI.create(PropertyBean.baseURI()));
             gc.addGrants(user, (List<Grant>)gc.toList(g), session.getUser());
         }
     }
@@ -204,13 +206,15 @@ public class UserBean
     public void toggleCreateCollection() throws Exception
     {
         GrantController gc = new GrantController();
-        Grant g = new Grant(GrantType.CREATE, URI.create(PropertyBean.baseURI()));
         if (user.isAllowedToCreateCollection())
         {
+            Grant g = AuthUtil.extractGrant((List<Grant>)user.getGrants(), PropertyBean.baseURI(), null,
+                    GrantType.CREATE);
             gc.removeGrants(user, (List<Grant>)gc.toList(g), session.getUser());
         }
         else
         {
+            Grant g = new Grant(GrantType.CREATE, URI.create(PropertyBean.baseURI()));
             gc.addGrants(user, (List<Grant>)gc.toList(g), session.getUser());
         }
     }

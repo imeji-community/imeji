@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.bcel.generic.ReturnaddressType;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.auth.Authorization;
@@ -184,7 +185,7 @@ public class AuthUtil
      * @param grantForUri
      * @return
      */
-    public static List<Grant> getGrantsFor(List<Grant> grants, String grantForUri, String profileUri)
+    public static List<Grant> extractGrantsFor(List<Grant> grants, String grantForUri, String profileUri)
     {
         List<Grant> l = new ArrayList<Grant>();
         for (Grant g : filterUnvalidGrants(grants))
@@ -195,6 +196,23 @@ public class AuthUtil
                 l.add(g);
         }
         return l;
+    }
+
+    /**
+     * {@link ReturnaddressType} the Grant which is exactly define by the pass parameter. If not found return null;
+     * 
+     * @param grants
+     * @param grantForUri
+     * @param profileUri
+     * @param type
+     * @return
+     */
+    public static Grant extractGrant(List<Grant> grants, String grantForUri, String profileUri, GrantType type)
+    {
+        for (Grant g : AuthUtil.extractGrantsFor(grants, PropertyBean.baseURI(), null))
+            if (g.getGrantType().compareTo(AuthUtil.toGrantTypeURI(type)) == 0)
+                return g;
+        return null;
     }
 
     /**

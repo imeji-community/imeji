@@ -98,9 +98,9 @@ public class SharedHistory implements Serializable
             // Remove all Grant for the current container
             if (user != null)
                 gc.removeGrants(getUser(),
-                        AuthUtil.getGrantsFor((List<Grant>)user.getGrants(), shareToUri, profileUri), Imeji.adminUser);
+                        AuthUtil.extractGrantsFor((List<Grant>)user.getGrants(), shareToUri, profileUri), Imeji.adminUser);
             else if (group != null)
-                gc.removeGrants(group, AuthUtil.getGrantsFor((List<Grant>)group.getGrants(), shareToUri, profileUri),
+                gc.removeGrants(group, AuthUtil.extractGrantsFor((List<Grant>)group.getGrants(), shareToUri, profileUri),
                         Imeji.adminUser);
             // Find all new Grants according to the shareType
             List<Grant> newGrants = ShareBean.getGrantsAccordingtoRoles(sharedType, shareToUri, profileUri);

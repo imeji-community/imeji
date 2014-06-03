@@ -162,6 +162,11 @@ public class User implements Serializable
     {
         return AuthUtil.isSysAdmin(this);
     }
+    
+    public void setAdmin(boolean b)
+    {
+        // dummy method fot jsf
+    }
 
     public boolean isAllowedToCreateCollection()
     {

@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import de.escidoc.core.resources.aa.useraccount.Grants;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiBean2RDF;
@@ -29,6 +31,7 @@ import de.mpg.imeji.presentation.auth.ImejiAuthBean;
 public class GrantController extends ImejiController
 {
     private static ImejiBean2RDF imejiBean2RDF = new ImejiBean2RDF(Imeji.userModel);
+    private static Logger logger = Logger.getLogger(GrantController.class);
 
     /**
      * Add to the {@link User} the {@link List} of {@link Grant} and update the user in the database
@@ -67,12 +70,19 @@ public class GrantController extends ImejiController
      * @param currentUser
      * @throws Exception
      */
-    public void removeGrants(User user, List<Grant> toRemove, User currentUser) throws Exception
+    public void removeGrants(User user, List<Grant> toRemove, User currentUser)
     {
         user.setGrants(getNotRemovedGrants(user.getGrants(), toRemove));
         UserController c = new UserController(currentUser);
-        c.update(user, currentUser);
-        imejiBean2RDF.delete(new ArrayList<Object>(toRemove), currentUser);
+        try
+        {
+            c.update(user, currentUser);
+            imejiBean2RDF.delete(new ArrayList<Object>(toRemove), currentUser);
+        }
+        catch (Exception e)
+        {
+            logger.error(e);
+        }
     }
 
     /**
@@ -84,11 +94,19 @@ public class GrantController extends ImejiController
      * @param currentUser
      * @throws Exception
      */
-    public void removeGrants(UserGroup group, List<Grant> toRemove, User currentUser) throws Exception
+    public void removeGrants(UserGroup group, List<Grant> toRemove, User currentUser)
     {
         group.setGrants(getNotRemovedGrants(group.getGrants(), toRemove));
         UserGroupController c = new UserGroupController();
-        c.update(group, currentUser);
+        try
+        {
+            c.update(group, currentUser);
+            imejiBean2RDF.delete(new ArrayList<Object>(toRemove), currentUser);
+        }
+        catch (Exception e)
+        {
+            logger.error(e);
+        }
     }
 
     /**

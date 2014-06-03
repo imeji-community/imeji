@@ -33,6 +33,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @XmlSeeAlso({ Item.class, MetadataProfile.class })
 public class Properties implements Serializable
 {
+    private static final long serialVersionUID = 6874979775433576816L;
     private URI id;
     @j2jResource("http://purl.org/dc/terms/creator")
     private URI createdBy;

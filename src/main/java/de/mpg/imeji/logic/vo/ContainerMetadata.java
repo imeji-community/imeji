@@ -24,6 +24,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jId(getMethod = "getId", setMethod = "setId")
 public class ContainerMetadata implements Serializable
 {
+    private static final long serialVersionUID = -1323309830123608910L;
     @j2jLiteral("http://purl.org/dc/elements/1.1/title")
     private String title;
     @j2jLiteral("http://purl.org/dc/elements/1.1/description")

@@ -33,6 +33,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @XmlType(propOrder = { "date", "time", "statement" })
 public class Date extends Metadata
 {
+    private static final long serialVersionUID = 8791083521970179964L;
     @j2jLiteral("http://imeji.org/terms/date")
     private String date;
     @j2jLiteral("http://imeji.org/terms/time")

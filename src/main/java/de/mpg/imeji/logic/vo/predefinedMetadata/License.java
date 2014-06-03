@@ -33,6 +33,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @XmlType(propOrder = { "externalUri", "license", "statement" })
 public class License extends Metadata
 {
+    private static final long serialVersionUID = -3194639210099160225L;
     private SimpleDateFormat date;
     private String dateFormat = "dd/mm/yyyy";
     @j2jLiteral("http://imeji.org/terms/license")

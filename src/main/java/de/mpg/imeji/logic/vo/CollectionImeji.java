@@ -25,6 +25,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jId(getMethod = "getId", setMethod = "setId")
 public class CollectionImeji extends Container implements Serializable
 {
+    private static final long serialVersionUID = -4689209760815149573L;
     @j2jResource("http://imeji.org/terms/mdprofile")
     private URI profile = null;
     @j2jResource("http://imeji.org/terms/metadataSet")

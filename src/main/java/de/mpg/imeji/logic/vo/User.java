@@ -29,6 +29,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jId(getMethod = "getId", setMethod = "setId")
 public class User implements Serializable
 {
+    private static final long serialVersionUID = -8961821901552709120L;
     @j2jLiteral("http://xmlns.com/foaf/0.1/name")
     private String name;
     @j2jLiteral("http://xmlns.com/foaf/0.1/nickname")

@@ -37,6 +37,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @XmlRootElement(name = "metadataSet", namespace = "http://imeji.org/terms")
 public class MetadataSet implements Serializable
 {
+    private static final long serialVersionUID = 6306551656394348422L;
     @j2jList("http://imeji.org/terms/metadata")
     private Collection<Metadata> metadata = new ArrayList<Metadata>();
     @j2jResource("http://imeji.org/terms/mdprofile")

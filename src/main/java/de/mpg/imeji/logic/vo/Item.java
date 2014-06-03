@@ -37,6 +37,8 @@ import de.mpg.j2j.annotations.j2jResource;
 @XmlRootElement(name = "item", namespace = "http://imeji.org/terms")
 public class Item extends Properties implements FulltextIndex, Serializable
 {
+    private static final long serialVersionUID = 3989965275269803885L;
+
     public enum Visibility
     {
         PUBLIC, PRIVATE;
@@ -159,7 +161,7 @@ public class Item extends Properties implements FulltextIndex, Serializable
     {
         return filename;
     }
-    
+
     public void setFiletype(String filetype)
     {
         this.filetype = filetype;

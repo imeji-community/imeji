@@ -34,6 +34,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @XmlRootElement(name = "person", namespace = "http://xmlns.com/foaf/0.1")
 public class Person implements Cloneable, Serializable
 {
+    private static final long serialVersionUID = 2030269396417009337L;
     private URI id = IdentifierUtil.newURI(Person.class);
     @j2jLiteral("http://purl.org/escidoc/metadata/terms/0.1/family-name")
     private String familyName;

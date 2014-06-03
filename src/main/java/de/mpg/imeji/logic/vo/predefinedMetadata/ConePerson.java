@@ -32,6 +32,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @XmlType(propOrder = { "coneId", "person", "statement" })
 public class ConePerson extends Metadata
 {
+    private static final long serialVersionUID = -1925520449071527632L;
     @j2jResource("http://xmlns.com/foaf/0.1/person")
     private Person person;
     @j2jResource("http://imeji.org/terms/coneId")

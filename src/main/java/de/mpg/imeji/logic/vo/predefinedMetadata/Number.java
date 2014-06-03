@@ -32,6 +32,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @XmlType(propOrder={"number", "statement"})
 public class Number extends Metadata
 {
+    private static final long serialVersionUID = 1465887901391010292L;
     @j2jLiteral("http://imeji.org/terms/number")
     private double number = Double.NaN;
     @j2jResource("http://imeji.org/terms/statement")

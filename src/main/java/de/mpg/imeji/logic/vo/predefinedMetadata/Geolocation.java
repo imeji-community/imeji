@@ -32,6 +32,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @XmlType(propOrder = { "latitude", "longitude", "name", "statement" })
 public class Geolocation extends Metadata
 {
+    private static final long serialVersionUID = 6902473139335929693L;
     @j2jLiteral("http://imeji.org/terms/longitude")
     private double longitude = Double.NaN;
     @j2jLiteral("http://imeji.org/terms/latitude")

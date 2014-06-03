@@ -24,6 +24,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jId(getMethod = "getId", setMethod = "setId")
 public class Album extends Container
 {
+    private static final long serialVersionUID = -2566717397577163202L;
     @j2jLazyList("http://imeji.org/terms/item")
     private Collection<URI> images = new ArrayList<URI>();
 

@@ -32,6 +32,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @XmlType(propOrder = { "label", "uri", "statement" })
 public class Link extends Metadata
 {
+    private static final long serialVersionUID = -8486219552564749433L;
     @j2jResource("http://imeji.org/terms/uri")
     private URI uri;
     @j2jLiteral("http://www.w3.org/2000/01/rdf-schema#label")

@@ -35,6 +35,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @XmlRootElement(name = "mdprofile", namespace = "http://imeji.org/terms")
 public class MetadataProfile extends Properties
 {
+    private static final long serialVersionUID = -3303333109346078736L;
     @j2jLiteral("http://purl.org/dc/elements/1.1/title")
     private String title;
     @j2jLiteral("http://purl.org/dc/elements/1.1/description")

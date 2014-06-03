@@ -364,8 +364,34 @@ public class J2JHelper
             {
                 l.addAll(getAllObjectFields(clazz.getSuperclass()));
             }
-            return l;
+            return getOnlyAnnotatedFields(l);
         }
         return new ArrayList<Field>();
+    }
+
+    /**
+     * Return only {@link Field} which have a j2j Annotation
+     * 
+     * @param l
+     * @return
+     */
+    public static List<Field> getOnlyAnnotatedFields(List<Field> l)
+    {
+        List<Field> afl = new ArrayList<Field>();
+        for (Field f : l)
+            if (isAnnotated(f))
+                afl.add(f);
+        return afl;
+    }
+
+    /**
+     * True if the {@link Field} is a j2j annotation
+     * 
+     * @param f
+     * @return
+     */
+    public static boolean isAnnotated(Field f)
+    {
+        return isLazyList(f) || isList(f) || isLiteral(f) || isResource(f);
     }
 }

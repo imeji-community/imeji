@@ -19,10 +19,11 @@ import de.mpg.j2j.annotations.j2jResource;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
- @j2jResource("http://imeji.org/terms/container")
- @j2jId(getMethod = "getId", setMethod = "setId")
+@j2jResource("http://imeji.org/terms/container")
+@j2jId(getMethod = "getId", setMethod = "setId")
 public abstract class Container extends Properties implements FulltextIndex, Serializable
 {
+    private static final long serialVersionUID = -5314334939747696614L;
     @j2jResource("http://imeji.org/terms/container/metadata")
     private ContainerMetadata metadata = new ContainerMetadata();
     @j2jLiteral("http://imeji.org/terms/fulltext")

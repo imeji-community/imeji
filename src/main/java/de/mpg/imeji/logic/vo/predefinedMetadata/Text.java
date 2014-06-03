@@ -32,6 +32,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @XmlType(propOrder = { "text", "statement" })
 public class Text extends Metadata
 {
+    private static final long serialVersionUID = 3394338221875432545L;
     @j2jLiteral("http://imeji.org/terms/text")
     private String text;
     @j2jResource("http://imeji.org/terms/statement")

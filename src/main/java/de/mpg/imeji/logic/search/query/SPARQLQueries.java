@@ -294,7 +294,7 @@ public class SPARQLQueries
     {
         return "WITH <http://imeji.org/user> DELETE {?user <http://imeji.org/terms/grant> ?s . ?s ?p ?o } "
                 + "USING <http://imeji.org/user>  WHERE {?user <http://imeji.org/terms/grant> ?s . ?s <http://imeji.org/terms/grantFor> <"
-                + uri + ">}";
+                + uri + "> . ?s ?p ?o}";
     }
 
     /**

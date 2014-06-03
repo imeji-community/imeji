@@ -165,7 +165,7 @@ public class User implements Serializable
     
     public void setAdmin(boolean b)
     {
-        // dummy method fot jsf
+        // dummy method for jsf
     }
 
     public boolean isAllowedToCreateCollection()

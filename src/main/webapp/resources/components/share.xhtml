@@ -113,7 +113,7 @@
 											<h:outputText value="#{sh.group.name}" rendered="#{sh.group != null}"/>
 										</td>
 										<td colspan="7">
-											<h:selectManyCheckbox id="role" value="#{sh.sharedType}" enabledClass="imj_noDisplay" layout="lineDirection" onclick="document.getElementById('share:users:#{pos.index}:checkGrants').click();">
+											<h:selectManyCheckbox id="role" value="#{sh.sharedType}" enabledClass="imj_noDisplay" immediate="true" layout="lineDirection" onclick="document.getElementById('share:users:#{pos.index}:checkGrants').click();">
 												<f:selectItems value="#{cc.attrs.roles}"/>
 											</h:selectManyCheckbox>
 											<h:commandButton id="checkGrants" value="Check Grants" action="#{ShareBean.checkGrants(sh.sharedType)}" styleClass="imj_noDisplay">
@@ -127,16 +127,13 @@
 								</ui:repeat>
 							</tbody>
 						</table>
-					</h:form>
-					
-					<div class="imj_submitPanel">
-						<h:outputLink value="#{Navigation.applicationUri}#{ShareBean.pageUrl}" styleClass="imj_cancelButton" title="#{lbl.reset}" rendered="#{cc.attrs.type != 'item'}">
-							<h:outputText value="#{lbl.reset}"/>
-						</h:outputLink>
-						<h:form>
+						<div class="imj_submitPanel">
+							<h:outputLink value="#{Navigation.applicationUri}#{ShareBean.pageUrl}" styleClass="imj_cancelButton" title="#{lbl.reset}" rendered="#{cc.attrs.type != 'item'}">
+								<h:outputText value="#{lbl.reset}"/>
+							</h:outputLink>
 							<h:commandButton value="#{lbl.save}" action="#{ShareBean.update}" styleClass="imj_submitButton"/>
-						</h:form>
-					</div>
+						</div>
+					</h:form>
 				</div>
 			</div>
 		</ui:fragment>

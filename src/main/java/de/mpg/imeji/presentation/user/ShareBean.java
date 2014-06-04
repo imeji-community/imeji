@@ -228,7 +228,7 @@ public class ShareBean implements Serializable
         List<String> l = new ArrayList<String>();
         l.add(userGroup.getId().toString());
         shareTo(l);
-        //init();
+        // init();
         reloadPage();
     }
 
@@ -372,7 +372,7 @@ public class ShareBean implements Serializable
     {
         EmailClient emailClient = new EmailClient();
         SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        this.getEmailMessage(this.user.getName(), dest.getName(), title,getShareToUri());
+        this.getEmailMessage(this.user.getName(), dest.getName(), title, getShareToUri());
         try
         {
             emailClient.sendMail(dest.getEmail(), null,
@@ -456,29 +456,28 @@ public class ShareBean implements Serializable
      */
     public void shareTo(List<String> toList)
     {
-        List<Grant> grants = getGrantsAccordingtoRoles(selectedRoles, getShareToUri(), profileUri);
         for (String to : toList)
         {
+            List<Grant> grants = getGrantsAccordingtoRoles(selectedRoles, getShareToUri(), profileUri);
             try
             {
                 GrantController gc = new GrantController();
                 if (UserCreationBean.isValidEmail(to))
                 {
-                	
                     User u = ObjectLoader.loadUser(to, Imeji.adminUser);
                     gc.addGrants(u, grants, u);
                     if (sendEmail)
-                    {                  	
-                        //sendEmail(u, title, getShareToUri());
-                    	sendEmail(u, title);
+                    {
+                        // sendEmail(u, title, getShareToUri());
+                        sendEmail(u, title);
                     }
                 }
                 else
                 {
                     gc.addGrants(retrieveGroup(to), grants, Imeji.adminUser);
                     if (sendEmail)
-                    { 
-                    	sendEmailToGroup(retrieveGroup(to), title);
+                    {
+                        sendEmailToGroup(retrieveGroup(to), title);
                     }
                 }
             }
@@ -492,22 +491,21 @@ public class ShareBean implements Serializable
 
     private void getEmailMessage(String from, String to, String name, String link)
     {
-    	EmailMessages emailMessages = new EmailMessages();
-    	
-    	if (this.type.equals(SharedObjectType.COLLECTION))
-    	{
-    		this.emailInput = emailMessages.getSharedCollectionMessage(from, to, name, link);
-    	}
-    	if (this.type.equals(SharedObjectType.ALBUM))
-    	{
-    		this.emailInput = emailMessages.getSharedAlbumMessage(from, to, name, link);
-    	}
-    	if (this.type.equals(SharedObjectType.ITEM))
-    	{
-    		this.emailInput = emailMessages.getSharedItemMessage(from, to, name, link);
-    	}
+        EmailMessages emailMessages = new EmailMessages();
+        if (this.type.equals(SharedObjectType.COLLECTION))
+        {
+            this.emailInput = emailMessages.getSharedCollectionMessage(from, to, name, link);
+        }
+        if (this.type.equals(SharedObjectType.ALBUM))
+        {
+            this.emailInput = emailMessages.getSharedAlbumMessage(from, to, name, link);
+        }
+        if (this.type.equals(SharedObjectType.ITEM))
+        {
+            this.emailInput = emailMessages.getSharedItemMessage(from, to, name, link);
+        }
     }
-    
+
     /**
      * Search a {@link UserGroup} by name
      * 

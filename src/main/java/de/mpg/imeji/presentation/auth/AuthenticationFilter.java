@@ -29,6 +29,8 @@
 package de.mpg.imeji.presentation.auth;
 
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -72,14 +74,27 @@ public class AuthenticationFilter implements Filter
     public void doFilter(ServletRequest serv, ServletResponse resp, FilterChain chain) throws IOException,
             ServletException
     {
-        HttpServletRequest request = (HttpServletRequest)serv;
-        SessionBean session = getSession(request);
-        if (session != null && session.getUser() == null)
+        try
         {
-            HttpAuthentication httpAuthentification = new HttpAuthentication(request);
-            session.setUser(httpAuthentification.doLogin());
+            HttpServletRequest request = (HttpServletRequest)serv;
+            SessionBean session = getSession(request);
+            if (session != null && session.getUser() == null)
+            {
+                HttpAuthentication httpAuthentification = new HttpAuthentication(request);
+                if (httpAuthentification.hasLoginInfos())
+                {
+                    session.setUser(httpAuthentification.doLogin());
+                }
+            }
         }
-        chain.doFilter(serv, resp);
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            chain.doFilter(serv, resp);
+        }
     }
 
     /*

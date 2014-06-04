@@ -156,7 +156,8 @@ public class SearchTransaction extends Transaction
             }
             return SortHelper.addSortValue(qs.getResource("s").toString(), sortValue);
         }
-        return qs.getResource("s").toString();
+        RDFNode node = qs.get("s");
+        return node.isURIResource() ? node.asResource().getURI() : node.asLiteral().toString();
     }
 
     @Override

@@ -12,6 +12,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
 
@@ -368,13 +369,15 @@ public class ShareBean implements Serializable
      * @param subject
      * @param message
      */
-    private void sendEmail(User dest, String subject)
+    private void sendEmail(User dest, String subject, List<Grant> grants)
     {
         EmailClient emailClient = new EmailClient();
         SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         this.getEmailMessage(this.user.getName(), dest.getName(), title, getShareToUri());
+
         try
         {
+        	this.addRoles(grants);
             emailClient.sendMail(dest.getEmail(), null,
                     subject.replaceAll("XXX_INSTANCE_NAME_XXX", sb.getInstanceName()), this.emailInput);
         }
@@ -383,6 +386,83 @@ public class ShareBean implements Serializable
             logger.error("Error sending email", e);
             BeanHelper.error(sb.getMessage("error") + ": Email not sent");
         }
+    }
+    
+    private void addRoles (List<Grant> grants)
+    {
+        String grantsStr = "";
+        List <String> roles = ShareBean.parseShareTypes(grants, getShareToUri(), profileUri, type);
+        SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+    	
+        if (this.type.equals(SharedObjectType.ALBUM))
+        {
+        	for (int i =0; i< roles.size(); i++)
+        	{
+        		String role = roles.get(i);
+                switch (role)
+                {	        		
+		            case "READ":
+		                grantsStr += "- " + sb.getLabel("album_share_read") + "\n";
+		                break;
+		            case "CREATE":
+		            	grantsStr += "- " + sb. getLabel("album_share_image_add") + "\n";
+		                break;
+		            case "EDIT_CONTAINER":
+		            	grantsStr += "- " + sb.getLabel("album_share_album_edit") + "\n";
+		                break;
+		            case "ADMIN":
+		            	grantsStr += "- " + sb.getLabel("album_share_admin") + "\n";
+		                break;
+                }       		
+        	}
+        }
+        if (this.type.equals(SharedObjectType.COLLECTION))
+        {        	
+        	for (int i =0; i< roles.size(); i++)
+        	{
+        		String role = roles.get(i);
+	            switch (role)
+	            {
+	                case "READ":
+	                	grantsStr +=  "- " + sb.getLabel("collection_share_read") + "\n";
+	                    break;
+	                case "CREATE":
+	                	grantsStr +=  "- " + sb.getLabel("collection_share_image_upload") + "\n";
+	                    break;
+	                case "EDIT_ITEM":
+	                	grantsStr +=  "- " + sb.getLabel("collection_share_image_edit") + "\n";
+	                    break;
+	                case "DELETE":
+	                	grantsStr +=  "- " + sb.getLabel("collection_share_image_delete") + "\n";
+	                    break;
+	                case "EDIT_CONTAINER":
+	                	grantsStr +=  "- " + sb.getLabel("collection_share_collection_edit") + "\n";
+	                    break;
+	                case "EDIT_PROFILE":
+	                	grantsStr +=  "- " + sb.getLabel("collection_share_profile_edit") + "\n";
+	                    break;
+	                case "ADMIN":
+	                	grantsStr +=  "- " + sb.getLabel("collection_share_admin") + "\n";
+	                    break;
+	            }
+        	}
+        }
+        if (this.type.equals(SharedObjectType.ITEM))
+        {
+        	for (int i =0; i< roles.size(); i++)
+        	{
+        		String role = roles.get(i);
+                switch (role)
+                {	        		
+		            case "READ":
+		                grantsStr +=  "- " + sb.getLabel("collection_share_read");
+		                break;
+                }      		
+        	}
+        }
+    
+    	this.emailInput += this.emailInput.replaceAll("XXX_RIGHTS_XXX", grantsStr.trim());
+    	System.out.println(this.emailInput);
     }
 
     /**
@@ -394,13 +474,14 @@ public class ShareBean implements Serializable
      */
     private void sendEmailToGroup(UserGroup group, String subject)
     {
+    	//TODO
         UserController c = new UserController(Imeji.adminUser);
         SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         for (URI uri : group.getUsers())
         {
             try
             {
-                sendEmail(c.retrieve(uri), subject);
+                sendEmail(c.retrieve(uri), subject, null);
             }
             catch (Exception e)
             {
@@ -469,7 +550,7 @@ public class ShareBean implements Serializable
                     if (sendEmail)
                     {
                         // sendEmail(u, title, getShareToUri());
-                        sendEmail(u, title);
+                        sendEmail(u, title, grants);
                     }
                 }
                 else

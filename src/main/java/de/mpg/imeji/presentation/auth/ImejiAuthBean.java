@@ -31,12 +31,13 @@ package de.mpg.imeji.presentation.auth;
 import java.io.Serializable;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
 import de.mpg.imeji.logic.auth.Authorization;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.PropertyBean;
+import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * JSF Bean for imeji authorization. Can be call in the xhtml pages by: <br/>
@@ -55,8 +56,15 @@ public class ImejiAuthBean implements Serializable
 {
     private static final long serialVersionUID = 4905896901833448372L;
     private static Authorization auth = new Authorization();
-    @ManagedProperty(value = "#{SessionBean.user}")
-    private static User sessionUser;
+    private User sessionUser;
+
+    /**
+     * 
+     */
+    public ImejiAuthBean()
+    {
+        this.sessionUser = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getUser();
+    }
 
     /**
      * True if the {@link User} can read the uri
@@ -414,21 +422,5 @@ public class ImejiAuthBean implements Serializable
     public boolean isLoggedIn()
     {
         return sessionUser != null;
-    }
-
-    /**
-     * @return the sessionUser
-     */
-    public User getSessionUser()
-    {
-        return sessionUser;
-    }
-
-    /**
-     * @param sessionUser the sessionUser to set
-     */
-    public void setSessionUser(User sessionUser)
-    {
-        ImejiAuthBean.sessionUser = sessionUser;
     }
 }

@@ -423,8 +423,8 @@ public class ItemController extends ImejiController
      */
     public Container findContainerItems(Container c, User user, int size)
     {
-        String q = c instanceof CollectionImeji ? SPARQLQueries.selectCollectionItems(c.getId(), user, size) : SPARQLQueries
-                .selectAlbumItems(c.getId(), user, size);
+        String q = c instanceof CollectionImeji ? SPARQLQueries.selectCollectionItems(c.getId(), user, size) : 
+        	SPARQLQueries.selectAlbumItems(c.getId(), user, size);
         c.getImages().clear();
         for (String s : ImejiSPARQL.exec(q, null))
         {

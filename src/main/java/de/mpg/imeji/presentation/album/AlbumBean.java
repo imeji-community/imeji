@@ -75,7 +75,7 @@ public class AlbumBean extends ContainerBean
     {
         this.album = album;
         this.id = ObjectHelper.getId(album.getId());
-        // album = ObjectLoader.loadAlbumLazy(ObjectHelper.getURI(Album.class, id), sessionBean.getUser());
+        //album = ObjectLoader.loadAlbumLazy(ObjectHelper.getURI(Album.class, id), sessionBean.getUser());
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         if (sessionBean.getActiveAlbum() != null && sessionBean.getActiveAlbum().getId().equals(album.getId()))
         {
@@ -114,11 +114,11 @@ public class AlbumBean extends ContainerBean
         if (id != null)
         {
             album = ObjectLoader.loadAlbumLazy(ObjectHelper.getURI(Album.class, id), sessionBean.getUser());
-            findItems(sessionBean.getUser(), 13);
-            loadItems(sessionBean.getUser());
-            countItems(sessionBean.getUser());
             if (album != null)
             {
+                findItems(sessionBean.getUser(), 13);
+                loadItems(sessionBean.getUser());
+                countItems(sessionBean.getUser());
                 if (sessionBean.getActiveAlbum() != null && sessionBean.getActiveAlbum().getId().equals(album.getId()))
                 {
                     active = true;

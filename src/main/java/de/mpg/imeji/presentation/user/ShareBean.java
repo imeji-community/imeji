@@ -9,10 +9,8 @@ import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
 
@@ -49,10 +47,12 @@ import de.mpg.imeji.presentation.util.UrlHelper;
 @ViewScoped
 public class ShareBean implements Serializable
 {
+    private static final long serialVersionUID = 8106762709528360926L;
     private static Logger logger = Logger.getLogger(ShareBean.class);
     @ManagedProperty(value = "#{SessionBean.user}")
     private User user;
     private String id;
+    private URI uri;
     // The object (collection, album or item) which is going to be shared
     private Object shareTo;
     // private String shareToUri;
@@ -92,8 +92,8 @@ public class ShareBean implements Serializable
         this.shareTo = null;
         this.profileUri = null;
         this.type = SharedObjectType.COLLECTION;
-        CollectionImeji collection = ObjectLoader.loadCollectionLazy(
-                ObjectHelper.getURI(CollectionImeji.class, getId()), user);
+        this.uri = ObjectHelper.getURI(CollectionImeji.class, getId());
+        CollectionImeji collection = ObjectLoader.loadCollectionLazy(uri, user);
         if (collection != null)
         {
             this.shareTo = collection;
@@ -113,7 +113,8 @@ public class ShareBean implements Serializable
         this.type = SharedObjectType.ALBUM;
         this.shareTo = null;
         this.profileUri = null;
-        Album album = ObjectLoader.loadAlbumLazy(ObjectHelper.getURI(Album.class, getId()), user);
+        this.uri = ObjectHelper.getURI(Album.class, getId());
+        Album album = ObjectLoader.loadAlbumLazy(uri, user);
         if (album != null)
         {
             this.shareTo = album;
@@ -134,8 +135,8 @@ public class ShareBean implements Serializable
         this.type = SharedObjectType.ITEM;
         this.profileUri = null;
         this.shareTo = null;
-        URI itemURI = PageURIHelper.extractId(PrettyContext.getCurrentInstance().getRequestURL().toString());
-        Item item = ObjectLoader.loadItem(itemURI, user);
+        this.uri = PageURIHelper.extractId(PrettyContext.getCurrentInstance().getRequestURL().toString());
+        Item item = ObjectLoader.loadItem(uri, user);
         if (item != null)
         {
             this.shareTo = item;
@@ -212,8 +213,36 @@ public class ShareBean implements Serializable
     {
         try
         {
+            UserController c = new UserController(user);
+            user = c.retrieve(user.getId());
             Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-            FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getApplicationUri() + pageUrl);
+            if (AuthUtil.staticAuth().administrate(user, uri.toString()))
+            {
+                // user has still rights to read the collection
+                FacesContext.getCurrentInstance().getExternalContext()
+                        .redirect(navigation.getApplicationUri() + pageUrl);
+            }
+            else if (AuthUtil.staticAuth().read(user, uri.toString()))
+            {
+                FacesContext.getCurrentInstance().getExternalContext()
+                        .redirect(navigation.getApplicationUri() + pageUrl.replace("share", ""));
+            }
+            else
+            {
+                // user has not right anymore to read the collection
+                switch (type)
+                {
+                    case COLLECTION:
+                        FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getCollectionsUrl());
+                        break;
+                    case ALBUM:
+                        FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getAlbumsUrl());
+                        break;
+                    case ITEM:
+                        FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getBrowseUrl());
+                        break;
+                }
+            }
         }
         catch (Exception e)
         {
@@ -373,99 +402,96 @@ public class ShareBean implements Serializable
     {
         EmailClient emailClient = new EmailClient();
         SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        
         if (grants != null && grants.size() > 0)
-	    {
-	        this.getEmailMessage(this.user.getName(), dest.getName(), title, getShareToUri());	
-	        try
-	        {
-	        	this.addRoles(grants);
-	            emailClient.sendMail(dest.getEmail(), null,
-	                    subject.replaceAll("XXX_INSTANCE_NAME_XXX", sb.getInstanceName()), this.emailInput);
-	        }
-	        catch (Exception e)
-	        {
-	            logger.error("Error sending email", e);
-	            BeanHelper.error(sb.getMessage("error") + ": Email not sent");
-	        }
+        {
+            this.getEmailMessage(this.user.getName(), dest.getName(), title, getShareToUri());
+            try
+            {
+                this.addRoles(grants);
+                emailClient.sendMail(dest.getEmail(), null,
+                        subject.replaceAll("XXX_INSTANCE_NAME_XXX", sb.getInstanceName()), this.emailInput);
+            }
+            catch (Exception e)
+            {
+                logger.error("Error sending email", e);
+                BeanHelper.error(sb.getMessage("error") + ": Email not sent");
+            }
         }
-        //System.out.println("EMAIL" + this.emailInput);
+        // System.out.println("EMAIL" + this.emailInput);
     }
-    
-    private void addRoles (List<Grant> grants)
+
+    private void addRoles(List<Grant> grants)
     {
         String grantsStr = "";
-        List <String> roles = ShareBean.parseShareTypes(grants, getShareToUri(), profileUri, type);
+        List<String> roles = ShareBean.parseShareTypes(grants, getShareToUri(), profileUri, type);
         SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-    	
         if (this.type.equals(SharedObjectType.ALBUM))
         {
-        	for (int i =0; i< roles.size(); i++)
-        	{
-        		String role = roles.get(i);
+            for (int i = 0; i < roles.size(); i++)
+            {
+                String role = roles.get(i);
                 switch (role)
-                {	        		
-		            case "READ":
-		                grantsStr += "- " + sb.getLabel("album_share_read") + "\n";
-		                break;
-		            case "CREATE":
-		            	grantsStr += "- " + sb. getLabel("album_share_image_add") + "\n";
-		                break;
-		            case "EDIT_CONTAINER":
-		            	grantsStr += "- " + sb.getLabel("album_share_album_edit") + "\n";
-		                break;
-		            case "ADMIN":
-		            	grantsStr += "- " + sb.getLabel("album_share_admin") + "\n";
-		                break;
-                }       		
-        	}
+                {
+                    case "READ":
+                        grantsStr += "- " + sb.getLabel("album_share_read") + "\n";
+                        break;
+                    case "CREATE":
+                        grantsStr += "- " + sb.getLabel("album_share_image_add") + "\n";
+                        break;
+                    case "EDIT_CONTAINER":
+                        grantsStr += "- " + sb.getLabel("album_share_album_edit") + "\n";
+                        break;
+                    case "ADMIN":
+                        grantsStr += "- " + sb.getLabel("album_share_admin") + "\n";
+                        break;
+                }
+            }
         }
         if (this.type.equals(SharedObjectType.COLLECTION))
-        {        	
-        	for (int i =0; i< roles.size(); i++)
-        	{
-        		String role = roles.get(i);
-	            switch (role)
-	            {
-	                case "READ":
-	                	grantsStr +=  "- " + sb.getLabel("collection_share_read") + "\n";
-	                    break;
-	                case "CREATE":
-	                	grantsStr +=  "- " + sb.getLabel("collection_share_image_upload") + "\n";
-	                    break;
-	                case "EDIT_ITEM":
-	                	grantsStr +=  "- " + sb.getLabel("collection_share_image_edit") + "\n";
-	                    break;
-	                case "DELETE":
-	                	grantsStr +=  "- " + sb.getLabel("collection_share_image_delete") + "\n";
-	                    break;
-	                case "EDIT_CONTAINER":
-	                	grantsStr +=  "- " + sb.getLabel("collection_share_collection_edit") + "\n";
-	                    break;
-	                case "EDIT_PROFILE":
-	                	grantsStr +=  "- " + sb.getLabel("collection_share_profile_edit") + "\n";
-	                    break;
-	                case "ADMIN":
-	                	grantsStr +=  "- " + sb.getLabel("collection_share_admin") + "\n";
-	                    break;
-	            }
-        	}
+        {
+            for (int i = 0; i < roles.size(); i++)
+            {
+                String role = roles.get(i);
+                switch (role)
+                {
+                    case "READ":
+                        grantsStr += "- " + sb.getLabel("collection_share_read") + "\n";
+                        break;
+                    case "CREATE":
+                        grantsStr += "- " + sb.getLabel("collection_share_image_upload") + "\n";
+                        break;
+                    case "EDIT_ITEM":
+                        grantsStr += "- " + sb.getLabel("collection_share_image_edit") + "\n";
+                        break;
+                    case "DELETE":
+                        grantsStr += "- " + sb.getLabel("collection_share_image_delete") + "\n";
+                        break;
+                    case "EDIT_CONTAINER":
+                        grantsStr += "- " + sb.getLabel("collection_share_collection_edit") + "\n";
+                        break;
+                    case "EDIT_PROFILE":
+                        grantsStr += "- " + sb.getLabel("collection_share_profile_edit") + "\n";
+                        break;
+                    case "ADMIN":
+                        grantsStr += "- " + sb.getLabel("collection_share_admin") + "\n";
+                        break;
+                }
+            }
         }
         if (this.type.equals(SharedObjectType.ITEM))
         {
-        	for (int i =0; i< roles.size(); i++)
-        	{
-        		String role = roles.get(i);
+            for (int i = 0; i < roles.size(); i++)
+            {
+                String role = roles.get(i);
                 switch (role)
-                {	        		
-		            case "READ":
-		                grantsStr +=  "- " + sb.getLabel("collection_share_read");
-		                break;
-                }      		
-        	}
+                {
+                    case "READ":
+                        grantsStr += "- " + sb.getLabel("collection_share_read");
+                        break;
+                }
+            }
         }
-    
-    	this.emailInput = this.emailInput.replaceAll("XXX_RIGHTS_XXX", grantsStr.trim());
+        this.emailInput = this.emailInput.replaceAll("XXX_RIGHTS_XXX", grantsStr.trim());
     }
 
     /**
@@ -483,7 +509,7 @@ public class ShareBean implements Serializable
         {
             try
             {
-            	List<Grant> grants = getGrantsAccordingtoRoles(selectedRoles, getShareToUri(), profileUri);
+                List<Grant> grants = getGrantsAccordingtoRoles(selectedRoles, getShareToUri(), profileUri);
                 User u = ObjectLoader.loadUser(uri, Imeji.adminUser);
                 GrantController gc = new GrantController();
                 gc.addGrants(u, grants, u);

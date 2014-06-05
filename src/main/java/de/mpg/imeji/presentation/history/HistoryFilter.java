@@ -80,9 +80,9 @@ public class HistoryFilter implements Filter
      */
     private void dofilterImpl(HttpServletRequest request, ServletResponse resp)
     {
-        HistorySession hs = getHistorySession(request);
+        HistorySession hs = getHistorySession(request, resp);
         Navigation nav = getNavigation(request, resp);
-        SessionBean session = getSessionBean(request);
+        SessionBean session = getSessionBean(request, resp);
         if (session != null)
         {
             String label = PageURIHelper
@@ -115,9 +115,9 @@ public class HistoryFilter implements Filter
      * @param req
      * @return
      */
-    private SessionBean getSessionBean(HttpServletRequest req)
+    private SessionBean getSessionBean(HttpServletRequest req, ServletResponse resp)
     {
-        return (SessionBean)req.getSession(true).getAttribute(SessionBean.class.getSimpleName());
+        return (SessionBean)getBean(SessionBean.class, req, resp);
     }
 
     /**
@@ -127,9 +127,9 @@ public class HistoryFilter implements Filter
      * @param resp
      * @return
      */
-    private HistorySession getHistorySession(HttpServletRequest req)
+    private HistorySession getHistorySession(HttpServletRequest req, ServletResponse resp)
     {
-        return (HistorySession)req.getSession(true).getAttribute(HistorySession.class.getSimpleName());
+        return (HistorySession)getBean(HistorySession.class, req, resp);
     }
 
     /**

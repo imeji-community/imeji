@@ -6,8 +6,6 @@ package de.mpg.imeji.presentation.user;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.logic.auth.Authentication;
 import de.mpg.imeji.logic.auth.AuthenticationFactory;
 import de.mpg.imeji.logic.vo.User;
@@ -29,7 +27,6 @@ public class LoginBean
     private String login;
     private String passwd;
     private SessionBean sb;
-    private static Logger logger = Logger.getLogger(LoginBean.class);
 
     /**
      * Constructor

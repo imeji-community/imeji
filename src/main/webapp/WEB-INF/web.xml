@@ -124,14 +124,6 @@
 		<param-value>.xhtml</param-value>
 	</context-param>
 	<context-param>
-		<param-name>facelets.DEVELOPMENT</param-name>
-		<param-value>false</param-value>
-	</context-param>
-	<context-param>
-		<param-name>facelets.SKIP_COMMENTS</param-name>
-		<param-value>true</param-value>
-	</context-param>
-	<context-param>
 		<param-name>javax.faces.PROJECT_STAGE</param-name>
 		<param-value>Production</param-value>
 	</context-param>
@@ -145,7 +137,7 @@
 	</context-param>
 	<context-param>
 		<param-name>javax.faces.STATE_SAVING_METHOD</param-name>
-		<param-value>server</param-value>
+		<param-value>client</param-value>
 	</context-param>
 	<context-param>
 		<param-name>javax.faces.CONFIG_FILES</param-name>

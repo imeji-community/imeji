@@ -305,7 +305,8 @@ public class InternalStorageManager implements Serializable
         filename = StringHelper.normalizeFilename(filename);
         if (resolution != FileResolution.ORIGINAL)
         {
-            filename = FilenameUtils.removeExtension(filename) + ".jpg";
+            String extension = FilenameUtils.getExtension(filename);
+            filename = FilenameUtils.removeExtension(filename) + (extension.equals("gif") ? ".gif" : ".jpg");
         }
         return storageUrl + id + StringHelper.urlSeparator + resolution.name().toLowerCase()
                 + StringHelper.urlSeparator + filename;

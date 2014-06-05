@@ -44,6 +44,8 @@ import javax.imageio.metadata.IIOMetadataNode;
 import javax.imageio.stream.ImageInputStream;
 import javax.imageio.stream.ImageOutputStream;
 
+import org.w3c.dom.NamedNodeMap;
+
 import de.mpg.imeji.logic.storage.Storage.FileResolution;
 import de.mpg.imeji.presentation.upload.helper.AnimatedGifEncoder;
 
@@ -122,9 +124,9 @@ public class GifUtils
             AnimatedGifEncoder gifEncoder = new AnimatedGifEncoder();
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             gifEncoder.start(bos);
+            int delay = getAnimationDelay(reader, minIndex) * 10; // * 10 because seems to be correct...
+            gifEncoder.setDelay(delay);
             gifEncoder.setRepeat(0);
-            // out commented since the result is sometimes too fast
-            // gifEncoder.setDelay(getAnimationDelay(reader, minIndex));
             for (int i = minIndex; i < numberOfImages; i++)
             {
                 BufferedImage bi = reader.read(i);
@@ -184,6 +186,11 @@ public class GifUtils
             return 10;
         }
         IIOMetadataNode gce = (IIOMetadataNode)imgRootNode.getElementsByTagName("GraphicControlExtension").item(0);
+        NamedNodeMap map = gce.getAttributes();
+        for (int i = 0; i < map.getLength(); i++)
+        {
+            // System.out.println(map.item(i).getNodeName() + " , " + map.item(i).getNodeValue());
+        }
         return Integer.parseInt(gce.getAttribute("delayTime"));
     }
 }

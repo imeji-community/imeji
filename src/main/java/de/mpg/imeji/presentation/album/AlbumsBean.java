@@ -15,9 +15,11 @@ import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.presentation.beans.SuperContainerBean;
+import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
+import de.mpg.imeji.presentation.util.UrlHelper;
 
 /**
  * Bean for the Albums page
@@ -30,6 +32,7 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean>
 {
     private int totalNumberOfRecords;
     private SessionBean sb;
+    private String query = "";
 
     /**
      * Bean for the Albums page
@@ -65,6 +68,13 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean>
         sortCriterion.setIndex(Search.getIndex(getSelectedSortCriterion()));
         sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
         SearchQuery searchQuery = new SearchQuery();
+        query = UrlHelper.getParameterValue("q");
+        if (query == null)
+            query = "";
+        if (!"".equals(query))
+        {
+            searchQuery = URLQueryTransformer.parseStringQuery(query);
+        }
         if (getFilter() != null)
         {
             searchQuery.addLogicalRelation(LOGICAL_RELATIONS.AND);
@@ -125,5 +135,49 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean>
         }
         sb.getSelectedAlbums().clear();
         return "pretty:albums";
+    }
+
+    /**
+     * setter
+     * 
+     * @param query
+     */
+    public void setQuery(String query)
+    {
+        this.query = query;
+    }
+
+    /**
+     * getter
+     * 
+     * @return
+     */
+    public String getQuery()
+    {
+        return query;
+    }
+
+    /**
+     * Collection search is always a simple search (needed for searchQueryDisplayArea.xhtml component)
+     * 
+     * @return
+     */
+    public boolean isSimpleSearch()
+    {
+        return true;
+    }
+    
+    /**
+     * needed for searchQueryDisplayArea.xhtml component
+     * 
+     * @return
+     */
+    public String getSimpleQuery()
+    {
+        if (query != null)
+        {
+            return query;
+        }
+        return "";
     }
 }

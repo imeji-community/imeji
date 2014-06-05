@@ -128,7 +128,7 @@ public class MediaUtils
      * @throws IM4JavaException
      * @throws URISyntaxException
      */
-    public static String findColorSpace(File tmp)
+    private static String findColorSpace(File tmp)
     {
         try
         {

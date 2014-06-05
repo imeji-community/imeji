@@ -74,7 +74,6 @@ public class CollectionImagesBean extends ImagesBean
         ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).init(profile);
         browseInit();
         browseContext = getNavigationString() + id;
-        sb.setSelected(new ArrayList<String>());
         return "";
     }
 

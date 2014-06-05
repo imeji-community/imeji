@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.filter.Filter;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -35,12 +36,12 @@ public class Page
      * 
      * @param uri
      */
-    public Page(String url, String label, Map<String, String[]> params)
+    public Page(String url, String label, Map<String, String[]> params, User user)
     {
         this.setUrl(url);
         name = label;
         this.params = params;
-        title = loadTitle(PageURIHelper.extractId(getCompleteUrl()));
+        title = loadTitle(PageURIHelper.extractId(getCompleteUrl()), user);
     }
 
     /**
@@ -49,7 +50,7 @@ public class Page
      * @param id
      * @return
      */
-    private String loadTitle(URI id)
+    private String loadTitle(URI id, User user)
     {
         String title = "";
         if (id != null)
@@ -59,38 +60,30 @@ public class Page
             {
                 if (idString.matches(".+/collection/.+"))
                 {
-                    title = ObjectLoader
-                            .loadCollectionLazy(id,
-                                    ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getUser())
-                            .getMetadata().getTitle();
+                    title = ObjectLoader.loadCollectionLazy(id, user).getMetadata().getTitle();
                 }
                 else if (idString.matches(".+/album/.+"))
                 {
-                    title = ObjectLoader
-                            .loadAlbumLazy(id, ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getUser())
-                            .getMetadata().getTitle();
+                    title = ObjectLoader.loadAlbumLazy(id, user).getMetadata().getTitle();
                 }
                 else if (idString.matches(".+/item/.+"))
                 {
-                    title = ObjectLoader.loadItem(id,
-                            ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getUser()).getFilename();
+                    title = ObjectLoader.loadItem(id, user).getFilename();
                 }
                 else if (idString.matches(".+/userGroup/.+"))
                 {
-                    title = ObjectLoader.loadUserGroupLazy(id,
-                            ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getUser()).getName();
+                    title = ObjectLoader.loadUserGroupLazy(id, user).getName();
                 }
                 else if (idString.matches(".+/user/.+"))
                 {
-                    title = ObjectLoader.loadUser(id,
-                            ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getUser()).getName();
+                    title = ObjectLoader.loadUser(id, user).getName();
                 }
-//                Is now done in html page
-//                // Cut the name of the object
-//                if (title != null && title.length() > 20)
-//                {
-//                    title = title.substring(0, 20) + "...";
-//                }
+                // Is now done in html page
+                // // Cut the name of the object
+                // if (title != null && title.length() > 20)
+                // {
+                // title = title.substring(0, 20) + "...";
+                // }
             }
             catch (Exception e)
             {

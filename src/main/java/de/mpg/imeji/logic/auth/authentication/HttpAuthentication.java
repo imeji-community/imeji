@@ -129,4 +129,13 @@ public class HttpAuthentication implements Authentication
         }
         return null;
     }
+
+    /**
+     * True if the request has informations about the login (user and password)
+     * @return
+     */
+    public boolean hasLoginInfos()
+    {
+        return usernamePassword != null;
+    }
 }

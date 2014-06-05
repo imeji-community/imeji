@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -89,9 +90,10 @@ public class InitializerServlet extends HttpServlet
     {
         try
         {
-            if (!UserController.adminUserExist())
+            UserController uc = new UserController(Imeji.adminUser);
+            List<User> admins = uc.retrieveAllAdmins();
+            if (admins.size() > 0)
             {
-                UserController uc = new UserController(Imeji.adminUser);
                 try
                 {
                     User admin = uc.retrieve(Imeji.adminUser.getEmail());
@@ -109,7 +111,11 @@ public class InitializerServlet extends HttpServlet
             }
             else
             {
-                logger.info("Admin user already exists.");
+                logger.info("Admin user already exists:");
+                for (User admin : admins)
+                {
+                    logger.info(admin.getEmail() + " is admin");
+                }
             }
         }
         catch (AlreadyExistsException e)

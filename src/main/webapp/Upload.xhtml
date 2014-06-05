@@ -176,33 +176,32 @@
 								<h:outputLabel styleClass="imj_optionLabel" value="#{lbl.upload_directory_recursive}" for="selRecursive"/>
 							</div>
 						</ui:fragment>
-									
 					</h:form>
 				</div>
 				
-				<ui:fragment rendered="#{UploadSession.fFiles.size() > 0 or UploadSession.sFiles.size() > 0}">
+				<ui:fragment rendered="#{UploadBean.getfFiles().size() > 0 or UploadBean.getsFiles().size() > 0}">
 					<div class="imj_uploadMessageArea">
 						<h2 class="imj_headline">
 							<h:outputText value="#{lbl.info_lblMessageHeader}"/>
 						</h2>
-						<h:panelGroup layout="block" styleClass="imj_fileErrorMessageArea" rendered="#{UploadSession.fFiles.size() > 0 }">
+						<h:panelGroup layout="block" styleClass="imj_fileErrorMessageArea" rendered="#{UploadBean.getfFiles().size() > 0 }">
 							<h3 class="imj_sectionHeadline">
-								<h:outputText value="#{UploadSession.fFiles.size()} #{msg.error_upload}:"/>
+								<h:outputText value="#{UploadBean.getfFiles().size()} #{msg.error_upload}:"/>
 							</h3>
 							<ol class="imj_messageList">
-								<ui:repeat id="fFile" var="fFile" value="#{UploadSession.fFiles}">
+								<ui:repeat id="fFile" var="fFile" value="#{UploadBean.getfFiles()}">
 									<li class="imj_messageError">
 										<h:outputText value="#{fFile}"/>
 									</li>
 								</ui:repeat>
 							</ol>
 						</h:panelGroup>
-						<h:panelGroup layout="block" styleClass="imj_fileSuccessMessageArea" rendered="#{UploadSession.sFiles.size() > 0}">
+						<h:panelGroup layout="block" styleClass="imj_fileSuccessMessageArea" rendered="#{UploadBean.getsFiles().size() > 0}">
 							<h3 class="imj_sectionHeadline">
-								<h:outputText value="#{UploadSession.sFiles.size()} #{msg.success_upload}:" />
+								<h:outputText value="#{UploadBean.getsFiles().size()} #{msg.success_upload}:" />
 							</h3>
 							<ol class="imj_messageList">
-								<ui:repeat id="sFile" var="sFile" value="#{UploadSession.sFiles}">
+								<ui:repeat id="sFile" var="sFile" value="#{UploadBean.getsFiles()}">
 									<li class="imj_messageInfo">
 										<h:outputLink value="#{sFile.id}">
 											<h:outputText value="#{sFile.filename}"/>		
@@ -211,6 +210,7 @@
 								</ui:repeat>
 							</ol>
 						</h:panelGroup>
+						<h:outputText id="resetMessages" value="#{UploadSession.resetUploads()}" />
 					</div>
 				</ui:fragment>
 			</h:panelGroup>

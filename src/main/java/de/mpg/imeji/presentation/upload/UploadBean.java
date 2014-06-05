@@ -81,6 +81,7 @@ public class UploadBean implements Serializable
     private String formatWhiteList = "";
     private boolean recursive;
 
+
     /**
      * Construct the Bean and initalize the pages
      * 
@@ -100,6 +101,7 @@ public class UploadBean implements Serializable
     {
         readId();
         loadCollection();
+        
         if (UrlHelper.getParameterBoolean("init"))
         {
             ((UploadSession)BeanHelper.getSessionBean(UploadSession.class)).reset();
@@ -108,7 +110,7 @@ public class UploadBean implements Serializable
         }
         else if (UrlHelper.getParameterBoolean("start"))
         {
-            upload();
+        	upload();
         }
         else if (UrlHelper.getParameterBoolean("done"))
         {
@@ -135,6 +137,9 @@ public class UploadBean implements Serializable
     {
         HttpServletRequest req = (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext()
                 .getRequest();
+        
+       
+        
         boolean isMultipart = ServletFileUpload.isMultipartContent(req);
         if (isMultipart)
         {
@@ -146,6 +151,7 @@ public class UploadBean implements Serializable
                 FileItemIterator iter = upload.getItemIterator(req);
                 while (iter.hasNext())
                 {
+                	
                     FileItemStream fis = iter.next();
                     InputStream stream = fis.openStream();
                     if (!fis.isFormField())
@@ -696,12 +702,12 @@ public class UploadBean implements Serializable
         this.formatWhiteList = formatWhiteList;
     }
 
-    private List<String> getfFiles()
+    public List<String> getfFiles()
     {
         return ((UploadSession)BeanHelper.getSessionBean(UploadSession.class)).getfFiles();
     }
 
-    private List<Item> getsFiles()
+    public List<Item> getsFiles()
     {
         return ((UploadSession)BeanHelper.getSessionBean(UploadSession.class)).getsFiles();
     }

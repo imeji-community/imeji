@@ -238,7 +238,7 @@ public class ImejiAuthBean implements Serializable
      * True if the {@link User} can read the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      */
     public boolean read(User user, Object obj)
@@ -250,7 +250,7 @@ public class ImejiAuthBean implements Serializable
      * True if the {@link User} can create the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      */
     public boolean create(User user, Object obj)
@@ -262,7 +262,7 @@ public class ImejiAuthBean implements Serializable
      * True if the {@link User} can update the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      */
     public boolean update(User user, Object obj)
@@ -274,7 +274,7 @@ public class ImejiAuthBean implements Serializable
      * True if the {@link User} can delete the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      */
     public boolean delete(User user, Object obj)
@@ -286,7 +286,7 @@ public class ImejiAuthBean implements Serializable
      * True if the {@link User} can administrate the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      */
     public boolean admin(User user, Object obj)
@@ -298,7 +298,7 @@ public class ImejiAuthBean implements Serializable
      * True if the {@link User} can update the content of the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      */
     public boolean updateContent(User user, Object obj)
@@ -310,7 +310,7 @@ public class ImejiAuthBean implements Serializable
      * True if the {@link User} can delete the content of the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      */
     public boolean deleteContent(User user, Object obj)
@@ -322,7 +322,7 @@ public class ImejiAuthBean implements Serializable
      * True if the current {@link User} in the session can read the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      */
     public boolean read(Object obj)
@@ -334,7 +334,7 @@ public class ImejiAuthBean implements Serializable
      * True if the current {@link User} in the session can create the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      */
     public boolean create(Object obj)
@@ -346,7 +346,7 @@ public class ImejiAuthBean implements Serializable
      * True if the {@link User} can update the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      */
     public boolean update(Object obj)
@@ -358,7 +358,7 @@ public class ImejiAuthBean implements Serializable
      * True if the current {@link User} in the session can delete the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      */
     public boolean delete(Object obj)
@@ -370,7 +370,7 @@ public class ImejiAuthBean implements Serializable
      * True if the current {@link User} in the session can administrate the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      */
     public boolean admin(Object obj)
@@ -382,7 +382,7 @@ public class ImejiAuthBean implements Serializable
      * True if the {@link User} can update the content of the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      */
     public boolean updateContent(Object obj)
@@ -394,7 +394,7 @@ public class ImejiAuthBean implements Serializable
      * True if the {@link User} can delete the content of the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      */
     public boolean deleteContent(Object obj)
@@ -406,7 +406,7 @@ public class ImejiAuthBean implements Serializable
      * True if the current {@link User} in the session can administrate imeji (i.e. is system administrator)
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      */
     public boolean isAdmin()

@@ -158,7 +158,7 @@ public class SearchIndexInitializer
                 indexes.get(SearchIndex.names.md.name())));
         indexes = put(
                 indexes,
-                new SearchIndex(SearchIndex.names.link.name(), "http://imeji.org/terms/uri", indexes
+                new SearchIndex(SearchIndex.names.url.name(), "http://imeji.org/terms/uri", indexes
                         .get(SearchIndex.names.md.name())));
         indexes = put(indexes, new SearchIndex(SearchIndex.names.label.name(),
                 "http://www.w3.org/2000/01/rdf-schema#label", indexes.get(SearchIndex.names.md.name())));

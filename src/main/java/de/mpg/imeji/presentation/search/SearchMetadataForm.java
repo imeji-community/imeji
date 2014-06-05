@@ -215,7 +215,10 @@ public class SearchMetadataForm
                             searchValue, ns, not));
                     break;
                 case LINK:
-                    group.addPair(new SearchMetadata(Search.getIndex(SearchIndex.names.link.name()), operator,
+                    group.addPair(new SearchMetadata(Search.getIndex(SearchIndex.names.label), operator,
+                            searchValue, ns, not));
+                    group.addLogicalRelation(LOGICAL_RELATIONS.OR);
+                    group.addPair(new SearchMetadata(Search.getIndex(SearchIndex.names.url), operator,
                             searchValue, ns, not));
                     break;
             }

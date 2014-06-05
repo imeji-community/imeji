@@ -176,7 +176,7 @@ public class Authorization
      * Return true if the {@link User} can create the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      * @throws NotAllowedError
      */
@@ -191,7 +191,7 @@ public class Authorization
      * Check if the object can be created when the object is not existing
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      * @throws NotAllowedError
      */
@@ -208,7 +208,7 @@ public class Authorization
      * Return true if the {@link User} can read the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      * @throws NotAllowedError
      */
@@ -233,7 +233,7 @@ public class Authorization
      * Return true if the {@link User} can update the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      * @throws NotAllowedError
      */
@@ -251,7 +251,7 @@ public class Authorization
      * Return true if the {@link User} can delete the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      * @throws NotAllowedError
      */
@@ -270,7 +270,7 @@ public class Authorization
      * Return true if the {@link User} can administrate the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      * @throws NotAllowedError
      */
@@ -288,7 +288,7 @@ public class Authorization
      * Return true if the user can update the content of the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      */
     public boolean updateContent(User user, Object obj)
@@ -302,7 +302,7 @@ public class Authorization
      * Return true if the user can delete the content of the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      */
     public boolean deleteContent(User user, Object obj)
@@ -317,7 +317,7 @@ public class Authorization
      * Return true if the user can administrate the content of the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      */
     public boolean adminContent(User user, Object obj)

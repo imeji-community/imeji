@@ -83,19 +83,23 @@ public class HistoryFilter implements Filter
         HistorySession hs = getHistorySession(request);
         Navigation nav = getNavigation(request, resp);
         SessionBean session = getSessionBean(request);
-        String label = PageURIHelper.getPageLabel(PrettyContext.getCurrentInstance(request).getRequestURL().toURL());
-        String h = request.getParameter("h");
-        String uri = nav.getApplicationUri() + PrettyContext.getCurrentInstance(request).getRequestURL().toURL();
-        Map<String, String[]> params = PrettyContext.getCurrentInstance(request).getRequestQueryString()
-                .getParameterMap();
-        Page p = new Page(uri, label, params, session.getUser());
-        if (request.getParameter("h") == null)
+        if (session != null)
         {
-            hs.addPage(p);
-        }
-        else
-        {
-            hs.remove(Integer.parseInt(h));
+            String label = PageURIHelper
+                    .getPageLabel(PrettyContext.getCurrentInstance(request).getRequestURL().toURL());
+            String h = request.getParameter("h");
+            String uri = nav.getApplicationUri() + PrettyContext.getCurrentInstance(request).getRequestURL().toURL();
+            Map<String, String[]> params = PrettyContext.getCurrentInstance(request).getRequestQueryString()
+                    .getParameterMap();
+            Page p = new Page(uri, label, params, session.getUser());
+            if (request.getParameter("h") == null)
+            {
+                hs.addPage(p);
+            }
+            else
+            {
+                hs.remove(Integer.parseInt(h));
+            }
         }
     }
 

@@ -45,7 +45,13 @@
 								<h:outputText value="Link" rendered="#{md.label == ''}"/>
 								<h:outputText value="#{md.label}" rendered="#{md.label != ''}"/>
 							</h:outputLink>
-							<h:outputText value="#{md.license}" title="#{md.license}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#license'}"/>
+							<ui:fragment rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#license'}">
+								<h:outputText value="#{md.license}" rendered="#{md.externalUri== null and md.license != null}"/>
+								<h:outputLink rendered="#{md.externalUri != null}" value="#{md.externalUri}">
+									<h:outputText value="#{md.license}" rendered="#{md.license != null}"/>
+									<h:outputText value="#{md.externalUri}" rendered="#{md.license == null or md.license == ''}"/>
+								</h:outputLink>
+							</ui:fragment>
 							<h:panelGroup rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#conePerson'}">
 								<h:outputText value="#{md.person.familyName}, #{md.person.givenName}" title="#{md.person.familyName}, #{md.person.givenName}"/>
 								<h:outputText value="(#{md.person.organizationString})" title="(#{md.person.organizationString})" rendered="#{md.person.organizationString} != ''"/>

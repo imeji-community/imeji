@@ -19,7 +19,7 @@
 		<h:outputText styleClass="imj_metadataValueEntry" value="#{md.license}" rendered="#{md.externalUri== null and md.license != null}"/>
 		<h:outputLink rendered="#{md.externalUri != null}" value="#{md.externalUri}">
 			<h:outputText styleClass="imj_metadataValueEntry" value="#{md.license}" rendered="#{md.license != null}"/>
-			<h:outputText styleClass="imj_metadataValueEntry" value="#{md.externalUri}" rendered="#{md.license == null}"/>
+			<h:outputText styleClass="imj_metadataValueEntry" value="#{md.externalUri}" rendered="#{md.license == null or md.license == ''}"/>
 		</h:outputLink>
 	</ui:fragment>
 			

@@ -389,7 +389,7 @@ public class ShareBean implements Serializable
 	            BeanHelper.error(sb.getMessage("error") + ": Email not sent");
 	        }
         }
-        System.out.println("EMAIL" + this.emailInput);
+        //System.out.println("EMAIL" + this.emailInput);
     }
     
     private void addRoles (List<Grant> grants)

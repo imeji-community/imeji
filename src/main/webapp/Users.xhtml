@@ -56,7 +56,7 @@
 							<h:inputText value="#{UsersBean.query}" styleClass="imj_simpleSearchInput" />
 							<h:commandButton action="#{UsersBean.search()}" value="#{lbl.search}" styleClass="imj_simpleSearchButtonSubmit" />
 						</h:form>
-						<h:outputLink value="#{Navigation.applicationUrl}users" title="#{lbl.clear}" rendered="#{UsersBean.query != ''}" styleClass="imj_cancelButton">
+						<h:outputLink value="#{Navigation.applicationUrl}users?group=#{UsersBean.group.id}" title="#{lbl.clear}" rendered="#{UsersBean.query != ''}" styleClass="imj_cancelButton">
 							<h:outputText value="#{lbl.clear}" />
 						</h:outputLink>
 						<h:outputText value="(#{UsersBean.users.size()} #{lbl.users})" />

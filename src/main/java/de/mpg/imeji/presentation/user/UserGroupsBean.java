@@ -90,7 +90,7 @@ public class UserGroupsBean implements Serializable
      */
     public void search()
     {
-        Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
+       Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
         try
         {
             FacesContext

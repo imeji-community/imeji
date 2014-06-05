@@ -70,7 +70,7 @@ public class UsersBean implements Serializable
         try
         {
             FacesContext.getCurrentInstance().getExternalContext()
-                    .redirect(nav.getApplicationUrl() + "users?q=" + query);
+                    .redirect(nav.getApplicationUrl() + "users?q=" + query + (group != null ? "&group=" + group.getId() : ""));
         }
         catch (IOException e)
         {
@@ -98,7 +98,7 @@ public class UsersBean implements Serializable
      */
     public void retrieveGroup()
     {
-        if (UrlHelper.getParameterValue("group") != null)
+        if (UrlHelper.getParameterValue("group") != null && UrlHelper.getParameterValue("group") != "")
         {
             UserGroupController c = new UserGroupController();
             try

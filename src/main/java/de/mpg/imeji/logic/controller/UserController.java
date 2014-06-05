@@ -132,7 +132,6 @@ public class UserController
         Search search = new Search(SearchType.ALL, null);
         return loadUsers(search.searchSimpleForQuery(SPARQLQueries.selectUserAll(name), null));
     }
-    
 
     public Collection<User> retrieveUserWithGrantFor(String grantFor)
     {
@@ -182,5 +181,30 @@ public class UserController
             exist = true;
         }
         return exist;
+    }
+
+    /**
+     * Retrieve all admin users
+     * 
+     * @return
+     * @throws Exception
+     */
+    public List<User> retrieveAllAdmins()
+    {
+        Search search = new Search(SearchType.ALL, null);
+        List<String> uris = search.searchSimpleForQuery(SPARQLQueries.selectUserSysAdmin(), null);
+        List<User> admins = new ArrayList<User>();
+        for (String uri : uris)
+        {
+            try
+            {
+                admins.add(retrieve(uri));
+            }
+            catch (Exception e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+        return admins;
     }
 }

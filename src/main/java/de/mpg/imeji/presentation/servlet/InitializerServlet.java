@@ -92,7 +92,7 @@ public class InitializerServlet extends HttpServlet
         {
             UserController uc = new UserController(Imeji.adminUser);
             List<User> admins = uc.retrieveAllAdmins();
-            if (admins.size() > 0)
+            if (admins.size() == 0)
             {
                 try
                 {
@@ -114,7 +114,7 @@ public class InitializerServlet extends HttpServlet
                 logger.info("Admin user already exists:");
                 for (User admin : admins)
                 {
-                    logger.info(admin.getEmail() + " is admin");
+                    logger.info(admin.getEmail() + " is admin + (" + admin.getId() + ")");
                 }
             }
         }

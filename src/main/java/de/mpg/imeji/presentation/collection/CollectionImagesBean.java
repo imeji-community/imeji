@@ -72,8 +72,10 @@ public class CollectionImagesBean extends ImagesBean
         collection = ObjectLoader.loadCollectionLazy(uri, sb.getUser());
         this.profile = ObjectCachedLoader.loadProfile(collection.getProfile());
         ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).init(profile);
-        browseInit();
+        // browse context must be initialized before browseinit(), since the browseinit() will check if the selected
+        // items must be removed
         browseContext = getNavigationString() + id;
+        browseInit();
         return "";
     }
 

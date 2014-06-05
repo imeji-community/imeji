@@ -198,7 +198,7 @@ public class UserController
         {
             try
             {
-                admins.add(retrieve(uri));
+                admins.add(retrieve(URI.create(uri)));
             }
             catch (Exception e)
             {

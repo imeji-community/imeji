@@ -389,7 +389,7 @@ public class ShareBean implements Serializable
 	            BeanHelper.error(sb.getMessage("error") + ": Email not sent");
 	        }
         }
-        //System.out.println("EMAIL" + this.emailInput);
+        System.out.println("EMAIL" + this.emailInput);
     }
     
     private void addRoles (List<Grant> grants)
@@ -477,14 +477,17 @@ public class ShareBean implements Serializable
      */
     private void sendEmailToGroup(UserGroup group, String subject)
     {
-    	//TODO
         UserController c = new UserController(Imeji.adminUser);
         SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         for (URI uri : group.getUsers())
         {
             try
             {
-                sendEmail(c.retrieve(uri), subject, null);
+            	List<Grant> grants = getGrantsAccordingtoRoles(selectedRoles, getShareToUri(), profileUri);
+                User u = ObjectLoader.loadUser(uri, Imeji.adminUser);
+                GrantController gc = new GrantController();
+                gc.addGrants(u, grants, u);
+                sendEmail(c.retrieve(uri), subject, grants);
             }
             catch (Exception e)
             {

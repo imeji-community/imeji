@@ -373,19 +373,23 @@ public class ShareBean implements Serializable
     {
         EmailClient emailClient = new EmailClient();
         SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        this.getEmailMessage(this.user.getName(), dest.getName(), title, getShareToUri());
-
-        try
-        {
-        	this.addRoles(grants);
-            emailClient.sendMail(dest.getEmail(), null,
-                    subject.replaceAll("XXX_INSTANCE_NAME_XXX", sb.getInstanceName()), this.emailInput);
+        
+        if (grants != null && grants.size() > 0)
+	    {
+	        this.getEmailMessage(this.user.getName(), dest.getName(), title, getShareToUri());	
+	        try
+	        {
+	        	this.addRoles(grants);
+	            emailClient.sendMail(dest.getEmail(), null,
+	                    subject.replaceAll("XXX_INSTANCE_NAME_XXX", sb.getInstanceName()), this.emailInput);
+	        }
+	        catch (Exception e)
+	        {
+	            logger.error("Error sending email", e);
+	            BeanHelper.error(sb.getMessage("error") + ": Email not sent");
+	        }
         }
-        catch (Exception e)
-        {
-            logger.error("Error sending email", e);
-            BeanHelper.error(sb.getMessage("error") + ": Email not sent");
-        }
+        //System.out.println("EMAIL" + this.emailInput);
     }
     
     private void addRoles (List<Grant> grants)
@@ -461,8 +465,7 @@ public class ShareBean implements Serializable
         	}
         }
     
-    	this.emailInput += this.emailInput.replaceAll("XXX_RIGHTS_XXX", grantsStr.trim());
-    	System.out.println(this.emailInput);
+    	this.emailInput = this.emailInput.replaceAll("XXX_RIGHTS_XXX", grantsStr.trim());
     }
 
     /**
@@ -573,6 +576,7 @@ public class ShareBean implements Serializable
     private void getEmailMessage(String from, String to, String name, String link)
     {
         EmailMessages emailMessages = new EmailMessages();
+        this.emailInput = "";
         if (this.type.equals(SharedObjectType.COLLECTION))
         {
             this.emailInput = emailMessages.getSharedCollectionMessage(from, to, name, link);

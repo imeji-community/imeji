@@ -40,6 +40,7 @@ import org.apache.commons.lang.BooleanUtils;
 
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.presentation.util.PropertyReader;
+import de.mpg.imeji.presentation.util.UrlHelper;
 
 /**
  * Session for the upload page for the parameter which must be in a sesion (because of the upload which call the page
@@ -87,6 +88,19 @@ public class UploadSession
         checkNameUnique = true;
     }
 
+    /**
+     * Reset to default value
+     */
+    public String resetUploads()
+    {
+    	if ( UrlHelper.getParameterBoolean("done") ){
+	    	sFiles.clear();
+	        fFiles.clear();
+	        //return "Resetted";
+    	}
+    	return "";
+    }
+    
     public void uploadFileToItemListener()
     {
         this.importImageToFile = BooleanUtils.negate(importImageToFile);

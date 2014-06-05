@@ -38,7 +38,6 @@
 	<url-mapping id="upload">
 		<pattern value="/collection/#{UploadBean.id}/upload" />
 		<view-id>/jsf/Upload.xhtml</view-id>
-		<action onPostback="false">#{UploadBean.status}</action>
 	</url-mapping>
 	<url-mapping id="ingest">
 		<pattern value="/collection/#{IngestBean.collectionId}/ingest" />

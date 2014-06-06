@@ -56,7 +56,7 @@ public class ImejiAuthBean implements Serializable
     private static final long serialVersionUID = 4905896901833448372L;
     private static Authorization auth = new Authorization();
     @ManagedProperty(value = "#{SessionBean.user}")
-    private static User sessionUser;
+    private User sessionUser;
 
     /**
      * True if the {@link User} can read the uri
@@ -429,6 +429,6 @@ public class ImejiAuthBean implements Serializable
      */
     public void setSessionUser(User sessionUser)
     {
-        ImejiAuthBean.sessionUser = sessionUser;
+        this.sessionUser = sessionUser;
     }
 }

@@ -33,14 +33,17 @@ public class SessionObjectsController
      */
     public void reloadUser()
     {
-        UserController c = new UserController(session.getUser());
-        try
+        if (session.getUser() != null)
         {
-            session.setUser(c.retrieve(session.getUser().getId()));
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException(e);
+            try
+            {
+                UserController c = new UserController(session.getUser());
+                session.setUser(c.retrieve(session.getUser().getId()));
+            }
+            catch (Exception e)
+            {
+                throw new RuntimeException(e);
+            }
         }
     }
 

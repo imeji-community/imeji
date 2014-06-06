@@ -4,7 +4,9 @@
     xmlns:f="http://java.sun.com/jsf/core">
 
 	<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/datepicker.js"></script>
-	<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/autocomplete.js"></script>
+	<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/autocomplete.js"></script>		
+	
+	
 	<!-- METADATA INPUT PANEL <h:panelGroup layout="block" styleClass="imj_metadataInputPanel"> -->
 
 		<!-- METADATA TYPE TEXT -->
@@ -17,7 +19,7 @@
 
 		<!-- METADATA TYPE NUMBER -->
 		<h:panelGroup rendered="#{metadata.typeNamespace =='http://imeji.org/terms/metadata#number'}">
-			<h:inputText styleClass="imj_metadataEditNumber" immediate="false" onfocus="this.select(); getDatasourceUrl('#{statement.vocabulary}', '#{Navigation.autocompleteUrl}')" value="#{metadata.number}" rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}">
+			<h:inputText styleClass="imj_metadataEditNumber spinner" immediate="false" onkeypress="validateInputNumber(this);" onkeyup="validateInputNumber(this);"  onfocus="this.select(); getDatasourceUrl('#{statement.vocabulary}', '#{Navigation.autocompleteUrl}')" value="#{metadata.number}" rendered="#{!SuggestBean.suggests[statement.id].hasRestrictedValues}">
 				<f:converter converterId="DoubleConverter" />
 			</h:inputText>
 			<h:selectOneMenu styleClass="imj_metadataEditNumber" immediate="true" value="#{metadata.number}" rendered="#{SuggestBean.suggests[statement.id].hasRestrictedValues}" valueChangeListener="#{metadata.predefinedValueListener}">

@@ -1,4 +1,34 @@
 /**
+ * true if the input is a number
+ * 
+ * @param n
+ * @returns {Boolean}
+ */
+function isNumber(n) {
+	n = formatNumber(n);
+	return !isNaN(parseFloat(n)) && isFinite(n);
+}
+/**
+ * Return a number which can be validated
+ * @param n
+ * @returns
+ */
+function formatNumber(n){
+	return n.replace(",", '.').replace(" ", '');;
+}
+
+/**
+ * Validate the value of the imput number
+ * @param input
+ */
+function validateInputNumber(input) {
+	input.value = formatNumber(input.value);
+	if (!isNumber(input.value)) {
+		input.value = input.value.substring(0,input.value.length - 1);
+	}
+}
+
+/**
  * Parse the id define in the css class by id_class
  * 
  * @param classname
@@ -30,10 +60,10 @@ function highlighter() {
 			var prntId = parseId(jQuery(this).attr('class'), 'parent_');
 			highlight(itemId); // highlight the current element
 			checkForChilds(itemId);// highlight the child elements - recursive
-									// - of the current item, if it's given
+			// - of the current item, if it's given
 			if (prntId) { // check if the current item is a child of another
 				highlight(prntId, 'id_'); // hightlight the next parent item,
-											// if the current item is a child
+				// if the current item is a child
 			}
 		}).mouseout(function() {
 			reset_highlight();
@@ -53,7 +83,7 @@ function checkForChilds(id) {
 
 	if (childs.length > 0) { // if childs given
 		childs.each(function(i, obj) { // loop through the childs an check if
-										// themselves have also childs
+			// themselves have also childs
 			jQuery(this).addClass('imj_highlightDependencies');
 			curId = parseId(jQuery(this).attr('class'));
 			if (curId) {
@@ -82,7 +112,8 @@ function highlight(id, alter) {
  * definitions
  */
 function reset_highlight() {
-	jQuery('.imj_highlightDependencies').removeClass("imj_highlightDependencies");
+	jQuery('.imj_highlightDependencies').removeClass(
+			"imj_highlightDependencies");
 };
 
 /**
@@ -178,7 +209,7 @@ function unSelectUnique(index) {
  * @param optionsString -
  *            the options as string
  */
-function write_options(select,value, optionsString) {
+function write_options(select, value, optionsString) {
 	select.innerHTML = '';
 	var options = optionsString.split('|');
 	for ( var i = 0; i < options.length; i++) {
@@ -188,7 +219,7 @@ function write_options(select,value, optionsString) {
 		if (option.value != '') {
 			select.appendChild(option);
 		}
-		if(option.value == value){
+		if (option.value == value) {
 			option.selected = 'selected';
 		}
 	}

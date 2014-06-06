@@ -31,6 +31,8 @@ package de.mpg.imeji.presentation.auth;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -54,6 +56,7 @@ import de.mpg.imeji.presentation.session.SessionBean;
 public class AuthenticationFilter implements Filter
 {
     private FilterConfig filterConfig = null;
+    private Pattern jsfPattern = Pattern.compile(".*\\/jsf\\/.*\\.xhtml");
 
     /*
      * (non-Javadoc)
@@ -84,6 +87,15 @@ public class AuthenticationFilter implements Filter
                 if (httpAuthentification.hasLoginInfos())
                 {
                     session.setUser(httpAuthentification.doLogin());
+                }
+            }
+            else if (session != null && session.getUser() != null)
+            {
+                Matcher m = jsfPattern.matcher(request.getRequestURI());
+                if (m.matches())
+                {
+                    // reload the user each time a jsf page is called
+                    session.reloadUser();
                 }
             }
         }

@@ -65,8 +65,6 @@ public class ImejiAuthBean implements Serializable
      */
     public ImejiAuthBean()
     {
-        SessionObjectsController sc = new SessionObjectsController();
-        sc.reloadUser();
         this.sessionUser = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getUser();
     }
 

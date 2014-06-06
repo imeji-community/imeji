@@ -19,6 +19,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
 
+import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -232,6 +233,15 @@ public class SessionBean
     public void setSelectedImagesContext(String selectedImagesContext)
     {
         this.selectedImagesContext = selectedImagesContext;
+    }
+    
+    public void reloadUser() throws Exception
+    {
+        if(user != null)
+        {
+            UserController c = new UserController(user);
+            user = c.retrieve(user.getId());
+        }
     }
 
     /**

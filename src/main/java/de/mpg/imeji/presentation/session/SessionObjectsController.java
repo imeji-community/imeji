@@ -29,25 +29,6 @@ public class SessionObjectsController
     }
 
     /**
-     * Releaod the {@link User} of the currrent session from the database
-     */
-    public void reloadUser()
-    {
-        if (session.getUser() != null)
-        {
-            try
-            {
-                UserController c = new UserController(session.getUser());
-                session.setUser(c.retrieve(session.getUser().getId()));
-            }
-            catch (Exception e)
-            {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
-    /**
      * Add the item to the {@link List} of selected {@link Item} stored in the {@link SessionBean}.
      * 
      * @param itemURI

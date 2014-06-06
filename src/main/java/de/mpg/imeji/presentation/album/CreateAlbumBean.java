@@ -28,6 +28,7 @@
  */
 package de.mpg.imeji.presentation.album;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
@@ -61,7 +62,6 @@ public class CreateAlbumBean extends AlbumBean
     /**
      * Called when bean page is called
      */
-
     public void init()
     {
         setAlbum(new Album());

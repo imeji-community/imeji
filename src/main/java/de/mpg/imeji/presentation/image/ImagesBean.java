@@ -109,6 +109,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
      */
     public String getInitPage()
     {
+       
         browseInit();
         isSimpleSearch = URLQueryTransformer.isSimpleSearch(searchQuery);
         browseContext = getNavigationString();

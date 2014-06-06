@@ -33,7 +33,7 @@ public class FacetsBean implements Callable<Boolean>
     public Boolean call() throws Exception
     {
         running = true;
-        facetsClass.init();
+        //facetsClass.init();
         facets = facetsClass.getFacets();
         running = false;
         return running;

@@ -442,7 +442,7 @@ public class AlbumBean extends ContainerBean
         {
             makeInactive();
             c.delete(album, sessionBean.getUser());
-            BeanHelper.info(sessionBean.getMessage("success_album_delete"));
+            BeanHelper.info(sessionBean.getMessage("success_album_delete").replace("XXX_albumName_XXX", this.album.getMetadata().getTitle()));
         }
         catch (Exception e)
         {

@@ -32,6 +32,7 @@
 	</ui:define>
 	
 	<ui:define name="searchQuery">
-		<imjc:searchQueryDisplayArea searchBean="#{paginatorListSessionBean}" navBean="#{Navigation}" rendered="#{paginatorListSessionBean.simpleQuery != ''}"/>
+		<imjc:searchQueryDisplayArea searchBean="#{paginatorListSessionBean}" navBean="#{Navigation}" 
+									 rendered="#{paginatorListSessionBean.simpleQuery != null}"/>
 	</ui:define>
 </ui:composition>

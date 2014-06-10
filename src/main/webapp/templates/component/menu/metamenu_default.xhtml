@@ -61,7 +61,9 @@ All rights reserved. Use is subject to license terms.
 				<h:panelGroup rendered="#{!Auth.loggedIn}" styleClass="imj_metaMenuItem">
 					<h:inputText value="#{LoginBean.login}" placeholder=""/>
 					<h:inputSecret value="#{LoginBean.passwd}" placeholder=""/>
-					<h:commandButton id="lnkLogin" title="#{lbl.login}" value="#{lbl.login}" action="#{LoginBean.doLogin}"/>
+					<h:commandLink id="lnkLogin" title="#{lbl.login}" action ="#{LoginBean.doLogin}" styleClass="imj_metaMenuItem">
+			    		<h:outputText value="#{lbl.login}"></h:outputText>
+			   		 </h:commandLink>
 				</h:panelGroup>
 				
 				<h:commandLink id="lnkLogout" title="#{lbl.logout}" action ="#{LoginBean.logout}" styleClass="imj_metaMenuItem" rendered="#{Auth.loggedIn}">
@@ -79,8 +81,8 @@ All rights reserved. Use is subject to license terms.
 			<h:outputText styleClass="imj_metaMenuSeparator" value="&#160;"/>
 			
 			<!-- Language -->
-			<h:form id="langForm" onsubmit="/*setTimeout(function () { window.location.reload(); }, 20);*/" >
-				<h:selectOneMenu  value="#{Internationalization.currentLanguage}" onchange="document.getElementById('Header:langForm:submitLang').click();" valueChangeListener="#{Internationalization.currentlanguageListener}" styleClass="imj_metaMenuItem">
+			<h:form id="langForm" onsubmit="/*setTimeout(function () { window.location.reload(); }, 20);*/" >	
+				<h:selectOneMenu  value="#{Internationalization.currentLanguage}" onchange="document.getElementById('Header:langForm:submitLang').click();" valueChangeListener="#{Internationalization.currentlanguageListener}" styleClass="imj_metaMenuItemSelect">
 					<f:selectItems value="#{Internationalization.internationalizedLanguages}"/>
 				</h:selectOneMenu>
 				<h:commandButton id="submitLang" action="#{Internationalization.changeLanguage}" value="Change language" styleClass="imj_noDisplay" >

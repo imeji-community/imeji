@@ -42,7 +42,7 @@
 		</ui:fragment>
         
         <!-- User not allowed to view item -->
-        <h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!Auth.read(imageBean.image) and SessionBean.user == null and !MessagesBean.hasMessages}">
+        <h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!Auth.read(imageBean.image) and !Auth.loggedIn and !MessagesBean.hasMessages}">
         	<ui:include src="../../include/LoginFormular.xhtml"/>
 		</h:panelGroup>
 		

@@ -83,6 +83,11 @@ public class UploadSession
     {
         sFiles.clear();
         fFiles.clear();
+        resetProperties();
+    }
+
+    public void resetProperties()
+    {
         importImageToFile = false;
         uploadFileToItem = false;
         checkNameUnique = true;
@@ -93,14 +98,14 @@ public class UploadSession
      */
     public String resetUploads()
     {
-    	if ( UrlHelper.getParameterBoolean("done") ){
-	    	sFiles.clear();
-	        fFiles.clear();
-	        //return "Resetted";
-    	}
-    	return "";
+        if (UrlHelper.getParameterBoolean("done"))
+        {
+            sFiles.clear();
+            fFiles.clear();
+        }
+        return "";
     }
-    
+
     public void uploadFileToItemListener()
     {
         this.importImageToFile = BooleanUtils.negate(importImageToFile);

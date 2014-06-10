@@ -40,7 +40,7 @@
 			<!-- List -->
 			<ui:fragment rendered="#{paginatorListSessionBean.totalNumberOfRecords > 0}">
 				<div id="imj_listBody">
-					<ui:fragment rendered="#{SessionBean.user == null}">
+					<ui:fragment rendered="#{!Auth.loggedIn}">
 						<imjc:bibliographicList_loggedOut mediaList="#{paginatorListSessionBean}" globalDisplayLinkText="#{globalDisplayLinkText}" metadataNavigationURL="#{metadataNavigationURL}"/>
 					</ui:fragment>
 					<ui:fragment rendered="#{Auth.loggedIn}">

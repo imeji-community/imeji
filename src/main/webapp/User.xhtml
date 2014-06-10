@@ -171,7 +171,7 @@
 										</div>
 										<div class="imj_admindataValue">
 											<div class="imj_admindataValueEntry">
-												<ui:fragment rendered="#{SessionBean.user.admin}">
+												<ui:fragment rendered="#{Auth.admin}">
 													<div>
 														<h:selectBooleanCheckbox value="#{UserBean.user.allowedToCreateCollection}" readonly="true" styleClass="imj_admindataCheckbox" onchange="document.getElementById('grantForm:toggleCreate').click()"/>
 														<h:outputText value="#{lbl.allowedToCreateCollection}"/>

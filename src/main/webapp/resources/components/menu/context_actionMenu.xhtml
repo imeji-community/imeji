@@ -41,7 +41,7 @@
 					</div>
 					<div class="imj_menuBody">
 						<ul class="imj_overlayMenuList">
-							<ui:fragment rendered="#{SessionBean.user.allowedToCreateCollection}">
+							<ui:fragment rendered="#{Auth.sessionUser.allowedToCreateCollection}">
 								<li>
 									<h:outputLink value="#{cc.attrs.navBean.createCollectionUrl}?reset=1" title="#{lbl.collection_create}">
 										<h:outputText value="#{lbl.collection_create}"/>
@@ -53,7 +53,7 @@
 									<h:outputText value="#{lbl.album_create}"/>
 								</h:outputLink>
 							</li>
-							<ui:fragment rendered="#{SessionBean.user.admin}">
+							<ui:fragment rendered="#{Auth.sessionUser.admin}">
 								<li>
 									<a href="#{Navigation.applicationUrl}createuser" title="#{lbl.admin_user_new}">
 										<h:outputText value="#{lbl.admin_user_new}"/>

@@ -4,7 +4,6 @@
 package de.mpg.imeji.presentation.collection;
 
 import java.net.URI;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -12,7 +11,6 @@ import java.util.List;
 import com.hp.hpl.jena.sparql.pfunction.library.container;
 
 import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
@@ -70,12 +68,7 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
     @Override
     public List<CollectionListItem> retrieveList(int offset, int limit) throws Exception
     {
-        UserController uc = new UserController(sb.getUser());
         initMenus();
-        if (sb.getUser() != null)
-        {
-            sb.setUser(uc.retrieve(sb.getUser().getEmail()));
-        }
         CollectionController controller = new CollectionController(sb.getUser());
         Collection<CollectionImeji> collections = new ArrayList<CollectionImeji>();
         SearchQuery searchQuery = new SearchQuery();

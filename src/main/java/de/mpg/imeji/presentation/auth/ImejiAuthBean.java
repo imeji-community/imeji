@@ -37,6 +37,7 @@ import de.mpg.imeji.logic.auth.Authorization;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.session.SessionObjectsController;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
@@ -59,6 +60,7 @@ public class ImejiAuthBean implements Serializable
     private User sessionUser;
 
     /**
+     * 
      * 
      */
     public ImejiAuthBean()
@@ -422,5 +424,21 @@ public class ImejiAuthBean implements Serializable
     public boolean isLoggedIn()
     {
         return sessionUser != null;
+    }
+
+    /**
+     * @return the sessionUser
+     */
+    public User getSessionUser()
+    {
+        return sessionUser;
+    }
+
+    /**
+     * @param sessionUser the sessionUser to set
+     */
+    public void setSessionUser(User sessionUser)
+    {
+        this.sessionUser = sessionUser;
     }
 }

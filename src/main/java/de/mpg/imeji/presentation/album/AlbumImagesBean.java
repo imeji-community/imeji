@@ -35,10 +35,10 @@ import de.mpg.imeji.presentation.util.ObjectLoader;
  */
 public class AlbumImagesBean extends ImagesBean
 {
-    private String id = null;
+    private String id;
     private Album album;
     private URI uri;
-    private SessionBean session;
+    private SessionBean sb;
     private CollectionImeji collection;
     private Navigation navigation;
 
@@ -46,20 +46,19 @@ public class AlbumImagesBean extends ImagesBean
      * Constructor
      */
     public AlbumImagesBean()
-    {
+    { 
         super();
-        session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
+        sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        this.navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
     }
 
     @Override
     public String getInitPage()
-    {
-        getNavigationString();
+    { 
         uri = ObjectHelper.getURI(Album.class, id);
         loadAlbum();
-        browseInit();
         browseContext = getNavigationString() + id;
+        browseInit();
         return "";
     }
 
@@ -72,7 +71,7 @@ public class AlbumImagesBean extends ImagesBean
     @Override
     public SearchResult search(SearchQuery searchQuery, SortCriterion sortCriterion)
     {
-        ItemController controller = new ItemController(session.getUser());
+        ItemController controller = new ItemController(sb.getUser());
         return controller.search(uri, searchQuery, sortCriterion, null);
     }
 
@@ -81,7 +80,7 @@ public class AlbumImagesBean extends ImagesBean
      */
     public void loadAlbum()
     {
-        album = ObjectLoader.loadAlbumLazy(uri, session.getUser());
+        album = ObjectLoader.loadAlbumLazy(uri, sb.getUser());
     }
 
     @Override
@@ -98,8 +97,8 @@ public class AlbumImagesBean extends ImagesBean
      */
     public String removeFromAlbum() throws Exception
     {
-        removeFromAlbum(session.getSelected());
-        session.getSelected().clear();
+        removeFromAlbum(sb.getSelected());
+        sb.getSelected().clear();
         return "pretty:";
     }
 
@@ -111,8 +110,8 @@ public class AlbumImagesBean extends ImagesBean
      */
     public String removeFromActiveAlbum() throws Exception
     {
-        removeFromActive(session.getSelected());
-        session.getSelected().clear();
+        removeFromActive(sb.getSelected());
+        sb.getSelected().clear();
         return "pretty:";
     }
 
@@ -136,7 +135,7 @@ public class AlbumImagesBean extends ImagesBean
      */
     public String removeAllFromActiveAlbum() throws Exception
     {
-        removeAllFromAlbum(session.getActiveAlbum());
+        removeAllFromAlbum(sb.getActiveAlbum());
         return "pretty:";
     }
 
@@ -150,7 +149,7 @@ public class AlbumImagesBean extends ImagesBean
     {
         album.setImages(new ArrayList<URI>());
         AlbumController ac = new AlbumController();
-        ac.update(album, session.getUser());
+        ac.update(album, sb.getUser());
     }
 
     /**
@@ -161,8 +160,8 @@ public class AlbumImagesBean extends ImagesBean
      */
     private void removeFromAlbum(List<String> uris) throws Exception
     {
-        if (session.getActiveAlbum() != null
-                && album.getId().toString().equals(session.getActiveAlbum().getId().toString()))
+        if (sb.getActiveAlbum() != null
+                && album.getId().toString().equals(sb.getActiveAlbum().getId().toString()))
         {
             // if the current album is the active album as well
             removeFromActive(uris);
@@ -170,10 +169,10 @@ public class AlbumImagesBean extends ImagesBean
         else
         {
             ItemController ic = new ItemController();
-            album = (Album)ic.loadContainerItems(album, session.getUser(), -1, 0);
+            album = (Album)ic.loadContainerItems(album, sb.getUser(), -1, 0);
             AlbumController ac = new AlbumController();
-            int deletedCount = ac.removeFromAlbum(album, uris, session.getUser());
-            BeanHelper.info(deletedCount + " " + session.getMessage("success_album_remove_images"));
+            int deletedCount = ac.removeFromAlbum(album, uris, sb.getUser());
+            BeanHelper.info(deletedCount + " " + sb.getMessage("success_album_remove_images"));
         }
     }
 
@@ -186,11 +185,11 @@ public class AlbumImagesBean extends ImagesBean
     private void removeFromActive(List<String> uris) throws Exception
     {
         SessionObjectsController soc = new SessionObjectsController();
-        int before = session.getActiveAlbumSize();
+        int before = sb.getActiveAlbumSize();
         soc.removeFromActiveAlbum(uris);
-        int deleted = before - session.getActiveAlbumSize();
-        session.getSelected().clear();
-        BeanHelper.info(deleted + " " + session.getMessage("success_album_remove_images"));
+        int deleted = before - sb.getActiveAlbumSize();
+        sb.getSelected().clear();
+        BeanHelper.info(deleted + " " + sb.getMessage("success_album_remove_images"));
     }
 
     @Override
@@ -291,4 +290,5 @@ public class AlbumImagesBean extends ImagesBean
     {
         return album;
     }
+    
 }

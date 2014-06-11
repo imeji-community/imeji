@@ -71,6 +71,16 @@
 			<organization>Max Planck Digital Library</organization>
 			<timezone>+2</timezone>
 		</developer>
+		<developer>
+			<id>YanYao</id>
+			<name>Yan Yao</name>
+			<email>yao@mpdl.mpg.de</email>
+			<roles>
+				<role>Software developer</role>
+			</roles>
+			<organization>Max Planck Digital Library</organization>
+			<timezone>+2</timezone>
+		</developer>
 	</developers>
 	<mailingLists>
 		<mailingList>

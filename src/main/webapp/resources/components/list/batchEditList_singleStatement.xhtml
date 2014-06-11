@@ -40,7 +40,7 @@
 				<div class="imj_metadataSet">
 					<h:outputText value="#{cc.attrs.itemLabelBean.internationalizedLabels[cc.attrs.itemStatement.id]} (#{cc.attrs.itemLabelBean.lang})" styleClass="imj_metadataLabel" rendered="#{cc.attrs.hideLabel == false}"/>
 					
-					<h:inputText immediate="false" onfocus="this.select(); getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.number}" rendered="#{!cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
+					<h:inputText immediate="false" onfocus="this.select(); getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')"  onkeypress="validateInputNumber(this);" onkeyup="validateInputNumber(this);" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.number}" rendered="#{!cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
 						<f:converter converterId="DoubleConverter"/>
 					</h:inputText>
 					<h:panelGroup layout="block" styleClass="imj_metadataValue" rendered="#{cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">

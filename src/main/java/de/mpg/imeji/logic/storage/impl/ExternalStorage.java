@@ -49,6 +49,7 @@ import de.mpg.imeji.presentation.util.ProxyHelper;
  */
 public class ExternalStorage implements Storage
 {
+    private static final long serialVersionUID = -5808761436385828641L;
     private HttpClient client;
 
     /**

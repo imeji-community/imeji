@@ -407,7 +407,9 @@ public class ImageUtils
         }
         else
         {
-            bufferedImage = image;
+            size = image.getWidth() > image.getHeight() ? image.getWidth() : image.getHeight();
+            bufferedImage = scaleImageFast(image, size, resolution);
+            // bufferedImage = image;
         }
         return bufferedImage;
     }

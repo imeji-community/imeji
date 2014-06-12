@@ -202,7 +202,8 @@ input[type=radio   ]:checked + label > span{
 
 input[type=radio]:checked + label > span > span{
   display          : block;
-  height           : 0.45em;
+  height           : 50%;
+  width			   : 50%;
   margin           : 0.15em;
   border           : 0.0625em solid #292929;
   border-radius    : 0.5em;
@@ -522,18 +523,25 @@ iframe#twitter-widget-0 div.root div.stream {
 	border: solid #6CAE2F 0.090909em;
 }
 
-.imj_metaMenuStandardSingleLine .imj_metaMenuItemSelect {
+.imj_metaMenuStandardSingleLine .imj_metaMenuItemSelect{
 	height: 1.454545em;
 	color: #F2F2F2;
 	background-color: #292929;
 	border: solid #6CAE2F 0.090909em;
-	-webkit-appearance: none;  /*Removes default chrome and safari style*/
-    -moz-appearance: none;  /*Removes default style Firefox*/
+	-webkit-appearance: none;  	/*Removes default chrome and safari style*/
+    -moz-appearance: none;  	/*Removes default style Firefox*/
+    -ms-appearance: none;  	
+    -o-appearance: none;  	
     background: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAE2F/imjButtonTriangleSortDesc_16.png")  no-repeat;
     background-position: 82px;          
     width: 100px;            
     text-indent: 0.01px;          
-    text-overflow: "";             
+    text-overflow: ""; 
+}
+
+.imj_metaMenuItemSelect option{
+	color: #F2F2F2;
+	background-color: #292929;
 }
 
 .imj_metaMenuStandardSingleLine .imj_metaMenuItem input[type="text"],

@@ -385,7 +385,7 @@ public class SimpleQueryFactory
             switch (pair.getOperator())
             {
                 case REGEX:
-                    filter += "regex(" + variable + ", '" + escapeApostroph(pair.getValue()) + "', 'i')";
+                    filter += "regex(str(" + variable + "), '" + escapeApostroph(pair.getValue()) + "', 'i')";
                     break;
                 case EQUALS:
                     filter += variable + "=" + getSearchValueInSPARQL(pair.getValue(), isRDFDate(pair));

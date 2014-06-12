@@ -156,6 +156,13 @@ input:focus {
 	border-style: solid;
 }
 
+input[type="checkbox"] {
+margin: 0;
+outline: none;
+background-color: transparent;
+border: 0;
+}
+
 input[type=radio]{
   margin    : 0;
   padding   : 0;
@@ -175,7 +182,7 @@ input[type=radio] + label > span{
   height           : 0.875em;
   margin           : 0.25em 0.5em 0.25em 0.25em;
   border           : 0.0625em solid #6CAE2F;
-  border-radius    : 0.25em;
+  border-radius    : 0.5em;
   background       : #292929;
   background-image :    -moz-linear-gradient(#292929,#292929);
   background-image :     -ms-linear-gradient(#292929,#292929);
@@ -195,11 +202,10 @@ input[type=radio   ]:checked + label > span{
 
 input[type=radio]:checked + label > span > span{
   display          : block;
-  height           : 0.5em;
-  margin           : 0.125em;
+  height           : 0.45em;
+  margin           : 0.15em;
   border           : 0.0625em solid #292929;
-  border-radius    : 0.125em;
-  background       : rgb(153,204,102);
+  border-radius    : 0.5em;
   background-image :    -moz-linear-gradient(rgb(179,217,140),rgb(153,204,102));
   background-image :     -ms-linear-gradient(rgb(179,217,140),rgb(153,204,102));
   background-image :      -o-linear-gradient(rgb(179,217,140),rgb(153,204,102));
@@ -580,7 +586,7 @@ iframe#twitter-widget-0 div.root div.stream {
    ================================================== */
 .imj_simpleSearch {
 	float: right;
-	margin: 1.5em 0 0 0;
+	margin: 0 0 0 0;
 	overflow: visible;
 }
 
@@ -592,7 +598,7 @@ iframe#twitter-widget-0 div.root div.stream {
 
 .imj_simpleSearchInput {
 	width: 17em;
-	padding: 0.25em 1em 0.1em 1em;
+	padding: 0.75% 1em 0.1em 1em;
 	border-radius: 5px 0px 0px 5px; 
 }
 
@@ -1007,7 +1013,6 @@ a:hover .imj_buttonSortAscending_16 {
    ================================================== */
 .imj_mainMenuStandard {
 	display: inline-block;
-	width: 98%;
 	padding: 0 3%;
 	margin-bottom: 0.454545em;
 	font-size: 135%;

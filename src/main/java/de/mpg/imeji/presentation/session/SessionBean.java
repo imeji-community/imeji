@@ -64,6 +64,7 @@ public class SessionBean
     private Style selectedCss = Style.NONE;
     public final static String styleCookieName = "IMEJI_STYLE";
     public final static String langCookieName = "IMEJI_LANG";
+    public boolean showLogin = false;
 
     /**
      * The session Bean for imeji
@@ -524,4 +525,13 @@ public class SessionBean
         itemList.add(new SelectItem(ShareType.ADMIN, getLabel("album_share_admin")));
         return itemList;
     }
+    
+    
+    public boolean isShowLogin() {
+		return showLogin;
+	}
+
+	public void setShowLogin(boolean showLogin) {
+		this.showLogin = showLogin;
+	}
 }

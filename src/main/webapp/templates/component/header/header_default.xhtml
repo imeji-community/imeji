@@ -50,15 +50,13 @@ All rights reserved. Use is subject to license terms.
 						<h:panelGroup styleClass="imj_siteHeaderLogo"/>
 					</h:outputLink>
 				</div>
-		
-				<!-- import search here-->
-				<ui:include src="../menu/searchmenu_default.xhtml"/>
-		
+				<div>
+					<!-- place main menu here -->
+					<menu:mainMenu navBean="#{Navigation}" curMainMenu="#{currentMainMenu}" menuClass="imj_mainMenuStandard" userHasAdminRights="#{Auth.admin}"/>			
+					<!-- import search here-->
+					<ui:include src="../menu/searchmenu_default.xhtml"/>
+				</div>
 			</h:panelGroup>
-		
-			<!-- place main menu here -->
-			<menu:mainMenu navBean="#{Navigation}" curMainMenu="#{currentMainMenu}" menuClass="imj_mainMenuStandard" userHasAdminRights="#{Auth.admin}"/>
-			
 		</h:panelGroup>
 	</f:subview>
 </ui:composition>

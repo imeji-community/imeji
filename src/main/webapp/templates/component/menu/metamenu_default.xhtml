@@ -40,13 +40,6 @@ All rights reserved. Use is subject to license terms.
 		
 		<h:panelGroup styleClass="imj_metaMenuItemsAlign">
 			
-			<!-- CSS Switcher -->
-			<ui:fragment rendered="#{Configuration.alternativeCss != null and Configuration.alternativeCss != ''}">
-				<h:form>
-					<h:commandButton value="&#160;" action="#{SessionBean.toggleCss()}" styleClass="imj_metaMenuItem imj_buttonStyleSwitcher"/>
-				</h:form>
-			</ui:fragment>
-			
 			<!-- Username if logged in -->
 			<ui:fragment rendered="#{Auth.loggedIn}">
 				<h:outputLink id="txtAccountUserName" title="#{lbl.goto_user_profile}" styleClass="imj_metaMenuItem" value="#{Navigation.applicationUrl}user?id=#{Auth.sessionUser.email}">
@@ -59,11 +52,20 @@ All rights reserved. Use is subject to license terms.
 			<!-- LogIn, LogOut -->
 			<h:form id="loginForm">
 				<h:panelGroup rendered="#{!Auth.loggedIn}" styleClass="imj_metaMenuItem">
-					<h:inputText value="#{LoginBean.login}" placeholder=""/>
-					<h:inputSecret value="#{LoginBean.passwd}" placeholder=""/>
-					<h:commandLink id="lnkLogin" title="#{lbl.login}" action ="#{LoginBean.doLogin}" styleClass="imj_metaMenuItem">
-			    		<h:outputText value="#{lbl.login}"></h:outputText>
-			   		 </h:commandLink>
+					<h:panelGroup rendered="#{!SessionBean.showLogin}">
+						<h:inputText value="#{LoginBean.login}" placeholder="" style="display:none"/>
+						<h:inputSecret value="#{LoginBean.passwd}" placeholder="" style="display:none"/>
+						<h:commandLink id="lnkLogin1" title="#{lbl.login}" action ="#{LoginBean.loginClick}" styleClass="imj_metaMenuItem">
+			    			<h:outputText value="#{lbl.login}"></h:outputText>
+			   			</h:commandLink>
+					</h:panelGroup>
+					<h:panelGroup rendered="#{SessionBean.showLogin}">
+						<h:inputText value="#{LoginBean.login}" placeholder=""/>
+						<h:inputSecret value="#{LoginBean.passwd}" placeholder=""/>
+						<h:commandLink id="lnkLogin" title="#{lbl.login}" action ="#{LoginBean.doLogin}" styleClass="imj_metaMenuItem">
+			    			<h:outputText value="#{lbl.login}"></h:outputText>
+			   			</h:commandLink>
+					</h:panelGroup>
 				</h:panelGroup>
 				
 				<h:commandLink id="lnkLogout" title="#{lbl.logout}" action ="#{LoginBean.logout}" styleClass="imj_metaMenuItem" rendered="#{Auth.loggedIn}">
@@ -88,6 +90,16 @@ All rights reserved. Use is subject to license terms.
 				<h:commandButton id="submitLang" action="#{Internationalization.changeLanguage}" value="Change language" styleClass="imj_noDisplay" >
 				</h:commandButton>
 			</h:form>
+			
+			<h:outputText styleClass="imj_metaMenuSeparator" value="&#160;"/>
+			
+			<!-- CSS Switcher -->
+			<ui:fragment rendered="#{Configuration.alternativeCss != null and Configuration.alternativeCss != ''}">
+				<h:form>
+					<h:commandButton value="&#160;" action="#{SessionBean.toggleCss()}" styleClass="imj_metaMenuItem imj_buttonStyleSwitcher"/>
+				</h:form>
+			</ui:fragment>
+			
 		</h:panelGroup>
 	</h:panelGroup>
 	

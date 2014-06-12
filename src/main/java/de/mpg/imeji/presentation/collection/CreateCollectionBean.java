@@ -32,6 +32,8 @@ import de.mpg.imeji.presentation.util.UrlHelper;
 @SessionScoped
 public class CreateCollectionBean extends CollectionBean
 {
+    private static final long serialVersionUID = 1257698224590957642L;
+
     /**
      * Bean Constructor
      */

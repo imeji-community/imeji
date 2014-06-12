@@ -17,7 +17,6 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
 	version="2.0">
 
-
 	<!-- Collections Bean -->
 	<managed-bean>
 		<managed-bean-name>CollectionsBean</managed-bean-name>
@@ -103,7 +102,7 @@
 	<managed-bean>
 		<managed-bean-name>AlbumBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.album.AlbumBean</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
+		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>AlbumsBean</managed-bean-name>

@@ -33,6 +33,8 @@ import de.mpg.imeji.presentation.util.UrlHelper;
  */
 public abstract class CollectionBean extends ContainerBean
 {
+    private static final long serialVersionUID = -3071769388574710503L;
+
     public enum TabType
     {
         COLLECTION, PROFILE, HOME, UTIL;

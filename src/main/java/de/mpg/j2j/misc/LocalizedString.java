@@ -1,5 +1,7 @@
 package de.mpg.j2j.misc;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -11,8 +13,9 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @version $Revision$ $LastChangedDate$
  */
 @XmlRootElement(name = "label", namespace = "http://www.w3.org/2000/01/rdf-schema#")
-public class LocalizedString
+public class LocalizedString implements Serializable
 {
+    private static final long serialVersionUID = 6853407399087925507L;
     private String value;
     private String lang;
 
@@ -64,11 +67,11 @@ public class LocalizedString
     @XmlAttribute(name = "lang")
     public String getLang()
     {
-    	//Set en as default language
-    	if (lang == null || lang.equals(""))
-    	{
-    		lang = "en";
-    	}
+        // Set en as default language
+        if (lang == null || lang.equals(""))
+        {
+            lang = "en";
+        }
         return lang;
     }
 

@@ -28,7 +28,6 @@
  */
 package de.mpg.imeji.presentation.album;
 
-import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
@@ -36,7 +35,6 @@ import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 
@@ -51,6 +49,8 @@ import de.mpg.imeji.presentation.util.ImejiFactory;
 @SessionScoped
 public class CreateAlbumBean extends AlbumBean
 {
+    private static final long serialVersionUID = -3257133789269212025L;
+
     /**
      * DEfault constructor
      */

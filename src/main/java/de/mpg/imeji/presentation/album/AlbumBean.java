@@ -41,6 +41,7 @@ import de.mpg.imeji.presentation.util.UrlHelper;
  */
 public class AlbumBean extends ContainerBean
 {
+    private static final long serialVersionUID = -8161410292667767348L;
     protected SessionBean sessionBean = null;
     private Album album = null;
     private String id = null;
@@ -64,7 +65,6 @@ public class AlbumBean extends ContainerBean
     private String description = "";
     private String descriptionFull = null;
     private ThumbnailBean thumbnail;
-    private Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
 
     /**
      * Construct an {@link AlbumBean} from an {@link Album}
@@ -75,7 +75,7 @@ public class AlbumBean extends ContainerBean
     {
         this.album = album;
         this.id = ObjectHelper.getId(album.getId());
-        //album = ObjectLoader.loadAlbumLazy(ObjectHelper.getURI(Album.class, id), sessionBean.getUser());
+        // album = ObjectLoader.loadAlbumLazy(ObjectHelper.getURI(Album.class, id), sessionBean.getUser());
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         if (sessionBean.getActiveAlbum() != null && sessionBean.getActiveAlbum().getId().equals(album.getId()))
         {
@@ -358,7 +358,7 @@ public class AlbumBean extends ContainerBean
             {
                 personString += "; ";
             }
-            personString +=  p.getFamilyName() + ", " +  p.getGivenName();
+            personString += p.getFamilyName() + ", " + p.getGivenName();
         }
         return personString;
     }
@@ -442,7 +442,8 @@ public class AlbumBean extends ContainerBean
         {
             makeInactive();
             c.delete(album, sessionBean.getUser());
-            BeanHelper.info(sessionBean.getMessage("success_album_delete").replace("XXX_albumName_XXX", this.album.getMetadata().getTitle()));
+            BeanHelper.info(sessionBean.getMessage("success_album_delete").replace("XXX_albumName_XXX",
+                    this.album.getMetadata().getTitle()));
         }
         catch (Exception e)
         {
@@ -571,7 +572,7 @@ public class AlbumBean extends ContainerBean
 
     public String getPageUrl()
     {
-        return navigation.getAlbumUrl() + id;
+        return ((Navigation)BeanHelper.getApplicationBean(Navigation.class)).getAlbumUrl() + id;
     }
 
     public User getAlbumCreator() throws Exception

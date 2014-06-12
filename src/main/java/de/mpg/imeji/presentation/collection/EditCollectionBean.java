@@ -20,6 +20,8 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 @SessionScoped
 public class EditCollectionBean extends CollectionBean
 {
+    private static final long serialVersionUID = 568267990816647451L;
+
     public EditCollectionBean()
     {
         super();

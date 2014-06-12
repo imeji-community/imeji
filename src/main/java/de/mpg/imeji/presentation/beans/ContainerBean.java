@@ -28,6 +28,7 @@
  */
 package de.mpg.imeji.presentation.beans;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,8 +56,9 @@ import de.mpg.imeji.presentation.util.ImejiFactory;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public abstract class ContainerBean
+public abstract class ContainerBean implements Serializable
 {
+    private static final long serialVersionUID = 3377874537531738442L;
     private int authorPosition;
     private int organizationPosition;
     private int size;

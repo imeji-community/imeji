@@ -31,6 +31,7 @@ import de.mpg.imeji.presentation.util.ObjectLoader;
 @RequestScoped
 public class ViewCollectionBean extends CollectionBean
 {
+    private static final long serialVersionUID = 6473181109648137472L;
     private List<Person> persons = null;
     private static Logger logger = Logger.getLogger(ViewCollectionBean.class);
 

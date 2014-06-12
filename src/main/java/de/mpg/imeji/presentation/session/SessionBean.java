@@ -4,6 +4,7 @@
 package de.mpg.imeji.presentation.session;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -39,8 +40,10 @@ import de.mpg.imeji.presentation.util.PropertyReader;
  */
 @ManagedBean
 @SessionScoped
-public class SessionBean
+public class SessionBean implements Serializable
 {
+    private static final long serialVersionUID = 3367867290955569762L;
+
     public enum Style
     {
         NONE, DEFAULT, ALTERNATIVE;
@@ -235,10 +238,10 @@ public class SessionBean
     {
         this.selectedImagesContext = selectedImagesContext;
     }
-    
+
     public void reloadUser() throws Exception
     {
-        if(user != null)
+        if (user != null)
         {
             UserController c = new UserController(user);
             user = c.retrieve(user.getId());
@@ -508,7 +511,7 @@ public class SessionBean
         itemList.add(new SelectItem(ShareType.ADMIN, getLabel("collection_share_admin")));
         return itemList;
     }
-    
+
     public List<SelectItem> getShareItemGrantItems()
     {
         List<SelectItem> itemList = new ArrayList<SelectItem>();
@@ -525,13 +528,14 @@ public class SessionBean
         itemList.add(new SelectItem(ShareType.ADMIN, getLabel("album_share_admin")));
         return itemList;
     }
-    
-    
-    public boolean isShowLogin() {
-		return showLogin;
-	}
 
-	public void setShowLogin(boolean showLogin) {
-		this.showLogin = showLogin;
-	}
+    public boolean isShowLogin()
+    {
+        return showLogin;
+    }
+
+    public void setShowLogin(boolean showLogin)
+    {
+        this.showLogin = showLogin;
+    }
 }

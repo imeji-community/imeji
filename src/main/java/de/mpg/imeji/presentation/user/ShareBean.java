@@ -511,9 +511,9 @@ public class ShareBean implements Serializable
             try
             {
                 List<Grant> grants = getGrantsAccordingtoRoles(selectedRoles, getShareToUri(), profileUri);
-                User u = ObjectLoader.loadUser(uri, Imeji.adminUser);
-                GrantController gc = new GrantController();
-                gc.addGrants(u, grants, u);
+//                User u = ObjectLoader.loadUser(uri, Imeji.adminUser);
+//                GrantController gc = new GrantController();
+//                gc.addGrants(u, grants, u);
                 sendEmail(c.retrieve(uri), subject, grants);
             }
             catch (Exception e)
@@ -569,7 +569,7 @@ public class ShareBean implements Serializable
      * @return
      */
     public void shareTo(List<String> toList)
-    {
+    { 
         for (String to : toList)
         {
             List<Grant> grants = getGrantsAccordingtoRoles(selectedRoles, getShareToUri(), profileUri);

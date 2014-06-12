@@ -32,7 +32,6 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean>
 {
     private int totalNumberOfRecords;
     private SessionBean sb;
-    private String query = "";
 
     /**
      * Bean for the Albums page
@@ -138,26 +137,6 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean>
     }
 
     /**
-     * setter
-     * 
-     * @param query
-     */
-    public void setQuery(String query)
-    {
-        this.query = query;
-    }
-
-    /**
-     * getter
-     * 
-     * @return
-     */
-    public String getQuery()
-    {
-        return query;
-    }
-
-    /**
      * Collection search is always a simple search (needed for searchQueryDisplayArea.xhtml component)
      * 
      * @return
@@ -166,7 +145,7 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean>
     {
         return true;
     }
-    
+
     /**
      * needed for searchQueryDisplayArea.xhtml component
      * 

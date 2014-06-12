@@ -38,7 +38,6 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
 {
     private int totalNumberOfRecords;
     private SessionBean sb;
-    private String query = "";
     /**
      * The comment required to discard a {@link container}
      */
@@ -68,13 +67,11 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
     @Override
     public List<CollectionListItem> retrieveList(int offset, int limit) throws Exception
     {
-        initMenus();
+        // initMenus();
         CollectionController controller = new CollectionController(sb.getUser());
         Collection<CollectionImeji> collections = new ArrayList<CollectionImeji>();
         SearchQuery searchQuery = new SearchQuery();
-        query = UrlHelper.getParameterValue("q");
-        if (query == null)
-            query = "";
+      
         if (!"".equals(query))
         {
             searchQuery = URLQueryTransformer.parseStringQuery(query);
@@ -188,26 +185,6 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
     public boolean isSimpleSearch()
     {
         return true;
-    }
-
-    /**
-     * setter
-     * 
-     * @param query
-     */
-    public void setQuery(String query)
-    {
-        this.query = query;
-    }
-
-    /**
-     * getter
-     * 
-     * @return
-     */
-    public String getQuery()
-    {
-        return query;
     }
 
     /**

@@ -34,6 +34,7 @@ import de.mpg.imeji.presentation.util.UrlHelper;
  */
 public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean<T>
 {
+    protected String query = "";
     protected String selectedMenu;
     private String selectedSortCriterion;
     private String selectedSortOrder;
@@ -89,6 +90,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
         {
             selectedMenu = UrlHelper.getParameterValue("tab");
         }
+        query = UrlHelper.getParameterValue("q");
         if (selectedFilter == null)
         {
             if (sb.getUser() != null)
@@ -337,5 +339,25 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
             }
         }
         return sb.getLabel("all_except_withdrawn");
+    }
+
+    /**
+     * setter
+     * 
+     * @param query
+     */
+    public void setQuery(String query)
+    {
+        this.query = query;
+    }
+
+    /**
+     * getter
+     * 
+     * @return
+     */
+    public String getQuery()
+    {
+        return query;
     }
 }

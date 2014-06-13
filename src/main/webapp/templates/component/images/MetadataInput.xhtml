@@ -129,11 +129,15 @@
 			<div class="imj_metadataValueEntryLabel">
 				<h:outputLabel value="#{lbl.geolocation_latitude}"/>
 			</div>
-			<h:inputText id="inputLatitude" styleClass="imj_metadataEditGeo" value="#{metadata.latitude}" immediate="true" onfocus="getDatasourceUrl('#{statement.vocabulary}', '#{Navigation.autocompleteUrl}')"/>
+			<h:inputText id="inputLatitude" styleClass="imj_metadataEditGeo" value="#{metadata.latitude}" onkeypress="validateInputNumber(this);" onkeyup="validateInputNumber(this);" immediate="true" onfocus="getDatasourceUrl('#{statement.vocabulary}', '#{Navigation.autocompleteUrl}')">
+				<f:converter converterId="DoubleConverter" />
+			</h:inputText>
 			<div class="imj_metadataValueEntryLabel">
 				<h:outputLabel value="#{lbl.geolocation_longitude}"/>
 			</div>
-			<h:inputText id="inputLongitude" styleClass="imj_metadataEditGeo" value="#{metadata.longitude}" immediate="true" onfocus="getDatasourceUrl('#{statement.vocabulary}', '#{Navigation.autocompleteUrl}')"/>
+			<h:inputText id="inputLongitude" styleClass="imj_metadataEditGeo" value="#{metadata.longitude}" onkeypress="validateInputNumber(this);" onkeyup="validateInputNumber(this);" immediate="true" onfocus="getDatasourceUrl('#{statement.vocabulary}', '#{Navigation.autocompleteUrl}')">
+				<f:converter converterId="DoubleConverter" />
+			</h:inputText>
 		</h:panelGroup>
 			
 	<!-- METADATA INPUT PANEL </h:panelGroup> -->

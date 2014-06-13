@@ -210,11 +210,15 @@
 				</div>
 				<div class="imj_metadataSet">
 					<h:outputLabel value="#{lbl.geolocation_latitude}" styleClass="imj_metadataLabel"/>
-					<h:inputText id="inputLatitude" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.latitude}" immediate="true" onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')"/>
+					<h:inputText id="inputLatitude" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.latitude}" onkeypress="validateInputNumber(this);" onkeyup="validateInputNumber(this);"  immediate="true" onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')">
+						<f:converter converterId="DoubleConverter" />
+					</h:inputText>
 				</div>
 				<div class="imj_metadataSet">
 					<h:outputLabel value="#{lbl.geolocation_longitude}" styleClass="imj_metadataLabel"/>
-					<h:inputText id="inputLongitude" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.longitude}" immediate="true" onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')"/>
+					<h:inputText id="inputLongitude" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.longitude}" onkeypress="validateInputNumber(this);" onkeyup="validateInputNumber(this);"  immediate="true" onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')">
+						<f:converter converterId="DoubleConverter" />
+					</h:inputText>				
 				</div>
 			</ui:fragment>
 			

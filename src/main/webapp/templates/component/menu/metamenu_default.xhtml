@@ -72,32 +72,38 @@ All rights reserved. Use is subject to license terms.
 			    </h:commandLink>
 			</h:form>
 			
+			<!-- CSS Switcher -->
+			<ui:fragment rendered="#{Configuration.alternativeCss != null and Configuration.alternativeCss != ''}">
+				
+				<h:outputText styleClass="imj_metaMenuSeparator" value="&#160;"/>
+				
+				<h:form>
+					<h:commandButton value="&#160;" action="#{SessionBean.toggleCss()}" styleClass="imj_metaMenuItem imj_buttonStyleSwitcher"/>
+				</h:form>
+			</ui:fragment>
+			
+			<h:outputText styleClass="imj_metaMenuSeparator" value="&#160;"/>
+			
+			<!-- Language -->
+			<h:form id="langForm" onsubmit="/*setTimeout(function () { window.location.reload(); }, 20);*/">
+				<div class="imj_customSelectbox">
+					<div class="imj_showSelection">
+						<div class="imj_selectionText"></div>
+						<div class="imj_buttonSortDescending_16"></div>
+					</div>
+					<h:selectOneMenu  value="#{Internationalization.currentLanguage}" onchange="document.getElementById('Header:langForm:submitLang').click();" valueChangeListener="#{Internationalization.currentlanguageListener}" styleClass="imj_metaMenuItemSelect">
+						<f:selectItems value="#{Internationalization.internationalizedLanguages}"/>
+					</h:selectOneMenu>
+					<h:commandButton id="submitLang" action="#{Internationalization.changeLanguage}" value="Change language" styleClass="imj_noDisplay"/>
+				</div>
+			</h:form>
+			
 			<h:outputText styleClass="imj_metaMenuSeparator" value="&#160;"/>
 		
 			<!-- Help -->
 			<h:outputLink id="lnkHelp" styleClass="imj_metaMenuItem" title="#{lbl.goto_help}" value="#{Navigation.helpUrl}" target="_blank">
 				<h:outputText value="#{lbl.help}"/>
 			</h:outputLink>
-			
-			<h:outputText styleClass="imj_metaMenuSeparator" value="&#160;"/>
-			
-			<!-- Language -->
-			<h:form id="langForm" onsubmit="/*setTimeout(function () { window.location.reload(); }, 20);*/" >	
-				<h:selectOneMenu  value="#{Internationalization.currentLanguage}" onchange="document.getElementById('Header:langForm:submitLang').click();" valueChangeListener="#{Internationalization.currentlanguageListener}" styleClass="imj_metaMenuItemSelect">
-					<f:selectItems value="#{Internationalization.internationalizedLanguages}"/>
-				</h:selectOneMenu>
-				<h:commandButton id="submitLang" action="#{Internationalization.changeLanguage}" value="Change language" styleClass="imj_noDisplay" >
-				</h:commandButton>
-			</h:form>
-			
-			<h:outputText styleClass="imj_metaMenuSeparator" value="&#160;"/>
-			
-			<!-- CSS Switcher -->
-			<ui:fragment rendered="#{Configuration.alternativeCss != null and Configuration.alternativeCss != ''}">
-				<h:form>
-					<h:commandButton value="&#160;" action="#{SessionBean.toggleCss()}" styleClass="imj_metaMenuItem imj_buttonStyleSwitcher"/>
-				</h:form>
-			</ui:fragment>
 			
 		</h:panelGroup>
 	</h:panelGroup>

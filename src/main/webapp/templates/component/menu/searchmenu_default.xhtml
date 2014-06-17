@@ -47,9 +47,9 @@ All rights reserved. Use is subject to license terms.
 			
 			<h:selectOneRadio id="quickSearchRadioBox" value="#{QuickSearchBean.selectedSearchType}" 
 							  valueChangeListener="#{QuickSearchBean.selectedSearchTypeListener}" >
-				<f:selectItem id="selIm" itemLabel="&lt;span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;#{lbl.images}" itemValue="images" itemEscaped="false"/>
-				<f:selectItem id="selCol" itemLabel="&lt;span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;#{lbl.collections}" itemValue="collections" itemEscaped="false"/>
-				<f:selectItem id="selAlb" itemLabel="&lt;span&gt;&lt;span&gt;&lt;/span&gt;&lt;/span&gt;#{lbl.history_albums}" itemValue="albums" itemEscaped="false"/>			
+				<f:selectItem id="selIm" itemLabel="#{lbl.images}" itemValue="images" itemEscaped="false"/>
+				<f:selectItem id="selCol" itemLabel="#{lbl.collections}" itemValue="collections" itemEscaped="false"/>
+				<f:selectItem id="selAlb" itemLabel="#{lbl.history_albums}" itemValue="albums" itemEscaped="false"/>			
 			</h:selectOneRadio>	   	
 		</h:form>
 	</h:panelGroup>

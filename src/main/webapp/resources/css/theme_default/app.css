@@ -157,19 +157,19 @@ input:focus {
 }
 
 input[type="checkbox"] {
-margin: 0;
-outline: none;
-background-color: transparent;
-border: 0;
+	margin: 0.090909em 0 0 0.090909em;
+	outline: none;
+	background-color: transparent;
+	border: 0;
 }
 
 input[type=radio]{
-  margin    : 0;
+  margin: 0.090909em 0 0 0.090909em;
   padding   : 0;
   font-size : 1em;
-  opacity   : 0;
+  outline: none;
 }
-
+/*
 input[type=radio] + label{
   display      : inline-block;
   line-height  : 1.5em;
@@ -213,7 +213,7 @@ input[type=radio]:checked + label > span > span{
   background-image : -webkit-linear-gradient(rgb(179,217,140),rgb(153,204,102));
   background-image :         linear-gradient(rgb(179,217,140),rgb(153,204,102));
 }
-
+*/
 select:focus,
 textarea:focus,
 input[type="text"]:focus,
@@ -478,11 +478,9 @@ iframe#twitter-widget-0 div.root div.stream {
 .imj_buttonStyleSwitcher {
 	width: 1.454545em;
 	height: 1.454545em;
-	margin: 0 0.727272em;
+	margin: 0 0.090909em;
 	display: inline-block;
-	background:
-		url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAE2F/imjButtonMonitorColor_16.png")
-		no-repeat scroll 0 0 transparent;
+	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAE2F/imjButtonMonitorColor_16.png") no-repeat scroll 0 0 transparent;
 	border: 0 none;
 	outline: none;
 }
@@ -507,9 +505,9 @@ iframe#twitter-widget-0 div.root div.stream {
 .imj_metaMenuStandardSingleLine .imj_metaMenuSeparator {
 	height: 1.545454em;
 	width: 0.090909em;
-	margin: 0 0.727272em;
+	margin: 0 0.272727em;
 	border-right: solid #6CAE2F 0.090909em;
-	display: inline-block;
+	visibility: hidden;
 }
 
 .imj_metaMenuStandardSingleLine .imj_metaMenuItem:not[select] {
@@ -523,20 +521,44 @@ iframe#twitter-widget-0 div.root div.stream {
 	border: solid #6CAE2F 0.090909em;
 }
 
-.imj_metaMenuStandardSingleLine .imj_metaMenuItemSelect{
-	height: 1.454545em;
-	color: #F2F2F2;
-	background-color: #292929;
+.imj_customSelectbox {
+	display: inline-block;
+	margin-top: 0.090909em;
+	padding: 0.181818em 0.545454em 0 0.545454em;
 	border: solid #6CAE2F 0.090909em;
-	-webkit-appearance: none;  	/*Removes default chrome and safari style*/
-    -moz-appearance: none;  	/*Removes default style Firefox*/
-    -ms-appearance: none;  	
-    -o-appearance: none;  	
-    background: url("/imeji/jsf/javax.faces.resource/imj_iconset/6CAE2F/imjButtonTriangleSortDesc_16.png")  no-repeat;
-    background-position: 82px;          
-    width: 100px;            
-    text-indent: 0.01px;          
-    text-overflow: ""; 
+	border-radius: 0.454545em;
+}
+
+.imj_customSelectbox select {
+	opacity: 0;
+	filter: Alpha(opacity=0)
+	border: solid #6CAE2F 0.090909em;
+}
+.imj_customSelectbox .imj_showSelection {
+	position: absolute;
+	display: inline-block;
+}
+.imj_customSelectbox .imj_showSelection .imj_selectionText {
+	display: inline-block;
+	color: #6CAE2F;
+	text-align: left;
+	vertical-align: top;
+}
+.imj_customSelectbox .imj_showSelection .imj_buttonSortDescending_16 {
+	display: inline-block;
+	margin-right: 0;
+	margin-left: 0.272727em;
+}
+.imj_customSelectbox .imj_showSelection .imj_buttonSortDescending_16:after {
+	clear: both;
+	content: "";
+	content: 0 none;
+}
+
+.imj_metaMenuStandardSingleLine .imj_metaMenuItemSelect{
+	height: 1.727272em;
+	color: #6CAE2F;
+	background-color: transparent;
 }
 
 .imj_metaMenuItemSelect option{
@@ -601,7 +623,7 @@ iframe#twitter-widget-0 div.root div.stream {
 .imj_simpleSearchInputWrapper {
 	display: inline-block;
 	vertical-align: top;
-	margin: 0 0 0 0;
+	margin: 0 0 0.272727em 0;
 }
 
 .imj_simpleSearchInput {
@@ -628,6 +650,15 @@ iframe#twitter-widget-0 div.root div.stream {
 	margin-left: 2.090909em;
 	white-space: nowrap;
 	display: inline-block;
+}
+
+.imj_simpleSearch input[type=radio] {
+	vertical-align: top;
+}
+
+.imj_simpleSearch input[type=radio]+label {
+	margin-left: 0.090909em;
+	margin-right: 1em;
 }
 
 /* ===[ ICONS - Buttons ]===

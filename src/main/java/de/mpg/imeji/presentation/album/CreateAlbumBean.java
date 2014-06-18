@@ -30,6 +30,7 @@ package de.mpg.imeji.presentation.album;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.UserController;
@@ -96,7 +97,15 @@ public class CreateAlbumBean extends AlbumBean
             UserController uc = new UserController(sessionBean.getUser());
             sessionBean.setUser(uc.retrieve(sessionBean.getUser().getEmail()));
             BeanHelper.info(sessionBean.getMessage("success_album_create"));
-            return "pretty:albums";
+
+            Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
+
+            ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).setAlbum(getAlbum());
+            sessionBean.setActiveAlbum(getAlbum());
+
+            FacesContext.getCurrentInstance().getExternalContext().redirect
+                 (nav.getAlbumUrl()+getAlbum().getIdString());
+            return "";
         }
         return "";
     }

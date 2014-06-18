@@ -16,6 +16,7 @@ import de.mpg.imeji.logic.controller.GrantController;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.presentation.album.AlbumBean;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
@@ -71,12 +72,13 @@ public class CreateCollectionBean extends CollectionBean
             CollectionController collectionController = new CollectionController();
             collectionController.create(getCollection(), profile, sessionBean.getUser());
             BeanHelper.info(sessionBean.getMessage("success_collection_create"));
-            FacesContext
-                    .getCurrentInstance()
-                    .getExternalContext()
-                    .redirect(
-                            ((Navigation)BeanHelper.getApplicationBean(Navigation.class)).getApplicationUrl()
-                                    + "collections?q=");
+            
+            Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
+
+            //((CollectionBean)BeanHelper.getSessionBean(CollectionBean.class)).setCollection(getCollection());
+            
+            FacesContext.getCurrentInstance().getExternalContext().redirect
+                 (nav.getCollectionUrl()+getCollection().getIdString());
             return "";
         }
         else

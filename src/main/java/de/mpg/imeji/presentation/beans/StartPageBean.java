@@ -83,7 +83,6 @@ public class StartPageBean
         try
         {
             String[] prop = PropertyReader.getProperty("imeji.home.caroussel.sort").split("-");
-            System.out.println(prop[0]);
             if( prop[0] != "" && prop[1] != "")
             	return new SortCriterion(Search.getIndex(prop[0]), SortOrder.valueOf(prop[1].toUpperCase()));
         }

@@ -628,16 +628,22 @@ iframe#twitter-widget-0 div.root div.stream {
 }
 
 .imj_simpleSearchInput {
+	height: 1.090909em;
 	width: 17em;
-	padding: 0.75% 1em 0.1em 1em;
-	border-radius: 5px 0px 0px 5px; 
+	padding: 0.181818em 1em 0.181818em 1em;
+	border-color: transparent;
+	border-radius: 5px 0px 0px 5px;
+	outline: 0 none;
+	vertical-align: top;
 }
 
 .imj_simpleSearchButtonSubmit {
+	height: 1.818181em;
 	padding: 0 1em 0.1em 1em;
 	background-color: #6CAE2F;
 	color: #F0F0F0;
 	border-radius: 0px 5px 5px 0px;
+	vertical-align: top;
 }
 
 .imj_simpleSearchButtonSubmit:hover {

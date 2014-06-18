@@ -294,18 +294,11 @@ public class ShareBean implements Serializable
             {
                 if (UserCreationBean.isValidEmail(value))
                 {
-                    UserController uc = new UserController(Imeji.adminUser);
                     try {
+                    	UserController uc = new UserController(Imeji.adminUser);
 						User u = uc.retrieve(value);
-						if(u.isAdmin())
-						{
-							this.errorList.add(sb.getMessage("error_share_sysadmin").replace("XXX_VALUE_XXX", value));
-				            BeanHelper.error(sb.getMessage("error_share_sysadmin").replace("XXX_VALUE_XXX", value));			            
-		                    logger.error(sb.getMessage("error_share_sysadmin").replace("XXX_VALUE_XXX", value));
-						}
-						else{
-							emailList.add(value);  
-						}
+						emailList.add(value);  
+
 					} catch (Exception e) {
 	                    this.errorList.add(sb.getMessage("error_share_invalid_user").replace("XXX_VALUE_XXX", value));
 			            BeanHelper.error(sb.getMessage("error_share_invalid_user").replace("XXX_VALUE_XXX", value));			            

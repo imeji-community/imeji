@@ -38,6 +38,7 @@ public class UserBean
     private SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     private String id;
     private List<SharedHistory> roles = new ArrayList<SharedHistory>();
+    private boolean changeEmail = false;
 
     public UserBean()
     {
@@ -68,7 +69,8 @@ public class UserBean
             repeatedPassword = null;
             retrieveUser();
             this.roles = AuthUtil.getAllRoles(user, session.getUser());
-            this.newEmail = null;
+            this.newEmail = user.getEmail();
+            this.changeEmail = false;
         }
         catch (Exception e)
         {
@@ -89,49 +91,6 @@ public class UserBean
         {
             LoginBean loginBean = (LoginBean)BeanHelper.getRequestBean(LoginBean.class);
             loginBean.setLogin(id);
-        }
-    }
-
-    /**
-     * Change the Email of the user:<br/>
-     * if the new email is valid and is not already used, then create a new user with this email and delete the old one
-     */
-    public void changeEmail()
-    {
-        User newUser = user.clone(newEmail);
-        if (!UserCreationBean.isValidEmail(newUser.getEmail()))
-        {
-            BeanHelper.error(session.getMessage("error_user_email_not_valid"));
-        }
-        else
-        {
-            try
-            {
-                if (UserCreationBean.userAlreadyExists(newUser))
-                {
-                    BeanHelper.error(session.getMessage("error_user_already_exists"));
-                }
-                else
-                {
-                    UserController uc = new UserController(session.getUser());
-                    // Create the new user
-                    uc.create(newUser);
-                    // If the edited user is the current user, put the new user in the session
-                    if (session.getUser().getEmail().equals(user.getEmail()))
-                    {
-                        session.setUser(newUser);
-                        uc = new UserController(session.getUser());
-                    }
-                    // delete the old user
-                    uc.delete(user);
-                    init(newUser.getEmail());
-                }
-                reloadPage();
-            }
-            catch (Exception e)
-            {
-                BeanHelper.error(session.getMessage("error") + ": " + e);
-            }
         }
     }
 
@@ -226,15 +185,68 @@ public class UserBean
     {
         if (user != null)
         {
-            UserController controller = new UserController(session.getUser());
+            if (changeEmail)
+                changeEmail();
+            else
+            {
+                UserController controller = new UserController(session.getUser());
+                try
+                {
+                    controller.update(user);
+                }
+                catch (Exception e)
+                {
+                    BeanHelper.error(e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public void changeEmailListener()
+    {
+        this.changeEmail = true;
+    }
+
+    /**
+     * Change the Email of the user:<br/>
+     * if the new email is valid and is not already used, then create a new user with this email and delete the old one
+     */
+    public void changeEmail()
+    {
+        User newUser = user.clone(newEmail);
+        if (!UserCreationBean.isValidEmail(newUser.getEmail()))
+        {
+            BeanHelper.error(session.getMessage("error_user_email_not_valid"));
+        }
+        else
+        {
             try
             {
-                controller.update(user);
+                if (UserCreationBean.userAlreadyExists(newUser))
+                {
+                    BeanHelper.error(session.getMessage("error_user_already_exists"));
+                }
+                else
+                {
+                    UserController uc = new UserController(session.getUser());
+                    // Create the new user
+                    uc.create(newUser);
+                    // If the edited user is the current user, put the new user in the session
+                    if (session.getUser().getEmail().equals(user.getEmail()))
+                    {
+                        session.setUser(newUser);
+                        uc = new UserController(session.getUser());
+                    }
+                    // delete the old user
+                    uc.delete(user);
+                    init(newUser.getEmail());
+                }
+                reloadPage();
             }
             catch (Exception e)
             {
-                BeanHelper.error(e.getMessage());
-                e.printStackTrace();
+                BeanHelper.error(session.getMessage("error") + ": " + e);
             }
         }
     }

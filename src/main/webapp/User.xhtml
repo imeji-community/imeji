@@ -83,7 +83,7 @@
 														<h:outputText value="#{UserBean.user.email}"/>
 													</div>
 													<div class="imj_admindataSetEdit">
-														<h:inputText value="#{UserBean.user.email}" title="#{!Auth.admin ? msg.edit_user_email_forbidden : ''}" styleClass="imj_admindataEdit imj_noDisplay #{!Auth.admin ? 'imj_disabled' : ''}" disabled="#{!Auth.admin}" readonly="#{!Auth.admin}"/>
+														<h:inputText value="#{UserBean.newEmail}" valueChangeListener="#{UserBean.changeEmailListener}" title="#{!Auth.admin ? msg.edit_user_email_forbidden : ''}" styleClass="imj_admindataEdit imj_noDisplay #{!Auth.admin ? 'imj_disabled' : ''}" disabled="#{!Auth.admin}" readonly="#{!Auth.admin}"/>
 													</div>
 												</div>
 											</h:panelGroup>

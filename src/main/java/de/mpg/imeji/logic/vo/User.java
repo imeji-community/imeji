@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
+import de.mpg.imeji.logic.controller.UserGroupController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jList;
@@ -57,10 +59,31 @@ public class User implements Serializable
         clone.grants = new ArrayList<Grant>();
         for (Grant g : grants)
         {
-            clone.grants.add(new Grant(g.asGrantType(), g.getGrantFor()));
+            if (g.asGrantType() != null && g.getGrantFor() != null)
+            {
+                if (g.getGrantFor().toString().equals(this.getId().toString()))
+                    clone.grants.add(new Grant(g.asGrantType(), clone.getId()));
+                else
+                    clone.grants.add(new Grant(g.asGrantType(), g.getGrantFor()));
+            }
         }
         clone.name = name;
         clone.nick = nick;
+        // Updates group references
+        for (UserGroup group : groups)
+        {
+            UserGroupController c = new UserGroupController();
+            group.getUsers().remove(this.getId());
+            group.getUsers().add(clone.getId());
+            try
+            {
+                c.update(group, Imeji.adminUser);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
         return clone;
     }
 
@@ -163,7 +186,7 @@ public class User implements Serializable
     {
         return AuthUtil.isSysAdmin(this);
     }
-    
+
     public void setAdmin(boolean b)
     {
         // dummy method for jsf

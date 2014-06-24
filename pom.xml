@@ -4,7 +4,7 @@
 	<groupId>org.imeji</groupId>
 	<name>imeji</name>
 	<packaging>war</packaging>
-	<version>2.0.0.0</version>
+	<version>2.0.0.1-SNAPSHOT</version>
 	<url>http://imeji.org</url>
 	<description>
 		http://imeji.org
@@ -24,7 +24,7 @@
 		<connection>scm:git:git://github.com/imeji-community/imeji.git</connection>
 		<developerConnection>scm:git:https://github.com/imeji-community/imeji.git</developerConnection>
 		<url>https://github.com/imeji-community/imeji.git</url>
-	  <tag>imeji-2.0.0.0</tag>
+	  <tag>HEAD</tag>
   </scm>
 	<issueManagement>
 		<system>Github</system>

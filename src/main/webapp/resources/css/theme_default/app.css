@@ -591,26 +591,20 @@ iframe#twitter-widget-0 div.root div.stream {
 
 /* ===[ SiteHeader - Logo + Search Area]===
    ================================================== */
-.imj_siteHeaderLogoSearchSection {
+.imj_siteHeaderMenuSearchSection {
 	width: 100%;
 	padding: 0;
-	margin: 0.454545em 0;
+	margin: 0 0 2em 0;
 }
 
 /* ===[ SiteHeader - Logo ]===
    ================================================== */
-.imj_siteHeaderLogoArea {
-	display: inline-block;
-	padding: 0 2em 0 0;
-}
-
-.imj_siteHeaderLogo {
+.imj_logo {
 	width: 13em;
 	height: 5em;
 	padding: 0;
 	display: inline-block;
-	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/logo_imeji.gif")
-		no-repeat scroll -1.909090em 0 transparent;
+	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/logo_imeji.gif") no-repeat scroll -1.909090em 0 transparent;
 }
 
 /* ===[ SiteHeader - SimpleSearch ]===

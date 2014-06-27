@@ -41,10 +41,10 @@
 					<h:outputLabel value="#{lbl.selected}" for="pictureCheckbox" styleClass="imj_optionLabel" rendered="#{Auth.loggedIn}"/>
 				</span>
 				
-				<h:commandLink styleClass="imj_mediaEditPanelItem imj_removeMedia" id="lnkPicRemove" action="#{imageBean.remove}" rendered="#{Auth.delete(imageBean.image)}">
+				<h:commandLink styleClass="imj_mediaEditPanelItem imj_removeButton" id="lnkPicRemove" action="#{imageBean.remove}" rendered="#{Auth.delete(imageBean.image)}">
 					<h:outputText value="#{lbl.remove_from_col}"/>
 				</h:commandLink>
-				<h:commandLink styleClass="imj_mediaEditPanelItem imj_removeMedia" id="lnkPicRemoveFromAlbum" action="#{imageBean.removeFromAlbum}" rendered="#{imageBean.navigationString == 'pretty:albumItem' and Auth.create(imageBean.album)}">
+				<h:commandLink styleClass="imj_mediaEditPanelItem imj_removeButton" id="lnkPicRemoveFromAlbum" action="#{imageBean.removeFromAlbum}" rendered="#{imageBean.navigationString == 'pretty:albumItem' and Auth.create(imageBean.album)}">
 					<h:outputText value="#{lbl.remove_from_album}"/>
 				</h:commandLink>
 				<h:commandLink styleClass="imj_mediaEditPanelItem imj_addMedia" id="lnkPicFullResolution2" action="#{imageBean.addToActiveAlbum}" rendered="#{!imageBean.isInActiveAlbum and SessionBean.activeAlbum != null}">
@@ -59,7 +59,7 @@
 					</h:outputLink>
 					<h:outputText value=" - "/>
 					<h:commandLink id="lnkPicRemoveFromAvtiveAlbum" action="#{imageBean.removeFromActiveAlbum}">
-						<h:outputText value="#{lbl.remove}" styleClass="imj_removeMedia"/>
+						<h:outputText value="#{lbl.remove}" styleClass="imj_removeButton"/>
 					</h:commandLink>
 					<h:outputText value=")"/>
 				</h:panelGroup>

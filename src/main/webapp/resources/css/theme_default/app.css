@@ -1429,7 +1429,7 @@ h4.imj_sectionHeadline {
 	text-align: center;
 }
 
-/* item-styles - .imj_removeMedia, .imj_addMedia , .imj_activeMedia, .imj_selectMedia 
+/* item-styles - .imj_removeButton, .imj_addMedia , .imj_activeMedia, .imj_selectMedia 
  * (image_details.xhtml) 
  ==================================================================================*/
 .imj_selectMedia {
@@ -1441,7 +1441,7 @@ h4.imj_sectionHeadline {
 	background-color: #444444;
 }
 
-.imj_removeMedia:hover {
+.imj_removeButton:hover {
 	color: #F0F0F0;
 	background-color: #990000;
 }

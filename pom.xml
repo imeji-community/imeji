@@ -629,5 +629,43 @@
 				<jdk.version>1.7</jdk.version>
 			</properties>
 		</profile>
+		<profile>
+			<id>env-testing-continuum</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<!-- TO avoid warning File encoding has not been set, using platform 
+					encoding Cp1252, i.e. build is platform dependent! -->
+				<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+				<!-- the jdk version to use -->
+				<jdk.version>1.7</jdk.version>
+				<tomcat.webapps>/mnt/tomcat/dev-faces/deploy</tomcat.webapps>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<!-- copy the war folder into the tomcat deploy folder ($TOMCAT_HOME/webapps) -->
+							<execution>
+								<id>install</id>
+								<phase>install</phase>
+								<configuration>
+									<tasks>
+										<delete quiet="true" file="${tomcat.webapps}/${project.warName}.war" />
+										<delete quiet="true" dir="${tomcat.webapps}/${project.warName}" />
+										<copy overwrite="true" file="${project.build.directory}/${project.warName}.war" tofile="${tomcat.webapps}/${project.warName}.war" />
+									</tasks>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 	</profiles>
 </project>

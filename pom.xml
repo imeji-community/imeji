@@ -21,10 +21,10 @@
 		<url>http://www.mpdl.mpg.de/</url>
 	</organization>
 	<scm>
+		<url>https://github.com/imeji-community/imeji</url>
 		<connection>scm:git:git://github.com/imeji-community/imeji.git</connection>
-		<developerConnection>scm:git:https://github.com/imeji-community/imeji.git</developerConnection>
-		<url>https://github.com/imeji-community/imeji.git</url>
-	  <tag>HEAD</tag>
+		<developerConnection>scm:git:git@github.com:imeji-community/imeji.git</developerConnection>
+		<tag>develop</tag>
   </scm>
 	<issueManagement>
 		<system>Github</system>
@@ -76,7 +76,17 @@
 			<name>Yan Yao</name>
 			<email>yao@mpdl.mpg.de</email>
 			<roles>
-				<role>Software developer</role>
+				<role>Test Manager</role>
+			</roles>
+			<organization>Max Planck Digital Library</organization>
+			<timezone>+2</timezone>
+		</developer>
+		<developer>
+			<id>MarcoSchlender</id>
+			<name>Marco Schlender</name>
+			<email>schlender@mpdl.mpg.de</email>
+			<roles>
+				<role>Web developer</role>
 			</roles>
 			<organization>Max Planck Digital Library</organization>
 			<timezone>+2</timezone>

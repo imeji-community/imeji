@@ -110,7 +110,6 @@
 		<org.richfaces.bom.version>4.2.3.Final</org.richfaces.bom.version>
 		<!-- Used by Tomcat to trip version Nr when deploy WAR package, e.g., imeji_1.0_screenshot->imeji -->
 		<project.warName>imeji</project.warName>
-		<project.build.finalName>imeji</project.build.finalName>
 	</properties>
 	<repositories>
 		<!-- <repository> <id>central</id> <url>http://central</url> <releases> 
@@ -639,6 +638,7 @@
 				<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 				<!-- the jdk version to use -->
 				<jdk.version>1.7</jdk.version>
+				<project.build.finalName>imeji</project.build.finalName>
 			</properties>
 			<build>
 				<plugins>
@@ -650,7 +650,6 @@
 							<server>Tomcat</server>
 							<path>/imeji</path>
 						</configuration>
-						
 					</plugin>
 				</plugins>
 			</build>

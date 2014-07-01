@@ -198,6 +198,5 @@ public class InitializerServlet extends HttpServlet
         logger.info("...done");
         super.destroy();
         logger.info("imeji is down");
-        System.exit(0);
     }
 }

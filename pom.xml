@@ -6,9 +6,7 @@
 	<packaging>war</packaging>
 	<version>2.0.0.1-SNAPSHOT</version>
 	<url>http://imeji.org</url>
-	<description>
-		http://imeji.org
-	</description>
+	<description>The imeji open source software offers a dedicated metadata management by supporting a non- restrictive metadata schema definition, as simple as liked or as complex as needed.</description>
 	<licenses>
 		<license>
 			<name>Common Development And Distribution License</name>
@@ -25,7 +23,7 @@
 		<connection>scm:git:git://github.com/imeji-community/imeji.git</connection>
 		<developerConnection>scm:git:git@github.com:imeji-community/imeji.git</developerConnection>
 		<tag>develop</tag>
-  </scm>
+  	</scm>
 	<issueManagement>
 		<system>Github</system>
 		<url>https://github.com/imeji-community/imeji/issues</url>
@@ -112,6 +110,7 @@
 		<org.richfaces.bom.version>4.2.3.Final</org.richfaces.bom.version>
 		<!-- Used by Tomcat to trip version Nr when deploy WAR package, e.g., imeji_1.0_screenshot->imeji -->
 		<project.warName>imeji</project.warName>
+		<project.build.finalName>imeji</project.build.finalName>
 	</properties>
 	<repositories>
 		<!-- <repository> <id>central</id> <url>http://central</url> <releases> 
@@ -651,6 +650,7 @@
 							<server>Tomcat</server>
 							<path>/imeji</path>
 						</configuration>
+						
 					</plugin>
 				</plugins>
 			</build>

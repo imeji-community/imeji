@@ -648,7 +648,7 @@
           				<version>2.1</version>
 						<configuration>
 							<url>http://dev-faces.mpdl.mpg.de/manager/text</url>
-							<server>Tomcat</server>
+							<server>tomcat</server>
 							<path>/imeji</path>
 							<warFile>/X/continuum/apache-continuum-1.4.1/data/working-directory/178/target/imeji.war</warFile>
 						</configuration>

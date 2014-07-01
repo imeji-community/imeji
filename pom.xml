@@ -540,6 +540,13 @@
 		<!-- this profile is used by developers -->
 		<profile>
 			<id>env-development</id>
+			<properties>
+				<!-- TO avoid warning File encoding has not been set, using platform 
+					encoding Cp1252, i.e. build is platform dependent! -->
+				<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+				<!-- the jdk version to use -->
+				<jdk.version>1.7</jdk.version>
+			</properties>
 			<build>
 				<plugins>
 					<plugin>
@@ -619,13 +626,6 @@
 					</plugins>
 				</pluginManagement>
 			</build>
-			<properties>
-				<!-- TO avoid warning File encoding has not been set, using platform 
-					encoding Cp1252, i.e. build is platform dependent! -->
-				<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-				<!-- the jdk version to use -->
-				<jdk.version>1.7</jdk.version>
-			</properties>
 		</profile>
 		<profile>
 			<id>env-testing-continuum</id>
@@ -647,8 +647,8 @@
 						<artifactId>tomcat7-maven-plugin</artifactId>
           				<version>2.1</version>
 						<configuration>
-							<url>http://dev-faces.mpdl.mpg.de/manager/html</url>
-							<server>Tomcat</server>
+							<url>http://dev-faces.mpdl.mpg.de/manager/text</url>
+							<server>tomcat</server>
 							<path>/imeji</path>
 							<warFile>/X/continuum/apache-continuum-1.4.1/data/working-directory/178/target/imeji.war</warFile>
 						</configuration>

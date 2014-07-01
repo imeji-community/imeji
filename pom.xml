@@ -640,29 +640,17 @@
 				<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 				<!-- the jdk version to use -->
 				<jdk.version>1.7</jdk.version>
-				<tomcat.webapps>/mnt/tomcat/dev-faces/deploy</tomcat.webapps>
 			</properties>
 			<build>
 				<plugins>
 					<plugin>
-						<artifactId>maven-antrun-plugin</artifactId>
-						<executions>
-							<!-- copy the war folder into the tomcat deploy folder ($TOMCAT_HOME/webapps) -->
-							<execution>
-								<id>install</id>
-								<phase>install</phase>
-								<configuration>
-									<tasks>
-										<delete quiet="true" file="${tomcat.webapps}/${project.warName}.war" />
-										<delete quiet="true" dir="${tomcat.webapps}/${project.warName}" />
-										<copy overwrite="true" file="${project.build.directory}/${project.warName}.war" tofile="${tomcat.webapps}/${project.warName}.war" />
-									</tasks>
-								</configuration>
-								<goals>
-									<goal>run</goal>
-								</goals>
-							</execution>
-						</executions>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>tomcat-maven-plugin</artifactId>
+						<configuration>
+							<url>http://dev-faces.mpdl.mpg.de/manager</url>
+							<server>Tomcat</server>
+							<path>/imeji</path>
+						</configuration>
 					</plugin>
 				</plugins>
 			</build>

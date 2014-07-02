@@ -50,16 +50,6 @@
 			<timezone>+2</timezone>
 		</developer>
 		<developer>
-			<id>wfrank</id>
-			<name>Wilhelm Frank</name>
-			<email>frank@mpdl.mpg.de</email>
-			<roles>
-				<role>developer</role>
-			</roles>
-			<organization>Max Planck Digital Library</organization>
-			<timezone>+2</timezone>
-		</developer>
-		<developer>
 			<id>LuYu</id>
 			<name>Lu Yu</name>
 			<email>yu@mpdl.mpg.de</email>

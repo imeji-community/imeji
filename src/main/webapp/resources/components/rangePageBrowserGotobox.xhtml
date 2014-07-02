@@ -61,7 +61,18 @@
 			 			</h:panelGroup>
 			 		</ui:repeat>
 			 		
-			 		<h:commandButton id="btList_lkNextAjax" onclick="setContentLoadingStatus();" styleClass="imj_buttonBrowseForward_16" value=" " alt="#{lbl.paginator_next}" title="#{lbl.paginator_results} #{cc.attrs.paginatorBean.offset + 1 + cc.attrs.paginatorBean.elementsPerPage} -  #{cc.attrs.paginatorBean.offset + 1 + 2*cc.attrs.paginatorBean.elementsPerPage}" action="#{cc.attrs.paginatorBean.goToNextPage}" rendered="#{cc.attrs.paginatorBean.ajaxMode and cc.attrs.paginatorBean.currentPageNumber != cc.attrs.paginatorBean.paginatorPageSize}">
+			 		<!-- Paginator next button if next < cc.attrs.paginatorBean.totalNumberOfElements -->
+			 		<h:commandButton id="btList_lkNextAjax1" onclick="setContentLoadingStatus();" styleClass="imj_buttonBrowseForward_16" value=" " alt="#{lbl.paginator_next}" 
+			 						 title="#{lbl.paginator_results} #{cc.attrs.paginatorBean.offset + 1 + cc.attrs.paginatorBean.elementsPerPage} -  #{cc.attrs.paginatorBean.offset + 1 + 2*cc.attrs.paginatorBean.elementsPerPage}" 
+			 						 action="#{cc.attrs.paginatorBean.goToNextPage}" 
+			 						 rendered="#{cc.attrs.paginatorBean.ajaxMode and cc.attrs.paginatorBean.currentPageNumber != cc.attrs.paginatorBean.paginatorPageSize and (cc.attrs.paginatorBean.offset + 1 + 2*cc.attrs.paginatorBean.elementsPerPage lt cc.attrs.paginatorBean.totalNumberOfElements)}">
+			 			<f:ajax disabled="#{!cc.attrs.paginatorBean.ajaxMode}" execute="@this" render=":ajaxWrapper :imj_pageMessageArea"/>
+			 		</h:commandButton>
+			 		<!-- Paginator next button if next >= cc.attrs.paginatorBean.totalNumberOfElements -->
+			 		<h:commandButton id="btList_lkNextAjax2" onclick="setContentLoadingStatus();" styleClass="imj_buttonBrowseForward_16" value=" " alt="#{lbl.paginator_next}" 
+			 						 title="#{lbl.paginator_results} #{cc.attrs.paginatorBean.offset + 1 + cc.attrs.paginatorBean.elementsPerPage} -  #{cc.attrs.paginatorBean.totalNumberOfElements}" 
+			 						 action="#{cc.attrs.paginatorBean.goToNextPage}" 
+			 						 rendered="#{cc.attrs.paginatorBean.ajaxMode and cc.attrs.paginatorBean.currentPageNumber != cc.attrs.paginatorBean.paginatorPageSize and (cc.attrs.paginatorBean.offset + 1 + 2*cc.attrs.paginatorBean.elementsPerPage ge cc.attrs.paginatorBean.totalNumberOfElements)}">
 			 			<f:ajax disabled="#{!cc.attrs.paginatorBean.ajaxMode}" execute="@this" render=":ajaxWrapper :imj_pageMessageArea"/>
 			 		</h:commandButton>
 			 		<h:panelGroup styleClass="imj_buttonBrowseForward_16 imj_deactivated" rendered="#{cc.attrs.paginatorBean.ajaxMode and cc.attrs.paginatorBean.currentPageNumber == cc.attrs.paginatorBean.paginatorPageSize}"/>

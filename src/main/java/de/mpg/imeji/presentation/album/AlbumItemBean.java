@@ -14,8 +14,8 @@ import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.image.ImageBean;
-import de.mpg.imeji.presentation.image.SingleImageBrowse;
+import de.mpg.imeji.presentation.image.ItemBean;
+import de.mpg.imeji.presentation.image.SingleItemBrowse;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
@@ -27,14 +27,14 @@ import de.mpg.imeji.presentation.util.ObjectLoader;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class AlbumImageBean extends ImageBean
+public class AlbumItemBean extends ItemBean
 {
     private String albumId;
     private Navigation navigation;
     private SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     private Album album;
 
-    public AlbumImageBean() throws Exception
+    public AlbumItemBean() throws Exception
     {
         super();
         this.prettyLink = "pretty:editImageOfAlbum";
@@ -45,8 +45,8 @@ public class AlbumImageBean extends ImageBean
     public void initBrowsing()
     {
         String tempId = (String)FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-                .get("AlbumImagesBean.id");
-        setBrowse(new SingleImageBrowse((AlbumImagesBean)BeanHelper.getSessionBean(AlbumImagesBean.class), getImage(),
+                .get("AlbumItemsBean.id");
+        setBrowse(new SingleItemBrowse((AlbumItemsBean)BeanHelper.getSessionBean(AlbumItemsBean.class), getImage(),
                 "album", tempId));
         this.setAlbum(this.loadAlbum());
     }

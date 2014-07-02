@@ -20,20 +20,20 @@ import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.image.ImagesBean;
+import de.mpg.imeji.presentation.image.ItemsBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.session.SessionObjectsController;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 
 /**
- * {@link ImagesBean} within an {@link Album}: Used to browse {@link Item} of an {@link Album}
+ * {@link ItemsBean} within an {@link Album}: Used to browse {@link Item} of an {@link Album}
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class AlbumImagesBean extends ImagesBean
+public class AlbumItemsBean extends ItemsBean
 {
     private String id;
     private Album album;
@@ -45,7 +45,7 @@ public class AlbumImagesBean extends ImagesBean
     /**
      * Constructor
      */
-    public AlbumImagesBean()
+    public AlbumItemsBean()
     { 
         super();
         sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
@@ -267,8 +267,8 @@ public class AlbumImagesBean extends ImagesBean
     public void setId(String id)
     {
         this.id = id;
-        // @Ye set session value to share with AlbumImageBean, another way is via injection
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("AlbumImagesBean.id", id);
+        // @Ye set session value to share with AlbumItemsBean, another way is via injection
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("AlbumItemsBean.id", id);
     }
 
     public void setCollection(CollectionImeji collection)

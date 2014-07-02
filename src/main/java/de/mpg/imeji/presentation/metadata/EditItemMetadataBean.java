@@ -44,7 +44,7 @@ import de.mpg.imeji.presentation.util.UrlHelper;
  * 
  * @author saquet
  */
-public class EditImageMetadataBean
+public class EditItemMetadataBean
 {
     // objects
     private List<Item> allItems;
@@ -70,7 +70,7 @@ public class EditImageMetadataBean
     private int lockedImages = 0;
     private boolean initialized = false;
     private SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-    private static Logger logger = Logger.getLogger(EditImageMetadataBean.class);
+    private static Logger logger = Logger.getLogger(EditItemMetadataBean.class);
     // url parameters
     private String type = "all";
     private String query = "";
@@ -79,7 +79,7 @@ public class EditImageMetadataBean
     /**
      * Bean for batch and multiple metadata editor
      */
-    public EditImageMetadataBean()
+    public EditItemMetadataBean()
     {
         statementMenu = new ArrayList<SelectItem>();
         modeRadio = new ArrayList<SelectItem>();

@@ -21,15 +21,15 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class SingleImageBrowse
+public class SingleItemBrowse
 {
-    private ImagesBean imagesBean = null;
+    private ItemsBean imagesBean = null;
     private Item currentImage = null;
     private String next = null;
     private String previous = null;
 
     /**
-     * Object for the browsing over the detail items. The Browsing is based on a {@link ImagesBean} and the current
+     * Object for the browsing over the detail items. The Browsing is based on a {@link ItemsBean} and the current
      * {@link Item}.
      * 
      * @param imagesBean
@@ -37,7 +37,7 @@ public class SingleImageBrowse
      * @param type
      * @param containerId
      */
-    public SingleImageBrowse(ImagesBean imagesBean, Item item, String type, String containerId)
+    public SingleItemBrowse(ItemsBean imagesBean, Item item, String type, String containerId)
     {
         this.imagesBean = imagesBean;
         currentImage = item;
@@ -45,7 +45,7 @@ public class SingleImageBrowse
     }
 
     /**
-     * Initialize the {@link SingleImageBrowse} for the current {@link Item} and {@link ImagesBean} according to:
+     * Initialize the {@link SingleItemBrowse} for the current {@link Item} and {@link ItemsBean} according to:
      * 
      * @param type - if the detail page is initialized within a collection, an album, or a browse page (item)
      * @param path - the id (not the uri) of the current container ({@link Album} or {@link CollectionImeji})
@@ -138,7 +138,7 @@ public class SingleImageBrowse
     }
 
     /**
-     * Return the {@link URI} of the first page of the current {@link ImagesBean}
+     * Return the {@link URI} of the first page of the current {@link ItemsBean}
      * 
      * @return
      */
@@ -152,7 +152,7 @@ public class SingleImageBrowse
     }
 
     /**
-     * Return the {@link URI} of the last page of the current {@link ImagesBean}
+     * Return the {@link URI} of the last page of the current {@link ItemsBean}
      * 
      * @return
      */

@@ -8,8 +8,8 @@ import java.io.IOException;
 import javax.faces.context.FacesContext;
 
 import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.image.ImageBean;
-import de.mpg.imeji.presentation.image.SingleImageBrowse;
+import de.mpg.imeji.presentation.image.ItemBean;
+import de.mpg.imeji.presentation.image.SingleItemBrowse;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
@@ -19,23 +19,23 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class CollectionImageBean extends ImageBean
+public class CollectionItemBean extends ItemBean
 {
     private String collectionId;
     private Navigation navigation;
-    private CollectionImagesBean collectionImagesBean;
+    private CollectionItemsBean collectionImagesBean;
 
-    public CollectionImagesBean getCollectionImagesBean()
+    public CollectionItemsBean getCollectionImagesBean()
     {
         return collectionImagesBean;
     }
 
-    public void setCollectionImagesBean(CollectionImagesBean collectionImagesBean)
+    public void setCollectionImagesBean(CollectionItemsBean collectionImagesBean)
     {
         this.collectionImagesBean = collectionImagesBean;
     }
 
-    public CollectionImageBean() throws Exception
+    public CollectionItemBean() throws Exception
     {
         super();
         this.prettyLink = "pretty:EditImageOfCollection";
@@ -46,8 +46,8 @@ public class CollectionImageBean extends ImageBean
     public void initBrowsing()
     {
         String tempId = (String)FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-                .get("CollectionImagesBean.id");
-        setBrowse(new SingleImageBrowse((CollectionImagesBean)BeanHelper.getSessionBean(CollectionImagesBean.class),
+                .get("CollectionItemsBean.id");
+        setBrowse(new SingleItemBrowse((CollectionItemsBean)BeanHelper.getSessionBean(CollectionItemsBean.class),
                 getImage(), "collection", tempId));
     }
 

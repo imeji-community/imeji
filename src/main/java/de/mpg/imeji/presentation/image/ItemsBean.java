@@ -48,7 +48,7 @@ import de.mpg.imeji.presentation.util.UrlHelper;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
+public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean>
 {
     private int totalNumberOfRecords;
     private SessionBean session;
@@ -73,7 +73,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     /**
      * The bean for all list of images
      */
-    public ImagesBean()
+    public ItemsBean()
     {
         super();
         navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
@@ -344,7 +344,7 @@ public class ImagesBean extends BasePaginatorListSessionBean<ThumbnailBean>
     }
 
     /**
-     * Add all {@link Item} of the current {@link ImagesBean} (i.e. browse page) to the active album
+     * Add all {@link Item} of the current {@link ItemsBean} (i.e. browse page) to the active album
      * 
      * @return
      * @throws Exception

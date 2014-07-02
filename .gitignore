@@ -165,3 +165,4 @@ pip-log.txt
 .DS_Store
 /YOUR JREBEL LICENSE HAS EXPIRED!.error
 src/main/webapp/WEB-INF/digilib-config.xml
+src/test/resources/ingest/items-out.xml

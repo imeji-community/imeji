@@ -24,7 +24,7 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.facet.FacetsBean;
-import de.mpg.imeji.presentation.image.ImagesBean;
+import de.mpg.imeji.presentation.image.ItemsBean;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.session.SessionBean;
@@ -33,13 +33,13 @@ import de.mpg.imeji.presentation.util.ObjectCachedLoader;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 
 /**
- * {@link ImagesBean} to browse {@link Item} of a {@link CollectionImeji}
+ * {@link ItemsBean} to browse {@link Item} of a {@link CollectionImeji}
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class CollectionImagesBean extends ImagesBean
+public class CollectionItemsBean extends ItemsBean
 {
     private String id = null;
     private URI uri;
@@ -52,7 +52,7 @@ public class CollectionImagesBean extends ImagesBean
     /**
      * Initialize the bean
      */
-    public CollectionImagesBean()
+    public CollectionItemsBean()
     {
         super();
         sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
@@ -150,8 +150,8 @@ public class CollectionImagesBean extends ImagesBean
     public void setId(String id)
     {
         this.id = id;
-        // @Ye set session value to share with CollectionImageBean, another way is via injection
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("CollectionImagesBean.id", id);
+        // @Ye set session value to share with CollectionItemsBean, another way is via injection
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("CollectionItemsBean.id", id);
     }
 
     public void setCollection(CollectionImeji collection)

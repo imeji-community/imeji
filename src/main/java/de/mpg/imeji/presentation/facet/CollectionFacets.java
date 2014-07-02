@@ -21,7 +21,7 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.collection.CollectionImagesBean;
+import de.mpg.imeji.presentation.collection.CollectionItemsBean;
 import de.mpg.imeji.presentation.facet.Facet.FacetType;
 import de.mpg.imeji.presentation.filter.FiltersSession;
 import de.mpg.imeji.presentation.session.SessionBean;
@@ -43,7 +43,7 @@ public class CollectionFacets extends Facets
     private URI colURI = null;
     private SearchQuery searchQuery;
     private Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-    private SearchResult allImages = ((CollectionImagesBean)BeanHelper.getSessionBean(CollectionImagesBean.class))
+    private SearchResult allImages = ((CollectionItemsBean)BeanHelper.getSessionBean(CollectionItemsBean.class))
             .getSearchResult();
     private MetadataProfile profile;
 

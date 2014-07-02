@@ -21,7 +21,7 @@ import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.facet.Facet.FacetType;
 import de.mpg.imeji.presentation.filter.Filter;
 import de.mpg.imeji.presentation.filter.FiltersSession;
-import de.mpg.imeji.presentation.image.ImagesBean;
+import de.mpg.imeji.presentation.image.ItemsBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
@@ -38,7 +38,7 @@ public class TechnicalFacets extends Facets
     private FiltersSession fs = (FiltersSession)BeanHelper.getSessionBean(FiltersSession.class);
     private List<List<Facet>> facets = new ArrayList<List<Facet>>();
     private SearchQuery searchQuery;
-    private SearchResult allImages = ((ImagesBean)BeanHelper.getSessionBean(ImagesBean.class)).getSearchResult();
+    private SearchResult allImages = ((ItemsBean)BeanHelper.getSessionBean(ItemsBean.class)).getSearchResult();
     private String baseURI = ((Navigation)BeanHelper.getApplicationBean(Navigation.class)).getBrowseUrl() + "?q=";
 
     /**
@@ -143,7 +143,7 @@ public class TechnicalFacets extends Facets
      */
     public SearchResult retrieveAllImages(SearchQuery searchQuery)
     {
-        return ((ImagesBean)BeanHelper.getSessionBean(ImagesBean.class)).getSearchResult();
+        return ((ItemsBean)BeanHelper.getSessionBean(ItemsBean.class)).getSearchResult();
     }
 
     /**

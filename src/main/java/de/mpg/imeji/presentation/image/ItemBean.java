@@ -54,7 +54,7 @@ import de.mpg.imeji.presentation.util.UrlHelper;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class ImageBean
+public class ItemBean
 {
     private String tab;
     private SessionBean sessionBean;
@@ -68,16 +68,16 @@ public class ImageBean
     private SingleEditBean edit;
     protected String prettyLink;
     private MetadataLabels labels;
-    private SingleImageBrowse browse = null;
+    private SingleItemBrowse browse = null;
     private MetadataSetBean mds;
     private List<Album> relatedAlbums;
 
     /**
-     * Construct a default {@link ImageBean}
+     * Construct a default {@link ItemBean}
      * 
      * @throws Exception
      */
-    public ImageBean() throws Exception
+    public ItemBean() throws Exception
     {
         item = new Item();
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
@@ -87,7 +87,7 @@ public class ImageBean
     }
 
     /**
-     * Initialize the {@link ImageBean}
+     * Initialize the {@link ItemBean}
      * 
      * @return
      * @throws Exception
@@ -185,12 +185,12 @@ public class ImageBean
     }
 
     /**
-     * Initiliaue the {@link SingleImageBrowse} for this {@link ImageBean}
+     * Initiliaue the {@link SingleItemBrowse} for this {@link ItemBean}
      */
     public void initBrowsing()
     {
         if (item != null)
-            browse = new SingleImageBrowse((ImagesBean)BeanHelper.getSessionBean(ImagesBean.class), item, "item", "");
+            browse = new SingleItemBrowse((ItemsBean)BeanHelper.getSessionBean(ItemsBean.class), item, "item", "");
     }
 
     /**
@@ -522,12 +522,12 @@ public class ImageBean
         return Locks.isLocked(this.item.getId().toString(), sessionBean.getUser().getEmail());
     }
 
-    public SingleImageBrowse getBrowse()
+    public SingleItemBrowse getBrowse()
     {
         return browse;
     }
 
-    public void setBrowse(SingleImageBrowse browse)
+    public void setBrowse(SingleItemBrowse browse)
     {
         this.browse = browse;
     }

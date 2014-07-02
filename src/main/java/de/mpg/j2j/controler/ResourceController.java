@@ -4,8 +4,8 @@ import java.net.URI;
 
 import com.hp.hpl.jena.rdf.model.Model;
 
-import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.exceptions.AlreadyExistsException;

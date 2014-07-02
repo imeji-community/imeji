@@ -13,11 +13,8 @@ import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.Syntax;
 import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.RDFNode;
-import com.hp.hpl.jena.sparql.util.DatasetUtils;
-import com.hp.hpl.jena.sparql.util.ModelUtils;
 import com.hp.hpl.jena.tdb.TDB;
 
-import de.mpg.imeji.logic.Imeji;
 import de.mpg.j2j.helper.SortHelper;
 
 /**

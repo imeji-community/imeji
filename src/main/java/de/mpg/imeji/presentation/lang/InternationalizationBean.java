@@ -6,10 +6,7 @@ package de.mpg.imeji.presentation.lang;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Observable;
-import java.util.ResourceBundle;
 
-import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;

@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -35,7 +34,6 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
-import de.mpg.imeji.presentation.beans.MessagesBean;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.history.PageURIHelper;
 import de.mpg.imeji.presentation.session.SessionBean;
@@ -296,7 +294,7 @@ public class ShareBean implements Serializable
                 {
                     try {
                     	UserController uc = new UserController(Imeji.adminUser);
-						User u = uc.retrieve(value);
+						uc.retrieve(value);
 						emailList.add(value);  
 
 					} catch (Exception e) {
@@ -314,26 +312,6 @@ public class ShareBean implements Serializable
             }
         }
         return emailList;
-    }
-
-    /**
-     * True if the email fits to an existing {@link User}
-     * 
-     * @param email
-     * @return
-     */
-    private boolean isExistingUser(String email)
-    {
-        try
-        {
-            UserController uc = new UserController(Imeji.adminUser);
-            uc.retrieve(email);
-            return true;
-        }
-        catch (Exception e)
-        {
-            return false;
-        }
     }
 
     /**

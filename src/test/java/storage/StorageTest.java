@@ -31,6 +31,7 @@ package storage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+
 import junit.framework.Assert;
 
 import org.apache.commons.io.FileUtils;
@@ -124,23 +125,11 @@ public class StorageTest
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         // READ THE URL
         sc.read(res.getOrginal(), baos, true);
-        byte[] stored = baos.toByteArray();
+        baos.toByteArray();
         // DELETE THE FILE
         sc.delete(res.getId());
         Assert.assertEquals(0, manager.getAdministrator().getNumberOfFiles());
         // Assert.assertTrue(Arrays.equals(original, stored));
         // Assert.assertTrue(Arrays.hashCode(original) == Arrays.hashCode(stored));
-    }
-
-    /**
-     * Read a file at the given path
-     * 
-     * @param path
-     * @return
-     * @throws FileNotFoundException
-     */
-    private File readFile(String path) throws FileNotFoundException
-    {
-        return new File(path);
     }
 }

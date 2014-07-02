@@ -4,8 +4,8 @@
 package de.mpg.imeji.logic.util;
 
 import de.mpg.imeji.logic.vo.Metadata;
-import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.Metadata.Types;
+import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Date;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;

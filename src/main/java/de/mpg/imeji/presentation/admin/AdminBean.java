@@ -31,13 +31,11 @@ import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.UploadResult;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
-import de.mpg.imeji.logic.util.MetadataFactory;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
@@ -45,7 +43,6 @@ import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.j2j.annotations.j2jId;
-import de.mpg.j2j.helper.SortHelper;
 
 /**
  * Bean for the administration page. Methods working on data
@@ -193,27 +190,6 @@ public class AdminBean
          */
         // cleanMetadata();
         cleanGrants();
-    }
-
-    /**
-     * Clean {@link Metadata} which are not attached to a {@link Statement} .NOT WORKING SO FAR
-     * 
-     * @throws Exception
-     */
-    private void cleanMetadata() throws Exception
-    {
-        logger.info("Searching not bounded metadata...");
-        // Don't use search to be able to get the type of the metadata defined as sort0 in the query
-        List<String> uris = ImejiSPARQL.exec(SPARQLQueries.selectMetadataUnbounded(), null);
-        for (String uri : uris)
-        {
-            // Split the metadata uri and the metatata type defined as sort parameter
-            String[] s = SortHelper.SORT_VALUE_PATTERN.split(uri);
-            List<String> l = new ArrayList<String>();
-            l.add(s[0]);
-            removeResources(l, Imeji.imageModel, MetadataFactory.createMetadata(s[1]));
-        }
-        logger.info("...found " + uris.size());
     }
 
     /**

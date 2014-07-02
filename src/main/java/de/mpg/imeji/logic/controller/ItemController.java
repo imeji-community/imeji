@@ -32,7 +32,6 @@ import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.collection.CollectionListItem;
 import de.mpg.j2j.helper.J2JHelper;
 
 /**

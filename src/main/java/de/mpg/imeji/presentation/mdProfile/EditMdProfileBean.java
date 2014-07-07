@@ -18,6 +18,7 @@ import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.UrlHelper;
+import de.mpg.imeji.presentation.util.VocabularyHelper;
 
 /**
  * Java Bean for the edit metadata Profile page
@@ -32,6 +33,7 @@ public class EditMdProfileBean extends MdProfileBean
     private boolean init = false;
     private String colId = null;
     private static Logger logger = Logger.getLogger(EditMdProfileBean.class);
+    private VocabularyHelper vocabularyHelper;
 
     /**
      * Constructor
@@ -49,6 +51,7 @@ public class EditMdProfileBean extends MdProfileBean
         try
         {
             readUrl();
+            vocabularyHelper = new VocabularyHelper();
             if (init)
             {
                 if (this.getId() != null)
@@ -195,5 +198,21 @@ public class EditMdProfileBean extends MdProfileBean
     public void setColId(String colId)
     {
         this.colId = colId;
+    }
+
+    /**
+     * @return the vocabularyHelper
+     */
+    public VocabularyHelper getVocabularyHelper()
+    {
+        return vocabularyHelper;
+    }
+
+    /**
+     * @param vocabularyHelper the vocabularyHelper to set
+     */
+    public void setVocabularyHelper(VocabularyHelper vocabularyHelper)
+    {
+        this.vocabularyHelper = vocabularyHelper;
     }
 }

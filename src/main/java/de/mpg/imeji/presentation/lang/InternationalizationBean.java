@@ -55,7 +55,7 @@ public class InternationalizationBean
     private void init()
     {
         try
-        {
+        { 
             Iso639_1Helper iso639_1Helper = new Iso639_1Helper();
             isolanguages = iso639_1Helper.getList();
             readSupportedLanguagesProperty();
@@ -83,6 +83,7 @@ public class InternationalizationBean
         // Add the other languages (non supported)
         // languages.addAll(getsupportedLanguages(false));
         // init the string of all languages
+        languagesAsString = "";
         for (SelectItem s : languages)
             languagesAsString += s.getValue() + "," + s.getLabel() + "|";
     }

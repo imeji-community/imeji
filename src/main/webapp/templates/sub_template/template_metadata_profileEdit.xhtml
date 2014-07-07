@@ -10,18 +10,7 @@
 		<h:outputText value="#{metadataBean.init}"/>
 	</ui:define>
 	
-	<ui:define name="additonalHeaderScripts">
-		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/main.js"></script>
-		<script type="text/javascript">
-			// avoid to have many times the whole iso langages defined on the page. Relevant for profiles with many metadata
-			function write_language_options(select, value) {
-				write_options(select, value, '#{Internationalization.languagesAsString}');
-			}
-			function write_metadata_type_options(select, value) {
-				write_options(select,value, '#{metadataBean.mdTypesMenuAsString}');
-			}			
-		</script>
-	</ui:define>
+	
 	
 	
 	<!-- Main Content - bibliographic grid list - START -->
@@ -143,7 +132,7 @@
 													
 													<div class="imj_metadataValue">
 														<div class="imj_metadataSet">
-															<!-- START Label - Language Paring -->
+															<!-- START Label - Language Parsing -->
 															<div class="imj_metadataLabel">
 																<h:outputText value="#{lbl.label}"/>
 																<h:outputText value=": " styleClass="imj_noDisplay"/>
@@ -202,7 +191,7 @@
 																	
 																	<ui:fragment rendered="#{wrapper.vocabularyString != null}">
 																		<h:selectOneMenu id="selectVocabulary" value="#{wrapper.vocabularyString}">
-																			<f:selectItems value="#{wrapper.vocabularyHelper.vocabularies}"/>
+																			<f:selectItems value="#{metadataBean.vocabularyHelper.vocabularies}"/>
 																		</h:selectOneMenu>
 																		<h:commandButton id="btnRemoveVocabulary" type="submit" styleClass="imj_buttonRemove_16" action="#{metadataBean.removeVocabulary}">
 																			<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
@@ -335,5 +324,17 @@
 				</div>
 			</h:form>
 		</h:panelGroup>
+		#{Internationalization.languagesAsString}
+		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/main.js"></script>
+		<script type="text/javascript">
+			// avoid to have many times the whole iso langages defined on the page. Relevant for profiles with many metadata
+			function write_language_options(select, value) {
+				write_options(select, value, '#{Internationalization.languagesAsString}');
+			}
+			function write_metadata_type_options(select, value) {
+				write_options(select,value, '#{metadataBean.mdTypesMenuAsString}');
+			}			
+		</script>
 	</ui:define>
+	
 </ui:composition>

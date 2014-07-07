@@ -90,8 +90,8 @@ public class SPARQLQueries
      */
     public static String selectUserAll(String name)
     {
-        return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s a <http://imeji.org/terms/user> . ?s <http://xmlns.com/foaf/0.1/name> ?name . filter(regex(?name, '"
-                + name + "','i'))}";
+        return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s a <http://imeji.org/terms/user> . ?s <http://xmlns.com/foaf/0.1/name> ?name . ?s <http://xmlns.com/foaf/0.1/email> ?email. filter(regex(?name, '"
+                + name + "','i') || regex(?email, '" + name + "','i'))}";
     }
 
     /**
@@ -143,8 +143,6 @@ public class SPARQLQueries
                 + uri
                 + ">} . filter(bound(?g)) . ?s a <http://imeji.org/terms/userGroup> . ?s <http://xmlns.com/foaf/0.1/name> ?name } ORDER BY DESC(?name)";
     }
-    
-   
 
     /**
      * Select all {@link UserGroup}

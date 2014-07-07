@@ -411,6 +411,8 @@ public class ItemBean
         ic.delete(l, sessionBean.getUser());
         SessionObjectsController soc = new SessionObjectsController();
         soc.unselectItem(item.getId().toString());
+        BeanHelper.info(sessionBean.getLabel("image") + " " + item.getFilename() + " "
+                + sessionBean.getMessage("success_collection_remove_from"));
         redirectToBrowsePage();
     }
 

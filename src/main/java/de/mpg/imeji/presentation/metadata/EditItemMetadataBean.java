@@ -441,8 +441,10 @@ public class EditItemMetadataBean
             }
             else if ("append".equals(selectedMode))
             {
+                // Remove all emtpy Metadata
+                eib.getMds().trim();
                 // Add an emtpy metadata at the position we want to have it
-                appendEmtpyMetadataIfNecessary(eib);
+                appendEmtpyMetadata(eib);
             }
             // Add the Metadata which has been entered to the emtpy Metadata with the same statement in the editor
             eib = pasteMetadataIfEmtpy(eib);
@@ -538,12 +540,11 @@ public class EditItemMetadataBean
      * 
      * @param eib
      */
-    private void appendEmtpyMetadataIfNecessary(EditorItemBean eib)
+    private void appendEmtpyMetadata(EditorItemBean eib)
     {
         List<SuperMetadataBean> l = eib.getMds().getTree().getList();
         for (Statement st : profile.getStatements())
-            if (hasValue(eib, st))
-                l.add(new SuperMetadataBean(MetadataFactory.createMetadata(st), st));
+            l.add(new SuperMetadataBean(MetadataFactory.createMetadata(st), st));
         eib.getMds().initTreeFromList(SuperMetadataTree.resetPosition(l));
     }
 

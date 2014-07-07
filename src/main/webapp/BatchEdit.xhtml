@@ -87,16 +87,16 @@
 								</div>
 								
 								<h:panelGroup styleClass="imj_submitPanel" rendered="#{EditItemMetadataBean.editType == 'selected'}">
-									<h:commandButton styleClass="imj_submitButton" action="#{EditItemMetadataBean.addToAll}" value="#{lbl.add_to_all}" onclick="document.getElementById('batchEditForm:ajaxContent').style.opacity='0.2';">
+									<h:commandButton styleClass="imj_submitButton" type="submit" action="#{EditItemMetadataBean.addToAll}" value="#{lbl.add_to_all}" onclick="document.getElementById('batchEditForm:ajaxContent').style.opacity='0.2';">
 										<f:ajax render="ajaxContent" execute="@form"/>
 									</h:commandButton>
 								</h:panelGroup>
 							</div>
 							
 							<h:panelGroup layout="block" styleClass="imj_submitPanel" rendered="#{EditItemMetadataBean.editType != 'selected'}">
-								<h:commandButton styleClass="imj_cancelButton" action="#{EditItemMetadataBean.cancel}" value="#{lbl.cancel}"/>
-								<h:commandButton styleClass="imj_submitButton" action="#{EditItemMetadataBean.addToAllSave}" value="#{lbl.save}" onclick="openDialog('dialogWait');"/>
-								<h:commandButton styleClass="imj_submitButton" action="#{EditItemMetadataBean.addToAllSaveAndRedirect}" value="#{lbl.save_and_return_to_view}" onclick="openDialog('dialogWait');"/>
+								<h:commandButton styleClass="imj_cancelButton" type="submit" action="#{EditItemMetadataBean.cancel}" value="#{lbl.cancel}"/>
+								<h:commandButton styleClass="imj_submitButton" type="submit" action="#{EditItemMetadataBean.addToAllSave}" value="#{lbl.save}" onclick="openDialog('dialogWait');"/>
+								<h:commandButton styleClass="imj_submitButton" type="submit" action="#{EditItemMetadataBean.addToAllSaveAndRedirect}" value="#{lbl.save_and_return_to_view}" onclick="openDialog('dialogWait');"/>
 							</h:panelGroup>
 						</div>
 						
@@ -106,15 +106,15 @@
 						<h:panelGroup layout="block" id="imagesMetadata" styleClass="imj_batchEditItemList" rendered="#{EditItemMetadataBean.profileWithStatements and EditItemMetadataBean.editType == 'selected'}">
 							<div class="imj_listHeader">
 								<div class="imj_submitPanel">
-									<h:commandButton  styleClass="imj_cancelButton" action="#{EditItemMetadataBean.clearAll}" value="#{lbl.clear_all}">
+									<h:commandButton  styleClass="imj_cancelButton" type="submit" action="#{EditItemMetadataBean.clearAll}" value="#{lbl.clear_all}">
 										<f:ajax render="ajaxContent"/>
 									</h:commandButton >
-									<h:commandButton styleClass="imj_resetButton" action="#{EditItemMetadataBean.resetChanges}" value="#{lbl.reset_changes}">
+									<h:commandButton styleClass="imj_resetButton" type="submit" action="#{EditItemMetadataBean.resetChanges}" value="#{lbl.reset_changes}">
 										<f:ajax render="ajaxContent"/>
 									</h:commandButton>
-									<h:commandButton styleClass="imj_cancelButton" action="#{EditItemMetadataBean.cancel}" value="#{lbl.cancel}"/>
-									<h:commandButton styleClass="imj_submitButton" action="#{EditItemMetadataBean.save}" value="#{lbl.save}" onclick="openDialog('dialogWait');"/>
-									<h:commandButton styleClass="imj_submitButton" action="#{EditItemMetadataBean.saveAndRedirect}" value="#{lbl.save_and_return_to_view}" onclick="openDialog('dialogWait');"/>
+									<h:commandButton styleClass="imj_cancelButton" type="submit" action="#{EditItemMetadataBean.cancel}" value="#{lbl.cancel}"/>
+									<h:commandButton styleClass="imj_submitButton" type="submit" action="#{EditItemMetadataBean.save}" value="#{lbl.save}" onclick="openDialog('dialogWait');"/>
+									<h:commandButton styleClass="imj_submitButton" type="submit" action="#{EditItemMetadataBean.saveAndRedirect}" value="#{lbl.save_and_return_to_view}" onclick="openDialog('dialogWait');"/>
 								</div>
 							</div>
 							
@@ -138,16 +138,16 @@
 							
 							<div class="imj_listFooter">
 								<div class="imj_submitPanel">
-									<h:commandButton  styleClass="imj_cancelButton" action="#{EditItemMetadataBean.clearAll}" type="button" value="#{lbl.clear_all}">
+									<h:commandButton  styleClass="imj_cancelButton" action="#{EditItemMetadataBean.clearAll}" type="submit" value="#{lbl.clear_all}">
 										<f:ajax render="ajaxContent"/>
 									</h:commandButton >
-									<h:commandButton styleClass="imj_resetButton" action="#{EditItemMetadataBean.resetChanges}" value="#{lbl.reset_changes}">
+									<h:commandButton styleClass="imj_resetButton" action="#{EditItemMetadataBean.resetChanges}" type="submit" value="#{lbl.reset_changes}">
 										<f:ajax render="ajaxContent"/>
 									</h:commandButton>
 									<h:messages />
-									<h:commandButton styleClass="imj_cancelButton" action="#{EditItemMetadataBean.cancel}" value="#{lbl.cancel}"/>
-									<h:commandButton styleClass="imj_submitButton" action="#{EditItemMetadataBean.save}" value="#{lbl.save}" onclick="openDialog('dialogWait');"/>
-									<h:commandButton styleClass="imj_submitButton" action="#{EditItemMetadataBean.saveAndRedirect}" value="#{lbl.save_and_return_to_view}" onclick="openDialog('dialogWait');"/>
+									<h:commandButton styleClass="imj_cancelButton" type="submit" action="#{EditItemMetadataBean.cancel}" value="#{lbl.cancel}"/>
+									<h:commandButton styleClass="imj_submitButton" type="submit" action="#{EditItemMetadataBean.save}" value="#{lbl.save}" onclick="openDialog('dialogWait');"/>
+									<h:commandButton styleClass="imj_submitButton" type="submit" action="#{EditItemMetadataBean.saveAndRedirect}" value="#{lbl.save_and_return_to_view}" onclick="openDialog('dialogWait');"/>
 								</div>
 							</div>
 				        </h:panelGroup> <!-- END imj_batchEditItemList -->

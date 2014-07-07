@@ -223,13 +223,13 @@
 			</ui:fragment>
 			
 			
-			<ui:fragment rendered="#{cc.attrs.formObject != null and cc.attrs.formObject != '' and cc.attrs.listItem != null}">
+			<ui:fragment rendered="#{cc.attrs.formObject != null and cc.attrs.formObject != '' and cc.attrs.listItem != null and cc.attrs.itemBean.statement.maxOccurs != '1'}">
 				<!-- BUTTONS -->
 				<h:panelGroup styleClass="imj_inlineButtonGroup">
-					<h:commandLink id="add" styleClass="imj_buttonAdd_16" action="#{cc.attrs.listItem.addMetadata(md)}" title="#{lbl.add}" value=" " rendered="#{cc.attrs.itemBean.statement.maxOccurs != '1'}">
+					<h:commandLink id="add" type="submit" styleClass="imj_buttonAdd_16" action="#{cc.attrs.listItem.addMetadata(md)}" title="#{lbl.add}">
 						<f:ajax execute="#{cc.attrs.formObject}" render="#{cc.attrs.formObject}" />
 					</h:commandLink>
-					<h:commandLink  id="remove" styleClass="imj_buttonRemove_16" action="#{cc.attrs.listItem.removeMetadata(md)}" title="#{lbl.remove}" value=" " rendered="#{cc.attrs.itemBean.statement.maxOccurs != '1'}">
+					<h:commandLink  id="remove" type="submit" styleClass="imj_buttonRemove_16" action="#{cc.attrs.listItem.removeMetadata(md)}" title="#{lbl.remove}">
 						<f:ajax execute="#{cc.attrs.formObject}" render="#{cc.attrs.formObject}" />
 					</h:commandLink>
 				</h:panelGroup>

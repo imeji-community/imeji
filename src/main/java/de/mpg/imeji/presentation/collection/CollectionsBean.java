@@ -149,15 +149,14 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
             CollectionImeji collection = collectionController.retrieve(uri, sb.getUser());
             collectionController.delete(collection, sb.getUser());
             count++;
+            
+            BeanHelper.info(sb.getMessage("success_collection_delete").replace("XXX_collectionName_XXX",
+                    collection.getMetadata().getTitle()));
         }
         sb.getSelectedCollections().clear();
         if (count == 0)
         {
             BeanHelper.warn(sb.getMessage("error_delete_no_collection_selected"));
-        }
-        else
-        {
-            BeanHelper.info(count + " " + sb.getMessage("success_collections_delete"));
         }
         return "pretty:collections";
     }

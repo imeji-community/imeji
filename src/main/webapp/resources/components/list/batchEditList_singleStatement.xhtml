@@ -144,11 +144,9 @@
 					</div>
 					<div class="imj_metadataSet">
 						<h:outputLabel value="#{lbl.url}" styleClass="imj_metadataLabel"/>
-						<div class="imj_metadataValue">
-							<h:inputText id="inputLicenseId" value="#{cc.attrs.itemBean.externalUri}" immediate="true" onfocus="this.select();">
-								<f:converter converterId="URIConverter"/>
-							</h:inputText>
-						</div>
+						<h:inputText styleClass="imj_metadataValue" id="inputLicenseId" value="#{cc.attrs.itemBean.externalUri}" immediate="true" onfocus="this.select();">
+							<f:converter converterId="URIConverter"/>
+						</h:inputText>
 					</div>
 				</ui:fragment>
 				

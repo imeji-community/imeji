@@ -46,6 +46,7 @@ import de.mpg.imeji.presentation.session.SessionObjectsController;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.UrlHelper;
+import de.mpg.j2j.helper.DateHelper;
 
 /**
  * Bean for a Single image
@@ -71,6 +72,7 @@ public class ItemBean
     private SingleItemBrowse browse = null;
     private MetadataSetBean mds;
     private List<Album> relatedAlbums;
+    private String dateCreated;
 
     /**
      * Construct a default {@link ItemBean}
@@ -663,5 +665,21 @@ public class ItemBean
     public boolean isAudioFile()
     {
         return StorageUtils.getMimeType(FilenameUtils.getExtension(item.getFilename())).contains("audio");
+    }
+
+    /**
+     * @return the dateCreated
+     */
+    public String getDateCreated()
+    {
+        return dateCreated;
+    }
+
+    /**
+     * @param dateCreated the dateCreated to set
+     */
+    public void setDateCreated(String dateCreated)
+    {
+        this.dateCreated = dateCreated;
     }
 }

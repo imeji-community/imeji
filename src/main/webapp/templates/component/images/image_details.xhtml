@@ -280,6 +280,16 @@
 						</span>
 					</h:panelGroup>
 					
+					<h:panelGroup styleClass="imj_infodataSet">
+						<span class="imj_infodataLabel">
+							<h:outputText value="#{lbl.imageUploadDate}"/>
+							<span class="imj_invisible">: </span>
+						</span>
+						<span class="imj_infodataValue">
+							<h:outputText value="#{itemBean.image.created.time.toString()}"/>
+						</span>
+					</h:panelGroup>
+					
 					<!-- InfoDataList - Images File Sizes -->						
 					<div class="imj_infodataSet">
 						<div class="imj_infodataLabel">

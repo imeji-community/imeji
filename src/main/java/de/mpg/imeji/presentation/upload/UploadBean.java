@@ -45,6 +45,7 @@ import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.collection.CollectionBean;
 import de.mpg.imeji.presentation.history.PageURIHelper;
 import de.mpg.imeji.presentation.session.SessionBean;
@@ -843,4 +844,5 @@ public class UploadBean implements Serializable
     {
         this.recursive = recursive;
     }
+   
 }

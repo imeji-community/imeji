@@ -45,9 +45,9 @@
 		<script type="text/javascript" src="http://www.google.com/jsapi"></script>
 		<!-- Load plupload and all it's runtimes and finally the jQuery queue widget -->
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
-		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload_1_5_5/js/plupload.full.js"></script>
-		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload_1_5_5/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
-		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload_1_5_5/js/i18n/#{Internationalization.currentLanguage}.js"></script>
+		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload-2.1.2/js/plupload.full.min.js"></script>
+		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload-2.1.2/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
+		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload-2.1.2/js/i18n/#{Internationalization.currentLanguage}.js"></script>
 		<script type="text/javascript">
 			$(function() {
 				// Setup html5 version
@@ -55,13 +55,12 @@
 					// General settings
 					runtimes : 'html5,silverlight,flash,html4',
 					url : location.pathname  + "?start=1",
-					//max_file_size : '10mb',
+					max_file_size : '#{Configuration.uploadMaxFileSize}mb',
 					multi_selection : true,
 					//chunk_size : '1mb',
 					unique_names : false,
-					flash_swf_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/eSciDoc_JavaScript/plupload_1_5_5/js/plupload.flash.swf',
-					silverlight_xap_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/eSciDoc_JavaScript/plupload_1_5_5/js/plupload.silverlight.xap',
-				
+					flash_swf_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/eSciDoc_JavaScript/plupload-2.1.2/js/movie.swf',
+					silverlight_xap_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/eSciDoc_JavaScript/plupload-2.1.2/js/movie.xap',
 					// Resize images on clientside
 					//resize : {width : 320, height : 240, quality : 90},
 					 init : {
@@ -77,7 +76,6 @@
 					 }
 					});
 			});
-
 			function report() {
 				window.location.href = location.pathname + "?done=1";
 			}

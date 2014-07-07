@@ -48,24 +48,24 @@
 	<managed-bean>
 		<managed-bean-name>AdvancedSearchBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.search.AdvancedSearchBean</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
+		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
 
 	<!-- Profiles bean -->
 	<managed-bean>
 		<managed-bean-name>MdProfileBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.mdProfile.MdProfileBean</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
+		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>ViewMdProfileBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.mdProfile.ViewMdProfileBean</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
+		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>CreateMdProfileBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.mdProfile.CreateMdProfileBean</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
+		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>EditMdProfileBean</managed-bean-name>
@@ -199,7 +199,7 @@
 	<managed-bean>
 		<managed-bean-name>QuickSearchBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.search.QuickSearchBean</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
+		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>AdminBean</managed-bean-name>

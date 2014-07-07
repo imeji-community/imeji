@@ -209,12 +209,11 @@ public class AdvancedSearchBean
         try
         {
             errorQuery = false;
-            FacesContext
-                    .getCurrentInstance()
-                    .getExternalContext()
-                    .redirect(
-                            navigation.getBrowseUrl() + "?q="
-                                    + URLQueryTransformer.transform2UTF8URL(formular.getFormularAsSearchQuery()));
+            String q = URLQueryTransformer.transform2UTF8URL(formular.getFormularAsSearchQuery());
+            if (q != "")
+                FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getBrowseUrl() + "?q=" + q);
+            else
+                BeanHelper.error(session.getMessage("error_search_query_emtpy"));
         }
         catch (Exception e)
         {

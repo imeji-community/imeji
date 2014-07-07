@@ -67,4 +67,20 @@ public class UrlHelper
             return false;
         }
     }
+
+    /**
+     * Add to the url the parameter
+     * 
+     * @param url
+     * @param param
+     * @param value
+     * @return
+     */
+    public static String addParameter(String url, String param, String value)
+    {
+        String[] params = url.split("\\?", 2);
+        if (params.length > 1 && !"".equals(params[1]))
+            return url + "&" + param + "=" + value;
+        return url + "?" + param + "=" + value;
+    }
 }

@@ -91,7 +91,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
             selectedMenu = UrlHelper.getParameterValue("tab");
         }
         query = UrlHelper.getParameterValue("q");
-        if (selectedFilter == null)
+        if (selectedFilter == null || UrlHelper.getParameterBoolean("login"))
         {
             if (sb.getUser() != null)
             {

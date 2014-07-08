@@ -16,9 +16,11 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
 import de.mpg.imeji.logic.ImejiSPARQL;
+import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.Search;
-import de.mpg.imeji.logic.search.Search.SearchType;
+import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
@@ -240,7 +242,7 @@ public class ItemController extends ImejiController
      */
     public SearchResult searchItemInContainer(URI containerUri, SearchQuery searchQuery, SortCriterion sortCri)
     {
-        Search search = new Search(SearchType.ITEM, containerUri.toString());
+        Search search = SearchFactory.create(SearchType.ITEM, containerUri.toString());
         return search.search(searchQuery, sortCri, user);
     }
 
@@ -255,11 +257,9 @@ public class ItemController extends ImejiController
      */
     public SearchResult search(URI containerUri, SearchQuery searchQuery, SortCriterion sortCri, List<String> uris)
     {
-        String uriString = null;
-        if (containerUri != null)
-            uriString = containerUri.toString();
-        Search search = new Search(SearchType.ALL, uriString);
-        return search.search(uris, searchQuery, sortCri, user);
+        String uriString = containerUri != null ? containerUri.toString() : null;
+        Search search = SearchFactory.create(SearchType.ITEM, uriString);
+        return search.search(searchQuery, sortCri, user, uris);
     }
 
     /**
@@ -422,8 +422,8 @@ public class ItemController extends ImejiController
      */
     public Container findContainerItems(Container c, User user, int size)
     {
-        String q = c instanceof CollectionImeji ? SPARQLQueries.selectCollectionItems(c.getId(), user, size) : 
-        	SPARQLQueries.selectAlbumItems(c.getId(), user, size);
+        String q = c instanceof CollectionImeji ? SPARQLQueries.selectCollectionItems(c.getId(), user, size) : SPARQLQueries
+                .selectAlbumItems(c.getId(), user, size);
         c.getImages().clear();
         for (String s : ImejiSPARQL.exec(q, null))
         {

@@ -12,7 +12,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.vo.SearchElement;
 import de.mpg.imeji.logic.search.vo.SearchElement.SEARCH_ELEMENTS;
 import de.mpg.imeji.logic.search.vo.SearchGroup;
@@ -132,7 +132,7 @@ public class URLQueryTransformer
                 {
                     value += "\"";
                 }
-                SearchIndex index = Search.getIndex(scString.substring(indexIndex + 1, indexOp).trim());
+                SearchIndex index = SPARQLSearch.getIndex(scString.substring(indexIndex + 1, indexOp).trim());
                 SearchOperators operator = stringOperator2SearchOperator(op);
                 searchQuery.addPair(new SearchMetadata(index, operator, value, ObjectHelper.getURI(Statement.class,
                         scString.substring(0, indexIndex).trim()), not));
@@ -149,7 +149,7 @@ public class URLQueryTransformer
                 {
                     value += "\"";
                 }
-                SearchIndex index = Search.getIndex(scString.substring(0, indexOp).trim());
+                SearchIndex index = SPARQLSearch.getIndex(scString.substring(0, indexOp).trim());
                 SearchOperators operator = stringOperator2SearchOperator(op);
                 searchQuery.addPair(new SearchPair(index, operator, value, not));
                 scString = "";
@@ -158,7 +158,7 @@ public class URLQueryTransformer
         }
         if (!"".equals(query) && searchQuery.isEmpty())
         {
-            searchQuery.addPair(new SearchPair(Search.getIndex(SearchIndex.names.all), SearchOperators.REGEX, query
+            searchQuery.addPair(new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.all), SearchOperators.REGEX, query
                     .trim()));
         }
         return searchQuery;

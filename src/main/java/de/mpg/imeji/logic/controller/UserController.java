@@ -12,7 +12,7 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
 import de.mpg.imeji.logic.search.Search;
-import de.mpg.imeji.logic.search.Search.SearchType;
+import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.User;
@@ -128,14 +128,14 @@ public class UserController
      */
     public Collection<User> retrieveAll(String name)
     {
-        Search search = new Search(SearchType.ALL, null);
-        return loadUsers(search.searchSimpleForQuery(SPARQLQueries.selectUserAll(name), null));
+        Search search = SearchFactory.create();
+        return loadUsers(search.searchSimpleForQuery(SPARQLQueries.selectUserAll(name)).getResults());
     }
 
     public Collection<User> retrieveUserWithGrantFor(String grantFor)
     {
-        Search search = new Search(SearchType.ALL, null);
-        return loadUsers(search.searchSimpleForQuery(SPARQLQueries.selectUserWithGrantFor(grantFor), null));
+        Search search = SearchFactory.create();
+        return loadUsers(search.searchSimpleForQuery(SPARQLQueries.selectUserWithGrantFor(grantFor)).getResults());
     }
 
     /**
@@ -173,8 +173,8 @@ public class UserController
     public static boolean adminUserExist()
     {
         boolean exist = false;
-        Search search = new Search(SearchType.ALL, null);
-        List<String> uris = search.searchSimpleForQuery(SPARQLQueries.selectUserSysAdmin(), null);
+        Search search = SearchFactory.create();
+        List<String> uris = search.searchSimpleForQuery(SPARQLQueries.selectUserSysAdmin()).getResults();
         if (uris != null && uris.size() > 0)
         {
             exist = true;
@@ -190,8 +190,8 @@ public class UserController
      */
     public List<User> retrieveAllAdmins()
     {
-        Search search = new Search(SearchType.ALL, null);
-        List<String> uris = search.searchSimpleForQuery(SPARQLQueries.selectUserSysAdmin(), null);
+        Search search = SearchFactory.create();
+        List<String> uris = search.searchSimpleForQuery(SPARQLQueries.selectUserSysAdmin()).getResults();
         List<User> admins = new ArrayList<User>();
         for (String uri : uris)
         {

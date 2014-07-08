@@ -9,7 +9,7 @@ import java.util.List;
 
 import javax.faces.model.SelectItem;
 
-import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.vo.SearchElement;
 import de.mpg.imeji.logic.search.vo.SearchGroup;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
@@ -179,46 +179,46 @@ public class SearchMetadataForm
             switch (MetadataTypesHelper.getTypesForNamespace(statement.getType().toString()))
             {
                 case DATE:
-                    group.addPair(new SearchMetadata(Search.getIndex(SearchIndex.names.time.name()), operator,
+                    group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.time.name()), operator,
                             DateFormatter.format(searchValue), ns, not));
                     break;
                 case GEOLOCATION:
                     group.setNot(not);
-                    group.addPair(new SearchMetadata(Search.getIndex(SearchIndex.names.title.name()), operator,
+                    group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.title.name()), operator,
                             searchValue, ns));
                     break;
                 case LICENSE:
-                    group.addPair(new SearchMetadata(Search.getIndex(SearchIndex.names.license.name()), operator,
+                    group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.license.name()), operator,
                             searchValue, ns, not));
                     break;
                 case NUMBER:
-                    group.addPair(new SearchMetadata(Search.getIndex(SearchIndex.names.number.name()), operator,
+                    group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.number.name()), operator,
                             searchValue, ns, not));
                     break;
                 case CONE_PERSON:
                     group.setNot(not);
-                    group.addPair(new SearchMetadata(Search.getIndex(SearchIndex.names.person_family.name()), operator,
+                    group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.person_family.name()), operator,
                             searchValue, ns));
                     group.addLogicalRelation(LOGICAL_RELATIONS.OR);
-                    group.addPair(new SearchMetadata(Search.getIndex(SearchIndex.names.person_given.name()), operator,
+                    group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.person_given.name()), operator,
                             searchValue, ns));
                     group.addLogicalRelation(LOGICAL_RELATIONS.OR);
-                    group.addPair(new SearchMetadata(Search.getIndex(SearchIndex.names.person_org_title.name()),
+                    group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.person_org_title.name()),
                             operator, searchValue, ns));
                     break;
                 case PUBLICATION:
-                    group.addPair(new SearchMetadata(Search.getIndex(SearchIndex.names.citation.name()), operator,
+                    group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.citation.name()), operator,
                             searchValue, ns, not));
                     break;
                 case TEXT:
-                    group.addPair(new SearchMetadata(Search.getIndex(SearchIndex.names.text.name()), operator,
+                    group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.text.name()), operator,
                             searchValue, ns, not));
                     break;
                 case LINK:
-                    group.addPair(new SearchMetadata(Search.getIndex(SearchIndex.names.label), operator,
+                    group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.label), operator,
                             searchValue, ns, not));
                     group.addLogicalRelation(LOGICAL_RELATIONS.OR);
-                    group.addPair(new SearchMetadata(Search.getIndex(SearchIndex.names.url), operator,
+                    group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.url), operator,
                             searchValue, ns, not));
                     break;
             }

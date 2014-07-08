@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Random;
 
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchOperators;
@@ -84,7 +84,7 @@ public class StartPageBean
         {
             String[] prop = PropertyReader.getProperty("imeji.home.caroussel.sort").split("-");
             if( prop[0] != "" && prop[1] != "")
-            	return new SortCriterion(Search.getIndex(prop[0]), SortOrder.valueOf(prop[1].toUpperCase()));
+            	return new SortCriterion(SPARQLSearch.getIndex(prop[0]), SortOrder.valueOf(prop[1].toUpperCase()));
         }
         catch (Exception e)
         {
@@ -106,7 +106,7 @@ public class StartPageBean
         if (sq.isEmpty() && searchforItemCreatedForLessThan > 0)
         {
             // Search for item which have been for less than n hours
-            sq.addPair(new SearchPair(Search.getIndex(SearchIndex.names.created), SearchOperators.GREATER,
+            sq.addPair(new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.created), SearchOperators.GREATER,
                     getTimeforNDaybeforeNow(searchforItemCreatedForLessThan)));
             return new SearchResult(ic.search(null, sq, sc, null).getResults(), null);
         }

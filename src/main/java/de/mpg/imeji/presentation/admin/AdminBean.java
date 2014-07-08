@@ -26,6 +26,7 @@ import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.index.Index;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
+import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.StorageController;
@@ -200,8 +201,8 @@ public class AdminBean
     private void cleanStatement() throws Exception
     {
         logger.info("Searching not bounded statement...");
-        Search search = new Search(SearchType.ALL, null);
-        List<String> uris = search.searchSimpleForQuery(SPARQLQueries.selectStatementUnbounded(), null);
+        Search search = SearchFactory.create();
+        List<String> uris = search.searchSimpleForQuery(SPARQLQueries.selectStatementUnbounded()).getResults();
         logger.info("...found " + uris.size());
         removeResources(uris, Imeji.profileModel, new Statement());
     }
@@ -214,20 +215,20 @@ public class AdminBean
     private void cleanGrants() throws Exception
     {
         logger.info("Searching not bounded grants...");
-        Search search = new Search(SearchType.ALL, null);
-        List<String> uris = search.searchSimpleForQuery(SPARQLQueries.selectGrantWithoutUser(), null);
+        Search search = SearchFactory.create();
+        List<String> uris = search.searchSimpleForQuery(SPARQLQueries.selectGrantWithoutUser()).getResults();
         logger.info("...found " + uris.size());
         System.out.println(uris.size());
         removeResources(uris, Imeji.userModel, new Grant());
         logger.info("Searching broken grants...");
-        uris = search.searchSimpleForQuery(SPARQLQueries.selectGrantBroken(), null);
+        uris = search.searchSimpleForQuery(SPARQLQueries.selectGrantBroken()).getResults();
         logger.info("...found " + uris.size());
         System.out.println(uris.size());
         removeResources(uris, Imeji.userModel, new Grant());
         logger.info("Searching emtpy grants...");
         if (clean)
             ImejiSPARQL.execUpdate(SPARQLQueries.removeGrantEmtpy());
-        uris = search.searchSimpleForQuery(SPARQLQueries.selectGrantEmtpy(), null);
+        uris = search.searchSimpleForQuery(SPARQLQueries.selectGrantEmtpy()).getResults();
         logger.info("...found " + uris.size());
         System.out.println(uris.size());
     }
@@ -297,8 +298,8 @@ public class AdminBean
      */
     public int getAllAlbumsSize()
     {
-        Search search = new Search(SearchType.ALBUM, null);
-        return search.searchSimpleForQuery(SPARQLQueries.selectAlbumAll(), null).size();
+        Search search = SearchFactory.create(SearchType.ALBUM);
+        return search.searchSimpleForQuery(SPARQLQueries.selectAlbumAll()).getNumberOfRecords();
     }
 
     /**
@@ -308,8 +309,8 @@ public class AdminBean
      */
     public int getAllCollectionsSize()
     {
-        Search search = new Search(SearchType.COLLECTION, null);
-        return search.searchSimpleForQuery(SPARQLQueries.selectCollectionAll(), null).size();
+        Search search = SearchFactory.create(SearchType.COLLECTION);
+        return search.searchSimpleForQuery(SPARQLQueries.selectCollectionAll()).getNumberOfRecords();
     }
 
     /**
@@ -319,8 +320,8 @@ public class AdminBean
      */
     public int getAllImagesSize()
     {
-        Search search = new Search(SearchType.ITEM, null);
-        return search.searchSimpleForQuery(SPARQLQueries.selectItemAll(), null).size();
+        Search search = SearchFactory.create(SearchType.ITEM);
+        return search.searchSimpleForQuery(SPARQLQueries.selectItemAll()).getNumberOfRecords();
     }
 
     /**

@@ -35,8 +35,10 @@ import com.ocpsoft.pretty.PrettyContext;
 
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
+import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.UploadResult;
@@ -443,10 +445,9 @@ public class UploadBean implements Serializable
      */
     private Item findItemByFileName(String filename)
     {
-        Search s = new Search(SearchType.ITEM, null);
+        Search s = SearchFactory.create(SearchType.ITEM);
         List<String> sr = s.searchSimpleForQuery(
-                SPARQLQueries.selectContainerItemByFilename(collection.getId(), FilenameUtils.getBaseName(filename)),
-                null);
+                SPARQLQueries.selectContainerItemByFilename(collection.getId(), FilenameUtils.getBaseName(filename))).getResults();
         if (sr.size() == 0)
             throw new RuntimeException("No item found with the filename " + FilenameUtils.getBaseName(filename));
         if (sr.size() > 1)
@@ -463,10 +464,9 @@ public class UploadBean implements Serializable
      */
     private boolean filenameExistsInCollection(String filename)
     {
-        Search s = new Search(SearchType.ITEM, null);
+        Search s = SearchFactory.create(SearchType.ITEM);
         return s.searchSimpleForQuery(
-                SPARQLQueries.selectContainerItemByFilename(collection.getId(), FilenameUtils.getBaseName(filename)),
-                null).size() > 0;
+                SPARQLQueries.selectContainerItemByFilename(collection.getId(), FilenameUtils.getBaseName(filename))).getNumberOfRecords() > 0;
     }
 
     /**

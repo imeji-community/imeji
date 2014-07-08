@@ -15,9 +15,11 @@ import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
+import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.Search;
-import de.mpg.imeji.logic.search.Search.SearchType;
+import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
@@ -289,7 +291,7 @@ public class CollectionController extends ImejiController
      */
     public SearchResult search(SearchQuery searchQuery, SortCriterion sortCri, int limit, int offset)
     {
-        Search search = new Search(SearchType.COLLECTION, null);
+        Search search = SearchFactory.create(SearchType.COLLECTION);
         return search.search(searchQuery, sortCri, user);
     }
 

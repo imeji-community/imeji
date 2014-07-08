@@ -3,7 +3,7 @@ package de.mpg.imeji.logic.search.vo;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.predefinedMetadata.util.MetadataTypesHelper;
@@ -94,31 +94,31 @@ public class SearchIndex
         switch (MetadataTypesHelper.getTypesForNamespace(st.getType().toString()))
         {
             case DATE:
-                list.add(Search.getIndex(SearchIndex.names.time.name()));
+                list.add(SPARQLSearch.getIndex(SearchIndex.names.time.name()));
                 break;
             case GEOLOCATION:
-                list.add(Search.getIndex(SearchIndex.names.title.name()));
+                list.add(SPARQLSearch.getIndex(SearchIndex.names.title.name()));
                 break;
             case LICENSE:
-                list.add(Search.getIndex(SearchIndex.names.license.name()));
+                list.add(SPARQLSearch.getIndex(SearchIndex.names.license.name()));
                 break;
             case NUMBER:
-                list.add(Search.getIndex(SearchIndex.names.number.name()));
+                list.add(SPARQLSearch.getIndex(SearchIndex.names.number.name()));
                 break;
             case CONE_PERSON:
-                list.add(Search.getIndex(SearchIndex.names.person_family.name()));
-                list.add(Search.getIndex(SearchIndex.names.person_given.name()));
-                list.add(Search.getIndex(SearchIndex.names.person_org_title.name()));
+                list.add(SPARQLSearch.getIndex(SearchIndex.names.person_family.name()));
+                list.add(SPARQLSearch.getIndex(SearchIndex.names.person_given.name()));
+                list.add(SPARQLSearch.getIndex(SearchIndex.names.person_org_title.name()));
                 break;
             case PUBLICATION:
-                list.add(Search.getIndex(SearchIndex.names.citation.name()));
+                list.add(SPARQLSearch.getIndex(SearchIndex.names.citation.name()));
                 break;
             case TEXT:
-                list.add(Search.getIndex(SearchIndex.names.text.name()));
+                list.add(SPARQLSearch.getIndex(SearchIndex.names.text.name()));
                 break;
             case LINK:
-                list.add(Search.getIndex(SearchIndex.names.url.name()));
-                list.add(Search.getIndex(SearchIndex.names.label.name()));
+                list.add(SPARQLSearch.getIndex(SearchIndex.names.url.name()));
+                list.add(SPARQLSearch.getIndex(SearchIndex.names.label.name()));
                 break;
         }
         return list;

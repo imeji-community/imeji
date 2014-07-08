@@ -21,7 +21,7 @@ import de.mpg.imeji.logic.concurrency.locks.Locks;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchOperators;
 import de.mpg.imeji.logic.search.vo.SearchPair;
@@ -134,7 +134,7 @@ public class ItemBean
         relatedAlbums = new ArrayList<Album>();
         AlbumController ac = new AlbumController(sessionBean.getUser());
         SearchQuery q = new SearchQuery();
-        q.addPair(new SearchPair(Search.getIndex(SearchIndex.names.item), SearchOperators.EQUALS, getImage().getId()
+        q.addPair(new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.item), SearchOperators.EQUALS, getImage().getId()
                 .toString()));
         relatedAlbums = (List<Album>)ac.loadAlbumsLazy(ac.search(q, null, -1, 0).getResults(), -1, 0);
     }

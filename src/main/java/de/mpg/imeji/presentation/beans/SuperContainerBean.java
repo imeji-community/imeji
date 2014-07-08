@@ -10,7 +10,7 @@ import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchOperators;
 import de.mpg.imeji.logic.search.vo.SearchPair;
@@ -150,22 +150,22 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
         SearchPair pair = null;
         if ("my".equals(selectedFilter))
         {
-            pair = new SearchPair(Search.getIndex(SearchIndex.names.user), SearchOperators.EQUALS, ObjectHelper.getURI(
+            pair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.user), SearchOperators.EQUALS, ObjectHelper.getURI(
                     User.class, sb.getUser().getEmail()).toString());
         }
         else if ("private".equals(selectedFilter))
         {
-            pair = new SearchPair(Search.getIndex(SearchIndex.names.status), SearchOperators.EQUALS,
+            pair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.status), SearchOperators.EQUALS,
                     "http://imeji.org/terms/status#PENDING");
         }
         else if ("public".equals(selectedFilter))
         {
-            pair = new SearchPair(Search.getIndex(SearchIndex.names.status), SearchOperators.EQUALS,
+            pair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.status), SearchOperators.EQUALS,
                     "http://imeji.org/terms/status#RELEASED");
         }
         else if ("withdrawn".equals(selectedFilter))
         {
-            pair = new SearchPair(Search.getIndex(SearchIndex.names.status), SearchOperators.EQUALS,
+            pair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.status), SearchOperators.EQUALS,
                     "http://imeji.org/terms/status#WITHDRAWN");
         }
         return pair;

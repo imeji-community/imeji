@@ -43,8 +43,9 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
 import de.mpg.imeji.logic.auth.Authorization;
+import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.Search;
-import de.mpg.imeji.logic.search.Search.SearchType;
+import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.internal.InternalStorageManager;
@@ -237,8 +238,8 @@ public class DigilibServlet extends Scaler
         }
         else
         {
-            Search s = new Search(SearchType.ALL, null);
-            List<String> r = s.searchSimpleForQuery(SPARQLQueries.selectCollectionIdOfFile(url), null);
+            Search s =  SearchFactory.create();
+            List<String> r = s.searchSimpleForQuery(SPARQLQueries.selectCollectionIdOfFile(url)).getResults();
             if (!r.isEmpty())
                 return URI.create(r.get(0));
             else

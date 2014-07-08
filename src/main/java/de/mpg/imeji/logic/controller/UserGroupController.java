@@ -36,8 +36,9 @@ import java.util.List;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
+import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.Search;
-import de.mpg.imeji.logic.search.Search.SearchType;
+import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.User;
@@ -157,9 +158,8 @@ public class UserGroupController
     private Collection<UserGroup> searchBySPARQLQuery(String q, User user)
     {
         Collection<UserGroup> userGroups = new ArrayList<UserGroup>();
-        Search search = new Search(SearchType.ALL, null);
-        List<String> uris = search.searchSimpleForQuery(q, null);
-        for (String uri : uris)
+        Search search = SearchFactory.create();
+        for (String uri : search.searchSimpleForQuery(q).getResults())
         {
             try
             {

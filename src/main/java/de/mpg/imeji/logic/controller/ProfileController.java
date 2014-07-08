@@ -14,8 +14,10 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
 import de.mpg.imeji.logic.ImejiSPARQL;
+import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
+import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
@@ -167,7 +169,7 @@ public class ProfileController extends ImejiController
      */
     public SearchResult search(SearchQuery query, User user)
     {
-        Search search = new Search(SearchType.PROFILE, null);
+        Search search = SearchFactory.create(SearchType.PROFILE);
         SearchResult result = search.search(query, null, user);
         return result;
     }
@@ -180,7 +182,7 @@ public class ProfileController extends ImejiController
      */
     public List<MetadataProfile> search(User user) throws Exception
     {
-        Search search = new Search(SearchType.PROFILE, null);
+        Search search = SearchFactory.create(SearchType.PROFILE);
         SearchResult result = search.search(new SearchQuery(), null, user);
         List<MetadataProfile> l = new ArrayList<MetadataProfile>();
         for (String uri : result.getResults())

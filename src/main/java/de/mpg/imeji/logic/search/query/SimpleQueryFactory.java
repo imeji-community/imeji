@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchMetadata;
 import de.mpg.imeji.logic.search.vo.SearchPair;
@@ -188,7 +188,7 @@ public class SimpleQueryFactory
             {
                 pair.setValue(normalizeURI(MetadataProfile.class, pair.getValue()));
                 return "FILTER(" + getSimpleFilter(pair, "s") + ") . ?c <"
-                        + Search.getIndex(SearchIndex.names.prof).getNamespace() + "> ?s .";
+                        + SPARQLSearch.getIndex(SearchIndex.names.prof).getNamespace() + "> ?s .";
             }
             else if (J2JHelper.getResourceNamespace(new CollectionImeji()).equals(rdfType))
             {
@@ -374,7 +374,7 @@ public class SimpleQueryFactory
      */
     private static String getSimpleFilter(SearchPair pair, String variable)
     {
-        if (pair.getIndex().equals(Search.getIndex(SearchIndex.names.all)))
+        if (pair.getIndex().equals(SPARQLSearch.getIndex(SearchIndex.names.all)))
         {
             return getTextSearchFilter(pair, variable);
         }

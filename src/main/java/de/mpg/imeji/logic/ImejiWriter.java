@@ -32,23 +32,23 @@ import de.mpg.j2j.transaction.Transaction;
  * - Use {@link Transaction} and {@link Security} <br/>
  * - For concurrency purpose, each write {@link Transaction} is made within a single {@link Thread}. Use
  * {@link ThreadedTransaction} <br/>
- * - for READ operations, uses {@link ImejiRDF2Bean}
+ * - for READ operations, uses {@link ImejiReader}
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class ImejiBean2RDF
+public class ImejiWriter
 {
     private String modelURI;
-    private static Logger logger = Logger.getLogger(ImejiBean2RDF.class);
+    private static Logger logger = Logger.getLogger(ImejiWriter.class);
 
     /**
-     * Construct one {@link ImejiBean2RDF} for one {@link Model}
+     * Construct one {@link ImejiWriter} for one {@link Model}
      * 
      * @param modelURI
      */
-    public ImejiBean2RDF(String modelURI)
+    public ImejiWriter(String modelURI)
     {
         this.modelURI = modelURI;
     }

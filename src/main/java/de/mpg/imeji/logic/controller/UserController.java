@@ -9,8 +9,8 @@ import java.util.Collection;
 import java.util.List;
 
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.ImejiBean2RDF;
-import de.mpg.imeji.logic.ImejiRDF2Bean;
+import de.mpg.imeji.logic.ImejiWriter;
+import de.mpg.imeji.logic.ImejiReader;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
@@ -28,8 +28,8 @@ import de.mpg.j2j.exceptions.NotFoundException;
  */
 public class UserController
 {
-    private static ImejiRDF2Bean imejiRDF2Bean = new ImejiRDF2Bean(Imeji.userModel);
-    private static ImejiBean2RDF imejiBean2RDF = new ImejiBean2RDF(Imeji.userModel);
+    private static ImejiReader imejiRDF2Bean = new ImejiReader(Imeji.userModel);
+    private static ImejiWriter imejiBean2RDF = new ImejiWriter(Imeji.userModel);
     private User user;
 
     /**

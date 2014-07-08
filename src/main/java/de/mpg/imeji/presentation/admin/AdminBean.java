@@ -18,8 +18,8 @@ import org.apache.log4j.Logger;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.ImejiBean2RDF;
-import de.mpg.imeji.logic.ImejiRDF2Bean;
+import de.mpg.imeji.logic.ImejiWriter;
+import de.mpg.imeji.logic.ImejiReader;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.UserController;
@@ -258,7 +258,7 @@ public class AdminBean
      */
     private List<Object> loadResourcesAsObjects(List<String> uris, String modelName, Object obj)
     {
-        ImejiRDF2Bean reader = new ImejiRDF2Bean(modelName);
+        ImejiReader reader = new ImejiReader(modelName);
         List<Object> l = new ArrayList<Object>();
         for (String uri : uris)
         {
@@ -286,7 +286,7 @@ public class AdminBean
     {
         if (clean)
         {
-            ImejiBean2RDF writer = new ImejiBean2RDF(modelName);
+            ImejiWriter writer = new ImejiWriter(modelName);
             writer.delete(l, sb.getUser());
         }
     }

@@ -11,7 +11,7 @@ import org.apache.log4j.Logger;
 
 import de.escidoc.core.resources.aa.useraccount.Grants;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.ImejiBean2RDF;
+import de.mpg.imeji.logic.ImejiWriter;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.vo.Grant;
@@ -27,7 +27,7 @@ import de.mpg.imeji.logic.vo.UserGroup;
  */
 public class GrantController extends ImejiController
 {
-    private static ImejiBean2RDF imejiBean2RDF = new ImejiBean2RDF(Imeji.userModel);
+    private static ImejiWriter imejiBean2RDF = new ImejiWriter(Imeji.userModel);
     private static Logger logger = Logger.getLogger(GrantController.class);
 
     /**

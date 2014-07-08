@@ -9,8 +9,8 @@ import java.util.Collection;
 import java.util.List;
 
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.ImejiBean2RDF;
-import de.mpg.imeji.logic.ImejiRDF2Bean;
+import de.mpg.imeji.logic.ImejiWriter;
+import de.mpg.imeji.logic.ImejiReader;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.search.Search;
@@ -36,8 +36,8 @@ import de.mpg.j2j.helper.J2JHelper;
  */
 public class AlbumController extends ImejiController
 {
-    private static ImejiRDF2Bean imejiRDF2Bean = null;
-    private static ImejiBean2RDF imejiBean2RDF = null;
+    private static ImejiReader imejiRDF2Bean = null;
+    private static ImejiWriter imejiBean2RDF = null;
 
     /**
      * Construct a new controller for {@link Album}
@@ -45,8 +45,8 @@ public class AlbumController extends ImejiController
     public AlbumController()
     {
         super();
-        imejiBean2RDF = new ImejiBean2RDF(Imeji.albumModel);
-        imejiRDF2Bean = new ImejiRDF2Bean(Imeji.albumModel);
+        imejiBean2RDF = new ImejiWriter(Imeji.albumModel);
+        imejiRDF2Bean = new ImejiReader(Imeji.albumModel);
     }
 
     /**
@@ -57,8 +57,8 @@ public class AlbumController extends ImejiController
     public AlbumController(User user)
     {
         super(user);
-        imejiBean2RDF = new ImejiBean2RDF(Imeji.albumModel);
-        imejiRDF2Bean = new ImejiRDF2Bean(Imeji.albumModel);
+        imejiBean2RDF = new ImejiWriter(Imeji.albumModel);
+        imejiRDF2Bean = new ImejiReader(Imeji.albumModel);
     }
 
     /**
@@ -84,7 +84,7 @@ public class AlbumController extends ImejiController
      */
     public void update(Album ic, User user) throws Exception
     {
-        imejiBean2RDF = new ImejiBean2RDF(Imeji.albumModel);
+        imejiBean2RDF = new ImejiWriter(Imeji.albumModel);
         writeUpdateProperties(ic, user);
         imejiBean2RDF.update(imejiBean2RDF.toList(ic), user);
     }
@@ -98,7 +98,7 @@ public class AlbumController extends ImejiController
      */
     public void updateLazy(Album ic, User user) throws Exception
     {
-        imejiBean2RDF = new ImejiBean2RDF(Imeji.albumModel);
+        imejiBean2RDF = new ImejiWriter(Imeji.albumModel);
         writeUpdateProperties(ic, user);
         imejiBean2RDF.updateLazy(imejiBean2RDF.toList(ic), user);
     }
@@ -138,7 +138,7 @@ public class AlbumController extends ImejiController
      */
     public void delete(Album album, User user) throws Exception
     {
-        imejiBean2RDF = new ImejiBean2RDF(Imeji.albumModel);
+        imejiBean2RDF = new ImejiWriter(Imeji.albumModel);
         imejiBean2RDF.delete(imejiBean2RDF.toList(album), user);
     }
 

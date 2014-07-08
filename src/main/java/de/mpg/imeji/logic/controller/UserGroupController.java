@@ -34,8 +34,8 @@ import java.util.Collection;
 import java.util.List;
 
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.ImejiBean2RDF;
-import de.mpg.imeji.logic.ImejiRDF2Bean;
+import de.mpg.imeji.logic.ImejiWriter;
+import de.mpg.imeji.logic.ImejiReader;
 import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchFactory;
@@ -54,8 +54,8 @@ import de.mpg.j2j.exceptions.NotFoundException;
  */
 public class UserGroupController
 {
-    private ImejiRDF2Bean imejiRDF2Bean = new ImejiRDF2Bean(Imeji.userModel);
-    private ImejiBean2RDF imejiBean2RDF = new ImejiBean2RDF(Imeji.userModel);
+    private ImejiReader imejiRDF2Bean = new ImejiReader(Imeji.userModel);
+    private ImejiWriter imejiBean2RDF = new ImejiWriter(Imeji.userModel);
 
     /**
      * Create a {@link UserGroup}

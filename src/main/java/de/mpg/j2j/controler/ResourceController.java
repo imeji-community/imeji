@@ -5,8 +5,8 @@ import java.net.URI;
 import com.hp.hpl.jena.rdf.model.Model;
 
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.ImejiBean2RDF;
-import de.mpg.imeji.logic.ImejiRDF2Bean;
+import de.mpg.imeji.logic.ImejiWriter;
+import de.mpg.imeji.logic.ImejiReader;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.exceptions.AlreadyExistsException;
 import de.mpg.j2j.exceptions.NotFoundException;
@@ -15,8 +15,8 @@ import de.mpg.j2j.persistence.Java2Jena;
 import de.mpg.j2j.persistence.Jena2Java;
 
 /**
- * Controller for {@link RDFResource} Attention: Non transactional!!!! Don't use directly, use {@link ImejiBean2RDF} of
- * {@link ImejiRDF2Bean} instead
+ * Controller for {@link RDFResource} Attention: Non transactional!!!! Don't use directly, use {@link ImejiWriter} of
+ * {@link ImejiReader} instead
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)

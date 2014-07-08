@@ -25,24 +25,24 @@ import de.mpg.j2j.transaction.Transaction;
  * - Use {@link CRUDTransaction} to load objects <br/>
  * - Check objects visibility via {@link Security}<br/>
  * - Implements lazy loading ({@link List} contained in objects are then no loaded), for faster load<br/>
- * - For WRITE operations, uses {@link ImejiBean2RDF}
+ * - For WRITE operations, uses {@link ImejiWriter}
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class ImejiRDF2Bean
+public class ImejiReader
 {
     private String modelURI;
     private boolean lazy = false;
-    private static Logger logger = Logger.getLogger(ImejiRDF2Bean.class);
+    private static Logger logger = Logger.getLogger(ImejiReader.class);
 
     /**
      * imeji object loader for one {@link Model}
      * 
      * @param modelURI
      */
-    public ImejiRDF2Bean(String modelURI)
+    public ImejiReader(String modelURI)
     {
         this.modelURI = modelURI;
     }

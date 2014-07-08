@@ -38,13 +38,23 @@
 					<ui:include src="../component/images/image_details.xhtml"/>
 				</ui:fragment>
 			</h:panelGroup>
-			
 		</ui:fragment>
-        
-        <!-- User not allowed to view item -->
-        <h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!Auth.read(itemBean.image) and !Auth.loggedIn and !MessagesBean.hasMessages}">
-        	<ui:include src="../../include/LoginFormular.xhtml"/>
-		</h:panelGroup>
 		
+		<ui:fragment rendered="#{itemBean.image == null}">
+			<h:panelGroup layout="block" styleClass="imj_errorPage" rendered="#{Auth.loggedIn}">
+	        	<h3 class="imj_headline">
+					<h:outputText value="#{lbl.errorNote}"/>
+				</h3>				
+				<p class="imj_errorText">
+					<h:outputText value="#{msg.error_file_not_found_logged_in}"/>
+				</p>
+			</h:panelGroup>			
+			<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!Auth.loggedIn}">
+	        	<ui:include src="../../include/LoginFormular.xhtml"/>
+			</h:panelGroup>
+			<h:outputLink value="#{HistorySession.previousPage.url}" rendered="#{HistorySession.previousPage != null}">
+				<h:outputText value="#{lbl.back_to_previous}" />
+			</h:outputLink>		
+		</ui:fragment>
 	</ui:define>	
 </ui:composition>

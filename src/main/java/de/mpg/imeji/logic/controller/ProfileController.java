@@ -11,10 +11,8 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.ImejiWriter;
-import de.mpg.imeji.logic.ImejiReader;
 import de.mpg.imeji.logic.ImejiSPARQL;
-import de.mpg.imeji.logic.search.SPARQLSearch;
+import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchFactory;
@@ -27,6 +25,7 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.j2j.exceptions.NotFoundException;
 import de.mpg.j2j.helper.DateHelper;
 
@@ -39,8 +38,8 @@ import de.mpg.j2j.helper.DateHelper;
  */
 public class ProfileController extends ImejiController
 {
-    private static ImejiReader imejiRDF2Bean = new ImejiReader(Imeji.profileModel);
-    private static ImejiWriter imejiBean2RDF = new ImejiWriter(Imeji.profileModel);
+    private static final ReaderFacade reader = new ReaderFacade(Imeji.profileModel);
+    private static final WriterFacade writer = new WriterFacade(Imeji.profileModel);
     private static Logger logger = Logger.getLogger(ProfileController.class);
 
     /**
@@ -59,10 +58,9 @@ public class ProfileController extends ImejiController
      */
     public URI create(MetadataProfile mdp, User user) throws Exception
     {
-        imejiBean2RDF = new ImejiWriter(Imeji.profileModel);
         writeCreateProperties(mdp, user);
         mdp.setStatus(Status.PENDING);
-        imejiBean2RDF.create(imejiBean2RDF.toList(mdp), user);
+        writer.create(WriterFacade.toList(mdp), user);
         return mdp.getId();
     }
 
@@ -76,7 +74,6 @@ public class ProfileController extends ImejiController
      */
     public MetadataProfile retrieve(String id, User user) throws Exception
     {
-        imejiRDF2Bean = new ImejiReader(Imeji.profileModel);
         return retrieve(ObjectHelper.getURI(MetadataProfile.class, id), user);
     }
 
@@ -91,11 +88,10 @@ public class ProfileController extends ImejiController
      */
     public MetadataProfile retrieve(URI uri, User user) throws NotFoundException
     {
-        imejiRDF2Bean = new ImejiReader(Imeji.profileModel);
         MetadataProfile p;
         try
         {
-            p = ((MetadataProfile)imejiRDF2Bean.load(uri.toString(), user, new MetadataProfile()));
+            p = ((MetadataProfile)reader.read(uri.toString(), user, new MetadataProfile()));
         }
         catch (Exception e)
         {
@@ -114,9 +110,8 @@ public class ProfileController extends ImejiController
      */
     public void update(MetadataProfile mdp, User user) throws Exception
     {
-        imejiBean2RDF = new ImejiWriter(Imeji.profileModel);
         writeUpdateProperties(mdp, user);
-        imejiBean2RDF.update(imejiBean2RDF.toList(mdp), user);
+        writer.update(WriterFacade.toList(mdp), user);
     }
 
     /**
@@ -142,8 +137,7 @@ public class ProfileController extends ImejiController
      */
     public void delete(MetadataProfile mdp, User user) throws Exception
     {
-        imejiBean2RDF = new ImejiWriter(Imeji.profileModel);
-        imejiBean2RDF.delete(imejiBean2RDF.toList(mdp), user);
+        writer.delete(WriterFacade.toList(mdp), user);
     }
 
     /**

@@ -9,10 +9,9 @@ import java.util.Collection;
 import java.util.List;
 
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.ImejiWriter;
-import de.mpg.imeji.logic.ImejiReader;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
+import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchFactory;
@@ -24,6 +23,7 @@ import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.j2j.helper.DateHelper;
 import de.mpg.j2j.helper.J2JHelper;
 
@@ -36,8 +36,8 @@ import de.mpg.j2j.helper.J2JHelper;
  */
 public class AlbumController extends ImejiController
 {
-    private static ImejiReader imejiRDF2Bean = null;
-    private static ImejiWriter imejiBean2RDF = null;
+    private static final ReaderFacade reader = new ReaderFacade(Imeji.albumModel);
+    private static final WriterFacade writer = new WriterFacade(Imeji.albumModel);
 
     /**
      * Construct a new controller for {@link Album}
@@ -45,8 +45,6 @@ public class AlbumController extends ImejiController
     public AlbumController()
     {
         super();
-        imejiBean2RDF = new ImejiWriter(Imeji.albumModel);
-        imejiRDF2Bean = new ImejiReader(Imeji.albumModel);
     }
 
     /**
@@ -57,8 +55,6 @@ public class AlbumController extends ImejiController
     public AlbumController(User user)
     {
         super(user);
-        imejiBean2RDF = new ImejiWriter(Imeji.albumModel);
-        imejiRDF2Bean = new ImejiReader(Imeji.albumModel);
     }
 
     /**
@@ -72,7 +68,7 @@ public class AlbumController extends ImejiController
         writeCreateProperties(album, user);
         GrantController gc = new GrantController();
         gc.addGrants(user, AuthorizationPredefinedRoles.admin(album.getId().toString(), null), user);
-        imejiBean2RDF.create(imejiBean2RDF.toList(album), user);
+        writer.create(WriterFacade.toList(album), user);
     }
 
     /**
@@ -84,9 +80,8 @@ public class AlbumController extends ImejiController
      */
     public void update(Album ic, User user) throws Exception
     {
-        imejiBean2RDF = new ImejiWriter(Imeji.albumModel);
         writeUpdateProperties(ic, user);
-        imejiBean2RDF.update(imejiBean2RDF.toList(ic), user);
+        writer.update(WriterFacade.toList(ic), user);
     }
 
     /**
@@ -98,9 +93,8 @@ public class AlbumController extends ImejiController
      */
     public void updateLazy(Album ic, User user) throws Exception
     {
-        imejiBean2RDF = new ImejiWriter(Imeji.albumModel);
         writeUpdateProperties(ic, user);
-        imejiBean2RDF.updateLazy(imejiBean2RDF.toList(ic), user);
+        writer.updateLazy(WriterFacade.toList(ic), user);
     }
 
     /**
@@ -113,7 +107,7 @@ public class AlbumController extends ImejiController
      */
     public Album retrieve(URI selectedAlbumId, User user) throws Exception
     {
-        return (Album)imejiRDF2Bean.load(selectedAlbumId.toString(), user, new Album());
+        return (Album)reader.read(selectedAlbumId.toString(), user, new Album());
     }
 
     /**
@@ -126,7 +120,7 @@ public class AlbumController extends ImejiController
      */
     public Album retrieveLazy(URI uri, User user) throws Exception
     {
-        return (Album)imejiRDF2Bean.loadLazy(uri.toString(), user, new Album());
+        return (Album)reader.readLazy(uri.toString(), user, new Album());
     }
 
     /**
@@ -138,8 +132,7 @@ public class AlbumController extends ImejiController
      */
     public void delete(Album album, User user) throws Exception
     {
-        imejiBean2RDF = new ImejiWriter(Imeji.albumModel);
-        imejiBean2RDF.delete(imejiBean2RDF.toList(album), user);
+        writer.delete(WriterFacade.toList(album), user);
     }
 
     /**
@@ -274,7 +267,7 @@ public class AlbumController extends ImejiController
             }
             counter++;
         }
-        imejiRDF2Bean.loadLazy(J2JHelper.cast2ObjectList(albs), user);
+        reader.readLazy(J2JHelper.cast2ObjectList(albs), user);
         return albs;
     }
 

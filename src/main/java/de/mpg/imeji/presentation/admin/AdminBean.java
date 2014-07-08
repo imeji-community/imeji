@@ -18,12 +18,12 @@ import org.apache.log4j.Logger;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.ImejiWriter;
-import de.mpg.imeji.logic.ImejiReader;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.index.Index;
+import de.mpg.imeji.logic.reader.JenaReader;
+import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchFactory;
@@ -40,6 +40,7 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
@@ -258,14 +259,14 @@ public class AdminBean
      */
     private List<Object> loadResourcesAsObjects(List<String> uris, String modelName, Object obj)
     {
-        ImejiReader reader = new ImejiReader(modelName);
+        ReaderFacade reader = new ReaderFacade(modelName);
         List<Object> l = new ArrayList<Object>();
         for (String uri : uris)
         {
             try
             {
                 logger.info("Resource to be removed: " + uri);
-                l.add(reader.load(uri, sb.getUser(), obj.getClass().newInstance()));
+                l.add(reader.read(uri, sb.getUser(), obj.getClass().newInstance()));
             }
             catch (Exception e)
             {
@@ -286,7 +287,7 @@ public class AdminBean
     {
         if (clean)
         {
-            ImejiWriter writer = new ImejiWriter(modelName);
+            WriterFacade writer = new WriterFacade(modelName);
             writer.delete(l, sb.getUser());
         }
     }

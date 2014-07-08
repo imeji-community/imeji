@@ -11,12 +11,12 @@ import org.apache.log4j.Logger;
 
 import de.escidoc.core.resources.aa.useraccount.Grants;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.ImejiWriter;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
+import de.mpg.imeji.logic.writer.WriterFacade;
 
 /**
  * Controller for {@link Grant}
@@ -27,7 +27,7 @@ import de.mpg.imeji.logic.vo.UserGroup;
  */
 public class GrantController extends ImejiController
 {
-    private static ImejiWriter imejiBean2RDF = new ImejiWriter(Imeji.userModel);
+    private static final WriterFacade writer = new WriterFacade(Imeji.userModel);
     private static Logger logger = Logger.getLogger(GrantController.class);
 
     /**
@@ -74,7 +74,7 @@ public class GrantController extends ImejiController
         try
         {
             c.update(user, currentUser);
-            imejiBean2RDF.delete(new ArrayList<Object>(toRemove), currentUser);
+            writer.delete(new ArrayList<Object>(toRemove), currentUser);
         }
         catch (Exception e)
         {
@@ -98,7 +98,7 @@ public class GrantController extends ImejiController
         try
         {
             c.update(group, currentUser);
-            imejiBean2RDF.delete(new ArrayList<Object>(toRemove), currentUser);
+            writer.delete(new ArrayList<Object>(toRemove), currentUser);
         }
         catch (Exception e)
         {

@@ -13,14 +13,13 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.ImejiWriter;
-import de.mpg.imeji.logic.ImejiReader;
 import de.mpg.imeji.logic.ImejiSPARQL;
-import de.mpg.imeji.logic.search.SPARQLSearch;
+import de.mpg.imeji.logic.reader.JenaReader;
+import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
@@ -34,6 +33,8 @@ import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.writer.JenaWriter;
+import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.j2j.helper.J2JHelper;
 
 /**
@@ -46,8 +47,8 @@ import de.mpg.j2j.helper.J2JHelper;
 public class ItemController extends ImejiController
 {
     private static Logger logger = Logger.getLogger(ItemController.class);
-    private static ImejiReader imejiRDF2Bean = new ImejiReader(Imeji.imageModel);
-    private static ImejiWriter imejiBean2RDF = new ImejiWriter(Imeji.imageModel);
+    private static final ReaderFacade reader = new ReaderFacade(Imeji.imageModel);
+    private static final WriterFacade writer = new WriterFacade(Imeji.imageModel);
 
     /**
      * Controller constructor
@@ -88,7 +89,6 @@ public class ItemController extends ImejiController
     {
         CollectionController cc = new CollectionController(user);
         CollectionImeji ic = cc.retrieve(coll, user);
-        imejiBean2RDF = new ImejiWriter(Imeji.imageModel);
         for (Item img : items)
         {
             writeCreateProperties(img, user);
@@ -104,7 +104,7 @@ public class ItemController extends ImejiController
             img.getMetadataSet().setProfile(ic.getProfile());
             ic.getImages().add(img.getId());
         }
-        imejiBean2RDF.create(J2JHelper.cast2ObjectList(new ArrayList<Item>(items)), user);
+        writer.create(J2JHelper.cast2ObjectList(new ArrayList<Item>(items)), user);
         cc.update(ic);
     }
 
@@ -133,14 +133,13 @@ public class ItemController extends ImejiController
     @Deprecated
     public void update(Collection<Item> items) throws Exception
     {
-        imejiBean2RDF = new ImejiWriter(Imeji.imageModel);
         List<Object> imBeans = new ArrayList<Object>();
         for (Item item : items)
         {
             writeUpdateProperties(item, user);
             imBeans.add(createFulltextForMetadata(item));
         }
-        imejiBean2RDF.update(imBeans, user);
+        writer.update(imBeans, user);
     }
 
     /**
@@ -166,14 +165,13 @@ public class ItemController extends ImejiController
      */
     public void update(Collection<Item> items, User user) throws Exception
     {
-        imejiBean2RDF = new ImejiWriter(Imeji.imageModel);
         List<Object> imBeans = new ArrayList<Object>();
         for (Item item : items)
         {
             writeUpdateProperties(item, user);
             imBeans.add(createFulltextForMetadata(item));
         }
-        imejiBean2RDF.update(imBeans, user);
+        writer.update(imBeans, user);
     }
 
     /**
@@ -203,8 +201,7 @@ public class ItemController extends ImejiController
      */
     public Item retrieve(URI imgUri) throws Exception
     {
-        imejiRDF2Bean = new ImejiReader(Imeji.imageModel);
-        return (Item)imejiRDF2Bean.load(imgUri.toString(), user, new Item());
+        return (Item)reader.read(imgUri.toString(), user, new Item());
     }
 
     /**
@@ -216,8 +213,7 @@ public class ItemController extends ImejiController
      */
     public Item retrieve(URI imgUri, User user) throws Exception
     {
-        imejiRDF2Bean = new ImejiReader(Imeji.imageModel);
-        return (Item)imejiRDF2Bean.load(imgUri.toString(), user, new Item());
+        return (Item)reader.read(imgUri.toString(), user, new Item());
     }
 
     /**
@@ -227,7 +223,6 @@ public class ItemController extends ImejiController
      */
     public Collection<Item> retrieveAll()
     {
-        imejiRDF2Bean = new ImejiReader(Imeji.imageModel);
         List<String> uris = ImejiSPARQL.exec(SPARQLQueries.selectItemAll(), Imeji.imageModel);
         return loadItems(uris, -1, 0);
     }
@@ -284,7 +279,7 @@ public class ItemController extends ImejiController
         }
         try
         {
-            imejiRDF2Bean.load(J2JHelper.cast2ObjectList(items), user);
+            reader.read(J2JHelper.cast2ObjectList(items), user);
             return items;
         }
         catch (Exception e)
@@ -316,7 +311,7 @@ public class ItemController extends ImejiController
                 cMap.put(item.getCollection().toString(), item.getCollection());
             }
         }
-        imejiBean2RDF.delete(toDelete, user);
+        writer.delete(toDelete, user);
         return count;
     }
 

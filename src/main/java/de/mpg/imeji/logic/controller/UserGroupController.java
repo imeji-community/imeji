@@ -31,18 +31,16 @@ package de.mpg.imeji.logic.controller;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.ImejiWriter;
-import de.mpg.imeji.logic.ImejiReader;
-import de.mpg.imeji.logic.search.SPARQLSearch;
+import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
+import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.j2j.exceptions.NotFoundException;
 
 /**
@@ -54,8 +52,8 @@ import de.mpg.j2j.exceptions.NotFoundException;
  */
 public class UserGroupController
 {
-    private ImejiReader imejiRDF2Bean = new ImejiReader(Imeji.userModel);
-    private ImejiWriter imejiBean2RDF = new ImejiWriter(Imeji.userModel);
+    private static final ReaderFacade reader = new ReaderFacade(Imeji.userModel);
+    private static final WriterFacade writer = new WriterFacade(Imeji.userModel);
 
     /**
      * Create a {@link UserGroup}
@@ -65,7 +63,7 @@ public class UserGroupController
      */
     public void create(UserGroup group, User user) throws Exception
     {
-        imejiBean2RDF.create(imejiBean2RDF.toList(group), user);
+        writer.create(WriterFacade.toList(group), user);
     }
 
     /**
@@ -77,7 +75,7 @@ public class UserGroupController
      */
     public UserGroup read(String uri, User user) throws Exception
     {
-        return (UserGroup)imejiRDF2Bean.load(uri, user, new UserGroup());
+        return (UserGroup)reader.read(uri, user, new UserGroup());
     }
 
     /**
@@ -101,7 +99,7 @@ public class UserGroupController
      */
     public void update(UserGroup group, User user) throws Exception
     {
-        imejiBean2RDF.update(imejiBean2RDF.toList(group), user);
+        writer.update(WriterFacade.toList(group), user);
     }
 
     /**
@@ -113,7 +111,7 @@ public class UserGroupController
      */
     public void delete(UserGroup group, User user) throws Exception
     {
-        imejiBean2RDF.delete(imejiBean2RDF.toList(group), user);
+        writer.delete(WriterFacade.toList(group), user);
     }
 
     /**
@@ -137,7 +135,7 @@ public class UserGroupController
     {
         return searchBySPARQLQuery(SPARQLQueries.selectUserGroupAll(q), user);
     }
-    
+
     /**
      * Retrieve all {@link UserGroup} a user is member of
      * 
@@ -163,7 +161,7 @@ public class UserGroupController
         {
             try
             {
-                userGroups.add((UserGroup)imejiRDF2Bean.load(uri, user, new UserGroup()));
+                userGroups.add((UserGroup)reader.read(uri, user, new UserGroup()));
             }
             catch (NotFoundException e)
             {

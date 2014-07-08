@@ -3,13 +3,9 @@
  */
 package de.mpg.imeji.presentation.converter;
 
-import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.convert.ConverterException;
-
-import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * Converter for Double: Display NaN as empty string, and transform empty String as NaN

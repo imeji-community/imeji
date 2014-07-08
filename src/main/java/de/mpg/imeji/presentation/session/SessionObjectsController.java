@@ -4,9 +4,7 @@ import java.util.List;
 
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.vo.Album;
-import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**

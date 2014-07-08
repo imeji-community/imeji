@@ -10,8 +10,6 @@ import javax.faces.context.FacesContext;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 
-import de.mpg.imeji.presentation.session.SessionBean;
-
 /**
  * Some Method to read URLs
  * 
@@ -68,5 +66,21 @@ public class UrlHelper
         {
             return false;
         }
+    }
+
+    /**
+     * Add to the url the parameter
+     * 
+     * @param url
+     * @param param
+     * @param value
+     * @return
+     */
+    public static String addParameter(String url, String param, String value)
+    {
+        String[] params = url.split("\\?", 2);
+        if (params.length > 1 && !"".equals(params[1]))
+            return url + "&" + param + "=" + value;
+        return url + "?" + param + "=" + value;
     }
 }

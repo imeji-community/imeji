@@ -64,7 +64,7 @@ public class ConfigurationBean
      */
     private enum CONFIGURATION
     {
-        SNIPPET, CSS_DEFAULT, CSS_ALT;
+        SNIPPET, CSS_DEFAULT, CSS_ALT, MAX_FILE_SIZE;
     }
 
     private Properties config;
@@ -157,40 +157,75 @@ public class ConfigurationBean
     {
         return MediaUtils.verifyImageMagickInstallation();
     }
-    
+
     /**
      * Set the url of the default CSS
+     * 
      * @param url
      */
     public void setDefaultCss(String url)
     {
         setProperty(CONFIGURATION.CSS_DEFAULT.name(), url);
     }
-    
+
     /**
      * Return the url of the default CSS
+     * 
      * @return
      */
     public String getDefaultCss()
     {
         return (String)config.get(CONFIGURATION.CSS_DEFAULT.name());
     }
-    
+
     /**
      * Set the url of the default CSS
+     * 
      * @param url
      */
     public void setAlternativeCss(String url)
     {
         setProperty(CONFIGURATION.CSS_ALT.name(), url);
     }
-    
+
     /**
      * Return the url of the default CSS
+     * 
      * @return
      */
     public String getAlternativeCss()
     {
         return (String)config.get(CONFIGURATION.CSS_ALT.name());
+    }
+
+    /**
+     * Set the url of the default CSS
+     * 
+     * @param url
+     */
+    public void setUploadMaxFileSize(String size)
+    {
+        try
+        {
+            Integer.parseInt(size);
+        }
+        catch (Exception e)
+        {
+            setProperty(CONFIGURATION.MAX_FILE_SIZE.name(), "");
+        }
+        setProperty(CONFIGURATION.MAX_FILE_SIZE.name(), size);
+    }
+
+    /**
+     * Return the url of the default CSS
+     * 
+     * @return
+     */
+    public String getUploadMaxFileSize()
+    {
+        String size = (String)config.get(CONFIGURATION.MAX_FILE_SIZE.name());
+        if (size == null || size == "")
+            return "0";
+        return size;
     }
 }

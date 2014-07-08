@@ -19,7 +19,12 @@
 		
 		<ui:fragment rendered="#{Auth.admin}">
 		<!-- Only for Admins -->			
-		
+		<!-- AdminDataList - Back Button -->
+			<h:panelGroup layout="block" styleClass="imj_backPanel">
+				<h:outputLink value="#{Navigation.adminUrl}">
+					<h:outputText value="#{lbl.back_to_admin}" styleClass="imj_backButton"/>
+				</h:outputLink>
+			</h:panelGroup>
 			<div class="imj_userConfig">
 				
 				<!-- Admin - TiledList -->		
@@ -82,6 +87,20 @@
 										</div>
 									</h:panelGroup>														
 								</div>
+								
+								<div class="imj_content">
+									<h:panelGroup layout="block" styleClass="imj_admindataSet">
+										<div class="imj_admindataLabel">
+											<h:outputText value="#{lbl.upload_max_file_size}"/>
+											<span class="imj_invisible">: </span>
+										</div>
+										<div class="imj_admindataValue">
+											<div class="imj_admindataValueEntry">
+												<h:inputText value="#{Configuration.uploadMaxFileSize}" styleClass="imj_admindataEdit"/>
+											</div>
+										</div>
+									</h:panelGroup>
+								</div> 
 							
 								<!-- AdminDataList - imj_submitPanel - cancel link + submit command buttons -->
 								<h:panelGroup layout="block" styleClass="imj_submitPanel">
@@ -98,12 +117,7 @@
 			
 			</div> <!-- END USER CONFIG -->
 			
-			<!-- AdminDataList - Back Button -->
-			<h:panelGroup layout="block" styleClass="imj_backPanel">
-				<h:outputLink value="#{Navigation.adminUrl}">
-					<h:outputText value="#{lbl.back_to_admin}" styleClass="imj_backButton"/>
-				</h:outputLink>
-			</h:panelGroup>
+			
 					
 			
 		</ui:fragment>

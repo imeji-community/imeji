@@ -11,11 +11,10 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.search.vo.SearchElement;
+import de.mpg.imeji.logic.search.vo.SearchElement.SEARCH_ELEMENTS;
 import de.mpg.imeji.logic.search.vo.SearchGroup;
 import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
-import de.mpg.imeji.logic.search.vo.SearchElement.SEARCH_ELEMENTS;
-import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 
 /**

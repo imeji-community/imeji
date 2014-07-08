@@ -319,6 +319,7 @@ select.imj_metadataEditText { min-height: 0; }
 .imj_simpleSearch .imj_simpleSearchInputWrapper { display: inline-block; vertical-align: top; }
 .imj_simpleSearch .imj_simpleSearchInput { width: 21em; min-width: 13em; -webkit-border-radius: 0.45455em 0 0 0.45455em; -moz-border-radius: 0.45455em 0 0 0.45455em; -ms-border-radius: 0.45455em 0 0 0.45455em; -o-border-radius: 0.45455em 0 0 0.45455em; border-radius: 0.45455em 0 0 0.45455em; }
 .imj_simpleSearch .imj_simpleSearchButtonSubmit { height: 1.909090em; margin-left: 0; padding: 0.090909em 1em; -webkit-border-radius: 0 0.45455em 0.45455em 0; -moz-border-radius: 0 0.45455em 0.45455em 0; -ms-border-radius: 0 0.45455em 0.45455em 0; -o-border-radius: 0 0.45455em 0.45455em 0; border-radius: 0 0.45455em 0.45455em 0; }
+.imj_simpleSearch .imj_searchInfoText { display: inline-block; margin: 0 0.272727em; }
 .imj_simpleSearch input[type=radio] { border: 0 none; margin: 0.090909em 0 0 0.090909em; }
 .imj_simpleSearch input[type=radio] + label { margin-left: 0.181818em; margin-right: 1em; }
 .imj_simpleSearch .imj_simpleSearchLinkAdvancedsearch { margin-top: 0.181818em; margin-left: 2.090909em; white-space: nowrap; display: inline-block; }
@@ -666,8 +667,8 @@ iframe#twitter-widget-0 div.root div.stream { height: 20em !important; }
 .imj_administrationTiledList .imj_adminPanel { display: inline-block; max-width: 23.95%; padding: 0 2%; vertical-align: top; margin-bottom: 2em; text-align: left; }
 .imj_administrationTiledList .imj_adminPanel h2 { font-size: 140%; line-height: normal; }
 .imj_administrationTiledList .imj_adminPanel ul { line-height: 150%; }
-.imj_administrationTiledList .imj_adminPanel .imj_headline { width: 91.95%; padding: 0.454545em 0.81818181em; text-align: center; background-color: #292929; -webkit-border-radius: 0.90909em 0.90909em 0 0; -moz-border-radius: 0.90909em 0.90909em 0 0; -ms-border-radius: 0.90909em 0.90909em 0 0; -o-border-radius: 0.90909em 0.90909em 0 0; border-radius: 0.90909em 0.90909em 0 0; border: 0.1em solid #292929; }
-.imj_administrationTiledList .imj_adminPanel .imj_content { width: 91.95%; padding: 0.454545em 0.81818181em; min-height: 10em; -webkit-border-radius: 0 0 0.90909em 0.90909em; -moz-border-radius: 0 0 0.90909em 0.90909em; -ms-border-radius: 0 0 0.90909em 0.90909em; -o-border-radius: 0 0 0.90909em 0.90909em; border-radius: 0 0 0.90909em 0.90909em; border: 0.1em solid #292929; }
+.imj_administrationTiledList .imj_adminPanel .imj_headline { padding: 0.454545em 0.81818181em; text-align: center; background-color: #292929; -webkit-border-radius: 0.90909em 0.90909em 0 0; -moz-border-radius: 0.90909em 0.90909em 0 0; -ms-border-radius: 0.90909em 0.90909em 0 0; -o-border-radius: 0.90909em 0.90909em 0 0; border-radius: 0.90909em 0.90909em 0 0; border: 0.1em solid #292929; }
+.imj_administrationTiledList .imj_adminPanel .imj_content { padding: 0.454545em 0.81818181em; min-height: 10em; -webkit-border-radius: 0 0 0.90909em 0.90909em; -moz-border-radius: 0 0 0.90909em 0.90909em; -ms-border-radius: 0 0 0.90909em 0.90909em; -o-border-radius: 0 0 0.90909em 0.90909em; border-radius: 0 0 0.90909em 0.90909em; border: 0.1em solid #292929; }
 .imj_administrationTiledList .imj_adminPanel.imj_storageInformation { max-width: 33em; }
 .imj_administrationTiledList .imj_adminPanel.imj_storageInformation .imj_admindataLabel { width: 33%; }
 .imj_administrationTiledList .imj_adminPanel.imj_storageInformation .imj_admindataValue { width: 61%; }

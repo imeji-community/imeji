@@ -34,13 +34,13 @@
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
-		<managed-bean-name>CollectionImagesBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.collection.CollectionImagesBean</managed-bean-class>
+		<managed-bean-name>CollectionItemsBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.presentation.collection.CollectionItemsBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
-		<managed-bean-name>CollectionImageBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.collection.CollectionImageBean</managed-bean-class>
+		<managed-bean-name>CollectionItemBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.presentation.collection.CollectionItemBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 
@@ -48,24 +48,24 @@
 	<managed-bean>
 		<managed-bean-name>AdvancedSearchBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.search.AdvancedSearchBean</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
+		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
 
 	<!-- Profiles bean -->
 	<managed-bean>
 		<managed-bean-name>MdProfileBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.mdProfile.MdProfileBean</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
+		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>ViewMdProfileBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.mdProfile.ViewMdProfileBean</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
+		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>CreateMdProfileBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.mdProfile.CreateMdProfileBean</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
+		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>EditMdProfileBean</managed-bean-name>
@@ -73,22 +73,22 @@
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 
-	<!-- Images Beans -->
+	<!-- Item Beans -->
 	<managed-bean>
-		<managed-bean-name>ImageBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.image.ImageBean</managed-bean-class>
+		<managed-bean-name>ItemBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.presentation.image.ItemBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 
 	<managed-bean>
-		<managed-bean-name>ImagesBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.image.ImagesBean</managed-bean-class>
+		<managed-bean-name>ItemsBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.presentation.image.ItemsBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 
 	<managed-bean>
-		<managed-bean-name>EditImageMetadataBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.metadata.EditImageMetadataBean</managed-bean-class>
+		<managed-bean-name>EditItemMetadataBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.presentation.metadata.EditItemMetadataBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 
@@ -110,13 +110,13 @@
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
-		<managed-bean-name>AlbumImagesBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.album.AlbumImagesBean</managed-bean-class>
+		<managed-bean-name>AlbumItemsBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.presentation.album.AlbumItemsBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
-		<managed-bean-name>AlbumImageBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.album.AlbumImageBean</managed-bean-class>
+		<managed-bean-name>AlbumItemBean</managed-bean-name>
+		<managed-bean-class>de.mpg.imeji.presentation.album.AlbumItemBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<!-- Users bean -->
@@ -199,7 +199,7 @@
 	<managed-bean>
 		<managed-bean-name>QuickSearchBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.search.QuickSearchBean</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
+		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
 		<managed-bean-name>AdminBean</managed-bean-name>

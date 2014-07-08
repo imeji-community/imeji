@@ -34,7 +34,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.vo.CollectionImeji;

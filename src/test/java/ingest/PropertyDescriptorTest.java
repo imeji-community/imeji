@@ -3,6 +3,7 @@ package ingest;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 

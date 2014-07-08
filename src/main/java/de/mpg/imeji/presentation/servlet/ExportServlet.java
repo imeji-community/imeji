@@ -19,7 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.http.client.HttpResponseException;
 
 import de.mpg.imeji.logic.export.ExportManager;
@@ -129,22 +128,5 @@ public class ExportServlet extends HttpServlet
         {
             FacesContext.setCurrentInstance(facesContext);
         }
-    }
-
-    /**
-     * Utility method to return the username and password (separated by a colon).
-     * 
-     * @param request
-     * @return The username and password combination
-     */
-    private String getUsernamePassword(HttpServletRequest request)
-    {
-        String authHeader = request.getHeader("Authorization");
-        if (authHeader != null)
-        {
-            String userPass = new String(Base64.decodeBase64(authHeader.getBytes()));
-            return userPass;
-        }
-        return null;
     }
 }

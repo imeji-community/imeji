@@ -5,6 +5,7 @@ package de.mpg.imeji.presentation.beans;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;

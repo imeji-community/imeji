@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
@@ -20,11 +20,9 @@ import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.vo.Album;
-import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.auth.ImejiAuthBean;
 import de.mpg.j2j.helper.DateHelper;
 import de.mpg.j2j.helper.J2JHelper;
 

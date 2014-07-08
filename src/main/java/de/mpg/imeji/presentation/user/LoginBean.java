@@ -3,6 +3,9 @@
  */
 package de.mpg.imeji.presentation.user;
 
+import java.net.URI;
+import java.net.URL;
+
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
@@ -14,6 +17,7 @@ import de.mpg.imeji.presentation.history.Page;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
+import de.mpg.imeji.presentation.util.UrlHelper;
 
 /**
  * Bean for login features
@@ -28,7 +32,7 @@ public class LoginBean
     private String passwd;
     private SessionBean sb;
 
-	/**
+    /**
      * Constructor
      */
     public LoginBean()
@@ -56,34 +60,35 @@ public class LoginBean
         return passwd;
     }
 
-	public void loginClick()
-	{
-		sb.showLogin = true;
-	}
+    public void loginClick()
+    {
+        sb.showLogin = true;
+    }
 
     public void doLogin() throws Exception
     {
-	        Authentication auth = AuthenticationFactory.factory(getLogin(), getPasswd());
-	        User user = auth.doLogin();
-	        if (user != null)
-	        {
-	            sb.setUser(user);
-	            BeanHelper.info(sb.getMessage("success_log_in"));
-	        }
-	        else
-	        {
-	            BeanHelper.error(sb.getMessage("error_log_in").replace("XXX_INSTANCE_NAME_XXX",
-	                    PropertyReader.getProperty("imeji.instance.name")));
-	            BeanHelper.error(sb.getMessage("error_log_in_description").replace("XXX_INSTANCE_NAME_XXX",
-	                    PropertyReader.getProperty("imeji.instance.name")));
-	        }
-	        Page current = ((HistorySession)BeanHelper.getSessionBean(HistorySession.class)).getCurrentPage();
-	        String redirectAfterLogin = "";
-	        if (current != null)
-	        {
-	            redirectAfterLogin = current.getCompleteUrl();
-	        }
-	        FacesContext.getCurrentInstance().getExternalContext().redirect(redirectAfterLogin);
+        Authentication auth = AuthenticationFactory.factory(getLogin(), getPasswd());
+        User user = auth.doLogin();
+        if (user != null)
+        {
+            sb.setUser(user);
+            BeanHelper.info(sb.getMessage("success_log_in"));
+        }
+        else
+        {
+            BeanHelper.error(sb.getMessage("error_log_in").replace("XXX_INSTANCE_NAME_XXX",
+                    PropertyReader.getProperty("imeji.instance.name")));
+            BeanHelper.error(sb.getMessage("error_log_in_description").replace("XXX_INSTANCE_NAME_XXX",
+                    PropertyReader.getProperty("imeji.instance.name")));
+        }
+        Page current = ((HistorySession)BeanHelper.getSessionBean(HistorySession.class)).getCurrentPage();
+        String redirectAfterLogin = "";
+        if (current != null)
+        {
+            redirectAfterLogin = current.getCompleteUrl();
+        }
+        redirectAfterLogin = UrlHelper.addParameter(redirectAfterLogin, "login", "1");
+        FacesContext.getCurrentInstance().getExternalContext().redirect(redirectAfterLogin);
     }
 
     public boolean loginWithEscidocAccount()

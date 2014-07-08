@@ -23,9 +23,9 @@ import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.vo.SearchGroup;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
-import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
+import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
@@ -209,12 +209,11 @@ public class AdvancedSearchBean
         try
         {
             errorQuery = false;
-            FacesContext
-                    .getCurrentInstance()
-                    .getExternalContext()
-                    .redirect(
-                            navigation.getBrowseUrl() + "?q="
-                                    + URLQueryTransformer.transform2UTF8URL(formular.getFormularAsSearchQuery()));
+            String q = URLQueryTransformer.transform2UTF8URL(formular.getFormularAsSearchQuery());
+            if (q != "")
+                FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getBrowseUrl() + "?q=" + q);
+            else
+                BeanHelper.error(session.getMessage("error_search_query_emtpy"));
         }
         catch (Exception e)
         {

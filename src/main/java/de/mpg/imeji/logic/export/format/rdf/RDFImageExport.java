@@ -5,8 +5,6 @@ package de.mpg.imeji.logic.export.format.rdf;
 
 import java.util.HashMap;
 
-import com.hp.hpl.jena.rdf.model.Resource;
-
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.export.format.RDFExport;
 import de.mpg.imeji.logic.search.SearchResult;
@@ -62,13 +60,6 @@ public class RDFImageExport extends RDFExport
     {
         return "</imeji:image>";
     }
-
-    private boolean isMetadata(Resource r)
-    {
-        return r.getNameSpace().contains("http://imeji.org/terms/metadata");
-    }
-
-   
 
     /*
      * Not implemented : needs of specification about restricted metadata (how to make it really private...)

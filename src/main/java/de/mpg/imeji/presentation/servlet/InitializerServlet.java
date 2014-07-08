@@ -27,7 +27,6 @@ import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.concurrency.locks.LocksSurveyor;
 import de.mpg.imeji.logic.controller.GrantController;
 import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.User;
@@ -198,6 +197,5 @@ public class InitializerServlet extends HttpServlet
         logger.info("...done");
         super.destroy();
         logger.info("imeji is down");
-        System.exit(0);
     }
 }

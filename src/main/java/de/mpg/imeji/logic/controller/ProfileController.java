@@ -10,19 +10,16 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.ImejiRDF2Bean;
 import de.mpg.imeji.logic.ImejiSPARQL;
-import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.Grant;
-import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;

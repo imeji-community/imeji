@@ -41,13 +41,13 @@ import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Grant;
-import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
+import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.presentation.beans.PropertyBean;
-import de.mpg.imeji.presentation.user.SharedHistory;
 import de.mpg.imeji.presentation.user.ShareBean.SharedObjectType;
+import de.mpg.imeji.presentation.user.SharedHistory;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 
 /**

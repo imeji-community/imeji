@@ -6,10 +6,7 @@ package de.mpg.imeji.presentation.lang;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Observable;
-import java.util.ResourceBundle;
 
-import javax.faces.application.Application;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
@@ -58,7 +55,7 @@ public class InternationalizationBean
     private void init()
     {
         try
-        {
+        { 
             Iso639_1Helper iso639_1Helper = new Iso639_1Helper();
             isolanguages = iso639_1Helper.getList();
             readSupportedLanguagesProperty();
@@ -86,6 +83,7 @@ public class InternationalizationBean
         // Add the other languages (non supported)
         // languages.addAll(getsupportedLanguages(false));
         // init the string of all languages
+        languagesAsString = "";
         for (SelectItem s : languages)
             languagesAsString += s.getValue() + "," + s.getLabel() + "|";
     }

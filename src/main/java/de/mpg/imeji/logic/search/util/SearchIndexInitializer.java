@@ -2,6 +2,7 @@ package de.mpg.imeji.logic.search.util;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import com.hp.hpl.jena.vocabulary.RDF;
 
 import de.mpg.imeji.logic.search.vo.SearchIndex;

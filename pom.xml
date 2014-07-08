@@ -6,9 +6,7 @@
 	<packaging>war</packaging>
 	<version>2.0.0.1-SNAPSHOT</version>
 	<url>http://imeji.org</url>
-	<description>
-		http://imeji.org
-	</description>
+	<description>The imeji open source software offers a dedicated metadata management by supporting a non- restrictive metadata schema definition, as simple as liked or as complex as needed.</description>
 	<licenses>
 		<license>
 			<name>Common Development And Distribution License</name>
@@ -25,7 +23,7 @@
 		<connection>scm:git:git://github.com/imeji-community/imeji.git</connection>
 		<developerConnection>scm:git:git@github.com:imeji-community/imeji.git</developerConnection>
 		<tag>develop</tag>
-  </scm>
+  	</scm>
 	<issueManagement>
 		<system>Github</system>
 		<url>https://github.com/imeji-community/imeji/issues</url>
@@ -47,16 +45,6 @@
 			<email>kleinfercher@mpdl.mpg.de</email>
 			<roles>
 				<role>Software developer</role>
-			</roles>
-			<organization>Max Planck Digital Library</organization>
-			<timezone>+2</timezone>
-		</developer>
-		<developer>
-			<id>wfrank</id>
-			<name>Wilhelm Frank</name>
-			<email>frank@mpdl.mpg.de</email>
-			<roles>
-				<role>developer</role>
 			</roles>
 			<organization>Max Planck Digital Library</organization>
 			<timezone>+2</timezone>
@@ -109,7 +97,7 @@
 		<maven.compiler.target>1.7</maven.compiler.target>
 		<!-- Setting this property so that generated project uses correct version 
 			of richfaces. -->
-		<org.richfaces.bom.version>4.2.3.Final</org.richfaces.bom.version>
+		<org.richfaces.bom.version>4.3.7.Final</org.richfaces.bom.version>
 		<!-- Used by Tomcat to trip version Nr when deploy WAR package, e.g., imeji_1.0_screenshot->imeji -->
 		<project.warName>imeji</project.warName>
 	</properties>
@@ -228,7 +216,7 @@
 					<failIfNoTests>false</failIfNoTests>
 					<!-- avoid the out of memory exception thrown in some test scenarios -->
 					<argLine>-Xmx1000M</argLine>
-					<skipTests>true</skipTests>
+					<skipTests>false</skipTests>
 				</configuration>
 				<executions>
 					<execution>
@@ -542,6 +530,13 @@
 		<!-- this profile is used by developers -->
 		<profile>
 			<id>env-development</id>
+			<properties>
+				<!-- TO avoid warning File encoding has not been set, using platform 
+					encoding Cp1252, i.e. build is platform dependent! -->
+				<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+				<!-- the jdk version to use -->
+				<jdk.version>1.7</jdk.version>
+			</properties>
 			<build>
 				<plugins>
 					<plugin>
@@ -621,13 +616,6 @@
 					</plugins>
 				</pluginManagement>
 			</build>
-			<properties>
-				<!-- TO avoid warning File encoding has not been set, using platform 
-					encoding Cp1252, i.e. build is platform dependent! -->
-				<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-				<!-- the jdk version to use -->
-				<jdk.version>1.7</jdk.version>
-			</properties>
 		</profile>
 		<profile>
 			<id>env-testing-continuum</id>
@@ -640,29 +628,20 @@
 				<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 				<!-- the jdk version to use -->
 				<jdk.version>1.7</jdk.version>
-				<tomcat.webapps>/mnt/tomcat/dev-faces/deploy</tomcat.webapps>
+				<project.build.finalName>imeji</project.build.finalName>
 			</properties>
 			<build>
 				<plugins>
 					<plugin>
-						<artifactId>maven-antrun-plugin</artifactId>
-						<executions>
-							<!-- copy the war folder into the tomcat deploy folder ($TOMCAT_HOME/webapps) -->
-							<execution>
-								<id>install</id>
-								<phase>install</phase>
-								<configuration>
-									<tasks>
-										<delete quiet="true" file="${tomcat.webapps}/${project.warName}.war" />
-										<delete quiet="true" dir="${tomcat.webapps}/${project.warName}" />
-										<copy overwrite="true" file="${project.build.directory}/${project.warName}.war" tofile="${tomcat.webapps}/${project.warName}.war" />
-									</tasks>
-								</configuration>
-								<goals>
-									<goal>run</goal>
-								</goals>
-							</execution>
-						</executions>
+						<groupId>org.apache.tomcat.maven</groupId>
+						<artifactId>tomcat7-maven-plugin</artifactId>
+          				<version>2.1</version>
+						<configuration>
+							<url>http://dev-faces.mpdl.mpg.de/manager/text</url>
+							<server>tomcat</server>
+							<path>/imeji</path>
+							<warFile>/X/continuum/apache-continuum-1.4.1/data/working-directory/178/target/imeji.war</warFile>
+						</configuration>
 					</plugin>
 				</plugins>
 			</build>

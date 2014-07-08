@@ -36,7 +36,12 @@ import java.util.List;
 import org.apache.tika.Tika;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
+import org.apache.tika.parser.ParseContext;
+import org.apache.tika.parser.Parser;
+import org.apache.tika.parser.jpeg.JpegParser;
 import org.apache.tika.sax.BodyContentHandler;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.helpers.DefaultHandler;
 
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.vo.Item;
@@ -64,7 +69,24 @@ public class TikaExtractor
             BodyContentHandler handler = new BodyContentHandler();
             parser.parse(in, handler, metadata);
             for (String name : metadata.names())
+            {
                 techMd.add(name + " :  " + metadata.get(name));
+                
+            }
+            System.err.println("Content-Type = " + metadata.get("Content-Type"));
+            System.err.println("Make = " + metadata.get("Make"));
+            System.err.println("Model = " + metadata.get("Model"));
+            System.err.println("Artist = " + metadata.get("Artist"));
+            System.err.println("Software = " + metadata.get("Software"));
+            System.err.println("Image Description = " + metadata.get("Image Description"));
+            System.err.println("exif:DateTimeOriginal = " + metadata.get("exif:DateTimeOriginal"));
+            System.err.println("DateTimeOriginal = " + metadata.get("DateTimeOriginal"));
+            System.err.println("Date/Time = " + metadata.get("Date/Time"));
+            System.err.println("Color Space = " + metadata.get("ColorSpace"));
+            
+            
+            
+            
         }
         catch (Exception e)
         {

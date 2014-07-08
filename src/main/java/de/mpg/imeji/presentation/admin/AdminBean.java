@@ -21,7 +21,6 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.index.Index;
 import de.mpg.imeji.logic.reader.JenaReader;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
@@ -150,8 +149,6 @@ public class AdminBean
      */
     public void reIndex() throws Exception
     {
-        Index index = new Index();
-        index.reindex();
     }
 
     /**

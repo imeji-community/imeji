@@ -26,21 +26,21 @@
  * Gesellschaft zur Förderung der Wissenschaft e.V.
  * All rights reserved. Use is subject to license terms.
  */
-package de.mpg.imeji.logic.index;
+package Authentication;
+
+import org.junit.Test;
 
 /**
- * Manages the search index used in imeji
+ * Test Interna
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class Index
+public class SimpleAuthenticationTest
 {
-    /**
-     * Reindex all data in imeji, and set this index as default index
-     */
-    public void reindex()
+    @Test
+    public void testLogin()
     {
     }
 }

@@ -132,7 +132,7 @@ public class SPARQLSearch implements Search
      */
     private List<String> advanced(List<String> previousResults, SearchQuery sq, SortCriterion sortCri, User user)
     {
-        indexes = SearchIndexInitializer.init();
+        //indexes = SearchIndexInitializer.init();
         // Set null parameters
         if (sq == null)
             sq = new SearchQuery();

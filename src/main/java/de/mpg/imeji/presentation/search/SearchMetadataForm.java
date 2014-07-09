@@ -35,6 +35,13 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 public class SearchMetadataForm
 {
     private String searchValue;
+    private String familyName;
+    private String givenName;
+    private String orgName;
+    private String uri;
+    private String number;
+    private String longitude;
+    private String latitude;
     private SearchOperators operator;
     private LOGICAL_RELATIONS logicalRelation;
     private boolean not = false;
@@ -169,61 +176,152 @@ public class SearchMetadataForm
     public SearchGroup getAsSearchGroup()
     {
         SearchGroup group = new SearchGroup();
-        if (searchValue == null || "".equals(searchValue.trim()))
-        {
-            return group;
-        }
         if (namespace != null)
         {
             URI ns = URI.create(namespace);
             switch (MetadataTypesHelper.getTypesForNamespace(statement.getType().toString()))
             {
                 case DATE:
-                    group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.time.name()), operator,
-                            DateFormatter.format(searchValue), ns, not));
+                    if (!isEmtpyValue(searchValue))
+                    {
+                        group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.time.name()),
+                                operator, DateFormatter.format(searchValue), ns, not));
+                    }
                     break;
                 case GEOLOCATION:
-                    group.setNot(not);
-                    group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.title.name()), operator,
-                            searchValue, ns));
+                    if (!isEmtpyValue(searchValue + latitude + longitude))
+                    {
+                        group.setNot(not);
+                        if (!isEmtpyValue(searchValue))
+                        {
+                            group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.title.name()),
+                                    operator, searchValue, ns));
+                        }
+                        if (!isEmtpyValue(latitude))
+                        {
+                            if (!group.isEmpty())
+                                group.addLogicalRelation(LOGICAL_RELATIONS.AND);
+                            group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.latitude.name()),
+                                    SearchOperators.EQUALS, latitude, ns));
+                        }
+                        if (!isEmtpyValue(longitude))
+                        {
+                            if (!group.isEmpty())
+                                group.addLogicalRelation(LOGICAL_RELATIONS.AND);
+                            group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.longitude.name()),
+                                    SearchOperators.EQUALS, longitude, ns));
+                        }
+                    }
                     break;
                 case LICENSE:
-                    group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.license.name()), operator,
-                            searchValue, ns, not));
+                    if (!isEmtpyValue(searchValue + uri))
+                    {
+                        if (!isEmtpyValue(searchValue))
+                        {
+                            group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.license.name()),
+                                    operator, searchValue, ns, not));
+                        }
+                        if (!isEmtpyValue(uri))
+                        {
+                            if (!group.isEmpty())
+                                group.addLogicalRelation(LOGICAL_RELATIONS.OR);
+                            group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.url), operator,
+                                    uri, ns, not));
+                        }
+                    }
                     break;
                 case NUMBER:
-                    group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.number.name()), operator,
-                            searchValue, ns, not));
+                    if (!isEmtpyValue(searchValue))
+                    {
+                        group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.number.name()),
+                                operator, searchValue, ns, not));
+                    }
                     break;
                 case CONE_PERSON:
-                    group.setNot(not);
-                    group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.person_family.name()), operator,
-                            searchValue, ns));
-                    group.addLogicalRelation(LOGICAL_RELATIONS.OR);
-                    group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.person_given.name()), operator,
-                            searchValue, ns));
-                    group.addLogicalRelation(LOGICAL_RELATIONS.OR);
-                    group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.person_org_title.name()),
-                            operator, searchValue, ns));
+                    if (!isEmtpyValue(searchValue + familyName + givenName + uri + orgName))
+                    {
+                        group.setNot(not);
+                        if (!isEmtpyValue(searchValue))
+                        {
+                            group.addPair(new SearchMetadata(
+                                    SPARQLSearch.getIndex(SearchIndex.names.person_name.name()), operator, searchValue,
+                                    ns));
+                        }
+                        if (!isEmtpyValue(familyName))
+                        {
+                            if (!group.isEmpty())
+                                group.addLogicalRelation(LOGICAL_RELATIONS.OR);
+                            group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.person_family
+                                    .name()), operator, familyName, ns));
+                        }
+                        if (!isEmtpyValue(givenName))
+                        {
+                            if (!group.isEmpty())
+                                group.addLogicalRelation(LOGICAL_RELATIONS.OR);
+                            group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.person_given
+                                    .name()), operator, givenName, ns));
+                        }
+                        if (!isEmtpyValue(uri))
+                        {
+                            if (!group.isEmpty())
+                                group.addLogicalRelation(LOGICAL_RELATIONS.OR);
+                            group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.person_id.name()),
+                                    operator, uri, ns));
+                        }
+                        if (!isEmtpyValue(orgName))
+                        {
+                            if (!group.isEmpty())
+                                group.addLogicalRelation(LOGICAL_RELATIONS.OR);
+                            group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.person_org_title
+                                    .name()), operator, orgName, ns));
+                        }
+                    }
                     break;
                 case PUBLICATION:
-                    group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.citation.name()), operator,
-                            searchValue, ns, not));
+                    if (!isEmtpyValue(searchValue))
+                    {
+                        group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.citation.name()),
+                                operator, searchValue, ns, not));
+                    }
                     break;
                 case TEXT:
-                    group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.text.name()), operator,
-                            searchValue, ns, not));
+                    if (!isEmtpyValue(searchValue))
+                    {
+                        group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.text.name()),
+                                operator, searchValue, ns, not));
+                    }
                     break;
                 case LINK:
-                    group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.label), operator,
-                            searchValue, ns, not));
-                    group.addLogicalRelation(LOGICAL_RELATIONS.OR);
-                    group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.url), operator,
-                            searchValue, ns, not));
+                    if (!isEmtpyValue(searchValue + uri))
+                    {
+                        if (!isEmtpyValue(searchValue))
+                        {
+                            group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.label), operator,
+                                    searchValue, ns, not));
+                        }
+                        if (!isEmtpyValue(uri))
+                        {
+                            if (!group.isEmpty())
+                                group.addLogicalRelation(LOGICAL_RELATIONS.OR);
+                            group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.url), operator,
+                                    uri, ns, not));
+                        }
+                    }
                     break;
             }
         }
         return group;
+    }
+
+    /**
+     * True if the value is emtpy for the search
+     * 
+     * @param value
+     * @return
+     */
+    private boolean isEmtpyValue(String value)
+    {
+        return value == null || "".equals(value.trim());
     }
 
     /**
@@ -304,5 +402,117 @@ public class SearchMetadataForm
     public String getInverse()
     {
         return Boolean.toString(not);
+    }
+
+    /**
+     * @return the familyName
+     */
+    public String getFamilyName()
+    {
+        return familyName;
+    }
+
+    /**
+     * @param familyName the familyName to set
+     */
+    public void setFamilyName(String familyName)
+    {
+        this.familyName = familyName;
+    }
+
+    /**
+     * @return the givenName
+     */
+    public String getGivenName()
+    {
+        return givenName;
+    }
+
+    /**
+     * @param givenName the givenName to set
+     */
+    public void setGivenName(String givenName)
+    {
+        this.givenName = givenName;
+    }
+
+    /**
+     * @return the uri
+     */
+    public String getUri()
+    {
+        return uri;
+    }
+
+    /**
+     * @param uri the uri to set
+     */
+    public void setUri(String uri)
+    {
+        this.uri = uri;
+    }
+
+    /**
+     * @return the number
+     */
+    public String getNumber()
+    {
+        return number;
+    }
+
+    /**
+     * @param number the number to set
+     */
+    public void setNumber(String number)
+    {
+        this.number = number;
+    }
+
+    /**
+     * @return the longitude
+     */
+    public String getLongitude()
+    {
+        return longitude;
+    }
+
+    /**
+     * @param longitude the longitude to set
+     */
+    public void setLongitude(String longitude)
+    {
+        this.longitude = longitude;
+    }
+
+    /**
+     * @return the latitude
+     */
+    public String getLatitude()
+    {
+        return latitude;
+    }
+
+    /**
+     * @param latitude the latitude to set
+     */
+    public void setLatitude(String latitude)
+    {
+        this.latitude = latitude;
+    }
+
+    /**
+     * @return the orgName
+     */
+    public String getOrgName()
+    {
+        return orgName;
+    }
+
+    /**
+     * @param orgName the orgName to set
+     */
+    public void setOrgName(String orgName)
+    {
+        this.orgName = orgName;
     }
 }

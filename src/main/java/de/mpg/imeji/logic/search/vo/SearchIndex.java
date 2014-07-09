@@ -26,7 +26,7 @@ public class SearchIndex
      */
     public static enum names
     {
-        item, user, prop, creator, editor, created, modified, status, grant, grant_type, grant_for, filename, visibility, mds, col, alb, prof, type, cont_md, cont_title, cont_description, cont_person, cont_person_family, cont_person_given, cont_person_name, cont_person_org, cont_person_org_name, md, statement, all, text, number, date, time, title, longitude, latitude, license, url, label, citation, citation_style, cone, person, person_family, person_given, person_id, person_role, person_org, person_org_title, person_org_id, person_org_description, person_org_city, person_org_country, checksum, filetype;
+        item, user, prop, creator, editor, created, modified, status, grant, grant_type, grant_for, filename, visibility, mds, col, alb, prof, type, cont_md, cont_title, cont_description, cont_person, cont_person_family, cont_person_given, cont_person_name, cont_person_org, cont_person_org_name, md, statement, all, text, number, date, time, title, longitude, latitude, license, url, label, citation, citation_style, cone, person, person_name, person_family, person_given, person_id, person_role, person_org, person_org_title, person_org_id, person_org_description, person_org_city, person_org_country, checksum, filetype;
     }
 
     private String name;

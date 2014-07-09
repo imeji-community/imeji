@@ -72,7 +72,7 @@ public class WriterFacade implements Writer
     @Override
     public void create(List<Object> objects, User user) throws Exception
     {
-        checkSecurity(objects, user, GrantType.READ);
+        checkSecurity(objects, user, GrantType.CREATE);
         writer.create(objects, user);
     }
 

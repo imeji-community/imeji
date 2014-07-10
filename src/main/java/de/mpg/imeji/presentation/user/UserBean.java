@@ -21,12 +21,14 @@ import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Grant;
+import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 
 public class UserBean
@@ -39,6 +41,7 @@ public class UserBean
     private String id;
     private List<SharedHistory> roles = new ArrayList<SharedHistory>();
     private boolean changeEmail = false;
+    private boolean edit = false;
 
     public UserBean()
     {
@@ -71,6 +74,7 @@ public class UserBean
             this.roles = AuthUtil.getAllRoles(user, session.getUser());
             this.newEmail = user.getEmail();
             this.changeEmail = false;
+            this.setEdit(false);
         }
         catch (Exception e)
         {
@@ -115,6 +119,31 @@ public class UserBean
             }
         }
         reloadPage();
+    }
+
+    public void toggleEdit()
+    {
+        this.edit = edit ? false : true;
+    }
+
+    /**
+     * Add a new empty organization
+     * 
+     * @param index
+     */
+    public void addOrganization(int index)
+    {
+        ((List<Organization>)this.user.getPerson().getOrganizations()).add(index, ImejiFactory.newOrganization());
+    }
+
+    /**
+     * Remove an nth organization
+     * 
+     * @param index
+     */
+    public void removeOrganization(int index)
+    {
+        ((List<Organization>)this.user.getPerson().getOrganizations()).remove(index);
     }
 
     /**
@@ -199,6 +228,10 @@ public class UserBean
                     BeanHelper.error(e.getMessage());
                     e.printStackTrace();
                 }
+                finally
+                {
+                    reloadPage();
+                }
             }
         }
     }
@@ -242,11 +275,14 @@ public class UserBean
                     uc.delete(user);
                     init(newUser.getEmail());
                 }
-                reloadPage();
             }
             catch (Exception e)
             {
                 BeanHelper.error(session.getMessage("error") + ": " + e);
+            }
+            finally
+            {
+                reloadPage();
             }
         }
     }
@@ -256,11 +292,18 @@ public class UserBean
      * 
      * @throws IOException
      */
-    private void reloadPage() throws IOException
+    private void reloadPage()
     {
         Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-        FacesContext.getCurrentInstance().getExternalContext()
-                .redirect(navigation.getUserUrl() + "?id=" + user.getEmail());
+        try
+        {
+            FacesContext.getCurrentInstance().getExternalContext()
+                    .redirect(navigation.getUserUrl() + "?id=" + user.getEmail());
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public User getUser()
@@ -323,5 +366,21 @@ public class UserBean
     public void setRoles(List<SharedHistory> roles)
     {
         this.roles = roles;
+    }
+
+    /**
+     * @return the edit
+     */
+    public boolean isEdit()
+    {
+        return edit;
+    }
+
+    /**
+     * @param edit the edit to set
+     */
+    public void setEdit(boolean edit)
+    {
+        this.edit = edit;
     }
 }

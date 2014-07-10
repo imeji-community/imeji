@@ -43,31 +43,6 @@
 							</div>
 							
 							<div class="imj_content">
-
-								<script type="text/javascript">
-									function hide_input_area_show_Links() {
-										var showElements = '.imj_userGlobalInformation .imj_admindataValue .imj_admindataEdit';
-										showElements += ', .imj_userGlobalInformation .imj_submitPanel .imj_submitButton';
-										showElements += ', .imj_userGlobalInformation .imj_submitPanel .imj_cancelButton';
-										
-										var hideElements = '.imj_userGlobalInformation .imj_admindataValue .imj_admindataValueEntry';
-										hideElements += ', .imj_userGlobalInformation .imj_submitPanel .imj_editButton';
-										
-										$(hideElements).hide();
-										$(showElements).show();
-									}
-									function cancelUserEdit() {
-										var hideElements = '.imj_userGlobalInformation .imj_admindataValue .imj_admindataEdit';
-										hideElements += ', .imj_userGlobalInformation .imj_submitPanel .imj_submitButton';
-										hideElements += ', .imj_userGlobalInformation .imj_submitPanel .imj_cancelButton';
-										
-										var showElements = '.imj_userGlobalInformation .imj_admindataValue .imj_admindataValueEntry';
-										showElements += ', .imj_userGlobalInformation .imj_submitPanel .imj_editButton';
-										
-										$(hideElements).hide();
-										$(showElements).show();
-									}
-								</script>
 								
 								<h:form id ="userForm">
 									<h:panelGroup layout="block" id="userInfos" class="imj_userGlobalInformation">					
@@ -79,12 +54,12 @@
 													<span class="imj_invisible">: </span>
 												</div>
 												<div class="imj_admindataValue">
-													<div class="imj_admindataValueEntry">
+													<h:panelGroup class="imj_admindataValueEntry" rendered="#{!UserBean.edit}">
 														<h:outputText value="#{UserBean.user.email}"/>
-													</div>
-													<div class="imj_admindataSetEdit">
-														<h:inputText value="#{UserBean.newEmail}" valueChangeListener="#{UserBean.changeEmailListener}" title="#{!Auth.admin ? msg.edit_user_email_forbidden : ''}" styleClass="imj_admindataEdit imj_noDisplay #{!Auth.admin ? 'imj_disabled' : ''}" disabled="#{!Auth.admin}" readonly="#{!Auth.admin}"/>
-													</div>
+													</h:panelGroup>
+													<h:panelGroup class="imj_admindataSetEdit" rendered="#{UserBean.edit}" >
+														<h:inputText value="#{UserBean.newEmail}" valueChangeListener="#{UserBean.changeEmailListener}" title="#{!Auth.admin ? msg.edit_user_email_forbidden : ''}" styleClass="imj_admindataEdit #{!Auth.admin ? 'imj_disabled' : ''}" disabled="#{!Auth.admin}" readonly="#{!Auth.admin}"/>
+													</h:panelGroup>
 												</div>
 											</h:panelGroup>
 											
@@ -95,43 +70,71 @@
 													<span class="imj_invisible">: </span>
 												</div>
 												<div class="imj_admindataValue">
-													<div class="imj_admindataValueEntry">
-														<h:outputText value="#{UserBean.user.name}"/>
-													</div>
-													
-													<div class="imj_admindataSetEdit">
-														<h:inputText value="#{UserBean.user.name}" styleClass="imj_admindataEdit imj_noDisplay"/>
-													</div>
+													<h:panelGroup class="imj_admindataValueEntry" rendered="#{!UserBean.edit}">
+														<h:outputText value="#{UserBean.user.name}" />
+													</h:panelGroup>
+													<h:panelGroup class="imj_admindataSetEdit" rendered="#{UserBean.edit}">
+														<h:inputText value="#{UserBean.user.name}" styleClass="imj_admindataEdit"/>
+													</h:panelGroup>
+												</div>
+											</h:panelGroup>
+											
+											<h:panelGroup layout="block" styleClass="imj_admindataSet">
+												<div class="imj_admindataLabel">
+													<h:outputText value="#{lbl.organization}"/>
+													<span class="imj_invisible">: </span>
+												</div>
+												<div class="imj_admindataValue">
+													<h:panelGroup class="imj_admindataValueEntry" rendered="#{!UserBean.edit}">
+														<ui:repeat var="org" value="#{UserBean.user.person.organizations}"  varStatus="index" >
+															<h:outputText value=", " rendered="#{index.index > 0}"/>
+															<h:outputText value="#{org.name}"/>
+														</ui:repeat>
+													</h:panelGroup>
+													<ui:repeat var="org" value="#{UserBean.user.person.organizations}" varStatus="index" >
+														<h:panelGroup class="imj_admindataSetEdit" rendered="#{UserBean.edit}">
+															<h:inputText value="#{org.name}"  styleClass="imj_admindataEdit "/>
+															<span class="imj_inlineButtonGroup">
+																<h:commandButton styleClass="imj_buttonAdd_16" type="submit" title="#{lbl.add_organization}" action="#{UserBean.addOrganization(index.index + 1)}">
+																	<f:ajax execute="@form" render="@form"/>
+																</h:commandButton>
+																<h:commandButton styleClass="imj_buttonRemove_16 imj_admindataEdit imj_noDisplay" type="submit" title="#{lbl.remove_organization}" action="#{UserBean.removeOrganization(index.index)}">
+																	<f:ajax execute="@form" render="@form"/>
+																</h:commandButton>
+															</span>
+														</h:panelGroup>
+													</ui:repeat>
 												</div>
 											</h:panelGroup>
 											
 											<!-- User Edit - Nickname -->
-											<h:panelGroup layout="block" styleClass="imj_admindataSet">
-												<div class="imj_admindataLabel">
-													<h:outputText value="#{lbl.nickname}"/>
-													<span class="imj_invisible">: </span>
-												</div>
-												<div class="imj_admindataValue">
-													<div class="imj_admindataValueEntry">
-														<h:outputText value="#{UserBean.user.nick}"/>
+											<ui:fragment rendered="false">
+												<h:panelGroup layout="block" styleClass="imj_admindataSet">
+													<div class="imj_admindataLabel">
+														<h:outputText value="#{lbl.nickname}"/>
+														<span class="imj_invisible">: </span>
 													</div>
-													
-													<div class="imj_admindataSetEdit">
-														<h:inputText value="#{UserBean.user.nick}" styleClass="imj_admindataEdit imj_noDisplay"/>
+													<div class="imj_admindataValue">
+														<div class="imj_admindataValueEntry">
+															<h:outputText value="#{UserBean.user.nick}"/>
+														</div>
+														<div class="imj_admindataSetEdit">
+															<h:inputText value="#{UserBean.user.nick}" styleClass="imj_admindataEdit imj_noDisplay"/>
+														</div>
 													</div>
-												</div>
-											</h:panelGroup>
+												</h:panelGroup>
+											</ui:fragment>
 											
 											
 											<!-- submit panel -->
 											<div class="imj_submitPanel">
-												<h:outputLink id="lnkEditUserdata" value="#" onclick="hide_input_area_show_Links(); $(this).hide();" styleClass="imj_editButton">
-													<h:outputText value="#{lbl.edit}"/>
-												</h:outputLink>
-												<h:outputLink id="lnkCancelEditUserdata" value="#" onclick="cancelUserEdit(); $(this).hide();" styleClass="imj_cancelButton imj_noDisplay">
+												<h:commandLink id="lnkEditUserdata" action="#{UserBean.toggleEdit}" value="#{lbl.edit}" rendered="#{!UserBean.edit}" styleClass="imj_editButton">
+													<f:ajax execute="@form" render="@form"/>
+												</h:commandLink>
+												<h:outputLink id="lnkCancelUserdata" value="" rendered="#{UserBean.edit}" styleClass="imj_cancelButton">
 													<h:outputText value="#{lbl.cancel}"/>
 												</h:outputLink>
-												<h:commandLink action="#{UserBean.updateUser}" value="#{lbl.save}" styleClass="imj_submitButton imj_noDisplay"/>
+												<h:commandLink action="#{UserBean.updateUser}" value="#{lbl.save}" styleClass="imj_submitButton"  rendered="#{UserBean.edit}"/>
 											</div>
 										</fieldset>
 									</h:panelGroup> <!-- END user infos -->

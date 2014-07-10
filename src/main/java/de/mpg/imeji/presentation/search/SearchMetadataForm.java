@@ -79,10 +79,7 @@ public class SearchMetadataForm
                     not = ((SearchPair)se).isNot();
                     break;
                 case METADATA:
-                    operator = ((SearchMetadata)se).getOperator();
-                    searchValue = ((SearchMetadata)se).getValue();
-                    not = ((SearchMetadata)se).isNot();
-                    namespace = ((SearchMetadata)se).getStatement().toString();
+                    parseMetadata((SearchMetadata)se);
                     break;
                 case LOGICAL_RELATIONS:
                     logicalRelation = ((SearchLogicalRelation)se).getLogicalRelation();
@@ -93,6 +90,40 @@ public class SearchMetadataForm
         }
         initStatement(profile, namespace);
         initOperatorMenu();
+    }
+
+    private void parseMetadata(SearchMetadata md)
+    {
+        switch (md.getIndex().getName())
+        {
+            case "latitude":
+                this.latitude = md.getValue();
+                break;
+            case "longitude":
+                this.longitude = md.getValue();
+                break;
+            case "person_family":
+                this.familyName = md.getValue();
+                break;
+            case "person_given":
+                this.givenName = md.getValue();
+                break;
+            case "person_id":
+                this.uri = md.getValue();
+                break;
+            case "person_org_title":
+                this.orgName = md.getValue();
+                break;
+            case "url":
+                this.uri = md.getValue();
+                break;
+            default:
+                searchValue = md.getValue();
+                operator = md.getOperator();
+                not = md.isNot();
+                namespace = md.toString();
+                break;
+        }
     }
 
     public SearchMetadataForm(SearchMetadata metadata, MetadataProfile profile)

@@ -94,6 +94,7 @@ public class SearchMetadataForm
 
     private void parseMetadata(SearchMetadata md)
     {
+        namespace = md.getStatement().toString();
         switch (md.getIndex().getName())
         {
             case "latitude":
@@ -121,7 +122,6 @@ public class SearchMetadataForm
                 searchValue = md.getValue();
                 operator = md.getOperator();
                 not = md.isNot();
-                namespace = md.getStatement().toString();
                 break;
         }
     }

@@ -121,7 +121,7 @@ public class SearchMetadataForm
                 searchValue = md.getValue();
                 operator = md.getOperator();
                 not = md.isNot();
-                namespace = md.toString();
+                namespace = md.getStatement().toString();
                 break;
         }
     }
@@ -255,7 +255,7 @@ public class SearchMetadataForm
                         if (!isEmtpyValue(uri))
                         {
                             if (!group.isEmpty())
-                                group.addLogicalRelation(LOGICAL_RELATIONS.OR);
+                                group.addLogicalRelation(LOGICAL_RELATIONS.AND);
                             group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.url), operator,
                                     uri, ns, not));
                         }
@@ -281,28 +281,28 @@ public class SearchMetadataForm
                         if (!isEmtpyValue(familyName))
                         {
                             if (!group.isEmpty())
-                                group.addLogicalRelation(LOGICAL_RELATIONS.OR);
+                                group.addLogicalRelation(LOGICAL_RELATIONS.AND);
                             group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.person_family
                                     .name()), operator, familyName, ns));
                         }
                         if (!isEmtpyValue(givenName))
                         {
                             if (!group.isEmpty())
-                                group.addLogicalRelation(LOGICAL_RELATIONS.OR);
+                                group.addLogicalRelation(LOGICAL_RELATIONS.AND);
                             group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.person_given
                                     .name()), operator, givenName, ns));
                         }
                         if (!isEmtpyValue(uri))
                         {
                             if (!group.isEmpty())
-                                group.addLogicalRelation(LOGICAL_RELATIONS.OR);
+                                group.addLogicalRelation(LOGICAL_RELATIONS.AND);
                             group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.person_id.name()),
                                     operator, uri, ns));
                         }
                         if (!isEmtpyValue(orgName))
                         {
                             if (!group.isEmpty())
-                                group.addLogicalRelation(LOGICAL_RELATIONS.OR);
+                                group.addLogicalRelation(LOGICAL_RELATIONS.AND);
                             group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.person_org_title
                                     .name()), operator, orgName, ns));
                         }
@@ -333,7 +333,7 @@ public class SearchMetadataForm
                         if (!isEmtpyValue(uri))
                         {
                             if (!group.isEmpty())
-                                group.addLogicalRelation(LOGICAL_RELATIONS.OR);
+                                group.addLogicalRelation(LOGICAL_RELATIONS.AND);
                             group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.names.url), operator,
                                     uri, ns, not));
                         }

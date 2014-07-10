@@ -95,6 +95,7 @@ public class User implements Serializable
                 e.printStackTrace();
             }
         }
+        clone.person = person;
         return clone;
     }
 

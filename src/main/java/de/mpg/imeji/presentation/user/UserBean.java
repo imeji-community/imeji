@@ -221,7 +221,7 @@ public class UserBean
                 UserController controller = new UserController(session.getUser());
                 try
                 {
-                    controller.update(user);
+                    controller.update(user, session.getUser());
                 }
                 catch (Exception e)
                 {

@@ -50,6 +50,7 @@ public class UserController
      */
     public void create(User newUser) throws Exception
     {
+        newUser.setName(newUser.getPerson().getGivenName() + " " + newUser.getPerson().getFamilyName());
         writer.create(WriterFacade.toList(newUser), user);
     }
 
@@ -100,23 +101,13 @@ public class UserController
     /**
      * Update a {@link User}
      * 
-     * @param user
-     * @throws Exception
-     */
-    public void update(User user) throws Exception
-    {
-        writer.update(WriterFacade.toList(user), this.user);
-    }
-
-    /**
-     * Update a {@link User}
-     * 
      * @param updatedUser : The user who is updated in the database
      * @param currentUSer : The user who does the update
      * @throws Exception
      */
     public void update(User updatedUser, User currentUser) throws Exception
     {
+        updatedUser.setName(updatedUser.getPerson().getGivenName() + " " + updatedUser.getPerson().getFamilyName());
         writer.update(WriterFacade.toList(updatedUser), currentUser);
     }
 

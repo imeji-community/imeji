@@ -1,46 +1,82 @@
-/*
- *
- * CDDL HEADER START
- *
- * The contents of this file are subject to the terms of the
- * Common Development and Distribution License, Version 1.0 only
- * (the "License"). You may not use this file except in compliance
- * with the License.
- *
- * You can obtain a copy of the license at license/ESCIDOC.LICENSE
- * or http://www.escidoc.de/license.
- * See the License for the specific language governing permissions
- * and limitations under the License.
- *
- * When distributing Covered Code, include this CDDL HEADER in each
- * file and include the License file at license/ESCIDOC.LICENSE.
- * If applicable, add the following below this CDDL HEADER, with the
- * fields enclosed by brackets "[]" replaced with your own identifying
- * information: Portions Copyright [yyyy] [name of copyright owner]
- *
- * CDDL HEADER END
- */
-/*
- * Copyright 2006-2007 Fachinformationszentrum Karlsruhe Gesellschaft
- * für wissenschaftlich-technische Information mbH and Max-Planck-
- * Gesellschaft zur Förderung der Wissenschaft e.V.
- * All rights reserved. Use is subject to license terms.
- */
 package Authentication;
 
+
+import junit.framework.Assert;
+
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
-/**
- * Test Interna
- * 
- * @author saquet (initial creation)
- * @author $Author$ (last modification)
- * @version $Revision$ $LastChangedDate$
- */
-public class SimpleAuthenticationTest
-{
-    @Test
-    public void testLogin()
-    {
-    }
+import util.JenaUtil;
+
+
+import de.mpg.imeji.logic.auth.authentication.SimpleAuthentication;
+import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.beans.PropertyBean;
+
+public class SimpleAuthenticationTest {
+	private SimpleAuthentication simpAuth;
+	private String emailTestUser ="test@imeji.org";
+	private String nameTestUser = "test user";
+	private String pwdTestUser = "test";
+	
+
+	private String emailTestUser2 ="abcd@imeji.org";
+	private String nameTestUser2 = "test user abcd";
+	private String pwdTestUser2 = "abcd";
+	
+	private User testUser;
+	private User testUser2;
+
+	@Before
+	public void setup() {
+		new PropertyBean();
+		JenaUtil.initJena();
+		JenaUtil.addUser(emailTestUser, nameTestUser, pwdTestUser);
+		JenaUtil.addUser(emailTestUser2, nameTestUser2, pwdTestUser2);
+	}
+
+	@After
+	public void tearDown() throws Exception {
+	}
+
+
+
+	@Test
+	public void testDoLogin() {
+		
+		simpAuth = new SimpleAuthentication("test@imeji.org", "test"); // test user with right login and password
+		testUser = simpAuth.doLogin();
+		Assert.assertNotNull(testUser); // test user as imeji user should be returned
+		
+		simpAuth = new SimpleAuthentication("abcd@imeji.org", "abcd"); // test user 2 with right login and password
+		testUser2 = simpAuth.doLogin();
+		Assert.assertNotNull(testUser2); // test user 2 as imeji user should be returned
+		
+		simpAuth = new SimpleAuthentication("test@imeji.org", "abcd"); //  login of test user and password of test user 2
+		testUser2 = simpAuth.doLogin();
+		Assert.assertNull(testUser2); // value null should be returned
+		
+		simpAuth = new SimpleAuthentication("abcd@imeji.org", "test"); //  login of test user 2 and password of test user
+		testUser2 = simpAuth.doLogin();
+		Assert.assertNull(testUser2); // value null should be returned
+		
+		simpAuth = new SimpleAuthentication("test@imeji.org","blabla"); // test user with right login and wrong password
+		testUser = simpAuth.doLogin();
+		Assert.assertNull(testUser);	// value null should be returned
+		
+		simpAuth = new SimpleAuthentication("123@imeji.org", "test");  // test user with wrong login and right password
+		testUser = simpAuth.doLogin();
+		Assert.assertNull(testUser);	// value null should be returned
+		
+		simpAuth = new SimpleAuthentication("123456789", "123456789"); // test user with wrong login and password
+		testUser = simpAuth.doLogin();
+		Assert.assertNull(testUser);  // value null should be returned
+		
+		simpAuth = new SimpleAuthentication("!§$%&/().,-#+*", "!§$%&/().,-#+*"); // test user with special characters
+		testUser = simpAuth.doLogin();
+		Assert.assertNull(testUser);  // value null should be returned
+	}
+
+
 }

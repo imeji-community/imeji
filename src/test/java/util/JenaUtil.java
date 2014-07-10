@@ -62,7 +62,9 @@ public class JenaUtil
             // Read tdb location
             String tdb = PropertyReader.getProperty("imeji.tdb.path");
             // remove old Database
-            FileUtils.cleanDirectory(new File(tdb));
+            File f = new File(tdb);
+            if(f.exists())
+            	FileUtils.cleanDirectory(f);
             // Create new tdb
             Imeji.init(tdb);
         }

@@ -60,23 +60,7 @@ public class URLQueryTransformerTest
     private static String advancedQuery = "(col==\"http://imeji.org/collection/86\" AND (e6537a19-86b6-47ca-bba7-c8cc4d6bd6bc:text=\"TEST\") OR (750c1b37-f766-4b74-9d83-ddc858ff4365:title=\"TEST\") OR (type==\"http://imeji.org/terms/metadata#number\"))";
     private static String simpleQuery = "TEST";
 
-    @Before
-    public void init()
-    {
-        new PropertyBean();
-        JenaUtil.initJena();
-        JenaUtil.addUser("saquet@mpdl.mpg.de", "saquet", "test");
-        UserController c = new UserController(Imeji.adminUser);
-        try
-        {
-            c.retrieve("saquet@mpdl.mpg.de");
-        }
-        catch (Exception e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
+   
 
     /**
      * Test the methods for an advanced search query

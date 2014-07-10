@@ -33,9 +33,15 @@ import java.net.URLEncoder;
 
 import junit.framework.Assert;
 
+import org.junit.Before;
 import org.junit.Test;
 
+import util.JenaUtil;
+
+import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
+import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.search.URLQueryTransformer;
 
 /**
@@ -53,6 +59,24 @@ public class URLQueryTransformerTest
     private static String specialsChar = "japanese:テスト  chinese:實驗 yiddish:פּראָבע arab:اختبار bengali: পরীক্ষা other:öäü@ß$&@*~!?{}[]-#'.,áò";
     private static String advancedQuery = "(col==\"http://imeji.org/collection/86\" AND (e6537a19-86b6-47ca-bba7-c8cc4d6bd6bc:text=\"TEST\") OR (750c1b37-f766-4b74-9d83-ddc858ff4365:title=\"TEST\") OR (type==\"http://imeji.org/terms/metadata#number\"))";
     private static String simpleQuery = "TEST";
+
+    @Before
+    public void init()
+    {
+        new PropertyBean();
+        JenaUtil.initJena();
+        JenaUtil.addUser("saquet@mpdl.mpg.de", "saquet", "test");
+        UserController c = new UserController(Imeji.adminUser);
+        try
+        {
+            c.retrieve("saquet@mpdl.mpg.de");
+        }
+        catch (Exception e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Test the methods for an advanced search query

@@ -11,13 +11,15 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.ImejiBean2RDF;
-import de.mpg.imeji.logic.ImejiRDF2Bean;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
+import de.mpg.imeji.logic.reader.JenaReader;
+import de.mpg.imeji.logic.reader.ReaderFacade;
+import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.Search;
-import de.mpg.imeji.logic.search.Search.SearchType;
+import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
@@ -25,6 +27,8 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.writer.JenaWriter;
+import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.j2j.helper.J2JHelper;
@@ -38,8 +42,8 @@ import de.mpg.j2j.helper.J2JHelper;
  */
 public class CollectionController extends ImejiController
 {
-    private static ImejiRDF2Bean imejiRDF2Bean = null;
-    private static ImejiBean2RDF imejiBean2RDF = null;
+    private static final ReaderFacade reader = new ReaderFacade(Imeji.collectionModel);
+    private static final WriterFacade writer = new WriterFacade(Imeji.collectionModel);
     private static Logger logger = Logger.getLogger(CollectionController.class);
 
     /**
@@ -48,8 +52,6 @@ public class CollectionController extends ImejiController
     public CollectionController()
     {
         super();
-        imejiBean2RDF = new ImejiBean2RDF(Imeji.collectionModel);
-        imejiRDF2Bean = new ImejiRDF2Bean(Imeji.collectionModel);
     }
 
     /**
@@ -60,8 +62,6 @@ public class CollectionController extends ImejiController
     public CollectionController(User user)
     {
         super(user);
-        imejiBean2RDF = new ImejiBean2RDF(Imeji.collectionModel);
-        imejiRDF2Bean = new ImejiRDF2Bean(Imeji.collectionModel);
     }
 
     /**
@@ -74,7 +74,7 @@ public class CollectionController extends ImejiController
     {
         writeCreateProperties(ic, user);
         ic.setProfile(profileURI);
-        imejiBean2RDF.create(imejiBean2RDF.toList(ic), user);
+        writer.create(WriterFacade.toList(ic), user);
         // Prepare grants
         GrantController gc = new GrantController();
         gc.addGrants(user, AuthorizationPredefinedRoles.admin(ic.getId().toString(), profileURI.toString()), user);
@@ -92,7 +92,7 @@ public class CollectionController extends ImejiController
     public void update(CollectionImeji ic) throws Exception
     {
         writeUpdateProperties(ic, user);
-        imejiBean2RDF.update(imejiBean2RDF.toList(ic), user);
+        writer.update(WriterFacade.toList(ic), user);
     }
 
     /**
@@ -105,7 +105,7 @@ public class CollectionController extends ImejiController
     public void update(CollectionImeji ic, User user) throws Exception
     {
         writeUpdateProperties(ic, user);
-        imejiBean2RDF.update(imejiBean2RDF.toList(ic), user);
+        writer.update(WriterFacade.toList(ic), user);
     }
 
     /**
@@ -118,7 +118,7 @@ public class CollectionController extends ImejiController
     public void updateLazy(CollectionImeji ic, User user) throws Exception
     {
         writeUpdateProperties(ic, user);
-        imejiBean2RDF.updateLazy(imejiBean2RDF.toList(ic), user);
+        writer.updateLazy(WriterFacade.toList(ic), user);
     }
 
     /**
@@ -145,7 +145,7 @@ public class CollectionController extends ImejiController
             // Delete profile
             ProfileController pc = new ProfileController();
             pc.delete(pc.retrieve(collection.getProfile(), user), user);
-            imejiBean2RDF.delete(imejiBean2RDF.toList(collection), user);
+            writer.delete(WriterFacade.toList(collection), user);
         }
     }
 
@@ -220,8 +220,7 @@ public class CollectionController extends ImejiController
      */
     public CollectionImeji retrieve(URI uri) throws Exception
     {
-        imejiRDF2Bean = new ImejiRDF2Bean(Imeji.collectionModel);
-        return (CollectionImeji)imejiRDF2Bean.load(uri.toString(), user, new CollectionImeji());
+        return (CollectionImeji)reader.read(uri.toString(), user, new CollectionImeji());
     }
 
     /**
@@ -234,8 +233,7 @@ public class CollectionController extends ImejiController
      */
     public CollectionImeji retrieve(URI uri, User user) throws Exception
     {
-        imejiRDF2Bean = new ImejiRDF2Bean(Imeji.collectionModel);
-        return (CollectionImeji)imejiRDF2Bean.load(uri.toString(), user, new CollectionImeji());
+        return (CollectionImeji)reader.read(uri.toString(), user, new CollectionImeji());
     }
 
     /**
@@ -248,8 +246,7 @@ public class CollectionController extends ImejiController
      */
     public CollectionImeji retrieveLazy(URI uri) throws Exception
     {
-        imejiRDF2Bean = new ImejiRDF2Bean(Imeji.collectionModel);
-        return (CollectionImeji)imejiRDF2Bean.loadLazy(uri.toString(), user, new CollectionImeji());
+        return (CollectionImeji)reader.readLazy(uri.toString(), user, new CollectionImeji());
     }
 
     /**
@@ -262,8 +259,7 @@ public class CollectionController extends ImejiController
      */
     public CollectionImeji retrieveLazy(URI uri, User user) throws Exception
     {
-        imejiRDF2Bean = new ImejiRDF2Bean(Imeji.collectionModel);
-        return (CollectionImeji)imejiRDF2Bean.loadLazy(uri.toString(), user, new CollectionImeji());
+        return (CollectionImeji)reader.readLazy(uri.toString(), user, new CollectionImeji());
     }
 
     /**
@@ -289,7 +285,7 @@ public class CollectionController extends ImejiController
      */
     public SearchResult search(SearchQuery searchQuery, SortCriterion sortCri, int limit, int offset)
     {
-        Search search = new Search(SearchType.COLLECTION, null);
+        Search search = SearchFactory.create(SearchType.COLLECTION);
         return search.search(searchQuery, sortCri, user);
     }
 
@@ -322,7 +318,7 @@ public class CollectionController extends ImejiController
             }
             counter++;
         }
-        imejiRDF2Bean.loadLazy(J2JHelper.cast2ObjectList(cols), user);
+        reader.readLazy(J2JHelper.cast2ObjectList(cols), user);
         return cols;
     }
 }

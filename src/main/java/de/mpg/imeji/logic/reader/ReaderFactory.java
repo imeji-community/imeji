@@ -26,21 +26,25 @@
  * Gesellschaft zur Förderung der Wissenschaft e.V.
  * All rights reserved. Use is subject to license terms.
  */
-package de.mpg.imeji.logic.index;
+package de.mpg.imeji.logic.reader;
 
 /**
- * Manages the search index used in imeji
+ * Factory for {@link Reader}
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class Index
+public class ReaderFactory
 {
     /**
-     * Reindex all data in imeji, and set this index as default index
+     * Create a Reader according to the uri of the model
+     * 
+     * @param modelURI
+     * @return
      */
-    public void reindex()
+    public static Reader create(String modelURI)
     {
+        return new JenaReader(modelURI);
     }
 }

@@ -4,6 +4,7 @@
 package de.mpg.imeji.presentation.collection;
 
 import java.net.URI;
+import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -13,6 +14,7 @@ import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
@@ -45,7 +47,10 @@ public class CreateCollectionBean extends CollectionBean
     public void init()
     {
         if (UrlHelper.getParameterBoolean("reset"))
+        {
             setCollection(ImejiFactory.newCollection());
+            ((List<Person>)getCollection().getMetadata().getPersons()).set(0, sessionBean.getUser().getPerson());
+        }
     }
 
     /**

@@ -26,55 +26,25 @@
  * Gesellschaft zur Förderung der Wissenschaft e.V.
  * All rights reserved. Use is subject to license terms.
  */
-package de.mpg.imeji.logic.export.format.explain;
-
-import java.io.OutputStream;
-import java.io.PrintWriter;
-
-import de.mpg.imeji.logic.export.format.ExplainExport;
-import de.mpg.imeji.logic.search.SPARQLSearch;
-import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.vo.SearchIndex;
+package de.mpg.imeji.logic.writer;
 
 /**
- * Explain the index for the search
+ * Factory for {@link Writer}
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class SearchExplainExport extends ExplainExport
+public class WriterFactory
 {
-    /*
-     * (non-Javadoc)
-     * @see de.mpg.imeji.logic.export.Export#export(java.io.OutputStream, de.mpg.imeji.logic.search.SearchResult)
+    /**
+     * Create a {@link Writer} for a model
+     * 
+     * @param modelURI
+     * @return
      */
-    @Override
-    public void export(OutputStream out, SearchResult sr)
+    public static Writer create(String modelURI)
     {
-        PrintWriter writer = new PrintWriter(out);
-        try
-        {
-            writer.append(getRDFTagOpen());
-            for (SearchIndex index : SPARQLSearch.indexes.values())
-            {
-                writer.append(getIndexTag(index.getName(), index.getNamespace()));
-            }
-            writer.append(getRDFTagClose());
-        }
-        finally
-        {
-            writer.close();
-        }
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see de.mpg.imeji.logic.export.Export#init()
-     */
-    @Override
-    public void init()
-    {
-        // Nothing to to
+        return new JenaWriter(modelURI);
     }
 }

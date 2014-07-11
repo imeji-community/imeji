@@ -173,6 +173,8 @@ public class SearchIndexInitializer
                         .get(SearchIndex.names.md.name())));
         indexes = put(indexes, new SearchIndex(SearchIndex.names.person.name(), "http://xmlns.com/foaf/0.1/person",
                 indexes.get(SearchIndex.names.md.name())));
+        indexes = put(indexes, new SearchIndex(SearchIndex.names.person_name.name(),
+                "http://purl.org/escidoc/metadata/terms/0.1/complete-name", indexes.get(SearchIndex.names.person.name())));
         indexes = put(indexes, new SearchIndex(SearchIndex.names.person_family.name(),
                 "http://purl.org/escidoc/metadata/terms/0.1/family-name", indexes.get(SearchIndex.names.person.name())));
         indexes = put(indexes, new SearchIndex(SearchIndex.names.person_given.name(),

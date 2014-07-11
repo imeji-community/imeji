@@ -12,7 +12,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.vo.SearchElement;
 import de.mpg.imeji.logic.search.vo.SearchElement.SEARCH_ELEMENTS;
 import de.mpg.imeji.logic.search.vo.SearchGroup;
@@ -132,7 +132,7 @@ public class URLQueryTransformer
                 {
                     value += "\"";
                 }
-                SearchIndex index = Search.getIndex(scString.substring(indexIndex + 1, indexOp).trim());
+                SearchIndex index = SPARQLSearch.getIndex(scString.substring(indexIndex + 1, indexOp).trim());
                 SearchOperators operator = stringOperator2SearchOperator(op);
                 searchQuery.addPair(new SearchMetadata(index, operator, value, ObjectHelper.getURI(Statement.class,
                         scString.substring(0, indexIndex).trim()), not));
@@ -149,7 +149,7 @@ public class URLQueryTransformer
                 {
                     value += "\"";
                 }
-                SearchIndex index = Search.getIndex(scString.substring(0, indexOp).trim());
+                SearchIndex index = SPARQLSearch.getIndex(scString.substring(0, indexOp).trim());
                 SearchOperators operator = stringOperator2SearchOperator(op);
                 searchQuery.addPair(new SearchPair(index, operator, value, not));
                 scString = "";
@@ -158,8 +158,8 @@ public class URLQueryTransformer
         }
         if (!"".equals(query) && searchQuery.isEmpty())
         {
-            searchQuery.addPair(new SearchPair(Search.getIndex(SearchIndex.names.all), SearchOperators.REGEX, query
-                    .trim()));
+            searchQuery.addPair(new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.all), SearchOperators.REGEX,
+                    query.trim()));
         }
         return searchQuery;
     }
@@ -408,8 +408,15 @@ public class URLQueryTransformer
         int groupSize = group.getElements().size();
         if (isSearchGroupForComplexMetadata(group))
         {
-            str = searchMetadata2PrettyQuery((SearchMetadata)group.getElements().get(0));
-            groupSize = 1;
+            for (SearchElement md : group.getElements())
+            {
+                if (md instanceof SearchMetadata)
+                    str += searchMetadata2PrettyQuery((SearchMetadata)md);
+                else if (md instanceof SearchLogicalRelation)
+                    str += searchLogicalRelation2PrettyQuery((SearchLogicalRelation)md);
+            }
+            // str = searchMetadata2PrettyQuery((SearchMetadata)group.getElements().get(0));
+            // groupSize = 1;
         }
         else
         {
@@ -513,6 +520,12 @@ public class URLQueryTransformer
             q = q.substring(0, q.length() - 4);
         if (q.endsWith(" " + session.getLabel("or_big")))
             q = q.substring(0, q.length() - 3);
+        if (q.startsWith(session.getLabel("or_big")))
+            q = q.substring(3,q.length());
+        if (q.startsWith(session.getLabel("and_big")))
+            q = q.substring(4,q.length());
+        if (q.endsWith(" ") || q.endsWith(" " + session.getLabel("and_big")) || q.endsWith(" " + session.getLabel("or_big")))
+        	q = removeUseLessLogicalOperation(q);
         return q;
     }
 
@@ -579,6 +592,39 @@ public class URLQueryTransformer
         if (label == null)
         {
             label = "Metadata-" + indexNamespace2PrettyQuery(md.getStatement().toString());
+        }
+        switch (md.getIndex().getName())
+        {
+            case "latitude":
+                label +=  "(" + ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("geolocation_latitude")
+                        + ")";
+                break;
+            case "longitude":
+                label +=  "(" + ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("geolocation_longitude")
+                        + ")";
+                break;
+            case "person_family":
+                label += "(" + ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("family_name")
+                        + ")";
+                break;
+            case "person_given":
+                label +=  "(" + ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("first_name")
+                        + ")";
+                break;
+            case "person_id":
+                label += "( " + ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("identifier")
+                        + ")";
+                break;
+            case "person_org_title":
+                label +=  "(" + ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("organization")
+                        + ")";
+                break;
+            case "url":
+                label +=  "(" + ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("url")
+                        + ")";
+                break;
+            default:
+                break;
         }
         return label + " " + negation2PrettyQuery(md.isNot()) + searchOperator2PrettyQuery(md.getOperator()) + " "
                 + md.getValue();

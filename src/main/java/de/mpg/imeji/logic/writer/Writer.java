@@ -26,55 +26,55 @@
  * Gesellschaft zur Förderung der Wissenschaft e.V.
  * All rights reserved. Use is subject to license terms.
  */
-package de.mpg.imeji.logic.export.format.explain;
+package de.mpg.imeji.logic.writer;
 
-import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.util.List;
 
-import de.mpg.imeji.logic.export.format.ExplainExport;
-import de.mpg.imeji.logic.search.SPARQLSearch;
-import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.vo.SearchIndex;
+import de.mpg.imeji.logic.vo.User;
 
 /**
- * Explain the index for the search
+ * Write imeji objects in the persistence layer. Important: {@link Writer} doens't check Authorization. Please use
+ * {@link WriterFacade} instead.
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class SearchExplainExport extends ExplainExport
+public interface Writer
 {
-    /*
-     * (non-Javadoc)
-     * @see de.mpg.imeji.logic.export.Export#export(java.io.OutputStream, de.mpg.imeji.logic.search.SearchResult)
+    /**
+     * Create a list of objects
+     * 
+     * @param objects
+     * @param user
+     * @throws Exception
      */
-    @Override
-    public void export(OutputStream out, SearchResult sr)
-    {
-        PrintWriter writer = new PrintWriter(out);
-        try
-        {
-            writer.append(getRDFTagOpen());
-            for (SearchIndex index : SPARQLSearch.indexes.values())
-            {
-                writer.append(getIndexTag(index.getName(), index.getNamespace()));
-            }
-            writer.append(getRDFTagClose());
-        }
-        finally
-        {
-            writer.close();
-        }
-    }
+    public void create(List<Object> objects, User user) throws Exception;
 
-    /*
-     * (non-Javadoc)
-     * @see de.mpg.imeji.logic.export.Export#init()
+    /**
+     * Delete a list of objects
+     * 
+     * @param objects
+     * @param user
+     * @throws Exception
      */
-    @Override
-    public void init()
-    {
-        // Nothing to to
-    }
+    public void delete(List<Object> objects, User user) throws Exception;
+
+    /**
+     * Update a list of objects
+     * 
+     * @param objects
+     * @param user
+     * @throws Exception
+     */
+    public void update(List<Object> objects, User user) throws Exception;
+
+    /**
+     * Lazy Update a list of objects (don't update lazy list)
+     * 
+     * @param objects
+     * @param user
+     * @throws Exception
+     */
+    public void updateLazy(List<Object> objects, User user) throws Exception;
 }

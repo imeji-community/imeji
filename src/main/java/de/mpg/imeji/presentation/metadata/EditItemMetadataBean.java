@@ -137,10 +137,9 @@ public class EditItemMetadataBean
      * @return
      * @throws IOException
      */
-    public String cancel() throws IOException
+    public void cancel() throws IOException
     {
         redirectToView();
-        return "";
     }
 
     /**
@@ -371,8 +370,8 @@ public class EditItemMetadataBean
      */
     public void saveAndRedirect() throws IOException
     {
-        editor.save();
-        redirectToView();
+    	editor.save();
+    	redirectToView();
     }
 
     /**

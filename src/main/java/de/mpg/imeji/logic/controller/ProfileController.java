@@ -11,11 +11,11 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.ImejiBean2RDF;
-import de.mpg.imeji.logic.ImejiRDF2Bean;
 import de.mpg.imeji.logic.ImejiSPARQL;
+import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
+import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
@@ -25,6 +25,7 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.j2j.exceptions.NotFoundException;
 import de.mpg.j2j.helper.DateHelper;
 
@@ -37,8 +38,8 @@ import de.mpg.j2j.helper.DateHelper;
  */
 public class ProfileController extends ImejiController
 {
-    private static ImejiRDF2Bean imejiRDF2Bean = new ImejiRDF2Bean(Imeji.profileModel);
-    private static ImejiBean2RDF imejiBean2RDF = new ImejiBean2RDF(Imeji.profileModel);
+    private static final ReaderFacade reader = new ReaderFacade(Imeji.profileModel);
+    private static final WriterFacade writer = new WriterFacade(Imeji.profileModel);
     private static Logger logger = Logger.getLogger(ProfileController.class);
 
     /**
@@ -57,10 +58,9 @@ public class ProfileController extends ImejiController
      */
     public URI create(MetadataProfile mdp, User user) throws Exception
     {
-        imejiBean2RDF = new ImejiBean2RDF(Imeji.profileModel);
         writeCreateProperties(mdp, user);
         mdp.setStatus(Status.PENDING);
-        imejiBean2RDF.create(imejiBean2RDF.toList(mdp), user);
+        writer.create(WriterFacade.toList(mdp), user);
         return mdp.getId();
     }
 
@@ -74,7 +74,6 @@ public class ProfileController extends ImejiController
      */
     public MetadataProfile retrieve(String id, User user) throws Exception
     {
-        imejiRDF2Bean = new ImejiRDF2Bean(Imeji.profileModel);
         return retrieve(ObjectHelper.getURI(MetadataProfile.class, id), user);
     }
 
@@ -89,11 +88,10 @@ public class ProfileController extends ImejiController
      */
     public MetadataProfile retrieve(URI uri, User user) throws NotFoundException
     {
-        imejiRDF2Bean = new ImejiRDF2Bean(Imeji.profileModel);
         MetadataProfile p;
         try
         {
-            p = ((MetadataProfile)imejiRDF2Bean.load(uri.toString(), user, new MetadataProfile()));
+            p = ((MetadataProfile)reader.read(uri.toString(), user, new MetadataProfile()));
         }
         catch (Exception e)
         {
@@ -112,9 +110,8 @@ public class ProfileController extends ImejiController
      */
     public void update(MetadataProfile mdp, User user) throws Exception
     {
-        imejiBean2RDF = new ImejiBean2RDF(Imeji.profileModel);
         writeUpdateProperties(mdp, user);
-        imejiBean2RDF.update(imejiBean2RDF.toList(mdp), user);
+        writer.update(WriterFacade.toList(mdp), user);
     }
 
     /**
@@ -140,8 +137,7 @@ public class ProfileController extends ImejiController
      */
     public void delete(MetadataProfile mdp, User user) throws Exception
     {
-        imejiBean2RDF = new ImejiBean2RDF(Imeji.profileModel);
-        imejiBean2RDF.delete(imejiBean2RDF.toList(mdp), user);
+        writer.delete(WriterFacade.toList(mdp), user);
     }
 
     /**
@@ -167,7 +163,7 @@ public class ProfileController extends ImejiController
      */
     public SearchResult search(SearchQuery query, User user)
     {
-        Search search = new Search(SearchType.PROFILE, null);
+        Search search = SearchFactory.create(SearchType.PROFILE);
         SearchResult result = search.search(query, null, user);
         return result;
     }
@@ -180,7 +176,7 @@ public class ProfileController extends ImejiController
      */
     public List<MetadataProfile> search(User user) throws Exception
     {
-        Search search = new Search(SearchType.PROFILE, null);
+        Search search = SearchFactory.create(SearchType.PROFILE);
         SearchResult result = search.search(new SearchQuery(), null, user);
         List<MetadataProfile> l = new ArrayList<MetadataProfile>();
         for (String uri : result.getResults())

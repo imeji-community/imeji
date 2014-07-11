@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchOperators;
@@ -71,7 +71,7 @@ public class TechnicalFacets extends Facets
                 {
                     if (!fs.isFilter("my_images") && !fs.isNoResultFilter("my_images"))
                     {
-                        SearchPair myImageSearchPair = new SearchPair(Search.getIndex(SearchIndex.names.user),
+                        SearchPair myImageSearchPair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.user),
                                 SearchOperators.EQUALS, sb.getUser().getEmail());
                         count = getCount(searchQuery, myImageSearchPair, allImages.getResults());
                         if (count > 0)
@@ -86,7 +86,7 @@ public class TechnicalFacets extends Facets
                     }
                     if (!fs.isFilter("pending_images") && !fs.isNoResultFilter("pending_images"))
                     {
-                        SearchPair privatePair = new SearchPair(Search.getIndex(SearchIndex.names.status),
+                        SearchPair privatePair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.status),
                                 SearchOperators.EQUALS, Status.PENDING.getUri().toString());
                         count = getCount(searchQuery, privatePair, allImages.getResults());
                         if (count > 0)
@@ -97,7 +97,7 @@ public class TechnicalFacets extends Facets
                     }
                     if (!fs.isFilter("released_images") && !fs.isNoResultFilter("released_images"))
                     {
-                        SearchPair publicPair = new SearchPair(Search.getIndex(SearchIndex.names.status),
+                        SearchPair publicPair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.status),
                                 SearchOperators.EQUALS, Status.RELEASED.getUri().toString());
                         count = getCount(searchQuery, publicPair, allImages.getResults());
                         if (count > 0)
@@ -111,7 +111,7 @@ public class TechnicalFacets extends Facets
                 {
                     if (!fs.isFilter(t.name()) && !fs.isNoResultFilter(t.name()))
                     {
-                        SearchPair pair = new SearchPair(Search.getIndex(SearchIndex.names.type),
+                        SearchPair pair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.type),
                                 SearchOperators.EQUALS, t.getClazzNamespace());
                         count = getCount(searchQuery, pair, allImages.getResults());
                         if (count > 0)

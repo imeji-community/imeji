@@ -32,7 +32,6 @@ import de.mpg.j2j.helper.J2JHelper;
  */
 public abstract class ImejiController
 {
-    private static Logger logger = Logger.getLogger(ImejiController.class);
     protected User user;
 
     /**

@@ -3,10 +3,10 @@
  */
 package de.mpg.imeji.logic.search.vo;
 
-import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.SPARQLSearch;
 
 /**
- * A sort criterion for a {@link Search}
+ * A sort criterion for a {@link SPARQLSearch}
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)

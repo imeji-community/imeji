@@ -9,14 +9,14 @@ import java.util.Collection;
 import java.util.List;
 
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.ImejiBean2RDF;
-import de.mpg.imeji.logic.ImejiRDF2Bean;
+import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
-import de.mpg.imeji.logic.search.Search.SearchType;
+import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
+import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.j2j.exceptions.NotFoundException;
 
 /**
@@ -28,8 +28,8 @@ import de.mpg.j2j.exceptions.NotFoundException;
  */
 public class UserController
 {
-    private static ImejiRDF2Bean imejiRDF2Bean = new ImejiRDF2Bean(Imeji.userModel);
-    private static ImejiBean2RDF imejiBean2RDF = new ImejiBean2RDF(Imeji.userModel);
+    private static final ReaderFacade reader = new ReaderFacade(Imeji.userModel);
+    private static final WriterFacade writer = new WriterFacade(Imeji.userModel);
     private User user;
 
     /**
@@ -50,7 +50,8 @@ public class UserController
      */
     public void create(User newUser) throws Exception
     {
-        imejiBean2RDF.create(imejiBean2RDF.toList(newUser), user);
+        newUser.setName(newUser.getPerson().getGivenName() + " " + newUser.getPerson().getFamilyName());
+        writer.create(WriterFacade.toList(newUser), user);
     }
 
     /**
@@ -62,9 +63,9 @@ public class UserController
     public void delete(User user) throws Exception
     {
         // remove user grant
-        imejiBean2RDF.delete(new ArrayList<Object>(user.getGrants()), this.user);
+        writer.delete(new ArrayList<Object>(user.getGrants()), this.user);
         // remove user
-        imejiBean2RDF.delete(imejiBean2RDF.toList(user), this.user);
+        writer.delete(WriterFacade.toList(user), this.user);
     }
 
     /**
@@ -76,7 +77,7 @@ public class UserController
      */
     public User retrieve(String email) throws Exception
     {
-        User u = (User)imejiRDF2Bean.load(ObjectHelper.getURI(User.class, email).toString(), user, new User());
+        User u = (User)reader.read(ObjectHelper.getURI(User.class, email).toString(), user, new User());
         UserGroupController ugc = new UserGroupController();
         u.setGroups((List<UserGroup>)ugc.searchByUser(u, user));
         return u;
@@ -91,21 +92,10 @@ public class UserController
      */
     public User retrieve(URI uri) throws Exception
     {
-        User u = (User)imejiRDF2Bean.load(uri.toString(), user, new User());
+        User u = (User)reader.read(uri.toString(), user, new User());
         UserGroupController ugc = new UserGroupController();
         u.setGroups((List<UserGroup>)ugc.searchByUser(u, user));
         return u;
-    }
-
-    /**
-     * Update a {@link User}
-     * 
-     * @param user
-     * @throws Exception
-     */
-    public void update(User user) throws Exception
-    {
-        imejiBean2RDF.update(imejiBean2RDF.toList(user), this.user);
     }
 
     /**
@@ -117,7 +107,8 @@ public class UserController
      */
     public void update(User updatedUser, User currentUser) throws Exception
     {
-        imejiBean2RDF.update(imejiBean2RDF.toList(updatedUser), currentUser);
+        updatedUser.setName(updatedUser.getPerson().getGivenName() + " " + updatedUser.getPerson().getFamilyName());
+        writer.update(WriterFacade.toList(updatedUser), currentUser);
     }
 
     /**
@@ -128,14 +119,14 @@ public class UserController
      */
     public Collection<User> retrieveAll(String name)
     {
-        Search search = new Search(SearchType.ALL, null);
-        return loadUsers(search.searchSimpleForQuery(SPARQLQueries.selectUserAll(name), null));
+        Search search = SearchFactory.create();
+        return loadUsers(search.searchSimpleForQuery(SPARQLQueries.selectUserAll(name)).getResults());
     }
 
     public Collection<User> retrieveUserWithGrantFor(String grantFor)
     {
-        Search search = new Search(SearchType.ALL, null);
-        return loadUsers(search.searchSimpleForQuery(SPARQLQueries.selectUserWithGrantFor(grantFor), null));
+        Search search = SearchFactory.create();
+        return loadUsers(search.searchSimpleForQuery(SPARQLQueries.selectUserWithGrantFor(grantFor)).getResults());
     }
 
     /**
@@ -151,7 +142,7 @@ public class UserController
         {
             try
             {
-                users.add((User)imejiRDF2Bean.load(uri, user, new User()));
+                users.add((User)reader.read(uri, user, new User()));
             }
             catch (NotFoundException e)
             {
@@ -173,8 +164,8 @@ public class UserController
     public static boolean adminUserExist()
     {
         boolean exist = false;
-        Search search = new Search(SearchType.ALL, null);
-        List<String> uris = search.searchSimpleForQuery(SPARQLQueries.selectUserSysAdmin(), null);
+        Search search = SearchFactory.create();
+        List<String> uris = search.searchSimpleForQuery(SPARQLQueries.selectUserSysAdmin()).getResults();
         if (uris != null && uris.size() > 0)
         {
             exist = true;
@@ -190,8 +181,8 @@ public class UserController
      */
     public List<User> retrieveAllAdmins()
     {
-        Search search = new Search(SearchType.ALL, null);
-        List<String> uris = search.searchSimpleForQuery(SPARQLQueries.selectUserSysAdmin(), null);
+        Search search = SearchFactory.create();
+        List<String> uris = search.searchSimpleForQuery(SPARQLQueries.selectUserSysAdmin()).getResults();
         List<User> admins = new ArrayList<User>();
         for (String uri : uris)
         {

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
@@ -77,7 +77,7 @@ public class CollectionFacets extends Facets
                 List<Facet> group = new ArrayList<Facet>();
                 if (st.isPreview() && !fs.isFilter(getName(st.getId())))
                 {
-                    SearchPair pair = new SearchPair(Search.getIndex(SearchIndex.names.statement),
+                    SearchPair pair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.statement),
                             SearchOperators.EQUALS, st.getId().toString());
                     count = getCount(searchQuery, pair, allImages.getResults());
                     if (count > 0 || true)

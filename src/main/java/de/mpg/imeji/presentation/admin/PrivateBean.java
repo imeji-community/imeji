@@ -19,7 +19,7 @@ import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.GrantController;
 import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchOperators;
@@ -84,11 +84,11 @@ public class PrivateBean extends SuperContainerBean<CollectionListItem>
     {
         CollectionController cc = new CollectionController(user);
         SearchQuery searchQuery = new SearchQuery();
-        SearchPair sp = new SearchPair(Search.getIndex(SearchIndex.names.user), SearchOperators.EQUALS, ObjectHelper
+        SearchPair sp = new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.user), SearchOperators.EQUALS, ObjectHelper
                 .getURI(User.class, user.getEmail()).toString());
         searchQuery.addPair(sp);
         SortCriterion sortCriterion = new SortCriterion();
-        sortCriterion.setIndex(Search.getIndex("user"));
+        sortCriterion.setIndex(SPARQLSearch.getIndex("user"));
         sortCriterion.setSortOrder(SortOrder.valueOf("DESCENDING"));
         SearchResult results = cc.search(searchQuery, sortCriterion, limit, offset);
         Collection<CollectionImeji> collections = new ArrayList<CollectionImeji>();

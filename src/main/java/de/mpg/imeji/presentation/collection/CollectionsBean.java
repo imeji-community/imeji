@@ -11,7 +11,7 @@ import java.util.List;
 import com.hp.hpl.jena.sparql.pfunction.library.container;
 
 import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.vo.SearchPair;
@@ -82,7 +82,7 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
             searchQuery.addPair(sp);
         }
         SortCriterion sortCriterion = new SortCriterion();
-        sortCriterion.setIndex(Search.getIndex(getSelectedSortCriterion()));
+        sortCriterion.setIndex(SPARQLSearch.getIndex(getSelectedSortCriterion()));
         sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
         SearchResult results = controller.search(searchQuery, sortCriterion, limit, offset);
         collections = controller.loadCollectionsLazy(results.getResults(), limit, offset);

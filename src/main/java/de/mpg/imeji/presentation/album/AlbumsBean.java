@@ -7,7 +7,7 @@ import java.util.List;
 
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
@@ -64,7 +64,7 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean>
         }
         AlbumController controller = new AlbumController(sb.getUser());
         SortCriterion sortCriterion = new SortCriterion();
-        sortCriterion.setIndex(Search.getIndex(getSelectedSortCriterion()));
+        sortCriterion.setIndex(SPARQLSearch.getIndex(getSelectedSortCriterion()));
         sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
         SearchQuery searchQuery = new SearchQuery();
         query = UrlHelper.getParameterValue("q");

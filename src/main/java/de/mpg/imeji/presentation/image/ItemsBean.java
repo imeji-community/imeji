@@ -16,7 +16,7 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
@@ -175,7 +175,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean>
     }
 
     /**
-     * Perform the {@link Search}
+     * Perform the {@link SPARQLSearch}
      * 
      * @param searchQuery
      * @param sortCriterion
@@ -233,7 +233,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean>
         SortCriterion sortCriterion = new SortCriterion();
         if (getSelectedSortCriterion() != null && !getSelectedSortCriterion().trim().equals(""))
         {
-            sortCriterion.setIndex(Search.getIndex(getSelectedSortCriterion()));
+            sortCriterion.setIndex(SPARQLSearch.getIndex(getSelectedSortCriterion()));
             sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
         }
         else

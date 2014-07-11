@@ -13,7 +13,7 @@ import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.j2j.helper.SortHelper;
 
 /**
- * Result {@link Object} for {@link Search}
+ * Result {@link Object} for {@link SPARQLSearch}
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)

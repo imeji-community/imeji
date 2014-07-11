@@ -13,6 +13,7 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.UserGroupController;
 import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jList;
 import de.mpg.j2j.annotations.j2jLiteral;
@@ -40,10 +41,20 @@ public class User implements Serializable
     private String email;
     @j2jLiteral("http://xmlns.com/foaf/0.1/password")
     private String encryptedPassword;
+    @j2jLiteral("http://xmlns.com/foaf/0.1/person")
+    private Person person;
     @j2jList("http://imeji.org/terms/grant")
     private Collection<Grant> grants = new ArrayList<Grant>();
     private URI id;
     private List<UserGroup> groups = new ArrayList<>();
+
+    /**
+     * 
+     */
+    public User()
+    {
+        this.person = ImejiFactory.newPerson();
+    }
 
     /**
      * Return a clone of this user, with a new email
@@ -84,6 +95,7 @@ public class User implements Serializable
                 e.printStackTrace();
             }
         }
+        clone.person = person;
         return clone;
     }
 
@@ -106,6 +118,7 @@ public class User implements Serializable
     public void setName(String name)
     {
         this.name = name;
+        this.getPerson().setCompleteName(name);
     }
 
     public String getNick()
@@ -195,5 +208,21 @@ public class User implements Serializable
     public boolean isAllowedToCreateCollection()
     {
         return AuthUtil.isAllowedToCreateCollection(this);
+    }
+
+    /**
+     * @return the person
+     */
+    public Person getPerson()
+    {
+        return person;
+    }
+
+    /**
+     * @param person the person to set
+     */
+    public void setPerson(Person person)
+    {
+        this.person = person;
     }
 }

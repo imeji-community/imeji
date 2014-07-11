@@ -26,55 +26,49 @@
  * Gesellschaft zur Förderung der Wissenschaft e.V.
  * All rights reserved. Use is subject to license terms.
  */
-package de.mpg.imeji.logic.export.format.explain;
+package de.mpg.imeji.logic.search;
 
-import java.io.OutputStream;
-import java.io.PrintWriter;
-
-import de.mpg.imeji.logic.export.format.ExplainExport;
-import de.mpg.imeji.logic.search.SPARQLSearch;
-import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.vo.SearchIndex;
+import de.mpg.imeji.logic.search.Search.SearchType;
 
 /**
- * Explain the index for the search
+ * Factory for {@link Search}
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class SearchExplainExport extends ExplainExport
+public class SearchFactory
 {
-    /*
-     * (non-Javadoc)
-     * @see de.mpg.imeji.logic.export.Export#export(java.io.OutputStream, de.mpg.imeji.logic.search.SearchResult)
+    /**
+     * Create a new {@link Search}
+     * 
+     * @return
      */
-    @Override
-    public void export(OutputStream out, SearchResult sr)
+    public static Search create()
     {
-        PrintWriter writer = new PrintWriter(out);
-        try
-        {
-            writer.append(getRDFTagOpen());
-            for (SearchIndex index : SPARQLSearch.indexes.values())
-            {
-                writer.append(getIndexTag(index.getName(), index.getNamespace()));
-            }
-            writer.append(getRDFTagClose());
-        }
-        finally
-        {
-            writer.close();
-        }
+        return new SPARQLSearch(SearchType.ALL, null);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see de.mpg.imeji.logic.export.Export#init()
+    /**
+     * Create a new {@link Search}
+     * 
+     * @param type
+     * @return
      */
-    @Override
-    public void init()
+    public static Search create(SearchType type)
     {
-        // Nothing to to
+        return new SPARQLSearch(type, null);
+    }
+
+    /**
+     * Create a new {@link Search}
+     * 
+     * @param type
+     * @param containerUri
+     * @return
+     */
+    public static Search create(SearchType type, String containerUri)
+    {
+        return new SPARQLSearch(type, containerUri);
     }
 }

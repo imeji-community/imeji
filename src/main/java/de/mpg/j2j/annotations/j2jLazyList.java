@@ -10,7 +10,7 @@ import org.opensaml.xml.util.LazyList;
 import com.hp.hpl.jena.Jena;
 import com.hp.hpl.jena.rdf.model.Resource;
 
-import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.vo.Item;
 
 /**
@@ -21,7 +21,7 @@ import de.mpg.imeji.logic.vo.Item;
  * <br/>
  * - Example: {@link List} of {@link Item} in a {@link Collection} are defined as {@link LazyList}. When loading a
  * collection, j2j doesn't load the complete {@link Collection} {@link Resource}, the {@link Item} {@link List} is not
- * loaded. To get the item, a {@link Search} is made (mucg faster that loading)
+ * loaded. To get the item, a {@link SPARQLSearch} is made (mucg faster that loading)
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)

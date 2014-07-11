@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.vo.SearchGroup;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
@@ -140,7 +140,7 @@ public class AdvancedSearchBean
         CollectionController cc = new CollectionController(session.getUser());
         List<CollectionImeji> l = new ArrayList<>();
         SortCriterion sortCriterion = new SortCriterion();
-        sortCriterion.setIndex(Search.getIndex(SearchIndex.names.cont_title.name()));
+        sortCriterion.setIndex(SPARQLSearch.getIndex(SearchIndex.names.cont_title.name()));
         sortCriterion.setSortOrder(SortOrder.valueOf(SortOrder.DESCENDING.name()));
         for (String uri : cc.search(new SearchQuery(), sortCriterion, -1, 0).getResults())
         {

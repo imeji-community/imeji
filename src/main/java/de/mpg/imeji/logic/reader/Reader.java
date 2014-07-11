@@ -26,61 +26,61 @@
  * Gesellschaft zur Förderung der Wissenschaft e.V.
  * All rights reserved. Use is subject to license terms.
  */
-package de.mpg.imeji.logic.search;
+package de.mpg.imeji.logic.reader;
 
 import java.util.List;
 
-import de.mpg.imeji.logic.search.vo.SearchQuery;
-import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.vo.User;
 
 /**
- * Search Interface for imeji
+ * Object reader interface for imeji. Important: {@link Reader} doens't check Authorization. Please use
+ * {@link ReaderFacade} instead.
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public interface Search
+public interface Reader
 {
     /**
-     * Types of search (What objects types are retuned)
+     * Read a single object by its uri
      * 
-     * @author saquet (initial creation)
-     * @author $Author$ (last modification)
-     * @version $Revision$ $LastChangedDate$
+     * @param uri
+     * @param user
+     * @param o
+     * @return
+     * @throws Exception
      */
-    public static enum SearchType
-    {
-        ITEM, COLLECTION, ALBUM, PROFILE, ALL;
-    }
+    public Object read(String uri, User user, Object o) throws Exception;
 
     /**
-     * Search for imeji objects
+     * Read a single Object by its uri (Lazy means don't load Lazy list within the object)
      * 
-     * @param query
-     * @param sortCri
+     * @param uri
+     * @param user
+     * @param o
+     * @return
+     * @throws Exception
+     */
+    public Object readLazy(String uri, User user, Object o) throws Exception;
+
+    /**
+     * Read a List of objects. All objects must have an uri
+     * 
+     * @param objects
      * @param user
      * @return
+     * @throws Exception
      */
-    public SearchResult search(SearchQuery query, SortCriterion sortCri, User user);
+    public List<Object> read(List<Object> objects, User user) throws Exception;
 
     /**
-     * Search for imeji objects belonging to a predefined list of possible results
+     * Read a List of objects. All objects must have an uri. (Lazy means don't load Lazy list within the object)
      * 
-     * @param query
-     * @param sortCri
+     * @param objects
      * @param user
-     * @param uris
      * @return
+     * @throws Exception
      */
-    public SearchResult search(SearchQuery query, SortCriterion sortCri, User user, List<String> uris);
-
-    /**
-     * Search with a Simple {@link String}
-     * 
-     * @param query
-     * @return
-     */
-    public SearchResult searchSimpleForQuery(String query);
+    public List<Object> readLazy(List<Object> objects, User user) throws Exception;
 }

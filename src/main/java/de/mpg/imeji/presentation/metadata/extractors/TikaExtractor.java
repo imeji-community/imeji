@@ -29,19 +29,23 @@
 package de.mpg.imeji.presentation.metadata.extractors;
 
 import java.io.ByteArrayInputStream;
+
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.tika.Tika;
+import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
-import org.apache.tika.parser.ParseContext;
-import org.apache.tika.parser.Parser;
-import org.apache.tika.parser.jpeg.JpegParser;
 import org.apache.tika.sax.BodyContentHandler;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.helpers.DefaultHandler;
+import org.xml.sax.SAXException;
+
+import com.drew.imaging.ImageMetadataReader;
 
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.vo.Item;
@@ -95,4 +99,27 @@ public class TikaExtractor
         }
         return techMd;
     }
+    
+    public static void main(String[] args) {
+    	Path path = Paths.get("C:\\Users\\yu\\Desktop\\md\\1.4.jpg");
+		try {
+			byte[] data = Files.readAllBytes(path);
+			ByteArrayInputStream in = new ByteArrayInputStream(data);
+	        Metadata metadata = new Metadata();
+	        AutoDetectParser parser = new AutoDetectParser();
+	        BodyContentHandler handler = new BodyContentHandler();
+			parser.parse(in, handler, metadata);
+
+	        for (String name : metadata.names())
+	        {
+	           System.out.println(name + " :  " + metadata.get(name));
+	            
+	        }
+		} catch (SAXException | TikaException | IOException e) {
+			e.printStackTrace();
+		}
+    	
+
+
+	}
 }

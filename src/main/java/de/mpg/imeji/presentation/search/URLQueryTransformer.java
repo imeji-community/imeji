@@ -520,6 +520,12 @@ public class URLQueryTransformer
             q = q.substring(0, q.length() - 4);
         if (q.endsWith(" " + session.getLabel("or_big")))
             q = q.substring(0, q.length() - 3);
+        if (q.startsWith(session.getLabel("or_big")))
+            q = q.substring(3,q.length());
+        if (q.startsWith(session.getLabel("and_big")))
+            q = q.substring(4,q.length());
+        if (q.endsWith(" ") || q.endsWith(" " + session.getLabel("and_big")) || q.endsWith(" " + session.getLabel("or_big")))
+        	q = removeUseLessLogicalOperation(q);
         return q;
     }
 

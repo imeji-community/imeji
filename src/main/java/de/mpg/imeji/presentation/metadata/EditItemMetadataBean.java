@@ -137,10 +137,9 @@ public class EditItemMetadataBean
      * @return
      * @throws IOException
      */
-    public String cancel() throws IOException
+    public void cancel() throws IOException
     {
         redirectToView();
-        return "";
     }
 
     /**

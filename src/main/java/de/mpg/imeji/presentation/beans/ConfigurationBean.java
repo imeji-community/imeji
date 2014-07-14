@@ -33,6 +33,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import javax.faces.bean.ApplicationScoped;
@@ -41,6 +43,7 @@ import javax.faces.bean.ManagedBean;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.storage.util.MediaUtils;
+import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -64,11 +67,12 @@ public class ConfigurationBean
      */
     private enum CONFIGURATION
     {
-        SNIPPET, CSS_DEFAULT, CSS_ALT, MAX_FILE_SIZE;
+        SNIPPET, CSS_DEFAULT, CSS_ALT, MAX_FILE_SIZE, FILE_TYPES;
     }
 
     private Properties config;
     private File configFile;
+    private FileTypes fileTypes;
     private final static Logger logger = Logger.getLogger(ConfigurationBean.class);
 
     /**
@@ -84,7 +88,7 @@ public class ConfigurationBean
         {
             configFile.createNewFile();
         }
-        loadConfig();
+        readConfig();
     }
 
     /**
@@ -93,18 +97,20 @@ public class ConfigurationBean
      * @param f
      * @throws IOException
      */
-    private void loadConfig() throws IOException
+    private String readConfig()
     {
-        config = new Properties();
-        FileInputStream in = new FileInputStream(configFile);
         try
         {
+            config = new Properties();
+            FileInputStream in = new FileInputStream(configFile);
             config.loadFromXML(in);
+            this.fileTypes = new FileTypes((String)config.get(CONFIGURATION.FILE_TYPES.name()));
         }
         catch (Exception e)
         {
-            logger.info("conf.xml can not be read, probably emtpy");
+            logger.info("conf.xml can not be read, probably emtpy", e);
         }
+        return "";
     }
 
     /**
@@ -114,7 +120,9 @@ public class ConfigurationBean
     {
         try
         {
+            setProperty(CONFIGURATION.FILE_TYPES.name(), fileTypes.toString());
             config.storeToXML(new FileOutputStream(configFile), "imeji configuration File");
+            BeanHelper.removeBeanFromMap(this.getClass());
         }
         catch (Exception e)
         {
@@ -227,5 +235,28 @@ public class ConfigurationBean
         if (size == null || size == "")
             return "0";
         return size;
+    }
+
+    /**
+     * Get the type of Files
+     * 
+     * @return
+     */
+    public FileTypes getFileTypes()
+    {
+        // String types_String = (String)config.get(CONFIGURATION.FILE_TYPES.name());
+        // return new FileTypes(types_String);
+        return this.fileTypes;
+    }
+
+    /**
+     * Set the type of Files
+     * 
+     * @param types
+     */
+    public void setFileTypes(FileTypes types)
+    {
+        // setProperty(CONFIGURATION.FILE_TYPES.name(), types.toString());
+        this.fileTypes = types;
     }
 }

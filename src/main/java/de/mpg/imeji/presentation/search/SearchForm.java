@@ -62,7 +62,8 @@ public class SearchForm
                 // String collectionId = SearchFormularHelper.getCollectionId((SearchGroup)se);
                 String collectionId = SearchFormularHelper.getProfileIdFromStatement((SearchGroup)se,
                         profilesMap.values());
-                groups.add(new SearchGroupForm((SearchGroup)se, profilesMap.get(collectionId), collectionId));
+                if (collectionId != null)
+                    groups.add(new SearchGroupForm((SearchGroup)se, profilesMap.get(collectionId)));
             }
         }
     }

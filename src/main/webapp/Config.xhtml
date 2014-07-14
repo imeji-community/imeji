@@ -6,7 +6,7 @@
 	<ui:param name="headline" value="#{lbl.configuration}" />
 	
 	<ui:define name="mainContent">
-	
+
 		<!-- Breadcrumb - History -->
 		<ui:include src="include/History.xhtml"></ui:include>
 		
@@ -16,10 +16,10 @@
 			<h:outputText value="#{lbl.view_page_disallowed2}" styleClass="imj_messageInfo" rendered="#{Auth.loggedIn}"/>
 		</h:panelGroup>
 			
-		
+		<!-- Only for Admins -->	
 		<ui:fragment rendered="#{Auth.admin}">
-		<!-- Only for Admins -->			
-		<!-- AdminDataList - Back Button -->
+		
+			<!-- AdminDataList - Back Button -->
 			<h:panelGroup layout="block" styleClass="imj_backPanel">
 				<h:outputLink value="#{Navigation.adminUrl}">
 					<h:outputText value="#{lbl.back_to_admin}" styleClass="imj_backButton"/>
@@ -88,6 +88,65 @@
 									</h:panelGroup>														
 								</div>
 								
+								<div class="imj_headline">
+									<h2>
+										<h:outputText value="#{lbl.search}"/>
+									</h2>
+								</div>
+								
+								<div class="imj_content">					
+									<!-- Admin - Snippet Insert -->	
+									<h:panelGroup layout="block" styleClass="imj_admindataSet">
+										<div class="imj_admindataLabel">
+											<h:outputText value="File Types"/>
+											<span class="imj_invisible">: </span>
+										</div>
+										<div class="imj_admindataValue">
+											<div class="imj_admindataValueEntry">
+												<h:outputText value="#{lbl.name}"/><span class="imj_invisible">: </span>
+											</div>
+											<div class="imj_admindataValueEntry">
+												<h:outputText value="#{lbl.file_types_separated_with_comma}"/><span class="imj_invisible">: </span>
+											</div>
+											<br/>
+											<ui:repeat var="type" value="#{Configuration.fileTypes.types}" varStatus="var">
+												<div class="imj_admindataValueEntry">
+													<h:inputText value="#{type.name}" styleClass="imj_admindataEdit" />
+												</div>
+												<div class="imj_admindataValueEntry">
+													<h:inputText value="#{type.extensions}" styleClass="imj_admindataEdit"/>
+												</div>
+												<div class="imj_admindataValueEntry">
+													<h:commandLink value="#{lbl.remove}" action="#{Configuration.fileTypes.removeType(var.index)}" >
+														<f:ajax execute="@form" render="@form"/>
+													</h:commandLink>
+												</div>
+												<br/>
+											</ui:repeat>
+											<div class="imj_submitPanel">
+											<h:commandLink styleClass="" value="#{lbl.add}" action="#{Configuration.fileTypes.addType(Configuration.fileTypes.types.size())}" >
+												<f:ajax execute="@form" render="@form"/>
+											</h:commandLink>
+											</div>
+										</div>
+									</h:panelGroup>
+									<h:panelGroup layout="block" styleClass="imj_admindataSet" rendered="#{Configuration.defaultCss != null and Configuration.defaultCss != ''}">
+										<div class="imj_admindataLabel">
+											<h:outputText value="Alternative CSS URL"/>
+											<span class="imj_invisible">: </span>
+										</div>
+										<div class="imj_admindataValue">
+											<div class="imj_admindataValueEntry">
+												<h:inputText value="#{Configuration.alternativeCss}" styleClass="imj_admindataEdit"/>
+											</div>
+										</div>
+									</h:panelGroup>														
+								</div>
+								<div class="imj_headline">
+									<h2>
+										<h:outputText value="#{lbl.uploadFiles}"/>
+									</h2>
+								</div>
 								<div class="imj_content">
 									<h:panelGroup layout="block" styleClass="imj_admindataSet">
 										<div class="imj_admindataLabel">

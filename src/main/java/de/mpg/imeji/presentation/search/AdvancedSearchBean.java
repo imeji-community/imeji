@@ -241,9 +241,9 @@ public class AdvancedSearchBean
             SearchQuery query = formular.getFormularAsSearchQuery();
             String q = URLQueryTransformer.transform2UTF8URL(query);
             String qf = getFileTypesQuery();
-            if (q != "" || qf != "")
+            if ("".equals(q) || "".equals(qf))
             {
-                if (qf != "")
+                if ("".equals(qf))
                     q = q + "&types=" + qf;
                 FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getBrowseUrl() + "?q=" + q);
             }

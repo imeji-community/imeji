@@ -237,7 +237,7 @@ public class ConfigurationBean
     public String getUploadMaxFileSize()
     {
         String size = (String)config.get(CONFIGURATION.MAX_FILE_SIZE.name());
-        if (size == null || size == "")
+        if (size == null || size.equals("") )
             return "0";
         return size;
     }

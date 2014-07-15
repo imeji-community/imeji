@@ -85,14 +85,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean>
         session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         filters = new FiltersBean();
         selectedSortCriterion = null;
-        try
-        {
-            setElementsPerPage(Integer.parseInt(PropertyReader.getProperty("imeji.image.list.size")));
-        }
-        catch (Exception e)
-        {
-            logger.error("Error loading property imeji.image.list.size", e);
-        }
+        setElementsPerPage(session.getNumberOfItemsPerPage());
         try
         {
             String options = PropertyReader.getProperty("imeji.image.list.size.options");
@@ -171,7 +164,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean>
                 if (!typeGroup.isEmpty())
                     typeGroup.addLogicalRelation(LOGICAL_RELATIONS.OR);
                 Type type = config.getFileTypes().getType(typeName);
-                if(type != null)
+                if (type != null)
                     typeGroup.addGroup(type.getAsSearchGroup());
             }
             sq.addLogicalRelation(LOGICAL_RELATIONS.AND);

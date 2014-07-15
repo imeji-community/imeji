@@ -33,8 +33,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
 import javax.faces.bean.ApplicationScoped;
@@ -74,6 +72,8 @@ public class ConfigurationBean
     private File configFile;
     private FileTypes fileTypes;
     private final static Logger logger = Logger.getLogger(ConfigurationBean.class);
+    // A list of predefined file types, which is set when imeji is initialized
+    private final static String predefinedFileTypes = "[Image@en,Bilder@de=jpg,jpeg,tiff,tiff,jp2,pbm,gif,png,psd][Video@en,Video@de=wmv,swf,rm,mp4,mpg,m4v,avi,mov.asf,flv,srt,vob][Audio@en,Ton@de=aif,iff,m3u,m4a,mid,mpa,mp3,ra,wav,wma][Document@en,Dokument@de=doc,docx,odt,pages,rtf,tex,rtf,bib,csv,ppt,pps,pptx,key,xls,xlr,xlsx,gsheet,nb,numbers,ods,indd,pdf,dtx][Fits Files@en,Fits Dateien@de=fits,fit]";
 
     /**
      * Constructor, create the file if not existing
@@ -87,8 +87,12 @@ public class ConfigurationBean
         if (!configFile.exists())
         {
             configFile.createNewFile();
+            readConfig();
+            this.fileTypes = new FileTypes(predefinedFileTypes);
+            saveConfig();
         }
-        readConfig();
+        else
+            readConfig();
     }
 
     /**
@@ -158,6 +162,7 @@ public class ConfigurationBean
      */
     public String getSnippet()
     {
+       
         return (String)config.get(CONFIGURATION.SNIPPET.name());
     }
 
@@ -214,7 +219,7 @@ public class ConfigurationBean
     public void setUploadMaxFileSize(String size)
     {
         try
-        {
+        { 
             Integer.parseInt(size);
         }
         catch (Exception e)
@@ -244,8 +249,6 @@ public class ConfigurationBean
      */
     public FileTypes getFileTypes()
     {
-        // String types_String = (String)config.get(CONFIGURATION.FILE_TYPES.name());
-        // return new FileTypes(types_String);
         return this.fileTypes;
     }
 
@@ -256,7 +259,6 @@ public class ConfigurationBean
      */
     public void setFileTypes(FileTypes types)
     {
-        // setProperty(CONFIGURATION.FILE_TYPES.name(), types.toString());
         this.fileTypes = types;
     }
 }

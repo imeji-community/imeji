@@ -29,7 +29,9 @@
 package de.mpg.imeji.presentation.beans;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -42,7 +44,7 @@ import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 
 /**
- * TODO Description
+ * A File Type (image, video, audio...)
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
@@ -59,16 +61,18 @@ public class FileTypes
      */
     public class Type
     {
-        private String name;
+        private String names;
         private String extensions;
+        private Map<String, String> namesMap;
 
         /**
          * Default Constructor
          */
-        public Type(String name, String extension)
+        public Type(String names, String extension)
         {
-            this.name = name;
+            this.names = names;
             this.extensions = extension;
+            this.namesMap = parseNames(names);
         }
 
         /*
@@ -78,7 +82,7 @@ public class FileTypes
         @Override
         public String toString()
         {
-            return name + "=" + extensions;
+            return names + "=" + extensions;
         }
 
         /**
@@ -94,25 +98,51 @@ public class FileTypes
                 if (!g.isEmpty())
                     g.addLogicalRelation(LOGICAL_RELATIONS.OR);
                 g.addPair(new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.filename), SearchOperators.REGEX, "."
-                        + extension));
+                        + extension + "$"));
             }
             return g;
         }
 
         /**
+         * True if the type has the following (in whatever language)
+         * 
+         * @param name
+         * @return
+         */
+        public boolean hasName(String name)
+        {
+            return namesMap.containsValue(name);
+        }
+
+        /**
+         * Return a name for a defined language
+         * 
+         * @param lang
+         * @return
+         */
+        public String getName(String lang)
+        {
+            String name = namesMap.get(lang);
+            if (name != null)
+                return name;
+            return namesMap.get("en");
+        }
+
+        /**
          * @return the name
          */
-        public String getName()
+        public String getNames()
         {
-            return name;
+            return names;
         }
 
         /**
          * @param name the name to set
          */
-        public void setName(String name)
+        public void setNames(String names)
         {
-            this.name = name;
+            this.names = names;
+            this.namesMap = parseNames(names);
         }
 
         /**
@@ -129,6 +159,27 @@ public class FileTypes
         public void setExtensions(String extensions)
         {
             this.extensions = extensions;
+        }
+
+        /**
+         * Parse the names (Image@en,Bilder@de,Image@fr) into a Map ()
+         * 
+         * @param names
+         * @return
+         */
+        private Map<String, String> parseNames(String names)
+        {
+            Map<String, String> map = new HashMap<String, String>();
+            for (String nameWithLang : names.split(","))
+            {
+                String[] nl = nameWithLang.split("@");
+                String name = nl[0];
+                String lang = "en";
+                if (nl.length > 1)
+                    lang = nl[1];
+                map.put(lang, name);
+            }
+            return map;
         }
     }
 
@@ -187,7 +238,7 @@ public class FileTypes
     public Type getType(String name)
     {
         for (Type type : types)
-            if (type.getName().equals(name))
+            if (type.hasName(name))
                 return type;
         return null;
     }

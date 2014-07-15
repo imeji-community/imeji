@@ -28,6 +28,7 @@ import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.presentation.beans.BasePaginatorListSessionBean;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
+import de.mpg.imeji.presentation.beans.FileTypes.Type;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.facet.Facet.FacetType;
 import de.mpg.imeji.presentation.facet.FacetsBean;
@@ -169,7 +170,9 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean>
             {
                 if (!typeGroup.isEmpty())
                     typeGroup.addLogicalRelation(LOGICAL_RELATIONS.OR);
-                typeGroup.addGroup(config.getFileTypes().getType(typeName).getAsSearchGroup());
+                Type type = config.getFileTypes().getType(typeName);
+                if(type != null)
+                    typeGroup.addGroup(type.getAsSearchGroup());
             }
             sq.addLogicalRelation(LOGICAL_RELATIONS.AND);
             sq.addGroup(typeGroup);

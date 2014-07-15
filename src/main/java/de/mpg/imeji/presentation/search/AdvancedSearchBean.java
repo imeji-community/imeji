@@ -113,7 +113,7 @@ public class AdvancedSearchBean
         fileTypesSelected = new ArrayList<>();
         for (Type type : config.getFileTypes().getTypes())
         {
-            fileTypesMenu.add(new SelectItem(type.getName()));
+            fileTypesMenu.add(new SelectItem(type.getName(session.getLocale().getLanguage())));
         }
         readFileTypesSelected();
     }

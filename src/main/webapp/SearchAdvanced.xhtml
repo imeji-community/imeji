@@ -35,7 +35,7 @@
 				<div class="imj_searchUnit">
 					<div class="imj_searchDetails">
 						<h:outputText value="#{lbl.select_file_type}" />
-						<h:selectManyCheckbox value="#{AdvancedSearchBean.fileTypesSelected}" styleClass="imj_inlineButtonGroup">
+						<h:selectManyCheckbox value="#{AdvancedSearchBean.fileTypesSelected}">
 							<f:selectItems value="#{AdvancedSearchBean.fileTypesMenu}"></f:selectItems>
 						</h:selectManyCheckbox>
 					</div>
@@ -199,7 +199,11 @@
 				width:45%;
 			}
 			.imj_searchInputValue{
-				margin-bottom: 10px;
+				margin-bottom: 1em;
+			}
+			.imj_searchDetails input[type="checkbox"] + label {
+				margin-left: 0.181818em;
+   				 margin-right: 1em;
 			}
 		</style>
 		

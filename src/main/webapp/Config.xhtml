@@ -102,16 +102,16 @@
 											<span class="imj_invisible">: </span>
 										</div>
 										<div class="imj_admindataValue">
-											<div class="imj_admindataValueEntry">
-												<h:outputText value="#{lbl.name}"/><span class="imj_invisible">: </span>
+											<div class="imj_halfArea">
+												<h:outputText value="#{lbl.name_with_lang_separated_with_comma}"/><span class="imj_invisible">: </span>
 											</div>
-											<div class="imj_admindataValueEntry">
+											<div class="imj_halfArea">
 												<h:outputText value="#{lbl.file_types_separated_with_comma}"/><span class="imj_invisible">: </span>
 											</div>
 											<br/>
 											<ui:repeat var="type" value="#{Configuration.fileTypes.types}" varStatus="var">
 												<div class="imj_admindataValueEntry">
-													<h:inputText value="#{type.name}" styleClass="imj_admindataEdit" />
+													<h:inputText value="#{type.names}" styleClass="imj_admindataEdit" />
 												</div>
 												<div class="imj_admindataValueEntry">
 													<h:inputText value="#{type.extensions}" styleClass="imj_admindataEdit"/>
@@ -177,7 +177,14 @@
 			</div> <!-- END USER CONFIG -->
 			
 			
-					
+			<style>
+			.imj_halfArea{
+				position:relative;
+				float:left;
+				width:45%;
+				margin: 0.3em;
+			}
+		</style>		
 			
 		</ui:fragment>
 	

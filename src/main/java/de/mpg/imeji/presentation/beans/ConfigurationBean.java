@@ -85,14 +85,8 @@ public class ConfigurationBean
     {
         configFile = new File(PropertyReader.getProperty("imeji.tdb.path") + "/conf.xml");
         if (!configFile.exists())
-        {
             configFile.createNewFile();
-            readConfig();
-            this.fileTypes = new FileTypes(predefinedFileTypes);
-            saveConfig();
-        }
-        else
-            readConfig();
+        readConfig();
     }
 
     /**
@@ -109,6 +103,11 @@ public class ConfigurationBean
             FileInputStream in = new FileInputStream(configFile);
             config.loadFromXML(in);
             this.fileTypes = new FileTypes((String)config.get(CONFIGURATION.FILE_TYPES.name()));
+            if (fileTypes == null)
+            {
+                this.fileTypes = new FileTypes(predefinedFileTypes);
+                saveConfig();
+            }
         }
         catch (Exception e)
         {
@@ -162,7 +161,6 @@ public class ConfigurationBean
      */
     public String getSnippet()
     {
-       
         return (String)config.get(CONFIGURATION.SNIPPET.name());
     }
 
@@ -219,7 +217,7 @@ public class ConfigurationBean
     public void setUploadMaxFileSize(String size)
     {
         try
-        { 
+        {
             Integer.parseInt(size);
         }
         catch (Exception e)

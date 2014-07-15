@@ -86,21 +86,20 @@ public class FileTypes
         }
 
         /**
-         * Return the type as a {@link SearchGroup} with can be used in the {@link SearchQuery}
+         * Give a regex to search for this file type
          * 
          * @return
          */
-        public SearchGroup getAsSearchGroup()
+        public String getAsRegexQuery()
         {
-            SearchGroup g = new SearchGroup();
+            String regex = "";
             for (String extension : extensions.split(","))
             {
-                if (!g.isEmpty())
-                    g.addLogicalRelation(LOGICAL_RELATIONS.OR);
-                g.addPair(new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.filename), SearchOperators.REGEX, "."
-                        + extension + "$"));
+                if (!regex.equals(""))
+                    regex += "|";
+                regex += "." + extension + "$";
             }
-            return g;
+            return regex;
         }
 
         /**

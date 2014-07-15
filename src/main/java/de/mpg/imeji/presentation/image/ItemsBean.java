@@ -20,6 +20,8 @@ import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchGroup;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
+import de.mpg.imeji.logic.search.vo.SearchOperators;
+import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
@@ -158,17 +160,19 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean>
         if (types != null)
         {
             ConfigurationBean config = (ConfigurationBean)BeanHelper.getApplicationBean(ConfigurationBean.class);
-            SearchGroup typeGroup = new SearchGroup();
+            String regex = "";
             for (String typeName : types.split(","))
             {
-                if (!typeGroup.isEmpty())
-                    typeGroup.addLogicalRelation(LOGICAL_RELATIONS.OR);
                 Type type = config.getFileTypes().getType(typeName);
                 if (type != null)
-                    typeGroup.addGroup(type.getAsSearchGroup());
+                {
+                    if (!regex.equals(""))
+                        regex += "|";
+                    regex += type.getAsRegexQuery();
+                }
             }
             sq.addLogicalRelation(LOGICAL_RELATIONS.AND);
-            sq.addGroup(typeGroup);
+            sq.addPair(new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.filename), SearchOperators.REGEX, regex));
         }
         return sq;
     }

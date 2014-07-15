@@ -134,7 +134,7 @@ public class SessionBean implements Serializable
         try
         {
             // First read in the property
-            value = PropertyReader.getProperty(cookieName);
+            value = PropertyReader.getProperty(propertyName);
         }
         catch (NumberFormatException | IOException | URISyntaxException e)
         {

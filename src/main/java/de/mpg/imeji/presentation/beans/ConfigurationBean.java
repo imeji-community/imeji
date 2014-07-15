@@ -102,12 +102,14 @@ public class ConfigurationBean
             config = new Properties();
             FileInputStream in = new FileInputStream(configFile);
             config.loadFromXML(in);
-            this.fileTypes = new FileTypes((String)config.get(CONFIGURATION.FILE_TYPES.name()));
-            if (fileTypes == null)
+            Object ft = config.get(CONFIGURATION.FILE_TYPES.name());
+            if (ft == null)
             {
                 this.fileTypes = new FileTypes(predefinedFileTypes);
                 saveConfig();
             }
+            else
+                this.fileTypes = new FileTypes((String)ft);
         }
         catch (Exception e)
         {

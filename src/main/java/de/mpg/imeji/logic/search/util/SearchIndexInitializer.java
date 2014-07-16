@@ -47,7 +47,7 @@ public class SearchIndexInitializer
         /**
          * Properties indexes
          */
-        indexes = put(indexes, new SearchIndex(SearchIndex.names.creator.name(), "http://imeji.org/terms/createdBy"));
+        indexes = put(indexes, new SearchIndex(SearchIndex.names.creator.name(), "http://purl.org/dc/terms/creator"));
         indexes = put(indexes, new SearchIndex(SearchIndex.names.editor.name(), "http://imeji.org/terms/modifiedBy"));
         indexes = put(indexes, new SearchIndex(SearchIndex.names.created.name(), "http://purl.org/dc/terms/created"));
         indexes = put(indexes, new SearchIndex(SearchIndex.names.modified.name(), "http://purl.org/dc/terms/modified"));

@@ -65,6 +65,7 @@ public class Person implements Cloneable, Serializable
     public void setFamilyName(String familyName)
     {
         this.familyName = familyName;
+        this.completeName = familyName + " " + givenName;
     }
 
     @XmlElement(name = "given-name", namespace = "http://purl.org/escidoc/metadata/terms/0.1")
@@ -76,6 +77,7 @@ public class Person implements Cloneable, Serializable
     public void setGivenName(String givenName)
     {
         this.givenName = givenName;
+        this.completeName = familyName + " " + givenName;
     }
 
     @XmlElement(name = "alternative-name", namespace = "http://purl.org/escidoc/metadata/terms/0.1")

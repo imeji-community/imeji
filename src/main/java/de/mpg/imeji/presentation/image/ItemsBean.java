@@ -19,12 +19,17 @@ import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
+import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
+import de.mpg.imeji.logic.search.vo.SearchOperators;
+import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.presentation.beans.BasePaginatorListSessionBean;
+import de.mpg.imeji.presentation.beans.ConfigurationBean;
+import de.mpg.imeji.presentation.beans.FileTypes.Type;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.facet.Facet.FacetType;
 import de.mpg.imeji.presentation.facet.FacetsBean;
@@ -65,6 +70,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean>
     private String discardComment;
     private String selectedImagesContext;
     private SearchResult searchResult;
+    private String types;
     /**
      * The context of the browse page (browse, collection browse, album browse)
      */
@@ -80,14 +86,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean>
         session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         filters = new FiltersBean();
         selectedSortCriterion = null;
-        try
-        {
-            setElementsPerPage(Integer.parseInt(PropertyReader.getProperty("imeji.image.list.size")));
-        }
-        catch (Exception e)
-        {
-            logger.error("Error loading property imeji.image.list.size", e);
-        }
+        setElementsPerPage(session.getNumberOfItemsPerPage());
         try
         {
             String options = PropertyReader.getProperty("imeji.image.list.size.options");
@@ -135,7 +134,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean>
             logger.error("Error parsing query", e);
         }
         SortCriterion sortCriterion = initSortCriterion();
-        searchResult = search(searchQuery, sortCriterion);
+        searchResult = search(addFileTypeSearch(searchQuery), sortCriterion);
         searchResult.setQuery(getQuery());
         searchResult.setSort(sortCriterion);
         totalNumberOfRecords = searchResult.getNumberOfRecords();
@@ -145,6 +144,36 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean>
         initFilters();
         cleanFacets();
         initFacets();
+    }
+
+    /**
+     * Read Url parameter "types" and add all the types to the query
+     * 
+     * @param sq
+     * @return
+     */
+    private SearchQuery addFileTypeSearch(SearchQuery sq)
+    {
+        types = UrlHelper.getParameterValue("types");
+        sq = new SearchQuery(sq.getElements());
+        if (types != null)
+        {
+            ConfigurationBean config = (ConfigurationBean)BeanHelper.getApplicationBean(ConfigurationBean.class);
+            String regex = "";
+            for (String typeName : types.split(","))
+            {
+                Type type = config.getFileTypes().getType(typeName);
+                if (type != null)
+                {
+                    if (!regex.equals(""))
+                        regex += "|";
+                    regex += type.getAsRegexQuery();
+                }
+            }
+            sq.addLogicalRelation(LOGICAL_RELATIONS.AND);
+            sq.addPair(new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.filename), SearchOperators.REGEX, regex));
+        }
+        return sq;
     }
 
     /**
@@ -695,5 +724,21 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean>
     public SearchResult getSearchResult()
     {
         return searchResult;
+    }
+
+    /**
+     * @return the types
+     */
+    public String getTypes()
+    {
+        return types;
+    }
+
+    /**
+     * @param types the types to set
+     */
+    public void setTypes(String types)
+    {
+        this.types = types;
     }
 }

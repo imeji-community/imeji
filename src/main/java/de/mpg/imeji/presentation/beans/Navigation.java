@@ -4,6 +4,7 @@
 package de.mpg.imeji.presentation.beans;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URISyntaxException;
 
 import de.mpg.imeji.logic.util.StringHelper;
@@ -19,8 +20,9 @@ import de.mpg.imeji.presentation.util.PropertyReader;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class Navigation
+public class Navigation implements Serializable
 {
+    private static final long serialVersionUID = -4318697194892200726L;
     // Url of the FW
     public String frameworkUrl;
     // Url of the application
@@ -47,7 +49,6 @@ public class Navigation
     public final Page USER = new Page("User", "user");
     public final Page ADMIN = new Page("Admin", "admin");
     public final Page DIGILIB = new Page("Digilib", "digilib");
-
     // session
     private SessionBean sessionBean = null;
 
@@ -174,8 +175,6 @@ public class Navigation
     {
         return applicationUrl + ADMIN.getPath();
     }
-    
-
 
     public String getAutocompleteUrl()
     {
@@ -278,8 +277,9 @@ public class Navigation
      * @author $Author$ (last modification)
      * @version $Revision$ $LastChangedDate$
      */
-    public class Page
+    public class Page implements Serializable
     {
+        private static final long serialVersionUID = -5718218208615761900L;
         private String name;
         private String path;
 

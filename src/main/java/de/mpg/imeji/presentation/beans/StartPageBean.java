@@ -83,12 +83,12 @@ public class StartPageBean
         try
         {
             String[] prop = PropertyReader.getProperty("imeji.home.caroussel.sort").split("-");
-            if( prop[0] != "" && prop[1] != "")
-            	return new SortCriterion(SPARQLSearch.getIndex(prop[0]), SortOrder.valueOf(prop[1].toUpperCase()));
+            if ("".equals(prop[0]) && "".equals(prop[1]))
+                return new SortCriterion(SPARQLSearch.getIndex(prop[0]), SortOrder.valueOf(prop[1].toUpperCase()));
         }
         catch (Exception e)
         {
-             // no sort order defined
+            // no sort order defined
         }
         return null;
     }

@@ -640,6 +640,7 @@
 							<server>tomcat</server>
 							<path>/imeji</path>
 							<warFile>/X/continuum/apache-continuum-1.4.1/data/working-directory/178/target/imeji.war</warFile>
+							<argLine>-Xms4096m -Xmx4096m -XX:MaxPermSize=512m</argLine>
 						</configuration>
 					</plugin>
 				</plugins>

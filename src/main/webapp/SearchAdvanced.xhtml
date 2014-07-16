@@ -32,6 +32,16 @@
 		<h:panelGroup layout="block" id="imj_ajaxWrapper" class="imj_advancedSearch">
 			<h:form id="advancedSearchForm">
 				
+				<div class="imj_searchUnit">
+					<div class="imj_searchDetails">
+						<h:outputText value="#{lbl.select_file_type}" />
+						<h:selectManyCheckbox value="#{AdvancedSearchBean.fileTypesSelected}">
+							<f:selectItems value="#{AdvancedSearchBean.fileTypesMenu}"></f:selectItems>
+						</h:selectManyCheckbox>
+					</div>
+					
+				</div>
+				
 				<ui:repeat id="groups" var="g" value="#{AdvancedSearchBean.formular.groups}" offset="0" varStatus="gIndex">
 					
 					<div class="imj_searchUnit">
@@ -173,10 +183,12 @@
 				</ui:repeat>
 				<!-- submit panel -->
 				<span class="imj_submitPanel">
-					<h:commandButton type="submit" value="#{lbl.clear_all_values}" action="#{AdvancedSearchBean.reset}" styleClass="imj_cancelButton">
-						<f:ajax execute="@form" render="@form :imj_searchQueryMessageArea"/>
+					<h:outputLink value="#{Navigation.searchUrl}" styleClass="imj_cancelButton">
+						<h:outputText value="#{lbl.clear_all_values}" />
+					</h:outputLink>
+					<h:commandButton id="submit"  value="#{lbl.search}" type="submit" action="#{AdvancedSearchBean.search}" styleClass="imj_submitButton">
+						<f:ajax execute="@form" render=":imj_pageMessageArea"/>
 					</h:commandButton>
-					<h:commandButton id="submit"  value="#{lbl.search}" type="submit" action="#{AdvancedSearchBean.search}" styleClass="imj_submitButton"/>
 				</span>
 			</h:form>
 		</h:panelGroup>
@@ -187,7 +199,11 @@
 				width:45%;
 			}
 			.imj_searchInputValue{
-				margin-bottom: 10px;
+				margin-bottom: 1em;
+			}
+			.imj_searchDetails input[type="checkbox"] + label {
+				margin-left: 0.181818em;
+   				 margin-right: 1em;
 			}
 		</style>
 		

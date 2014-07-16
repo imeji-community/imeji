@@ -6,6 +6,7 @@ package de.mpg.imeji.presentation.search;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -19,9 +20,12 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.search.SPARQLSearch;
+import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.vo.SearchGroup;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
+import de.mpg.imeji.logic.search.vo.SearchOperators;
+import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
@@ -29,6 +33,9 @@ import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.beans.ConfigurationBean;
+import de.mpg.imeji.presentation.beans.FileTypes;
+import de.mpg.imeji.presentation.beans.FileTypes.Type;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.filter.FiltersSession;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
@@ -50,6 +57,8 @@ public class AdvancedSearchBean
     // Menus
     private List<SelectItem> profilesMenu;
     private List<SelectItem> operatorsMenu;
+    private List<SelectItem> fileTypesMenu;
+    private List<String> fileTypesSelected;
     /**
      * True if the query got an error (for instance wrong date format). Then the message is written in red
      */
@@ -99,6 +108,26 @@ public class AdvancedSearchBean
         operatorsMenu = new ArrayList<SelectItem>();
         operatorsMenu.add(new SelectItem(LOGICAL_RELATIONS.AND, session.getLabel("and_small")));
         operatorsMenu.add(new SelectItem(LOGICAL_RELATIONS.OR, session.getLabel("or_small")));
+        ConfigurationBean config = (ConfigurationBean)BeanHelper.getApplicationBean(ConfigurationBean.class);
+        fileTypesMenu = new ArrayList<>();
+        fileTypesSelected = new ArrayList<>();
+        for (Type type : config.getFileTypes().getTypes())
+        {
+            fileTypesMenu.add(new SelectItem(type.getName(session.getLocale().getLanguage())));
+        }
+        readFileTypesSelected();
+    }
+
+    /**
+     * Read the File Types selected in the url
+     */
+    private void readFileTypesSelected()
+    {
+        String param = UrlHelper.getParameterValue("types");
+        if (param != null)
+        {
+            fileTypesSelected = Arrays.asList(param.split(","));
+        }
     }
 
     /**
@@ -209,17 +238,36 @@ public class AdvancedSearchBean
         try
         {
             errorQuery = false;
-            String q = URLQueryTransformer.transform2UTF8URL(formular.getFormularAsSearchQuery());
-            if (q != "")
+            SearchQuery query = formular.getFormularAsSearchQuery();
+            String q = URLQueryTransformer.transform2UTF8URL(query);
+            String qf = getFileTypesQuery();
+            if ("".equals(q) || "".equals(qf))
+            {
+                if ("".equals(qf))
+                    q = q + "&types=" + qf;
                 FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getBrowseUrl() + "?q=" + q);
+            }
             else
                 BeanHelper.error(session.getMessage("error_search_query_emtpy"));
         }
         catch (Exception e)
         {
             errorQuery = true;
-            FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getSearchUrl() + "?error=1");
+            FacesContext.getCurrentInstance().getExternalContext()
+                    .redirect(navigation.getSearchUrl() + "?error=1&types=" + getFileTypesQuery());
         }
+    }
+
+    private String getFileTypesQuery()
+    {
+        String qf = "";
+        for (String type : fileTypesSelected)
+        {
+            if (!qf.equals(""))
+                qf += ",";
+            qf += type;
+        }
+        return qf;
     }
 
     /**
@@ -404,5 +452,37 @@ public class AdvancedSearchBean
     public void setErrorQuery(boolean errorQuery)
     {
         this.errorQuery = errorQuery;
+    }
+
+    /**
+     * @return the fileTypesMenu
+     */
+    public List<SelectItem> getFileTypesMenu()
+    {
+        return fileTypesMenu;
+    }
+
+    /**
+     * @param fileTypesMenu the fileTypesMenu to set
+     */
+    public void setFileTypesMenu(List<SelectItem> fileTypesMenu)
+    {
+        this.fileTypesMenu = fileTypesMenu;
+    }
+
+    /**
+     * @return the fileTypesSelected
+     */
+    public List<String> getFileTypesSelected()
+    {
+        return fileTypesSelected;
+    }
+
+    /**
+     * @param fileTypesSelected the fileTypesSelected to set
+     */
+    public void setFileTypesSelected(List<String> fileTypesSelected)
+    {
+        this.fileTypesSelected = fileTypesSelected;
     }
 }

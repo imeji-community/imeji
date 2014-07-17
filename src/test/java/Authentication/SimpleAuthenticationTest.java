@@ -8,10 +8,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import util.JenaUtil;
+
+
 import de.mpg.imeji.logic.auth.authentication.SimpleAuthentication;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.PropertyBean;
-
 
 public class SimpleAuthenticationTest {
 	private SimpleAuthentication simpAuth;

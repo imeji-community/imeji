@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
@@ -20,13 +21,12 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.search.SPARQLSearch;
-import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.vo.SearchGroup;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
+import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.vo.SearchOperators;
 import de.mpg.imeji.logic.search.vo.SearchPair;
-import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
@@ -34,7 +34,6 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
-import de.mpg.imeji.presentation.beans.FileTypes;
 import de.mpg.imeji.presentation.beans.FileTypes.Type;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.filter.FiltersSession;
@@ -115,19 +114,6 @@ public class AdvancedSearchBean
         {
             fileTypesMenu.add(new SelectItem(type.getName(session.getLocale().getLanguage())));
         }
-        readFileTypesSelected();
-    }
-
-    /**
-     * Read the File Types selected in the url
-     */
-    private void readFileTypesSelected()
-    {
-        String param = UrlHelper.getParameterValue("types");
-        if (param != null)
-        {
-            fileTypesSelected = Arrays.asList(param.split(","));
-        }
     }
 
     /**
@@ -142,6 +128,7 @@ public class AdvancedSearchBean
         ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).init1((new ArrayList<MetadataProfile>(profs
                 .values())));
         formular = new SearchForm(searchQuery, profs);
+        parseFileTypesQuery(formular.getFileTypesQuery());
         if (formular.getGroups().size() == 0)
         {
             formular.addSearchGroup(0);
@@ -239,12 +226,12 @@ public class AdvancedSearchBean
         {
             errorQuery = false;
             SearchQuery query = formular.getFormularAsSearchQuery();
+            query.addLogicalRelation(LOGICAL_RELATIONS.AND);
+            query.addPair(new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.filetype), SearchOperators.REGEX,
+                    getFileTypesQuery()));
             String q = URLQueryTransformer.transform2UTF8URL(query);
-            String qf = getFileTypesQuery();
-            if ("".equals(q) || "".equals(qf))
+            if (!"".equals(q))
             {
-                if ("".equals(qf))
-                    q = q + "&types=" + qf;
                 FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getBrowseUrl() + "?q=" + q);
             }
             else
@@ -258,16 +245,33 @@ public class AdvancedSearchBean
         }
     }
 
+    /**
+     * REturn the file types Selected as a query
+     * 
+     * @return
+     */
     private String getFileTypesQuery()
     {
         String qf = "";
         for (String type : fileTypesSelected)
         {
             if (!qf.equals(""))
-                qf += ",";
+                qf += "|";
             qf += type;
         }
         return qf;
+    }
+
+    /**
+     * Parse the selected file types in the seach query
+     * 
+     * @param query
+     */
+    private void parseFileTypesQuery(String query)
+    {
+        fileTypesSelected = new ArrayList<String>();
+        for (String t : query.split(Pattern.quote("|")))
+            fileTypesSelected.add(t);
     }
 
     /**

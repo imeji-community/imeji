@@ -17,7 +17,7 @@
 					<h:outputText value=" #{lbl.search_for}: " rendered="#{cc.attrs.searchBean.simpleSearch}"/>
 					<h:outputText value="#{cc.attrs.searchBean.simpleQuery}"/>
 				</span>
-				<h:outputLink value="#{cc.attrs.navBean.searchUrl}?q=#{cc.attrs.searchBean.query}&amp;types=#{cc.attrs.searchBean.types}" styleClass="imj_submitButton" rendered="#{!cc.attrs.searchBean.simpleSearch}">
+				<h:outputLink value="#{cc.attrs.navBean.searchUrl}?q=#{cc.attrs.searchBean.query}" styleClass="imj_submitButton" rendered="#{!cc.attrs.searchBean.simpleSearch}">
 					<h:outputText value="#{lbl.search_revise}"/>
 				</h:outputLink>
 			</fieldset>

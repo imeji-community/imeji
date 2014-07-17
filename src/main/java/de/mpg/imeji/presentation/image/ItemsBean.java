@@ -70,7 +70,6 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean>
     private String discardComment;
     private String selectedImagesContext;
     private SearchResult searchResult;
-    private String types;
     /**
      * The context of the browse page (browse, collection browse, album browse)
      */
@@ -134,7 +133,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean>
             logger.error("Error parsing query", e);
         }
         SortCriterion sortCriterion = initSortCriterion();
-        searchResult = search(addFileTypeSearch(searchQuery), sortCriterion);
+        searchResult = search(searchQuery, sortCriterion);
         searchResult.setQuery(getQuery());
         searchResult.setSort(sortCriterion);
         totalNumberOfRecords = searchResult.getNumberOfRecords();
@@ -144,36 +143,6 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean>
         initFilters();
         cleanFacets();
         initFacets();
-    }
-
-    /**
-     * Read Url parameter "types" and add all the types to the query
-     * 
-     * @param sq
-     * @return
-     */
-    private SearchQuery addFileTypeSearch(SearchQuery sq)
-    {
-        types = UrlHelper.getParameterValue("types");
-        sq = new SearchQuery(sq.getElements());
-        if (types != null)
-        {
-            ConfigurationBean config = (ConfigurationBean)BeanHelper.getApplicationBean(ConfigurationBean.class);
-            String regex = "";
-            for (String typeName : types.split(","))
-            {
-                Type type = config.getFileTypes().getType(typeName);
-                if (type != null)
-                {
-                    if (!regex.equals(""))
-                        regex += "|";
-                    regex += type.getAsRegexQuery();
-                }
-            }
-            sq.addLogicalRelation(LOGICAL_RELATIONS.AND);
-            sq.addPair(new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.filename), SearchOperators.REGEX, regex));
-        }
-        return sq;
     }
 
     /**
@@ -724,21 +693,5 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean>
     public SearchResult getSearchResult()
     {
         return searchResult;
-    }
-
-    /**
-     * @return the types
-     */
-    public String getTypes()
-    {
-        return types;
-    }
-
-    /**
-     * @param types the types to set
-     */
-    public void setTypes(String types)
-    {
-        this.types = types;
     }
 }

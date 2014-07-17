@@ -9,13 +9,16 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchMetadata;
+import de.mpg.imeji.logic.search.vo.SearchOperators;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
+import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.util.DateFormatter;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
@@ -25,6 +28,7 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
+import de.mpg.imeji.presentation.beans.FileTypes.Type;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.j2j.helper.J2JHelper;
 
@@ -140,7 +144,21 @@ public class SimpleQueryFactory
         }
         else if (SearchIndex.names.filetype.name().equals(pair.getIndex().getName()))
         {
-            searchQuery = " ?s <" + pair.getIndex().getNamespace() + "> ?el";
+            ConfigurationBean config = (ConfigurationBean)BeanHelper.getApplicationBean(ConfigurationBean.class);
+            String regex = "";
+            String types = pair.getValue();
+            for (String typeName : types.split(Pattern.quote("|")))
+            {
+                Type type = config.getFileTypes().getType(typeName);
+                if (type != null)
+                {
+                    if (!regex.equals(""))
+                        regex += "|";
+                    regex += type.getAsRegexQuery();
+                }
+            }
+            pair = new SearchPair(pair.getIndex(), pair.getOperator(), regex);
+            searchQuery = "?s <http://imeji.org/terms/filename> ?el";
         }
         else if (SearchIndex.names.item.name().equals(pair.getIndex().getName()))
         {

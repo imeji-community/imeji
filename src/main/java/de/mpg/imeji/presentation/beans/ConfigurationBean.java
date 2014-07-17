@@ -102,19 +102,19 @@ public class ConfigurationBean
             config = new Properties();
             FileInputStream in = new FileInputStream(configFile);
             config.loadFromXML(in);
-            Object ft = config.get(CONFIGURATION.FILE_TYPES.name());
-            if (ft == null)
-            {
-                this.fileTypes = new FileTypes(predefinedFileTypes);
-                saveConfig();
-            }
-            else
-                this.fileTypes = new FileTypes((String)ft);
         }
         catch (Exception e)
         {
-            logger.info("conf.xml can not be read, probably emtpy", e);
+            logger.info("conf.xml can not be read, probably emtpy");
         }
+        Object ft = config.get(CONFIGURATION.FILE_TYPES.name());
+        if (ft == null)
+        {
+            this.fileTypes = new FileTypes(predefinedFileTypes);
+            saveConfig();
+        }
+        else
+            this.fileTypes = new FileTypes((String)ft);
         return "";
     }
 
@@ -237,7 +237,7 @@ public class ConfigurationBean
     public String getUploadMaxFileSize()
     {
         String size = (String)config.get(CONFIGURATION.MAX_FILE_SIZE.name());
-        if (size == null || size.equals("") )
+        if (size == null || size.equals(""))
             return "0";
         return size;
     }

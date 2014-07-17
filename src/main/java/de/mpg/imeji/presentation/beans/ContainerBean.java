@@ -146,17 +146,37 @@ public abstract class ContainerBean implements Serializable
     }
 
     /**
-     * Return the {@link User} having uploaded the file for this item
+     * Get Person String
      * 
      * @return
-     * @throws Exception
      */
-    public User getCreator() throws Exception
+    public String getPersonString()
     {
-        User user = null;
-        UserController uc = new UserController(Imeji.adminUser);
-        user = uc.retrieve(getContainer().getCreatedBy());
-        return user;
+        String personString = "";
+        for (Person p : getContainer().getMetadata().getPersons())
+        {
+            if (!"".equalsIgnoreCase(personString))
+                personString += ", ";
+            personString += p.getFamilyName() + " " + p.getGivenName() + " ";
+        }
+        return personString;
+    }
+
+    /**
+     * @return
+     */
+    public String getAuthorsWithOrg()
+    {
+        String personString = "";
+        for (Person p : getContainer().getMetadata().getPersons())
+        {
+            if (!"".equalsIgnoreCase(personString))
+                personString += ", ";
+            personString += p.getCompleteName();
+            if (!p.getOrganizationString().equals(""))
+                personString += " (" + p.getOrganizationString() + ")";
+        }
+        return personString;
     }
 
     /**

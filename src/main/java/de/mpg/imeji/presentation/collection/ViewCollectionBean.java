@@ -100,18 +100,6 @@ public class ViewCollectionBean extends CollectionBean
         return "pretty:collectionInfos";
     }
 
-    public String getPersonString()
-    {
-        String personString = "";
-        for (Person p : getCollection().getMetadata().getPersons())
-        {
-            if (!"".equalsIgnoreCase(personString))
-                personString += " / ";
-            personString += p.getFamilyName() + ", " + p.getGivenName() + " ";
-        }
-        return personString;
-    }
-
     public String getSmallDescription()
     {
         if (this.getCollection() == null || this.getCollection().getMetadata().getDescription() == null)

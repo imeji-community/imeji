@@ -20,17 +20,13 @@
 	
 	<ui:define name="mainContent">
 		<script>
-		$(document).keypress(function(e) {
-		    if(e.which == 13) {
-		    	document.getElementById('advancedSearchForm:submit').click();
-		    }
-		});
+
 		</script>
 		<ui:include src="./include/History.xhtml"/>
 		
 		<!-- AJAX Wrapper - START -->
 		<h:panelGroup layout="block" id="imj_ajaxWrapper" class="imj_advancedSearch">
-			<h:form id="advancedSearchForm">
+			<h:form id="advancedSearchForm" onkeypress="if (event.keyCode == 13) return false;">
 				
 				<div class="imj_searchUnit">
 					<div class="imj_searchDetails">
@@ -39,7 +35,10 @@
 							<f:selectItems value="#{AdvancedSearchBean.fileTypesMenu}"></f:selectItems>
 						</h:selectManyCheckbox>
 					</div>
-					
+					<div class="imj_logicalConnector">
+			    		<h:outputLabel value="#{lbl.and_big}"/>
+			    		<h:outputText value="&#160;"/>
+		    		</div>
 				</div>
 				
 				<ui:repeat id="groups" var="g" value="#{AdvancedSearchBean.formular.groups}" offset="0" varStatus="gIndex">
@@ -54,18 +53,18 @@
 							<h:selectOneMenu id="selCollection" value="#{g.profileId}" onchange="$(this).next().click();">
 								<f:selectItems value="#{AdvancedSearchBean.profilesMenu}"/>
 							</h:selectOneMenu>
-							<h:commandButton type="submit" id="changeGroup" action="#{AdvancedSearchBean.changeGroup}" style="visibility:hidden;">
+							<h:commandButton id="changeGroup" action="#{AdvancedSearchBean.changeGroup}" style="visibility:hidden;">
 								<f:ajax execute="@form" render="@form :imj_searchQueryMessageArea"/>
 								<f:param name="gPos" value="#{gIndex.index}"/>
 							</h:commandButton>
 						</div>
 						
 						<div class="imj_inlineButtonGroup">
-							<h:commandButton type="submit" value="" action="#{AdvancedSearchBean.addGroup}" render="imj_ajaxWrapper :imj_searchQueryMessageArea" styleClass="imj_buttonAdd_16" title="#{lbl.add_collection}">
+							<h:commandButton  value="" action="#{AdvancedSearchBean.addGroup}" render="imj_ajaxWrapper :imj_searchQueryMessageArea" styleClass="imj_buttonAdd_16" title="#{lbl.add_collection}">
 								<f:ajax execute="@form" render="@form :imj_searchQueryMessageArea"/>
 								<f:param name="gPos" value="#{gIndex.index}"/>
 							</h:commandButton>
-							<h:commandButton type="submit" value="" action="#{AdvancedSearchBean.removeGroup}" render="imj_ajaxWrapper :imj_searchQueryMessageArea" styleClass="imj_buttonRemove_16" title="#{lbl.remove_collection}">
+							<h:commandButton value="" action="#{AdvancedSearchBean.removeGroup}" render="imj_ajaxWrapper :imj_searchQueryMessageArea" styleClass="imj_buttonRemove_16" title="#{lbl.remove_collection}">
 								<f:ajax execute="@form" render="@form :imj_searchQueryMessageArea"/>
 								<f:param name="gPos" value="#{gIndex.index}"/>
 							</h:commandButton>
@@ -144,20 +143,18 @@
 									</h:selectOneMenu>
 									
 									<h:panelGroup styleClass="imj_inlineButtonGroup"> <!-- This panelGroup is needed for IE -->
-									<h:commandButton type="submit" value="" action="#{AdvancedSearchBean.addElement}" render="imj_ajaxWrapper, imj_searchQueryMessageArea" styleClass="imj_buttonAdd_16">
+									<h:commandButton value="" action="#{AdvancedSearchBean.addElement}" render="imj_ajaxWrapper, imj_searchQueryMessageArea" styleClass="imj_buttonAdd_16">
 										<f:ajax execute="@form" render="@form :imj_searchQueryMessageArea"/>
 										<f:param name="gPos" value="#{gIndex.index}"/>
 										<f:param name="elPos" value="#{elIndex.index}"/>
 									</h:commandButton>
-									<h:commandButton type="submit" value="" action="#{AdvancedSearchBean.removeElement}" render="imj_ajaxWrapper, imj_searchQueryMessageArea" styleClass="imj_buttonRemove_16">
+									<h:commandButton value="" action="#{AdvancedSearchBean.removeElement}" render="imj_ajaxWrapper, imj_searchQueryMessageArea" styleClass="imj_buttonRemove_16">
 										<f:ajax execute="@form" render="@form :imj_searchQueryMessageArea"/>
 										<f:param name="gPos" value="#{gIndex.index}"/>
 										<f:param name="elPos" value="#{elIndex.index}"/>
 									</h:commandButton>
 								</h:panelGroup>
 								</h:panelGroup>
-								
-								
 								
 								<h:commandButton type="submit" id="changeEl" action="#{AdvancedSearchBean.changeElement}" style="visibility:hidden;" styleClass="imj_ajaxChangeElementButton">
 									<f:ajax execute="@form" render="@form :imj_searchQueryMessageArea"/>

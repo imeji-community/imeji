@@ -76,20 +76,7 @@ public class TikaExtractor
             {
                 techMd.add(name + " :  " + metadata.get(name));
                 
-            }
-            System.err.println("Content-Type = " + metadata.get("Content-Type"));
-            System.err.println("Make = " + metadata.get("Make"));
-            System.err.println("Model = " + metadata.get("Model"));
-            System.err.println("Artist = " + metadata.get("Artist"));
-            System.err.println("Software = " + metadata.get("Software"));
-            System.err.println("Image Description = " + metadata.get("Image Description"));
-            System.err.println("exif:DateTimeOriginal = " + metadata.get("exif:DateTimeOriginal"));
-            System.err.println("DateTimeOriginal = " + metadata.get("DateTimeOriginal"));
-            System.err.println("Date/Time = " + metadata.get("Date/Time"));
-            System.err.println("Color Space = " + metadata.get("ColorSpace"));
-            
-            
-            
+            }        
             
         }
         catch (Exception e)

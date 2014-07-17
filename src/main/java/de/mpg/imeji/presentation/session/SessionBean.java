@@ -65,9 +65,16 @@ public class SessionBean implements Serializable
     private Map<URI, CollectionImeji> collectionCached;
     private String selectedImagesContext = null;
     private Style selectedCss = Style.NONE;
+    private boolean showLogin = false;
+    private int numberOfItemsPerPage = 18;
+    private int numberOfContainersPerPage = 10;
+    /*
+     * Cookies name
+     */
     public final static String styleCookieName = "IMEJI_STYLE";
     public final static String langCookieName = "IMEJI_LANG";
-    public boolean showLogin = false;
+    public final static String numberOfItemsPerPageCookieName = "IMEJI_ITEMS_PER_PAGE";
+    public final static String numberOfContainersPerPageCookieName = "IMEJI_CONTAINERS_PER_PAGE";
 
     /**
      * The session Bean for imeji
@@ -81,6 +88,60 @@ public class SessionBean implements Serializable
         collectionCached = new HashMap<URI, CollectionImeji>();
         initLocale();
         initCssWithCookie();
+        initNumberOfItemsPerPageWithCookieOrProperties();
+        initNumberOfContainersPerPageWithCookieOrProperties();
+    }
+
+    /**
+     * Initialize the number of items per page by:<br/>
+     * 1- Reading the property<br/>
+     * 2- Reading the Cookie<br/>
+     * If the cookie is not null, this value is used, otherwise, a new cookie is created with the value in the porperty
+     */
+    private void initNumberOfItemsPerPageWithCookieOrProperties()
+    {
+        this.numberOfItemsPerPage = Integer.parseInt(initWithCookieAndProperty(Integer.toString(numberOfItemsPerPage),
+                numberOfItemsPerPageCookieName, "imeji.image.list.size"));
+    }
+
+    /**
+     * Initialize the number of items per page by:<br/>
+     * 1- Reading the property<br/>
+     * 2- Reading the Cookie<br/>
+     * If the cookie is not null, this value is used, otherwise, a new cookie is created with the value in the porperty
+     */
+    private void initNumberOfContainersPerPageWithCookieOrProperties()
+    {
+        this.numberOfContainersPerPage = Integer.parseInt(initWithCookieAndProperty(
+                Integer.toString(numberOfContainersPerPage), numberOfContainersPerPageCookieName,
+                "imeji.container.list.size"));
+    }
+
+    /**
+     * Initialize the property by:<br/>
+     * 1- Reading the property file<br/>
+     * 2- Reading the Cookie<br/>
+     * If the cookie is not null, this value is used, otherwise, a new cookie is created with the value from the
+     * property file
+     * 
+     * @param value
+     * @param cookieName
+     * @param propertyName
+     * @return
+     */
+    private String initWithCookieAndProperty(String value, String cookieName, String propertyName)
+    {
+        try
+        {
+            // First read in the property
+            value = PropertyReader.getProperty(propertyName);
+        }
+        catch (NumberFormatException | IOException | URISyntaxException e)
+        {
+            e.printStackTrace();
+        }
+        // Second, Read the cookie and set a default value if null
+        return CookieUtils.readNonNull(cookieName, value);
     }
 
     /**
@@ -537,5 +598,37 @@ public class SessionBean implements Serializable
     public void setShowLogin(boolean showLogin)
     {
         this.showLogin = showLogin;
+    }
+
+    /**
+     * @return the numberOfItemsPerPage
+     */
+    public int getNumberOfItemsPerPage()
+    {
+        return numberOfItemsPerPage;
+    }
+
+    /**
+     * @param numberOfItemsPerPage the numberOfItemsPerPage to set
+     */
+    public void setNumberOfItemsPerPage(int numberOfItemsPerPage)
+    {
+        this.numberOfItemsPerPage = numberOfItemsPerPage;
+    }
+
+    /**
+     * @return the numberOfContainersPerPage
+     */
+    public int getNumberOfContainersPerPage()
+    {
+        return numberOfContainersPerPage;
+    }
+
+    /**
+     * @param numberOfContainersPerPage the numberOfContainersPerPage to set
+     */
+    public void setNumberOfContainersPerPage(int numberOfContainersPerPage)
+    {
+        this.numberOfContainersPerPage = numberOfContainersPerPage;
     }
 }

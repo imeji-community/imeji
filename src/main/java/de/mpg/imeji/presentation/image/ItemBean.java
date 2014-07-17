@@ -399,7 +399,7 @@ public class ItemBean
      * 
      * @throws Exception
      */
-    public void remove() throws Exception
+    public void delete() throws Exception
     {
         if (getIsInActiveAlbum())
         {

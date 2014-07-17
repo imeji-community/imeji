@@ -41,6 +41,7 @@ import javax.faces.bean.ManagedBean;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.storage.util.MediaUtils;
+import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -64,12 +65,15 @@ public class ConfigurationBean
      */
     private enum CONFIGURATION
     {
-        SNIPPET, CSS_DEFAULT, CSS_ALT, MAX_FILE_SIZE;
+        SNIPPET, CSS_DEFAULT, CSS_ALT, MAX_FILE_SIZE, FILE_TYPES;
     }
 
     private Properties config;
     private File configFile;
+    private FileTypes fileTypes;
     private final static Logger logger = Logger.getLogger(ConfigurationBean.class);
+    // A list of predefined file types, which is set when imeji is initialized
+    private final static String predefinedFileTypes = "[Image@en,Bilder@de=jpg,jpeg,tiff,tiff,jp2,pbm,gif,png,psd][Video@en,Video@de=wmv,swf,rm,mp4,mpg,m4v,avi,mov.asf,flv,srt,vob][Audio@en,Ton@de=aif,iff,m3u,m4a,mid,mpa,mp3,ra,wav,wma][Document@en,Dokument@de=doc,docx,odt,pages,rtf,tex,rtf,bib,csv,ppt,pps,pptx,key,xls,xlr,xlsx,gsheet,nb,numbers,ods,indd,pdf,dtx]";
 
     /**
      * Constructor, create the file if not existing
@@ -81,10 +85,8 @@ public class ConfigurationBean
     {
         configFile = new File(PropertyReader.getProperty("imeji.tdb.path") + "/conf.xml");
         if (!configFile.exists())
-        {
             configFile.createNewFile();
-        }
-        loadConfig();
+        readConfig();
     }
 
     /**
@@ -93,18 +95,27 @@ public class ConfigurationBean
      * @param f
      * @throws IOException
      */
-    private void loadConfig() throws IOException
+    private String readConfig()
     {
-        config = new Properties();
-        FileInputStream in = new FileInputStream(configFile);
         try
         {
+            config = new Properties();
+            FileInputStream in = new FileInputStream(configFile);
             config.loadFromXML(in);
+            Object ft = config.get(CONFIGURATION.FILE_TYPES.name());
+            if (ft == null)
+            {
+                this.fileTypes = new FileTypes(predefinedFileTypes);
+                saveConfig();
+            }
+            else
+                this.fileTypes = new FileTypes((String)ft);
         }
         catch (Exception e)
         {
-            logger.info("conf.xml can not be read, probably emtpy");
+            logger.info("conf.xml can not be read, probably emtpy", e);
         }
+        return "";
     }
 
     /**
@@ -114,7 +125,9 @@ public class ConfigurationBean
     {
         try
         {
+            setProperty(CONFIGURATION.FILE_TYPES.name(), fileTypes.toString());
             config.storeToXML(new FileOutputStream(configFile), "imeji configuration File");
+            BeanHelper.removeBeanFromMap(this.getClass());
         }
         catch (Exception e)
         {
@@ -224,8 +237,28 @@ public class ConfigurationBean
     public String getUploadMaxFileSize()
     {
         String size = (String)config.get(CONFIGURATION.MAX_FILE_SIZE.name());
-        if (size == null || size == "")
+        if (size == null || size.equals("") )
             return "0";
         return size;
+    }
+
+    /**
+     * Get the type of Files
+     * 
+     * @return
+     */
+    public FileTypes getFileTypes()
+    {
+        return this.fileTypes;
+    }
+
+    /**
+     * Set the type of Files
+     * 
+     * @param types
+     */
+    public void setFileTypes(FileTypes types)
+    {
+        this.fileTypes = types;
     }
 }

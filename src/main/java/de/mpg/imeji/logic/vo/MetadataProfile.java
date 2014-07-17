@@ -33,7 +33,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jModel("metadataProfile")
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "mdprofile", namespace = "http://imeji.org/terms")
-public class MetadataProfile extends Properties
+public class MetadataProfile extends Properties implements Cloneable
 {
     private static final long serialVersionUID = -3303333109346078736L;
     @j2jLiteral("http://purl.org/dc/elements/1.1/title")

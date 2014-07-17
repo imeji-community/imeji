@@ -45,7 +45,7 @@ public class CookieUtils
 {
     /**
      * Read a cookie. If not found, the default value is returned. After the cookie has been read, the cookie is updated
-     * (new max age, default set if needed)
+     * (new max age, default value set if needed)
      * 
      * @param name
      * @param defaultValue

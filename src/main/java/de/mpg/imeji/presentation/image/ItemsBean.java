@@ -19,12 +19,17 @@ import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
+import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
+import de.mpg.imeji.logic.search.vo.SearchOperators;
+import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.presentation.beans.BasePaginatorListSessionBean;
+import de.mpg.imeji.presentation.beans.ConfigurationBean;
+import de.mpg.imeji.presentation.beans.FileTypes.Type;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.facet.Facet.FacetType;
 import de.mpg.imeji.presentation.facet.FacetsBean;
@@ -80,14 +85,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean>
         session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         filters = new FiltersBean();
         selectedSortCriterion = null;
-        try
-        {
-            setElementsPerPage(Integer.parseInt(PropertyReader.getProperty("imeji.image.list.size")));
-        }
-        catch (Exception e)
-        {
-            logger.error("Error loading property imeji.image.list.size", e);
-        }
+        setElementsPerPage(session.getNumberOfItemsPerPage());
         try
         {
             String options = PropertyReader.getProperty("imeji.image.list.size.options");

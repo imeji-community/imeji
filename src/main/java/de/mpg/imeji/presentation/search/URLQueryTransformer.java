@@ -502,7 +502,7 @@ public class URLQueryTransformer
                     break;
             }
         }
-        return removeUseLessLogicalOperation(q).trim();
+        return removeUseLessLogicalOperation(q.trim());
     }
 
     /**
@@ -514,13 +514,21 @@ public class URLQueryTransformer
     private static String removeUseLessLogicalOperation(String q)
     {
         SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        String orString = session.getLabel("or_big");
+        String andString = session.getLabel("and_big");
         if (q.endsWith(" "))
             q = q.substring(0, q.length() - 1);
-        if (q.endsWith(" " + session.getLabel("and_big")))
-            q = q.substring(0, q.length() - 4);
-        if (q.endsWith(" " + session.getLabel("or_big")))
-            q = q.substring(0, q.length() - 3);
-        return q;
+        if (q.endsWith(" " + andString))
+            q = q.substring(0, q.length() - andString.length());
+        if (q.endsWith(" " + orString))
+            q = q.substring(0, q.length() - orString.length());
+        if (q.startsWith(orString))
+            q = q.substring(orString.length(),q.length());
+        if (q.startsWith(andString))
+            q = q.substring(andString.length(),q.length());
+        if (q.endsWith(" ") || q.endsWith(" " + session.getLabel("and_big")) || q.endsWith(" " + session.getLabel("or_big")))
+        	q = removeUseLessLogicalOperation(q);
+        return q.trim();
     }
 
     /**

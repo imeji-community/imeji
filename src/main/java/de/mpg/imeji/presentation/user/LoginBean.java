@@ -62,7 +62,7 @@ public class LoginBean
 
     public void loginClick()
     {
-        sb.showLogin = true;
+        sb.setShowLogin(true);
     }
 
     public void doLogin() throws Exception
@@ -109,7 +109,7 @@ public class LoginBean
         HttpSession session = (HttpSession)fc.getExternalContext().getSession(false);
         session.invalidate();
         sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        sb.showLogin = false;
+        sb.setShowLogin(false);
         return "pretty:home";
     }
 }

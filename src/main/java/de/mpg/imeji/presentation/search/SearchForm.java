@@ -8,12 +8,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.logic.search.vo.SearchElement;
 import de.mpg.imeji.logic.search.vo.SearchElement.SEARCH_ELEMENTS;
 import de.mpg.imeji.logic.search.vo.SearchGroup;
+import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
+import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 
@@ -28,12 +28,7 @@ public class SearchForm
 {
     private Map<String, MetadataProfile> profilesMap;
     private List<SearchGroupForm> groups;
-    private static Logger logger = Logger.getLogger(SearchForm.class);
-
-    private enum fileType
-    {
-        IMAGE, VIDEO, AUDIO, OTHER;
-    }
+    private String fileTypesQuery = "";
 
     /**
      * Default Constructor
@@ -62,7 +57,15 @@ public class SearchForm
                 // String collectionId = SearchFormularHelper.getCollectionId((SearchGroup)se);
                 String collectionId = SearchFormularHelper.getProfileIdFromStatement((SearchGroup)se,
                         profilesMap.values());
-                groups.add(new SearchGroupForm((SearchGroup)se, profilesMap.get(collectionId), collectionId));
+                if (collectionId != null)
+                    groups.add(new SearchGroupForm((SearchGroup)se, profilesMap.get(collectionId)));
+            }
+            if (se.getType().equals(SEARCH_ELEMENTS.PAIR))
+            {
+                if (((SearchPair)se).getIndex().getName().equals(SearchIndex.names.filetype.name()))
+                {
+                    this.fileTypesQuery = ((SearchPair)se).getValue();
+                }
             }
         }
     }
@@ -198,5 +201,21 @@ public class SearchForm
     public void setProfilesMap(Map<String, MetadataProfile> profilesMap)
     {
         this.profilesMap = profilesMap;
+    }
+
+    /**
+     * @return the fileTypesQuery
+     */
+    public String getFileTypesQuery()
+    {
+        return fileTypesQuery;
+    }
+
+    /**
+     * @param fileTypesQuery the fileTypesQuery to set
+     */
+    public void setFileTypesQuery(String fileTypesQuery)
+    {
+        this.fileTypesQuery = fileTypesQuery;
     }
 }

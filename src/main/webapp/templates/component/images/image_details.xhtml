@@ -3,7 +3,8 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:imjc="http://java.sun.com/jsf/composite/components">
+	xmlns:imjc="http://java.sun.com/jsf/composite/components"
+	xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs">
 
 	<!-- MediaDisplayContainer - START -->
 	<h:panelGroup layout="block" styleClass="imj_mediaDisplayContainer">
@@ -26,6 +27,7 @@
 			<h:outputText styleClass="" value="#{lbl.withdraw_image_content}"/>
 		</h:panelGroup>
 		
+				
 		<!-- MediaEditPanel - select, add, remove media items -->
 		<h:panelGroup id="image" layout="block" rendered="#{itemBean.image.status != 'WITHDRAWN'}" styleClass="imj_mediaEditPanel">
 			<h:outputLink styleClass="imj_mediaEditPanelItem" id="lnkDownload" value="#{Navigation.applicationUrl}file/#{itemBean.encodedFileName}?id=#{itemBean.image.fullImageUrl}&amp;download=1" target="_blank">
@@ -41,9 +43,10 @@
 					<h:outputLabel value="#{lbl.selected}" for="pictureCheckbox" styleClass="imj_optionLabel" rendered="#{Auth.loggedIn}"/>
 				</span>
 				
-				<h:commandLink styleClass="imj_mediaEditPanelItem imj_removeButton" id="lnkPicRemove" action="#{itemBean.remove}" rendered="#{Auth.delete(itemBean.image)}">
+				<h:outputLink value="#" styleClass="imj_mediaEditPanelItem imj_removeButton" onclick="openDialog('deleteMenuItemDialog');" rendered="#{Auth.delete(itemBean.image)}">
 					<h:outputText value="#{lbl.remove_from_col}"/>
-				</h:commandLink>
+				</h:outputLink>
+				
 				<h:commandLink styleClass="imj_mediaEditPanelItem imj_removeButton" id="lnkPicRemoveFromAlbum" action="#{itemBean.removeFromAlbum}" rendered="#{itemBean.navigationString == 'pretty:albumItem' and Auth.create(itemBean.album)}">
 					<h:outputText value="#{lbl.remove_from_album}"/>
 				</h:commandLink>
@@ -65,6 +68,9 @@
 				</h:panelGroup>
 			</h:form>
 		</h:panelGroup>
+		
+		<dialog:confirmationDialog submitAction="delete" bean="#{itemBean}" confirmationText="#{msg.confirmation_delete_item}?" submitLabel="#{lbl.delete}" dialogId="deleteMenuItemDialog" rendered="#{Auth.delete(itemBean.image)}"/>
+		
 	</h:panelGroup> <!-- Media Display Container - END -->
 		
 	

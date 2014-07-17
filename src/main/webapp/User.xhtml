@@ -149,13 +149,13 @@
 											
 											<!-- submit panel -->
 											<div class="imj_submitPanel">
-												<h:commandLink id="lnkEditUserdata" action="#{UserBean.toggleEdit}" value="#{lbl.edit}" rendered="#{!UserBean.edit}" styleClass="imj_editButton">
+												<h:commandLink id="lnkEditUserdata" action="#{UserBean.toggleEdit}" value="#{lbl.edit}" rendered="#{!UserBean.edit}" styleClass="imj_editButton" type="submit">
 													<f:ajax execute="@form" render="@form"/>
 												</h:commandLink>
-												<h:outputLink id="lnkCancelUserdata" value="" rendered="#{UserBean.edit}" styleClass="imj_cancelButton">
+												<h:outputLink id="lnkCancelUserdata" value="" rendered="#{UserBean.edit}" styleClass="imj_cancelButton" type="submit">
 													<h:outputText value="#{lbl.cancel}"/>
 												</h:outputLink>
-												<h:commandLink action="#{UserBean.updateUser}" value="#{lbl.save}" styleClass="imj_submitButton"  rendered="#{UserBean.edit}"/>
+												<h:commandLink action="#{UserBean.updateUser}" value="#{lbl.save}" styleClass="imj_submitButton"  rendered="#{UserBean.edit}" type="submit"/>
 											</div>
 										</fieldset>
 									</h:panelGroup> <!-- END user infos -->
@@ -182,7 +182,9 @@
 												<div class="imj_admindataValueEntry">
 													<h:inputSecret id="inputRespeated" value="#{UserBean.repeatedPassword}" styleClass="imj_admindataEdit"/>
 												</div>
-												<h:commandButton action="#{UserBean.changePassword}" value="#{lbl.password_change}" styleClass="imj_editButton"/>
+												<h:commandButton action="#{UserBean.changePassword}" value="#{lbl.password_change}" styleClass="imj_editButton" type="submit">
+													<f:ajax execute="@form" render="@form" />
+												</h:commandButton>
 											</div>
 										</div>
 									</div>
@@ -213,17 +215,17 @@
 													<ui:param name="roles" value="#{sh.type == 'ITEM' ? SessionBean.shareItemGrantItems : roles}"/>
 													<div>
 														<h:outputText value="Grant for #{sh.title}" styleClass="imj_admindataValueEntry"/>
-														<h:commandButton action="#{UserBean.revokeGrants(sh)}" value="#{lbl.revoke}" styleClass="imj_cancelButton" onclick="if(confirm('Are you sure you want to revoke this grant?'))return true;return false;"/>
+														<h:commandButton action="#{UserBean.revokeGrants(sh)}" value="#{lbl.revoke}" styleClass="imj_cancelButton" onclick="if(confirm('Are you sure you want to revoke this grant?'))return true;return false;" type="submit"/>
 														<h:selectManyCheckbox id="role" value="#{sh.sharedType}"  disabled="true" layout="pageDirection">
 															<f:selectItems value="#{roles}" />
 														</h:selectManyCheckbox>
 													</div>
 													<br/>
 												</ui:repeat>
-												<h:commandButton id="toggleCreate" action="#{UserBean.toggleCreateCollection}" value="toggle create col" styleClass="imj_noDisplay">
+												<h:commandButton id="toggleCreate" action="#{UserBean.toggleCreateCollection}" value="toggle create col" styleClass="imj_noDisplay" type="submit">
 													<f:ajax render="@none"/>
 												</h:commandButton>
-												<h:commandButton id="toggleAdmin" action="#{UserBean.toggleAdmin}" value="toggle admin" styleClass="imj_noDisplay">
+												<h:commandButton id="toggleAdmin" action="#{UserBean.toggleAdmin}" value="toggle admin" styleClass="imj_noDisplay" type="submit">
 													<f:ajax render="@form"/>
 												</h:commandButton>
 											</div>

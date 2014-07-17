@@ -46,7 +46,9 @@ import de.mpg.j2j.annotations.j2jResource;
 public abstract class Metadata implements Comparable<Metadata>, Serializable
 {
     private static final long serialVersionUID = -6967620655990351430L;
+    
     private URI id = IdentifierUtil.newURI(Metadata.class);
+       
     @j2jLiteral("http://imeji.org/terms/position")
     private int pos = 0;
 

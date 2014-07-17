@@ -67,8 +67,7 @@ public class PropertyBean
     private static String css_default;
     private static String css_alternate;
 
-
-	/**
+    /**
      * Default constructor
      */
     public PropertyBean()
@@ -90,15 +89,17 @@ public class PropertyBean
         }
     }
 
-    public String getAppName() {
-		return appName;
-	}
+    public String getAppName()
+    {
+        return appName;
+    }
 
-	public void setAppName(String appName) {
-		this.appName = appName;
-	}
+    public void setAppName(String appName)
+    {
+        this.appName = appName;
+    }
 
-	/**
+    /**
      * Read in the property the base Uri
      */
     private void readBaseUri()
@@ -177,23 +178,24 @@ public class PropertyBean
         return applicationURL;
     }
 
-    public static String getCss_default()
-    {
-        return css_default;
-    }
+//    public static String getCss_default()
+//    {
+//        return css_default;
+//    }
+//
+//    public static void setCss_default(String css_default)
+//    {
+//        PropertyBean.css_default = css_default;
+//    }
+//
+//    public static String getCss_alternate()
+//    {
+//        return css_alternate;
+//    }
+//
+//    public static void setCss_dark(String css_alternate)
+//    {
+//        PropertyBean.css_alternate = css_alternate;
+//    }
 
-    public static void setCss_default(String css_default)
-    {
-        PropertyBean.css_default = css_default;
-    }
-
-    public static String getCss_alternate()
-    {
-        return css_alternate;
-    }
-
-    public static void setCss_dark(String css_alternate)
-    {
-        PropertyBean.css_alternate = css_alternate;
-    }
 }

@@ -16,28 +16,51 @@
 	
 	<composite:implementation>
 		<ui:param name="withdrawID" value="listItem-#{cc.attrs.itemIndex}-dialDiscardContainer-dialogWithdraw"/>
+		
 		<li class="#{cc.attrs.itemClass}">
 			<div class="imj_previewArea">
 				<div class="imj_previewImage imj_imageStack">
 					<h:outputLink value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}">						
 						<h:graphicImage value="#{Navigation.applicationUrl}file?id=#{cc.attrs.item.thumbnail.link}" alt="preview picture" rendered="#{cc.attrs.item.thumbnail.link != null}"/>
-					    <h:graphicImage value="#{Navigation.applicationUrl}resources/icon/itemDeleted.png" alt="preview picture" 
+					    <h:graphicImage value="#{Navigation.applicationUrl}resources/icon/deleted.png" alt="preview picture" 
 					    				rendered="#{cc.attrs.item.thumbnail.link == null}" title="#{lbl.itemDel}"/>
-				
-					</h:outputLink>			
+					</h:outputLink>
+					<h:outputText value="#{cc.attrs.item.size} #{lbl.images}" class="imj_itemCount"/>
 				</div>
 			</div>
 			<div class="imj_informationContent">
-				<!-- description area - includes default values - START -->
 				<div class="imj_descriptionArea">
-					<h3 class="imj_itemHeadline">
-						<h:outputLink value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}" title="#{cc.attrs.item.title}">
+					<h3 class="imj_itemHeadline imj_containerHeadline">
+						<h:outputLink value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}" title="#{cc.attrs.item.title}" >
 							<h:outputText value="#{cc.attrs.item.title}"/>
 						</h:outputLink>
 					</h3>
+					<div class="imj_metadataSet">
+						<h:outputText value="#{lbl.by} #{cc.attrs.item.authors}" class="imj_containerAuthor"/>
+					</div>
 					<div class="imj_metadataContent">
+					
+						<h:panelGroup layout="block" class="imj_metadataSet" rendered="#{not empty cc.attrs.item.description}">
+							<div class="imj_metadataContent">
+								<h:outputText value="#{cc.attrs.item.description}" title="#{cc.attrs.item.descriptionFull}"/>
+								<button class="imj_expand imj_containerDescExpand" onclick="$(this).parent().hide(); $(this).parent().next().show();">
+									<img height="13" alt="description full view" src="#{Navigation.applicationUrl}resources/imj_iconset/6CAE2F/imjTriangleNext_16.png" />
+								</button>
+							</div>
+							<div class="imj_metadataContent imj_noDisplay">
+								<h:outputText value="#{cc.attrs.item.descriptionFull}"/>
+								<button class="imj_collapse" onclick="$(this).parent().hide(); $(this).parent().prev().show();" >
+									<img height="13" alt="description short view" src="#{Navigation.applicationUrl}resources/imj_iconset/6CAE2F/imjTrianglePrevious_16.png"/>
+								</button>
+							</div>						
+						</h:panelGroup>
 						<div class="imj_itemActionArea">
 							<ul>
+								<li>
+									<h:outputLink value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}">
+										<h:outputText value="#{lbl.startpage}"/>
+									</h:outputLink>
+								</li>	
 								<li>
 									<h:outputLink value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}/#{Navigation.browsePath}?q=" rendered="#{cc.attrs.item.size > 0}">
 										<h:outputText value="#{lbl.view_images}"/>
@@ -55,65 +78,31 @@
 										</h:outputLink>
 									</li>
 								</ui:fragment>
-								<ui:fragment rendered="#{Auth.admin(cc.attrs.item) and cc.attrs.item.status == 'RELEASED'}">
-									<li>
-										<h:outputLink id="lnkWithdrawCollection" value="#" onclick="openDialog('#{withdrawID}');">
-											<h:outputText value="#{lbl.withdraw}"/>
-										</h:outputLink>
-										<dialog:confirmationReasonedDialog submitAction="withdraw" bean="#{cc.attrs.item}" confirmationText="#{cc.attrs.withdrawConfirmationText}" submitLabel="#{lbl.withdraw}" dialogId="#{withdrawID}"/>
-									</li>
-								</ui:fragment>
 							</ul>
 						</div>
-						<div class="imj_metadataSet">
-							<label class="imj_metadataLabel"><h:outputText value="#{lbl.creator_s}"/><span class="imj_noDisplay">: </span></label>
-							<span class="imj_metadataValue"><h:outputText value="#{cc.attrs.item.authors}"/></span>
-						</div>
-						<h:panelGroup layout="block" class="imj_metadataSet" rendered="#{not empty cc.attrs.item.description}">
-							<label class="imj_metadataLabel"><h:outputText value="#{lbl.description}"/><span class="imj_noDisplay">: </span></label>
-							<p class="imj_metadataValue"><h:outputText value="#{cc.attrs.item.description}" title="#{cc.attrs.item.descriptionFull}"/></p>
-						</h:panelGroup>
-						<div class="imj_metadataSet">
-							<label class="imj_metadataLabel"><h:outputText value="#{lbl.images}"/><span class="imj_noDisplay">: </span></label>
-							<span class="imj_metadataValue"><h:outputText value="#{cc.attrs.item.size}"/></span>
-						</div>
 					</div>
 				</div>
-				<!-- description area - includes default values - END -->
-				
-				<!-- description area - includes additional values - START -->
-				<div class="imj_additionalInfoArea">
-					<div class="imj_displayArea">
-						<button class="imj_collapse imj_noDisplay" onclick="$(this).parent().next().hide(); $(this).hide().next().show();" title="#{lbl.show} Details">
-							<span class="imj_buttonRemove_16">&#160;</span>
-							<h:outputText value="#{lbl.less}"/>
-						</button>
-						<button class="imj_expand" onclick="$(this).parent().next().show(); $(this).hide().prev().show();" title="#{lbl.show} Details">
-							<span class="imj_buttonAdd_16">&#160;</span>
-							<h:outputText value="#{lbl.more}"/>
-						</button>
-					</div>
-					<div class="imj_metadataContent">
-						<div class="imj_metadataSet">
-							<label class="imj_metadataLabel"><h:outputText value="#{lbl.date_creation}"/><span class="imj_noDisplay">: </span></label>
-							<span class="imj_metadataValue"><h:outputText value="#{cc.attrs.item.creationDate}"/></span>
-						</div>
-						<div class="imj_metadataSet">
-							<label class="imj_metadataLabel"><h:outputText value="#{lbl.date_last_modification}"/><span class="imj_noDisplay">: </span></label>												
-							<span class="imj_metadataValue"><h:outputText value="#{cc.attrs.item.lastModificationDate}"/></span>
-						</div>
-						<h:panelGroup layout="block" class="imj_metadataSet" rendered="#{cc.attrs.item.status == 'RELEASED'}">
-							<label class="imj_metadataLabel"><h:outputText value="#{lbl.date_released}"/><span class="imj_noDisplay">: </span></label>
-							<span class="imj_metadataValue"><h:outputText value="#{cc.attrs.item.versionDate}"/></span>
-						</h:panelGroup>
-						<h:panelGroup layout="block" class="imj_metadataSet" rendered="#{cc.attrs.item.status == 'WITHDRAWN'}">
-							<label class="imj_metadataLabel"><h:outputText value="#{lbl.date_withdraw}"/><span class="imj_noDisplay">: </span></label>
-							<span class="imj_metadataValue"><h:outputText value="#{cc.attrs.item.versionDate}"/></span>
-						</h:panelGroup>
-					</div>
-				</div>
-				<!-- description area - includes additional values - END -->
 			</div>
 		</li>
+		<style>
+			.imj_itemCount{
+				font-size: 10px;
+			}
+			.imj_containerHeadline{
+				font-size: 16px; 
+				height: 1em;
+			}
+			.imj_containerAuthor{
+				font-size: 10px; 
+				margin-top:3em;
+			}
+			.imj_containerLogoPrivate{
+				width: 25px; 
+				float:right;
+			}
+			.imj_containerDescExpand{
+				margin-top:-10px;
+			}
+		</style>
 	</composite:implementation>
 </html>

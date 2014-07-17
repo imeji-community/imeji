@@ -518,20 +518,22 @@
 		<!-- END: Digilib integration -->
 		<dependency>
 			<groupId>org.apache.tika</groupId>
-			<artifactId>tika-core</artifactId>
-			<version>1.3</version>
+			<artifactId>tika-server</artifactId>
+			<version>1.5</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.tika</groupId>
 			<artifactId>tika-parsers</artifactId>
-			<version>1.3</version>
+			<version>1.5</version>
 		</dependency>
+		
 		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
-			<version>1.9.5</version>
-			<scope>test</scope>
+			<groupId>com.drewnoakes</groupId>
+			<artifactId>metadata-extractor</artifactId>
+			<version>2.6.2</version>
 		</dependency>
+		
+
 		<!-- <dependency> <groupId>net.java.dev.jai-imageio</groupId> <artifactId>jai-imageio-core-standalone</artifactId> 
 			<version>1.2-pre-dr-b04-2011-07-04</version> </dependency> <dependency> <groupId>org.devlib.schmidt</groupId> 
 			<artifactId>imageinfo</artifactId> <version>1.9</version> <type>jar</type> 
@@ -542,8 +544,7 @@
 		<profile>
 			<id>env-development</id>
 			<properties>
-				<!-- TO avoid warning File encoding has not been set, using platform 
-					encoding Cp1252, i.e. build is platform dependent! -->
+				<!-- TO avoid warning File encoding has not been set, using platform encoding Cp1252, i.e. build is platform dependent! -->
 				<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 				<!-- the jdk version to use -->
 				<jdk.version>1.7</jdk.version>
@@ -655,6 +656,7 @@
 							<server>tomcat</server>
 							<path>/imeji</path>
 							<warFile>/X/continuum/apache-continuum-1.4.1/data/working-directory/178/target/imeji.war</warFile>
+							<argLine>-Xms4096m -Xmx4096m -XX:MaxPermSize=512m</argLine>
 						</configuration>
 					</plugin>
 				</plugins>

@@ -15,7 +15,7 @@
 	
 	<composite:implementation>
 		
-		<h:panelGroup layout="block" id="filterInfoPanel" styleClass="imj_filterInfoPanel">
+		<h:panelGroup layout="block" id="filterInfoPanel" styleClass="imj_filterInfoPanel" rendered="#{Auth.loggedIn}">
 			<h:form id="preListForm">
 				<h:outputLink value="?q=&amp;f=all">
 					<h:outputText value="#{lbl.all}"/>

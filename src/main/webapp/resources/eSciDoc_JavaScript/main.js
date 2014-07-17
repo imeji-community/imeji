@@ -366,6 +366,29 @@ var patchJSF = function() {
 	}
 };
 
+/**
+ * Avoid double click submit for all submit buttons
+ * @param data
+ */
+function handleDisableButton(data) {
+    if (data.source.type != "submit") {
+        return;
+    }
+
+    switch (data.status) {
+        case "begin":
+            data.source.disabled = true;
+            break;
+        case "complete":
+            data.source.disabled = false;
+            break;
+    }    
+}
+/**
+ * Add the previous method to jsf
+ */
+jsf.ajax.addOnEvent(handleDisableButton);
+
 /*
  * open a dialog functions are shifted and modified from old template.xhtml
  */

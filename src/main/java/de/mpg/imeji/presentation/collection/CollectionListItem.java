@@ -51,7 +51,7 @@ public class CollectionListItem
     /**
      * Maximum number of character displayed in the list for the description
      */
-    private static final int DESCRIPTION_MAX_SIZE = 300;
+    private static final int DESCRIPTION_MAX_SIZE = 330; //430
 
     /**
      * Construct a new {@link CollectionListItem} with a {@link CollectionImeji}
@@ -87,20 +87,20 @@ public class CollectionListItem
             {
                 versionDate = collection.getVersionDate().getTime().toString();
             }
-            if (collection.getStatus().equals(Status.RELEASED))
+            // Get first thumbnail of the collection
+            ItemController ic = new ItemController(user);
+            if (ic.findContainerItems(collection, user, 1).getImages().iterator().hasNext())
             {
-                // Get first thumbnail of the collection
-                ItemController ic = new ItemController(user);
-                URI uri = ic.findContainerItems(collection, user, 1).getImages().iterator().next();
-                if (uri != null)
-                {
-                    this.thumbnail = new ThumbnailBean(ic.retrieve(uri));
-                }
-            }
-            // initializations
-            initSize(collection, user);
-            initSelected();
-        }
+               URI uri = ic.findContainerItems(collection, user, 1).getImages().iterator().next();
+               if (uri != null)
+               {
+                 this.thumbnail = new ThumbnailBean(ic.retrieve(uri));                
+               }
+             }
+             // initializations
+             initSize(collection, user);
+             initSelected();
+         }
         catch (Exception e)
         {
             logger.error("Error creating collectionListItem", e);

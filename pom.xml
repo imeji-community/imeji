@@ -101,6 +101,7 @@
 		<org.richfaces.bom.version>4.3.7.Final</org.richfaces.bom.version>
 		<!-- Used by Tomcat to trip version Nr when deploy WAR package, e.g., imeji_1.0_screenshot->imeji -->
 		<project.warName>imeji</project.warName>
+		<tomcat.webapps>/opt/apache-tomcat-7.0.54/webapps</tomcat.webapps>
 	</properties>
 	<repositories>
 		<!-- <repository> <id>central</id> <url>http://central</url> <releases> 
@@ -148,6 +149,11 @@
 			<name>jvnet-nexus-snapshots</name>
 			<url>https://maven.java.net/content/repositories/snapshots/</url>
 		</repository>
+		 <repository>
+          <id>maven-central</id>
+          <url>http://repo2.maven.org/maven2</url>
+       </repository>
+		
 	</repositories>
 	<distributionManagement>
 		<repository>
@@ -531,6 +537,25 @@
 			<artifactId>metadata-extractor</artifactId>
 			<version>2.6.2</version>
 		</dependency>
+		<!-- RestService -->
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-client</artifactId>
+			<version>1.9</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-server</artifactId>
+			<version>1.9</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey.contribs</groupId>
+			<artifactId>jersey-multipart</artifactId>
+			<version>1.9</version>
+			<scope>compile</scope>
+		</dependency>		
 		
 		<!-- <dependency> <groupId>net.java.dev.jai-imageio</groupId> <artifactId>jai-imageio-core-standalone</artifactId> 
 			<version>1.2-pre-dr-b04-2011-07-04</version> </dependency> <dependency> <groupId>org.devlib.schmidt</groupId> 
@@ -550,31 +575,17 @@
 			<build>
 				<plugins>
 					<plugin>
-						<groupId>org.zeroturnaround</groupId>
-						<artifactId>javarebel-maven-plugin</artifactId>
-						<configuration>
-							<packaging>war</packaging>
-							<classpath>
-								<fallback>default</fallback>
-								<resources>
-									<resource>
-										<directory>target/classes</directory>
-										<excludes>
-											<exclude>log4j.xml</exclude>
-										</excludes>
-									</resource>
-								</resources>
-							</classpath>
-						</configuration>
-						<executions>
-							<execution>
-								<id>generate-rebel-xml</id>
-								<phase>process-resources</phase>
-								<goals>
-									<goal>generate</goal>
-								</goals>
-							</execution>
-						</executions>
+						  <groupId>org.zeroturnaround</groupId>
+						  <artifactId>jrebel-maven-plugin</artifactId>
+						  <executions>
+						    <execution>
+						      <id>generate-rebel-xml</id>
+						      <phase>process-resources</phase>
+						      <goals>
+						        <goal>generate</goal>
+						      </goals>
+						    </execution>
+						  </executions>
 					</plugin>
 					<plugin>
 						<artifactId>maven-antrun-plugin</artifactId>
@@ -599,35 +610,50 @@
 							</execution>
 						</executions>
 					</plugin>
+					<plugin>
+					  <groupId>org.zeroturnaround</groupId>
+					  <artifactId>jrebel-maven-plugin</artifactId>
+					  <version>1.1.5</version>
+					  <executions>
+					    <execution>
+					      <id>generate-rebel-xml</id>
+					      <phase>process-resources</phase>
+					      <goals>
+					        <goal>generate</goal>
+					      </goals>
+					    </execution>
+					  </executions>
+					</plugin>					
+					
 				</plugins>
-				<pluginManagement>
-					<plugins>
-						<plugin>
-							<groupId>org.eclipse.m2e</groupId>
-							<artifactId>lifecycle-mapping</artifactId>
-							<version>1.0.0</version>
-							<configuration>
-								<lifecycleMappingMetadata>
-									<pluginExecutions>
-										<pluginExecution>
-											<pluginExecutionFilter>
-												<groupId>org.zeroturnaround</groupId>
-												<artifactId>jrebel-maven-plugin</artifactId>
-												<versionRange>1.1</versionRange>
-												<goals>
-													<goal>generate</goal>
-												</goals>
-											</pluginExecutionFilter>
-											<action>
-												<execute />
-											</action>
-										</pluginExecution>
-									</pluginExecutions>
-								</lifecycleMappingMetadata>
-							</configuration>
-						</plugin>
-					</plugins>
-				</pluginManagement>
+<!-- 				<pluginManagement> -->
+<!-- 					<plugins> -->
+<!-- 						<plugin> -->
+<!-- 							<groupId>org.eclipse.m2e</groupId> -->
+<!-- 							<artifactId>lifecycle-mapping</artifactId> -->
+<!-- 							<version>1.0.0</version> -->
+<!-- 							<configuration> -->
+<!-- 								<lifecycleMappingMetadata> -->
+<!-- 									<pluginExecutions> -->
+<!-- 										<pluginExecution> -->
+<!-- 											<pluginExecutionFilter> -->
+<!-- 												<groupId>org.zeroturnaround</groupId> -->
+<!-- 												<artifactId>jrebel-maven-plugin</artifactId> -->
+<!-- 												<versionRange>1.1</versionRange> -->
+<!-- 												<goals> -->
+<!-- 													<goal>generate</goal> -->
+<!-- 												</goals> -->
+<!-- 											</pluginExecutionFilter> -->
+<!-- 											<action> -->
+<!-- 												<execute /> -->
+<!-- 											</action> -->
+<!-- 										</pluginExecution> -->
+<!-- 									</pluginExecutions> -->
+<!-- 								</lifecycleMappingMetadata> -->
+<!-- 							</configuration> -->
+<!-- 						</plugin> -->
+<!-- 					</plugins> -->
+<!-- 				</pluginManagement> -->
 			</build>
 		</profile>
 		<profile>

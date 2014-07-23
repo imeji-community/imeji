@@ -37,6 +37,11 @@
 					<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/datepicker.js"></script>
 					<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/autocomplete.js"></script>
 					<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/main.js"></script>
+					<script type="text/javascript">
+						jQuery(document).ready(function() {
+							document.getElementById('batchEditForm:editInitialized').click();
+						});
+					</script>
 					
 					<ui:fragment rendered="#{!EditImageMetadataBean.initialized and Auth.loggedIn}">
 						<h2 class="imj_headline"><h:outputText value="Preparing editor! Please wait a little ..."/></h2>
@@ -61,8 +66,8 @@
 						<div class="imj_editGlobalAssignment">
 							<div class="imj_metadataSet">
 								<div class="imj_metadataLabel">
-									<h:outputLabel for="selStatement" value="#{lbl.metadata_type_select}"/>
-									<h:selectOneMenu id="selStatement" value="#{EditImageMetadataBean.selectedStatementName}" onchange="document.getElementById('batchEditForm:ajaxContent').style.opacity='0.2';">
+									<h:outputLabel for="selStatement" value="#{lbl.metadata_type_select}" rendered="#{EditImageMetadataBean.displayStatementMenu}"/>
+									<h:selectOneMenu id="selStatement" value="#{EditImageMetadataBean.selectedStatementName}" onchange="document.getElementById('batchEditForm:ajaxContent').style.opacity='0.2';" rendered="#{EditImageMetadataBean.displayStatementMenu}">
 										<f:selectItems value="#{EditImageMetadataBean.statementMenu}"/>
 										<f:ajax event="change" execute="@this" render="ajaxContent" listener="#{EditImageMetadataBean.changeStatement}"/>
 									</h:selectOneMenu>

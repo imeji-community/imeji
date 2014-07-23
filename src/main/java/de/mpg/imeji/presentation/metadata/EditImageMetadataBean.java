@@ -646,6 +646,11 @@ public class EditImageMetadataBean
         return statementMenu;
     }
 
+    public boolean getDisplayStatementMenu()
+    {
+    	return statementMenu.size()<=1 ? Boolean.FALSE : Boolean.TRUE;
+    }
+    
     public void setStatementMenu(List<SelectItem> statementMenu)
     {
         this.statementMenu = statementMenu;

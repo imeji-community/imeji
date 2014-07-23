@@ -11,7 +11,7 @@ import java.util.List;
 import com.hp.hpl.jena.sparql.pfunction.library.container;
 
 import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.vo.SearchPair;
@@ -25,7 +25,6 @@ import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
-import de.mpg.imeji.presentation.util.UrlHelper;
 
 /**
  * Bean for the collections page
@@ -83,7 +82,7 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
             searchQuery.addPair(sp);
         }
         SortCriterion sortCriterion = new SortCriterion();
-        sortCriterion.setIndex(Search.getIndex(getSelectedSortCriterion()));
+        sortCriterion.setIndex(SPARQLSearch.getIndex(getSelectedSortCriterion()));
         sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
         SearchResult results = controller.search(searchQuery, sortCriterion, limit, offset);
         collections = controller.loadCollectionsLazy(results.getResults(), limit, offset);
@@ -150,15 +149,14 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
             CollectionImeji collection = collectionController.retrieve(uri, sb.getUser());
             collectionController.delete(collection, sb.getUser());
             count++;
+            
+            BeanHelper.info(sb.getMessage("success_collection_delete").replace("XXX_collectionName_XXX",
+                    collection.getMetadata().getTitle()));
         }
         sb.getSelectedCollections().clear();
         if (count == 0)
         {
             BeanHelper.warn(sb.getMessage("error_delete_no_collection_selected"));
-        }
-        else
-        {
-            BeanHelper.info(count + " " + sb.getMessage("success_collections_delete"));
         }
         return "pretty:collections";
     }

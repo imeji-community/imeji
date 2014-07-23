@@ -68,6 +68,43 @@
 							</span>
 						</h:panelGroup>
 						
+						<!-- Tab Utilities - Dates -->
+						<h:panelGroup styleClass="imj_infodataSet">
+							<span class="imj_infodataLabel">
+								<h:outputText value="#{lbl.date_creation}"/>
+								<span class="imj_invisible">: </span>
+							</span>
+							<span class="imj_infodataValue">
+								<h:outputText value="#{cc.attrs.infoLogicBean.container.created.time}"/>
+							</span>
+						</h:panelGroup>
+						<h:panelGroup styleClass="imj_infodataSet">
+							<span class="imj_infodataLabel">
+								<h:outputText value="#{lbl.date_last_modification}"/>
+								<span class="imj_invisible">: </span>
+							</span>
+							<span class="imj_infodataValue">
+								<h:outputText value="#{cc.attrs.infoLogicBean.container.modified.time}"/>
+							</span>
+						</h:panelGroup>
+						<h:panelGroup styleClass="imj_infodataSet" rendered="#{cc.attrs.item.status == 'RELEASED'}">
+							<span class="imj_infodataLabel">
+								<h:outputText value="#{lbl.date_released}"/>
+								<span class="imj_invisible">: </span>
+							</span>
+							<span class="imj_infodataValue">
+								<h:outputText value="#{cc.attrs.infoLogicBean.container.versionDate.time}"/>
+							</span>
+						</h:panelGroup>
+						<h:panelGroup styleClass="imj_infodataSet" rendered="#{cc.attrs.item.status == 'WITHDRAWN'}">
+							<span class="imj_infodataLabel">
+								<h:outputText value="#{lbl.date_withdraw}"/>
+								<span class="imj_invisible">: </span>
+							</span>
+							<span class="imj_infodataValue">
+								<h:outputText value="#{cc.attrs.infoLogicBean.container.versionDate.time}"/>
+							</span>
+						</h:panelGroup>
 						<!-- Tab Utilities - Creator -->
 						<h:panelGroup styleClass="imj_infodataSet">
 							<span class="imj_infodataLabel">
@@ -75,7 +112,7 @@
 								<span class="imj_invisible">: </span>
 							</span>
 							<span class="imj_infodataValue">
-								<h:outputText value="#{cc.attrs.infoLogicBean.creator.name}"/>
+								<h:outputText value="#{cc.attrs.infoLogicBean.authorsWithOrg}"/>
 							</span>
 						</h:panelGroup>
 								
@@ -93,7 +130,7 @@
 						<!-- Tab Utilities - Identifier -->
 						<h:panelGroup styleClass="imj_infodataSet">
 							<span class="imj_infodataLabel">
-								<h:outputText value="#{lbl.identifier}"/>
+								<h:outputText value="#{lbl.permalink}"/>
 								<span class="imj_invisible">: </span>
 							</span>
 							<span class="imj_infodataValue">

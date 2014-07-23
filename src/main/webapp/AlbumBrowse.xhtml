@@ -7,10 +7,10 @@
 	xmlns:menu="http://java.sun.com/jsf/composite/components/menu"
 	xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs">
 	
-	<ui:param name="paginatorListSessionBean" value="#{AlbumImagesBean}"/>
-	<ui:param name="headline" value="#{AlbumImagesBean.album.metadata.title}"/>
+	<ui:param name="paginatorListSessionBean" value="#{AlbumItemsBean}"/>
+	<ui:param name="headline" value="#{AlbumItemsBean.album.metadata.title}"/>
 	<ui:param name="currentMainMenu" value="album"/>
-	<ui:param name="browseToAllItemsUrl" value="#{Navigation.albumUrl}#{AlbumImagesBean.id}/browse?q="/>
+	<ui:param name="browseToAllItemsUrl" value="#{Navigation.albumUrl}#{AlbumItemsBean.id}/browse?q="/>
 	<ui:param name="containerId" value="#{paginatorListSessionBean.id}"/>
 	
 	<ui:define name="actionsMenu">
@@ -36,7 +36,7 @@
 									isAdmin="#{Auth.admin(paginatorListSessionBean.album)}"
 									hasContent="#{paginatorListSessionBean.totalNumberOfRecords > 0}"
 									contextDownloadParam="&amp;album=#{paginatorListSessionBean.id}"
-									allowedToShare="#{AlbumImagesBean.album.status!='WITHDRAWN' and Auth.admin(paginatorListSessionBean.album)}"/>
+									allowedToShare="#{AlbumItemsBean.album.status!='WITHDRAWN' and Auth.admin(paginatorListSessionBean.album)}"/>
 		</ui:fragment>
 	</ui:define>
 	

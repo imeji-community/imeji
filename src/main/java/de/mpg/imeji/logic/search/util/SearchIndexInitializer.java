@@ -2,6 +2,7 @@ package de.mpg.imeji.logic.search.util;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import com.hp.hpl.jena.vocabulary.RDF;
 
 import de.mpg.imeji.logic.search.vo.SearchIndex;
@@ -46,7 +47,7 @@ public class SearchIndexInitializer
         /**
          * Properties indexes
          */
-        indexes = put(indexes, new SearchIndex(SearchIndex.names.creator.name(), "http://imeji.org/terms/createdBy"));
+        indexes = put(indexes, new SearchIndex(SearchIndex.names.creator.name(), "http://purl.org/dc/terms/creator"));
         indexes = put(indexes, new SearchIndex(SearchIndex.names.editor.name(), "http://imeji.org/terms/modifiedBy"));
         indexes = put(indexes, new SearchIndex(SearchIndex.names.created.name(), "http://purl.org/dc/terms/created"));
         indexes = put(indexes, new SearchIndex(SearchIndex.names.modified.name(), "http://purl.org/dc/terms/modified"));
@@ -172,6 +173,8 @@ public class SearchIndexInitializer
                         .get(SearchIndex.names.md.name())));
         indexes = put(indexes, new SearchIndex(SearchIndex.names.person.name(), "http://xmlns.com/foaf/0.1/person",
                 indexes.get(SearchIndex.names.md.name())));
+        indexes = put(indexes, new SearchIndex(SearchIndex.names.person_name.name(),
+                "http://purl.org/escidoc/metadata/terms/0.1/complete-name", indexes.get(SearchIndex.names.person.name())));
         indexes = put(indexes, new SearchIndex(SearchIndex.names.person_family.name(),
                 "http://purl.org/escidoc/metadata/terms/0.1/family-name", indexes.get(SearchIndex.names.person.name())));
         indexes = put(indexes, new SearchIndex(SearchIndex.names.person_given.name(),

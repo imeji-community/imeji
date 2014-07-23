@@ -29,7 +29,6 @@
 package de.mpg.imeji.logic.storage.administrator;
 
 import java.io.Serializable;
-import java.util.List;
 
 import de.mpg.imeji.logic.storage.Storage;
 

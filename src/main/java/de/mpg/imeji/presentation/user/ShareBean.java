@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -74,6 +73,8 @@ public class ShareBean implements Serializable
     // The url of the current share page (used for back link)
     private String pageUrl;
     private boolean hasContent = false;
+    @ManagedProperty( "#{sessionBean}")
+    private SessionBean sb;
 
     public enum SharedObjectType
     {
@@ -289,39 +290,28 @@ public class ShareBean implements Serializable
             List<String> inputValues = Arrays.asList(getEmailInput().split("\\s*[|,;\\n]\\s*"));
             for (String value : inputValues)
             {
-                if (UserCreationBean.isValidEmail(value) && isExistingUser(value))
+                if (UserCreationBean.isValidEmail(value))
                 {
-                    emailList.add(value);
+                    try {
+                    	UserController uc = new UserController(Imeji.adminUser);
+						uc.retrieve(value);
+						emailList.add(value);  
+
+					} catch (Exception e) {
+	                    this.errorList.add(sb.getMessage("error_share_invalid_user").replace("XXX_VALUE_XXX", value));
+			            BeanHelper.error(sb.getMessage("error_share_invalid_user").replace("XXX_VALUE_XXX", value));			            
+	                    logger.error(sb.getMessage("error_share_invalid_user").replace("XXX_VALUE_XXX", value));
+					}                    	                 
                 }
                 else
                 {
-                    this.errorList.add(value + " -- invalid Input");
-                    BeanHelper.error(value + " -- invalid Input");
-                    logger.error(value + " -- invalid Input");
+                    this.errorList.add(sb.getMessage("error_share_invalid_email").replace("XXX_VALUE_XXX", value));
+		            BeanHelper.error(sb.getMessage("error_share_invalid_email").replace("XXX_VALUE_XXX", value));			            
+                    logger.error(sb.getMessage("error_share_invalid_email").replace("XXX_VALUE_XXX", value));
                 }
             }
         }
         return emailList;
-    }
-
-    /**
-     * True if the email fits to an existing {@link User}
-     * 
-     * @param email
-     * @return
-     */
-    private boolean isExistingUser(String email)
-    {
-        try
-        {
-            UserController uc = new UserController(Imeji.adminUser);
-            uc.retrieve(email);
-            return true;
-        }
-        catch (Exception e)
-        {
-            return false;
-        }
     }
 
     /**
@@ -960,4 +950,14 @@ public class ShareBean implements Serializable
     {
         this.hasContent = hasContent;
     }
+
+	public SessionBean getSb() {
+		return sb;
+	}
+
+	public void setSb(SessionBean sb) {
+		this.sb = sb;
+	}
+    
+    
 }

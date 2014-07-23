@@ -125,10 +125,7 @@ public class Scripts
 
     public void createContentModel() throws Exception
     {
-        String admin = LoginHelper.loginInEscidoc("roland", "topor");
-        // ContentModelDocument cmd = ContentModelDocument.Factory.parse(new File("C:\\Users\\saquet\\faces40.xml"));
-        // String response = ServiceLocator.getContentModelHandler(admin).create(cmd.xmlText());
-        // System.out.println(response);
+        LoginHelper.loginInEscidoc("roland", "topor");
     }
 
     // public GetMethod loadImage(String frameworkUrl, String imageUrl, String userHandle) throws Exception

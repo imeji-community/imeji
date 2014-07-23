@@ -53,7 +53,7 @@ All rights reserved. Use is subject to license terms.
 			<h:form id="loginForm">
 				<h:panelGroup rendered="#{!Auth.loggedIn}" styleClass="imj_metaMenuItem">
 					<h:panelGroup rendered="#{!SessionBean.showLogin}">
-						<h:commandLink id="lnkLogin1" title="#{lbl.login}" action ="#{LoginBean.loginClick}" styleClass="imj_metaMenuItem">
+						<h:commandLink  id="lnkLogin1"  title="#{lbl.login}" action ="#{LoginBean.loginClick}" styleClass="imj_metaMenuItem">
 			    			<h:outputText value="#{lbl.login}"></h:outputText>
 			    			<f:ajax render="@form"/>
 			   			</h:commandLink>
@@ -61,9 +61,7 @@ All rights reserved. Use is subject to license terms.
 					<h:panelGroup rendered="#{SessionBean.showLogin}">
 						<h:inputText value="#{LoginBean.login}" placeholder=""/>
 						<h:inputSecret value="#{LoginBean.passwd}" placeholder=""/>
-						<h:commandLink id="lnkLogin" title="#{lbl.login}" action ="#{LoginBean.doLogin}" styleClass="imj_metaMenuItem">
-			    			<h:outputText value="#{lbl.login}"></h:outputText>
-			   			</h:commandLink>
+						<h:commandButton id="lnkLogin" title="#{lbl.login}" value="#{lbl.login}" action="#{LoginBean.doLogin}" styleClass="imj_metaMenuItem"/>
 					</h:panelGroup>
 				</h:panelGroup>
 				
@@ -71,6 +69,7 @@ All rights reserved. Use is subject to license terms.
 			    	<h:outputText value="#{lbl.logout}"></h:outputText>
 			    </h:commandLink>
 			</h:form>
+			
 			
 			<!-- CSS Switcher -->
 			<ui:fragment rendered="#{Configuration.alternativeCss != null and Configuration.alternativeCss != ''}">

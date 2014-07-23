@@ -74,27 +74,30 @@ public class AlbumBean extends ContainerBean
     public AlbumBean(Album album)
     {
         this.album = album;
-        this.id = ObjectHelper.getId(album.getId());
-        // album = ObjectLoader.loadAlbumLazy(ObjectHelper.getURI(Album.class, id), sessionBean.getUser());
-        sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        if (sessionBean.getActiveAlbum() != null && sessionBean.getActiveAlbum().getId().equals(album.getId()))
+        if (album != null)
         {
-            active = true;
-        }
-        if (album != null && album.getId() != null)
-        {
-            findItems(sessionBean.getUser(), 1);
-            loadItems(sessionBean.getUser());
-            countItems(sessionBean.getUser());
-            description = album.getMetadata().getDescription();
-            descriptionFull = description;
-            description = CommonUtils.removeTags(description);
-            if (description != null && description.length() > DESCRIPTION_MAX_SIZE)
+            this.id = ObjectHelper.getId(album.getId());
+            // album = ObjectLoader.loadAlbumLazy(ObjectHelper.getURI(Album.class, id), sessionBean.getUser());
+            sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+            if (sessionBean.getActiveAlbum() != null && sessionBean.getActiveAlbum().getId().equals(album.getId()))
             {
-                description = description.substring(0, DESCRIPTION_MAX_SIZE) + "...";
+                active = true;
             }
-            if (!getItems().isEmpty())
-                thumbnail = new ThumbnailBean(getItems().get(0));
+            if (album.getId() != null)
+            {
+                findItems(sessionBean.getUser(), 1);
+                loadItems(sessionBean.getUser());
+                countItems(sessionBean.getUser());
+                description = album.getMetadata().getDescription();
+                descriptionFull = description;
+                description = CommonUtils.removeTags(description);
+                if (description != null && description.length() > DESCRIPTION_MAX_SIZE)
+                {
+                    description = description.substring(0, DESCRIPTION_MAX_SIZE) + "...";
+                }
+                if (!getItems().isEmpty())
+                    thumbnail = new ThumbnailBean(getItems().get(0));
+            }
         }
     }
 

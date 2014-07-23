@@ -5,21 +5,21 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:menu="http://java.sun.com/jsf/composite/components/menu">
 	
-	<ui:param name="imageBean" value="#{AlbumImageBean}"/>
+	<ui:param name="itemBean" value="#{AlbumItemBean}"/>
 	<ui:param name="headline" value="#{lbl.details}:"/>
-	<ui:param name="headlineSecondRow" value="#{AlbumImageBean.album.metadata.title}"/>
+	<ui:param name="headlineSecondRow" value="#{AlbumItemBean.album.metadata.title}"/>
 	<ui:param name="currentMainMenu" value="album"/>
-	<ui:param name="browseToAllItemsUrl" value="#{Navigation.albumUrl}#{AlbumImageBean.albumId}/browse?q="/>
+	<ui:param name="browseToAllItemsUrl" value="#{Navigation.albumUrl}#{AlbumItemBean.albumId}/browse?q="/>
 	
 	
 	
 	<ui:define name="actionsMenu">
-		<ui:fragment rendered="#{Auth.read(imageBean.image)}">
-			<menu:context_subNavigation contextId="#{imageBean.albumId}" 
+		<ui:fragment rendered="#{Auth.read(itemBean.image)}">
+			<menu:context_subNavigation contextId="#{itemBean.albumId}" 
 									contextUrl="#{Navigation.albumUrl}" 
 									curMainMenu="#{currentMainMenu}" 
 									userHasAdminRights="#{Auth.admin}" 
-									userHasUploadRights="#{Auth.create(imageBean.image)}" 
+									userHasUploadRights="#{Auth.create(itemBean.image)}" 
 									hasContent="true" 
 									navBean="#{Navigation}" 
 									activeMenu="item" />

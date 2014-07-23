@@ -14,7 +14,6 @@ import de.mpg.imeji.logic.search.vo.SearchElement;
 import de.mpg.imeji.logic.search.vo.SearchElement.SEARCH_ELEMENTS;
 import de.mpg.imeji.logic.search.vo.SearchGroup;
 import de.mpg.imeji.logic.search.vo.SearchLogicalRelation;
-import de.mpg.imeji.logic.search.vo.SearchMetadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
@@ -50,23 +49,27 @@ public class SearchGroupForm
      * @param profile
      * @param collectionId
      */
-    public SearchGroupForm(SearchGroup searchGroup, MetadataProfile profile, String profileId)
+    public SearchGroupForm(SearchGroup searchGroup, MetadataProfile profile)
     {
         this();
-        this.setProfileId(profileId);
-        for (SearchElement se : searchGroup.getElements())
+        if (profile != null)
         {
-            if (se.getType().equals(SEARCH_ELEMENTS.GROUP))
+            this.setProfileId(profile.getId().toString());
+            for (SearchElement se : searchGroup.getElements())
             {
-                // the searchgroup contains the metadata sarch (md=seachvalue)
-                elements.add(new SearchMetadataForm((SearchGroup)se, profile));
+                if (se.getType().equals(SEARCH_ELEMENTS.GROUP))
+                {
+                    // the searchgroup contains the metadata sarch (md=seachvalue)
+                    elements.add(new SearchMetadataForm((SearchGroup)se, profile));
+                }
+                else if (elements.size() > 0 && se.getType().equals(SEARCH_ELEMENTS.LOGICAL_RELATIONS))
+                {
+                    elements.get(elements.size() - 1).setLogicalRelation(
+                            ((SearchLogicalRelation)se).getLogicalRelation());
+                }
             }
-            else if (elements.size() > 0 && se.getType().equals(SEARCH_ELEMENTS.LOGICAL_RELATIONS))
-            {
-                elements.get(elements.size() - 1).setLogicalRelation(((SearchLogicalRelation)se).getLogicalRelation());
-            }
+            initStatementsMenu(profile);
         }
-        initStatementsMenu(profile);
     }
 
     /**

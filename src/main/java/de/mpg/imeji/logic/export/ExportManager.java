@@ -89,7 +89,7 @@ public class ExportManager
         String collectionId = export.getParam("col");
         String albumId = export.getParam("alb");
         String query = export.getParam("q");
-        String id = export.getParam("id");
+        export.getParam("id");
         String searchType = export.getParam("type");
         int maximumNumberOfRecords = 100;
         SearchQuery searchQuery = URLQueryTransformer.parseStringQuery(query);

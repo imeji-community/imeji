@@ -159,7 +159,7 @@ input:focus {
 input[type="checkbox"] {
 	margin: 0.090909em 0 0 0.090909em;
 	outline: none;
-	background-color: transparent;
+	background-color: inherit;
 	border: 0;
 }
 
@@ -168,6 +168,7 @@ input[type=radio]{
   padding   : 0;
   font-size : 1em;
   outline: none;
+  background-color: inherit;
 }
 /*
 input[type=radio] + label{
@@ -590,26 +591,20 @@ iframe#twitter-widget-0 div.root div.stream {
 
 /* ===[ SiteHeader - Logo + Search Area]===
    ================================================== */
-.imj_siteHeaderLogoSearchSection {
+.imj_siteHeaderMenuSearchSection {
 	width: 100%;
 	padding: 0;
-	margin: 0.454545em 0;
+	margin: 0 0 2em 0;
 }
 
 /* ===[ SiteHeader - Logo ]===
    ================================================== */
-.imj_siteHeaderLogoArea {
-	display: inline-block;
-	padding: 0 2em 0 0;
-}
-
-.imj_siteHeaderLogo {
+.imj_logo {
 	width: 13em;
 	height: 5em;
 	padding: 0;
 	display: inline-block;
-	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/logo_imeji.gif")
-		no-repeat scroll -1.909090em 0 transparent;
+	background: url("/imeji/jsf/javax.faces.resource/imj_iconset/logo_imeji.gif") no-repeat scroll -1.909090em 0 transparent;
 }
 
 /* ===[ SiteHeader - SimpleSearch ]===
@@ -627,16 +622,22 @@ iframe#twitter-widget-0 div.root div.stream {
 }
 
 .imj_simpleSearchInput {
+	height: 1.090909em;
 	width: 17em;
-	padding: 0.75% 1em 0.1em 1em;
-	border-radius: 5px 0px 0px 5px; 
+	padding: 0.181818em 1em 0.181818em 1em;
+	border-color: transparent;
+	border-radius: 5px 0px 0px 5px;
+	outline: 0 none;
+	vertical-align: top;
 }
 
 .imj_simpleSearchButtonSubmit {
+	height: 1.818181em;
 	padding: 0 1em 0.1em 1em;
 	background-color: #6CAE2F;
 	color: #F0F0F0;
 	border-radius: 0px 5px 5px 0px;
+	vertical-align: top;
 }
 
 .imj_simpleSearchButtonSubmit:hover {
@@ -660,6 +661,7 @@ iframe#twitter-widget-0 div.root div.stream {
 	margin-left: 0.090909em;
 	margin-right: 1em;
 }
+
 
 /* ===[ ICONS - Buttons ]===
    ================================================== */
@@ -1422,7 +1424,7 @@ h4.imj_sectionHeadline {
 	text-align: center;
 }
 
-/* item-styles - .imj_removeMedia, .imj_addMedia , .imj_activeMedia, .imj_selectMedia 
+/* item-styles - .imj_removeButton, .imj_addMedia , .imj_activeMedia, .imj_selectMedia 
  * (image_details.xhtml) 
  ==================================================================================*/
 .imj_selectMedia {
@@ -1434,7 +1436,7 @@ h4.imj_sectionHeadline {
 	background-color: #444444;
 }
 
-.imj_removeMedia:hover {
+.imj_removeButton:hover {
 	color: #F0F0F0;
 	background-color: #990000;
 }
@@ -3492,3 +3494,9 @@ a.imj_editButton {
 	border: solid #BBBBBB;
 	cursor: default;
 }
+
+// Extension
+.imj_simpleSearch .imj_searchInfoText { display: inline-block; margin: 0 0.272727em; }
+.imj_administrationTiledList .imj_adminPanel .imj_headline { padding: 0.454545em 0.81818181em; text-align: center; background-color: #292929; -webkit-border-radius: 0.90909em 0.90909em 0 0; -moz-border-radius: 0.90909em 0.90909em 0 0; -ms-border-radius: 0.90909em 0.90909em 0 0; -o-border-radius: 0.90909em 0.90909em 0 0; border-radius: 0.90909em 0.90909em 0 0; border: 0.1em solid #292929; }
+.imj_administrationTiledList .imj_adminPanel .imj_content { padding: 0.454545em 0.81818181em; min-height: 10em; -webkit-border-radius: 0 0 0.90909em 0.90909em; -moz-border-radius: 0 0 0.90909em 0.90909em; -ms-border-radius: 0 0 0.90909em 0.90909em; -o-border-radius: 0 0 0.90909em 0.90909em; border-radius: 0 0 0.90909em 0.90909em; border: 0.1em solid #292929; }
+

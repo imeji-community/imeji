@@ -11,7 +11,6 @@ import javax.faces.bean.RequestScoped;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Organization;
@@ -99,18 +98,6 @@ public class ViewCollectionBean extends CollectionBean
     protected String getNavigationString()
     {
         return "pretty:collectionInfos";
-    }
-
-    public String getPersonString()
-    {
-        String personString = "";
-        for (Person p : getCollection().getMetadata().getPersons())
-        {
-            if (!"".equalsIgnoreCase(personString))
-                personString += " / ";
-            personString += p.getFamilyName() + ", " + p.getGivenName() + " ";
-        }
-        return personString;
     }
 
     public String getSmallDescription()

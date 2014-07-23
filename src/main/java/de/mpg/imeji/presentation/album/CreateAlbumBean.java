@@ -28,6 +28,8 @@
  */
 package de.mpg.imeji.presentation.album;
 
+import java.util.List;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -35,6 +37,7 @@ import javax.faces.context.FacesContext;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.vo.Album;
+import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
@@ -69,7 +72,7 @@ public class CreateAlbumBean extends AlbumBean
         getAlbum().getMetadata().setTitle("");
         getAlbum().getMetadata().setDescription("");
         getAlbum().getMetadata().getPersons().clear();
-        getAlbum().getMetadata().getPersons().add(ImejiFactory.newPerson());
+        getAlbum().getMetadata().getPersons().add(sessionBean.getUser().getPerson());
     }
 
     /*

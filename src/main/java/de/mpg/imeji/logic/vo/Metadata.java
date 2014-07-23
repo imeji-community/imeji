@@ -15,6 +15,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
+
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Date;
@@ -45,7 +46,9 @@ import de.mpg.j2j.annotations.j2jResource;
 public abstract class Metadata implements Comparable<Metadata>, Serializable
 {
     private static final long serialVersionUID = -6967620655990351430L;
+    
     private URI id = IdentifierUtil.newURI(Metadata.class);
+       
     @j2jLiteral("http://imeji.org/terms/position")
     private int pos = 0;
 

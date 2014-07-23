@@ -140,8 +140,10 @@ $(function() {
 		if (offset == 0 && datasourceUrl != null && datasourceUrl != '') {
 			this.value = " ";
 			$(this).autocomplete("search");
+			this.value = "";
 			// force an error (event is null) to avoid more calls on focus
 			event.getPreventDefault();
+			
 		}
 
 	});

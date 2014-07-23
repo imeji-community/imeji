@@ -21,12 +21,14 @@ import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Grant;
+import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 
 public class UserBean
@@ -38,6 +40,8 @@ public class UserBean
     private SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     private String id;
     private List<SharedHistory> roles = new ArrayList<SharedHistory>();
+    private boolean changeEmail = false;
+    private boolean edit = false;
 
     public UserBean()
     {
@@ -68,7 +72,9 @@ public class UserBean
             repeatedPassword = null;
             retrieveUser();
             this.roles = AuthUtil.getAllRoles(user, session.getUser());
-            this.newEmail = null;
+            this.newEmail = user.getEmail();
+            this.changeEmail = false;
+            this.setEdit(false);
         }
         catch (Exception e)
         {
@@ -93,49 +99,6 @@ public class UserBean
     }
 
     /**
-     * Change the Email of the user:<br/>
-     * if the new email is valid and is not already used, then create a new user with this email and delete the old one
-     */
-    public void changeEmail()
-    {
-        User newUser = user.clone(newEmail);
-        if (!UserCreationBean.isValidEmail(newUser.getEmail()))
-        {
-            BeanHelper.error(session.getMessage("error_user_email_not_valid"));
-        }
-        else
-        {
-            try
-            {
-                if (UserCreationBean.userAlreadyExists(newUser))
-                {
-                    BeanHelper.error(session.getMessage("error_user_already_exists"));
-                }
-                else
-                {
-                    UserController uc = new UserController(session.getUser());
-                    // Create the new user
-                    uc.create(newUser);
-                    // If the edited user is the current user, put the new user in the session
-                    if (session.getUser().getEmail().equals(user.getEmail()))
-                    {
-                        session.setUser(newUser);
-                        uc = new UserController(session.getUser());
-                    }
-                    // delete the old user
-                    uc.delete(user);
-                    init(newUser.getEmail());
-                }
-                reloadPage();
-            }
-            catch (Exception e)
-            {
-                BeanHelper.error(session.getMessage("error") + ": " + e);
-            }
-        }
-    }
-
-    /**
      * Change the password of the user
      * 
      * @throws Exception
@@ -155,7 +118,31 @@ public class UserBean
                 BeanHelper.error(session.getMessage("error_user_repeat_password"));
             }
         }
-        reloadPage();
+    }
+
+    public void toggleEdit()
+    {
+        this.edit = edit ? false : true;
+    }
+
+    /**
+     * Add a new empty organization
+     * 
+     * @param index
+     */
+    public void addOrganization(int index)
+    {
+        ((List<Organization>)this.user.getPerson().getOrganizations()).add(index, ImejiFactory.newOrganization());
+    }
+
+    /**
+     * Remove an nth organization
+     * 
+     * @param index
+     */
+    public void removeOrganization(int index)
+    {
+        ((List<Organization>)this.user.getPerson().getOrganizations()).remove(index);
     }
 
     /**
@@ -226,15 +213,75 @@ public class UserBean
     {
         if (user != null)
         {
-            UserController controller = new UserController(session.getUser());
+            if (changeEmail)
+                changeEmail();
+            else
+            {
+                UserController controller = new UserController(session.getUser());
+                try
+                {
+                    controller.update(user, session.getUser());
+                }
+                catch (Exception e)
+                {
+                    BeanHelper.error(e.getMessage());
+                    e.printStackTrace();
+                }
+                finally
+                {
+                    reloadPage();
+                }
+            }
+        }
+    }
+
+    public void changeEmailListener()
+    {
+        this.changeEmail = true;
+    }
+
+    /**
+     * Change the Email of the user:<br/>
+     * if the new email is valid and is not already used, then create a new user with this email and delete the old one
+     */
+    public void changeEmail()
+    {
+        User newUser = user.clone(newEmail);
+        if (!UserCreationBean.isValidEmail(newUser.getEmail()))
+        {
+            BeanHelper.error(session.getMessage("error_user_email_not_valid"));
+        }
+        else
+        {
             try
             {
-                controller.update(user);
+                if (UserCreationBean.userAlreadyExists(newUser))
+                {
+                    BeanHelper.error(session.getMessage("error_user_already_exists"));
+                }
+                else
+                {
+                    UserController uc = new UserController(session.getUser());
+                    // Create the new user
+                    uc.create(newUser);
+                    // If the edited user is the current user, put the new user in the session
+                    if (session.getUser().getEmail().equals(user.getEmail()))
+                    {
+                        session.setUser(newUser);
+                        uc = new UserController(session.getUser());
+                    }
+                    // delete the old user
+                    uc.delete(user);
+                    init(newUser.getEmail());
+                }
             }
             catch (Exception e)
             {
-                BeanHelper.error(e.getMessage());
-                e.printStackTrace();
+                BeanHelper.error(session.getMessage("error") + ": " + e);
+            }
+            finally
+            {
+                reloadPage();
             }
         }
     }
@@ -244,11 +291,18 @@ public class UserBean
      * 
      * @throws IOException
      */
-    private void reloadPage() throws IOException
+    private void reloadPage()
     {
         Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-        FacesContext.getCurrentInstance().getExternalContext()
-                .redirect(navigation.getUserUrl() + "?id=" + user.getEmail());
+        try
+        {
+            FacesContext.getCurrentInstance().getExternalContext()
+                    .redirect(navigation.getUserUrl() + "?id=" + user.getEmail());
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public User getUser()
@@ -311,5 +365,21 @@ public class UserBean
     public void setRoles(List<SharedHistory> roles)
     {
         this.roles = roles;
+    }
+
+    /**
+     * @return the edit
+     */
+    public boolean isEdit()
+    {
+        return edit;
+    }
+
+    /**
+     * @param edit the edit to set
+     */
+    public void setEdit(boolean edit)
+    {
+        this.edit = edit;
     }
 }

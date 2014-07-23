@@ -260,7 +260,9 @@ public abstract class CollectionBean extends ContainerBean
         try
         {
             cc.delete(collection, sessionBean.getUser());
-            BeanHelper.info(sessionBean.getMessage("success_collection_delete"));
+            //BeanHelper.info(sessionBean.getMessage("success_collection_delete"));
+            BeanHelper.info(sessionBean.getMessage("success_collection_delete").replace("XXX_collectionName_XXX",
+                    this.collection.getMetadata().getTitle()));
         }
         catch (Exception e)
         {

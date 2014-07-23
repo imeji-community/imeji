@@ -32,7 +32,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 
 import de.mpg.imeji.logic.export.format.ExplainExport;
-import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
 
@@ -56,7 +56,7 @@ public class SearchExplainExport extends ExplainExport
         try
         {
             writer.append(getRDFTagOpen());
-            for (SearchIndex index : Search.indexes.values())
+            for (SearchIndex index : SPARQLSearch.indexes.values())
             {
                 writer.append(getIndexTag(index.getName(), index.getNamespace()));
             }

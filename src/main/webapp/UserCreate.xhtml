@@ -46,35 +46,86 @@
 										</div>
 										<div class="imj_admindataValue">
 											<div class="imj_admindataValueEntry">
-												<h:inputText id="inputEmailText" styleClass="imj_admindataEdit" value="#{UserCreationBean.user.email}" required="true"/>
+												<h:inputText id="inputEmailText" styleClass="imj_admindataEdit" value="#{UserCreationBean.user.email}" />
 											</div>
 										</div>
 									</h:panelGroup>
 										
 																
 									<!-- AdminDataList - Name -->
+									<ui:fragment rendered="false">
+										<h:panelGroup layout="block" styleClass="imj_admindataSet">
+											<div class="imj_admindataLabel">
+												<h:outputText value="#{lbl.name}"/>
+												<span class="imj_invisible">: </span>
+											</div>				
+											<div class="imj_admindataValue">
+												<div class="imj_admindataValueEntry">
+													<h:inputText id="inputNameText" styleClass="imj_admindataEdit" value="#{UserCreationBean.user.name}" />
+												</div>
+											</div>
+										</h:panelGroup>
+									</ui:fragment>
+									
 									<h:panelGroup layout="block" styleClass="imj_admindataSet">
 										<div class="imj_admindataLabel">
-											<h:outputText value="#{lbl.name}"/>
+											<h:outputText value="#{lbl.family_name}"/>
 											<span class="imj_invisible">: </span>
 										</div>				
 										<div class="imj_admindataValue">
 											<div class="imj_admindataValueEntry">
-												<h:inputText id="inputNameText" styleClass="imj_admindataEdit" value="#{UserCreationBean.user.name}" required="true"/>
+												<h:inputText id="inputFamilyNameText" styleClass="imj_admindataEdit" value="#{UserCreationBean.user.person.familyName}" />
 											</div>
 										</div>
-									</h:panelGroup>											
-									
-									<!-- AdminDataList - Nickname -->
+									</h:panelGroup>	
 									<h:panelGroup layout="block" styleClass="imj_admindataSet">
 										<div class="imj_admindataLabel">
-											<h:outputText value="#{lbl.nickname}"/>
+											<h:outputText value="#{lbl.first_name}"/>
+											<span class="imj_invisible">: </span>
+										</div>				
+										<div class="imj_admindataValue">
+											<div class="imj_admindataValueEntry">
+												<h:inputText id="inputGiveNameText" styleClass="imj_admindataEdit" value="#{UserCreationBean.user.person.givenName}" />
+											</div>
+										</div>
+									</h:panelGroup>							
+									
+									<!-- AdminDataList - Nickname -->
+									<ui:fragment rendered="false">
+										<h:panelGroup layout="block" styleClass="imj_admindataSet">
+											<div class="imj_admindataLabel">
+												<h:outputText value="#{lbl.nickname}"/>
+												<span class="imj_invisible">: </span>
+											</div>
+											<div class="imj_admindataValue">
+												<div class="imj_admindataValueEntry">
+													<h:inputText id="inputNickText" styleClass="imj_admindataEdit" value="#{UserCreationBean.user.nick}"/>
+												</div>
+											</div>
+										</h:panelGroup>
+									</ui:fragment>
+									
+									<h:panelGroup layout="block" styleClass="imj_admindataSet">
+										<div class="imj_admindataLabel">
+											<h:outputText value="#{lbl.organization}"/>
 											<span class="imj_invisible">: </span>
 										</div>
 										<div class="imj_admindataValue">
-											<div class="imj_admindataValueEntry">
-												<h:inputText id="inputNickText" styleClass="imj_admindataEdit" value="#{UserCreationBean.user.nick}" required="true"/>
-											</div>
+											<ui:repeat var="org" value="#{UserCreationBean.user.person.organizations}" varStatus="index" >
+												<div class="imj_admindataValueEntry">
+													<h:inputText id="inputOrgaName" styleClass="imj_admindataEdit" value="#{org.name}" />
+												</div>
+												<span class="imj_noDisplay">: </span>
+													<span class="imj_inlineButtonGroup">
+													<h:commandButton styleClass="imj_buttonAdd_16" type="submit" title="#{lbl.add_organization}" action="#{UserCreationBean.addOrganization(index.index + 1)}">
+														<f:ajax execute="@form" render="@form"/>
+													</h:commandButton>
+													<h:commandButton styleClass="imj_buttonRemove_16" type="submit" title="#{lbl.remove_organization}" action="#{UserCreationBean.removeOrganization(index.index)}">
+														<f:ajax execute="@form" render="@form"/>
+													</h:commandButton>
+												</span>
+												<br/><br/>
+											</ui:repeat>
 										</div>
 									</h:panelGroup>
 									
@@ -111,7 +162,7 @@
 									<h:outputLink value="#{Navigation.applicationUrl}users" styleClass="imj_cancelButton">
 										<h:outputText value="#{lbl.cancel}" />
 									</h:outputLink>
-									<h:commandButton action="#{UserCreationBean.create}" value="#{lbl.save}" styleClass="imj_submitButton"/> 
+									<h:commandButton action="#{UserCreationBean.create}" type="submit" value="#{lbl.save}" styleClass="imj_submitButton"/> 
 									<!-- Create a new label value for "Create User" instead of "Save" -->
 								</h:panelGroup>
 								

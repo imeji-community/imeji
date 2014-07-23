@@ -31,6 +31,9 @@ package storage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Arrays;
+
 import junit.framework.Assert;
 
 import org.apache.commons.io.FileUtils;
@@ -117,30 +120,30 @@ public class StorageTest
         StorageController sc = new StorageController("internal");
         InternalStorageManager manager = new InternalStorageManager();
         // UPLOAD
-        File file = new File("/src/test/resources/temp");
+        File file = new File(TEST_IMAGE);
         UploadResult res = sc.upload(filename, file, "1");
         Assert.assertFalse(res.getOrginal() + " url is same as path",
                 res.getOrginal().equals(manager.transformUrlToPath(res.getOrginal())));
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         // READ THE URL
         sc.read(res.getOrginal(), baos, true);
+        baos.toByteArray();
         byte[] stored = baos.toByteArray();
+        try
+        {
+            // Test if the uploaded file is the (i.e has the same hashcode) the one which has been stored
+            Assert.assertTrue("Uploaded file has been modified",
+                    Arrays.hashCode(FileUtils.readFileToByteArray(file)) == Arrays.hashCode(stored));
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
         // DELETE THE FILE
         sc.delete(res.getId());
+        // Test that the file has been correctly deleted (i.e, the number of files in the storage is null)
         Assert.assertEquals(0, manager.getAdministrator().getNumberOfFiles());
         // Assert.assertTrue(Arrays.equals(original, stored));
         // Assert.assertTrue(Arrays.hashCode(original) == Arrays.hashCode(stored));
-    }
-
-    /**
-     * Read a file at the given path
-     * 
-     * @param path
-     * @return
-     * @throws FileNotFoundException
-     */
-    private File readFile(String path) throws FileNotFoundException
-    {
-        return new File(path);
     }
 }

@@ -34,13 +34,17 @@ import de.mpg.imeji.presentation.util.ObjectLoader;
 public class UserBean
 {
     private User user;
+    private String newEmail = null;
+    private String newFamilyName = null;
     private String newPassword = null;
     private String repeatedPassword = null;
-    private String newEmail = null;
+
+    
     private SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     private String id;
     private List<SharedHistory> roles = new ArrayList<SharedHistory>();
     private boolean changeEmail = false;
+    private boolean changeFamilyName = false;
     private boolean edit = false;
 
     public UserBean()
@@ -73,7 +77,9 @@ public class UserBean
             retrieveUser();
             this.roles = AuthUtil.getAllRoles(user, session.getUser());
             this.newEmail = user.getEmail();
+            this.newFamilyName = user.getPerson().getFamilyName();
             this.changeEmail = false;
+            this.changeFamilyName = false;
             this.setEdit(false);
         }
         catch (Exception e)
@@ -205,51 +211,81 @@ public class UserBean
             gc.addGrants(user, (List<Grant>)gc.toList(g), session.getUser());
         }
     }
+    
+    private boolean inputValid()
+    {
+    	boolean valid = true;
+        if(changeFamilyName)
+        {
+        	if(newFamilyName == null || "".equals(newFamilyName))
+        	{
+        		BeanHelper.error(session.getMessage("error_user_name_unfilled"));
+        		valid = false;
+        	}
+        	else if (changeEmail && changeEmail())
+        	{
+        		this.user.getPerson().setFamilyName(newFamilyName);
+        	}
+        	else
+        		valid = false;
+        		
+        }
+        if (changeEmail && !changeEmail())
+        {
+            valid = false;
+        }
+
+        return valid;
+    }
 
     /**
      * Update the user in jena
      */
     public void updateUser()
     {
-        if (user != null)
+        if (user != null && inputValid())
         {
-            if (changeEmail)
-                changeEmail();
-            else
+
+            UserController controller = new UserController(session.getUser());
+            try
             {
-                UserController controller = new UserController(session.getUser());
-                try
-                {
-                    controller.update(user, session.getUser());
-                }
-                catch (Exception e)
-                {
-                    BeanHelper.error(e.getMessage());
-                    e.printStackTrace();
-                }
-                finally
-                {
-                    reloadPage();
-                }
+                controller.update(user, session.getUser());
+            }
+            catch (Exception e)
+            {
+                BeanHelper.error(e.getMessage());
+                e.printStackTrace();
+            }
+            finally
+            {
+                reloadPage();
             }
         }
+
     }
 
     public void changeEmailListener()
     {
         this.changeEmail = true;
     }
+    
+    public void changeFamilyNameListerner()
+    {
+    	this.changeFamilyName = true;
+    }
 
     /**
      * Change the Email of the user:<br/>
      * if the new email is valid and is not already used, then create a new user with this email and delete the old one
      */
-    public void changeEmail()
+    public boolean changeEmail()
     {
+    	boolean emailChanged = true;
         User newUser = user.clone(newEmail);
         if (!UserCreationBean.isValidEmail(newUser.getEmail()))
         {
             BeanHelper.error(session.getMessage("error_user_email_not_valid"));
+            emailChanged = false;
         }
         else
         {
@@ -258,6 +294,7 @@ public class UserBean
                 if (UserCreationBean.userAlreadyExists(newUser))
                 {
                     BeanHelper.error(session.getMessage("error_user_already_exists"));
+                    emailChanged = false;
                 }
                 else
                 {
@@ -278,12 +315,14 @@ public class UserBean
             catch (Exception e)
             {
                 BeanHelper.error(session.getMessage("error") + ": " + e);
+                emailChanged = false;
             }
             finally
             {
                 reloadPage();
             }
         }
+        return emailChanged;
     }
 
     /**
@@ -382,4 +421,14 @@ public class UserBean
     {
         this.edit = edit;
     }
+
+	public String getNewFamilyName() {
+		return newFamilyName;
+	}
+
+	public void setNewFamilyName(String newFamilyName) {
+		this.newFamilyName = newFamilyName;
+	}
+    
+    
 }

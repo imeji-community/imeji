@@ -63,7 +63,6 @@ public class UserBean
      */
     public String getInit()
     {
-    	System.err.println("getInit");
         init(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id"));
         return "";
     }
@@ -216,7 +215,6 @@ public class UserBean
     private boolean inputValid()
     {
     	boolean valid = true;
-    	System.err.println("newFamilyName = " + newFamilyName);
         if(changeFamilyName)
         {
         	if(newFamilyName == null || "".equals(newFamilyName))

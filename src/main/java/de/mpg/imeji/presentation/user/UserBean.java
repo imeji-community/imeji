@@ -63,6 +63,7 @@ public class UserBean
      */
     public String getInit()
     {
+    	System.err.println("getInit");
         init(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id"));
         return "";
     }
@@ -211,10 +212,11 @@ public class UserBean
             gc.addGrants(user, (List<Grant>)gc.toList(g), session.getUser());
         }
     }
-    
+     
     private boolean inputValid()
     {
     	boolean valid = true;
+    	System.err.println("newFamilyName = " + newFamilyName);
         if(changeFamilyName)
         {
         	if(newFamilyName == null || "".equals(newFamilyName))
@@ -227,8 +229,7 @@ public class UserBean
         		this.user.getPerson().setFamilyName(newFamilyName);
         	}
         	else
-        		valid = false;
-        		
+        		this.user.getPerson().setFamilyName(newFamilyName);
         }
         if (changeEmail && !changeEmail())
         {
@@ -242,7 +243,7 @@ public class UserBean
      * Update the user in jena
      */
     public void updateUser()
-    {
+    { 
         if (user != null && inputValid())
         {
 
@@ -256,10 +257,10 @@ public class UserBean
                 BeanHelper.error(e.getMessage());
                 e.printStackTrace();
             }
-            finally
-            {
-                reloadPage();
-            }
+//            finally
+//            {
+//                reloadPage();
+//            }
         }
 
     }
@@ -279,7 +280,7 @@ public class UserBean
      * if the new email is valid and is not already used, then create a new user with this email and delete the old one
      */
     public boolean changeEmail()
-    {
+    {  
     	boolean emailChanged = true;
         User newUser = user.clone(newEmail);
         if (!UserCreationBean.isValidEmail(newUser.getEmail()))
@@ -335,8 +336,8 @@ public class UserBean
         Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
         try
         {
-            FacesContext.getCurrentInstance().getExternalContext()
-                    .redirect(navigation.getUserUrl() + "?id=" + user.getEmail());
+        	String url = navigation.getUserUrl() + "?id=" + user.getEmail();
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url);
         }
         catch (IOException e)
         {

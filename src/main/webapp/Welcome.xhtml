@@ -83,16 +83,15 @@
 		<div class="imj_mainContentWrapper">
 			<!-- Main Content -->							
 			<div id="imj_welcomeInfoWrapper" class="imj_welcomeInfo">
-				
 				<!-- HTML Snippet defined in the configuration -->
 				<ui:repeat var="lang" value="#{Internationalization.internationalizedLanguages}">
-					<ui:fragment rendered="#{SessionBean.locale == lang.value}">
-						<div id="tabsEN" class="id_tabs" >
-							<h:outputText value="#{Configuration.getStartPageHTML(lang.value)}" escape="false"/>
-						</div>
-					</ui:fragment>
+					
 				</ui:repeat>
-				
+				<ui:fragment rendered="#{Configuration.getStartPageHTML(SessionBean.locale) != ''}">
+					<div id="tabsEN" class="id_tabs" >
+						<h:outputText value="#{Configuration.getStartPageHTML(SessionBean.locale)}" escape="false"/>
+					</div>
+				</ui:fragment>
 				<!-- Default Startpage content (if configuration is emtpy) -->
 				<ui:fragment rendered="#{Configuration.getStartPageHTML('en') == '' and (SessionBean.locale == 'en' or SessionBean.locale == 'es')}">
 					<div id="tabsEN_OLD" class="id_tabs" >

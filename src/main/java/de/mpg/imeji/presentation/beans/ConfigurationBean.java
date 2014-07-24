@@ -291,7 +291,8 @@ public class ConfigurationBean
      */
     public String getStartPageHTML(String lang)
     {
-        return (String)config.get(CONFIGURATION.STARTPAGE_HTML.name() + "_" + lang);
+        String html = (String)config.get(CONFIGURATION.STARTPAGE_HTML.name() + "_" + lang);
+        return html != null ? html : "";
     }
 
     /**

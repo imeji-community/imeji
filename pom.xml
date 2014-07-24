@@ -556,6 +556,12 @@
 			<version>1.9</version>
 			<scope>compile</scope>
 		</dependency>		
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-json</artifactId>
+			<version>1.8</version>
+		</dependency>		
+		
 		
 		<!-- <dependency> <groupId>net.java.dev.jai-imageio</groupId> <artifactId>jai-imageio-core-standalone</artifactId> 
 			<version>1.2-pre-dr-b04-2011-07-04</version> </dependency> <dependency> <groupId>org.devlib.schmidt</groupId> 

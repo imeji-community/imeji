@@ -44,6 +44,20 @@ public class RestService implements Pathes {
 		return RestProcessGeneric.hallo();
 	}
 	
+//	@GET @Path(Pathes.PATH_COLLECTIONS)
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public Response getCollections() {
+//		return null;
+//	}
+//	
+//	{ 
+//	     {"uri":"uri1", "name":"name1"}, 
+//	     {"uri":"uri2", "name":"name2"} 
+//	}
+//	
+	
+	 
+		
 	
 	
 }

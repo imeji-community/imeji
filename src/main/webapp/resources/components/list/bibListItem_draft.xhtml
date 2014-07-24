@@ -21,54 +21,35 @@
 		<ui:param name="withdrawID" value="listItem-#{cc.attrs.itemIndex}-dialDiscardContainer-dialogWithdraw"/>
 
 		<li class="#{cc.attrs.itemClass}#{cc.attrs.isActivatable == 'yes' and cc.attrs.item.active ? ' imj_active' : ''}">
-			<!-- <div class="imj_statusArea">
-				<ui:fragment rendered="#{cc.attrs.item.status == 'PENDING'}">
-					<div class="imj_statusIconArea">
-						<h:panelGroup styleClass="imj_icoStatusPending_32"/>
-					</div>
-					<h:outputText value="#{lbl['private']}"/>
-				</ui:fragment>
-				
-				<ui:fragment rendered="#{cc.attrs.item.status == 'RELEASED'}">
-					<div class="imj_statusIconArea">
-						<h:panelGroup styleClass="imj_icoStatusReleased_32"/>
-					</div>
-					<h:outputText value="#{lbl.published}"/>
-				</ui:fragment>
-				
-				<ui:fragment rendered="#{cc.attrs.item.status == 'WITHDRAWN'}">
-					<div class="imj_statusIconArea">
-						<h:panelGroup styleClass="imj_icoStatusWithdrawn_32"/>
-					</div>
-					<h:outputText value="#{lbl.withdrawn}"/>
-				</ui:fragment>			
-			</div>
-			 -->
-			 
+					 
 			 <div class="imj_previewArea">
 				<div class="imj_previewImage imj_imageStack">			
-					<h:outputLink value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}">						
+					<h:outputLink value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}/#{Navigation.browsePath}?q=">						
 						<h:graphicImage value="#{Navigation.applicationUrl}file?id=#{cc.attrs.item.thumbnail.link}" alt="preview picture" 
 										rendered="#{cc.attrs.item.thumbnail.link != null and cc.attrs.item.size > 0}"/>
 					  	<h:graphicImage value="#{Navigation.applicationUrl}resources/icon/empty.png" alt="preview picture" 
 					    				rendered="#{cc.attrs.item.size == 0 and cc.attrs.item.status != 'WITHDRAWN'}" title="#{lbl.ContainerEmpty}"/>
 					    <h:graphicImage value="#{Navigation.applicationUrl}resources/icon/discarded.png" alt="preview picture" 
-					    				rendered="#{cc.attrs.item.status == 'WITHDRAWN'}" title="#{lbl.ContainerEmpty}"/>
-					    
+					    				rendered="#{cc.attrs.item.status == 'WITHDRAWN'}" title="#{lbl.ContainerEmpty}"/>				    
 					</h:outputLink>					 
 					<h:outputText value="#{cc.attrs.item.size} #{lbl.images}" class="imj_itemCount"/>
 				</div>
 			</div>
-			
+
 			<div class="imj_informationContent">
+
 				<!-- description area - includes default values - START -->
-				<div class="imj_descriptionArea">
-									 
-					<h3 class="imj_itemHeadline imj_containerHeadline">  
-						<h:outputLink value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}" title="#{cc.attrs.item.title}">
-							<h:outputText value="#{cc.attrs.item.title}"/>
-						</h:outputLink>
-					</h3>
+
+					<div>
+						<h:graphicImage value="#{Navigation.applicationUrl}resources/icon/private_dark_grey.png" class="imj_containerLogoPrivate" rendered="#{cc.attrs.item.status != 'WITHDRAWN'}"/>
+					</div>
+					<div class="imj_itemHeadline imj_containerHeadline">
+						<h3>  
+							<h:outputLink value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}" title="#{cc.attrs.item.title}">
+								<h:outputText value="#{cc.attrs.item.title}"/>
+							</h:outputLink>
+						</h3>
+					</div>
 					<div class="imj_metadataSet">
 						<h:outputText value="#{lbl.by} #{cc.attrs.item.authors}" class="imj_containerAuthor"/>
 					</div>
@@ -95,7 +76,7 @@
 									</h:outputLink>
 								</li>	
 								<li>
-									<h:outputLink value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}/#{Navigation.browsePath}?q=">
+									<h:outputLink value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}/#{Navigation.browsePath}?q=" rendered="#{cc.attrs.item.size > 0}">
 										<h:outputText value="#{lbl.view_images}"/>
 									</h:outputLink>
 								</li>							
@@ -132,9 +113,7 @@
 							</ul>
 						</div>
 				   </div>
-				</div>
-			</div>
-			<h:graphicImage value="#{Navigation.applicationUrl}resources/icon/private_colored_small.png" class="imj_containerLogoPrivate" rendered="#{cc.attrs.item.status != 'WITHDRAWN'}"/>
+			</div>		
 		</li>
 		<style>
 			.imj_itemCount{
@@ -151,6 +130,8 @@
 			.imj_containerLogoPrivate{
 				width: 25px; 
 				float:right;
+				margin-top:10px;
+				margin-right:-40px;
 			}
 			.imj_containerDescExpand{
 				margin-top:-10px;

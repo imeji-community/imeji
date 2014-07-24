@@ -575,6 +575,14 @@
 								</goals>
 							</execution>
 						</executions>
+						<dependencies>
+							<dependency>
+								<groupId>org.codehaus.plexus</groupId>
+								<artifactId>plexus-utils</artifactId>
+								<version>1.4.1</version>
+								<scope>runtime</scope>
+							</dependency>
+						</dependencies>						
 					</plugin>
 					<plugin>
 						<artifactId>maven-antrun-plugin</artifactId>

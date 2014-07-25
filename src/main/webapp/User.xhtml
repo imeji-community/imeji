@@ -83,7 +83,7 @@
 												</div>
 												<div class="imj_admindataValue">
 													<h:panelGroup class="imj_admindataSetEdit" >
-														<h:inputText value="#{UserBean.user.person.familyName}" styleClass="imj_admindataEdit"/>
+														<h:inputText value="#{UserBean.newFamilyName}" valueChangeListener="#{UserBean.changeFamilyNameListerner}" styleClass="imj_admindataEdit"/>
 													</h:panelGroup>
 												</div>
 											</h:panelGroup>

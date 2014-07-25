@@ -65,12 +65,13 @@ public class ConfigurationBean
      */
     private enum CONFIGURATION
     {
-        SNIPPET, CSS_DEFAULT, CSS_ALT, MAX_FILE_SIZE, FILE_TYPES;
+        SNIPPET, CSS_DEFAULT, CSS_ALT, MAX_FILE_SIZE, FILE_TYPES, STARTPAGE_HTML;
     }
 
     private Properties config;
     private File configFile;
     private FileTypes fileTypes;
+    private String lang = "en";
     private final static Logger logger = Logger.getLogger(ConfigurationBean.class);
     // A list of predefined file types, which is set when imeji is initialized
     private final static String predefinedFileTypes = "[Image@en,Bilder@de=jpg,jpeg,tiff,tiff,jp2,pbm,gif,png,psd][Video@en,Video@de=wmv,swf,rm,mp4,mpg,m4v,avi,mov.asf,flv,srt,vob][Audio@en,Ton@de=aif,iff,m3u,m4a,mid,mpa,mp3,ra,wav,wma][Document@en,Dokument@de=doc,docx,odt,pages,rtf,tex,rtf,bib,csv,ppt,pps,pptx,key,xls,xlr,xlsx,gsheet,nb,numbers,ods,indd,pdf,dtx]";
@@ -260,5 +261,53 @@ public class ConfigurationBean
     public void setFileTypes(FileTypes types)
     {
         this.fileTypes = types;
+    }
+
+    /**
+     * Set the Property according to the selected lang
+     * 
+     * @param html
+     */
+    public void setStartPageHTML(String html)
+    {
+        setProperty(CONFIGURATION.STARTPAGE_HTML.name() + "_" + lang, html);
+    }
+
+    /**
+     * Get the value according to the selected lang
+     * 
+     * @return
+     */
+    public String getStartPageHTML()
+    {
+        return getStartPageHTML(lang);
+    }
+
+    /**
+     * Get the html snippet for a specified lang
+     * 
+     * @param lang
+     * @return
+     */
+    public String getStartPageHTML(String lang)
+    {
+        String html = (String)config.get(CONFIGURATION.STARTPAGE_HTML.name() + "_" + lang);
+        return html != null ? html : "";
+    }
+
+    /**
+     * @return the lang
+     */
+    public String getLang()
+    {
+        return lang;
+    }
+
+    /**
+     * @param lang the lang to set
+     */
+    public void setLang(String lang)
+    {
+        this.lang = lang;
     }
 }

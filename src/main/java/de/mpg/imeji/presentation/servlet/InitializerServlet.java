@@ -53,9 +53,9 @@ public class InitializerServlet extends HttpServlet
     {
         super.init();
         new PropertyBean();
-        initModel();
         startLocksSurveyor();
-        createSysadminUser();
+        initModel();
+        createSysAdminUser();
     }
 
     /**
@@ -85,7 +85,7 @@ public class InitializerServlet extends HttpServlet
     /**
      * Create the imeji system user if it doesn't exists
      */
-    private void createSysadminUser()
+    private void createSysAdminUser()
     {
         try
         {
@@ -176,26 +176,43 @@ public class InitializerServlet extends HttpServlet
         return sb.toString();
     }
 
-    @Override
+
+
+ @Override
     public void destroy()
     {
+
+
         logger.info("Shutting down imeji!");
+
+        //Do we really need? -----
         logger.info("Make Garbage collector!");
         System.gc();
         System.runFinalization();
+        //----
+
         logger.info("Shutting down thread executor...");
         Imeji.executor.shutdown();
         logger.info("executor shutdown status: " + Imeji.executor.isShutdown());
+
         logger.info("Closing Jena TDB...");
         TDB.sync(Imeji.dataset);
         Imeji.dataset.close();
         TDB.closedown();
         TDBMaker.releaseLocation(new Location(Imeji.tdbPath));
         logger.info("...done");
+
+
         logger.info("Ending LockSurveyor...");
         locksSurveyor.terminate();
         logger.info("...done");
-        super.destroy();
+
         logger.info("imeji is down");
+
+        super.destroy();
+
     }
+
+
+
 }

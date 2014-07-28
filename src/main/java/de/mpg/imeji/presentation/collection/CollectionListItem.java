@@ -48,6 +48,7 @@ public class CollectionListItem
     private ThumbnailBean thumbnail = null;
     private String selectedGrant;
     private URI profileURI;
+    private boolean isOwner = false;
     /**
      * Maximum number of character displayed in the list for the description
      */
@@ -100,6 +101,10 @@ public class CollectionListItem
              // initializations
              initSize(collection, user);
              initSelected();
+             if (collection != null && user != null)
+             {
+                 isOwner = collection.getCreatedBy().equals(ObjectHelper.getURI(User.class, user.getEmail()));
+             }
          }
         catch (Exception e)
         {
@@ -107,7 +112,8 @@ public class CollectionListItem
         }
     }
 
-    /**
+
+	/**
      * Count the size of the collection
      * 
      * @param user
@@ -381,4 +387,13 @@ public class CollectionListItem
     {
         this.profileURI = profileURI;
     }
+
+    public boolean isOwner() {
+		return isOwner;
+	}
+
+	public void setOwner(boolean isOwner) {
+		this.isOwner = isOwner;
+	}
+    
 }

@@ -41,8 +41,12 @@
 				<!-- description area - includes default values - START -->
 
 					<div>
-						<h:graphicImage value="#{Navigation.applicationUrl}resources/icon/private_dark_grey.png" class="imj_containerLogoPrivate" rendered="#{cc.attrs.item.status != 'WITHDRAWN'}"/>
+						<h:graphicImage value="#{Navigation.applicationUrl}resources/icon/private_grey.png" class="imj_containerLogoPrivate" 
+										rendered="#{cc.attrs.item.status != 'WITHDRAWN'}" title="#{lbl.privateContent}"/>
+						<h:graphicImage value="#{Navigation.applicationUrl}resources/icon/share.png" class="imj_containerLogoShare" 
+										rendered="#{!cc.attrs.item.owner}" title="#{lbl.sharedContent}"/>
 					</div>
+
 					<div class="imj_itemHeadline imj_containerHeadline">
 						<h3>  
 							<h:outputLink value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}" title="#{cc.attrs.item.title}">
@@ -128,10 +132,16 @@
 				margin-top:3em;
 			}
 			.imj_containerLogoPrivate{
-				width: 25px; 
+				height: 1.8em;
 				float:right;
 				margin-top:10px;
-				margin-right:-40px;
+				margin-right:-38px;
+			}
+			.imj_containerLogoShare{
+				height: 1.8em;
+				float:right;
+				margin-top:40px;
+				margin-right:-38px;
 			}
 			.imj_containerDescExpand{
 				margin-top:-10px;

@@ -53,9 +53,16 @@ public class UserCreationBean
      */
     public String create()
     {
-        if (!isValidEmail(user.getEmail()))
+   	
+        if(user.getPerson() == null || "".equals(user.getPerson().getFamilyName()) || user.getPerson().getFamilyName() == null)
         {
-            BeanHelper.error(sb.getMessage("error_user_email_not_valid"));
+        	BeanHelper.error(sb.getMessage("error_user_name_unfilled"));
+        	if(!isValidEmail(user.getEmail()))
+            	BeanHelper.error(sb.getMessage("error_user_email_not_valid"));
+        }
+        else if(!isValidEmail(user.getEmail()))
+        {
+        	BeanHelper.error(sb.getMessage("error_user_email_not_valid"));
         }
         else
         {

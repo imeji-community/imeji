@@ -559,7 +559,7 @@ public class ShareBean implements Serializable
      * @return
      */
     public void shareTo(List<String> toList)
-    { 
+    {  
         for (String to : toList)
         {
             List<Grant> grants = getGrantsAccordingtoRoles(selectedRoles, getShareToUri(), profileUri);

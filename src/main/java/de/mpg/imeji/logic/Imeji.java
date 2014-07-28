@@ -27,7 +27,9 @@ import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.j2j.annotations.j2jModel;
 
@@ -171,9 +173,13 @@ public class Imeji
     private static void initadminUser()
     {
         adminUser = new User();
+        Person adminPerson = ImejiFactory.newPerson();
+        adminPerson.setFamilyName("Admin");
+        adminPerson.setGivenName("imeji");
+        adminUser.setPerson(adminPerson);
         adminUser.setEmail(ADMIN_EMAIL_INIT);
-        adminUser.setName("imeji Sysadmin");
-        adminUser.setNick("sysadmin");
+        // adminUser.setName("imeji Sysadmin");
+        // adminUser.setNick("sysadmin");
         try
         {
             adminUser.setEncryptedPassword(StringHelper.convertToMD5(ADMIN_PASSWORD_INIT));

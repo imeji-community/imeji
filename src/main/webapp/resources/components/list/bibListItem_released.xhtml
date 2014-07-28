@@ -20,7 +20,7 @@
 		<li class="#{cc.attrs.itemClass}">
 			<div class="imj_previewArea">
 				<div class="imj_previewImage imj_imageStack">
-					<h:outputLink value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}">						
+					<h:outputLink value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}/#{Navigation.browsePath}?q=">						
 						<h:graphicImage value="#{Navigation.applicationUrl}file?id=#{cc.attrs.item.thumbnail.link}" alt="preview picture" rendered="#{cc.attrs.item.thumbnail.link != null}"/>
 					    <h:graphicImage value="#{Navigation.applicationUrl}resources/icon/deleted.png" alt="preview picture" 
 					    				rendered="#{cc.attrs.item.thumbnail.link == null}" title="#{lbl.itemDel}"/>
@@ -28,9 +28,13 @@
 					<h:outputText value="#{cc.attrs.item.size} #{lbl.images}" class="imj_itemCount"/>
 				</div>
 			</div>
-			<div class="imj_informationContent">
+			<div class="imj_informationContent">			
+				<div>
+					<h:graphicImage value="#{Navigation.applicationUrl}resources/icon/share.png" class="imj_containerLogoShare" 
+										rendered="#{Auth.loggedIn and !cc.attrs.item.owner}" title="#{lbl.sharedContent}"/>
+				</div>			
 				<div class="imj_descriptionArea">
-					<h3 class="imj_itemHeadline imj_containerHeadline">
+					<h3 class="imj_itemHeadline">
 						<h:outputLink value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}" title="#{cc.attrs.item.title}" >
 							<h:outputText value="#{cc.attrs.item.title}"/>
 						</h:outputLink>
@@ -96,9 +100,11 @@
 				font-size: 10px; 
 				margin-top:3em;
 			}
-			.imj_containerLogoPrivate{
-				width: 25px; 
+			.imj_containerLogoShare{
+				height: 1.8em;
 				float:right;
+				margin-top:40px;
+				margin-right:-38px;
 			}
 			.imj_containerDescExpand{
 				margin-top:-10px;

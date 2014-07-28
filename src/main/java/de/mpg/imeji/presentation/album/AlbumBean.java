@@ -281,16 +281,15 @@ public class AlbumBean extends ContainerBean
      * 
      * @return
      */
-    public boolean getIsOwner()
-    {
-        if (sessionBean.getUser() != null)
-        {
-            return getAlbum().getCreatedBy().equals(ObjectHelper.getURI(User.class, sessionBean.getUser().getEmail()));
-        }
-        else
-            return false;
-    }
-
+    // public boolean getIsOwner()
+    // {
+    // if (sessionBean.getUser() != null)
+    // {
+    // return getAlbum().getCreatedBy().equals(ObjectHelper.getURI(User.class, sessionBean.getUser().getEmail()));
+    // }
+    // else
+    // return false;
+    // }
     /**
      * Save (create or update) the {@link Album} in the database
      * 
@@ -393,6 +392,7 @@ public class AlbumBean extends ContainerBean
      */
     public String makeActive()
     {
+        findItems(sessionBean.getUser(), getSize());
         sessionBean.setActiveAlbum(this.album);
         this.setActive(true);
         return "pretty:";

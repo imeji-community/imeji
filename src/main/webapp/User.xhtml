@@ -83,7 +83,7 @@
 												</div>
 												<div class="imj_admindataValue">
 													<h:panelGroup class="imj_admindataSetEdit" >
-														<h:inputText value="#{UserBean.user.person.familyName}" styleClass="imj_admindataEdit"/>
+														<h:inputText value="#{UserBean.newFamilyName}" valueChangeListener="#{UserBean.changeFamilyNameListerner}" styleClass="imj_admindataEdit"/>
 													</h:panelGroup>
 												</div>
 											</h:panelGroup>
@@ -183,7 +183,7 @@
 													<h:inputSecret id="inputRespeated" value="#{UserBean.repeatedPassword}" styleClass="imj_admindataEdit"/>
 												</div>
 												<h:commandButton action="#{UserBean.changePassword}" value="#{lbl.password_change}" styleClass="imj_editButton" type="submit">
-													<f:ajax execute="@form" render="@form" />
+													<f:ajax execute="@form" render="@none" />
 												</h:commandButton>
 											</div>
 										</div>

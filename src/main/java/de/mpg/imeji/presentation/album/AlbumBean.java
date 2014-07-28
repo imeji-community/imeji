@@ -398,6 +398,7 @@ public class AlbumBean extends ContainerBean
      */
     public String makeActive()
     {
+        findItems(sessionBean.getUser(), getSize());
         sessionBean.setActiveAlbum(this.album);
         this.setActive(true);
         return "pretty:";

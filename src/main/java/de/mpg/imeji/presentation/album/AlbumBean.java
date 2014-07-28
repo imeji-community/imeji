@@ -65,7 +65,6 @@ public class AlbumBean extends ContainerBean
     private String description = "";
     private String descriptionFull = null;
     private ThumbnailBean thumbnail;
-    private boolean isOwner = false;
 
     /**
      * Construct an {@link AlbumBean} from an {@link Album}
@@ -98,10 +97,6 @@ public class AlbumBean extends ContainerBean
                 }
                 if (!getItems().isEmpty())
                     thumbnail = new ThumbnailBean(getItems().get(0));
-                if (album != null && sessionBean.getUser() != null)
-                {
-                    isOwner = album.getCreatedBy().equals(ObjectHelper.getURI(User.class, sessionBean.getUser().getEmail()));
-                }
             }
         }
     }
@@ -286,16 +281,15 @@ public class AlbumBean extends ContainerBean
      * 
      * @return
      */
-    public boolean getIsOwner()
-    {
-        if (sessionBean.getUser() != null)
-        {
-            return getAlbum().getCreatedBy().equals(ObjectHelper.getURI(User.class, sessionBean.getUser().getEmail()));
-        }
-        else
-            return false;
-    }
-
+    // public boolean getIsOwner()
+    // {
+    // if (sessionBean.getUser() != null)
+    // {
+    // return getAlbum().getCreatedBy().equals(ObjectHelper.getURI(User.class, sessionBean.getUser().getEmail()));
+    // }
+    // else
+    // return false;
+    // }
     /**
      * Save (create or update) the {@link Album} in the database
      * 
@@ -665,13 +659,4 @@ public class AlbumBean extends ContainerBean
     {
         this.getContainer().setDiscardComment(comment);
     }
-    
-
-    public boolean isOwner() {
-		return isOwner;
-	}
-
-	public void setOwner(boolean isOwner) {
-		this.isOwner = isOwner;
-	}
 }

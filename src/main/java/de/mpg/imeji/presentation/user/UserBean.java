@@ -123,6 +123,7 @@ public class UserBean
             {
                 BeanHelper.error(session.getMessage("error_user_repeat_password"));
             }
+            reloadPage();
         }
     }
 

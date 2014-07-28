@@ -112,7 +112,7 @@
 		<!-- MetaDataList - LIST BODY START -->
 		<h:panelGroup id="metadata" layout="block" styleClass="imj_listBody">
 			<ui:fragment rendered="#{itemBean.tab == null}">
-				<h:form>
+				<h:form onkeypress="if(event.keyCode == 13) return false;">
 					<!-- For future - panel / sub action menu - link to edit metadata -->
 					<h:panelGroup layout="block" styleClass="imj_metadataSubPanel">
 						<span class="imj_metadataSubPanelItem">
@@ -213,10 +213,10 @@
 												</div>
 												<!-- imj_multipleButtons (-) (+) command buttons -->
 												<div class="imj_metadataEditButtonArea">
-													<h:commandButton type="button" styleClass="imj_buttonAdd_16" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{item.addMetadata(metadata)}" value="">
+													<h:commandButton type="submit" styleClass="imj_buttonAdd_16" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{item.addMetadata(metadata)}" value="">
 														<f:ajax execute="@form" render="@form"/>
 													</h:commandButton>
-													<h:commandButton type="button" styleClass="imj_buttonRemove_16" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{item.removeMetadata(metadata)}" value="">
+													<h:commandButton type="submit" styleClass="imj_buttonRemove_16" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{item.removeMetadata(metadata)}" value="">
 														<f:ajax execute="@form" render="@form"/>
 													</h:commandButton>
 												</div>

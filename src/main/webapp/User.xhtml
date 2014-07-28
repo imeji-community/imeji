@@ -183,7 +183,7 @@
 													<h:inputSecret id="inputRespeated" value="#{UserBean.repeatedPassword}" styleClass="imj_admindataEdit"/>
 												</div>
 												<h:commandButton action="#{UserBean.changePassword}" value="#{lbl.password_change}" styleClass="imj_editButton" type="submit">
-													<f:ajax execute="@form" render="@form" />
+													<f:ajax execute="@form" render="@none" />
 												</h:commandButton>
 											</div>
 										</div>

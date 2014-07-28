@@ -111,6 +111,7 @@ public class UserBean
      */
     public void changePassword() throws Exception
     {
+        System.out.println("ppppp");
         if (user != null && newPassword != null && !"".equals(newPassword))
         {
             if (newPassword.equals(repeatedPassword))
@@ -123,6 +124,7 @@ public class UserBean
             {
                 BeanHelper.error(session.getMessage("error_user_repeat_password"));
             }
+            reloadPage();
         }
     }
 

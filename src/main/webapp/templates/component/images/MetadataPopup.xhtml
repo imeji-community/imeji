@@ -51,7 +51,7 @@
 								</h:outputLink>
 							</ui:fragment>
 							<h:panelGroup rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#conePerson'}">
-								<h:outputText value="#{md.person.familyName}, #{md.person.givenName}" title="#{md.person.familyName}, #{md.person.givenName}"/>
+								<h:outputText value="#{md.person.completeName}" title="#{md.person.completeName}"/>
 								<h:outputText value="(#{md.person.organizationString})" title="(#{md.person.organizationString})" rendered="#{md.person.organizationString} != ''"/>
 							</h:panelGroup>
 							<h:outputLink value="http://maps.google.com/maps?q=#{md.latitude},#{md.longitude}" title="http://maps.google.com/maps?q=#{md.latitude},#{md.longitude}" target="_blank" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation'}">

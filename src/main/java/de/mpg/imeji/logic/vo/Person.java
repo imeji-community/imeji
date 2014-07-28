@@ -15,7 +15,10 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.bouncycastle.util.Strings;
+
 import de.mpg.imeji.logic.util.IdentifierUtil;
+import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jList;
 import de.mpg.j2j.annotations.j2jLiteral;
@@ -64,8 +67,21 @@ public class Person implements Cloneable, Serializable
 
     public void setFamilyName(String familyName)
     {
-        this.familyName = familyName;
-        this.completeName = familyName + " " + givenName;
+            this.familyName = familyName;
+    }
+    
+    protected void setCompleteName (String familyName, String givenName)
+    {
+    	if (familyName=="" && givenName=="") {
+    		return;
+    	}
+    	
+	    String newCompleteName = ( familyName.isEmpty() || familyName == null ) ?givenName:( familyName + (( givenName.isEmpty() || givenName == null )?"":(", " + givenName )));
+	    if ( this.completeName != newCompleteName )
+	    {
+	    	this.completeName = newCompleteName;
+	    	System.out.println("CompleteName set to "+this.completeName);
+	    }
     }
 
     @XmlElement(name = "given-name", namespace = "http://purl.org/escidoc/metadata/terms/0.1")
@@ -76,8 +92,7 @@ public class Person implements Cloneable, Serializable
 
     public void setGivenName(String givenName)
     {
-        this.givenName = givenName;
-        this.completeName = familyName + " " + givenName;
+    	this.givenName = givenName;
     }
 
     @XmlElement(name = "alternative-name", namespace = "http://purl.org/escidoc/metadata/terms/0.1")
@@ -132,7 +147,9 @@ public class Person implements Cloneable, Serializable
 
     public void setCompleteName(String completeName)
     {
-        this.completeName = completeName;
+        //this.completeName = completeName;
+    	setCompleteName(this.givenName, this.familyName);
+
     }
 
     public int getPos()

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Map.Entry;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
@@ -104,10 +105,11 @@ public class PropertyReader
         InputStream instream = getInputStream(propertiesFile);
         properties = new Properties();
         properties.load(instream);
-        properties.putAll(solProperties);
+        cleanUp(properties).putAll(solProperties);
     }
 
-    /**
+
+	/**
      * Retrieves the Inputstream of the given file path. First the resource is searched in the file system, if this
      * fails it is searched using the classpath.
      * 
@@ -160,4 +162,21 @@ public class PropertyReader
     {
         return version;
     }
+    
+    /**
+     * Clean up properties 
+     * 
+     * @param props
+     * @return 
+     */
+    
+    private static Properties cleanUp(Properties props) {
+
+    	//Trim values
+    	for ( Entry<Object, Object> e : props.entrySet()){
+    		e.setValue(((String)e.getValue()).trim());
+    	}
+    	return props;
+	}
+    
 }

@@ -20,7 +20,7 @@
 		<li class="#{cc.attrs.itemClass}">
 			<div class="imj_previewArea">
 				<div class="imj_previewImage imj_imageStack">
-					<h:outputLink value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}">						
+					<h:outputLink value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}/#{Navigation.browsePath}?q=">						
 						<h:graphicImage value="#{Navigation.applicationUrl}file?id=#{cc.attrs.item.thumbnail.link}" alt="preview picture" rendered="#{cc.attrs.item.thumbnail.link != null}"/>
 					    <h:graphicImage value="#{Navigation.applicationUrl}resources/icon/deleted.png" alt="preview picture" 
 					    				rendered="#{cc.attrs.item.thumbnail.link == null}" title="#{lbl.itemDel}"/>

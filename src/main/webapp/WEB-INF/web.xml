@@ -92,13 +92,6 @@
 		<dispatcher>REQUEST</dispatcher>
 		<dispatcher>FORWARD</dispatcher>
 	</filter-mapping>
-	
-	<servlet-mapping>
-        <servlet-name>imeji-service</servlet-name>
-        <url-pattern>/rest/*</url-pattern>
-    </servlet-mapping>	
-		
-	
 	<servlet-mapping>
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>/jsf/*</url-pattern>

@@ -57,7 +57,7 @@ public class SearchTransaction extends Transaction
         qexec.setTimeout(20000);
         try
         {
-            ResultSet rs = qexec.execSelect();
+            ResultSet rs = qexec.execSelect();	
             setResults(rs);
             count = true;
         }

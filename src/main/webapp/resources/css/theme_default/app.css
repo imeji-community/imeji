@@ -2892,6 +2892,7 @@ a.imj_submitButton,
 	width: 49%;
 	display: inline-block;
 	white-space: normal;
+	margin-left: 8em;
 }
 
 .plupload_file_action {

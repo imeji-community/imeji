@@ -50,7 +50,7 @@ public class CreateCollectionBean extends CollectionBean
         if (UrlHelper.getParameterBoolean("reset"))
         {
             setCollection(ImejiFactory.newCollection());
-            ((List<Person>)getCollection().getMetadata().getPersons()).set(0, sessionBean.getUser().getPerson());
+            ((List<Person>)getCollection().getMetadata().getPersons()).set(0, sessionBean.getUser().getPerson().clone());
         }
     }
 

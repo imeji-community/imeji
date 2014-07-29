@@ -65,7 +65,7 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
 
     @Override
     public List<CollectionListItem> retrieveList(int offset, int limit) throws Exception
-    {
+    {   
         // initMenus();
         CollectionController controller = new CollectionController(sb.getUser());
         Collection<CollectionImeji> collections = new ArrayList<CollectionImeji>();
@@ -81,7 +81,7 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
             searchQuery.addLogicalRelation(LOGICAL_RELATIONS.AND);
             searchQuery.addPair(sp);
         }
-        SortCriterion sortCriterion = new SortCriterion();
+        SortCriterion sortCriterion = new SortCriterion();  
         sortCriterion.setIndex(SPARQLSearch.getIndex(getSelectedSortCriterion()));
         sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
         SearchResult results = controller.search(searchQuery, sortCriterion, limit, offset);

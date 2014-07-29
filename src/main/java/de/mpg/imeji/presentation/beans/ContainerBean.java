@@ -33,9 +33,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Item;
@@ -309,5 +308,20 @@ public abstract class ContainerBean implements Serializable
     public void setSize(int size)
     {
         this.size = size;
+    }
+
+    /**
+     * True if the current {@link User} is the creator of the {@link Container}
+     * 
+     * @return
+     */
+    public boolean isOwner()
+    {
+        SessionBean sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        if (getContainer() != null && getContainer().getCreatedBy() != null && sessionBean.getUser() != null)
+        {
+            return getContainer().getCreatedBy().equals(ObjectHelper.getURI(User.class, sessionBean.getUser().getEmail()));
+        }
+        return false;
     }
 }

@@ -21,6 +21,7 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.image.ItemsBean;
+import de.mpg.imeji.presentation.image.ThumbnailBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.session.SessionObjectsController;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -46,7 +47,7 @@ public class AlbumItemsBean extends ItemsBean
      * Constructor
      */
     public AlbumItemsBean()
-    { 
+    {
         super();
         sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         this.navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
@@ -54,7 +55,7 @@ public class AlbumItemsBean extends ItemsBean
 
     @Override
     public String getInitPage()
-    { 
+    {
         uri = ObjectHelper.getURI(Album.class, id);
         loadAlbum();
         browseContext = getNavigationString() + id;
@@ -147,9 +148,20 @@ public class AlbumItemsBean extends ItemsBean
      */
     private void removeAllFromAlbum(Album album) throws Exception
     {
-        album.setImages(new ArrayList<URI>());
-        AlbumController ac = new AlbumController();
-        ac.update(album, sb.getUser());
+        if (sb.getActiveAlbum() != null && album.getId().toString().equals(sb.getActiveAlbum().getId().toString()))
+        {
+            // if the current album is the active album as well
+            List<String> uris = new ArrayList<>();
+            for (ThumbnailBean uri : this.getCurrentPartList())
+                uris.add(uri.getUri().toString());
+            removeFromActive(uris);
+        }
+        else
+        {
+            album.setImages(new ArrayList<URI>());
+            AlbumController ac = new AlbumController();
+            ac.update(album, sb.getUser());
+        }
     }
 
     /**
@@ -160,8 +172,7 @@ public class AlbumItemsBean extends ItemsBean
      */
     private void removeFromAlbum(List<String> uris) throws Exception
     {
-        if (sb.getActiveAlbum() != null
-                && album.getId().toString().equals(sb.getActiveAlbum().getId().toString()))
+        if (sb.getActiveAlbum() != null && album.getId().toString().equals(sb.getActiveAlbum().getId().toString()))
         {
             // if the current album is the active album as well
             removeFromActive(uris);
@@ -290,5 +301,4 @@ public class AlbumItemsBean extends ItemsBean
     {
         return album;
     }
-    
 }

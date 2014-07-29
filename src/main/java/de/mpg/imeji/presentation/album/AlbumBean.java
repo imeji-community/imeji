@@ -127,6 +127,10 @@ public class AlbumBean extends ContainerBean
                     active = true;
                     sessionBean.setActiveAlbum(album);
                 }
+                if (getPrivateCount() != 0)
+                {
+                	BeanHelper.info(sessionBean.getMessage("album_Private_Content").replace("XXX_COUNT_XXX", getPrivateCount()+""));
+                }
             }
         }
     }
@@ -281,16 +285,15 @@ public class AlbumBean extends ContainerBean
      * 
      * @return
      */
-    public boolean getIsOwner()
-    {
-        if (sessionBean.getUser() != null)
-        {
-            return getAlbum().getCreatedBy().equals(ObjectHelper.getURI(User.class, sessionBean.getUser().getEmail()));
-        }
-        else
-            return false;
-    }
-
+    // public boolean getIsOwner()
+    // {
+    // if (sessionBean.getUser() != null)
+    // {
+    // return getAlbum().getCreatedBy().equals(ObjectHelper.getURI(User.class, sessionBean.getUser().getEmail()));
+    // }
+    // else
+    // return false;
+    // }
     /**
      * Save (create or update) the {@link Album} in the database
      * 
@@ -393,6 +396,7 @@ public class AlbumBean extends ContainerBean
      */
     public String makeActive()
     {
+        findItems(sessionBean.getUser(), getSize());
         sessionBean.setActiveAlbum(this.album);
         this.setActive(true);
         return "pretty:";
@@ -658,5 +662,19 @@ public class AlbumBean extends ContainerBean
     public void setDiscardComment(String comment)
     {
         this.getContainer().setDiscardComment(comment);
+    }
+    
+    /**
+     * Compute the amount of private items within an album
+     * @return
+     */
+    public int getPrivateCount ()
+    {
+    	int count = 0;
+    	if (this.getSize() > this.getContainer().getImages().size())
+    	{
+        	count = this.getSize() - this.getContainer().getImages().size();       	
+    	}
+    	return count;
     }
 }

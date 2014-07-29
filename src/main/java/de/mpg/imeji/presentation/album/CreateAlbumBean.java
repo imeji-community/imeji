@@ -72,7 +72,7 @@ public class CreateAlbumBean extends AlbumBean
         getAlbum().getMetadata().setTitle("");
         getAlbum().getMetadata().setDescription("");
         getAlbum().getMetadata().getPersons().clear();
-        getAlbum().getMetadata().getPersons().add(sessionBean.getUser().getPerson());
+        getAlbum().getMetadata().getPersons().add(sessionBean.getUser().getPerson().clone());
     }
 
     /*

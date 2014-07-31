@@ -31,6 +31,7 @@ package de.mpg.imeji.presentation.servlet;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import javax.servlet.ServletConfig;
@@ -89,6 +90,7 @@ public class DigilibServlet extends Scaler
     public void init(ServletConfig config) throws ServletException
     {
         PropertyBean propBean = new PropertyBean();
+        String filePath = "";
         if (propBean.isDigilibEnabled())
         {
             try
@@ -104,9 +106,14 @@ public class DigilibServlet extends Scaler
             InternalStorageManager ism = new InternalStorageManager();
             internalStorageBase = FilenameUtils
                     .getBaseName(FilenameUtils.normalizeNoEndSeparator(ism.getStoragePath()));
+            filePath = ism.getStoragePath();
             // Copy the digilib-config.xml before initialising the digilib servlet, which needs this file
             copyFile(getDigilibConfigPath(), config.getServletContext().getRealPath("/WEB-INF"));
             super.init(config);
+            // Force Digilib to use the correct path
+            super.dirCache.getBaseDirNames()[0] = FilenameUtils.normalizeNoEndSeparator(filePath.replace(
+                    internalStorageBase, ""));
+            logger.info("digilib started for directory: " + super.dirCache.getBaseDirNames()[0]);
         }
         else
         {
@@ -238,7 +245,7 @@ public class DigilibServlet extends Scaler
         }
         else
         {
-            Search s =  SearchFactory.create();
+            Search s = SearchFactory.create();
             List<String> r = s.searchSimpleForQuery(SPARQLQueries.selectCollectionIdOfFile(url)).getResults();
             if (!r.isEmpty())
                 return URI.create(r.get(0));

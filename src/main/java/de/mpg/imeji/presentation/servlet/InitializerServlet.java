@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
+import org.apache.jena.atlas.lib.AlarmClock;
 import org.apache.log4j.Logger;
 import org.apache.log4j.lf5.util.StreamUtils;
 
@@ -53,9 +54,9 @@ public class InitializerServlet extends HttpServlet
     {
         super.init();
         new PropertyBean();
-        initModel();
         startLocksSurveyor();
-        createSysadminUser();
+        initModel();
+        createSysAdminUser();
     }
 
     /**
@@ -85,7 +86,7 @@ public class InitializerServlet extends HttpServlet
     /**
      * Create the imeji system user if it doesn't exists
      */
-    private void createSysadminUser()
+    private void createSysAdminUser()
     {
         try
         {
@@ -176,26 +177,44 @@ public class InitializerServlet extends HttpServlet
         return sb.toString();
     }
 
-    @Override
+
+
+ @Override
     public void destroy()
     {
+
         logger.info("Shutting down imeji!");
-        logger.info("Make Garbage collector!");
-        System.gc();
-        System.runFinalization();
+
         logger.info("Shutting down thread executor...");
         Imeji.executor.shutdown();
         logger.info("executor shutdown status: " + Imeji.executor.isShutdown());
-        logger.info("Closing Jena TDB...");
+
+        logger.info("Closing Jena! TDB...");
         TDB.sync(Imeji.dataset);
         Imeji.dataset.close();
         TDB.closedown();
         TDBMaker.releaseLocation(new Location(Imeji.tdbPath));
         logger.info("...done");
+
+        // This is a bug of com.hp.hpl.jena.sparql.engine.QueryExecutionBase implementation:
+        // AlarmClock is not correctly released, it leads to the memory leaks after tomcat stop
+        // see https://github.com/imeji-community/imeji/issues/966!
+        logger.info("Release AlarmClock...");
+        AlarmClock alarmClock = AlarmClock.get();
+        alarmClock.release();
+        logger.info("done");
+
+
         logger.info("Ending LockSurveyor...");
         locksSurveyor.terminate();
         logger.info("...done");
-        super.destroy();
+
         logger.info("imeji is down");
+
+        super.destroy();
+
     }
+
+
+
 }

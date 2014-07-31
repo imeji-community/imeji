@@ -116,10 +116,10 @@
 														<h:panelGroup class="imj_admindataSetEdit" rendered="#{UserBean.edit}">
 															<h:inputText value="#{org.name}"  styleClass="imj_admindataEdit "/>
 															<span class="imj_inlineButtonGroup">
-																<h:commandButton styleClass="imj_buttonAdd_16 " type="submit" title="#{lbl.add_organization}" action="#{UserBean.addOrganization(index.index + 1)}" >
+																<h:commandButton styleClass="imj_buttonAdd_16" type="submit" title="#{lbl.add_organization}" action="#{UserBean.addOrganization(index.index + 1)}">
 																	<f:ajax execute="@form" render="@form"/>
 																</h:commandButton>
-																<h:commandButton styleClass="imj_buttonRemove_16" type="submit" title="#{lbl.remove_organization}" action="#{UserBean.removeOrganization(index.index)}" rendered="#{UserBean.user.person.organizations.size() &gt; 1}">
+																<h:commandButton styleClass="imj_buttonRemove_16 imj_admindataEdit imj_noDisplay" type="submit" title="#{lbl.remove_organization}" action="#{UserBean.removeOrganization(index.index)}">
 																	<f:ajax execute="@form" render="@form"/>
 																</h:commandButton>
 															</span>

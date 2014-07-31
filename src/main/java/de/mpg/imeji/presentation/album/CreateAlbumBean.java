@@ -68,11 +68,8 @@ public class CreateAlbumBean extends AlbumBean
      */
     public void init()
     {
-        setAlbum(new Album());
-        getAlbum().getMetadata().setTitle("");
-        getAlbum().getMetadata().setDescription("");
-        getAlbum().getMetadata().getPersons().clear();
-        getAlbum().getMetadata().getPersons().add(sessionBean.getUser().getPerson().clone());
+    	setAlbum(ImejiFactory.newAlbum());
+    	((List<Person>)getAlbum().getMetadata().getPersons()).set(0, sessionBean.getUser().getPerson().clone());
     }
 
     /*

@@ -247,7 +247,7 @@
 					</div>
 				</ui:fragment>
 				<!-- japanese part -->
-				<ui:fragment rendered="#{Configuration.getStartPageHTML('jp') == '' and (SessionBean.locale == 'jp' or SessionBean.locale == 'ja')}">
+				<ui:fragment rendered="#{(Configuration.getStartPageHTML('jp') == '' and Configuration.getStartPageHTML('ja') == '') and (SessionBean.locale == 'jp' or SessionBean.locale == 'ja')}">
 					<div id="tabsJP" class="id_tabs" >
 						<!-- tabs -->
 						<ul class="imj_tabMenu">

@@ -39,6 +39,13 @@ public class ImejiFactory
 {
     private static Logger logger = Logger.getLogger(ImejiFactory.class);
 
+    public static Album newAlbum()
+    {
+    	Album album = new Album();
+    	album.setMetadata(newContainerMetadata());
+    	return album;
+    }
+    
     public static CollectionImeji newCollection()
     {
         CollectionImeji coll = new CollectionImeji();

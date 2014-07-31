@@ -147,7 +147,9 @@ public class UserBean
      */
     public void removeOrganization(int index)
     {
-        ((List<Organization>)this.user.getPerson().getOrganizations()).remove(index);
+    	List<Organization> orgas = (List<Organization>)this.user.getPerson().getOrganizations();
+    	if(orgas.size() > 1)
+    		orgas.remove(index);
     }
 
     /**

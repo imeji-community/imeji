@@ -18,7 +18,6 @@
 	
 	<ui:define name="mainContent">
 		<h:outputText value="#{UserBean.init}"/>
-		
 		<!-- Breadcrumb - History -->
 		<ui:include src="include/History.xhtml"></ui:include>
 		
@@ -43,10 +42,9 @@
 							</div>
 							
 							<div class="imj_content">
-								
-								<h:form id ="userForm">
+								<h:form id="userForm">
 									<h:panelGroup layout="block" id="userInfos" class="imj_userGlobalInformation">					
-										<fieldset>
+										
 											<!-- User Edit - Email -->
 											<h:panelGroup layout="block" styleClass="imj_admindataSet">
 												<div class="imj_admindataLabel">
@@ -117,10 +115,10 @@
 															<h:inputText value="#{org.name}"  styleClass="imj_admindataEdit "/>
 															<span class="imj_inlineButtonGroup">
 																<h:commandButton styleClass="imj_buttonAdd_16 " type="submit" title="#{lbl.add_organization}" action="#{UserBean.addOrganization(index.index + 1)}" >
-																	<f:ajax execute="@form" render="@form"/>
+																	<f:ajax execute=":userForm:userInfos" render=":userForm:userInfos"/>
 																</h:commandButton>
 																<h:commandButton styleClass="imj_buttonRemove_16" type="submit" title="#{lbl.remove_organization}" action="#{UserBean.removeOrganization(index.index)}" rendered="#{UserBean.user.person.organizations.size() &gt; 1}">
-																	<f:ajax execute="@form" render="@form"/>
+																	<f:ajax execute=":userForm:userInfos" render=":userForm:userInfos"/>
 																</h:commandButton>
 															</span>
 														</h:panelGroup>
@@ -150,14 +148,14 @@
 											<!-- submit panel -->
 											<div class="imj_submitPanel">
 												<h:commandLink id="lnkEditUserdata" action="#{UserBean.toggleEdit}" value="#{lbl.edit}" rendered="#{!UserBean.edit}" styleClass="imj_editButton" type="submit">
-													<f:ajax execute="@form" render="@form"/>
+													<f:ajax execute="@this" render=":userForm:userInfos"/>
 												</h:commandLink>
-												<h:outputLink id="lnkCancelUserdata" value="" rendered="#{UserBean.edit}" styleClass="imj_cancelButton" type="submit">
+												<h:outputLink id="lnkCancelUserdata" value="#{UserBean.userPageUrl}" rendered="#{UserBean.edit}" styleClass="imj_cancelButton" type="submit">
 													<h:outputText value="#{lbl.cancel}"/>
 												</h:outputLink>
 												<h:commandLink action="#{UserBean.updateUser}" value="#{lbl.save}" styleClass="imj_submitButton"  rendered="#{UserBean.edit}" type="submit"/>
 											</div>
-										</fieldset>
+										
 									</h:panelGroup> <!-- END user infos -->
 									
 									<!-- User Edit - Password -->

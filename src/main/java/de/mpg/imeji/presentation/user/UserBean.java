@@ -38,8 +38,6 @@ public class UserBean
     private String newFamilyName = null;
     private String newPassword = null;
     private String repeatedPassword = null;
-
-    
     private SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     private String id;
     private List<SharedHistory> roles = new ArrayList<SharedHistory>();
@@ -212,29 +210,28 @@ public class UserBean
             gc.addGrants(user, (List<Grant>)gc.toList(g), session.getUser());
         }
     }
-     
+
     private boolean inputValid()
     {
-    	boolean valid = true;
-        if(changeFamilyName)
+        boolean valid = true;
+        if (changeFamilyName)
         {
-        	if(newFamilyName == null || "".equals(newFamilyName))
-        	{
-        		BeanHelper.error(session.getMessage("error_user_name_unfilled"));
-        		valid = false;
-        	}
-        	else if (changeEmail && changeEmail())
-        	{
-        		this.user.getPerson().setFamilyName(newFamilyName);
-        	}
-        	else
-        		this.user.getPerson().setFamilyName(newFamilyName);
+            if (newFamilyName == null || "".equals(newFamilyName))
+            {
+                BeanHelper.error(session.getMessage("error_user_name_unfilled"));
+                valid = false;
+            }
+            else if (changeEmail && changeEmail())
+            {
+                this.user.getPerson().setFamilyName(newFamilyName);
+            }
+            else
+                this.user.getPerson().setFamilyName(newFamilyName);
         }
         if (changeEmail && !changeEmail())
         {
             valid = false;
         }
-
         return valid;
     }
 
@@ -242,10 +239,9 @@ public class UserBean
      * Update the user in jena
      */
     public void updateUser()
-    { 
+    {
         if (user != null && inputValid())
         {
-
             UserController controller = new UserController(session.getUser());
             try
             {
@@ -256,22 +252,21 @@ public class UserBean
                 BeanHelper.error(e.getMessage());
                 e.printStackTrace();
             }
-//            finally
-//            {
-//                reloadPage();
-//            }
+            // finally
+            // {
+            // reloadPage();
+            // }
         }
-
     }
 
     public void changeEmailListener()
     {
         this.changeEmail = true;
     }
-    
+
     public void changeFamilyNameListerner()
     {
-    	this.changeFamilyName = true;
+        this.changeFamilyName = true;
     }
 
     /**
@@ -279,8 +274,8 @@ public class UserBean
      * if the new email is valid and is not already used, then create a new user with this email and delete the old one
      */
     public boolean changeEmail()
-    {  
-    	boolean emailChanged = true;
+    {
+        boolean emailChanged = true;
         User newUser = user.clone(newEmail);
         if (!UserCreationBean.isValidEmail(newUser.getEmail()))
         {
@@ -332,16 +327,25 @@ public class UserBean
      */
     private void reloadPage()
     {
-        Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
         try
         {
-        	String url = navigation.getUserUrl() + "?id=" + user.getEmail();
-            FacesContext.getCurrentInstance().getExternalContext().redirect(url);
+            FacesContext.getCurrentInstance().getExternalContext().redirect(getUserPageUrl());
         }
         catch (IOException e)
         {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * return the URL of the current user
+     * 
+     * @return
+     */
+    public String getUserPageUrl()
+    {
+        Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
+        return navigation.getUserUrl() + "?id=" + user.getEmail();
     }
 
     public User getUser()
@@ -422,13 +426,13 @@ public class UserBean
         this.edit = edit;
     }
 
-	public String getNewFamilyName() {
-		return newFamilyName;
-	}
+    public String getNewFamilyName()
+    {
+        return newFamilyName;
+    }
 
-	public void setNewFamilyName(String newFamilyName) {
-		this.newFamilyName = newFamilyName;
-	}
-    
-    
+    public void setNewFamilyName(String newFamilyName)
+    {
+        this.newFamilyName = newFamilyName;
+    }
 }

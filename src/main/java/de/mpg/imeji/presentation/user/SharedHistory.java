@@ -8,7 +8,6 @@ import org.apache.log4j.Logger;
 
 import de.escidoc.core.resources.aa.useraccount.Grants;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.GrantController;
 import de.mpg.imeji.logic.vo.Grant;
@@ -18,6 +17,7 @@ import de.mpg.imeji.presentation.user.ShareBean.SharedObjectType;
 
 public class SharedHistory implements Serializable
 {
+    private static final long serialVersionUID = -1637916656299359982L;
     private static Logger logger = Logger.getLogger(SharedHistory.class);
     private User user;
     private UserGroup group;

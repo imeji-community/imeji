@@ -4,7 +4,6 @@
 package de.mpg.imeji.presentation.collection;
 
 import java.net.URI;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -12,8 +11,7 @@ import java.util.List;
 import com.hp.hpl.jena.sparql.pfunction.library.container;
 
 import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.vo.SearchPair;
@@ -27,7 +25,6 @@ import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
-import de.mpg.imeji.presentation.util.UrlHelper;
 
 /**
  * Bean for the collections page
@@ -40,7 +37,6 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
 {
     private int totalNumberOfRecords;
     private SessionBean sb;
-    private String query = "";
     /**
      * The comment required to discard a {@link container}
      */
@@ -69,19 +65,12 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
 
     @Override
     public List<CollectionListItem> retrieveList(int offset, int limit) throws Exception
-    {
-        UserController uc = new UserController(sb.getUser());
-        initMenus();
-        if (sb.getUser() != null)
-        {
-            sb.setUser(uc.retrieve(sb.getUser().getEmail()));
-        }
+    {   
+        // initMenus();
         CollectionController controller = new CollectionController(sb.getUser());
         Collection<CollectionImeji> collections = new ArrayList<CollectionImeji>();
         SearchQuery searchQuery = new SearchQuery();
-        query = UrlHelper.getParameterValue("q");
-        if (query == null)
-            query = "";
+      
         if (!"".equals(query))
         {
             searchQuery = URLQueryTransformer.parseStringQuery(query);
@@ -92,8 +81,8 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
             searchQuery.addLogicalRelation(LOGICAL_RELATIONS.AND);
             searchQuery.addPair(sp);
         }
-        SortCriterion sortCriterion = new SortCriterion();
-        sortCriterion.setIndex(Search.getIndex(getSelectedSortCriterion()));
+        SortCriterion sortCriterion = new SortCriterion();  
+        sortCriterion.setIndex(SPARQLSearch.getIndex(getSelectedSortCriterion()));
         sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
         SearchResult results = controller.search(searchQuery, sortCriterion, limit, offset);
         collections = controller.loadCollectionsLazy(results.getResults(), limit, offset);
@@ -160,15 +149,14 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
             CollectionImeji collection = collectionController.retrieve(uri, sb.getUser());
             collectionController.delete(collection, sb.getUser());
             count++;
+            
+            BeanHelper.info(sb.getMessage("success_collection_delete").replace("XXX_collectionName_XXX",
+                    collection.getMetadata().getTitle()));
         }
         sb.getSelectedCollections().clear();
         if (count == 0)
         {
             BeanHelper.warn(sb.getMessage("error_delete_no_collection_selected"));
-        }
-        else
-        {
-            BeanHelper.info(count + " " + sb.getMessage("success_collections_delete"));
         }
         return "pretty:collections";
     }
@@ -195,26 +183,6 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
     public boolean isSimpleSearch()
     {
         return true;
-    }
-
-    /**
-     * setter
-     * 
-     * @param query
-     */
-    public void setQuery(String query)
-    {
-        this.query = query;
-    }
-
-    /**
-     * getter
-     * 
-     * @return
-     */
-    public String getQuery()
-    {
-        return query;
     }
 
     /**

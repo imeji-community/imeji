@@ -80,22 +80,32 @@ public class ContentNegotiationFilter implements Filter
     public void doFilter(ServletRequest serv, ServletResponse resp, FilterChain chain) throws IOException,
             ServletException
     {
-        // Limit the case to filter: dispachertype only forward
-        if (DispatcherType.REQUEST.compareTo(serv.getDispatcherType()) == 0)
+        try
         {
-            HttpServletRequest request = (HttpServletRequest)serv;
-            if (rdfNegotiated(request))
+            // Limit the case to filter: dispachertype only forward
+            if (DispatcherType.REQUEST.compareTo(serv.getDispatcherType()) == 0)
             {
-                String url = "/export?format=rdf&n=10000";
-                String type = getType(request);
-                if (type != null)
+                HttpServletRequest request = (HttpServletRequest)serv;
+                if (rdfNegotiated(request))
                 {
-                    url += "&type=" + type + "&" + getQuery(request);
-                    forwardToExport(url, request, resp);
+                    String url = "/export?format=rdf&n=10000";
+                    String type = getType(request);
+                    if (type != null)
+                    {
+                        url += "&type=" + type + "&" + getQuery(request);
+                        forwardToExport(url, request, resp);
+                    }
                 }
             }
         }
-        chain.doFilter(serv, resp);
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            chain.doFilter(serv, resp);
+        }
     }
 
     /**

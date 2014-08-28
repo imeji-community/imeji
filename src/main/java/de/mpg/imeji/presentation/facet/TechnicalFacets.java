@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchOperators;
@@ -21,7 +21,7 @@ import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.facet.Facet.FacetType;
 import de.mpg.imeji.presentation.filter.Filter;
 import de.mpg.imeji.presentation.filter.FiltersSession;
-import de.mpg.imeji.presentation.image.ImagesBean;
+import de.mpg.imeji.presentation.image.ItemsBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
@@ -38,7 +38,7 @@ public class TechnicalFacets extends Facets
     private FiltersSession fs = (FiltersSession)BeanHelper.getSessionBean(FiltersSession.class);
     private List<List<Facet>> facets = new ArrayList<List<Facet>>();
     private SearchQuery searchQuery;
-    private SearchResult allImages = ((ImagesBean)BeanHelper.getSessionBean(ImagesBean.class)).getSearchResult();
+    private SearchResult allImages = ((ItemsBean)BeanHelper.getSessionBean(ItemsBean.class)).getSearchResult();
     private String baseURI = ((Navigation)BeanHelper.getApplicationBean(Navigation.class)).getBrowseUrl() + "?q=";
 
     /**
@@ -71,7 +71,7 @@ public class TechnicalFacets extends Facets
                 {
                     if (!fs.isFilter("my_images") && !fs.isNoResultFilter("my_images"))
                     {
-                        SearchPair myImageSearchPair = new SearchPair(Search.getIndex(SearchIndex.names.user),
+                        SearchPair myImageSearchPair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.user),
                                 SearchOperators.EQUALS, sb.getUser().getEmail());
                         count = getCount(searchQuery, myImageSearchPair, allImages.getResults());
                         if (count > 0)
@@ -86,7 +86,7 @@ public class TechnicalFacets extends Facets
                     }
                     if (!fs.isFilter("pending_images") && !fs.isNoResultFilter("pending_images"))
                     {
-                        SearchPair privatePair = new SearchPair(Search.getIndex(SearchIndex.names.status),
+                        SearchPair privatePair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.status),
                                 SearchOperators.EQUALS, Status.PENDING.getUri().toString());
                         count = getCount(searchQuery, privatePair, allImages.getResults());
                         if (count > 0)
@@ -97,7 +97,7 @@ public class TechnicalFacets extends Facets
                     }
                     if (!fs.isFilter("released_images") && !fs.isNoResultFilter("released_images"))
                     {
-                        SearchPair publicPair = new SearchPair(Search.getIndex(SearchIndex.names.status),
+                        SearchPair publicPair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.status),
                                 SearchOperators.EQUALS, Status.RELEASED.getUri().toString());
                         count = getCount(searchQuery, publicPair, allImages.getResults());
                         if (count > 0)
@@ -111,7 +111,7 @@ public class TechnicalFacets extends Facets
                 {
                     if (!fs.isFilter(t.name()) && !fs.isNoResultFilter(t.name()))
                     {
-                        SearchPair pair = new SearchPair(Search.getIndex(SearchIndex.names.type),
+                        SearchPair pair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.type),
                                 SearchOperators.EQUALS, t.getClazzNamespace());
                         count = getCount(searchQuery, pair, allImages.getResults());
                         if (count > 0)
@@ -143,7 +143,7 @@ public class TechnicalFacets extends Facets
      */
     public SearchResult retrieveAllImages(SearchQuery searchQuery)
     {
-        return ((ImagesBean)BeanHelper.getSessionBean(ImagesBean.class)).getSearchResult();
+        return ((ItemsBean)BeanHelper.getSessionBean(ItemsBean.class)).getSearchResult();
     }
 
     /**

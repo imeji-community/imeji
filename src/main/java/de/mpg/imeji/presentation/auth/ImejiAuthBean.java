@@ -31,12 +31,13 @@ package de.mpg.imeji.presentation.auth;
 import java.io.Serializable;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
 import de.mpg.imeji.logic.auth.Authorization;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.PropertyBean;
+import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * JSF Bean for imeji authorization. Can be call in the xhtml pages by: <br/>
@@ -55,8 +56,16 @@ public class ImejiAuthBean implements Serializable
 {
     private static final long serialVersionUID = 4905896901833448372L;
     private static Authorization auth = new Authorization();
-    @ManagedProperty(value = "#{SessionBean.user}")
-    private static User sessionUser;
+    private User sessionUser;
+
+    /**
+     * 
+     * 
+     */
+    public ImejiAuthBean()
+    {
+        this.sessionUser = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getUser();
+    }
 
     /**
      * True if the {@link User} can read the uri
@@ -230,7 +239,7 @@ public class ImejiAuthBean implements Serializable
      * True if the {@link User} can read the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      */
     public boolean read(User user, Object obj)
@@ -242,7 +251,7 @@ public class ImejiAuthBean implements Serializable
      * True if the {@link User} can create the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      */
     public boolean create(User user, Object obj)
@@ -254,7 +263,7 @@ public class ImejiAuthBean implements Serializable
      * True if the {@link User} can update the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      */
     public boolean update(User user, Object obj)
@@ -266,7 +275,7 @@ public class ImejiAuthBean implements Serializable
      * True if the {@link User} can delete the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      */
     public boolean delete(User user, Object obj)
@@ -278,7 +287,7 @@ public class ImejiAuthBean implements Serializable
      * True if the {@link User} can administrate the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      */
     public boolean admin(User user, Object obj)
@@ -290,7 +299,7 @@ public class ImejiAuthBean implements Serializable
      * True if the {@link User} can update the content of the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      */
     public boolean updateContent(User user, Object obj)
@@ -302,7 +311,7 @@ public class ImejiAuthBean implements Serializable
      * True if the {@link User} can delete the content of the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      */
     public boolean deleteContent(User user, Object obj)
@@ -314,7 +323,7 @@ public class ImejiAuthBean implements Serializable
      * True if the current {@link User} in the session can read the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      */
     public boolean read(Object obj)
@@ -326,7 +335,7 @@ public class ImejiAuthBean implements Serializable
      * True if the current {@link User} in the session can create the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      */
     public boolean create(Object obj)
@@ -338,7 +347,7 @@ public class ImejiAuthBean implements Serializable
      * True if the {@link User} can update the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      */
     public boolean update(Object obj)
@@ -350,7 +359,7 @@ public class ImejiAuthBean implements Serializable
      * True if the current {@link User} in the session can delete the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      */
     public boolean delete(Object obj)
@@ -362,7 +371,7 @@ public class ImejiAuthBean implements Serializable
      * True if the current {@link User} in the session can administrate the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      */
     public boolean admin(Object obj)
@@ -374,7 +383,7 @@ public class ImejiAuthBean implements Serializable
      * True if the {@link User} can update the content of the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      */
     public boolean updateContent(Object obj)
@@ -386,7 +395,7 @@ public class ImejiAuthBean implements Serializable
      * True if the {@link User} can delete the content of the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      */
     public boolean deleteContent(Object obj)
@@ -398,7 +407,7 @@ public class ImejiAuthBean implements Serializable
      * True if the current {@link User} in the session can administrate imeji (i.e. is system administrator)
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      */
     public boolean isAdmin()
@@ -429,6 +438,6 @@ public class ImejiAuthBean implements Serializable
      */
     public void setSessionUser(User sessionUser)
     {
-        ImejiAuthBean.sessionUser = sessionUser;
+        this.sessionUser = sessionUser;
     }
 }

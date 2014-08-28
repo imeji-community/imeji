@@ -3,7 +3,7 @@ package de.mpg.imeji.logic.search.vo;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.predefinedMetadata.util.MetadataTypesHelper;
@@ -26,7 +26,7 @@ public class SearchIndex
      */
     public static enum names
     {
-        item, user, prop, creator, editor, created, modified, status, grant, grant_type, grant_for, filename, visibility, mds, col, alb, prof, type, cont_md, cont_title, cont_description, cont_person, cont_person_family, cont_person_given, cont_person_name, cont_person_org, cont_person_org_name, md, statement, all, text, number, date, time, title, longitude, latitude, license, link, label, citation, citation_style, cone, person, person_family, person_given, person_id, person_role, person_org, person_org_title, person_org_id, person_org_description, person_org_city, person_org_country, checksum, filetype;
+        item, user, prop, creator, editor, created, modified, status, grant, grant_type, grant_for, filename, visibility, mds, col, alb, prof, type, cont_md, cont_title, cont_description, cont_person, cont_person_family, cont_person_given, cont_person_name, cont_person_org, cont_person_org_name, md, statement, all, text, number, date, time, title, longitude, latitude, license, url, label, citation, citation_style, cone, person, person_name, person_family, person_given, person_id, person_role, person_org, person_org_title, person_org_id, person_org_description, person_org_city, person_org_country, checksum, filetype;
     }
 
     private String name;
@@ -94,30 +94,31 @@ public class SearchIndex
         switch (MetadataTypesHelper.getTypesForNamespace(st.getType().toString()))
         {
             case DATE:
-                list.add(Search.getIndex(SearchIndex.names.time.name()));
+                list.add(SPARQLSearch.getIndex(SearchIndex.names.time.name()));
                 break;
             case GEOLOCATION:
-                list.add(Search.getIndex(SearchIndex.names.title.name()));
+                list.add(SPARQLSearch.getIndex(SearchIndex.names.title.name()));
                 break;
             case LICENSE:
-                list.add(Search.getIndex(SearchIndex.names.license.name()));
+                list.add(SPARQLSearch.getIndex(SearchIndex.names.license.name()));
                 break;
             case NUMBER:
-                list.add(Search.getIndex(SearchIndex.names.number.name()));
+                list.add(SPARQLSearch.getIndex(SearchIndex.names.number.name()));
                 break;
             case CONE_PERSON:
-                list.add(Search.getIndex(SearchIndex.names.person_family.name()));
-                list.add(Search.getIndex(SearchIndex.names.person_given.name()));
-                list.add(Search.getIndex(SearchIndex.names.person_org_title.name()));
+                list.add(SPARQLSearch.getIndex(SearchIndex.names.person_family.name()));
+                list.add(SPARQLSearch.getIndex(SearchIndex.names.person_given.name()));
+                list.add(SPARQLSearch.getIndex(SearchIndex.names.person_org_title.name()));
                 break;
             case PUBLICATION:
-                list.add(Search.getIndex(SearchIndex.names.citation.name()));
+                list.add(SPARQLSearch.getIndex(SearchIndex.names.citation.name()));
                 break;
             case TEXT:
-                list.add(Search.getIndex(SearchIndex.names.text.name()));
+                list.add(SPARQLSearch.getIndex(SearchIndex.names.text.name()));
                 break;
             case LINK:
-                list.add(Search.getIndex(SearchIndex.names.link.name()));
+                list.add(SPARQLSearch.getIndex(SearchIndex.names.url.name()));
+                list.add(SPARQLSearch.getIndex(SearchIndex.names.label.name()));
                 break;
         }
         return list;

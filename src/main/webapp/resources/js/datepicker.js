@@ -8,4 +8,5 @@ $(function() {
 		dateFormat : "yy-mm-dd",
 		firstDay : 1
 	});
+	
 });

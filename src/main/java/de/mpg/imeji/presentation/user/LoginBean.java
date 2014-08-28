@@ -3,10 +3,11 @@
  */
 package de.mpg.imeji.presentation.user;
 
+import java.net.URI;
+import java.net.URL;
+
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
-
-import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.auth.Authentication;
 import de.mpg.imeji.logic.auth.AuthenticationFactory;
@@ -16,6 +17,7 @@ import de.mpg.imeji.presentation.history.Page;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
+import de.mpg.imeji.presentation.util.UrlHelper;
 
 /**
  * Bean for login features
@@ -29,7 +31,6 @@ public class LoginBean
     private String login;
     private String passwd;
     private SessionBean sb;
-    private static Logger logger = Logger.getLogger(LoginBean.class);
 
     /**
      * Constructor
@@ -59,6 +60,11 @@ public class LoginBean
         return passwd;
     }
 
+    public void loginClick()
+    {
+        sb.setShowLogin(true);
+    }
+
     public void doLogin() throws Exception
     {
         Authentication auth = AuthenticationFactory.factory(getLogin(), getPasswd());
@@ -81,6 +87,7 @@ public class LoginBean
         {
             redirectAfterLogin = current.getCompleteUrl();
         }
+        redirectAfterLogin = UrlHelper.addParameter(redirectAfterLogin, "login", "1");
         FacesContext.getCurrentInstance().getExternalContext().redirect(redirectAfterLogin);
     }
 
@@ -102,6 +109,7 @@ public class LoginBean
         HttpSession session = (HttpSession)fc.getExternalContext().getSession(false);
         session.invalidate();
         sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        sb.setShowLogin(false);
         return "pretty:home";
     }
 }

@@ -24,7 +24,7 @@
 		
 		<!-- Are You Admin? -->	
 		<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!Auth.admin}">
-			<h:outputText value="#{lbl.view_page_disallowed}" styleClass="imj_messageInfo" rendered="#{SessionBean.user == null}"/>
+			<h:outputText value="#{lbl.view_page_disallowed}" styleClass="imj_messageInfo" rendered="#{!Auth.loggedIn}"/>
 			<h:outputText value="#{lbl.view_page_disallowed2}" styleClass="imj_messageInfo" rendered="#{Auth.loggedIn}"/>
 		</h:panelGroup>
 		
@@ -50,17 +50,18 @@
 								<h:outputText value="#{lbl.add_to_group} #{UsersBean.group.name}" rendered="#{UsersBean.group != null}"/>
 							</h2>
 						</div>
+						<div class="imj_simpleSearch">
+							<h:outputText value="(#{UsersBean.users.size()} #{lbl.users})" styleClass="imj_searchInfoText"/>
+							<h:form id="new">
+								<h:inputText value="#{UsersBean.query}" styleClass="imj_simpleSearchInput" />
+								<h:commandButton action="#{UsersBean.search()}" value="#{lbl.search}" styleClass="imj_simpleSearchButtonSubmit" />
+							</h:form>
+							<h:outputLink value="#{Navigation.applicationUrl}users?group=#{UsersBean.group.id}" title="#{lbl.clear}" rendered="#{UsersBean.query != ''}" styleClass="imj_cancelButton">
+								<h:outputText value="#{lbl.clear}" />
+							</h:outputLink>
+						</div>
 					</div>
-					<div class="imj_listBody">
-						<h:form id="new">
-							<h:inputText value="#{UsersBean.query}" styleClass="imj_simpleSearchInput" />
-							<h:commandButton action="#{UsersBean.search()}" value="#{lbl.search}" styleClass="imj_simpleSearchButtonSubmit" />
-						</h:form>
-						<h:outputLink value="#{Navigation.applicationUrl}users" title="#{lbl.clear}" rendered="#{UsersBean.query != ''}" styleClass="imj_cancelButton">
-							<h:outputText value="#{lbl.clear}" />
-						</h:outputLink>
-						<h:outputText value="(#{UsersBean.users.size()} #{lbl.users})" />
-					</div>
+					
 					<div class="imj_listBody">
 					
 						<ui:repeat id="userList" var="user" value="#{UsersBean.users}" rows="0">

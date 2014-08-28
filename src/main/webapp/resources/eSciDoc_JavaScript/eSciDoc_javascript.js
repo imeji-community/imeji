@@ -202,3 +202,36 @@ function include_javascripts() {
 
 
 addEvent(window, 'load', function(){window.setTimeout('install_javascripts()', 1);});
+
+
+/* this function updates the selectText container with the selected item of selectbox */
+// a.t.m. is implemented only for meta menu
+function customSelectbox(obj) {
+	if (obj) {
+		// implement the onchange functionality
+	} else {
+		$(".imj_metaMenuStandardSingleLine select").each(function(i) { // if you wish to select all, delete the selector for meta menu in front of select
+			var customSelectbox, select, val, textContainer, icon;
+			select = $(this);
+			customSelectbox = select.parents(".imj_customSelectbox");
+			customSelectbox.width(select.width());
+			
+			text = customSelectbox.find(".imj_selectionText");
+			icon = customSelectbox.find(".imj_buttonSortDescending_16");
+			
+			val = select.val(); // is the technical value of the current selectbox, but not the text wich is displayed
+			
+			select.find("option").each(function(i, opt){ // find the right option to get the right text value
+				if ($(opt).val() == val) {
+					val = $(opt).text(); // is now the option text
+					$(opt).parent().attr("title", val);
+				}
+			});
+			text.text(val);
+			text.width( ( select.width() - icon.width() - Math.round(Number(icon.css("margin-left").replace("px", ""))) ) );
+		});
+	}
+}
+$(function(){
+	customSelectbox();
+});

@@ -22,7 +22,7 @@ import de.mpg.imeji.logic.auth.Authorization;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.Search;
-import de.mpg.imeji.logic.search.Search.SearchType;
+import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.StorageController;
@@ -33,9 +33,7 @@ import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.auth.ImejiAuthBean;
 import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.history.PageURIHelper;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.PropertyReader;
@@ -188,8 +186,8 @@ public class FileServlet extends HttpServlet
         }
         else
         {
-            Search s = new Search(SearchType.ALL, null);
-            List<String> r = s.searchSimpleForQuery(SPARQLQueries.selectCollectionIdOfFile(url), null);
+            Search s = SearchFactory.create();
+            List<String> r = s.searchSimpleForQuery(SPARQLQueries.selectCollectionIdOfFile(url)).getResults();
             if (!r.isEmpty())
                 return URI.create(r.get(0));
             else
@@ -205,8 +203,8 @@ public class FileServlet extends HttpServlet
      */
     private Item getItem(String url, User user)
     {
-        Search s = new Search(SearchType.ALL, null);
-        List<String> r = s.searchSimpleForQuery(SPARQLQueries.selectItemIdOfFile(url), null);
+        Search s = SearchFactory.create();
+        List<String> r = s.searchSimpleForQuery(SPARQLQueries.selectItemIdOfFile(url)).getResults();
         if (!r.isEmpty())
         {
             ItemController c = new ItemController();

@@ -49,6 +49,8 @@
 	</servlet>
 	<!-- Filters (order is important) -->
 	
+
+	
 	<filter>
 		<filter-name>Encoder Filter</filter-name>
 		<filter-class>de.mpg.imeji.presentation.util.EncoderFilter</filter-class>
@@ -71,6 +73,9 @@
 	</filter>
 	
 	<!-- Mappings -->
+	
+ 	
+	
 	<filter-mapping>
 		<filter-name>Encoder Filter</filter-name>
 		<url-pattern>/*</url-pattern>
@@ -108,6 +113,9 @@
 		<url-pattern>/digilib</url-pattern>
 	</servlet-mapping>
 	
+
+	
+	
 	<filter-mapping>
 		<filter-name>History Filter</filter-name>
 		<url-pattern>/*</url-pattern>
@@ -115,6 +123,8 @@
 		<dispatcher>FORWARD</dispatcher>
 	</filter-mapping>
 	<!-- Parameters -->
+	
+	
 	<context-param>
 		<param-name>com.ocpsoft.pretty.BASE_PACKAGES</param-name>
 		<param-value>de.mpg.imeji</param-value>
@@ -122,14 +132,6 @@
 	<context-param>
 		<param-name>javax.faces.DEFAULT_SUFFIX</param-name>
 		<param-value>.xhtml</param-value>
-	</context-param>
-	<context-param>
-		<param-name>facelets.DEVELOPMENT</param-name>
-		<param-value>false</param-value>
-	</context-param>
-	<context-param>
-		<param-name>facelets.SKIP_COMMENTS</param-name>
-		<param-value>true</param-value>
 	</context-param>
 	<context-param>
 		<param-name>javax.faces.PROJECT_STAGE</param-name>
@@ -168,18 +170,6 @@
 		<param-name>javax.faces.FACELETS_REFRESH_PERIOD</param-name>
 		<param-value>-1</param-value>
 	</context-param>
-	<context-param>
-	    <param-name>org.richfaces.enableControlSkinning</param-name>
-	    <param-value>false</param-value>
-	 </context-param>
-	 <context-param>
-	    <param-name>org.richfaces.enableControlSkinningClasses</param-name>
-	    <param-value>false</param-value>
-	 </context-param>
-	 <context-param>
-	    <param-name>org.richfaces.skin</param-name>
-	    <param-value>blueSky</param-value>
-  	 </context-param>
 	
 	
 	
@@ -199,6 +189,7 @@
 	</error-page>
 	<!-- Digilib staff -->
 	<!-- The Intialisation Listener -->
+	
 	<listener>
 		<listener-class>digilib.conf.DigilibServletConfiguration</listener-class>
 	</listener>

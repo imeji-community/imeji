@@ -62,6 +62,7 @@ import de.mpg.imeji.presentation.util.ProxyHelper;
  */
 public class EscidocStorage implements Storage
 {
+    private static final long serialVersionUID = 2943184911605071789L;
     private final String name = "escidoc";
     private EscidocUtils util;
     private Authentication auth;
@@ -134,7 +135,7 @@ public class EscidocStorage implements Storage
         get.addRequestHeader("Cookie", getEscidocCookie());
         try
         {
-            //client.executeMethod(get);
+            // client.executeMethod(get);
             ProxyHelper.executeMethod(client, get);
             if (get.getStatusCode() == 302)
             {
@@ -143,7 +144,7 @@ public class EscidocStorage implements Storage
                 login();
                 get = StorageUtils.newGetMethod(client, url);
                 get.addRequestHeader("Cookie", getEscidocCookie());
-                //client.executeMethod(get);
+                // client.executeMethod(get);
                 ProxyHelper.executeMethod(client, get);
             }
             StorageUtils.writeInOut(get.getResponseBodyAsStream(), out, close);

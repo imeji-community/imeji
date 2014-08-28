@@ -35,25 +35,22 @@ All rights reserved. Use is subject to license terms.
 -->
 </ui:remove>
 
-	<h:panelGroup layout="block" styleClass="imj_simpleSearch">
+	<h:panelGroup  styleClass="imj_simpleSearch">
 		<h:form>
-			<span class="imj_iconMagnifier_24">&#160;</span>
-			
 			<h:panelGroup styleClass="imj_simpleSearchInputWrapper">
 				<h:inputText id="quickSearchString" styleClass="imj_simpleSearchInput" value="#{QuickSearchBean.searchString}"/>
-				<h:selectOneRadio id="quickSearchRadioBox" value="#{QuickSearchBean.selectedSearchType}" valueChangeListener="#{QuickSearchBean.selectedSearchTypeListener}">
-					<f:selectItem id="selIm" itemLabel="#{lbl.images}" itemValue="images"/>
-					<f:selectItem id="selCol" itemLabel="#{lbl.collections}" itemValue="collections"/>
-					<f:selectItem id="selAlb" itemLabel="#{lbl.history_albums}" itemValue="albums"/>
-				</h:selectOneRadio>
+				<h:commandButton id="btnQuickSearchStart" title="#{lbl.search_for}" styleClass="imj_simpleSearchButtonSubmit" value="#{lbl.paginator_go}" action="#{QuickSearchBean.search}"/>
+				<h:outputLink id="lnkAdvancedSearch" title="#{lbl.goto_adv_search}" styleClass="imj_simpleSearchLinkAdvancedsearch" value="#{Navigation.searchUrl}">
+		   			<h:outputText value="#{lbl.advanced_search}"/>
+		   		</h:outputLink>
 			</h:panelGroup>
 			
-			<h:commandButton id="btnQuickSearchStart" title="#{lbl.search_for}" styleClass="imj_simpleSearchButtonSubmit" value="#{lbl.paginator_go}" action="#{QuickSearchBean.search}"/>
-			
-			<h:outputLink id="lnkAdvancedSearch" title="#{lbl.goto_adv_search}" styleClass="imj_simpleSearchLinkAdvancedsearch" value="#{Navigation.searchUrl}">
-		   		<h:outputText value="#{lbl.advanced_search}"/>
-		   	</h:outputLink>
-		   	
+			<h:selectOneRadio id="quickSearchRadioBox" value="#{QuickSearchBean.selectedSearchType}" 
+							  valueChangeListener="#{QuickSearchBean.selectedSearchTypeListener}" >
+				<f:selectItem id="selIm" itemLabel="#{lbl.images}" itemValue="images" itemEscaped="false"/>
+				<f:selectItem id="selCol" itemLabel="#{lbl.collections}" itemValue="collections" itemEscaped="false"/>
+				<f:selectItem id="selAlb" itemLabel="#{lbl.history_albums}" itemValue="albums" itemEscaped="false"/>			
+			</h:selectOneRadio>	   	
 		</h:form>
 	</h:panelGroup>
 	

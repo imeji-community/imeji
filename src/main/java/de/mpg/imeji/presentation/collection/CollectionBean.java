@@ -33,6 +33,8 @@ import de.mpg.imeji.presentation.util.UrlHelper;
  */
 public abstract class CollectionBean extends ContainerBean
 {
+    private static final long serialVersionUID = -3071769388574710503L;
+
     public enum TabType
     {
         COLLECTION, PROFILE, HOME, UTIL;
@@ -212,20 +214,6 @@ public abstract class CollectionBean extends ContainerBean
     }
 
     /**
-     * True if the current {@link User} is the creator of the {@link CollectionImeji}
-     * 
-     * @return
-     */
-    public boolean getIsOwner()
-    {
-        if (collection != null && collection.getCreatedBy() != null && sessionBean.getUser() != null)
-        {
-            return collection.getCreatedBy().equals(ObjectHelper.getURI(User.class, sessionBean.getUser().getEmail()));
-        }
-        return false;
-    }
-
-    /**
      * release the {@link CollectionImeji}
      * 
      * @return
@@ -258,7 +246,9 @@ public abstract class CollectionBean extends ContainerBean
         try
         {
             cc.delete(collection, sessionBean.getUser());
-            BeanHelper.info(sessionBean.getMessage("success_collection_delete"));
+            // BeanHelper.info(sessionBean.getMessage("success_collection_delete"));
+            BeanHelper.info(sessionBean.getMessage("success_collection_delete").replace("XXX_collectionName_XXX",
+                    this.collection.getMetadata().getTitle()));
         }
         catch (Exception e)
         {

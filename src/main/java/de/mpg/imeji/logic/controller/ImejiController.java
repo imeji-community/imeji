@@ -4,10 +4,9 @@
 package de.mpg.imeji.logic.controller;
 
 import java.util.ArrayList;
+
 import java.util.Calendar;
 import java.util.List;
-
-import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.concurrency.locks.Locks;
 import de.mpg.imeji.logic.util.IdentifierUtil;
@@ -32,7 +31,6 @@ import de.mpg.j2j.helper.J2JHelper;
  */
 public abstract class ImejiController
 {
-    private static Logger logger = Logger.getLogger(ImejiController.class);
     protected User user;
 
     /**

@@ -69,8 +69,12 @@ public class UsersBean implements Serializable
         Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
         try
         {
-            FacesContext.getCurrentInstance().getExternalContext()
-                    .redirect(nav.getApplicationUrl() + "users?q=" + query);
+            FacesContext
+                    .getCurrentInstance()
+                    .getExternalContext()
+                    .redirect(
+                            nav.getApplicationUrl() + "users?q=" + query
+                                    + (group != null ? "&group=" + group.getId() : ""));
         }
         catch (IOException e)
         {
@@ -98,7 +102,7 @@ public class UsersBean implements Serializable
      */
     public void retrieveGroup()
     {
-        if (UrlHelper.getParameterValue("group") != null)
+        if (UrlHelper.getParameterValue("group") != null && "".equals(UrlHelper.getParameterValue("group")))
         {
             UserGroupController c = new UserGroupController();
             try

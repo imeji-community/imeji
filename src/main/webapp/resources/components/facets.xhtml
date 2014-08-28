@@ -14,9 +14,19 @@
 						<h:panelGroup styleClass="imj_facetGroup" rendered="#{!(empty groups)}">
 							<h:outputText value="[" styleClass="imj_facetGroupOpener"/>
 							<ui:repeat var="facets" value="#{groups}" varStatus="fpos">
+								<h:outputLink value="#{facets.uri}" styleClass="imj_facetGroupItem" rendered="#{facets.type == 'COLLECTION'}">								
+									<h:panelGroup rendered="#{!facets.label.startsWith('No ')}">
+										<h:outputText value="#{facets.internationalizedLabel}"/>
+										<h:outputText value=" (#{facets.count}" title="Defined values"/>
+									</h:panelGroup>
+									<h:panelGroup rendered="#{facets.label.startsWith('No ')}">
+										<h:outputText value=" | #{facets.count})" title="Not defined values"/>
+									</h:panelGroup>							
+								</h:outputLink>
 								<h:outputText value="|" styleClass="imj_facetSeparator" rendered="#{fpos.index > 0 }"/>
-								<h:outputLink value="#{facets.uri}" styleClass="imj_facetGroupItem">
-									<h:outputText value="#{facets.internationalizedLabel} (#{facets.count})"/>
+								<h:outputLink value="#{facets.uri}" styleClass="imj_facetGroupItem" rendered="#{facets.type != 'COLLECTION'}">								
+									<h:outputText value="#{facets.internationalizedLabel}"/>
+									<h:outputText value=" (#{facets.count})"/>
 								</h:outputLink>
 							</ui:repeat>
 							<h:outputText value="]" styleClass="imj_facetGroupCloser"/>

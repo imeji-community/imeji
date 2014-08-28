@@ -35,8 +35,10 @@ import com.ocpsoft.pretty.PrettyContext;
 
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
+import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.UploadResult;
@@ -45,7 +47,7 @@ import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.collection.CollectionBean;
 import de.mpg.imeji.presentation.history.PageURIHelper;
 import de.mpg.imeji.presentation.session.SessionBean;
@@ -108,11 +110,11 @@ public class UploadBean implements Serializable
         }
         else if (UrlHelper.getParameterBoolean("start"))
         {
-            upload();
+        	upload();
         }
         else if (UrlHelper.getParameterBoolean("done"))
         {
-            // do nothing
+            ((UploadSession)BeanHelper.getSessionBean(UploadSession.class)).resetProperties();    
         }
     }
 
@@ -443,10 +445,9 @@ public class UploadBean implements Serializable
      */
     private Item findItemByFileName(String filename)
     {
-        Search s = new Search(SearchType.ITEM, null);
+        Search s = SearchFactory.create(SearchType.ITEM);
         List<String> sr = s.searchSimpleForQuery(
-                SPARQLQueries.selectContainerItemByFilename(collection.getId(), FilenameUtils.getBaseName(filename)),
-                null);
+                SPARQLQueries.selectContainerItemByFilename(collection.getId(), FilenameUtils.getBaseName(filename))).getResults();
         if (sr.size() == 0)
             throw new RuntimeException("No item found with the filename " + FilenameUtils.getBaseName(filename));
         if (sr.size() > 1)
@@ -463,10 +464,9 @@ public class UploadBean implements Serializable
      */
     private boolean filenameExistsInCollection(String filename)
     {
-        Search s = new Search(SearchType.ITEM, null);
+        Search s = SearchFactory.create(SearchType.ITEM);
         return s.searchSimpleForQuery(
-                SPARQLQueries.selectContainerItemByFilename(collection.getId(), FilenameUtils.getBaseName(filename)),
-                null).size() > 0;
+                SPARQLQueries.selectContainerItemByFilename(collection.getId(), FilenameUtils.getBaseName(filename))).getNumberOfRecords() > 0;
     }
 
     /**
@@ -696,12 +696,12 @@ public class UploadBean implements Serializable
         this.formatWhiteList = formatWhiteList;
     }
 
-    private List<String> getfFiles()
+    public List<String> getfFiles()
     {
         return ((UploadSession)BeanHelper.getSessionBean(UploadSession.class)).getfFiles();
     }
 
-    private List<Item> getsFiles()
+    public List<Item> getsFiles()
     {
         return ((UploadSession)BeanHelper.getSessionBean(UploadSession.class)).getsFiles();
     }
@@ -844,4 +844,5 @@ public class UploadBean implements Serializable
     {
         this.recursive = recursive;
     }
+   
 }

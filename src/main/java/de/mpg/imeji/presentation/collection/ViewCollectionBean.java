@@ -11,7 +11,6 @@ import javax.faces.bean.RequestScoped;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Organization;
@@ -31,6 +30,7 @@ import de.mpg.imeji.presentation.util.ObjectLoader;
 @RequestScoped
 public class ViewCollectionBean extends CollectionBean
 {
+    private static final long serialVersionUID = 6473181109648137472L;
     private List<Person> persons = null;
     private static Logger logger = Logger.getLogger(ViewCollectionBean.class);
 
@@ -98,18 +98,6 @@ public class ViewCollectionBean extends CollectionBean
     protected String getNavigationString()
     {
         return "pretty:collectionInfos";
-    }
-
-    public String getPersonString()
-    {
-        String personString = "";
-        for (Person p : getCollection().getMetadata().getPersons())
-        {
-            if (!"".equalsIgnoreCase(personString))
-                personString += " / ";
-            personString += p.getFamilyName() + ", " + p.getGivenName() + " ";
-        }
-        return personString;
     }
 
     public String getSmallDescription()

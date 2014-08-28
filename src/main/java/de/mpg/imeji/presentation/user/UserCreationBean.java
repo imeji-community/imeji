@@ -11,12 +11,14 @@ import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Grant;
+import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.user.util.EmailClient;
 import de.mpg.imeji.presentation.user.util.EmailMessages;
 import de.mpg.imeji.presentation.user.util.PasswordGenerator;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.j2j.exceptions.NotFoundException;
 
 /**
@@ -51,9 +53,16 @@ public class UserCreationBean
      */
     public String create()
     {
-        if (!isValidEmail(user.getEmail()))
+   	
+        if(user.getPerson() == null || "".equals(user.getPerson().getFamilyName()) || user.getPerson().getFamilyName() == null)
         {
-            BeanHelper.error(sb.getMessage("error_user_email_not_valid"));
+        	BeanHelper.error(sb.getMessage("error_user_name_unfilled"));
+        	if(!isValidEmail(user.getEmail()))
+            	BeanHelper.error(sb.getMessage("error_user_email_not_valid"));
+        }
+        else if(!isValidEmail(user.getEmail()))
+        {
+        	BeanHelper.error(sb.getMessage("error_user_email_not_valid"));
         }
         else
         {
@@ -154,6 +163,28 @@ public class UserCreationBean
             logger.error("Error sending email", e);
             BeanHelper.error(sb.getMessage("error") + ": Email not sent");
         }
+    }
+
+    /**
+     * Add a new empty organization
+     * 
+     * @param index
+     */
+    public void addOrganization(int index)
+    {
+        ((List<Organization>)this.user.getPerson().getOrganizations()).add(index, ImejiFactory.newOrganization());
+    }
+
+    /**
+     * Remove an nth organization
+     * 
+     * @param index
+     */
+    public void removeOrganization(int index)
+    {
+    	List<Organization> orgas = (List<Organization>)this.user.getPerson().getOrganizations();
+    	if(orgas.size() > 1)
+    		orgas.remove(index);
     }
 
     /**

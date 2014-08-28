@@ -176,7 +176,7 @@ public class Authorization
      * Return true if the {@link User} can create the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      * @throws NotAllowedError
      */
@@ -186,30 +186,29 @@ public class Authorization
             return true;
         return false;
     }
-    
+
     /**
      * Check if the object can be created when the object is not existing
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      * @throws NotAllowedError
      */
     public boolean createNew(User user, Object obj)
     {
-        if(user != null && obj instanceof Album)
+        if (user != null && obj instanceof Album)
             return true;
         if (hasGrant(user, toGrant(getRelevantURIForSecurity(obj, true, true), GrantType.CREATE)))
             return true;
         return false;
     }
 
-
     /**
      * Return true if the {@link User} can read the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      * @throws NotAllowedError
      */
@@ -234,7 +233,7 @@ public class Authorization
      * Return true if the {@link User} can update the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      * @throws NotAllowedError
      */
@@ -252,16 +251,17 @@ public class Authorization
      * Return true if the {@link User} can delete the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      * @throws NotAllowedError
      */
     public boolean delete(User user, Object obj)
     {
-        if (!isPublic(obj) && hasGrant(
-                user,
-                toGrant(getRelevantURIForSecurity(obj, false, true),
-                        getGrantTypeAccordingToObjectType(obj, GrantType.DELETE))))
+        if (!isPublic(obj)
+                && hasGrant(
+                        user,
+                        toGrant(getRelevantURIForSecurity(obj, false, true),
+                                getGrantTypeAccordingToObjectType(obj, GrantType.DELETE))))
             return true;
         return AuthUtil.isSysAdmin(user);
     }
@@ -270,7 +270,7 @@ public class Authorization
      * Return true if the {@link User} can administrate the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      * @throws NotAllowedError
      */
@@ -288,7 +288,7 @@ public class Authorization
      * Return true if the user can update the content of the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      */
     public boolean updateContent(User user, Object obj)
@@ -302,12 +302,13 @@ public class Authorization
      * Return true if the user can delete the content of the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      */
     public boolean deleteContent(User user, Object obj)
     {
-        if (!isPublic(obj) && hasGrant(user, toGrant(getRelevantURIForSecurity(obj, false, true), GrantType.DELETE_CONTENT)))
+        if (!isPublic(obj)
+                && hasGrant(user, toGrant(getRelevantURIForSecurity(obj, false, true), GrantType.DELETE_CONTENT)))
             return true;
         return AuthUtil.isSysAdmin(user);
     }
@@ -316,7 +317,7 @@ public class Authorization
      * Return true if the user can administrate the content of the object
      * 
      * @param user
-     * @param uri
+     * @param url
      * @return
      */
     public boolean adminContent(User user, Object obj)
@@ -374,7 +375,8 @@ public class Authorization
         else if (obj instanceof AlbumBean)
             return ((AlbumBean)obj).getAlbum().getId().toString();
         else if (obj instanceof MetadataProfile)
-            return createNew ? AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI : ((MetadataProfile)obj).getId().toString();
+            return createNew ? AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI : ((MetadataProfile)obj).getId()
+                    .toString();
         else if (obj instanceof User)
             return ((User)obj).getId().toString();
         else if (obj instanceof URI)
@@ -431,11 +433,22 @@ public class Authorization
     private boolean isPublic(Object obj)
     {
         if (obj instanceof Item)
-            return ((Item)obj).getStatus().equals(Status.RELEASED);
+            return isPublicStatus(((Item)obj).getStatus());
         else if (obj instanceof Container)
-            return ((Container)obj).getStatus().equals(Status.RELEASED);
+            return isPublicStatus(((Container)obj).getStatus());
         else if (obj instanceof MetadataProfile)
-            return ((MetadataProfile)obj).getStatus().equals(Status.RELEASED);
+            return isPublicStatus(((MetadataProfile)obj).getStatus());
         return false;
+    }
+
+    /**
+     * True if the {@link Status} is a public status(i.e. not need to have special grants to read the object)
+     * 
+     * @param status
+     * @return
+     */
+    private boolean isPublicStatus(Status status)
+    {
+        return status.equals(Status.RELEASED) || status.equals(Status.WITHDRAWN);
     }
 }

@@ -4,17 +4,18 @@
 package de.mpg.imeji.presentation.collection;
 
 import java.net.URI;
+import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
-import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.controller.GrantController;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Person;
+import de.mpg.imeji.presentation.album.AlbumBean;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
@@ -31,6 +32,8 @@ import de.mpg.imeji.presentation.util.UrlHelper;
 @SessionScoped
 public class CreateCollectionBean extends CollectionBean
 {
+    private static final long serialVersionUID = 1257698224590957642L;
+
     /**
      * Bean Constructor
      */
@@ -45,7 +48,10 @@ public class CreateCollectionBean extends CollectionBean
     public void init()
     {
         if (UrlHelper.getParameterBoolean("reset"))
+        {
             setCollection(ImejiFactory.newCollection());
+            ((List<Person>)getCollection().getMetadata().getPersons()).set(0, sessionBean.getUser().getPerson().clone());
+        }
     }
 
     /**
@@ -68,12 +74,13 @@ public class CreateCollectionBean extends CollectionBean
             CollectionController collectionController = new CollectionController();
             collectionController.create(getCollection(), profile, sessionBean.getUser());
             BeanHelper.info(sessionBean.getMessage("success_collection_create"));
-            FacesContext
-                    .getCurrentInstance()
-                    .getExternalContext()
-                    .redirect(
-                            ((Navigation)BeanHelper.getApplicationBean(Navigation.class)).getApplicationUrl()
-                                    + "collections?q=");
+            
+            Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
+
+            //((CollectionBean)BeanHelper.getSessionBean(CollectionBean.class)).setCollection(getCollection());
+            
+            FacesContext.getCurrentInstance().getExternalContext().redirect
+                 (nav.getCollectionUrl()+getCollection().getIdString());
             return "";
         }
         else

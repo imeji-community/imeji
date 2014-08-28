@@ -11,22 +11,15 @@
 		<composite:attribute name="metadataNavigationURL"/>
 	</composite:interface>
 	
-	<composite:implementation>
-		
+	<composite:implementation>		
 		<div class="imj_bibliographicList">
-			
-			<list:listHeaderFooter_showHideDetails containerClass="imj_listHeader" displayLinkText="#{cc.attrs.globalDisplayLinkText}"/>
-			
 			<h:panelGroup id="ajaxList" styleClass="imj_listBody">
 				<ul>
 					<ui:repeat var="container" value="#{cc.attrs.mediaList.currentPartList}" id="list" rows="0"  varStatus="index">
 						<list:bibListItem_released itemClass="imj_bibliographicListItem" item="#{container}" metadataNavigationURL="#{cc.attrs.metadataNavigationURL}"/>
 					</ui:repeat>
 				</ul>
-			</h:panelGroup>
-			
-			<list:listHeaderFooter_showHideDetails containerClass="imj_listFooter" displayLinkText="#{cc.attrs.globalDisplayLinkText}"/>
-			
+			</h:panelGroup>						
 		</div> <!-- END OF BIBLIOGRAPHIC LIST -->
 	</composite:implementation>
 </html>

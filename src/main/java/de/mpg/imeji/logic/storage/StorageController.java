@@ -49,6 +49,7 @@ import de.mpg.imeji.presentation.util.PropertyReader;
  */
 public class StorageController implements Serializable
 {
+    private static final long serialVersionUID = -2651970941029421673L;
     private Storage storage;
 
     /**

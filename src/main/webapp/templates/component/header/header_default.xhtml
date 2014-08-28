@@ -42,23 +42,17 @@ All rights reserved. Use is subject to license terms.
 			
 			<!-- import meta menu here -->
 			<ui:include src="../menu/metamenu_default.xhtml"/>
-		
-			<h:panelGroup layout="block" styleClass="imj_siteHeaderLogoSearchSection">
-				<div class="imj_siteHeaderLogoArea">
-					<h:outputLink id="lnkStartPage" title="#{lbl.goto_startpage}" value="#{Navigation.homeUrl}">
-						
-						<h:panelGroup styleClass="imj_siteHeaderLogo"/>
-					</h:outputLink>
-				</div>
-		
+			
+			<h:outputLink id="lnkStartPage" title="#{lbl.goto_startpage}" value="#{Navigation.homeUrl}">
+				<h:panelGroup styleClass="imj_logo"/>
+			</h:outputLink>
+			
+			<div class="imj_siteHeaderMenuSearchSection">
+				<!-- place main menu here -->
+				<menu:mainMenu navBean="#{Navigation}" curMainMenu="#{currentMainMenu}" menuClass="imj_mainMenuStandard" userHasAdminRights="#{Auth.admin}"/>			
 				<!-- import search here-->
 				<ui:include src="../menu/searchmenu_default.xhtml"/>
-		
-			</h:panelGroup>
-		
-			<!-- place main menu here -->
-			<menu:mainMenu navBean="#{Navigation}" curMainMenu="#{currentMainMenu}" menuClass="imj_mainMenuStandard" userHasAdminRights="#{Auth.admin}"/>
-			
+			</div>
 		</h:panelGroup>
 	</f:subview>
 </ui:composition>

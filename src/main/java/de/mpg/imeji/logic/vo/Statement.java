@@ -3,6 +3,7 @@
  */
 package de.mpg.imeji.logic.vo;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,8 +36,9 @@ import de.mpg.j2j.misc.LocalizedString;
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "statement", namespace = "http://imeji.org/terms")
-public class Statement implements Comparable<Statement>
+public class Statement implements Comparable<Statement>, Serializable, Cloneable
 {
+    private static final long serialVersionUID = -7950561563075491540L;
     // Id: creation to be changed with pretty ids
     private URI id = IdentifierUtil.newURI(Statement.class);
     @j2jResource("http://purl.org/dc/terms/type")

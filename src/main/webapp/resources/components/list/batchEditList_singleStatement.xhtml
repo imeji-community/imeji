@@ -40,7 +40,7 @@
 				<div class="imj_metadataSet">
 					<h:outputText value="#{cc.attrs.itemLabelBean.internationalizedLabels[cc.attrs.itemStatement.id]} (#{cc.attrs.itemLabelBean.lang})" styleClass="imj_metadataLabel" rendered="#{cc.attrs.hideLabel == false}"/>
 					
-					<h:inputText immediate="false" onfocus="this.select(); getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.number}" rendered="#{!cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
+					<h:inputText immediate="false" onfocus="this.select(); getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')"  onkeypress="validateInputNumber(this);" onkeyup="validateInputNumber(this);" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.number}" rendered="#{!cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
 						<f:converter converterId="DoubleConverter"/>
 					</h:inputText>
 					<h:panelGroup layout="block" styleClass="imj_metadataValue" rendered="#{cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
@@ -144,11 +144,9 @@
 					</div>
 					<div class="imj_metadataSet">
 						<h:outputLabel value="#{lbl.url}" styleClass="imj_metadataLabel"/>
-						<div class="imj_metadataValue">
-							<h:inputText id="inputLicenseId" value="#{cc.attrs.itemBean.externalUri}" immediate="true" onfocus="this.select();">
-								<f:converter converterId="URIConverter"/>
-							</h:inputText>
-						</div>
+						<h:inputText styleClass="imj_metadataValue" id="inputLicenseId" value="#{cc.attrs.itemBean.externalUri}" immediate="true" onfocus="this.select();">
+							<f:converter converterId="URIConverter"/>
+						</h:inputText>
 					</div>
 				</ui:fragment>
 				
@@ -210,22 +208,26 @@
 				</div>
 				<div class="imj_metadataSet">
 					<h:outputLabel value="#{lbl.geolocation_latitude}" styleClass="imj_metadataLabel"/>
-					<h:inputText id="inputLatitude" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.latitude}" immediate="true" onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')"/>
+					<h:inputText id="inputLatitude" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.latitude}" onkeypress="validateInputNumber(this);" onkeyup="validateInputNumber(this);"  immediate="true" onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')">
+						<f:converter converterId="DoubleConverter" />
+					</h:inputText>
 				</div>
 				<div class="imj_metadataSet">
 					<h:outputLabel value="#{lbl.geolocation_longitude}" styleClass="imj_metadataLabel"/>
-					<h:inputText id="inputLongitude" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.longitude}" immediate="true" onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')"/>
+					<h:inputText id="inputLongitude" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.longitude}" onkeypress="validateInputNumber(this);" onkeyup="validateInputNumber(this);"  immediate="true" onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')">
+						<f:converter converterId="DoubleConverter" />
+					</h:inputText>				
 				</div>
 			</ui:fragment>
 			
 			
-			<ui:fragment rendered="#{cc.attrs.formObject != null and cc.attrs.formObject != '' and cc.attrs.listItem != null}">
+			<ui:fragment rendered="#{cc.attrs.formObject != null and cc.attrs.formObject != '' and cc.attrs.listItem != null and cc.attrs.itemBean.statement.maxOccurs != '1'}">
 				<!-- BUTTONS -->
 				<h:panelGroup styleClass="imj_inlineButtonGroup">
-					<h:commandLink id="add" styleClass="imj_buttonAdd_16" action="#{cc.attrs.listItem.addMetadata(md)}" title="#{lbl.add}" value=" " rendered="#{cc.attrs.itemBean.statement.maxOccurs != '1'}">
+					<h:commandLink id="add" type="submit" styleClass="imj_buttonAdd_16" action="#{cc.attrs.listItem.addMetadata(md)}" title="#{lbl.add}">
 						<f:ajax execute="#{cc.attrs.formObject}" render="#{cc.attrs.formObject}" />
 					</h:commandLink>
-					<h:commandLink  id="remove" styleClass="imj_buttonRemove_16" action="#{cc.attrs.listItem.removeMetadata(md)}" title="#{lbl.remove}" value=" " rendered="#{cc.attrs.itemBean.statement.maxOccurs != '1'}">
+					<h:commandLink  id="remove" type="submit" styleClass="imj_buttonRemove_16" action="#{cc.attrs.listItem.removeMetadata(md)}" title="#{lbl.remove}">
 						<f:ajax execute="#{cc.attrs.formObject}" render="#{cc.attrs.formObject}" />
 					</h:commandLink>
 				</h:panelGroup>

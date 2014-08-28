@@ -5,13 +5,13 @@
 	xmlns:imjc="http://java.sun.com/jsf/composite/components">
 	
 	<ui:define name="init">
-		<h:outputText value="#{imageBean.init}"/>
+		<h:outputText value="#{itemBean.init}"/>
 	</ui:define>
 	
 	<!-- Main Content - Image Detail View -->
 	<ui:define name="mainContent">
 	   
-		<ui:fragment rendered="#{imageBean.image != null}">
+		<ui:fragment rendered="#{itemBean.image != null}">
 			<!-- Breadcrumb - History -->
 			<ui:include src="../../include/History.xhtml"></ui:include> 
 			
@@ -19,18 +19,18 @@
 			<h:panelGroup layout="block" id="imj_ajaxWrapper" styleClass="imj_mediaEntryDetailPage">
 				<h:panelGroup layout="block" id="selectionInfoPanel">
 					<!-- Selection Info Panel -->
-					<imjc:selectionInfoPanel fSession="#{FiltersSession}" facetBean="#{imageBean}" currentMainMenu="#{currentMainMenu}" browseToAllUrl="#{browseToAllItemsUrl}" numberOfElements="0" showSelectMenu="false"/>
+					<imjc:selectionInfoPanel fSession="#{FiltersSession}" facetBean="#{itemBean}" currentMainMenu="#{currentMainMenu}" browseToAllUrl="#{browseToAllItemsUrl}" numberOfElements="0" showSelectMenu="false"/>
 				</h:panelGroup>
 				
-				<ui:fragment rendered="#{Auth.read(imageBean.image)}">
+				<ui:fragment rendered="#{Auth.read(itemBean.image)}">
 					<!-- pagination top -->
 					<h:panelGroup layout="block" id="paginatorTop" styleClass="imj_paginator">
 						<h:panelGroup styleClass="imj_simplePageBrowser">
-							<h:outputLink value="#{imageBean.browse.previous}&amp;tab=#{imageBean.tab}" styleClass="imj_backwardButton" disabled="#{imageBean.browse.previous == null}">
-								<h:outputText value="#{lbl.paginator_previous} #{imageBean.initLabels}"/>
+							<h:outputLink value="#{itemBean.browse.previous}&amp;tab=#{itemBean.tab}" styleClass="imj_backwardButton" disabled="#{itemBean.browse.previous == null}">
+								<h:outputText value="#{lbl.paginator_previous} #{itemBean.initLabels}"/>
 							</h:outputLink>
 							
-							<h:outputLink value="#{imageBean.browse.next}&amp;tab=#{imageBean.tab}" styleClass="imj_forwardButton" disabled="#{imageBean.browse.next == null}">
+							<h:outputLink value="#{itemBean.browse.next}&amp;tab=#{itemBean.tab}" styleClass="imj_forwardButton" disabled="#{itemBean.browse.next == null}">
 								<h:outputText value="#{lbl.paginator_next}"/>
 							</h:outputLink>
 						</h:panelGroup>
@@ -40,11 +40,22 @@
 			</h:panelGroup>
 			
 		</ui:fragment>
-        
-        <!-- User not allowed to view item -->
-        <h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!Auth.read(imageBean.image) and SessionBean.user == null and !MessagesBean.hasMessages}">
-        	<ui:include src="../../include/LoginFormular.xhtml"/>
-		</h:panelGroup>
 		
+		<ui:fragment rendered="#{itemBean.image == null}">
+			<h:panelGroup layout="block" styleClass="imj_errorPage" rendered="#{Auth.loggedIn}">
+	        	<h3 class="imj_headline">
+					<h:outputText value="#{lbl.errorNote}"/>
+				</h3>				
+				<p class="imj_errorText">
+					<h:outputText value="#{msg.error_file_not_found_logged_in}"/>
+				</p>
+			</h:panelGroup>			
+			<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!Auth.loggedIn}">
+	        	<ui:include src="../../include/LoginFormular.xhtml"/>
+			</h:panelGroup>
+			<h:outputLink value="#{HistorySession.previousPage.url}" rendered="#{HistorySession.previousPage != null}">
+				<h:outputText value="#{lbl.back_to_previous}" />
+			</h:outputLink>		
+		</ui:fragment>
 	</ui:define>	
 </ui:composition>

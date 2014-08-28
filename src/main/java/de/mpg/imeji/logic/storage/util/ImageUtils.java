@@ -127,7 +127,7 @@ public class ImageUtils
         int height = image.getHeight(null);
         BufferedImage newImg = null;
         Image rescaledImage;
-        int colorSpace = (image.getTransparency() == Transparency.OPAQUE) ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB;
+        int colorSpace = BufferedImage.TYPE_INT_RGB;
         if (width > height)
         {
             if (FileResolution.THUMBNAIL.equals(resolution))
@@ -407,7 +407,9 @@ public class ImageUtils
         }
         else
         {
-            bufferedImage = image;
+            size = image.getWidth() > image.getHeight() ? image.getWidth() : image.getHeight();
+            bufferedImage = scaleImageFast(image, size, resolution);
+            // bufferedImage = image;
         }
         return bufferedImage;
     }

@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.ocpsoft.pretty.PrettyContext;
 
 import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.session.SessionBean;
 
 /**
  * {@link Filter} for the imeji history
@@ -48,17 +49,27 @@ public class HistoryFilter implements Filter
     public void doFilter(ServletRequest serv, ServletResponse resp, FilterChain chain) throws IOException,
             ServletException
     {
-        // Limit the case to filter: dispachertype only forward, and only HTTP GET method
-        if (DispatcherType.FORWARD.compareTo(serv.getDispatcherType()) == 0)
+        try
         {
-            HttpServletRequest request = (HttpServletRequest)serv;
-            if ("GET".equals(request.getMethod()))
+            // Limit the case to filter: dispachertype only forward, and only HTTP GET method
+            if (DispatcherType.FORWARD.compareTo(serv.getDispatcherType()) == 0)
             {
+                HttpServletRequest request = (HttpServletRequest)serv;
                 servletContext = request.getSession().getServletContext();
-                dofilterImpl(request, resp);
+                if ("GET".equals(request.getMethod()))
+                {
+                    dofilterImpl(request, resp);
+                }
             }
         }
-        chain.doFilter(serv, resp);
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            chain.doFilter(serv, resp);
+        }
     }
 
     /**
@@ -71,19 +82,24 @@ public class HistoryFilter implements Filter
     {
         HistorySession hs = getHistorySession(request, resp);
         Navigation nav = getNavigation(request, resp);
-        String label = PageURIHelper.getPageLabel(PrettyContext.getCurrentInstance(request).getRequestURL().toURL());
-        String h = request.getParameter("h");
-        String uri = nav.getApplicationUri() + PrettyContext.getCurrentInstance(request).getRequestURL().toURL();
-        Map<String, String[]> params = PrettyContext.getCurrentInstance(request).getRequestQueryString()
-                .getParameterMap();
-        Page p = new Page(uri, label, params);
-        if (request.getParameter("h") == null)
+        SessionBean session = getSessionBean(request, resp);
+        if (session != null)
         {
-            hs.addPage(p);
-        }
-        else
-        {
-            hs.remove(Integer.parseInt(h));
+            String label = PageURIHelper
+                    .getPageLabel(PrettyContext.getCurrentInstance(request).getRequestURL().toURL());
+            String h = request.getParameter("h");
+            String uri = nav.getApplicationUri() + PrettyContext.getCurrentInstance(request).getRequestURL().toURL();
+            Map<String, String[]> params = PrettyContext.getCurrentInstance(request).getRequestQueryString()
+                    .getParameterMap();
+            Page p = new Page(uri, label, params, session.getUser());
+            if (request.getParameter("h") == null)
+            {
+                hs.addPage(p);
+            }
+            else
+            {
+                hs.remove(Integer.parseInt(h));
+            }
         }
     }
 
@@ -94,20 +110,38 @@ public class HistoryFilter implements Filter
     }
 
     /**
+     * Return the {@link SessionBean}
+     * 
+     * @param req
+     * @return
+     */
+    private SessionBean getSessionBean(HttpServletRequest req, ServletResponse resp)
+    {
+        return (SessionBean)getBean(SessionBean.class, req, resp);
+    }
+
+    /**
      * Get the {@link HistorySession} from the {@link FacesContext}
      * 
      * @param request
      * @param resp
      * @return
      */
-    private HistorySession getHistorySession(ServletRequest request, ServletResponse resp)
+    private HistorySession getHistorySession(HttpServletRequest req, ServletResponse resp)
     {
-        return (HistorySession)getBean(HistorySession.class, request, resp);
+        return (HistorySession)getBean(HistorySession.class, req, resp);
     }
 
-    private Navigation getNavigation(ServletRequest request, ServletResponse resp)
+    /**
+     * return the current {@link Navigation}
+     * 
+     * @param request
+     * @param resp
+     * @return
+     */
+    private Navigation getNavigation(HttpServletRequest req, ServletResponse resp)
     {
-        return (Navigation)getBean(Navigation.class, request, resp);
+        return (Navigation)getBean(Navigation.class, req, resp);
     }
 
     private Object getBean(Class<?> c, ServletRequest request, ServletResponse resp)

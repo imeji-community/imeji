@@ -21,23 +21,29 @@ import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Grant;
+import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 
 public class UserBean
 {
     private User user;
+    private String newEmail = null;
+    private String newFamilyName = null;
     private String newPassword = null;
     private String repeatedPassword = null;
-    private String newEmail = null;
     private SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     private String id;
     private List<SharedHistory> roles = new ArrayList<SharedHistory>();
+    private boolean changeEmail = false;
+    private boolean changeFamilyName = false;
+    private boolean edit = false;
 
     public UserBean()
     {
@@ -68,7 +74,11 @@ public class UserBean
             repeatedPassword = null;
             retrieveUser();
             this.roles = AuthUtil.getAllRoles(user, session.getUser());
-            this.newEmail = null;
+            this.newEmail = user.getEmail();
+            this.newFamilyName = user.getPerson().getFamilyName();
+            this.changeEmail = false;
+            this.changeFamilyName = false;
+            this.setEdit(false);
         }
         catch (Exception e)
         {
@@ -93,49 +103,6 @@ public class UserBean
     }
 
     /**
-     * Change the Email of the user:<br/>
-     * if the new email is valid and is not already used, then create a new user with this email and delete the old one
-     */
-    public void changeEmail()
-    {
-        User newUser = user.clone(newEmail);
-        if (!UserCreationBean.isValidEmail(newUser.getEmail()))
-        {
-            BeanHelper.error(session.getMessage("error_user_email_not_valid"));
-        }
-        else
-        {
-            try
-            {
-                if (UserCreationBean.userAlreadyExists(newUser))
-                {
-                    BeanHelper.error(session.getMessage("error_user_already_exists"));
-                }
-                else
-                {
-                    UserController uc = new UserController(session.getUser());
-                    // Create the new user
-                    uc.create(newUser);
-                    // If the edited user is the current user, put the new user in the session
-                    if (session.getUser().getEmail().equals(user.getEmail()))
-                    {
-                        session.setUser(newUser);
-                        uc = new UserController(session.getUser());
-                    }
-                    // delete the old user
-                    uc.delete(user);
-                    init(newUser.getEmail());
-                }
-                reloadPage();
-            }
-            catch (Exception e)
-            {
-                BeanHelper.error(session.getMessage("error") + ": " + e);
-            }
-        }
-    }
-
-    /**
      * Change the password of the user
      * 
      * @throws Exception
@@ -154,8 +121,35 @@ public class UserBean
             {
                 BeanHelper.error(session.getMessage("error_user_repeat_password"));
             }
+            reloadPage();
         }
-        reloadPage();
+    }
+
+    public void toggleEdit()
+    {
+        this.edit = edit ? false : true;
+    }
+
+    /**
+     * Add a new empty organization
+     * 
+     * @param index
+     */
+    public void addOrganization(int index)
+    {
+        ((List<Organization>)this.user.getPerson().getOrganizations()).add(index, ImejiFactory.newOrganization());
+    }
+
+    /**
+     * Remove an nth organization
+     * 
+     * @param index
+     */
+    public void removeOrganization(int index)
+    {
+    	List<Organization> orgas = (List<Organization>)this.user.getPerson().getOrganizations();
+    	if(orgas.size() > 1)
+    		orgas.remove(index);
     }
 
     /**
@@ -219,24 +213,113 @@ public class UserBean
         }
     }
 
+    private boolean inputValid()
+    {
+        boolean valid = true;
+        if (changeFamilyName)
+        {
+            if (newFamilyName == null || "".equals(newFamilyName))
+            {
+                BeanHelper.error(session.getMessage("error_user_name_unfilled"));
+                valid = false;
+            }
+            else if (changeEmail && changeEmail())
+            {
+                this.user.getPerson().setFamilyName(newFamilyName);
+            }
+            else
+                this.user.getPerson().setFamilyName(newFamilyName);
+        }
+        if (changeEmail && !changeEmail())
+        {
+            valid = false;
+        }
+        return valid;
+    }
+
     /**
      * Update the user in jena
      */
     public void updateUser()
     {
-        if (user != null)
+        if (user != null && inputValid())
         {
             UserController controller = new UserController(session.getUser());
             try
             {
-                controller.update(user);
+                controller.update(user, session.getUser());
             }
             catch (Exception e)
             {
                 BeanHelper.error(e.getMessage());
                 e.printStackTrace();
             }
+            // finally
+            // {
+            // reloadPage();
+            // }
         }
+    }
+
+    public void changeEmailListener()
+    {
+        this.changeEmail = true;
+    }
+
+    public void changeFamilyNameListerner()
+    {
+        this.changeFamilyName = true;
+    }
+
+    /**
+     * Change the Email of the user:<br/>
+     * if the new email is valid and is not already used, then create a new user with this email and delete the old one
+     */
+    public boolean changeEmail()
+    {
+        boolean emailChanged = true;
+        User newUser = user.clone(newEmail);
+        if (!UserCreationBean.isValidEmail(newUser.getEmail()))
+        {
+            BeanHelper.error(session.getMessage("error_user_email_not_valid"));
+            emailChanged = false;
+        }
+        else
+        {
+            try
+            {
+                if (UserCreationBean.userAlreadyExists(newUser))
+                {
+                    BeanHelper.error(session.getMessage("error_user_already_exists"));
+                    emailChanged = false;
+                }
+                else
+                {
+                    UserController uc = new UserController(session.getUser());
+                    // Create the new user
+                    uc.create(newUser);
+                    // If the edited user is the current user, put the new user in the session
+                    if (session.getUser().getEmail().equals(user.getEmail()))
+                    {
+                        session.setUser(newUser);
+                        uc = new UserController(session.getUser());
+                    }
+                    // delete the old user
+                    uc.delete(user);
+                    init(newUser.getEmail());
+                }
+            }
+            catch (Exception e)
+            {
+                BeanHelper.error(session.getMessage("error") + ": " + e);
+                emailChanged = false;
+            }
+            finally
+            {
+                reloadPage();
+            }
+        }
+        return emailChanged;
     }
 
     /**
@@ -244,11 +327,27 @@ public class UserBean
      * 
      * @throws IOException
      */
-    private void reloadPage() throws IOException
+    private void reloadPage()
+    {
+        try
+        {
+            FacesContext.getCurrentInstance().getExternalContext().redirect(getUserPageUrl());
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * return the URL of the current user
+     * 
+     * @return
+     */
+    public String getUserPageUrl()
     {
         Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-        FacesContext.getCurrentInstance().getExternalContext()
-                .redirect(navigation.getUserUrl() + "?id=" + user.getEmail());
+        return navigation.getUserUrl() + "?id=" + user.getEmail();
     }
 
     public User getUser()
@@ -311,5 +410,31 @@ public class UserBean
     public void setRoles(List<SharedHistory> roles)
     {
         this.roles = roles;
+    }
+
+    /**
+     * @return the edit
+     */
+    public boolean isEdit()
+    {
+        return edit;
+    }
+
+    /**
+     * @param edit the edit to set
+     */
+    public void setEdit(boolean edit)
+    {
+        this.edit = edit;
+    }
+
+    public String getNewFamilyName()
+    {
+        return newFamilyName;
+    }
+
+    public void setNewFamilyName(String newFamilyName)
+    {
+        this.newFamilyName = newFamilyName;
     }
 }

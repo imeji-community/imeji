@@ -48,10 +48,11 @@ public class CollectionListItem
     private ThumbnailBean thumbnail = null;
     private String selectedGrant;
     private URI profileURI;
+    private boolean isOwner = false;
     /**
      * Maximum number of character displayed in the list for the description
      */
-    private static final int DESCRIPTION_MAX_SIZE = 300;
+    private static final int DESCRIPTION_MAX_SIZE = 330; //430
 
     /**
      * Construct a new {@link CollectionListItem} with a {@link CollectionImeji}
@@ -87,27 +88,32 @@ public class CollectionListItem
             {
                 versionDate = collection.getVersionDate().getTime().toString();
             }
-            if (collection.getStatus().equals(Status.RELEASED))
+            // Get first thumbnail of the collection
+            ItemController ic = new ItemController(user);
+            if (ic.findContainerItems(collection, user, 1).getImages().iterator().hasNext())
             {
-                // Get first thumbnail of the collection
-                ItemController ic = new ItemController(user);
-                URI uri = ic.findContainerItems(collection, user, 1).getImages().iterator().next();
-                if (uri != null)
-                {
-                    this.thumbnail = new ThumbnailBean(ic.retrieve(uri));
-                }
-            }
-            // initializations
-            initSize(collection, user);
-            initSelected();
-        }
+               URI uri = ic.findContainerItems(collection, user, 1).getImages().iterator().next();
+               if (uri != null)
+               {
+                 this.thumbnail = new ThumbnailBean(ic.retrieve(uri));                
+               }
+             }
+             // initializations
+             initSize(collection, user);
+             initSelected();
+             if (collection != null && user != null)
+             {
+                 isOwner = collection.getCreatedBy().equals(ObjectHelper.getURI(User.class, user.getEmail()));
+             }
+         }
         catch (Exception e)
         {
             logger.error("Error creating collectionListItem", e);
         }
     }
 
-    /**
+
+	/**
      * Count the size of the collection
      * 
      * @param user
@@ -381,4 +387,13 @@ public class CollectionListItem
     {
         this.profileURI = profileURI;
     }
+
+    public boolean isOwner() {
+		return isOwner;
+	}
+
+	public void setOwner(boolean isOwner) {
+		this.isOwner = isOwner;
+	}
+    
 }

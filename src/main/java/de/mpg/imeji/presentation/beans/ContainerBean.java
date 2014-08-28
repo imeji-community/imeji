@@ -28,14 +28,13 @@
  */
 package de.mpg.imeji.presentation.beans;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Item;
@@ -55,8 +54,9 @@ import de.mpg.imeji.presentation.util.ImejiFactory;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public abstract class ContainerBean
+public abstract class ContainerBean implements Serializable
 {
+    private static final long serialVersionUID = 3377874537531738442L;
     private int authorPosition;
     private int organizationPosition;
     private int size;
@@ -145,17 +145,37 @@ public abstract class ContainerBean
     }
 
     /**
-     * Return the {@link User} having uploaded the file for this item
+     * Get Person String
      * 
      * @return
-     * @throws Exception
      */
-    public User getCreator() throws Exception
+    public String getPersonString()
     {
-        User user = null;
-        UserController uc = new UserController(Imeji.adminUser);
-        user = uc.retrieve(getContainer().getCreatedBy());
-        return user;
+        String personString = "";
+        for (Person p : getContainer().getMetadata().getPersons())
+        {
+            if (!"".equalsIgnoreCase(personString))
+                personString += ", ";
+            personString += p.getFamilyName() + " " + p.getGivenName() + " ";
+        }
+        return personString;
+    }
+
+    /**
+     * @return
+     */
+    public String getAuthorsWithOrg()
+    {
+        String personString = "";
+        for (Person p : getContainer().getMetadata().getPersons())
+        {
+            if (!"".equalsIgnoreCase(personString))
+                personString += ", ";
+            personString += p.getCompleteName();
+            if (!p.getOrganizationString().equals(""))
+                personString += " (" + p.getOrganizationString() + ")";
+        }
+        return personString;
     }
 
     /**
@@ -288,5 +308,20 @@ public abstract class ContainerBean
     public void setSize(int size)
     {
         this.size = size;
+    }
+
+    /**
+     * True if the current {@link User} is the creator of the {@link Container}
+     * 
+     * @return
+     */
+    public boolean isOwner()
+    {
+        SessionBean sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        if (getContainer() != null && getContainer().getCreatedBy() != null && sessionBean.getUser() != null)
+        {
+            return getContainer().getCreatedBy().equals(ObjectHelper.getURI(User.class, sessionBean.getUser().getEmail()));
+        }
+        return false;
     }
 }

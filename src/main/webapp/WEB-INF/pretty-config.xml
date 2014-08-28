@@ -25,20 +25,19 @@
 	</url-mapping>
 	<url-mapping id="browse">
 		<pattern value="/browse" />
-		<view-id>/jsf/Images.xhtml</view-id>
+		<view-id>/jsf/Items.xhtml</view-id>
 	</url-mapping>
 	<url-mapping id="editPage">
 		<pattern value="/edit"></pattern>
 		<view-id>/jsf/BatchEdit.xhtml</view-id>
 	</url-mapping>
 	<url-mapping id="item">
-		<pattern value="/item/#{ImageBean.id}" />
-		<view-id>/jsf/Image.xhtml</view-id>
+		<pattern value="/item/#{ItemBean.id}" />
+		<view-id>/jsf/Item.xhtml</view-id>
 	</url-mapping>
 	<url-mapping id="upload">
 		<pattern value="/collection/#{UploadBean.id}/upload" />
 		<view-id>/jsf/Upload.xhtml</view-id>
-		<action onPostback="false">#{UploadBean.status}</action>
 	</url-mapping>
 	<url-mapping id="ingest">
 		<pattern value="/collection/#{IngestBean.collectionId}/ingest" />
@@ -57,12 +56,12 @@
 		<action>#{ViewCollectionBean.init}</action>
 	</url-mapping>
 	<url-mapping id="collectionBrowse">
-		<pattern value="/collection/#{CollectionImagesBean.id}/browse" />
+		<pattern value="/collection/#{CollectionItemsBean.id}/browse" />
 		<view-id>/jsf/CollectionBrowse.xhtml</view-id>
 	</url-mapping>
 	<url-mapping id="collectionItem">
 		<pattern
-			value="/collection/#{CollectionImageBean.collectionId}/item/#{CollectionImageBean.id}" />
+			value="/collection/#{CollectionItemBean.collectionId}/item/#{CollectionItemBean.id}" />
 		<view-id>/jsf/CollectionImage.xhtml</view-id>
 	</url-mapping>
 	<url-mapping id="editCollection">
@@ -115,7 +114,7 @@
 	</url-mapping>
 
 	<url-mapping id="albumBrowse">
-		<pattern value="/album/#{AlbumImagesBean.id}/browse" />
+		<pattern value="/album/#{AlbumItemsBean.id}/browse" />
 		<view-id>/jsf/AlbumBrowse.xhtml</view-id>
 	</url-mapping>
 	<url-mapping id="shareAlbum">
@@ -125,7 +124,7 @@
 	</url-mapping>
 
 	<url-mapping id="albumItem">
-		<pattern value="/album/#{AlbumImageBean.albumId}/item/#{AlbumImageBean.id}" />
+		<pattern value="/album/#{AlbumItemBean.albumId}/item/#{AlbumItemBean.id}" />
 		<view-id>/jsf/AlbumImage.xhtml</view-id>
 	</url-mapping>
 

@@ -18,34 +18,31 @@ import org.apache.log4j.Logger;
 import com.hp.hpl.jena.rdf.model.Resource;
 
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.ImejiBean2RDF;
-import de.mpg.imeji.logic.ImejiRDF2Bean;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.index.Index;
+import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
+import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.UploadResult;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
-import de.mpg.imeji.logic.util.MetadataFactory;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.j2j.annotations.j2jId;
-import de.mpg.j2j.helper.SortHelper;
 
 /**
  * Bean for the administration page. Methods working on data
@@ -151,8 +148,6 @@ public class AdminBean
      */
     public void reIndex() throws Exception
     {
-        Index index = new Index();
-        index.reindex();
     }
 
     /**
@@ -196,27 +191,6 @@ public class AdminBean
     }
 
     /**
-     * Clean {@link Metadata} which are not attached to a {@link Statement} .NOT WORKING SO FAR
-     * 
-     * @throws Exception
-     */
-    private void cleanMetadata() throws Exception
-    {
-        logger.info("Searching not bounded metadata...");
-        // Don't use search to be able to get the type of the metadata defined as sort0 in the query
-        List<String> uris = ImejiSPARQL.exec(SPARQLQueries.selectMetadataUnbounded(), null);
-        for (String uri : uris)
-        {
-            // Split the metadata uri and the metatata type defined as sort parameter
-            String[] s = SortHelper.SORT_VALUE_PATTERN.split(uri);
-            List<String> l = new ArrayList<String>();
-            l.add(s[0]);
-            removeResources(l, Imeji.imageModel, MetadataFactory.createMetadata(s[1]));
-        }
-        logger.info("...found " + uris.size());
-    }
-
-    /**
      * Clean {@link Statement} which are not bound a {@link MetadataProfile}
      * 
      * @throws Exception
@@ -224,8 +198,8 @@ public class AdminBean
     private void cleanStatement() throws Exception
     {
         logger.info("Searching not bounded statement...");
-        Search search = new Search(SearchType.ALL, null);
-        List<String> uris = search.searchSimpleForQuery(SPARQLQueries.selectStatementUnbounded(), null);
+        Search search = SearchFactory.create();
+        List<String> uris = search.searchSimpleForQuery(SPARQLQueries.selectStatementUnbounded()).getResults();
         logger.info("...found " + uris.size());
         removeResources(uris, Imeji.profileModel, new Statement());
     }
@@ -238,20 +212,20 @@ public class AdminBean
     private void cleanGrants() throws Exception
     {
         logger.info("Searching not bounded grants...");
-        Search search = new Search(SearchType.ALL, null);
-        List<String> uris = search.searchSimpleForQuery(SPARQLQueries.selectGrantWithoutUser(), null);
+        Search search = SearchFactory.create();
+        List<String> uris = search.searchSimpleForQuery(SPARQLQueries.selectGrantWithoutUser()).getResults();
         logger.info("...found " + uris.size());
         System.out.println(uris.size());
         removeResources(uris, Imeji.userModel, new Grant());
         logger.info("Searching broken grants...");
-        uris = search.searchSimpleForQuery(SPARQLQueries.selectGrantBroken(), null);
+        uris = search.searchSimpleForQuery(SPARQLQueries.selectGrantBroken()).getResults();
         logger.info("...found " + uris.size());
         System.out.println(uris.size());
         removeResources(uris, Imeji.userModel, new Grant());
         logger.info("Searching emtpy grants...");
         if (clean)
             ImejiSPARQL.execUpdate(SPARQLQueries.removeGrantEmtpy());
-        uris = search.searchSimpleForQuery(SPARQLQueries.selectGrantEmtpy(), null);
+        uris = search.searchSimpleForQuery(SPARQLQueries.selectGrantEmtpy()).getResults();
         logger.info("...found " + uris.size());
         System.out.println(uris.size());
     }
@@ -281,14 +255,14 @@ public class AdminBean
      */
     private List<Object> loadResourcesAsObjects(List<String> uris, String modelName, Object obj)
     {
-        ImejiRDF2Bean reader = new ImejiRDF2Bean(modelName);
+        ReaderFacade reader = new ReaderFacade(modelName);
         List<Object> l = new ArrayList<Object>();
         for (String uri : uris)
         {
             try
             {
                 logger.info("Resource to be removed: " + uri);
-                l.add(reader.load(uri, sb.getUser(), obj.getClass().newInstance()));
+                l.add(reader.read(uri, sb.getUser(), obj.getClass().newInstance()));
             }
             catch (Exception e)
             {
@@ -309,7 +283,7 @@ public class AdminBean
     {
         if (clean)
         {
-            ImejiBean2RDF writer = new ImejiBean2RDF(modelName);
+            WriterFacade writer = new WriterFacade(modelName);
             writer.delete(l, sb.getUser());
         }
     }
@@ -321,8 +295,8 @@ public class AdminBean
      */
     public int getAllAlbumsSize()
     {
-        Search search = new Search(SearchType.ALBUM, null);
-        return search.searchSimpleForQuery(SPARQLQueries.selectAlbumAll(), null).size();
+        Search search = SearchFactory.create(SearchType.ALBUM);
+        return search.searchSimpleForQuery(SPARQLQueries.selectAlbumAll()).getNumberOfRecords();
     }
 
     /**
@@ -332,8 +306,8 @@ public class AdminBean
      */
     public int getAllCollectionsSize()
     {
-        Search search = new Search(SearchType.COLLECTION, null);
-        return search.searchSimpleForQuery(SPARQLQueries.selectCollectionAll(), null).size();
+        Search search = SearchFactory.create(SearchType.COLLECTION);
+        return search.searchSimpleForQuery(SPARQLQueries.selectCollectionAll()).getNumberOfRecords();
     }
 
     /**
@@ -343,8 +317,8 @@ public class AdminBean
      */
     public int getAllImagesSize()
     {
-        Search search = new Search(SearchType.ITEM, null);
-        return search.searchSimpleForQuery(SPARQLQueries.selectItemAll(), null).size();
+        Search search = SearchFactory.create(SearchType.ITEM);
+        return search.searchSimpleForQuery(SPARQLQueries.selectItemAll()).getNumberOfRecords();
     }
 
     /**

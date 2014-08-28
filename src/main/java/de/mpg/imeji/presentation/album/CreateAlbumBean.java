@@ -28,14 +28,17 @@
  */
 package de.mpg.imeji.presentation.album;
 
+import java.util.List;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.vo.Album;
+import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 
@@ -50,6 +53,8 @@ import de.mpg.imeji.presentation.util.ImejiFactory;
 @SessionScoped
 public class CreateAlbumBean extends AlbumBean
 {
+    private static final long serialVersionUID = -3257133789269212025L;
+
     /**
      * DEfault constructor
      */
@@ -61,14 +66,10 @@ public class CreateAlbumBean extends AlbumBean
     /**
      * Called when bean page is called
      */
-
     public void init()
     {
-        setAlbum(new Album());
-        getAlbum().getMetadata().setTitle("");
-        getAlbum().getMetadata().setDescription("");
-        getAlbum().getMetadata().getPersons().clear();
-        getAlbum().getMetadata().getPersons().add(ImejiFactory.newPerson());
+    	setAlbum(ImejiFactory.newAlbum());
+    	((List<Person>)getAlbum().getMetadata().getPersons()).set(0, sessionBean.getUser().getPerson().clone());
     }
 
     /*
@@ -96,7 +97,15 @@ public class CreateAlbumBean extends AlbumBean
             UserController uc = new UserController(sessionBean.getUser());
             sessionBean.setUser(uc.retrieve(sessionBean.getUser().getEmail()));
             BeanHelper.info(sessionBean.getMessage("success_album_create"));
-            return "pretty:albums";
+
+            Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
+
+            ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).setAlbum(getAlbum());
+            sessionBean.setActiveAlbum(getAlbum());
+
+            FacesContext.getCurrentInstance().getExternalContext().redirect
+                 (nav.getAlbumUrl()+getAlbum().getIdString());
+            return "";
         }
         return "";
     }

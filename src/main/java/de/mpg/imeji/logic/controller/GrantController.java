@@ -5,21 +5,18 @@ package de.mpg.imeji.logic.controller;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import de.escidoc.core.resources.aa.useraccount.Grants;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.ImejiBean2RDF;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
-import de.mpg.imeji.presentation.auth.ImejiAuthBean;
+import de.mpg.imeji.logic.writer.WriterFacade;
 
 /**
  * Controller for {@link Grant}
@@ -30,7 +27,7 @@ import de.mpg.imeji.presentation.auth.ImejiAuthBean;
  */
 public class GrantController extends ImejiController
 {
-    private static ImejiBean2RDF imejiBean2RDF = new ImejiBean2RDF(Imeji.userModel);
+    private static final WriterFacade writer = new WriterFacade(Imeji.userModel);
     private static Logger logger = Logger.getLogger(GrantController.class);
 
     /**
@@ -77,7 +74,7 @@ public class GrantController extends ImejiController
         try
         {
             c.update(user, currentUser);
-            imejiBean2RDF.delete(new ArrayList<Object>(toRemove), currentUser);
+            writer.delete(new ArrayList<Object>(toRemove), currentUser);
         }
         catch (Exception e)
         {
@@ -101,7 +98,7 @@ public class GrantController extends ImejiController
         try
         {
             c.update(group, currentUser);
-            imejiBean2RDF.delete(new ArrayList<Object>(toRemove), currentUser);
+            writer.delete(new ArrayList<Object>(toRemove), currentUser);
         }
         catch (Exception e)
         {

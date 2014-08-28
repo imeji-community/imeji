@@ -43,17 +43,18 @@
 								<h:outputText value="#{lbl.admin_userGroups_view}"/>
 							</h2>
 						</div>
+						<div class="imj_simpleSearch">
+							<h:outputText value="(#{UserGroups.userGroups.size()} #{lbl.admin_userGroups})" styleClass="imj_searchInfoText"/>
+							<h:form id="new">
+								<h:inputText value="#{UserGroups.query}" styleClass="imj_simpleSearchInput" />
+								<h:commandButton action="#{UserGroups.search()}" type="submit" value="#{lbl.search}" styleClass="imj_simpleSearchButtonSubmit"/>
+							</h:form>
+							<h:outputLink value="#{Navigation.applicationUrl}usergroups?back=#{UserGroups.backContainerUrl}" title="#{lbl.clear}" rendered="#{UserGroups.query != ''}" styleClass="imj_cancelButton">
+								<h:outputText value="#{lbl.clear}" />
+							</h:outputLink>
+						</div>
 					</div>
-					<div class="imj_listBody">
-						<h:form id="new">
-							<h:inputText value="#{UserGroups.query}" styleClass="imj_simpleSearchInput" />
-							<h:commandButton action="#{UserGroups.search()}" value="#{lbl.search}" styleClass="imj_simpleSearchButtonSubmit" />
-						</h:form>
-						<h:outputLink value="#{Navigation.applicationUrl}usergroups?back=#{UserGroups.backContainerUrl}" title="#{lbl.clear}" rendered="#{UserGroups.query != ''}" styleClass="imj_cancelButton">
-							<h:outputText value="#{lbl.clear}" />
-						</h:outputLink>
-						<h:outputText value="(#{UserGroups.userGroups.size()} #{lbl.admin_userGroups})" />
-					</div>
+					
 					<div class="imj_listBody">
 						<ui:repeat var="group" value="#{UserGroups.userGroups}">
 							<div class="imj_adminPanel imj_userConfig">

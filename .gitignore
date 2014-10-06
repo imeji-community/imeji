@@ -167,3 +167,5 @@ pip-log.txt
 src/main/webapp/WEB-INF/digilib-config.xml
 src/test/resources/ingest/items-out.xml
 src/main/webapp/WEB-INF/digilib-config.xml
+src/main/resources/rebel.xml
+src/main/webapp/WEB-INF/digilib-config.xml

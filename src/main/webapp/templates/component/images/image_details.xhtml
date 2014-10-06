@@ -8,11 +8,14 @@
 
 	<!-- MediaDisplayContainer - START -->
 	<h:panelGroup layout="block" styleClass="imj_mediaDisplayContainer">
-		<h:outputLink id="lnkPicFullResolution" value="#{Navigation.applicationUrl}file/#{itemBean.encodedFileName}?id=#{itemBean.image.fullImageUrl}" target="_blank" rendered="#{(itemBean.imageFile and !Property.digilibEnabled) or itemBean.rawFile or itemBean.pdfFile}">
+		<h:outputLink id="lnkPicFullResolution" value="#{Navigation.applicationUrl}file/#{itemBean.encodedFileName}?id=#{itemBean.image.fullImageUrl}" target="_blank" rendered="#{!itemBean.viewInDigilib and !itemBean.viewInDataViewer}">
 			<h:graphicImage id="picWebResolution" title="#{itemBean.image.filename}" alt="#{itemBean.image.filename}" value="#{Navigation.applicationUrl}file/#{itemBean.encodedFileName}?id=#{itemBean.image.webImageUrl}" />
 		</h:outputLink>
-		<h:outputLink id="lnkPicInternalDigilib" value="#{Navigation.applicationUrl}digilibImage?fn=#{Property.internalStorageBase}/#{itemBean.image.storageId}/original/#{itemBean.itemStorageIdFilename}" target="_blank" rendered="#{itemBean.imageFile and Property.digilibEnabled and (empty Navigation.externalDigilibUrl)}">
+		<h:outputLink id="lnkPicInternalDigilib" value="#{Navigation.applicationUrl}digilibImage?fn=#{Property.internalStorageBase}/#{itemBean.image.storageId}/original/#{itemBean.itemStorageIdFilename}" target="_blank" rendered="#{itemBean.viewInDigilib}">
 			<h:graphicImage id="picWebResolutionInternalDigilib" title="#{itemBean.image.filename}" alt="#{itemBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{itemBean.image.webImageUrl}" />
+		</h:outputLink>
+		<h:outputLink id="lnkPicInternalDataViewer" value="#{Navigation.applicationUrl}dataviewer?id=#{itemBean.image.idString}" target="_blank" rendered="#{itemBean.viewInDataViewer}">
+			<h:graphicImage title="#{itemBean.image.filename}" alt="#{itemBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{itemBean.image.webImageUrl}" />
 		</h:outputLink>
 		<h:panelGroup rendered="#{itemBean.videoFile}">
 			<video id="imejiVideoPlayer" src="#{Navigation.applicationUrl}file?id=#{itemBean.image.fullImageUrl}" controls="controls" 
@@ -30,26 +33,41 @@
 				
 		<!-- MediaEditPanel - select, add, remove media items -->
 		<h:panelGroup id="image" layout="block" rendered="#{itemBean.image.status != 'WITHDRAWN'}" styleClass="imj_mediaEditPanel">
-			<h:outputLink styleClass="imj_mediaEditPanelItem" id="lnkDownload" value="#{Navigation.applicationUrl}file/#{itemBean.encodedFileName}?id=#{itemBean.image.fullImageUrl}&amp;download=1" target="_blank">
-				<h:outputText value="#{lbl.fileDownload}"/>
-			</h:outputLink>
+			
 			<h:form id="itemForm">
-				<h:outputText value=":" styleClass="imj_invisible"/>
-				
+			
 				<span class="imj_optionSet">
+					<h:outputLabel value="#{lbl.select}" for="pictureCheckbox" styleClass="imj_optionLabel" rendered="#{Auth.loggedIn}"/>
+						<h:outputText value=":" styleClass="imj_invisible"/>
 					<h:selectBooleanCheckbox styleClass="imj_mediaEditPanelItem imj_selectMedia imj_optionCheckbox" id="pictureCheckbox" value="#{itemBean.selected}" valueChangeListener="#{itemBean.selectedChanged}" rendered="#{Auth.loggedIn}">
 						<f:ajax execute="@this" render=":selectionInfoPanel :paginatorTop"/>
 					</h:selectBooleanCheckbox>
-					<h:outputLabel value="#{lbl.selected}" for="pictureCheckbox" styleClass="imj_optionLabel" rendered="#{Auth.loggedIn}"/>
 				</span>
 				
-				<h:outputLink value="#" styleClass="imj_mediaEditPanelItem imj_removeButton" onclick="openDialog('deleteMenuItemDialog');" rendered="#{Auth.delete(itemBean.image)}">
-					<h:outputText value="#{lbl.remove_from_col}"/>
+				<h:outputLink id="lnkDataViewer" value="#{Navigation.applicationUrl}dataviewer?id=#{itemBean.image.idString}" rendered="#{itemBean.viewInDataViewer}" styleClass="imj_mediaEditPanelItem imj_submitButton" target="_blank">
+					<h:outputText value="#{lbl.view}"/>
+				</h:outputLink>
+				
+				<h:outputLink id="lnkDigilib" value="#{Navigation.applicationUrl}digilibImage?fn=#{Property.internalStorageBase}/#{itemBean.image.storageId}/original/#{itemBean.itemStorageIdFilename}" target="_blank" rendered="#{itemBean.viewInDigilib}" styleClass="imj_mediaEditPanelItem imj_submitButton">
+					<h:outputText value="#{lbl.view}"/>
+				</h:outputLink>
+				
+				<h:outputLink id="lnkOriginalData" value="#{Navigation.applicationUrl}file/#{itemBean.encodedFileName}?id=#{itemBean.image.fullImageUrl}" target="_blank" rendered="#{!itemBean.viewInDigilib and !itemBean.viewInDataViewer}" styleClass="imj_mediaEditPanelItem imj_submitButton">
+					<h:outputText value="#{lbl.view}"/>
+				</h:outputLink>
+				
+				<h:outputLink styleClass="imj_mediaEditPanelItem imj_submitButton" id="lnkDownload" value="#{Navigation.applicationUrl}file/#{itemBean.encodedFileName}?id=#{itemBean.image.fullImageUrl}&amp;download=1" target="_blank">
+					<h:outputText value="#{lbl.download}"/>
+				</h:outputLink>
+				
+				<h:outputLink value="#" styleClass="imj_mediaEditPanelItem imj_cancelButton" onclick="openDialog('deleteMenuItemDialog');" rendered="#{Auth.delete(itemBean.image)}">
+					<h:outputText value="#{lbl.remove}"/>
 				</h:outputLink>
 				
 				<h:commandLink styleClass="imj_mediaEditPanelItem imj_removeButton" id="lnkPicRemoveFromAlbum" action="#{itemBean.removeFromAlbum}" rendered="#{itemBean.navigationString == 'pretty:albumItem' and Auth.create(itemBean.album)}">
 					<h:outputText value="#{lbl.remove_from_album}"/>
 				</h:commandLink>
+				
 				<h:commandLink styleClass="imj_mediaEditPanelItem imj_addMedia" id="lnkPicFullResolution2" action="#{itemBean.addToActiveAlbum}" rendered="#{!itemBean.isInActiveAlbum and SessionBean.activeAlbum != null}">
 					<h:outputText value="#{lbl.add_to_active_album}"/>
 				</h:commandLink>
@@ -66,6 +84,7 @@
 					</h:commandLink>
 					<h:outputText value=")"/>
 				</h:panelGroup>
+				
 			</h:form>
 		</h:panelGroup>
 		

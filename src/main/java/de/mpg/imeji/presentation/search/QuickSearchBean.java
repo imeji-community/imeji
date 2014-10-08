@@ -13,6 +13,7 @@ import javax.faces.event.ValueChangeEvent;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
@@ -38,6 +39,11 @@ public class QuickSearchBean implements Serializable
     public String search() throws IOException
     {
         Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
+        if ("".equals(searchString))
+        {
+        	  BeanHelper.error(((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getMessage("error_search_query_emtpy"));
+        	  return "pretty:";
+        }
         if (getSelectedSearchType() == null)
             setSelectedSearchType("images");
         if (getSelectedSearchType().equals("collections"))

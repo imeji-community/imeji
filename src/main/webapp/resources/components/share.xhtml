@@ -26,8 +26,12 @@
 					</div>
 				</ui:fragment>
 				<ui:fragment rendered="#{ShareBean.userGroup != null}">
+					<h2 class="imj_sectionHeadline">
+						<h:outputText value="#{lbl.share_with}"/>
+					</h2>
+					<div class="imj_metadataSet">
 					<div class="imj_metadataLabel">
-						<h:outputText value="#{lbl.share_with} #{lbl.admin_userGroup}: #{ShareBean.userGroup.name}"/>
+						<h:outputText value="#{lbl.admin_userGroup}: #{ShareBean.userGroup.name}"/>
 					</div>
 					<h:form prependId="false">
 						<h:panelGroup layout="block" styleClass="imj_metadataValue">
@@ -51,9 +55,13 @@
 							</div>
 						</h:panelGroup>
 					</h:form>
+					</div>
 				</ui:fragment>
 				
 				<div id="share" class="imj_noDisplay">
+					<h2 class="imj_sectionHeadline">
+						<h:outputText value="#{lbl.share_with}"/>
+					</h2>
 					<h:form prependId="false">		
 						<div class="imj_shareEmailInput">
 							<div class="imj_metadataSet">
@@ -88,12 +96,15 @@
 				
 				<!-- user table which shows all user with existing rights -->
 				<div class="imj_shareRightsOverview">
+					<h2 class="imj_sectionHeadline">
+						<h:outputText value="#{lbl.shared_with}"/>
+					</h2>
 					<h:form prependId="false">
 						<table id="history" class="imj_rightsTable">
 							<thead>
 								<tr>
 									<th>
-										<h:outputText value="#{lbl.shared_with} #{lbl.admin_info_users}"/>
+										<h:outputText value="#{lbl.admin_info_users}"/>
 									</th>
 									<ui:repeat var="tableHead" value="#{cc.attrs.roles}">
 										<th>

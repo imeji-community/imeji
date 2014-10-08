@@ -157,69 +157,82 @@
 											<h:commandLink action="#{UserBean.updateUser}" value="#{lbl.save}" styleClass="imj_submitButton"  rendered="#{UserBean.edit}" type="submit"/>
 										</div>
 									
-								</h:panelGroup> <!-- END user infos -->
-								
-								<!-- User Edit - Password -->
-								<div class="imj_admindataSetEdit">
+									</h:panelGroup> <!-- END user infos -->
+									
+									<!-- User Edit - Password -->
 									<div class="imj_admindataSetEdit">
-										<div class="imj_admindataLabel">
-											<h:outputLabel for="inputPassword" value="#{lbl.password_new}"/>
-											<span class="imj_invisible">: </span>
+										<div class="imj_admindataSetEdit">
+											<div class="imj_admindataLabel">
+												<h:outputLabel for="inputPassword" value="#{lbl.password_new}"/>
+												<span class="imj_invisible">: </span>
+											</div>
+											<div class="imj_admindataValue">
+												<div class="imj_admindataValueEntry">
+													<h:inputSecret id="inputPassword" value="#{UserBean.newPassword}" styleClass="imj_admindataEdit"/>
+												</div>
+											</div>
 										</div>
-										<div class="imj_admindataValue">
-											<div class="imj_admindataValueEntry">
-												<h:inputSecret id="inputPassword" value="#{UserBean.newPassword}" styleClass="imj_admindataEdit"/>
+										<div class="imj_admindataSetEdit">
+											<div class="imj_admindataLabel">
+												<h:outputLabel for="inputRespeated" value="#{lbl.password_repeat}"/>
+												<span class="imj_invisible">: </span>
+											</div>
+											<div class="imj_admindataValue">
+												<div class="imj_admindataValueEntry">
+													<h:inputSecret id="inputRespeated" value="#{UserBean.repeatedPassword}" styleClass="imj_admindataEdit"/>
+												</div>
+												<h:commandButton action="#{UserBean.changePassword}" value="#{lbl.password_change}" styleClass="imj_editButton" type="submit">
+													<f:ajax execute="@form" render="@none" />
+												</h:commandButton>
 											</div>
 										</div>
 									</div>
-									<div class="imj_admindataSetEdit">
+								</h:form>						
+								<h:form id="grantForm">	
+									<!-- User Grants -->
+									<h:panelGroup layout="block" styleClass="imj_admindataSetEdit imj_admindataSet">
 										<div class="imj_admindataLabel">
-											<h:outputLabel for="inputRespeated" value="#{lbl.password_repeat}"/>
-											<span class="imj_invisible">: </span>
+											<h:outputText value="#{UserBean.user.name} #{lbl.grants_has_following}:"/>
 										</div>
 										<div class="imj_admindataValue">
 											<div class="imj_admindataValueEntry">
-												<h:inputSecret id="inputRespeated" value="#{UserBean.repeatedPassword}" styleClass="imj_admindataEdit"/>
+												<ui:fragment rendered="#{Auth.admin}">
+													<div class="imj_admindataSet">
+														<h:selectBooleanCheckbox id="createcollectioncheck" value="#{UserBean.user.allowedToCreateCollection}" readonly="true" styleClass="imj_admindataCheckbox" onchange="document.getElementById('grantForm:toggleCreate').click()"/>
+														<label for="grantForm:createcollectioncheck"><h:outputText value="#{lbl.allowedToCreateCollection}"/></label>
+														<span class="imj_invisible">: </span>
+													</div>
+													<div class="imj_admindataSet">
+														<h:selectBooleanCheckbox id="admincheck" title="#{UserBean.user.admin and UserBean.uniqueAdmin ? lbl.user_unique_admin : lbl.user_toggle_admin_role}" value="#{UserBean.user.admin}" styleClass="imj_admindataCheckbox"  onchange="document.getElementById('grantForm:toggleAdmin').click();" disabled="#{UserBean.user.admin and UserBean.uniqueAdmin}"/>
+														<label for="grantForm:admincheck"><h:outputText value="#{lbl.isAdmin}"/></label>
+														<span class="imj_invisible">: </span>
+													</div>
+												</ui:fragment>
 											</div>
-											<h:commandButton action="#{UserBean.changePassword}" value="#{lbl.password_change}" styleClass="imj_editButton" type="submit">
-												<f:ajax execute="@form" render="@none" />
-											</h:commandButton>
 										</div>
-									</div>
-								</div>
-							</h:form>						
-							<h:form id="grantForm">	
-								<!-- User Grants -->
-								<h:panelGroup layout="block" styleClass="imj_admindataSetEdit">
-									<div class="imj_admindataLabel">
-										<h:outputText value="#{UserBean.user.name} #{lbl.grants_has_following}:"/>
-									</div>
-									<div class="imj_admindataValue">
-										<div class="imj_admindataValueEntry">
-											<ui:fragment rendered="#{Auth.admin}">
-												<div>
-													<h:selectBooleanCheckbox value="#{UserBean.user.allowedToCreateCollection}" readonly="true" styleClass="imj_admindataCheckbox" onchange="document.getElementById('grantForm:toggleCreate').click()"/>
-													<h:outputText value="#{lbl.allowedToCreateCollection}"/>
-													<span class="imj_invisible">: </span>
-												</div>
-												<div>
-													<h:selectBooleanCheckbox title="#{UserBean.user.admin and UserBean.uniqueAdmin ? lbl.user_unique_admin : lbl.user_toggle_admin_role}" value="#{UserBean.user.admin}" styleClass="imj_admindataCheckbox"  onchange="document.getElementById('grantForm:toggleAdmin').click();" disabled="#{UserBean.user.admin and UserBean.uniqueAdmin}"/>
-													<h:outputText value="#{lbl.isAdmin}"/>
-													<span class="imj_invisible">: </span>
-												</div>
-												<br/>
-											</ui:fragment>
+									</h:panelGroup>
+									<h:panelGroup layout="block" styleClass="imj_admindataSetEdit">
+										<h3 class="imj_headline"><h:outputText value="Grant for:" styleClass="imj_admindataValueEntry"/></h3>
+										
+										<div class="imj_admindataValue">
 											<ui:repeat var="sh" value="#{UserBean.roles}" rows="0">
 												<ui:param name="roles" value="#{sh.type == 'COLLECTION' ? SessionBean.shareCollectionGrantItems : SessionBean.shareAlbumGrantItems}"/>
 												<ui:param name="roles" value="#{sh.type == 'ITEM' ? SessionBean.shareItemGrantItems : roles}"/>
-												<div>
-													<h:outputText value="Grant for #{sh.title}" styleClass="imj_admindataValueEntry"/>
-													<h:commandButton action="#{UserBean.revokeGrants(sh)}" value="#{lbl.revoke}" styleClass="imj_cancelButton" onclick="if(confirm('Are you sure you want to revoke this grant?'))return true;return false;" type="submit"/>
-													<h:selectManyCheckbox id="role" value="#{sh.sharedType}"  disabled="true" layout="pageDirection">
-														<f:selectItems value="#{roles}" />
-													</h:selectManyCheckbox>
+												
+												<div class="imj_admindataSet">
+													<div class="imj_admindataLabel">
+														<h:outputText value="#{sh.title}" title="#{sh.title}"/>
+														<div class="imj_submitPanel">
+															<h:commandButton action="#{UserBean.revokeGrants(sh)}" value="#{lbl.revoke}" styleClass="imj_cancelButton" onclick="if(confirm('Are you sure you want to revoke this grant?'))return true;return false;" type="submit"/>
+														</div>
+													</div>
+													<div class="imj_admindataValueEntry">
+														
+														<h:selectManyCheckbox id="role" value="#{sh.sharedType}" disabled="true" layout="pageDirection">
+															<f:selectItems value="#{roles}"/>
+														</h:selectManyCheckbox>
+													</div>
 												</div>
-												<br/>
 											</ui:repeat>
 											<h:commandButton id="toggleCreate" action="#{UserBean.toggleCreateCollection}" value="toggle create col" styleClass="imj_noDisplay" type="submit">
 												<f:ajax render="@none"/>
@@ -227,28 +240,25 @@
 											<h:commandButton id="toggleAdmin" action="#{UserBean.toggleAdmin}" value="toggle admin" styleClass="imj_noDisplay" type="submit">
 												<f:ajax render="@form"/>
 											</h:commandButton>
-											</div>
 										</div>
 									</h:panelGroup>											
 								</h:form>
+								
 								<h:form id="userGroups">
 									<!-- usergroups -->
-									<h:panelGroup layout="block" styleClass="imj_admindataSetEdit">
+									<div class="imj_admindataSetEdit imj_admindataSet imj_connectedUserGroups">
 										<div class="imj_admindataLabel">
 											<h:outputText value="#{UserBean.user.name} #{lbl.in_following_user_groups}:"/>
 										</div>
 										<div class="imj_admindataValue">
-											<div class="imj_admindataValueEntry">
-												<ui:repeat var="ug" value="#{UserBean.user.groups}" rows="0">
-													<div>
-														<h:outputText value="Grant for #{ug.name}" styleClass="imj_admindataValueEntry"/>
-													</div>
-												</ui:repeat>
-											</div>
+											<ui:repeat var="ug" value="#{UserBean.user.groups}" rows="0">
+												<div class="imj_admindataValueEntry">
+													<h:outputText value="Grant for #{ug.name}" styleClass="imj_admindataValueEntry"/>
+												</div>
+											</ui:repeat>
 										</div>
-									</h:panelGroup>
+									</div>
 								</h:form>
-										
 					
 							</div> <!-- END CONTENT -->
 							

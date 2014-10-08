@@ -289,7 +289,9 @@ public class ConfigurationBean {
 	 * @return the list of all formats supported by the data viewer service
 	 */
 	public String getDataViewerFormatListString() {
-		return (String) config.get(CONFIGURATION.DATA_VIEWER_FORMATS.name());
+		String list = (String) config.get(CONFIGURATION.DATA_VIEWER_FORMATS
+				.name());
+		return list == null ? "" : list;
 	}
 
 	/**

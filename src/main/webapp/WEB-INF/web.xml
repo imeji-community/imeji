@@ -47,6 +47,12 @@
 		<load-on-startup>5</load-on-startup>
 		<async-supported>true</async-supported>
 	</servlet>
+	<servlet>
+		<servlet-name>Data Viewer Servlet</servlet-name>
+		<servlet-class>de.mpg.imeji.presentation.servlet.DataViewerServlet</servlet-class>
+		<load-on-startup>5</load-on-startup>
+		<async-supported>true</async-supported>
+	</servlet>
 	<!-- Filters (order is important) -->
 	
 
@@ -112,8 +118,10 @@
 		<servlet-name>Digilib Servlet</servlet-name>
 		<url-pattern>/digilib</url-pattern>
 	</servlet-mapping>
-	
-
+	<servlet-mapping>
+		<servlet-name>Data Viewer Servlet</servlet-name>
+		<url-pattern>/dataviewer</url-pattern>
+	</servlet-mapping>
 	
 	
 	<filter-mapping>

@@ -69,7 +69,7 @@ public class FileServlet extends HttpServlet
         try
         {
             storageController = new StorageController();
-            logger.info("ImageServlet initialized");
+            logger.info("File Servlet initialized");
             authorization = new Authorization();
             navivation = new Navigation();
             domain = StringHelper.normalizeURI(navivation.getDomain());

@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.http.client.HttpResponseException;
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.util.ObjectHelper;
+
 /**
  * SErvlet to call Data viewer service
  * 

@@ -560,6 +560,11 @@
 			<version>1.2-pre-dr-b04-2011-07-04</version> </dependency> <dependency> <groupId>org.devlib.schmidt</groupId> 
 			<artifactId>imageinfo</artifactId> <version>1.9</version> <type>jar</type> 
 			<scope>compile</scope> </dependency> -->
+		<dependency>
+			<groupId>de.mpg.mpdl.service.connector</groupId>
+			<artifactId>java-connector</artifactId>
+			<version>0.1</version>
+		</dependency>
 	</dependencies>
 	<profiles>
 		<!-- this profile is used by developers -->

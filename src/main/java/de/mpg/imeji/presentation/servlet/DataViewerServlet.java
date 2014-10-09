@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -41,7 +42,6 @@ public class DataViewerServlet extends HttpServlet {
 	@Override
 	public void init() throws ServletException {
 		super.init();
-		System.out.println("DataViewerServlet iniiiiiiiiit");
 		logger.info("Data Viewer Servlet initialized");
 	}
    
@@ -59,18 +59,28 @@ public class DataViewerServlet extends HttpServlet {
 			ByteArrayInputStream istream = new ByteArrayInputStream(data);
 			out.close();
 			String name = item.getFilename();
-			String redirectTo = "";
+			File image = new File("");
 			if(name.endsWith(".swc"))
-				redirectTo = viewSWCFile(istream);
+				image = viewSWCFile(istream);
 			else
 				viewFitsFile(istream, resp);	 
-//			resp.sendRedirect(redirectTo);
+
+	        String contentType = getServletContext().getMimeType(image.getName());
 			
-			getServletContext().getRequestDispatcher(redirectTo).forward(req, resp);
+	        // Init servlet response.
+	        resp.reset();
+	        resp.setContentType(contentType);
+	        resp.setHeader("Content-Length", String.valueOf(image.length()));
+
+	        // Write image content to response.
+	        Files.copy(image.toPath(), resp.getOutputStream());
+
 //			resp.getWriter().append("id" + id);
 		} catch (HttpResponseException he) {
+			
 			resp.sendError(he.getStatusCode(), he.getMessage());
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
 					e.getMessage());
 		}
@@ -81,24 +91,21 @@ public class DataViewerServlet extends HttpServlet {
 		
 	}
 
-	private String viewSWCFile(InputStream istream) throws FileNotFoundException, IOException {
+	private File viewSWCFile(InputStream istream) throws FileNotFoundException, IOException {
 		String swcServiceTargetURL = "http://servicehub.mpdl.mpg.de/swc/api/view";
 		PostMethod post = new PostMethod(swcServiceTargetURL);
 		try {
 			post.setParameter("swc", IOUtils.toString(istream));
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		post.setParameter("portable", "true");		
 		HttpClient client = new HttpClient();
 		int status = client.executeMethod(post);
-		System.err.println(status);
 		File respFile = File.createTempFile("swc_3d", ".html");
 		IOUtils.copy(post.getResponseBodyAsStream(), new FileOutputStream(respFile));
 		post.releaseConnection();
-		System.err.println(respFile.getAbsolutePath());
-		return respFile.getAbsolutePath();
+		return respFile;
 	}
 
 }

@@ -1,11 +1,14 @@
 package de.mpg.imeji.presentation.servlet;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 
 import javax.servlet.ServletException;
@@ -13,10 +16,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.params.HttpMethodParams;
+import org.apache.commons.httpclient.methods.multipart.FilePart;
+import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
+import org.apache.commons.httpclient.methods.multipart.Part;
+import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.http.client.HttpResponseException;
@@ -27,6 +33,8 @@ import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.ObjectLoader;
+import de.mpg.imeji.presentation.util.PropertyReader;
+
 
 /**
  * SErvlet to call Data viewer service
@@ -37,7 +45,7 @@ import de.mpg.imeji.presentation.util.ObjectLoader;
 public class DataViewerServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -4602021617386831403L;
-	private static Logger logger = Logger.getLogger(FileServlet.class);
+	private static Logger logger = Logger.getLogger(DataViewerServlet.class);
     
 	@Override
 	public void init() throws ServletException {
@@ -52,19 +60,29 @@ public class DataViewerServlet extends HttpServlet {
 			SessionBean sb = (SessionBean)req.getSession(false).getAttribute(SessionBean.class.getSimpleName());
 			String id = req.getParameter("id");
 			Item item = ObjectLoader.loadItem(ObjectHelper.getURI(Item.class, id),sb.getUser());
+			File image = new File("");
+			String name = item.getFilename();
+			String fileExtension = name.split("\\.")[name.split("\\.").length - 1];
+			
+			/*
+			 * transfer file to dataViewer	
+			 */
+			
 			StorageController controller = new StorageController();
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			controller.read(item.getFullImageUrl().toString(), out, true);
 			byte[] data = out.toByteArray();
 			ByteArrayInputStream istream = new ByteArrayInputStream(data);
 			out.close();
-			String name = item.getFilename();
-			File image = new File("");
-			if(name.endsWith(".swc"))
-				image = viewSWCFile(istream);
-			else
-				viewFitsFile(istream, resp);	 
-
+			image = viewGenericFile(istream, fileExtension);
+			
+			/*
+			 * transfer stream to dataViewer	 
+			URI fullImageUrl = item.getFullImageUrl();
+			image = viewGenericFileFromURL(fullImageUrl, fileExtension);
+			*/
+			
+			
 	        String contentType = getServletContext().getMimeType(image.getName());
 			
 	        // Init servlet response.
@@ -75,7 +93,7 @@ public class DataViewerServlet extends HttpServlet {
 	        // Write image content to response.
 	        Files.copy(image.toPath(), resp.getOutputStream());
 
-//			resp.getWriter().append("id" + id);
+	        // resp.getWriter().append("id" + id);
 		} catch (HttpResponseException he) {
 			
 			resp.sendError(he.getStatusCode(), he.getMessage());
@@ -85,27 +103,57 @@ public class DataViewerServlet extends HttpServlet {
 					e.getMessage());
 		}
 	}
+	
 
-	private void viewFitsFile(InputStream istream, HttpServletResponse response) {
-		String fitsServiceTargetURL = "http://servicehub.mpdl.mpg.de/fits/api/view";
-		
-	}
 
-	private File viewSWCFile(InputStream istream) throws FileNotFoundException, IOException {
-		String swcServiceTargetURL = "http://servicehub.mpdl.mpg.de/swc/api/view";
-		PostMethod post = new PostMethod(swcServiceTargetURL);
+	
+	private File viewGenericFile(InputStream istream, String fileType) throws FileNotFoundException, IOException, URISyntaxException {
+		String dataViewerServiceTargetURL = PropertyReader.getProperty("dataViewer.service.targetURL");
+
+		PostMethod post = new PostMethod(dataViewerServiceTargetURL);
 		try {
-			post.setParameter("swc", IOUtils.toString(istream));
-		} catch (Exception e) {
-			e.printStackTrace();
+			post.setParameter("mimetype", fileType);	
+			File file = File.createTempFile("tmpInputstreamFile", ".tmp");
+			OutputStream outputStream = new FileOutputStream(file);
+ 
+			int read = 0;
+			byte[] bytes = new byte[1024];
+			while ((read = istream.read(bytes)) != -1) {
+				outputStream.write(bytes, 0, read);
+			}
+			
+			Part[] parts = {new FilePart(file.getName(), file), new StringPart("mimetype",fileType)};
+
+			post.setRequestEntity(new MultipartRequestEntity(parts, post.getParams()));
+
+			outputStream.close();
+			outputStream.flush();
+			} catch (Exception e) {
+				e.printStackTrace();
 		}
-		post.setParameter("portable", "true");		
+	
 		HttpClient client = new HttpClient();
 		int status = client.executeMethod(post);
-		File respFile = File.createTempFile("swc_3d", ".html");
+		File respFile = File.createTempFile("result", ".html");
 		IOUtils.copy(post.getResponseBodyAsStream(), new FileOutputStream(respFile));
 		post.releaseConnection();
 		return respFile;
 	}
+	
+	/*
+	public File viewGenericFileFromURL(URI url, String fileType) throws IOException, URISyntaxException{
+		String dataViewerServiceTargetURL = PropertyReader.getProperty("dataViewer.service.targetURL");
+		String connURL = String.format(dataViewerServiceTargetURL + "?url=%s&mimetype=%s", String.valueOf(url), fileType);
+		GetMethod get = new GetMethod(connURL);
+		HttpClient client = new HttpClient();
+		client.executeMethod(get);		
+		File respFile = File.createTempFile("result", ".html");
+		IOUtils.copy(get.getResponseBodyAsStream(), new FileOutputStream(respFile));
+		get.releaseConnection();
+		return respFile;
+	}
+	*/
+	
+	
 
 }

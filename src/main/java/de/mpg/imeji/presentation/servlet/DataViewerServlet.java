@@ -2,7 +2,6 @@ package de.mpg.imeji.presentation.servlet;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -24,11 +23,9 @@ import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.http.client.HttpResponseException;
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.presentation.session.SessionBean;
@@ -62,11 +59,10 @@ public class DataViewerServlet extends HttpServlet {
 			Item item = ObjectLoader.loadItem(ObjectHelper.getURI(Item.class, id),sb.getUser());
 			File image = new File("");
 			String name = item.getFilename();
-			String fileExtension = name.split("\\.")[name.split("\\.").length - 1];
+			String fileExtensionName = name.split("\\.")[name.split("\\.").length - 1];
 			
 			/*
 			 * transfer file to dataViewer	
-			 */
 			
 			StorageController controller = new StorageController();
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -74,14 +70,15 @@ public class DataViewerServlet extends HttpServlet {
 			byte[] data = out.toByteArray();
 			ByteArrayInputStream istream = new ByteArrayInputStream(data);
 			out.close();
-			image = viewGenericFile(istream, fileExtension);
+			image = viewGenericFile(istream, fileExtensionName);
+			 */
 			
 			/*
-			 * transfer stream to dataViewer	 
-			URI fullImageUrl = item.getFullImageUrl();
-			image = viewGenericFileFromURL(fullImageUrl, fileExtension);
+			 * send the file URL to dataViewer	 
 			*/
-			
+			URI fullImageUrl = item.getFullImageUrl();
+			System.out.println(fullImageUrl.toString());
+			image = viewFitsFile(fullImageUrl, false);
 			
 	        String contentType = getServletContext().getMimeType(image.getName());
 			
@@ -95,7 +92,6 @@ public class DataViewerServlet extends HttpServlet {
 
 	        // resp.getWriter().append("id" + id);
 		} catch (HttpResponseException he) {
-			
 			resp.sendError(he.getStatusCode(), he.getMessage());
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -105,11 +101,23 @@ public class DataViewerServlet extends HttpServlet {
 	}
 	
 
+	private File viewFitsFile(URI url, boolean isLoad) throws FileNotFoundException, IOException {
+ 		String fitsServiceTargetURL = "http://localhost:8080/fits/api/view?url="+url+"&load="+String.valueOf(isLoad);
+ 		//String fitsServiceTargetURL = "http://servicehub.mpdl.mpg.de/fits/api/view?url="+url+"&load="+String.valueOf(isLoad);
 
+ 		GetMethod get = new GetMethod(fitsServiceTargetURL);
+ 		
+ 		HttpClient client = new HttpClient();
+ 		int status = client.executeMethod(get);
+ 		File respFile = File.createTempFile("fits", ".html");
+ 		IOUtils.copy(get.getResponseBodyAsStream(), new FileOutputStream(respFile));
+ 		get.releaseConnection();
+		return respFile;
+ 	}
+	
 	
 	private File viewGenericFile(InputStream istream, String fileType) throws FileNotFoundException, IOException, URISyntaxException {
 		String dataViewerServiceTargetURL = PropertyReader.getProperty("dataViewer.service.targetURL");
-
 		PostMethod post = new PostMethod(dataViewerServiceTargetURL);
 		try {
 			post.setParameter("mimetype", fileType);	
@@ -126,8 +134,8 @@ public class DataViewerServlet extends HttpServlet {
 
 			post.setRequestEntity(new MultipartRequestEntity(parts, post.getParams()));
 
-			outputStream.close();
 			outputStream.flush();
+			outputStream.close();
 			} catch (Exception e) {
 				e.printStackTrace();
 		}

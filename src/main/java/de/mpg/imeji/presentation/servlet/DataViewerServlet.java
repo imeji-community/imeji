@@ -1,5 +1,6 @@
 package de.mpg.imeji.presentation.servlet;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.FileNotFoundException;
@@ -23,9 +24,11 @@ import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.http.client.HttpResponseException;
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.presentation.session.SessionBean;
@@ -61,24 +64,26 @@ public class DataViewerServlet extends HttpServlet {
 			String name = item.getFilename();
 			String fileExtensionName = name.split("\\.")[name.split("\\.").length - 1];
 			
-			/*
-			 * transfer file to dataViewer	
-			
-			StorageController controller = new StorageController();
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			controller.read(item.getFullImageUrl().toString(), out, true);
-			byte[] data = out.toByteArray();
-			ByteArrayInputStream istream = new ByteArrayInputStream(data);
-			out.close();
-			image = viewGenericFile(istream, fileExtensionName);
-			 */
-			
-			/*
-			 * send the file URL to dataViewer	 
-			*/
-			URI fullImageUrl = item.getFullImageUrl();
-			System.out.println(fullImageUrl.toString());
-			image = viewFitsFile(fullImageUrl, false);
+			if (fileExtensionName.equalsIgnoreCase("fits")){
+				/*
+				 * send the file URL to dataViewer if file is in .fits format 
+				*/
+				URI fullImageUrl = item.getFullImageUrl();
+				System.out.println(fullImageUrl.toString());
+				image = viewFileByURL(fullImageUrl, false, fileExtensionName);
+			}else{
+				/*
+				 * transfer file to dataViewer	
+				 */
+				StorageController controller = new StorageController();
+				ByteArrayOutputStream out = new ByteArrayOutputStream();
+				controller.read(item.getFullImageUrl().toString(), out, true);
+				byte[] data = out.toByteArray();
+				ByteArrayInputStream istream = new ByteArrayInputStream(data);
+				out.flush();
+				out.close();
+				image = viewGenericFile(istream, fileExtensionName);
+			}
 			
 	        String contentType = getServletContext().getMimeType(image.getName());
 			
@@ -101,11 +106,11 @@ public class DataViewerServlet extends HttpServlet {
 	}
 	
 
-	private File viewFitsFile(URI url, boolean isLoad) throws FileNotFoundException, IOException {
- 		String fitsServiceTargetURL = "http://localhost:8080/fits/api/view?url="+url+"&load="+String.valueOf(isLoad);
- 		//String fitsServiceTargetURL = "http://servicehub.mpdl.mpg.de/fits/api/view?url="+url+"&load="+String.valueOf(isLoad);
+	private File viewFileByURL(URI url, boolean isLoad, String fileType) throws FileNotFoundException, IOException, URISyntaxException {
+		String dataViewerServiceTargetURL = PropertyReader.getProperty("dataViewer.service.targetURL");
+    	String serviceTargetURL = dataViewerServiceTargetURL+"?url="+url+"&load="+String.valueOf(isLoad)+"&mimetype="+fileType;
 
- 		GetMethod get = new GetMethod(fitsServiceTargetURL);
+ 		GetMethod get = new GetMethod(serviceTargetURL);
  		
  		HttpClient client = new HttpClient();
  		int status = client.executeMethod(get);
@@ -118,6 +123,7 @@ public class DataViewerServlet extends HttpServlet {
 	
 	private File viewGenericFile(InputStream istream, String fileType) throws FileNotFoundException, IOException, URISyntaxException {
 		String dataViewerServiceTargetURL = PropertyReader.getProperty("dataViewer.service.targetURL");
+
 		PostMethod post = new PostMethod(dataViewerServiceTargetURL);
 		try {
 			post.setParameter("mimetype", fileType);	

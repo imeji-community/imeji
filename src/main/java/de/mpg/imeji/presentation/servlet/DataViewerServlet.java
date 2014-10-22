@@ -31,6 +31,7 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.PropertyReader;
@@ -58,6 +59,7 @@ public class DataViewerServlet extends HttpServlet {
 			throws ServletException, IOException {
 		try {
 			SessionBean sb = (SessionBean)req.getSession(false).getAttribute(SessionBean.class.getSimpleName());
+			ConfigurationBean config = new ConfigurationBean();
 			String id = req.getParameter("id");
 			Item item = ObjectLoader.loadItem(ObjectHelper.getURI(Item.class, id),sb.getUser());
 			File image = new File("");
@@ -70,7 +72,7 @@ public class DataViewerServlet extends HttpServlet {
 				*/
 				URI fullImageUrl = item.getFullImageUrl();
 				System.out.println(fullImageUrl.toString());
-				image = viewFileByURL(fullImageUrl, false, fileExtensionName);
+				image = viewFileByURL(fullImageUrl, false, fileExtensionName, config.getDataViewerUrl());
 			}else{
 				/*
 				 * transfer file to dataViewer	
@@ -82,7 +84,7 @@ public class DataViewerServlet extends HttpServlet {
 				ByteArrayInputStream istream = new ByteArrayInputStream(data);
 				out.flush();
 				out.close();
-				image = viewGenericFile(istream, fileExtensionName);
+				image = viewGenericFile(istream, fileExtensionName, config.getDataViewerUrl());
 			}
 			
 	        String contentType = getServletContext().getMimeType(image.getName());
@@ -106,8 +108,7 @@ public class DataViewerServlet extends HttpServlet {
 	}
 	
 
-	private File viewFileByURL(URI url, boolean isLoad, String fileType) throws FileNotFoundException, IOException, URISyntaxException {
-		String dataViewerServiceTargetURL = PropertyReader.getProperty("dataViewer.service.targetURL");
+	private File viewFileByURL(URI url, boolean isLoad, String fileType, String dataViewerServiceTargetURL) throws FileNotFoundException, IOException, URISyntaxException {
     	String serviceTargetURL = dataViewerServiceTargetURL+"?url="+url+"&load="+String.valueOf(isLoad)+"&mimetype="+fileType;
 
  		GetMethod get = new GetMethod(serviceTargetURL);
@@ -121,8 +122,7 @@ public class DataViewerServlet extends HttpServlet {
  	}
 	
 	
-	private File viewGenericFile(InputStream istream, String fileType) throws FileNotFoundException, IOException, URISyntaxException {
-		String dataViewerServiceTargetURL = PropertyReader.getProperty("dataViewer.service.targetURL");
+	private File viewGenericFile(InputStream istream, String fileType, String dataViewerServiceTargetURL) throws FileNotFoundException, IOException, URISyntaxException {
 
 		PostMethod post = new PostMethod(dataViewerServiceTargetURL);
 		try {

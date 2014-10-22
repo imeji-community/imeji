@@ -184,12 +184,14 @@
 								<div class="imj_content">
 									<h:panelGroup layout="block" styleClass="imj_admindataSet">
 										<div class="imj_admindataLabel">
-											<h:outputText value="#{lbl.data_viewer_url}"/>
+											<h:outputText value="#{lbl.data_viewer_urlddd}"/>
 											<span class="imj_invisible">: </span>
 										</div>
 										<div class="imj_admindataValue">
 											<div class="imj_admindataValueEntry">
-												<h:inputText value="#{Configuration.dataViewerUrl}" styleClass="imj_admindataEdit"/>
+												<h:inputText value="#{Configuration.dataViewerUrl}" styleClass="imj_admindataEdit" onkeypress="if (event.keyCode == 13) { onchange(); return false; }">
+    												<f:ajax event="change" listener="#{Configuration.listener}" />
+												</h:inputText>
 											</div>
 										</div>
 									</h:panelGroup>

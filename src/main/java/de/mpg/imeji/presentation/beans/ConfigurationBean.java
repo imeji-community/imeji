@@ -33,9 +33,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Properties;
 
 import javax.faces.bean.ApplicationScoped;
@@ -52,7 +49,6 @@ import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
 
 import de.mpg.imeji.logic.storage.util.MediaUtils;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -139,8 +135,6 @@ public class ConfigurationBean {
 		System.out.println("saveconfig");
 		try {
 			setProperty(CONFIGURATION.FILE_TYPES.name(), fileTypes.toString());
-			setProperty(CONFIGURATION.DATA_VIEWER_URL.name(), dataViewerUrl);
-			setProperty(CONFIGURATION.DATA_VIEWER_FORMATS.name(), dataViewerFormatListString);
 			config.storeToXML(new FileOutputStream(configFile),"imeji configuration File");
 			BeanHelper.removeBeanFromMap(this.getClass());
 		} catch (Exception e) {
@@ -148,43 +142,6 @@ public class ConfigurationBean {
 		}
 	}
 	
-	public void getDataViewerFormatslistener(AjaxBehaviorEvent event) throws JSONException, ParseException {
-		String connURL = dataViewerUrl + "/api/explain/formats";
-		DefaultHttpClient httpclient = new DefaultHttpClient();
-		HttpGet httpget = new HttpGet(connURL);
-		HttpResponse resp;
-		try {
-			resp = httpclient.execute(httpget);
-			if(200 == resp.getStatusLine().getStatusCode())
-			{
-				HttpEntity entity = resp.getEntity();
-		        if (entity != null) {
-		            String retSrc = EntityUtils.toString(entity); 
-		            JSONArray array = new JSONArray(retSrc);
-		            String str = "";
-		            int i=0;
-		            while(i < array.length())
-		            {
-		            	str += array.get(i)+", ";
-		            	i++;
-		            }
-		            setDataViewerFormatListString(str);
-		            
-		         }
-			}
-		} catch (ClientProtocolException e) {
-			logger.error(e.getMessage(), e.fillInStackTrace());
-			setDataViewerFormatListString("");
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e.fillInStackTrace());
-			setDataViewerFormatListString("");
-		} catch(IllegalStateException e){
-			logger.error(e.getMessage(), e.fillInStackTrace());
-			setDataViewerFormatListString("");
-		}
-
-
-	}
 
 	/**
 	 * Set the value of a configuration property, and save it on disk
@@ -349,7 +306,9 @@ public class ConfigurationBean {
 	 */
 	public String getDataViewerFormatListString() {
 		
-		return dataViewerFormatListString;
+		//return dataViewerFormatListString;
+		System.out.println("get: "+ config.getProperty(CONFIGURATION.DATA_VIEWER_FORMATS.name()));
+		return config.getProperty(CONFIGURATION.DATA_VIEWER_FORMATS.name());
 	}
 
 	/**
@@ -357,7 +316,8 @@ public class ConfigurationBean {
 	 * 
 	 */
 	public void setDataViewerFormatListString(String str) {
-		this.dataViewerFormatListString = str;
+		System.out.println("set:" + str);
+		config.setProperty(CONFIGURATION.DATA_VIEWER_FORMATS.name(), str);
 		
 	}
 
@@ -375,7 +335,8 @@ public class ConfigurationBean {
 	 * @return the url of the data viewer service
 	 */
 	public String getDataViewerUrl() {
-		return dataViewerUrl;
+		//return dataViewerUrl;
+		return config.getProperty(CONFIGURATION.DATA_VIEWER_URL.name());
 	}
 
 	/**
@@ -385,5 +346,42 @@ public class ConfigurationBean {
 	public void setDataViewerUrl(String str) {
 		dataViewerUrl = str;
 		
+	}
+	
+	public String fetchDataViewerFormats() throws JSONException{
+		String connURL = dataViewerUrl + "/api/explain/formats";
+		DefaultHttpClient httpclient = new DefaultHttpClient();
+		HttpGet httpget = new HttpGet(connURL);
+		HttpResponse resp;
+		String str = "";
+		try {
+			resp = httpclient.execute(httpget);
+			
+			if(200 == resp.getStatusLine().getStatusCode())
+			{
+				HttpEntity entity = resp.getEntity();
+		        if (entity != null) {
+		            String retSrc = EntityUtils.toString(entity); 
+		            JSONArray array = new JSONArray(retSrc);
+		           
+		            int i=0;
+		            while(i < array.length())
+		            {
+		            	str += array.get(i)+", ";
+		            	i++;
+		            }
+		            
+		         }
+			}
+		} catch (ClientProtocolException e) {
+			logger.error(e.getMessage(), e.fillInStackTrace());
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e.fillInStackTrace());
+		} catch(IllegalStateException e){
+			logger.error(e.getMessage(), e.fillInStackTrace());
+		}
+		setDataViewerFormatListString(str);
+		System.out.println(getDataViewerFormatListString());
+		return "";
 	}
 }

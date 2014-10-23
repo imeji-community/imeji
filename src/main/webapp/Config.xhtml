@@ -189,8 +189,7 @@
 										</div>
 										<div class="imj_admindataValue">
 											<div class="imj_admindataValueEntry">
-												<h:inputText value="#{Configuration.dataViewerUrl}" styleClass="imj_admindataEdit" onkeypress="if (event.keyCode == 13) { onchange(); return false; }">
-    												<f:ajax event="change" render=":configForm:dataViewerFormatListString" listener="#{Configuration.getDataViewerFormatslistener}" />
+												<h:inputText value="#{Configuration.dataViewerUrl}" styleClass="imj_admindataEdit">
 												</h:inputText>
 											</div>
 										</div>
@@ -204,6 +203,9 @@
 											<div class="imj_admindataValueEntry">
 												<h:inputText id="dataViewerFormatListString" value="#{Configuration.dataViewerFormatListString}" styleClass="imj_admindataEdit"/>
 											</div>
+											<h:commandButton action="#{Configuration.fetchDataViewerFormats}" value="#{lbl.fetch_from_data_viewer}" styleClass="imj_editButton">
+												<f:ajax execute="@form" render=":configForm:dataViewerFormatListString"/>
+											</h:commandButton>
 										</div>
 									</h:panelGroup>
 								</div> 

@@ -44,6 +44,7 @@ import javax.faces.event.AjaxBehaviorEvent;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -147,29 +148,41 @@ public class ConfigurationBean {
 		}
 	}
 	
-	public void getDataViewerFormatslistener(AjaxBehaviorEvent event) throws ClientProtocolException, IOException, JSONException{
-		
+	public void getDataViewerFormatslistener(AjaxBehaviorEvent event) throws JSONException, ParseException {
 		String connURL = dataViewerUrl + "/api/explain/formats";
 		DefaultHttpClient httpclient = new DefaultHttpClient();
 		HttpGet httpget = new HttpGet(connURL);
-		HttpResponse resp = httpclient.execute(httpget);
-		if(200 == resp.getStatusLine().getStatusCode())
-		{
-			HttpEntity entity = resp.getEntity();
-	        if (entity != null) {
-	            String retSrc = EntityUtils.toString(entity); 
-	            JSONArray array = new JSONArray(retSrc);
-	            String str = "";
-	            int i=0;
-	            while(i < array.length())
-	            {
-	            	str += array.get(i)+", ";
-	            	i++;
-	            }
-	            setDataViewerFormatListString(str);
-	            
-	         }
+		HttpResponse resp;
+		try {
+			resp = httpclient.execute(httpget);
+			if(200 == resp.getStatusLine().getStatusCode())
+			{
+				HttpEntity entity = resp.getEntity();
+		        if (entity != null) {
+		            String retSrc = EntityUtils.toString(entity); 
+		            JSONArray array = new JSONArray(retSrc);
+		            String str = "";
+		            int i=0;
+		            while(i < array.length())
+		            {
+		            	str += array.get(i)+", ";
+		            	i++;
+		            }
+		            setDataViewerFormatListString(str);
+		            
+		         }
+			}
+		} catch (ClientProtocolException e) {
+			logger.error(e.getMessage(), e.fillInStackTrace());
+			setDataViewerFormatListString("");
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e.fillInStackTrace());
+			setDataViewerFormatListString("");
+		} catch(IllegalStateException e){
+			logger.error(e.getMessage(), e.fillInStackTrace());
+			setDataViewerFormatListString("");
 		}
+
 
 	}
 
@@ -335,7 +348,7 @@ public class ConfigurationBean {
 	 * @return the list of all formats supported by the data viewer service
 	 */
 	public String getDataViewerFormatListString() {
-		 
+		
 		return dataViewerFormatListString;
 	}
 

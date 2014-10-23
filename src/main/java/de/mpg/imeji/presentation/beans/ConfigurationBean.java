@@ -33,6 +33,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
 
 import javax.faces.bean.ApplicationScoped;
@@ -47,6 +50,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
 import de.mpg.imeji.logic.storage.util.MediaUtils;
@@ -86,6 +90,8 @@ public class ConfigurationBean {
 	
 	private String dataViewerUrl;
 	
+	private String dataViewerFormatListString;
+	
 	/**
 	 * Constructor, create the file if not existing
 	 * 
@@ -121,6 +127,7 @@ public class ConfigurationBean {
 		} else
 			this.fileTypes = new FileTypes((String) ft);
 		this.dataViewerUrl = (String) config.get(CONFIGURATION.DATA_VIEWER_URL.name());
+		this.dataViewerFormatListString = (String) config.get(CONFIGURATION.DATA_VIEWER_FORMATS.name());
 		return "";
 	}
 
@@ -132,16 +139,17 @@ public class ConfigurationBean {
 		try {
 			setProperty(CONFIGURATION.FILE_TYPES.name(), fileTypes.toString());
 			setProperty(CONFIGURATION.DATA_VIEWER_URL.name(), dataViewerUrl);
-			config.storeToXML(new FileOutputStream(configFile),
-					"imeji configuration File");
+			setProperty(CONFIGURATION.DATA_VIEWER_FORMATS.name(), dataViewerFormatListString);
+			config.storeToXML(new FileOutputStream(configFile),"imeji configuration File");
 			BeanHelper.removeBeanFromMap(this.getClass());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 	
-	public void listener(AjaxBehaviorEvent event) throws ClientProtocolException, IOException{
-		String connURL = "http://servicehub.mpdl.mpg.de/data-viewer/api/explain/formats";
+	public void getDataViewerFormatslistener(AjaxBehaviorEvent event) throws ClientProtocolException, IOException, JSONException{
+		
+		String connURL = dataViewerUrl + "/api/explain/formats";
 		DefaultHttpClient httpclient = new DefaultHttpClient();
 		HttpGet httpget = new HttpGet(connURL);
 		HttpResponse resp = httpclient.execute(httpget);
@@ -150,7 +158,16 @@ public class ConfigurationBean {
 			HttpEntity entity = resp.getEntity();
 	        if (entity != null) {
 	            String retSrc = EntityUtils.toString(entity); 
-	            System.err.println(retSrc);
+	            JSONArray array = new JSONArray(retSrc);
+	            String str = "";
+	            int i=0;
+	            while(i < array.length())
+	            {
+	            	str += array.get(i)+", ";
+	            	i++;
+	            }
+	            setDataViewerFormatListString(str);
+	            
 	         }
 		}
 
@@ -318,9 +335,8 @@ public class ConfigurationBean {
 	 * @return the list of all formats supported by the data viewer service
 	 */
 	public String getDataViewerFormatListString() {
-		String list = (String) config.get(CONFIGURATION.DATA_VIEWER_FORMATS
-				.name());
-		return list == null ? "" : list;
+		 
+		return dataViewerFormatListString;
 	}
 
 	/**
@@ -328,7 +344,8 @@ public class ConfigurationBean {
 	 * 
 	 */
 	public void setDataViewerFormatListString(String str) {
-		setProperty(CONFIGURATION.DATA_VIEWER_FORMATS.name(), str);
+		this.dataViewerFormatListString = str;
+		
 	}
 
 	/**

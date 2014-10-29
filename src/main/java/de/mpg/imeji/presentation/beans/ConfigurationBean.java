@@ -84,11 +84,11 @@ public class ConfigurationBean {
 			.getLogger(ConfigurationBean.class);
 	// A list of predefined file types, which is set when imeji is initialized
 	private final static String predefinedFileTypes = "[Image@en,Bilder@de=jpg,jpeg,tiff,tiff,jp2,pbm,gif,png,psd][Video@en,Video@de=wmv,swf,rm,mp4,mpg,m4v,avi,mov.asf,flv,srt,vob][Audio@en,Ton@de=aif,iff,m3u,m4a,mid,mpa,mp3,ra,wav,wma][Document@en,Dokument@de=doc,docx,odt,pages,rtf,tex,rtf,bib,csv,ppt,pps,pptx,key,xls,xlr,xlsx,gsheet,nb,numbers,ods,indd,pdf,dtx]";
-	
+
 	private String dataViewerUrl;
-	
+
 	private String dataViewerFormatListString;
-	
+
 	/**
 	 * Constructor, create the file if not existing
 	 * 
@@ -96,8 +96,9 @@ public class ConfigurationBean {
 	 * @throws IOException
 	 */
 	public ConfigurationBean() throws IOException, URISyntaxException {
-		
-		configFile = new File(PropertyReader.getProperty("imeji.tdb.path") + "/conf.xml");
+
+		configFile = new File(PropertyReader.getProperty("imeji.tdb.path")
+				+ "/conf.xml");
 		if (!configFile.exists())
 			configFile.createNewFile();
 		readConfig();
@@ -123,8 +124,10 @@ public class ConfigurationBean {
 			saveConfig();
 		} else
 			this.fileTypes = new FileTypes((String) ft);
-		this.dataViewerUrl = (String) config.get(CONFIGURATION.DATA_VIEWER_URL.name());
-		this.dataViewerFormatListString = (String) config.get(CONFIGURATION.DATA_VIEWER_FORMATS.name());
+		this.dataViewerUrl = (String) config.get(CONFIGURATION.DATA_VIEWER_URL
+				.name());
+		this.dataViewerFormatListString = (String) config
+				.get(CONFIGURATION.DATA_VIEWER_FORMATS.name());
 		return "";
 	}
 
@@ -135,13 +138,13 @@ public class ConfigurationBean {
 		System.out.println("saveconfig");
 		try {
 			setProperty(CONFIGURATION.FILE_TYPES.name(), fileTypes.toString());
-			config.storeToXML(new FileOutputStream(configFile),"imeji configuration File");
+			config.storeToXML(new FileOutputStream(configFile),
+					"imeji configuration File");
 			BeanHelper.removeBeanFromMap(this.getClass());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
-	
 
 	/**
 	 * Set the value of a configuration property, and save it on disk
@@ -305,9 +308,6 @@ public class ConfigurationBean {
 	 * @return the list of all formats supported by the data viewer service
 	 */
 	public String getDataViewerFormatListString() {
-		
-		//return dataViewerFormatListString;
-		System.out.println("get: "+ config.getProperty(CONFIGURATION.DATA_VIEWER_FORMATS.name()));
 		return config.getProperty(CONFIGURATION.DATA_VIEWER_FORMATS.name());
 	}
 
@@ -318,7 +318,7 @@ public class ConfigurationBean {
 	public void setDataViewerFormatListString(String str) {
 		System.out.println("set:" + str);
 		config.setProperty(CONFIGURATION.DATA_VIEWER_FORMATS.name(), str);
-		
+
 	}
 
 	/**
@@ -328,14 +328,17 @@ public class ConfigurationBean {
 	 * @return
 	 */
 	public boolean isDataViewerSupportedFormats(String format) {
-		return getDataViewerFormatListString().contains(format);
+		String l = getDataViewerFormatListString();
+		if (l == null)
+			return false;
+		return l.contains(format);
 	}
 
 	/**
 	 * @return the url of the data viewer service
 	 */
 	public String getDataViewerUrl() {
-		//return dataViewerUrl;
+		// return dataViewerUrl;
 		return config.getProperty(CONFIGURATION.DATA_VIEWER_URL.name());
 	}
 
@@ -345,10 +348,10 @@ public class ConfigurationBean {
 	 */
 	public void setDataViewerUrl(String str) {
 		dataViewerUrl = str;
-		
+
 	}
-	
-	public String fetchDataViewerFormats() throws JSONException{
+
+	public String fetchDataViewerFormats() throws JSONException {
 		String connURL = dataViewerUrl + "/api/explain/formats";
 		DefaultHttpClient httpclient = new DefaultHttpClient();
 		HttpGet httpget = new HttpGet(connURL);
@@ -356,28 +359,26 @@ public class ConfigurationBean {
 		String str = "";
 		try {
 			resp = httpclient.execute(httpget);
-			
-			if(200 == resp.getStatusLine().getStatusCode())
-			{
+
+			if (200 == resp.getStatusLine().getStatusCode()) {
 				HttpEntity entity = resp.getEntity();
-		        if (entity != null) {
-		            String retSrc = EntityUtils.toString(entity); 
-		            JSONArray array = new JSONArray(retSrc);
-		           
-		            int i=0;
-		            while(i < array.length())
-		            {
-		            	str += array.get(i)+", ";
-		            	i++;
-		            }
-		            
-		         }
+				if (entity != null) {
+					String retSrc = EntityUtils.toString(entity);
+					JSONArray array = new JSONArray(retSrc);
+
+					int i = 0;
+					while (i < array.length()) {
+						str += array.get(i) + ", ";
+						i++;
+					}
+
+				}
 			}
 		} catch (ClientProtocolException e) {
 			logger.error(e.getMessage(), e.fillInStackTrace());
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e.fillInStackTrace());
-		} catch(IllegalStateException e){
+		} catch (IllegalStateException e) {
 			logger.error(e.getMessage(), e.fillInStackTrace());
 		}
 		setDataViewerFormatListString(str);

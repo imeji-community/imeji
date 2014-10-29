@@ -66,13 +66,20 @@ public class DataViewerServlet extends HttpServlet {
 			String name = item.getFilename();
 			String fileExtensionName = name.split("\\.")[name.split("\\.").length - 1];
 			
+			String dataViewerUrl = "";
+			if(config.getDataViewerUrl().endsWith("/")){
+				dataViewerUrl = config.getDataViewerUrl()+"api/view";
+			}else{
+				dataViewerUrl = config.getDataViewerUrl()+"/api/view";
+			}
+			
 			if (fileExtensionName.equalsIgnoreCase("fits")){
 				/*
 				 * send the file URL to dataViewer if file is in .fits format 
 				*/
 				URI fullImageUrl = item.getFullImageUrl();
 				System.out.println(fullImageUrl.toString());
-				image = viewFileByURL(fullImageUrl, false, fileExtensionName, config.getDataViewerUrl());
+				image = viewFileByURL(fullImageUrl, false, fileExtensionName, dataViewerUrl);
 			}else{
 				/*
 				 * transfer file to dataViewer	
@@ -84,7 +91,7 @@ public class DataViewerServlet extends HttpServlet {
 				ByteArrayInputStream istream = new ByteArrayInputStream(data);
 				out.flush();
 				out.close();
-				image = viewGenericFile(istream, fileExtensionName, config.getDataViewerUrl());
+				image = viewGenericFile(istream, fileExtensionName, dataViewerUrl);
 			}
 			
 	        String contentType = getServletContext().getMimeType(image.getName());

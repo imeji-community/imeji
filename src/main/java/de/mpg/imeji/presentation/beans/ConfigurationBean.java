@@ -121,8 +121,9 @@ public class ConfigurationBean {
 		if (ft == null) {
 			this.fileTypes = new FileTypes(predefinedFileTypes);
 			saveConfig();
-		} else
+		} else{
 			this.fileTypes = new FileTypes((String) ft);
+		}
 		this.dataViewerUrl = (String) config.get(CONFIGURATION.DATA_VIEWER_URL.name());
 		this.dataViewerFormatListString = (String) config.get(CONFIGURATION.DATA_VIEWER_FORMATS.name());
 		return "";
@@ -135,7 +136,9 @@ public class ConfigurationBean {
 		System.out.println("saveconfig");
 		try {
 			setProperty(CONFIGURATION.FILE_TYPES.name(), fileTypes.toString());
+			setProperty(CONFIGURATION.DATA_VIEWER_URL.name(), dataViewerUrl.toString());
 			config.storeToXML(new FileOutputStream(configFile),"imeji configuration File");
+			
 			BeanHelper.removeBeanFromMap(this.getClass());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -305,9 +308,8 @@ public class ConfigurationBean {
 	 * @return the list of all formats supported by the data viewer service
 	 */
 	public String getDataViewerFormatListString() {
-		
 		//return dataViewerFormatListString;
-		System.out.println("get: "+ config.getProperty(CONFIGURATION.DATA_VIEWER_FORMATS.name()));
+		//System.out.println("get: "+ config.getProperty(CONFIGURATION.DATA_VIEWER_FORMATS.name()));
 		return config.getProperty(CONFIGURATION.DATA_VIEWER_FORMATS.name());
 	}
 
@@ -316,7 +318,7 @@ public class ConfigurationBean {
 	 * 
 	 */
 	public void setDataViewerFormatListString(String str) {
-		System.out.println("set:" + str);
+		//System.out.println("set:" + str);
 		config.setProperty(CONFIGURATION.DATA_VIEWER_FORMATS.name(), str);
 		
 	}
@@ -345,7 +347,6 @@ public class ConfigurationBean {
 	 */
 	public void setDataViewerUrl(String str) {
 		dataViewerUrl = str;
-		
 	}
 	
 	public String fetchDataViewerFormats() throws JSONException{

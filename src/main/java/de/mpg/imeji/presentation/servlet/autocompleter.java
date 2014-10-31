@@ -40,7 +40,7 @@ public class autocompleter extends HttpServlet
             Pattern.CASE_INSENSITIVE);
     private Pattern googleGeoAPIPattern = Pattern.compile(
             "https://maps.googleapis.com/maps/api/geocode/json.*address=", Pattern.CASE_INSENSITIVE);
-    private Pattern ccLicensePattern = Pattern.compile("http://api.creativecommons.org/rest/.*/simple/chooser.*");
+    private Pattern ccLicensePattern = Pattern.compile("https://api.creativecommons.org/rest/.*/simple/chooser.*");
 
     /**
      * @see HttpServlet#HttpServlet()

@@ -131,8 +131,8 @@ public class ZIPExport extends Export
             for (int i = 0; i < source.size(); i++)
             {
                 SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-                ItemController ic = new ItemController(session.getUser());
-                Item item = ic.retrieve(new URI(source.get(i)));
+                ItemController ic = new ItemController();
+                Item item = ic.retrieve(new URI(source.get(i)), session.getUser());
                 StorageController sc = new StorageController();
                 try
                 {

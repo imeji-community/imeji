@@ -118,10 +118,10 @@ public class SingleEditBean
     private void reloadImage()
     {
         SessionBean sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        ItemController itemController = new ItemController(sessionBean.getUser());
+        ItemController itemController = new ItemController();
         try
         {
-            item = itemController.retrieve(item.getId());
+            item = itemController.retrieve(item.getId(),sessionBean.getUser());
         }
         catch (Exception e)
         {

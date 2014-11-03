@@ -110,8 +110,8 @@ public abstract class ContainerBean implements Serializable
      */
     protected void findItems(User user, int size)
     {
-        ItemController ic = new ItemController(user);
-        ic.findContainerItems(getContainer(), user, size);
+        ItemController ic = new ItemController();
+        ic.searchAndSetContainerItemsFast(getContainer(), user, size);
     }
 
     /**
@@ -120,9 +120,9 @@ public abstract class ContainerBean implements Serializable
      * @param user
      * @return
      */
-    protected void countItems(User user)
+    protected void countItems()
     {
-        ItemController ic = new ItemController(user);
+        ItemController ic = new ItemController();
         size = ic.countContainerSize(getContainer());
     }
 
@@ -139,8 +139,8 @@ public abstract class ContainerBean implements Serializable
             {
                 uris.add(uri.toString());
             }
-            ItemController ic = new ItemController(user);
-            setItems((List<Item>)ic.loadItems(uris, -1, 0));
+            ItemController ic = new ItemController();
+            setItems((List<Item>)ic.retrieve(uris, -1, 0, user));
         }
     }
 

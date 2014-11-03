@@ -89,13 +89,13 @@ public class CollectionListItem
                 versionDate = collection.getVersionDate().getTime().toString();
             }
             // Get first thumbnail of the collection
-            ItemController ic = new ItemController(user);
-            if (ic.findContainerItems(collection, user, 1).getImages().iterator().hasNext())
+            ItemController ic = new ItemController();
+            if (ic.searchAndSetContainerItemsFast(collection, user, 1).getImages().iterator().hasNext())
             {
-               URI uri = ic.findContainerItems(collection, user, 1).getImages().iterator().next();
+               URI uri = ic.searchAndSetContainerItemsFast(collection, user, 1).getImages().iterator().next();
                if (uri != null)
                {
-                 this.thumbnail = new ThumbnailBean(ic.retrieve(uri));                
+                 this.thumbnail = new ThumbnailBean(ic.retrieve(uri, user));                
                }
              }
              // initializations
@@ -120,7 +120,7 @@ public class CollectionListItem
      */
     private void initSize(CollectionImeji collection, User user)
     {
-        ItemController ic = new ItemController(user);
+        ItemController ic = new ItemController();
         size = ic.countContainerSize(collection);
     }
 

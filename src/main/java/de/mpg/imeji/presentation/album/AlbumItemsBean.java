@@ -72,8 +72,8 @@ public class AlbumItemsBean extends ItemsBean
     @Override
     public SearchResult search(SearchQuery searchQuery, SortCriterion sortCriterion)
     {
-        ItemController controller = new ItemController(sb.getUser());
-        return controller.search(uri, searchQuery, sortCriterion, null);
+        ItemController controller = new ItemController();
+        return controller.search(uri, searchQuery, sortCriterion, null, sb.getUser());
     }
 
     /**
@@ -180,7 +180,7 @@ public class AlbumItemsBean extends ItemsBean
         else
         {
             ItemController ic = new ItemController();
-            album = (Album)ic.loadContainerItems(album, sb.getUser(), -1, 0);
+            album = (Album)ic.searchAndSetContainerItems(album, sb.getUser(), -1, 0);
             AlbumController ac = new AlbumController();
             int deletedCount = ac.removeFromAlbum(album, uris, sb.getUser());
             BeanHelper.info(deletedCount + " " + sb.getMessage("success_album_remove_images"));

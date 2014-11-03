@@ -28,6 +28,7 @@ import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.concurrency.locks.LocksSurveyor;
 import de.mpg.imeji.logic.controller.GrantController;
 import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.User;
@@ -105,7 +106,7 @@ public class InitializerServlet extends HttpServlet
                 catch (NotFoundException e)
                 {
                     logger.info("!!! IMPORTANT !!! Create admin@imeji.org as system administrator with password admin. !!! CHANGE PASSWORD !!!");
-                    uc.create(Imeji.adminUser);
+                    uc.create(Imeji.adminUser, USER_TYPE.ADMIN);
                     logger.info("Created admin user successfully:" + Imeji.adminUser.getEmail());
                 }
             }

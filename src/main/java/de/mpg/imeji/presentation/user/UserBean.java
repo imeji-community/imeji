@@ -17,6 +17,7 @@ import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.GrantController;
 import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Container;
@@ -259,7 +260,7 @@ public class UserBean {
 				} else {
 					UserController uc = new UserController(session.getUser());
 					// Create the new user
-					uc.create(newUser);
+					uc.create(newUser, USER_TYPE.RESTRICTED);
 					// If the edited user is the current user, put the new user
 					// in the session
 					if (session.getUser().getEmail().equals(user.getEmail())) {

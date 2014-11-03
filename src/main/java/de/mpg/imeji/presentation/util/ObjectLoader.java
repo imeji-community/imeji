@@ -45,7 +45,7 @@ public class ObjectLoader
     {
         try
         {
-            CollectionController cl = new CollectionController(user);
+            CollectionController cl = new CollectionController();
             return cl.retrieve(id, user);
         }
         catch (NotFoundException e)
@@ -99,8 +99,8 @@ public class ObjectLoader
         try
         {
             Album a = loadAlbumLazy(id, user);
-            ItemController ic = new ItemController(user);
-            return (Album)ic.loadContainerItems(a, user, -1, 0);
+            ItemController ic = new ItemController();
+            return (Album)ic.searchAndSetContainerItems(a, user, -1, 0);
         }
         catch (Exception e)
         {
@@ -145,8 +145,8 @@ public class ObjectLoader
     {
         try
         {
-            ItemController ic = new ItemController(user);
-            return ic.retrieve(id);
+            ItemController ic = new ItemController();
+            return ic.retrieve(id, user);
         }
         catch (NotFoundException e)
         {

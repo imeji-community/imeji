@@ -71,8 +71,8 @@ public class AdminBean
     {
         StorageController internal = new StorageController("internal");
         StorageController escidoc = new StorageController("escidoc");
-        ItemController ic = new ItemController(sb.getUser());
-        for (Item item : ic.retrieveAll())
+        ItemController ic = new ItemController();
+        for (Item item : ic.retrieveAll(sb.getUser()))
         {
             File tmp = null;
             try

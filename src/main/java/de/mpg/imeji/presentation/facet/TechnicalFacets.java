@@ -156,10 +156,10 @@ public class TechnicalFacets extends Facets
      */
     public int getCount(SearchQuery searchQuery, SearchPair pair, List<String> allImages)
     {
-        ItemController ic = new ItemController(sb.getUser());
+        ItemController ic = new ItemController();
         SearchQuery sq = new SearchQuery();
         sq.addPair(pair);
-        return ic.search(null, sq, null, allImages).getNumberOfRecords();
+        return ic.search(null, sq, null, allImages, sb.getUser()).getNumberOfRecords();
     }
 
     /*

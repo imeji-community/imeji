@@ -143,8 +143,8 @@ public class AlbumController extends ImejiController
      */
     public void release(Album album, User user) throws Exception
     {
-        ItemController ic = new ItemController(user);
-        album = (Album)ic.loadContainerItems(album, user, -1, 0);
+        ItemController ic = new ItemController();
+        album = (Album)ic.searchAndSetContainerItems(album, user, -1, 0);
         if (album.getImages().isEmpty())
         {
             throw new RuntimeException("An empty album can not be released!");
@@ -168,8 +168,8 @@ public class AlbumController extends ImejiController
      */
     public List<String> addToAlbum(Album album, List<String> uris, User user) throws Exception
     {
-        ItemController ic = new ItemController(user);
-        List<String> inAlbums = ic.search(album.getId(), null, null, null).getResults();
+        ItemController ic = new ItemController();
+        List<String> inAlbums = ic.search(album.getId(), null, null, null, user).getResults();
         List<String> notAddedUris = new ArrayList<String>();
         for (String uri : uris)
         {

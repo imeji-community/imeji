@@ -86,7 +86,7 @@ public class SessionObjectsController
         if (session.getActiveAlbum() != null)
         {
             ItemController ic = new ItemController();
-            session.setActiveAlbum((Album)ic.loadContainerItems(session.getActiveAlbum(), session.getUser(), -1, 0));
+            session.setActiveAlbum((Album)ic.searchAndSetContainerItems(session.getActiveAlbum(), session.getUser(), -1, 0));
         }
     }
 }

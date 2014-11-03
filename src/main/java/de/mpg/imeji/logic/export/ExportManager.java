@@ -117,19 +117,19 @@ public class ExportManager
         }
         else if ("image".equals(searchType))
         {
-            ItemController itemController = new ItemController(user);
+            ItemController itemController = new ItemController();
             if (collectionId != null)
             {
                 result = itemController.search(ObjectHelper.getURI(CollectionImeji.class, collectionId), searchQuery,
-                        null, null);
+                        null, null, user);
             }
             else if (albumId != null)
             {
-                result = itemController.search(ObjectHelper.getURI(Album.class, albumId), searchQuery, null, null);
+                result = itemController.search(ObjectHelper.getURI(Album.class, albumId), searchQuery, null, null, user);
             }
             else
             {
-                result = itemController.search(null, searchQuery, null, null);
+                result = itemController.search(null, searchQuery, null, null, user);
             }
         }
         if (result != null && result.getNumberOfRecords() > 0 && result.getNumberOfRecords() > maximumNumberOfRecords)

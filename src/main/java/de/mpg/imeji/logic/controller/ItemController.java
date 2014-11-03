@@ -14,7 +14,6 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
-import de.mpg.imeji.logic.reader.JenaReader;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
@@ -23,7 +22,7 @@ import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
-
+import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Container;
@@ -33,7 +32,6 @@ import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.logic.writer.JenaWriter;
 import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.j2j.helper.J2JHelper;
 
@@ -44,423 +42,337 @@ import de.mpg.j2j.helper.J2JHelper;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class ItemController extends ImejiController
-{
-    private static Logger logger = Logger.getLogger(ItemController.class);
-    private static final ReaderFacade reader = new ReaderFacade(Imeji.imageModel);
-    private static final WriterFacade writer = new WriterFacade(Imeji.imageModel);
+public class ItemController extends ImejiController {
+	private static Logger logger = Logger.getLogger(ItemController.class);
+	private static final ReaderFacade reader = new ReaderFacade(
+			Imeji.imageModel);
+	private static final WriterFacade writer = new WriterFacade(
+			Imeji.imageModel);
 
-    /**
-     * Controller constructor
-     */
-    public ItemController()
-    {
-        super();
-    }
+	/**
+	 * Controller constructor
+	 */
+	public ItemController() {
+		super();
+	}
 
-    public ItemController(User user)
-    {
-        super(user);
-    }
+	/**
+	 * Create an {@link Item} in a {@link CollectionImeji}
+	 * 
+	 * @param img
+	 * @param coll
+	 * @throws Exception
+	 */
+	public Item create(Item item, URI coll, User user) throws Exception {
+		Collection<Item> l = new ArrayList<Item>();
+		l.add(item);
+		create(l, coll, user);
+		return item;
+	}
 
-    /**
-     * Create an {@link Item} in a {@link CollectionImeji}
-     * 
-     * @param img
-     * @param coll
-     * @throws Exception
-     */
-    public Item create(Item item, URI coll) throws Exception
-    {
-        Collection<Item> l = new ArrayList<Item>();
-        l.add(item);
-        create(l, coll);
-        return item;
-    }
+	/**
+	 * Create a {@link List} of {@link Item} in a {@link CollectionImeji}. This
+	 * method is faster than using create(Item item, URI coll) when creating
+	 * many items
+	 * 
+	 * @param items
+	 * @param coll
+	 * @throws Exception
+	 */
+	public void create(Collection<Item> items, URI coll, User user)
+			throws Exception {
+		CollectionController cc = new CollectionController();
+		CollectionImeji ic = cc.retrieve(coll, user);
+		for (Item img : items) {
+			writeCreateProperties(img, user);
+			if (Status.PENDING.equals(ic.getStatus())) {
+				img.setVisibility(Visibility.PRIVATE);
+			} else {
+				img.setVisibility(Visibility.PUBLIC);
+			}
+			img.setCollection(coll);
+			img.getMetadataSet().setProfile(ic.getProfile());
+			ic.getImages().add(img.getId());
+		}
+		writer.create(J2JHelper.cast2ObjectList(new ArrayList<Item>(items)),
+				user);
+		cc.update(ic, user);
 
-    /**
-     * Create a {@link List} of {@link Item} in a {@link CollectionImeji}. This method is faster than using create(Item
-     * item, URI coll) when creating many items
-     * 
-     * @param items
-     * @param coll
-     * @throws Exception
-     */
-    public void create(Collection<Item> items, URI coll) throws Exception
-    {
-        CollectionController cc = new CollectionController(user);
-        CollectionImeji ic = cc.retrieve(coll, user);
-        for (Item img : items)
-        {
-            writeCreateProperties(img, user);
-            if (Status.PENDING.equals(ic.getStatus()))
-            {
-                img.setVisibility(Visibility.PRIVATE);
-            }
-            else
-            {
-                img.setVisibility(Visibility.PUBLIC);
-            }
-            img.setCollection(coll);
-            img.getMetadataSet().setProfile(ic.getProfile());
-            ic.getImages().add(img.getId());
-        }
-        writer.create(J2JHelper.cast2ObjectList(new ArrayList<Item>(items)), user);
-        cc.update(ic);
-       
-    }
-    
+	}
 
+	/**
+	 * User ObjectLoader to load image
+	 * 
+	 * @param imgUri
+	 * @return
+	 * @throws Exception
+	 */
+	public Item retrieve(URI imgUri, User user) throws Exception {
+		return (Item) reader.read(imgUri.toString(), user, new Item());
+	}
 
-    /**
-     * Update an {@link Item} in the database
-     * 
-     * @param item
-     * @deprecated
-     * @throws Exception
-     */
-    @Deprecated
-    public void update(Item item) throws Exception
-    {
-        Collection<Item> l = new ArrayList<Item>();
-        l.add(item);
-        update(l);
-    }
+	/**
+	 * Load the {@link List} of {@link Item}
+	 * 
+	 * @param uris
+	 * @param limit
+	 * @param offset
+	 * @return
+	 */
+	public Collection<Item> retrieve(List<String> uris, int limit, int offset,
+			User user) {
+		int counter = 0;
+		List<Item> items = new ArrayList<Item>();
+		for (String s : uris) {
+			if (offset <= counter
+					&& (counter < (limit + offset) || limit == -1)) {
+				items.add((Item) J2JHelper.setId(new Item(), URI.create(s)));
+			}
+			counter++;
+		}
+		try {
+			reader.read(J2JHelper.cast2ObjectList(items), user);
+			return items;
+		} catch (Exception e) {
+			throw new RuntimeException(
+					"Error loading items: " + e.getMessage(), e);
+		}
+	}
 
-    /**
-     * Update a {@link Collection} of {@link Item}
-     * 
-     * @param items
-     * @deprecated
-     * @throws Exception
-     */
-    @Deprecated
-    public void update(Collection<Item> items) throws Exception
-    {
-        List<Object> imBeans = new ArrayList<Object>();
-        for (Item item : items)
-        {
-            writeUpdateProperties(item, user);
-            imBeans.add(createFulltextForMetadata(item));
-        }
-        writer.update(imBeans, user);
-    }
+	/**
+	 * Retrieve all {@link Item} (all status, all users) in imeji
+	 * 
+	 * @return
+	 */
+	public Collection<Item> retrieveAll(User user) {
+		List<String> uris = ImejiSPARQL.exec(SPARQLQueries.selectItemAll(),
+				Imeji.imageModel);
+		return retrieve(uris, -1, 0, user);
+	}
 
-    /**
-     * Update an {@link Item} in the database
-     * 
-     * @param item
-     * @param user
-     * @throws Exception
-     */
-    public Item update(Item item, User user) throws Exception
-    {
-        Collection<Item> l = new ArrayList<Item>();
-        l.add(item);
-        update(l, user);
-        
-        return item;
-    }
+	/**
+	 * Update an {@link Item} in the database
+	 * 
+	 * @param item
+	 * @param user
+	 * @throws Exception
+	 */
+	public Item update(Item item, User user) throws Exception {
+		Collection<Item> l = new ArrayList<Item>();
+		l.add(item);
+		update(l, user);
 
-    /**
-     * Update a {@link Collection} of {@link Item}
-     * 
-     * @param items
-     * @param user
-     * @throws Exception
-     */
-    public void update(Collection<Item> items, User user) throws Exception
-    {
-        List<Object> imBeans = new ArrayList<Object>();
-        for (Item item : items)
-        {
-            writeUpdateProperties(item, user);
-            imBeans.add(createFulltextForMetadata(item));
-        }
-        writer.update(imBeans, user);
-    }
+		return item;
+	}
 
-    /**
-     * Initialize the fulltext search value for all {@link Metadata} of an {@link Item}
-     * 
-     * @param item
-     * @return
-     */
-    private Item createFulltextForMetadata(Item item)
-    {
-        for (MetadataSet mds : item.getMetadataSets())
-        {
-            for (Metadata md : mds.getMetadata())
-            {
-                md.asFulltext();
-            }
-        }
-        return item;
-    }
+	/**
+	 * Update a {@link Collection} of {@link Item}
+	 * 
+	 * @param items
+	 * @param user
+	 * @throws Exception
+	 */
+	public void update(Collection<Item> items, User user) throws Exception {
+		List<Object> imBeans = new ArrayList<Object>();
+		for (Item item : items) {
+			writeUpdateProperties(item, user);
+			imBeans.add(createFulltextForMetadata(item));
+		}
+		writer.update(imBeans, user);
+	}
 
-    /**
-     * User ObjectLoader to load image
-     * 
-     * @param imgUri
-     * @return
-     * @throws Exception
-     */
-    public Item retrieve(URI imgUri) throws Exception
-    {
-        return (Item)reader.read(imgUri.toString(), user, new Item());
-    }
+	/**
+	 * Delete a {@link List} of {@link Item} inclusive all files stored in the
+	 * {@link Storage}
+	 * 
+	 * @param items
+	 * @param user
+	 * @return
+	 * @throws Exception
+	 */
+	public int delete(List<Item> items, User user) throws Exception {
+		int count = 0;
+		Map<String, URI> cMap = new HashMap<String, URI>();
+		List<Object> toDelete = new ArrayList<Object>();
+		for (Item item : items) {
+			if (item != null) {
+				removeFileFromStorage(item.getStorageId());
+				toDelete.add(item);
+				count++;
+				cMap.put(item.getCollection().toString(), item.getCollection());
+			}
+		}
+		writer.delete(toDelete, user);
+		return count;
+	}
 
-    /**
-     * User ObjectLoader to load image
-     * 
-     * @param imgUri
-     * @return
-     * @throws Exception
-     */
-    public Item retrieve(URI imgUri, User user) throws Exception
-    {
-        return (Item)reader.read(imgUri.toString(), user, new Item());
-    }
+	/**
+	 * Search {@link Item}
+	 * 
+	 * @param containerUri
+	 *            - if the search is done within a {@link Container}
+	 * @param searchQuery
+	 *            - the {@link SearchQuery}
+	 * @param sortCri
+	 *            - the {@link SortCriterion}
+	 * @param uris
+	 *            - The {@link List} of uri to restrict the search
+	 * @param user
+	 * @return
+	 */
+	public SearchResult search(URI containerUri, SearchQuery searchQuery,
+			SortCriterion sortCri, List<String> uris, User user) {
+		String uriString = containerUri != null ? containerUri.toString()
+				: null;
+		Search search = SearchFactory.create(SearchType.ITEM, uriString);
+		return search.search(searchQuery, sortCri, user, uris);
+	}
 
-    /**
-     * Retrieve all {@link Item} (all status, all users) in imeji
-     * 
-     * @return
-     */
-    public Collection<Item> retrieveAll()
-    {
-        List<String> uris = ImejiSPARQL.exec(SPARQLQueries.selectItemAll(), Imeji.imageModel);
-        return loadItems(uris, -1, 0);
-    }
+	/**
+	 * load items of a container. Perform a search to load all items: is faster
+	 * than to read the complete container
+	 * 
+	 * @param c
+	 * @param user
+	 */
+	public Container searchAndSetContainerItems(Container c, User user,
+			int limit, int offset) {
+		ItemController ic = new ItemController();
+		List<String> newUris = ic.search(c.getId(), null, null, null, user)
+				.getResults();
+		c.getImages().clear();
+		for (String s : newUris) {
+			c.getImages().add(URI.create(s));
+		}
+		return c;
+	}
 
-    /**
-     * Search
-     * 
-     * @param containerUri
-     * @param searchQuery
-     * @param sortCri
-     * @return
-     */
-    public SearchResult searchItemInContainer(URI containerUri, SearchQuery searchQuery, SortCriterion sortCri)
-    {
-        Search search = SearchFactory.create(SearchType.ITEM, containerUri.toString());
-        return search.search(searchQuery, sortCri, user);
-    }
+	/**
+	 * Load items from a {@link Container} without any ordering. This is faster
+	 * than searchAndSetContainerItems Method, but is working only with tdb
+	 * 
+	 * @param c
+	 * @param size
+	 * @return
+	 */
+	public Container searchAndSetContainerItemsFast(Container c, User user,
+			int size) {
+		String q = c instanceof CollectionImeji ? SPARQLQueries
+				.selectCollectionItems(c.getId(), user, size) : SPARQLQueries
+				.selectAlbumItems(c.getId(), user, size);
+		c.getImages().clear();
+		for (String s : ImejiSPARQL.exec(q, null)) {
+			c.getImages().add(URI.create(s));
+		}
+		return c;
+	}
 
-    /**
-     * Search {@link Item}
-     * 
-     * @param containerUri - if the search is done within a {@link Container}
-     * @param searchQuery - the {@link SearchQuery}
-     * @param sortCri - the {@link SortCriterion}
-     * @param uris - The {@link List} of uri to restrict the search
-     * @return
-     */
-    public SearchResult search(URI containerUri, SearchQuery searchQuery, SortCriterion sortCri, List<String> uris)
-    {
-        String uriString = containerUri != null ? containerUri.toString() : null;
-        Search search = SearchFactory.create(SearchType.ITEM, uriString);
-        return search.search(searchQuery, sortCri, user, uris);
-    }
+	/**
+	 * Set the status of a {@link List} of {@link Item} to released
+	 * 
+	 * @param l
+	 * @param user
+	 * @throws Exception
+	 */
+	public void release(List<Item> l, User user) throws Exception {
+		for (Item item : l) {
+			if (Status.PENDING.equals(item.getStatus())) {
+				writeReleaseProperty(item, user);
+				item.setVisibility(Visibility.PUBLIC);
+			}
+		}
+		update(l, user);
+	}
 
-    /**
-     * Load the {@link List} of {@link Item}
-     * 
-     * @param uris
-     * @param limit
-     * @param offset
-     * @return
-     */
-    public Collection<Item> loadItems(List<String> uris, int limit, int offset)
-    {
-        int counter = 0;
-        List<Item> items = new ArrayList<Item>();
-        for (String s : uris)
-        {
-            if (offset <= counter && (counter < (limit + offset) || limit == -1))
-            {
-                items.add((Item)J2JHelper.setId(new Item(), URI.create(s)));
-            }
-            counter++;
-        }
-        try
-        {
-            reader.read(J2JHelper.cast2ObjectList(items), user);
-            return items;
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException("Error loading items: " + e.getMessage(), e);
-        }
-    }
+	/**
+	 * Make the Items private
+	 * 
+	 * @param l
+	 * @param user
+	 * @throws Exception
+	 */
+	public void unRelease(List<Item> l, User user) throws Exception {
+		for (Item item : l) {
+			item.setStatus(Status.PENDING);
+		}
+		update(l, user);
+	}
 
-    /**
-     * Delete a {@link List} of {@link Item} inclusive all files stored in the {@link Storage}
-     * 
-     * @param items
-     * @param user
-     * @return
-     * @throws Exception
-     */
-    public int delete(List<Item> items, User user) throws Exception
-    {
-        int count = 0;
-        Map<String, URI> cMap = new HashMap<String, URI>();
-        List<Object> toDelete = new ArrayList<Object>();
-        for (Item item : items)
-        {
-            if (item != null)
-            {
-                removeFileFromStorage(item.getStorageId());
-                toDelete.add(item);
-                count++;
-                cMap.put(item.getCollection().toString(), item.getCollection());
-            }
-        }
-        writer.delete(toDelete, user);
-        return count;
-    }
+	/**
+	 * Set the status of a {@link List} of {@link Item} to withdraw and delete
+	 * its files from the {@link Storage}
+	 * 
+	 * @param items
+	 * @param comment
+	 * @throws Exception
+	 */
+	public void withdraw(List<Item> items, String comment, User user)
+			throws Exception {
+		Map<String, URI> cMap = new HashMap<String, URI>();
+		for (Item item : items) {
+			if (!item.getStatus().equals(Status.RELEASED)) {
+				throw new RuntimeException("Error discard " + item.getId()
+						+ " must be release (found: " + item.getStatus() + ")");
+			} else {
+				writeWithdrawProperties(item, comment);
+				item.setVisibility(Visibility.PUBLIC);
+				if (item.getEscidocId() != null) {
+					removeFileFromStorage(item.getStorageId());
+					item.setEscidocId(null);
+				}
+			}
+		}
+		update(items, user);
+		// Remove items from their collections
+		for (URI uri : cMap.values()) {
+			CollectionController cc = new CollectionController();
+			CollectionImeji c = cc.retrieveLazy(uri, user);
+			c = (CollectionImeji) searchAndSetContainerItems(c, user, -1, 0);
+			cc.update(c, user);
+		}
+	}
 
-    /**
-     * Set the status of a {@link List} of {@link Item} to released
-     * 
-     * @param l
-     * @param user
-     * @throws Exception
-     */
-    public void release(List<Item> l, User user) throws Exception
-    {
-        for (Item item : l)
-        {
-            if (Status.PENDING.equals(item.getStatus()))
-            {
-                writeReleaseProperty(item, user);
-                item.setVisibility(Visibility.PUBLIC);
-            }
-        }
-        update(l, user);
-    }
+	/**
+	 * Return the size of a {@link Container}
+	 * 
+	 * @param c
+	 * @return
+	 */
+	public int countContainerSize(Container c) {
+		String q = c instanceof CollectionImeji ? SPARQLQueries
+				.countCollectionSize(c.getId()) : SPARQLQueries
+				.countAlbumSize(c.getId());
+		return ImejiSPARQL.execCount(q, null);
+	}
 
-    /**
-     * Make the Items private
-     * 
-     * @param l
-     * @param user
-     * @throws Exception
-     */
-    public void unRelease(List<Item> l, User user) throws Exception
-    {
-        for (Item item : l)
-        {
-            item.setStatus(Status.PENDING);
-        }
-        update(l, user);
-    }
+	/**
+	 * Remove a file from the current {@link Storage}
+	 * 
+	 * @param id
+	 */
+	private void removeFileFromStorage(String id) {
+		StorageController storageController = new StorageController();
+		try {
+			storageController.delete(id);
+		} catch (Exception e) {
+			logger.error("error deleting file", e);
+		}
+	}
 
-    /**
-     * Set the status of a {@link List} of {@link Item} to withdraw and delete its files from the {@link Storage}
-     * 
-     * @param items
-     * @param comment
-     * @throws Exception
-     */
-    public void withdraw(List<Item> items, String comment) throws Exception
-    {
-        Map<String, URI> cMap = new HashMap<String, URI>();
-        for (Item item : items)
-        {
-            if (!item.getStatus().equals(Status.RELEASED))
-            {
-                throw new RuntimeException("Error discard " + item.getId() + " must be release (found: "
-                        + item.getStatus() + ")");
-            }
-            else
-            {
-                writeWithdrawProperties(item, comment);
-                item.setVisibility(Visibility.PUBLIC);
-                if (item.getEscidocId() != null)
-                {
-                    removeFileFromStorage(item.getStorageId());
-                    item.setEscidocId(null);
-                }
-            }
-        }
-        update(items);
-        // Remove items from their collections
-        for (URI uri : cMap.values())
-        {
-            CollectionController cc = new CollectionController(user);
-            CollectionImeji c = cc.retrieveLazy(uri);
-            c = (CollectionImeji)loadContainerItems(c, user, -1, 0);
-            cc.update(c);
-        }
-    }
+	/**
+	 * Initialize the fulltext search value for all {@link Metadata} of an
+	 * {@link Item}
+	 * 
+	 * @param item
+	 * @return
+	 */
+	private Item createFulltextForMetadata(Item item) {
+		for (MetadataSet mds : item.getMetadataSets()) {
+			for (Metadata md : mds.getMetadata()) {
+				md.asFulltext();
+			}
+		}
+		return item;
+	}
 
-    /**
-     * load items of a container. Perform a search to load all items: is faster than to read the complete container
-     * 
-     * @param c
-     * @param user
-     */
-    public Container loadContainerItems(Container c, User user, int limit, int offset)
-    {
-        ItemController ic = new ItemController(user);
-        List<String> newUris = ic.search(c.getId(), null, null, null).getResults();
-        c.getImages().clear();
-        for (String s : newUris)
-        {
-            c.getImages().add(URI.create(s));
-        }
-        return c;
-    }
-
-    /**
-     * Load items from a {@link Container} without any ordering. This is faster than loadContainerItem Method.
-     * 
-     * @param c
-     * @param size
-     * @return
-     */
-    public Container findContainerItems(Container c, User user, int size)
-    {
-        String q = c instanceof CollectionImeji ? SPARQLQueries.selectCollectionItems(c.getId(), user, size) : SPARQLQueries
-                .selectAlbumItems(c.getId(), user, size);
-        c.getImages().clear();
-        for (String s : ImejiSPARQL.exec(q, null))
-        {
-            c.getImages().add(URI.create(s));
-        }
-        return c;
-    }
-
-    /**
-     * Return the size of a {@link Container}
-     * 
-     * @param c
-     * @return
-     */
-    public int countContainerSize(Container c)
-    {
-        String q = c instanceof CollectionImeji ? SPARQLQueries.countCollectionSize(c.getId()) : SPARQLQueries
-                .countAlbumSize(c.getId());
-        return ImejiSPARQL.execCount(q, null);
-    }
-
-    /**
-     * Remove a file from the current {@link Storage}
-     * 
-     * @param id
-     */
-    private void removeFileFromStorage(String id)
-    {
-        StorageController storageController = new StorageController();
-        try
-        {
-            storageController.delete(id);
-        }
-        catch (Exception e)
-        {
-            logger.error("error deleting file", e);
-        }
-    }
 }

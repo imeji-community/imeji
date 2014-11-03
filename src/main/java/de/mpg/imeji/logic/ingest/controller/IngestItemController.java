@@ -66,7 +66,7 @@ public class IngestItemController
             ItemContentValidator.validate(itemList);
             ItemMapperTask im = new ItemMapperTask(itemList);
             im.execute();
-            ItemController ic = new ItemController(user);
+            ItemController ic = new ItemController();
             ic.update(im.get(), user);
         }
         catch (Exception e)
@@ -170,8 +170,8 @@ public class IngestItemController
      */
     private Item retrieveItem(Item item) throws Exception
     {
-        ItemController ic = new ItemController(user);
-        return ic.retrieve(item.getId());
+        ItemController ic = new ItemController();
+        return ic.retrieve(item.getId(), user);
     }
 
     /**

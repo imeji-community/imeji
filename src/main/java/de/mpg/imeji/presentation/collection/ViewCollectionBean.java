@@ -56,7 +56,7 @@ public class ViewCollectionBean extends CollectionBean
             {
                 findItems(user, 13);
                 loadItems(user);
-                countItems(user);
+                countItems();
             }
             if (getCollection() != null)
             {

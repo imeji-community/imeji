@@ -42,721 +42,664 @@ import de.mpg.imeji.presentation.util.UrlHelper;
  * 
  * @author saquet
  */
-public class EditItemMetadataBean
-{
-    // objects
-    private List<Item> allItems;
-    // The Metadateditor which is used to edit
-    private MetadataEditor editor = null;
-    // The editor before the user made any modification
-    private MetadataEditor noChangesEditor = null;
-    private MetadataProfile profile = null;
-    private Statement statement = null;
-    /**
-     * the {@link EditorItemBean} used to for the editor and which will be copied to all {@link Item}
-     */
-    private EditorItemBean editorItem = null;
-    // menus
-    private List<SelectItem> statementMenu = null;
-    private String selectedStatementName = null;
-    private List<SelectItem> modeRadio = null;
-    private String selectedMode = "basic";
-    // other
-    private int mdPosition;
-    private int imagePosition;
-    private boolean isProfileWithStatements = true;
-    private int lockedImages = 0;
-    private boolean initialized = false;
-    private SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-    private static Logger logger = Logger.getLogger(EditItemMetadataBean.class);
-    // url parameters
-    private String type = "all";
-    private String query = "";
-    private String collectionId = null;
+public class EditItemMetadataBean {
+	// objects
+	private List<Item> allItems;
+	// The Metadateditor which is used to edit
+	private MetadataEditor editor = null;
+	// The editor before the user made any modification
+	private MetadataEditor noChangesEditor = null;
+	private MetadataProfile profile = null;
+	private Statement statement = null;
+	/**
+	 * the {@link EditorItemBean} used to for the editor and which will be
+	 * copied to all {@link Item}
+	 */
+	private EditorItemBean editorItem = null;
+	// menus
+	private List<SelectItem> statementMenu = null;
+	private String selectedStatementName = null;
+	private List<SelectItem> modeRadio = null;
+	private String selectedMode = "basic";
+	// other
+	private int mdPosition;
+	private int imagePosition;
+	private boolean isProfileWithStatements = true;
+	private int lockedImages = 0;
+	private boolean initialized = false;
+	private SessionBean session = (SessionBean) BeanHelper
+			.getSessionBean(SessionBean.class);
+	private static Logger logger = Logger.getLogger(EditItemMetadataBean.class);
+	// url parameters
+	private String type = "all";
+	private String query = "";
+	private String collectionId = null;
 
-    /**
-     * Bean for batch and multiple metadata editor
-     */
-    public EditItemMetadataBean()
-    {
-        statementMenu = new ArrayList<SelectItem>();
-        modeRadio = new ArrayList<SelectItem>();
-    }
+	/**
+	 * Bean for batch and multiple metadata editor
+	 */
+	public EditItemMetadataBean() {
+		statementMenu = new ArrayList<SelectItem>();
+		modeRadio = new ArrayList<SelectItem>();
+	}
 
-    /**
-     * Initialize all elements of the bean
-     */
-    public void init()
-    {
-        reset();
-        try
-        {
-            List<String> uris = findItems();
-            if (uris != null)
-            {
-                lockImages(uris);
-                if ("selected".equals(type))
-                    allItems = loaditems(uris);
-                else
-                    allItems = loaditems(uris.subList(0, 1));
-            }
-            initProfileAndStatement(allItems);
-            initStatementsMenu();
-            initEmtpyEditorItem();
-            initEditor(new ArrayList<Item>(allItems));
-            ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).init(profile);
-            initialized = true;
-            noChangesEditor = editor.clone();
-            initModeMenu();
-        }
-        catch (Exception e)
-        {
-            BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("error") + " " + e);
-            logger.error("Error init Edit page", e);
-        }
-    }
+	/**
+	 * Initialize all elements of the bean
+	 */
+	public void init() {
+		reset();
+		try {
+			List<String> uris = findItems();
+			if (uris != null) {
+				lockImages(uris);
+				if ("selected".equals(type))
+					allItems = loaditems(uris);
+				else
+					allItems = loaditems(uris.subList(0, 1));
+			}
+			initProfileAndStatement(allItems);
+			initStatementsMenu();
+			initEmtpyEditorItem();
+			initEditor(new ArrayList<Item>(allItems));
+			((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class))
+					.init(profile);
+			initialized = true;
+			noChangesEditor = editor.clone();
+			initModeMenu();
+		} catch (Exception e) {
+			BeanHelper.error(((SessionBean) BeanHelper
+					.getSessionBean(SessionBean.class)).getLabel("error")
+					+ " "
+					+ e);
+			logger.error("Error init Edit page", e);
+		}
+	}
 
-    /**
-     * Set all pages element to their default values
-     */
-    public void reset()
-    {
-        initialized = false;
-        statementMenu = new ArrayList<SelectItem>();
-        modeRadio = new ArrayList<SelectItem>();
-        if (editor != null)
-        {
-            editor.reset();
-        }
-        statement = null;
-    }
+	/**
+	 * Set all pages element to their default values
+	 */
+	public void reset() {
+		initialized = false;
+		statementMenu = new ArrayList<SelectItem>();
+		modeRadio = new ArrayList<SelectItem>();
+		if (editor != null) {
+			editor.reset();
+		}
+		statement = null;
+	}
 
-    /**
-     * Go back to the previous page
-     * 
-     * @return
-     * @throws IOException
-     */
-    public void cancel() throws IOException
-    {
-        redirectToView();
-    }
+	/**
+	 * Go back to the previous page
+	 * 
+	 * @return
+	 * @throws IOException
+	 */
+	public void cancel() throws IOException {
+		redirectToView();
+	}
 
-    /**
-     * Read the url paramameters when the page is first called. This method is called directly from the xhtml page
-     * 
-     * @return
-     */
-    public String getUrlParameters()
-    {
-        type = UrlHelper.getParameterValue("type");
-        query = UrlHelper.getParameterValue("q");
-        collectionId = UrlHelper.getParameterValue("c");
-        return "";
-    }
+	/**
+	 * Read the url paramameters when the page is first called. This method is
+	 * called directly from the xhtml page
+	 * 
+	 * @return
+	 */
+	public String getUrlParameters() {
+		type = UrlHelper.getParameterValue("type");
+		query = UrlHelper.getParameterValue("q");
+		collectionId = UrlHelper.getParameterValue("c");
+		return "";
+	}
 
-    /**
-     * Find the uri of the {@link Item} which are edited
-     * 
-     * @return
-     * @throws IOException
-     */
-    private List<String> findItems() throws IOException
-    {
-        if ("selected".equals(type))
-        {
-            return getSelectedItems();
-        }
-        else if ("all".equals(type) && query != null && collectionId != null)
-        {
-            return searchItems();
-        }
-        return null;
-    }
+	/**
+	 * Find the uri of the {@link Item} which are edited
+	 * 
+	 * @return
+	 * @throws IOException
+	 */
+	private List<String> findItems() throws IOException {
+		if ("selected".equals(type)) {
+			return getSelectedItems();
+		} else if ("all".equals(type) && query != null && collectionId != null) {
+			return searchItems();
+		}
+		return null;
+	}
 
-    /**
-     * Load the profile of the images, and set the statement to be edited.
-     * 
-     * @param items
-     */
-    private void initProfileAndStatement(List<Item> items)
-    {
-        profile = null;
-        if (items != null && items.size() > 0)
-        {
-            profile = ObjectLoader.loadProfile(items.get(0).getMetadataSet().getProfile(), session.getUser());
-        }
-        statement = getSelectedStatement();
-    }
+	/**
+	 * Load the profile of the images, and set the statement to be edited.
+	 * 
+	 * @param items
+	 */
+	private void initProfileAndStatement(List<Item> items) {
+		profile = null;
+		if (items != null && items.size() > 0) {
+			profile = ObjectLoader.loadProfile(items.get(0).getMetadataSet()
+					.getProfile(), session.getUser());
+		}
+		statement = getSelectedStatement();
+	}
 
-    /**
-     * Init the {@link MetadataEditor}
-     * 
-     * @param items
-     */
-    private void initEditor(List<Item> items)
-    {
-        try
-        {
-            isProfileWithStatements = true;
-            if (statement != null)
-            {
-                editor = new MetadataMultipleEditor(items, profile, getSelectedStatement());
-                ((SuggestBean)BeanHelper.getSessionBean(SuggestBean.class)).init(profile);
-            }
-            else
-            {
-                logger.error("No statement found");
-                isProfileWithStatements = false;
-                BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("profile_empty"));
-            }
-        }
-        catch (Exception e)
-        {
-            BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("error") + " " + e);
-            logger.error("Error init Edit page", e);
-        }
-    }
+	/**
+	 * Init the {@link MetadataEditor}
+	 * 
+	 * @param items
+	 */
+	private void initEditor(List<Item> items) {
+		try {
+			isProfileWithStatements = true;
+			if (statement != null) {
+				editor = new MetadataMultipleEditor(items, profile,
+						getSelectedStatement());
+				((SuggestBean) BeanHelper.getSessionBean(SuggestBean.class))
+						.init(profile);
+			} else {
+				logger.error("No statement found");
+				isProfileWithStatements = false;
+				BeanHelper.error(((SessionBean) BeanHelper
+						.getSessionBean(SessionBean.class))
+						.getLabel("profile_empty"));
+			}
+		} catch (Exception e) {
+			BeanHelper.error(((SessionBean) BeanHelper
+					.getSessionBean(SessionBean.class)).getLabel("error")
+					+ " "
+					+ e);
+			logger.error("Error init Edit page", e);
+		}
+	}
 
-    /**
-     * Initialize the {@link EditorItemBean} with a new emtpy one;
-     */
-    private void initEmtpyEditorItem()
-    {
-        Item emtpyItem = new Item();
-        emtpyItem.getMetadataSets().add(ImejiFactory.newMetadataSet(profile.getId()));
-        editorItem = new EditorItemBean(emtpyItem, profile, true);
-        editorItem.getMds().addEmtpyValues();
-    }
+	/**
+	 * Initialize the {@link EditorItemBean} with a new emtpy one;
+	 */
+	private void initEmtpyEditorItem() {
+		Item emtpyItem = new Item();
+		emtpyItem.getMetadataSets().add(
+				ImejiFactory.newMetadataSet(profile.getId()));
+		editorItem = new EditorItemBean(emtpyItem, profile, true);
+		editorItem.getMds().addEmtpyValues();
+	}
 
-    /**
-     * Init the radio select menu with the 3 edit modes (overwrite all values, append new value, add if empty)
-     */
-    private void initModeMenu()
-    {
-        selectedMode = "basic";
-        modeRadio = new ArrayList<SelectItem>();
-        modeRadio.add(new SelectItem("basic", ((SessionBean)BeanHelper.getSessionBean(SessionBean.class))
-                .getMessage("editor_basic")));
-        if (this.statement.getMaxOccurs().equals("unbounded"))
-        {
-            modeRadio.add(new SelectItem("append", ((SessionBean)BeanHelper.getSessionBean(SessionBean.class))
-                    .getMessage("editor_append")));
-        }
-        modeRadio.add(new SelectItem("overwrite", ((SessionBean)BeanHelper.getSessionBean(SessionBean.class))
-                .getMessage("editor_overwrite")));
-    }
+	/**
+	 * Init the radio select menu with the 3 edit modes (overwrite all values,
+	 * append new value, add if empty)
+	 */
+	private void initModeMenu() {
+		selectedMode = "basic";
+		modeRadio = new ArrayList<SelectItem>();
+		modeRadio
+				.add(new SelectItem("basic", ((SessionBean) BeanHelper
+						.getSessionBean(SessionBean.class))
+						.getMessage("editor_basic")));
+		if (this.statement.getMaxOccurs().equals("unbounded")) {
+			modeRadio.add(new SelectItem("append", ((SessionBean) BeanHelper
+					.getSessionBean(SessionBean.class))
+					.getMessage("editor_append")));
+		}
+		modeRadio.add(new SelectItem("overwrite", ((SessionBean) BeanHelper
+				.getSessionBean(SessionBean.class))
+				.getMessage("editor_overwrite")));
+	}
 
-    /**
-     * Initialize the select menu with the possible statement to edit (i.e. statement of the profiles)
-     */
-    private void initStatementsMenu()
-    {
-        statementMenu = new ArrayList<SelectItem>();
-        for (Statement s : profile.getStatements())
-        {
-            if (s.getParent() == null)
-            {
-                // Add a statement to the menu only if it doen'st have a parent statement. If it has a parent, then it
-                // will be editable by choosing the parent in the menu
-                statementMenu.add(new SelectItem(s.getId().toString(), ((MetadataLabels)BeanHelper
-                        .getSessionBean(MetadataLabels.class)).getInternationalizedLabels().get(s.getId())));
-            }
-        }
-    }
+	/**
+	 * Initialize the select menu with the possible statement to edit (i.e.
+	 * statement of the profiles)
+	 */
+	private void initStatementsMenu() {
+		statementMenu = new ArrayList<SelectItem>();
+		for (Statement s : profile.getStatements()) {
+			if (s.getParent() == null) {
+				// Add a statement to the menu only if it doen'st have a parent
+				// statement. If it has a parent, then it
+				// will be editable by choosing the parent in the menu
+				statementMenu.add(new SelectItem(s.getId().toString(),
+						((MetadataLabels) BeanHelper
+								.getSessionBean(MetadataLabels.class))
+								.getInternationalizedLabels().get(s.getId())));
+			}
+		}
+	}
 
-    /**
-     * Change the statement to edit
-     * 
-     * @return
-     */
-    public String changeStatement()
-    {
-        statement = getSelectedStatement();
-        // Reset the original items
-        // initEditor(new ArrayList<Item>(allItems));
-        // initEmtpyEditorItem();
-        editor = noChangesEditor.clone();
-        initModeMenu();
-        return "";
-    }
+	/**
+	 * Change the statement to edit
+	 * 
+	 * @return
+	 */
+	public String changeStatement() {
+		statement = getSelectedStatement();
+		// Reset the original items
+		// initEditor(new ArrayList<Item>(allItems));
+		// initEmtpyEditorItem();
+		editor = noChangesEditor.clone();
+		initModeMenu();
+		return "";
+	}
 
-    /**
-     * Set to the original state
-     * 
-     * @return
-     */
-    public String resetChanges()
-    {
-        init();
-        return "";
-    }
+	/**
+	 * Set to the original state
+	 * 
+	 * @return
+	 */
+	public String resetChanges() {
+		init();
+		return "";
+	}
 
-    /**
-     * Load the list of items
-     * 
-     * @param uris
-     * @return
-     */
-    public List<Item> loaditems(List<String> uris)
-    {
-        ItemController itemController = new ItemController(session.getUser());
-        return (List<Item>)itemController.loadItems(uris, -1, 0);
-    }
+	/**
+	 * Load the list of items
+	 * 
+	 * @param uris
+	 * @return
+	 */
+	public List<Item> loaditems(List<String> uris) {
+		ItemController itemController = new ItemController();
+		return (List<Item>) itemController.retrieve(uris, -1, 0,session.getUser());
+	}
 
-    /**
-     * Load the selected item from the session
-     * 
-     * @return
-     */
-    public List<String> getSelectedItems()
-    {
-        List<String> l = new ArrayList<String>(session.getSelected().size());
-        for (String uri : session.getSelected())
-        {
-            l.add(uri);
-        }
-        return l;
-    }
+	/**
+	 * Load the selected item from the session
+	 * 
+	 * @return
+	 */
+	public List<String> getSelectedItems() {
+		List<String> l = new ArrayList<String>(session.getSelected().size());
+		for (String uri : session.getSelected()) {
+			l.add(uri);
+		}
+		return l;
+	}
 
-    /**
-     * Search for item according to the query
-     * 
-     * @return
-     * @throws IOException
-     */
-    public List<String> searchItems() throws IOException
-    {
-        SearchQuery sq = URLQueryTransformer.parseStringQuery(query);
-        ItemController itemController = new ItemController(session.getUser());
-        SearchResult sr = itemController.search(URI.create(collectionId), sq, null, null);
-        return sr.getResults();
-    }
+	/**
+	 * Search for item according to the query
+	 * 
+	 * @return
+	 * @throws IOException
+	 */
+	public List<String> searchItems() throws IOException {
+		SearchQuery sq = URLQueryTransformer.parseStringQuery(query);
+		ItemController itemController = new ItemController();
+		SearchResult sr = itemController.search(URI.create(collectionId), sq,
+				null, null, session.getUser());
+		return sr.getResults();
+	}
 
-    /**
-     * For batch edit: Add the same values to all images and save.
-     * 
-     * @return
-     * @throws IOException
-     */
-    public String addToAllSaveAndRedirect() throws IOException
-    {
-        // First, re-initialize the editor with all items (for batch, editor has been initialized with only one item)
-        initEditor(new ArrayList<Item>(loaditems(findItems())));
-        addToAll();
-        saveAndRedirect();
-        return "";
-    }
+	/**
+	 * For batch edit: Add the same values to all images and save.
+	 * 
+	 * @return
+	 * @throws IOException
+	 */
+	public String addToAllSaveAndRedirect() throws IOException {
+		// First, re-initialize the editor with all items (for batch, editor has
+		// been initialized with only one item)
+		initEditor(new ArrayList<Item>(loaditems(findItems())));
+		addToAll();
+		saveAndRedirect();
+		return "";
+	}
 
-    /**
-     * For batch edit: Add the same values to all images and save.
-     * 
-     * @return
-     * @throws Exception
-     */
-    public void addToAllSave() throws Exception
-    {
-        // First, re-initialize the editor with all items (for batch, editor has been initialized with only one item)
-        initEditor(new ArrayList<Item>(loaditems(findItems())));
-        addToAll();
-        save();
-    }
+	/**
+	 * For batch edit: Add the same values to all images and save.
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public void addToAllSave() throws Exception {
+		// First, re-initialize the editor with all items (for batch, editor has
+		// been initialized with only one item)
+		initEditor(new ArrayList<Item>(loaditems(findItems())));
+		addToAll();
+		save();
+	}
 
-    /**
-     * For the Multiple Edit: Save the current values
-     * 
-     * @return
-     * @throws IOException
-     */
-    public void saveAndRedirect() throws IOException
-    {
-    	editor.save();
-    	redirectToView();
-    }
+	/**
+	 * For the Multiple Edit: Save the current values
+	 * 
+	 * @return
+	 * @throws IOException
+	 */
+	public void saveAndRedirect() throws IOException {
+		editor.save();
+		redirectToView();
+	}
 
-    /**
-     * For the Multiple Edit: Save the current values
-     * 
-     * @return
-     * @throws Exception
-     */
-    public void save() throws Exception
-    {
-        editor.save();
-        reload();
-    }
+	/**
+	 * For the Multiple Edit: Save the current values
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public void save() throws Exception {
+		editor.save();
+		reload();
+	}
 
-    /**
-     * Lock the {@link Item} which are currently in the editor. This prevent other users to make concurrent
-     * modification.
-     * 
-     * @param items
-     */
-    private void lockImages(List<String> uris)
-    {
-        lockedImages = 0;
-        for (int i = 0; i < uris.size(); i++)
-        {
-            try
-            {
-                Locks.lock(new Lock(uris.get(i), session.getUser().getEmail()));
-            }
-            catch (Exception e)
-            {
-                uris.remove(i);
-                lockedImages++;
-                i--;
-            }
-        }
-    }
+	/**
+	 * Lock the {@link Item} which are currently in the editor. This prevent
+	 * other users to make concurrent modification.
+	 * 
+	 * @param items
+	 */
+	private void lockImages(List<String> uris) {
+		lockedImages = 0;
+		for (int i = 0; i < uris.size(); i++) {
+			try {
+				Locks.lock(new Lock(uris.get(i), session.getUser().getEmail()));
+			} catch (Exception e) {
+				uris.remove(i);
+				lockedImages++;
+				i--;
+			}
+		}
+	}
 
-    /**
-     * Release the lock on all current {@link Item}
-     */
-    private void unlockImages()
-    {
-        SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        for (EditorItemBean eib : editor.getItems())
-        {
-            Locks.unLock(new Lock(eib.asItem().getId().toString(), sb.getUser().getEmail()));
-        }
-    }
+	/**
+	 * Release the lock on all current {@link Item}
+	 */
+	private void unlockImages() {
+		SessionBean sb = (SessionBean) BeanHelper
+				.getSessionBean(SessionBean.class);
+		for (EditorItemBean eib : editor.getItems()) {
+			Locks.unLock(new Lock(eib.asItem().getId().toString(), sb.getUser()
+					.getEmail()));
+		}
+	}
 
-    /**
-     * Called method when "add to all" button is clicked
-     * 
-     * @return
-     */
-    public void addToAll()
-    {
-        for (EditorItemBean eib : editor.getItems())
-        {
-            if ("overwrite".equals(selectedMode))
-            {
-                // remove all metadata which have the same statement
-                eib.clear(statement);
-                // Prepare the emtpy values in which the new values will be added
-                eib.getMds().addEmtpyValues();
-            }
-            else if ("append".equals(selectedMode))
-            {
-                // Remove all emtpy Metadata
-                eib.getMds().trim();
-                // Add an emtpy metadata at the position we want to have it
-                appendEmtpyMetadata(eib);
-            }
-            // Add the Metadata which has been entered to the emtpy Metadata with the same statement in the editor
-            eib = pasteMetadataIfEmtpy(eib);
-        }
-        // Make a new Emtpy Metadata of the same statement
-        initEmtpyEditorItem();
-    }
+	/**
+	 * Called method when "add to all" button is clicked
+	 * 
+	 * @return
+	 */
+	public void addToAll() {
+		for (EditorItemBean eib : editor.getItems()) {
+			if ("overwrite".equals(selectedMode)) {
+				// remove all metadata which have the same statement
+				eib.clear(statement);
+				// Prepare the emtpy values in which the new values will be
+				// added
+				eib.getMds().addEmtpyValues();
+			} else if ("append".equals(selectedMode)) {
+				// Remove all emtpy Metadata
+				eib.getMds().trim();
+				// Add an emtpy metadata at the position we want to have it
+				appendEmtpyMetadata(eib);
+			}
+			// Add the Metadata which has been entered to the emtpy Metadata
+			// with the same statement in the editor
+			eib = pasteMetadataIfEmtpy(eib);
+		}
+		// Make a new Emtpy Metadata of the same statement
+		initEmtpyEditorItem();
+	}
 
-    /**
-     * redirect to previous page
-     * 
-     * @throws IOException
-     */
-    public void redirectToView() throws IOException
-    {
-        this.reset();
-        unlockImages();
-        HistorySession hs = (HistorySession)BeanHelper.getSessionBean(HistorySession.class);
-        FacesContext.getCurrentInstance().getExternalContext().redirect(hs.getPreviousPage().getCompleteUrl());
-    }
+	/**
+	 * redirect to previous page
+	 * 
+	 * @throws IOException
+	 */
+	public void redirectToView() throws IOException {
+		this.reset();
+		unlockImages();
+		HistorySession hs = (HistorySession) BeanHelper
+				.getSessionBean(HistorySession.class);
+		FacesContext.getCurrentInstance().getExternalContext()
+				.redirect(hs.getPreviousPage().getCompleteUrl());
+	}
 
-    /**
-     * redirect to previous page
-     * 
-     * @throws IOException
-     */
-    public void reload() throws IOException
-    {
-        HistorySession hs = (HistorySession)BeanHelper.getSessionBean(HistorySession.class);
-        FacesContext.getCurrentInstance().getExternalContext().redirect(hs.getCurrentPage().getCompleteUrl());
-    }
+	/**
+	 * redirect to previous page
+	 * 
+	 * @throws IOException
+	 */
+	public void reload() throws IOException {
+		HistorySession hs = (HistorySession) BeanHelper
+				.getSessionBean(HistorySession.class);
+		FacesContext.getCurrentInstance().getExternalContext()
+				.redirect(hs.getCurrentPage().getCompleteUrl());
+	}
 
-    /**
-     * Remove all metadata
-     * 
-     * @return
-     */
-    public String clearAll()
-    {
-        for (EditorItemBean eib : editor.getItems())
-        {
-            eib.clear(statement);
-            eib.getMds().addEmtpyValues();
-        }
-        return "";
-    }
+	/**
+	 * Remove all metadata
+	 * 
+	 * @return
+	 */
+	public String clearAll() {
+		for (EditorItemBean eib : editor.getItems()) {
+			eib.clear(statement);
+			eib.getMds().addEmtpyValues();
+		}
+		return "";
+	}
 
-    /**
-     * fill all emtpy Metadata of passed {@link EditorItemBean} with the values of the current one
-     * 
-     * @param im
-     * @return
-     */
-    private EditorItemBean pasteMetadataIfEmtpy(EditorItemBean eib)
-    {
-        List<SuperMetadataBean> list = fillEmtpyValues(eib.getMds().getTree().getList(), editorItem.getMds().getTree()
-                .getList());
-        list = SuperMetadataTree.resetPosition(list);
-        eib.getMds().initTreeFromList(list);
-        return eib;
-    }
+	/**
+	 * fill all emtpy Metadata of passed {@link EditorItemBean} with the values
+	 * of the current one
+	 * 
+	 * @param im
+	 * @return
+	 */
+	private EditorItemBean pasteMetadataIfEmtpy(EditorItemBean eib) {
+		List<SuperMetadataBean> list = fillEmtpyValues(eib.getMds().getTree()
+				.getList(), editorItem.getMds().getTree().getList());
+		list = SuperMetadataTree.resetPosition(list);
+		eib.getMds().initTreeFromList(list);
+		return eib;
+	}
 
-    /**
-     * Fill l1 emtpy metadata with non emtpy metadata from l2
-     * 
-     * @param l1
-     * @param l2
-     */
-    private List<SuperMetadataBean> fillEmtpyValues(List<SuperMetadataBean> l1, List<SuperMetadataBean> l2)
-    {
-        List<SuperMetadataBean> filled = new ArrayList<SuperMetadataBean>();
-        for (SuperMetadataBean md1 : l1)
-        {
-            boolean emtpy1 = MetadataHelper.isEmpty(md1.asMetadata());
-            for (SuperMetadataBean md2 : l2)
-            {
-                boolean emtpy2 = MetadataHelper.isEmpty(md2.asMetadata());
-                if (md1.getStatementId().equals(md2.getStatementId()))
-                {
-                    if (emtpy1 && !emtpy2)
-                        filled.add(md2.copy());
-                    else
-                        filled.add(md1);
-                }
-            }
-        }
-        return filled;
-    }
+	/**
+	 * Fill l1 emtpy metadata with non emtpy metadata from l2
+	 * 
+	 * @param l1
+	 * @param l2
+	 */
+	private List<SuperMetadataBean> fillEmtpyValues(List<SuperMetadataBean> l1,
+			List<SuperMetadataBean> l2) {
+		List<SuperMetadataBean> filled = new ArrayList<SuperMetadataBean>();
+		for (SuperMetadataBean md1 : l1) {
+			boolean emtpy1 = MetadataHelper.isEmpty(md1.asMetadata());
+			for (SuperMetadataBean md2 : l2) {
+				boolean emtpy2 = MetadataHelper.isEmpty(md2.asMetadata());
+				if (md1.getStatementId().equals(md2.getStatementId())) {
+					if (emtpy1 && !emtpy2)
+						filled.add(md2.copy());
+					else
+						filled.add(md1);
+				}
+			}
+		}
+		return filled;
+	}
 
-    /**
-     * Add an emtpy {@link Metadata} accroding to the current {@link Statement} to the {@link EditorItemBean}. If the
-     * {@link EditorItemBean} has already an emtpy {@link Metadata} for this {@link Statement}, then don't had it.
-     * 
-     * @param eib
-     */
-    private void appendEmtpyMetadata(EditorItemBean eib)
-    {
-        List<SuperMetadataBean> l = eib.getMds().getTree().getList();
-        for (Statement st : profile.getStatements())
-            l.add(new SuperMetadataBean(MetadataFactory.createMetadata(st), st));
-        eib.getMds().initTreeFromList(SuperMetadataTree.resetPosition(l));
-    }
+	/**
+	 * Add an emtpy {@link Metadata} accroding to the current {@link Statement}
+	 * to the {@link EditorItemBean}. If the {@link EditorItemBean} has already
+	 * an emtpy {@link Metadata} for this {@link Statement}, then don't had it.
+	 * 
+	 * @param eib
+	 */
+	private void appendEmtpyMetadata(EditorItemBean eib) {
+		List<SuperMetadataBean> l = eib.getMds().getTree().getList();
+		for (Statement st : profile.getStatements())
+			l.add(new SuperMetadataBean(MetadataFactory.createMetadata(st), st));
+		eib.getMds().initTreeFromList(SuperMetadataTree.resetPosition(l));
+	}
 
-    /**
-     * True if the {@link EditorItemBean} has a value for the {@link Statement}
-     * 
-     * @param eib
-     * @param st
-     * @return
-     */
-    private boolean hasValue(EditorItemBean eib, Statement st)
-    {
-        for (SuperMetadataBean md : eib.getMds().getTree().getList())
-            if (md.getStatement().getId().compareTo(st.getId()) == 0 && !MetadataHelper.isEmpty(md.asMetadata()))
-                return true;
-        return false;
-    }
+	/**
+	 * True if the {@link EditorItemBean} has a value for the {@link Statement}
+	 * 
+	 * @param eib
+	 * @param st
+	 * @return
+	 */
+	private boolean hasValue(EditorItemBean eib, Statement st) {
+		for (SuperMetadataBean md : eib.getMds().getTree().getList())
+			if (md.getStatement().getId().compareTo(st.getId()) == 0
+					&& !MetadataHelper.isEmpty(md.asMetadata()))
+				return true;
+		return false;
+	}
 
-    /**
-     * Return the {@link Statement} which is currently edited
-     * 
-     * @return
-     */
-    public Statement getSelectedStatement()
-    {
-        if (profile != null)
-        {
-            for (Statement s : profile.getStatements())
-            {
-                if (s.getId().toString().equals(selectedStatementName))
-                {
-                    return s;
-                }
-            }
-        }
-        return getDefaultStatement();
-    }
+	/**
+	 * Return the {@link Statement} which is currently edited
+	 * 
+	 * @return
+	 */
+	public Statement getSelectedStatement() {
+		if (profile != null) {
+			for (Statement s : profile.getStatements()) {
+				if (s.getId().toString().equals(selectedStatementName)) {
+					return s;
+				}
+			}
+		}
+		return getDefaultStatement();
+	}
 
-    /**
-     * Return the first {@link Statement} of the current {@link MetadataProfile}
-     * 
-     * @return
-     */
-    public Statement getDefaultStatement()
-    {
-        if (profile != null && profile.getStatements().iterator().hasNext())
-        {
-            return profile.getStatements().iterator().next();
-        }
-        return null;
-    }
+	/**
+	 * Return the first {@link Statement} of the current {@link MetadataProfile}
+	 * 
+	 * @return
+	 */
+	public Statement getDefaultStatement() {
+		if (profile != null && profile.getStatements().iterator().hasNext()) {
+			return profile.getStatements().iterator().next();
+		}
+		return null;
+	}
 
-    /**
-     * True if the {@link Statement} can be edited
-     * 
-     * @param st
-     * @return
-     */
-    public boolean isEditableStatement(Statement st)
-    {
-        URI lastParent = ProfileHelper.getLastParent(st, profile);
-        return statement.getId().compareTo(st.getId()) == 0
-                || (lastParent != null && statement.getId().compareTo(lastParent) == 0);
-    }
+	/**
+	 * True if the {@link Statement} can be edited
+	 * 
+	 * @param st
+	 * @return
+	 */
+	public boolean isEditableStatement(Statement st) {
+		URI lastParent = ProfileHelper.getLastParent(st, profile);
+		return statement.getId().compareTo(st.getId()) == 0
+				|| (lastParent != null && statement.getId().compareTo(
+						lastParent) == 0);
+	}
 
-    public int getMdPosition()
-    {
-        return mdPosition;
-    }
+	public int getMdPosition() {
+		return mdPosition;
+	}
 
-    public void setMdPosition(int mdPosition)
-    {
-        this.mdPosition = mdPosition;
-    }
+	public void setMdPosition(int mdPosition) {
+		this.mdPosition = mdPosition;
+	}
 
-    public int getImagePosition()
-    {
-        return imagePosition;
-    }
+	public int getImagePosition() {
+		return imagePosition;
+	}
 
-    public void setImagePosition(int imagePosition)
-    {
-        this.imagePosition = imagePosition;
-    }
+	public void setImagePosition(int imagePosition) {
+		this.imagePosition = imagePosition;
+	}
 
-    public MetadataEditor getEditor()
-    {
-        return editor;
-    }
+	public MetadataEditor getEditor() {
+		return editor;
+	}
 
-    public void setEditor(MetadataEditor editor)
-    {
-        this.editor = editor;
-    }
+	public void setEditor(MetadataEditor editor) {
+		this.editor = editor;
+	}
 
-    public List<SelectItem> getStatementMenu()
-    {
-        return statementMenu;
-    }
+	public List<SelectItem> getStatementMenu() {
+		return statementMenu;
+	}
 
-    public boolean getDisplayStatementMenu()
-    {
-    	return statementMenu.size()<=1 ? Boolean.FALSE : Boolean.TRUE;
-    }
-    
-    public void setStatementMenu(List<SelectItem> statementMenu)
-    {
-        this.statementMenu = statementMenu;
-    }
+	public boolean getDisplayStatementMenu() {
+		return statementMenu.size() <= 1 ? Boolean.FALSE : Boolean.TRUE;
+	}
 
-    public String getSelectedStatementName()
-    {
-        return selectedStatementName;
-    }
+	public void setStatementMenu(List<SelectItem> statementMenu) {
+		this.statementMenu = statementMenu;
+	}
 
-    public void setSelectedStatementName(String selectedStatementName)
-    {
-        this.selectedStatementName = selectedStatementName;
-    }
+	public String getSelectedStatementName() {
+		return selectedStatementName;
+	}
 
-    public MetadataProfile getProfile()
-    {
-        return profile;
-    }
+	public void setSelectedStatementName(String selectedStatementName) {
+		this.selectedStatementName = selectedStatementName;
+	}
 
-    public void setProfile(MetadataProfile profile)
-    {
-        this.profile = profile;
-    }
+	public MetadataProfile getProfile() {
+		return profile;
+	}
 
-    public List<SelectItem> getModeRadio()
-    {
-        return modeRadio;
-    }
+	public void setProfile(MetadataProfile profile) {
+		this.profile = profile;
+	}
 
-    public void setModeRadio(List<SelectItem> modeRadio)
-    {
-        this.modeRadio = modeRadio;
-    }
+	public List<SelectItem> getModeRadio() {
+		return modeRadio;
+	}
 
-    public String getSelectedMode()
-    {
-        return selectedMode;
-    }
+	public void setModeRadio(List<SelectItem> modeRadio) {
+		this.modeRadio = modeRadio;
+	}
 
-    public void setSelectedMode(String selectedMode)
-    {
-        this.selectedMode = selectedMode;
-    }
+	public String getSelectedMode() {
+		return selectedMode;
+	}
 
-    public String getEditType()
-    {
-        return type;
-    }
+	public void setSelectedMode(String selectedMode) {
+		this.selectedMode = selectedMode;
+	}
 
-    public void setEditType(String editType)
-    {
-        this.type = editType;
-    }
+	public String getEditType() {
+		return type;
+	}
 
-    public Statement getStatement()
-    {
-        return statement;
-    }
+	public void setEditType(String editType) {
+		this.type = editType;
+	}
 
-    public void setStatement(Statement statement)
-    {
-        this.statement = statement;
-    }
+	public Statement getStatement() {
+		return statement;
+	}
 
-    public boolean isProfileWithStatements()
-    {
-        return isProfileWithStatements;
-    }
+	public void setStatement(Statement statement) {
+		this.statement = statement;
+	}
 
-    public void setProfileWithStatements(boolean isProfileWithStatements)
-    {
-        this.isProfileWithStatements = isProfileWithStatements;
-    }
+	public boolean isProfileWithStatements() {
+		return isProfileWithStatements;
+	}
 
-    public int getLockedImages()
-    {
-        return lockedImages;
-    }
+	public void setProfileWithStatements(boolean isProfileWithStatements) {
+		this.isProfileWithStatements = isProfileWithStatements;
+	}
 
-    public void setLockedImages(int lockedImages)
-    {
-        this.lockedImages = lockedImages;
-    }
+	public int getLockedImages() {
+		return lockedImages;
+	}
 
-    public void setInitialized(boolean initialized)
-    {
-        this.initialized = initialized;
-    }
+	public void setLockedImages(int lockedImages) {
+		this.lockedImages = lockedImages;
+	}
 
-    public boolean isInitialized()
-    {
-        return initialized;
-    }
+	public void setInitialized(boolean initialized) {
+		this.initialized = initialized;
+	}
 
-    /**
-     * @return the editorItemBean
-     */
-    public EditorItemBean getEditorItem()
-    {
-        return editorItem;
-    }
+	public boolean isInitialized() {
+		return initialized;
+	}
 
-    /**
-     * @param editorItemBean the editorItemBean to set
-     */
-    public void setEditorItem(EditorItemBean editorItemBean)
-    {
-        this.editorItem = editorItemBean;
-    }
+	/**
+	 * @return the editorItemBean
+	 */
+	public EditorItemBean getEditorItem() {
+		return editorItem;
+	}
+
+	/**
+	 * @param editorItemBean
+	 *            the editorItemBean to set
+	 */
+	public void setEditorItem(EditorItemBean editorItemBean) {
+		this.editorItem = editorItemBean;
+	}
 }

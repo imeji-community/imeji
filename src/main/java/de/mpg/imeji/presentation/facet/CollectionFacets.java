@@ -123,14 +123,14 @@ public class CollectionFacets extends Facets
      */
     public int getCount(SearchQuery searchQuery, SearchPair pair, List<String> collectionImages)
     {
-        ItemController ic = new ItemController(sb.getUser());
+        ItemController ic = new ItemController();
         SearchQuery sq = new SearchQuery();
         if (pair != null)
         {
             sq.addLogicalRelation(LOGICAL_RELATIONS.AND);
             sq.addPair(pair);
         }
-        return ic.search(colURI, sq, null, collectionImages).getNumberOfRecords();
+        return ic.search(colURI, sq, null, collectionImages, sb.getUser()).getNumberOfRecords();
     }
 
     /*

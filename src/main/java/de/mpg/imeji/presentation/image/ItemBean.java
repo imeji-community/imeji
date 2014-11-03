@@ -371,7 +371,7 @@ public class ItemBean {
 		if (getIsInActiveAlbum()) {
 			removeFromActiveAlbum();
 		}
-		ItemController ic = new ItemController(sessionBean.getUser());
+		ItemController ic = new ItemController();
 		List<Item> l = new ArrayList<Item>();
 		l.add(item);
 		ic.delete(l, sessionBean.getUser());

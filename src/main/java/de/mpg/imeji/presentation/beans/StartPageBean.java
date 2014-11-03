@@ -32,163 +32,155 @@ import de.mpg.imeji.presentation.util.PropertyReader;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class StartPageBean
-{
-    private List<ThumbnailBean> carousselImages = new ArrayList<ThumbnailBean>();
-    private SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-    private final static int CAROUSSEL_SIZE = 6;
-    // in hours
-    private int searchforItemCreatedForLessThan = 0;
+public class StartPageBean {
+	private List<ThumbnailBean> carousselImages = new ArrayList<ThumbnailBean>();
+	private SessionBean session = (SessionBean) BeanHelper
+			.getSessionBean(SessionBean.class);
+	private final static int CAROUSSEL_SIZE = 6;
+	// in hours
+	private int searchforItemCreatedForLessThan = 0;
 
-    /**
-     * Constructor for the bean
-     * 
-     * @throws IOException
-     * @throws URISyntaxException
-     */
-    public StartPageBean() throws IOException, URISyntaxException
-    {
-        SearchQuery query = readSearchQueryInProperty();
-        SortCriterion order = readSortCriterionInProperty();
-        SearchResult result = searchItems(query, order);
-        loadItemInCaroussel(result, order == null);// if order is null, then it is random
-    }
+	/**
+	 * Constructor for the bean
+	 * 
+	 * @throws IOException
+	 * @throws URISyntaxException
+	 */
+	public StartPageBean() throws IOException, URISyntaxException {
+		SearchQuery query = readSearchQueryInProperty();
+		SortCriterion order = readSortCriterionInProperty();
+		SearchResult result = searchItems(query, order);
+		loadItemInCaroussel(result, order == null);// if order is null, then it
+													// is random
+	}
 
-    /**
-     * Read the search query defined in the imeji.properties
-     * 
-     * @return
-     * @throws URISyntaxException
-     * @throws IOException
-     */
-    private SearchQuery readSearchQueryInProperty() throws IOException, URISyntaxException
-    {
-        String prop = PropertyReader.getProperty("imeji.home.caroussel.query");
-        if (prop != null)
-        {
-            return URLQueryTransformer.parseStringQuery(prop);
-        }
-        return null;
-    }
+	/**
+	 * Read the search query defined in the imeji.properties
+	 * 
+	 * @return
+	 * @throws URISyntaxException
+	 * @throws IOException
+	 */
+	private SearchQuery readSearchQueryInProperty() throws IOException,
+			URISyntaxException {
+		String prop = PropertyReader.getProperty("imeji.home.caroussel.query");
+		if (prop != null) {
+			return URLQueryTransformer.parseStringQuery(prop);
+		}
+		return null;
+	}
 
-    /**
-     * Read the order defined in the imeji.properties
-     * 
-     * @return
-     * @throws URISyntaxException
-     * @throws IOException
-     */
-    private SortCriterion readSortCriterionInProperty() throws IOException, URISyntaxException
-    {
-        try
-        {
-            String[] prop = PropertyReader.getProperty("imeji.home.caroussel.sort").split("-");
-            if ("".equals(prop[0]) && "".equals(prop[1]))
-                return new SortCriterion(SPARQLSearch.getIndex(prop[0]), SortOrder.valueOf(prop[1].toUpperCase()));
-        }
-        catch (Exception e)
-        {
-            // no sort order defined
-        }
-        return null;
-    }
+	/**
+	 * Read the order defined in the imeji.properties
+	 * 
+	 * @return
+	 * @throws URISyntaxException
+	 * @throws IOException
+	 */
+	private SortCriterion readSortCriterionInProperty() throws IOException,
+			URISyntaxException {
+		try {
+			String[] prop = PropertyReader.getProperty(
+					"imeji.home.caroussel.sort").split("-");
+			if ("".equals(prop[0]) && "".equals(prop[1]))
+				return new SortCriterion(SPARQLSearch.getIndex(prop[0]),
+						SortOrder.valueOf(prop[1].toUpperCase()));
+		} catch (Exception e) {
+			// no sort order defined
+		}
+		return null;
+	}
 
-    /**
-     * Search the item for the caroussel
-     * 
-     * @param sq
-     * @param sc
-     * @return
-     */
-    private SearchResult searchItems(SearchQuery sq, SortCriterion sc)
-    {
-        ItemController ic = new ItemController(session.getUser());
-        if (sq.isEmpty() && searchforItemCreatedForLessThan > 0)
-        {
-            // Search for item which have been for less than n hours
-            sq.addPair(new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.created), SearchOperators.GREATER,
-                    getTimeforNDaybeforeNow(searchforItemCreatedForLessThan)));
-            return new SearchResult(ic.search(null, sq, sc, null).getResults(), null);
-        }
-        return ic.search(null, sq, sc, null);
-    }
+	/**
+	 * Search the item for the caroussel
+	 * 
+	 * @param sq
+	 * @param sc
+	 * @return
+	 */
+	private SearchResult searchItems(SearchQuery sq, SortCriterion sc) {
+		ItemController ic = new ItemController();
+		if (sq.isEmpty() && searchforItemCreatedForLessThan > 0) {
+			// Search for item which have been for less than n hours
+			sq.addPair(new SearchPair(SPARQLSearch
+					.getIndex(SearchIndex.names.created),
+					SearchOperators.GREATER,
+					getTimeforNDaybeforeNow(searchforItemCreatedForLessThan)));
+			return new SearchResult(ic.search(null, sq, sc, null,
+					session.getUser()).getResults(), null);
+		}
+		return ic.search(null, sq, sc, null, session.getUser());
+	}
 
-    /**
-     * Return the time of the nth day before the current time
-     * 
-     * @param day
-     * @return
-     */
-    private String getTimeforNDaybeforeNow(int n)
-    {
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.HOUR, -n);
-        return DateFormatter.formatToSparqlDateTime(cal);
-    }
+	/**
+	 * Return the time of the nth day before the current time
+	 * 
+	 * @param day
+	 * @return
+	 */
+	private String getTimeforNDaybeforeNow(int n) {
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.HOUR, -n);
+		return DateFormatter.formatToSparqlDateTime(cal);
+	}
 
-    /**
-     * Load the item the {@link SearchResult} in the caroussel. If random true, will load some random items
-     * 
-     * @param sr
-     * @param random
-     */
-    private void loadItemInCaroussel(SearchResult sr, boolean random)
-    {
-        ItemController ic = new ItemController(session.getUser());
-        List<String> uris = new ArrayList<String>();
-        if (random)
-        {
-            uris = getRandomResults(sr);
-        }
-        else
-        {
-            int sublistSize = CAROUSSEL_SIZE;
-            if (sr.getResults().size() < CAROUSSEL_SIZE)
-                sublistSize = sr.getResults().size();
-            if (sublistSize > 0)
-                uris = sr.getResults().subList(0, sublistSize);
-        }
-        List<Item> items = (List<Item>)ic.loadItems(uris, -1, 0);
-        carousselImages = ImejiFactory.imageListToThumbList(items);
-    }
+	/**
+	 * Load the item the {@link SearchResult} in the caroussel. If random true,
+	 * will load some random items
+	 * 
+	 * @param sr
+	 * @param random
+	 */
+	private void loadItemInCaroussel(SearchResult sr, boolean random) {
+		ItemController ic = new ItemController();
+		List<String> uris = new ArrayList<String>();
+		if (random) {
+			uris = getRandomResults(sr);
+		} else {
+			int sublistSize = CAROUSSEL_SIZE;
+			if (sr.getResults().size() < CAROUSSEL_SIZE)
+				sublistSize = sr.getResults().size();
+			if (sublistSize > 0)
+				uris = sr.getResults().subList(0, sublistSize);
+		}
+		List<Item> items = (List<Item>) ic.retrieve(uris, -1, 0, session.getUser());
+		carousselImages = ImejiFactory.imageListToThumbList(items);
+	}
 
-    /**
-     * Takes a number ({@link StartPageBean}.CAROUSSEL_SIZE) of results from a {@link SearchResult}
-     * 
-     * @param sr
-     * @return
-     */
-    private List<String> getRandomResults(SearchResult sr)
-    {
-        List<String> l = new ArrayList<String>();
-        Random r = new Random();
-        for (int i = 0; i < CAROUSSEL_SIZE; i++)
-        {
-            if (sr.getNumberOfRecords() > 1)
-            {
-                l.add(sr.getResults().get(r.nextInt(sr.getNumberOfRecords() - 1)));
-            }
-        }
-        return l;
-    }
+	/**
+	 * Takes a number ({@link StartPageBean}.CAROUSSEL_SIZE) of results from a
+	 * {@link SearchResult}
+	 * 
+	 * @param sr
+	 * @return
+	 */
+	private List<String> getRandomResults(SearchResult sr) {
+		List<String> l = new ArrayList<String>();
+		Random r = new Random();
+		for (int i = 0; i < CAROUSSEL_SIZE; i++) {
+			if (sr.getNumberOfRecords() > 1) {
+				l.add(sr.getResults().get(
+						r.nextInt(sr.getNumberOfRecords() - 1)));
+			}
+		}
+		return l;
+	}
 
-    /**
-     * setter
-     * 
-     * @param carousselImages
-     */
-    public void setCarousselImages(List<ThumbnailBean> carousselImages)
-    {
-        this.carousselImages = carousselImages;
-    }
+	/**
+	 * setter
+	 * 
+	 * @param carousselImages
+	 */
+	public void setCarousselImages(List<ThumbnailBean> carousselImages) {
+		this.carousselImages = carousselImages;
+	}
 
-    /**
-     * getter
-     * 
-     * @return
-     */
-    public List<ThumbnailBean> getCarousselImages()
-    {
-        return carousselImages;
-    }
+	/**
+	 * getter
+	 * 
+	 * @return
+	 */
+	public List<ThumbnailBean> getCarousselImages() {
+		return carousselImages;
+	}
 }

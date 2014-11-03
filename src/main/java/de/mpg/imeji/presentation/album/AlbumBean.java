@@ -87,7 +87,7 @@ public class AlbumBean extends ContainerBean
             {
                 findItems(sessionBean.getUser(), 1);
                 loadItems(sessionBean.getUser());
-                countItems(sessionBean.getUser());
+                countItems();
                 description = album.getMetadata().getDescription();
                 descriptionFull = description;
                 description = CommonUtils.removeTags(description);
@@ -121,7 +121,7 @@ public class AlbumBean extends ContainerBean
             {
                 findItems(sessionBean.getUser(), 13);
                 loadItems(sessionBean.getUser());
-                countItems(sessionBean.getUser());
+                countItems();
                 if (sessionBean.getActiveAlbum() != null && sessionBean.getActiveAlbum().getId().equals(album.getId()))
                 {
                     active = true;

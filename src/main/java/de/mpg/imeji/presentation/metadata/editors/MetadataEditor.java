@@ -86,7 +86,7 @@ public abstract class MetadataEditor
     public void save()
     {
         SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        ItemController ic = new ItemController(sb.getUser());
+        ItemController ic = new ItemController();
         try
         {
 
@@ -102,7 +102,7 @@ public abstract class MetadataEditor
                         {
                             itemList.add(eib.asItem());
                         }
-                        ic.update(itemList);
+                        ic.update(itemList, sb.getUser());
                         ImejiSPARQL.execUpdate(SPARQLQueries.updateEmptyMetadata());
                         //BeanHelper.info(sb.getMessage("success_editor_edit"));
                         String str = items.size() + " " + sb.getMessage("success_editor_images");

@@ -352,7 +352,13 @@ public class ConfigurationBean {
 	}
 
 	public String fetchDataViewerFormats() throws JSONException {
-		String connURL = dataViewerUrl + "/api/explain/formats";
+		String connURL;
+		if(dataViewerUrl.endsWith("/")){
+			connURL = dataViewerUrl+"api/explain/formats";
+		}else{
+			connURL = dataViewerUrl+"/api/explain/formats";
+		}
+		//String connURL = dataViewerUrl + "/api/explain/formats";
 		DefaultHttpClient httpclient = new DefaultHttpClient();
 		HttpGet httpget = new HttpGet(connURL);
 		HttpResponse resp;

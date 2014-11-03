@@ -70,11 +70,12 @@ public class ItemController extends ImejiController
      * @param coll
      * @throws Exception
      */
-    public void create(Item item, URI coll) throws Exception
+    public Item create(Item item, URI coll) throws Exception
     {
         Collection<Item> l = new ArrayList<Item>();
         l.add(item);
         create(l, coll);
+        return item;
     }
 
     /**
@@ -106,7 +107,10 @@ public class ItemController extends ImejiController
         }
         writer.create(J2JHelper.cast2ObjectList(new ArrayList<Item>(items)), user);
         cc.update(ic);
+       
     }
+    
+
 
     /**
      * Update an {@link Item} in the database
@@ -149,11 +153,13 @@ public class ItemController extends ImejiController
      * @param user
      * @throws Exception
      */
-    public void update(Item item, User user) throws Exception
+    public Item update(Item item, User user) throws Exception
     {
         Collection<Item> l = new ArrayList<Item>();
         l.add(item);
         update(l, user);
+        
+        return item;
     }
 
     /**

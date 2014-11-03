@@ -53,6 +53,38 @@
 		<load-on-startup>5</load-on-startup>
 		<async-supported>true</async-supported>
 	</servlet>
+	
+	<servlet>
+		<servlet-name>imeji REST Service</servlet-name>
+		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+		<init-param>
+		     <param-name>jersey.config.server.provider.packages</param-name>
+		     <param-value>de.mpg.imeji.rest.resources</param-value>
+		</init-param>
+		<init-param>
+	        <param-name>com.sun.jersey.config.property.resourceConfigClass</param-name>
+	        <param-value>com.sun.jersey.api.core.PackagesResourceConfig</param-value>
+    	</init-param>
+    	
+		<init-param>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>de.mpg.imeji.rest.MyApplication</param-value>
+        </init-param>
+        
+        <!--
+        <init-param>
+            <param-name>org.glassfish.jersey.spi.container.ContainerRequestFilters</param-name>
+            <param-value>org.glassfish.jersey.api.container.filter.GZIPContentEncodingFilter</param-value>
+        </init-param>
+        <init-param>
+            <param-name>org.glassfish.jersey.spi.container.ContainerResponseFilters</param-name>
+            <param-value>org.glassfish.api.container.filter.GZIPContentEncodingFilter</param-value>
+        </init-param>
+         -->
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
+	
 	<!-- Filters (order is important) -->
 	
 
@@ -122,6 +154,11 @@
 		<servlet-name>Data Viewer Servlet</servlet-name>
 		<url-pattern>/dataviewer</url-pattern>
 	</servlet-mapping>
+	<servlet-mapping>  
+		<servlet-name>imeji REST Service</servlet-name>  
+		<url-pattern>/rest/*</url-pattern>  
+	</servlet-mapping> 
+ 
 	
 	
 	<filter-mapping>

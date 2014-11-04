@@ -6,11 +6,9 @@ import static org.junit.Assert.fail;
 
 import java.util.Calendar;
 
-import javax.validation.constraints.AssertFalse;
-
 import junit.framework.Assert;
 
-import org.apache.tools.ant.filters.TokenFilter.ContainsString;
+
 import org.junit.Before;
 import org.junit.Test;
 

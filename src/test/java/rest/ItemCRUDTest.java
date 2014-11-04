@@ -1,9 +1,16 @@
 package rest;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.Calendar;
+
+import javax.validation.constraints.AssertFalse;
 
 import junit.framework.Assert;
 
+import org.apache.tools.ant.filters.TokenFilter.ContainsString;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,6 +22,7 @@ import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.Item.Visibility;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.rest.crud.ItemCRUD;
@@ -33,7 +41,6 @@ public class ItemCRUDTest {
 		JenaUtil.initJena();
 		initUser();
 		initItem();
-
 	}
 
 	public void initItem() throws Exception {
@@ -59,11 +66,33 @@ public class ItemCRUDTest {
 	}
 
 	@Test
-	public void itemCreate() {
+	public void testItemCRUND() {
+		
 		ItemCRUD crud = new ItemCRUD();
+		// create item
 		crud.create(item, user);
+		// check the item be created and has new id
 		Assert.assertNotNull(item.getId());
-
+		// read the item id
+		Assert.assertNotNull(crud.read(item, user).getId());
+		// check the default visibility of item = private
+		assertTrue(item.getVisibility().equals(Visibility.PRIVATE));
+		//set new visibility = public
+		item.setVisibility(Visibility.PUBLIC);
+		// check the visibility= public unchanged
+		assertTrue(item.getVisibility().equals(Visibility.PUBLIC));
+		// check the visibility changed
+		assertFalse(item.getVisibility().equals(Visibility.PRIVATE));
+		// delete item
+		Assert.assertTrue(crud.delete(item, user));
+		// try to read the delete item
+		try{
+			crud.read(item, user);
+			fail("should not found the item");
+		}catch(RuntimeException e){
+			assertTrue(e.getMessage().contains("Error reading item"));;
+		}
+		
 	}
 
 }

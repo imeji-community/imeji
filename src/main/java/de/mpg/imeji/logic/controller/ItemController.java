@@ -3,12 +3,15 @@
  */
 package de.mpg.imeji.logic.controller;
 
+import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.activation.MimetypesFileTypeMap;
 
 import org.apache.log4j.Logger;
 
@@ -24,6 +27,7 @@ import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.StorageController;
+import de.mpg.imeji.logic.storage.UploadResult;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Item;
@@ -33,6 +37,7 @@ import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.writer.WriterFacade;
+import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.j2j.helper.J2JHelper;
 
 /**
@@ -68,6 +73,34 @@ public class ItemController extends ImejiController {
 		l.add(item);
 		create(l, coll, user);
 		return item;
+	}
+
+	/**
+	 * Create an {@link Item} for a {@link File}.
+	 * 
+	 * @param f
+	 * @param filename
+	 *            (optional)
+	 * @param c
+	 *            - the collection in which the file is uploaded
+	 * @param user
+	 * @return
+	 * @throws Exception
+	 */
+	public Item create(File f, String filename, CollectionImeji c, User user)
+			throws Exception {
+		if (filename == null)
+			filename = f.getName();
+		StorageController sc = new StorageController();
+		MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
+		String mimeType = mimeTypesMap.getContentType(f);
+		UploadResult uploadResult = sc.upload(filename, f, c.getIdString());
+		Item item = ImejiFactory.newItem(c, user, uploadResult.getId(),
+				filename, URI.create(uploadResult.getOrginal()),
+				URI.create(uploadResult.getThumb()),
+				URI.create(uploadResult.getWeb()), mimeType);
+		item.setChecksum(uploadResult.getChecksum());
+		return create(item, c.getId(), user);
 	}
 
 	/**
@@ -179,6 +212,44 @@ public class ItemController extends ImejiController {
 			imBeans.add(createFulltextForMetadata(item));
 		}
 		writer.update(imBeans, user);
+	}
+
+	/**
+	 * Update the File of an {@link Item}
+	 * 
+	 * @param item
+	 * @param f
+	 * @param user
+	 * @return
+	 * @throws Exception
+	 */
+	public Item updateFile(Item item, File f, User user) throws Exception {
+		StorageController sc = new StorageController();
+		sc.update(item.getFullImageUrl().toString(), f);
+		item.setChecksum(sc.calculateChecksum(f));
+		MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
+		item.setFiletype(mimeTypesMap.getContentType(f));
+		sc.update(item.getWebImageUrl().toString(), f);
+		sc.update(item.getThumbnailImageUrl().toString(), f);
+		return update(item, user);
+	}
+
+	/**
+	 * 
+	 * Update only the thumbnail and the Web Resolution (doesn't change the
+	 * original file)
+	 * 
+	 * @param item
+	 * @param f
+	 * @param user
+	 * @return
+	 * @throws Exception
+	 */
+	public Item updateThumbnail(Item item, File f, User user) throws Exception {
+		StorageController sc = new StorageController();
+		sc.update(item.getWebImageUrl().toString(), f);
+		sc.update(item.getThumbnailImageUrl().toString(), f);
+		return update(item, user);
 	}
 
 	/**

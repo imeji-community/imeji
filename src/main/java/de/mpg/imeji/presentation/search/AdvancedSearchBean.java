@@ -153,12 +153,12 @@ public class AdvancedSearchBean
      */
     private List<CollectionImeji> loadCollections()
     {
-        CollectionController cc = new CollectionController(session.getUser());
+        CollectionController cc = new CollectionController();
         List<CollectionImeji> l = new ArrayList<>();
         SortCriterion sortCriterion = new SortCriterion();
         sortCriterion.setIndex(SPARQLSearch.getIndex(SearchIndex.names.cont_title.name()));
         sortCriterion.setSortOrder(SortOrder.valueOf(SortOrder.DESCENDING.name()));
-        for (String uri : cc.search(new SearchQuery(), sortCriterion, -1, 0).getResults())
+        for (String uri : cc.search(new SearchQuery(), sortCriterion, -1, 0,session.getUser()).getResults())
         {
             CollectionImeji c = ObjectLoader.loadCollectionLazy(URI.create(uri), session.getUser());
             l.add(c);

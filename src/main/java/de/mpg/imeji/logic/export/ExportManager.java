@@ -100,8 +100,8 @@ public class ExportManager
         SearchResult result = null;
         if ("collection".equals(searchType) || "metadata".equals(searchType))
         {
-            CollectionController collectionController = new CollectionController(user);
-            result = collectionController.search(searchQuery, null, maximumNumberOfRecords, 0);
+            CollectionController collectionController = new CollectionController();
+            result = collectionController.search(searchQuery, null, maximumNumberOfRecords, 0, user);
         }
         else if ("album".equals(searchType))
         {

@@ -12,11 +12,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-import javax.activation.MimetypesFileTypeMap;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -35,24 +32,20 @@ import com.ocpsoft.pretty.PrettyContext;
 
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.storage.StorageController;
-import de.mpg.imeji.logic.storage.UploadResult;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.collection.CollectionBean;
 import de.mpg.imeji.presentation.history.PageURIHelper;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
@@ -69,7 +62,6 @@ public class UploadBean implements Serializable {
 	private static final long serialVersionUID = -2731118794797476328L;
 	private static Logger logger = Logger.getLogger(UploadBean.class);
 	private CollectionImeji collection = new CollectionImeji();
-	private StorageController storageController;
 	private int collectionSize = 0;
 	private String id;
 	private String localDirectory = null;
@@ -88,8 +80,7 @@ public class UploadBean implements Serializable {
 	 * @throws URISyntaxException
 	 * @throws IOException
 	 */
-	public UploadBean() throws IOException, URISyntaxException {
-		storageController = new StorageController();
+	public UploadBean() {
 	}
 
 	/**
@@ -133,7 +124,6 @@ public class UploadBean implements Serializable {
 				.getCurrentInstance().getExternalContext().getRequest();
 		boolean isMultipart = ServletFileUpload.isMultipartContent(req);
 		if (isMultipart) {
-			List<Item> itemList = new ArrayList<Item>();
 			ServletFileUpload upload = new ServletFileUpload();
 			// Parse the request
 			try {
@@ -145,9 +135,7 @@ public class UploadBean implements Serializable {
 						File tmp = createTmpFile(fis.getName());
 						try {
 							writeInTmpFile(tmp, stream);
-							Item item = uploadFile(tmp, fis.getName());
-							if (item != null)
-								itemList.add(item);
+							uploadFile(tmp, fis.getName());
 						} finally {
 							stream.close();
 							FileUtils.deleteQuietly(tmp);
@@ -157,7 +145,6 @@ public class UploadBean implements Serializable {
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
-			createOrUpdateItem(itemList);
 		}
 	}
 
@@ -170,17 +157,14 @@ public class UploadBean implements Serializable {
 	public String uploadFromLocalDirectory() throws Exception {
 		try {
 			File dir = new File(localDirectory);
-			List<Item> itemList = new ArrayList<>();
+			int i = 0;
 			if (dir.isDirectory()) {
 				for (File f : FileUtils.listFiles(dir, null, recursive)) {
-					Item item = uploadFile(f, f.getName());
-					if (item != null)
-						itemList.add(item);
+					uploadFile(f, f.getName());
+					i++;
 				}
-				createOrUpdateItem(itemList);
 			}
-			BeanHelper.info(itemList.size() + " files uploaded from "
-					+ localDirectory);
+			BeanHelper.info(i + " files uploaded from " + localDirectory);
 		} catch (Exception e) {
 			BeanHelper.error(e.getMessage());
 		}
@@ -202,12 +186,7 @@ public class UploadBean implements Serializable {
 						"external");
 				FileOutputStream fos = new FileOutputStream(tmp);
 				externalController.read(url.toString(), fos, true);
-				Item item = uploadFile(tmp, findFileName(url));
-				if (item != null) {
-					List<Item> itemList = new ArrayList<>();
-					itemList.add(item);
-					createOrUpdateItem(itemList);
-				}
+				uploadFile(tmp, findFileName(url));
 				externalUrl = null;
 			} catch (Exception e) {
 				getfFiles().add(e.getMessage() + ": " + findFileName(url));
@@ -219,18 +198,6 @@ public class UploadBean implements Serializable {
 			BeanHelper.error(e.getMessage());
 		}
 		return "pretty:";
-	}
-
-	/**
-	 * According to choosed options, create or update the item
-	 * 
-	 * @param itemList
-	 */
-	private void createOrUpdateItem(List<Item> itemList) {
-		if (isImportImageToFile() || isUploadFileToItem())
-			updateItemForFiles(itemList);
-		else
-			createItemForFiles(itemList);
 	}
 
 	/**
@@ -336,24 +303,16 @@ public class UploadBean implements Serializable {
 			if (!StorageUtils.hasExtension(title))
 				title += StorageUtils.guessExtension(file);
 			validateName(title);
-			storageController = new StorageController();
 			Item item = null;
+			ItemController controller = new ItemController();
 			if (isImportImageToFile()) {
-				item = replaceWebResolutionAndThumbnailOfItem(
-						findItemByFileName(title), file);
+				item = controller.updateFile(findItemByFileName(title), file,
+						user);
 			} else if (isUploadFileToItem()) {
-				item = replaceFileOfItem(findItemByFileName(title), file);
+				item = controller.updateThumbnail(findItemByFileName(title),
+						file, user);
 			} else {
-				MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
-				String mimeType = mimeTypesMap.getContentType(file);
-				UploadResult uploadResult = storageController.upload(title,
-						file, id);
-				item = ImejiFactory.newItem(collection, user,
-						uploadResult.getId(), title,
-						URI.create(uploadResult.getOrginal()),
-						URI.create(uploadResult.getThumb()),
-						URI.create(uploadResult.getWeb()), mimeType);
-				item.setChecksum(uploadResult.getChecksum());
+				item = controller.create(file, title, collection, user);
 			}
 			getsFiles().add(item);
 			return item;
@@ -364,37 +323,6 @@ public class UploadBean implements Serializable {
 			e.printStackTrace();
 			return null;
 		}
-	}
-
-	/**
-	 * Replace the web resolution and thumbnail files with the one the the
-	 * upload result
-	 * 
-	 * @param item
-	 * @param uploadResult
-	 * @return
-	 * @throws Exception
-	 */
-	private Item replaceWebResolutionAndThumbnailOfItem(Item item, File file)
-			throws Exception {
-		storageController.update(item.getWebImageUrl().toString(), file);
-		storageController.update(item.getThumbnailImageUrl().toString(), file);
-		return item;
-	}
-
-	/**
-	 * Replace the File of an Item
-	 * 
-	 * @param item
-	 * @param uploadResult
-	 * @return
-	 * @throws Exception
-	 */
-	private Item replaceFileOfItem(Item item, File file) throws Exception {
-		storageController.update(item.getFullImageUrl().toString(), file);
-		item.setChecksum(storageController.calculateChecksum(file));
-		replaceWebResolutionAndThumbnailOfItem(item, file);
-		return item;
 	}
 
 	/**
@@ -432,30 +360,6 @@ public class UploadBean implements Serializable {
 				SPARQLQueries.selectContainerItemByFilename(collection.getId(),
 						FilenameUtils.getBaseName(filename)))
 				.getNumberOfRecords() > 0;
-	}
-
-	/**
-	 * Create the {@link Item} for the files which have been uploaded
-	 */
-	private void createItemForFiles(Collection<Item> itemList) {
-		ItemController ic = new ItemController();
-		try {
-			ic.create(itemList, collection.getId(), user);
-		} catch (Exception e) {
-			logger.error("Error creating files for upload", e);
-		}
-	}
-
-	/**
-	 * Update the {@link Item} for the files which have been uploaded
-	 */
-	private void updateItemForFiles(Collection<Item> itemList) {
-		ItemController ic = new ItemController();
-		try {
-			ic.update(itemList, user);
-		} catch (Exception e) {
-			logger.error("Error creating files for upload", e);
-		}
 	}
 
 	/**

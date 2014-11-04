@@ -66,7 +66,7 @@ public class EditCollectionBean extends CollectionBean
     {
         if (valid())
         {
-            CollectionController collectionController = new CollectionController(sessionBean.getUser());
+            CollectionController collectionController = new CollectionController();
             collectionController.updateLazy(getCollection(), sessionBean.getUser());
             BeanHelper.info(sessionBean.getMessage("success_collection_save"));
             Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);

@@ -11,14 +11,12 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.Search.SearchType;
-import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -54,15 +52,6 @@ public class CollectionController extends ImejiController {
 	}
 
 	/**
-	 * @deprecated
-	 * @param user
-	 */
-	@Deprecated
-	public CollectionController(User user) {
-		super(user);
-	}
-
-	/**
 	 * Creates a new collection. - Add a unique id - Write user properties
 	 * 
 	 * @param c
@@ -89,6 +78,63 @@ public class CollectionController extends ImejiController {
 		gc.addGrants(user, AuthorizationPredefinedRoles.admin(c.getId()
 				.toString(), p.getId().toString()), user);
 		return c.getId();
+	}
+
+	/**
+	 * Retrieve a complete {@link CollectionImeji} (inclusive its {@link Item}:
+	 * slow for huge {@link CollectionImeji})
+	 * 
+	 * @param uri
+	 * @param user
+	 * @return
+	 * @throws Exception
+	 */
+	public CollectionImeji retrieve(URI uri, User user) throws Exception {
+		return (CollectionImeji) reader.read(uri.toString(), user,
+				new CollectionImeji());
+	}
+
+	/**
+	 * Retrieve the {@link CollectionImeji} without its {@link Item}
+	 * 
+	 * @param uri
+	 * @param user
+	 * @return
+	 * @throws Exception
+	 */
+	public CollectionImeji retrieveLazy(URI uri, User user) throws Exception {
+		return (CollectionImeji) reader.readLazy(uri.toString(), user,
+				new CollectionImeji());
+	}
+
+	/**
+	 * Load {@link CollectionImeji} defined in a {@link List} of uris. Don't
+	 * load the {@link Item} contained in the {@link CollectionImeji}
+	 * 
+	 * @param uris
+	 * @param limit
+	 * @param offset
+	 * @return
+	 * @throws Exception
+	 */
+	public Collection<CollectionImeji> retrieveLazy(List<String> uris,
+			int limit, int offset, User user) throws Exception {
+		List<CollectionImeji> cols = new ArrayList<CollectionImeji>();
+		int counter = 0;
+		for (String s : uris) {
+			if (offset <= counter
+					&& (counter < (limit + offset) || limit == -1)) {
+				try {
+					cols.add((CollectionImeji) J2JHelper.setId(
+							new CollectionImeji(), URI.create(s)));
+				} catch (Exception e) {
+					logger.error("Error loading collection " + s, e);
+				}
+			}
+			counter++;
+		}
+		reader.readLazy(J2JHelper.cast2ObjectList(cols), user);
+		return cols;
 	}
 
 	/**
@@ -193,78 +239,14 @@ public class CollectionController extends ImejiController {
 		} else {
 			List<Item> items = (List<Item>) itemController.retrieve(itemUris,
 					-1, 0, user);
-			itemController.withdraw(items, collection.getDiscardComment(), user);
+			itemController
+					.withdraw(items, collection.getDiscardComment(), user);
 			writeWithdrawProperties(collection, null);
 			update(collection, user);
 			// Withdraw profile
 			ProfileController pc = new ProfileController();
 			pc.withdraw(pc.retrieve(collection.getProfile(), user), user);
 		}
-	}
-
-	/**
-	 * Retrieve a complete {@link CollectionImeji} (inclusive its {@link Item}:
-	 * slow for huge {@link CollectionImeji})
-	 * 
-	 * @param uri
-	 * @return
-	 * @throws Exception
-	 */
-	public CollectionImeji retrieve(URI uri) throws Exception {
-		return (CollectionImeji) reader.read(uri.toString(), user,
-				new CollectionImeji());
-	}
-
-	/**
-	 * Retrieve a complete {@link CollectionImeji} (inclusive its {@link Item}:
-	 * slow for huge {@link CollectionImeji})
-	 * 
-	 * @param uri
-	 * @param user
-	 * @return
-	 * @throws Exception
-	 */
-	public CollectionImeji retrieve(URI uri, User user) throws Exception {
-		return (CollectionImeji) reader.read(uri.toString(), user,
-				new CollectionImeji());
-	}
-
-	/**
-	 * Retrieve the {@link CollectionImeji} without its {@link Item}
-	 * 
-	 * @param uri
-	 * @return
-	 * @throws Exception
-	 * @{@link Deprecated}
-	 */
-	public CollectionImeji retrieveLazy(URI uri) throws Exception {
-		return (CollectionImeji) reader.readLazy(uri.toString(), user,
-				new CollectionImeji());
-	}
-
-	/**
-	 * Retrieve the {@link CollectionImeji} without its {@link Item}
-	 * 
-	 * @param uri
-	 * @param user
-	 * @return
-	 * @throws Exception
-	 */
-	public CollectionImeji retrieveLazy(URI uri, User user) throws Exception {
-		return (CollectionImeji) reader.readLazy(uri.toString(), user,
-				new CollectionImeji());
-	}
-
-	/**
-	 * Retieve all {@link CollectionImeji} in imeji
-	 * 
-	 * @return
-	 * @throws Exception
-	 */
-	public List<CollectionImeji> retrieveAllCollections() throws Exception {
-		List<String> uris = ImejiSPARQL.exec(
-				SPARQLQueries.selectCollectionAll(), Imeji.collectionModel);
-		return (List<CollectionImeji>) loadCollectionsLazy(uris, -1, 0);
 	}
 
 	/**
@@ -277,38 +259,8 @@ public class CollectionController extends ImejiController {
 	 * @return
 	 */
 	public SearchResult search(SearchQuery searchQuery, SortCriterion sortCri,
-			int limit, int offset) {
+			int limit, int offset, User user) {
 		Search search = SearchFactory.create(SearchType.COLLECTION);
 		return search.search(searchQuery, sortCri, user);
-	}
-
-	/**
-	 * Load {@link CollectionImeji} defined in a {@link List} of uris. Don't
-	 * load the {@link Item} contained in the {@link CollectionImeji}
-	 * 
-	 * @param uris
-	 * @param limit
-	 * @param offset
-	 * @return
-	 * @throws Exception
-	 */
-	public Collection<CollectionImeji> loadCollectionsLazy(List<String> uris,
-			int limit, int offset) throws Exception {
-		List<CollectionImeji> cols = new ArrayList<CollectionImeji>();
-		int counter = 0;
-		for (String s : uris) {
-			if (offset <= counter
-					&& (counter < (limit + offset) || limit == -1)) {
-				try {
-					cols.add((CollectionImeji) J2JHelper.setId(
-							new CollectionImeji(), URI.create(s)));
-				} catch (Exception e) {
-					logger.error("Error loading collection " + s, e);
-				}
-			}
-			counter++;
-		}
-		reader.readLazy(J2JHelper.cast2ObjectList(cols), user);
-		return cols;
 	}
 }

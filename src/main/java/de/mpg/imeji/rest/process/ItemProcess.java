@@ -1,36 +1,51 @@
 package de.mpg.imeji.rest.process;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-
-import de.mpg.imeji.logic.util.ObjectHelper;
+import de.escidoc.core.client.Authentication;
+import de.mpg.imeji.logic.auth.AuthenticationFactory;
+import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.presentation.util.ObjectLoader;
+import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.rest.crud.ItemCRUD;
+import de.mpg.j2j.exceptions.NotFoundException;
 
 public class ItemProcess{
 	
-	
-	public static Response buildJSONResponse(HttpServletRequest req, String id){
-		String username = req.getParameter("username");
-		String password = req.getParameter("password");
+	public static Item readItem(HttpServletRequest req, String id){
 		
-		Item item = ObjectLoader.loadItem(ObjectHelper.getURI(Item.class, id), null); 
-		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-    	String json = "";
+		String login = req.getParameter("username");
+		String pwd = req.getParameter("password");	
+		      
+		Authentication auth = null;
+		User u = null;
+		if(login != null && pwd != null)
+		auth = (Authentication) AuthenticationFactory.factory(login, pwd);
+		if(auth != null)
+			u = ((de.mpg.imeji.logic.auth.Authentication) auth).doLogin(); 
+		
+		Item item = null;
+		
+		ItemCRUD icrud = new ItemCRUD();
 		try {
-			json = ow.writeValueAsString(item);
-		} catch (JsonProcessingException e) {
-
-			e.printStackTrace();
+			item = icrud.read(id, u);
+		} catch (NotFoundException e) {
+			
+		}catch(NotAllowedError e){
+			System.err.println(e.getMessage());
+		}catch(Exception e){
+			System.err.println("exception");
 		}
-		return Response.status(Status.OK).entity(json).type(MediaType.APPLICATION_JSON).build();
 
+
+
+		req = null;
+		return item;
 	}
+
+	
+	
+	
+
 
 }

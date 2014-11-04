@@ -6,13 +6,13 @@ import static org.junit.Assert.fail;
 
 import java.util.Calendar;
 
+
 import junit.framework.Assert;
 
 
 import org.junit.Before;
 import org.junit.Test;
 
-import util.JenaUtil;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.UserController;
@@ -36,7 +36,7 @@ public class ItemCRUDTest {
 
 	@Before
 	public void setup() throws Exception {
-		JenaUtil.initJena();
+//		JenaUtil.initJena();
 		initUser();
 		initItem();
 	}

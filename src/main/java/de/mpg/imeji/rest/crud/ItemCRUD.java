@@ -4,11 +4,18 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.j2j.exceptions.NotFoundException;
 
 public class ItemCRUD implements CRUDInterface<Item> {
+	
+	public ItemCRUD(){
+		
+	}
 
 	@Override
 	public Item create(Item o, User u) {
@@ -25,18 +32,12 @@ public class ItemCRUD implements CRUDInterface<Item> {
 	}
 
 	@Override
-	public Item read(Item o, User u) {
+	public Item read(String id, User u) throws NotFoundException, NotAllowedError, Exception {
 
 		ItemController controller = new ItemController();
-
-		try {
-			return controller.retrieve(o.getId(), u);
-		} catch (Exception e) {
-			throw new RuntimeException("Error reading item: " + e.getMessage(),
-					e);
-		}
-
+		return controller.retrieve(ObjectHelper.getURI(Item.class, id), u);
 	}
+	
 
 	@Override
 	public Item update(Item o, User u) {
@@ -62,6 +63,11 @@ public class ItemCRUD implements CRUDInterface<Item> {
 			e.printStackTrace();
 			return false;
 		}
+	}
+
+	@Override
+	public Item read(Item o, User u) {
+		return null;
 	}
 
 }

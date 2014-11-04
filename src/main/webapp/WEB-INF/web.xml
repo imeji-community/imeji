@@ -66,12 +66,13 @@
 	        <param-value>com.sun.jersey.api.core.PackagesResourceConfig</param-value>
     	</init-param>
     	
+    	<!--
 		<init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>de.mpg.imeji.rest.MyApplication</param-value>
         </init-param>
         
-        <!--
+        
         <init-param>
             <param-name>org.glassfish.jersey.spi.container.ContainerRequestFilters</param-name>
             <param-value>org.glassfish.jersey.api.container.filter.GZIPContentEncodingFilter</param-value>

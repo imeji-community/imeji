@@ -1,6 +1,7 @@
 package de.mpg.imeji.rest.process;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Response.Status;
 
 import de.escidoc.core.client.Authentication;
 import de.mpg.imeji.logic.auth.AuthenticationFactory;
@@ -8,12 +9,15 @@ import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.crud.ItemCRUD;
+import de.mpg.imeji.rest.to.HTTPError;
+import de.mpg.imeji.rest.to.JSONException;
+import de.mpg.imeji.rest.to.JSONResponse;
 import de.mpg.j2j.exceptions.NotFoundException;
 
 public class ItemProcess{
 	
-	public static Item readItem(HttpServletRequest req, String id){
-		
+	public static JSONResponse readItem(HttpServletRequest req, String id){
+		JSONResponse resp = new JSONResponse();
 		String login = req.getParameter("username");
 		String pwd = req.getParameter("password");	
 		      
@@ -29,18 +33,28 @@ public class ItemProcess{
 		ItemCRUD icrud = new ItemCRUD();
 		try {
 			item = icrud.read(id, u);
+			resp.setObject(item);
+			resp.setStatus(Status.OK);
 		} catch (NotFoundException e) {
+			resp.setObject(RestProcessUtils.buildBadRequestResponse());
+			resp.setStatus(Status.BAD_REQUEST);	
 			
-		}catch(NotAllowedError e){
-			System.err.println(e.getMessage());
+		}catch(NotAllowedError e){			
+			if(auth == null)
+			{
+				resp.setObject(RestProcessUtils.buildUnauthorizedResponse());
+				resp.setStatus(Status.UNAUTHORIZED);	
+			}else{
+				resp.setObject(RestProcessUtils.buildNotAllowedResponse());
+				resp.setStatus(Status.FORBIDDEN);
+				
+			}
 		}catch(Exception e){
-			System.err.println("exception");
+
 		}
+		return resp;
 
 
-
-		req = null;
-		return item;
 	}
 
 	

@@ -14,6 +14,7 @@ import javax.ws.rs.core.Response;
 
 import de.mpg.imeji.rest.process.ItemProcess;
 import de.mpg.imeji.rest.process.RestProcessUtils;
+import de.mpg.imeji.rest.to.JSONResponse;
 
 @Path("/items")
 public class ItemResource implements ImejiResource{
@@ -29,7 +30,8 @@ public class ItemResource implements ImejiResource{
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response readFromID(@Context HttpServletRequest req, @PathParam("id") String id){
-        return RestProcessUtils.buildJSONResponse(ItemProcess.readItem(req,id));
+    	JSONResponse resp = ItemProcess.readItem(req,id);
+        return RestProcessUtils.buildJSONResponse(resp);
 
 
     }

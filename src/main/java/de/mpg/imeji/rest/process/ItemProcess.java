@@ -3,14 +3,12 @@ package de.mpg.imeji.rest.process;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response.Status;
 
-import de.escidoc.core.client.Authentication;
 import de.mpg.imeji.logic.auth.AuthenticationFactory;
+import de.mpg.imeji.logic.auth.authentication.SimpleAuthentication;
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.crud.ItemCRUD;
-import de.mpg.imeji.rest.to.HTTPError;
-import de.mpg.imeji.rest.to.JSONException;
 import de.mpg.imeji.rest.to.JSONResponse;
 import de.mpg.j2j.exceptions.NotFoundException;
 
@@ -21,12 +19,12 @@ public class ItemProcess{
 		String login = req.getParameter("username");
 		String pwd = req.getParameter("password");	
 		      
-		Authentication auth = null;
+		SimpleAuthentication auth = null;
 		User u = null;
 		if(login != null && pwd != null)
-		auth = (Authentication) AuthenticationFactory.factory(login, pwd);
+		auth =  (SimpleAuthentication) AuthenticationFactory.factory(login, pwd);
 		if(auth != null)
-			u = ((de.mpg.imeji.logic.auth.Authentication) auth).doLogin(); 
+			u = ((de.mpg.imeji.logic.auth.Authentication) auth).doLogin();   
 		
 		Item item = null;
 		

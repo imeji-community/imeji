@@ -1,10 +1,14 @@
 package de.mpg.imeji.presentation.servlet;
 
 import java.io.ByteArrayInputStream;
+
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
 import java.io.File;
-import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
@@ -15,18 +19,21 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.multipart.FilePart;
-import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
-import org.apache.commons.httpclient.methods.multipart.Part;
-import org.apache.commons.httpclient.methods.multipart.StringPart;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.http.client.HttpResponseException;
 import org.apache.log4j.Logger;
+import org.glassfish.jersey.media.multipart.FormDataMultiPart;
+import org.glassfish.jersey.media.multipart.MultiPart;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
+import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
 
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -34,7 +41,7 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.ObjectLoader;
-import de.mpg.imeji.presentation.util.PropertyReader;
+
 
 
 /**
@@ -53,11 +60,11 @@ public class DataViewerServlet extends HttpServlet {
 		super.init();
 		logger.info("Data Viewer Servlet initialized");
 	}
-   
+       
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		try {
+		try {  
 			SessionBean sb = (SessionBean)req.getSession(false).getAttribute(SessionBean.class.getSimpleName());
 			ConfigurationBean config = new ConfigurationBean();
 			String id = req.getParameter("id");
@@ -78,7 +85,7 @@ public class DataViewerServlet extends HttpServlet {
 				 * send the file URL to dataViewer if file is in .fits format 
 				*/
 				URI fullImageUrl = item.getFullImageUrl();
-				System.out.println(fullImageUrl.toString());
+				System.out.println("fitsURL = " +fullImageUrl.toString());
 				image = viewFileByURL(fullImageUrl, false, fileExtensionName, dataViewerUrl);
 			}else{
 				/*
@@ -117,7 +124,7 @@ public class DataViewerServlet extends HttpServlet {
 
 	private File viewFileByURL(URI url, boolean isLoad, String fileType, String dataViewerServiceTargetURL) throws FileNotFoundException, IOException, URISyntaxException {
     	String serviceTargetURL = dataViewerServiceTargetURL+"?url="+url+"&load="+String.valueOf(isLoad)+"&mimetype="+fileType;
-
+  
  		GetMethod get = new GetMethod(serviceTargetURL);
  		
  		HttpClient client = new HttpClient();
@@ -130,10 +137,9 @@ public class DataViewerServlet extends HttpServlet {
 	
 	
 	private File viewGenericFile(InputStream istream, String fileType, String dataViewerServiceTargetURL) throws FileNotFoundException, IOException, URISyntaxException {
-
-		PostMethod post = new PostMethod(dataViewerServiceTargetURL);
+ 
+		MultiPart multiPart = null;
 		try {
-			post.setParameter("mimetype", fileType);	
 			File file = File.createTempFile("tmpInputstreamFile", ".tmp");
 			OutputStream outputStream = new FileOutputStream(file);
  
@@ -142,22 +148,20 @@ public class DataViewerServlet extends HttpServlet {
 			while ((read = istream.read(bytes)) != -1) {
 				outputStream.write(bytes, 0, read);
 			}
+			FileDataBodyPart filePart = new FileDataBodyPart(file.getName(), file);
+			multiPart =  new FormDataMultiPart().field("mimetype", fileType).bodyPart(filePart);
 			
-			Part[] parts = {new FilePart(file.getName(), file), new StringPart("mimetype",fileType)};
-
-			post.setRequestEntity(new MultipartRequestEntity(parts, post.getParams()));
-
 			outputStream.flush();
 			outputStream.close();
 			} catch (Exception e) {
 				e.printStackTrace();
 		}
-	
-		HttpClient client = new HttpClient();
-		int status = client.executeMethod(post);
+		Client client = ClientBuilder.newBuilder().register(MultiPartFeature.class).build();
+		WebTarget target = client.target(dataViewerServiceTargetURL);
+		Response response =target.request().post(Entity.entity(multiPart, multiPart.getMediaType()));
+		
 		File respFile = File.createTempFile("result", ".html");
-		IOUtils.copy(post.getResponseBodyAsStream(), new FileOutputStream(respFile));
-		post.releaseConnection();
+		IOUtils.copy(response.readEntity(InputStream.class), new FileOutputStream(respFile));
 		return respFile;
 	}
 	

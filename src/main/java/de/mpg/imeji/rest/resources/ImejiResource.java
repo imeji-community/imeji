@@ -11,7 +11,6 @@ public interface ImejiResource {
 
     public Response readAll(HttpServletRequest req);
     
-
     public Response readFromID(HttpServletRequest req, String id);
     
     public Response create(HttpServletRequest req);

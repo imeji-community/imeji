@@ -70,12 +70,14 @@ public class UserBean {
 			newPassword = null;
 			repeatedPassword = null;
 			retrieveUser();
-			this.roles = AuthUtil.getAllRoles(user, session.getUser());
-			this.newEmail = user.getEmail();
-			this.newFamilyName = user.getPerson().getFamilyName();
-			this.changeEmail = false;
-			this.changeFamilyName = false;
-			this.setEdit(false);
+			if (user != null) {
+				this.roles = AuthUtil.getAllRoles(user, session.getUser());
+				this.newEmail = user.getEmail();
+				this.newFamilyName = user.getPerson().getFamilyName();
+				this.changeEmail = false;
+				this.changeFamilyName = false;
+				this.setEdit(false);
+			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

@@ -85,7 +85,6 @@ public class DataViewerServlet extends HttpServlet {
 				 * send the file URL to dataViewer if file is in .fits format 
 				*/
 				URI fullImageUrl = item.getFullImageUrl();
-				System.out.println("fitsURL = " +fullImageUrl.toString());
 				image = viewFileByURL(fullImageUrl, false, fileExtensionName, dataViewerUrl);
 			}else{
 				/*

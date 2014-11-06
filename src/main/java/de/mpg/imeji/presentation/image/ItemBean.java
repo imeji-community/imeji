@@ -126,12 +126,13 @@ public class ItemBean {
 	 */
 	private void initUtilTab() throws Exception {
 		relatedAlbums = new ArrayList<Album>();
-		AlbumController ac = new AlbumController(sessionBean.getUser());
+		AlbumController ac = new AlbumController();
 		SearchQuery q = new SearchQuery();
 		q.addPair(new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.item),
 				SearchOperators.EQUALS, getImage().getId().toString()));
 		relatedAlbums = (List<Album>) ac.loadAlbumsLazy(
-				ac.search(q, null, -1, 0).getResults(), -1, 0);
+				ac.search(q, sessionBean.getUser(), null, -1, 0).getResults(), sessionBean.getUser(),
+				-1, 0);
 	}
 
 	/**

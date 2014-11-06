@@ -103,7 +103,7 @@ public class ObjectLoader {
 	 */
 	public static Album loadAlbumLazy(URI id, User user) {
 		try {
-			AlbumController ac = new AlbumController(user);
+			AlbumController ac = new AlbumController();
 			return ac.retrieveLazy(id, user);
 		} catch (NotFoundException e) {
 			writeErrorNotFound("album", id);

@@ -59,7 +59,6 @@ public class HistoryFilter implements Filter
                 servletContext = request.getSession().getServletContext();
                 if ("GET".equals(request.getMethod()))
                 {
-                	System.out.println("dassad");
                     dofilterImpl(request, resp);
                 }
             }

@@ -7,7 +7,9 @@ import static org.junit.Assert.fail;
 import java.util.Calendar;
 
 
+
 import junit.framework.Assert;
+
 
 
 import org.junit.Before;
@@ -23,7 +25,7 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Item.Visibility;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.util.ImejiFactory;
-import de.mpg.imeji.rest.crud.ItemCRUD;
+import de.mpg.imeji.rest.api.ItemService;
 
 public class ItemCRUDTest {
 
@@ -66,7 +68,7 @@ public class ItemCRUDTest {
 	@Test
 	public void testItemCRUND() {
 		
-		ItemCRUD crud = new ItemCRUD();
+		ItemService crud = new ItemService();
 		// create item
 		crud.create(item, user);
 		// check the item be created and has new id

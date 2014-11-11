@@ -108,6 +108,31 @@ public class IdentifierUtil
             return newRandomId();
         }
     }
+    
+    /**
+     * Return an identifier according to the method passed (universal, random or counter)
+     * 
+     * @return
+     */
+    public static String newId(String method)
+    {
+        if ("universal".equals(method))
+        {
+            return newUniversalUniqueId();
+        }
+        else if ("random".equals(method))
+        {
+            return newRandomId();
+        }
+        else if ("counter".equals(method))
+        {
+            return newLocalUniqueId();
+        }
+        else
+        {
+            return newRandomId();
+        }
+    }
 
     /**
      * Return an {@link URI} according to the identifier creation method
@@ -128,7 +153,7 @@ public class IdentifierUtil
      */
     public static URI newURI(Class<?> c, String method)
     {
-        return ObjectHelper.getURI(c, newId());
+        return ObjectHelper.getURI(c, newId(method));
     }
 
     /**

@@ -119,6 +119,17 @@ public class IdentifierUtil
     {
         return ObjectHelper.getURI(c, newId());
     }
+    
+    /**
+     * Return an {@link URI} according to the identifier creation method. Method can be universal, random or counter
+     * 
+     * @param c
+     * @return
+     */
+    public static URI newURI(Class<?> c, String method)
+    {
+        return ObjectHelper.getURI(c, newId());
+    }
 
     /**
      * Create a new identifier unique for the local instance of imeji

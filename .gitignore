@@ -1,0 +1,8 @@
+# Created by .gitignore support plugin (hsz.mobi)
+imeji.iml
+.classpath
+.project
+imeji.sublime-workspace
+imeji.sublime-project
+.idea
+.settings

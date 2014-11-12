@@ -11,6 +11,7 @@ import com.hp.hpl.jena.tdb.TDBFactory;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -53,7 +54,7 @@ public class BasicTest
         }
         catch (NotFoundException e)
         {
-            uc.create(getTestUser());
+            uc.create(getTestUser(), USER_TYPE.DEFAULT);
         }
         ProfileController pc = new ProfileController();
         pc.create(new MetadataProfile(), getTestUser());

@@ -40,9 +40,10 @@ All rights reserved. Use is subject to license terms.
 	<meta http-equiv="expires" content="0"/>
 	<title><h:outputText value="#{PropertyBean.appName} - #{HistorySession.currentPage.internationalizedName}"/></title>
 		
-	<link type="text/css" rel="stylesheet" href="/imeji/jsf/javax.faces.resource/basic.css?ln=css" />
-	
 	<h:inputHidden value="#{SessionBean.checkCss(Configuration.defaultCss, Configuration.alternativeCss)}" />
+	
+	
+	<h:outputStylesheet library="css" name="basic.css" id="basicscss" rendered="#{SessionBean.selectedCss == 'NONE'}"/>
 	
 	<ui:fragment rendered="#{SessionBean.selectedCss != 'NONE'}">
 		<ui:fragment rendered="#{SessionBean.selectedCss == 'DEFAULT'}">
@@ -53,10 +54,11 @@ All rights reserved. Use is subject to license terms.
 		</ui:fragment>
 	</ui:fragment>
 	
+	
 	<h:outputStylesheet library="css/theme_default" name="app.css" id="themeDefault" rendered="#{SessionBean.selectedCss == 'NONE'}"/>
 	
 	<link rel="shortcut icon" type="image/x-ico" href="#{Navigation.applicationUrl}resources/icon/imeji.ico"/>
-	<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
 	
 	<ui:fragment rendered="#{SessionBean.locale == 'en' or SessionBean.locale == 'es'}">
 		<script type="text/javascript">var placeholder_username = 'username'; var placeholder_password = 'password'; var placeholder_simpleSearch = 'search for ...';</script>
@@ -83,7 +85,7 @@ All rights reserved. Use is subject to license terms.
 	
 	<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/eSciDoc_inc.js"></script>
 	
-	<script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
+	<script src="https://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
 	
 	<ui:insert name="additonalHeaderScripts"/>
 	

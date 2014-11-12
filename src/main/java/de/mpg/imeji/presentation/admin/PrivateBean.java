@@ -82,7 +82,7 @@ public class PrivateBean extends SuperContainerBean<CollectionListItem>
     @Override
     public List<CollectionListItem> retrieveList(int offset, int limit) throws Exception
     {
-        CollectionController cc = new CollectionController(user);
+        CollectionController cc = new CollectionController();
         SearchQuery searchQuery = new SearchQuery();
         SearchPair sp = new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.user), SearchOperators.EQUALS, ObjectHelper
                 .getURI(User.class, user.getEmail()).toString());
@@ -90,9 +90,9 @@ public class PrivateBean extends SuperContainerBean<CollectionListItem>
         SortCriterion sortCriterion = new SortCriterion();
         sortCriterion.setIndex(SPARQLSearch.getIndex("user"));
         sortCriterion.setSortOrder(SortOrder.valueOf("DESCENDING"));
-        SearchResult results = cc.search(searchQuery, sortCriterion, limit, offset);
+        SearchResult results = cc.search(searchQuery, sortCriterion, limit, offset, user);
         Collection<CollectionImeji> collections = new ArrayList<CollectionImeji>();
-        collections = cc.loadCollectionsLazy(results.getResults(), limit, offset);
+        collections = cc.retrieveLazy(results.getResults(), limit, offset, user);
         totalNumberOfRecords = results.getNumberOfRecords();
         this.returnedCollections = ImejiFactory.collectionListToListItem(collections, user);
         return returnedCollections;

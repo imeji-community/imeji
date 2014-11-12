@@ -65,9 +65,9 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
 
     @Override
     public List<CollectionListItem> retrieveList(int offset, int limit) throws Exception
-    {
+    {   
         // initMenus();
-        CollectionController controller = new CollectionController(sb.getUser());
+        CollectionController controller = new CollectionController();
         Collection<CollectionImeji> collections = new ArrayList<CollectionImeji>();
         SearchQuery searchQuery = new SearchQuery();
       
@@ -81,11 +81,11 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
             searchQuery.addLogicalRelation(LOGICAL_RELATIONS.AND);
             searchQuery.addPair(sp);
         }
-        SortCriterion sortCriterion = new SortCriterion();
+        SortCriterion sortCriterion = new SortCriterion();  
         sortCriterion.setIndex(SPARQLSearch.getIndex(getSelectedSortCriterion()));
         sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
-        SearchResult results = controller.search(searchQuery, sortCriterion, limit, offset);
-        collections = controller.loadCollectionsLazy(results.getResults(), limit, offset);
+        SearchResult results = controller.search(searchQuery, sortCriterion, limit, offset, sb.getUser());
+        collections = controller.retrieveLazy(results.getResults(), limit, offset, sb.getUser());
         totalNumberOfRecords = results.getNumberOfRecords();
         return ImejiFactory.collectionListToListItem(collections, sb.getUser());
     }

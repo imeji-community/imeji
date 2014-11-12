@@ -30,78 +30,73 @@ import de.mpg.imeji.presentation.util.UrlHelper;
  */
 @ManagedBean(name = "CreateCollectionBean")
 @SessionScoped
-public class CreateCollectionBean extends CollectionBean
-{
-    private static final long serialVersionUID = 1257698224590957642L;
+public class CreateCollectionBean extends CollectionBean {
+	private static final long serialVersionUID = 1257698224590957642L;
 
-    /**
-     * Bean Constructor
-     */
-    public CreateCollectionBean()
-    {
-        super();
-    }
+	/**
+	 * Bean Constructor
+	 */
+	public CreateCollectionBean() {
+		super();
+	}
 
-    /**
-     * Method called when paged is loaded (defined in pretty-config.xml)
-     */
-    public void init()
-    {
-        if (UrlHelper.getParameterBoolean("reset"))
-        {
-            setCollection(ImejiFactory.newCollection());
-            ((List<Person>)getCollection().getMetadata().getPersons()).set(0, sessionBean.getUser().getPerson());
-        }
-    }
+	/**
+	 * Method called when paged is loaded (defined in pretty-config.xml)
+	 */
+	public void init() {
+		if (UrlHelper.getParameterBoolean("reset")) {
+			setCollection(ImejiFactory.newCollection());
+			((List<Person>) getCollection().getMetadata().getPersons()).set(0,
+					sessionBean.getUser().getPerson().clone());
+		}
+	}
 
-    /**
-     * Method for save button. Create the {@link CollectionImeji} according to the form
-     * 
-     * @return
-     * @throws Exception
-     */
-    public String save() throws Exception
-    {
-        if (valid())
-        {
-            MetadataProfile mdp = new MetadataProfile();
-            // Create profile
-            ProfileController profileController = new ProfileController();
-            mdp.setDescription(getCollection().getMetadata().getDescription());
-            mdp.setTitle(getCollection().getMetadata().getTitle());
-            URI profile = profileController.create(mdp, sessionBean.getUser());
-            // Create collection
-            CollectionController collectionController = new CollectionController();
-            collectionController.create(getCollection(), profile, sessionBean.getUser());
-            BeanHelper.info(sessionBean.getMessage("success_collection_create"));
-            
-            Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
+	/**
+	 * Method for save button. Create the {@link CollectionImeji} according to
+	 * the form
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public String save() throws Exception {
+		if (valid()) {
+			// Create collection
+			CollectionController collectionController = new CollectionController();
+			collectionController.create(getCollection(), null,
+					sessionBean.getUser());
+			BeanHelper
+					.info(sessionBean.getMessage("success_collection_create"));
 
-            //((CollectionBean)BeanHelper.getSessionBean(CollectionBean.class)).setCollection(getCollection());
-            
-            FacesContext.getCurrentInstance().getExternalContext().redirect
-                 (nav.getCollectionUrl()+getCollection().getIdString());
-            return "";
-        }
-        else
-            return "";
-    }
+			Navigation nav = (Navigation) BeanHelper
+					.getApplicationBean(Navigation.class);
 
-    /**
-     * Return the link for the Cancel button
-     * 
-     * @return
-     */
-    public String getCancel()
-    {
-        Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-        this.init();
-        return nav.getCollectionsUrl() + "?q=";
-    }
+			// ((CollectionBean)BeanHelper.getSessionBean(CollectionBean.class)).setCollection(getCollection());
 
-    @Override
-    protected String getNavigationString()
-    {
-        return "pretty:createCollection";
-    }
+			FacesContext
+					.getCurrentInstance()
+					.getExternalContext()
+					.redirect(
+							nav.getCollectionUrl()
+									+ getCollection().getIdString());
+			return "";
+		} else
+			return "";
+	}
+
+	/**
+	 * Return the link for the Cancel button
+	 * 
+	 * @return
+	 */
+	public String getCancel() {
+		Navigation nav = (Navigation) BeanHelper
+				.getApplicationBean(Navigation.class);
+		this.init();
+		return nav.getCollectionsUrl() + "?q=";
+	}
+
+	@Override
+	protected String getNavigationString() {
+		return "pretty:createCollection";
+	}
 }

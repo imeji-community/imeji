@@ -20,15 +20,15 @@
 	</ui:define>
 	
 	<ui:define name="additonalHeaderScripts">
-		<script src="http://www.google.com/jsapi" type="text/javascript"> </script>
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+		<script src="https://www.google.com/jsapi" type="text/javascript"> </script>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
 		<script type="text/javascript">
 		  jQuery.noConflict();
 		  // Code that uses other library's $ can follow here.
 		</script>
 		
 		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/jquery/jquery.mousewheel.3.0.2.js"></script>
-		<script type="text/javascript" src="http://code.jquery.com/ui/1.8.23/jquery-ui.min.js"></script>
+		<script type="text/javascript" src="https://code.jquery.com/ui/1.8.23/jquery-ui.min.js"></script>
 		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/jquery/cloud-carousel.1.0.5.min.js"></script>
 		
 		<script type="text/javascript">
@@ -247,7 +247,7 @@
 					</div>
 				</ui:fragment>
 				<!-- japanese part -->
-				<ui:fragment rendered="#{Configuration.getStartPageHTML('jp') == '' and (SessionBean.locale == 'jp' or SessionBean.locale == 'ja')}">
+				<ui:fragment rendered="#{(Configuration.getStartPageHTML('jp') == '' and Configuration.getStartPageHTML('ja') == '') and (SessionBean.locale == 'jp' or SessionBean.locale == 'ja')}">
 					<div id="tabsJP" class="id_tabs" >
 						<!-- tabs -->
 						<ul class="imj_tabMenu">

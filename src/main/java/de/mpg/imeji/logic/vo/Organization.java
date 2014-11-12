@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jResource;
@@ -23,6 +24,7 @@ import de.mpg.j2j.annotations.j2jResource;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
+//@j2jResource("http://purl.org/escidoc/metadata/profiles/0.1/organizationalunit")
 @j2jResource("http://purl.org/escidoc/metadata/profiles/0.1/organizationalunit")
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlAccessorType(XmlAccessType.NONE)
@@ -30,7 +32,7 @@ import de.mpg.j2j.annotations.j2jResource;
 public class Organization implements Cloneable, Serializable
 {
     private static final long serialVersionUID = -7541779415288019910L;
-    private URI id;
+    private URI id = IdentifierUtil.newURI(Organization.class);
     @j2jLiteral("http://purl.org/dc/terms/title")
     private String name;
     @j2jLiteral("http://purl.org/dc/terms/description")

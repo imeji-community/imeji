@@ -33,9 +33,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Item;
@@ -111,8 +110,8 @@ public abstract class ContainerBean implements Serializable
      */
     protected void findItems(User user, int size)
     {
-        ItemController ic = new ItemController(user);
-        ic.findContainerItems(getContainer(), user, size);
+        ItemController ic = new ItemController();
+        ic.searchAndSetContainerItemsFast(getContainer(), user, size);
     }
 
     /**
@@ -121,9 +120,9 @@ public abstract class ContainerBean implements Serializable
      * @param user
      * @return
      */
-    protected void countItems(User user)
+    protected void countItems()
     {
-        ItemController ic = new ItemController(user);
+        ItemController ic = new ItemController();
         size = ic.countContainerSize(getContainer());
     }
 
@@ -140,8 +139,8 @@ public abstract class ContainerBean implements Serializable
             {
                 uris.add(uri.toString());
             }
-            ItemController ic = new ItemController(user);
-            setItems((List<Item>)ic.loadItems(uris, -1, 0));
+            ItemController ic = new ItemController();
+            setItems((List<Item>)ic.retrieve(uris, -1, 0, user));
         }
     }
 
@@ -309,5 +308,20 @@ public abstract class ContainerBean implements Serializable
     public void setSize(int size)
     {
         this.size = size;
+    }
+
+    /**
+     * True if the current {@link User} is the creator of the {@link Container}
+     * 
+     * @return
+     */
+    public boolean isOwner()
+    {
+        SessionBean sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        if (getContainer() != null && getContainer().getCreatedBy() != null && sessionBean.getUser() != null)
+        {
+            return getContainer().getCreatedBy().equals(ObjectHelper.getURI(User.class, sessionBean.getUser().getEmail()));
+        }
+        return false;
     }
 }

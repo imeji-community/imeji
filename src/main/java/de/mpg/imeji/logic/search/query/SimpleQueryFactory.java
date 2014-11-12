@@ -59,14 +59,14 @@ public class SimpleQueryFactory
     {
         PATTERN_SELECT = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 XXX_MODEL_NAMES_XXX WHERE {XXX_SECURITY_FILTER_XXX XXX_SEARCH_ELEMENT_XXX XXX_SPECIFIC_QUERY_XXX XXX_SEARCH_TYPE_ELEMENT_XXX  ?s <http://imeji.org/terms/status> ?status XXX_SORT_ELEMENT_XXX}";
         return PATTERN_SELECT
-                .replace("XXX_MODEL_NAMES_XXX", getModelNames(modelName, pair))
+                .replace("XXX_MODEL_NAMES_XXX", getModelNames(modelName, pair, specificQuery))
                 .replace("XXX_SECURITY_FILTER_XXX",
                         SimpleSecurityQuery.queryFactory(user, rdfType, getFilterStatus(pair), isUserSearchPair(pair)))
                 .replace("XXX_SEARCH_ELEMENT_XXX", getSearchElement(pair, rdfType, user))
                 .replace("XXX_SEARCH_TYPE_ELEMENT_XXX", getRdfType(rdfType))
                 .replace("XXX_SORT_ELEMENT_XXX",
                         getSortElement(sortCriterion, "http://imeji.org/terms/item".equals(rdfType)))
-                .replace("XXX_SPECIFIC_QUERY_XXX", specificQuery);
+                .replace("XXX_SPECIFIC_QUERY_XXX", specificQuery);       
     }
 
     /**
@@ -88,8 +88,10 @@ public class SimpleQueryFactory
      * @param modelName
      * @return
      */
-    private static String getModelNames(String modelName, SearchPair pair)
+    private static String getModelNames(String modelName, SearchPair pair, String specificQuery)
     {
+        if (specificQuery != null && !specificQuery.equals(""))
+            return "";
         String names = "";
         if (modelName != null && !modelName.equals(""))
         {
@@ -377,7 +379,7 @@ public class SimpleQueryFactory
                 return ". ?s <http://imeji.org/terms/container/metadata> ?contmd . ?contmd <http://xmlns.com/foaf/0.1/person> ?person . ?person <http://purl.org/escidoc/metadata/terms/0.1/complete-name> ?sort0";
             }
             else if (SearchIndex.names.cont_title.name().equals(sortCriterion.getIndex().getName()))
-            {
+            {         	
                 return (item ? " . ?c" : " . ?s") + " <http://imeji.org/terms/container/metadata> ?title . ?title <"
                         + sortCriterion.getIndex().getNamespace() + "> ?sort0";
             }

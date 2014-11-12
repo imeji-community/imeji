@@ -65,7 +65,15 @@ public class Person implements Cloneable, Serializable
     public void setFamilyName(String familyName)
     {
         this.familyName = familyName;
-        this.completeName = familyName + " " + givenName;
+        setCompleteName(this.givenName, this.familyName);
+    }
+
+    protected void setCompleteName(String familyName, String givenName)
+    {
+        this.completeName = givenName
+                + ((givenName == null || givenName.isEmpty() || familyName == null || familyName.isEmpty()) ? "" : ", ")
+                + familyName;
+        this.completeName = completeName.trim();
     }
 
     @XmlElement(name = "given-name", namespace = "http://purl.org/escidoc/metadata/terms/0.1")
@@ -77,7 +85,7 @@ public class Person implements Cloneable, Serializable
     public void setGivenName(String givenName)
     {
         this.givenName = givenName;
-        this.completeName = familyName + " " + givenName;
+        setCompleteName(this.givenName, this.familyName);
     }
 
     @XmlElement(name = "alternative-name", namespace = "http://purl.org/escidoc/metadata/terms/0.1")

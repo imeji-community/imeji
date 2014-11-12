@@ -25,14 +25,14 @@
 			
 	<!-- MetaDataOutput - CoNE Author -->
 	<h:outputLink value="#{md.coneId}" target="_blank" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#conePerson' and md.coneId != null}" >
-		<h:outputText styleClass="imj_metadataValueEntry" value="#{md.person.familyName}, #{md.person.givenName} "/>
+		<h:outputText styleClass="imj_metadataValueEntry" value="#{md.person.completeName} "/>
 		<h:outputText styleClass="" value="  " rendered="#{md.person.organizationString != ''}"/>
 		<h:outputText styleClass="imj_metadataValueEntry" value="  (#{md.person.organizationString})" rendered="#{md.person.organizationString != ''}"/>
 	</h:outputLink>
 			
 	<!-- MetaDataOutput - Person -->
 	<ui:fragment rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#conePerson' and md.coneId == null and md.person.familyName != null}">
-		<h:outputText styleClass="imj_metadataValueEntry" value="#{md.person.familyName}, #{md.person.givenName} "/>
+		<h:outputText styleClass="imj_metadataValueEntry" value="#{md.person.completeName}"/>
 		<h:outputText styleClass="" value="  " rendered="#{md.person.organizationString != ''}"/>
 		<h:outputText styleClass="imj_metadataValueEntry" value="  (#{md.person.organizationString})" rendered="#{md.person.organizationString != ''}"/>
 	</ui:fragment>

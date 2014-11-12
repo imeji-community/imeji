@@ -102,7 +102,7 @@ public class UsersBean implements Serializable
      */
     public void retrieveGroup()
     {
-        if (UrlHelper.getParameterValue("group") != null && "".equals(UrlHelper.getParameterValue("group")))
+        if (UrlHelper.getParameterValue("group") != null && !"".equals(UrlHelper.getParameterValue("group")))
         {
             UserGroupController c = new UserGroupController();
             try

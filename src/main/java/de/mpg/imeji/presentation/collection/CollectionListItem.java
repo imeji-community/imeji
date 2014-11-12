@@ -48,6 +48,7 @@ public class CollectionListItem
     private ThumbnailBean thumbnail = null;
     private String selectedGrant;
     private URI profileURI;
+    private boolean isOwner = false;
     /**
      * Maximum number of character displayed in the list for the description
      */
@@ -88,18 +89,22 @@ public class CollectionListItem
                 versionDate = collection.getVersionDate().getTime().toString();
             }
             // Get first thumbnail of the collection
-            ItemController ic = new ItemController(user);
-            if (ic.findContainerItems(collection, user, 1).getImages().iterator().hasNext())
+            ItemController ic = new ItemController();
+            if (ic.searchAndSetContainerItemsFast(collection, user, 1).getImages().iterator().hasNext())
             {
-               URI uri = ic.findContainerItems(collection, user, 1).getImages().iterator().next();
+               URI uri = ic.searchAndSetContainerItemsFast(collection, user, 1).getImages().iterator().next();
                if (uri != null)
                {
-                 this.thumbnail = new ThumbnailBean(ic.retrieve(uri));                
+                 this.thumbnail = new ThumbnailBean(ic.retrieve(uri, user));                
                }
              }
              // initializations
              initSize(collection, user);
              initSelected();
+             if (collection != null && user != null)
+             {
+                 isOwner = collection.getCreatedBy().equals(ObjectHelper.getURI(User.class, user.getEmail()));
+             }
          }
         catch (Exception e)
         {
@@ -107,14 +112,15 @@ public class CollectionListItem
         }
     }
 
-    /**
+
+	/**
      * Count the size of the collection
      * 
      * @param user
      */
     private void initSize(CollectionImeji collection, User user)
     {
-        ItemController ic = new ItemController(user);
+        ItemController ic = new ItemController();
         size = ic.countContainerSize(collection);
     }
 
@@ -381,4 +387,13 @@ public class CollectionListItem
     {
         this.profileURI = profileURI;
     }
+
+    public boolean isOwner() {
+		return isOwner;
+	}
+
+	public void setOwner(boolean isOwner) {
+		this.isOwner = isOwner;
+	}
+    
 }

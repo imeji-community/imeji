@@ -4,6 +4,7 @@
 package de.mpg.imeji.presentation.search;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URLEncoder;
 
 import javax.faces.context.FacesContext;
@@ -12,6 +13,7 @@ import javax.faces.event.ValueChangeEvent;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
@@ -21,8 +23,9 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class QuickSearchBean
+public class QuickSearchBean implements Serializable
 {
+    private static final long serialVersionUID = 1599497861175666068L;
     private String searchString = "";
     private String selectedSearchType = "images";
     private static Logger logger = Logger.getLogger(QuickSearchBean.class);
@@ -36,6 +39,11 @@ public class QuickSearchBean
     public String search() throws IOException
     {
         Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
+        if ("".equals(searchString))
+        {
+        	  BeanHelper.error(((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getMessage("error_search_query_emtpy"));
+        	  return "pretty:";
+        }
         if (getSelectedSearchType() == null)
             setSelectedSearchType("images");
         if (getSelectedSearchType().equals("collections"))

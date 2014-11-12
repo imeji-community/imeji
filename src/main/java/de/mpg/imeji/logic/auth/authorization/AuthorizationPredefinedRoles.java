@@ -76,7 +76,7 @@ public class AuthorizationPredefinedRoles
      * @param allowedToCreateCollection
      * @return
      */
-    public static List<Grant> defaultUser(String uri, boolean allowedToCreateCollection)
+    public static List<Grant> defaultUser(String uri)
     {
         GrantType[] g = { GrantType.CREATE };
         List<Grant> l = toGrantList(g, IMEJI_GLOBAL_URI);
@@ -105,7 +105,7 @@ public class AuthorizationPredefinedRoles
     {
         GrantType[] g = { GrantType.ADMIN };
         List<Grant> l = toGrantList(g, IMEJI_GLOBAL_URI);
-        l.addAll(defaultUser(uri, true));
+        l.addAll(defaultUser(uri));
         return l;
     }
 

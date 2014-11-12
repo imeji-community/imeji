@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.ocpsoft.pretty.PrettyContext;
 
+import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
 
@@ -61,10 +62,6 @@ public class HistoryFilter implements Filter
                     dofilterImpl(request, resp);
                 }
             }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
         }
         finally
         {

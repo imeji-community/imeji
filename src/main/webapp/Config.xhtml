@@ -41,7 +41,6 @@
 							</div>
 							<h:form id="configForm">					
 								<div class="imj_content">
-												
 									<!-- Admin - Snippet Insert -->	
 									<h:panelGroup layout="block" styleClass="imj_admindataSet">
 										<div class="imj_admindataLabel">
@@ -126,18 +125,7 @@
 											</h:commandLink>
 											</div>
 										</div>
-									</h:panelGroup>
-									<h:panelGroup layout="block" styleClass="imj_admindataSet" rendered="#{Configuration.defaultCss != null and Configuration.defaultCss != ''}">
-										<div class="imj_admindataLabel">
-											<h:outputText value="Alternative CSS URL"/>
-											<span class="imj_invisible">: </span>
-										</div>
-										<div class="imj_admindataValue">
-											<div class="imj_admindataValueEntry">
-												<h:inputText value="#{Configuration.alternativeCss}" styleClass="imj_admindataEdit"/>
-											</div>
-										</div>
-									</h:panelGroup>														
+									</h:panelGroup>											
 								</div>
 								<div class="imj_headline">
 									<h2>
@@ -165,24 +153,51 @@
 								</div>
 								<div class="imj_content">
 									<h:panelGroup layout="block" styleClass="imj_admindataSet">
+										<ui:repeat value="#{Configuration.snippets}" var="snippet">
+											<div class="imj_admindataLabel">
+											 	<h:outputText value="#{Internationalization.getLanguageLabel(snippet.lang)}"/>
+												<span class="imj_invisible">: </span>
+											<br/><br/><br/><br/><br/><br/>
+											</div>
+											<div class="imj_admindataValue">
+												<div class="imj_admindataValueEntry">
+													<h:inputTextarea value="#{snippet.html}" styleClass="imj_admindataEdit imj_additionalCodeSnippet" valueChangeListener="#{snippet.listener}"/>
+												</div>
+											</div>
+										</ui:repeat>
+									</h:panelGroup>
+								</div> 
+								
+								<div class="imj_headline">
+									<h2>
+										<h:outputText value="#{lbl.data_viewer}"/>
+									</h2>
+								</div>
+								<div class="imj_content">
+									<h:panelGroup layout="block" styleClass="imj_admindataSet">
 										<div class="imj_admindataLabel">
-											<h:outputText value="#{lbl.select_lang}"/>
-											<!-- Language -->
-											<h:panelGroup id="startpageHTML">
-												<h:selectOneMenu value="#{Configuration.lang}" onchange="document.getElementById('configForm:submitLang').click();" styleClass="imj_metaMenuItemSelect">
-													<f:selectItems value="#{Internationalization.languages}"/>
-												</h:selectOneMenu>
-												<h:commandButton id="submitLang" action="#" value="Change language" styleClass="imj_noDisplay">
-													<f:ajax render="@form" execute=":configForm:startpageHTML"/>
-												</h:commandButton>
-											</h:panelGroup>
+											<h:outputText value="#{lbl.data_viewer_url}"/>
 											<span class="imj_invisible">: </span>
 										</div>
 										<div class="imj_admindataValue">
-											<h:outputText value="#{lbl.enter_StartPage_Html_Snippet}" styleClass=""/><br/>
 											<div class="imj_admindataValueEntry">
-												<h:inputTextarea value="#{Configuration.startPageHTML}" styleClass="imj_admindataEdit"/>
+												<h:inputText value="#{Configuration.dataViewerUrl}" styleClass="imj_admindataEdit">
+												</h:inputText>
 											</div>
+										</div>
+									</h:panelGroup>
+									<h:panelGroup layout="block" styleClass="imj_admindataSet">
+										<div class="imj_admindataLabel">
+											<h:outputText value="#{lbl.data_viewer_formats}"/>
+											<span class="imj_invisible">: </span>
+										</div>
+										<div class="imj_admindataValue">
+											<div class="imj_admindataValueEntry">
+												<h:inputText id="dataViewerFormatListString" value="#{Configuration.dataViewerFormatListString}" styleClass="imj_admindataEdit"/>
+											</div>
+											<h:commandButton action="#{Configuration.fetchDataViewerFormats}" value="#{lbl.fetch_from_data_viewer}" styleClass="imj_editButton">
+												<f:ajax execute="@form" render=":configForm:dataViewerFormatListString"/>
+											</h:commandButton>
 										</div>
 									</h:panelGroup>
 								</div> 

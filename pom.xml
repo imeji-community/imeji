@@ -365,7 +365,7 @@
 			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>
 			<scope>provided</scope>
-			<version>6.0</version>
+			<version>7.0</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.mail</groupId>
@@ -516,11 +516,13 @@
 			<version>1.9</version>
 		</dependency>
 		<!-- END: Digilib integration -->
+		<!-- 
 		<dependency>
 			<groupId>org.apache.tika</groupId>
 			<artifactId>tika-server</artifactId>
 			<version>1.5</version>
 		</dependency>
+		 -->
 		<dependency>
 			<groupId>org.apache.tika</groupId>
 			<artifactId>tika-parsers</artifactId>
@@ -531,35 +533,86 @@
 			<artifactId>metadata-extractor</artifactId>
 			<version>2.6.2</version>
 		</dependency>
-		<!-- RestService -->
+
+		
+		<!-- REST -->
+		
 		<dependency>
-			<groupId>com.sun.jersey</groupId>
+		  <groupId>javax.ws.rs</groupId>
+		  <artifactId>javax.ws.rs-api</artifactId>
+		  <version>2.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.jersey.core</groupId>
 			<artifactId>jersey-client</artifactId>
-			<version>1.9</version>
-			<scope>compile</scope>
+			<version>2.13</version>
 		</dependency>
 		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-server</artifactId>
-			<version>1.9</version>
-			<scope>compile</scope>
+			<groupId>org.glassfish.jersey.containers</groupId>
+			<artifactId>jersey-container-servlet</artifactId>
+			<version>2.13</version>
 		</dependency>
 		<dependency>
-			<groupId>com.sun.jersey.contribs</groupId>
-			<artifactId>jersey-multipart</artifactId>
-			<version>1.9</version>
-			<scope>compile</scope>
-		</dependency>		
+	        <groupId>org.glassfish.jersey.core</groupId>
+	        <artifactId>jersey-server</artifactId>
+	        <version>2.13</version>
+    	</dependency>
+  	
+		<dependency>
+			<groupId>org.glassfish.jersey.media</groupId>
+			<artifactId>jersey-media-multipart</artifactId>
+			<version>2.13</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.glassfish.jersey.test-framework.providers</groupId>
+			<artifactId>jersey-test-framework-provider-grizzly2</artifactId>
+			<version>2.13</version>
+		</dependency>
+
+		<dependency>
+		  <groupId>org.glassfish.jersey.media</groupId>
+		  <artifactId>jersey-media-moxy</artifactId>
+		  <version>2.13</version>
+
+		</dependency>
+		
+		<dependency>
+    		<groupId>org.glassfish.jersey.media</groupId>
+    		<artifactId>jersey-media-json-jettison</artifactId>
+    		<version>2.13</version>
+		</dependency>
+
+
+		
+		<dependency>
+    		<groupId>org.glassfish.jersey.media</groupId>
+   			<artifactId>jersey-media-json-jackson</artifactId>
+    		<version>2.13</version>
+		</dependency>
+		
+		<!-- 
+		
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-json</artifactId>
 			<version>1.8</version>
 		</dependency>		
+		 -->
 		
 		<!-- <dependency> <groupId>net.java.dev.jai-imageio</groupId> <artifactId>jai-imageio-core-standalone</artifactId> 
 			<version>1.2-pre-dr-b04-2011-07-04</version> </dependency> <dependency> <groupId>org.devlib.schmidt</groupId> 
 			<artifactId>imageinfo</artifactId> <version>1.9</version> <type>jar</type> 
 			<scope>compile</scope> </dependency> -->
+		<dependency>
+			<groupId>de.mpg.mpdl.service.connector</groupId>
+			<artifactId>java-connector</artifactId>
+			<version>0.1</version>
+		</dependency>
+		
+
+		
+		
 	</dependencies>
 	<profiles>
 		<!-- this profile is used by developers -->
@@ -700,7 +753,7 @@
 							<url>http://dev-faces.mpdl.mpg.de/manager/text</url>
 							<server>tomcat</server>
 							<path>/imeji</path>
-							<warFile>/X/continuum/apache-continuum-1.4.1/data/working-directory/178/target/imeji.war</warFile>
+							<warFile>/X/continuum/apache-continuum-1.4.1/data/working-directory/181/target/imeji.war</warFile>
 							<argLine>-Xms4096m -Xmx4096m -XX:MaxPermSize=512m</argLine>
 						</configuration>
 					</plugin>

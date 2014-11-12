@@ -28,6 +28,9 @@
  */
 package de.mpg.imeji.logic.auth;
 
+import javax.servlet.http.HttpServletRequest;
+
+import de.mpg.imeji.logic.auth.authentication.HttpAuthentication;
 import de.mpg.imeji.logic.auth.authentication.SimpleAuthentication;
 
 /**
@@ -37,16 +40,24 @@ import de.mpg.imeji.logic.auth.authentication.SimpleAuthentication;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class AuthenticationFactory
-{
-    /**
-     * Factory with a login and a password
-     * @param login
-     * @param pwd
-     * @return
-     */
-    public static Authentication factory(String login, String pwd)
-    {
-        return new SimpleAuthentication(login, pwd);
-    }
+public class AuthenticationFactory {
+	/**
+	 * Factory with a login and a password
+	 * 
+	 * @param login
+	 * @param pwd
+	 * @return
+	 */
+	public static Authentication factory(String login, String pwd) {
+		return new SimpleAuthentication(login, pwd);
+	}
+
+	/**
+	 * Factory for http authentication
+	 * @param request
+	 * @return
+	 */
+	public static Authentication factory(HttpServletRequest request) {
+		return new HttpAuthentication(request);
+	}
 }

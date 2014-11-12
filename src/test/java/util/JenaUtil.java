@@ -8,6 +8,7 @@ import org.apache.commons.io.FileUtils;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.PropertyBean;
@@ -90,7 +91,7 @@ public class JenaUtil
             user.setEmail(email);
             user.setName(name);
             user.setEncryptedPassword(StringHelper.convertToMD5(pwd));
-            c.create(user);
+            c.create(user, USER_TYPE.DEFAULT);
         }
         catch (Exception e)
         {

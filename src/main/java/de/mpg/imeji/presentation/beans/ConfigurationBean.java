@@ -33,10 +33,14 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.model.SelectItem;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -49,6 +53,7 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 
 import de.mpg.imeji.logic.storage.util.MediaUtils;
+import de.mpg.imeji.presentation.lang.InternationalizationBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
@@ -133,10 +138,10 @@ public class ConfigurationBean {
 	 * Save the configuration in the config file
 	 */
 	public void saveConfig() {
-		System.out.println("saveconfig");
 		try {
 			setProperty(CONFIGURATION.FILE_TYPES.name(), fileTypes.toString());
-			setProperty(CONFIGURATION.DATA_VIEWER_URL.name(), dataViewerUrl.toString());
+			setProperty(CONFIGURATION.DATA_VIEWER_URL.name(),
+					dataViewerUrl.toString());
 			config.storeToXML(new FileOutputStream(configFile),
 					"imeji configuration File");
 			BeanHelper.removeBeanFromMap(this.getClass());
@@ -258,23 +263,6 @@ public class ConfigurationBean {
 		this.fileTypes = types;
 	}
 
-	/**
-	 * Set the Property according to the selected lang
-	 * 
-	 * @param html
-	 */
-	public void setStartPageHTML(String html) {
-		setProperty(CONFIGURATION.STARTPAGE_HTML.name() + "_" + lang, html);
-	}
-
-	/**
-	 * Get the value according to the selected lang
-	 * 
-	 * @return
-	 */
-	public String getStartPageHTML() {
-		return getStartPageHTML(lang);
-	}
 
 	/**
 	 * Get the html snippet for a specified lang
@@ -286,6 +274,62 @@ public class ConfigurationBean {
 		String html = (String) config.get(CONFIGURATION.STARTPAGE_HTML.name()
 				+ "_" + lang);
 		return html != null ? html : "";
+	}
+
+	/**
+	 * Utility class to parse the html snippets
+	 * 
+	 * @author saquet
+	 *
+	 */
+	public class HtmlSnippet {
+		private String html;
+		private String lang;
+
+		public HtmlSnippet(String lang, String html) {
+			this.lang = lang;
+			this.html = html;
+		}
+
+		public void listener(ValueChangeEvent event) {
+			html = (String) event.getNewValue();
+			setProperty(CONFIGURATION.STARTPAGE_HTML.name() + "_" + lang, html);
+		}
+
+		public String getLang() {
+			return lang;
+		}
+
+		public void setLang(String lang) {
+			this.lang = lang;
+		}
+
+		public String getHtml() {
+			return html;
+		}
+
+		public void setHtml(String html) {
+			this.html = html;
+		}
+	}
+
+	/**
+	 * Read all the html snippets in the config and retunr it as a {@link List}
+	 * {@link HtmlSnippet}
+	 * 
+	 * @return
+	 */
+	public List<HtmlSnippet> getSnippets() {
+		InternationalizationBean internationalizationBean = (InternationalizationBean) BeanHelper
+				.getApplicationBean(InternationalizationBean.class);
+		List<HtmlSnippet> snippets = new ArrayList<ConfigurationBean.HtmlSnippet>();
+		for (SelectItem lang : internationalizationBean.getLanguages()) {
+			String html = (String) config.get(CONFIGURATION.STARTPAGE_HTML
+					.name() + "_" + lang.getValue());
+			snippets.add(new HtmlSnippet((String) lang.getValue(),
+					html != null ? html : ""));
+		}
+		return snippets;
 	}
 
 	/**
@@ -315,7 +359,7 @@ public class ConfigurationBean {
 	 * 
 	 */
 	public void setDataViewerFormatListString(String str) {
-		//System.out.println("set:" + str);
+		// System.out.println("set:" + str);
 		config.setProperty(CONFIGURATION.DATA_VIEWER_FORMATS.name(), str);
 
 	}
@@ -351,12 +395,12 @@ public class ConfigurationBean {
 
 	public String fetchDataViewerFormats() throws JSONException {
 		String connURL;
-		if(dataViewerUrl.endsWith("/")){
-			connURL = dataViewerUrl+"api/explain/formats";
-		}else{
-			connURL = dataViewerUrl+"/api/explain/formats";
+		if (dataViewerUrl.endsWith("/")) {
+			connURL = dataViewerUrl + "api/explain/formats";
+		} else {
+			connURL = dataViewerUrl + "/api/explain/formats";
 		}
-		//String connURL = dataViewerUrl + "/api/explain/formats";
+		// String connURL = dataViewerUrl + "/api/explain/formats";
 		DefaultHttpClient httpclient = new DefaultHttpClient();
 		HttpGet httpget = new HttpGet(connURL);
 		HttpResponse resp;

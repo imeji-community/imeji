@@ -1,8 +1,10 @@
-package de.mpg.imeji.rest.crud;
+package de.mpg.imeji.rest.api;
 
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.ws.rs.NotSupportedException;
 
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.controller.ItemController;
@@ -11,10 +13,10 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.j2j.exceptions.NotFoundException;
 
-public class ItemCRUD implements CRUDInterface<Item> {
-	
-	public ItemCRUD(){
-		
+public class ItemService implements API<Item> {
+
+	public ItemService() {
+
 	}
 
 	@Override
@@ -32,12 +34,12 @@ public class ItemCRUD implements CRUDInterface<Item> {
 	}
 
 	@Override
-	public Item read(String id, User u) throws NotFoundException, NotAllowedError, Exception {
+	public Item read(String id, User u) throws NotFoundException,
+			NotAllowedError, Exception {
 
 		ItemController controller = new ItemController();
 		return controller.retrieve(ObjectHelper.getURI(Item.class, id), u);
 	}
-	
 
 	@Override
 	public Item update(Item o, User u) {
@@ -66,7 +68,39 @@ public class ItemCRUD implements CRUDInterface<Item> {
 	}
 
 	@Override
-	public Item read(Item o, User u) {
+	public void release(Item o, User u) throws NotFoundException,
+			NotAllowedError, NotSupportedException, Exception {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void withdraw(Item o, User u) throws NotFoundException,
+			NotAllowedError, NotSupportedException, Exception {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void share(String id, String userId, List<String> roles, User u)
+			throws NotFoundException, NotAllowedError, NotSupportedException,
+			Exception {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void unshare(String id, String userId, List<String> roles, User u)
+			throws NotFoundException, NotAllowedError, NotSupportedException,
+			Exception {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public List<String> search(String q, User u) throws NotSupportedException,
+			Exception {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

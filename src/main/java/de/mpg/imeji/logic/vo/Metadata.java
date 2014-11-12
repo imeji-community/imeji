@@ -41,133 +41,109 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "metadata", namespace = "http://imeji.org/terms")
-@XmlSeeAlso({ Text.class, Number.class, ConePerson.class, Date.class, Geolocation.class, License.class, Link.class,
-        Publication.class })
-public abstract class Metadata implements Comparable<Metadata>, Serializable
-{
-    private static final long serialVersionUID = -6967620655990351430L;
-    
-    private URI id = IdentifierUtil.newURI(Metadata.class);
-       
-    @j2jLiteral("http://imeji.org/terms/position")
-    private int pos = 0;
+@XmlSeeAlso({ Text.class, Number.class, ConePerson.class, Date.class,
+		Geolocation.class, License.class, Link.class, Publication.class })
+public abstract class Metadata implements Comparable<Metadata>, Serializable {
+	private static final long serialVersionUID = -6967620655990351430L;
+	// Metadata should have a universal id to avoid overwriting
+	private URI id = IdentifierUtil.newURI(Metadata.class, "universal");
 
-    @XmlEnum(Types.class)
-    public enum Types
-    {
-        TEXT(Text.class), NUMBER(Number.class), CONE_PERSON(ConePerson.class), DATE(Date.class), GEOLOCATION(
-                Geolocation.class), LICENSE(License.class), LINK(Link.class), PUBLICATION(Publication.class);
-        private Class<? extends Metadata> clazz = null;
+	@j2jLiteral("http://imeji.org/terms/position")
+	private int pos = 0;
 
-        private Types(Class<? extends Metadata> clazz)
-        {
-            this.clazz = clazz;
-        }
+	@XmlEnum(Types.class)
+	public enum Types {
+		TEXT(Text.class), NUMBER(Number.class), CONE_PERSON(ConePerson.class), DATE(
+				Date.class), GEOLOCATION(Geolocation.class), LICENSE(
+				License.class), LINK(Link.class), PUBLICATION(Publication.class);
+		private Class<? extends Metadata> clazz = null;
 
-        public Class<? extends Metadata> getClazz()
-        {
-            return clazz;
-        }
+		private Types(Class<? extends Metadata> clazz) {
+			this.clazz = clazz;
+		}
 
-        public String getClazzNamespace()
-        {
-            return clazz.getAnnotation(j2jDataType.class).value();
-        }
-    }
+		public Class<? extends Metadata> getClazz() {
+			return clazz;
+		}
 
-    public Metadata()
-    {
-    }
+		public String getClazzNamespace() {
+			return clazz.getAnnotation(j2jDataType.class).value();
+		}
+	}
 
-    public String getTypeNamespace()
-    {
-        return this.getClass().getAnnotation(j2jDataType.class).value();
-    }
+	public Metadata() {
+	}
 
-    /**
-     * Compare metadata
-     * 
-     * @param imd
-     * @return
-     */
-    @Override
-    public int compareTo(Metadata imd)
-    {
-        if (imd.getPos() > this.pos)
-            return -1;
-        else if (imd.getPos() == this.pos)
-            return 0;
-        else
-            return 1;
-    }
+	public String getTypeNamespace() {
+		return this.getClass().getAnnotation(j2jDataType.class).value();
+	}
 
-    public abstract void copy(Metadata metadata);
+	/**
+	 * Compare metadata
+	 * 
+	 * @param imd
+	 * @return
+	 */
+	@Override
+	public int compareTo(Metadata imd) {
+		if (imd.getPos() > this.pos)
+			return -1;
+		else if (imd.getPos() == this.pos)
+			return 0;
+		else
+			return 1;
+	}
 
-    public abstract URI getStatement();
+	public abstract void copy(Metadata metadata);
 
-    public abstract void setStatement(URI namespace);
+	public abstract URI getStatement();
 
-    public abstract String asFulltext();
+	public abstract void setStatement(URI namespace);
 
-    protected void copyMetadata(Metadata metadata)
-    {
-        this.id = metadata.getId();
-    }
+	public abstract String asFulltext();
 
-    @XmlAttribute(name = "id")
-    public URI getId()
-    {
-        return id;
-    }
+	protected void copyMetadata(Metadata metadata) {
+		this.id = metadata.getId();
+	}
 
-    public void setId(URI id)
-    {
-        this.id = id;
-    }
+	@XmlAttribute(name = "id")
+	public URI getId() {
+		return id;
+	}
 
-    @XmlElement(name = "position", namespace = "http://imeji.org/terms")
-    public int getPos()
-    {
-        return pos;
-    }
+	public void setId(URI id) {
+		this.id = id;
+	}
 
-    public void setPos(int pos)
-    {
-        this.pos = pos;
-    }
+	@XmlElement(name = "position", namespace = "http://imeji.org/terms")
+	public int getPos() {
+		return pos;
+	}
 
-    public Object getValueFromMethod(String methodName)
-    {
-        Method method;
-        Object ret = null;
-        try
-        {
-            method = this.getClass().getMethod(methodName);
-            ret = method.invoke(this);
-        }
-        catch (SecurityException e)
-        {
-            e.printStackTrace();
-        }
-        catch (NoSuchMethodException e)
-        {
-            e.printStackTrace();
-        }
-        catch (IllegalArgumentException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        catch (IllegalAccessException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        catch (InvocationTargetException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return ret;
-    }
+	public void setPos(int pos) {
+		this.pos = pos;
+	}
+
+	public Object getValueFromMethod(String methodName) {
+		Method method;
+		Object ret = null;
+		try {
+			method = this.getClass().getMethod(methodName);
+			ret = method.invoke(this);
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return ret;
+	}
 }

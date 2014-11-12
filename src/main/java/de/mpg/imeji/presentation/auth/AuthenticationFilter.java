@@ -51,90 +51,78 @@ import de.mpg.imeji.presentation.session.SessionBean;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class AuthenticationFilter implements Filter
-{
-    private FilterConfig filterConfig = null;
-    private Pattern jsfPattern = Pattern.compile(".*\\/jsf\\/.*\\.xhtml");
+public class AuthenticationFilter implements Filter {
+	private FilterConfig filterConfig = null;
+	private Pattern jsfPattern = Pattern.compile(".*\\/jsf\\/.*\\.xhtml");
 
-    /*
-     * (non-Javadoc)
-     * @see javax.servlet.Filter#destroy()
-     */
-    @Override
-    public void destroy()
-    {
-        setFilterConfig(null);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.servlet.Filter#destroy()
+	 */
+	@Override
+	public void destroy() {
+		setFilterConfig(null);
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse,
-     * javax.servlet.FilterChain)
-     */
-    @Override
-    public void doFilter(ServletRequest serv, ServletResponse resp, FilterChain chain) throws IOException,
-            ServletException
-    {
-        try
-        {
-            HttpServletRequest request = (HttpServletRequest)serv;
-            SessionBean session = getSession(request);
-            if (session != null && session.getUser() == null)
-            {
-                HttpAuthentication httpAuthentification = new HttpAuthentication(request);
-                if (httpAuthentification.hasLoginInfos())
-                {
-                    session.setUser(httpAuthentification.doLogin());
-                }
-            }
-            else if (session != null && session.getUser() != null)
-            {
-                Matcher m = jsfPattern.matcher(request.getRequestURI());
-                if (m.matches())
-                {
-                    // reload the user each time a jsf page is called
-                    session.reloadUser();
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        finally
-        {
-            chain.doFilter(serv, resp);
-        }
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest,
+	 * javax.servlet.ServletResponse, javax.servlet.FilterChain)
+	 */
+	@Override
+	public void doFilter(ServletRequest serv, ServletResponse resp,
+			FilterChain chain) throws IOException, ServletException {
+		try {
+			HttpServletRequest request = (HttpServletRequest) serv;
+			SessionBean session = getSession(request);
+			if (session != null && session.getUser() == null) {
+				HttpAuthentication httpAuthentification = new HttpAuthentication(
+						request);
+				if (httpAuthentification.hasLoginInfos()) {
+					session.setUser(httpAuthentification.doLogin());
+				}
+			} else if (session != null && session.getUser() != null) {
+				Matcher m = jsfPattern.matcher(request.getRequestURI());
+				if (m.matches()) {
+					// reload the user each time a jsf page is called
+					session.reloadUser();
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			chain.doFilter(serv, resp);
+		}
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
-     */
-    @Override
-    public void init(FilterConfig arg0) throws ServletException
-    {
-        this.setFilterConfig(arg0);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
+	 */
+	@Override
+	public void init(FilterConfig arg0) throws ServletException {
+		this.setFilterConfig(arg0);
+	}
 
-    public FilterConfig getFilterConfig()
-    {
-        return filterConfig;
-    }
+	public FilterConfig getFilterConfig() {
+		return filterConfig;
+	}
 
-    public void setFilterConfig(FilterConfig filterConfig)
-    {
-        this.filterConfig = filterConfig;
-    }
+	public void setFilterConfig(FilterConfig filterConfig) {
+		this.filterConfig = filterConfig;
+	}
 
-    /**
-     * Return the {@link SessionBean} form the {@link HttpSession}
-     * 
-     * @param req
-     * @return
-     */
-    private SessionBean getSession(HttpServletRequest req)
-    {
-        return (SessionBean)req.getSession(true).getAttribute(SessionBean.class.getSimpleName());
-    }
+	/**
+	 * Return the {@link SessionBean} form the {@link HttpSession}
+	 * 
+	 * @param req
+	 * @return
+	 */
+	private SessionBean getSession(HttpServletRequest req) {
+		return (SessionBean) req.getSession(true).getAttribute(
+				SessionBean.class.getSimpleName());
+	}
 }

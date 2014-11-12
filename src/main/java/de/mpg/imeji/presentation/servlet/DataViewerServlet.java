@@ -1,10 +1,6 @@
 package de.mpg.imeji.presentation.servlet;
 
 import java.io.ByteArrayInputStream;
-
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -23,6 +19,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Response;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -85,7 +82,6 @@ public class DataViewerServlet extends HttpServlet {
 				 * send the file URL to dataViewer if file is in .fits format 
 				*/
 				URI fullImageUrl = item.getFullImageUrl();
-				System.out.println("fitsURL = " +fullImageUrl.toString());
 				image = viewFileByURL(fullImageUrl, false, fileExtensionName, dataViewerUrl);
 			}else{
 				/*

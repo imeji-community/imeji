@@ -3,6 +3,7 @@ import java.net.URI;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -22,7 +23,9 @@ public class TestItem {
 		    System.out.println(target.path("items").request("yxmK_oGNdRHmL3YR").accept(MediaType.APPLICATION_JSON).get(String.class));
 
 		    
-//		    System.err.println(target.path("itmes").path("").request().accept(MediaType.APPLICATION_XML).get(String.class));
+            Response response = target.path("collections/J__Ib4WvHys0X_qK").request(MediaType.APPLICATION_JSON).get();
+		    System.out.println(response.getStatus());
+		    System.out.println(response.readEntity(String.class));
 
 		  }
 

@@ -7,7 +7,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -15,9 +14,8 @@ import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
-import de.mpg.imeji.presentation.util.ObjectLoader;
-import de.mpg.imeji.rest.crud.ProfileCRUD;
-import de.mpg.imeji.rest.crud.UserCRUD;
+import de.mpg.imeji.rest.api.ProfileService;
+import de.mpg.imeji.rest.api.UserService;
 import de.mpg.imeji.rest.to.GeolocationTO;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.LabelTO;
@@ -33,7 +31,7 @@ public class TransferObjectFactory {
 	public static void transferItem(Item vo, ItemTO to) {
 
 		to.setId(vo.getIdString());
-		UserCRUD ucrud = new UserCRUD();
+		UserService ucrud = new UserService();
 		User u = new User();
 		try {
 			u = ucrud.read(vo.getCreatedBy());
@@ -65,7 +63,7 @@ public class TransferObjectFactory {
  		to.setThumbnailUrl(vo.getThumbnailImageUrl());
 		to.setFileUrl(vo.getFullImageUrl());
 		
-		ProfileCRUD pcrud = new ProfileCRUD();
+		ProfileService pcrud = new ProfileService();
 		MetadataProfile profile = new MetadataProfile();
 		try {
 			profile = pcrud.read(vo.getMetadataSet().getProfile());

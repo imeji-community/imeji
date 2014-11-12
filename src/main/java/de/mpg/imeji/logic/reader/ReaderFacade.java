@@ -62,7 +62,7 @@ public class ReaderFacade implements Reader
      */
     @Override
     public Object read(String uri, User user, Object o) throws Exception
-    {
+    { 
         o = reader.read(uri, user, o);
         checkSecurity(toList(o), user);
         return o;

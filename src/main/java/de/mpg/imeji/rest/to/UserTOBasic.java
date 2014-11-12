@@ -1,11 +1,15 @@
 package de.mpg.imeji.rest.to;
 
-import java.net.URI;
 
 public class UserTOBasic {
 	private String fullname;
 	
-	private URI uri;
+	private String id;
+	
+	public UserTOBasic(String fullname, String id){
+		this.fullname = fullname;
+		this.id = id;
+	}
 
 	public String getFullname() {
 		return fullname;
@@ -15,13 +19,15 @@ public class UserTOBasic {
 		this.fullname = fullname;
 	}
 
-	public URI getUri() {
-		return uri;
+	public String getId() {
+		return id;
 	}
 
-	public void setUri(URI uri) {
-		this.uri = uri;
+	public void setId(String id) {
+		this.id = id;
 	}
+
+
 	
 	
 

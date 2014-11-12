@@ -2,14 +2,14 @@ package de.mpg.imeji.rest.process;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response.Status;
-import de.mpg.imeji.logic.auth.Authentication;
 
+import de.mpg.imeji.logic.auth.Authentication;
 import de.mpg.imeji.logic.auth.AuthenticationFactory;
-import de.mpg.imeji.logic.auth.authentication.SimpleAuthentication;
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.crud.ItemCRUD;
+import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.JSONResponse;
 import de.mpg.j2j.exceptions.NotFoundException;
 
@@ -22,11 +22,13 @@ public class ItemProcess {
 		User u = auth.doLogin();
 
 		Item item = null;
-
+  
 		ItemCRUD icrud = new ItemCRUD();
-		try {
+		try { 
 			item = icrud.read(id, u);
-			resp.setObject(item);
+			ItemTO to = new ItemTO();
+			TransferObjectFactory.transferItem(item, to);
+			resp.setObject(to);
 			resp.setStatus(Status.OK);
 		} catch (NotFoundException e) {
 			resp.setObject(RestProcessUtils.buildBadRequestResponse());
@@ -47,5 +49,7 @@ public class ItemProcess {
 		return resp;
 
 	}
+	
+
 
 }

@@ -27,6 +27,7 @@ public class RestProcessUtils {
 		return Response.status(resp.getStatus()).entity(json).type(MediaType.APPLICATION_JSON).build();
 	}
 	
+	
 	public static JSONException buildBadRequestResponse(){		
 		JSONException ex = new JSONException();
 		HTTPError error = new HTTPError();

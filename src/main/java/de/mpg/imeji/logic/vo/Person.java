@@ -209,4 +209,12 @@ public class Person implements Cloneable, Serializable
         clone.pos = this.pos;
         return clone;
     }
+    public String getIdString()
+    {
+        if (id != null)
+        {
+            return id.getPath().substring(id.getPath().lastIndexOf("/") + 1);
+        }
+        return "";
+    }
 }

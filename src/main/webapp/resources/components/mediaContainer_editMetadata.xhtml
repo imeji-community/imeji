@@ -3,7 +3,8 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:composite="http://java.sun.com/jsf/composite"
-	xmlns:list="http://java.sun.com/jsf/composite/components/list">
+	xmlns:list="http://java.sun.com/jsf/composite/components/list"
+	xmlns:imjc="http://java.sun.com/jsf/composite/components">
 	
 	<composite:interface>
 		<composite:attribute name="formularBean" required="true"/>
@@ -38,6 +39,7 @@
 						</label>
 						<h:inputTextarea id="inputDescription" styleClass="imj_metadataValue" value="#{cc.attrs.formularContextBean.metadata.description}"/>
 					</div>
+					
 					<!-- Author data -->
 					<ui:repeat var="creator" value="#{cc.attrs.formularContextBean.metadata.persons}" varStatus="indexA">
 						<h:panelGroup layout="block" styleClass="imj_authorMetadataSet">
@@ -56,7 +58,10 @@
 									<span class="imj_noDisplay">: </span>	
 								</h4>
 							</div>
+							<!-- The user of the person -->
+							<imjc:person person="#{creator}" />
 							
+							<ui:remove>
 							<!-- Family Name -->
 							<div class="imj_metadataSet">
 								<label class="imj_metadataLabel">
@@ -93,6 +98,7 @@
 									<h:inputText id="inputCreator" styleClass="imj_metadataValue" value="#{organization.name}"/>
 								</div>
 							</ui:repeat>
+							</ui:remove>
 						</h:panelGroup>
 					</ui:repeat>
 					<h:outputText value="* #{lbl.mandatory}"/>

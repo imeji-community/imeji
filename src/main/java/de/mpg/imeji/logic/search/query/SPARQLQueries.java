@@ -94,6 +94,27 @@ public class SPARQLQueries {
 	}
 
 	/**
+	 * Select all {@link Username}
+	 * 
+	 * @return
+	 */
+	public static String selectOrganizationByName(String name) {
+		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?person <http://purl.org/escidoc/metadata/profiles/0.1/organizationalunit> ?s . ?s <http://purl.org/dc/terms/title> ?name . filter(regex(?name, '"
+				+ name + "','i'))}";
+	}
+
+	/**
+	 * Select all {@link Username}
+	 * 
+	 * @return
+	 */
+	public static String selectPersonByName(String name) {
+		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s <http://purl.org/escidoc/metadata/terms/0.1/complete-name>  ?name . filter(regex(?name, '"
+				+ name + "','i'))}";
+	}
+
+
+	/**
 	 * Find all the user which have SysAdmin rights for imeji
 	 * 
 	 * @return
@@ -434,8 +455,7 @@ public class SPARQLQueries {
 						.queryFactory(user,
 								J2JHelper.getResourceNamespace(new Item()),
 								null, false)
-				+ " ?s <http://imeji.org/terms/status> ?status}LIMIT "
-				+ limit;
+				+ " ?s <http://imeji.org/terms/status> ?status}LIMIT " + limit;
 	}
 
 	public static String selectContainerItemByFilename(URI containerURI,

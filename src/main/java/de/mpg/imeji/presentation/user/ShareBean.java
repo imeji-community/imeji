@@ -320,7 +320,7 @@ public class ShareBean implements Serializable
     public void retrieveSharedUserWithGrants()
     {
         UserController uc = new UserController(Imeji.adminUser);
-        Collection<User> allUser = uc.retrieveUserWithGrantFor(getShareToUri());
+        Collection<User> allUser = uc.searchByGrantFor(getShareToUri());
         sharedWith = new ArrayList<>();
         for (User u : allUser)
         {

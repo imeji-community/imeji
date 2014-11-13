@@ -90,7 +90,7 @@ public class UsersBean implements Serializable
     {
         UserController controller = new UserController(sessionUser);
         users = new ArrayList<User>();
-        for (User user : controller.retrieveAll(query))
+        for (User user : controller.searchUserByName(query))
         {
             users.add(user);
         }

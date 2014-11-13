@@ -3,6 +3,7 @@
  */
 package de.mpg.imeji.presentation.user;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -13,6 +14,7 @@ import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.Organization;
+import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.user.util.EmailClient;
@@ -152,6 +154,7 @@ public class UserCreationBean {
 	 * @param index
 	 */
 	public void addOrganization(int index) {
+		System.out.println("index" + index);
 		((List<Organization>) this.user.getPerson().getOrganizations()).add(
 				index, ImejiFactory.newOrganization());
 	}

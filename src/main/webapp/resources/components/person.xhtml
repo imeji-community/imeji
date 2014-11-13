@@ -1,0 +1,198 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:composite="http://java.sun.com/jsf/composite">
+
+<composite:interface>
+	<composite:attribute name="person" type="java.lang.Object"
+		required="true" shortDescription="@type: A Person" />
+</composite:interface>
+
+<composite:implementation>
+	<script>
+		$(function() {
+			var persons = [#{PersonBean.allPersonsAsJQuery}]
+			$(".autocomplete_person").autocomplete({
+				source : persons,
+				select : function(event, ui) {
+					//setInputValues(".autocomplete_input",ui.item.value)
+					$( ".input_hidden_person_uri" ).val(ui.item.value);
+					$( ".button_change_person" ).click();
+					return false;
+				}
+			});
+			var orgs = [#{PersonBean.allOrganizationsAsString}]
+			$(".autocomplete_org").autocomplete({
+				source : orgs,
+				select : function(event, ui) {
+					setInputValues(".autocomplete_input_orga",ui.item.value)
+					return false;
+				}
+			});
+		});
+		function setInputValues(cssClass, value) {
+			$( cssClass ).each( function( index ) {
+				$( this ).val(value.split(",")[index]);
+			});
+		}
+	</script>
+
+	<h:inputText styleClass="input_hidden_person_uri"
+		value="#{PersonBean.personURI}"
+		valueChangeListener="#{PersonBean.personListener}" style="display:none;" />
+
+	<h:commandButton styleClass="button_change_person"
+		action="#{PersonBean.changePerson}" style="display:none;">
+		<f:ajax render="@form" execute="@form" />
+	</h:commandButton>
+
+	<h:panelGroup layout="block" styleClass="imj_admindataSet">
+		<div class="imj_admindataLabel">
+			<h:outputText value="#{lbl.family_name}" />
+			<span class="imj_invisible">: </span>
+		</div>
+		<div class="imj_admindataValue">
+			<div class="imj_admindataValueEntry">
+				<h:inputText id="inputFamilyNameText"
+					styleClass="imj_admindataEdit autocomplete_person autocomplete_input"
+					value="#{cc.attrs.person.familyName}" />
+			</div>
+		</div>
+	</h:panelGroup>
+	<h:panelGroup layout="block" styleClass="imj_admindataSet">
+		<div class="imj_admindataLabel">
+			<h:outputText value="#{lbl.first_name}" />
+			<span class="imj_invisible">: </span>
+		</div>
+		<div class="imj_admindataValue">
+			<div class="imj_admindataValueEntry">
+				<h:inputText id="inputGiveNameText"
+					styleClass="imj_admindataEdit autocomplete_person autocomplete_input"
+					value="#{cc.attrs.person.givenName}" />
+			</div>
+		</div>
+	</h:panelGroup>
+
+	<h:panelGroup layout="block" styleClass="imj_admindataSet">
+		<div class="imj_admindataLabel">
+			<h:outputText value="#{lbl.alternative_name}" />
+			<span class="imj_invisible">: </span>
+		</div>
+		<div class="imj_admindataValue">
+			<div class="imj_admindataValueEntry">
+				<h:inputText id="inputAlternativeName"
+					styleClass="imj_admindataEdit autocomplete_person autocomplete_input"
+					value="#{cc.attrs.person.alternativeName}" />
+			</div>
+		</div>
+	</h:panelGroup>
+
+	<h:panelGroup layout="block" styleClass="imj_admindataSet">
+		<div class="imj_admindataLabel">
+			<h:outputText value="#{lbl.identifier}" />
+			<span class="imj_invisible">: </span>
+		</div>
+		<div class="imj_admindataValue">
+			<div class="imj_admindataValueEntry">
+				<h:inputText id="inputIdentifier"
+					styleClass="imj_admindataEdit autocomplete_input"
+					value="#{cc.attrs.person.identifier}" />
+			</div>
+		</div>
+	</h:panelGroup>
+
+	<h:panelGroup layout="block" styleClass="imj_admindataSet">
+		<div class="imj_admindataLabel">
+			<h:outputText value="#{lbl.organization}" />
+			<span class="imj_invisible">: </span>
+		</div>
+		<div class="imj_admindataValue">
+			<ui:repeat var="org" value="#{cc.attrs.person.organizations}"
+				varStatus="index">
+
+				<h:panelGroup layout="block" styleClass="imj_admindataSet">
+					<div class="imj_admindataLabel">
+						<h:outputText value="#{lbl.name}" />
+						<span class="imj_invisible">: </span>
+					</div>
+					<div class="imj_admindataValue">
+						<div class="imj_admindataValueEntry">
+							<h:inputText id="inputOrgaName"
+								styleClass="imj_admindataEdit autocomplete_org autocomplete_input autocomplete_input_orga"
+								value="#{org.name}" />
+						</div>
+					</div>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="imj_admindataSet ">
+					<div class="imj_admindataLabel">
+						<h:outputText value="#{lbl.description}" />
+						<span class="imj_invisible">: </span>
+					</div>
+					<div class="imj_admindataValue">
+						<div class="imj_admindataValueEntry">
+							<h:inputTextarea id="inputOrgaDescription"
+								styleClass="imj_admindataEdit autocomplete_input autocomplete_input_orga"
+								value="#{org.description}" />
+						</div>
+					</div>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="imj_admindataSet">
+					<div class="imj_admindataLabel">
+						<h:outputText value="#{lbl.identifier}" />
+						<span class="imj_invisible">: </span>
+					</div>
+					<div class="imj_admindataValue">
+						<div class="imj_admindataValueEntry">
+							<h:inputText id="inputOrgaIdentifier"
+								styleClass="imj_admindataEdit autocomplete_input autocomplete_input_orga"
+								value="#{org.identifier}" />
+						</div>
+					</div>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="imj_admindataSet">
+					<div class="imj_admindataLabel">
+						<h:outputText value="#{lbl.city}" />
+						<span class="imj_invisible">: </span>
+					</div>
+					<div class="imj_admindataValue">
+						<div class="imj_admindataValueEntry">
+							<h:inputText id="inputOrgaCity"
+								styleClass="imj_admindataEdit autocomplete_input autocomplete_input_orga"
+								value="#{org.city}" />
+						</div>
+					</div>
+				</h:panelGroup>
+				<h:panelGroup layout="block" styleClass="imj_admindataSet">
+					<div class="imj_admindataLabel">
+						<h:outputText value="#{lbl.country}" />
+						<span class="imj_invisible">: </span>
+					</div>
+					<div class="imj_admindataValue">
+						<div class="imj_admindataValueEntry">
+							<h:inputText id="inputOrgaCountry"
+								styleClass="imj_admindataEdit autocomplete_input autocomplete_input_orga"
+								value="#{org.country}" />
+						</div>
+					</div>
+				</h:panelGroup>
+				<span class="imj_noDisplay">: </span>
+				<span class="imj_inlineButtonGroup"> <h:commandButton
+						styleClass="imj_buttonAdd_16" type="submit"
+						title="#{lbl.add_organization}"
+						action="#{UserCreationBean.addOrganization(index.index + 1)}">
+						<f:ajax execute="@form" render="@form" />
+					</h:commandButton> <h:commandButton styleClass="imj_buttonRemove_16" type="submit"
+						title="#{lbl.remove_organization}"
+						action="#{UserCreationBean.removeOrganization(index.index)}">
+						<f:ajax execute="@form" render="@form" />
+					</h:commandButton>
+				</span>
+				<br />
+				<br />
+			</ui:repeat>
+		</div>
+	</h:panelGroup>
+</composite:implementation>
+</html>
+

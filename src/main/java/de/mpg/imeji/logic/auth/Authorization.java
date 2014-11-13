@@ -40,6 +40,8 @@ import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Organization;
+import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.album.AlbumBean;
@@ -454,6 +456,10 @@ public class Authorization {
 			return isPublicStatus(((Container) obj).getStatus());
 		else if (obj instanceof MetadataProfile)
 			return isPublicStatus(((MetadataProfile) obj).getStatus());
+		else if (obj instanceof Person)
+			return true;
+		else if (obj instanceof Organization)
+			return true;
 		return false;
 	}
 

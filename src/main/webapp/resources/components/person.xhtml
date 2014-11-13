@@ -7,6 +7,10 @@
 <composite:interface>
 	<composite:attribute name="person" type="java.lang.Object"
 		required="true" shortDescription="@type: A Person" />
+	<composite:attribute name="bean" type="java.lang.Object"
+		required="true" shortDescription="@type: The parent bean" />
+	<composite:attribute name="position" type="Integer" required="true"
+		shortDescription="@type: The position of the person if included in a list" />
 </composite:interface>
 
 <composite:implementation>
@@ -16,9 +20,21 @@
 			$(".autocomplete_person").autocomplete({
 				source : persons,
 				select : function(event, ui) {
-					//setInputValues(".autocomplete_input",ui.item.value)
 					$( ".input_hidden_person_uri" ).val(ui.item.value);
-					$( ".button_change_person" ).click();
+					var ids = this.id.split(":");
+					var id = "";
+					for(i = 0; i &lt; ids.length; i++){
+						if(i == 0){
+							id += ids[i];
+						}
+						else if(i == ids.length -1){
+							id += ":changePersonButton"
+						}
+						else{
+							id += ':' + ids[i]
+						}
+					}
+					document.getElementById(id).click();
 					return false;
 				}
 			});
@@ -31,21 +47,20 @@
 				}
 			});
 		});
-		function setInputValues(cssClass, value) {
-			$( cssClass ).each( function( index ) {
-				$( this ).val(value.split(",")[index]);
-			});
-		}
 	</script>
 
-	<h:inputText styleClass="input_hidden_person_uri"
+	<h:inputText id="inputPersonURI" styleClass="input_hidden_person_uri"
 		value="#{PersonBean.personURI}"
-		valueChangeListener="#{PersonBean.personListener}" style="display:none;" />
+		valueChangeListener="#{PersonBean.personListener}"
+		style="display:none;" />
 
-	<h:commandButton styleClass="button_change_person"
-		action="#{PersonBean.changePerson}" style="display:none;">
+	<h:commandButton id="changePersonButton"
+		styleClass="button_change_person "
+		action="#{PersonBean.changePerson(cc.attrs.bean, cc.attrs.position)}"
+		style="display:none;">
 		<f:ajax render="@form" execute="@form" />
 	</h:commandButton>
+
 
 	<h:panelGroup layout="block" styleClass="imj_admindataSet">
 		<div class="imj_admindataLabel">
@@ -55,7 +70,7 @@
 		<div class="imj_admindataValue">
 			<div class="imj_admindataValueEntry">
 				<h:inputText id="inputFamilyNameText"
-					styleClass="imj_admindataEdit autocomplete_person autocomplete_input"
+					styleClass="imj_admindataEdit autocomplete_person"
 					value="#{cc.attrs.person.familyName}" />
 			</div>
 		</div>
@@ -68,7 +83,7 @@
 		<div class="imj_admindataValue">
 			<div class="imj_admindataValueEntry">
 				<h:inputText id="inputGiveNameText"
-					styleClass="imj_admindataEdit autocomplete_person autocomplete_input"
+					styleClass="imj_admindataEdit autocomplete_person"
 					value="#{cc.attrs.person.givenName}" />
 			</div>
 		</div>
@@ -82,7 +97,7 @@
 		<div class="imj_admindataValue">
 			<div class="imj_admindataValueEntry">
 				<h:inputText id="inputAlternativeName"
-					styleClass="imj_admindataEdit autocomplete_person autocomplete_input"
+					styleClass="imj_admindataEdit autocomplete_person"
 					value="#{cc.attrs.person.alternativeName}" />
 			</div>
 		</div>
@@ -95,8 +110,7 @@
 		</div>
 		<div class="imj_admindataValue">
 			<div class="imj_admindataValueEntry">
-				<h:inputText id="inputIdentifier"
-					styleClass="imj_admindataEdit autocomplete_input"
+				<h:inputText id="inputIdentifier" styleClass="imj_admindataEdit"
 					value="#{cc.attrs.person.identifier}" />
 			</div>
 		</div>
@@ -119,7 +133,7 @@
 					<div class="imj_admindataValue">
 						<div class="imj_admindataValueEntry">
 							<h:inputText id="inputOrgaName"
-								styleClass="imj_admindataEdit autocomplete_org autocomplete_input autocomplete_input_orga"
+								styleClass="imj_admindataEdit autocomplete_org autocomplete_input_orga"
 								value="#{org.name}" />
 						</div>
 					</div>
@@ -132,7 +146,7 @@
 					<div class="imj_admindataValue">
 						<div class="imj_admindataValueEntry">
 							<h:inputTextarea id="inputOrgaDescription"
-								styleClass="imj_admindataEdit autocomplete_input autocomplete_input_orga"
+								styleClass="imj_admindataEdit autocomplete_input_orga"
 								value="#{org.description}" />
 						</div>
 					</div>
@@ -145,7 +159,7 @@
 					<div class="imj_admindataValue">
 						<div class="imj_admindataValueEntry">
 							<h:inputText id="inputOrgaIdentifier"
-								styleClass="imj_admindataEdit autocomplete_input autocomplete_input_orga"
+								styleClass="imj_admindataEdit autocomplete_input_orga"
 								value="#{org.identifier}" />
 						</div>
 					</div>
@@ -158,7 +172,7 @@
 					<div class="imj_admindataValue">
 						<div class="imj_admindataValueEntry">
 							<h:inputText id="inputOrgaCity"
-								styleClass="imj_admindataEdit autocomplete_input autocomplete_input_orga"
+								styleClass="imj_admindataEdit autocomplete_input_orga"
 								value="#{org.city}" />
 						</div>
 					</div>
@@ -171,7 +185,7 @@
 					<div class="imj_admindataValue">
 						<div class="imj_admindataValueEntry">
 							<h:inputText id="inputOrgaCountry"
-								styleClass="imj_admindataEdit autocomplete_input autocomplete_input_orga"
+								styleClass="imj_admindataEdit autocomplete_input_orga"
 								value="#{org.country}" />
 						</div>
 					</div>
@@ -180,11 +194,11 @@
 				<span class="imj_inlineButtonGroup"> <h:commandButton
 						styleClass="imj_buttonAdd_16" type="submit"
 						title="#{lbl.add_organization}"
-						action="#{UserCreationBean.addOrganization(index.index + 1)}">
+						action="#{PersonBean.addOrganization(index.index + 1)}">
 						<f:ajax execute="@form" render="@form" />
 					</h:commandButton> <h:commandButton styleClass="imj_buttonRemove_16" type="submit"
 						title="#{lbl.remove_organization}"
-						action="#{UserCreationBean.removeOrganization(index.index)}">
+						action="#{PersonBean.removeOrganization(index.index)}">
 						<f:ajax execute="@form" render="@form" />
 					</h:commandButton>
 				</span>

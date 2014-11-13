@@ -22,6 +22,7 @@ import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jList;
 import de.mpg.j2j.annotations.j2jLiteral;
+import de.mpg.j2j.annotations.j2jModel;
 import de.mpg.j2j.annotations.j2jResource;
 import de.mpg.j2j.misc.LocalizedString;
 
@@ -33,6 +34,7 @@ import de.mpg.j2j.misc.LocalizedString;
  * @version $Revision$ $LastChangedDate$
  */
 @j2jResource("http://imeji.org/terms/statement")
+@j2jModel("statement")
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "statement", namespace = "http://imeji.org/terms")

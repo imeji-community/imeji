@@ -30,6 +30,7 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
+import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.PropertyReader;
@@ -50,6 +51,7 @@ public class Imeji
     public static String imageModel;
     public static String userModel;
     public static String profileModel;
+    public static String statementModel;
     public static String counterModel = "http://imeji.org/counter";
     public static Dataset dataset;
     public static URI counterID = URI.create("http://imeji.org/counter/0");
@@ -110,14 +112,14 @@ public class Imeji
      * Initialize a {@link Jena} database according at one path location in filesystem
      * 
      * @param path
-     */
+     */ 
     public static void init(String path)
     {
         File f = new File(path);
         if (!f.exists())
         {
             f.getParentFile().mkdirs();
-        }
+        } 
         tdbPath = f.getAbsolutePath();
         logger.info("Initializing Jena dataset (" + tdbPath + ")...");
         dataset = TDBFactory.createDataset(tdbPath);
@@ -127,11 +129,13 @@ public class Imeji
         collectionModel = getModelName(CollectionImeji.class);
         imageModel = getModelName(Item.class);
         userModel = getModelName(User.class);
+        statementModel = getModelName(Statement.class);
         profileModel = getModelName(MetadataProfile.class);
         initModel(albumModel);
         initModel(collectionModel);
         initModel(imageModel);
         initModel(userModel);
+        initModel(statementModel);
         initModel(profileModel);
         initModel(counterModel);
         initadminUser();

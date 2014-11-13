@@ -11,7 +11,8 @@ import de.mpg.j2j.annotations.j2jResource;
 
 public class PropertiesTO implements Serializable{
 
-	private static final long serialVersionUID = 679290120403475256L;
+
+	private static final long serialVersionUID = 1508003946046656414L;
 
 	private String id;
 
@@ -19,34 +20,19 @@ public class PropertiesTO implements Serializable{
 
     private UserTOBasic modifiedBy;
 
-    private SimpleDateFormats created;
+    private String createdDate;
 
-    private SimpleDateFormats modified;
+    private String modifiedDate;
 
-    private SimpleDateFormats versionDate;
+    private String versionDate;
 
-    private String status = Status.PENDING.getText();
+    private String status;
 
     private int version = 0;
 
     private String discardComment;
     
-    public enum Status
-    {
-        PENDING("PENDING"), RELEASED("RELEASED"), WITHDRAWN("WITHDRAWN");
-        private String text;
-
-        private Status(String text)
-        {
-            this.text = text;
-        }
-
-        public String getText()
-        {
-            return text;
-        }
-    }
-    
+   
     public PropertiesTO()
     {
     	
@@ -76,27 +62,31 @@ public class PropertiesTO implements Serializable{
 		this.modifiedBy = modifiedBy;
 	}
 
-	public SimpleDateFormats getCreated() {
-		return created;
+
+
+	public String getCreatedDate() {
+		return createdDate;
 	}
 
-	public void setCreated(SimpleDateFormats created) {
-		this.created = created;
+	public void setCreatedDate(String createdDate) {
+		this.createdDate = createdDate;
 	}
 
-	public SimpleDateFormats getModified() {
-		return modified;
+
+
+	public String getModifiedDate() {
+		return modifiedDate;
 	}
 
-	public void setModified(SimpleDateFormats modified) {
-		this.modified = modified;
+	public void setModifiedDate(String modifiedDate) {
+		this.modifiedDate = modifiedDate;
 	}
 
-	public SimpleDateFormats getVersionDate() {
+	public String getVersionDate() {
 		return versionDate;
 	}
 
-	public void setVersionDate(SimpleDateFormats versionDate) {
+	public void setVersionDate(String versionDate) {
 		this.versionDate = versionDate;
 	}
 
@@ -124,10 +114,6 @@ public class PropertiesTO implements Serializable{
 		this.discardComment = discardComment;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-    
     
     
     

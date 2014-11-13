@@ -5,19 +5,19 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
 public class ItemTO extends PropertiesTO implements Serializable{
 
-	private static final long serialVersionUID = -6786476307736639709L;
-	
-	private String visibility = Visibility.PRIVATE.name();
+	private static final long serialVersionUID = 8408059450327059926L;
+
+	private String visibility;
     
-	private String collection;
+	private String collectionId;
 	
     private String filename;
     
     private String mimetype;
+    
+    private String checksumMd5;
 
     private URI webResolutionUrlUrl;
     
@@ -25,13 +25,8 @@ public class ItemTO extends PropertiesTO implements Serializable{
     
     private URI fileUrl;
     
-    private List<MetadataTO> metadata = new ArrayList<MetadataTO>();
+    private List<MetadataSetTO> metadata = new ArrayList<MetadataSetTO>();
     
-    
-    public enum Visibility
-    {
-        PUBLIC, PRIVATE;
-    }
 
 
 	public String getVisibility() {
@@ -44,13 +39,13 @@ public class ItemTO extends PropertiesTO implements Serializable{
 	}
 
 
-	public String getCollection() {
-		return collection;
+	public String getCollectionId() {
+		return collectionId;
 	}
 
 
-	public void setCollection(String collection) {
-		this.collection = collection;
+	public void setCollectionId(String collectionId) {
+		this.collectionId = collectionId;
 	}
 
 
@@ -71,6 +66,17 @@ public class ItemTO extends PropertiesTO implements Serializable{
 
 	public void setMimetype(String mimetype) {
 		this.mimetype = mimetype;
+	}
+
+	
+
+	public String getChecksumMd5() {
+		return checksumMd5;
+	}
+
+
+	public void setChecksumMd5(String checksumMd5) {
+		this.checksumMd5 = checksumMd5;
 	}
 
 
@@ -104,20 +110,19 @@ public class ItemTO extends PropertiesTO implements Serializable{
 	}
 
 
-	public List<MetadataTO> getMetadata() {
+	public List<MetadataSetTO> getMetadata() {
 		return metadata;
 	}
 
 
-	public void setMetadata(List<MetadataTO> metadata) {
+	public void setMetadata(List<MetadataSetTO> metadata) {
 		this.metadata = metadata;
 	}
 
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-    
+
+
+
     
     
     

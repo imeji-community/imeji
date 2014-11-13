@@ -278,6 +278,8 @@ public class SPARQLSearch implements Search
                 return Imeji.albumModel;
             case PROFILE:
                 return Imeji.profileModel;
+            case USER:
+            	return Imeji.userModel;
             default:
                 return null;
         }

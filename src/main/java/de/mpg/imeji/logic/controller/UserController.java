@@ -12,9 +12,13 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Organization;
+import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.logic.writer.WriterFacade;
@@ -144,16 +148,120 @@ public class UserController {
 	 * 
 	 * @return
 	 */
-	public Collection<User> retrieveAll(String name) {
+	public Collection<User> searchUserByName(String name) {
 		Search search = SearchFactory.create();
 		return loadUsers(search.searchSimpleForQuery(
 				SPARQLQueries.selectUserAll(name)).getResults());
 	}
 
-	public Collection<User> retrieveUserWithGrantFor(String grantFor) {
+	/**
+	 * Search for all users having the grant for an object
+	 * 
+	 * @param grantFor
+	 * @return
+	 */
+	public Collection<User> searchByGrantFor(String grantFor) {
 		Search search = SearchFactory.create();
 		return loadUsers(search.searchSimpleForQuery(
 				SPARQLQueries.selectUserWithGrantFor(grantFor)).getResults());
+	}
+
+	/**
+	 * Search for all {@link Person} by their names. The search looks within the
+	 * {@link User} and the {@link Collection} what {@link Person} are already
+	 * existing.
+	 * 
+	 * @param name
+	 * @return
+	 */
+	public Collection<Person> searchPersonByName(String name) {
+		Collection<Person> l = searchPersonByNameInUsers(name);
+		l.addAll(searchPersonByNameInCollections(name));
+		return l;
+	}
+
+	public Person retrievePersonById(String id) {
+		List<String> l = new ArrayList<String>();
+		l.add(id);
+		Collection<Person> c = new ArrayList<Person>();
+		try {
+			c = loadPersons(l, Imeji.userModel);
+		} catch (Exception e) {
+			c.addAll(loadPersons(l, Imeji.collectionModel));
+		}
+		return c.iterator().next();
+	}
+
+/**
+	 * Search for all {@link Organization} in imeji, i.e. t The search looks within the
+	 * {@link User} and the {@link Collection} what {@link Organization are already
+	 * existing.
+	 * @param name
+	 * @return
+	 */
+	public Collection<Organization> searchOrganizationByName(String name) {
+		Collection<Organization> l = searchOrganizationByNameInCollections(name);
+		l.addAll(searchOrganizationByNameInUsers(name));
+		return l;
+	}
+
+	/**
+	 * Search all {@link Person} which are defined in a {@link User}
+	 * 
+	 * @param name
+	 * @return
+	 */
+	private Collection<Person> searchPersonByNameInUsers(String name) {
+		Search search = SearchFactory.create(SearchType.USER);
+		return loadPersons(
+				search.searchSimpleForQuery(
+						SPARQLQueries.selectPersonByName(name)).getResults(),
+				Imeji.userModel);
+	}
+
+	/**
+	 * Search all {@link Person} which are defined as person of a
+	 * {@link CollectionImeji}
+	 * 
+	 * @param name
+	 * @return
+	 */
+	private Collection<Person> searchPersonByNameInCollections(String name) {
+		Search search = SearchFactory.create(SearchType.COLLECTION);
+		return loadPersons(
+				search.searchSimpleForQuery(
+						SPARQLQueries.selectPersonByName(name)).getResults(),
+				Imeji.collectionModel);
+	}
+
+	/**
+	 * Search all {@link Organization} which are defined in a {@link User}
+	 * 
+	 * @param name
+	 * @return
+	 */
+	private Collection<Organization> searchOrganizationByNameInUsers(String name) {
+		Search search = SearchFactory.create(SearchType.USER);
+		return loadOrganizations(
+				search.searchSimpleForQuery(
+						SPARQLQueries.selectOrganizationByName(name))
+						.getResults(), Imeji.userModel);
+	}
+
+	/**
+	 * Search all {@link Organization} which are defined as person of a
+	 * {@link CollectionImeji}
+	 * 
+	 * @param name
+	 * @return
+	 */
+	private Collection<Organization> searchOrganizationByNameInCollections(
+			String name) {
+		Search search = SearchFactory.create(SearchType.COLLECTION);
+		return loadOrganizations(
+				search.searchSimpleForQuery(
+						SPARQLQueries.selectOrganizationByName(name))
+						.getResults(), Imeji.collectionModel);
 	}
 
 	/**
@@ -166,6 +274,7 @@ public class UserController {
 		Collection<User> users = new ArrayList<User>();
 		for (String uri : uris) {
 			try {
+
 				users.add((User) reader.read(uri, user, new User()));
 			} catch (NotFoundException e) {
 				throw new RuntimeException("User " + uri + " not found", e);
@@ -174,6 +283,51 @@ public class UserController {
 			}
 		}
 		return users;
+	}
+
+	/**
+	 * Load Organizations
+	 * 
+	 * @param uris
+	 * @return
+	 */
+	public Collection<Organization> loadOrganizations(List<String> uris,
+			String model) {
+		Collection<Organization> orgs = new ArrayList<Organization>();
+		for (String uri : uris) {
+			try {
+				ReaderFacade reader = new ReaderFacade(model);
+				orgs.add((Organization) reader.read(uri, user,
+						new Organization()));
+			} catch (NotFoundException e) {
+				throw new RuntimeException(
+						"Organization " + uri + " not found", e);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
+		return orgs;
+	}
+
+	/**
+	 * Load Organizations
+	 * 
+	 * @param uris
+	 * @return
+	 */
+	private Collection<Person> loadPersons(List<String> uris, String model) {
+		Collection<Person> p = new ArrayList<Person>();
+		for (String uri : uris) {
+			try {
+				ReaderFacade reader = new ReaderFacade(model);
+				p.add((Person) reader.read(uri, user, new Person()));
+			} catch (NotFoundException e) {
+				throw new RuntimeException("Person " + uri + " not found", e);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
+		return p;
 	}
 
 	/**

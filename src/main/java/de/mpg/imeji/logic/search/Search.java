@@ -52,7 +52,7 @@ public interface Search
      */
     public static enum SearchType
     {
-        ITEM, COLLECTION, ALBUM, PROFILE, ALL;
+        ITEM, COLLECTION, ALBUM, PROFILE, USER, ALL;
     }
 
     /**

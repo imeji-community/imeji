@@ -98,7 +98,6 @@ public class ImejiFactory
         pers.setAlternativeName("");
         pers.setFamilyName("");
         pers.setGivenName("");
-        pers.setIdentifier("");
         pers.getOrganizations().add(newOrganization());
         return pers;
     }

@@ -6,6 +6,10 @@ import java.net.URISyntaxException;
 
 import org.apache.commons.io.FileUtils;
 
+import com.hp.hpl.jena.tdb.TDB;
+import com.hp.hpl.jena.tdb.base.file.Location;
+import com.hp.hpl.jena.tdb.sys.TDBMaker;
+
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
@@ -49,54 +53,53 @@ import de.mpg.imeji.presentation.util.PropertyReader;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class JenaUtil
-{
-    /**
-     * Init a Jena Instance for Testing
-     */
-    public static void initJena()
-    {
-        try
-        {
-            // Init PropertyBean
-            new PropertyBean();
-            // Read tdb location
-            String tdb = PropertyReader.getProperty("imeji.tdb.path");
-            // remove old Database
-            File f = new File(tdb);
-            if(f.exists())
-            	FileUtils.cleanDirectory(f);
-            // Create new tdb
-            Imeji.init(tdb);
-        }
-        catch (IOException | URISyntaxException e)
-        {
-            throw new RuntimeException("Error initialiting Jena for testing: ", e);
-        }
-    }
+public class JenaUtil {
+	/**
+	 * Init a Jena Instance for Testing
+	 */
+	public static void initJena() {
+		try {
+			// Init PropertyBean
+			new PropertyBean();
+			// Read tdb location
+			String tdb = PropertyReader.getProperty("imeji.tdb.path");
+			// remove old Database
+			File f = new File(tdb);
+			if (f.exists())
+				FileUtils.cleanDirectory(f);
+			// Create new tdb
+			Imeji.init(tdb);
+		} catch (IOException | URISyntaxException e) {
+			throw new RuntimeException("Error initialiting Jena for testing: ",
+					e);
+		}
+	}
 
-    /**
-     * Add a User to Jena
-     * 
-     * @param email
-     * @param name
-     * @param pwd
-     */
-    public static void addUser(String email, String name, String pwd)
-    {
-        try
-        {
-            UserController c = new UserController(Imeji.adminUser);
-            User user = new User();
-            user.setEmail(email);
-            user.setName(name);
-            user.setEncryptedPassword(StringHelper.convertToMD5(pwd));
-            c.create(user, USER_TYPE.DEFAULT);
-        }
-        catch (Exception e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
+	public static void closeJena() {
+		TDB.sync(Imeji.dataset);
+		Imeji.dataset.close();
+		TDB.closedown();
+		TDBMaker.releaseLocation(new Location(Imeji.tdbPath));
+	}
+
+	/**
+	 * Add a User to Jena
+	 * 
+	 * @param email
+	 * @param name
+	 * @param pwd
+	 */
+	public static void addUser(String email, String name, String pwd) {
+		try {
+			UserController c = new UserController(Imeji.adminUser);
+			User user = new User();
+			user.setEmail(email);
+			user.setName(name);
+			user.setEncryptedPassword(StringHelper.convertToMD5(pwd));
+			c.create(user, USER_TYPE.DEFAULT);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

@@ -38,8 +38,8 @@ public class SimpleAuthenticationTest {
 
 	@After
 	public void tearDown() throws Exception {
+		JenaUtil.closeJena();
 	}
-
 
 
 	@Test

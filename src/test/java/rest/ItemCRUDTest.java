@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import junit.framework.Assert;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -38,6 +39,11 @@ public class ItemCRUDTest {
 		JenaUtil.initJena();
 		initUser();
 		initItem();
+	}
+
+	@After
+	public void tearDown() throws Exception {
+		JenaUtil.closeJena();
 	}
 
 	public void initItem() throws Exception {

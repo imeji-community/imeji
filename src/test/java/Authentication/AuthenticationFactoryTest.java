@@ -29,6 +29,7 @@ public class AuthenticationFactoryTest {
 
 	@After
 	public void tearDown() throws Exception {
+		JenaUtil.closeJena();
 	}
 
 //	@Test

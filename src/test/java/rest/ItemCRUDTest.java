@@ -3,25 +3,19 @@ package rest;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-
-import java.util.Calendar;
-
-
-
-
 import junit.framework.Assert;
 
-
-
-
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import util.JenaUtil;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
+import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
@@ -42,9 +36,14 @@ public class ItemCRUDTest {
 
 	@Before
 	public void setup() throws Exception {
-//		JenaUtil.initJena();
+		JenaUtil.initJena();
 		initUser();
 		initItem();
+	}
+
+	@After
+	public void tearDown() throws Exception {
+		JenaUtil.closeJena();
 	}
 
 	public void initItem() throws Exception {
@@ -53,7 +52,6 @@ public class ItemCRUDTest {
 		controller.create(c, null, user);
 		item = ImejiFactory.newItem(c);
 		item.setFilename("test item");
-		item.setCreated(Calendar.getInstance());
 	}
 
 	public void initUser() {
@@ -70,18 +68,20 @@ public class ItemCRUDTest {
 	}
 
 	@Test
-	public void testItemCRUND() throws NotFoundException, NotAllowedError, Exception {
-		
+	public void testItemCRUD() throws NotFoundException, NotAllowedError,
+			Exception {
+
 		ItemService crud = new ItemService();
 		// create item
-		crud.create(item, user);
+		item = crud.create(item, user);
 		// check the item be created and has new id
 		Assert.assertNotNull(item.getId());
 		// read the item id
-		Assert.assertNotNull(crud.read(item.getId().toString(), user).getId());
+		Assert.assertNotNull(crud.read(ObjectHelper.getId(item.getId()), user)
+				.getId());
 		// check the default visibility of item = private
 		assertTrue(item.getVisibility().equals(Visibility.PRIVATE));
-		//set new visibility = public
+		// set new visibility = public
 		item.setVisibility(Visibility.PUBLIC);
 		// check the visibility= public unchanged
 		assertTrue(item.getVisibility().equals(Visibility.PUBLIC));
@@ -90,13 +90,14 @@ public class ItemCRUDTest {
 		// delete item
 		Assert.assertTrue(crud.delete(item, user));
 		// try to read the delete item
-		try{
-			crud.read(item.getId().toString(), user);
+		try {
+			crud.read(ObjectHelper.getId(item.getId()), user);
 			fail("should not found the item");
-		}catch(Exception e){
-			assertTrue(e.getMessage().contains("Error reading item"));;
+		} catch (Exception e) {
+			// success
+			;
 		}
-		
+
 	}
 
 }

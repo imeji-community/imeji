@@ -60,7 +60,9 @@
 									</h:panelGroup>
 
 									<!-- The user of the person -->
-									<imjc:person person="#{UserCreationBean.user.person}" />
+									<imjc:person id="userPerson"
+										person="#{UserCreationBean.user.person}"
+										bean="#{UserCreationBean}" position="0" />
 
 									<!-- AdminDataList - allowedToCreateCollection -->
 									<h:panelGroup layout="block" styleClass="imj_admindataSet">

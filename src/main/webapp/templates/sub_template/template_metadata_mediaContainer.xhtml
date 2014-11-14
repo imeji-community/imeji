@@ -22,7 +22,7 @@
 			<!-- AJAX Wrapper - START -->
 			<h:panelGroup layout="block" id="imj_ajaxWrapper">
 				<ui:fragment rendered="#{Auth.loggedIn and metadataView != 'yes'}">
-					<imjc:mediaContainer_editMetadata formularContextBean="#{metadataContextBean}" formularBean="#{metadataBean}" headline="#{containerHeadline}"/>
+					<imjc:mediaContainer_editMetadata id="editContainer" formularContextBean="#{metadataContextBean}" formularBean="#{metadataBean}" headline="#{containerHeadline}"/>
 				</ui:fragment>
 				<ui:fragment rendered="#{metadataView == 'yes'}">
 					<imjc:mediaContainer_viewMetadata metadataContextBean="#{metadataContextBean}" metadata="#{metadataBean}" headline="#{containerHeadline}" navigationContextURL="#{navigationContextURL}"/>

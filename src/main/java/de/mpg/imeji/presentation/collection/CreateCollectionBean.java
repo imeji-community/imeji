@@ -3,20 +3,15 @@
  */
 package de.mpg.imeji.presentation.collection;
 
-import java.net.URI;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Person;
-import de.mpg.imeji.presentation.album.AlbumBean;
-import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.UrlHelper;
@@ -29,7 +24,7 @@ import de.mpg.imeji.presentation.util.UrlHelper;
  * @version $Revision$ $LastChangedDate$
  */
 @ManagedBean(name = "CreateCollectionBean")
-@SessionScoped
+@ViewScoped
 public class CreateCollectionBean extends CollectionBean {
 	private static final long serialVersionUID = 1257698224590957642L;
 
@@ -37,14 +32,17 @@ public class CreateCollectionBean extends CollectionBean {
 	 * Bean Constructor
 	 */
 	public CreateCollectionBean() {
-		super();
+		System.out.println("createcollectionBean");
+		initialize();
 	}
 
 	/**
 	 * Method called when paged is loaded (defined in pretty-config.xml)
 	 */
-	public void init() {
+	public void initialize() {
+
 		if (UrlHelper.getParameterBoolean("reset")) {
+			System.out.println("reset");
 			setCollection(ImejiFactory.newCollection());
 			((List<Person>) getCollection().getMetadata().getPersons()).set(0,
 					sessionBean.getUser().getPerson().clone());
@@ -66,17 +64,11 @@ public class CreateCollectionBean extends CollectionBean {
 					sessionBean.getUser());
 			BeanHelper
 					.info(sessionBean.getMessage("success_collection_create"));
-
-			Navigation nav = (Navigation) BeanHelper
-					.getApplicationBean(Navigation.class);
-
-			// ((CollectionBean)BeanHelper.getSessionBean(CollectionBean.class)).setCollection(getCollection());
-
 			FacesContext
 					.getCurrentInstance()
 					.getExternalContext()
 					.redirect(
-							nav.getCollectionUrl()
+							navigation.getCollectionUrl()
 									+ getCollection().getIdString());
 			return "";
 		} else
@@ -89,10 +81,7 @@ public class CreateCollectionBean extends CollectionBean {
 	 * @return
 	 */
 	public String getCancel() {
-		Navigation nav = (Navigation) BeanHelper
-				.getApplicationBean(Navigation.class);
-		this.init();
-		return nav.getCollectionsUrl() + "?q=";
+		return navigation.getCollectionsUrl() + "?q=";
 	}
 
 	@Override

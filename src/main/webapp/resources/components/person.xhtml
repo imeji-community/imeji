@@ -42,7 +42,21 @@
 			$(".autocomplete_org").autocomplete({
 				source : orgs,
 				select : function(event, ui) {
-					setInputValues(".autocomplete_input_orga",ui.item.value)
+					$( ".input_hidden_orga_uri" ).val(ui.item.value);
+					var ids = this.id.split(":");
+					var id = "";
+					for(i = 0; i &lt; ids.length; i++){
+						if(i == 0){
+							id += ids[i];
+						}
+						else if(i == ids.length -1){
+							id += ":changeOrgaButton"
+						}
+						else{
+							id += ':' + ids[i]
+						}
+					}
+					document.getElementById(id).click();
 					return false;
 				}
 			});
@@ -60,6 +74,8 @@
 		style="display:none;">
 		<f:ajax render="@form" execute="@form" />
 	</h:commandButton>
+
+
 
 
 	<h:panelGroup layout="block" styleClass="imj_admindataSet">
@@ -124,6 +140,18 @@
 		<div class="imj_admindataValue">
 			<ui:repeat var="org" value="#{cc.attrs.person.organizations}"
 				varStatus="index">
+
+				<h:inputText id="inputOrgaURI" styleClass="input_hidden_orga_uri"
+					value="#{PersonBean.orgaURI}"
+					valueChangeListener="#{PersonBean.orgaListener}"
+					style="display:none;" />
+
+				<h:commandButton id="changeOrgaButton"
+					styleClass="button_change_button "
+					action="#{PersonBean.changeOrga(cc.attrs.bean, cc.attrs.position,  index.index)}"
+					style="display:none;">
+					<f:ajax render="@form" execute="@form" />
+				</h:commandButton>
 
 				<h:panelGroup layout="block" styleClass="imj_admindataSet">
 					<div class="imj_admindataLabel">

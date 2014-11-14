@@ -6,7 +6,9 @@ package de.mpg.imeji.logic.controller;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
@@ -40,7 +42,7 @@ public class UserController {
 	 * User type (restricted: can not create collection)
 	 * 
 	 * @author saquet
-	 *
+	 * 
 	 */
 	public enum USER_TYPE {
 		DEFAULT, ADMIN, RESTRICTED;
@@ -175,11 +177,22 @@ public class UserController {
 	 * @return
 	 */
 	public Collection<Person> searchPersonByName(String name) {
+
 		Collection<Person> l = searchPersonByNameInUsers(name);
 		l.addAll(searchPersonByNameInCollections(name));
-		return l;
+		Map<String, Person> map = new HashMap<>();
+		for (Person p : l) {
+			map.put(p.getIdentifier(), p);
+		}
+		return map.values();
 	}
 
+	/**
+	 * Load a {@link User} by its uri
+	 * 
+	 * @param id
+	 * @return
+	 */
 	public Person retrievePersonById(String id) {
 		List<String> l = new ArrayList<String>();
 		l.add(id);
@@ -188,6 +201,24 @@ public class UserController {
 			c = loadPersons(l, Imeji.userModel);
 		} catch (Exception e) {
 			c.addAll(loadPersons(l, Imeji.collectionModel));
+		}
+		return c.iterator().next();
+	}
+
+	/**
+	 * Load an {@link Organization} by its uri
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public Organization retrieveOrganizationById(String id) {
+		List<String> l = new ArrayList<String>();
+		l.add(id);
+		Collection<Organization> c = new ArrayList<Organization>();
+		try {
+			c = loadOrganizations(l, Imeji.userModel);
+		} catch (Exception e) {
+			c.addAll(loadOrganizations(l, Imeji.collectionModel));
 		}
 		return c.iterator().next();
 	}
@@ -202,7 +233,11 @@ public class UserController {
 	public Collection<Organization> searchOrganizationByName(String name) {
 		Collection<Organization> l = searchOrganizationByNameInCollections(name);
 		l.addAll(searchOrganizationByNameInUsers(name));
-		return l;
+		Map<String, Organization> map = new HashMap<>();
+		for (Organization o : l) {
+			map.put(o.getIdentifier(), o);
+		}
+		return map.values();
 	}
 
 	/**

@@ -3,7 +3,9 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:menu="http://java.sun.com/jsf/composite/components/menu">
+	xmlns:menu="http://java.sun.com/jsf/composite/components/menu"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:imjc="http://java.sun.com/jsf/composite/components">
 	
 	<ui:param name="headline" value="User Page"/>
 	<ui:param name="currentMainMenu" value="admin"/>
@@ -60,6 +62,7 @@
 											</div>
 										</h:panelGroup>
 										
+										
 										<!-- User Edit - Username -->
 										<h:panelGroup layout="block" styleClass="imj_admindataSet" rendered="#{!UserBean.edit}">
 											<div class="imj_admindataLabel">
@@ -73,29 +76,6 @@
 											</div>
 										</h:panelGroup>
 										
-										<h:panelGroup layout="block" styleClass="imj_admindataSet" rendered="#{UserBean.edit}">
-											<div class="imj_admindataLabel">
-												<h:outputText value="#{lbl.family_name}"/>
-												<span class="imj_invisible">: </span>
-											</div>
-											<div class="imj_admindataValue">
-												<h:panelGroup class="imj_admindataSetEdit" >
-													<h:inputText value="#{UserBean.newFamilyName}" valueChangeListener="#{UserBean.changeFamilyNameListerner}" styleClass="imj_admindataEdit" autocomplete="off" />
-												</h:panelGroup>
-											</div>
-										</h:panelGroup>
-										
-										<h:panelGroup layout="block" styleClass="imj_admindataSet" rendered="#{UserBean.edit}">
-											<div class="imj_admindataLabel">
-												<h:outputText value="#{lbl.first_name}"/>
-												<span class="imj_invisible">: </span>
-											</div>
-											<div class="imj_admindataValue">
-												<h:panelGroup class="imj_admindataSetEdit" >
-													<h:inputText value="#{UserBean.user.person.givenName}" styleClass="imj_admindataEdit" autocomplete="off" />
-												</h:panelGroup>
-											</div>
-										</h:panelGroup>
 										
 										<h:panelGroup layout="block" styleClass="imj_admindataSet">
 											<div class="imj_admindataLabel">
@@ -109,41 +89,12 @@
 														<h:outputText value="#{org.name}"/>
 													</ui:repeat>
 												</h:panelGroup>
-												<ui:repeat id="orgs" var="org" value="#{UserBean.user.person.organizations}" varStatus="index" >
-													<h:panelGroup class="imj_admindataSetEdit" rendered="#{UserBean.edit}">
-														<h:inputText id="orgaInput" value="#{org.name}" autocomplete="off" styleClass="imj_admindataEdit"/>
-														<!-- This input is here to avoid chrome to make the autofill on the previous input -->
-														<input class="imj_invisible"/>
-														<span class="imj_inlineButtonGroup">
-															<h:commandButton styleClass="imj_buttonAdd_16" type="submit" title="#{lbl.add_organization}" action="#{UserBean.addOrganization(index.index + 1)}">
-																<f:ajax execute="@form" render="@form"/>
-															</h:commandButton>
-															<h:commandButton styleClass="imj_buttonRemove_16 imj_admindataEdit imj_noDisplay" type="submit" title="#{lbl.remove_organization}" action="#{UserBean.removeOrganization(index.index)}">
-																<f:ajax execute="@form" render="@form"/>
-															</h:commandButton>
-														</span>
-													</h:panelGroup>
-												</ui:repeat>
 											</div>
 										</h:panelGroup>
 										
-										<!-- User Edit - Nickname -->
-										<ui:fragment rendered="false">
-											<h:panelGroup layout="block" styleClass="imj_admindataSet">
-												<div class="imj_admindataLabel">
-													<h:outputText value="#{lbl.nickname}"/>
-													<span class="imj_invisible">: </span>
-												</div>
-												<div class="imj_admindataValue">
-													<div class="imj_admindataValueEntry">
-														<h:outputText value="#{UserBean.user.nick}"/>
-													</div>
-													<div class="imj_admindataSetEdit">
-														<h:inputText value="#{UserBean.user.nick}" styleClass="imj_admindataEdit imj_noDisplay"/>
-													</div>
-												</div>
-											</h:panelGroup>
-										</ui:fragment>
+										<!-- The user of the person -->
+										<imjc:person person="#{UserBean.user.person}"
+											bean="#{UserBean}" position="0" rendered="#{UserBean.edit}"/>
 										
 										
 										<!-- submit panel -->

@@ -89,7 +89,6 @@ public class ItemBean {
 		prettyLink = "pretty:editImage";
 		labels = (MetadataLabels) BeanHelper
 				.getSessionBean(MetadataLabels.class);
-		getMds().getTree().getList();
 	}
 
 	/**

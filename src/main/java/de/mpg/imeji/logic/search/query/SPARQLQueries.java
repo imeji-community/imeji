@@ -113,7 +113,6 @@ public class SPARQLQueries {
 				+ name + "','i'))}";
 	}
 
-
 	/**
 	 * Find all the user which have SysAdmin rights for imeji
 	 * 

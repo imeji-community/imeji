@@ -76,7 +76,7 @@ public class ConfigurationBean {
 	 * @version $Revision$ $LastChangedDate$
 	 */
 	private enum CONFIGURATION {
-		SNIPPET, CSS_DEFAULT, CSS_ALT, MAX_FILE_SIZE, FILE_TYPES, STARTPAGE_HTML, DATA_VIEWER_FORMATS, DATA_VIEWER_URL;
+		SNIPPET, CSS_DEFAULT, CSS_ALT, MAX_FILE_SIZE, FILE_TYPES, STARTPAGE_HTML, DATA_VIEWER_FORMATS, DATA_VIEWER_URL, AUTOSUGGEST_USERS, AUTOSUGGEST_ORGAS;
 	}
 
 	private Properties config;
@@ -263,7 +263,6 @@ public class ConfigurationBean {
 		this.fileTypes = types;
 	}
 
-
 	/**
 	 * Get the html snippet for a specified lang
 	 * 
@@ -359,7 +358,6 @@ public class ConfigurationBean {
 	 * 
 	 */
 	public void setDataViewerFormatListString(String str) {
-		// System.out.println("set:" + str);
 		config.setProperty(CONFIGURATION.DATA_VIEWER_FORMATS.name(), str);
 
 	}
@@ -430,7 +428,29 @@ public class ConfigurationBean {
 			logger.error(e.getMessage(), e.fillInStackTrace());
 		}
 		setDataViewerFormatListString(str);
-		System.out.println(getDataViewerFormatListString());
 		return "";
+	}
+
+	public boolean isEnableAutosuggestForUsers() {
+		return Boolean.parseBoolean(config.getProperty(
+				CONFIGURATION.AUTOSUGGEST_USERS.name()));
+	}
+
+	public void setEnableAutosuggestForUsers(boolean b) {
+		System.out.println("set users " + b);
+		config.setProperty(CONFIGURATION.AUTOSUGGEST_USERS.name(),
+				Boolean.toString(b));
+	}
+
+	public boolean isEnableAutosuggestForOrganizations() {
+		return Boolean.parseBoolean(config.getProperty(
+				CONFIGURATION.AUTOSUGGEST_ORGAS.name(), "false"));
+	}
+
+	public void setEnableAutosuggestForOrganizations(boolean b) {
+		System.out.println("set orgs " + b);
+		config.setProperty(CONFIGURATION.AUTOSUGGEST_ORGAS.name(),
+				Boolean.toString(b));
+
 	}
 }

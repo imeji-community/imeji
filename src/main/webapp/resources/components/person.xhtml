@@ -14,54 +14,64 @@
 </composite:interface>
 
 <composite:implementation>
-	<script>
-		$(function() {
-			var persons = [#{PersonBean.allPersonsAsJQuery}]
-			$(".autocomplete_person").autocomplete({
-				source : persons,
-				select : function(event, ui) {
-					$( ".input_hidden_person_uri" ).val(ui.item.value);
-					var ids = this.id.split(":");
-					var id = "";
-					for(i = 0; i &lt; ids.length; i++){
-						if(i == 0){
-							id += ids[i];
+	<ui:fragment rendered="#{Configuration.enableAutosuggestForUsers}">
+		<script>
+			$(function() {
+				var persons = [#{PersonBean.allPersonsAsJQuery}]
+				$(".autocomplete_person").autocomplete({
+					source : persons,
+					select : function(event, ui) {
+						$( ".input_hidden_person_uri" ).val(ui.item.value);
+						var ids = this.id.split(":");
+						var id = "";
+						for(i = 0; i &lt; ids.length; i++){
+							if(i == 0){
+								id += ids[i];
+							}
+							else if(i == ids.length -1){
+								id += ":changePersonButton"
+							}
+							else{
+								id += ':' + ids[i]
+							}
 						}
-						else if(i == ids.length -1){
-							id += ":changePersonButton"
-						}
-						else{
-							id += ':' + ids[i]
-						}
+						document.getElementById(id).click();
+						return false;
 					}
-					document.getElementById(id).click();
-					return false;
-				}
+				});
 			});
-			var orgs = [#{PersonBean.allOrganizationsAsString}]
-			$(".autocomplete_org").autocomplete({
-				source : orgs,
-				select : function(event, ui) {
-					$( ".input_hidden_orga_uri" ).val(ui.item.value);
-					var ids = this.id.split(":");
-					var id = "";
-					for(i = 0; i &lt; ids.length; i++){
-						if(i == 0){
-							id += ids[i];
+		</script>
+	</ui:fragment>
+	<ui:fragment
+		rendered="#{Configuration.enableAutosuggestForOrganizations}">
+		<script>
+			$(function() {
+				var orgs = [#{PersonBean.allOrganizationsAsString}]
+				$(".autocomplete_org").autocomplete({
+					source : orgs,
+					select : function(event, ui) {
+						$( ".input_hidden_orga_uri" ).val(ui.item.value);
+						var ids = this.id.split(":");
+						var id = "";
+						for(i = 0; i &lt; ids.length; i++){
+							if(i == 0){
+								id += ids[i];
+							}
+							else if(i == ids.length -1){
+								id += ":changeOrgaButton"
+							}
+							else{
+								id += ':' + ids[i]
+							}
 						}
-						else if(i == ids.length -1){
-							id += ":changeOrgaButton"
-						}
-						else{
-							id += ':' + ids[i]
-						}
+						document.getElementById(id).click();
+						return false;
 					}
-					document.getElementById(id).click();
-					return false;
-				}
+				});
 			});
-		});
-	</script>
+		</script>
+	</ui:fragment>
+
 
 	<h:inputText id="inputPersonURI" styleClass="input_hidden_person_uri"
 		value="#{PersonBean.personURI}"

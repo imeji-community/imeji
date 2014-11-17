@@ -16,9 +16,9 @@ public class PropertiesTO implements Serializable{
 
 	private String id;
 
-    private UserTOBasic createdBy;
+    private PersonTOBasic createdBy;
 
-    private UserTOBasic modifiedBy;
+    private PersonTOBasic modifiedBy;
 
     private String createdDate;
 
@@ -46,19 +46,19 @@ public class PropertiesTO implements Serializable{
 		this.id = id;
 	}
 
-	public UserTOBasic getCreatedBy() {
+	public PersonTOBasic getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(UserTOBasic createdBy) {
+	public void setCreatedBy(PersonTOBasic createdBy) {
 		this.createdBy = createdBy;
 	}
 
-	public UserTOBasic getModifiedBy() {
+	public PersonTOBasic getModifiedBy() {
 		return modifiedBy;
 	}
 
-	public void setModifiedBy(UserTOBasic modifiedBy) {
+	public void setModifiedBy(PersonTOBasic modifiedBy) {
 		this.modifiedBy = modifiedBy;
 	}
 

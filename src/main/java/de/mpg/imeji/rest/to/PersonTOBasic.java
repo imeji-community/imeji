@@ -1,12 +1,12 @@
 package de.mpg.imeji.rest.to;
 
 
-public class UserTOBasic {
+public class PersonTOBasic {
 	private String fullname;
 	
 	private String id;
 	
-	public UserTOBasic(String fullname, String id){
+	public PersonTOBasic(String fullname, String id){
 		this.fullname = fullname;
 		this.id = id;
 	}

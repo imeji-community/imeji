@@ -10,6 +10,7 @@ import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.api.CollectionService;
+import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.JSONResponse;
 import de.mpg.j2j.exceptions.NotFoundException;
 
@@ -23,10 +24,12 @@ public class CollectionProcess {
 
 		CollectionImeji collection = null;
 
-		CollectionService icrud = new CollectionService();
+		CollectionService ccrud = new CollectionService();
 		try {
-			collection = icrud.read(id, u);
-			resp.setObject(collection);
+			collection = ccrud.read(id, u);
+			CollectionTO to = new CollectionTO();
+			TransferObjectFactory.transferCollection(collection, to);
+			resp.setObject(to);
 			resp.setStatus(Status.OK);
 		} catch (NotFoundException e) {
 			resp.setObject(RestProcessUtils.buildBadRequestResponse());

@@ -1,4 +1,6 @@
-package de.mpg.imeji.rest.to;
+package de.mpg.imeji.rest.to.predefinedMetadataTO;
+
+import de.mpg.imeji.rest.to.MetadataTO;
 
 public class GeolocationTO extends MetadataTO{
 	private String name;

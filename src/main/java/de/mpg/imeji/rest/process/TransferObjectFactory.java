@@ -18,20 +18,30 @@ import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
+import de.mpg.imeji.logic.vo.predefinedMetadata.License;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
+import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
 import de.mpg.imeji.rest.api.ProfileService;
 import de.mpg.imeji.rest.api.UserService;
 import de.mpg.imeji.rest.to.CollectionTO;
-import de.mpg.imeji.rest.to.GeolocationTO;
 import de.mpg.imeji.rest.to.IdentifierTO;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.LabelTO;
 import de.mpg.imeji.rest.to.MetadataSetTO;
-import de.mpg.imeji.rest.to.NumberTO;
 import de.mpg.imeji.rest.to.OrganizationTO;
 import de.mpg.imeji.rest.to.PersonTO;
 import de.mpg.imeji.rest.to.PersonTOBasic;
 import de.mpg.imeji.rest.to.PropertiesTO;
-import de.mpg.imeji.rest.to.TextTO;
+import de.mpg.imeji.rest.to.predefinedMetadataTO.ConePersonTO;
+import de.mpg.imeji.rest.to.predefinedMetadataTO.DateTO;
+import de.mpg.imeji.rest.to.predefinedMetadataTO.GeolocationTO;
+import de.mpg.imeji.rest.to.predefinedMetadataTO.LicenseTO;
+import de.mpg.imeji.rest.to.predefinedMetadataTO.LinkTO;
+import de.mpg.imeji.rest.to.predefinedMetadataTO.NumberTO;
+import de.mpg.imeji.rest.to.predefinedMetadataTO.PublicationTO;
+import de.mpg.imeji.rest.to.predefinedMetadataTO.TextTO;
 import de.mpg.j2j.misc.LocalizedString;
 
 public class TransferObjectFactory {
@@ -46,14 +56,17 @@ public class TransferObjectFactory {
 		to.setTitle(vo.getMetadata().getTitle());
 		to.setDescription(vo.getMetadata().getDescription());
 		
-		transferCollectionContributors(vo.getMetadata().getPersons(), to);
-
-
-	}
-	 
-	public static void transferCollectionContributors(Collection<Person> persons, CollectionTO to ){
-		for(Person p : persons){
+		
+		for(Person p : vo.getMetadata().getPersons())
+		{
 			PersonTO pto = new PersonTO();
+			transferPerson(p, pto);
+			to.getContributors().add(pto);
+		}
+	}
+	
+	 
+	public static void transferPerson(Person p, PersonTO pto){  
 			pto.setPosition(p.getPos());
 			pto.setId(extractIDFromURI(p.getId()));
 			pto.setFamilyName(p.getFamilyName());
@@ -63,13 +76,9 @@ public class TransferObjectFactory {
 
 			IdentifierTO ito = new IdentifierTO();
 			ito.setValue(p.getIdentifier());
-			pto.getIdentifiers().add(ito);
-			
+			pto.getIdentifiers().add(ito);			
 			//set oganizations
 			transferContributorOrganizations(p.getOrganizations(), pto);			
-			
-			to.getContributors().add(pto);
-		}
 		
 	}
 	
@@ -119,9 +128,7 @@ public class TransferObjectFactory {
 		//set version
 		to.setVersion(vo.getVersion());
 		//set discardComment
-		to.setDiscardComment(vo.getDiscardComment());
-		
-		
+		to.setDiscardComment(vo.getDiscardComment());		
 	}
 	
 
@@ -182,18 +189,28 @@ public class TransferObjectFactory {
 			case "de.mpg.imeji.logic.vo.predefinedMetadata.Text":
 				Text mdText = (Text) md;
 				TextTO tt = new TextTO();
-				tt.setName(mdText.getText());
+				tt.setText(mdText.getText());
 				mdTO.setValue(tt);
 				break;
 			case "de.mpg.imeji.logic.vo.predefinedMetadata.Number":
-				de.mpg.imeji.logic.vo.predefinedMetadata.Number mdNumber = (de.mpg.imeji.logic.vo.predefinedMetadata.Number) md;
+				Number mdNumber = (Number) md;
 				NumberTO nt = new NumberTO();
 				nt.setNumber(mdNumber.getNumber());
 				mdTO.setValue(nt);
 				break;
 			case "de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson":
+				ConePerson mdCP = (ConePerson) md;
+				ConePersonTO cpto = new ConePersonTO();
+				PersonTO personTo = new PersonTO();
+				cpto.setPerson(personTo);
+				transferPerson(mdCP.getPerson(), cpto.getPerson());
+				mdTO.setValue(cpto);
 				break;
 			case "de.mpg.imeji.logic.vo.predefinedMetadata.Date":
+				de.mpg.imeji.logic.vo.predefinedMetadata.Date mdDate = (de.mpg.imeji.logic.vo.predefinedMetadata.Date) md;
+				DateTO dt = new DateTO();
+				dt.setDate(mdDate.getDate());
+				mdTO.setValue(dt);				
 				break;
 			case "de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation":
 				Geolocation mdGeo = (Geolocation) md;
@@ -204,10 +221,25 @@ public class TransferObjectFactory {
 				mdTO.setValue(gto);
 				break;
 			case "de.mpg.imeji.logic.vo.predefinedMetadata.License":
+				License mdLicense = (License) md;
+				LicenseTO lto = new LicenseTO();
+				lto.setLicense(mdLicense.getLicense());
+				lto.setUrl(mdLicense.getExternalUri().toString());
+				mdTO.setValue(lto);			
 				break;
 			case "de.mpg.imeji.logic.vo.predefinedMetadata.Link":
+				Link mdLink = (Link)md;
+				LinkTO llto = new LinkTO();
+				llto.setLink(mdLink.getLabel());
+				llto.setUrl(mdLink.getUri().toString());
+				mdTO.setValue(llto);	
 				break;
 			case "de.mpg.imeji.logic.vo.predefinedMetadata.Publication":
+				Publication mdP = (Publication) md;
+				PublicationTO pto = new PublicationTO();
+				pto.setPublication(mdP.getUri().toString());
+				pto.setFormat(mdP.getExportFormat());
+				mdTO.setValue(pto);
 				break;
 			}
 

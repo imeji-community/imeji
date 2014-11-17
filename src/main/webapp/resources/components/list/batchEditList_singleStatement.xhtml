@@ -2,7 +2,8 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:composite="http://java.sun.com/jsf/composite">
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:imjc="http://java.sun.com/jsf/composite/components">
 	
 	<composite:interface>
 		<composite:attribute name="formObject" required="false"/>
@@ -164,7 +165,9 @@
 						<h:outputText value="#{cc.attrs.itemLabelBean.internationalizedLabels[cc.attrs.itemStatement.id]} (#{cc.attrs.itemLabelBean.lang})"/>
 					</h4>
 				</ui:fragment>
-				
+				<ui:remove>
+					<imjc:person person="#{cc.attrs.itemBean.person}" bean="#{cc.attrs.itemBean}" position="0"/>
+				</ui:remove>
 				<div class="imj_metadataSet">
 					<h:outputLabel value="#{lbl.family_name}" styleClass="imj_metadataLabel"/>
 					<h:inputText id="inputFamilyName" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.person.familyName}" immediate="true" onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')"/>
@@ -185,6 +188,8 @@
 					<h:outputLabel value="#{lbl.organization}" styleClass="imj_metadataLabel"/>
 					<h:inputText id="inputOrganization" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.person.organizations[0].name}" immediate="true" onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')"/>
 				</div>
+				
+
 			</ui:fragment>
 			
 			<!-- METADATA TYPE GEOLOCATION -->

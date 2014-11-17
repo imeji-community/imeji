@@ -160,12 +160,12 @@ function addEvent(obj, evType, fn){
 
 /*START ALL EXTERNAL JAVASCRIPTS*/
 function install_javascripts() {
-	installExtPaginator();
-	installItemList();
-	installFullItem();
-	installQuickSearchShortcut();
-	installDateTextbox();
-	installSameHeight();
+	//installExtPaginator();
+	//installItemList();
+	//installFullItem();
+	//installQuickSearchShortcut();
+	//installDateTextbox();
+	//installSameHeight();
 //	bindSuggests();	//from autoSuggestFunctions.js
 //	themeCookieInit();
 }

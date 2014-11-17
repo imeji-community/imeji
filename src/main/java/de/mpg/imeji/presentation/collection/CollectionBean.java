@@ -52,7 +52,6 @@ public abstract class CollectionBean extends ContainerBean {
 	 * New default {@link CollectionBean}
 	 */
 	public CollectionBean() {
-		System.out.println("collectionbean");
 		collection = new CollectionImeji();
 		sessionBean = (SessionBean) BeanHelper
 				.getSessionBean(SessionBean.class);

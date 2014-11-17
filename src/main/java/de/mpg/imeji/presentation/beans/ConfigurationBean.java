@@ -432,12 +432,11 @@ public class ConfigurationBean {
 	}
 
 	public boolean isEnableAutosuggestForUsers() {
-		return Boolean.parseBoolean(config.getProperty(
-				CONFIGURATION.AUTOSUGGEST_USERS.name()));
+		return Boolean.parseBoolean(config
+				.getProperty(CONFIGURATION.AUTOSUGGEST_USERS.name()));
 	}
 
 	public void setEnableAutosuggestForUsers(boolean b) {
-		System.out.println("set users " + b);
 		config.setProperty(CONFIGURATION.AUTOSUGGEST_USERS.name(),
 				Boolean.toString(b));
 	}
@@ -448,7 +447,6 @@ public class ConfigurationBean {
 	}
 
 	public void setEnableAutosuggestForOrganizations(boolean b) {
-		System.out.println("set orgs " + b);
 		config.setProperty(CONFIGURATION.AUTOSUGGEST_ORGAS.name(),
 				Boolean.toString(b));
 

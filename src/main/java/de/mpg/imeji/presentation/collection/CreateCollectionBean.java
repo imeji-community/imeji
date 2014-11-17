@@ -32,7 +32,6 @@ public class CreateCollectionBean extends CollectionBean {
 	 * Bean Constructor
 	 */
 	public CreateCollectionBean() {
-		System.out.println("createcollectionBean");
 		initialize();
 	}
 
@@ -41,12 +40,14 @@ public class CreateCollectionBean extends CollectionBean {
 	 */
 	public void initialize() {
 
-		if (UrlHelper.getParameterBoolean("reset")) {
-			System.out.println("reset");
-			setCollection(ImejiFactory.newCollection());
-			((List<Person>) getCollection().getMetadata().getPersons()).set(0,
-					sessionBean.getUser().getPerson().clone());
-		}
+		setCollection(ImejiFactory.newCollection());
+		((List<Person>) getCollection().getMetadata().getPersons()).set(0,
+				sessionBean.getUser().getPerson().clone());
+		// if (UrlHelper.getParameterBoolean("reset")) {
+		// setCollection(ImejiFactory.newCollection());
+		// ((List<Person>) getCollection().getMetadata().getPersons()).set(0,
+		// sessionBean.getUser().getPerson().clone());
+		// }
 	}
 
 	/**

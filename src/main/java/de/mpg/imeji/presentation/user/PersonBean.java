@@ -1,6 +1,5 @@
 package de.mpg.imeji.presentation.user;
 
-import java.util.Collection;
 import java.util.List;
 
 import javax.el.ELContext;
@@ -15,7 +14,6 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.presentation.beans.ContainerBean;
-import de.mpg.imeji.presentation.collection.CreateCollectionBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
@@ -39,45 +37,6 @@ public class PersonBean {
 	}
 
 	/**
-	 * Get all {@link Person} in imeji and return a String which can be read for
-	 * the JQUERY autocomplete
-	 * 
-	 * @return
-	 */
-	public String getAllPersonsAsJQuery() {
-		UserController uc = new UserController(sb.getUser());
-		String s = "";
-		Collection<Person> persons = uc.searchPersonByName("");
-		for (Person p : persons) {
-			if (!"".equals(s))
-				s += ",";
-			s += "{";
-			s += "label: \"" + p.getCompleteName() + "("
-					+ p.getOrganizationString() + ")\",";
-			s += "value : \"";
-			s += p.getId();
-			s += "\"}";
-		}
-		return s;
-	}
-
-	public String getAllOrganizationsAsString() {
-		UserController uc = new UserController(sb.getUser());
-		String s = "";
-		Collection<Organization> orgs = uc.searchOrganizationByName("");
-		for (Organization o : orgs) {
-			if (!"".equals(s))
-				s += ",";
-			s += "{";
-			s += "label: \"" + o.getName();
-			s += " \",value : \"";
-			s += o.getId();
-			s += "\"}";
-		}
-		return s;
-	}
-
-	/**
 	 * Change the person
 	 * 
 	 * @return
@@ -93,6 +52,7 @@ public class PersonBean {
 		} else if (bean instanceof UserBean) {
 			((UserBean) bean).getUser().setPerson(person.clone());
 		}
+		System.out.println(bean);
 		return ":";
 	}
 

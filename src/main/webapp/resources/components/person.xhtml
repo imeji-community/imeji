@@ -17,9 +17,15 @@
 	<ui:fragment rendered="#{Configuration.enableAutosuggestForUsers}">
 		<script>
 			$(function() {
-				var persons = [#{PersonBean.allPersonsAsJQuery}]
+				var result;
 				$(".autocomplete_person").autocomplete({
-					source : persons,
+					source : function(request, response) {
+						$.getJSON('#{Navigation.applicationUrl}autocompleter', {
+							searchkeyword : request.term,
+							datasource : "imeji_persons"
+						}, response );
+					},
+					minLength : 1,
 					select : function(event, ui) {
 						$( ".input_hidden_person_uri" ).val(ui.item.value);
 						var ids = this.id.split(":");
@@ -46,9 +52,13 @@
 		rendered="#{Configuration.enableAutosuggestForOrganizations}">
 		<script>
 			$(function() {
-				var orgs = [#{PersonBean.allOrganizationsAsString}]
 				$(".autocomplete_org").autocomplete({
-					source : orgs,
+					source : function(request, response) {
+						$.getJSON('#{Navigation.applicationUrl}autocompleter', {
+							searchkeyword : request.term,
+							datasource : "imeji_orgs"
+						}, response );
+					},
 					select : function(event, ui) {
 						$( ".input_hidden_orga_uri" ).val(ui.item.value);
 						var ids = this.id.split(":");
@@ -72,7 +82,6 @@
 		</script>
 	</ui:fragment>
 
-
 	<h:inputText id="inputPersonURI" styleClass="input_hidden_person_uri"
 		value="#{PersonBean.personURI}"
 		valueChangeListener="#{PersonBean.personListener}"
@@ -84,9 +93,6 @@
 		style="display:none;">
 		<f:ajax render="@form" execute="@form" />
 	</h:commandButton>
-
-
-
 
 	<h:panelGroup layout="block" styleClass="imj_admindataSet">
 		<div class="imj_admindataLabel">

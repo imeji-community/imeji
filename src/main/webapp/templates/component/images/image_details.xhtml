@@ -4,7 +4,8 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:imjc="http://java.sun.com/jsf/composite/components"
-	xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs">
+	xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs"
+	xmlns:list="http://java.sun.com/jsf/composite/components/list">
 
 	<!-- MediaDisplayContainer - START -->
 	<h:panelGroup layout="block" styleClass="imj_mediaDisplayContainer">
@@ -217,14 +218,9 @@
 												<span class="imj_invisible">: </span>
 											</div>
 											<div class="imj_metadataValue">
-												<div class="imj_metadataValueEntry" style="margin-left: #{metadata.hierarchyLevel}em;">
+												<div style="margin-left: #{metadata.hierarchyLevel}em;">
 													<!-- MetaDataInput -->
-													<ui:include src="MetadataInput.xhtml">
-														<ui:param name="statement" value="#{metadata.statement}"/>
-														<ui:param name="metadata" value="#{metadata}"/>
-														<ui:param name="areaClass" value="double_txtArea"/>
-														<ui:param name="hideLabel" value="true"/>
-													</ui:include>
+													<list:batchEditList_singleStatement itemBean="#{metadata}" itemStatement="#{metadata.statement}" itemLabelBean="#{MetadataLabels}" hideLabel="true" navBean="#{Navigation}" suggestBean="#{SuggestBean}"/>		
 												</div>
 												<!-- imj_multipleButtons (-) (+) command buttons -->
 												<div class="imj_metadataEditButtonArea">

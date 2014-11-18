@@ -18,7 +18,8 @@
 	
 	<composite:implementation>
 		
-		
+		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/datepicker.js"></script>
+		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/autocomplete.js"></script>	
 		<div class="imj_singleStatementEdit">
 			
 			<!-- METADATA TYPE TEXT -->
@@ -86,6 +87,7 @@
 					<h:outputText value="#{cc.attrs.itemLabelBean.internationalizedLabels[cc.attrs.itemStatement.id]} (#{cc.attrs.itemLabelBean.lang})" styleClass="imj_metadataLabel" rendered="#{cc.attrs.hideLabel == false}"/>
 					
 					<ui:fragment rendered="#{!cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
+						<h:outputLabel value="#{lbl.link}" styleClass="imj_metadataLabel"/>
 						<h:inputText id="inputPublicationURI" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.uri}" 
 									 onfocus="this.select(); getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')" valueChangeListener="#{cc.attrs.itemBean.resetCitationListener}">
 							<f:converter converterId="URIConverter"/>
@@ -118,16 +120,19 @@
 						<h:outputText value="#{cc.attrs.itemLabelBean.internationalizedLabels[cc.attrs.itemStatement.id]} (#{cc.attrs.itemLabelBean.lang})"/>
 					</h4>
 				</ui:fragment>
-				
-				<h:panelGroup layout="block" styleClass="imj_metadataSet " rendered="#{!cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
-					<h:outputLabel value="YYYY-MM-DD" styleClass="imj_metadataLabel "/>
-					<h:inputText styleClass="imj_metadataValue datepicker" value="#{cc.attrs.itemBean.date}" immediate="false" onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}');"/>
-				</h:panelGroup>
-				<h:panelGroup layout="block" styleClass="imj_metadataValue" rendered="#{cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
-					<h:selectOneMenu immediate="true" value="#{cc.attrs.itemBean.date}" valueChangeListener="#{cc.attrs.itemBean.predefinedValueListener}">
-						<f:selectItems value="#{cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].restrictedValues}"/>
-					</h:selectOneMenu>
-				</h:panelGroup>
+				<ui:fragment rendered="#{!cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
+					<div class="imj_metadataSet " >
+						<h:outputLabel value="YYYY-MM-DD" styleClass="imj_metadataLabel "/>
+						<h:inputText styleClass="imj_metadataValue datepicker" value="#{cc.attrs.itemBean.date}" immediate="false" onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}');"/>
+					</div>
+				</ui:fragment>
+				<ui:fragment rendered="#{cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
+					<div class="imj_metadataValue">
+						<h:selectOneMenu immediate="true" value="#{cc.attrs.itemBean.date}" valueChangeListener="#{cc.attrs.itemBean.predefinedValueListener}">
+							<f:selectItems value="#{cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].restrictedValues}"/>
+						</h:selectOneMenu>
+					</div>
+				</ui:fragment>
 			</ui:fragment>
 			
 			<!-- METADATA TYPE LICENSE -->

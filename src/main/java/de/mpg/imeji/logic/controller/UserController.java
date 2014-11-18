@@ -178,13 +178,14 @@ public class UserController {
 	 */
 	public Collection<Person> searchPersonByName(String name) {
 
-		Collection<Person> l = searchPersonByNameInUsers(name);
-		l.addAll(searchPersonByNameInCollections(name));
-		Map<String, Person> map = new HashMap<>();
-		for (Person p : l) {
-			map.put(p.getIdentifier(), p);
-		}
-		return map.values();
+		return  searchPersonByNameInUsers(name);
+		// don't search (for now) for all persons, since it would get messy (many duplicates)
+		//l.addAll(searchPersonByNameInCollections(name));
+//		Map<String, Person> map = new HashMap<>();
+//		for (Person p : l) {
+//			map.put(p.getIdentifier(), p);
+//		}
+//		return map.values();
 	}
 
 	/**
@@ -231,13 +232,14 @@ public class UserController {
 	 * @return
 	 */
 	public Collection<Organization> searchOrganizationByName(String name) {
-		Collection<Organization> l = searchOrganizationByNameInCollections(name);
-		l.addAll(searchOrganizationByNameInUsers(name));
-		Map<String, Organization> map = new HashMap<>();
-		for (Organization o : l) {
-			map.put(o.getIdentifier(), o);
-		}
-		return map.values();
+		return searchOrganizationByNameInUsers(name);
+//		Collection<Organization> l = searchOrganizationByNameInCollections(name);
+//		l.addAll(searchOrganizationByNameInUsers(name));
+//		Map<String, Organization> map = new HashMap<>();
+//		for (Organization o : l) {
+//			map.put(o.getIdentifier(), o);
+//		}
+//		return map.values();
 	}
 
 	/**

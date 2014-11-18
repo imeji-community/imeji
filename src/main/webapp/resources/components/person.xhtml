@@ -11,6 +11,8 @@
 		required="true" shortDescription="@type: The parent bean" />
 	<composite:attribute name="position" type="Integer" required="true"
 		shortDescription="@type: The position of the person if included in a list" />
+	<composite:attribute name="userSource" type="String" required="false"  default="imeji_persons"/>
+	<composite:attribute name="orgsSource" type="String" required="false" default="imeji_orgs"/>
 </composite:interface>
 
 <composite:implementation>
@@ -22,7 +24,7 @@
 					source : function(request, response) {
 						$.getJSON('#{Navigation.applicationUrl}autocompleter', {
 							searchkeyword : request.term,
-							datasource : "imeji_persons"
+							datasource : '#{cc.attrs.userSource}'
 						}, response );
 					},
 					minLength : 1,

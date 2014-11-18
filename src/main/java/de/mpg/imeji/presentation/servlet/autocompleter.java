@@ -86,7 +86,8 @@ public class autocompleter extends HttpServlet {
 			} else if ("imeji_orgs".equals(datasource)) {
 				UserController uc = new UserController(getSession(request)
 						.getUser());
-				Collection<Organization> orgs = uc.searchOrganizationByName(suggest);
+				Collection<Organization> orgs = uc
+						.searchOrganizationByName(suggest);
 				for (Organization o : orgs) {
 					responseString = appendResponseForInternalSuggestion(
 							responseString, o.getName(), o.getId().toString());
@@ -231,17 +232,21 @@ public class autocompleter extends HttpServlet {
 			JSONObject sendObject = new JSONObject();
 			sendObject.put("label",
 					parseObject.get("http_purl_org_dc_elements_1_1_title"));
+			sendObject.put("value",
+					parseObject.toJSONString());
 			sendObject.put("family",
 					parseObject.get("http_xmlns_com_foaf_0_1_family_name"));
 			sendObject.put("givenname",
 					parseObject.get("http_xmlns_com_foaf_0_1_givenname"));
 			sendObject.put("id", parseObject.get("id"));
-			sendObject
-					.put("orgs",
-							writeJsonArrayToOneString(
-									parseObject
-											.get("http_purl_org_escidoc_metadata_terms_0_1_position"),
-									"http_purl_org_eprint_terms_affiliatedInstitution"));
+			// sendObject
+			// .put("orgs",
+			// writeJsonArrayToOneString(
+			// parseObject
+			// .get("http_purl_org_escidoc_metadata_terms_0_1_position"),
+			// "http_purl_org_eprint_terms_affiliatedInstitution"));
+			sendObject.put("orgs", parseObject
+					.get("http_purl_org_escidoc_metadata_terms_0_1_position"));
 			sendObject.put(
 					"alternatives",
 					writeJsonArrayToOneString(parseObject

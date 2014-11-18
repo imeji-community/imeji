@@ -1,5 +1,8 @@
 package de.mpg.imeji.presentation.user;
 
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.el.ELContext;
@@ -9,11 +12,16 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.presentation.beans.ContainerBean;
+import de.mpg.imeji.presentation.metadata.SuperMetadataBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
@@ -51,8 +59,9 @@ public class PersonBean {
 			l.set(position, person.clone());
 		} else if (bean instanceof UserBean) {
 			((UserBean) bean).getUser().setPerson(person.clone());
+		} else if (bean instanceof SuperMetadataBean) {
+			((SuperMetadataBean) bean).setPerson(person);
 		}
-		System.out.println(bean);
 		return ":";
 	}
 
@@ -82,6 +91,7 @@ public class PersonBean {
 					.getUser().getPerson().getOrganizations();
 			l.set(positionOrga, orga);
 		}
+		System.out.println(bean);
 		return ":";
 	}
 
@@ -94,14 +104,66 @@ public class PersonBean {
 	private Person loadPerson(String uri) {
 		if (uri != null) {
 			try {
+				URI.create(uri);
+				// if not errors, then the person is intern to imeji
 				UserController uc = new UserController(sb.getUser());
 				return uc.retrievePersonById(personURI);
 			} catch (Exception e) {
-				BeanHelper.error(e.getMessage());
-				e.printStackTrace();
+				// is a cone person
+				return parseConePersonJSON(uri);
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Parse a json from cone for a person
+	 * 
+	 * @param jsonString
+	 * @return
+	 */
+	private Person parseConePersonJSON(String jsonString) {
+		Object json = JSONValue.parse(jsonString);
+		if (json instanceof JSONObject) {
+			Person p = ImejiFactory.newPerson();
+			p.setFamilyName((String) ((JSONObject) json)
+					.get("http_xmlns_com_foaf_0_1_family_name"));
+			p.setGivenName((String) ((JSONObject) json)
+					.get("http_xmlns_com_foaf_0_1_givenname"));
+			p.setIdentifier((String) ((JSONObject) json).get("id"));
+			p.setAlternativeName((String) ((JSONObject) json)
+					.get("http_purl_org_dc_terms_alternative"));
+			p.setOrganizations(parseConeOrgnanizationJson(((JSONObject) json)
+					.get("http_purl_org_escidoc_metadata_terms_0_1_position")
+					.toString()));
+			return p;
+		}
+		return null;
+	}
+
+	/**
+	 * Parse a json from cone for an organization
+	 * 
+	 * @param jsonString
+	 * @return
+	 */
+	private List<Organization> parseConeOrgnanizationJson(String jsonString) {
+		Object json = JSONValue.parse(jsonString);
+		List<Organization> l = new ArrayList<Organization>();
+		if (json instanceof JSONArray) {
+			for (Iterator<?> iterator = ((JSONArray) json).iterator(); iterator
+					.hasNext();) {
+				l.addAll(parseConeOrgnanizationJson(iterator.next().toString()));
+			}
+		} else if (json instanceof JSONObject) {
+			Organization o = ImejiFactory.newOrganization();
+			o.setName((String) ((JSONObject) json)
+					.get("http_purl_org_eprint_terms_affiliatedInstitution"));
+			o.setIdentifier((String) ((JSONObject) json)
+					.get("http_purl_org_dc_elements_1_1_identifier"));
+			l.add(o);
+		}
+		return l;
 	}
 
 	private Organization loadOrga(String uri) {

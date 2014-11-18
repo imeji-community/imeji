@@ -19,7 +19,6 @@
 	<composite:implementation>
 		
 		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/datepicker.js"></script>
-		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/autocomplete.js"></script>	
 		<div class="imj_singleStatementEdit">
 			
 			<!-- METADATA TYPE TEXT -->
@@ -170,30 +169,72 @@
 						<h:outputText value="#{cc.attrs.itemLabelBean.internationalizedLabels[cc.attrs.itemStatement.id]} (#{cc.attrs.itemLabelBean.lang})"/>
 					</h4>
 				</ui:fragment>
-				<ui:remove>
-					<imjc:person person="#{cc.attrs.itemBean.person}" bean="#{cc.attrs.itemBean}" position="0"/>
-				</ui:remove>
-				<div class="imj_metadataSet">
-					<h:outputLabel value="#{lbl.family_name}" styleClass="imj_metadataLabel"/>
-					<h:inputText id="inputFamilyName" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.person.familyName}" immediate="true" onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')"/>
-				</div>
-				<div class="imj_metadataSet">
-					<h:outputLabel value="#{lbl.first_name}" styleClass="imj_metadataLabel"/>
-					<h:inputText id="inputFirstName" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.person.givenName}" immediate="true"  onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')"/>
-				</div>
-				<div class="imj_metadataSet">
-					<h:outputLabel value="#{lbl.alternative_name}" styleClass="imj_metadataLabel"/>
-					<h:inputText id="inputAlternative" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.person.alternativeName}" immediate="true" onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')"/>
-				</div>
-				<div class="imj_metadataSet">
-					<h:outputLabel value="#{lbl.identifier}" styleClass="imj_metadataLabel"/>
-					<h:inputText id="inputIdentifier" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.person.identifier}" immediate="true" onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')"/>
-				</div>
-				<div class="imj_metadataSet">
-					<h:outputLabel value="#{lbl.organization}" styleClass="imj_metadataLabel"/>
-					<h:inputText id="inputOrganization" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.person.organizations[0].name}" immediate="true" onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')"/>
-				</div>
 				
+				<imjc:person person="#{cc.attrs.itemBean.person}" bean="#{cc.attrs.itemBean}" position="0" userSource="#{cc.attrs.itemStatement.vocabulary}"/>
+				
+				<ui:remove>
+						<div class="imj_metadataSet">
+							<h:outputLabel value="#{lbl.family_name}" styleClass="imj_metadataLabel"/>
+							<h:inputText id="inputFamilyName" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.person.familyName}" immediate="true" onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')"/>
+						</div>
+						<div class="imj_metadataSet">
+							<h:outputLabel value="#{lbl.first_name}" styleClass="imj_metadataLabel"/>
+							<h:inputText id="inputFirstName" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.person.givenName}" immediate="true"  onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')"/>
+						</div>
+						<div class="imj_metadataSet">
+							<h:outputLabel value="#{lbl.alternative_name}" styleClass="imj_metadataLabel"/>
+							<h:inputText id="inputAlternative" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.person.alternativeName}" immediate="true" onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')"/>
+						</div>
+						<div class="imj_metadataSet">
+							<h:outputLabel value="#{lbl.identifier}" styleClass="imj_metadataLabel"/>
+							<h:inputText id="inputIdentifier" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.person.identifier}" immediate="true" onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')"/>
+						</div>
+						<div class="imj_metadataSet">
+						<h:outputLabel value="#{lbl.organizations}" styleClass="imj_metadataLabel"/>
+						<ui:repeat id="organizations" var="orga" value="#{cc.attrs.itemBean.person.organizations}" varStatus="index">
+							<div class="imj_metadataSet">
+								<h:outputLabel value="#{lbl.name}" styleClass="imj_metadataLabel"/>
+								<h:inputText id="inputOrganizationName" styleClass="imj_metadataValue" value="#{orga.name}"  onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')"/>	
+							</div>
+							<div class="imj_metadataSet">
+								<h:outputLabel value="#{lbl.description}" styleClass="imj_metadataLabel"/>
+								<h:inputText id="inputOrganizationDescription"  styleClass="imj_metadataValue" value="#{orga.description}"  onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')"/>	
+							</div>
+							<div class="imj_metadataSet">
+								<h:outputLabel value="#{lbl.identifier}" styleClass="imj_metadataLabel"/>
+								<h:inputText id="inputOrganizationIdentifer"  styleClass="imj_metadataValue" value="#{orga.description}"  onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')"/>	
+							</div>
+							<div class="imj_metadataSet">
+								<h:outputLabel value="#{lbl.city}" styleClass="imj_metadataLabel"/>
+								<h:inputText id="inputOrganizationCity"  styleClass="imj_metadataValue" value="#{orga.description}"  onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')"/>	
+							</div>
+							<div class="imj_metadataSet">
+								<h:outputLabel value="#{lbl.country}" styleClass="imj_metadataLabel"/>
+								<h:inputText id="inputOrganizationCountry"  styleClass="imj_metadataValue" value="#{orga.description}"  onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')"/>	
+							</div>
+							<span class="imj_noDisplay">: </span>
+							<span class="imj_inlineButtonGroup"> 
+								<h:commandButton id="addOrganization"
+									styleClass="imj_buttonAdd_16"
+									title="#{lbl.add_organization}"
+									action="#{cc.attrs.itemBean.addOrganization(index.index)}">
+									<f:ajax execute="@form" render="@form" />
+								</h:commandButton> 
+								<h:commandButton id="removeOrganization" styleClass="imj_buttonRemove_16"
+									title="#{lbl.remove_organization}"
+									action="#{cc.attrs.itemBean.removeOrganization(index.index)}">
+									<f:ajax execute="@form" render="@form" />
+								</h:commandButton>
+							</span>
+						</ui:repeat>
+						</div>
+				</ui:remove>
+				<ui:remove>
+					<div class="imj_metadataSet">
+						<h:outputLabel value="#{lbl.organization}" styleClass="imj_metadataLabel"/>
+						<h:inputText id="inputOrganization" styleClass="imj_metadataValue" value="#{cc.attrs.itemBean.person.organizations[0].name}" immediate="true" onfocus="getDatasourceUrl('#{cc.attrs.itemStatement.vocabulary}', '#{cc.attrs.navBean.autocompleteUrl}')"/>
+					</div>
+				</ui:remove>
 
 			</ui:fragment>
 			

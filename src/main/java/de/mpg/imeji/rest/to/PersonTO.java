@@ -24,7 +24,7 @@ public class PersonTO implements Serializable{
 	
 	private List<IdentifierTO> identifiers = new ArrayList<IdentifierTO>();
 	
-	private List<OrganizationTO> origanizations = new ArrayList<OrganizationTO>();
+	private List<OrganizationTO> organizations = new ArrayList<OrganizationTO>();
 
 
 
@@ -92,14 +92,15 @@ public class PersonTO implements Serializable{
 		this.identifiers = identifiers;
 	}
 
-	public List<OrganizationTO> getOriganizations() {
-		return origanizations;
+	public List<OrganizationTO> getOrganizations() {
+		return organizations;
 	}
 
-	public void setOriganizations(List<OrganizationTO> origanizations) {
-		this.origanizations = origanizations;
+	public void setOrganizations(List<OrganizationTO> organizations) {
+		this.organizations = organizations;
 	}
-	
+
+
 	
 	
 

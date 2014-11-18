@@ -91,8 +91,10 @@ public class TransferObjectFactory {
 			oto.setDescription(orga.getDescription());
 			IdentifierTO ito = new IdentifierTO();
 			ito.setValue(orga.getIdentifier());
-			oto.getIdentifiers().add(ito);			
-			pto.getOriganizations().add(oto);			
+			oto.getIdentifiers().add(ito);
+			oto.setCity(orga.getCity());
+			oto.setCountry(orga.getCountry());
+			pto.getOrganizations().add(oto);			
 		}
 		
 	}

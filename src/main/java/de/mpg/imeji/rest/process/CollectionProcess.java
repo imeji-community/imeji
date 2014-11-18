@@ -23,12 +23,17 @@ public class CollectionProcess {
 		User u = auth.doLogin();
 
 		CollectionImeji collection = null;
+		CollectionImeji collection2 = new CollectionImeji();
 
+		
 		CollectionService ccrud = new CollectionService();
 		try {
 			collection = ccrud.read(id, u);
 			CollectionTO to = new CollectionTO();
 			TransferObjectFactory.transferCollection(collection, to);
+
+			ReverseTransferObjectFactory.transferCollection(to, collection2);
+			
 			resp.setObject(to);
 			resp.setStatus(Status.OK);
 		} catch (NotFoundException e) {

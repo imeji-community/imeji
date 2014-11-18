@@ -23,7 +23,7 @@ public class CollectionProcess {
 		User u = auth.doLogin();
 
 		CollectionImeji collection = null;
-		CollectionImeji collection2 = new CollectionImeji();
+		//CollectionImeji collection2 = new CollectionImeji();
 
 		
 		CollectionService ccrud = new CollectionService();
@@ -31,8 +31,7 @@ public class CollectionProcess {
 			collection = ccrud.read(id, u);
 			CollectionTO to = new CollectionTO();
 			TransferObjectFactory.transferCollection(collection, to);
-
-			ReverseTransferObjectFactory.transferCollection(to, collection2);
+			//ReverseTransferObjectFactory.transferCollection(to, collection2);
 			
 			resp.setObject(to);
 			resp.setStatus(Status.OK);

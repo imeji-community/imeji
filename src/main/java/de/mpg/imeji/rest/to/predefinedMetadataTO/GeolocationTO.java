@@ -1,7 +1,16 @@
 package de.mpg.imeji.rest.to.predefinedMetadataTO;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
 import de.mpg.imeji.rest.to.MetadataTO;
 
+@XmlRootElement
+@XmlType (propOrder = {	 
+		"name",
+		"longitude",
+		"latitude"
+		})
 public class GeolocationTO extends MetadataTO{
 	private String name;
 	private double longitude;

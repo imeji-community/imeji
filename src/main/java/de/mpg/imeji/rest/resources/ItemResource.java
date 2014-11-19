@@ -30,6 +30,8 @@ public class ItemResource implements ImejiResource{
         return null;  
     } 
     
+    
+    
     @GET   
     @Path("/{id}")
     @ApiOperation(value = "Get item by id")
@@ -37,8 +39,6 @@ public class ItemResource implements ImejiResource{
     public Response readFromID(@Context HttpServletRequest req, @PathParam("id") String id){
     	JSONResponse resp = ItemProcess.readItem(req,id);
         return RestProcessUtils.buildJSONResponse(resp);
-
-
     }
 
     @POST 

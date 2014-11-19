@@ -1,8 +1,15 @@
 package de.mpg.imeji.rest.to.predefinedMetadataTO;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
 import de.mpg.imeji.rest.to.MetadataTO;
 import de.mpg.imeji.rest.to.PersonTO;
 
+@XmlRootElement
+@XmlType(propOrder = {	 
+		"person",
+		})
 public class ConePersonTO extends MetadataTO{
 	private PersonTO person;
 

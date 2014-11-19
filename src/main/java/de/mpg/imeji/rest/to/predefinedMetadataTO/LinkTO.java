@@ -1,7 +1,15 @@
 package de.mpg.imeji.rest.to.predefinedMetadataTO;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
 import de.mpg.imeji.rest.to.MetadataTO;
 
+@XmlRootElement
+@XmlType (propOrder = {	 
+		"link",
+		"url"
+		})
 public class LinkTO extends MetadataTO{
 	
 	private String link;

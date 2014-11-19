@@ -5,6 +5,32 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAccessOrder;
+import javax.xml.bind.annotation.XmlAccessorOrder;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
+@XmlRootElement
+@XmlType (propOrder = {	
+		"id",
+		"createdBy",
+		"modifiedBy", 
+		"createdDate",
+		"modifiedDate",
+		"versionDate",
+		"status",
+		"visibility",
+		"version",
+		"discardComment",
+		"collectionId",
+		"filename",
+		"mimetype",
+		"checksumMd5",
+		"webResolutionUrlUrl",
+		"thumbnailUrl",
+		"fileUrl",
+		"metadata"
+		})
 public class ItemTO extends PropertiesTO implements Serializable{
 
 	private static final long serialVersionUID = 8408059450327059926L;

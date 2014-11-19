@@ -15,7 +15,7 @@ import de.mpg.imeji.rest.to.JSONResponse;
 import de.mpg.j2j.exceptions.NotFoundException;
 
 public class CollectionProcess {
-
+    
 	public static JSONResponse readCollection(HttpServletRequest req, String id) {
 		JSONResponse resp = new JSONResponse();
 

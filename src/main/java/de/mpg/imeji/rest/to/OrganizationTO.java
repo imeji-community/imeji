@@ -4,6 +4,19 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
+@XmlRootElement
+@XmlType(propOrder = {	 
+		"position",
+		"id",
+		"name", 
+		"description",
+		"identifiers",
+		"city",
+		"country"
+		})
 public class OrganizationTO implements Serializable{
 
 

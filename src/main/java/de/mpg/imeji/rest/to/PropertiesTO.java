@@ -1,14 +1,22 @@
 package de.mpg.imeji.rest.to;
 
 import java.io.Serializable;
-import java.net.URI;
-import java.util.Calendar;
 
-import org.glassfish.grizzly.http.server.util.SimpleDateFormats;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
-import de.mpg.j2j.annotations.j2jLiteral;
-import de.mpg.j2j.annotations.j2jResource;
-
+@XmlRootElement
+@XmlType (propOrder = {	 
+		"id",
+		"createdBy",
+		"modifiedBy", 
+		"createdDate",
+		"modifiedDate",
+		"versionDate",
+		"status",
+		"version",
+		"discardComment"
+		})
 public class PropertiesTO implements Serializable{
 
 

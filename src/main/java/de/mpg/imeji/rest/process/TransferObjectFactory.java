@@ -49,9 +49,6 @@ public class TransferObjectFactory {
 	
 	public static void transferCollection(CollectionImeji vo, CollectionTO to) {
 		transferProperties(vo, to);
-		//set visibility
-//		to.setVisibility(vo.getVisibility().toString());
-
 		to.setProfileId(extractIDFromURI(vo.getProfile()));
 		to.setTitle(vo.getMetadata().getTitle());
 		to.setDescription(vo.getMetadata().getDescription());
@@ -67,6 +64,7 @@ public class TransferObjectFactory {
 	
 	 
 	public static void transferPerson(Person p, PersonTO pto){  
+
 			pto.setPosition(p.getPos());
 			pto.setId(extractIDFromURI(p.getId()));
 			pto.setFamilyName(p.getFamilyName());
@@ -124,7 +122,8 @@ public class TransferObjectFactory {
 		//set createdDate, modifiedDate, versionDate
 		to.setCreatedDate(formatDate(vo.getCreated().getTime()));
 		to.setModifiedDate(formatDate(vo.getModified().getTime()));
-		to.setVersionDate(formatDate(vo.getVersionDate().getTime()));
+		if(vo.getVersionDate() != null)
+			to.setVersionDate(formatDate(vo.getVersionDate().getTime()));
 		//set status
 		to.setStatus(vo.getStatus().toString());
 		//set version
@@ -241,6 +240,7 @@ public class TransferObjectFactory {
 				PublicationTO pto = new PublicationTO();
 				pto.setPublication(mdP.getUri().toString());
 				pto.setFormat(mdP.getExportFormat());
+				pto.setCitation(mdP.getCitation());
 				mdTO.setValue(pto);
 				break;
 			}

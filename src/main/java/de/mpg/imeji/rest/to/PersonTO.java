@@ -4,6 +4,21 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
+@XmlRootElement
+@XmlType(propOrder = {	 
+		"position",
+		"id",
+		"familyName", 
+		"givenName",
+		"completeName",
+		"alternativeName",
+		"role",
+		"identifiers",
+		"organizations"
+		})
 public class PersonTO implements Serializable{
 	
 	private static final long serialVersionUID = 2752588435466650389L;

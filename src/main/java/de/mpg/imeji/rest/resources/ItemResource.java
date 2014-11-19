@@ -25,7 +25,6 @@ public class ItemResource implements ImejiResource{
 
 	
     @GET  
-    @ApiOperation(value = "Get item by id")
     @Produces(MediaType.APPLICATION_JSON)  
     public Response readAll(@Context HttpServletRequest req){       
         return null;  
@@ -44,7 +43,7 @@ public class ItemResource implements ImejiResource{
 
     @POST 
     @Consumes(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Create new item", notes = "When contains parameter \"versionOf\", new item is created as a copy of released item (statements only, not binaries)")
+    @ApiOperation(value = "(Not implemented) Create new item", notes = "When contains parameter \"versionOf\", new item is created as a copy of released item (statements only, not binaries)")
     @Produces(MediaType.APPLICATION_JSON) 
 	public Response create(@Context HttpServletRequest req) {
 		return null;
@@ -52,7 +51,7 @@ public class ItemResource implements ImejiResource{
 
     @DELETE  
     @Path("/{id}")
-    @ApiOperation(value = "Delete item by id")
+    @ApiOperation(value = "(Not implemented) Delete item by id")
     @Produces(MediaType.APPLICATION_JSON) 
 	public Response delete(@Context HttpServletRequest req, @PathParam("id") String id) {
 		return null;

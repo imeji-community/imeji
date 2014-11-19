@@ -25,7 +25,6 @@ public class CollectionResource implements ImejiResource{
 
 	
     @GET  
-    @ApiOperation(value = "Get collection")
     @Produces(MediaType.APPLICATION_JSON)  
     public Response readAll(@Context HttpServletRequest req){       
         return null;  
@@ -44,7 +43,7 @@ public class CollectionResource implements ImejiResource{
 
     @POST 
     @Consumes(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Create collection or new version of collection", notes = "When contains as parameter \"versionOF\", new collection is created as a copy of a released collection (method needs to validate the status of the collection provided with \"versionOf\")\n"  
+    @ApiOperation(value = "(Not implemented) Create collection or new version of collection", notes = "When contains as parameter \"versionOF\", new collection is created as a copy of a released collection (method needs to validate the status of the collection provided with \"versionOf\")\n"  
     + "\nCreation of the new collection automatically generates a new (empty) metadata profile  for that collection. ")
     @Produces(MediaType.APPLICATION_JSON) 
 	public Response create(@Context HttpServletRequest req) {
@@ -53,7 +52,7 @@ public class CollectionResource implements ImejiResource{
 
     @DELETE  
     @Path("/{id}")
-    @ApiOperation(value = "Delete collection by id", notes = "Deletes also the profile and items of this collection")   
+    @ApiOperation(value = "(Not implemented)  Delete collection by id", notes = "Deletes also the profile and items of this collection")   
     @Produces(MediaType.APPLICATION_JSON) 
 	public Response delete(@Context HttpServletRequest req, @PathParam("id") String id) {
 		return null;

@@ -232,14 +232,12 @@ public class UserController {
 	 * @return
 	 */
 	public Collection<Organization> searchOrganizationByName(String name) {
-		return searchOrganizationByNameInUsers(name);
-//		Collection<Organization> l = searchOrganizationByNameInCollections(name);
-//		l.addAll(searchOrganizationByNameInUsers(name));
-//		Map<String, Organization> map = new HashMap<>();
-//		for (Organization o : l) {
-//			map.put(o.getIdentifier(), o);
-//		}
-//		return map.values();
+		Collection<Organization> l = searchOrganizationByNameInUsers(name);
+		Map<String, Organization> map = new HashMap<>();
+		for (Organization o : l) {
+			map.put(o.getIdentifier(), o);
+		}
+		return map.values();
 	}
 
 	/**

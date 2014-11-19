@@ -11,20 +11,26 @@
 		required="true" shortDescription="@type: The parent bean" />
 	<composite:attribute name="position" type="Integer" required="true"
 		shortDescription="@type: The position of the person if included in a list" />
-	<composite:attribute name="userSource" type="String" required="false"  default="#{Configuration.autoSuggestForUsers}"/>
-	<composite:attribute name="orgsSource" type="String" required="false" default="#{Configuration.autosuggestForOrganizations}"/>
+	<composite:attribute name="userSource" type="String" required="false"
+		default="#{Configuration.autoSuggestForUsers}" />
+	<composite:attribute name="orgsSource" type="String" required="false"
+		default="#{Configuration.autosuggestForOrganizations}" />
 </composite:interface>
 
 <composite:implementation>
 	<ui:fragment rendered="#{cc.attrs.userSource != ''}">
 		<script>
+			var userSource;
+			function setUserSource(src) {
+				userSource = src;
+			}
 			$(function() {
 				var result;
 				$(".autocomplete_person").autocomplete({
 					source : function(request, response) {
 						$.getJSON('#{Navigation.applicationUrl}autocompleter', {
 							searchkeyword : request.term,
-							datasource : '#{cc.attrs.userSource}'
+							datasource : userSource
 						}, response );
 					},
 					minLength : 1,
@@ -50,15 +56,18 @@
 			});
 		</script>
 	</ui:fragment>
-	<ui:fragment
-		rendered="#{cc.attrs.orgsSource != ''}">
+	<ui:fragment rendered="#{cc.attrs.orgsSource != ''}">
 		<script>
+			var orgaSource;
+			function setOrgaSource(src) {
+				orgaSource = src;
+			}
 			$(function() {
 				$(".autocomplete_org").autocomplete({
 					source : function(request, response) {
 						$.getJSON('#{Navigation.applicationUrl}autocompleter', {
 							searchkeyword : request.term,
-							datasource : '#{cc.attrs.orgsSource}'
+							datasource : orgaSource
 						}, response );
 					},
 					select : function(event, ui) {
@@ -105,7 +114,8 @@
 			<div class="imj_admindataValueEntry">
 				<h:inputText id="inputFamilyNameText"
 					styleClass="imj_admindataEdit autocomplete_person"
-					value="#{cc.attrs.person.familyName}" />
+					value="#{cc.attrs.person.familyName}"
+					onfocus="setUserSource('#{cc.attrs.userSource}')" />
 			</div>
 		</div>
 	</h:panelGroup>
@@ -118,7 +128,8 @@
 			<div class="imj_admindataValueEntry">
 				<h:inputText id="inputGiveNameText"
 					styleClass="imj_admindataEdit autocomplete_person"
-					value="#{cc.attrs.person.givenName}" />
+					value="#{cc.attrs.person.givenName}"
+					onfocus="setUserSource('#{cc.attrs.userSource}')" />
 			</div>
 		</div>
 	</h:panelGroup>
@@ -132,7 +143,8 @@
 			<div class="imj_admindataValueEntry">
 				<h:inputText id="inputAlternativeName"
 					styleClass="imj_admindataEdit autocomplete_person"
-					value="#{cc.attrs.person.alternativeName}" />
+					value="#{cc.attrs.person.alternativeName}"
+					onfocus="setUserSource('#{cc.attrs.userSource}')" />
 			</div>
 		</div>
 	</h:panelGroup>
@@ -145,7 +157,8 @@
 		<div class="imj_admindataValue">
 			<div class="imj_admindataValueEntry">
 				<h:inputText id="inputIdentifier" styleClass="imj_admindataEdit"
-					value="#{cc.attrs.person.identifier}" />
+					value="#{cc.attrs.person.identifier}"
+					onfocus="setUserSource('#{cc.attrs.userSource}')" />
 			</div>
 		</div>
 	</h:panelGroup>
@@ -162,7 +175,8 @@
 				<h:inputText id="inputOrgaURI" styleClass="input_hidden_orga_uri"
 					value="#{PersonBean.orgaURI}"
 					valueChangeListener="#{PersonBean.orgaListener}"
-					style="display:none;" />
+					style="display:none;"
+					onfocus="setOrgaSource('#{cc.attrs.orgsSource}');" />
 
 				<h:commandButton id="changeOrgaButton"
 					styleClass="button_change_button "
@@ -179,8 +193,9 @@
 					<div class="imj_admindataValue">
 						<div class="imj_admindataValueEntry">
 							<h:inputText id="inputOrgaName"
-								styleClass="imj_admindataEdit autocomplete_org autocomplete_input_orga"
-								value="#{org.name}" />
+								styleClass="imj_admindataEdit autocomplete_org "
+								value="#{org.name}"
+								onfocus="setOrgaSource('#{cc.attrs.orgsSource}');" />
 						</div>
 					</div>
 				</h:panelGroup>
@@ -192,8 +207,9 @@
 					<div class="imj_admindataValue">
 						<div class="imj_admindataValueEntry">
 							<h:inputTextarea id="inputOrgaDescription"
-								styleClass="imj_admindataEdit autocomplete_input_orga"
-								value="#{org.description}" />
+								styleClass="imj_admindataEdit "
+								value="#{org.description}"
+								onfocus="setOrgaSource('#{cc.attrs.orgsSource}');" />
 						</div>
 					</div>
 				</h:panelGroup>
@@ -205,8 +221,9 @@
 					<div class="imj_admindataValue">
 						<div class="imj_admindataValueEntry">
 							<h:inputText id="inputOrgaIdentifier"
-								styleClass="imj_admindataEdit autocomplete_input_orga"
-								value="#{org.identifier}" />
+								styleClass="imj_admindataEdit "
+								value="#{org.identifier}"
+								onfocus="setOrgaSource('#{cc.attrs.orgsSource}');" />
 						</div>
 					</div>
 				</h:panelGroup>
@@ -218,8 +235,9 @@
 					<div class="imj_admindataValue">
 						<div class="imj_admindataValueEntry">
 							<h:inputText id="inputOrgaCity"
-								styleClass="imj_admindataEdit autocomplete_input_orga"
-								value="#{org.city}" />
+								styleClass="imj_admindataEdit "
+								value="#{org.city}"
+								onfocus="setOrgaSource('#{cc.attrs.orgsSource}');" />
 						</div>
 					</div>
 				</h:panelGroup>
@@ -231,8 +249,9 @@
 					<div class="imj_admindataValue">
 						<div class="imj_admindataValueEntry">
 							<h:inputText id="inputOrgaCountry"
-								styleClass="imj_admindataEdit autocomplete_input_orga"
-								value="#{org.country}" />
+								styleClass="imj_admindataEdit "
+								value="#{org.country}"
+								onfocus="setOrgaSource('#{cc.attrs.orgsSource}');" />
 						</div>
 					</div>
 				</h:panelGroup>

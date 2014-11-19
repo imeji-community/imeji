@@ -12,15 +12,20 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+
 import de.mpg.imeji.rest.process.CollectionProcess;
 import de.mpg.imeji.rest.process.RestProcessUtils;
 import de.mpg.imeji.rest.to.JSONResponse;
 
 @Path("/collections")
+@Api(value = "rest/collections", description = "Operations on collections")
 public class CollectionResource implements ImejiResource{
 
 	
     @GET  
+    @ApiOperation(value = "Get collection")
     @Produces(MediaType.APPLICATION_JSON)  
     public Response readAll(@Context HttpServletRequest req){       
         return null;  
@@ -28,6 +33,7 @@ public class CollectionResource implements ImejiResource{
     
     @GET   
     @Path("/{id}")
+    @ApiOperation(value = "Get collection by id")
     @Produces(MediaType.APPLICATION_JSON)
     public Response readFromID(@Context HttpServletRequest req, @PathParam("id") String id){
     	JSONResponse resp = CollectionProcess.readCollection(req, id);
@@ -38,6 +44,8 @@ public class CollectionResource implements ImejiResource{
 
     @POST 
     @Consumes(MediaType.APPLICATION_JSON)
+    @ApiOperation(value = "Create collection or new version of collection", notes = "When contains as parameter \"versionOF\", new collection is created as a copy of a released collection (method needs to validate the status of the collection provided with \"versionOf\")\n"  
+    + "\nCreation of the new collection automatically generates a new (empty) metadata profile  for that collection. ")
     @Produces(MediaType.APPLICATION_JSON) 
 	public Response create(@Context HttpServletRequest req) {
 		return null;
@@ -45,6 +53,7 @@ public class CollectionResource implements ImejiResource{
 
     @DELETE  
     @Path("/{id}")
+    @ApiOperation(value = "Delete collection by id", notes = "Deletes also the profile and items of this collection")   
     @Produces(MediaType.APPLICATION_JSON) 
 	public Response delete(@Context HttpServletRequest req, @PathParam("id") String id) {
 		return null;

@@ -59,7 +59,7 @@
 		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
 		<init-param>
 		     <param-name>jersey.config.server.provider.packages</param-name>
-		     <param-value>de.mpg.imeji.rest.resources</param-value>
+		     <param-value>de.mpg.imeji.rest.resources; com.wordnik.swagger.jersey.listing</param-value>
 		</init-param>
 		<init-param>
 	        <param-name>com.sun.jersey.config.property.resourceConfigClass</param-name>
@@ -84,7 +84,19 @@
          -->
 		<load-on-startup>1</load-on-startup>
 	</servlet>
-	
+		<servlet>
+	  <servlet-name>JerseyJaxrsConfig</servlet-name>
+	  <servlet-class>com.wordnik.swagger.jersey.config.JerseyJaxrsConfig</servlet-class>
+	  <init-param>
+	    <param-name>api.version</param-name>
+	    <param-value>2.0</param-value>
+	  </init-param>
+	  <init-param>
+	    <param-name>swagger.api.basepath</param-name>
+	    <param-value>http://localhost:8080/imeji/rest</param-value>
+	  </init-param>
+	  <load-on-startup>2</load-on-startup>
+	</servlet>
 	
 	<!-- Filters (order is important) -->
 	

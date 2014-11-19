@@ -48,7 +48,7 @@ public class autocompleter extends HttpServlet {
 			"https://maps.googleapis.com/maps/api/geocode/json.*address=",
 			Pattern.CASE_INSENSITIVE);
 	private Pattern ccLicensePattern = Pattern
-			.compile("https://api.creativecommons.org/rest/.*/simple/chooser.*");
+			.compile("http.*://api.creativecommons.org/rest/.*/simple/chooser.*");
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -66,6 +66,7 @@ public class autocompleter extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		String suggest = request.getParameter("searchkeyword");
 		String datasource = request.getParameter("datasource");
+
 		String responseString = "";
 		if (suggest == null || suggest.isEmpty()) {
 			suggest = "a";
@@ -232,19 +233,12 @@ public class autocompleter extends HttpServlet {
 			JSONObject sendObject = new JSONObject();
 			sendObject.put("label",
 					parseObject.get("http_purl_org_dc_elements_1_1_title"));
-			sendObject.put("value",
-					parseObject.toJSONString());
+			sendObject.put("value", parseObject.toJSONString());
 			sendObject.put("family",
 					parseObject.get("http_xmlns_com_foaf_0_1_family_name"));
 			sendObject.put("givenname",
 					parseObject.get("http_xmlns_com_foaf_0_1_givenname"));
 			sendObject.put("id", parseObject.get("id"));
-			// sendObject
-			// .put("orgs",
-			// writeJsonArrayToOneString(
-			// parseObject
-			// .get("http_purl_org_escidoc_metadata_terms_0_1_position"),
-			// "http_purl_org_eprint_terms_affiliatedInstitution"));
 			sendObject.put("orgs", parseObject
 					.get("http_purl_org_escidoc_metadata_terms_0_1_position"));
 			sendObject.put(
@@ -258,6 +252,7 @@ public class autocompleter extends HttpServlet {
 		return out.toString();
 	}
 
+	@SuppressWarnings("unchecked")
 	private String parseCCLicense(String str) {
 		str = "<licences>" + str.trim() + "</licences>";
 		try {

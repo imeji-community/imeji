@@ -45,7 +45,8 @@ function setInputValue(inputId, value) {
 $(function() {
 
 	// This add auto-complete to all input fields on page,
-	$(":input[type=text], textarea")
+	//$(":input[type=text], textarea")
+	$(".autocomplete_js")
 	// don't navigate away from the field on tab when selecting an item
 	.bind(
 			"keydown",
@@ -125,37 +126,11 @@ $(function() {
 			}
 			// Write the value of the current input
 			setInputValue(this.id, ui.item.value);
-			setInputValue(inputId + "inputFamilyName", ui.item.family);
-			setInputValue(inputId + "inputFirstName", ui.item.givenname);
-			setInputValue(inputId + "inputAlternative", ui.item.alternatives);
 			setInputValue(inputId + "inputIdentifier", ui.item.id);
 			setInputValue(inputId + "inputLatitude", ui.item.latitude);
 			setInputValue(inputId + "inputLongitude", ui.item.longitude);
 			setInputValue(inputId + "inputLicenseId", ui.item.licenseId);
-			if (ui.item.orgs.length > 0) {
-				for (var i = 0; i < ui.item.orgs.length - 1 ; i++) {
-					alert(i)
-					document.getElementById(inputId+"organizations:" +i +":addOrganization").click();
-				}
-				setInterval(function () {}, 3000);
-				for (var i = 0; i < ui.item.orgs.length; i++) {
-					setInputValue(
-							inputId + "organizations:" + i
-									+ ":inputOrganizationName",
-							ui.item.orgs[i].http_purl_org_eprint_terms_affiliatedInstitution);
-					setInputValue(
-							inputId
-									+ "organizations:"
-									+ i
-									+ ":inputOrganizationIdentifer",
-							ui.item.orgs[i].http_purl_org_dc_elements_1_1_identifier);
-					document.getElementById(inputId+"organizations:" +i +":addOrganization").click();
-				}
-			}
-			else{
-				setInputValue(inputId + "organizations:0:inputOrganizationName", ui.item.orgs.http_purl_org_eprint_terms_affiliatedInstitution);
-				setInputValue(inputId + "organizations:0:inputOrganizationIdentifer", ui.item.orgs.http_purl_org_dc_elements_1_1_identifier);
-			}
+			
 			return false;
 		}
 	}).focus(function() {

@@ -10,7 +10,6 @@
 	<rewrite match="/metadataProfile/(.+)" substitute="/profile/$1"
 		redirect="301" />
 	<!-- Begin UrlMappings -->
-
 	<url-mapping id="home">
 		<pattern value="/" />
 		<view-id>/jsf/Welcome.xhtml</view-id>

@@ -122,8 +122,7 @@ public class TransferObjectFactory {
 		//set createdDate, modifiedDate, versionDate
 		to.setCreatedDate(formatDate(vo.getCreated().getTime()));
 		to.setModifiedDate(formatDate(vo.getModified().getTime()));
-		if(vo.getVersionDate() != null)
-			to.setVersionDate(formatDate(vo.getVersionDate().getTime()));
+		to.setVersionDate( (vo.getVersionDate() != null) ? formatDate(vo.getVersionDate().getTime()) :  "");
 		//set status
 		to.setStatus(vo.getStatus().toString());
 		//set version

@@ -18,6 +18,8 @@ public class CollectionProcess {
     
 	public static JSONResponse readCollection(HttpServletRequest req, String id) {
 		JSONResponse resp = new JSONResponse();
+		String authHeader = req.getHeader("Authorization");
+		System.err.println(authHeader);
 
 		Authentication auth = AuthenticationFactory.factory(req);
 		User u = auth.doLogin();

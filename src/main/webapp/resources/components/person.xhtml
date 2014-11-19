@@ -11,12 +11,12 @@
 		required="true" shortDescription="@type: The parent bean" />
 	<composite:attribute name="position" type="Integer" required="true"
 		shortDescription="@type: The position of the person if included in a list" />
-	<composite:attribute name="userSource" type="String" required="false"  default="imeji_persons"/>
-	<composite:attribute name="orgsSource" type="String" required="false" default="imeji_orgs"/>
+	<composite:attribute name="userSource" type="String" required="false"  default="#{Configuration.autoSuggestForUsers}"/>
+	<composite:attribute name="orgsSource" type="String" required="false" default="#{Configuration.autosuggestForOrganizations}"/>
 </composite:interface>
 
 <composite:implementation>
-	<ui:fragment rendered="#{Configuration.enableAutosuggestForUsers}">
+	<ui:fragment rendered="#{cc.attrs.userSource != ''}">
 		<script>
 			$(function() {
 				var result;
@@ -51,14 +51,14 @@
 		</script>
 	</ui:fragment>
 	<ui:fragment
-		rendered="#{Configuration.enableAutosuggestForOrganizations}">
+		rendered="#{cc.attrs.orgsSource != ''}">
 		<script>
 			$(function() {
 				$(".autocomplete_org").autocomplete({
 					source : function(request, response) {
 						$.getJSON('#{Navigation.applicationUrl}autocompleter', {
 							searchkeyword : request.term,
-							datasource : "imeji_orgs"
+							datasource : '#{cc.attrs.orgsSource}'
 						}, response );
 					},
 					select : function(event, ui) {

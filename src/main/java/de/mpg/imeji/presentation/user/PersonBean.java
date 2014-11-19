@@ -90,8 +90,11 @@ public class PersonBean {
 			List<Organization> l = (List<Organization>) ((UserBean) bean)
 					.getUser().getPerson().getOrganizations();
 			l.set(positionOrga, orga);
+		} else if (bean instanceof SuperMetadataBean) {
+			List<Organization> l = (List<Organization>) ((SuperMetadataBean) bean)
+					.getPerson().getOrganizations();
+			l.set(positionOrga, orga);
 		}
-		System.out.println(bean);
 		return ":";
 	}
 
@@ -124,19 +127,23 @@ public class PersonBean {
 	 */
 	private Person parseConePersonJSON(String jsonString) {
 		Object json = JSONValue.parse(jsonString);
+		Person p = ImejiFactory.newPerson();
 		if (json instanceof JSONObject) {
-			Person p = ImejiFactory.newPerson();
+
 			p.setFamilyName((String) ((JSONObject) json)
 					.get("http_xmlns_com_foaf_0_1_family_name"));
 			p.setGivenName((String) ((JSONObject) json)
 					.get("http_xmlns_com_foaf_0_1_givenname"));
 			p.setIdentifier((String) ((JSONObject) json).get("id"));
-			p.setAlternativeName((String) ((JSONObject) json)
-					.get("http_purl_org_dc_terms_alternative"));
+			p.setAlternativeName(writeJsonArrayToOneString(((JSONObject) json)
+					.get("http_purl_org_dc_terms_alternative"),
+					"http_purl_org_dc_terms_alternative"));
 			p.setOrganizations(parseConeOrgnanizationJson(((JSONObject) json)
 					.get("http_purl_org_escidoc_metadata_terms_0_1_position")
 					.toString()));
 			return p;
+		} else {
+			System.out.println(json);
 		}
 		return null;
 	}
@@ -177,6 +184,32 @@ public class PersonBean {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Read a JSON Object as a String, whether it is an {@link JSONArray}, a
+	 * {@link String} or a {@link JSONObject}
+	 * 
+	 * @param jsonObj
+	 * @param jsonName
+	 * @return
+	 */
+	private String writeJsonArrayToOneString(Object jsonObj, String jsonName) {
+		String str = "";
+		if (jsonObj instanceof JSONArray) {
+			for (Iterator<?> iterator = ((JSONArray) jsonObj).iterator(); iterator
+					.hasNext();) {
+				if (!"".equals(str)) {
+					str += ", ";
+				}
+				str += writeJsonArrayToOneString(iterator.next(), jsonName);
+			}
+		} else if (jsonObj instanceof JSONObject) {
+			str = (String) ((JSONObject) jsonObj).get(jsonName);
+		} else if (jsonObj instanceof String) {
+			str = (String) jsonObj;
+		}
+		return str;
 	}
 
 	/**

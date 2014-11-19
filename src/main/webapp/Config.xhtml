@@ -215,7 +215,11 @@
 										</div>
 										<div class="imj_admindataValue">
 											<div class="imj_admindataValueEntry">
-												<h:selectBooleanCheckbox value="#{Configuration.enableAutosuggestForUsers}" styleClass="imj_admindataEdit"/>
+												<h:selectOneRadio value="#{Configuration.autoSuggestForUsers}">
+													<f:selectItem itemLabel="#{lbl.none}" itemValue=""/>
+													<f:selectItem itemLabel="#{lbl.imeji_users}" itemValue="imeji_persons"/>
+													<f:selectItem itemLabel="#{lbl.max_planck_authors}" itemValue="http://pubman.mpdl.mpg.de/cone/persons/query?format=json&amp;n=10&amp;m=full&amp;q="/>
+												</h:selectOneRadio>
 											</div>
 										</div>
 									</div>
@@ -226,7 +230,10 @@
 										</div>
 										<div class="imj_admindataValue">
 											<div class="imj_admindataValueEntry">
-												<h:selectBooleanCheckbox value="#{Configuration.enableAutosuggestForOrganizations}" styleClass="imj_admindataEdit"/>
+												<h:selectOneRadio value="#{Configuration.autosuggestForOrganizations}">
+													<f:selectItem itemLabel="#{lbl.none}" itemValue=""/>
+													<f:selectItem itemLabel="#{lbl.imeji_organizations}" itemValue="imeji_orgs"/>
+												</h:selectOneRadio>
 											</div>
 										</div>
 									</div>

@@ -90,8 +90,6 @@ public class ConfigurationBean {
 
 	private String dataViewerUrl;
 
-	private String dataViewerFormatListString;
-
 	/**
 	 * Constructor, create the file if not existing
 	 * 
@@ -129,8 +127,6 @@ public class ConfigurationBean {
 			this.fileTypes = new FileTypes((String) ft);
 		this.dataViewerUrl = (String) config.get(CONFIGURATION.DATA_VIEWER_URL
 				.name());
-		this.dataViewerFormatListString = (String) config
-				.get(CONFIGURATION.DATA_VIEWER_FORMATS.name());
 		return "";
 	}
 
@@ -431,24 +427,31 @@ public class ConfigurationBean {
 		return "";
 	}
 
-	public boolean isEnableAutosuggestForUsers() {
-		return Boolean.parseBoolean(config
-				.getProperty(CONFIGURATION.AUTOSUGGEST_USERS.name()));
+	// public boolean isEnableAutosuggestForUsers() {
+	// return Boolean.parseBoolean(config
+	// .getProperty(CONFIGURATION.AUTOSUGGEST_USERS.name()));
+	// }
+	//
+	// public void setEnableAutosuggestForUsers(boolean b) {
+	// config.setProperty(CONFIGURATION.AUTOSUGGEST_USERS.name(),
+	// Boolean.toString(b));
+	// }
+
+	public String getAutosuggestForOrganizations() {
+		return config.getProperty(CONFIGURATION.AUTOSUGGEST_ORGAS.name());
 	}
 
-	public void setEnableAutosuggestForUsers(boolean b) {
-		config.setProperty(CONFIGURATION.AUTOSUGGEST_USERS.name(),
-				Boolean.toString(b));
+	public void setAutosuggestForOrganizations(String s) {
+		config.setProperty(CONFIGURATION.AUTOSUGGEST_ORGAS.name(), s);
+
 	}
 
-	public boolean isEnableAutosuggestForOrganizations() {
-		return Boolean.parseBoolean(config.getProperty(
-				CONFIGURATION.AUTOSUGGEST_ORGAS.name(), "false"));
+	public String getAutoSuggestForUsers() {
+		return config.getProperty(CONFIGURATION.AUTOSUGGEST_USERS.name());
 	}
 
-	public void setEnableAutosuggestForOrganizations(boolean b) {
-		config.setProperty(CONFIGURATION.AUTOSUGGEST_ORGAS.name(),
-				Boolean.toString(b));
+	public void setAutoSuggestForUsers(String s) {
+		config.setProperty(CONFIGURATION.AUTOSUGGEST_USERS.name(), s);
 
 	}
 }

@@ -1,7 +1,9 @@
 package de.mpg.imeji.rest.process;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -11,6 +13,13 @@ import de.mpg.imeji.rest.to.JSONException;
 import de.mpg.imeji.rest.to.JSONResponse;
 
 public class RestProcessUtils {
+	public static Object buildTOFromJSON(HttpServletRequest req, Object o){
+
+		return o;
+		
+	}
+	
+	
 	public static Response buildJSONResponse(JSONResponse resp){
 		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
     	String json = "";

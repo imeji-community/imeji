@@ -5,7 +5,6 @@ import javax.ws.rs.core.Response.Status;
 
 import de.mpg.imeji.logic.auth.Authentication;
 import de.mpg.imeji.logic.auth.AuthenticationFactory;
-import de.mpg.imeji.logic.auth.authentication.SimpleAuthentication;
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.User;
@@ -24,7 +23,6 @@ public class CollectionProcess {
 
 		CollectionImeji collection = null;
 		//CollectionImeji collection2 = new CollectionImeji();
-
 		
 		CollectionService ccrud = new CollectionService();
 		try {
@@ -54,5 +52,39 @@ public class CollectionProcess {
 		return resp;
 
 	}
+	
+	public static JSONResponse createCollection(HttpServletRequest req) {
+		JSONResponse resp = new JSONResponse();
+
+		Authentication auth = AuthenticationFactory.factory(req);
+		User u = auth.doLogin();
+
+		CollectionImeji collection = null;
+		//CollectionImeji collection2 = new CollectionImeji();
+		
+		CollectionService ccrud = new CollectionService();
+		try {
+			CollectionTO to = new CollectionTO();
+			RestProcessUtils.buildTOFromJSON(req, to);
+			CollectionImeji vo = new CollectionImeji();
+			ReverseTransferObjectFactory.transferCollection(to, vo);
+			
+			
+			
+			
+			collection = ccrud.create(vo, u);
+
+			TransferObjectFactory.transferCollection(collection, to);
+			//ReverseTransferObjectFactory.transferCollection(to, collection2);
+			
+			resp.setObject(to);
+			resp.setStatus(Status.OK);
+		} catch (Exception e) {
+
+		}
+		return resp;
+
+	}
+	
 
 }

@@ -47,7 +47,8 @@ public class CollectionResource implements ImejiResource{
     + "\nCreation of the new collection automatically generates a new (empty) metadata profile  for that collection. ")
     @Produces(MediaType.APPLICATION_JSON) 
 	public Response create(@Context HttpServletRequest req) {
-		return null;
+    	JSONResponse resp = CollectionProcess.createCollection(req);
+        return RestProcessUtils.buildJSONResponse(resp);
 	}  
 
     @DELETE  

@@ -8,6 +8,7 @@ import javax.ws.rs.NotSupportedException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.controller.ProfileController;
+import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.j2j.exceptions.NotFoundException;
@@ -31,8 +32,8 @@ public class ProfileService implements API<MetadataProfile>{
 	@Override
 	public MetadataProfile read(String id, User u) throws NotFoundException,
 			NotAllowedError, NotSupportedException, Exception {
-		// TODO Auto-generated method stub
-		return null;
+		ProfileController pcontroller = new ProfileController();
+		return pcontroller.retrieve(ObjectHelper.getURI(MetadataProfile.class, id), u);
 	}
 
 	@Override

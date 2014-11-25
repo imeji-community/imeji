@@ -62,7 +62,7 @@ public class CollectionController extends ImejiController {
 	 * @throws Exception
 	 */
 	public URI create(CollectionImeji c, MetadataProfile p, User user)
-			throws Exception {
+			throws Exception {  
 		if (p == null) {
 			p = new MetadataProfile();
 			p.setDescription(c.getMetadata().getDescription());
@@ -75,8 +75,7 @@ public class CollectionController extends ImejiController {
 		writer.create(WriterFacade.toList(c), user);
 		// Prepare grants
 		GrantController gc = new GrantController();
-		gc.addGrants(user, AuthorizationPredefinedRoles.admin(c.getId()
-				.toString(), p.getId().toString()), user);
+		gc.addGrants(user, AuthorizationPredefinedRoles.admin(c.getId().toString(), p.getId().toString()), user);
 		return c.getId();
 	}
 

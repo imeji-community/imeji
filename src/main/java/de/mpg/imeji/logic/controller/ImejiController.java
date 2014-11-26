@@ -47,8 +47,7 @@ public abstract class ImejiController {
 		J2JHelper.setId(properties,
 				IdentifierUtil.newURI(properties.getClass()));
 		Calendar now = DateHelper.getCurrentDate();
-		properties
-				.setCreatedBy(ObjectHelper.getURI(User.class, user.getEmail()));
+		properties.setCreatedBy(ObjectHelper.getURI(User.class, user.getEmail()));
 		properties.setModifiedBy(ObjectHelper.getURI(User.class,
 				user.getEmail()));
 		properties.setCreated(now);

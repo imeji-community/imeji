@@ -42,6 +42,7 @@ public class Organization implements Cloneable, Serializable {
 	private String city;
 	@j2jLiteral("http://purl.org/escidoc/metadata/terms/0.1/country")
 	private String country;
+    @j2jLiteral("http://imeji.org/terms/position")
 	private int pos = 0;
 
 	public Organization() {

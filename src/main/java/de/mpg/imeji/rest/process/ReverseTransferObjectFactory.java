@@ -2,23 +2,24 @@ package de.mpg.imeji.rest.process;
 
 import java.net.URI;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-
-import javax.swing.text.LabelView;
 
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.ContainerMetadata;
 import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Item.Visibility;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
-import de.mpg.imeji.logic.vo.predefinedMetadata.*;
+import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
+import de.mpg.imeji.logic.vo.predefinedMetadata.License;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.IdentifierTO;
 import de.mpg.imeji.rest.to.ItemTO;
@@ -36,8 +37,8 @@ import de.mpg.imeji.rest.to.predefinedMetadataTO.TextTO;
 
 public class ReverseTransferObjectFactory {
 	
-	
-	private static Metadata md;
+
+
 
 	public static void transferCollection(CollectionTO to, CollectionImeji vo) {
 		ContainerMetadata metadata = new ContainerMetadata();
@@ -61,7 +62,7 @@ public class ReverseTransferObjectFactory {
 		MetadataSet voMds = new MetadataSet();
 	
 		for(MetadataSetTO mdTO : toMds){
-			md = null;
+			Metadata md = null;
 			md.setPos(mdTO.getPosition());
 			md.setStatement(mdTO.getStatementUri());
 			String typeUri = mdTO.getTypeUri().toString();

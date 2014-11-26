@@ -48,6 +48,7 @@ public class Person implements Cloneable, Serializable {
 	private String identifier;
 	@j2jLiteral("http://purl.org/escidoc/metadata/terms/0.1/role")
 	private URI role;
+    @j2jLiteral("http://imeji.org/terms/position")
 	private int pos = 0;
 	@j2jList("http://purl.org/escidoc/metadata/profiles/0.1/organizationalunit")
 	protected Collection<Organization> organizations = new ArrayList<Organization>();

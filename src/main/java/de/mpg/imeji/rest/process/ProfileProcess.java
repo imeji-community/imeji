@@ -10,6 +10,7 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.api.ProfileService;
 import de.mpg.imeji.rest.to.JSONResponse;
+import de.mpg.imeji.rest.to.MetadataProfileTO;
 import de.mpg.j2j.exceptions.NotFoundException;
 
 public class ProfileProcess {
@@ -26,10 +27,10 @@ public class ProfileProcess {
 		ProfileService pcrud = new ProfileService();
 		try {
 			vo = pcrud.read(id, u);
-//			ProfileTO to = new ProfileTO();
-//			TransferObjectFactory.transferCollection(vo, to);
+			MetadataProfileTO to = new MetadataProfileTO();
+			TransferObjectFactory.transferMetadataProfile(vo, to);
 			
-			resp.setObject(vo);
+			resp.setObject(to);
 			resp.setStatus(Status.OK);
 		} catch (NotFoundException e) {
 			resp.setObject(RestProcessUtils.buildBadRequestResponse());

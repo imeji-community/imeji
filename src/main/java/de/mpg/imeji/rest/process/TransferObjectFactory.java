@@ -16,19 +16,20 @@ import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.Properties;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
 import de.mpg.imeji.logic.vo.predefinedMetadata.License;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
-import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
 import de.mpg.imeji.rest.api.ProfileService;
 import de.mpg.imeji.rest.api.UserService;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.IdentifierTO;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.LabelTO;
+import de.mpg.imeji.rest.to.MetadataProfileTO;
 import de.mpg.imeji.rest.to.MetadataSetTO;
 import de.mpg.imeji.rest.to.OrganizationTO;
 import de.mpg.imeji.rest.to.PersonTO;
@@ -46,13 +47,16 @@ import de.mpg.j2j.misc.LocalizedString;
 
 public class TransferObjectFactory {
 	
+	public static void transferMetadataProfile(MetadataProfile vo, MetadataProfileTO to){
+		transferProperties(vo, to);
+		
+	}
 	
 	public static void transferCollection(CollectionImeji vo, CollectionTO to) {
 		transferProperties(vo, to);
 		to.setProfileId(extractIDFromURI(vo.getProfile()));
 		to.setTitle(vo.getMetadata().getTitle());
 		to.setDescription(vo.getMetadata().getDescription());
-		
 		
 		for(Person p : vo.getMetadata().getPersons())
 		{
@@ -64,7 +68,6 @@ public class TransferObjectFactory {
 	
 	 
 	public static void transferPerson(Person p, PersonTO pto){  
-
 			pto.setPosition(p.getPos());
 			pto.setId(extractIDFromURI(p.getId()));
 			pto.setFamilyName(p.getFamilyName());
@@ -252,7 +255,7 @@ public class TransferObjectFactory {
 		String output = "";
 		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
 		output = f.format(d);
-		f = new SimpleDateFormat("HH:mm:SS Z");
+		f = new SimpleDateFormat("HH:mm:SS	 Z");
 		output += "T" + f.format(d);
 		return output;
 

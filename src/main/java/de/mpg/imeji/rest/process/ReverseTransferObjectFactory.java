@@ -1,21 +1,44 @@
 package de.mpg.imeji.rest.process;
 
+import java.net.URI;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.text.LabelView;
+
+import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.ContainerMetadata;
+import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.Item.Visibility;
+import de.mpg.imeji.logic.vo.Metadata;
+import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
+import de.mpg.imeji.logic.vo.predefinedMetadata.*;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.IdentifierTO;
+import de.mpg.imeji.rest.to.ItemTO;
+import de.mpg.imeji.rest.to.MetadataSetTO;
 import de.mpg.imeji.rest.to.OrganizationTO;
 import de.mpg.imeji.rest.to.PersonTO;
+import de.mpg.imeji.rest.to.predefinedMetadataTO.ConePersonTO;
+import de.mpg.imeji.rest.to.predefinedMetadataTO.DateTO;
+import de.mpg.imeji.rest.to.predefinedMetadataTO.GeolocationTO;
+import de.mpg.imeji.rest.to.predefinedMetadataTO.LicenseTO;
+import de.mpg.imeji.rest.to.predefinedMetadataTO.LinkTO;
+import de.mpg.imeji.rest.to.predefinedMetadataTO.NumberTO;
+import de.mpg.imeji.rest.to.predefinedMetadataTO.PublicationTO;
+import de.mpg.imeji.rest.to.predefinedMetadataTO.TextTO;
 
 public class ReverseTransferObjectFactory {
 	
 	
+	private static Metadata md;
+
 	public static void transferCollection(CollectionTO to, CollectionImeji vo) {
 		ContainerMetadata metadata = new ContainerMetadata();
 		metadata.setTitle(to.getTitle());
@@ -25,7 +48,108 @@ public class ReverseTransferObjectFactory {
 		transferCollectionContributors(to.getContributors(), metadata);
 		vo.setMetadata(metadata);
 	}
-	 
+	
+	public static void transferItem(ItemTO to, Item vo){
+		vo.setCollection(ObjectHelper.getURI(CollectionImeji.class, to.getCollectionId()));
+		vo.setFilename(to.getFilename());
+		
+		transferItemMetaData(to.getMetadata(), vo);
+		
+	}
+	
+	public static void transferItemMetaData(List<MetadataSetTO> toMds, Item vo){
+		MetadataSet voMds = new MetadataSet();
+	
+		for(MetadataSetTO mdTO : toMds){
+			md = null;
+			md.setPos(mdTO.getPosition());
+			md.setStatement(mdTO.getStatementUri());
+			String typeUri = mdTO.getTypeUri().toString();
+			String type = typeUri.substring(typeUri.lastIndexOf("/"+1));
+			switch(type){
+			case "metadata#text":
+				Text mdText = new Text();
+				TextTO text = (TextTO) mdTO.getValue();
+				mdText.setText(text.getText());
+				md = mdText;
+				break;
+			case "metadata#geolocation":
+				Geolocation mdGeo = new Geolocation();
+				GeolocationTO geo = (GeolocationTO) mdTO.getValue();
+				mdGeo.setName(geo.getName());
+				mdGeo.setLatitude(geo.getLatitude());
+				mdGeo.setLongitude(geo.getLongitude());
+				md=mdGeo;
+				break;
+			case "metadata#number":
+				Number mdNum = new Number();
+				NumberTO num = (NumberTO) mdTO.getValue();
+				mdNum.setNumber(num.getNumber());
+				md=mdNum;
+				break;
+			case "metadata#conePerson":
+				ConePerson mdP = new ConePerson();
+				ConePersonTO p = (ConePersonTO) mdTO.getValue();
+				Person person = new Person();
+				mdP.setPerson(person);
+				transferPerson(p.getPerson(), mdP.getPerson());
+				md=mdP;
+				break;
+			case "metadata#date":
+				de.mpg.imeji.logic.vo.predefinedMetadata.Date mdDate = new de.mpg.imeji.logic.vo.predefinedMetadata.Date();
+				DateTO date = (DateTO) mdTO.getValue();
+				mdDate.setDate(date.getDate());
+				md = mdDate;
+				
+				break;
+			case "metadata#license":
+				License mdLic = new License();
+				LicenseTO license = (LicenseTO) mdTO.getValue();
+				mdLic.setLicense(license.getLicense());
+				mdLic.setExternalUri(URI.create(license.getUrl()));
+				md=mdLic;
+				break;
+			case "metadata#publication":
+				Publication mdPub = new Publication();
+				PublicationTO pub = (PublicationTO) mdTO.getValue();
+				mdPub.setUri(URI.create(pub.getPublication()));
+				mdPub.setExportFormat(pub.getFormat());
+				mdPub.setCitation(pub.getCitation());
+				md= mdPub;
+				break;
+			case "metadata#link":
+				Link mdLink = new Link();
+				LinkTO link = (LinkTO) mdTO.getValue();
+				mdLink.setLabel(link.getLink());
+				mdLink.setUri(URI.create(link.getUrl()));
+				md = mdLink;
+				break;
+			}
+			voMds.getMetadata().add(md);
+			vo.getMetadataSets().add(voMds);
+		}
+			
+	}
+	
+	public static void transferPerson(PersonTO pto, Person p){  
+
+		p.setPos(pto.getPosition());
+		p.setFamilyName(pto.getFamilyName());
+		p.setGivenName(pto.getGivenName());
+		p.setCompleteName(pto.getCompleteName());
+		p.setAlternativeName(pto.getAlternativeName());
+		
+		IdentifierTO ito = new IdentifierTO();
+		ito.setValue(pto.getIdentifiers().get(0).getValue());
+		p.setIdentifier(ito.getValue());
+		
+		//set oganizations
+		transferContributorOrganizations(pto.getOrganizations(), p);			
+	
+		}
+	
+
+	
 	public static void transferCollectionContributors(List<PersonTO> persons, ContainerMetadata metadata){
 		for(PersonTO pTO : persons){
 			Person person = new Person();
@@ -64,7 +188,7 @@ public class ReverseTransferObjectFactory {
 		}
 		
 	}
-
+	
 	public static String formatDate(Date d) {
 		String output = "";
 		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");

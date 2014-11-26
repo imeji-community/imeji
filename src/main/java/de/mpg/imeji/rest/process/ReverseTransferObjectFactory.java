@@ -66,15 +66,14 @@ public class ReverseTransferObjectFactory {
 			md.setPos(mdTO.getPosition());
 			md.setStatement(mdTO.getStatementUri());
 			String typeUri = mdTO.getTypeUri().toString();
-			String type = typeUri.substring(typeUri.lastIndexOf("/"+1));
-			switch(type){
-			case "metadata#text":
+			switch(typeUri){
+			case "http://imeji.org/terms/metadata#text":
 				Text mdText = new Text();
 				TextTO text = (TextTO) mdTO.getValue();
 				mdText.setText(text.getText());
 				md = mdText;
 				break;
-			case "metadata#geolocation":
+			case "http://imeji.org/terms/metadata#geolocation":
 				Geolocation mdGeo = new Geolocation();
 				GeolocationTO geo = (GeolocationTO) mdTO.getValue();
 				mdGeo.setName(geo.getName());
@@ -82,13 +81,13 @@ public class ReverseTransferObjectFactory {
 				mdGeo.setLongitude(geo.getLongitude());
 				md=mdGeo;
 				break;
-			case "metadata#number":
+			case "http://imeji.org/terms/metadata#number":
 				Number mdNum = new Number();
 				NumberTO num = (NumberTO) mdTO.getValue();
 				mdNum.setNumber(num.getNumber());
 				md=mdNum;
 				break;
-			case "metadata#conePerson":
+			case "http://imeji.org/terms/metadata#conePerson":
 				ConePerson mdP = new ConePerson();
 				ConePersonTO p = (ConePersonTO) mdTO.getValue();
 				Person person = new Person();
@@ -96,21 +95,21 @@ public class ReverseTransferObjectFactory {
 				transferPerson(p.getPerson(), mdP.getPerson());
 				md=mdP;
 				break;
-			case "metadata#date":
+			case "http://imeji.org/terms/metadata#date":
 				de.mpg.imeji.logic.vo.predefinedMetadata.Date mdDate = new de.mpg.imeji.logic.vo.predefinedMetadata.Date();
 				DateTO date = (DateTO) mdTO.getValue();
 				mdDate.setDate(date.getDate());
 				md = mdDate;
 				
 				break;
-			case "metadata#license":
+			case "http://imeji.org/terms/metadata#license":
 				License mdLic = new License();
 				LicenseTO license = (LicenseTO) mdTO.getValue();
 				mdLic.setLicense(license.getLicense());
 				mdLic.setExternalUri(URI.create(license.getUrl()));
 				md=mdLic;
 				break;
-			case "metadata#publication":
+			case "http://imeji.org/terms/metadata#publication":
 				Publication mdPub = new Publication();
 				PublicationTO pub = (PublicationTO) mdTO.getValue();
 				mdPub.setUri(URI.create(pub.getPublication()));
@@ -118,7 +117,7 @@ public class ReverseTransferObjectFactory {
 				mdPub.setCitation(pub.getCitation());
 				md= mdPub;
 				break;
-			case "metadata#link":
+			case "http://imeji.org/terms/metadata#link":
 				Link mdLink = new Link();
 				LinkTO link = (LinkTO) mdTO.getValue();
 				mdLink.setLabel(link.getLink());

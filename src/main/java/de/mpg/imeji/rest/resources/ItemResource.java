@@ -3,13 +3,13 @@ package de.mpg.imeji.rest.resources;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -19,12 +19,18 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.IOUtils;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 
+import de.mpg.imeji.rest.api.ItemService;
 import de.mpg.imeji.rest.process.ItemProcess;
 import de.mpg.imeji.rest.process.RestProcessUtils;
+import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.JSONResponse;
 
 @Path("/items")
@@ -47,17 +53,19 @@ public class ItemResource implements ImejiResource {
 		return RestProcessUtils.buildJSONResponse(resp);
 	}
 
-	@POST	
+	@POST
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@ApiOperation(value = "(Not implemented) Create new item", notes = "Create an item with a file")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response create(@Context HttpServletRequest req,
-			@FormParam("collectionId") String collectionId, @FormParam("file") File file) {
-		System.out.println("create in " + collectionId + " " + req);
+	public Response create(@FormDataParam("collectionId") String collectionId,
+			@FormDataParam("file") InputStream file,
+			@FormDataParam("json") String json) {
+		System.out.println("create in " + collectionId);
 		try {
 			File tmp = File.createTempFile("createItem", null);
-			IOUtils.copy(req.getInputStream(), new FileOutputStream(tmp));
+			IOUtils.copy(file, new FileOutputStream(tmp));
 			System.out.println(tmp.getAbsolutePath());
+			System.out.println("json " + json);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

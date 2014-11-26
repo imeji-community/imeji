@@ -25,7 +25,7 @@ public class CollectionProcess {
 		//CollectionImeji collection2 = new CollectionImeji();
 		
 		CollectionService ccrud = new CollectionService();
-		try {
+		try { 
 			collection = ccrud.read(id, u);
 			CollectionTO to = new CollectionTO();
 			TransferObjectFactory.transferCollection(collection, to);

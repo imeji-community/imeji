@@ -11,7 +11,9 @@ import javax.faces.context.FacesContext;
 
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
+import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.UrlHelper;
@@ -39,7 +41,6 @@ public class CreateCollectionBean extends CollectionBean {
 	 * Method called when paged is loaded (defined in pretty-config.xml)
 	 */
 	public void initialize() {
-
 		setCollection(ImejiFactory.newCollection());
 		((List<Person>) getCollection().getMetadata().getPersons()).set(0,
 				sessionBean.getUser().getPerson().clone());
@@ -61,6 +62,18 @@ public class CreateCollectionBean extends CollectionBean {
 		if (valid()) {
 			// Create collection
 			CollectionController collectionController = new CollectionController();
+	        int pos = 0;
+	        // Set the position of the statement (used for the sorting later)
+	        for (Person p : getCollection().getMetadata().getPersons())
+	        {
+	            p.setPos(pos);
+	            pos++;
+	            int pos2 = 0;
+	            for(Organization o : p.getOrganizations()){
+	            	o.setPos(pos2);
+	            	pos2++;	            	
+	            }
+	        }
 			collectionController.create(getCollection(), null,
 					sessionBean.getUser());
 			BeanHelper

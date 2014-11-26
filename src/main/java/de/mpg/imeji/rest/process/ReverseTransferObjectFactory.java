@@ -6,15 +6,21 @@ import java.util.List;
 
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.ContainerMetadata;
+import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.IdentifierTO;
+import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.OrganizationTO;
 import de.mpg.imeji.rest.to.PersonTO;
 
 public class ReverseTransferObjectFactory {
 	
+	
+	public static void transferItem(ItemTO to, Item vo){
+		
+	}
 	
 	public static void transferCollection(CollectionTO to, CollectionImeji vo) {
 		ContainerMetadata metadata = new ContainerMetadata();

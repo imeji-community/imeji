@@ -255,7 +255,7 @@ public class TransferObjectFactory {
 		String output = "";
 		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
 		output = f.format(d);
-		f = new SimpleDateFormat("HH:mm:SS	 Z");
+		f = new SimpleDateFormat("HH:mm:ss Z");
 		output += "T" + f.format(d);
 		return output;
 

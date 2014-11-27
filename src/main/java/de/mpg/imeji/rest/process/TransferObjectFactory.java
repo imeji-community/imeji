@@ -29,12 +29,14 @@ import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.IdentifierTO;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.LabelTO;
+import de.mpg.imeji.rest.to.LiteralConstraintTO;
 import de.mpg.imeji.rest.to.MetadataProfileTO;
 import de.mpg.imeji.rest.to.MetadataSetTO;
 import de.mpg.imeji.rest.to.OrganizationTO;
 import de.mpg.imeji.rest.to.PersonTO;
 import de.mpg.imeji.rest.to.PersonTOBasic;
 import de.mpg.imeji.rest.to.PropertiesTO;
+import de.mpg.imeji.rest.to.StatementTO;
 import de.mpg.imeji.rest.to.predefinedMetadataTO.ConePersonTO;
 import de.mpg.imeji.rest.to.predefinedMetadataTO.DateTO;
 import de.mpg.imeji.rest.to.predefinedMetadataTO.GeolocationTO;
@@ -49,6 +51,33 @@ public class TransferObjectFactory {
 	
 	public static void transferMetadataProfile(MetadataProfile vo, MetadataProfileTO to){
 		transferProperties(vo, to);
+		to.setTitle(vo.getTitle());
+		to.setDescription(vo.getDescription());
+		transferStatements(vo.getStatements(), to);	
+	}
+	
+	public static void transferStatements(Collection<Statement> stats, MetadataProfileTO to){
+		for(Statement t : stats)
+		{
+			StatementTO sto = new StatementTO();
+			sto.setId(extractIDFromURI(t.getId()));
+			sto.setPos(t.getPos());
+			sto.setType(t.getType());
+			sto.setLabels(new ArrayList<LocalizedString>(t.getLabels()));
+			sto.setVocabulary(t.getVocabulary());
+			for(String s : t.getLiteralConstraints())
+			{
+				LiteralConstraintTO lcto = new LiteralConstraintTO();
+				lcto.setValue(s);
+				sto.getLiteralConstraints().add(lcto);
+			}
+			sto.setMinOccurs(t.getMinOccurs());
+			sto.setMaxOccurs(t.getMaxOccurs());
+			if(t.getParent() != null)
+				sto.setParentStatementId(extractIDFromURI(t.getParent()));
+			sto.setUseInPreview(t.isPreview());
+			to.getStatements().add(sto);
+		}
 		
 	}
 	

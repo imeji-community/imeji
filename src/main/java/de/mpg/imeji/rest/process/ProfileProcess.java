@@ -17,7 +17,7 @@ public class ProfileProcess {
 
 	public static JSONResponse readProfile(HttpServletRequest req, String id) {
 		JSONResponse resp = new JSONResponse();
-  
+   
 		Authentication auth = AuthenticationFactory.factory(req);
 		User u = auth.doLogin();
 

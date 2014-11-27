@@ -11,21 +11,27 @@ import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.rest.process.ReverseTransferObjectFactory;
+import de.mpg.imeji.rest.process.TransferObjectFactory;
+import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.j2j.exceptions.NotFoundException;
 
-public class ItemService implements API<Item> {
+public class ItemService implements API<ItemTO> {
 
 	public ItemService() {
 
 	}
 
 	@Override
-	public Item create(Item o, User u) {
+	public ItemTO create(ItemTO o, User u) {
 
 		ItemController controller = new ItemController();
-		URI coll = o.getCollection();
+		Item item = null;//TODO: ReverseTransferObjectFactory.transferItem(item, o);
+		URI coll = item.getCollection();
 		try {
-			return controller.create(o, coll, u);
+			item = controller.create(item, coll, u);
+			TransferObjectFactory.transferItem(item, o);
+			return o;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -34,18 +40,24 @@ public class ItemService implements API<Item> {
 	}
 
 	@Override
-	public Item read(String id, User u) throws NotFoundException,
+	public ItemTO read(String id, User u) throws NotFoundException,
 			NotAllowedError, Exception {
 
 		ItemController controller = new ItemController();
-		return controller.retrieve(ObjectHelper.getURI(Item.class, id), u);
+		ItemTO to = new ItemTO();
+		Item item = controller.retrieve(ObjectHelper.getURI(Item.class, id), u);
+		TransferObjectFactory.transferItem(item, to);
+		return to;
 	}
 
 	@Override
-	public Item update(Item o, User u) {
+	public ItemTO update(ItemTO o, User u) {
 		ItemController controller = new ItemController();
 		try {
-			return controller.update(o, u);
+			Item item = null;//TODO: ReverseTransferObjectFactory.transferItem(item, o);
+			item = controller.update(item, u);
+			TransferObjectFactory.transferItem(item, o);
+			return o;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -54,10 +66,11 @@ public class ItemService implements API<Item> {
 	}
 
 	@Override
-	public boolean delete(Item o, User u) {
+	public boolean delete(ItemTO o, User u) {
 		ItemController controller = new ItemController();
 		List<Item> items = new ArrayList<Item>();
-		items.add(o);
+		Item item = null;//TODO: ReverseTransferObjectFactory.transferItem(item, o);
+		items.add(item);
 		try {
 			controller.delete(items, u);
 			return true;
@@ -68,14 +81,14 @@ public class ItemService implements API<Item> {
 	}
 
 	@Override
-	public void release(Item o, User u) throws NotFoundException,
+	public void release(ItemTO o, User u) throws NotFoundException,
 			NotAllowedError, NotSupportedException, Exception {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void withdraw(Item o, User u) throws NotFoundException,
+	public void withdraw(ItemTO o, User u) throws NotFoundException,
 			NotAllowedError, NotSupportedException, Exception {
 		// TODO Auto-generated method stub
 
@@ -103,5 +116,7 @@ public class ItemService implements API<Item> {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
 
 }

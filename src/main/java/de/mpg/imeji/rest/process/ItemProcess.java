@@ -32,15 +32,12 @@ public class ItemProcess {
 		User u = auth.doLogin();
 		JSONResponse resp = new JSONResponse();
 
-		Item item = null;
+		ItemTO item = null;
 
 		ItemService icrud = new ItemService();
 		try {
 			item = icrud.read(id, u);
-			ItemTO to = new ItemTO();
-
-			TransferObjectFactory.transferItem(item, to);
-			resp.setObject(to);
+			resp.setObject(item);
 			resp.setStatus(Status.OK);
 		} catch (NotFoundException e) {
 			resp.setObject(RestProcessUtils.buildBadRequestResponse());
@@ -69,11 +66,11 @@ public class ItemProcess {
 		Authentication auth = AuthenticationFactory.factory(req);
 		User u = auth.doLogin();
 		u = Imeji.adminUser;
-		
+
 		// Parse json into to
 		ItemWithFileTO to = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(
 				req, ItemWithFileTO.class, json);
-		
+
 		// set file in to (if provided)
 		if (file != null) {
 			try {

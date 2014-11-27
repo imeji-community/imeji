@@ -27,7 +27,7 @@ import de.mpg.j2j.exceptions.NotFoundException;
 public class ItemService implements API<ItemTO> {
 
 	@Override
-	public ItemTO create(ItemTO to, User u) {
+	public ItemTO create(ItemTO to, User u) throws Exception {
 		if (to instanceof ItemWithFileTO) {
 			// get filename
 			String filename = getFilename((ItemWithFileTO) to);
@@ -36,7 +36,6 @@ public class ItemService implements API<ItemTO> {
 			Item item = new Item();
 			ReverseTransferObjectFactory.transferItem(to, item);
 
-			try {
 				// read collection
 				CollectionController cc = new CollectionController();
 				CollectionImeji collection = cc.retrieve(item.getCollection(),
@@ -56,10 +55,6 @@ public class ItemService implements API<ItemTO> {
 							downloadFile((ItemWithFileTO) to), u);
 				}
 
-			} catch (Exception e) {
-				e.printStackTrace();
-				return null;
-			}
 
 			// transfer item into ItemTO
 			ItemTO itemTO = new ItemTO();

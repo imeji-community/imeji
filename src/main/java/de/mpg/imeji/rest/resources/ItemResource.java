@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -60,19 +61,11 @@ public class ItemResource implements ImejiResource {
 	public Response create(@Context HttpServletRequest req,
 			@FormDataParam("collectionId") String collectionId,
 			@FormDataParam("file") InputStream file,
-			@FormDataParam("json") String json) {
-		System.out.println("create in " + collectionId);
-		try {
-			File tmp = File.createTempFile("createItem", null);
-			IOUtils.copy(file, new FileOutputStream(tmp));
-			System.out.println(tmp.getAbsolutePath());
-			System.out.println("json " + json);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return null;
+			@FormDataParam("json") String json,
+			@FormDataParam("file") FormDataContentDisposition fileDetail) {
+		String filename = fileDetail != null ? fileDetail.getFileName() : null;
+		return RestProcessUtils.buildJSONResponse(ItemProcess.createItem(req,
+				file, json, filename));
 	}
 
 	public Response create(HttpServletRequest req) {

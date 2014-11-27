@@ -87,15 +87,17 @@ public class ItemController extends ImejiController {
 	 * @return
 	 * @throws Exception
 	 */
-	public Item create(File f, String filename, CollectionImeji c, User user)
-			throws Exception {
+	public Item create(Item item, File f, String filename, CollectionImeji c,
+			User user) throws Exception {
 		if (filename == null)
 			filename = f.getName();
 		StorageController sc = new StorageController();
 		MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
 		String mimeType = mimeTypesMap.getContentType(f);
 		UploadResult uploadResult = sc.upload(filename, f, c.getIdString());
-		Item item = ImejiFactory.newItem(c, user, uploadResult.getId(),
+		if (item == null)
+			item = ImejiFactory.newItem(c);
+		item = ImejiFactory.newItem(item, c, user, uploadResult.getId(),
 				filename, URI.create(uploadResult.getOrginal()),
 				URI.create(uploadResult.getThumb()),
 				URI.create(uploadResult.getWeb()), mimeType);

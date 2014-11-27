@@ -1,11 +1,14 @@
 package de.mpg.imeji.rest.process;
 
+import java.io.IOException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
 import de.mpg.imeji.rest.to.HTTPError;
@@ -13,27 +16,41 @@ import de.mpg.imeji.rest.to.JSONException;
 import de.mpg.imeji.rest.to.JSONResponse;
 
 public class RestProcessUtils {
-	public static Object buildTOFromJSON(HttpServletRequest req, Object o){
+	/**
+	 * Parse a json file and construct a new Object of type T
+	 * 
+	 * @param req
+	 * @param type
+	 * @param json
+	 * @return
+	 */
+	public static <T> Object buildTOFromJSON(HttpServletRequest req,
+			Class<T> type, String json) {
+		ObjectReader reader = new ObjectMapper().reader().withType(type);
+		try {
+			return reader.readValue(json);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 
-		return o;
-		
 	}
-	
-	
-	public static Response buildJSONResponse(JSONResponse resp){
-		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-    	String json = "";
+
+	public static Response buildJSONResponse(JSONResponse resp) {
+		ObjectWriter ow = new ObjectMapper().writer()
+				.withDefaultPrettyPrinter();
+		String json = "";
 		try {
 			json = ow.writeValueAsString(resp.getObject());
 		} catch (JsonProcessingException e) {
 
 			e.printStackTrace();
 		}
-		return Response.status(resp.getStatus()).entity(json).type(MediaType.APPLICATION_JSON).build();
+		return Response.status(resp.getStatus()).entity(json)
+				.type(MediaType.APPLICATION_JSON).build();
 	}
-	
-	
-	public static JSONException buildBadRequestResponse(){		
+
+	public static JSONException buildBadRequestResponse() {
 		JSONException ex = new JSONException();
 		HTTPError error = new HTTPError();
 		error.setCode("1400");
@@ -41,7 +58,7 @@ public class RestProcessUtils {
 		error.setMessage("validation-failed-message");
 		ex.setError(error);
 		return ex;
-		
+
 	}
 
 	public static Object buildUnauthorizedResponse() {
@@ -53,8 +70,8 @@ public class RestProcessUtils {
 		ex.setError(error);
 		return ex;
 	}
-	
-	public static Object buildNotAllowedResponse(){
+
+	public static Object buildNotAllowedResponse() {
 		JSONException ex = new JSONException();
 		HTTPError error = new HTTPError();
 		error.setCode("1403");
@@ -62,7 +79,7 @@ public class RestProcessUtils {
 		error.setMessage("authorization-failed-message");
 		ex.setError(error);
 		return ex;
-		
+
 	}
 
 }

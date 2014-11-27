@@ -17,6 +17,9 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
+import de.mpg.imeji.logic.auth.Authorization;
+import de.mpg.imeji.logic.auth.exception.NotAllowedError;
+import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
@@ -89,6 +92,10 @@ public class ItemController extends ImejiController {
 	 */
 	public Item create(Item item, File f, String filename, CollectionImeji c,
 			User user) throws Exception {
+		if (!AuthUtil.staticAuth().create(user, item))
+			throw new NotAllowedError(
+					"User not Allowed to upload files in collection "
+							+ c.getIdString());
 		if (filename == null)
 			filename = f.getName();
 		StorageController sc = new StorageController();

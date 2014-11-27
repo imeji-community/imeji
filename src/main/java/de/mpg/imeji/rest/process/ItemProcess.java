@@ -5,21 +5,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.Part;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.io.IOUtils;
 
-import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.Authentication;
 import de.mpg.imeji.logic.auth.AuthenticationFactory;
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
-import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.api.ItemService;
-import de.mpg.imeji.rest.api.ItemService2;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
 import de.mpg.imeji.rest.to.JSONResponse;
@@ -50,7 +45,6 @@ public class ItemProcess {
 			} else {
 				resp.setObject(RestProcessUtils.buildNotAllowedResponse());
 				resp.setStatus(Status.FORBIDDEN);
-
 			}
 		} catch (Exception e) {
 
@@ -65,7 +59,6 @@ public class ItemProcess {
 		// Load User (if provided)
 		Authentication auth = AuthenticationFactory.factory(req);
 		User u = auth.doLogin();
-		u = Imeji.adminUser;
 
 		// Parse json into to
 		ItemWithFileTO to = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(
@@ -84,12 +77,11 @@ public class ItemProcess {
 		}
 
 		// create item with the file
-		ItemService2 service = new ItemService2();
-		to = (ItemWithFileTO) service.create(to, u);
+		ItemService service = new ItemService();
 
 		// / write response
 		JSONResponse resp = new JSONResponse();
-		resp.setObject(to);
+		resp.setObject(service.create(to, u));
 		resp.setStatus(Status.OK);
 		return resp;
 	}

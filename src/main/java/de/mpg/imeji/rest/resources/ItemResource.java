@@ -59,7 +59,6 @@ public class ItemResource implements ImejiResource {
 	@ApiOperation(value = "(Not implemented) Create new item", notes = "Create an item with a file")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response create(@Context HttpServletRequest req,
-			@FormDataParam("collectionId") String collectionId,
 			@FormDataParam("file") InputStream file,
 			@FormDataParam("json") String json,
 			@FormDataParam("file") FormDataContentDisposition fileDetail) {

@@ -53,7 +53,6 @@ public class ReverseTransferObjectFactory {
 	public static void transferItem(ItemTO to, Item vo){
 		vo.setCollection(ObjectHelper.getURI(CollectionImeji.class, to.getCollectionId()));
 		vo.setFilename(to.getFilename());
-		
 		transferItemMetaData(to.getMetadata(), vo);
 		
 	}

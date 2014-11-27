@@ -21,14 +21,12 @@ public class ItemProcess {
 		Authentication auth = AuthenticationFactory.factory(req);
 		User u = auth.doLogin();
 
-		Item item = null;
+		ItemTO item = null;
   
 		ItemService icrud = new ItemService();
 		try { 
 			item = icrud.read(id, u);
-			ItemTO to = new ItemTO();
-			TransferObjectFactory.transferItem(item, to);
-			resp.setObject(to);
+			resp.setObject(item);
 			resp.setStatus(Status.OK);
 		} catch (NotFoundException e) {
 			resp.setObject(RestProcessUtils.buildBadRequestResponse());

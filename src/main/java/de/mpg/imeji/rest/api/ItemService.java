@@ -1,5 +1,8 @@
 package de.mpg.imeji.rest.api;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +13,7 @@ import org.apache.commons.io.FilenameUtils;
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.storage.impl.ExternalStorage;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
@@ -40,8 +44,17 @@ public class ItemService implements API<ItemTO> {
 
 				// Create Item with File
 				ItemController controller = new ItemController();
-				controller.create(item, ((ItemWithFileTO) to).getFile(),
-						filename, collection, u);
+				if (((ItemWithFileTO) to).getFile() != null) {
+					// If TO has attribute File, then upload it
+					controller.createWithFile(item,
+							((ItemWithFileTO) to).getFile(), filename,
+							collection, u);
+				} else if (getExternalFileUrl((ItemWithFileTO) to) != null) {
+					// If no file, but either a fetchUrl or a referenceUrl
+					controller.createWithExternalFile(item, collection,
+							getExternalFileUrl((ItemWithFileTO) to),
+							downloadFile((ItemWithFileTO) to), u);
+				}
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -151,6 +164,33 @@ public class ItemService implements API<ItemTO> {
 		if (filename == null)
 			filename = FilenameUtils.getName(to.getReferenceUrl());
 		return filename;
+	}
+
+	/**
+	 * Return the external Url
+	 * 
+	 * @param to
+	 * @return
+	 */
+	private String getExternalFileUrl(ItemWithFileTO to) {
+		if (to.getFetchUrl() != null && !"".equals(to.getFetchUrl()))
+			return to.getFetchUrl();
+		else if (to.getReferenceUrl() != null
+				&& !"".equals(to.getReferenceUrl()))
+			return to.getReferenceUrl();
+		return null;
+	}
+
+	/**
+	 * True if the file must be download in imeji (i.e fetchurl is defined)
+	 * 
+	 * @param to
+	 * @return
+	 */
+	private boolean downloadFile(ItemWithFileTO to) {
+		if (to.getFetchUrl() != null && !"".equals(to.getFetchUrl()))
+			return true;
+		return false;
 	}
 
 }

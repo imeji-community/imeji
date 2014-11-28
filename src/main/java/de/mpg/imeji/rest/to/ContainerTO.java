@@ -33,7 +33,5 @@ public class ContainerTO extends PropertiesTO implements Serializable{
 		this.contributors = contributors;
 	}
 
-	
-
 
 }

@@ -1,17 +1,16 @@
 package de.mpg.imeji.rest.process;
 
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.ContainerMetadata;
-import de.mpg.imeji.logic.vo.Organization;
-import de.mpg.imeji.logic.vo.Person;
-import de.mpg.imeji.rest.to.CollectionTO;
-import de.mpg.imeji.rest.to.IdentifierTO;
-import de.mpg.imeji.rest.to.OrganizationTO;
-import de.mpg.imeji.rest.to.PersonTO;
+import de.mpg.imeji.logic.vo.*;
+import de.mpg.imeji.presentation.util.ImejiFactory;
+import de.mpg.imeji.rest.api.ProfileService;
+import de.mpg.imeji.rest.to.*;
+
+import java.util.UUID;
 
 public class ReverseTransferObjectFactory {
 	
@@ -24,6 +23,20 @@ public class ReverseTransferObjectFactory {
 		//set contributors
 		transferCollectionContributors(to.getContributors(), metadata);
 		vo.setMetadata(metadata);
+
+		//set Metadata
+		CollectionProfileTO profileTO = to.getProfile();
+
+		//TODO: change the code after CollectionImeji update
+		if (null == profileTO || profileTO.getProfileId() == null ) {
+			//profile = ImejiFactory.newProfile();
+			vo.setProfile(URI.create("default___copy"));
+			//reference profile to existed one
+		} else {
+			vo.setProfile(URI.create(profileTO.getProfileId() + "___" + profileTO.getMethod()));
+		}
+
+
 	}
 	 
 	public static void transferCollectionContributors(List<PersonTO> persons, ContainerMetadata metadata){

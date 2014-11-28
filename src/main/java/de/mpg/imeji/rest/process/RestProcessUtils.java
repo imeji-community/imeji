@@ -12,14 +12,10 @@ import de.mpg.imeji.rest.to.HTTPError;
 import de.mpg.imeji.rest.to.JSONException;
 import de.mpg.imeji.rest.to.JSONResponse;
 
-public class RestProcessUtils {
-	public static Object buildTOFromJSON(HttpServletRequest req, Object o){
+import java.net.URI;
 
-		return o;
-		
-	}
-	
-	
+public class RestProcessUtils {
+
 	public static Response buildJSONResponse(JSONResponse resp){
 		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
     	String json = "";
@@ -63,6 +59,10 @@ public class RestProcessUtils {
 		ex.setError(error);
 		return ex;
 		
+	}
+
+	public static String extractIDFromURI(URI uri) {
+		return uri.getPath().substring(uri.getPath().lastIndexOf("/") + 1);
 	}
 
 }

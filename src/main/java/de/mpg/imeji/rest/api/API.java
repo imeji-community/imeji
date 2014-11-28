@@ -34,7 +34,7 @@ public interface API<V> {
 	 * @param u
 	 * @return
 	 */
-	public V create(V o, User u);
+	public V create(V o, User u) throws Exception;
 
 	/**
 	 * Read an object from imneji with its id

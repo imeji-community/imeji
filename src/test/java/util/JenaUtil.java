@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.tdb.TDB;
 import com.hp.hpl.jena.tdb.base.file.Location;
@@ -54,6 +55,8 @@ import de.mpg.imeji.presentation.util.PropertyReader;
  * @version $Revision$ $LastChangedDate$
  */
 public class JenaUtil {
+	private static Logger logger = Logger.getLogger(JenaUtil.class);
+
 	/**
 	 * Init a Jena Instance for Testing
 	 */
@@ -65,8 +68,14 @@ public class JenaUtil {
 			String tdb = PropertyReader.getProperty("imeji.tdb.path");
 			// remove old Database
 			File f = new File(tdb);
-			if (f.exists())
-				FileUtils.cleanDirectory(f);
+			if (f.exists()) {
+				try {
+					FileUtils.cleanDirectory(f);
+				} catch (Exception e) {
+					logger.error("Error cleaning " + f.getAbsolutePath(), e);
+				}
+
+			}
 			// Create new tdb
 			Imeji.init(tdb);
 		} catch (IOException | URISyntaxException e) {

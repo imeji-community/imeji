@@ -98,13 +98,12 @@
 		valueChangeListener="#{PersonBean.personListener}"
 		style="display:none;" />
 
-	<h:commandButton id="changePersonButton"
-		styleClass="button_change_person "
+	<h:commandButton id="changePersonButton" styleClass="button_change_person "
 		action="#{PersonBean.changePerson(cc.attrs.bean, cc.attrs.position)}"
 		style="display:none;">
 		<f:ajax render="@form" execute="@form" />
 	</h:commandButton>
-
+	
 	<h:panelGroup layout="block" styleClass="imj_admindataSet">
 		<div class="imj_admindataLabel">
 			<h:outputText value="#{lbl.family_name}" />

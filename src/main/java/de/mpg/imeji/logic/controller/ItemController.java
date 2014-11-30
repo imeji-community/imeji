@@ -4,6 +4,8 @@
 package de.mpg.imeji.logic.controller;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,10 +15,14 @@ import java.util.Map;
 
 import javax.activation.MimetypesFileTypeMap;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
+import de.mpg.imeji.logic.auth.Authorization;
+import de.mpg.imeji.logic.auth.exception.NotAllowedError;
+import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
@@ -28,6 +34,8 @@ import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.UploadResult;
+import de.mpg.imeji.logic.storage.impl.ExternalStorage;
+import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Item;
@@ -37,6 +45,7 @@ import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.writer.WriterFacade;
+import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.j2j.helper.J2JHelper;
 
@@ -53,6 +62,7 @@ public class ItemController extends ImejiController {
 			Imeji.imageModel);
 	private static final WriterFacade writer = new WriterFacade(
 			Imeji.imageModel);
+	private static final String NO_THUMBNAIL_URL = "http://imeji.org/noThumbnail.png";
 
 	/**
 	 * Controller constructor
@@ -87,20 +97,61 @@ public class ItemController extends ImejiController {
 	 * @return
 	 * @throws Exception
 	 */
-	public Item create(File f, String filename, CollectionImeji c, User user)
-			throws Exception {
+	public Item createWithFile(Item item, File f, String filename,
+			CollectionImeji c, User user) throws Exception {
+		if (!AuthUtil.staticAuth().create(user, item))
+			throw new NotAllowedError(
+					"User not Allowed to upload files in collection "
+							+ c.getIdString());
 		if (filename == null)
 			filename = f.getName();
 		StorageController sc = new StorageController();
 		MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
 		String mimeType = mimeTypesMap.getContentType(f);
 		UploadResult uploadResult = sc.upload(filename, f, c.getIdString());
-		Item item = ImejiFactory.newItem(c, user, uploadResult.getId(),
+		if (item == null)
+			item = ImejiFactory.newItem(c);
+		item = ImejiFactory.newItem(item, c, user, uploadResult.getId(),
 				filename, URI.create(uploadResult.getOrginal()),
 				URI.create(uploadResult.getThumb()),
 				URI.create(uploadResult.getWeb()), mimeType);
 		item.setChecksum(uploadResult.getChecksum());
 		return create(item, c.getId(), user);
+	}
+
+	/**
+	 * Create an {@link Item} with an external {@link File} according to its URL
+	 * 
+	 * @param item
+	 * @param c
+	 * @param externalFileUrl
+	 * @param download
+	 * @param user
+	 * @return
+	 * @throws Exception
+	 */
+	public Item createWithExternalFile(Item item, CollectionImeji c,
+			String externalFileUrl, boolean download, User user)
+			throws Exception {
+		File tmp = null;
+		String filename = FilenameUtils.getName(externalFileUrl);
+		StorageController sController = new StorageController("external");
+		if (item == null)
+			item = ImejiFactory.newItem(c);
+		if (download) {
+			// download the file in storage
+			tmp = File.createTempFile("imeji", null);
+			sController.read(externalFileUrl, new FileOutputStream(tmp), true);
+			item = createWithFile(item, tmp, filename, c, user);
+		} else {
+			// Reference the file
+			item.setFilename(filename);
+			item.setFullImageUrl(URI.create(externalFileUrl));
+			item.setThumbnailImageUrl(URI.create("NO_THUMBNAIL_URL"));
+			item.setWebImageUrl(URI.create("NO_THUMBNAIL_URL"));
+			item = create(item, c.getId(), user);
+		}
+		return item;
 	}
 
 	/**

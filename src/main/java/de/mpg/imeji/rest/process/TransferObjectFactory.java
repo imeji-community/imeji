@@ -16,16 +16,27 @@ import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.Properties;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
 import de.mpg.imeji.logic.vo.predefinedMetadata.License;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
-import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
 import de.mpg.imeji.rest.api.ProfileService;
 import de.mpg.imeji.rest.api.UserService;
-import de.mpg.imeji.rest.to.*;
+import de.mpg.imeji.rest.to.CollectionTO;
+import de.mpg.imeji.rest.to.IdentifierTO;
+import de.mpg.imeji.rest.to.ItemTO;
+import de.mpg.imeji.rest.to.LabelTO;
+import de.mpg.imeji.rest.to.LiteralConstraintTO;
+import de.mpg.imeji.rest.to.MetadataProfileTO;
+import de.mpg.imeji.rest.to.MetadataSetTO;
+import de.mpg.imeji.rest.to.OrganizationTO;
+import de.mpg.imeji.rest.to.PersonTO;
+import de.mpg.imeji.rest.to.PersonTOBasic;
+import de.mpg.imeji.rest.to.PropertiesTO;
+import de.mpg.imeji.rest.to.StatementTO;
 import de.mpg.imeji.rest.to.predefinedMetadataTO.ConePersonTO;
 import de.mpg.imeji.rest.to.predefinedMetadataTO.DateTO;
 import de.mpg.imeji.rest.to.predefinedMetadataTO.GeolocationTO;
@@ -36,12 +47,60 @@ import de.mpg.imeji.rest.to.predefinedMetadataTO.PublicationTO;
 import de.mpg.imeji.rest.to.predefinedMetadataTO.TextTO;
 import de.mpg.j2j.misc.LocalizedString;
 
-import static de.mpg.imeji.rest.process.RestProcessUtils.extractIDFromURI;
-
 public class TransferObjectFactory {
 	
+	public static void transferMetadataProfile(MetadataProfile vo, MetadataProfileTO to){
+		transferProperties(vo, to);
+		to.setTitle(vo.getTitle());
+		to.setDescription(vo.getDescription());
+		transferStatements(vo.getStatements(), to);	
+	}
 	
+	public static void transferStatements(Collection<Statement> stats, MetadataProfileTO to){
+		for(Statement t : stats)
+		{
+			StatementTO sto = new StatementTO();
+			sto.setId(extractIDFromURI(t.getId()));
+			sto.setPos(t.getPos());
+			sto.setType(t.getType());
+			sto.setLabels(new ArrayList<LocalizedString>(t.getLabels()));
+			sto.setVocabulary(t.getVocabulary());
+			for(String s : t.getLiteralConstraints())
+			{
+				LiteralConstraintTO lcto = new LiteralConstraintTO();
+				lcto.setValue(s);
+				sto.getLiteralConstraints().add(lcto);
+			}
+			sto.setMinOccurs(t.getMinOccurs());
+			sto.setMaxOccurs(t.getMaxOccurs());
+			if(t.getParent() != null)
+				sto.setParentStatementId(extractIDFromURI(t.getParent()));
+			sto.setUseInPreview(t.isPreview());
+			to.getStatements().add(sto);
+		}
+		
+	}
+	
+	public static void transferCollection(CollectionImeji vo, CollectionTO to) {
+		transferProperties(vo, to);
 
+		//TODO: Container
+		to.setTitle(vo.getMetadata().getTitle());
+		to.setDescription(vo.getMetadata().getDescription());
+
+		//TODO: versionOf
+
+		//in output jsen reference to mdprofile
+		to.getProfile().setProfileId(vo.getProfile().toString());
+		to.getProfile().setMethod("reference");
+
+		for(Person p : vo.getMetadata().getPersons())
+		{
+			PersonTO pto = new PersonTO();
+			transferPerson(p, pto);
+			to.getContributors().add(pto);
+		}
+	}	
 	 
 	public static void transferPerson(Person p, PersonTO pto){  
 
@@ -138,8 +197,6 @@ public class TransferObjectFactory {
 
 	}
 
-
-
 	public static void tranferItemMetadata(MetadataProfile profile, Collection<Metadata> voMds, ItemTO to) {
 
 		for (Metadata md : voMds) {
@@ -230,38 +287,21 @@ public class TransferObjectFactory {
 		}
 	}
 
-	public static void transferCollection(CollectionImeji vo, CollectionTO to) {
-		transferProperties(vo, to);
-
-		//TODO: Container
-		to.setTitle(vo.getMetadata().getTitle());
-		to.setDescription(vo.getMetadata().getDescription());
-
-		//TODO: versionOf
-
-		//in output jsen reference to mdprofile
-		to.getProfile().setProfileId(vo.getProfile().toString());
-		to.getProfile().setMethod("reference");
-
-		for(Person p : vo.getMetadata().getPersons())
-		{
-			PersonTO pto = new PersonTO();
-			transferPerson(p, pto);
-			to.getContributors().add(pto);
-		}
-	}
 
 
 	public static String formatDate(Date d) {
 		String output = "";
 		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
 		output = f.format(d);
-		f = new SimpleDateFormat("HH:mm:SS Z");
+		f = new SimpleDateFormat("HH:mm:ss Z");
 		output += "T" + f.format(d);
 		return output;
 
 	}
 
+	public static String extractIDFromURI(URI uri) {
+		return uri.getPath().substring(uri.getPath().lastIndexOf("/") + 1);
+	}
 
 
 

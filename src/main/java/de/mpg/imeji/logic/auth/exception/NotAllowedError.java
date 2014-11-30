@@ -37,7 +37,7 @@ import de.mpg.imeji.logic.auth.Authorization;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class NotAllowedError extends Exception
+public class NotAllowedError extends RuntimeException
 {
     private static final long serialVersionUID = -3504946406047760565L;
 

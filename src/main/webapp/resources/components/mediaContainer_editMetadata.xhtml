@@ -42,20 +42,16 @@
 				</div>
 
 				<!-- Author data -->
-				<ui:repeat id="persons" var="creator"
-					value="#{cc.attrs.formularContextBean.metadata.persons}"
-					varStatus="indexA">
+				<ui:repeat id="persons" var="creator" value="#{cc.attrs.formularContextBean.metadata.persons}" varStatus="indexA">
 					<h:panelGroup layout="block" styleClass="imj_authorMetadataSet">
 						<div class="imj_sectionHeadline">
 							<h4>
 								<!-- Add/Remove Author buttons -->
-								<span class="imj_inlineButtonGroup"> <h:commandButton
-										styleClass="imj_buttonAdd_16" title="#{lbl.add_author}"
-										action="#{cc.attrs.formularBean.addAuthor(indexA.index)}">
+								<span class="imj_inlineButtonGroup"> 
+									<h:commandButton styleClass="imj_buttonAdd_16" title="#{lbl.add_author}" action="#{cc.attrs.formularBean.addAuthor(indexA.index)}">
 										<f:ajax execute="@this" render="@form" />
-									</h:commandButton> <h:commandButton styleClass="imj_buttonRemove_16"
-										title="#{lbl.remove_author}"
-										action="#{cc.attrs.formularBean.removeAuthor(indexA.index)}">
+									</h:commandButton>
+									<h:commandButton styleClass="imj_buttonRemove_16" title="#{lbl.remove_author}" action="#{cc.attrs.formularBean.removeAuthor(indexA.index)}">
 										<f:ajax execute="@this" render="@form" />
 									</h:commandButton>
 								</span>
@@ -65,8 +61,7 @@
 						</div>
 
 						<!-- The user of the person -->
-						<imjc:person id="collectionAuthor" person="#{creator}"
-							bean="#{cc.attrs.formularBean}" position="#{indexA.index}" />
+						<imjc:person id="collectionAuthor" person="#{creator}" bean="#{cc.attrs.formularBean}" position="#{indexA.index}" />
 
 						<ui:remove>
 							<!-- Family Name -->

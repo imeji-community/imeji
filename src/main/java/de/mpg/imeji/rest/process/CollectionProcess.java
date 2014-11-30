@@ -20,7 +20,7 @@ import java.io.InputStream;
 
 public class CollectionProcess {
     
-	public JSONResponse readCollection(HttpServletRequest req, String id) {
+	public static JSONResponse readCollection(HttpServletRequest req, String id) {
 		JSONResponse resp = new JSONResponse();
 
 		User u = getUser(req);
@@ -34,7 +34,6 @@ public class CollectionProcess {
 
 			resp.setObject(to);
 			resp.setStatus(Status.OK);
-
 		} catch (NotFoundException e) {
 			resp.setObject(RestProcessUtils.buildBadRequestResponse());
 			resp.setStatus(Status.BAD_REQUEST);
@@ -60,14 +59,15 @@ public class CollectionProcess {
 
 		User u = getUser(req);
 
-		//cannot authorize user
-
-
 		CollectionImeji collection = null;
-
+		//CollectionImeji collection2 = new CollectionImeji();
+		
 		CollectionService ccrud = new CollectionService();
 		try {
 			CollectionTO to = buildTOFromJSON(req);
+			CollectionTO to = new CollectionTO();
+			RestProcessUtils.buildTOFromJSON(req, CollectionTO.class,
+					"TODO, write json as string here");
 			CollectionImeji vo = new CollectionImeji();
 			ReverseTransferObjectFactory.transferCollection(to, vo);
 			collection = ccrud.create(vo, u);

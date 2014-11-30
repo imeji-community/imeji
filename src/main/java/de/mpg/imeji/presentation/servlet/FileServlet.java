@@ -27,6 +27,7 @@ import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.StorageController;
+import de.mpg.imeji.logic.storage.impl.ExternalStorage;
 import de.mpg.imeji.logic.storage.internal.InternalStorageManager;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -103,15 +104,22 @@ public class FileServlet extends HttpServlet {
 				.getFileExtension(url)));
 		SessionBean session = getSession(req);
 		User user = getUser(req, session);
-		
-		if (authorization.read(user, loadCollection(url, session))
-				|| authorization.read(user, getItem(url, user))) {
-			if (download)
-				resp.setHeader("Content-disposition", "attachment;");
-			storageController.read(url, resp.getOutputStream(), true);
-		} else {
-			resp.sendError(403,
-					"imeji security: You are not allowed to view this file");
+
+		try {
+			if (authorization.read(user, loadCollection(url, session))
+					|| authorization.read(user, getItem(url, user))) {
+				if (download)
+					resp.setHeader("Content-disposition", "attachment;");
+				storageController.read(url, resp.getOutputStream(), true);
+			} else {
+				resp.sendError(403,
+						"imeji security: You are not allowed to view this file");
+			}
+		} catch (Exception e) {
+			ExternalStorage eStorage = new ExternalStorage();
+			eStorage.read(
+					"http://localhost:8080/imeji/resources/icon/empty.png",
+					resp.getOutputStream(), true);
 		}
 	}
 

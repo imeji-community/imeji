@@ -17,8 +17,7 @@ import java.io.InputStream;
 
 @Path("/items")
 @Api(value = "rest/items", description = "Operations on items")
-public class ItemResource implements ImejiResource
-{
+public class ItemResource implements ImejiResource {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -31,20 +30,31 @@ public class ItemResource implements ImejiResource
 	@ApiOperation(value = "Get item by id")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response readFromID(@Context HttpServletRequest req,
-							   @PathParam("id") String id) {
+			@PathParam("id") String id) {
 		JSONResponse resp = ItemProcess.readItem(req, id);
 		return RestProcessUtils.buildJSONResponse(resp);
 	}
 
 	@POST
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	@ApiOperation(value = "(Not implemented) Create new item", notes = "Create an item with a file")
+	@ApiOperation(value = "Create new item with a File", notes = "Create an item with a file. File can be defined either as (by order of priority):"
+			+ "<br/> 1) form parameter <br/> 2) json parameter: \"fetchUrl\" : \"http://example.org/myFile.png\" (myFile.png will be uploaded in imeji) "
+			+ "<br/> 3) json parameter \"referenceUrl\" : \"http://example.org/myFile.png\" (myFile.png will be only referenced in imeji, i.e. not uploaded)"
+			+ "<br/><br/>"
+			+ "Json example:"
+			+ "<br/>{"
+			+ "<br/>\"collectionId\" : \"abc123\","
+			+ "<br/>\"fetchUrl\" : \"http://example.org/myFile.png\","
+			+ "<br/>\"referenceUrl\" : \"http://example.org/myFile.png\","
+			+ "<br/>\"metadata\" : \"[]\""
+			+ "<br/>}"
+			+ "<br/><br/>"
+			+ "The metadata parameter allows to define the metadata of item during the creation of the item. To get an example of how to do it, please try the get item method")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response create(@Context HttpServletRequest req,
-						   @FormDataParam("file") InputStream file,
-						   @FormDataParam("json") String json,
-						   @FormDataParam("file") FormDataContentDisposition fileDetail
-	) {
+			@FormDataParam("file") InputStream file,
+			@FormDataParam("json") String json,
+			@FormDataParam("file") FormDataContentDisposition fileDetail) {
 		String filename = fileDetail != null ? fileDetail.getFileName() : null;
 		return RestProcessUtils.buildJSONResponse(ItemProcess.createItem(req,
 				file, json, filename));
@@ -59,7 +69,7 @@ public class ItemResource implements ImejiResource
 	@ApiOperation(value = "(Not implemented) Delete item by id")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response delete(@Context HttpServletRequest req,
-						   @PathParam("id") String id) {
+			@PathParam("id") String id) {
 		return null;
 	}
 

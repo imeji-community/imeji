@@ -85,12 +85,12 @@ public class ItemService implements API<ItemTO> {
 	}
 
 	@Override
-	public boolean delete(ItemTO o, User u) {
+	public boolean delete(ItemTO to, User u) {
 		ItemController controller = new ItemController();
 		List<Item> items = new ArrayList<Item>();
-		Item item = null;// TODO:
-							// ReverseTransferObjectFactory.transferItem(item,
-							// o);
+		Item item = new Item();
+		ReverseTransferObjectFactory.transferItem(to, item);
+
 		items.add(item);
 		try {
 			controller.delete(items, u);

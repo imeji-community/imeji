@@ -64,10 +64,7 @@ public class CollectionProcess {
 		
 		CollectionService ccrud = new CollectionService();
 		try {
-			CollectionTO to = buildTOFromJSON(req);
-			CollectionTO to = new CollectionTO();
-			RestProcessUtils.buildTOFromJSON(req, CollectionTO.class,
-					"TODO, write json as string here");
+			CollectionTO to = (CollectionTO)RestProcessUtils.buildTOFromJSON(req, CollectionTO.class);
 			CollectionImeji vo = new CollectionImeji();
 			ReverseTransferObjectFactory.transferCollection(to, vo);
 			collection = ccrud.create(vo, u);
@@ -92,31 +89,12 @@ public class CollectionProcess {
 
 	}
 
-	public User getUser(HttpServletRequest req) {
+	public static User getUser(HttpServletRequest req) {
 
-//		Authentication auth = AuthenticationFactory.factory("admin@imeji.org", "admin");
-//		return auth.doLogin();
 		Authentication auth = AuthenticationFactory.factory(req);
 		return auth.doLogin();
 	}
 
-	public static CollectionTO buildTOFromJSON(HttpServletRequest req) {
-		try {
-			return buildTOFromJSON(req.getInputStream());
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
-
-	}
-
-	public static CollectionTO buildTOFromJSON(InputStream is) throws IOException {
-
-		ObjectMapper mapper = new ObjectMapper();
-		return mapper.readValue(ByteStreams.toByteArray(is), CollectionTO.class);
-
-
-	}
 
 
 }

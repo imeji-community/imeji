@@ -1,8 +1,11 @@
 package de.mpg.imeji.rest.test;
 
 import org.glassfish.grizzly.http.server.HttpServer;
+import org.glassfish.grizzly.servlet.ServletRegistration;
+import org.glassfish.grizzly.servlet.WebappContext;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.grizzly2.servlet.GrizzlyWebContainerFactory;
+import org.glassfish.jersey.servlet.ServletContainer;
 import org.glassfish.jersey.test.DeploymentContext;
 import org.glassfish.jersey.test.spi.TestContainer;
 import org.glassfish.jersey.test.spi.TestContainerException;
@@ -22,7 +25,7 @@ import java.util.Collections;
 * */
 public class MyTestContainerFactory implements TestContainerFactory {
     @Override
-    public TestContainer create(final URI baseUri, DeploymentContext deploymentContext) throws IllegalArgumentException {
+    public TestContainer create(final URI baseUri, final DeploymentContext deploymentContext) throws IllegalArgumentException {
         return new TestContainer() {
             private HttpServer server;
 
@@ -40,8 +43,14 @@ public class MyTestContainerFactory implements TestContainerFactory {
             public void start() {
                 try {
                     this.server = GrizzlyWebContainerFactory.create(
-                            baseUri, Collections.singletonMap("jersey.config.server.provider.packages", "de.mpg.imeji.rest")
+                            baseUri, Collections.singletonMap("jersey.config.server.provider.packages", "de.mpg.imeji.rest.resources")
                     );
+                    /*WebappContext context = new WebappContext("WebappContext", "");
+
+                    ServletRegistration registration = context.addServlet("ServletContainer", ServletContainer.class);
+                    registration.setInitParameter("javax.ws.rs.Application", "de.mpg.imeji.rest.MyApplication");
+                    registration.setInitParameter("jersey.config.server.provider.classnames", "org.glassfish.jersey.filter.LoggingFilter;org.glassfish.jersey.media.multipart.MultiPartFeature");
+                    context.deploy(server);*/
                 } catch (ProcessingException e) {
                     throw new TestContainerException(e);
                 } catch (IOException e) {

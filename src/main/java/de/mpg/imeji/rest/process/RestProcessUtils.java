@@ -35,6 +35,18 @@ public class RestProcessUtils {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public static <T> Object buildTOFromJSON(HttpServletRequest req,
+			Class<T> type) {
+		ObjectReader reader = new ObjectMapper().reader().withType(type);
+		try {
+			return reader.readValue(req.getInputStream());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 
 	public static Response buildJSONResponse(JSONResponse resp) {

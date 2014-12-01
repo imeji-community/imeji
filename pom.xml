@@ -226,6 +226,9 @@
 					<systemPropertyVariables>
 						<catalina.base>${test.catalina.base}</catalina.base>
 					</systemPropertyVariables>
+					<excludes>
+						<exclude>**/CollectionTest.java</exclude>
+					</excludes>
 				</configuration>
 				<executions>
 					<execution>
@@ -535,7 +538,12 @@
 
 
 		<!-- REST -->
-
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version>
+			<scope>provided</scope>
+		</dependency>
 		<dependency>
 			<groupId>javax.ws.rs</groupId>
 			<artifactId>javax.ws.rs-api</artifactId>

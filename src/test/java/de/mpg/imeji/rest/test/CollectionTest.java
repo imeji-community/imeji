@@ -12,7 +12,13 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.rest.MyApplication;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
+import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.server.ServerProperties;
+import org.glassfish.jersey.test.DeploymentContext;
 import org.glassfish.jersey.test.JerseyTest;
+import org.glassfish.jersey.test.ServletDeploymentContext;
+import org.glassfish.jersey.test.grizzly.GrizzlyWebTestContainerFactory;
 import org.glassfish.jersey.test.spi.TestContainerException;
 import org.glassfish.jersey.test.spi.TestContainerFactory;
 import org.junit.*;
@@ -73,9 +79,12 @@ public class CollectionTest extends JerseyTest {
 	}
 
 
+
+
 	@Override
 	protected TestContainerFactory getTestContainerFactory() throws TestContainerException {
 		return new MyTestContainerFactory();
+//		return new GrizzlyWebTestContainerFactory();
 	}
 
 	@BeforeClass
@@ -99,6 +108,7 @@ public class CollectionTest extends JerseyTest {
 
 		Response response = target(pathPrefix)
 				.register(authAsAdmin)
+				.register(MultiPartFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.post(Entity.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
 
@@ -119,6 +129,7 @@ public class CollectionTest extends JerseyTest {
 
 		Response response = target(pathPrefix)
 				.register(authAsAdmin)
+				.register(MultiPartFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.post(Entity.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
 

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- CDDL HEADER START The contents of this file are subject to the terms 
-	of the Common Development and Distribution License, Version 1.0 only (the 
-	"License"). You may not use this file except in compliance with the License. 
+<!-- CDDL HEADER START The contents of this file are subject to the terms
+	of the Common Development and Distribution License, Version 1.0 only (the
+	"License"). You may not use this file except in compliance with the License.
 	You can obtain a copy of the license at license/ESCIDOC.LICENSE or http://www.escidoc.de/license. asasasa
-	See the License for the specific language governing permissions and limitations 
-	under the License. When distributing Covered Code, include this CDDL HEADER 
-	in each file and include the License file at license/ESCIDOC.LICENSE. If 
-	applicable, add the following below this CDDL HEADER, with the fields enclosed 
-	by brackets "[]" replaced with your own identifying information: Portions 
-	Copyright [yyyy] [name of copyright owner] CDDL HEADER END Copyright 2006-2007 
-	Fachinformationszentrum Karlsruhe Gesellschaft für wissenschaftlich-technische 
-	Information mbH and Max-Planck- Gesellschaft zur Förderung der Wissenschaft 
+	See the License for the specific language governing permissions and limitations
+	under the License. When distributing Covered Code, include this CDDL HEADER
+	in each file and include the License file at license/ESCIDOC.LICENSE. If
+	applicable, add the following below this CDDL HEADER, with the fields enclosed
+	by brackets "[]" replaced with your own identifying information: Portions
+	Copyright [yyyy] [name of copyright owner] CDDL HEADER END Copyright 2006-2007
+	Fachinformationszentrum Karlsruhe Gesellschaft für wissenschaftlich-technische
+	Information mbH and Max-Planck- Gesellschaft zur Förderung der Wissenschaft
 	e.V. All rights reserved. Use is subject to license terms. -->
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
@@ -53,7 +53,7 @@
 		<load-on-startup>5</load-on-startup>
 		<async-supported>true</async-supported>
 	</servlet>
-	
+
 	<servlet>
 		<servlet-name>imeji REST Service</servlet-name>
 		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
@@ -61,31 +61,31 @@
 		     <param-name>jersey.config.server.provider.packages</param-name>
 		     <param-value>de.mpg.imeji.rest.resources; com.wordnik.swagger.jersey.listing</param-value>
 		</init-param>
+<!--
 		<init-param>
 	        <param-name>com.sun.jersey.config.property.resourceConfigClass</param-name>
 	        <param-value>com.sun.jersey.api.core.PackagesResourceConfig</param-value>
     	</init-param>
+-->
 		<init-param>
 			<param-name>javax.ws.rs.Application</param-name>
 			<param-value>de.mpg.imeji.rest.MyApplication</param-value>
 		</init-param>
+<!--
 		<init-param>
 			<param-name>jersey.config.server.provider.classnames</param-name>
-			<param-value>org.glassfish.jersey.filter.LoggingFilter</param-value>
+			<param-value>org.glassfish.jersey.filter.LoggingFilter;org.glassfish.jersey.media.multipart.MultiPartFeature</param-value>
 		</init-param>
+-->
 
-    	<init-param>
-		    <param-name>jersey.config.server.provider.classnames</param-name>
-		    <param-value>org.glassfish.jersey.media.multipart.MultiPartFeature</param-value>
-		</init-param>
-    	
+
     	<!--
 		<init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>de.mpg.imeji.rest.MyApplication</param-value>
         </init-param>
-        
-        
+
+
         <init-param>
             <param-name>org.glassfish.jersey.spi.container.ContainerRequestFilters</param-name>
             <param-value>org.glassfish.jersey.api.container.filter.GZIPContentEncodingFilter</param-value>
@@ -110,11 +110,11 @@
 	  </init-param>
 	  <load-on-startup>2</load-on-startup>
 	</servlet>
-	
-	<!-- Filters (order is important) -->
-	
 
-	
+	<!-- Filters (order is important) -->
+
+
+
 	<filter>
 		<filter-name>Encoder Filter</filter-name>
 		<filter-class>de.mpg.imeji.presentation.util.EncoderFilter</filter-class>
@@ -135,11 +135,11 @@
 		<filter-class>de.mpg.imeji.presentation.history.HistoryFilter</filter-class>
 		<async-supported>true</async-supported>
 	</filter>
-	
+
 	<!-- Mappings -->
-	
- 	
-	
+
+
+
 	<filter-mapping>
 		<filter-name>Encoder Filter</filter-name>
 		<url-pattern>/*</url-pattern>
@@ -180,13 +180,13 @@
 		<servlet-name>Data Viewer Servlet</servlet-name>
 		<url-pattern>/dataviewer</url-pattern>
 	</servlet-mapping>
-	<servlet-mapping>  
-		<servlet-name>imeji REST Service</servlet-name>  
-		<url-pattern>/rest/*</url-pattern>  
-	</servlet-mapping> 
- 
-	
-	
+	<servlet-mapping>
+		<servlet-name>imeji REST Service</servlet-name>
+		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
+
+
+
 	<filter-mapping>
 		<filter-name>History Filter</filter-name>
 		<url-pattern>/*</url-pattern>
@@ -194,8 +194,8 @@
 		<dispatcher>FORWARD</dispatcher>
 	</filter-mapping>
 	<!-- Parameters -->
-	
-	
+
+
 	<context-param>
 		<param-name>com.ocpsoft.pretty.BASE_PACKAGES</param-name>
 		<param-value>de.mpg.imeji</param-value>
@@ -244,9 +244,9 @@
 	<context-param>
 	    <param-name>javax.faces.PARTIAL_STATE_SAVING</param-name>
 	    <param-value>true</param-value>
-	</context-param>	
-	
-	
+	</context-param>
+
+
 	<session-config>
 		<session-timeout>180</session-timeout>
 	</session-config>
@@ -263,7 +263,7 @@
 	</error-page>
 	<!-- Digilib staff -->
 	<!-- The Intialisation Listener -->
-	
+
 	<listener>
 		<listener-class>digilib.conf.DigilibServletConfiguration</listener-class>
 	</listener>

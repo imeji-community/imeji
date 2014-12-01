@@ -34,12 +34,16 @@ import de.mpg.imeji.rest.to.predefinedMetadataTO.LinkTO;
 import de.mpg.imeji.rest.to.predefinedMetadataTO.NumberTO;
 import de.mpg.imeji.rest.to.predefinedMetadataTO.PublicationTO;
 import de.mpg.imeji.rest.to.predefinedMetadataTO.TextTO;
+import de.mpg.imeji.logic.vo.*;
+import de.mpg.imeji.presentation.util.ImejiFactory;
+import de.mpg.imeji.rest.api.ProfileService;
+import de.mpg.imeji.rest.to.*;
+
+import java.util.UUID;
 
 public class ReverseTransferObjectFactory {
 	
-
-
-
+	
 	public static void transferCollection(CollectionTO to, CollectionImeji vo) {
 		ContainerMetadata metadata = new ContainerMetadata();
 		metadata.setTitle(to.getTitle());
@@ -48,6 +52,20 @@ public class ReverseTransferObjectFactory {
 		//set contributors
 		transferCollectionContributors(to.getContributors(), metadata);
 		vo.setMetadata(metadata);
+
+		//set Metadata
+		CollectionProfileTO profileTO = to.getProfile();
+
+		//TODO: change the code after CollectionImeji update
+		if (null == profileTO || profileTO.getProfileId() == null ) {
+			//profile = ImejiFactory.newProfile();
+			vo.setProfile(URI.create("default___copy"));
+			//reference profile to existed one
+		} else {
+			vo.setProfile(URI.create(profileTO.getProfileId() + "___" + profileTO.getMethod()));
+		}
+
+
 	}
 	
 	public static void transferItem(ItemTO to, Item vo){
@@ -187,7 +205,7 @@ public class ReverseTransferObjectFactory {
 		}
 		
 	}
-	
+
 	public static String formatDate(Date d) {
 		String output = "";
 		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");

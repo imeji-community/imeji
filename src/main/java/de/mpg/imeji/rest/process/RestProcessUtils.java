@@ -15,6 +15,8 @@ import de.mpg.imeji.rest.to.HTTPError;
 import de.mpg.imeji.rest.to.JSONException;
 import de.mpg.imeji.rest.to.JSONResponse;
 
+import java.net.URI;
+
 public class RestProcessUtils {
 	/**
 	 * Parse a json file and construct a new Object of type T
@@ -34,7 +36,6 @@ public class RestProcessUtils {
 		}
 		return null;
 
-	}
 
 	public static Response buildJSONResponse(JSONResponse resp) {
 		ObjectWriter ow = new ObjectMapper().writer()
@@ -79,7 +80,9 @@ public class RestProcessUtils {
 		error.setMessage("authorization-failed-message");
 		ex.setError(error);
 		return ex;
-
+		
 	}
+
+
 
 }

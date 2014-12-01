@@ -83,20 +83,27 @@ public class TransferObjectFactory {
 	
 	public static void transferCollection(CollectionImeji vo, CollectionTO to) {
 		transferProperties(vo, to);
-		to.setProfileId(extractIDFromURI(vo.getProfile()));
+
+		//TODO: Container
 		to.setTitle(vo.getMetadata().getTitle());
 		to.setDescription(vo.getMetadata().getDescription());
-		
+
+		//TODO: versionOf
+
+		//in output jsen reference to mdprofile
+		to.getProfile().setProfileId(vo.getProfile().toString());
+		to.getProfile().setMethod("reference");
+
 		for(Person p : vo.getMetadata().getPersons())
 		{
 			PersonTO pto = new PersonTO();
 			transferPerson(p, pto);
 			to.getContributors().add(pto);
 		}
-	}
-	
+	}	
 	 
 	public static void transferPerson(Person p, PersonTO pto){  
+
 			pto.setPosition(p.getPos());
 			pto.setId(extractIDFromURI(p.getId()));
 			pto.setFamilyName(p.getFamilyName());
@@ -279,6 +286,8 @@ public class TransferObjectFactory {
 			to.getMetadata().add(mdTO);
 		}
 	}
+
+
 
 	public static String formatDate(Date d) {
 		String output = "";

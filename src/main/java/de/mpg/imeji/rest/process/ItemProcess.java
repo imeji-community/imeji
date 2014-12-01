@@ -81,8 +81,25 @@ public class ItemProcess {
 
 		// / write response
 		JSONResponse resp = new JSONResponse();
-		resp.setObject(service.create(to, u));
-		resp.setStatus(Status.OK);
+		try {
+			resp.setObject(service.create(to, u));
+			resp.setStatus(Status.OK);
+		} catch (NotFoundException e) {
+			resp.setObject(RestProcessUtils.buildBadRequestResponse());
+			resp.setStatus(Status.BAD_REQUEST);
+
+		} catch (NotAllowedError e) {
+			if (u == null) {
+				resp.setObject(RestProcessUtils.buildUnauthorizedResponse());
+				resp.setStatus(Status.UNAUTHORIZED);
+			} else {
+				resp.setObject(RestProcessUtils.buildNotAllowedResponse());
+				resp.setStatus(Status.FORBIDDEN);
+			}
+		} catch (Exception e) {
+			resp.setStatus(Status.INTERNAL_SERVER_ERROR);
+		}
+
 		return resp;
 	}
 

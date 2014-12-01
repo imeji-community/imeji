@@ -312,7 +312,7 @@ public class UploadBean implements Serializable {
 				item = controller.updateThumbnail(findItemByFileName(title),
 						file, user);
 			} else {
-				item = controller.create(null, file, title, collection, user);
+				item = controller.createWithFile(null, file, title, collection, user);
 			}
 			getsFiles().add(item);
 			return item;

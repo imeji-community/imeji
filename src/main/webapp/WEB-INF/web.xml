@@ -65,6 +65,15 @@
 	        <param-name>com.sun.jersey.config.property.resourceConfigClass</param-name>
 	        <param-value>com.sun.jersey.api.core.PackagesResourceConfig</param-value>
     	</init-param>
+		<init-param>
+			<param-name>javax.ws.rs.Application</param-name>
+			<param-value>de.mpg.imeji.rest.MyApplication</param-value>
+		</init-param>
+		<init-param>
+			<param-name>jersey.config.server.provider.classnames</param-name>
+			<param-value>org.glassfish.jersey.filter.LoggingFilter</param-value>
+		</init-param>
+
     	<init-param>
 		    <param-name>jersey.config.server.provider.classnames</param-name>
 		    <param-value>org.glassfish.jersey.media.multipart.MultiPartFeature</param-value>

@@ -148,7 +148,7 @@ public class TransferObjectFactory {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		to.setCreatedBy(new PersonTOBasic(u.getPerson().getFamilyName(), extractIDFromURI(u.getPerson().getId())));
+		to.setCreatedBy(new PersonTOBasic(u.getPerson().getCompleteName(), extractIDFromURI(u.getPerson().getId())));
 		//set modifiedBy
 		try {
 			u = ucrud.read(vo.getModifiedBy());
@@ -157,7 +157,7 @@ public class TransferObjectFactory {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		to.setModifiedBy(new PersonTOBasic(u.getPerson().getFamilyName(), extractIDFromURI(u.getPerson().getId())));
+		to.setModifiedBy(new PersonTOBasic(u.getPerson().getCompleteName(), extractIDFromURI(u.getPerson().getId())));
 		//set createdDate, modifiedDate, versionDate
 		to.setCreatedDate(formatDate(vo.getCreated().getTime()));
 		to.setModifiedDate(formatDate(vo.getModified().getTime()));

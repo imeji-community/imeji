@@ -7,6 +7,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -34,7 +37,6 @@ import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.UploadResult;
-import de.mpg.imeji.logic.storage.impl.ExternalStorage;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Container;
@@ -105,9 +107,11 @@ public class ItemController extends ImejiController {
 							+ c.getIdString());
 		if (filename == null)
 			filename = f.getName();
-		StorageController sc = new StorageController();
-		MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
-		String mimeType = mimeTypesMap.getContentType(f);
+		StorageController sc = new StorageController();	
+//		MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
+//		String mimeType = mimeTypesMap.getContentType(f);
+		Path p = Paths.get(filename);
+		String mimeType = Files.probeContentType(p);
 		UploadResult uploadResult = sc.upload(filename, f, c.getIdString());
 		if (item == null)
 			item = ImejiFactory.newItem(c);

@@ -29,7 +29,7 @@ import de.mpg.j2j.annotations.j2jResource;
  */
 @j2jResource("http://imeji.org/terms/properties")
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlRootElement(name = "properties", namespace = "http://imeji.org/terms")
+@XmlRootElement(name = "properties", namespace = "http://imeji.org/terms/")
 @XmlSeeAlso({ Item.class, MetadataProfile.class })
 public class Properties implements Serializable
 {
@@ -80,7 +80,7 @@ public class Properties implements Serializable
         this.createdBy = createdBy;
     }
 
-    @XmlElement(name = "creator", namespace = "http://purl.org/dc/terms")
+    @XmlElement(name = "creator", namespace = "http://purl.org/dc/terms/")
     public URI getCreatedBy()
     {
         return createdBy;
@@ -91,7 +91,7 @@ public class Properties implements Serializable
         this.modifiedBy = modifiedBy;
     }
 
-    @XmlElement(name = "modifiedBy", namespace = "http://imeji.org/terms")
+    @XmlElement(name = "modifiedBy", namespace = "http://imeji.org/terms/")
     public URI getModifiedBy()
     {
         return modifiedBy;
@@ -102,7 +102,7 @@ public class Properties implements Serializable
         this.status = status.getUri();
     }
 
-    @XmlElement(name = "status", namespace = "http://imeji.org/terms")
+    @XmlElement(name = "status", namespace = "http://imeji.org/terms/")
     public Status getStatus()
     {
         return Status.valueOf(status.getFragment());
@@ -113,13 +113,13 @@ public class Properties implements Serializable
         this.version = version;
     }
 
-    @XmlElement(name = "version", namespace = "http://imeji.org/terms")
+    @XmlElement(name = "version", namespace = "http://imeji.org/terms/")
     public int getVersion()
     {
         return version;
     }
 
-    @XmlElement(name = "discardComment", namespace = "http://imeji.org/terms")
+    @XmlElement(name = "discardComment", namespace = "http://imeji.org/terms/")
     public String getDiscardComment()
     {
         return discardComment;
@@ -130,7 +130,7 @@ public class Properties implements Serializable
         this.discardComment = discardComment;
     }
 
-    @XmlElement(name = "created", namespace = "http://purl.org/dc/terms")
+    @XmlElement(name = "created", namespace = "http://purl.org/dc/terms/")
     public Calendar getCreated()
     {
         return created;
@@ -141,7 +141,7 @@ public class Properties implements Serializable
         this.created = created;
     }
 
-    @XmlElement(name = "modified", namespace = "http://purl.org/dc/terms")
+    @XmlElement(name = "modified", namespace = "http://purl.org/dc/terms/")
     public Calendar getModified()
     {
         return modified;
@@ -152,7 +152,7 @@ public class Properties implements Serializable
         this.modified = modified;
     }
 
-    @XmlElement(name = "issued", namespace = "http://purl.org/dc/terms")
+    @XmlElement(name = "issued", namespace = "http://purl.org/dc/terms/")
     public Calendar getVersionDate()
     {
         return versionDate;

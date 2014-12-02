@@ -32,7 +32,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jId(getMethod = "getId", setMethod = "setId")
 @j2jModel("metadataProfile")
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlRootElement(name = "mdprofile", namespace = "http://imeji.org/terms")
+@XmlRootElement(name = "mdprofile", namespace = "http://imeji.org/terms/")
 public class MetadataProfile extends Properties implements Cloneable
 {
     private static final long serialVersionUID = -3303333109346078736L;
@@ -43,7 +43,7 @@ public class MetadataProfile extends Properties implements Cloneable
     @j2jList("http://imeji.org/terms/statement")
     private Collection<Statement> statements = new ArrayList<Statement>();
 
-    @XmlElement(name = "title", namespace = "http://purl.org/dc/elements/1.1")
+    @XmlElement(name = "title", namespace = "http://purl.org/dc/elements/1.1/")
     public String getTitle()
     {
         return title;
@@ -54,7 +54,7 @@ public class MetadataProfile extends Properties implements Cloneable
         this.title = title;
     }
 
-    @XmlElement(name = "description", namespace = "http://purl.org/dc/elements/1.1")
+    @XmlElement(name = "description", namespace = "http://purl.org/dc/elements/1.1/")
     public String getDescription()
     {
         return description;
@@ -65,7 +65,7 @@ public class MetadataProfile extends Properties implements Cloneable
         this.description = description;
     }
 
-    @XmlElement(name = "statement", namespace = "http://imeji.org/terms")
+    @XmlElement(name = "statement", namespace = "http://imeji.org/terms/")
     public Collection<Statement> getStatements()
     {
         return statements;

@@ -37,7 +37,7 @@ import de.mpg.j2j.misc.LocalizedString;
 @j2jModel("statement")
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlRootElement(name = "statement", namespace = "http://imeji.org/terms")
+@XmlRootElement(name = "statement", namespace = "http://imeji.org/terms/")
 public class Statement implements Comparable<Statement>, Serializable, Cloneable
 {
     private static final long serialVersionUID = -7950561563075491540L;
@@ -73,7 +73,7 @@ public class Statement implements Comparable<Statement>, Serializable, Cloneable
     {
     }
 
-    @XmlElement(name = "type", namespace = "http://purl.org/dc/terms")
+    @XmlElement(name = "type", namespace = "http://purl.org/dc/terms/")
     public URI getType()
     {
         return type;
@@ -95,7 +95,7 @@ public class Statement implements Comparable<Statement>, Serializable, Cloneable
         this.labels = labels;
     }
 
-    @XmlElement(name = "VocabularyEncodingScheme", namespace = "http://purl.org/dc/dcam")
+    @XmlElement(name = "VocabularyEncodingScheme", namespace = "http://purl.org/dc/dcam/")
     public URI getVocabulary()
     {
         return vocabulary;
@@ -106,7 +106,7 @@ public class Statement implements Comparable<Statement>, Serializable, Cloneable
         this.vocabulary = vocabulary;
     }
 
-    @XmlElement(name = "literalConstraint", namespace = "http://imeji.org/terms")
+    @XmlElement(name = "literalConstraint", namespace = "http://imeji.org/terms/")
     public Collection<String> getLiteralConstraints()
     {
         List<String> constraints = new ArrayList<String>(literalConstraints);
@@ -120,7 +120,7 @@ public class Statement implements Comparable<Statement>, Serializable, Cloneable
         this.literalConstraints = literalConstraints;
     }
 
-    @XmlElement(name = "minOccurs", namespace = "http://imeji.org/terms")
+    @XmlElement(name = "minOccurs", namespace = "http://imeji.org/terms/")
     public String getMinOccurs()
     {
         return minOccurs;
@@ -131,7 +131,7 @@ public class Statement implements Comparable<Statement>, Serializable, Cloneable
         this.minOccurs = minOccurs;
     }
 
-    @XmlElement(name = "maxOccurs", namespace = "http://imeji.org/terms")
+    @XmlElement(name = "maxOccurs", namespace = "http://imeji.org/terms/")
     public String getMaxOccurs()
     {
         return maxOccurs;
@@ -142,7 +142,7 @@ public class Statement implements Comparable<Statement>, Serializable, Cloneable
         this.maxOccurs = maxOccurs;
     }
 
-    @XmlElement(name = "position", namespace = "http://imeji.org/terms")
+    @XmlElement(name = "position", namespace = "http://imeji.org/terms/")
     public int getPos()
     {
         return pos;
@@ -164,7 +164,7 @@ public class Statement implements Comparable<Statement>, Serializable, Cloneable
             return 1;
     }
 
-    @XmlElement(name = "isDescription", namespace = "http://imeji.org/terms")
+    @XmlElement(name = "isDescription", namespace = "http://imeji.org/terms/")
     public boolean isDescription()
     {
         return isDescription;
@@ -191,7 +191,7 @@ public class Statement implements Comparable<Statement>, Serializable, Cloneable
         this.parent = parent;
     }
 
-    @XmlElement(name = "parent", namespace = "http://imeji.org/terms")
+    @XmlElement(name = "parent", namespace = "http://imeji.org/terms/")
     public URI getParent()
     {
         return parent;
@@ -202,13 +202,13 @@ public class Statement implements Comparable<Statement>, Serializable, Cloneable
         this.isPreview = isPreview;
     }
 
-    @XmlElement(name = "isPreview", namespace = "http://imeji.org/terms")
+    @XmlElement(name = "isPreview", namespace = "http://imeji.org/terms/")
     public boolean isPreview()
     {
         return isPreview;
     }
 
-    @XmlElement(name = "restricted", namespace = "http://imeji.org/terms")
+    @XmlElement(name = "restricted", namespace = "http://imeji.org/terms/")
     public boolean isRestricted()
     {
         return restricted;

@@ -34,11 +34,11 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jResource("http://imeji.org/terms/metadataSet")
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlRootElement(name = "metadataSet", namespace = "http://imeji.org/terms")
+@XmlRootElement(name = "metadataSet", namespace = "http://imeji.org/terms/")
 public class MetadataSet implements Serializable
 {
     private static final long serialVersionUID = 6306551656394348422L;
-    @j2jList("http://imeji.org/terms/metadata")
+    @j2jList("http://imeji.org/terms/metadata/")
     private Collection<Metadata> metadata = new ArrayList<Metadata>();
     @j2jResource("http://imeji.org/terms/mdprofile")
     private URI profile;
@@ -48,7 +48,7 @@ public class MetadataSet implements Serializable
     {
     }
 
-    @XmlElement(name = "metadata", namespace = "http://imeji.org/terms")
+    @XmlElement(name = "metadata", namespace = "http://imeji.org/terms/")
     public Collection<Metadata> getMetadata()
     {
         sortMetadata();
@@ -60,7 +60,7 @@ public class MetadataSet implements Serializable
         this.metadata = metadata;
     }
 
-    @XmlElement(name = "profile", namespace = "http://imeji.org/terms")
+    @XmlElement(name = "profile", namespace = "http://imeji.org/terms/")
     public URI getProfile()
     {
         return profile;

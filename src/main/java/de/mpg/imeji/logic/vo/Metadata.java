@@ -37,10 +37,10 @@ import de.mpg.j2j.annotations.j2jResource;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-@j2jResource("http://imeji.org/terms/metadata")
+@j2jResource("http://imeji.org/terms/metadata/")
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlRootElement(name = "metadata", namespace = "http://imeji.org/terms")
+@XmlRootElement(name = "metadata", namespace = "http://imeji.org/terms/")
 @XmlSeeAlso({ Text.class, Number.class, ConePerson.class, Date.class,
 		Geolocation.class, License.class, Link.class, Publication.class })
 public abstract class Metadata implements Comparable<Metadata>, Serializable {
@@ -115,7 +115,7 @@ public abstract class Metadata implements Comparable<Metadata>, Serializable {
 		this.id = id;
 	}
 
-	@XmlElement(name = "position", namespace = "http://imeji.org/terms")
+	@XmlElement(name = "position", namespace = "http://imeji.org/terms/")
 	public int getPos() {
 		return pos;
 	}

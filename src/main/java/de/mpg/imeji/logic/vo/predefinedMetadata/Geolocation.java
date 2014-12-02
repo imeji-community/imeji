@@ -24,11 +24,11 @@ import de.mpg.j2j.annotations.j2jResource;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-@j2jResource("http://imeji.org/terms/metadata")
+@j2jResource("http://imeji.org/terms/metadata/")
 @j2jDataType("http://imeji.org/terms/metadata#geolocation")
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlRootElement(name = "geolocation", namespace = "http://imeji.org/terms/metadata")
+@XmlRootElement(name = "geolocation", namespace = "http://imeji.org/terms/metadata/")
 @XmlType(propOrder = { "latitude", "longitude", "name", "statement" })
 public class Geolocation extends Metadata
 {
@@ -50,7 +50,7 @@ public class Geolocation extends Metadata
     {
     }
 
-    @XmlElement(name = "longitude", namespace = "http://imeji.org/terms")
+    @XmlElement(name = "longitude", namespace = "http://imeji.org/terms/")
     public double getLongitude()
     {
         return longitude;
@@ -61,7 +61,7 @@ public class Geolocation extends Metadata
         this.longitude = longitude;
     }
 
-    @XmlElement(name = "latitude", namespace = "http://imeji.org/terms")
+    @XmlElement(name = "latitude", namespace = "http://imeji.org/terms/")
     public double getLatitude()
     {
         return latitude;
@@ -72,7 +72,7 @@ public class Geolocation extends Metadata
         this.latitude = latitude;
     }
 
-    @XmlElement(name = "title", namespace = "http://purl.org/dc/terms")
+    @XmlElement(name = "title", namespace = "http://purl.org/dc/terms/")
     public String getName()
     {
         return name;
@@ -84,7 +84,7 @@ public class Geolocation extends Metadata
     }
 
     @Override
-    @XmlElement(name = "statement", namespace = "http://imeji.org/terms")
+    @XmlElement(name = "statement", namespace = "http://imeji.org/terms/")
     public URI getStatement()
     {
         return statement;

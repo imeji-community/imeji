@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<imeji:items xmlns:imeji-metadata="http://imeji.org/terms/metadata" xmlns:imeji="http://imeji.org/terms" xmlns:dc="http://purl.org/dc/elements/1.1" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:eprofiles="http://purl.org/escidoc/metadata/profiles/0.1" xmlns:dcterms="http://purl.org/dc/terms" xmlns:eterms="http://purl.org/escidoc/metadata/terms/0.1" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:foaf="http://xmlns.com/foaf/0.1" xmlns:dcam="http://purl.org/dc/dcam">
+<imeji:items xmlns:imeji-metadata="http://imeji.org/terms/metadata/" xmlns:imeji="http://imeji.org/terms/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:eprofiles="http://purl.org/escidoc/metadata/profiles/0.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:eterms="http://purl.org/escidoc/metadata/terms/0.1/" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:dcam="http://purl.org/dc/dcam/">
     <imeji:item id="http://localhost:8080/imeji/item/sNoxkDCuGFvSlsM">
         <dcterms:created>2013-05-08T10:10:20.371Z</dcterms:created>
         <dcterms:creator>http://localhost:8080/imeji/user/admin%40imeji.org</dcterms:creator>

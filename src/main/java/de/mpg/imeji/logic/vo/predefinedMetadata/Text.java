@@ -24,11 +24,11 @@ import de.mpg.j2j.annotations.j2jResource;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-@j2jResource("http://imeji.org/terms/metadata")
+@j2jResource("http://imeji.org/terms/metadata/")
 @j2jDataType("http://imeji.org/terms/metadata#text")
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlRootElement(name = "text", namespace = "http://imeji.org/terms/metadata")
+@XmlRootElement(name = "text", namespace = "http://imeji.org/terms/metadata/")
 @XmlType(propOrder = { "text", "statement" })
 public class Text extends Metadata
 {
@@ -42,7 +42,7 @@ public class Text extends Metadata
     {
     }
 
-    @XmlElement(name = "text", namespace = "http://imeji.org/terms")
+    @XmlElement(name = "text", namespace = "http://imeji.org/terms/")
     public String getText()
     {
         return text;
@@ -54,7 +54,7 @@ public class Text extends Metadata
     }
 
     @Override
-    @XmlElement(name = "statement", namespace = "http://imeji.org/terms")
+    @XmlElement(name = "statement", namespace = "http://imeji.org/terms/")
     public URI getStatement()
     {
         return statement;

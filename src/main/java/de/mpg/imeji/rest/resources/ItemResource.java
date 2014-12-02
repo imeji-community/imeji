@@ -2,9 +2,12 @@ package de.mpg.imeji.rest.resources;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
+
 import de.mpg.imeji.rest.process.ItemProcess;
 import de.mpg.imeji.rest.process.RestProcessUtils;
 import de.mpg.imeji.rest.to.JSONResponse;
+
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
@@ -13,6 +16,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
 import java.io.InputStream;
 
 @Path("/items")
@@ -46,14 +50,14 @@ public class ItemResource implements ImejiResource {
 			+ "<br/>\"collectionId\" : \"abc123\","
 			+ "<br/>\"fetchUrl\" : \"http://example.org/myFile.png\","
 			+ "<br/>\"referenceUrl\" : \"http://example.org/myFile.png\","
-			+ "<br/>\"metadata\" : \"[]\""
+			+ "<br/>\"metadata\" : []"
 			+ "<br/>}"
 			+ "<br/><br/>"
 			+ "The metadata parameter allows to define the metadata of item during the creation of the item. To get an example of how to do it, please try the get item method")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response create(@Context HttpServletRequest req,
 			@FormDataParam("file") InputStream file,
-			@FormDataParam("json") String json,
+			@ApiParam(required = true) @FormDataParam("json") String json,
 			@FormDataParam("file") FormDataContentDisposition fileDetail) {
 		String filename = fileDetail != null ? fileDetail.getFileName() : null;
 		return RestProcessUtils.buildJSONResponse(ItemProcess.createItem(req,

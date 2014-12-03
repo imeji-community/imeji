@@ -1,10 +1,8 @@
 package de.mpg.imeji.rest.process;
 
 import java.net.URI;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -60,7 +58,7 @@ public class TransferObjectFactory {
 		for(Statement t : stats)
 		{
 			StatementTO sto = new StatementTO();
-			sto.setId(extractIDFromURI(t.getId()));
+			sto.setId(CommonUtils.extractIDFromURI(t.getId()));
 			sto.setPos(t.getPos());
 			sto.setType(t.getType());
 			sto.setLabels(new ArrayList<LocalizedString>(t.getLabels()));
@@ -74,7 +72,7 @@ public class TransferObjectFactory {
 			sto.setMinOccurs(t.getMinOccurs());
 			sto.setMaxOccurs(t.getMaxOccurs());
 			if(t.getParent() != null)
-				sto.setParentStatementId(extractIDFromURI(t.getParent()));
+				sto.setParentStatementId(CommonUtils.extractIDFromURI(t.getParent()));
 			sto.setUseInPreview(t.isPreview());
 			to.getStatements().add(sto);
 		}
@@ -91,8 +89,8 @@ public class TransferObjectFactory {
 		//TODO: versionOf
 
 		//in output jsen reference to mdprofile
-		to.getProfile().setProfileId(vo.getProfile().toString());
-		to.getProfile().setMethod("reference");
+		to.getProfile().setProfileId(CommonUtils.extractIDFromURI(vo.getProfile()));
+		to.getProfile().setMethod("");
 
 		for(Person p : vo.getMetadata().getPersons())
 		{
@@ -105,7 +103,7 @@ public class TransferObjectFactory {
 	public static void transferPerson(Person p, PersonTO pto){  
 
 			pto.setPosition(p.getPos());
-			pto.setId(extractIDFromURI(p.getId()));
+			pto.setId(CommonUtils.extractIDFromURI(p.getId()));
 			pto.setFamilyName(p.getFamilyName());
 			pto.setGivenName(p.getGivenName());
 			pto.setCompleteName(p.getCompleteName());
@@ -123,7 +121,7 @@ public class TransferObjectFactory {
 		for(Organization orga : orgas){
 			OrganizationTO oto = new OrganizationTO();
 			oto.setPosition(orga.getPos());
-			oto.setId(extractIDFromURI(orga.getId()));
+			oto.setId(CommonUtils.extractIDFromURI(orga.getId()));
 			oto.setName(orga.getName());
 			oto.setDescription(orga.getDescription());
 			IdentifierTO ito = new IdentifierTO();
@@ -148,7 +146,7 @@ public class TransferObjectFactory {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		to.setCreatedBy(new PersonTOBasic(u.getPerson().getCompleteName(), extractIDFromURI(u.getPerson().getId())));
+		to.setCreatedBy(new PersonTOBasic(u.getPerson().getCompleteName(), CommonUtils.extractIDFromURI(u.getPerson().getId())));
 		//set modifiedBy
 		try {
 			u = ucrud.read(vo.getModifiedBy());
@@ -157,11 +155,11 @@ public class TransferObjectFactory {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		to.setModifiedBy(new PersonTOBasic(u.getPerson().getCompleteName(), extractIDFromURI(u.getPerson().getId())));
+		to.setModifiedBy(new PersonTOBasic(u.getPerson().getCompleteName(), CommonUtils.extractIDFromURI(u.getPerson().getId())));
 		//set createdDate, modifiedDate, versionDate
-		to.setCreatedDate(formatDate(vo.getCreated().getTime()));
-		to.setModifiedDate(formatDate(vo.getModified().getTime()));
-		to.setVersionDate( (vo.getVersionDate() != null) ? formatDate(vo.getVersionDate().getTime()) :  "");
+		to.setCreatedDate(CommonUtils.formatDate(vo.getCreated().getTime()));
+		to.setModifiedDate(CommonUtils.formatDate(vo.getModified().getTime()));
+		to.setVersionDate( (vo.getVersionDate() != null) ? CommonUtils.formatDate(vo.getVersionDate().getTime()) :  "");
 		//set status
 		to.setStatus(vo.getStatus().toString());
 		//set version
@@ -176,7 +174,7 @@ public class TransferObjectFactory {
 		//set visibility
 		to.setVisibility(vo.getVisibility().toString());
 		//set collectionID
-		to.setCollectionId(extractIDFromURI(vo.getCollection()));
+		to.setCollectionId(CommonUtils.extractIDFromURI(vo.getCollection()));
 		to.setFilename(vo.getFilename());
 		to.setMimetype(vo.getFiletype());
 		to.setChecksumMd5(vo.getChecksum());
@@ -289,19 +287,7 @@ public class TransferObjectFactory {
 
 
 
-	public static String formatDate(Date d) {
-		String output = "";
-		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
-		output = f.format(d);
-		f = new SimpleDateFormat("HH:mm:ss Z");
-		output += "T" + f.format(d);
-		return output;
 
-	}
-
-	public static String extractIDFromURI(URI uri) {
-		return uri.getPath().substring(uri.getPath().lastIndexOf("/") + 1);
-	}
 
 
 

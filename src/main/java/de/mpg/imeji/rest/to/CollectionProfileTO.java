@@ -10,6 +10,7 @@ public class CollectionProfileTO implements Serializable{
     private static final long serialVersionUID = -5210147403244095642L;
 
     private String profileId;
+    private String method;
 
     public String getProfileId() {
         return profileId;
@@ -18,8 +19,6 @@ public class CollectionProfileTO implements Serializable{
     public void setProfileId(String profileId) {
         this.profileId = profileId;
     }
-
-    private String method;
 
     public String getMethod() {
         return method;

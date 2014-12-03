@@ -11,11 +11,13 @@ import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.rest.process.TransferObjectFactory;
+import de.mpg.imeji.rest.to.MetadataProfileTO;
 import de.mpg.j2j.exceptions.NotFoundException;
 
 
 
-public class ProfileService implements API<MetadataProfile>{
+public class ProfileService implements API<MetadataProfileTO>{
 	
 	public MetadataProfile read(URI uri) throws Exception{
 		ProfileController pcon = new ProfileController();
@@ -24,20 +26,23 @@ public class ProfileService implements API<MetadataProfile>{
 
 
 	@Override
-	public MetadataProfile create(MetadataProfile o, User u) {
+	public MetadataProfileTO create(MetadataProfileTO o, User u) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public MetadataProfile read(String id, User u) throws NotFoundException,
+	public MetadataProfileTO read(String id, User u) throws NotFoundException,
 			NotAllowedError, NotSupportedException, Exception {
 		ProfileController pcontroller = new ProfileController();
-		return pcontroller.retrieve(ObjectHelper.getURI(MetadataProfile.class, id), u);
+		MetadataProfileTO to = new MetadataProfileTO();
+		MetadataProfile vo = pcontroller.retrieve(ObjectHelper.getURI(MetadataProfile.class, id), u);
+		TransferObjectFactory.transferMetadataProfile(vo, to);
+		return to;
 	}
 
 	@Override
-	public MetadataProfile update(MetadataProfile o, User u)
+	public MetadataProfileTO update(MetadataProfileTO o, User u)
 			throws NotFoundException, NotAllowedError, NotSupportedException,
 			Exception {
 		// TODO Auto-generated method stub
@@ -45,21 +50,21 @@ public class ProfileService implements API<MetadataProfile>{
 	}
 
 	@Override
-	public boolean delete(MetadataProfile o, User u) throws NotFoundException,
+	public boolean delete(MetadataProfileTO o, User u) throws NotFoundException,
 			NotAllowedError, NotSupportedException, Exception {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public void release(MetadataProfile o, User u) throws NotFoundException,
+	public void release(MetadataProfileTO o, User u) throws NotFoundException,
 			NotAllowedError, NotSupportedException, Exception {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void withdraw(MetadataProfile o, User u) throws NotFoundException,
+	public void withdraw(MetadataProfileTO o, User u) throws NotFoundException,
 			NotAllowedError, NotSupportedException, Exception {
 		// TODO Auto-generated method stub
 		
@@ -87,5 +92,7 @@ public class ProfileService implements API<MetadataProfile>{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
 
 }

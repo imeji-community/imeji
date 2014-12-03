@@ -83,7 +83,7 @@ public class ItemProcess {
 		JSONResponse resp = new JSONResponse();
 		try {
 			resp.setObject(service.create(to, u));
-			resp.setStatus(Status.OK);
+			resp.setStatus(Status.CREATED);
 		} catch (NotFoundException e) {
 			resp.setObject(RestProcessUtils.buildBadRequestResponse());
 			resp.setStatus(Status.BAD_REQUEST);

@@ -70,11 +70,11 @@ public class ItemResource implements ImejiResource {
 
 	@DELETE
 	@Path("/{id}")
-	@ApiOperation(value = "(Not implemented) Delete item by id")
+	@ApiOperation(value = "Delete item by id")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response delete(@Context HttpServletRequest req,
-			@PathParam("id") String id) {
-		return null;
+	public Response delete(@Context HttpServletRequest req, @PathParam("id") String id) {
+		JSONResponse resp = ItemProcess.deleteItem(req, id);
+		return RestProcessUtils.buildJSONResponse(resp);
 	}
 
 }

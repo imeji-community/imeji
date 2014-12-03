@@ -67,7 +67,7 @@ public interface API<V> {
 	 * @param u
 	 * @return
 	 */
-	public boolean delete(V o, User u) throws NotFoundException,
+	public boolean delete(String i, User u) throws NotFoundException,
 			NotAllowedError, NotSupportedException, Exception;
 
 	/**

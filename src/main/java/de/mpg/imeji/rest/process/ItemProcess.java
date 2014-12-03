@@ -21,6 +21,34 @@ import de.mpg.imeji.rest.to.JSONResponse;
 import de.mpg.j2j.exceptions.NotFoundException;
 
 public class ItemProcess {
+	
+	public static JSONResponse deleteItem(HttpServletRequest req, String id) {
+		Authentication auth = AuthenticationFactory.factory(req);
+		User u = auth.doLogin();
+		JSONResponse resp = new JSONResponse();
+		
+		if (u == null) {
+			resp.setObject(RestProcessUtils.buildUnauthorizedResponse());
+			resp.setStatus(Status.UNAUTHORIZED);
+		}
+		else {
+			ItemService icrud = new ItemService();
+			try {
+				icrud.delete(id, u);
+				resp.setStatus(Status.OK);
+			} catch (NotFoundException e) {
+				resp.setObject(RestProcessUtils.buildBadRequestResponse());
+				resp.setStatus(Status.BAD_REQUEST);
+	
+			} catch (NotAllowedError e) {
+	
+					resp.setObject(RestProcessUtils.buildNotAllowedResponse());
+					resp.setStatus(Status.FORBIDDEN);
+			}
+		}
+		return resp;
+	}
+	
 
 	public static JSONResponse readItem(HttpServletRequest req, String id) {
 		Authentication auth = AuthenticationFactory.factory(req);

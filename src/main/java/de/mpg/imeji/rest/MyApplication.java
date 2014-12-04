@@ -16,4 +16,5 @@ public class MyApplication extends ResourceConfig {
 //        property(MarshallerProperties.JSON_NAMESPACE_SEPARATOR, ".");
   }
 
+
 }

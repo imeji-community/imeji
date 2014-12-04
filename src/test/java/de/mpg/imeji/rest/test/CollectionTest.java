@@ -84,7 +84,6 @@ public class CollectionTest extends JerseyTest {
 	@Override
 	protected TestContainerFactory getTestContainerFactory() throws TestContainerException {
 		return new MyTestContainerFactory();
-//		return new GrizzlyWebTestContainerFactory();
 	}
 
 	@BeforeClass
@@ -111,7 +110,6 @@ public class CollectionTest extends JerseyTest {
 				.register(MultiPartFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.post(Entity.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
-
 		assertEquals(response.getStatus(), Status.CREATED.getStatusCode());
 		Map<String, Object> collData = jsonToPOJO(response);
 		assertNotNull("Created collection is null", collData);

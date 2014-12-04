@@ -19,7 +19,7 @@ import de.mpg.imeji.rest.to.JSONResponse;
 
 @Path("/profiles")
 @Api(value = "rest/profiles", description = "Operations on profiles")
-public class ProfileResource implements ImejiResource{
+public class ProfileResource implements ImejiResource {
 
     @GET  
     @Produces(MediaType.APPLICATION_JSON)

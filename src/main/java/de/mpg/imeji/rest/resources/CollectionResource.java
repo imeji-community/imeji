@@ -1,7 +1,5 @@
 package de.mpg.imeji.rest.resources;
 
-import javax.inject.Singleton;
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -26,7 +24,7 @@ import org.slf4j.LoggerFactory;
 //@Singleton
 @Path("/collections")
 @Api(value = "rest/collections", description = "Operations on collections")
-public class CollectionResource implements ImejiResource{
+public class CollectionResource implements ImejiResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CollectionResource.class);
 

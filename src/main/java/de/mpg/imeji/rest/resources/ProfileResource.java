@@ -9,8 +9,11 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.glassfish.jersey.media.multipart.FormDataParam;
+
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 
 import de.mpg.imeji.rest.process.ProfileProcess;
 import de.mpg.imeji.rest.process.RestProcessUtils;

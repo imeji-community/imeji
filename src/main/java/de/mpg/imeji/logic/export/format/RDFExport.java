@@ -151,8 +151,20 @@ public abstract class RDFExport extends Export
             {
                 try
                 {
-                    writer.append(openTag(st, toUrl(st.getResource().getURI())));
+                	if (st.getResource().listProperties().hasNext()) {
+                		//Open as parseType
+                        writer.append(openTagAsParseUri(st));
+                		//Put Object as resourceId
                     writer.append(exportResource(st.getResource()).getBuffer());
+                		//CloseTheTag for the parseResource element (used also for Literal statements)
+                    	writer.append(closeTag(st));
+                   	}
+                	else
+                	{
+                		//if it is a simple resource, without subelements - close the tag asap (without separate closing element) 
+                		writer.append(openAndCloseResourceTag(st, toUrl(st.getResource().getURI())));
+                }
+                	
                 }
                 catch (Exception e)
                 {
@@ -168,13 +180,14 @@ public abstract class RDFExport extends Export
                         if (literal.contains("<html>"))
                             literal = "<![CDATA[" + literal + "]]>";
                         writer.append(literal);
+                        writer.append(closeTag(st));
                     }
                 }
                 catch (Exception e)
                 {
                     /* Not a literal */
                 }
-                writer.append(closeTag(st));
+                
                 newLine(writer);
             }
         }
@@ -224,6 +237,55 @@ public abstract class RDFExport extends Export
         tag += ">";
         return tag;
     }
+
+    /**
+     * Open and close tag for statement
+     * 
+     * @param st
+     * @param resourceURI
+     * @return
+     */
+    private String openAndCloseResourceTag(Statement st, String resourceURI)
+    {
+    	//calculate the element of standard resource statement and close the element immediately
+        String tag = "<" + getNamespace(st.getPredicate().getNameSpace()) + ":" + st.getPredicate().getLocalName();
+        
+        if (resourceURI != null) 
+        {
+            tag += " rdf:resource=\"" + resourceURI + "\"/";
+        }
+        tag += ">";
+        
+        return tag;
+    }
+
+
+    /**
+     * Open an html tag for statement
+     * 
+     * @param st
+     * @param resourceURI
+     * @return
+     */
+    private String openTagAsParseUri(Statement st)
+    {
+    	//use the resource URI as separate Element within the rdf:parseResource tag
+    	String resourceURI = st.getObject().toString();
+    	//calculate the element name which should be appended with rdf:parseResource attribute
+        String tagRegular = "<" + getNamespace(st.getPredicate().getNameSpace()) + ":" + st.getPredicate().getLocalName();
+        //calculate the inner resourceId element name
+    	String tagInnerResourceId = "<" + getNamespace(st.getPredicate().getNameSpace()) + ":" + "resourceId>";
+        
+    	//append the parseType attribute
+            tagRegular += " rdf:parseType=\"Resource\">\n";
+        //append the resourceId element
+            tagRegular += tagInnerResourceId+resourceURI+"</" + getNamespace(st.getPredicate().getNameSpace()) + ":" + "resourceId>";
+            
+        //return the regular complex element as two elements, one with parseResource attribute and another subelement of resourceId
+        
+        return tagRegular;
+    }
+
 
     /**
      * Close an html tag for statement

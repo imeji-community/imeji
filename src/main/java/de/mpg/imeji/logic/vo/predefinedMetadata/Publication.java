@@ -24,11 +24,11 @@ import de.mpg.j2j.annotations.j2jResource;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-@j2jResource("http://imeji.org/terms/metadata")
+@j2jResource("http://imeji.org/terms/metadata/")
 @j2jDataType("http://imeji.org/terms/metadata#publication")
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlRootElement(name = "publication", namespace = "http://imeji.org/terms/metadata")
+@XmlRootElement(name = "publication", namespace = "http://imeji.org/terms/metadata/")
 @XmlType(propOrder = { "citation", "exportFormat", "uri", "statement" })
 public class Publication extends Metadata
 {
@@ -46,7 +46,7 @@ public class Publication extends Metadata
     {
     }
 
-    @XmlElement(name = "uri", namespace = "http://imeji.org/terms")
+    @XmlElement(name = "uri", namespace = "http://imeji.org/terms/")
     public java.net.URI getUri()
     {
         return uri;
@@ -57,7 +57,7 @@ public class Publication extends Metadata
         this.uri = uri;
     }
 
-    @XmlElement(name = "citationStyle", namespace = "http://imeji.org/terms")
+    @XmlElement(name = "citationStyle", namespace = "http://imeji.org/terms/")
     public String getExportFormat()
     {
         return exportFormat;
@@ -68,7 +68,7 @@ public class Publication extends Metadata
         this.exportFormat = exportFormat;
     }
 
-    @XmlElement(name = "citation", namespace = "http://imeji.org/terms")
+    @XmlElement(name = "citation", namespace = "http://imeji.org/terms/")
     public String getCitation()
     {
         return citation;
@@ -80,7 +80,7 @@ public class Publication extends Metadata
     }
 
     @Override
-    @XmlElement(name = "statement", namespace = "http://imeji.org/terms")
+    @XmlElement(name = "statement", namespace = "http://imeji.org/terms/")
     public URI getStatement()
     {
         return statement;

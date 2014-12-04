@@ -28,7 +28,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jResource("http://purl.org/escidoc/metadata/profiles/0.1/organizationalunit")
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlRootElement(name = "organizationalunit", namespace = "http://purl.org/escidoc/metadata/profiles/0.1")
+@XmlRootElement(name = "organizationalunit", namespace = "http://purl.org/escidoc/metadata/profiles/0.1/")
 public class Organization implements Cloneable, Serializable {
 	private static final long serialVersionUID = -7541779415288019910L;
 	private URI id;
@@ -50,7 +50,7 @@ public class Organization implements Cloneable, Serializable {
 		this.identifier = ObjectHelper.getId(id);
 	}
 
-	@XmlElement(name = "title", namespace = "http://purl.org/dc/terms")
+	@XmlElement(name = "title", namespace = "http://purl.org/dc/terms/")
 	public String getName() {
 		return name;
 	}
@@ -59,7 +59,7 @@ public class Organization implements Cloneable, Serializable {
 		this.name = name;
 	}
 
-	@XmlElement(name = "description", namespace = "http://purl.org/dc/terms")
+	@XmlElement(name = "description", namespace = "http://purl.org/dc/terms/")
 	public String getDescription() {
 		return description;
 	}
@@ -68,7 +68,7 @@ public class Organization implements Cloneable, Serializable {
 		this.description = description;
 	}
 
-	@XmlElement(name = "identifier", namespace = "http://purl.org/dc/terms")
+	@XmlElement(name = "identifier", namespace = "http://purl.org/dc/terms/")
 	public String getIdentifier() {
 		return identifier;
 	}
@@ -77,7 +77,7 @@ public class Organization implements Cloneable, Serializable {
 		this.identifier = identifier;
 	}
 
-	@XmlElement(name = "city", namespace = "http://purl.org/escidoc/metadata/terms/0.1")
+	@XmlElement(name = "city", namespace = "http://purl.org/escidoc/metadata/terms/0.1/")
 	public String getCity() {
 		return city;
 	}
@@ -86,7 +86,7 @@ public class Organization implements Cloneable, Serializable {
 		this.city = city;
 	}
 
-	@XmlElement(name = "country", namespace = "http://purl.org/escidoc/metadata/terms/0.1")
+	@XmlElement(name = "country", namespace = "http://purl.org/escidoc/metadata/terms/0.1/")
 	public String getCountry() {
 		return country;
 	}
@@ -95,7 +95,7 @@ public class Organization implements Cloneable, Serializable {
 		this.country = country;
 	}
 
-	@XmlElement(name = "position", namespace = "http://imeji.org/terms")
+	@XmlElement(name = "position", namespace = "http://imeji.org/terms/")
 	public int getPos() {
 		return pos;
 	}

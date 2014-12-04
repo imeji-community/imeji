@@ -25,11 +25,11 @@ import de.mpg.j2j.annotations.j2jResource;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-@j2jResource("http://imeji.org/terms/metadata")
+@j2jResource("http://imeji.org/terms/metadata/")
 @j2jDataType("http://imeji.org/terms/metadata#date")
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlRootElement(name = "date", namespace = "http://imeji.org/terms/metadata")
+@XmlRootElement(name = "date", namespace = "http://imeji.org/terms/metadata/")
 @XmlType(propOrder = { "date", "time", "statement" })
 public class Date extends Metadata
 {
@@ -45,7 +45,7 @@ public class Date extends Metadata
     {
     }
 
-    @XmlElement(name = "date", namespace = "http://imeji.org/terms")
+    @XmlElement(name = "date", namespace = "http://imeji.org/terms/")
     public String getDate()
     {
         return date;
@@ -60,7 +60,7 @@ public class Date extends Metadata
         }
     }
 
-    @XmlElement(name = "time", namespace = "http://imeji.org/terms")
+    @XmlElement(name = "time", namespace = "http://imeji.org/terms/")
     public long getTime()
     {
         return time;
@@ -72,7 +72,7 @@ public class Date extends Metadata
     }
 
     @Override
-    @XmlElement(name = "statement", namespace = "http://imeji.org/terms")
+    @XmlElement(name = "statement", namespace = "http://imeji.org/terms/")
     public URI getStatement()
     {
         return statement;

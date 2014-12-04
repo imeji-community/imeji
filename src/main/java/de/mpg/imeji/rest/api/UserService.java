@@ -36,7 +36,7 @@ public class UserService implements API<User>{
 	}
 
 	@Override
-	public boolean delete(User o, User u) throws NotFoundException,
+	public boolean delete(String id, User u) throws NotFoundException,
 			NotAllowedError, NotSupportedException, Exception {
 		// TODO Auto-generated method stub
 		return false;

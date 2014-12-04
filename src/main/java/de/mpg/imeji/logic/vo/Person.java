@@ -32,7 +32,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jResource("http://xmlns.com/foaf/0.1/person")
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlRootElement(name = "person", namespace = "http://xmlns.com/foaf/0.1")
+@XmlRootElement(name = "person", namespace = "http://xmlns.com/foaf/0.1/")
 public class Person implements Cloneable, Serializable {
 	private static final long serialVersionUID = 2030269396417009337L;
 	private URI id;
@@ -58,7 +58,7 @@ public class Person implements Cloneable, Serializable {
 		this.identifier = ObjectHelper.getId(id);
 	}
 
-	@XmlElement(name = "family-name", namespace = "http://purl.org/escidoc/metadata/terms/0.1")
+	@XmlElement(name = "family-name", namespace = "http://purl.org/escidoc/metadata/terms/0.1/")
 	public String getFamilyName() {
 		return familyName;
 	}
@@ -76,7 +76,7 @@ public class Person implements Cloneable, Serializable {
 		this.completeName = completeName.trim();
 	}
 
-	@XmlElement(name = "given-name", namespace = "http://purl.org/escidoc/metadata/terms/0.1")
+	@XmlElement(name = "given-name", namespace = "http://purl.org/escidoc/metadata/terms/0.1/")
 	public String getGivenName() {
 		return givenName;
 	}
@@ -86,7 +86,7 @@ public class Person implements Cloneable, Serializable {
 		setCompleteName(this.givenName, this.familyName);
 	}
 
-	@XmlElement(name = "alternative-name", namespace = "http://purl.org/escidoc/metadata/terms/0.1")
+	@XmlElement(name = "alternative-name", namespace = "http://purl.org/escidoc/metadata/terms/0.1/")
 	public String getAlternativeName() {
 		return alternativeName;
 	}
@@ -95,7 +95,7 @@ public class Person implements Cloneable, Serializable {
 		this.alternativeName = alternativeName;
 	}
 
-	@XmlElement(name = "identifier", namespace = "http://purl.org/dc/elements/1.1")
+	@XmlElement(name = "identifier", namespace = "http://purl.org/dc/elements/1.1/")
 	public String getIdentifier() {
 		return identifier;
 	}
@@ -104,7 +104,7 @@ public class Person implements Cloneable, Serializable {
 		this.identifier = identifier;
 	}
 
-	@XmlElement(name = "role", namespace = "http://purl.org/escidoc/metadata/terms/0.1")
+	@XmlElement(name = "role", namespace = "http://purl.org/escidoc/metadata/terms/0.1/")
 	public URI getRole() {
 		return role;
 	}
@@ -113,7 +113,7 @@ public class Person implements Cloneable, Serializable {
 		this.role = role;
 	}
 
-	@XmlElements(value = @XmlElement(name = "organizationalunit", namespace = "http://purl.org/escidoc/metadata/profiles/0.1"))
+	@XmlElements(value = @XmlElement(name = "organizationalunit", namespace = "http://purl.org/escidoc/metadata/profiles/0.1/"))
 	public Collection<Organization> getOrganizations() {
 		return organizations;
 	}
@@ -122,7 +122,7 @@ public class Person implements Cloneable, Serializable {
 		this.organizations = organizations;
 	}
 
-	@XmlElement(name = "complete-name", namespace = "http://purl.org/escidoc/metadata/terms/0.1")
+	@XmlElement(name = "complete-name", namespace = "http://purl.org/escidoc/metadata/terms/0.1/")
 	public String getCompleteName() {
 		return completeName;
 	}
@@ -135,7 +135,7 @@ public class Person implements Cloneable, Serializable {
 		return pos;
 	}
 
-	@XmlElement(name = "position", namespace = "http://imeji.org/terms")
+	@XmlElement(name = "position", namespace = "http://imeji.org/terms/")
 	public void setPos(int pos) {
 		this.pos = pos;
 	}

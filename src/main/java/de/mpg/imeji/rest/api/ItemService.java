@@ -1,11 +1,9 @@
 package de.mpg.imeji.rest.api;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.NotAllowedException;
 import javax.ws.rs.NotSupportedException;
 
 import org.apache.commons.io.FilenameUtils;
@@ -13,7 +11,6 @@ import org.apache.commons.io.FilenameUtils;
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.storage.impl.ExternalStorage;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
@@ -93,19 +90,21 @@ public class ItemService implements API<ItemTO> {
 	}
 
 	@Override
-	public boolean delete(ItemTO to, User u) {
+	public boolean delete(String id, User u) throws NotFoundException, NotAllowedError {
 		ItemController controller = new ItemController();
 		List<Item> items = new ArrayList<Item>();
 		Item item = new Item();
-		ReverseTransferObjectFactory.transferItem(to, item);
-
+		try {
+			item = controller.retrieve(ObjectHelper.getURI(Item.class,id), u);
+		} catch (Exception e1) {
+			throw new NotFoundException(e1.getMessage());
+		}
 		items.add(item);
 		try {
 			controller.delete(items, u);
 			return true;
 		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
+			throw new NotAllowedError(e.getMessage());
 		}
 	}
 

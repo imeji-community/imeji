@@ -1,12 +1,9 @@
 package rest;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.net.URL;
-
-import junit.framework.Assert;
 
 import org.junit.After;
 import org.junit.Before;
@@ -57,7 +54,6 @@ public class ItemCRUDTest {
 
 	public void initItem() throws Exception {
 		File file = new File(TEST_IMAGE);
-		file.deleteOnExit();
 		c = ImejiFactory.newCollection();
 		CollectionController controller = new CollectionController();
 		controller.create(c, null, user);
@@ -90,9 +86,9 @@ public class ItemCRUDTest {
 		// create item
 		itemTo = crud.create(itemWithFileTo, user);
 		// check the item be created and has new id
-		Assert.assertNotNull(itemTo.getId());
+		assertNotNull(itemTo.getId());
 		// read the item id
-		Assert.assertNotNull(crud.read(itemTo.getId(), user)
+		assertNotNull(crud.read(itemTo.getId(), user)
 				.getId());
 		// check the default visibility of item = private
 		assertTrue(itemTo.getVisibility().equals("PRIVATE"));

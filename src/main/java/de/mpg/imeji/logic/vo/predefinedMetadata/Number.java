@@ -24,11 +24,11 @@ import de.mpg.j2j.annotations.j2jResource;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-@j2jResource("http://imeji.org/terms/metadata")
+@j2jResource("http://imeji.org/terms/metadata/")
 @j2jDataType("http://imeji.org/terms/metadata#number")
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlRootElement(name = "number", namespace = "http://imeji.org/terms/metadata")
+@XmlRootElement(name = "number", namespace = "http://imeji.org/terms/metadata/")
 @XmlType(propOrder={"number", "statement"})
 public class Number extends Metadata
 {
@@ -52,14 +52,14 @@ public class Number extends Metadata
         this.number = number;
     }
 
-    @XmlElement(name = "number", namespace = "http://imeji.org/terms")
+    @XmlElement(name = "number", namespace = "http://imeji.org/terms/")
     public double getNumber()
     {
         return number;
     }
 
     @Override
-    @XmlElement(name = "statement", namespace = "http://imeji.org/terms")
+    @XmlElement(name = "statement", namespace = "http://imeji.org/terms/")
     public URI getStatement()
     {
         return statement;

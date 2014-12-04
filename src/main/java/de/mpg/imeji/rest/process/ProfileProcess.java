@@ -21,14 +21,13 @@ public class ProfileProcess {
 		Authentication auth = AuthenticationFactory.factory(req);
 		User u = auth.doLogin();
 
-		MetadataProfile vo = null;
+
 		//CollectionImeji collection2 = new CollectionImeji();
 		
 		ProfileService pcrud = new ProfileService();
 		try {
-			vo = pcrud.read(id, u);
 			MetadataProfileTO to = new MetadataProfileTO();
-			TransferObjectFactory.transferMetadataProfile(vo, to);
+			to = pcrud.read(id,u);
 			
 			resp.setObject(to);
 			resp.setStatus(Status.OK);

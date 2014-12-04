@@ -118,7 +118,7 @@ public class SearchIndexInitializer
         /**
          * Image Metadata indexes
          */
-        indexes = put(indexes, new SearchIndex(SearchIndex.names.md.name(), "http://imeji.org/terms/metadata"));
+        indexes = put(indexes, new SearchIndex(SearchIndex.names.md.name(), "http://imeji.org/terms/metadata/"));
         indexes = put(indexes, new SearchIndex(SearchIndex.names.statement.name(), "http://imeji.org/terms/statement"));
         indexes = put(
                 indexes,

@@ -1,7 +1,10 @@
 package rest;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
+
+import javax.validation.constraints.AssertTrue;
 
 import org.junit.After;
 import org.junit.Before;
@@ -16,6 +19,7 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.rest.api.CollectionService;
+import de.mpg.imeji.rest.to.CollectionTO;
 import rest.ItemCRUDTest.*;
 import util.JenaUtil;
 
@@ -55,6 +59,7 @@ public class CollectionCRUDTest {
 	
 	public void initCollection() throws Exception{
 		collection = ImejiFactory.newCollection();
+		collection.getMetadata().setTitle("test collection");
 		CollectionController controller = new CollectionController();
 		controller.create(collection, null, user);
 	}
@@ -63,12 +68,14 @@ public class CollectionCRUDTest {
 	public void testCollectionCRUD(){
 		
 		CollectionService collcrud = new CollectionService();
+		CollectionTO collectionTO = null;
 		try {
-			collection = collcrud.read(collection.getIdString(), user);
+			collectionTO = collcrud.read(collection.getIdString(), user);
 		}catch (Exception e) {
 			fail("could not read collection");
 		}
-		assertNotNull(collection.getId());
+		assertNotNull(collectionTO.getId());
+		assertEquals("test collection",collectionTO.getTitle());
 	}
 	
 }

@@ -15,7 +15,7 @@ import de.mpg.imeji.logic.vo.Item;
 /**
  * @author hnguyen
  */
-@XmlRootElement(name = "items", namespace = "http://imeji.org/terms")
+@XmlRootElement(name = "items", namespace = "http://imeji.org/terms/")
 public class Items
 {
     private List<Item> item;
@@ -32,7 +32,7 @@ public class Items
     /**
      * @return the items
      */
-    @XmlElement(name = "item", namespace = "http://imeji.org/terms")
+    @XmlElement(name = "item", namespace = "http://imeji.org/terms/")
     public List<Item> getItem()
     {
         return item;

@@ -25,11 +25,11 @@ import de.mpg.j2j.annotations.j2jResource;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-@j2jResource("http://imeji.org/terms/metadata")
+@j2jResource("http://imeji.org/terms/metadata/")
 @j2jDataType("http://imeji.org/terms/metadata#license")
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlRootElement(name = "license", namespace = "http://imeji.org/terms/metadata")
+@XmlRootElement(name = "license", namespace = "http://imeji.org/terms/metadata/")
 @XmlType(propOrder = { "externalUri", "license", "statement" })
 public class License extends Metadata
 {
@@ -60,7 +60,7 @@ public class License extends Metadata
         return date.format(date);
     }
 
-    @XmlElement(name = "license", namespace = "http://imeji.org/terms")
+    @XmlElement(name = "license", namespace = "http://imeji.org/terms/")
     public String getLicense()
     {
         return license;
@@ -72,7 +72,7 @@ public class License extends Metadata
     }
 
     @Override
-    @XmlElement(name = "statement", namespace = "http://imeji.org/terms")
+    @XmlElement(name = "statement", namespace = "http://imeji.org/terms/")
     public URI getStatement()
     {
         return statement;
@@ -87,7 +87,7 @@ public class License extends Metadata
     /**
      * @return the externalUri
      */
-    @XmlElement(name = "identifier", namespace = "http://purl.org/dc/elements/1.1")
+    @XmlElement(name = "identifier", namespace = "http://purl.org/dc/elements/1.1/")
     public URI getExternalUri()
     {
         return externalUri;

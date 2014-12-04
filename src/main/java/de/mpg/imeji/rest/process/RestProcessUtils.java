@@ -26,8 +26,7 @@ public class RestProcessUtils {
 	 * @param json
 	 * @return
 	 */
-	public static <T> Object buildTOFromJSON(HttpServletRequest req,
-			Class<T> type, String json) {
+	public static <T> Object buildTOFromJSON(HttpServletRequest req, Class<T> type, String json) {
 		ObjectReader reader = new ObjectMapper().reader().withType(type);
 		try {
 			return reader.readValue(json);
@@ -37,8 +36,7 @@ public class RestProcessUtils {
 		return null;
 	}
 
-	public static <T> Object buildTOFromJSON(HttpServletRequest req,
-			Class<T> type) {
+	public static <T> Object buildTOFromJSON(HttpServletRequest req, Class<T> type) {
 		ObjectReader reader = new ObjectMapper().reader().withType(type);
 		try {
 			return reader.readValue(req.getInputStream());

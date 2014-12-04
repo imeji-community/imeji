@@ -34,7 +34,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jModel("item")
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlRootElement(name = "item", namespace = "http://imeji.org/terms")
+@XmlRootElement(name = "item", namespace = "http://imeji.org/terms/")
 public class Item extends Properties implements FulltextIndex, Serializable {
 	private static final long serialVersionUID = 3989965275269803885L;
 
@@ -75,7 +75,7 @@ public class Item extends Properties implements FulltextIndex, Serializable {
 		copyInFields(im);
 	}
 
-	@XmlElement(name = "escidocId", namespace = "http://imeji.org/terms")
+	@XmlElement(name = "escidocId", namespace = "http://imeji.org/terms/")
 	public String getEscidocId() {
 		return escidocId;
 	}
@@ -84,16 +84,16 @@ public class Item extends Properties implements FulltextIndex, Serializable {
 		this.escidocId = escidocId;
 	}
 
-	@XmlElement(name = "webImageUrl", namespace = "http://imeji.org/terms")
+	@XmlElement(name = "webImageUrl", namespace = "http://imeji.org/terms/")
 	public URI getWebImageUrl() {
 		return webImageUrl;
 	}
-
+	
 	public void setWebImageUrl(URI webImageUrl) {
 		this.webImageUrl = webImageUrl;
 	}
 
-	@XmlElement(name = "thumbnailImageUrl", namespace = "http://imeji.org/terms")
+	@XmlElement(name = "thumbnailImageUrl", namespace = "http://imeji.org/terms/")
 	public URI getThumbnailImageUrl() {
 		return thumbnailImageUrl;
 	}
@@ -102,7 +102,7 @@ public class Item extends Properties implements FulltextIndex, Serializable {
 		this.thumbnailImageUrl = thumbnailImageUrl;
 	}
 
-	@XmlElement(name = "fullImageUrl", namespace = "http://imeji.org/terms")
+	@XmlElement(name = "fullImageUrl", namespace = "http://imeji.org/terms/")
 	public URI getFullImageUrl() {
 		return fullImageUrl;
 	}
@@ -116,7 +116,7 @@ public class Item extends Properties implements FulltextIndex, Serializable {
 				+ visibility.name());
 	}
 
-	@XmlElement(name = "visibility", namespace = "http://imeji.org/terms")
+	@XmlElement(name = "visibility", namespace = "http://imeji.org/terms/")
 	public Visibility getVisibility() {
 		return Visibility.valueOf(visibility.getFragment());
 	}
@@ -131,7 +131,7 @@ public class Item extends Properties implements FulltextIndex, Serializable {
 		this.collection = collection;
 	}
 
-	@XmlElement(name = "collection", namespace = "http://imeji.org/terms")
+	@XmlElement(name = "collection", namespace = "http://imeji.org/terms/")
 	public URI getCollection() {
 		return collection;
 	}
@@ -140,7 +140,7 @@ public class Item extends Properties implements FulltextIndex, Serializable {
 		this.filename = filename;
 	}
 
-	@XmlElement(name = "filename", namespace = "http://imeji.org/terms")
+	@XmlElement(name = "filename", namespace = "http://imeji.org/terms/")
 	public String getFilename() {
 		return filename;
 	}
@@ -149,7 +149,7 @@ public class Item extends Properties implements FulltextIndex, Serializable {
 		this.filetype = filetype;
 	}
 
-	@XmlElement(name = "filetype", namespace = "http://imeji.org/terms")
+	@XmlElement(name = "filetype", namespace = "http://imeji.org/terms/")
 	public String getFiletype() {
 		return filetype;
 	}
@@ -197,7 +197,7 @@ public class Item extends Properties implements FulltextIndex, Serializable {
 		this.metadataSets = metadataSets;
 	}
 
-	@XmlElement(name = "metadataSet", namespace = "http://imeji.org/terms")
+	@XmlElement(name = "metadataSet", namespace = "http://imeji.org/terms/")
 	public List<MetadataSet> getMetadataSets() {
 		return metadataSets;
 	}
@@ -205,7 +205,7 @@ public class Item extends Properties implements FulltextIndex, Serializable {
 	/**
 	 * @return the storageId
 	 */
-	@XmlElement(name = "storageId", namespace = "http://imeji.org/terms")
+	@XmlElement(name = "storageId", namespace = "http://imeji.org/terms/")
 	public String getStorageId() {
 		return storageId;
 	}
@@ -224,7 +224,7 @@ public class Item extends Properties implements FulltextIndex, Serializable {
 	}
 
 	@Override
-	@XmlElement(name = "fulltext", namespace = "http://imeji.org/terms")
+	@XmlElement(name = "fulltext", namespace = "http://imeji.org/terms/")
 	public String getFulltextIndex() {
 		return fulltext;
 	}
@@ -247,7 +247,7 @@ public class Item extends Properties implements FulltextIndex, Serializable {
 	/**
 	 * @return the checksum
 	 */
-	@XmlElement(name = "checksum", namespace = "http://imeji.org/terms")
+	@XmlElement(name = "checksum", namespace = "http://imeji.org/terms/")
 	public String getChecksum() {
 		return checksum;
 	}

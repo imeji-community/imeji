@@ -106,7 +106,7 @@ public class ExternalStorage implements Storage
         }
         catch (Exception e)
         {
-            throw new RuntimeException("Error reading " + url + " from escidoc: ", e);
+            throw new RuntimeException("Error reading " + url, e);
         }
         finally
         {

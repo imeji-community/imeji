@@ -4,11 +4,11 @@ package de.mpg.imeji.rest.to;
 public class PersonTOBasic {
 	private String fullname;
 	
-	private String id;
+	private String userId;
 	
-	public PersonTOBasic(String fullname, String id){
+	public PersonTOBasic(String fullname, String userId){
 		this.fullname = fullname;
-		this.id = id;
+		this.userId = userId;
 	}
 
 	public String getFullname() {
@@ -19,12 +19,12 @@ public class PersonTOBasic {
 		this.fullname = fullname;
 	}
 
-	public String getId() {
-		return id;
+	public String getUserId() {
+		return userId;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 
 

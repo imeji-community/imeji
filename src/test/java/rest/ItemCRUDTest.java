@@ -54,7 +54,6 @@ public class ItemCRUDTest {
 
 	public void initItem() throws Exception {
 		File file = new File(TEST_IMAGE);
-		file.deleteOnExit();
 		c = ImejiFactory.newCollection();
 		CollectionController controller = new CollectionController();
 		controller.create(c, null, user);

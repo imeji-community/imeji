@@ -44,17 +44,20 @@ public class CollectionService implements API<CollectionTO> {
 		MetadataProfile mp = null;
 		String profileId = to.getProfile().getProfileId();
 		String method = to.getProfile().getMethod();
-		String newId = null;		
-		if("".equals(profileId) || profileId == null)
+		String newId = null;
+		//create new profile (take default=
+		if(profileId == null || "".equals(profileId) )
 			mp = pc.create(ImejiFactory.newProfile(), u);
-			
-		else if("reference".equalsIgnoreCase(method))
-			mp = pc.retrieve(profileId, u);
-
-		else if("copy".equalsIgnoreCase(method) && "" != profileId && profileId != null){
-				mp = pc.retrieve(profileId, u);
+		else if(profileId != null && "reference".equalsIgnoreCase(method))
+			mp = pc.retrieve(URI.create(profileId), u);
+		else if(profileId != null && "copy".equalsIgnoreCase(method)){
+				mp = pc.retrieve(URI.create(profileId), u);
 				mp = pc.create(mp.clone(), u);
 				pc.update(mp, u);
+		}
+		else {
+			//TODO: throw exception BAD request
+			return null;
 		}
 		CollectionImeji vo = new CollectionImeji();
 		ReverseTransferObjectFactory.transferCollection(to, vo);

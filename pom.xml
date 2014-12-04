@@ -226,9 +226,6 @@
 					<systemPropertyVariables>
 						<catalina.base>${test.catalina.base}</catalina.base>
 					</systemPropertyVariables>
-					<excludes>
-						<exclude>**/CollectionTest.java</exclude>
-					</excludes>
 				</configuration>
 				<executions>
 					<execution>

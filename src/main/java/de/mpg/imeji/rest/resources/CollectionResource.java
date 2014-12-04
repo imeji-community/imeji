@@ -1,5 +1,7 @@
 package de.mpg.imeji.rest.resources;
 
+import java.io.InputStream;
+
 import javax.inject.Singleton;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -52,10 +54,9 @@ public class CollectionResource implements ImejiResource {
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	@ApiOperation(value = "Create collection or new version of collection", notes = "When contains as parameter \"versionOF\", new collection is created as a copy of a released collection (method needs to validate the status of the collection provided with \"versionOf\")\n"
-			+ "\nCreation of the new collection automatically generates a new (empty) metadata profile  for that collection. ")
+	@ApiOperation(value = "Create collection or new version of collection", notes = "The body parameter is the json of a collection. You can get an example by using the get collection mehtod.")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response create(@Context HttpServletRequest req, String json) {
+	public Response create(@Context HttpServletRequest req, InputStream json) {
 		JSONResponse resp = CollectionProcess.createCollection(req);
 		return RestProcessUtils.buildJSONResponse(resp);
 	}

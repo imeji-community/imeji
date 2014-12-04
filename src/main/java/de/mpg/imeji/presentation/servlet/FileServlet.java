@@ -106,7 +106,12 @@ public class FileServlet extends HttpServlet {
 		User user = getUser(req, session);
 
 		try {
-			if (authorization.read(user, loadCollection(url, session))
+			if ("NO_THUMBNAIL_URL".equals(url)) {
+				ExternalStorage eStorage = new ExternalStorage();
+				eStorage.read("http://localhost:8080/imeji/resources/icon/empty.png",
+						resp.getOutputStream(), true);
+
+			} else if (authorization.read(user, loadCollection(url, session))
 					|| authorization.read(user, getItem(url, user))) {
 				if (download)
 					resp.setHeader("Content-disposition", "attachment;");
@@ -117,8 +122,7 @@ public class FileServlet extends HttpServlet {
 			}
 		} catch (Exception e) {
 			ExternalStorage eStorage = new ExternalStorage();
-			eStorage.read(
-					"http://localhost:8080/imeji/resources/icon/empty.png",
+			eStorage.read(domain + "/imeji/resources/icon/empty.png",
 					resp.getOutputStream(), true);
 		}
 	}

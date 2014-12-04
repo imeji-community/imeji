@@ -56,7 +56,7 @@ public class ReverseTransferObjectFactory {
 		//set Metadata
 		CollectionProfileTO profileTO = to.getProfile();
 
-		//TODO: change the code after CollectionImeji update
+		//TODO: change the code after extension of CollectionImeji mdprofile container
 		if (null == profileTO || profileTO.getProfileId() == null ) {
 			//profile = ImejiFactory.newProfile();
 			vo.setProfile(URI.create("default___copy"));

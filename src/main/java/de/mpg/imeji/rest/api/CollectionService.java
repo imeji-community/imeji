@@ -31,7 +31,6 @@ public class CollectionService implements API<CollectionImeji> {
 
 	@Override
 	public CollectionImeji create(CollectionImeji c, User u) throws Exception {
-		CollectionController cc = new CollectionController();
 		ProfileController pc = new ProfileController();
 		//MetadataProfile handling
 		//TODO: change the code after CollectionImeji update for profile placeholder
@@ -40,15 +39,13 @@ public class CollectionService implements API<CollectionImeji> {
 		String newId = null;
 		if ("copy".equals(prof[1])) {
 			if ("default".equals(prof[0])) {
+				//copy default mdprofile
 				mp = pc.create(ImejiFactory.newProfile(), u);
 				newId = mp.getId().toString();
 			} else {
 				try {
 					//copy metadataprofile
-					//TODO: workaround for URI retrieval: use only postfix of namespaced IDs
-					//ProfileController adds namespace to the IDs!
-					String[] arrId = prof[0].split("/");
-					mp = pc.retrieve(arrId[arrId.length-1], u);
+					mp = pc.retrieve(URI.create(prof[0]), u);
 					mp = pc.create(mp.clone(), u);
 					newId = mp.getId().toString();
 				} catch (Exception e) {
@@ -58,10 +55,12 @@ public class CollectionService implements API<CollectionImeji> {
 				}
 			}
 		} else {
+			//reference metadataprofile
 			newId = prof[0];
 		}
-		c.setProfile(URI.create(newId));
 
+		c.setProfile(URI.create(newId));
+		CollectionController cc = new CollectionController();
 		try {
 			URI collectionURI = cc.create(c, mp, u);
 			return cc.retrieve(collectionURI, u);

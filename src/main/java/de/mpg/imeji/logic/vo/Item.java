@@ -88,7 +88,7 @@ public class Item extends Properties implements FulltextIndex, Serializable {
 	public URI getWebImageUrl() {
 		return webImageUrl;
 	}
-
+	
 	public void setWebImageUrl(URI webImageUrl) {
 		this.webImageUrl = webImageUrl;
 	}

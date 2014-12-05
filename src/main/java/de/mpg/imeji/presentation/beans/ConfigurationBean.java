@@ -136,8 +136,11 @@ public class ConfigurationBean {
 	 */
 	public void saveConfig() {
 		try {
-			setProperty(CONFIGURATION.FILE_TYPES.name(), fileTypes.toString());
-			setProperty(CONFIGURATION.DATA_VIEWER_URL.name(), dataViewerUrl);
+			if (fileTypes != null)
+				setProperty(CONFIGURATION.FILE_TYPES.name(),
+						fileTypes.toString());
+			if (dataViewerUrl != null)
+				setProperty(CONFIGURATION.DATA_VIEWER_URL.name(), dataViewerUrl);
 			config.storeToXML(new FileOutputStream(configFile),
 					"imeji configuration File");
 			BeanHelper.removeBeanFromMap(this.getClass());
@@ -275,7 +278,7 @@ public class ConfigurationBean {
 	 * Utility class to parse the html snippets
 	 * 
 	 * @author saquet
-	 *
+	 * 
 	 */
 	public class HtmlSnippet {
 		private String html;

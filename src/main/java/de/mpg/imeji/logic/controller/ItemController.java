@@ -7,6 +7,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -106,8 +109,10 @@ public class ItemController extends ImejiController {
 		if (filename == null)
 			filename = f.getName();
 		StorageController sc = new StorageController();
-		MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
-		String mimeType = mimeTypesMap.getContentType(f);
+//		MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
+//		String mimeType = mimeTypesMap.getContentType(f);
+		Path p = Paths.get(filename);
+		String mimeType = Files.probeContentType(p);
 		UploadResult uploadResult = sc.upload(filename, f, c.getIdString());
 		if (item == null)
 			item = ImejiFactory.newItem(c);
@@ -278,8 +283,11 @@ public class ItemController extends ImejiController {
 		StorageController sc = new StorageController();
 		sc.update(item.getFullImageUrl().toString(), f);
 		item.setChecksum(sc.calculateChecksum(f));
-		MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
-		item.setFiletype(mimeTypesMap.getContentType(f));
+//		MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
+//		item.setFiletype(mimeTypesMap.getContentType(f));
+		Path p = Paths.get(f.getName());
+		String mimeType = Files.probeContentType(p);
+		item.setFiletype(mimeType);
 		sc.update(item.getWebImageUrl().toString(), f);
 		sc.update(item.getThumbnailImageUrl().toString(), f);
 		return update(item, user);

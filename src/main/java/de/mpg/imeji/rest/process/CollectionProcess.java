@@ -17,8 +17,8 @@ public class CollectionProcess {
     
 	public static JSONResponse readCollection(HttpServletRequest req, String id) {
 		JSONResponse resp = new JSONResponse();
-
-		User u = getUser(req);
+		
+		User u = BasicAuthentication.auth(req);
 
 		CollectionTO to = null;
 		CollectionService ccrud = new CollectionService();
@@ -49,7 +49,7 @@ public class CollectionProcess {
 	public static JSONResponse createCollection(HttpServletRequest req) {
 		JSONResponse resp = new JSONResponse();
 		
-		User u = getUser(req);
+		User u = BasicAuthentication.auth(req);
 		
 		if(u == null)
 		{
@@ -72,11 +72,35 @@ public class CollectionProcess {
 		return resp;
 
 	}
+	
+	public static JSONResponse releaseCollection(HttpServletRequest req, String id){
+		JSONResponse resp = new JSONResponse();
+		resp.setStatus(Status.OK);
+		User u = getUser(req);
+		CollectionService service = new CollectionService();
+		try {
+				service.release(id, u);
+			} catch (NotFoundException e) {
+				resp.setObject(RestProcessUtils.buildBadRequestResponse());
+				resp.setStatus(Status.BAD_REQUEST);
 
-	public static User getUser(HttpServletRequest req) {
+			} catch (NotAllowedError e) {
+				if (u == null) {
+					resp.setObject(RestProcessUtils.buildUnauthorizedResponse());
+					resp.setStatus(Status.UNAUTHORIZED);
+				} else {
+					resp.setObject(RestProcessUtils.buildNotAllowedResponse());
+					resp.setStatus(Status.FORBIDDEN);
 
-		Authentication auth = AuthenticationFactory.factory(req);
-		return auth.doLogin();
+				}
+			} catch(RuntimeException e){
+				resp.setObject(RestProcessUtils.buildExceptionResponse(e.getLocalizedMessage()));
+				resp.setStatus(Status.FORBIDDEN);
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}	
+		return resp;
 	}
 
 

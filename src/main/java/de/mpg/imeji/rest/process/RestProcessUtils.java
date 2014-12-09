@@ -92,6 +92,19 @@ public class RestProcessUtils {
 		return ex;
 		
 	}
+	
+	public static Object buildExceptionResponse(String e) {
+		JSONException ex = new JSONException();
+		HTTPError error = new HTTPError();
+		error.setCode("1403");
+		error.setTitle("Forbidden");
+		error.setMessage("authorization-failed-message");
+		error.setExceptionReport(e);
+		ex.setError(error);
+		return ex;
+		
+	}
+	
 
 
 

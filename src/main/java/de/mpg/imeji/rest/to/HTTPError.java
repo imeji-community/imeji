@@ -5,7 +5,15 @@ public class HTTPError {
 	public String code;
 	public String title;
 	public String message;
+	public String exceptionReport;
 	
+	
+	public String getExceptionReport() {
+		return exceptionReport;
+	}
+	public void setExceptionReport(String exceptionReport) {
+		this.exceptionReport = exceptionReport;
+	}
 	public String getCode() {
 		return code;
 	}

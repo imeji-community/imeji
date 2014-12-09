@@ -9,6 +9,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -49,6 +50,16 @@ public class CollectionResource implements ImejiResource {
 	public Response readFromID(@Context HttpServletRequest req,
 			@PathParam("id") String id) {
 		JSONResponse resp = CollectionProcess.readCollection(req, id);
+		return RestProcessUtils.buildJSONResponse(resp);
+	}
+	
+	@PUT
+	@Path("/{id}/release")
+	@ApiOperation(value = "Release collection by id")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response releaseFromID(@Context HttpServletRequest req,
+			@PathParam("id") String id) {
+		JSONResponse resp = CollectionProcess.releaseCollection(req, id);
 		return RestProcessUtils.buildJSONResponse(resp);
 	}
 

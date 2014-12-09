@@ -1,6 +1,7 @@
 package de.mpg.imeji.rest.resources;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -13,7 +14,6 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
 
 import de.mpg.imeji.rest.process.ProfileProcess;
 import de.mpg.imeji.rest.process.RestProcessUtils;
@@ -45,10 +45,13 @@ public class ProfileResource implements ImejiResource {
 		return null;
 	}
 
-	@Override
+    @DELETE 
+    @Path("/{id}")
+    @ApiOperation(value = "Delete profile by id")
+    @Produces(MediaType.APPLICATION_JSON)
 	public Response delete(@Context HttpServletRequest req, @PathParam("id") String id) {
-		// TODO Auto-generated method stub
-		return null;
+		JSONResponse resp = ProfileProcess.deleteProfile(req, id);
+		return RestProcessUtils.buildJSONResponse(resp);
 	}
 
 	

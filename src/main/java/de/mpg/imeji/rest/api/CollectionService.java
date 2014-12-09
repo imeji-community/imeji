@@ -70,7 +70,19 @@ public class CollectionService implements API<CollectionTO> {
 			return null;
 		}
 	}
+	
 
+	@Override
+	public void release(String id, User u) throws NotFoundException,
+			NotAllowedError, NotSupportedException, Exception {
+		CollectionController controller = new CollectionController();
+		CollectionImeji vo = controller.retrieve(ObjectHelper.getURI(CollectionImeji.class, id), u);
+		controller.release(vo, u);
+
+	}	
+	
+	
+	
 	@Override
 	public CollectionTO update(CollectionTO o, User u) throws NotFoundException,
 			NotAllowedError, NotSupportedException, Exception {
@@ -85,12 +97,6 @@ public class CollectionService implements API<CollectionTO> {
 		return false;
 	}
 
-	@Override
-	public void release(CollectionTO o, User u) throws NotFoundException,
-			NotAllowedError, NotSupportedException, Exception {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void withdraw(CollectionTO o, User u) throws NotFoundException,

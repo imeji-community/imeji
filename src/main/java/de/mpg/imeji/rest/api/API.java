@@ -76,7 +76,7 @@ public interface API<V> {
 	 * @param o
 	 * @param u
 	 */
-	public void release(V o, User u) throws NotFoundException, NotAllowedError,
+	public void release(String i, User u) throws NotFoundException, NotAllowedError,
 			NotSupportedException, Exception;
 
 	/**
@@ -123,5 +123,6 @@ public interface API<V> {
 	 */
 	public List<String> search(String q, User u) throws NotSupportedException,
 			Exception;
+
 
 }

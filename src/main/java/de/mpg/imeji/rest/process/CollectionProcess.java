@@ -72,6 +72,36 @@ public class CollectionProcess {
 		return resp;
 
 	}
+	
+	public static JSONResponse releaseCollection(HttpServletRequest req, String id){
+		JSONResponse resp = new JSONResponse();
+		resp.setStatus(Status.OK);
+		User u = getUser(req);
+		CollectionService service = new CollectionService();
+		try {
+				service.release(id, u);
+			} catch (NotFoundException e) {
+				resp.setObject(RestProcessUtils.buildBadRequestResponse());
+				resp.setStatus(Status.BAD_REQUEST);
+
+			} catch (NotAllowedError e) {
+				if (u == null) {
+					resp.setObject(RestProcessUtils.buildUnauthorizedResponse());
+					resp.setStatus(Status.UNAUTHORIZED);
+				} else {
+					resp.setObject(RestProcessUtils.buildNotAllowedResponse());
+					resp.setStatus(Status.FORBIDDEN);
+
+				}
+			} catch(RuntimeException e){
+				resp.setObject(RestProcessUtils.buildExceptionResponse(e.getLocalizedMessage()));
+				resp.setStatus(Status.FORBIDDEN);
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}	
+		return resp;
+	}
 
 
 

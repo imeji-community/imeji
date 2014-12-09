@@ -109,7 +109,7 @@ public class ItemService implements API<ItemTO> {
 	}
 
 	@Override
-	public void release(ItemTO o, User u) throws NotFoundException,
+	public void release(String id, User u) throws NotFoundException,
 			NotAllowedError, NotSupportedException, Exception {
 		// TODO Auto-generated method stub
 

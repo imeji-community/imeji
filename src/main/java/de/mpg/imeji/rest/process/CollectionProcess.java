@@ -17,8 +17,8 @@ public class CollectionProcess {
     
 	public static JSONResponse readCollection(HttpServletRequest req, String id) {
 		JSONResponse resp = new JSONResponse();
-
-		User u = getUser(req);
+		
+		User u = BasicAuthentication.auth(req);
 
 		CollectionTO to = null;
 		CollectionService ccrud = new CollectionService();
@@ -49,7 +49,7 @@ public class CollectionProcess {
 	public static JSONResponse createCollection(HttpServletRequest req) {
 		JSONResponse resp = new JSONResponse();
 		
-		User u = getUser(req);
+		User u = BasicAuthentication.auth(req);
 		
 		if(u == null)
 		{
@@ -71,12 +71,6 @@ public class CollectionProcess {
 		}  
 		return resp;
 
-	}
-
-	public static User getUser(HttpServletRequest req) {
-
-		Authentication auth = AuthenticationFactory.factory(req);
-		return auth.doLogin();
 	}
 
 

@@ -50,8 +50,7 @@ public class ProfileService implements API<MetadataProfileTO>{
 	}
 
 	@Override
-	public boolean delete(String id, User u) throws NotFoundException,
-			NotAllowedError, NotSupportedException, Exception {
+	public boolean delete(String id, User u) throws NotFoundException, NotAllowedError, NotSupportedException, Exception {
 		// TODO Auto-generated method stub
 		return false;
 	}

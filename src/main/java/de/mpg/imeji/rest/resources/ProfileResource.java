@@ -45,10 +45,13 @@ public class ProfileResource implements ImejiResource {
 		return null;
 	}
 
-	@Override
+    @GET   
+    @Path("/{id}")
+    @ApiOperation(value = "Delete profile by id")
+    @Produces(MediaType.APPLICATION_JSON)
 	public Response delete(@Context HttpServletRequest req, @PathParam("id") String id) {
-		// TODO Auto-generated method stub
-		return null;
+		JSONResponse resp = ProfileProcess.deleteProfile(req, id);
+		return RestProcessUtils.buildJSONResponse(resp);
 	}
 
 	

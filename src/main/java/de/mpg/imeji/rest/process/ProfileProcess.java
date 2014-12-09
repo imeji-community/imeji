@@ -1,12 +1,10 @@
 package de.mpg.imeji.rest.process;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.NotSupportedException;
 import javax.ws.rs.core.Response.Status;
 
-import de.mpg.imeji.logic.auth.Authentication;
-import de.mpg.imeji.logic.auth.AuthenticationFactory;
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
-import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.api.ProfileService;
 import de.mpg.imeji.rest.to.JSONResponse;
@@ -17,13 +15,9 @@ public class ProfileProcess {
 
 	public static JSONResponse readProfile(HttpServletRequest req, String id) {
 		JSONResponse resp = new JSONResponse();
-   
-		Authentication auth = AuthenticationFactory.factory(req);
-		User u = auth.doLogin();
-
-
-		//CollectionImeji collection2 = new CollectionImeji();
 		
+		User u = BasicAuthentication.auth(req);
+
 		ProfileService pcrud = new ProfileService();
 		try {
 			MetadataProfileTO to = new MetadataProfileTO();
@@ -51,4 +45,38 @@ public class ProfileProcess {
 
 	}
 
+	public static JSONResponse deleteProfile(HttpServletRequest req, String id) {
+		JSONResponse resp = new JSONResponse();
+		
+		User u = BasicAuthentication.auth(req);
+		
+		if(u == null){
+			resp.setObject(RestProcessUtils.buildUnauthorizedResponse());
+			resp.setStatus(Status.UNAUTHORIZED);			
+		}
+		else{
+			ProfileService pcrud = new ProfileService();			
+			try{				
+				pcrud.delete(id, u);
+				resp.setStatus(Status.OK);
+			}catch(NotFoundException e) {
+				resp.setObject(RestProcessUtils.buildBadRequestResponse());
+				resp.setStatus(Status.BAD_REQUEST);
+	
+			} catch (NotAllowedError e) {	
+					resp.setObject(RestProcessUtils.buildNotAllowedResponse());
+					resp.setStatus(Status.FORBIDDEN);
+			} catch (NotSupportedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		
+		}
+		return resp;
+
+	}
 }

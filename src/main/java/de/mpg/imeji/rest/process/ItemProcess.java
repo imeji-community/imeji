@@ -23,8 +23,7 @@ import de.mpg.j2j.exceptions.NotFoundException;
 public class ItemProcess {
 	
 	public static JSONResponse deleteItem(HttpServletRequest req, String id) {
-		Authentication auth = AuthenticationFactory.factory(req);
-		User u = auth.doLogin();
+		User u = BasicAuthentication.auth(req);
 		JSONResponse resp = new JSONResponse();
 		
 		if (u == null) {
@@ -51,8 +50,7 @@ public class ItemProcess {
 	
 
 	public static JSONResponse readItem(HttpServletRequest req, String id) {
-		Authentication auth = AuthenticationFactory.factory(req);
-		User u = auth.doLogin();
+		User u = BasicAuthentication.auth(req);
 		JSONResponse resp = new JSONResponse();
 
 		ItemTO item = null;
@@ -85,9 +83,8 @@ public class ItemProcess {
 			InputStream file, String json, String filename) {
 
 		// Load User (if provided)
-		Authentication auth = AuthenticationFactory.factory(req);
-		User u = auth.doLogin();
-
+		User u = BasicAuthentication.auth(req);
+		
 		// Parse json into to
 		ItemWithFileTO to = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(
 				req, ItemWithFileTO.class, json);

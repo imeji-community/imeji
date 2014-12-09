@@ -20,15 +20,16 @@ import de.mpg.imeji.rest.process.ReverseTransferObjectFactory;
 import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.j2j.exceptions.NotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CollectionService implements API<CollectionTO> {
 
-	public CollectionService() {
+	private static final Logger LOGGER = LoggerFactory.getLogger(CollectionService.class);
 
-	}
 
 	@Override
-	public CollectionTO read(String id, User u) throws NotFoundException, NotAllowedError, Exception {
+	public CollectionTO read(String id, User u) throws Exception {
 		CollectionController controller = new CollectionController();
 		CollectionTO to = new CollectionTO();
 		CollectionImeji vo = controller.retrieve(ObjectHelper.getURI(CollectionImeji.class, id), u);
@@ -45,27 +46,30 @@ public class CollectionService implements API<CollectionTO> {
 		String profileId = to.getProfile().getProfileId();
 		String method = to.getProfile().getMethod();
 		String newId = null;
-		//create new profile (take default=
+		//create new profile (take default)
 		if(profileId == null || "".equals(profileId) )
 			mp = pc.create(ImejiFactory.newProfile(), u);
+		//set reference to existed profile
 		else if(profileId != null && "reference".equalsIgnoreCase(method))
 			mp = pc.retrieve(URI.create(profileId), u);
+		//copy existed profile
 		else if(profileId != null && "copy".equalsIgnoreCase(method)){
 				mp = pc.retrieve(URI.create(profileId), u);
 				mp = pc.create(mp.clone(), u);
 				pc.update(mp, u);
-		}
-		else {
-			//TODO: throw exception BAD request
-			return null;
+		} else {
+		//throw exception if no method specified
+			final String msg = "Bad metadata profile method definition:" + method;
+			LOGGER.error(msg);
+			throw new Exception(msg);
 		}
 		CollectionImeji vo = new CollectionImeji();
 		ReverseTransferObjectFactory.transferCollection(to, vo);
-//		vo.setProfile(URI.create(newId));
 		try {
 			URI collectionURI = cc.create(vo, mp, u);
 			return read(CommonUtils.extractIDFromURI(collectionURI), u);
 		} catch (Exception e) {
+			LOGGER.error("Cannot create collection:");
 			e.printStackTrace();
 			return null;
 		}

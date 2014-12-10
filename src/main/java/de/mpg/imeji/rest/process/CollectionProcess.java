@@ -24,15 +24,15 @@ public class CollectionProcess {
 			resp.setObject(to);
 			resp.setStatus(Status.OK);
 		} catch (NotFoundException e) {
-			resp.setObject(RestProcessUtils.buildBadRequestResponse());
+			resp.setObject(RestProcessUtils.buildBadRequestResponse(e.getLocalizedMessage()));
 			resp.setStatus(Status.BAD_REQUEST);
 
 		} catch (NotAllowedError e) {
 			if (u == null) {
-				resp.setObject(RestProcessUtils.buildUnauthorizedResponse());
+				resp.setObject(RestProcessUtils.buildUnauthorizedResponse(e.getLocalizedMessage()));
 				resp.setStatus(Status.UNAUTHORIZED);
 			} else {
-				resp.setObject(RestProcessUtils.buildNotAllowedResponse());
+				resp.setObject(RestProcessUtils.buildNotAllowedResponse(e.getLocalizedMessage()));
 				resp.setStatus(Status.FORBIDDEN);
 
 			}
@@ -50,7 +50,7 @@ public class CollectionProcess {
 		
 		if(u == null)
 		{
-			resp.setObject(RestProcessUtils.buildUnauthorizedResponse());
+			resp.setObject(RestProcessUtils.buildUnauthorizedResponse(""));
 			resp.setStatus(Status.UNAUTHORIZED);
 		}
 		else
@@ -61,7 +61,7 @@ public class CollectionProcess {
 				resp.setObject(service.create(to, u));
 				resp.setStatus(Status.CREATED);
 			} catch (Exception e) {
-				resp.setObject(RestProcessUtils.buildBadRequestResponse());
+				resp.setObject(RestProcessUtils.buildBadRequestResponse(e.getLocalizedMessage()));
 				resp.setStatus(Status.BAD_REQUEST);
 			}
 
@@ -78,15 +78,15 @@ public class CollectionProcess {
 		try {
 				service.release(id, u);
 			} catch (NotFoundException e) {
-				resp.setObject(RestProcessUtils.buildBadRequestResponse());
+				resp.setObject(RestProcessUtils.buildBadRequestResponse(e.getLocalizedMessage()));
 				resp.setStatus(Status.BAD_REQUEST);
 
 			} catch (NotAllowedError e) {
 				if (u == null) {
-					resp.setObject(RestProcessUtils.buildUnauthorizedResponse());
+					resp.setObject(RestProcessUtils.buildUnauthorizedResponse(e.getLocalizedMessage()));
 					resp.setStatus(Status.UNAUTHORIZED);
 				} else {
-					resp.setObject(RestProcessUtils.buildNotAllowedResponse());
+					resp.setObject(RestProcessUtils.buildNotAllowedResponse(e.getLocalizedMessage()));
 					resp.setStatus(Status.FORBIDDEN);
 
 				}

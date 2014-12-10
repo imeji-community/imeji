@@ -28,7 +28,7 @@ public class ItemProcess {
 		JSONResponse resp = new JSONResponse();
 		
 		if (u == null) {
-			resp.setObject(RestProcessUtils.buildUnauthorizedResponse());
+			resp.setObject(RestProcessUtils.buildUnauthorizedResponse(""));
 			resp.setStatus(Status.UNAUTHORIZED);
 		}
 		else {
@@ -37,12 +37,12 @@ public class ItemProcess {
 				icrud.delete(id, u);
 				resp.setStatus(Status.OK);
 			} catch (NotFoundException e) {
-				resp.setObject(RestProcessUtils.buildBadRequestResponse());
+				resp.setObject(RestProcessUtils.buildBadRequestResponse(e.getLocalizedMessage()));
 				resp.setStatus(Status.BAD_REQUEST);
 	
 			} catch (NotAllowedError e) {
 	
-					resp.setObject(RestProcessUtils.buildNotAllowedResponse());
+					resp.setObject(RestProcessUtils.buildNotAllowedResponse(e.getLocalizedMessage()));
 					resp.setStatus(Status.FORBIDDEN);
 			}
 		}
@@ -62,19 +62,20 @@ public class ItemProcess {
 			resp.setObject(item);
 			resp.setStatus(Status.OK);
 		} catch (NotFoundException e) {
-			resp.setObject(RestProcessUtils.buildBadRequestResponse());
+			resp.setObject(RestProcessUtils.buildBadRequestResponse(e.getLocalizedMessage()));
 			resp.setStatus(Status.BAD_REQUEST);
 
 		} catch (NotAllowedError e) {
 			if (u == null) {
-				resp.setObject(RestProcessUtils.buildUnauthorizedResponse());
+				resp.setObject(RestProcessUtils.buildUnauthorizedResponse(e.getLocalizedMessage()));
 				resp.setStatus(Status.UNAUTHORIZED);
 			} else {
-				resp.setObject(RestProcessUtils.buildNotAllowedResponse());
+				resp.setObject(RestProcessUtils.buildNotAllowedResponse(e.getLocalizedMessage()));
 				resp.setStatus(Status.FORBIDDEN);
 			}
 		} catch (Exception e) {
-
+			resp.setObject(RestProcessUtils.buildExceptionResponse(e.getLocalizedMessage()));
+			resp.setStatus(Status.FORBIDDEN);
 		}
 		return resp;
 
@@ -113,15 +114,15 @@ public class ItemProcess {
 			resp.setObject(service.create(to, u));
 			resp.setStatus(Status.CREATED);
 		} catch (NotFoundException e) {
-			resp.setObject(RestProcessUtils.buildBadRequestResponse());
+			resp.setObject(RestProcessUtils.buildBadRequestResponse(e.getLocalizedMessage()));
 			resp.setStatus(Status.BAD_REQUEST);
 
 		} catch (NotAllowedError e) {
 			if (u == null) {
-				resp.setObject(RestProcessUtils.buildUnauthorizedResponse());
+				resp.setObject(RestProcessUtils.buildUnauthorizedResponse(e.getLocalizedMessage()));
 				resp.setStatus(Status.UNAUTHORIZED);
 			} else {
-				resp.setObject(RestProcessUtils.buildNotAllowedResponse());
+				resp.setObject(RestProcessUtils.buildNotAllowedResponse(e.getLocalizedMessage()));
 				resp.setStatus(Status.FORBIDDEN);
 			}
 		} catch (Exception e) {

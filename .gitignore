@@ -163,7 +163,7 @@ pip-log.txt
 .DS_Store
 /YOUR JREBEL LICENSE HAS EXPIRED!.error
 digilib-config.xml
-items-out.xml
+src/test/resources/ingest/items-out.xml
 
 # jRebel
 rebel.xml

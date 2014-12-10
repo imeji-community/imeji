@@ -107,7 +107,7 @@ public class ItemController extends ImejiController {
 		StorageController sc = new StorageController();
 //		MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
 //		String mimeType = mimeTypesMap.getContentType(f);
-		Path p = Paths.get(filename);
+		Path p = Paths.get(f.getName());
 		String mimeType = Files.probeContentType(p);
 		UploadResult uploadResult = sc.upload(filename, f, c.getIdString());
 		if (item == null)

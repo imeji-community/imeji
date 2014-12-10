@@ -133,7 +133,7 @@
 					<h:panelGroup layout="block" styleClass="imj_metadataSubPanel">
 						<span class="imj_metadataSubPanelItem">
 							<h:outputText id="lblViewItemFull_lblBasic" value="#{lbl.metadata} "/>
-							<h:commandLink rendered="#{Auth.updateContent(itemBean.image) and !itemBean.locked and itemBean.edit.toggleState != 'editMd' and itemBean.profile.statements.size() > 0}" value="#{lbl.edit}" action="#{itemBean.edit.showEditor}">
+							<h:commandLink rendered="#{Auth.updateContent(itemBean.image) and !itemBean.locked and itemBean.edit.toggleState == 'displayMd'}" value="#{lbl.edit}" action="#{itemBean.edit.showEditor}">
 								<f:ajax execute="@this" render="@form"/>
 							</h:commandLink>
 						</span>
@@ -166,25 +166,17 @@
 									<span class="imj_invisible">: </span>
 								</div>
 
-							<ui:fragment rendered="#{itemBean.edit.toggleState != 'changeFilename'}">
+							<ui:fragment rendered="#{itemBean.edit.toggleState == 'displayMd'}">
 								<div class="imj_metadataValue">
 									<h:outputText id="txtUrl" value="#{itemBean.image.filename}"/>
-								</div>
-								<h:commandLink value="#{lbl.rename}" action="#{itemBean.edit.changeFilename}">
-									<f:ajax execute="@this" render="@form"/>
-								</h:commandLink>
-							
+								</div>							
 							</ui:fragment>
 							
-							<ui:fragment rendered="#{itemBean.edit.toggleState == 'changeFilename'}">
+							<ui:fragment rendered="#{itemBean.edit.toggleState == 'editMd'}">
 								<div class="imj_metadataValue">
 									<h:inputText value="#{itemBean.image.filename}"/>
 								</div>
-							
-								<h:commandButton type="submit" value="#{lbl.save}"  action="#{itemBean.edit.save}" styleClass="imj_submitButton"/>
 							</ui:fragment>
-
-
 			
 							</h:panelGroup>
 							

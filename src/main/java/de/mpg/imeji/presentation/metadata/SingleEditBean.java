@@ -218,28 +218,5 @@ public class SingleEditBean
     {
         this.metadataList = metadataList;
     }
-    
-    public String changeFilename()
-    {
-        SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        if (AuthUtil.staticAuth().updateContent(sb.getUser(), item))
-        {
-            this.toggleState = "changeFilename";
-            try
-            {
-                Locks.lock(new Lock(item.getId().toString(), sb.getUser().getEmail()));
-            }
-            catch (Exception e)
-            {
-                BeanHelper.error(sb.getMessage("error_editor_image_locked"));
-            }
-            // init();
-        }
-        else
-        {
-            BeanHelper.error(sb.getMessage("error_editor_not_allowed"));
-        }
-        return "";
-    }
-    
+
 }

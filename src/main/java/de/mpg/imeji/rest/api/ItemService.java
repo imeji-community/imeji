@@ -26,8 +26,8 @@ public class ItemService implements API<ItemTO> {
 	@Override
 	public ItemTO create(ItemTO to, User u) throws Exception {
 		if (to instanceof ItemWithFileTO) {
-			// get filename
-			String filename = getFilename((ItemWithFileTO) to);
+			// get newFilename
+			String filename = to.getFilename();
 
 			// transfer TO into item
 			Item item = new Item();
@@ -35,23 +35,17 @@ public class ItemService implements API<ItemTO> {
 
 				// read collection
 				CollectionController cc = new CollectionController();
-				CollectionImeji collection = cc.retrieve(item.getCollection(),
-						u);
+				CollectionImeji collection = cc.retrieve(item.getCollection(), u);
 
 				// Create Item with File
-				ItemController controller = new ItemController();
+				ItemController ic = new ItemController();
 				if (((ItemWithFileTO) to).getFile() != null) {
 					// If TO has attribute File, then upload it
-					controller.createWithFile(item,
-							((ItemWithFileTO) to).getFile(), filename,
-							collection, u);
+					ic.createWithFile(item, ((ItemWithFileTO) to).getFile(), filename, collection, u);
 				} else if (getExternalFileUrl((ItemWithFileTO) to) != null) {
 					// If no file, but either a fetchUrl or a referenceUrl
-					controller.createWithExternalFile(item, collection,
-							getExternalFileUrl((ItemWithFileTO) to),
-							downloadFile((ItemWithFileTO) to), u);
+					ic.createWithExternalFile(item, collection, getExternalFileUrl((ItemWithFileTO) to), filename, downloadFile((ItemWithFileTO) to), u);
 				}
-
 
 			// transfer item into ItemTO
 			ItemTO itemTO = new ItemTO();
@@ -150,7 +144,7 @@ public class ItemService implements API<ItemTO> {
 	 * 
 	 * @param to
 	 * @return
-	 */
+	
 	private String getFilename(ItemWithFileTO to) {
 		String filename = to.getFilename();
 		if (filename == null)
@@ -159,7 +153,7 @@ public class ItemService implements API<ItemTO> {
 			filename = FilenameUtils.getName(to.getReferenceUrl());
 		return filename;
 	}
-
+ */
 	/**
 	 * Return the external Url
 	 * 

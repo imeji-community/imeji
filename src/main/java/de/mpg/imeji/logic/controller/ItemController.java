@@ -100,14 +100,10 @@ public class ItemController extends ImejiController {
 	 * @return
 	 * @throws Exception
 	 */
-	public Item createWithFile(Item item, File f, String filename,
-			CollectionImeji c, User user) throws Exception {
-		if (!AuthUtil.staticAuth().create(user, item))
-			throw new NotAllowedError(
-					"User not Allowed to upload files in collection "
-							+ c.getIdString());
-		if (filename == null)
-			filename = f.getName();
+	public Item createWithFile(Item item, File f, String filename, CollectionImeji c, User user) throws Exception {
+		if (!AuthUtil.staticAuth().create(user, item))  
+			throw new NotAllowedError("User not Allowed to upload files in collection "+ c.getIdString());
+//		String filename = f.getName();
 		StorageController sc = new StorageController();
 //		MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
 //		String mimeType = mimeTypesMap.getContentType(f);
@@ -135,11 +131,14 @@ public class ItemController extends ImejiController {
 	 * @return
 	 * @throws Exception
 	 */
-	public Item createWithExternalFile(Item item, CollectionImeji c,
-			String externalFileUrl, boolean download, User user)
-			throws Exception {
+	public Item createWithExternalFile(Item item, CollectionImeji c, String externalFileUrl, String filename, boolean download, User user) throws Exception {
 		File tmp = null;
-		String filename = FilenameUtils.getName(externalFileUrl);
+		String origName = FilenameUtils.getName(externalFileUrl);
+		if("".equals(filename) || filename == null)
+			filename = origName;
+		else
+			filename = filename + "." + FilenameUtils.getExtension(origName);
+
 		StorageController sController = new StorageController("external");
 		if (item == null)
 			item = ImejiFactory.newItem(c);

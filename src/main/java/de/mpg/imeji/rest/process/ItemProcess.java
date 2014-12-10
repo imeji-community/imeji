@@ -8,6 +8,7 @@ import java.io.InputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
 import de.mpg.imeji.logic.auth.Authentication;
@@ -79,23 +80,25 @@ public class ItemProcess {
 
 	}
 
-	public static JSONResponse createItem(HttpServletRequest req,
-			InputStream file, String json, String filename) {
-
+	public static JSONResponse createItem(HttpServletRequest req, InputStream file, String json, String origName) {
+		
 		// Load User (if provided)
 		User u = BasicAuthentication.auth(req);
 		
 		// Parse json into to
-		ItemWithFileTO to = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(
-				req, ItemWithFileTO.class, json);
-
+		ItemWithFileTO to = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(req, ItemWithFileTO.class, json);
 		// set file in to (if provided)
+		
 		if (file != null) {
 			try {
 				File tmp = File.createTempFile("imejiAPI", null);
 				IOUtils.copy(file, new FileOutputStream(tmp));
 				to.setFile(tmp);
-				to.setFilename(filename);
+				if(to.getFilename() == null || "".equals(to.getFilename()))
+					to.setFilename(origName);
+				else
+					to.setFilename(to.getFilename() + "." + FilenameUtils.getExtension(origName));
+					
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

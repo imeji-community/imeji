@@ -9,6 +9,7 @@ import de.mpg.imeji.rest.process.RestProcessUtils;
 import de.mpg.imeji.rest.resources.ImejiResource;
 import de.mpg.imeji.rest.to.JSONResponse;
 
+import org.apache.commons.io.FilenameUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
@@ -48,11 +49,14 @@ public class ItemResource implements ImejiResource {
 			+ "<br/><br/>"
 			+ "Json example:"
 			+ "<br/>{"
-			+ "<br/>\"collectionId\" : \"abc123\","
-			+ "<br/>\"fetchUrl\" : \"http://example.org/myFile.png\","
-			+ "<br/>\"referenceUrl\" : \"http://example.org/myFile.png\","
-			+ "<br/>\"metadata\" : []"
+			+ "<br/>\"collectionId\" : \"abc123\", (requied)"
+			+ "<br/>\"fetchUrl\" : \"http://example.org/myFile.png\", (optional)"
+			+ "<br/>\"referenceUrl\" : \"http://example.org/myFile.png\", (optional)"
+			+ "<br/>\"filename\" : \"new filename\", (optional)"
+			+ "<br/>\"metadata\" : [] (optional)"
 			+ "<br/>}"
+			+ "<br/><br/>"
+			+ "rename and save the uploaded image with filename parameter"
 			+ "<br/><br/>"
 			+ "The metadata parameter allows to define the metadata of item during the creation of the item. To get an example of how to do it, please try the get item method")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -60,9 +64,8 @@ public class ItemResource implements ImejiResource {
 			@FormDataParam("file") InputStream file,
 			@ApiParam(required = true) @FormDataParam("json") String json,
 			@FormDataParam("file") FormDataContentDisposition fileDetail) {
-		String filename = fileDetail != null ? fileDetail.getFileName() : null;
-		return RestProcessUtils.buildJSONResponse(ItemProcess.createItem(req,
-				file, json, filename));
+		String origName = fileDetail != null ? fileDetail.getFileName() : null;
+		return RestProcessUtils.buildJSONResponse(ItemProcess.createItem(req, file, json, origName));
 	}
 
 	public Response create(HttpServletRequest req) {

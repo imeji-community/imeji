@@ -76,7 +76,7 @@ public class CollectionProcess {
 	public static JSONResponse releaseCollection(HttpServletRequest req, String id){
 		JSONResponse resp = new JSONResponse();
 		resp.setStatus(Status.OK);
-		User u = getUser(req);
+		User u = BasicAuthentication.auth(req);
 		CollectionService service = new CollectionService();
 		try {
 				service.release(id, u);

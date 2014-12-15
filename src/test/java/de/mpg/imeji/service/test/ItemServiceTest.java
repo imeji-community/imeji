@@ -17,6 +17,7 @@ import org.junit.Test;
 import util.JenaUtil;
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.controller.CollectionController;
+import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.rest.api.ItemService;
@@ -74,11 +75,10 @@ public class ItemServiceTest {
 		assertTrue(itemTo.getVisibility().equals("PRIVATE"));
 		// check the item mime type
 		assertEquals(itemTo.getMimetype(),
-			Files.probeContentType(Paths.get(file.getName())));
-		System.err.println("itemTo.getMimetype() "+ itemTo.getMimetype());
-		System.err.println("Files.probeContentType(Paths.get(file.getName()))" +Files.probeContentType(Paths.get(file.getName())));
+				StorageUtils.getMimeType(file));
 		// check the item file name
-		assertEquals(itemTo.getFilename(),crud.read(itemTo.getId(), JenaUtil.testUser).getFilename());
+		assertEquals(itemTo.getFilename(),
+				crud.read(itemTo.getId(), JenaUtil.testUser).getFilename());
 		// check the item status
 		assertTrue(itemTo.getStatus().equals("PENDING"));
 
@@ -103,12 +103,9 @@ public class ItemServiceTest {
 		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser)
 				.getModifiedBy().getUserId(),
 				(itemTo.getModifiedBy().getUserId()));
-//		assertEquals(
-//				crud.read(itemTo.getId(), JenaUtil.testUser).getMimetype(),
-//				(itemTo.getMimetype()));
-		System.err.println("crud.read(itemTo.getId(), JenaUtil.testUser).getMimetype()" +crud.read(itemTo.getId(), JenaUtil.testUser).getMimetype());
-		System.err.println("itemTo.getMimetype()" +itemTo.getMimetype());
-		
+		 assertEquals(
+		 crud.read(itemTo.getId(), JenaUtil.testUser).getMimetype(),
+		 (itemTo.getMimetype()));
 		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser).getStatus(),
 				(itemTo.getStatus()));
 		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser)

@@ -105,10 +105,11 @@ public class ItemController extends ImejiController {
 			throw new NotAllowedError("User not Allowed to upload files in collection "+ c.getIdString());
 //		String filename = f.getName();
 		StorageController sc = new StorageController();
+		String mimeType = StorageUtils.getMimeType(f);
 //		MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
 //		String mimeType = mimeTypesMap.getContentType(f);
-		Path p = Paths.get(f.getName());
-		String mimeType = Files.probeContentType(p);
+//		Path p = Paths.get(f.getName());
+//		String mimeType = Files.probeContentType(p);
 		UploadResult uploadResult = sc.upload(filename, f, c.getIdString());
 		if (item == null)
 			item = ImejiFactory.newItem(c);
@@ -282,10 +283,11 @@ public class ItemController extends ImejiController {
 		StorageController sc = new StorageController();
 		sc.update(item.getFullImageUrl().toString(), f);
 		item.setChecksum(sc.calculateChecksum(f));
+		String mimeType = StorageUtils.getMimeType(f);
 //		MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
 //		item.setFiletype(mimeTypesMap.getContentType(f));
-		Path p = Paths.get(f.getName());
-		String mimeType = Files.probeContentType(p);
+//		Path p = Paths.get(f.getName());
+//		String mimeType = Files.probeContentType(p);
 		item.setFiletype(mimeType);
 		sc.update(item.getWebImageUrl().toString(), f);
 		sc.update(item.getThumbnailImageUrl().toString(), f);

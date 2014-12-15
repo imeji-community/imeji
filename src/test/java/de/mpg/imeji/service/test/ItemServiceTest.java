@@ -1,30 +1,24 @@
 package de.mpg.imeji.service.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.File;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import util.JenaUtil;
-import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Item.Visibility;
 import de.mpg.imeji.presentation.util.ImejiFactory;
-import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
@@ -32,7 +26,6 @@ import de.mpg.j2j.exceptions.NotFoundException;
 
 public class ItemServiceTest {
 
-	private Item item;
 	private ItemWithFileTO itemWithFileTo;
 	private ItemTO itemTo;
 	private CollectionImeji c;
@@ -65,9 +58,6 @@ public class ItemServiceTest {
 	@Test
 	public void testItemCRUD() throws NotFoundException, NotAllowedError,
 			Exception {
-		Item item = ImejiFactory.newItem(c);
-		item.setFilename("test.jpg");
-		System.out.println(item);
 
 		ItemService crud = new ItemService();
 		// create item
@@ -82,16 +72,10 @@ public class ItemServiceTest {
 		// check the item be created and has new id
 		assertNotNull(itemTo.getId());
 		// check the default visibility of item = private
-		System.out.println(itemTo.getId());
 		assertTrue(itemTo.getVisibility().equals("PRIVATE"));
 		// check the item mime type
-		System.out.println(itemTo.getMimetype());
-		System.out.println(Files.probeContentType(Paths.get(file.getName())));
-		
 		assertEquals(itemTo.getMimetype(),
-				Files.probeContentType(Paths.get(file.getName())));
-		System.out.println(itemTo.getMimetype());
-		System.out.println(Files.probeContentType(Paths.get(file.getName())));
+			Files.probeContentType(Paths.get(file.getName())));
 		// check the item file name
 		assertEquals(itemTo.getFilename(),crud.read(itemTo.getId(), JenaUtil.testUser).getFilename());
 		// check the item status

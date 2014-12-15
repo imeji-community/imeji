@@ -9,9 +9,9 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import util.JenaUtil;
@@ -26,25 +26,25 @@ import de.mpg.j2j.exceptions.NotFoundException;
 
 public class ItemServiceTest {
 
-	private ItemWithFileTO itemWithFileTo;
-	private ItemTO itemTo;
-	private CollectionImeji c;
+	private static ItemWithFileTO itemWithFileTo;
+	private static ItemTO itemTo;
+	private static CollectionImeji c;
 	private static final String TEST_IMAGE = "./src/test/resources/storage/test.png";
-	private File file = null;
+	private static File file = null;
 
-	@Before
-	public void setup() throws Exception {
+	@BeforeClass
+	public static void setup() throws Exception {
 		JenaUtil.initJena();
 		initItem();
 	}
 
-	@After
-	public void tearDown() throws Exception {
+	@AfterClass
+	public static void tearDown() throws Exception {
 
 		JenaUtil.closeJena();
 	}
 
-	public void initItem() throws Exception {
+	public static void initItem() throws Exception {
 		file = new File(TEST_IMAGE);
 		c = ImejiFactory.newCollection();
 		CollectionController controller = new CollectionController();
@@ -67,7 +67,6 @@ public class ItemServiceTest {
 		} catch (NotAllowedError e) {
 			// its everything fine
 		}
-		System.out.println(itemTo);
 		itemTo = crud.create(itemWithFileTo, JenaUtil.testUser);
 		// check the item be created and has new id
 		assertNotNull(itemTo.getId());
@@ -102,9 +101,9 @@ public class ItemServiceTest {
 		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser)
 				.getModifiedBy().getUserId(),
 				(itemTo.getModifiedBy().getUserId()));
-//		assertEquals(
-//				crud.read(itemTo.getId(), JenaUtil.testUser).getMimetype(),
-//				(itemTo.getMimetype()));
+		assertEquals(
+				crud.read(itemTo.getId(), JenaUtil.testUser).getMimetype(),
+				(itemTo.getMimetype()));
 		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser).getStatus(),
 				(itemTo.getStatus()));
 		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser)

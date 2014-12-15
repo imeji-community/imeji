@@ -10,7 +10,8 @@ import de.mpg.imeji.rest.to.MetadataTO;
 		"number"
 		})
 public class NumberTO extends MetadataTO{
-	 private double number;
+	private static final long serialVersionUID = -6070724739245057290L;
+	private double number;
 
 	public double getNumber() {
 		return number;

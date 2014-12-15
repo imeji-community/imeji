@@ -1,5 +1,6 @@
 package de.mpg.imeji.rest.api;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.rest.process.ReverseTransferObjectFactory;
 import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.to.ItemTO;
@@ -33,19 +35,22 @@ public class ItemService implements API<ItemTO> {
 			Item item = new Item();
 			ReverseTransferObjectFactory.transferItem(to, item);
 
-				// read collection
-				CollectionController cc = new CollectionController();
-				CollectionImeji collection = cc.retrieve(item.getCollection(), u);
+			// read collection
+			CollectionController cc = new CollectionController();
+			CollectionImeji collection = cc.retrieve(item.getCollection(), u);
 
-				// Create Item with File
-				ItemController ic = new ItemController();
-				if (((ItemWithFileTO) to).getFile() != null) {
-					// If TO has attribute File, then upload it
-					ic.createWithFile(item, ((ItemWithFileTO) to).getFile(), filename, collection, u);
-				} else if (getExternalFileUrl((ItemWithFileTO) to) != null) {
-					// If no file, but either a fetchUrl or a referenceUrl
-					ic.createWithExternalFile(item, collection, getExternalFileUrl((ItemWithFileTO) to), filename, downloadFile((ItemWithFileTO) to), u);
-				}
+			// Create Item with File
+			ItemController ic = new ItemController();
+			if (((ItemWithFileTO) to).getFile() != null) {
+				// If TO has attribute File, then upload it
+				ic.createWithFile(item, ((ItemWithFileTO) to).getFile(),
+						filename, collection, u);
+			} else if (getExternalFileUrl((ItemWithFileTO) to) != null) {
+				// If no file, but either a fetchUrl or a referenceUrl
+				ic.createWithExternalFile(item, collection,
+						getExternalFileUrl((ItemWithFileTO) to), filename,
+						downloadFile((ItemWithFileTO) to), u);
+			}
 
 			// transfer item into ItemTO
 			ItemTO itemTO = new ItemTO();
@@ -84,12 +89,13 @@ public class ItemService implements API<ItemTO> {
 	}
 
 	@Override
-	public boolean delete(String id, User u) throws NotFoundException, NotAllowedError {
+	public boolean delete(String id, User u) throws NotFoundException,
+			NotAllowedError {
 		ItemController controller = new ItemController();
 		List<Item> items = new ArrayList<Item>();
 		Item item = new Item();
 		try {
-			item = controller.retrieve(ObjectHelper.getURI(Item.class,id), u);
+			item = controller.retrieve(ObjectHelper.getURI(Item.class, id), u);
 		} catch (Exception e1) {
 			throw new NotFoundException(e1.getMessage());
 		}
@@ -144,16 +150,13 @@ public class ItemService implements API<ItemTO> {
 	 * 
 	 * @param to
 	 * @return
-	
-	private String getFilename(ItemWithFileTO to) {
-		String filename = to.getFilename();
-		if (filename == null)
-			filename = FilenameUtils.getName(to.getFetchUrl());
-		if (filename == null)
-			filename = FilenameUtils.getName(to.getReferenceUrl());
-		return filename;
-	}
- */
+	 * 
+	 *         private String getFilename(ItemWithFileTO to) { String filename =
+	 *         to.getFilename(); if (filename == null) filename =
+	 *         FilenameUtils.getName(to.getFetchUrl()); if (filename == null)
+	 *         filename = FilenameUtils.getName(to.getReferenceUrl()); return
+	 *         filename; }
+	 */
 	/**
 	 * Return the external Url
 	 * 

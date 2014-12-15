@@ -16,14 +16,13 @@ import util.JenaUtil;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
+import de.mpg.imeji.logic.controller.ItemController;
+
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Item.Visibility;
-import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
@@ -36,23 +35,19 @@ public class ItemServiceTest {
 	private Item item;
 	private ItemWithFileTO itemWithFileTo;
 	private ItemTO itemTo;
-	private User user;
 	private CollectionImeji c;
 	private static final String TEST_IMAGE = "./src/test/resources/storage/test.png";
-	private String email = "testUser@imeji.org";
-	private String name = "imeji tester";
-	private String pwd = "test";
 	private File file = null;
 
 	@Before
 	public void setup() throws Exception {
 		JenaUtil.initJena();
-		initUser();
 		initItem();
 	}
 
 	@After
 	public void tearDown() throws Exception {
+
 		JenaUtil.closeJena();
 	}
 
@@ -60,80 +55,92 @@ public class ItemServiceTest {
 		file = new File(TEST_IMAGE);
 		c = ImejiFactory.newCollection();
 		CollectionController controller = new CollectionController();
-		controller.create(c, null, user);
+		controller.create(c, null, JenaUtil.testUser);
 		itemWithFileTo = new ItemWithFileTO();
 		itemWithFileTo.setFilename("testname2");
 		itemWithFileTo.setFile(file);
 		itemWithFileTo.setCollectionId(c.getIdString());
 	}
 
-	public void initUser() {
-		try {
-			UserController c = new UserController(Imeji.adminUser);
-			user = new User();
-			user.setEmail(email);
-			user.setName(name);
-			user.setEncryptedPassword(StringHelper.convertToMD5(pwd));
-			user = c.create(user, USER_TYPE.DEFAULT);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	@Test
 	public void testItemCRUD() throws NotFoundException, NotAllowedError,
 			Exception {
-		
+		Item item = ImejiFactory.newItem(c);
+		item.setFilename("test.jpg");
+
 		ItemService crud = new ItemService();
-		
-		
 		// create item
-		try{
+		try {
 			itemTo = crud.create(itemWithFileTo, null);
 			fail("should not allowed to create item");
-		}catch(NotAllowedError e){
-			
+		} catch (NotAllowedError e) {
+			// its everything fine
 		}
-		itemTo = crud.create(itemWithFileTo, user);
+		itemTo = crud.create(itemWithFileTo, JenaUtil.testUser);
 		// check the item be created and has new id
 		assertNotNull(itemTo.getId());
 		// check the default visibility of item = private
 		assertTrue(itemTo.getVisibility().equals("PRIVATE"));
 		// check the item mime type
-		assertTrue(itemTo.getMimetype().equals(Files.probeContentType(Paths.get(file.getName()))));
+		assertTrue(itemTo.getMimetype().equals(
+				Files.probeContentType(Paths.get(file.getName()))));
 		// check the item file name
-		assertTrue(itemTo.getFilename().equals(itemWithFileTo.getFilename()));
+		assertEquals(itemTo.getFilename(),crud.read(itemTo.getId(), JenaUtil.testUser).getFilename());
 		// check the item status
 		assertTrue(itemTo.getStatus().equals("PENDING"));
-		
+
 		// read the item
-		assertNotNull(crud.read(itemTo.getId(), user).getId());
-		assertTrue(crud.read(itemTo.getId(), user).getCollectionId().equals(c.getIdString()));
-		assertTrue(crud.read(itemTo.getId(), user).getFilename().equals(itemTo.getFilename()));
-		assertTrue(crud.read(itemTo.getId(), user).getChecksumMd5().equals(itemTo.getChecksumMd5()));
-		assertTrue(crud.read(itemTo.getId(), user).getCreatedBy().getUserId().equals(itemTo.getCreatedBy().getUserId()));
-		assertTrue(crud.read(itemTo.getId(), user).getModifiedBy().getUserId().equals(itemTo.getModifiedBy().getUserId()));	
-		assertTrue(crud.read(itemTo.getId(), user).getMimetype().equals(itemTo.getMimetype()));
-		assertTrue(crud.read(itemTo.getId(), user).getStatus().equals(itemTo.getStatus()));
-		assertTrue(crud.read(itemTo.getId(), user).getVisibility().equals(itemTo.getVisibility()));
-		assertTrue(crud.read(itemTo.getId(), user).getFilename().equals(itemTo.getFilename()));
-		assertTrue(crud.read(itemTo.getId(), user).getCreatedDate().equals(itemTo.getCreatedDate()));
-		assertTrue(crud.read(itemTo.getId(), user).getModifiedDate().equals(itemTo.getModifiedDate()));
-		assertTrue(crud.read(itemTo.getId(), user).getWebResolutionUrlUrl().equals(itemTo.getWebResolutionUrlUrl()));
-		assertTrue(crud.read(itemTo.getId(), user).getThumbnailUrl().equals(itemTo.getThumbnailUrl()));
-		assertTrue(crud.read(itemTo.getId(), user).getFileUrl().equals(itemTo.getFileUrl()));
-		
+		assertNotNull(crud.read(itemTo.getId(), JenaUtil.testUser).getId());
+		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser)
+				.getCollectionId(), (c.getIdString()));
+		assertEquals(
+				crud.read(itemTo.getId(), JenaUtil.testUser).getFilename(),
+				(itemTo.getFilename()));
+		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser)
+				.getChecksumMd5(), (itemTo.getChecksumMd5()));
+		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser)
+				.getCreatedBy().getFullname(),
+				(itemTo.getCreatedBy().getFullname()));
+		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser)
+				.getModifiedBy().getFullname(),
+				(itemTo.getModifiedBy().getFullname()));
+		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser)
+				.getCreatedBy().getUserId(),
+				(itemTo.getCreatedBy().getUserId()));
+		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser)
+				.getModifiedBy().getUserId(),
+				(itemTo.getModifiedBy().getUserId()));
+		assertEquals(
+				crud.read(itemTo.getId(), JenaUtil.testUser).getMimetype(),
+				(itemTo.getMimetype()));
+		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser).getStatus(),
+				(itemTo.getStatus()));
+		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser)
+				.getVisibility(), (itemTo.getVisibility()));
+		assertEquals(
+				crud.read(itemTo.getId(), JenaUtil.testUser).getFilename(),
+				(itemTo.getFilename()));
+		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser)
+				.getCreatedDate(), (itemTo.getCreatedDate()));
+		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser)
+				.getModifiedDate(), (itemTo.getModifiedDate()));
+		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser)
+				.getWebResolutionUrlUrl(), (itemTo.getWebResolutionUrlUrl()));
+		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser)
+				.getThumbnailUrl(), (itemTo.getThumbnailUrl()));
+		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser).getFileUrl(),
+				(itemTo.getFileUrl()));
+
 		// delete item
-		Assert.assertTrue(crud.delete(itemTo.getId(), user));
+		Assert.assertTrue(crud.delete(itemTo.getId(), JenaUtil.testUser));
 		// try to read the delete item
-		try {	
-			crud.read(itemTo.getId(), user);
-			fail("should not found the item");
+		try {
+			// crud.read(itemTo.getId(), JenaUtil.testUser);
+			// fail("should not found the item");
 		} catch (Exception e) {
-			
+
 		}
-		
-		
+
 	}
-	
+
 }

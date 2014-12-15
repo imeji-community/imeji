@@ -50,7 +50,7 @@ public class CollectionProcess {
 		
 		if(u == null)
 		{
-			resp.setObject(RestProcessUtils.buildUnauthorizedResponse(""));
+			resp.setObject(RestProcessUtils.buildUnauthorizedResponse("Not logged in not allowed to create collection"));
 			resp.setStatus(Status.UNAUTHORIZED);
 		}
 		else

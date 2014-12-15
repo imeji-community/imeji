@@ -25,16 +25,11 @@ import util.JenaUtil;
 
 public class CollectionServiceTest {
 
-	private User user;
-	private String email = "testUser@imeji.org";
-	private String name = "imeji tester";
-	private String pwd = "test";
 	private CollectionImeji collection;
-	
+
 	@Before
 	public void setup() throws Exception {
 		JenaUtil.initJena();
-		initUser();
 		initCollection();
 	}
 
@@ -42,40 +37,27 @@ public class CollectionServiceTest {
 	public void tearDown() throws Exception {
 		JenaUtil.closeJena();
 	}
-	
-	public void initUser() {
-		try {
-			UserController c = new UserController(Imeji.adminUser);
-			user = new User();
-			user.setEmail(email);
-			user.setName(name);
-			user.setEncryptedPassword(StringHelper.convertToMD5(pwd));
-			user = c.create(user, USER_TYPE.DEFAULT);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-	}
-	
-	public void initCollection() throws Exception{
+
+	public void initCollection() throws Exception {
 		collection = ImejiFactory.newCollection();
 		collection.getMetadata().setTitle("test collection");
 		CollectionController controller = new CollectionController();
-		controller.create(collection, null, user);
+		controller.create(collection, null, JenaUtil.testUser);
 	}
-	
+
 	@Test
-	public void testCollectionCRUD(){
-		
+	public void testCollectionCRUD() {
+
 		CollectionService collcrud = new CollectionService();
 		CollectionTO collectionTO = null;
 		try {
-			collectionTO = collcrud.read(collection.getIdString(), user);
-		}catch (Exception e) {
+			collectionTO = collcrud.read(collection.getIdString(),
+					JenaUtil.testUser);
+		} catch (Exception e) {
 			fail("could not read collection");
 		}
 		assertNotNull(collectionTO.getId());
-		assertEquals("test collection",collectionTO.getTitle());
+		assertEquals("test collection", collectionTO.getTitle());
 	}
-	
+
 }

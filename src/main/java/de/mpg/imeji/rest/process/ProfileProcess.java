@@ -53,7 +53,7 @@ public class ProfileProcess {
 		User u = BasicAuthentication.auth(req);
 		
 		if(u == null){
-			resp.setObject(RestProcessUtils.buildUnauthorizedResponse(""));
+			resp.setObject(RestProcessUtils.buildUnauthorizedResponse("Not logged in not allowed to delete profile"));
 			resp.setStatus(Status.UNAUTHORIZED);			
 		}
 		else{

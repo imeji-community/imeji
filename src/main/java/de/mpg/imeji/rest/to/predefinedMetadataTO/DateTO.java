@@ -10,8 +10,8 @@ import de.mpg.imeji.rest.to.MetadataTO;
 		"date"
 		})
 public class DateTO extends MetadataTO{
-	
-    private String date;
+	private static final long serialVersionUID = -2728940704203315449L;
+	private String date;
  
 	public String getDate() {
 		return date;

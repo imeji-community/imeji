@@ -28,7 +28,7 @@ public class ItemProcess {
 		JSONResponse resp = new JSONResponse();
 		
 		if (u == null) {
-			resp.setObject(RestProcessUtils.buildUnauthorizedResponse(""));
+			resp.setObject(RestProcessUtils.buildUnauthorizedResponse("Not logged in not allowed to delete item"));
 			resp.setStatus(Status.UNAUTHORIZED);
 		}
 		else {

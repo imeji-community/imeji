@@ -13,6 +13,7 @@ import de.mpg.imeji.rest.to.MetadataTO;
 		"citation"	
 		})
 public class PublicationTO extends MetadataTO{
+	private static final long serialVersionUID = 5215159848857258368L;
 	private String format;
 	private String publication;
 	private String citation;

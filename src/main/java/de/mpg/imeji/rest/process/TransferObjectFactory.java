@@ -176,6 +176,7 @@ public class TransferObjectFactory {
 		//set collectionID
 		to.setCollectionId(CommonUtils.extractIDFromURI(vo.getCollection()));
 		to.setFilename(vo.getFilename());
+		to.setFilename("terst.jpg");
 		to.setMimetype(vo.getFiletype());
 		to.setChecksumMd5(vo.getChecksum());
 		to.setWebResolutionUrlUrl(vo.getWebImageUrl());
@@ -216,12 +217,10 @@ public class TransferObjectFactory {
 			}
 			mdTO.setLabels(ltos);
 
-			// if(md.getClass().isInstance(Text.class))
-			// {
-			// Text mdText = (Text) md;
-			//
-			//
-			// }
+//			if (md.getClass().isInstance(Text.class)) {
+//				Text mdText = (Text) md;
+//
+//			}
 			switch (md.getClass().getName()) {
 			case "de.mpg.imeji.logic.vo.predefinedMetadata.Text":
 				Text mdText = (Text) md;
@@ -247,7 +246,7 @@ public class TransferObjectFactory {
 				de.mpg.imeji.logic.vo.predefinedMetadata.Date mdDate = (de.mpg.imeji.logic.vo.predefinedMetadata.Date) md;
 				DateTO dt = new DateTO();
 				dt.setDate(mdDate.getDate());
-				mdTO.setValue(dt);				
+				mdTO.setValue(dt);
 				break;
 			case "de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation":
 				Geolocation mdGeo = (Geolocation) md;
@@ -262,14 +261,14 @@ public class TransferObjectFactory {
 				LicenseTO lto = new LicenseTO();
 				lto.setLicense(mdLicense.getLicense());
 				lto.setUrl(mdLicense.getExternalUri().toString());
-				mdTO.setValue(lto);			
+				mdTO.setValue(lto);
 				break;
 			case "de.mpg.imeji.logic.vo.predefinedMetadata.Link":
-				Link mdLink = (Link)md;
+				Link mdLink = (Link) md;
 				LinkTO llto = new LinkTO();
 				llto.setLink(mdLink.getLabel());
 				llto.setUrl(mdLink.getUri().toString());
-				mdTO.setValue(llto);	
+				mdTO.setValue(llto);
 				break;
 			case "de.mpg.imeji.logic.vo.predefinedMetadata.Publication":
 				Publication mdP = (Publication) md;

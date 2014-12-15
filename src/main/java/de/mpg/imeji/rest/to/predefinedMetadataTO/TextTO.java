@@ -10,6 +10,7 @@ import de.mpg.imeji.rest.to.MetadataTO;
 		"text"
 		})
 public class TextTO extends MetadataTO{
+	private static final long serialVersionUID = -3794700986989015104L;
 	private String text;
 
 	public String getText() {

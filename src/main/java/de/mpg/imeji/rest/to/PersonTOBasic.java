@@ -1,7 +1,11 @@
 package de.mpg.imeji.rest.to;
 
+import java.io.Serializable;
 
-public class PersonTOBasic {
+
+public class PersonTOBasic implements Serializable{
+	private static final long serialVersionUID = 306199590952021003L;
+
 	private String fullname;
 	
 	private String userId;

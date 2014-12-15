@@ -11,7 +11,7 @@ import de.mpg.imeji.rest.to.MetadataTO;
 		"url"
 		})
 public class LinkTO extends MetadataTO{
-	
+	private static final long serialVersionUID = -7245573760046279074L;
 	private String link;
 	private String url;
 

@@ -12,6 +12,7 @@ import de.mpg.imeji.rest.to.MetadataTO;
 		"latitude"
 		})
 public class GeolocationTO extends MetadataTO{
+	private static final long serialVersionUID = 8462024730005197786L;
 	private String name;
 	private double longitude;
 	private double latitude;

@@ -11,6 +11,7 @@ import de.mpg.imeji.rest.to.PersonTO;
 		"person",
 		})
 public class ConePersonTO extends MetadataTO{
+	private static final long serialVersionUID = -7123511172438572514L;
 	private PersonTO person;
 
 	public PersonTO getPerson() {

@@ -2,7 +2,6 @@ package de.mpg.imeji.rest.to;
 
 import java.io.Serializable;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;

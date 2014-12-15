@@ -11,7 +11,8 @@ import de.mpg.imeji.rest.to.MetadataTO;
 		"url"
 		})
 public class LicenseTO extends MetadataTO{
-	
+	private static final long serialVersionUID = 5493360284361097587L;
+
 	private String license;
 	
 	private String url;

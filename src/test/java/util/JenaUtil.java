@@ -12,9 +12,11 @@ import com.hp.hpl.jena.tdb.TDB;
 import com.hp.hpl.jena.tdb.TDBBackup;
 import com.hp.hpl.jena.tdb.TDBFactory;
 import com.hp.hpl.jena.tdb.TDBLoader;
+import com.hp.hpl.jena.tdb.base.block.FileMode;
 import com.hp.hpl.jena.tdb.base.file.Location;
 import com.hp.hpl.jena.tdb.mgt.TDBMgt;
 import com.hp.hpl.jena.tdb.mgt.TDBSystemInfo;
+import com.hp.hpl.jena.tdb.sys.SystemTDB;
 import com.hp.hpl.jena.tdb.sys.TDBInternal;
 import com.hp.hpl.jena.tdb.sys.TDBMaker;
 
@@ -82,32 +84,30 @@ public class JenaUtil {
 			new PropertyBean();
 			// Read tdb location
 			TDB_PATH = PropertyReader.getProperty("imeji.tdb.path");
-			logger.info("Initializing " + TDB_PATH);
 			// remove old Database
 			deleteTDBDirectory();
+			// Set Filemode: important to be able to delete TDB directory by
+			// closing Jena
+			SystemTDB.setFileMode(FileMode.direct);
 			// Create new tdb
 			Imeji.init(TDB_PATH);
 			initTestUser();
 		} catch (Exception e) {
-			// throw new
-			// RuntimeException("Error initialiting Jena for testing: ",
-			// e);
+			throw new RuntimeException("Error initialiting Jena for testing: ",
+					e);
 		}
 	}
 
 	public static void closeJena() throws InterruptedException {
-		logger.info("CLosing Jena...");
-		TDB.sync(Imeji.dataset);		
-		logger.error("Jena Sync done! ");
+		logger.info("Closing Jena:");
+		TDB.sync(Imeji.dataset);
+		logger.info("Jena Sync done! ");
 		TDBFactory.reset();
-		logger.error("Reset internal state, releasing all datasets done! ");
+		logger.info("Reset internal state, releasing all datasets done! ");
 		Imeji.dataset.close();
 		logger.info("Dataset closed!");
 		TDB.closedown();
-		logger.info("Release any and all system resources held by TDB done!");
-		TDBMaker.reset();
-		Location l = new Location(TDB_PATH);
-		TDBMaker.releaseLocation(l);
+		TDBMaker.releaseLocation(new Location(TDB_PATH));
 		logger.info("TDB Location released!");
 		deleteTDBDirectory();
 	}
@@ -148,6 +148,7 @@ public class JenaUtil {
 
 	private static void deleteTDBDirectory() {
 		File f = new File(TDB_PATH);
-		logger.info("TDB directory deleted: " + FileUtils.deleteQuietly(f));
+		if (f.exists())
+			logger.info("TDB directory deleted: " + FileUtils.deleteQuietly(f));
 	}
 }

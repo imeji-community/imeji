@@ -216,7 +216,7 @@ public class TransferObjectFactory {
                 }
 				mdTO.setLabels(ltos);
 			}
-
+		
 			// if(md.getClass().isInstance(Text.class))
 			// {
 			// Text mdText = (Text) md;

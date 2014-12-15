@@ -75,33 +75,36 @@ public class RestProcessUtils {
 				.type(MediaType.APPLICATION_JSON).build();
 	}
 
-	public static JSONException buildBadRequestResponse() {
+	public static JSONException buildBadRequestResponse(String e) {
 		JSONException ex = new JSONException();
 		HTTPError error = new HTTPError();
 		error.setCode("1400");
 		error.setTitle("Validation failed");
 		error.setMessage("validation-failed-message");
+		error.setExceptionReport(e);
 		ex.setError(error);
 		return ex;
 
 	}
 
-	public static Object buildUnauthorizedResponse() {
+	public static Object buildUnauthorizedResponse(String e) {
 		JSONException ex = new JSONException();
 		HTTPError error = new HTTPError();
 		error.setCode("1401");
 		error.setTitle("Not authenticated");
 		error.setMessage("invalid-account-message");
+		error.setExceptionReport(e);
 		ex.setError(error);
 		return ex;
 	}
 
-	public static Object buildNotAllowedResponse() {
+	public static Object buildNotAllowedResponse(String e) {
 		JSONException ex = new JSONException();
 		HTTPError error = new HTTPError();
 		error.setCode("1403");
 		error.setTitle("Forbidden");
 		error.setMessage("authorization-failed-message");
+		error.setExceptionReport(e);
 		ex.setError(error);
 		return ex;
 		

@@ -12,8 +12,8 @@ import de.mpg.j2j.annotations.j2jDataType;
 		"date"
 		})
 public class DateTO extends MetadataTO{
-	
-    private String date;
+	private static final long serialVersionUID = -2728940704203315449L;
+	private String date;
  
 	public String getDate() {
 		return date;

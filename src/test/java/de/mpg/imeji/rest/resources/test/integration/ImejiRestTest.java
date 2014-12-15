@@ -40,7 +40,6 @@ public class ImejiRestTest extends JerseyTest{
     protected static User defaultUser = null;
 
 
-
     @Override
     protected Application configure() {
         return new MyApplication();
@@ -60,7 +59,7 @@ public class ImejiRestTest extends JerseyTest{
     }
 
     @AfterClass
-    public static void shutdown() throws IOException, URISyntaxException {
+    public static void shutdown() throws IOException, URISyntaxException, InterruptedException {
         JenaUtil.closeJena();
 
     }

@@ -13,7 +13,8 @@ import de.mpg.j2j.annotations.j2jDataType;
 		"url"
 		})
 public class LicenseTO extends MetadataTO{
-	
+	private static final long serialVersionUID = 5493360284361097587L;
+
 	private String license;
 	
 	private String url;

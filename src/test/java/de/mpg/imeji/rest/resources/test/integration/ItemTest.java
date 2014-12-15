@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 
-import static de.mpg.imeji.rest.resources.test.TestUtils.*;
+import static de.mpg.imeji.rest.resources.test.TestUtils.getStringFromPath;
 
 /**
  * Created by vlad on 09.12.14.

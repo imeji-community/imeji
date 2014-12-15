@@ -22,7 +22,7 @@ public class JSONDeserializationTest {
 
     @Test
     public void testBuildItemTOFromJSON() throws IOException {
-        String jsonStringIn = getStringFromPath("src/test/resources/rest/editItemResponse.json");
+        String jsonStringIn = getStringFromPath("src/test/resources/rest/itemFull.json");
         ItemTO item = (ItemTO)RestProcessUtils.buildTOFromJSON(jsonStringIn, ItemTO.class);
         ObjectMapper mapper = new ObjectMapper();
         //mapper.enable(SerializationFeature.INDENT_OUTPUT);

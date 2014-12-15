@@ -15,6 +15,7 @@ import de.mpg.j2j.annotations.j2jDataType;
 		"citation"	
 		})
 public class PublicationTO extends MetadataTO{
+	private static final long serialVersionUID = 5215159848857258368L;
 	private String format;
 	private String publication;
 	private String citation;

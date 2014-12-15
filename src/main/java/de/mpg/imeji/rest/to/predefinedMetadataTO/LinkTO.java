@@ -13,7 +13,7 @@ import de.mpg.j2j.annotations.j2jDataType;
 		"url"
 		})
 public class LinkTO extends MetadataTO{
-	
+	private static final long serialVersionUID = -7245573760046279074L;
 	private String link;
 	private String url;
 

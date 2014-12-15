@@ -14,6 +14,7 @@ import de.mpg.j2j.annotations.j2jDataType;
 		"latitude"
 		})
 public class GeolocationTO extends MetadataTO{
+	private static final long serialVersionUID = 8462024730005197786L;
 	private String name;
 	private double longitude;
 	private double latitude;

@@ -1,7 +1,5 @@
-package de.mpg.imeji.rest.test;
+package de.mpg.imeji.rest.resources.test.integration;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.io.ByteStreams;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.controller.UserController;
@@ -16,16 +14,11 @@ import org.glassfish.jersey.test.spi.TestContainerException;
 import org.glassfish.jersey.test.spi.TestContainerFactory;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.FixMethodOrder;
-import org.junit.runners.MethodSorters;
 import util.JenaUtil;
 
 import javax.ws.rs.core.Application;
-import javax.ws.rs.core.Response;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URISyntaxException;
-import java.util.Map;
 
 /**
  * Created by vlad on 09.12.14.
@@ -45,6 +38,8 @@ public class ImejiRestTest extends JerseyTest{
     public static HttpAuthenticationFeature authAsUser = HttpAuthenticationFeature.basic(userEmail, userPwd);
     protected static User adminUser = null;
     protected static User defaultUser = null;
+
+
 
     @Override
     protected Application configure() {
@@ -97,8 +92,5 @@ public class ImejiRestTest extends JerseyTest{
     }
 
 
-    public static Map<String, Object> jsonToPOJO(Response response) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(ByteStreams.toByteArray(response.readEntity(InputStream.class)), Map.class);
-    }
+
 }

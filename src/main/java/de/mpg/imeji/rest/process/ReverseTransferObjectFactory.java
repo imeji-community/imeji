@@ -80,8 +80,6 @@ public class ReverseTransferObjectFactory {
 	
 		for(MetadataSetTO mdTO : toMds){
 			Metadata md = null;
-			md.setPos(mdTO.getPosition());
-			md.setStatement(mdTO.getStatementUri());
 			String typeUri = mdTO.getTypeUri().toString();
 			switch(typeUri){
 			case "http://imeji.org/terms/metadata#text":
@@ -142,6 +140,8 @@ public class ReverseTransferObjectFactory {
 				md = mdLink;
 				break;
 			}
+			md.setPos(mdTO.getPosition());
+			md.setStatement(mdTO.getStatementUri());
 			voMds.getMetadata().add(md);
 			vo.getMetadataSets().add(voMds);
 		}

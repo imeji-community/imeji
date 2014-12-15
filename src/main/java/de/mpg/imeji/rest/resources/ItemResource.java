@@ -65,6 +65,32 @@ public class ItemResource implements ImejiResource {
 				file, json, filename));
 	}
 
+	@PUT
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@ApiOperation(value = "Update an item", notes = "Update an already existed item. File can be defined either as (by order of priority):"
+			+ "<br/> 1) form parameter <br/> 2) json parameter: \"fetchUrl\" : \"http://example.org/myFile.png\" (myFile.png will be uploaded in imeji) "
+			+ "<br/> 3) json parameter \"referenceUrl\" : \"http://example.org/myFile.png\" (myFile.png will be only referenced in imeji, i.e. not uploaded)"
+			+ "<br/><br/>"
+			+ "Json example:"
+			+ "<br/>{"
+			+ "<br/>\"collectionId\" : \"abc123\","
+			+ "<br/>\"fetchUrl\" : \"http://example.org/myFile.png\","
+			+ "<br/>\"referenceUrl\" : \"http://example.org/myFile.png\","
+			+ "<br/>\"metadata\" : []"
+			+ "<br/>}"
+			+ "<br/><br/>"
+			+ "The metadata parameter allows to define the metadata of item during the creation of the item. To get an example of how to do it, please try the get item method")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response update(@Context HttpServletRequest req,
+						   @FormDataParam("file") InputStream file,
+						   @ApiParam(required = true) @FormDataParam("json") String json,
+						   @FormDataParam("file") FormDataContentDisposition fileDetail) {
+		String filename = fileDetail != null ? fileDetail.getFileName() : null;
+		return RestProcessUtils.buildJSONResponse(ItemProcess.udpateItem(req,
+				file, json, filename));
+	}
+
+
 	public Response create(HttpServletRequest req) {
 		return null;
 	}

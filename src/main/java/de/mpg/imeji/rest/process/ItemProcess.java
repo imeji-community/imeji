@@ -8,10 +8,9 @@ import java.io.InputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response.Status;
 
+import com.google.common.base.Strings;
 import org.apache.commons.io.IOUtils;
 
-import de.mpg.imeji.logic.auth.Authentication;
-import de.mpg.imeji.logic.auth.AuthenticationFactory;
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.api.ItemService;
@@ -87,7 +86,7 @@ public class ItemProcess {
 		
 		// Parse json into to
 		ItemWithFileTO to = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(
-				req, ItemWithFileTO.class, json);
+				json, ItemWithFileTO.class);
 
 		// set file in to (if provided)
 		if (file != null) {
@@ -113,6 +112,48 @@ public class ItemProcess {
 			resp.setObject(RestProcessUtils.buildBadRequestResponse());
 			resp.setStatus(Status.BAD_REQUEST);
 
+		} catch (NotAllowedError e) {
+			if (u == null) {
+				resp.setObject(RestProcessUtils.buildUnauthorizedResponse());
+				resp.setStatus(Status.UNAUTHORIZED);
+			} else {
+				resp.setObject(RestProcessUtils.buildNotAllowedResponse());
+				resp.setStatus(Status.FORBIDDEN);
+			}
+		} catch (Exception e) {
+			resp.setStatus(Status.INTERNAL_SERVER_ERROR);
+		}
+
+		return resp;
+	}
+
+	public static JSONResponse udpateItem(HttpServletRequest req, InputStream file, String json, String filename) {
+
+		User u = BasicAuthentication.auth(req);
+
+		JSONResponse resp = new JSONResponse();
+		ItemService service = new ItemService();
+
+		try {
+			//item, no file
+			if (file == null || Strings.isNullOrEmpty(filename)) {
+				ItemTO to = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(
+						json, ItemTO.class);
+				resp.setObject(service.update(to, u));
+			//item with file file
+			} else {
+				ItemWithFileTO to = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(
+						json, ItemWithFileTO.class);
+				File tmpFile = File.createTempFile("imejiAPI", null);
+				IOUtils.copy(file, new FileOutputStream(tmpFile));
+				to.setFile(tmpFile);
+				to.setFilename(filename);
+				resp.setObject(service.update(to, tmpFile, u));
+			}
+			resp.setStatus(Status.OK);
+		} catch (NotFoundException e) {
+			resp.setObject(RestProcessUtils.buildBadRequestResponse());
+			resp.setStatus(Status.BAD_REQUEST);
 		} catch (NotAllowedError e) {
 			if (u == null) {
 				resp.setObject(RestProcessUtils.buildUnauthorizedResponse());

@@ -11,9 +11,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
+import com.fasterxml.jackson.databind.SerializationFeature;
 import de.mpg.imeji.rest.to.HTTPError;
 import de.mpg.imeji.rest.to.JSONException;
 import de.mpg.imeji.rest.to.JSONResponse;
+import org.apache.poi.ss.formula.functions.T;
 
 import java.net.URI;
 
@@ -21,12 +23,11 @@ public class RestProcessUtils {
 	/**
 	 * Parse a json file and construct a new Object of type T
 	 * 
-	 * @param req
-	 * @param type
 	 * @param json
+	 * @param type
 	 * @return
 	 */
-	public static <T> Object buildTOFromJSON(HttpServletRequest req, Class<T> type, String json) {
+	public static <T> Object buildTOFromJSON(String json, Class<T> type) {
 		ObjectReader reader = new ObjectMapper().reader().withType(type);
 		try {
 			return reader.readValue(json);
@@ -40,6 +41,19 @@ public class RestProcessUtils {
 		ObjectReader reader = new ObjectMapper().reader().withType(type);
 		try {
 			return reader.readValue(req.getInputStream());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public static String buildJSONFromTO(Object obj) {
+		ObjectWriter ow = new ObjectMapper().writer()
+				.with(SerializationFeature.INDENT_OUTPUT)
+				//.without(SerializationFeature.WRITE_NULL_MAP_VALUES)
+				;
+		try {
+			return ow.writeValueAsString(obj);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -1,11 +1,15 @@
 package de.mpg.imeji.rest.to;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+
+import static com.fasterxml.jackson.annotation.JsonInclude.*;
 
 @XmlRootElement
 @XmlType(propOrder = {	 
@@ -17,6 +21,7 @@ import javax.xml.bind.annotation.XmlType;
 		"city",
 		"country"
 		})
+@JsonInclude(Include.NON_NULL)
 public class OrganizationTO implements Serializable{
 
 

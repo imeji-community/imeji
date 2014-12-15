@@ -73,7 +73,7 @@ public class CollectionProcess {
 
 	}
 	
-	public static JSONResponse releaseCollection(HttpServletRequest req, String id){
+	/*public static JSONResponse releaseCollection(HttpServletRequest req, String id){
 		JSONResponse resp = new JSONResponse();
 		resp.setStatus(Status.OK);
 		User u = getUser(req);
@@ -101,7 +101,7 @@ public class CollectionProcess {
 				e.printStackTrace();
 			}	
 		return resp;
-	}
+	}*/
 
 
 

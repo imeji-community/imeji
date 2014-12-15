@@ -1,5 +1,6 @@
-package de.mpg.imeji.rest.test;
+package de.mpg.imeji.rest.resources.test.integration;
 
+import de.mpg.imeji.rest.resources.test.TestUtils;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
@@ -51,7 +52,7 @@ public class CollectionTest extends ImejiRestTest {
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.post(Entity.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
 		assertEquals(response.getStatus(), Status.CREATED.getStatusCode());
-		Map<String, Object> collData = jsonToPOJO(response);
+		Map<String, Object> collData = TestUtils.jsonToPOJO(response);
 		assertNotNull("Created collection is null", collData);
 		collId = (String)collData.get("id");
 		assertThat("Empty collection id", collId, not(isEmptyOrNullString()));
@@ -72,7 +73,7 @@ public class CollectionTest extends ImejiRestTest {
 				.post(Entity.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
 
 		assertEquals(response.getStatus(), Status.CREATED.getStatusCode());
-		Map<String, Object> collData = jsonToPOJO(response);
+		Map<String, Object> collData = TestUtils.jsonToPOJO(response);
 		assertNotNull("Created collection is null", collData);
 		collId = (String)collData.get("id");
 		assertThat("Empty collection id", collId, not(isEmptyOrNullString()));
@@ -92,7 +93,7 @@ public class CollectionTest extends ImejiRestTest {
 				.post(Entity.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
 
 		assertEquals(response.getStatus(), Status.CREATED.getStatusCode());
-		Map<String, Object> collData = jsonToPOJO(response);
+		Map<String, Object> collData = TestUtils.jsonToPOJO(response);
 		assertNotNull("Created collection is null", collData);
 		collId = (String)collData.get("id");
 		assertThat("Empty collection id", collId, not(isEmptyOrNullString()));

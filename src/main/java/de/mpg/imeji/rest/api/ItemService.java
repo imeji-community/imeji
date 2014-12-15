@@ -1,5 +1,6 @@
 package de.mpg.imeji.rest.api;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +53,6 @@ public class ItemService implements API<ItemTO> {
 							downloadFile((ItemWithFileTO) to), u);
 				}
 
-
 			// transfer item into ItemTO
 			ItemTO itemTO = new ItemTO();
 			TransferObjectFactory.transferItem(item, itemTO);
@@ -73,20 +73,44 @@ public class ItemService implements API<ItemTO> {
 	}
 
 	@Override
-	public ItemTO update(ItemTO o, User u) {
+	public ItemTO update(ItemTO to, User u) throws Exception {
 		ItemController controller = new ItemController();
-		try {
-			Item item = null;// TODO:
-								// ReverseTransferObjectFactory.transferItem(item,
-								// o);
-			item = controller.update(item, u);
-			TransferObjectFactory.transferItem(item, o);
-			return o;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+		Item item = new Item();
+		ReverseTransferObjectFactory.transferItem(to, item);
+		item = controller.update(item, u);
+		TransferObjectFactory.transferItem(item, to);
+		return to;
+	}
 
+	public ItemTO update(ItemWithFileTO to, File f, User u) throws Exception {
+
+		return null;
+		//TODO: Implement ItemWithFileTO
+		/*ItemController controller = new ItemController();
+
+
+			// get filename
+			String filename = getFilename(to);
+
+			// transfer TO into item
+			Item item = new Item();
+			ReverseTransferObjectFactory.transferItem(to, item);
+
+			// Create Item with File
+
+			if (to.getFile() != null) {
+				// If TO has attribute File, then upload it
+				//controller.updateFile(item, File file, u);
+			} else if (getExternalFileUrl((ItemWithFileTO) to) != null) {
+				// If no file, but either a fetchUrl or a referenceUrl
+				//controller.updateWithExternalFile();
+			}
+
+
+			// transfer item into ItemTO
+			ItemTO itemTO = new ItemTO();
+			TransferObjectFactory.transferItem(item, itemTO);
+			return itemTO;*/
 	}
 
 	@Override

@@ -4,9 +4,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import de.mpg.imeji.rest.to.MetadataTO;
+import de.mpg.j2j.annotations.j2jDataType;
 
 @XmlRootElement
-@XmlType (propOrder = {	 
+@j2jDataType("http://imeji.org/terms/metadata#text")
+@XmlType (propOrder = {
 		"text"
 		})
 public class TextTO extends MetadataTO{
@@ -21,7 +23,5 @@ public class TextTO extends MetadataTO{
 	}
 
 
-	
-	
 
 }

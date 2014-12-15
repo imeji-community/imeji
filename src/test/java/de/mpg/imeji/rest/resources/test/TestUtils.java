@@ -1,4 +1,4 @@
-package de.mpg.imeji.rest.test;
+package de.mpg.imeji.rest.resources.test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.ByteStreams;

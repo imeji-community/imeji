@@ -1,5 +1,7 @@
 package de.mpg.imeji.rest.to;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
@@ -11,6 +13,7 @@ import java.util.List;
 		"versionOf",
 		"profile"
 })
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CollectionTO extends ContainerTO implements Serializable{
 
 	private static final long serialVersionUID = 7039960402363523772L;

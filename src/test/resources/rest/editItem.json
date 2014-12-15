@@ -1,7 +1,7 @@
 {
   "id": "TIi0T8BvG9zmAq5l",
-  "filename": "2011-08-12 15.10.42.jpg",
-  "mimetype": "image/jpeg",
+  "filename": "test.png",
+  "mimetype": "image/png",
   "metadata": [
     {
       "value": {
@@ -21,7 +21,7 @@
     },
     {
       "value": {
-        "number": 12345678
+        "number": 1.2345678E7
       },
       "statementUri": "http://dev-faces.mpdl.mpg.de/imeji/statement/vUQy8uW4yf7fNa2y",
       "typeUri": "http://imeji.org/terms/metadata#number"

@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import util.JenaUtil;
@@ -17,7 +18,6 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
-
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -67,23 +67,31 @@ public class ItemServiceTest {
 			Exception {
 		Item item = ImejiFactory.newItem(c);
 		item.setFilename("test.jpg");
+		System.out.println(item);
 
 		ItemService crud = new ItemService();
 		// create item
 		try {
-			itemTo = crud.create(itemWithFileTo, null);
+			crud.create(itemWithFileTo, null);
 			fail("should not allowed to create item");
 		} catch (NotAllowedError e) {
 			// its everything fine
 		}
+		System.out.println(itemTo);
 		itemTo = crud.create(itemWithFileTo, JenaUtil.testUser);
 		// check the item be created and has new id
 		assertNotNull(itemTo.getId());
 		// check the default visibility of item = private
+		System.out.println(itemTo.getId());
 		assertTrue(itemTo.getVisibility().equals("PRIVATE"));
 		// check the item mime type
-		assertTrue(itemTo.getMimetype().equals(
-				Files.probeContentType(Paths.get(file.getName()))));
+		System.out.println(itemTo.getMimetype());
+		System.out.println(Files.probeContentType(Paths.get(file.getName())));
+		
+		assertEquals(itemTo.getMimetype(),
+				Files.probeContentType(Paths.get(file.getName())));
+		System.out.println(itemTo.getMimetype());
+		System.out.println(Files.probeContentType(Paths.get(file.getName())));
 		// check the item file name
 		assertEquals(itemTo.getFilename(),crud.read(itemTo.getId(), JenaUtil.testUser).getFilename());
 		// check the item status

@@ -90,15 +90,19 @@ public class ItemProcess {
 		User u = BasicAuthentication.auth(req);
 		
 		// Parse json into to
-		ItemWithFileTO to = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(req, ItemWithFileTO.class);
+		ItemWithFileTO to = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(json, ItemWithFileTO.class);
 		// set file in to (if provided)
 		
+		
 		if( "".equals(to.getFilename())){
-			resp.setObject(RestProcessUtils.buildBadRequestResponse(CommonUtils.FILENAME_NOT_EMPTY));
+			resp.setObject(RestProcessUtils.buildBadRequestResponse(CommonUtils.FILENAME_RENAME_EMPTY));
 			resp.setStatus(Status.BAD_REQUEST);		
 		}
+		else if(!"".equals(FilenameUtils.getExtension(to.getFilename())) && !FilenameUtils.getExtension(to.getFilename()).equals(FilenameUtils.getExtension(origName))){
+			resp.setObject(RestProcessUtils.buildBadRequestResponse(CommonUtils.FILENAME_RENAME_INVALID_SUFFIX));
+			resp.setStatus(Status.BAD_REQUEST);	
+		}
 		else{
-		
 			if (file != null) {
 				try {
 					File tmp = File.createTempFile("imejiAPI", null);
@@ -136,6 +140,7 @@ public class ItemProcess {
 			} catch (Exception e) {
 				resp.setStatus(Status.INTERNAL_SERVER_ERROR);
 			}
+			
 		}
 
 		return resp;

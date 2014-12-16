@@ -9,7 +9,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.io.FilenameUtils;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import com.google.common.base.Strings;
+
 import org.apache.commons.io.IOUtils;
 
 import de.mpg.imeji.logic.auth.Authentication;
@@ -85,51 +89,71 @@ public class ItemProcess {
 	}
 
 	public static JSONResponse createItem(HttpServletRequest req, InputStream file, String json, String origName) {
+		// / write response
+		JSONResponse resp = new JSONResponse();
 		
 		// Load User (if provided)
 		User u = BasicAuthentication.auth(req);
 		
 		// Parse json into to
-		ItemWithFileTO to = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(req, ItemWithFileTO.class);
+		ItemWithFileTO to =null;
+		try {
+			to = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(json, ItemWithFileTO.class);
+		} catch (Exception e) {
+			resp.setObject(RestProcessUtils.buildBadRequestResponse(CommonUtils.JSON_Invalid));
+			resp.setStatus(Status.BAD_REQUEST);
+			return resp;
+		}
 		// set file in to (if provided)
 		
-		if (file != null) {
-			try {
-				File tmp = File.createTempFile("imejiAPI", null);
-				IOUtils.copy(file, new FileOutputStream(tmp));
-				to.setFile(tmp);
-				if(to.getFilename() == null || "".equals(to.getFilename()))
-					to.setFilename(origName);
-				else
-					to.setFilename(to.getFilename() + "." + FilenameUtils.getExtension(origName));
-					
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-
-		// create item with the file
-		ItemService service = new ItemService();
-
-		// / write response
-		JSONResponse resp = new JSONResponse();
-		try {
-			resp.setObject(service.create(to, u));
-			resp.setStatus(Status.CREATED);
-		} catch (NotFoundException e) {
-			resp.setObject(RestProcessUtils.buildBadRequestResponse(e.getLocalizedMessage()));
+		
+		if( "".equals(to.getFilename())){
+			resp.setObject(RestProcessUtils.buildBadRequestResponse(CommonUtils.FILENAME_RENAME_EMPTY));
 			resp.setStatus(Status.BAD_REQUEST);
-
-		} catch (NotAllowedError e) {
-			if (u == null) {
-				resp.setObject(RestProcessUtils.buildUnauthorizedResponse(e.getLocalizedMessage()));
-				resp.setStatus(Status.UNAUTHORIZED);
-			} else {
-				resp.setObject(RestProcessUtils.buildNotAllowedResponse(e.getLocalizedMessage()));
-				resp.setStatus(Status.FORBIDDEN);
+		}
+		else if(!"".equals(FilenameUtils.getExtension(to.getFilename())) && !FilenameUtils.getExtension(to.getFilename()).equals(FilenameUtils.getExtension(origName))){
+			resp.setObject(RestProcessUtils.buildBadRequestResponse(CommonUtils.FILENAME_RENAME_INVALID_SUFFIX));
+			resp.setStatus(Status.BAD_REQUEST);	
+		}
+		else{
+			if (file != null) {
+				try {
+					File tmp = File.createTempFile("imejiAPI", null);
+					IOUtils.copy(file, new FileOutputStream(tmp));
+					to.setFile(tmp);
+					if(to.getFilename() == null)
+						to.setFilename(origName);
+					else
+						to.setFilename(to.getFilename() + "." + FilenameUtils.getExtension(origName));
+						
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
-		} catch (Exception e) {
-			resp.setStatus(Status.INTERNAL_SERVER_ERROR);
+	
+			// create item with the file
+			ItemService service = new ItemService();
+	
+
+			try {
+				resp.setObject(service.create(to, u));
+				resp.setStatus(Status.CREATED);
+			} catch (NotFoundException e) {
+				resp.setObject(RestProcessUtils.buildBadRequestResponse(e.getLocalizedMessage()));
+				resp.setStatus(Status.BAD_REQUEST);
+	
+			} catch (NotAllowedError e) {
+				if (u == null) {
+					resp.setObject(RestProcessUtils.buildUnauthorizedResponse(e.getLocalizedMessage()));
+					resp.setStatus(Status.UNAUTHORIZED);
+				} else {
+					resp.setObject(RestProcessUtils.buildNotAllowedResponse(e.getLocalizedMessage()));
+					resp.setStatus(Status.FORBIDDEN);
+				}
+			} catch (Exception e) {
+				resp.setStatus(Status.INTERNAL_SERVER_ERROR);
+			}
+			
 		}
 
 		return resp;

@@ -44,7 +44,7 @@ public class CollectionServiceTest {
 	private static CollectionImeji collection;
 	private CollectionService collService = new CollectionService();
 	private static final String TEST_IMAGE = "./src/test/resources/storage/test.png";
-	
+
 	@BeforeClass
 	public static void setup() throws Exception {
 		JenaUtil.initJena();
@@ -55,56 +55,52 @@ public class CollectionServiceTest {
 	public static void tearDown() throws Exception {
 		JenaUtil.closeJena();
 	}
-	
 
-	
-	public static void initCollection() throws Exception{
+	public static void initCollection() throws Exception {
 		collection = ImejiFactory.newCollection();
 		collection.getMetadata().setTitle("test collection");
 		CollectionController controller = new CollectionController();
 		controller.create(collection, null, JenaUtil.testUser);
 	}
-	
-//	@Test
-//	public void test_readCollection() throws Exception{
-//				
-//		CollectionTO collectionTO = null;
-//		try {
-//			collectionTO = collService.read(collection.getIdString(), JenaUtil.testUser);
-//		}catch (Exception e) {
-//			fail("could not read collection");
-//		}
-//		assertNotNull(collectionTO.getId());
-//		assertEquals("test collection",collectionTO.getTitle());
-//	
-//		try{
-//			collService.release(collection.getIdString(), JenaUtil.testUser);
-//			fail("should not be allowed to release collection");
-//		}catch(Exception e){
-//			
-//		}
-//		File file = null;
-//		file = new File(TEST_IMAGE);
-//		ItemService crud = new ItemService();
-//		ItemWithFileTO itemWithFileTo;
-//		itemWithFileTo = new ItemWithFileTO();
-//		itemWithFileTo.setFilename("testname2");
-//		itemWithFileTo.setFile(file);
-//		itemWithFileTo.setCollectionId(collection.getIdString());
-//		try {
-//			itemTo = crud.create(itemWithFileTo, JenaUtil.testUser);
-//		} catch (Exception e1) {
-//			e1.printStackTrace();
-//		}
-//
-//		try {
-//			collService.release(collection.getIdString(), JenaUtil.testUser);
-//		} catch (NotSupportedException | NotAllowedError
-//				| NotFoundException e) {
-//			e.printStackTrace();
-//		}		
-//
-//		
-//	
-//	}
+
+	@Test
+	public void test_readCollection() throws Exception {
+
+		CollectionTO collectionTO = null;
+		try {
+			collectionTO = collService.read(collection.getIdString(),
+					JenaUtil.testUser);
+		} catch (Exception e) {
+			fail("could not read collection");
+		}
+		assertNotNull(collectionTO.getId());
+		assertEquals("test collection", collectionTO.getTitle());
+
+		try {
+			collService.release(collection.getIdString(), JenaUtil.testUser);
+			fail("should not be allowed to release collection");
+		} catch (Exception e) {
+
+		}
+		File file = null;
+		file = new File(TEST_IMAGE);
+		ItemService crud = new ItemService();
+		ItemWithFileTO itemWithFileTo;
+		itemWithFileTo = new ItemWithFileTO();
+		itemWithFileTo.setFilename("testname2");
+		itemWithFileTo.setFile(file);
+		itemWithFileTo.setCollectionId(collection.getIdString());
+		try {
+			itemTo = crud.create(itemWithFileTo, JenaUtil.testUser);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+
+		try {
+			collService.release(collection.getIdString(), JenaUtil.testUser);
+		} catch (NotSupportedException | NotAllowedError | NotFoundException e) {
+			e.printStackTrace();
+		}
+
+	}
 }

@@ -1,10 +1,18 @@
 package de.mpg.imeji.rest.process;
 
 import java.net.URI;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+
 public class CommonUtils {
+	
+	public static final String FILENAME_RENAME_EMPTY = "type a new filename if you want to rename it";
+	public static final String FILENAME_RENAME_INVALID_SUFFIX = "invalid suffix";
+	public static final String JSON_Invalid ="invalid json input";
+	
+	
 	public static String formatDate(Date d) {
 		String output = "";
 		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");

@@ -70,7 +70,8 @@ public class ReverseTransferObjectFactory {
 	public static void transferItem(ItemTO to, Item vo){
 
 		//only fields which can be transferred for TO to VO!!!
-		vo.setId(ObjectHelper.getURI(Item.class, to.getId()));
+		if (!isNullOrEmpty(to.getId()))
+			vo.setId(ObjectHelper.getURI(Item.class, to.getId()));
 
 		if (!isNullOrEmpty(to.getCollectionId()))
 			vo.setCollection(ObjectHelper.getURI(CollectionImeji.class, to.getCollectionId()));

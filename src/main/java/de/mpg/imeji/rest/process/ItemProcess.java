@@ -83,6 +83,8 @@ public class ItemProcess {
 	}
 
 	public static JSONResponse createItem(HttpServletRequest req, InputStream file, String json, String origName) {
+		// / write response
+		JSONResponse resp = new JSONResponse();
 		
 		// Load User (if provided)
 		User u = BasicAuthentication.auth(req);
@@ -91,43 +93,49 @@ public class ItemProcess {
 		ItemWithFileTO to = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(req, ItemWithFileTO.class);
 		// set file in to (if provided)
 		
-		if (file != null) {
-			try {
-				File tmp = File.createTempFile("imejiAPI", null);
-				IOUtils.copy(file, new FileOutputStream(tmp));
-				to.setFile(tmp);
-				if(to.getFilename() == null || "".equals(to.getFilename()))
-					to.setFilename(origName);
-				else
-					to.setFilename(to.getFilename() + "." + FilenameUtils.getExtension(origName));
-					
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		if( "".equals(to.getFilename())){
+			resp.setObject(RestProcessUtils.buildBadRequestResponse(CommonUtils.FILENAME_NOT_EMPTY));
+			resp.setStatus(Status.BAD_REQUEST);		
 		}
-
-		// create item with the file
-		ItemService service = new ItemService();
-
-		// / write response
-		JSONResponse resp = new JSONResponse();
-		try {
-			resp.setObject(service.create(to, u));
-			resp.setStatus(Status.CREATED);
-		} catch (NotFoundException e) {
-			resp.setObject(RestProcessUtils.buildBadRequestResponse(e.getLocalizedMessage()));
-			resp.setStatus(Status.BAD_REQUEST);
-
-		} catch (NotAllowedError e) {
-			if (u == null) {
-				resp.setObject(RestProcessUtils.buildUnauthorizedResponse(e.getLocalizedMessage()));
-				resp.setStatus(Status.UNAUTHORIZED);
-			} else {
-				resp.setObject(RestProcessUtils.buildNotAllowedResponse(e.getLocalizedMessage()));
-				resp.setStatus(Status.FORBIDDEN);
+		else{
+		
+			if (file != null) {
+				try {
+					File tmp = File.createTempFile("imejiAPI", null);
+					IOUtils.copy(file, new FileOutputStream(tmp));
+					to.setFile(tmp);
+					if(to.getFilename() == null)
+						to.setFilename(origName);
+					else
+						to.setFilename(to.getFilename() + "." + FilenameUtils.getExtension(origName));
+						
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
-		} catch (Exception e) {
-			resp.setStatus(Status.INTERNAL_SERVER_ERROR);
+	
+			// create item with the file
+			ItemService service = new ItemService();
+	
+
+			try {
+				resp.setObject(service.create(to, u));
+				resp.setStatus(Status.CREATED);
+			} catch (NotFoundException e) {
+				resp.setObject(RestProcessUtils.buildBadRequestResponse(e.getLocalizedMessage()));
+				resp.setStatus(Status.BAD_REQUEST);
+	
+			} catch (NotAllowedError e) {
+				if (u == null) {
+					resp.setObject(RestProcessUtils.buildUnauthorizedResponse(e.getLocalizedMessage()));
+					resp.setStatus(Status.UNAUTHORIZED);
+				} else {
+					resp.setObject(RestProcessUtils.buildNotAllowedResponse(e.getLocalizedMessage()));
+					resp.setStatus(Status.FORBIDDEN);
+				}
+			} catch (Exception e) {
+				resp.setStatus(Status.INTERNAL_SERVER_ERROR);
+			}
 		}
 
 		return resp;

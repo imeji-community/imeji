@@ -22,6 +22,8 @@ import de.mpg.imeji.rest.to.ItemWithFileTO;
 import de.mpg.imeji.rest.to.JSONResponse;
 import de.mpg.j2j.exceptions.NotFoundException;
 
+import static com.google.common.base.Strings.*;
+
 public class ItemProcess {
 	
 	public static JSONResponse deleteItem(HttpServletRequest req, String id) {
@@ -134,7 +136,7 @@ public class ItemProcess {
 	}
 
 
-	public static JSONResponse udpateItem(HttpServletRequest req, InputStream file, String json, String filename) {
+	public static JSONResponse udpateItem(HttpServletRequest req, String id, InputStream file, String json, String filename) {
 
 		User u = BasicAuthentication.auth(req);
 
@@ -143,19 +145,25 @@ public class ItemProcess {
 
 		try {
 			//item, no file
-			if (file == null || Strings.isNullOrEmpty(filename)) {
-				ItemTO to = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(
+			if (file == null) {
+				ItemTO to = (ItemTO) RestProcessUtils.buildTOFromJSON(
 						json, ItemTO.class);
+				validateId(id, to);
+				to.setId(id);
 				resp.setObject(service.update(to, u));
 				//item with file file
 			} else {
 				ItemWithFileTO to = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(
 						json, ItemWithFileTO.class);
+				validateId(id, to);
+				to.setId(id);
 				File tmpFile = File.createTempFile("imejiAPI", null);
 				IOUtils.copy(file, new FileOutputStream(tmpFile));
 				to.setFile(tmpFile);
-				to.setFilename(filename);
-				resp.setObject(service.update(to, tmpFile, u));
+				if (isNullOrEmpty(to.getFilename()) && !isNullOrEmpty(filename)) {
+					to.setFilename(filename);
+				}
+				resp.setObject(service.update(to, u));
 			}
 			resp.setStatus(Status.OK);
 		} catch (NotFoundException e) {
@@ -174,6 +182,12 @@ public class ItemProcess {
 		}
 
 		return resp;
-	}	
+	}
+
+	private static void validateId(String id, ItemTO to) throws NotFoundException {
+		if ( !isNullOrEmpty(id) && !isNullOrEmpty(to.getId()) && !id.equals(to.getId())) {
+			throw new NotFoundException("Ambiguous item id: <" + id +"> in path; <" + to.getId() + "> in JSON");
+		}
+	}
 
 }

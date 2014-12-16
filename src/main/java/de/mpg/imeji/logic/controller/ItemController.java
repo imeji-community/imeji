@@ -250,8 +250,7 @@ public class ItemController extends ImejiController {
 		Collection<Item> l = new ArrayList<Item>();
 		l.add(item);
 		update(l, user);
-
-		return item;
+		return retrieve(item.getId(), user);
 	}
 
 	/**

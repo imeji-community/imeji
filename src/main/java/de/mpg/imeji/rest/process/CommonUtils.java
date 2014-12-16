@@ -10,6 +10,7 @@ public class CommonUtils {
 	
 	public static final String FILENAME_RENAME_EMPTY = "type a new filename if you want to rename it";
 	public static final String FILENAME_RENAME_INVALID_SUFFIX = "invalid suffix";
+	public static final String JSON_Invalid ="invalid json input";
 	
 	
 	public static String formatDate(Date d) {

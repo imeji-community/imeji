@@ -9,7 +9,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.io.FilenameUtils;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import com.google.common.base.Strings;
+
 import org.apache.commons.io.IOUtils;
 
 import de.mpg.imeji.logic.auth.Authentication;
@@ -90,13 +94,20 @@ public class ItemProcess {
 		User u = BasicAuthentication.auth(req);
 		
 		// Parse json into to
-		ItemWithFileTO to = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(json, ItemWithFileTO.class);
+		ItemWithFileTO to =null;
+		try {
+			to = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(json, ItemWithFileTO.class);
+		} catch (Exception e) {
+			resp.setObject(RestProcessUtils.buildBadRequestResponse(CommonUtils.JSON_Invalid));
+			resp.setStatus(Status.BAD_REQUEST);
+			return resp;
+		}
 		// set file in to (if provided)
 		
 		
 		if( "".equals(to.getFilename())){
 			resp.setObject(RestProcessUtils.buildBadRequestResponse(CommonUtils.FILENAME_RENAME_EMPTY));
-			resp.setStatus(Status.BAD_REQUEST);		
+			resp.setStatus(Status.BAD_REQUEST);
 		}
 		else if(!"".equals(FilenameUtils.getExtension(to.getFilename())) && !FilenameUtils.getExtension(to.getFilename()).equals(FilenameUtils.getExtension(origName))){
 			resp.setObject(RestProcessUtils.buildBadRequestResponse(CommonUtils.FILENAME_RENAME_INVALID_SUFFIX));

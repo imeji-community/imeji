@@ -19,6 +19,7 @@ import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
 import de.mpg.imeji.rest.api.ProfileService;
 import de.mpg.imeji.rest.to.CollectionTO;
+import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
 import de.mpg.imeji.rest.to.MetadataProfileTO;
 
@@ -36,6 +37,7 @@ public class ImejiRestTest extends JerseyTest {
 	protected static String profileId;
 	protected static String itemId;
 	protected static CollectionTO collectionTO;
+	protected static ItemTO itemTO;
 
 	@Override
 	protected Application configure() {
@@ -99,7 +101,8 @@ public class ImejiRestTest extends JerseyTest {
 		to.setCollectionId(collectionId);
 		to.setFile(new File("src/test/resources/storage/test.png"));
 		try {
-			itemId = s.create(to, JenaUtil.testUser).getId();
+			itemTO= s.create(to, JenaUtil.testUser);
+			itemId = itemTO.getId();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

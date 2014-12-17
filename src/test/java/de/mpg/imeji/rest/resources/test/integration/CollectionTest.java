@@ -7,6 +7,7 @@ import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -29,8 +30,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import util.JenaUtil;
+import de.mpg.imeji.logic.auth.exception.NotAllowedError;
+import de.mpg.imeji.logic.controller.CollectionController;
+import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.rest.api.CollectionService;
+import de.mpg.imeji.rest.api.ItemService;
 import de.mpg.imeji.rest.resources.test.TestUtils;
+import de.mpg.imeji.rest.to.CollectionTO;
+import de.mpg.imeji.rest.to.ItemTO;
+import de.mpg.imeji.rest.to.ItemWithFileTO;
+import de.mpg.j2j.exceptions.NotFoundException;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CollectionTest extends ImejiRestTest {
@@ -43,7 +53,7 @@ public class CollectionTest extends ImejiRestTest {
 	@Before
 	public void specificSetup() {
 		initCollection();
-		initItem();
+		
 	}
 
 	@Test
@@ -64,7 +74,6 @@ public class CollectionTest extends ImejiRestTest {
 		collectionId = (String) collData.get("id");
 		assertThat("Empty collection id", collectionId,
 				not(isEmptyOrNullString()));
-		System.out.println(collectionId);
 	}
 
 	@Test
@@ -173,7 +182,11 @@ public class CollectionTest extends ImejiRestTest {
 	}
 
 	@Test
-	public void test_3_ReleaseCollection_1_WithAdmin() throws Exception {
+	public void test_3_ReleaseCollection_1_WithAuth() throws Exception {
+		ItemService itemStatus = new ItemService();
+		initItem();
+		assertEquals("PENDING",itemStatus.read(itemId, JenaUtil.testUser).getStatus());
+		
 		Response response = target(pathPrefix)
 				.path("/" + collectionId + "/release").register(authAsUser)
 				.request(MediaType.APPLICATION_JSON_TYPE)
@@ -182,6 +195,77 @@ public class CollectionTest extends ImejiRestTest {
 		CollectionService s = new CollectionService();
 		assertEquals("RELEASED", s.read(collectionId, JenaUtil.testUser)
 				.getStatus());
-
+		
+		assertEquals("RELEASED",itemStatus.read(itemId, JenaUtil.testUser).getStatus());
+		
+	}
+	
+	@Test
+	public void test_3_ReleaseCollection_2_WithUnauth() throws NotAllowedError, NotFoundException, Exception{
+		ItemService itemStatus = new ItemService();
+		initItem();
+		assertEquals("PENDING",itemStatus.read(itemId, JenaUtil.testUser).getStatus());
+		Response response = target(pathPrefix)
+				.path("/" + collectionId + "/release").register(authAsUser2)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("{}"));
+		assertEquals(response.getStatus(), Status.FORBIDDEN.getStatusCode());
+		
+	
+		assertEquals("PENDING",itemStatus.read(itemId, JenaUtil.testUser).getStatus());
+	}
+	@Test
+	public void test_3_ReleaseCollection_3_EmptyCollection(){
+		Response response = target(pathPrefix)
+				.path("/" + collectionId + "/release").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("{}"));	
+		assertEquals(response.getStatus(), Status.FORBIDDEN.getStatusCode());
+	}
+	@Test
+	public void test_3_ReleaseCollection_4_WithOutUser(){
+		
+		Response response = target(pathPrefix)
+				.path("/" + collectionId + "/release")
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("{}"));
+		assertEquals(response.getStatus(), Status.UNAUTHORIZED.getStatusCode());
+	}
+	
+	@Ignore
+	@Test
+	public void test_3_ReleaseCollection_5_AddItemInReleasedCollection() throws Exception{
+		initItem();
+		Response response = target(pathPrefix)
+				.path("/" + collectionId + "/release")
+				.register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("{}"));
+		CollectionService s = new CollectionService();
+		
+		try {
+			System.out.println(s.read(collectionId, JenaUtil.testUser).getStatus());
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		ItemService is = new ItemService();
+		ItemWithFileTO to = new ItemWithFileTO();
+		ItemTO itemTo = new ItemTO();
+		to.setCollectionId(collectionId);
+		to.setFile(new File("src/test/resources/storage/test2.png"));
+		try {
+			
+			itemTo =  is.create(to, JenaUtil.testUser);
+			 	
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println(itemId);
+		System.out.println(itemTo.getId());
+	 	System.out.println("collectionId " +collectionId);
+	 	System.out.println("collectionId "+itemTo.getCollectionId());
+	 	System.out.println(s.read(collectionId, JenaUtil.testUser).getStatus()); 	
 	}
 }

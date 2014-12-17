@@ -2,6 +2,7 @@ package de.mpg.imeji.service.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
@@ -110,25 +111,27 @@ public class CollectionServiceTest {
 	}
 	
 	@Test
-	public void test_createCollection() throws InterruptedException{
-		CollectionTO collectionTO = null;
+	public void test_createCollection() throws Exception{
+
+		CollectionTO to = new CollectionTO();
 		try {
-			collectionTO = collService.read(collection.getIdString(),
-					JenaUtil.testUser);
-			CollectionProfileTO profile = new CollectionProfileTO();
-			profile.setMethod("copy");
-			collectionTO.setProfile(profile);
-		} catch (Exception e) {
-			fail("could not read collection");
-		}
-		JenaUtil.closeJena();
-		JenaUtil.initJena();
-		try {
-			collService.create(collectionTO, JenaUtil.testUser);
+			
+			to = collService.create(to, JenaUtil.testUser);
+			System.out.println("fertig");
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();
 		}
+		// check the collection be created and has new id
+		assertNotNull(to.getId());
+		// check the collection status
+		assertTrue(to.getStatus().equals("PENDING"));
+		//check the collection profile
+		assertNotNull(to.getProfile());
+		//check the createdDate attribute
+		assertNotNull(to.getCreatedDate());
+		//check the createdBy attribute
+		assertNotNull(to.getCreatedBy());
 		
 	}
 }

@@ -50,7 +50,7 @@ public class ItemResource implements ImejiResource {
 			+ "Json example:"
 			+ "<div class=\"json\">"
 			+ "{"
-			+ "<br/>\"collectionId\" : \"abc123\", (requied)"
+			+ "<br/>\"collectionId\" : \"abc123\", (required)"
 			+ "<br/>\"fetchUrl\" : \"http://example.org/myFile.png\", (optional)"
 			+ "<br/>\"referenceUrl\" : \"http://example.org/myFile.png\", (optional)"
 			+ "<br/>\"filename\" : \"new filename\", (optional)"

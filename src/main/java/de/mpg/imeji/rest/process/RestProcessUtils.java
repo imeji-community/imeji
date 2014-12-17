@@ -10,14 +10,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
-
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
+
 import de.mpg.imeji.rest.to.HTTPError;
 import de.mpg.imeji.rest.to.JSONException;
 import de.mpg.imeji.rest.to.JSONResponse;
-import org.apache.poi.ss.formula.functions.T;
-
-import java.net.URI;
 
 public class RestProcessUtils {
 	/**
@@ -25,16 +23,21 @@ public class RestProcessUtils {
 	 * 
 	 * @param json
 	 * @param type
-	 * @return
+	 * @return 
 	 */
-	public static <T> Object buildTOFromJSON(String json, Class<T> type) {
+	public static <T> Object buildTOFromJSON(String json, Class<T> type) throws JsonProcessingException, UnrecognizedPropertyException{
 		ObjectReader reader = new ObjectMapper().reader().withType(type);
 		try {
 			return reader.readValue(json);
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			return e.getMessage();		
+		}catch(UnrecognizedPropertyException e2){
+			return e2.getMessage();
+		}catch(JsonProcessingException e3){
+			return e3.getMessage();
+		}catch(IOException e4){
+			return e4.getMessage();
 		}
-		return null;
 	}
 
 	public static <T> Object buildTOFromJSON(HttpServletRequest req, Class<T> type) {

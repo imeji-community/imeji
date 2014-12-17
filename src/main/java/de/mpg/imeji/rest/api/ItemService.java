@@ -74,42 +74,20 @@ public class ItemService implements API<ItemTO> {
 	@Override
 	public ItemTO update(ItemTO to, User u) throws Exception {
 		ItemController controller = new ItemController();
-		Item item = new Item();
+		Item item = controller.retrieve(ObjectHelper.getURI(Item.class, to.getId()), u);
 		ReverseTransferObjectFactory.transferItem(to, item);
 		item = controller.update(item, u);
 		TransferObjectFactory.transferItem(item, to);
 		return to;
 	}
 	
-	public ItemTO update(ItemWithFileTO to, File f, User u) throws Exception {
-
-		return null;
-		//TODO: Implement ItemWithFileTO
-		/*ItemController controller = new ItemController();
-
-
-			// get filename
-			String filename = getFilename(to);
-
-			// transfer TO into item
-			Item item = new Item();
-			ReverseTransferObjectFactory.transferItem(to, item);
-
-			// Create Item with File
-
-			if (to.getFile() != null) {
-				// If TO has attribute File, then upload it
-				//controller.updateFile(item, File file, u);
-			} else if (getExternalFileUrl((ItemWithFileTO) to) != null) {
-				// If no file, but either a fetchUrl or a referenceUrl
-				//controller.updateWithExternalFile();
-			}
-
-
-			// transfer item into ItemTO
-			ItemTO itemTO = new ItemTO();
-			TransferObjectFactory.transferItem(item, itemTO);
-			return itemTO;*/
+	public ItemTO update(ItemWithFileTO to, User u) throws Exception {
+		ItemController controller = new ItemController();
+		Item item = controller.retrieve(ObjectHelper.getURI(Item.class, to.getId()), u);
+		ReverseTransferObjectFactory.transferItem(to, item);
+		item = controller.updateFile(item, to.getFile(), u);
+		TransferObjectFactory.transferItem(item, to);
+		return to;
 	}
 
 	@Override

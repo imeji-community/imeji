@@ -1,13 +1,9 @@
 package de.mpg.imeji.rest.resources.test.integration;
 
-import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.controller.ProfileController;
-import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.util.StringHelper;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.util.ImejiFactory;
-import de.mpg.imeji.rest.MyApplication;
+import java.io.IOException;
+import java.net.URISyntaxException;
+
+import javax.ws.rs.core.Application;
 
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.test.JerseyTest;
@@ -17,11 +13,10 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
 import util.JenaUtil;
-
-import javax.ws.rs.core.Application;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
+import de.mpg.imeji.logic.controller.ProfileController;
+import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.presentation.util.ImejiFactory;
+import de.mpg.imeji.rest.MyApplication;
 
 /**
  * Created by vlad on 09.12.14.

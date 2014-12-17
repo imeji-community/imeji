@@ -1,6 +1,22 @@
 package de.mpg.imeji.rest.resources.test.integration;
 
+import de.mpg.imeji.logic.controller.CollectionController;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.util.ImejiFactory;
+import de.mpg.imeji.rest.api.CollectionService;
+import de.mpg.imeji.rest.api.ItemService;
+import de.mpg.imeji.rest.process.BasicAuthentication;
+import de.mpg.imeji.rest.process.CollectionProcess;
+import de.mpg.imeji.rest.process.RestProcessUtils;
+import de.mpg.imeji.rest.resources.CollectionResource;
 import de.mpg.imeji.rest.resources.test.TestUtils;
+import de.mpg.imeji.rest.to.CollectionTO;
+import de.mpg.imeji.rest.to.ItemTO;
+import de.mpg.imeji.rest.to.ItemWithFileTO;
+import de.mpg.imeji.rest.to.JSONResponse;
+import de.mpg.j2j.exceptions.NotFoundException;
+
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
@@ -9,16 +25,25 @@ import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import util.JenaUtil;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 
-import static javax.ws.rs.core.Response.Status;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
@@ -35,6 +60,10 @@ public class CollectionTest extends ImejiRestTest {
 	private static String collId = null;
 
 	public static String profileId = null;
+
+	private static final String TEST_IMAGE = "./src/test/resources/storage/test.png";
+
+	private static File file = null;
 
 	@BeforeClass
 	public static void specificSetup() {
@@ -58,6 +87,7 @@ public class CollectionTest extends ImejiRestTest {
 		assertNotNull("Created collection is null", collData);
 		collId = (String) collData.get("id");
 		assertThat("Empty collection id", collId, not(isEmptyOrNullString()));
+		System.out.println(collId);
 	}
 
 	@Test
@@ -125,6 +155,7 @@ public class CollectionTest extends ImejiRestTest {
 	public void test_2_ReadCollection_1() throws IOException {
 		Response response = target(pathPrefix).path(collId)
 				.register(authAsUser).request(MediaType.APPLICATION_JSON).get();
+
 		String jsonString = response.readEntity(String.class);
 		assertThat("Empty collection", jsonString, not(isEmptyOrNullString()));
 	}
@@ -133,6 +164,7 @@ public class CollectionTest extends ImejiRestTest {
 	public void test_2_ReadCollection_2_BadRequest() throws IOException {
 		Response response = target(pathPrefix).path(collId + "schmarrn")
 				.register(authAsUser).request(MediaType.APPLICATION_JSON).get();
+
 		assertThat(response.getStatus(),
 				equalTo(Status.BAD_REQUEST.getStatusCode()));
 	}
@@ -157,4 +189,18 @@ public class CollectionTest extends ImejiRestTest {
 				equalTo(Status.FORBIDDEN.getStatusCode()));
 	}
 
+	@Test
+	public void test_3_ReleaseCollection_1_WithAdmin() throws Exception {
+		System.out.println(collId);
+		Response response = target(pathPrefix).path("/" + collId + "/release")
+				.register(authAsUser).request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("{}"));
+		//
+		assertEquals(response.getStatus(), Status.OK.getStatusCode());
+		CollectionService s = new CollectionService();
+		assertEquals("RELEASED", s.read(collId, JenaUtil.testUser).getStatus());
+		//
+		// System.out.println(c.getStatus());
+
+	}
 }

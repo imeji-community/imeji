@@ -26,6 +26,7 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
+import de.mpg.imeji.rest.to.CollectionProfileTO;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
@@ -75,7 +76,11 @@ public class CollectionServiceTest {
 		}
 		assertNotNull(collectionTO.getId());
 		assertEquals("test collection", collectionTO.getTitle());
+	}
 
+	@Test
+	public void test_releaseCollection() throws Exception{
+		
 		try {
 			collService.release(collection.getIdString(), JenaUtil.testUser);
 			fail("should not be allowed to release collection");
@@ -102,5 +107,28 @@ public class CollectionServiceTest {
 			e.printStackTrace();
 		}
 
+	}
+	
+	@Test
+	public void test_createCollection() throws InterruptedException{
+		CollectionTO collectionTO = null;
+		try {
+			collectionTO = collService.read(collection.getIdString(),
+					JenaUtil.testUser);
+			CollectionProfileTO profile = new CollectionProfileTO();
+			profile.setMethod("copy");
+			collectionTO.setProfile(profile);
+		} catch (Exception e) {
+			fail("could not read collection");
+		}
+		JenaUtil.closeJena();
+		JenaUtil.initJena();
+		try {
+			collService.create(collectionTO, JenaUtil.testUser);
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
+		
 	}
 }

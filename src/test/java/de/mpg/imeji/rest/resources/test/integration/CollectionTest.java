@@ -27,8 +27,8 @@ import static org.junit.Assert.assertNotNull;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CollectionTest extends ImejiRestTest {
 
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(CollectionTest.class);
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(CollectionTest.class);
 
 	private static String pathPrefix = "/collections";
 
@@ -38,127 +38,123 @@ public class CollectionTest extends ImejiRestTest {
 
 	@BeforeClass
 	public static void specificSetup() {
-		profileId = createProfile(adminUser);
+		profileId = initProfile();
 	}
 
 	@Test
 	public void test_1_CreateCollection_1_DefaultProfile() throws IOException {
-		Path jsonPath = Paths.get("src/test/resources/rest/createCollection.json");
+		Path jsonPath = Paths
+				.get("src/test/resources/rest/createCollection.json");
 		String jsonString = new String(Files.readAllBytes(jsonPath), "UTF-8");
 
 		Response response = target(pathPrefix)
-				.register(authAsAdmin)
+				.register(authAsUser)
 				.register(MultiPartFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)
-				.post(Entity.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
+				.post(Entity
+						.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
 		assertEquals(response.getStatus(), Status.CREATED.getStatusCode());
 		Map<String, Object> collData = TestUtils.jsonToPOJO(response);
 		assertNotNull("Created collection is null", collData);
-		collId = (String)collData.get("id");
+		collId = (String) collData.get("id");
 		assertThat("Empty collection id", collId, not(isEmptyOrNullString()));
 	}
 
 	@Test
 	public void test_1_CreateCollection_2_CopyProfile() throws IOException {
-		Path jsonPath = Paths.get("src/test/resources/rest/createCollectionWithProfile.json");
+		Path jsonPath = Paths
+				.get("src/test/resources/rest/createCollectionWithProfile.json");
 		String jsonString = new String(Files.readAllBytes(jsonPath), "UTF-8");
-		jsonString = jsonString
-				.replace("___PROFILE_ID___", profileId)
-				.replace("___METHOD___", "copy");
+		jsonString = jsonString.replace("___PROFILE_ID___", profileId).replace(
+				"___METHOD___", "copy");
 
 		Response response = target(pathPrefix)
-				.register(authAsAdmin)
+				.register(authAsUser)
 				.register(MultiPartFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)
-				.post(Entity.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
+				.post(Entity
+						.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
 
 		assertEquals(response.getStatus(), Status.CREATED.getStatusCode());
 		Map<String, Object> collData = TestUtils.jsonToPOJO(response);
 		assertNotNull("Created collection is null", collData);
-		collId = (String)collData.get("id");
+		collId = (String) collData.get("id");
 		assertThat("Empty collection id", collId, not(isEmptyOrNullString()));
 	}
 
 	@Test
 	public void test_1_CreateCollection_3_ReferenceProfile() throws IOException {
-		Path jsonPath = Paths.get("src/test/resources/rest/createCollectionWithProfile.json");
+		Path jsonPath = Paths
+				.get("src/test/resources/rest/createCollectionWithProfile.json");
 		String jsonString = new String(Files.readAllBytes(jsonPath), "UTF-8");
-		jsonString = jsonString
-				.replace("___PROFILE_ID___", profileId)
-				.replace("___METHOD___", "reference");
+		jsonString = jsonString.replace("___PROFILE_ID___", profileId).replace(
+				"___METHOD___", "reference");
 
 		Response response = target(pathPrefix)
-				.register(authAsAdmin)
+				.register(authAsUser)
 				.request(MediaType.APPLICATION_JSON_TYPE)
-				.post(Entity.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
+				.post(Entity
+						.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
 
 		assertEquals(response.getStatus(), Status.CREATED.getStatusCode());
 		Map<String, Object> collData = TestUtils.jsonToPOJO(response);
 		assertNotNull("Created collection is null", collData);
-		collId = (String)collData.get("id");
+		collId = (String) collData.get("id");
 		assertThat("Empty collection id", collId, not(isEmptyOrNullString()));
 	}
 
-@Test
-	public void test_1_CreateCollection_4_NotExistedReferenceProfile() throws IOException {
-		Path jsonPath = Paths.get("src/test/resources/rest/createCollectionWithProfile.json");
+	@Test
+	public void test_1_CreateCollection_4_NotExistedReferenceProfile()
+			throws IOException {
+		Path jsonPath = Paths
+				.get("src/test/resources/rest/createCollectionWithProfile.json");
 		String jsonString = new String(Files.readAllBytes(jsonPath), "UTF-8");
-		jsonString = jsonString
-				.replace("___PROFILE_ID___", profileId + "shmarrn")
-				.replace("___METHOD___", "reference");
+		jsonString = jsonString.replace("___PROFILE_ID___",
+				profileId + "shmarrn").replace("___METHOD___", "reference");
 		Response response = target(pathPrefix)
-				.register(authAsAdmin)
+				.register(authAsUser)
 				.request(MediaType.APPLICATION_JSON_TYPE)
-				.post(Entity.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
+				.post(Entity
+						.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
 
 		assertEquals(response.getStatus(), Status.BAD_REQUEST.getStatusCode());
 
 	}
 
-
 	@Test
 	public void test_2_ReadCollection_1() throws IOException {
-		Response response = target(pathPrefix)
-				.path(collId)
-				.register(authAsAdmin)
-				.request(MediaType.APPLICATION_JSON)
-				.get();
+		Response response = target(pathPrefix).path(collId)
+				.register(authAsUser).request(MediaType.APPLICATION_JSON).get();
 		String jsonString = response.readEntity(String.class);
 		assertThat("Empty collection", jsonString, not(isEmptyOrNullString()));
 	}
 
 	@Test
 	public void test_2_ReadCollection_2_BadRequest() throws IOException {
-		Response response = target(pathPrefix)
-				.path(collId + "schmarrn")
-				.register(authAsAdmin)
-				.request(MediaType.APPLICATION_JSON)
-				.get();
-		assertThat(response.getStatus(), equalTo(Status.BAD_REQUEST.getStatusCode()));
+		Response response = target(pathPrefix).path(collId + "schmarrn")
+				.register(authAsUser).request(MediaType.APPLICATION_JSON).get();
+		assertThat(response.getStatus(),
+				equalTo(Status.BAD_REQUEST.getStatusCode()));
 	}
 
 	@Test
 	public void test_2_ReadCollection_3_Unathorized() throws IOException {
-		Response response = target(pathPrefix)
-				.path(collId)
-				.request(MediaType.APPLICATION_JSON)
-				.get();
-		//String jsonString = response.readEntity(String.class);
-//		assertThat("Authentication should fail!", jsonString, containsString("<div class=\"header\">Unauthorized</div>"));
-		assertThat(response.getStatus(), equalTo(Status.UNAUTHORIZED.getStatusCode()));
+		Response response = target(pathPrefix).path(collId)
+				.request(MediaType.APPLICATION_JSON).get();
+		// String jsonString = response.readEntity(String.class);
+		// assertThat("Authentication should fail!", jsonString,
+		// containsString("<div class=\"header\">Unauthorized</div>"));
+		assertThat(response.getStatus(),
+				equalTo(Status.UNAUTHORIZED.getStatusCode()));
 
 	}
 
 	@Test
 	public void test_2_ReadCollection_4_Forbidden() throws IOException {
-		Response response = target(pathPrefix)
-				.path(collId)
-				.register(authAsUser)
-				.request(MediaType.APPLICATION_JSON)
-				.get();
-		assertThat(response.getStatus(), equalTo(Status.FORBIDDEN.getStatusCode()));
+		Response response = target(pathPrefix).path(collId)
+				.register(authAsUser).request(MediaType.APPLICATION_JSON).get();
+		assertThat(response.getStatus(),
+				equalTo(Status.FORBIDDEN.getStatusCode()));
 	}
-
-
 
 }

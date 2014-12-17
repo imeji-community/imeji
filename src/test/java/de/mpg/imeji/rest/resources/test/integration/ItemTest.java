@@ -1,12 +1,18 @@
 package de.mpg.imeji.rest.resources.test.integration;
 
-import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.presentation.util.ImejiFactory;
-import de.mpg.imeji.rest.api.ItemService;
-import de.mpg.imeji.rest.process.RestProcessUtils;
-import de.mpg.imeji.rest.to.ItemTO;
-import de.mpg.imeji.rest.to.ItemWithFileTO;
+import static de.mpg.imeji.rest.resources.test.TestUtils.getStringFromPath;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
+
+import java.io.File;
+import java.io.IOException;
+
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
@@ -17,111 +23,132 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import java.io.File;
-import java.io.IOException;
-
-import static de.mpg.imeji.rest.resources.test.TestUtils.getStringFromPath;
-import static javax.ws.rs.core.Response.*;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import util.JenaUtil;
+import de.mpg.imeji.rest.api.CollectionService;
+import de.mpg.imeji.rest.api.ItemService;
+import de.mpg.imeji.rest.resources.test.TestUtils;
+import de.mpg.imeji.rest.to.CollectionTO;
+import de.mpg.imeji.rest.to.ItemTO;
+import de.mpg.imeji.rest.to.ItemWithFileTO;
 
 /**
  * Created by vlad on 09.12.14.
  */
 public class ItemTest extends ImejiRestTest {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ItemTest.class);
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(ItemTest.class);
 
-    private static String collectionId;
-    private static String itemId;
-    private static String updateJSON;
-    private static String itemJSON;
-    private static ItemTO itemTO;
-    private static final String pathPrefix = "/items";
-    private static final String updatedFileName = "updated_filename.png";
+	private static String collectionId;
+	private static String itemId;
+	private static String updateJSON;
+	private static String itemJSON;
+	private static ItemTO itemTO;
+	private static final String pathPrefix = "/items";
+	private static final String updatedFileName = "updated_filename.png";
 
-    @BeforeClass
-    public static void initItem() throws Exception {
-        CollectionImeji c = ImejiFactory.newCollection();
-        CollectionController controller = new CollectionController();
-        controller.create(c, null, adminUser);
-        assertNotNull(c);
-        collectionId = c.getIdString();
+	@BeforeClass
+	public static void specificSetup() throws Exception {
+		initCollection();
+		initItem();
+		updateJSON = getStringFromPath("src/test/resources/rest/updateItem.json");
+	}
 
-        //get full item
-        ItemWithFileTO itemWithFileTO = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(
-                getStringFromPath("src/test/resources/rest/itemFull.json"), ItemWithFileTO.class);
+	/**
+	 * Create a new collection and set the collectionid
+	 * 
+	 * @throws Exception
+	 */
+	public static void initCollection() throws Exception {
+		CollectionService s = new CollectionService();
+		collectionId = s.create(new CollectionTO(), JenaUtil.testUser).getId();
+	}
 
-        itemWithFileTO.setFile(new File("src/test/resources/storage/test.png"));
-        itemWithFileTO.setCollectionId(collectionId);
-        ItemService is = new ItemService();
-        itemTO =  is.create(itemWithFileTO, adminUser);
-        assertNotNull(itemTO);
-        itemId = itemTO.getId();
+	/**
+	 * Create an item (maybe not usefull)
+	 * 
+	 * @throws Exception
+	 */
+	public static void initItem() throws Exception {
+		ItemService s = new ItemService();
+		ItemWithFileTO to = new ItemWithFileTO();
+		to.setCollectionId(collectionId);
+		to.setFile(new File("src/test/resources/storage/test.png"));
+		itemId = s.create(to, JenaUtil.testUser).getId();
+	}
 
-        updateJSON = getStringFromPath("src/test/resources/rest/updateItem.json");
+	@Ignore
+	@Test
+	public void test_0_createItemWithoutFilename() throws IOException {
+		itemJSON = TestUtils
+				.getStringFromPath("src/test/resources/rest/createItem.json");
 
-    }
+		FileDataBodyPart filePart = new FileDataBodyPart("file", new File(
+				"src/test/resources/storage/test.png"));
+		FormDataMultiPart multiPart = new FormDataMultiPart();
+		multiPart.bodyPart(filePart);
+		multiPart.field("json", itemJSON.replace("___FILENAME___", ""));
 
-    @Test
-    public void test_1_UpdateItem_1_Basic() throws IOException {
-        FormDataMultiPart multiPart = new FormDataMultiPart();
-        multiPart.field("json", updateJSON
-                .replace("___FILENAME___", updatedFileName));
+		Response response = target(pathPrefix).register(authAsUser)
+				.register(MultiPartFeature.class)
+				.register(JacksonFeature.class)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.post(Entity.entity(multiPart, multiPart.getMediaType()));
 
-        Response response = target(pathPrefix)
-                .path("/" + itemId)
-                .register(authAsAdmin)
-                .register(MultiPartFeature.class)
-                .register(JacksonFeature.class)
-                .request(MediaType.APPLICATION_JSON_TYPE)
-                .put(Entity.entity(multiPart, multiPart.getMediaType()));
-        assertEquals(response.getStatus(), Status.OK.getStatusCode());
-        ItemTO updatedItem = (ItemTO) response.readEntity(ItemWithFileTO.class);
-        assertThat("Filename has not been updated", updatedItem.getFilename(), equalTo(updatedFileName));
+		assertEquals(response.getStatus(), Status.OK.getStatusCode());
+	}
 
-    }
+	@Test
+	public void test_1_UpdateItem_1_Basic() throws IOException {
+		FormDataMultiPart multiPart = new FormDataMultiPart();
+		multiPart.field("json",
+				updateJSON.replace("___FILENAME___", updatedFileName));
 
-    @Test
-    public void test_1_UpdateItem_2_NotAllowedUser() throws IOException {
-        FormDataMultiPart multiPart = new FormDataMultiPart();
-        multiPart.field("json", updateJSON);
-        Response response = target(pathPrefix)
-                .path("/" + itemId)
-                .register(authAsUser)
-                .register(MultiPartFeature.class)
-                .register(JacksonFeature.class)
-                .request(MediaType.APPLICATION_JSON_TYPE)
-                .put(Entity.entity(multiPart, multiPart.getMediaType()));
-        assertEquals(response.getStatus(), Status.FORBIDDEN.getStatusCode());
-    }
+		Response response = target(pathPrefix).path("/" + itemId)
+				.register(authAsUser).register(MultiPartFeature.class)
+				.register(JacksonFeature.class)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.entity(multiPart, multiPart.getMediaType()));
+		assertEquals(response.getStatus(), Status.OK.getStatusCode());
+		ItemTO updatedItem = (ItemTO) response.readEntity(ItemWithFileTO.class);
+		assertThat("Filename has not been updated", updatedItem.getFilename(),
+				equalTo(updatedFileName));
 
-    @Ignore
-    @Test
-    public void test_1_UpdateItem_3_WithFile() throws IOException {
+	}
 
-        FileDataBodyPart filePart = new FileDataBodyPart("file", new File("src/test/resources/storage/test2.png"));
-        FormDataMultiPart multiPart = new FormDataMultiPart();
-        multiPart.bodyPart(filePart);
-        multiPart.field("json", getStringFromPath("src/test/resources/rest/updateItem_short.json"));
+	@Test
+	public void test_1_UpdateItem_2_NotAllowedUser() throws IOException {
+		FormDataMultiPart multiPart = new FormDataMultiPart();
+		multiPart.field("json", updateJSON);
+		Response response = target(pathPrefix).path("/" + itemId)
+				.register(authAsUser).register(MultiPartFeature.class)
+				.register(JacksonFeature.class)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.entity(multiPart, multiPart.getMediaType()));
+		assertEquals(response.getStatus(), Status.FORBIDDEN.getStatusCode());
+	}
 
-        Response response = target(pathPrefix)
-                .path("/" + itemId)
-                .register(authAsUser)
-                .register(MultiPartFeature.class)
-                .register(JacksonFeature.class)
-                .request(MediaType.APPLICATION_JSON_TYPE)
-                .put(Entity.entity(multiPart, multiPart.getMediaType()));
+	@Ignore
+	@Test
+	public void test_1_UpdateItem_3_WithFile() throws IOException {
 
-        //ItemTO updatedItem = (ItemTO) response.readEntity(ItemWithFileTO.class);
-        LOGGER.info(response.readEntity(String .class));
+		FileDataBodyPart filePart = new FileDataBodyPart("file", new File(
+				"src/test/resources/storage/test2.png"));
+		FormDataMultiPart multiPart = new FormDataMultiPart();
+		multiPart.bodyPart(filePart);
+		multiPart
+				.field("json",
+						getStringFromPath("src/test/resources/rest/updateItem_short.json"));
 
+		Response response = target(pathPrefix).path("/" + itemId)
+				.register(authAsUser).register(MultiPartFeature.class)
+				.register(JacksonFeature.class)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.entity(multiPart, multiPart.getMediaType()));
 
-    }
+		// ItemTO updatedItem = (ItemTO)
+		// response.readEntity(ItemWithFileTO.class);
+		LOGGER.info(response.readEntity(String.class));
+
+	}
 }

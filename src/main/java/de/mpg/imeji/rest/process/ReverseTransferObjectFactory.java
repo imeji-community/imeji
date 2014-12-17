@@ -1,7 +1,5 @@
 package de.mpg.imeji.rest.process;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -80,48 +78,11 @@ public class ReverseTransferObjectFactory {
 				"getFilename", "setFilename"//,
 				//"getMimeType", "setFileType"
 				).entrySet()) {
-			transferField(field.getKey(), to, field.getValue(), vo);
+			ObjectHelper.transferField(field.getKey(), to, field.getValue(), vo);
 		}
 
 		transferItemMetaData(to.getMetadata(), vo);
 	}
-
-	private static void transferField(String getter, Object from, String setter, Object to) {
-		if (from == null || to == null || isNullOrEmpty(getter) || isNullOrEmpty(setter))
-			return;
-		Class fromClass = from.getClass();
-		Class toClass = to.getClass();
-		try {
-
-			Method getterMethod = null;
-			Method setterMethod = null;
-			for (Method m: fromClass.getMethods()) {
-				if (m.getName().equalsIgnoreCase(getter)) {
-					getterMethod = m;
-					break;
-				}
-			}
-			for (Method m: toClass.getMethods()) {
-				if (m.getName().equalsIgnoreCase(setter)) {
-					setterMethod = m;
-					break;
-				}
-			}
-			if ( getterMethod != null && setterMethod!= null) {
-				Object val = null;
-				val = getterMethod.invoke(from);
-				if (val != null) {
-					setterMethod.invoke(to, val);
-				}
-			}
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
-
-	}
-
 
 
 	public static void transferItemMetaData(List<MetadataSetTO> toMds, Item vo){

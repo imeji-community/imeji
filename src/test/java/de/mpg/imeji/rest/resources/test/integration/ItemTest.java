@@ -25,6 +25,7 @@ import java.io.IOException;
 
 import static de.mpg.imeji.rest.resources.test.TestUtils.getStringFromPath;
 import static javax.ws.rs.core.Response.*;
+import static javax.ws.rs.core.Response.Status.*;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -82,7 +83,7 @@ public class ItemTest extends ImejiRestTest {
                 .register(JacksonFeature.class)
                 .request(MediaType.APPLICATION_JSON_TYPE)
                 .put(Entity.entity(multiPart, multiPart.getMediaType()));
-        assertEquals(response.getStatus(), Status.OK.getStatusCode());
+        assertEquals(response.getStatus(), OK.getStatusCode());
         ItemTO updatedItem = (ItemTO) response.readEntity(ItemWithFileTO.class);
         assertThat("Filename has not been updated", updatedItem.getFilename(), equalTo(updatedFileName));
 
@@ -99,18 +100,15 @@ public class ItemTest extends ImejiRestTest {
                 .register(JacksonFeature.class)
                 .request(MediaType.APPLICATION_JSON_TYPE)
                 .put(Entity.entity(multiPart, multiPart.getMediaType()));
-        assertEquals(response.getStatus(), Status.FORBIDDEN.getStatusCode());
+        assertEquals(response.getStatus(), FORBIDDEN.getStatusCode());
     }
 
-    @Ignore
     @Test
     public void test_1_UpdateItem_3_WithFile() throws IOException {
-
         FileDataBodyPart filePart = new FileDataBodyPart("file", new File("src/test/resources/storage/test2.png"));
         FormDataMultiPart multiPart = new FormDataMultiPart();
         multiPart.bodyPart(filePart);
         multiPart.field("json", getStringFromPath("src/test/resources/rest/updateItem_short.json"));
-
         Response response = target(pathPrefix)
                 .path("/" + itemId)
                 .register(authAsUser)
@@ -118,10 +116,7 @@ public class ItemTest extends ImejiRestTest {
                 .register(JacksonFeature.class)
                 .request(MediaType.APPLICATION_JSON_TYPE)
                 .put(Entity.entity(multiPart, multiPart.getMediaType()));
-
-        //ItemTO updatedItem = (ItemTO) response.readEntity(ItemWithFileTO.class);
-        LOGGER.info(response.readEntity(String .class));
-
-
+        assertEquals(response.getStatus(), OK.getStatusCode());
+        LOGGER.info(response.readEntity(String.class));
     }
 }

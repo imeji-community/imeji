@@ -8,16 +8,11 @@ import java.io.InputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response.Status;
 
+import com.google.common.io.ByteStreams;
 import org.apache.commons.io.FilenameUtils;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
-import com.google.common.base.Strings;
 
 import org.apache.commons.io.IOUtils;
 
-import de.mpg.imeji.logic.auth.Authentication;
-import de.mpg.imeji.logic.auth.AuthenticationFactory;
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.api.ItemService;
@@ -25,11 +20,15 @@ import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
 import de.mpg.imeji.rest.to.JSONResponse;
 import de.mpg.j2j.exceptions.NotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.google.common.base.Strings.*;
 
 public class ItemProcess {
-	
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(ItemProcess.class);
+
 	public static JSONResponse deleteItem(HttpServletRequest req, String id) {
 		User u = BasicAuthentication.auth(req);
 		JSONResponse resp = new JSONResponse();
@@ -160,7 +159,7 @@ public class ItemProcess {
 	}
 
 
-	public static JSONResponse udpateItem(HttpServletRequest req, String id, InputStream file, String json, String filename) {
+	public static JSONResponse udpateItem(HttpServletRequest req, String id, InputStream fileInputStream, String json, String filename) {
 
 		User u = BasicAuthentication.auth(req);
 
@@ -169,7 +168,7 @@ public class ItemProcess {
 
 		try {
 			//item, no file
-			if (file == null) {
+			if (fileInputStream == null) {
 				ItemTO to = (ItemTO) RestProcessUtils.buildTOFromJSON(
 						json, ItemTO.class);
 				validateId(id, to);
@@ -181,8 +180,12 @@ public class ItemProcess {
 						json, ItemWithFileTO.class);
 				validateId(id, to);
 				to.setId(id);
-				File tmpFile = File.createTempFile("imejiAPI", null);
-				IOUtils.copy(file, new FileOutputStream(tmpFile));
+
+				String tmpPath = (String)req.getServletContext().getAttribute(CommonUtils.JAVAX_SERVLET_CONTEXT_TEMPDIR);
+				File tmpFile = File.createTempFile("imejiAPI", tmpPath);
+
+				ByteStreams.copy(fileInputStream, new FileOutputStream(tmpFile));
+
 				to.setFile(tmpFile);
 				if (isNullOrEmpty(to.getFilename()) && !isNullOrEmpty(filename)) {
 					to.setFilename(filename);

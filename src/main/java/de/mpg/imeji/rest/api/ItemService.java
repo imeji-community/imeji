@@ -7,6 +7,7 @@ import java.util.List;
 import javax.ws.rs.NotAllowedException;
 import javax.ws.rs.NotSupportedException;
 
+import com.google.common.base.Strings;
 import org.apache.commons.io.FilenameUtils;
 
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
@@ -23,7 +24,11 @@ import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
 import de.mpg.j2j.exceptions.NotFoundException;
 
+import static com.google.common.base.Strings.*;
+
 public class ItemService implements API<ItemTO> {
+
+	private static ItemController controller = new ItemController();
 
 	@Override
 	public ItemTO create(ItemTO to, User u) throws Exception {
@@ -64,7 +69,6 @@ public class ItemService implements API<ItemTO> {
 	public ItemTO read(String id, User u) throws NotFoundException,
 			NotAllowedError, Exception {
 
-		ItemController controller = new ItemController();
 		ItemTO to = new ItemTO();
 		Item item = controller.retrieve(ObjectHelper.getURI(Item.class, id), u);
 		TransferObjectFactory.transferItem(item, to);
@@ -73,7 +77,6 @@ public class ItemService implements API<ItemTO> {
 
 	@Override
 	public ItemTO update(ItemTO to, User u) throws Exception {
-		ItemController controller = new ItemController();
 		Item item = controller.retrieve(ObjectHelper.getURI(Item.class, to.getId()), u);
 		ReverseTransferObjectFactory.transferItem(to, item);
 		item = controller.update(item, u);
@@ -82,7 +85,6 @@ public class ItemService implements API<ItemTO> {
 	}
 	
 	public ItemTO update(ItemWithFileTO to, User u) throws Exception {
-		ItemController controller = new ItemController();
 		Item item = controller.retrieve(ObjectHelper.getURI(Item.class, to.getId()), u);
 		ReverseTransferObjectFactory.transferItem(to, item);
 		item = controller.updateFile(item, to.getFile(), u);
@@ -93,7 +95,6 @@ public class ItemService implements API<ItemTO> {
 	@Override
 	public boolean delete(String id, User u) throws NotFoundException,
 			NotAllowedError {
-		ItemController controller = new ItemController();
 		List<Item> items = new ArrayList<Item>();
 		Item item = new Item();
 		try {
@@ -166,10 +167,9 @@ public class ItemService implements API<ItemTO> {
 	 * @return
 	 */
 	private String getExternalFileUrl(ItemWithFileTO to) {
-		if (to.getFetchUrl() != null && !"".equals(to.getFetchUrl()))
+		if (!isNullOrEmpty(to.getFetchUrl()))
 			return to.getFetchUrl();
-		else if (to.getReferenceUrl() != null
-				&& !"".equals(to.getReferenceUrl()))
+		else if (!isNullOrEmpty(to.getReferenceUrl()))
 			return to.getReferenceUrl();
 		return null;
 	}
@@ -181,9 +181,7 @@ public class ItemService implements API<ItemTO> {
 	 * @return
 	 */
 	private boolean downloadFile(ItemWithFileTO to) {
-		if (to.getFetchUrl() != null && !"".equals(to.getFetchUrl()))
-			return true;
-		return false;
+		return !isNullOrEmpty(to.getFetchUrl());
 	}
 
 }

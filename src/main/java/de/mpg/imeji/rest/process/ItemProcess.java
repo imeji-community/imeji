@@ -111,7 +111,7 @@ public class ItemProcess {
 			resp.setObject(RestProcessUtils.buildBadRequestResponse(CommonUtils.FILENAME_RENAME_EMPTY));
 			resp.setStatus(Status.BAD_REQUEST);
 		}
-		else if(!"".equals(FilenameUtils.getExtension(to.getFilename())) && !FilenameUtils.getExtension(to.getFilename()).equals(FilenameUtils.getExtension(origName))){
+		else if(to.getFilename() != null && !"".equals(FilenameUtils.getExtension(to.getFilename())) && !FilenameUtils.getExtension(to.getFilename()).equals(FilenameUtils.getExtension(origName))){
 			resp.setObject(RestProcessUtils.buildBadRequestResponse(CommonUtils.FILENAME_RENAME_INVALID_SUFFIX));
 			resp.setStatus(Status.BAD_REQUEST);	
 		}

@@ -23,11 +23,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import util.JenaUtil;
-import de.mpg.imeji.rest.api.CollectionService;
-import de.mpg.imeji.rest.api.ItemService;
 import de.mpg.imeji.rest.resources.test.TestUtils;
-import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
 
@@ -39,11 +35,8 @@ public class ItemTest extends ImejiRestTest {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ItemTest.class);
 
-	private static String collectionId;
-	private static String itemId;
 	private static String updateJSON;
 	private static String itemJSON;
-	private static ItemTO itemTO;
 	private static final String pathPrefix = "/items";
 	private static final String updatedFileName = "updated_filename.png";
 
@@ -54,34 +47,12 @@ public class ItemTest extends ImejiRestTest {
 		updateJSON = getStringFromPath("src/test/resources/rest/updateItem.json");
 	}
 
-	/**
-	 * Create a new collection and set the collectionid
-	 * 
-	 * @throws Exception
-	 */
-	public static void initCollection() throws Exception {
-		CollectionService s = new CollectionService();
-		collectionId = s.create(new CollectionTO(), JenaUtil.testUser).getId();
-	}
-
-	/**
-	 * Create an item (maybe not usefull)
-	 * 
-	 * @throws Exception
-	 */
-	public static void initItem() throws Exception {
-		ItemService s = new ItemService();
-		ItemWithFileTO to = new ItemWithFileTO();
-		to.setCollectionId(collectionId);
-		to.setFile(new File("src/test/resources/storage/test.png"));
-		itemId = s.create(to, JenaUtil.testUser).getId();
-	}
-
-	@Ignore
 	@Test
-	public void test_0_createItemWithoutFilename() throws IOException {
+	public void createItemWithoutFilename() throws IOException {
 		itemJSON = TestUtils
 				.getStringFromPath("src/test/resources/rest/createItem.json");
+		itemJSON =  itemJSON.replace("___COLLECTION_ID___", collectionId);
+		
 
 		FileDataBodyPart filePart = new FileDataBodyPart("file", new File(
 				"src/test/resources/storage/test.png"));
@@ -95,7 +66,29 @@ public class ItemTest extends ImejiRestTest {
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.post(Entity.entity(multiPart, multiPart.getMediaType()));
 
-		assertEquals(response.getStatus(), Status.OK.getStatusCode());
+		assertEquals(response.getStatus(), Status.CREATED.getStatusCode());
+	}
+	
+	@Test
+	public void createItemWithFilename() throws IOException {
+		itemJSON = TestUtils
+				.getStringFromPath("src/test/resources/rest/createItem.json");
+		itemJSON =  itemJSON.replace("___COLLECTION_ID___", collectionId);
+		
+
+		FileDataBodyPart filePart = new FileDataBodyPart("file", new File(
+				"src/test/resources/storage/test.png"));
+		FormDataMultiPart multiPart = new FormDataMultiPart();
+		multiPart.bodyPart(filePart);
+		multiPart.field("json", itemJSON.replace("___FILENAME___", "test.png"));
+
+		Response response = target(pathPrefix).register(authAsUser)
+				.register(MultiPartFeature.class)
+				.register(JacksonFeature.class)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.post(Entity.entity(multiPart, multiPart.getMediaType()));
+
+		assertEquals(response.getStatus(), Status.CREATED.getStatusCode());
 	}
 
 	@Test
@@ -121,7 +114,7 @@ public class ItemTest extends ImejiRestTest {
 		FormDataMultiPart multiPart = new FormDataMultiPart();
 		multiPart.field("json", updateJSON);
 		Response response = target(pathPrefix).path("/" + itemId)
-				.register(authAsUser).register(MultiPartFeature.class)
+				.register(authAsUser2).register(MultiPartFeature.class)
 				.register(JacksonFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.entity(multiPart, multiPart.getMediaType()));

@@ -29,7 +29,7 @@ public class ItemService implements API<ItemTO> {
 	public ItemTO create(ItemTO to, User u) throws Exception {
 		if (to instanceof ItemWithFileTO) {
 			// get newFilename
-			String filename = to.getFilename();
+			String filename = getFilename((ItemWithFileTO) to);
 
 			// transfer TO into item
 			Item item = new Item();
@@ -74,16 +74,18 @@ public class ItemService implements API<ItemTO> {
 	@Override
 	public ItemTO update(ItemTO to, User u) throws Exception {
 		ItemController controller = new ItemController();
-		Item item = controller.retrieve(ObjectHelper.getURI(Item.class, to.getId()), u);
+		Item item = controller.retrieve(
+				ObjectHelper.getURI(Item.class, to.getId()), u);
 		ReverseTransferObjectFactory.transferItem(to, item);
 		item = controller.update(item, u);
 		TransferObjectFactory.transferItem(item, to);
 		return to;
 	}
-	
+
 	public ItemTO update(ItemWithFileTO to, User u) throws Exception {
 		ItemController controller = new ItemController();
-		Item item = controller.retrieve(ObjectHelper.getURI(Item.class, to.getId()), u);
+		Item item = controller.retrieve(
+				ObjectHelper.getURI(Item.class, to.getId()), u);
 		ReverseTransferObjectFactory.transferItem(to, item);
 		item = controller.updateFile(item, to.getFile(), u);
 		TransferObjectFactory.transferItem(item, to);
@@ -152,13 +154,18 @@ public class ItemService implements API<ItemTO> {
 	 * 
 	 * @param to
 	 * @return
-	 * 
-	 *         private String getFilename(ItemWithFileTO to) { String filename =
-	 *         to.getFilename(); if (filename == null) filename =
-	 *         FilenameUtils.getName(to.getFetchUrl()); if (filename == null)
-	 *         filename = FilenameUtils.getName(to.getReferenceUrl()); return
-	 *         filename; }
-	 */
+	 **/
+	private String getFilename(ItemWithFileTO to) {
+		String filename = to.getFilename();
+		if (filename == null)
+			filename = FilenameUtils.getName(to.getFile().getName());
+		if (filename == null)
+			filename = FilenameUtils.getName(to.getFetchUrl());
+		if (filename == null)
+			filename = FilenameUtils.getName(to.getReferenceUrl());
+		return filename;
+	}
+
 	/**
 	 * Return the external Url
 	 * 

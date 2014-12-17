@@ -1,5 +1,6 @@
 package de.mpg.imeji.rest.resources.test.integration;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
@@ -13,10 +14,13 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
 import util.JenaUtil;
-import de.mpg.imeji.logic.controller.ProfileController;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.rest.MyApplication;
+import de.mpg.imeji.rest.api.CollectionService;
+import de.mpg.imeji.rest.api.ItemService;
+import de.mpg.imeji.rest.api.ProfileService;
+import de.mpg.imeji.rest.to.CollectionTO;
+import de.mpg.imeji.rest.to.ItemWithFileTO;
+import de.mpg.imeji.rest.to.MetadataProfileTO;
 
 /**
  * Created by vlad on 09.12.14.
@@ -25,6 +29,13 @@ public class ImejiRestTest extends JerseyTest {
 
 	protected static HttpAuthenticationFeature authAsUser = HttpAuthenticationFeature
 			.basic(JenaUtil.TEST_USER_EMAIL, JenaUtil.TEST_USER_PWD);
+	protected static HttpAuthenticationFeature authAsUser2 = HttpAuthenticationFeature
+			.basic(JenaUtil.TEST_USER_EMAIL_2, JenaUtil.TEST_USER_PWD);
+
+	protected static String collectionId;
+	protected static String profileId;
+	protected static String itemId;
+	protected static CollectionTO collectionTO;
 
 	@Override
 	protected Application configure() {
@@ -48,16 +59,49 @@ public class ImejiRestTest extends JerseyTest {
 		JenaUtil.closeJena();
 	}
 
-	public static String initProfile() {
+	/**
+	 * Create a profile
+	 */
+	public static void initProfile() {
 		try {
-			ProfileController c = new ProfileController();
-			MetadataProfile p = c.create(ImejiFactory.newProfile(),
-					JenaUtil.testUser);
-			return p.getId().toString();
+			ProfileService s = new ProfileService();
+			profileId = s.create(new MetadataProfileTO(), JenaUtil.testUser)
+					.getId();
 		} catch (Exception e) {
 			e.printStackTrace();
-			return null;
 		}
 	}
 
+	/**
+	 * Create a new collection and set the collectionid
+	 * 
+	 * @throws Exception
+	 */
+	public static void initCollection() {
+		CollectionService s = new CollectionService();
+		try {
+			collectionTO = s.create(new CollectionTO(), JenaUtil.testUser);
+			collectionId = collectionTO.getId();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Create an item in the test collection (initCollection must be called
+	 * before)
+	 * 
+	 * @throws Exception
+	 */
+	public static void initItem() {
+		ItemService s = new ItemService();
+		ItemWithFileTO to = new ItemWithFileTO();
+		to.setCollectionId(collectionId);
+		to.setFile(new File("src/test/resources/storage/test.png"));
+		try {
+			itemId = s.create(to, JenaUtil.testUser).getId();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

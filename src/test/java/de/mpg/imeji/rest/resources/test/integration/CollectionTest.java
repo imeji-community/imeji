@@ -67,7 +67,6 @@ public class CollectionTest extends ImejiRestTest {
 		System.out.println(collectionId);
 	}
 
-	@Ignore
 	@Test
 	public void test_1_CreateCollection_2_CopyProfile() throws IOException {
 		Path jsonPath = Paths
@@ -92,7 +91,6 @@ public class CollectionTest extends ImejiRestTest {
 				not(isEmptyOrNullString()));
 	}
 
-	@Ignore
 	@Test
 	public void test_1_CreateCollection_3_ReferenceProfile() throws IOException {
 		Path jsonPath = Paths

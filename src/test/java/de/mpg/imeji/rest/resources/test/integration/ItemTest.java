@@ -48,11 +48,10 @@ public class ItemTest extends ImejiRestTest {
 	}
 
 	@Test
-	public void createItemWithoutFilename() throws IOException {
+	public void createItemWithEmtpyFilename() throws IOException {
 		itemJSON = TestUtils
 				.getStringFromPath("src/test/resources/rest/createItem.json");
-		itemJSON =  itemJSON.replace("___COLLECTION_ID___", collectionId);
-		
+		itemJSON = itemJSON.replace("___COLLECTION_ID___", collectionId);
 
 		FileDataBodyPart filePart = new FileDataBodyPart("file", new File(
 				"src/test/resources/storage/test.png"));
@@ -66,15 +65,36 @@ public class ItemTest extends ImejiRestTest {
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.post(Entity.entity(multiPart, multiPart.getMediaType()));
 
-		assertEquals(response.getStatus(), Status.CREATED.getStatusCode());
+		assertEquals(response.getStatus(), Status.BAD_REQUEST.getStatusCode());
 	}
-	
+
+	@Test
+	public void createItemWithoutFilename() throws IOException {
+		itemJSON = TestUtils
+				.getStringFromPath("src/test/resources/rest/createItem.json");
+		itemJSON = itemJSON.replace("  \"filename\": \"___FILENAME___\",",
+				collectionId);
+
+		FileDataBodyPart filePart = new FileDataBodyPart("file", new File(
+				"src/test/resources/storage/test.png"));
+		FormDataMultiPart multiPart = new FormDataMultiPart();
+		multiPart.bodyPart(filePart);
+		multiPart.field("json", itemJSON.replace("___FILENAME___", ""));
+
+		Response response = target(pathPrefix).register(authAsUser)
+				.register(MultiPartFeature.class)
+				.register(JacksonFeature.class)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.post(Entity.entity(multiPart, multiPart.getMediaType()));
+
+		assertEquals(response.getStatus(), Status.BAD_REQUEST.getStatusCode());
+	}
+
 	@Test
 	public void createItemWithFilename() throws IOException {
 		itemJSON = TestUtils
 				.getStringFromPath("src/test/resources/rest/createItem.json");
-		itemJSON =  itemJSON.replace("___COLLECTION_ID___", collectionId);
-		
+		itemJSON = itemJSON.replace("___COLLECTION_ID___", collectionId);
 
 		FileDataBodyPart filePart = new FileDataBodyPart("file", new File(
 				"src/test/resources/storage/test.png"));

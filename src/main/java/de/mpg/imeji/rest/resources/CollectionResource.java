@@ -48,7 +48,7 @@ public class CollectionResource implements ImejiResource {
 		return RestProcessUtils.buildJSONResponse(resp);
 	}
 	
-/*
+
 	@PUT
 	@Path("/{id}/release")
 	@ApiOperation(value = "Release collection by id")
@@ -58,7 +58,7 @@ public class CollectionResource implements ImejiResource {
 		JSONResponse resp = CollectionProcess.releaseCollection(req, id);
 		return RestProcessUtils.buildJSONResponse(resp);
 	}
-*/
+
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)

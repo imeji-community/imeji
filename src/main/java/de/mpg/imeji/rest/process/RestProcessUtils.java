@@ -50,7 +50,7 @@ public class RestProcessUtils {
 		return null;
 	}
 
-	public static String buildJSONFromTO(Object obj) {
+	public static String buildJSONFromObject(Object obj) {
 		ObjectWriter ow = new ObjectMapper().writer()
 				.with(SerializationFeature.INDENT_OUTPUT)
 				//.without(SerializationFeature.WRITE_NULL_MAP_VALUES)

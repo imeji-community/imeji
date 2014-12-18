@@ -76,7 +76,7 @@ public class ItemUpdateTest extends ImejiTestBase {
                 .register(JacksonFeature.class)
                 .request(MediaType.APPLICATION_JSON_TYPE)
                 .put(Entity.entity(multiPart, multiPart.getMediaType()));
-        assertEquals(response.getStatus(), FORBIDDEN.getStatusCode());
+        assertEquals(FORBIDDEN.getStatusCode(), response.getStatus());
     }
 
     @Test
@@ -95,10 +95,10 @@ public class ItemUpdateTest extends ImejiTestBase {
                 .request(MediaType.APPLICATION_JSON_TYPE)
                 .put(Entity.entity(multiPart, multiPart.getMediaType()));
 
-        assertEquals(response.getStatus(), OK.getStatusCode());
-        // ItemTO updatedItem = (ItemTO)
-        // response.readEntity(ItemWithFileTO.class);
-        LOGGER.info(response.readEntity(String.class));
+        assertEquals(OK.getStatusCode(), response.getStatus());
+        ItemWithFileTO itemWithFileTO = response.readEntity(ItemWithFileTO.class);
+        assertThat("Wrong file name", itemWithFileTO.getFilename(), equalTo("updated_" + filePart.getFileEntity().getName()));
+
 
     }
 }

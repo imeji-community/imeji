@@ -87,7 +87,7 @@ public class ItemTest extends ImejiRestTest {
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.post(Entity.entity(multiPart, multiPart.getMediaType()));
 
-		assertEquals(response.getStatus(), Status.BAD_REQUEST.getStatusCode());
+		assertEquals(response.getStatus(), Status.CREATED.getStatusCode());
 	}
 
 	@Test

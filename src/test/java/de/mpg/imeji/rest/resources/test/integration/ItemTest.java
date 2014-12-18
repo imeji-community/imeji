@@ -71,8 +71,8 @@ public class ItemTest extends ImejiRestTest {
 	@Test
 	public void createItemWithoutFilename() throws IOException {
 		itemJSON = TestUtils
-				.getStringFromPath("src/test/resources/rest/createItem.json");
-		itemJSON = itemJSON.replace("  \"filename\": \"___FILENAME___\",",
+				.getStringFromPath("src/test/resources/rest/createItemMin.json");
+		itemJSON = itemJSON.replace("___COLLECTION_ID___",
 				collectionId);
 
 		FileDataBodyPart filePart = new FileDataBodyPart("file", new File(

@@ -7,41 +7,27 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 
-import javax.validation.constraints.AssertTrue;
 import javax.ws.rs.NotSupportedException;
 
-import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
-import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
-import de.mpg.imeji.rest.to.CollectionProfileTO;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
-import de.mpg.imeji.service.test.ItemServiceTest.*;
 import de.mpg.j2j.exceptions.NotFoundException;
 import util.JenaUtil;
 
 public class CollectionServiceTest {
 
-	private User user;
-	private UserController c = new UserController(Imeji.adminUser);
-	private String email = "testUser@imeji.org";
-	private String name = "imeji tester";
-	private String pwd = "test";
+
 	private ItemTO itemTo;
 	private static CollectionImeji collection;
 	private CollectionService collService = new CollectionService();
@@ -117,7 +103,6 @@ public class CollectionServiceTest {
 		try {
 			
 			to = collService.create(to, JenaUtil.testUser);
-			System.out.println("fertig");
 		} catch (Exception e) {
 			fail();
 			e.printStackTrace();

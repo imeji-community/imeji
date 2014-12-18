@@ -43,7 +43,6 @@ public class ItemService implements API<ItemTO> {
 			// read collection
 			CollectionController cc = new CollectionController();
 			CollectionImeji collection = cc.retrieve(item.getCollection(), u);
-
 			// Create Item with File
 			ItemController ic = new ItemController();
 			if (((ItemWithFileTO) to).getFile() != null) {

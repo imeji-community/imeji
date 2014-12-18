@@ -35,7 +35,7 @@ public class ItemProcess {
 			ItemService icrud = new ItemService();
 			try {
 				icrud.delete(id, u);
-				resp.setStatus(Status.OK);
+				resp.setStatus(Status.NO_CONTENT);
 			} catch (NotFoundException e) {
 				resp.setObject(RestProcessUtils.buildBadRequestResponse(e
 						.getLocalizedMessage()));

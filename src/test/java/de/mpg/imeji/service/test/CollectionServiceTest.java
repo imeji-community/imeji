@@ -2,6 +2,7 @@ package de.mpg.imeji.service.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
@@ -26,6 +27,7 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
+import de.mpg.imeji.rest.to.CollectionProfileTO;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
@@ -75,7 +77,11 @@ public class CollectionServiceTest {
 		}
 		assertNotNull(collectionTO.getId());
 		assertEquals("test collection", collectionTO.getTitle());
+	}
 
+	@Test
+	public void test_releaseCollection() throws Exception{
+		
 		try {
 			collService.release(collection.getIdString(), JenaUtil.testUser);
 			fail("should not be allowed to release collection");
@@ -102,5 +108,30 @@ public class CollectionServiceTest {
 			e.printStackTrace();
 		}
 
+	}
+	
+	@Test
+	public void test_createCollection() throws Exception{
+
+		CollectionTO to = new CollectionTO();
+		try {
+			
+			to = collService.create(to, JenaUtil.testUser);
+			System.out.println("fertig");
+		} catch (Exception e) {
+			fail();
+			e.printStackTrace();
+		}
+		// check the collection be created and has new id
+		assertNotNull(to.getId());
+		// check the collection status
+		assertTrue(to.getStatus().equals("PENDING"));
+		//check the collection profile
+		assertNotNull(to.getProfile());
+		//check the createdDate attribute
+		assertNotNull(to.getCreatedDate());
+		//check the createdBy attribute
+		assertNotNull(to.getCreatedBy());
+		
 	}
 }

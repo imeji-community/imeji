@@ -69,7 +69,9 @@ import de.mpg.imeji.presentation.util.PropertyReader;
 public class JenaUtil {
 	private static Logger logger = Logger.getLogger(JenaUtil.class);
 	public static User testUser;
+	public static User testUser2;
 	public static String TEST_USER_EMAIL = "test@imeji.org";
+	public static String TEST_USER_EMAIL_2 = "test2@imeji.org";
 	public static String TEST_USER_NAME = "Test User";
 	public static String TEST_USER_PWD = "password";
 	public static String TDB_PATH;
@@ -114,13 +116,16 @@ public class JenaUtil {
 
 	private static void initTestUser() throws Exception {
 		testUser = getMockupUser(TEST_USER_EMAIL, TEST_USER_NAME, TEST_USER_PWD);
+		testUser2 = getMockupUser(TEST_USER_EMAIL_2, TEST_USER_NAME,
+				TEST_USER_PWD);
 		createUser(testUser);
+		createUser(testUser2);
 	}
 
 	private static void createUser(User u) {
 		try {
 			UserController c = new UserController(Imeji.adminUser);
-			c.create(testUser, USER_TYPE.DEFAULT);
+			c.create(u, USER_TYPE.DEFAULT);
 		} catch (Exception e) {
 			logger.info(u.getEmail() + " already exists. Must not be created");
 		}

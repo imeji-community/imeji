@@ -1219,3 +1219,11 @@
   text-align: center;
   padding-top: 10px;
 }
+
+.json{
+	background-color: white;
+	width: 50%;
+	padding-left: 5px;
+	line-height: 1.5;
+}
+}

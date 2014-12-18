@@ -44,17 +44,19 @@ public class ItemResource implements ImejiResource {
 	@POST
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@ApiOperation(value = "Create new item with a File", notes = "Create an item with a file. File can be defined either as (by order of priority):"
-			+ "<br/> 1) form parameter <br/> 2) json parameter: \"fetchUrl\" : \"http://example.org/myFile.png\" (myFile.png will be uploaded in imeji) "
+			+ "<br/> 1) form parameter (multipart/form-data)<br/> 2) json parameter: \"fetchUrl\" : \"http://example.org/myFile.png\" (myFile.png will be uploaded in imeji) "
 			+ "<br/> 3) json parameter \"referenceUrl\" : \"http://example.org/myFile.png\" (myFile.png will be only referenced in imeji, i.e. not uploaded)"
 			+ "<br/><br/>"
 			+ "Json example:"
-			+ "<br/>{"
-			+ "<br/>\"collectionId\" : \"abc123\", (requied)"
+			+ "<div class=\"json\">"
+			+ "{"
+			+ "<br/>\"collectionId\" : \"abc123\", (required)"
 			+ "<br/>\"fetchUrl\" : \"http://example.org/myFile.png\", (optional)"
 			+ "<br/>\"referenceUrl\" : \"http://example.org/myFile.png\", (optional)"
 			+ "<br/>\"filename\" : \"new filename\", (optional)"
 			+ "<br/>\"metadata\" : [] (optional)"
 			+ "<br/>}"
+			+ "</div>"
 			+ "<br/><br/>"
 			+ "rename and save the uploaded image with filename parameter"
 			+ "<br/><br/>"
@@ -71,18 +73,19 @@ public class ItemResource implements ImejiResource {
 	@PUT
 	@Path("/{id}")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	@ApiOperation(value = "Update an item", notes = "Update an already existed item. Both the item metadata and the item file can be updated. "
-			+ "File can be defined either as (by order of priority):"
-			+ "<br/> 1) form parameter <br/> 2) json parameter: \"fetchUrl\" : \"http://example.org/myFile.png\" (myFile.png will be uploaded in imeji) "
+	@ApiOperation(value = "Update an item", notes = "Update an already existed item. Both the item metadata and the item file can be updated. File can be defined either as (by order of priority):"
+			+ "<br/> 1) form parameter (multipart/form-data)<br/> 2) json parameter: \"fetchUrl\" : \"http://example.org/myFile.png\" (myFile.png will be uploaded in imeji) "
 			+ "<br/> 3) json parameter \"referenceUrl\" : \"http://example.org/myFile.png\" (myFile.png will be only referenced in imeji, i.e. not uploaded)"
 			+ "<br/><br/>"
 			+ "Json example:"
-			+ "<br/>{"
+			+ "<div class=\"json\">"
+			+ "{"
 			+ "<br/>\"collectionId\" : \"abc123\","
 			+ "<br/>\"fetchUrl\" : \"http://example.org/myFile.png\","
 			+ "<br/>\"referenceUrl\" : \"http://example.org/myFile.png\","
 			+ "<br/>\"metadata\" : []"
 			+ "<br/>}"
+			+"</div>"
 			+ "<br/><br/>"
 			+ "The metadata parameter allows to define the metadata of item during the creation of the item. To get an example of how to do it, please try the get item method")
 	@Produces(MediaType.APPLICATION_JSON)

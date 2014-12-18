@@ -3,13 +3,9 @@ package de.mpg.imeji.rest.resources;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
-
 import de.mpg.imeji.rest.process.ItemProcess;
 import de.mpg.imeji.rest.process.RestProcessUtils;
-import de.mpg.imeji.rest.resources.ImejiResource;
 import de.mpg.imeji.rest.to.JSONResponse;
-
-import org.apache.commons.io.FilenameUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
@@ -18,7 +14,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
 import java.io.InputStream;
 
 @Path("/items")
@@ -80,7 +75,8 @@ public class ItemResource implements ImejiResource {
 			+ "Json example:"
 			+ "<div class=\"json\">"
 			+ "{"
-			+ "<br/>\"collectionId\" : \"abc123\","
+			+ "<br/>\"id\" : \"abc123\","
+			+ "<br/>\"collectionId\" : \"def123\","
 			+ "<br/>\"fetchUrl\" : \"http://example.org/myFile.png\","
 			+ "<br/>\"referenceUrl\" : \"http://example.org/myFile.png\","
 			+ "<br/>\"metadata\" : []"

@@ -72,7 +72,7 @@ public class CollectionProcess {
 	
 	public static JSONResponse releaseCollection(HttpServletRequest req, String id){
 		JSONResponse resp = new JSONResponse();
-		resp.setStatus(Status.OK);
+		resp.setStatus(Status.NO_CONTENT);
 		User u = BasicAuthentication.auth(req);
 		CollectionService service = new CollectionService();
 		try {

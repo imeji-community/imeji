@@ -5,6 +5,8 @@ package de.mpg.imeji.logic.util;
 
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -15,6 +17,8 @@ import java.util.regex.Pattern;
 import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.j2j.annotations.j2jModel;
 import de.mpg.j2j.annotations.j2jResource;
+
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
  * Helper for imeji {@link Object}
@@ -172,5 +176,49 @@ public class ObjectHelper
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * Transfer a value from {@code obj1} to {@code obj2}. Value wil be get with the {@code getter} method and set
+     * with {@code setter} method. Type of the transferred value should be same for {@code obj1} and {@code obj2}
+     *
+     * @param obj1
+     * @param obj2
+     * 
+     */
+    public static void transferField(String getter, Object obj1, String setter, Object obj2) {
+        if (obj1 == null || obj2 == null || isNullOrEmpty(getter) || isNullOrEmpty(setter))
+            return;
+        Class fromClass = obj1.getClass();
+        Class toClass = obj2.getClass();
+        try {
+
+            Method getterMethod = null;
+            Method setterMethod = null;
+            for (Method m: fromClass.getMethods()) {
+                if (m.getName().equalsIgnoreCase(getter)) {
+                    getterMethod = m;
+                    break;
+                }
+            }
+            for (Method m: toClass.getMethods()) {
+                if (m.getName().equalsIgnoreCase(setter)) {
+                    setterMethod = m;
+                    break;
+                }
+            }
+            if ( getterMethod != null && setterMethod!= null) {
+                Object val = null;
+                val = getterMethod.invoke(obj1);
+                if (val != null) {
+                    setterMethod.invoke(obj2, val);
+                }
+            }
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
     }
 }

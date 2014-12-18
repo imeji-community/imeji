@@ -3,10 +3,7 @@ package de.mpg.imeji.rest.process;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response.Status;
 
-import de.mpg.imeji.logic.auth.Authentication;
-import de.mpg.imeji.logic.auth.AuthenticationFactory;
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
-import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.to.CollectionTO;
@@ -27,15 +24,15 @@ public class CollectionProcess {
 			resp.setObject(to);
 			resp.setStatus(Status.OK);
 		} catch (NotFoundException e) {
-			resp.setObject(RestProcessUtils.buildBadRequestResponse());
+			resp.setObject(RestProcessUtils.buildBadRequestResponse(e.getLocalizedMessage()));
 			resp.setStatus(Status.BAD_REQUEST);
 
 		} catch (NotAllowedError e) {
 			if (u == null) {
-				resp.setObject(RestProcessUtils.buildUnauthorizedResponse());
+				resp.setObject(RestProcessUtils.buildUnauthorizedResponse(e.getLocalizedMessage()));
 				resp.setStatus(Status.UNAUTHORIZED);
 			} else {
-				resp.setObject(RestProcessUtils.buildNotAllowedResponse());
+				resp.setObject(RestProcessUtils.buildNotAllowedResponse(e.getLocalizedMessage()));
 				resp.setStatus(Status.FORBIDDEN);
 
 			}
@@ -53,7 +50,7 @@ public class CollectionProcess {
 		
 		if(u == null)
 		{
-			resp.setObject(RestProcessUtils.buildUnauthorizedResponse());
+			resp.setObject(RestProcessUtils.buildUnauthorizedResponse("Not logged in not allowed to create collection"));
 			resp.setStatus(Status.UNAUTHORIZED);
 		}
 		else
@@ -64,13 +61,43 @@ public class CollectionProcess {
 				resp.setObject(service.create(to, u));
 				resp.setStatus(Status.CREATED);
 			} catch (Exception e) {
-				resp.setObject(RestProcessUtils.buildBadRequestResponse());
+				resp.setObject(RestProcessUtils.buildBadRequestResponse(e.getLocalizedMessage()));
 				resp.setStatus(Status.BAD_REQUEST);
 			}
 
 		}  
 		return resp;
 
+	}
+	
+	public static JSONResponse releaseCollection(HttpServletRequest req, String id){
+		JSONResponse resp = new JSONResponse();
+		resp.setStatus(Status.OK);
+		User u = BasicAuthentication.auth(req);
+		CollectionService service = new CollectionService();
+		try {
+				service.release(id, u);
+			} catch (NotFoundException e) {
+				resp.setObject(RestProcessUtils.buildBadRequestResponse(e.getLocalizedMessage()));
+				resp.setStatus(Status.BAD_REQUEST);
+
+			} catch (NotAllowedError e) {
+				if (u == null) {
+					resp.setObject(RestProcessUtils.buildUnauthorizedResponse(e.getLocalizedMessage()));
+					resp.setStatus(Status.UNAUTHORIZED);
+				} else {
+					resp.setObject(RestProcessUtils.buildNotAllowedResponse(e.getLocalizedMessage()));
+					resp.setStatus(Status.FORBIDDEN);
+
+				}
+			} catch(RuntimeException e){
+				resp.setObject(RestProcessUtils.buildExceptionResponse(e.getLocalizedMessage()));
+				resp.setStatus(Status.FORBIDDEN);
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}	
+		return resp;
 	}
 
 

@@ -4,14 +4,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import de.mpg.imeji.rest.to.MetadataTO;
+import de.mpg.j2j.annotations.j2jDataType;
 
 @XmlRootElement
-@XmlType (propOrder = {	 
+@j2jDataType("http://imeji.org/terms/metadata#date")
+@XmlType (propOrder = {
 		"date"
 		})
 public class DateTO extends MetadataTO{
-	
-    private String date;
+	private static final long serialVersionUID = -2728940704203315449L;
+	private String date;
  
 	public String getDate() {
 		return date;

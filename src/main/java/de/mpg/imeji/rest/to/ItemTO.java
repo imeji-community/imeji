@@ -1,20 +1,22 @@
 package de.mpg.imeji.rest.to;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAccessOrder;
-import javax.xml.bind.annotation.XmlAccessorOrder;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+
+import static com.fasterxml.jackson.annotation.JsonInclude.*;
 
 @XmlRootElement
 @XmlType (propOrder = {	
 		"id",
 		"createdBy",
-		"modifiedBy", 
+		"modifiedBy",
 		"createdDate",
 		"modifiedDate",
 		"versionDate",
@@ -31,6 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 		"fileUrl",
 		"metadata"
 		})
+@JsonInclude(Include.NON_NULL)
 public class ItemTO extends PropertiesTO implements Serializable{
 
 	private static final long serialVersionUID = 8408059450327059926L;
@@ -38,7 +41,7 @@ public class ItemTO extends PropertiesTO implements Serializable{
 	private String visibility;
     
 	private String collectionId;
-	
+
     private String filename;
     
     private String mimetype;
@@ -53,7 +56,6 @@ public class ItemTO extends PropertiesTO implements Serializable{
     
     private List<MetadataSetTO> metadata = new ArrayList<MetadataSetTO>();
     
-
 
 	public String getVisibility() {
 		return visibility;
@@ -143,14 +145,13 @@ public class ItemTO extends PropertiesTO implements Serializable{
 
 	public void setMetadata(List<MetadataSetTO> metadata) {
 		this.metadata = metadata;
+		if (metadata != null) {
+			int pos = 0;
+			for (MetadataSetTO md : metadata) {
+				md.setPosition(pos++);
+			}
+		}
 	}
 
-
-
-
-
-    
-    
-    
 
 }

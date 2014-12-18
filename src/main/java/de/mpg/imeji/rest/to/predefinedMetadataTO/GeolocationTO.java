@@ -4,14 +4,17 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import de.mpg.imeji.rest.to.MetadataTO;
+import de.mpg.j2j.annotations.j2jDataType;
 
 @XmlRootElement
+@j2jDataType("http://imeji.org/terms/metadata#geolocation")
 @XmlType (propOrder = {	 
 		"name",
 		"longitude",
 		"latitude"
 		})
 public class GeolocationTO extends MetadataTO{
+	private static final long serialVersionUID = 8462024730005197786L;
 	private String name;
 	private double longitude;
 	private double latitude;

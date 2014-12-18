@@ -1,4 +1,4 @@
-package de.mpg.imeji.rest.test;
+package de.mpg.imeji.rest.resources.test.integration;
 
 import com.google.common.collect.ImmutableMap;
 import org.glassfish.grizzly.http.server.HttpServer;

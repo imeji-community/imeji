@@ -1,6 +1,9 @@
 package de.mpg.imeji.rest.to;
 
-public class LabelTO {
+import java.io.Serializable;
+
+public class LabelTO implements Serializable{
+	private static final long serialVersionUID = -2008451477251307856L;
 	private String language;
 	private String value;
 	

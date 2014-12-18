@@ -1,12 +1,17 @@
 package de.mpg.imeji.rest.to;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import java.io.Serializable;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+
+import static com.fasterxml.jackson.annotation.JsonInclude.*;
 
 @XmlRootElement
 @XmlType (propOrder = {	 
@@ -16,6 +21,8 @@ import javax.xml.bind.annotation.XmlType;
 		"statementUri",
 		"typeUri",
 		})
+@JsonInclude(Include.NON_NULL)
+@JsonDeserialize(using = MetadataSetTODeserializer.class)
 public class MetadataSetTO implements Serializable{
 
 	private static final long serialVersionUID = 5826924314949469841L;
@@ -52,6 +59,7 @@ public class MetadataSetTO implements Serializable{
 
 	public void setValue(MetadataTO value) {
 		this.value = value;
+
 	}
 
 	public URI getStatementUri() {

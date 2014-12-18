@@ -133,9 +133,9 @@
 					<h:panelGroup layout="block" styleClass="imj_metadataSubPanel">
 						<span class="imj_metadataSubPanelItem">
 							<h:outputText id="lblViewItemFull_lblBasic" value="#{lbl.metadata} "/>
-								<h:commandLink rendered="#{Auth.updateContent(itemBean.image) and !itemBean.locked and itemBean.edit.toggleState == 'displayMd' and itemBean.profile.statements.size() > 0}" value="#{lbl.edit}" action="#{itemBean.edit.showEditor}">
-									<f:ajax execute="@this" render="@form"/>
-								</h:commandLink>
+							<h:commandLink rendered="#{Auth.updateContent(itemBean.image) and !itemBean.locked and itemBean.edit.toggleState == 'displayMd'}" value="#{lbl.edit}" action="#{itemBean.edit.showEditor}">
+								<f:ajax execute="@this" render="@form"/>
+							</h:commandLink>
 						</span>
 							<h:outputText value="Item locked " rendered="#{Auth.updateContent(itemBean.image) and itemBean.locked}"/>
 							<h:outputLink value="#" title="#{msg.warning_locked}" rendered="#{Auth.updateContent(itemBean.image) and itemBean.locked}">[info]</h:outputLink>
@@ -165,10 +165,21 @@
 									<h:outputText value="#{lbl.filename} "/>
 									<span class="imj_invisible">: </span>
 								</div>
+
+							<ui:fragment rendered="#{itemBean.edit.toggleState == 'displayMd'}">
 								<div class="imj_metadataValue">
 									<h:outputText id="txtUrl" value="#{itemBean.image.filename}"/>
+								</div>							
+							</ui:fragment>
+							
+							<ui:fragment rendered="#{itemBean.edit.toggleState == 'editMd'}">
+								<div class="imj_metadataValue">
+									<h:inputText value="#{itemBean.newFilename}"/>
 								</div>
+							</ui:fragment>
+			
 							</h:panelGroup>
+							
 							<!-- MetaDataList - Collection -->
 							<h:panelGroup layout="block" styleClass="imj_metadataSet">
 								<div class="imj_metadataLabel">

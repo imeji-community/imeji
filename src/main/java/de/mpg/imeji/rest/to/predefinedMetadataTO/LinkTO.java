@@ -4,14 +4,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import de.mpg.imeji.rest.to.MetadataTO;
+import de.mpg.j2j.annotations.j2jDataType;
 
 @XmlRootElement
-@XmlType (propOrder = {	 
+@j2jDataType("http://imeji.org/terms/metadata#link")
+@XmlType (propOrder = {
 		"link",
 		"url"
 		})
 public class LinkTO extends MetadataTO{
-	
+	private static final long serialVersionUID = -7245573760046279074L;
 	private String link;
 	private String url;
 

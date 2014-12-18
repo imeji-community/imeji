@@ -39,4 +39,6 @@ public class ItemWithFileTO extends ItemTO {
 	public void setFetchUrl(String fetchUrl) {
 		this.fetchUrl = fetchUrl;
 	}
+	
+	
 }

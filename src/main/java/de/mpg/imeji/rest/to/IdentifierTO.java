@@ -1,15 +1,20 @@
 package de.mpg.imeji.rest.to;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+
+import static com.fasterxml.jackson.annotation.JsonInclude.*;
 
 @XmlRootElement
 @XmlType(propOrder = {	 
 		"type",
 		"value"
 		})
+@JsonInclude(Include.NON_NULL)
 public class IdentifierTO implements Serializable{
 
 

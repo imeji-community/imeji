@@ -43,7 +43,7 @@ public class UserService implements API<User>{
 	}
 
 	@Override
-	public void release(User o, User u) throws NotFoundException,
+	public void release(String id, User u) throws NotFoundException,
 			NotAllowedError, NotSupportedException, Exception {
 		// TODO Auto-generated method stub
 		

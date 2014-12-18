@@ -74,6 +74,7 @@ public class ItemBean {
 	private MetadataSetBean mds;
 	private List<Album> relatedAlbums;
 	private String dateCreated;
+	private String newFilename;
 
 	/**
 	 * Construct a default {@link ItemBean}
@@ -650,5 +651,15 @@ public class ItemBean {
 	 */
 	public void setDateCreated(String dateCreated) {
 		this.dateCreated = dateCreated;
+	}
+
+	public String getNewFilename() {
+		this.newFilename = getImage().getFilename();
+		return newFilename;
+	}
+
+	public void setNewFilename(String newFilename) {
+		if(!"".equals(newFilename))
+			getImage().setFilename(newFilename);
 	}
 }

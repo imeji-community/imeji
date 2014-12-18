@@ -24,7 +24,8 @@ public class AuthenticationFactoryTest {
 	public void setUp() throws Exception {
 		new PropertyBean();
 		JenaUtil.initJena();
-		JenaUtil.addUser("test@imeji.org", null, "test");
+		// TODO Write test
+		//JenaUtil.addUser("test@imeji.org", null, "test");
 	}
 
 	@After

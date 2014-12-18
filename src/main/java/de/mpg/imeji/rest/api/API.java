@@ -21,11 +21,10 @@ import de.mpg.j2j.exceptions.NotFoundException;
  * method
  * 
  * @author saquet
- *
+ * 
  * @param <V>
  */
 public interface API<V> {
-	static Logger logger = Logger.getLogger(API.class);
 
 	/**
 	 * Create an Object in imeji
@@ -76,8 +75,8 @@ public interface API<V> {
 	 * @param o
 	 * @param u
 	 */
-	public void release(V o, User u) throws NotFoundException, NotAllowedError,
-			NotSupportedException, Exception;
+	public void release(String i, User u) throws NotFoundException,
+			NotAllowedError, NotSupportedException, Exception;
 
 	/**
 	 * Withdraw an object

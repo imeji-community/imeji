@@ -2,9 +2,9 @@ package de.mpg.imeji.rest.process;
 
 import java.net.URI;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
+import com.google.common.collect.ImmutableMap;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.ContainerMetadata;
@@ -34,12 +34,9 @@ import de.mpg.imeji.rest.to.predefinedMetadataTO.LinkTO;
 import de.mpg.imeji.rest.to.predefinedMetadataTO.NumberTO;
 import de.mpg.imeji.rest.to.predefinedMetadataTO.PublicationTO;
 import de.mpg.imeji.rest.to.predefinedMetadataTO.TextTO;
-import de.mpg.imeji.logic.vo.*;
-import de.mpg.imeji.presentation.util.ImejiFactory;
-import de.mpg.imeji.rest.api.ProfileService;
 import de.mpg.imeji.rest.to.*;
 
-import java.util.UUID;
+import static com.google.common.base.Strings.*;
 
 public class ReverseTransferObjectFactory {
 	
@@ -69,19 +66,30 @@ public class ReverseTransferObjectFactory {
 	}
 	
 	public static void transferItem(ItemTO to, Item vo){
-		vo.setCollection(ObjectHelper.getURI(CollectionImeji.class, to.getCollectionId()));
-		vo.setFilename(to.getFilename());
+
+		//only fields which can be transferred for TO to VO!!!
+		if (!isNullOrEmpty(to.getId()))
+			vo.setId(ObjectHelper.getURI(Item.class, to.getId()));
+
+		if (!isNullOrEmpty(to.getCollectionId()))
+			vo.setCollection(ObjectHelper.getURI(CollectionImeji.class, to.getCollectionId()));
+
+		for (Map.Entry<String, String> field : ImmutableMap.of(
+				"getFilename", "setFilename"//,
+				//"getMimeType", "setFileType"
+				).entrySet()) {
+			ObjectHelper.transferField(field.getKey(), to, field.getValue(), vo);
+		}
+
 		transferItemMetaData(to.getMetadata(), vo);
-		
 	}
-	
+
+
 	public static void transferItemMetaData(List<MetadataSetTO> toMds, Item vo){
 		MetadataSet voMds = new MetadataSet();
 	
 		for(MetadataSetTO mdTO : toMds){
 			Metadata md = null;
-			md.setPos(mdTO.getPosition());
-			md.setStatement(mdTO.getStatementUri());
 			String typeUri = mdTO.getTypeUri().toString();
 			switch(typeUri){
 			case "http://imeji.org/terms/metadata#text":
@@ -142,6 +150,8 @@ public class ReverseTransferObjectFactory {
 				md = mdLink;
 				break;
 			}
+			md.setPos(mdTO.getPosition());
+			md.setStatement(mdTO.getStatementUri());
 			voMds.getMetadata().add(md);
 			vo.getMetadataSets().add(voMds);
 		}

@@ -3,27 +3,8 @@
  */
 package de.mpg.imeji.logic.controller;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.activation.MimetypesFileTypeMap;
-
-import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
-import de.mpg.imeji.logic.auth.Authorization;
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.reader.ReaderFacade;
@@ -37,20 +18,20 @@ import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.UploadResult;
-import de.mpg.imeji.logic.storage.impl.ExternalStorage;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Container;
-import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.logic.vo.Item.Visibility;
-import de.mpg.imeji.logic.vo.Metadata;
-import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Properties.Status;
-import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.writer.WriterFacade;
-import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.j2j.helper.J2JHelper;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.net.URI;
+import java.util.*;
 
 /**
  * Implements CRUD and Search methods for {@link Item}
@@ -100,19 +81,11 @@ public class ItemController extends ImejiController {
 	 * @return
 	 * @throws Exception
 	 */
-	public Item createWithFile(Item item, File f, String filename,
-			CollectionImeji c, User user) throws Exception {
-		if (!AuthUtil.staticAuth().create(user, item))
-			throw new NotAllowedError(
-					"User not Allowed to upload files in collection "
-							+ c.getIdString());
-		if (filename == null)
-			filename = f.getName();
+	public Item createWithFile(Item item, File f, String filename, CollectionImeji c, User user) throws Exception {
+		if (!AuthUtil.staticAuth().create(user, item))  
+			throw new NotAllowedError("User not Allowed to upload files in collection "+ c.getIdString());
 		StorageController sc = new StorageController();
-//		MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
-//		String mimeType = mimeTypesMap.getContentType(f);
-		Path p = Paths.get(filename);
-		String mimeType = Files.probeContentType(p);
+		String mimeType = StorageUtils.getMimeType(f);
 		UploadResult uploadResult = sc.upload(filename, f, c.getIdString());
 		if (item == null)
 			item = ImejiFactory.newItem(c);
@@ -135,11 +108,14 @@ public class ItemController extends ImejiController {
 	 * @return
 	 * @throws Exception
 	 */
-	public Item createWithExternalFile(Item item, CollectionImeji c,
-			String externalFileUrl, boolean download, User user)
-			throws Exception {
+	public Item createWithExternalFile(Item item, CollectionImeji c, String externalFileUrl, String filename, boolean download, User user) throws Exception {
 		File tmp = null;
-		String filename = FilenameUtils.getName(externalFileUrl);
+		String origName = FilenameUtils.getName(externalFileUrl);
+		if("".equals(filename) || filename == null)
+			filename = origName;
+		else
+			filename = filename + "." + FilenameUtils.getExtension(origName);
+
 		StorageController sController = new StorageController("external");
 		if (item == null)
 			item = ImejiFactory.newItem(c);
@@ -250,8 +226,7 @@ public class ItemController extends ImejiController {
 		Collection<Item> l = new ArrayList<Item>();
 		l.add(item);
 		update(l, user);
-
-		return item;
+		return retrieve(item.getId(), user);
 	}
 
 	/**
@@ -283,10 +258,7 @@ public class ItemController extends ImejiController {
 		StorageController sc = new StorageController();
 		sc.update(item.getFullImageUrl().toString(), f);
 		item.setChecksum(sc.calculateChecksum(f));
-//		MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
-//		item.setFiletype(mimeTypesMap.getContentType(f));
-		Path p = Paths.get(f.getName());
-		String mimeType = Files.probeContentType(p);
+		String mimeType = StorageUtils.getMimeType(f);
 		item.setFiletype(mimeType);
 		sc.update(item.getWebImageUrl().toString(), f);
 		sc.update(item.getThumbnailImageUrl().toString(), f);

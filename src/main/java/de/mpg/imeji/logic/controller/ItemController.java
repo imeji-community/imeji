@@ -33,6 +33,8 @@ import java.io.FileOutputStream;
 import java.net.URI;
 import java.util.*;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 /**
  * Implements CRUD and Search methods for {@link Item}
  * 
@@ -266,6 +268,37 @@ public class ItemController extends ImejiController {
 	}
 
 	/**
+	 * Update the {@link Item} with External link to File.
+	 *
+	 * @param item
+	 * @param externalFileUrl
+	 * @param filename
+	 * @param download
+	 * @param u
+	 * @return
+	 * @throws Exception
+	 */
+	public Item updateWithExternalFile(Item item, String externalFileUrl, String filename, boolean download, User u) throws Exception {
+		String origName = FilenameUtils.getName(externalFileUrl);
+		filename = isNullOrEmpty(filename) ? origName : filename + "." + FilenameUtils.getExtension(origName);
+		StorageController sController = new StorageController("external");
+		if (download) {
+			// download the file in storage
+			File tmp = File.createTempFile("imeji", null);
+			sController.read(externalFileUrl, new FileOutputStream(tmp), true);
+			item = updateFile(item, tmp, u);
+		} else {
+			// Reference the file
+			item.setFilename(filename);
+			item.setFullImageUrl(URI.create(externalFileUrl));
+			item.setThumbnailImageUrl(URI.create("NO_THUMBNAIL_URL"));
+			item.setWebImageUrl(URI.create("NO_THUMBNAIL_URL"));
+			item = update(item, u);
+		}
+		return item;
+
+	}
+	/**
 	 * 
 	 * Update only the thumbnail and the Web Resolution (doesn't change the
 	 * original file)
@@ -476,5 +509,6 @@ public class ItemController extends ImejiController {
 		}
 		return item;
 	}
+
 
 }

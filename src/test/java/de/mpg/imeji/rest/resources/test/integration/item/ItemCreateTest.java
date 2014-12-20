@@ -34,7 +34,7 @@ public class ItemCreateTest extends ImejiTestBase {
             .getLogger(ItemCreateTest.class);
 
     private static String itemJSON;
-    private static final String pathPrefix = "/items";
+    private static final String pathPrefix = "/rest/items";
 
     @BeforeClass
     public static void specificSetup() throws Exception {

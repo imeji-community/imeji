@@ -281,11 +281,11 @@ public class ItemController extends ImejiController {
 	public Item updateWithExternalFile(Item item, String externalFileUrl, String filename, boolean download, User u) throws Exception {
 		String origName = FilenameUtils.getName(externalFileUrl);
 		filename = isNullOrEmpty(filename) ? origName : filename + "." + FilenameUtils.getExtension(origName);
-		StorageController sController = new StorageController("external");
+		StorageController sc = new StorageController("external");
 		if (download) {
 			// download the file in storage
 			File tmp = File.createTempFile("imeji", null);
-			sController.read(externalFileUrl, new FileOutputStream(tmp), true);
+			sc.read(externalFileUrl, new FileOutputStream(tmp), true);
 			item = updateFile(item, tmp, u);
 		} else {
 			// Reference the file

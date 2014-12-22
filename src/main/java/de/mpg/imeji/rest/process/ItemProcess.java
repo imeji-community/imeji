@@ -1,6 +1,7 @@
 package de.mpg.imeji.rest.process;
 
 import com.google.common.io.ByteStreams;
+import com.google.common.io.Files;
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.api.ItemService;
@@ -179,23 +180,25 @@ public class ItemProcess {
 		ItemService service = new ItemService();
 
 		try {
-			ItemTO to = !isNullOrEmpty(json) && (json.indexOf("fetchUrl")>0 || json.indexOf("referenceUrl") > 0) ?
+			ItemTO to = !isNullOrEmpty(json) && (fileInputStream != null || json.indexOf("fetchUrl")>0 || json.indexOf("referenceUrl") > 0) ?
 					(ItemWithFileTO) RestProcessUtils.buildTOFromJSON(json, ItemWithFileTO.class) :
 					(ItemTO) RestProcessUtils.buildTOFromJSON(json, ItemTO.class);
 
 			validateId(id, to);
 			to.setId(id);
 			if (fileInputStream != null) {
-				String tmpPath = null;//(String)req.getServletContext().getAttribute(CommonUtils.JAVAX_SERVLET_CONTEXT_TEMPDIR);
-				File tmpFile = File.createTempFile("imejiAPI", tmpPath);
+
+				if (isNullOrEmpty(to.getFilename()) && !isNullOrEmpty(filename)) {
+					to.setFilename(filename);
+				}
+
+				//String tmpPath = null;//(String)req.getServletContext().getAttribute(CommonUtils.JAVAX_SERVLET_CONTEXT_TEMPDIR);
+				File tmpFile = File.createTempFile("imejiAPI", "." + Files.getFileExtension(to.getFilename()));
 
 				ByteStreams.copy(fileInputStream, new FileOutputStream(tmpFile));
 
 				((ItemWithFileTO)to).setFile(tmpFile);
 
-				if (isNullOrEmpty(to.getFilename()) && !isNullOrEmpty(filename)) {
-					to.setFilename(filename);
-				}
 			}
 			resp.setObject(service.update(to, u));
 			//item, no file
@@ -213,6 +216,7 @@ public class ItemProcess {
 			}
 		} catch (Exception e) {
 			resp.setStatus(Status.INTERNAL_SERVER_ERROR);
+			LOGGER.error(e.getLocalizedMessage());
 		}
 
 		return resp;

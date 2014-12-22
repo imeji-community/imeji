@@ -113,6 +113,18 @@ public class RestProcessUtils {
 		
 	}
 	
+	public static Object buildUnprocessableErrorResponse(String e){
+		JSONException ex = new JSONException();
+		HTTPError error = new HTTPError();
+		error.setCode("1422");
+		error.setTitle("Unprocessable Entity");
+		error.setMessage("processe-failed-message");
+		error.setExceptionReport(e);
+		ex.setError(error);
+		return ex;
+		
+	}
+	
 	public static Object buildExceptionResponse(String e) {
 		JSONException ex = new JSONException();
 		HTTPError error = new HTTPError();

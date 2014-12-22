@@ -1,6 +1,7 @@
 package de.mpg.imeji.rest.resources;
 
 import java.io.InputStream;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -54,7 +55,7 @@ public class CollectionResource implements ImejiResource {
 	@ApiOperation(value = "Release collection by id")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response releaseFromID(@Context HttpServletRequest req,
-			@PathParam("id") String id) {
+			@PathParam("id") String id) throws Exception {
 		JSONResponse resp = CollectionProcess.releaseCollection(req, id);
 		return RestProcessUtils.buildJSONResponse(resp);
 	}

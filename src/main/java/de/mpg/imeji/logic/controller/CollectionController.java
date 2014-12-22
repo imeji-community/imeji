@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
+import de.mpg.imeji.logic.auth.exception.UnprocessableError;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
@@ -196,7 +197,7 @@ public class CollectionController extends ImejiController {
 	 * @param user
 	 * @throws Exception
 	 */
-	public void release(CollectionImeji collection, User user) throws Exception, NotAllowedError {
+	public void release(CollectionImeji collection, User user) throws Exception {
 		ItemController itemController = new ItemController();
 		List<String> itemUris = itemController.search(collection.getId(), null,
 				null, null, user).getResults();
@@ -209,7 +210,7 @@ public class CollectionController extends ImejiController {
 			throw new RuntimeException(
 					"An empty collection can not be released!");
 		} else if(collection.getStatus().equals(Status.RELEASED)){
-			throw new NotAllowedError("The status of collection is " + collection.getStatus() + " and can not be released again!");
+			throw new UnprocessableError("The status of collection is " + collection.getStatus() + " and can not be released again!");
 		}
 			else {
 			writeReleaseProperty(collection, user);

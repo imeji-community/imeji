@@ -19,6 +19,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import net.java.dev.webdav.jaxrs.ResponseStatus;
+
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -242,6 +244,6 @@ public class CollectionTest extends ImejiTestBase {
 				.path("/" + collectionId + "/release").register(authAsUser)
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.json("{}"));
-		assertEquals(response.getStatus(), Status.FORBIDDEN.getStatusCode());
+		assertEquals(response.getStatus(), ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode());
 	}
 }

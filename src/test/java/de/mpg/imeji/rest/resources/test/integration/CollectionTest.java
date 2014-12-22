@@ -190,7 +190,7 @@ public class CollectionTest extends ImejiTestBase {
 				.path("/" + collectionId + "/release").register(authAsUser)
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.json("{}"));
-		assertEquals(response.getStatus(), Status.OK.getStatusCode());
+		assertEquals(response.getStatus(), Status.NO_CONTENT.getStatusCode());
 		CollectionService s = new CollectionService();
 		assertEquals("RELEASED", s.read(collectionId, JenaUtil.testUser)
 				.getStatus());
@@ -232,38 +232,16 @@ public class CollectionTest extends ImejiTestBase {
 	}
 	
 	@Test
-	public void test_3_ReleaseCollection_5_AddItemInReleasedCollection() throws Exception{
+	public void test_3_ReleaseCollection_5_ReleaseCollectionTwice() throws NotAllowedError, NotFoundException, Exception{
 		initItem();
+		CollectionService s = new CollectionService();
+		s.release(collectionId, JenaUtil.testUser);
+		assertEquals("RELEASED", s.read(collectionId, JenaUtil.testUser)
+				.getStatus());
 		Response response = target(pathPrefix)
-				.path("/" + collectionId + "/release")
-				.register(authAsUser)
+				.path("/" + collectionId + "/release").register(authAsUser)
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.json("{}"));
-		CollectionService s = new CollectionService();
-		
-		try {
-			System.out.println(s.read(collectionId, JenaUtil.testUser).getStatus());
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		ItemService is = new ItemService();
-		ItemWithFileTO to = new ItemWithFileTO();
-		ItemTO itemTo = new ItemTO();
-		to.setCollectionId(collectionId);
-		to.setFile(new File("src/test/resources/storage/test2.png"));
-		try {
-			
-			itemTo =  is.create(to, JenaUtil.testUser);
-			 	
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		System.out.println(itemId);
-		System.out.println(itemTo.getId());
-	 	System.out.println("collectionId " +collectionId);
-	 	System.out.println("collectionId "+itemTo.getCollectionId());
-	 	System.out.println(s.read(collectionId, JenaUtil.testUser).getStatus()); 	
+		assertEquals(response.getStatus(), Status.FORBIDDEN.getStatusCode());
 	}
 }

@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
+import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
@@ -195,10 +196,11 @@ public class CollectionController extends ImejiController {
 	 * @param user
 	 * @throws Exception
 	 */
-	public void release(CollectionImeji collection, User user) throws Exception {
+	public void release(CollectionImeji collection, User user) throws Exception, NotAllowedError {
 		ItemController itemController = new ItemController();
 		List<String> itemUris = itemController.search(collection.getId(), null,
 				null, null, user).getResults();
+	
 		if (hasImageLocked(itemUris, user)) {
 			throw new RuntimeException(
 					((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
@@ -206,7 +208,10 @@ public class CollectionController extends ImejiController {
 		} else if (itemUris.isEmpty()) {
 			throw new RuntimeException(
 					"An empty collection can not be released!");
-		} else {
+		} else if(collection.getStatus().equals(Status.RELEASED)){
+			throw new NotAllowedError("The status of collection is " + collection.getStatus() + " and can not be released again!");
+		}
+			else {
 			writeReleaseProperty(collection, user);
 			List<Item> items = (List<Item>) itemController.retrieve(itemUris,
 					-1, 0, user);

@@ -180,7 +180,7 @@ public class ItemProcess {
 		ItemService service = new ItemService();
 
 		try {
-			ItemTO to = !isNullOrEmpty(json) && (fileInputStream != null || json.indexOf("fetchUrl")>0 || json.indexOf("referenceUrl") > 0) ?
+			ItemTO to = !isNullOrEmpty(json) && (fileInputStream != null || json.indexOf("fetchUrl") > 0 || json.indexOf("referenceUrl") > 0) ?
 					(ItemWithFileTO) RestProcessUtils.buildTOFromJSON(json, ItemWithFileTO.class) :
 					(ItemTO) RestProcessUtils.buildTOFromJSON(json, ItemTO.class);
 
@@ -192,8 +192,8 @@ public class ItemProcess {
 					to.setFilename(filename);
 				}
 
-				//String tmpPath = null;//(String)req.getServletContext().getAttribute(CommonUtils.JAVAX_SERVLET_CONTEXT_TEMPDIR);
-				File tmpFile = File.createTempFile("imejiAPI", "." + Files.getFileExtension(to.getFilename()));
+				File tmpPath = (File)req.getServletContext().getAttribute(CommonUtils.JAVAX_SERVLET_CONTEXT_TEMPDIR);
+				File tmpFile = File.createTempFile("imejiAPI", "." + Files.getFileExtension(to.getFilename()), tmpPath);
 
 				ByteStreams.copy(fileInputStream, new FileOutputStream(tmpFile));
 

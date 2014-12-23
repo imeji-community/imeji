@@ -81,6 +81,7 @@ public class ItemService implements API<ItemTO> {
 						downloadFile(tof), u);
 			else
 				item = controller.updateFile(item, tof.getFile(), u);
+			tof.setFile(null);
 		} else {
 			item = controller.update(item, u);
 		}

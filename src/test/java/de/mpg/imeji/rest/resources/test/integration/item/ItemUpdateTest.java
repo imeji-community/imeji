@@ -1,6 +1,7 @@
 package de.mpg.imeji.rest.resources.test.integration.item;
 
 import de.mpg.imeji.logic.storage.StorageController;
+import de.mpg.imeji.rest.process.RestProcessUtils;
 import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
@@ -113,6 +114,8 @@ public class ItemUpdateTest extends ImejiTestBase {
         assertThat("Wrong file name", itemWithFileTO.getFilename(), equalTo(UPDATED_FILE_NAME));
 
         storedFileURL = target().getUri() + itemWithFileTO.getFileUrl().getPath().substring(1);
+
+        LOGGER.info(RestProcessUtils.buildJSONFromObject(itemWithFileTO));
 
     }
 

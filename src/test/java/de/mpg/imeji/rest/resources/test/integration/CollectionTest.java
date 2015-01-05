@@ -1,5 +1,6 @@
 package de.mpg.imeji.rest.resources.test.integration;
 
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.isEmptyOrNullString;
@@ -21,27 +22,39 @@ import javax.ws.rs.core.Response.Status;
 
 import net.java.dev.webdav.jaxrs.ResponseStatus;
 
+=======
+import de.mpg.imeji.logic.auth.exception.NotAllowedError;
+import de.mpg.imeji.rest.api.CollectionService;
+import de.mpg.imeji.rest.api.ItemService;
+import de.mpg.imeji.rest.resources.test.TestUtils;
+import de.mpg.imeji.rest.to.ItemTO;
+import de.mpg.imeji.rest.to.ItemWithFileTO;
+import de.mpg.j2j.exceptions.NotFoundException;
+>>>>>>> af4fb0b528a2b08510a944498a6ae4cba6a5a781
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import util.JenaUtil;
-import de.mpg.imeji.logic.auth.exception.NotAllowedError;
-import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.rest.api.CollectionService;
-import de.mpg.imeji.rest.api.ItemService;
-import de.mpg.imeji.rest.resources.test.TestUtils;
-import de.mpg.imeji.rest.to.CollectionTO;
-import de.mpg.imeji.rest.to.ItemTO;
-import de.mpg.imeji.rest.to.ItemWithFileTO;
-import de.mpg.j2j.exceptions.NotFoundException;
+
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Map;
+
+import static javax.ws.rs.core.Response.Status.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CollectionTest extends ImejiTestBase {
@@ -49,7 +62,7 @@ public class CollectionTest extends ImejiTestBase {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(CollectionTest.class);
 
-	private static String pathPrefix = "/collections";
+	private static String pathPrefix = "/rest/collections";
 
 	@Before
 	public void specificSetup() {
@@ -69,7 +82,7 @@ public class CollectionTest extends ImejiTestBase {
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.post(Entity
 						.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
-		assertEquals(response.getStatus(), Status.CREATED.getStatusCode());
+		assertEquals(response.getStatus(), CREATED.getStatusCode());
 		Map<String, Object> collData = TestUtils.jsonToPOJO(response);
 		assertNotNull("Created collection is null", collData);
 		collectionId = (String) collData.get("id");
@@ -93,7 +106,7 @@ public class CollectionTest extends ImejiTestBase {
 				.post(Entity
 						.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
 
-		assertEquals(response.getStatus(), Status.CREATED.getStatusCode());
+		assertEquals(response.getStatus(), CREATED.getStatusCode());
 		Map<String, Object> collData = TestUtils.jsonToPOJO(response);
 		assertNotNull("Created collection is null", collData);
 		collectionId = (String) collData.get("id");
@@ -116,7 +129,7 @@ public class CollectionTest extends ImejiTestBase {
 				.post(Entity
 						.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
 
-		assertEquals(response.getStatus(), Status.CREATED.getStatusCode());
+		assertEquals(response.getStatus(), CREATED.getStatusCode());
 		Map<String, Object> collData = TestUtils.jsonToPOJO(response);
 		assertNotNull("Created collection is null", collData);
 		collectionId = (String) collData.get("id");
@@ -139,7 +152,7 @@ public class CollectionTest extends ImejiTestBase {
 				.post(Entity
 						.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
 
-		assertEquals(response.getStatus(), Status.BAD_REQUEST.getStatusCode());
+		assertEquals(response.getStatus(), BAD_REQUEST.getStatusCode());
 
 	}
 
@@ -158,7 +171,7 @@ public class CollectionTest extends ImejiTestBase {
 				.register(authAsUser).request(MediaType.APPLICATION_JSON).get();
 
 		assertThat(response.getStatus(),
-				equalTo(Status.BAD_REQUEST.getStatusCode()));
+				equalTo(BAD_REQUEST.getStatusCode()));
 	}
 
 	@Test
@@ -169,7 +182,7 @@ public class CollectionTest extends ImejiTestBase {
 		// assertThat("Authentication should fail!", jsonString,
 		// containsString("<div class=\"header\">Unauthorized</div>"));
 		assertThat(response.getStatus(),
-				equalTo(Status.UNAUTHORIZED.getStatusCode()));
+				equalTo(UNAUTHORIZED.getStatusCode()));
 
 	}
 
@@ -179,7 +192,7 @@ public class CollectionTest extends ImejiTestBase {
 				.register(authAsUser2).request(MediaType.APPLICATION_JSON)
 				.get();
 		assertThat(response.getStatus(),
-				equalTo(Status.FORBIDDEN.getStatusCode()));
+				equalTo(FORBIDDEN.getStatusCode()));
 	}
 
 	@Test
@@ -192,7 +205,9 @@ public class CollectionTest extends ImejiTestBase {
 				.path("/" + collectionId + "/release").register(authAsUser)
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.json("{}"));
+
 		assertEquals(response.getStatus(), Status.NO_CONTENT.getStatusCode());
+
 		CollectionService s = new CollectionService();
 		assertEquals("RELEASED", s.read(collectionId, JenaUtil.testUser)
 				.getStatus());
@@ -210,7 +225,7 @@ public class CollectionTest extends ImejiTestBase {
 				.path("/" + collectionId + "/release").register(authAsUser2)
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.json("{}"));
-		assertEquals(response.getStatus(), Status.FORBIDDEN.getStatusCode());
+		assertEquals(response.getStatus(), FORBIDDEN.getStatusCode());
 		
 	
 		assertEquals("PENDING",itemStatus.read(itemId, JenaUtil.testUser).getStatus());
@@ -221,7 +236,7 @@ public class CollectionTest extends ImejiTestBase {
 				.path("/" + collectionId + "/release").register(authAsUser)
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.json("{}"));	
-		assertEquals(response.getStatus(), Status.FORBIDDEN.getStatusCode());
+		assertEquals(response.getStatus(), FORBIDDEN.getStatusCode());
 	}
 	@Test
 	public void test_3_ReleaseCollection_4_WithOutUser(){
@@ -230,7 +245,7 @@ public class CollectionTest extends ImejiTestBase {
 				.path("/" + collectionId + "/release")
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.json("{}"));
-		assertEquals(response.getStatus(), Status.UNAUTHORIZED.getStatusCode());
+		assertEquals(response.getStatus(), UNAUTHORIZED.getStatusCode());
 	}
 	
 	@Test

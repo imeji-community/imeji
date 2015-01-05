@@ -1,15 +1,5 @@
 package de.mpg.imeji.rest.api;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.ws.rs.NotAllowedException;
-import javax.ws.rs.NotSupportedException;
-
-import com.google.common.base.Strings;
-import org.apache.commons.io.FilenameUtils;
-
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
@@ -17,14 +7,19 @@ import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.rest.process.ReverseTransferObjectFactory;
 import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
 import de.mpg.j2j.exceptions.NotFoundException;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.ObjectUtils;
 
-import static com.google.common.base.Strings.*;
+import javax.ws.rs.NotSupportedException;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 public class ItemService implements API<ItemTO> {
 
@@ -44,14 +39,13 @@ public class ItemService implements API<ItemTO> {
 			CollectionController cc = new CollectionController();
 			CollectionImeji collection = cc.retrieve(item.getCollection(), u);
 			// Create Item with File
-			ItemController ic = new ItemController();
 			if (((ItemWithFileTO) to).getFile() != null) {
 				// If TO has attribute File, then upload it
-				ic.createWithFile(item, ((ItemWithFileTO) to).getFile(),
+				controller.createWithFile(item, ((ItemWithFileTO) to).getFile(),
 						filename, collection, u);
 			} else if (getExternalFileUrl((ItemWithFileTO) to) != null) {
 				// If no file, but either a fetchUrl or a referenceUrl
-				ic.createWithExternalFile(item, collection,
+				controller.createWithExternalFile(item, collection,
 						getExternalFileUrl((ItemWithFileTO) to), filename,
 						downloadFile((ItemWithFileTO) to), u);
 			}
@@ -78,18 +72,23 @@ public class ItemService implements API<ItemTO> {
 	public ItemTO update(ItemTO to, User u) throws Exception {
 		Item item = controller.retrieve(ObjectHelper.getURI(Item.class, to.getId()), u);
 		ReverseTransferObjectFactory.transferItem(to, item);
-		item = controller.update(item, u);
+		if (to instanceof ItemWithFileTO) {
+			ItemWithFileTO tof = (ItemWithFileTO)to;
+			String url = getExternalFileUrl(tof);
+			if (url != null)
+				item = controller.updateWithExternalFile(item,
+						getExternalFileUrl(tof), to.getFilename(),
+						downloadFile(tof), u);
+			else
+				item = controller.updateFile(item, tof.getFile(), u);
+			tof.setFile(null);
+		} else {
+			item = controller.update(item, u);
+		}
 		TransferObjectFactory.transferItem(item, to);
 		return to;
 	}
 	
-	public ItemTO update(ItemWithFileTO to, User u) throws Exception {
-		Item item = controller.retrieve(ObjectHelper.getURI(Item.class, to.getId()), u);
-		ReverseTransferObjectFactory.transferItem(to, item);
-		item = controller.updateFile(item, to.getFile(), u);
-		TransferObjectFactory.transferItem(item, to);
-		return to;
-	}
 
 	@Override
 	public boolean delete(String id, User u) throws NotFoundException,
@@ -154,14 +153,12 @@ public class ItemService implements API<ItemTO> {
 	 * @return
 	 **/
 	private String getFilename(ItemWithFileTO to) {
-		String filename = to.getFilename();
-		if (filename == null)
-			filename = FilenameUtils.getName(to.getFile().getName());
-		if (filename == null)
-			filename = FilenameUtils.getName(to.getFetchUrl());
-		if (filename == null)
-			filename = FilenameUtils.getName(to.getReferenceUrl());
-		return filename;
+		return ObjectUtils.firstNonNull(
+				to.getFilename(),
+				FilenameUtils.getName(to.getFile().getName()),
+				FilenameUtils.getName(to.getFetchUrl()),
+				FilenameUtils.getName(to.getReferenceUrl())
+		);
 	}
 
 	/**
@@ -171,12 +168,21 @@ public class ItemService implements API<ItemTO> {
 	 * @return
 	 */
 	private String getExternalFileUrl(ItemWithFileTO to) {
-		if (!isNullOrEmpty(to.getFetchUrl()))
-			return to.getFetchUrl();
-		else if (!isNullOrEmpty(to.getReferenceUrl()))
-			return to.getReferenceUrl();
+		return firstNonNullOrEmtpy(
+				to.getFetchUrl(),
+				to.getReferenceUrl()
+		);
+	}
+
+	private String firstNonNullOrEmtpy(String... strs) {
+		if (strs == null)
+			return null;
+		for (String str : strs)
+			if (str != null && !"".equals(str.trim()))
+				return str;
 		return null;
 	}
+
 
 	/**
 	 * True if the file must be download in imeji (i.e fetchurl is defined)

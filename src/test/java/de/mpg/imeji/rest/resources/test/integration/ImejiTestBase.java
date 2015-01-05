@@ -1,19 +1,5 @@
 package de.mpg.imeji.rest.resources.test.integration;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-
-import javax.ws.rs.core.Application;
-
-import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
-import org.glassfish.jersey.test.JerseyTest;
-import org.glassfish.jersey.test.spi.TestContainerException;
-import org.glassfish.jersey.test.spi.TestContainerFactory;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-
-import util.JenaUtil;
 import de.mpg.imeji.rest.MyApplication;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
@@ -22,6 +8,18 @@ import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
 import de.mpg.imeji.rest.to.MetadataProfileTO;
+import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
+import org.glassfish.jersey.test.JerseyTest;
+import org.glassfish.jersey.test.spi.TestContainerException;
+import org.glassfish.jersey.test.spi.TestContainerFactory;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import util.JenaUtil;
+
+import javax.ws.rs.core.Application;
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 /**
  * Created by vlad on 09.12.14.
@@ -101,7 +99,7 @@ public class ImejiTestBase extends JerseyTest {
 		to.setCollectionId(collectionId);
 		to.setFile(new File("src/test/resources/storage/test.png"));
 		try {
-			itemTO= s.create(to, JenaUtil.testUser);
+			itemTO = s.create(to, JenaUtil.testUser);
 			itemId = itemTO.getId();
 		} catch (Exception e) {
 			e.printStackTrace();

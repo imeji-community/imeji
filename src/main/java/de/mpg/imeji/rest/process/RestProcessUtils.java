@@ -1,21 +1,19 @@
 package de.mpg.imeji.rest.process;
 
-import java.io.IOException;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
-
 import de.mpg.imeji.rest.to.HTTPError;
 import de.mpg.imeji.rest.to.JSONException;
 import de.mpg.imeji.rest.to.JSONResponse;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.io.IOException;
 
 public class RestProcessUtils {
 	/**
@@ -52,9 +50,7 @@ public class RestProcessUtils {
 
 	public static String buildJSONFromObject(Object obj) {
 		ObjectWriter ow = new ObjectMapper().writer()
-				.with(SerializationFeature.INDENT_OUTPUT)
-				//.without(SerializationFeature.WRITE_NULL_MAP_VALUES)
-				;
+				.with(SerializationFeature.INDENT_OUTPUT);
 		try {
 			return ow.writeValueAsString(obj);
 		} catch (IOException e) {

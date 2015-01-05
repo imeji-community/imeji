@@ -1,11 +1,14 @@
 package de.mpg.imeji.rest.to;
 
-import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import de.mpg.imeji.rest.to.predefinedMetadataTO.*;
 import de.mpg.j2j.helper.J2JHelper;
 
+import java.io.Serializable;
 import java.net.URI;
 
+@JsonInclude(Include.NON_NULL)
 public abstract class MetadataTO implements Serializable {
 	private static final long serialVersionUID = -6164935834371913175L;
 

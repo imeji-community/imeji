@@ -1,8 +1,11 @@
 package de.mpg.imeji.rest.to;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import de.mpg.imeji.logic.vo.Item;
+
 import java.io.File;
 
-import de.mpg.imeji.logic.vo.Item;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 /**
  * A convenience TO to fit the specification for create {@link Item}
@@ -10,6 +13,7 @@ import de.mpg.imeji.logic.vo.Item;
  * @author saquet
  *
  */
+@JsonInclude(Include.NON_NULL)
 public class ItemWithFileTO extends ItemTO {
 	private static final long serialVersionUID = 3788266886306040199L;
 	private File file;

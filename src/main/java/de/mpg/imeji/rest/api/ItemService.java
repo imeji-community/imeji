@@ -41,8 +41,9 @@ public class ItemService implements API<ItemTO> {
 			// Create Item with File
 			if (((ItemWithFileTO) to).getFile() != null) {
 				// If TO has attribute File, then upload it
-				controller.createWithFile(item, ((ItemWithFileTO) to).getFile(),
-						filename, collection, u);
+				controller.createWithFile(item,
+						((ItemWithFileTO) to).getFile(), filename, collection,
+						u);
 			} else if (getExternalFileUrl((ItemWithFileTO) to) != null) {
 				// If no file, but either a fetchUrl or a referenceUrl
 				controller.createWithExternalFile(item, collection,
@@ -70,10 +71,11 @@ public class ItemService implements API<ItemTO> {
 
 	@Override
 	public ItemTO update(ItemTO to, User u) throws Exception {
-		Item item = controller.retrieve(ObjectHelper.getURI(Item.class, to.getId()), u);
+		Item item = controller.retrieve(
+				ObjectHelper.getURI(Item.class, to.getId()), u);
 		ReverseTransferObjectFactory.transferItem(to, item);
 		if (to instanceof ItemWithFileTO) {
-			ItemWithFileTO tof = (ItemWithFileTO)to;
+			ItemWithFileTO tof = (ItemWithFileTO) to;
 			String url = getExternalFileUrl(tof);
 			if (url != null)
 				item = controller.updateWithExternalFile(item,
@@ -88,7 +90,6 @@ public class ItemService implements API<ItemTO> {
 		TransferObjectFactory.transferItem(item, to);
 		return to;
 	}
-	
 
 	@Override
 	public boolean delete(String id, User u) throws NotFoundException,
@@ -153,12 +154,10 @@ public class ItemService implements API<ItemTO> {
 	 * @return
 	 **/
 	private String getFilename(ItemWithFileTO to) {
-		return ObjectUtils.firstNonNull(
-				to.getFilename(),
+		return ObjectUtils.firstNonNull(to.getFilename(),
 				FilenameUtils.getName(to.getFile().getName()),
 				FilenameUtils.getName(to.getFetchUrl()),
-				FilenameUtils.getName(to.getReferenceUrl())
-		);
+				FilenameUtils.getName(to.getReferenceUrl()));
 	}
 
 	/**
@@ -168,10 +167,7 @@ public class ItemService implements API<ItemTO> {
 	 * @return
 	 */
 	private String getExternalFileUrl(ItemWithFileTO to) {
-		return firstNonNullOrEmtpy(
-				to.getFetchUrl(),
-				to.getReferenceUrl()
-		);
+		return firstNonNullOrEmtpy(to.getFetchUrl(), to.getReferenceUrl());
 	}
 
 	private String firstNonNullOrEmtpy(String... strs) {
@@ -182,7 +178,6 @@ public class ItemService implements API<ItemTO> {
 				return str;
 		return null;
 	}
-
 
 	/**
 	 * True if the file must be download in imeji (i.e fetchurl is defined)

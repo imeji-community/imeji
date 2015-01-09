@@ -1,12 +1,30 @@
 package de.mpg.imeji.rest.resources.test.integration;
 
-import de.mpg.imeji.logic.auth.exception.NotAllowedError;
-import de.mpg.imeji.rest.api.CollectionService;
-import de.mpg.imeji.rest.api.ItemService;
-import de.mpg.imeji.rest.resources.test.TestUtils;
-import de.mpg.imeji.rest.to.ItemTO;
-import de.mpg.imeji.rest.to.ItemWithFileTO;
-import de.mpg.j2j.exceptions.NotFoundException;
+
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+import static javax.ws.rs.core.Response.Status.CREATED;
+import static javax.ws.rs.core.Response.Status.FORBIDDEN;
+import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.isEmptyOrNullString;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Map;
+
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
+import net.java.dev.webdav.jaxrs.ResponseStatus;
+
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -14,23 +32,13 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import util.JenaUtil;
-
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Map;
-
-import static javax.ws.rs.core.Response.Status.*;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import de.mpg.imeji.logic.auth.exception.NotAllowedError;
+import de.mpg.imeji.rest.api.CollectionService;
+import de.mpg.imeji.rest.api.ItemService;
+import de.mpg.imeji.rest.resources.test.TestUtils;
+import de.mpg.j2j.exceptions.NotFoundException;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CollectionTest extends ImejiTestBase {
@@ -181,7 +189,9 @@ public class CollectionTest extends ImejiTestBase {
 				.path("/" + collectionId + "/release").register(authAsUser)
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.json("{}"));
-		assertEquals(NO_CONTENT.getStatusCode(), response.getStatus());
+
+		assertEquals(response.getStatus(), Status.NO_CONTENT.getStatusCode());
+
 		CollectionService s = new CollectionService();
 		assertEquals("RELEASED", s.read(collectionId, JenaUtil.testUser)
 				.getStatus());
@@ -223,38 +233,16 @@ public class CollectionTest extends ImejiTestBase {
 	}
 	
 	@Test
-	public void test_3_ReleaseCollection_5_AddItemInReleasedCollection() throws Exception{
+	public void test_3_ReleaseCollection_5_ReleaseCollectionTwice() throws NotAllowedError, NotFoundException, Exception{
 		initItem();
+		CollectionService s = new CollectionService();
+		s.release(collectionId, JenaUtil.testUser);
+		assertEquals("RELEASED", s.read(collectionId, JenaUtil.testUser)
+				.getStatus());
 		Response response = target(pathPrefix)
-				.path("/" + collectionId + "/release")
-				.register(authAsUser)
+				.path("/" + collectionId + "/release").register(authAsUser)
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.json("{}"));
-		CollectionService s = new CollectionService();
-		
-		try {
-			System.out.println(s.read(collectionId, JenaUtil.testUser).getStatus());
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		ItemService is = new ItemService();
-		ItemWithFileTO to = new ItemWithFileTO();
-		ItemTO itemTo = new ItemTO();
-		to.setCollectionId(collectionId);
-		to.setFile(new File("src/test/resources/storage/test2.png"));
-		try {
-			
-			itemTo =  is.create(to, JenaUtil.testUser);
-			 	
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		System.out.println(itemId);
-		System.out.println(itemTo.getId());
-	 	System.out.println("collectionId " +collectionId);
-	 	System.out.println("collectionId "+itemTo.getCollectionId());
-	 	System.out.println(s.read(collectionId, JenaUtil.testUser).getStatus()); 	
+		assertEquals(response.getStatus(), ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode());
 	}
 }

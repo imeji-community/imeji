@@ -1,9 +1,15 @@
 package de.mpg.imeji.rest.process;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.xml.ws.soap.AddressingFeature.Responses;
 
+import net.java.dev.webdav.jaxrs.ResponseStatus;
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
+import de.mpg.imeji.logic.auth.exception.UnprocessableError;
+import de.mpg.imeji.logic.vo.Properties;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.to.CollectionTO;
@@ -70,11 +76,12 @@ public class CollectionProcess {
 
 	}
 	
-	public static JSONResponse releaseCollection(HttpServletRequest req, String id){
+	public static JSONResponse releaseCollection(HttpServletRequest req, String id) throws Exception{
 		JSONResponse resp = new JSONResponse();
 		resp.setStatus(Status.NO_CONTENT);
 		User u = BasicAuthentication.auth(req);
-		CollectionService service = new CollectionService();
+		CollectionService service = new CollectionService(); 
+		
 		try {
 				service.release(id, u);
 			} catch (NotFoundException e) {
@@ -85,14 +92,17 @@ public class CollectionProcess {
 				if (u == null) {
 					resp.setObject(RestProcessUtils.buildUnauthorizedResponse(e.getLocalizedMessage()));
 					resp.setStatus(Status.UNAUTHORIZED);
-				} else {
+				} 
+				else {
 					resp.setObject(RestProcessUtils.buildNotAllowedResponse(e.getLocalizedMessage()));
 					resp.setStatus(Status.FORBIDDEN);
-
 				}
 			} catch(RuntimeException e){
 				resp.setObject(RestProcessUtils.buildExceptionResponse(e.getLocalizedMessage()));
 				resp.setStatus(Status.FORBIDDEN);
+			} catch (UnprocessableError e){
+				resp.setObject(RestProcessUtils.buildUnprocessableErrorResponse(e.getLocalizedMessage()));
+				resp.setStatus(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode());
 			}
 			catch (Exception e) {
 				e.printStackTrace();

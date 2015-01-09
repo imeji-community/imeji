@@ -83,9 +83,12 @@ public class ItemController extends ImejiController {
 	 * @return
 	 * @throws Exception
 	 */
-	public Item createWithFile(Item item, File f, String filename, CollectionImeji c, User user) throws Exception {
-		if (!AuthUtil.staticAuth().create(user, item))  
-			throw new NotAllowedError("User not Allowed to upload files in collection "+ c.getIdString());
+	public Item createWithFile(Item item, File f, String filename,
+			CollectionImeji c, User user) throws Exception {
+		if (!AuthUtil.staticAuth().create(user, item))
+			throw new NotAllowedError(
+					"User not Allowed to upload files in collection "
+							+ c.getIdString());
 		StorageController sc = new StorageController();
 		String mimeType = StorageUtils.getMimeType(f);
 		UploadResult uploadResult = sc.upload(filename, f, c.getIdString());
@@ -110,10 +113,12 @@ public class ItemController extends ImejiController {
 	 * @return
 	 * @throws Exception
 	 */
-	public Item createWithExternalFile(Item item, CollectionImeji c, String externalFileUrl, String filename, boolean download, User user) throws Exception {
+	public Item createWithExternalFile(Item item, CollectionImeji c,
+			String externalFileUrl, String filename, boolean download, User user)
+			throws Exception {
 		File tmp = null;
 		String origName = FilenameUtils.getName(externalFileUrl);
-		if("".equals(filename) || filename == null)
+		if ("".equals(filename) || filename == null)
 			filename = origName;
 		else
 			filename = filename + "." + FilenameUtils.getExtension(origName);
@@ -241,6 +246,7 @@ public class ItemController extends ImejiController {
 	public void update(Collection<Item> items, User user) throws Exception {
 		List<Object> imBeans = new ArrayList<Object>();
 		for (Item item : items) {
+
 			writeUpdateProperties(item, user);
 			imBeans.add(createFulltextForMetadata(item));
 		}
@@ -278,9 +284,11 @@ public class ItemController extends ImejiController {
 	 * @return
 	 * @throws Exception
 	 */
-	public Item updateWithExternalFile(Item item, String externalFileUrl, String filename, boolean download, User u) throws Exception {
+	public Item updateWithExternalFile(Item item, String externalFileUrl,
+			String filename, boolean download, User u) throws Exception {
 		String origName = FilenameUtils.getName(externalFileUrl);
-		filename = isNullOrEmpty(filename) ? origName : filename + "." + FilenameUtils.getExtension(origName);
+		filename = isNullOrEmpty(filename) ? origName : filename + "."
+				+ FilenameUtils.getExtension(origName);
 		StorageController sc = new StorageController("external");
 		if (download) {
 			// download the file in storage
@@ -298,6 +306,7 @@ public class ItemController extends ImejiController {
 		return item;
 
 	}
+
 	/**
 	 * 
 	 * Update only the thumbnail and the Web Resolution (doesn't change the
@@ -509,6 +518,5 @@ public class ItemController extends ImejiController {
 		}
 		return item;
 	}
-
 
 }

@@ -1,16 +1,17 @@
 package de.mpg.imeji.rest.process;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 import java.net.URI;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
 
-import com.google.common.collect.ImmutableMap;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.ContainerMetadata;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
-import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
@@ -20,6 +21,7 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
+import de.mpg.imeji.rest.to.CollectionProfileTO;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.IdentifierTO;
 import de.mpg.imeji.rest.to.ItemTO;
@@ -34,64 +36,56 @@ import de.mpg.imeji.rest.to.predefinedMetadataTO.LinkTO;
 import de.mpg.imeji.rest.to.predefinedMetadataTO.NumberTO;
 import de.mpg.imeji.rest.to.predefinedMetadataTO.PublicationTO;
 import de.mpg.imeji.rest.to.predefinedMetadataTO.TextTO;
-import de.mpg.imeji.rest.to.*;
-
-import static com.google.common.base.Strings.*;
 
 public class ReverseTransferObjectFactory {
-	
-	
+
 	public static void transferCollection(CollectionTO to, CollectionImeji vo) {
 		ContainerMetadata metadata = new ContainerMetadata();
 		metadata.setTitle(to.getTitle());
 		metadata.setDescription(to.getDescription());
-		
-		//set contributors
+
+		// set contributors
 		transferCollectionContributors(to.getContributors(), metadata);
 		vo.setMetadata(metadata);
 
-		//set Metadata
+		// set Metadata
 		CollectionProfileTO profileTO = to.getProfile();
 
-		//TODO: change the code after extension of CollectionImeji mdprofile container
-		if (null == profileTO || profileTO.getProfileId() == null ) {
-			//profile = ImejiFactory.newProfile();
+		// TODO: change the code after extension of CollectionImeji mdprofile
+		// container
+		if (null == profileTO || profileTO.getProfileId() == null) {
+			// profile = ImejiFactory.newProfile();
 			vo.setProfile(URI.create("default___copy"));
-			//reference profile to existed one
+			// reference profile to existed one
 		} else {
-			vo.setProfile(URI.create(profileTO.getProfileId() + "___" + profileTO.getMethod()));
+			vo.setProfile(URI.create(profileTO.getProfileId() + "___"
+					+ profileTO.getMethod()));
 		}
 
-
 	}
-	
-	public static void transferItem(ItemTO to, Item vo){
 
-		//only fields which can be transferred for TO to VO!!!
+	public static void transferItem(ItemTO to, Item vo) {
+
+		// only fields which can be transferred for TO to VO!!!
 		if (!isNullOrEmpty(to.getId()))
 			vo.setId(ObjectHelper.getURI(Item.class, to.getId()));
 
 		if (!isNullOrEmpty(to.getCollectionId()))
-			vo.setCollection(ObjectHelper.getURI(CollectionImeji.class, to.getCollectionId()));
+			vo.setCollection(ObjectHelper.getURI(CollectionImeji.class,
+					to.getCollectionId()));
 
-		for (Map.Entry<String, String> field : ImmutableMap.of(
-				"getFilename", "setFilename"//,
-				//"getMimeType", "setFileType"
-				).entrySet()) {
-			ObjectHelper.transferField(field.getKey(), to, field.getValue(), vo);
-		}
+		if (!isNullOrEmpty(to.getFilename()))
+			vo.setFilename(to.getFilename());
 
 		transferItemMetaData(to.getMetadata(), vo);
 	}
 
-
-	public static void transferItemMetaData(List<MetadataSetTO> toMds, Item vo){
-		MetadataSet voMds = new MetadataSet();
-	
-		for(MetadataSetTO mdTO : toMds){
+	public static void transferItemMetaData(List<MetadataSetTO> toMds, Item vo) {
+		vo.getMetadataSet().getMetadata().clear();
+		for (MetadataSetTO mdTO : toMds) {
 			Metadata md = null;
 			String typeUri = mdTO.getTypeUri().toString();
-			switch(typeUri){
+			switch (typeUri) {
 			case "http://imeji.org/terms/metadata#text":
 				Text mdText = new Text();
 				TextTO text = (TextTO) mdTO.getValue();
@@ -104,13 +98,13 @@ public class ReverseTransferObjectFactory {
 				mdGeo.setName(geo.getName());
 				mdGeo.setLatitude(geo.getLatitude());
 				mdGeo.setLongitude(geo.getLongitude());
-				md=mdGeo;
+				md = mdGeo;
 				break;
 			case "http://imeji.org/terms/metadata#number":
 				Number mdNum = new Number();
 				NumberTO num = (NumberTO) mdTO.getValue();
 				mdNum.setNumber(num.getNumber());
-				md=mdNum;
+				md = mdNum;
 				break;
 			case "http://imeji.org/terms/metadata#conePerson":
 				ConePerson mdP = new ConePerson();
@@ -118,21 +112,21 @@ public class ReverseTransferObjectFactory {
 				Person person = new Person();
 				mdP.setPerson(person);
 				transferPerson(p.getPerson(), mdP.getPerson());
-				md=mdP;
+				md = mdP;
 				break;
 			case "http://imeji.org/terms/metadata#date":
 				de.mpg.imeji.logic.vo.predefinedMetadata.Date mdDate = new de.mpg.imeji.logic.vo.predefinedMetadata.Date();
 				DateTO date = (DateTO) mdTO.getValue();
 				mdDate.setDate(date.getDate());
 				md = mdDate;
-				
+
 				break;
 			case "http://imeji.org/terms/metadata#license":
 				License mdLic = new License();
 				LicenseTO license = (LicenseTO) mdTO.getValue();
 				mdLic.setLicense(license.getLicense());
 				mdLic.setExternalUri(URI.create(license.getUrl()));
-				md=mdLic;
+				md = mdLic;
 				break;
 			case "http://imeji.org/terms/metadata#publication":
 				Publication mdPub = new Publication();
@@ -140,7 +134,7 @@ public class ReverseTransferObjectFactory {
 				mdPub.setUri(URI.create(pub.getPublication()));
 				mdPub.setExportFormat(pub.getFormat());
 				mdPub.setCitation(pub.getCitation());
-				md= mdPub;
+				md = mdPub;
 				break;
 			case "http://imeji.org/terms/metadata#link":
 				Link mdLink = new Link();
@@ -152,68 +146,67 @@ public class ReverseTransferObjectFactory {
 			}
 			md.setPos(mdTO.getPosition());
 			md.setStatement(mdTO.getStatementUri());
-			voMds.getMetadata().add(md);
-			vo.getMetadataSets().add(voMds);
+			vo.getMetadataSet().getMetadata().add(md);
 		}
-			
+
 	}
-	
-	public static void transferPerson(PersonTO pto, Person p){  
+
+	public static void transferPerson(PersonTO pto, Person p) {
 
 		p.setPos(pto.getPosition());
 		p.setFamilyName(pto.getFamilyName());
 		p.setGivenName(pto.getGivenName());
 		p.setCompleteName(pto.getCompleteName());
 		p.setAlternativeName(pto.getAlternativeName());
-		
+
 		IdentifierTO ito = new IdentifierTO();
 		ito.setValue(pto.getIdentifiers().get(0).getValue());
 		p.setIdentifier(ito.getValue());
-		
-		//set oganizations
-		transferContributorOrganizations(pto.getOrganizations(), p);			
-	
-		}
-	
 
-	
-	public static void transferCollectionContributors(List<PersonTO> persons, ContainerMetadata metadata){
-		for(PersonTO pTO : persons){
+		// set oganizations
+		transferContributorOrganizations(pto.getOrganizations(), p);
+
+	}
+
+	public static void transferCollectionContributors(List<PersonTO> persons,
+			ContainerMetadata metadata) {
+		for (PersonTO pTO : persons) {
 			Person person = new Person();
 			person.setFamilyName(pTO.getFamilyName());
 			person.setGivenName(pTO.getGivenName());
 			person.setCompleteName(pTO.getCompleteName());
 			person.setAlternativeName(pTO.getAlternativeName());
-			//person.setRole(pto.getRole());
+			// person.setRole(pto.getRole());
 			person.setPos(pTO.getPosition());
-			
-			//set the identifier of current person 
+
+			// set the identifier of current person
 			IdentifierTO ito = new IdentifierTO();
 			ito.setValue(pTO.getIdentifiers().get(0).getValue());
 			person.setIdentifier(ito.getValue());
-			
-			//set organizations
-			transferContributorOrganizations(pTO.getOrganizations(), person);			
+
+			// set organizations
+			transferContributorOrganizations(pTO.getOrganizations(), person);
 			metadata.getPersons().add(person);
 		}
-		
+
 	}
 
-	public static void transferContributorOrganizations(List<OrganizationTO> orgs, Person person){
-		for(OrganizationTO orgTO : orgs){
+	public static void transferContributorOrganizations(
+			List<OrganizationTO> orgs, Person person) {
+		for (OrganizationTO orgTO : orgs) {
 			Organization org = new Organization();
 			org.setPos(orgTO.getPosition());
 			org.setName(orgTO.getName());
 			org.setDescription(orgTO.getDescription());
-			
-			//set the identifier of current organization 
+
+			// set the identifier of current organization
 			IdentifierTO ito = new IdentifierTO();
 			ito.setValue(orgTO.getIdentifiers().get(0).getValue());
 			org.setIdentifier(ito.getValue());
-			
-			person.getOrganizations().add(org);			
+
+			person.getOrganizations().add(org);
 		}
-		
+
 	}
 
 	public static String formatDate(Date d) {

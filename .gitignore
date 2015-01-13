@@ -167,6 +167,7 @@ items-out.xml
 
 # jRebel
 rebel.xml
+rebel-remote.xml
 
 # intellij IDEA
 imeji.iml

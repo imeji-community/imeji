@@ -33,7 +33,7 @@
 							<div class="imj_listHeaderMenu">
 								<h:commandButton id="addFirstStatement" type="submit" styleClass="imj_submitButton" action="#{metadataBean.addFirstStatement}" value="#{lbl.profile_start_new}">
 								</h:commandButton>
-								<ui:fragment rendered="#{metadataBean.profilesMenu.size() > 0}">
+								<ui:fragment rendered="#{metadataBean.profilesMenu.size() > 1}">
 									<span class="imj_inlineButtonGroup">
 										<h:outputLabel value="#{lbl.or_small} #{lbl.profile_use_template}" for="chooseGivenTemplate"/>
 										<h:selectOneMenu value="#{metadataBean.template}" id="chooseGivenTemplate" onchange="submit();" valueChangeListener="#{metadataBean.templateListener}">

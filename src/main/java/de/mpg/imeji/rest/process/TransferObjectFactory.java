@@ -76,7 +76,7 @@ public class TransferObjectFactory {
 	 
 	public static void transferPerson(Person p, PersonTO pto){  
 
-			pto.setPosition(p.getPos());
+			//pto.setPosition(p.getPos());
 			pto.setId(CommonUtils.extractIDFromURI(p.getId()));
 			pto.setFamilyName(p.getFamilyName());
 			pto.setGivenName(p.getGivenName());
@@ -94,7 +94,7 @@ public class TransferObjectFactory {
 	public static void transferContributorOrganizations(Collection<Organization> orgas, PersonTO pto){
 		for(Organization orga : orgas){
 			OrganizationTO oto = new OrganizationTO();
-			oto.setPosition(orga.getPos());
+			//oto.setPosition(orga.getPos());
 			oto.setId(CommonUtils.extractIDFromURI(orga.getId()));
 			oto.setName(orga.getName());
 			oto.setDescription(orga.getDescription());
@@ -179,7 +179,7 @@ public class TransferObjectFactory {
 		for (Metadata md : voMds) {
 			md.getId();
 			MetadataSetTO mdTO = new MetadataSetTO();
-			mdTO.setPosition(md.getPos());
+			//mdTO.setPosition(md.getPos());
 			mdTO.setStatementUri(md.getStatement());
 			mdTO.setTypeUri(URI.create(md.getTypeNamespace()));
 

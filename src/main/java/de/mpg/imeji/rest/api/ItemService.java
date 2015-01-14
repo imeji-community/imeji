@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
+import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE.CREATE;
+import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE.UPDATE;
 
 public class ItemService implements API<ItemTO> {
 
@@ -33,7 +35,7 @@ public class ItemService implements API<ItemTO> {
 
 			// transfer TO into item
 			Item item = new Item();
-			ReverseTransferObjectFactory.transferItem(to, item);
+			ReverseTransferObjectFactory.transferItem(to, item, CREATE);
 
 			// read collection
 			CollectionController cc = new CollectionController();
@@ -73,7 +75,7 @@ public class ItemService implements API<ItemTO> {
 	public ItemTO update(ItemTO to, User u) throws Exception {
 		Item item = controller.retrieve(
 				ObjectHelper.getURI(Item.class, to.getId()), u);
-		ReverseTransferObjectFactory.transferItem(to, item);
+		ReverseTransferObjectFactory.transferItem(to, item, UPDATE);
 		if (to instanceof ItemWithFileTO) {
 			ItemWithFileTO tof = (ItemWithFileTO) to;
 			String url = getExternalFileUrl(tof);

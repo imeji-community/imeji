@@ -1,19 +1,19 @@
 package de.mpg.imeji.rest.to;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-
-import static com.fasterxml.jackson.annotation.JsonInclude.*;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @XmlRootElement
 @XmlType(propOrder = {	 
-		"position",
+		//"position",
 		"id",
 		"familyName", 
 		"givenName",
@@ -27,7 +27,8 @@ import static com.fasterxml.jackson.annotation.JsonInclude.*;
 public class PersonTO implements Serializable{
 	
 	private static final long serialVersionUID = 2752588435466650389L;
-	
+
+	@JsonIgnore
 	private int position;
 
 	private String id;

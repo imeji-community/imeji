@@ -34,10 +34,11 @@
         {
           "language": "en",
           "value": "Title"
-        }
-      ]
-    },
-    {
+        }, {
+      "language" : "de",
+      "value" : "Titel"
+    } ]
+  }, {
       "position": 1,
       "value": {
         "name": "Zugspitze, 82491 Garmisch-Partenkirchen, Germany",

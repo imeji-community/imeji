@@ -24,7 +24,6 @@
   "fileUrl": "http://qa-imeji.mpdl.mpg.de/imeji/file/_FAfwLZ9Vy3LUSM/f7/a5/84/a3-ca3f-4116-9b05-34c49892c17d/0/original/cb6faf2b3b358438e2b670548168dd10.jpg",
   "metadata": [
     {
-      "position": 0,
       "value": {
         "text": "Emotion Masks"
       },
@@ -42,7 +41,6 @@
       ]
     },
     {
-      "position": 1,
       "value": {
         "text": "Emotion, Sad, Happy, Cry, Shock, Angry"
       },
@@ -56,7 +54,6 @@
       ]
     },
     {
-      "position": 2,
       "value": {
         "text": "100 * 200"
       },
@@ -74,7 +71,6 @@
       ]
     },
     {
-      "position": 3,
       "value": {
         "number": 100.0
       },
@@ -92,7 +88,6 @@
       ]
     },
     {
-      "position": 4,
       "value": {
         "number": 200.0
       },
@@ -110,10 +105,8 @@
       ]
     },
     {
-      "position": 5,
       "value": {
         "person": {
-          "position": 0,
           "id": "bkHAVUJDLWqcGfH",
           "familyName": "Yao",
           "givenName": "Yan",
@@ -128,7 +121,6 @@
           ],
           "organizations": [
             {
-              "position": 0,
               "id": "jvW8jXAFRGU6MnmA",
               "name": "Innovations, Max Planck Digital Library, Max Planck Society",
               "description": "",
@@ -158,7 +150,6 @@
       ]
     },
     {
-      "position": 6,
       "value": {
         "name": "Munich, Germany",
         "longitude": 11.5819806,
@@ -178,7 +169,6 @@
       ]
     },
     {
-      "position": 7,
       "value": {
         "format": "APA",
         "publication": "http://pubman.mpdl.mpg.de/pubman/faces/viewItemFullPage.jsp?itemId=escidoc:2043151:3",
@@ -198,7 +188,6 @@
       ]
     },
     {
-      "position": 8,
       "value": {
         "link": "Masking",
         "url": "http://en.wikipedia.org/wiki/Masking_%28personality%29"
@@ -217,7 +206,6 @@
       ]
     },
     {
-      "position": 9,
       "value": {
         "text": "JPG"
       },
@@ -235,7 +223,6 @@
       ]
     },
     {
-      "position": 10,
       "value": {
         "text": "Masking (Personality Theory) is a process in which an individual changes or \"masks\" his or her natural personality to conform to social pressures, abuse, and or harassment."
       },
@@ -253,7 +240,6 @@
       ]
     },
     {
-      "position": 11,
       "value": {
         "date": "2015-01-15"
       },
@@ -271,10 +257,8 @@
       ]
     },
     {
-      "position": 12,
       "value": {
         "person": {
-          "position": 0,
           "id": "nnw69ZMiI_gLbDni",
           "familyName": "Berthold",
           "givenName": "Andre",
@@ -289,7 +273,6 @@
           ],
           "organizations": [
             {
-              "position": 0,
               "id": "Ew1soKTt1FCQgr9b",
               "name": "Programming Logics, MPI for Informatics, Max Planck Society",
               "description": "",
@@ -319,10 +302,8 @@
       ]
     },
     {
-      "position": 13,
       "value": {
         "person": {
-          "position": 0,
           "id": "u9IlshAIp7SDgeYV",
           "familyName": "Abbot-Smith",
           "givenName": "Kirsten F.",
@@ -337,7 +318,6 @@
           ],
           "organizations": [
             {
-              "position": 0,
               "id": "j4AwQvHKwJcHPcul",
               "name": "Department of Developmental and Comparative Psychology, Max Planck Institute for Evolutionary Anthropology, Max Planck Society",
               "description": "",
@@ -367,7 +347,6 @@
       ]
     },
     {
-      "position": 14,
       "value": {
         "text": "Abstracts of Papers of the American Chemical Society"
       },
@@ -385,7 +364,6 @@
       ]
     },
     {
-      "position": 15,
       "value": {
         "license": "Attribution-NonCommercial 4.0 International",
         "url": "http://creativecommons.org/licenses/by-nc/4.0/"
@@ -404,7 +382,6 @@
       ]
     },
     {
-      "position": 16,
       "value": {
         "text": "Black/White"
       },

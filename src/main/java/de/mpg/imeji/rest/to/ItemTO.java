@@ -2,15 +2,14 @@ package de.mpg.imeji.rest.to;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-
-import static com.fasterxml.jackson.annotation.JsonInclude.*;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @XmlRootElement
 @XmlType (propOrder = {	
@@ -145,12 +144,14 @@ public class ItemTO extends PropertiesTO implements Serializable{
 
 	public void setMetadata(List<MetadataSetTO> metadata) {
 		this.metadata = metadata;
+/*
 		if (metadata != null) {
 			int pos = 0;
 			for (MetadataSetTO md : metadata) {
 				md.setPosition(pos++);
 			}
 		}
+*/
 	}
 
 

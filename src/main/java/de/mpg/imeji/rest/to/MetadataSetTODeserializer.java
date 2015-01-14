@@ -1,17 +1,15 @@
 package de.mpg.imeji.rest.to;
 
-import com.fasterxml.jackson.core.*;
-import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import com.google.common.collect.Lists;
-import de.mpg.imeji.logic.vo.Metadata;
-import de.mpg.imeji.logic.vo.MetadataSet;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.ObjectCodec;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -28,10 +26,10 @@ public class MetadataSetTODeserializer extends JsonDeserializer<MetadataSetTO> {
 
         MetadataSetTO mdSet = new MetadataSetTO();
 
-        JsonNode pos = rootNode.get("position");
+       /* JsonNode pos = rootNode.get("position");
         if (pos != null) {
             mdSet.setPosition(pos.asInt());
-        }
+        }*/
 
         JsonNode statementUri = rootNode.get("statementUri");
         if (statementUri != null) {

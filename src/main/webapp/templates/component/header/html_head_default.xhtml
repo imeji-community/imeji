@@ -42,9 +42,6 @@ All rights reserved. Use is subject to license terms.
 		
 	<h:inputHidden value="#{SessionBean.checkCss(Configuration.defaultCss, Configuration.alternativeCss)}" />
 	
-	
-	<h:outputStylesheet library="css" name="basic.css" id="basicscss" rendered="#{SessionBean.selectedCss == 'NONE'}"/>
-	
 	<ui:fragment rendered="#{SessionBean.selectedCss != 'NONE'}">
 		<ui:fragment rendered="#{SessionBean.selectedCss == 'DEFAULT'}">
 			<link type="text/css" rel="stylesheet" href="#{Configuration.defaultCss}" id="themeDefault"/>

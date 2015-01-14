@@ -1,25 +1,3 @@
-/* used colors for imeji default theme */
-/*
-$color01: #F0F0F0;	// dirty white
-$color02: #F2F2F2;	// lighten dirty white
-
-$color03: #6CAE2F;	// green
-$color04: #4AFF00;	// lighten green
-
-$color05: #FF7700;	// orange
-$color06: #FFC999;	// lighten dirty orange
-
-$color07: #D80000;	// lighten red
-$color08: #990000;	// red
-
-$color09: #000000;	// black
-$color10: #292929;	// darkgrey
-$color11: #313131;	// darkgrey - equals #313131
-$color12: #383838;	// darkgrey - equals #383838
-$color13: #444444;	// darken grey - equals #444444
-$color14: #4D4D4D;	// darken grey - equals #4D4D4D
-$color15: #BBBBBB;	// grey
-*/
 @import url(http://fonts.googleapis.com/css?family=Open+Sans);
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video { margin: 0; padding: 0; border: 0; font: inherit; font-size: 100%; vertical-align: baseline; }
 

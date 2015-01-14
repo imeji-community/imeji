@@ -87,9 +87,6 @@
 			<!-- Main Content -->							
 			<div id="imj_welcomeInfoWrapper" class="imj_welcomeInfo">
 				<!-- HTML Snippet defined in the configuration -->
-				<ui:repeat var="lang" value="#{Internationalization.internationalizedLanguages}">
-					
-				</ui:repeat>
 				<ui:fragment rendered="#{Configuration.getStartPageHTML(SessionBean.locale) != ''}">
 					<div id="tabsEN" class="id_tabs" >
 						<h:outputText value="#{Configuration.getStartPageHTML(SessionBean.locale)}" escape="false"/>
@@ -306,16 +303,19 @@
 			
 			<div class="imj_startpageFooter">
 			<!-- begin: footer section-->
+			
 				<div class="imj_startpageFooterLogos">
-					<a href="http://imeji.org/community/" target="_blank" title="imeji community">
-						<img alt="imeji community logo" src="#{Navigation.applicationUrl}resources/icon/imeji_community_bright.png" width="150em" class="imj_community_logo"/>
-					</a> 
+					<ui:fragment rendered="#{Configuration.startPageFooterLogos == ''}">
+						<a href="http://imeji.org/community/" target="_blank" title="imeji community">
+							<img alt="imeji community logo" src="#{Navigation.applicationUrl}resources/icon/imeji_community_bright.png" width="150em" class="imj_community_logo"/>
+						</a> 
 					<br/><br/>
-					<!--  <a href="http://www.escidoc.org/" target="_blank" title="eSciDoc"> 
-						<img alt="eSciDoc logo" src="https://zim02.gwdg.de/repos/faces/trunk/faces/faces_static/images/escidoc_new.png" height="32em"/> 
-					</a>
-					-->
+					</ui:fragment>
+					<ui:fragment rendered="#{Configuration.startPageFooterLogos != ''}">
+						<h:outputText value="#{Configuration.startPageFooterLogos}" escape="false"/>
+					</ui:fragment>
 				</div>
+		
 			<!-- end: footer section -->
 			</div>
 		</div>

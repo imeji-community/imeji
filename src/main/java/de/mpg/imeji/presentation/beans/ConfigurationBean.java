@@ -76,7 +76,7 @@ public class ConfigurationBean {
 	 * @version $Revision$ $LastChangedDate$
 	 */
 	private enum CONFIGURATION {
-		SNIPPET, CSS_DEFAULT, CSS_ALT, MAX_FILE_SIZE, FILE_TYPES, STARTPAGE_HTML, DATA_VIEWER_FORMATS, DATA_VIEWER_URL, AUTOSUGGEST_USERS, AUTOSUGGEST_ORGAS;
+		SNIPPET, CSS_DEFAULT, CSS_ALT, MAX_FILE_SIZE, FILE_TYPES, STARTPAGE_HTML, DATA_VIEWER_FORMATS, DATA_VIEWER_URL, AUTOSUGGEST_USERS, AUTOSUGGEST_ORGAS, STARTPAGE_FOOTER_LOGOS;
 	}
 
 	private Properties config;
@@ -272,6 +272,25 @@ public class ConfigurationBean {
 		String html = (String) config.get(CONFIGURATION.STARTPAGE_HTML.name()
 				+ "_" + lang);
 		return html != null ? html : "";
+	}
+
+	/**
+	 * Get the html snippet for the footer of the startpage
+	 * 
+	 * @return
+	 */
+	public String getStartPageFooterLogos() {
+		String html = (String) config
+				.get(CONFIGURATION.STARTPAGE_FOOTER_LOGOS.name());
+		return html != null ? html : "";
+	}
+
+	/**
+	 * 
+	 * @param html
+	 */
+	public void setStartPageFooterLogos(String html) {
+		setProperty(CONFIGURATION.STARTPAGE_FOOTER_LOGOS.name(), html);
 	}
 
 	/**

@@ -18,7 +18,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
 
 html, body { width: 100%; height: 100%; margin: 0px; padding: 0px; background-color: #292929; }
 
-body { font-size: 68.75%; font-family: "Open Sans", sans-serif; font-weight: normal; color: #F0F0F0; line-height: 145%; }
+body { font-size: 75%; font-family: "Open Sans", sans-serif; font-weight: normal; color: #F0F0F0; line-height: 145%; }
 
 form { display: inline; }
 
@@ -333,6 +333,8 @@ select.imj_metadataEditText { min-height: 0; }
 .imj_simpleSearch input[type=radio] + label { margin-left: 0.181818em; margin-right: 1em; }
 .imj_simpleSearch .imj_simpleSearchLinkAdvancedsearch { margin-top: 0.181818em; margin-left: 2.090909em; white-space: nowrap; display: inline-block; }
 
+.imj_isAdmin .imj_simpleSearch .imj_simpleSearchInput { width: 15em; }
+
 .imj_subHeaderMessageSpace { clear: both; float: left; display: inline; overflow: hidden; margin: 0.65em 0.0909em 0 0; width: 81.3636em; }
 
 .imj_submitPanel { display: inline-block; width: 100%; text-align: right; margin-top: 1em; }
@@ -542,6 +544,8 @@ iframe#twitter-widget-0 div.root div.stream { height: 20em !important; }
 .imj_userConfig .imj_connectedUserGroups .imj_admindataValueEntry { display: block; }
 
 .imj_setupConfig .imj_admindataValue .imj_admindataEdit { width: 100%; }
+.imj_setupConfig .imj_adminPanel .imj_headline .imj_submitButton { float: right; }
+.imj_setupConfig .imj_adminPanel .imj_headline .imj_submitButton:after { clear: both; content: ""; }
 .imj_setupConfig .imj_adminPanel .imj_content .imj_admindataSet .imj_submitPanel { margin-top: 0; }
 
 .imj_mainMenuStandard { display: inline-block; padding: 0 3%; font-size: 135%; letter-spacing: 0.090909em; text-align: left; text-transform: uppercase; }

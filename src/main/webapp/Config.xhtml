@@ -37,6 +37,7 @@
 								<div class="imj_headline">
 									<h2>
 										<h:outputText value="#{lbl.snippet}"/>
+										<h:commandButton action="#{Configuration.saveConfig}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
 									</h2>
 								</div>
 												
@@ -58,6 +59,7 @@
 								<div class="imj_headline">
 									<h2>
 										<h:outputText value="CSS"/>
+										<h:commandButton action="#{Configuration.saveConfig}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
 									</h2>
 								</div>
 							
@@ -88,12 +90,11 @@
 								<div class="imj_headline">
 									<h2>
 										<h:outputText value="#{lbl.search}"/>
+										<h:commandButton action="#{Configuration.saveConfig}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
 									</h2>
 								</div>
 								
 								<div class="imj_content">
-									<h4 class="imj_sectionHeadline"><h:outputText value="#{msg.notice_change_works_immediately}"/></h4>
-														
 									<!-- Admin - Snippet Insert -->	
 									<h:panelGroup layout="block" styleClass="imj_admindataSet">
 										<div class="imj_admindataLabel">
@@ -136,6 +137,7 @@
 								<div class="imj_headline">
 									<h2>
 										<h:outputText value="#{lbl.uploadFiles}"/>
+										<h:commandButton action="#{Configuration.saveConfig}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
 									</h2>
 								</div>
 								<div class="imj_content">
@@ -155,6 +157,7 @@
 								<div class="imj_headline">
 									<h2>
 										<h:outputText value="#{lbl.startPageHtmlSnippet}"/>
+										<h:commandButton action="#{Configuration.saveConfig}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
 									</h2>
 								</div>
 								<div class="imj_content">
@@ -196,6 +199,7 @@
 								<div class="imj_headline">
 									<h2>
 										<h:outputText value="#{lbl.data_viewer}"/>
+										<h:commandButton action="#{Configuration.saveConfig}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
 									</h2>
 								</div>
 								<div class="imj_content">
@@ -230,6 +234,7 @@
 								<div class="imj_headline">
 									<h2>
 										<h:outputText value="#{lbl.autosuggest}"/>
+										<h:commandButton action="#{Configuration.saveConfig}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
 									</h2>
 								</div>
 								<div class="imj_content">
@@ -267,7 +272,7 @@
 							
 							<!-- AdminDataList - imj_submitPanel - cancel link + submit command buttons -->
 							<h:panelGroup layout="block" styleClass="imj_submitPanel">
-								<h:commandButton action="#{Configuration.saveConfig}" value="#{lbl.configuration_save}" styleClass="imj_editButton"/>
+								
 							</h:panelGroup>
 						</h:form>
 					</h:panelGroup> <!-- END LIST BODY -->

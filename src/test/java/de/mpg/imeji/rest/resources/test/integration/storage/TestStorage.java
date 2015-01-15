@@ -3,6 +3,7 @@ package de.mpg.imeji.rest.resources.test.integration.storage;
 import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
+import de.mpg.imeji.rest.to.StorageTO;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -22,7 +23,9 @@ public class TestStorage extends ImejiTestBase{
     private static final Logger LOGGER = LoggerFactory
             .getLogger(TestStorage.class);
 
-    @Ignore
+    private final String PATH_PREFIX = "/rest/storage";
+
+
     @Test
     public void test_1_uploadFormats() throws IOException {
 
@@ -30,11 +33,11 @@ public class TestStorage extends ImejiTestBase{
         Response response = target(PATH_PREFIX)
                 .request(MediaType.APPLICATION_JSON_TYPE)
                 .get();
+        String s = response.readEntity(String.class);
+        LOGGER.info(s);
         assertEquals(response.getStatus(), OK.getStatusCode());
-        ItemTO updatedItem = (ItemTO) response.readEntity(ItemWithFileTO.class);
 
     }
 
-    private final String PATH_PREFIX = "/storage";
 
 }

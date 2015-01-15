@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
 
+import de.mpg.imeji.presentation.metadata.extractors.TikaExtractor;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
@@ -162,6 +163,19 @@ public class StorageController implements Serializable {
 			if (fis != null)
 				fis.close();
 		}
+	}
+
+	/**
+	 * Guess
+	 * Hexadecimal
+	 *
+	 * @param bytes
+	 * @return
+	 * @throws IOException
+	 */
+	public String extractMimeType(File file) throws IOException {
+
+		return TikaExtractor.extractMimeType(file);
 	}
 
 	/**

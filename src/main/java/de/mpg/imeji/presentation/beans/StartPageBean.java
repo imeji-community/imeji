@@ -157,12 +157,18 @@ public class StartPageBean {
 	private List<String> getRandomResults(SearchResult sr) {
 		List<String> l = new ArrayList<String>();
 		Random r = new Random();
-		for (int i = 0; i < CAROUSSEL_SIZE; i++) {
+		while(l.size() < CAROUSSEL_SIZE && l.size() < sr.getNumberOfRecords()){
 			if (sr.getNumberOfRecords() > 1) {
 				l.add(sr.getResults().get(
 						r.nextInt(sr.getNumberOfRecords() - 1)));
 			}
 		}
+//		for (int i = 0; i < CAROUSSEL_SIZE; i++) {
+//			if (sr.getNumberOfRecords() > 1) {
+//				l.add(sr.getResults().get(
+//						r.nextInt(sr.getNumberOfRecords() - 1)));
+//			}
+//		}
 		return l;
 	}
 

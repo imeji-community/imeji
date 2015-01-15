@@ -134,7 +134,6 @@ public class SingleUploadBean implements Serializable {
 	}
 
 	public String getSelectedCollectionItem() {
-		System.err.println("sel = " + selectedCollectionItem);
 		return selectedCollectionItem;
 	}
 

@@ -86,7 +86,7 @@
 						</span>
 						<h:selectOneMenu id="collections" value="#{SingleUploadBean.selectedCollectionItem}" styleClass="imj_selectionBox">
 							<f:selectItems value="#{SingleUploadBean.collectionItems}"/>
-							<f:ajax event="change" execute="@this" render="mdProfile" listener="#{SingleUploadBean.colChangeListener}"/>
+							<f:ajax event="change" execute="@this" render=":singleUpload:mdProfile" listener="#{SingleUploadBean.colChangeListener}"/>
 						</h:selectOneMenu>
 					</h:panelGroup>
 					

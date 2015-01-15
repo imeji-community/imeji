@@ -1,0 +1,130 @@
+<ui:composition template="templates/template_site.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:menu="http://java.sun.com/jsf/composite/components/menu"
+	xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs"
+	xmlns:list="http://java.sun.com/jsf/composite/components/list">
+	
+	<ui:param name="headline" value="# SingleUploadBean.title "/>
+
+
+	<ui:define name="modalDialogs_from_site">
+		<dialog:confirmationDialog submitAction="release" bean="#{SingleUploadBean}" confirmationText="#{msg.confirmation_release_collection}?" submitLabel="#{lbl.release}" dialogId="releaseMenuItemDialog" />
+		<dialog:confirmationDialog submitAction="delete" bean="#{UploadBean}" confirmationText="#{msg.confirmation_delete_collection}?" submitLabel="#{lbl.delete}" dialogId="deleteMenuItemDialog"/>
+		<dialog:confirmationReasonedDialog submitAction="withdraw" bean="#{UploadBean}" confirmationText="#{msg.confirmation_withdraw_collection}" submitLabel="#{lbl.withdraw}" dialogId="withdrawMenuItemDialog" />
+	</ui:define>
+	
+		<ui:define name="additonalHeaderScripts">
+		<!-- Load Queue widget CSS and jQuery -->
+		<!-- style type="text/css">@import url(#{Navigation.applicationUrl}resources/eSciDoc_CSS/plupload/styles/plupload.queue.css);</style -->
+		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+		<!-- Load plupload and all it's runtimes and finally the jQuery queue widget -->
+		
+		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/plupload/2.1.2/js/plupload.full.min.js"></script>
+		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/plupload/2.1.2/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
+		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/plupload/2.1.2/js/i18n/#{Internationalization.currentLanguage}.js"></script>
+		
+		<script type="text/javascript">
+			$(function() {
+				// Setup html5 version
+				$("#uploader").pluploadQueue({
+					// General settings
+					runtimes : 'html5,silverlight,flash,html4',
+					url : location.pathname  + "?start=1",
+					max_file_size : '#{Configuration.uploadMaxFileSize}kb',
+					multi_selection : true,
+					// Rename files by clicking on their titles
+			        rename: true,
+			        // Sort files
+			        sortable: true,
+			        // Enable ability to drag'n'drop files onto the widget (currently only HTML5 supports that)
+			        dragdrop: true,
+					flash_swf_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/eSciDoc_JavaScript/plupload-2.1.2/js/movie.swf',
+					silverlight_xap_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/eSciDoc_JavaScript/plupload-2.1.2/js/movie.xap',
+					init : {
+						 StateChanged: function(up) {
+								// Called when the state of the queue is changed
+								if( up.state == plupload.STOPPED){
+									report();
+								}
+								if( up.state == plupload.STARTED){
+									openDialog('dialogWait');
+								}
+							},
+					 }
+					});
+			});
+			
+			function report() {
+				window.location.href = location.pathname + "?done=1";
+			}
+		</script>
+	</ui:define>
+		
+	<ui:define name="mainContent">
+		<!-- Breadcrumb - History -->
+		<ui:include src="./include/History.xhtml"/>
+		
+	<h:form id="singleUpload">	
+		<h:panelGroup layout="block" id="selCols" styleClass="">
+
+			<h:panelGroup layout="block" styleClass="">
+				<h:outputText value="#{lbl.sel_collection} "/>
+			</h:panelGroup>
+			<h:selectOneMenu id="collections" value="#{SingleUploadBean.selectedCollectionItem}">
+				<f:selectItems value="#{SingleUploadBean.collectionItems}"/>
+				<f:ajax event="change" render=":singleUpload:mdProfile" listener="#{SingleUploadBean.colChangeListener}"/>
+			</h:selectOneMenu> 
+			
+		</h:panelGroup> 
+		<!-- AJAX Wrapper - START -->
+		<h:panelGroup layout="block" id="imj_ajaxWrapper" rendered="#{not empty SingleUploadBean.profile}">
+			<!-- START UPLOAD -->
+			<h:panelGroup layout="block" styleClass="imj_upload" >
+				<div class="imj_headline">
+					<h2>
+						<h:outputText value="#{lbl.uploadFiles}"/>
+					</h2>
+				</div>
+				
+				
+				<div class="imj_uploadInputWrapper">
+					<div id="uploader" class="imj_uploadDropArea">
+						Your browser doesn't support native upload!<br /> 
+						Please use HTML5 compatible browser (Firefox 4.x, Safari 4, Chrome) or download following tools:<br /> 
+						<a href="http://www.microsoft.com/germany/silverlight/downloads.aspx" target="_blank">Download Siverlight</a> 
+						<h:outputText value=" #{lbl.or_small} "/> 
+						<a href="http://get.adobe.com/de/flashplayer/download/" target="_blank">Download Flash</a>
+					</div>					
+				</div>
+			</h:panelGroup>
+		</h:panelGroup>
+		
+		<h:panelGroup layout="block" id="mdProfile" styleClass="" rendered="#{not empty SingleUploadBean.profile}">
+			<ui:repeat id="superStatementBean" var="superStatementBean" value="#{SingleUploadBean.sts}" rows="0" varStatus="indexMetadata">			
+					<!-- MetaDataList - edit panel container set -->
+					<div class="imj_metadataSet">
+						<div class="imj_metadataLabel">
+							<h:outputText value="#{MetadataLabels.internationalizedLabels[superStatementBean.statement.id]}"/>
+							<span class="imj_invisible">: </span>
+						</div>
+						<div class="imj_metadataValue">
+							<div style="margin-left: #{superStatementBean.hierarchyLevel}em;">
+								<!-- MetaDataInput -->
+								<list:batchEditList_singleStatement itemBean="#{superStatementBean}" itemStatement="#{superStatementBean.statement}" itemLabelBean="#{MetadataLabels}" hideLabel="true" navBean="#{Navigation}" suggestBean="#{SuggestBean}"/>		
+							</div>
+						</div>
+					</div>
+			</ui:repeat>
+		</h:panelGroup>
+	</h:form>
+	
+	</ui:define>
+</ui:composition>
+
+
+
+
+

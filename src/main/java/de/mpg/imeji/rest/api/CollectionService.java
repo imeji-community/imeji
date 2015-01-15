@@ -1,27 +1,26 @@
 package de.mpg.imeji.rest.api;
 
-import java.net.URI;
-import java.util.List;
-
-import javax.ws.rs.NotSupportedException;
-
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.rest.process.CommonUtils;
-import de.mpg.imeji.rest.process.ReverseTransferObjectFactory;
 import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.j2j.exceptions.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.ws.rs.NotSupportedException;
+import java.net.URI;
+import java.util.List;
+
+import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE.CREATE;
+import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.transferCollection;
 
 public class CollectionService implements API<CollectionTO> {
 
@@ -68,7 +67,7 @@ public class CollectionService implements API<CollectionTO> {
 			throw new Exception(msg);
 		}
 		CollectionImeji vo = new CollectionImeji();
-		ReverseTransferObjectFactory.transferCollection(to, vo);
+		transferCollection(to, vo, CREATE);
 		try {
 			URI collectionURI = cc.create(vo, mp, u);
 			return read(CommonUtils.extractIDFromURI(collectionURI), u);

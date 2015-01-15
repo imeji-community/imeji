@@ -23,6 +23,13 @@
 		<!-- Breadcrumb - History -->
 		<ui:include src="include/History.xhtml"></ui:include>
 		
+		<!-- If User has no right to view the page -->
+		<ui:fragment rendered="#{!Auth.admin(UserBean.user)}">
+			<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!Auth.loggedIn}">
+	        	<ui:include src="./include/LoginFormular.xhtml"/>
+			</h:panelGroup>
+		</ui:fragment>
+		
 		<ui:fragment rendered="#{Auth.admin(UserBean.user)}">
 			<h:panelGroup layout="block" styleClass="imj_backPanel" rendered="#{Auth.admin}">
 				<a href="#{Navigation.applicationUrl}users" title="#{lbl.admin_user_view}">

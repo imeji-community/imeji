@@ -1,51 +1,30 @@
 package de.mpg.imeji.rest.process;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
+import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.vo.*;
+import de.mpg.imeji.logic.vo.predefinedMetadata.*;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
+import de.mpg.imeji.rest.to.*;
+import de.mpg.imeji.rest.to.predefinedMetadataTO.*;
 
 import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.ContainerMetadata;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Metadata;
-import de.mpg.imeji.logic.vo.Organization;
-import de.mpg.imeji.logic.vo.Person;
-import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
-import de.mpg.imeji.logic.vo.predefinedMetadata.License;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
-import de.mpg.imeji.rest.to.CollectionProfileTO;
-import de.mpg.imeji.rest.to.CollectionTO;
-import de.mpg.imeji.rest.to.IdentifierTO;
-import de.mpg.imeji.rest.to.ItemTO;
-import de.mpg.imeji.rest.to.MetadataSetTO;
-import de.mpg.imeji.rest.to.OrganizationTO;
-import de.mpg.imeji.rest.to.PersonTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.ConePersonTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.DateTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.GeolocationTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.LicenseTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.LinkTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.NumberTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.PublicationTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.TextTO;
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 public class ReverseTransferObjectFactory {
 
-	public static void transferCollection(CollectionTO to, CollectionImeji vo) {
+	public enum TRANSFER_MODE {CREATE, UPDATE};
+
+	public static void transferCollection(CollectionTO to, CollectionImeji vo, TRANSFER_MODE mode) {
 		ContainerMetadata metadata = new ContainerMetadata();
 		metadata.setTitle(to.getTitle());
 		metadata.setDescription(to.getDescription());
 
 		// set contributors
-		transferCollectionContributors(to.getContributors(), metadata);
+		transferCollectionContributors(to.getContributors(), metadata, mode);
 		vo.setMetadata(metadata);
 
 		// set Metadata
@@ -64,112 +43,135 @@ public class ReverseTransferObjectFactory {
 
 	}
 
-	public static void transferItem(ItemTO to, Item vo) {
+	public static void transferItem(ItemTO to, Item vo, TRANSFER_MODE mode) {
 
 		// only fields which can be transferred for TO to VO!!!
-		if (!isNullOrEmpty(to.getId()))
-			vo.setId(ObjectHelper.getURI(Item.class, to.getId()));
+		if (mode == TRANSFER_MODE.CREATE) {
+			if (!isNullOrEmpty(to.getId()))
+                vo.setId(ObjectHelper.getURI(Item.class, to.getId()));
 
-		if (!isNullOrEmpty(to.getCollectionId()))
-			vo.setCollection(ObjectHelper.getURI(CollectionImeji.class,
-					to.getCollectionId()));
+			if (!isNullOrEmpty(to.getCollectionId()))
+                vo.setCollection(ObjectHelper.getURI(CollectionImeji.class,
+                        to.getCollectionId()));
+		}
 
 		if (!isNullOrEmpty(to.getFilename()))
 			vo.setFilename(to.getFilename());
 
-		transferItemMetaData(to.getMetadata(), vo);
+		transferItemMetaData(to.getMetadata(), vo, mode);
 	}
 
-	public static void transferItemMetaData(List<MetadataSetTO> toMds, Item vo) {
+	public static void transferItemMetaData(List<MetadataSetTO> toMds, Item vo, TRANSFER_MODE mode) {
 		vo.getMetadataSet().getMetadata().clear();
 		for (MetadataSetTO mdTO : toMds) {
 			Metadata md = null;
 			String typeUri = mdTO.getTypeUri().toString();
 			switch (typeUri) {
 			case "http://imeji.org/terms/metadata#text":
-				Text mdText = new Text();
 				TextTO text = (TextTO) mdTO.getValue();
-				mdText.setText(text.getText());
-				md = mdText;
+				if (!isNullOrEmpty(text.getText())) {
+					Text mdText = new Text();
+					mdText.setText(text.getText());
+					md = mdText;
+				}
 				break;
 			case "http://imeji.org/terms/metadata#geolocation":
-				Geolocation mdGeo = new Geolocation();
 				GeolocationTO geo = (GeolocationTO) mdTO.getValue();
-				mdGeo.setName(geo.getName());
-				mdGeo.setLatitude(geo.getLatitude());
-				mdGeo.setLongitude(geo.getLongitude());
-				md = mdGeo;
+				if (geo != null) {
+					Geolocation mdGeo = new Geolocation();
+					mdGeo.setName(geo.getName());
+					mdGeo.setLatitude(geo.getLatitude());
+					mdGeo.setLongitude(geo.getLongitude());
+					md = mdGeo;
+				}
 				break;
 			case "http://imeji.org/terms/metadata#number":
-				Number mdNum = new Number();
 				NumberTO num = (NumberTO) mdTO.getValue();
-				mdNum.setNumber(num.getNumber());
-				md = mdNum;
+				if (num != null) {
+					Number 	mdNum = new Number();
+					mdNum.setNumber(num.getNumber());
+					md = mdNum;
+				}
 				break;
 			case "http://imeji.org/terms/metadata#conePerson":
-				ConePerson mdP = new ConePerson();
 				ConePersonTO p = (ConePersonTO) mdTO.getValue();
-				Person person = new Person();
-				mdP.setPerson(person);
-				transferPerson(p.getPerson(), mdP.getPerson());
-				md = mdP;
+				if (p != null) {
+					ConePerson mdP = new ConePerson();
+					Person person = new Person();
+					mdP.setPerson(person);
+					transferPerson(p.getPerson(), mdP.getPerson(), mode);
+					md = mdP;
+				}
 				break;
 			case "http://imeji.org/terms/metadata#date":
-				de.mpg.imeji.logic.vo.predefinedMetadata.Date mdDate = new de.mpg.imeji.logic.vo.predefinedMetadata.Date();
 				DateTO date = (DateTO) mdTO.getValue();
-				mdDate.setDate(date.getDate());
-				md = mdDate;
-
+				if (!isNullOrEmpty(date.getDate())) {
+					de.mpg.imeji.logic.vo.predefinedMetadata.Date mdDate = new de.mpg.imeji.logic.vo.predefinedMetadata.Date();
+					mdDate.setDate(date.getDate());
+					md = mdDate;
+				}
 				break;
 			case "http://imeji.org/terms/metadata#license":
-				License mdLic = new License();
 				LicenseTO license = (LicenseTO) mdTO.getValue();
-				mdLic.setLicense(license.getLicense());
-				mdLic.setExternalUri(URI.create(license.getUrl()));
-				md = mdLic;
+				if (!isNullOrEmpty(license.getLicense())) {
+					License mdLic = new License();
+					mdLic.setLicense(license.getLicense());
+					mdLic.setExternalUri(URI.create(license.getUrl()));
+					md = mdLic;
+				}
 				break;
 			case "http://imeji.org/terms/metadata#publication":
-				Publication mdPub = new Publication();
 				PublicationTO pub = (PublicationTO) mdTO.getValue();
-				mdPub.setUri(URI.create(pub.getPublication()));
-				mdPub.setExportFormat(pub.getFormat());
-				mdPub.setCitation(pub.getCitation());
-				md = mdPub;
+				if (!isNullOrEmpty(pub.getPublication()) || !isNullOrEmpty(pub.getCitation()) ) {
+					Publication mdPub = new Publication();
+					mdPub.setUri(URI.create(pub.getPublication()));
+					mdPub.setExportFormat(pub.getFormat());
+					mdPub.setCitation(pub.getCitation());
+					md = mdPub;
+				}
 				break;
 			case "http://imeji.org/terms/metadata#link":
-				Link mdLink = new Link();
 				LinkTO link = (LinkTO) mdTO.getValue();
-				mdLink.setLabel(link.getLink());
-				mdLink.setUri(URI.create(link.getUrl()));
-				md = mdLink;
+				if (!isNullOrEmpty(link.getUrl()) ) {
+					Link mdLink = new Link();
+					mdLink.setLabel(link.getLink());
+					mdLink.setUri(URI.create(link.getUrl()));
+					md = mdLink;
+				}
 				break;
 			}
-			md.setPos(mdTO.getPosition());
-			md.setStatement(mdTO.getStatementUri());
-			vo.getMetadataSet().getMetadata().add(md);
+			if (md != null) {
+				if (mode == TRANSFER_MODE.CREATE) {
+					//md.setPos(mdTO.getPosition());
+					md.setStatement(mdTO.getStatementUri());
+				}
+				vo.getMetadataSet().getMetadata().add(md);
+			}
 		}
 
 	}
 
-	public static void transferPerson(PersonTO pto, Person p) {
+	public static void transferPerson(PersonTO pto, Person p, TRANSFER_MODE mode) {
 
-		p.setPos(pto.getPosition());
+		if (mode == TRANSFER_MODE.CREATE) {
+			//p.setPos(pto.getPosition());
+			IdentifierTO ito = new IdentifierTO();
+			ito.setValue(pto.getIdentifiers().get(0).getValue());
+			p.setIdentifier(ito.getValue());
+		}
+		p.setRole(URI.create(pto.getRole()));
 		p.setFamilyName(pto.getFamilyName());
 		p.setGivenName(pto.getGivenName());
 		p.setCompleteName(pto.getCompleteName());
 		p.setAlternativeName(pto.getAlternativeName());
 
-		IdentifierTO ito = new IdentifierTO();
-		ito.setValue(pto.getIdentifiers().get(0).getValue());
-		p.setIdentifier(ito.getValue());
-
 		// set oganizations
-		transferContributorOrganizations(pto.getOrganizations(), p);
+		transferContributorOrganizations(pto.getOrganizations(), p, mode);
 
 	}
 
 	public static void transferCollectionContributors(List<PersonTO> persons,
-			ContainerMetadata metadata) {
+		ContainerMetadata metadata, TRANSFER_MODE mode) {
 		for (PersonTO pTO : persons) {
 			Person person = new Person();
 			person.setFamilyName(pTO.getFamilyName());
@@ -177,7 +179,7 @@ public class ReverseTransferObjectFactory {
 			person.setCompleteName(pTO.getCompleteName());
 			person.setAlternativeName(pTO.getAlternativeName());
 			// person.setRole(pto.getRole());
-			person.setPos(pTO.getPosition());
+			//person.setPos(pTO.getPosition());
 
 			// set the identifier of current person
 			IdentifierTO ito = new IdentifierTO();
@@ -185,24 +187,30 @@ public class ReverseTransferObjectFactory {
 			person.setIdentifier(ito.getValue());
 
 			// set organizations
-			transferContributorOrganizations(pTO.getOrganizations(), person);
+			transferContributorOrganizations(pTO.getOrganizations(), person, mode);
 			metadata.getPersons().add(person);
 		}
 
 	}
 
 	public static void transferContributorOrganizations(
-			List<OrganizationTO> orgs, Person person) {
+			List<OrganizationTO> orgs, Person person, TRANSFER_MODE mode) {
 		for (OrganizationTO orgTO : orgs) {
 			Organization org = new Organization();
-			org.setPos(orgTO.getPosition());
+
+			if (mode == TRANSFER_MODE.CREATE) {
+				//org.setPos(orgTO.getPosition());
+				IdentifierTO ito = new IdentifierTO();
+				ito.setValue(orgTO.getIdentifiers().get(0).getValue());
+				org.setIdentifier(ito.getValue());
+			}
+
 			org.setName(orgTO.getName());
 			org.setDescription(orgTO.getDescription());
+			org.setCity(orgTO.getCity());
+			org.setCountry(orgTO.getCountry());
 
 			// set the identifier of current organization
-			IdentifierTO ito = new IdentifierTO();
-			ito.setValue(orgTO.getIdentifiers().get(0).getValue());
-			org.setIdentifier(ito.getValue());
 
 			person.getOrganizations().add(org);
 		}

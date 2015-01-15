@@ -67,64 +67,55 @@
 		<!-- Breadcrumb - History -->
 		<ui:include src="./include/History.xhtml"/>
 		
-	<h:form id="singleUpload">	
-		<h:panelGroup layout="block" id="selCols" styleClass="">
-
-			<h:panelGroup layout="block" styleClass="">
-				<h:outputText value="#{lbl.sel_collection} "/>
-			</h:panelGroup>
-			<h:selectOneMenu id="collections" value="#{SingleUploadBean.selectedCollectionItem}">
-				<f:selectItems value="#{SingleUploadBean.collectionItems}"/>
-				<f:ajax event="change" render=":singleUpload:mdProfile" listener="#{SingleUploadBean.colChangeListener}"/>
-			</h:selectOneMenu> 
-			
-		</h:panelGroup> 
+ 
 		<!-- AJAX Wrapper - START -->
 		<h:panelGroup layout="block" id="imj_ajaxWrapper" rendered="#{not empty SingleUploadBean.profile}">
 			<!-- START UPLOAD -->
-			<h:panelGroup layout="block" styleClass="imj_upload" >
+			<h:panelGroup layout="block" styleClass="imj_upload">
+				
 				<div class="imj_headline">
 					<h2>
 						<h:outputText value="#{lbl.uploadFiles}"/>
 					</h2>
 				</div>
 				
-				
-				<div class="imj_uploadInputWrapper">
-					<div id="uploader" class="imj_uploadDropArea">
-						Your browser doesn't support native upload!<br /> 
-						Please use HTML5 compatible browser (Firefox 4.x, Safari 4, Chrome) or download following tools:<br /> 
-						<a href="http://www.microsoft.com/germany/silverlight/downloads.aspx" target="_blank">Download Siverlight</a> 
-						<h:outputText value=" #{lbl.or_small} "/> 
-						<a href="http://get.adobe.com/de/flashplayer/download/" target="_blank">Download Flash</a>
-					</div>					
-				</div>
-			</h:panelGroup>
-		</h:panelGroup>
-		
-		<h:panelGroup layout="block" id="mdProfile" styleClass="" rendered="#{not empty SingleUploadBean.profile}">
-			<ui:repeat id="superStatementBean" var="superStatementBean" value="#{SingleUploadBean.sts}" rows="0" varStatus="indexMetadata">			
-					<!-- MetaDataList - edit panel container set -->
-					<div class="imj_metadataSet">
-						<div class="imj_metadataLabel">
-							<h:outputText value="#{MetadataLabels.internationalizedLabels[superStatementBean.statement.id]}"/>
-							<span class="imj_invisible">: </span>
-						</div>
-						<div class="imj_metadataValue">
-							<div style="margin-left: #{superStatementBean.hierarchyLevel}em;">
-								<!-- MetaDataInput -->
-								<list:batchEditList_singleStatement itemBean="#{superStatementBean}" itemStatement="#{superStatementBean.statement}" itemLabelBean="#{MetadataLabels}" hideLabel="true" navBean="#{Navigation}" suggestBean="#{SuggestBean}"/>		
-							</div>
+				<h:form id="singleUpload">
+					<h:panelGroup layout="block" id="selCols" styleClass="imj_inlineSelectionGroup">
+						<span class="imj_selectionLabel">
+							<h:outputText value="#{lbl.select_collection}"/>
+						</span>
+						<h:selectOneMenu id="collections" value="#{SingleUploadBean.selectedCollectionItem}" styleClass="imj_selectionBox">
+							<f:selectItems value="#{SingleUploadBean.collectionItems}"/>
+							<f:ajax event="change" execute="@this" render="mdProfile" listener="#{SingleUploadBean.colChangeListener}"/>
+						</h:selectOneMenu>
+					</h:panelGroup>
+					
+					<div class="imj_uploadInputWrapper">
+						<div id="uploader" class="imj_uploadDropArea">Your browser doesn't support native upload!<br />
+							Please use HTML5 compatible browser (Firefox 4.x, Safari 4, Chrome) or download following tools:<br />
+							<a href="http://www.microsoft.com/germany/silverlight/downloads.aspx" target="_blank">Download Siverlight</a>
+							<h:outputText value=" #{lbl.or_small} "/>
+							<a href="http://get.adobe.com/de/flashplayer/download/" target="_blank">Download Flash</a>
 						</div>
 					</div>
-			</ui:repeat>
+				
+					<h:panelGroup layout="block" id="mdProfile" styleClass="imj_metadataList" rendered="#{not empty SingleUploadBean.profile}">
+						<ui:repeat id="superStatementBean" var="superStatementBean" value="#{SingleUploadBean.sts}" rows="0" varStatus="indexMetadata">			
+								<!-- MetaDataList - edit panel container set -->
+								<div class="imj_metadataSet">
+									<div class="imj_metadataLabel">
+										<h:outputText value="#{MetadataLabels.internationalizedLabels[superStatementBean.statement.id]}"/>
+										<span class="imj_invisible">: </span>
+									</div>
+									<div class="imj_metadataValue" style="margin-left: #{superStatementBean.hierarchyLevel}em;">
+										<!-- MetaDataInput -->
+										<list:batchEditList_singleStatement itemBean="#{superStatementBean}" itemStatement="#{superStatementBean.statement}" itemLabelBean="#{MetadataLabels}" hideLabel="true" navBean="#{Navigation}" suggestBean="#{SuggestBean}"/>		
+									</div>
+								</div>
+						</ui:repeat>
+					</h:panelGroup>
+				</h:form>
+			</h:panelGroup>
 		</h:panelGroup>
-	</h:form>
-	
 	</ui:define>
 </ui:composition>
-
-
-
-
-

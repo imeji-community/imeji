@@ -630,6 +630,7 @@ iframe#twitter-widget-0 div.root div.stream { height: 20em !important; }
 .imj_bibliographicList .imj_listBody .imj_bibliographicListItem .imj_interactiveArea { padding-top: 0.75em; vertical-align: top; }
 .imj_bibliographicList .imj_listBody .imj_bibliographicListItem .imj_itemContent { width: 77.25%; display: inline-block; vertical-align: top; }
 .imj_bibliographicList .imj_listBody .imj_bibliographicListItem .imj_itemContent .imj_metadataContent { width: 100%; }
+.imj_bibliographicList .imj_listBody .imj_bibliographicListItem .imj_itemContent .imj_descriptionArea { overflow: hidden; text-overflow: ellipsis; }
 .imj_bibliographicList .imj_listBody .imj_bibliographicListItem .imj_itemContent .imj_descriptionArea p { margin: 0; }
 .imj_bibliographicList .imj_listBody .imj_bibliographicListItem .imj_itemContent p.imj_descriptionArea { margin: 0; }
 .imj_bibliographicList .imj_listBody .imj_bibliographicListItem .imj_itemContent .imj_metadataSet { padding-bottom: 0.25em; }

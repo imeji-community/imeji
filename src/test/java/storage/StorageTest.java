@@ -28,30 +28,28 @@
  */
 package storage;
 
+import de.mpg.imeji.logic.storage.Storage;
+import de.mpg.imeji.logic.storage.StorageController;
+import de.mpg.imeji.logic.storage.UploadResult;
+import de.mpg.imeji.logic.storage.impl.InternalStorage;
+import de.mpg.imeji.logic.storage.internal.InternalStorageManager;
+import de.mpg.imeji.logic.storage.util.StorageUtils;
+import de.mpg.imeji.presentation.util.PropertyReader;
+import junit.framework.Assert;
+import org.apache.commons.io.FileUtils;
+import org.junit.Before;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 
-import de.mpg.imeji.logic.storage.util.StorageUtils;
-import junit.framework.Assert;
-
-import org.apache.commons.io.FileUtils;
-import org.junit.Before;
-import org.junit.Test;
-
-import de.mpg.imeji.logic.storage.Storage;
-import de.mpg.imeji.logic.storage.StorageController;
-import de.mpg.imeji.logic.storage.UploadResult;
-import de.mpg.imeji.logic.storage.impl.InternalStorage;
-import de.mpg.imeji.logic.storage.internal.InternalStorageManager;
-import de.mpg.imeji.presentation.util.PropertyReader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import scala.util.parsing.combinator.testing.Str;
-
-import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_STORAGE;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * Test {@link Storage}
@@ -115,15 +113,10 @@ public class StorageTest {
 
 	@Test
 	public void testMimeTypeDetection() {
-
 		String STATIC_CONTEXT_STORAGE = "src/test/resources/storage";
-
 		File file = new File(STATIC_CONTEXT_STORAGE + "/test2.wrongext");
-
 		String mimeType = StorageUtils.getMimeType(file);
-
-		LOGGER.info(mimeType);
-
+		assertThat(mimeType, equalTo("image/jpeg"));
 	}
 
 	/**

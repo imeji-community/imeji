@@ -22,8 +22,7 @@ public class StorageResource {
         @Path("/")
         @ApiOperation(value = "Get storage properties")
         @Produces(MediaType.APPLICATION_JSON)
-        public Response getStorageProperties()
-        {
+        public Response getStorageProperties(){
                 return RestProcessUtils.buildJSONResponse(StorageProcess.getStorageProperties());
         }
 

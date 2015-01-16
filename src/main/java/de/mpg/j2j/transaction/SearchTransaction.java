@@ -154,7 +154,19 @@ public class SearchTransaction extends Transaction
             return SortHelper.addSortValue(qs.getResource("s").toString(), sortValue);
         }
         RDFNode node = qs.get("s");
-        return node.isURIResource() ? node.asResource().getURI() : node.asLiteral().toString();
+        
+        /* Was causing internal Server error when node was Null (i.e. there were no results), 
+           
+           see https://github.com/imeji-community/imeji/issues/1010
+        */
+        if (node != null) {
+        	return node.isURIResource() ? node.asResource().getURI() : node.asLiteral().toString();
+        }
+        else
+        {
+        	return null;
+        }
+        	
     }
 
     @Override

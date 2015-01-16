@@ -32,8 +32,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.mpg.imeji.logic.auth.Authorization;
+import de.mpg.imeji.logic.auth.exception.AuthenticationError;
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
+import de.mpg.imeji.logic.controller.exceptions.NotFoundError;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.j2j.helper.J2JHelper;
 
@@ -76,6 +78,11 @@ public class ReaderFacade implements Reader
     public Object readLazy(String uri, User user, Object o) throws Exception
     {
         o = reader.readLazy(uri, user, o);
+        
+        if (o == null ) {
+        	throw new NotFoundError("Authentication is required.");
+        }
+        
         checkSecurity(toList(o), user);
         return o;
     }
@@ -112,7 +119,7 @@ public class ReaderFacade implements Reader
      * @param opType
      * @throws NotAllowedError
      */
-    private void checkSecurity(List<Object> list, User user) throws NotAllowedError
+    private void checkSecurity(List<Object> list, User user) throws NotAllowedError, AuthenticationError
     {
         for (int i = 0; i < list.size(); i++)
         {
@@ -120,9 +127,13 @@ public class ReaderFacade implements Reader
             {
                 String id = J2JHelper.getId(list.get(i)).toString();
                 String email = "Not logged in";
-                if (user != null)
+                if (user != null) {
                     email = user.getEmail();
-                throw new NotAllowedError(email + " not allowed to read " + id);
+                    throw new NotAllowedError(email + " not allowed to read " + id);
+                }
+                else if (user == null) {
+                	throw new AuthenticationError("Authentication is required.");
+                }
             }
         }
     }

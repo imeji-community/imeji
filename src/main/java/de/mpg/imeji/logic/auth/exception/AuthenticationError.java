@@ -40,7 +40,7 @@ public class AuthenticationError extends Exception
     private static final long serialVersionUID = 6128275500671470459L;
 
     /**
-     * Constructor
+     * Constructor for HTTP 401 Unauthorized
      */
     public AuthenticationError(String message)
     {

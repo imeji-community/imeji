@@ -28,18 +28,13 @@
  */
 package de.mpg.imeji.logic.storage;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.Serializable;
-
-import de.mpg.imeji.presentation.metadata.extractors.TikaExtractor;
-import org.apache.commons.codec.digest.DigestUtils;
-
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
+import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.presentation.util.PropertyReader;
+import org.apache.commons.codec.digest.DigestUtils;
+
+import java.io.*;
 
 /**
  * Controller for the {@link Storage} objects
@@ -50,7 +45,15 @@ import de.mpg.imeji.presentation.util.PropertyReader;
  */
 public class StorageController implements Serializable {
 	private static final long serialVersionUID = -2651970941029421673L;
+	public static final String UPLOAD_BLACKLIST_PROPERTY = "imeji.upload.blacklist";
+	public static final String IMEJI_STORAGE_NAME_PROPERTY = "imeji.storage.name";
+	public static final String UPLOAD_WHITELIST_PROPERTY = "imeji.upload.whitelist";
 	private Storage storage;
+
+
+
+	private String formatWhiteList;
+	private String formatBlackList;
 
 	/**
 	 * Create new {@link StorageController} for the {@link Storage} defined in
@@ -59,7 +62,9 @@ public class StorageController implements Serializable {
 	public StorageController() {
 		String name;
 		try {
-			name = PropertyReader.getProperty("imeji.storage.name");
+			name = PropertyReader.getProperty(IMEJI_STORAGE_NAME_PROPERTY);
+			formatBlackList = PropertyReader.getProperty(UPLOAD_BLACKLIST_PROPERTY);
+			formatWhiteList = PropertyReader.getProperty(UPLOAD_WHITELIST_PROPERTY);
 		} catch (Exception e) {
 			throw new RuntimeException("Error reading storage name property: ",
 					e);
@@ -166,16 +171,25 @@ public class StorageController implements Serializable {
 	}
 
 	/**
-	 * Guess
-	 * Hexadecimal
+	 * True if the file format related to the passed extension can be download
 	 *
-	 * @param bytes
+	 * @param extension
 	 * @return
-	 * @throws IOException
 	 */
-	public String extractMimeType(File file) throws IOException {
-
-		return TikaExtractor.extractMimeType(file);
+	public boolean isAllowedFormat(String extension) {
+		// If no extension, not possible to recognized the format
+		if ("".equals(extension.trim()))
+			return false;
+		// check in white list, if found then allowed
+		for (String s : formatWhiteList.split(","))
+			if (StorageUtils.compareExtension(extension, s.trim()))
+				return true;
+		// check black list, if found then forbidden
+		for (String s : formatBlackList.split(","))
+			if (StorageUtils.compareExtension(extension, s.trim()))
+				return false;
+		// Not found in both list: if white list is empty, allowed
+		return "".equals(formatWhiteList.trim());
 	}
 
 	/**

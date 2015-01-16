@@ -98,10 +98,6 @@ body .imj_buttonBrowseToLast_16 { display: inline-block; width: 2.36364em; heigh
 body .imj_buttonBrowseToLast_16.imj_deactivated { background: transparent url("/imeji/resources/imj_iconset/BBBBBB/imjGotoLast_16.png") center right no-repeat; }
 body .imj_buttonBrowseToLast_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjGotoLast_16.png") center right no-repeat; }
 body .imj_buttonBrowseToLast_16:hover.imj_deactivated { background: transparent url("/imeji/resources/imj_iconset/BBBBBB/imjGotoLast_16.png") center right no-repeat; }
-body .imj_paginator .imj_backwardButton { padding-left: 1.5em; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjTrianglePrevious_16.png") center left no-repeat; }
-body .imj_paginator .imj_backwardButton:hover { color: #F0F0F0; background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjTrianglePrevious_16.png") center left no-repeat; }
-body .imj_paginator .imj_forwardButton { padding-right: 1.5em; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjTriangleNext_16.png") center right no-repeat; }
-body .imj_paginator .imj_forwardButton:hover { color: #F0F0F0; background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjTriangleNext_16.png") center right no-repeat; }
 body .imj_buttonAdd_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; margin-right: 0.181818em; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjButtonPlusBorderOpen_16.png") 0 0 no-repeat; }
 body .imj_buttonAdd_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjButtonPlusBorderOpen_16.png") 0 0 no-repeat; }
 body .imj_buttonRemove_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; margin-right: 0.182em; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjButtonMinusRoundedBorderOpen_16.png") 0 0 no-repeat; }
@@ -394,13 +390,15 @@ select.imj_metadataEditText { min-height: 0; }
 .imj_paginator .imj_gotoBox .imj_pageInput { width: 3em; margin-left: 0.363636em; margin-right: 0.363636em; text-align: center; }
 .imj_paginator .imj_gotoBox .imj_submitButton { margin-left: 0.545454em; }
 
-.imj_simplePageBrowser .imj_backwardButton, .imj_simplePageBrowser .imj_forwardButton { color: #6CAE2F; cursor: pointer; }
-.imj_simplePageBrowser .imj_backwardButton:hover, .imj_simplePageBrowser .imj_forwardButton:hover { color: #F0F0F0; border: none; }
-.imj_simplePageBrowser .imj_backwardButton:focus, .imj_simplePageBrowser .imj_forwardButton:focus { color: #F0F0F0; border: none; }
-.imj_simplePageBrowser .imj_backwardButton:active, .imj_simplePageBrowser .imj_forwardButton:active { color: #BBBBBB; cursor: default; border: none; }
-.imj_simplePageBrowser .imj_backwardButton.disabled, .imj_simplePageBrowser .imj_forwardButton.disabled { color: #BBBBBB; cursor: default; border: none; }
-.imj_simplePageBrowser .imj_backwardButton.disabled:hover, .imj_simplePageBrowser .imj_forwardButton.disabled:hover { color: #BBBBBB; cursor: default; border: none; }
-.imj_simplePageBrowser .imj_backwardButton + .imj_forwardButton { margin-left: 1em; }
+.imj_simplePageBrowser .imj_buttonBrowseBackward_16 { padding-left: 1.5em; }
+.imj_simplePageBrowser .imj_buttonBrowseForward_16 { padding-right: 1.5em; }
+.imj_simplePageBrowser .imj_buttonBrowseBackward_16, .imj_simplePageBrowser .imj_buttonBrowseForward_16 { color: #6CAE2F; cursor: pointer; width: auto; }
+.imj_simplePageBrowser .imj_buttonBrowseBackward_16:hover, .imj_simplePageBrowser .imj_buttonBrowseForward_16:hover { color: #F0F0F0; border: none; }
+.imj_simplePageBrowser .imj_buttonBrowseBackward_16:focus, .imj_simplePageBrowser .imj_buttonBrowseForward_16:focus { color: #F0F0F0; border: none; }
+.imj_simplePageBrowser .imj_buttonBrowseBackward_16:active, .imj_simplePageBrowser .imj_buttonBrowseForward_16:active { color: #BBBBBB; cursor: default; border: none; }
+.imj_simplePageBrowser .imj_buttonBrowseBackward_16.imj_deactivated, .imj_simplePageBrowser .imj_buttonBrowseForward_16.imj_deactivated { cursor: default; color: #BBBBBB; cursor: default; border: none; }
+.imj_simplePageBrowser .imj_buttonBrowseBackward_16.imj_deactivated:hover, .imj_simplePageBrowser .imj_buttonBrowseForward_16.imj_deactivated:hover { color: #BBBBBB; cursor: default; border: none; }
+.imj_simplePageBrowser .imj_buttonBrowseBackward_16 + .imj_buttonBrowseForward_16 { margin-left: 1.5em; }
 
 .imj_singlePageBrowser { display: inline-block; }
 .imj_singlePageBrowser .imj_separator { display: inline-block; height: 1.81818181em; vertical-align: middle; }

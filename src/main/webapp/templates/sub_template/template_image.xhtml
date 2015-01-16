@@ -8,6 +8,9 @@
 		<h:outputText value="#{itemBean.init}"/>
 	</ui:define>
 	
+	<ui:param name="backwardClass" value="#{itemBean.browse.previous == null ? 'imj_buttonBrowseBackward_16 imj_deactivated' : 'imj_buttonBrowseBackward_16'}"/>
+	<ui:param name="forwardClass" value="#{itemBean.browse.next == null ? 'imj_buttonBrowseForward_16 imj_deactivated' : 'imj_buttonBrowseForward_16'}"/>
+	
 	<!-- Main Content - Image Detail View -->
 	<ui:define name="mainContent">
 	  
@@ -26,11 +29,11 @@
 					<!-- pagination top -->
 					<h:panelGroup layout="block" id="paginatorTop" styleClass="imj_paginator">
 						<h:panelGroup styleClass="imj_simplePageBrowser">
-							<h:outputLink value="#{itemBean.browse.previous}&amp;tab=#{itemBean.tab}" styleClass="imj_backwardButton" disabled="#{itemBean.browse.previous == null}">
+							<h:outputLink value="#{itemBean.browse.previous}&amp;tab=#{itemBean.tab}" styleClass="#{backwardClass}" disabled="#{itemBean.browse.previous == null}">
 								<h:outputText value="#{lbl.paginator_previous} #{itemBean.initLabels}"/>
 							</h:outputLink>
 							
-							<h:outputLink value="#{itemBean.browse.next}&amp;tab=#{itemBean.tab}" styleClass="imj_forwardButton" disabled="#{itemBean.browse.next == null}">
+							<h:outputLink value="#{itemBean.browse.next}&amp;tab=#{itemBean.tab}" styleClass="#{forwardClass}" disabled="#{itemBean.browse.next == null}">
 								<h:outputText value="#{lbl.paginator_next}"/>
 							</h:outputLink>
 						</h:panelGroup>

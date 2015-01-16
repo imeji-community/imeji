@@ -259,6 +259,18 @@
 		<location>/jsf/errorPages/404.xhtml</location>
 	</error-page>
 	<error-page>
+		<error-code>403</error-code>
+		<location>/jsf/errorPages/403.xhtml</location>
+	</error-page>
+	<error-page>
+		<error-code>401</error-code>
+		<location>/jsf/errorPages/401.xhtml</location>
+	</error-page>
+	<error-page>
+		<error-code>422</error-code>
+		<location>/jsf/errorPages/422.xhtml</location>
+	</error-page>
+	<error-page>
 		<error-code>500</error-code>
 		<location>/jsf/errorPages/500.xhtml</location>
 	</error-page>

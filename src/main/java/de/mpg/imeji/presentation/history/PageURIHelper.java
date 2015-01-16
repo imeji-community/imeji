@@ -45,7 +45,7 @@ public class PageURIHelper
             return ObjectHelper.getURI(Album.class, m.group(1));
         m = findUserId.matcher(url);
         if (m.find())
-            return ObjectHelper.getURI(User.class, m.group(1));
+            return URI.create(m.group(1));
         m = findUserGroupId.matcher(url);
         if (m.find())
             return ObjectHelper.getURI(UserGroup.class, m.group(1));

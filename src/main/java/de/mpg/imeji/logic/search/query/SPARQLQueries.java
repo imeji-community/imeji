@@ -114,6 +114,17 @@ public class SPARQLQueries {
 	}
 
 	/**
+	 * Select a User by its Email
+	 * 
+	 * @param email
+	 * @return
+	 */
+	public static String selectUserByEmail(String email) {
+		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE { ?s <http://xmlns.com/foaf/0.1/email> ?email . filter(?email='"
+				+ email + "')}";
+	}
+
+	/**
 	 * Find all the user which have SysAdmin rights for imeji
 	 * 
 	 * @return
@@ -133,18 +144,6 @@ public class SPARQLQueries {
 	 * @return
 	 */
 	public static String selectUserWithGrantFor(String uri) {
-		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {OPTIONAL{ ?s <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> <"
-				+ uri
-				+ ">} . filter(bound(?g)) . ?s a <http://imeji.org/terms/user> . ?s <http://xmlns.com/foaf/0.1/name> ?name } ORDER BY DESC(?name)";
-	}
-
-	/**
-	 * Select {@link User} having a {@link Grant} for an object defined by its
-	 * uri
-	 * 
-	 * @return
-	 */
-	public static String selectUserBy(String uri) {
 		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {OPTIONAL{ ?s <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> <"
 				+ uri
 				+ ">} . filter(bound(?g)) . ?s a <http://imeji.org/terms/user> . ?s <http://xmlns.com/foaf/0.1/name> ?name } ORDER BY DESC(?name)";

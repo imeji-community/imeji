@@ -4,6 +4,8 @@ import de.mpg.imeji.rest.to.JSONResponse;
 import de.mpg.imeji.rest.to.StorageTO;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
+import static de.mpg.imeji.logic.storage.StorageController.UPLOAD_BLACKLIST_PROPERTY;
+import static de.mpg.imeji.logic.storage.StorageController.UPLOAD_WHITELIST_PROPERTY;
 import static de.mpg.imeji.presentation.util.PropertyReader.getProperty;
 import static javax.ws.rs.core.Response.Status;
 
@@ -13,9 +15,6 @@ import static javax.ws.rs.core.Response.Status;
  */
 public class StorageProcess {
 
-    public static final String UPLOAD_BLACKLIST = "imeji.upload.blacklist";
-    public static final String UPLOAD_WHITELIST = "imeji.upload.whitelist";
-
     public static JSONResponse getStorageProperties() {
 
         JSONResponse resp = new JSONResponse();
@@ -23,12 +22,11 @@ public class StorageProcess {
         StorageTO sto = new StorageTO();
 
         try {
-
-            final String black = getProperty(UPLOAD_BLACKLIST);
+            final String black = getProperty(UPLOAD_BLACKLIST_PROPERTY);
             if (!isNullOrEmpty(black)) {
                 sto.setUploadBlackList(black);
             }
-            final String white = getProperty(UPLOAD_WHITELIST);
+            final String white = getProperty(UPLOAD_WHITELIST_PROPERTY);
             if (!isNullOrEmpty(white)) {
                 sto.setUploadWhiteList(white);
             }

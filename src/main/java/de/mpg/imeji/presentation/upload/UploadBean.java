@@ -3,33 +3,7 @@
  */
 package de.mpg.imeji.presentation.upload;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Serializable;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.fileupload.FileItemIterator;
-import org.apache.commons.fileupload.FileItemStream;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Logger;
-
 import com.ocpsoft.pretty.PrettyContext;
-
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.Search;
@@ -48,6 +22,25 @@ import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.UrlHelper;
+import org.apache.commons.fileupload.FileItemIterator;
+import org.apache.commons.fileupload.FileItemStream;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
+
+import javax.annotation.PostConstruct;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
+import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.util.List;
 
 /**
  * Bean for the upload page
@@ -68,10 +61,6 @@ public class UploadBean implements Serializable {
 	private String externalUrl;
 	@ManagedProperty(value = "#{SessionBean.user}")
 	private User user;
-	@ManagedProperty(value = "#{UploadSession.formatBlackList}")
-	private String formatBlackList = "";
-	@ManagedProperty(value = "#{UploadSession.formatWhiteList}")
-	private String formatWhiteList = "";
 	private boolean recursive;
 
 	/**
@@ -81,6 +70,8 @@ public class UploadBean implements Serializable {
 	 * @throws IOException
 	 */
 	public UploadBean() {
+
+
 	}
 
 	/**
@@ -281,7 +272,8 @@ public class UploadBean implements Serializable {
 							"There is already at least one item with the filename "
 									+ FilenameUtils.getBaseName(title));
 			}
-			if (!isAllowedFormat(FilenameUtils.getExtension(title))) {
+			StorageController sc = new StorageController();
+			if (!sc.isAllowedFormat(FilenameUtils.getExtension(title))) {
 				SessionBean sessionBean = (SessionBean) BeanHelper
 						.getSessionBean(SessionBean.class);
 				throw new RuntimeException(
@@ -380,27 +372,6 @@ public class UploadBean implements Serializable {
 		}
 	}
 
-	/**
-	 * True if the file format related to the passed extension can be download
-	 * 
-	 * @param extension
-	 * @return
-	 */
-	private boolean isAllowedFormat(String extension) {
-		// If no extension, not possible to recognized the format
-		if ("".equals(extension.trim()))
-			return false;
-		// check in white list, if found then allowed
-		for (String s : formatWhiteList.split(","))
-			if (StorageUtils.compareExtension(extension, s.trim()))
-				return true;
-		// check black list, if found then forbidden
-		for (String s : formatBlackList.split(","))
-			if (StorageUtils.compareExtension(extension, s.trim()))
-				return false;
-		// Not found in both list: if white list is empty, allowed
-		return "".equals(formatWhiteList.trim());
-	}
 
 	/**
 	 * release the {@link CollectionImeji}
@@ -507,35 +478,10 @@ public class UploadBean implements Serializable {
 		this.externalUrl = externalUrl;
 	}
 
-	/**
-	 * @return the formatBlackList
-	 */
-	public String getFormatBlackList() {
-		return formatBlackList;
-	}
 
-	/**
-	 * @param formatBlackList
-	 *            the formatBlackList to set
-	 */
-	public void setFormatBlackList(String formatBlackList) {
-		this.formatBlackList = formatBlackList;
-	}
 
-	/**
-	 * @return the formatWhiteList
-	 */
-	public String getFormatWhiteList() {
-		return formatWhiteList;
-	}
 
-	/**
-	 * @param formatWhiteList
-	 *            the formatWhiteList to set
-	 */
-	public void setFormatWhiteList(String formatWhiteList) {
-		this.formatWhiteList = formatWhiteList;
-	}
+
 
 	public List<String> getfFiles() {
 		return ((UploadSession) BeanHelper.getSessionBean(UploadSession.class))

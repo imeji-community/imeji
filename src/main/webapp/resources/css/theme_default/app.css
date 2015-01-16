@@ -347,7 +347,7 @@ select.imj_metadataEditText { min-height: 0; }
 .imj_breadcrumpHistory { width: 91.75%; padding: 0 4%; margin-bottom: 0.5em; }
 .imj_breadcrumpHistory .imj_breadcrumpTitle { margin-right: 0.363636em; font-size: 1.090909em; line-height: 2em; vertical-align: top; }
 .imj_breadcrumpHistory .imj_breadcrumpItem { display: inline-block; max-width: 11em; line-height: 2em; font-size: 1.090909em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: top; }
-.imj_breadcrumpHistory .imj_breadcrumpItem .imj_breadcrumpLongDescription { display: none; max-width: 10.272727em; padding: 0 0.363636em; white-space: normal; background-color: #292929; }
+.imj_breadcrumpHistory .imj_breadcrumpItem .imj_breadcrumpLongDescription { display: none; max-width: 20.272727em; padding: 0 0.363636em; white-space: normal; background-color: #292929; overflow: hidden; text-overflow: ellipsis; }
 .imj_breadcrumpHistory .imj_breadcrumpItem:hover .imj_breadcrumpLongDescription { position: absolute; display: block; z-index: 10; }
 .imj_breadcrumpHistory .imj_breadcrumpSeparator { margin-left: 0.363636em; margin-right: 0.363636em; line-height: 2em; font-size: 1.090909em; vertical-align: top; }
 

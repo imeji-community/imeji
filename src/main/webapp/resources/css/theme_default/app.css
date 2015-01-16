@@ -665,7 +665,9 @@ iframe#twitter-widget-0 div.root div.stream { height: 20em !important; }
 @media screen and (-webkit-min-device-pixel-ratio: 0) { .imj_tiledMediaList > .imj_listBody .imj_tileItem .imj_tileThumbnailArea img { height: auto; } }
 
 .imj_entryPagePreviewTiledList { margin-bottom: 0.5em; padding: 1% 4%; border-top: 0.1em solid #6CAE2F; }
-.imj_entryPagePreviewTiledList .imj_entryPagePreviewTiledListItem { padding: 0.25em; }
+.imj_entryPagePreviewTiledList .imj_thumbnailsPreview { display: inline; }
+.imj_entryPagePreviewTiledList .imj_tileItem { display: inline-block; width: 12.75%; padding: 0.5%; }
+.imj_entryPagePreviewTiledList .imj_entryPagePreviewPicture { padding: 0.25em; width: 100%; }
 .imj_entryPagePreviewTiledList .imj_entryPagePreviewTiledListLink { float: right; width: 8em; }
 .imj_entryPagePreviewTiledList .imj_entryPagePreviewTiledListLink:after { clear: both; content: ""; }
 .imj_entryPagePreviewTiledList + .imj_metadataList { clear: both; padding: 1% 4%; }

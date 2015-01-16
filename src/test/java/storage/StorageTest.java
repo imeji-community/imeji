@@ -34,6 +34,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 
+import de.mpg.imeji.logic.storage.util.StorageUtils;
 import junit.framework.Assert;
 
 import org.apache.commons.io.FileUtils;
@@ -46,6 +47,11 @@ import de.mpg.imeji.logic.storage.UploadResult;
 import de.mpg.imeji.logic.storage.impl.InternalStorage;
 import de.mpg.imeji.logic.storage.internal.InternalStorageManager;
 import de.mpg.imeji.presentation.util.PropertyReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import scala.util.parsing.combinator.testing.Str;
+
+import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_STORAGE;
 
 /**
  * Test {@link Storage}
@@ -55,6 +61,10 @@ import de.mpg.imeji.presentation.util.PropertyReader;
  * @version $Revision$ $LastChangedDate$
  */
 public class StorageTest {
+
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(StorageTest.class);
+
 	private static final String TEST_IMAGE = "./src/test/resources/storage/test.png";
 	private static final String FILENAME = "test";
 	private static final String INTERNATIONAL_CHARACHTERS = "japanese:ãƒ†ã‚¹ãƒˆ  chinese:å¯¦é©— yiddish:×¤Ö¼×¨×�Ö¸×‘×¢ arab:Ø§Ø®ØªØ¨Ø§Ø± bengali: à¦ªà¦°à§€à¦•à§�à¦·à¦¾";
@@ -103,6 +113,19 @@ public class StorageTest {
 		uploadReadDelete(LONG_NAME + ".png");
 	}
 
+	@Test
+	public void testMimeTypeDetection() {
+
+		String STATIC_CONTEXT_STORAGE = "src/test/resources/storage";
+
+		File file = new File(STATIC_CONTEXT_STORAGE + "/test2.wrongext");
+
+		String mimeType = StorageUtils.getMimeType(file);
+
+		LOGGER.info(mimeType);
+
+	}
+
 	/**
 	 * Do upload - read - delete methods in a row
 	 * 
@@ -141,4 +164,8 @@ public class StorageTest {
 		// Assert.assertTrue(Arrays.hashCode(original) ==
 		// Arrays.hashCode(stored));
 	}
+
+
+
+
 }

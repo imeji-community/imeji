@@ -11,7 +11,6 @@ import net.java.dev.webdav.jaxrs.ResponseStatus;
 import de.mpg.imeji.logic.auth.exception.AuthenticationError;
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.auth.exception.UnprocessableError;
-import de.mpg.imeji.logic.controller.exceptions.AuthorizationException;
 import de.mpg.imeji.logic.vo.Properties;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.api.CollectionService;

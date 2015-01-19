@@ -16,6 +16,7 @@ import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchFactory;
+import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -45,7 +46,7 @@ public class UserController {
 	 * 
 	 */
 	public enum USER_TYPE {
-		DEFAULT, ADMIN, RESTRICTED;
+		DEFAULT, ADMIN, RESTRICTED, COPY;
 	}
 
 	/**
@@ -76,9 +77,11 @@ public class UserController {
 			u.setGrants(AuthorizationPredefinedRoles.restrictedUser(u.getId()
 					.toString()));
 			break;
-		default:
+		case DEFAULT:
 			u.setGrants(AuthorizationPredefinedRoles.defaultUser(u.getId()
 					.toString()));
+		case COPY:
+			// Don't change the grants of the user
 			break;
 		}
 		u.setName(u.getPerson().getGivenName() + " "
@@ -108,11 +111,17 @@ public class UserController {
 	 * @throws Exception
 	 */
 	public User retrieve(String email) throws Exception {
-		User u = (User) reader.read(ObjectHelper.getURI(User.class, email)
-				.toString(), user, new User());
-		UserGroupController ugc = new UserGroupController();
-		u.setGroups((List<UserGroup>) ugc.searchByUser(u, user));
-		return u;
+		Search search = SearchFactory.create();
+		SearchResult result = search.searchSimpleForQuery(SPARQLQueries
+				.selectUserByEmail(email));
+		if (result.getNumberOfRecords() == 1) {
+			String id = result.getResults().get(0);
+			User u = (User) reader.read(id, user, new User());
+			UserGroupController ugc = new UserGroupController();
+			u.setGroups((List<UserGroup>) ugc.searchByUser(u, user));
+			return u;
+		}
+		throw new NotFoundException("User with email " + email + " not found");
 	}
 
 	/**
@@ -178,14 +187,15 @@ public class UserController {
 	 */
 	public Collection<Person> searchPersonByName(String name) {
 
-		return  searchPersonByNameInUsers(name);
-		// don't search (for now) for all persons, since it would get messy (many duplicates)
-		//l.addAll(searchPersonByNameInCollections(name));
-//		Map<String, Person> map = new HashMap<>();
-//		for (Person p : l) {
-//			map.put(p.getIdentifier(), p);
-//		}
-//		return map.values();
+		return searchPersonByNameInUsers(name);
+		// don't search (for now) for all persons, since it would get messy
+		// (many duplicates)
+		// l.addAll(searchPersonByNameInCollections(name));
+		// Map<String, Person> map = new HashMap<>();
+		// for (Person p : l) {
+		// map.put(p.getIdentifier(), p);
+		// }
+		// return map.values();
 	}
 
 	/**

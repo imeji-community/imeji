@@ -2,13 +2,16 @@ package de.mpg.imeji.rest.process;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.xml.ws.soap.AddressingFeature.Responses;
 
 import net.java.dev.webdav.jaxrs.ResponseStatus;
+import de.mpg.imeji.logic.auth.exception.AuthenticationError;
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.auth.exception.UnprocessableError;
+import de.mpg.imeji.logic.controller.exceptions.AuthorizationException;
 import de.mpg.imeji.logic.vo.Properties;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.api.CollectionService;
@@ -33,15 +36,13 @@ public class CollectionProcess {
 			resp.setObject(RestProcessUtils.buildBadRequestResponse(e.getLocalizedMessage()));
 			resp.setStatus(Status.BAD_REQUEST);
 
-		} catch (NotAllowedError e) {
-			if (u == null) {
+		} catch (AuthenticationError e) {
 				resp.setObject(RestProcessUtils.buildUnauthorizedResponse(e.getLocalizedMessage()));
 				resp.setStatus(Status.UNAUTHORIZED);
-			} else {
+		}
+		catch (NotAllowedError e) { 
 				resp.setObject(RestProcessUtils.buildNotAllowedResponse(e.getLocalizedMessage()));
 				resp.setStatus(Status.FORBIDDEN);
-
-			}
 		} catch (Exception e) {
 
 		}
@@ -88,19 +89,18 @@ public class CollectionProcess {
 				resp.setObject(RestProcessUtils.buildBadRequestResponse(e.getLocalizedMessage()));
 				resp.setStatus(Status.BAD_REQUEST);
 
-			} catch (NotAllowedError e) {
-				if (u == null) {
+			} catch (AuthenticationError e) {
 					resp.setObject(RestProcessUtils.buildUnauthorizedResponse(e.getLocalizedMessage()));
 					resp.setStatus(Status.UNAUTHORIZED);
-				} 
-				else {
+			}
+			catch (NotAllowedError e) {
 					resp.setObject(RestProcessUtils.buildNotAllowedResponse(e.getLocalizedMessage()));
 					resp.setStatus(Status.FORBIDDEN);
-				}
 			} catch(RuntimeException e){
 				resp.setObject(RestProcessUtils.buildExceptionResponse(e.getLocalizedMessage()));
 				resp.setStatus(Status.FORBIDDEN);
-			} catch (UnprocessableError e){
+			}
+			catch (UnprocessableError e){
 				resp.setObject(RestProcessUtils.buildUnprocessableErrorResponse(e.getLocalizedMessage()));
 				resp.setStatus(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode());
 			}

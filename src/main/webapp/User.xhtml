@@ -64,7 +64,7 @@
 													<h:outputText value="#{UserBean.user.email}"/>
 												</h:panelGroup>
 												<h:panelGroup class="imj_admindataSetEdit" rendered="#{UserBean.edit}" >
-													<h:inputText value="#{UserBean.newEmail}" valueChangeListener="#{UserBean.changeEmailListener}" title="#{!Auth.admin ? msg.edit_user_email_forbidden : ''}" styleClass="imj_admindataEdit #{!Auth.admin ? 'imj_disabled' : ''}" autocomplete="off"  disabled="#{!Auth.admin}" readonly="#{!Auth.admin}"/>
+													<h:inputText value="#{UserBean.user.email}"/>
 												</h:panelGroup>
 											</div>
 										</h:panelGroup>
@@ -84,13 +84,13 @@
 										</h:panelGroup>
 										
 										
-										<h:panelGroup layout="block" styleClass="imj_admindataSet">
+										<h:panelGroup layout="block" styleClass="imj_admindataSet" rendered="#{!UserBean.edit}">
 											<div class="imj_admindataLabel">
 												<h:outputText value="#{lbl.organization}"/>
 												<span class="imj_invisible">: </span>
 											</div>
 											<div class="imj_admindataValue">
-												<h:panelGroup class="imj_admindataValueEntry" rendered="#{!UserBean.edit}">
+												<h:panelGroup class="imj_admindataValueEntry">
 													<ui:repeat var="org" value="#{UserBean.user.person.organizations}"  varStatus="index" >
 														<h:outputText value=", " rendered="#{index.index > 0}"/>
 														<h:outputText value="#{org.name}"/>

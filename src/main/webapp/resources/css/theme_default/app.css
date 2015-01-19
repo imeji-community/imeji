@@ -401,17 +401,19 @@ select.imj_metadataEditText { min-height: 0; }
 .imj_simplePageBrowser .imj_buttonBrowseBackward_16 + .imj_buttonBrowseForward_16 { margin-left: 1.5em; }
 
 .imj_singlePageBrowser { display: inline-block; }
+.imj_singlePageBrowser .imj_buttonBrowseToFirst_16, .imj_singlePageBrowser .imj_buttonBrowseBackward_16, .imj_singlePageBrowser .imj_buttonBrowseForward_16, .imj_singlePageBrowser .imj_buttonBrowseToLast_16 { cursor: pointer; }
+.imj_singlePageBrowser .imj_buttonBrowseToFirst_16.imj_deactivated, .imj_singlePageBrowser .imj_buttonBrowseBackward_16.imj_deactivated, .imj_singlePageBrowser .imj_buttonBrowseForward_16.imj_deactivated, .imj_singlePageBrowser .imj_buttonBrowseToLast_16.imj_deactivated { cursor: default; }
 .imj_singlePageBrowser .imj_separator { display: inline-block; height: 1.81818181em; vertical-align: middle; }
 .imj_singlePageBrowser .imj_pageNumber { padding: 0 1em; background-color: transparent; border: 0 none; font-size: 1em; color: #6CAE2F; }
 .imj_singlePageBrowser .imj_pageNumber:hover { color: #F0F0F0; }
 .imj_singlePageBrowser .imj_currentPageNumber { padding: 0 1em; color: #F0F0F0; background-color: transparent; border: 0 none; }
 
 .imj_imageInfoLayer { width: 95.95%; padding: 0 2%; }
-.imj_imageInfoLayer a { margin-left: 1em; }
 .imj_imageInfoLayer .imj_metadataValue { width: 72.33%; margin-left: 0.727272em; }
 .imj_imageInfoLayer .highlight_area.imj_highlightDependencies { background-color: #4d4d4d; }
 .imj_imageInfoLayer .imj_infoNavigation { width: 95.95%; padding: 0 2%; text-align: right; margin-bottom: 1.454545em; }
 .imj_imageInfoLayer .imj_infoNavigation .imj_buttonEdit_16 { margin-right: 0.181818em; }
+.imj_imageInfoLayer .imj_infoNavigation a { margin-left: 1em; }
 
 .imj_metadataSubPanel { text-align: left; width: 91.95%; padding: 1% 4%; }
 .imj_metadataSubPanel .imj_metadataSubPanelItem { font-weight: bold; border-bottom: 0.1em solid #BBBBBB; }

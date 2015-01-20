@@ -1,10 +1,7 @@
 package de.mpg.imeji.presentation.upload;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -18,10 +15,8 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
-import javax.servlet.http.Part;
 
 import org.apache.log4j.Logger;
-
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchResult;
@@ -53,19 +48,33 @@ public class SingleUploadBean implements Serializable{
 	private List<SelectItem> collectionItems = new ArrayList<SelectItem>();	
 	private String selectedCollectionItem;
 	
+
+	
 	@ManagedProperty(value = "#{SessionBean.user}")
 	private User user;
 	
 
 	private List<String> techMd;
 	 
-	public String uploadFile() throws IOException {
+	public void upload() throws IOException {
 
-		return null; 
-	}
- 
-
+    }
 	
+
+
+
+	public List<String> getTechMd() {
+		return techMd;
+	}
+
+
+
+	public void setTechMd(List<String> techMd) {
+		this.techMd = techMd;
+	}
+
+
+
 	public SingleUploadBean(){
 		
 	}

@@ -137,8 +137,8 @@
 		<async-supported>true</async-supported>
 	</filter>
 
-	<!-- Mappings -->
 
+	<!-- Mappings -->
 
 
 	<filter-mapping>
@@ -195,8 +195,6 @@
 		<dispatcher>FORWARD</dispatcher>
 	</filter-mapping>
 	<!-- Parameters -->
-
-
 	<context-param>
 		<param-name>com.ocpsoft.pretty.BASE_PACKAGES</param-name>
 		<param-value>de.mpg.imeji</param-value>

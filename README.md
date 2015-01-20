@@ -22,5 +22,6 @@
 <p>For (not only technical) support<br /> <a href="mailto:imeji-support@gwdg.de" title="support mailinglist">imeji-support@gwdg.de</a></p>
 
 <h2>Download</h2>
-<p><a href="http://github.com/imeji-community/imeji/" target="_blank" class="gitwatch">Watch Us / Get the source code on GitHub</a></p>
+<p><a href="http://github.com/imeji-community/imeji/" target="_blank" class="gitwatch">Watch Us/Get the community source code on GitHub</a></p>
+<p><a href="http://github.com/MPDL-Innovations/imeji/" target="_blank" class="gitwatch">Watch Us/Get the MPDL Innovations code on GitHub</a></p>
 <p>You can download this project in either <a href="https://github.com/imeji-community/imeji/zipball/master" target="_blank">zip</a> or <a href="https://github.com/imeji-community/imeji/tarball/master" target="_blank">tar</a> formats. <br /> You can also clone the project with <a href="http://git-scm.com" target="_blank">Git</a> by running:<pre>$ git clone https://github.com/imeji-community/imeji.git</pre></p>

@@ -12,6 +12,7 @@ import java.util.List;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.UserGroupController;
+import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.j2j.annotations.j2jId;
@@ -45,7 +46,7 @@ public class User implements Serializable
     private Person person;
     @j2jList("http://imeji.org/terms/grant")
     private Collection<Grant> grants = new ArrayList<Grant>();
-    private URI id;
+    private URI id = IdentifierUtil.newURI(User.class);
     private List<UserGroup> groups = new ArrayList<>();
 
     /**
@@ -107,7 +108,7 @@ public class User implements Serializable
     public void setEmail(String email)
     {
         this.email = email;
-        this.id = ObjectHelper.getURI(User.class, this.email);
+        //this.id = ObjectHelper.getURI(User.class, this.email);
     }
 
     public String getName()

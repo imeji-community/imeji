@@ -18,7 +18,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
 
 html, body { width: 100%; height: 100%; margin: 0px; padding: 0px; background-color: #292929; }
 
-body { font-size: 68.75%; font-family: "Open Sans", sans-serif; font-weight: normal; color: #F0F0F0; line-height: 145%; }
+body { font-size: 75%; font-family: "Open Sans", sans-serif; font-weight: normal; color: #F0F0F0; line-height: 145%; }
 
 form { display: inline; }
 
@@ -98,10 +98,6 @@ body .imj_buttonBrowseToLast_16 { display: inline-block; width: 2.36364em; heigh
 body .imj_buttonBrowseToLast_16.imj_deactivated { background: transparent url("/imeji/resources/imj_iconset/BBBBBB/imjGotoLast_16.png") center right no-repeat; }
 body .imj_buttonBrowseToLast_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjGotoLast_16.png") center right no-repeat; }
 body .imj_buttonBrowseToLast_16:hover.imj_deactivated { background: transparent url("/imeji/resources/imj_iconset/BBBBBB/imjGotoLast_16.png") center right no-repeat; }
-body .imj_paginator .imj_backwardButton { padding-left: 1.5em; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjTrianglePrevious_16.png") center left no-repeat; }
-body .imj_paginator .imj_backwardButton:hover { color: #F0F0F0; background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjTrianglePrevious_16.png") center left no-repeat; }
-body .imj_paginator .imj_forwardButton { padding-right: 1.5em; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjTriangleNext_16.png") center right no-repeat; }
-body .imj_paginator .imj_forwardButton:hover { color: #F0F0F0; background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjTriangleNext_16.png") center right no-repeat; }
 body .imj_buttonAdd_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; margin-right: 0.181818em; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjButtonPlusBorderOpen_16.png") 0 0 no-repeat; }
 body .imj_buttonAdd_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjButtonPlusBorderOpen_16.png") 0 0 no-repeat; }
 body .imj_buttonRemove_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; margin-right: 0.182em; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjButtonMinusRoundedBorderOpen_16.png") 0 0 no-repeat; }
@@ -186,17 +182,21 @@ body a:hover .imj_entryPagePreviewTiledListLinkArrow { background: transparent u
 .imj_modalDialogBox .imj_dialogReasonText { width: 50em; resize: vertical; }
 .imj_modalDialogBox .imj_confirmationText p { max-width: 50em; }
 
+.imj_inlineSelectionGroup { display: inline-block; }
+.imj_inlineSelectionGroup .imj_selectionLabel { display: inline; margin-right: 0.5em; }
+.imj_inlineSelectionGroup .imj_selectionBox { display: inline; }
+
 .imj_inlineButtonGroup { white-space: nowrap; }
 
 .imj_collapse, button.imj_collapse, input[type=button].imj_collapse, .imj_expand, button.imj_expand, input[type=button].imj_expand { color: #6CAE2F; border: 0 none; background-color: transparent; cursor: pointer; }
 .imj_collapse:hover, button.imj_collapse:hover, input[type=button].imj_collapse:hover, .imj_expand:hover, button.imj_expand:hover, input[type=button].imj_expand:hover { color: #F0F0F0; border: 0 none; background-color: transparent; }
 
-a.imj_cancelButton, input.imj_cancelButton, button.imj_cancelButton, .imj_cancelButton { margin: 0 1em; color: #F0F0F0; background-color: #990000; border: solid #990000 0.1em; -moz-border-radius: 0.41667em; -webkit-border-radius: 0.41667em; border-radius: 0.41667em; }
+a.imj_cancelButton, input.imj_cancelButton, button.imj_cancelButton, .imj_cancelButton { margin: 0 1em; color: #F0F0F0; background-color: #990000; border: solid #990000 0.1em; cursor: pointer; -moz-border-radius: 0.41667em; -webkit-border-radius: 0.41667em; border-radius: 0.41667em; }
 a.imj_cancelButton:hover, input.imj_cancelButton:hover, button.imj_cancelButton:hover, .imj_cancelButton:hover { color: #F0F0F0; background-color: #D80000; border: solid #D80000 0.1em; }
 a.imj_cancelButton:active, input.imj_cancelButton:active, button.imj_cancelButton:active, .imj_cancelButton:active { color: #F0F0F0; background-color: #D80000; border: solid #D80000 0.1em; }
 a.imj_cancelButton:focus, input.imj_cancelButton:focus, button.imj_cancelButton:focus, .imj_cancelButton:focus { color: #F0F0F0; background-color: #D80000; border: solid #D80000 0.1em; }
 
-a.imj_submitButton, input.imj_submitButton, button.imj_submitButton, .imj_submitButton { margin-left: 1em; color: #F0F0F0; background-color: #6CAE2F; border: solid transparent 0.1em; -moz-border-radius: 0.41667em; -webkit-border-radius: 0.41667em; border-radius: 0.41667em; }
+a.imj_submitButton, input.imj_submitButton, button.imj_submitButton, .imj_submitButton { margin-left: 1em; color: #F0F0F0; background-color: #6CAE2F; border: solid transparent 0.1em; cursor: pointer; -moz-border-radius: 0.41667em; -webkit-border-radius: 0.41667em; border-radius: 0.41667em; }
 a.imj_submitButton:hover, input.imj_submitButton:hover, button.imj_submitButton:hover, .imj_submitButton:hover { color: #000000; background-color: #4AFF00; border: solid #4AFF00 0.1em; }
 a.imj_submitButton:active, input.imj_submitButton:active, button.imj_submitButton:active, .imj_submitButton:active { color: #000000; background-color: #4AFF00; border: solid #4AFF00 0.1em; }
 a.imj_submitButton:focus, input.imj_submitButton:focus, button.imj_submitButton:focus, .imj_submitButton:focus { color: #000000; background-color: #4AFF00; border: solid #4AFF00 0.1em; }
@@ -206,17 +206,17 @@ a.imj_disabledButton:hover, input.imj_disabledButton:hover, button.imj_disabledB
 a.imj_disabledButton:active, input.imj_disabledButton:active, button.imj_disabledButton:active, .imj_disabledButton:active { color: #444444; background-color: #BBBBBB; cursor: default; border: solid transparent 0.1em; }
 a.imj_disabledButton:focus, input.imj_disabledButton:focus, button.imj_disabledButton:focus, .imj_disabledButton:focus { color: #444444; background-color: #BBBBBB; cursor: default; border: solid transparent 0.1em; }
 
-a.imj_resetButton, input.imj_resetButton, button.imj_resetButton, .imj_resetButton { color: #000000; background-color: #FF7700; border: solid #FF7700 0.1em; -moz-border-radius: 0.41667em; -webkit-border-radius: 0.41667em; border-radius: 0.41667em; }
+a.imj_resetButton, input.imj_resetButton, button.imj_resetButton, .imj_resetButton { color: #000000; background-color: #FF7700; border: solid #FF7700 0.1em; cursor: pointer; -moz-border-radius: 0.41667em; -webkit-border-radius: 0.41667em; border-radius: 0.41667em; }
 a.imj_resetButton:hover, input.imj_resetButton:hover, button.imj_resetButton:hover, .imj_resetButton:hover { color: #000000; background-color: #FFC999; border: solid #FFC999 0.1em; }
 a.imj_resetButton:active, input.imj_resetButton:active, button.imj_resetButton:active, .imj_resetButton:active { color: #000000; background-color: #FFC999; border: solid #FFC999 0.1em; }
 a.imj_resetButton:focus, input.imj_resetButton:focus, button.imj_resetButton:focus, .imj_resetButton:focus { color: #000000; background-color: #FFC999; border: solid #FFC999 0.1em; }
 
-.imj_backButton { padding: 0 0.3333333em; margin-left: 1em; color: #F0F0F0; background-color: inherit; border-bottom: solid #6CAE2F 0.1em; -moz-border-radius: 0 0 0.41667em 0.41667em; -webkit-border-radius: 0; border-radius: 0 0 0.41667em 0.41667em; }
+.imj_backButton { padding: 0 0.3333333em; margin-left: 1em; color: #F0F0F0; background-color: inherit; border-bottom: solid #6CAE2F 0.1em; cursor: pointer; -moz-border-radius: 0 0 0.41667em 0.41667em; -webkit-border-radius: 0; border-radius: 0 0 0.41667em 0.41667em; }
 .imj_backButton:hover { -moz-border-radius: 0.41667em; -webkit-border-radius: 0.41667em; border-radius: 0.41667em; color: #000000; background-color: #4AFF00; border: solid #4AFF00 0.1em; }
 .imj_backButton:active { -moz-border-radius: 0.41667em; -webkit-border-radius: 0.41667em; border-radius: 0.41667em; color: #000000; background-color: #4AFF00; border: solid #4AFF00 0.1em; }
 .imj_backButton:focus { -moz-border-radius: 0.41667em; -webkit-border-radius: 0.41667em; border-radius: 0.41667em; color: #000000; background-color: #4AFF00; border: solid #4AFF00 0.1em; }
 
-.imj_editButton, a.imj_editButton { margin-left: 1em; color: #F0F0F0; background-color: #6CAE2F; border: solid transparent 0.1em; -moz-border-radius: 0.41667em; -webkit-border-radius: 0.41667em; border-radius: 0.41667em; }
+.imj_editButton, a.imj_editButton { margin-left: 1em; color: #F0F0F0; background-color: #6CAE2F; border: solid transparent 0.1em; cursor: pointer; -moz-border-radius: 0.41667em; -webkit-border-radius: 0.41667em; border-radius: 0.41667em; }
 .imj_editButton:hover, a.imj_editButton:hover { color: #000000; background-color: #4AFF00; border: solid #4AFF00 0.1em; }
 .imj_editButton:active, a.imj_editButton:active { color: #000000; background-color: #4AFF00; border: solid #4AFF00 0.1em; }
 .imj_editButton:focus, a.imj_editButton:focus { color: #000000; background-color: #4AFF00; border: solid #4AFF00 0.1em; }
@@ -260,7 +260,7 @@ button.imj_removeButton { color: #6CAE2F; background-color: inherit; }
 .imj_imageStack:after { content: ""; position: absolute; width: 100px; height: 100px; left: -6px; top: -2px; border: 2px solid #F0F0F0; background: none repeat scroll 0 0 #444444; -moz-box-shadow: 0.54545em 0.54545em 0.54545em #292929; -webkit-box-shadow: 0.54545em 0.54545em 0.54545em #292929; box-shadow: 0.54545em 0.54545em 0.54545em #292929; -moz-transform: rotate(4deg); -ms-transform: rotate(4deg); -webkit-transform: rotate(4deg); transform: rotate(4deg); }
 
 .imj_optionSet { max-width: 100%; margin-bottom: 1em; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
-.imj_optionSet .imj_optionCheckbox { margin-right: 0.272727em; }
+.imj_optionSet .imj_optionCheckbox { margin-right: 0.272727em; margin-left: 0; }
 .imj_optionSet .imj_optionLabel { white-space: normal; }
 
 table.imj_optionSet td label { white-space: normal; }
@@ -269,7 +269,7 @@ table.imj_optionSet td label { white-space: normal; }
 
 .imj_metadataSet { width: 100%; display: inline-block; padding-bottom: 1em; }
 .imj_metadataSet .imj_metadataLabel { display: inline-block; width: 24%; vertical-align: top; font-weight: bold; overflow: hidden; text-overflow: ellipsis; }
-.imj_metadataSet .imj_metadataValue { display: inline-block; margin-left: 1.0em; min-width: 60%; max-width: 73.2%; word-wrap: break-word; }
+.imj_metadataSet .imj_metadataValue { display: inline-block; margin-left: 1.0em; min-width: 60%; max-width: 72.6%; word-wrap: break-word; }
 
 textarea.imj_metadataValue { resize: vertical; }
 
@@ -294,18 +294,18 @@ select.imj_metadataEditText { min-height: 0; }
 
 .imj_infodataSet { width: 100%; display: inline-block; padding-bottom: 1em; }
 .imj_infodataSet .imj_infodataLabel { display: inline-block; width: 24%; vertical-align: top; font-weight: bold; overflow: hidden; text-overflow: ellipsis; }
-.imj_infodataSet .imj_infodataValue { display: inline-block; margin-left: 1.0em; min-width: 60%; max-width: 73.2%; word-wrap: break-word; }
+.imj_infodataSet .imj_infodataValue { display: inline-block; margin-left: 1.0em; min-width: 60%; max-width: 72.6%; word-wrap: break-word; }
 
 .imj_infodataValueEntryEmbed { min-height: 6em; width: 55em; }
 
 .imj_admindataSet { width: 100%; display: inline-block; padding-bottom: 1em; }
 .imj_admindataSet .imj_admindataLabel { display: inline-block; width: 24%; vertical-align: top; font-weight: bold; overflow: hidden; text-overflow: ellipsis; }
-.imj_admindataSet .imj_admindataValue { display: inline-block; margin-left: 1.0em; min-width: 60%; max-width: 73.2%; word-wrap: break-word; }
+.imj_admindataSet .imj_admindataValue { display: inline-block; margin-left: 1.0em; min-width: 60%; max-width: 72.6%; word-wrap: break-word; }
 
 .imj_admindataSetEdit { margin: 1em 0; }
 .imj_admindataSetEdit .imj_admindataValue .imj_admindataSetEdit { margin: 0; }
 .imj_admindataSetEdit .imj_admindataLabel { display: inline-block; width: 24%; vertical-align: top; font-weight: bold; overflow: hidden; text-overflow: ellipsis; }
-.imj_admindataSetEdit .imj_admindataValue { display: inline-block; margin-left: 1.0em; min-width: 60%; max-width: 73.2%; word-wrap: break-word; }
+.imj_admindataSetEdit .imj_admindataValue { display: inline-block; margin-left: 1.0em; min-width: 60%; max-width: 72.6%; word-wrap: break-word; }
 
 .imj_admindataCheckbox { margin-left: 0; }
 
@@ -333,6 +333,8 @@ select.imj_metadataEditText { min-height: 0; }
 .imj_simpleSearch input[type=radio] + label { margin-left: 0.181818em; margin-right: 1em; }
 .imj_simpleSearch .imj_simpleSearchLinkAdvancedsearch { margin-top: 0.181818em; margin-left: 2.090909em; white-space: nowrap; display: inline-block; }
 
+.imj_isAdmin .imj_simpleSearch .imj_simpleSearchInput { width: 15em; }
+
 .imj_subHeaderMessageSpace { clear: both; float: left; display: inline; overflow: hidden; margin: 0.65em 0.0909em 0 0; width: 81.3636em; }
 
 .imj_submitPanel { display: inline-block; width: 100%; text-align: right; margin-top: 1em; }
@@ -345,7 +347,7 @@ select.imj_metadataEditText { min-height: 0; }
 .imj_breadcrumpHistory { width: 91.75%; padding: 0 4%; margin-bottom: 0.5em; }
 .imj_breadcrumpHistory .imj_breadcrumpTitle { margin-right: 0.363636em; font-size: 1.090909em; line-height: 2em; vertical-align: top; }
 .imj_breadcrumpHistory .imj_breadcrumpItem { display: inline-block; max-width: 11em; line-height: 2em; font-size: 1.090909em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; vertical-align: top; }
-.imj_breadcrumpHistory .imj_breadcrumpItem .imj_breadcrumpLongDescription { display: none; max-width: 10.272727em; padding: 0 0.363636em; white-space: normal; background-color: #292929; }
+.imj_breadcrumpHistory .imj_breadcrumpItem .imj_breadcrumpLongDescription { display: none; max-width: 20.272727em; padding: 0 0.363636em; white-space: normal; background-color: #292929; overflow: hidden; text-overflow: ellipsis; }
 .imj_breadcrumpHistory .imj_breadcrumpItem:hover .imj_breadcrumpLongDescription { position: absolute; display: block; z-index: 10; }
 .imj_breadcrumpHistory .imj_breadcrumpSeparator { margin-left: 0.363636em; margin-right: 0.363636em; line-height: 2em; font-size: 1.090909em; vertical-align: top; }
 
@@ -388,26 +390,30 @@ select.imj_metadataEditText { min-height: 0; }
 .imj_paginator .imj_gotoBox .imj_pageInput { width: 3em; margin-left: 0.363636em; margin-right: 0.363636em; text-align: center; }
 .imj_paginator .imj_gotoBox .imj_submitButton { margin-left: 0.545454em; }
 
-.imj_simplePageBrowser .imj_backwardButton, .imj_simplePageBrowser .imj_forwardButton { color: #6CAE2F; cursor: pointer; }
-.imj_simplePageBrowser .imj_backwardButton:hover, .imj_simplePageBrowser .imj_forwardButton:hover { color: #F0F0F0; border: none; }
-.imj_simplePageBrowser .imj_backwardButton:focus, .imj_simplePageBrowser .imj_forwardButton:focus { color: #F0F0F0; border: none; }
-.imj_simplePageBrowser .imj_backwardButton:active, .imj_simplePageBrowser .imj_forwardButton:active { color: #BBBBBB; cursor: default; border: none; }
-.imj_simplePageBrowser .imj_backwardButton.disabled, .imj_simplePageBrowser .imj_forwardButton.disabled { color: #BBBBBB; cursor: default; border: none; }
-.imj_simplePageBrowser .imj_backwardButton.disabled:hover, .imj_simplePageBrowser .imj_forwardButton.disabled:hover { color: #BBBBBB; cursor: default; border: none; }
-.imj_simplePageBrowser .imj_backwardButton + .imj_forwardButton { margin-left: 1em; }
+.imj_simplePageBrowser .imj_buttonBrowseBackward_16 { padding-left: 1.5em; }
+.imj_simplePageBrowser .imj_buttonBrowseForward_16 { padding-right: 1.5em; }
+.imj_simplePageBrowser .imj_buttonBrowseBackward_16, .imj_simplePageBrowser .imj_buttonBrowseForward_16 { color: #6CAE2F; cursor: pointer; width: auto; }
+.imj_simplePageBrowser .imj_buttonBrowseBackward_16:hover, .imj_simplePageBrowser .imj_buttonBrowseForward_16:hover { color: #F0F0F0; border: none; }
+.imj_simplePageBrowser .imj_buttonBrowseBackward_16:focus, .imj_simplePageBrowser .imj_buttonBrowseForward_16:focus { color: #F0F0F0; border: none; }
+.imj_simplePageBrowser .imj_buttonBrowseBackward_16:active, .imj_simplePageBrowser .imj_buttonBrowseForward_16:active { color: #BBBBBB; cursor: default; border: none; }
+.imj_simplePageBrowser .imj_buttonBrowseBackward_16.imj_deactivated, .imj_simplePageBrowser .imj_buttonBrowseForward_16.imj_deactivated { cursor: default; color: #BBBBBB; cursor: default; border: none; }
+.imj_simplePageBrowser .imj_buttonBrowseBackward_16.imj_deactivated:hover, .imj_simplePageBrowser .imj_buttonBrowseForward_16.imj_deactivated:hover { color: #BBBBBB; cursor: default; border: none; }
+.imj_simplePageBrowser .imj_buttonBrowseBackward_16 + .imj_buttonBrowseForward_16 { margin-left: 1.5em; }
 
 .imj_singlePageBrowser { display: inline-block; }
+.imj_singlePageBrowser .imj_buttonBrowseToFirst_16, .imj_singlePageBrowser .imj_buttonBrowseBackward_16, .imj_singlePageBrowser .imj_buttonBrowseForward_16, .imj_singlePageBrowser .imj_buttonBrowseToLast_16 { cursor: pointer; }
+.imj_singlePageBrowser .imj_buttonBrowseToFirst_16.imj_deactivated, .imj_singlePageBrowser .imj_buttonBrowseBackward_16.imj_deactivated, .imj_singlePageBrowser .imj_buttonBrowseForward_16.imj_deactivated, .imj_singlePageBrowser .imj_buttonBrowseToLast_16.imj_deactivated { cursor: default; }
 .imj_singlePageBrowser .imj_separator { display: inline-block; height: 1.81818181em; vertical-align: middle; }
 .imj_singlePageBrowser .imj_pageNumber { padding: 0 1em; background-color: transparent; border: 0 none; font-size: 1em; color: #6CAE2F; }
 .imj_singlePageBrowser .imj_pageNumber:hover { color: #F0F0F0; }
 .imj_singlePageBrowser .imj_currentPageNumber { padding: 0 1em; color: #F0F0F0; background-color: transparent; border: 0 none; }
 
 .imj_imageInfoLayer { width: 95.95%; padding: 0 2%; }
-.imj_imageInfoLayer a { margin-left: 1em; }
 .imj_imageInfoLayer .imj_metadataValue { width: 72.33%; margin-left: 0.727272em; }
 .imj_imageInfoLayer .highlight_area.imj_highlightDependencies { background-color: #4d4d4d; }
 .imj_imageInfoLayer .imj_infoNavigation { width: 95.95%; padding: 0 2%; text-align: right; margin-bottom: 1.454545em; }
 .imj_imageInfoLayer .imj_infoNavigation .imj_buttonEdit_16 { margin-right: 0.181818em; }
+.imj_imageInfoLayer .imj_infoNavigation a { margin-left: 1em; }
 
 .imj_metadataSubPanel { text-align: left; width: 91.95%; padding: 1% 4%; }
 .imj_metadataSubPanel .imj_metadataSubPanelItem { font-weight: bold; border-bottom: 0.1em solid #BBBBBB; }
@@ -542,6 +548,8 @@ iframe#twitter-widget-0 div.root div.stream { height: 20em !important; }
 .imj_userConfig .imj_connectedUserGroups .imj_admindataValueEntry { display: block; }
 
 .imj_setupConfig .imj_admindataValue .imj_admindataEdit { width: 100%; }
+.imj_setupConfig .imj_adminPanel .imj_headline .imj_submitButton { float: right; }
+.imj_setupConfig .imj_adminPanel .imj_headline .imj_submitButton:after { clear: both; content: ""; }
 .imj_setupConfig .imj_adminPanel .imj_content .imj_admindataSet .imj_submitPanel { margin-top: 0; }
 
 .imj_mainMenuStandard { display: inline-block; padding: 0 3%; font-size: 135%; letter-spacing: 0.090909em; text-align: left; text-transform: uppercase; }
@@ -622,6 +630,7 @@ iframe#twitter-widget-0 div.root div.stream { height: 20em !important; }
 .imj_bibliographicList .imj_listBody .imj_bibliographicListItem .imj_interactiveArea { padding-top: 0.75em; vertical-align: top; }
 .imj_bibliographicList .imj_listBody .imj_bibliographicListItem .imj_itemContent { width: 77.25%; display: inline-block; vertical-align: top; }
 .imj_bibliographicList .imj_listBody .imj_bibliographicListItem .imj_itemContent .imj_metadataContent { width: 100%; }
+.imj_bibliographicList .imj_listBody .imj_bibliographicListItem .imj_itemContent .imj_descriptionArea { overflow: hidden; text-overflow: ellipsis; }
 .imj_bibliographicList .imj_listBody .imj_bibliographicListItem .imj_itemContent .imj_descriptionArea p { margin: 0; }
 .imj_bibliographicList .imj_listBody .imj_bibliographicListItem .imj_itemContent p.imj_descriptionArea { margin: 0; }
 .imj_bibliographicList .imj_listBody .imj_bibliographicListItem .imj_itemContent .imj_metadataSet { padding-bottom: 0.25em; }
@@ -657,7 +666,9 @@ iframe#twitter-widget-0 div.root div.stream { height: 20em !important; }
 @media screen and (-webkit-min-device-pixel-ratio: 0) { .imj_tiledMediaList > .imj_listBody .imj_tileItem .imj_tileThumbnailArea img { height: auto; } }
 
 .imj_entryPagePreviewTiledList { margin-bottom: 0.5em; padding: 1% 4%; border-top: 0.1em solid #6CAE2F; }
-.imj_entryPagePreviewTiledList .imj_entryPagePreviewTiledListItem { padding: 0.25em; }
+.imj_entryPagePreviewTiledList .imj_thumbnailsPreview { display: inline; }
+.imj_entryPagePreviewTiledList .imj_tileItem { display: inline-block; width: 12.75%; padding: 0.5%; }
+.imj_entryPagePreviewTiledList .imj_entryPagePreviewPicture { padding: 0.25em; width: 100%; }
 .imj_entryPagePreviewTiledList .imj_entryPagePreviewTiledListLink { float: right; width: 8em; }
 .imj_entryPagePreviewTiledList .imj_entryPagePreviewTiledListLink:after { clear: both; content: ""; }
 .imj_entryPagePreviewTiledList + .imj_metadataList { clear: both; padding: 1% 4%; }

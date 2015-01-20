@@ -19,15 +19,18 @@ import java.nio.file.Paths;
 import java.util.Map;
 
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import net.java.dev.webdav.jaxrs.ResponseStatus;
 
+import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
@@ -136,10 +139,12 @@ public class CollectionTest extends ImejiTestBase {
 				.post(Entity
 						.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
 
-		assertEquals(response.getStatus(), BAD_REQUEST.getStatusCode());
+		assertEquals(response.getStatus(), ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode());
 
 	}
 
+	//TODO: TEST for user who does not have right to create collection
+	
 	@Test
 	public void test_2_ReadCollection_1() throws IOException {
 		Response response = target(pathPrefix).path(collectionId)
@@ -147,15 +152,6 @@ public class CollectionTest extends ImejiTestBase {
 
 		String jsonString = response.readEntity(String.class);
 		assertThat("Empty collection", jsonString, not(isEmptyOrNullString()));
-	}
-
-	@Test
-	public void test_2_ReadCollection_2_BadRequest() throws IOException {
-		Response response = target(pathPrefix).path(collectionId + "schmarrn")
-				.register(authAsUser).request(MediaType.APPLICATION_JSON).get();
-
-		assertThat(response.getStatus(),
-				equalTo(BAD_REQUEST.getStatusCode()));
 	}
 
 	@Test
@@ -178,6 +174,15 @@ public class CollectionTest extends ImejiTestBase {
 		assertThat(response.getStatus(),
 				equalTo(FORBIDDEN.getStatusCode()));
 	}
+	
+	@Test
+	public void test_2_ReadCollection_4_DoesNotExist() throws IOException {
+		Response response = target(pathPrefix).path(collectionId+"i_do_not_exist")
+				.register(authAsUser).request(MediaType.APPLICATION_JSON)
+				.get();
+		assertThat(response.getStatus(),
+				equalTo(Status.NOT_FOUND.getStatusCode()));
+	}
 
 	@Test
 	public void test_3_ReleaseCollection_1_WithAuth() throws Exception {
@@ -190,7 +195,7 @@ public class CollectionTest extends ImejiTestBase {
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.json("{}"));
 
-		assertEquals(response.getStatus(), Status.NO_CONTENT.getStatusCode());
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
 		CollectionService s = new CollectionService();
 		assertEquals("RELEASED", s.read(collectionId, JenaUtil.testUser)
@@ -209,7 +214,7 @@ public class CollectionTest extends ImejiTestBase {
 				.path("/" + collectionId + "/release").register(authAsUser2)
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.json("{}"));
-		assertEquals(response.getStatus(), FORBIDDEN.getStatusCode());
+		assertEquals(FORBIDDEN.getStatusCode(), response.getStatus());
 		
 	
 		assertEquals("PENDING",itemStatus.read(itemId, JenaUtil.testUser).getStatus());
@@ -220,7 +225,7 @@ public class CollectionTest extends ImejiTestBase {
 				.path("/" + collectionId + "/release").register(authAsUser)
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.json("{}"));	
-		assertEquals(response.getStatus(), FORBIDDEN.getStatusCode());
+		assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
 	}
 	@Test
 	public void test_3_ReleaseCollection_4_WithOutUser(){
@@ -229,7 +234,7 @@ public class CollectionTest extends ImejiTestBase {
 				.path("/" + collectionId + "/release")
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.json("{}"));
-		assertEquals(response.getStatus(), UNAUTHORIZED.getStatusCode());
+		assertEquals(UNAUTHORIZED.getStatusCode(), response.getStatus());
 	}
 	
 	@Test
@@ -243,6 +248,139 @@ public class CollectionTest extends ImejiTestBase {
 				.path("/" + collectionId + "/release").register(authAsUser)
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.json("{}"));
-		assertEquals(response.getStatus(), ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode());
+		assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+	}
+	
+	@Test
+	public void test_3_ReleaseCollection_6_nonExistingCollection(){
+		Response response = target(pathPrefix)
+				.path("/" + collectionId + "i_do_not_exist/release").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("{}"));	
+		assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
+	}
+
+	@Test
+	public void test_4_WithdrawCollection_1_WithAuth() throws Exception {
+		
+		ItemService itemStatus = new ItemService();
+		initItem();
+		CollectionService s = new CollectionService();
+		s.release(collectionId, JenaUtil.testUser);
+		
+		assertEquals("RELEASED", s.read(collectionId, JenaUtil.testUser).getStatus());
+		assertEquals("RELEASED",itemStatus.read(itemId, JenaUtil.testUser).getStatus());
+		
+		Form form= new Form();
+		form.param("id", collectionId);
+		form.param("discardComment", "test_4_WithdrawCollection_1_WithAuth_"+System.currentTimeMillis());
+		Response response = target(pathPrefix)
+				.path("/" + collectionId + "/withdraw").register(authAsUser)
+				.request((MediaType.APPLICATION_JSON_TYPE))
+				.put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+		
+		assertEquals("WITHDRAWN", s.read(collectionId, JenaUtil.testUser)
+				.getStatus());
+		
+		assertEquals("WITHDRAWN",itemStatus.read(itemId, JenaUtil.testUser).getStatus());
+		
+	}
+	
+	
+	@Test
+	public void test_4_WithdrawCollection_2_WithUnauth() throws Exception{
+		
+		initItem();
+		CollectionService s = new CollectionService();
+		s.release(collectionId, JenaUtil.testUser);
+		
+		assertEquals("RELEASED", s.read(collectionId, JenaUtil.testUser).getStatus());
+		
+		Form form= new Form();
+		form.param("id", collectionId);
+		form.param("discardComment", "test_4_WithdrawCollection_2_WithUnAuth_"+System.currentTimeMillis());
+		Response response = target(pathPrefix)
+				.path("/" + collectionId + "/withdraw").register(authAsUser2)
+				.request((MediaType.APPLICATION_JSON_TYPE))
+				.put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+
+		assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
+	 }
+
+	@Test
+	public void test_4_WithdrawCollection_3_WithNonAuth() throws Exception {
+
+		initItem();
+		CollectionService s = new CollectionService();
+		s.release(collectionId, JenaUtil.testUser);
+		assertEquals("RELEASED", s.read(collectionId, JenaUtil.testUser).getStatus());
+		
+		Form form= new Form();
+		form.param("id", collectionId);
+		form.param("discardComment", "test_4_WithdrawCollection_3_WithNonAuth_"+System.currentTimeMillis());
+		Response response = target(pathPrefix)
+				.path("/" + collectionId + "/withdraw")
+				.request((MediaType.APPLICATION_JSON_TYPE))
+				.put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+
+		assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
+	 }
+
+
+	@Test
+
+	public void test_4_WithdrawCollection_4_NotReleasedCollection() throws Exception {
+
+		initItem();
+		CollectionService s = new CollectionService();
+		assertEquals("PENDING", s.read(collectionId, JenaUtil.testUser).getStatus());
+		
+		Form form= new Form();
+		form.param("id", collectionId);
+		form.param("discardComment", "test_4_WithdrawCollection_4_NotReleasedCollection_"+System.currentTimeMillis());
+		Response response = target(pathPrefix)
+				.path("/" + collectionId + "/withdraw").register(authAsUser)
+				.request((MediaType.APPLICATION_JSON_TYPE))
+				.put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+
+		assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+	}
+	
+	@Test
+	public void test_4_WithdrawCollection_5_WithdrawCollectionTwice() throws Exception{
+
+		initItem();
+		CollectionService s = new CollectionService();
+		s.release(collectionId, JenaUtil.testUser);
+		s.withdraw (collectionId, JenaUtil.testUser,"test_4_WithdrawCollection_5_WithdrawCollectionTwice_"+System.currentTimeMillis());
+
+		assertEquals("WITHDRAWN", s.read(collectionId, JenaUtil.testUser).getStatus());
+		
+		Form form= new Form();
+		form.param("id", collectionId);
+		form.param("discardComment", "test_4_WithdrawCollection_5_WithdrawCollectionTwice_SecondTime_"+System.currentTimeMillis());
+		Response response = target(pathPrefix)
+				.path("/" + collectionId + "/withdraw").register(authAsUser)
+				.request((MediaType.APPLICATION_JSON_TYPE))
+				.put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+
+		assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+	}
+	
+	@Test
+	public void test_4_WithdrawCollection_5_NotExistingCollection() throws Exception{
+		
+		Form form= new Form();
+		form.param("id", collectionId+"i_do_not_exist");
+		form.param("discardComment", "test_4_WithdrawCollection_5_WithdrawCollectionTwice_SecondTime_"+System.currentTimeMillis());
+		Response response = target(pathPrefix)
+				.path("/" + collectionId + "i_do_not_exist/withdraw").register(authAsUser)
+				.request((MediaType.APPLICATION_JSON_TYPE))
+				.put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+
+		assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
 	}
 }

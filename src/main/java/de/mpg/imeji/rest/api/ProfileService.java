@@ -56,16 +56,17 @@ public class ProfileService implements API<MetadataProfileTO>{
 	}
 
 	@Override
-	public void release(String id, User u) throws NotFoundException,
+	public MetadataProfileTO release(String id, User u) throws NotFoundException,
 			NotAllowedError, NotSupportedException, Exception {
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
 
 	@Override
-	public void withdraw(MetadataProfileTO o, User u) throws NotFoundException,
+	public MetadataProfileTO withdraw(String id, User u, String discardComment) throws NotFoundException,
 			NotAllowedError, NotSupportedException, Exception {
 		// TODO Auto-generated method stub
+		return null;
 		
 	}
 

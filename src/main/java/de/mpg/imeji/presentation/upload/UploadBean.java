@@ -261,7 +261,7 @@ public class UploadBean implements Serializable {
 	 * file has an extension (therefore, for file without extension, the
 	 * validation will only occur when the file has been stored locally)
 	 */
-	private void validateName(String title) {
+	private void validateName(File file, String title) {
 		if (StorageUtils.hasExtension(title)) {
 			if (isCheckNameUnique()) {
 				// if the checkNameUnique is checked, check that two files with
@@ -273,12 +273,13 @@ public class UploadBean implements Serializable {
 									+ FilenameUtils.getBaseName(title));
 			}
 			StorageController sc = new StorageController();
-			if (!sc.isAllowedFormat(FilenameUtils.getExtension(title))) {
+			String guessedNotAllowedFormat = sc.guessNotAllowedFormat(file);
+			if (guessedNotAllowedFormat != null) {
 				SessionBean sessionBean = (SessionBean) BeanHelper
 						.getSessionBean(SessionBean.class);
 				throw new RuntimeException(
 						sessionBean.getMessage("upload_format_not_allowed")
-								+ " (" + FilenameUtils.getExtension(title)
+								+ " (" + guessedNotAllowedFormat
 								+ ")");
 			}
 		}
@@ -294,7 +295,7 @@ public class UploadBean implements Serializable {
 		try {
 			if (!StorageUtils.hasExtension(title))
 				title += StorageUtils.guessExtension(file);
-			validateName(title);
+			validateName(file, title);
 			Item item = null;
 			ItemController controller = new ItemController();
 			if (isImportImageToFile()) {

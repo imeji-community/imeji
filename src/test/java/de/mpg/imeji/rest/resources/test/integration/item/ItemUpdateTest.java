@@ -1,18 +1,15 @@
 package de.mpg.imeji.rest.resources.test.integration.item;
 
-import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.rest.process.RestProcessUtils;
 import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
-
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
@@ -21,15 +18,15 @@ import org.slf4j.LoggerFactory;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
 import java.io.File;
 import java.io.IOException;
 
+import static de.mpg.imeji.logic.storage.util.StorageUtils.calculateChecksum;
 import static de.mpg.imeji.rest.resources.test.TestUtils.getStringFromPath;
 import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.*;
 import static javax.ws.rs.core.Response.Status.FORBIDDEN;
 import static javax.ws.rs.core.Response.Status.OK;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 
@@ -145,13 +142,12 @@ public class ItemUpdateTest extends ImejiTestBase {
 
         assertEquals(OK.getStatusCode(), response.getStatus());
         ItemWithFileTO itemWithFileTO = response.readEntity(ItemWithFileTO.class);
-        StorageController sc = new StorageController();
         assertThat("Checksum of stored file does not match the source file",
-                itemWithFileTO.getChecksumMd5(), equalTo(sc.calculateChecksum(ATTACHED_FILE)));
+                itemWithFileTO.getChecksumMd5(), equalTo(calculateChecksum(ATTACHED_FILE)));
         LOGGER.info(RestProcessUtils.buildJSONFromObject(itemWithFileTO));
     }
     
-    @Ignore
+    //@Ignore
     //TODO after execution this test case, the following test cases can not be executed successfully, a service exception reported.
     //TODO if change the order of this test case as the last one, all test cases can be executed successfully
     @Test
@@ -206,9 +202,8 @@ public class ItemUpdateTest extends ImejiTestBase {
 
          assertEquals(OK.getStatusCode(), response.getStatus());
          ItemWithFileTO itemWithFileTO = response.readEntity(ItemWithFileTO.class);
-         StorageController sc = new StorageController();
          assertThat("Checksum of stored file does not match the source file",
-                 itemWithFileTO.getChecksumMd5(), equalTo(sc.calculateChecksum(newFile)));
+                 itemWithFileTO.getChecksumMd5(), equalTo(calculateChecksum(newFile)));
     	
     }
    
@@ -237,9 +232,8 @@ public class ItemUpdateTest extends ImejiTestBase {
 
          assertEquals(OK.getStatusCode(), response.getStatus());
          ItemWithFileTO itemWithFileTO = response.readEntity(ItemWithFileTO.class);
-         StorageController sc = new StorageController();
          assertThat("Checksum of stored file does not match the source file",
-                 itemWithFileTO.getChecksumMd5(), equalTo(sc.calculateChecksum(newFile)));
+                 itemWithFileTO.getChecksumMd5(), equalTo(calculateChecksum(newFile)));
     }
     
     @Test
@@ -265,9 +259,8 @@ public class ItemUpdateTest extends ImejiTestBase {
          assertEquals(OK.getStatusCode(), response.getStatus());
          ItemWithFileTO itemWithFileTO = response.readEntity(ItemWithFileTO.class);
          LOGGER.info(RestProcessUtils.buildJSONFromObject(itemWithFileTO));
-         StorageController sc = new StorageController();
          assertThat("Checksum of stored file does not match the source file",
-                 itemWithFileTO.getChecksumMd5(), equalTo(sc.calculateChecksum(new File(STATIC_CONTEXT_STORAGE + "/test.jpg"))));
+                 itemWithFileTO.getChecksumMd5(), equalTo(calculateChecksum(new File(STATIC_CONTEXT_STORAGE + "/test.jpg"))));
     }
     
     @Test
@@ -297,9 +290,8 @@ public class ItemUpdateTest extends ImejiTestBase {
 
          assertEquals(OK.getStatusCode(), response.getStatus());
          ItemWithFileTO itemWithFileTO = response.readEntity(ItemWithFileTO.class);
-         StorageController sc = new StorageController();
          assertThat("Checksum of stored file does not match the source file",
-                 itemWithFileTO.getChecksumMd5(), equalTo(sc.calculateChecksum(newFile)));
+                 itemWithFileTO.getChecksumMd5(), equalTo(calculateChecksum(newFile)));
     }
     
     

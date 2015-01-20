@@ -8,6 +8,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -29,7 +30,7 @@ public class MetadataSetTO implements Serializable{
 	@JsonIgnore
 	private int position;
 	
-	private List<LabelTO> Labels;
+	private List<LabelTO> Labels = new ArrayList<LabelTO>();
 	
 	private MetadataTO value;
 	

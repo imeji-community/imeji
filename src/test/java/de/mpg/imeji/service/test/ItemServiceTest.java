@@ -1,60 +1,81 @@
 package de.mpg.imeji.service.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
+import de.mpg.imeji.logic.auth.exception.AuthenticationError;
+import de.mpg.imeji.logic.auth.exception.NotAllowedError;
+import de.mpg.imeji.logic.storage.util.StorageUtils;
+import de.mpg.imeji.rest.api.CollectionService;
+import de.mpg.imeji.rest.api.ItemService;
+import de.mpg.imeji.rest.to.*;
+import de.mpg.imeji.rest.to.predefinedMetadataTO.TextTO;
+import de.mpg.j2j.exceptions.NotFoundException;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
 import util.JenaUtil;
-import de.mpg.imeji.logic.auth.exception.AuthenticationError;
-import de.mpg.imeji.logic.auth.exception.NotAllowedError;
-import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.storage.util.StorageUtils;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.presentation.util.ImejiFactory;
-import de.mpg.imeji.rest.api.ItemService;
-import de.mpg.imeji.rest.to.ItemTO;
-import de.mpg.imeji.rest.to.ItemWithFileTO;
-import de.mpg.j2j.exceptions.NotFoundException;
+
+import java.io.File;
+import java.net.URI;
+
+import static org.junit.Assert.*;
 
 public class ItemServiceTest {
 
-	private static ItemWithFileTO itemWithFileTo;
-	private static ItemTO itemTo;
-	private static CollectionImeji c;
-	private static final String TEST_IMAGE = "./src/test/resources/storage/test.png";
+	private static final String TEST_IMAGE_FILE_PATH = "src/test/resources/storage/test.png";
 	private static File file = null;
+	private static CollectionTO collectionTO;
+	private static String collectionId;
+	private static ItemWithFileTO itemTO;
 
 	@BeforeClass
 	public static void setup() throws Exception {
 		JenaUtil.initJena();
+		initCollection();
 		initItem();
 	}
 
 	@AfterClass
 	public static void tearDown() throws Exception {
-
 		JenaUtil.closeJena();
 	}
 
+	/**
+	 * Create a new collection and set the collectionid
+	 *
+	 * @throws Exception
+	 */
+	public static void initCollection() {
+		CollectionService s = new CollectionService();
+		try {
+			collectionTO = s.create(new CollectionTO(), JenaUtil.testUser);
+			collectionId = collectionTO.getId();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static void initItem() throws Exception {
-		file = new File(TEST_IMAGE);
-		c = ImejiFactory.newCollection();
-		CollectionController controller = new CollectionController();
-		controller.create(c, null, JenaUtil.testUser);
-		itemWithFileTo = new ItemWithFileTO();
-		itemWithFileTo.setFilename("testname2");
-		itemWithFileTo.setFile(file);
-		itemWithFileTo.setCollectionId(c.getIdString());
+
+		itemTO = new ItemWithFileTO();
+		itemTO.setFilename("testname2");
+		itemTO.setCollectionId(collectionId);
+
+		file = new File(TEST_IMAGE_FILE_PATH);
+
+		itemTO.setFile(file);
+
+		TextTO text = new TextTO();
+		text.setText("kuku moj mal4ik");
+
+		LabelTO label = new LabelTO("en", "text label");
+
+		MetadataSetTO mds = new MetadataSetTO();
+		mds.setValue(text);
+		mds.setTypeUri(URI.create("http://imeji.org/terms/metadata#text"));
+		mds.getLabels().add(label);
+
+		itemTO.getMetadata().add(mds);
+
 	}
 
 	@Test
@@ -64,74 +85,78 @@ public class ItemServiceTest {
 		ItemService crud = new ItemService();
 		// create item
 		try {
-			crud.create(itemWithFileTo, null);
+			crud.create(itemTO, null);
 			fail("You have to be authenticated");
 		} catch (Exception e) {
 			// its everything fine
 		}
 
-		itemTo = crud.create(itemWithFileTo, JenaUtil.testUser);
+		ItemTO createdItem = crud.create(itemTO, JenaUtil.testUser);
 		// check the item be created and has new id
-		assertNotNull(itemTo.getId());
+		assertNotNull(createdItem.getId());
+
+		assertEquals(createdItem.getCollectionId(), collectionId);
 		// check the default visibility of item = private
-		assertTrue(itemTo.getVisibility().equals("PRIVATE"));
+		assertTrue(createdItem.getVisibility().equals("PRIVATE"));
 		// check the item mime type
-		assertEquals(itemTo.getMimetype(), StorageUtils.getMimeType(file));
+		assertEquals(createdItem.getMimetype(), StorageUtils.getMimeType(file));
 		// check the item file name
-		assertEquals(itemTo.getFilename(),
-				crud.read(itemTo.getId(), JenaUtil.testUser).getFilename());
+		assertEquals(createdItem.getFilename(), itemTO.getFilename());
 		// check the item status
-		assertTrue(itemTo.getStatus().equals("PENDING"));
+		assertTrue(createdItem.getStatus().equals("PENDING"));
+
 
 		// read the item
-		assertNotNull(crud.read(itemTo.getId(), JenaUtil.testUser).getId());
-		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser)
-				.getCollectionId(), (c.getIdString()));
+		ItemTO readItem = crud.read(createdItem.getId(), JenaUtil.testUser);
+
+		assertNotNull(readItem.getId());
+		assertEquals(readItem.getCollectionId(), collectionId);
+
 		assertEquals(
-				crud.read(itemTo.getId(), JenaUtil.testUser).getFilename(),
-				(itemTo.getFilename()));
-		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser)
-				.getChecksumMd5(), (itemTo.getChecksumMd5()));
-		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser)
-				.getCreatedBy().getFullname(),
-				(itemTo.getCreatedBy().getFullname()));
-		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser)
-				.getModifiedBy().getFullname(), itemTo.getModifiedBy()
+				readItem.getFilename(),
+				(createdItem.getFilename()));
+		assertEquals(readItem
+				.getChecksumMd5(), (createdItem.getChecksumMd5()));
+		assertEquals(readItem
+						.getCreatedBy().getFullname(),
+				(createdItem.getCreatedBy().getFullname()));
+		assertEquals(readItem
+				.getModifiedBy().getFullname(), createdItem.getModifiedBy()
 				.getFullname());
-		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser)
-				.getCreatedBy().getUserId(), itemTo.getCreatedBy().getUserId());
-		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser)
-				.getModifiedBy().getUserId(),
-				(itemTo.getModifiedBy().getUserId()));
+		assertEquals(readItem
+				.getCreatedBy().getUserId(), createdItem.getCreatedBy().getUserId());
+		assertEquals(readItem
+						.getModifiedBy().getUserId(),
+				(createdItem.getModifiedBy().getUserId()));
 		assertEquals(
-				crud.read(itemTo.getId(), JenaUtil.testUser).getMimetype(),
-				(itemTo.getMimetype()));
-		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser).getStatus(),
-				(itemTo.getStatus()));
-		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser)
-				.getVisibility(), (itemTo.getVisibility()));
+				readItem.getMimetype(),
+				(createdItem.getMimetype()));
+		assertEquals(readItem.getStatus(),
+				(createdItem.getStatus()));
+		assertEquals(readItem
+				.getVisibility(), (createdItem.getVisibility()));
 		assertEquals(
-				crud.read(itemTo.getId(), JenaUtil.testUser).getFilename(),
-				(itemTo.getFilename()));
-		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser)
-				.getCreatedDate(), (itemTo.getCreatedDate()));
-		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser)
-				.getModifiedDate(), (itemTo.getModifiedDate()));
-		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser)
-				.getWebResolutionUrlUrl(), (itemTo.getWebResolutionUrlUrl()));
-		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser)
-				.getThumbnailUrl(), (itemTo.getThumbnailUrl()));
-		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser).getFileUrl(),
-				(itemTo.getFileUrl()));
+				readItem.getFilename(),
+				(createdItem.getFilename()));
+		assertEquals(readItem
+				.getCreatedDate(), (createdItem.getCreatedDate()));
+		assertEquals(readItem
+				.getModifiedDate(), (createdItem.getModifiedDate()));
+		assertEquals(readItem
+				.getWebResolutionUrlUrl(), (createdItem.getWebResolutionUrlUrl()));
+		assertEquals(readItem
+				.getThumbnailUrl(), (createdItem.getThumbnailUrl()));
+		assertEquals(readItem.getFileUrl(),
+				(createdItem.getFileUrl()));
 
 		// delete item
-		Assert.assertTrue(crud.delete(itemTo.getId(), JenaUtil.testUser));
+		Assert.assertTrue(crud.delete(readItem.getId(), JenaUtil.testUser));
 		// try to read the delete item
 		try {
-			// crud.read(itemTo.getId(), JenaUtil.testUser);
-			// fail("should not found the item");
+			readItem = crud.read(createdItem.getId(), JenaUtil.testUser);
+			fail("should not found the item");
 		} catch (Exception e) {
-
+			//is OK
 		}
 
 	}

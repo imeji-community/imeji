@@ -29,12 +29,15 @@
 package de.mpg.imeji.logic.storage;
 
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
-import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.presentation.util.PropertyReader;
-import org.apache.commons.codec.digest.DigestUtils;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.Serializable;
+
+import static de.mpg.imeji.logic.storage.util.StorageUtils.*;
 
 /**
  * Controller for the {@link Storage} objects
@@ -148,26 +151,17 @@ public class StorageController implements Serializable {
 		return storage.getCollectionId(url);
 	}
 
+
+
 	/**
-	 * Calculate the Checksum of a byte array with MD5 algorithm displayed in
-	 * Hexadecimal
-	 * 
-	 * @param bytes
-	 * @return
-	 * @throws IOException
+	 * Null if the file format related to the passed extension can be uploaded, not allowed file type exception otherwise
+	 *
+	 * @param file
+	 * @return not allowed file format extension
 	 */
-	public String calculateChecksum(File file) throws IOException {
-		FileInputStream fis = null;
-		try {
-			fis = new FileInputStream(file);
-			return DigestUtils.md5Hex(fis);
-		} catch (Exception e) {
-			throw new RuntimeException(
-					"Error calculating the cheksum of the file: ", e);
-		} finally {
-			if (fis != null)
-				fis.close();
-		}
+	public String guessNotAllowedFormat(File file) {
+		String guessedExtension = guessExtension(file);
+		return isAllowedFormat(guessedExtension) ? null : guessedExtension;
 	}
 
 	/**
@@ -176,21 +170,22 @@ public class StorageController implements Serializable {
 	 * @param extension
 	 * @return
 	 */
-	public boolean isAllowedFormat(String extension) {
+	private boolean isAllowedFormat(String extension) {
 		// If no extension, not possible to recognized the format
 		if ("".equals(extension.trim()))
 			return false;
 		// check in white list, if found then allowed
 		for (String s : formatWhiteList.split(","))
-			if (StorageUtils.compareExtension(extension, s.trim()))
+			if (compareExtension(extension, s.trim()))
 				return true;
 		// check black list, if found then forbidden
 		for (String s : formatBlackList.split(","))
-			if (StorageUtils.compareExtension(extension, s.trim()))
+			if (compareExtension(extension, s.trim()))
 				return false;
 		// Not found in both list: if white list is empty, allowed
 		return "".equals(formatWhiteList.trim());
 	}
+
 
 	/**
 	 * Get the {@link Storage} used by the {@link StorageController}

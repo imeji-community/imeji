@@ -177,3 +177,5 @@ target/
 # sublime
 *.sublime-workspace
 *.sublime-project
+src/main/java/de/mpg/imeji/logic/storage/internal/InternalStorageManager.java
+src/test/java/de/mpg/imeji/service/test/ItemServiceTest.java

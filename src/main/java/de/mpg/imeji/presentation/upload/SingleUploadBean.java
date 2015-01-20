@@ -1,5 +1,10 @@
 package de.mpg.imeji.presentation.upload;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -10,13 +15,11 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
-import javax.faces.context.FacesContext;
+import javax.faces.bean.ViewScoped;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
 
-import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.controller.CollectionController;
@@ -37,8 +40,8 @@ import de.mpg.imeji.presentation.mdProfile.SuperStatementBean;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 
 @ManagedBean(name = "SingleUploadBean")
-@RequestScoped
-public class SingleUploadBean implements Serializable {
+@ViewScoped
+public class SingleUploadBean implements Serializable{
 	private static final long serialVersionUID = -2731118794797476328L;
 	private static Logger logger = Logger.getLogger(SingleUploadBean.class);
 	
@@ -53,20 +56,15 @@ public class SingleUploadBean implements Serializable {
 	@ManagedProperty(value = "#{SessionBean.user}")
 	private User user;
 	
-	  private Part file;
-	  private String fileContent;
-	 
-	  public void upload() {
 
-	  }
+	private List<String> techMd;
 	 
-	  public Part getFile() {
-	    return file;
-	  }
-	 
-	  public void setFile(Part file) {
-	    this.file = file;
-	  }
+	public String uploadFile() throws IOException {
+
+		return null; 
+	}
+ 
+
 	
 	public SingleUploadBean(){
 		

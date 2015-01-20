@@ -1,5 +1,6 @@
 package de.mpg.imeji.presentation.user;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -34,7 +35,12 @@ import de.mpg.imeji.presentation.util.ImejiFactory;
  */
 @ManagedBean(name = "PersonBean")
 @ViewScoped
-public class PersonBean {
+public class PersonBean implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2066560191381597873L;
+
 	private SessionBean sb;
 
 	private String personURI;

@@ -74,9 +74,9 @@ public class Page
                 {
                     title = ObjectLoader.loadUserGroupLazy(id, user).getName();
                 }
-                else if (idString.matches(".+/user/.+"))
+                else if (idString.matches("([^.@]+)(\\.[^.@]+)*@([^.@]+\\.)+([^.@]+)"))
                 {
-                    title = ObjectLoader.loadUser(id, user).getName();
+                    title = ObjectLoader.loadUser(id.toString(), user).getName();
                 }
                 // Is now done in html page
                 // // Cut the name of the object

@@ -35,7 +35,6 @@ public class TransferObjectFactory {
 			sto.setId(CommonUtils.extractIDFromURI(t.getId()));
 			sto.setPos(t.getPos());
 			sto.setType(t.getType());
-			sto.setType(t.getType());
 			sto.setLabels(new ArrayList<LocalizedString>(t.getLabels()));
 			sto.setVocabulary(t.getVocabulary());
 			for(String s : t.getLiteralConstraints())

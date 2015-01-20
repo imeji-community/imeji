@@ -20,8 +20,11 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.AuthenticationFactory;
 import de.mpg.imeji.logic.auth.Authorization;
+import de.mpg.imeji.logic.auth.exception.AuthenticationError;
+import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.controller.exceptions.NotFoundError;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
@@ -104,28 +107,42 @@ public class FileServlet extends HttpServlet {
 				.getFileExtension(url)));
 		SessionBean session = getSession(req);
 		User user = getUser(req, session);
-
+		
 		try {
-			if ("NO_THUMBNAIL_URL".equals(url)) {
-				ExternalStorage eStorage = new ExternalStorage();
-				eStorage.read("http://localhost:8080/imeji/resources/icon/empty.png",
-						resp.getOutputStream(), true);
+				Item fileItem = getItem(url, user);
+				if ("NO_THUMBNAIL_URL".equals(url)) {
+					ExternalStorage eStorage = new ExternalStorage();
+					eStorage.read("http://localhost:8080/imeji/resources/icon/empty.png",
+							resp.getOutputStream(), true);
 
-			} else if (authorization.read(user, loadCollection(url, session))
-					|| authorization.read(user, getItem(url, user))) {
-				if (download)
-					resp.setHeader("Content-disposition", "attachment;");
-				storageController.read(url, resp.getOutputStream(), true);
-			} else {
-				resp.sendError(403,
-						"imeji security: You are not allowed to view this file");
+				} else {
+					
+					if (download)
+						resp.setHeader("Content-disposition", "attachment;");
+					storageController.read(url, resp.getOutputStream(), true);
+				}
+			} 
+		catch (Exception e) {
+			if (e instanceof NotAllowedError ) {
+				resp.sendError(HttpServletResponse.SC_FORBIDDEN,
+					"imeji security: You are not allowed to view this file");
 			}
-		} catch (Exception e) {
-			ExternalStorage eStorage = new ExternalStorage();
-			eStorage.read(domain + "/imeji/resources/icon/empty.png",
-					resp.getOutputStream(), true);
+			else if (e instanceof AuthenticationError ) {
+				resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, "imeji security: You need to be signed-in to view this file.");
+			}
+			else if (e instanceof NotFoundError ) {
+				resp.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource you are trying to retrieve does not exist!");
+			}
+			else
+			{
+				resp.sendError(422, "Unprocessable entity!");
+/*				ExternalStorage eStorage = new ExternalStorage();
+				eStorage.read(domain + "/imeji/resources/icon/empty.png",
+						resp.getOutputStream(), true);
+*/			}
 		}
-	}
+		
+}
 
 	/**
 	 * Load a {@link CollectionImeji} from the session if possible, otherwise
@@ -195,6 +212,8 @@ public class FileServlet extends HttpServlet {
 		}
 		return null;
 	}
+	
+	
 
 	/**
 	 * Return the uri of the {@link CollectionImeji} of the file with this url
@@ -222,20 +241,19 @@ public class FileServlet extends HttpServlet {
 	 * 
 	 * @param url
 	 * @return
+	 * @throws Exception 
 	 */
-	private Item getItem(String url, User user) {
+	private Item getItem(String url, User user) throws Exception {
 		Search s = SearchFactory.create();
-		List<String> r = s.searchSimpleForQuery(
-				SPARQLQueries.selectItemIdOfFile(url)).getResults();
-		if (!r.isEmpty()) {
+		List<String> r = s.searchSimpleForQuery(SPARQLQueries.selectItemIdOfFile(url)).getResults();
+		if (!r.isEmpty() && r.get(0) != null) {
 			ItemController c = new ItemController();
-			try {
-				return c.retrieve(URI.create(r.get(0)), user);
-			} catch (Exception e) {
-				return null;
-			}
+			return c.retrieve(URI.create(r.get(0)), user);
 		}
-		return null;
+		else
+		{
+			throw new NotFoundError("Can not find the resource requested");
+		}
 	}
 
 	/**

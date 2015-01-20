@@ -15,6 +15,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import util.JenaUtil;
+import de.mpg.imeji.logic.auth.exception.AuthenticationError;
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
@@ -58,24 +59,24 @@ public class ItemServiceTest {
 
 	@Test
 	public void testItemCRUD() throws NotFoundException, NotAllowedError,
-			Exception {
+			AuthenticationError, Exception {
 
 		ItemService crud = new ItemService();
 		// create item
 		try {
 			crud.create(itemWithFileTo, null);
-			fail("should not allowed to create item");
-		} catch (NotAllowedError e) {
+			fail("You have to be authenticated");
+		} catch (Exception e) {
 			// its everything fine
 		}
+
 		itemTo = crud.create(itemWithFileTo, JenaUtil.testUser);
 		// check the item be created and has new id
 		assertNotNull(itemTo.getId());
 		// check the default visibility of item = private
 		assertTrue(itemTo.getVisibility().equals("PRIVATE"));
 		// check the item mime type
-		assertEquals(itemTo.getMimetype(),
-				StorageUtils.getMimeType(file));
+		assertEquals(itemTo.getMimetype(), StorageUtils.getMimeType(file));
 		// check the item file name
 		assertEquals(itemTo.getFilename(),
 				crud.read(itemTo.getId(), JenaUtil.testUser).getFilename());
@@ -95,17 +96,16 @@ public class ItemServiceTest {
 				.getCreatedBy().getFullname(),
 				(itemTo.getCreatedBy().getFullname()));
 		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser)
-				.getModifiedBy().getFullname(),
-				(itemTo.getModifiedBy().getFullname()));
+				.getModifiedBy().getFullname(), itemTo.getModifiedBy()
+				.getFullname());
 		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser)
-				.getCreatedBy().getUserId(),
-				(itemTo.getCreatedBy().getUserId()));
+				.getCreatedBy().getUserId(), itemTo.getCreatedBy().getUserId());
 		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser)
 				.getModifiedBy().getUserId(),
 				(itemTo.getModifiedBy().getUserId()));
-		 assertEquals(
-		 crud.read(itemTo.getId(), JenaUtil.testUser).getMimetype(),
-		 (itemTo.getMimetype()));
+		assertEquals(
+				crud.read(itemTo.getId(), JenaUtil.testUser).getMimetype(),
+				(itemTo.getMimetype()));
 		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser).getStatus(),
 				(itemTo.getStatus()));
 		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser)

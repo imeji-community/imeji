@@ -4,6 +4,7 @@
 package de.mpg.imeji.presentation.upload;
 
 import com.ocpsoft.pretty.PrettyContext;
+
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.Search;
@@ -22,6 +23,7 @@ import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.UrlHelper;
+
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -35,6 +37,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
+
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -122,6 +125,8 @@ public class UploadBean implements Serializable {
 				while (iter.hasNext()) {
 					FileItemStream fis = iter.next();
 					InputStream stream = fis.openStream();
+					System.err.println("getFieldNameee = " + fis.getFieldName());
+					System.err.println("getNameeee = " + fis.getName());
 					if (!fis.isFormField()) {
 						File tmp = createTmpFile(fis.getName());
 						try {

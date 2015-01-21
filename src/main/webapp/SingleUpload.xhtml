@@ -105,22 +105,52 @@
 
 				
 					<h:panelGroup layout="block" id="mdProfile" styleClass="imj_metadataList">
-						<ui:repeat id="superStatementBean" var="superStatementBean" value="#{SingleUploadBean.sts}" rows="0" varStatus="indexMetadata">	
+						<ui:repeat id="smdb" var="smdb" value="#{SingleUploadBean.superMetadataBeans}" rows="0" varStatus="indexMetadata">	
 								<!-- MetaDataList - edit panel container set -->
 								<div class="imj_metadataSet">
 									<div class="imj_metadataLabel">
-										<h:outputText value="#{MetadataLabels.internationalizedLabels[superStatementBean.statement.id]}"/>
+										<h:outputText value="#{MetadataLabels.internationalizedLabels[smdb.statement.id]}"/>
 										<span class="imj_invisible">: </span>
 									</div>
-									<div class="imj_metadataValue" style="margin-left: #{superStatementBean.hierarchyLevel}em;">
+									<div class="imj_metadataValue" style="margin-left: #{smdb.hierarchyLevel}em;">
 										<!-- MetaDataInput -->
-										<list:batchEditList_singleStatement itemBean="#{superStatementBean}" itemStatement="#{superStatementBean.statement}" itemLabelBean="#{MetadataLabels}" hideLabel="true" navBean="#{Navigation}" suggestBean="#{SuggestBean}"/>		
+										<list:batchEditList_singleStatement itemBean="#{smdb}" itemStatement="#{smdb.statement}" itemLabelBean="#{MetadataLabels}" hideLabel="true" navBean="#{Navigation}" suggestBean="#{SuggestBean}"/>		
 									</div>
 								</div>
 						</ui:repeat>
 					</h:panelGroup>
 					
-					<h:commandButton value="#{lbl.save}" action="#{SingleUploadBean.save}"/>
+					<div class="imj_submitPanel">
+						<h:outputLink value="#{HistorySession.previousPage.completeUrlWithHistory}" styleClass="imj_cancelButton">
+							<h:outputText value="#{lbl.cancel}" />
+						</h:outputLink>
+						<h:commandButton action="#{SingleUploadBean.save}" value="#{lbl.save}" styleClass="imj_submitButton" rendered="#{SingleUploadBean.readyFotUploading()}"/>
+					</div>
+					
+					<ui:fragment rendered="#{SingleUploadBean.getfFile() != '' or not empty SingleUploadBean.getItem()}">
+						<div class="imj_uploadMessageArea">
+							<h2 class="imj_headline">
+								<h:outputText value="#{lbl.info_lblMessageHeader}"/>
+							</h2>
+							<h:panelGroup layout="block" styleClass="imj_fileErrorMessageArea" rendered="#{SingleUploadBean.getfFile() != '' }">
+								<h3 class="imj_sectionHeadline">
+									<h:outputText value="#{msg.error_upload}:"/>
+								</h3>
+								<li class="imj_messageError">
+									<h:outputText value="#{SingleUploadBean.getfFile()}"/>
+								</li>
+	
+							</h:panelGroup>					
+							<h:panelGroup layout="block" styleClass="imj_fileErrorMessageArea" rendered="#{not empty SingleUploadBean.getItem()}">
+									<h3 class="imj_sectionHeadline">
+										<h:outputText value="#{msg.success_upload}:" />
+									</h3>
+									<h:outputLink value="#{Navigation.collectionUrl}#{SingleUploadBean.extractIDFromURI(SingleUploadBean.getItem().collection)}/item/#{SingleUploadBean.getItem().idString}">
+										<h:outputText value="#{SingleUploadBean.getItem().filename}"/>		
+									</h:outputLink>
+							</h:panelGroup>
+						</div>
+					</ui:fragment>
 				</h:form>
 			</h:panelGroup>
 		</h:panelGroup>

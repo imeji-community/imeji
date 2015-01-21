@@ -29,6 +29,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.controller.CollectionController;
+import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
@@ -37,14 +38,20 @@ import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
+import de.mpg.imeji.logic.storage.StorageController;
+import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
-import de.mpg.imeji.presentation.mdProfile.SuperStatementBean;
+import de.mpg.imeji.presentation.metadata.MetadataSetBean;
+import de.mpg.imeji.presentation.metadata.SingleEditBean;
+import de.mpg.imeji.presentation.metadata.SuperMetadataBean;
 import de.mpg.imeji.presentation.metadata.extractors.TikaExtractor;
+import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.UrlHelper;
@@ -56,10 +63,6 @@ public class SingleUploadBean implements Serializable{
 	private static Logger logger = Logger.getLogger(SingleUploadBean.class);
 	
 	private Collection<CollectionImeji> collections = new ArrayList<CollectionImeji>();
-	private CollectionImeji collection;
-	private MetadataProfile profile = new MetadataProfile();
-	private MetadataLabels labels;
-	private List<SuperStatementBean> sts = new ArrayList<SuperStatementBean>();
 	
 	private List<SelectItem> collectionItems = new ArrayList<SelectItem>();	
 	private String selectedCollectionItem;
@@ -70,8 +73,7 @@ public class SingleUploadBean implements Serializable{
 	@ManagedProperty(value = "#{SessionBean.user}")
 	private User user;
 	
-	private File ingestFile;
-	private List<String> techMd = new ArrayList<String>();
+	private IngestImage ingestImage;
 	 
 
 	public SingleUploadBean(){
@@ -86,35 +88,129 @@ public class SingleUploadBean implements Serializable{
 				sus.reset();
 				
 			}else if(UrlHelper.getParameterBoolean("start")){
-				System.err.println("start");
 				upload();			
 			}
 			else if(UrlHelper.getParameterBoolean("done"))
 			{
-				sus.uploadedToTemp();
+				sus.copyToTemp();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+	    
+	public String save(){
+		try {        
+			Item item = uploadFileToItem(getIngestImage().getFile(), getIngestImage().getName());
+			SingleEditBean edit = new SingleEditBean(item, sus.getProfile(), "");
+			MetadataSetBean mds = edit.getEditor().getItems().get(0).getMds();
+			List <SuperMetadataBean> smdb1 = mds.getTree().getList();
+			List <SuperMetadataBean> smdb2 = getSuperMetadataBeans();
+			copyValueToItem(smdb1, smdb2);
+			edit.save();
+			sus.uploaded();
+		} catch (Exception e) {
+			BeanHelper.error(e.getMessage());
+		}
+		return "";
+	} 
+	
+	public void copyValueToItem(List <SuperMetadataBean> itemStatements, List <SuperMetadataBean> statements){
+		for(SuperMetadataBean smdb1 : itemStatements)
+		{
+			for(SuperMetadataBean smdb2 : statements)
+			{
+				if(smdb1.getStatement().getId().equals(smdb2.getStatement().getId()))
+				{
+					smdb1.setText(smdb2.getText());
+					smdb1.setDate(smdb2.getDate());
+					smdb1.setCitation(smdb2.getCitation());
+					smdb1.setConeId(smdb2.getConeId());
+					smdb1.setPerson(smdb2.getPerson());
+					smdb1.setName(smdb2.getName());
+					smdb1.setLatitude(smdb2.getLatitude());
+					smdb1.setLongitude(smdb2.getLongitude());
+					smdb1.setLicense(smdb2.getLicense());
+					smdb1.setExternalUri(smdb2.getExternalUri());
+					smdb1.setLabel(smdb2.getLabel());
+					smdb1.setNumber(smdb2.getNumber());
+					smdb1.setExportFormat(smdb2.getExportFormat());
+					smdb1.setCitation(smdb2.getCitation());
+				}
+			}
+		}
+		
+	}
+	    
+	private Item uploadFileToItem(File file, String title) {
+		try {    
+			if (!StorageUtils.hasExtension(title))
+				title += StorageUtils.guessExtension(file);
+			validateName(file, title);
+			Item item = null;
+			ItemController controller = new ItemController();
+			item = controller.createWithFile(null, file, title, getCollection(), user);
+			sus.setUploadedItem(item);
+			return item;
+		} catch (Exception e) {	
+			sus.setfFile(" File " + title + " not uploaded: " + e.getMessage());
+			logger.error("Error uploading item: ", e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+
+	
+    protected void addPositionToMetadata()
+    {
+            int pos = 0;
+            for (SuperMetadataBean smb : sus.getSuperMdBeans())
+            {
+                smb.setPos(pos);
+                pos++;
+            }
+    }
+	
+	/**
+	 * Throws an {@link Exception} if the file ca be upload. Works only if the
+	 * file has an extension (therefore, for file without extension, the
+	 * validation will only occur when the file has been stored locally)
+	 */
+	private void validateName(File file, String title) {
+		if (StorageUtils.hasExtension(title)) {
+			StorageController sc = new StorageController();
+			String guessedNotAllowedFormat = sc.guessNotAllowedFormat(file);
+			if (guessedNotAllowedFormat != null) {
+				SessionBean sessionBean = (SessionBean) BeanHelper
+						.getSessionBean(SessionBean.class);
+				throw new RuntimeException(
+						sessionBean.getMessage("upload_format_not_allowed") + " (" + guessedNotAllowedFormat + ")");
+			}
+		}
+	}
+
 	
 	public void upload() {  
 		HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+		List<String> techMd = new ArrayList<String>();
 		try {
-			this.ingestFile = getUploadedIngestFile(request);
-			sus.setFile(ingestFile);
-			this.techMd = TikaExtractor.extractFromFile(ingestFile);
-			sus.setTechMD(techMd);
+			this.ingestImage = getUploadedIngestFile(request);
+			sus.setIngestImage(ingestImage);
+			techMd = TikaExtractor.extractFromFile(ingestImage.getFile());
 		} catch (Exception e) {
 			techMd = new ArrayList<String>();
 			techMd.add(e.getMessage());
 			e.printStackTrace();
 		}
+		sus.setTechMD(techMd);
     }
 	
-	private File getUploadedIngestFile(HttpServletRequest request) throws FileUploadException{
+	
+	private IngestImage getUploadedIngestFile(HttpServletRequest request) throws FileUploadException{
 		File tmp = null;
 		boolean isMultipart=ServletFileUpload.isMultipartContent(request);
+		IngestImage ii = new IngestImage();
 		if (isMultipart) {
 			ServletFileUpload upload=new ServletFileUpload();
 			try {
@@ -124,6 +220,8 @@ public class SingleUploadBean implements Serializable{
 					InputStream in = fis.openStream();
 					tmp = File.createTempFile("singleupload", "." + FilenameUtils.getExtension(fis.getName()));
 					FileOutputStream fos = new FileOutputStream(tmp);
+					if(fis.getName() != null)
+						ii.setName(fis.getName());
 					if(!fis.isFormField())
 					{
 						try {
@@ -134,11 +232,12 @@ public class SingleUploadBean implements Serializable{
 						}
 					}
 				}
+				ii.setFile(tmp);
 			} catch (IOException | FileUploadException e) {
 				e.printStackTrace();
 			}
 		}
-		return tmp;
+		return ii;
 	}
 	
 	
@@ -148,19 +247,21 @@ public class SingleUploadBean implements Serializable{
 		{
 			sus.setSelectedCollectionItem(selectedCollectionItem);
 			try {    
-				collection = ObjectLoader.loadCollectionLazy(new URI(selectedCollectionItem), user);
-				profile = ObjectLoader.loadProfile(collection.getProfile(), user);
-				if(profile.getStatements().size() == 0)
-					sts.clear();
-				for(Statement st : profile.getStatements())
-				{
-					SuperStatementBean smd = new SuperStatementBean(st);
-					sts.add(smd);
-				}  
-				labels = (MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class);
+				CollectionImeji collection = ObjectLoader.loadCollectionLazy(new URI(selectedCollectionItem), user);
+				MetadataProfile profile = ObjectLoader.loadProfile(collection.getProfile(), user);
+				List<SuperMetadataBean> sts = new ArrayList<SuperMetadataBean>();
+				if(profile.getStatements().size() > 0){
+					for(Statement st : profile.getStatements())
+					{
+						SuperMetadataBean smb = new SuperMetadataBean(st);
+						sts.add(smb);
+					}  
+				}
+				MetadataLabels labels = (MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class);
 				labels.init(profile);
 				sus.setCollection(collection);
-				sus.setSts(sts);
+				sus.setProfile(profile);
+				sus.setSuperMdBeans(sts);;
 			} catch (URISyntaxException e) {
 				e.printStackTrace();
 			} 
@@ -235,32 +336,12 @@ public class SingleUploadBean implements Serializable{
 		return sus.getCollection();
 	}
 
-	public void setCollection(CollectionImeji collection) {
-		this.collection = collection;
-	}
-
-	public MetadataProfile getProfile() {
-		return profile;
-	}
-
-	public void setProfile(MetadataProfile profile) {
-		this.profile = profile;
-	}
-
-	public List<SuperStatementBean> getSts() {
-		return sus.getSts();
-	}
-
-	public void setSts(List<SuperStatementBean> sts) {
-		this.sts = sts;
+	public List<SuperMetadataBean> getSuperMetadataBeans() {
+		return sus.getSuperMdBeans();
 	}
 
 	public List<String> getTechMd() {
 		return sus.getTechMD();
-	}
-
-	public void setTechMd(List<String> techMd) {
-		this.techMd = techMd;
 	}
 
 	public SingleUploadSession getSus() {
@@ -275,27 +356,29 @@ public class SingleUploadBean implements Serializable{
 		return sus.getLabels();
 	}
 
-	public void setLabels(MetadataLabels labels) {
-		this.labels = labels;
+	public IngestImage getIngestImage() {
+		return sus.getIngestImage();
 	}
 
-	public File getIngestFile() {
-		return sus.getFile();
+	public String getfFile()
+	{
+		return sus.getfFile();
 	}
-
-	public void setIngestFile(File ingestFile) {
-		this.ingestFile = ingestFile;
+	
+	public Item getItem()
+	{
+		return sus.getUploadedItem();
 	}
-
+	
+	public static String extractIDFromURI(URI uri) {
+		return uri.getPath().substring(uri.getPath().lastIndexOf("/") + 1);
+	}
+	
+	public boolean readyFotUploading(){
+		return sus.isUploadFileToTemp() && sus.getCollection() != null;
+	}
 	
 	
-	
-	
-	
-
-
-
-
 
 }
 

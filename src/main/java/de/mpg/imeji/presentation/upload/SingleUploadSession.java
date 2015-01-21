@@ -1,6 +1,5 @@
 package de.mpg.imeji.presentation.upload;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,8 +7,10 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
 import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
-import de.mpg.imeji.presentation.mdProfile.SuperStatementBean;
+import de.mpg.imeji.presentation.metadata.SuperMetadataBean;
 
 
 @ManagedBean(name = "SingleUploadSession")
@@ -18,38 +19,53 @@ public class SingleUploadSession {
 	
 	private String selectedCollectionItem;
 	private CollectionImeji collection;
+	private MetadataProfile profile;
 	private MetadataLabels labels;
-	private File file;
+	private IngestImage ingestImage;
 	private List<String> techMD = new ArrayList<String>();
-	private List<SuperStatementBean> sts;
+	private List<SuperMetadataBean> superMdBeans;
 	private boolean uploadFileToTemp = false;
 	private boolean uploadFileToItem = false;
+	private Item uploadedItem;
+	private String fFile;
 	
 	public void reset()
 	{
 		selectedCollectionItem = "";
 		collection = null;
-		file = null;
+		profile = null;
+		ingestImage = null;
 		techMD.clear();;
-		sts = null;
+		superMdBeans = null;
 		labels = null;
 		uploadFileToTemp = false;
-		uploadFileToItem = false;		
+		uploadFileToItem = false;
+		uploadedItem = null;
+		fFile = "";
 	}
 	
-	public void uploadedToTemp()
+	public void copyToTemp()
 	{
 		uploadFileToTemp = true;
 		uploadFileToItem = false;
+		uploadedItem = null;
+		fFile = "";
+	}
+	
+	public void uploaded()
+	{
+		selectedCollectionItem = "";
+		collection = null;
+		profile = null;
+		ingestImage = null;
+		techMD.clear();;
+		superMdBeans = null;
+		labels = null;
+		uploadFileToTemp = false;
+		uploadFileToItem = true;
+		fFile = "";
 	}
 
-	public File getFile() {
-		return file;
-	}
-
-	public void setFile(File file) {
-		this.file = file;
-	}
 
 	public List<String> getTechMD() {
 		return techMD;
@@ -67,12 +83,12 @@ public class SingleUploadSession {
 		this.uploadFileToItem = uploadFileToItem;
 	}
 
-	public List<SuperStatementBean> getSts() {
-		return sts;
+	public List<SuperMetadataBean> getSuperMdBeans() {
+		return superMdBeans;
 	}
 
-	public void setSts(List<SuperStatementBean> sts) {
-		this.sts = sts;
+	public void setSuperMdBeans(List<SuperMetadataBean> superMdBeans) {
+		this.superMdBeans = superMdBeans;
 	}
 
 	public boolean isUploadFileToTemp() {
@@ -106,10 +122,38 @@ public class SingleUploadSession {
 	public void setLabels(MetadataLabels labels) {
 		this.labels = labels;
 	}
-	
-	
-	
-	
+
+	public Item getUploadedItem() {
+		return uploadedItem;
+	}
+
+	public void setUploadedItem(Item uploadedItem) {
+		this.uploadedItem = uploadedItem;
+	}
+
+	public String getfFile() {
+		return fFile;
+	}
+
+	public void setfFile(String fFile) {
+		this.fFile = fFile;
+	}
+
+	public IngestImage getIngestImage() {
+		return ingestImage;
+	}
+
+	public void setIngestImage(IngestImage ingestImage) {
+		this.ingestImage = ingestImage;
+	}
+
+	public MetadataProfile getProfile() {
+		return profile;
+	}
+
+	public void setProfile(MetadataProfile profile) {
+		this.profile = profile;
+	}
 	
 	
 }

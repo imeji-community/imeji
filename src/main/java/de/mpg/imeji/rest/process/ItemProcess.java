@@ -217,6 +217,7 @@ public class ItemProcess {
 		} catch (Exception e) {
 			resp.setStatus(Status.INTERNAL_SERVER_ERROR);
 			LOGGER.error(e.getLocalizedMessage());
+			e.printStackTrace();
 		}
 
 		return resp;

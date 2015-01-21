@@ -1,43 +1,28 @@
 package de.mpg.imeji.service.test;
 
-import static org.junit.Assert.*;
-
-import java.io.File;
-import java.net.URI;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import util.JenaUtil;
-import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ProfileController;
-import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
-import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.logic.vo.Item.Visibility;
 import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.rest.api.CollectionService;
-import de.mpg.imeji.rest.api.ItemService;
 import de.mpg.imeji.rest.api.ProfileService;
-import de.mpg.imeji.rest.to.CollectionTO;
-import de.mpg.imeji.rest.to.ItemTO;
-import de.mpg.imeji.rest.to.ItemWithFileTO;
 import de.mpg.imeji.rest.to.MetadataProfileTO;
 import de.mpg.imeji.rest.to.StatementTO;
 import de.mpg.j2j.exceptions.NotFoundException;
 import de.mpg.j2j.misc.LocalizedString;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import util.JenaUtil;
+
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import static org.junit.Assert.*;
 
 public class ProfileServiceTest {
 
@@ -64,7 +49,7 @@ public class ProfileServiceTest {
 	}
 
 	public void initProfile() throws Exception {
-		CollectionController controller = new CollectionController();
+		CollectionController cController = new CollectionController();
 		ProfileController pController = new ProfileController();
 		Collection<Statement> statements = new ArrayList<Statement>();
 		Collection<LocalizedString> labels1 = new ArrayList<LocalizedString>();
@@ -102,7 +87,7 @@ public class ProfileServiceTest {
 		c.setProfile(p.getId());
 
 		pController.create(p, JenaUtil.testUser);
-		controller.create(c, p, JenaUtil.testUser);
+		cController.create(c, p, JenaUtil.testUser);
 	}
 
 	@Test

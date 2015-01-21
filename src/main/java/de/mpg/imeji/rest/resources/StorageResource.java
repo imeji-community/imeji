@@ -2,6 +2,8 @@ package de.mpg.imeji.rest.resources;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
+import de.mpg.imeji.rest.process.RestProcessUtils;
+import de.mpg.imeji.rest.process.StorageProcess;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -12,16 +14,16 @@ import javax.ws.rs.core.Response;
 /**
  * Created by vlad on 13.01.15.
  */
-@Api(value = "rest/storage", description = "Storage configuration")
+@Path("/storage")
+@Api(value = "rest/storage", description = "Storage properties")
 public class StorageResource {
 
-        @Path("/storage")
         @GET
-        @ApiOperation(value = "Get storage configuration")
+        @Path("/")
+        @ApiOperation(value = "Get storage properties")
         @Produces(MediaType.APPLICATION_JSON)
-        public Response getStorageConfig()
-        {
-            return null;
+        public Response getStorageProperties(){
+                return RestProcessUtils.buildJSONResponse(StorageProcess.getStorageProperties());
         }
 
 }

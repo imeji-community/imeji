@@ -7,6 +7,8 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
         ItemCreateTest.class,
-        ItemUpdateTest.class
+        ItemUpdateBasicTest.class,
+        ItemUpdateFileTest.class,
+        ItemUpdateMetadataTest.class
 })
 public class ItemTestSuite { }

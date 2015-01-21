@@ -172,7 +172,7 @@ public class TransferObjectFactory {
 	public static void tranferItemMetadata(MetadataProfile profile, Collection<Metadata> voMds, ItemTO to) {
 
 		if (voMds.size() == 0){
-			to.setMetadata(null);
+//			to.setMetadata(null);
 			return;
 		}
 

@@ -3,24 +3,19 @@ package de.mpg.imeji.rest.api;
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.process.ReverseTransferObjectFactory;
 import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
 import de.mpg.j2j.exceptions.NotFoundException;
-
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ObjectUtils;
 
 import javax.ws.rs.NotSupportedException;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,12 +44,12 @@ public class ItemService implements API<ItemTO> {
 			// Create Item with File
 			if (((ItemWithFileTO) to).getFile() != null) {
 				// If TO has attribute File, then upload it
-				controller.createWithFile(item,
+				item = controller.createWithFile(item,
 						((ItemWithFileTO) to).getFile(), filename, collection,
 						u);
 			} else if (getExternalFileUrl((ItemWithFileTO) to) != null) {
 				// If no file, but either a fetchUrl or a referenceUrl
-				controller.createWithExternalFile(item, collection,
+				item = controller.createWithExternalFile(item, collection,
 						getExternalFileUrl((ItemWithFileTO) to), filename,
 						downloadFile((ItemWithFileTO) to), u);
 			}

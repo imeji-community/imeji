@@ -300,7 +300,7 @@ public class ItemController extends ImejiController {
 			item.setFilename(filename);
 			item.setFullImageUrl(URI.create(externalFileUrl));
 			item.setThumbnailImageUrl(URI.create("NO_THUMBNAIL_URL"));
-			item.setWebImageUrl(URI.create("NO_THUMBNAIL_URL"));
+			item.setWebImageUrl(URI.create("NO_WEBIMAGE_URL"));
 			item = update(item, u);
 		}
 		return item;

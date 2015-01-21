@@ -2,22 +2,27 @@ package de.mpg.imeji.service.test;
 
 import de.mpg.imeji.logic.auth.exception.AuthenticationError;
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
+
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
 import de.mpg.imeji.rest.to.*;
 import de.mpg.imeji.rest.to.predefinedMetadataTO.TextTO;
 import de.mpg.j2j.exceptions.NotFoundException;
+
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
 import util.JenaUtil;
 
 import java.io.File;
 import java.net.URI;
 
+
 import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.*;
 
 public class ItemServiceTest {
 
@@ -140,6 +145,76 @@ public class ItemServiceTest {
 		}
 
 
+
+	}
+	
+	@Test
+	public void updateItemTest() throws Exception {
+
+		ItemService is = new ItemService();
+		ItemTO itemTo = is.create(itemTO, JenaUtil.testUser);
+		
+		
+		// update item with new file
+		String uploadFilePath = "src/test/resources/storage/test.jpg";
+		File uploadFile = new File(uploadFilePath);
+
+		itemTO.setId(itemTo.getId());
+		itemTO.setFile(uploadFile);
+		itemTo = is.update(itemTO, JenaUtil.testUser);
+		
+	
+	
+		assertEquals(is.read(itemTo.getId(), JenaUtil.testUser).getChecksumMd5(),
+				itemTo.getChecksumMd5());
+		assertEquals(StorageUtils.calculateChecksum(uploadFile),
+				itemTo.getChecksumMd5());
+		
+		
+		
+		//update item with new fetch url
+		String url = "http://imeji.org/wp-content/uploads/2014/11/imeji_opening_can.png";
+		itemTO.setFetchUrl(url);
+		itemTO.setFile(null);
+		itemTo = is.update(itemTO, JenaUtil.testUser);
+		assertThat(StorageUtils.calculateChecksum(uploadFile), is(not(itemTo.getChecksumMd5())));
+		assertThat(StorageUtils.getMimeType(uploadFile),is(not(itemTo.getMimetype())));
+		
+		//update item with new referenced url
+		itemTO.setFetchUrl(null);
+		itemTO.setFile(null);
+		itemTO.setReferenceUrl(url);
+		itemTo = is.update(itemTO, JenaUtil.testUser);
+		assertEquals(url, itemTo.getFileUrl().toString());
+		assertEquals("NO_THUMBNAIL_URL", itemTo.getThumbnailUrl().toString());
+		assertEquals("NO_WEBIMAGE_URL", itemTo.getWebResolutionUrlUrl().toString());
+	
+		//update item with new file and new fetch url, the new file should be  updated, not though the fetch url
+		itemTO.setFile(uploadFile);
+		itemTO.setFetchUrl(url);
+		itemTo = is.update(itemTO, JenaUtil.testUser);
+
+		assertEquals(StorageUtils.calculateChecksum(uploadFile),
+				itemTo.getChecksumMd5());
+		assertEquals(is.read(itemTo.getId(), JenaUtil.testUser).getChecksumMd5(),
+				StorageUtils.calculateChecksum(uploadFile));
+//		assertThat("the thumbnail url does not updated", itemTo.getThumbnailUrl().toString(), is(not("NO_THUMBNAIL_URL")));
+//		assertThat("the web image url does not updated", itemTo.getThumbnailUrl().toString(), is(not("NO_WEBIMAGE_URL")));
+		
+		//update item with new file and new referenced url, the new file should be  updated, not though the referenced url 
+		itemTO.setFile(uploadFile);
+		itemTO.setReferenceUrl(url);
+		itemTo = is.update(itemTO, JenaUtil.testUser);
+		assertEquals(is.read(itemTo.getId(), JenaUtil.testUser).getChecksumMd5(),
+				StorageUtils.calculateChecksum(uploadFile));
+		
+
+		// change the file name
+		String updateFileName = "updateFileName.png";
+		itemTo.setFilename(updateFileName);
+		is.update(itemTo, JenaUtil.testUser);
+		assertEquals(is.read(itemTo.getId(), JenaUtil.testUser).getFilename(),
+				itemTo.getFilename());
 
 	}
 

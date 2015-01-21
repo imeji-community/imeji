@@ -5,7 +5,7 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:list="http://java.sun.com/jsf/composite/components/list">
 	
-	<ui:param name="headline" value="# SingleUploadBean.title "/>
+	<ui:param name="headline" value="#{lbl.singleUploadTitle}"/>
 	<ui:define name="mainContent">
 		<!-- Breadcrumb - History -->
 		<ui:include src="./include/History.xhtml"/>
@@ -66,9 +66,9 @@
 								
 								FilesAdded: function(up, files) {
 									plupload.each(files, function(file) {
-										if(uploader.files.length > 0)
+										if(up.files.length > 1)
 										{
-											uploader.removeFile(file);
+											up.removeFile(file);
 										}
 										
 										document.getElementById('filelist').innerHTML = '<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';

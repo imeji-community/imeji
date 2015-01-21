@@ -86,6 +86,7 @@ public class SingleUploadBean implements Serializable{
 				sus.reset();
 				
 			}else if(UrlHelper.getParameterBoolean("start")){
+				System.err.println("start");
 				upload();			
 			}
 			else if(UrlHelper.getParameterBoolean("done"))

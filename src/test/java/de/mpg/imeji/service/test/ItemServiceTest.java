@@ -112,45 +112,25 @@ public class ItemServiceTest {
 		assertNotNull(readItem.getId());
 		assertEquals(readItem.getCollectionId(), collectionId);
 
-		assertEquals(
-				readItem.getFilename(),
-				(createdItem.getFilename()));
-		assertEquals(readItem
-				.getChecksumMd5(), (createdItem.getChecksumMd5()));
-		assertEquals(readItem
-						.getCreatedBy().getFullname(),
-				(createdItem.getCreatedBy().getFullname()));
-		assertEquals(readItem
-				.getModifiedBy().getFullname(), createdItem.getModifiedBy()
-				.getFullname());
-		assertEquals(readItem
-				.getCreatedBy().getUserId(), createdItem.getCreatedBy().getUserId());
-		assertEquals(readItem
-						.getModifiedBy().getUserId(),
-				(createdItem.getModifiedBy().getUserId()));
-		assertEquals(
-				readItem.getMimetype(),
-				(createdItem.getMimetype()));
-		assertEquals(readItem.getStatus(),
-				(createdItem.getStatus()));
-		assertEquals(readItem
-				.getVisibility(), (createdItem.getVisibility()));
-		assertEquals(
-				readItem.getFilename(),
-				(createdItem.getFilename()));
-		assertEquals(readItem
-				.getCreatedDate(), (createdItem.getCreatedDate()));
-		assertEquals(readItem
-				.getModifiedDate(), (createdItem.getModifiedDate()));
-		assertEquals(readItem
-				.getWebResolutionUrlUrl(), (createdItem.getWebResolutionUrlUrl()));
-		assertEquals(readItem
-				.getThumbnailUrl(), (createdItem.getThumbnailUrl()));
-		assertEquals(readItem.getFileUrl(),
-				(createdItem.getFileUrl()));
+		assertEquals(readItem.getFilename(), createdItem.getFilename());
+		assertEquals(readItem.getChecksumMd5(), (createdItem.getChecksumMd5()));
+		assertEquals(readItem.getCreatedBy().getFullname(), createdItem.getCreatedBy().getFullname());
+		assertEquals(readItem.getModifiedBy().getFullname(), createdItem.getModifiedBy().getFullname());
+		assertEquals(readItem.getCreatedBy().getUserId(), createdItem.getCreatedBy().getUserId());
+		assertEquals(readItem.getModifiedBy().getUserId(), createdItem.getModifiedBy().getUserId());
+		assertEquals(readItem.getMimetype(), createdItem.getMimetype());
+		assertEquals(readItem.getStatus(), createdItem.getStatus());
+		assertEquals(readItem.getVisibility(), createdItem.getVisibility());
+		assertEquals(readItem.getFilename(), createdItem.getFilename());
+		assertEquals(readItem.getCreatedDate(), (createdItem.getCreatedDate()));
+		assertEquals(readItem.getModifiedDate(), (createdItem.getModifiedDate()));
+		assertEquals(readItem.getWebResolutionUrlUrl(), (createdItem.getWebResolutionUrlUrl()));
+		assertEquals(readItem.getThumbnailUrl(), (createdItem.getThumbnailUrl()));
+		assertEquals(readItem.getFileUrl(), createdItem.getFileUrl());
 
 		// delete item
 		Assert.assertTrue(crud.delete(readItem.getId(), JenaUtil.testUser));
+
 		// try to read the delete item
 		try {
 			readItem = crud.read(createdItem.getId(), JenaUtil.testUser);
@@ -158,6 +138,8 @@ public class ItemServiceTest {
 		} catch (Exception e) {
 			//is OK
 		}
+
+
 
 	}
 

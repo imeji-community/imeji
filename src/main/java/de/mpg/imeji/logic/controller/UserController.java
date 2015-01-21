@@ -158,9 +158,11 @@ public class UserController {
 	 */
 	public void update(User updatedUser, User currentUser) throws Exception {
 		try {
-			retrieve(updatedUser.getEmail());
-			throw new AlreadyExistsException("Email" + updatedUser.getEmail()
-					+ "already used by another user");
+			User u = retrieve(updatedUser.getEmail());
+			if (!u.getId().toString().equals(updatedUser.getId().toString()))
+				throw new AlreadyExistsException("Email"
+						+ updatedUser.getEmail()
+						+ "already used by another user");
 		} catch (NotFoundException e) {
 			// fine, user can be updated
 		}

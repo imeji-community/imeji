@@ -47,9 +47,8 @@ public abstract class ImejiController {
 		J2JHelper.setId(properties,
 				IdentifierUtil.newURI(properties.getClass()));
 		Calendar now = DateHelper.getCurrentDate();
-		properties.setCreatedBy(ObjectHelper.getURI(User.class, user.getEmail()));
-		properties.setModifiedBy(ObjectHelper.getURI(User.class,
-				user.getEmail()));
+		properties.setCreatedBy(user.getId());
+		properties.setModifiedBy(user.getId());
 		properties.setCreated(now);
 		properties.setModified(now);
 		if (properties.getStatus() == null)
@@ -63,8 +62,7 @@ public abstract class ImejiController {
 	 * @param user
 	 */
 	protected void writeUpdateProperties(Properties properties, User user) {
-		properties.setModifiedBy(ObjectHelper.getURI(User.class,
-				user.getEmail()));
+		properties.setModifiedBy(user.getId());
 		properties.setModified(DateHelper.getCurrentDate());
 	}
 

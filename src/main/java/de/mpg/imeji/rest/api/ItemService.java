@@ -3,19 +3,24 @@ package de.mpg.imeji.rest.api;
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.process.ReverseTransferObjectFactory;
 import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
 import de.mpg.j2j.exceptions.NotFoundException;
+
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ObjectUtils;
 
 import javax.ws.rs.NotSupportedException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +40,7 @@ public class ItemService implements API<ItemTO> {
 
 			// transfer TO into item
 			Item item = new Item();
+			
 			ReverseTransferObjectFactory.transferItem(to, item, CREATE);
 
 			// read collection
@@ -79,17 +85,27 @@ public class ItemService implements API<ItemTO> {
 		if (to instanceof ItemWithFileTO) {
 			ItemWithFileTO tof = (ItemWithFileTO) to;
 			String url = getExternalFileUrl(tof);
-			if (url != null)
-				item = controller.updateWithExternalFile(item,
-						getExternalFileUrl(tof), to.getFilename(),
-						downloadFile(tof), u);
-			else
+//			if (url != null)
+//				item = controller.updateWithExternalFile(item,
+//						getExternalFileUrl(tof), to.getFilename(),
+//						downloadFile(tof), u);
+//			else
+//				item = controller.updateFile(item, tof.getFile(), u);
+//			tof.setFile(null);
+			if(tof.getFile() !=null){
 				item = controller.updateFile(item, tof.getFile(), u);
-			tof.setFile(null);
+			}
+			else{
+				if (url != null)
+					item = controller.updateWithExternalFile(item,
+							getExternalFileUrl(tof), to.getFilename(),
+							downloadFile(tof), u);
+			}
 		} else {
 			item = controller.update(item, u);
 		}
-		TransferObjectFactory.transferItem(item, to);
+		to = new ItemTO();
+		TransferObjectFactory.transferItem(item,to);
 		return to;
 	}
 

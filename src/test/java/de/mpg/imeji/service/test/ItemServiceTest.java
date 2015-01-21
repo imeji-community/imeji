@@ -58,8 +58,8 @@ public class ItemServiceTest {
 	}
 
 	@Test
-	public void testItemCRUD() throws NotFoundException, NotAllowedError, AuthenticationError, 
-			Exception {
+	public void testItemCRUD() throws NotFoundException, NotAllowedError,
+			AuthenticationError, Exception {
 
 		ItemService crud = new ItemService();
 		// create item
@@ -76,8 +76,7 @@ public class ItemServiceTest {
 		// check the default visibility of item = private
 		assertTrue(itemTo.getVisibility().equals("PRIVATE"));
 		// check the item mime type
-		assertEquals(itemTo.getMimetype(),
-				StorageUtils.getMimeType(file));
+		assertEquals(itemTo.getMimetype(), StorageUtils.getMimeType(file));
 		// check the item file name
 		assertEquals(itemTo.getFilename(),
 				crud.read(itemTo.getId(), JenaUtil.testUser).getFilename());
@@ -97,18 +96,16 @@ public class ItemServiceTest {
 				.getCreatedBy().getFullname(),
 				(itemTo.getCreatedBy().getFullname()));
 		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser)
-				.getModifiedBy().getFullname(),
-				(itemTo.getModifiedBy().getFullname()));
-		//TODO Bastien: Please change the tests to fit the UserID Changes
-		/*assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser)
-				.getCreatedBy().getUserId(),
-				(itemTo.getCreatedBy().getUserId()));
+				.getModifiedBy().getFullname(), itemTo.getModifiedBy()
+				.getFullname());
+		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser)
+				.getCreatedBy().getUserId(), itemTo.getCreatedBy().getUserId());
 		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser)
 				.getModifiedBy().getUserId(),
-				(itemTo.getModifiedBy().getUserId()));*/
-		 assertEquals(
-		 crud.read(itemTo.getId(), JenaUtil.testUser).getMimetype(),
-		 (itemTo.getMimetype()));
+				(itemTo.getModifiedBy().getUserId()));
+		assertEquals(
+				crud.read(itemTo.getId(), JenaUtil.testUser).getMimetype(),
+				(itemTo.getMimetype()));
 		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser).getStatus(),
 				(itemTo.getStatus()));
 		assertEquals(crud.read(itemTo.getId(), JenaUtil.testUser)

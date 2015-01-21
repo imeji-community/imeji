@@ -324,6 +324,21 @@
 		<artifactId>richfaces-bom</artifactId> <version>${org.richfaces.bom.version}</version> 
 		<scope>import</scope> <type>pom</type> </dependency> </dependencies> </dependencyManagement> -->
 	<dependencies>
+		<!-- Primefaces 
+		<dependency>
+			<groupId>org.primefaces</groupId>
+			<artifactId>primefaces</artifactId>
+			<version>5.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.primefaces</groupId>
+			<artifactId>primefaces</artifactId>
+			<version>5.0</version>
+			<classifier>sources</classifier>
+		</dependency>
+		 End Primefaces -->
+		
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>

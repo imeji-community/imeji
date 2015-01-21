@@ -97,8 +97,8 @@
 		<maven.compiler.source>1.7</maven.compiler.source>
 		<maven.compiler.target>1.7</maven.compiler.target>
 		<!-- Setting this property so that generated project uses correct version 
-			of richfaces. -->
-		<org.richfaces.bom.version>4.3.7.Final</org.richfaces.bom.version>
+			of richfaces. 
+		<org.richfaces.bom.version>4.3.7.Final</org.richfaces.bom.version>-->
 		<!-- Used by Tomcat to trip version Nr when deploy WAR package, e.g., imeji_1.0_screenshot->imeji -->
 		<project.warName>imeji</project.warName>
 	</properties>
@@ -324,6 +324,21 @@
 		<artifactId>richfaces-bom</artifactId> <version>${org.richfaces.bom.version}</version> 
 		<scope>import</scope> <type>pom</type> </dependency> </dependencies> </dependencyManagement> -->
 	<dependencies>
+		<!-- Primefaces 
+		<dependency>
+			<groupId>org.primefaces</groupId>
+			<artifactId>primefaces</artifactId>
+			<version>5.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.primefaces</groupId>
+			<artifactId>primefaces</artifactId>
+			<version>5.0</version>
+			<classifier>sources</classifier>
+		</dependency>
+		 End Primefaces -->
+		
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
@@ -407,6 +422,7 @@
 			</dependency> <dependency> <groupId>javax.servlet.jsp.jstl</groupId> <artifactId>jstl-api</artifactId> 
 			</dependency> -->
 		<!-- test -->
+
 		<dependency>
 			<groupId>com.sun.faces</groupId>
 			<artifactId>jsf-api</artifactId>

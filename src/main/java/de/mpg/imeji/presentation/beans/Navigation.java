@@ -49,6 +49,7 @@ public class Navigation implements Serializable
     public final Page USER = new Page("User", "user");
     public final Page ADMIN = new Page("Admin", "admin");
     public final Page DIGILIB = new Page("Digilib", "digilib");
+    public final Page SINGLEUPLOAD = new Page("Single upload", "singleupload");
     // session
     private SessionBean sessionBean = null;
 
@@ -129,6 +130,11 @@ public class Navigation implements Serializable
     public String getCollectionsUrl()
     {
         return applicationUrl + COLLECTIONS.getPath();
+    }
+    
+    public String getSingleUploadUrl()
+    {
+    	return applicationUrl + SINGLEUPLOAD.getPath();
     }
 
     public String getCreateCollectionUrl()

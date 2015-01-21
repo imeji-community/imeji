@@ -37,7 +37,7 @@
 				</h:outputLink>
 			</li>
 			<li class="#{cc.attrs.menuClass.trim()}Item#{ (cc.attrs.curMainMenu == 'upload') ? ' imj_active' : ''}">
-				<h:outputLink id="lnkUpload" title="#{lbl.goto_upload}" value="#{cc.attrs.navBean.singleUploadUrl}?page=1">
+				<h:outputLink id="lnkUpload" title="#{lbl.goto_upload}" value="#{cc.attrs.navBean.singleUploadUrl}?init=1">
 					<h:outputText value="#{lbl.header_upload}"/>
 				</h:outputLink>
 			</li>

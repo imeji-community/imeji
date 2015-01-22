@@ -200,7 +200,6 @@ public class SPARQLSearch implements Search
     private List<String> simple(SearchPair pair, SortCriterion sortCri, User user)
     {
         String sparqlQuery = SimpleQueryFactory.getQuery(getModelName(type), getRDFType(type), pair, sortCri, user,  (containerURI != null), getSpecificQuery(user));
-        System.out.println(sparqlQuery);
         return ImejiSPARQL.exec(sparqlQuery, null);
     }
 

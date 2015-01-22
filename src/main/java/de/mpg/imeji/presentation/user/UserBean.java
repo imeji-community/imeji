@@ -136,17 +136,6 @@ public class UserBean {
 	}
 
 	/**
-	 * Unshare the {@link Container} for one {@link User} (i.e, remove all
-	 * {@link Grant} of this {@link User} related to the {@link container})
-	 * 
-	 * @param sh
-	 */
-	public void revokeGrants(SharedHistory sh) {
-		sh.getSharedType().clear();
-		sh.update();
-	}
-
-	/**
 	 * Toggle the Admin Role of the {@link User}
 	 * 
 	 * @throws Exception

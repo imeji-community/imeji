@@ -28,15 +28,7 @@
  */
 package de.mpg.imeji.logic.storage.util;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URL;
-
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -49,6 +41,9 @@ import org.apache.tika.mime.MimeType;
 import org.apache.tika.mime.MimeTypeException;
 import org.apache.tika.mime.MimeTypes;
 import org.apache.tools.ant.taskdefs.Get;
+
+import java.io.*;
+import java.net.URL;
 
 /**
  * Util class fore the storage package
@@ -233,7 +228,7 @@ public class StorageUtils {
 	 * Return the Mime Type of a file according to its format (i.e. file
 	 * extension). <br/>
 	 * The File extension can be found via {@link FilenameUtils}
-	 * 
+	 *
 	 * @param extension
 	 * @return
 	 */
@@ -311,8 +306,30 @@ public class StorageUtils {
 	}
 
 	/**
+	 * Calculate the Checksum of a byte array with MD5 algorithm displayed in
+	 * Hexadecimal
+	 *
+	 * @param bytes
+	 * @return
+	 * @throws IOException
+	 */
+	public static String calculateChecksum(File file) throws IOException {
+		FileInputStream fis = null;
+		try {
+			fis = new FileInputStream(file);
+			return DigestUtils.md5Hex(fis);
+		} catch (Exception e) {
+			throw new RuntimeException(
+					"Error calculating the cheksum of the file: ", e);
+		} finally {
+			if (fis != null)
+				fis.close();
+		}
+	}
+
+	/**
 	 * Return the bytes from an url
-	 * 
+	 *
 	 * @param url
 	 * @return
 	 * @throws FileNotFoundException

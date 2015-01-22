@@ -265,7 +265,7 @@ public class ItemController extends ImejiController {
 	public Item updateFile(Item item, File f, User user) throws Exception {
 		StorageController sc = new StorageController();
 		sc.update(item.getFullImageUrl().toString(), f);
-		item.setChecksum(sc.calculateChecksum(f));
+		item.setChecksum(StorageUtils.calculateChecksum(f));
 		String mimeType = StorageUtils.getMimeType(f);
 		item.setFiletype(mimeType);
 		sc.update(item.getWebImageUrl().toString(), f);
@@ -300,7 +300,7 @@ public class ItemController extends ImejiController {
 			item.setFilename(filename);
 			item.setFullImageUrl(URI.create(externalFileUrl));
 			item.setThumbnailImageUrl(URI.create("NO_THUMBNAIL_URL"));
-			item.setWebImageUrl(URI.create("NO_THUMBNAIL_URL"));
+			item.setWebImageUrl(URI.create("NO_WEBIMAGE_URL"));
 			item = update(item, u);
 		}
 		return item;

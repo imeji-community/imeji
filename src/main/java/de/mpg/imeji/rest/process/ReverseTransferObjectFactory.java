@@ -142,10 +142,7 @@ public class ReverseTransferObjectFactory {
 				break;
 			}
 			if (md != null) {
-				if (mode == TRANSFER_MODE.CREATE) {
-					//md.setPos(mdTO.getPosition());
-					md.setStatement(mdTO.getStatementUri());
-				}
+				md.setStatement(mdTO.getStatementUri());
 				vo.getMetadataSet().getMetadata().add(md);
 			}
 		}

@@ -13,6 +13,7 @@ import java.util.Map;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.reader.ReaderFacade;
+import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchFactory;
@@ -25,6 +26,7 @@ import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.logic.writer.WriterFacade;
+import de.mpg.j2j.exceptions.AlreadyExistsException;
 import de.mpg.j2j.exceptions.NotFoundException;
 
 /**
@@ -68,6 +70,13 @@ public class UserController {
 	 * @throws Exception
 	 */
 	public User create(User u, USER_TYPE type) throws Exception {
+		try {
+			retrieve(u.getEmail());
+			throw new AlreadyExistsException("Email" + u.getEmail()
+					+ "already used by another user");
+		} catch (NotFoundException e) {
+			// fine, user can be created
+		}
 		switch (type) {
 		case ADMIN:
 			u.setGrants(AuthorizationPredefinedRoles.imejiAdministrator(u
@@ -148,6 +157,15 @@ public class UserController {
 	 * @throws Exception
 	 */
 	public void update(User updatedUser, User currentUser) throws Exception {
+		try {
+			User u = retrieve(updatedUser.getEmail());
+			if (!u.getId().toString().equals(updatedUser.getId().toString()))
+				throw new AlreadyExistsException("Email"
+						+ updatedUser.getEmail()
+						+ "already used by another user");
+		} catch (NotFoundException e) {
+			// fine, user can be updated
+		}
 		updatedUser.setName(updatedUser.getPerson().getGivenName() + " "
 				+ updatedUser.getPerson().getFamilyName());
 		writer.update(WriterFacade.toList(updatedUser), currentUser);

@@ -5,6 +5,7 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:menu="http://java.sun.com/jsf/composite/components/menu"
 	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs"
 	xmlns:imjc="http://java.sun.com/jsf/composite/components">
 	
 	<ui:param name="headline" value="User Page"/>
@@ -51,6 +52,7 @@
 							</div>
 							
 							<div class="imj_content">
+								
 								<h:form id="userForm">
 									<h:panelGroup layout="block" id="userInfos" class="imj_userGlobalInformation">				
 										<!-- User Edit - Email -->
@@ -146,7 +148,8 @@
 										</div>
 									</div>
 								</h:form>						
-								<h:form id="grantForm">	
+								
+								<h:form id="grantForm">
 									<!-- User Grants -->
 									<h:panelGroup layout="block" styleClass="imj_admindataSetEdit imj_admindataSet">
 										<div class="imj_admindataLabel">
@@ -169,38 +172,43 @@
 											</div>
 										</div>
 									</h:panelGroup>
-									<h:panelGroup layout="block" styleClass="imj_admindataSetEdit">
-										<h3 class="imj_headline"><h:outputText value="Grant for:" styleClass="imj_admindataValueEntry"/></h3>
-										
-										<div class="imj_admindataValue">
-											<ui:repeat var="sh" value="#{UserBean.roles}" rows="0">
-												<ui:param name="roles" value="#{sh.type == 'COLLECTION' ? SessionBean.shareCollectionGrantItems : SessionBean.shareAlbumGrantItems}"/>
-												<ui:param name="roles" value="#{sh.type == 'ITEM' ? SessionBean.shareItemGrantItems : roles}"/>
-												
-												<div class="imj_admindataSet">
-													<div class="imj_admindataLabel">
-														<h:outputText value="#{sh.title}" title="#{sh.title}"/>
-														<div class="imj_submitPanel">
-															<h:commandButton action="#{UserBean.revokeGrants(sh)}" value="#{lbl.revoke}" styleClass="imj_cancelButton" onclick="if(confirm('Are you sure you want to revoke this grant?'))return true;return false;" type="submit"/>
-														</div>
-													</div>
-													<div class="imj_admindataValueEntry">
-														
-														<h:selectManyCheckbox id="role" value="#{sh.sharedType}" disabled="true" layout="pageDirection">
-															<f:selectItems value="#{roles}"/>
-														</h:selectManyCheckbox>
-													</div>
-												</div>
-											</ui:repeat>
-											<h:commandButton id="toggleCreate" action="#{UserBean.toggleCreateCollection}" value="toggle create col" styleClass="imj_noDisplay" type="submit">
-												<f:ajax render="@none"/>
-											</h:commandButton>
-											<h:commandButton id="toggleAdmin" action="#{UserBean.toggleAdmin}" value="toggle admin" styleClass="imj_noDisplay" type="submit">
-												<f:ajax render="@form"/>
-											</h:commandButton>
-										</div>
-									</h:panelGroup>											
+									<h:commandButton id="toggleCreate" action="#{UserBean.toggleCreateCollection}" value="toggle create col" styleClass="imj_noDisplay" type="submit">
+										<f:ajax render="@none"/>
+									</h:commandButton>
+									<h:commandButton id="toggleAdmin" action="#{UserBean.toggleAdmin}" value="toggle admin" styleClass="imj_noDisplay" type="submit">
+										<f:ajax render="@form"/>
+									</h:commandButton>
 								</h:form>
+								
+								<h:panelGroup layout="block" styleClass="imj_admindataSetEdit">
+									<h3 class="imj_headline"><h:outputText value="#{lbl.grant_for}" styleClass="imj_admindataValueEntry"/></h3>
+									
+									<div class="imj_admindataValue">
+										<ui:repeat var="shareHistory" value="#{UserBean.roles}" rows="0" varStatus="row">
+											<ui:param name="roles" value="#{shareHistory.type == 'COLLECTION' ? SessionBean.shareCollectionGrantItems : SessionBean.shareAlbumGrantItems}"/>
+											<ui:param name="roles" value="#{shareHistory.type == 'ITEM' ? SessionBean.shareItemGrantItems : roles}"/>
+											
+											<div class="imj_admindataSet">
+												<div class="imj_admindataLabel">
+													<h:outputText value="#{shareHistory.title}" title="#{shareHistory.title}"/>
+													
+													<div class="imj_submitPanel">
+														<h:outputLink value="#" styleClass="imj_cancelButton" title="#{lbl.revoke} #{lbl.grant_for} #{shareHistory.title}" onclick="openDialog('revokeDialog#{row.index}');">
+															<h:outputText value="#{lbl.revoke}"/>
+														</h:outputLink>
+													</div>
+													<dialog:confirmationDialog submitAction="revokeGrants" bean="#{shareHistory}" confirmationText="#{msg.confirmation_revoke_grant} &quot;#{shareHistory.title}&quot; ?" submitLabel="#{lbl.revoke}" dialogId="revokeDialog#{row.index}"/>
+												</div>
+												<div class="imj_admindataValueEntry">
+													<h:selectManyCheckbox id="role" value="#{shareHistory.sharedType}" disabled="true" layout="pageDirection">
+														<f:selectItems value="#{roles}"/>
+													</h:selectManyCheckbox>
+												</div>
+											</div>
+										</ui:repeat>
+									</div>
+								</h:panelGroup>
+								
 								
 								<h:form id="userGroups">
 									<!-- usergroups -->

@@ -36,6 +36,7 @@ public class ItemService implements API<ItemTO> {
 
 			// transfer TO into item
 			Item item = new Item();
+			
 			ReverseTransferObjectFactory.transferItem(to, item, CREATE);
 
 			// read collection
@@ -44,12 +45,12 @@ public class ItemService implements API<ItemTO> {
 			// Create Item with File
 			if (((ItemWithFileTO) to).getFile() != null) {
 				// If TO has attribute File, then upload it
-				controller.createWithFile(item,
+				item = controller.createWithFile(item,
 						((ItemWithFileTO) to).getFile(), filename, collection,
 						u);
 			} else if (getExternalFileUrl((ItemWithFileTO) to) != null) {
 				// If no file, but either a fetchUrl or a referenceUrl
-				controller.createWithExternalFile(item, collection,
+				item = controller.createWithExternalFile(item, collection,
 						getExternalFileUrl((ItemWithFileTO) to), filename,
 						downloadFile((ItemWithFileTO) to), u);
 			}
@@ -80,17 +81,27 @@ public class ItemService implements API<ItemTO> {
 		if (to instanceof ItemWithFileTO) {
 			ItemWithFileTO tof = (ItemWithFileTO) to;
 			String url = getExternalFileUrl(tof);
-			if (url != null)
-				item = controller.updateWithExternalFile(item,
-						getExternalFileUrl(tof), to.getFilename(),
-						downloadFile(tof), u);
-			else
+//			if (url != null)
+//				item = controller.updateWithExternalFile(item,
+//						getExternalFileUrl(tof), to.getFilename(),
+//						downloadFile(tof), u);
+//			else
+//				item = controller.updateFile(item, tof.getFile(), u);
+//			tof.setFile(null);
+			if(tof.getFile() !=null){
 				item = controller.updateFile(item, tof.getFile(), u);
-			tof.setFile(null);
+			}
+			else{
+				if (url != null)
+					item = controller.updateWithExternalFile(item,
+							getExternalFileUrl(tof), to.getFilename(),
+							downloadFile(tof), u);
+			}
 		} else {
 			item = controller.update(item, u);
 		}
-		TransferObjectFactory.transferItem(item, to);
+		to = new ItemTO();
+		TransferObjectFactory.transferItem(item,to);
 		return to;
 	}
 

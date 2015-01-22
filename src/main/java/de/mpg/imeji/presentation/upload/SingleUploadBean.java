@@ -44,6 +44,7 @@ import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
@@ -114,7 +115,7 @@ public class SingleUploadBean implements Serializable{
 		}
 		return "";
 	} 
-	
+	  
 	public void copyValueToItem(List <SuperMetadataBean> itemStatements, List <SuperMetadataBean> statements){
 		for(SuperMetadataBean smdb1 : itemStatements)
 		{
@@ -239,12 +240,10 @@ public class SingleUploadBean implements Serializable{
 		}
 		return ii;
 	}
-	
-	
 
 	public void colChangeListener(AjaxBehaviorEvent event){
 		if(!"".equals(selectedCollectionItem))
-		{
+		{  
 			sus.setSelectedCollectionItem(selectedCollectionItem);
 			try {    
 				CollectionImeji collection = ObjectLoader.loadCollectionLazy(new URI(selectedCollectionItem), user);
@@ -253,7 +252,12 @@ public class SingleUploadBean implements Serializable{
 				if(profile.getStatements().size() > 0){
 					for(Statement st : profile.getStatements())
 					{
-						SuperMetadataBean smb = new SuperMetadataBean(st);
+ 						SuperMetadataBean smb = new SuperMetadataBean(st);
+						if("http://imeji.org/terms/metadata#conePerson".equals(st.getType().toString()))
+						{
+							Person person = new Person();
+							smb.setPerson(person);
+						}
 						sts.add(smb);
 					}  
 				}

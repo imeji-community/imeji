@@ -38,7 +38,7 @@
 						</span>
 						<h:selectOneMenu id="collections" value="#{SingleUploadBean.selectedCollectionItem}" styleClass="imj_selectionBox">
 							<f:selectItems value="#{SingleUploadBean.collectionItems}"/>
-							<f:ajax event="change" execute="@this" render=":singleUpload:mdProfile" listener="#{SingleUploadBean.colChangeListener}"/>
+							<f:ajax event="change" execute="@this" render="@form" listener="#{SingleUploadBean.colChangeListener}"/>
 						</h:selectOneMenu>
 					</h:panelGroup>
 					
@@ -136,7 +136,7 @@
 						<h:outputLink value="#{HistorySession.previousPage.completeUrlWithHistory}" styleClass="imj_cancelButton">
 							<h:outputText value="#{lbl.cancel}" />
 						</h:outputLink>
-						<h:commandButton action="#{SingleUploadBean.save}" value="#{lbl.save}" styleClass="imj_submitButton" rendered="#{SingleUploadBean.readyFotUploading()}"/>
+						<h:commandButton id="submit" action="#{SingleUploadBean.save}" value="#{lbl.save}" styleClass="imj_submitButton" rendered="#{SingleUploadBean.readyForUploading()}"/>
 					</div>
 					
 					<ui:fragment rendered="#{SingleUploadBean.getfFile() != '' or not empty SingleUploadBean.getItem()}">

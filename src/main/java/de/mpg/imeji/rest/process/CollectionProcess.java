@@ -145,23 +145,19 @@ public class CollectionProcess {
 
 			}
 		  catch (NotFoundException e) {
-			resp.setObject(RestProcessUtils.buildBadRequestResponse(e
-					.getLocalizedMessage()));
+			resp.setObject(RestProcessUtils.buildBadRequestResponse(e.getLocalizedMessage()));
 			resp.setStatus(Status.NOT_FOUND);
 
 		 }
 		   catch (AuthenticationError e) {
-					re			resp.setObject(RestProcessUtils.buildUnauthorizedResponse(e
-					.getLocalizedMessage()));
-sp.setStatus(Status.UNAUTHORIZED);
+					resp.setObject(RestProcessUtils.buildUnauthorizedResponse(e.getLocalizedMessage()));
+					resp.setStatus(Status.UNAUTHORIZED);
 			}
-			cat		} catch (NotAllowedError e) {
-			resp.setObject(RestProcessUtils.buildNotAllowedResponse(e
-					.getLocalizedMessage()));
-tStatus(Status.FORBIDDEN);
+			catch (NotAllowedError e) {
+			resp.setObject(RestProcessUtils.buildNotAllowedResponse(e.getLocalizedMessage()));
+			resp.setStatus(Status.FORBIDDEN);
 		} catch (UnprocessableError e) {
-			resp.setObject(RestProcessUtils.buildUnprocessableErrorResponse(e
-					.getLocalizedMessage()));
+			resp.setObject(RestProcessUtils.buildUnprocessableErrorResponse(e.getLocalizedMessage()));
 				resp.setStatus(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode());
 			}
 		

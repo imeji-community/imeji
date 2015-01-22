@@ -42,13 +42,67 @@
 						</h:selectOneMenu>
 					</h:panelGroup>
 					
-					<div class="imj_fileUploadContainer imj_singleUpload">
-						<div id="filelist" class="imj_uploadFilelist">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
+					<div>
+						<div id="filelist">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
+						<br />
 		
-						<div id="container" class="imj_submitPanel">
-						    <button id="pickfiles" class="imj_submitButton">[Select files]</button>
-						    <button id="uploadfiles" class="imj_submitButton">[Upload files]</button>
+						<div id="container">
+						    <a id="pickfiles" href="javascript:;">[Select files]</a>
+						    <a id="uploadfiles" href="javascript:;">[Upload files]</a>
 						</div>
+						<br />
+	
+						<script type="text/javascript" src="#{Navigation.applicationUrl}resources/plupload/2.1.2/js/plupload.full.min.js"></script>
+						
+						
+						<script type="text/javascript">
+			
+						var uploader = new plupload.Uploader({
+							runtimes : 'html5,flash,silverlight,html4',
+							browse_button : 'pickfiles', // you can pass in id...
+							container: document.getElementById('container'), // ... or DOM Element itself
+							url : location.pathname  + "?start=1",
+							max_file_size : '#{Configuration.uploadMaxFileSize}kb',
+							multi_selection : false,
+							init: {
+								PostInit: function() {
+									document.getElementById('filelist').innerHTML = '';					
+									document.getElementById('uploadfiles').onclick = function() {
+										uploader.start();
+									};
+								},
+								
+								FilesAdded: function(up, files) {
+									plupload.each(files, function(file) {
+										if(up.files.length > 1)
+										{
+											up.removeFile(file);
+										}
+										
+										document.getElementById('filelist').innerHTML = '<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
+									});
+								},
+								
+								UploadProgress: function(up, file) {
+									document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+								},
+								 StateChanged: function(up) {
+										// Called when the state of the queue is changed
+										if( up.state == plupload.STOPPED)
+											report();
+	
+								},
+							}
+						});
+						
+						uploader.init();
+						function report(){
+							window.location.href = location.pathname + "?done=1";
+						}
+						
+						</script>
+						
+						
 					</div>
 						
 					
@@ -113,55 +167,6 @@
 			</h:panelGroup>
 		</h:panelGroup>
 	</ui:define>
-	
-	<ui:define name="additonalFooterScripts">
-		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/plupload/2.1.2/js/plupload.full.min.js"></script>
-		
-		<script type="text/javascript">
-	
-			var uploader = new plupload.Uploader({
-				runtimes : 'html5,flash,silverlight,html4',
-				browse_button : 'pickfiles', // you can pass in id...
-				container: document.getElementById('container'), // ... or DOM Element itself
-				url : location.pathname  + "?start=1",
-				max_file_size : '#{Configuration.uploadMaxFileSize}kb',
-				multi_selection : false,
-				init: {
-					PostInit: function() {
-						document.getElementById('filelist').innerHTML = '';					
-						document.getElementById('uploadfiles').onclick = function() {
-							uploader.start();
-						};
-					},
-					
-					FilesAdded: function(up, files) {
-						plupload.each(files, function(file) {
-							if(up.files.length > 1)
-							{
-								up.removeFile(file);
-							}
-							
-							document.getElementById('filelist').innerHTML = '<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ')</div>';
-						});
-					},
-					
-					UploadProgress: function(up, file) {
-						document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
-					},
-					 StateChanged: function(up) {
-							// Called when the state of the queue is changed
-							if( up.state == plupload.STOPPED)
-								report();
-		
-					},
-				}
-			});
-			
-			uploader.init();
-			function report(){
-				window.location.href = location.pathname + "?done=1";
-			}
-		</script>
-	</ui:define>
+
 
 </ui:composition>

@@ -28,6 +28,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.SPARQLSearch;
@@ -294,7 +295,11 @@ public class SingleUploadBean implements Serializable{
 		collections = cc.retrieveLazy(results.getResults(), -1, 0, user);
 		collectionItems.add(new SelectItem("", "-- select collection --"));
 		for(CollectionImeji c : collections)
-			collectionItems.add(new SelectItem(c.getId(), c.getMetadata().getTitle()));
+        {
+               if(AuthUtil.staticAuth().create(user, c))
+                     collectionItems.add(new SelectItem(c.getId(), c.getMetadata().getTitle()));
+        }
+
 	
 	}
 

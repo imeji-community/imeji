@@ -6,6 +6,7 @@ package de.mpg.imeji.logic.export.format.rdf;
 import java.util.HashMap;
 
 import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.export.format.RDFExport;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.vo.Item;
@@ -40,7 +41,7 @@ public class RDFImageExport extends RDFExport
     {
         super.namespaces = new HashMap<String, String>();
         super.namespaces.put("http://imeji.org/terms/", "imeji");
-        super.namespaces.put("http://imeji.org/terms/metadata/", "imeji-metadata");
+        super.namespaces.put(ImejiNamespaces.METADATA, "imeji-metadata");
         super.namespaces.put("http://purl.org/escidoc/metadata/terms/0.1/", "eterms");
         super.namespaces.put("http://purl.org/dc/elements/1.1/", "dc");
         super.namespaces.put("http://purl.org/dc/terms/", "dcterms");

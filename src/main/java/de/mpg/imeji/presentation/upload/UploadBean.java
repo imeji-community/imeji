@@ -125,8 +125,6 @@ public class UploadBean implements Serializable {
 				while (iter.hasNext()) {
 					FileItemStream fis = iter.next();
 					InputStream stream = fis.openStream();
-					System.err.println("getFieldNameee = " + fis.getFieldName());
-					System.err.println("getNameeee = " + fis.getName());
 					if (!fis.isFormField()) {
 						File tmp = createTmpFile(fis.getName());
 						try {

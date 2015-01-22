@@ -6,13 +6,22 @@
 	xmlns:list="http://java.sun.com/jsf/composite/components/list">
 	
 	<ui:param name="headline" value="#{lbl.singleUploadPageTitle}"/>
+	<ui:param name="currentMainMenu" value="upload"/>
+	
+	
 	<ui:define name="mainContent">
 		<!-- Breadcrumb - History -->
 		<ui:include src="./include/History.xhtml"/>
 		
- 
+ 		<!-- If User is not logged in -->
+		<ui:fragment rendered="#{!Auth.loggedIn}">
+			<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!Auth.loggedIn}">
+	        	<ui:include src="./include/LoginFormular.xhtml"/>
+			</h:panelGroup>
+		</ui:fragment>
+		
 
-		<h:panelGroup layout="block" id="imj_ajaxWrapper" >
+		<h:panelGroup layout="block" id="imj_ajaxWrapper" rendered="#{Auth.loggedIn}">
 
 			<h:panelGroup layout="block" styleClass="imj_upload">
 				
@@ -33,78 +42,27 @@
 						</h:selectOneMenu>
 					</h:panelGroup>
 					
-					<div>
-						<div id="filelist">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
-						<br />
+					<div class="imj_fileUploadContainer imj_singleUpload">
+						<div id="filelist" class="imj_uploadFilelist">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
 		
-						<div id="container">
-						    <a id="pickfiles" href="javascript:;">[Select files]</a> 
-						    <a id="uploadfiles" href="javascript:;">[Upload files]</a>
+						<div id="container" class="imj_submitPanel">
+						    <button id="pickfiles" class="imj_submitButton">[Select files]</button>
+						    <button id="uploadfiles" class="imj_submitButton">[Upload files]</button>
 						</div>
-						
-						<br />
-	
-						<script type="text/javascript" src="#{Navigation.applicationUrl}resources/plupload/2.1.2/js/plupload.full.min.js"></script>
-						
-						
-						<script type="text/javascript">
-			
-						var uploader = new plupload.Uploader({
-							runtimes : 'html5,flash,silverlight,html4',
-							browse_button : 'pickfiles', // you can pass in id...
-							container: document.getElementById('container'), // ... or DOM Element itself
-							url : location.pathname  + "?start=1",
-							max_file_size : '#{Configuration.uploadMaxFileSize}kb',
-							multi_selection : false,
-							init: {
-								PostInit: function() {
-									document.getElementById('filelist').innerHTML = '';					
-									document.getElementById('uploadfiles').onclick = function() {
-										uploader.start();
-									};
-								},
-								
-								FilesAdded: function(up, files) {
-									plupload.each(files, function(file) {
-										if(up.files.length > 1)
-										{
-											up.removeFile(file);
-										}
-										
-										document.getElementById('filelist').innerHTML = '<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
-									});
-								},
-								
-								UploadProgress: function(up, file) {
-									document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
-								},
-								 StateChanged: function(up) {
-										// Called when the state of the queue is changed
-										if( up.state == plupload.STOPPED)
-											report();
-	
-								},
-							}
-						});
-						
-						uploader.init();
-						function report(){
-							window.location.href = location.pathname + "?done=1";
-						}
-						
-						</script>
 					</div>
+						
 					
 					<h:panelGroup id="techmetadata" layout="block" styleClass="imj_techdataList" rendered="#{SingleUploadBean.techMd.size()>0}">
-						<ui:repeat id="techMd" var="techMd" value="#{SingleUploadBean.techMd}">
-							<h:outputText value="#{techMd}" styleClass="imj_techdataEntry"/>
-						</ui:repeat>
+						<div class="imj_listHeader"><h3 class="imj_sectionHeadline" style="white-space:nowrap;">#{SingleUploadBean.ingestImage.name}</h3></div>
+						<div class="imj_listBody">
+							<ui:repeat id="techMd" var="techMd" value="#{SingleUploadBean.techMd}">
+								<h:outputText value="#{techMd}" styleClass="imj_techdataEntry"/>
+							</ui:repeat>
+						</div>
 					</h:panelGroup>
 
-					
-
-				
 					<h:panelGroup layout="block" id="mdProfile" styleClass="imj_metadataList">
+						<h3 class="imj_sectionHeadline">#{lbl.metadata_profile}</h3>
 						<ui:repeat id="smdb" var="smdb" value="#{SingleUploadBean.superMetadataBeans}" rows="0" varStatus="indexMetadata">	
 								<!-- MetaDataList - edit panel container set -->
 								<div class="imj_metadataSet">
@@ -156,5 +114,54 @@
 		</h:panelGroup>
 	</ui:define>
 	
+	<ui:define name="additonalFooterScripts">
+		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/plupload/2.1.2/js/plupload.full.min.js"></script>
+		
+		<script type="text/javascript">
+	
+			var uploader = new plupload.Uploader({
+				runtimes : 'html5,flash,silverlight,html4',
+				browse_button : 'pickfiles', // you can pass in id...
+				container: document.getElementById('container'), // ... or DOM Element itself
+				url : location.pathname  + "?start=1",
+				max_file_size : '#{Configuration.uploadMaxFileSize}kb',
+				multi_selection : false,
+				init: {
+					PostInit: function() {
+						document.getElementById('filelist').innerHTML = '';					
+						document.getElementById('uploadfiles').onclick = function() {
+							uploader.start();
+						};
+					},
+					
+					FilesAdded: function(up, files) {
+						plupload.each(files, function(file) {
+							if(up.files.length > 1)
+							{
+								up.removeFile(file);
+							}
+							
+							document.getElementById('filelist').innerHTML = '<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ')</div>';
+						});
+					},
+					
+					UploadProgress: function(up, file) {
+						document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+					},
+					 StateChanged: function(up) {
+							// Called when the state of the queue is changed
+							if( up.state == plupload.STOPPED)
+								report();
+		
+					},
+				}
+			});
+			
+			uploader.init();
+			function report(){
+				window.location.href = location.pathname + "?done=1";
+			}
+		</script>
+	</ui:define>
 
 </ui:composition>

@@ -6,13 +6,22 @@
 	xmlns:list="http://java.sun.com/jsf/composite/components/list">
 	
 	<ui:param name="headline" value="#{lbl.singleUploadPageTitle}"/>
+	<ui:param name="currentMainMenu" value="upload"/>
+	
+	
 	<ui:define name="mainContent">
 		<!-- Breadcrumb - History -->
 		<ui:include src="./include/History.xhtml"/>
 		
- 
+ 		<!-- If User is not logged in -->
+		<ui:fragment rendered="#{!Auth.loggedIn}">
+			<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!Auth.loggedIn}">
+	        	<ui:include src="./include/LoginFormular.xhtml"/>
+			</h:panelGroup>
+		</ui:fragment>
+		
 
-		<h:panelGroup layout="block" id="imj_ajaxWrapper" >
+		<h:panelGroup layout="block" id="imj_ajaxWrapper" rendered="#{Auth.loggedIn}">
 
 			<h:panelGroup layout="block" styleClass="imj_upload">
 				
@@ -29,7 +38,7 @@
 						</span>
 						<h:selectOneMenu id="collections" value="#{SingleUploadBean.selectedCollectionItem}" styleClass="imj_selectionBox">
 							<f:selectItems value="#{SingleUploadBean.collectionItems}"/>
-							<f:ajax event="change" execute="@this" render=":singleUpload:mdProfile" listener="#{SingleUploadBean.colChangeListener}"/>
+							<f:ajax event="change" execute="@this" render="@form" listener="#{SingleUploadBean.colChangeListener}"/>
 						</h:selectOneMenu>
 					</h:panelGroup>
 					
@@ -38,10 +47,9 @@
 						<br />
 		
 						<div id="container">
-						    <a id="pickfiles" href="javascript:;">[Select files]</a> 
+						    <a id="pickfiles" href="javascript:;">[Select files]</a>
 						    <a id="uploadfiles" href="javascript:;">[Upload files]</a>
 						</div>
-						
 						<br />
 	
 						<script type="text/javascript" src="#{Navigation.applicationUrl}resources/plupload/2.1.2/js/plupload.full.min.js"></script>
@@ -93,18 +101,22 @@
 						}
 						
 						</script>
+						
+						
 					</div>
+						
 					
 					<h:panelGroup id="techmetadata" layout="block" styleClass="imj_techdataList" rendered="#{SingleUploadBean.techMd.size()>0}">
-						<ui:repeat id="techMd" var="techMd" value="#{SingleUploadBean.techMd}">
-							<h:outputText value="#{techMd}" styleClass="imj_techdataEntry"/>
-						</ui:repeat>
+						<div class="imj_listHeader"><h3 class="imj_sectionHeadline" style="white-space:nowrap;">#{SingleUploadBean.ingestImage.name}</h3></div>
+						<div class="imj_listBody">
+							<ui:repeat id="techMd" var="techMd" value="#{SingleUploadBean.techMd}">
+								<h:outputText value="#{techMd}" styleClass="imj_techdataEntry"/>
+							</ui:repeat>
+						</div>
 					</h:panelGroup>
 
-					
-
-				
 					<h:panelGroup layout="block" id="mdProfile" styleClass="imj_metadataList">
+						<h3 class="imj_sectionHeadline">#{lbl.metadata_profile}</h3>
 						<ui:repeat id="smdb" var="smdb" value="#{SingleUploadBean.superMetadataBeans}" rows="0" varStatus="indexMetadata">	
 								<!-- MetaDataList - edit panel container set -->
 								<div class="imj_metadataSet">
@@ -124,7 +136,7 @@
 						<h:outputLink value="#{HistorySession.previousPage.completeUrlWithHistory}" styleClass="imj_cancelButton">
 							<h:outputText value="#{lbl.cancel}" />
 						</h:outputLink>
-						<h:commandButton action="#{SingleUploadBean.save}" value="#{lbl.save}" styleClass="imj_submitButton" rendered="#{SingleUploadBean.readyFotUploading()}"/>
+						<h:commandButton id="submit" action="#{SingleUploadBean.save}" value="#{lbl.save}" styleClass="imj_submitButton" rendered="#{SingleUploadBean.readyForUploading()}"/>
 					</div>
 					
 					<ui:fragment rendered="#{SingleUploadBean.getfFile() != '' or not empty SingleUploadBean.getItem()}">
@@ -155,6 +167,6 @@
 			</h:panelGroup>
 		</h:panelGroup>
 	</ui:define>
-	
+
 
 </ui:composition>

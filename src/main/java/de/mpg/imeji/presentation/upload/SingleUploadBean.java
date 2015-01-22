@@ -84,20 +84,23 @@ public class SingleUploadBean implements Serializable{
 
 	@PostConstruct
 	public void init() {
-		try {
-			loadCollections(); 
-			if (UrlHelper.getParameterBoolean("init")) {
-				sus.reset();
-				
-			}else if(UrlHelper.getParameterBoolean("start")){
-				upload();			
+		if(user != null)
+		{
+			try {
+				loadCollections(); 
+				if (UrlHelper.getParameterBoolean("init")) {
+					sus.reset();
+					
+				}else if(UrlHelper.getParameterBoolean("start")){
+					upload();			
+				}
+				else if(UrlHelper.getParameterBoolean("done"))
+				{
+					sus.copyToTemp();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			else if(UrlHelper.getParameterBoolean("done"))
-			{
-				sus.copyToTemp();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 	    
@@ -283,10 +286,10 @@ public class SingleUploadBean implements Serializable{
 	 * Load the collection
 	 */
 	public void loadCollections() throws Exception{
-		CollectionController cc = new CollectionController();
 
+		CollectionController cc = new CollectionController();
 		SearchQuery sq = new SearchQuery();
-		SearchPair sp = new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.user), SearchOperators.EQUALS, ObjectHelper.getURI(User.class, user.getEmail()).toString());
+		SearchPair sp = new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.user), SearchOperators.EQUALS, user.getId().toString());
 		sq.addPair(sp);
         SortCriterion sortCriterion = new SortCriterion();
         sortCriterion.setIndex(SPARQLSearch.getIndex("user"));
@@ -298,9 +301,7 @@ public class SingleUploadBean implements Serializable{
         {
                if(AuthUtil.staticAuth().create(user, c))
                      collectionItems.add(new SelectItem(c.getId(), c.getMetadata().getTitle()));
-        }
-
-	
+        }	
 	}
 
 
@@ -383,7 +384,7 @@ public class SingleUploadBean implements Serializable{
 		return uri.getPath().substring(uri.getPath().lastIndexOf("/") + 1);
 	}
 	
-	public boolean readyFotUploading(){
+	public boolean readyForUploading(){
 		return sus.isUploadFileToTemp() && sus.getCollection() != null;
 	}
 	

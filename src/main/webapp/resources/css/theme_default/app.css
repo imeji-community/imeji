@@ -319,10 +319,10 @@ select.imj_metadataEditText { min-height: 0; }
 
 .imj_simpleSearch { float: right; display: inline-block; overflow: visible; }
 .imj_simpleSearch .imj_simpleSearchInputWrapper { display: inline-block; vertical-align: middle; }
-.imj_simpleSearch .imj_simpleSearchInput { width: 16em; border: solid transparent 0.1em; -moz-border-radius: 0.45455em 0 0 0.45455em; -webkit-border-radius: 0.45455em; border-radius: 0.45455em 0 0 0.45455em; vertical-align: top; }
+.imj_simpleSearch .imj_simpleSearchInput { width: 6em; border: solid transparent 0.1em; -moz-border-radius: 0.45455em 0 0 0.45455em; -webkit-border-radius: 0.45455em; border-radius: 0.45455em 0 0 0.45455em; vertical-align: top; transition: width 250ms ease, margin-left 250ms; }
 .imj_simpleSearch .imj_simpleSearchInput:hover { border: solid #6CAE2F 0.1em; }
 .imj_simpleSearch .imj_simpleSearchInput:active { border: solid #6CAE2F 0.1em; }
-.imj_simpleSearch .imj_simpleSearchInput:focus { border: solid #6CAE2F 0.1em; }
+.imj_simpleSearch .imj_simpleSearchInput:focus { width: 12em; border: solid #6CAE2F 0.1em; }
 .imj_simpleSearch .imj_simpleSearchButtonSubmit { margin-left: 0; padding-left: 1em; padding-right: 1em; -moz-border-radius: 0 0.45455em 0.45455em 0; -webkit-border-radius: 0; border-radius: 0 0.45455em 0.45455em 0; vertical-align: top; }
 .imj_simpleSearch .imj_simpleSearchButtonSubmit:hover { color: #000000; background-color: #4AFF00; border: solid #4AFF00 0.1em; }
 .imj_simpleSearch .imj_simpleSearchButtonSubmit:active { color: #000000; background-color: #4AFF00; border: solid #4AFF00 0.1em; }
@@ -331,8 +331,9 @@ select.imj_metadataEditText { min-height: 0; }
 .imj_simpleSearch .imj_searchInfoText { display: inline-block; margin: 0 0.272727em; }
 .imj_simpleSearch input[type=radio] { margin: 0.090909em 0 0 0.090909em; }
 .imj_simpleSearch input[type=radio] + label { margin-left: 0.181818em; margin-right: 1em; }
-.imj_simpleSearch .imj_simpleSearchLinkAdvancedsearch { margin-top: 0.181818em; margin-left: 2.090909em; white-space: nowrap; display: inline-block; }
+.imj_simpleSearch .imj_simpleSearchLinkAdvancedsearch { margin-top: 0.181818em; margin-left: 1.090909em; white-space: nowrap; display: inline-block; }
 
+.imj_isAdmin .imj_simpleSearch { margin-top: -6em; }
 .imj_isAdmin .imj_simpleSearch .imj_simpleSearchInput { width: 15em; }
 
 .imj_subHeaderMessageSpace { clear: both; float: left; display: inline; overflow: hidden; margin: 0.65em 0.0909em 0 0; width: 81.3636em; }

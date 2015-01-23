@@ -5,20 +5,29 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:list="http://java.sun.com/jsf/composite/components/list">
 	
-	<ui:param name="headline" value="# SingleUploadBean.title "/>
+	<ui:param name="headline" value="#{lbl.singleUploadPageTitle}"/>
+	<ui:param name="currentMainMenu" value="upload"/>
+	
+	
 	<ui:define name="mainContent">
 		<!-- Breadcrumb - History -->
 		<ui:include src="./include/History.xhtml"/>
 		
- 
-		<!-- AJAX Wrapper - START -->
-		<h:panelGroup layout="block" id="imj_ajaxWrapper" >
-			<!-- START UPLOAD -->
+ 		<!-- If User is not logged in -->
+		<ui:fragment rendered="#{!Auth.loggedIn}">
+			<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!Auth.loggedIn}">
+	        	<ui:include src="./include/LoginFormular.xhtml"/>
+			</h:panelGroup>
+		</ui:fragment>
+		
+
+		<h:panelGroup layout="block" id="imj_ajaxWrapper" rendered="#{Auth.loggedIn}">
+
 			<h:panelGroup layout="block" styleClass="imj_upload">
 				
 				<div class="imj_headline">
 					<h2>
-						<h:outputText value="#{lbl.uploadFiles}"/>
+						<h:outputText value="#{lbl.uploadFile}"/>
 					</h2>
 				</div>
 				
@@ -29,7 +38,7 @@
 						</span>
 						<h:selectOneMenu id="collections" value="#{SingleUploadBean.selectedCollectionItem}" styleClass="imj_selectionBox">
 							<f:selectItems value="#{SingleUploadBean.collectionItems}"/>
-							<f:ajax event="change" execute="@this" render=":singleUpload:mdProfile" listener="#{SingleUploadBean.colChangeListener}"/>
+							<f:ajax event="change" execute="@this" render="@form" listener="#{SingleUploadBean.colChangeListener}"/>
 						</h:selectOneMenu>
 					</h:panelGroup>
 					
@@ -38,18 +47,16 @@
 						<br />
 		
 						<div id="container">
-						    <a id="pickfiles" href="javascript:;">[Select files]</a> 
+						    <a id="pickfiles" href="javascript:;">[Select files]</a>
 						    <a id="uploadfiles" href="javascript:;">[Upload files]</a>
 						</div>
-						
 						<br />
-						<pre id="console"></pre>
+	
 						<script type="text/javascript" src="#{Navigation.applicationUrl}resources/plupload/2.1.2/js/plupload.full.min.js"></script>
 						
 						
 						<script type="text/javascript">
-						// Custom example logic
-						
+			
 						var uploader = new plupload.Uploader({
 							runtimes : 'html5,flash,silverlight,html4',
 							browse_button : 'pickfiles', // you can pass in id...
@@ -59,65 +66,107 @@
 							multi_selection : false,
 							init: {
 								PostInit: function() {
-									document.getElementById('filelist').innerHTML = '';
-						
+									document.getElementById('filelist').innerHTML = '';					
 									document.getElementById('uploadfiles').onclick = function() {
 										uploader.start();
-										return false;
 									};
 								},
 								
 								FilesAdded: function(up, files) {
 									plupload.each(files, function(file) {
-										if(uploader.files.length > 0)
+										if(up.files.length > 1)
 										{
-											uploader.removeFile(file);
+											up.removeFile(file);
 										}
 										
 										document.getElementById('filelist').innerHTML = '<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
 									});
 								},
 								
-								
-								
+								UploadProgress: function(up, file) {
+									document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+								},
+								 StateChanged: function(up) {
+										// Called when the state of the queue is changed
+										if( up.state == plupload.STOPPED)
+											report();
+	
+								},
 							}
 						});
 						
 						uploader.init();
+						function report(){
+							window.location.href = location.pathname + "?done=1";
+						}
 						
 						</script>
+						
+						
 					</div>
+						
 					
-					<h:panelGroup id="techmetadata" layout="block" styleClass="imj_techdataList">
-						<ui:repeat id="techMd" var="techMd" value="#{SingleUploadBean.techMd}">
-							<h:outputText value="#{techMd}" styleClass="imj_techdataEntry"/>
-						</ui:repeat>
+					<h:panelGroup id="techmetadata" layout="block" styleClass="imj_techdataList" rendered="#{SingleUploadBean.techMd.size()>0}">
+						<div class="imj_listHeader"><h3 class="imj_sectionHeadline" style="white-space:nowrap;">#{SingleUploadBean.ingestImage.name}</h3></div>
+						<div class="imj_listBody">
+							<ui:repeat id="techMd" var="techMd" value="#{SingleUploadBean.techMd}">
+								<h:outputText value="#{techMd}" styleClass="imj_techdataEntry"/>
+							</ui:repeat>
+						</div>
 					</h:panelGroup>
 
-					
-
-				
 					<h:panelGroup layout="block" id="mdProfile" styleClass="imj_metadataList">
-						<ui:repeat id="superStatementBean" var="superStatementBean" value="#{SingleUploadBean.sts}" rows="0" varStatus="indexMetadata">			
+						<h3 class="imj_sectionHeadline">#{lbl.metadata_profile}</h3>
+						<ui:repeat id="smdb" var="smdb" value="#{SingleUploadBean.superMetadataBeans}" rows="0" varStatus="indexMetadata">	
 								<!-- MetaDataList - edit panel container set -->
 								<div class="imj_metadataSet">
 									<div class="imj_metadataLabel">
-										<h:outputText value="#{MetadataLabels.internationalizedLabels[superStatementBean.statement.id]}"/>
+										<h:outputText value="#{MetadataLabels.internationalizedLabels[smdb.statement.id]}"/>
 										<span class="imj_invisible">: </span>
 									</div>
-									<div class="imj_metadataValue" style="margin-left: #{superStatementBean.hierarchyLevel}em;">
+									<div class="imj_metadataValue" style="margin-left: #{smdb.hierarchyLevel}em;">
 										<!-- MetaDataInput -->
-										<list:batchEditList_singleStatement itemBean="#{superStatementBean}" itemStatement="#{superStatementBean.statement}" itemLabelBean="#{MetadataLabels}" hideLabel="true" navBean="#{Navigation}" suggestBean="#{SuggestBean}"/>		
+										<list:batchEditList_singleStatement itemBean="#{smdb}" itemStatement="#{smdb.statement}" itemLabelBean="#{MetadataLabels}" hideLabel="true" navBean="#{Navigation}" suggestBean="#{SuggestBean}"/>		
 									</div>
 								</div>
 						</ui:repeat>
 					</h:panelGroup>
 					
-					<h:commandButton value="#{lbl.save}" action="#{SingleUploadBean.save}"/>
+					<div class="imj_submitPanel">
+						<h:outputLink value="#{HistorySession.previousPage.completeUrlWithHistory}" styleClass="imj_cancelButton">
+							<h:outputText value="#{lbl.cancel}" />
+						</h:outputLink>
+						<h:commandButton id="submit" action="#{SingleUploadBean.save}" value="#{lbl.save}" styleClass="imj_submitButton" rendered="#{SingleUploadBean.readyForUploading()}"/>
+					</div>
+					
+					<ui:fragment rendered="#{SingleUploadBean.getfFile() != '' or not empty SingleUploadBean.getItem()}">
+						<div class="imj_uploadMessageArea">
+							<h2 class="imj_headline">
+								<h:outputText value="#{lbl.info_lblMessageHeader}"/>
+							</h2>
+							<h:panelGroup layout="block" styleClass="imj_fileErrorMessageArea" rendered="#{SingleUploadBean.getfFile() != '' }">
+								<h3 class="imj_sectionHeadline">
+									<h:outputText value="#{msg.error_upload}:"/>
+								</h3>
+								<li class="imj_messageError">
+									<h:outputText value="#{SingleUploadBean.getfFile()}"/>
+								</li>
+	
+							</h:panelGroup>					
+							<h:panelGroup layout="block" styleClass="imj_fileErrorMessageArea" rendered="#{not empty SingleUploadBean.getItem()}">
+									<h3 class="imj_sectionHeadline">
+										<h:outputText value="#{msg.success_upload}:" />
+									</h3>
+									<h:outputLink value="#{Navigation.collectionUrl}#{SingleUploadBean.extractIDFromURI(SingleUploadBean.getItem().collection)}/item/#{SingleUploadBean.getItem().idString}">
+										<h:outputText value="#{SingleUploadBean.getItem().filename}"/>		
+									</h:outputLink>
+							</h:panelGroup>
+						</div>
+					</ui:fragment>
 				</h:form>
 			</h:panelGroup>
 		</h:panelGroup>
 	</ui:define>
-	
+
 
 </ui:composition>

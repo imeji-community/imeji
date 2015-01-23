@@ -103,7 +103,7 @@ public class CollectionListItem
              initSelected();
              if (collection != null && user != null)
              {
-                 isOwner = collection.getCreatedBy().equals(ObjectHelper.getURI(User.class, user.getEmail()));
+                 isOwner = collection.getCreatedBy().equals(user.getId());
              }
          }
         catch (Exception e)

@@ -72,19 +72,19 @@ public interface API<V> {
 	/**
 	 * Release an object
 	 * 
-	 * @param o
+	 * @param i
 	 * @param u
 	 */
-	public void release(String i, User u) throws NotFoundException,
+	public V release(String i, User u) throws NotFoundException,
 			NotAllowedError, NotSupportedException, Exception;
 
 	/**
 	 * Withdraw an object
 	 * 
-	 * @param o
+	 * @param i
 	 * @param u
 	 */
-	public void withdraw(V o, User u) throws NotFoundException,
+	public V withdraw(String i, User u, String discardComment) throws NotFoundException,
 			NotAllowedError, NotSupportedException, Exception;
 
 	/**

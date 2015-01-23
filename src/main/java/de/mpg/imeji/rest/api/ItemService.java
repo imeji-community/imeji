@@ -1,6 +1,7 @@
 package de.mpg.imeji.rest.api;
 
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
+import de.mpg.imeji.logic.auth.exception.UnprocessableError;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -123,16 +124,18 @@ public class ItemService implements API<ItemTO> {
 	}
 
 	@Override
-	public void release(String id, User u) throws NotFoundException,
+	public ItemTO release(String id, User u) throws NotFoundException,
 			NotAllowedError, NotSupportedException, Exception {
 		// TODO Auto-generated method stub
+		return null;
 
 	}
 
 	@Override
-	public void withdraw(ItemTO o, User u) throws NotFoundException,
+	public ItemTO withdraw(String id, User u, String discardComment) throws NotFoundException,
 			NotAllowedError, NotSupportedException, Exception {
 		// TODO Auto-generated method stub
+		return null;
 
 	}
 

@@ -29,7 +29,6 @@
 package de.mpg.imeji.presentation.metadata.extractors;
 
 import java.io.*;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -41,9 +40,8 @@ import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.sax.BodyContentHandler;
+import org.omg.CORBA.portable.InputStream;
 import org.xml.sax.SAXException;
-
-import com.drew.imaging.ImageMetadataReader;
 
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.vo.Item;
@@ -66,7 +64,10 @@ public class TikaExtractor
             ByteArrayOutputStream bous = new ByteArrayOutputStream();
             sc.read(item.getFullImageUrl().toString(), bous, true);
             ByteArrayInputStream in = new ByteArrayInputStream(bous.toByteArray());
-            Metadata metadata = extractMetadata(in);
+            Metadata metadata = new Metadata();
+            AutoDetectParser parser = new AutoDetectParser();
+            BodyContentHandler handler = new BodyContentHandler();
+            parser.parse(in, handler, metadata);
             for (String name : metadata.names())
             {
                 techMd.add(name + " :  " + metadata.get(name));
@@ -81,28 +82,32 @@ public class TikaExtractor
         }
         return techMd;
     }
-
-    public static String extractMimeType(File file) {
-        try {
-            InputStream is = new FileInputStream(file);
-            Metadata md = extractMetadata(is);
-            return md.get(Metadata.CONTENT_TYPE);
-        } catch (Exception e) {
+    
+    public static List<String> extractFromFile(File file)
+    {
+        List<String> techMd = new ArrayList<String>();
+        try
+        {
+            Metadata metadata = new Metadata();
+            AutoDetectParser parser = new AutoDetectParser();
+            BodyContentHandler handler = new BodyContentHandler();
+            FileInputStream is = new FileInputStream(file);            
+            parser.parse(is, handler, metadata);
+            for (String name : metadata.names())
+            {
+                techMd.add(name + " :  " + metadata.get(name));
+                
+            }        
+            
+        }
+        catch (Exception e)
+        {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
-        return null;
+        return techMd;
     }
-
-    public static Metadata extractMetadata(InputStream in) throws TikaException, SAXException, IOException {
-        Metadata metadata = new Metadata();
-        AutoDetectParser parser = new AutoDetectParser();
-        BodyContentHandler handler = new BodyContentHandler();
-        parser.parse(in, handler, metadata);
-        return metadata;
-    }
-
+    
     public static void main(String[] args) {
     	Path path = Paths.get("C:\\Users\\yu\\Desktop\\md\\1.4.jpg");
 		try {

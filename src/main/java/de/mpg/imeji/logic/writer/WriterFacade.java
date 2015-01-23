@@ -163,7 +163,7 @@ public class WriterFacade implements Writer
         }
         else if (o instanceof User)
         {
-            return URI.create(((User)o).getEmail());
+            return ((User)o).getId();
         }
         else if (o instanceof UserGroup)
         {

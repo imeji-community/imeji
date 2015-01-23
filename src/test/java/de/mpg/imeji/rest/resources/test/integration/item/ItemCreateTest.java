@@ -2,6 +2,8 @@ package de.mpg.imeji.rest.resources.test.integration.item;
 
 import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
 import de.mpg.imeji.rest.to.ItemTO;
+import net.java.dev.webdav.jaxrs.ResponseStatus;
+
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
@@ -107,5 +109,25 @@ public class ItemCreateTest extends ImejiTestBase {
 
         assertEquals(CREATED.getStatusCode(), response.getStatus());
     }
+    
+    /*@Test
+    public void createItemInNotExistingCollection() throws IOException {
 
+        FileDataBodyPart filePart = new FileDataBodyPart("file", new File(
+                "src/test/resources/storage/test.png"));
+        FormDataMultiPart multiPart = new FormDataMultiPart();
+        multiPart.bodyPart(filePart);
+        multiPart.field("json", itemJSON
+                .replace("___COLLECTION_ID___", collectionId+"i_do_not_exist")
+                .replace("___FILENAME___", "test.png"));
+
+        Response response = target(pathPrefix).register(authAsUser)
+                .register(MultiPartFeature.class)
+                .register(JacksonFeature.class)
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .post(Entity.entity(multiPart, multiPart.getMediaType()));
+
+        assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+    }
+*/
 }

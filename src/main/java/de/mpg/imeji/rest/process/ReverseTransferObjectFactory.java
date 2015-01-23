@@ -1,5 +1,6 @@
 package de.mpg.imeji.rest.process;
 
+import de.mpg.imeji.logic.auth.exception.UnprocessableError;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.logic.vo.predefinedMetadata.*;
@@ -51,8 +52,8 @@ public class ReverseTransferObjectFactory {
                 vo.setId(ObjectHelper.getURI(Item.class, to.getId()));
 
 			if (!isNullOrEmpty(to.getCollectionId()))
-                vo.setCollection(ObjectHelper.getURI(CollectionImeji.class,
-                        to.getCollectionId()));
+				     vo.setCollection(ObjectHelper.getURI(CollectionImeji.class,
+		                        to.getCollectionId()));
 		}
 
 		if (!isNullOrEmpty(to.getFilename()))

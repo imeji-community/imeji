@@ -43,16 +43,19 @@ public class UserService implements API<User>{
 	}
 
 	@Override
-	public void release(String id, User u) throws NotFoundException,
+	public User release(String id, User u) throws NotFoundException,
 			NotAllowedError, NotSupportedException, Exception {
 		// TODO Auto-generated method stub
+		throw new NotSupportedException();
+		
 		
 	}
 
 	@Override
-	public void withdraw(User o, User u) throws NotFoundException,
+	public User withdraw(String id, User u, String discardComment) throws NotFoundException,
 			NotAllowedError, NotSupportedException, Exception {
 		// TODO Auto-generated method stub
+		throw new NotSupportedException();
 		
 	}
 
@@ -61,6 +64,8 @@ public class UserService implements API<User>{
 			throws NotFoundException, NotAllowedError, NotSupportedException,
 			Exception {
 		// TODO Auto-generated method stub
+		throw new NotSupportedException();
+		
 		
 	}
 
@@ -69,6 +74,8 @@ public class UserService implements API<User>{
 			throws NotFoundException, NotAllowedError, NotSupportedException,
 			Exception {
 		// TODO Auto-generated method stub
+		throw new NotSupportedException();
+		
 		
 	}
 

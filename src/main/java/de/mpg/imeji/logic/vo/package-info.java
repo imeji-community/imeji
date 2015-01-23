@@ -7,7 +7,7 @@
  */
 @XmlSchema(elementFormDefault = XmlNsForm.QUALIFIED, xmlns = {
         @XmlNs(prefix = "imeji", namespaceURI = "http://imeji.org/terms/"),
-        @XmlNs(prefix = "imeji-metadata", namespaceURI = "http://imeji.org/terms/metadata/"),
+        @XmlNs(prefix = "imeji-metadata", namespaceURI = ImejiNamespaces.METADATA),
         @XmlNs(prefix = "dcterms", namespaceURI = "http://purl.org/dc/terms/"),
         @XmlNs(prefix = "dc", namespaceURI = "http://purl.org/dc/elements/1.1/"),
         @XmlNs(prefix = "eprofiles", namespaceURI = "http://purl.org/escidoc/metadata/profiles/0.1/"),
@@ -21,4 +21,6 @@ package de.mpg.imeji.logic.vo;
 import javax.xml.bind.annotation.XmlNs;
 import javax.xml.bind.annotation.XmlNsForm;
 import javax.xml.bind.annotation.XmlSchema;
+
+import de.mpg.imeji.logic.ImejiNamespaces;
 

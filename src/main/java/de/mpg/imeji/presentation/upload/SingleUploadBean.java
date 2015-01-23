@@ -41,10 +41,10 @@ import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
-import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
@@ -260,6 +260,8 @@ public class SingleUploadBean implements Serializable{
 						if("http://imeji.org/terms/metadata#conePerson".equals(st.getType().toString()))
 						{
 							Person person = new Person();
+							Organization orga = new Organization();
+							person.getOrganizations().add(orga);
 							smb.setPerson(person);
 						}
 						sts.add(smb);

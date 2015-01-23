@@ -20,12 +20,15 @@ import javax.ws.rs.core.Response;
 import java.io.File;
 import java.io.IOException;
 
+import static de.mpg.imeji.logic.controller.ItemController.NO_THUMBNAIL_FILE_NAME;
 import static de.mpg.imeji.logic.storage.util.StorageUtils.calculateChecksum;
 import static de.mpg.imeji.rest.resources.test.TestUtils.getStringFromPath;
 import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.*;
 import static javax.ws.rs.core.Response.Status.OK;
-import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsNot.not;
+import static org.hamcrest.text.IsEmptyString.isEmptyOrNullString;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -76,11 +79,12 @@ public class ItemUpdateFileTest extends ImejiTestBase {
         assertEquals(OK.getStatusCode(), response.getStatus());
         ItemWithFileTO itemWithFileTO = response.readEntity(ItemWithFileTO.class);
         assertThat("Wrong file name", itemWithFileTO.getFilename(), equalTo(ATTACHED_FILE.getName()));
+        assertThat(itemWithFileTO.getFetchUrl(), isEmptyOrNullString());
+        assertThat(itemWithFileTO.getReferenceUrl(), isEmptyOrNullString());
 
         storedFileURL = target().getUri() + itemWithFileTO.getFileUrl().getPath().substring(1);
 
-        LOGGER.info(RestProcessUtils.buildJSONFromObject(itemWithFileTO));
-
+        //LOGGER.info(RestProcessUtils.buildJSONFromObject(itemWithFileTO));
 
     }
 
@@ -111,9 +115,6 @@ public class ItemUpdateFileTest extends ImejiTestBase {
         LOGGER.info(RestProcessUtils.buildJSONFromObject(itemWithFileTO));
     }
 
-    //@Ignore
-    //TODO after execution this test case, the following test cases can not be executed successfully, a service exception reported.
-    //TODO if change the order of this test case as the last one, all test cases can be executed successfully
     @Test
     public void test_1_UpdateItem_3_WithFile_Referenced() throws IOException {
 
@@ -135,6 +136,13 @@ public class ItemUpdateFileTest extends ImejiTestBase {
         ItemWithFileTO itemWithFileTO = response.readEntity(ItemWithFileTO.class);
         assertThat("Reference URL does not match",
                 storedFileURL, equalTo(itemWithFileTO.getFileUrl().toString()));
+
+        assertThat(itemWithFileTO.getFetchUrl(), isEmptyOrNullString());
+
+        assertThat("Should be link to NO_THUMBNAIL image:", itemWithFileTO.getWebResolutionUrlUrl().toString(),
+                endsWith(NO_THUMBNAIL_FILE_NAME));
+        assertThat("Should be link to NO_THUMBNAIL image:", itemWithFileTO.getThumbnailUrl().toString(),
+                endsWith(NO_THUMBNAIL_FILE_NAME));
     }
 
 
@@ -168,6 +176,10 @@ public class ItemUpdateFileTest extends ImejiTestBase {
         ItemWithFileTO itemWithFileTO = response.readEntity(ItemWithFileTO.class);
         assertThat("Checksum of stored file does not match the source file",
                 itemWithFileTO.getChecksumMd5(), equalTo(calculateChecksum(newFile)));
+        assertThat(itemWithFileTO.getThumbnailUrl().toString(),
+                not(endsWith(NO_THUMBNAIL_FILE_NAME)));
+        assertThat(itemWithFileTO.getWebResolutionUrlUrl().toString(),
+                not(endsWith(NO_THUMBNAIL_FILE_NAME)));
 
     }
 
@@ -198,6 +210,10 @@ public class ItemUpdateFileTest extends ImejiTestBase {
         ItemWithFileTO itemWithFileTO = response.readEntity(ItemWithFileTO.class);
         assertThat("Checksum of stored file does not match the source file",
                 itemWithFileTO.getChecksumMd5(), equalTo(calculateChecksum(newFile)));
+        assertThat(itemWithFileTO.getThumbnailUrl().toString(),
+                not(endsWith(NO_THUMBNAIL_FILE_NAME)));
+        assertThat(itemWithFileTO.getWebResolutionUrlUrl().toString(),
+                not(endsWith(NO_THUMBNAIL_FILE_NAME)));
     }
 
     @Test
@@ -222,9 +238,15 @@ public class ItemUpdateFileTest extends ImejiTestBase {
 
         assertEquals(OK.getStatusCode(), response.getStatus());
         ItemWithFileTO itemWithFileTO = response.readEntity(ItemWithFileTO.class);
-        LOGGER.info(RestProcessUtils.buildJSONFromObject(itemWithFileTO));
         assertThat("Checksum of stored file does not match the source file",
                 itemWithFileTO.getChecksumMd5(), equalTo(calculateChecksum(new File(STATIC_CONTEXT_STORAGE + "/test.jpg"))));
+
+        assertThat(itemWithFileTO.getFileUrl().toString(), not(isEmptyOrNullString()));
+        assertThat(itemWithFileTO.getReferenceUrl(), isEmptyOrNullString());
+        assertThat(itemWithFileTO.getThumbnailUrl().toString(),
+                not(endsWith(NO_THUMBNAIL_FILE_NAME)));
+        assertThat(itemWithFileTO.getWebResolutionUrlUrl().toString(),
+                not(endsWith(NO_THUMBNAIL_FILE_NAME)));
     }
 
     @Test
@@ -256,7 +278,13 @@ public class ItemUpdateFileTest extends ImejiTestBase {
         ItemWithFileTO itemWithFileTO = response.readEntity(ItemWithFileTO.class);
         assertThat("Checksum of stored file does not match the source file",
                 itemWithFileTO.getChecksumMd5(), equalTo(calculateChecksum(newFile)));
-    }
+        assertThat(itemWithFileTO.getFetchUrl(), isEmptyOrNullString());
+        assertThat(itemWithFileTO.getReferenceUrl(), isEmptyOrNullString());
+        assertThat(itemWithFileTO.getThumbnailUrl().toString(),
+                not(containsString(NO_THUMBNAIL_FILE_NAME)));
+        assertThat(itemWithFileTO.getWebResolutionUrlUrl().toString(),
+                not(containsString(NO_THUMBNAIL_FILE_NAME)));
 
+    }
 
 }

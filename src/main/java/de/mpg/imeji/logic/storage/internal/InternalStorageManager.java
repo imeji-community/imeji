@@ -28,19 +28,6 @@
  */
 package de.mpg.imeji.logic.storage.internal;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
-
-import javax.activation.MimetypesFileTypeMap;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.logic.storage.Storage.FileResolution;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.storage.administrator.impl.InternalStorageAdministrator;
@@ -50,6 +37,12 @@ import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.presentation.util.PropertyReader;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
+
+import javax.activation.MimetypesFileTypeMap;
+import java.io.*;
 
 /**
  * Manage internal storage in file system
@@ -78,9 +71,7 @@ public class InternalStorageManager implements Serializable {
 
 	/**
 	 * Constructor for a specific path and url
-	 * 
-	 * @param path
-	 * @param url
+	 *
 	 */
 	public InternalStorageManager() {
 		try {
@@ -124,25 +115,29 @@ public class InternalStorageManager implements Serializable {
 	/**
 	 * Replace the {@link File} stored at the passed url by the passed
 	 * {@link File}
-	 * 
+	 *
+	 * @param file
 	 * @param url
-	 * @param fileName
 	 * @throws IOException
 	 */
 	public void replaceFile(File file, String url) throws IOException {
 		// Get the filextension for the thumbnail and preview generation (can be
 		// jpg, gif etc.)
-		String extension = file.getName().substring(
-				file.getName().lastIndexOf(".") + 1, file.getName().length());
+//		String extension = file.getName().substring(
+//				file.getName().lastIndexOf(".") + 1, file.getName().length());
+		String origExtension = FilenameUtils.getExtension(file.getPath());
+		String guessedExtension = StorageUtils.guessExtension(file);
 		ImageGeneratorManager generatorManager = new ImageGeneratorManager();
+
 		removeFile(url);
-		if (url.contains(FileResolution.ORIGINAL.name().toLowerCase()))
+		if (url.contains(FileResolution.ORIGINAL.name().toLowerCase())) {
+			url = StorageUtils.replaceExtension(url, origExtension);
 			copy(file, transformUrlToPath(url));
-		else if (url.contains(FileResolution.WEB.name().toLowerCase()))
-			write(generatorManager.generateWebResolution(file, extension),
+		} else if (url.contains(FileResolution.WEB.name().toLowerCase()))
+			write(generatorManager.generateWebResolution(file, guessedExtension),
 					transformUrlToPath(url));
 		else if (url.contains(FileResolution.THUMBNAIL.name().toLowerCase()))
-			write(generatorManager.generateThumbnail(file, extension),
+			write(generatorManager.generateThumbnail(file, guessedExtension),
 					transformUrlToPath(url));
 	}
 
@@ -302,8 +297,8 @@ public class InternalStorageManager implements Serializable {
 	 * @return
 	 * @throws UnsupportedEncodingException
 	 */
-	private String generateUrl(String id, String filename,
-			FileResolution resolution) {
+	public String generateUrl(String id, String filename,
+							  FileResolution resolution) {
 		filename = StringHelper.normalizeFilename(filename);
 		if (resolution != FileResolution.ORIGINAL) {
 			String extension = FilenameUtils.getExtension(filename);
@@ -319,7 +314,6 @@ public class InternalStorageManager implements Serializable {
 	 * Write a new file for the 3 resolution of one file
 	 * 
 	 * @param item
-	 * @param bytes
 	 * @throws IOException
 	 * @throws Exception
 	 */
@@ -345,7 +339,7 @@ public class InternalStorageManager implements Serializable {
 	/**
 	 * Copy the file in the file system
 	 * 
-	 * @param bytes
+	 * @param toCopy
 	 * @param path
 	 * @return
 	 * @throws IOException
@@ -389,7 +383,7 @@ public class InternalStorageManager implements Serializable {
 	/**
 	 * Return true if an id (i.e. a file) already exists, otherwise false
 	 * 
-	 * @param item
+	 * @param id
 	 * @return
 	 */
 	private boolean exists(String id) {

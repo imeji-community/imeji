@@ -87,14 +87,13 @@ public class ItemService implements API<ItemTO> {
 //			else
 //				item = controller.updateFile(item, tof.getFile(), u);
 //			tof.setFile(null);
-			if(tof.getFile() !=null){
+			if(tof.getFile() != null){
 				item = controller.updateFile(item, tof.getFile(), u);
 			}
-			else{
-				if (url != null)
-					item = controller.updateWithExternalFile(item,
-							getExternalFileUrl(tof), to.getFilename(),
-							downloadFile(tof), u);
+			else if (url != null) {
+				item = controller.updateWithExternalFile(item,
+						getExternalFileUrl(tof), to.getFilename(),
+						downloadFile(tof), u);
 			}
 		} else {
 			item = controller.update(item, u);

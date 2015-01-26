@@ -3,6 +3,7 @@ package de.mpg.imeji.service.test;
 import de.mpg.imeji.logic.auth.exception.AuthenticationError;
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 
+import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
@@ -186,9 +187,9 @@ public class ItemServiceTest {
 		itemTO.setReferenceUrl(url);
 		itemTo = is.update(itemTO, JenaUtil.testUser);
 		assertEquals(url, itemTo.getFileUrl().toString());
-		assertEquals("NO_THUMBNAIL_URL", itemTo.getThumbnailUrl().toString());
-		assertEquals("NO_WEBIMAGE_URL", itemTo.getWebResolutionUrlUrl().toString());
-	
+		assertThat(itemTo.getThumbnailUrl().toString(), endsWith(ItemController.NO_THUMBNAIL_FILE_NAME));
+		assertThat(itemTo.getWebResolutionUrlUrl().toString(), endsWith(ItemController.NO_THUMBNAIL_FILE_NAME));
+
 		//update item with new file and new fetch url, the new file should be  updated, not though the fetch url
 		itemTO.setFile(uploadFile);
 		itemTO.setFetchUrl(url);

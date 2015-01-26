@@ -306,6 +306,15 @@ public class StorageUtils {
 	}
 
 	/**
+	 * Remove extension if exists and update with new one
+	 *
+	 * @return update url
+	 */
+	public static String replaceExtension(String url, String newExt) throws IOException {
+		return FilenameUtils.removeExtension(url) + "." + newExt;
+	}
+
+	/**
 	 * Calculate the Checksum of a byte array with MD5 algorithm displayed in
 	 * Hexadecimal
 	 *

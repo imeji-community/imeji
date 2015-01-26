@@ -69,7 +69,7 @@ public class StorageController implements Serializable {
 			formatBlackList = PropertyReader.getProperty(UPLOAD_BLACKLIST_PROPERTY);
 			formatWhiteList = PropertyReader.getProperty(UPLOAD_WHITELIST_PROPERTY);
 		} catch (Exception e) {
-			throw new RuntimeException("Error reading storage name property: ",
+			throw new RuntimeException("Error reading property: ",
 					e);
 		}
 		storage = StorageFactory.create(name);

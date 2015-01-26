@@ -16,14 +16,16 @@ import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.storage.Storage;
+import de.mpg.imeji.logic.storage.Storage.FileResolution;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.UploadResult;
-import de.mpg.imeji.logic.storage.util.StorageUtils;
+import de.mpg.imeji.logic.storage.internal.InternalStorageManager;
 import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.logic.vo.Item.Visibility;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.imeji.presentation.util.ImejiFactory;
+import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.j2j.helper.J2JHelper;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
@@ -34,6 +36,8 @@ import java.net.URI;
 import java.util.*;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
+import static de.mpg.imeji.logic.storage.util.StorageUtils.calculateChecksum;
+import static de.mpg.imeji.logic.storage.util.StorageUtils.getMimeType;
 
 /**
  * Implements CRUD and Search methods for {@link Item}
@@ -48,21 +52,31 @@ public class ItemController extends ImejiController {
 			Imeji.imageModel);
 	private static final WriterFacade writer = new WriterFacade(
 			Imeji.imageModel);
-	private static final String NO_THUMBNAIL_URL = "http://imeji.org/noThumbnail.png";
+	public static final String NO_THUMBNAIL_FILE_NAME = "noThumbnail.png";
+	private static String NO_THUMBNAIL_URL;
 
 	/**
 	 * Controller constructor
 	 */
 	public ItemController() {
 		super();
+		try {
+			NO_THUMBNAIL_URL = PropertyReader.getProperty("imeji.instance.url")
+					+ "/resources/icon/" + NO_THUMBNAIL_FILE_NAME;
+		} catch (Exception e) {
+			throw new RuntimeException("Error reading property: ",
+					e);
+		}
 	}
 
 	/**
 	 * Create an {@link Item} in a {@link CollectionImeji}
-	 * 
-	 * @param img
+	 *
+	 * @param item
 	 * @param coll
+	 * @param user
 	 * @throws Exception
+	 * @return
 	 */
 	public Item create(Item item, URI coll, User user) throws Exception {
 		Collection<Item> l = new ArrayList<Item>();
@@ -90,7 +104,7 @@ public class ItemController extends ImejiController {
 					"User not Allowed to upload files in collection "
 							+ c.getIdString());
 		StorageController sc = new StorageController();
-		String mimeType = StorageUtils.getMimeType(f);
+		String mimeType = getMimeType(f);
 		UploadResult uploadResult = sc.upload(filename, f, c.getIdString());
 		if (item == null)
 			item = ImejiFactory.newItem(c);
@@ -135,8 +149,8 @@ public class ItemController extends ImejiController {
 			// Reference the file
 			item.setFilename(filename);
 			item.setFullImageUrl(URI.create(externalFileUrl));
-			item.setThumbnailImageUrl(URI.create("NO_THUMBNAIL_URL"));
-			item.setWebImageUrl(URI.create("NO_THUMBNAIL_URL"));
+			item.setThumbnailImageUrl(URI.create(NO_THUMBNAIL_URL));
+			item.setWebImageUrl(URI.create(NO_THUMBNAIL_URL));
 			item = create(item, c.getId(), user);
 		}
 		return item;
@@ -263,13 +277,26 @@ public class ItemController extends ImejiController {
 	 * @throws Exception
 	 */
 	public Item updateFile(Item item, File f, User user) throws Exception {
+		item.setFiletype(getMimeType(f));
+		item.setChecksum(calculateChecksum(f));
+
 		StorageController sc = new StorageController();
-		sc.update(item.getFullImageUrl().toString(), f);
-		item.setChecksum(StorageUtils.calculateChecksum(f));
-		String mimeType = StorageUtils.getMimeType(f);
-		item.setFiletype(mimeType);
-		sc.update(item.getWebImageUrl().toString(), f);
-		sc.update(item.getThumbnailImageUrl().toString(), f);
+
+		InternalStorageManager ism = new InternalStorageManager();
+
+		//regenerate new url!!!
+		String url = ism.generateUrl(item.getStorageId(), f.getName(), FileResolution.ORIGINAL);
+		sc.update(url, f);
+		item.setFullImageUrl(URI.create(url));
+
+		url = ism.generateUrl(item.getStorageId(), f.getName(), FileResolution.WEB);
+		sc.update(url, f);
+		item.setWebImageUrl(URI.create(url));
+
+		url = ism.generateUrl(item.getStorageId(), f.getName(), FileResolution.THUMBNAIL);
+		sc.update(url, f);
+		item.setThumbnailImageUrl(URI.create(url));
+
 		return update(item, user);
 	}
 
@@ -289,18 +316,31 @@ public class ItemController extends ImejiController {
 		String origName = FilenameUtils.getName(externalFileUrl);
 		filename = isNullOrEmpty(filename) ? origName : filename + "."
 				+ FilenameUtils.getExtension(origName);
+
+		item.setFilename(filename);
+
 		StorageController sc = new StorageController("external");
 		if (download) {
 			// download the file in storage
-			File tmp = File.createTempFile("imeji", null);
+			File tmp = File.createTempFile("imeji", "." + FilenameUtils.getExtension(origName));
 			sc.read(externalFileUrl, new FileOutputStream(tmp), true);
 			item = updateFile(item, tmp, u);
 		} else {
 			// Reference the file
-			item.setFilename(filename);
+			InternalStorageManager ism = new InternalStorageManager();
+
+			//Remove all 3 resolutions files from storage
+			ism.removeFile(item.getFullImageUrl().toString());
+			ism.removeFile(item.getWebImageUrl().toString());
+			ism.removeFile(item.getThumbnailImageUrl().toString());
+
 			item.setFullImageUrl(URI.create(externalFileUrl));
-			item.setThumbnailImageUrl(URI.create("NO_THUMBNAIL_URL"));
-			item.setWebImageUrl(URI.create("NO_WEBIMAGE_URL"));
+			item.setThumbnailImageUrl(URI.create(NO_THUMBNAIL_URL));
+			item.setWebImageUrl(URI.create(NO_THUMBNAIL_URL));
+			item.setChecksum("");
+			item.setFiletype("");
+			item.setFilename("");
+
 			item = update(item, u);
 		}
 		return item;

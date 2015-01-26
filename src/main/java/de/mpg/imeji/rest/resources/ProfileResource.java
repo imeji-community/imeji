@@ -34,7 +34,7 @@ public class ProfileResource implements ImejiResource {
     @Path("/{id}")
     @ApiOperation(value = "Get profile by id")
     @Produces(MediaType.APPLICATION_JSON)
-	public Response readFromID(@Context HttpServletRequest req, @PathParam("id") String id) {
+	public Response read(@Context HttpServletRequest req, @PathParam("id") String id) {
     	JSONResponse resp = ProfileProcess.readProfile(req, id);
 		return RestProcessUtils.buildJSONResponse(resp);
 	}

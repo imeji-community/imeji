@@ -44,7 +44,7 @@ public class CollectionResource implements ImejiResource {
 	@Path("/{id}")
 	@ApiOperation(value = "Get collection by id")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response readFromID(@Context HttpServletRequest req,
+	public Response read(@Context HttpServletRequest req,
 			@PathParam("id") String id) {
 		JSONResponse resp = CollectionProcess.readCollection(req, id);
 		return RestProcessUtils.buildJSONResponse(resp);
@@ -55,7 +55,7 @@ public class CollectionResource implements ImejiResource {
 	@Path("/{id}/release")
 	@ApiOperation(value = "Release collection by id")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response releaseFromID(@Context HttpServletRequest req,
+	public Response release(@Context HttpServletRequest req,
 			@PathParam("id") String id) throws Exception {
 		JSONResponse resp = CollectionProcess.releaseCollection(req, id);
 		return RestProcessUtils.buildJSONResponse(resp);
@@ -66,39 +66,7 @@ public class CollectionResource implements ImejiResource {
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@ApiOperation(value = "Withraw a collection by id, with mandatory discard commenrt")
 	@Produces(MediaType.APPLICATION_JSON)
-	
-	/*
-	 * 
-	 * 
-	 * 
-	 * @Consumes(MediaType.MULTIPART_FORM_DATA)
-	@ApiOperation(value = "Update an item", notes = "Update an already existed item. Both the item metadata and the item file can be updated. File can be defined either as (by order of priority):"
-			+ "<br/> 1) form parameter (multipart/form-data)<br/> 2) json parameter: \"fetchUrl\" : \"http://example.org/myFile.png\" (myFile.png will be uploaded in imeji) "
-			+ "<br/> 3) json parameter \"referenceUrl\" : \"http://example.org/myFile.png\" (myFile.png will be only referenced in imeji, i.e. not uploaded)"
-			+ "<br/><br/>"
-			+ "Json example:"
-			+ "<div class=\"json_example\">"
-			+ "{"
-			+ "<br/>\"id\" : \"abc123\","
-			+ "<br/>\"collectionId\" : \"def123\","
-			+ "<br/>\"fetchUrl\" : \"http://example.org/myFile.png\","
-			+ "<br/>\"referenceUrl\" : \"http://example.org/myFile.png\","
-			+ "<br/>\"metadata\" : []"
-			+ "<br/>}"
-			+"</div>"
-			+ "<br/><br/>"
-			+ "The metadata parameter allows to define the metadata of item during the creation of the item. To get an example of how to do it, please try the get item method")
-	@Produces(MediaType.APPLICATION_JSON)
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 */
-	
-	public Response withdrawFromID(@Context HttpServletRequest req,
+	public Response withdraw(@Context HttpServletRequest req,
 			@FormParam("id") String id, @FormParam("discardComment") String discardComment) throws Exception {
 		JSONResponse resp = CollectionProcess.withdrawCollection(req, id, discardComment);
 		return RestProcessUtils.buildJSONResponse(resp);

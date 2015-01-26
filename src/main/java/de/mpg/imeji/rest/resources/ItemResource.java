@@ -30,7 +30,7 @@ public class ItemResource implements ImejiResource {
 	@Path("/{id}")
 	@ApiOperation(value = "Get item by id")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response readFromID(@Context HttpServletRequest req,
+	public Response read(@Context HttpServletRequest req,
 			@PathParam("id") String id) {
 		JSONResponse resp = ItemProcess.readItem(req, id);
 		return RestProcessUtils.buildJSONResponse(resp);
@@ -91,7 +91,7 @@ public class ItemResource implements ImejiResource {
 						   @FormDataParam("file") FormDataContentDisposition fileDetail,
 						   @PathParam("id") String id) {
 		String filename = fileDetail != null ? fileDetail.getFileName() : null;
-		return RestProcessUtils.buildJSONResponse(ItemProcess.udpateItem(req, id,
+		return RestProcessUtils.buildJSONResponse(ItemProcess.updateItem(req, id,
 				file, json, filename));
 	}
 

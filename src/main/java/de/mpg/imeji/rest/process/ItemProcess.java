@@ -2,6 +2,9 @@ package de.mpg.imeji.rest.process;
 
 import com.google.common.io.ByteStreams;
 import com.google.common.io.Files;
+
+import de.escidoc.core.common.exceptions.remote.application.security.AuthorizationException;
+import de.mpg.imeji.logic.auth.exception.AuthenticationError;
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.api.ItemService;
@@ -15,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.core.Response.Status;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -30,27 +34,18 @@ public class ItemProcess {
 
 	public static JSONResponse deleteItem(HttpServletRequest req, String id) {
 		User u = BasicAuthentication.auth(req);
-		JSONResponse resp = new JSONResponse();
+		JSONResponse resp; 
 
 		if (u == null) {
-			resp.setObject(RestProcessUtils
-					.buildUnauthorizedResponse("Not logged in not allowed to delete item"));
-			resp.setStatus(Status.UNAUTHORIZED);
+			Exception e = new AuthenticationError(CommonUtils.USER_MUST_BE_LOGGED_IN);
+			resp = RestProcessUtils.localExceptionHandler(e, CommonUtils.USER_MUST_BE_LOGGED_IN);
 		} else {
 			ItemService icrud = new ItemService();
 			try {
 				icrud.delete(id, u);
-				resp.setStatus(Status.NO_CONTENT);
-			} catch (NotFoundException e) {
-				resp.setObject(RestProcessUtils.buildBadRequestResponse(e
-						.getLocalizedMessage()));
-				resp.setStatus(Status.BAD_REQUEST);
-
-			} catch (NotAllowedError e) {
-
-				resp.setObject(RestProcessUtils.buildNotAllowedResponse(e
-						.getLocalizedMessage()));
-				resp.setStatus(Status.FORBIDDEN);
+				resp= RestProcessUtils.buildResponse(Status.NO_CONTENT.getStatusCode(), null);
+			} catch (Exception e) {
+				resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
 			}
 		}
 		return resp;
@@ -59,34 +54,13 @@ public class ItemProcess {
 
 	public static JSONResponse readItem(HttpServletRequest req, String id) {
 		User u = BasicAuthentication.auth(req);
-		JSONResponse resp = new JSONResponse();
-
-		ItemTO item = null;
+		JSONResponse resp; 
 
 		ItemService icrud = new ItemService();
 		try {
-			item = icrud.read(id, u);
-			resp.setObject(item);
-			resp.setStatus(Status.OK);
-		} catch (NotFoundException e) {
-			resp.setObject(RestProcessUtils.buildBadRequestResponse(e
-					.getLocalizedMessage()));
-			resp.setStatus(Status.BAD_REQUEST);
-
-		} catch (NotAllowedError e) {
-			if (u == null) {
-				resp.setObject(RestProcessUtils.buildUnauthorizedResponse(e
-						.getLocalizedMessage()));
-				resp.setStatus(Status.UNAUTHORIZED);
-			} else {
-				resp.setObject(RestProcessUtils.buildNotAllowedResponse(e
-						.getLocalizedMessage()));
-				resp.setStatus(Status.FORBIDDEN);
-			}
+			resp= RestProcessUtils.buildResponse(Status.OK.getStatusCode(), icrud.read(id, u));
 		} catch (Exception e) {
-			resp.setObject(RestProcessUtils.buildExceptionResponse(e
-					.getLocalizedMessage()));
-			resp.setStatus(Status.FORBIDDEN);
+			resp= RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
 		}
 		return resp;
 
@@ -95,10 +69,16 @@ public class ItemProcess {
 	public static JSONResponse createItem(HttpServletRequest req,
 			InputStream file, String json, String origName) {
 		// / write response
-		JSONResponse resp = new JSONResponse();
+		JSONResponse resp; 
 
 		// Load User (if provided)
 		User u = BasicAuthentication.auth(req);
+		
+		if (u == null) {
+			Exception e = new AuthenticationError(CommonUtils.USER_MUST_BE_LOGGED_IN);
+			resp = RestProcessUtils.localExceptionHandler(e, CommonUtils.USER_MUST_BE_LOGGED_IN);
+			return resp;
+		} 
 		
 		// Parse json into to
 		ItemWithFileTO to = null;
@@ -106,24 +86,23 @@ public class ItemProcess {
 			to = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(json,
 					ItemWithFileTO.class);
 		} catch (Exception e) {
-			resp.setObject(RestProcessUtils
-					.buildBadRequestResponse(CommonUtils.JSON_Invalid));
-			resp.setStatus(Status.BAD_REQUEST);
+			e = new BadRequestException();
+			resp= RestProcessUtils.localExceptionHandler(e, CommonUtils.JSON_Invalid);
 			return resp;
 		}
 		// set file in to (if provided)
 
 		if ("".equals(to.getFilename())) {
-			resp.setObject(RestProcessUtils
-					.buildBadRequestResponse(CommonUtils.FILENAME_RENAME_EMPTY));
-			resp.setStatus(Status.BAD_REQUEST);
+			Exception e = new BadRequestException();
+			resp = RestProcessUtils.localExceptionHandler(e, CommonUtils.FILENAME_RENAME_EMPTY);
+			return resp;
 		} else if (to.getFilename() != null
 				&& !"".equals(FilenameUtils.getExtension(to.getFilename()))
 				&& !FilenameUtils.getExtension(to.getFilename()).equals(
 						FilenameUtils.getExtension(origName))) {
-			resp.setObject(RestProcessUtils
-					.buildBadRequestResponse(CommonUtils.FILENAME_RENAME_INVALID_SUFFIX));
-			resp.setStatus(Status.BAD_REQUEST);
+			Exception e = new BadRequestException();
+			resp = RestProcessUtils.localExceptionHandler(e, CommonUtils.FILENAME_RENAME_INVALID_SUFFIX);
+			return resp;
 		} else {
 			if (file != null) {
 				try {
@@ -145,38 +124,23 @@ public class ItemProcess {
 			ItemService service = new ItemService();
 
 			try {
-				resp.setObject(service.create(to, u));
-				resp.setStatus(Status.CREATED);
-			} catch (NotFoundException e) {
-				resp.setObject(RestProcessUtils.buildBadRequestResponse(e
-						.getLocalizedMessage()));
-				resp.setStatus(Status.BAD_REQUEST);
-
-			} catch (NotAllowedError e) {
-				if (u == null) {
-					resp.setObject(RestProcessUtils.buildUnauthorizedResponse(e
-							.getLocalizedMessage()));
-					resp.setStatus(Status.UNAUTHORIZED);
-				} else {
-					resp.setObject(RestProcessUtils.buildNotAllowedResponse(e
-							.getLocalizedMessage()));
-					resp.setStatus(Status.FORBIDDEN);
-				}
+				resp= RestProcessUtils.buildResponse(Status.CREATED.getStatusCode(), service.create(to, u) );
 			} catch (Exception e) {
-				resp.setStatus(Status.INTERNAL_SERVER_ERROR);
-			}
+				resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
 
+			}
+			
 		}
 
 		return resp;
 	}
 
 
-	public static JSONResponse udpateItem(HttpServletRequest req, String id, InputStream fileInputStream, String json, String filename) {
+	public static JSONResponse updateItem(HttpServletRequest req, String id, InputStream fileInputStream, String json, String filename) {
 
 		User u = BasicAuthentication.auth(req);
 
-		JSONResponse resp = new JSONResponse();
+		JSONResponse resp; 
 		ItemService service = new ItemService();
 
 		try {
@@ -200,24 +164,9 @@ public class ItemProcess {
 				((ItemWithFileTO)to).setFile(tmpFile);
 
 			}
-			resp.setObject(service.update(to, u));
-			//item, no file
-			resp.setStatus(Status.OK);
-		} catch (NotFoundException e) {
-			resp.setObject(RestProcessUtils.buildBadRequestResponse(e.getLocalizedMessage()));
-			resp.setStatus(Status.BAD_REQUEST);
-		} catch (NotAllowedError e) {
-			if (u == null) {
-				resp.setObject(RestProcessUtils.buildUnauthorizedResponse(e.getLocalizedMessage()));
-				resp.setStatus(Status.UNAUTHORIZED);
-			} else {
-				resp.setObject(RestProcessUtils.buildNotAllowedResponse(e.getLocalizedMessage()));
-				resp.setStatus(Status.FORBIDDEN);
-			}
+			resp = RestProcessUtils.buildResponse(Status.OK.getStatusCode(), service.update(to, u));
 		} catch (Exception e) {
-			resp.setStatus(Status.INTERNAL_SERVER_ERROR);
-			LOGGER.error(e.getLocalizedMessage());
-			e.printStackTrace();
+			resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
 		}
 
 		return resp;

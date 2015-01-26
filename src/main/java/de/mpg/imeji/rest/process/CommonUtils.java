@@ -8,10 +8,11 @@ import java.util.Date;
 
 public class CommonUtils {
 	
-	public static final String FILENAME_RENAME_EMPTY = "type a new filename if you want to rename it";
-	public static final String FILENAME_RENAME_INVALID_SUFFIX = "invalid suffix";
-	public static final String JSON_Invalid ="invalid json input";
+	public static final String FILENAME_RENAME_EMPTY = "Type a new filename if you want to rename it.";
+	public static final String FILENAME_RENAME_INVALID_SUFFIX = "Invalid suffix.";
+	public static final String JSON_Invalid ="Malformed json body in the request. Check the JSON body for correctness.";
 	public static final String JAVAX_SERVLET_CONTEXT_TEMPDIR = "javax.servlet.context.tempdir";
+	public static final String USER_MUST_BE_LOGGED_IN = "Need to be logged-in to proceed with the operation.";
 
 
 	public static String formatDate(Date d) {

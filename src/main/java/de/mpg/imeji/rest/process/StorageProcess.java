@@ -17,7 +17,7 @@ public class StorageProcess {
 
     public static JSONResponse getStorageProperties() {
 
-        JSONResponse resp = new JSONResponse();
+        JSONResponse resp; 
 
         StorageTO sto = new StorageTO();
 
@@ -30,12 +30,9 @@ public class StorageProcess {
             if (!isNullOrEmpty(white)) {
                 sto.setUploadWhiteList(white);
             }
-            resp.setObject(sto);
-            resp.setStatus(Status.OK);
+            resp = RestProcessUtils.buildResponse(Status.OK.getStatusCode(), sto);
         } catch (Exception e) {
-            resp.setObject(RestProcessUtils.buildExceptionResponse(e
-                    .getLocalizedMessage()));
-            resp.setStatus(Status.FORBIDDEN);
+        	resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
         }
         return resp;
     }

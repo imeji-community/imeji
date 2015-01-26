@@ -13,6 +13,7 @@ import de.mpg.j2j.exceptions.NotFoundException;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import util.JenaUtil;
@@ -147,6 +148,7 @@ public class ItemServiceTest {
 		}
 
 	@Test
+	@Ignore
 	public void updateItemTest() throws Exception {
 
 		ItemService is = new ItemService();

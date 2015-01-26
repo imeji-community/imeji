@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import de.mpg.imeji.logic.auth.exception.UnprocessableError;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -83,14 +84,15 @@ public abstract class ImejiController {
 	 * 
 	 * @param properties
 	 * @param comment
+	 * @throws UnprocessableError 
 	 */
-	protected void writeWithdrawProperties(Properties properties, String comment) {
+	protected void writeWithdrawProperties(Properties properties, String comment) throws Exception {
 		if (comment != null && !"".equals(comment)) {
 			properties.setDiscardComment(comment);
 		}
 		if (properties.getDiscardComment() == null
 				|| "".equals(properties.getDiscardComment())) {
-			throw new RuntimeException(
+			throw new UnprocessableError (
 					"Discard error: A Discard comment is needed");
 		}
 		properties.setStatus(Status.WITHDRAWN);

@@ -6,13 +6,26 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
+
+import de.mpg.imeji.logic.auth.exception.AuthenticationError;
+import de.mpg.imeji.logic.auth.exception.NotAllowedError;
+import de.mpg.imeji.logic.auth.exception.UnprocessableError;
+import de.mpg.imeji.logic.controller.exceptions.NotFoundError;
 import de.mpg.imeji.rest.to.HTTPError;
 import de.mpg.imeji.rest.to.JSONException;
 import de.mpg.imeji.rest.to.JSONResponse;
+import de.mpg.j2j.exceptions.NotFoundException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.BadRequestException;
+import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.ServerErrorException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
+import net.java.dev.webdav.jaxrs.ResponseStatus;
+
 import java.io.IOException;
 
 public class RestProcessUtils {
@@ -74,66 +87,103 @@ public class RestProcessUtils {
 				.type(MediaType.APPLICATION_JSON).build();
 	}
 
-	public static JSONException buildBadRequestResponse(String e) {
+	public static Object buildExceptionResponse(int errorCode, String e) {
 		JSONException ex = new JSONException();
 		HTTPError error = new HTTPError();
-		error.setCode("1400");
-		error.setTitle("Validation failed");
-		error.setMessage("validation-failed-message");
-		error.setExceptionReport(e);
-		ex.setError(error);
-		return ex;
-
-	}
-
-	public static Object buildUnauthorizedResponse(String e) {
-		JSONException ex = new JSONException();
-		HTTPError error = new HTTPError();
-		error.setCode("1401");
-		error.setTitle("Not authenticated");
-		error.setMessage("invalid-account-message");
-		error.setExceptionReport(e);
-		ex.setError(error);
-		return ex;
-	}
-
-	public static Object buildNotAllowedResponse(String e) {
-		JSONException ex = new JSONException();
-		HTTPError error = new HTTPError();
-		error.setCode("1403");
-		error.setTitle("Forbidden");
-		error.setMessage("authorization-failed-message");
-		error.setExceptionReport(e);
-		ex.setError(error);
-		return ex;
+		String errorCodeLocal = "1"+ errorCode;
+		error.setCode(errorCodeLocal);
+		String errorTitleLocal = "";
+		Status localStatus = Status.fromStatusCode(errorCode);
+		if (localStatus != null) {
+			errorTitleLocal = localStatus.getReasonPhrase();
+		}
+		else
+		{
+			if (errorCode == ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode()) {
+				errorTitleLocal = ResponseStatus.UNPROCESSABLE_ENTITY.getReasonPhrase();
+			}
+			else
+			{
+				errorTitleLocal = Status.INTERNAL_SERVER_ERROR.getReasonPhrase();
+			}
+		}
 		
-	}
-	
-	public static Object buildUnprocessableErrorResponse(String e){
-		JSONException ex = new JSONException();
-		HTTPError error = new HTTPError();
-		error.setCode("1422");
-		error.setTitle("Unprocessable Entity");
-		error.setMessage("processe-failed-message");
 		error.setExceptionReport(e);
+		error.setCode(errorCodeLocal);
+		error.setTitle(errorTitleLocal);
+		error.setMessage(errorCodeLocal+"-message");
 		ex.setError(error);
 		return ex;
-		
-	}
-	
-	public static Object buildExceptionResponse(String e) {
-		JSONException ex = new JSONException();
-		HTTPError error = new HTTPError();
-		error.setCode("1403");
-		error.setTitle("Forbidden");
-		error.setMessage("authorization-failed-message");
-		error.setExceptionReport(e);
-		ex.setError(error);
-		return ex;
-		
 	}
 	
 
+	/**
+	 * This method builds exception response. Based on the error Code, local title and message (which can be localized through the Language Bundles) are built
+	 *  
+	 * @param errorCode
+	 * @param e
+	 * @return
+	 */
+	public static JSONResponse buildJSONAndExceptionResponse(int errorCode, String e) {
+		JSONResponse resp = new JSONResponse();
+		resp.setStatus(errorCode);
+		resp.setObject(buildExceptionResponse(errorCode, e));
+		return resp;
+	}
 
+	/**
+	 * This method builds the response for successfully created, updated, deleted, released etc. object.
+	 * It is a convenience method to save 3 lines of code every time the HTTP Response needs to be built after success 
+	 * @param statusCode
+	 * @param responseObject
+	 * @return
+	 */
+	public static JSONResponse buildResponse(int statusCode, Object responseObject) {
+		JSONResponse resp = new JSONResponse();
+		resp.setStatus(statusCode);
+		resp.setObject(responseObject);
+		return resp;
+	}
+	
+	/**
+	 * This method checks the exception type and returns appropriate JSON Response with properly set-up HTTP Code.
+	 * 
+	 * 
+	 * @param eX
+	 * @param message
+	 * @return
+	 */
+	public static JSONResponse localExceptionHandler(Exception eX, String message) {
+		String localMessage = ( message=="" || message == null)?
+				eX.getLocalizedMessage():message;
+				
+		JSONResponse resp;
+				
+		if (eX instanceof AuthenticationError)  {
+			resp = RestProcessUtils.buildJSONAndExceptionResponse(Status.UNAUTHORIZED.getStatusCode(), localMessage);
+		}
+		else if (eX instanceof NotAllowedError) {
+			resp = RestProcessUtils.buildJSONAndExceptionResponse(Status.FORBIDDEN.getStatusCode(), localMessage);
+			
+		}
+		else if (eX instanceof NotFoundError || eX instanceof NotFoundException) {
+			resp = RestProcessUtils.buildJSONAndExceptionResponse(Status.NOT_FOUND.getStatusCode(),localMessage);
 
+		}
+		else if (eX instanceof UnprocessableError) {
+			resp = RestProcessUtils.buildJSONAndExceptionResponse(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(),localMessage);
+		}
+		else if (eX instanceof InternalServerErrorException) {
+			resp = RestProcessUtils.buildJSONAndExceptionResponse(Status.INTERNAL_SERVER_ERROR.getStatusCode(), localMessage);
+		}
+		else if (eX instanceof BadRequestException) {
+			resp = RestProcessUtils.buildJSONAndExceptionResponse(Status.BAD_REQUEST.getStatusCode(), localMessage);
+		}
+		else {
+			resp = RestProcessUtils.buildJSONAndExceptionResponse(Status.INTERNAL_SERVER_ERROR.getStatusCode(), localMessage);
+		}
+		
+		return resp;
+		
+	}
 }

@@ -231,8 +231,9 @@
 																			<h:inputText value="#{constraint}" valueChangeListener="#{wrapper.constraintListener}" styleClass="#{wrapper.statement.type == 'http://imeji.org/terms/metadata#date' ? 'datepicker' : ''}">
 																				<f:attribute name="position" value="#{constraintPosition.index}"/>
 																			</h:inputText>
+																		
 																			<span class="imj_inlineButtonGroup">
-																				<h:commandButton styleClass="imj_buttonAdd_16" type="submit" title="#{lbl.add_constraint}" action="#{metadataBean.addConstraint}">
+																				<h:commandButton rendered="#{constraintPosition.index == wrapper.statement.literalConstraints.size()-1}" styleClass="imj_buttonAdd_16" type="submit" title="#{lbl.add_constraint}" action="#{metadataBean.addConstraint}">
 																					<f:setPropertyActionListener value="#{constraintPosition.index}" target="#{metadataBean.constraintPosition}"/>
 																					<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
 																					<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
@@ -245,6 +246,7 @@
 																			</span>
 																		</div>
 																	</ui:repeat>
+																		<h:outputText value="#{lbl.sorted_alphabetically}"/>
 																</ui:fragment>
 															</div>
 														</h:panelGroup><!-- END - add constraints -->

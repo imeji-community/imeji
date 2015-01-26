@@ -11,6 +11,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.j2j.annotations.j2jDataType;
@@ -24,11 +25,11 @@ import de.mpg.j2j.annotations.j2jResource;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-@j2jResource("http://imeji.org/terms/metadata/")
+@j2jResource(ImejiNamespaces.METADATA)
 @j2jDataType("http://imeji.org/terms/metadata#conePerson")
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlRootElement(name = "conePerson", namespace = "http://imeji.org/terms/metadata/")
+@XmlRootElement(name = "conePerson", namespace = ImejiNamespaces.METADATA)
 @XmlType(propOrder = { "coneId", "person", "statement" })
 public class ConePerson extends Metadata
 {

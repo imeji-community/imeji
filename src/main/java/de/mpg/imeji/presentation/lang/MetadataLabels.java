@@ -35,11 +35,11 @@ public class MetadataLabels
     /**
      * Initialize the labels for a {@link List} of {@link Item}
      * 
-     * @param items
+     * @param items  
      * @throws Exception
      */
     public void init(List<Item> items)
-    {
+    {  
         labels = new HashMap<URI, String>();
         Map<URI, MetadataProfile> profiles = ProfileHelper.loadProfiles(items);
         init1(new ArrayList<MetadataProfile>(profiles.values()));

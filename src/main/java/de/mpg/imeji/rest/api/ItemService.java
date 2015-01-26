@@ -1,6 +1,7 @@
 package de.mpg.imeji.rest.api;
 
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
+import de.mpg.imeji.logic.auth.exception.UnprocessableError;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -20,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
+import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE.CREATE;
+import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE.UPDATE;
 
 public class ItemService implements API<ItemTO> {
 
@@ -33,7 +36,8 @@ public class ItemService implements API<ItemTO> {
 
 			// transfer TO into item
 			Item item = new Item();
-			ReverseTransferObjectFactory.transferItem(to, item);
+			
+			ReverseTransferObjectFactory.transferItem(to, item, CREATE);
 
 			// read collection
 			CollectionController cc = new CollectionController();
@@ -41,12 +45,12 @@ public class ItemService implements API<ItemTO> {
 			// Create Item with File
 			if (((ItemWithFileTO) to).getFile() != null) {
 				// If TO has attribute File, then upload it
-				controller.createWithFile(item,
+				item = controller.createWithFile(item,
 						((ItemWithFileTO) to).getFile(), filename, collection,
 						u);
 			} else if (getExternalFileUrl((ItemWithFileTO) to) != null) {
 				// If no file, but either a fetchUrl or a referenceUrl
-				controller.createWithExternalFile(item, collection,
+				item = controller.createWithExternalFile(item, collection,
 						getExternalFileUrl((ItemWithFileTO) to), filename,
 						downloadFile((ItemWithFileTO) to), u);
 			}
@@ -73,21 +77,30 @@ public class ItemService implements API<ItemTO> {
 	public ItemTO update(ItemTO to, User u) throws Exception {
 		Item item = controller.retrieve(
 				ObjectHelper.getURI(Item.class, to.getId()), u);
-		ReverseTransferObjectFactory.transferItem(to, item);
+		ReverseTransferObjectFactory.transferItem(to, item, UPDATE);
 		if (to instanceof ItemWithFileTO) {
 			ItemWithFileTO tof = (ItemWithFileTO) to;
 			String url = getExternalFileUrl(tof);
-			if (url != null)
+//			if (url != null)
+//				item = controller.updateWithExternalFile(item,
+//						getExternalFileUrl(tof), to.getFilename(),
+//						downloadFile(tof), u);
+//			else
+//				item = controller.updateFile(item, tof.getFile(), u);
+//			tof.setFile(null);
+			if(tof.getFile() != null){
+				item = controller.updateFile(item, tof.getFile(), u);
+			}
+			else if (url != null) {
 				item = controller.updateWithExternalFile(item,
 						getExternalFileUrl(tof), to.getFilename(),
 						downloadFile(tof), u);
-			else
-				item = controller.updateFile(item, tof.getFile(), u);
-			tof.setFile(null);
+			}
 		} else {
 			item = controller.update(item, u);
 		}
-		TransferObjectFactory.transferItem(item, to);
+		to = new ItemTO();
+		TransferObjectFactory.transferItem(item,to);
 		return to;
 	}
 
@@ -111,16 +124,18 @@ public class ItemService implements API<ItemTO> {
 	}
 
 	@Override
-	public void release(String id, User u) throws NotFoundException,
+	public ItemTO release(String id, User u) throws NotFoundException,
 			NotAllowedError, NotSupportedException, Exception {
 		// TODO Auto-generated method stub
+		return null;
 
 	}
 
 	@Override
-	public void withdraw(ItemTO o, User u) throws NotFoundException,
+	public ItemTO withdraw(String id, User u, String discardComment) throws NotFoundException,
 			NotAllowedError, NotSupportedException, Exception {
 		// TODO Auto-generated method stub
+		return null;
 
 	}
 

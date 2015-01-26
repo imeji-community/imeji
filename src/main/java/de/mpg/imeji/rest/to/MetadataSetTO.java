@@ -1,17 +1,17 @@
 package de.mpg.imeji.rest.to;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import java.io.Serializable;
-import java.net.URI;
-import java.util.List;
-
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import java.io.Serializable;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.*;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @XmlRootElement
 @XmlType (propOrder = {	 
@@ -27,9 +27,10 @@ public class MetadataSetTO implements Serializable{
 
 	private static final long serialVersionUID = 5826924314949469841L;
 
+	@JsonIgnore
 	private int position;
 	
-	private List<LabelTO> Labels;
+	private List<LabelTO> Labels = new ArrayList<LabelTO>();
 	
 	private MetadataTO value;
 	

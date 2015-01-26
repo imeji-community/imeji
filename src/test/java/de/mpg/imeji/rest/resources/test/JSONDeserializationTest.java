@@ -9,9 +9,10 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-import static de.mpg.imeji.rest.resources.test.TestUtils.*;
+import static de.mpg.imeji.rest.resources.test.TestUtils.getStringFromPath;
+import static de.mpg.imeji.rest.resources.test.TestUtils.jsonToPOJO;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
 
 /**
  * Created by vlad on 11.12.14.
@@ -22,7 +23,8 @@ public class JSONDeserializationTest {
 
     @Test
     public void testBuildItemTOFromJSON() throws IOException {
-        String jsonStringIn = getStringFromPath("src/test/resources/rest/itemFull.json");
+        //String jsonStringIn = getStringFromPath("src/test/resources/rest/itemFull.json");
+        String jsonStringIn = getStringFromPath("src/test/resources/rest/itemFull2.json");
         ItemTO item = (ItemTO)RestProcessUtils.buildTOFromJSON(jsonStringIn, ItemTO.class);
         ObjectMapper mapper = new ObjectMapper();
         //mapper.enable(SerializationFeature.INDENT_OUTPUT);

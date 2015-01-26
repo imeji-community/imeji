@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
@@ -59,8 +60,8 @@ public class ViewCollectionBean extends CollectionBean
                 countItems();
             }
             if (getCollection() != null)
-            {
-                setProfile(ObjectLoader.loadProfile(getCollection().getProfile(), user));
+            { 
+            	setProfile(ObjectLoader.loadProfile(getCollection().getProfile(), user));
                 setProfileId(ObjectHelper.getId(getProfile().getId()));
                 // super.setTab(TabType.COLLECTION);
                 persons = new ArrayList<Person>();

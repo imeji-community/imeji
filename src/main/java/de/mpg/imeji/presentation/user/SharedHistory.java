@@ -64,6 +64,11 @@ public class SharedHistory implements Serializable
         this.title = title;
         this.sharedType = ShareBean.parseShareTypes((List<Grant>)group.getGrants(), containerUri, profileUri, type);
     }
+    
+    public void revokeGrants() {
+		this.getSharedType().clear();
+		this.update();
+	}
 
     public User getUser()
     {

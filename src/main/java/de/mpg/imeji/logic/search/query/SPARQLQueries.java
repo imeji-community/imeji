@@ -35,6 +35,7 @@ import org.opensaml.ws.wssecurity.Username;
 import com.hp.hpl.jena.sparql.pfunction.library.container;
 
 import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -66,7 +67,9 @@ public class SPARQLQueries {
 	public static String selectMetadataRestricted() {
 		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 WHERE {  ?it a <http://imeji.org/terms/item>"
 				+ " . ?it <http://imeji.org/terms/collection> ?sort0"
-				+ ". ?it <http://imeji.org/terms/metadataSet> ?mds . ?mds <http://imeji.org/terms/metadata> ?s . ?s <http://imeji.org/terms/statement> ?st"
+				+ ". ?it <http://imeji.org/terms/metadataSet> ?mds . ?mds <"
+				+ ImejiNamespaces.METADATA
+				+ "> ?s . ?s <http://imeji.org/terms/statement> ?st"
 				+ " . ?st <http://imeji.org/terms/restricted> ?r  .FILTER(?r='true'^^<http://www.w3.org/2001/XMLSchema#boolean>) }";
 	}
 
@@ -114,6 +117,17 @@ public class SPARQLQueries {
 	}
 
 	/**
+	 * Select a User by its Email
+	 * 
+	 * @param email
+	 * @return
+	 */
+	public static String selectUserByEmail(String email) {
+		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE { ?s <http://xmlns.com/foaf/0.1/email> ?email . filter(?email='"
+				+ email + "')}";
+	}
+
+	/**
 	 * Find all the user which have SysAdmin rights for imeji
 	 * 
 	 * @return
@@ -133,18 +147,6 @@ public class SPARQLQueries {
 	 * @return
 	 */
 	public static String selectUserWithGrantFor(String uri) {
-		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {OPTIONAL{ ?s <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> <"
-				+ uri
-				+ ">} . filter(bound(?g)) . ?s a <http://imeji.org/terms/user> . ?s <http://xmlns.com/foaf/0.1/name> ?name } ORDER BY DESC(?name)";
-	}
-
-	/**
-	 * Select {@link User} having a {@link Grant} for an object defined by its
-	 * uri
-	 * 
-	 * @return
-	 */
-	public static String selectUserBy(String uri) {
 		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {OPTIONAL{ ?s <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> <"
 				+ uri
 				+ ">} . filter(bound(?g)) . ?s a <http://imeji.org/terms/user> . ?s <http://xmlns.com/foaf/0.1/name> ?name } ORDER BY DESC(?name)";
@@ -242,7 +244,9 @@ public class SPARQLQueries {
 	 * @return
 	 */
 	public static String selectMetadataUnbounded() {
-		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 WHERE {?mds <http://imeji.org/terms/metadata> ?s"
+		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 WHERE {?mds <"
+				+ ImejiNamespaces.METADATA
+				+ "> ?s"
 				+ " . ?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?sort0 . ?s <http://imeji.org/terms/statement> ?st"
 				+ " . not exists{?p a <http://imeji.org/terms/mdprofile> . ?p <http://imeji.org/terms/statement> ?st}}";
 	}
@@ -364,13 +368,13 @@ public class SPARQLQueries {
 	 */
 	public static String updateRemoveAllMetadataWithoutStatement(
 			String profileURI) {
-		return "WITH <http://imeji.org/item> "
-				+ "DELETE {?mds <http://imeji.org/terms/metadata> ?s . ?s ?p ?o } "
+		return "WITH <http://imeji.org/item> " + "DELETE {?mds <"
+				+ ImejiNamespaces.METADATA + "> ?s . ?s ?p ?o } "
 				+ "USING <http://imeji.org/item> "
 				+ "USING <http://imeji.org/metadataProfile> "
 				+ "WHERE {?mds <http://imeji.org/terms/mdprofile> <"
-				+ profileURI
-				+ "> . ?mds <http://imeji.org/terms/metadata> ?s . ?s <http://imeji.org/terms/statement> ?st"
+				+ profileURI + "> . ?mds <" + ImejiNamespaces.METADATA
+				+ "> ?s . ?s <http://imeji.org/terms/statement> ?st"
 				+ " . NOT EXISTS{<" + profileURI
 				+ "> <http://imeji.org/terms/statement> ?st}" + " . ?s ?p ?o }";
 	}
@@ -382,10 +386,10 @@ public class SPARQLQueries {
 	 * @return
 	 */
 	public static String updateEmptyMetadata() {
-		return "WITH <http://imeji.org/item> "
-				+ "DELETE {?mds <http://imeji.org/terms/metadata> ?s} "
-				+ "USING <http://imeji.org/item> "
-				+ "WHERE {?mds <http://imeji.org/terms/metadata> ?s . NOT EXISTS{?s ?p ?o}}";
+		return "WITH <http://imeji.org/item> " + "DELETE {?mds <"
+				+ ImejiNamespaces.METADATA + "> ?s} "
+				+ "USING <http://imeji.org/item> " + "WHERE {?mds <"
+				+ ImejiNamespaces.METADATA + "> ?s . NOT EXISTS{?s ?p ?o}}";
 	}
 
 	/**

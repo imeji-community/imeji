@@ -12,8 +12,10 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
+import de.mpg.imeji.logic.auth.exception.AuthenticationError;
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.auth.exception.UnprocessableError;
+import de.mpg.imeji.logic.controller.exceptions.NotFoundError;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
@@ -29,6 +31,7 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.j2j.exceptions.NotFoundException;
 import de.mpg.j2j.helper.J2JHelper;
 
 /**
@@ -91,8 +94,8 @@ public class CollectionController extends ImejiController {
 	 * @throws Exception
 	 */
 	public CollectionImeji retrieve(URI uri, User user) throws Exception {
-		return (CollectionImeji) reader.read(uri.toString(), user,
-				new CollectionImeji());
+				return (CollectionImeji) reader.read(uri.toString(), user,
+						new CollectionImeji());
 	}
 
 	/**
@@ -104,8 +107,8 @@ public class CollectionController extends ImejiController {
 	 * @throws Exception
 	 */
 	public CollectionImeji retrieveLazy(URI uri, User user) throws Exception {
-		return (CollectionImeji) reader.readLazy(uri.toString(), user,
-				new CollectionImeji());
+				return (CollectionImeji) reader.readLazy(uri.toString(), user,
+						new CollectionImeji());
 	}
 
 	/**
@@ -199,20 +202,29 @@ public class CollectionController extends ImejiController {
 	 */
 	public void release(CollectionImeji collection, User user) throws Exception {
 		ItemController itemController = new ItemController();
+		
+		if (user == null ) {
+			throw new AuthenticationError("User must be signed-in");
+		}
+		
+		if (collection == null ) {
+			throw new NotFoundError("collection object does not exists");
+		}
+		
 		List<String> itemUris = itemController.search(collection.getId(), null,
 				null, null, user).getResults();
 	
 		if (hasImageLocked(itemUris, user)) {
-			throw new RuntimeException(
+			throw new UnprocessableError(
 					((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
 							.getMessage("collection_locked"));
 		} else if (itemUris.isEmpty()) {
-			throw new RuntimeException(
+			throw new UnprocessableError(
 					"An empty collection can not be released!");
 		} else if(collection.getStatus().equals(Status.RELEASED)){
 			throw new UnprocessableError("The status of collection is " + collection.getStatus() + " and can not be released again!");
 		}
-			else {
+		else {
 			writeReleaseProperty(collection, user);
 			List<Item> items = (List<Item>) itemController.retrieve(itemUris,
 					-1, 0, user);
@@ -232,14 +244,24 @@ public class CollectionController extends ImejiController {
 	public void withdraw(CollectionImeji collection, User user)
 			throws Exception {
 		ItemController itemController = new ItemController();
+		
+		if (user == null ) {
+			throw new AuthenticationError("User must be signed-in");
+		}
+		
+		if (collection == null) {
+			throw new NotFoundError("Collection does not exists");
+		}
+		
 		List<String> itemUris = itemController.search(collection.getId(), null,
 				null, null, user).getResults();
 		if (hasImageLocked(itemUris, user)) {
-			throw new RuntimeException(
+			throw new UnprocessableError (
 					((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
 							.getMessage("collection_locked"));
 		} else if (!Status.RELEASED.equals(collection.getStatus())) {
-			throw new RuntimeException(
+
+			throw new UnprocessableError (
 					"Withdraw collection: Collection must be released");
 		} else {
 			List<Item> items = (List<Item>) itemController.retrieve(itemUris,

@@ -39,11 +39,12 @@ All rights reserved. Use is subject to license terms.
 	<meta http-equiv="cache-control" content="no-cache"/>
 	<meta http-equiv="expires" content="0"/>
 	<title><h:outputText value="#{PropertyBean.appName} - #{HistorySession.currentPage.internationalizedName}"/></title>
+	
+	<ui:fragment rendered="#{PropertyBean.appMetaDescription != ''}">
+		<meta name="description" content="#{PropertyBean.appMetaDescription}"/>
+	</ui:fragment>
 		
 	<h:inputHidden value="#{SessionBean.checkCss(Configuration.defaultCss, Configuration.alternativeCss)}" />
-	
-	
-	<h:outputStylesheet library="css" name="basic.css" id="basicscss" rendered="#{SessionBean.selectedCss == 'NONE'}"/>
 	
 	<ui:fragment rendered="#{SessionBean.selectedCss != 'NONE'}">
 		<ui:fragment rendered="#{SessionBean.selectedCss == 'DEFAULT'}">

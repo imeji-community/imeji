@@ -89,10 +89,9 @@ public class SingleEditBean
     public String save() throws Exception
     {
         editor.save();
-        Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-        FacesContext.getCurrentInstance().getExternalContext().redirect
-        (nav.getItemUrl()+ item.getIdString());
-
+//        Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
+//        FacesContext.getCurrentInstance().getExternalContext().redirect
+//        (nav.getItemUrl()+ item.getIdString());
         return "";
     }
 

@@ -13,9 +13,11 @@ import java.util.Map;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.reader.ReaderFacade;
+import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchFactory;
+import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -24,6 +26,7 @@ import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.logic.writer.WriterFacade;
+import de.mpg.j2j.exceptions.AlreadyExistsException;
 import de.mpg.j2j.exceptions.NotFoundException;
 
 /**
@@ -45,7 +48,7 @@ public class UserController {
 	 * 
 	 */
 	public enum USER_TYPE {
-		DEFAULT, ADMIN, RESTRICTED;
+		DEFAULT, ADMIN, RESTRICTED, COPY;
 	}
 
 	/**
@@ -67,6 +70,13 @@ public class UserController {
 	 * @throws Exception
 	 */
 	public User create(User u, USER_TYPE type) throws Exception {
+		try {
+			retrieve(u.getEmail());
+			throw new AlreadyExistsException("Email" + u.getEmail()
+					+ "already used by another user");
+		} catch (NotFoundException e) {
+			// fine, user can be created
+		}
 		switch (type) {
 		case ADMIN:
 			u.setGrants(AuthorizationPredefinedRoles.imejiAdministrator(u
@@ -76,9 +86,11 @@ public class UserController {
 			u.setGrants(AuthorizationPredefinedRoles.restrictedUser(u.getId()
 					.toString()));
 			break;
-		default:
+		case DEFAULT:
 			u.setGrants(AuthorizationPredefinedRoles.defaultUser(u.getId()
 					.toString()));
+		case COPY:
+			// Don't change the grants of the user
 			break;
 		}
 		u.setName(u.getPerson().getGivenName() + " "
@@ -108,11 +120,17 @@ public class UserController {
 	 * @throws Exception
 	 */
 	public User retrieve(String email) throws Exception {
-		User u = (User) reader.read(ObjectHelper.getURI(User.class, email)
-				.toString(), user, new User());
-		UserGroupController ugc = new UserGroupController();
-		u.setGroups((List<UserGroup>) ugc.searchByUser(u, user));
-		return u;
+		Search search = SearchFactory.create();
+		SearchResult result = search.searchSimpleForQuery(SPARQLQueries
+				.selectUserByEmail(email));
+		if (result.getNumberOfRecords() == 1) {
+			String id = result.getResults().get(0);
+			User u = (User) reader.read(id, user, new User());
+			UserGroupController ugc = new UserGroupController();
+			u.setGroups((List<UserGroup>) ugc.searchByUser(u, user));
+			return u;
+		}
+		throw new NotFoundException("User with email " + email + " not found");
 	}
 
 	/**
@@ -139,6 +157,15 @@ public class UserController {
 	 * @throws Exception
 	 */
 	public void update(User updatedUser, User currentUser) throws Exception {
+		try {
+			User u = retrieve(updatedUser.getEmail());
+			if (!u.getId().toString().equals(updatedUser.getId().toString()))
+				throw new AlreadyExistsException("Email"
+						+ updatedUser.getEmail()
+						+ "already used by another user");
+		} catch (NotFoundException e) {
+			// fine, user can be updated
+		}
 		updatedUser.setName(updatedUser.getPerson().getGivenName() + " "
 				+ updatedUser.getPerson().getFamilyName());
 		writer.update(WriterFacade.toList(updatedUser), currentUser);
@@ -178,14 +205,15 @@ public class UserController {
 	 */
 	public Collection<Person> searchPersonByName(String name) {
 
-		return  searchPersonByNameInUsers(name);
-		// don't search (for now) for all persons, since it would get messy (many duplicates)
-		//l.addAll(searchPersonByNameInCollections(name));
-//		Map<String, Person> map = new HashMap<>();
-//		for (Person p : l) {
-//			map.put(p.getIdentifier(), p);
-//		}
-//		return map.values();
+		return searchPersonByNameInUsers(name);
+		// don't search (for now) for all persons, since it would get messy
+		// (many duplicates)
+		// l.addAll(searchPersonByNameInCollections(name));
+		// Map<String, Person> map = new HashMap<>();
+		// for (Person p : l) {
+		// map.put(p.getIdentifier(), p);
+		// }
+		// return map.values();
 	}
 
 	/**

@@ -59,6 +59,7 @@ public class PropertyBean
      */
     private String internalStorageBase = "files";
     private String appName;
+    private String appMetaDescription;
     /**
      * The base of the uri of imeji objects
      */
@@ -81,9 +82,25 @@ public class PropertyBean
             css_default = PropertyReader.getProperty("imeji.layout.css_default");
             css_alternate = PropertyReader.getProperty("imeji.layout.css_alternate");
             readBaseUri();
-            this.appName = PropertyReader.getProperty("imeji.instance.name");
+            this.appName = this.getProperty("imeji.instance.name");
+            this.appMetaDescription = this.getProperty("imeji.instance.meta.description");
         }
         catch (Exception e)
+        {
+            throw new RuntimeException("Error reading properties: ", e);
+        }
+    }
+    
+    /**
+     * Function reads each property from imeji.properties file
+     * @param key - property name
+     * @return String - trimmed value of key
+     */
+    public String getProperty(String key) {
+    	try {
+    		return PropertyReader.getProperty(key).trim();
+    	}
+    	catch (Exception e)
         {
             throw new RuntimeException("Error reading properties: ", e);
         }
@@ -97,6 +114,16 @@ public class PropertyBean
     public void setAppName(String appName)
     {
         this.appName = appName;
+    }
+    
+    public String getAppMetaDescription()
+    {
+        return appMetaDescription;
+    }
+
+    public void setAppMetaDescription(String description)
+    {
+        this.appMetaDescription = description;
     }
 
     /**

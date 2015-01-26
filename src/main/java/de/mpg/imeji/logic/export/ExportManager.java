@@ -77,7 +77,7 @@ public class ExportManager {
 	 */
 	public SearchResult search() throws IOException {
 		String collectionId = export.getParam("col");
-		String albumId = export.getParam("alb");
+		String albumId = export.getParam("album");
 		String query = export.getParam("q");
 		export.getParam("id");
 		String searchType = export.getParam("type");

@@ -93,6 +93,11 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean> {
 		this.statement = statement;
 		this.customField = CommonUtils.toStringCustomField(metadata);
 	}
+	
+	public SuperMetadataBean(Statement statement){
+		this.preview = statement.isPreview();
+		this.statement = statement;
+	}
 
 	/**
 	 * Get {@link SuperMetadataBean} as {@link Metadata}
@@ -235,7 +240,7 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean> {
 	 * @return
 	 */
 	public String getTypeNamespace() {
-		return metadata.getTypeNamespace();
+		return statement.getType().toString();
 	}
 
 	/**

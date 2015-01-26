@@ -66,6 +66,10 @@ public class ReaderFacade implements Reader
     public Object read(String uri, User user, Object o) throws Exception
     { 
         o = reader.read(uri, user, o);
+        if (o == null ) {
+        	throw new NotFoundError("Object is not found or authentication is required.");
+        }
+        
         checkSecurity(toList(o), user);
         return o;
     }
@@ -80,7 +84,7 @@ public class ReaderFacade implements Reader
         o = reader.readLazy(uri, user, o);
         
         if (o == null ) {
-        	throw new NotFoundError("Authentication is required.");
+        	throw new NotFoundError("Object is not found or authentication is required.");
         }
         
         checkSecurity(toList(o), user);

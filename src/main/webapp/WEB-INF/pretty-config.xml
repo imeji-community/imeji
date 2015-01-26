@@ -38,6 +38,12 @@
 		<pattern value="/collection/#{UploadBean.id}/upload" />
 		<view-id>/jsf/Upload.xhtml</view-id>
 	</url-mapping>
+	
+	<url-mapping id="singleupload">
+		<pattern value="/singleupload" />
+		<view-id>/jsf/SingleUpload.xhtml</view-id>
+	</url-mapping>
+	
 	<url-mapping id="ingest">
 		<pattern value="/collection/#{IngestBean.collectionId}/ingest" />
 		<view-id>/jsf/Ingest.xhtml</view-id>

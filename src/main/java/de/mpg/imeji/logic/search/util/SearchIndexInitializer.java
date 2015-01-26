@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.hp.hpl.jena.vocabulary.RDF;
 
+import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.vo.Metadata;
 
@@ -118,7 +119,7 @@ public class SearchIndexInitializer
         /**
          * Image Metadata indexes
          */
-        indexes = put(indexes, new SearchIndex(SearchIndex.names.md.name(), "http://imeji.org/terms/metadata/"));
+        indexes = put(indexes, new SearchIndex(SearchIndex.names.md.name(), ImejiNamespaces.METADATA));
         indexes = put(indexes, new SearchIndex(SearchIndex.names.statement.name(), "http://imeji.org/terms/statement"));
         indexes = put(
                 indexes,

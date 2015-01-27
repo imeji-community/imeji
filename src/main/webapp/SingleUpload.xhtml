@@ -39,8 +39,7 @@
 						<br />
 		
 						<div id="container">
-						    <a id="pickfiles" href="javascript:;">[Select files]</a>
-						    <a id="uploadfiles" href="javascript:;">[Upload files]</a>
+						    <a id="pickfiles" href="javascript:;">[Select file]</a>
 						</div>
 						<br />
 	
@@ -59,12 +58,10 @@
 							init: {
 								PostInit: function() {
 									document.getElementById('filelist').innerHTML = '';					
-									document.getElementById('uploadfiles').onclick = function() {
-										uploader.start();
-									};
 								},
 								
 								FilesAdded: function(up, files) {
+									
 									plupload.each(files, function(file) {
 										if(up.files.length > 1)
 										{
@@ -73,6 +70,8 @@
 										
 										document.getElementById('filelist').innerHTML = '<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
 									});
+									uploader.start();
+									
 								},
 								
 								UploadProgress: function(up, file) {

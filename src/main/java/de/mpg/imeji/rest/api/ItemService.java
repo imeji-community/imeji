@@ -1,5 +1,6 @@
 package de.mpg.imeji.rest.api;
 
+import de.mpg.imeji.logic.auth.exception.AuthenticationError;
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.auth.exception.UnprocessableError;
 import de.mpg.imeji.logic.controller.CollectionController;
@@ -8,6 +9,7 @@ import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.rest.process.CommonUtils;
 import de.mpg.imeji.rest.process.ReverseTransferObjectFactory;
 import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.to.ItemTO;
@@ -37,30 +39,20 @@ public class ItemService implements API<ItemTO> {
 			// transfer TO into item
 			Item item = new Item();
 			
+			
 			ReverseTransferObjectFactory.transferItem(to, item, CREATE);
-
-			// read collection
-			CollectionController cc = new CollectionController();
-			CollectionImeji collection = cc.retrieve(item.getCollection(), u);
-			// Create Item with File
-			if (((ItemWithFileTO) to).getFile() != null) {
-				// If TO has attribute File, then upload it
-				item = controller.createWithFile(item,
-						((ItemWithFileTO) to).getFile(), filename, collection,
-						u);
-			} else if (getExternalFileUrl((ItemWithFileTO) to) != null) {
-				// If no file, but either a fetchUrl or a referenceUrl
-				item = controller.createWithExternalFile(item, collection,
-						getExternalFileUrl((ItemWithFileTO) to), filename,
-						downloadFile((ItemWithFileTO) to), u);
-			}
-
+			
+			item = controller.create(item, ((ItemWithFileTO) to).getFile(), filename, u, ((ItemWithFileTO) to).getFetchUrl(), ((ItemWithFileTO) to).getReferenceUrl());
 			// transfer item into ItemTO
 			ItemTO itemTO = new ItemTO();
 			TransferObjectFactory.transferItem(item, itemTO);
 			return itemTO;
 		}
-		return null;
+		else
+		{
+			throw new UnprocessableError("A file must be uploaded, referenced or fetched from external location.");
+		}
+
 	}
 
 	@Override
@@ -105,22 +97,9 @@ public class ItemService implements API<ItemTO> {
 	}
 
 	@Override
-	public boolean delete(String id, User u) throws NotFoundException,
-			NotAllowedError {
-		List<Item> items = new ArrayList<Item>();
-		Item item = new Item();
-		try {
-			item = controller.retrieve(ObjectHelper.getURI(Item.class, id), u);
-		} catch (Exception e1) {
-			throw new NotFoundException(e1.getMessage());
-		}
-		items.add(item);
-		try {
-			controller.delete(items, u);
+	public boolean delete(String id, User u) throws Exception {
+			controller.delete(id, u);
 			return true;
-		} catch (Exception e) {
-			throw new NotAllowedError(e.getMessage());
-		}
 	}
 
 	@Override
@@ -170,7 +149,7 @@ public class ItemService implements API<ItemTO> {
 	 **/
 	private String getFilename(ItemWithFileTO to) {
 		return ObjectUtils.firstNonNull(to.getFilename(),
-				FilenameUtils.getName(to.getFile().getName()),
+				(to.getFile()!=null)?FilenameUtils.getName(to.getFile().getName()):"",
 				FilenameUtils.getName(to.getFetchUrl()),
 				FilenameUtils.getName(to.getReferenceUrl()));
 	}

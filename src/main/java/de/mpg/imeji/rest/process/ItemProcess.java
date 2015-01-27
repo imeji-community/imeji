@@ -36,18 +36,13 @@ public class ItemProcess {
 		User u = BasicAuthentication.auth(req);
 		JSONResponse resp; 
 
-		if (u == null) {
-			Exception e = new AuthenticationError(CommonUtils.USER_MUST_BE_LOGGED_IN);
-			resp = RestProcessUtils.localExceptionHandler(e, CommonUtils.USER_MUST_BE_LOGGED_IN);
-		} else {
-			ItemService icrud = new ItemService();
+		ItemService icrud = new ItemService();
 			try {
 				icrud.delete(id, u);
 				resp= RestProcessUtils.buildResponse(Status.NO_CONTENT.getStatusCode(), null);
 			} catch (Exception e) {
 				resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
 			}
-		}
 		return resp;
 	}
 	
@@ -73,65 +68,32 @@ public class ItemProcess {
 
 		// Load User (if provided)
 		User u = BasicAuthentication.auth(req);
-		
-		if (u == null) {
-			Exception e = new AuthenticationError(CommonUtils.USER_MUST_BE_LOGGED_IN);
-			resp = RestProcessUtils.localExceptionHandler(e, CommonUtils.USER_MUST_BE_LOGGED_IN);
-			return resp;
-		} 
-		
+
 		// Parse json into to
 		ItemWithFileTO to = null;
 		try {
 			to = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(json,
 					ItemWithFileTO.class);
+			File tmp = File.createTempFile("imejiAPI", null);
+			IOUtils.copy(file, new FileOutputStream(tmp));
+			
+			to.setFile(tmp);
+			to.setFilename((!isNullOrEmpty(to.getFilename()))?to.getFilename():(to.getFilename()==null?origName:to.getFilename()));
+
 		} catch (Exception e) {
 			e = new BadRequestException();
 			resp= RestProcessUtils.localExceptionHandler(e, CommonUtils.JSON_Invalid);
-			return resp;
 		}
-		// set file in to (if provided)
-
-		if ("".equals(to.getFilename())) {
-			Exception e = new BadRequestException();
-			resp = RestProcessUtils.localExceptionHandler(e, CommonUtils.FILENAME_RENAME_EMPTY);
-			return resp;
-		} else if (to.getFilename() != null
-				&& !"".equals(FilenameUtils.getExtension(to.getFilename()))
-				&& !FilenameUtils.getExtension(to.getFilename()).equals(
-						FilenameUtils.getExtension(origName))) {
-			Exception e = new BadRequestException();
-			resp = RestProcessUtils.localExceptionHandler(e, CommonUtils.FILENAME_RENAME_INVALID_SUFFIX);
-			return resp;
-		} else {
-			if (file != null) {
-				try {
-					File tmp = File.createTempFile("imejiAPI", null);
-					IOUtils.copy(file, new FileOutputStream(tmp));
-					to.setFile(tmp);
-					if (to.getFilename() == null)
-						to.setFilename(origName);
-					else
-						to.setFilename(to.getFilename() + "."
-								+ FilenameUtils.getExtension(origName));
-
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-
-			// create item with the file
+		// create item with the file
 			ItemService service = new ItemService();
 
 			try {
-				resp= RestProcessUtils.buildResponse(Status.CREATED.getStatusCode(), service.create(to, u) );
+				resp= RestProcessUtils.buildResponse(Status.CREATED.getStatusCode(), service.create(to, u));
 			} catch (Exception e) {
 				resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
 
 			}
 			
-		}
-
 		return resp;
 	}
 

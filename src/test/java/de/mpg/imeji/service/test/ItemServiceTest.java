@@ -137,7 +137,6 @@ public class ItemServiceTest {
 
 		// delete item
 		Assert.assertTrue(crud.delete(readItem.getId(), JenaUtil.testUser));
-
 		// try to read the delete item
 		try {
 			readItem = crud.read(createdItem.getId(), JenaUtil.testUser);

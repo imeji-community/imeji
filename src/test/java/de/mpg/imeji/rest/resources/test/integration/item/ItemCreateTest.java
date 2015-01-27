@@ -16,6 +16,8 @@ import org.slf4j.LoggerFactory;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -56,14 +58,14 @@ public class ItemCreateTest extends ImejiTestBase {
                         .replace("___COLLECTION_ID___", collectionId)
                         .replace("___FILENAME___", "")
         );
-
+        
         Response response = target(pathPrefix).register(authAsUser)
                 .register(MultiPartFeature.class)
                 .register(JacksonFeature.class)
                 .request(MediaType.APPLICATION_JSON_TYPE)
                 .post(Entity.entity(multiPart, multiPart.getMediaType()));
 
-        assertEquals(BAD_REQUEST.getStatusCode(), response.getStatus());
+        assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
     }
 
     @Test
@@ -110,7 +112,27 @@ public class ItemCreateTest extends ImejiTestBase {
         assertEquals(CREATED.getStatusCode(), response.getStatus());
     }
     
-    /*@Test
+    @Test
+    public void createItemWithoutFile() throws IOException {
+
+        FileDataBodyPart filePart = new FileDataBodyPart("file", new File(
+                "src/test/resources/storage/test.png"));
+        FormDataMultiPart multiPart = new FormDataMultiPart();
+        //multiPart.bodyPart(filePart);
+        multiPart.field("json", itemJSON
+                .replace("___COLLECTION_ID___", collectionId)
+                .replace("___FILENAME___", "test.png"));
+
+        Response response = target(pathPrefix).register(authAsUser)
+                .register(MultiPartFeature.class)
+                .register(JacksonFeature.class)
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .post(Entity.entity(multiPart, multiPart.getMediaType()));
+
+        assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+    }
+
+    @Test
     public void createItemInNotExistingCollection() throws IOException {
 
         FileDataBodyPart filePart = new FileDataBodyPart("file", new File(
@@ -129,5 +151,24 @@ public class ItemCreateTest extends ImejiTestBase {
 
         assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
     }
-*/
+    
+    @Test
+    public void createItem_NotLoggedIn() throws IOException {
+
+        FileDataBodyPart filePart = new FileDataBodyPart("file", new File(
+                "src/test/resources/storage/test.png"));
+        FormDataMultiPart multiPart = new FormDataMultiPart();
+        multiPart.bodyPart(filePart);
+        multiPart.field("json", itemJSON
+                .replace("___COLLECTION_ID___", collectionId)
+                .replace("___FILENAME___", "test.png"));
+
+        Response response = target(pathPrefix)
+                .register(MultiPartFeature.class)
+                .register(JacksonFeature.class)
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .post(Entity.entity(multiPart, multiPart.getMediaType()));
+
+        assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
+    }
 }

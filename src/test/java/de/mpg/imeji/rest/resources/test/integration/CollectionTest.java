@@ -331,7 +331,6 @@ public class CollectionTest extends ImejiTestBase {
 
 
 	@Test
-
 	public void test_4_WithdrawCollection_4_NotReleasedCollection() throws Exception {
 
 		initItem();

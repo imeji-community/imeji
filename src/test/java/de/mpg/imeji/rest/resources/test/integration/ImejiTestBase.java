@@ -1,5 +1,6 @@
 package de.mpg.imeji.rest.resources.test.integration;
 
+import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.rest.MyApplication;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
@@ -98,6 +99,7 @@ public class ImejiTestBase extends JerseyTest {
 		ItemWithFileTO to = new ItemWithFileTO();
 		to.setCollectionId(collectionId);
 		to.setFile(new File("src/test/resources/storage/test.png"));
+		to.setStatus("PENDING");
 		try {
 			itemTO = s.create(to, JenaUtil.testUser);
 			itemId = itemTO.getId();

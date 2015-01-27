@@ -39,6 +39,7 @@ public class ItemDeleteTest extends ImejiTestBase {
 	@Test
 	public void test_1_deleteItem_WithNonAuth() throws Exception {
 
+		initCollection();
 		initItem();
 		ItemService s = new ItemService();
 		assertEquals("PENDING", s.read(itemId, JenaUtil.testUser).getStatus());
@@ -55,9 +56,10 @@ public class ItemDeleteTest extends ImejiTestBase {
 
 	@Test
 	public void test_2_deleteItem_NotAllowed() throws Exception {
-
+		initCollection();
 		initItem();
 		ItemService s = new ItemService();
+		System.out.println("ITEM STATUS = "+s.read(itemId, JenaUtil.testUser).getStatus());
 		assertEquals("PENDING", s.read(itemId, JenaUtil.testUser).getStatus());
 		
 		Form form= new Form();
@@ -89,7 +91,7 @@ public class ItemDeleteTest extends ImejiTestBase {
 
 	@Test
 	public void test_2_deleteItem_Released() throws Exception {
-
+		initCollection();
 		initItem();
 		ItemService s = new ItemService();
 		assertEquals("PENDING", s.read(itemId, JenaUtil.testUser).getStatus());
@@ -109,7 +111,7 @@ public class ItemDeleteTest extends ImejiTestBase {
 
 	@Test
 	public void test_2_deleteItem_Withdrawn() throws Exception {
-
+		initCollection();
 		initItem();
 		ItemService s = new ItemService();
 		assertEquals("PENDING", s.read(itemId, JenaUtil.testUser).getStatus());
@@ -131,7 +133,7 @@ public class ItemDeleteTest extends ImejiTestBase {
 
 	@Test
 	public void test_3_deleteItem() throws Exception {
-
+		initCollection();
 		initItem();
 		ItemService s = new ItemService();
 		assertEquals("PENDING", s.read(itemId, JenaUtil.testUser).getStatus());

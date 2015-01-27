@@ -3,9 +3,6 @@
  */
 package de.mpg.imeji.presentation.user;
 
-import java.net.URI;
-import java.net.URL;
-
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
@@ -13,7 +10,7 @@ import de.mpg.imeji.logic.auth.Authentication;
 import de.mpg.imeji.logic.auth.AuthenticationFactory;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.history.HistorySession;
-import de.mpg.imeji.presentation.history.Page;
+import de.mpg.imeji.presentation.history.HistoryPage;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
@@ -81,7 +78,7 @@ public class LoginBean
             BeanHelper.error(sb.getMessage("error_log_in_description").replace("XXX_INSTANCE_NAME_XXX",
                     PropertyReader.getProperty("imeji.instance.name")));
         }
-        Page current = ((HistorySession)BeanHelper.getSessionBean(HistorySession.class)).getCurrentPage();
+        HistoryPage current = ((HistorySession)BeanHelper.getSessionBean(HistorySession.class)).getCurrentPage();
         String redirectAfterLogin = "";
         if (current != null)
         {

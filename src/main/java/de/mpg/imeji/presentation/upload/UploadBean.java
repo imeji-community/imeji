@@ -18,7 +18,7 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.collection.CollectionBean;
-import de.mpg.imeji.presentation.history.PageURIHelper;
+import de.mpg.imeji.presentation.history.HistoryUtil;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
@@ -102,7 +102,7 @@ public class UploadBean implements Serializable {
 	 * Read the id of the collection from the url
 	 */
 	private void readId() {
-		URI uri = PageURIHelper.extractId(PrettyContext.getCurrentInstance()
+		URI uri = HistoryUtil.extractURI(PrettyContext.getCurrentInstance()
 				.getRequestURL().toString());
 		if (uri != null)
 			this.id = ObjectHelper.getId(uri);

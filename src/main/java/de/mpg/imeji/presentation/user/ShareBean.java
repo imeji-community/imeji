@@ -35,7 +35,7 @@ import de.mpg.imeji.logic.vo.Properties;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.history.PageURIHelper;
+import de.mpg.imeji.presentation.history.HistoryUtil;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.user.util.EmailClient;
 import de.mpg.imeji.presentation.user.util.EmailMessages;
@@ -137,7 +137,7 @@ public class ShareBean implements Serializable
         this.type = SharedObjectType.ITEM;
         this.profileUri = null;
         this.shareTo = null;
-        this.uri = PageURIHelper.extractId(PrettyContext.getCurrentInstance().getRequestURL().toString());
+        this.uri = HistoryUtil.extractURI(PrettyContext.getCurrentInstance().getRequestURL().toString());
         Item item = ObjectLoader.loadItem(uri, user);
         if (item != null)
         {

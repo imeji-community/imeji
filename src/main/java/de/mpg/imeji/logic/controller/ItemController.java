@@ -215,6 +215,9 @@ public class ItemController extends ImejiController {
 		CollectionImeji collection;
 		try {
 			collection = cc.retrieve(item.getCollection(), u);
+			if (collection.getStatus().equals(Status.WITHDRAWN)) {
+				throw new UnprocessableError("Collection is withdrawn, you can not create an item.");
+			}
 		}
 		catch (Exception e)
 		{

@@ -204,4 +204,31 @@ public class ItemCreateTest extends ImejiTestBase {
         assertEquals("RELEASED", is.read(itemId, JenaUtil.testUser).getStatus());
         
     }
+    
+    @Test
+    public void createItem_InWithdrawnCollection() throws Exception {
+    	initCollection();
+    	initItem();
+    	CollectionService sc = new CollectionService();
+    	sc.release(collectionId, JenaUtil.testUser);
+        assertEquals("RELEASED", sc.read(collectionId, JenaUtil.testUser).getStatus());
+        sc.withdraw(collectionId,JenaUtil.testUser, "ItemCreateTest_createItem_InWithdrawnCollection");
+    	
+        FileDataBodyPart filePart = new FileDataBodyPart("file", new File(
+                "src/test/resources/storage/test.png"));
+        FormDataMultiPart multiPart = new FormDataMultiPart();
+        multiPart.bodyPart(filePart);
+        multiPart.field("json", itemJSON
+                .replace("___COLLECTION_ID___", collectionId)
+                .replace("___FILENAME___", "test.png"));
+
+        Response response = target(pathPrefix).register(authAsUser)
+                .register(MultiPartFeature.class)
+                .register(JacksonFeature.class)
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .post(Entity.entity(multiPart, multiPart.getMediaType()));
+
+        assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+        
+    }
 }

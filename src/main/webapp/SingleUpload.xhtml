@@ -32,17 +32,9 @@
 				</div>
 				
 				<h:form id="singleUpload">
-					<h:panelGroup layout="block" id="selCols" styleClass="imj_inlineSelectionGroup">
-						<span class="imj_selectionLabel">
-							<h:outputText value="#{lbl.select_collection}"/>
-						</span>
-						<h:selectOneMenu id="collections" value="#{SingleUploadBean.selectedCollectionItem}" styleClass="imj_selectionBox">
-							<f:selectItems value="#{SingleUploadBean.collectionItems}"/>
-							<f:ajax event="change" execute="@this" render="@form" listener="#{SingleUploadBean.colChangeListener}"/>
-						</h:selectOneMenu>
-					</h:panelGroup>
+
 					
-					<div>
+					<div id="uploader">
 						<div id="filelist">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
 						<br />
 		
@@ -104,6 +96,16 @@
 						
 						
 					</div>
+					
+					<h:panelGroup layout="block" id="selCols" styleClass="imj_inlineSelectionGroup" rendered="#{not empty SingleUploadBean.ingestImage}">
+						<span class="imj_selectionLabel">
+							<h:outputText value="#{lbl.select_collection}"/>
+						</span>
+						<h:selectOneMenu id="collections" value="#{SingleUploadBean.selectedCollectionItem}" styleClass="imj_selectionBox">
+							<f:selectItems value="#{SingleUploadBean.collectionItems}"/>
+							<f:ajax event="change" execute="@this" render="@form" listener="#{SingleUploadBean.colChangeListener}"/>
+						</h:selectOneMenu>
+					</h:panelGroup>
 						
 					
 					<h:panelGroup id="techmetadata" layout="block" styleClass="imj_techdataList" rendered="#{SingleUploadBean.techMd.size()>0}">
@@ -115,7 +117,7 @@
 						</div>
 					</h:panelGroup>
 
-					<h:panelGroup layout="block" id="mdProfile" styleClass="imj_metadataList">
+					<h:panelGroup layout="block" id="mdProfile" styleClass="imj_metadataList" rendered="#{not empty SingleUploadBean.collection}">
 						<h3 class="imj_sectionHeadline">#{lbl.metadata_profile}</h3>
 						<ui:repeat id="smdb" var="smdb" value="#{SingleUploadBean.superMetadataBeans}" rows="0" varStatus="indexMetadata">	
 								<!-- MetaDataList - edit panel container set -->

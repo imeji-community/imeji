@@ -3,20 +3,15 @@
  */
 package de.mpg.imeji.logic.vo.predefinedMetadata;
 
-import java.net.URI;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-
 import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.j2j.annotations.j2jDataType;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jResource;
+
+import javax.xml.bind.annotation.*;
+import java.net.URI;
 
 /**
  * {@link Metadata} for geolocation data
@@ -40,6 +35,7 @@ public class Geolocation extends Metadata
     private double latitude = Double.NaN;
     @j2jLiteral("http://purl.org/dc/terms/title")
     private String name;
+
     @j2jResource("http://imeji.org/terms/statement")
     private URI statement;
 
@@ -84,14 +80,12 @@ public class Geolocation extends Metadata
         this.name = name;
     }
 
-    @Override
     @XmlElement(name = "statement", namespace = "http://imeji.org/terms/")
     public URI getStatement()
     {
         return statement;
     }
 
-    @Override
     public void setStatement(URI namespace)
     {
         this.statement = namespace;
@@ -106,8 +100,7 @@ public class Geolocation extends Metadata
             this.latitude = ((Geolocation)metadata).getLatitude();
             this.longitude = ((Geolocation)metadata).getLongitude();
             this.name = ((Geolocation)metadata).getName();
-            this.statement = metadata.getStatement();
-        }
+            setStatement(((Geolocation)metadata).getStatement());        }
     }
 
     @Override

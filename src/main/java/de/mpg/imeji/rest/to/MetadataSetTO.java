@@ -31,7 +31,7 @@ public class MetadataSetTO implements Serializable{
 	private int position;
 	
 	private List<LabelTO> Labels = new ArrayList<LabelTO>();
-	
+
 	private MetadataTO value;
 	
 	private URI statementUri;

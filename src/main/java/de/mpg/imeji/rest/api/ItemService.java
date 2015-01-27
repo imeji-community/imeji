@@ -1,7 +1,6 @@
 package de.mpg.imeji.rest.api;
 
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
-import de.mpg.imeji.logic.auth.exception.UnprocessableError;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -14,7 +13,6 @@ import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
 import de.mpg.j2j.exceptions.NotFoundException;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.ObjectUtils;
 
 import javax.ws.rs.NotSupportedException;
 import java.util.ArrayList;
@@ -23,6 +21,7 @@ import java.util.List;
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE.CREATE;
 import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE.UPDATE;
+import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
 
 public class ItemService implements API<ItemTO> {
 
@@ -37,7 +36,7 @@ public class ItemService implements API<ItemTO> {
 			// transfer TO into item
 			Item item = new Item();
 			
-			ReverseTransferObjectFactory.transferItem(to, item, CREATE);
+			ReverseTransferObjectFactory.transferItem(to, item, u, CREATE);
 
 			// read collection
 			CollectionController cc = new CollectionController();
@@ -77,7 +76,7 @@ public class ItemService implements API<ItemTO> {
 	public ItemTO update(ItemTO to, User u) throws Exception {
 		Item item = controller.retrieve(
 				ObjectHelper.getURI(Item.class, to.getId()), u);
-		ReverseTransferObjectFactory.transferItem(to, item, UPDATE);
+		ReverseTransferObjectFactory.transferItem(to, item, u, UPDATE);
 		if (to instanceof ItemWithFileTO) {
 			ItemWithFileTO tof = (ItemWithFileTO) to;
 			String url = getExternalFileUrl(tof);
@@ -169,11 +168,12 @@ public class ItemService implements API<ItemTO> {
 	 * @return
 	 **/
 	private String getFilename(ItemWithFileTO to) {
-		return ObjectUtils.firstNonNull(to.getFilename(),
-				FilenameUtils.getName(to.getFile().getName()),
+		return firstNonNull(to.getFilename(),
+				FilenameUtils.getName(to.getFile() != null ? to.getFile().getName() : null),
 				FilenameUtils.getName(to.getFetchUrl()),
 				FilenameUtils.getName(to.getReferenceUrl()));
 	}
+
 
 	/**
 	 * Return the external Url

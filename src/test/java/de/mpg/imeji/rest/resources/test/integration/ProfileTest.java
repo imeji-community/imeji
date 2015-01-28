@@ -47,7 +47,7 @@ public class ProfileTest extends ImejiTestBase{
 		assertEquals(Status.OK.getStatusCode(),response.getStatus());
 	}
 	
-	@Ignore
+	
 	@Test
 	public void test_1_ReadProfiles_Unauthorized(){
 		String profileId = collectionTO.getProfile().getProfileId();
@@ -64,7 +64,7 @@ public class ProfileTest extends ImejiTestBase{
 				.request(MediaType.APPLICATION_JSON).get();
 		assertEquals(Status.NOT_FOUND.getStatusCode(),response.getStatus());
 	}
-	@Ignore
+
 	@Test
 	public void test_1_ReadProfiles_NotAllowedUser(){
 		String profileId = collectionTO.getProfile().getProfileId();

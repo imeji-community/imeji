@@ -3,14 +3,17 @@
  */
 package de.mpg.imeji.presentation.collection;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.logic.controller.exceptions.NotFoundError;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -46,13 +49,29 @@ public class ViewCollectionBean extends CollectionBean
     /**
      * Initialize all elements of the page.
      */
-    public void init()
+    public void init() throws Exception
     {
         try
         {
             User user = super.sessionBean.getUser();
             String id = getId();
-            setCollection(ObjectLoader.loadCollectionLazy(ObjectHelper.getURI(CollectionImeji.class, id), user));
+
+            CollectionImeji requestedCollection = null;
+            try {
+            	URI uRIID = ObjectHelper.getURI(CollectionImeji.class, id);
+            	requestedCollection = ObjectLoader.loadCollectionLazy(uRIID, user);
+            }
+            catch (Exception e)
+            {
+            	FacesContext.getCurrentInstance().getExternalContext().responseSendError(404, "404_NOT_FOUND");
+            }
+
+            if (requestedCollection == null ) {
+            	throw new NotFoundError("404_NOT_FOUND");
+            }
+            
+            setCollection(requestedCollection);
+
             if (getCollection() != null && getCollection().getId() != null)
             {
                 findItems(user, 13);
@@ -78,10 +97,8 @@ public class ViewCollectionBean extends CollectionBean
                 getCollection().getMetadata().setPersons(persons);
             }
         }
-        catch (Exception e)
-        {
-            BeanHelper.error(e.getMessage());
-            logger.error("Error init of collection home page", e);
+        catch (NotFoundError e) {
+        	FacesContext.getCurrentInstance().getExternalContext().responseSendError(404, "404_NOT_FOUND");
         }
     }
 

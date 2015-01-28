@@ -3,6 +3,7 @@
  */
 package de.mpg.imeji.presentation.album;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -71,7 +72,7 @@ public class AlbumBean extends ContainerBean
      * 
      * @param album
      */
-    public AlbumBean(Album album)
+    public AlbumBean(Album album) 
     {
         this.album = album;
         if (album != null)
@@ -111,8 +112,9 @@ public class AlbumBean extends ContainerBean
 
     /**
      * Load the {@link Album} and its {@link Item} when the {@link AlbumBean} page is called, and initialize it.
+     * @throws IOException 
      */
-    public void initView()
+    public void initView() throws IOException
     {
         if (id != null)
         {
@@ -132,7 +134,12 @@ public class AlbumBean extends ContainerBean
                 	BeanHelper.info(sessionBean.getMessage("album_Private_Content").replace("XXX_COUNT_XXX", getPrivateCount()+""));
                 }
             }
+            else
+            {
+               	FacesContext.getCurrentInstance().getExternalContext().responseSendError(404, "404_NOT_FOUND");
+            }
         }
+    	
     }
 
     /**

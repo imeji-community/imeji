@@ -3,6 +3,7 @@
  */
 package de.mpg.imeji.presentation.album;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -225,7 +226,12 @@ public class AlbumItemsBean extends ItemsBean
     public String release()
     {
         ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).setId(id);
-        ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).initView();
+        try {
+			((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).initView();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).release();
         return "pretty:";
     }
@@ -238,7 +244,12 @@ public class AlbumItemsBean extends ItemsBean
     public String delete()
     {
         ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).setId(id);
-        ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).initView();
+        try {
+			((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).initView();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).delete();
         return "pretty:albums";
     }

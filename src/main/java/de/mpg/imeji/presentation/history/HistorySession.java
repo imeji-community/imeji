@@ -13,126 +13,118 @@ import java.util.List;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class HistorySession
-{
-    /**
-     * {@link List} of {@link Page} stored in the history
-     */
-    private List<Page> pages = new ArrayList<Page>();
-    /**
-     * The maximum count of {@link Page} stored in the history
-     */
-    private static int HISTORY_SIZE = 10;
+public class HistorySession {
+	/**
+	 * {@link List} of {@link HistoryPage} stored in the history
+	 */
+	private List<HistoryPage> pages = new ArrayList<HistoryPage>();
+	/**
+	 * The maximum count of {@link HistoryPage} stored in the history
+	 */
+	private static int HISTORY_SIZE = 10;
 
-    /**
-     * Create new {@link HistorySession}
-     */
-    public HistorySession()
-    {
-    }
+	/**
+	 * Create new {@link HistorySession}
+	 */
+	public HistorySession() {
+	}
 
-    /**
-     * Add a {@link Page} to the history
-     * 
-     * @param page
-     * @param id - the ids defined in the url
-     */
-    public void addPage(Page page)
-    {
-        if (page != null)
-        {
-            if (!page.isSame(getCurrentPage()))
-            {
-                page.setPos(pages.size());
-                pages.add(page);
-                removeOldPages();
-            }
-        }
-    }
+	/**
+	 * Add a {@link HistoryPage} to the history
+	 * 
+	 * @param page
+	 * @param id
+	 *            - the ids defined in the url
+	 */
+	public void addPage(HistoryPage page) {
+		if (page != null) {
+			if (!page.isSame(getCurrentPage())) {
+				// If new page, add it to the history
+				page.setPos(pages.size());
+				pages.add(page);
+				removeOldPages();
+			} else {
+				// If the page is the same, it might be that the params have
+				// been changed
+				getCurrentPage().setParams(page.getParams());
+			}
+		}
+	}
 
-    /**
-     * Remove {@link Page} of the history, when the size of the history is greater thant the maximum size
-     */
-    private void removeOldPages()
-    {
-        while (pages.size() > HISTORY_SIZE)
-        {
-            pages.remove(0);
-        }
-    }
+	/**
+	 * Remove {@link HistoryPage} of the history, when the size of the history
+	 * is greater thant the maximum size
+	 */
+	private void removeOldPages() {
+		while (pages.size() > HISTORY_SIZE) {
+			pages.remove(0);
+		}
+	}
 
-    /**
-     * Remove a {@link Page} of the history according to its position in the history
-     * 
-     * @param pos
-     */
-    public void remove(int pos)
-    {
-        for (int i = 0; i < pages.size(); i++)
-        {
-            if (i > pos)
-            {
-                pages.remove(i);
-                i--;
-            }
-        }
-    }
+	/**
+	 * Remove a {@link HistoryPage} of the history according to its position in
+	 * the history
+	 * 
+	 * @param pos
+	 */
+	public void remove(int pos) {
+		for (int i = 0; i < pages.size(); i++) {
+			if (i > pos) {
+				pages.remove(i);
+				i--;
+			}
+		}
+	}
 
-    /**
-     * Return the current {@link Page}
-     * 
-     * @return
-     */
-    public Page getCurrentPage()
-    {
-        if (!pages.isEmpty())
-        {
-            return pages.get(pages.size() - 1);
-        }
-        return null;
-    }
+	/**
+	 * Return the current {@link HistoryPage}
+	 * 
+	 * @return
+	 */
+	public HistoryPage getCurrentPage() {
+		if (!pages.isEmpty()) {
+			return pages.get(pages.size() - 1);
+		}
+		return null;
+	}
 
-    /**
-     * Return the previous {@link Page} in the history
-     * 
-     * @return
-     */
-    public Page getPreviousPage()
-    {
-        if (!pages.isEmpty())
-        {
-            return pages.size() > 2 ? pages.get(pages.size() - 2) : pages.get(0);
-        }
-        return null;
-    }
+	/**
+	 * Return the previous {@link HistoryPage} in the history
+	 * 
+	 * @return
+	 */
+	public HistoryPage getPreviousPage() {
+		if (!pages.isEmpty()) {
+			return pages.size() > 2 ? pages.get(pages.size() - 2) : pages
+					.get(0);
+		}
+		return null;
+	}
 
-    /**
-     * Return the size of the history
-     * 
-     * @return
-     */
-    public int getHistorySize()
-    {
-        return pages.size();
-    }
+	/**
+	 * Return the size of the history
+	 * 
+	 * @return
+	 */
+	public int getHistorySize() {
+		return pages.size();
+	}
 
-    /**
-     * Getter- Return the {@link List} of {@link Page} of the history
-     * 
-     * @return
-     */
-    public List<Page> getPages()
-    {
-        return pages;
-    }
+	/**
+	 * Getter- Return the {@link List} of {@link HistoryPage} of the history
+	 * 
+	 * @return
+	 */
+	public List<HistoryPage> getPages() {
+		return pages;
+	}
 
-    /**
-     * setter
-     * 
-     * @param pages
-     */
-    public void setPages(List<Page> pages)
-    {
-        this.pages = pages;
-    }
+	/**
+	 * setter
+	 * 
+	 * @param pages
+	 */
+	public void setPages(List<HistoryPage> pages) {
+		this.pages = pages;
+	}
 }

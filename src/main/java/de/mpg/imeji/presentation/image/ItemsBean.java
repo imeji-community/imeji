@@ -130,7 +130,6 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
 		totalNumberOfRecords = searchResult.getNumberOfRecords();
 		initMenus();
 		cleanSelectItems();
-		initBackPage();
 		initFilters();
 		cleanFacets();
 		initFacets();
@@ -256,30 +255,6 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
 		for (Filter f : filters.getSession().getFilters()) {
 			if (FacetType.SEARCH.equals(f.getType())) {
 				searchFilter = f;
-			}
-		}
-	}
-
-	/**
-	 * Initialize the page when the page has been called by the browser back
-	 * button
-	 */
-	public void initBackPage() {
-		HistorySession hs = (HistorySession) BeanHelper
-				.getSessionBean(HistorySession.class);
-		FiltersSession fs = (FiltersSession) BeanHelper
-				.getSessionBean(FiltersSession.class);
-		if (hs != null && fs != null) {
-			if (FacesContext.getCurrentInstance().getExternalContext()
-					.getRequestParameterMap().get("h") != null) {
-				if (FacesContext.getCurrentInstance().getExternalContext()
-						.getRequestParameterMap().get("h") != null) {
-					hs.getCurrentPage().setFilters(fs.getFilters());
-					hs.getCurrentPage().setQuery(fs.getWholeQuery());
-				} else {
-					hs.getCurrentPage().setFilters(fs.getFilters());
-					hs.getCurrentPage().setQuery(fs.getWholeQuery());
-				}
 			}
 		}
 	}

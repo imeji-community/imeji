@@ -13,6 +13,8 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
+import de.mpg.imeji.logic.auth.exception.AuthenticationError;
+import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
@@ -95,16 +97,11 @@ public class ProfileController extends ImejiController {
 	 * @throws Exception
 	 */
 	public MetadataProfile retrieve(URI uri, User user)
-			throws NotFoundException {
-		MetadataProfile p = null;
-		try {
+			throws NotFoundException,
+			NotAllowedError,  AuthenticationError,Exception {
+			MetadataProfile p = null;
 			p = ((MetadataProfile) reader.read(uri.toString(), user,
 					new MetadataProfile()));
-		} catch (Exception e) {
-			// throw new NotFoundException("Profile (URL: " + uri
-			// + " ) not found.");
-			throw new NotFoundException(e.getLocalizedMessage());
-		}
 		Collections.sort((List<Statement>) p.getStatements());
 		return p;
 	}

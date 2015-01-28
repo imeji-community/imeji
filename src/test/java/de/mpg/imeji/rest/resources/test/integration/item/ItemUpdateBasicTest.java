@@ -3,11 +3,15 @@ package de.mpg.imeji.rest.resources.test.integration.item;
 import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
+import net.java.dev.webdav.jaxrs.ResponseStatus;
+
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
+import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
@@ -16,12 +20,16 @@ import org.slf4j.LoggerFactory;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
 import java.io.File;
 import java.io.IOException;
 
 import static de.mpg.imeji.rest.resources.test.TestUtils.getStringFromPath;
+import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_PATH;
 import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_REST;
 import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_STORAGE;
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.FORBIDDEN;
 import static javax.ws.rs.core.Response.Status.OK;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -86,7 +94,80 @@ public class ItemUpdateBasicTest extends ImejiTestBase {
                 .put(Entity.entity(multiPart, multiPart.getMediaType()));
         assertEquals(FORBIDDEN.getStatusCode(), response.getStatus());
     }
+    
+    @Test
+    public void test_1_UpdateItem_3_NotFoundItem() throws IOException {
+        FormDataMultiPart multiPart = new FormDataMultiPart();
+        multiPart.field("json", updateJSON);
+        Response response = target(PATH_PREFIX).path("/" + itemId+"_not_exist_item")
+                .register(authAsUser)
+                .register(MultiPartFeature.class)
+                .register(JacksonFeature.class)
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .put(Entity.entity(multiPart, multiPart.getMediaType()));
+        assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
+    }
+    
 
+    @Test
+    public void test_1_UpdateItem_4_Unauthorized() throws IOException {
+        FormDataMultiPart multiPart = new FormDataMultiPart();
+        multiPart.field("json", updateJSON);
+        Response response = target(PATH_PREFIX).path("/" + itemId)
+                .register(MultiPartFeature.class)
+                .register(JacksonFeature.class)
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .put(Entity.entity(multiPart, multiPart.getMediaType()));
+        
+        assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
+    }
+    
+    @Ignore
+    @Test
+    public void test_2_UpdateItem_SemanticInvalidJSONFile() throws Exception {
+    	
+        FileDataBodyPart filePart = new FileDataBodyPart("file", new File(
+                "src/test/resources/storage/test.png"));
+        FormDataMultiPart multiPart = new FormDataMultiPart();
+        multiPart.bodyPart(filePart);
+        String wrongJSON = getStringFromPath("src/test/resources/rest/wrongSemantic.json");
+        
+        multiPart.field("json", wrongJSON
+        		.replace("___FILENAME___", "test.png"));
+
+        Response response = target(PATH_PREFIX).path("/" + itemId)
+        		.register(authAsUser)
+                .register(MultiPartFeature.class)
+                .register(JacksonFeature.class)
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .put(Entity.entity(multiPart, multiPart.getMediaType()));
+
+        assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+        
+    }
+    @Ignore
+    @Test
+    public void test_2_UpdateItem_SyntaxInvalidJSONFile() throws Exception {
+    	
+        FileDataBodyPart filePart = new FileDataBodyPart("file", new File(
+                "src/test/resources/storage/test.png"));
+        FormDataMultiPart multiPart = new FormDataMultiPart();
+        multiPart.bodyPart(filePart);
+        String wrongJSON = getStringFromPath("src/test/resources/rest/wrongSyntax.json");
+        
+        multiPart.field("json", wrongJSON
+                .replace("___FILENAME___", "test.png"));
+
+        Response response = target(PATH_PREFIX).path("/" + itemId)
+        		.register(authAsUser)
+                .register(MultiPartFeature.class)
+                .register(JacksonFeature.class)
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .put(Entity.entity(multiPart, multiPart.getMediaType()));
+
+        assertEquals(BAD_REQUEST.getStatusCode(), response.getStatus());
+        
+    }
 
 
 }

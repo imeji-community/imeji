@@ -148,5 +148,28 @@ public class ItemDeleteTest extends ImejiTestBase {
 		assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
 		
 	 }
+	@Test
+	public void test_3_deleteItemTwice() throws Exception {
+		initCollection();
+		initItem();
+		ItemService s = new ItemService();
+		assertEquals("PENDING", s.read(itemId, JenaUtil.testUser).getStatus());
+		
+		Form form= new Form();
+		form.param("id", itemId);
+		Response response = target(pathPrefix).register(authAsUser)
+				.path("/" + itemId)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.delete();
+
+		assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+		
+		Response response2 = target(pathPrefix).register(authAsUser)
+				.path("/" + itemId)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.delete();
+		assertEquals(Status.NOT_FOUND.getStatusCode(), response2.getStatus());
+	 }
+	
 
 }

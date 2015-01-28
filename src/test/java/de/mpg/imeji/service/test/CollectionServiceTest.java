@@ -63,6 +63,7 @@ public class CollectionServiceTest {
 		}
 		assertNotNull(collectionTO.getId());
 		assertEquals("test collection", collectionTO.getTitle());
+		
 	}
 
 	@Test

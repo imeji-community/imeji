@@ -3,12 +3,15 @@ package de.mpg.imeji.rest.resources.test.integration.item;
 import de.mpg.imeji.rest.process.RestProcessUtils;
 import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
+import net.java.dev.webdav.jaxrs.ResponseStatus;
+
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
@@ -17,6 +20,8 @@ import org.slf4j.LoggerFactory;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -24,6 +29,7 @@ import static de.mpg.imeji.logic.controller.ItemController.NO_THUMBNAIL_FILE_NAM
 import static de.mpg.imeji.logic.storage.util.StorageUtils.calculateChecksum;
 import static de.mpg.imeji.rest.resources.test.TestUtils.getStringFromPath;
 import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.*;
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.OK;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -286,5 +292,51 @@ public class ItemUpdateFileTest extends ImejiTestBase {
                 not(containsString(NO_THUMBNAIL_FILE_NAME)));
 
     }
+    
+    @Test
+    public void test_1_UpdateItem_8_InvalidFetchURL() throws IOException {
+
+
+        FormDataMultiPart multiPart = new FormDataMultiPart();
+
+        multiPart.field("json",
+                getStringFromPath(UPDATE_ITEM_FILE_JSON)
+                        .replace("___FETCH_URL___", "invalid url")
+
+        );
+
+        Response response = target(PATH_PREFIX).path("/" + itemId)
+                .register(authAsUser).register(MultiPartFeature.class)
+                .register(JacksonFeature.class)
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .put(Entity.entity(multiPart, multiPart.getMediaType()));
+
+        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+
+    }
+    
+    @Test
+    public void test_1_UpdateItem_9_FetchURL_NoFile() throws IOException {
+
+
+        FormDataMultiPart multiPart = new FormDataMultiPart();
+
+        multiPart.field("json",
+                getStringFromPath(UPDATE_ITEM_FILE_JSON)
+                        .replace("___FETCH_URL___", "www.google.de")
+
+        );
+
+        Response response = target(PATH_PREFIX).path("/" + itemId)
+                .register(authAsUser).register(MultiPartFeature.class)
+                .register(JacksonFeature.class)
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .put(Entity.entity(multiPart, multiPart.getMediaType()));
+
+        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+
+    }
+    
+   
 
 }

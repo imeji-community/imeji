@@ -145,7 +145,7 @@ public class ItemUpdateBasicTest extends ImejiTestBase {
         assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
         
     }
-    
+    @Ignore
     @Test
     public void test_2_UpdateItem_SyntaxInvalidJSONFile() throws Exception {
     	

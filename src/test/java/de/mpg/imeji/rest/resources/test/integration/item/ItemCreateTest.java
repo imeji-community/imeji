@@ -310,7 +310,7 @@ public class ItemCreateTest extends ImejiTestBase {
         assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
         
     }
-    
+    @Ignore
     @Test
     public void createItem_SyntaxInvalidJSONFile() throws Exception {
     	

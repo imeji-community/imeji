@@ -41,8 +41,9 @@ public class ObjectCachedLoader
      * 
      * @param uri
      * @return
+     * @throws Exception 
      */
-    public static CollectionImeji loadCollection(URI uri)
+    public static CollectionImeji loadCollection(URI uri) throws Exception
     {
         SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         CollectionImeji collection = session.getCollectionCached().get(uri);

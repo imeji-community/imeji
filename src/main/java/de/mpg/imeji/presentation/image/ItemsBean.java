@@ -101,8 +101,9 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
 	 * Init the page when it is called
 	 * 
 	 * @return
+	 * @throws Exception 
 	 */
-	public String getInitPage() {
+	public String getInitPage() throws Exception {
 		browseContext = getNavigationString();
 		browseInit();
 		isSimpleSearch = URLQueryTransformer.isSimpleSearch(searchQuery);

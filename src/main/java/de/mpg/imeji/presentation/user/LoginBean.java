@@ -79,6 +79,7 @@ public class LoginBean
                     PropertyReader.getProperty("imeji.instance.name")));
         }
         HistoryPage current = ((HistorySession)BeanHelper.getSessionBean(HistorySession.class)).getCurrentPage();
+
         String redirectAfterLogin = "";
         if (current != null)
         {
@@ -100,7 +101,7 @@ public class LoginBean
 
     public String logout()
     {
-        sb.setUser(null);
+    	sb.setUser(null);
         BeanHelper.info(sb.getMessage("success_log_out"));
         FacesContext fc = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession)fc.getExternalContext().getSession(false);

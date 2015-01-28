@@ -54,7 +54,7 @@ public class MetadataExplainExport extends ExplainExport
      * @see de.mpg.imeji.logic.export.Export#export(java.io.OutputStream, de.mpg.imeji.logic.search.SearchResult)
      */
     @Override
-    public void export(OutputStream out, SearchResult sr)
+    public void export(OutputStream out, SearchResult sr) throws Exception
     {
         PrintWriter writer = new PrintWriter(out);
         try

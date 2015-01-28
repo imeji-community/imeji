@@ -41,8 +41,9 @@ public class ObjectLoader {
 	 * @param id
 	 * @param user
 	 * @return
+	 * @throws Exception 
 	 */
-	public static CollectionImeji loadCollection(URI id, User user) {
+	public static CollectionImeji loadCollection(URI id, User user) throws Exception {
 		try {
 			CollectionController cl = new CollectionController();
 			return cl.retrieve(id, user);
@@ -50,6 +51,7 @@ public class ObjectLoader {
 			writeErrorNotFound("collection", id);
 		} catch (Exception e) {
 			writeException(e, id.toString());
+			throw e;
 		}
 		return null;
 	}
@@ -60,8 +62,9 @@ public class ObjectLoader {
 	 * @param id
 	 * @param user
 	 * @return
+	 * @throws Exception 
 	 */
-	public static CollectionImeji loadCollectionLazy(URI id, User user) {
+	public static CollectionImeji loadCollectionLazy(URI id, User user) throws Exception {
 		try {
 			CollectionController cl = new CollectionController();
 			return cl.retrieveLazy(id, user);
@@ -82,8 +85,9 @@ public class ObjectLoader {
 	 * @param id
 	 * @param user
 	 * @return
+	 * @throws Exception 
 	 */
-	public static Album loadAlbum(URI id, User user) {
+	public static Album loadAlbum(URI id, User user) throws Exception {
 		try {
 			Album a = loadAlbumLazy(id, user);
 			ItemController ic = new ItemController();
@@ -100,8 +104,9 @@ public class ObjectLoader {
 	 * @param id
 	 * @param user
 	 * @return
+	 * @throws Exception 
 	 */
-	public static Album loadAlbumLazy(URI id, User user) {
+	public static Album loadAlbumLazy(URI id, User user) throws Exception {
 		try {
 			AlbumController ac = new AlbumController();
 			return ac.retrieveLazy(id, user);
@@ -119,8 +124,9 @@ public class ObjectLoader {
 	 * @param id
 	 * @param user
 	 * @return
+	 * @throws Exception 
 	 */
-	public static Item loadItem(URI id, User user) {
+	public static Item loadItem(URI id, User user) throws Exception {
 		try {
 			ItemController ic = new ItemController();
 			return ic.retrieve(id, user);
@@ -138,8 +144,9 @@ public class ObjectLoader {
 	 * @param id
 	 * @param user
 	 * @return
+	 * @throws Exception 
 	 */
-	public static UserGroup loadUserGroupLazy(URI id, User user) {
+	public static UserGroup loadUserGroupLazy(URI id, User user) throws Exception {
 		try {
 			UserGroupController c = new UserGroupController();
 			return c.read(id, user);
@@ -157,8 +164,9 @@ public class ObjectLoader {
 	 * @param email
 	 * @param user
 	 * @return
+	 * @throws Exception 
 	 */
-	public static User loadUser(URI uri, User user) {
+	public static User loadUser(URI uri, User user) throws Exception {
 		try {
 			UserController uc = new UserController(user);
 			return uc.retrieve(uri);
@@ -176,8 +184,9 @@ public class ObjectLoader {
 	 * @param email
 	 * @param user
 	 * @return
+	 * @throws Exception 
 	 */
-	public static User loadUser(String email, User user) {
+	public static User loadUser(String email, User user) throws Exception {
 		try {
 			UserController uc = new UserController(user);
 			return uc.retrieve(email);
@@ -235,8 +244,10 @@ public class ObjectLoader {
 	 * 
 	 * @param e
 	 * @param id
+	 * @throws Exception 
 	 */
-	private static void writeException(Exception e, String id) {
+	private static void writeException(Exception e, String id) throws Exception {
 		logger.error("Error Object loader for " + id, e);
+		throw e;
 	}
 }

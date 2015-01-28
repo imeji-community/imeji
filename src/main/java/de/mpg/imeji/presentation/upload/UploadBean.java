@@ -80,9 +80,10 @@ public class UploadBean implements Serializable {
 	/**
 	 * Method checking the url parameters and triggering then the
 	 * {@link UploadBean} methods
+	 * @throws Exception 
 	 */
 	@PostConstruct
-	public void status() {
+	public void status() throws Exception {
 		readId();
 		loadCollection();
 		if (UrlHelper.getParameterBoolean("init")) {
@@ -327,8 +328,9 @@ public class UploadBean implements Serializable {
 	 * 
 	 * @param filename
 	 * @return
+	 * @throws Exception 
 	 */
-	private Item findItemByFileName(String filename) {
+	private Item findItemByFileName(String filename) throws Exception {
 		Search s = SearchFactory.create(SearchType.ITEM);
 		List<String> sr = s.searchSimpleForQuery(
 				SPARQLQueries.selectContainerItemByFilename(collection.getId(),
@@ -360,8 +362,9 @@ public class UploadBean implements Serializable {
 
 	/**
 	 * Load the collection
+	 * @throws Exception 
 	 */
-	public void loadCollection() {
+	public void loadCollection() throws Exception {
 		if (id != null) {
 			collection = ObjectLoader.loadCollectionLazy(
 					ObjectHelper.getURI(CollectionImeji.class, id), user);

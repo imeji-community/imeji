@@ -71,8 +71,9 @@ public class AlbumBean extends ContainerBean
      * Construct an {@link AlbumBean} from an {@link Album}
      * 
      * @param album
+     * @throws Exception 
      */
-    public AlbumBean(Album album) 
+    public AlbumBean(Album album) throws Exception 
     {
         this.album = album;
         if (album != null)
@@ -112,9 +113,9 @@ public class AlbumBean extends ContainerBean
 
     /**
      * Load the {@link Album} and its {@link Item} when the {@link AlbumBean} page is called, and initialize it.
-     * @throws IOException 
+     * @throws Exception 
      */
-    public void initView() throws IOException
+    public void initView() throws Exception
     {
         if (id != null)
         {
@@ -134,10 +135,7 @@ public class AlbumBean extends ContainerBean
                 	BeanHelper.info(sessionBean.getMessage("album_Private_Content").replace("XXX_COUNT_XXX", getPrivateCount()+""));
                 }
             }
-            else
-            {
-               	FacesContext.getCurrentInstance().getExternalContext().responseSendError(404, "404_NOT_FOUND");
-            }
+            
         }
     	
     }

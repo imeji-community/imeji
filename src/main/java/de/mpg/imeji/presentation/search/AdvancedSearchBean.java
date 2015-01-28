@@ -150,8 +150,9 @@ public class AdvancedSearchBean
      * Load all {@link CollectionImeji} which are searchable for the current {@link User}
      * 
      * @return
+     * @throws Exception 
      */
-    private List<CollectionImeji> loadCollections()
+    private List<CollectionImeji> loadCollections() throws Exception
     {
         CollectionController cc = new CollectionController();
         List<CollectionImeji> l = new ArrayList<>();

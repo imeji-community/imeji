@@ -198,9 +198,10 @@ public class ImejiFactory {
 	 * 
 	 * @param albumList
 	 * @return
+	 * @throws Exception 
 	 */
 	public static List<AlbumBean> albumListToBeanList(
-			Collection<Album> albumList) {
+			Collection<Album> albumList) throws Exception {
 		List<AlbumBean> beanList = new ArrayList<AlbumBean>();
 		for (Album album : albumList) {
 			beanList.add(new AlbumBean(album));

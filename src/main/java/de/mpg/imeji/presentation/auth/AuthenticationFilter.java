@@ -83,7 +83,7 @@ public class AuthenticationFilter implements Filter {
 				if (httpAuthentification.hasLoginInfos()) {
 					session.setUser(httpAuthentification.doLogin());
 				}
-			} else if (session != null && session.getUser() != null) {
+			} else if (session != null && session.getUser() != null ) {
 				Matcher m = jsfPattern.matcher(request.getRequestURI());
 				if (m.matches()) {
 					// reload the user each time a jsf page is called
@@ -91,7 +91,7 @@ public class AuthenticationFilter implements Filter {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		} finally {
 			chain.doFilter(serv, resp);
 		}

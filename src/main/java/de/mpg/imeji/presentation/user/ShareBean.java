@@ -88,8 +88,9 @@ public class ShareBean implements Serializable
 
     /**
      * Init {@link ShareBean} for {@link CollectionImeji}
+     * @throws Exception 
      */
-    public void initShareCollection()
+    public void initShareCollection() throws Exception
     {
         this.shareTo = null;
         this.profileUri = null;
@@ -109,8 +110,9 @@ public class ShareBean implements Serializable
 
     /**
      * Init {@link ShareBean} for {@link Album}
+     * @throws Exception 
      */
-    public void initShareAlbum()
+    public void initShareAlbum() throws Exception
     {
         this.type = SharedObjectType.ALBUM;
         this.shareTo = null;
@@ -131,8 +133,9 @@ public class ShareBean implements Serializable
      * Loaded when the shre component is called from the item page
      * 
      * @return
+     * @throws Exception 
      */
-    public String getInitShareItem()
+    public String getInitShareItem() throws Exception
     {
         this.type = SharedObjectType.ITEM;
         this.profileUri = null;

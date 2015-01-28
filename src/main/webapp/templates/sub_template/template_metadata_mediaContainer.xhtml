@@ -12,10 +12,10 @@
 		<!-- Breadcrumb - History -->
 		<ui:include src="../../include/History.xhtml"/>
 		
-		<ui:fragment rendered="#{metadataContextBean.id != null and !Auth.read(metadataContextBean)}">
+		<!-- <ui:fragment rendered="#{metadataContextBean.id != null and !Auth.read(metadataContextBean)}">
 			<ui:include src="../../include/LoginFormular.xhtml"/>
 		</ui:fragment>
-		
+		 -->
 		<!-- EntryPagePreviewTiledList -->
 		<ui:fragment rendered="#{metadataContextBean.id == null or Auth.read(metadataContextBean)}">
 			

@@ -66,7 +66,7 @@ public class CollectionItemsBean extends ItemsBean
      * @throws Exception
      */
     @Override
-    public String getInitPage()
+    public String getInitPage() throws Exception
     {
         uri = ObjectHelper.getURI(CollectionImeji.class, id);
         collection = ObjectLoader.loadCollectionLazy(uri, sb.getUser());

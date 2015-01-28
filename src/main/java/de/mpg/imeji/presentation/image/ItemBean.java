@@ -195,8 +195,9 @@ public class ItemBean {
 
 	/**
 	 * Initiliaue the {@link SingleItemBrowse} for this {@link ItemBean}
+	 * @throws Exception 
 	 */
-	public void initBrowsing() {
+	public void initBrowsing() throws Exception {
 		if (item != null)
 			browse = new SingleItemBrowse(
 					(ItemsBean) BeanHelper.getSessionBean(ItemsBean.class),

@@ -77,8 +77,9 @@ public class UserBean {
 
 	/**
 	 * Retrieve the current user
+	 * @throws Exception 
 	 */
-	public void retrieveUser() {
+	public void retrieveUser() throws Exception {
 		if (id != null && session.getUser() != null) {
 			user = ObjectLoader.loadUser(id, session.getUser());
 		} else if (id != null && session.getUser() == null) {

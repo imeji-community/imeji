@@ -43,7 +43,7 @@ public class AlbumItemBean extends ItemBean
     }
 
     @Override
-    public void initBrowsing()
+    public void initBrowsing() throws Exception
     {
         String tempId = (String)FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
                 .get("AlbumItemsBean.id");
@@ -52,7 +52,7 @@ public class AlbumItemBean extends ItemBean
         this.setAlbum(this.loadAlbum());
     }
 
-    private Album loadAlbum()
+    private Album loadAlbum() throws Exception
     {
         return ObjectLoader.loadAlbumLazy(ObjectHelper.getURI(Album.class, albumId), session.getUser());
     }

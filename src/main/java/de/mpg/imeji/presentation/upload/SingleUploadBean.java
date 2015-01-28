@@ -245,7 +245,7 @@ public class SingleUploadBean implements Serializable{
 		return ii;
 	}
 
-	public void colChangeListener(AjaxBehaviorEvent event){
+	public void colChangeListener(AjaxBehaviorEvent event) throws Exception{
 		if(!"".equals(selectedCollectionItem))
 		{  
 			sus.setSelectedCollectionItem(selectedCollectionItem);

@@ -35,8 +35,9 @@ public class HistoryPage {
 	 * @param url
 	 * @param params
 	 * @param user
+	 * @throws Exception 
 	 */
-	public HistoryPage(String url, Map<String, String[]> params, User user) {
+	public HistoryPage(String url, Map<String, String[]> params, User user) throws Exception {
 		this.params = params;
 		this.url = url;
 		this.imejiPage = HistoryUtil.getImejiPage(getCompleteUrl());
@@ -48,8 +49,9 @@ public class HistoryPage {
 	 * 
 	 * @param uri
 	 * @return
+	 * @throws Exception 
 	 */
-	private String loadTitle(URI uri, User user) {
+	private String loadTitle(URI uri, User user) throws Exception {
 		if (uri != null) {
 			String uriStr = UrlHelper.decode(uri.toString());
 			if (ImejiPages.COLLECTION_HOME.matches(uriStr)) {

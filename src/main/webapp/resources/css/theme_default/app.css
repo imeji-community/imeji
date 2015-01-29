@@ -505,13 +505,8 @@ iframe#twitter-widget-0 div.root div.stream { height: 20em !important; }
 .imj_upload { width: 91.25%; padding: 1% 4%; border-top: 0.1em solid #6CAE2F; }
 .imj_upload .imj_uploadInputWrapper { width: 70%; min-width: 30em; display: inline-block; }
 .imj_upload .imj_uploadDropArea { width: 100%; }
-.imj_upload .imj_fileUploadContainer { margin-top: 2em; margin-bottom: 2em; }
+.imj_upload .imj_fileUploadContainer { margin-top: 2em; margin-bottom: 2em; margin-right: 2em; display: inline-block; }
 .imj_upload .imj_fileUploadContainer.imj_singleUpload .imj_submitPanel { text-align: left; }
-.imj_upload .imj_techdataList { max-width: 25%; display: inline-block; vertical-align: top; overflow: hidden; text-overflow: ellipsis; }
-.imj_upload .imj_techdataList:hover { max-width: 100%; float: left; }
-.imj_upload .imj_techdataList:hover + .imj_metadataList { display: none; }
-.imj_upload .imj_techdataList .imj_techdataEntry { overflow: hidden; text-overflow: ellipsis; }
-.imj_upload .imj_metadataList { max-width: 71%; margin-left: 1%; display: inline-block; vertical-align: top; }
 
 .imj_uploadUrlReference { width: 98%; min-width: 30em; padding: 0.5% 1%; background-color: #292929; }
 .imj_uploadUrlReference label { margin-left: 1em; }
@@ -596,8 +591,16 @@ iframe#twitter-widget-0 div.root div.stream { height: 20em !important; }
 
 .imj_optionList li { padding-bottom: 0.272727em; }
 
-.imj_techdataList { width: 100%; padding: 0.545454em 0; background-color: #444444; }
+.imj_techdataList { width: 100%; padding: 0.545454em 0; background-color: #444444; vertical-align: top; }
+.imj_techdataList .imj_listBody { overflow: auto; text-overflow: ellipsis; }
+.imj_techdataList .imj_listBody.imj_minHeight { max-height: 5em; }
+.imj_techdataList .imj_listBody.imj_maxHeight { max-height: 18em; }
 .imj_techdataList .imj_techdataEntry { width: 98%; padding: 0 1%; white-space: pre; display: inline-block; overflow-x: auto; }
+
+.imj_upload .imj_techdataList { display: inline-block; overflow: hidden; text-overflow: ellipsis; }
+.imj_upload .imj_techdataList .imj_listHeader { box-shadow: 0 0.7em 0.7em rgba(0, 0, 0, 0.25); margin: 0 0 1em 0; }
+.imj_upload .imj_techdataList .imj_listHeader .imj_iconExpand_16, .imj_upload .imj_techdataList .imj_listHeader .imj_iconCollapse_16 { float: right; margin: 0.25em 0.25em 0 0; }
+.imj_upload .imj_techdataList .imj_techdataEntry { overflow: hidden; text-overflow: ellipsis; }
 
 .imj_bibliographicList { width: 100%; 	/*
 	.imj_statusArea {
@@ -652,9 +655,11 @@ iframe#twitter-widget-0 div.root div.stream { height: 20em !important; }
 .imj_metadataList .imj_listHeader a:hover { color: #F0F0F0; background-color: #6CAE2F; }
 .imj_metadataList .imj_listHeader .imj_separator { float: right; width: 0.090909em; margin-top: 0.454545em; border: solid #6CAE2F; border-width: 1.3em 0 0; }
 .imj_metadataList .imj_listHeader .imj_active { color: #F0F0F0; background-color: #6CAE2F; }
+.imj_metadataList .imj_listHeader.imj_noBorder { border: 0 none; }
 .imj_metadataList .imj_listBody { clear: both; width: 100%; border-top: 0.1em solid #BBBBBB; }
 .imj_metadataList .imj_listBody .imj_entryPageTitle { font-size: 1.636em; letter-spacing: 0.045em; line-height: 130%; margin-bottom: 0.455em; }
 .imj_metadataList .imj_listBody .imj_entryPageDescription { line-height: 130%; }
+.imj_metadataList .imj_listBody.imj_noBorder { border: 0 none; }
 
 .imj_tiledMediaList { padding: 1% 4%; }
 .imj_tiledMediaList .imj_listHeader { min-height: 2em; }

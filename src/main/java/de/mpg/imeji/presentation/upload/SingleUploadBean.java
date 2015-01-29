@@ -1,6 +1,7 @@
 package de.mpg.imeji.presentation.upload;
 
 import java.io.File;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,9 +45,7 @@ import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Organization;
-import de.mpg.imeji.logic.vo.Person;
-import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.metadata.MetadataSetBean;
@@ -55,6 +54,7 @@ import de.mpg.imeji.presentation.metadata.SuperMetadataBean;
 import de.mpg.imeji.presentation.metadata.extractors.TikaExtractor;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
@@ -108,10 +108,8 @@ public class SingleUploadBean implements Serializable{
 		try {        
 			Item item = uploadFileToItem(getIngestImage().getFile(), getIngestImage().getName());
 			SingleEditBean edit = new SingleEditBean(item, sus.getProfile(), "");
-			MetadataSetBean mds = edit.getEditor().getItems().get(0).getMds();
-			List <SuperMetadataBean> smdb1 = mds.getTree().getList();
-			List <SuperMetadataBean> smdb2 = getSuperMetadataBeans();
-			copyValueToItem(smdb1, smdb2);
+			MetadataSetBean newSet = getMdSetBean();
+			edit.getEditor().getItems().get(0).setMds(newSet);
 			edit.save();
 			sus.uploaded();
 		} catch (Exception e) {
@@ -119,7 +117,8 @@ public class SingleUploadBean implements Serializable{
 		}
 		return "";
 	} 
-	  
+
+	/*
 	public void copyValueToItem(List <SuperMetadataBean> itemStatements, List <SuperMetadataBean> statements){
 		for(SuperMetadataBean smdb1 : itemStatements)
 		{
@@ -146,6 +145,7 @@ public class SingleUploadBean implements Serializable{
 		}
 		
 	}
+	*/
 	    
 	private Item uploadFileToItem(File file, String title) {
 		try {    
@@ -164,18 +164,6 @@ public class SingleUploadBean implements Serializable{
 			return null;
 		}
 	}
-	
-
-	
-    protected void addPositionToMetadata()
-    {
-            int pos = 0;
-            for (SuperMetadataBean smb : sus.getSuperMdBeans())
-            {
-                smb.setPos(pos);
-                pos++;
-            }
-    }
 	
 	/**
 	 * Throws an {@link Exception} if the file ca be upload. Works only if the
@@ -249,29 +237,17 @@ public class SingleUploadBean implements Serializable{
 		if(!"".equals(selectedCollectionItem))
 		{  
 			sus.setSelectedCollectionItem(selectedCollectionItem);
-			try {    
+			try {     
 				CollectionImeji collection = ObjectLoader.loadCollectionLazy(new URI(selectedCollectionItem), user);
 				MetadataProfile profile = ObjectLoader.loadProfile(collection.getProfile(), user);
-				List<SuperMetadataBean> sts = new ArrayList<SuperMetadataBean>();
-				if(profile.getStatements().size() > 0){
-					for(Statement st : profile.getStatements())
-					{
- 						SuperMetadataBean smb = new SuperMetadataBean(st);
-						if("http://imeji.org/terms/metadata#conePerson".equals(st.getType().toString()))
-						{
-							Person person = new Person();
-							Organization orga = new Organization();
-							person.getOrganizations().add(orga);
-							smb.setPerson(person);
-						}
-						sts.add(smb);
-					}  
-				}
+				MetadataSet mdSet = ImejiFactory.newMetadataSet(profile.getId());
+				MetadataSetBean mdSetBean = new MetadataSetBean(mdSet, profile, true);
+				
 				MetadataLabels labels = (MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class);
 				labels.init(profile);
 				sus.setCollection(collection);
 				sus.setProfile(profile);
-				sus.setSuperMdBeans(sts);;
+				sus.setMdSetBean(mdSetBean);
 			} catch (URISyntaxException e) {
 				e.printStackTrace();
 			} 
@@ -281,6 +257,23 @@ public class SingleUploadBean implements Serializable{
 			
 		}
 		
+	}  
+	    
+	/**
+	 * Add a Metadata of the same type as the passed metadata
+	 */
+	public void addMetadata(SuperMetadataBean smb) {    
+		SuperMetadataBean newMd = smb.copyEmpty();
+		newMd.addEmtpyChilds(sus.getProfile());
+		sus.getMdSetBean().getTree().add(newMd);
+	}
+	
+	/**
+	 * Remove the active metadata
+	 */
+	public void removeMetadata(SuperMetadataBean smb) {
+		sus.getMdSetBean().getTree().remove(smb);
+		sus.getMdSetBean().addEmtpyValues();
 	}
 
  
@@ -348,8 +341,8 @@ public class SingleUploadBean implements Serializable{
 		return sus.getCollection();
 	}
 
-	public List<SuperMetadataBean> getSuperMetadataBeans() {
-		return sus.getSuperMdBeans();
+	public MetadataSetBean getMdSetBean(){
+		return sus.getMdSetBean();
 	}
 
 	public List<String> getTechMd() {

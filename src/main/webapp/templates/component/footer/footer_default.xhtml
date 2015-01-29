@@ -13,5 +13,8 @@
 		<!-- end: footer section -->
 	</h:panelGroup>
 	<h:outputText value="#{Configuration.snippet}" escape="false"/>
-	<ui:insert name="additonalFooterScripts"/>
+	
+	<h:panelGroup id="additonalFooterScripts" styleClass="imj_noDisplay">
+		<ui:insert name="additonalFooterScripts"/>
+	</h:panelGroup>
 </ui:composition>

@@ -7,6 +7,7 @@ import com.ocpsoft.pretty.PrettyContext;
 
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.controller.exceptions.NotFoundError;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchFactory;
@@ -69,23 +70,28 @@ public class UploadBean implements Serializable {
 	/**
 	 * Construct the Bean and initalize the pages
 	 * 
+	 * @throws Exception
+	 * 
 	 * @throws URISyntaxException
 	 * @throws IOException
 	 */
 	public UploadBean() {
-
-
 	}
 
 	/**
 	 * Method checking the url parameters and triggering then the
 	 * {@link UploadBean} methods
-	 * @throws Exception 
+	 * 
+	 * @throws Exception
 	 */
 	@PostConstruct
-	public void status() throws Exception {
+	public void status() {
 		readId();
-		loadCollection();
+		try {
+			loadCollection();
+		} catch (Exception e) {
+			throw new RuntimeException("collection couldn't be loaded", e);
+		}
 		if (UrlHelper.getParameterBoolean("init")) {
 			((UploadSession) BeanHelper.getSessionBean(UploadSession.class))
 					.reset();
@@ -283,8 +289,7 @@ public class UploadBean implements Serializable {
 						.getSessionBean(SessionBean.class);
 				throw new RuntimeException(
 						sessionBean.getMessage("upload_format_not_allowed")
-								+ " (" + guessedNotAllowedFormat
-								+ ")");
+								+ " (" + guessedNotAllowedFormat + ")");
 			}
 		}
 	}
@@ -309,7 +314,8 @@ public class UploadBean implements Serializable {
 				item = controller.updateThumbnail(findItemByFileName(title),
 						file, user);
 			} else {
-				item = controller.createWithFile(null, file, title, collection, user);
+				item = controller.createWithFile(null, file, title, collection,
+						user);
 			}
 			getsFiles().add(item);
 			return item;
@@ -328,7 +334,7 @@ public class UploadBean implements Serializable {
 	 * 
 	 * @param filename
 	 * @return
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	private Item findItemByFileName(String filename) throws Exception {
 		Search s = SearchFactory.create(SearchType.ITEM);
@@ -362,7 +368,8 @@ public class UploadBean implements Serializable {
 
 	/**
 	 * Load the collection
-	 * @throws Exception 
+	 * 
+	 * @throws Exception
 	 */
 	public void loadCollection() throws Exception {
 		if (id != null) {
@@ -378,7 +385,6 @@ public class UploadBean implements Serializable {
 			BeanHelper.error(sessionBean.getLabel("error") + "No ID in URL");
 		}
 	}
-
 
 	/**
 	 * release the {@link CollectionImeji}
@@ -484,11 +490,6 @@ public class UploadBean implements Serializable {
 	public void setExternalUrl(String externalUrl) {
 		this.externalUrl = externalUrl;
 	}
-
-
-
-
-
 
 	public List<String> getfFiles() {
 		return ((UploadSession) BeanHelper.getSessionBean(UploadSession.class))

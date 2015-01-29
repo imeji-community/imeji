@@ -65,9 +65,10 @@ All rights reserved. Use is subject to license terms.
 					</h:panelGroup>
 				</h:panelGroup>
 				
-				<h:commandLink id="lnkLogout" title="#{lbl.logout}" action ="#{LoginBean.logout}" styleClass="imj_metaMenuItem" rendered="#{Auth.loggedIn}">
-			    	<h:outputText value="#{lbl.logout}"></h:outputText>
-			    </h:commandLink>
+				<!-- <h:commandLink id="lnkLogout" title="#{lbl.logout}" value="#{lbl.logout}" action="#{LoginBean.logout}" styleClass="imj_metaMenuItem" rendered="#{Auth.loggedIn}"/>-->
+				<h:outputLink id="lnkLogout" title="#{lbl.logout}" value="#{Navigation.applicationUrl}login?logout=1" styleClass="imj_metaMenuItem" rendered="#{Auth.loggedIn}">
+					<h:outputText value="#{lbl.logout}"/>
+				</h:outputLink>
 			</h:form>
 			
 			

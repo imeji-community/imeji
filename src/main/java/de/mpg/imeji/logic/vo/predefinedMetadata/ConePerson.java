@@ -3,20 +3,15 @@
  */
 package de.mpg.imeji.logic.vo.predefinedMetadata;
 
-import java.net.URI;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-
 import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.j2j.annotations.j2jDataType;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jResource;
+
+import javax.xml.bind.annotation.*;
+import java.net.URI;
 
 /**
  * Metadata for {@link Person}. Can have a CoNe identifier
@@ -38,6 +33,7 @@ public class ConePerson extends Metadata
     private Person person;
     @j2jResource("http://imeji.org/terms/coneId")
     private URI coneId;
+
     @j2jResource("http://imeji.org/terms/statement")
     private URI statement;
 
@@ -72,14 +68,12 @@ public class ConePerson extends Metadata
         this.coneId = coneId;
     }
 
-    @Override
     @XmlElement(name = "statement", namespace = "http://imeji.org/terms/")
     public URI getStatement()
     {
         return statement;
     }
 
-    @Override
     public void setStatement(URI namespace)
     {
         this.statement = namespace;
@@ -93,7 +87,7 @@ public class ConePerson extends Metadata
             setPos(metadata.getPos());
             this.person = ((ConePerson)metadata).getPerson().clone();
             this.coneId = ((ConePerson)metadata).getConeId();
-            this.statement = metadata.getStatement();
+            this.statement = ((ConePerson)metadata).getStatement();
         }
     }
 

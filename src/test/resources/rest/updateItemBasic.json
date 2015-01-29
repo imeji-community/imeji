@@ -1,9 +1,26 @@
 {
+  "createdBy": {
+    "fullname": "Yao",
+    "userId": "n8lwIPNI4WCdVA7k"
+  },
+  "modifiedBy": {
+    "fullname": "Yao",
+    "userId": "n8lwIPNI4WCdVA7k"
+  },
+  "createdDate": "2015-01-13T14:57:67 +0100",
+  "modifiedDate": "2015-01-13T16:08:496 +0100",
+  "versionDate": "2015-01-13T16:08:496 +0100",
+  "status": "RELEASED",
+  "version": 1,
+  "discardComment": "",
+  "visibility": "PUBLIC",
+  "collectionId": "___COLLECTION_ID___",
   "filename": "___FILE_NAME___",
-  "createdDate" : "2015-01-21T15:31:21 +0100",
-  "collectionId" : "pP89bCRnDbd8HfRp",
-  "checksumMd5" : "bc7df93ab2e2542944681c791a6eb61c",
-  "webResolutionUrlUrl" : "http://mydomain.org/imeji/file/tLelAYNqHNlounyW/d3/b8/fe/31-01af-4167-be36-b82d5d45e0da/0/web/364be8860e8d72b4358b5e88099a935a.jpg",
+  "mimetype": "application/octet-stream",
+  "checksumMd5": "bc7df93ab2e2542944681c791a6eb61c",
+  "webResolutionUrlUrl": "http://mydomain.org/imeji/file/tLelAYNqHNlounyW/d3/b8/fe/31-01af-4167-be36-b82d5d45e0da/0/web/364be8860e8d72b4358b5e88099a935a.jpg",
+  "thumbnailUrl": "http://qa-imeji.mpdl.mpg.de/imeji/file/_FAfwLZ9Vy3LUSM/f7/a5/84/a3-ca3f-4116-9b05-34c49892c17d/0/thumbnail/cb6faf2b3b358438e2b670548168dd10.jpg",
+  "fileUrl": "http://qa-imeji.mpdl.mpg.de/imeji/file/_FAfwLZ9Vy3LUSM/f7/a5/84/a3-ca3f-4116-9b05-34c49892c17d/0/original/cb6faf2b3b358438e2b670548168dd10.jpg",
   "metadata": [
     {
       "value": {
@@ -21,15 +38,6 @@
           "value": "Titel"
         }
       ]
-    },
-    {
-      "value": {
-        "name": "Zugspitze, 82491 Garmisch-Partenkirchen, Germany",
-        "longitude": 10.985278,
-        "latitude": 47.421111
-      },
-      "statementUri": "http://dev-faces.mpdl.mpg.de/imeji/statement/5te5IGKJHKNDMmY0",
-      "typeUri": "http://imeji.org/terms/metadata#geolocation"
     },
     {
       "value": {
@@ -88,6 +96,15 @@
     },
     {
       "value": {
+        "name": "Zugspitze, 82491 Garmisch-Partenkirchen, Germany",
+        "longitude": 10.985278,
+        "latitude": 47.421111
+      },
+      "statementUri": "http://dev-faces.mpdl.mpg.de/imeji/statement/5te5IGKJHKNDMmY0",
+      "typeUri": "http://imeji.org/terms/metadata#geolocation"
+    },
+    {
+      "value": {
         "date": "2014-12-11"
       },
       "statementUri": "http://dev-faces.mpdl.mpg.de/imeji/statement/YxIrhTc0itIg2gjO",
@@ -113,7 +130,7 @@
       "value": {
         "format": "APA",
         "publication": "http://dev-faces.mpdl.mpg.de/imeji/rest/items/TIi0T8BvG9zmAq5l",
-        "citation": ""
+        "citation": "Citation"
       },
       "statementUri": "http://dev-faces.mpdl.mpg.de/imeji/statement/CPQU87FGkyReUZ5",
       "typeUri": "http://imeji.org/terms/metadata#publication"

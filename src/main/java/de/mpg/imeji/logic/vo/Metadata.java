@@ -3,33 +3,20 @@
  */
 package de.mpg.imeji.logic.vo;
 
-import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.URI;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSeeAlso;
-
 import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.util.IdentifierUtil;
-import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Date;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
-import de.mpg.imeji.logic.vo.predefinedMetadata.License;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
+import de.mpg.imeji.logic.vo.predefinedMetadata.*;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
 import de.mpg.j2j.annotations.j2jDataType;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jResource;
+
+import javax.xml.bind.annotation.*;
+import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.URI;
 
 /**
  * Abstract class for metadata of an {@link Item}.
@@ -52,6 +39,7 @@ public abstract class Metadata implements Comparable<Metadata>, Serializable {
 	@j2jLiteral("http://imeji.org/terms/position")
 	private int pos = 0;
 
+
 	@XmlEnum(Types.class)
 	public enum Types {
 		TEXT(Text.class), NUMBER(Number.class), CONE_PERSON(ConePerson.class), DATE(
@@ -73,6 +61,15 @@ public abstract class Metadata implements Comparable<Metadata>, Serializable {
 	}
 
 	public Metadata() {
+	}
+
+	public static Metadata createNewInstance(URI typeUri) throws IllegalAccessException, InstantiationException {
+		for (Types type: Types.values()) {
+			if (type.getClazzNamespace().equals(typeUri.toString())) {
+				return type.getClazz().newInstance();
+			}
+		}
+		return null;
 	}
 
 	public String getTypeNamespace() {

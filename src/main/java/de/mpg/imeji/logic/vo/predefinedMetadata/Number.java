@@ -3,20 +3,15 @@
  */
 package de.mpg.imeji.logic.vo.predefinedMetadata;
 
-import java.net.URI;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-
 import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.j2j.annotations.j2jDataType;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jResource;
+
+import javax.xml.bind.annotation.*;
+import java.net.URI;
 
 /**
  * {@link Metadata} for number values
@@ -36,6 +31,7 @@ public class Number extends Metadata
     private static final long serialVersionUID = 1465887901391010292L;
     @j2jLiteral("http://imeji.org/terms/number")
     private double number = Double.NaN;
+
     @j2jResource("http://imeji.org/terms/statement")
     private URI statement;
 
@@ -59,14 +55,12 @@ public class Number extends Metadata
         return number;
     }
 
-    @Override
     @XmlElement(name = "statement", namespace = "http://imeji.org/terms/")
     public URI getStatement()
     {
         return statement;
     }
 
-    @Override
     public void setStatement(URI namespace)
     {
         this.statement = namespace;
@@ -79,8 +73,7 @@ public class Number extends Metadata
         {
             setPos(metadata.getPos());
             this.number = ((Number)metadata).getNumber();
-            this.statement = metadata.getStatement();
-        }
+            setStatement(((Number) metadata).getStatement());        }
     }
 
     @Override

@@ -73,6 +73,7 @@ public class ImejiTestBase extends JerseyTest {
 		}
 	}
 
+
 	/**
 	 * Create a new collection and set the collectionid
 	 * 

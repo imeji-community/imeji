@@ -1,6 +1,5 @@
 package de.mpg.imeji.rest.api;
 
-import de.mpg.imeji.logic.auth.exception.AuthenticationError;
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.auth.exception.UnprocessableError;
 import de.mpg.imeji.logic.controller.CollectionController;
@@ -9,7 +8,6 @@ import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.rest.process.CommonUtils;
 import de.mpg.imeji.rest.process.ReverseTransferObjectFactory;
 import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.to.ItemTO;
@@ -48,11 +46,7 @@ public class ItemService implements API<ItemTO> {
 			TransferObjectFactory.transferItem(item, itemTO);
 			return itemTO;
 		}
-		else
-		{
-			throw new UnprocessableError("A file must be uploaded, referenced or fetched from external location.");
-		}
-
+		return null;
 	}
 
 	@Override

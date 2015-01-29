@@ -141,17 +141,23 @@ public class ItemTO extends PropertiesTO implements Serializable{
 		return metadata;
 	}
 
+	public List<MetadataSetTO> filterMetadataByTypeURI(URI type) {
+		List<MetadataSetTO> filtered = new ArrayList<MetadataSetTO>();
+		for ( MetadataSetTO md: this.metadata )
+			if (md.getTypeUri().equals(type))
+				filtered.add(md);
+		return filtered;
+	}
+
+	public MetadataSetTO findMetadata(URI statement, URI type) {
+		for (MetadataSetTO md: this.metadata)
+			if (md.getTypeUri().equals(type) && md.getStatementUri().equals(statement))
+				return md;
+		return null;
+	}
 
 	public void setMetadata(List<MetadataSetTO> metadata) {
 		this.metadata = metadata;
-/*
-		if (metadata != null) {
-			int pos = 0;
-			for (MetadataSetTO md : metadata) {
-				md.setPosition(pos++);
-			}
-		}
-*/
 	}
 
 

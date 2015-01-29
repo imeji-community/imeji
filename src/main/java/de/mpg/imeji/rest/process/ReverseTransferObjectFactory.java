@@ -54,7 +54,7 @@ public class ReverseTransferObjectFactory {
 
 	}
 
-	public static void transferItem(ItemTO to, Item vo, User u, TRANSFER_MODE mode) {
+	public static void transferItem(ItemTO to, Item vo, User u, TRANSFER_MODE mode) throws Exception {
 
 		// only fields which can be transferred for TO to VO!!!
 		if (mode == TRANSFER_MODE.CREATE) {
@@ -72,7 +72,7 @@ public class ReverseTransferObjectFactory {
 		transferItemMetaData(to, vo, u, mode);
 	}
 
-	public static void transferItemMetaData(ItemTO to, Item vo, User u, TRANSFER_MODE mode) {
+	public static void transferItemMetaData(ItemTO to, Item vo, User u, TRANSFER_MODE mode) throws Exception {
 
 
 		Collection<Metadata> voMDs = vo.getMetadataSet().getMetadata();
@@ -182,19 +182,9 @@ public class ReverseTransferObjectFactory {
 
 	}
 
-	private static MetadataProfile getMetadataProfile(URI collectionURI, User u) {
-
-		CollectionController cc = new CollectionController();
+	private static MetadataProfile getMetadataProfile(URI collectionURI, User u) throws Exception {
 		ProfileController pc = new ProfileController();
-		MetadataProfile p;
-		try {
-			CollectionImeji c = cc.retrieve(collectionURI, u);
-			p = pc.retrieve(c.getProfile(), u);
-		} catch (Exception e) {
-			//TODO: Correct exception handling
-			throw new RuntimeException("Cannot retrieve metadata profile" + e.getLocalizedMessage());
-		}
-		return p;
+		return pc.retrieveByCollectionId(collectionURI, u);
 	}
 
 

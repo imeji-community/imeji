@@ -3,18 +3,12 @@
  */
 package de.mpg.imeji.logic.controller;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.auth.exception.AuthenticationError;
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
+import de.mpg.imeji.logic.auth.exception.UnprocessableError;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
@@ -23,16 +17,17 @@ import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.Metadata;
-import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.logic.vo.Properties.Status;
-import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.writer.WriterFacade;
-import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.j2j.exceptions.NotFoundException;
 import de.mpg.j2j.helper.DateHelper;
-import de.mpg.j2j.helper.J2JHelper;
+import org.apache.log4j.Logger;
+
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Controller for {@link MetadataProfile}
@@ -104,6 +99,30 @@ public class ProfileController extends ImejiController {
 					new MetadataProfile()));
 		Collections.sort((List<Statement>) p.getStatements());
 		return p;
+	}
+
+	/**
+	 * Retrieve a {@link User} by its {@link URI}
+	 *
+	 * @param uri
+	 * @param user
+	 * @return
+	 * @throws NotFoundException
+	 * @throws Exception
+	 */
+	public MetadataProfile retrieveByCollectionId(URI collectionId, User user)
+			throws Exception {
+
+		CollectionController cc = new CollectionController();
+		CollectionImeji c;
+		try {
+			c = cc.retrieve(collectionId, user);
+		} catch (Exception e) {
+			//e.printStackTrace();
+			throw new UnprocessableError("Invalid collection: " + e.getLocalizedMessage());
+		}
+
+		return retrieve(c.getProfile(), user);
 	}
 
 	/**

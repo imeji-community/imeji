@@ -1,11 +1,8 @@
 package de.mpg.imeji.rest.api;
 
 import de.mpg.imeji.logic.auth.exception.NotAllowedError;
-import de.mpg.imeji.logic.auth.exception.UnprocessableError;
-import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.process.ReverseTransferObjectFactory;
@@ -17,7 +14,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ObjectUtils;
 
 import javax.ws.rs.NotSupportedException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
@@ -38,7 +34,7 @@ public class ItemService implements API<ItemTO> {
 			Item item = new Item();
 			
 			
-			ReverseTransferObjectFactory.transferItem(to, item, CREATE);
+			ReverseTransferObjectFactory.transferItem(to, item, u, CREATE);
 			
 			item = controller.create(item, ((ItemWithFileTO) to).getFile(), filename, u, ((ItemWithFileTO) to).getFetchUrl(), ((ItemWithFileTO) to).getReferenceUrl());
 			// transfer item into ItemTO
@@ -63,7 +59,7 @@ public class ItemService implements API<ItemTO> {
 	public ItemTO update(ItemTO to, User u) throws Exception {
 		Item item = controller.retrieve(
 				ObjectHelper.getURI(Item.class, to.getId()), u);
-		ReverseTransferObjectFactory.transferItem(to, item, UPDATE);
+		ReverseTransferObjectFactory.transferItem(to, item, u, UPDATE);
 		if (to instanceof ItemWithFileTO) {
 			ItemWithFileTO tof = (ItemWithFileTO) to;
 			String url = getExternalFileUrl(tof);

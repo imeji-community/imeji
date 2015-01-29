@@ -1,6 +1,5 @@
 package de.mpg.imeji.rest.resources.test.integration;
 
-import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.rest.MyApplication;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;

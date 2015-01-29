@@ -121,31 +121,8 @@ public class ItemUpdateBasicTest extends ImejiTestBase {
         
         assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
     }
-    
-    @Ignore
-    @Test
-    public void test_2_UpdateItem_SemanticInvalidJSONFile() throws Exception {
-    	
-        FileDataBodyPart filePart = new FileDataBodyPart("file", new File(
-                "src/test/resources/storage/test.png"));
-        FormDataMultiPart multiPart = new FormDataMultiPart();
-        multiPart.bodyPart(filePart);
-        String wrongJSON = getStringFromPath("src/test/resources/rest/wrongSemantic.json");
-        
-        multiPart.field("json", wrongJSON
-        		.replace("___FILENAME___", "test.png"));
 
-        Response response = target(PATH_PREFIX).path("/" + itemId)
-        		.register(authAsUser)
-                .register(MultiPartFeature.class)
-                .register(JacksonFeature.class)
-                .request(MediaType.APPLICATION_JSON_TYPE)
-                .put(Entity.entity(multiPart, multiPart.getMediaType()));
-
-        assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
-        
-    }
-    @Ignore
+   
     @Test
     public void test_2_UpdateItem_SyntaxInvalidJSONFile() throws Exception {
     	
@@ -156,6 +133,7 @@ public class ItemUpdateBasicTest extends ImejiTestBase {
         String wrongJSON = getStringFromPath("src/test/resources/rest/wrongSyntax.json");
         
         multiPart.field("json", wrongJSON
+        		
                 .replace("___FILENAME___", "test.png"));
 
         Response response = target(PATH_PREFIX).path("/" + itemId)
@@ -167,6 +145,22 @@ public class ItemUpdateBasicTest extends ImejiTestBase {
 
         assertEquals(BAD_REQUEST.getStatusCode(), response.getStatus());
         
+    }
+    
+    @Test
+    public void test_2_UpdateItem_WrongID() throws Exception{
+    	FormDataMultiPart multiPart = new FormDataMultiPart();
+        multiPart.field("json",
+        		getStringFromPath(UPDATE_ITEM_FILE_JSON).replace("___ITEM_ID___", "12345"));
+
+        Response response = target(PATH_PREFIX).path("/" + itemId)
+                .register(authAsUser)
+                .register(MultiPartFeature.class)
+                .register(JacksonFeature.class)
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .put(Entity.entity(multiPart, multiPart.getMediaType()));
+        
+        assertEquals(response.getStatus(), Status.NOT_FOUND.getStatusCode());
     }
 
 

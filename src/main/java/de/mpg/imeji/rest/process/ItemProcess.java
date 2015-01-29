@@ -75,14 +75,18 @@ public class ItemProcess {
 			to = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(json,
 					ItemWithFileTO.class);
 			File tmp = File.createTempFile("imejiAPI", null);
-			IOUtils.copy(file, new FileOutputStream(tmp));
 			
-			to.setFile(tmp);
-			to.setFilename((!isNullOrEmpty(to.getFilename()))?to.getFilename():(to.getFilename()==null?origName:to.getFilename()));
+			if(!(file == null)){
+				IOUtils.copy(file, new FileOutputStream(tmp));
+				to.setFile(tmp);
+				to.setFilename((!isNullOrEmpty(to.getFilename()))?to.getFilename():(to.getFilename()==null?origName:to.getFilename()));
 
+			}
+			
 		} catch (Exception e) {
 			e = new BadRequestException();
 			resp= RestProcessUtils.localExceptionHandler(e, CommonUtils.JSON_Invalid);
+			return resp;
 		}
 		// create item with the file
 			ItemService service = new ItemService();
@@ -104,12 +108,17 @@ public class ItemProcess {
 
 		JSONResponse resp; 
 		ItemService service = new ItemService();
-
+		ItemTO to = new ItemTO();
 		try {
-			ItemTO to = !isNullOrEmpty(json) && (fileInputStream != null || json.indexOf("fetchUrl") > 0 || json.indexOf("referenceUrl") > 0) ?
+			to = !isNullOrEmpty(json) && (fileInputStream != null || json.indexOf("fetchUrl") > 0 || json.indexOf("referenceUrl") > 0) ?
 					(ItemWithFileTO) RestProcessUtils.buildTOFromJSON(json, ItemWithFileTO.class) :
 					(ItemTO) RestProcessUtils.buildTOFromJSON(json, ItemTO.class);
-
+		} catch (Exception e) {
+			e = new BadRequestException();
+			resp= RestProcessUtils.localExceptionHandler(e, CommonUtils.JSON_Invalid);
+			return resp;
+		}
+		try {
 			validateId(id, to);
 			to.setId(id);
 			if (fileInputStream != null) {

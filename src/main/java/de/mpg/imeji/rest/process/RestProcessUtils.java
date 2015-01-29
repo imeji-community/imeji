@@ -179,6 +179,9 @@ public class RestProcessUtils {
 		else if (eX instanceof BadRequestException) {
 			resp = RestProcessUtils.buildJSONAndExceptionResponse(Status.BAD_REQUEST.getStatusCode(), localMessage);
 		}
+		else if (eX instanceof ClassCastException) {
+			resp = RestProcessUtils.buildJSONAndExceptionResponse(Status.BAD_REQUEST.getStatusCode(), localMessage);
+		}
 		else {
 			resp = RestProcessUtils.buildJSONAndExceptionResponse(Status.INTERNAL_SERVER_ERROR.getStatusCode(), localMessage);
 		}

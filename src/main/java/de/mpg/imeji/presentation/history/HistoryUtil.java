@@ -3,7 +3,10 @@
  */
 package de.mpg.imeji.presentation.history;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URLEncoder;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -84,5 +87,27 @@ public class HistoryUtil {
 				return page.getLabel();
 		}
 		return "history_home";
+	}
+
+	/**
+	 * return a {@link Map} of http paramter into on String as displayed in the
+	 * url
+	 * 
+	 * @param params
+	 * @return
+	 */
+	public static String paramsMapToString(Map<String, String[]> params) {
+		String s = "";
+		for (String key : params.keySet()) {
+			String delim = "".equals(s) ? "?" : "&";
+			try {
+				s += delim + key + "="
+						+ URLEncoder.encode(params.get(key)[0], "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				throw new RuntimeException("Error encoding "
+						+ params.get(key)[0], e);
+			}
+		}
+		return s;
 	}
 }

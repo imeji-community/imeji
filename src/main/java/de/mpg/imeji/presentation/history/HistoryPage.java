@@ -35,9 +35,10 @@ public class HistoryPage {
 	 * @param url
 	 * @param params
 	 * @param user
-	 * @throws Exception 
+	 * @throws Exception
 	 */
-	public HistoryPage(String url, Map<String, String[]> params, User user) throws Exception {
+	public HistoryPage(String url, Map<String, String[]> params, User user)
+			throws Exception {
 		this.params = params;
 		this.url = url;
 		this.imejiPage = HistoryUtil.getImejiPage(getCompleteUrl());
@@ -49,7 +50,7 @@ public class HistoryPage {
 	 * 
 	 * @param uri
 	 * @return
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	private String loadTitle(URI uri, User user) throws Exception {
 		if (uri != null) {
@@ -120,7 +121,7 @@ public class HistoryPage {
 	}
 
 	public String getCompleteUrl() {
-		return url + getParamsAsString();
+		return url + HistoryUtil.paramsMapToString(params);
 	}
 
 	public String getUrl() {
@@ -129,21 +130,6 @@ public class HistoryPage {
 
 	public void setUrl(String url) {
 		this.url = url;
-	}
-
-	private String getParamsAsString() {
-		String s = "";
-		for (String key : params.keySet()) {
-			String delim = "".equals(s) ? "?" : "&";
-			try {
-				s += delim + key + "="
-						+ URLEncoder.encode(params.get(key)[0], "UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				throw new RuntimeException("Error encoding "
-						+ params.get(key)[0], e);
-			}
-		}
-		return s;
 	}
 
 	public void setParams(Map<String, String[]> params) {

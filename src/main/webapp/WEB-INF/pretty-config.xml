@@ -53,12 +53,12 @@
 	<url-mapping id="collection">
 		<pattern value="/collection/#{ViewCollectionBean.id}" />
 		<view-id>/jsf/CollectionEntryPage.xhtml</view-id>
-		<action onPostback="">#{ViewCollectionBean.init}</action>
+		<action onPostback="true">#{ViewCollectionBean.init}</action>
 	</url-mapping>
 	<url-mapping id="collectionInfos">
 		<pattern value="/collection/#{ViewCollectionBean.id}/infos" />
 		<view-id>/jsf/CollectionView.xhtml</view-id>
-		<action>#{ViewCollectionBean.init}</action>
+		<action onPostback="true">#{ViewCollectionBean.init}</action>
 	</url-mapping>
 	<url-mapping id="collectionBrowse">
 		<pattern value="/collection/#{CollectionItemsBean.id}/browse" />
@@ -205,8 +205,8 @@
 	</url-mapping>
 	
 	<url-mapping id="loginFormular">
-		<pattern value="login" />
-		<view-id>/jsf/include/LoginFormular.xhtml</view-id>
+		<pattern value="/login" />
+		<view-id>/jsf/Login.xhtml</view-id>
 	</url-mapping>
 
 </pretty-config>

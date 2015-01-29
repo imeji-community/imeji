@@ -4,6 +4,8 @@
 package de.mpg.imeji.presentation.history;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Map;
 
 import javax.faces.FactoryFinder;
@@ -64,35 +66,56 @@ public class HistoryFilter implements Filter {
 					dofilterImpl(request, resp);
 				}
 			}
-		}
-		catch (Exception e){
-			//TODO: Bastien 
-			//Please create a loginPage, partly started.
-			if (e instanceof NotFoundError || e instanceof NotFoundException || e instanceof NullPointerException) {
-				((HttpServletResponse)resp).sendError(Status.NOT_FOUND.getStatusCode(), "RESOURCE_NOT_FOUND");
+		} catch (Exception e) {
+			if (e instanceof NotFoundError || e instanceof NotFoundException
+					|| e instanceof NullPointerException) {
+				((HttpServletResponse) resp).sendError(
+						Status.NOT_FOUND.getStatusCode(), "RESOURCE_NOT_FOUND");
+			} else if (e instanceof AuthenticationError) {
+				redirectToLoginPage(serv, resp);
+			} else if (e instanceof NotAllowedError
+					|| e instanceof NotAllowedException) {
+				((HttpServletResponse) resp).sendError(
+						Status.FORBIDDEN.getStatusCode(), "FORBIDDEN");
+			} else if (e instanceof BadRequestException) {
+				((HttpServletResponse) resp).sendError(
+						Status.BAD_REQUEST.getStatusCode(), "BAD_REQUEST");
+			} else {
+
+				((HttpServletResponse) resp).sendError(
+						Status.INTERNAL_SERVER_ERROR.getStatusCode(),
+						"INTERNAL_SERVER_ERROR");
 			}
-			else if (e instanceof AuthenticationError )
-			{
-				((HttpServletResponse)resp).sendRedirect(serv.getServletContext().getContextPath()+"login");
-				
-			}
-			else if ( e instanceof NotAllowedError || e instanceof NotAllowedException) 
-			{
-				((HttpServletResponse)resp).sendError(Status.FORBIDDEN.getStatusCode(), "FORBIDDEN");
-			}
-			else if ( e instanceof BadRequestException) 
-			{
-				((HttpServletResponse)resp).sendError(Status.BAD_REQUEST.getStatusCode(), "BAD_REQUEST");
-			}
-			else {
-				
-				((HttpServletResponse)resp).sendError(Status.INTERNAL_SERVER_ERROR.getStatusCode(), "INTERNAL_SERVER_ERROR");
-			}
-			
-			}
-		finally {
+
+		} finally {
 			chain.doFilter(serv, resp);
 		}
+	}
+	
+	/**
+	 * Redicrect the request to the login page
+	 * 
+	 * @param serv
+	 * @param resp
+	 * @throws IOException
+	 * @throws UnsupportedEncodingException
+	 */
+	private void redirectToLoginPage(ServletRequest serv, ServletResponse resp)
+			throws UnsupportedEncodingException, IOException {
+		HttpServletRequest request = (HttpServletRequest) serv;
+		Navigation nav = getNavigation(request, resp);
+		String url = nav.getApplicationUri()
+				+ PrettyContext.getCurrentInstance(request).getRequestURL()
+						.toURL();
+		Map<String, String[]> params = PrettyContext
+				.getCurrentInstance(request).getRequestQueryString()
+				.getParameterMap();
+		((HttpServletResponse) resp).sendRedirect(serv.getServletContext()
+				.getContextPath()
+				+ "/login?redirect="
+				+ URLEncoder.encode(
+						url + HistoryUtil.paramsMapToString(params), "UTF-8"));
+
 	}
 
 	/**
@@ -100,9 +123,10 @@ public class HistoryFilter implements Filter {
 	 * 
 	 * @param request
 	 * @param resp
-	 * @throws Exception 
+	 * @throws Exception
 	 */
-	private void dofilterImpl(HttpServletRequest request, ServletResponse resp) throws Exception {
+	private void dofilterImpl(HttpServletRequest request, ServletResponse resp)
+			throws Exception {
 		HistorySession hs = getHistorySession(request, resp);
 		Navigation nav = getNavigation(request, resp);
 		SessionBean session = getSessionBean(request, resp);
@@ -115,7 +139,6 @@ public class HistoryFilter implements Filter {
 					.getCurrentInstance(request).getRequestQueryString()
 					.getParameterMap();
 			HistoryPage p = new HistoryPage(url, params, session.getUser());
-			System.out.println("Adding History Page "+url);
 			if (request.getParameter("h") == null) {
 				hs.addPage(p);
 			} else {

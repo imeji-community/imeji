@@ -1,9 +1,9 @@
 package de.mpg.imeji.logic.util;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
-
-import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  * Static functions to manipulate {@link String}

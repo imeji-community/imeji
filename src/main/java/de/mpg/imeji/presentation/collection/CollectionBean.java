@@ -212,7 +212,7 @@ public abstract class CollectionBean extends ContainerBean {
 			BeanHelper
 					.error(sessionBean.getMessage("error_collection_release"));
 			BeanHelper.error(e.getMessage());
-			e.printStackTrace();
+			logger.error("Error during collection release", e);
 		}
 		return "pretty:";
 	}

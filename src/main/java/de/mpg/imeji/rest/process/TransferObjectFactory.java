@@ -150,7 +150,7 @@ public class TransferObjectFactory {
 			u = ucrud.read(vo.getCreatedBy());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.info("Something nasty happened during properties transfer", e);
 		}
 		to.setCreatedBy(new PersonTOBasic(u.getPerson().getCompleteName(), CommonUtils.extractIDFromURI(u.getPerson().getId())));
 		//set modifiedBy
@@ -159,7 +159,7 @@ public class TransferObjectFactory {
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.info("Something nasty happened during reading from modified date VO", e);
 		}
 		to.setModifiedBy(new PersonTOBasic(u.getPerson().getCompleteName(), CommonUtils.extractIDFromURI(u.getPerson().getId())));
 		//set createdDate, modifiedDate, versionDate
@@ -195,7 +195,7 @@ public class TransferObjectFactory {
 			profile = pcrud.read(vo.getMetadataSet().getProfile());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.info("Something nasty happend after reading the profile", e);
 		}
 		tranferItemMetadata(profile, vo.getMetadataSet().getMetadata(), to);
 

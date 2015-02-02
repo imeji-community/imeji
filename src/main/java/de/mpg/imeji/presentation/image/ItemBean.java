@@ -184,7 +184,6 @@ public class ItemBean {
 		} catch (Exception e) {
 			techMd = new ArrayList<String>();
 			techMd.add(e.getMessage());
-			e.printStackTrace();
 		}
 	}
 
@@ -220,7 +219,6 @@ public class ItemBean {
 					user);
 		} catch (Exception e) {
 			BeanHelper.error(e.getMessage());
-			e.printStackTrace();
 			collection = null;
 		}
 	}

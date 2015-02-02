@@ -6,6 +6,8 @@ package de.mpg.imeji.logic;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.j2j.transaction.SPARQLUpdateTransaction;
 import de.mpg.j2j.transaction.SearchTransaction;
@@ -39,7 +41,7 @@ public class ImejiSPARQL
         catch (ImejiException e)
         {
             
-        	e.printStackTrace();
+        	Logger.getLogger(ImejiSPARQL.class).error("There has bin some SPARQL issue", e);
         }
         return results;
     }
@@ -63,7 +65,7 @@ public class ImejiSPARQL
         }
         catch (ImejiException e)
         {
-            e.printStackTrace();
+        	Logger.getLogger(ImejiSPARQL.class).error("There has been execCount issue", e);
         }
         if (results.size() > 0)
         {

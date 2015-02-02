@@ -6,6 +6,7 @@ import java.net.URISyntaxException;
 
 import javax.ws.rs.core.Application;
 
+import org.apache.log4j.Logger;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.test.JerseyTest;
 import org.glassfish.jersey.test.spi.TestContainerException;
@@ -38,6 +39,8 @@ public class ImejiTestBase extends JerseyTest {
 	protected static String itemId;
 	protected static CollectionTO collectionTO;
 	protected static ItemTO itemTO;
+	
+	private static Logger logger = Logger.getLogger(ImejiTestBase.class);
 
 	@Override
 	protected Application configure() {
@@ -70,7 +73,7 @@ public class ImejiTestBase extends JerseyTest {
 			profileId = s.create(new MetadataProfileTO(), JenaUtil.testUser)
 					.getId();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Cannot init profile", e);
 		}
 	}
 
@@ -86,7 +89,7 @@ public class ImejiTestBase extends JerseyTest {
 			collectionTO = s.create(new CollectionTO(), JenaUtil.testUser);
 			collectionId = collectionTO.getId();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Cannot init Collection", e);
 		}
 	}
 
@@ -106,7 +109,8 @@ public class ImejiTestBase extends JerseyTest {
 			itemTO = s.create(to, JenaUtil.testUser);
 			itemId = itemTO.getId();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Cannot init Item", e);
+
 		}
 	}
 	

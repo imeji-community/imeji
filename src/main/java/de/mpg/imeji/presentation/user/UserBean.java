@@ -10,6 +10,8 @@ import java.util.List;
 
 import javax.faces.context.FacesContext;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
@@ -185,7 +187,6 @@ public class UserBean {
 				controller.update(user, session.getUser());
 			} catch (Exception e) {
 				BeanHelper.error(e.getMessage());
-				e.printStackTrace();
 			}
 			reloadPage();
 		}
@@ -202,7 +203,7 @@ public class UserBean {
 			FacesContext.getCurrentInstance().getExternalContext()
 					.redirect(getUserPageUrl());
 		} catch (IOException e) {
-			e.printStackTrace();
+			Logger.getLogger(UserBean.class).info("Some reloadPage exception", e);
 		}
 	}
 

@@ -1,6 +1,8 @@
 package de.mpg.j2j;
 
 
+import org.apache.log4j.Logger;
+
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.query.ReadWrite;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -189,7 +191,8 @@ public class BasicTest
         catch (Exception e1)
         {
             // TODO Auto-generated catch block
-            e1.printStackTrace();
+			Logger.getLogger(BasicTest.class).info("Getting test user failed", e1);
+
         }
         return adminUser;
     }
@@ -207,7 +210,7 @@ public class BasicTest
         catch (Exception e1)
         {
             // TODO Auto-generated catch block
-            e1.printStackTrace();
+        	Logger.getLogger(BasicTest.class).info("Getting test ADMIN user failed", e1);
         }
         return adminUser;
     }

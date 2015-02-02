@@ -4,6 +4,7 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 
+import org.apache.log4j.Logger;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -47,7 +48,7 @@ public class PropertyDescriptorTest
         catch (IntrospectionException e)
         {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+        	Logger.getLogger(PropertyDescriptorTest.class).error("anyPropertyDescriptorTest issue", e);
         }
     }
 }

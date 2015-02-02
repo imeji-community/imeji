@@ -123,7 +123,6 @@ public class SingleEditBean
         {
             // TODO
             BeanHelper.error("Error reload item" + e.getMessage());
-            e.printStackTrace();
         }
     }
 

@@ -17,6 +17,8 @@ import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jResource;
 
@@ -52,7 +54,9 @@ public class Properties implements Serializable
     @j2jLiteral("http://imeji.org/terms/discardComment")
     private String discardComment;
 
-    @XmlEnum(String.class)
+	private static Logger logger = Logger.getLogger(Properties.class);
+	
+	@XmlEnum(String.class)
     public enum Status
     {
         PENDING("http://imeji.org/terms/status#PENDING"), RELEASED("http://imeji.org/terms/status#RELEASED"), WITHDRAWN(
@@ -203,28 +207,9 @@ public class Properties implements Serializable
             method = this.getClass().getMethod(methodName);
             ret = method.invoke(this);
         }
-        catch (SecurityException e)
+        catch (SecurityException | NoSuchMethodException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e)
         {
-            e.printStackTrace();
-        }
-        catch (NoSuchMethodException e)
-        {
-            e.printStackTrace();
-        }
-        catch (IllegalArgumentException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        catch (IllegalAccessException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        catch (InvocationTargetException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        	logger.error("Some issues with getValueFromMethod ", e);
         }
         return ret;
     }

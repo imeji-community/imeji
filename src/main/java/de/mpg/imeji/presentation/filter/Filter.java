@@ -5,6 +5,8 @@ package de.mpg.imeji.presentation.filter;
 
 import java.net.URI;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.presentation.facet.Facet;
 import de.mpg.imeji.presentation.search.URLQueryTransformer;
@@ -59,7 +61,7 @@ public class Filter extends Facet
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+        	Logger.getLogger(Filter.class).error("Some issues during Filter initialization", e);
         }
     }
 

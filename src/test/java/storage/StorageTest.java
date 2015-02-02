@@ -84,7 +84,7 @@ public class StorageTest {
 			if (f.exists())
 				FileUtils.cleanDirectory(f);
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("CleanFiles error", e);
 		}
 	}
 

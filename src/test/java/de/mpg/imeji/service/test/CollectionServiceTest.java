@@ -9,6 +9,7 @@ import java.io.File;
 
 import javax.ws.rs.NotSupportedException;
 
+import org.apache.log4j.Logger;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -32,6 +33,7 @@ public class CollectionServiceTest {
 	private static CollectionImeji collection;
 	private CollectionService collService = new CollectionService();
 	private static final String TEST_IMAGE = "./src/test/resources/storage/test.png";
+	private static Logger logger = Logger.getLogger(CollectionServiceTest.class);
 
 	@BeforeClass
 	public static void setup() throws Exception {
@@ -86,13 +88,14 @@ public class CollectionServiceTest {
 		try {
 			itemTo = crud.create(itemWithFileTo, JenaUtil.testUser);
 		} catch (Exception e1) {
-			e1.printStackTrace();
+			logger.error("test_releaseCollection, can not create item", e1);
 		}
 
 		try {
 			collService.release(collection.getIdString(), JenaUtil.testUser);
 		} catch (NotSupportedException | NotAllowedError | NotFoundException e) {
-			e.printStackTrace();
+			logger.error("test_releaseCollection", e);
+
 		}
 
 	}
@@ -106,7 +109,7 @@ public class CollectionServiceTest {
 			to = collService.create(to, JenaUtil.testUser);
 		} catch (Exception e) {
 			fail();
-			e.printStackTrace();
+			logger.error("test_createCollectionCollection", e);
 		}
 		// check the collection be created and has new id
 		assertNotNull(to.getId());

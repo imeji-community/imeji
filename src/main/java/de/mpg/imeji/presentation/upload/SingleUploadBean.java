@@ -98,7 +98,7 @@ public class SingleUploadBean implements Serializable{
 					sus.copyToTemp();
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.info("Some exception happened during initialization", e);
 			}
 		}
 	}
@@ -159,7 +159,6 @@ public class SingleUploadBean implements Serializable{
 		} catch (Exception e) {	
 			sus.setfFile(" File " + title + " not uploaded: " + e.getMessage());
 			logger.error("Error uploading item: ", e);
-			e.printStackTrace();
 			return null;
 		}
 	}
@@ -193,7 +192,6 @@ public class SingleUploadBean implements Serializable{
 		} catch (Exception e) {
 			techMd = new ArrayList<String>();
 			techMd.add(e.getMessage());
-			e.printStackTrace();
 		}
 		sus.setTechMD(techMd);
     }
@@ -226,7 +224,7 @@ public class SingleUploadBean implements Serializable{
 				}
 				ii.setFile(tmp);
 			} catch (IOException | FileUploadException e) {
-				e.printStackTrace();
+				logger.info("Could not get uploaded ingest file",e);
 			}
 		}
 		return ii;
@@ -248,7 +246,7 @@ public class SingleUploadBean implements Serializable{
 				sus.setProfile(profile);
 				sus.setMdSetBean(mdSetBean);
 			} catch (URISyntaxException e) {
-				e.printStackTrace();
+				logger.info("Pure URI Syntax issue ", e);
 			} 
 		}
 		else

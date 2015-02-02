@@ -8,6 +8,8 @@ import java.io.OutputStream;
 import java.io.StringWriter;
 import java.net.URI;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.logic.export.Export;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.presentation.beans.Navigation;
@@ -21,6 +23,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 public class SitemapExport extends Export
 {
     private double priority = 0.5;
+	private static Logger logger = Logger.getLogger(SitemapExport.class);
 
     @Override
     public void init()
@@ -44,7 +47,7 @@ public class SitemapExport extends Export
         }
         catch (IOException e)
         {
-            e.printStackTrace();
+            logger.info("Some problems with exporting Sitemap!", e);
         }
     }
 

@@ -12,6 +12,7 @@ import static org.junit.Assert.fail;
 import java.io.File;
 import java.net.URI;
 
+import org.apache.log4j.Logger;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -64,7 +65,7 @@ public class ItemServiceTest {
 			collectionTO = s.create(new CollectionTO(), JenaUtil.testUser);
 			collectionId = collectionTO.getId();
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.getLogger(ItemServiceTest.class).error("Cannot initCollection ",e);
 		}
 	}
 

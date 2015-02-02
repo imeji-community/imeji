@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.j2j.annotations.j2jModel;
 import de.mpg.j2j.annotations.j2jResource;
@@ -27,8 +29,10 @@ import de.mpg.j2j.annotations.j2jResource;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class ObjectHelper
-{
+public class ObjectHelper {
+	
+	private static Logger logger = Logger.getLogger(ObjectHelper.class);
+	
     /**
      * Ensure that the {@link URI} uses the correct base uri (see property imeji.jena.resource.base_uri)
      * 
@@ -143,7 +147,7 @@ public class ObjectHelper
             }
             catch (Exception e)
             {
-                e.printStackTrace();
+                logger.error("CopyFields issue", e);
             }
         }
     }
@@ -173,7 +177,7 @@ public class ObjectHelper
             }
             catch (Exception e)
             {
-                e.printStackTrace();
+                logger.error("copyAllFields issue", e);
             }
         }
     }
@@ -215,9 +219,9 @@ public class ObjectHelper
                 }
             }
         } catch (InvocationTargetException e) {
-            e.printStackTrace();
+            logger.error("Invocation Target in transfer Fields", e);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            logger.error("Illegal Access in transfer fields", e);
         }
 
     }

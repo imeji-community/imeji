@@ -5,6 +5,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.ObjectCodec;
@@ -54,11 +56,8 @@ public class MetadataSetTODeserializer extends JsonDeserializer<MetadataSetTO> {
                 MetadataTO mdTO = codec.treeToValue(valueNode, mdTOClass);
                 mdSet.setValue(mdTO);
 
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-                return new MetadataSetTO();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
+            } catch (IllegalAccessException  | InstantiationException e) {
+            	Logger.getLogger(MetadataSetTODeserializer.class).info("Exception, will return new Metadata Set TO", e);
                 return new MetadataSetTO();
             }
 

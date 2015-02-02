@@ -5,6 +5,8 @@ package de.mpg.imeji.logic.export.format;
 
 import java.io.OutputStream;
 
+import org.apache.log4j.Logger;
+
 import com.hp.hpl.jena.query.ReadWrite;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -23,7 +25,10 @@ import de.mpg.imeji.logic.search.SearchResult;
  */
 public class JenaExport extends Export
 {
-    @Override
+	
+	private static Logger logger = Logger.getLogger(JenaExport.class);
+	  
+	@Override
     public void init()
     {
         // Not initialization so far
@@ -64,7 +69,7 @@ public class JenaExport extends Export
             catch (Exception e)
             {
                 Imeji.dataset.abort();
-                e.printStackTrace();
+                logger.info("Some problems with Exporting of Imeji data", e);
             }
             finally
             {

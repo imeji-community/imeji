@@ -93,7 +93,6 @@ public class AdvancedSearchBean
         {
             logger.error("Error initializing advanced search", e);
             BeanHelper.error("Error initializing advanced search");
-            e.printStackTrace();
         }
         return "";
     }

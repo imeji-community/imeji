@@ -204,7 +204,6 @@ public class MdProfileBean
         catch (Exception e)
         {
             BeanHelper.error(sessionBean.getMessage("error_profile_template_load"));
-            e.printStackTrace();
         }
     }
 

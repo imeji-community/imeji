@@ -99,7 +99,7 @@ public class ZIPExport extends Export
         catch (Exception e)
         {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.info("Some problems with ZIP Export",  e);
         }
     }
 
@@ -167,7 +167,7 @@ public class ZIPExport extends Export
         }
         catch (IOException e)
         {
-            e.printStackTrace();
+            logger.info("Some IO Exception when exporting all images!", e);
         }
        
         try {

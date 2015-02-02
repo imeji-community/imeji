@@ -326,7 +326,6 @@ public class UploadBean implements Serializable {
 			getfFiles().add(
 					" File " + title + " not uploaded: " + e.getMessage());
 			logger.error("Error uploading item: ", e);
-			e.printStackTrace();
 			return null;
 		}
 	}
@@ -406,7 +405,6 @@ public class UploadBean implements Serializable {
 			BeanHelper
 					.error(sessionBean.getMessage("error_collection_release"));
 			BeanHelper.error(e.getMessage());
-			e.printStackTrace();
 		}
 		return "pretty:";
 	}

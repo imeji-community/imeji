@@ -436,7 +436,7 @@ public class AlbumBean extends ContainerBean
         {
             BeanHelper.error(sessionBean.getMessage("error_album_release"));
             BeanHelper.error(e.getMessage());
-            e.printStackTrace();
+            logger.error("Issue during release", e);
         }
         return "pretty:";
     }
@@ -460,7 +460,7 @@ public class AlbumBean extends ContainerBean
         {
             BeanHelper.error(sessionBean.getMessage("error_album_delete"));
             BeanHelper.error(e.getMessage());
-            e.printStackTrace();
+            logger.error("Error during delete album", e);
         }
         return "pretty:albums";
     }
@@ -483,7 +483,7 @@ public class AlbumBean extends ContainerBean
         {
             BeanHelper.error(sessionBean.getMessage("error_album_withdraw"));
             BeanHelper.error(e.getMessage());
-            e.printStackTrace();
+            logger.error("Error during withdraw album", e);
         }
         return "pretty:";
     }

@@ -11,6 +11,8 @@ import javax.ws.rs.core.Response.Status;
 
 import net.java.dev.webdav.jaxrs.ResponseStatus;
 
+import org.apache.log4j.Logger;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
@@ -27,6 +29,8 @@ import de.mpg.imeji.rest.to.JSONException;
 import de.mpg.imeji.rest.to.JSONResponse;
 
 public class RestProcessUtils {
+	
+	private static Logger logger = Logger.getLogger(RestProcessUtils.class);
 	/**
 	 * Parse a json file and construct a new Object of type T
 	 * 
@@ -54,7 +58,7 @@ public class RestProcessUtils {
 		try {
 			return reader.readValue(req.getInputStream());
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("Could not build TO from JSON", e);
 		}
 		return null;
 	}
@@ -65,7 +69,8 @@ public class RestProcessUtils {
 		try {
 			return ow.writeValueAsString(obj);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("Could not build JSON from Object", e);
+
 		}
 		return null;
 	}
@@ -79,7 +84,8 @@ public class RestProcessUtils {
 			json = ow.writeValueAsString(resp.getObject());
 		} catch (JsonProcessingException e) {
 
-			e.printStackTrace();
+			logger.error("Have a JSON Processing Exception during building JSON Response", e);
+
 		}
 		return Response.status(resp.getStatus()).entity(json)
 				.type(MediaType.APPLICATION_JSON).build();

@@ -42,7 +42,9 @@ public class ItemService implements API<ItemTO> {
 			TransferObjectFactory.transferItem(item, itemTO);
 			return itemTO;
 		}
-		return null;
+		else
+		{
+			throw new UnprocessableError("A file must be uploaded, referenced or fetched from external location.");
 	}
 
 	@Override

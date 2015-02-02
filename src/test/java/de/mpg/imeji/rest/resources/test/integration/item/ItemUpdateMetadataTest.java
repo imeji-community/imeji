@@ -1,5 +1,39 @@
 package de.mpg.imeji.rest.resources.test.integration.item;
 
+import de.mpg.imeji.logic.controller.CollectionController;
+import de.mpg.imeji.logic.controller.ProfileController;
+import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.presentation.util.ImejiFactory;
+import de.mpg.imeji.rest.api.ItemService;
+import de.mpg.imeji.rest.process.RestProcessUtils;
+import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
+import de.mpg.imeji.rest.to.*;
+import de.mpg.imeji.rest.to.predefinedMetadataTO.*;
+import de.mpg.j2j.misc.LocalizedString;
+import org.glassfish.jersey.jackson.JacksonFeature;
+import org.glassfish.jersey.media.multipart.FormDataMultiPart;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
+import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runners.MethodSorters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import util.JenaUtil;
+
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
 import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONFromObject;
 import static de.mpg.imeji.rest.resources.test.TestUtils.getStringFromPath;
 import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_REST;
@@ -13,60 +47,6 @@ import static org.hamcrest.core.AllOf.allOf;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertEquals;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
-import org.glassfish.jersey.jackson.JacksonFeature;
-import org.glassfish.jersey.media.multipart.FormDataMultiPart;
-import org.glassfish.jersey.media.multipart.MultiPartFeature;
-import org.junit.BeforeClass;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import util.JenaUtil;
-import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.controller.ProfileController;
-import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.presentation.util.ImejiFactory;
-import de.mpg.imeji.rest.api.ItemService;
-import de.mpg.imeji.rest.process.RestProcessUtils;
-import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
-import de.mpg.imeji.rest.to.IdentifierTO;
-import de.mpg.imeji.rest.to.ItemTO;
-import de.mpg.imeji.rest.to.ItemWithFileTO;
-import de.mpg.imeji.rest.to.LabelTO;
-import de.mpg.imeji.rest.to.MetadataSetTO;
-import de.mpg.imeji.rest.to.MetadataTO;
-import de.mpg.imeji.rest.to.OrganizationTO;
-import de.mpg.imeji.rest.to.PersonTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.ConePersonTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.DateTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.GeolocationTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.LicenseTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.LinkTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.NumberTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.PublicationTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.TextTO;
-import de.mpg.j2j.misc.LocalizedString;
 
 /**
  * Created by vlad on 09.12.14.
@@ -323,15 +303,14 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
 
         FormDataMultiPart multiPart = new FormDataMultiPart();
         multiPart.field("json", buildJSONFromObject(itemTO)
-                        //TODO: make sense only for
                         .replaceAll("(\"text\"\\s*:\\s*)\"(.+)\"", REP_CHANGED)
                         .replaceAll("(\"date\"\\s*:\\s*)\"(.+)\"", REP_CHANGED)
                         .replaceAll("(\"license\"\\s*:\\s*)\"(.+)\"", REP_CHANGED)
                         .replaceAll("(\"link\"\\s*:\\s*)\"(.+)\"", REP_CHANGED)
                         .replaceAll("(\"url\"\\s*:\\s*)\"(.+)\"", REP_CHANGED)
-                        .replaceAll("(\"format\"\\s*:\\s*)\"(.+)\"", REP_CHANGED)
+                        //only publication should be filled, not citation or format
                         .replaceAll("(\"publication\"\\s*:\\s*)\"(.+)\"", REP_CHANGED)
-                        .replaceAll("(\"citation\"\\s*:\\s*)\"(.+)\"", REP_CHANGED)
+
         );
         
         LOGGER.info(multiPart.getField("json").getValue());

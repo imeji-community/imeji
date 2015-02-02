@@ -1,6 +1,17 @@
 package de.mpg.imeji.rest.process;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
+import com.google.common.collect.ImmutableList;
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.controller.CollectionController;
+import de.mpg.imeji.logic.controller.ProfileController;
+import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.vo.*;
+import de.mpg.imeji.logic.vo.predefinedMetadata.*;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
+import de.mpg.imeji.rest.to.*;
+import de.mpg.imeji.rest.to.predefinedMetadataTO.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URI;
 import java.text.SimpleDateFormat;
@@ -8,46 +19,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.common.collect.ImmutableList;
-
-import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.controller.ProfileController;
-import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.ContainerMetadata;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Metadata;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Organization;
-import de.mpg.imeji.logic.vo.Person;
-import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
-import de.mpg.imeji.logic.vo.predefinedMetadata.License;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
-import de.mpg.imeji.rest.to.CollectionProfileTO;
-import de.mpg.imeji.rest.to.CollectionTO;
-import de.mpg.imeji.rest.to.IdentifierTO;
-import de.mpg.imeji.rest.to.ItemTO;
-import de.mpg.imeji.rest.to.MetadataSetTO;
-import de.mpg.imeji.rest.to.OrganizationTO;
-import de.mpg.imeji.rest.to.PersonTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.ConePersonTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.DateTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.GeolocationTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.LicenseTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.LinkTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.NumberTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.PublicationTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.TextTO;
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 public class ReverseTransferObjectFactory {
 
@@ -179,7 +151,7 @@ public class ReverseTransferObjectFactory {
 						break;
 					case "http://imeji.org/terms/metadata#publication":
 						PublicationTO pubTO = (PublicationTO) md.getValue();
-						if (!isNullOrEmpty(pubTO.getPublication()) || !isNullOrEmpty(pubTO.getCitation())) {
+						if (!isNullOrEmpty(pubTO.getPublication())) {
 							Publication mdVO = new Publication();
 							mdVO.setStatement(stURI);
 							mdVO.setUri(URI.create(pubTO.getPublication()));

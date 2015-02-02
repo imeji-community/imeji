@@ -3,19 +3,25 @@
  */
 package de.mpg.imeji.logic.vo;
 
-import de.mpg.imeji.logic.search.FulltextIndex;
-import de.mpg.j2j.annotations.*;
-import org.joda.time.chrono.AssembledChronology.Fields;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+import org.joda.time.chrono.AssembledChronology.Fields;
+
+import de.mpg.imeji.logic.search.FulltextIndex;
+import de.mpg.j2j.annotations.j2jId;
+import de.mpg.j2j.annotations.j2jList;
+import de.mpg.j2j.annotations.j2jLiteral;
+import de.mpg.j2j.annotations.j2jModel;
+import de.mpg.j2j.annotations.j2jResource;
 
 /**
  * imeji item. Can be an image, a video, a sound, etc.

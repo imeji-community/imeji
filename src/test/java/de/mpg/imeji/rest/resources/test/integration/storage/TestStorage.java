@@ -1,19 +1,21 @@
 package de.mpg.imeji.rest.resources.test.integration.storage;
 
-import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import java.io.IOException;
-
 import static javax.ws.rs.core.Response.Status.OK;
 import static org.hamcrest.CoreMatchers.anyOf;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
+
+import java.io.IOException;
+
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
 
 /**
  * Created by vlad on 13.01.15.

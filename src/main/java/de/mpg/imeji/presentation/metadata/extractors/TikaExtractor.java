@@ -28,7 +28,11 @@
  */
 package de.mpg.imeji.presentation.metadata.extractors;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -40,7 +44,6 @@ import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.sax.BodyContentHandler;
-import org.omg.CORBA.portable.InputStream;
 import org.xml.sax.SAXException;
 
 import de.mpg.imeji.logic.storage.StorageController;

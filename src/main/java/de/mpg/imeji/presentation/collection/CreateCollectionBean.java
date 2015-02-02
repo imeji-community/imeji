@@ -13,10 +13,8 @@ import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
-import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
-import de.mpg.imeji.presentation.util.UrlHelper;
 
 /**
  * Java Bean for the create Collection Page

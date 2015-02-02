@@ -122,4 +122,29 @@ public class Grant implements Serializable
     {
         return grantType;
     }
+    
+    public static String getGrantTypeName(GrantType gt){
+        switch (gt)
+        {
+            case CREATE:
+                return "create";
+            case DELETE:
+                return "delete";
+            case UPDATE:
+                return "update";
+            case READ:
+            	return "read";
+            case ADMIN:
+            	return "admin";
+            case UPDATE_CONTENT:
+            	return "update content";
+            case DELETE_CONTENT:
+            	return "delete content";
+            case ADMIN_CONTENT:
+            	return "administer content";
+        }
+        return "action";
+    }
+
+    
 }

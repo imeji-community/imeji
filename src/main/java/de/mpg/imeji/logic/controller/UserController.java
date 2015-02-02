@@ -10,24 +10,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
+import de.mpg.imeji.exceptions.AlreadyExistsException;
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.reader.ReaderFacade;
-import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
-import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.logic.writer.WriterFacade;
-import de.mpg.j2j.exceptions.AlreadyExistsException;
-import de.mpg.j2j.exceptions.NotFoundException;
 
 /**
  * Controller for {@link User}
@@ -40,6 +41,7 @@ public class UserController {
 	private static final ReaderFacade reader = new ReaderFacade(Imeji.userModel);
 	private static final WriterFacade writer = new WriterFacade(Imeji.userModel);
 	private User user;
+	static Logger logger = Logger.getLogger(UserController.class);
 
 	/**
 	 * User type (restricted: can not create collection)
@@ -67,9 +69,9 @@ public class UserController {
 	 * @param newUser
 	 * @param type
 	 * @return
-	 * @throws Exception
+	 * @throws ImejiException
 	 */
-	public User create(User u, USER_TYPE type) throws Exception {
+	public User create(User u, USER_TYPE type) throws ImejiException {
 		try {
 			retrieve(u.getEmail());
 			throw new AlreadyExistsException("Email" + u.getEmail()
@@ -103,9 +105,9 @@ public class UserController {
 	 * Delete a {@link User}
 	 * 
 	 * @param user
-	 * @throws Exception
+	 * @throws ImejiException
 	 */
-	public void delete(User user) throws Exception {
+	public void delete(User user) throws ImejiException {
 		// remove user grant
 		writer.delete(new ArrayList<Object>(user.getGrants()), this.user);
 		// remove user
@@ -117,9 +119,9 @@ public class UserController {
 	 * 
 	 * @param email
 	 * @return
-	 * @throws Exception
+	 * @throws ImejiException
 	 */
-	public User retrieve(String email) throws Exception {
+	public User retrieve(String email) throws ImejiException {
 		Search search = SearchFactory.create();
 		SearchResult result = search.searchSimpleForQuery(SPARQLQueries
 				.selectUserByEmail(email));
@@ -138,9 +140,9 @@ public class UserController {
 	 * 
 	 * @param email
 	 * @return
-	 * @throws Exception
+	 * @throws ImejiException
 	 */
-	public User retrieve(URI uri) throws Exception {
+	public User retrieve(URI uri) throws ImejiException {
 		User u = (User) reader.read(uri.toString(), user, new User());
 		UserGroupController ugc = new UserGroupController();
 		u.setGroups((List<UserGroup>) ugc.searchByUser(u, user));
@@ -154,9 +156,9 @@ public class UserController {
 	 *            : The user who is updated in the database
 	 * @param currentUSer
 	 *            : The user who does the update
-	 * @throws Exception
+	 * @throws ImejiException
 	 */
-	public void update(User updatedUser, User currentUser) throws Exception {
+	public void update(User updatedUser, User currentUser) throws ImejiException {
 		try {
 			User u = retrieve(updatedUser.getEmail());
 			if (!u.getId().toString().equals(updatedUser.getId().toString()))
@@ -332,17 +334,16 @@ public class UserController {
 	 * 
 	 * @param uris
 	 * @return
+	 * @throws ImejiAPIException 
 	 */
-	public Collection<User> loadUsers(List<String> uris) {
+	public Collection<User> loadUsers(List<String> uris)  {
 		Collection<User> users = new ArrayList<User>();
 		for (String uri : uris) {
 			try {
 
 				users.add((User) reader.read(uri, user, new User()));
-			} catch (NotFoundException e) {
-				throw new RuntimeException("User " + uri + " not found", e);
-			} catch (Exception e) {
-				throw new RuntimeException(e);
+			} catch (ImejiException e) {
+				logger.info("Could not find user with URI "+uri, e);
 			}
 		}
 		return users;
@@ -362,11 +363,8 @@ public class UserController {
 				ReaderFacade reader = new ReaderFacade(model);
 				orgs.add((Organization) reader.read(uri, user,
 						new Organization()));
-			} catch (NotFoundException e) {
-				throw new RuntimeException(
-						"Organization " + uri + " not found", e);
-			} catch (Exception e) {
-				throw new RuntimeException(e);
+			} catch (ImejiException e) {
+				logger.info("Organization with " + uri + " not found");
 			}
 		}
 		return orgs;
@@ -381,14 +379,13 @@ public class UserController {
 	private Collection<Person> loadPersons(List<String> uris, String model) {
 		Collection<Person> p = new ArrayList<Person>();
 		for (String uri : uris) {
-			try {
-				ReaderFacade reader = new ReaderFacade(model);
-				p.add((Person) reader.read(uri, user, new Person()));
-			} catch (NotFoundException e) {
-				throw new RuntimeException("Person " + uri + " not found", e);
-			} catch (Exception e) {
-				throw new RuntimeException(e);
-			}
+				try {
+					ReaderFacade reader = new ReaderFacade(model);
+					p.add((Person) reader.read(uri, user, new Person()));
+				}
+				catch (ImejiException e){
+				
+				}
 		}
 		return p;
 	}
@@ -413,7 +410,7 @@ public class UserController {
 	 * Retrieve all admin users
 	 * 
 	 * @return
-	 * @throws Exception
+	 * @throws ImejiException
 	 */
 	public List<User> retrieveAllAdmins() {
 		Search search = SearchFactory.create();
@@ -423,8 +420,8 @@ public class UserController {
 		for (String uri : uris) {
 			try {
 				admins.add(retrieve(URI.create(uri)));
-			} catch (Exception e) {
-				throw new RuntimeException(e);
+			} catch (ImejiException e) {
+				logger.info("Could not retrieve any admin in the list. Something is wrong!");
 			}
 		}
 		return admins;

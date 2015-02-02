@@ -3,13 +3,9 @@ package Authentication;
 
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Test;
 
 import util.JenaUtil;
-import de.mpg.imeji.logic.auth.Authentication;
-import de.mpg.imeji.logic.auth.AuthenticationFactory;
 import de.mpg.imeji.logic.auth.authentication.SimpleAuthentication;
 import de.mpg.imeji.presentation.beans.PropertyBean;
 

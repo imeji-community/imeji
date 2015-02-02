@@ -1,13 +1,14 @@
 package de.mpg.imeji.rest.process;
 
-import de.mpg.imeji.rest.to.JSONResponse;
-import de.mpg.imeji.rest.to.StorageTO;
-
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static de.mpg.imeji.logic.storage.StorageController.UPLOAD_BLACKLIST_PROPERTY;
 import static de.mpg.imeji.logic.storage.StorageController.UPLOAD_WHITELIST_PROPERTY;
 import static de.mpg.imeji.presentation.util.PropertyReader.getProperty;
-import static javax.ws.rs.core.Response.Status;
+
+import javax.ws.rs.core.Response.Status;
+
+import de.mpg.imeji.rest.to.JSONResponse;
+import de.mpg.imeji.rest.to.StorageTO;
 
 
 /**

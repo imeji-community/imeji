@@ -13,7 +13,6 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.UserGroupController;
 import de.mpg.imeji.logic.util.IdentifierUtil;
-import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jList;

@@ -6,10 +6,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import util.JenaUtil;
+import de.mpg.imeji.exceptions.AlreadyExistsException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.j2j.exceptions.AlreadyExistsException;
 
 public class UserControllerTest {
 	@Before

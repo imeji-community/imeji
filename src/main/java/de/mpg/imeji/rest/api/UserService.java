@@ -5,11 +5,11 @@ import java.util.List;
 
 import javax.ws.rs.NotSupportedException;
 
+import de.mpg.imeji.exceptions.NotAllowedError;
+import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.j2j.exceptions.NotFoundException;
 
 
 

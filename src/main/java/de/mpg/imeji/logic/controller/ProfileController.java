@@ -3,12 +3,19 @@
  */
 package de.mpg.imeji.logic.controller;
 
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.NotFoundException;
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
-import de.mpg.imeji.logic.auth.exception.AuthenticationError;
-import de.mpg.imeji.logic.auth.exception.NotAllowedError;
-import de.mpg.imeji.logic.auth.exception.UnprocessableError;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
@@ -17,17 +24,14 @@ import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.*;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Metadata;
+import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;
+import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.writer.WriterFacade;
-import de.mpg.j2j.exceptions.NotFoundException;
 import de.mpg.j2j.helper.DateHelper;
-import org.apache.log4j.Logger;
-
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Controller for {@link MetadataProfile}
@@ -56,10 +60,10 @@ public class ProfileController extends ImejiController {
 	 * @param p
 	 * @param user
 	 * @return
-	 * @throws Exception
+	 * @throws ImejiException
 	 */
 	public MetadataProfile create(MetadataProfile p, User user)
-			throws Exception {
+			throws ImejiException {
 		writeCreateProperties(p, user);
 		p.setStatus(Status.PENDING);
 		writer.create(WriterFacade.toList(p), user);
@@ -76,9 +80,9 @@ public class ProfileController extends ImejiController {
 	 * @param id
 	 * @param user
 	 * @return
-	 * @throws Exception
+	 * @throws ImejiException
 	 */
-	public MetadataProfile retrieve(String id, User user) throws Exception {
+	public MetadataProfile retrieve(String id, User user) throws ImejiException {
 		return retrieve(ObjectHelper.getURI(MetadataProfile.class, id), user);
 	}
 
@@ -89,11 +93,10 @@ public class ProfileController extends ImejiController {
 	 * @param user
 	 * @return
 	 * @throws NotFoundException
-	 * @throws Exception
+	 * @throws ImejiException
 	 */
 	public MetadataProfile retrieve(URI uri, User user)
-			throws NotFoundException,
-			NotAllowedError,  AuthenticationError,Exception {
+			throws ImejiException {
 			MetadataProfile p = null;
 			p = ((MetadataProfile) reader.read(uri.toString(), user,
 					new MetadataProfile()));
@@ -108,16 +111,16 @@ public class ProfileController extends ImejiController {
 	 * @param user
 	 * @return
 	 * @throws NotFoundException
-	 * @throws Exception
+	 * @throws ImejiException
 	 */
 	public MetadataProfile retrieveByCollectionId(URI collectionId, User user)
-			throws Exception {
+			throws ImejiException {
 
 		CollectionController cc = new CollectionController();
 		CollectionImeji c;
 		try {
 			c = cc.retrieve(collectionId, user);
-		} catch (Exception e) {
+		} catch (ImejiException e) {
 			//e.printStackTrace();
 			throw new UnprocessableError("Invalid collection: " + e.getLocalizedMessage());
 		}
@@ -131,9 +134,9 @@ public class ProfileController extends ImejiController {
 	 * 
 	 * @param ic
 	 * @param user
-	 * @throws Exception
+	 * @throws ImejiException
 	 */
-	public void update(MetadataProfile mdp, User user) throws Exception {
+	public void update(MetadataProfile mdp, User user) throws ImejiException {
 		writeUpdateProperties(mdp, user);
 		writer.update(WriterFacade.toList(mdp), user);
 	}
@@ -143,9 +146,9 @@ public class ProfileController extends ImejiController {
 	 * 
 	 * @param mdp
 	 * @param user
-	 * @throws Exception
+	 * @throws ImejiException
 	 */
-	public void release(MetadataProfile mdp, User user) throws Exception {
+	public void release(MetadataProfile mdp, User user) throws ImejiException {
 		mdp.setStatus(Status.RELEASED);
 		mdp.setVersionDate(DateHelper.getCurrentDate());
 		update(mdp, user);
@@ -156,9 +159,9 @@ public class ProfileController extends ImejiController {
 	 * 
 	 * @param mdp
 	 * @param user
-	 * @throws Exception
+	 * @throws ImejiException
 	 */
-	public void delete(MetadataProfile mdp, User user) throws Exception {
+	public void delete(MetadataProfile mdp, User user) throws ImejiException {
 		writer.delete(WriterFacade.toList(mdp), user);
 	}
 
@@ -167,9 +170,9 @@ public class ProfileController extends ImejiController {
 	 * 
 	 * @param mdp
 	 * @param user
-	 * @throws Exception
+	 * @throws ImejiException
 	 */
-	public void withdraw(MetadataProfile mdp, User user) throws Exception {
+	public void withdraw(MetadataProfile mdp, User user) throws ImejiException {
 		mdp.setStatus(Status.WITHDRAWN);
 		mdp.setVersionDate(DateHelper.getCurrentDate());
 		update(mdp, user);
@@ -192,9 +195,9 @@ public class ProfileController extends ImejiController {
 	 * Search all profile allowed for the current user. Not sorted.
 	 * 
 	 * @return
-	 * @throws Exception
+	 * @throws ImejiException
 	 */
-	public List<MetadataProfile> search(User user) throws Exception {
+	public List<MetadataProfile> search(User user) throws ImejiException {
 		Search search = SearchFactory.create(SearchType.PROFILE);
 		SearchResult result = search.search(new SearchQuery(), null, user);
 		List<MetadataProfile> l = new ArrayList<MetadataProfile>();

@@ -32,6 +32,9 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.apache.log4j.Logger;
+
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
@@ -41,7 +44,6 @@ import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.logic.writer.WriterFacade;
-import de.mpg.j2j.exceptions.NotFoundException;
 
 /**
  * Implements CRUD Methods for a {@link UserGroup}
@@ -54,14 +56,15 @@ public class UserGroupController
 {
     private static final ReaderFacade reader = new ReaderFacade(Imeji.userModel);
     private static final WriterFacade writer = new WriterFacade(Imeji.userModel);
+    static Logger logger = Logger.getLogger(UserGroupController.class);
 
     /**
      * Create a {@link UserGroup}
      * 
      * @param group
-     * @throws Exception
+     * @throws ImejiException
      */
-    public void create(UserGroup group, User user) throws Exception
+    public void create(UserGroup group, User user) throws ImejiException
     {
         writer.create(WriterFacade.toList(group), user);
     }
@@ -71,9 +74,9 @@ public class UserGroupController
      * 
      * @param uri
      * @return
-     * @throws Exception
+     * @throws ImejiException
      */
-    public UserGroup read(String uri, User user) throws Exception
+    public UserGroup read(String uri, User user) throws ImejiException
     {
         return (UserGroup)reader.read(uri, user, new UserGroup());
     }
@@ -83,9 +86,9 @@ public class UserGroupController
      * 
      * @param uri
      * @return
-     * @throws Exception
+     * @throws ImejiException
      */
-    public UserGroup read(URI uri, User user) throws Exception
+    public UserGroup read(URI uri, User user) throws ImejiException
     {
         return read(uri.toString(), user);
     }
@@ -95,9 +98,9 @@ public class UserGroupController
      * 
      * @param group
      * @param user
-     * @throws Exception
+     * @throws ImejiException
      */
-    public void update(UserGroup group, User user) throws Exception
+    public void update(UserGroup group, User user) throws ImejiException
     {
         writer.update(WriterFacade.toList(group), user);
     }
@@ -107,9 +110,9 @@ public class UserGroupController
      * 
      * @param group
      * @param user
-     * @throws Exception
+     * @throws ImejiException
      */
-    public void delete(UserGroup group, User user) throws Exception
+    public void delete(UserGroup group, User user) throws ImejiException
     {
         writer.delete(WriterFacade.toList(group), user);
     }
@@ -153,24 +156,18 @@ public class UserGroupController
      * @param user
      * @return
      */
-    private Collection<UserGroup> searchBySPARQLQuery(String q, User user)
+    private Collection<UserGroup> searchBySPARQLQuery(String q, User user) 
     {
         Collection<UserGroup> userGroups = new ArrayList<UserGroup>();
         Search search = SearchFactory.create();
         for (String uri : search.searchSimpleForQuery(q).getResults())
         {
-            try
-            {
-                userGroups.add((UserGroup)reader.read(uri, user, new UserGroup()));
-            }
-            catch (NotFoundException e)
-            {
-                throw new RuntimeException("UserGroup " + uri + " not found", e);
-            }
-            catch (Exception e)
-            {
-                throw new RuntimeException(e);
-            }
+        		try {
+						userGroups.add((UserGroup)reader.read(uri, user, new UserGroup()));
+        		}
+        		catch (ImejiException e) {
+        			logger.info("User group with uri "+uri+" not found.");
+        		}
         }
         return userGroups;
     }

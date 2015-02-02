@@ -30,12 +30,11 @@ import javax.ws.rs.core.Response.Status;
 
 import com.ocpsoft.pretty.PrettyContext;
 
-import de.mpg.imeji.logic.auth.exception.AuthenticationError;
-import de.mpg.imeji.logic.auth.exception.NotAllowedError;
-import de.mpg.imeji.logic.controller.exceptions.NotFoundError;
+import de.mpg.imeji.exceptions.AuthenticationError;
+import de.mpg.imeji.exceptions.NotAllowedError;
+import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.j2j.exceptions.NotFoundException;
 
 /**
  * {@link Filter} for the imeji history
@@ -67,7 +66,7 @@ public class HistoryFilter implements Filter {
 				}
 			}
 		} catch (Exception e) {
-			if (e instanceof NotFoundError || e instanceof NotFoundException
+			if (e instanceof NotFoundException || e instanceof NotFoundException
 					|| e instanceof NullPointerException) {
 				((HttpServletResponse) resp).sendError(
 						Status.NOT_FOUND.getStatusCode(), "RESOURCE_NOT_FOUND");

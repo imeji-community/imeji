@@ -8,6 +8,7 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.tdb.TDBFactory;
 
+import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.controller.UserController;
@@ -17,7 +18,6 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.util.ImejiFactory;
-import de.mpg.j2j.exceptions.NotFoundException;
 
 /**
  * Class for developer testing purpose

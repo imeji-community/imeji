@@ -1,10 +1,11 @@
 package de.mpg.imeji.rest.to;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * Created by vlad on 13.01.15.

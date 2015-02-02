@@ -6,9 +6,9 @@ import javax.ws.rs.NotSupportedException;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.auth.exception.NotAllowedError;
+import de.mpg.imeji.exceptions.NotAllowedError;
+import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.j2j.exceptions.NotFoundException;
 
 /**
  * The generic Interface defining all methods (i.e verbs) available for the
@@ -25,6 +25,8 @@ import de.mpg.j2j.exceptions.NotFoundException;
  * @param <V>
  */
 public interface API<V> {
+	
+	static Logger logger = Logger.getLogger(API.class);
 
 	/**
 	 * Create an Object in imeji

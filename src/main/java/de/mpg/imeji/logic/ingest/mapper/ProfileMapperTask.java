@@ -77,7 +77,7 @@ public class ProfileMapperTask extends SwingWorker<Collection<MetadataProfile>, 
     }
 
     @Override
-    protected Collection<MetadataProfile> doInBackground() throws Exception
+    protected Collection<MetadataProfile> doInBackground() 
     {
         this.dupProfiles = this.process(profileList);
         return this.getMappedProfileObjects();

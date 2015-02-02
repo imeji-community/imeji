@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
@@ -53,7 +54,7 @@ public class AlbumController extends ImejiController {
 	 * @param album
 	 * @param user
 	 */
-	public void create(Album album, User user) throws Exception {
+	public void create(Album album, User user) throws ImejiException {
 		writeCreateProperties(album, user);
 		GrantController gc = new GrantController();
 		gc.addGrants(user, AuthorizationPredefinedRoles.admin(album.getId()
@@ -67,9 +68,9 @@ public class AlbumController extends ImejiController {
 	 * 
 	 * @param ic
 	 * @param user
-	 * @throws Exception
+	 * @throws ImejiException
 	 */
-	public void update(Album ic, User user) throws Exception {
+	public void update(Album ic, User user) throws ImejiException {
 		writeUpdateProperties(ic, user);
 		writer.update(WriterFacade.toList(ic), user);
 	}
@@ -80,9 +81,9 @@ public class AlbumController extends ImejiController {
 	 * 
 	 * @param ic
 	 * @param user
-	 * @throws Exception
+	 * @throws ImejiException
 	 */
-	public void updateLazy(Album ic, User user) throws Exception {
+	public void updateLazy(Album ic, User user) throws ImejiException {
 		writeUpdateProperties(ic, user);
 		writer.updateLazy(WriterFacade.toList(ic), user);
 	}
@@ -93,9 +94,9 @@ public class AlbumController extends ImejiController {
 	 * @param selectedAlbumId
 	 * @param user
 	 * @return
-	 * @throws Exception
+	 * @throws ImejiException
 	 */
-	public Album retrieve(URI selectedAlbumId, User user) throws Exception {
+	public Album retrieve(URI selectedAlbumId, User user) throws ImejiException {
 		return (Album) reader.read(selectedAlbumId.toString(), user,
 				new Album());
 	}
@@ -106,9 +107,9 @@ public class AlbumController extends ImejiController {
 	 * @param uri
 	 * @param user
 	 * @return
-	 * @throws Exception
+	 * @throws ImejiException
 	 */
-	public Album retrieveLazy(URI uri, User user) throws Exception {
+	public Album retrieveLazy(URI uri, User user) throws ImejiException {
 		return (Album) reader.readLazy(uri.toString(), user, new Album());
 	}
 
@@ -117,9 +118,9 @@ public class AlbumController extends ImejiController {
 	 * 
 	 * @param album
 	 * @param user
-	 * @throws Exception
+	 * @throws ImejiException
 	 */
-	public void delete(Album album, User user) throws Exception {
+	public void delete(Album album, User user) throws ImejiException {
 		writer.delete(WriterFacade.toList(album), user);
 	}
 
@@ -128,9 +129,9 @@ public class AlbumController extends ImejiController {
 	 * not released, then abort.
 	 * 
 	 * @param album
-	 * @throws Exception
+	 * @throws ImejiException
 	 */
-	public void release(Album album, User user) throws Exception {
+	public void release(Album album, User user) throws ImejiException {
 		ItemController ic = new ItemController();
 		album = (Album) ic.searchAndSetContainerItems(album, user, -1, 0);
 		if (album.getImages().isEmpty()) {
@@ -150,10 +151,10 @@ public class AlbumController extends ImejiController {
 	 * @param uris
 	 * @param user
 	 * @return
-	 * @throws Exception
+	 * @throws ImejiException
 	 */
 	public List<String> addToAlbum(Album album, List<String> uris, User user)
-			throws Exception {
+			throws ImejiException {
 		ItemController ic = new ItemController();
 		List<String> inAlbums = ic
 				.search(album.getId(), null, null, null, user).getResults();
@@ -182,10 +183,10 @@ public class AlbumController extends ImejiController {
 	 * @param toDelete
 	 * @param user
 	 * @return
-	 * @throws Exception
+	 * @throws ImejiException
 	 */
 	public int removeFromAlbum(Album album, List<String> toDelete, User user)
-			throws Exception {
+			throws ImejiException {
 		List<URI> inAlbums = new ArrayList<URI>(album.getImages());
 		album.getImages().clear();
 		for (URI uri : inAlbums) {
@@ -203,9 +204,9 @@ public class AlbumController extends ImejiController {
 	 * all {@link Item}
 	 * 
 	 * @param album
-	 * @throws Exception
+	 * @throws ImejiException
 	 */
-	public void withdraw(Album album, User user) throws Exception {
+	public void withdraw(Album album, User user) throws ImejiException {
 		album.setStatus(Status.WITHDRAWN);
 		album.setVersionDate(DateHelper.getCurrentDate());
 		album.getImages().clear();
@@ -235,10 +236,10 @@ public class AlbumController extends ImejiController {
 	 * @param limit
 	 * @param offset
 	 * @return
-	 * @throws Exception
+	 * @throws ImejiException
 	 */
 	public Collection<Album> loadAlbumsLazy(List<String> uris, User user,
-			int limit, int offset) throws Exception {
+			int limit, int offset) throws ImejiException {
 		List<Album> albs = new ArrayList<Album>();
 		int counter = 0;
 		for (String s : uris) {
@@ -256,9 +257,9 @@ public class AlbumController extends ImejiController {
 	 * Retrieve all imeji {@link Album}
 	 * 
 	 * @return
-	 * @throws Exception
+	 * @throws ImejiException
 	 */
-	public List<Album> retrieveAll(User user) throws Exception {
+	public List<Album> retrieveAll(User user) throws ImejiException {
 		List<String> uris = ImejiSPARQL.exec(SPARQLQueries.selectAlbumAll(),
 				Imeji.albumModel);
 		return (List<Album>) loadAlbumsLazy(uris, user, -1, 0);

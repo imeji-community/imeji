@@ -30,6 +30,7 @@ package de.mpg.imeji.logic.writer;
 
 import java.util.List;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.vo.User;
 
 /**
@@ -47,34 +48,34 @@ public interface Writer
      * 
      * @param objects
      * @param user
-     * @throws Exception
+     * @throws ImejiException
      */
-    public void create(List<Object> objects, User user) throws Exception;
+    public void create(List<Object> objects, User user) throws ImejiException;
 
     /**
      * Delete a list of objects
      * 
      * @param objects
      * @param user
-     * @throws Exception
+     * @throws ImejiException
      */
-    public void delete(List<Object> objects, User user) throws Exception;
+    public void delete(List<Object> objects, User user) throws ImejiException;
 
     /**
      * Update a list of objects
      * 
      * @param objects
      * @param user
-     * @throws Exception
+     * @throws ImejiException
      */
-    public void update(List<Object> objects, User user) throws Exception;
+    public void update(List<Object> objects, User user) throws ImejiException;
 
     /**
      * Lazy Update a list of objects (don't update lazy list)
      * 
      * @param objects
      * @param user
-     * @throws Exception
+     * @throws ImejiException
      */
-    public void updateLazy(List<Object> objects, User user) throws Exception;
+    public void updateLazy(List<Object> objects, User user) throws ImejiException;
 }

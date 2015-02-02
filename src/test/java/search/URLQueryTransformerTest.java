@@ -33,15 +33,9 @@ import java.net.URLEncoder;
 
 import junit.framework.Assert;
 
-import org.junit.Before;
 import org.junit.Test;
 
-import util.JenaUtil;
-
-import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
-import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.search.URLQueryTransformer;
 
 /**

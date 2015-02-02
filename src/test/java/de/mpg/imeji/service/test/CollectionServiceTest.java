@@ -13,7 +13,9 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.mpg.imeji.logic.auth.exception.NotAllowedError;
+import util.JenaUtil;
+import de.mpg.imeji.exceptions.NotAllowedError;
+import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.presentation.util.ImejiFactory;
@@ -22,8 +24,6 @@ import de.mpg.imeji.rest.api.ItemService;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
-import de.mpg.j2j.exceptions.NotFoundException;
-import util.JenaUtil;
 
 public class CollectionServiceTest {
 

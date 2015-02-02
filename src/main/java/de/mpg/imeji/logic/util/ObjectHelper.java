@@ -3,6 +3,8 @@
  */
 package de.mpg.imeji.logic.util;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -17,8 +19,6 @@ import java.util.regex.Pattern;
 import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.j2j.annotations.j2jModel;
 import de.mpg.j2j.annotations.j2jResource;
-
-import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
  * Helper for imeji {@link Object}

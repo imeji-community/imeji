@@ -26,25 +26,24 @@
  * Gesellschaft zur Förderung der Wissenschaft e.V.
  * All rights reserved. Use is subject to license terms.
  */
-package de.mpg.imeji.logic.auth.exception;
+package de.mpg.imeji.exceptions;
 
-import de.mpg.imeji.logic.auth.Authorization;
 
 /**
- * {@link Authorization} error when a user is not allowed to do an action
+ * Error by authentication (wrong credentials)
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class NotAllowedError extends RuntimeException
+public class AuthenticationError extends ImejiException
 {
-    private static final long serialVersionUID = -3504946406047760565L;
+    private static final long serialVersionUID = 6128275500671470459L;
 
     /**
-     * Constructor for HTTP 403 Forbidden
+     * Constructor for HTTP 401 Unauthorized
      */
-    public NotAllowedError(String message)
+    public AuthenticationError(String message)
     {
         super(message);
     }

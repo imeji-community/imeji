@@ -5,15 +5,15 @@ import java.util.List;
 
 import javax.ws.rs.NotSupportedException;
 
+import de.mpg.imeji.exceptions.NotAllowedError;
+import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.to.MetadataProfileTO;
-import de.mpg.j2j.exceptions.NotFoundException;
 
 
 

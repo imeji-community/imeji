@@ -41,9 +41,9 @@ public abstract class Export
      * 
      * @param out
      * @param sr
-     * @throws Exception 
+     * 
      */
-    public abstract void export(OutputStream out, SearchResult sr) throws Exception;
+    public abstract void export(OutputStream out, SearchResult sr);
 
     /**
      * Return the Mime-type of the http response

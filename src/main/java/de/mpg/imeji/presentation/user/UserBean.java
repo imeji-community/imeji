@@ -10,20 +10,16 @@ import java.util.List;
 
 import javax.faces.context.FacesContext;
 
-import com.hp.hpl.jena.sparql.pfunction.library.container;
-
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.GrantController;
 import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.util.StringHelper;
-import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Grant;
-import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
+import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.beans.PropertyBean;

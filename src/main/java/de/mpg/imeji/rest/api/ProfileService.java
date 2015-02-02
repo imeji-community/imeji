@@ -3,10 +3,7 @@ package de.mpg.imeji.rest.api;
 import java.net.URI;
 import java.util.List;
 
-import javax.ws.rs.NotSupportedException;
-
-import de.mpg.imeji.exceptions.NotAllowedError;
-import de.mpg.imeji.exceptions.NotFoundException;
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -19,7 +16,7 @@ import de.mpg.imeji.rest.to.MetadataProfileTO;
 
 public class ProfileService implements API<MetadataProfileTO>{
 	
-	public MetadataProfile read(URI uri) throws Exception{
+	public MetadataProfile read(URI uri) throws ImejiException{
 		ProfileController pcon = new ProfileController();
 		return pcon.retrieve(uri, Imeji.adminUser);
 	}
@@ -32,8 +29,7 @@ public class ProfileService implements API<MetadataProfileTO>{
 	}
 
 	@Override
-	public MetadataProfileTO read(String id, User u) throws NotFoundException,
-			NotAllowedError, NotSupportedException, Exception {
+	public MetadataProfileTO read(String id, User u) throws ImejiException {
 		ProfileController pcontroller = new ProfileController();
 		MetadataProfileTO to = new MetadataProfileTO();
 		MetadataProfile vo = pcontroller.retrieve(ObjectHelper.getURI(MetadataProfile.class, id), u);
@@ -43,28 +39,25 @@ public class ProfileService implements API<MetadataProfileTO>{
 
 	@Override
 	public MetadataProfileTO update(MetadataProfileTO o, User u)
-			throws NotFoundException, NotAllowedError, NotSupportedException,
-			Exception {
+			throws ImejiException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public boolean delete(String id, User u) throws NotFoundException, NotAllowedError, NotSupportedException, Exception {
+	public boolean delete(String id, User u) throws ImejiException {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public MetadataProfileTO release(String id, User u) throws NotFoundException,
-			NotAllowedError, NotSupportedException, Exception {
+	public MetadataProfileTO release(String id, User u) throws ImejiException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public MetadataProfileTO withdraw(String id, User u, String discardComment) throws NotFoundException,
-			NotAllowedError, NotSupportedException, Exception {
+	public MetadataProfileTO withdraw(String id, User u, String discardComment) throws ImejiException {
 		// TODO Auto-generated method stub
 		return null;
 		
@@ -72,23 +65,20 @@ public class ProfileService implements API<MetadataProfileTO>{
 
 	@Override
 	public void share(String id, String userId, List<String> roles, User u)
-			throws NotFoundException, NotAllowedError, NotSupportedException,
-			Exception {
+			throws ImejiException {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void unshare(String id, String userId, List<String> roles, User u)
-			throws NotFoundException, NotAllowedError, NotSupportedException,
-			Exception {
+			throws ImejiException {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public List<String> search(String q, User u) throws NotSupportedException,
-			Exception {
+	public List<String> search(String q, User u) throws ImejiException {
 		// TODO Auto-generated method stub
 		return null;
 	}

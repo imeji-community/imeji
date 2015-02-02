@@ -47,4 +47,5 @@ public class AuthenticationError extends ImejiException
     {
         super(message);
     }
+    
 }

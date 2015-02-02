@@ -1,6 +1,5 @@
 package de.mpg.imeji.exceptions;
 
-import java.io.Serializable;
 
 /*
  *
@@ -30,12 +29,17 @@ import java.io.Serializable;
  * Gesellschaft zur Förderung der Wissenschaft e.V.
  * All rights reserved. Use is subject to license terms.
  */
-public class ImejiException extends Exception implements Serializable {
+public class ImejiException extends Exception  {
 	private static final long serialVersionUID = -1024323233094119992L;
 
 		public ImejiException(String message)
 	    {
 	        super(message);
+	        
 	    }
+		
+		ImejiException(String message, Throwable e) {
+			super(message, e);
+		}
 
 }

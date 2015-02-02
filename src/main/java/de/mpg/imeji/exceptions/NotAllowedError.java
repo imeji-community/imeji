@@ -48,4 +48,5 @@ public class NotAllowedError extends ImejiException
     {
         super(message);
     }
+    
 }

@@ -92,6 +92,12 @@ public class Grant implements Serializable
         }
         return false;
     }
+    
+    @Override
+    public int hashCode() {
+    	// TODO Auto-generated method stub
+    	return super.hashCode();
+    }
 
     public void setGrantFor(URI grantFor)
     {

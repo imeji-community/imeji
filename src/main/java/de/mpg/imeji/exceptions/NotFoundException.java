@@ -9,6 +9,8 @@ public class NotFoundException extends ImejiException {
     {
         super(message);
     }
+	
+
 }
 
 

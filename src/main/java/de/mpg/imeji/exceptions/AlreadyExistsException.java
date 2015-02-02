@@ -22,4 +22,5 @@ public class AlreadyExistsException extends ImejiException
     {
         super(message);
     }
+    
 }

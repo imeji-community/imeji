@@ -3,20 +3,35 @@
  */
 package de.mpg.imeji.logic.vo;
 
-import de.mpg.imeji.logic.ImejiNamespaces;
-import de.mpg.imeji.logic.util.IdentifierUtil;
-import de.mpg.imeji.logic.vo.predefinedMetadata.*;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
-import de.mpg.j2j.annotations.j2jDataType;
-import de.mpg.j2j.annotations.j2jId;
-import de.mpg.j2j.annotations.j2jLiteral;
-import de.mpg.j2j.annotations.j2jResource;
-
-import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
+
+import org.apache.log4j.Logger;
+
+import de.mpg.imeji.logic.ImejiNamespaces;
+import de.mpg.imeji.logic.util.IdentifierUtil;
+import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Date;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
+import de.mpg.imeji.logic.vo.predefinedMetadata.License;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
+import de.mpg.j2j.annotations.j2jDataType;
+import de.mpg.j2j.annotations.j2jId;
+import de.mpg.j2j.annotations.j2jLiteral;
+import de.mpg.j2j.annotations.j2jResource;
 
 /**
  * Abstract class for metadata of an {@link Item}.
@@ -35,7 +50,7 @@ public abstract class Metadata implements Comparable<Metadata>, Serializable {
 	private static final long serialVersionUID = -6967620655990351430L;
 	// Metadata should have a universal id to avoid overwriting
 	private URI id = IdentifierUtil.newURI(Metadata.class, "universal");
-
+	private static Logger logger = Logger.getLogger(Metadata.class);
 	@j2jLiteral("http://imeji.org/terms/position")
 	private int pos = 0;
 
@@ -128,20 +143,9 @@ public abstract class Metadata implements Comparable<Metadata>, Serializable {
 		try {
 			method = this.getClass().getMethod(methodName);
 			ret = method.invoke(this);
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} catch (SecurityException | NoSuchMethodException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
+			logger.error("Some problems in Metadata getting values from Method ", e);
+		} 
 		return ret;
 	}
 }

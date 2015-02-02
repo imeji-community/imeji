@@ -31,8 +31,8 @@ package de.mpg.imeji.logic.auth;
 import java.net.URI;
 import java.util.List;
 
+import de.mpg.imeji.exceptions.NotAllowedError;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
-import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Container;

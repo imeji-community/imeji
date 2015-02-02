@@ -1,9 +1,27 @@
 package de.mpg.imeji.rest.resources.test.integration.item;
 
-import de.mpg.imeji.rest.process.RestProcessUtils;
-import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
-import de.mpg.imeji.rest.to.ItemWithFileTO;
-import net.java.dev.webdav.jaxrs.ResponseStatus;
+import static de.mpg.imeji.logic.controller.ItemController.NO_THUMBNAIL_FILE_NAME;
+import static de.mpg.imeji.logic.storage.util.StorageUtils.calculateChecksum;
+import static de.mpg.imeji.rest.resources.test.TestUtils.getStringFromPath;
+import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_PATH;
+import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_REST;
+import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_STORAGE;
+import static javax.ws.rs.core.Response.Status.OK;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.endsWith;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsNot.not;
+import static org.hamcrest.text.IsEmptyString.isEmptyOrNullString;
+import static org.junit.Assert.assertEquals;
+
+import java.io.File;
+import java.io.IOException;
+
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
@@ -11,31 +29,15 @@ import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
-import java.io.File;
-import java.io.IOException;
-
-import static de.mpg.imeji.logic.controller.ItemController.NO_THUMBNAIL_FILE_NAME;
-import static de.mpg.imeji.logic.storage.util.StorageUtils.calculateChecksum;
-import static de.mpg.imeji.rest.resources.test.TestUtils.getStringFromPath;
-import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.*;
-import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
-import static javax.ws.rs.core.Response.Status.OK;
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.IsNot.not;
-import static org.hamcrest.text.IsEmptyString.isEmptyOrNullString;
-import static org.junit.Assert.assertEquals;
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.rest.process.RestProcessUtils;
+import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
+import de.mpg.imeji.rest.to.ItemWithFileTO;
 
 /**
  * Created by vlad on 09.12.14.
@@ -100,7 +102,7 @@ public class ItemUpdateFileTest extends ImejiTestBase {
 	}
 
 	@Test
-	public void test_1_UpdateItem_2_WithFile_Fetched() throws IOException {
+	public void test_1_UpdateItem_2_WithFile_Fetched() throws  ImejiException, IOException {
 
 		final String fileURL = target().getUri()
 				+ STATIC_CONTEXT_PATH.substring(1) + "/test2.jpg";
@@ -164,7 +166,7 @@ public class ItemUpdateFileTest extends ImejiTestBase {
 
 	@Test
 	public void test_1_UpdateItem_4_WithFile_Attached_Fetched()
-			throws IOException {
+			throws IOException, ImejiException {
 
 		File newFile = new File(STATIC_CONTEXT_STORAGE + "/test.png");
 
@@ -204,7 +206,7 @@ public class ItemUpdateFileTest extends ImejiTestBase {
 
 	@Test
 	public void test_1_UpdateItem_5_WithFile_Attached_Referenced()
-			throws IOException {
+			throws IOException, ImejiException {
 
 		File newFile = new File(STATIC_CONTEXT_STORAGE + "/test.png");
 
@@ -240,7 +242,7 @@ public class ItemUpdateFileTest extends ImejiTestBase {
 
 	@Test
 	public void test_1_UpdateItem_6_WithFile_Fetched_Referenced()
-			throws IOException {
+			throws IOException, ImejiException {
 
 		final String fileURL = target().getUri()
 				+ STATIC_CONTEXT_PATH.substring(1) + "/test.jpg";
@@ -279,7 +281,7 @@ public class ItemUpdateFileTest extends ImejiTestBase {
 
 	@Test
 	public void test_1_UpdateItem_7_WithFile_Attached_Fetched_Referenced()
-			throws IOException {
+			throws IOException, ImejiException {
 
 		File newFile = new File(STATIC_CONTEXT_STORAGE + "/test.png");
 		FileDataBodyPart filePart = new FileDataBodyPart("file", newFile);

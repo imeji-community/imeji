@@ -16,15 +16,15 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.exceptions.AuthenticationError;
+import de.mpg.imeji.exceptions.NotAllowedError;
+import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.AuthenticationFactory;
 import de.mpg.imeji.logic.auth.Authorization;
-import de.mpg.imeji.logic.auth.exception.AuthenticationError;
-import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.controller.exceptions.NotFoundError;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
@@ -130,7 +130,7 @@ public class FileServlet extends HttpServlet {
 			else if (e instanceof AuthenticationError ) {
 				resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, "imeji security: You need to be signed-in to view this file.");
 			}
-			else if (e instanceof NotFoundError ) {
+			else if (e instanceof NotFoundException ) {
 				resp.sendError(HttpServletResponse.SC_NOT_FOUND, "The resource you are trying to retrieve does not exist!");
 			}
 			else
@@ -252,7 +252,7 @@ public class FileServlet extends HttpServlet {
 		}
 		else
 		{
-			throw new NotFoundError("Can not find the resource requested");
+			throw new NotFoundException("Can not find the resource requested");
 		}
 	}
 

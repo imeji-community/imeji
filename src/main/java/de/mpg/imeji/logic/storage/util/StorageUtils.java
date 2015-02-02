@@ -28,6 +28,15 @@
  */
 package de.mpg.imeji.logic.storage.util;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
@@ -42,8 +51,8 @@ import org.apache.tika.mime.MimeTypeException;
 import org.apache.tika.mime.MimeTypes;
 import org.apache.tools.ant.taskdefs.Get;
 
-import java.io.*;
-import java.net.URL;
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.UnprocessableError;
 
 /**
  * Util class fore the storage package
@@ -322,18 +331,22 @@ public class StorageUtils {
 	 * @return
 	 * @throws IOException
 	 */
-	public static String calculateChecksum(File file) throws IOException {
+	public static String calculateChecksum(File file) throws ImejiException {
 		FileInputStream fis = null;
 		try {
 			fis = new FileInputStream(file);
 			return DigestUtils.md5Hex(fis);
-		} catch (Exception e) {
-			throw new RuntimeException(
-					"Error calculating the cheksum of the file: ", e);
-		} finally {
-			if (fis != null)
-				fis.close();
-		}
+		} catch (IOException e) {
+			throw new UnprocessableError(
+					"Error calculating the cheksum of the file: ");
+		} 
+		
+//		finally {
+//			if (fis != null)
+//				fis.close();
+//		}
+//		
+		
 	}
 
 	/**

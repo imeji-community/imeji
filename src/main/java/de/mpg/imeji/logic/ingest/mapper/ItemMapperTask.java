@@ -77,7 +77,7 @@ public class ItemMapperTask extends SwingWorker<Collection<Item>, Void>
     }
 
     @Override
-    protected Collection<Item> doInBackground() throws Exception
+    protected Collection<Item> doInBackground() 
     {
         this.dupItems = this.process(this.itemList);
         return this.getMappedItemObjects();

@@ -28,19 +28,23 @@
  */
 package de.mpg.imeji.presentation.metadata.extractors;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.apache.tika.Tika;
 import org.apache.tika.exception.TikaException;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.sax.BodyContentHandler;
-import org.omg.CORBA.portable.InputStream;
 import org.xml.sax.SAXException;
 
 import de.mpg.imeji.logic.storage.StorageController;
@@ -77,8 +81,7 @@ public class TikaExtractor
         }
         catch (Exception e)
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        	Logger.getLogger(TikaExtractor.class).error("There had been some Tika extraction issues.", e);
         }
         return techMd;
     }
@@ -103,7 +106,7 @@ public class TikaExtractor
         catch (Exception e)
         {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+        	Logger.getLogger(TikaExtractor.class).error("There had been some Tika file metadata extraction issues.", e);
         }
         return techMd;
     }
@@ -124,7 +127,7 @@ public class TikaExtractor
 	            
 	        }
 		} catch (SAXException | TikaException | IOException e) {
-			e.printStackTrace();
+			Logger.getLogger(TikaExtractor.class).error("There had been some Tika extraction issues for main .", e);
 		}
     	
 

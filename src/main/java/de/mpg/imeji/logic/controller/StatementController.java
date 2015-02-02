@@ -4,11 +4,12 @@ import java.net.URI;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.j2j.exceptions.NotFoundException;
 
 public class StatementController extends ImejiController{
 	
@@ -26,7 +27,7 @@ public class StatementController extends ImejiController{
 		Statement s;
 		try {
 			s = ((Statement) reader.read(uri.toString(), user, new Statement()));
-		} catch (Exception e) {
+		} catch (ImejiException e) {
 			throw new NotFoundException("Statement (URL: " + uri
 					+ " ) not found.");
 		}

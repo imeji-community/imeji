@@ -10,12 +10,12 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.exceptions.AuthenticationError;
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.NotFoundException;
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
-import de.mpg.imeji.logic.auth.exception.AuthenticationError;
-import de.mpg.imeji.logic.auth.exception.NotAllowedError;
-import de.mpg.imeji.logic.auth.exception.UnprocessableError;
-import de.mpg.imeji.logic.controller.exceptions.NotFoundError;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
@@ -31,7 +31,6 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.j2j.exceptions.NotFoundException;
 import de.mpg.j2j.helper.J2JHelper;
 
 /**
@@ -64,10 +63,10 @@ public class CollectionController extends ImejiController {
 	 *            : if the profile is null, then create an empty one
 	 * @param user
 	 * @return
-	 * @throws Exception
+	 * @throws ImejiException
 	 */
 	public URI create(CollectionImeji c, MetadataProfile p, User user)
-			throws Exception {  
+			throws ImejiException {  
 		if (p == null) {
 			p = new MetadataProfile();
 			p.setDescription(c.getMetadata().getDescription());
@@ -91,9 +90,9 @@ public class CollectionController extends ImejiController {
 	 * @param uri
 	 * @param user
 	 * @return
-	 * @throws Exception
+	 * @throws ImejiException
 	 */
-	public CollectionImeji retrieve(URI uri, User user) throws Exception {
+	public CollectionImeji retrieve(URI uri, User user) throws ImejiException {
 				return (CollectionImeji) reader.read(uri.toString(), user,
 						new CollectionImeji());
 	}
@@ -104,9 +103,9 @@ public class CollectionController extends ImejiController {
 	 * @param uri
 	 * @param user
 	 * @return
-	 * @throws Exception
+	 * @throws ImejiException
 	 */
-	public CollectionImeji retrieveLazy(URI uri, User user) throws Exception {
+	public CollectionImeji retrieveLazy(URI uri, User user) throws ImejiException {
 				return (CollectionImeji) reader.readLazy(uri.toString(), user,
 						new CollectionImeji());
 	}
@@ -119,10 +118,10 @@ public class CollectionController extends ImejiController {
 	 * @param limit
 	 * @param offset
 	 * @return
-	 * @throws Exception
+	 * @throws ImejiException
 	 */
 	public Collection<CollectionImeji> retrieveLazy(List<String> uris,
-			int limit, int offset, User user) throws Exception {
+			int limit, int offset, User user) throws ImejiException {
 		List<CollectionImeji> cols = new ArrayList<CollectionImeji>();
 		int counter = 0;
 		for (String s : uris) {
@@ -147,9 +146,9 @@ public class CollectionController extends ImejiController {
 	 * 
 	 * @param ic
 	 * @param user
-	 * @throws Exception
+	 * @throws ImejiException
 	 */
-	public void update(CollectionImeji ic, User user) throws Exception {
+	public void update(CollectionImeji ic, User user) throws ImejiException {
 		writeUpdateProperties(ic, user);
 		writer.update(WriterFacade.toList(ic), user);
 	}
@@ -159,9 +158,9 @@ public class CollectionController extends ImejiController {
 	 * 
 	 * @param ic
 	 * @param user
-	 * @throws Exception
+	 * @throws ImejiException
 	 */
-	public void updateLazy(CollectionImeji ic, User user) throws Exception {
+	public void updateLazy(CollectionImeji ic, User user) throws ImejiException {
 		writeUpdateProperties(ic, user);
 		writer.updateLazy(WriterFacade.toList(ic), user);
 	}
@@ -171,9 +170,9 @@ public class CollectionController extends ImejiController {
 	 * 
 	 * @param collection
 	 * @param user
-	 * @throws Exception
+	 * @throws ImejiException
 	 */
-	public void delete(CollectionImeji collection, User user) throws Exception {
+	public void delete(CollectionImeji collection, User user) throws ImejiException {
 		ItemController itemController = new ItemController();
 		List<String> itemUris = itemController.search(collection.getId(), null,
 				null, null, user).getResults();
@@ -198,9 +197,9 @@ public class CollectionController extends ImejiController {
 	 * 
 	 * @param collection
 	 * @param user
-	 * @throws Exception
+	 * @throws ImejiException
 	 */
-	public void release(CollectionImeji collection, User user) throws Exception {
+	public void release(CollectionImeji collection, User user) throws ImejiException {
 		ItemController itemController = new ItemController();
 		
 		if (user == null ) {
@@ -208,7 +207,7 @@ public class CollectionController extends ImejiController {
 		}
 		
 		if (collection == null ) {
-			throw new NotFoundError("collection object does not exists");
+			throw new NotFoundException("collection object does not exists");
 		}
 		
 		List<String> itemUris = itemController.search(collection.getId(), null,
@@ -239,10 +238,10 @@ public class CollectionController extends ImejiController {
 	 * Withdraw a {@link CollectionImeji} and all its {@link Item}
 	 * 
 	 * @param collection
-	 * @throws Exception
+	 * @throws ImejiException
 	 */
 	public void withdraw(CollectionImeji collection, User user)
-			throws Exception {
+			throws ImejiException {
 		ItemController itemController = new ItemController();
 		
 		if (user == null ) {
@@ -250,7 +249,7 @@ public class CollectionController extends ImejiController {
 		}
 		
 		if (collection == null) {
-			throw new NotFoundError("Collection does not exists");
+			throw new NotFoundException("Collection does not exists");
 		}
 		
 		List<String> itemUris = itemController.search(collection.getId(), null,

@@ -11,7 +11,6 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.metadata.MetadataSetBean;
-import de.mpg.imeji.presentation.metadata.SuperMetadataBean;
 
 
 @ManagedBean(name = "SingleUploadSession")

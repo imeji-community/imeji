@@ -5,6 +5,7 @@ package de.mpg.imeji.presentation.util;
 
 import java.net.URI;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.presentation.session.SessionBean;
@@ -43,7 +44,7 @@ public class ObjectCachedLoader
      * @return
      * @throws Exception 
      */
-    public static CollectionImeji loadCollection(URI uri) throws Exception
+    public static CollectionImeji loadCollection(URI uri) throws ImejiException
     {
         SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         CollectionImeji collection = session.getCollectionCached().get(uri);

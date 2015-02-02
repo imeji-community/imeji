@@ -173,7 +173,6 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
         {
             BeanHelper.error(e.getMessage());
             logger.error("Error paginator list update ", e);
-            e.printStackTrace();
         }
     }
 

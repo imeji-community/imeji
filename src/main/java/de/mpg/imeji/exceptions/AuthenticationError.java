@@ -26,7 +26,8 @@
  * Gesellschaft zur Förderung der Wissenschaft e.V.
  * All rights reserved. Use is subject to license terms.
  */
-package de.mpg.imeji.logic.auth.exception;
+package de.mpg.imeji.exceptions;
+
 
 /**
  * Error by authentication (wrong credentials)
@@ -35,7 +36,7 @@ package de.mpg.imeji.logic.auth.exception;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class AuthenticationError extends Exception
+public class AuthenticationError extends ImejiException
 {
     private static final long serialVersionUID = 6128275500671470459L;
 
@@ -46,4 +47,5 @@ public class AuthenticationError extends Exception
     {
         super(message);
     }
+    
 }

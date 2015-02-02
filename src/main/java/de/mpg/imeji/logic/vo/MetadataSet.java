@@ -18,6 +18,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.log4j.Logger;
+
 import com.hp.hpl.jena.ontology.Profile;
 
 import de.mpg.imeji.logic.ImejiNamespaces;
@@ -44,6 +46,8 @@ public class MetadataSet implements Serializable
     @j2jResource("http://imeji.org/terms/mdprofile")
     private URI profile;
     private URI id;
+    
+	private static Logger logger = Logger.getLogger(MetadataSet.class);
 
     public MetadataSet()
     {
@@ -100,28 +104,9 @@ public class MetadataSet implements Serializable
             method = this.getClass().getMethod(methodName);
             ret = method.invoke(this);
         }
-        catch (SecurityException e)
+        catch (SecurityException | NoSuchMethodException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e)
         {
-            e.printStackTrace();
-        }
-        catch (NoSuchMethodException e)
-        {
-            e.printStackTrace();
-        }
-        catch (IllegalArgumentException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        catch (IllegalAccessException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        catch (InvocationTargetException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        	logger.error("Some issues with getValueFromMethod ", e);
         }
         return ret;
     }

@@ -1,16 +1,18 @@
 package de.mpg.imeji.service.test;
 
-import de.mpg.imeji.logic.auth.exception.AuthenticationError;
-import de.mpg.imeji.logic.auth.exception.NotAllowedError;
+import static org.hamcrest.CoreMatchers.endsWith;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
-import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.storage.util.StorageUtils;
-import de.mpg.imeji.rest.api.CollectionService;
-import de.mpg.imeji.rest.api.ItemService;
-import de.mpg.imeji.rest.to.*;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.TextTO;
-import de.mpg.j2j.exceptions.NotFoundException;
+import java.io.File;
+import java.net.URI;
 
+import org.apache.log4j.Logger;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -18,13 +20,19 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import util.JenaUtil;
-
-import java.io.File;
-import java.net.URI;
-
-
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
+import de.mpg.imeji.exceptions.AuthenticationError;
+import de.mpg.imeji.exceptions.NotAllowedError;
+import de.mpg.imeji.exceptions.NotFoundException;
+import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.storage.util.StorageUtils;
+import de.mpg.imeji.rest.api.CollectionService;
+import de.mpg.imeji.rest.api.ItemService;
+import de.mpg.imeji.rest.to.CollectionTO;
+import de.mpg.imeji.rest.to.ItemTO;
+import de.mpg.imeji.rest.to.ItemWithFileTO;
+import de.mpg.imeji.rest.to.LabelTO;
+import de.mpg.imeji.rest.to.MetadataSetTO;
+import de.mpg.imeji.rest.to.predefinedMetadataTO.TextTO;
 
 public class ItemServiceTest {
 
@@ -57,7 +65,7 @@ public class ItemServiceTest {
 			collectionTO = s.create(new CollectionTO(), JenaUtil.testUser);
 			collectionId = collectionTO.getId();
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.getLogger(ItemServiceTest.class).error("Cannot initCollection ",e);
 		}
 	}
 

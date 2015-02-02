@@ -14,6 +14,8 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.controller.CollectionController;
@@ -27,7 +29,6 @@ import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
-import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.SuperContainerBean;
@@ -46,6 +47,7 @@ public class PrivateBean extends SuperContainerBean<CollectionListItem> {
 	private List<CollectionListItem> returnedCollections = new ArrayList<CollectionListItem>();
 	private String email;
 	private int totalNumberOfRecords;
+	private static Logger logger = Logger.getLogger(PrivateBean.class);
 
 	public PrivateBean() {
 		super();
@@ -57,7 +59,7 @@ public class PrivateBean extends SuperContainerBean<CollectionListItem> {
 				ec.redirect(ec.getRequestContextPath() + "/");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("Some IO Exception", e);
 			}
 		}
 	}
@@ -177,8 +179,7 @@ public class PrivateBean extends SuperContainerBean<CollectionListItem> {
 							}
 						}
 					} catch (Exception e1) {
-						e1.printStackTrace();
-						System.err.println("user doen't exits");
+						logger.info("User does not exist, Some strange eMail Input exception ", e1);
 						// TODO return user doesn't exits Error on the page
 						return false;
 					}

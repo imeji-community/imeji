@@ -3,7 +3,6 @@ package de.mpg.imeji.rest.resources.test.integration.item;
 import static de.mpg.imeji.rest.resources.test.TestUtils.getStringFromPath;
 import static org.junit.Assert.assertEquals;
 
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;

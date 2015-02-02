@@ -9,21 +9,19 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FilenameUtils;
 
+import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.controller.exceptions.NotFoundError;
 import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchOperators;
@@ -42,7 +40,6 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.beans.PropertyBean;
-import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.metadata.MetadataSetBean;
 import de.mpg.imeji.presentation.metadata.SingleEditBean;
@@ -52,8 +49,6 @@ import de.mpg.imeji.presentation.session.SessionObjectsController;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.UrlHelper;
-import de.mpg.j2j.exceptions.NotFoundException;
-import de.mpg.j2j.helper.DateHelper;
 
 /**
  * Bean for a Single image
@@ -189,7 +184,6 @@ public class ItemBean {
 		} catch (Exception e) {
 			techMd = new ArrayList<String>();
 			techMd.add(e.getMessage());
-			e.printStackTrace();
 		}
 	}
 
@@ -212,7 +206,7 @@ public class ItemBean {
 		item = ObjectLoader.loadItem(ObjectHelper.getURI(Item.class, id),
 				sessionBean.getUser());
 		if (item == null ) {
-			throw new NotFoundError("LoadImage: empty");
+			throw new NotFoundException("LoadImage: empty");
 		}
 	}
 
@@ -225,7 +219,6 @@ public class ItemBean {
 					user);
 		} catch (Exception e) {
 			BeanHelper.error(e.getMessage());
-			e.printStackTrace();
 			collection = null;
 		}
 	}

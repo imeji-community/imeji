@@ -15,6 +15,7 @@ import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.tdb.TDB;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.j2j.helper.SortHelper;
 
 /**
@@ -49,7 +50,7 @@ public class SearchTransaction extends Transaction
     }
 
     @Override
-    protected void execute(Dataset ds) throws Exception
+    protected void execute(Dataset ds) throws ImejiException
     {
         Query q = QueryFactory.create(searchQuery, Syntax.syntaxARQ);
         QueryExecution qexec = initQueryExecution(ds, q);

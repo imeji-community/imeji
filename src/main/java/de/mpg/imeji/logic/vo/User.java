@@ -9,11 +9,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.UserGroupController;
 import de.mpg.imeji.logic.util.IdentifierUtil;
-import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jList;
@@ -48,6 +49,8 @@ public class User implements Serializable
     private Collection<Grant> grants = new ArrayList<Grant>();
     private URI id = IdentifierUtil.newURI(User.class);
     private List<UserGroup> groups = new ArrayList<>();
+    
+	private static Logger logger = Logger.getLogger(User.class);
 
     /**
      * 
@@ -93,7 +96,7 @@ public class User implements Serializable
             }
             catch (Exception e)
             {
-                e.printStackTrace();
+                logger.error("Could not update the user group i think", e);
             }
         }
         clone.person = person.clone();

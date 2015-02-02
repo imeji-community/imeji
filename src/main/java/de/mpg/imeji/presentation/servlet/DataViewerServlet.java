@@ -150,8 +150,8 @@ public class DataViewerServlet extends HttpServlet {
 			outputStream.flush();
 			outputStream.close();
 			} catch (Exception e) {
-				e.printStackTrace();
-		}
+				logger.info("Some problems with viewing generic file!", e);
+			}
 		Client client = ClientBuilder.newBuilder().register(MultiPartFeature.class).build();
 		WebTarget target = client.target(dataViewerServiceTargetURL);
 		Response response =target.request().post(Entity.entity(multiPart, multiPart.getMediaType()));

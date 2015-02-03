@@ -44,6 +44,7 @@ import de.escidoc.core.client.Authentication;
 import de.escidoc.core.client.ItemHandlerClient;
 import de.escidoc.core.client.StagingHandlerClient;
 import de.escidoc.core.resources.om.item.Item;
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.UploadResult;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
@@ -129,7 +130,7 @@ public class EscidocStorage implements Storage
      * @see de.mpg.imeji.logic.storage.Storage#read(java.lang.String)
      */
     @Override
-    public void read(String url, OutputStream out, boolean close)
+    public void read(String url, OutputStream out, boolean close) throws ImejiException
     {
         GetMethod get = StorageUtils.newGetMethod(client, url);
         get.addRequestHeader("Cookie", getEscidocCookie());

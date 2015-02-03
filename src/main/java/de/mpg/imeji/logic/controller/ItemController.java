@@ -172,8 +172,9 @@ public class ItemController extends ImejiController {
 			tmp = File.createTempFile("imeji", null);
 			sController.read(externalFileUrl, new FileOutputStream(tmp), true);
 			}
-			catch (IOException e) {
-				throw new UnprocessableError("There has been a problem with the file upload. ");
+			catch (Exception e) {
+//				throw new UnprocessableError("There has been a problem with the file upload. ");
+				throw new UnprocessableError(e.getLocalizedMessage());
 			}
 			item = createWithFile(item, tmp, filename, c, user);
 		} else {
@@ -398,9 +399,10 @@ public class ItemController extends ImejiController {
 			sc.read(externalFileUrl, new FileOutputStream(tmp), true);
 			item = updateFile(item, tmp, u);
 			}
-			catch (IOException e)
+			catch (Exception e)
 			{
-				throw new UnprocessableError("There was a problem with update from external File.");
+//				throw new UnprocessableError("There was a problem with update from external File.");
+				throw new UnprocessableError(e.getLocalizedMessage());
 			}
 		} else {
 			// Reference the file

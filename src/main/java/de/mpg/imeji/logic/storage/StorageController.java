@@ -108,8 +108,9 @@ public class StorageController implements Serializable {
 	 * 
 	 * @param url
 	 * @param out
+	 * @throws ImejiException 
 	 */
-	public void read(String url, OutputStream out, boolean close) {
+	public void read(String url, OutputStream out, boolean close) throws ImejiException {
 		storage.read(url, out, close);
 	}
 

@@ -20,4 +20,8 @@ public class UnprocessableError extends ImejiException {
 	    {
 	        super(message);
 	    }
+	public UnprocessableError(String message, Throwable e)
+    {
+        super(message, e);
+    }
 }

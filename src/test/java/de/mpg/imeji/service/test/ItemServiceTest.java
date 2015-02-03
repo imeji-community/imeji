@@ -156,7 +156,6 @@ public class ItemServiceTest {
 		}
 
 	@Test
-	@Ignore
 	public void updateItemTest() throws Exception {
 
 		ItemService is = new ItemService();

@@ -168,7 +168,7 @@ public class StorageUtils {
 	 * @param url
 	 * @return
 	 */
-	public static GetMethod newGetMethod(HttpClient client, String url) {
+	public static GetMethod newGetMethod(HttpClient client, String url) throws ImejiException {
 		GetMethod method = new GetMethod(url);
 		method.addRequestHeader("Cache-Control", "public");
 		method.setRequestHeader("Connection", "close");

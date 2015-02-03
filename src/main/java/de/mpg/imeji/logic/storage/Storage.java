@@ -32,6 +32,7 @@ import java.io.File;
 import java.io.OutputStream;
 import java.io.Serializable;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 
@@ -77,8 +78,9 @@ public interface Storage extends Serializable
      * 
      * @param url
      * @param out
+     * @throws ImejiException 
      */
-    public void read(String url, OutputStream out, boolean close);
+    public void read(String url, OutputStream out, boolean close) throws ImejiException;
 
     /**
      * Delete the file stored in the passed url

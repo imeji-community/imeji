@@ -120,11 +120,12 @@ public class ZIPExport extends Export
 
     /**
      * This method exports all images of the current browse page as a zip file
+     * @throws ImejiException 
      * 
      * @throws Exception
      * @throws URISyntaxException
      */
-    public void exportAllImages(SearchResult sr, OutputStream out) 
+    public void exportAllImages(SearchResult sr, OutputStream out) throws ImejiException 
     {
         List<String> source = sr.getResults();
         ZipOutputStream zip = new ZipOutputStream(out);

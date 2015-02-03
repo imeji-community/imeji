@@ -23,6 +23,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import net.java.dev.webdav.jaxrs.ResponseStatus;
+
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
@@ -339,7 +341,7 @@ public class ItemUpdateFileTest extends ImejiTestBase {
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.entity(multiPart, multiPart.getMediaType()));
 
-		assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(),
+		assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(),
 				response.getStatus());
 
 	}
@@ -363,7 +365,7 @@ public class ItemUpdateFileTest extends ImejiTestBase {
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.entity(multiPart, multiPart.getMediaType()));
 
-		assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(),
+		assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(),
 				response.getStatus());
 
 	}

@@ -297,30 +297,7 @@ public class ItemCreateTest extends ImejiTestBase {
         assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
         
     }
-    
-    @Ignore
-    @Test
-    public void createItem_SemanticInvalidJSONFile() throws Exception {
-    	
-        FileDataBodyPart filePart = new FileDataBodyPart("file", TEST_PNG_FILE);
-        FormDataMultiPart multiPart = new FormDataMultiPart();
-        multiPart.bodyPart(filePart);
-        String wrongJSON = getStringFromPath("src/test/resources/rest/wrongSemantic.json");
-        
-        multiPart.field("json", wrongJSON
-                .replace("___COLLECTION_ID___", collectionId)
-                .replace("___FILENAME___", "test.png"));
-
-        Response response = target(pathPrefix).register(authAsUser)
-                .register(MultiPartFeature.class)
-                .register(JacksonFeature.class)
-                .request(MediaType.APPLICATION_JSON_TYPE)
-                .post(Entity.entity(multiPart, multiPart.getMediaType()));
-
-        assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
-        
-    }
-    
+       
     @Test
     public void createItem_SyntaxInvalidJSONFile() throws Exception {
     	
@@ -432,7 +409,7 @@ public class ItemCreateTest extends ImejiTestBase {
                 .request(MediaType.APPLICATION_JSON_TYPE)
                 .post(Entity.entity(multiPart, multiPart.getMediaType()));
 
-        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+        assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
 
     }
     
@@ -455,7 +432,7 @@ public class ItemCreateTest extends ImejiTestBase {
                 .request(MediaType.APPLICATION_JSON_TYPE)
                 .post(Entity.entity(multiPart, multiPart.getMediaType()));
 
-        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+        assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
 
     }
 

@@ -6,6 +6,11 @@ package de.mpg.imeji.logic.export.format.xml;
 import java.io.OutputStream;
 import java.net.URI;
 
+import javax.xml.bind.JAXBException;
+
+import org.apache.log4j.Logger;
+
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.export.format.XMLExport;
 import de.mpg.imeji.logic.ingest.jaxb.JaxbUtil;
@@ -20,6 +25,8 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  */
 public class XMLMdProfileExport extends XMLExport
 {
+	
+	  private static Logger logger = Logger.getLogger(XMLMdProfileExport.class);
     @Override
     public void init()
     {
@@ -37,14 +44,17 @@ public class XMLMdProfileExport extends XMLExport
             {
                 JaxbUtil.writeToOutputStream(pc.retrieve(URI.create(sr.getResults().get(0)), session.getUser()), out);
             }
-            catch (Exception e)
+            catch (JAXBException e)
             {
                 throw new RuntimeException(e);
+            }
+            catch (ImejiException iie) {
+            	logger.error("Could not retrieve any statements for exporting!");
             }
         }
         else
         {
-            throw new RuntimeException(sr.getNumberOfRecords() + " profile(s) found. Only 1 profile should be found");
+        	logger.error("Problems during XMLMDProfile Export: "+sr.getNumberOfRecords() + " profile(s) found. Only 1 profile should be found");
         }
     }
 }

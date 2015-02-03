@@ -1,6 +1,22 @@
 package de.mpg.imeji.service.test;
 
-import de.mpg.imeji.logic.auth.exception.NotAllowedError;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
+
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import util.JenaUtil;
+import de.mpg.imeji.exceptions.NotAllowedError;
+import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -11,18 +27,7 @@ import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ProfileService;
 import de.mpg.imeji.rest.to.MetadataProfileTO;
 import de.mpg.imeji.rest.to.StatementTO;
-import de.mpg.j2j.exceptions.NotFoundException;
 import de.mpg.j2j.misc.LocalizedString;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import util.JenaUtil;
-
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collection;
-
-import static org.junit.Assert.*;
 
 public class ProfileServiceTest {
 

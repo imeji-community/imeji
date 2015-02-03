@@ -3,9 +3,7 @@
  */
 package de.mpg.imeji.presentation.history;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.net.URLEncoder;
 import java.util.Map;
 
 import de.mpg.imeji.logic.util.ObjectHelper;

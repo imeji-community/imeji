@@ -101,6 +101,8 @@
 		<org.richfaces.bom.version>4.3.7.Final</org.richfaces.bom.version>
 		<!-- Used by Tomcat to trip version Nr when deploy WAR package, e.g., imeji_1.0_screenshot->imeji -->
 		<project.warName>imeji</project.warName>
+		<!-- <sonar.host.url>http://localhost:9000</sonar.host.url>-->
+		<!-- <sonar.exclusions></sonar.exclusions>-->
 	</properties>
 	<repositories>
 		<!-- <repository> <id>central</id> <url>http://central</url> <releases> 

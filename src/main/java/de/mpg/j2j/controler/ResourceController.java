@@ -4,12 +4,12 @@ import java.net.URI;
 
 import com.hp.hpl.jena.rdf.model.Model;
 
+import de.mpg.imeji.exceptions.AlreadyExistsException;
+import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.reader.JenaReader;
 import de.mpg.imeji.logic.writer.JenaWriter;
 import de.mpg.j2j.annotations.j2jId;
-import de.mpg.j2j.exceptions.AlreadyExistsException;
-import de.mpg.j2j.exceptions.NotFoundException;
 import de.mpg.j2j.helper.J2JHelper;
 import de.mpg.j2j.persistence.Java2Jena;
 import de.mpg.j2j.persistence.Jena2Java;

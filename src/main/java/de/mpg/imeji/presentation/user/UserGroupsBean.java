@@ -135,7 +135,6 @@ public class UserGroupsBean implements Serializable
             {
                 BeanHelper.error("Error removing group");
                 logger.error(e);
-                e.printStackTrace();
             }
         }
         return "pretty:";

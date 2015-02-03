@@ -186,7 +186,6 @@ public class PersonBean implements Serializable{
 				return uc.retrieveOrganizationById(uri);
 			} catch (Exception e) {
 				BeanHelper.error(e.getMessage());
-				e.printStackTrace();
 			}
 		}
 		return null;

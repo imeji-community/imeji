@@ -12,7 +12,6 @@ import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.image.ItemBean;
 import de.mpg.imeji.presentation.image.SingleItemBrowse;

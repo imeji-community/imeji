@@ -1,3 +1,6 @@
+package de.mpg.imeji.exceptions;
+
+
 /*
  *
  * CDDL HEADER START
@@ -26,51 +29,17 @@
  * Gesellschaft zur Förderung der Wissenschaft e.V.
  * All rights reserved. Use is subject to license terms.
  */
-package de.mpg.j2j.transaction;
+public class ImejiException extends Exception  {
+	private static final long serialVersionUID = -1024323233094119992L;
 
-import com.hp.hpl.jena.query.Dataset;
-import com.hp.hpl.jena.query.ReadWrite;
-import com.hp.hpl.jena.update.UpdateAction;
+		public ImejiException(String message)
+	    {
+	        super(message);
+	        
+	    }
+		
+		ImejiException(String message, Throwable e) {
+			super(message, e);
+		}
 
-import de.mpg.imeji.exceptions.ImejiException;
-
-/**
- * {@link Transaction} for SPARQL update Query
- * 
- * @author saquet (initial creation)
- * @author $Author$ (last modification)
- * @version $Revision$ $LastChangedDate$
- */
-public class SPARQLUpdateTransaction extends Transaction
-{
-    private String query;
-
-    /**
-     * @param modelURI
-     */
-    public SPARQLUpdateTransaction(String modelURI, String query)
-    {
-        super(modelURI);
-        this.query = query;
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see de.mpg.j2j.transaction.Transaction#execute(com.hp.hpl.jena.query.Dataset)
-     */
-    @Override
-    protected void execute(Dataset ds) throws ImejiException
-    {
-        UpdateAction.parseExecute(query, ds);
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see de.mpg.j2j.transaction.Transaction#getLockType()
-     */
-    @Override
-    protected ReadWrite getLockType()
-    {
-        return ReadWrite.WRITE;
-    }
 }

@@ -1,5 +1,18 @@
 package de.mpg.imeji.rest.process;
 
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.BadRequestException;
+import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
+import net.java.dev.webdav.jaxrs.ResponseStatus;
+
+import org.apache.log4j.Logger;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
@@ -7,28 +20,17 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 
-import de.mpg.imeji.logic.auth.exception.AuthenticationError;
-import de.mpg.imeji.logic.auth.exception.NotAllowedError;
-import de.mpg.imeji.logic.auth.exception.UnprocessableError;
-import de.mpg.imeji.logic.controller.exceptions.NotFoundError;
+import de.mpg.imeji.exceptions.AuthenticationError;
+import de.mpg.imeji.exceptions.NotAllowedError;
+import de.mpg.imeji.exceptions.NotFoundException;
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.rest.to.HTTPError;
 import de.mpg.imeji.rest.to.JSONException;
 import de.mpg.imeji.rest.to.JSONResponse;
-import de.mpg.j2j.exceptions.NotFoundException;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.BadRequestException;
-import javax.ws.rs.InternalServerErrorException;
-import javax.ws.rs.ServerErrorException;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
-import net.java.dev.webdav.jaxrs.ResponseStatus;
-
-import java.io.IOException;
 
 public class RestProcessUtils {
+	
+	private static Logger logger = Logger.getLogger(RestProcessUtils.class);
 	/**
 	 * Parse a json file and construct a new Object of type T
 	 * 
@@ -56,7 +58,7 @@ public class RestProcessUtils {
 		try {
 			return reader.readValue(req.getInputStream());
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("Could not build TO from JSON", e);
 		}
 		return null;
 	}
@@ -67,7 +69,8 @@ public class RestProcessUtils {
 		try {
 			return ow.writeValueAsString(obj);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("Could not build JSON from Object", e);
+
 		}
 		return null;
 	}
@@ -81,7 +84,8 @@ public class RestProcessUtils {
 			json = ow.writeValueAsString(resp.getObject());
 		} catch (JsonProcessingException e) {
 
-			e.printStackTrace();
+			logger.error("Have a JSON Processing Exception during building JSON Response", e);
+
 		}
 		return Response.status(resp.getStatus()).entity(json)
 				.type(MediaType.APPLICATION_JSON).build();
@@ -154,8 +158,10 @@ public class RestProcessUtils {
 	 * @return
 	 */
 	public static JSONResponse localExceptionHandler(Exception eX, String message) {
-		String localMessage = ( message=="" || message == null)?
-				eX.getLocalizedMessage():message;
+		String localMessage = message;
+		if (message=="" || message == null) {
+			message = eX.getLocalizedMessage();
+		}
 				
 		JSONResponse resp;
 				
@@ -166,7 +172,7 @@ public class RestProcessUtils {
 			resp = RestProcessUtils.buildJSONAndExceptionResponse(Status.FORBIDDEN.getStatusCode(), localMessage);
 			
 		}
-		else if (eX instanceof NotFoundError || eX instanceof NotFoundException) {
+		else if (eX instanceof NotFoundException || eX instanceof NotFoundException) {
 			resp = RestProcessUtils.buildJSONAndExceptionResponse(Status.NOT_FOUND.getStatusCode(),localMessage);
 
 		}

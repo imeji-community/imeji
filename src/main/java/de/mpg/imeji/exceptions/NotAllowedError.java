@@ -26,7 +26,7 @@
  * Gesellschaft zur Förderung der Wissenschaft e.V.
  * All rights reserved. Use is subject to license terms.
  */
-package de.mpg.imeji.logic.auth.exception;
+package de.mpg.imeji.exceptions;
 
 import de.mpg.imeji.logic.auth.Authorization;
 
@@ -37,7 +37,7 @@ import de.mpg.imeji.logic.auth.Authorization;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class NotAllowedError extends RuntimeException
+public class NotAllowedError extends ImejiException
 {
     private static final long serialVersionUID = -3504946406047760565L;
 
@@ -48,4 +48,5 @@ public class NotAllowedError extends RuntimeException
     {
         super(message);
     }
+    
 }

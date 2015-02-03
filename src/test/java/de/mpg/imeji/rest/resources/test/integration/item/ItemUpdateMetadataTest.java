@@ -309,9 +309,8 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
                         .replaceAll("(\"license\"\\s*:\\s*)\"(.+)\"", REP_CHANGED)
                         .replaceAll("(\"link\"\\s*:\\s*)\"(.+)\"", REP_CHANGED)
                         .replaceAll("(\"url\"\\s*:\\s*)\"(.+)\"", REP_CHANGED)
-                        .replaceAll("(\"format\"\\s*:\\s*)\"(.+)\"", REP_CHANGED)
+                        //only publication should be filled, not citation or format
                         .replaceAll("(\"publication\"\\s*:\\s*)\"(.+)\"", REP_CHANGED)
-                        .replaceAll("(\"citation\"\\s*:\\s*)\"(.+)\"", REP_CHANGED)
         );
         
         LOGGER.info(multiPart.getField("json").getValue());

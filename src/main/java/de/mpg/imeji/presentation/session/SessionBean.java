@@ -20,6 +20,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
@@ -138,7 +140,7 @@ public class SessionBean implements Serializable
         }
         catch (NumberFormatException | IOException | URISyntaxException e)
         {
-            e.printStackTrace();
+        	Logger.getLogger(SessionBean.class).error("There had been some initWithCookieAndProperty issues.", e);
         }
         // Second, Read the cookie and set a default value if null
         return CookieUtils.readNonNull(cookieName, value);

@@ -6,6 +6,7 @@ import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.query.ReadWrite;
 import com.hp.hpl.jena.rdf.model.Model;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 
 /**
@@ -19,7 +20,7 @@ public abstract class Transaction
 {
     private String modelURI;
     private boolean isException;
-    private Exception exception;
+    private ImejiException exception;
     private static Logger logger = Logger.getLogger(Transaction.class);
 
     /**
@@ -53,7 +54,7 @@ public abstract class Transaction
             execute(dataset);
             dataset.commit();
         }
-        catch (Exception e)
+        catch (ImejiException e)
         {
             dataset.abort();
             isException = true;
@@ -72,7 +73,7 @@ public abstract class Transaction
      * @param ds
      * @throws Exception
      */
-    protected abstract void execute(Dataset ds) throws Exception;
+    protected abstract void execute(Dataset ds) throws ImejiException;
 
     /**
      * Return the type of Jena lock ({@link ReadWrite}) uses for the {@link Transaction}
@@ -101,7 +102,7 @@ public abstract class Transaction
      * 
      * @throws Exception
      */
-    public void throwException() throws Exception
+    public void throwException() throws ImejiException
     {
         if (isException)
         {

@@ -1,6 +1,12 @@
 package de.mpg.imeji.rest.resources.test.integration;
 
-import com.google.common.collect.ImmutableMap;
+import java.io.IOException;
+import java.net.URI;
+import java.util.Map;
+
+import javax.servlet.Servlet;
+import javax.ws.rs.ProcessingException;
+
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.grizzly.http.server.StaticHttpHandler;
 import org.glassfish.grizzly.servlet.ServletRegistration;
@@ -14,11 +20,7 @@ import org.glassfish.jersey.test.spi.TestContainerException;
 import org.glassfish.jersey.test.spi.TestContainerFactory;
 import org.glassfish.jersey.uri.UriComponent;
 
-import javax.servlet.Servlet;
-import javax.ws.rs.ProcessingException;
-import java.io.IOException;
-import java.net.URI;
-import java.util.Map;
+import com.google.common.collect.ImmutableMap;
 
 /**
  * The class overrides TestContainerFactory with GrizzlyWebContainerFactory. The GrizzlyWebContainer fully

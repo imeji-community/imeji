@@ -55,9 +55,9 @@ public class ExportManager {
 	 * Write in {@link OutputStream} the export
 	 * 
 	 * @param sr
-	 * @throws Exception 
+	 * 
 	 */
-	public void export(SearchResult sr) throws Exception {
+	public void export(SearchResult sr) {
 		if (export != null) {
 			export.export(out, sr);
 		} else {

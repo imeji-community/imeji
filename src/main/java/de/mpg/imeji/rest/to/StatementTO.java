@@ -1,11 +1,11 @@
 package de.mpg.imeji.rest.to;
 
-import de.mpg.j2j.misc.LocalizedString;
-
 import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+
+import de.mpg.j2j.misc.LocalizedString;
 
 public class StatementTO implements Serializable{
 

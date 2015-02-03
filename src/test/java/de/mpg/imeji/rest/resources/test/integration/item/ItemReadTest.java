@@ -1,10 +1,6 @@
 package de.mpg.imeji.rest.resources.test.integration.item;
 
-import static javax.ws.rs.core.Response.Status.CREATED;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.isEmptyOrNullString;
-import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.util.Map;
@@ -13,16 +9,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import net.java.dev.webdav.jaxrs.ResponseStatus;
-
-import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
-import org.hamcrest.MatcherAssert;
 import org.junit.Before;
 import org.junit.Test;
 
 import util.JenaUtil;
-import de.mpg.imeji.logic.auth.exception.AuthenticationError;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.resources.test.TestUtils;
 import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;

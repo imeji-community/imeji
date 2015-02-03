@@ -12,6 +12,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.apache.log4j.Logger;
+
 public class AnimatedGifEncoder
 {
     protected int width; // image size
@@ -165,7 +167,7 @@ public class AnimatedGifEncoder
                 }
                 catch (IOException e)
                 {
-                    e.printStackTrace();
+                   Logger.getLogger(AnimatedGifEncoder.class).info("There had been some finishing problems by flushing data", e);
                 }
             }
         }

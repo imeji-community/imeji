@@ -10,6 +10,7 @@ import com.hp.hpl.jena.Jena;
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.tdb.TDBFactory;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 
 /**
@@ -57,7 +58,7 @@ public class ThreadedTransaction implements Callable<Integer> {
 	 * 
 	 * @throws Exception
 	 */
-	public void throwException() throws Exception {
+	public void throwException() throws ImejiException {
 		transaction.throwException();
 	}
 
@@ -68,11 +69,15 @@ public class ThreadedTransaction implements Callable<Integer> {
 	 * @param t
 	 * @throws Exception
 	 */
-	public static void run(ThreadedTransaction t) throws Exception {
+	public static void run(ThreadedTransaction t) throws ImejiException {
 		Future<Integer> f = Imeji.executor.submit(t);
 		// wait for the transaction to be finished
-		f.get();
-		// Throw exception is any
+		try {
+			f.get();
+		}
+		catch (Exception e) {
+			logger.info("An exception happened in run method ", e);
+		}
 		t.throwException();
 	}
 }

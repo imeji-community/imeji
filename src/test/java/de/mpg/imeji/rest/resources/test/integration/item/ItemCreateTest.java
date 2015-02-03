@@ -1,11 +1,27 @@
 package de.mpg.imeji.rest.resources.test.integration.item;
 
-import de.mpg.imeji.rest.api.CollectionService;
-import de.mpg.imeji.rest.api.ItemService;
-import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
-import de.mpg.imeji.rest.to.ItemTO;
-import de.mpg.imeji.rest.to.ItemWithFileTO;
+import static de.mpg.imeji.rest.resources.test.TestUtils.getStringFromPath;
+import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_PATH;
+import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_STORAGE;
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+import static javax.ws.rs.core.Response.Status.CREATED;
+import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.endsWith;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsNot.not;
+import static org.junit.Assert.assertEquals;
+
+import java.io.File;
+import java.io.IOException;
+
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
 import net.java.dev.webdav.jaxrs.ResponseStatus;
+
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
@@ -15,24 +31,13 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import util.JenaUtil;
-
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-import java.io.File;
-import java.io.IOException;
-
-import static de.mpg.imeji.rest.resources.test.TestUtils.getStringFromPath;
-import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_PATH;
-import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_STORAGE;
-import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
-import static javax.ws.rs.core.Response.Status.CREATED;
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.IsNot.not;
-import static org.junit.Assert.assertEquals;
+import de.mpg.imeji.rest.api.CollectionService;
+import de.mpg.imeji.rest.api.ItemService;
+import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
+import de.mpg.imeji.rest.to.ItemTO;
+import de.mpg.imeji.rest.to.ItemWithFileTO;
 
 /**
  * Created by vlad on 09.12.14.
@@ -292,30 +297,7 @@ public class ItemCreateTest extends ImejiTestBase {
         assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
         
     }
-    
-    @Ignore
-    @Test
-    public void createItem_SemanticInvalidJSONFile() throws Exception {
-    	
-        FileDataBodyPart filePart = new FileDataBodyPart("file", TEST_PNG_FILE);
-        FormDataMultiPart multiPart = new FormDataMultiPart();
-        multiPart.bodyPart(filePart);
-        String wrongJSON = getStringFromPath("src/test/resources/rest/wrongSemantic.json");
-        
-        multiPart.field("json", wrongJSON
-                .replace("___COLLECTION_ID___", collectionId)
-                .replace("___FILENAME___", "test.png"));
-
-        Response response = target(pathPrefix).register(authAsUser)
-                .register(MultiPartFeature.class)
-                .register(JacksonFeature.class)
-                .request(MediaType.APPLICATION_JSON_TYPE)
-                .post(Entity.entity(multiPart, multiPart.getMediaType()));
-
-        assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
-        
-    }
-    
+       
     @Test
     public void createItem_SyntaxInvalidJSONFile() throws Exception {
     	
@@ -427,7 +409,7 @@ public class ItemCreateTest extends ImejiTestBase {
                 .request(MediaType.APPLICATION_JSON_TYPE)
                 .post(Entity.entity(multiPart, multiPart.getMediaType()));
 
-        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+        assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
 
     }
     
@@ -450,7 +432,7 @@ public class ItemCreateTest extends ImejiTestBase {
                 .request(MediaType.APPLICATION_JSON_TYPE)
                 .post(Entity.entity(multiPart, multiPart.getMediaType()));
 
-        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+        assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
 
     }
 

@@ -138,7 +138,7 @@ public class UsersBean implements Serializable
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            logger.info("Could not send password", e);
         }
         BeanHelper.info(session.getMessage("success_email"));
         return "";

@@ -1,4 +1,4 @@
-package de.mpg.j2j.exceptions;
+package de.mpg.imeji.exceptions;
 
 import com.hp.hpl.jena.Jena;
 
@@ -9,7 +9,7 @@ import com.hp.hpl.jena.Jena;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class AlreadyExistsException extends Exception
+public class AlreadyExistsException extends ImejiException
 {
     private static final long serialVersionUID = 4123172628332785494L;
 
@@ -22,4 +22,5 @@ public class AlreadyExistsException extends Exception
     {
         super(message);
     }
+    
 }

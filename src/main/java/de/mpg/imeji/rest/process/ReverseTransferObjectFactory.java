@@ -1,6 +1,7 @@
 package de.mpg.imeji.rest.process;
 
 import com.google.common.collect.ImmutableList;
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -54,7 +55,7 @@ public class ReverseTransferObjectFactory {
 
 	}
 
-	public static void transferItem(ItemTO to, Item vo, User u, TRANSFER_MODE mode) throws Exception {
+	public static void transferItem(ItemTO to, Item vo, User u, TRANSFER_MODE mode) throws ImejiException  {
 
 		// only fields which can be transferred for TO to VO!!!
 		if (mode == TRANSFER_MODE.CREATE) {
@@ -72,7 +73,7 @@ public class ReverseTransferObjectFactory {
 		transferItemMetaData(to, vo, u, mode);
 	}
 
-	public static void transferItemMetaData(ItemTO to, Item vo, User u, TRANSFER_MODE mode) throws Exception {
+	public static void transferItemMetaData(ItemTO to, Item vo, User u, TRANSFER_MODE mode) throws ImejiException  {
 
 
 		Collection<Metadata> voMDs = vo.getMetadataSet().getMetadata();
@@ -150,7 +151,7 @@ public class ReverseTransferObjectFactory {
 						break;
 					case "http://imeji.org/terms/metadata#publication":
 						PublicationTO pubTO = (PublicationTO) md.getValue();
-						if (!isNullOrEmpty(pubTO.getPublication()) || !isNullOrEmpty(pubTO.getCitation())) {
+						if (!isNullOrEmpty(pubTO.getPublication())) {
 							Publication mdVO = new Publication();
 							mdVO.setStatement(stURI);
 							mdVO.setUri(URI.create(pubTO.getPublication()));
@@ -172,6 +173,7 @@ public class ReverseTransferObjectFactory {
 				}
 			} else {
 				//TODO: Correct exception handling
+				//
 				final String message = "Statement { type: \"" + st.getType() +
 						"\", id: \"" + stURI +
 						"\" } has not been found for item id: \"" + vo.getId() + "\"";
@@ -182,7 +184,7 @@ public class ReverseTransferObjectFactory {
 
 	}
 
-	private static MetadataProfile getMetadataProfile(URI collectionURI, User u) throws Exception {
+	private static MetadataProfile getMetadataProfile(URI collectionURI, User u) throws ImejiException  {
 		ProfileController pc = new ProfileController();
 		return pc.retrieveByCollectionId(collectionURI, u);
 	}

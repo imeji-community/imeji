@@ -6,8 +6,6 @@ package de.mpg.imeji.presentation.metadata;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.faces.context.FacesContext;
-
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.concurrency.locks.Lock;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
@@ -15,7 +13,6 @@ import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.metadata.editors.SimpleImageEditor;
 import de.mpg.imeji.presentation.metadata.util.SuggestBean;
 import de.mpg.imeji.presentation.session.SessionBean;
@@ -126,7 +123,6 @@ public class SingleEditBean
         {
             // TODO
             BeanHelper.error("Error reload item" + e.getMessage());
-            e.printStackTrace();
         }
     }
 

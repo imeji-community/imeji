@@ -42,6 +42,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
@@ -60,7 +62,7 @@ import de.mpg.imeji.presentation.servlet.ExportServlet;
 public class ContentNegotiationFilter implements Filter
 {
     private FilterConfig filterConfig = null;
-
+	private static Logger logger = Logger.getLogger(ContentNegotiationFilter.class);
     /*
      * (non-Javadoc)
      * @see javax.servlet.Filter#destroy()
@@ -100,7 +102,7 @@ public class ContentNegotiationFilter implements Filter
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+           logger.error("Filtering error in content negotiation filter", e);
         }
         finally
         {

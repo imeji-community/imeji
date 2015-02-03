@@ -1,10 +1,20 @@
 package de.mpg.imeji.rest.api;
 
-import de.mpg.imeji.logic.auth.exception.NotAllowedError;
-import de.mpg.imeji.logic.auth.exception.UnprocessableError;
+import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.transferCollection;
+import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE.CREATE;
+
+import java.net.URI;
+import java.util.List;
+
+import javax.ws.rs.BadRequestException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ProfileController;
-import de.mpg.imeji.logic.controller.exceptions.NotFoundError;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -13,25 +23,13 @@ import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.rest.process.CommonUtils;
 import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.to.CollectionTO;
-import de.mpg.j2j.exceptions.NotFoundException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.ws.rs.BadRequestException;
-import javax.ws.rs.NotSupportedException;
-import java.net.URI;
-import java.util.List;
-import java.util.prefs.BackingStoreException;
-
-import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE.CREATE;
-import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.transferCollection;
 
 public class CollectionService implements API<CollectionTO> {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(CollectionService.class);
 	
-	private CollectionTO getCollectionTO (CollectionController controller, String id, User u) throws Exception {
+	private CollectionTO getCollectionTO (CollectionController controller, String id, User u) throws ImejiException {
 		CollectionTO to = new CollectionTO();
 		CollectionImeji vo = controller.retrieve(
 				ObjectHelper.getURI(CollectionImeji.class, id), u);
@@ -40,13 +38,13 @@ public class CollectionService implements API<CollectionTO> {
 	}
 
 	@Override
-	public CollectionTO read(String id, User u) throws Exception {
+	public CollectionTO read(String id, User u) throws ImejiException {
 		CollectionController controller = new CollectionController();
 		return getCollectionTO(controller, id, u);
 	}
 
 	@Override
-	public CollectionTO create(CollectionTO to, User u) throws Exception {
+	public CollectionTO create(CollectionTO to, User u) throws ImejiException {
 		CollectionController cc = new CollectionController();
 		ProfileController pc = new ProfileController();
 
@@ -100,7 +98,7 @@ public class CollectionService implements API<CollectionTO> {
 	}
 
 	@Override
-	public CollectionTO release(String id, User u) throws Exception {
+	public CollectionTO release(String id, User u) throws ImejiException {
 
 		CollectionController controller = new CollectionController();
 		CollectionImeji vo = controller.retrieve(
@@ -114,19 +112,19 @@ public class CollectionService implements API<CollectionTO> {
 
 	@Override
 	public CollectionTO update(CollectionTO o, User u)
-			throws Exception {
+			throws ImejiException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public boolean delete(String id, User u) throws Exception {
+	public boolean delete(String id, User u) throws ImejiException {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public CollectionTO withdraw(String id, User u, String discardComment) throws Exception {
+	public CollectionTO withdraw(String id, User u, String discardComment) throws ImejiException {
 
 		CollectionController controller = new CollectionController();
 		CollectionImeji vo = controller.retrieve(
@@ -140,21 +138,20 @@ public class CollectionService implements API<CollectionTO> {
 
 	@Override
 	public void share(String id, String userId, List<String> roles, User u)
-			throws Exception {
+			throws ImejiException {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void unshare(String id, String userId, List<String> roles, User u)
-			throws	Exception {
+			throws	ImejiException {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public List<String> search(String q, User u) throws NotSupportedException,
-			Exception {
+	public List<String> search(String q, User u) throws ImejiException {
 		// TODO Auto-generated method stub
 		return null;
 	}

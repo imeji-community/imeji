@@ -1,4 +1,5 @@
-package de.mpg.imeji.logic.auth.exception;
+package de.mpg.imeji.exceptions;
+
 
 /**
  * 
@@ -9,7 +10,7 @@ package de.mpg.imeji.logic.auth.exception;
  * @modifyTime: 22.12.201413:58:25
 
  */
-public class UnprocessableError extends Exception {
+public class UnprocessableError extends ImejiException {
 	 /**
 	 * 
 	 */
@@ -19,4 +20,8 @@ public class UnprocessableError extends Exception {
 	    {
 	        super(message);
 	    }
+	public UnprocessableError(String message, Throwable e)
+    {
+        super(message, e);
+    }
 }

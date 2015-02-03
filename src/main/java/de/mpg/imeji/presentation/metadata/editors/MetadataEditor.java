@@ -112,7 +112,6 @@ public abstract class MetadataEditor
                     }
                     catch (Exception e)
                     {
-                        e.printStackTrace();
                         BeanHelper.error(sb.getMessage("error_metadata_edit") + ": " + e.getMessage());
                     }
                 }

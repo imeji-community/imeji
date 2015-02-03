@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 
+import org.apache.log4j.Logger;
 import org.openimaj.feature.local.list.LocalFeatureList;
 import org.openimaj.image.ImageUtilities;
 import org.openimaj.image.MBFImage;
@@ -23,7 +24,7 @@ public class VideoUtils
     final static float IMAGE_DETECTION_LOWER_THRESHOLD = 0.8F;
     final static String IMAGE_FILE_EXTENTION = "jpg";
     final static int SNAPSHOT_CREATION_METHOD = 0;
-
+	private static Logger logger = Logger.getLogger(VideoUtils.class);
     /**
      * @return the thresholds for finding good snapshot image within the video.
      */
@@ -46,7 +47,7 @@ public class VideoUtils
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            logger.info("Some problems with Image detection", e);
             return new float[] { IMAGE_DETECTION_UPPER_THRESHOLD, IMAGE_DETECTION_LOWER_THRESHOLD };
         }
     }
@@ -62,7 +63,7 @@ public class VideoUtils
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            logger.info("Could not get snapshot creation method", e);
             return VideoUtils.SNAPSHOT_CREATION_METHOD;
         }
     }

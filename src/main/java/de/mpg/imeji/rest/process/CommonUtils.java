@@ -1,7 +1,6 @@
 package de.mpg.imeji.rest.process;
 
 import java.net.URI;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 

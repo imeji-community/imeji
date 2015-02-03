@@ -31,11 +31,12 @@ package de.mpg.imeji.logic.reader;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.mpg.imeji.exceptions.AuthenticationError;
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.NotAllowedError;
+import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.auth.Authorization;
-import de.mpg.imeji.logic.auth.exception.AuthenticationError;
-import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
-import de.mpg.imeji.logic.controller.exceptions.NotFoundError;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.j2j.helper.J2JHelper;
 
@@ -63,14 +64,11 @@ public class ReaderFacade implements Reader
      * @see de.mpg.imeji.logic.reader.Reader#read(java.lang.String, de.mpg.imeji.logic.vo.User, java.lang.Object)
      */
     @Override
-    public Object read(String uri, User user, Object o) throws Exception
+    public Object read(String uri, User user, Object o) throws ImejiException  
     { 
-        o = reader.read(uri, user, o);
-        if (o == null ) {
-        	throw new NotFoundError("Object is not found or authentication is required.");
-        }
-        
-        checkSecurity(toList(o), user);
+    		o = reader.read(uri, user, o);
+    		checkSecurity(toList(o), user);
+
         return o;
     }
 
@@ -79,12 +77,12 @@ public class ReaderFacade implements Reader
      * @see de.mpg.imeji.logic.reader.Reader#readLazy(java.lang.String, de.mpg.imeji.logic.vo.User, java.lang.Object)
      */
     @Override
-    public Object readLazy(String uri, User user, Object o) throws Exception
-    { 
+    public Object readLazy(String uri, User user, Object o) throws ImejiException
+    {
         o = reader.readLazy(uri, user, o);
         
         if (o == null ) {
-        	throw new NotFoundError("Object is not found or authentication is required.");
+        	throw new NotFoundException("Object is not found or authentication is required.");
         }
         
         checkSecurity(toList(o), user);
@@ -96,7 +94,7 @@ public class ReaderFacade implements Reader
      * @see de.mpg.imeji.logic.reader.Reader#read(java.util.List, de.mpg.imeji.logic.vo.User)
      */
     @Override
-    public List<Object> read(List<Object> l, User user) throws Exception
+    public List<Object> read(List<Object> l, User user) throws ImejiException
     {
         l = reader.read(l, user);
         checkSecurity(l, user);
@@ -108,22 +106,20 @@ public class ReaderFacade implements Reader
      * @see de.mpg.imeji.logic.reader.Reader#readLazy(java.util.List, de.mpg.imeji.logic.vo.User)
      */
     @Override
-    public List<Object> readLazy(List<Object> l, User user) throws Exception
+    public List<Object> readLazy(List<Object> l, User user) throws ImejiException
     {
         l = reader.readLazy(l, user);
         checkSecurity(l, user);
         return l;
     }
 
+
     /**
-     * Check the {@link Security} of loaded {@link Object}
-     * 
      * @param list
      * @param user
-     * @param opType
-     * @throws NotAllowedError
+     * @throws ImejiException
      */
-    private void checkSecurity(List<Object> list, User user) throws NotAllowedError, AuthenticationError
+    private void checkSecurity(List<Object> list, User user) throws ImejiException
     {
         for (int i = 0; i < list.size(); i++)
         {

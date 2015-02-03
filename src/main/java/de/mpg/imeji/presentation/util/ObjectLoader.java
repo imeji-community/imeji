@@ -65,7 +65,7 @@ public class ObjectLoader {
 	 * @throws Exception 
 	 */
 	public static CollectionImeji loadCollectionLazy(URI id, User user) throws Exception {
-		try {
+		try {   
 			CollectionController cl = new CollectionController();
 			return cl.retrieveLazy(id, user);
 		} catch (NotFoundException e) {

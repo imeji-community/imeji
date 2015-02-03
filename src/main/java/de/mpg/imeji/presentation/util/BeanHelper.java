@@ -289,13 +289,13 @@ public class BeanHelper
     public static void fatal(String summary, String detail, UIComponent component)
     {
         message(summary, detail, component, FacesMessage.SEVERITY_FATAL);
-    }
+    } 
 
     /**
      * @param summary summary text
      */
     public static void message(String summary, String detail, UIComponent component, Severity severity)
-    {
+    {  
         FacesMessage fm = new FacesMessage(severity, summary, detail);
         if (component == null)
         {

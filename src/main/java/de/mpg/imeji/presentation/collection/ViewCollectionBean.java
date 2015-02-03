@@ -58,7 +58,7 @@ public class ViewCollectionBean extends CollectionBean
      * @throws Exception 
      */
     public void init() throws Exception 
-    {
+    {  
     	try{
             User user = super.sessionBean.getUser();
             String id = getId();

@@ -1,7 +1,6 @@
 package de.mpg.imeji.presentation.upload;
 
 import java.io.File;
-
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,6 +12,7 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -32,6 +32,7 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.controller.exceptions.TypeNotAllowedException;
 import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
@@ -72,6 +73,9 @@ public class SingleUploadBean implements Serializable{
 	@ManagedProperty("#{SingleUploadSession}")
 	private SingleUploadSession sus;
 	
+	@ManagedProperty("#{SessionBean}")
+	private SessionBean sb;
+	
 	@ManagedProperty(value = "#{SessionBean.user}")
 	private User user;
 	
@@ -102,7 +106,8 @@ public class SingleUploadBean implements Serializable{
 				e.printStackTrace();
 			}
 		}
-	}
+
+		}
 	    
 	public String save(){
 		try {        
@@ -191,25 +196,29 @@ public class SingleUploadBean implements Serializable{
 			this.ingestImage = getUploadedIngestFile(request);
 			sus.setIngestImage(ingestImage);
 			techMd = TikaExtractor.extractFromFile(ingestImage.getFile());
-		} catch (Exception e) {
-			techMd = new ArrayList<String>();
-			techMd.add(e.getMessage());
-			e.printStackTrace();
+			sus.setTechMD(techMd);
+		} catch (FileUploadException|TypeNotAllowedException e) {
+			BeanHelper.error(e.getMessage());
 		}
-		sus.setTechMD(techMd);
+
     }
 	
 	
-	private IngestImage getUploadedIngestFile(HttpServletRequest request) throws FileUploadException{
+	private IngestImage getUploadedIngestFile(HttpServletRequest request) throws FileUploadException, TypeNotAllowedException{
 		File tmp = null;
 		boolean isMultipart=ServletFileUpload.isMultipartContent(request);
 		IngestImage ii = new IngestImage();
 		if (isMultipart) {
 			ServletFileUpload upload=new ServletFileUpload();
-			try {
+			try {    
 				FileItemIterator iter = upload.getItemIterator(request);
-				while (iter.hasNext()) {
+				while (iter.hasNext()) {  
 					FileItemStream fis = iter.next();
+					if(fis.getName() != null && FilenameUtils.getExtension(fis.getName()).matches("ini|exe|sh|bin"))
+					{
+	                	throw new TypeNotAllowedException(sb.getMessage("single_upload_invalid_content_format"));
+					}
+
 					InputStream in = fis.openStream();
 					tmp = File.createTempFile("singleupload", "." + FilenameUtils.getExtension(fis.getName()));
 					FileOutputStream fos = new FileOutputStream(tmp);
@@ -231,7 +240,10 @@ public class SingleUploadBean implements Serializable{
 			}
 		}
 		return ii;
-	}
+	}   
+
+	
+
 
 	public void colChangeListener(AjaxBehaviorEvent event) throws Exception{
 		if(!"".equals(selectedCollectionItem))
@@ -375,6 +387,16 @@ public class SingleUploadBean implements Serializable{
 		return sus.getUploadedItem();
 	}
 	
+	
+	
+	public SessionBean getSb() {
+		return sb;
+	}
+
+	public void setSb(SessionBean sb) {
+		this.sb = sb;
+	}
+
 	public static String extractIDFromURI(URI uri) {
 		return uri.getPath().substring(uri.getPath().lastIndexOf("/") + 1);
 	}

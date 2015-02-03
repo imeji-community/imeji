@@ -80,7 +80,7 @@ public class ReaderFacade implements Reader
      */
     @Override
     public Object readLazy(String uri, User user, Object o) throws Exception
-    {
+    { 
         o = reader.readLazy(uri, user, o);
         
         if (o == null ) {

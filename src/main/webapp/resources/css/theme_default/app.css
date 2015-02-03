@@ -18,7 +18,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
 
 html, body { width: 100%; height: 100%; margin: 0px; padding: 0px; background-color: #292929; }
 
-body { font-size: 75%; font-family: "Open Sans", sans-serif; font-weight: normal; color: #F0F0F0; line-height: 145%; }
+body { font-size: 75%; font-family: "Open Sans", Arial, Helvetica, Verdana, sans-serif; font-weight: normal; color: #F0F0F0; line-height: 145%; }
 
 form { display: inline; }
 
@@ -28,6 +28,10 @@ a:focus { color: #F0F0F0; }
 a:active { color: #6CAE2F; }
 a.disabled { color: #BBBBBB; cursor: default; border: solid transparent 0.1em; }
 a.disabled:hover { color: #BBBBBB; cursor: default; border: solid transparent 0.1em; }
+
+strong, b { font-weight: bold; }
+
+i { font-style: italic; }
 
 input, button { padding-left: 0.5em; padding-right: 0.5em; color: #000000; background-color: #F0F0F0; border: solid transparent 0.1em; -moz-border-radius: 0.41667em; -webkit-border-radius: 0.41667em; border-radius: 0.41667em; }
 input:hover, button:hover { color: #000000; background-color: #F0F0F0; border: solid #6CAE2F 0.1em; }

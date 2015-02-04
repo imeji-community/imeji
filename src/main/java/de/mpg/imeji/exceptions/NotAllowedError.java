@@ -31,11 +31,7 @@ package de.mpg.imeji.exceptions;
 import de.mpg.imeji.logic.auth.Authorization;
 
 /**
- * {@link Authorization} error when a user is not allowed to do an action
  * 
- * @author saquet (initial creation)
- * @author $Author$ (last modification)
- * @version $Revision$ $LastChangedDate$
  */
 public class NotAllowedError extends ImejiException
 {

@@ -1,5 +1,6 @@
 package de.mpg.imeji.rest.api;
 
+import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.ItemController;
@@ -43,7 +44,7 @@ public class ItemService implements API<ItemTO> {
 		}
 		else
 		{
-			throw new UnprocessableError("A file must be uploaded, referenced or fetched from external location.");
+			throw new BadRequestException("A file must be uploaded, referenced or fetched from external location.");
 		}
 }
 

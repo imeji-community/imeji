@@ -1,15 +1,5 @@
 package de.mpg.imeji.exceptions;
 
-
-/**
- * 
- * @author: yao
- * @className: UnprocessableError
- * @classDescription: Error by unable to process the data
- * @createTime: 22.12.201413:58:25
- * @modifyTime: 22.12.201413:58:25
-
- */
 public class UnprocessableError extends ImejiException {
 	 /**
 	 * 

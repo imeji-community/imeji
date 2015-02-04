@@ -78,7 +78,7 @@ public class ItemCreateTest extends ImejiTestBase {
                 .request(MediaType.APPLICATION_JSON_TYPE)
                 .post(Entity.entity(multiPart, multiPart.getMediaType()));
 
-        assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+        assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
     }
 
 
@@ -183,7 +183,7 @@ public class ItemCreateTest extends ImejiTestBase {
                 .request(MediaType.APPLICATION_JSON_TYPE)
                 .post(Entity.entity(multiPart, multiPart.getMediaType()));
 
-        assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+        assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
     }
 
     @Test
@@ -362,7 +362,7 @@ public class ItemCreateTest extends ImejiTestBase {
                 .request(MediaType.APPLICATION_JSON_TYPE)
                 .post(Entity.entity(multiPart, multiPart.getMediaType()));
 
-        assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+        assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
        
        
     }

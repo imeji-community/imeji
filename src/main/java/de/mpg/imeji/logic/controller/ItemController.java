@@ -21,6 +21,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.AuthenticationError;
+import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotAllowedError;
 import de.mpg.imeji.exceptions.UnprocessableError;
@@ -226,7 +227,7 @@ public class ItemController extends ImejiController {
 		} 
 
 		if (filename == null || filename.isEmpty()) {
-			throw new UnprocessableError("Filename or reference must not be empty!");
+			throw new BadRequestException("Filename or reference must not be empty!");
 		}
 		Item newItem = new Item(item); 
 		CollectionController cc = new CollectionController();
@@ -252,7 +253,7 @@ public class ItemController extends ImejiController {
 		}
 		else
 		{
-			throw new UnprocessableError("Filename or reference must not be empty!");
+			throw new BadRequestException("Filename or reference must not be empty!");
 		}
 
 		return newItem;

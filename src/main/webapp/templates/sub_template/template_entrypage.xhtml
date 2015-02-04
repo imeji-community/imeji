@@ -18,11 +18,23 @@
 		
 		<!-- EntryPagePreviewTiledList -->
 		<ui:fragment rendered="#{Auth.read(logicBean.container)}">
-		
-			<imjc:entryPagePreviewTiledList mediaLogicBean="#{logicBean}" lbl="#{lbl}" applicationUrl="#{Navigation.applicationUrl}" browsePath="#{Navigation.browsePath}" /> 
-
-			<!-- EntryPageTabList -->
-			<imjc:entryPageTabList infoLogicBean="#{logicBean}" applicationUrl="#{Navigation.applicationUrl}" lbl="#{lbl}"/>
+			<div class="imj_#{currentMainMenu}EntryPage">
+				<ui:fragment rendered="#{currentMainMenu == 'collection'}">
+					<ui:fragment rendered="#{empty logicBean.profile.statements and Auth.update(logicBean.profile) and logicBean.profile.status != 'WITHDRAWN'}">
+						<h2 class="imj_headline imj_messageInfo">#{msg.error_collection_profile_not_exist}
+							<h:outputLink value="#{Navigation.profileUrl}#{logicBean.profileId}/#{Navigation.editPath}?init=1&amp;col=#{logicBean.id}" title="#{lbl.create_now}">
+									<span class="imj_entryPagePreviewTiledListLinkArrow"> </span>
+									<h:outputText value="#{lbl.create_now}"/>
+							</h:outputLink>
+						</h2>
+					</ui:fragment>
+				</ui:fragment>
+				
+				<imjc:entryPagePreviewTiledList mediaLogicBean="#{logicBean}" lbl="#{lbl}" applicationUrl="#{Navigation.applicationUrl}" browsePath="#{Navigation.browsePath}" /> 
+	
+				<!-- EntryPageTabList -->
+				<imjc:entryPageTabList infoLogicBean="#{logicBean}" applicationUrl="#{Navigation.applicationUrl}" lbl="#{lbl}"/>
+			</div>
 		</ui:fragment>
 			
 	</ui:define>	

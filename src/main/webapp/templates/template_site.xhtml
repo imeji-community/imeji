@@ -69,6 +69,7 @@ All rights reserved. Use is subject to license terms.
 							</ui:fragment>
 							
 							<ui:fragment rendered="#{MessagesBean.numberOfMessages != 1}">
+								<h:outputText value="#{MessagesBean.numberOfMessages}" />
 								<ui:fragment rendered="#{MessagesBean.hasErrorMessages}">
 									<div class="imj_messageTitleWarn"><h:outputText value="#{lbl.warning_lblMessageHeader}"/></div>
 									<h:messages styleClass="imj_messageList"

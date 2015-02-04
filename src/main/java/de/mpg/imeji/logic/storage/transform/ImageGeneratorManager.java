@@ -192,6 +192,9 @@ public class ImageGeneratorManager
             {
                 ImageGenerator imageGenerator = it.next();
                 jpeg = imageGenerator.generateJPG(file, extension);
+                if (jpeg != null ) {
+                	break;
+                }
             }
             catch (Exception e)
             {

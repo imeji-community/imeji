@@ -51,6 +51,8 @@ import org.apache.tika.mime.MimeTypeException;
 import org.apache.tika.mime.MimeTypes;
 import org.apache.tools.ant.taskdefs.Get;
 
+import com.google.common.base.Strings;
+
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 
@@ -199,10 +201,17 @@ public class StorageUtils {
 			if (!type.getExtensions().isEmpty()) {
 				return type.getExtensions().get(0).replace(".", "");
 			}
+			else
+			{
+				String calculatedExtension =  FilenameUtils.getExtension(file.getName());
+				if (!Strings.isNullOrEmpty(calculatedExtension)){
+					return calculatedExtension;
+				}
+			}
 		} catch (Exception e) {
 			logger.error("Error guessing file format", e);
 		}
-		return "";
+		return "bad-extension/other";
 	}
 
 	/**

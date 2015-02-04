@@ -330,14 +330,17 @@ public class InternalStorageManager implements Serializable {
 			File file) throws IOException {
 		ImageGeneratorManager generatorManager = new ImageGeneratorManager();
 		// write web resolution file in storage
+		
+		String calculatedExtension = StorageUtils.guessExtension(file);
 		write(generatorManager.generateWebResolution(file,
-						getExtension(item.getWebUrl()) ),
+				calculatedExtension ),
 				transformUrlToPath(item.getWebUrl()));
 		// Use Web resolution to generate Thumbnail (avoid to read the original
 		// file again)
+	
 		write(generatorManager.generateThumbnail(file,
-						getExtension(item.getThumbnailUrl())),
-				transformUrlToPath(item.getThumbnailUrl()));
+				calculatedExtension),
+		transformUrlToPath(item.getThumbnailUrl()));
 		// write original file in storage: simple copy the tmp file to the
 		// correct path
 		copy(file, transformUrlToPath(item.getOriginalUrl()));

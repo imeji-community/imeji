@@ -1,8 +1,7 @@
 package de.mpg.imeji.rest.process;
 
-import com.google.common.collect.ImmutableList;
+import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.*;
@@ -80,11 +79,17 @@ public class ReverseTransferObjectFactory {
 		//Collection<Metadata> copyOfvoMDs =  ImmutableList.copyOf(voMDs);
 		voMDs.clear();
 
+
 		MetadataProfile mp = getMetadataProfile(vo.getCollection(), u);
-		for (Statement st : mp.getStatements()) {
+
+        validateMetadata(to, mp);
+
+
+        for (Statement st : mp.getStatements()) {
 			final URI stURI = st.getId();
-			MetadataSetTO md = findMetadata(to, stURI, st.getType());
-			//Metadata mdVOPrev = findMetadata(copyOfvoMDs, stURI, st.getType());
+
+			MetadataSetTO md = lookUpMetadata(to, st.getType(), stURI);
+			//Metadata mdVOPrev = lookUpMetadata(copyOfvoMDs, stURI, st.getType());
 			if (md != null) {
 				switch (st.getType().toString()) {
 					case "http://imeji.org/terms/metadata#text":
@@ -172,77 +177,54 @@ public class ReverseTransferObjectFactory {
 							break;
 				}
 			} else {
-				//TODO: Correct exception handling
-				//
 				final String message = "Statement { type: \"" + st.getType() +
 						"\", id: \"" + stURI +
 						"\" } has not been found for item id: \"" + vo.getId() + "\"";
 				//throw new RuntimeException(message);
-				LOGGER.info(message);
+                LOGGER.debug(message);
 			}
 		}
 
 	}
 
-	private static MetadataProfile getMetadataProfile(URI collectionURI, User u) throws ImejiException  {
+    /**
+     * Check all item metadata statement/types:
+     * they should be presented in the MetadataProfile statements
+     *
+     * @param to
+     * @param mp
+     * @throws de.mpg.imeji.exceptions.BadRequestException
+     */
+    private static void validateMetadata(ItemTO to, MetadataProfile mp) throws BadRequestException {
+        for (MetadataSetTO md: to.getMetadata()) {
+            if (lookUpStatement(mp.getStatements(), md.getTypeUri(), md.getStatementUri()) == null)
+                throw new BadRequestException("Cannot find { typeUri: " + md.getTypeUri()
+                        + " , statementUri: " + md.getStatementUri() +
+                        "} in profile: " + mp.getId());
+
+        }
+    }
+
+    private static MetadataProfile getMetadataProfile(URI collectionURI, User u) throws ImejiException  {
 		ProfileController pc = new ProfileController();
 		return pc.retrieveByCollectionId(collectionURI, u);
 	}
 
 
-	private static Metadata findMetadata(Collection<Metadata> mdColl, URI statement, URI type) {
-		for (Metadata md: mdColl)
-			if (md.getTypeNamespace().equals(type) && md.getStatement().equals(statement))
-				return md;
+	private static Statement lookUpStatement(Collection<Statement> statements, URI type, URI statementUri) {
+		for (Statement st: statements)
+			if (st.getType().equals(type) && st.getId().equals(statementUri))
+				return st;
 		return null;
 	}
 
-	private static MetadataSetTO findMetadata(ItemTO to, URI statement, URI type) {
+	private static MetadataSetTO lookUpMetadata(ItemTO to, URI type, URI statement) {
 		for (MetadataSetTO md: to.getMetadata())
 			if (md.getTypeUri().equals(type) && md.getStatementUri().equals(statement))
 				return md;
 		return null;
 	}
 
-	private static Metadata lookUpMetadata(MetadataSetTO mdTO, ImmutableList<Metadata> mdList, ItemTO to, User u) {
-		URI typeUri =  mdTO.getTypeUri();
-		URI statementUri =  mdTO.getStatementUri();
-		//check VO firstly
-		for (Metadata md: mdList) {
-			if (md.getStatement().equals(statementUri) && md.getId().equals(typeUri))
-				return md;
-		}
-		//if not found in VO, lookup in profile
-		CollectionController cc = new CollectionController();
-		ProfileController pc = new ProfileController();
-		CollectionImeji c = null;
-		MetadataProfile p = null;
-		try {
-			c = cc.retrieve(URI.create(to.getCollectionId()), u);
-			p = pc.retrieve(c.getProfile(), u);
-		} catch (Exception e) {
-			//TODO: Correct exception handling
-			throw new RuntimeException("Cannot retrieve metadata profile" + e.getLocalizedMessage());
-		}
-
-		for (Statement st: p.getStatements()) {
-			if (st.getId().equals(statementUri) && st.getType().equals(typeUri)) {
-				Metadata md = null;
-				try {
-					md = Metadata.createNewInstance(typeUri);
-					md.setId(typeUri);
-					md.setStatement(statementUri);
-					return md;
-				} catch (Exception e) {
-					//TODO: Correct exception handling
-					throw new RuntimeException("Cannot instantiate metadata class: " + e.getLocalizedMessage());
-				}
-			}
-
-		}
-
-		return null;
-	}
 
 	public static void transferPerson(PersonTO pto, Person p, TRANSFER_MODE mode) {
 

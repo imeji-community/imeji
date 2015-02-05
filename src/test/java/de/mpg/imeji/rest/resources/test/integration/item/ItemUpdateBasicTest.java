@@ -1,23 +1,8 @@
 package de.mpg.imeji.rest.resources.test.integration.item;
 
-import static de.mpg.imeji.rest.resources.test.TestUtils.getStringFromPath;
-import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_REST;
-import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_STORAGE;
-import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
-import static javax.ws.rs.core.Response.Status.FORBIDDEN;
-import static javax.ws.rs.core.Response.Status.OK;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
-
-import java.io.File;
-import java.io.IOException;
-
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
+import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
+import de.mpg.imeji.rest.to.ItemTO;
+import de.mpg.imeji.rest.to.ItemWithFileTO;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
@@ -29,9 +14,22 @@ import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
-import de.mpg.imeji.rest.to.ItemTO;
-import de.mpg.imeji.rest.to.ItemWithFileTO;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import java.io.File;
+import java.io.IOException;
+
+import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONFromObject;
+import static de.mpg.imeji.rest.process.RestProcessUtils.buildTOFromJSON;
+import static de.mpg.imeji.rest.resources.test.TestUtils.getStringFromPath;
+import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_REST;
+import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_STORAGE;
+import static javax.ws.rs.core.Response.Status.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by vlad on 09.12.14.
@@ -62,8 +60,13 @@ public class ItemUpdateBasicTest extends ImejiTestBase {
     @Test
     public void test_1_UpdateItem_1_Basic() throws IOException {
         FormDataMultiPart multiPart = new FormDataMultiPart();
-        multiPart.field("json",
-                updateJSON.replace("___FILE_NAME___", UPDATED_FILE_NAME));
+
+        //remove all metadata!!!
+        final ItemWithFileTO item = (ItemWithFileTO) buildTOFromJSON(updateJSON, ItemWithFileTO.class);
+        item.getMetadata().clear();
+
+        multiPart.field("json", buildJSONFromObject(item)
+                .replace("___FILE_NAME___", UPDATED_FILE_NAME));
 
         Response response = target(PATH_PREFIX).path("/" + itemId)
                 .register(authAsUser)
@@ -71,8 +74,9 @@ public class ItemUpdateBasicTest extends ImejiTestBase {
                 .register(JacksonFeature.class)
                 .request(MediaType.APPLICATION_JSON_TYPE)
                 .put(Entity.entity(multiPart, multiPart.getMediaType()));
-        assertEquals(response.getStatus(), OK.getStatusCode());
-        ItemTO updatedItem = (ItemTO) response.readEntity(ItemWithFileTO.class);
+        ItemTO updatedItem = response.readEntity(ItemWithFileTO.class);
+
+        assertEquals(OK.getStatusCode(), response.getStatus());
         assertThat("Filename has not been updated", updatedItem.getFilename(),
                 equalTo(UPDATED_FILE_NAME));
 

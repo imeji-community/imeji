@@ -28,14 +28,6 @@
  */
 package de.mpg.imeji.exceptions;
 
-
-/**
- * Error by authentication (wrong credentials)
- * 
- * @author saquet (initial creation)
- * @author $Author$ (last modification)
- * @version $Revision$ $LastChangedDate$
- */
 public class AuthenticationError extends ImejiException
 {
     private static final long serialVersionUID = 6128275500671470459L;

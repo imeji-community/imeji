@@ -33,7 +33,7 @@ package de.mpg.imeji.exceptions;
  */
 public class BadRequestException extends ImejiException
 {
-    private static final long serialVersionUID = -1979864889420036142L;
+    private static final long serialVersionUID = -3721639144291667847L;
 
     /**
      * Constructor for HTTP 400 BadRequest

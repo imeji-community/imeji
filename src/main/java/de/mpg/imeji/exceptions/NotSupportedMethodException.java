@@ -3,11 +3,6 @@
  */
 package de.mpg.imeji.exceptions;
 
-
-/**
- * @author natasab
- *
- */
 public class NotSupportedMethodException extends ImejiException {
 
 

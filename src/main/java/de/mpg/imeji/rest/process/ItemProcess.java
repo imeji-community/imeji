@@ -1,25 +1,29 @@
 package de.mpg.imeji.rest.process;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Response.Status;
+
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.io.ByteStreams;
 import com.google.common.io.Files;
 import de.mpg.imeji.exceptions.BadRequestException;
+
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.api.ItemService;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
 import de.mpg.imeji.rest.to.JSONResponse;
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.Response.Status;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-
-import static com.google.common.base.Strings.isNullOrEmpty;
 
 public class ItemProcess {
 
@@ -68,20 +72,25 @@ public class ItemProcess {
 		try {
 			to = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(json,
 					ItemWithFileTO.class);
-			File tmp = File.createTempFile("imejiAPI", null);
 			
-			if(!(file == null)){
+			if (file != null){
+				File tmp = File.createTempFile("imejiAPI", null);
 				IOUtils.copy(file, new FileOutputStream(tmp));
 				to.setFile(tmp);
 				to.setFilename((!isNullOrEmpty(to.getFilename()))?to.getFilename():(to.getFilename()==null?origName:to.getFilename()));
-
+	
+			}
+			
+			if (to.getFile() == null && isNullOrEmpty(to.getFetchUrl()) && isNullOrEmpty(to.getReferenceUrl()) ) {
+				throw new BadRequestException("A file must be uploaded, referenced or fetched from external location.");
 			}
 			
 		} catch (Exception e) {
-			e = new BadRequestException("");
+			e = new BadRequestException(e.getLocalizedMessage());
 			resp= RestProcessUtils.localExceptionHandler(e, CommonUtils.JSON_Invalid);
 			return resp;
 		}
+		
 		// create item with the file
 			ItemService service = new ItemService();
 
@@ -108,7 +117,7 @@ public class ItemProcess {
 					(ItemWithFileTO) RestProcessUtils.buildTOFromJSON(json, ItemWithFileTO.class) :
 					(ItemTO) RestProcessUtils.buildTOFromJSON(json, ItemTO.class);
 		} catch (Exception e) {
-			e = new BadRequestException("");
+			e = new BadRequestException("A file must be uploaded, referenced or fetched from external location.");
 			resp= RestProcessUtils.localExceptionHandler(e, CommonUtils.JSON_Invalid);
 			return resp;
 		}

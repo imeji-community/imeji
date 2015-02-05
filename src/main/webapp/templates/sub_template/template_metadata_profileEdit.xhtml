@@ -18,13 +18,14 @@
 		<ui:include src="../../include/History.xhtml"/>
 		
 		<!-- AJAX Wrapper - START -->
-		<h:panelGroup layout="block" id="imj_ajaxWrapper">
+		<h:panelGroup layout="block" id="imj_ajaxWrapper" class="imj_editMetadataProfilePage">
 	  		<h:form id="profileForm" >
+	  			<h2 class="imj_headline">#{lbl.collection}: #{metadataBean.profile.title}</h2>
 				<div class="imj_metadataProfileList imj_edit">
 					<div class="imj_listHeader">
 						<div class="imj_metadataSet">
 							<h:outputLabel styleClass="imj_metadataLabel" for="mdProfileTitle">
-								<h:outputText value="#{lbl.title}"/>
+								<h:outputText value="#{lbl.profile_name}"/>
 								<span class="imj_noDisplay">: </span>
 							</h:outputLabel>
 							<h:inputText value="#{metadataBean.profile.title}" id="mdProfileTitle" valueChangeListener="#{metadataBean.titleListener}" styleClass="imj_metadataValue"/>

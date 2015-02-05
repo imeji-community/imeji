@@ -1,4 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=Open+Sans);
+@import url("http://fonts.googleapis.com/css?family=Open+Sans");
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video { margin: 0; padding: 0; border: 0; font: inherit; font-size: 100%; vertical-align: baseline; }
 
 html { line-height: 1; }
@@ -162,6 +162,12 @@ body a:hover .imj_entryPagePreviewTiledListLinkArrow { background: transparent u
 .imj_errorPage { width: 91.25%; padding: 1% 4%; }
 
 .imj_shareForm, .imj_legalPage, .imj_aboutPage, .imj_helpPage { width: 91.25%; padding: 1% 4%; border-top: 0.1em solid #6CAE2F; }
+
+.imj_collectionEntryPage, .imj_albumEntryPage { width: 91.25%; padding: 1% 4%; border-top: 0.1em solid #6CAE2F; }
+.imj_collectionEntryPage .imj_headline .imj_entryPagePreviewTiledListLinkArrow, .imj_albumEntryPage .imj_headline .imj_entryPagePreviewTiledListLinkArrow { float: none; margin-right: 0.5em; vertical-align: bottom; }
+.imj_collectionEntryPage .imj_headline.imj_messageInfo, .imj_albumEntryPage .imj_headline.imj_messageInfo { margin-bottom: 1em; }
+
+.imj_editMetadataProfilePage { width: 91.25%; padding: 1% 4%; border-top: 0.1em solid #6CAE2F; }
 
 .imj_pageMessageArea, .imj_contentMessageArea { width: 87.95%; display: inline-block; color: #F0F0F0; margin: 1em 0; padding: 0 6%; }
 
@@ -680,15 +686,14 @@ iframe#twitter-widget-0 div.root div.stream { height: 20em !important; }
 .imj_tiledMediaList > .imj_listBody .imj_tileItem:hover .imj_tooltip { display: block; }
 @media screen and (-webkit-min-device-pixel-ratio: 0) { .imj_tiledMediaList > .imj_listBody .imj_tileItem .imj_tileThumbnailArea img { height: auto; } }
 
-.imj_entryPagePreviewTiledList { margin-bottom: 0.5em; padding: 1% 4%; border-top: 0.1em solid #6CAE2F; }
+.imj_entryPagePreviewTiledList { margin-bottom: 0.5em; }
 .imj_entryPagePreviewTiledList .imj_thumbnailsPreview { display: inline; }
 .imj_entryPagePreviewTiledList .imj_tileItem { display: inline-block; width: 12.75%; padding: 0.5%; }
 .imj_entryPagePreviewTiledList .imj_entryPagePreviewPicture { padding: 0.25em; width: 100%; }
 .imj_entryPagePreviewTiledList .imj_entryPagePreviewTiledListLink { float: right; width: 8em; }
 .imj_entryPagePreviewTiledList .imj_entryPagePreviewTiledListLink:after { clear: both; content: ""; }
-.imj_entryPagePreviewTiledList + .imj_metadataList { clear: both; padding: 1% 4%; }
+.imj_entryPagePreviewTiledList + .imj_metadataList { clear: both; }
 
-.imj_metadataProfileList, .imj_metadataListMediaContainer { width: 91.25%; padding: 0 4%; border-top: 0.1em solid #6CAE2F; }
 .imj_metadataProfileList .imj_listHeader, .imj_metadataListMediaContainer .imj_listHeader { padding: 1% 0; }
 .imj_metadataProfileList .imj_listHeader .imj_listHeaderMenu, .imj_metadataListMediaContainer .imj_listHeader .imj_listHeaderMenu { float: right; display: inline-block; }
 .imj_metadataProfileList .imj_listHeader .imj_listHeaderMenu a, .imj_metadataListMediaContainer .imj_listHeader .imj_listHeaderMenu a { margin: 0.363636em 0.27272727em 0.363636em; padding: 0 0.363636em; }

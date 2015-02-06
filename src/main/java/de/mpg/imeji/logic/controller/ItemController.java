@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.AuthenticationError;
@@ -350,11 +351,17 @@ public class ItemController extends ImejiController {
 	 * @throws ImejiException
 	 */
 	public Item updateFile(Item item, File f, User user) throws ImejiException {
+
+		
+		//First remove the old File from the Internal Storage if its there
+		if (!isNullOrEmpty(item.getStorageId())) {
+			removeFileFromStorage(item.getStorageId());
+		}
+
 		item.setFiletype(getMimeType(f));
 		item.setChecksum(calculateChecksum(f));
 
 		StorageController sc = new StorageController();
-
 		InternalStorageManager ism = new InternalStorageManager();
 
 		//regenerate new url!!!
@@ -369,6 +376,7 @@ public class ItemController extends ImejiController {
 		url = ism.generateUrl(item.getStorageId(), f.getName(), FileResolution.THUMBNAIL);
 		sc.update(url, f);
 		item.setThumbnailImageUrl(URI.create(url));
+		
 
 		return update(item, user);
 	}

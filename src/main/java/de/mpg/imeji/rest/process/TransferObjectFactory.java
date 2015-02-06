@@ -1,52 +1,20 @@
 package de.mpg.imeji.rest.process;
 
+import de.mpg.imeji.logic.vo.*;
+import de.mpg.imeji.logic.vo.predefinedMetadata.*;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
+import de.mpg.imeji.rest.api.ProfileService;
+import de.mpg.imeji.rest.api.UserService;
+import de.mpg.imeji.rest.to.*;
+import de.mpg.imeji.rest.to.predefinedMetadataTO.*;
+import de.mpg.j2j.misc.LocalizedString;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Metadata;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Organization;
-import de.mpg.imeji.logic.vo.Person;
-import de.mpg.imeji.logic.vo.Properties;
-import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
-import de.mpg.imeji.logic.vo.predefinedMetadata.License;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
-import de.mpg.imeji.rest.api.ProfileService;
-import de.mpg.imeji.rest.api.UserService;
-import de.mpg.imeji.rest.to.CollectionTO;
-import de.mpg.imeji.rest.to.IdentifierTO;
-import de.mpg.imeji.rest.to.ItemTO;
-import de.mpg.imeji.rest.to.LabelTO;
-import de.mpg.imeji.rest.to.LiteralConstraintTO;
-import de.mpg.imeji.rest.to.MetadataProfileTO;
-import de.mpg.imeji.rest.to.MetadataSetTO;
-import de.mpg.imeji.rest.to.OrganizationTO;
-import de.mpg.imeji.rest.to.PersonTO;
-import de.mpg.imeji.rest.to.PersonTOBasic;
-import de.mpg.imeji.rest.to.PropertiesTO;
-import de.mpg.imeji.rest.to.StatementTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.ConePersonTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.DateTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.GeolocationTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.LicenseTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.LinkTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.NumberTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.PublicationTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.TextTO;
-import de.mpg.j2j.misc.LocalizedString;
 
 public class TransferObjectFactory {
 
@@ -273,7 +241,8 @@ public class TransferObjectFactory {
 					License mdLicense = (License) md;
 					LicenseTO lto = new LicenseTO();
 					lto.setLicense(mdLicense.getLicense());
-					lto.setUrl(mdLicense.getExternalUri().toString());
+                    final URI externalUri = mdLicense.getExternalUri();
+                    lto.setUrl(externalUri != null ? externalUri.toString() : "");
 					mdTO.setValue(lto);
 					break;
 				case "de.mpg.imeji.logic.vo.predefinedMetadata.Link":

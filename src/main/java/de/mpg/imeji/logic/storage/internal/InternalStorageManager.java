@@ -28,29 +28,23 @@
  */
 package de.mpg.imeji.logic.storage.internal;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
-import static org.apache.commons.io.FilenameUtils.getExtension;
-import static org.apache.commons.io.FilenameUtils.removeExtension;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.logic.storage.Storage.FileResolution;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.storage.administrator.impl.InternalStorageAdministrator;
 import de.mpg.imeji.logic.storage.transform.ImageGeneratorManager;
-import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.presentation.util.PropertyReader;
+import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
+
+import java.io.*;
+
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static de.mpg.imeji.logic.storage.util.StorageUtils.*;
+import static org.apache.commons.io.FilenameUtils.getExtension;
+import static org.apache.commons.io.FilenameUtils.removeExtension;
 
 /**
  * Manage internal storage in file system
@@ -132,12 +126,12 @@ public class InternalStorageManager implements Serializable {
 //		String extension = file.getName().substring(
 //				file.getName().lastIndexOf(".") + 1, file.getName().length());
 		String origExtension = getExtension(file.getPath());
-		String guessedExtension = StorageUtils.guessExtension(file);
+		String guessedExtension = guessExtension(file);
 		ImageGeneratorManager generatorManager = new ImageGeneratorManager();
 
 		removeFile(url);
 		if (url.contains(FileResolution.ORIGINAL.name().toLowerCase())) {
-			url = StorageUtils.replaceExtension(url, origExtension);
+			url = replaceExtension(url, origExtension);
 			copy(file, transformUrlToPath(url));
 		} else if (url.contains(FileResolution.WEB.name().toLowerCase()))
 			write(generatorManager.generateWebResolution(file, guessedExtension),
@@ -252,9 +246,9 @@ public class InternalStorageManager implements Serializable {
 		InternalStorageItem item = new InternalStorageItem();
 		item.setId(id);
 		item.setFileName(fileName);
-		item.setFileType(StorageUtils.getMimeType(file));
+		item.setFileType(getMimeType(file));
 		fileName = isNullOrEmpty(getExtension(fileName)) ?
-				fileName + "." + StorageUtils.guessExtension(file) :
+				fileName + "." + guessExtension(file) :
 				fileName;
 		item.setOriginalUrl(generateUrl(id, fileName, FileResolution.ORIGINAL));
 		item.setThumbnailUrl(generateUrl(id, fileName, FileResolution.THUMBNAIL));
@@ -331,7 +325,7 @@ public class InternalStorageManager implements Serializable {
 		ImageGeneratorManager generatorManager = new ImageGeneratorManager();
 		// write web resolution file in storage
 		
-		String calculatedExtension = StorageUtils.guessExtension(file);
+		String calculatedExtension = guessExtension(file);
 		write(generatorManager.generateWebResolution(file,
 				calculatedExtension ),
 				transformUrlToPath(item.getWebUrl()));
@@ -362,7 +356,7 @@ public class InternalStorageManager implements Serializable {
 			dest.createNewFile();
 			FileInputStream fis = new FileInputStream(toCopy);
 			FileOutputStream fos = new FileOutputStream(dest);
-			StorageUtils.writeInOut(fis, fos, true);
+			writeInOut(fis, fos, true);
 			return dest.getAbsolutePath();
 		} else {
 			throw new RuntimeException("File " + path

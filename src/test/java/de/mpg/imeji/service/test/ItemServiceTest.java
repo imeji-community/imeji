@@ -1,25 +1,5 @@
 package de.mpg.imeji.service.test;
 
-import static org.hamcrest.CoreMatchers.endsWith;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.io.File;
-import java.net.URI;
-
-import org.apache.log4j.Logger;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
-
-import util.JenaUtil;
 import de.mpg.imeji.exceptions.AuthenticationError;
 import de.mpg.imeji.exceptions.NotAllowedError;
 import de.mpg.imeji.exceptions.NotFoundException;
@@ -30,9 +10,17 @@ import de.mpg.imeji.rest.api.ItemService;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
-import de.mpg.imeji.rest.to.LabelTO;
-import de.mpg.imeji.rest.to.MetadataSetTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.TextTO;
+import org.apache.log4j.Logger;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import util.JenaUtil;
+
+import java.io.File;
+
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.*;
 
 public class ItemServiceTest {
 
@@ -78,18 +66,6 @@ public class ItemServiceTest {
 		file = new File(TEST_IMAGE_FILE_PATH);
 
 		itemTO.setFile(file);
-
-		TextTO text = new TextTO();
-		text.setText("kuku moj mal4ik");
-
-		LabelTO label = new LabelTO("en", "text label");
-
-		MetadataSetTO mds = new MetadataSetTO();
-		mds.setValue(text);
-		mds.setTypeUri(URI.create("http://imeji.org/terms/metadata#text"));
-		mds.getLabels().add(label);
-
-		itemTO.getMetadata().add(mds);
 
 	}
 

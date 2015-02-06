@@ -28,15 +28,8 @@
  */
 package de.mpg.imeji.logic.storage.util;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URL;
-
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.UnprocessableError;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
@@ -51,10 +44,10 @@ import org.apache.tika.mime.MimeTypeException;
 import org.apache.tika.mime.MimeTypes;
 import org.apache.tools.ant.taskdefs.Get;
 
-import com.google.common.base.Strings;
+import java.io.*;
+import java.net.URL;
 
-import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.exceptions.UnprocessableError;
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
  * Util class fore the storage package
@@ -204,7 +197,7 @@ public class StorageUtils {
 			else
 			{
 				String calculatedExtension =  FilenameUtils.getExtension(file.getName());
-				if (!Strings.isNullOrEmpty(calculatedExtension)){
+				if (!isNullOrEmpty(calculatedExtension)){
 					return calculatedExtension;
 				}
 			}

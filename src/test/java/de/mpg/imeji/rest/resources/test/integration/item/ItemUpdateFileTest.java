@@ -1,30 +1,10 @@
 package de.mpg.imeji.rest.resources.test.integration.item;
 
-import static de.mpg.imeji.logic.controller.ItemController.NO_THUMBNAIL_FILE_NAME;
-import static de.mpg.imeji.logic.storage.util.StorageUtils.calculateChecksum;
-import static de.mpg.imeji.rest.resources.test.TestUtils.getStringFromPath;
-import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_PATH;
-import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_REST;
-import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_STORAGE;
-import static javax.ws.rs.core.Response.Status.OK;
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.endsWith;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.IsNot.not;
-import static org.hamcrest.text.IsEmptyString.isEmptyOrNullString;
-import static org.junit.Assert.assertEquals;
-
-import java.io.File;
-import java.io.IOException;
-
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.rest.process.RestProcessUtils;
+import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
+import de.mpg.imeji.rest.to.ItemWithFileTO;
 import net.java.dev.webdav.jaxrs.ResponseStatus;
-
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
@@ -36,10 +16,22 @@ import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.rest.process.RestProcessUtils;
-import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
-import de.mpg.imeji.rest.to.ItemWithFileTO;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.io.File;
+import java.io.IOException;
+
+import static de.mpg.imeji.logic.controller.ItemController.NO_THUMBNAIL_FILE_NAME;
+import static de.mpg.imeji.logic.storage.util.StorageUtils.calculateChecksum;
+import static de.mpg.imeji.rest.resources.test.TestUtils.getStringFromPath;
+import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.*;
+import static javax.ws.rs.core.Response.Status.OK;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsNot.not;
+import static org.hamcrest.text.IsEmptyString.isEmptyOrNullString;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by vlad on 09.12.14.
@@ -369,5 +361,39 @@ public class ItemUpdateFileTest extends ImejiTestBase {
 				response.getStatus());
 
 	}
+
+    @Test
+	public void test_2_UpdateItem_1_TypeDetection_JPG() throws IOException {
+
+        FileDataBodyPart filePart = new FileDataBodyPart("file", ATTACHED_FILE);
+        FormDataMultiPart multiPart = new FormDataMultiPart();
+        multiPart.bodyPart(filePart);
+        multiPart.field(
+                "json",
+                getStringFromPath(UPDATE_ITEM_FILE_JSON)
+                        .replace("___FILE_NAME___", ATTACHED_FILE.getName())
+                        .replace("___FETCH_URL___", "")
+                        .replaceAll("\"id\"\\s*:\\s*\"__ITEM_ID__\",", "")
+                        .replace("___REFERENCE_URL___", ""));
+
+        Response response = target(PATH_PREFIX).path("/" + itemId)
+                .register(authAsUser).register(MultiPartFeature.class)
+                .register(JacksonFeature.class)
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .put(Entity.entity(multiPart, multiPart.getMediaType()));
+
+        assertEquals(OK.getStatusCode(), response.getStatus());
+        ItemWithFileTO itemWithFileTO = response
+                .readEntity(ItemWithFileTO.class);
+        assertThat("Wrong file name", itemWithFileTO.getFilename(),
+                equalTo(ATTACHED_FILE.getName()));
+        assertThat(itemWithFileTO.getFetchUrl(), isEmptyOrNullString());
+        assertThat(itemWithFileTO.getReferenceUrl(), isEmptyOrNullString());
+
+	}
+
+
+
+
 
 }

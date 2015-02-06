@@ -37,6 +37,7 @@ import java.util.*;
 import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONFromObject;
 import static de.mpg.imeji.rest.resources.test.TestUtils.getStringFromPath;
 import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_REST;
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.OK;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -80,7 +81,7 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
         final String DATE_CHANGED = "$1\"" + dateFormat.format(date) + "\"";
 
         FormDataMultiPart multiPart = new FormDataMultiPart();
-        
+
         multiPart.field("json", buildJSONFromObject(itemTO)
                         .replace("___FILE_NAME___", CHANGED)
                                 //text
@@ -113,7 +114,7 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
                         .replaceAll("(\"publication\"\\s*:\\s*)\"(.+)\"", REP_CHANGED)
                         .replaceAll("(\"citation\"\\s*:\\s*)\"(.+)\"", REP_CHANGED)
         );
-        
+
         LOGGER.info(multiPart.getField("json").getValue());
 
         Response response = target(PATH_PREFIX).path("/" + itemId)
@@ -124,12 +125,12 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
                 .put(Entity.entity(multiPart, multiPart.getMediaType()));
         assertEquals(response.getStatus(), OK.getStatusCode());
         ItemTO updatedItem = (ItemTO) response.readEntity(ItemWithFileTO.class);
-        
-        
+
+
         LOGGER.info(buildJSONFromObject(updatedItem));
 
         assertThat(updatedItem.getFilename(), equalTo(CHANGED));
-       
+
         List<MetadataSetTO> mds = updatedItem.getMetadata();
 
         //text
@@ -156,7 +157,7 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
 
         //date
         assertThat( ((DateTO) mds.get(4).getValue()).getDate(), equalTo(dateFormat.format(date)));
-        
+
         //license
         final LicenseTO licenseTO = (LicenseTO) mds.get(5).getValue();
         assertThat(licenseTO.getLicense(), equalTo(CHANGED));
@@ -296,6 +297,55 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
         }
     }
 
+
+    @Test
+    public void test_2_UpdateItem_3_Change_Metadata_Statements_Wrong_StatementUri() throws IOException {
+
+        final String CHANGED = "wrong_statementUri";
+        final String REP_CHANGED = "$1\"" + CHANGED + "\"";
+
+        FormDataMultiPart multiPart = new FormDataMultiPart();
+
+        multiPart.field("json", buildJSONFromObject(itemTO)
+                        .replaceAll("(\"statementUri\"\\s*:\\s*)\"(.+)\"", REP_CHANGED)
+        );
+
+        LOGGER.info(multiPart.getField("json").getValue());
+
+        Response response = target(PATH_PREFIX).path("/" + itemId)
+                .register(authAsUser)
+                .register(MultiPartFeature.class)
+                .register(JacksonFeature.class)
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .put(Entity.entity(multiPart, multiPart.getMediaType()));
+
+        assertEquals(BAD_REQUEST.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void test_2_UpdateItem_4_Change_Metadata_Statements_Wrong_typeUri() throws IOException {
+
+        final String CHANGED = "wrong_typeUri";
+        final String REP_CHANGED = "$1\"" + CHANGED + "\"";
+
+        FormDataMultiPart multiPart = new FormDataMultiPart();
+
+        multiPart.field("json", buildJSONFromObject(itemTO)
+                        .replaceAll("(\"statementUri\"\\s*:\\s*)\"(.+)\"", REP_CHANGED)
+        );
+
+        LOGGER.info(multiPart.getField("json").getValue());
+
+        Response response = target(PATH_PREFIX).path("/" + itemId)
+                .register(authAsUser)
+                .register(MultiPartFeature.class)
+                .register(JacksonFeature.class)
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .put(Entity.entity(multiPart, multiPart.getMediaType()));
+
+        assertEquals(BAD_REQUEST.getStatusCode(), response.getStatus());
+    }
+
     @Test
     public void test_3_UpdateItem_1_Change_Metadata_Statements_EmptyValues() throws IOException {
 
@@ -309,7 +359,7 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
                         .replaceAll("(\"license\"\\s*:\\s*)\"(.+)\"", REP_CHANGED)
                         .replaceAll("(\"link\"\\s*:\\s*)\"(.+)\"", REP_CHANGED)
                         .replaceAll("(\"url\"\\s*:\\s*)\"(.+)\"", REP_CHANGED)
-                        //only publication should be filled, not citation or format
+                                ///only publication should be filled, not citation or format
                         .replaceAll("(\"publication\"\\s*:\\s*)\"(.+)\"", REP_CHANGED)
         );
         
@@ -324,7 +374,7 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
         assertEquals(response.getStatus(), OK.getStatusCode());
 
         final String json = response.readEntity(String.class);
-        //LOGGER.info(json);
+        LOGGER.info(json);
 
         assertThat(json, not(containsString("\"text\"")));
         assertThat(json, not(containsString("\"date\"")));
@@ -338,9 +388,7 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
                 not(containsString("\"format\"")),
                 not(containsString("\"publication\"")),
                 not(containsString("\"citation\""))  ) );
-
- 
-    }
+   }
 
     @Test
     public void test_3_UpdateItem_2_Change_Metadata_Statements_EmptyStatements_SomeSections() throws IOException {
@@ -351,6 +399,8 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
         itemTO.getMetadata().remove(2);
 
         multiPart.field("json", buildJSONFromObject(itemTO));
+
+        LOGGER.info(multiPart.getField("json").getValue());
 
         Response response = target(PATH_PREFIX).path("/" + itemId)
                 .register(authAsUser)
@@ -391,6 +441,8 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
 
 
 
+
+
     private static void initCollectionWithProfile() throws Exception {
 
         Collection<Statement> statements = new ArrayList<Statement>();
@@ -428,7 +480,7 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
         ProfileController pc = new ProfileController();
         MetadataProfile mp = pc.retrieve(ObjectHelper.getURI(MetadataProfile.class, profileId), JenaUtil.testUser);
 
-        //lookup related statementURIs
+        //set real statementURIs
         for (Statement st: mp.getStatements()) {
             final MetadataSetTO md = itemTO.filterMetadataByTypeURI(st.getType()).get(0);
             md.setStatementUri(st.getId());

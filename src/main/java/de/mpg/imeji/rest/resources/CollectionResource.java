@@ -83,12 +83,14 @@ public class CollectionResource implements ImejiResource {
 
 	@DELETE
 	@Path("/{id}")
-	@ApiOperation(value = "(Not implemented)  Delete collection by id", notes = "Deletes also the profile and items of this collection")
+	@ApiOperation(value = "Delete collection by id", notes = "Deletes also the profile and items of this collection")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response delete(@Context HttpServletRequest req,
 			@PathParam("id") String id) {
-		return null;
+		JSONResponse resp = CollectionProcess.deleteCollection(req, id);
+		return RestProcessUtils.buildJSONResponse(resp);
 	}
+	
 
 	@Override
 	public Response create(HttpServletRequest req) {

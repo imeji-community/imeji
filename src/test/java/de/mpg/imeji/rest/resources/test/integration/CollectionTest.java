@@ -12,6 +12,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -34,6 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import util.JenaUtil;
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotAllowedError;
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.rest.api.CollectionService;
@@ -75,7 +77,7 @@ public class CollectionTest extends ImejiTestBase {
 	}
 
 	@Test
-	public void test_1_CreateCollection_2_CopyProfile() throws IOException {
+	public void test_1_CreateCollection_2_CopyProfile() throws ImejiException, UnsupportedEncodingException, IOException {
 		Path jsonPath = Paths
 				.get("src/test/resources/rest/createCollectionWithProfile.json");
 		String jsonString = new String(Files.readAllBytes(jsonPath), "UTF-8");
@@ -99,7 +101,7 @@ public class CollectionTest extends ImejiTestBase {
 	}
 
 	@Test
-	public void test_1_CreateCollection_3_ReferenceProfile() throws IOException {
+	public void test_1_CreateCollection_3_ReferenceProfile() throws ImejiException, UnsupportedEncodingException, IOException {
 		Path jsonPath = Paths
 				.get("src/test/resources/rest/createCollectionWithProfile.json");
 		String jsonString = new String(Files.readAllBytes(jsonPath), "UTF-8");
@@ -123,7 +125,7 @@ public class CollectionTest extends ImejiTestBase {
 
 	@Test
 	public void test_1_CreateCollection_4_NotExistedReferenceProfile()
-			throws IOException {
+			throws ImejiException, UnsupportedEncodingException, IOException {
 		Path jsonPath = Paths
 				.get("src/test/resources/rest/createCollectionWithProfile.json");
 		String jsonString = new String(Files.readAllBytes(jsonPath), "UTF-8");
@@ -143,7 +145,7 @@ public class CollectionTest extends ImejiTestBase {
 	//TODO: TEST for user who does not have right to create collection
 	
 	@Test
-	public void test_2_ReadCollection_1() throws IOException {
+	public void test_2_ReadCollection_1() throws ImejiException {
 		Response response = target(pathPrefix).path(collectionId)
 				.register(authAsUser).request(MediaType.APPLICATION_JSON).get();
 
@@ -152,7 +154,7 @@ public class CollectionTest extends ImejiTestBase {
 	}
 
 	@Test
-	public void test_2_ReadCollection_3_Unauthorized() throws IOException {
+	public void test_2_ReadCollection_3_Unauthorized() throws ImejiException {
 		Response response = target(pathPrefix).path(collectionId)
 				.request(MediaType.APPLICATION_JSON).get();
 		// String jsonString = response.readEntity(String.class);
@@ -164,7 +166,7 @@ public class CollectionTest extends ImejiTestBase {
 	}
 
 	@Test
-	public void test_2_ReadCollection_4_Forbidden() throws IOException {
+	public void test_2_ReadCollection_4_Forbidden() throws ImejiException {
 		Response response = target(pathPrefix).path(collectionId)
 				.register(authAsUser2).request(MediaType.APPLICATION_JSON)
 				.get();
@@ -182,7 +184,7 @@ public class CollectionTest extends ImejiTestBase {
 	}
 
 	@Test
-	public void test_3_ReleaseCollection_1_WithAuth() throws Exception {
+	public void test_3_ReleaseCollection_1_WithAuth() throws ImejiException {
 		ItemService itemStatus = new ItemService();
 		initItem();
 		//assertEquals("PENDING",itemStatus.read(itemId, JenaUtil.testUser).getStatus());
@@ -203,7 +205,7 @@ public class CollectionTest extends ImejiTestBase {
 	}
 	
 	@Test
-	public void test_3_ReleaseCollection_2_WithUnauth() throws NotAllowedError, NotFoundException, Exception{
+	public void test_3_ReleaseCollection_2_WithUnauth() throws ImejiException{
 		ItemService itemStatus = new ItemService();
 		initItem();
 		assertEquals("PENDING",itemStatus.read(itemId, JenaUtil.testUser).getStatus());
@@ -235,7 +237,7 @@ public class CollectionTest extends ImejiTestBase {
 	}
 	
 	@Test
-	public void test_3_ReleaseCollection_5_ReleaseCollectionTwice() throws NotAllowedError, NotFoundException, Exception{
+	public void test_3_ReleaseCollection_5_ReleaseCollectionTwice() throws ImejiException{
 		initItem();
 		CollectionService s = new CollectionService();
 		s.release(collectionId, JenaUtil.testUser);
@@ -258,7 +260,7 @@ public class CollectionTest extends ImejiTestBase {
 	}
 
 	@Test
-	public void test_4_WithdrawCollection_1_WithAuth() throws Exception {
+	public void test_4_WithdrawCollection_1_WithAuth() throws ImejiException {
 		
 		ItemService itemStatus = new ItemService();
 		initItem();
@@ -288,7 +290,7 @@ public class CollectionTest extends ImejiTestBase {
 	
 	
 	@Test
-	public void test_4_WithdrawCollection_2_WithUnauth() throws Exception{
+	public void test_4_WithdrawCollection_2_WithUnauth() throws ImejiException{
 		
 		initItem();
 		CollectionService s = new CollectionService();
@@ -308,7 +310,7 @@ public class CollectionTest extends ImejiTestBase {
 	 }
 
 	@Test
-	public void test_4_WithdrawCollection_3_WithNonAuth() throws Exception {
+	public void test_4_WithdrawCollection_3_WithNonAuth() throws ImejiException {
 
 		initItem();
 		CollectionService s = new CollectionService();
@@ -328,7 +330,7 @@ public class CollectionTest extends ImejiTestBase {
 
 
 	@Test
-	public void test_4_WithdrawCollection_4_NotReleasedCollection() throws Exception {
+	public void test_4_WithdrawCollection_4_NotReleasedCollection() throws ImejiException {
 
 		initItem();
 		CollectionService s = new CollectionService();
@@ -346,7 +348,7 @@ public class CollectionTest extends ImejiTestBase {
 	}
 	
 	@Test
-	public void test_4_WithdrawCollection_5_WithdrawCollectionTwice() throws Exception{
+	public void test_4_WithdrawCollection_5_WithdrawCollectionTwice() throws ImejiException{
 
 		initItem();
 		CollectionService s = new CollectionService();
@@ -367,7 +369,7 @@ public class CollectionTest extends ImejiTestBase {
 	}
 	
 	@Test
-	public void test_4_WithdrawCollection_5_NotExistingCollection() throws Exception{
+	public void test_4_WithdrawCollection_5_NotExistingCollection() throws ImejiException{
 		
 		Form form= new Form();
 		form.param("id", collectionId+"i_do_not_exist");
@@ -376,6 +378,79 @@ public class CollectionTest extends ImejiTestBase {
 				.path("/" + collectionId + "i_do_not_exist/withdraw").register(authAsUser)
 				.request((MediaType.APPLICATION_JSON_TYPE))
 				.put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+
+		assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
+	}
+	
+
+	@Test
+	public void test_3_DeleteCollection_1_WithAuth() throws ImejiException {
+
+		initCollection();
+		ItemService itemStatus = new ItemService();
+
+		Response response = target(pathPrefix)
+				.path("/" + collectionId).register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.delete();
+
+		assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+		
+		Response responseRead = target(pathPrefix).path(collectionId)
+				.register(authAsUser).request(MediaType.APPLICATION_JSON)
+				.get();
+		
+		assertEquals(Status.NOT_FOUND.getStatusCode(), responseRead.getStatus());
+		
+	}
+	
+	@Test
+	public void test_3_DeleteCollection_2_WithUnauth() throws ImejiException{
+		initCollection();
+		ItemService itemStatus = new ItemService();
+
+		Response response = target(pathPrefix)
+				.path("/" + collectionId).register(authAsUser2)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.delete();
+
+		assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
+	}
+
+	@Test
+	public void test_3_DeleteCollection_3_NotPendingCollection() throws ImejiException{
+		initCollection();
+		ItemService itemStatus = new ItemService();
+		CollectionService colService = new CollectionService();
+		colService.release(collectionId, JenaUtil.testUser);
+		assertEquals("RELEASED", colService.read(collectionId, JenaUtil.testUser).getStatus());
+
+		Response response = target(pathPrefix)
+				.path("/" + collectionId ).register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("{}"));	
+		
+		assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+	}
+	@Test
+	public void test_3_DeleteCollection_4_WithOutUser(){
+		
+		initCollection();
+		
+		Response response = target(pathPrefix)
+				.path("/" + collectionId)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.delete();
+		assertEquals(UNAUTHORIZED.getStatusCode(), response.getStatus());
+	}
+	
+		
+	@Test
+	public void test_3_DeleteCollection_6_nonExistingCollection(){
+		Response response = target(pathPrefix)
+				.path("/" + collectionId+"i_do_not_exist").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.delete();
 
 		assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
 	}

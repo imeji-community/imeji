@@ -62,6 +62,7 @@ public class CollectionProcess {
 		return resp;
 	}
 
+
 	public static JSONResponse withdrawCollection(HttpServletRequest req, String id, String discardComment) 
 	throws 
 	Exception {
@@ -76,6 +77,20 @@ public class CollectionProcess {
 		catch (Exception e)	{
 			resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
 			}
+		return resp;
+	}
+
+	public static JSONResponse deleteCollection(HttpServletRequest req,
+			String id) throws Exception {
+		JSONResponse resp;
+		User u = BasicAuthentication.auth(req);
+		CollectionService service = new CollectionService(); 
+		
+		try {
+			resp= RestProcessUtils.buildResponse(Status.NO_CONTENT.getStatusCode(), service.delete(id, u));
+		} catch (Exception e) {
+			resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
+		}
 		return resp;
 	}
 

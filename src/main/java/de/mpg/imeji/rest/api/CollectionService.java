@@ -1,16 +1,6 @@
 package de.mpg.imeji.rest.api;
 
-import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.transferCollection;
-import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE.CREATE;
-
-import java.net.URI;
-import java.util.List;
-
-import javax.ws.rs.BadRequestException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.CollectionController;
@@ -23,6 +13,14 @@ import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.rest.process.CommonUtils;
 import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.to.CollectionTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.net.URI;
+import java.util.List;
+
+import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE.CREATE;
+import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.transferCollection;
 
 public class CollectionService implements API<CollectionTO> {
 
@@ -119,8 +117,12 @@ public class CollectionService implements API<CollectionTO> {
 
 	@Override
 	public boolean delete(String id, User u) throws ImejiException {
-		// TODO Auto-generated method stub
-		return false;
+		CollectionController controller = new CollectionController();
+		CollectionImeji vo = controller.retrieve(
+				ObjectHelper.getURI(CollectionImeji.class, id), u);
+		controller.delete(vo, u);
+		return true;
+
 	}
 
 	@Override

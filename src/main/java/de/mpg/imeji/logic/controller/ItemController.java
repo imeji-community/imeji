@@ -124,6 +124,7 @@ public class ItemController extends ImejiController {
 		StorageController sc = new StorageController();
 		String mimeType = getMimeType(f);
 		UploadResult uploadResult = sc.upload(filename, f, c.getIdString());
+
 		if (item == null)
 			item = ImejiFactory.newItem(c);
 		
@@ -352,17 +353,25 @@ public class ItemController extends ImejiController {
 	 */
 	public Item updateFile(Item item, File f, User user) throws ImejiException {
 
-		
 		//First remove the old File from the Internal Storage if its there
 		if (!isNullOrEmpty(item.getStorageId())) {
 			removeFileFromStorage(item.getStorageId());
 		}
+		
+		CollectionController c = new CollectionController();
+		
+		StorageController sc = new StorageController();
+		UploadResult uploadResult = sc.upload(item.getFilename(), f, c.retrieve(item.getCollection(), user).getIdString());
 
 		item.setFiletype(getMimeType(f));
 		item.setChecksum(calculateChecksum(f));
-
-		StorageController sc = new StorageController();
-		InternalStorageManager ism = new InternalStorageManager();
+		item.setStorageId(uploadResult.getId());
+		item.setFullImageUrl(URI.create(uploadResult.getOrginal()));
+		item.setThumbnailImageUrl(URI.create(uploadResult.getThumb()));
+		item.setWebImageUrl(URI.create(uploadResult.getWeb()));
+		//item.setFilename(uploadResult.)
+		
+/*		InternalStorageManager ism = new InternalStorageManager();
 
 		//regenerate new url!!!
 		String url = ism.generateUrl(item.getStorageId(), f.getName(), FileResolution.ORIGINAL);
@@ -376,7 +385,8 @@ public class ItemController extends ImejiController {
 		url = ism.generateUrl(item.getStorageId(), f.getName(), FileResolution.THUMBNAIL);
 		sc.update(url, f);
 		item.setThumbnailImageUrl(URI.create(url));
-		
+*/		
+	
 
 		return update(item, user);
 	}
@@ -410,18 +420,12 @@ public class ItemController extends ImejiController {
 			}
 			catch (Exception e)
 			{
-//				throw new UnprocessableError("There was a problem with update from external File.");
-				throw new UnprocessableError(e.getLocalizedMessage());
+				throw new UnprocessableError("There was a problem with file update");
 			}
 		} else {
+			
+			removeFileFromStorage(item.getStorageId());
 			// Reference the file
-			InternalStorageManager ism = new InternalStorageManager();
-
-			//Remove all 3 resolutions files from storage
-			ism.removeFile(item.getFullImageUrl().toString());
-			ism.removeFile(item.getWebImageUrl().toString());
-			ism.removeFile(item.getThumbnailImageUrl().toString());
-
 			item.setFullImageUrl(URI.create(externalFileUrl));
 			item.setThumbnailImageUrl(URI.create(NO_THUMBNAIL_URL));
 			item.setWebImageUrl(URI.create(NO_THUMBNAIL_URL));

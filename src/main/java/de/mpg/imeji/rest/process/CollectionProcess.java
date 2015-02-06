@@ -15,11 +15,9 @@ public class CollectionProcess {
 
 		User u = BasicAuthentication.auth(req);
 
-		CollectionTO to = null;
 		CollectionService ccrud = new CollectionService();
 		try {
-			to = ccrud.read(id, u);
-			resp = RestProcessUtils.buildResponse(Status.OK.getStatusCode(), to);
+			resp = RestProcessUtils.buildResponse(Status.OK.getStatusCode(), ccrud.read(id, u));
 		} catch (Exception e) {
 			resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
 		}
@@ -81,7 +79,7 @@ public class CollectionProcess {
 	}
 
 	public static JSONResponse deleteCollection(HttpServletRequest req,
-			String id) throws Exception {
+			String id) {
 		JSONResponse resp;
 		User u = BasicAuthentication.auth(req);
 		CollectionService service = new CollectionService(); 

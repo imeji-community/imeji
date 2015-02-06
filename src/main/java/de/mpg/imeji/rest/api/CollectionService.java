@@ -37,7 +37,10 @@ public class CollectionService implements API<CollectionTO> {
 
 	@Override
 	public CollectionTO read(String id, User u) throws ImejiException {
+		
 		CollectionController controller = new CollectionController();
+		CollectionImeji vo = controller.retrieve(
+				ObjectHelper.getURI(CollectionImeji.class, id), u);
 		return getCollectionTO(controller, id, u);
 	}
 
@@ -116,7 +119,7 @@ public class CollectionService implements API<CollectionTO> {
 	}
 
 	@Override
-	public boolean delete(String id, User u) throws ImejiException {
+	public boolean  delete(String id, User u) throws ImejiException {
 		CollectionController controller = new CollectionController();
 		CollectionImeji vo = controller.retrieve(
 				ObjectHelper.getURI(CollectionImeji.class, id), u);

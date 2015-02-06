@@ -387,7 +387,6 @@ public class CollectionTest extends ImejiTestBase {
 	public void test_3_DeleteCollection_1_WithAuth() throws ImejiException {
 
 		initCollection();
-		ItemService itemStatus = new ItemService();
 
 		Response response = target(pathPrefix)
 				.path("/" + collectionId).register(authAsUser)
@@ -396,11 +395,12 @@ public class CollectionTest extends ImejiTestBase {
 
 		assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
 		
-		Response responseRead = target(pathPrefix).path(collectionId)
-				.register(authAsUser).request(MediaType.APPLICATION_JSON)
+		response = target(pathPrefix).
+				path(collectionId).register(authAsUser).
+				request(MediaType.APPLICATION_JSON)
 				.get();
 		
-		assertEquals(Status.NOT_FOUND.getStatusCode(), responseRead.getStatus());
+		assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
 		
 	}
 	
@@ -418,17 +418,24 @@ public class CollectionTest extends ImejiTestBase {
 	}
 
 	@Test
-	public void test_3_DeleteCollection_3_NotPendingCollection() throws ImejiException{
+	public void test_3_DeleteCollection_3_NotPendingCollection() {
 		initCollection();
-		ItemService itemStatus = new ItemService();
+		initItem();
+
 		CollectionService colService = new CollectionService();
+		try {
 		colService.release(collectionId, JenaUtil.testUser);
 		assertEquals("RELEASED", colService.read(collectionId, JenaUtil.testUser).getStatus());
-
+		}
+		catch (ImejiException e)
+		{
+			System.out.println("Could not release collection");
+		}
+		
 		Response response = target(pathPrefix)
-				.path("/" + collectionId ).register(authAsUser)
+				.path("/" + collectionId).register(authAsUser)
 				.request(MediaType.APPLICATION_JSON_TYPE)
-				.put(Entity.json("{}"));	
+				.delete();
 		
 		assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
 	}

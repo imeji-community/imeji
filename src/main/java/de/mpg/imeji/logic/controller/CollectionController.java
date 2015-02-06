@@ -181,6 +181,9 @@ public class CollectionController extends ImejiController {
 					((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
 							.getMessage("collection_locked"));
 		} else {
+			if (collection.getStatus() != Status.PENDING && !user.isAdmin()) {
+				throw new UnprocessableError("Collection is not pending and can not be released!");
+			}
 			// Delete images
 			List<Item> items = (List<Item>) itemController.retrieve(itemUris,
 					-1, 0, user);

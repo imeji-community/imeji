@@ -121,11 +121,51 @@ public class WriterFacade implements Writer
      */
     private void checkSecurity(List<Object> list, User user, GrantType gt) throws NotAllowedError
     {
+    	String  messageHelper = null;
+    	//TODO: Complete Rework of staticAUTH
         for (Object o : list)
         {
-            throwAuthorizationException(AuthUtil.staticAuth().createNew(user, o), user.getEmail()
-                            + " not allowed to "+Grant.getGrantTypeName(gt)+" " + extractID(o));
+        	
+        	messageHelper =  " not allowed to "+Grant.getGrantTypeName(gt)+" " + extractID(o);
+        	//TODO: Thorough tests
+        	if (gt == GrantType.CREATE) {
+        		throwAuthorizationException(AuthUtil.staticAuth().createNew(user, o), user.getEmail()
+                            +  messageHelper);
+        	}
+        	else if (gt == GrantType.UPDATE ) {
+                throwAuthorizationException(AuthUtil.staticAuth().update(user, o), user.getEmail()
+                        + messageHelper);
+        		
+        	}
+        	else if (gt == GrantType.DELETE ) {
+                throwAuthorizationException(AuthUtil.staticAuth().delete(user, o), user.getEmail()
+                		  + messageHelper);
+        		
+        	}
+        	else if (gt == GrantType.UPDATE_CONTENT ) {
+                throwAuthorizationException(AuthUtil.staticAuth().updateContent(user, o), user.getEmail()
+                		  + messageHelper);
+        		
+        	}
+        	else if (gt == GrantType.ADMIN_CONTENT ) {
+                throwAuthorizationException(AuthUtil.staticAuth().adminContent(user, o), user.getEmail()
+                		  + messageHelper);
+        		
+        	}
         }
+    }
+    
+    /**
+     * Check {@link Security} for WRITE operations
+     * 
+     * @param list
+     * @param user
+     * @param opType
+     * @throws NotAllowedError
+     */
+    public void checkSecurityParentObject(List<Object> list, User user, GrantType gt) throws NotAllowedError
+    {
+    	checkSecurity(list, user, gt);
     }
 
     /**

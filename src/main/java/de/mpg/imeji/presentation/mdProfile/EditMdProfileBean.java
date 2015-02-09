@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
+import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.collection.ViewCollectionBean;
@@ -34,8 +35,10 @@ public class EditMdProfileBean extends MdProfileBean
     private String colId = null;
     private static Logger logger = Logger.getLogger(EditMdProfileBean.class);
     private VocabularyHelper vocabularyHelper;
+    private ViewCollectionBean colContext;
 
-    /**
+
+	/**
      * Constructor
      */
     public EditMdProfileBean()
@@ -58,10 +61,11 @@ public class EditMdProfileBean extends MdProfileBean
                 {
                     try
                     {
-                        ((ViewCollectionBean)BeanHelper.getSessionBean(ViewCollectionBean.class)).setId(getColId());
-                        ((ViewCollectionBean)BeanHelper.getSessionBean(ViewCollectionBean.class)).init();
-                        setProfile(((ViewCollectionBean)BeanHelper.getSessionBean(ViewCollectionBean.class))
-                                .getProfile());
+                    	colContext = (ViewCollectionBean)BeanHelper.getSessionBean(ViewCollectionBean.class);
+                    	colContext.setId(getColId());
+                        colContext.init();
+                        setProfile((colContext).getProfile());
+                        
                     }
                     catch (Exception e)
                     {
@@ -215,4 +219,18 @@ public class EditMdProfileBean extends MdProfileBean
     {
         this.vocabularyHelper = vocabularyHelper;
     }
+    
+    /**
+	 * @return the colContext
+	 */
+	public ViewCollectionBean getColContext() {
+		return colContext;
+	}
+
+	/**
+	 * @param colContext the colContext to set
+	 */
+	public void setColContext(ViewCollectionBean colContext) {
+		this.colContext = colContext;
+	}
 }

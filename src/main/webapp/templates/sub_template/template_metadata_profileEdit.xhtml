@@ -35,12 +35,19 @@
 								<h:commandButton id="addFirstStatement" type="submit" styleClass="imj_submitButton" action="#{metadataBean.addFirstStatement}" value="#{lbl.profile_start_new}">
 								</h:commandButton>
 								<ui:fragment rendered="#{metadataBean.profilesMenu.size() > 1}">
-									<span class="imj_inlineButtonGroup">
-										<h:outputLabel value="#{lbl.or_small} #{lbl.profile_use_template}" for="chooseGivenTemplate"/>
-										<h:selectOneMenu value="#{metadataBean.template}" id="chooseGivenTemplate" onchange="submit();" valueChangeListener="#{metadataBean.templateListener}">
-											<f:selectItems value="#{metadataBean.profilesMenu}"/>
-										</h:selectOneMenu>
-									</span>
+									<div class="imj_inlineButtonGroup">
+										<h:outputLabel value="#{lbl.or_small}" for="chooseGivenTemplate"/>
+										<div class="imj_customSelectbox">
+											<div class="imj_showSelection">
+												<div class="imj_selectionText">#{lbl.profile_use_template}</div>
+												<div class="imj_buttonSortDescending_16"> </div>
+											</div>
+										
+											<h:selectOneMenu value="#{metadataBean.template}" id="chooseGivenTemplate" onchange="submit();" valueChangeListener="#{metadataBean.templateListener}">
+												<f:selectItems value="#{metadataBean.profilesMenu}"/>
+											</h:selectOneMenu>
+										</div>
+									</div>
 								</ui:fragment>
 							</div>
 						</ui:fragment>

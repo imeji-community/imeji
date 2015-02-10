@@ -167,6 +167,8 @@ body a:hover .imj_entryPagePreviewTiledListLinkArrow { background: transparent u
 .imj_collectionEntryPage .imj_headline .imj_entryPagePreviewTiledListLinkArrow, .imj_albumEntryPage .imj_headline .imj_entryPagePreviewTiledListLinkArrow { float: none; margin-right: 0.5em; vertical-align: bottom; }
 .imj_collectionEntryPage .imj_headline.imj_messageInfo, .imj_albumEntryPage .imj_headline.imj_messageInfo { margin-bottom: 1em; }
 
+.imj_organisation { width: 100%; padding: 0 4%; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; }
+
 .imj_editMetadataProfilePage { width: 91.25%; padding: 1% 4%; border-top: 0.1em solid #6CAE2F; }
 
 .imj_pageMessageArea, .imj_contentMessageArea { width: 87.95%; display: inline-block; color: #F0F0F0; margin: 1em 0; padding: 0 6%; }

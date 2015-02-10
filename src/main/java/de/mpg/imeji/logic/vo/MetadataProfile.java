@@ -43,6 +43,9 @@ public class MetadataProfile extends Properties implements Cloneable
     @j2jList("http://imeji.org/terms/statement")
     private Collection<Statement> statements = new ArrayList<Statement>();
 
+    @j2jResource("http://imeji.org/terms/default")
+    private boolean def = false;
+
     @XmlElement(name = "title", namespace = "http://purl.org/dc/elements/1.1/")
     public String getTitle()
     {
@@ -74,6 +77,15 @@ public class MetadataProfile extends Properties implements Cloneable
     public void setStatements(Collection<Statement> statements)
     {
         this.statements = statements;
+    }
+
+    @XmlElement(name = "default", namespace = "http://imeji.org/terms/")
+    public boolean getDefault() {
+        return def;
+    }
+
+    public void setDefault(boolean def) {
+        this.def = def;
     }
 
     /*

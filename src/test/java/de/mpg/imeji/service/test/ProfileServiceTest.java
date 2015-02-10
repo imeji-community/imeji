@@ -1,22 +1,6 @@
 package de.mpg.imeji.service.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
-
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collection;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import util.JenaUtil;
-import de.mpg.imeji.exceptions.NotAllowedError;
-import de.mpg.imeji.exceptions.NotFoundException;
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -28,32 +12,44 @@ import de.mpg.imeji.rest.api.ProfileService;
 import de.mpg.imeji.rest.to.MetadataProfileTO;
 import de.mpg.imeji.rest.to.StatementTO;
 import de.mpg.j2j.misc.LocalizedString;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import util.JenaUtil;
+
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.*;
 
 public class ProfileServiceTest {
 
-	private CollectionImeji c;
-	private MetadataProfile p;
+    public static final String DESCRIPTION = "Default profile";
+    private static CollectionImeji c;
+	private static MetadataProfile p;
 
-	private String typeText = "http://imeji.org/terms/metadata#text";
-	private String typeNumber = "http://imeji.org/terms/metadata#number";
-	private String textLabel = "profile text";
-	private String numberLabel = "profile number";
-	private String textLanguage = "en";
-	private String numberLanguage = "de";
+	private static final String typeText = "http://imeji.org/terms/metadata#text";
+	private static final String typeNumber = "http://imeji.org/terms/metadata#number";
+	private static final String textLabel = "profile text";
+	private static final String numberLabel = "profile number";
+	private static final String textLanguage = "en";
+	private static final String numberLanguage = "de";
 
-	@Before
-	public void setup() throws Exception {
+	@BeforeClass
+	public static void setup() throws Exception {
 		JenaUtil.initJena();
 		initProfile();
 	}
 
-	@After
-	public void tearDown() throws Exception {
+	@AfterClass
+	public static void tearDown() throws Exception {
 
 		JenaUtil.closeJena();
 	}
 
-	public void initProfile() throws Exception {
+	public static void initProfile() throws Exception {
 		CollectionController cController = new CollectionController();
 		ProfileController pController = new ProfileController();
 		Collection<Statement> statements = new ArrayList<Statement>();
@@ -88,6 +84,8 @@ public class ProfileServiceTest {
 
 		c.getMetadata().setTitle("test collection");
 		p.setStatements(statements);
+        p.setDefault(true);
+        p.setDescription(DESCRIPTION);
 
 		c.setProfile(p.getId());
 
@@ -96,8 +94,7 @@ public class ProfileServiceTest {
 	}
 
 	@Test
-	public void testProfileCRUD() throws NotFoundException, NotAllowedError,
-			Exception {
+	public void testProfileCRUD_TO()  {
 		CollectionService collcrud = new CollectionService();
 		ProfileService pCrud = new ProfileService();
 		MetadataProfileTO profile = new MetadataProfileTO();
@@ -154,6 +151,38 @@ public class ProfileServiceTest {
 				.getValue(), proTO1.getLabels().get(0).getValue());
 		assertEquals(((ArrayList<LocalizedString>) pro2.getLabels()).get(0)
 				.getValue(), proTO2.getLabels().get(0).getValue());
+
+	}
+
+    @Test
+	public void testProfile_Default_Description_VO() throws ImejiException {
+
+        ProfileController pc = new ProfileController();
+
+        final MetadataProfile profile = pc.retrieve(p.getId(), JenaUtil.testUser);
+
+        assertThat(profile.getDefault(), equalTo(true));
+        assertThat(profile.getDescription(), equalTo(DESCRIPTION));
+
+	}
+
+    @Test
+	public void testProfile_Default_Description_TO() throws ImejiException {
+
+
+        ProfileService pCrud = new ProfileService();
+        MetadataProfileTO pTO = new MetadataProfileTO();
+
+        // read profile with login
+        try {
+            pTO = pCrud.read(p.getIdString(), JenaUtil.testUser);
+        } catch (Exception e) {
+            fail("could not read Profile");
+        }
+
+        assertThat(pTO.getDefault(), equalTo(true));
+        assertThat(pTO.getDescription(), equalTo(DESCRIPTION));
+
 
 	}
 

@@ -1,32 +1,26 @@
 package de.mpg.imeji.rest.process;
 
-import java.io.IOException;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.InternalServerErrorException;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
-import net.java.dev.webdav.jaxrs.ResponseStatus;
-
-import org.apache.log4j.Logger;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
-
-import de.mpg.imeji.exceptions.AuthenticationError;
-import de.mpg.imeji.exceptions.BadRequestException;
-import de.mpg.imeji.exceptions.NotAllowedError;
-import de.mpg.imeji.exceptions.NotFoundException;
-import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.exceptions.*;
 import de.mpg.imeji.rest.to.HTTPError;
 import de.mpg.imeji.rest.to.JSONException;
 import de.mpg.imeji.rest.to.JSONResponse;
+import net.java.dev.webdav.jaxrs.ResponseStatus;
+import org.apache.log4j.Logger;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class RestProcessUtils {
 	
@@ -195,4 +189,13 @@ public class RestProcessUtils {
 		return resp;
 		
 	}
+
+    public static String formatDate(Date d) {
+        SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+        String output = f.format(d);
+        f = new SimpleDateFormat("HH:mm:SS Z");
+        output += "T" + f.format(d);
+        return output;
+    }
+
 }

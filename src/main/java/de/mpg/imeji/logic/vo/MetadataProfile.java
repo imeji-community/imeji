@@ -3,23 +3,18 @@
  */
 package de.mpg.imeji.logic.vo;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import de.mpg.imeji.presentation.util.ImejiFactory;
+import de.mpg.j2j.annotations.*;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import de.mpg.imeji.presentation.util.ImejiFactory;
-import de.mpg.j2j.annotations.j2jId;
-import de.mpg.j2j.annotations.j2jList;
-import de.mpg.j2j.annotations.j2jLiteral;
-import de.mpg.j2j.annotations.j2jModel;
-import de.mpg.j2j.annotations.j2jResource;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Profile where {@link Item} {@link Metadata} are defined
@@ -43,7 +38,7 @@ public class MetadataProfile extends Properties implements Cloneable
     @j2jList("http://imeji.org/terms/statement")
     private Collection<Statement> statements = new ArrayList<Statement>();
 
-    @j2jResource("http://imeji.org/terms/default")
+    @j2jLiteral("http://imeji.org/terms/default")
     private boolean def = false;
 
     @XmlElement(name = "title", namespace = "http://purl.org/dc/elements/1.1/")

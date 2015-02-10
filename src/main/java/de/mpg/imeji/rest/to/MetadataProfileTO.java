@@ -8,7 +8,9 @@ public class MetadataProfileTO extends PropertiesTO{
 	private static final long serialVersionUID = 1450623577903800529L;
 
     private String title;
-    
+
+    private boolean def;
+
     private String description;
     
     private List<StatementTO> statements = new ArrayList<StatementTO>();
@@ -36,5 +38,12 @@ public class MetadataProfileTO extends PropertiesTO{
 	public void setStatements(List<StatementTO> statements) {
 		this.statements = statements;
 	}
-    
+
+    public boolean getDefault() {
+        return def;
+    }
+
+    public void setDefault(boolean def) {
+        this.def = def;
+    }
 }

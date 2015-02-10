@@ -13,9 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URI;
-import java.text.SimpleDateFormat;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
@@ -69,10 +67,10 @@ public class ReverseTransferObjectFactory {
 		if (!isNullOrEmpty(to.getFilename()))
 			vo.setFilename(to.getFilename());
 
-		transferItemMetaData(to, vo, u, mode);
+		transferItemMetadata(to, vo, u, mode);
 	}
 
-	public static void transferItemMetaData(ItemTO to, Item vo, User u, TRANSFER_MODE mode) throws ImejiException  {
+	public static void transferItemMetadata(ItemTO to, Item vo, User u, TRANSFER_MODE mode) throws ImejiException  {
 
 
 		Collection<Metadata> voMDs = vo.getMetadataSet().getMetadata();
@@ -290,15 +288,6 @@ public class ReverseTransferObjectFactory {
 			person.getOrganizations().add(org);
 		}
 
-	}
-
-	public static String formatDate(Date d) {
-		String output = "";
-		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
-		output = f.format(d);
-		f = new SimpleDateFormat("HH:mm:SS Z");
-		output += "T" + f.format(d);
-		return output;
 	}
 
 }

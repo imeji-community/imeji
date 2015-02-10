@@ -24,6 +24,7 @@ public class TransferObjectFactory {
 	public static void transferMetadataProfile(MetadataProfile vo, MetadataProfileTO to){
 		transferProperties(vo, to);
 		to.setTitle(vo.getTitle());
+        to.setDefault(vo.getDefault());
 		to.setDescription(vo.getDescription());
 		transferStatements(vo.getStatements(), to);	
 	}

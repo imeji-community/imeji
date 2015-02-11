@@ -76,6 +76,7 @@
 					<h:commandButton action="#{cc.attrs.formularBean.save}" value="#{lbl.save}" styleClass="imj_submitButton" onclick="openDialog('dialogWait');"/>
 				</div>
 				
+				
 		<!-- START NEW FEATURE -->
 				<h:panelGroup layout="block" id="previewArea">
 					<input type="checkbox" id="useTemplate" checked="checked" onchange="$('#templateSelect, .imj_metadataProfilePreview').toggle(); $($('.imj_submitPanel').get(0)).toggle();"/>
@@ -92,12 +93,18 @@
 								<option></option>
 								<option></option>
 							</select>
+							
+							<h:selectOneMenu value="#{cc.attrs.formularBean.template}" id="chooseGivenTemplate" onchange="submit();" valueChangeListener="#{cc.attrs.formularBean.templateListener}">
+								<f:selectItems value="#{cc.attrs.formularBean.profilesMenu}"/>
+							</h:selectOneMenu>
+							
 						</div>
 						
 						<mdprofile:profile_preview profileBean=""/>
 					</ui:fragment>
 				</h:panelGroup>
 		<!-- START END FEATURE -->
+		
 			</div>
 		
 		

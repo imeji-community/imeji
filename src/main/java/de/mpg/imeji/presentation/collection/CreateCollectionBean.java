@@ -71,7 +71,7 @@ public class CreateCollectionBean extends CollectionBean {
 	            	o.setPos(pos2);
 	            	pos2++;	            	
 	            }
-	        }
+	        }  
 			collectionController.create(getCollection(), null,
 					sessionBean.getUser());
 			BeanHelper

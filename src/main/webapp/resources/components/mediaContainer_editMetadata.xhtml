@@ -3,7 +3,8 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:composite="http://java.sun.com/jsf/composite"
-	xmlns:imjc="http://java.sun.com/jsf/composite/components">
+	xmlns:imjc="http://java.sun.com/jsf/composite/components"
+	xmlns:mdprofile="http://java.sun.com/jsf/composite/components/mdProfile">
 
 <composite:interface>
 	<composite:attribute name="formularBean" required="true" />
@@ -40,7 +41,9 @@
 						styleClass="imj_metadataValue"
 						value="#{cc.attrs.formularContextBean.metadata.description}" />
 				</div>
-
+				
+				<h:outputText value="* #{lbl.mandatory}" />
+				
 				<!-- Author data -->
 				<ui:repeat id="persons" var="creator" value="#{cc.attrs.formularContextBean.metadata.persons}" varStatus="indexA">
 					<h:panelGroup layout="block" styleClass="imj_authorMetadataSet">
@@ -59,68 +62,58 @@
 								<span class="imj_noDisplay">: </span>
 							</h4>
 						</div>
-
+						
 						<!-- The user of the person -->
 						<imjc:person id="collectionAuthor" person="#{creator}" bean="#{cc.attrs.formularBean}" position="#{indexA.index}" />
 
-						<ui:remove>
-							<!-- Family Name -->
-							<div class="imj_metadataSet">
-								<label class="imj_metadataLabel"> <h:outputText
-										value="#{lbl.family_name} *" /> <span class="imj_noDisplay">:
-								</span>
-								</label>
-								<h:inputText id="inputFamiliyName"
-									styleClass="imj_metadataValue" value="#{creator.familyName}" />
-							</div>
-
-							<!-- Given Name -->
-							<div class="imj_metadataSet">
-								<label class="imj_metadataLabel"> <h:outputText
-										value="#{lbl.first_name}" /> <span class="imj_noDisplay">:
-								</span>
-								</label>
-								<h:inputText id="inputGivenName" styleClass="imj_metadataValue"
-									value="#{creator.givenName}" />
-							</div>
-
-							<!-- Organizations -->
-							<ui:repeat var="organization" value="#{creator.organizations}"
-								varStatus="indexO">
-								<div class="imj_metadataSet">
-									<label class="imj_metadataLabel"> <h:outputText
-											value="#{lbl.organization} *" /> <span class="imj_noDisplay">:
-									</span> <span class="imj_inlineButtonGroup"> <h:commandButton
-												styleClass="imj_buttonAdd_16"
-												title="#{lbl.add_organization}"
-												action="#{cc.attrs.formularBean.addOrganization(indexA.index,indexO.index)}">
-												<f:ajax execute="@this" render="@form" />
-											</h:commandButton> <h:commandButton styleClass="imj_buttonRemove_16"
-												title="#{lbl.remove_organization}"
-												action="#{cc.attrs.formularBean.removeOrganization(indexA.index,indexO.index)}">
-												<f:ajax execute="@this" render="@form" />
-											</h:commandButton>
-									</span>
-									</label>
-									<h:inputText id="inputCreator" styleClass="imj_metadataValue"
-										value="#{organization.name}" />
-								</div>
-							</ui:repeat>
-						</ui:remove>
 					</h:panelGroup>
 				</ui:repeat>
-				<h:outputText value="* #{lbl.mandatory}" />
+				
+				<div class="imj_submitPanel">
+					<h:outputLink value="#{HistorySession.previousPage.completeUrlWithHistory}" styleClass="imj_cancelButton">
+						<h:outputText value="#{lbl.cancel}"/>
+					</h:outputLink>
+					<h:commandButton action="#{cc.attrs.formularBean.save}" value="#{lbl.save}" styleClass="imj_submitButton" onclick="openDialog('dialogWait');"/>
+				</div>
+				
+				
+		<!-- START NEW FEATURE -->
+				<h:panelGroup layout="block" id="previewArea">
+					<input type="checkbox" id="useTemplate" checked="checked" onchange="$('#templateSelect, .imj_metadataProfilePreview').toggle(); $($('.imj_submitPanel').get(0)).toggle();"/>
+					<label for="useTemplate">#{lbl.profile_use_template}</label>
+					
+					<ui:fragment>
+						<div class="imj_customSelectbox" id="templateSelect">
+							<div class="imj_showSelection">
+								<div class="imj_selectionText">use predefined values</div>
+								<div class="imj_buttonSortDescending_16"></div>
+							</div>
+							<select>
+								<option>DEFAULT-TEMPLATE</option>
+								<option></option>
+								<option></option>
+							</select>
+							
+							<h:selectOneMenu value="#{cc.attrs.formularBean.template}" id="chooseGivenTemplate" onchange="submit();" valueChangeListener="#{cc.attrs.formularBean.templateListener}">
+								<f:selectItems value="#{cc.attrs.formularBean.profilesMenu}"/>
+							</h:selectOneMenu>
+							
+						</div>
+						
+						<mdprofile:profile_preview profileBean=""/>
+					</ui:fragment>
+				</h:panelGroup>
+		<!-- START END FEATURE -->
+		
 			</div>
-
+		
+		
+			
 			<div class="imj_submitPanel">
-				<h:outputLink
-					value="#{HistorySession.previousPage.completeUrlWithHistory}"
-					styleClass="imj_cancelButton">
-					<h:outputText value="#{lbl.cancel}" />
+				<h:outputLink value="#{HistorySession.previousPage.completeUrlWithHistory}" styleClass="imj_cancelButton">
+					<h:outputText value="#{lbl.cancel}"/>
 				</h:outputLink>
-				<h:commandButton action="#{cc.attrs.formularBean.save}"
-					value="#{lbl.save}" styleClass="imj_submitButton"
-					onclick="openDialog('dialogWait');" />
+				<h:commandButton action="#{cc.attrs.formularBean.save}" value="#{lbl.save}" styleClass="imj_submitButton" onclick="openDialog('dialogWait');"/>
 			</div>
 		</h:form>
 	</h:panelGroup>

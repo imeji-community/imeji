@@ -3,23 +3,32 @@
  */
 package de.mpg.imeji.presentation.collection;
 
+import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
+import javax.faces.bean.ManagedProperty;
 import javax.faces.event.ValueChangeEvent;
+import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.controller.CollectionController;
+import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.ContainerBean;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.ImejiFactory;
+import de.mpg.imeji.presentation.util.ObjectCachedLoader;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
 /**
@@ -45,6 +54,100 @@ public abstract class CollectionBean extends ContainerBean {
 	private String id;
 	private String profileId;
 	private boolean selected;
+	
+	private String template;
+    private List<SelectItem> profilesMenu = new ArrayList<SelectItem>();
+	
+    /**
+     * Listener for the template value
+     * 
+     * @param event
+     * @throws Exception
+     */
+    public void templateListener(ValueChangeEvent event) throws Exception
+    {
+        if (event != null && event.getNewValue() != event.getOldValue())
+        {
+            this.template = event.getNewValue().toString();
+            MetadataProfile tp = ObjectCachedLoader.loadProfile(URI.create(this.template));
+            if (tp.getStatements().isEmpty())
+                profile.getStatements().add(ImejiFactory.newStatement());
+            else
+                profile.setStatements(tp.clone().getStatements());
+//            collectionSession.setProfile(profile);
+//            initStatementWrappers(profile);
+        }
+    }
+    
+    /**
+     * Load the templates (i.e. the {@link MetadataProfile} that can be used by the {@link User}), and add it the the
+     * menu (sorted by name)
+     */
+    public void loadtemplates()
+    {
+        profilesMenu = new ArrayList<SelectItem>();
+        try
+        {
+            ProfileController pc = new ProfileController();
+            for (MetadataProfile mdp : pc.search(sessionBean.getUser()))
+            {
+                if (!mdp.getId().toString().equals(profile.getId().toString()) && !mdp.getStatements().isEmpty())
+                {
+                    profilesMenu.add(new SelectItem(mdp.getId().toString(), mdp.getTitle()));
+                }
+            }
+            // sort profilesMenu
+            Collections.sort(profilesMenu, new profilesLabelComparator());
+            // add title to first position
+            profilesMenu.add(0, new SelectItem(null, sessionBean.getLabel("profile_select_template")));
+        }
+        catch (Exception e)
+        {
+            BeanHelper.error(sessionBean.getMessage("error_profile_template_load"));
+        }
+    }
+    
+    /**
+     * Comparator of {@link MetadataProfile} names, to sort a {@link List} of {@link MetadataProfile} according to their
+     * name
+     * 
+     * @author saquet (initial creation)
+     * @author $Author$ (last modification)
+     * @version $Revision$ $LastChangedDate$
+     */
+    static class profilesLabelComparator implements Comparator<Object>
+    {
+        @Override
+        public int compare(Object o1, Object o2)
+        {
+            SelectItem profile1 = (SelectItem)o1;
+            SelectItem profile2 = (SelectItem)o2;
+            String profile1Label = profile1.getLabel();
+            String profile1Labe2 = profile2.getLabel();
+            return profile1Label.compareTo(profile1Labe2);
+        }
+    }
+    
+    public List<SelectItem> getProfilesMenu()
+    {
+        return profilesMenu;
+    }
+
+    public void setProfilesMenu(List<SelectItem> profilesMenu)
+    {
+        this.profilesMenu = profilesMenu;
+    }
+    
+    public String getTemplate()
+    {
+        return template;
+    }
+
+    public void setTemplate(String template)
+    {
+        this.template = template;
+    }
+	
 
 	/**
 	 * New default {@link CollectionBean}

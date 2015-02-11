@@ -25,7 +25,8 @@ public class ReverseTransferObjectFactory {
 			.getLogger(ReverseTransferObjectFactory.class);
 
 
-	public enum TRANSFER_MODE {CREATE, UPDATE};
+
+    public enum TRANSFER_MODE {CREATE, UPDATE};
 
 	public static void transferCollection(CollectionTO to, CollectionImeji vo, TRANSFER_MODE mode) {
 		ContainerMetadata metadata = new ContainerMetadata();
@@ -184,6 +185,32 @@ public class ReverseTransferObjectFactory {
 		}
 
 	}
+
+    public static void transferMetadataProfile(MetadataProfileTO to, MetadataProfile vo, TRANSFER_MODE mode) {
+        if (mode == TRANSFER_MODE.CREATE) {
+            vo.setTitle(to.getTitle());
+            vo.setDescription(to.getDescription());
+            vo.setDefault(to.getDefault());
+            for (StatementTO stTO: to.getStatements()) {
+                Statement stVO = new Statement();
+                stVO.setType(stTO.getType());
+                stVO.setLabels(stTO.getLabels());
+                stVO.setVocabulary(stTO.getVocabulary());
+                for (LiteralConstraintTO lc: stTO.getLiteralConstraints()) {
+                    stVO.getLiteralConstraints().add(lc.getValue());
+                }
+                stVO.setMinOccurs(stTO.getMinOccurs());
+                stVO.setMaxOccurs(stTO.getMaxOccurs());
+                //TODO: check namespace
+                //stVO.setNamespace(???);
+                if (!isNullOrEmpty(stTO.getParentStatementId()))
+                    stVO.setParent(URI.create(stTO.getParentStatementId()));
+                vo.getStatements().add(stVO);
+            }
+        }
+
+    }
+
 
     /**
      * Check all item metadata statement/types:

@@ -1,22 +1,20 @@
 package de.mpg.imeji.rest.resources.test.integration.item;
 
-import static org.junit.Assert.assertEquals;
-
-import java.io.IOException;
-import java.util.Map;
+import de.mpg.imeji.rest.api.CollectionService;
+import de.mpg.imeji.rest.resources.test.TestUtils;
+import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
+import org.junit.Before;
+import org.junit.Test;
+import util.JenaUtil;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import java.io.IOException;
+import java.util.Map;
 
-import org.glassfish.jersey.media.multipart.MultiPartFeature;
-import org.junit.Before;
-import org.junit.Test;
-
-import util.JenaUtil;
-import de.mpg.imeji.rest.api.CollectionService;
-import de.mpg.imeji.rest.resources.test.TestUtils;
-import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
+import static org.junit.Assert.assertEquals;
 
 public class ItemReadTest extends ImejiTestBase{
 	private static final String PATH_PREFIX = "/rest/items";

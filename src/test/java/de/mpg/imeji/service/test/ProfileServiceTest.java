@@ -1,32 +1,43 @@
 package de.mpg.imeji.service.test;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ProfileController;
+import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ProfileService;
+import de.mpg.imeji.rest.process.RestProcessUtils;
 import de.mpg.imeji.rest.to.MetadataProfileTO;
 import de.mpg.imeji.rest.to.StatementTO;
 import de.mpg.j2j.misc.LocalizedString;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import util.JenaUtil;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static de.mpg.imeji.logic.Imeji.adminUser;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
+import static util.JenaUtil.testUser;
 
 public class ProfileServiceTest {
 
-    public static final String DESCRIPTION = "Default profile";
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(ProfileServiceTest.class);
+
+    public static final String PROFILE_DESCRIPTION = "Ordinary profile";
     private static CollectionImeji c;
 	private static MetadataProfile p;
 
@@ -37,7 +48,7 @@ public class ProfileServiceTest {
 	private static final String textLanguage = "en";
 	private static final String numberLanguage = "de";
 
-	@BeforeClass
+    @BeforeClass
 	public static void setup() throws Exception {
 		JenaUtil.initJena();
 		initProfile();
@@ -84,13 +95,13 @@ public class ProfileServiceTest {
 
 		c.getMetadata().setTitle("test collection");
 		p.setStatements(statements);
-        p.setDefault(true);
-        p.setDescription(DESCRIPTION);
+        p.setDefault(false);
+        p.setDescription(PROFILE_DESCRIPTION);
 
 		c.setProfile(p.getId());
 
-		pController.create(p, JenaUtil.testUser);
-		cController.create(c, p, JenaUtil.testUser);
+		pController.create(p, testUser);
+		cController.create(c, p, testUser);
 	}
 
 	@Test
@@ -109,7 +120,7 @@ public class ProfileServiceTest {
 
 		// read profile with login
 		try {
-			profile = pCrud.read(p.getIdString(), JenaUtil.testUser);
+			profile = pCrud.read(p.getIdString(), testUser);
 		} catch (Exception e) {
 			fail("could not read Profile");
 		}
@@ -155,19 +166,41 @@ public class ProfileServiceTest {
 	}
 
     @Test
-	public void testProfile_Default_Description_VO() throws ImejiException {
+	public void testProfile_VO() throws ImejiException {
 
         ProfileController pc = new ProfileController();
 
-        final MetadataProfile profile = pc.retrieve(p.getId(), JenaUtil.testUser);
+        final MetadataProfile profile = pc.retrieve(p.getId(), testUser);
 
-        assertThat(profile.getDefault(), equalTo(true));
-        assertThat(profile.getDescription(), equalTo(DESCRIPTION));
+        assertThat(profile.getDefault(), equalTo(false));
+        assertThat(profile.getDescription(), equalTo(PROFILE_DESCRIPTION));
 
 	}
 
     @Test
-	public void testProfile_Default_Description_TO() throws ImejiException {
+	public void testDefaultProfile() throws ImejiException, IOException {
+
+        ProfileController pc = new ProfileController();
+
+        final MetadataProfile profile = pc.retrieveDefaultProfile();
+
+        assertThat(profile.getDefault(), equalTo(true));
+        assertThat(profile.getId(), equalTo(Imeji.defaultMetadataProfile.getId()));
+        assertThat(profile.getDescription(), equalTo(ProfileController.DEFAULT_PROFILE_DESCRIPTION));
+
+
+        ProfileService ps = new ProfileService();
+        MetadataProfileTO to = ps.read(
+                ObjectHelper.getId(Imeji.defaultMetadataProfile.getId()), adminUser);
+
+        LOGGER.info(RestProcessUtils.buildJSONFromObject(to));
+
+
+
+	}
+
+    @Test
+	public void testProfile_TO() throws ImejiException {
 
 
         ProfileService pCrud = new ProfileService();
@@ -175,14 +208,13 @@ public class ProfileServiceTest {
 
         // read profile with login
         try {
-            pTO = pCrud.read(p.getIdString(), JenaUtil.testUser);
+            pTO = pCrud.read(p.getIdString(), testUser);
         } catch (Exception e) {
             fail("could not read Profile");
         }
 
-        assertThat(pTO.getDefault(), equalTo(true));
-        assertThat(pTO.getDescription(), equalTo(DESCRIPTION));
-
+        assertThat(pTO.getDefault(), equalTo(false));
+        assertThat(pTO.getDescription(), equalTo(PROFILE_DESCRIPTION));
 
 	}
 

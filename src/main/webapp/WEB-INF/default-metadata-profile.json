@@ -1,0 +1,14 @@
+{
+  "title" : "Default metadata profile",
+  "description" : "Default metadata profile description",
+  "statements" : [ {
+    "type" : "http://imeji.org/terms/metadata#license",
+    "labels" : [ {
+      "value" : "License",
+      "lang" : "en"
+    } ],
+    "minOccurs" : "0",
+    "maxOccurs" : "1"
+  } ],
+  "default" : true
+}

@@ -3,19 +3,6 @@
  */
 package de.mpg.imeji.logic;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URI;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import org.apache.jena.atlas.lib.AlarmClock;
-import org.apache.log4j.Logger;
-import org.apache.log4j.lf5.util.StreamUtils;
-
 import com.hp.hpl.jena.Jena;
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.query.ReadWrite;
@@ -25,20 +12,25 @@ import com.hp.hpl.jena.tdb.TDB;
 import com.hp.hpl.jena.tdb.TDBFactory;
 import com.hp.hpl.jena.tdb.base.file.Location;
 import com.hp.hpl.jena.tdb.sys.TDBMaker;
-
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
+import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.StringHelper;
-import de.mpg.imeji.logic.vo.Album;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Organization;
-import de.mpg.imeji.logic.vo.Person;
-import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.j2j.annotations.j2jModel;
+import org.apache.jena.atlas.lib.AlarmClock;
+import org.apache.log4j.Logger;
+import org.apache.log4j.lf5.util.StreamUtils;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URI;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * {@link Jena} interface for imeji
@@ -48,18 +40,21 @@ import de.mpg.j2j.annotations.j2jModel;
  * @version $Revision$ $LastChangedDate$
  */
 public class Imeji {
-	public static String tdbPath = null;
-	public static String collectionModel;
-	public static String albumModel;
-	public static String imageModel;
-	public static String userModel;
-	public static String profileModel;
-	public static String statementModel;
-	public static String counterModel = "http://imeji.org/counter";
-	public static Dataset dataset;
-	public static URI counterID = URI.create("http://imeji.org/counter/0");
-	private static Logger logger = Logger.getLogger(Imeji.class);
+
+    private static Logger logger = Logger.getLogger(Imeji.class);
+
+    public static String tdbPath = null;
+    public static String collectionModel;
+    public static String albumModel;
+    public static String imageModel;
+    public static String userModel;
+    public static String profileModel;
+    public static String statementModel;
+    public static String counterModel = "http://imeji.org/counter";
+    public static Dataset dataset;
+    public static URI counterID = URI.create("http://imeji.org/counter/0");
 	public static User adminUser;
+	public static MetadataProfile defaultMetadataProfile;
 	private static final String ADMIN_EMAIL_INIT = "admin@imeji.org";
 	private static final String ADMIN_PASSWORD_INIT = "admin";
 	/**
@@ -124,7 +119,7 @@ public class Imeji {
 		logger.info("Initializing Jena dataset (" + tdbPath + ")...");
 		dataset = tdbPath != null ? TDBFactory.createDataset(tdbPath)
 				: TDBFactory.createDataset();
-		logger.info("... done!");
+		logger.info("... dataset done!");
 		logger.info("Initializing Jena models...");
 		albumModel = getModelName(Album.class);
 		collectionModel = getModelName(CollectionImeji.class);
@@ -139,10 +134,13 @@ public class Imeji {
 		initModel(statementModel);
 		initModel(profileModel);
 		initModel(counterModel);
-		initadminUser();
+        logger.info("... models done!");
+        initadminUser();
+        initDefaultMetadataProfile();
 	}
 
-	/**
+
+    /**
 	 * Initialize (Create when not existing) a {@link Model} with a given name
 	 * 
 	 * @param name
@@ -191,6 +189,18 @@ public class Imeji {
 				AuthorizationPredefinedRoles.imejiAdministrator(adminUser
 						.getId().toString()));
 	}
+
+    private static void initDefaultMetadataProfile() {
+
+        ProfileController pc = new ProfileController();
+        logger.info("Initializing default metadata profile...");
+        try {
+            defaultMetadataProfile = pc.initDefaultMetadataProfile();
+        } catch (Exception e) {
+            throw new RuntimeException("error retrieving/creating default metadata profile: ", e);
+        }
+        logger.info("... metadata profile done!");
+    }
 
 	public static void shutdown() {
 		logger.info("Shutting down thread executor...");

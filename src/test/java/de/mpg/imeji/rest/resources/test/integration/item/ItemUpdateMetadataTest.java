@@ -34,8 +34,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static de.mpg.imeji.logic.util.ResourceHelper.getStringFromPath;
 import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONFromObject;
-import static de.mpg.imeji.rest.resources.test.TestUtils.getStringFromPath;
 import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_REST;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.OK;

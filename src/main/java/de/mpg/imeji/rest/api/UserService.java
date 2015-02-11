@@ -1,14 +1,14 @@
 package de.mpg.imeji.rest.api;
 
-import java.net.URI;
-import java.util.List;
-
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotSupportedMethodException;
-import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.vo.User;
 
+import java.net.URI;
+import java.util.List;
+
+import static de.mpg.imeji.logic.Imeji.adminUser;
 
 
 public class UserService implements API<User>{
@@ -74,8 +74,9 @@ public class UserService implements API<User>{
 	}
 	
 	public User read(URI uri) throws ImejiException {
-		UserController con = new UserController(Imeji.adminUser);
-		return con.retrieve(uri);
+        //TODO: admin cannot read itself???!!! workaround:
+        return adminUser.getId().equals(uri) ? adminUser :
+                new UserController(adminUser).retrieve(uri);
 	}
 
 }

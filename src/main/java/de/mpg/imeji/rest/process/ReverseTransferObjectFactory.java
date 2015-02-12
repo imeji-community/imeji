@@ -13,9 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URI;
-import java.text.SimpleDateFormat;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
@@ -27,7 +25,8 @@ public class ReverseTransferObjectFactory {
 			.getLogger(ReverseTransferObjectFactory.class);
 
 
-	public enum TRANSFER_MODE {CREATE, UPDATE};
+
+    public enum TRANSFER_MODE {CREATE, UPDATE};
 
 	public static void transferCollection(CollectionTO to, CollectionImeji vo, TRANSFER_MODE mode) {
 		ContainerMetadata metadata = new ContainerMetadata();
@@ -69,21 +68,19 @@ public class ReverseTransferObjectFactory {
 		if (!isNullOrEmpty(to.getFilename()))
 			vo.setFilename(to.getFilename());
 
-		transferItemMetaData(to, vo, u, mode);
+		transferItemMetadata(to, vo, u, mode);
 	}
 
-	public static void transferItemMetaData(ItemTO to, Item vo, User u, TRANSFER_MODE mode) throws ImejiException  {
+	public static void transferItemMetadata(ItemTO to, Item vo, User u, TRANSFER_MODE mode) throws ImejiException  {
 
 
 		Collection<Metadata> voMDs = vo.getMetadataSet().getMetadata();
 		//Collection<Metadata> copyOfvoMDs =  ImmutableList.copyOf(voMDs);
 		voMDs.clear();
 
-
 		MetadataProfile mp = getMetadataProfile(vo.getCollection(), u);
 
         validateMetadata(to, mp);
-
 
         for (Statement st : mp.getStatements()) {
 			final URI stURI = st.getId();
@@ -186,6 +183,32 @@ public class ReverseTransferObjectFactory {
 		}
 
 	}
+
+    public static void transferMetadataProfile(MetadataProfileTO to, MetadataProfile vo, TRANSFER_MODE mode) {
+        if (mode == TRANSFER_MODE.CREATE) {
+            vo.setTitle(to.getTitle());
+            vo.setDescription(to.getDescription());
+            vo.setDefault(to.getDefault());
+            for (StatementTO stTO: to.getStatements()) {
+                Statement stVO = new Statement();
+                stVO.setType(stTO.getType());
+                stVO.setLabels(stTO.getLabels());
+                stVO.setVocabulary(stTO.getVocabulary());
+                for (LiteralConstraintTO lc: stTO.getLiteralConstraints()) {
+                    stVO.getLiteralConstraints().add(lc.getValue());
+                }
+                stVO.setMinOccurs(stTO.getMinOccurs());
+                stVO.setMaxOccurs(stTO.getMaxOccurs());
+                //TODO: check namespace
+                //stVO.setNamespace(???);
+                if (!isNullOrEmpty(stTO.getParentStatementId()))
+                    stVO.setParent(URI.create(stTO.getParentStatementId()));
+                vo.getStatements().add(stVO);
+            }
+        }
+
+    }
+
 
     /**
      * Check all item metadata statement/types:
@@ -290,15 +313,6 @@ public class ReverseTransferObjectFactory {
 			person.getOrganizations().add(org);
 		}
 
-	}
-
-	public static String formatDate(Date d) {
-		String output = "";
-		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
-		output = f.format(d);
-		f = new SimpleDateFormat("HH:mm:SS Z");
-		output += "T" + f.format(d);
-		return output;
 	}
 
 }

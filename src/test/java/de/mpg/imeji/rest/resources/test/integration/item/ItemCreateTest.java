@@ -23,7 +23,7 @@ import javax.ws.rs.core.Response.Status;
 import java.io.File;
 import java.io.IOException;
 
-import static de.mpg.imeji.rest.resources.test.TestUtils.getStringFromPath;
+import static de.mpg.imeji.logic.util.ResourceHelper.getStringFromPath;
 import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_PATH;
 import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_STORAGE;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;

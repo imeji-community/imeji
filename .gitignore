@@ -177,3 +177,6 @@ target/
 # sublime
 *.sublime-workspace
 *.sublime-project
+
+#runtime errors logs
+hs_err*.log

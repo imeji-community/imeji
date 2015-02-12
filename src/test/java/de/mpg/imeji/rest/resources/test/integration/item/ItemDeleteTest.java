@@ -1,24 +1,22 @@
 package de.mpg.imeji.rest.resources.test.integration.item;
 
-import static de.mpg.imeji.rest.resources.test.TestUtils.getStringFromPath;
-import static org.junit.Assert.assertEquals;
+import de.mpg.imeji.rest.api.CollectionService;
+import de.mpg.imeji.rest.api.ItemService;
+import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
+import net.java.dev.webdav.jaxrs.ResponseStatus;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import util.JenaUtil;
 
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import net.java.dev.webdav.jaxrs.ResponseStatus;
-
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import util.JenaUtil;
-import de.mpg.imeji.rest.api.CollectionService;
-import de.mpg.imeji.rest.api.ItemService;
-import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
+import static de.mpg.imeji.logic.util.ResourceHelper.getStringFromPath;
+import static org.junit.Assert.assertEquals;
 
 public class ItemDeleteTest extends ImejiTestBase {
 	

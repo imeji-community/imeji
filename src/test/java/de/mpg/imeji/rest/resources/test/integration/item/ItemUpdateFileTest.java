@@ -24,7 +24,7 @@ import java.io.IOException;
 
 import static de.mpg.imeji.logic.controller.ItemController.NO_THUMBNAIL_FILE_NAME;
 import static de.mpg.imeji.logic.storage.util.StorageUtils.calculateChecksum;
-import static de.mpg.imeji.rest.resources.test.TestUtils.getStringFromPath;
+import static de.mpg.imeji.logic.util.ResourceHelper.getStringFromPath;
 import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.*;
 import static javax.ws.rs.core.Response.Status.OK;
 import static org.hamcrest.CoreMatchers.*;

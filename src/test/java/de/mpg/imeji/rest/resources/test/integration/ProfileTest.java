@@ -1,20 +1,29 @@
 package de.mpg.imeji.rest.resources.test.integration;
 
-import static org.junit.Assert.assertEquals;
+import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.rest.api.CollectionService;
+import de.mpg.imeji.rest.api.ProfileService;
+import de.mpg.imeji.rest.to.MetadataProfileTO;
+import org.junit.Before;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import util.JenaUtil;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import util.JenaUtil;
-import de.mpg.imeji.rest.api.CollectionService;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 public class ProfileTest extends ImejiTestBase{
 
 	private static String pathPrefix = "/rest/profiles";
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(ProfileTest.class);
 
 	@Before
 	public void specificSetup() {
@@ -67,4 +76,18 @@ public class ProfileTest extends ImejiTestBase{
 				.request(MediaType.APPLICATION_JSON).get();
 		assertEquals(Status.FORBIDDEN.getStatusCode(),response.getStatus());
 	}
+
+	@Test
+	public void test_2_ReadProfiles_Default(){
+		String profileId = ProfileService.DEFAULT_METADATA_PROFILE_ID;
+		Response response = target(pathPrefix).path(profileId)
+				.register(authAsUser2)
+				.request(MediaType.APPLICATION_JSON).get();
+		assertEquals(Status.OK.getStatusCode(),response.getStatus());
+
+        MetadataProfileTO profile = response.readEntity(MetadataProfileTO.class);
+        assertThat(profile.getId(), equalTo(ObjectHelper.getId(Imeji.defaultMetadataProfile.getId())));
+
+
+    }
 }

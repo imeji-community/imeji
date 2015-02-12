@@ -3,13 +3,8 @@
  */
 package de.mpg.imeji.logic.controller;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.exceptions.UnprocessableError;
@@ -24,14 +19,25 @@ import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Metadata;
-import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.logic.vo.Properties.Status;
-import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.writer.WriterFacade;
+import de.mpg.imeji.presentation.util.PropertyReader;
+import de.mpg.imeji.rest.process.RestProcessUtils;
+import de.mpg.imeji.rest.to.MetadataProfileTO;
 import de.mpg.j2j.helper.DateHelper;
+import org.apache.log4j.Logger;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import static de.mpg.imeji.logic.util.ResourceHelper.getStringFromPath;
+import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE;
+import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.transferMetadataProfile;
 
 /**
  * Controller for {@link MetadataProfile}
@@ -41,13 +47,15 @@ import de.mpg.j2j.helper.DateHelper;
  * @version $Revision$ $LastChangedDate$
  */
 public class ProfileController extends ImejiController {
-	private static final ReaderFacade reader = new ReaderFacade(
+    private static final ReaderFacade reader = new ReaderFacade(
 			Imeji.profileModel);
 	private static final WriterFacade writer = new WriterFacade(
 			Imeji.profileModel);
-	private static Logger logger = Logger.getLogger(ProfileController.class);
+    public static final String DEFAULT_METADATA_PROFILE_PATH_PROPERTY = "imeji.default.metadata.profile.path";
+    private static Logger logger = Logger.getLogger(ProfileController.class);
 
-	/**
+
+    /**
 	 * Default Constructor
 	 */
 	public ProfileController() {
@@ -67,10 +75,12 @@ public class ProfileController extends ImejiController {
 		writeCreateProperties(p, user);
 		p.setStatus(Status.PENDING);
 		writer.create(WriterFacade.toList(p), user);
-		GrantController gc = new GrantController();
-		gc.addGrants(user,
-				AuthorizationPredefinedRoles.admin(null, p.getId().toString()),
-				user);
+        if (!user.isAdmin()){
+            GrantController gc = new GrantController();
+            gc.addGrants(user,
+                    AuthorizationPredefinedRoles.admin(null, p.getId().toString()),
+                    user);
+        }
 		return p;
 	}
 
@@ -107,8 +117,8 @@ public class ProfileController extends ImejiController {
 	/**
 	 * Retrieve a {@link User} by its {@link URI}
 	 *
-	 * @param uri
-	 * @param user
+	 * @param collectionId
+     * @param user
 	 * @return
 	 * @throws NotFoundException
 	 * @throws ImejiException
@@ -132,8 +142,8 @@ public class ProfileController extends ImejiController {
 	 * Updates a collection -Logged in users: --User is collection owner --OR
 	 * user is collection editor
 	 * 
-	 * @param ic
-	 * @param user
+	 * @param mdp
+     * @param user
 	 * @throws ImejiException
 	 */
 	public void update(MetadataProfile mdp, User user) throws ImejiException {
@@ -152,6 +162,17 @@ public class ProfileController extends ImejiController {
 		mdp.setStatus(Status.RELEASED);
 		mdp.setVersionDate(DateHelper.getCurrentDate());
 		update(mdp, user);
+	}
+
+    /**
+	 * Release a {@link MetadataProfile}
+	 *
+	 * @param id
+	 * @param user
+	 * @throws ImejiException
+	 */
+	public void release(String id, User user) throws ImejiException {
+        release(retrieve(id, user), user);
 	}
 
 	/**
@@ -210,6 +231,66 @@ public class ProfileController extends ImejiController {
 		}
 		return l;
 	}
+
+    /**
+     * Find default profile.
+     *
+     * @return default metadata profile
+     * @throws ImejiException
+     */
+
+    public MetadataProfile retrieveDefaultProfile() throws ImejiException {
+        Search search = SearchFactory.create(SearchType.PROFILE);
+        //TODO: dedicated SPARQL query!!!
+        SearchResult result = search.search(new SearchQuery(), null, Imeji.adminUser);
+        for (String uri : result.getResults()) {
+            try {
+                final MetadataProfile mdp = retrieve(URI.create(uri), Imeji.adminUser);
+                if(mdp.getDefault())
+                    return mdp;
+            } catch (Exception e) {
+                logger.error(e);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Create default profile.
+     *
+     * @return default metadata profile
+     * @throws ImejiException
+     */
+
+    public MetadataProfile initDefaultMetadataProfile() throws ImejiException {
+
+        MetadataProfile mdpVO = retrieveDefaultProfile();
+
+        if (mdpVO == null) {
+            String path = null;
+            String profileJSON = null;
+            MetadataProfileTO mdpTO = null;
+            try {
+                path = PropertyReader.getProperty(DEFAULT_METADATA_PROFILE_PATH_PROPERTY);
+                profileJSON = getStringFromPath(path);
+                mdpTO = (MetadataProfileTO) RestProcessUtils.buildTOFromJSON(profileJSON, MetadataProfileTO.class);
+            } catch (UnrecognizedPropertyException e) {
+                throw new ImejiException("Error reading property " + DEFAULT_METADATA_PROFILE_PATH_PROPERTY + ": " + e);
+            } catch (JsonProcessingException e) {
+                throw new ImejiException("Cannot process json: " + e);
+            } catch (URISyntaxException | IOException e) {
+                throw new ImejiException("Wrong path: " + e);
+            }
+            mdpVO = new MetadataProfile();
+            transferMetadataProfile(mdpTO, mdpVO, TRANSFER_MODE.CREATE);
+            mdpVO.setDefault(true);
+            mdpVO = create(mdpVO, Imeji.adminUser);
+            release(mdpVO, Imeji.adminUser);
+
+        }
+        return mdpVO;
+
+    }
 
 	/**
 	 * Remove all the {@link Metadata} not having a {@link Statement}. This

@@ -1,8 +1,5 @@
 package de.mpg.imeji.rest.api;
 
-import java.net.URI;
-import java.util.List;
-
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.ProfileController;
@@ -12,11 +9,16 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.to.MetadataProfileTO;
 
+import java.net.URI;
+import java.util.List;
+
 
 
 public class ProfileService implements API<MetadataProfileTO>{
-	
-	public MetadataProfile read(URI uri) throws ImejiException{
+
+    public static final String DEFAULT_METADATA_PROFILE_ID = "default";
+
+    public MetadataProfile read(URI uri) throws ImejiException{
 		ProfileController pcon = new ProfileController();
 		return pcon.retrieve(uri, Imeji.adminUser);
 	}
@@ -32,7 +34,8 @@ public class ProfileService implements API<MetadataProfileTO>{
 	public MetadataProfileTO read(String id, User u) throws ImejiException {
 		ProfileController pcontroller = new ProfileController();
 		MetadataProfileTO to = new MetadataProfileTO();
-		MetadataProfile vo = pcontroller.retrieve(ObjectHelper.getURI(MetadataProfile.class, id), u);
+		MetadataProfile vo = DEFAULT_METADATA_PROFILE_ID.equals(id) ? Imeji.defaultMetadataProfile :
+                pcontroller.retrieve(ObjectHelper.getURI(MetadataProfile.class, id), u);
 		TransferObjectFactory.transferMetadataProfile(vo, to);
 		return to;
 	}
@@ -52,7 +55,7 @@ public class ProfileService implements API<MetadataProfileTO>{
 
 	@Override
 	public MetadataProfileTO release(String id, User u) throws ImejiException {
-		// TODO Auto-generated method stub
+        // TODO Auto-generated method stub
 		return null;
 	}
 

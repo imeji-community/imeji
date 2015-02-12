@@ -11,7 +11,6 @@ import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ProfileService;
-import de.mpg.imeji.rest.process.RestProcessUtils;
 import de.mpg.imeji.rest.to.MetadataProfileTO;
 import de.mpg.imeji.rest.to.StatementTO;
 import de.mpg.j2j.misc.LocalizedString;
@@ -28,7 +27,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import static de.mpg.imeji.logic.Imeji.adminUser;
+import static de.mpg.imeji.logic.util.ResourceHelper.getStringFromPath;
+import static de.mpg.imeji.rest.process.RestProcessUtils.buildTOFromJSON;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.*;
 import static util.JenaUtil.testUser;
 
@@ -41,6 +43,7 @@ public class ProfileServiceTest {
     private static CollectionImeji c;
 	private static MetadataProfile p;
 
+    private static final String DEFAULT_PROFILE_JSON_PATH = "src/main/webapp/WEB-INF/default-metadata-profile.json";
 	private static final String typeText = "http://imeji.org/terms/metadata#text";
 	private static final String typeNumber = "http://imeji.org/terms/metadata#number";
 	private static final String textLabel = "profile text";
@@ -182,22 +185,24 @@ public class ProfileServiceTest {
 
         ProfileController pc = new ProfileController();
 
-        final MetadataProfile profile = pc.retrieveDefaultProfile();
+        MetadataProfileTO pFromJSON = (MetadataProfileTO) buildTOFromJSON(getStringFromPath(DEFAULT_PROFILE_JSON_PATH), MetadataProfileTO.class);
 
-        assertThat(profile.getDefault(), equalTo(true));
-        assertThat(profile.getId(), equalTo(Imeji.defaultMetadataProfile.getId()));
-        assertThat(profile.getDescription(), equalTo(ProfileController.DEFAULT_PROFILE_DESCRIPTION));
+        MetadataProfile pFromController = pc.retrieveDefaultProfile();
 
+        assertThat(pFromController.getDefault(), equalTo(true));
+        assertThat(pFromController.getId(), equalTo(Imeji.defaultMetadataProfile.getId()));
+        assertThat(pFromController.getDescription(), equalTo(pFromJSON.getDescription()));
+        assertThat(pFromController.getStatements(), hasSize(pFromJSON.getStatements().size()));
 
         ProfileService ps = new ProfileService();
-        MetadataProfileTO to = ps.read(
-                ObjectHelper.getId(Imeji.defaultMetadataProfile.getId()), adminUser);
+        MetadataProfileTO pFromService = ps.read(ObjectHelper.getId(Imeji.defaultMetadataProfile.getId()), adminUser);
 
-        LOGGER.info(RestProcessUtils.buildJSONFromObject(to));
+        assertThat(pFromService.getDefault(), equalTo(true));
+        assertThat(pFromService.getId(), equalTo(ObjectHelper.getId(Imeji.defaultMetadataProfile.getId())));
+        assertThat(pFromService.getDescription(), equalTo(pFromJSON.getDescription()));
+        assertThat(pFromService.getStatements(), hasSize(pFromJSON.getStatements().size()));
 
-
-
-	}
+    }
 
     @Test
 	public void testProfile_TO() throws ImejiException {

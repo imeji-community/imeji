@@ -16,9 +16,9 @@ import java.util.List;
 
 public class ProfileService implements API<MetadataProfileTO>{
 
+    public static final String DEFAULT_METADATA_PROFILE_ID = "default";
 
-
-	public MetadataProfile read(URI uri) throws ImejiException{
+    public MetadataProfile read(URI uri) throws ImejiException{
 		ProfileController pcon = new ProfileController();
 		return pcon.retrieve(uri, Imeji.adminUser);
 	}
@@ -34,7 +34,8 @@ public class ProfileService implements API<MetadataProfileTO>{
 	public MetadataProfileTO read(String id, User u) throws ImejiException {
 		ProfileController pcontroller = new ProfileController();
 		MetadataProfileTO to = new MetadataProfileTO();
-		MetadataProfile vo = pcontroller.retrieve(ObjectHelper.getURI(MetadataProfile.class, id), u);
+		MetadataProfile vo = DEFAULT_METADATA_PROFILE_ID.equals(id) ? Imeji.defaultMetadataProfile :
+                pcontroller.retrieve(ObjectHelper.getURI(MetadataProfile.class, id), u);
 		TransferObjectFactory.transferMetadataProfile(vo, to);
 		return to;
 	}

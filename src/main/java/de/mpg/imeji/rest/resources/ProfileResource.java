@@ -1,21 +1,17 @@
 package de.mpg.imeji.rest.resources;
 
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import de.mpg.imeji.rest.process.ProfileProcess;
+import de.mpg.imeji.rest.to.JSONResponse;
+
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiOperation;
-
-import de.mpg.imeji.rest.process.ProfileProcess;
-import de.mpg.imeji.rest.process.RestProcessUtils;
-import de.mpg.imeji.rest.to.JSONResponse;
+import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONResponse;
 
 
 @Path("/profiles")
@@ -30,11 +26,11 @@ public class ProfileResource implements ImejiResource {
   
     @GET   
     @Path("/{id}")
-    @ApiOperation(value = "Get profile by id")
+    @ApiOperation(value = "Get profile by id. If id is equal to \"default\", the default metadata profile will be delivered.")
     @Produces(MediaType.APPLICATION_JSON)
 	public Response read(@Context HttpServletRequest req, @PathParam("id") String id) {
     	JSONResponse resp = ProfileProcess.readProfile(req, id);
-		return RestProcessUtils.buildJSONResponse(resp);
+		return buildJSONResponse(resp);
 	}
 
 	@Override
@@ -49,7 +45,7 @@ public class ProfileResource implements ImejiResource {
     @Produces(MediaType.APPLICATION_JSON)
 	public Response delete(@Context HttpServletRequest req, @PathParam("id") String id) {
 		JSONResponse resp = ProfileProcess.deleteProfile(req, id);
-		return RestProcessUtils.buildJSONResponse(resp);
+		return buildJSONResponse(resp);
 	}
 
 	

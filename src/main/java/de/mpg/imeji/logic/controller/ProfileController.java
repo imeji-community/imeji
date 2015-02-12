@@ -51,10 +51,8 @@ public class ProfileController extends ImejiController {
 			Imeji.profileModel);
 	private static final WriterFacade writer = new WriterFacade(
 			Imeji.profileModel);
-    public static final String DEFAULT_METADATA_PROFILE_PATH = "imeji.default.metadata.profile.path";
+    public static final String DEFAULT_METADATA_PROFILE_PATH_PROPERTY = "imeji.default.metadata.profile.path";
     private static Logger logger = Logger.getLogger(ProfileController.class);
-
-    public static String DEFAULT_PROFILE_DESCRIPTION = "";
 
 
     /**
@@ -273,11 +271,11 @@ public class ProfileController extends ImejiController {
             String profileJSON = null;
             MetadataProfileTO mdpTO = null;
             try {
-                path = PropertyReader.getProperty(DEFAULT_METADATA_PROFILE_PATH);
+                path = PropertyReader.getProperty(DEFAULT_METADATA_PROFILE_PATH_PROPERTY);
                 profileJSON = getStringFromPath(path);
                 mdpTO = (MetadataProfileTO) RestProcessUtils.buildTOFromJSON(profileJSON, MetadataProfileTO.class);
             } catch (UnrecognizedPropertyException e) {
-                throw new ImejiException("Error reading property " + DEFAULT_METADATA_PROFILE_PATH + ": " + e);
+                throw new ImejiException("Error reading property " + DEFAULT_METADATA_PROFILE_PATH_PROPERTY + ": " + e);
             } catch (JsonProcessingException e) {
                 throw new ImejiException("Cannot process json: " + e);
             } catch (URISyntaxException | IOException e) {
@@ -288,8 +286,6 @@ public class ProfileController extends ImejiController {
             mdpVO.setDefault(true);
             mdpVO = create(mdpVO, Imeji.adminUser);
             release(mdpVO, Imeji.adminUser);
-
-            DEFAULT_PROFILE_DESCRIPTION = mdpVO.getDescription();
 
         }
         return mdpVO;

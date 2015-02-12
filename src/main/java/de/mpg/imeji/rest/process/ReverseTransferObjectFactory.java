@@ -78,11 +78,9 @@ public class ReverseTransferObjectFactory {
 		//Collection<Metadata> copyOfvoMDs =  ImmutableList.copyOf(voMDs);
 		voMDs.clear();
 
-
 		MetadataProfile mp = getMetadataProfile(vo.getCollection(), u);
 
         validateMetadata(to, mp);
-
 
         for (Statement st : mp.getStatements()) {
 			final URI stURI = st.getId();

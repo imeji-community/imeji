@@ -57,54 +57,56 @@ p { display: block; margin: 1em 0; }
 
 /* ===[ ICONS - Buttons ]=== ================================================== */
 body .imj_logo { width: 13em; height: 5em; padding: 0; display: inline-block; background: transparent url("/imeji/resources/imj_iconset/logo_imeji.gif") -1.90909em 0 no-repeat; }
-body .imj_buttonStyleSwitcher { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; margin: 0 0.727272em; outline: none; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjButtonMonitorColor_16.png") 0 0 no-repeat; }
+body .imj_buttonStyleSwitcher { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; margin: 0 0.727272em; outline: none; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjButtonMonitorColor_16.png") 0 0 no-repeat; }
 body .imj_buttonStyleSwitcher:hover { border: 0 none; outline: none; background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjButtonMonitorColor_16.png") 0 0 no-repeat; }
-body .imj_iconTriangleBottomRight_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjTriangleLargeBottomRight_16.png") 0 0 no-repeat; }
+body .imj_iconTriangleBottomRight_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjTriangleLargeBottomRight_16.png") 0 0 no-repeat; }
 body .imj_iconTriangleBottomRight_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjTriangleLargeBottomRight_16.png") 0 0 no-repeat; }
 body .imj_overlayMenu:hover .imj_iconTriangleBottomRight_16 { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjTriangleLargeBottomRight_16.png") 0 0 no-repeat; }
-body .imj_iconEyeOpen_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjEyeOpen_16.png") 0 0 no-repeat; }
+body .imj_iconEyeOpen_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjEyeOpen_16.png") 0 0 no-repeat; }
 body .imj_iconEyeOpen_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjEyeOpen_16.png") 0 0 no-repeat; }
 body a:hover .imj_iconEyeOpen_16 { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjEyeOpen_16.png") 0 0 no-repeat; }
-body .imj_buttonEdit_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjEditPen_16.png") 0 0 no-repeat; }
+body .imj_buttonEdit_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjEditPen_16.png") 0 0 no-repeat; }
 body .imj_buttonEdit_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjEditPen_16.png") 0 0 no-repeat; }
 body a:hover .imj_buttonEdit_16 { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjEditPen_16.png") 0 0 no-repeat; }
-body .imj_buttonSortAscending_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; margin-right: 0.5em; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjButtonTriangleSortAsc_16.png") 0 0 no-repeat; }
+body .imj_iconErase_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjButtonCross_16.png") 0 0 no-repeat; }
+body .imj_iconErase_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjButtonCross_16.png") 0 0 no-repeat; }
+body .imj_buttonSortAscending_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; margin-right: 0.5em; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjButtonTriangleSortAsc_16.png") 0 0 no-repeat; }
 body .imj_buttonSortAscending_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjButtonTriangleSortAsc_16.png") 0 0 no-repeat; }
-body .imj_buttonSortDescending_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; margin-right: 0.5em; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjButtonTriangleSortDesc_16.png") 0 0 no-repeat; }
+body .imj_buttonSortDescending_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; margin-right: 0.5em; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjButtonTriangleSortDesc_16.png") 0 0 no-repeat; }
 body .imj_buttonSortDescending_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjButtonTriangleSortDesc_16.png") 0 0 no-repeat; }
-body .imj_buttonOrderByAsc_16 { display: inline-block; width: 2.36364em; height: 16px; vertical-align: middle; border: 0 none; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjButtonTriangleSortAsc_16.png") 0 0 no-repeat; }
+body .imj_buttonOrderByAsc_16 { display: inline-block; width: 2.36364em; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjButtonTriangleSortAsc_16.png") 0 0 no-repeat; }
 body .imj_buttonOrderByAsc_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjButtonTriangleSortAsc_16.png") 0 0 no-repeat; }
-body .imj_buttonOrderByDesc_16 { display: inline-block; width: 2.36364em; height: 16px; vertical-align: middle; border: 0 none; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjButtonTriangleSortDesc_16.png") 0 0 no-repeat; }
+body .imj_buttonOrderByDesc_16 { display: inline-block; width: 2.36364em; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjButtonTriangleSortDesc_16.png") 0 0 no-repeat; }
 body .imj_buttonOrderByDesc_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjButtonTriangleSortDesc_16.png") 0 0 no-repeat; }
 body a:hover .imj_buttonSortDescending_16 { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjButtonTriangleSortDesc_16.png") 0 0 no-repeat; }
 body a:hover .imj_buttonSortAscending_16 { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjButtonTriangleSortAsc_16.png") 0 0 no-repeat; }
 body select + .imj_buttonOrderByAsc_16, body select + .imj_buttonOrderByDesc_16, body select + .imj_buttonSortAscending_16, body select + .imj_buttonSortDescending_16 { margin-left: 1em; }
-body .imj_iconMagnifier_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; margin-right: 0.5em; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjMagnifierTopLeft_16.png") center center no-repeat; }
+body .imj_iconMagnifier_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; margin-right: 0.5em; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjMagnifierTopLeft_16.png") center center no-repeat; }
 body .imj_iconMagnifier_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjMagnifierTopLeft_16.png") center center no-repeat; }
 body .imj_overlayMenu:hover .imj_iconMagnifier_16 { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjMagnifierTopLeft_16.png") center center no-repeat; }
 body .imj_iconMagnifier_24 { display: inline-block; height: 2em; width: 2em; margin-right: 0.636363em; margin-top: -0.1818em; background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjMagnifierTopLeft_24.png") center center no-repeat; }
-body .imj_iconGoTo { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjTriangleNext_16.png") center right no-repeat; }
+body .imj_iconGoTo { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjTriangleNext_16.png") center right no-repeat; }
 body .imj_iconGoTo:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjTriangleNext_16.png") center right no-repeat; }
 body .imj_iconGoTo:focus { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjTriangleNext_16.png") center right no-repeat; }
-body .imj_buttonBrowseToFirst_16 { display: inline-block; width: 2.36364em; height: 16px; vertical-align: middle; border: 0 none; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjGotoFirst_16.png") center left no-repeat; }
+body .imj_buttonBrowseToFirst_16 { display: inline-block; width: 2.36364em; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjGotoFirst_16.png") center left no-repeat; }
 body .imj_buttonBrowseToFirst_16.imj_deactivated { background: transparent url("/imeji/resources/imj_iconset/BBBBBB/imjGotoFirst_16.png") center left no-repeat; }
 body .imj_buttonBrowseToFirst_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjGotoFirst_16.png") center left no-repeat; }
 body .imj_buttonBrowseToFirst_16:hover.imj_deactivated { background: transparent url("/imeji/resources/imj_iconset/BBBBBB/imjGotoFirst_16.png") center left no-repeat; }
-body .imj_buttonBrowseBackward_16 { display: inline-block; width: 2.36364em; height: 16px; vertical-align: middle; border: 0 none; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjTrianglePrevious_16.png") center left no-repeat; }
+body .imj_buttonBrowseBackward_16 { display: inline-block; width: 2.36364em; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjTrianglePrevious_16.png") center left no-repeat; }
 body .imj_buttonBrowseBackward_16.imj_deactivated { background: transparent url("/imeji/resources/imj_iconset/BBBBBB/imjTrianglePrevious_16.png") center left no-repeat; }
 body .imj_buttonBrowseBackward_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjTrianglePrevious_16.png") center left no-repeat; }
 body .imj_buttonBrowseBackward_16:hover.imj_deactivated { background: transparent url("/imeji/resources/imj_iconset/BBBBBB/imjTrianglePrevious_16.png") center left no-repeat; }
-body .imj_buttonBrowseForward_16 { display: inline-block; width: 2.36364em; height: 16px; vertical-align: middle; border: 0 none; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjTriangleNext_16.png") center right no-repeat; }
+body .imj_buttonBrowseForward_16 { display: inline-block; width: 2.36364em; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjTriangleNext_16.png") center right no-repeat; }
 body .imj_buttonBrowseForward_16.imj_deactivated { background: transparent url("/imeji/resources/imj_iconset/BBBBBB/imjTriangleNext_16.png") center right no-repeat; }
 body .imj_buttonBrowseForward_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjTriangleNext_16.png") center right no-repeat; }
 body .imj_buttonBrowseForward_16:hover.imj_deactivated { background: transparent url("/imeji/resources/imj_iconset/BBBBBB/imjTriangleNext_16.png") center right no-repeat; }
-body .imj_buttonBrowseToLast_16 { display: inline-block; width: 2.36364em; height: 16px; vertical-align: middle; border: 0 none; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjGotoLast_16.png") center right no-repeat; }
+body .imj_buttonBrowseToLast_16 { display: inline-block; width: 2.36364em; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjGotoLast_16.png") center right no-repeat; }
 body .imj_buttonBrowseToLast_16.imj_deactivated { background: transparent url("/imeji/resources/imj_iconset/BBBBBB/imjGotoLast_16.png") center right no-repeat; }
 body .imj_buttonBrowseToLast_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjGotoLast_16.png") center right no-repeat; }
 body .imj_buttonBrowseToLast_16:hover.imj_deactivated { background: transparent url("/imeji/resources/imj_iconset/BBBBBB/imjGotoLast_16.png") center right no-repeat; }
-body .imj_buttonAdd_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; margin-right: 0.181818em; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjButtonPlusBorderOpen_16.png") 0 0 no-repeat; }
+body .imj_buttonAdd_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; margin-right: 0.181818em; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjButtonPlusBorderOpen_16.png") 0 0 no-repeat; }
 body .imj_buttonAdd_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjButtonPlusBorderOpen_16.png") 0 0 no-repeat; }
-body .imj_buttonRemove_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; margin-right: 0.182em; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjButtonMinusRoundedBorderOpen_16.png") 0 0 no-repeat; }
+body .imj_buttonRemove_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; margin-right: 0.182em; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjButtonMinusRoundedBorderOpen_16.png") 0 0 no-repeat; }
 body .imj_buttonRemove_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjButtonMinusRoundedBorderOpen_16.png") 0 0 no-repeat; }
 body .imj_collapse .imj_buttonRemove_16 { margin-right: 0.272727em; vertical-align: top; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjButtonMinusRoundedBorder_16.png") 0 0 no-repeat; }
 body .imj_collapse .imj_buttonRemove_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjButtonMinusRoundedBorder_16.png") 0 0 no-repeat; }
@@ -112,18 +114,18 @@ body .imj_collapse:hover .imj_buttonRemove_16 { background: transparent url("/im
 body .imj_expand .imj_buttonAdd_16 { margin-right: 0.272727em; vertical-align: top; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjButtonPlusBorder_16.png") 0 0 no-repeat; }
 body .imj_expand .imj_buttonAdd_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjButtonPlusBorder_16.png") 0 0 no-repeat; }
 body .imj_expand:hover .imj_buttonAdd_16 { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjButtonPlusBorder_16.png") 0 0 no-repeat; }
-body .imj_iconExpand_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjArrowAwayText_16.png") 0 0 no-repeat; }
+body .imj_iconExpand_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjArrowAwayText_16.png") 0 0 no-repeat; }
 body .imj_iconExpand_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjArrowAwayText_16.png") 0 0 no-repeat; }
 body .imj_iconExpand_16:focus { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjArrowAwayText_16.png") 0 0 no-repeat; }
-body .imj_iconCollapse_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjArrowToText_16.png") 0 0 no-repeat; }
+body .imj_iconCollapse_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjArrowToText_16.png") 0 0 no-repeat; }
 body .imj_iconCollapse_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjArrowToText_16.png") 0 0 no-repeat; }
 body .imj_iconCollapse_16:focus { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjArrowToText_16.png") 0 0 no-repeat; }
-body .imj_iconStatusPrivate_24 { display: inline-block; width: 24px; height: 24px; vertical-align: middle; border: 0 none; background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjLocked_24.png") left center no-repeat; }
-body .imj_iconStatusShareable_24 { display: inline-block; width: 24px; height: 24px; vertical-align: middle; border: 0 none; background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjArrowRightToPeople_24.png") left center no-repeat; }
-body .imj_icoStatusWithdrawn_32 { display: inline-block; width: 32px; height: 32px; vertical-align: middle; border: 0 none; background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjDocumentDelete_32.png") left center no-repeat; }
-body .imj_icoStatusPending_32 { display: inline-block; width: 32px; height: 32px; vertical-align: middle; border: 0 none; background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjDocumentPending_32.png") left center no-repeat; }
-body .imj_icoStatusReleased_32 { display: inline-block; width: 32px; height: 32px; vertical-align: middle; border: 0 none; background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjDocumentPublished_32.png") left center no-repeat; }
-body .imj_entryPagePreviewTiledListLinkArrow { float: right; display: inline-block; width: 24px; height: 24px; vertical-align: middle; border: 0 none; margin-top: 1em; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjArrowThinRight_24.png") top right no-repeat; }
+body .imj_iconStatusPrivate_24 { display: inline-block; width: 24px; height: 24px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjLocked_24.png") left center no-repeat; }
+body .imj_iconStatusShareable_24 { display: inline-block; width: 24px; height: 24px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjArrowRightToPeople_24.png") left center no-repeat; }
+body .imj_icoStatusWithdrawn_32 { display: inline-block; width: 32px; height: 32px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjDocumentDelete_32.png") left center no-repeat; }
+body .imj_icoStatusPending_32 { display: inline-block; width: 32px; height: 32px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjDocumentPending_32.png") left center no-repeat; }
+body .imj_icoStatusReleased_32 { display: inline-block; width: 32px; height: 32px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjDocumentPublished_32.png") left center no-repeat; }
+body .imj_entryPagePreviewTiledListLinkArrow { float: right; display: inline-block; width: 24px; height: 24px; vertical-align: middle; border: 0 none; cursor: pointer; margin-top: 1em; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjArrowThinRight_24.png") top right no-repeat; }
 body .imj_entryPagePreviewTiledListLinkArrow:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjArrowThinRight_24.png") top right no-repeat; }
 body .imj_entryPagePreviewTiledListLinkArrow:after { clear: both; content: ""; }
 body a:hover .imj_entryPagePreviewTiledListLinkArrow { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjArrowThinRight_24.png") top right no-repeat; }
@@ -565,10 +567,9 @@ iframe#twitter-widget-0 div.root div.stream { height: 20em !important; }
 .imj_userConfig .imj_admindataValueEntry + .imj_editButton { float: right; }
 .imj_userConfig .imj_connectedUserGroups .imj_admindataValueEntry { display: block; }
 
-.imj_setupConfig .imj_admindataValue .imj_admindataEdit { width: 100%; }
+.imj_setupConfig .imj_admindataValue .imj_admindataEdit { width: 100%; box-sizing: border-box; }
 .imj_setupConfig .imj_adminPanel .imj_headline .imj_submitButton { float: right; }
 .imj_setupConfig .imj_adminPanel .imj_headline .imj_submitButton:after { clear: both; content: ""; }
-.imj_setupConfig .imj_adminPanel .imj_content .imj_admindataSet .imj_submitPanel { margin-top: 0; }
 
 .imj_mainMenuStandard { display: inline-block; padding: 0 3%; font-size: 135%; letter-spacing: 0.090909em; text-align: left; text-transform: uppercase; }
 .imj_mainMenuStandard .imj_mainMenuStandardItem { display: inline-block; padding: 0.272727em 0.181818em 0.272727em 0.272727em; margin-right: 0.454545em; text-decoration: none; background-color: #313131; -moz-border-radius: 0.41667em; -webkit-border-radius: 0.41667em; border-radius: 0.41667em; }
@@ -760,14 +761,8 @@ iframe#twitter-widget-0 div.root div.stream { height: 20em !important; }
 .imj_administrationTiledList.imj_maxWidth .imj_adminPanel { width: 100%; max-width: none; }
 
 .imj_fileTypeConfig { width: 100%; }
-.imj_fileTypeConfig .imj_fileTypeConfigList { width: 100%; margin-top: 0.5em; }
-.imj_fileTypeConfig .imj_fileTypeConfigList .imj_fileTypeDescription, .imj_fileTypeConfig .imj_fileTypeConfigList .imj_fileTypeValueDescription { width: 46.5%; padding: 0 0.5em; margin-top: 0; display: inline-block; }
-.imj_fileTypeConfig .imj_fileTypeConfigList .imj_fileTypeDescription { margin-right: 1%; }
-.imj_fileTypeConfig .imj_fileTypeConfigList .imj_fileTypeInput { width: 46.5%; margin-right: 1%; }
-.imj_fileTypeConfig .imj_fileTypeConfigList .imj_fileTypeInput input { width: 100%; }
-.imj_fileTypeConfig .imj_fileTypeConfigList .imj_fileTypeValueInput { width: 46.5%; }
-.imj_fileTypeConfig .imj_fileTypeConfigList .imj_fileTypeValueInput input { width: 100%; }
-.imj_fileTypeConfig .imj_fileTypeConfigList .imj_submitPanel { margin-top: 0; margin-bottom: 1em; }
+.imj_fileTypeConfig table.imj_fileTypeConfigList { width: 100%; margin-top: 0.5em; }
+.imj_fileTypeConfig table.imj_fileTypeConfigList td .imj_fileTypeInput, .imj_fileTypeConfig table.imj_fileTypeConfigList td .imj_fileTypeValueInput { width: 90%; padding: 1% 2%; }
 
 .imj_tabList .imj_tabMenu { width: 100%; background-color: #292929; font-size: 120%; }
 .imj_tabList .imj_tabMenu li { display: inline-block; padding: 1em 0.5em; }
@@ -852,6 +847,6 @@ body .imj_siteWrapper .plupload_buttons a:focus { color: #000000; background-col
 body .imj_siteWrapper .plupload_buttons a + a { margin-left: 1em; }
 body .imj_siteWrapper .plupload_delete:hover { background-color: rgba(0, 0, 0, 0.1); }
 body .imj_siteWrapper .plupload_delete .plupload_file_action { vertical-align: text-top; }
-body .imj_siteWrapper .plupload_delete .plupload_file_action a { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; background: transparent url("/imeji/resources/imj_iconset/D80000/imjButtonMinusRoundedBorderOpen_16.png") 0 0 no-repeat; }
+body .imj_siteWrapper .plupload_delete .plupload_file_action a { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/D80000/imjButtonMinusRoundedBorderOpen_16.png") 0 0 no-repeat; }
 body .imj_siteWrapper .plupload_delete .plupload_file_action a:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjButtonMinusRoundedBorderOpen_16.png") 0 0 no-repeat; }
 body .imj_siteWrapper .moxie-shim input { border-radius: 0; -webkit-border-radius: 0; -moz-border-radius: 0; -o-border-radius: 0; -ms-border-radius: 0; padding: 0; margin: 0; cursor: pointer; }

@@ -100,7 +100,14 @@ public class RawFileImageGenerator implements ImageGenerator
         g2d.setPaint(Color.WHITE);
         g2d.setFont(new Font("Serif", Font.BOLD, TEXT_FONT_SIZE));
         FontMetrics fm = g2d.getFontMetrics();
-        extension = FilenameUtils.getExtension(fileName);
+
+        //display the filename extension. 
+        //if filename extension is null, simply show the mimetype (if recognized) which comes with the extension parameter of the method.
+        String fileNameExtension = FilenameUtils.getExtension(fileName);
+        if (fileNameExtension != "") {
+        	extension = fileNameExtension;
+        }
+        
         extension = formatExtension(extension);
         g2d.drawString(extension, TEXT_POSITION_X - fm.stringWidth(extension), TEXT_POSITION_Y);
         g2d.dispose();

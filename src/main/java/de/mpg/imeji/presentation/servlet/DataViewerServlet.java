@@ -19,7 +19,9 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.StatusType;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -35,6 +37,7 @@ import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.ObjectLoader;
@@ -66,17 +69,21 @@ public class DataViewerServlet extends HttpServlet {
 			ConfigurationBean config = new ConfigurationBean();
 			String id = req.getParameter("id");
 			Item item = ObjectLoader.loadItem(ObjectHelper.getURI(Item.class, id),sb.getUser());
-			File image = new File("");
+			boolean isPublicItem = Status.RELEASED.equals(item.getStatus());
+
 			String name = item.getFilename();
 			String fileExtensionName = name.split("\\.")[name.split("\\.").length - 1];
 			
+			
+			File image = new File("");
 			String dataViewerUrl = "";
+
 			if(config.getDataViewerUrl().endsWith("/")){
 				dataViewerUrl = config.getDataViewerUrl()+"api/view";
 			}else{
 				dataViewerUrl = config.getDataViewerUrl()+"/api/view";
 			}
-			
+
 			if (fileExtensionName.equalsIgnoreCase("fits")){
 				/*
 				 * send the file URL to dataViewer if file is in .fits format 
@@ -85,33 +92,45 @@ public class DataViewerServlet extends HttpServlet {
 				image = viewFileByURL(fullImageUrl, false, fileExtensionName, dataViewerUrl);
 			}else{
 				/*
-				 * transfer file to dataViewer	
+				 * transfer file to dataViewer only if it is not public	
 				 */
-				StorageController controller = new StorageController();
-				ByteArrayOutputStream out = new ByteArrayOutputStream();
-				controller.read(item.getFullImageUrl().toString(), out, true);
-				byte[] data = out.toByteArray();
-				ByteArrayInputStream istream = new ByteArrayInputStream(data);
-				out.flush();
-				out.close();
-				image = viewGenericFile(istream, fileExtensionName, dataViewerUrl);
+				
+				if (!isPublicItem) {
+					
+					StorageController controller = new StorageController();
+					ByteArrayOutputStream out = new ByteArrayOutputStream();
+					controller.read(item.getFullImageUrl().toString(), out, true);
+					byte[] data = out.toByteArray();
+					ByteArrayInputStream istream = new ByteArrayInputStream(data);
+					out.flush();
+					out.close();
+					image = viewGenericFile(istream, fileExtensionName, dataViewerUrl);
+			        String contentType = getServletContext().getMimeType(image.getName());
+					
+			        // Init servlet response.
+			        resp.reset();
+			        resp.setContentType(contentType);
+			        resp.setHeader("Content-Length", String.valueOf(image.length()));
+
+			        // Write image content to response.
+			        Files.copy(image.toPath(), resp.getOutputStream());
+
+				}
+				else
+				{
+					
+					resp.sendRedirect(viewGenericUrl(item.getFullImageUrl().toString(),
+							fileExtensionName, 
+							dataViewerUrl));
+				}
 			}
 			
-	        String contentType = getServletContext().getMimeType(image.getName());
-			
-	        // Init servlet response.
-	        resp.reset();
-	        resp.setContentType(contentType);
-	        resp.setHeader("Content-Length", String.valueOf(image.length()));
-
-	        // Write image content to response.
-	        Files.copy(image.toPath(), resp.getOutputStream());
-
 	        // resp.getWriter().append("id" + id);
 		} catch (HttpResponseException he) {
 			resp.sendError(he.getStatusCode(), he.getMessage());
 		} catch (Exception e) {
 			logger.error(e.getMessage());
+			e.printStackTrace();
 			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
 					e.getMessage());
 		}
@@ -134,7 +153,7 @@ public class DataViewerServlet extends HttpServlet {
 	
 	private File viewGenericFile(InputStream istream, String fileType, String dataViewerServiceTargetURL) throws FileNotFoundException, IOException, URISyntaxException {
  
-		MultiPart multiPart = null;
+		FormDataMultiPart multiPart = null;
 		try {
 			File file = File.createTempFile("tmpInputstreamFile", ".tmp");
 			OutputStream outputStream = new FileOutputStream(file);
@@ -144,23 +163,55 @@ public class DataViewerServlet extends HttpServlet {
 			while ((read = istream.read(bytes)) != -1) {
 				outputStream.write(bytes, 0, read);
 			}
-			FileDataBodyPart filePart = new FileDataBodyPart(file.getName(), file);
-			multiPart =  new FormDataMultiPart().field("mimetype", fileType).bodyPart(filePart);
+			FileDataBodyPart filePart = new FileDataBodyPart("file1", file);
+			
+			multiPart =  new FormDataMultiPart();
+			multiPart.bodyPart(filePart);
+			multiPart.field("mimetype", fileType);
 			
 			outputStream.flush();
 			outputStream.close();
 			} catch (Exception e) {
 				logger.info("Some problems with viewing generic file!", e);
 			}
-		Client client = ClientBuilder.newBuilder().register(MultiPartFeature.class).build();
-		WebTarget target = client.target(dataViewerServiceTargetURL);
-		Response response =target.request().post(Entity.entity(multiPart, multiPart.getMediaType()));
+		
+		 Client client =  ClientBuilder.newClient();
+  		 WebTarget target = client.target(dataViewerServiceTargetURL);
+
+		 Response response = target
+	                .register(MultiPartFeature.class)
+	                .request(MediaType.MULTIPART_FORM_DATA_TYPE, MediaType.TEXT_HTML_TYPE)
+	                .post(Entity.entity(multiPart, multiPart.getMediaType()));
 		
 		File respFile = File.createTempFile("result", ".html");
 		IOUtils.copy(response.readEntity(InputStream.class), new FileOutputStream(respFile));
+		client.close();
 		return respFile;
 	}
+
+	private String viewGenericUrl(String webResolution, String fileType, String dataViewerServiceTargetURL) throws FileNotFoundException, IOException, URISyntaxException {
+		 
+//			 Client client =  ClientBuilder.newClient();
+//	  		 Response response= client.target(dataViewerServiceTargetURL)
+//	  				 .queryParam("mimetype", fileType)
+//	  				 .queryParam("portable", "true")
+//	  				 .queryParam("url", webResolution)
+//	  				 .request(MediaType.APPLICATION_FORM_URLENCODED_TYPE)
+//	  				 .accept(MediaType.TEXT_HTML_TYPE)
+//	  				 .get();
+//	  		 
+//	  		client.close();
+//			File respFile = File.createTempFile("result", ".html");
+//			IOUtils.copy(response.readEntity(InputStream.class), new FileOutputStream(respFile));
+			return dataViewerServiceTargetURL+"?"+"mimetype="+fileType+"&url="+webResolution;
+		}
 	
+	private static Response buildHtmlResponse(String str, int status) {
+		return Response.status(status).entity(str).type(MediaType.TEXT_HTML)
+				.build();
+	}
+	
+
 	/*
 	public File viewGenericFileFromURL(URI url, String fileType) throws IOException, URISyntaxException{
 		String dataViewerServiceTargetURL = PropertyReader.getProperty("dataViewer.service.targetURL");

@@ -28,17 +28,17 @@
  */
 package de.mpg.imeji.logic.storage.impl;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.UploadResult;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.storage.internal.InternalStorageItem;
 import de.mpg.imeji.logic.storage.internal.InternalStorageManager;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * imeji internal {@link Storage}
@@ -86,16 +86,38 @@ public class InternalStorage implements Storage
     @Override
     public void read(String url, OutputStream out, boolean close)
     {
+        final String path = manager.transformUrlToPath(url);
         try
         {
-            FileInputStream fis = new FileInputStream(manager.transformUrlToPath(url));
+            FileInputStream fis = new FileInputStream(path);
             StorageUtils.writeInOut(fis, out, close);
         }
         catch (Exception e)
         {
-            throw new RuntimeException("Error reading file " + manager.transformUrlToPath(url)
+            throw new RuntimeException("Error reading file " + path
                     + " in internal storage: ", e);
         }
+    }
+
+    /**
+     * Read file in internal storage
+     * @param url
+     * @return
+     */
+    public File readFile(String url)
+    {
+        final String path = manager.transformUrlToPath(url);
+        File file;
+        try
+        {
+            file = new File(path);
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Error reading file " + path
+                    + " in internal storage: ", e);
+        }
+        return file;
     }
 
     /*

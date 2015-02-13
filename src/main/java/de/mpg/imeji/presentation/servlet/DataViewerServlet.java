@@ -93,8 +93,8 @@ public class DataViewerServlet extends HttpServlet {
 	private String viewGenericFile(Item item, String fileType, String dataViewerServiceTargetURL) throws FileNotFoundException, IOException, URISyntaxException, ImejiException {
  
 		//in any other case, download the temporary file and send it to the data viewer
-		InternalStorage ism = new InternalStorage();
-        File file = ism.readFile(item.getFullImageUrl().toString());
+		InternalStorage ist = new InternalStorage();
+        File file = ist.readFile(item.getFullImageUrl().toString());
 
 		//Data Viewer File Parameter is always named "file1" not filename
 		FileDataBodyPart filePart = new FileDataBodyPart("file1", file);

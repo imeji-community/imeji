@@ -31,11 +31,12 @@
 							<h:inputText value="#{metadataBean.profile.title}" id="mdProfileTitle" valueChangeListener="#{metadataBean.titleListener}" styleClass="imj_metadataValue"/>
 						</div>
 						<ui:fragment rendered="#{empty metadataBean.wrappers}">
-							<div class="imj_listHeaderMenu">
-								<h:commandButton id="addFirstStatement" type="submit" styleClass="imj_submitButton" action="#{metadataBean.addFirstStatement}" value="#{lbl.profile_start_new}">
-								</h:commandButton>
+							<ul class="imj_listHeaderMenu">
+								<li>
+									<h:commandButton id="addFirstStatement" type="submit" styleClass="imj_submitButton" action="#{metadataBean.addFirstStatement}" value="#{lbl.profile_start_new}"/>
+								</li>
 								<ui:fragment rendered="#{metadataBean.profilesMenu.size() > 1}">
-									<div class="imj_inlineButtonGroup">
+									<li class="imj_inlineButtonGroup">
 										<h:outputLabel value="#{lbl.or_small}" for="chooseGivenTemplate"/>
 										<div class="imj_customSelectbox">
 											<div class="imj_showSelection">
@@ -47,9 +48,9 @@
 												<f:selectItems value="#{metadataBean.profilesMenu}"/>
 											</h:selectOneMenu>
 										</div>
-									</div>
+									</li>
 								</ui:fragment>
-							</div>
+							</ul>
 						</ui:fragment>
 						<ui:fragment rendered="#{!(empty metadataBean.wrappers)}">
 							<h2 class="imj_headline"><h:outputText value="#{lbl.profile_move_info}"/></h2>

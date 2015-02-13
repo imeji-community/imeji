@@ -62,7 +62,7 @@ public class CollectionResource implements ImejiResource {
 	}
 
 	@PUT
-	@Path("/{id}/withdraw")
+	@Path("/{id}/discard")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@ApiOperation(value = "Withraw a collection by id, with mandatory discard commenrt")
 	@Produces(MediaType.APPLICATION_JSON)

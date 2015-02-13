@@ -274,7 +274,7 @@ public class CollectionTest extends ImejiTestBase {
 		form.param("id", collectionId);
 		form.param("discardComment", "test_4_WithdrawCollection_1_WithAuth_"+System.currentTimeMillis());
 		Response response = target(pathPrefix)
-				.path("/" + collectionId + "/withdraw").register(authAsUser)
+				.path("/" + collectionId + "/discard").register(authAsUser)
 				.request((MediaType.APPLICATION_JSON_TYPE))
 				.put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
 
@@ -302,7 +302,7 @@ public class CollectionTest extends ImejiTestBase {
 		form.param("id", collectionId);
 		form.param("discardComment", "test_4_WithdrawCollection_2_WithUnAuth_"+System.currentTimeMillis());
 		Response response = target(pathPrefix)
-				.path("/" + collectionId + "/withdraw").register(authAsUser2)
+				.path("/" + collectionId + "/discard").register(authAsUser2)
 				.request((MediaType.APPLICATION_JSON_TYPE))
 				.put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
 
@@ -321,7 +321,7 @@ public class CollectionTest extends ImejiTestBase {
 		form.param("id", collectionId);
 		form.param("discardComment", "test_4_WithdrawCollection_3_WithNonAuth_"+System.currentTimeMillis());
 		Response response = target(pathPrefix)
-				.path("/" + collectionId + "/withdraw")
+				.path("/" + collectionId + "/discard")
 				.request((MediaType.APPLICATION_JSON_TYPE))
 				.put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
 
@@ -340,7 +340,7 @@ public class CollectionTest extends ImejiTestBase {
 		form.param("id", collectionId);
 		form.param("discardComment", "test_4_WithdrawCollection_4_NotReleasedCollection_"+System.currentTimeMillis());
 		Response response = target(pathPrefix)
-				.path("/" + collectionId + "/withdraw").register(authAsUser)
+				.path("/" + collectionId + "/discard").register(authAsUser)
 				.request((MediaType.APPLICATION_JSON_TYPE))
 				.put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
 
@@ -361,7 +361,7 @@ public class CollectionTest extends ImejiTestBase {
 		form.param("id", collectionId);
 		form.param("discardComment", "test_4_WithdrawCollection_5_WithdrawCollectionTwice_SecondTime_"+System.currentTimeMillis());
 		Response response = target(pathPrefix)
-				.path("/" + collectionId + "/withdraw").register(authAsUser)
+				.path("/" + collectionId + "/discard").register(authAsUser)
 				.request((MediaType.APPLICATION_JSON_TYPE))
 				.put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
 
@@ -369,13 +369,13 @@ public class CollectionTest extends ImejiTestBase {
 	}
 	
 	@Test
-	public void test_4_WithdrawCollection_5_NotExistingCollection() throws ImejiException{
+	public void test_4_WithdrawCollection_6_NotExistingCollection() throws ImejiException{
 		
 		Form form= new Form();
 		form.param("id", collectionId+"i_do_not_exist");
 		form.param("discardComment", "test_4_WithdrawCollection_5_WithdrawCollectionTwice_SecondTime_"+System.currentTimeMillis());
 		Response response = target(pathPrefix)
-				.path("/" + collectionId + "i_do_not_exist/withdraw").register(authAsUser)
+				.path("/" + collectionId + "i_do_not_exist/discard").register(authAsUser)
 				.request((MediaType.APPLICATION_JSON_TYPE))
 				.put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
 

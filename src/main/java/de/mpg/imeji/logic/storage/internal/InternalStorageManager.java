@@ -248,7 +248,7 @@ public class InternalStorageManager implements Serializable {
 		item.setFileName(fileName);
 		item.setFileType(getMimeType(file));
 		fileName = isNullOrEmpty(getExtension(fileName)) ?
-				fileName + "." + getMimeType(file) :
+				fileName + "." + guessExtension(file) :
 				fileName;
 		item.setOriginalUrl(generateUrl(id, fileName, FileResolution.ORIGINAL));
 		item.setThumbnailUrl(generateUrl(id, fileName, FileResolution.THUMBNAIL));

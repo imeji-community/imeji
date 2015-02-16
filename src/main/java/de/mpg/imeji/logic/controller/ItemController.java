@@ -42,6 +42,7 @@ import de.mpg.imeji.logic.storage.Storage.FileResolution;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.UploadResult;
 import de.mpg.imeji.logic.storage.internal.InternalStorageManager;
+import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Container;
@@ -122,7 +123,7 @@ public class ItemController extends ImejiController {
 					"User not Allowed to upload files in collection "
 							+ c.getIdString());
 		StorageController sc = new StorageController();
-		String mimeType = getMimeType(f);
+		String mimeType = StorageUtils.getMimeType(f);
 		UploadResult uploadResult = sc.upload(filename, f, c.getIdString());
 
 		if (item == null)
@@ -369,24 +370,6 @@ public class ItemController extends ImejiController {
 		item.setFullImageUrl(URI.create(uploadResult.getOrginal()));
 		item.setThumbnailImageUrl(URI.create(uploadResult.getThumb()));
 		item.setWebImageUrl(URI.create(uploadResult.getWeb()));
-		//item.setFilename(uploadResult.)
-		
-/*		InternalStorageManager ism = new InternalStorageManager();
-
-		//regenerate new url!!!
-		String url = ism.generateUrl(item.getStorageId(), f.getName(), FileResolution.ORIGINAL);
-		sc.update(url, f);
-		item.setFullImageUrl(URI.create(url));
-
-		url = ism.generateUrl(item.getStorageId(), f.getName(), FileResolution.WEB);
-		sc.update(url, f);
-		item.setWebImageUrl(URI.create(url));
-
-		url = ism.generateUrl(item.getStorageId(), f.getName(), FileResolution.THUMBNAIL);
-		sc.update(url, f);
-		item.setThumbnailImageUrl(URI.create(url));
-*/		
-	
 
 		return update(item, user);
 	}

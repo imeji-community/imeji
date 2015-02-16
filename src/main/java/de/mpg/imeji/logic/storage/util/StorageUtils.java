@@ -204,6 +204,7 @@ public class StorageUtils {
 		} catch (Exception e) {
 			logger.error("Error guessing file format", e);
 		}
+		
 		return "bad-extension/other";
 	}
 
@@ -305,15 +306,17 @@ public class StorageUtils {
 		} else if ("wma".equals(extension)) {
 			return "audio/x-ms-wma";
 		}
-		try {
-			// If not found, Try with tika
-			MimeType type = MimeTypes.getDefaultMimeTypes().forName(
-					"name." + extension);
-			return type.getName();
-		} catch (MimeTypeException e) {
-			// If still not found, return the default one
-			return "application/octet-stream";
+		
+		Tika t = new Tika();
+		String calculatedMimeType =	t.detect("name."+extension);
+			
+		if ("".equals(calculatedMimeType)) {
+				return "application/octet-stream";
 		}
+		else {
+			return calculatedMimeType;
+		}
+			
 	}
 
 	/**

@@ -150,7 +150,6 @@ public class UserCreationBean {
 	 * @param index
 	 */
 	public void addOrganization(int index) {
-		System.out.println("index" + index);
 		((List<Organization>) this.user.getPerson().getOrganizations()).add(
 				index, ImejiFactory.newOrganization());
 	}

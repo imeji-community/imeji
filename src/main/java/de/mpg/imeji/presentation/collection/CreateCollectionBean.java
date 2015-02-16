@@ -3,16 +3,24 @@
  */
 package de.mpg.imeji.presentation.collection;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
+import javax.faces.model.SelectItem;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.CollectionController;
+import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
+import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.mdProfile.MdProfileBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 
@@ -27,7 +35,58 @@ import de.mpg.imeji.presentation.util.ImejiFactory;
 @ViewScoped
 public class CreateCollectionBean extends CollectionBean {
 	private static final long serialVersionUID = 1257698224590957642L;
+	
+    private List<SelectItem> profileItems = new ArrayList<SelectItem>();
+    private String selectedProfileItem;
+    
+    private MdProfileBean mdProfileBean;    
+	
+    /**
+     * Load the templates (i.e. the {@link MetadataProfile} that can be used by the {@link User}), and add it the the
+     * menu (sorted by name)
+     */
+    public void loadProfiles()
+    {    
+    	profileItems.clear();
+        try
+        {    
+            ProfileController pc = new ProfileController();
+            List<MetadataProfile> profiles = pc.search(sessionBean.getUser());
+            
+            for (MetadataProfile mdp : profiles)
+            {  
+            	profileItems.add(new SelectItem(mdp.getIdString(), mdp.getTitle()));
+            }           
+            selectedProfileItem = (String) profileItems.get(0).getValue();
+          
+            mdProfileBean = new MdProfileBean();
+            MetadataProfile profile = pc.retrieve(selectedProfileItem, sessionBean.getUser());
+            mdProfileBean.setProfile(profile);
+            mdProfileBean.setId(profile.getIdString());
 
+        }
+        catch (Exception e)
+        {
+            BeanHelper.error(sessionBean.getMessage("error_profile_template_load"));
+        }
+    }
+    
+    /**
+     * Listener for the template value
+     * 
+     * @param event
+     * @throws Exception
+     */
+    public void profileChangeListener(AjaxBehaviorEvent event) throws Exception
+    {
+//        if (event != null && event.getNewValue() != event.getOldValue())
+//        {
+//            this.template = event.getNewValue().toString();
+//            MetadataProfile tp = ObjectCachedLoader.loadProfile(URI.create(this.template));
+//
+//        }
+    }
+    
 	/**
 	 * Bean Constructor
 	 */
@@ -40,8 +99,8 @@ public class CreateCollectionBean extends CollectionBean {
 	 */
 	public void initialize() {
 		setCollection(ImejiFactory.newCollection());
-		((List<Person>) getCollection().getMetadata().getPersons()).set(0,
-				sessionBean.getUser().getPerson().clone());
+		((List<Person>) getCollection().getMetadata().getPersons()).set(0, sessionBean.getUser().getPerson().clone());
+		loadProfiles();
 		// if (UrlHelper.getParameterBoolean("reset")) {
 		// setCollection(ImejiFactory.newCollection());
 		// ((List<Person>) getCollection().getMetadata().getPersons()).set(0,
@@ -72,10 +131,8 @@ public class CreateCollectionBean extends CollectionBean {
 	            	pos2++;	            	
 	            }
 	        }  
-			collectionController.create(getCollection(), null,
-					sessionBean.getUser());
-			BeanHelper
-					.info(sessionBean.getMessage("success_collection_create"));
+			collectionController.create(getCollection(), null, sessionBean.getUser());
+			BeanHelper.info(sessionBean.getMessage("success_collection_create"));
 			FacesContext
 					.getCurrentInstance()
 					.getExternalContext()
@@ -100,4 +157,23 @@ public class CreateCollectionBean extends CollectionBean {
 	protected String getNavigationString() {
 		return "pretty:createCollection";
 	}
+	
+
+    
+    public List<SelectItem> getProfileItems() {
+		return profileItems;
+	}
+
+	public void setProfileItems(List<SelectItem> profileItems) {
+		this.profileItems = profileItems;
+	}
+
+	public String getSelectedProfileItem() {
+		return selectedProfileItem;
+	}
+
+	public void setSelectedProfileItem(String selectedProfileItem) {
+		this.selectedProfileItem = selectedProfileItem;
+	}
+
 }

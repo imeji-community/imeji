@@ -37,10 +37,9 @@
 		<!-- style type="text/css">@import url(#{Navigation.applicationUrl}resources/eSciDoc_CSS/plupload/styles/plupload.queue.css);</style -->
 		<script type="text/javascript" src="http://www.google.com/jsapi"></script>
 		<!-- Load plupload and all it's runtimes and finally the jQuery queue widget -->
-		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
-		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload_1_5_5/js/plupload.full.js"></script>
-		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload_1_5_5/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
-		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/plupload_1_5_5/js/i18n/#{Internationalization.currentLanguage}.js"></script>
+		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/plupload/2.1.2/js/plupload.full.min.js"></script>
+		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/plupload/2.1.2/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
+		<script type="text/javascript" src="#{Navigation.applicationUrl}resources/plupload/2.1.2/js/i18n/#{Internationalization.currentLanguage}.js"></script>
 		<script type="text/javascript">
 			$(function() {
 				// Setup html5 version
@@ -52,8 +51,8 @@
 					multi_selection : false,
 					//chunk_size : '1mb',
 					unique_names : false,
-					flash_swf_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/eSciDoc_JavaScript/plupload/plupload.flash.swf',
-					silverlight_xap_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/eSciDoc_JavaScript/plupload/plupload.silverlight.xap',
+					flash_swf_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/plupload/2.1.2/js/Moxie.swf',
+					silverlight_xap_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources//plupload/2.1.2/js/Moxie.xap',
 					filters : [{
 						title : "Item list xml", 
 						extensions : "xml,XML"}
@@ -82,8 +81,8 @@
 					multi_selection : false,
 					//chunk_size : '1mb',
 					unique_names : false,
-					flash_swf_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/eSciDoc_JavaScript/plupload/plupload.flash.swf',
-					silverlight_xap_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/eSciDoc_JavaScript/plupload/plupload.silverlight.xap',
+					flash_swf_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/plupload/2.1.2/js/Moxie.swf',
+					silverlight_xap_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources//plupload/2.1.2/js/Moxie.xap',
 					filters : [{
 						title : "Item list xml", 
 						extensions : "xml,XML"}

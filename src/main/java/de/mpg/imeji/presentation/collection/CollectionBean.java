@@ -47,7 +47,9 @@ public abstract class CollectionBean extends ContainerBean {
 
 	private static Logger logger = Logger.getLogger(CollectionBean.class);
 	private TabType tab = TabType.HOME;
+	
 	protected SessionBean sessionBean;
+
 	protected Navigation navigation;
 	private CollectionImeji collection;
 	private MetadataProfile profile;
@@ -55,109 +57,13 @@ public abstract class CollectionBean extends ContainerBean {
 	private String profileId;
 	private boolean selected;
 	
-	private String template;
-    private List<SelectItem> profilesMenu = new ArrayList<SelectItem>();
-	
-    /**
-     * Listener for the template value
-     * 
-     * @param event
-     * @throws Exception
-     */
-    public void templateListener(ValueChangeEvent event) throws Exception
-    {
-        if (event != null && event.getNewValue() != event.getOldValue())
-        {
-            this.template = event.getNewValue().toString();
-            MetadataProfile tp = ObjectCachedLoader.loadProfile(URI.create(this.template));
-            if (tp.getStatements().isEmpty())
-                profile.getStatements().add(ImejiFactory.newStatement());
-            else
-                profile.setStatements(tp.clone().getStatements());
-//            collectionSession.setProfile(profile);
-//            initStatementWrappers(profile);
-        }
-    }
-    
-    /**
-     * Load the templates (i.e. the {@link MetadataProfile} that can be used by the {@link User}), and add it the the
-     * menu (sorted by name)
-     */
-    public void loadtemplates()
-    {
-        profilesMenu = new ArrayList<SelectItem>();
-        try
-        {
-            ProfileController pc = new ProfileController();
-            for (MetadataProfile mdp : pc.search(sessionBean.getUser()))
-            {
-                if (!mdp.getId().toString().equals(profile.getId().toString()) && !mdp.getStatements().isEmpty())
-                {
-                    profilesMenu.add(new SelectItem(mdp.getId().toString(), mdp.getTitle()));
-                }
-            }
-            // sort profilesMenu
-            Collections.sort(profilesMenu, new profilesLabelComparator());
-            // add title to first position
-            profilesMenu.add(0, new SelectItem(null, sessionBean.getLabel("profile_select_template")));
-        }
-        catch (Exception e)
-        {
-            BeanHelper.error(sessionBean.getMessage("error_profile_template_load"));
-        }
-    }
-    
-    /**
-     * Comparator of {@link MetadataProfile} names, to sort a {@link List} of {@link MetadataProfile} according to their
-     * name
-     * 
-     * @author saquet (initial creation)
-     * @author $Author$ (last modification)
-     * @version $Revision$ $LastChangedDate$
-     */
-    static class profilesLabelComparator implements Comparator<Object>
-    {
-        @Override
-        public int compare(Object o1, Object o2)
-        {
-            SelectItem profile1 = (SelectItem)o1;
-            SelectItem profile2 = (SelectItem)o2;
-            String profile1Label = profile1.getLabel();
-            String profile1Labe2 = profile2.getLabel();
-            return profile1Label.compareTo(profile1Labe2);
-        }
-    }
-    
-    public List<SelectItem> getProfilesMenu()
-    {
-        return profilesMenu;
-    }
-
-    public void setProfilesMenu(List<SelectItem> profilesMenu)
-    {
-        this.profilesMenu = profilesMenu;
-    }
-    
-    public String getTemplate()
-    {
-        return template;
-    }
-
-    public void setTemplate(String template)
-    {
-        this.template = template;
-    }
-	
-
 	/**
 	 * New default {@link CollectionBean}
 	 */
 	public CollectionBean() {
 		collection = new CollectionImeji();
-		sessionBean = (SessionBean) BeanHelper
-				.getSessionBean(SessionBean.class);
-		navigation = (Navigation) BeanHelper
-				.getApplicationBean(Navigation.class);
+		sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+		navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
 	}
 
 	/**
@@ -166,10 +72,8 @@ public abstract class CollectionBean extends ContainerBean {
 	 * @return
 	 */
 	public boolean valid() {
-		if (collection.getMetadata().getTitle() == null
-				|| "".equals(collection.getMetadata().getTitle())) {
-			BeanHelper.error(sessionBean
-					.getMessage("error_collection_need_title"));
+		if (collection.getMetadata().getTitle() == null || "".equals(collection.getMetadata().getTitle())) {
+			BeanHelper.error(sessionBean.getMessage("error_collection_need_title"));
 			return false;
 		}
 		List<Person> pers = new ArrayList<Person>();
@@ -185,19 +89,16 @@ public abstract class CollectionBean extends ContainerBean {
 					c.setOrganizations(orgs);
 					pers.add(c);
 				} else {
-					BeanHelper.error(sessionBean
-							.getMessage("error_author_need_one_organization"));
+					BeanHelper.error(sessionBean.getMessage("error_author_need_one_organization"));
 					return false;
 				}
 			} else {
-				BeanHelper.error(sessionBean
-						.getMessage("error_author_need_one_family_name"));
+				BeanHelper.error(sessionBean.getMessage("error_author_need_one_family_name"));
 				return false;
 			}
 		}
 		if (pers.size() == 0) {
-			BeanHelper.error(sessionBean
-					.getMessage("error_collection_need_one_author"));
+			BeanHelper.error(sessionBean.getMessage("error_collection_need_one_author"));
 			return false;
 		}
 		collection.getMetadata().setPersons(pers);
@@ -292,8 +193,7 @@ public abstract class CollectionBean extends ContainerBean {
 	 */
 	public void setSelected(boolean selected) {
 		if (selected) {
-			if (!(sessionBean.getSelectedCollections().contains(collection
-					.getId())))
+			if (!(sessionBean.getSelectedCollections().contains(collection.getId())))
 				sessionBean.getSelectedCollections().add(collection.getId());
 		} else
 			sessionBean.getSelectedCollections().remove(collection.getId());
@@ -309,8 +209,7 @@ public abstract class CollectionBean extends ContainerBean {
 		CollectionController cc = new CollectionController();
 		try {
 			cc.release(collection, sessionBean.getUser());
-			BeanHelper.info(sessionBean
-					.getMessage("success_collection_release"));
+			BeanHelper.info(sessionBean.getMessage("success_collection_release"));
 		} catch (Exception e) {
 			BeanHelper
 					.error(sessionBean.getMessage("error_collection_release"));
@@ -330,9 +229,7 @@ public abstract class CollectionBean extends ContainerBean {
 		try {
 			cc.delete(collection, sessionBean.getUser());
 			// BeanHelper.info(sessionBean.getMessage("success_collection_delete"));
-			BeanHelper.info(sessionBean.getMessage("success_collection_delete")
-					.replace("XXX_collectionName_XXX",
-							this.collection.getMetadata().getTitle()));
+			BeanHelper.info(sessionBean.getMessage("success_collection_delete").replace("XXX_collectionName_XXX", this.collection.getMetadata().getTitle()));
 		} catch (Exception e) {
 			BeanHelper.error(sessionBean.getMessage("error_collection_delete"));
 			logger.error("Error delete collection", e);
@@ -350,11 +247,9 @@ public abstract class CollectionBean extends ContainerBean {
 		CollectionController cc = new CollectionController();
 		try {
 			cc.withdraw(collection, sessionBean.getUser());
-			BeanHelper.info(sessionBean
-					.getMessage("success_collection_withdraw"));
+			BeanHelper.info(sessionBean.getMessage("success_collection_withdraw"));
 		} catch (Exception e) {
-			BeanHelper.error(sessionBean
-					.getMessage("error_collection_withdraw"));
+			BeanHelper.error(sessionBean.getMessage("error_collection_withdraw"));
 			BeanHelper.error(e.getMessage());
 			logger.error("Error discarding collection:", e);
 		}
@@ -428,4 +323,7 @@ public abstract class CollectionBean extends ContainerBean {
 	public void setDiscardComment(String comment) {
 		this.getContainer().setDiscardComment(comment);
 	}
+	
+	
+
 }

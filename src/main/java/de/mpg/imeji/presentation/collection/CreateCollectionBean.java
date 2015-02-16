@@ -12,6 +12,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -46,19 +47,18 @@ public class CreateCollectionBean extends CollectionBean {
      */
     public void loadProfiles()
     {    
+    	profileItems.clear();
         try
-        {
+        {    
             ProfileController pc = new ProfileController();
             List<MetadataProfile> profiles = pc.search(sessionBean.getUser());
-//            MetadataProfile dp = pc.retrieveDefaultProfile();
-//            profileItems.add(new SelectItem(dp.getId(),dp.getTitle()));
             
             for (MetadataProfile mdp : profiles)
             {  
-            	profileItems.add(new SelectItem(mdp.getId(), mdp.getTitle()));
-            } 
+            	profileItems.add(new SelectItem(mdp.getIdString(), mdp.getTitle()));
+            }           
             selectedProfileItem = (String) profileItems.get(0).getValue();
-            System.err.println(selectedProfileItem);
+          
             mdProfileBean = new MdProfileBean();
             MetadataProfile profile = pc.retrieve(selectedProfileItem, sessionBean.getUser());
             mdProfileBean.setProfile(profile);

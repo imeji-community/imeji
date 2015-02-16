@@ -438,6 +438,23 @@ public class CollectionTest extends ImejiTestBase {
 				.delete();
 		
 		assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+		
+		try {
+			colService.withdraw(collectionId, JenaUtil.testUser, "test_3_DeleteCollection_3_NotPendingCollection");
+			assertEquals("WITHDRAWN", colService.read(collectionId, JenaUtil.testUser).getStatus());
+			}
+			catch (ImejiException e)
+			{
+				System.out.println("Could not withdraw the collection");
+			}
+		
+		response = target(pathPrefix)
+				.path("/" + collectionId).register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.delete();
+		
+		assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+		
 	}
 	@Test
 	public void test_3_DeleteCollection_4_WithOutUser(){

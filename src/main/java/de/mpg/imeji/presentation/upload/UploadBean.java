@@ -303,10 +303,23 @@ public class UploadBean implements Serializable {
 	 * @param bytes
 	 * @throws Exception
 	 */
-	private Item uploadFile(File file, String title) {
+	private Item uploadFile(File fileUploaded, String title) {
 		try {
-			if (!StorageUtils.hasExtension(title))
-				title += StorageUtils.guessExtension(file);
+			
+			
+			String calculatedExtension = StorageUtils.guessExtension(fileUploaded);
+			File file=fileUploaded;
+
+			//TODO: not certain we should change the extensions even if these are not provided! Thus commented at the moment
+			//	if (!StorageUtils.hasExtension(title)) {
+			//		title += "."+calculatedExtension;
+			//	}
+			
+			if (!fileUploaded.getName().endsWith(calculatedExtension)) {
+				file = new File(file.getName()+calculatedExtension);
+				FileUtils.moveFile(fileUploaded, file);
+			}
+			
 			validateName(file, title);
 			Item item = null;
 			ItemController controller = new ItemController();

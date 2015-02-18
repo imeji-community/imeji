@@ -11,6 +11,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.AuthenticationError;
+import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.exceptions.UnprocessableError;
@@ -26,12 +27,15 @@ import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Organization;
+import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.j2j.helper.J2JHelper;
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
  * CRUD controller for {@link CollectionImeji}, plus search mehtods related to
@@ -67,6 +71,7 @@ public class CollectionController extends ImejiController {
 	 */
 	public URI create(CollectionImeji c, MetadataProfile p, User user)
 			throws ImejiException {  
+
 		if (p == null) {
 			p = new MetadataProfile();
 			p.setDescription(c.getMetadata().getDescription());
@@ -74,6 +79,9 @@ public class CollectionController extends ImejiController {
 			ProfileController pc = new ProfileController();
 			p = pc.create(p, user);
 		}
+		
+		validateCollection(c, user);
+		
 		writeCreateProperties(c, user);
 		c.setProfile(p.getId());
 		writer.create(WriterFacade.toList(c), user);
@@ -83,6 +91,8 @@ public class CollectionController extends ImejiController {
 		return c.getId();
 	}
 
+	
+	
 	/**
 	 * Retrieve a complete {@link CollectionImeji} (inclusive its {@link Item}:
 	 * slow for huge {@link CollectionImeji})
@@ -149,6 +159,7 @@ public class CollectionController extends ImejiController {
 	 * @throws ImejiException
 	 */
 	public void update(CollectionImeji ic, User user) throws ImejiException {
+		validateCollection(ic, user);
 		writeUpdateProperties(ic, user);
 		writer.update(WriterFacade.toList(ic), user);
 	}
@@ -292,4 +303,61 @@ public class CollectionController extends ImejiController {
 		Search search = SearchFactory.create(SearchType.COLLECTION);
 		return search.search(searchQuery, sortCri, user);
 	}
+	
+	/**
+	 * Validate the collection information provided, before it has been submitted to the writer
+	 
+	 * @param collection
+	 * @param u
+	 * @throws ImejiException
+	 */
+	public void validateCollection (CollectionImeji collection, User u) throws ImejiException {
+		//Copied from Collection Bean in presentation
+		if ( isNullOrEmpty (collection.getMetadata().getTitle())) {
+			throw new BadRequestException("error_collection_need_title");
+		}
+
+		List<Person> pers = new ArrayList<Person>();
+		
+		for (Person c : collection.getMetadata().getPersons()) {
+			List<Organization> orgs = new ArrayList<Organization>();
+			for (Organization o : c.getOrganizations()) {
+				if (!isNullOrEmpty(o.getName())) {
+					orgs.add(o);
+				}
+				else
+				{
+					throw new BadRequestException("error_organization_need_name");
+				}
+			}
+			
+			
+			if (! isNullOrEmpty(c.getFamilyName())) {
+				if (orgs.size() > 0) {
+					pers.add(c);
+				} else {
+					throw new BadRequestException("error_author_need_one_organization");
+				}
+			} else {
+				throw new BadRequestException("error_author_need_one_family_name");
+			}
+		}
+
+		if (pers.size() == 0 || pers == null || pers.isEmpty()) {
+			throw new BadRequestException("error_collection_need_one_author");
+		}
+		
+		//Check the collection Profile
+		ProfileController pc = new ProfileController();
+		if (!isNullOrEmpty(collection.getProfile().toString())) {
+		try {
+			pc.retrieve(collection.getProfile(), u);
+		} catch (ImejiException e) {
+			throw new UnprocessableError("error_provided_metadata_profile_does_not_exist");
+		}
+		}
+		//if (collection.getProfile()
+	
+	}
+
 }

@@ -46,6 +46,7 @@ public class CollectionService implements API<CollectionTO> {
 
 	@Override
 	public CollectionTO create(CollectionTO to, User u) throws ImejiException {
+		//toDo: Move to Controller
 		CollectionController cc = new CollectionController();
 		ProfileController pc = new ProfileController();
 
@@ -62,7 +63,7 @@ public class CollectionService implements API<CollectionTO> {
 				mp = pc.retrieve(
 					ObjectHelper.getURI(MetadataProfile.class, profileId), u);
 			}
-			catch (Exception e)
+			catch (ImejiException e)
 			{
 				throw new UnprocessableError("Can not find the metadata profile you have referenced in the JSON body");
 				
@@ -73,7 +74,7 @@ public class CollectionService implements API<CollectionTO> {
 			mp = pc.retrieve(
 					ObjectHelper.getURI(MetadataProfile.class, profileId), u);
 			}
-			catch (Exception e)
+			catch (ImejiException e)
 			{
 				throw new UnprocessableError("Can not find the metadata profile you want to copy from in the JSON body");
 			}

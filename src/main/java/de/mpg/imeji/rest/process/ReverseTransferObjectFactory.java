@@ -279,10 +279,15 @@ public class ReverseTransferObjectFactory {
 			// person.setRole(pto.getRole());
 			//person.setPos(pTO.getPosition());
 
+			if (pTO.getIdentifiers().size() == 1 ) {
 			// set the identifier of current person
-			IdentifierTO ito = new IdentifierTO();
-			ito.setValue(pTO.getIdentifiers().get(0).getValue());
-			person.setIdentifier(ito.getValue());
+				IdentifierTO ito = new IdentifierTO();
+				ito.setValue(pTO.getIdentifiers().get(0).getValue());
+				person.setIdentifier(ito.getValue());
+			}
+			else if (pTO.getIdentifiers().size() > 1) {
+				System.out.println("I have more identifiers than needed for Person");
+			}
 
 			// set organizations
 			transferContributorOrganizations(pTO.getOrganizations(), person, mode);
@@ -296,11 +301,14 @@ public class ReverseTransferObjectFactory {
 		for (OrganizationTO orgTO : orgs) {
 			Organization org = new Organization();
 
-			if (mode == TRANSFER_MODE.CREATE) {
+			if (mode == TRANSFER_MODE.CREATE && orgTO.getIdentifiers().size() == 1) {
 				//org.setPos(orgTO.getPosition());
 				IdentifierTO ito = new IdentifierTO();
 				ito.setValue(orgTO.getIdentifiers().get(0).getValue());
 				org.setIdentifier(ito.getValue());
+			}
+			else if (orgTO.getIdentifiers().size() > 1) {
+				System.out.println("Have more organization identifiers than needed");
 			}
 
 			org.setName(orgTO.getName());

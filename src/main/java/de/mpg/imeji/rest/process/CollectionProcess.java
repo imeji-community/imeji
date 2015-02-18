@@ -3,6 +3,7 @@ package de.mpg.imeji.rest.process;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response.Status;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.to.CollectionTO;
@@ -38,7 +39,7 @@ public class CollectionProcess {
 					req, CollectionTO.class);
 			try {
 				resp = RestProcessUtils.buildResponse(Status.CREATED.getStatusCode(), service.create(to, u));
-			} catch (Exception e) {
+			} catch (ImejiException e) {
 				resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
 			}
 
@@ -47,7 +48,7 @@ public class CollectionProcess {
 	}
 	
 	public static JSONResponse releaseCollection(HttpServletRequest req,
-			String id) throws Exception {
+			String id)  {
 		JSONResponse resp;
 		User u = BasicAuthentication.auth(req);
 		CollectionService service = new CollectionService(); 

@@ -163,17 +163,22 @@ public abstract class CollectionBean extends ContainerBean {
      * @param event
      * @throws Exception
      */
-    public void profileChangeListener(ValueChangeEvent event) throws Exception
+    public void profileChangeListener() throws Exception
     {
-    	 if (event != null && event.getNewValue() != event.getOldValue())
+//    	 if (event != null && event.getNewValue() != event.getOldValue())
          {
-             this.selectedProfileItem = event.getNewValue().toString();
-             MetadataProfile tp = ObjectCachedLoader.loadProfile(URI.create(this.selectedProfileItem));
-             if (tp.getStatements().isEmpty())
-                 profile.getStatements().add(ImejiFactory.newStatement());
-             else
-                 profile.setStatements(tp.clone().getStatements());
-             setProfile(profile);
+        	 System.out.println("Test");
+           ProfileController pc = new ProfileController();
+           MetadataProfile profile = pc.retrieve(selectedProfileItem, sessionBean.getUser());
+           this.setProfile(profile);
+           
+//             this.selectedProfileItem = event.getNewValue().toString();
+//             MetadataProfile tp = ObjectCachedLoader.loadProfile(URI.create(this.selectedProfileItem));
+//             if (tp.getStatements().isEmpty())
+//                 profile.getStatements().add(ImejiFactory.newStatement());
+//             else
+//                 profile.setStatements(tp.clone().getStatements());
+//             setProfile(profile);
          }
     }
 

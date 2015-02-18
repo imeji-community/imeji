@@ -10,11 +10,14 @@ import java.util.Comparator;
 import java.util.List;
 
 import javax.faces.bean.ManagedProperty;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.exceptions.BadRequestException;
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -25,6 +28,7 @@ import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.ContainerBean;
 import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.mdProfile.MdProfileBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
@@ -57,6 +61,13 @@ public abstract class CollectionBean extends ContainerBean {
 	private String profileId;
 	private boolean selected;
 	
+	private List<SelectItem> profileItems = new ArrayList<SelectItem>();
+	private String selectedProfileItem;
+    private MdProfileBean mdProfileBean;    
+    
+    private boolean modeCreate = false ;
+
+	
 	/**
 	 * New default {@link CollectionBean}
 	 */
@@ -72,38 +83,99 @@ public abstract class CollectionBean extends ContainerBean {
 	 * @return
 	 */
 	public boolean valid() {
-		if (collection.getMetadata().getTitle() == null || "".equals(collection.getMetadata().getTitle())) {
-			BeanHelper.error(sessionBean.getMessage("error_collection_need_title"));
+		
+		CollectionController cc = new CollectionController();
+		try {
+			cc.validateCollection(collection, sessionBean.getUser());
+			return true;
+		} catch (ImejiException e) 
+		{
+			BeanHelper.error(sessionBean.getMessage(e.getMessage()));
 			return false;
 		}
-		List<Person> pers = new ArrayList<Person>();
-		for (Person c : collection.getMetadata().getPersons()) {
-			List<Organization> orgs = new ArrayList<Organization>();
-			for (Organization o : c.getOrganizations()) {
-				if (!"".equals(o.getName())) {
-					orgs.add(o);
-				}
-			}
-			if (!"".equals(c.getFamilyName())) {
-				if (orgs.size() > 0) {
-					c.setOrganizations(orgs);
-					pers.add(c);
-				} else {
-					BeanHelper.error(sessionBean.getMessage("error_author_need_one_organization"));
-					return false;
-				}
-			} else {
-				BeanHelper.error(sessionBean.getMessage("error_author_need_one_family_name"));
-				return false;
-			}
-		}
-		if (pers.size() == 0) {
-			BeanHelper.error(sessionBean.getMessage("error_collection_need_one_author"));
-			return false;
-		}
-		collection.getMetadata().setPersons(pers);
-		return true;
+//		if (collection.getMetadata().getTitle() == null || "".equals(collection.getMetadata().getTitle())) {
+//			BeanHelper.error(sessionBean.getMessage("error_collection_need_title"));
+//			return false;
+//		}
+//		List<Person> pers = new ArrayList<Person>();
+//		for (Person c : collection.getMetadata().getPersons()) {
+//			List<Organization> orgs = new ArrayList<Organization>();
+//			for (Organization o : c.getOrganizations()) {
+//				if (!"".equals(o.getName())) {
+//					orgs.add(o);
+//				}
+//			}
+//			if (!"".equals(c.getFamilyName())) {
+//				if (orgs.size() > 0) {
+//					c.setOrganizations(orgs);
+//					pers.add(c);
+//				} else {
+//					BeanHelper.error(sessionBean.getMessage("error_author_need_one_organization"));
+//					return false;
+//				}
+//			} else {
+//				BeanHelper.error(sessionBean.getMessage("error_author_need_one_family_name"));
+//				return false;
+//			}
+//		}
+//		if (pers.size() == 0) {
+//			BeanHelper.error(sessionBean.getMessage("error_collection_need_one_author"));
+//			return false;
+//		}
+//		collection.getMetadata().setPersons(pers);
+//		return true;
 	}
+	
+    /**
+     * Load the templates (i.e. the {@link MetadataProfile} that can be used by the {@link User}), and add it the the
+     * menu (sorted by name)
+     */
+    public void loadProfiles()
+    {    
+    	profileItems.clear();
+        try
+        {    
+            ProfileController pc = new ProfileController();
+            List<MetadataProfile> profiles = pc.search(sessionBean.getUser());
+            
+            for (MetadataProfile mdp : profiles)
+            {  
+            	profileItems.add(new SelectItem(mdp.getIdString(), mdp.getTitle()));
+            }           
+            selectedProfileItem = (String) profileItems.get(0).getValue();
+          
+            mdProfileBean = new MdProfileBean();
+            MetadataProfile profile = pc.retrieve(selectedProfileItem, sessionBean.getUser());
+            mdProfileBean.setProfile(profile);
+            mdProfileBean.setId(profile.getIdString());
+
+        }
+        catch (Exception e)
+        {
+            BeanHelper.error(sessionBean.getMessage("error_profile_template_load"));
+        }
+    }
+    
+    
+    /**
+     * Listener for the template value
+     * 
+     * @param event
+     * @throws Exception
+     */
+    public void profileChangeListener(ValueChangeEvent event) throws Exception
+    {
+    	 if (event != null && event.getNewValue() != event.getOldValue())
+         {
+             this.selectedProfileItem = event.getNewValue().toString();
+             MetadataProfile tp = ObjectCachedLoader.loadProfile(URI.create(this.selectedProfileItem));
+             if (tp.getStatements().isEmpty())
+                 profile.getStatements().add(ImejiFactory.newStatement());
+             else
+                 profile.setStatements(tp.clone().getStatements());
+             setProfile(profile);
+         }
+    }
 
 	@Override
 	protected String getErrorMessageNoAuthor() {
@@ -324,6 +396,31 @@ public abstract class CollectionBean extends ContainerBean {
 		this.getContainer().setDiscardComment(comment);
 	}
 	
+
+    public List<SelectItem> getProfileItems() {
+		return profileItems;
+	}
+
+	public void setProfileItems(List<SelectItem> profileItems) {
+		this.profileItems = profileItems;
+	}
+
+	
+	public String getSelectedProfileItem() {
+		return selectedProfileItem;
+	}
+
+	public void setSelectedProfileItem(String selectedProfileItem) {
+		this.selectedProfileItem = selectedProfileItem;
+	}
+	
+	public void setModeCreate (boolean modeCreate) {
+		this.modeCreate = modeCreate;
+	}
+	
+	public boolean getModeCreate() {
+		return this.modeCreate;
+	}
 	
 
 }

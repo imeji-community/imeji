@@ -312,7 +312,7 @@ public class CollectionController extends ImejiController {
 	 * @throws ImejiException
 	 */
 	public void validateCollection (CollectionImeji collection, User u) throws ImejiException {
-		//Copied from Collection Bean in presentation
+		//Copied from Collection Bean in presentation  
 		if ( isNullOrEmpty (collection.getMetadata().getTitle())) {
 			throw new BadRequestException("error_collection_need_title");
 		}
@@ -346,7 +346,9 @@ public class CollectionController extends ImejiController {
 		if (pers.size() == 0 || pers == null || pers.isEmpty()) {
 			throw new BadRequestException("error_collection_need_one_author");
 		}
-		
+	
+//TODO Update needed, it doesn't work by creating new collection withour using profile template
+		/*
 		//Check the collection Profile
 		ProfileController pc = new ProfileController();
 		if (!isNullOrEmpty(collection.getProfile().toString())) {
@@ -356,6 +358,7 @@ public class CollectionController extends ImejiController {
 			throw new UnprocessableError("error_provided_metadata_profile_does_not_exist");
 		}
 		}
+		*/
 		//if (collection.getProfile()
 	
 	}

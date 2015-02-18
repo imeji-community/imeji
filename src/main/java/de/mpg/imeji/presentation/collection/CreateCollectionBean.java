@@ -130,17 +130,26 @@ public class CreateCollectionBean extends CollectionBean {
 	            }
 	        }  
 			collectionController.create(getCollection(), null, sessionBean.getUser());
+			if(isUseMDProfileTemplate()){
+				
+			}
 			BeanHelper.info(sessionBean.getMessage("success_collection_create"));
-			FacesContext
-					.getCurrentInstance()
-					.getExternalContext()
-					.redirect(
-							navigation.getCollectionUrl()
-									+ getCollection().getIdString());
+			FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getCollectionUrl()+ getCollection().getIdString());
 			return "";
 		} else
 			return "";
 	}
+	/**
+	 * Method for save&editProfile button. Create the {@link CollectionImeji} according to
+	 * the form
+	 * 
+	 * @return
+	 * @throws Exception
+	 */  
+	public String saveAndEditProfile() throws Exception {
+		return "";
+	}
+	
 
 	/**
 	 * Return the link for the Cancel button

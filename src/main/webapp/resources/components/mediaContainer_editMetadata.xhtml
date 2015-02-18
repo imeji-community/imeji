@@ -69,23 +69,24 @@
 					</h:panelGroup>
 				</ui:repeat>
 				
-				<div class="imj_submitPanel">
-					<h:outputLink value="#{HistorySession.previousPage.completeUrlWithHistory}" styleClass="imj_cancelButton">
-						<h:outputText value="#{lbl.cancel}"/>
-					</h:outputLink>
-					<h:commandButton action="#{cc.attrs.formularBean.save}" value="#{lbl.save}" styleClass="imj_submitButton" onclick="openDialog('dialogWait');"/>
-				</div>
-				
-				
 		<!-- START NEW FEATURE -->
 				<h:panelGroup layout="block" id="previewArea"  rendered="#{cc.attrs.formularBean.modeCreate}">
-					<input type="checkbox" id="useTemplate" checked="checked" onchange="$('#templateSelect, .imj_metadataProfilePreview').toggle(); $($('.imj_submitPanel').get(0)).toggle();"/>
+					<div class="imj_metadataSet">
+						<h:outputLabel styleClass="imj_metadataLabel" for="mdProfileTitle">
+							<h:outputText value="#{lbl.profile_name}"/>
+							<span class="imj_noDisplay">: </span>
+						</h:outputLabel>
+						<h:inputText value="#{cc.attrs.formularBean.profile.title}" id="mdProfileTitle"  styleClass="imj_metadataValue"/>
+					</div>
+					<h:selectBooleanCheckbox  id="useTemplate" value="#{cc.attrs.formularBean.useMDProfileTemplate}">
+						<f:ajax event="change" execute="@this" render="previewArea" />
+					</h:selectBooleanCheckbox>
 					<label for="useTemplate">#{lbl.profile_use_template}</label>
 					
-					<ui:fragment>
+					<ui:fragment rendered="#{cc.attrs.formularBean.useMDProfileTemplate}">
 						<div class="imj_customSelectbox" id="templateSelect">
 							<div class="imj_showSelection">
-								<div class="imj_selectionText">use predefined values</div>
+								<div class="imj_selectionText">#{lbl.profile_use_template}</div>
 								<div class="imj_buttonSortDescending_16"></div>
 							</div>
 		 					
@@ -97,7 +98,7 @@
 						</div>
 						
 
-				<h:panelGroup id="metadataprofilepreview">		
+				<h:panelGroup id="metadataprofilepreview" >		
 					<imjc:metadataProfile_view headline="#{lbl.collection_profile}" metadataBean="#{cc.attrs.formularBean}" metadataContextBean="#{cc.attrs.formularBean.collection}" 
 							metadataProfile="#{cc.attrs.formularBean.profileTemplate}"/>
 					
@@ -183,16 +184,18 @@
 				</h:panelGroup>
 		<!-- START END FEATURE -->
 		
+			<div class="imj_submitPanel">
+				<h:outputLink value="#{HistorySession.previousPage.completeUrlWithHistory}" styleClass="imj_cancelButton">
+					<h:outputText value="#{lbl.cancel}"/>
+				</h:outputLink>
+				<h:commandButton action="#{cc.attrs.formularBean.save()}" value="#{lbl.save}" styleClass="imj_submitButton" onclick="openDialog('dialogWait');"/>
+			</div>
+		
 			</div>
 		
 		
 			
-			<div class="imj_submitPanel"  rendered="#{cc.attrs.formularBean.modeCreate}">
-				<h:outputLink value="#{HistorySession.previousPage.completeUrlWithHistory}" styleClass="imj_cancelButton">
-					<h:outputText value="#{lbl.cancel}"/>
-				</h:outputLink>
-				<h:commandButton action="#{cc.attrs.formularBean.save}" value="#{lbl.save}" styleClass="imj_submitButton" onclick="openDialog('dialogWait');"/>
-			</div>
+
 		</h:form>
 	</h:panelGroup>
 </composite:implementation>

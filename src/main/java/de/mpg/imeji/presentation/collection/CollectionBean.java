@@ -65,7 +65,9 @@ public abstract class CollectionBean extends ContainerBean {
 	
 	private List<SelectItem> profileItems = new ArrayList<SelectItem>();
 	private String selectedProfileItem;
-    private MdProfileBean mdProfileBean;    
+    private MdProfileBean mdProfileBean;  
+    private boolean useMDProfileTemplate = true;
+    
     
     private boolean modeCreate = false ;
 
@@ -85,10 +87,14 @@ public abstract class CollectionBean extends ContainerBean {
 	 * @return
 	 */
 	public boolean valid() {
-		
 		CollectionController cc = new CollectionController();
+		ProfileController pc = new ProfileController();
 		try {
 			cc.validateCollection(collection, sessionBean.getUser());
+			if(useMDProfileTemplate && "".equals(profile.getTitle())){
+				pc.validateProfile(profile, sessionBean.getUser());
+				return false;
+			}
 			return true;
 		} catch (ImejiException e) 
 		{
@@ -146,6 +152,7 @@ public abstract class CollectionBean extends ContainerBean {
             }           
             selectedProfileItem = (String) profileItems.get(0).getValue();
             this.profileTemplate = pc.retrieve(selectedProfileItem, sessionBean.getUser());
+            this.profile = new MetadataProfile();
 
 
         }
@@ -435,6 +442,16 @@ public abstract class CollectionBean extends ContainerBean {
 	public boolean getModeCreate() {
 		return this.modeCreate;
 	}
+
+	public boolean isUseMDProfileTemplate() {
+		return useMDProfileTemplate;
+	}
+
+	public void setUseMDProfileTemplate(boolean useMDProfileTemplate) {
+		this.useMDProfileTemplate = useMDProfileTemplate;
+	}
+	
+	
 	
 
 }

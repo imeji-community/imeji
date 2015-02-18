@@ -5,6 +5,8 @@ package de.mpg.imeji.logic.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
+
+import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.exceptions.UnprocessableError;
@@ -26,6 +28,7 @@ import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.imeji.rest.process.RestProcessUtils;
 import de.mpg.imeji.rest.to.MetadataProfileTO;
 import de.mpg.j2j.helper.DateHelper;
+
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -35,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
 import static de.mpg.imeji.logic.util.ResourceHelper.getStringFromPath;
 import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE;
 import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.transferMetadataProfile;
@@ -303,5 +307,12 @@ public class ProfileController extends ImejiController {
 						.updateRemoveAllMetadataWithoutStatement((p.getId()
 								.toString())));
 		ImejiSPARQL.execUpdate(SPARQLQueries.updateEmptyMetadata());
+	}
+	
+	public void validateProfile (MetadataProfile profile, User u) throws ImejiException {
+		//Copied from Collection Bean in presentation  
+		if ( isNullOrEmpty (profile.getTitle())) {
+			throw new BadRequestException("error_profile_need_title");
+		}
 	}
 }

@@ -79,7 +79,7 @@
 						<h:inputText value="#{cc.attrs.formularBean.profile.title}" id="mdProfileTitle"  styleClass="imj_metadataValue"/>
 					</div>
 					<h:selectBooleanCheckbox  id="useTemplate" value="#{cc.attrs.formularBean.useMDProfileTemplate}">
-						<f:ajax event="change" execute="@this" render="previewArea" />
+						<f:ajax event="change" execute="@this" render="previewArea submitButtonPanel" />
 					</h:selectBooleanCheckbox>
 					<label for="useTemplate">#{lbl.profile_use_template}</label>
 					
@@ -184,12 +184,13 @@
 				</h:panelGroup>
 		<!-- START END FEATURE -->
 		
-			<div class="imj_submitPanel">
+			<h:panelGroup layout="block" id="submitButtonPanel" class="imj_submitPanel">
 				<h:outputLink value="#{HistorySession.previousPage.completeUrlWithHistory}" styleClass="imj_cancelButton">
 					<h:outputText value="#{lbl.cancel}"/>
 				</h:outputLink>
+				<h:commandButton action="#{cc.attrs.formularBean.saveAndEditProfile()}" value="#{lbl.save_and_edit_profile}" styleClass="imj_submitButton" onclick="openDialog('dialogWait');" rendered="#{cc.attrs.formularBean.useMDProfileTemplate}"/>				
 				<h:commandButton action="#{cc.attrs.formularBean.save()}" value="#{lbl.save}" styleClass="imj_submitButton" onclick="openDialog('dialogWait');"/>
-			</div>
+			</h:panelGroup>
 		
 			</div>
 		

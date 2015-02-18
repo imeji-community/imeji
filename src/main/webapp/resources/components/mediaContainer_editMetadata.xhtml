@@ -88,10 +88,10 @@
 								<div class="imj_selectionText">use predefined values</div>
 								<div class="imj_buttonSortDescending_16"></div>
 							</div>
-		 					
+							
 							<h:selectOneMenu id="profileTemplates" value="#{cc.attrs.formularBean.selectedProfileItem}">
-								<f:selectItems value="#{cc.attrs.formularBean.profileItems}"/>
-								<f:ajax event="change" execute="@this" render="" listener="#{cc.attrs.formularBean.profileChangeListener}"/>
+														<f:selectItems value="#{cc.attrs.formularBean.profileItems}"/>
+<f:ajax event="change" execute="@this" render="" listener="#{cc.attrs.formularBean.profileChangeListener}"/>
 							</h:selectOneMenu> 
 							
 						</div>
@@ -99,8 +99,6 @@
 						<div id="profileTemplate" >
 						
 						</div>
-						
-						
 						
 						<mdprofile:profile_preview profileBean=""/>
 					</ui:fragment>

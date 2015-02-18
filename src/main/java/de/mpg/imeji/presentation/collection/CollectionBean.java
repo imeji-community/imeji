@@ -57,6 +57,8 @@ public abstract class CollectionBean extends ContainerBean {
 	protected Navigation navigation;
 	private CollectionImeji collection;
 	private MetadataProfile profile;
+	private MetadataProfile profileTemplate;
+	
 	private String id;
 	private String profileId;
 	private boolean selected;
@@ -143,11 +145,8 @@ public abstract class CollectionBean extends ContainerBean {
             	profileItems.add(new SelectItem(mdp.getIdString(), mdp.getTitle()));
             }           
             selectedProfileItem = (String) profileItems.get(0).getValue();
+            this.profileTemplate = pc.retrieve(selectedProfileItem, sessionBean.getUser());
           
-            mdProfileBean = new MdProfileBean();
-            MetadataProfile profile = pc.retrieve(selectedProfileItem, sessionBean.getUser());
-            mdProfileBean.setProfile(profile);
-            mdProfileBean.setId(profile.getIdString());
 
         }
         catch (Exception e)
@@ -188,19 +187,21 @@ public abstract class CollectionBean extends ContainerBean {
     	System.out.println("This is the profileChange listener 123 ... "+  event.getSource().toString() );
     }
     
-   public void profileSelectionChangeListener(ValueChangeEvent event) throws Exception
+    public void profileChangeListener() throws Exception
   {
-    System.out.println("NewValue= "+event.getNewValue()+ " oldValue="+event.getOldValue());
-  	 if (event != null && event.getNewValue() != event.getOldValue())
-       {
-           this.selectedProfileItem = event.getNewValue().toString();
-           MetadataProfile tp = ObjectCachedLoader.loadProfile(URI.create(this.selectedProfileItem));
-           if (tp.getStatements().isEmpty())
-               profile.getStatements().add(ImejiFactory.newStatement());
-           else
-               profile.setStatements(tp.clone().getStatements());
-           setProfile(profile);
-       }
+//    	 if (event != null && event.getNewValue() != event.getOldValue())
+        	 System.out.println("Test");
+           ProfileController pc = new ProfileController();
+           MetadataProfile profile = pc.retrieve(selectedProfileItem, sessionBean.getUser());
+           this.setProfile(profile);
+
+//             this.selectedProfileItem = event.getNewValue().toString();
+//             MetadataProfile tp = ObjectCachedLoader.loadProfile(URI.create(this.selectedProfileItem));
+//             if (tp.getStatements().isEmpty())
+//                 profile.getStatements().add(ImejiFactory.newStatement());
+//             else
+//                 profile.setStatements(tp.clone().getStatements());
+//             setProfile(profile);
   }
     
 
@@ -371,6 +372,16 @@ public abstract class CollectionBean extends ContainerBean {
 	 */
 	public void setProfile(MetadataProfile profile) {
 		this.profile = profile;
+	}
+
+	
+
+	public MetadataProfile getProfileTemplate() {
+		return profileTemplate;
+	}
+
+	public void setProfileTemplate(MetadataProfile profileTemplate) {
+		this.profileTemplate = profileTemplate;
 	}
 
 	/**

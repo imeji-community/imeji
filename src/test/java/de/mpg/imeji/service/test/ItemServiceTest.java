@@ -7,6 +7,7 @@ import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
+import de.mpg.imeji.rest.process.RestProcessUtils;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
@@ -18,6 +19,9 @@ import org.junit.Test;
 import util.JenaUtil;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
@@ -50,7 +54,13 @@ public class ItemServiceTest {
 	public static void initCollection() {
 		CollectionService s = new CollectionService();
 		try {
-			collectionTO = s.create(new CollectionTO(), JenaUtil.testUser);
+			
+			Path jsonPath = Paths
+					.get("src/test/resources/rest/createCollection.json");
+			String jsonString = new String(Files.readAllBytes(jsonPath), "UTF-8");
+			
+			collectionTO= (CollectionTO) RestProcessUtils.buildTOFromJSON(jsonString, CollectionTO.class); 
+			collectionTO = s.create(collectionTO, JenaUtil.testUser);
 			collectionId = collectionTO.getId();
 		} catch (Exception e) {
 			Logger.getLogger(ItemServiceTest.class).error("Cannot initCollection ",e);
@@ -76,6 +86,8 @@ public class ItemServiceTest {
 		ItemService crud = new ItemService();
 		// create item
 		try {
+			itemTO.setCollectionId(collectionTO.getId());
+
 			crud.create(itemTO, null);
 			fail("You have to be authenticated");
 		} catch (Exception e) {

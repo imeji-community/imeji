@@ -121,6 +121,7 @@ public class ImageGeneratorManager
                 throw new RuntimeException(e);
             }
         }
+        
         return generateJpeg(file, extension, resolution);
     }
 

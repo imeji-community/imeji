@@ -2,7 +2,11 @@ package de.mpg.imeji.rest.resources.test.integration;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import javax.ws.rs.core.Application;
 
@@ -15,10 +19,12 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
 import util.JenaUtil;
+import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.rest.MyApplication;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
 import de.mpg.imeji.rest.api.ProfileService;
+import de.mpg.imeji.rest.process.RestProcessUtils;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
@@ -80,13 +86,21 @@ public class ImejiTestBase extends JerseyTest {
 
 	/**
 	 * Create a new collection and set the collectionid
+	 * @throws IOException 
+	 * @throws UnsupportedEncodingException 
 	 * 
 	 * @throws Exception
 	 */
-	public static void initCollection() {
+	public static void initCollection()  {
 		CollectionService s = new CollectionService();
+		
 		try {
-			collectionTO = s.create(new CollectionTO(), JenaUtil.testUser);
+			Path jsonPath = Paths
+					.get("src/test/resources/rest/createCollection.json");
+			String jsonString = new String(Files.readAllBytes(jsonPath), "UTF-8");
+			
+			collectionTO= (CollectionTO) RestProcessUtils.buildTOFromJSON(jsonString, CollectionTO.class); 
+			collectionTO = s.create(collectionTO, JenaUtil.testUser);
 			collectionId = collectionTO.getId();
 		} catch (Exception e) {
 			logger.error("Cannot init Collection", e);

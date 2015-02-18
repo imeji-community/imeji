@@ -163,19 +163,46 @@ public abstract class CollectionBean extends ContainerBean {
      * @param event
      * @throws Exception
      */
-    public void profileChangeListener(ValueChangeEvent event) throws Exception
+//    public void profileChangeListener(ValueChangeEvent event) throws Exception
+//    {
+//    	 if (event != null && event.getNewValue() != event.getOldValue())
+//         {
+//             this.selectedProfileItem = event.getNewValue().toString();
+//             MetadataProfile tp = ObjectCachedLoader.loadProfile(URI.create(this.selectedProfileItem));
+//             if (tp.getStatements().isEmpty())
+//                 profile.getStatements().add(ImejiFactory.newStatement());
+//             else
+//                 profile.setStatements(tp.clone().getStatements());
+//             setProfile(profile);
+//         }
+//    }
+//    
+    public void profileChangeListener(AjaxBehaviorEvent event) throws Exception
     {
-    	 if (event != null && event.getNewValue() != event.getOldValue())
-         {
-             this.selectedProfileItem = event.getNewValue().toString();
-             MetadataProfile tp = ObjectCachedLoader.loadProfile(URI.create(this.selectedProfileItem));
-             if (tp.getStatements().isEmpty())
-                 profile.getStatements().add(ImejiFactory.newStatement());
-             else
-                 profile.setStatements(tp.clone().getStatements());
-             setProfile(profile);
-         }
+//      if (event != null && event.getNewValue() != event.getOldValue())
+//      {
+//          this.template = event.getNewValue().toString();
+//          MetadataProfile tp = ObjectCachedLoader.loadProfile(URI.create(this.template));
+//
+//      }
+    	System.out.println("This is the profileChange listener 123 ... "+  event.getSource().toString() );
     }
+    
+   public void profileSelectionChangeListener(ValueChangeEvent event) throws Exception
+  {
+    System.out.println("NewValue= "+event.getNewValue()+ " oldValue="+event.getOldValue());
+  	 if (event != null && event.getNewValue() != event.getOldValue())
+       {
+           this.selectedProfileItem = event.getNewValue().toString();
+           MetadataProfile tp = ObjectCachedLoader.loadProfile(URI.create(this.selectedProfileItem));
+           if (tp.getStatements().isEmpty())
+               profile.getStatements().add(ImejiFactory.newStatement());
+           else
+               profile.setStatements(tp.clone().getStatements());
+           setProfile(profile);
+       }
+  }
+    
 
 	@Override
 	protected String getErrorMessageNoAuthor() {

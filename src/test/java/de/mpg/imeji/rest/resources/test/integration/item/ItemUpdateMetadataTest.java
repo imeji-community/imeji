@@ -7,8 +7,11 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.util.ImejiFactory;
+import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
 import de.mpg.imeji.rest.process.RestProcessUtils;
+import de.mpg.imeji.rest.process.ReverseTransferObjectFactory;
+import de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE;
 import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
 import de.mpg.imeji.rest.to.*;
 import de.mpg.imeji.rest.to.predefinedMetadataTO.*;
@@ -30,6 +33,9 @@ import javax.ws.rs.core.Response;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -462,11 +468,23 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
         MetadataProfile mp = pc.create(p, JenaUtil.testUser);
 
         profileId = ObjectHelper.getId(mp.getId());
-
-        CollectionImeji c = ImejiFactory.newCollection();
-        CollectionController cc = new CollectionController();
-
-        collectionId = ObjectHelper.getId(cc.create(c, p, JenaUtil.testUser));
+        
+		try {
+			Path jsonPath = Paths
+					.get("src/test/resources/rest/createCollection.json");
+			String jsonString = new String(Files.readAllBytes(jsonPath), "UTF-8");
+			
+			collectionTO= (CollectionTO) RestProcessUtils.buildTOFromJSON(jsonString, CollectionTO.class); 
+			
+	        CollectionController cc = new CollectionController();
+	        CollectionImeji ci = new CollectionImeji();
+	        ReverseTransferObjectFactory.transferCollection(collectionTO, ci, TRANSFER_MODE.CREATE);
+	        collectionId = ObjectHelper.getId(cc.create(ci, p, JenaUtil.testUser));
+			
+		} catch (Exception e) {
+			LOGGER.error("Cannot init Collection", e);
+		}
+	     
     }
 
 

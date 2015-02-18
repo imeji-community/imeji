@@ -71,27 +71,39 @@ public class CollectionController extends ImejiController {
 	 */
 	public URI create(CollectionImeji c, MetadataProfile p, User user)
 			throws ImejiException {  
-
-		if (p == null) {
-			p = new MetadataProfile();
-			p.setDescription(c.getMetadata().getDescription());
-			p.setTitle(c.getMetadata().getTitle());
-			ProfileController pc = new ProfileController();
-			p = pc.create(p, user);
-		}
-		
-		validateCollection(c, user);
-		
-		writeCreateProperties(c, user);
-		c.setProfile(p.getId());
-		writer.create(WriterFacade.toList(c), user);
-		// Prepare grants
-		GrantController gc = new GrantController();
-		gc.addGrants(user, AuthorizationPredefinedRoles.admin(c.getId().toString(), p.getId().toString()), user);
-		return c.getId();
+		return createAskValidate(c, p, user, true);
 	}
 
+	public URI createNoValidate(CollectionImeji c, MetadataProfile p, User user)
+			throws ImejiException {  
+		return createAskValidate(c, p, user, false);
+	}
 	
+	private URI createAskValidate(CollectionImeji c, MetadataProfile p, User user, boolean validate)
+			throws ImejiException { 
+
+			if (p == null) {
+				p = new MetadataProfile();
+				p.setDescription(c.getMetadata().getDescription());
+				p.setTitle(c.getMetadata().getTitle());
+				ProfileController pc = new ProfileController();
+				p = pc.create(p, user);
+			}
+			
+			c.setProfile(p.getId());
+			
+			if (validate)
+				validateCollection(c, user);
+			
+			writeCreateProperties(c, user);
+			c.setProfile(p.getId());
+			writer.create(WriterFacade.toList(c), user);
+			// Prepare grants
+			GrantController gc = new GrantController();
+			gc.addGrants(user, AuthorizationPredefinedRoles.admin(c.getId().toString(), p.getId().toString()), user);
+			return c.getId();
+	}
+
 	
 	/**
 	 * Retrieve a complete {@link CollectionImeji} (inclusive its {@link Item}:

@@ -29,6 +29,7 @@ public class ReverseTransferObjectFactory {
     public enum TRANSFER_MODE {CREATE, UPDATE};
 
 	public static void transferCollection(CollectionTO to, CollectionImeji vo, TRANSFER_MODE mode) {
+		
 		ContainerMetadata metadata = new ContainerMetadata();
 		metadata.setTitle(to.getTitle());
 		metadata.setDescription(to.getDescription());

@@ -104,7 +104,7 @@ public class ProfileServiceTest {
 		c.setProfile(p.getId());
 
 		pController.create(p, testUser);
-		cController.create(c, p, testUser);
+		cController.createNoValidate(c, p, testUser);
 	}
 
 	@Test

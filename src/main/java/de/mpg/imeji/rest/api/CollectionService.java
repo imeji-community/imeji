@@ -39,13 +39,22 @@ public class CollectionService implements API<CollectionTO> {
 	public CollectionTO read(String id, User u) throws ImejiException {
 		
 		CollectionController controller = new CollectionController();
-		CollectionImeji vo = controller.retrieve(
-				ObjectHelper.getURI(CollectionImeji.class, id), u);
+//		CollectionImeji vo = controller.retrieve(
+//				ObjectHelper.getURI(CollectionImeji.class, id), u);
 		return getCollectionTO(controller, id, u);
 	}
 
 	@Override
 	public CollectionTO create(CollectionTO to, User u) throws ImejiException {
+		return createAskValidate(to, u, true);
+	}
+
+
+	public CollectionTO createNoValidate(CollectionTO to, User u) throws ImejiException {
+		return createAskValidate(to, u, false);
+	}
+	
+	private CollectionTO createAskValidate(CollectionTO to, User u, boolean validate) throws ImejiException {
 		//toDo: Move to Controller
 		CollectionController cc = new CollectionController();
 		ProfileController pc = new ProfileController();
@@ -90,15 +99,22 @@ public class CollectionService implements API<CollectionTO> {
 		CollectionImeji vo = new CollectionImeji();
 		transferCollection(to, vo, CREATE);
 //		try {
-			URI collectionURI = cc.create(vo, mp, u);
-			return read(CommonUtils.extractIDFromURI(collectionURI), u);
+		URI collectionURI = null;
+		if (validate) {
+			collectionURI = cc.create(vo, mp, u);
+		}
+		else
+		{
+			collectionURI = cc.createNoValidate(vo, mp, u);
+		}
+		return read(CommonUtils.extractIDFromURI(collectionURI), u);
 //		} catch (Exception e) {
 //			LOGGER.error("Cannot create collection:");
 //			e.printStackTrace();
 //			return null;
 //		}
 	}
-
+	
 	@Override
 	public CollectionTO release(String id, User u) throws ImejiException {
 

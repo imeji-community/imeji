@@ -57,6 +57,8 @@ public abstract class CollectionBean extends ContainerBean {
 	protected Navigation navigation;
 	private CollectionImeji collection;
 	private MetadataProfile profile;
+	private MetadataProfile profileTemplate;
+	
 	private String id;
 	private String profileId;
 	private boolean selected;
@@ -143,11 +145,8 @@ public abstract class CollectionBean extends ContainerBean {
             	profileItems.add(new SelectItem(mdp.getIdString(), mdp.getTitle()));
             }           
             selectedProfileItem = (String) profileItems.get(0).getValue();
-          
-            mdProfileBean = new MdProfileBean();
-            MetadataProfile profile = pc.retrieve(selectedProfileItem, sessionBean.getUser());
-            mdProfileBean.setProfile(profile);
-            mdProfileBean.setId(profile.getIdString());
+            this.profileTemplate = pc.retrieve(selectedProfileItem, sessionBean.getUser());
+
 
         }
         catch (Exception e)
@@ -349,6 +348,16 @@ public abstract class CollectionBean extends ContainerBean {
 	 */
 	public void setProfile(MetadataProfile profile) {
 		this.profile = profile;
+	}
+	
+	
+
+	public MetadataProfile getProfileTemplate() {
+		return profileTemplate;
+	}
+
+	public void setProfileTemplate(MetadataProfile profileTemplate) {
+		this.profileTemplate = profileTemplate;
 	}
 
 	/**

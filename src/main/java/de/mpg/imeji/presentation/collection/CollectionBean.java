@@ -151,14 +151,17 @@ public abstract class CollectionBean extends ContainerBean {
     
     public void profileChangeListener(AjaxBehaviorEvent event) throws Exception
     {
+		if(!"".equals(selectedProfileItem))
+		{  
         ProfileController pc = new ProfileController();
         MetadataProfile mProfile = pc.retrieve(selectedProfileItem, sessionBean.getUser());
         setProfile(mProfile);
 		this.profileTemplate = pc.retrieve(selectedProfileItem, sessionBean.getUser());
 		this.profile.setTitle(profileTemplate.getTitle());
+		}
     }
 
-	@Override
+    @Override
 	protected String getErrorMessageNoAuthor() {
 		return "error_collection_need_one_author";
 	}

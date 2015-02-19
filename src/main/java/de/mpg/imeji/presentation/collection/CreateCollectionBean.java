@@ -34,7 +34,7 @@ import de.mpg.imeji.presentation.util.ImejiFactory;
 public class CreateCollectionBean extends CollectionBean {
 	private static final long serialVersionUID = 1257698224590957642L;
 	
-//    private List<SelectItem> profileItems = new ArrayList<SelectItem>();
+
 
     
 	/**
@@ -131,22 +131,5 @@ public class CreateCollectionBean extends CollectionBean {
 		return "pretty:createCollection";
 	}
 	
-
-    
-//    public List<SelectItem> getProfileItems() {
-//		return profileItems;
-//	}
-//
-//	public void setProfileItems(List<SelectItem> profileItems) {
-//		this.profileItems = profileItems;
-//	}
-
-//	public String getSelectedProfileItem() {
-//		return selectedProfileItem;
-//	}
-//
-//	public void setSelectedProfileItem(String selectedProfileItem) {
-//		this.selectedProfileItem = selectedProfileItem;
-//	}
 
 }

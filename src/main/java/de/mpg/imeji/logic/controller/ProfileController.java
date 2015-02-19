@@ -249,7 +249,7 @@ public class ProfileController extends ImejiController {
             try {
                 final MetadataProfile mdp = retrieve(URI.create(uri), Imeji.adminUser);
                 if(mdp.getDefault()) {
-                    delete(mdp, Imeji.adminUser);
+//                    delete(mdp, Imeji.adminUser);
                     return mdp;
                 }
 

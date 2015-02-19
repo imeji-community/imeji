@@ -35,7 +35,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectCachedLoader;
 import de.mpg.imeji.presentation.util.UrlHelper;
-
+import static com.google.common.base.Strings.isNullOrEmpty;
 /**
  * Abstract bean for all collection beans
  * 
@@ -146,11 +146,14 @@ public abstract class CollectionBean extends ContainerBean {
         {    
             ProfileController pc = new ProfileController();
             List<MetadataProfile> profiles = pc.search(sessionBean.getUser());
-            
+            String profileTitle="";
             for (MetadataProfile mdp : profiles)
             {
             	if ( mdp.getStatements().size() > 0) {
-            		profileItems.add(new SelectItem(mdp.getIdString(), mdp.getIdString()+"-"+mdp.getTitle()));
+            		profileTitle=isNullOrEmpty(mdp.getTitle())?
+            				(mdp.getIdString()+" - "+ "No Title provided") :
+            				mdp.getTitle();
+            		profileItems.add(new SelectItem(mdp.getIdString(), profileTitle));
             	}
             }           
             selectedProfileItem = (String) profileItems.get(0).getValue();

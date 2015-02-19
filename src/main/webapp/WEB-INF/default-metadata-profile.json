@@ -1,7 +1,19 @@
 {
   "title" : "Default metadata profile",
   "description" : "Default metadata profile description",
-  "statements" : [ {
+  "statements" : [
+    {
+      "type": "http://imeji.org/terms/metadata#text",
+      "labels": [
+        {
+          "value": "Title",
+          "lang": "en"
+        }
+      ],
+      "minOccurs": "0",
+      "maxOccurs": "1"
+    },
+    {
     "type" : "http://imeji.org/terms/metadata#license",
     "labels" : [ {
       "value" : "License",
@@ -9,6 +21,18 @@
     } ],
     "minOccurs" : "0",
     "maxOccurs" : "1"
-  } ],
+    },
+    {
+      "type": "http://imeji.org/terms/metadata#text",
+      "labels": [
+        {
+          "value": "Comment",
+          "lang": "en"
+        }
+      ],
+      "minOccurs": "0",
+      "maxOccurs": "1"
+    }
+  ],
   "default" : true
 }

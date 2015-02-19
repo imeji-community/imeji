@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
-
 /**
  * Abstract bean for all collection beans
  * 
@@ -46,7 +45,7 @@ public abstract class CollectionBean extends ContainerBean {
 
 	protected Navigation navigation;
 	private CollectionImeji collection;
-	private MetadataProfile profile;
+	private MetadataProfile profile = null;
 	private MetadataProfile profileTemplate;
 	
 	private String id;
@@ -105,10 +104,16 @@ public abstract class CollectionBean extends ContainerBean {
         {    
             ProfileController pc = new ProfileController();
             List<MetadataProfile> profiles = pc.search(sessionBean.getUser());
+            String profileTitle="";
             for (MetadataProfile mdp : profiles)
-                if (!isNullOrEmpty(mdp.getTitle())) {
-                    profileItems.add(new SelectItem( mdp.getIdString(), mdp.getTitle()));
-                }
+            {
+            	if ( mdp.getStatements().size() > 0) {
+            		profileTitle=isNullOrEmpty(mdp.getTitle())?
+            				(mdp.getIdString()+" - "+ "No Title provided") :
+            				mdp.getTitle();
+            		profileItems.add(new SelectItem(mdp.getIdString(), profileTitle));
+            	}
+            }           
             selectedProfileItem = (String) profileItems.get(0).getValue();
             this.profile = new MetadataProfile();
             profile.setTitle(profiles.get(0).getTitle());
@@ -120,17 +125,20 @@ public abstract class CollectionBean extends ContainerBean {
         }
     }
     
-
+    
     public void profileChangeListener(AjaxBehaviorEvent event) throws Exception
     {
 		if(!"".equals(selectedProfileItem))
 		{  
-			ProfileController pc = new ProfileController();
-			this.profileTemplate = pc.retrieve(selectedProfileItem, sessionBean.getUser());
-			this.profile.setTitle(profileTemplate.getTitle());
+        ProfileController pc = new ProfileController();
+        MetadataProfile mProfile = pc.retrieve(selectedProfileItem, sessionBean.getUser());
+        setProfile(mProfile);
+		this.profileTemplate = pc.retrieve(selectedProfileItem, sessionBean.getUser());
+		this.profile.setTitle(profileTemplate.getTitle());
 		}
     }
-	@Override
+
+    @Override
 	protected String getErrorMessageNoAuthor() {
 		return "error_collection_need_one_author";
 	}
@@ -392,8 +400,6 @@ public abstract class CollectionBean extends ContainerBean {
 	public void setUseMDProfileTemplate(boolean useMDProfileTemplate) {
 		this.useMDProfileTemplate = useMDProfileTemplate;
 	}
-	
-	
 	
 
 }

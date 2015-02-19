@@ -35,6 +35,7 @@ public class CreateCollectionBean extends CollectionBean {
 	private static final long serialVersionUID = 1257698224590957642L;
 	
 
+
     
 	/**
 	 * Bean Constructor
@@ -51,11 +52,6 @@ public class CreateCollectionBean extends CollectionBean {
 		((List<Person>) getCollection().getMetadata().getPersons()).set(0, sessionBean.getUser().getPerson().clone());
 		setModeCreate(true);
 		loadProfiles();
-		// if (UrlHelper.getParameterBoolean("reset")) {
-		// setCollection(ImejiFactory.newCollection());
-		// ((List<Person>) getCollection().getMetadata().getPersons()).set(0,
-		// sessionBean.getUser().getPerson().clone());
-		// }
 	}
 
 	/**

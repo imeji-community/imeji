@@ -84,19 +84,14 @@
 					
 					<ui:fragment rendered="#{cc.attrs.formularBean.useMDProfileTemplate}">
 		
-						<div class="imj_customSelectbox" id="templateSelect">
-							<div class="imj_showSelection">
-								<div class="imj_selectionText">Select template</div>
-								<div class="imj_buttonSortDescending_16"></div>
-							</div>
+						<div>
 							<h:selectOneMenu id="profileTemplates" value="#{cc.attrs.formularBean.selectedProfileItem}" >
-								<f:ajax  execute="@this" render="metadataprofilepreview" listener="#{cc.attrs.formularBean.profileChangeListener}"/>
+								<f:ajax  execute="@this" render="previewArea" listener="#{cc.attrs.formularBean.profileChangeListener}"/>
 								<f:selectItems value="#{cc.attrs.formularBean.profileItems}"/>
 							</h:selectOneMenu> 
 						</div>					
 
 						<h:panelGroup layout="block" id="metadataprofilepreview" >		
-							<h:outputText value="#{cc.attrs.formularBean.selectedProfileItem}" />
 							<imjc:metadataProfile_view headline="#{lbl.collection_profile}" metadataBean="#{cc.attrs.formularBean}" metadataContextBean="#{cc.attrs.formularBean.collection}" 
 									metadataProfile="#{cc.attrs.formularBean.profileTemplate}"/>
 						</h:panelGroup>

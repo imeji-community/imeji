@@ -5,7 +5,6 @@ package de.mpg.imeji.logic.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
-
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotFoundException;
@@ -28,7 +27,6 @@ import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.imeji.rest.process.RestProcessUtils;
 import de.mpg.imeji.rest.to.MetadataProfileTO;
 import de.mpg.j2j.helper.DateHelper;
-
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -250,8 +248,11 @@ public class ProfileController extends ImejiController {
         for (String uri : result.getResults()) {
             try {
                 final MetadataProfile mdp = retrieve(URI.create(uri), Imeji.adminUser);
-                if(mdp.getDefault())
+                if(mdp.getDefault()) {
+                    delete(mdp, Imeji.adminUser);
                     return mdp;
+                }
+
             } catch (Exception e) {
                 logger.error(e);
             }

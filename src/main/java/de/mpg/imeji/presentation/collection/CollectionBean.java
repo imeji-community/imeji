@@ -4,13 +4,13 @@
 package de.mpg.imeji.presentation.collection;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 import javax.faces.bean.ManagedProperty;
-import javax.faces.component.UIOutput;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
@@ -21,19 +21,30 @@ import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ProfileController;
+import de.mpg.imeji.logic.search.SPARQLSearch;
+import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.vo.SearchIndex;
+import de.mpg.imeji.logic.search.vo.SearchOperators;
+import de.mpg.imeji.logic.search.vo.SearchPair;
+import de.mpg.imeji.logic.search.vo.SearchQuery;
+import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.ContainerBean;
 import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.mdProfile.MdProfileBean;
+import de.mpg.imeji.presentation.metadata.MetadataSetBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectCachedLoader;
+import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.UrlHelper;
 import static com.google.common.base.Strings.isNullOrEmpty;
 /**
@@ -66,7 +77,7 @@ public abstract class CollectionBean extends ContainerBean {
 	
 	private List<SelectItem> profileItems = new ArrayList<SelectItem>();
 	private String selectedProfileItem;
-    private MdProfileBean mdProfileBean;  
+  
     private boolean useMDProfileTemplate = true;
     
     
@@ -102,37 +113,7 @@ public abstract class CollectionBean extends ContainerBean {
 			BeanHelper.error(sessionBean.getMessage(e.getMessage()));
 			return false;
 		}
-//		if (collection.getMetadata().getTitle() == null || "".equals(collection.getMetadata().getTitle())) {
-//			BeanHelper.error(sessionBean.getMessage("error_collection_need_title"));
-//			return false;
-//		}
-//		List<Person> pers = new ArrayList<Person>();
-//		for (Person c : collection.getMetadata().getPersons()) {
-//			List<Organization> orgs = new ArrayList<Organization>();
-//			for (Organization o : c.getOrganizations()) {
-//				if (!"".equals(o.getName())) {
-//					orgs.add(o);
-//				}
-//			}
-//			if (!"".equals(c.getFamilyName())) {
-//				if (orgs.size() > 0) {
-//					c.setOrganizations(orgs);
-//					pers.add(c);
-//				} else {
-//					BeanHelper.error(sessionBean.getMessage("error_author_need_one_organization"));
-//					return false;
-//				}
-//			} else {
-//				BeanHelper.error(sessionBean.getMessage("error_author_need_one_family_name"));
-//				return false;
-//			}
-//		}
-//		if (pers.size() == 0) {
-//			BeanHelper.error(sessionBean.getMessage("error_collection_need_one_author"));
-//			return false;
-//		}
-//		collection.getMetadata().setPersons(pers);
-//		return true;
+
 	}
 	
     /**
@@ -157,10 +138,9 @@ public abstract class CollectionBean extends ContainerBean {
             	}
             }           
             selectedProfileItem = (String) profileItems.get(0).getValue();
-            this.profileTemplate = pc.retrieve(selectedProfileItem, sessionBean.getUser());
             this.profile = new MetadataProfile();
-
-
+            profile.setTitle(profiles.get(0).getTitle());
+            this.profileTemplate = pc.retrieve(selectedProfileItem, sessionBean.getUser());
         }
         catch (Exception e)
         {
@@ -169,31 +149,13 @@ public abstract class CollectionBean extends ContainerBean {
     }
     
     
-    /**
-     * Listener for the template value
-     * 
-     * @param event
-     * @throws Exception
-     */
-//    public void profileChangeListener(ValueChangeEvent event) throws Exception
-//    {
-//    	 if (event != null && event.getNewValue() != event.getOldValue())
-//         {
-//             this.selectedProfileItem = event.getNewValue().toString();
-//             MetadataProfile tp = ObjectCachedLoader.loadProfile(URI.create(this.selectedProfileItem));
-//             if (tp.getStatements().isEmpty())
-//                 profile.getStatements().add(ImejiFactory.newStatement());
-//             else
-//                 profile.setStatements(tp.clone().getStatements());
-//             setProfile(profile);
-//         }
-//    }
-//    
     public void profileChangeListener(AjaxBehaviorEvent event) throws Exception
     {
         ProfileController pc = new ProfileController();
         MetadataProfile mProfile = pc.retrieve(selectedProfileItem, sessionBean.getUser());
         setProfile(mProfile);
+		this.profileTemplate = pc.retrieve(selectedProfileItem, sessionBean.getUser());
+		this.profile.setTitle(profileTemplate.getTitle());
     }
 
 	@Override

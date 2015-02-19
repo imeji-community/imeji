@@ -35,6 +35,8 @@ public class CreateCollectionBean extends CollectionBean {
 	private static final long serialVersionUID = 1257698224590957642L;
 	
 //    private List<SelectItem> profileItems = new ArrayList<SelectItem>();
+
+    
 	/**
 	 * Bean Constructor
 	 */

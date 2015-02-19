@@ -68,7 +68,6 @@
 
 					</h:panelGroup>
 				</ui:repeat>
-				
 		<!-- START NEW FEATURE -->
 				<h:panelGroup layout="block" id="previewArea"  rendered="#{cc.attrs.formularBean.modeCreate}">
 					<div class="imj_metadataSet">
@@ -84,19 +83,17 @@
 					<label for="useTemplate">#{lbl.profile_use_template}</label>
 					
 					<ui:fragment rendered="#{cc.attrs.formularBean.useMDProfileTemplate}">
+		
 						<div class="imj_customSelectbox" id="templateSelect">
 							<div class="imj_showSelection">
-								<div class="imj_selectionText">#{lbl.profile_use_template}</div>
+								<div class="imj_selectionText">Select template</div>
 								<div class="imj_buttonSortDescending_16"></div>
 							</div>
-							
-							<h:selectOneMenu id="profileTemplates" value="#{cc.attrs.formularBean.selectedProfileItem}">
+							<h:selectOneMenu id="profileTemplates" value="#{cc.attrs.formularBean.selectedProfileItem}" >
+								<f:ajax  execute="@this" render="metadataprofilepreview" listener="#{cc.attrs.formularBean.profileChangeListener}"/>
 								<f:selectItems value="#{cc.attrs.formularBean.profileItems}"/>
-								<f:ajax event="change" execute="@this" render="metadataprofilepreview" listener="#{cc.attrs.formularBean.profileChangeListener}"/>
 							</h:selectOneMenu> 
-							
-						</div>
-						
+						</div>					
 
 				<h:panelGroup id="metadataprofilepreview" >		
 					<imjc:metadataProfile_view headline="#{lbl.collection_profile}" metadataBean="#{cc.attrs.formularBean}" metadataContextBean="#{cc.attrs.formularBean.collection}" 
@@ -179,9 +176,11 @@
 					</ui:remove>
 				</h:panelGroup>					
 
-				<ui:remove>  <mdprofile:profile_preview profileBean=""/> </ui:remove>
-					</ui:fragment>
-				</h:panelGroup>
+				<ui:remove>  
+					<mdprofile:profile_preview profileBean=""/> 
+				</ui:remove>
+			</ui:fragment>
+		</h:panelGroup>
 		<!-- START END FEATURE -->
 		
 			<h:panelGroup layout="block" id="submitButtonPanel" class="imj_submitPanel">

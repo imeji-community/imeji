@@ -10,6 +10,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import javax.faces.bean.ManagedProperty;
+import javax.faces.component.UIOutput;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
@@ -56,7 +57,7 @@ public abstract class CollectionBean extends ContainerBean {
 
 	protected Navigation navigation;
 	private CollectionImeji collection;
-	private MetadataProfile profile;
+	private MetadataProfile profile = null;
 	private MetadataProfile profileTemplate;
 	
 	private String id;
@@ -147,8 +148,10 @@ public abstract class CollectionBean extends ContainerBean {
             List<MetadataProfile> profiles = pc.search(sessionBean.getUser());
             
             for (MetadataProfile mdp : profiles)
-            {  
-            	profileItems.add(new SelectItem(mdp.getIdString(), mdp.getTitle()));
+            {
+            	if ( mdp.getStatements().size() > 0) {
+            		profileItems.add(new SelectItem(mdp.getIdString(), mdp.getIdString()+"-"+mdp.getTitle()));
+            	}
             }           
             selectedProfileItem = (String) profileItems.get(0).getValue();
             this.profileTemplate = pc.retrieve(selectedProfileItem, sessionBean.getUser());
@@ -185,32 +188,10 @@ public abstract class CollectionBean extends ContainerBean {
 //    
     public void profileChangeListener(AjaxBehaviorEvent event) throws Exception
     {
-//      if (event != null && event.getNewValue() != event.getOldValue())
-//      {
-//          this.template = event.getNewValue().toString();
-//          MetadataProfile tp = ObjectCachedLoader.loadProfile(URI.create(this.template));
-//
-//      }
-    	System.out.println("This is the profileChange listener 123 ... "+  event.getSource().toString() );
+        ProfileController pc = new ProfileController();
+        MetadataProfile mProfile = pc.retrieve(selectedProfileItem, sessionBean.getUser());
+        setProfile(mProfile);
     }
-    
-    public void profileChangeListener() throws Exception
-  {
-//    	 if (event != null && event.getNewValue() != event.getOldValue())
-        	 System.out.println("Test");
-           ProfileController pc = new ProfileController();
-           MetadataProfile profile = pc.retrieve(selectedProfileItem, sessionBean.getUser());
-           this.setProfile(profile);
-
-//             this.selectedProfileItem = event.getNewValue().toString();
-//             MetadataProfile tp = ObjectCachedLoader.loadProfile(URI.create(this.selectedProfileItem));
-//             if (tp.getStatements().isEmpty())
-//                 profile.getStatements().add(ImejiFactory.newStatement());
-//             else
-//                 profile.setStatements(tp.clone().getStatements());
-//             setProfile(profile);
-  }
-    
 
 	@Override
 	protected String getErrorMessageNoAuthor() {
@@ -474,8 +455,6 @@ public abstract class CollectionBean extends ContainerBean {
 	public void setUseMDProfileTemplate(boolean useMDProfileTemplate) {
 		this.useMDProfileTemplate = useMDProfileTemplate;
 	}
-	
-	
 	
 
 }

@@ -28,27 +28,21 @@
  */
 package de.mpg.imeji.logic.auth.util;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import org.apache.bcel.generic.ReturnaddressType;
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.logic.auth.Authorization;
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.vo.Album;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Grant;
+import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.user.ShareBean.SharedObjectType;
 import de.mpg.imeji.presentation.user.SharedHistory;
 import de.mpg.imeji.presentation.util.ObjectLoader;
+import org.apache.bcel.generic.ReturnaddressType;
+import org.apache.log4j.Logger;
+
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Utility class for the package auth
@@ -118,6 +112,24 @@ public class AuthUtil
         for (Grant g : getAllGrantsOfUser(user))
         {
             if (g.getGrantFor().toString().contains("/collection/")
+                    && g.getGrantType().equals(toGrantTypeURI(GrantType.READ)))
+                uris.add(g.getGrantFor().toString());
+        }
+        return uris;
+    }
+
+    /**
+     * Return the {@link List} of uri of all {@link de.mpg.imeji.logic.vo.MetadataProfile}, the {@link User} is allowed to see
+     *
+     * @param user
+     * @return
+     */
+    public static List<String> getListOfAllowedProfiles(User user)
+    {
+        List<String> uris = new ArrayList<>();
+        for (Grant g : getAllGrantsOfUser(user))
+        {
+            if (g.getGrantFor().toString().contains("/metadataProfile/")
                     && g.getGrantType().equals(toGrantTypeURI(GrantType.READ)))
                 uris.add(g.getGrantFor().toString());
         }

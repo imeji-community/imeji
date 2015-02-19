@@ -3,16 +3,13 @@
  */
 package de.mpg.imeji.logic.search.query;
 
+import de.mpg.imeji.logic.auth.util.AuthUtil;
+import de.mpg.imeji.logic.vo.*;
+import de.mpg.imeji.logic.vo.Properties.Status;
+import de.mpg.j2j.helper.J2JHelper;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import de.mpg.imeji.logic.auth.util.AuthUtil;
-import de.mpg.imeji.logic.vo.Album;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Properties.Status;
-import de.mpg.imeji.logic.vo.User;
-import de.mpg.j2j.helper.J2JHelper;
 
 /**
  * Simple security query add to any imeji sparql query, a security filter (according to user, searchtype, etc)
@@ -125,6 +122,16 @@ public class SimpleSecurityQuery
         {
             // searching for items. Add to the Filter the item for which the user has extra rights as well as the item which are public
             for(String uri : AuthUtil.getListOfAllowedItem(user))
+            {
+                if (!"".equals(s))
+                    s += " || ";
+                s += "?s=<" + uri + ">";
+            }
+        }
+        if(J2JHelper.getResourceNamespace(new MetadataProfile()).equals(rdfType))
+        {
+            // searching for items. Add to the Filter the profiles for which the user has extra rights as well as the item which are public
+            for(String uri : AuthUtil.getListOfAllowedProfiles(user))
             {
                 if (!"".equals(s))
                     s += " || ";

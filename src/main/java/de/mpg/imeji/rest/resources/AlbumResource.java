@@ -23,7 +23,6 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 
 import de.mpg.imeji.rest.process.AlbumProcess;
-import de.mpg.imeji.rest.process.CollectionProcess;
 import de.mpg.imeji.rest.process.RestProcessUtils;
 import de.mpg.imeji.rest.to.JSONResponse;
 
@@ -37,7 +36,7 @@ public class AlbumResource implements ImejiResource{
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	@ApiOperation(value = "Create album or new version of album", notes = "The body parameter is the json of a collection. You can get an example by using the get collection method.")
+	@ApiOperation(value = "Create album or new version of album", notes = "The body parameter is the json of an album. You can get an example by using the get album method.")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response create(@Context HttpServletRequest req, InputStream json) {
 		JSONResponse resp = AlbumProcess.createAlbum(req);

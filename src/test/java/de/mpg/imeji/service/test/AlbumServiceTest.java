@@ -5,13 +5,10 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.File;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-import javax.ws.rs.NotSupportedException;
 
 import org.apache.log4j.Logger;
 import org.junit.AfterClass;
@@ -19,17 +16,13 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import util.JenaUtil;
-import de.mpg.imeji.exceptions.NotAllowedError;
-import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.vo.Album;
-import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.rest.api.AlbumService;
 import de.mpg.imeji.rest.process.RestProcessUtils;
 import de.mpg.imeji.rest.process.ReverseTransferObjectFactory;
-import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE;
 import de.mpg.imeji.rest.to.AlbumTO;
-import de.mpg.imeji.rest.to.CollectionTO;
+
 
 
 
@@ -78,7 +71,7 @@ public class AlbumServiceTest {
 			to = service.read(vo.getIdString(),
 					JenaUtil.testUser);
 		} catch (Exception e) {
-			fail("could not read collection "+ vo.getIdString());
+			fail("could not read album "+ vo.getIdString());
 		}
 		assertNotNull(to.getId());
 	}
@@ -93,11 +86,11 @@ public class AlbumServiceTest {
 			to = service.createNoValidate(to, JenaUtil.testUser);
 		} catch (Exception e) {
 			fail();
-			logger.error("test_createCollectionCollection", e);
+			logger.error("test_createAlbum", e);
 		}
-		// check the collection be created and has new id
+		// check the album be created and has new id
 		assertNotNull(to.getId());
-		// check the collection status
+		// check the album status
 		assertTrue(to.getStatus().equals("PENDING"));
 		//check the createdDate attribute
 		assertNotNull(to.getCreatedDate());

@@ -79,4 +79,9 @@ public class UserService implements API<User>{
                 new UserController(adminUser).retrieve(uri);
 	}
 
+	public User read(String email) throws ImejiException {
+        return adminUser.getEmail().equals(email) ? adminUser :
+                new UserController(adminUser).retrieve(email);
+	}
+
 }

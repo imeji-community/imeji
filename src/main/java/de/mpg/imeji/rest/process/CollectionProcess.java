@@ -1,13 +1,15 @@
 package de.mpg.imeji.rest.process;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.Response.Status;
-
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.JSONResponse;
+
+import javax.servlet.http.HttpServletRequest;
+
+import static de.mpg.imeji.rest.process.CommonUtils.USER_MUST_BE_LOGGED_IN;
+import static javax.ws.rs.core.Response.Status.*;
 
 public class CollectionProcess {
 
@@ -18,7 +20,7 @@ public class CollectionProcess {
 
 		CollectionService ccrud = new CollectionService();
 		try {
-			resp = RestProcessUtils.buildResponse(Status.OK.getStatusCode(), ccrud.read(id, u));
+			resp = RestProcessUtils.buildResponse(OK.getStatusCode(), ccrud.read(id, u));
 		} catch (Exception e) {
 			resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
 		}
@@ -32,13 +34,33 @@ public class CollectionProcess {
 		User u = BasicAuthentication.auth(req);
 		
 		if (u == null) {
-			resp = RestProcessUtils.buildJSONAndExceptionResponse(Status.UNAUTHORIZED.getStatusCode(), CommonUtils.USER_MUST_BE_LOGGED_IN);
+			resp = RestProcessUtils.buildJSONAndExceptionResponse(UNAUTHORIZED.getStatusCode(), USER_MUST_BE_LOGGED_IN);
 		} else {
 			CollectionService service = new CollectionService();
 			CollectionTO to = (CollectionTO) RestProcessUtils.buildTOFromJSON(
 					req, CollectionTO.class);
 			try {
-				resp = RestProcessUtils.buildResponse(Status.CREATED.getStatusCode(), service.create(to, u));
+				resp = RestProcessUtils.buildResponse(CREATED.getStatusCode(), service.create(to, u));
+			} catch (ImejiException e) {
+				resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
+			}
+
+		}
+		return resp;
+	}
+
+    public static JSONResponse updateCollection(HttpServletRequest req, String id, String json) {
+		JSONResponse resp;
+
+		User u = BasicAuthentication.auth(req);
+
+		if (u == null) {
+			resp = RestProcessUtils.buildJSONAndExceptionResponse(UNAUTHORIZED.getStatusCode(), USER_MUST_BE_LOGGED_IN);
+		} else {
+			CollectionService service = new CollectionService();
+			try {
+                CollectionTO to = (CollectionTO) RestProcessUtils.buildTOFromJSON(json, CollectionTO.class);
+                resp = RestProcessUtils.buildResponse(OK.getStatusCode(), service.update(to, u));
 			} catch (ImejiException e) {
 				resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
 			}
@@ -54,7 +76,7 @@ public class CollectionProcess {
 		CollectionService service = new CollectionService(); 
 		
 		try {
-			resp= RestProcessUtils.buildResponse(Status.OK.getStatusCode(), service.release(id, u));
+			resp= RestProcessUtils.buildResponse(OK.getStatusCode(), service.release(id, u));
 		} catch (Exception e) {
 			resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
 		}
@@ -71,7 +93,7 @@ public class CollectionProcess {
 		CollectionService service = new CollectionService();
 
 		try {
-				resp = RestProcessUtils.buildResponse(Status.OK.getStatusCode(), service.withdraw(id, u, discardComment));
+				resp = RestProcessUtils.buildResponse(OK.getStatusCode(), service.withdraw(id, u, discardComment));
 			} 
 		catch (Exception e)	{
 			resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
@@ -86,7 +108,7 @@ public class CollectionProcess {
 		CollectionService service = new CollectionService(); 
 		
 		try {
-			resp= RestProcessUtils.buildResponse(Status.NO_CONTENT.getStatusCode(), service.delete(id, u));
+			resp= RestProcessUtils.buildResponse(NO_CONTENT.getStatusCode(), service.delete(id, u));
 		} catch (Exception e) {
 			resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
 		}

@@ -1,31 +1,15 @@
 package de.mpg.imeji.rest.resources.test.integration;
 
 
-import static javax.ws.rs.core.Response.Status.CREATED;
-import static javax.ws.rs.core.Response.Status.FORBIDDEN;
-import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.isEmptyOrNullString;
-import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Map;
-
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.Form;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
-import net.java.dev.webdav.jaxrs.ResponseStatus;
-
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.rest.api.CollectionService;
+import de.mpg.imeji.rest.api.ItemService;
+import de.mpg.imeji.rest.resources.test.TestUtils;
+import de.mpg.imeji.rest.to.CollectionTO;
+import de.mpg.imeji.rest.to.IdentifierTO;
+import de.mpg.imeji.rest.to.OrganizationTO;
+import de.mpg.imeji.rest.to.PersonTO;
+import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -33,14 +17,26 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import util.JenaUtil;
-import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.exceptions.NotAllowedError;
-import de.mpg.imeji.exceptions.NotFoundException;
-import de.mpg.imeji.rest.api.CollectionService;
-import de.mpg.imeji.rest.api.ItemService;
-import de.mpg.imeji.rest.resources.test.TestUtils;
+
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Form;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.Map;
+
+import static de.mpg.imeji.logic.util.ResourceHelper.getStringFromPath;
+import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONFromObject;
+import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_REST;
+import static javax.ws.rs.core.Response.Status.*;
+import static net.java.dev.webdav.jaxrs.ResponseStatus.UNPROCESSABLE_ENTITY;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CollectionTest extends ImejiTestBase {
@@ -49,6 +45,7 @@ public class CollectionTest extends ImejiTestBase {
 			.getLogger(CollectionTest.class);
 
 	private static String pathPrefix = "/rest/collections";
+    private static String updateJSON;
 
 	@Before
 	public void specificSetup() {
@@ -58,10 +55,7 @@ public class CollectionTest extends ImejiTestBase {
 
 	@Test
 	public void test_1_CreateCollection_1_DefaultProfile() throws IOException {
-		Path jsonPath = Paths
-				.get("src/test/resources/rest/createCollection.json");
-		String jsonString = new String(Files.readAllBytes(jsonPath), "UTF-8");
-
+        String jsonString = getStringFromPath(STATIC_CONTEXT_REST + "/createCollection.json");
 		Response response = target(pathPrefix)
 				.register(authAsUser)
 				.register(MultiPartFeature.class)
@@ -78,9 +72,7 @@ public class CollectionTest extends ImejiTestBase {
 
 	@Test
 	public void test_1_CreateCollection_2_CopyProfile() throws ImejiException, UnsupportedEncodingException, IOException {
-		Path jsonPath = Paths
-				.get("src/test/resources/rest/createCollectionWithProfile.json");
-		String jsonString = new String(Files.readAllBytes(jsonPath), "UTF-8");
+        String jsonString = getStringFromPath(STATIC_CONTEXT_REST + "/createCollectionWithProfile.json");
 		jsonString = jsonString.replace("___PROFILE_ID___",
 				collectionTO.getProfile().getProfileId()).replace(
 				"___METHOD___", "copy");
@@ -102,9 +94,7 @@ public class CollectionTest extends ImejiTestBase {
 
 	@Test
 	public void test_1_CreateCollection_3_ReferenceProfile() throws ImejiException, UnsupportedEncodingException, IOException {
-		Path jsonPath = Paths
-				.get("src/test/resources/rest/createCollectionWithProfile.json");
-		String jsonString = new String(Files.readAllBytes(jsonPath), "UTF-8");
+        String jsonString = getStringFromPath(STATIC_CONTEXT_REST + "/createCollectionWithProfile.json");
 		jsonString = jsonString.replace("___PROFILE_ID___",
 				collectionTO.getProfile().getProfileId()).replace(
 				"___METHOD___", "reference");
@@ -126,9 +116,7 @@ public class CollectionTest extends ImejiTestBase {
 	@Test
 	public void test_1_CreateCollection_4_NotExistedReferenceProfile()
 			throws ImejiException, UnsupportedEncodingException, IOException {
-		Path jsonPath = Paths
-				.get("src/test/resources/rest/createCollectionWithProfile.json");
-		String jsonString = new String(Files.readAllBytes(jsonPath), "UTF-8");
+        String jsonString = getStringFromPath(STATIC_CONTEXT_REST + "/createCollectionWithProfile.json");
 		jsonString = jsonString.replace("___PROFILE_ID___",
 				collectionTO.getProfile().getProfileId() + "shmarrn").replace(
 				"___METHOD___", "reference");
@@ -138,7 +126,7 @@ public class CollectionTest extends ImejiTestBase {
 				.post(Entity
 						.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
 
-		assertEquals(response.getStatus(), ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode());
+		assertEquals(response.getStatus(), UNPROCESSABLE_ENTITY.getStatusCode());
 
 	}
 
@@ -180,7 +168,7 @@ public class CollectionTest extends ImejiTestBase {
 				.register(authAsUser).request(MediaType.APPLICATION_JSON)
 				.get();
 		assertThat(response.getStatus(),
-				equalTo(Status.NOT_FOUND.getStatusCode()));
+				equalTo(NOT_FOUND.getStatusCode()));
 	}
 
 	@Test
@@ -194,7 +182,7 @@ public class CollectionTest extends ImejiTestBase {
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.json("{}"));
 
-		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		assertEquals(OK.getStatusCode(), response.getStatus());
 
 		CollectionService s = new CollectionService();
 		assertEquals("RELEASED", s.read(collectionId, JenaUtil.testUser)
@@ -224,7 +212,7 @@ public class CollectionTest extends ImejiTestBase {
 				.path("/" + collectionId + "/release").register(authAsUser)
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.json("{}"));	
-		assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+		assertEquals(UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
 	}
 	@Test
 	public void test_3_ReleaseCollection_4_WithOutUser(){
@@ -247,7 +235,7 @@ public class CollectionTest extends ImejiTestBase {
 				.path("/" + collectionId + "/release").register(authAsUser)
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.json("{}"));
-		assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+		assertEquals(UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
 	}
 	
 	@Test
@@ -256,7 +244,7 @@ public class CollectionTest extends ImejiTestBase {
 				.path("/" + collectionId + "i_do_not_exist/release").register(authAsUser)
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.json("{}"));	
-		assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
+		assertEquals(NOT_FOUND.getStatusCode(), response.getStatus());
 	}
 
 	@Test
@@ -278,7 +266,7 @@ public class CollectionTest extends ImejiTestBase {
 				.request((MediaType.APPLICATION_JSON_TYPE))
 				.put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
 
-		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		assertEquals(OK.getStatusCode(), response.getStatus());
 
 		
 		assertEquals("WITHDRAWN", s.read(collectionId, JenaUtil.testUser)
@@ -306,7 +294,7 @@ public class CollectionTest extends ImejiTestBase {
 				.request((MediaType.APPLICATION_JSON_TYPE))
 				.put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
 
-		assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
+		assertEquals(FORBIDDEN.getStatusCode(), response.getStatus());
 	 }
 
 	@Test
@@ -325,7 +313,7 @@ public class CollectionTest extends ImejiTestBase {
 				.request((MediaType.APPLICATION_JSON_TYPE))
 				.put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
 
-		assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
+		assertEquals(UNAUTHORIZED.getStatusCode(), response.getStatus());
 	 }
 
 
@@ -344,7 +332,7 @@ public class CollectionTest extends ImejiTestBase {
 				.request((MediaType.APPLICATION_JSON_TYPE))
 				.put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
 
-		assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+		assertEquals(UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
 	}
 	
 	@Test
@@ -365,7 +353,7 @@ public class CollectionTest extends ImejiTestBase {
 				.request((MediaType.APPLICATION_JSON_TYPE))
 				.put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
 
-		assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+		assertEquals(UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
 	}
 	
 	@Test
@@ -379,7 +367,7 @@ public class CollectionTest extends ImejiTestBase {
 				.request((MediaType.APPLICATION_JSON_TYPE))
 				.put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
 
-		assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
+		assertEquals(NOT_FOUND.getStatusCode(), response.getStatus());
 	}
 	
 
@@ -400,21 +388,18 @@ public class CollectionTest extends ImejiTestBase {
 				request(MediaType.APPLICATION_JSON)
 				.get();
 		
-		assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
+		assertEquals(NOT_FOUND.getStatusCode(), response.getStatus());
 		
 	}
 	
 	@Test
 	public void test_3_DeleteCollection_2_WithUnauth() throws ImejiException{
 		initCollection();
-		ItemService itemStatus = new ItemService();
-
 		Response response = target(pathPrefix)
 				.path("/" + collectionId).register(authAsUser2)
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.delete();
-
-		assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
+		assertEquals(FORBIDDEN.getStatusCode(), response.getStatus());
 	}
 
 	@Test
@@ -437,7 +422,7 @@ public class CollectionTest extends ImejiTestBase {
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.delete();
 		
-		assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+		assertEquals(UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
 		
 		try {
 			colService.withdraw(collectionId, JenaUtil.testUser, "test_3_DeleteCollection_3_NotPendingCollection");
@@ -453,7 +438,7 @@ public class CollectionTest extends ImejiTestBase {
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.delete();
 		
-		assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+		assertEquals(UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
 		
 	}
 	@Test
@@ -476,6 +461,80 @@ public class CollectionTest extends ImejiTestBase {
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.delete();
 
-		assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
+		assertEquals(NOT_FOUND.getStatusCode(), response.getStatus());
 	}
+
+
+    @Test
+	public void test_4_UpdateCollection_Metadata() throws IOException {
+
+        initCollection();
+
+        String CHANGED = "_changed";
+
+        collectionTO.setTitle(collectionTO.getTitle() + CHANGED);
+        collectionTO.setDescription(collectionTO.getDescription() + CHANGED);
+
+        for (PersonTO p : collectionTO.getContributors()) {
+            p.setFamilyName(p.getFamilyName() + CHANGED);
+            p.setGivenName(p.getGivenName() + CHANGED);
+            p.setCompleteName(p.getCompleteName() + CHANGED);
+            p.setAlternativeName(p.getAlternativeName() + CHANGED);
+            p.setRole(p.getRole() + CHANGED);
+            for (IdentifierTO i : p.getIdentifiers()) {
+                i.setType(i.getType() + CHANGED);
+                i.setValue(i.getValue() + CHANGED);
+            }
+            for (OrganizationTO o : p.getOrganizations()) {
+                o.setName(o.getName() + CHANGED);
+                o.setDescription(o.getDescription() + CHANGED);
+                o.setCountry(o.getCountry() + CHANGED);
+                o.setCity(o.getCity() + CHANGED);
+                for (IdentifierTO i : o.getIdentifiers()) {
+                    i.setType(i.getType() + CHANGED);
+                    i.setValue(i.getValue() + CHANGED);
+                }
+            }
+        }
+
+        Form form= new Form();
+        form.param("json", buildJSONFromObject(collectionTO));
+
+        Response response = target(pathPrefix)
+				.path("/" + collectionId).register(authAsUser)
+                .register(JacksonFeature.class)
+                .request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+		assertEquals(OK.getStatusCode(), response.getStatus());
+
+        CollectionTO uc = response.readEntity(CollectionTO.class);
+
+        assertThat(uc.getTitle(), endsWith(CHANGED));
+        assertThat(uc.getDescription(), endsWith(CHANGED));
+
+//        for (PersonTO p : collectionTO.getContributors()) {
+//            p.setFamilyName(p.getFamilyName() + CHANGED);
+//            p.setGivenName(p.getGivenName() + CHANGED);
+//            p.setCompleteName(p.getCompleteName() + CHANGED);
+//            p.setAlternativeName(p.getAlternativeName() + CHANGED);
+//            p.setRole(p.getRole() + CHANGED);
+//            for (IdentifierTO i : p.getIdentifiers()) {
+//                i.setType(i.getType() + CHANGED);
+//                i.setValue(i.getValue() + CHANGED);
+//            }
+//            for (OrganizationTO o : p.getOrganizations()) {
+//                o.setName(o.getName() + CHANGED);
+//                o.setDescription(o.getDescription() + CHANGED);
+//                o.setCountry(o.getCountry() + CHANGED);
+//                o.setCity(o.getCity() + CHANGED);
+//                for (IdentifierTO i : o.getIdentifiers()) {
+//                    i.setType(i.getType() + CHANGED);
+//                    i.setValue(i.getValue() + CHANGED);
+//                }
+//            }
+//        }
+
+
+
+    }
 }

@@ -1,25 +1,5 @@
 package de.mpg.imeji.rest.resources.test.integration;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
-import javax.ws.rs.core.Application;
-
-import org.apache.log4j.Logger;
-import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
-import org.glassfish.jersey.test.JerseyTest;
-import org.glassfish.jersey.test.spi.TestContainerException;
-import org.glassfish.jersey.test.spi.TestContainerFactory;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-
-import util.JenaUtil;
-import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.rest.MyApplication;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
@@ -29,6 +9,23 @@ import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
 import de.mpg.imeji.rest.to.MetadataProfileTO;
+import org.apache.log4j.Logger;
+import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
+import org.glassfish.jersey.test.JerseyTest;
+import org.glassfish.jersey.test.spi.TestContainerException;
+import org.glassfish.jersey.test.spi.TestContainerFactory;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import util.JenaUtil;
+
+import javax.ws.rs.core.Application;
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+
+import static de.mpg.imeji.logic.util.ResourceHelper.getStringFromPath;
+import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_REST;
 
 /**
  * Created by vlad on 09.12.14.
@@ -95,11 +92,8 @@ public class ImejiTestBase extends JerseyTest {
 		CollectionService s = new CollectionService();
 		
 		try {
-			Path jsonPath = Paths
-					.get("src/test/resources/rest/createCollection.json");
-			String jsonString = new String(Files.readAllBytes(jsonPath), "UTF-8");
-			
-			collectionTO= (CollectionTO) RestProcessUtils.buildTOFromJSON(jsonString, CollectionTO.class); 
+            String jsonString = getStringFromPath(STATIC_CONTEXT_REST + "/createCollection.json");
+			collectionTO= (CollectionTO) RestProcessUtils.buildTOFromJSON(jsonString, CollectionTO.class);
 			collectionTO = s.create(collectionTO, JenaUtil.testUser);
 			collectionId = collectionTO.getId();
 		} catch (Exception e) {

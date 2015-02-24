@@ -19,7 +19,9 @@ import org.slf4j.LoggerFactory;
 import java.net.URI;
 import java.util.List;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
 import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE.CREATE;
+import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE.UPDATE;
 import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.transferCollection;
 
 public class CollectionService implements API<CollectionTO> {
@@ -59,12 +61,13 @@ public class CollectionService implements API<CollectionTO> {
 		CollectionController cc = new CollectionController();
 		ProfileController pc = new ProfileController();
 
+
 		MetadataProfile mp = null;
 		String profileId = to.getProfile().getProfileId();
 		String method = to.getProfile().getMethod();
 		String newId = null;
 		// create new profile (take default)
-		if (profileId == null || "".equals(profileId))
+		if (isNullOrEmpty(profileId))
 			mp = pc.create(ImejiFactory.newProfile(), u);
 		// set reference to existed profile
 		else if (profileId != null && "reference".equalsIgnoreCase(method))
@@ -114,7 +117,44 @@ public class CollectionService implements API<CollectionTO> {
 //			return null;
 //		}
 	}
-	
+
+    @Override
+    public CollectionTO update(CollectionTO to, User u)
+            throws ImejiException {
+        ProfileController pc = new ProfileController();
+
+
+        //profile is defined
+        if (to.getProfile() != null) {
+            String profileId = to.getProfile().getProfileId();
+            String method = to.getProfile().getMethod();
+            MetadataProfile mp;
+
+            CollectionTO oldTO = read(to.getId(), u);
+            //profileId has been changed
+            if ( !isNullOrEmpty(profileId) && !profileId.equals(oldTO.getProfile().getProfileId())) {
+            //TODO: remove old profile?
+                    try {
+                        mp = pc.retrieve(profileId, u);
+                    } catch (ImejiException e) {
+                        throw new UnprocessableError("Can not find the metadata profile you have referenced in the JSON body");
+
+                    }
+                    if ("reference".equalsIgnoreCase(method)) {
+                        mp = pc.create(mp.clone(), u);
+                        pc.update(mp, u);
+                    }
+            }
+        }
+        CollectionImeji vo = new CollectionImeji();
+        transferCollection(to, vo, UPDATE);
+        CollectionController cc = new CollectionController();
+        CollectionTO newTO = new CollectionTO();
+        TransferObjectFactory.transferCollection(cc.update(vo, u), newTO);
+        return newTO;
+
+    }
+
 	@Override
 	public CollectionTO release(String id, User u) throws ImejiException {
 
@@ -126,13 +166,6 @@ public class CollectionService implements API<CollectionTO> {
 		//Now Read the collection and return it back
 		return getCollectionTO(controller, id, u);
 
-	}
-
-	@Override
-	public CollectionTO update(CollectionTO o, User u)
-			throws ImejiException {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

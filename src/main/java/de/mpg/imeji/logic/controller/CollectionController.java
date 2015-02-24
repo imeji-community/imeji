@@ -3,18 +3,7 @@
  */
 package de.mpg.imeji.logic.controller;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
-import de.mpg.imeji.exceptions.AuthenticationError;
-import de.mpg.imeji.exceptions.BadRequestException;
-import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.exceptions.NotFoundException;
-import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.exceptions.*;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.reader.ReaderFacade;
@@ -24,17 +13,19 @@ import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Organization;
-import de.mpg.imeji.logic.vo.Person;
+import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.logic.vo.Properties.Status;
-import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.j2j.helper.J2JHelper;
+import org.apache.log4j.Logger;
+
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
@@ -170,10 +161,11 @@ public class CollectionController extends ImejiController {
 	 * @param user
 	 * @throws ImejiException
 	 */
-	public void update(CollectionImeji ic, User user) throws ImejiException {
+	public CollectionImeji update(CollectionImeji ic, User user) throws ImejiException {
 		validateCollection(ic, user);
 		writeUpdateProperties(ic, user);
 		writer.update(WriterFacade.toList(ic), user);
+        return retrieve(ic.getId(), user);
 	}
 
 	/**
@@ -183,9 +175,10 @@ public class CollectionController extends ImejiController {
 	 * @param user
 	 * @throws ImejiException
 	 */
-	public void updateLazy(CollectionImeji ic, User user) throws ImejiException {
+	public CollectionImeji updateLazy(CollectionImeji ic, User user) throws ImejiException {
 		writeUpdateProperties(ic, user);
 		writer.updateLazy(WriterFacade.toList(ic), user);
+        return retrieveLazy(ic.getId(), user);
 	}
 
 	/**

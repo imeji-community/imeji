@@ -55,7 +55,6 @@ public class CollectionServiceTest {
 	}
 
 	public static void initCollection()  {
-		CollectionService s = new CollectionService();
 		
 		try {
 			Path jsonPath = Paths

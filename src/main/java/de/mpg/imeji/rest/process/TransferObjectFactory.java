@@ -73,7 +73,23 @@ public class TransferObjectFactory {
 			transferPerson(p, pto);
 			to.getContributors().add(pto);
 		}
-	}	
+	}
+	
+	public static void transferAlbum(Album vo, AlbumTO to){
+		transferProperties(vo, to);
+
+		//TODO: Container
+		to.setTitle(vo.getMetadata().getTitle());
+		to.setDescription(vo.getMetadata().getDescription());
+		
+		for(Person p : vo.getMetadata().getPersons())
+		{
+			PersonTO pto = new PersonTO();
+			transferPerson(p, pto);
+			to.getContributors().add(pto);
+		}
+		
+	}
 	 
 	public static void transferPerson(Person p, PersonTO pto){  
 

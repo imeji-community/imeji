@@ -6,6 +6,7 @@ import javax.ws.rs.core.Response.Status;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.api.AlbumService;
+import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.to.AlbumTO;
 import de.mpg.imeji.rest.to.JSONResponse;
 
@@ -43,6 +44,20 @@ public class AlbumProcess {
 				resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
 			}
 
+		}
+		return resp;
+	}
+	
+	public static JSONResponse deleteAlbum(HttpServletRequest req,
+			String id) {
+		JSONResponse resp;
+		User u = BasicAuthentication.auth(req);
+		AlbumService service = new AlbumService(); 
+		
+		try {
+			resp= RestProcessUtils.buildResponse(Status.NO_CONTENT.getStatusCode(), service.delete(id, u));
+		} catch (Exception e) {
+			resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
 		}
 		return resp;
 	}

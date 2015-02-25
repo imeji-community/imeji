@@ -5,48 +5,43 @@
 	xmlns:composite="http://java.sun.com/jsf/composite">
 	
 	<composite:interface>
-		<composite:attribute name="profileBean" required="true"/>
+		<composite:attribute name="profile" required="true"/>
 	</composite:interface>
 	
 	<composite:implementation>
 		<h:panelGroup layout="block" styleClass="imj_metadataProfilePreview">
 			<h2 class="imj_headline">Metadata Profile Preview</h2>
-			
+						
 			<ul class="imj_metadataGroup"><!-- created by every hierachy level 0 element -->
-				<li class="imj_metadataSet" style="padding-left: #{(hierachyLevel * 2) + 2}%;">
-					<h4 class="imj_sectionHeadline">#{lbl.metadata}</h4>
-					<div class="imj_metadataLabel">
-						<ul>
-							<li>
-								<dl>
-									<dt>#{lbl.type}: </dt>
-									<dd>(language) labelextralonglabelwithextralargetext</dd>
-									<dd>(language) label</dd>
-									<dd>(language) label</dd>
-								</dl>	
-							</li>
-						</ul>
-					</div> <!-- END Label -->
-					
-					<div class="imj_metadataValue">
-						<div class="imj_customSelectbox">
-							<div class="imj_showSelection">
-								<div class="imj_selectionText">use predefined values</div>
-								<div class="imj_buttonSortDescending_16"></div>
-							</div>
-							<select>
-								<option>use predefined values</option>
-								<option>use predefined values</option>
-								<option>use predefined values</option>
-								<option>use predefined values</option>
-							</select>
-						</div>
-						<p>
-							<label>use controlled vocabulary:</label> <var>MarcoSchlenderMarcoSchlenderMarco</var>
-						</p>
-					</div> <!-- END Value -->
-				</li> <!-- END MDSet -->
+				<ui:repeat var="statement" value="#{cc.attrs.profile.statements}" >				
+					<li class="imj_metadataSet" style="padding-left: #{(hierachyLevel * 2) + 2}%;">
+						<div class="imj_metadataLabel">
+							<ul>
+								<li>
+									<dl>
+										<h:outputText value="#{MdProfileBean.getTypeLabel(statement.type)}"/>
+										<ui:repeat var="label" value="#{statement.labels}" varStatus="indexO">
+											<h:outputText value="#{label.value}"/>
+											<h:outputText value=" (#{label.lang})"/>
+										</ui:repeat>
+									</dl>	
+								</li>
+							</ul>
+						</div> <!-- END Label -->
+						
+						<ui:fragment rendered="#{statement.vocabulary != null}">
+							<div class="imj_metadataValue">
+
+								<p>
+									<h:outputLabel value="#{CreateCollectionBean.getVocabularyLabel(statement.vocabulary)}"/>
+								</p>
+							</div> <!-- END Value -->
+						</ui:fragment>
+					</li> <!-- END MDSet -->
+				</ui:repeat>
 			</ul> <!-- END MDGroup -->
+
+
 			
 		</h:panelGroup>
 	</composite:implementation>

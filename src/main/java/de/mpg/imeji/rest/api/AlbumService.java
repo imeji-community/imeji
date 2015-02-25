@@ -67,9 +67,12 @@ public class AlbumService implements API<AlbumTO>{
 	}
 
 	@Override
-	public boolean delete(String i, User u) throws ImejiException {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean delete(String id, User u) throws ImejiException {
+		AlbumController controller = new AlbumController();
+		Album vo = controller.retrieve(
+				ObjectHelper.getURI(Album.class, id), u);
+		controller.delete(vo, u);
+		return true;
 	}
 
 	@Override

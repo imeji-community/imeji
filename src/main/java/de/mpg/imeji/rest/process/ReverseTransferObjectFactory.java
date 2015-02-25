@@ -53,6 +53,16 @@ public class ReverseTransferObjectFactory {
 		}
 
 	}
+	
+	public static void transferAlbum(AlbumTO to, Album vo, TRANSFER_MODE mode){
+		ContainerMetadata metadata = new ContainerMetadata();
+		metadata.setTitle(to.getTitle());
+		metadata.setDescription(to.getDescription());
+
+		// set contributors
+		transferCollectionContributors(to.getContributors(), metadata, mode);
+		vo.setMetadata(metadata);
+	}
 
 	public static void transferItem(ItemTO to, Item vo, User u, TRANSFER_MODE mode) throws ImejiException  {
 
@@ -323,5 +333,6 @@ public class ReverseTransferObjectFactory {
 		}
 
 	}
+	
 
 }

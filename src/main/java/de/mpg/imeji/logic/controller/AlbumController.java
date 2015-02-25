@@ -49,22 +49,23 @@ public class AlbumController extends ImejiController {
 	}
 
 	/**
-	 * Creates a new collection. - Add a unique id - Write user properties
+	 * Creates a new album. - Add a unique id - Write user properties
 	 * 
 	 * @param album
 	 * @param user
 	 */
-	public void create(Album album, User user) throws ImejiException {
+	public URI create(Album album, User user) throws ImejiException {
 		writeCreateProperties(album, user);
 		GrantController gc = new GrantController();
 		gc.addGrants(user, AuthorizationPredefinedRoles.admin(album.getId()
 				.toString(), null), user);
 		writer.create(WriterFacade.toList(album), user);
+		return album.getId();
 	}
 
 	/**
-	 * Updates a collection -Logged in users: --User is collection owner --OR
-	 * user is collection editor
+	 * Updates an album -Logged in users: --User is album owner --OR
+	 * user is album editor
 	 * 
 	 * @param ic
 	 * @param user
@@ -76,8 +77,8 @@ public class AlbumController extends ImejiController {
 	}
 
 	/**
-	 * Updates a collection -Logged in users: --User is collection owner --OR
-	 * user is collection editor
+	 * Updates an album -Logged in users: --User is album owner --OR
+	 * user is album editor
 	 * 
 	 * @param ic
 	 * @param user

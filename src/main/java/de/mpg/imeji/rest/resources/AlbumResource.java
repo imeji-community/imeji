@@ -23,6 +23,7 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 
 import de.mpg.imeji.rest.process.AlbumProcess;
+import de.mpg.imeji.rest.process.CollectionProcess;
 import de.mpg.imeji.rest.process.RestProcessUtils;
 import de.mpg.imeji.rest.to.JSONResponse;
 
@@ -66,9 +67,13 @@ public class AlbumResource implements ImejiResource{
 		return null;
 	}
 
-	@Override
-	public Response delete(HttpServletRequest req, String id) {
-		// TODO Auto-generated method stub
-		return null;
+	@DELETE
+	@Path("/{id}")
+	@ApiOperation(value = "Delete album by id")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response delete(@Context HttpServletRequest req,
+			@PathParam("id") String id) {
+		JSONResponse resp = AlbumProcess.deleteAlbum(req, id);
+		return RestProcessUtils.buildJSONResponse(resp);
 	}
 }

@@ -21,10 +21,12 @@ import org.junit.BeforeClass;
 import util.JenaUtil;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.rest.MyApplication;
+import de.mpg.imeji.rest.api.AlbumService;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
 import de.mpg.imeji.rest.api.ProfileService;
 import de.mpg.imeji.rest.process.RestProcessUtils;
+import de.mpg.imeji.rest.to.AlbumTO;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
@@ -41,9 +43,11 @@ public class ImejiTestBase extends JerseyTest {
 			.basic(JenaUtil.TEST_USER_EMAIL_2, JenaUtil.TEST_USER_PWD);
 
 	protected static String collectionId;
+	protected static String albumId;
 	protected static String profileId;
 	protected static String itemId;
 	protected static CollectionTO collectionTO;
+	protected static AlbumTO albumTO;
 	protected static ItemTO itemTO;
 	
 	private static Logger logger = Logger.getLogger(ImejiTestBase.class);
@@ -107,6 +111,31 @@ public class ImejiTestBase extends JerseyTest {
 		}
 	}
 
+	/**
+	 * Create a new album and set the albumid
+	 * @throws IOException 
+	 * @throws UnsupportedEncodingException 
+	 * 
+	 * @throws Exception
+	 */
+	public static void initAlbum(){
+		AlbumService s = new AlbumService();
+		
+		try{			
+			Path jsonPath = Paths
+					.get("src/test/resources/rest/createAlbum.json");
+			String jsonString = new String(Files.readAllBytes(jsonPath), "UTF-8");
+			
+			albumTO = (AlbumTO) RestProcessUtils.buildTOFromJSON(jsonString, AlbumTO.class); 
+			albumTO = s.create(albumTO, JenaUtil.testUser);
+			albumId = albumTO.getId();
+			
+		}catch (Exception e) {
+			logger.error("Cannot init Album", e);
+		}
+	}
+	
+	
 	/**
 	 * Create an item in the test collection (initCollection must be called
 	 * before)

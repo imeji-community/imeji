@@ -25,6 +25,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static de.mpg.imeji.logic.util.ResourceHelper.getStringFromPath;
 import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_REST;
@@ -94,10 +97,9 @@ public class ImejiTestBase extends JerseyTest {
 	 */
 	public static void initCollection()  {
 		CollectionService s = new CollectionService();
-		
 		try {
-            String jsonString = getStringFromPath(STATIC_CONTEXT_REST + "/createCollection.json");
-			collectionTO= (CollectionTO) RestProcessUtils.buildTOFromJSON(jsonString, CollectionTO.class);
+            collectionTO= (CollectionTO) RestProcessUtils.buildTOFromJSON(
+                    getStringFromPath(STATIC_CONTEXT_REST + "/createCollection.json"), CollectionTO.class);
 			collectionTO = s.create(collectionTO, JenaUtil.testUser);
 			collectionId = collectionTO.getId();
 		} catch (Exception e) {
@@ -114,13 +116,9 @@ public class ImejiTestBase extends JerseyTest {
 	 */
 	public static void initAlbum(){
 		AlbumService s = new AlbumService();
-		
-		try{			
-			Path jsonPath = Paths
-					.get("src/test/resources/rest/createAlbum.json");
-			String jsonString = new String(Files.readAllBytes(jsonPath), "UTF-8");
-			
-			albumTO = (AlbumTO) RestProcessUtils.buildTOFromJSON(jsonString, AlbumTO.class); 
+		try{
+            albumTO = (AlbumTO) RestProcessUtils.buildTOFromJSON(
+                    getStringFromPath(STATIC_CONTEXT_REST + "/createAlbum.json"), AlbumTO.class);
 			albumTO = s.create(albumTO, JenaUtil.testUser);
 			albumId = albumTO.getId();
 			

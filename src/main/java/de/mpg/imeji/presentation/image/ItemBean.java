@@ -639,7 +639,11 @@ public class ItemBean {
 				FilenameUtils.getExtension(item.getFilename())).contains(
 				"application/pdf");
 	}
-
+	
+	public boolean isSwcFile() {
+		return item.getFullImageUrl().toString().endsWith("swc");
+	}
+	
 	/**
 	 * True if the current file is an audio
 	 * 

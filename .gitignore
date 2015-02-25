@@ -180,3 +180,5 @@ target/
 
 #runtime errors logs
 hs_err*.log
+
+atlassian-ide-plugin.xml

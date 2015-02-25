@@ -36,6 +36,8 @@ import java.io.File;
 import java.io.OutputStream;
 import java.io.Serializable;
 
+import org.apache.commons.io.FilenameUtils;
+
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -160,7 +162,10 @@ public class StorageController implements Serializable {
 	 * @return not allowed file format extension
 	 */
 	public String guessNotAllowedFormat(File file) {
-		String guessedExtension = guessExtension(file);
+		
+		String guessedExtension = FilenameUtils.getExtension(file.getName());
+		if ("".equals(guessedExtension))
+			guessedExtension= guessExtension(file);
 		return isAllowedFormat(guessedExtension) ? null : guessedExtension;
 	}
 
@@ -175,13 +180,14 @@ public class StorageController implements Serializable {
 		if ("".equals(extension.trim()))
 			return false;
 		// check in white list, if found then allowed
-		for (String s : formatWhiteList.split(","))
+		for (String s : formatWhiteList.split(",")) 
 			if (compareExtension(extension, s.trim()))
 				return true;
 		// check black list, if found then forbidden
+		
 		for (String s : formatBlackList.split(","))
-			if (compareExtension(extension, s.trim()))
-				return false;
+				if (compareExtension(extension, s.trim())) 
+					return false;
 		// Not found in both list: if white list is empty, allowed
 		return "".equals(formatWhiteList.trim());
 	}

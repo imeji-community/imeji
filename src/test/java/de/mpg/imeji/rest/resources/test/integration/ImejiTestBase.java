@@ -6,11 +6,7 @@ import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
 import de.mpg.imeji.rest.api.ProfileService;
 import de.mpg.imeji.rest.process.RestProcessUtils;
-import de.mpg.imeji.rest.to.AlbumTO;
-import de.mpg.imeji.rest.to.CollectionTO;
-import de.mpg.imeji.rest.to.ItemTO;
-import de.mpg.imeji.rest.to.ItemWithFileTO;
-import de.mpg.imeji.rest.to.MetadataProfileTO;
+import de.mpg.imeji.rest.to.*;
 import org.apache.log4j.Logger;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.test.JerseyTest;
@@ -25,12 +21,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import static de.mpg.imeji.logic.util.ResourceHelper.getStringFromPath;
 import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_REST;
+import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_STORAGE;
 
 /**
  * Created by vlad on 09.12.14.
@@ -138,7 +132,7 @@ public class ImejiTestBase extends JerseyTest {
 		ItemService s = new ItemService();
 		ItemWithFileTO to = new ItemWithFileTO();
 		to.setCollectionId(collectionId);
-		to.setFile(new File("src/test/resources/storage/test.png"));
+		to.setFile(new File(STATIC_CONTEXT_STORAGE + "/test.png"));
 		to.setStatus("PENDING");
 		try {
 			itemTO = s.create(to, JenaUtil.testUser);

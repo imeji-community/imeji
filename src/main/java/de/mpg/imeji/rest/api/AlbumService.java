@@ -69,23 +69,31 @@ public class AlbumService implements API<AlbumTO>{
 	@Override
 	public boolean delete(String id, User u) throws ImejiException {
 		AlbumController controller = new AlbumController();
-		Album vo = controller.retrieve(
-				ObjectHelper.getURI(Album.class, id), u);
+		Album vo = controller.retrieve(ObjectHelper.getURI(Album.class, id), u);
 		controller.delete(vo, u);
 		return true;
 	}
 
 	@Override
-	public AlbumTO release(String i, User u) throws ImejiException {
-		// TODO Auto-generated method stub
-		return null;
+	public AlbumTO release(String id, User u) throws ImejiException {
+		AlbumController controller = new AlbumController();
+		Album vo = controller.retrieve(ObjectHelper.getURI(Album.class, id), u);
+		controller.release(vo, u);
+
+		//Now Read the collection and return it back
+		return getAlbumTO(controller, id, u);
 	}
 
 	@Override
-	public AlbumTO withdraw(String i, User u, String discardComment)
+	public AlbumTO withdraw(String id, User u, String discardComment)
 			throws ImejiException {
-		// TODO Auto-generated method stub
-		return null;
+		AlbumController controller = new AlbumController();
+		Album vo = controller.retrieve(ObjectHelper.getURI(Album.class, id), u);
+		vo.setDiscardComment(discardComment);
+		controller.withdraw(vo, u);
+
+		//Now Read the withdrawn collection and return it back
+		return getAlbumTO(controller, id, u);
 	}
 
 	@Override

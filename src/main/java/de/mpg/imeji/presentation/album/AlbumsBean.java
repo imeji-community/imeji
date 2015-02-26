@@ -13,6 +13,7 @@ import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
+import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.presentation.beans.SuperContainerBean;
 import de.mpg.imeji.presentation.search.URLQueryTransformer;
@@ -51,7 +52,7 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean> {
 	}
 
 	@Override
-	public List<AlbumBean> retrieveList(int offset, int limit) throws Exception {
+	public List<AlbumBean> retrieveList(int offset, int limit) throws Exception {  
 		UserController uc = new UserController(sb.getUser());
 		if (sb.getUser() != null) {
 			sb.setUser(uc.retrieve(sb.getUser().getEmail()));

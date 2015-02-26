@@ -76,4 +76,27 @@ public class AlbumResource implements ImejiResource{
 		JSONResponse resp = AlbumProcess.deleteAlbum(req, id);
 		return RestProcessUtils.buildJSONResponse(resp);
 	}
+	
+	@PUT
+	@Path("/{id}/discard")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@ApiOperation(value = "Withraw a album by id, with mandatory discard commenrt")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response withdraw(@Context HttpServletRequest req,
+			@FormParam("id") String id, @FormParam("discardComment") String discardComment) throws Exception {
+		JSONResponse resp = AlbumProcess.withdrawAlbum(req, id, discardComment);
+		return RestProcessUtils.buildJSONResponse(resp);
+	}
+	
+	@PUT
+	@Path("/{id}/release")
+	@ApiOperation(value = "Release album by id")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response release(@Context HttpServletRequest req, @PathParam("id") String id) throws Exception {
+		JSONResponse resp = AlbumProcess.releaseAlbum(req, id);
+		return RestProcessUtils.buildJSONResponse(resp);
+	}
+	
+	
+	
 }

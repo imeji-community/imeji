@@ -399,20 +399,20 @@ public class AlbumBean extends ContainerBean
      * @return
      */
     public String makeActive()
-    {
+    {    
         findItems(sessionBean.getUser(), getSize());
         sessionBean.setActiveAlbum(this.album);
         this.setActive(true);
         return "pretty:";
     }
-
+  
     /**
      * Make the current {@link Album} inactive
      * 
      * @return
      */
     public String makeInactive()
-    {
+    { 
         sessionBean.setActiveAlbum(null);
         this.setActive(false);
         return "pretty:";

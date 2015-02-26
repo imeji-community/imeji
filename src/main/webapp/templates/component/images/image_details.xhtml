@@ -9,7 +9,7 @@
 
 	<!-- MediaDisplayContainer - START -->
 	<h:panelGroup layout="block" styleClass="imj_mediaDisplayContainer">
-		<ui:fragment rendered="#{!itemBean.videoFile and !itemBean.audioFile}">
+		<ui:fragment rendered="#{!itemBean.videoFile and !itemBean.audioFile and !itemBean.swcFile}">
 			<h:outputLink id="lnkPicFullResolution" value="#{Navigation.applicationUrl}file/#{itemBean.encodedFileName}?id=#{itemBean.image.fullImageUrl}" target="_blank" rendered="#{!itemBean.viewInDigilib and !itemBean.viewInDataViewer}">
 				<h:graphicImage id="picWebResolution" title="#{itemBean.image.filename}" alt="#{itemBean.image.filename}" value="#{Navigation.applicationUrl}file/#{itemBean.encodedFileName}?id=#{itemBean.image.webImageUrl}" />
 			</h:outputLink>
@@ -35,7 +35,11 @@
 			</div>
 		</ui:fragment>
 		
-				
+		<ui:fragment rendered='#{itemBean.swcFile}'>
+    		<imjc:swcViewer itemBean="#{itemBean}" swcID="swc3d" loadJSLibraries="true"/>
+	    </ui:fragment>
+		
+		
 		<!-- MediaEditPanel - select, add, remove media items -->
 		<h:panelGroup id="image" layout="block" rendered="#{itemBean.image.status != 'WITHDRAWN'}" styleClass="imj_mediaEditPanel">
 			

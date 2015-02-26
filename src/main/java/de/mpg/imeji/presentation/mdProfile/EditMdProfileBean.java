@@ -52,7 +52,7 @@ public class EditMdProfileBean extends MdProfileBean
     public String getInit()
     {
         try
-        {
+        {   
             readUrl();
             vocabularyHelper = new VocabularyHelper();
             if (init)
@@ -124,7 +124,7 @@ public class EditMdProfileBean extends MdProfileBean
      * @throws IOException
      */
     public String save() throws IOException
-    {
+    {  
         getProfile().setStatements(getUnwrappedStatements());
         int pos = 0;
         // Set the position of the statement (used for the sorting later)

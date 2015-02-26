@@ -19,6 +19,10 @@ import org.apache.log4j.Logger;
 
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.ValueChangeEvent;
+
+
+
+
 import javax.faces.model.SelectItem;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,11 +60,7 @@ public abstract class CollectionBean extends ContainerBean {
 	private String selectedProfileItem;
   
     private boolean useMDProfileTemplate = true;
-    
-    
-    private boolean modeCreate = false ;
-
-	
+    	
 	/**
 	 * New default {@link CollectionBean}
 	 */
@@ -383,14 +383,6 @@ public abstract class CollectionBean extends ContainerBean {
 
 	public void setSelectedProfileItem(String selectedProfileItem) {
 		this.selectedProfileItem = selectedProfileItem;
-	}
-	
-	public void setModeCreate (boolean modeCreate) {
-		this.modeCreate = modeCreate;
-	}
-	
-	public boolean getModeCreate() {
-		return this.modeCreate;
 	}
 
 	public boolean isUseMDProfileTemplate() {

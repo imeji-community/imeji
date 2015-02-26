@@ -21,6 +21,7 @@ import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
+import de.mpg.imeji.presentation.util.VocabularyHelper;
 
 /**
  * Java Bean for the create Collection Page
@@ -33,9 +34,7 @@ import de.mpg.imeji.presentation.util.ImejiFactory;
 @ViewScoped
 public class CreateCollectionBean extends CollectionBean {
 	private static final long serialVersionUID = 1257698224590957642L;
-	
-
-
+    private VocabularyHelper vocabularyHelper;
     
 	/**
 	 * Bean Constructor
@@ -50,8 +49,9 @@ public class CreateCollectionBean extends CollectionBean {
 	public void initialize() {
 		setCollection(ImejiFactory.newCollection());
 		((List<Person>) getCollection().getMetadata().getPersons()).set(0, sessionBean.getUser().getPerson().clone());
-		setModeCreate(true);
+//		setModeCreate(true);
 		loadProfiles();
+        vocabularyHelper = new VocabularyHelper();
 	}
 
 	/**
@@ -130,6 +130,19 @@ public class CreateCollectionBean extends CollectionBean {
 	protected String getNavigationString() {
 		return "pretty:createCollection";
 	}
+	  
+	public String getVocabularyLabel(URI id){
+			for(SelectItem item : vocabularyHelper.getVocabularies())
+			{
+				
+				if(id.toString().equals(item.getValue().toString()))
+				{
+					return item.getLabel();
+				}
+			}
+		return "";		
+	}
+	
 	
 
 }

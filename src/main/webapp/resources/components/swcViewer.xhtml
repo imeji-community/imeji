@@ -1,0 +1,52 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:imjc="http://java.sun.com/jsf/composite/components"
+	xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs"
+	xmlns:list="http://java.sun.com/jsf/composite/components/list">
+	
+	<composite:interface>
+		<composite:attribute name="itemBean" required="true"/>
+		<composite:attribute name="swcID" required="true"/>
+		<composite:attribute name="loadJSLibraries" required="false" default="false"/>
+	</composite:interface>
+	
+	<composite:implementation>
+		<ui:fragment rendered="#{cc.attrs.loadJSLibraries}">
+			<script src="https://servicehub.mpdl.mpg.de/swc/js/threejs/three.js"></script>
+		    <script src="https://servicehub.mpdl.mpg.de/swc/js/threejs/TrackballControls.js"></script>
+		    <script src="https://servicehub.mpdl.mpg.de/swc/js/shark_viewer.js"></script>
+		
+		    <!-- optional only if show_stats = true -->
+		    <script src="https://servicehub.mpdl.mpg.de/swc/js/threejs/Stats.js"></script>
+		    <!-- optional only if effect='rift' -->
+		    <script src="https://servicehub.mpdl.mpg.de/swc/js/threejs/OculusRiftEffect.js"></script>
+		    <!-- optional only if effect='parallax' -->
+	   		<script src="https://servicehub.mpdl.mpg.de/swc/js/threejs/ParallaxBarrierEffect.js"></script>
+   		</ui:fragment>
+   		<script type="text/javascript" id="#{cc.attrs.swcID}">#{cc.attrs.itemBean.getStringContent()}</script>
+		<input id="#{cc.attrs.swcID}source" type="hidden" data-swc-source="#{cc.attrs.itemBean.image.fullImageUrl}" data-target-id="#{cc.attrs.swcID}target" data-target-width="357" data-target-height="357" data-placeholder-id="#{cc.attrs.swcID}NoSupportPlaceholder" data-failed-msg-id="#{cc.attrs.swcID}NoSupportMsg"/>
+		<h2 id="#{cc.attrs.swcID}NoSupportMsg" style="display: none;" class="imj_headline">Your browser doesn't support WebGL</h2>
+		<h:outputLink id="#{cc.attrs.swcID}NoSupportPlaceholder" value="#{Navigation.applicationUrl}file/#{cc.attrs.itemBean.encodedFileName}?id=#{cc.attrs.itemBean.image.fullImageUrl}" target="_blank" rendered="#{cc.attrs.itemBean.viewInDataViewer}">
+			<h:graphicImage title="#{cc.attrs.itemBean.image.filename}" alt="#{cc.attrs.itemBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{cc.attrs.itemBean.image.webImageUrl}" />
+		</h:outputLink>
+		<div id="#{cc.attrs.swcID}target"></div>
+		<!-- info on screen display -->
+		<script type="text/javascript">
+			$(document).ready(function() {
+				/* start function is defined because of checking fully loaded main.js */
+				function startSWCViewer() {
+					console.log(typeof loadSWC);
+					if (typeof loadSWC === 'function') {
+						loadSWC('##{cc.attrs.swcID}source', '#{cc.attrs.swcID}');
+					} else {
+						setTimeout(startSWCViewer, 250);
+					}
+				}
+				startSWCViewer();
+			});
+		</script>
+	</composite:implementation>
+</html>

@@ -137,4 +137,14 @@ public class HistoryPage {
 	public Map<String, String[]> getParams() {
 		return params;
 	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	
+	
 }

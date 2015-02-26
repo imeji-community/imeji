@@ -13,49 +13,56 @@
 			<h2 class="imj_headline">Metadata Profile Preview</h2>
 						
 			<ul class="imj_metadataGroup"><!-- created by every hierachy level 0 element -->
-				<ui:repeat var="statement" value="#{cc.attrs.profile.statements}" >				
-					<li class="imj_metadataSet" style="padding-left: #{(hierachyLevel * 2) + 2}%;">
+				<ui:repeat var="statement" value="#{cc.attrs.profile.statements}">
+					<li class="imj_metadataSet" style="padding-left: #{(cc.attrs.profile.level * 2) + 2}%;">
+						<dl class="imj_headline">
+							<dt>
+								#{lbl.type}: 
+								<h:outputText value="#{MdProfileBean.getTypeLabel(statement.type)}"/>
+							</dt>
+						<dd>
 						<div class="imj_metadataLabel">
 							<ul>
-								<li>
-									<dl>
-										<h:outputText value="#{MdProfileBean.getTypeLabel(statement.type)}"/>
-										<ui:repeat var="label" value="#{statement.labels}" varStatus="indexO">
-											<h:outputText value="#{label.value}"/>
-											<h:outputText value=" (#{label.lang})"/>
-										</ui:repeat>
-									</dl>	
-								</li>
+								<ui:repeat var="label" value="#{statement.labels}" varStatus="indexO">
+									<li>
+										<dl>
+											<dt>
+												<h:outputText value="(#{label.lang}): "/>
+											</dt>
+											<dd>
+												<h:outputText value="#{label.value}"/>
+											</dd>
+										</dl>
+									</li>
+								</ui:repeat>
 							</ul>
 						</div> <!-- END Label -->
 						
 						<ui:fragment rendered="#{!(empty statement.literalConstraints)}">
-						<div class="imj_metadataValue">
-							<div class="imj_customSelectbox">
-							<div class="imj_showSelection">
-								<div class="imj_selectionText">use predefined values</div>
-								<div class="imj_buttonSortDescending_16"></div>
-							</div>								
-							<select>
-								<ui:repeat id="constraints" var="constraint" value="#{statement.literalConstraints}">
-									<option>#{constraint}</option>
-								</ui:repeat>
-							</select>
+							<div class="imj_metadataValue">
+								<div class="imj_customSelectbox">
+									<div class="imj_showSelection">
+										<div class="imj_selectionText">predefined values</div>
+										<div class="imj_buttonSortDescending_16"></div>
+									</div>
+									<select>
+										<option>predefind values</option>
+										<ui:repeat id="constraints" var="constraint" value="#{statement.literalConstraints}">
+											<option>#{constraint}</option>
+										</ui:repeat>
+									</select>
+								</div>
+								<ui:fragment rendered="#{statement.vocabulary != null}">
+										<h:outputLabel value="#{CreateCollectionBean.getVocabularyLabel(statement.vocabulary)}"/>
+								 <!-- END Value -->
+								</ui:fragment>
 							</div>
-						</div>
 						</ui:fragment>
-							<ui:fragment rendered="#{statement.vocabulary != null}">
-								<p>
-									<h:outputLabel value="#{CreateCollectionBean.getVocabularyLabel(statement.vocabulary)}"/>
-								</p>
-							 <!-- END Value -->
-							</ui:fragment>
+						</dd>
+						</dl>
 					</li> <!-- END MDSet -->
 				</ui:repeat>
 			</ul> <!-- END MDGroup -->
-
-
-			
-		</h:panelGroup>
+		</h:panelGroup> <!-- END PROFILE PREVIEW -->
 	</composite:implementation>
 </html>

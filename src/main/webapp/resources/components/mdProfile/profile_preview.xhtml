@@ -9,7 +9,7 @@
 	</composite:interface>
 	
 	<composite:implementation>
-		<h:panelGroup layout="block" styleClass="imj_metadataProfilePreview">
+		<h:panelGroup layout="block" styleClass="imj_metadataProfilePreview" >
 			<h2 class="imj_headline">Metadata Profile Preview</h2>
 						
 			<ul class="imj_metadataGroup"><!-- created by every hierachy level 0 element -->
@@ -29,14 +29,27 @@
 							</ul>
 						</div> <!-- END Label -->
 						
-						<ui:fragment rendered="#{statement.vocabulary != null}">
-							<div class="imj_metadataValue">
-
+						<ui:fragment rendered="#{!(empty statement.literalConstraints)}">
+						<div class="imj_metadataValue">
+							<div class="imj_customSelectbox">
+							<div class="imj_showSelection">
+								<div class="imj_selectionText">use predefined values</div>
+								<div class="imj_buttonSortDescending_16"></div>
+							</div>								
+							<select>
+								<ui:repeat id="constraints" var="constraint" value="#{statement.literalConstraints}">
+									<option>#{constraint}</option>
+								</ui:repeat>
+							</select>
+							</div>
+						</div>
+						</ui:fragment>
+							<ui:fragment rendered="#{statement.vocabulary != null}">
 								<p>
 									<h:outputLabel value="#{CreateCollectionBean.getVocabularyLabel(statement.vocabulary)}"/>
 								</p>
-							</div> <!-- END Value -->
-						</ui:fragment>
+							 <!-- END Value -->
+							</ui:fragment>
 					</li> <!-- END MDSet -->
 				</ui:repeat>
 			</ul> <!-- END MDGroup -->

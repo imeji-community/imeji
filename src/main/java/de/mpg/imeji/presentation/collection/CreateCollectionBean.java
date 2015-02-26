@@ -49,7 +49,7 @@ public class CreateCollectionBean extends CollectionBean {
 	public void initialize() {
 		setCollection(ImejiFactory.newCollection());
 		((List<Person>) getCollection().getMetadata().getPersons()).set(0, sessionBean.getUser().getPerson().clone());
-		setModeCreate(true);
+//		setModeCreate(true);
 		loadProfiles();
         vocabularyHelper = new VocabularyHelper();
 	}

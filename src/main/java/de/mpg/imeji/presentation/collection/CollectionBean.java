@@ -60,11 +60,7 @@ public abstract class CollectionBean extends ContainerBean {
 	private String selectedProfileItem;
   
     private boolean useMDProfileTemplate = true;
-    
-    
-    private boolean modeCreate = false ;
-
-	
+    	
 	/**
 	 * New default {@link CollectionBean}
 	 */
@@ -387,14 +383,6 @@ public abstract class CollectionBean extends ContainerBean {
 
 	public void setSelectedProfileItem(String selectedProfileItem) {
 		this.selectedProfileItem = selectedProfileItem;
-	}
-	
-	public void setModeCreate (boolean modeCreate) {
-		this.modeCreate = modeCreate;
-	}
-	
-	public boolean getModeCreate() {
-		return this.modeCreate;
 	}
 
 	public boolean isUseMDProfileTemplate() {

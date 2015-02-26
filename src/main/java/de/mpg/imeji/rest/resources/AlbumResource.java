@@ -97,6 +97,14 @@ public class AlbumResource implements ImejiResource{
 		return RestProcessUtils.buildJSONResponse(resp);
 	}
 	
+	@PUT
+	@Path("/{id}/add")
+	@ApiOperation(value = "Release album by id")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response addItem(@Context HttpServletRequest req, InputStream json, @PathParam("id") String id) throws Exception {
+		JSONResponse resp = AlbumProcess.addItem(req, id);
+		return RestProcessUtils.buildJSONResponse(resp);
+	}
 	
 	
 }

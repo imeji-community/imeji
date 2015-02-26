@@ -6,6 +6,7 @@ import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.process.CommonUtils;
 import de.mpg.imeji.rest.process.TransferObjectFactory;
@@ -16,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE.CREATE;
@@ -114,6 +116,21 @@ public class AlbumService implements API<AlbumTO>{
 	public List<String> search(String q, User u) throws ImejiException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public AlbumTO addItem(String id, User u, List<String> itemIds) throws ImejiException {
+		AlbumController controller = new AlbumController();
+		Album vo = controller.retrieve(ObjectHelper.getURI(Album.class, id), u);
+		List<String> itemUris = new ArrayList<>();
+		
+		//Convert Ids to Uris
+		for(String itemId : itemIds){
+			itemUris.add(ObjectHelper.getURI(Item.class, itemId).toASCIIString());
+		}
+		controller.addToAlbum(vo, itemUris, u);
+		
+		//Now Read the collection and return it back
+		return getAlbumTO(controller, id , u);
 	}
 
 }

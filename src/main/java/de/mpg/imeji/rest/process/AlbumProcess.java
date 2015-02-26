@@ -1,5 +1,7 @@
 package de.mpg.imeji.rest.process;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response.Status;
 
@@ -84,6 +86,20 @@ public class AlbumProcess {
 		
 		try {
 			resp= RestProcessUtils.buildResponse(Status.OK.getStatusCode(), service.release(id, u));
+		} catch (Exception e) {
+			resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
+		}
+		return resp;
+	}
+	
+	public static JSONResponse addItem(HttpServletRequest req,	String id)	{
+		JSONResponse resp;
+		User u = BasicAuthentication.auth(req);
+		AlbumService service = new AlbumService();
+		List<String> itemIds = (List) RestProcessUtils.buildTOFromJSON(req, List.class);
+		
+		try {
+			resp= RestProcessUtils.buildResponse(Status.OK.getStatusCode(), service.addItem(id, u, itemIds));
 		} catch (Exception e) {
 			resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
 		}

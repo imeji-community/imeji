@@ -70,7 +70,8 @@ public class ItemBean {
 	private List<Album> relatedAlbums;
 	private String dateCreated;
 	private String newFilename;
-
+	private String stringContent = null;
+	
 	/**
 	 * Construct a default {@link ItemBean}
 	 * 
@@ -517,11 +518,14 @@ public class ItemBean {
 	 * Function to return the content of the item
 	 * @return String
 	 */
-	public String getContent() throws ImejiException {
-        StorageController sc = new StorageController();
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        sc.read(item.getFullImageUrl().toString(), baos, true);
-		return baos.toString();
+	public String getStringContent() throws ImejiException {
+		if (stringContent == null) {
+	        StorageController sc = new StorageController();
+	        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	        sc.read(item.getFullImageUrl().toString(), baos, true);
+	        stringContent = baos.toString(); 
+		}
+		return stringContent;
 	}
 	
 	/**

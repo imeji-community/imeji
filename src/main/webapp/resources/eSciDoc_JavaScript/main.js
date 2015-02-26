@@ -439,7 +439,10 @@ $(function() {
 	});
 });
 
-// global function to load content via ajax, function use jQuery
+/*
+ * global function to load content via ajax, function use jQuery
+ * the callback function get the target and returndata
+ */ 
 function loadContent(loadURL, target, callback) {
 	$.ajax({
 		type: "GET",
@@ -447,11 +450,10 @@ function loadContent(loadURL, target, callback) {
 		cache: false,
 		success: function(returndata) {
 			if (target) { $(target).html(returndata); }
-			if (callback) {	setTimeout(callback, 15, returndata, target); }
+			if (callback) {	setTimeout(callback, 15, target, returndata); }
 		}
 	});
 }
-
 
 
 // Initialize a global swc object for easy handling
@@ -461,10 +463,10 @@ var swcObject = {};
  * initialize the rendering of a SWC file
  * @param swcdata: swc file content in clear format
  */ 
-function initSWC(swcdata, swcdomelement) {
+function initSWC(swcdomelement) {
 	var shark, canvas, placeholder;
-	swcObject.data = swcdata;
-	swcObject.json = swc_parser($(swcdomelement).text());
+	swcObject.data = $(swcdomelement).text();
+	swcObject.json = swc_parser(swcObject.data);
 	canvas = document.createElement('canvas');
 	
 	if ( window.WebGLRenderingContext && (canvas.getContext("webgl") || canvas.getContext("experimental-webgl")) ) {
@@ -496,6 +498,6 @@ function loadSWC(src, element_name) {
 		placeholderID: (source.data("placeholder-id")[0] == '#') ? source.data("placeholder-id").substring(1) : source.data("placeholder-id"),
 		failedMsgID: (source.data("failed-msg-id")[0] == '#') ? source.data("failed-msg-id").substring(1) : source.data("failed-msg-id")
 	};
-	$('#'+ swcObject.displayID).before('<script type="text/javascript" id="'+swcObject.elementID+'"></script>');
-	loadContent(swcObject.dataURL, '#'+swcObject.elementID, initSWC);
+	// loadContent(swcObject.dataURL, '#'+swcObject.elementID, initSWC);
+	initSWC('#'+swcObject.elementID);
 }

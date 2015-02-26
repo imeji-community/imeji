@@ -517,7 +517,15 @@ public class ItemBean {
 		}
 		return item.getFilename();
 	}
-
+	
+	/**
+	 * Function to return the content of the item
+	 * @return String
+	 */
+	public String getContent() {
+		return "";
+	}
+	
 	/**
 	 * Returns a list of all albums this image is added to.
 	 * 
@@ -640,8 +648,11 @@ public class ItemBean {
 				"application/pdf");
 	}
 	
+	/**
+	 * Function checks if the file ends with swc
+	 */
 	public boolean isSwcFile() {
-		return item.getFullImageUrl().toString().endsWith("swc");
+		return item.getFullImageUrl().toString().endsWith(".swc");
 	}
 	
 	/**

@@ -61,6 +61,34 @@ public class AlbumProcess {
 		}
 		return resp;
 	}
+	
+	public static JSONResponse withdrawAlbum(HttpServletRequest req, String id, String discardComment) throws Exception {
+		JSONResponse resp;
+
+		User u = BasicAuthentication.auth(req);
+		AlbumService service = new AlbumService();
+
+		try {
+				resp = RestProcessUtils.buildResponse(Status.OK.getStatusCode(), service.withdraw(id, u, discardComment));
+			} 
+		catch (Exception e)	{
+			resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
+			}
+		return resp;
+	}
+	
+	public static JSONResponse releaseAlbum(HttpServletRequest req,	String id)  {
+		JSONResponse resp;
+		User u = BasicAuthentication.auth(req);
+		AlbumService service = new AlbumService(); 
+		
+		try {
+			resp= RestProcessUtils.buildResponse(Status.OK.getStatusCode(), service.release(id, u));
+		} catch (Exception e) {
+			resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
+		}
+		return resp;
+	}
 		
 
 

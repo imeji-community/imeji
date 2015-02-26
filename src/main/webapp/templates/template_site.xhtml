@@ -59,7 +59,7 @@ All rights reserved. Use is subject to license terms.
 				</h:panelGroup>
 				
 				<h:panelGroup id="imj_pageMessageArea">
-					<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{MessagesBean.hasMessages or (SessionBean.activeAlbum != null and HistorySession.currentPage.name != 'help')}">
+					<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{MessagesBean.hasMessages or (SessionBean.activeAlbum != null and HistorySession.currentPage.title != 'help')}">
 						
 						<ui:fragment rendered="#{MessagesBean.hasMessages}">
 							<ui:fragment rendered="#{MessagesBean.numberOfMessages == 1}">
@@ -86,7 +86,7 @@ All rights reserved. Use is subject to license terms.
 							</ui:fragment>
 						</ui:fragment>
 						
-						<ui:fragment rendered="#{SessionBean.activeAlbum != null and HistorySession.currentPage.name != 'help'}">
+						<ui:fragment rendered="#{SessionBean.activeAlbum != null and HistorySession.currentPage.title != 'help'}">
 							<h:panelGroup id="preListHeaderActiveAlbum1" layout="block" styleClass="imj_messageStatus">
 								<h:outputText value="#{lbl.active_album}: "/>
 								<h:outputLink value="#{Navigation.albumUrl}#{SessionBean.activeAlbumId}/#{Navigation.browsePath}">

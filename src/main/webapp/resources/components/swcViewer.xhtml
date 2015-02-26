@@ -38,7 +38,6 @@
 			$(document).ready(function() {
 				/* start function is defined because of checking fully loaded main.js */
 				function startSWCViewer() {
-					console.log(typeof loadSWC);
 					if (typeof loadSWC === 'function') {
 						loadSWC('##{cc.attrs.swcID}source', '#{cc.attrs.swcID}');
 					} else {

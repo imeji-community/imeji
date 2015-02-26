@@ -12,6 +12,7 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.rest.process.CommonUtils;
 import de.mpg.imeji.rest.process.TransferObjectFactory;
+import de.mpg.imeji.rest.to.CollectionProfileTO.METHOD;
 import de.mpg.imeji.rest.to.CollectionTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,12 +30,14 @@ public class CollectionService implements API<CollectionTO> {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(CollectionService.class);
 	
-	private CollectionTO getCollectionTO (CollectionController controller, String id, User u) throws ImejiException {
+	private CollectionTO getCollectionTO (CollectionController cc, String id, User u) throws ImejiException {
 		CollectionTO to = new CollectionTO();
-		CollectionImeji vo = controller.retrieve(
-				ObjectHelper.getURI(CollectionImeji.class, id), u);
-		TransferObjectFactory.transferCollection(vo, to);
+        TransferObjectFactory.transferCollection(getCollectionVO(cc, id, u), to);
 		return to;
+	}
+
+	private CollectionImeji getCollectionVO (CollectionController cc, String id, User u) throws ImejiException {
+		return cc.retrieve(ObjectHelper.getURI(CollectionImeji.class, id), u);
 	}
 
 	@Override
@@ -122,7 +125,9 @@ public class CollectionService implements API<CollectionTO> {
     public CollectionTO update(CollectionTO to, User u)
             throws ImejiException {
         ProfileController pc = new ProfileController();
+        CollectionController cc = new CollectionController();
 
+        CollectionImeji vo = getCollectionVO(cc, to.getId(), u);
 
         //profile is defined
         if (to.getProfile() != null) {
@@ -130,25 +135,29 @@ public class CollectionService implements API<CollectionTO> {
             String method = to.getProfile().getMethod();
             MetadataProfile mp;
 
-            CollectionTO oldTO = read(to.getId(), u);
             //profileId has been changed
-            if ( !isNullOrEmpty(profileId) && !profileId.equals(oldTO.getProfile().getProfileId())) {
-            //TODO: remove old profile?
+            if ( !isNullOrEmpty(profileId) ) {
+                //changed profile id
+                if (!profileId.equals(ObjectHelper.getId(vo.getProfile()))) {
+                    //TODO: remove old profile?
                     try {
                         mp = pc.retrieve(profileId, u);
                     } catch (ImejiException e) {
                         throw new UnprocessableError("Can not find the metadata profile you have referenced in the JSON body");
 
                     }
-                    if ("reference".equalsIgnoreCase(method)) {
+                    if (METHOD.REFERENCE.toString().equalsIgnoreCase(method)) {
                         mp = pc.create(mp.clone(), u);
                         pc.update(mp, u);
                     }
+                }
+                if (isNullOrEmpty(method)) {
+                    to.getProfile().setMethod(METHOD.COPY.toString());
+                }
+
             }
         }
-        CollectionImeji vo = new CollectionImeji();
         transferCollection(to, vo, UPDATE);
-        CollectionController cc = new CollectionController();
         CollectionTO newTO = new CollectionTO();
         TransferObjectFactory.transferCollection(cc.update(vo, u), newTO);
         return newTO;

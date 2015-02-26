@@ -1,5 +1,6 @@
 package de.mpg.imeji.rest.process;
 
+import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.api.CollectionService;
@@ -58,8 +59,11 @@ public class CollectionProcess {
 			resp = RestProcessUtils.buildJSONAndExceptionResponse(UNAUTHORIZED.getStatusCode(), USER_MUST_BE_LOGGED_IN);
 		} else {
 			CollectionService service = new CollectionService();
-			try {
+            try {
                 CollectionTO to = (CollectionTO) RestProcessUtils.buildTOFromJSON(json, CollectionTO.class);
+                if (!id.equals(to.getId())) {
+                    throw new BadRequestException("Collection id is not equal in request URL and in json");
+                }
                 resp = RestProcessUtils.buildResponse(OK.getStatusCode(), service.update(to, u));
 			} catch (ImejiException e) {
 				resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());

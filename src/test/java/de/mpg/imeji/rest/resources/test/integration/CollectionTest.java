@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import util.JenaUtil;
 
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -168,7 +169,7 @@ public class CollectionTest extends ImejiTestBase {
 				.register(authAsUser).request(MediaType.APPLICATION_JSON)
 				.get();
 		assertThat(response.getStatus(),
-				equalTo(NOT_FOUND.getStatusCode()));
+                equalTo(NOT_FOUND.getStatusCode()));
 	}
 
 	@Test
@@ -256,11 +257,11 @@ public class CollectionTest extends ImejiTestBase {
 		s.release(collectionId, JenaUtil.testUser);
 		
 		assertEquals("RELEASED", s.read(collectionId, JenaUtil.testUser).getStatus());
-		assertEquals("RELEASED",itemStatus.read(itemId, JenaUtil.testUser).getStatus());
+		assertEquals("RELEASED", itemStatus.read(itemId, JenaUtil.testUser).getStatus());
 		
 		Form form= new Form();
 		form.param("id", collectionId);
-		form.param("discardComment", "test_4_WithdrawCollection_1_WithAuth_"+System.currentTimeMillis());
+		form.param("discardComment", "test_4_WithdrawCollection_1_WithAuth_" + System.currentTimeMillis());
 		Response response = target(pathPrefix)
 				.path("/" + collectionId + "/discard").register(authAsUser)
 				.request((MediaType.APPLICATION_JSON_TYPE))
@@ -361,7 +362,7 @@ public class CollectionTest extends ImejiTestBase {
 		
 		Form form= new Form();
 		form.param("id", collectionId+"i_do_not_exist");
-		form.param("discardComment", "test_4_WithdrawCollection_5_WithdrawCollectionTwice_SecondTime_"+System.currentTimeMillis());
+		form.param("discardComment", "test_4_WithdrawCollection_5_WithdrawCollectionTwice_SecondTime_" + System.currentTimeMillis());
 		Response response = target(pathPrefix)
 				.path("/" + collectionId + "i_do_not_exist/discard").register(authAsUser)
 				.request((MediaType.APPLICATION_JSON_TYPE))
@@ -466,7 +467,7 @@ public class CollectionTest extends ImejiTestBase {
 
 
     @Test
-	public void test_4_UpdateCollection_Metadata() throws IOException {
+	public void test_4_UpdateCollection_1_Metadata_AllowedChanges() throws IOException {
 
         initCollection();
 
@@ -509,30 +510,96 @@ public class CollectionTest extends ImejiTestBase {
 
         CollectionTO uc = response.readEntity(CollectionTO.class);
 
+        assertEquals(collectionTO.getId(), uc.getId());
+
         assertThat(uc.getTitle(), endsWith(CHANGED));
         assertThat(uc.getDescription(), endsWith(CHANGED));
 
-//        for (PersonTO p : collectionTO.getContributors()) {
-//            p.setFamilyName(p.getFamilyName() + CHANGED);
-//            p.setGivenName(p.getGivenName() + CHANGED);
-//            p.setCompleteName(p.getCompleteName() + CHANGED);
-//            p.setAlternativeName(p.getAlternativeName() + CHANGED);
-//            p.setRole(p.getRole() + CHANGED);
-//            for (IdentifierTO i : p.getIdentifiers()) {
-//                i.setType(i.getType() + CHANGED);
-//                i.setValue(i.getValue() + CHANGED);
-//            }
-//            for (OrganizationTO o : p.getOrganizations()) {
-//                o.setName(o.getName() + CHANGED);
-//                o.setDescription(o.getDescription() + CHANGED);
-//                o.setCountry(o.getCountry() + CHANGED);
-//                o.setCity(o.getCity() + CHANGED);
-//                for (IdentifierTO i : o.getIdentifiers()) {
-//                    i.setType(i.getType() + CHANGED);
-//                    i.setValue(i.getValue() + CHANGED);
-//                }
-//            }
-//        }
+        for (PersonTO p : uc.getContributors()) {
+            assertThat(p.getFamilyName(), endsWith(CHANGED));
+            assertThat(p.getGivenName(), endsWith(CHANGED));
+            assertThat(p.getCompleteName(), endsWith(CHANGED));
+            assertThat(p.getAlternativeName(), endsWith(CHANGED));
+            assertThat(p.getRole(), endsWith(CHANGED));
+            for (IdentifierTO i : p.getIdentifiers()) {
+                assertThat(i.getType(), not(endsWith(CHANGED)));
+                assertThat(i.getValue(), endsWith(CHANGED));
+            }
+            for (OrganizationTO o : p.getOrganizations()) {
+                assertThat(o.getName(), endsWith(CHANGED));
+                assertThat(o.getDescription(), endsWith(CHANGED));
+                assertThat(o.getCountry(), endsWith(CHANGED));
+                assertThat(o.getCity(), endsWith(CHANGED));
+                for (IdentifierTO i : o.getIdentifiers()) {
+                    assertThat(i.getType(), not(endsWith(CHANGED)));
+                    assertThat(i.getValue(), not(endsWith(CHANGED)));
+                }
+            }
+        }
+
+
+
+    }
+    @Test
+	public void test_4_UpdateCollection_2_Metadata_NotAllowedChanges() throws IOException {
+
+        initCollection();
+
+        String CHANGED = "_changed";
+        String stored;
+
+        Builder request = target(pathPrefix)
+                .path("/" + collectionId).register(authAsUser)
+                .register(JacksonFeature.class)
+                .request(MediaType.APPLICATION_JSON_TYPE);
+
+        //empty collection title
+        stored = collectionTO.getTitle();
+        collectionTO.setTitle("");
+        Form form= new Form()
+                .param("json",  buildJSONFromObject(collectionTO));
+
+        Response response = request
+                .put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+        assertEquals(BAD_REQUEST.getStatusCode(), response.getStatus());
+        //TODO: BAD_REQUEST response message is not correctly generated
+        collectionTO.setTitle(stored);
+
+        //wrong collection id
+        stored = collectionTO.getId();
+        collectionTO.setId(stored + CHANGED);
+        form= new Form()
+                .param("json", buildJSONFromObject(collectionTO));
+
+        response = request
+                .put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+        assertEquals(BAD_REQUEST.getStatusCode(), response.getStatus());
+        collectionTO.setId(stored);
+
+
+        //empty family name
+        PersonTO contrib = collectionTO.getContributors().get(0);
+        stored = contrib.getFamilyName();
+        contrib.setFamilyName("");
+        form= new Form()
+                .param("json", buildJSONFromObject(collectionTO));
+
+        response = request
+                .put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+        assertEquals(BAD_REQUEST.getStatusCode(), response.getStatus());
+        contrib.setFamilyName(stored);
+
+        //empty organization name
+        OrganizationTO org = contrib.getOrganizations().get(0);
+        stored = org.getName();
+        org.setName("");
+        form= new Form()
+                .param("json", buildJSONFromObject(collectionTO));
+
+        response = request
+                .put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+        assertEquals(BAD_REQUEST.getStatusCode(), response.getStatus());
+        org.setName(stored);
 
 
 

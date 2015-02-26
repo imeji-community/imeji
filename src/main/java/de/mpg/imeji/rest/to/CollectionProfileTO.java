@@ -9,6 +9,14 @@ public class CollectionProfileTO implements Serializable{
 
     private static final long serialVersionUID = -5210147403244095642L;
 
+    public static enum METHOD {
+        REFERENCE, COPY;
+        @Override
+        public String toString() {
+            return super.toString().toLowerCase();
+        }
+    }
+
     private String profileId;
     private String method;
 

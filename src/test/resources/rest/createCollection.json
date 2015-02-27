@@ -8,7 +8,7 @@
       "givenName": "Vlad",
       "completeName": "Vladislav Makarenko",
       "alternativeName": "Vladislav Evgenjevich Makarenko",
-      "role": "author",
+      "role": "http://author",
       "identifiers": [
         {
           "type": "other",
@@ -47,7 +47,7 @@
       "givenName": "Natasa",
       "completeName": "Natasa Bulatovic",
       "alternativeName": "Alternative name for Natasa",
-      "role": "author",
+      "role": "http://author",
       "identifiers": [
         {
           "type": "imeji",

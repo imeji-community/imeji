@@ -26,11 +26,12 @@ public class ReverseTransferObjectFactory {
 
 
 
-    public enum TRANSFER_MODE {CREATE, UPDATE};
+    public enum TRANSFER_MODE {CREATE, UPDATE}
 
 	public static void transferCollection(CollectionTO to, CollectionImeji vo, TRANSFER_MODE mode) {
 		
 		ContainerMetadata metadata = new ContainerMetadata();
+
 		metadata.setTitle(to.getTitle());
 		metadata.setDescription(to.getDescription());
 
@@ -45,7 +46,7 @@ public class ReverseTransferObjectFactory {
 		// container
 		if (null == profileTO || profileTO.getProfileId() == null) {
 			// profile = ImejiFactory.newProfile();
-			vo.setProfile(URI.create("default___copy"));
+			vo.setProfile(URI.create("default___" + CollectionProfileTO.METHOD.COPY));
 			// reference profile to existed one
 		} else {
 			vo.setProfile(URI.create(profileTO.getProfileId() + "___"
@@ -287,7 +288,7 @@ public class ReverseTransferObjectFactory {
 			person.setGivenName(pTO.getGivenName());
 			person.setCompleteName(pTO.getCompleteName());
 			person.setAlternativeName(pTO.getAlternativeName());
-			// person.setRole(pto.getRole());
+			person.setRole(URI.create(pTO.getRole()));
 			//person.setPos(pTO.getPosition());
 
 			if (pTO.getIdentifiers().size() == 1 ) {
@@ -307,32 +308,34 @@ public class ReverseTransferObjectFactory {
 
 	}
 
-	public static void transferContributorOrganizations(
-			List<OrganizationTO> orgs, Person person, TRANSFER_MODE mode) {
-		for (OrganizationTO orgTO : orgs) {
-			Organization org = new Organization();
+    public static void transferContributorOrganizations(List<OrganizationTO> orgs, Person person, TRANSFER_MODE mode) {
+        for (OrganizationTO orgTO : orgs) {
+            Organization org = new Organization();
 
-			if (mode == TRANSFER_MODE.CREATE && orgTO.getIdentifiers().size() == 1) {
-				//org.setPos(orgTO.getPosition());
-				IdentifierTO ito = new IdentifierTO();
-				ito.setValue(orgTO.getIdentifiers().get(0).getValue());
-				org.setIdentifier(ito.getValue());
-			}
-			else if (orgTO.getIdentifiers().size() > 1) {
-				System.out.println("Have more organization identifiers than needed");
-			}
+            if (mode == TRANSFER_MODE.CREATE) {
+                //TODO: Organization can have only one identifier, why OrganizationTO has many?
+                //get only first one!
+                if (orgTO.getIdentifiers().size() > 0) {
+                    IdentifierTO ito = new IdentifierTO();
+                    ito.setValue(orgTO.getIdentifiers().get(0).getValue());
+                    org.setIdentifier(ito.getValue());
+                    if (orgTO.getIdentifiers().size() > 1) {
+                        LOGGER.info("Have more organization identifiers than needed");
+                    }
+                }
+            }
 
-			org.setName(orgTO.getName());
-			org.setDescription(orgTO.getDescription());
-			org.setCity(orgTO.getCity());
-			org.setCountry(orgTO.getCountry());
+            org.setName(orgTO.getName());
+            org.setDescription(orgTO.getDescription());
+            org.setCity(orgTO.getCity());
+            org.setCountry(orgTO.getCountry());
 
-			// set the identifier of current organization
+            // set the identifier of current organization
 
-			person.getOrganizations().add(org);
-		}
+            person.getOrganizations().add(org);
+        }
 
-	}
-	
+    }
+
 
 }

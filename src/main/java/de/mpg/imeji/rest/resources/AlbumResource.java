@@ -1,5 +1,8 @@
 package de.mpg.imeji.rest.resources;
 
+import static de.mpg.imeji.rest.process.CollectionProcess.updateCollection;
+import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONResponse;
+
 import java.io.InputStream;
 
 import javax.servlet.http.HttpServletRequest;
@@ -48,6 +51,15 @@ public class AlbumResource implements ImejiResource{
 	public Response readAll(HttpServletRequest req) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	@PUT
+	@Path("/{id}")
+	@ApiOperation(value = "Update album by id")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response update(@PathParam("id") String id, @Context HttpServletRequest req, InputStream json) throws Exception {
+		JSONResponse resp = AlbumProcess.updateAlbum(req, id);
+		return buildJSONResponse(resp);
 	}
 
 	@GET
@@ -100,8 +112,8 @@ public class AlbumResource implements ImejiResource{
 	@PUT
 	@Path("/{id}/add")
 	@ApiOperation(value = "Add Items to album", notes = "Add list of items to an album:"
-			+ "<br/> 1) List of item IDs "
-			+ "<br/> 2) Album ID"
+			+ "<br/> 1) Album ID "
+			+ "<br/> 2) List of item IDs"
 			+ "<br/><br/>"
 			+ "Json example:"
 			+ "<div class=\"json_example\">"
@@ -109,7 +121,7 @@ public class AlbumResource implements ImejiResource{
 			+ "</div>"
 			+ "<br/>")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response addItem(@Context HttpServletRequest req, InputStream json, @PathParam("id") String id) throws Exception {
+	public Response addItem(@PathParam("id") String id, @Context HttpServletRequest req, InputStream json) throws Exception {
 		JSONResponse resp = AlbumProcess.addItem(req, id);
 		return RestProcessUtils.buildJSONResponse(resp);
 	}

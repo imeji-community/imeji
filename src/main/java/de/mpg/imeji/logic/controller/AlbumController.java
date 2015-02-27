@@ -74,9 +74,10 @@ public class AlbumController extends ImejiController {
 	 * @param user
 	 * @throws ImejiException
 	 */
-	public void update(Album ic, User user) throws ImejiException {
+	public Album update(Album ic, User user) throws ImejiException {
 		writeUpdateProperties(ic, user);
 		writer.update(WriterFacade.toList(ic), user);
+		return retrieve(ic.getId(), user);
 	}
 
 	/**

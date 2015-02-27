@@ -1,15 +1,21 @@
 package de.mpg.imeji.rest.process;
 
+import static de.mpg.imeji.rest.process.CommonUtils.USER_MUST_BE_LOGGED_IN;
+import static javax.ws.rs.core.Response.Status.OK;
+import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
+
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response.Status;
 
+import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.api.AlbumService;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.to.AlbumTO;
+import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.JSONResponse;
 
 
@@ -46,6 +52,28 @@ public class AlbumProcess {
 				resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
 			}
 
+		}
+		return resp;
+	}
+	
+    public static JSONResponse updateAlbum(HttpServletRequest req, String id) {
+		JSONResponse resp;
+
+		User u = BasicAuthentication.auth(req);
+
+		if (u == null) {
+			resp = RestProcessUtils.buildJSONAndExceptionResponse(UNAUTHORIZED.getStatusCode(), USER_MUST_BE_LOGGED_IN);
+		} else {
+			AlbumService service = new AlbumService();
+            try {
+                AlbumTO to = (AlbumTO) RestProcessUtils.buildTOFromJSON(req, AlbumTO.class);
+                if (!id.equals(to.getId())) {
+                    throw new BadRequestException("Album id is not equal in request URL and in json");
+                }       
+                resp = RestProcessUtils.buildResponse(OK.getStatusCode(), service.update(to, u));
+			} catch (ImejiException e) {
+				resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
+			}
 		}
 		return resp;
 	}

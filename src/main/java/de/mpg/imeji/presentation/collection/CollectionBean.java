@@ -9,12 +9,15 @@ import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.ContainerBean;
 import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.mdProfile.wrapper.StatementWrapper;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.UrlHelper;
+
 import org.apache.log4j.Logger;
 
 import javax.faces.event.AjaxBehaviorEvent;
@@ -24,8 +27,12 @@ import javax.faces.event.ValueChangeEvent;
 
 
 import javax.faces.model.SelectItem;
+
+import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 /**
@@ -60,6 +67,11 @@ public abstract class CollectionBean extends ContainerBean {
 	private String selectedProfileItem;
   
     private boolean useMDProfileTemplate = true;
+    
+    private List<StatementWrapper> statementWrappers = new ArrayList<StatementWrapper>();
+    private Map<URI, Integer> levels;
+    
+    private static final int MARGIN_PIXELS_FOR_STATEMENT_CHILD = 5;
     	
 	/**
 	 * New default {@link CollectionBean}
@@ -112,12 +124,13 @@ public abstract class CollectionBean extends ContainerBean {
             				(mdp.getIdString()+" - "+ "No Title provided") :
             				mdp.getTitle();
             		profileItems.add(new SelectItem(mdp.getIdString(), profileTitle));
-            	}
-            }           
+            	}  
+            }            
             selectedProfileItem = (String) profileItems.get(0).getValue();
             this.profile = new MetadataProfile();
             profile.setTitle(profiles.get(0).getTitle());
             this.profileTemplate = pc.retrieve(selectedProfileItem, sessionBean.getUser());
+			initStatementWrappers(this.profileTemplate);
         }
         catch (Exception e)
         {
@@ -134,8 +147,36 @@ public abstract class CollectionBean extends ContainerBean {
         MetadataProfile mProfile = pc.retrieve(selectedProfileItem, sessionBean.getUser());
         setProfile(mProfile);
 		this.profileTemplate = pc.retrieve(selectedProfileItem, sessionBean.getUser());
+		initStatementWrappers(this.profileTemplate);
 		this.profile.setTitle(profileTemplate.getTitle());
 		}
+    }
+    
+    protected void initStatementWrappers(MetadataProfile mdp)
+    {  
+    	statementWrappers.clear();
+        levels = new HashMap<URI, Integer>();
+        for (Statement st : mdp.getStatements())
+        {
+        	statementWrappers.add(new StatementWrapper(st, mdp.getId(), getLevel(st)));
+        }
+    }
+    
+	
+    protected int getLevel(Statement st)
+    {
+        if (!levels.containsKey(st.getId()))
+        {
+            if (st.getParent() != null && levels.get(st.getParent()) != null)
+            {
+                levels.put(st.getId(), (levels.get(st.getParent()) + MARGIN_PIXELS_FOR_STATEMENT_CHILD));
+            }
+            else
+            {
+                levels.put(st.getId(), 0);
+            }
+        }
+        return levels.get(st.getId());
     }
 
     @Override
@@ -391,6 +432,14 @@ public abstract class CollectionBean extends ContainerBean {
 
 	public void setUseMDProfileTemplate(boolean useMDProfileTemplate) {
 		this.useMDProfileTemplate = useMDProfileTemplate;
+	}
+
+	public List<StatementWrapper> getStatementWrappers() {
+		return statementWrappers;
+	}
+
+	public void setStatementWrappers(List<StatementWrapper> statementWrappers) {
+		this.statementWrappers = statementWrappers;
 	}
 	
 

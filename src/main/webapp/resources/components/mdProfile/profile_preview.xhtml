@@ -5,7 +5,7 @@
 	xmlns:composite="http://java.sun.com/jsf/composite">
 	
 	<composite:interface>
-		<composite:attribute name="profile" required="true"/>
+		<composite:attribute name="statementWrappers" required="true"/>
 	</composite:interface>
 	
 	<composite:implementation>
@@ -15,16 +15,16 @@
 			</div>
 					
 			<ul class="imj_listBody"><!-- created by every hierachy level 0 element -->
-				<ui:repeat var="statement" value="#{cc.attrs.profile.statements}">
+				<ui:repeat var="wrapper" value="#{cc.attrs.statementWrappers}">
 					<li class="imj_listItem">
-						<dl style="margin-left: #{(0 * 2)}%;">
+						<dl style="margin-left: #{wrapper.level}%;">
 							<dt class="imj_headline">
 								#{lbl.metadata} #{lbl.type}: 
-								<h:outputText value="#{MdProfileBean.getTypeLabel(statement.type)}"/>
+								<h:outputText value="#{MdProfileBean.getTypeLabel(wrapper.statement.type)}"/>
 							</dt>
 							<dd>
 								<ul class="imj_metadataBox">
-									<ui:repeat var="label" value="#{statement.labels}" varStatus="indexO">
+									<ui:repeat var="label" value="#{wrapper.statement.labels}" varStatus="indexO">
 										<li>
 											<dl>
 												<dt>
@@ -39,21 +39,21 @@
 								</ul>
 								
 								<div class="imj_metadataBox">
-									<ui:fragment rendered="#{!(empty statement.literalConstraints)}">
+									<ui:fragment rendered="#{!(empty wrapper.statement.literalConstraints)}">
 										<div class="imj_customSelectbox">
 											<div class="imj_showSelection">
 												<div class="imj_selectionText">predefined values</div>
 												<div class="imj_buttonSortDescending_16"></div>
 											</div>
 											<select>
-												<ui:repeat id="constraints" var="constraint" value="#{statement.literalConstraints}">
+												<ui:repeat id="constraints" var="constraint" value="#{wrapper.statement.literalConstraints}">
 													<option>#{constraint}</option>
 												</ui:repeat>
 											</select>
 										</div>
 									</ui:fragment>
-									<ui:fragment rendered="#{statement.vocabulary != null}">
-										<h:outputText value="#{CreateCollectionBean.getVocabularyLabel(statement.vocabulary)}"/>
+									<ui:fragment rendered="#{wrapper.statement.vocabulary != null}">
+										<h:outputText value="#{CreateCollectionBean.getVocabularyLabel(wrapper.statement.vocabulary)}"/>
 									</ui:fragment>
 								</div>
 							</dd>

@@ -145,8 +145,7 @@ public class AlbumController extends ImejiController {
 
 	/**
 	 * Add a list of {@link Item} (as a {@link List} of {@link URI}) to an
-	 * {@link Album}. Return {@link List} of {@link URI} which were not added to
-	 * the album.
+	 * {@link Album}. Return {@link List} of {@link URI} {@link Item} of the album.
 	 * 
 	 * @param album
 	 * @param uris
@@ -154,11 +153,10 @@ public class AlbumController extends ImejiController {
 	 * @return
 	 * @throws ImejiException
 	 */
-	public List<String> addToAlbum(Album album, List<String> uris, User user)
+	public List<URI> addToAlbum(Album album, List<String> uris, User user)
 			throws ImejiException {
 		ItemController ic = new ItemController();
-		List<String> inAlbums = ic
-				.search(album.getId(), null, null, null, user).getResults();
+		List<String> inAlbums = ic.search(album.getId(), null, null, null, user).getResults();
 		List<String> notAddedUris = new ArrayList<String>();
 		for (String uri : uris) {
 			if (!inAlbums.contains(uri)) {
@@ -172,8 +170,8 @@ public class AlbumController extends ImejiController {
 			album.getImages().add(URI.create(uri));
 		}
 		// Force admin user since th user might not have right to edit the album
-		update(album, Imeji.adminUser);
-		return notAddedUris;
+		update(album, user);
+		return new ArrayList(album.getImages());
 	}
 
 	/**
@@ -195,8 +193,7 @@ public class AlbumController extends ImejiController {
 				album.getImages().add(uri);
 			}
 		}
-		// Force admin user since th user might not have right to edit the album
-		update(album, Imeji.adminUser);
+		update(album, user);
 		return inAlbums.size() - album.getImages().size();
 	}
 

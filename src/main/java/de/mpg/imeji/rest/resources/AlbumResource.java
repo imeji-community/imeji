@@ -99,7 +99,15 @@ public class AlbumResource implements ImejiResource{
 	
 	@PUT
 	@Path("/{id}/add")
-	@ApiOperation(value = "Release album by id")
+	@ApiOperation(value = "Add Items to album", notes = "Add list of items to an album:"
+			+ "<br/> 1) List of item IDs "
+			+ "<br/> 2) Album ID"
+			+ "<br/><br/>"
+			+ "Json example:"
+			+ "<div class=\"json_example\">"
+			+ "[\"Item-ID 1\" , \"Item-ID 2\" , \"Item-ID 3\" , \"Item-ID 4\" ...]"
+			+ "</div>"
+			+ "<br/>")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response addItem(@Context HttpServletRequest req, InputStream json, @PathParam("id") String id) throws Exception {
 		JSONResponse resp = AlbumProcess.addItem(req, id);

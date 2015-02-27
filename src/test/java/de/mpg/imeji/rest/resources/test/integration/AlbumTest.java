@@ -11,21 +11,16 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import net.java.dev.webdav.jaxrs.ResponseStatus;
 
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.junit.Before;
@@ -37,10 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import util.JenaUtil;
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.exceptions.NotAllowedError;
-import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.rest.api.AlbumService;
-import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
 import de.mpg.imeji.rest.resources.test.TestUtils;
 
@@ -50,8 +42,7 @@ import de.mpg.imeji.rest.resources.test.TestUtils;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class AlbumTest extends ImejiTestBase{
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(AlbumTest.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AlbumTest.class);
 	
 	private static String pathPrefix = "/rest/albums";
 
@@ -176,26 +167,20 @@ public class AlbumTest extends ImejiTestBase{
 	}
 
 	@Test
-	public void test_4_ReleaseCollection_1_WithAuth() throws ImejiException {
-		ItemService itemStatus = new ItemService();
+	public void test_4_ReleaseAlbum_1_WithAuth() throws ImejiException {
 		initCollection();
 		initAlbum();
 		initItem();
-		//assertEquals("PENDING",itemStatus.read(itemId, JenaUtil.testUser).getStatus());
 		
 		target(pathPrefix)
 				.path("/" + collectionId + "/release").register(authAsUser)
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.json("{}"));
 		
-		
-		
 		target(pathPrefix)
 		.path("/" + albumId + "/add").register(authAsUser)
 		.request(MediaType.APPLICATION_JSON_TYPE)
-		.put(Entity.entity("[" + itemId + "]",  MediaType.APPLICATION_JSON_TYPE));
-		
-		
+		.put(Entity.json("[\"" + itemId + "\"]"));
 		
 		Response response = target(pathPrefix)
 		.path("/" + albumId + "/release").register(authAsUser)
@@ -205,12 +190,30 @@ public class AlbumTest extends ImejiTestBase{
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
 		AlbumService s = new AlbumService();
-		assertEquals("RELEASED", s.read(albumId, JenaUtil.testUser)
-				.getStatus());
-		
-		assertEquals("RELEASED",itemStatus.read(itemId, JenaUtil.testUser).getStatus());
+		assertEquals("RELEASED", s.read(albumId, JenaUtil.testUser).getStatus());	
 		
 	}
+	
+	@Test
+	public void test_5_AddItemsToAlbum() throws ImejiException {
+		initCollection();
+		initAlbum();
+		initItem();
+		
+		target(pathPrefix)
+				.path("/" + collectionId + "/release").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("{}"));
+		
+		Response response = target(pathPrefix)
+		.path("/" + albumId + "/add").register(authAsUser)
+		.request(MediaType.APPLICATION_JSON_TYPE)
+		.put(Entity.json("[\"" + itemId + "\"]"));	
+
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+	}
+	
+	
 
 
 }

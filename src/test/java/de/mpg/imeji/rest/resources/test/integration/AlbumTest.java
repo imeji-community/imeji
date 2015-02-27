@@ -15,6 +15,8 @@ import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.client.Entity;
@@ -37,6 +39,7 @@ import util.JenaUtil;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotAllowedError;
 import de.mpg.imeji.exceptions.NotFoundException;
+import de.mpg.imeji.rest.api.AlbumService;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
 import de.mpg.imeji.rest.resources.test.TestUtils;
@@ -172,7 +175,42 @@ public class AlbumTest extends ImejiTestBase{
 		assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
 	}
 
+	@Test
+	public void test_4_ReleaseCollection_1_WithAuth() throws ImejiException {
+		ItemService itemStatus = new ItemService();
+		initCollection();
+		initAlbum();
+		initItem();
+		//assertEquals("PENDING",itemStatus.read(itemId, JenaUtil.testUser).getStatus());
+		
+		target(pathPrefix)
+				.path("/" + collectionId + "/release").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("{}"));
+		
+		
+		
+		target(pathPrefix)
+		.path("/" + albumId + "/add").register(authAsUser)
+		.request(MediaType.APPLICATION_JSON_TYPE)
+		.put(Entity.entity("[" + itemId + "]",  MediaType.APPLICATION_JSON_TYPE));
+		
+		
+		
+		Response response = target(pathPrefix)
+		.path("/" + albumId + "/release").register(authAsUser)
+		.request(MediaType.APPLICATION_JSON_TYPE)
+		.put(Entity.json("{}"));		
 
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+		AlbumService s = new AlbumService();
+		assertEquals("RELEASED", s.read(albumId, JenaUtil.testUser)
+				.getStatus());
+		
+		assertEquals("RELEASED",itemStatus.read(itemId, JenaUtil.testUser).getStatus());
+		
+	}
 
 
 }

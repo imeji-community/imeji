@@ -25,14 +25,11 @@ import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.transferAlb
 
 public class AlbumService implements API<AlbumTO>{
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(AlbumService.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AlbumService.class);
 	
-
 	private AlbumTO getAlbumTO (AlbumController controller, String id, User u) throws ImejiException {
 		AlbumTO to = new AlbumTO();
-		Album vo = controller.retrieve(
-				ObjectHelper.getURI(Album.class, id), u);
+		Album vo = controller.retrieve(ObjectHelper.getURI(Album.class, id), u);
 		TransferObjectFactory.transferAlbum(vo, to);
 		return to;
 	}
@@ -82,7 +79,7 @@ public class AlbumService implements API<AlbumTO>{
 		Album vo = controller.retrieve(ObjectHelper.getURI(Album.class, id), u);
 		controller.release(vo, u);
 
-		//Now Read the collection and return it back
+		//Now Read the album and return it back
 		return getAlbumTO(controller, id, u);
 	}
 
@@ -94,7 +91,7 @@ public class AlbumService implements API<AlbumTO>{
 		vo.setDiscardComment(discardComment);
 		controller.withdraw(vo, u);
 
-		//Now Read the withdrawn collection and return it back
+		//Now Read the withdrawn album and return it back
 		return getAlbumTO(controller, id, u);
 	}
 
@@ -118,7 +115,7 @@ public class AlbumService implements API<AlbumTO>{
 		return null;
 	}
 	
-	public AlbumTO addItem(String id, User u, List<String> itemIds) throws ImejiException {
+	public List<String> addItem(String id, User u, List<String> itemIds) throws ImejiException {
 		AlbumController controller = new AlbumController();
 		Album vo = controller.retrieve(ObjectHelper.getURI(Album.class, id), u);
 		List<String> itemUris = new ArrayList<>();
@@ -127,10 +124,10 @@ public class AlbumService implements API<AlbumTO>{
 		for(String itemId : itemIds){
 			itemUris.add(ObjectHelper.getURI(Item.class, itemId).toASCIIString());
 		}
-		controller.addToAlbum(vo, itemUris, u);
-		
-		//Now Read the collection and return it back
-		return getAlbumTO(controller, id , u);
+		List<String> ids = new ArrayList<String>();
+		for(URI itemURI : controller.addToAlbum(vo, itemUris, u))
+			ids.add(CommonUtils.extractIDFromURI(itemURI));
+		return ids;
 	}
 
 }

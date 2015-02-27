@@ -8,7 +8,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import de.mpg.imeji.exceptions.AuthenticationError;
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.NotFoundException;
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
@@ -136,8 +139,10 @@ public class AlbumController extends ImejiController {
 		ItemController ic = new ItemController();
 		album = (Album) ic.searchAndSetContainerItems(album, user, -1, 0);
 		if (album.getImages().isEmpty()) {
-			throw new RuntimeException("An empty album can not be released!");
-		} else {
+			throw new UnprocessableError("An empty album can not be released!");
+		} else if(album.getStatus().equals(Status.RELEASED)){
+			throw new UnprocessableError("The status of album is " + album.getStatus() + " and can not be released again!");
+		}else {
 			writeReleaseProperty(album, user);
 			update(album, user);
 		}
@@ -205,6 +210,15 @@ public class AlbumController extends ImejiController {
 	 * @throws ImejiException
 	 */
 	public void withdraw(Album album, User user) throws ImejiException {
+		if (user == null ) {
+			throw new AuthenticationError("User must be signed-in");
+		}
+		if (album == null) {
+			throw new NotFoundException("Album does not exists");
+		}
+		if (!Status.RELEASED.equals(album.getStatus())) {
+			throw new UnprocessableError ("Withdraw album: Album must be released");
+		}
 		album.setStatus(Status.WITHDRAWN);
 		album.setVersionDate(DateHelper.getCurrentDate());
 		album.getImages().clear();

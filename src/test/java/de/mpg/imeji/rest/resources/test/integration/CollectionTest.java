@@ -214,8 +214,7 @@ public class CollectionTest extends ImejiTestBase {
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.json("{}"));
 		assertEquals(FORBIDDEN.getStatusCode(), response.getStatus());
-		
-	
+			
 		assertEquals("PENDING",itemStatus.read(itemId, JenaUtil.testUser).getStatus());
 	}
 	@Test
@@ -373,7 +372,7 @@ public class CollectionTest extends ImejiTestBase {
 		
 		Form form= new Form();
 		form.param("id", collectionId+"i_do_not_exist");
-		form.param("discardComment", "test_4_WithdrawCollection_5_WithdrawCollectionTwice_SecondTime_"+System.currentTimeMillis());
+		form.param("discardComment", "test_4_WithdrawCollection_6_NotExistingCollection_"+System.currentTimeMillis());
 		Response response = target(pathPrefix)
 				.path("/" + collectionId + "i_do_not_exist/discard").register(authAsUser)
 				.request((MediaType.APPLICATION_JSON_TYPE))
@@ -384,7 +383,7 @@ public class CollectionTest extends ImejiTestBase {
 	
 
 	@Test
-	public void test_3_DeleteCollection_1_WithAuth() throws ImejiException {
+	public void test_5_DeleteCollection_1_WithAuth() throws ImejiException {
 
 		initCollection();
 
@@ -405,7 +404,7 @@ public class CollectionTest extends ImejiTestBase {
 	}
 	
 	@Test
-	public void test_3_DeleteCollection_2_WithUnauth() throws ImejiException{
+	public void test_5_DeleteCollection_2_WithUnauth() throws ImejiException{
 		initCollection();
 		ItemService itemStatus = new ItemService();
 
@@ -418,7 +417,7 @@ public class CollectionTest extends ImejiTestBase {
 	}
 
 	@Test
-	public void test_3_DeleteCollection_3_NotPendingCollection() {
+	public void test_5_DeleteCollection_3_NotPendingCollection() {
 		initCollection();
 		initItem();
 
@@ -457,7 +456,7 @@ public class CollectionTest extends ImejiTestBase {
 		
 	}
 	@Test
-	public void test_3_DeleteCollection_4_WithOutUser(){
+	public void test_5_DeleteCollection_4_WithOutUser(){
 		
 		initCollection();
 		
@@ -470,7 +469,7 @@ public class CollectionTest extends ImejiTestBase {
 	
 		
 	@Test
-	public void test_3_DeleteCollection_6_nonExistingCollection(){
+	public void test_5_DeleteCollection_1_nonExistingCollection(){
 		Response response = target(pathPrefix)
 				.path("/" + collectionId+"i_do_not_exist").register(authAsUser)
 				.request(MediaType.APPLICATION_JSON_TYPE)

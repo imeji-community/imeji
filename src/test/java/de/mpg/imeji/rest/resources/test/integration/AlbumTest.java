@@ -17,10 +17,16 @@ import java.nio.file.Paths;
 import java.util.Map;
 
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+
+
+
+
+import net.java.dev.webdav.jaxrs.ResponseStatus;
 
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.junit.Before;
@@ -33,6 +39,7 @@ import org.slf4j.LoggerFactory;
 import util.JenaUtil;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.rest.api.AlbumService;
+import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
 import de.mpg.imeji.rest.resources.test.TestUtils;
 
@@ -169,11 +176,9 @@ public class AlbumTest extends ImejiTestBase{
 	@Test
 	public void test_4_ReleaseAlbum_1_WithAuth() throws ImejiException {
 		initCollection();
-		initAlbum();
-		initItem();
-		
+		initItem();		
 		target(pathPrefix)
-				.path("/" + collectionId + "/release").register(authAsUser)
+				.path("/" + albumId + "/release").register(authAsUser)
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.json("{}"));
 		
@@ -195,22 +200,236 @@ public class AlbumTest extends ImejiTestBase{
 	}
 	
 	@Test
-	public void test_5_AddItemsToAlbum() throws ImejiException {
+	public void test_4_ReleaseAlbum_2_WithUnauth() throws ImejiException{
 		initCollection();
-		initAlbum();
 		initItem();
+		target(pathPrefix)
+		.path("/" + albumId + "/add").register(authAsUser)
+		.request(MediaType.APPLICATION_JSON_TYPE)
+		.put(Entity.json("[\"" + itemId + "\"]"));
 		
+		Response response = target(pathPrefix)
+		.path("/" + albumId + "/release").register(JenaUtil.testUser)
+		.request(MediaType.APPLICATION_JSON_TYPE)
+		.put(Entity.json("{}"));		
+		
+		assertEquals(UNAUTHORIZED.getStatusCode(), response.getStatus());
+	}
+	
+	@Test
+	public void test_4_ReleaseCollection_3_EmptyAlbum(){
+		Response response = target(pathPrefix)
+				.path("/" + albumId + "/release").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("{}"));	
+		assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+	}
+	
+	@Test
+	public void test_4_ReleaseAlbum_4_WithOutUser(){
+		
+		Response response = target(pathPrefix)
+				.path("/" + albumId + "/release")
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("{}"));
+		assertEquals(UNAUTHORIZED.getStatusCode(), response.getStatus());
+	}
+	
+	@Test
+	public void test_4_ReleaseAlbum_5_ReleaseAlbumTwice() throws ImejiException{
+		initCollection();
+		initItem();		
 		target(pathPrefix)
 				.path("/" + collectionId + "/release").register(authAsUser)
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.json("{}"));
 		
-		Response response = target(pathPrefix)
+		target(pathPrefix)
 		.path("/" + albumId + "/add").register(authAsUser)
 		.request(MediaType.APPLICATION_JSON_TYPE)
-		.put(Entity.json("[\"" + itemId + "\"]"));	
+		.put(Entity.json("[\"" + itemId + "\"]"));
+		
+		Response response = target(pathPrefix)
+		.path("/" + albumId + "/release").register(authAsUser)
+		.request(MediaType.APPLICATION_JSON_TYPE)
+		.put(Entity.json("{}"));		
 
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+		AlbumService s = new AlbumService();
+		assertEquals("RELEASED", s.read(albumId, JenaUtil.testUser).getStatus());	
+		
+		response = target(pathPrefix)
+				.path("/" + albumId + "/release").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("{}"));
+		assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+	}
+	
+	@Test
+	public void test_4_ReleaseAlbum_6_nonExistingAlbum(){
+		Response response = target(pathPrefix)
+				.path("/" + albumId + "i_do_not_exist/release").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("{}"));	
+		assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
+	}
+
+	
+	
+	@Test
+	public void test_5_AddItemsToAlbum() throws ImejiException {
+		initCollection();
+		initItem();
+		
+//		target(pathPrefix)
+//				.path("/" + collectionId + "/release").register(authAsUser)
+//				.request(MediaType.APPLICATION_JSON_TYPE)
+//				.put(Entity.json("{}"));
+		
+		Response response = target(pathPrefix)
+				.path("/" + albumId + "/add").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));	
+
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+	}
+	
+	@Test
+	public void test_6_WithdrawAlbum_1_WithAuth() throws ImejiException {
+		
+		initCollection();
+		initItem();
+		Response response = target(pathPrefix)
+				.path("/" + albumId + "/add").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));	
+		
+		AlbumService s = new AlbumService();
+		s.release(albumId, JenaUtil.testUser);
+		
+		assertEquals("RELEASED", s.read(albumId, JenaUtil.testUser).getStatus());
+		
+		Form form= new Form();
+		form.param("id", albumId);
+		form.param("discardComment", "test_6_WithdrawAlbum_1_WithAuth_"+System.currentTimeMillis());
+		response = target(pathPrefix)
+				.path("/" + albumId + "/discard").register(authAsUser)
+				.request((MediaType.APPLICATION_JSON_TYPE))
+				.put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());	
+		assertEquals("WITHDRAWN", s.read(albumId, JenaUtil.testUser).getStatus());
+	}
+	
+	
+	@Test
+	public void test_6_WithdrawAlbum_2_WithUnauth() throws ImejiException{
+		initCollection();
+		initItem();
+		Response response = target(pathPrefix)
+				.path("/" + albumId + "/add").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));	
+		AlbumService s = new AlbumService();
+		s.release(albumId, JenaUtil.testUser);
+		
+		assertEquals("RELEASED", s.read(albumId, JenaUtil.testUser).getStatus());
+		
+		Form form= new Form();
+		form.param("id", albumId);
+		form.param("discardComment", "test_6_WithdrawAlbum_2_WithUnAuth_"+System.currentTimeMillis());
+		response = target(pathPrefix)
+				.path("/" + albumId + "/discard").register(authAsUser2)
+				.request((MediaType.APPLICATION_JSON_TYPE))
+				.put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+
+		assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
+	 }
+
+	@Test
+	public void test_6_WithdrawAlbum_3_WithNonAuth() throws ImejiException {
+		initCollection();
+		initItem();
+		Response response = target(pathPrefix)
+				.path("/" + albumId + "/add").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));	
+		AlbumService s = new AlbumService();
+		s.release(albumId, JenaUtil.testUser);
+		assertEquals("RELEASED", s.read(albumId, JenaUtil.testUser).getStatus());
+		
+		Form form= new Form();
+		form.param("id", albumId);
+		form.param("discardComment", "test_6_WithdrawAlbum_3_WithNonAuth_"+System.currentTimeMillis());
+		response = target(pathPrefix)
+				.path("/" + albumId + "/discard")
+				.request((MediaType.APPLICATION_JSON_TYPE))
+				.put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+
+		assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
+	 }
+
+
+	@Test
+	public void test_6_WithdrawAlbum_4_NotReleasedAlbum() throws ImejiException {
+		initCollection();
+		initItem();
+		Response response = target(pathPrefix)
+				.path("/" + albumId + "/add").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));	
+		AlbumService s = new AlbumService();
+		assertEquals("PENDING", s.read(albumId, JenaUtil.testUser).getStatus());
+		
+		Form form= new Form();
+		form.param("id", albumId);
+		form.param("discardComment", "test_6_WithdrawAlbum_4_NotReleasedCollection_"+System.currentTimeMillis());
+		response = target(pathPrefix)
+				.path("/" + albumId + "/discard").register(authAsUser)
+				.request((MediaType.APPLICATION_JSON_TYPE))
+				.put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+
+		assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+	}
+	
+	@Test
+	public void test_6_WithdrawAlbum_5_WithdrawAlbumTwice() throws ImejiException{
+		initCollection();
+		initItem();
+		Response response = target(pathPrefix)
+				.path("/" + albumId + "/add").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));	
+		AlbumService s = new AlbumService();
+		s.release(albumId, JenaUtil.testUser);
+		s.withdraw (albumId, JenaUtil.testUser,"test_6_WithdrawAlbum_5_WithdrawAlbumTwice_"+System.currentTimeMillis());
+
+		assertEquals("WITHDRAWN", s.read(albumId, JenaUtil.testUser).getStatus());
+		
+		Form form= new Form();
+		form.param("id", albumId);
+		form.param("discardComment", "test_6_WithdrawAlbum_5_WithdrawAlbumTwice_SecondTime_"+System.currentTimeMillis());
+		response = target(pathPrefix)
+				.path("/" + albumId + "/discard").register(authAsUser)
+				.request((MediaType.APPLICATION_JSON_TYPE))
+				.put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+
+		assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+	}
+	
+	@Test
+	public void test_6_WithdrawAlbum_6_NotExistingAlbum() throws ImejiException{
+		
+		Form form= new Form();
+		form.param("id", albumId + "i_do_not_exist");
+		form.param("discardComment", "test_6_WithdrawAlbum_6_NotExistingAlbum_"+System.currentTimeMillis());
+		Response response = target(pathPrefix)
+				.path("/" + albumId + "i_do_not_exist/discard").register(authAsUser)
+				.request((MediaType.APPLICATION_JSON_TYPE))
+				.put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+
+		assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
 	}
 	
 	

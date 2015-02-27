@@ -99,7 +99,7 @@ public class TransferObjectFactory {
 			pto.setGivenName(p.getGivenName());
 			pto.setCompleteName(p.getCompleteName());
 			pto.setAlternativeName(p.getAlternativeName());
-
+            pto.setRole(p.getRole() == null ? "" : p.getRole().toString());
 			IdentifierTO ito = new IdentifierTO();
 			ito.setValue(p.getIdentifier());
 			pto.getIdentifiers().add(ito);			
@@ -111,7 +111,6 @@ public class TransferObjectFactory {
 	public static void transferContributorOrganizations(Collection<Organization> orgas, PersonTO pto){
 		for(Organization orga : orgas){
 			OrganizationTO oto = new OrganizationTO();
-			//oto.setPosition(orga.getPos());
 			oto.setId(CommonUtils.extractIDFromURI(orga.getId()));
 			oto.setName(orga.getName());
 			oto.setDescription(orga.getDescription());
@@ -120,7 +119,7 @@ public class TransferObjectFactory {
 			oto.getIdentifiers().add(ito);
 			oto.setCity(orga.getCity());
 			oto.setCountry(orga.getCountry());
-			pto.getOrganizations().add(oto);			
+			pto.getOrganizations().add(oto);
 		}
 		
 	}

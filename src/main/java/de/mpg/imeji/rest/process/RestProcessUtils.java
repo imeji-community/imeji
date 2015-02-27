@@ -32,12 +32,12 @@ public class RestProcessUtils {
 	 * @param type
 	 * @return 
 	 */
-	public static <T> Object buildTOFromJSON(String json, Class<T> type) throws JsonProcessingException, UnrecognizedPropertyException{
-		ObjectReader reader = new ObjectMapper().reader().withType(type);
+	public static <T> Object buildTOFromJSON(String json, Class<T> type) {
 		try {
-			return reader.readValue(json);
+            ObjectReader reader = new ObjectMapper().reader().withType(type);
+            return reader.readValue(json);
 		} catch (IllegalArgumentException e) {
-			return e.getMessage();		
+			return e.getMessage();
 		}catch(UnrecognizedPropertyException e2){
 			return e2.getMessage();
 		}catch(JsonProcessingException e3){

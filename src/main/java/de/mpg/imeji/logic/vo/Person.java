@@ -3,24 +3,18 @@
  */
 package de.mpg.imeji.logic.vo;
 
-import java.io.Serializable;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collection;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElements;
-import javax.xml.bind.annotation.XmlRootElement;
-
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jList;
 import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jResource;
+
+import javax.xml.bind.annotation.*;
+import java.io.Serializable;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * a foaf person
@@ -46,7 +40,7 @@ public class Person implements Cloneable, Serializable {
 	private String alternativeName;
 	@j2jLiteral("http://purl.org/dc/elements/1.1/identifier")
 	private String identifier;
-	@j2jLiteral("http://purl.org/escidoc/metadata/terms/0.1/role")
+	@j2jResource("http://purl.org/escidoc/metadata/terms/0.1/role")
 	private URI role;
     @j2jLiteral("http://imeji.org/terms/position")
 	private int pos = 0;

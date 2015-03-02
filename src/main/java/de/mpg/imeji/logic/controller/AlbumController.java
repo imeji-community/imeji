@@ -4,6 +4,7 @@
 package de.mpg.imeji.logic.controller;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -159,17 +160,23 @@ public class AlbumController extends ImejiController {
 	 * @return
 	 * @throws ImejiException
 	 */
-	public List<URI> addToAlbum(Album album, List<String> uris, User user)
-			throws ImejiException {
+	public List<URI> addToAlbum(Album album, List<String> uris, User user) throws ImejiException {
 		ItemController ic = new ItemController();
 		List<String> inAlbums = ic.search(album.getId(), null, null, null, user).getResults();
 		List<String> notAddedUris = new ArrayList<String>();
 		for (String uri : uris) {
-			if (!inAlbums.contains(uri)) {
-				inAlbums.add(uri);
-			} else {
-				notAddedUris.add(uri);
-			}
+			try {
+				Item item = ic.retrieve(new URI(uri), user);			
+				if(item != null){
+					if (!inAlbums.contains(uri)) {
+						inAlbums.add(uri);
+					} else {
+						notAddedUris.add(uri);
+					}
+				}
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+			}	
 		}
 		album.getImages().clear();
 		for (String uri : inAlbums) {

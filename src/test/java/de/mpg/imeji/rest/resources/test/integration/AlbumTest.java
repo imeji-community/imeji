@@ -88,24 +88,7 @@ public class AlbumTest extends ImejiTestBase{
 		assertThat(response.getStatus(),equalTo(UNAUTHORIZED.getStatusCode()));
 	}
 	
-	@Test
-	public void test_1_CreateAlbum_3_WithNonAuth() throws IOException {
-		Path jsonPath = Paths
-				.get("src/test/resources/rest/createAlbum.json");
-		String jsonString = new String(Files.readAllBytes(jsonPath), "UTF-8");
-
-		Response response = target(pathPrefix)
-				.register(authAsUser2)
-				.register(MultiPartFeature.class)
-				.request(MediaType.APPLICATION_JSON_TYPE)
-				.post(Entity
-						.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
-		assertThat(response.getStatus(),equalTo(FORBIDDEN.getStatusCode()));
-	}
 	
-	
-
-
 	@Test
 	public void test_2_ReadAlbum_1_WithAuth() throws ImejiException {
 		Response response = target(pathPrefix).path(albumId)
@@ -136,8 +119,7 @@ public class AlbumTest extends ImejiTestBase{
 		Response response = target(pathPrefix).path(albumId+"i_do_not_exist")
 				.register(authAsUser).request(MediaType.APPLICATION_JSON)
 				.get();
-		assertThat(response.getStatus(),
-				equalTo(Status.NOT_FOUND.getStatusCode()));
+		assertThat(response.getStatus(), equalTo(Status.NOT_FOUND.getStatusCode()));
 	}
 	
 	@Test
@@ -187,7 +169,7 @@ public class AlbumTest extends ImejiTestBase{
 	
 		
 	@Test
-	public void test_3_DeleteAlbum_6_NonExistingAlbum(){
+	public void test_3_DeleteAlbum_5_NonExistingAlbum(){
 		Response response = target(pathPrefix)
 				.path("/" + albumId+"i_do_not_exist").register(authAsUser)
 				.request(MediaType.APPLICATION_JSON_TYPE)
@@ -301,7 +283,7 @@ public class AlbumTest extends ImejiTestBase{
 	
 	
 	@Test
-	public void test_5_AddItemsToAlbum() throws ImejiException {
+	public void test_5_AddItemsToAlbum_1_WithAuth() throws ImejiException {
 		initCollection();
 		initItem();
 		
@@ -312,6 +294,59 @@ public class AlbumTest extends ImejiTestBase{
 
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 	}
+	
+	@Test
+	public void test_5_AddItemsToAlbum_2_WithUnauth() throws ImejiException {
+		initCollection();
+		initItem();
+		
+		Response response = target(pathPrefix)
+				.path("/" + albumId + "/add")
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));	
+
+		assertThat(response.getStatus(),equalTo(UNAUTHORIZED.getStatusCode()));
+	}
+	
+	@Test
+	public void test_5_AddItemsToAlbum_3_WithNonAuth() throws ImejiException {
+		initCollection();
+		initItem();
+		
+		Response response = target(pathPrefix)
+				.path("/" + albumId + "/add").register(authAsUser2)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));	
+
+		assertThat(response.getStatus(),equalTo(FORBIDDEN.getStatusCode()));;
+	}
+	
+	@Test
+	public void test_5_AddItemsToAlbum_4_NonExistingAlbum() throws ImejiException {
+		initCollection();
+		initItem();
+		
+		Response response = target(pathPrefix)
+				.path("/" + albumId+"i_do_not_exist" + "/add").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));	
+
+		assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
+	}
+	
+	
+	
+	@Test
+	public void test_5_AddItemsToAlbum_5_NonExistingItem() throws ImejiException {
+		
+		Response response = target(pathPrefix)
+				.path("/" + albumId + "/add").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + "adfgsh" + "\"]"));	
+
+		assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
+	}
+	
 	
 	@Test
 	public void test_6_WithdrawAlbum_1_WithAuth() throws ImejiException {

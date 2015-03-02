@@ -69,8 +69,8 @@
 
     $('#input_user').change(updateAuth);
     $('#input_pass').change(updateAuth);
-
-    
+    $('#input_button').click(updateAuth);
+        
     window.swaggerUi.load();
   });
   </script>
@@ -83,6 +83,7 @@
     <form id='api_selector'>
       <div class='input'><input placeholder="user" id="input_user" name="user" type="text" size="10"/></div>	
       <div class='input'><input placeholder="pass" id="input_pass" name="pass" type="password" size="10"/></div>
+      <div class='input'><input id="input_button" name="input_button" type="button" value="Authorize"/></div>
     </form>
   </div>
 </div>

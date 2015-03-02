@@ -103,7 +103,7 @@
 						<h:panelGroup id="techmetadata" layout="block" styleClass="imj_techdataList" rendered="#{SingleUploadBean.techMd.size()>0}">
 							<div class="imj_listHeader">
 								<span class="imj_iconExpand_16"> </span>
-								<h3 class="imj_sectionHeadline" style="white-space:nowrap;">#{SingleUploadBean.ingestImage.name}</h3>
+								<h3 class="imj_sectionHeadline" style="white-space:nowrap;">#{lbl.metadata}: #{SingleUploadBean.ingestImage.name}</h3>
 							</div>
 							<div class="imj_listBody imj_minHeight">
 								<ui:repeat id="techMd" var="techMd" value="#{SingleUploadBean.techMd}">

@@ -172,6 +172,7 @@ body a:hover .imj_entryPagePreviewTiledListLinkArrow { background: transparent u
 .imj_organisation { width: 100%; padding: 0 4%; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; }
 
 .imj_editMetadataProfilePage { width: 91.25%; padding: 1% 4%; border-top: 0.1em solid #6CAE2F; }
+.imj_editMetadataProfilePage h2.imj_headline { margin-bottom: 1em; }
 
 .imj_pageMessageArea, .imj_contentMessageArea { width: 87.95%; display: inline-block; color: #F0F0F0; margin: 1em 0; padding: 0 6%; }
 

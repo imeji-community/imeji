@@ -1,31 +1,11 @@
 package de.mpg.imeji.rest.resources.test.integration;
 
 
-import static javax.ws.rs.core.Response.Status.CREATED;
-import static javax.ws.rs.core.Response.Status.FORBIDDEN;
-import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.isEmptyOrNullString;
-import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Map;
-
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.Form;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.rest.api.CollectionService;
+import de.mpg.imeji.rest.api.ItemService;
+import de.mpg.imeji.rest.resources.test.TestUtils;
 import net.java.dev.webdav.jaxrs.ResponseStatus;
-
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -33,14 +13,25 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import util.JenaUtil;
-import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.exceptions.NotAllowedError;
-import de.mpg.imeji.exceptions.NotFoundException;
-import de.mpg.imeji.rest.api.CollectionService;
-import de.mpg.imeji.rest.api.ItemService;
-import de.mpg.imeji.rest.resources.test.TestUtils;
+
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Form;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Map;
+
+import static javax.ws.rs.core.Response.Status.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CollectionTest extends ImejiTestBase {
@@ -101,7 +92,7 @@ public class CollectionTest extends ImejiTestBase {
 	}
 
 	@Test
-	public void test_1_CreateCollection_3_ReferenceProfile() throws ImejiException, UnsupportedEncodingException, IOException {
+	public void test_1_CreateCollection_3_ReferenceProfile() throws ImejiException, IOException {
 		Path jsonPath = Paths
 				.get("src/test/resources/rest/createCollectionWithProfile.json");
 		String jsonString = new String(Files.readAllBytes(jsonPath), "UTF-8");
@@ -125,7 +116,7 @@ public class CollectionTest extends ImejiTestBase {
 
 	@Test
 	public void test_1_CreateCollection_4_NotExistedReferenceProfile()
-			throws ImejiException, UnsupportedEncodingException, IOException {
+			throws ImejiException, IOException {
 		Path jsonPath = Paths
 				.get("src/test/resources/rest/createCollectionWithProfile.json");
 		String jsonString = new String(Files.readAllBytes(jsonPath), "UTF-8");

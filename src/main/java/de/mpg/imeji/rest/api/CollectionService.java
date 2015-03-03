@@ -142,7 +142,7 @@ public class CollectionService implements API<CollectionTO> {
                 try {
                     mp = pc.retrieve(profileId, u);
                 } catch (ImejiException e) {
-                    throw new UnprocessableError("Can not find the metadata profile you have referenced in the JSON body: " + profileId);
+                    throw new BadRequestException("Can not find the metadata profile you have referenced in the JSON body: " + profileId);
                 }
                 if (METHOD.COPY.toString().equals(method)) {
                     mp = pc.create(mp.clone(), u);
@@ -150,7 +150,7 @@ public class CollectionService implements API<CollectionTO> {
                 }  else if (isNullOrEmpty(method) || METHOD.REFERENCE.toString().equals(method)) {
                     profTO.setMethod(METHOD.REFERENCE.toString());
                 } else
-                    throw new UnprocessableError("Wrong update method by update of collections metadata profile: " + method);
+                    throw new BadRequestException("Wrong update method by update of collections metadata profile: " + method);
 
                 profTO.setProfileId(mp.getId().toString());
                 vo.setProfile(mp.getId());

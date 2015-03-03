@@ -12,6 +12,7 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.rest.process.CommonUtils;
 import de.mpg.imeji.rest.process.TransferObjectFactory;
+import de.mpg.imeji.rest.to.CollectionProfileTO;
 import de.mpg.imeji.rest.to.CollectionProfileTO.METHOD;
 import de.mpg.imeji.rest.to.CollectionTO;
 import org.slf4j.Logger;
@@ -130,31 +131,29 @@ public class CollectionService implements API<CollectionTO> {
         CollectionImeji vo = getCollectionVO(cc, to.getId(), u);
 
         //profile is defined
-        if (to.getProfile() != null) {
-            String profileId = to.getProfile().getProfileId();
-            String method = to.getProfile().getMethod();
+        CollectionProfileTO profTO = to.getProfile();
+        if (profTO != null) {
+            String profileId = profTO.getProfileId();
+            String method = profTO.getMethod();
             MetadataProfile mp;
 
-            //profileId has been changed
+            //profileId is filled
             if ( !isNullOrEmpty(profileId) ) {
-                //changed profile id
-                if (!profileId.equals(ObjectHelper.getId(vo.getProfile()))) {
-                    //TODO: remove old profile?
-                    try {
-                        mp = pc.retrieve(profileId, u);
-                    } catch (ImejiException e) {
-                        throw new UnprocessableError("Can not find the metadata profile you have referenced in the JSON body");
-
-                    }
-                    if (METHOD.REFERENCE.toString().equalsIgnoreCase(method)) {
-                        mp = pc.create(mp.clone(), u);
-                        pc.update(mp, u);
-                    }
+                try {
+                    mp = pc.retrieve(profileId, u);
+                } catch (ImejiException e) {
+                    throw new UnprocessableError("Can not find the metadata profile you have referenced in the JSON body: " + profileId);
                 }
-                if (isNullOrEmpty(method)) {
-                    to.getProfile().setMethod(METHOD.COPY.toString());
-                }
+                if (METHOD.COPY.toString().equals(method)) {
+                    mp = pc.create(mp.clone(), u);
+                    //other profile id
+                }  else if (METHOD.REFERENCE.toString().equals(method)) {
+                    profTO.setMethod(METHOD.REFERENCE.toString());
+                } else
+                    throw new UnprocessableError("Wrong update method by update of collections metadata profile: " + method);
 
+                profTO.setProfileId(mp.getId().toString());
+                vo.setProfile(mp.getId());
             }
         }
         transferCollection(to, vo, UPDATE);

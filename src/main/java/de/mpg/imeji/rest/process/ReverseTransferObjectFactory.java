@@ -39,20 +39,6 @@ public class ReverseTransferObjectFactory {
 		transferCollectionContributors(to.getContributors(), metadata, mode);
 		vo.setMetadata(metadata);
 
-		// set Metadata
-		CollectionProfileTO profileTO = to.getProfile();
-
-		// TODO: change the code after extension of CollectionImeji mdprofile
-		// container
-		if (null == profileTO || profileTO.getProfileId() == null) {
-			// profile = ImejiFactory.newProfile();
-			vo.setProfile(URI.create("default___" + CollectionProfileTO.METHOD.COPY));
-			// reference profile to existed one
-		} else {
-			vo.setProfile(URI.create(profileTO.getProfileId() + "___"
-					+ profileTO.getMethod()));
-		}
-
 	}
 	
 	public static void transferAlbum(AlbumTO to, Album vo, TRANSFER_MODE mode){

@@ -147,7 +147,7 @@ public class CollectionService implements API<CollectionTO> {
                 if (METHOD.COPY.toString().equals(method)) {
                     mp = pc.create(mp.clone(), u);
                     //other profile id
-                }  else if (METHOD.REFERENCE.toString().equals(method)) {
+                }  else if (isNullOrEmpty(method) || METHOD.REFERENCE.toString().equals(method)) {
                     profTO.setMethod(METHOD.REFERENCE.toString());
                 } else
                     throw new UnprocessableError("Wrong update method by update of collections metadata profile: " + method);

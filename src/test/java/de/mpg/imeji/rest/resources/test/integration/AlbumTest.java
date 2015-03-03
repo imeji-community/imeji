@@ -22,10 +22,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-
-
-
-
 import net.java.dev.webdav.jaxrs.ResponseStatus;
 
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
@@ -39,8 +35,6 @@ import org.slf4j.LoggerFactory;
 import util.JenaUtil;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.rest.api.AlbumService;
-import de.mpg.imeji.rest.api.CollectionService;
-import de.mpg.imeji.rest.api.ItemService;
 import de.mpg.imeji.rest.resources.test.TestUtils;
 
 
@@ -61,7 +55,7 @@ public class AlbumTest extends ImejiTestBase{
 	}
 
 	@Test
-	public void test_1_CreateAlbum_1() throws IOException {
+	public void test_1_CreateAlbum_1_WithAuth() throws IOException {
 		Path jsonPath = Paths
 				.get("src/test/resources/rest/createAlbum.json");
 		String jsonString = new String(Files.readAllBytes(jsonPath), "UTF-8");
@@ -79,10 +73,24 @@ public class AlbumTest extends ImejiTestBase{
 		assertThat("Empty album id", albumId,
 				not(isEmptyOrNullString()));
 	}
-
-
+	
 	@Test
-	public void test_2_ReadAlbum_1() throws ImejiException {
+	public void test_1_CreateAlbum_2_WithUnauth() throws IOException {
+		Path jsonPath = Paths
+				.get("src/test/resources/rest/createAlbum.json");
+		String jsonString = new String(Files.readAllBytes(jsonPath), "UTF-8");
+
+		Response response = target(pathPrefix)
+				.register(MultiPartFeature.class)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.post(Entity
+						.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
+		assertThat(response.getStatus(),equalTo(UNAUTHORIZED.getStatusCode()));
+	}
+	
+	
+	@Test
+	public void test_2_ReadAlbum_1_WithAuth() throws ImejiException {
 		Response response = target(pathPrefix).path(albumId)
 				.register(authAsUser).request(MediaType.APPLICATION_JSON).get();
 
@@ -91,30 +99,27 @@ public class AlbumTest extends ImejiTestBase{
 	}
 
 	@Test
-	public void test_2_ReadAlbum_2_Unauthorized() throws ImejiException {
+	public void test_2_ReadAlbum_2_WithUnauth() throws ImejiException {
 		Response response = target(pathPrefix).path(albumId)
 				.request(MediaType.APPLICATION_JSON).get();
-		assertThat(response.getStatus(),
-				equalTo(UNAUTHORIZED.getStatusCode()));
+		assertThat(response.getStatus(),equalTo(UNAUTHORIZED.getStatusCode()));
 
 	}
 
 	@Test
-	public void test_2_ReadAlbum_3_Forbidden() throws ImejiException {
+	public void test_2_ReadAlbum_3_WithNonAuth() throws ImejiException {
 		Response response = target(pathPrefix).path(albumId)
 				.register(authAsUser2).request(MediaType.APPLICATION_JSON)
 				.get();
-		assertThat(response.getStatus(),
-				equalTo(FORBIDDEN.getStatusCode()));
+		assertThat(response.getStatus(),equalTo(FORBIDDEN.getStatusCode()));
 	}
 
 	@Test
-	public void test_2_ReadAlbum_4_DoesNotExist() throws IOException {
+	public void test_2_ReadAlbum_4_NonExistingAlbum() throws IOException {
 		Response response = target(pathPrefix).path(albumId+"i_do_not_exist")
 				.register(authAsUser).request(MediaType.APPLICATION_JSON)
 				.get();
-		assertThat(response.getStatus(),
-				equalTo(Status.NOT_FOUND.getStatusCode()));
+		assertThat(response.getStatus(), equalTo(Status.NOT_FOUND.getStatusCode()));
 	}
 	
 	@Test
@@ -164,7 +169,7 @@ public class AlbumTest extends ImejiTestBase{
 	
 		
 	@Test
-	public void test_3_DeleteAlbum_6_nonExistingAlbum(){
+	public void test_3_DeleteAlbum_5_NonExistingAlbum(){
 		Response response = target(pathPrefix)
 				.path("/" + albumId+"i_do_not_exist").register(authAsUser)
 				.request(MediaType.APPLICATION_JSON_TYPE)
@@ -226,7 +231,7 @@ public class AlbumTest extends ImejiTestBase{
 	}
 	
 	@Test
-	public void test_4_ReleaseAlbum_4_WithOutUser(){
+	public void test_4_ReleaseAlbum_4_WithUnauth(){
 		
 		Response response = target(pathPrefix)
 				.path("/" + albumId + "/release")
@@ -267,7 +272,7 @@ public class AlbumTest extends ImejiTestBase{
 	}
 	
 	@Test
-	public void test_4_ReleaseAlbum_6_nonExistingAlbum(){
+	public void test_4_ReleaseAlbum_6_NonExistingAlbum(){
 		Response response = target(pathPrefix)
 				.path("/" + albumId + "i_do_not_exist/release").register(authAsUser)
 				.request(MediaType.APPLICATION_JSON_TYPE)
@@ -278,14 +283,9 @@ public class AlbumTest extends ImejiTestBase{
 	
 	
 	@Test
-	public void test_5_AddItemsToAlbum() throws ImejiException {
+	public void test_5_AddItemsToAlbum_1_WithAuth() throws ImejiException {
 		initCollection();
 		initItem();
-		
-//		target(pathPrefix)
-//				.path("/" + collectionId + "/release").register(authAsUser)
-//				.request(MediaType.APPLICATION_JSON_TYPE)
-//				.put(Entity.json("{}"));
 		
 		Response response = target(pathPrefix)
 				.path("/" + albumId + "/add").register(authAsUser)
@@ -294,6 +294,59 @@ public class AlbumTest extends ImejiTestBase{
 
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 	}
+	
+	@Test
+	public void test_5_AddItemsToAlbum_2_WithUnauth() throws ImejiException {
+		initCollection();
+		initItem();
+		
+		Response response = target(pathPrefix)
+				.path("/" + albumId + "/add")
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));	
+
+		assertThat(response.getStatus(),equalTo(UNAUTHORIZED.getStatusCode()));
+	}
+	
+	@Test
+	public void test_5_AddItemsToAlbum_3_WithNonAuth() throws ImejiException {
+		initCollection();
+		initItem();
+		
+		Response response = target(pathPrefix)
+				.path("/" + albumId + "/add").register(authAsUser2)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));	
+
+		assertThat(response.getStatus(),equalTo(FORBIDDEN.getStatusCode()));;
+	}
+	
+	@Test
+	public void test_5_AddItemsToAlbum_4_NonExistingAlbum() throws ImejiException {
+		initCollection();
+		initItem();
+		
+		Response response = target(pathPrefix)
+				.path("/" + albumId+"i_do_not_exist" + "/add").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));	
+
+		assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
+	}
+	
+	
+	
+	@Test
+	public void test_5_AddItemsToAlbum_5_NonExistingItem() throws ImejiException {
+		
+		Response response = target(pathPrefix)
+				.path("/" + albumId + "/add").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + "adfgsh" + "\"]"));	
+
+		assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
+	}
+	
 	
 	@Test
 	public void test_6_WithdrawAlbum_1_WithAuth() throws ImejiException {
@@ -430,6 +483,135 @@ public class AlbumTest extends ImejiTestBase{
 				.put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
 
 		assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
+	}
+	
+	@Test
+	public void test_7_UpdateAlbum_1_WithAuth() throws IOException {
+		Path jsonPath = Paths.get("src/test/resources/rest/createAlbum.json");
+		String jsonString = new String(Files.readAllBytes(jsonPath), "UTF-8");
+
+		Response response = target(pathPrefix)
+				.register(authAsUser)
+				.register(MultiPartFeature.class)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.post(Entity.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
+
+		jsonPath = Paths.get("src/test/resources/rest/updateAlbum.json");
+		jsonString = new String(Files.readAllBytes(jsonPath), "UTF-8");
+		
+		jsonString = jsonString.replace("idValue", albumId);
+		
+		response = target(pathPrefix)
+				.path("/" + albumId).register(authAsUser)
+				.register(MultiPartFeature.class)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
+		
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		Map<String, Object> albData = TestUtils.jsonToPOJO(response);
+		assertEquals("TestAlbumUpdate", albData.get("title"));
+	}
+	
+	@Test
+	public void test_7_UpdateAlbum_2_WithUnAuth() throws IOException {
+		Path jsonPath = Paths.get("src/test/resources/rest/createAlbum.json");
+		String jsonString = new String(Files.readAllBytes(jsonPath), "UTF-8");
+
+		Response response = target(pathPrefix)
+				.register(authAsUser)
+				.register(MultiPartFeature.class)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.post(Entity.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
+
+		jsonPath = Paths.get("src/test/resources/rest/updateAlbum.json");
+		jsonString = new String(Files.readAllBytes(jsonPath), "UTF-8");
+		
+		jsonString = jsonString.replace("idValue", albumId);
+		
+		response = target(pathPrefix)
+				.path("/" + albumId).register(authAsUser2)
+				.register(MultiPartFeature.class)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
+		
+		assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
+	}
+	
+	@Test
+	public void test_7_UpdateAlbum_3_WithNonAuth() throws IOException {
+		Path jsonPath = Paths.get("src/test/resources/rest/createAlbum.json");
+		String jsonString = new String(Files.readAllBytes(jsonPath), "UTF-8");
+
+		Response response = target(pathPrefix)
+				.register(authAsUser)
+				.register(MultiPartFeature.class)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.post(Entity.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
+
+		jsonPath = Paths.get("src/test/resources/rest/updateAlbum.json");
+		jsonString = new String(Files.readAllBytes(jsonPath), "UTF-8");
+		
+		jsonString = jsonString.replace("idValue", albumId);
+		
+		response = target(pathPrefix)
+				.path("/" + albumId)
+				.register(MultiPartFeature.class)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
+		
+		assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
+	}
+	
+	@Test
+	public void test_7_UpdateAlbum_4_NonExistingAlbum() throws IOException {
+		Path jsonPath = Paths.get("src/test/resources/rest/createAlbum.json");
+		String jsonString = new String(Files.readAllBytes(jsonPath), "UTF-8");
+
+		Response response = target(pathPrefix)
+				.register(authAsUser)
+				.register(MultiPartFeature.class)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.post(Entity.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
+
+		jsonPath = Paths.get("src/test/resources/rest/updateAlbum.json");
+		jsonString = new String(Files.readAllBytes(jsonPath), "UTF-8");
+		
+		String nonExistingAlbumId = "testID";
+		jsonString = jsonString.replace("idValue", nonExistingAlbumId);
+		
+		response = target(pathPrefix)
+				.path("/" + nonExistingAlbumId).register(authAsUser)
+				.register(MultiPartFeature.class)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
+		
+		assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
+	}
+	
+	@Test
+	public void test_7_UpdateAlbum_5_AlbumIdDiffersFromAlbumIdInJSON() throws IOException {
+		Path jsonPath = Paths.get("src/test/resources/rest/createAlbum.json");
+		String jsonString = new String(Files.readAllBytes(jsonPath), "UTF-8");
+
+		Response response = target(pathPrefix)
+				.register(authAsUser)
+				.register(MultiPartFeature.class)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.post(Entity.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
+
+		jsonPath = Paths.get("src/test/resources/rest/updateAlbum.json");
+		jsonString = new String(Files.readAllBytes(jsonPath), "UTF-8");
+		
+		String nonExistingAlbumId = "testID";
+		jsonString = jsonString.replace("idValue", nonExistingAlbumId);
+		
+		response = target(pathPrefix)
+				.path("/" + albumId).register(authAsUser)
+				.register(MultiPartFeature.class)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
+		
+		assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
 	}
 	
 	

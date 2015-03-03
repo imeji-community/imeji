@@ -1,6 +1,5 @@
 package de.mpg.imeji.rest.resources;
 
-import static de.mpg.imeji.rest.process.CollectionProcess.updateCollection;
 import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONResponse;
 
 import java.io.InputStream;
@@ -26,7 +25,6 @@ import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 
 import de.mpg.imeji.rest.process.AlbumProcess;
-import de.mpg.imeji.rest.process.CollectionProcess;
 import de.mpg.imeji.rest.process.RestProcessUtils;
 import de.mpg.imeji.rest.to.JSONResponse;
 

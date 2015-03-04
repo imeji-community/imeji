@@ -3,31 +3,12 @@
  */
 package de.mpg.imeji.presentation.search;
 
-import java.io.IOException;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
-
-import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
-
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
-import de.mpg.imeji.logic.search.vo.SearchGroup;
-import de.mpg.imeji.logic.search.vo.SearchIndex;
+import de.mpg.imeji.logic.search.vo.*;
 import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
-import de.mpg.imeji.logic.search.vo.SearchOperators;
-import de.mpg.imeji.logic.search.vo.SearchPair;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
-import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -41,6 +22,14 @@ import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.UrlHelper;
+import org.apache.log4j.Logger;
+
+import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
+import java.io.IOException;
+import java.net.URI;
+import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * Java bean for the advanced search page
@@ -179,7 +168,7 @@ public class AdvancedSearchBean
         for (CollectionImeji c : collections)
         {
             MetadataProfile p = ObjectLoader.loadProfile(c.getProfile(), session.getUser());
-            if (p.getStatements().size() > 0 && !isEmpty(c))
+            if (p != null && p.getStatements() != null && p.getStatements().size() > 0 && !isEmpty(c))
             {
                 map.put(p.getId().toString(), p);
                 profilesMenu.add(new SelectItem(p.getId().toString(), c.getMetadata().getTitle()));

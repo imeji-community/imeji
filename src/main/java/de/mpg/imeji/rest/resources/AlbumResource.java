@@ -86,7 +86,7 @@ public class AlbumResource implements ImejiResource{
 		JSONResponse resp = AlbumProcess.deleteAlbum(req, id);
 		return RestProcessUtils.buildJSONResponse(resp);
 	}
-	
+	 
 	@PUT
 	@Path("/{id}/discard")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)

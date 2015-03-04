@@ -89,8 +89,16 @@ public class AlbumProcess {
 		return resp;
 	}
 	
-	public static JSONResponse withdrawAlbum(HttpServletRequest req, String id, String discardComment) throws Exception {
+	public static JSONResponse withdrawAlbum(HttpServletRequest req, String id, String discardComment){
 		JSONResponse resp;
+        if ("".equals(discardComment) || discardComment == null ) {
+            try {
+				throw new BadRequestException("Please give a comment");
+			} catch (ImejiException e) {
+				resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
+				return resp;
+			}
+        }    
 
 		User u = BasicAuthentication.auth(req);
 		AlbumService service = new AlbumService();

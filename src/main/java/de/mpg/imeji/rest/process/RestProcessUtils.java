@@ -20,6 +20,8 @@ import javax.ws.rs.core.Response.Status;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 public class RestProcessUtils {
 	
 	private static Logger logger = Logger.getLogger(RestProcessUtils.class);
@@ -142,7 +144,7 @@ public class RestProcessUtils {
 	 */
 	public static JSONResponse localExceptionHandler(Exception eX, String message) {
 		String localMessage = message;
-		if (message=="" || message == null) {
+		if ( isNullOrEmpty(message) ) {
 			message = eX.getLocalizedMessage();
 		}
 				
@@ -155,9 +157,8 @@ public class RestProcessUtils {
 			resp = RestProcessUtils.buildJSONAndExceptionResponse(Status.FORBIDDEN.getStatusCode(), localMessage);
 			
 		}
-		else if (eX instanceof NotFoundException || eX instanceof NotFoundException) {
+		else if (eX instanceof NotFoundException) {
 			resp = RestProcessUtils.buildJSONAndExceptionResponse(Status.NOT_FOUND.getStatusCode(),localMessage);
-
 		}
 		else if (eX instanceof UnprocessableError) {
 			resp = RestProcessUtils.buildJSONAndExceptionResponse(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(),localMessage);

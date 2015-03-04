@@ -2,6 +2,7 @@ package de.mpg.imeji.rest.resources.test.integration;
 
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
 import de.mpg.imeji.rest.resources.test.TestUtils;
@@ -470,7 +471,7 @@ public class CollectionTest extends ImejiTestBase {
 
 
     @Test
-    public void test_6_UpdateCollection_1_Metadata_AllowedChanges() throws IOException {
+    public void test_6_UpdateCollection_1_Metadata_AllowedChanges() throws IOException, UnprocessableError {
 
         initCollection();
 
@@ -545,15 +546,13 @@ public class CollectionTest extends ImejiTestBase {
             }
         }
 
-        //check profile stuff
+        //profile COPY
         assertThat("Should be new profileId", uc.getProfile().getProfileId(), not(equalTo(storedProfileId)));
 
-        collectionTO.getProfile().setMethod(METHOD.REFERENCE.toString());
-        form= new Form()
-                .param("json",  buildJSONFromObject(collectionTO));
 
-        response = request
-                .put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+        //profile REFERENCE
+        collectionTO.getProfile().setMethod(METHOD.REFERENCE.toString());
+        response = getResponse(request, collectionTO);
         assertEquals(OK.getStatusCode(), response.getStatus());
         uc = response.readEntity(CollectionTO.class);
         assertThat("Should be same profileId", uc.getProfile().getProfileId(), equalTo(collectionTO.getProfile().getProfileId()));
@@ -561,7 +560,7 @@ public class CollectionTest extends ImejiTestBase {
 
     }
     @Test
-    public void test_6_UpdateCollection_2_Metadata_NotAllowedChanges() throws IOException {
+    public void test_6_UpdateCollection_2_Metadata_NotAllowedChanges() throws IOException, UnprocessableError {
 
         initCollection();
 
@@ -576,11 +575,7 @@ public class CollectionTest extends ImejiTestBase {
         //empty collection title
         stored = collectionTO.getTitle();
         collectionTO.setTitle("");
-        Form form= new Form()
-                .param("json",  buildJSONFromObject(collectionTO));
-
-        Response response = request
-                .put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+        Response response = getResponse(request, collectionTO);
         assertEquals(BAD_REQUEST.getStatusCode(), response.getStatus());
         //TODO: BAD_REQUEST response message is not correctly generated
         collectionTO.setTitle(stored);
@@ -588,11 +583,7 @@ public class CollectionTest extends ImejiTestBase {
         //wrong collection id
         stored = collectionTO.getId();
         collectionTO.setId(stored + CHANGED);
-        form= new Form()
-                .param("json", buildJSONFromObject(collectionTO));
-
-        response = request
-                .put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+        response = getResponse(request, collectionTO);
         assertEquals(BAD_REQUEST.getStatusCode(), response.getStatus());
         collectionTO.setId(stored);
 
@@ -601,11 +592,7 @@ public class CollectionTest extends ImejiTestBase {
         PersonTO contrib = collectionTO.getContributors().get(0);
         stored = contrib.getFamilyName();
         contrib.setFamilyName("");
-        form= new Form()
-                .param("json", buildJSONFromObject(collectionTO));
-
-        response = request
-                .put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+        response = getResponse(request, collectionTO);
         assertEquals(BAD_REQUEST.getStatusCode(), response.getStatus());
         contrib.setFamilyName(stored);
 
@@ -613,33 +600,28 @@ public class CollectionTest extends ImejiTestBase {
         OrganizationTO org = contrib.getOrganizations().get(0);
         stored = org.getName();
         org.setName("");
-        form= new Form()
-                .param("json", buildJSONFromObject(collectionTO));
-
-        response = request
-                .put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+        response = getResponse(request, collectionTO);
         assertEquals(BAD_REQUEST.getStatusCode(), response.getStatus());
         org.setName(stored);
 
         //wrong profile id
         stored = collectionTO.getProfile().getProfileId();
         collectionTO.getProfile().setMethod(stored + CHANGED);
-        form= new Form()
-                .param("json", buildJSONFromObject(collectionTO));
-        response = request
-                .put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+        response = getResponse(request, collectionTO);
         assertEquals(BAD_REQUEST.getStatusCode(), response.getStatus());
         collectionTO.getProfile().setProfileId(stored);
 
         //wrong profile method
         collectionTO.getProfile().setMethod("wrong_method");
-        form = new Form()
-                .param("json", buildJSONFromObject(collectionTO));
-        response = request
-                .put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+        response = getResponse(request, collectionTO);
         assertEquals(BAD_REQUEST.getStatusCode(), response.getStatus());
         collectionTO.getProfile().setMethod("");
 
 
+    }
+
+    private static Response getResponse(Builder request, CollectionTO collTO) throws UnprocessableError {
+        return request.put(Entity.entity(new Form()
+                .param("json", buildJSONFromObject(collTO)), MediaType.APPLICATION_FORM_URLENCODED_TYPE));
     }
 }

@@ -1,22 +1,19 @@
 package de.mpg.imeji.rest.process;
 
-import static de.mpg.imeji.rest.process.CommonUtils.USER_MUST_BE_LOGGED_IN;
-import static javax.ws.rs.core.Response.Status.OK;
-import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
-
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.Response.Status;
-
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.api.AlbumService;
-import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.to.AlbumTO;
-import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.JSONResponse;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Response.Status;
+import java.util.List;
+
+import static de.mpg.imeji.rest.process.CommonUtils.USER_MUST_BE_LOGGED_IN;
+import static javax.ws.rs.core.Response.Status.OK;
+import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
 
 
 public class AlbumProcess {
@@ -45,9 +42,9 @@ public class AlbumProcess {
 			resp = RestProcessUtils.buildJSONAndExceptionResponse(Status.UNAUTHORIZED.getStatusCode(), CommonUtils.USER_MUST_BE_LOGGED_IN);
 		} else {
 			AlbumService service = new AlbumService();
-			AlbumTO to = (AlbumTO) RestProcessUtils.buildTOFromJSON(req, AlbumTO.class);
 			try {
-				resp = RestProcessUtils.buildResponse(Status.CREATED.getStatusCode(), service.create(to, u));
+                AlbumTO to = (AlbumTO) RestProcessUtils.buildTOFromJSON(req, AlbumTO.class);
+                resp = RestProcessUtils.buildResponse(Status.CREATED.getStatusCode(), service.create(to, u));
 			} catch (ImejiException e) {
 				resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
 			}
@@ -124,10 +121,10 @@ public class AlbumProcess {
 		JSONResponse resp;
 		User u = BasicAuthentication.auth(req);
 		AlbumService service = new AlbumService();
-		List<String> itemIds = (List) RestProcessUtils.buildTOFromJSON(req, List.class);
-		
-		try {
-			resp= RestProcessUtils.buildResponse(Status.OK.getStatusCode(), service.addItem(id, u, itemIds));
+
+        try {
+            List<String> itemIds = (List) RestProcessUtils.buildTOFromJSON(req, List.class);
+            resp= RestProcessUtils.buildResponse(Status.OK.getStatusCode(), service.addItem(id, u, itemIds));
 		} catch (Exception e) {
 			resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
 		}

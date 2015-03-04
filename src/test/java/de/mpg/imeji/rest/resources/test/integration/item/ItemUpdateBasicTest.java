@@ -1,5 +1,6 @@
 package de.mpg.imeji.rest.resources.test.integration.item;
 
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
@@ -58,7 +59,7 @@ public class ItemUpdateBasicTest extends ImejiTestBase {
 
 
     @Test
-    public void test_1_UpdateItem_1_Basic() throws IOException {
+    public void test_1_UpdateItem_1_Basic() throws IOException, UnprocessableError {
         FormDataMultiPart multiPart = new FormDataMultiPart();
 
         //remove all metadata!!!

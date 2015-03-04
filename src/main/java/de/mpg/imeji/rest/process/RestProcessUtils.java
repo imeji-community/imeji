@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import de.mpg.imeji.exceptions.*;
 import de.mpg.imeji.rest.to.HTTPError;
 import de.mpg.imeji.rest.to.JSONException;
@@ -18,7 +17,6 @@ import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -32,41 +30,32 @@ public class RestProcessUtils {
 	 * @param type
 	 * @return 
 	 */
-	public static <T> Object buildTOFromJSON(String json, Class<T> type) {
+	public static <T> Object buildTOFromJSON(String json, Class<T> type) throws UnprocessableError {
 		try {
             ObjectReader reader = new ObjectMapper().reader().withType(type);
             return reader.readValue(json);
-		} catch (IllegalArgumentException e) {
-			return e.getMessage();
-		}catch(UnrecognizedPropertyException e2){
-			return e2.getMessage();
-		}catch(JsonProcessingException e3){
-			return e3.getMessage();
-		}catch(IOException e4){
-			return e4.getMessage();
+		} catch (Exception e) {
+            throw new UnprocessableError("Cannot parse json: " + e.getLocalizedMessage());
 		}
 	}
 
-	public static <T> Object buildTOFromJSON(HttpServletRequest req, Class<T> type) {
+	public static <T> Object buildTOFromJSON(HttpServletRequest req, Class<T> type) throws UnprocessableError {
 		ObjectReader reader = new ObjectMapper().reader().withType(type);
 		try {
 			return reader.readValue(req.getInputStream());
-		} catch (IOException e) {
-			logger.error("Could not build TO from JSON", e);
+		} catch (Exception e) {
+            throw new UnprocessableError("Cannot parse json: " + e.getLocalizedMessage());
 		}
-		return null;
 	}
 
-	public static String buildJSONFromObject(Object obj) {
+	public static String buildJSONFromObject(Object obj) throws UnprocessableError {
 		ObjectWriter ow = new ObjectMapper().writer()
 				.with(SerializationFeature.INDENT_OUTPUT);
 		try {
 			return ow.writeValueAsString(obj);
-		} catch (IOException e) {
-			logger.error("Could not build JSON from Object", e);
-
-		}
-		return null;
+        } catch (Exception e) {
+            throw new UnprocessableError("Cannot parse json: " + e.getLocalizedMessage());
+        }
 	}
 
 

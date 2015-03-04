@@ -38,10 +38,9 @@ public class CollectionProcess {
 			resp = RestProcessUtils.buildJSONAndExceptionResponse(UNAUTHORIZED.getStatusCode(), USER_MUST_BE_LOGGED_IN);
 		} else {
 			CollectionService service = new CollectionService();
-			CollectionTO to = (CollectionTO) RestProcessUtils.buildTOFromJSON(
-					req, CollectionTO.class);
 			try {
-				resp = RestProcessUtils.buildResponse(CREATED.getStatusCode(), service.create(to, u));
+                CollectionTO to = (CollectionTO) RestProcessUtils.buildTOFromJSON(req, CollectionTO.class);
+                resp = RestProcessUtils.buildResponse(CREATED.getStatusCode(), service.create(to, u));
 			} catch (ImejiException e) {
 				resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
 			}

@@ -458,7 +458,7 @@ public class SPARQLQueries {
 						.queryFactory(user,
 								J2JHelper.getResourceNamespace(new Item()),
 								null, false)
-				+ " ?s <http://imeji.org/terms/status> ?status}LIMIT " + limit;
+				+ " ?s <http://imeji.org/terms/status> ?status . ?s <http://imeji.org/terms/collection> ?c} LIMIT " + limit;
 	}
 
 	public static String selectContainerItemByFilename(URI containerURI,

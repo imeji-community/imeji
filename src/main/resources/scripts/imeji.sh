@@ -27,12 +27,12 @@ case "$1" in
 
   start-remote-debug)
 	echo "Starting $SERVICE_NAME..."
-	sh $BIN_DIR/catalina.sh jdpa start
+	sh $BIN_DIR/catalina.sh jpda start
 	ShowStatus
     ;;
 
    stop)
-	echo -n "Shutting down $SERVICE_NAME..."
+	echo "Shutting down $SERVICE_NAME..."
 	sh $BIN_DIR/shutdown.sh
 	sleep 5
 	ShowStatus

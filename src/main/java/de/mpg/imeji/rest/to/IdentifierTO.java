@@ -1,13 +1,12 @@
 package de.mpg.imeji.rest.to;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
 import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.*;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @XmlRootElement
 @XmlType(propOrder = {	 

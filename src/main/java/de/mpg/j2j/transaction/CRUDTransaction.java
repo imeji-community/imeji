@@ -6,6 +6,7 @@ import java.util.List;
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.query.ReadWrite;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.j2j.controler.ResourceController;
 
@@ -39,7 +40,7 @@ public class CRUDTransaction extends Transaction
     }
 
     @Override
-    protected void execute(Dataset ds) throws Exception
+    protected void execute(Dataset ds) throws ImejiException
     {
         ResourceController rc = new ResourceController(getModel(ds), lazy);
         for (Object o : objects)
@@ -53,9 +54,9 @@ public class CRUDTransaction extends Transaction
      * 
      * @param rc
      * @param o
-     * @throws Exception
+     * @throws ImejiException
      */
-    private void invokeResourceController(ResourceController rc, Object o) throws Exception
+    private void invokeResourceController(ResourceController rc, Object o) throws ImejiException
     {
         switch (type)
         {

@@ -1,13 +1,14 @@
 package de.mpg.imeji.rest.process;
 
-import de.mpg.imeji.rest.to.JSONResponse;
-import de.mpg.imeji.rest.to.StorageTO;
-
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static de.mpg.imeji.logic.storage.StorageController.UPLOAD_BLACKLIST_PROPERTY;
 import static de.mpg.imeji.logic.storage.StorageController.UPLOAD_WHITELIST_PROPERTY;
 import static de.mpg.imeji.presentation.util.PropertyReader.getProperty;
-import static javax.ws.rs.core.Response.Status;
+
+import javax.ws.rs.core.Response.Status;
+
+import de.mpg.imeji.rest.to.JSONResponse;
+import de.mpg.imeji.rest.to.StorageTO;
 
 
 /**
@@ -17,7 +18,7 @@ public class StorageProcess {
 
     public static JSONResponse getStorageProperties() {
 
-        JSONResponse resp = new JSONResponse();
+        JSONResponse resp; 
 
         StorageTO sto = new StorageTO();
 
@@ -30,12 +31,9 @@ public class StorageProcess {
             if (!isNullOrEmpty(white)) {
                 sto.setUploadWhiteList(white);
             }
-            resp.setObject(sto);
-            resp.setStatus(Status.OK);
+            resp = RestProcessUtils.buildResponse(Status.OK.getStatusCode(), sto);
         } catch (Exception e) {
-            resp.setObject(RestProcessUtils.buildExceptionResponse(e
-                    .getLocalizedMessage()));
-            resp.setStatus(Status.FORBIDDEN);
+        	resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
         }
         return resp;
     }

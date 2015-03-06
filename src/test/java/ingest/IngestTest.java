@@ -14,6 +14,7 @@ import java.util.List;
 
 import javax.xml.bind.JAXBException;
 
+import org.apache.log4j.Logger;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.xml.sax.SAXException;
@@ -74,7 +75,6 @@ public class IngestTest
         }
         catch (JAXBException e)
         {
-            e.printStackTrace();
             fail("JAXBException");
         }
     }
@@ -92,7 +92,8 @@ public class IngestTest
         catch (JAXBException e)
         {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+			Logger.getLogger(IngestTest.class).error("ProfileParsing issue", e);
+
         }
     }
 
@@ -114,7 +115,7 @@ public class IngestTest
         catch (JAXBException e)
         {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+        	Logger.getLogger(IngestTest.class).error("ItemParsing issue", e);
         }
     }
 
@@ -143,7 +144,7 @@ public class IngestTest
         catch (JAXBException e)
         {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+        	Logger.getLogger(IngestTest.class).error("ItemParsing writetofile issue", e);
         }
     }
 }

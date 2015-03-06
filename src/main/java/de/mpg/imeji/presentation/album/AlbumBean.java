@@ -70,8 +70,9 @@ public class AlbumBean extends ContainerBean
      * Construct an {@link AlbumBean} from an {@link Album}
      * 
      * @param album
+     * @throws Exception 
      */
-    public AlbumBean(Album album)
+    public AlbumBean(Album album) throws Exception 
     {
         this.album = album;
         if (album != null)
@@ -111,8 +112,9 @@ public class AlbumBean extends ContainerBean
 
     /**
      * Load the {@link Album} and its {@link Item} when the {@link AlbumBean} page is called, and initialize it.
+     * @throws Exception 
      */
-    public void initView()
+    public void initView() throws Exception
     {
         if (id != null)
         {
@@ -132,7 +134,9 @@ public class AlbumBean extends ContainerBean
                 	BeanHelper.info(sessionBean.getMessage("album_Private_Content").replace("XXX_COUNT_XXX", getPrivateCount()+""));
                 }
             }
+            
         }
+    	
     }
 
     /**
@@ -395,20 +399,20 @@ public class AlbumBean extends ContainerBean
      * @return
      */
     public String makeActive()
-    {
+    {    
         findItems(sessionBean.getUser(), getSize());
         sessionBean.setActiveAlbum(this.album);
         this.setActive(true);
         return "pretty:";
     }
-
+  
     /**
      * Make the current {@link Album} inactive
      * 
      * @return
      */
     public String makeInactive()
-    {
+    { 
         sessionBean.setActiveAlbum(null);
         this.setActive(false);
         return "pretty:";
@@ -432,7 +436,7 @@ public class AlbumBean extends ContainerBean
         {
             BeanHelper.error(sessionBean.getMessage("error_album_release"));
             BeanHelper.error(e.getMessage());
-            e.printStackTrace();
+            logger.error("Issue during release", e);
         }
         return "pretty:";
     }
@@ -456,7 +460,7 @@ public class AlbumBean extends ContainerBean
         {
             BeanHelper.error(sessionBean.getMessage("error_album_delete"));
             BeanHelper.error(e.getMessage());
-            e.printStackTrace();
+            logger.error("Error during delete album", e);
         }
         return "pretty:albums";
     }
@@ -479,7 +483,7 @@ public class AlbumBean extends ContainerBean
         {
             BeanHelper.error(sessionBean.getMessage("error_album_withdraw"));
             BeanHelper.error(e.getMessage());
-            e.printStackTrace();
+            logger.error("Error during withdraw album", e);
         }
         return "pretty:";
     }

@@ -36,6 +36,7 @@ public class Number extends Metadata
     private static final long serialVersionUID = 1465887901391010292L;
     @j2jLiteral("http://imeji.org/terms/number")
     private double number = Double.NaN;
+
     @j2jResource("http://imeji.org/terms/statement")
     private URI statement;
 
@@ -59,14 +60,12 @@ public class Number extends Metadata
         return number;
     }
 
-    @Override
     @XmlElement(name = "statement", namespace = "http://imeji.org/terms/")
     public URI getStatement()
     {
         return statement;
     }
 
-    @Override
     public void setStatement(URI namespace)
     {
         this.statement = namespace;
@@ -79,8 +78,7 @@ public class Number extends Metadata
         {
             setPos(metadata.getPos());
             this.number = ((Number)metadata).getNumber();
-            this.statement = metadata.getStatement();
-        }
+            setStatement(((Number) metadata).getStatement());        }
     }
 
     @Override

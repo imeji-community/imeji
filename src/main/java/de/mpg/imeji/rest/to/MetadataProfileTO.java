@@ -5,10 +5,12 @@ import java.util.List;
 
 public class MetadataProfileTO extends PropertiesTO{
 
-	private static final long serialVersionUID = 1450623577903800529L;
+    private static final long serialVersionUID = -8360877762365469585L;
 
     private String title;
-    
+
+    private boolean def;
+
     private String description;
     
     private List<StatementTO> statements = new ArrayList<StatementTO>();
@@ -20,6 +22,14 @@ public class MetadataProfileTO extends PropertiesTO{
 	public void setTitle(String title) {
 		this.title = title;
 	}
+
+    public boolean getDefault() {
+        return def;
+    }
+
+    public void setDefault(boolean def) {
+        this.def = def;
+    }
 
 	public String getDescription() {
 		return description;
@@ -36,5 +46,5 @@ public class MetadataProfileTO extends PropertiesTO{
 	public void setStatements(List<StatementTO> statements) {
 		this.statements = statements;
 	}
-    
+
 }

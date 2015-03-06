@@ -3,6 +3,7 @@
  */
 package de.mpg.imeji.presentation.album;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +55,7 @@ public class AlbumItemsBean extends ItemsBean
     }
 
     @Override
-    public String getInitPage()
+    public String getInitPage() throws Exception
     {
         uri = ObjectHelper.getURI(Album.class, id);
         loadAlbum();
@@ -78,8 +79,9 @@ public class AlbumItemsBean extends ItemsBean
 
     /**
      * Load the current album
+     * @throws Exception 
      */
-    public void loadAlbum()
+    public void loadAlbum() throws Exception
     {
         album = ObjectLoader.loadAlbumLazy(uri, sb.getUser());
     }
@@ -221,11 +223,16 @@ public class AlbumItemsBean extends ItemsBean
      * Release current {@link Album}
      * 
      * @return
+     * @throws Exception 
      */
-    public String release()
+    public String release() throws Exception
     {
         ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).setId(id);
-        ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).initView();
+        try {
+			((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).initView();
+		} catch (IOException e) {
+			logger.error("Error during release album items", e);
+		}
         ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).release();
         return "pretty:";
     }
@@ -234,11 +241,17 @@ public class AlbumItemsBean extends ItemsBean
      * Delete current {@link Album}
      * 
      * @return
+     * @throws Exception 
      */
-    public String delete()
+    public String delete() throws Exception
     {
         ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).setId(id);
-        ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).initView();
+        try {
+			((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).initView();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			logger.error("Error during delete album items ", e);
+		}
         ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).delete();
         return "pretty:albums";
     }

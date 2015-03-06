@@ -7,6 +7,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchResult;
@@ -131,7 +133,7 @@ public class TechnicalFacets extends Facets
         }
         catch (UnsupportedEncodingException e)
         {
-            e.printStackTrace();
+        	Logger.getLogger(TechnicalFacets.class).error("There had been some issues with the technical facets", e);
         }
     }
 

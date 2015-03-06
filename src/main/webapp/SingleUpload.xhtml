@@ -3,11 +3,19 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:list="http://java.sun.com/jsf/composite/components/list">
+	xmlns:list="http://java.sun.com/jsf/composite/components/list"
+	xmlns:menu="http://java.sun.com/jsf/composite/components/menu">
 	
 	<ui:param name="headline" value="#{lbl.singleUploadPageTitle}"/>
 	<ui:param name="currentMainMenu" value="upload"/>
 	
+	<ui:define name="actionsMenu">
+		<menu:context_actionMenu isUserLoggedIn="#{Auth.loggedIn}" 
+								 curMainMenu="#{currentMainMenu}" 
+								 downloadEnabled="false"
+								 actionEnabled="false"
+								 navBean="#{Navigation}"/>
+	</ui:define>
 	
 	<ui:define name="mainContent">
 		<!-- Breadcrumb - History -->
@@ -19,125 +27,100 @@
 	        	<ui:include src="./include/LoginFormular.xhtml"/>
 			</h:panelGroup>
 		</ui:fragment>
-		
 
+			
 		<h:panelGroup layout="block" id="imj_ajaxWrapper" rendered="#{Auth.loggedIn}">
 
 			<h:panelGroup layout="block" styleClass="imj_upload">
 				
-				<div class="imj_headline">
-					<h2>
-						<h:outputText value="#{lbl.uploadFile}"/>
-					</h2>
-				</div>
-				
 				<h:form id="singleUpload">
-					<h:panelGroup layout="block" id="selCols" styleClass="imj_inlineSelectionGroup">
+					
+					<div id="uploader" class="imj_fileUploadContainer imj_singleUpload">
+						<div id="filelist">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
+		
+						<div id="container">
+						    <a id="pickfiles" href="javascript:;">[#{lbl.uploadFile}]</a>
+						</div>
+	
+						<script type="text/javascript" src="#{Navigation.applicationUrl}resources/plupload/2.1.2/js/plupload.full.min.js"></script>
+						<script type="text/javascript">
+							var uploader = new plupload.Uploader({
+								runtimes : 'html5,flash,silverlight,html4',
+								browse_button : 'pickfiles', // you can pass in id...
+								container: document.getElementById('container'), // ... or DOM Element itself
+								url : location.pathname  + "?start=1",
+								max_file_size : '#{Configuration.uploadMaxFileSize}kb',
+								multi_selection : false,
+								init: {
+									PostInit: function() {
+										document.getElementById('filelist').innerHTML = '';					
+									},
+									
+									FilesAdded: function(up, files) {
+										
+										plupload.each(files, function(file) {
+											if(up.files.length > 1)
+											{
+												up.removeFile(file);
+											}
+											
+											document.getElementById('filelist').innerHTML = '<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
+										});
+										uploader.start();
+										
+									},
+									
+									UploadProgress: function(up, file) {
+										document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+									},
+									 StateChanged: function(up) {
+											// Called when the state of the queue is changed
+											if( up.state == plupload.STOPPED)
+												report();
+		
+									},
+								}
+							});
+							
+							uploader.init();
+							function report(){
+								window.location.href = location.pathname + "?done=1";
+							}
+						</script>
+					</div>
+					
+					<h:panelGroup layout="block" id="selCols" styleClass="imj_inlineSelectionGroup" rendered="#{not empty SingleUploadBean.ingestImage}">
 						<span class="imj_selectionLabel">
 							<h:outputText value="#{lbl.select_collection}"/>
 						</span>
 						<h:selectOneMenu id="collections" value="#{SingleUploadBean.selectedCollectionItem}" styleClass="imj_selectionBox">
 							<f:selectItems value="#{SingleUploadBean.collectionItems}"/>
-							<f:ajax event="change" execute="@this" render="@form" listener="#{SingleUploadBean.colChangeListener}"/>
+							<f:ajax event="change" execute="@this" render="@form :additonalFooterScripts" listener="#{SingleUploadBean.colChangeListener}"/>
 						</h:selectOneMenu>
 					</h:panelGroup>
-					
-					<div>
-						<div id="filelist">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
-						<br />
-		
-						<div id="container">
-						    <a id="pickfiles" href="javascript:;">[Select files]</a>
-						    <a id="uploadfiles" href="javascript:;">[Upload files]</a>
-						</div>
-						<br />
-	
-						<script type="text/javascript" src="#{Navigation.applicationUrl}resources/plupload/2.1.2/js/plupload.full.min.js"></script>
 						
-						
-						<script type="text/javascript">
-			
-						var uploader = new plupload.Uploader({
-							runtimes : 'html5,flash,silverlight,html4',
-							browse_button : 'pickfiles', // you can pass in id...
-							container: document.getElementById('container'), // ... or DOM Element itself
-							url : location.pathname  + "?start=1",
-							max_file_size : '#{Configuration.uploadMaxFileSize}kb',
-							multi_selection : false,
-							init: {
-								PostInit: function() {
-									document.getElementById('filelist').innerHTML = '';					
-									document.getElementById('uploadfiles').onclick = function() {
-										uploader.start();
-									};
-								},
-								
-								FilesAdded: function(up, files) {
-									plupload.each(files, function(file) {
-										if(up.files.length > 1)
-										{
-											up.removeFile(file);
-										}
-										
-										document.getElementById('filelist').innerHTML = '<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
-									});
-								},
-								
-								UploadProgress: function(up, file) {
-									document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
-								},
-								 StateChanged: function(up) {
-										// Called when the state of the queue is changed
-										if( up.state == plupload.STOPPED)
-											report();
-	
-								},
-							}
-						});
-						
-						uploader.init();
-						function report(){
-							window.location.href = location.pathname + "?done=1";
-						}
-						
-						</script>
-						
-						
+					<div class="imj_infodataWrapper">
+						<h:panelGroup id="techmetadata" layout="block" styleClass="imj_techdataList" rendered="#{SingleUploadBean.techMd.size()>0}">
+							<div class="imj_listHeader">
+								<span class="imj_iconExpand_16"> </span>
+								<h3 class="imj_sectionHeadline" style="white-space:nowrap;">#{lbl.metadata}: #{SingleUploadBean.ingestImage.name}</h3>
+							</div>
+							<div class="imj_listBody imj_minHeight">
+								<ui:repeat id="techMd" var="techMd" value="#{SingleUploadBean.techMd}">
+									<h:outputText value="#{techMd}" styleClass="imj_techdataEntry"/>
+								</ui:repeat>
+							</div>
+						</h:panelGroup>
 					</div>
-						
 					
-					<h:panelGroup id="techmetadata" layout="block" styleClass="imj_techdataList" rendered="#{SingleUploadBean.techMd.size()>0}">
-						<div class="imj_listHeader"><h3 class="imj_sectionHeadline" style="white-space:nowrap;">#{SingleUploadBean.ingestImage.name}</h3></div>
-						<div class="imj_listBody">
-							<ui:repeat id="techMd" var="techMd" value="#{SingleUploadBean.techMd}">
-								<h:outputText value="#{techMd}" styleClass="imj_techdataEntry"/>
-							</ui:repeat>
+					<ui:fragment rendered="#{SingleUploadBean.techMd.size()>0}">
+						<div class="imj_submitPanel">
+							<h:outputLink value="#{HistorySession.previousPage.completeUrlWithHistory}" styleClass="imj_cancelButton">
+								<h:outputText value="#{lbl.cancel}" />
+							</h:outputLink>
+							<h:commandButton id="submitTop" action="#{SingleUploadBean.save}" value="#{lbl.save}" styleClass="imj_submitButton" rendered="#{SingleUploadBean.readyForUploading()}"/>
 						</div>
-					</h:panelGroup>
-
-					<h:panelGroup layout="block" id="mdProfile" styleClass="imj_metadataList">
-						<h3 class="imj_sectionHeadline">#{lbl.metadata_profile}</h3>
-						<ui:repeat id="smdb" var="smdb" value="#{SingleUploadBean.superMetadataBeans}" rows="0" varStatus="indexMetadata">	
-								<!-- MetaDataList - edit panel container set -->
-								<div class="imj_metadataSet">
-									<div class="imj_metadataLabel">
-										<h:outputText value="#{MetadataLabels.internationalizedLabels[smdb.statement.id]}"/>
-										<span class="imj_invisible">: </span>
-									</div>
-									<div class="imj_metadataValue" style="margin-left: #{smdb.hierarchyLevel}em;">
-										<!-- MetaDataInput -->
-										<list:batchEditList_singleStatement itemBean="#{smdb}" itemStatement="#{smdb.statement}" itemLabelBean="#{MetadataLabels}" hideLabel="true" navBean="#{Navigation}" suggestBean="#{SuggestBean}"/>		
-									</div>
-								</div>
-						</ui:repeat>
-					</h:panelGroup>
-					
-					<div class="imj_submitPanel">
-						<h:outputLink value="#{HistorySession.previousPage.completeUrlWithHistory}" styleClass="imj_cancelButton">
-							<h:outputText value="#{lbl.cancel}" />
-						</h:outputLink>
-						<h:commandButton id="submit" action="#{SingleUploadBean.save}" value="#{lbl.save}" styleClass="imj_submitButton" rendered="#{SingleUploadBean.readyForUploading()}"/>
-					</div>
+					</ui:fragment>
 					
 					<ui:fragment rendered="#{SingleUploadBean.getfFile() != '' or not empty SingleUploadBean.getItem()}">
 						<div class="imj_uploadMessageArea">
@@ -163,10 +146,65 @@
 							</h:panelGroup>
 						</div>
 					</ui:fragment>
+					
+					<h:panelGroup layout="block" id="mdProfile" styleClass="imj_metadataList" rendered="#{not empty SingleUploadBean.collection}">
+						<div class="imj_listHeader">
+							<h3 class="imj_sectionHeadline">#{lbl.metadata_profile}</h3>
+						</div>
+						<div class="imj_listBody imj_noBorder">
+							<ui:repeat id="metadata" var="metadata" value="#{SingleUploadBean.mdSetBean.tree.list}" rows="0" varStatus="indexMetadata">	
+									<!-- MetaDataList - edit panel container set -->   
+									<div class="imj_metadataSet">
+										<div class="imj_metadataLabel">
+											<h:outputText value="#{MetadataLabels.internationalizedLabels[metadata.statement.id]}"/>
+											<span class="imj_invisible">: </span>
+										</div>
+										<div class="imj_metadataValue" style="margin-left: #{smdb.hierarchyLevel}em;">
+											<!-- MetaDataInput -->
+											<list:batchEditList_singleStatement itemBean="#{metadata}" itemStatement="#{metadata.statement}" itemLabelBean="#{MetadataLabels}" hideLabel="true" navBean="#{Navigation}" suggestBean="#{SuggestBean}"/>											
+											<div class="imj_metadataEditButtonArea">
+												<h:commandButton type="submit" styleClass="imj_buttonAdd_16" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{SingleUploadBean.addMetadata(metadata)}" value="">
+													<f:ajax execute="@form" render="@form"/>
+												</h:commandButton>
+												<h:commandButton type="submit" styleClass="imj_buttonRemove_16" rendered="#{metadata.statement.maxOccurs != '1'}" action="#{SingleUploadBean.removeMetadata(metadata)}" value="">
+													<f:ajax execute="@form" render="@form"/>
+												</h:commandButton>
+											</div>
+										</div>
+									</div>
+							</ui:repeat>
+						</div>
+					</h:panelGroup>
+					
+					<ui:fragment rendered="#{not empty SingleUploadBean.collection}">
+						<div class="imj_submitPanel">
+							<h:outputLink value="#{HistorySession.previousPage.completeUrlWithHistory}" styleClass="imj_cancelButton">
+								<h:outputText value="#{lbl.cancel}" />
+							</h:outputLink>
+							<h:commandButton id="submitBottom" action="#{SingleUploadBean.save}" value="#{lbl.save}" styleClass="imj_submitButton" rendered="#{SingleUploadBean.readyForUploading()}"/>
+						</div>
+					</ui:fragment>
 				</h:form>
 			</h:panelGroup>
 		</h:panelGroup>
 	</ui:define>
-
-
+	
+	<ui:define name="additonalFooterScripts">
+		<script type="text/javascript">
+			$(function(){
+				$('.imj_techdataList .imj_listHeader span').click(function(evt){ 
+					var toggleIcon = $(this);
+					var list = $('.imj_techdataList .imj_listBody');
+					if (list.hasClass('imj_maxHeight')) {
+						toggleIcon.removeClass("imj_iconCollapse_16").addClass("imj_iconExpand_16");
+						list.removeClass('imj_maxHeight').addClass('imj_minHeight');
+					} else {
+						toggleIcon.removeClass("imj_iconExpand_16").addClass("imj_iconCollapse_16");
+						list.removeClass('imj_minHeight').addClass('imj_maxHeight');
+					}
+				});
+			});
+		</script>
+	</ui:define>
+	
 </ui:composition>

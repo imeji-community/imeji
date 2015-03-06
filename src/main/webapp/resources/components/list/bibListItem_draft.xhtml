@@ -95,11 +95,13 @@
 									<h:outputText value="#{lbl.startpage}"/>
 								</h:outputLink>
 							</li>	
-							<li>
-								<h:outputLink value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}/#{Navigation.browsePath}?q=" rendered="#{cc.attrs.item.size > 0}">
-									<h:outputText value="#{lbl.view_images}"/>
-								</h:outputLink>
-							</li>							
+							<ui:fragment rendered="#{cc.attrs.item.size > 0}">
+								<li>
+									<h:outputLink value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}/#{Navigation.browsePath}?q=">
+										<h:outputText value="#{lbl.view_images}"/>
+									</h:outputLink>
+								</li>
+							</ui:fragment>
 							<li>
 								<h:outputLink id="lnkViewMetadataDetail" value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}/#{Navigation.infosPath}?init=1">
 									<h:outputText value="#{lbl.view_md}"/>

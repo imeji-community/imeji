@@ -16,6 +16,8 @@ import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
@@ -48,9 +50,10 @@ public abstract class Metadata implements Comparable<Metadata>, Serializable {
 	private static final long serialVersionUID = -6967620655990351430L;
 	// Metadata should have a universal id to avoid overwriting
 	private URI id = IdentifierUtil.newURI(Metadata.class, "universal");
-
+	private static Logger logger = Logger.getLogger(Metadata.class);
 	@j2jLiteral("http://imeji.org/terms/position")
 	private int pos = 0;
+
 
 	@XmlEnum(Types.class)
 	public enum Types {
@@ -73,6 +76,15 @@ public abstract class Metadata implements Comparable<Metadata>, Serializable {
 	}
 
 	public Metadata() {
+	}
+
+	public static Metadata createNewInstance(URI typeUri) throws IllegalAccessException, InstantiationException {
+		for (Types type: Types.values()) {
+			if (type.getClazzNamespace().equals(typeUri.toString())) {
+				return type.getClazz().newInstance();
+			}
+		}
+		return null;
 	}
 
 	public String getTypeNamespace() {
@@ -131,20 +143,9 @@ public abstract class Metadata implements Comparable<Metadata>, Serializable {
 		try {
 			method = this.getClass().getMethod(methodName);
 			ret = method.invoke(this);
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} catch (SecurityException | NoSuchMethodException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
+			logger.error("Some problems in Metadata getting values from Method ", e);
+		} 
 		return ret;
 	}
 }

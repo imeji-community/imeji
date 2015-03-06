@@ -55,6 +55,7 @@ public class ExportManager {
 	 * Write in {@link OutputStream} the export
 	 * 
 	 * @param sr
+	 * 
 	 */
 	public void export(SearchResult sr) {
 		if (export != null) {

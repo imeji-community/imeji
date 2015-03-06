@@ -3,13 +3,8 @@
  */
 package de.mpg.imeji.logic.controller;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
 import de.escidoc.core.resources.aa.useraccount.Grants;
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
@@ -17,6 +12,11 @@ import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.logic.writer.WriterFacade;
+import org.apache.log4j.Logger;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Controller for {@link Grant}
@@ -35,9 +35,9 @@ public class GrantController extends ImejiController
      * 
      * @param user
      * @param g
-     * @throws Exception
+     * @throws ImejiException
      */
-    public void addGrants(User user, List<Grant> g, User currentUser) throws Exception
+    public void addGrants(User user, List<Grant> g, User currentUser) throws ImejiException
     {
         user.getGrants().addAll(getNewGrants(user.getGrants(), g));
         UserController c = new UserController(currentUser);
@@ -47,11 +47,12 @@ public class GrantController extends ImejiController
     /**
      * Add to the {@link UserGroup} the {@link List} of {@link Grant} and update the user in the database
      * 
-     * @param user
+     * @param group
      * @param g
-     * @throws Exception
+     * @param currentUser
+     * @throws ImejiException
      */
-    public void addGrants(UserGroup group, List<Grant> g, User currentUser) throws Exception
+    public void addGrants(UserGroup group, List<Grant> g, User currentUser) throws ImejiException
     {
         group.getGrants().addAll(getNewGrants(group.getGrants(), g));
         UserGroupController c = new UserGroupController();
@@ -62,10 +63,8 @@ public class GrantController extends ImejiController
      * Remove {@link List} of {@link Grant} from the {@link User} {@link Grant}
      * 
      * @param user
-     * @param g
-     * @param grantFor
+     * @param toRemove
      * @param currentUser
-     * @throws Exception
      */
     public void removeGrants(User user, List<Grant> toRemove, User currentUser)
     {
@@ -85,11 +84,9 @@ public class GrantController extends ImejiController
     /**
      * Remove {@link List} of {@link Grant} from the {@link User} {@link Grant}
      * 
-     * @param user
-     * @param g
-     * @param grantFor
+     * @param group
+     * @param toRemove
      * @param currentUser
-     * @throws Exception
      */
     public void removeGrants(UserGroup group, List<Grant> toRemove, User currentUser)
     {
@@ -127,7 +124,7 @@ public class GrantController extends ImejiController
     /**
      * Return the {@link Grant} which are new for the {@link User}
      * 
-     * @param user
+     * @param current
      * @param toAdd
      * @return
      */
@@ -146,7 +143,7 @@ public class GrantController extends ImejiController
      * Remove all {@link Grant} in the database (i.e for all {@link User})
      * 
      * @param uri
-     * @throws Exception
+     * @throws ImejiException
      */
     public void removeAllGrants(String uri)
     {

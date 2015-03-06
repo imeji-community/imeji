@@ -28,23 +28,22 @@
  */
 package de.mpg.imeji.presentation.metadata.extractors;
 
+import de.mpg.imeji.logic.storage.StorageController;
+import de.mpg.imeji.logic.vo.Item;
+import org.apache.log4j.Logger;
+import org.apache.tika.Tika;
+import org.apache.tika.exception.TikaException;
+import org.apache.tika.metadata.Metadata;
+import org.apache.tika.parser.AutoDetectParser;
+import org.apache.tika.sax.BodyContentHandler;
+import org.xml.sax.SAXException;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.tika.Tika;
-import org.apache.tika.exception.TikaException;
-import org.apache.tika.metadata.Metadata;
-import org.apache.tika.parser.AutoDetectParser;
-import org.apache.tika.sax.BodyContentHandler;
-import org.omg.CORBA.portable.InputStream;
-import org.xml.sax.SAXException;
-
-import de.mpg.imeji.logic.storage.StorageController;
-import de.mpg.imeji.logic.vo.Item;
 
 /**
  * User {@link Tika} to extract metadata out of the image
@@ -55,6 +54,9 @@ import de.mpg.imeji.logic.vo.Item;
  */
 public class TikaExtractor
 {
+
+    public static final int WRITE_LIMIT = 10 * 1024 * 1024;
+
     public static List<String> extract(Item item)
     {
         List<String> techMd = new ArrayList<String>();
@@ -66,7 +68,7 @@ public class TikaExtractor
             ByteArrayInputStream in = new ByteArrayInputStream(bous.toByteArray());
             Metadata metadata = new Metadata();
             AutoDetectParser parser = new AutoDetectParser();
-            BodyContentHandler handler = new BodyContentHandler();
+            BodyContentHandler handler = new BodyContentHandler(WRITE_LIMIT);
             parser.parse(in, handler, metadata);
             for (String name : metadata.names())
             {
@@ -77,8 +79,7 @@ public class TikaExtractor
         }
         catch (Exception e)
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        	Logger.getLogger(TikaExtractor.class).error("There had been some Tika extraction issues.", e);
         }
         return techMd;
     }
@@ -103,7 +104,7 @@ public class TikaExtractor
         catch (Exception e)
         {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+        	Logger.getLogger(TikaExtractor.class).error("There had been some Tika file metadata extraction issues.", e);
         }
         return techMd;
     }
@@ -124,7 +125,7 @@ public class TikaExtractor
 	            
 	        }
 		} catch (SAXException | TikaException | IOException e) {
-			e.printStackTrace();
+			Logger.getLogger(TikaExtractor.class).error("There had been some Tika extraction issues for main .", e);
 		}
     	
 

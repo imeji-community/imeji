@@ -21,5 +21,4 @@ package de.mpg.imeji.logic.ingest.vo;
 import javax.xml.bind.annotation.XmlNs;
 import javax.xml.bind.annotation.XmlNsForm;
 import javax.xml.bind.annotation.XmlSchema;
-import de.mpg.imeji.logic.ImejiNamespaces;
 

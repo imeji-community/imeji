@@ -19,7 +19,6 @@ import javax.ws.rs.core.Response;
 public class StorageResource {
 
         @GET
-        @Path("/")
         @ApiOperation(value = "Get storage properties")
         @Produces(MediaType.APPLICATION_JSON)
         public Response getStorageProperties(){

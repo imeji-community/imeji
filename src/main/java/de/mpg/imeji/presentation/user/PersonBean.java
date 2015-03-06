@@ -148,9 +148,10 @@ public class PersonBean implements Serializable{
 					.get("http_purl_org_escidoc_metadata_terms_0_1_position")
 					.toString()));
 			return p;
-		} else {
-			System.out.println(json);
-		}
+		} 
+//			else {
+//			System.out.println(json);
+//		}
 		return null;
 	}
 
@@ -186,7 +187,6 @@ public class PersonBean implements Serializable{
 				return uc.retrieveOrganizationById(uri);
 			} catch (Exception e) {
 				BeanHelper.error(e.getMessage());
-				e.printStackTrace();
 			}
 		}
 		return null;

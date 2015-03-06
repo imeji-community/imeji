@@ -133,12 +133,6 @@
 		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
 
-	<!-- Other Beans -->
-	<managed-bean>
-		<managed-bean-name>LoginBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.user.LoginBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
 
 	<managed-bean>
 		<managed-bean-name>MessagesBean</managed-bean-name>

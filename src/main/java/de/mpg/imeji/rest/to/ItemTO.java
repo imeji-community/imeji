@@ -1,15 +1,15 @@
 package de.mpg.imeji.rest.to;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @XmlRootElement
 @XmlType (propOrder = {	
@@ -141,17 +141,23 @@ public class ItemTO extends PropertiesTO implements Serializable{
 		return metadata;
 	}
 
+	public List<MetadataSetTO> filterMetadataByTypeURI(URI type) {
+		List<MetadataSetTO> filtered = new ArrayList<MetadataSetTO>();
+		for ( MetadataSetTO md: this.metadata )
+			if (md.getTypeUri().equals(type))
+				filtered.add(md);
+		return filtered;
+	}
+
+	public MetadataSetTO findMetadata(URI statement, URI type) {
+		for (MetadataSetTO md: this.metadata)
+			if (md.getTypeUri().equals(type) && md.getStatementUri().equals(statement))
+				return md;
+		return null;
+	}
 
 	public void setMetadata(List<MetadataSetTO> metadata) {
 		this.metadata = metadata;
-/*
-		if (metadata != null) {
-			int pos = 0;
-			for (MetadataSetTO md : metadata) {
-				md.setPosition(pos++);
-			}
-		}
-*/
 	}
 
 

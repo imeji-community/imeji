@@ -12,7 +12,6 @@ import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.image.ItemBean;
 import de.mpg.imeji.presentation.image.SingleItemBrowse;
@@ -43,7 +42,7 @@ public class AlbumItemBean extends ItemBean
     }
 
     @Override
-    public void initBrowsing()
+    public void initBrowsing() throws Exception
     {
         String tempId = (String)FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
                 .get("AlbumItemsBean.id");
@@ -52,7 +51,7 @@ public class AlbumItemBean extends ItemBean
         this.setAlbum(this.loadAlbum());
     }
 
-    private Album loadAlbum()
+    private Album loadAlbum() throws Exception
     {
         return ObjectLoader.loadAlbumLazy(ObjectHelper.getURI(Album.class, albumId), session.getUser());
     }

@@ -3,27 +3,38 @@
  */
 package de.mpg.imeji.presentation.collection;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.faces.event.ValueChangeEvent;
-
-import org.apache.log4j.Logger;
-
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Organization;
-import de.mpg.imeji.logic.vo.Person;
+import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.ContainerBean;
 import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.mdProfile.wrapper.StatementWrapper;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
+import org.apache.log4j.Logger;
+
+import javax.faces.event.AjaxBehaviorEvent;
+import javax.faces.event.ValueChangeEvent;
+
+
+
+
+import javax.faces.model.SelectItem;
+
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.google.common.base.Strings.isNullOrEmpty;
 /**
  * Abstract bean for all collection beans
  * 
@@ -40,23 +51,35 @@ public abstract class CollectionBean extends ContainerBean {
 
 	private static Logger logger = Logger.getLogger(CollectionBean.class);
 	private TabType tab = TabType.HOME;
+	
 	protected SessionBean sessionBean;
+
 	protected Navigation navigation;
 	private CollectionImeji collection;
-	private MetadataProfile profile;
+	private MetadataProfile profile = null;
+	private MetadataProfile profileTemplate;
+	
 	private String id;
 	private String profileId;
 	private boolean selected;
-
+	
+	private List<SelectItem> profileItems = new ArrayList<SelectItem>();
+	private String selectedProfileItem;
+  
+    private boolean useMDProfileTemplate = true;
+    
+    private List<StatementWrapper> statementWrappers = new ArrayList<StatementWrapper>();
+    private Map<URI, Integer> levels;
+    
+    private static final int MARGIN_PIXELS_FOR_STATEMENT_CHILD = 5;
+    	
 	/**
 	 * New default {@link CollectionBean}
 	 */
 	public CollectionBean() {
 		collection = new CollectionImeji();
-		sessionBean = (SessionBean) BeanHelper
-				.getSessionBean(SessionBean.class);
-		navigation = (Navigation) BeanHelper
-				.getApplicationBean(Navigation.class);
+		sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+		navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
 	}
 
 	/**
@@ -65,45 +88,98 @@ public abstract class CollectionBean extends ContainerBean {
 	 * @return
 	 */
 	public boolean valid() {
-		if (collection.getMetadata().getTitle() == null
-				|| "".equals(collection.getMetadata().getTitle())) {
-			BeanHelper.error(sessionBean
-					.getMessage("error_collection_need_title"));
-			return false;
-		}
-		List<Person> pers = new ArrayList<Person>();
-		for (Person c : collection.getMetadata().getPersons()) {
-			List<Organization> orgs = new ArrayList<Organization>();
-			for (Organization o : c.getOrganizations()) {
-				if (!"".equals(o.getName())) {
-					orgs.add(o);
-				}
-			}
-			if (!"".equals(c.getFamilyName())) {
-				if (orgs.size() > 0) {
-					c.setOrganizations(orgs);
-					pers.add(c);
-				} else {
-					BeanHelper.error(sessionBean
-							.getMessage("error_author_need_one_organization"));
-					return false;
-				}
-			} else {
-				BeanHelper.error(sessionBean
-						.getMessage("error_author_need_one_family_name"));
+		CollectionController cc = new CollectionController();
+		ProfileController pc = new ProfileController();
+		try {
+			cc.validateCollection(collection, sessionBean.getUser());
+			if(useMDProfileTemplate && "".equals(profile.getTitle())){
+				pc.validateProfile(profile, sessionBean.getUser());
 				return false;
 			}
-		}
-		if (pers.size() == 0) {
-			BeanHelper.error(sessionBean
-					.getMessage("error_collection_need_one_author"));
+			return true;
+		} catch (ImejiException e) 
+		{
+			BeanHelper.error(sessionBean.getMessage(e.getMessage()));
 			return false;
 		}
-		collection.getMetadata().setPersons(pers);
-		return true;
-	}
 
-	@Override
+	}
+	
+    /**
+     * Load the templates (i.e. the {@link MetadataProfile} that can be used by the {@link User}), and add it the the
+     * menu (sorted by name)
+     */
+    public void loadProfiles()
+    {    
+    	profileItems.clear();
+        try
+        {    
+            ProfileController pc = new ProfileController();
+            List<MetadataProfile> profiles = pc.search(sessionBean.getUser());
+            String profileTitle="";
+            for (MetadataProfile mdp : profiles)
+            {
+            	if ( mdp.getStatements().size() > 0) {
+            		profileTitle=isNullOrEmpty(mdp.getTitle())?
+            				(mdp.getIdString()+" - "+ "No Title provided") :
+            				mdp.getTitle();
+            		profileItems.add(new SelectItem(mdp.getIdString(), profileTitle));
+            	}  
+            }            
+            selectedProfileItem = (String) profileItems.get(0).getValue();
+            this.profile = new MetadataProfile();
+            profile.setTitle(profiles.get(0).getTitle());
+            this.profileTemplate = pc.retrieve(selectedProfileItem, sessionBean.getUser());
+			initStatementWrappers(this.profileTemplate);
+        }
+        catch (Exception e)
+        {
+            BeanHelper.error(sessionBean.getMessage("error_profile_template_load"));
+        }
+    }
+    
+    
+    public void profileChangeListener(AjaxBehaviorEvent event) throws Exception
+    {
+		if(!"".equals(selectedProfileItem))
+		{  
+        ProfileController pc = new ProfileController();
+        MetadataProfile mProfile = pc.retrieve(selectedProfileItem, sessionBean.getUser());
+        setProfile(mProfile);
+		this.profileTemplate = pc.retrieve(selectedProfileItem, sessionBean.getUser());
+		initStatementWrappers(this.profileTemplate);
+		this.profile.setTitle(profileTemplate.getTitle());
+		}
+    }
+    
+    protected void initStatementWrappers(MetadataProfile mdp)
+    {  
+    	statementWrappers.clear();
+        levels = new HashMap<URI, Integer>();
+        for (Statement st : mdp.getStatements())
+        {
+        	statementWrappers.add(new StatementWrapper(st, mdp.getId(), getLevel(st)));
+        }
+    }
+    
+	
+    protected int getLevel(Statement st)
+    {
+        if (!levels.containsKey(st.getId()))
+        {
+            if (st.getParent() != null && levels.get(st.getParent()) != null)
+            {
+                levels.put(st.getId(), (levels.get(st.getParent()) + MARGIN_PIXELS_FOR_STATEMENT_CHILD));
+            }
+            else
+            {
+                levels.put(st.getId(), 0);
+            }
+        }
+        return levels.get(st.getId());
+    }
+
+    @Override
 	protected String getErrorMessageNoAuthor() {
 		return "error_collection_need_one_author";
 	}
@@ -191,8 +267,7 @@ public abstract class CollectionBean extends ContainerBean {
 	 */
 	public void setSelected(boolean selected) {
 		if (selected) {
-			if (!(sessionBean.getSelectedCollections().contains(collection
-					.getId())))
+			if (!(sessionBean.getSelectedCollections().contains(collection.getId())))
 				sessionBean.getSelectedCollections().add(collection.getId());
 		} else
 			sessionBean.getSelectedCollections().remove(collection.getId());
@@ -208,13 +283,12 @@ public abstract class CollectionBean extends ContainerBean {
 		CollectionController cc = new CollectionController();
 		try {
 			cc.release(collection, sessionBean.getUser());
-			BeanHelper.info(sessionBean
-					.getMessage("success_collection_release"));
+			BeanHelper.info(sessionBean.getMessage("success_collection_release"));
 		} catch (Exception e) {
 			BeanHelper
 					.error(sessionBean.getMessage("error_collection_release"));
 			BeanHelper.error(e.getMessage());
-			e.printStackTrace();
+			logger.error("Error during collection release", e);
 		}
 		return "pretty:";
 	}
@@ -229,9 +303,7 @@ public abstract class CollectionBean extends ContainerBean {
 		try {
 			cc.delete(collection, sessionBean.getUser());
 			// BeanHelper.info(sessionBean.getMessage("success_collection_delete"));
-			BeanHelper.info(sessionBean.getMessage("success_collection_delete")
-					.replace("XXX_collectionName_XXX",
-							this.collection.getMetadata().getTitle()));
+			BeanHelper.info(sessionBean.getMessage("success_collection_delete").replace("XXX_collectionName_XXX", this.collection.getMetadata().getTitle()));
 		} catch (Exception e) {
 			BeanHelper.error(sessionBean.getMessage("error_collection_delete"));
 			logger.error("Error delete collection", e);
@@ -249,11 +321,9 @@ public abstract class CollectionBean extends ContainerBean {
 		CollectionController cc = new CollectionController();
 		try {
 			cc.withdraw(collection, sessionBean.getUser());
-			BeanHelper.info(sessionBean
-					.getMessage("success_collection_withdraw"));
+			BeanHelper.info(sessionBean.getMessage("success_collection_withdraw"));
 		} catch (Exception e) {
-			BeanHelper.error(sessionBean
-					.getMessage("error_collection_withdraw"));
+			BeanHelper.error(sessionBean.getMessage("error_collection_withdraw"));
 			BeanHelper.error(e.getMessage());
 			logger.error("Error discarding collection:", e);
 		}
@@ -276,6 +346,16 @@ public abstract class CollectionBean extends ContainerBean {
 	 */
 	public void setProfile(MetadataProfile profile) {
 		this.profile = profile;
+	}
+
+	
+
+	public MetadataProfile getProfileTemplate() {
+		return profileTemplate;
+	}
+
+	public void setProfileTemplate(MetadataProfile profileTemplate) {
+		this.profileTemplate = profileTemplate;
 	}
 
 	/**
@@ -327,4 +407,40 @@ public abstract class CollectionBean extends ContainerBean {
 	public void setDiscardComment(String comment) {
 		this.getContainer().setDiscardComment(comment);
 	}
+	
+
+    public List<SelectItem> getProfileItems() {
+		return profileItems;
+	}
+
+	public void setProfileItems(List<SelectItem> profileItems) {
+		this.profileItems = profileItems;
+	}
+
+	
+	public String getSelectedProfileItem() {
+		return selectedProfileItem;
+	}
+
+	public void setSelectedProfileItem(String selectedProfileItem) {
+		this.selectedProfileItem = selectedProfileItem;
+	}
+
+	public boolean isUseMDProfileTemplate() {
+		return useMDProfileTemplate;
+	}
+
+	public void setUseMDProfileTemplate(boolean useMDProfileTemplate) {
+		this.useMDProfileTemplate = useMDProfileTemplate;
+	}
+
+	public List<StatementWrapper> getStatementWrappers() {
+		return statementWrappers;
+	}
+
+	public void setStatementWrappers(List<StatementWrapper> statementWrappers) {
+		this.statementWrappers = statementWrappers;
+	}
+	
+
 }

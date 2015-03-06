@@ -121,6 +121,7 @@ public class ImageGeneratorManager
                 throw new RuntimeException(e);
             }
         }
+        
         return generateJpeg(file, extension, resolution);
     }
 
@@ -192,6 +193,9 @@ public class ImageGeneratorManager
             {
                 ImageGenerator imageGenerator = it.next();
                 jpeg = imageGenerator.generateJPG(file, extension);
+                if (jpeg != null ) {
+                	break;
+                }
             }
             catch (Exception e)
             {

@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
 import de.mpg.imeji.logic.util.StringHelper;
@@ -18,7 +19,6 @@ import de.mpg.imeji.presentation.user.util.EmailMessages;
 import de.mpg.imeji.presentation.user.util.PasswordGenerator;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
-import de.mpg.j2j.exceptions.NotFoundException;
 
 /**
  * Java Bean for the Create new user page
@@ -150,7 +150,6 @@ public class UserCreationBean {
 	 * @param index
 	 */
 	public void addOrganization(int index) {
-		System.out.println("index" + index);
 		((List<Organization>) this.user.getPerson().getOrganizations()).add(
 				index, ImejiFactory.newOrganization());
 	}

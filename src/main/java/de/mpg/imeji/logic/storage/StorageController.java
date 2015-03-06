@@ -28,16 +28,20 @@
  */
 package de.mpg.imeji.logic.storage;
 
-import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.presentation.util.PropertyReader;
+import static de.mpg.imeji.logic.storage.util.StorageUtils.calculateChecksum;
+import static de.mpg.imeji.logic.storage.util.StorageUtils.compareExtension;
+import static de.mpg.imeji.logic.storage.util.StorageUtils.guessExtension;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
 
-import static de.mpg.imeji.logic.storage.util.StorageUtils.*;
+import org.apache.commons.io.FilenameUtils;
+
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
  * Controller for the {@link Storage} objects
@@ -92,15 +96,12 @@ public class StorageController implements Serializable {
 	 * @param file
 	 * @param collectionId
 	 * @return
+	 * @throws ImejiException 
 	 */
-	public UploadResult upload(String filename, File file, String collectionId) {
+	public UploadResult upload(String filename, File file, String collectionId) throws ImejiException {
 
 		UploadResult result = storage.upload(filename, file, collectionId);
-		try {
-			result.setChecksum(calculateChecksum(file));
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+		result.setChecksum(calculateChecksum(file));
 		return result;
 	}
 
@@ -109,8 +110,9 @@ public class StorageController implements Serializable {
 	 * 
 	 * @param url
 	 * @param out
+	 * @throws ImejiException 
 	 */
-	public void read(String url, OutputStream out, boolean close) {
+	public void read(String url, OutputStream out, boolean close) throws ImejiException {
 		storage.read(url, out, close);
 	}
 
@@ -160,7 +162,10 @@ public class StorageController implements Serializable {
 	 * @return not allowed file format extension
 	 */
 	public String guessNotAllowedFormat(File file) {
-		String guessedExtension = guessExtension(file);
+		
+		String guessedExtension = FilenameUtils.getExtension(file.getName());
+		if ("".equals(guessedExtension))
+			guessedExtension= guessExtension(file);
 		return isAllowedFormat(guessedExtension) ? null : guessedExtension;
 	}
 
@@ -175,13 +180,14 @@ public class StorageController implements Serializable {
 		if ("".equals(extension.trim()))
 			return false;
 		// check in white list, if found then allowed
-		for (String s : formatWhiteList.split(","))
+		for (String s : formatWhiteList.split(",")) 
 			if (compareExtension(extension, s.trim()))
 				return true;
 		// check black list, if found then forbidden
+		
 		for (String s : formatBlackList.split(","))
-			if (compareExtension(extension, s.trim()))
-				return false;
+				if (compareExtension(extension, s.trim())) 
+					return false;
 		// Not found in both list: if white list is empty, allowed
 		return "".equals(formatWhiteList.trim());
 	}

@@ -1,166 +1,120 @@
 package de.mpg.imeji.rest.process;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.NotAllowedException;
-import javax.ws.rs.NotAuthorizedException;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
-import net.java.dev.webdav.jaxrs.ResponseStatus;
-import de.mpg.imeji.logic.auth.exception.AuthenticationError;
-import de.mpg.imeji.logic.auth.exception.NotAllowedError;
-import de.mpg.imeji.logic.auth.exception.UnprocessableError;
-import de.mpg.imeji.logic.controller.exceptions.NotFoundError;
+import de.mpg.imeji.exceptions.BadRequestException;
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.JSONResponse;
-import de.mpg.j2j.exceptions.NotFoundException;
+
+import javax.servlet.http.HttpServletRequest;
+
+import static de.mpg.imeji.rest.process.CommonUtils.USER_MUST_BE_LOGGED_IN;
+import static javax.ws.rs.core.Response.Status.*;
 
 public class CollectionProcess {
 
 	public static JSONResponse readCollection(HttpServletRequest req, String id) {
-		JSONResponse resp = new JSONResponse();
+		JSONResponse resp;
 
 		User u = BasicAuthentication.auth(req);
 
-		CollectionTO to = null;
 		CollectionService ccrud = new CollectionService();
 		try {
-			to = ccrud.read(id, u);
-			resp.setObject(to);
-			resp.setStatus(Status.OK);
-		} catch (NotFoundException e) {
-			resp.setObject(RestProcessUtils.buildExceptionResponse(e.getLocalizedMessage()));
-			resp.setStatus(Status.NOT_FOUND);
-
-		} catch (AuthenticationError e) {
-			resp.setObject(RestProcessUtils.buildUnauthorizedResponse(e
-					.getLocalizedMessage()));
-				resp.setStatus(Status.UNAUTHORIZED);
-		} catch (NotAllowedError e) {
-			resp.setObject(RestProcessUtils.buildNotAllowedResponse(e
-					.getLocalizedMessage()));
-				resp.setStatus(Status.FORBIDDEN);
+			resp = RestProcessUtils.buildResponse(OK.getStatusCode(), ccrud.read(id, u));
 		} catch (Exception e) {
-
+			resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
 		}
 		return resp;
 
 	}
 
 	public static JSONResponse createCollection(HttpServletRequest req) {
-		JSONResponse resp = new JSONResponse();
+		JSONResponse resp; 
 
 		User u = BasicAuthentication.auth(req);
 		
 		if (u == null) {
-			resp.setObject(RestProcessUtils
-					.buildUnauthorizedResponse("Not logged in not allowed to create collection"));
-			resp.setStatus(Status.UNAUTHORIZED);
+			resp = RestProcessUtils.buildJSONAndExceptionResponse(UNAUTHORIZED.getStatusCode(), USER_MUST_BE_LOGGED_IN);
 		} else {
 			CollectionService service = new CollectionService();
-			CollectionTO to = (CollectionTO) RestProcessUtils.buildTOFromJSON(
-					req, CollectionTO.class);
 			try {
-				resp.setObject(service.create(to, u));
-				resp.setStatus(Status.CREATED);
-			} catch (NotAllowedError e) {
-				resp.setObject(RestProcessUtils.buildBadRequestResponse(e
-						.getLocalizedMessage()));
-				resp.setStatus(Status.FORBIDDEN);
-			}
-			catch (AuthenticationError e) {
-				resp.setObject(RestProcessUtils.buildUnauthorizedResponse(e.getLocalizedMessage()));
-				resp.setStatus(Status.UNAUTHORIZED);
-			}
-			catch (UnprocessableError e) {
-				resp.setObject(RestProcessUtils.buildUnprocessableErrorResponse(e.getLocalizedMessage()));
-				resp.setStatus(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode());
-			}
-			catch (Exception e) {
-				resp.setObject(RestProcessUtils.buildUnprocessableErrorResponse(e.getLocalizedMessage()));
-				resp.setStatus(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode());
+                CollectionTO to = (CollectionTO) RestProcessUtils.buildTOFromJSON(req, CollectionTO.class);
+                resp = RestProcessUtils.buildResponse(CREATED.getStatusCode(), service.create(to, u));
+			} catch (ImejiException e) {
+				resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
 			}
 
 		}
 		return resp;
+	}
 
+    public static JSONResponse updateCollection(HttpServletRequest req, String id, String json) {
+		JSONResponse resp;
+
+		User u = BasicAuthentication.auth(req);
+
+		if (u == null) {
+			resp = RestProcessUtils.buildJSONAndExceptionResponse(UNAUTHORIZED.getStatusCode(), USER_MUST_BE_LOGGED_IN);
+		} else {
+			CollectionService service = new CollectionService();
+            try {
+                CollectionTO to = (CollectionTO) RestProcessUtils.buildTOFromJSON(json, CollectionTO.class);
+                if (!id.equals(to.getId())) {
+                    throw new BadRequestException("Collection id is not equal in request URL and in json");
+                }
+                resp = RestProcessUtils.buildResponse(OK.getStatusCode(), service.update(to, u));
+			} catch (ImejiException e) {
+				resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
+			}
+
+		}
+		return resp;
 	}
 	
 	public static JSONResponse releaseCollection(HttpServletRequest req,
-			String id) throws Exception {
-		JSONResponse resp = new JSONResponse();
-		resp.setStatus(Status.NO_CONTENT);
+			String id)  {
+		JSONResponse resp;
 		User u = BasicAuthentication.auth(req);
 		CollectionService service = new CollectionService(); 
 		
 		try {
-				resp.setObject(service.release(id, u));
-				resp.setStatus(Status.OK);
-		} catch (NotFoundError e) {
-			resp.setObject(RestProcessUtils.buildBadRequestResponse(e
-					.getLocalizedMessage()));
-			resp.setStatus(Status.NOT_FOUND);
-
+			resp= RestProcessUtils.buildResponse(OK.getStatusCode(), service.release(id, u));
+		} catch (Exception e) {
+			resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
 		}
-		 catch (NotFoundException e) {
-			resp.setObject(RestProcessUtils.buildBadRequestResponse(e
-					.getLocalizedMessage()));
-				resp.setStatus(Status.NOT_FOUND);
-
-		}
-		catch (AuthenticationError e) {
-			resp.setObject(RestProcessUtils.buildUnauthorizedResponse(e
-					.getLocalizedMessage()));
-				resp.setStatus(Status.UNAUTHORIZED);
-		} catch (NotAllowedError e) {
-			resp.setObject(RestProcessUtils.buildNotAllowedResponse(e
-					.getLocalizedMessage()));
-				resp.setStatus(Status.FORBIDDEN);
-		} catch (UnprocessableError e) {
-			resp.setObject(RestProcessUtils.buildUnprocessableErrorResponse(e
-					.getLocalizedMessage()));
-			resp.setStatus(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode());
-		}
-		
 		return resp;
 	}
+
 
 	public static JSONResponse withdrawCollection(HttpServletRequest req, String id, String discardComment) 
 	throws 
 	Exception {
-		JSONResponse resp = new JSONResponse();
-		resp.setStatus(Status.NO_CONTENT);
+		JSONResponse resp;
+
 		User u = BasicAuthentication.auth(req);
 		CollectionService service = new CollectionService();
 
 		try {
-				resp.setObject(service.withdraw(id, u, discardComment));
-				resp.setStatus(Status.OK);
-			} catch (NotFoundError e) {
-				resp.setObject(RestProcessUtils.buildBadRequestResponse(e.getLocalizedMessage()));
-				resp.setStatus(Status.NOT_FOUND);
+				resp = RestProcessUtils.buildResponse(OK.getStatusCode(), service.withdraw(id, u, discardComment));
+			} 
+		catch (Exception e)	{
+			resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
+			}
+		return resp;
+	}
 
-			}
-		  catch (NotFoundException e) {
-			resp.setObject(RestProcessUtils.buildBadRequestResponse(e.getLocalizedMessage()));
-			resp.setStatus(Status.NOT_FOUND);
-
-		 }
-		   catch (AuthenticationError e) {
-					resp.setObject(RestProcessUtils.buildUnauthorizedResponse(e.getLocalizedMessage()));
-					resp.setStatus(Status.UNAUTHORIZED);
-			}
-			catch (NotAllowedError e) {
-			resp.setObject(RestProcessUtils.buildNotAllowedResponse(e.getLocalizedMessage()));
-			resp.setStatus(Status.FORBIDDEN);
-		} catch (UnprocessableError e) {
-			resp.setObject(RestProcessUtils.buildUnprocessableErrorResponse(e.getLocalizedMessage()));
-				resp.setStatus(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode());
-			}
+	public static JSONResponse deleteCollection(HttpServletRequest req,
+			String id) {
+		JSONResponse resp;
+		User u = BasicAuthentication.auth(req);
+		CollectionService service = new CollectionService(); 
 		
+		try {
+			resp= RestProcessUtils.buildResponse(NO_CONTENT.getStatusCode(), service.delete(id, u));
+		} catch (Exception e) {
+			resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
+		}
 		return resp;
 	}
 

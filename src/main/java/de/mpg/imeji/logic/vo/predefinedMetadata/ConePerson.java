@@ -38,6 +38,7 @@ public class ConePerson extends Metadata
     private Person person;
     @j2jResource("http://imeji.org/terms/coneId")
     private URI coneId;
+
     @j2jResource("http://imeji.org/terms/statement")
     private URI statement;
 
@@ -72,14 +73,12 @@ public class ConePerson extends Metadata
         this.coneId = coneId;
     }
 
-    @Override
     @XmlElement(name = "statement", namespace = "http://imeji.org/terms/")
     public URI getStatement()
     {
         return statement;
     }
 
-    @Override
     public void setStatement(URI namespace)
     {
         this.statement = namespace;
@@ -93,7 +92,7 @@ public class ConePerson extends Metadata
             setPos(metadata.getPos());
             this.person = ((ConePerson)metadata).getPerson().clone();
             this.coneId = ((ConePerson)metadata).getConeId();
-            this.statement = metadata.getStatement();
+            this.statement = ((ConePerson)metadata).getStatement();
         }
     }
 

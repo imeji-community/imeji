@@ -41,6 +41,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.logic.auth.authentication.HttpAuthentication;
 import de.mpg.imeji.presentation.session.SessionBean;
 
@@ -54,7 +56,7 @@ import de.mpg.imeji.presentation.session.SessionBean;
 public class AuthenticationFilter implements Filter {
 	private FilterConfig filterConfig = null;
 	private Pattern jsfPattern = Pattern.compile(".*\\/jsf\\/.*\\.xhtml");
-
+	private static Logger logger = Logger.getLogger(AuthenticationFilter.class);
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -83,7 +85,7 @@ public class AuthenticationFilter implements Filter {
 				if (httpAuthentification.hasLoginInfos()) {
 					session.setUser(httpAuthentification.doLogin());
 				}
-			} else if (session != null && session.getUser() != null) {
+			} else if (session != null && session.getUser() != null ) {
 				Matcher m = jsfPattern.matcher(request.getRequestURI());
 				if (m.matches()) {
 					// reload the user each time a jsf page is called
@@ -91,7 +93,7 @@ public class AuthenticationFilter implements Filter {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.info("We had some exception in Autnbentication filter", e);
 		} finally {
 			chain.doFilter(serv, resp);
 		}

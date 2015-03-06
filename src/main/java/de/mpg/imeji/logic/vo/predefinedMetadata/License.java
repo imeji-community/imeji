@@ -39,10 +39,11 @@ public class License extends Metadata
     private String dateFormat = "dd/mm/yyyy";
     @j2jLiteral("http://imeji.org/terms/license")
     private String license = null;
-    @j2jResource("http://imeji.org/terms/statement")
-    private URI statement;
     @j2jResource("http://purl.org/dc/elements/1.1/identifier")
     private URI externalUri;
+
+    @j2jResource("http://imeji.org/terms/statement")
+    private URI statement;
 
     public License()
     {
@@ -72,18 +73,6 @@ public class License extends Metadata
         license = str;
     }
 
-    @Override
-    @XmlElement(name = "statement", namespace = "http://imeji.org/terms/")
-    public URI getStatement()
-    {
-        return statement;
-    }
-
-    @Override
-    public void setStatement(URI namespace)
-    {
-        this.statement = namespace;
-    }
 
     /**
      * @return the externalUri
@@ -102,15 +91,25 @@ public class License extends Metadata
         this.externalUri = externalUri;
     }
 
+    @XmlElement(name = "statement", namespace = "http://imeji.org/terms/")
+    public URI getStatement()
+    {
+        return statement;
+    }
+
+    public void setStatement(URI namespace)
+    {
+        this.statement = namespace;
+    }
+
     @Override
     public void copy(Metadata metadata)
     {
-        if (metadata instanceof License)
-        {
+        if (metadata instanceof License) {
             setPos(metadata.getPos());
             this.license = ((License)metadata).getLicense();
-            this.statement = metadata.getStatement();
-            this.externalUri = ((License)metadata).getExternalUri();
+            setStatement(((License) metadata).getStatement());
+            this.externalUri = ((License) metadata).getExternalUri();
         }
     }
 

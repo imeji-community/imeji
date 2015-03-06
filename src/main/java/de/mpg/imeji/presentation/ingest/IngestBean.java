@@ -50,8 +50,9 @@ public class IngestBean
 
     /**
      * Method reading url to trigger event
+     * @throws Exception 
      */
-    public void status()
+    public void status() throws Exception
     {
         if (UrlHelper.getParameterBoolean("init"))
         {
@@ -217,8 +218,9 @@ public class IngestBean
 
     /**
      * Load the {@link CollectionImeji} for the ingest
+     * @throws Exception 
      */
-    private void loadCollection()
+    private void loadCollection() throws Exception
     {
         if (collectionId != null)
         {

@@ -35,7 +35,7 @@ import de.mpg.imeji.logic.vo.Properties;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.history.PageURIHelper;
+import de.mpg.imeji.presentation.history.HistoryUtil;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.user.util.EmailClient;
 import de.mpg.imeji.presentation.user.util.EmailMessages;
@@ -88,8 +88,9 @@ public class ShareBean implements Serializable
 
     /**
      * Init {@link ShareBean} for {@link CollectionImeji}
+     * @throws Exception 
      */
-    public void initShareCollection()
+    public void initShareCollection() throws Exception
     {
         this.shareTo = null;
         this.profileUri = null;
@@ -109,8 +110,9 @@ public class ShareBean implements Serializable
 
     /**
      * Init {@link ShareBean} for {@link Album}
+     * @throws Exception 
      */
-    public void initShareAlbum()
+    public void initShareAlbum() throws Exception
     {
         this.type = SharedObjectType.ALBUM;
         this.shareTo = null;
@@ -131,13 +133,14 @@ public class ShareBean implements Serializable
      * Loaded when the shre component is called from the item page
      * 
      * @return
+     * @throws Exception 
      */
-    public String getInitShareItem()
+    public String getInitShareItem() throws Exception
     {
         this.type = SharedObjectType.ITEM;
         this.profileUri = null;
         this.shareTo = null;
-        this.uri = PageURIHelper.extractId(PrettyContext.getCurrentInstance().getRequestURL().toString());
+        this.uri = HistoryUtil.extractURI(PrettyContext.getCurrentInstance().getRequestURL().toString());
         Item item = ObjectLoader.loadItem(uri, user);
         if (item != null)
         {

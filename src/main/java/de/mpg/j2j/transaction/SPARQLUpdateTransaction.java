@@ -32,6 +32,8 @@ import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.query.ReadWrite;
 import com.hp.hpl.jena.update.UpdateAction;
 
+import de.mpg.imeji.exceptions.ImejiException;
+
 /**
  * {@link Transaction} for SPARQL update Query
  * 
@@ -57,7 +59,7 @@ public class SPARQLUpdateTransaction extends Transaction
      * @see de.mpg.j2j.transaction.Transaction#execute(com.hp.hpl.jena.query.Dataset)
      */
     @Override
-    protected void execute(Dataset ds) throws Exception
+    protected void execute(Dataset ds) throws ImejiException
     {
         UpdateAction.parseExecute(query, ds);
     }

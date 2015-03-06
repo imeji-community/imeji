@@ -30,6 +30,7 @@ package de.mpg.imeji.logic.reader;
 
 import java.util.List;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.vo.User;
 
 /**
@@ -51,7 +52,7 @@ public interface Reader
      * @return
      * @throws Exception
      */
-    public Object read(String uri, User user, Object o) throws Exception;
+    public Object read(String uri, User user, Object o) throws ImejiException;
 
     /**
      * Read a single Object by its uri (Lazy means don't load Lazy list within the object)
@@ -62,7 +63,7 @@ public interface Reader
      * @return
      * @throws Exception
      */
-    public Object readLazy(String uri, User user, Object o) throws Exception;
+    public Object readLazy(String uri, User user, Object o) throws ImejiException;
 
     /**
      * Read a List of objects. All objects must have an uri
@@ -72,7 +73,7 @@ public interface Reader
      * @return
      * @throws Exception
      */
-    public List<Object> read(List<Object> objects, User user) throws Exception;
+    public List<Object> read(List<Object> objects, User user) throws ImejiException;
 
     /**
      * Read a List of objects. All objects must have an uri. (Lazy means don't load Lazy list within the object)
@@ -82,5 +83,5 @@ public interface Reader
      * @return
      * @throws Exception
      */
-    public List<Object> readLazy(List<Object> objects, User user) throws Exception;
+    public List<Object> readLazy(List<Object> objects, User user) throws ImejiException;
 }

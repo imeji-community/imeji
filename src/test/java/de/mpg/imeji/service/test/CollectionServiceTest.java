@@ -6,32 +6,42 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
+import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import javax.ws.rs.NotSupportedException;
 
+import org.apache.log4j.Logger;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.mpg.imeji.logic.auth.exception.NotAllowedError;
+import util.JenaUtil;
+import de.mpg.imeji.exceptions.NotAllowedError;
+import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
+import de.mpg.imeji.rest.process.RestProcessUtils;
+import de.mpg.imeji.rest.process.ReverseTransferObjectFactory;
+import de.mpg.imeji.rest.process.TransferObjectFactory;
+import de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
-import de.mpg.j2j.exceptions.NotFoundException;
-import util.JenaUtil;
 
 public class CollectionServiceTest {
 
 
 	private ItemTO itemTo;
-	private static CollectionImeji collection;
-	private CollectionService collService = new CollectionService();
+	private static CollectionImeji collection = new CollectionImeji();
+	private static CollectionService collService = new CollectionService();
 	private static final String TEST_IMAGE = "./src/test/resources/storage/test.png";
+	private static Logger logger = Logger.getLogger(CollectionServiceTest.class);
 
 	@BeforeClass
 	public static void setup() throws Exception {
@@ -44,11 +54,23 @@ public class CollectionServiceTest {
 		JenaUtil.closeJena();
 	}
 
-	public static void initCollection() throws Exception {
-		collection = ImejiFactory.newCollection();
-		collection.getMetadata().setTitle("test collection");
-		CollectionController controller = new CollectionController();
-		controller.create(collection, null, JenaUtil.testUser);
+	public static void initCollection()  {
+		
+		try {
+			Path jsonPath = Paths
+					.get("src/test/resources/rest/createCollection.json");
+			String jsonString = new String(Files.readAllBytes(jsonPath), "UTF-8");
+			
+			CollectionTO collectionTO= (CollectionTO) RestProcessUtils.buildTOFromJSON(jsonString, CollectionTO.class);
+			collectionTO = collService.create(collectionTO, JenaUtil.testUser);
+		
+			ReverseTransferObjectFactory.transferCollection(collectionTO, collection, TRANSFER_MODE.CREATE);
+			collection.setId(URI.create(collectionTO.getId()));
+			
+			System.out.println("IdString= "+collection.getIdString());
+		} catch (Exception e) {
+			logger.error("Cannot init Collection", e);
+		}
 	}
 
 	@Test
@@ -59,10 +81,9 @@ public class CollectionServiceTest {
 			collectionTO = collService.read(collection.getIdString(),
 					JenaUtil.testUser);
 		} catch (Exception e) {
-			fail("could not read collection");
+			fail("could not read collection "+collection.getIdString());
 		}
 		assertNotNull(collectionTO.getId());
-		assertEquals("test collection", collectionTO.getTitle());
 	}
 
 	@Test
@@ -85,13 +106,14 @@ public class CollectionServiceTest {
 		try {
 			itemTo = crud.create(itemWithFileTo, JenaUtil.testUser);
 		} catch (Exception e1) {
-			e1.printStackTrace();
+			logger.error("test_releaseCollection, can not create item", e1);
 		}
 
 		try {
 			collService.release(collection.getIdString(), JenaUtil.testUser);
 		} catch (NotSupportedException | NotAllowedError | NotFoundException e) {
-			e.printStackTrace();
+			logger.error("test_releaseCollection", e);
+
 		}
 
 	}
@@ -102,10 +124,10 @@ public class CollectionServiceTest {
 		CollectionTO to = new CollectionTO();
 		try {
 			
-			to = collService.create(to, JenaUtil.testUser);
+			to = collService.createNoValidate(to, JenaUtil.testUser);
 		} catch (Exception e) {
 			fail();
-			e.printStackTrace();
+			logger.error("test_createCollectionCollection", e);
 		}
 		// check the collection be created and has new id
 		assertNotNull(to.getId());

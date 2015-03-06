@@ -88,9 +88,7 @@
 			<div id="imj_welcomeInfoWrapper" class="imj_welcomeInfo">
 				<!-- HTML Snippet defined in the configuration -->
 				<ui:fragment rendered="#{Configuration.getStartPageHTML(SessionBean.locale) != ''}">
-					<div id="tabsEN" class="id_tabs" >
-						<h:outputText value="#{Configuration.getStartPageHTML(SessionBean.locale)}" escape="false"/>
-					</div>
+					<h:outputText value="#{Configuration.getStartPageHTML(SessionBean.locale)}" escape="false"/>
 				</ui:fragment>
 				<!-- Default Startpage content (if configuration is emtpy) -->
 				<ui:fragment rendered="#{Configuration.getStartPageHTML('en') == '' and (SessionBean.locale == 'en' or SessionBean.locale == 'es')}">

@@ -54,7 +54,6 @@ public class FacetsBean implements Callable<Boolean>
         {
             BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("error")
                     + ", Facets intialization: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 
@@ -74,7 +73,6 @@ public class FacetsBean implements Callable<Boolean>
         {
             BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("error")
                     + ", Facets intialization: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 

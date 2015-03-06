@@ -7,7 +7,8 @@ import java.net.URI;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.auth.exception.NotAllowedError;
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
@@ -21,7 +22,6 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.j2j.exceptions.NotFoundException;
 
 /**
  * imeji objects (item, collection, album, profile) loader. This loader should
@@ -41,15 +41,17 @@ public class ObjectLoader {
 	 * @param id
 	 * @param user
 	 * @return
+	 * @throws Exception 
 	 */
-	public static CollectionImeji loadCollection(URI id, User user) {
+	public static CollectionImeji loadCollection(URI id, User user) throws ImejiException {
 		try {
 			CollectionController cl = new CollectionController();
 			return cl.retrieve(id, user);
 		} catch (NotFoundException e) {
 			writeErrorNotFound("collection", id);
-		} catch (Exception e) {
-			writeException(e, id.toString());
+		} catch (ImejiException e) {
+			logger.error("Error Object loader for " + id, e);
+			throw e;
 		}
 		return null;
 	}
@@ -60,14 +62,15 @@ public class ObjectLoader {
 	 * @param id
 	 * @param user
 	 * @return
+	 * @throws Exception 
 	 */
-	public static CollectionImeji loadCollectionLazy(URI id, User user) {
+	public static CollectionImeji loadCollectionLazy(URI id, User user) throws ImejiException {
 		try {
 			CollectionController cl = new CollectionController();
 			return cl.retrieveLazy(id, user);
 		} catch (NotFoundException e) {
 			writeErrorNotFound("collection", id);
-		} catch (Exception e) {
+		} catch (ImejiException e) {
 			if (id != null)
 				writeException(e, id.toString());
 			else
@@ -82,13 +85,14 @@ public class ObjectLoader {
 	 * @param id
 	 * @param user
 	 * @return
+	 * @throws Exception 
 	 */
-	public static Album loadAlbum(URI id, User user) {
+	public static Album loadAlbum(URI id, User user) throws Exception {
 		try {
 			Album a = loadAlbumLazy(id, user);
 			ItemController ic = new ItemController();
 			return (Album) ic.searchAndSetContainerItems(a, user, -1, 0);
-		} catch (Exception e) {
+		} catch (ImejiException e) {
 			writeException(e, id.toString());
 		}
 		return null;
@@ -100,14 +104,15 @@ public class ObjectLoader {
 	 * @param id
 	 * @param user
 	 * @return
+	 * @throws Exception 
 	 */
-	public static Album loadAlbumLazy(URI id, User user) {
+	public static Album loadAlbumLazy(URI id, User user) throws Exception {
 		try {
 			AlbumController ac = new AlbumController();
 			return ac.retrieveLazy(id, user);
 		} catch (NotFoundException e) {
 			writeErrorNotFound("album", id);
-		} catch (Exception e) {
+		} catch (ImejiException e) {
 			writeException(e, id.toString());
 		}
 		return null;
@@ -119,14 +124,15 @@ public class ObjectLoader {
 	 * @param id
 	 * @param user
 	 * @return
+	 * @throws Exception 
 	 */
-	public static Item loadItem(URI id, User user) {
+	public static Item loadItem(URI id, User user) throws Exception {
 		try {
 			ItemController ic = new ItemController();
 			return ic.retrieve(id, user);
 		} catch (NotFoundException e) {
 			writeErrorNotFound("image", id);
-		} catch (Exception e) {
+		} catch (ImejiException e) {
 			writeException(e, id.toString());
 		}
 		return null;
@@ -138,14 +144,15 @@ public class ObjectLoader {
 	 * @param id
 	 * @param user
 	 * @return
+	 * @throws Exception 
 	 */
-	public static UserGroup loadUserGroupLazy(URI id, User user) {
+	public static UserGroup loadUserGroupLazy(URI id, User user) throws Exception {
 		try {
 			UserGroupController c = new UserGroupController();
 			return c.read(id, user);
 		} catch (NotFoundException e) {
 			writeErrorNotFound("usergroup", id);
-		} catch (Exception e) {
+		} catch (ImejiException e) {
 			writeException(e, id.toString());
 		}
 		return null;
@@ -157,14 +164,15 @@ public class ObjectLoader {
 	 * @param email
 	 * @param user
 	 * @return
+	 * @throws Exception 
 	 */
-	public static User loadUser(URI uri, User user) {
+	public static User loadUser(URI uri, User user) throws Exception {
 		try {
 			UserController uc = new UserController(user);
 			return uc.retrieve(uri);
 		} catch (NotFoundException e) {
 			writeErrorNotFound("user", uri);
-		} catch (Exception e) {
+		} catch (ImejiException e) {
 			writeException(e, uri.toString());
 		}
 		return null;
@@ -176,14 +184,15 @@ public class ObjectLoader {
 	 * @param email
 	 * @param user
 	 * @return
+	 * @throws Exception 
 	 */
-	public static User loadUser(String email, User user) {
+	public static User loadUser(String email, User user) throws Exception {
 		try {
 			UserController uc = new UserController(user);
 			return uc.retrieve(email);
 		} catch (NotFoundException e) {
 			writeErrorNotFound("user", URI.create(email));
-		} catch (Exception e) {
+		} catch (ImejiException e) {
 			writeException(e, email);
 		}
 		return null;
@@ -235,8 +244,10 @@ public class ObjectLoader {
 	 * 
 	 * @param e
 	 * @param id
+	 * @throws Exception 
 	 */
-	private static void writeException(Exception e, String id) {
+	private static void writeException(ImejiException e, String id) throws ImejiException {
 		logger.error("Error Object loader for " + id, e);
+		throw e;
 	}
 }

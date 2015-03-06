@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -31,6 +32,7 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.controller.exceptions.TypeNotAllowedException;
 import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
@@ -44,9 +46,7 @@ import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Organization;
-import de.mpg.imeji.logic.vo.Person;
-import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.metadata.MetadataSetBean;
@@ -55,6 +55,7 @@ import de.mpg.imeji.presentation.metadata.SuperMetadataBean;
 import de.mpg.imeji.presentation.metadata.extractors.TikaExtractor;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.UrlHelper;
 
@@ -71,6 +72,9 @@ public class SingleUploadBean implements Serializable{
 	
 	@ManagedProperty("#{SingleUploadSession}")
 	private SingleUploadSession sus;
+	
+	@ManagedProperty("#{SessionBean}")
+	private SessionBean sb;
 	
 	@ManagedProperty(value = "#{SessionBean.user}")
 	private User user;
@@ -99,19 +103,18 @@ public class SingleUploadBean implements Serializable{
 					sus.copyToTemp();
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.info("Some exception happened during initialization", e);
 			}
 		}
-	}
+
+		}
 	    
 	public String save(){
 		try {        
 			Item item = uploadFileToItem(getIngestImage().getFile(), getIngestImage().getName());
 			SingleEditBean edit = new SingleEditBean(item, sus.getProfile(), "");
-			MetadataSetBean mds = edit.getEditor().getItems().get(0).getMds();
-			List <SuperMetadataBean> smdb1 = mds.getTree().getList();
-			List <SuperMetadataBean> smdb2 = getSuperMetadataBeans();
-			copyValueToItem(smdb1, smdb2);
+			MetadataSetBean newSet = getMdSetBean();
+			edit.getEditor().getItems().get(0).setMds(newSet);
 			edit.save();
 			sus.uploaded();
 		} catch (Exception e) {
@@ -119,7 +122,8 @@ public class SingleUploadBean implements Serializable{
 		}
 		return "";
 	} 
-	  
+
+	/*
 	public void copyValueToItem(List <SuperMetadataBean> itemStatements, List <SuperMetadataBean> statements){
 		for(SuperMetadataBean smdb1 : itemStatements)
 		{
@@ -146,6 +150,7 @@ public class SingleUploadBean implements Serializable{
 		}
 		
 	}
+	*/
 	    
 	private Item uploadFileToItem(File file, String title) {
 		try {    
@@ -160,22 +165,9 @@ public class SingleUploadBean implements Serializable{
 		} catch (Exception e) {	
 			sus.setfFile(" File " + title + " not uploaded: " + e.getMessage());
 			logger.error("Error uploading item: ", e);
-			e.printStackTrace();
 			return null;
 		}
 	}
-	
-
-	
-    protected void addPositionToMetadata()
-    {
-            int pos = 0;
-            for (SuperMetadataBean smb : sus.getSuperMdBeans())
-            {
-                smb.setPos(pos);
-                pos++;
-            }
-    }
 	
 	/**
 	 * Throws an {@link Exception} if the file ca be upload. Works only if the
@@ -203,25 +195,29 @@ public class SingleUploadBean implements Serializable{
 			this.ingestImage = getUploadedIngestFile(request);
 			sus.setIngestImage(ingestImage);
 			techMd = TikaExtractor.extractFromFile(ingestImage.getFile());
-		} catch (Exception e) {
-			techMd = new ArrayList<String>();
-			techMd.add(e.getMessage());
-			e.printStackTrace();
+			sus.setTechMD(techMd);
+		} catch (FileUploadException|TypeNotAllowedException e) {
+			BeanHelper.error(e.getMessage());
 		}
-		sus.setTechMD(techMd);
+
     }
 	
 	
-	private IngestImage getUploadedIngestFile(HttpServletRequest request) throws FileUploadException{
+	private IngestImage getUploadedIngestFile(HttpServletRequest request) throws FileUploadException, TypeNotAllowedException{
 		File tmp = null;
 		boolean isMultipart=ServletFileUpload.isMultipartContent(request);
 		IngestImage ii = new IngestImage();
 		if (isMultipart) {
 			ServletFileUpload upload=new ServletFileUpload();
-			try {
+			try {    
 				FileItemIterator iter = upload.getItemIterator(request);
-				while (iter.hasNext()) {
+				while (iter.hasNext()) {  
 					FileItemStream fis = iter.next();
+					if(fis.getName() != null && FilenameUtils.getExtension(fis.getName()).matches("ini|exe|sh|bin"))
+					{
+	                	throw new TypeNotAllowedException(sb.getMessage("single_upload_invalid_content_format"));
+					}
+
 					InputStream in = fis.openStream();
 					tmp = File.createTempFile("singleupload", "." + FilenameUtils.getExtension(fis.getName()));
 					FileOutputStream fos = new FileOutputStream(tmp);
@@ -239,41 +235,32 @@ public class SingleUploadBean implements Serializable{
 				}
 				ii.setFile(tmp);
 			} catch (IOException | FileUploadException e) {
-				e.printStackTrace();
+				logger.info("Could not get uploaded ingest file",e);
 			}
 		}
 		return ii;
-	}
+	}   
 
-	public void colChangeListener(AjaxBehaviorEvent event){
+	
+
+
+	public void colChangeListener(AjaxBehaviorEvent event) throws Exception{
 		if(!"".equals(selectedCollectionItem))
 		{  
 			sus.setSelectedCollectionItem(selectedCollectionItem);
-			try {    
+			try {     
 				CollectionImeji collection = ObjectLoader.loadCollectionLazy(new URI(selectedCollectionItem), user);
 				MetadataProfile profile = ObjectLoader.loadProfile(collection.getProfile(), user);
-				List<SuperMetadataBean> sts = new ArrayList<SuperMetadataBean>();
-				if(profile.getStatements().size() > 0){
-					for(Statement st : profile.getStatements())
-					{
- 						SuperMetadataBean smb = new SuperMetadataBean(st);
-						if("http://imeji.org/terms/metadata#conePerson".equals(st.getType().toString()))
-						{
-							Person person = new Person();
-							Organization orga = new Organization();
-							person.getOrganizations().add(orga);
-							smb.setPerson(person);
-						}
-						sts.add(smb);
-					}  
-				}
+				MetadataSet mdSet = ImejiFactory.newMetadataSet(profile.getId());
+				MetadataSetBean mdSetBean = new MetadataSetBean(mdSet, profile, true);
+				
 				MetadataLabels labels = (MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class);
 				labels.init(profile);
 				sus.setCollection(collection);
 				sus.setProfile(profile);
-				sus.setSuperMdBeans(sts);;
+				sus.setMdSetBean(mdSetBean);
 			} catch (URISyntaxException e) {
-				e.printStackTrace();
+				logger.info("Pure URI Syntax issue ", e);
 			} 
 		}
 		else
@@ -281,6 +268,23 @@ public class SingleUploadBean implements Serializable{
 			
 		}
 		
+	}  
+	    
+	/**
+	 * Add a Metadata of the same type as the passed metadata
+	 */
+	public void addMetadata(SuperMetadataBean smb) {    
+		SuperMetadataBean newMd = smb.copyEmpty();
+		newMd.addEmtpyChilds(sus.getProfile());
+		sus.getMdSetBean().getTree().add(newMd);
+	}
+	
+	/**
+	 * Remove the active metadata
+	 */
+	public void removeMetadata(SuperMetadataBean smb) {
+		sus.getMdSetBean().getTree().remove(smb);
+		sus.getMdSetBean().addEmtpyValues();
 	}
 
  
@@ -348,8 +352,8 @@ public class SingleUploadBean implements Serializable{
 		return sus.getCollection();
 	}
 
-	public List<SuperMetadataBean> getSuperMetadataBeans() {
-		return sus.getSuperMdBeans();
+	public MetadataSetBean getMdSetBean(){
+		return sus.getMdSetBean();
 	}
 
 	public List<String> getTechMd() {
@@ -382,6 +386,16 @@ public class SingleUploadBean implements Serializable{
 		return sus.getUploadedItem();
 	}
 	
+	
+	
+	public SessionBean getSb() {
+		return sb;
+	}
+
+	public void setSb(SessionBean sb) {
+		this.sb = sb;
+	}
+
 	public static String extractIDFromURI(URI uri) {
 		return uri.getPath().substring(uri.getPath().lastIndexOf("/") + 1);
 	}

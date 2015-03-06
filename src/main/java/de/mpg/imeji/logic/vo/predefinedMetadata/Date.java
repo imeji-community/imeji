@@ -39,6 +39,7 @@ public class Date extends Metadata
     private String date;
     @j2jLiteral("http://imeji.org/terms/time")
     private long time;
+
     @j2jResource("http://imeji.org/terms/statement")
     private URI statement;
 
@@ -72,14 +73,12 @@ public class Date extends Metadata
         this.time = dateTime;
     }
 
-    @Override
     @XmlElement(name = "statement", namespace = "http://imeji.org/terms/")
     public URI getStatement()
     {
         return statement;
     }
 
-    @Override
     public void setStatement(URI namespace)
     {
         this.statement = namespace;
@@ -92,7 +91,7 @@ public class Date extends Metadata
         {
             setPos(metadata.getPos());
             setDate(((Date)metadata).getDate());
-            this.statement = metadata.getStatement();
+            setStatement(((Date) metadata).getStatement());
         }
     }
 

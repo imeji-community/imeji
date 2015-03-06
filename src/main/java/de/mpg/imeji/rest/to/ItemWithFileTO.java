@@ -1,11 +1,11 @@
 package de.mpg.imeji.rest.to;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import de.mpg.imeji.logic.vo.Item;
-
 import java.io.File;
 
-import static com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+import de.mpg.imeji.logic.vo.Item;
 
 /**
  * A convenience TO to fit the specification for create {@link Item}

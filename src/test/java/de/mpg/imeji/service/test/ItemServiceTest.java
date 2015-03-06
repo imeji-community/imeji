@@ -1,29 +1,30 @@
 package de.mpg.imeji.service.test;
 
-import de.mpg.imeji.logic.auth.exception.AuthenticationError;
-import de.mpg.imeji.logic.auth.exception.NotAllowedError;
-
+import de.mpg.imeji.exceptions.AuthenticationError;
+import de.mpg.imeji.exceptions.NotAllowedError;
+import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
-import de.mpg.imeji.rest.to.*;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.TextTO;
-import de.mpg.j2j.exceptions.NotFoundException;
-
+import de.mpg.imeji.rest.process.RestProcessUtils;
+import de.mpg.imeji.rest.to.CollectionTO;
+import de.mpg.imeji.rest.to.ItemTO;
+import de.mpg.imeji.rest.to.ItemWithFileTO;
+import org.apache.log4j.Logger;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
 import util.JenaUtil;
 
 import java.io.File;
-import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
-
-import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.*;
 
 public class ItemServiceTest {
 
@@ -53,10 +54,16 @@ public class ItemServiceTest {
 	public static void initCollection() {
 		CollectionService s = new CollectionService();
 		try {
-			collectionTO = s.create(new CollectionTO(), JenaUtil.testUser);
+			
+			Path jsonPath = Paths
+					.get("src/test/resources/rest/createCollection.json");
+			String jsonString = new String(Files.readAllBytes(jsonPath), "UTF-8");
+			
+			collectionTO= (CollectionTO) RestProcessUtils.buildTOFromJSON(jsonString, CollectionTO.class); 
+			collectionTO = s.create(collectionTO, JenaUtil.testUser);
 			collectionId = collectionTO.getId();
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.getLogger(ItemServiceTest.class).error("Cannot initCollection ",e);
 		}
 	}
 
@@ -70,18 +77,6 @@ public class ItemServiceTest {
 
 		itemTO.setFile(file);
 
-		TextTO text = new TextTO();
-		text.setText("kuku moj mal4ik");
-
-		LabelTO label = new LabelTO("en", "text label");
-
-		MetadataSetTO mds = new MetadataSetTO();
-		mds.setValue(text);
-		mds.setTypeUri(URI.create("http://imeji.org/terms/metadata#text"));
-		mds.getLabels().add(label);
-
-		itemTO.getMetadata().add(mds);
-
 	}
 
 	@Test
@@ -91,6 +86,8 @@ public class ItemServiceTest {
 		ItemService crud = new ItemService();
 		// create item
 		try {
+			itemTO.setCollectionId(collectionTO.getId());
+
 			crud.create(itemTO, null);
 			fail("You have to be authenticated");
 		} catch (Exception e) {
@@ -136,7 +133,6 @@ public class ItemServiceTest {
 
 		// delete item
 		Assert.assertTrue(crud.delete(readItem.getId(), JenaUtil.testUser));
-
 		// try to read the delete item
 		try {
 			readItem = crud.read(createdItem.getId(), JenaUtil.testUser);

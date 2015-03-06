@@ -32,17 +32,19 @@ import de.mpg.imeji.logic.storage.Storage.FileResolution;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.storage.administrator.impl.InternalStorageAdministrator;
 import de.mpg.imeji.logic.storage.transform.ImageGeneratorManager;
-import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.presentation.util.PropertyReader;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
-import javax.activation.MimetypesFileTypeMap;
 import java.io.*;
+
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static de.mpg.imeji.logic.storage.util.StorageUtils.*;
+import static org.apache.commons.io.FilenameUtils.getExtension;
+import static org.apache.commons.io.FilenameUtils.removeExtension;
 
 /**
  * Manage internal storage in file system
@@ -102,10 +104,8 @@ public class InternalStorageManager implements Serializable {
 	public InternalStorageItem createItem(File file, String filename,
 			String collectionId) {
 		try {
-			MimetypesFileTypeMap mimeTypesMap = new MimetypesFileTypeMap();
-			String mimeType = mimeTypesMap.getContentType(file);
-			InternalStorageItem item = generateInternalStorageItem(filename,
-					mimeType, collectionId);
+			InternalStorageItem item = generateInternalStorageItem(file, filename,
+					collectionId);
 			return writeItemFiles(item, file);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -125,13 +125,13 @@ public class InternalStorageManager implements Serializable {
 		// jpg, gif etc.)
 //		String extension = file.getName().substring(
 //				file.getName().lastIndexOf(".") + 1, file.getName().length());
-		String origExtension = FilenameUtils.getExtension(file.getPath());
-		String guessedExtension = StorageUtils.guessExtension(file);
+		String origExtension = getExtension(file.getPath());
+		String guessedExtension = guessExtension(file);
 		ImageGeneratorManager generatorManager = new ImageGeneratorManager();
 
 		removeFile(url);
 		if (url.contains(FileResolution.ORIGINAL.name().toLowerCase())) {
-			url = StorageUtils.replaceExtension(url, origExtension);
+			url = replaceExtension(url, origExtension);
 			copy(file, transformUrlToPath(url));
 		} else if (url.contains(FileResolution.WEB.name().toLowerCase()))
 			write(generatorManager.generateWebResolution(file, guessedExtension),
@@ -236,20 +236,23 @@ public class InternalStorageManager implements Serializable {
 	 * Create an {@link InternalStorageItem} for this file. Set the correct
 	 * version.
 	 * 
-	 * @param filename
+	 * @param fileName
 	 * @return
 	 * @throws UnsupportedEncodingException
 	 */
-	public InternalStorageItem generateInternalStorageItem(String filename,
-			String filetype, String collectionId) {
+	public InternalStorageItem generateInternalStorageItem(File file, String fileName,
+			String collectionId) {
 		String id = generateIdWithVersion(collectionId);
 		InternalStorageItem item = new InternalStorageItem();
 		item.setId(id);
-		item.setFileName(filename);
-		item.setFileType(filetype);
-		item.setOriginalUrl(generateUrl(id, filename, FileResolution.ORIGINAL));
-		item.setThumbnailUrl(generateUrl(id, filename, FileResolution.THUMBNAIL));
-		item.setWebUrl(generateUrl(id, filename, FileResolution.WEB));
+		item.setFileName(fileName);
+		item.setFileType(getMimeType(file));
+		fileName = isNullOrEmpty(getExtension(fileName)) ?
+				fileName + "." + guessExtension(file) :
+				fileName;
+		item.setOriginalUrl(generateUrl(id, fileName, FileResolution.ORIGINAL));
+		item.setThumbnailUrl(generateUrl(id, fileName, FileResolution.THUMBNAIL));
+		item.setWebUrl(generateUrl(id, fileName, FileResolution.WEB));
 		return item;
 	}
 
@@ -301,8 +304,8 @@ public class InternalStorageManager implements Serializable {
 							  FileResolution resolution) {
 		filename = StringHelper.normalizeFilename(filename);
 		if (resolution != FileResolution.ORIGINAL) {
-			String extension = FilenameUtils.getExtension(filename);
-			filename = FilenameUtils.removeExtension(filename)
+			String extension = getExtension(filename);
+			filename = removeExtension(filename)
 					+ (extension.equals("gif") ? ".gif" : ".jpg");
 		}
 		return storageUrl + id + StringHelper.urlSeparator
@@ -320,16 +323,18 @@ public class InternalStorageManager implements Serializable {
 	private InternalStorageItem writeItemFiles(InternalStorageItem item,
 			File file) throws IOException {
 		ImageGeneratorManager generatorManager = new ImageGeneratorManager();
-		String extension = FilenameUtils.getExtension(item.getFileName());
 		// write web resolution file in storage
+		
+		String calculatedExtension = guessExtension(file);
 		write(generatorManager.generateWebResolution(file,
-				extension.equals("gif") ? "gif" : extension),
+				calculatedExtension ),
 				transformUrlToPath(item.getWebUrl()));
 		// Use Web resolution to generate Thumbnail (avoid to read the original
 		// file again)
+	
 		write(generatorManager.generateThumbnail(file,
-				extension.equals("gif") ? "gif" : extension),
-				transformUrlToPath(item.getThumbnailUrl()));
+				calculatedExtension),
+		transformUrlToPath(item.getThumbnailUrl()));
 		// write original file in storage: simple copy the tmp file to the
 		// correct path
 		copy(file, transformUrlToPath(item.getOriginalUrl()));
@@ -351,7 +356,7 @@ public class InternalStorageManager implements Serializable {
 			dest.createNewFile();
 			FileInputStream fis = new FileInputStream(toCopy);
 			FileOutputStream fos = new FileOutputStream(dest);
-			StorageUtils.writeInOut(fis, fos, true);
+			writeInOut(fis, fos, true);
 			return dest.getAbsolutePath();
 		} else {
 			throw new RuntimeException("File " + path

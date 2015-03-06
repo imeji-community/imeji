@@ -3,6 +3,8 @@
  */
 package de.mpg.imeji.presentation.user.util;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -44,7 +46,7 @@ public class EmailMessages
         try {
 			return getEmailMessage(password, email, username, "email_new_password").replace("XXX_INSTANCE_NAME_XXX", PropertyReader.getProperty("imeji.instance.name"));
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger.getLogger(EmailMessages.class).info("Will return empty message, due to some error", e);
 			return msg;
 		} 
     }

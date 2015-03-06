@@ -24,6 +24,7 @@ public class TransferObjectFactory {
 	public static void transferMetadataProfile(MetadataProfile vo, MetadataProfileTO to){
 		transferProperties(vo, to);
 		to.setTitle(vo.getTitle());
+        to.setDefault(vo.getDefault());
 		to.setDescription(vo.getDescription());
 		transferStatements(vo.getStatements(), to);	
 	}
@@ -72,7 +73,23 @@ public class TransferObjectFactory {
 			transferPerson(p, pto);
 			to.getContributors().add(pto);
 		}
-	}	
+	}
+	
+	public static void transferAlbum(Album vo, AlbumTO to){
+		transferProperties(vo, to);
+
+		//TODO: Container
+		to.setTitle(vo.getMetadata().getTitle());
+		to.setDescription(vo.getMetadata().getDescription());
+		
+		for(Person p : vo.getMetadata().getPersons())
+		{
+			PersonTO pto = new PersonTO();
+			transferPerson(p, pto);
+			to.getContributors().add(pto);
+		}
+		
+	}
 	 
 	public static void transferPerson(Person p, PersonTO pto){  
 
@@ -82,7 +99,7 @@ public class TransferObjectFactory {
 			pto.setGivenName(p.getGivenName());
 			pto.setCompleteName(p.getCompleteName());
 			pto.setAlternativeName(p.getAlternativeName());
-
+            pto.setRole(p.getRole() == null ? "" : p.getRole().toString());
 			IdentifierTO ito = new IdentifierTO();
 			ito.setValue(p.getIdentifier());
 			pto.getIdentifiers().add(ito);			
@@ -94,7 +111,6 @@ public class TransferObjectFactory {
 	public static void transferContributorOrganizations(Collection<Organization> orgas, PersonTO pto){
 		for(Organization orga : orgas){
 			OrganizationTO oto = new OrganizationTO();
-			//oto.setPosition(orga.getPos());
 			oto.setId(CommonUtils.extractIDFromURI(orga.getId()));
 			oto.setName(orga.getName());
 			oto.setDescription(orga.getDescription());
@@ -103,7 +119,7 @@ public class TransferObjectFactory {
 			oto.getIdentifiers().add(ito);
 			oto.setCity(orga.getCity());
 			oto.setCountry(orga.getCountry());
-			pto.getOrganizations().add(oto);			
+			pto.getOrganizations().add(oto);
 		}
 		
 	}
@@ -118,7 +134,7 @@ public class TransferObjectFactory {
 			u = ucrud.read(vo.getCreatedBy());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.info("Something nasty happened during properties transfer", e);
 		}
 		to.setCreatedBy(new PersonTOBasic(u.getPerson().getCompleteName(), CommonUtils.extractIDFromURI(u.getPerson().getId())));
 		//set modifiedBy
@@ -127,7 +143,7 @@ public class TransferObjectFactory {
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.info("Something nasty happened during reading from modified date VO", e);
 		}
 		to.setModifiedBy(new PersonTOBasic(u.getPerson().getCompleteName(), CommonUtils.extractIDFromURI(u.getPerson().getId())));
 		//set createdDate, modifiedDate, versionDate
@@ -163,7 +179,7 @@ public class TransferObjectFactory {
 			profile = pcrud.read(vo.getMetadataSet().getProfile());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.info("Something nasty happend after reading the profile", e);
 		}
 		tranferItemMetadata(profile, vo.getMetadataSet().getMetadata(), to);
 
@@ -241,7 +257,8 @@ public class TransferObjectFactory {
 					License mdLicense = (License) md;
 					LicenseTO lto = new LicenseTO();
 					lto.setLicense(mdLicense.getLicense());
-					lto.setUrl(mdLicense.getExternalUri().toString());
+                    final URI externalUri = mdLicense.getExternalUri();
+                    lto.setUrl(externalUri != null ? externalUri.toString() : "");
 					mdTO.setValue(lto);
 					break;
 				case "de.mpg.imeji.logic.vo.predefinedMetadata.Link":

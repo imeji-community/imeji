@@ -388,7 +388,7 @@ public class ConfigurationBean {
 	 */
 	public boolean isDataViewerSupportedFormats(String format) {
 		String l = getDataViewerFormatListString();
-		if (l == null)
+		if (l == null || "".equals(format))
 			return false;
 		return l.contains(format);
 	}

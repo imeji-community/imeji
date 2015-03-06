@@ -96,7 +96,6 @@ used as it is.
 					'<div class="plupload">' +
 						'<div class="plupload_header">' +
 							'<div class="plupload_header_content">' +
-								'<div class="plupload_header_title">' + _('Select files') + '</div>' +
 								'<div class="plupload_header_text">' + _('Add files to the upload queue and click the start button.') + '</div>' +
 							'</div>' +
 						'</div>' +

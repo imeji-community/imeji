@@ -34,6 +34,8 @@ import java.io.OutputStream;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.UploadResult;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
@@ -86,8 +88,9 @@ public class ExternalStorage implements Storage
      * @see de.mpg.imeji.logic.storage.Storage#read(java.lang.String)
      */
     @Override
-    public void read(String url, OutputStream out, boolean close)
-    {
+    public void read(String url, OutputStream out, boolean close) throws ImejiException
+    {	
+    	
         GetMethod get = StorageUtils.newGetMethod(client, url);
         get.setFollowRedirects(true);
         try
@@ -106,7 +109,8 @@ public class ExternalStorage implements Storage
         }
         catch (Exception e)
         {
-            throw new RuntimeException("Error reading " + url, e);
+//            throw new RuntimeException("Error reading " + url, e);
+        	throw new UnprocessableError("Error reading " + url, e);
         }
         finally
         {

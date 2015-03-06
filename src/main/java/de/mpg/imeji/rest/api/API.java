@@ -4,11 +4,8 @@ import java.util.List;
 
 import javax.ws.rs.NotSupportedException;
 
-import org.apache.log4j.Logger;
-
-import de.mpg.imeji.logic.auth.exception.NotAllowedError;
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.j2j.exceptions.NotFoundException;
 
 /**
  * The generic Interface defining all methods (i.e verbs) available for the
@@ -25,7 +22,7 @@ import de.mpg.j2j.exceptions.NotFoundException;
  * @param <V>
  */
 public interface API<V> {
-
+	
 	/**
 	 * Create an Object in imeji
 	 * 
@@ -33,8 +30,7 @@ public interface API<V> {
 	 * @param u
 	 * @return
 	 */
-	public V create(V o, User u) throws NotFoundException, NotAllowedError,
-			NotSupportedException, Exception;
+	public V create(V o, User u) throws ImejiException;
 
 	/**
 	 * Read an object from imneji with its id
@@ -42,12 +38,8 @@ public interface API<V> {
 	 * @param id
 	 * @param u
 	 * @return
-	 * @throws NotFoundException
-	 * @throws NotAllowedError
-	 * @throws Exception
 	 */
-	public V read(String id, User u) throws NotFoundException, NotAllowedError,
-			NotSupportedException, Exception;
+	public V read(String id, User u) throws ImejiException;
 
 	/**
 	 * Update an object in imeji
@@ -56,8 +48,7 @@ public interface API<V> {
 	 * @param u
 	 * @return
 	 */
-	public V update(V o, User u) throws NotFoundException, NotAllowedError,
-			NotSupportedException, Exception;
+	public V update(V o, User u) throws ImejiException;
 
 	/**
 	 * Delete an object in imeji
@@ -66,8 +57,7 @@ public interface API<V> {
 	 * @param u
 	 * @return
 	 */
-	public boolean delete(String i, User u) throws NotFoundException,
-			NotAllowedError, NotSupportedException, Exception;
+	public boolean delete(String i, User u) throws ImejiException;
 
 	/**
 	 * Release an object
@@ -75,8 +65,7 @@ public interface API<V> {
 	 * @param i
 	 * @param u
 	 */
-	public V release(String i, User u) throws NotFoundException,
-			NotAllowedError, NotSupportedException, Exception;
+	public V release(String i, User u) throws ImejiException;
 
 	/**
 	 * Withdraw an object
@@ -84,8 +73,7 @@ public interface API<V> {
 	 * @param i
 	 * @param u
 	 */
-	public V withdraw(String i, User u, String discardComment) throws NotFoundException,
-			NotAllowedError, NotSupportedException, Exception;
+	public V withdraw(String i, User u, String discardComment) throws ImejiException;
 
 	/**
 	 * Share an object defined by id to a user defined by userid. The roles to
@@ -97,8 +85,7 @@ public interface API<V> {
 	 * @param u
 	 */
 	public void share(String id, String userId, List<String> roles, User u)
-			throws NotFoundException, NotAllowedError, NotSupportedException,
-			Exception;
+			throws ImejiException;
 
 	/**
 	 * Unshare an object defined by id from a user defined by userid. The roles
@@ -110,8 +97,7 @@ public interface API<V> {
 	 * @param u
 	 */
 	public void unshare(String id, String userId, List<String> roles, User u)
-			throws NotFoundException, NotAllowedError, NotSupportedException,
-			Exception;
+			throws ImejiException;
 
 	/**
 	 * Search for an object according to a query
@@ -120,7 +106,6 @@ public interface API<V> {
 	 * @param u
 	 * @return
 	 */
-	public List<String> search(String q, User u) throws NotSupportedException,
-			Exception;
+	public List<String> search(String q, User u) throws ImejiException;
 
 }

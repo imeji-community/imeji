@@ -1,20 +1,9 @@
 package de.mpg.imeji.presentation.beans;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Random;
-
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.vo.SearchIndex;
-import de.mpg.imeji.logic.search.vo.SearchOperators;
-import de.mpg.imeji.logic.search.vo.SearchPair;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
-import de.mpg.imeji.logic.search.vo.SortCriterion;
+import de.mpg.imeji.logic.search.vo.*;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.util.DateFormatter;
 import de.mpg.imeji.logic.vo.Item;
@@ -24,6 +13,13 @@ import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.PropertyReader;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Random;
 
 /**
  * the Java Bean for the Start Page
@@ -159,7 +155,7 @@ public class StartPageBean {
 		List<String> l = new ArrayList<String>();
 		Random r = new Random();
 		while (l.size() < CAROUSSEL_SIZE && l.size() < sr.getNumberOfRecords()) {
-			if (sr.getNumberOfRecords() > 1) {
+			if (sr.getNumberOfRecords() > 0) {
 				String uri = sr.getResults().get(
 						r.nextInt(sr.getNumberOfRecords()));
 				if (!l.contains(uri)) {

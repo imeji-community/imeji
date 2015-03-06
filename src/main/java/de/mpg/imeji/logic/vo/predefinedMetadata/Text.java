@@ -20,7 +20,7 @@ import de.mpg.j2j.annotations.j2jResource;
 
 /**
  * {@link Metadata} of type text
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -36,12 +36,13 @@ public class Text extends Metadata
     private static final long serialVersionUID = 3394338221875432545L;
     @j2jLiteral("http://imeji.org/terms/text")
     private String text;
-    @j2jResource("http://imeji.org/terms/statement")
-    private URI statement;
 
     public Text()
     {
     }
+
+    @j2jResource("http://imeji.org/terms/statement")
+    private URI statement;
 
     @XmlElement(name = "text", namespace = "http://imeji.org/terms/")
     public String getText()
@@ -54,14 +55,12 @@ public class Text extends Metadata
         text = str;
     }
 
-    @Override
     @XmlElement(name = "statement", namespace = "http://imeji.org/terms/")
     public URI getStatement()
     {
         return statement;
     }
 
-    @Override
     public void setStatement(URI namespace)
     {
         this.statement = namespace;
@@ -74,7 +73,7 @@ public class Text extends Metadata
         {
             setPos(metadata.getPos());
             this.text = ((Text)metadata).getText();
-            this.statement = metadata.getStatement();
+            setStatement(metadata.getStatement());
         }
     }
 

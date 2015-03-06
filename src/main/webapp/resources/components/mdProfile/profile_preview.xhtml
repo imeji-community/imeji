@@ -1,0 +1,66 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:composite="http://java.sun.com/jsf/composite">
+	
+	<composite:interface>
+		<composite:attribute name="statementWrappers" required="true"/>
+	</composite:interface>
+	
+	<composite:implementation>
+		<h:panelGroup layout="block" styleClass="imj_metadataList imj_metadataProfilePreviewList">
+			<div class="imj_listHeader">
+				<h2 class="imj_headline">Metadata Profile Preview</h2>
+			</div>
+					
+			<ul class="imj_listBody"><!-- created by every hierachy level 0 element -->
+				<ui:repeat var="wrapper" value="#{cc.attrs.statementWrappers}">
+					<li class="imj_listItem">
+						<dl style="margin-left: #{wrapper.level}%;">
+							<dt class="imj_headline">
+								#{lbl.metadata} #{lbl.type}: 
+								<h:outputText value="#{MdProfileBean.getTypeLabel(wrapper.statement.type)}"/>
+							</dt>
+							<dd>
+								<ul class="imj_metadataBox">
+									<ui:repeat var="label" value="#{wrapper.statement.labels}" varStatus="indexO">
+										<li>
+											<dl>
+												<dt>
+													<h:outputText value="(#{label.lang}): " title="#{lbl.label} (#{label.lang}): #{label.value}"/>
+												</dt>
+												<dd>
+													<h:outputText value="#{label.value}" title="#{lbl.label} (#{label.lang}): #{label.value}"/>
+												</dd>
+											</dl>
+										</li>
+									</ui:repeat>
+								</ul>
+								
+								<div class="imj_metadataBox">
+									<ui:fragment rendered="#{!(empty wrapper.statement.literalConstraints)}">
+										<div class="imj_customSelectbox">
+											<div class="imj_showSelection">
+												<div class="imj_selectionText">predefined values</div>
+												<div class="imj_buttonSortDescending_16"></div>
+											</div>
+											<select>
+												<ui:repeat id="constraints" var="constraint" value="#{wrapper.statement.literalConstraints}">
+													<option>#{constraint}</option>
+												</ui:repeat>
+											</select>
+										</div>
+									</ui:fragment>
+									<ui:fragment rendered="#{wrapper.statement.vocabulary != null}">
+										<h:outputText value="#{CreateCollectionBean.getVocabularyLabel(wrapper.statement.vocabulary)}"/>
+									</ui:fragment>
+								</div>
+							</dd>
+						</dl>
+					</li> <!-- END MDSet -->
+				</ui:repeat>
+			</ul> <!-- END MDGroup -->
+		</h:panelGroup> <!-- END PROFILE PREVIEW -->
+	</composite:implementation>
+</html>

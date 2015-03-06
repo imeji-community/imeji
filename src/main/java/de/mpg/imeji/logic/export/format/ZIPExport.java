@@ -39,7 +39,9 @@ import java.util.zip.ZipException;
 import java.util.zip.ZipOutputStream;
 
 import org.apache.http.client.HttpResponseException;
+import org.apache.log4j.Logger;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.export.Export;
@@ -61,6 +63,7 @@ public class ZIPExport extends Export
 {
     protected List<String> filteredResources = new ArrayList<String>();
     protected String modelURI;
+    private static Logger logger = Logger.getLogger(ZIPExport.class);
 
     /**
      * @param type
@@ -96,7 +99,7 @@ public class ZIPExport extends Export
         catch (Exception e)
         {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.info("Some problems with ZIP Export",  e);
         }
     }
 
@@ -117,11 +120,12 @@ public class ZIPExport extends Export
 
     /**
      * This method exports all images of the current browse page as a zip file
+     * @throws ImejiException 
      * 
      * @throws Exception
      * @throws URISyntaxException
      */
-    public void exportAllImages(SearchResult sr, OutputStream out) throws URISyntaxException, Exception
+    public void exportAllImages(SearchResult sr, OutputStream out) throws ImejiException 
     {
         List<String> source = sr.getResults();
         ZipOutputStream zip = new ZipOutputStream(out);
@@ -132,10 +136,12 @@ public class ZIPExport extends Export
             {
                 SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
                 ItemController ic = new ItemController();
-                Item item = ic.retrieve(new URI(source.get(i)), session.getUser());
-                StorageController sc = new StorageController();
+                Item item = null;
+                StorageController sc = null;
                 try
                 {
+                 item = ic.retrieve(new URI(source.get(i)), session.getUser());
+                 sc = new StorageController();
                     zip.putNextEntry(new ZipEntry(item.getFilename()));
                     sc.read(item.getFullImageUrl().toString(), zip, false);
                     // Complete the entry
@@ -151,17 +157,29 @@ public class ZIPExport extends Export
                         // Complete the entry
                         zip.closeEntry();
                     }
+                 }
+                catch (ImejiException e) {
+                	logger.info("Could not retrieve Item for export!");
+                }
+                catch (URISyntaxException eui) {
+                	logger.info("Could not create URI during retrieval and export! ");
                 }
             }
         }
         catch (IOException e)
         {
-            e.printStackTrace();
+            logger.info("Some IO Exception when exporting all images!", e);
         }
-        finally
-        {
-            // Complete the ZIP file
-            zip.close();
+       
+        try {
+        // 	Complete the ZIP file
+        	zip.close();
         }
-    }
+        catch (IOException ioe) {
+        	logger.info("Could not close the ZIP File!");
+        }
+    }       
+
+  
+
 }

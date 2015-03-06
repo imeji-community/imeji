@@ -3,6 +3,35 @@
  */
 package de.mpg.imeji.presentation.upload;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Serializable;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.util.List;
+import java.util.regex.Pattern;
+
+import javax.annotation.PostConstruct;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.fileupload.FileItemIterator;
+import org.apache.commons.fileupload.FileItemStream;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.log4j.Logger;
+import org.apache.regexp.REUtil;
+
+import com.hp.hpl.jena.query.ParameterizedSparqlString;
 import com.ocpsoft.pretty.PrettyContext;
 
 import de.mpg.imeji.logic.controller.CollectionController;
@@ -18,32 +47,11 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.collection.CollectionBean;
-import de.mpg.imeji.presentation.history.PageURIHelper;
+import de.mpg.imeji.presentation.history.HistoryUtil;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.UrlHelper;
-
-import org.apache.commons.fileupload.FileItemIterator;
-import org.apache.commons.fileupload.FileItemStream;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Logger;
-
-import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
-
-import java.io.*;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.util.List;
 
 /**
  * Bean for the upload page
@@ -69,22 +77,28 @@ public class UploadBean implements Serializable {
 	/**
 	 * Construct the Bean and initalize the pages
 	 * 
+	 * @throws Exception
+	 * 
 	 * @throws URISyntaxException
 	 * @throws IOException
 	 */
 	public UploadBean() {
-
-
 	}
 
 	/**
 	 * Method checking the url parameters and triggering then the
 	 * {@link UploadBean} methods
+	 * 
+	 * @throws Exception
 	 */
 	@PostConstruct
 	public void status() {
 		readId();
-		loadCollection();
+		try {
+			loadCollection();
+		} catch (Exception e) {
+			throw new RuntimeException("collection couldn't be loaded", e);
+		}
 		if (UrlHelper.getParameterBoolean("init")) {
 			((UploadSession) BeanHelper.getSessionBean(UploadSession.class))
 					.reset();
@@ -102,7 +116,7 @@ public class UploadBean implements Serializable {
 	 * Read the id of the collection from the url
 	 */
 	private void readId() {
-		URI uri = PageURIHelper.extractId(PrettyContext.getCurrentInstance()
+		URI uri = HistoryUtil.extractURI(PrettyContext.getCurrentInstance()
 				.getRequestURL().toString());
 		if (uri != null)
 			this.id = ObjectHelper.getId(uri);
@@ -282,8 +296,7 @@ public class UploadBean implements Serializable {
 						.getSessionBean(SessionBean.class);
 				throw new RuntimeException(
 						sessionBean.getMessage("upload_format_not_allowed")
-								+ " (" + guessedNotAllowedFormat
-								+ ")");
+								+ " (" + guessedNotAllowedFormat + ")");
 			}
 		}
 	}
@@ -294,10 +307,23 @@ public class UploadBean implements Serializable {
 	 * @param bytes
 	 * @throws Exception
 	 */
-	private Item uploadFile(File file, String title) {
+	private Item uploadFile(File fileUploaded, String title) {
 		try {
-			if (!StorageUtils.hasExtension(title))
-				title += StorageUtils.guessExtension(file);
+			
+			
+			String calculatedExtension = StorageUtils.guessExtension(fileUploaded);
+			File file=fileUploaded;
+
+			//TODO: not certain we should change the extensions even if these are not provided! Thus commented at the moment
+			//	if (!StorageUtils.hasExtension(title)) {
+			//		title += "."+calculatedExtension;
+			//	}
+			
+			if (!fileUploaded.getName().endsWith(calculatedExtension)) {
+				file = new File(file.getName()+calculatedExtension);
+				FileUtils.moveFile(fileUploaded, file);
+			}
+			
 			validateName(file, title);
 			Item item = null;
 			ItemController controller = new ItemController();
@@ -308,7 +334,8 @@ public class UploadBean implements Serializable {
 				item = controller.updateThumbnail(findItemByFileName(title),
 						file, user);
 			} else {
-				item = controller.createWithFile(null, file, title, collection, user);
+				item = controller.createWithFile(null, file, title, collection,
+						user);
 			}
 			getsFiles().add(item);
 			return item;
@@ -316,7 +343,6 @@ public class UploadBean implements Serializable {
 			getfFiles().add(
 					" File " + title + " not uploaded: " + e.getMessage());
 			logger.error("Error uploading item: ", e);
-			e.printStackTrace();
 			return null;
 		}
 	}
@@ -327,8 +353,9 @@ public class UploadBean implements Serializable {
 	 * 
 	 * @param filename
 	 * @return
+	 * @throws Exception
 	 */
-	private Item findItemByFileName(String filename) {
+	private Item findItemByFileName(String filename) throws Exception {
 		Search s = SearchFactory.create(SearchType.ITEM);
 		List<String> sr = s.searchSimpleForQuery(
 				SPARQLQueries.selectContainerItemByFilename(collection.getId(),
@@ -352,6 +379,9 @@ public class UploadBean implements Serializable {
 	 */
 	private boolean filenameExistsInCollection(String filename) {
 		Search s = SearchFactory.create(SearchType.ITEM);
+		//filename = org.apache.xerces.impl.xpath.regex.REUtil.quoteMeta(filename);
+		//filename = Pattern.quote(FilenameUtils.removeExtension(filename));
+		//filename = filename.replace(")", "\\u+0029").replace("(", "\\u+0028");
 		return s.searchSimpleForQuery(
 				SPARQLQueries.selectContainerItemByFilename(collection.getId(),
 						FilenameUtils.getBaseName(filename)))
@@ -360,8 +390,10 @@ public class UploadBean implements Serializable {
 
 	/**
 	 * Load the collection
+	 * 
+	 * @throws Exception
 	 */
-	public void loadCollection() {
+	public void loadCollection() throws Exception {
 		if (id != null) {
 			collection = ObjectLoader.loadCollectionLazy(
 					ObjectHelper.getURI(CollectionImeji.class, id), user);
@@ -375,7 +407,6 @@ public class UploadBean implements Serializable {
 			BeanHelper.error(sessionBean.getLabel("error") + "No ID in URL");
 		}
 	}
-
 
 	/**
 	 * release the {@link CollectionImeji}
@@ -394,7 +425,6 @@ public class UploadBean implements Serializable {
 			BeanHelper
 					.error(sessionBean.getMessage("error_collection_release"));
 			BeanHelper.error(e.getMessage());
-			e.printStackTrace();
 		}
 		return "pretty:";
 	}
@@ -481,11 +511,6 @@ public class UploadBean implements Serializable {
 	public void setExternalUrl(String externalUrl) {
 		this.externalUrl = externalUrl;
 	}
-
-
-
-
-
 
 	public List<String> getfFiles() {
 		return ((UploadSession) BeanHelper.getSessionBean(UploadSession.class))

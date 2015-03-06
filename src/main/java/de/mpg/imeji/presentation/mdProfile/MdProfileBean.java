@@ -90,6 +90,7 @@ public class MdProfileBean
         parseID();
         initMenus();
         cleanMetadata = false;
+        updateFirstTemplateProfileLabel();
         if (UrlHelper.getParameterBoolean("reset"))
         {
             reset();
@@ -204,9 +205,18 @@ public class MdProfileBean
         catch (Exception e)
         {
             BeanHelper.error(sessionBean.getMessage("error_profile_template_load"));
-            e.printStackTrace();
         }
     }
+    
+    public void updateFirstTemplateProfileLabel()
+    {
+    	if(profilesMenu != null && profilesMenu.size() >0)
+    	{
+    		profilesMenu.remove(0);
+    		profilesMenu.add(0, new SelectItem(null, sessionBean.getLabel("profile_select_template")));
+    	}
+    }
+    
 
     /**
      * Check all profile elements, and return true if all are valid. Error messages are logged for the user to help him

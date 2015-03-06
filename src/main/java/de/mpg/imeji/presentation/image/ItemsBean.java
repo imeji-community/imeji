@@ -11,7 +11,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
@@ -19,24 +18,17 @@ import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
-import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
-import de.mpg.imeji.logic.search.vo.SearchOperators;
-import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.presentation.beans.BasePaginatorListSessionBean;
-import de.mpg.imeji.presentation.beans.ConfigurationBean;
-import de.mpg.imeji.presentation.beans.FileTypes.Type;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.facet.Facet.FacetType;
 import de.mpg.imeji.presentation.facet.FacetsBean;
 import de.mpg.imeji.presentation.filter.Filter;
 import de.mpg.imeji.presentation.filter.FiltersBean;
-import de.mpg.imeji.presentation.filter.FiltersSession;
-import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.session.SessionBean;
@@ -101,8 +93,9 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
 	 * Init the page when it is called
 	 * 
 	 * @return
+	 * @throws Exception 
 	 */
-	public String getInitPage() {
+	public String getInitPage() throws Exception {
 		browseContext = getNavigationString();
 		browseInit();
 		isSimpleSearch = URLQueryTransformer.isSimpleSearch(searchQuery);
@@ -130,7 +123,6 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
 		totalNumberOfRecords = searchResult.getNumberOfRecords();
 		initMenus();
 		cleanSelectItems();
-		initBackPage();
 		initFilters();
 		cleanFacets();
 		initFacets();
@@ -256,30 +248,6 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
 		for (Filter f : filters.getSession().getFilters()) {
 			if (FacetType.SEARCH.equals(f.getType())) {
 				searchFilter = f;
-			}
-		}
-	}
-
-	/**
-	 * Initialize the page when the page has been called by the browser back
-	 * button
-	 */
-	public void initBackPage() {
-		HistorySession hs = (HistorySession) BeanHelper
-				.getSessionBean(HistorySession.class);
-		FiltersSession fs = (FiltersSession) BeanHelper
-				.getSessionBean(FiltersSession.class);
-		if (hs != null && fs != null) {
-			if (FacesContext.getCurrentInstance().getExternalContext()
-					.getRequestParameterMap().get("h") != null) {
-				if (FacesContext.getCurrentInstance().getExternalContext()
-						.getRequestParameterMap().get("h") != null) {
-					hs.getCurrentPage().setFilters(fs.getFilters());
-					hs.getCurrentPage().setQuery(fs.getWholeQuery());
-				} else {
-					hs.getCurrentPage().setFilters(fs.getFilters());
-					hs.getCurrentPage().setQuery(fs.getWholeQuery());
-				}
 			}
 		}
 	}

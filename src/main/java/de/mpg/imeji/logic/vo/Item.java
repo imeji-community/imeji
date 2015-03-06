@@ -259,4 +259,6 @@ public class Item extends Properties implements FulltextIndex, Serializable {
 	public void setChecksum(String checksum) {
 		this.checksum = checksum;
 	}
+
+
 }

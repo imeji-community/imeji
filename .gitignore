@@ -58,7 +58,6 @@ local.properties
 *.tlb
 *.tli
 *.tlh
-*.tmp
 *.vspscc
 .builds
 *.dotCover
@@ -177,3 +176,8 @@ target/
 # sublime
 *.sublime-workspace
 *.sublime-project
+
+#runtime errors logs
+hs_err*.log
+
+atlassian-ide-plugin.xml

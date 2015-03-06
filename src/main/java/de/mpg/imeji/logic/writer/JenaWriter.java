@@ -9,6 +9,7 @@ import java.util.List;
 import com.hp.hpl.jena.Jena;
 import com.hp.hpl.jena.rdf.model.Model;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.reader.JenaReader;
 import de.mpg.imeji.logic.search.FulltextIndex;
@@ -51,7 +52,7 @@ public class JenaWriter implements Writer
      * @param user
      * @throws Exception
      */
-    public void create(List<Object> objects, User user) throws Exception
+    public void create(List<Object> objects, User user) throws ImejiException
     {
         runTransaction(objects, GrantType.CREATE, false);
     }
@@ -63,7 +64,7 @@ public class JenaWriter implements Writer
      * @param user
      * @throws Exception
      */
-    public void delete(List<Object> objects, User user) throws Exception
+    public void delete(List<Object> objects, User user) throws ImejiException
     {
         runTransaction(objects, GrantType.DELETE, false);
         for (Object o : objects)
@@ -81,7 +82,7 @@ public class JenaWriter implements Writer
      * @param user
      * @throws Exception
      */
-    public void update(List<Object> objects, User user) throws Exception
+    public void update(List<Object> objects, User user) throws ImejiException
     {
         runTransaction(objects, GrantType.UPDATE, false);
     }
@@ -95,7 +96,7 @@ public class JenaWriter implements Writer
      * @param user
      * @throws Exception
      */
-    public void updateLazy(List<Object> objects, User user) throws Exception
+    public void updateLazy(List<Object> objects, User user) throws ImejiException
     {
         runTransaction(objects, GrantType.UPDATE, true);
     }
@@ -108,7 +109,7 @@ public class JenaWriter implements Writer
      * @param lazy
      * @throws Exception
      */
-    private void runTransaction(List<Object> objects, GrantType type, boolean lazy) throws Exception
+    private void runTransaction(List<Object> objects, GrantType type, boolean lazy) throws ImejiException
     {
         index(objects);
         Transaction t = new CRUDTransaction(objects, type, modelURI, lazy);

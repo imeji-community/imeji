@@ -64,8 +64,8 @@
 			        sortable: true,
 			        // Enable ability to drag'n'drop files onto the widget (currently only HTML5 supports that)
 			        dragdrop: true,
-					flash_swf_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/eSciDoc_JavaScript/plupload-2.1.2/js/movie.swf',
-					silverlight_xap_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/eSciDoc_JavaScript/plupload-2.1.2/js/movie.xap',
+					flash_swf_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/plupload/2.1.2/js/Moxie.swf',
+					silverlight_xap_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources//plupload/2.1.2/js/Moxie.xap',
 					init : {
 						 StateChanged: function(up) {
 								// Called when the state of the queue is changed
@@ -96,50 +96,69 @@
 		<h:panelGroup layout="block" id="imj_ajaxWrapper">
 			<!-- START UPLOAD -->
 			<h:panelGroup layout="block" styleClass="imj_upload" rendered="#{Auth.create(UploadBean.collection)}">
-				<div class="imj_headline">
-					<h2>
-						<h:outputText value="#{lbl.uploadFiles}"/>
-					</h2>
-				</div>
+				<h2 class="imj_headline">
+					<h:outputText value="#{lbl.uploadFiles}"/>
+				</h2>
 				
 				<div class="imj_uploadInputWrapper">
-					<div id="uploader" class="imj_uploadDropArea">
-						Your browser doesn't support native upload!<br /> 
-						Please use HTML5 compatible browser (Firefox 4.x, Safari 4, Chrome) or download following tools:<br /> 
-						<a href="http://www.microsoft.com/germany/silverlight/downloads.aspx" target="_blank">Download Siverlight</a> 
-						<h:outputText value=" #{lbl.or_small} "/> 
-						<a href="http://get.adobe.com/de/flashplayer/download/" target="_blank">Download Flash</a>
-					</div>
-					
-					<div class="imj_uploadUrlReference">
-						<h:form>
-							<h:outputText value="#{lbl.or_big}"/>
-							<h:outputLabel value="#{lbl.upload_from_link}" for="uploadInputText"/>
-							<h:inputText value="#{UploadBean.externalUrl}" id="uploadInputText"/>
+					<div id="tabsUpload" class="id_tabs imj_tabList">
+						<!-- tabs -->
+						<ul class="imj_tabMenu">
+							<li><a href="#tabsUpload-1">#{lbl.select_files}</a></li>
+							<li><a href="#tabsUpload-2">#{lbl.upload_from_link_menu}</a></li>
+							<ui:fragment rendered="#{Auth.admin}">
+								<li><a href="#tabsUpload-3">#{lbl.upload_directory_menu}</a></li>
+							</ui:fragment>
+						</ul>
 						
-							<div class="imj_submitPanel">
-								<h:commandLink value="#{lbl.upload_start}" action="#{UploadBean.uploadFromLink}" styleClass="imj_submitButton" onclick="openDialog('dialogWait');"/>
+						<!--  tabs content -->
+						<div id="tabsUpload-1" class="imj_tabContent">
+							<div id="uploader" class="imj_uploadDropArea">
+								Your browser doesn't support native upload!<br /> 
+								Please use HTML5 compatible browser (Firefox 4.x, Safari 4, Chrome) or download following tools:<br /> 
+								<a href="http://www.microsoft.com/germany/silverlight/downloads.aspx" target="_blank">Download Siverlight</a> 
+								<h:outputText value=" #{lbl.or_small} "/> 
+								<a href="http://get.adobe.com/de/flashplayer/download/" target="_blank">Download Flash</a>
 							</div>
-						</h:form>
-					</div>
-					
-					<ui:fragment rendered="#{Auth.admin}">
-						<div class="imj_uploadUrlReference">
-							<h:form>
-								<h:outputText value="#{lbl.or_big}"/>
-								<h:outputLabel value="#{lbl.upload_directory}" for="uploadInputDir"/>
-								<h:inputText value="#{UploadBean.localDirectory}" id="uploadInputDir"/>
-								<div class="imj_submitPanel">
-									<h:commandLink value="#{lbl.upload_start}" action="#{UploadBean.uploadFromLocalDirectory}" styleClass="imj_submitButton" onclick="openDialog('dialogWait');">
-										<f:ajax execute="@form" render="@none" />
-									</h:commandLink>
-								
-								</div>
-							</h:form>
 						</div>
-					</ui:fragment>
+						<div id="tabsUpload-2" class="imj_tabContent">
+							<div class="imj_uploadUrlReference">
+								<h:form>
+									<h:outputLabel value="#{lbl.upload_from_link}" for="uploadInputText"/>
+									<h:inputText value="#{UploadBean.externalUrl}" id="uploadInputText"/>
+								
+									<div class="imj_submitPanel">
+										<h:commandLink value="#{lbl.upload_start}" action="#{UploadBean.uploadFromLink}" styleClass="imj_submitButton" onclick="openDialog('dialogWait');"/>
+									</div>
+								</h:form>
+							</div>
+						</div>
+						<ui:fragment rendered="#{Auth.admin}">
+							<div id="tabsUpload-3" class="imj_tabContent">
+							
+								<div class="imj_uploadUrlReference">
+									<h:form>
+										<h:outputLabel value="#{lbl.upload_directory}" for="uploadInputDir"/>
+										<h:inputText value="#{UploadBean.localDirectory}" id="uploadInputDir"/>
+										<div class="imj_submitPanel">
+											<h:commandLink value="#{lbl.upload_start}" action="#{UploadBean.uploadFromLocalDirectory}" styleClass="imj_submitButton" onclick="openDialog('dialogWait');">
+												<f:ajax execute="@form" render="@none" />
+											</h:commandLink>
+										
+										</div>
+									</h:form>
+								</div>
+							
+							</div>
+						</ui:fragment>
+					</div>
+					<script type="text/javascript">
+						jQuery(function(){
+							jQuery(".id_tabs").tabs();
+						});
+					</script>
 				</div>
-						
+				
 				<div class="imj_uploadOptionsArea">
 					
 					<h3 class="imj_sectionHeadline">

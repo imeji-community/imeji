@@ -181,7 +181,7 @@ public class MediaUtils
             }
             catch (Exception e)
             {
-                e.printStackTrace();
+                logger.info("Some problems with getting non blank frame!", e);
             }
             finally
             {

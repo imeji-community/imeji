@@ -40,6 +40,7 @@ public class Publication extends Metadata
     private String exportFormat = "APA";
     @j2jLiteral("http://imeji.org/terms/citation")
     private String citation;
+
     @j2jResource("http://imeji.org/terms/statement")
     private URI statement;
 
@@ -80,14 +81,12 @@ public class Publication extends Metadata
         this.citation = citation;
     }
 
-    @Override
     @XmlElement(name = "statement", namespace = "http://imeji.org/terms/")
     public URI getStatement()
     {
         return statement;
     }
 
-    @Override
     public void setStatement(URI namespace)
     {
         this.statement = namespace;
@@ -102,8 +101,7 @@ public class Publication extends Metadata
             this.citation = ((Publication)metadata).getCitation();
             this.exportFormat = ((Publication)metadata).getExportFormat();
             this.uri = ((Publication)metadata).getUri();
-            this.statement = metadata.getStatement();
-        }
+            setStatement(((Publication)metadata).getStatement());        }
     }
 
     @Override

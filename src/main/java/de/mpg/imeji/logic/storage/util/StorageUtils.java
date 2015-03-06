@@ -28,6 +28,8 @@
  */
 package de.mpg.imeji.logic.storage.util;
 
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.UnprocessableError;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
@@ -44,6 +46,8 @@ import org.apache.tools.ant.taskdefs.Get;
 
 import java.io.*;
 import java.net.URL;
+
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
  * Util class fore the storage package
@@ -159,7 +163,7 @@ public class StorageUtils {
 	 * @param url
 	 * @return
 	 */
-	public static GetMethod newGetMethod(HttpClient client, String url) {
+	public static GetMethod newGetMethod(HttpClient client, String url) throws ImejiException {
 		GetMethod method = new GetMethod(url);
 		method.addRequestHeader("Cache-Control", "public");
 		method.setRequestHeader("Connection", "close");
@@ -190,10 +194,18 @@ public class StorageUtils {
 			if (!type.getExtensions().isEmpty()) {
 				return type.getExtensions().get(0).replace(".", "");
 			}
+			else
+			{
+				String calculatedExtension =  FilenameUtils.getExtension(file.getName());
+				if (!isNullOrEmpty(calculatedExtension)){
+					return calculatedExtension;
+				}
+			}
 		} catch (Exception e) {
 			logger.error("Error guessing file format", e);
 		}
-		return "";
+		
+		return "bad-extension/other";
 	}
 
 	/**
@@ -294,15 +306,17 @@ public class StorageUtils {
 		} else if ("wma".equals(extension)) {
 			return "audio/x-ms-wma";
 		}
-		try {
-			// If not found, Try with tika
-			MimeType type = MimeTypes.getDefaultMimeTypes().forName(
-					"name." + extension);
-			return type.getName();
-		} catch (MimeTypeException e) {
-			// If still not found, return the default one
-			return "application/octet-stream";
+		
+		Tika t = new Tika();
+		String calculatedMimeType =	t.detect("name."+extension);
+			
+		if ("".equals(calculatedMimeType)) {
+				return "application/octet-stream";
 		}
+		else {
+			return calculatedMimeType;
+		}
+			
 	}
 
 	/**
@@ -322,18 +336,22 @@ public class StorageUtils {
 	 * @return
 	 * @throws IOException
 	 */
-	public static String calculateChecksum(File file) throws IOException {
+	public static String calculateChecksum(File file) throws ImejiException {
 		FileInputStream fis = null;
 		try {
 			fis = new FileInputStream(file);
 			return DigestUtils.md5Hex(fis);
-		} catch (Exception e) {
-			throw new RuntimeException(
-					"Error calculating the cheksum of the file: ", e);
-		} finally {
-			if (fis != null)
-				fis.close();
-		}
+		} catch (IOException e) {
+			throw new UnprocessableError(
+					"Error calculating the cheksum of the file: ");
+		} 
+		
+//		finally {
+//			if (fis != null)
+//				fis.close();
+//		}
+//		
+		
 	}
 
 	/**

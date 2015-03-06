@@ -3,18 +3,8 @@
  */
 package de.mpg.imeji.presentation.image;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.faces.context.FacesContext;
-import javax.faces.event.ValueChangeEvent;
-import javax.faces.model.SelectItem;
-
-import org.apache.commons.io.FilenameUtils;
-
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
@@ -26,16 +16,11 @@ import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchOperators;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
+import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.StringHelper;
-import de.mpg.imeji.logic.vo.Album;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Metadata;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.beans.PropertyBean;
@@ -48,7 +33,17 @@ import de.mpg.imeji.presentation.session.SessionObjectsController;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.UrlHelper;
-import de.mpg.j2j.helper.DateHelper;
+import org.apache.commons.io.FilenameUtils;
+
+import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.model.SelectItem;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Bean for a Single image
@@ -75,7 +70,8 @@ public class ItemBean {
 	private List<Album> relatedAlbums;
 	private String dateCreated;
 	private String newFilename;
-
+	private String stringContent = null;
+	
 	/**
 	 * Construct a default {@link ItemBean}
 	 * 
@@ -102,7 +98,17 @@ public class ItemBean {
 		tab = UrlHelper.getParameterValue("tab");
 		if ("".equals(tab))
 			tab = null;
-		loadImage();
+			try {
+				loadImage();
+			}
+			catch (Exception e)
+			{
+				FacesContext.getCurrentInstance().getExternalContext()
+				.responseSendError(404, "404_NOT_FOUND");
+
+			}
+			
+			
 		if (item != null) {
 			if ("techmd".equals(tab)) {
 				initViewTechnicalMetadata();
@@ -174,14 +180,14 @@ public class ItemBean {
 		} catch (Exception e) {
 			techMd = new ArrayList<String>();
 			techMd.add(e.getMessage());
-			e.printStackTrace();
 		}
 	}
 
 	/**
 	 * Initiliaue the {@link SingleItemBrowse} for this {@link ItemBean}
+	 * @throws Exception 
 	 */
-	public void initBrowsing() {
+	public void initBrowsing() throws Exception {
 		if (item != null)
 			browse = new SingleItemBrowse(
 					(ItemsBean) BeanHelper.getSessionBean(ItemsBean.class),
@@ -190,10 +196,14 @@ public class ItemBean {
 
 	/**
 	 * Load the item according to the idntifier defined in the URL
+	 * @throws Exception 
 	 */
-	public void loadImage() {
+	public void loadImage() throws Exception {
 		item = ObjectLoader.loadItem(ObjectHelper.getURI(Item.class, id),
 				sessionBean.getUser());
+		if (item == null ) {
+			throw new NotFoundException("LoadImage: empty");
+		}
 	}
 
 	/**
@@ -205,7 +215,6 @@ public class ItemBean {
 					user);
 		} catch (Exception e) {
 			BeanHelper.error(e.getMessage());
-			e.printStackTrace();
 			collection = null;
 		}
 	}
@@ -504,7 +513,21 @@ public class ItemBean {
 		}
 		return item.getFilename();
 	}
-
+	
+	/**
+	 * Function to return the content of the item
+	 * @return String
+	 */
+	public String getStringContent() throws ImejiException {
+		if (stringContent == null) {
+	        StorageController sc = new StorageController();
+	        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	        sc.read(item.getFullImageUrl().toString(), baos, true);
+	        stringContent = baos.toString(); 
+		}
+		return stringContent;
+	}
+	
 	/**
 	 * Returns a list of all albums this image is added to.
 	 * 
@@ -626,7 +649,14 @@ public class ItemBean {
 				FilenameUtils.getExtension(item.getFilename())).contains(
 				"application/pdf");
 	}
-
+	
+	/**
+	 * Function checks if the file ends with swc
+	 */
+	public boolean isSwcFile() {
+		return item.getFullImageUrl().toString().endsWith(".swc");
+	}
+	
 	/**
 	 * True if the current file is an audio
 	 * 

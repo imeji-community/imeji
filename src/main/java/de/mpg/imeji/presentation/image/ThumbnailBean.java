@@ -61,8 +61,9 @@ public class ThumbnailBean {
 	 * is an instance of a {@link ThumbnailBean}
 	 * 
 	 * @param item
+	 * @throws Exception 
 	 */
-	public ThumbnailBean(Item item) {
+	public ThumbnailBean(Item item) throws Exception {
 		this.sessionBean = (SessionBean) BeanHelper
 				.getSessionBean(SessionBean.class);
 		this.uri = item.getId();

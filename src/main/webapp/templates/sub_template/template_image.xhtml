@@ -38,14 +38,15 @@
 							</h:outputLink>
 						</h:panelGroup>
 					</h:panelGroup>
+					
 					<ui:include src="../component/images/image_details.xhtml"/>
 				</ui:fragment>
 			</h:panelGroup>
 			
 		</ui:fragment>
 		
-		<ui:fragment rendered="#{itemBean.image == null}">
-			<h:panelGroup layout="block" styleClass="imj_errorPage" rendered="#{Auth.loggedIn}">
+		 <ui:fragment rendered="#{itemBean.image == null}">
+		<!--	<h:panelGroup layout="block" styleClass="imj_errorPage" rendered="#{Auth.loggedIn}">
 	        	<h3 class="imj_headline">
 					<h:outputText value="#{lbl.errorNote}"/>
 				</h3>				
@@ -56,9 +57,10 @@
 			<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!Auth.loggedIn}">
 	        	<ui:include src="../../include/LoginFormular.xhtml"/>
 			</h:panelGroup>
+			 -->
 			<h:outputLink value="#{HistorySession.previousPage.url}" rendered="#{HistorySession.previousPage != null}">
 				<h:outputText value="#{lbl.back_to_previous}" />
 			</h:outputLink>		
 		</ui:fragment>
-	</ui:define>	
+	</ui:define>
 </ui:composition>

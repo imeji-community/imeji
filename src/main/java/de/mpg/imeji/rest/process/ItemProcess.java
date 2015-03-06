@@ -1,27 +1,29 @@
 package de.mpg.imeji.rest.process;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Response.Status;
+
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.io.ByteStreams;
 import com.google.common.io.Files;
-import de.mpg.imeji.logic.auth.exception.NotAllowedError;
+import de.mpg.imeji.exceptions.BadRequestException;
+
+import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.api.ItemService;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
 import de.mpg.imeji.rest.to.JSONResponse;
-import de.mpg.j2j.exceptions.NotFoundException;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.Response.Status;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
-import static com.google.common.base.Strings.isNullOrEmpty;
 
 public class ItemProcess {
 
@@ -30,63 +32,28 @@ public class ItemProcess {
 
 	public static JSONResponse deleteItem(HttpServletRequest req, String id) {
 		User u = BasicAuthentication.auth(req);
-		JSONResponse resp = new JSONResponse();
+		JSONResponse resp; 
 
-		if (u == null) {
-			resp.setObject(RestProcessUtils
-					.buildUnauthorizedResponse("Not logged in not allowed to delete item"));
-			resp.setStatus(Status.UNAUTHORIZED);
-		} else {
-			ItemService icrud = new ItemService();
+		ItemService icrud = new ItemService();
 			try {
 				icrud.delete(id, u);
-				resp.setStatus(Status.NO_CONTENT);
-			} catch (NotFoundException e) {
-				resp.setObject(RestProcessUtils.buildBadRequestResponse(e
-						.getLocalizedMessage()));
-				resp.setStatus(Status.BAD_REQUEST);
-
-			} catch (NotAllowedError e) {
-
-				resp.setObject(RestProcessUtils.buildNotAllowedResponse(e
-						.getLocalizedMessage()));
-				resp.setStatus(Status.FORBIDDEN);
+				resp= RestProcessUtils.buildResponse(Status.NO_CONTENT.getStatusCode(), null);
+			} catch (Exception e) {
+				resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
 			}
-		}
 		return resp;
 	}
 	
 
 	public static JSONResponse readItem(HttpServletRequest req, String id) {
 		User u = BasicAuthentication.auth(req);
-		JSONResponse resp = new JSONResponse();
-
-		ItemTO item = null;
+		JSONResponse resp; 
 
 		ItemService icrud = new ItemService();
 		try {
-			item = icrud.read(id, u);
-			resp.setObject(item);
-			resp.setStatus(Status.OK);
-		} catch (NotFoundException e) {
-			resp.setObject(RestProcessUtils.buildBadRequestResponse(e
-					.getLocalizedMessage()));
-			resp.setStatus(Status.BAD_REQUEST);
-
-		} catch (NotAllowedError e) {
-			if (u == null) {
-				resp.setObject(RestProcessUtils.buildUnauthorizedResponse(e
-						.getLocalizedMessage()));
-				resp.setStatus(Status.UNAUTHORIZED);
-			} else {
-				resp.setObject(RestProcessUtils.buildNotAllowedResponse(e
-						.getLocalizedMessage()));
-				resp.setStatus(Status.FORBIDDEN);
-			}
+			resp= RestProcessUtils.buildResponse(Status.OK.getStatusCode(), icrud.read(id, u));
 		} catch (Exception e) {
-			resp.setObject(RestProcessUtils.buildExceptionResponse(e
-					.getLocalizedMessage()));
-			resp.setStatus(Status.FORBIDDEN);
+			resp= RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
 		}
 		return resp;
 
@@ -95,95 +62,66 @@ public class ItemProcess {
 	public static JSONResponse createItem(HttpServletRequest req,
 			InputStream file, String json, String origName) {
 		// / write response
-		JSONResponse resp = new JSONResponse();
+		JSONResponse resp; 
 
 		// Load User (if provided)
 		User u = BasicAuthentication.auth(req);
-		
+
 		// Parse json into to
 		ItemWithFileTO to = null;
 		try {
 			to = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(json,
 					ItemWithFileTO.class);
+			
+			if (file != null){
+				File tmp = File.createTempFile("imejiAPI", null);
+				IOUtils.copy(file, new FileOutputStream(tmp));
+				to.setFile(tmp);
+				to.setFilename((!isNullOrEmpty(to.getFilename()))?to.getFilename():(to.getFilename()==null?origName:to.getFilename()));
+	
+			}
+			
+			if (to.getFile() == null && isNullOrEmpty(to.getFetchUrl()) && isNullOrEmpty(to.getReferenceUrl()) ) {
+				throw new BadRequestException("A file must be uploaded, referenced or fetched from external location.");
+			}
+			
 		} catch (Exception e) {
-			resp.setObject(RestProcessUtils
-					.buildBadRequestResponse(CommonUtils.JSON_Invalid));
-			resp.setStatus(Status.BAD_REQUEST);
+			e = new BadRequestException(e.getLocalizedMessage());
+			resp= RestProcessUtils.localExceptionHandler(e, CommonUtils.JSON_Invalid);
 			return resp;
 		}
-		// set file in to (if provided)
-
-		if ("".equals(to.getFilename())) {
-			resp.setObject(RestProcessUtils
-					.buildBadRequestResponse(CommonUtils.FILENAME_RENAME_EMPTY));
-			resp.setStatus(Status.BAD_REQUEST);
-		} else if (to.getFilename() != null
-				&& !"".equals(FilenameUtils.getExtension(to.getFilename()))
-				&& !FilenameUtils.getExtension(to.getFilename()).equals(
-						FilenameUtils.getExtension(origName))) {
-			resp.setObject(RestProcessUtils
-					.buildBadRequestResponse(CommonUtils.FILENAME_RENAME_INVALID_SUFFIX));
-			resp.setStatus(Status.BAD_REQUEST);
-		} else {
-			if (file != null) {
-				try {
-					File tmp = File.createTempFile("imejiAPI", null);
-					IOUtils.copy(file, new FileOutputStream(tmp));
-					to.setFile(tmp);
-					if (to.getFilename() == null)
-						to.setFilename(origName);
-					else
-						to.setFilename(to.getFilename() + "."
-								+ FilenameUtils.getExtension(origName));
-
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-
-			// create item with the file
+		
+		// create item with the file
 			ItemService service = new ItemService();
 
 			try {
-				resp.setObject(service.create(to, u));
-				resp.setStatus(Status.CREATED);
-			} catch (NotFoundException e) {
-				resp.setObject(RestProcessUtils.buildBadRequestResponse(e
-						.getLocalizedMessage()));
-				resp.setStatus(Status.BAD_REQUEST);
-
-			} catch (NotAllowedError e) {
-				if (u == null) {
-					resp.setObject(RestProcessUtils.buildUnauthorizedResponse(e
-							.getLocalizedMessage()));
-					resp.setStatus(Status.UNAUTHORIZED);
-				} else {
-					resp.setObject(RestProcessUtils.buildNotAllowedResponse(e
-							.getLocalizedMessage()));
-					resp.setStatus(Status.FORBIDDEN);
-				}
+				resp= RestProcessUtils.buildResponse(Status.CREATED.getStatusCode(), service.create(to, u));
 			} catch (Exception e) {
-				resp.setStatus(Status.INTERNAL_SERVER_ERROR);
+				resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
+
 			}
-
-		}
-
+			
 		return resp;
 	}
 
 
-	public static JSONResponse udpateItem(HttpServletRequest req, String id, InputStream fileInputStream, String json, String filename) {
+	public static JSONResponse updateItem(HttpServletRequest req, String id, InputStream fileInputStream, String json, String filename) {
 
 		User u = BasicAuthentication.auth(req);
 
-		JSONResponse resp = new JSONResponse();
+		JSONResponse resp; 
 		ItemService service = new ItemService();
-
+		ItemTO to = new ItemTO();
 		try {
-			ItemTO to = !isNullOrEmpty(json) && (fileInputStream != null || json.indexOf("fetchUrl") > 0 || json.indexOf("referenceUrl") > 0) ?
+			to = !isNullOrEmpty(json) && (fileInputStream != null || json.indexOf("fetchUrl") > 0 || json.indexOf("referenceUrl") > 0) ?
 					(ItemWithFileTO) RestProcessUtils.buildTOFromJSON(json, ItemWithFileTO.class) :
 					(ItemTO) RestProcessUtils.buildTOFromJSON(json, ItemTO.class);
-
+		} catch (Exception e) {
+			e = new BadRequestException("A file must be uploaded, referenced or fetched from external location.");
+			resp= RestProcessUtils.localExceptionHandler(e, CommonUtils.JSON_Invalid);
+			return resp;
+		}
+		try {
 			validateId(id, to);
 			to.setId(id);
 			if (fileInputStream != null) {
@@ -200,24 +138,9 @@ public class ItemProcess {
 				((ItemWithFileTO)to).setFile(tmpFile);
 
 			}
-			resp.setObject(service.update(to, u));
-			//item, no file
-			resp.setStatus(Status.OK);
-		} catch (NotFoundException e) {
-			resp.setObject(RestProcessUtils.buildBadRequestResponse(e.getLocalizedMessage()));
-			resp.setStatus(Status.BAD_REQUEST);
-		} catch (NotAllowedError e) {
-			if (u == null) {
-				resp.setObject(RestProcessUtils.buildUnauthorizedResponse(e.getLocalizedMessage()));
-				resp.setStatus(Status.UNAUTHORIZED);
-			} else {
-				resp.setObject(RestProcessUtils.buildNotAllowedResponse(e.getLocalizedMessage()));
-				resp.setStatus(Status.FORBIDDEN);
-			}
+			resp = RestProcessUtils.buildResponse(Status.OK.getStatusCode(), service.update(to, u));
 		} catch (Exception e) {
-			resp.setStatus(Status.INTERNAL_SERVER_ERROR);
-			LOGGER.error(e.getLocalizedMessage());
-			e.printStackTrace();
+			resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
 		}
 
 		return resp;

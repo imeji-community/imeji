@@ -1,34 +1,24 @@
 package util;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
-import com.hp.hpl.jena.sparql.util.DatasetUtils;
 import com.hp.hpl.jena.tdb.TDB;
-import com.hp.hpl.jena.tdb.TDBBackup;
 import com.hp.hpl.jena.tdb.TDBFactory;
-import com.hp.hpl.jena.tdb.TDBLoader;
 import com.hp.hpl.jena.tdb.base.block.FileMode;
 import com.hp.hpl.jena.tdb.base.file.Location;
-import com.hp.hpl.jena.tdb.mgt.TDBMgt;
-import com.hp.hpl.jena.tdb.mgt.TDBSystemInfo;
 import com.hp.hpl.jena.tdb.sys.SystemTDB;
-import com.hp.hpl.jena.tdb.sys.TDBInternal;
 import com.hp.hpl.jena.tdb.sys.TDBMaker;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
-import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.PropertyBean;
-import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /*

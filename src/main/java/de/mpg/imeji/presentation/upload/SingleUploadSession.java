@@ -10,7 +10,7 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
-import de.mpg.imeji.presentation.metadata.SuperMetadataBean;
+import de.mpg.imeji.presentation.metadata.MetadataSetBean;
 
 
 @ManagedBean(name = "SingleUploadSession")
@@ -23,7 +23,7 @@ public class SingleUploadSession {
 	private MetadataLabels labels;
 	private IngestImage ingestImage;
 	private List<String> techMD = new ArrayList<String>();
-	private List<SuperMetadataBean> superMdBeans;
+	private MetadataSetBean mdSetBean;
 	private boolean uploadFileToTemp = false;
 	private boolean uploadFileToItem = false;
 	private Item uploadedItem;
@@ -36,7 +36,7 @@ public class SingleUploadSession {
 		profile = null;
 		ingestImage = null;
 		techMD.clear();;
-		superMdBeans = null;
+		mdSetBean = null;
 		labels = null;
 		uploadFileToTemp = false;
 		uploadFileToItem = false;
@@ -59,7 +59,7 @@ public class SingleUploadSession {
 		profile = null;
 		ingestImage = null;
 		techMD.clear();;
-		superMdBeans = null;
+		mdSetBean = null;
 		labels = null;
 		uploadFileToTemp = false;
 		uploadFileToItem = true;
@@ -83,16 +83,16 @@ public class SingleUploadSession {
 		this.uploadFileToItem = uploadFileToItem;
 	}
 
-	public List<SuperMetadataBean> getSuperMdBeans() {
-		return superMdBeans;
-	}
-
-	public void setSuperMdBeans(List<SuperMetadataBean> superMdBeans) {
-		this.superMdBeans = superMdBeans;
-	}
-
 	public boolean isUploadFileToTemp() {
 		return uploadFileToTemp;
+	}
+
+	public MetadataSetBean getMdSetBean() {
+		return mdSetBean;
+	}
+
+	public void setMdSetBean(MetadataSetBean mdSetBean) {
+		this.mdSetBean = mdSetBean;
 	}
 
 	public void setUploadFileToTemp(boolean uploadFileToTemp) {

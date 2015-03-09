@@ -29,7 +29,11 @@
 package de.mpg.imeji.logic.search.query;
 
 import java.net.URI;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.text.translate.UnicodeEscaper;
+import org.apache.xerces.impl.xpath.regex.REUtil;
 import org.opensaml.ws.wssecurity.Username;
 
 import com.hp.hpl.jena.sparql.pfunction.library.container;
@@ -458,15 +462,46 @@ public class SPARQLQueries {
 						.queryFactory(user,
 								J2JHelper.getResourceNamespace(new Item()),
 								null, false)
-				+ " ?s <http://imeji.org/terms/status> ?status}LIMIT " + limit;
+				+ " ?s <http://imeji.org/terms/status> ?status . ?s <http://imeji.org/terms/collection> ?c} LIMIT "
+				+ limit;
 	}
 
 	public static String selectContainerItemByFilename(URI containerURI,
 			String filename) {
+		filename = removeforbiddenCharacters(filename);
 		return "SELECT DISTINCT ?s WHERE {?s <http://imeji.org/terms/filename> ?el . FILTER(regex(?el, '^"
 				+ filename
 				+ "\\\\..+', 'i')) .?s <http://imeji.org/terms/collection> <"
 				+ containerURI.toString()
 				+ "> . ?s <http://imeji.org/terms/status> ?status . FILTER (?status!=<http://imeji.org/terms/status#WITHDRAWN>)} LIMIT 2";
+
 	}
+
+
+	public static String escapeWithUnicode(String s) {
+		String[] escapedCharacters = { "(", ")" };
+		for (int i = 0; i < escapedCharacters.length; i++) {
+			s = s.replace(escapedCharacters[i],
+					escapeCharacterWithUnicode(escapedCharacters[i]));
+		}
+		return s;
+	}
+
+	private static String escapeCharacterWithUnicode(String c) {
+		return "\\u00" + UnicodeEscaper.hex(c.codePointAt(0));
+	}
+
+	/**
+	 * Chararters ( and ) can not be accepted in the sparql query and must therefore removed
+	 * @param s
+	 * @return
+	 */
+	public static String removeforbiddenCharacters(String s) {
+		String[] forbidden = { "(", ")" };
+		for (int i = 0; i < forbidden.length; i++) {
+			s = s.replace(forbidden[i], ".");
+		}
+		return s;
+	}
+
 }

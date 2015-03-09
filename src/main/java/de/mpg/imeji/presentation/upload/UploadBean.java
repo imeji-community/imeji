@@ -13,6 +13,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -26,8 +27,11 @@ import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.log4j.Logger;
+import org.apache.regexp.REUtil;
 
+import com.hp.hpl.jena.query.ParameterizedSparqlString;
 import com.ocpsoft.pretty.PrettyContext;
 
 import de.mpg.imeji.logic.controller.CollectionController;
@@ -375,6 +379,9 @@ public class UploadBean implements Serializable {
 	 */
 	private boolean filenameExistsInCollection(String filename) {
 		Search s = SearchFactory.create(SearchType.ITEM);
+		//filename = org.apache.xerces.impl.xpath.regex.REUtil.quoteMeta(filename);
+		//filename = Pattern.quote(FilenameUtils.removeExtension(filename));
+		//filename = filename.replace(")", "\\u+0029").replace("(", "\\u+0028");
 		return s.searchSimpleForQuery(
 				SPARQLQueries.selectContainerItemByFilename(collection.getId(),
 						FilenameUtils.getBaseName(filename)))

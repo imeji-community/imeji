@@ -66,8 +66,7 @@ public class ItemController extends ImejiController {
 			NO_THUMBNAIL_URL = PropertyReader.getProperty("imeji.instance.url")
 					+ "/resources/icon/" + NO_THUMBNAIL_FILE_NAME;
 		} catch (Exception e) {
-			throw new RuntimeException("Error reading property: ",
-					e);
+			throw new RuntimeException("Error reading property: ", e);
 		}
 	}
 
@@ -111,11 +110,12 @@ public class ItemController extends ImejiController {
 
 		if (item == null)
 			item = ImejiFactory.newItem(c);
-		
+
 		if (filename == null || filename.equals("")) {
-			throw new UnprocessableError("Filename or reference must not be empty!");
+			throw new UnprocessableError(
+					"Filename or reference must not be empty!");
 		}
-		
+
 		item = ImejiFactory.newItem(item, c, user, uploadResult.getId(),
 				filename, URI.create(uploadResult.getOrginal()),
 				URI.create(uploadResult.getThumb()),
@@ -133,7 +133,7 @@ public class ItemController extends ImejiController {
 	 * @param download
 	 * @param user
 	 * @return
-	 * @throws IOException 
+	 * @throws IOException
 	 * @throws ImejiException
 	 */
 	public Item createWithExternalFile(Item item, CollectionImeji c,
@@ -145,22 +145,24 @@ public class ItemController extends ImejiController {
 			filename = origName;
 		else
 			filename = filename + "." + FilenameUtils.getExtension(origName);
-		
+
 		if (filename == null || filename.equals("")) {
-			throw new UnprocessableError("Filename or reference must not be empty!");
+			throw new UnprocessableError(
+					"Filename or reference must not be empty!");
 		}
-		
+
 		StorageController sController = new StorageController("external");
 		if (item == null)
 			item = ImejiFactory.newItem(c);
 		if (download) {
 			// download the file in storage
 			try {
-			tmp = File.createTempFile("imeji", null);
-			sController.read(externalFileUrl, new FileOutputStream(tmp), true);
-			}
-			catch (Exception e) {
-//				throw new UnprocessableError("There has been a problem with the file upload. ");
+				tmp = File.createTempFile("imeji", null);
+				sController.read(externalFileUrl, new FileOutputStream(tmp),
+						true);
+			} catch (Exception e) {
+				// throw new
+				// UnprocessableError("There has been a problem with the file upload. ");
 				throw new UnprocessableError(e.getLocalizedMessage());
 			}
 			item = createWithFile(item, tmp, filename, c, user);
@@ -204,42 +206,43 @@ public class ItemController extends ImejiController {
 		cc.update(ic, user);
 
 	}
-	
-	public Item create(Item item, File uploadedFile, String filename, User u, String fetchUrl, String referenceUrl) throws ImejiException 
-	{
-		
+
+	public Item create(Item item, File uploadedFile, String filename, User u,
+			String fetchUrl, String referenceUrl) throws ImejiException {
+
 		if (u == null) {
 			throw new AuthenticationError(CommonUtils.USER_MUST_BE_LOGGED_IN);
-		} 
+		}
 
 		if (filename == null || filename.isEmpty()) {
-			throw new BadRequestException("Filename or reference must not be empty!");
+			throw new BadRequestException(
+					"Filename or reference must not be empty!");
 		}
-		Item newItem = new Item(item); 
+		Item newItem = new Item(item);
 		CollectionController cc = new CollectionController();
 		CollectionImeji collection;
 		try {
 			collection = cc.retrieve(item.getCollection(), u);
 			if (collection.getStatus().equals(Status.WITHDRAWN)) {
-				throw new UnprocessableError("Collection is withdrawn, you can not create an item.");
+				throw new UnprocessableError(
+						"Collection is withdrawn, you can not create an item.");
 			}
+		} catch (Exception e) {
+			throw new UnprocessableError(
+					"There was a problem with specified collection. Check the collectionID for correctness!");
 		}
-		catch (Exception e)
-		{
-			throw new UnprocessableError("There was a problem with specified collection. Check the collectionID for correctness!");
-		}
-		
-		if (uploadedFile != null ) {
-			newItem = createWithFile (item, uploadedFile, filename, collection, u );
+
+		if (uploadedFile != null) {
+			newItem = createWithFile(item, uploadedFile, filename, collection,
+					u);
 		} else if (getExternalFileUrl(fetchUrl, referenceUrl) != null) {
 			// If no file, but either a fetchUrl or a referenceUrl
 			newItem = createWithExternalFile(item, collection,
 					getExternalFileUrl(fetchUrl, referenceUrl), filename,
 					downloadFile(fetchUrl), u);
-		}
-		else
-		{
-			throw new BadRequestException("Filename or reference must not be empty!");
+		} else {
+			throw new BadRequestException(
+					"Filename or reference must not be empty!");
 		}
 
 		return newItem;
@@ -337,15 +340,16 @@ public class ItemController extends ImejiController {
 	 */
 	public Item updateFile(Item item, File f, User user) throws ImejiException {
 
-		//First remove the old File from the Internal Storage if its there
+		// First remove the old File from the Internal Storage if its there
 		if (!isNullOrEmpty(item.getStorageId())) {
 			removeFileFromStorage(item.getStorageId());
 		}
-		
+
 		CollectionController c = new CollectionController();
-		
+
 		StorageController sc = new StorageController();
-		UploadResult uploadResult = sc.upload(item.getFilename(), f, c.retrieve(item.getCollection(), user).getIdString());
+		UploadResult uploadResult = sc.upload(item.getFilename(), f, c
+				.retrieve(item.getCollection(), user).getIdString());
 
 		item.setFiletype(getMimeType(f));
 		item.setChecksum(calculateChecksum(f));
@@ -380,16 +384,16 @@ public class ItemController extends ImejiController {
 		if (download) {
 			// download the file in storage
 			try {
-			File tmp = File.createTempFile("imeji", "." + FilenameUtils.getExtension(origName));
-			sc.read(externalFileUrl, new FileOutputStream(tmp), true);
-			item = updateFile(item, tmp, u);
-			}
-			catch (Exception e)
-			{
-				throw new UnprocessableError("There was a problem with file update");
+				File tmp = File.createTempFile("imeji",
+						"." + FilenameUtils.getExtension(origName));
+				sc.read(externalFileUrl, new FileOutputStream(tmp), true);
+				item = updateFile(item, tmp, u);
+			} catch (Exception e) {
+				throw new UnprocessableError(
+						"There was a problem with file update");
 			}
 		} else {
-			
+
 			removeFileFromStorage(item.getStorageId());
 			// Reference the file
 			item.setFullImageUrl(URI.create(externalFileUrl));
@@ -416,7 +420,8 @@ public class ItemController extends ImejiController {
 	 * @return
 	 * @throws ImejiException
 	 */
-	public Item updateThumbnail(Item item, File f, User user) throws ImejiException {
+	public Item updateThumbnail(Item item, File f, User user)
+			throws ImejiException {
 		StorageController sc = new StorageController();
 		sc.update(item.getWebImageUrl().toString(), f);
 		sc.update(item.getThumbnailImageUrl().toString(), f);
@@ -453,26 +458,27 @@ public class ItemController extends ImejiController {
 	 * {@link Storage}
 	 * 
 	 * @param itemId
-     * @param u
-     * @return
+	 * @param u
+	 * @return
 	 * @throws ImejiException
 	 */
 	public int delete(String itemId, User u) throws ImejiException {
-		
-		if (u == null ) {
+
+		if (u == null) {
 			throw new AuthenticationError(CommonUtils.USER_MUST_BE_LOGGED_IN);
 		}
-		
-		Item item= retrieve(ObjectHelper.getURI(Item.class, itemId), u);
-		
+
+		Item item = retrieve(ObjectHelper.getURI(Item.class, itemId), u);
+
 		if (!Status.PENDING.equals(item.getStatus())) {
 			throw new UnprocessableError("Item status must be PENDING.");
 		}
-		
+
 		List<Item> items = new ArrayList<Item>();
 		items.add(item);
 		return (delete(items, u));
 	}
+
 	/**
 	 * Search {@link Item}
 	 * 
@@ -641,14 +647,13 @@ public class ItemController extends ImejiController {
 		}
 		return item;
 	}
-	
-	
+
 	/**
-	 * Return the external Url of the File 
+	 * Return the external Url of the File
 	 * 
 	 * @param fetchUrl
-     * @param referenceUrl
-     * @return
+	 * @param referenceUrl
+	 * @return
 	 */
 	private String getExternalFileUrl(String fetchUrl, String referenceUrl) {
 		return firstNonNullOrEmtpy(fetchUrl, referenceUrl);
@@ -667,11 +672,10 @@ public class ItemController extends ImejiController {
 	 * True if the file must be download in imeji (i.e fetchurl is defined)
 	 * 
 	 * @param fetchUrl
-     * @return
+	 * @return
 	 */
 	private boolean downloadFile(String fetchUrl) {
 		return !isNullOrEmpty(fetchUrl);
 	}
-
 
 }

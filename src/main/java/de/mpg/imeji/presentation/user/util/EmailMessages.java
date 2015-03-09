@@ -3,12 +3,11 @@
  */
 package de.mpg.imeji.presentation.user.util;
 
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
+import org.apache.log4j.Logger;
 
 /**
  * List of text (messages) sent from imeji to users via email
@@ -159,4 +158,10 @@ public class EmailMessages
         }
         return emailsubject.replaceAll("XXX_INSTANCE_NAME_XXX", session.getInstanceName());
     }
+
+    public String getMessage(String[] placeholders, String[] values, String message_bundle){
+
+        return null;
+    }
+
 }

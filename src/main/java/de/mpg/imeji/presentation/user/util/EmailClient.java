@@ -3,29 +3,22 @@
  */
 package de.mpg.imeji.presentation.user.util;
 
+import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.PropertyReader;
+import org.apache.log4j.Logger;
+
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.Properties;
 
-import javax.mail.Authenticator;
-import javax.mail.BodyPart;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Multipart;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
-
-import org.apache.log4j.Logger;
-
-import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.PropertyReader;
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
  * Client to send email
@@ -53,6 +46,9 @@ public class EmailClient
         String emailUser = PropertyReader.getProperty("imeji.email.user");
         String password = PropertyReader.getProperty("imeji.email.password");
         String server = PropertyReader.getProperty("imeji.email.server.smtp");
+        String port = PropertyReader.getProperty("imeji.email.smtp.port");
+        if(isNullOrEmpty(port))
+            port = "25";
         String auth = PropertyReader.getProperty("imeji.email.auth");
         String sender = PropertyReader.getProperty("imeji.email.sender");
         if (from != null)
@@ -60,7 +56,7 @@ public class EmailClient
             sender = from;
         }
         String[] recipientsAdress = { to };
-        sendMail(server, auth, emailUser, password, sender, recipientsAdress, null, null, null, subject, message);
+        sendMail(server, port, auth, emailUser, password, sender, recipientsAdress, null, null, null, subject, message);
     }
 
     /**
@@ -79,7 +75,7 @@ public class EmailClient
      * @param text
      * @return
      */
-    public String sendMail(String smtpHost, String withAuth, String usr, String pwd, String senderAddress,
+    public String sendMail(String smtpHost, String port, String withAuth, String usr, String pwd, String senderAddress,
             String[] recipientsAddresses, String[] recipientsCCAddresses, String[] recipientsBCCAddresses,
             String[] replytoAddresses, String subject, String text)
     {
@@ -93,7 +89,7 @@ public class EmailClient
             props.put("mail.smtp.host", smtpHost);
             props.put("mail.smtp.auth", withAuth);
             props.put("mail.smtp.starttls.enable", "true");
-            props.put("mail.smtp.port", "25");
+            props.put("mail.smtp.port", port);
             // Get a mail session with authentication
             MailAuthenticator authenticator = new MailAuthenticator(usr, pwd);
             Session mailSession = Session.getInstance(props, authenticator);

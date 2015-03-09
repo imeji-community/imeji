@@ -3,24 +3,19 @@
  */
 package de.mpg.imeji.logic.vo;
 
-import java.io.Serializable;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.UserGroupController;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.presentation.util.ImejiFactory;
-import de.mpg.j2j.annotations.j2jId;
-import de.mpg.j2j.annotations.j2jList;
-import de.mpg.j2j.annotations.j2jLiteral;
-import de.mpg.j2j.annotations.j2jModel;
-import de.mpg.j2j.annotations.j2jResource;
+import de.mpg.j2j.annotations.*;
+import org.apache.log4j.Logger;
+
+import java.io.Serializable;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * imeji user
@@ -49,7 +44,12 @@ public class User implements Serializable
     private Collection<Grant> grants = new ArrayList<Grant>();
     private URI id = IdentifierUtil.newURI(User.class);
     private List<UserGroup> groups = new ArrayList<>();
-    
+
+
+    @j2jList("http://imeji.org/terms/observedCollections")
+    private Collection<String> observedCollections = new ArrayList<String>();
+
+
 	private static Logger logger = Logger.getLogger(User.class);
 
     /**
@@ -228,6 +228,20 @@ public class User implements Serializable
     {
         this.person = person;
     }
-    
+
+
+    /**
+     * @return
+     */
+    public Collection<String> getObservedCollections() {
+        return observedCollections;
+    }
+
+    /**
+     * @param observedCollections
+     */
+    public void setObservedCollections(Collection<String> observedCollections) {
+        this.observedCollections = observedCollections;
+    }
 
 }

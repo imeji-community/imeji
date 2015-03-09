@@ -3,21 +3,19 @@
  */
 package de.mpg.imeji.presentation.collection;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.util.ObjectLoader;
+import org.apache.log4j.Logger;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Bean for the pages "CollectionEntryPage" and "ViewCollection"
@@ -65,6 +63,7 @@ public class ViewCollectionBean extends CollectionBean
                 loadItems(user);
                 countItems();
             }
+            setSendEmailNotification(sessionBean.getUser().getObservedCollections().contains(id));
             if (getCollection() != null)
             { 
             	setProfile(ObjectLoader.loadProfile(getCollection().getProfile(), user));

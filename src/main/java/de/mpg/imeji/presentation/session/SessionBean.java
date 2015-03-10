@@ -20,6 +20,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.controller.UserController;
@@ -612,6 +613,8 @@ public class SessionBean implements Serializable {
 	 * @return
 	 */
 	public String getInstitute() {
+		if (StringUtils.isEmpty(institute))
+			return "unknown";
 		return institute;
 	}
 

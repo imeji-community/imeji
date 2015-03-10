@@ -13,6 +13,7 @@
 		<h:outputText value=" Insitute: #{SessionBean.institute} "/>
 		<!-- end: footer section -->
 	</h:panelGroup>
+	<h:inputHidden id="instituteName" value="#{SessionBean.institute}"/>
 	<h:outputText value="#{Configuration.snippet}" escape="false"/>
 	
 	<h:panelGroup id="additonalFooterScripts" styleClass="imj_noDisplay">

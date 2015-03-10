@@ -2,9 +2,7 @@ package de.mpg.imeji.presentation.util;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.net.InetAddress;
 import java.net.URL;
-import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,12 +26,8 @@ public class MaxPlanckInstitutUtils {
 	public static String getInstituteForIP(String userIP) {
 		Map<String, String> mpiMap = getMPIMap();
 		for (String ipRange : mpiMap.keySet()) {
-			try {
-				if (isInRange(ipRange, userIP))
-					return mpiMap.get(ipRange);
-			} catch (UnknownHostException e) {
-				e.printStackTrace();
-			}
+			if (IPUtils.isInRange(ipRange, userIP))
+				return mpiMap.get(ipRange);
 		}
 		return null;
 	}
@@ -63,92 +57,6 @@ public class MaxPlanckInstitutUtils {
 			e.printStackTrace();
 		}
 		return null;
-	}
-
-	/**
-	 * True if the ip is include into the IP Range. IP range can be: <br/>
-	 * 130.183.100-129.* <br/>
-	 * 130.183.248.12-13 <br/>
-	 * 85.183.114.142 <br/>
-	 * 141.61.*.* <br/>
-	 * 
-	 * @param ipRange
-	 * @param ip
-	 * @return
-	 * @throws UnknownHostException
-	 */
-	private static boolean isInRange(String ipRange, String ip)
-			throws UnknownHostException {
-
-		return ipToLong(InetAddress.getByName(ip)) > ipToLong(getMinIP(ipRange))
-				&& ipToLong(InetAddress.getByName(ip)) < ipToLong(getMaxIP(ipRange));
-	}
-
-	/**
-	 * Return the minimal IP of an IP range
-	 * 
-	 * @param ipRangeString
-	 * @return
-	 * @throws UnknownHostException
-	 */
-	private static InetAddress getMinIP(String ipRangeString)
-			throws UnknownHostException {
-		String ip = "";
-		for (String s : ipRangeString.split("\\.")) {
-			if (!"".equals(ip))
-				ip += ".";
-			if ("*".equals(s))
-				ip += "0";
-			else if (s.contains("-"))
-				ip += s.split("-")[0];
-			else
-				ip += s;
-		}
-		try {
-			return InetAddress.getByName(ip);
-		} catch (UnknownHostException e) {
-			// if some error return the locahost IP
-			return InetAddress.getLocalHost();
-		}
-	}
-
-	/**
-	 * Return the maximal IP of an IP range
-	 * 
-	 * @param ipRangeString
-	 * @return
-	 * @throws UnknownHostException
-	 */
-	private static InetAddress getMaxIP(String ipRangeString)
-			throws UnknownHostException {
-		String ip = "";
-		for (String s : ipRangeString.split("\\.")) {
-			if (!"".equals(ip))
-				ip += ".";
-			if ("*".equals(s))
-				ip += "255";
-			else if (s.contains("-"))
-				ip += s.split("-")[1];
-			else
-				ip += s;
-		}
-		return InetAddress.getByName(ip);
-	}
-
-	/**
-	 * Convert an ip to a long with can be then compared to another
-	 * 
-	 * @param ip
-	 * @return
-	 */
-	private static long ipToLong(InetAddress ip) {
-		byte[] octets = ip.getAddress();
-		long result = 0;
-		for (byte octet : octets) {
-			result <<= 8;
-			result |= octet & 0xff;
-		}
-		return result;
 	}
 
 }

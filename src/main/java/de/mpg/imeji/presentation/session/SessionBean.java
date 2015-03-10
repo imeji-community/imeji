@@ -28,6 +28,7 @@ import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation.Page;
 import de.mpg.imeji.presentation.user.ShareBean.ShareType;
@@ -81,6 +82,7 @@ public class SessionBean implements Serializable {
 	 * Specific variables for the May Planck Inistute
 	 */
 	public String institute;
+	public String instituteId;
 
 	/**
 	 * The session Bean for imeji
@@ -96,6 +98,7 @@ public class SessionBean implements Serializable {
 		initNumberOfItemsPerPageWithCookieOrProperties();
 		initNumberOfContainersPerPageWithCookieOrProperties();
 		institute = findInstitute();
+		instituteId = findInstituteId();
 	}
 
 	/**
@@ -608,21 +611,57 @@ public class SessionBean implements Serializable {
 	}
 
 	/**
-	 * The name of the institute of the current user
+	 * Return the Institute of the current {@link User} according to his IP.
+	 * IMPORTANT: works only for Max Planck Institutes IPs.
 	 * 
 	 * @return
 	 */
-	public String getInstitute() {
+	public String getInstituteNameByIP() {
 		if (StringUtils.isEmpty(institute))
 			return "unknown";
 		return institute;
 	}
 
 	/**
+	 * Return the Institute of the current {@link User} according to his IP.
+	 * IMPORTANT: works only for Max Planck Institutes IPs.
+	 * 
+	 * @return
+	 */
+	public String getInstituteIdByIP() {
+		if (StringUtils.isEmpty(institute))
+			return "unknown";
+		return instituteId;
+	}
+
+	/**
+	 * Return the first {@link Organization} of a user (considered as the
+	 * current one).
+	 * 
+	 * @return
+	 */
+	public String getInstituteByUser() {
+		if (user != null)
+			return user.getPerson().getOrganizations().iterator().next()
+					.getName();
+		return "anonymous";
+	}
+
+	public static void main(String[] args) {
+		System.out.println(MaxPlanckInstitutUtils.getInstituteIdForIP("192.129.1.102"));
+	}
+	/**
 	 * Find the Name of the Institute of the current user
 	 */
 	public String findInstitute() {
-		return MaxPlanckInstitutUtils.getInstituteForIP(readUserIp());
+		return MaxPlanckInstitutUtils.getInstituteNameForIP(readUserIp());
+	}
+
+	/**
+	 * Find the Name of the Institute of the current user
+	 */
+	public String findInstituteId() {
+		return MaxPlanckInstitutUtils.getInstituteIdForIP(readUserIp());
 	}
 
 	/**

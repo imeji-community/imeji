@@ -10,10 +10,14 @@
 			<h:outputText value="imeji"/>
 		</h:outputLink>
 		<h:outputText value=" - #{SessionBean.version} "/>
-		<h:outputText value=" Insitute: #{SessionBean.institute} "/>
+		<h:outputText value=" Institute: #{SessionBean.instituteNameByIP} "/>
+		<h:outputText value=" Institute ID: #{SessionBean.instituteIdByIP} "/>
+		<h:outputText value=" User Orga:  #{SessionBean.instituteByUser} "/>
 		<!-- end: footer section -->
 	</h:panelGroup>
-	<h:inputHidden id="instituteName" value="#{SessionBean.institute}"/>
+	<h:inputHidden id="instituteNameForIP" value="#{SessionBean.instituteNameByIP}"/>
+	<h:inputHidden id="instituteIdForIP" value="#{SessionBean.instituteIdByIP}"/>
+	<h:inputHidden id="instituteNameForUser" value="#{SessionBean.instituteByUser}"/>
 	<h:outputText value="#{Configuration.snippet}" escape="false"/>
 	
 	<h:panelGroup id="additonalFooterScripts" styleClass="imj_noDisplay">

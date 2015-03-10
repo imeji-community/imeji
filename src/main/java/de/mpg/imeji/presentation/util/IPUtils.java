@@ -28,8 +28,8 @@ public class IPUtils {
 	public static boolean isInRange(String ipRange, String ip) {
 
 		try {
-			return ipToLong(InetAddress.getByName(ip)) > ipToLong(getMinIP(ipRange))
-					&& ipToLong(InetAddress.getByName(ip)) < ipToLong(getMaxIP(ipRange));
+			return ipToLong(InetAddress.getByName(ip)) >= ipToLong(getMinIP(ipRange))
+					&& ipToLong(InetAddress.getByName(ip)) <= ipToLong(getMaxIP(ipRange));
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
@@ -47,16 +47,16 @@ public class IPUtils {
 			throws UnknownHostException {
 		String ip = "";
 		for (String s : ipRangeString.split("\\.")) {
-			if (StringUtils.isNumeric(s)) {
-				if (!"".equals(ip))
-					ip += ".";
-				if ("*".equals(s))
-					ip += "0";
-				else if (s.contains("-"))
-					ip += s.split("-")[0];
-				else
-					ip += s;
-			}
+
+			if (!"".equals(ip))
+				ip += ".";
+			if ("*".equals(s))
+				ip += "0";
+			else if (s.contains("-"))
+				ip += s.split("-")[0];
+			else
+				ip += s;
+
 		}
 		try {
 			return InetAddress.getByName(ip);
@@ -77,18 +77,21 @@ public class IPUtils {
 			throws UnknownHostException {
 		String ip = "";
 		for (String s : ipRangeString.split("\\.")) {
-			if (StringUtils.isNumeric(s)) {
-				if (!"".equals(ip))
-					ip += ".";
-				if ("*".equals(s))
-					ip += "255";
-				else if (s.contains("-"))
-					ip += s.split("-")[1];
-				else
-					ip += s;
-			}
+			if (!"".equals(ip))
+				ip += ".";
+			if ("*".equals(s))
+				ip += "255";
+			else if (s.contains("-"))
+				ip += s.split("-")[1];
+			else
+				ip += s;
 		}
-		return InetAddress.getByName(ip);
+		try {
+			return InetAddress.getByName(ip);
+		} catch (UnknownHostException e) {
+			// if some error return the locahost IP
+			return InetAddress.getLocalHost();
+		}
 	}
 
 	/**

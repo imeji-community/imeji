@@ -647,9 +647,6 @@ public class SessionBean implements Serializable {
 		return "anonymous";
 	}
 
-	public static void main(String[] args) {
-		System.out.println(MaxPlanckInstitutUtils.getInstituteIdForIP("192.129.1.102"));
-	}
 	/**
 	 * Find the Name of the Institute of the current user
 	 */

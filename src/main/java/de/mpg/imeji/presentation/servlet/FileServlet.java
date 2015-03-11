@@ -122,10 +122,12 @@ public class FileServlet extends HttpServlet {
 					
 					if (download)
 						resp.setHeader("Content-disposition", "attachment;");
-					storageController.read(url, resp.getOutputStream(), true);
+
+                    storageController.read(url, resp.getOutputStream(), true);
 
                     //message to observer if item downloaded
-                    notifyByEmail(user, fileItem, session);
+                    if (download)
+                        notifyByEmail(user, fileItem, session);
 
 
                 }
@@ -175,6 +177,7 @@ public class FileServlet extends HttpServlet {
             emailClient.sendMail(u.getEmail(), null,
                     msgs.getEmailOnItemDownload_Subject(fileItem, session),
                     msgs.getEmailOnItemDownload_Body(u, user, fileItem, c, session));
+            //logger.info("Sent notification email "+ to + " by item " + fileItem.getId() + " download");
         }
     }
 

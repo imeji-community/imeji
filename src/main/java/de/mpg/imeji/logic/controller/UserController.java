@@ -421,13 +421,16 @@ public class UserController {
 		return admins;
 	}
 
-    public List<User> findUsersToBeNotified(CollectionImeji c) {
+    /**
+     * Search for users to be notified by item download of the collection
+     * @param c
+     * @return
+     */
+    public List<User> searchUsersToBeNotified(CollectionImeji c) {
         final String id = ObjectHelper.getId(c.getId());
-        List<User> foundUsers = new ArrayList<>();
-        for (User u: searchUserByName("")) {
-            if (u.getObservedCollections().contains(id))
-                foundUsers.add(u);
-        }
-        return foundUsers;
+        Search search = SearchFactory.create();
+        List<String> uris = search.searchSimpleForQuery(
+                SPARQLQueries.selectUsersToBeNotifiedByFileDownload(id)).getResults();
+        return (List<User>)loadUsers(uris);
     }
 }

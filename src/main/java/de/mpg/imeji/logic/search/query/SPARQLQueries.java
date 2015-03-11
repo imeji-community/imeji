@@ -28,31 +28,18 @@
  */
 package de.mpg.imeji.logic.search.query;
 
-import java.net.URI;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.apache.commons.lang3.text.translate.UnicodeEscaper;
-import org.apache.xerces.impl.xpath.regex.REUtil;
-import org.opensaml.ws.wssecurity.Username;
-
 import com.hp.hpl.jena.sparql.pfunction.library.container;
-
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
-import de.mpg.imeji.logic.vo.Album;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Grant;
+import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Metadata;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.j2j.helper.J2JHelper;
+import org.apache.commons.lang3.text.translate.UnicodeEscaper;
+import org.opensaml.ws.wssecurity.Username;
+
+import java.net.URI;
 
 /**
  * SPARQL queries for imeji
@@ -198,6 +185,18 @@ public class SPARQLQueries {
 		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s "
 				+ "WHERE { ?s <http://imeji.org/terms/grantType>ADMIN}";
 	}
+
+	/**
+	 * Select Users to be notified by file download
+	 *
+	 * @return
+     * @param collectionId
+	 */
+	public static String selectUsersToBeNotifiedByFileDownload(String collectionId) {
+		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> " +
+                "SELECT DISTINCT ?s WHERE {?s <http://imeji.org/terms/observedCollections> ?c . filter(?c='"+ collectionId +"')}";
+	}
+
 
 	/**
 	 * @param fileUrl

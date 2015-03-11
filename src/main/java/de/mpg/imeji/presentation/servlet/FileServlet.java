@@ -3,20 +3,8 @@
  */
 package de.mpg.imeji.presentation.servlet;
 
-import java.io.IOException;
-import java.net.URI;
-import java.util.List;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.exceptions.AuthenticationError;
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotAllowedError;
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.Imeji;
@@ -25,6 +13,7 @@ import de.mpg.imeji.logic.auth.AuthenticationFactory;
 import de.mpg.imeji.logic.auth.Authorization;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
@@ -40,8 +29,22 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.user.util.EmailClient;
+import de.mpg.imeji.presentation.user.util.EmailMessages;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.PropertyReader;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
 
 /**
  * The Servlet to Read files from imeji {@link Storage}
@@ -120,7 +123,12 @@ public class FileServlet extends HttpServlet {
 					if (download)
 						resp.setHeader("Content-disposition", "attachment;");
 					storageController.read(url, resp.getOutputStream(), true);
-				}
+
+                    //message to observer if item downloaded
+                    notifyByEmail(user, fileItem, session);
+
+
+                }
 			} 
 		catch (Exception e) {
 			if (e instanceof NotAllowedError ) {
@@ -144,14 +152,39 @@ public class FileServlet extends HttpServlet {
 		
 }
 
-	/**
+    /**
+     * Send email notifications to all users which checked
+     * "Send notification email by item download" feature
+     * for collection of item
+     *
+     * @param user
+     * @param fileItem
+     * @param session
+     * @throws ImejiException
+     * @throws IOException
+     * @throws URISyntaxException
+     */
+    private void notifyByEmail(User user, Item fileItem, SessionBean session) throws ImejiException, IOException, URISyntaxException {
+        CollectionController cc = new CollectionController();
+        final CollectionImeji c = cc.retrieve(fileItem.getCollection(), Imeji.adminUser);
+
+        final UserController uc = new UserController(user);
+        final EmailClient emailClient = new EmailClient();
+        EmailMessages msgs = new EmailMessages();
+        for(User u:  uc.searchUsersToBeNotified(c)) {
+            emailClient.sendMail(u.getEmail(), null,
+                    msgs.getEmailOnItemDownload_Subject(fileItem, session),
+                    msgs.getEmailOnItemDownload_Body(u, user, fileItem, c, session));
+        }
+    }
+
+    /**
 	 * Load a {@link CollectionImeji} from the session if possible, otherwise
 	 * from jena
 	 * 
-	 * @param uri
-	 * @param user
-	 * @return
-	 * @throws Exception
+	 * @param url
+     * @param session
+     * @return
 	 */
 	private CollectionImeji loadCollection(String url, SessionBean session) {
 		if (session == null)

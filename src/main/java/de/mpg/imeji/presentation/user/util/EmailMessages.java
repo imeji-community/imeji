@@ -3,12 +3,17 @@
  */
 package de.mpg.imeji.presentation.user.util;
 
-import org.apache.log4j.Logger;
-
+import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
+import org.apache.log4j.Logger;
+
+import java.util.Date;
 
 /**
  * List of text (messages) sent from imeji to users via email
@@ -73,8 +78,8 @@ public class EmailMessages
      * 
      * @param sender
      * @param dest
-     * @param collectionName
-     * @param collectionLink
+     * @param itemName
+     * @param itemLink
      * @return
      */
     public String getSharedItemMessage(String sender, String dest, String itemName, String itemLink)
@@ -126,8 +131,8 @@ public class EmailMessages
     private String getEmailMessage(String password, String email, String username, String message_bundle)
     {
         Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-        SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         String userPage = navigation.getApplicationUrl() + "user?id=" + email;
+        SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         String emailMessage = session.getMessage(message_bundle);
         if ("email_new_user".equals(message_bundle))
         {
@@ -159,4 +164,38 @@ public class EmailMessages
         }
         return emailsubject.replaceAll("XXX_INSTANCE_NAME_XXX", session.getInstanceName());
     }
+
+    /**
+     * Generate email body for "Send notification email by item download" feature
+     *
+     * @param to
+     * @param actor
+     * @param item
+     * @param c
+     * @param session
+     * @return
+     */
+    public String getEmailOnItemDownload_Body(User to, User actor, Item item, CollectionImeji c, SessionBean session){
+        return session.getMessage("email_item_downloaded_body")
+                .replace("XXX_USER_NAME_XXX", to.getName())
+                .replace("XXX_ITEM_ID_XXX", ObjectHelper.getId(item.getId()))
+                .replace("XXX_ITEM_LINK_XXX", item.getId().toString())
+                .replace("XXX_COLLECTION_NAME_XXX", c.getMetadata().getTitle())
+                .replace("XXX_COLLECTION_LINK_XXX", c.getId().toString())
+                .replace("XXX_ACTOR_NAME_XXX", actor.getName())
+                .replace("XXX_ACTOR_EMAIL_XXX", actor.getEmail())
+                .replace("XXX_TIME_XXX", new Date().toString());
+    }
+
+    /**
+     * Generate email subject for "Send notification email by item download" feature
+     * @param item
+     * @param session
+     * @return
+     */
+    public String getEmailOnItemDownload_Subject(Item item, SessionBean session){
+        return session.getMessage("email_item_downloaded_subject")
+                .replace("XXX_ITEM_ID_XXX", item.getIdString());
+    }
+
 }

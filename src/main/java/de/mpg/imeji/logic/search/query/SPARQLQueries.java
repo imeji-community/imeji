@@ -85,7 +85,7 @@ public class SPARQLQueries {
 	 */
 	public static String selectDefaultMetadataProfile() {
 		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE { "
-				+ "?s a <http://imeji.org/terms/mdprofile> . ?s <http://imeji.org/terms/default> ?def . filter(?def=true) " +
+				+ "?s a <http://imeji.org/terms/mdprofile> . ?s <http://imeji.org/terms/default> true" +
                 "}";
 	}
 

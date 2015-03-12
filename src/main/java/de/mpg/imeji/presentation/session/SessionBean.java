@@ -644,7 +644,7 @@ public class SessionBean implements Serializable {
 		if (user != null)
 			return user.getPerson().getOrganizations().iterator().next()
 					.getName();
-		return "anonymous";
+		return "";
 	}
 
 	/**

@@ -170,14 +170,15 @@ public class FileServlet extends HttpServlet {
         CollectionController cc = new CollectionController();
         final CollectionImeji c = cc.retrieve(fileItem.getCollection(), Imeji.adminUser);
 
-        final UserController uc = new UserController(user);
+        final UserController uc = new UserController(Imeji.adminUser);
         final EmailClient emailClient = new EmailClient();
         EmailMessages msgs = new EmailMessages();
-        for(User u:  uc.searchUsersToBeNotified(c)) {
-            emailClient.sendMail(u.getEmail(), null,
-                    msgs.getEmailOnItemDownload_Subject(fileItem, session),
-                    msgs.getEmailOnItemDownload_Body(u, user, fileItem, c, session));
-            //logger.info("Sent notification email "+ to + " by item " + fileItem.getId() + " download");
+        for(User u:  uc.searchUsersToBeNotified(user, c)) {
+                emailClient.sendMail(u.getEmail(), null,
+                        msgs.getEmailOnItemDownload_Subject(fileItem, session),
+                        msgs.getEmailOnItemDownload_Body(u, user, fileItem, c, session));
+                logger.info("Sent notification email to user: "+ u.getName() + "<" + u.getEmail()
+                        + ">"  + " by item " + fileItem.getId() + " download");
         }
     }
 

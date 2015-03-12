@@ -14,7 +14,6 @@ import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
-import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.logic.writer.WriterFacade;
 import org.apache.log4j.Logger;
@@ -423,14 +422,16 @@ public class UserController {
 
     /**
      * Search for users to be notified by item download of the collection
+     *
+     * @param user
      * @param c
      * @return
      */
-    public List<User> searchUsersToBeNotified(CollectionImeji c) {
-        final String id = ObjectHelper.getId(c.getId());
+    public List<User> searchUsersToBeNotified(User user, CollectionImeji c) {
         Search search = SearchFactory.create();
         List<String> uris = search.searchSimpleForQuery(
-                SPARQLQueries.selectUsersToBeNotifiedByFileDownload(id)).getResults();
+                SPARQLQueries.selectUsersToBeNotifiedByFileDownload(user, c))
+        .getResults();
         return (List<User>)loadUsers(uris);
     }
 }

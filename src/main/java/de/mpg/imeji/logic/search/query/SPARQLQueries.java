@@ -32,6 +32,7 @@ import com.hp.hpl.jena.sparql.pfunction.library.container;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
+import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.presentation.beans.PropertyBean;
@@ -188,13 +189,18 @@ public class SPARQLQueries {
 
 	/**
 	 * Select Users to be notified by file download
+     * Note: Current <code>user</code> is excluded from the result set
 	 *
 	 * @return
-     * @param collectionId
-	 */
-	public static String selectUsersToBeNotifiedByFileDownload(String collectionId) {
+     * @param user
+     * @param c
+     */
+	public static String selectUsersToBeNotifiedByFileDownload(User user, CollectionImeji c) {
 		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> " +
-                "SELECT DISTINCT ?s WHERE {?s <http://imeji.org/terms/observedCollections> ?c . filter(?c='"+ collectionId +"')}";
+                "SELECT DISTINCT ?s WHERE {" +
+                "filter(?c='"+ ObjectHelper.getId(c.getId()) + "'" +
+                " && ?s!=<" + user.getId().toString() + ">) " +
+                " . ?s <http://imeji.org/terms/observedCollections> ?c }";
 	}
 
 
@@ -231,8 +237,8 @@ public class SPARQLQueries {
 	}
 
 	/**
-	 * @param fileUrl
-	 * @return
+	 * @param id
+     * @return
 	 */
 	public static String selectAlbumIdOfFile(String id) {
 		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {"

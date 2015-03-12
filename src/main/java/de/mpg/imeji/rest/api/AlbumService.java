@@ -63,7 +63,7 @@ public class AlbumService implements API<AlbumTO>{
 		Album vo = new Album();
 		transferAlbum(to, vo, CREATE);
 		URI albumURI;
-		albumURI = ac.create(vo, u);	
+		albumURI = ac.createNoValidate(vo, u);	
 		return read(CommonUtils.extractIDFromURI(albumURI), u);
 	}
 

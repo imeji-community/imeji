@@ -30,6 +30,7 @@ import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.Properties.Status;
@@ -64,8 +65,19 @@ public class AlbumController extends ImejiController {
 	 * @param album
 	 * @param user
 	 */
-	public URI create(Album album, User user) throws ImejiException {
-		validateAlbum(album, user);
+	public URI create(Album album, User user)
+			throws ImejiException {  
+		return createAskValidate(album, user, true);
+	}
+	public URI createNoValidate(Album album, User user)
+			throws ImejiException {  
+		return createAskValidate(album, user, false);
+	}
+	
+	public URI createAskValidate(Album album, User user, boolean validate) throws ImejiException {
+		if(validate){
+			validateAlbum(album, user);
+		}
 		writeCreateProperties(album, user);
 		GrantController gc = new GrantController();
 		gc.addGrants(user, AuthorizationPredefinedRoles.admin(album.getId()

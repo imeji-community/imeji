@@ -246,13 +246,14 @@ public class ProfileController extends ImejiController {
         List<String> uris = search.searchSimpleForQuery(
                 SPARQLQueries.selectDefaultMetadataProfile())
                 .getResults();
-
         if (uris.size() == 1) {
             return retrieve(URI.create(uris.get(0)), Imeji.adminUser);
+        } else if (uris.size() > 1) {
+            throw new ImejiException("Data inconsistency: " + uris.size()  + " + default metadata profile have been found.");
         } else {
-            logger.error("Data inconsistency: " + uris.size()  + " + default metadata profile have been found ");
-            return null;
+            logger.info("Cannot find default metadata profile...");
         }
+        return null;
     }
 
     /**

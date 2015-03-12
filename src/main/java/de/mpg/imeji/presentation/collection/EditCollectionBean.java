@@ -8,6 +8,7 @@ import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
@@ -68,9 +69,10 @@ public class EditCollectionBean extends CollectionBean
         if (valid())
         {
             CollectionController collectionController = new CollectionController();
-            collectionController.updateLazy(getCollection(), sessionBean.getUser());
-            UserController userController = new UserController(sessionBean.getUser());
-            userController.update(sessionBean.getUser(), sessionBean.getUser());
+            User user = sessionBean.getUser();
+            collectionController.updateLazy(getCollection(), user);
+            UserController uc = new UserController(user);
+            uc.update(user, user);
             BeanHelper.info(sessionBean.getMessage("success_collection_save"));
 
             Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);

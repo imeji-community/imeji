@@ -238,6 +238,24 @@ public class User implements Serializable
     }
 
     /**
+     * @return
+     */
+    public String addObservedCollection(String id) {
+        if (!this.observedCollections.contains(id))
+            this.observedCollections.add(id);
+        return id;
+    }
+
+    /**
+     * @return
+     */
+    public void removeObservedCollection(String id) {
+        this.observedCollections.remove(id);
+    }
+
+
+
+    /**
      * @param observedCollections
      */
     public void setObservedCollections(Collection<String> observedCollections) {

@@ -19,7 +19,10 @@ import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 import java.net.URI;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 /**
@@ -441,14 +444,14 @@ public abstract class CollectionBean extends ContainerBean {
 
     public void setSendEmailNotification(boolean sendEmailNotification) {
         this.sendEmailNotification = sendEmailNotification;
-        final User user = sessionBean.getUser();
-        Collection<String> oc = user.getObservedCollections();
-        //TODO: implementation
-        if (sendEmailNotification) {
-            if (!oc.contains(id))
-                user.getObservedCollections().add(id);
-        } else {
-            user.getObservedCollections().remove(id);
+        //check if id already set
+        if (!isNullOrEmpty(id)) {
+            User user = sessionBean.getUser();
+            if (sendEmailNotification) {
+                user.addObservedCollection(id);
+            } else {
+                user.removeObservedCollection(id);
+            }
         }
 
     }

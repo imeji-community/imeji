@@ -78,6 +78,17 @@ public class SPARQLQueries {
 				+ "> <http://imeji.org/terms/statement> ?st . ?st <http://imeji.org/terms/namespace> ?s }";
 	}
 
+    /**
+	 * Select default {@link MetadataProfile}
+	 *
+	 * @return
+	 */
+	public static String selectDefaultMetadataProfile() {
+		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE { "
+				+ "?s a <http://imeji.org/terms/mdprofile> . ?s <http://imeji.org/terms/default> ?def . filter(?def=true) " +
+                "}";
+	}
+
 	/**
 	 * Select all {@link Username}
 	 * 

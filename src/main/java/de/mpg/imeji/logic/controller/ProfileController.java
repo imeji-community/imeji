@@ -242,20 +242,17 @@ public class ProfileController extends ImejiController {
      */
 
     public MetadataProfile retrieveDefaultProfile() throws ImejiException {
-        Search search = SearchFactory.create(SearchType.PROFILE);
-        //TODO: dedicated SPARQL query!!!
-        SearchResult result = search.search(new SearchQuery(), null, Imeji.adminUser);
-        for (String uri : result.getResults()) {
-            try {
-                final MetadataProfile mdp = retrieve(URI.create(uri), Imeji.adminUser);
-                if(mdp.getDefault()) {
-                    return mdp;
-                }
-            } catch (Exception e) {
-                logger.error(e);
-            }
+        Search search = SearchFactory.create();
+        List<String> uris = search.searchSimpleForQuery(
+                SPARQLQueries.selectDefaultMetadataProfile())
+                .getResults();
+
+        if (uris.size() == 1) {
+            return retrieve(URI.create(uris.get(0)), Imeji.adminUser);
+        } else {
+            logger.error("Data inconsistency: " + uris.size()  + " + default metadata profile have been found ");
+            return null;
         }
-        return null;
     }
 
     /**

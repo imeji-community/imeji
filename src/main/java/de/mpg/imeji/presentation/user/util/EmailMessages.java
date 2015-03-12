@@ -179,9 +179,7 @@ public class EmailMessages
      * @return
      */
     public String getEmailOnItemDownload_Body(User to, User actor, Item item, CollectionImeji c, SessionBean session){
-        Locale locale = new Locale("de");
-    	DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, locale);
-    	String string = session.getMessage("email_item_downloaded_body")
+    	return session.getMessage("email_item_downloaded_body")
                 .replace("XXX_USER_NAME_XXX", to.getName())
                 .replace("XXX_ITEM_ID_XXX", ObjectHelper.getId(item.getId()))
                 .replace("XXX_ITEM_LINK_XXX", item.getId().toString())
@@ -189,8 +187,7 @@ public class EmailMessages
                 .replace("XXX_COLLECTION_LINK_XXX", c.getId().toString())
                 .replace("XXX_ACTOR_NAME_XXX", actor.getName())
                 .replace("XXX_ACTOR_EMAIL_XXX", actor.getEmail())
-                .replace("XXX_TIME_XXX", df.format(new Date()));//..toString());
-    	return "";
+                .replace("XXX_TIME_XXX", new Date().toString());
     }
 
     /**

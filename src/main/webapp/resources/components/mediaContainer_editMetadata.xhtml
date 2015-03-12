@@ -99,17 +99,21 @@
 						<mdprofile:profile_preview statementWrappers="#{cc.attrs.formularBean.statementWrappers}"/> 
 					</ui:fragment>
 				</h:panelGroup>
+
 			</c:if>
 		<!-- START END FEATURE -->
 
             <!-- Notifications -->
-            <h:panelGroup layout="block" styleClass="imj_collectionNotifications">
-                <h:selectBooleanCheckbox  id="notificationCheckBox" value="#{cc.attrs.formularBean.sendEmailNotification}" />
-                <h:outputLabel styleClass="imj_metadataLabel" for="notificationCheckBox">
-                    <h:outputText value="#{lbl.send_email_on_download}"/>
-                    <span class="imj_noDisplay">: </span>
-                </h:outputLabel>
-            </h:panelGroup>
+            <c:if test="#{cc.attrs.formularBean.getClass() == 'class de.mpg.imeji.presentation.collection.CreateCollectionBean' || cc.attrs.formularBean.getClass() == 'class de.mpg.imeji.presentation.collection.EditCollectionBean'}">
+                <h:panelGroup layout="block" styleClass="imj_collectionNotifications">
+                    <h:selectBooleanCheckbox  id="notificationCheckBox" value="#{cc.attrs.formularBean.sendEmailNotification}" />
+                    <h:outputLabel styleClass="imj_metadataLabel" for="notificationCheckBox">
+                        <h:outputText value="#{lbl.send_email_on_download}"/>
+                        <span class="imj_noDisplay">: </span>
+                    </h:outputLabel>
+                </h:panelGroup>
+            </c:if>
+
 
 			<h:panelGroup layout="block" id="submitButtonPanel" class="imj_submitPanel">
 				<h:outputLink value="#{HistorySession.previousPage.completeUrlWithHistory}" styleClass="imj_cancelButton">

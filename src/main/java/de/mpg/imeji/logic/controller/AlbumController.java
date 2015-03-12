@@ -306,7 +306,7 @@ public class AlbumController extends ImejiController {
 	
 	public void validateAlbum (Album album, User u) throws ImejiException {
 		//Copied from Collection Bean in presentation  
-		if ( isNullOrEmpty (album.getMetadata().getTitle())) {
+		if ( isNullOrEmpty (album.getMetadata().getTitle().trim())) {
 			throw new BadRequestException("error_album_need_title");
 		}
 
@@ -315,7 +315,7 @@ public class AlbumController extends ImejiController {
 		for (Person c : album.getMetadata().getPersons()) {
 			List<Organization> orgs = new ArrayList<Organization>();
 			for (Organization o : c.getOrganizations()) {
-				if (!isNullOrEmpty(o.getName())) {
+				if (!isNullOrEmpty(o.getName().trim())) {
 					orgs.add(o);
 				}
 				else
@@ -325,7 +325,7 @@ public class AlbumController extends ImejiController {
 			}
 			
 			
-			if (! isNullOrEmpty(c.getFamilyName())) {
+			if (! isNullOrEmpty(c.getFamilyName().trim())) {
 				if (orgs.size() > 0) {
 					pers.add(c);
 				} else {

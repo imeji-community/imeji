@@ -2,13 +2,16 @@ package de.mpg.imeji.rest.process;
 
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.api.AlbumService;
 import de.mpg.imeji.rest.to.AlbumTO;
 import de.mpg.imeji.rest.to.JSONResponse;
+import de.mpg.imeji.rest.to.PersonTO;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response.Status;
+
 import java.util.List;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
@@ -46,6 +49,17 @@ public class AlbumProcess {
 			AlbumService service = new AlbumService();
 			try {
                 AlbumTO to = (AlbumTO) buildTOFromJSON(req, AlbumTO.class);
+              
+                //Test for author and organization
+                if(to.getContributors().size() == 0){
+                	throw new UnprocessableError("Album needs at least one contributor");
+                }
+                for(PersonTO author : to.getContributors()){
+                	if(author.getOrganizations().size() == 0){
+                		throw new UnprocessableError("Every author must belong to an organization");
+                	}
+                }
+                
                 resp = buildResponse(Status.CREATED.getStatusCode(), service.create(to, u));
 			} catch (ImejiException e) {
 				resp = localExceptionHandler(e, e.getLocalizedMessage());

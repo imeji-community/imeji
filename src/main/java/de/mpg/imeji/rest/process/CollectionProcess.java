@@ -2,10 +2,12 @@ package de.mpg.imeji.rest.process;
 
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.JSONResponse;
+import de.mpg.imeji.rest.to.PersonTO;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -40,6 +42,17 @@ public class CollectionProcess {
 			CollectionService service = new CollectionService();
 			try {
                 CollectionTO to = (CollectionTO) RestProcessUtils.buildTOFromJSON(req, CollectionTO.class);
+                
+                //Test for author and organization
+                if(to.getContributors().size() == 0){
+                	throw new UnprocessableError("Collection needs at least one contributor");
+                }
+                for(PersonTO author : to.getContributors()){
+                	if(author.getOrganizations().size() == 0){
+                		throw new UnprocessableError("Every author must belong to an organization");
+                	}
+                }
+                
                 resp = RestProcessUtils.buildResponse(CREATED.getStatusCode(), service.create(to, u));
 			} catch (ImejiException e) {
 				resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());

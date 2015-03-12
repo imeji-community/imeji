@@ -3,6 +3,8 @@
  */
 package de.mpg.imeji.logic.controller;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -10,6 +12,7 @@ import java.util.Collection;
 import java.util.List;
 
 import de.mpg.imeji.exceptions.AuthenticationError;
+import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.exceptions.UnprocessableError;
@@ -25,7 +28,10 @@ import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.vo.Album;
+import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.Organization;
+import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.writer.WriterFacade;
@@ -59,6 +65,7 @@ public class AlbumController extends ImejiController {
 	 * @param user
 	 */
 	public URI create(Album album, User user) throws ImejiException {
+		validateAlbum(album, user);
 		writeCreateProperties(album, user);
 		GrantController gc = new GrantController();
 		gc.addGrants(user, AuthorizationPredefinedRoles.admin(album.getId()
@@ -283,5 +290,42 @@ public class AlbumController extends ImejiController {
 		List<String> uris = ImejiSPARQL.exec(SPARQLQueries.selectAlbumAll(),
 				Imeji.albumModel);
 		return (List<Album>) loadAlbumsLazy(uris, user, -1, 0);
+	}
+	
+	public void validateAlbum (Album album, User u) throws ImejiException {
+		//Copied from Collection Bean in presentation  
+		if ( isNullOrEmpty (album.getMetadata().getTitle())) {
+			throw new BadRequestException("error_album_need_title");
+		}
+
+		List<Person> pers = new ArrayList<Person>();
+		
+		for (Person c : album.getMetadata().getPersons()) {
+			List<Organization> orgs = new ArrayList<Organization>();
+			for (Organization o : c.getOrganizations()) {
+				if (!isNullOrEmpty(o.getName())) {
+					orgs.add(o);
+				}
+				else
+				{
+					throw new BadRequestException("error_organization_need_name");
+				}
+			}
+			
+			
+			if (! isNullOrEmpty(c.getFamilyName())) {
+				if (orgs.size() > 0) {
+					pers.add(c);
+				} else {
+					throw new BadRequestException("error_author_need_one_organization");
+				}
+			} else {
+				throw new BadRequestException("error_author_need_one_family_name");
+			}
+		}
+
+		if (pers.size() == 0 || pers == null || pers.isEmpty()) {
+			throw new BadRequestException("error_album_need_one_author");
+		}
 	}
 }

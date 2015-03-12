@@ -48,18 +48,7 @@ public class AlbumProcess {
 		} else {
 			AlbumService service = new AlbumService();
 			try {
-                AlbumTO to = (AlbumTO) buildTOFromJSON(req, AlbumTO.class);
-              
-                //Test for author and organization
-                if(to.getContributors().size() == 0){
-                	throw new UnprocessableError("Album needs at least one contributor");
-                }
-                for(PersonTO author : to.getContributors()){
-                	if(author.getOrganizations().size() == 0){
-                		throw new UnprocessableError("Every author must belong to an organization");
-                	}
-                }
-                
+                AlbumTO to = (AlbumTO) buildTOFromJSON(req, AlbumTO.class);               
                 resp = buildResponse(Status.CREATED.getStatusCode(), service.create(to, u));
 			} catch (ImejiException e) {
 				resp = localExceptionHandler(e, e.getLocalizedMessage());

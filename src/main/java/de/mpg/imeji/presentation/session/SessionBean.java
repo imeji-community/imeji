@@ -635,15 +635,13 @@ public class SessionBean implements Serializable {
 	}
 
 	/**
-	 * Return the first {@link Organization} of a user (considered as the
-	 * current one).
+	 * Return the suffix of the email of the user
 	 * 
 	 * @return
 	 */
 	public String getInstituteByUser() {
 		if (user != null)
-			return user.getPerson().getOrganizations().iterator().next()
-					.getName();
+			return user.getEmail().split("@")[1];
 		return "";
 	}
 

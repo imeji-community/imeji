@@ -11,9 +11,12 @@ import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
+
 import org.apache.log4j.Logger;
 
+import java.text.DateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * List of text (messages) sent from imeji to users via email
@@ -176,7 +179,7 @@ public class EmailMessages
      * @return
      */
     public String getEmailOnItemDownload_Body(User to, User actor, Item item, CollectionImeji c, SessionBean session){
-        return session.getMessage("email_item_downloaded_body")
+    	return session.getMessage("email_item_downloaded_body")
                 .replace("XXX_USER_NAME_XXX", to.getName())
                 .replace("XXX_ITEM_ID_XXX", ObjectHelper.getId(item.getId()))
                 .replace("XXX_ITEM_LINK_XXX", item.getId().toString())

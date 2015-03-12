@@ -51,7 +51,6 @@ public class AlbumService implements API<AlbumTO>{
 	@Override
 	public AlbumTO create(AlbumTO o, User u) throws ImejiException {
 		return createAskValidate(o, u, true);
-//		return null;
 	}
 
 	public AlbumTO createNoValidate(AlbumTO to, User u) throws ImejiException {
@@ -63,7 +62,11 @@ public class AlbumService implements API<AlbumTO>{
 		Album vo = new Album();
 		transferAlbum(to, vo, CREATE);
 		URI albumURI;
-		albumURI = ac.create(vo, u);	
+		if(validate){
+			albumURI = ac.create(vo, u);
+		}else{
+			albumURI = ac.createNoValidate(vo, u);
+		}
 		return read(CommonUtils.extractIDFromURI(albumURI), u);
 	}
 

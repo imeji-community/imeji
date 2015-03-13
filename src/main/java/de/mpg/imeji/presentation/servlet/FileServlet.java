@@ -4,7 +4,6 @@
 package de.mpg.imeji.presentation.servlet;
 
 import de.mpg.imeji.exceptions.AuthenticationError;
-import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotAllowedError;
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.Imeji;
@@ -13,7 +12,6 @@ import de.mpg.imeji.logic.auth.AuthenticationFactory;
 import de.mpg.imeji.logic.auth.Authorization;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
@@ -29,8 +27,7 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.user.util.EmailClient;
-import de.mpg.imeji.presentation.user.util.EmailMessages;
+import de.mpg.imeji.presentation.util.NotificationUtils;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.PropertyReader;
 import org.apache.commons.io.FilenameUtils;
@@ -43,7 +40,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 
 /**
@@ -127,7 +123,7 @@ public class FileServlet extends HttpServlet {
 
                     //message to observer if item downloaded
                     if (download)
-                        notifyByEmail(user, fileItem, session);
+                        NotificationUtils.notifyByItemDownload(user, fileItem, session);
 
 
                 }
@@ -153,34 +149,6 @@ public class FileServlet extends HttpServlet {
 		}
 		
 }
-
-    /**
-     * Send email notifications to all users which checked
-     * "Send notification email by item download" feature
-     * for collection of item
-     *
-     * @param user
-     * @param fileItem
-     * @param session
-     * @throws ImejiException
-     * @throws IOException
-     * @throws URISyntaxException
-     */
-    private void notifyByEmail(User user, Item fileItem, SessionBean session) throws ImejiException, IOException, URISyntaxException {
-        CollectionController cc = new CollectionController();
-        final CollectionImeji c = cc.retrieve(fileItem.getCollection(), Imeji.adminUser);
-
-        final UserController uc = new UserController(Imeji.adminUser);
-        final EmailClient emailClient = new EmailClient();
-        EmailMessages msgs = new EmailMessages();
-        for(User u:  uc.searchUsersToBeNotified(user, c)) {
-                emailClient.sendMail(u.getEmail(), null,
-                        msgs.getEmailOnItemDownload_Subject(fileItem, session),
-                        msgs.getEmailOnItemDownload_Body(u, user, fileItem, c, session));
-                logger.info("Sent notification email to user: "+ u.getName() + "<" + u.getEmail()
-                        + ">"  + " by item " + fileItem.getId() + " download");
-        }
-    }
 
     /**
 	 * Load a {@link CollectionImeji} from the session if possible, otherwise

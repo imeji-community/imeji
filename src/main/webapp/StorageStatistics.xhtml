@@ -24,9 +24,6 @@
 			<div class="imj_administrationTiledList imj_maxWidth">
 			
 				<div class="imj_listHeader">
-						<div class="imj_headline">
-							<h2><h:outputText value="#{lbl.database_infos} - #{lbl.storage_infos}"/></h2>
-						</div>
 				</div>
 				
 				<div class="imj_listBody">
@@ -44,7 +41,7 @@
 							<!-- Table -->
 							<ui:repeat var="institute" value="#{storageStatisticsBean.institutes}">
 							<h:panelGroup layout="block" styleClass="imj_admindataSet">
-								<div class="imj_admindataLabel" title="#{lbl.admin_info_sys2}">
+								<div class="imj_admindataLabel" title="#{lbl.institute}">
 									<h:outputText value="#{institute.name}"/>
 									<span class="imj_invisible">: </span>
 								</div>	

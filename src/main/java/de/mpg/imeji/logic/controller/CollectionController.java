@@ -13,6 +13,7 @@ import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
+import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.writer.WriterFacade;
@@ -108,6 +109,19 @@ public class CollectionController extends ImejiController {
 	public CollectionImeji retrieve(URI uri, User user) throws ImejiException {
 				return (CollectionImeji) reader.read(uri.toString(), user,
 						new CollectionImeji());
+	}
+
+    /**
+	 * Retrieve a complete {@link CollectionImeji} (inclusive its {@link Item}:
+	 * slow for huge {@link CollectionImeji})
+	 *
+	 * @param id
+     * @param user
+	 * @return
+	 * @throws ImejiException
+	 */
+	public CollectionImeji retrieve(String id, User user) throws ImejiException {
+        return retrieve(ObjectHelper.getURI(CollectionImeji.class, id), user);
 	}
 
 	/**

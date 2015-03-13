@@ -11,12 +11,9 @@ import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
-
 import org.apache.log4j.Logger;
 
-import java.text.DateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 /**
  * List of text (messages) sent from imeji to users via email
@@ -199,6 +196,38 @@ public class EmailMessages
     public String getEmailOnItemDownload_Subject(Item item, SessionBean session){
         return session.getMessage("email_item_downloaded_subject")
                 .replace("XXX_ITEM_ID_XXX", item.getIdString());
+    }
+
+    /**
+     * Generate email body for "Send notification email by item download" feature
+     *
+     * @param to
+     * @param actor
+     * @param item
+     * @param c
+     * @param session
+     * @return
+     */
+    public String getEmailOnCollectionDownload_Body(User to, User actor, CollectionImeji c, SessionBean session){
+    	return session.getMessage("email_collection_downloaded_body")
+                .replace("XXX_USER_NAME_XXX", to.getName())
+                .replace("XXX_COLLECTION_NAME_XXX", c.getMetadata().getTitle())
+                .replace("XXX_COLLECTION_LINK_XXX", c.getId().toString())
+                .replace("XXX_ACTOR_NAME_XXX", actor.getName())
+                .replace("XXX_ACTOR_EMAIL_XXX", actor.getEmail())
+                .replace("XXX_TIME_XXX", new Date().toString());
+    }
+
+
+    /**
+     * Generate email subject for "Send notification email by item download" feature
+     * @param c
+     * @param session
+     * @return
+     */
+    public String getEmailOnCollectionDownload_Subject(CollectionImeji c, SessionBean session){
+        return session.getMessage("email_collection_downloaded_subject")
+                .replace("XXX_COLLECTION_ID_XXX", c.getIdString());
     }
 
 }

@@ -3,8 +3,12 @@
  */
 package de.mpg.imeji.presentation.servlet;
 
-import java.io.IOException;
-import java.util.Date;
+import de.mpg.imeji.logic.export.ExportManager;
+import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.util.NotificationUtils;
+import org.apache.http.client.HttpResponseException;
 
 import javax.faces.FactoryFinder;
 import javax.faces.component.UIViewRoot;
@@ -18,13 +22,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import org.apache.http.client.HttpResponseException;
-
-import de.mpg.imeji.logic.export.ExportManager;
-import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.session.SessionBean;
+import java.io.IOException;
+import java.util.Date;
 
 public class ExportServlet extends HttpServlet
 {
@@ -59,6 +58,8 @@ public class ExportServlet extends HttpServlet
             SearchResult result = exportManager.search();
             exportManager.export(result);
             resp.getOutputStream().flush();
+
+            NotificationUtils.notifyByExport(user, exportManager.getExport(), session);
         }
         catch (HttpResponseException he)
         {

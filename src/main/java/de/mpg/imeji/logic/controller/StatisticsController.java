@@ -2,8 +2,6 @@ package de.mpg.imeji.logic.controller;
 
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
-
 import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
@@ -47,15 +45,4 @@ public class StatisticsController extends ImejiController {
 		}
 		return 0;
 	}
-
-	/**
-	 * Give a human readable size (for file size)
-	 * 
-	 * @param size
-	 * @return
-	 */
-	public String humanReadableSize(long size) {
-		return FileUtils.byteCountToDisplaySize(size);
-	}
-
 }

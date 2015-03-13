@@ -78,15 +78,15 @@ public class SPARQLQueries {
 				+ "> <http://imeji.org/terms/statement> ?st . ?st <http://imeji.org/terms/namespace> ?s }";
 	}
 
-    /**
+	/**
 	 * Select default {@link MetadataProfile}
 	 *
 	 * @return
 	 */
 	public static String selectDefaultMetadataProfile() {
 		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE { "
-				+ "?s a <http://imeji.org/terms/mdprofile> . ?s <http://imeji.org/terms/default> true" +
-                "}";
+				+ "?s a <http://imeji.org/terms/mdprofile> . ?s <http://imeji.org/terms/default> true"
+				+ "}";
 	}
 
 	/**
@@ -199,21 +199,21 @@ public class SPARQLQueries {
 	}
 
 	/**
-	 * Select Users to be notified by file download
-     * Note: Current <code>user</code> is excluded from the result set
+	 * Select Users to be notified by file download Note: Current
+	 * <code>user</code> is excluded from the result set
 	 *
 	 * @return
-     * @param user
-     * @param c
-     */
-	public static String selectUsersToBeNotifiedByFileDownload(User user, CollectionImeji c) {
-		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> " +
-                "SELECT DISTINCT ?s WHERE {" +
-                "filter(?c='"+ ObjectHelper.getId(c.getId()) + "'" +
-                " && ?s!=<" + user.getId().toString() + ">) " +
-                " . ?s <http://imeji.org/terms/observedCollections> ?c }";
+	 * @param user
+	 * @param c
+	 */
+	public static String selectUsersToBeNotifiedByFileDownload(User user,
+			CollectionImeji c) {
+		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> "
+				+ "SELECT DISTINCT ?s WHERE {" + "filter(?c='"
+				+ ObjectHelper.getId(c.getId()) + "'" + " && ?s!=<"
+				+ user.getId().toString() + ">) "
+				+ " . ?s <http://imeji.org/terms/observedCollections> ?c }";
 	}
-
 
 	/**
 	 * @param fileUrl
@@ -249,7 +249,7 @@ public class SPARQLQueries {
 
 	/**
 	 * @param id
-     * @return
+	 * @return
 	 */
 	public static String selectAlbumIdOfFile(String id) {
 		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {"
@@ -493,6 +493,29 @@ public class SPARQLQueries {
 
 	}
 
+	/**
+	 * Search for all Institute of all {@link User} . An institute is defined by
+	 * the emai of the {@link User}, for instance user@mpdl.mpg.de has institute
+	 * mpdl.mpg.de
+	 * 
+	 * @return
+	 */
+	public static String selectAllInstitutes() {
+		return "SELECT DISTINCT ?s WHERE {?user <http://xmlns.com/foaf/0.1/email> ?email . let(?s := str(replace(?email, '(.)+@', '', 'i')))}";
+	}
+
+	/**
+	 * Search for all {@link Item} within a {@link CollectionImeji} belonging
+	 * the the institute, and sum all fileSize
+	 * 
+	 * @param instituteName
+	 * @return
+	 */
+	public static String selectInstituteFileSize(String instituteName) {
+		return "SELECT (SUM(?size) AS ?s) WHERE {?c <http://purl.org/dc/terms/creator> ?user . ?user <http://xmlns.com/foaf/0.1/email> ?email .filter(regex(?email, '"
+				+ instituteName
+				+ "', 'i')) . ?c a <http://imeji.org/terms/collection> . ?item <http://imeji.org/terms/collection> ?c . ?item <http://imeji.org/terms/fileSize> ?size}";
+	}
 
 	public static String escapeWithUnicode(String s) {
 		String[] escapedCharacters = { "(", ")" };
@@ -508,7 +531,9 @@ public class SPARQLQueries {
 	}
 
 	/**
-	 * Chararters ( and ) can not be accepted in the sparql query and must therefore removed
+	 * Chararters ( and ) can not be accepted in the sparql query and must
+	 * therefore removed
+	 * 
 	 * @param s
 	 * @return
 	 */

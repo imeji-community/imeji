@@ -52,6 +52,21 @@
 								</h:form>
 							</div>
 							
+								<!-- Admin - Import -->
+							<div class="imj_headline">
+								<h2>
+									<h:outputText value="Refresh File Size of all items"/>
+								</h2>
+							</div>
+							
+							<div class="imj_content">
+								<h:form>
+									<h:panelGroup layout="block" styleClass="imj_adminEditPanel">
+										<h:commandLink styleClass="imj_editButton" action="#{AdminBean.refreshFileSize}" value="Refresh (Operation runs asynchrone)"/>
+									</h:panelGroup>		
+								</h:form>
+							</div>
+							
 						</h:panelGroup>
 					
 					</div> <!-- END LIST BODY -->	

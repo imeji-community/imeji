@@ -52,11 +52,6 @@ public class ViewCollectionBean extends CollectionBean {
 	 * @throws Exception
 	 */
 	public void init() throws Exception {
-		StatisticsController sc = new StatisticsController();
-		for (String inst : sc.getAllInstitute()) {
-			System.out.println(inst + ":"
-					+ FileUtils.byteCountToDisplaySize(sc.getUsedStorageSizeForInstitute(inst)));
-		}
 		try {
 			User user = super.sessionBean.getUser();
 			String id = getId();

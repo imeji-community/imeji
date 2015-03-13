@@ -57,8 +57,6 @@ public class StorageController implements Serializable {
 	public static final String UPLOAD_WHITELIST_PROPERTY = "imeji.upload.whitelist";
 	private Storage storage;
 
-
-
 	private String formatWhiteList;
 	private String formatBlackList;
 
@@ -70,11 +68,12 @@ public class StorageController implements Serializable {
 		String name;
 		try {
 			name = PropertyReader.getProperty(IMEJI_STORAGE_NAME_PROPERTY);
-			formatBlackList = PropertyReader.getProperty(UPLOAD_BLACKLIST_PROPERTY);
-			formatWhiteList = PropertyReader.getProperty(UPLOAD_WHITELIST_PROPERTY);
+			formatBlackList = PropertyReader
+					.getProperty(UPLOAD_BLACKLIST_PROPERTY);
+			formatWhiteList = PropertyReader
+					.getProperty(UPLOAD_WHITELIST_PROPERTY);
 		} catch (Exception e) {
-			throw new RuntimeException("Error reading property: ",
-					e);
+			throw new RuntimeException("Error reading property: ", e);
 		}
 		storage = StorageFactory.create(name);
 	}
@@ -96,12 +95,14 @@ public class StorageController implements Serializable {
 	 * @param file
 	 * @param collectionId
 	 * @return
-	 * @throws ImejiException 
+	 * @throws ImejiException
 	 */
-	public UploadResult upload(String filename, File file, String collectionId) throws ImejiException {
+	public UploadResult upload(String filename, File file, String collectionId)
+			throws ImejiException {
 
 		UploadResult result = storage.upload(filename, file, collectionId);
 		result.setChecksum(calculateChecksum(file));
+		result.setFileSize(file.length());
 		return result;
 	}
 
@@ -110,9 +111,10 @@ public class StorageController implements Serializable {
 	 * 
 	 * @param url
 	 * @param out
-	 * @throws ImejiException 
+	 * @throws ImejiException
 	 */
-	public void read(String url, OutputStream out, boolean close) throws ImejiException {
+	public void read(String url, OutputStream out, boolean close)
+			throws ImejiException {
 		storage.read(url, out, close);
 	}
 
@@ -153,19 +155,18 @@ public class StorageController implements Serializable {
 		return storage.getCollectionId(url);
 	}
 
-
-
 	/**
-	 * Null if the file format related to the passed extension can be uploaded, not allowed file type exception otherwise
+	 * Null if the file format related to the passed extension can be uploaded,
+	 * not allowed file type exception otherwise
 	 *
 	 * @param file
 	 * @return not allowed file format extension
 	 */
 	public String guessNotAllowedFormat(File file) {
-		
+
 		String guessedExtension = FilenameUtils.getExtension(file.getName());
 		if ("".equals(guessedExtension))
-			guessedExtension= guessExtension(file);
+			guessedExtension = guessExtension(file);
 		return isAllowedFormat(guessedExtension) ? null : guessedExtension;
 	}
 
@@ -180,18 +181,17 @@ public class StorageController implements Serializable {
 		if ("".equals(extension.trim()))
 			return false;
 		// check in white list, if found then allowed
-		for (String s : formatWhiteList.split(",")) 
+		for (String s : formatWhiteList.split(","))
 			if (compareExtension(extension, s.trim()))
 				return true;
 		// check black list, if found then forbidden
-		
+
 		for (String s : formatBlackList.split(","))
-				if (compareExtension(extension, s.trim())) 
-					return false;
+			if (compareExtension(extension, s.trim()))
+				return false;
 		// Not found in both list: if white list is empty, allowed
 		return "".equals(formatWhiteList.trim());
 	}
-
 
 	/**
 	 * Get the {@link Storage} used by the {@link StorageController}

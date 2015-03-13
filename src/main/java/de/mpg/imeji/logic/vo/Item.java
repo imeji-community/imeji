@@ -68,7 +68,7 @@ public class Item extends Properties implements FulltextIndex, Serializable {
 	@j2jLiteral("http://imeji.org/terms/checksum")
 	private String checksum;
 	@j2jLiteral("http://imeji.org/terms/fileSize")
-	private int fileSize;
+	private long fileSize;
 
 	
 
@@ -268,7 +268,7 @@ public class Item extends Properties implements FulltextIndex, Serializable {
 	 * 
 	 * @return
 	 */
-	public int getFileSize() {
+	public long getFileSize() {
 		return fileSize;
 	}
 
@@ -276,7 +276,7 @@ public class Item extends Properties implements FulltextIndex, Serializable {
 	 * 
 	 * @param fileSize
 	 */
-	public void setFileSize(int fileSize) {
+	public void setFileSize(long fileSize) {
 		this.fileSize = fileSize;
 	}
 

@@ -104,15 +104,15 @@
 		<!-- START END FEATURE -->
 
             <!-- Notifications -->
-            <c:if test="#{cc.attrs.formularBean.getClass() == 'class de.mpg.imeji.presentation.collection.CreateCollectionBean' || cc.attrs.formularBean.getClass() == 'class de.mpg.imeji.presentation.collection.EditCollectionBean'}">
-                <h:panelGroup layout="block" styleClass="imj_collectionNotifications">
+			<ui:fragment rendered="#{cc.attrs.formularBean.type == 'COLLECTION'}">                
+				<h:panelGroup layout="block" styleClass="imj_collectionNotifications">
                     <h:selectBooleanCheckbox  id="notificationCheckBox" value="#{cc.attrs.formularBean.sendEmailNotification}" />
                     <h:outputLabel styleClass="imj_metadataLabel" for="notificationCheckBox">
                         <h:outputText value="#{lbl.send_email_on_download}"/>
                         <span class="imj_noDisplay">: </span>
                     </h:outputLabel>
                 </h:panelGroup>
-            </c:if>
+            </ui:fragment>
 
 
 			<h:panelGroup layout="block" id="submitButtonPanel" class="imj_submitPanel">

@@ -133,17 +133,18 @@
 						</span>
 					</div>
 				</ui:fragment>
-
-                <ui:fragment rendered="#{cc.attrs.metadata.sendEmailNotification}">
-                    <div class="imj_metadataSet">
-                        <label class="imj_metadataLabel">
-                            <h:outputText value="#{lbl.notifications}"/>
-                            <h:outputText value=": " styleClass="imj_noDisplay"/>
-                        </label>
-						<span class="imj_metadataValue">
-                            <h:outputText value="#{lbl.send_email_on_download}"/>
-						</span>
-                    </div>
+				<ui:fragment rendered="#{cc.attrs.metadata.type == 'COLLECTION'}">
+	                <ui:fragment rendered="#{cc.attrs.metadata.sendEmailNotification}">
+	                    <div class="imj_metadataSet">
+	                        <label class="imj_metadataLabel">
+	                            <h:outputText value="#{lbl.notifications}"/>
+	                            <h:outputText value=": " styleClass="imj_noDisplay"/>
+	                        </label>
+							<span class="imj_metadataValue">
+	                            <h:outputText value="#{lbl.send_email_on_download}"/>
+							</span>
+	                    </div>
+	                </ui:fragment>
                 </ui:fragment>
 
 			</div>

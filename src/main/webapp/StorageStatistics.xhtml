@@ -9,7 +9,14 @@
 	<ui:define name="mainContent">
 		
 		<!-- Breadcrumb - History -->
-		<ui:include src="include/History.xhtml"></ui:include>			
+		<ui:include src="include/History.xhtml"></ui:include>
+					
+		<!-- AdminDataList - Back Button -->
+		<h:panelGroup layout="block" styleClass="imj_backPanel">
+			<h:outputLink value="#{Navigation.adminUrl}">
+				<h:outputText value="#{lbl.back_to_admin}" styleClass="imj_backButton"/>
+			</h:outputLink>
+		</h:panelGroup>	
 		
 		<!-- Are You Admin? -->	
 		<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!Auth.admin}">
@@ -63,12 +70,7 @@
 			
 			</div> <!-- END ADMIN LIST -->
 		
-			<!-- AdminDataList - Back Button -->
-			<h:panelGroup layout="block" styleClass="imj_backPanel">
-				<h:outputLink value="#{Navigation.adminUrl}">
-					<h:outputText value="#{lbl.back_to_admin}" styleClass="imj_backButton"/>
-				</h:outputLink>
-			</h:panelGroup>					
+					
 						
 		</ui:fragment>
 

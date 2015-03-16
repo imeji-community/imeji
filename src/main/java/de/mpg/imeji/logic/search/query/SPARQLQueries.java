@@ -210,9 +210,9 @@ public class SPARQLQueries {
 			CollectionImeji c) {
 		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> "
 				+ "SELECT DISTINCT ?s WHERE {" + "filter(?c='"
-				+ ObjectHelper.getId(c.getId()) + "'" + " && ?s!=<"
-				+ user.getId().toString() + ">) "
-				+ " . ?s <http://imeji.org/terms/observedCollections> ?c }";
+				+ ObjectHelper.getId(c.getId()) + "'"
+                + ( user != null ? " && ?s!=<"+ user.getId().toString() + "> " : "" )
+				+ ") . ?s <http://imeji.org/terms/observedCollections> ?c }";
 	}
 
 	/**

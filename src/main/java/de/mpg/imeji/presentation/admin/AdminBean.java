@@ -3,25 +3,23 @@
  */
 package de.mpg.imeji.presentation.admin;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Future;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.rdf.model.Resource;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
-import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.jobs.ImportFileFromEscidocToInternalStorageJob;
 import de.mpg.imeji.logic.jobs.RefreshFileSizeJob;
+import de.mpg.imeji.logic.jobs.StorageUsageAnalyseJob;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
@@ -29,9 +27,7 @@ import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.StorageController;
-import de.mpg.imeji.logic.storage.UploadResult;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
-import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Grant;
@@ -56,58 +52,24 @@ public class AdminBean {
 	private SessionBean sb;
 	private static Logger logger = Logger.getLogger(AdminBean.class);
 	private boolean clean = false;
+	private String numberOfFilesInStorage;
+	private String sizeOfFilesinStorage;
+	private String freeSpaceInStorage;
+	private String lastUpdateStorageStatistics;
+	private Future<Integer> storageAnalyseStatus;
+	private String cleanDatabaseReport = "";
 
-	public AdminBean() {
+	public AdminBean() throws IOException, URISyntaxException {
 		sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-	}
-
-	/**
-	 * Import the files in an external storage (for instance escidoc) into the
-	 * internal storage
-	 * 
-	 * @throws Exception
-	 */
-	public String importToInternalStorage() throws Exception {
-		StorageController internal = new StorageController("internal");
-		StorageController escidoc = new StorageController("escidoc");
-		ItemController ic = new ItemController();
-		for (Item item : ic.retrieveAll(sb.getUser())) {
-			File tmp = null;
-			try {
-				// Get escidoc url for all files
-				URI escidocUrl = item.getFullImageUrl();
-				logger.info("Importing file " + escidocUrl + " for item "
-						+ item.getId());
-				ByteArrayOutputStream out = new ByteArrayOutputStream();
-				// Read the file in a stream
-				escidoc.read(escidocUrl.toString(), out, true);
-				// Upload the file in the internal storage
-				if (out.toByteArray() != null) {
-					tmp = File.createTempFile("import",
-							FilenameUtils.getExtension(item.getFilename()));
-					FileUtils.writeByteArrayToFile(tmp, out.toByteArray());
-					UploadResult result = internal.upload(item.getFilename(),
-							tmp, ObjectHelper.getId(item.getCollection()));
-					FileUtils.deleteQuietly(tmp);
-					item.setChecksum(result.getChecksum());
-					item.setFullImageUrl(URI.create(result.getOrginal()));
-					item.setWebImageUrl(URI.create(result.getWeb()));
-					item.setThumbnailImageUrl(URI.create(result.getThumb()));
-					item.setStorageId(result.getId());
-					item.setFiletype(item.getFiletype());
-					// Update the item with the new values
-					ic.update(item, sb.getUser());
-				} else {
-					logger.error("File not found: " + escidocUrl + " for item "
-							+ item.getId());
-				}
-			} catch (Exception e) {
-				logger.error("Error importing item " + item.getId(), e);
-			} finally {
-				FileUtils.deleteQuietly(tmp);
-			}
-		}
-		return "";
+		StorageUsageAnalyseJob storageUsageAnalyse;
+		storageUsageAnalyse = new StorageUsageAnalyseJob();
+		this.numberOfFilesInStorage = Integer.toString(storageUsageAnalyse
+				.getNumberOfFiles());
+		this.sizeOfFilesinStorage = FileUtils
+				.byteCountToDisplaySize(storageUsageAnalyse.getStorageUsed());
+		this.freeSpaceInStorage = FileUtils
+				.byteCountToDisplaySize(storageUsageAnalyse.getFreeSpace());
+		this.lastUpdateStorageStatistics = storageUsageAnalyse.getLastUpdate();
 	}
 
 	/**
@@ -144,14 +106,6 @@ public class AdminBean {
 	}
 
 	/**
-	 * Initialize the full text index for all elements
-	 * 
-	 * @throws Exception
-	 */
-	public void reIndex() throws Exception {
-	}
-
-	/**
 	 * Make the same as clean, but doesn't remove the resources
 	 * 
 	 * @throws Exception
@@ -169,7 +123,29 @@ public class AdminBean {
 	public void clean() throws Exception {
 		clean = true;
 		invokeCleanMethods();
-		reIndex();
+	}
+
+	/**
+	 * Start the job {@link StorageUsageAnalyseJob}
+	 * 
+	 * @throws IOException
+	 * @throws URISyntaxException
+	 */
+	public void analyseStorageUsage() throws IOException, URISyntaxException {
+		storageAnalyseStatus = Imeji.executor
+				.submit(new StorageUsageAnalyseJob());
+	}
+
+	/**
+	 * Import the files in an external storage (for instance escidoc) into the
+	 * internal storage
+	 * 
+	 * @throws Exception
+	 */
+	public String importToInternalStorage() {
+		Imeji.executor.submit(new ImportFileFromEscidocToInternalStorageJob(sb
+				.getUser()));
+		return "";
 	}
 
 	/**
@@ -195,11 +171,12 @@ public class AdminBean {
 	 * @throws Exception
 	 */
 	private void cleanStatement() throws Exception {
-		logger.info("Searching not bounded statement...");
 		Search search = SearchFactory.create();
 		List<String> uris = search.searchSimpleForQuery(
 				SPARQLQueries.selectStatementUnbounded()).getResults();
 		logger.info("...found " + uris.size());
+		cleanDatabaseReport += "Unbounded Statements: " + uris.size()
+				+ " found  <br/> ";
 		removeResources(uris, Imeji.profileModel, new Statement());
 	}
 
@@ -213,22 +190,19 @@ public class AdminBean {
 		Search search = SearchFactory.create();
 		List<String> uris = search.searchSimpleForQuery(
 				SPARQLQueries.selectGrantWithoutUser()).getResults();
-		logger.info("...found " + uris.size());
-		System.out.println(uris.size());
+		cleanDatabaseReport += "Unbounded Grants: " + uris.size()
+				+ " found  <br/>";
 		removeResources(uris, Imeji.userModel, new Grant());
-		logger.info("Searching broken grants...");
 		uris = search.searchSimpleForQuery(SPARQLQueries.selectGrantBroken())
 				.getResults();
-		logger.info("...found " + uris.size());
-		System.out.println(uris.size());
+		cleanDatabaseReport += "Broken Grants: " + uris.size() + " found <br/>";
 		removeResources(uris, Imeji.userModel, new Grant());
 		logger.info("Searching emtpy grants...");
 		if (clean)
 			ImejiSPARQL.execUpdate(SPARQLQueries.removeGrantEmtpy());
 		uris = search.searchSimpleForQuery(SPARQLQueries.selectGrantEmtpy())
 				.getResults();
-		logger.info("...found " + uris.size());
-		System.out.println(uris.size());
+		cleanDatabaseReport += "Empty Grants: " + uris.size() + " found  <br/>";
 	}
 
 	/**
@@ -330,36 +304,6 @@ public class AdminBean {
 	}
 
 	/**
-	 * Return the number of files stored in the {@link Storage}
-	 * 
-	 * @return
-	 */
-	public int getNumberOfFiles() {
-		StorageController sc = new StorageController();
-		return (int) sc.getAdministrator().getNumberOfFiles();
-	}
-
-	/**
-	 * Return the free space in the {@link Storage} in bytes
-	 * 
-	 * @return
-	 */
-	public long getStorageFreeSpace() {
-		StorageController sc = new StorageController();
-		return sc.getAdministrator().getFreeSpace();
-	}
-
-	/**
-	 * Return the Size in bytes of all files in the {@link Storage}
-	 * 
-	 * @return
-	 */
-	public long getSizeOfFiles() {
-		StorageController sc = new StorageController();
-		return sc.getAdministrator().getSizeOfFiles();
-	}
-
-	/**
 	 * Return all {@link User}
 	 * 
 	 * @return
@@ -380,5 +324,31 @@ public class AdminBean {
 		} catch (Exception e) {
 			return 0;
 		}
+	}
+
+	public String getNumberOfFilesInStorage() {
+		return numberOfFilesInStorage;
+	}
+
+	public String getSizeOfFilesinStorage() {
+		return sizeOfFilesinStorage;
+	}
+
+	public String getFreeSpaceInStorage() {
+		return freeSpaceInStorage;
+	}
+
+	public String getLastUpdateStorageStatistics() {
+		return lastUpdateStorageStatistics;
+	}
+
+	public boolean getStorageAnalyseStatus() {
+		if (storageAnalyseStatus != null)
+			return storageAnalyseStatus.isDone();
+		return true;
+	}
+
+	public String getCleanDatabaseReport() {
+		return cleanDatabaseReport;
 	}
 }

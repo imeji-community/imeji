@@ -1,9 +1,7 @@
 package de.mpg.imeji.logic.jobs;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.concurrent.Callable;
 
 import org.apache.log4j.Logger;

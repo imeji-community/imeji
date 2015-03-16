@@ -156,7 +156,7 @@
 
 	<url-mapping id="administration">
 		<pattern value="/admin"></pattern>
-		<view-id>/jsf/UserAdministrationPage.xhtml</view-id>
+		<view-id>/jsf/AdminOverview.xhtml</view-id>
 	</url-mapping>
 	
 	<url-mapping id="storageTools">

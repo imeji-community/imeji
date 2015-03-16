@@ -7,9 +7,17 @@
 	<ui:param name="currentMainMenu" value="admin"/>
 
 	<ui:define name="mainContent">
+			<!-- AdminDataList - Back Button -->
 		
 		<!-- Breadcrumb - History -->
 		<ui:include src="include/History.xhtml"></ui:include>			
+		
+			<h:panelGroup layout="block" styleClass="imj_backPanel">
+				<h:outputLink value="#{Navigation.adminUrl}">
+					<h:outputText value="#{lbl.back_to_admin}" styleClass="imj_backButton"/>
+				</h:outputLink>
+			</h:panelGroup>					
+						
 		
 		<!-- Are You Admin? -->	
 		<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!Auth.admin}">
@@ -103,12 +111,28 @@
 						<div class="imj_headline">
 							<h2>
 								<h:outputText value="#{lbl.storage_infos}"/>
+								<h:form>
+									<h:commandButton value="#{lbl.update}" action="#{AdminBean.analyseStorageUsage}" styleClass="imj_submitButton" rendered="#{AdminBean.storageAnalyseStatus}"/>
+								</h:form>
 							</h2>
 						</div>
 						
 						<div class="imj_content">
 						
 							<h:panelGroup layout="block" rendered="#{Auth.admin}">
+							
+								<!-- Admin - Last update of the statistics -->
+								<h:panelGroup layout="block" styleClass="imj_admindataSet">
+									<div class="imj_admindataLabel" title="#{lbl.last_update}">
+										<h:outputText value="#{lbl.last_update}"/>
+										<span class="imj_invisible">: </span>
+									</div>
+									<div class="imj_admindataValue">
+										<div class="imj_admindataValueEntry">
+											<h:outputText value="#{AdminBean.lastUpdateStorageStatistics}"/>
+										</div>
+									</div>
+								</h:panelGroup>
 							
 								<!-- Admin - Number of Files Info -->
 								<h:panelGroup layout="block" styleClass="imj_admindataSet">
@@ -118,7 +142,7 @@
 									</div>
 									<div class="imj_admindataValue">
 										<div class="imj_admindataValueEntry">
-											<h:outputText value="#{AdminBean.numberOfFiles}"/>
+											<h:outputText value="#{AdminBean.numberOfFilesInStorage}"/>
 										</div>
 									</div>
 								</h:panelGroup>
@@ -131,7 +155,7 @@
 									</div>
 									<div class="imj_admindataValue">
 										<div class="imj_admindataValueEntry">
-											<h:outputText value="#{AdminBean.sizeOfFiles}"/>
+											<h:outputText value="#{AdminBean.sizeOfFilesinStorage}"/>
 										</div>
 									</div>
 								</h:panelGroup>
@@ -144,7 +168,7 @@
 									</div>
 									<div class="imj_admindataValue">
 										<div class="imj_admindataValueEntry">
-											<h:outputText value="#{AdminBean.storageFreeSpace}"/>
+											<h:outputText value="#{AdminBean.freeSpaceInStorage}"/>
 										</div>
 									</div>
 								</h:panelGroup>
@@ -159,13 +183,6 @@
 			
 			</div> <!-- END ADMIN LIST -->
 		
-			<!-- AdminDataList - Back Button -->
-			<h:panelGroup layout="block" styleClass="imj_backPanel">
-				<h:outputLink value="#{Navigation.adminUrl}">
-					<h:outputText value="#{lbl.back_to_admin}" styleClass="imj_backButton"/>
-				</h:outputLink>
-			</h:panelGroup>					
-						
 		</ui:fragment>
 
 	</ui:define>

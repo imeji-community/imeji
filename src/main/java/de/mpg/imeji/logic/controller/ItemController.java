@@ -358,6 +358,7 @@ public class ItemController extends ImejiController {
 		item.setFullImageUrl(URI.create(uploadResult.getOrginal()));
 		item.setThumbnailImageUrl(URI.create(uploadResult.getThumb()));
 		item.setWebImageUrl(URI.create(uploadResult.getWeb()));
+		item.setFileSize(uploadResult.getFileSize());
 
 		return update(item, user);
 	}

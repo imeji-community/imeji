@@ -14,6 +14,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.io.FileUtils;
 import org.joda.time.chrono.AssembledChronology.Fields;
 
 import de.mpg.imeji.logic.search.FulltextIndex;
@@ -270,6 +271,14 @@ public class Item extends Properties implements FulltextIndex, Serializable {
 	 */
 	public long getFileSize() {
 		return fileSize;
+	}
+	
+	/**
+	 * 
+	 * @return human readable file size
+	 */
+	public String getFileSizeHumanReadable(){
+		return FileUtils.byteCountToDisplaySize(fileSize);
 	}
 
 	/**

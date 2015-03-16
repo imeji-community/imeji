@@ -182,8 +182,8 @@ public class EmailMessages
                 .replace("XXX_ITEM_LINK_XXX", item.getId().toString())
                 .replace("XXX_COLLECTION_NAME_XXX", c.getMetadata().getTitle())
                 .replace("XXX_COLLECTION_LINK_XXX", c.getId().toString())
-                .replace("XXX_ACTOR_NAME_XXX", actor.getName())
-                .replace("XXX_ACTOR_EMAIL_XXX", actor.getEmail())
+                .replace("XXX_ACTOR_NAME_XXX", (actor != null ? actor.getName() : "non_logged_in_user" ))
+                .replace("XXX_ACTOR_EMAIL_XXX", (actor != null ? actor.getEmail() : "" ))
                 .replace("XXX_TIME_XXX", new Date().toString());
     }
 
@@ -203,7 +203,6 @@ public class EmailMessages
      *
      * @param to
      * @param actor
-     * @param item
      * @param c
      * @param session
      * @return
@@ -213,8 +212,8 @@ public class EmailMessages
                 .replace("XXX_USER_NAME_XXX", to.getName())
                 .replace("XXX_COLLECTION_NAME_XXX", c.getMetadata().getTitle())
                 .replace("XXX_COLLECTION_LINK_XXX", c.getId().toString())
-                .replace("XXX_ACTOR_NAME_XXX", actor.getName())
-                .replace("XXX_ACTOR_EMAIL_XXX", actor.getEmail())
+                .replace("XXX_ACTOR_NAME_XXX", (actor != null ? actor.getName() : "non_logged_in_user") )
+                .replace("XXX_ACTOR_EMAIL_XXX", (actor != null ? actor.getEmail() : ""))
                 .replace("XXX_TIME_XXX", new Date().toString());
     }
 

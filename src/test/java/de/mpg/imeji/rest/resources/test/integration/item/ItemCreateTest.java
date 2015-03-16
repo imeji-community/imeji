@@ -2,10 +2,12 @@ package de.mpg.imeji.rest.resources.test.integration.item;
 
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
+import de.mpg.imeji.rest.resources.test.TestUtils;
 import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
 import net.java.dev.webdav.jaxrs.ResponseStatus;
+
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
@@ -14,14 +16,17 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import util.JenaUtil;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 import static de.mpg.imeji.logic.util.ResourceHelper.getStringFromPath;
 import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_PATH;
@@ -141,6 +146,8 @@ public class ItemCreateTest extends ImejiTestBase {
                 .post(Entity.entity(multiPart, multiPart.getMediaType()));
 
         assertEquals(CREATED.getStatusCode(), response.getStatus());
+        Map<String,Object> itemData = TestUtils.jsonToPOJO(response);
+        assertEquals(Long.toString(TEST_PNG_FILE.length()),Integer.toString((Integer) itemData.get("fileSize")));
     }
     
     @Test

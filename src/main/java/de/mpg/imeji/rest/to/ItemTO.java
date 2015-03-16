@@ -43,6 +43,7 @@ public class ItemTO extends PropertiesTO implements Serializable{
 
     private String filename;
     
+    
     private String mimetype;
     
     private String checksumMd5;
@@ -55,6 +56,18 @@ public class ItemTO extends PropertiesTO implements Serializable{
     
     private List<MetadataSetTO> metadata = new ArrayList<MetadataSetTO>();
     
+    private long fileSize;
+    
+
+	public long getFileSize() {
+		return fileSize;
+	}
+
+
+	public void setFileSize(long fileSize) {
+		this.fileSize = fileSize;
+	}
+
 
 	public String getVisibility() {
 		return visibility;

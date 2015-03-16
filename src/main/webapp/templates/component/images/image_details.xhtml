@@ -196,6 +196,17 @@
 									</h:outputLink>
 								</div>
 							</h:panelGroup>
+							
+							<!-- MetaDataList - File Size -->
+							<h:panelGroup layout="block" styleClass="imj_metadataSet">
+								<div class="imj_metadataLabel">
+									<h:outputText value="#{lbl.file_size}"/>
+									<span class="imj_invisible">: </span>
+								</div>
+								<div class="imj_metadataValue">
+										<h:outputText value="#{itemBean.image.fileSizeHumanReadable}"/>
+								</div>
+							</h:panelGroup>
 						</h:panelGroup>
 
 						<!-- MetaDataList - further metadata - single edit panel - Wrapper -->				

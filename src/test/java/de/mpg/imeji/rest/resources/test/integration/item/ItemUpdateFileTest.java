@@ -2,9 +2,11 @@ package de.mpg.imeji.rest.resources.test.integration.item;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.rest.process.RestProcessUtils;
+import de.mpg.imeji.rest.resources.test.TestUtils;
 import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
 import net.java.dev.webdav.jaxrs.ResponseStatus;
+
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
@@ -19,8 +21,10 @@ import org.slf4j.LoggerFactory;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 import static de.mpg.imeji.logic.controller.ItemController.NO_THUMBNAIL_FILE_NAME;
 import static de.mpg.imeji.logic.storage.util.StorageUtils.calculateChecksum;
@@ -90,6 +94,7 @@ public class ItemUpdateFileTest extends ImejiTestBase {
 
 		storedFileURL = target().getUri()
 				+ itemWithFileTO.getFileUrl().getPath().substring(1);
+        assertEquals(ATTACHED_FILE.length(),itemWithFileTO.getFileSize());
 
 		// LOGGER.info(RestProcessUtils.buildJSONFromObject(itemWithFileTO));
 

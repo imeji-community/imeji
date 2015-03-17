@@ -36,7 +36,7 @@
 					
 						<h:panelGroup layout="block" styleClass="imj_adminPanel imj_userConfig" rendered="#{Auth.admin}">
 								
-							<h:outputText value="Important: This methods will affect your backend (database and storage): Make sure to make backup before running it!"/> <!-- internationalized info message lbl missing -->					
+							<h:outputText value="#{lbl.admin_tools_warning}"/>			
 							<br/>
 							<!-- Admin - Clean storage -->
 							<div class="imj_headline">
@@ -46,7 +46,7 @@
 							</div>
 							
 							<div class="imj_content">
-								<h:outputText value="Remove files from the filesystem, which don't exists anymore in the database"/> <!-- internationalized info message lbl missing -->					
+								<h:outputText value="#{lbl.admin_clean_storage_description}"/> 				
 								<h:form>
 									<h:panelGroup layout="block" styleClass="imj_adminEditPanel">
 										<h:commandLink styleClass="imj_editButton" action="#{AdminBean.cleanStorage}" value="#{lbl.admin_clean_storage}: #{AdminBean.internalStorageLocation}"  onclick="openDialog('dialogWait');">
@@ -63,7 +63,7 @@
 								</h2>
 							</div>
 							<div class="imj_content">
-								<h:outputText value="Check if some triples are not valid/used, and removed them, and give a report of the results."/> <!-- internationalized info message lbl missing -->		
+								<h:outputText value="#{lbl.admin_advanced_clean_description}"/> 		
 								<h:form>
 									<h:panelGroup layout="block" styleClass="imj_adminEditPanel">
 										<h:commandLink action="#{AdminBean.status}" value="#{lbl.admin_advanced_state}" title="#{lbl.admin_advanced_state}" styleClass="imj_editButton">
@@ -73,7 +73,7 @@
 								<h:outputText value="#{AdminBean.cleanDatabaseReport}" escape="false"/>
 							</div>
 							<div class="imj_content">
-								<h:outputText value="Important: First check database. Remove the triples as found in the check database"/> <!-- internationalized info message lbl missing -->		
+								<h:outputText value="#{lbl.admin_advanced_clean_warning}"/>	
 								<h:form>
 									<h:panelGroup layout="block" styleClass="imj_adminEditPanel">
 										<h:commandLink action="#{AdminBean.clean}" value="#{lbl.admin_advanced_clean}" title="#{lbl.admin_advanced_clean}" styleClass="imj_editButton">
@@ -86,15 +86,15 @@
 								<!-- Admin - Import -->
 							<div class="imj_headline">
 								<h2>
-									<h:outputText value="Refresh File Size of all items"/>
+									<h:outputText value="#{lbl.admin_refresh_file_size}"/>
 								</h2>
 							</div>
 							
 							<div class="imj_content">
-								<h:outputText value="Refresh file size value of each item, wich actual value from storage (Useful after some manual operation on the storage)"/> <!-- internationalized info message lbl missing -->							
+								<h:outputText value="#{lbl.admin_refresh_file_size_description}"/>							
 								<h:form>
 									<h:panelGroup layout="block" styleClass="imj_adminEditPanel">
-										<h:commandLink styleClass="imj_editButton" action="#{AdminBean.refreshFileSize}" value="Refresh (Operation runs asynchronously)"/>
+										<h:commandLink styleClass="imj_editButton" action="#{AdminBean.refreshFileSize}" value="#{lbl.admin_refresh_file_size_buttontext}"/>
 									</h:panelGroup>	
 								</h:form>
 							</div>
@@ -108,7 +108,7 @@
 							</div>
 							
 							<div class="imj_content">
-								<h:outputText value="Important: When the import is done (check in the log file), restart imeji with the correct storage!"/> <!-- internationalized info message lbl missing -->													
+								<h:outputText value="#{lbl.import_to_internal_warning}"/>													
 								<h:form>
 									<h:panelGroup layout="block" styleClass="imj_adminEditPanel">
 										<h:commandLink styleClass="imj_editButton" action="#{AdminBean.importToInternalStorage}" value="#{lbl.import_to_internal}: #{AdminBean.internalStorageLocation}"  onclick="openDialog('dialogWait');">

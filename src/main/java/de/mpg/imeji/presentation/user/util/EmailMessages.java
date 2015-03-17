@@ -203,18 +203,18 @@ public class EmailMessages
      *
      * @param to
      * @param actor
-     * @param c
+     * @param uri
      * @param session
      * @return
      */
-    public String getEmailOnCollectionDownload_Body(User to, User actor, CollectionImeji c, SessionBean session){
-    	return session.getMessage("email_collection_downloaded_body")
+    public String getEmailOnZipDownload_Body(User to, User actor, String uri, int itemsCount, SessionBean session){
+    	return session.getMessage("email_zip_images_downloaded_body")
                 .replace("XXX_USER_NAME_XXX", to.getName())
-                .replace("XXX_COLLECTION_NAME_XXX", c.getMetadata().getTitle())
-                .replace("XXX_COLLECTION_LINK_XXX", c.getId().toString())
                 .replace("XXX_ACTOR_NAME_XXX", (actor != null ? actor.getName() : "non_logged_in_user") )
                 .replace("XXX_ACTOR_EMAIL_XXX", (actor != null ? actor.getEmail() : ""))
-                .replace("XXX_TIME_XXX", new Date().toString());
+                .replace("XXX_TIME_XXX", new Date().toString())
+                .replace("XXX_COLLECTION_URI_XXX", uri)
+                .replace("XXX_ITEMS_COUNT_XXX", String.valueOf(itemsCount));
     }
 
 
@@ -224,9 +224,8 @@ public class EmailMessages
      * @param session
      * @return
      */
-    public String getEmailOnCollectionDownload_Subject(CollectionImeji c, SessionBean session){
-        return session.getMessage("email_collection_downloaded_subject")
-                .replace("XXX_COLLECTION_ID_XXX", c.getIdString());
+    public String getEmailOnZipDownload_Subject(CollectionImeji c, SessionBean session){
+        return session.getMessage("email_zip_images_downloaded_subject");
     }
 
 }

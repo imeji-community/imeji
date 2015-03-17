@@ -163,6 +163,11 @@
 		<pattern value="/admin/storage/tools"></pattern>
 		<view-id>/jsf/AdminStorage.xhtml</view-id>
 	</url-mapping>
+	
+	<url-mapping id="storageDetails">
+		<pattern value="/admin/storage/details"></pattern>
+		<view-id>/jsf/AdminInterface.xhtml</view-id>
+	</url-mapping>
 
 	<url-mapping id="createUser">
 		<pattern value="/createuser"></pattern>

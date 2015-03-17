@@ -17,6 +17,7 @@ import org.apache.log4j.Logger;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -66,23 +67,32 @@ public class NotificationUtils {
      * @throws java.io.IOException
      * @throws java.net.URISyntaxException
      */
-    public static void notifyByExport(User user, Export export, SessionBean session) throws ImejiException, IOException, URISyntaxException {
+    public static void notifyByExport(User user, Export export, String url, SessionBean session) throws ImejiException, IOException, URISyntaxException {
         //notify by zip export
         if ("zip".equals(export.getParam("format"))) {
             //only for images
             if ("image".equals(export.getParam("type"))) {
+                Map<User, String> msgsPerUser = new HashMap<User, String>();
                 for (Map.Entry<URI, Integer> entry: ((ZIPExport)export).getItemsPerCollection().entrySet()) {
                     final CollectionImeji c = cc.retrieve(entry.getKey(), Imeji.adminUser);
                     for(User u:  uc.searchUsersToBeNotified(user, c)) {
-                        emailClient.sendMail(u.getEmail(), null,
-                                msgs.getEmailOnZipDownload_Subject(c, session),
-                                msgs.getEmailOnZipDownload_Body(u, user, entry.getKey().toString(),
-                                        entry.getValue().intValue(), session));
-                                LOGGER.info("Sent notification email to user: " + u.getName() + "<" + u.getEmail()
-                                + ">" + " zip download: "+ entry.getValue().intValue()
-                                + " item(s) in collection " + entry.getKey().toString());
-                    }
+                            msgsPerUser.put(u,
+                                    (msgsPerUser.containsKey(u) ? msgsPerUser.get(u) + "\\r\\n" : "" )
+                                    + "Collection URI: " + entry.getKey().toString()
+                                    + ", items count: " + entry.getValue().intValue()
+                                    );
+                        };
                 }
+                for (Map.Entry<User, String> entry: msgsPerUser.entrySet()) {
+                    User u = entry.getKey();
+                    emailClient.sendMail(u.getEmail(), null,
+                            msgs.getEmailOnZipDownload_Subject(session),
+                            msgs.getEmailOnZipDownload_Body(u, user, entry.getValue(), url, session));
+                    LOGGER.info("Sent notification email to user: " + u.getName() + "<" + u.getEmail()
+                            + ">;" + " zip download query: <" + url
+                            + ">; message: <" + entry.getValue().replaceAll("[\\r\\n]]", ";") );
+                }
+
 
             }
         }

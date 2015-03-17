@@ -59,7 +59,9 @@ public class ExportServlet extends HttpServlet
             exportManager.export(result);
             resp.getOutputStream().flush();
 
-            NotificationUtils.notifyByExport(user, exportManager.getExport(), session);
+            NotificationUtils.notifyByExport(user, exportManager.getExport(),
+                    req.getRequestURL().toString() + "?" + req.getQueryString()
+                    , session);
         }
         catch (HttpResponseException he)
         {

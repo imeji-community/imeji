@@ -203,28 +203,28 @@ public class EmailMessages
      *
      * @param to
      * @param actor
-     * @param uri
+     * @param itemsDownloaded
+     * @param url
      * @param session
      * @return
      */
-    public String getEmailOnZipDownload_Body(User to, User actor, String uri, int itemsCount, SessionBean session){
+    public String getEmailOnZipDownload_Body(User to, User actor, String itemsDownloaded, String url, SessionBean session){
     	return session.getMessage("email_zip_images_downloaded_body")
                 .replace("XXX_USER_NAME_XXX", to.getName())
                 .replace("XXX_ACTOR_NAME_XXX", (actor != null ? actor.getName() : "non_logged_in_user") )
                 .replace("XXX_ACTOR_EMAIL_XXX", (actor != null ? actor.getEmail() : ""))
                 .replace("XXX_TIME_XXX", new Date().toString())
-                .replace("XXX_COLLECTION_URI_XXX", uri)
-                .replace("XXX_ITEMS_COUNT_XXX", String.valueOf(itemsCount));
+                .replace("XXX_ITEMS_DOWNLOADED_XXX", itemsDownloaded)
+                .replace("XXX_QUERY_URL_XXX", url);
     }
 
 
     /**
      * Generate email subject for "Send notification email by item download" feature
-     * @param c
      * @param session
      * @return
      */
-    public String getEmailOnZipDownload_Subject(CollectionImeji c, SessionBean session){
+    public String getEmailOnZipDownload_Subject(SessionBean session){
         return session.getMessage("email_zip_images_downloaded_subject");
     }
 

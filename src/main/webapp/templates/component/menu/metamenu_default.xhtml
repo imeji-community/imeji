@@ -55,7 +55,7 @@ All rights reserved. Use is subject to license terms.
 					<h:panelGroup rendered="#{!SessionBean.showLogin}">
 						<h:commandLink  id="lnkLogin1"  title="#{lbl.login}" action ="#{LoginBean.loginClick}" styleClass="imj_metaMenuItem">
 			    			<h:outputText value="#{lbl.login}"></h:outputText>
-			    			<f:ajax render="@form"/>
+			    			<f:ajax render="@form" execute="@this"/>
 			   			</h:commandLink>
 					</h:panelGroup>
 					<h:panelGroup rendered="#{SessionBean.showLogin}">

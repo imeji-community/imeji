@@ -112,7 +112,12 @@
 							<h2>
 								<h:outputText value="#{lbl.storage_infos}"/>
 								<h:form>
-									<h:commandButton value="#{lbl.update}" action="#{AdminBean.analyseStorageUsage}" styleClass="imj_submitButton" rendered="#{AdminBean.storageAnalyseStatus}"/>
+									<h:commandButton value="#{lbl.update}" action="#{AdminBean.analyseStorageUsage}" styleClass="imj_submitButton" rendered="#{AdminBean.storageAnalyseStatus}">
+										<f:ajax render="@form" execute="@this"/>
+									</h:commandButton>
+									<h:outputLink value="">
+										<h:outputText value="#{lbl.admin_refresh_browser}" rendered="#{!AdminBean.storageAnalyseStatus}"/>
+									</h:outputLink>
 								</h:form>
 							</h2>
 						</div>

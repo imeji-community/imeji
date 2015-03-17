@@ -72,19 +72,22 @@ public class NotificationUtils {
         if ("zip".equals(export.getParam("format"))) {
             //only for images
             if ("image".equals(export.getParam("type"))) {
-                Map<User, String> msgsPerUser = new HashMap<User, String>();
+                Map<String, String> msgsPerEmail = new HashMap<>();
+                Map<String, User> usersPerEmail = new HashMap<>();
                 for (Map.Entry<URI, Integer> entry: ((ZIPExport)export).getItemsPerCollection().entrySet()) {
                     final CollectionImeji c = cc.retrieve(entry.getKey(), Imeji.adminUser);
                     for(User u:  uc.searchUsersToBeNotified(user, c)) {
-                            msgsPerUser.put(u,
-                                    (msgsPerUser.containsKey(u) ? msgsPerUser.get(u) + "\\r\\n" : "" )
-                                    + "Collection URI: " + entry.getKey().toString()
-                                    + ", items count: " + entry.getValue().intValue()
-                                    );
-                        };
+                        String key = u.getEmail();
+                        msgsPerEmail.put(key,
+                                (msgsPerEmail.containsKey(key) ? msgsPerEmail.get(key) + "\r\n" : "")
+                                        + "Collection URI: " + entry.getKey().toString()
+                                        + ", items count: " + entry.getValue().intValue()
+                        );
+                        usersPerEmail.put(key, u);
+                    }
                 }
-                for (Map.Entry<User, String> entry: msgsPerUser.entrySet()) {
-                    User u = entry.getKey();
+                for (Map.Entry<String, String> entry: msgsPerEmail.entrySet()) {
+                    User u = usersPerEmail.get(entry.getKey());
                     emailClient.sendMail(u.getEmail(), null,
                             msgs.getEmailOnZipDownload_Subject(session),
                             msgs.getEmailOnZipDownload_Body(u, user, entry.getValue(), url, session));

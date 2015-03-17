@@ -131,9 +131,10 @@ public class AdminBean {
 	 * @throws IOException
 	 * @throws URISyntaxException
 	 */
-	public void analyseStorageUsage() throws IOException, URISyntaxException {
+	public String analyseStorageUsage() throws IOException, URISyntaxException {
 		storageAnalyseStatus = Imeji.executor
 				.submit(new StorageUsageAnalyseJob());
+		return "";
 	}
 
 	/**

@@ -66,7 +66,8 @@
 								<h:outputText value="Check if some triples are not valid/used, and removed them, and give a report of the results."/> <!-- internationalized info message lbl missing -->		
 								<h:form>
 									<h:panelGroup layout="block" styleClass="imj_adminEditPanel">
-										<h:commandLink action="#{AdminBean.status}" value="#{lbl.admin_advanced_state}" title="#{lbl.admin_advanced_state}" styleClass="imj_editButton"/>
+										<h:commandLink action="#{AdminBean.status}" value="#{lbl.admin_advanced_state}" title="#{lbl.admin_advanced_state}" styleClass="imj_editButton">
+										</h:commandLink>
 									</h:panelGroup>
 								</h:form>
 								<h:outputText value="#{AdminBean.cleanDatabaseReport}" escape="false"/>

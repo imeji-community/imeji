@@ -5,6 +5,7 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.export.Export;
+import de.mpg.imeji.logic.export.format.ZIPExport;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
@@ -14,9 +15,9 @@ import de.mpg.imeji.presentation.user.util.EmailMessages;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
-
-import static com.google.common.base.Strings.isNullOrEmpty;
+import java.util.Map;
 
 /**
  * Created by vlad on 13.03.15.
@@ -68,16 +69,21 @@ public class NotificationUtils {
     public static void notifyByExport(User user, Export export, SessionBean session) throws ImejiException, IOException, URISyntaxException {
         //notify by zip export
         if ("zip".equals(export.getParam("format"))) {
-            //only collection for the moment
-            if (!isNullOrEmpty(export.getParam("col"))) {
-                final CollectionImeji c = cc.retrieve(export.getParam("col"), Imeji.adminUser);
-                for(User u:  uc.searchUsersToBeNotified(user, c)) {
-                    emailClient.sendMail(u.getEmail(), null,
-                            msgs.getEmailOnCollectionDownload_Subject(c, session),
-                            msgs.getEmailOnCollectionDownload_Body(u, user, c, session));
-                    LOGGER.info("Sent notification email to user: " + u.getName() + "<" + u.getEmail()
-                            + ">" + " by collection " + c.getIdString() + " download");
+            //only for images
+            if ("image".equals(export.getParam("type"))) {
+                for (Map.Entry<URI, Integer> entry: ((ZIPExport)export).getItemsPerCollection().entrySet()) {
+                    final CollectionImeji c = cc.retrieve(entry.getKey(), Imeji.adminUser);
+                    for(User u:  uc.searchUsersToBeNotified(user, c)) {
+                        emailClient.sendMail(u.getEmail(), null,
+                                msgs.getEmailOnZipDownload_Subject(c, session),
+                                msgs.getEmailOnZipDownload_Body(u, user, entry.getKey().toString(),
+                                        entry.getValue().intValue(), session));
+                                LOGGER.info("Sent notification email to user: " + u.getName() + "<" + u.getEmail()
+                                + ">" + " zip download: "+ entry.getValue().intValue()
+                                + " item(s) in collection " + entry.getKey().toString());
+                    }
                 }
+
             }
         }
     }

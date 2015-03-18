@@ -148,6 +148,7 @@ public class ZIPExport extends Export
                 try
                 {
                  item = ic.retrieve(new URI(source.get(i)), session.getUser());
+                 updateMetrics(item);
                  sc = new StorageController();
                     zip.putNextEntry(new ZipEntry(item.getFilename()));
                     sc.read(item.getFullImageUrl().toString(), zip, false);
@@ -171,7 +172,6 @@ public class ZIPExport extends Export
                 catch (URISyntaxException eui) {
                 	logger.info("Could not create URI during retrieval and export! ");
                 }
-                updateMetrics(item);
             }
         }
         catch (IOException e)

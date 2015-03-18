@@ -20,6 +20,8 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 /**
  * Created by vlad on 13.03.15.
  */
@@ -67,25 +69,29 @@ public class NotificationUtils {
      * @throws java.io.IOException
      * @throws java.net.URISyntaxException
      */
-    public static void notifyByExport(User user, Export export, String url, SessionBean session) throws ImejiException, IOException, URISyntaxException {
+    public static void notifyByExport(User user, Export export, SessionBean session) throws ImejiException, IOException, URISyntaxException {
         //notify by zip export
         if ("zip".equals(export.getParam("format"))) {
             //only for images
             if ("image".equals(export.getParam("type"))) {
                 Map<String, String> msgsPerEmail = new HashMap<>();
                 Map<String, User> usersPerEmail = new HashMap<>();
+                String q = !isNullOrEmpty(export.getParam("q")) ? "/browse?q=" + export.getParam("q") : "";
                 for (Map.Entry<URI, Integer> entry: ((ZIPExport)export).getItemsPerCollection().entrySet()) {
                     final CollectionImeji c = cc.retrieve(entry.getKey(), Imeji.adminUser);
                     for(User u:  uc.searchUsersToBeNotified(user, c)) {
                         String key = u.getEmail();
                         msgsPerEmail.put(key,
                                 (msgsPerEmail.containsKey(key) ? msgsPerEmail.get(key) + "\r\n" : "")
-                                        + "Collection URI: " + entry.getKey().toString()
-                                        + ", items count: " + entry.getValue().intValue()
+                                        + "XXX_COLLECTION_XXX URI"
+                                        + (isNullOrEmpty(q)? ": " : " (XXX_FILTERED_XXX): ")
+                                        + entry.getKey().toString() + q
+                                        + ", XXX_ITEMS_COUNT_XXX: " + entry.getValue().intValue()
                         );
                         usersPerEmail.put(key, u);
                     }
                 }
+                String url  = reconstructQueryUrl((ZIPExport)export, session);
                 for (Map.Entry<String, String> entry: msgsPerEmail.entrySet()) {
                     User u = usersPerEmail.get(entry.getKey());
                     emailClient.sendMail(u.getEmail(), null,
@@ -95,10 +101,28 @@ public class NotificationUtils {
                             + ">;" + " zip download query: <" + url
                             + ">; message: <" + entry.getValue().replaceAll("[\\r\\n]]", ";") );
                 }
-
-
             }
         }
+    }
+
+
+    /**
+     * Reconstructs Query Url on hand of request parameters saved in export instance
+     * @param export
+     * @param session
+     * @return
+     */
+    private static String reconstructQueryUrl(ZIPExport export, SessionBean session) {
+        String q = "?q=", path = "browse";
+        if (!isNullOrEmpty(export.getParam("q"))) {
+            q += export.getParam("q");
+        }
+        if (!isNullOrEmpty(export.getParam("col"))) {
+            path = "collection/" +  export.getParam("col") + "/" + path;
+        } else if (!isNullOrEmpty(export.getParam("album"))) {
+            path = "album/" +  export.getParam("album") + "/" + path;
+        }
+        return session.getApplicationUrl() + path + q;
     }
 
 

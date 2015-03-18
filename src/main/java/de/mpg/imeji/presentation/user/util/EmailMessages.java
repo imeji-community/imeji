@@ -211,10 +211,13 @@ public class EmailMessages
     public String getEmailOnZipDownload_Body(User to, User actor, String itemsDownloaded, String url, SessionBean session){
     	return session.getMessage("email_zip_images_downloaded_body")
                 .replace("XXX_USER_NAME_XXX", to.getName())
-                .replace("XXX_ACTOR_NAME_XXX", (actor != null ? actor.getName() : "non_logged_in_user") )
+                .replace("XXX_ACTOR_NAME_XXX", (actor != null ? actor.getName() : "non_logged_in_user"))
                 .replace("XXX_ACTOR_EMAIL_XXX", (actor != null ? actor.getEmail() : ""))
                 .replace("XXX_TIME_XXX", new Date().toString())
                 .replace("XXX_ITEMS_DOWNLOADED_XXX", itemsDownloaded)
+                .replaceAll("XXX_COLLECTION_XXX", session.getMessage("collection"))
+                .replaceAll("XXX_FILTERED_XXX", session.getMessage("filtered"))
+                .replaceAll("XXX_ITEMS_COUNT_XXX", session.getMessage("items_count"))
                 .replace("XXX_QUERY_URL_XXX", url);
     }
 

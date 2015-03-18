@@ -3,28 +3,9 @@
  */
 package de.mpg.imeji.presentation.session;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.ResourceBundle;
-
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
-import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -34,6 +15,19 @@ import de.mpg.imeji.presentation.user.ShareBean.ShareType;
 import de.mpg.imeji.presentation.util.CookieUtils;
 import de.mpg.imeji.presentation.util.MaxPlanckInstitutUtils;
 import de.mpg.imeji.presentation.util.PropertyReader;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.io.Serializable;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.*;
 
 /**
  * The session Bean for imeji.
@@ -70,6 +64,9 @@ public class SessionBean implements Serializable {
 	private boolean showLogin = false;
 	private int numberOfItemsPerPage = 18;
 	private int numberOfContainersPerPage = 10;
+
+
+    private String applicationUrl;
 	/*
 	 * Cookies name
 	 */
@@ -94,13 +91,15 @@ public class SessionBean implements Serializable {
 		collectionCached = new HashMap<URI, CollectionImeji>();
 		initLocale();
 		initCssWithCookie();
+		initApplicationUrl();
 		initNumberOfItemsPerPageWithCookieOrProperties();
 		initNumberOfContainersPerPageWithCookieOrProperties();
 		institute = findInstitute();
 		instituteId = findInstituteId();
 	}
 
-	/**
+
+    /**
 	 * Initialize the number of items per page by:<br/>
 	 * 1- Reading the property<br/>
 	 * 2- Reading the Cookie<br/>
@@ -238,6 +237,22 @@ public class SessionBean implements Serializable {
 			return "imeji";
 		}
 	}
+
+    /**
+     * Read application URL from the imeji properties
+     */
+    private void initApplicationUrl() {
+        try {
+            applicationUrl = StringHelper.normalizeURI(PropertyReader.getProperty("imeji.instance.url"));
+        } catch (Exception e) {
+            applicationUrl = "http://localhost:8080/imeji";
+        }
+    }
+
+    public String getApplicationUrl() {
+        return applicationUrl;
+    }
+
 
 	/**
 	 * First read the {@link Locale} in the request. This is the default

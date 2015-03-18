@@ -6,6 +6,7 @@ package de.mpg.imeji.presentation.servlet;
 import de.mpg.imeji.logic.export.ExportManager;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.NotificationUtils;
 import org.apache.http.client.HttpResponseException;
@@ -16,6 +17,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
+import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
@@ -25,9 +27,23 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Date;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 public class ExportServlet extends HttpServlet
 {
     private static final long serialVersionUID = -777947169051357999L;
+    private Navigation navigation;
+
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        try {
+            navigation = new Navigation();
+        } catch (Exception e) {
+            new RuntimeException("Cannot init Navigation", e);
+        }
+    }
 
     /**
      * {@inheritDoc}
@@ -59,9 +75,8 @@ public class ExportServlet extends HttpServlet
             exportManager.export(result);
             resp.getOutputStream().flush();
 
-            NotificationUtils.notifyByExport(user, exportManager.getExport(),
-                    req.getRequestURL().toString() + "?" + req.getQueryString()
-                    , session);
+            NotificationUtils.notifyByExport(user, exportManager.getExport(), reconstructQueryUrl(req), session);
+
         }
         catch (HttpResponseException he)
         {
@@ -71,6 +86,18 @@ public class ExportServlet extends HttpServlet
         {
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         }
+    }
+
+    private String reconstructQueryUrl(HttpServletRequest req) {
+        String q = "?q=", path = "browse";
+        if (!isNullOrEmpty(req.getParameter("q"))) {
+            q += req.getParameter("q");
+        } else if (!isNullOrEmpty(req.getParameter("col"))) {
+            path = "collection/" +  req.getParameter("col") + "/" + path;
+        } else if (!isNullOrEmpty(req.getParameter("album"))) {
+            path = "album/" +  req.getParameter("album") + "/" + path;
+        }
+        return navigation.getApplicationUrl() + path + q;
     }
 
     /**

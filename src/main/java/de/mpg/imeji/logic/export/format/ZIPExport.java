@@ -78,6 +78,7 @@ public class ZIPExport extends Export
      */
     public ZIPExport(String type) throws HttpResponseException
     {
+        itemsPerCollection = new HashMap<URI, Integer>();
         boolean supported = false;
         if ("image".equalsIgnoreCase(type))
         {
@@ -88,7 +89,6 @@ public class ZIPExport extends Export
         {
             throw new HttpResponseException(400, "Type " + type + " is not supported.");
         }
-        itemsPerCollection = new HashMap<URI, Integer>();
     }
 
     @Override
@@ -195,7 +195,7 @@ public class ZIPExport extends Export
                 int newVal = itemsPerCollection.get(item.getCollection()).intValue() + 1;
                 itemsPerCollection.put(item.getCollection(), Integer.valueOf(newVal));
             } else {
-                itemsPerCollection.put(item.getCollection(), Integer.valueOf(1));
+                itemsPerCollection.put(item.getCollection(), new Integer(1));
             }
         }
     }

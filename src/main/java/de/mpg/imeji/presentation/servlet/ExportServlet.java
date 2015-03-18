@@ -58,9 +58,11 @@ public class ExportServlet extends HttpServlet
             resp.setStatus(HttpServletResponse.SC_OK);
             SearchResult result = exportManager.search();
             exportManager.export(result);
-            resp.getOutputStream().flush();
 
             NotificationUtils.notifyByExport(user, exportManager.getExport(), session);
+
+            resp.getOutputStream().flush();
+
 
         }
         catch (HttpResponseException he)

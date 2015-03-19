@@ -32,6 +32,7 @@ import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
@@ -60,6 +61,7 @@ public class AdminBean {
 	private String cleanDatabaseReport = "";
 
 	public AdminBean() throws IOException, URISyntaxException {
+
 		sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
 		StorageUsageAnalyseJob storageUsageAnalyse;
 		storageUsageAnalyse = new StorageUsageAnalyseJob();
@@ -162,8 +164,19 @@ public class AdminBean {
 		 * self not. Since a metadata is a abstract class, j2j can not instance
 		 * a new metadata since it doesn't know the type
 		 */
-		// cleanMetadata();
+		cleanMetadata();
 		cleanGrants();
+	}
+
+	/**
+	 * Find all {@link Metadata} which are not related to a {@link Statement}
+	 */
+	private void cleanMetadata() {
+		Search search = SearchFactory.create();
+		List<String> uris = search.searchSimpleForQuery(
+				SPARQLQueries.selectMetadataUnbounded()).getResults();
+		cleanDatabaseReport += "Metadata Without Statement: " + uris.size()
+				+ " found  <br/> ";
 	}
 
 	/**

@@ -53,6 +53,12 @@
 		<load-on-startup>5</load-on-startup>
 		<async-supported>true</async-supported>
 	</servlet>
+	<servlet>
+		<servlet-name>imeji SPARQL End Point</servlet-name>
+		<servlet-class>de.mpg.imeji.presentation.servlet.SPARQLEndpointServlet</servlet-class>
+		<load-on-startup>5</load-on-startup>
+		<async-supported>true</async-supported>
+	</servlet>
 
 	<servlet>
 		<servlet-name>imeji REST Service</servlet-name>
@@ -184,6 +190,10 @@
 	<servlet-mapping>
 		<servlet-name>imeji REST Service</servlet-name>
 		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>imeji SPARQL End Point</servlet-name>
+		<url-pattern>/sparql</url-pattern>
 	</servlet-mapping>
 
 

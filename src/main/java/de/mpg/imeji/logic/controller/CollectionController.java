@@ -190,7 +190,8 @@ public class CollectionController extends ImejiController {
 	 * @throws ImejiException
 	 */
 	public CollectionImeji updateLazy(CollectionImeji ic, User user) throws ImejiException {
-		writeUpdateProperties(ic, user);
+        validateCollection(ic, user);
+        writeUpdateProperties(ic, user);
 		writer.updateLazy(WriterFacade.toList(ic), user);
         return retrieveLazy(ic.getId(), user);
 	}

@@ -38,6 +38,42 @@
 								
 							<h:outputText value="#{lbl.admin_tools_warning}"/>			
 							<br/>
+							<!-- Admin - SPARQL -->
+							<div class="imj_headline">
+								<h2>
+									<h:outputText value="#{lbl.admin_sparql}"/>
+								</h2>
+							</div>
+							<div class="imj_content">
+								<FORM action="#{Navigation.applicationUrl}/sparql">
+								  	<p>
+								        <textarea name="q" cols="40" rows="10" maxlength="10240000" >SELECT * WHERE{?s ?p ?o}</textarea>
+								   	</p>
+								  	<p>
+										#{lbl.model} 
+										<select name="model">
+											<option value="" selected="selected">All (Union)</option>
+											<option value="item">Item</option>
+											<option value="collection">Collection</option>
+											<option value="album">Album</option>
+											<option value="user">User</option>
+											<option value="profile">Profile</option>
+										</select>
+									 </p>
+									 <p>
+										#{lbl.format} 
+										<select name="format">
+											<option value="" selected="selected">RDF-XML</option>
+											<option value="csv">CSV</option>
+											<option value="json">JSON</option>
+											<option value="tsv">TSV</option>
+											<option value="ttl">TTL</option>
+											<option value="bio">BIO</option>
+										</select>
+									</p>
+								    <input type="submit" value="#{lbl.execute}" formtarget="_blank" class="imj_editButton"/>
+								</FORM>	
+							</div>
 							<!-- Admin - Clean storage -->
 							<div class="imj_headline">
 								<h2>

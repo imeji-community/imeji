@@ -519,13 +519,11 @@ public class ItemBean {
 	 * @return String
 	 */
 	public String getStringContent() throws ImejiException {
-		if (stringContent == null) {
 	        StorageController sc = new StorageController();
 	        ByteArrayOutputStream baos = new ByteArrayOutputStream();
 	        sc.read(item.getFullImageUrl().toString(), baos, true);
 	        stringContent = baos.toString(); 
-		}
-		return stringContent;
+	        return stringContent;
 	}
 	
 	/**

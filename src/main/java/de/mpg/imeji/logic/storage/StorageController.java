@@ -201,4 +201,15 @@ public class StorageController implements Serializable {
 	public Storage getStorage() {
 		return storage;
 	}
+	
+	/**
+	 * Call read method of the controlled {@link Storage}
+	 * 
+	 * @param url
+	 * @param out
+	 * @throws ImejiException
+	 */
+	public String readFileStringContent(String url){
+		return storage.readFileStringContent(url);
+	}
 }

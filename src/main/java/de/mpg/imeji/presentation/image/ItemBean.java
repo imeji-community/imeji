@@ -17,6 +17,7 @@ import de.mpg.imeji.logic.search.vo.SearchOperators;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.storage.StorageController;
+import de.mpg.imeji.logic.storage.internal.InternalStorageManager;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.StringHelper;
@@ -42,6 +43,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -519,11 +523,9 @@ public class ItemBean {
 	 * @return String
 	 */
 	public String getStringContent() throws ImejiException {
-	        StorageController sc = new StorageController();
-	        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-	        sc.read(item.getFullImageUrl().toString(), baos, true);
-	        stringContent = baos.toString(); 
-	        return stringContent;
+		StorageController sc = new StorageController();
+		stringContent = sc.readFileStringContent(item.getFullImageUrl().toString());
+        return stringContent;
 	}
 	
 	/**

@@ -159,4 +159,13 @@ public class ExternalStorage implements Storage
         // TODO Auto-generated method stub
         return null;
     }
+    
+    
+    /* (non-Javadoc)
+     * @see de.mpg.imeji.logic.storage.Storage#readFileStringContent(java.lang.String)
+     */
+    @Override
+    public String readFileStringContent(String url) {
+		return null;
+    }
 }

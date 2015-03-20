@@ -28,19 +28,6 @@
  */
 package de.mpg.imeji.logic.export.format;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipException;
-import java.util.zip.ZipOutputStream;
-
-import org.apache.http.client.HttpResponseException;
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.ItemController;
@@ -51,6 +38,20 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import org.apache.http.client.HttpResponseException;
+import org.apache.log4j.Logger;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
+import java.util.zip.ZipOutputStream;
 
 /**
  * {@link Export} images in zip
@@ -65,6 +66,11 @@ public class ZIPExport extends Export
     protected String modelURI;
     private static Logger logger = Logger.getLogger(ZIPExport.class);
 
+
+
+    private Map<URI, Integer> itemsPerCollection;
+
+
     /**
      * @param type
      * @return
@@ -72,6 +78,7 @@ public class ZIPExport extends Export
      */
     public ZIPExport(String type) throws HttpResponseException
     {
+        itemsPerCollection = new HashMap<URI, Integer>();
         boolean supported = false;
         if ("image".equalsIgnoreCase(type))
         {
@@ -141,6 +148,7 @@ public class ZIPExport extends Export
                 try
                 {
                  item = ic.retrieve(new URI(source.get(i)), session.getUser());
+                 updateMetrics(item);
                  sc = new StorageController();
                     zip.putNextEntry(new ZipEntry(item.getFilename()));
                     sc.read(item.getFullImageUrl().toString(), zip, false);
@@ -178,8 +186,23 @@ public class ZIPExport extends Export
         catch (IOException ioe) {
         	logger.info("Could not close the ZIP File!");
         }
-    }       
+    }
 
-  
+    private void updateMetrics(Item item) {
+        //only images for the moment!
+        if ( modelURI.equals(Imeji.imageModel) ) {
+            if (itemsPerCollection.containsKey(item.getCollection())) {
+                int newVal = itemsPerCollection.get(item.getCollection()).intValue() + 1;
+                itemsPerCollection.put(item.getCollection(), Integer.valueOf(newVal));
+            } else {
+                itemsPerCollection.put(item.getCollection(), new Integer(1));
+            }
+        }
+    }
+
+    public Map<URI, Integer> getItemsPerCollection() {
+        return itemsPerCollection;
+    }
+
 
 }

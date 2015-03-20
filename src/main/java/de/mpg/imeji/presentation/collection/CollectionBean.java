@@ -6,28 +6,18 @@ package de.mpg.imeji.presentation.collection;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ProfileController;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Container;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.presentation.beans.ContainerBean;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.mdProfile.wrapper.StatementWrapper;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.UrlHelper;
-
 import org.apache.log4j.Logger;
 
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.ValueChangeEvent;
-
-
-
-
 import javax.faces.model.SelectItem;
-
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,7 +60,11 @@ public abstract class CollectionBean extends ContainerBean {
     
     private List<StatementWrapper> statementWrappers = new ArrayList<StatementWrapper>();
     private Map<URI, Integer> levels;
-    
+
+
+    private boolean sendEmailNotification = false;
+
+
     private static final int MARGIN_PIXELS_FOR_STATEMENT_CHILD = 5;
     	
 	/**
@@ -441,6 +435,25 @@ public abstract class CollectionBean extends ContainerBean {
 	public void setStatementWrappers(List<StatementWrapper> statementWrappers) {
 		this.statementWrappers = statementWrappers;
 	}
-	
+
+    public boolean isSendEmailNotification() {
+
+        return sendEmailNotification;
+
+    }
+
+    public void setSendEmailNotification(boolean sendEmailNotification) {
+        this.sendEmailNotification = sendEmailNotification;
+        //check if id already set
+        if (!isNullOrEmpty(id)) {
+            User user = sessionBean.getUser();
+            if (sendEmailNotification) {
+                user.addObservedCollection(id);
+            } else {
+                user.removeObservedCollection(id);
+            }
+        }
+
+    }
 
 }

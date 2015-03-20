@@ -12,6 +12,9 @@
 		<h:outputText value=" - #{SessionBean.version} "/>
 		<!-- end: footer section -->
 	</h:panelGroup>
+	<h:inputHidden id="instituteNameForIP" value="#{SessionBean.instituteNameByIP}"/>
+	<h:inputHidden id="instituteIdForIP" value="#{SessionBean.instituteIdByIP}"/>
+	<h:inputHidden id="instituteNameForUser" value="#{SessionBean.instituteByUser}"/>
 	<h:outputText value="#{Configuration.snippet}" escape="false"/>
 	
 	<h:panelGroup id="additonalFooterScripts" styleClass="imj_noDisplay">

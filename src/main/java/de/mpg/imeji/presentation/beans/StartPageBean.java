@@ -1,9 +1,23 @@
 package de.mpg.imeji.presentation.beans;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Random;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.vo.*;
+import de.mpg.imeji.logic.search.vo.SearchIndex;
+import de.mpg.imeji.logic.search.vo.SearchOperators;
+import de.mpg.imeji.logic.search.vo.SearchPair;
+import de.mpg.imeji.logic.search.vo.SearchQuery;
+import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.util.DateFormatter;
 import de.mpg.imeji.logic.vo.Item;
@@ -14,13 +28,6 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Random;
-
 /**
  * the Java Bean for the Start Page
  * 
@@ -28,6 +35,8 @@ import java.util.Random;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
+@ManagedBean(name="StartPageBean")
+@ViewScoped
 public class StartPageBean {
 	private List<ThumbnailBean> carousselImages = new ArrayList<ThumbnailBean>();
 	private SessionBean session = (SessionBean) BeanHelper

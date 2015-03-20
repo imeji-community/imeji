@@ -67,7 +67,7 @@ public class CollectionResource implements ImejiResource {
 	@PUT
 	@Path("/{id}/discard")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	@ApiOperation(value = "Withraw a collection by id, with mandatory discard commenrt")
+	@ApiOperation(value = "Discard a collection by id, with mandatory discard comment")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response withdraw(@Context HttpServletRequest req,
 			@FormParam("id") String id, @FormParam("discardComment") String discardComment) throws Exception {

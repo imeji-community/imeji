@@ -121,6 +121,7 @@ public class ItemController extends ImejiController {
 				URI.create(uploadResult.getThumb()),
 				URI.create(uploadResult.getWeb()), mimeType);
 		item.setChecksum(uploadResult.getChecksum());
+		item.setFileSize(uploadResult.getFileSize());
 		return create(item, c.getId(), user);
 	}
 
@@ -357,6 +358,7 @@ public class ItemController extends ImejiController {
 		item.setFullImageUrl(URI.create(uploadResult.getOrginal()));
 		item.setThumbnailImageUrl(URI.create(uploadResult.getThumb()));
 		item.setWebImageUrl(URI.create(uploadResult.getWeb()));
+		item.setFileSize(uploadResult.getFileSize());
 
 		return update(item, user);
 	}
@@ -617,6 +619,7 @@ public class ItemController extends ImejiController {
 				.countAlbumSize(c.getId());
 		return ImejiSPARQL.execCount(q, null);
 	}
+	
 
 	/**
 	 * Remove a file from the current {@link Storage}

@@ -150,7 +150,7 @@ public class CollectionService implements API<CollectionTO> {
                 }  else if (isNullOrEmpty(method) || METHOD.REFERENCE.toString().equals(method)) {
                     profTO.setMethod(METHOD.REFERENCE.toString());
                 } else
-                    throw new BadRequestException("Wrong update method by update of collections metadata profile: " + method);
+                    throw new BadRequestException("Wrong metadata profile update method: " + method);
 
                 profTO.setProfileId(mp.getId().toString());
                 vo.setProfile(mp.getId());

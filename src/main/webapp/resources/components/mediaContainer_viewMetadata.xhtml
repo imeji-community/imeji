@@ -1,9 +1,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:composite="http://java.sun.com/jsf/composite"
-	xmlns:list="http://java.sun.com/jsf/composite/components/list">
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+        >
 	
 	<composite:interface>
 		<composite:attribute name="metadataContextBean" required="true"/>
@@ -134,6 +133,20 @@
 						</span>
 					</div>
 				</ui:fragment>
+				<ui:fragment rendered="#{cc.attrs.metadata.type == 'COLLECTION'}">
+	                <ui:fragment rendered="#{cc.attrs.metadata.sendEmailNotification}">
+	                    <div class="imj_metadataSet">
+	                        <label class="imj_metadataLabel">
+	                            <h:outputText value="#{lbl.notifications}"/>
+	                            <h:outputText value=": " styleClass="imj_noDisplay"/>
+	                        </label>
+							<span class="imj_metadataValue">
+	                            <h:outputText value="#{lbl.send_email_on_download}"/>
+							</span>
+	                    </div>
+	                </ui:fragment>
+                </ui:fragment>
+
 			</div>
 		</div>
 	</composite:implementation>

@@ -85,39 +85,34 @@
 							<div class="imj_content">
 								<ul>
 									<li>
-										<a href="#{Navigation.applicationUri}/jsf/AdminInterface.xhtml" title="#{lbl.view_detail}">
+										<a href="#{Navigation.applicationUri}/admin/storage/details" title="#{lbl.view_detail}">
 											<h:outputText value="#{lbl.view_detail}" />
 										</a>
 									</li>
+									
+									<li>
+										<a href="#{Navigation.applicationUri}/admin/storage/statistics" title="#{lbl.storage_statistics}">
+											<h:outputText value="#{lbl.storage_statistics}" />
+										</a>
+									</li>
+									
 									<li>
 										<a href="#{Navigation.applicationUri}/admin/storage/tools" title="#{lbl.storage_tools}">
 											<h:outputText value="#{lbl.storage_tools}" />
 										</a>
 									</li>
+																		
 								</ul>
 							</div>
 						</ui:fragment>	
 					</h:panelGroup>
 				
-					<h:panelGroup layout="block" styleClass="imj_adminPanel imj_advancedConfig">
+					<h:panelGroup layout="block" styleClass="imj_adminPanel imj_advancedConfig" rendered="false">
 						<ui:fragment rendered="#{Auth.admin}">
 							<div class="imj_headline">
 								<h2><h:outputText value="#{lbl.administration_advanced}"/></h2>
 							</div>
 							<div class="imj_content">
-								<h:form>
-									<ul>
-										<li>
-											<h:commandLink action="#{AdminBean.reIndex}" value="#{lbl.admin_advanced_reindex}" title="#{lbl.admin_advanced_reindex}"/>
-										</li>
-										<li>
-											<h:commandLink action="#{AdminBean.status}" value="#{lbl.admin_advanced_state}" title="#{lbl.admin_advanced_state}"/>
-										</li>
-										<li>
-											<h:commandLink action="#{AdminBean.clean}" value="#{lbl.admin_advanced_clean}" title="#{lbl.admin_advanced_clean}"/>
-										</li>
-									</ul>
-								</h:form>
 							</div>
 						</ui:fragment>	
 					</h:panelGroup>

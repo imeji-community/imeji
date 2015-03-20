@@ -81,8 +81,7 @@ public class AlbumServiceTest {
 
 		AlbumTO to = new AlbumTO();
 		to.setTitle("Test");
-		try {
-			
+		try {			
 			to = service.createNoValidate(to, JenaUtil.testUser);
 		} catch (Exception e) {
 			fail();

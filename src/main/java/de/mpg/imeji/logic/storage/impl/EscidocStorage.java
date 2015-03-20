@@ -34,6 +34,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -295,5 +298,14 @@ public class EscidocStorage implements Storage
     {
         // TODO Auto-generated method stub
         return null;
+    }
+    
+    
+    /* (non-Javadoc)
+     * @see de.mpg.imeji.logic.storage.Storage#readFileStringContent(java.lang.String)
+     */
+    @Override
+    public String readFileStringContent(String url) {
+		return null;
     }
 }

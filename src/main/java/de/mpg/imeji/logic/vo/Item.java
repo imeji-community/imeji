@@ -14,6 +14,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.commons.io.FileUtils;
 import org.joda.time.chrono.AssembledChronology.Fields;
 
 import de.mpg.imeji.logic.search.FulltextIndex;
@@ -67,6 +68,10 @@ public class Item extends Properties implements FulltextIndex, Serializable {
 	private String fulltext;
 	@j2jLiteral("http://imeji.org/terms/checksum")
 	private String checksum;
+	@j2jLiteral("http://imeji.org/terms/fileSize")
+	private long fileSize;
+
+	
 
 	public Item() {
 	}
@@ -260,5 +265,28 @@ public class Item extends Properties implements FulltextIndex, Serializable {
 		this.checksum = checksum;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
+	public long getFileSize() {
+		return fileSize;
+	}
+	
+	/**
+	 * 
+	 * @return human readable file size
+	 */
+	public String getFileSizeHumanReadable(){
+		return FileUtils.byteCountToDisplaySize(fileSize);
+	}
+
+	/**
+	 * 
+	 * @param fileSize
+	 */
+	public void setFileSize(long fileSize) {
+		this.fileSize = fileSize;
+	}
 
 }

@@ -3,18 +3,19 @@
  */
 package de.mpg.imeji.presentation.collection;
 
-import java.util.LinkedList;
+import de.mpg.imeji.logic.controller.CollectionController;
+import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.vo.Organization;
+import de.mpg.imeji.logic.vo.Person;
+import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.util.BeanHelper;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-
-import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.Organization;
-import de.mpg.imeji.logic.vo.Person;
-import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.util.BeanHelper;
+import java.util.LinkedList;
 
 @ManagedBean(name = "EditCollectionBean")
 @SessionScoped
@@ -35,8 +36,9 @@ public class EditCollectionBean extends CollectionBean
         {
             ((ViewCollectionBean)BeanHelper.getSessionBean(ViewCollectionBean.class)).setId(id);
             ((ViewCollectionBean)BeanHelper.getSessionBean(ViewCollectionBean.class)).init();
-            setProfile(((ViewCollectionBean)BeanHelper.getSessionBean(ViewCollectionBean.class)).getProfile());
+            setProfile(((ViewCollectionBean) BeanHelper.getSessionBean(ViewCollectionBean.class)).getProfile());
             setCollection(((ViewCollectionBean)BeanHelper.getSessionBean(ViewCollectionBean.class)).getCollection());
+            setSendEmailNotification(sessionBean.getUser().getObservedCollections().contains(id));
             LinkedList<Person> persons = new LinkedList<Person>();
             if (getCollection().getMetadata().getPersons().size() == 0)
             {
@@ -67,8 +69,12 @@ public class EditCollectionBean extends CollectionBean
         if (valid())
         {
             CollectionController collectionController = new CollectionController();
-            collectionController.updateLazy(getCollection(), sessionBean.getUser());
+            User user = sessionBean.getUser();
+            collectionController.updateLazy(getCollection(), user);
+            UserController uc = new UserController(user);
+            uc.update(user, user);
             BeanHelper.info(sessionBean.getMessage("success_collection_save"));
+
             Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
             FacesContext
                     .getCurrentInstance()

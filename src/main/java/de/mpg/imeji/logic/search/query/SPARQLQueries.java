@@ -28,31 +28,19 @@
  */
 package de.mpg.imeji.logic.search.query;
 
-import java.net.URI;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.apache.commons.lang3.text.translate.UnicodeEscaper;
-import org.apache.xerces.impl.xpath.regex.REUtil;
-import org.opensaml.ws.wssecurity.Username;
-
 import com.hp.hpl.jena.sparql.pfunction.library.container;
-
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
-import de.mpg.imeji.logic.vo.Album;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Grant;
+import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Metadata;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.j2j.helper.J2JHelper;
+import org.apache.commons.lang3.text.translate.UnicodeEscaper;
+import org.opensaml.ws.wssecurity.Username;
+
+import java.net.URI;
 
 /**
  * SPARQL queries for imeji
@@ -88,6 +76,17 @@ public class SPARQLQueries {
 		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE { <"
 				+ uri
 				+ "> <http://imeji.org/terms/statement> ?st . ?st <http://imeji.org/terms/namespace> ?s }";
+	}
+
+	/**
+	 * Select default {@link MetadataProfile}
+	 *
+	 * @return
+	 */
+	public static String selectDefaultMetadataProfile() {
+		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE { "
+				+ "?s a <http://imeji.org/terms/mdprofile> . ?s <http://imeji.org/terms/default> true"
+				+ "}";
 	}
 
 	/**
@@ -200,6 +199,23 @@ public class SPARQLQueries {
 	}
 
 	/**
+	 * Select Users to be notified by file download Note: Current
+	 * <code>user</code> is excluded from the result set
+	 *
+	 * @return
+	 * @param user
+	 * @param c
+	 */
+	public static String selectUsersToBeNotifiedByFileDownload(User user,
+			CollectionImeji c) {
+		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> "
+				+ "SELECT DISTINCT ?s WHERE {" + "filter(?c='"
+				+ ObjectHelper.getId(c.getId()) + "'"
+                + ( user != null ? " && ?s!=<"+ user.getId().toString() + "> " : "" )
+				+ ") . ?s <http://imeji.org/terms/observedCollections> ?c }";
+	}
+
+	/**
 	 * @param fileUrl
 	 * @return
 	 */
@@ -232,7 +248,7 @@ public class SPARQLQueries {
 	}
 
 	/**
-	 * @param fileUrl
+	 * @param id
 	 * @return
 	 */
 	public static String selectAlbumIdOfFile(String id) {
@@ -477,6 +493,29 @@ public class SPARQLQueries {
 
 	}
 
+	/**
+	 * Search for all Institute of all {@link User} . An institute is defined by
+	 * the emai of the {@link User}, for instance user@mpdl.mpg.de has institute
+	 * mpdl.mpg.de
+	 * 
+	 * @return
+	 */
+	public static String selectAllInstitutes() {
+		return "SELECT DISTINCT ?s WHERE {?user <http://xmlns.com/foaf/0.1/email> ?email . let(?s := str(replace(?email, '(.)+@', '', 'i')))}";
+	}
+
+	/**
+	 * Search for all {@link Item} within a {@link CollectionImeji} belonging
+	 * the the institute, and sum all fileSize
+	 * 
+	 * @param instituteName
+	 * @return
+	 */
+	public static String selectInstituteFileSize(String instituteName) {
+		return "SELECT (SUM(?size) AS ?s) WHERE {?c <http://purl.org/dc/terms/creator> ?user . ?user <http://xmlns.com/foaf/0.1/email> ?email .filter(regex(?email, '"
+				+ instituteName
+				+ "', 'i')) . ?c a <http://imeji.org/terms/collection> . ?item <http://imeji.org/terms/collection> ?c . ?item <http://imeji.org/terms/fileSize> ?size}";
+	}
 
 	public static String escapeWithUnicode(String s) {
 		String[] escapedCharacters = { "(", ")" };
@@ -492,7 +531,9 @@ public class SPARQLQueries {
 	}
 
 	/**
-	 * Chararters ( and ) can not be accepted in the sparql query and must therefore removed
+	 * Chararters ( and ) can not be accepted in the sparql query and must
+	 * therefore removed
+	 * 
 	 * @param s
 	 * @return
 	 */

@@ -156,12 +156,17 @@
 
 	<url-mapping id="administration">
 		<pattern value="/admin"></pattern>
-		<view-id>/jsf/UserAdministrationPage.xhtml</view-id>
+		<view-id>/jsf/AdminOverview.xhtml</view-id>
 	</url-mapping>
 	
 	<url-mapping id="storageTools">
 		<pattern value="/admin/storage/tools"></pattern>
 		<view-id>/jsf/AdminStorage.xhtml</view-id>
+	</url-mapping>
+	
+	<url-mapping id="storageDetails">
+		<pattern value="/admin/storage/details"></pattern>
+		<view-id>/jsf/AdminInterface.xhtml</view-id>
 	</url-mapping>
 
 	<url-mapping id="createUser">
@@ -207,6 +212,11 @@
 	<url-mapping id="loginFormular">
 		<pattern value="/login" />
 		<view-id>/jsf/Login.xhtml</view-id>
+	</url-mapping>
+	
+	<url-mapping id="storageStatistics">
+		<pattern value="/admin/storage/statistics"></pattern>
+		<view-id>/jsf/StorageStatistics.xhtml</view-id>
 	</url-mapping>
 
 </pretty-config>

@@ -34,8 +34,8 @@
 
 				<!-- Description -->
 				<div class="imj_metadataSet">
-					<label class="imj_metadataLabel"> <h:outputText
-							value="#{lbl.description}" /> <span class="imj_noDisplay">:
+					<label class="imj_metadataLabel">
+                        <h:outputText value="#{lbl.description}" /> <span class="imj_noDisplay">:
 					</span>
 					</label>
 					<h:inputTextarea id="inputDescription"
@@ -69,6 +69,9 @@
 
 					</h:panelGroup>
 				</ui:repeat>
+
+
+
 		<!-- START NEW FEATURE -->
 			<c:if test="#{cc.attrs.formularBean.getClass() == 'class de.mpg.imeji.presentation.collection.CreateCollectionBean'}">
 				<h:panelGroup layout="block" id="previewArea" >
@@ -96,14 +99,27 @@
 						<mdprofile:profile_preview statementWrappers="#{cc.attrs.formularBean.statementWrappers}"/> 
 					</ui:fragment>
 				</h:panelGroup>
+
 			</c:if>
 		<!-- START END FEATURE -->
-		
+
+            <!-- Notifications -->
+			<ui:fragment rendered="#{cc.attrs.formularBean.type == 'COLLECTION'}">                
+				<h:panelGroup layout="block" styleClass="imj_collectionNotifications">
+                    <h:selectBooleanCheckbox  id="notificationCheckBox" value="#{cc.attrs.formularBean.sendEmailNotification}" />
+                    <h:outputLabel styleClass="imj_metadataLabel" for="notificationCheckBox">
+                        <h:outputText value="#{lbl.send_email_on_download}"/>
+                        <span class="imj_noDisplay">: </span>
+                    </h:outputLabel>
+                </h:panelGroup>
+            </ui:fragment>
+
+
 			<h:panelGroup layout="block" id="submitButtonPanel" class="imj_submitPanel">
 				<h:outputLink value="#{HistorySession.previousPage.completeUrlWithHistory}" styleClass="imj_cancelButton">
 					<h:outputText value="#{lbl.cancel}"/>
 				</h:outputLink>
-				<h:commandButton action="#{cc.attrs.formularBean.saveAndEditProfile()}" value="#{lbl.save_and_edit_profile}" styleClass="imj_submitButton" onclick="openDialog('dialogWait');" rendered="#{cc.attrs.formularBean.getClass() == 'class de.mpg.imeji.presentation.collection.CreateCollectionBean' and cc.attrs.formularBean.useMDProfileTemplate }"/>				
+				<h:commandButton action="#{cc.attrs.formularBean.saveAndEditProfile()}" value="#{lbl.save_and_edit_profile}" styleClass="imj_submitButton" onclick="openDialog('dialogWait');" rendered="#{cc.attrs.formularBean.getClass() == 'class de.mpg.imeji.presentation.collection.CreateCollectionBean' and cc.attrs.formularBean.useMDProfileTemplate }"/>
 				<h:commandButton action="#{cc.attrs.formularBean.save()}" value="#{lbl.save}" styleClass="imj_submitButton" onclick="openDialog('dialogWait');"/>
 			</h:panelGroup>
 		

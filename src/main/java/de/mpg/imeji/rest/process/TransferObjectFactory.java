@@ -155,7 +155,7 @@ public class TransferObjectFactory {
 		//set version
 		to.setVersion(vo.getVersion());
 		//set discardComment
-		to.setDiscardComment(vo.getDiscardComment());		
+		to.setDiscardComment(vo.getDiscardComment());
 	}
 	
 
@@ -166,6 +166,7 @@ public class TransferObjectFactory {
 		//set collectionID
 		to.setCollectionId(CommonUtils.extractIDFromURI(vo.getCollection()));
 		to.setFilename(vo.getFilename());
+		to.setFileSize(vo.getFileSize());
 		to.setMimetype(vo.getFiletype());
 		to.setChecksumMd5(vo.getChecksum());
 		to.setWebResolutionUrlUrl(vo.getWebImageUrl());

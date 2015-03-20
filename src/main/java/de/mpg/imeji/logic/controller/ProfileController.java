@@ -242,18 +242,16 @@ public class ProfileController extends ImejiController {
      */
 
     public MetadataProfile retrieveDefaultProfile() throws ImejiException {
-        Search search = SearchFactory.create(SearchType.PROFILE);
-        //TODO: dedicated SPARQL query!!!
-        SearchResult result = search.search(new SearchQuery(), null, Imeji.adminUser);
-        for (String uri : result.getResults()) {
-            try {
-                final MetadataProfile mdp = retrieve(URI.create(uri), Imeji.adminUser);
-                if(mdp.getDefault()) {
-                    return mdp;
-                }
-            } catch (Exception e) {
-                logger.error(e);
-            }
+        Search search = SearchFactory.create();
+        List<String> uris = search.searchSimpleForQuery(
+                SPARQLQueries.selectDefaultMetadataProfile())
+                .getResults();
+        if (uris.size() == 1) {
+            return retrieve(URI.create(uris.get(0)), Imeji.adminUser);
+        } else if (uris.size() > 1) {
+            throw new ImejiException("Data inconsistency: " + uris.size()  + " + default metadata profile have been found.");
+        } else {
+            logger.info("Cannot find default metadata profile...");
         }
         return null;
     }
@@ -275,6 +273,11 @@ public class ProfileController extends ImejiController {
             MetadataProfileTO mdpTO = null;
             try {
                 path = PropertyReader.getProperty(DEFAULT_METADATA_PROFILE_PATH_PROPERTY);
+                if (isNullOrEmpty(path)) {
+                	System.out.println("There is no default metadata profile defined! This is not an error, Imeji will still work. Default metadata profile is a convenience for quick start!" +
+                			"Check more about it at the IMEJI Documentation.");
+                	return null;
+                }
                 profileJSON = getStringFromPath(path);
                 mdpTO = (MetadataProfileTO) RestProcessUtils.buildTOFromJSON(profileJSON, MetadataProfileTO.class);
             } catch (UnrecognizedPropertyException e) {

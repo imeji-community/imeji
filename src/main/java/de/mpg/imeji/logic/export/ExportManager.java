@@ -3,13 +3,6 @@
  */
 package de.mpg.imeji.logic.export;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Map;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpResponseException;
-
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
@@ -21,6 +14,12 @@ import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.search.URLQueryTransformer;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpResponseException;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Map;
 
 /**
  * Manage {@link Export}
@@ -31,7 +30,7 @@ import de.mpg.imeji.presentation.search.URLQueryTransformer;
  */
 public class ExportManager {
 	private OutputStream out;
-	private Export export;
+    private Export export;
 	private User user;
 
 	/**
@@ -125,12 +124,16 @@ public class ExportManager {
 	}
 
 	/**
-	 * REturn the content type of the {@link HttpResponse}
+	 * Return the content type of the {@link HttpResponse}
 	 * 
 	 * @return
 	 */
 	public String getContentType() {
 		return export.getContentType();
 	}
+
+    public Export getExport() {
+        return export;
+    }
 
 }

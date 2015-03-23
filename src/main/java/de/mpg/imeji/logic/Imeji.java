@@ -185,6 +185,7 @@ public class Imeji {
 		} catch (Exception e) {
 			throw new RuntimeException("error creating admin user: ", e);
 		}
+		
 		adminUser.getGrants().addAll(
 				AuthorizationPredefinedRoles.imejiAdministrator(adminUser
 						.getId().toString()));
@@ -197,9 +198,16 @@ public class Imeji {
         try {
             defaultMetadataProfile = pc.initDefaultMetadataProfile();
         } catch (Exception e) {
-            throw new RuntimeException("error retrieving/creating default metadata profile: ", e);
+        	throw new RuntimeException("error retrieving/creating default metadata profile: ", e);
         }
-        logger.info("... metadata profile done!");
+        if (defaultMetadataProfile != null) {
+        	logger.info("Default metadata profile is set-up to "+defaultMetadataProfile.getId());
+        }
+        else
+        {
+        	logger.info("Checking for default metadata profile is finished: no default metadata profile has been set.");
+        	
+        }
     }
 
 	public static void shutdown() {

@@ -273,6 +273,11 @@ public class ProfileController extends ImejiController {
             MetadataProfileTO mdpTO = null;
             try {
                 path = PropertyReader.getProperty(DEFAULT_METADATA_PROFILE_PATH_PROPERTY);
+                if (isNullOrEmpty(path)) {
+                	System.out.println("There is no default metadata profile defined! This is not an error, Imeji will still work. Default metadata profile is a convenience for quick start!" +
+                			"Check more about it at the IMEJI Documentation.");
+                	return null;
+                }
                 profileJSON = getStringFromPath(path);
                 mdpTO = (MetadataProfileTO) RestProcessUtils.buildTOFromJSON(profileJSON, MetadataProfileTO.class);
             } catch (UnrecognizedPropertyException e) {

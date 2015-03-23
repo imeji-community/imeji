@@ -39,6 +39,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * imeji internal {@link Storage}
@@ -176,5 +179,23 @@ public class InternalStorage implements Storage
     public String getCollectionId(String url)
     {
         return url.replace(manager.getStorageUrl(), "").split("/", 2)[0];
+    }
+    
+    
+    /* (non-Javadoc)
+     * @see de.mpg.imeji.logic.storage.Storage#readFileStringContent(java.lang.String)
+     */
+    @Override
+    public String readFileStringContent(String url) {
+		String pathString = manager.transformUrlToPath(url);
+		Path path = Paths.get(pathString );
+		String stringFromFile = "";
+	    try {
+	    	stringFromFile = new String(Files.readAllBytes(path));
+	    }
+	    catch (Exception e) {
+	    	stringFromFile = "";
+	    }
+	    return stringFromFile;
     }
 }

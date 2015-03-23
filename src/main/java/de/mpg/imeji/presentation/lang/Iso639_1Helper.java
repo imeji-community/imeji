@@ -15,7 +15,7 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.imeji.presentation.util.ProxyHelper;
-
+import static com.google.common.base.Strings.isNullOrEmpty;
 /**
  * Utility class for Iso638_1 languages vocabulary
  * 
@@ -43,9 +43,14 @@ public class Iso639_1Helper {
 	private String getVocabularyString() {
 		try {
 			HttpClient client = new HttpClient();
-			GetMethod getMethod = new GetMethod(
-					PropertyReader.getProperty("cone.isos639_1.all")
-							+ "?format=options");
+			String coneVocabularyPath = PropertyReader.getProperty("cone.isos639_1.all");
+			if (isNullOrEmpty(coneVocabularyPath)) {
+				logger.info("CONE Service Property for Language Vocabularies has not been set-up. Will use default vocabulary for languages."+
+			                "NOTE: This is not an error: for more information on setting cone, check http://imeji.org/?s=cone.isos639_1.all ");
+				return null;
+				
+			}
+			GetMethod getMethod = new GetMethod(coneVocabularyPath +"?format=options");
 			ProxyHelper.executeMethod(client, getMethod);
 			return IOUtils.toString(getMethod.getResponseBodyAsStream());
 		} catch (Exception e) {

@@ -111,4 +111,13 @@ public interface Storage extends Serializable
      * @return
      */
     public String getCollectionId(String url);
+    
+    /**
+     * Read the file stored in the passed url as string
+     * 
+     * @param url
+     * @return
+     */
+    public String readFileStringContent(String url);
+
 }

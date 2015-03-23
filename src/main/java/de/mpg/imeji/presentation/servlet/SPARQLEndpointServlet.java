@@ -52,9 +52,14 @@ public class SPARQLEndpointServlet extends HttpServlet {
 				QueryExecution exec = initQueryExecution(sparql, model);
 				exec.getContext().set(TDB.symUnionDefaultGraph, true);
 				ResultSet result = exec.execSelect();
-				ResultSetFormatter.output(resp.getOutputStream(), result,
-						getFormat(format));
+				if ("table".equals(format))
+					ResultSetFormatter.out(resp.getOutputStream(), result);
+				else
+					ResultSetFormatter.output(resp.getOutputStream(), result,
+							getFormat(format));
+
 			} catch (Exception e) {
+				e.printStackTrace();
 				Imeji.dataset.abort();
 			} finally {
 				Imeji.dataset.commit();
@@ -93,19 +98,17 @@ public class SPARQLEndpointServlet extends HttpServlet {
 		}
 		return null;
 	}
-	
-	private ResultsFormat getFormat(String format){
-		if("rdf".equals(format))
-			return ResultsFormat.FMT_RDF_XML;
-		else if("csv".equals(format))
+
+	private ResultsFormat getFormat(String format) {
+		if ("csv".equals(format))
 			return ResultsFormat.FMT_RS_CSV;
-		else if("json".equals(format))
+		else if ("json".equals(format))
 			return ResultsFormat.FMT_RS_JSON;
-		else if("tsv".equals(format))
+		else if ("tsv".equals(format))
 			return ResultsFormat.FMT_RS_TSV;
-		else if("ttl".equals(format))
+		else if ("ttl".equals(format))
 			return ResultsFormat.FMT_RDF_TTL;
-		else if("bio".equals(format))
+		else if ("bio".equals(format))
 			return ResultsFormat.FMT_RS_BIO;
 		return ResultsFormat.FMT_RDF_XML;
 	}

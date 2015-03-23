@@ -17,6 +17,7 @@ import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.writer.WriterFacade;
+import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.j2j.helper.J2JHelper;
@@ -28,6 +29,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
+import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
 
 /**
  * CRUD controller for {@link CollectionImeji}, plus search mehtods related to
@@ -122,6 +124,31 @@ public class CollectionController extends ImejiController {
 	 */
 	public CollectionImeji retrieve(String id, User user) throws ImejiException {
         return retrieve(ObjectHelper.getURI(CollectionImeji.class, id), user);
+	}
+
+    /**
+	 * Retrieve all items of the collection
+	 *
+	 * @param id
+     * @param user
+	 * @param q
+     * @return
+	 * @throws ImejiException
+	 */
+	public List<Item> retrieveItems(String id, User user, String q) throws ImejiException {
+        ItemController ic = new ItemController();
+        List<Item> itemList = new ArrayList();
+        try {
+            for (String itemId: ic.search(ObjectHelper.getURI(CollectionImeji.class, id),
+                    !isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q) : null,
+                    null, null, user).getResults()) {
+                itemList.add(ic.retrieve(URI.create(itemId), user));
+            }
+        } catch (Exception e) {
+            throw new UnprocessableError("Cannot retrieve items:", e);
+
+        }
+        return itemList;
 	}
 
 	/**

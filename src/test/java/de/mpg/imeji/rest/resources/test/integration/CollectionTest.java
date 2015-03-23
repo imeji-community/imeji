@@ -11,6 +11,7 @@ import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.IdentifierTO;
 import de.mpg.imeji.rest.to.OrganizationTO;
 import de.mpg.imeji.rest.to.PersonTO;
+import org.apache.commons.lang.StringUtils;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.junit.Before;
@@ -173,6 +174,37 @@ public class CollectionTest extends ImejiTestBase {
         assertThat(response.getStatus(),
                 equalTo(NOT_FOUND.getStatusCode()));
     }
+
+    @Test
+    public void test_2_ReadCollection_5_AllItems() throws Exception {
+        initItem();
+        Response response = target(pathPrefix).path(collectionId + "/items")
+                .register(authAsUser).request(MediaType.APPLICATION_JSON)
+                .get();
+        assertEquals(OK.getStatusCode(), response.getStatus());
+        String jsonStr = response.readEntity(String.class);
+        assertThat(jsonStr, not(isEmptyOrNullString()));
+    }
+
+    @Test
+    public void test_2_ReadCollection_6_AllItems_WithQuery() throws Exception {
+        initItem();
+        initItem();
+        initItem();
+        initItem();
+        initItem();
+        initItem();
+        Response response = target(pathPrefix).path(collectionId + "/items")
+                .queryParam("q", "test.png")
+                .register(authAsUser).request(MediaType.APPLICATION_JSON)
+                .get();
+        assertEquals(OK.getStatusCode(), response.getStatus());
+        String jsonStr = response.readEntity(String.class);
+        assertThat(jsonStr, not(isEmptyOrNullString()));
+        assertThat(StringUtils.countMatches(jsonStr, "test.png"), equalTo(6));
+
+    }
+
 
     @Test
     public void test_3_ReleaseCollection_1_WithAuth() throws ImejiException {

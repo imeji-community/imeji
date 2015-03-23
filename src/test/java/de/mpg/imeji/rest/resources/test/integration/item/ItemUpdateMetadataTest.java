@@ -1,21 +1,9 @@
 package de.mpg.imeji.rest.resources.test.integration.item;
 
 import de.mpg.imeji.exceptions.UnprocessableError;
-import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.controller.ProfileController;
-import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.presentation.util.ImejiFactory;
-import de.mpg.imeji.rest.api.ItemService;
-import de.mpg.imeji.rest.process.RestProcessUtils;
-import de.mpg.imeji.rest.process.ReverseTransferObjectFactory;
-import de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE;
 import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
 import de.mpg.imeji.rest.to.*;
 import de.mpg.imeji.rest.to.predefinedMetadataTO.*;
-import de.mpg.j2j.misc.LocalizedString;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
@@ -25,24 +13,18 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.JenaUtil;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
 
-import static de.mpg.imeji.logic.util.ResourceHelper.getStringFromPath;
 import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONFromObject;
-import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_REST;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.OK;
 import static org.hamcrest.CoreMatchers.containsString;
@@ -65,12 +47,10 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
     private static final Logger LOGGER = LoggerFactory
             .getLogger(ItemUpdateMetadataTest.class);
 
-    private static String updateJSON;
     private static final String PATH_PREFIX = "/rest/items";
 
     @BeforeClass
     public static void specificSetup() throws Exception {
-        updateJSON = getStringFromPath(STATIC_CONTEXT_REST + "/updateItemBasic.json");
         initCollectionWithProfile();
         initItemWithFullMedatada();
     }
@@ -449,65 +429,7 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
 
 
 
-    private static void initCollectionWithProfile() throws Exception {
 
-        Collection<Statement> statements = new ArrayList<Statement>();
-        Statement st;
-        for (String type: new String[]{"text", "number", "conePerson" , "geolocation", "date", "license", "link", "publication"}) {
-            st = new Statement();
-            st.setType(URI.create("http://imeji.org/terms/metadata#" + type));
-            st.getLabels().add(new LocalizedString(type + "Label", "en"));
-            statements.add(st);
-        }
-
-        MetadataProfile p = ImejiFactory.newProfile();
-
-        p.setStatements(statements);
-
-        ProfileController pc = new ProfileController();
-        MetadataProfile mp = pc.create(p, JenaUtil.testUser);
-
-        profileId = ObjectHelper.getId(mp.getId());
-        
-		try {
-			Path jsonPath = Paths
-					.get("src/test/resources/rest/createCollection.json");
-			String jsonString = new String(Files.readAllBytes(jsonPath), "UTF-8");
-			
-			collectionTO= (CollectionTO) RestProcessUtils.buildTOFromJSON(jsonString, CollectionTO.class); 
-			
-	        CollectionController cc = new CollectionController();
-	        CollectionImeji ci = new CollectionImeji();
-	        ReverseTransferObjectFactory.transferCollection(collectionTO, ci, TRANSFER_MODE.CREATE);
-	        collectionId = ObjectHelper.getId(cc.create(ci, p, JenaUtil.testUser));
-			
-		} catch (Exception e) {
-			LOGGER.error("Cannot init Collection", e);
-		}
-	     
-    }
-
-
-    private static void initItemWithFullMedatada() throws Exception {
-        ItemService s = new ItemService();
-        itemTO = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(updateJSON, ItemWithFileTO.class);
-        itemTO.setCollectionId(collectionId);
-        ((ItemWithFileTO)itemTO).setFile(new File("src/test/resources/storage/test.png"));
-
-
-        ProfileController pc = new ProfileController();
-        MetadataProfile mp = pc.retrieve(ObjectHelper.getURI(MetadataProfile.class, profileId), JenaUtil.testUser);
-
-        //set real statementURIs
-        for (Statement st: mp.getStatements()) {
-            final MetadataSetTO md = itemTO.filterMetadataByTypeURI(st.getType()).get(0);
-            md.setStatementUri(st.getId());
-        }
-
-        itemTO = s.create(itemTO, JenaUtil.testUser);
-        itemId = itemTO.getId();
-
-    }
 
 
 }

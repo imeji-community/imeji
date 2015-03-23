@@ -3,22 +3,21 @@
  */
 package de.mpg.imeji.presentation.filter;
 
+import de.mpg.imeji.logic.search.query.URLQueryTransformer;
+import de.mpg.imeji.logic.search.vo.SearchQuery;
+import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.presentation.facet.Facet.FacetType;
+import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.UrlHelper;
+import org.apache.log4j.Logger;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.log4j.Logger;
-
-import de.mpg.imeji.logic.search.vo.SearchQuery;
-import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.presentation.facet.Facet.FacetType;
-import de.mpg.imeji.presentation.search.URLQueryTransformer;
-import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.UrlHelper;
 
 /**
  * Java Bean for the {@link Filter}

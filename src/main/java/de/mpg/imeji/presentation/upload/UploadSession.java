@@ -28,19 +28,17 @@
  */
 package de.mpg.imeji.presentation.upload;
 
+import de.mpg.imeji.logic.util.UrlHelper;
+import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.presentation.util.PropertyReader;
+import org.apache.commons.lang.BooleanUtils;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
-
-import org.apache.commons.lang.BooleanUtils;
-
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.presentation.util.PropertyReader;
-import de.mpg.imeji.presentation.util.UrlHelper;
 
 /**
  * Session for the upload page for the parameter which must be in a sesion (because of the upload which call the page

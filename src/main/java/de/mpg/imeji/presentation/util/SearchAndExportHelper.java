@@ -3,15 +3,15 @@
  */
 package de.mpg.imeji.presentation.util;
 
+import de.mpg.imeji.logic.util.UrlHelper;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.GetMethod;
+
 import java.net.URI;
 import java.net.URLEncoder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.GetMethod;
-
-import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 
 /**
  * Utility class to work with PubMan search and export interface

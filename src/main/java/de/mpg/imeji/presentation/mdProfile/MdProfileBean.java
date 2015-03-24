@@ -3,20 +3,8 @@
  */
 package de.mpg.imeji.presentation.mdProfile;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.faces.event.ValueChangeEvent;
-import javax.faces.model.SelectItem;
-
 import de.mpg.imeji.logic.controller.ProfileController;
+import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.Metadata.Types;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -29,8 +17,14 @@ import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectCachedLoader;
-import de.mpg.imeji.presentation.util.UrlHelper;
 import de.mpg.j2j.misc.LocalizedString;
+
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.model.SelectItem;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URLEncoder;
+import java.util.*;
 
 /**
  * Bean for {@link MetadataProfile} view pages

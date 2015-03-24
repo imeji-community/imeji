@@ -3,15 +3,15 @@
  */
 package de.mpg.imeji.presentation.history;
 
-import java.net.URI;
-import java.util.Map;
-
 import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
-import de.mpg.imeji.presentation.util.UrlHelper;
+
+import java.net.URI;
+import java.util.Map;
 
 /**
  * An imeji web page

@@ -5,6 +5,7 @@ package de.mpg.imeji.presentation.collection;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.CollectionController;
+import de.mpg.imeji.logic.controller.CollectionController.MetadataProfileCreationMethod;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.presentation.beans.ContainerBean;
@@ -57,8 +58,10 @@ public abstract class CollectionBean extends ContainerBean {
 	private String selectedProfileItem;
   
     private boolean useMDProfileTemplate = true;
-    
-    private List<StatementWrapper> statementWrappers = new ArrayList<StatementWrapper>();
+	private SelectItem[] profileCreationMethod = {new SelectItem("Reference", "Reference"), new SelectItem("Copy", "Copy")};
+	private String selectedCreationMethod = profileCreationMethod[0].getValue().toString();
+
+	private List<StatementWrapper> statementWrappers = new ArrayList<StatementWrapper>();
     private Map<URI, Integer> levels;
 
 
@@ -111,13 +114,25 @@ public abstract class CollectionBean extends ContainerBean {
             ProfileController pc = new ProfileController();
             List<MetadataProfile> profiles = pc.search(sessionBean.getUser());
             String profileTitle="";
+        	useMDProfileTemplate = false;
+            MetadataProfile defaultMetadataProfile = pc.retrieveDefaultProfile();
+            //Add default Metadata Profile as first one
+            if (defaultMetadataProfile != null ) {
+            	useMDProfileTemplate = true;
+            	profileItems.add(new SelectItem(defaultMetadataProfile.getIdString(), defaultMetadataProfile.getTitle()));
+            }
+
             for (MetadataProfile mdp : profiles)
             {
             	if ( mdp.getStatements().size() > 0) {
             		profileTitle=isNullOrEmpty(mdp.getTitle())?
             				(mdp.getIdString()+" - "+ "No Title provided") :
             				mdp.getTitle();
-            		profileItems.add(new SelectItem(mdp.getIdString(), profileTitle));
+            		if (defaultMetadataProfile == null || !mdp.getIdString().equals(defaultMetadataProfile.getIdString())) {
+	            		profileItems.add(new SelectItem(mdp.getIdString(), profileTitle));
+	            		if (!useMDProfileTemplate ) 
+	            				useMDProfileTemplate = true;
+            		}
             	}  
             }            
             selectedProfileItem = (String) profileItems.get(0).getValue();
@@ -125,6 +140,7 @@ public abstract class CollectionBean extends ContainerBean {
             profile.setTitle(profiles.get(0).getTitle());
             this.profileTemplate = pc.retrieve(selectedProfileItem, sessionBean.getUser());
 			initStatementWrappers(this.profileTemplate);
+
         }
         catch (Exception e)
         {
@@ -455,5 +471,25 @@ public abstract class CollectionBean extends ContainerBean {
         }
 
     }
+    
+	public SelectItem[] getProfileCreationMethod() {
+		return profileCreationMethod;
+	}
 
-}
+	public String getSelectedCreationMethod() {
+		return selectedCreationMethod;
+	}
+
+	public void setSelectedCreationMethod(String selectedCreationMethod) {
+		this.selectedCreationMethod = selectedCreationMethod;
+	}
+	
+	public boolean isCopyProfileMethod() {
+		CollectionController cc= new CollectionController();
+		if (MetadataProfileCreationMethod.COPY.equals( cc.getProfileCreationMethod(getSelectedCreationMethod()))) {
+			return true;
+		}
+		return false;
+	}
+
+ }

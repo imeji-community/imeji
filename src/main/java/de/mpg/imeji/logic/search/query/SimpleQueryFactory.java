@@ -383,6 +383,10 @@ public class SimpleQueryFactory {
 				return ". ?s <" + sortCriterion.getIndex().getNamespace()
 						+ "> ?sort0";
 			}
+			else if (SearchIndex.names.prof.name().equals(sortCriterion.getIndex().getName())) {
+				return (item ? " . ?c" : " . ?s")
+						+ " <http://purl.org/dc/elements/1.1/title> ?sort0 ";
+			}
 		}
 		return "";
 	}

@@ -43,6 +43,11 @@ public class CollectionController extends ImejiController {
 	private static final WriterFacade writer = new WriterFacade(
 			Imeji.collectionModel);
 	private static Logger logger = Logger.getLogger(CollectionController.class);
+	
+	public static enum MetadataProfileCreationMethod
+	    {
+	        COPY, REFERENCE, NEW;
+	    }
 
 	/**
 	 * Default constructor
@@ -63,23 +68,48 @@ public class CollectionController extends ImejiController {
 	 */
 	public URI create(CollectionImeji c, MetadataProfile p, User user)
 			throws ImejiException {  
-		return createAskValidate(c, p, user, true);
+		return createAskValidate(c, p, user, true, MetadataProfileCreationMethod.COPY);
 	}
 
-	public URI createNoValidate(CollectionImeji c, MetadataProfile p, User user)
+	/**
+	 * Creates a new collection. - Add a unique id - Write user properties
+	 * 
+	 * @param c
+	 * @param p
+	 * @param user
+	 * @param method
+	 * @return
+	 * @throws ImejiException
+	 */
+	public URI create(CollectionImeji c, MetadataProfile p, User user, MetadataProfileCreationMethod method)
 			throws ImejiException {  
-		return createAskValidate(c, p, user, false);
+		return createAskValidate(c, p, user, true, method);
+	}
+
+
+	public URI createNoValidate(CollectionImeji c, MetadataProfile p, User user, MetadataProfileCreationMethod method)
+			throws ImejiException {  
+		return createAskValidate(c, p, user, false, method);
 	}
 	
-	private URI createAskValidate(CollectionImeji c, MetadataProfile p, User user, boolean validate)
+	private URI createAskValidate(CollectionImeji c, MetadataProfile p, User user, boolean validate, MetadataProfileCreationMethod method)
 			throws ImejiException { 
-
-			if (p == null) {
+		  
+		    ProfileController pc = new ProfileController();
+		    String metadataProfileName=" (Metadata profile)";
+			if (p == null || method.equals(MetadataProfileCreationMethod.NEW)) {
 				p = new MetadataProfile();
 				p.setDescription(c.getMetadata().getDescription());
-				p.setTitle(c.getMetadata().getTitle());
-				ProfileController pc = new ProfileController();
+				p.setTitle(c.getMetadata().getTitle()+metadataProfileName);
 				p = pc.create(p, user);
+			}
+			else if ( p != null && !method.equals(MetadataProfileCreationMethod.REFERENCE)) {
+				if (method.equals(MetadataProfileCreationMethod.COPY)) {
+					p.setTitle(c.getMetadata().getTitle()+metadataProfileName);
+				}
+				
+				
+				p = pc.create(p.cloneWithTitle(), user);
 			}
 			
 			c.setProfile(p.getId());
@@ -220,7 +250,16 @@ public class CollectionController extends ImejiController {
 			itemController.delete(items, user);
 			// Delete profile
 			ProfileController pc = new ProfileController();
-			pc.delete(pc.retrieve(collection.getProfile(), user), user);
+			try {
+				MetadataProfile collectionMdp= pc.retrieve(collection.getProfile(), user);
+				if (collectionMdp != null) {
+					pc.delete(collectionMdp, user);
+					
+				}
+			}
+			catch (NotFoundException e){
+				logger.info("Collection profile does not exist, could not be deleted.");
+			}
 			writer.delete(WriterFacade.toList(collection), user);
 		}
 	}
@@ -365,6 +404,21 @@ public class CollectionController extends ImejiController {
 		if (pers.size() == 0 || pers == null || pers.isEmpty()) {
 			throw new BadRequestException("error_collection_need_one_author");
 		}
+		
+		}
+	
+	public MetadataProfileCreationMethod getProfileCreationMethod (String method) {
+		if  ( "reference".equalsIgnoreCase(method)) {
+			return MetadataProfileCreationMethod.REFERENCE;
+		}
+		else if ("copy".equalsIgnoreCase(method) )
+		{
+			return MetadataProfileCreationMethod.COPY;
+		}
+		else {
+			return MetadataProfileCreationMethod.NEW; 
+		}
+	}
 	
 //TODO Update needed, it doesn't work by creating new collection withour using profile template
 		/*
@@ -380,6 +434,4 @@ public class CollectionController extends ImejiController {
 		*/
 		//if (collection.getProfile()
 	
-	}
-
 }

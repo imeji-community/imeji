@@ -67,7 +67,6 @@ public class CollectionServiceTest {
 			ReverseTransferObjectFactory.transferCollection(collectionTO, collection, TRANSFER_MODE.CREATE);
 			collection.setId(URI.create(collectionTO.getId()));
 			
-			System.out.println("IdString= "+collection.getIdString());
 		} catch (Exception e) {
 			logger.error("Cannot init Collection", e);
 		}

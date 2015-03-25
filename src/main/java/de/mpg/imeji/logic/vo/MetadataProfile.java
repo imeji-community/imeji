@@ -102,6 +102,16 @@ public class MetadataProfile extends Properties implements Cloneable
         for (Statement s : clone.statements)
             if (s.getParent() != null)
                 s.setParent(idMapping.get(s.getParent().toString()));
+        
         return clone;
     }
+    
+    public MetadataProfile cloneWithTitle()
+    {
+        MetadataProfile clone = clone();
+        clone.setTitle(this.title);
+        clone.setDescription(this.description);
+        return clone;
+    }
+
 }

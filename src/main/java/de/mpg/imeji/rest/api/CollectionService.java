@@ -71,10 +71,10 @@ public class CollectionService implements API<CollectionTO> {
 		String method = to.getProfile().getMethod();
 		String newId = null;
 		// create new profile (take default)
-		if (isNullOrEmpty(profileId))
-			mp = pc.create(ImejiFactory.newProfile(), u);
+//		if (isNullOrEmpty(profileId))
+//			mp = pc.create(ImejiFactory.newProfile(), u);
 		// set reference to existed profile
-		else if (profileId != null && "reference".equalsIgnoreCase(method))
+		if (!isNullOrEmpty(profileId)) {
 			try {
 				mp = pc.retrieve(
 					ObjectHelper.getURI(MetadataProfile.class, profileId), u);
@@ -84,42 +84,20 @@ public class CollectionService implements API<CollectionTO> {
 				throw new UnprocessableError("Can not find the metadata profile you have referenced in the JSON body");
 				
 			}
-		// copy existed profile
-		else if (profileId != null && "copy".equalsIgnoreCase(method)) {
-			try {
-			mp = pc.retrieve(
-					ObjectHelper.getURI(MetadataProfile.class, profileId), u);
-			}
-			catch (ImejiException e)
-			{
-				throw new UnprocessableError("Can not find the metadata profile you want to copy from in the JSON body");
-			}
-			mp = pc.create(mp.clone(), u);
-			pc.update(mp, u);
-		} else {
-			// throw exception if no method specified
-			final String msg = "Bad metadata profile method definition:"
-					+ method;
-			LOGGER.error(msg);
-			throw new BadRequestException(msg);
 		}
+		
 		CollectionImeji vo = new CollectionImeji();
 		transferCollection(to, vo, CREATE);
-//		try {
+
 		URI collectionURI = null;
 		if (validate) {
-			collectionURI = cc.create(vo, mp, u);
+			collectionURI = cc.create(vo, mp, u, cc.getProfileCreationMethod(method));
 		}
 		else
 		{
-			collectionURI = cc.createNoValidate(vo, mp, u);
+			collectionURI = cc.createNoValidate(vo, mp, u, cc.getProfileCreationMethod(method));
 		}
 		return read(CommonUtils.extractIDFromURI(collectionURI), u);
-//		} catch (Exception e) {
-//			LOGGER.error("Cannot create collection:");
-//			e.printStackTrace();
-//			return null;
-//		}
 	}
 
     @Override

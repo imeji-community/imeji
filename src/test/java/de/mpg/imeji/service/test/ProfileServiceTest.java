@@ -3,6 +3,7 @@ package de.mpg.imeji.service.test;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.CollectionController;
+import de.mpg.imeji.logic.controller.CollectionController.MetadataProfileCreationMethod;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -104,7 +105,7 @@ public class ProfileServiceTest {
 		c.setProfile(p.getId());
 
 		pController.create(p, testUser);
-		cController.createNoValidate(c, p, testUser);
+		cController.createNoValidate(c, p, testUser, cController.getProfileCreationMethod("reference"));
 	}
 
 	@Test

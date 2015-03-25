@@ -2,6 +2,7 @@ package de.mpg.imeji.rest.resources.test.integration.item;
 
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.CollectionController;
+import de.mpg.imeji.logic.controller.CollectionController.MetadataProfileCreationMethod;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -479,7 +480,7 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
 	        CollectionController cc = new CollectionController();
 	        CollectionImeji ci = new CollectionImeji();
 	        ReverseTransferObjectFactory.transferCollection(collectionTO, ci, TRANSFER_MODE.CREATE);
-	        collectionId = ObjectHelper.getId(cc.create(ci, p, JenaUtil.testUser));
+	        collectionId = ObjectHelper.getId(cc.create(ci, p, JenaUtil.testUser, MetadataProfileCreationMethod.REFERENCE));
 			
 		} catch (Exception e) {
 			LOGGER.error("Cannot init Collection", e);

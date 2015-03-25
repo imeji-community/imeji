@@ -222,7 +222,7 @@ public class Imeji {
 		logger.info("dataset closed");
 		TDB.closedown();
 		logger.info("tdb closed");
-		TDBMaker.releaseLocation(new Location(Imeji.tdbPath));
+		TDBMaker.releaseLocation(Location.create(Imeji.tdbPath));
 		logger.info("location released");
 		logger.info("...done!");
 

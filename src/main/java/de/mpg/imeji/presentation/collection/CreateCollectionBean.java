@@ -7,8 +7,10 @@ import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.controller.CollectionController.MetadataProfileCreationMethod;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
@@ -20,6 +22,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+
+import org.eclipse.persistence.descriptors.SelectedFieldsLockingPolicy;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -52,9 +57,12 @@ public class CreateCollectionBean extends CollectionBean {
 	public void initialize() {
 		setCollection(ImejiFactory.newCollection());
 		((List<Person>) getCollection().getMetadata().getPersons()).set(0, sessionBean.getUser().getPerson().clone());
-//		setModeCreate(true);
-		loadProfiles();
         vocabularyHelper = new VocabularyHelper();
+        loadProfiles();
+        if (getProfileItems().size()==0) {
+        	setUseMDProfileTemplate(false);
+        }
+        
 	}
 	
 	
@@ -99,24 +107,22 @@ public class CreateCollectionBean extends CollectionBean {
                 }
             }
             User user = sessionBean.getUser();
-            URI id = collectionController.create(getCollection(), null, user);
+           
+
+            MetadataProfile whichProfile = isUseMDProfileTemplate() ? getProfileTemplate() :null;
+            //feature below will always create a collection with a new metadata profile copied (cloned)
+            //if there is no metadata profile template selected, then it will create a new metadata profile 
+            URI id = collectionController.create(getCollection(), whichProfile, user, collectionController.getProfileCreationMethod(getSelectedCreationMethod()));
             setCollection(collectionController.retrieve(id, user));
             setId(ObjectHelper.getId(id));
-            getProfile().setId(new URI(extractIDFromURI(getCollection().getProfile())));
-
+            
+            //Setting user email notification for the collection downloads
             setSendEmailNotification(isSendEmailNotification());
             UserController uc = new UserController(user);
             uc.update(user, user);
-
+            
             BeanHelper.info(sessionBean.getMessage("success_collection_create"));
-            if (isUseMDProfileTemplate()) {
-                String profileTitle = getProfile().getTitle();
-                ProfileController pc = new ProfileController();
-                this.setProfile(pc.retrieve(extractIDFromURI(getCollection().getProfile()), user));
-                this.getProfile().setTitle(profileTitle);
-                this.getProfile().setStatements(getProfileTemplate().getStatements());
-                pc.update(getProfile(), user);
-            }
+
             return true;
         }
         return false;

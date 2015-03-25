@@ -13,12 +13,16 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.reader.ReaderFacade;
+import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
+import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
+import de.mpg.imeji.logic.search.vo.SortCriterion;
+import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.logic.vo.Properties.Status;
@@ -210,7 +214,9 @@ public class ProfileController extends ImejiController {
 	 */
 	public SearchResult search(SearchQuery query, User user) {
 		Search search = SearchFactory.create(SearchType.PROFILE);
-		SearchResult result = search.search(query, null, user);
+		//Automatically sort by profile title
+		SortCriterion sortCri = new SortCriterion(SPARQLSearch.getIndex(SearchIndex.names.prof.name()), SortOrder.ASCENDING);
+		SearchResult result = search.search(query, sortCri, user);
 		return result;
 	}
 
@@ -222,7 +228,10 @@ public class ProfileController extends ImejiController {
 	 */
 	public List<MetadataProfile> search(User user) throws ImejiException {
 		Search search = SearchFactory.create(SearchType.PROFILE);
-		SearchResult result = search.search(new SearchQuery(), null, user);
+		
+        //Automatically sort by profile title
+		SortCriterion sortCri = new SortCriterion(SPARQLSearch.getIndex(SearchIndex.names.prof.name()), SortOrder.ASCENDING);
+		SearchResult result = search.search(new SearchQuery(), sortCri, user);
 		List<MetadataProfile> l = new ArrayList<MetadataProfile>();
 		for (String uri : result.getResults()) {
 			try {

@@ -71,38 +71,6 @@
 				</ui:repeat>
 
 
-
-		<!-- START NEW FEATURE -->
-			<c:if test="#{cc.attrs.formularBean.getClass() == 'class de.mpg.imeji.presentation.collection.CreateCollectionBean'}">
-				<h:panelGroup layout="block" id="previewArea" >
-					<div class="imj_metadataSet" id="newProfileName">
-						<h:outputLabel styleClass="imj_metadataLabel" for="mdProfileTitle">
-							<h:outputText value="#{lbl.profile_name}"/>
-							<span class="imj_noDisplay">: </span>
-						</h:outputLabel>
-						<h:inputText value="#{cc.attrs.formularBean.profile.title}" id="mdProfileTitle"  styleClass="imj_metadataValue"/>
-					</div>
-					<h:selectBooleanCheckbox  id="useTemplate" value="#{cc.attrs.formularBean.useMDProfileTemplate}">
-						<f:ajax event="change" execute="@this" render="previewArea submitButtonPanel" />
-					</h:selectBooleanCheckbox>
-					<label for="useTemplate">#{lbl.profile_use_template}</label>
-					
-					<ui:fragment rendered="#{cc.attrs.formularBean.useMDProfileTemplate}">
-		
-						<div>
-							<h:selectOneMenu id="profileTemplates" value="#{cc.attrs.formularBean.selectedProfileItem}" >
-								<f:ajax  execute="@this" render="previewArea" listener="#{cc.attrs.formularBean.profileChangeListener}"/>
-								<f:selectItems value="#{cc.attrs.formularBean.profileItems}"/>
-							</h:selectOneMenu> 
-						</div>														
-
-						<mdprofile:profile_preview statementWrappers="#{cc.attrs.formularBean.statementWrappers}"/> 
-					</ui:fragment>
-				</h:panelGroup>
-
-			</c:if>
-		<!-- START END FEATURE -->
-
             <!-- Notifications -->
 			<ui:fragment rendered="#{cc.attrs.formularBean.type == 'COLLECTION'}">                
 				<h:panelGroup layout="block" styleClass="imj_collectionNotifications">
@@ -115,19 +83,58 @@
             </ui:fragment>
 
 
+		<!-- START NEW FEATURE -->
+			<c:if test="#{cc.attrs.formularBean.getClass() == 'class de.mpg.imeji.presentation.collection.CreateCollectionBean'}">
+				<h:panelGroup layout="block" id="previewArea"  rendered="#{cc.attrs.formularBean.profileItems.size()>0}">
+					<h:selectBooleanCheckbox  id="useTemplate" value="#{cc.attrs.formularBean.useMDProfileTemplate}">
+						<f:ajax event="change" execute="@this" render="previewArea selectProfilesPanel submitButtonPanel profileCreationMethodPanel" />
+					</h:selectBooleanCheckbox>
+					<h:outputLabel styleClass="imj_metadataLabel" for="useTemplate">
+						<h:outputText value="#{lbl.profile_use_template}"/>
+						<span class="imj_noDisplay">: </span>
+					</h:outputLabel>
+				</h:panelGroup>
+				<h:panelGroup layout="block" id="selectProfilesPanel">
+					<ui:fragment rendered="#{cc.attrs.formularBean.useMDProfileTemplate}">
+						<div>
+							<h:selectOneMenu id="profileTemplates" value="#{cc.attrs.formularBean.selectedProfileItem}" >
+									<f:ajax  execute="@this" render="previewArea selectProfilesPanel" listener="#{cc.attrs.formularBean.profileChangeListener}"/>
+								<f:selectItems value="#{cc.attrs.formularBean.profileItems}"/>
+							</h:selectOneMenu> 
+						</div>														
+
+						<mdprofile:profile_preview statementWrappers="#{cc.attrs.formularBean.statementWrappers}"/> 
+					</ui:fragment>
+					
+					
+				</h:panelGroup>
+				<h:panelGroup layout="block" id="profileCreationMethodPanel">
+					<ui:fragment rendered="#{cc.attrs.formularBean.useMDProfileTemplate}" >
+					<div>
+						<h:outputText value="Please select whether you would like to copy or reference the metadata profile you selected. Blah Blah... "/>
+					</div>
+					<div rendered="#{cc.attrs.formularBean.useMDProfileTemplate}">
+							<h:selectOneRadio value="#{cc.attrs.formularBean.selectedCreationMethod}">
+											<f:ajax  execute="@this" render="submitButtonPanel" />
+									<f:selectItems value="#{cc.attrs.formularBean.profileCreationMethod}"/>
+							</h:selectOneRadio>
+					</div>
+						</ui:fragment>
+				</h:panelGroup>
+
+			</c:if>
+		<!-- START END FEATURE -->
+
 			<h:panelGroup layout="block" id="submitButtonPanel" class="imj_submitPanel">
+
 				<h:outputLink value="#{HistorySession.previousPage.completeUrlWithHistory}" styleClass="imj_cancelButton">
 					<h:outputText value="#{lbl.cancel}"/>
 				</h:outputLink>
-				<h:commandButton action="#{cc.attrs.formularBean.saveAndEditProfile()}" value="#{lbl.save_and_edit_profile}" styleClass="imj_submitButton" onclick="openDialog('dialogWait');" rendered="#{cc.attrs.formularBean.getClass() == 'class de.mpg.imeji.presentation.collection.CreateCollectionBean' and cc.attrs.formularBean.useMDProfileTemplate }"/>
+				<h:commandButton action="#{cc.attrs.formularBean.saveAndEditProfile()}" value="#{lbl.save_and_edit_profile}" styleClass="imj_submitButton" onclick="openDialog('dialogWait');" rendered="#{cc.attrs.formularBean.getClass() == 'class de.mpg.imeji.presentation.collection.CreateCollectionBean' and cc.attrs.formularBean.useMDProfileTemplate and cc.attrs.formularBean.copyProfileMethod}"/>
 				<h:commandButton action="#{cc.attrs.formularBean.save()}" value="#{lbl.save}" styleClass="imj_submitButton" onclick="openDialog('dialogWait');"/>
 			</h:panelGroup>
 		
 			</div>
-		
-		
-			
-
 		</h:form>
 	</h:panelGroup>
 </composite:implementation>

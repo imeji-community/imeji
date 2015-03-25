@@ -60,7 +60,7 @@ public class LoginBean {
 	}
 
 	public void setLogin(String login) {
-		this.login = login;
+		this.login = login.trim();
 	}
 
 	public String getLogin() {
@@ -68,7 +68,7 @@ public class LoginBean {
 	}
 
 	public void setPasswd(String passwd) {
-		this.passwd = passwd;
+		this.passwd = passwd.trim();
 	}
 
 	public String getPasswd() {

@@ -4,6 +4,7 @@
 package de.mpg.imeji.presentation.user.util;
 
 import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
@@ -24,6 +25,9 @@ import java.util.Date;
  */
 public class EmailMessages
 {
+
+    private static Logger LOGGER = Logger.getLogger(EmailMessages.class);
+
     /**
      * Email content when a new Account is sent
      * 
@@ -218,7 +222,7 @@ public class EmailMessages
                 .replaceAll("XXX_COLLECTION_XXX", session.getMessage("collection"))
                 .replaceAll("XXX_FILTERED_XXX", session.getMessage("filtered"))
                 .replaceAll("XXX_ITEMS_COUNT_XXX", session.getMessage("items_count"))
-                .replace("XXX_QUERY_URL_XXX", url);
+                .replace("XXX_QUERY_URL_XXX", UrlHelper.encodeQuery(url));
     }
 
 
@@ -230,5 +234,7 @@ public class EmailMessages
     public String getEmailOnZipDownload_Subject(SessionBean session){
         return session.getMessage("email_zip_images_downloaded_subject");
     }
+
+
 
 }

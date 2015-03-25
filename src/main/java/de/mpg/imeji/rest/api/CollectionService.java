@@ -1,5 +1,7 @@
 package de.mpg.imeji.rest.api;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
@@ -7,6 +9,7 @@ import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.util.ImejiFactory;
@@ -15,6 +18,7 @@ import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.to.CollectionProfileTO;
 import de.mpg.imeji.rest.to.CollectionProfileTO.METHOD;
 import de.mpg.imeji.rest.to.CollectionTO;
+import de.mpg.imeji.rest.to.ItemTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,10 +49,25 @@ public class CollectionService implements API<CollectionTO> {
 	public CollectionTO read(String id, User u) throws ImejiException {
 		
 		CollectionController controller = new CollectionController();
-//		CollectionImeji vo = controller.retrieve(
-//				ObjectHelper.getURI(CollectionImeji.class, id), u);
 		return getCollectionTO(controller, id, u);
 	}
+
+
+    public List<ItemTO> readItems(String id, User u, String q) throws ImejiException {
+        CollectionController cc = new CollectionController();
+        return Lists.transform(cc.retrieveItems(id, u, q),
+                new Function<Item, ItemTO>() {
+                    @Override
+                    public ItemTO apply(Item vo) {
+                        ItemTO to = new ItemTO();
+                        TransferObjectFactory.transferItem(vo, to);
+                        return to;
+                    }
+                }
+        );
+    }
+
+
 
 	@Override
 	public CollectionTO create(CollectionTO to, User u) throws ImejiException {
@@ -196,5 +215,6 @@ public class CollectionService implements API<CollectionTO> {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 
 }

@@ -3,25 +3,23 @@
  */
 package de.mpg.imeji.presentation.beans;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.faces.model.SelectItem;
-
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchOperators;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
+import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.presentation.filter.Filter;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CookieUtils;
 import de.mpg.imeji.presentation.util.PropertyReader;
-import de.mpg.imeji.presentation.util.UrlHelper;
+import org.apache.log4j.Logger;
+
+import javax.faces.model.SelectItem;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Java Bean for {@link Container} browse pages (collections and albums)

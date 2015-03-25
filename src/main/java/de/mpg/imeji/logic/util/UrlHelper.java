@@ -1,17 +1,16 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-package de.mpg.imeji.presentation.util;
+package de.mpg.imeji.logic.util;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-
-import javax.faces.context.FacesContext;
-
+import de.mpg.imeji.presentation.util.ProxyHelper;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.log4j.Logger;
+
+import javax.faces.context.FacesContext;
+import java.io.UnsupportedEncodingException;
+import java.net.*;
 
 /**
  * Some Method to read URLs
@@ -21,6 +20,9 @@ import org.apache.commons.httpclient.methods.GetMethod;
  * @version $Revision$ $LastChangedDate$
  */
 public class UrlHelper {
+
+    private static Logger LOGGER = Logger.getLogger(UrlHelper.class);
+
 	/**
 	 * Return the value of a parameter in an url
 	 * 
@@ -110,4 +112,22 @@ public class UrlHelper {
 		}
 		return null;
 	}
+
+    /**
+     * Encode url with query. Escape blanks with %20 etc.
+     *
+     * @param urlStr
+     * @return
+     */
+    public static String encodeQuery(String urlStr) {
+        try {
+            URL url = new URL(urlStr);
+            return new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(),
+                    url.getQuery(),
+                    url.getRef()).toURL().toString();
+        } catch (MalformedURLException | URISyntaxException e) {
+            LOGGER.info("Cannot parse url: " + urlStr + "\n" + e.getLocalizedMessage());
+            return  urlStr;
+        }
+    }
 }

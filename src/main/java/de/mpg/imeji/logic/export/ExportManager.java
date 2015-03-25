@@ -8,12 +8,12 @@ import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.query.URLQueryTransformer;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpResponseException;
 

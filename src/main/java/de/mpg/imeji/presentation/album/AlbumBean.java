@@ -3,26 +3,12 @@
  */
 package de.mpg.imeji.presentation.album;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.faces.context.FacesContext;
-import javax.faces.event.ValueChangeEvent;
-import javax.faces.model.SelectItem;
-
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.Album;
-import de.mpg.imeji.logic.vo.Container;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Organization;
-import de.mpg.imeji.logic.vo.Person;
+import de.mpg.imeji.logic.util.UrlHelper;
+import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.logic.vo.Properties.Status;
-import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.ContainerBean;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.image.ThumbnailBean;
@@ -30,7 +16,14 @@ import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CommonUtils;
 import de.mpg.imeji.presentation.util.ObjectLoader;
-import de.mpg.imeji.presentation.util.UrlHelper;
+import org.apache.log4j.Logger;
+
+import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.model.SelectItem;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * The javabean for the {@link Album}

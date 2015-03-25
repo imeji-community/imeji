@@ -1,22 +1,7 @@
 package de.mpg.imeji.presentation.user;
 
-import java.io.Serializable;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-
-import org.apache.log4j.Logger;
-
 import com.hp.hpl.jena.sparql.pfunction.library.container;
 import com.ocpsoft.pretty.PrettyContext;
-
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
@@ -25,15 +10,8 @@ import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserGroupController;
 import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.Album;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Container;
-import de.mpg.imeji.logic.vo.Grant;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Properties;
-import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.logic.vo.UserGroup;
+import de.mpg.imeji.logic.util.UrlHelper;
+import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.history.HistoryUtil;
 import de.mpg.imeji.presentation.session.SessionBean;
@@ -41,7 +19,18 @@ import de.mpg.imeji.presentation.user.util.EmailClient;
 import de.mpg.imeji.presentation.user.util.EmailMessages;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
-import de.mpg.imeji.presentation.util.UrlHelper;
+import org.apache.log4j.Logger;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import java.io.Serializable;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 @ManagedBean(name = "ShareBean")
 @ViewScoped

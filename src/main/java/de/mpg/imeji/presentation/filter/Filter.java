@@ -3,13 +3,12 @@
  */
 package de.mpg.imeji.presentation.filter;
 
-import java.net.URI;
-
-import org.apache.log4j.Logger;
-
+import de.mpg.imeji.logic.search.query.URLQueryTransformer;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.presentation.facet.Facet;
-import de.mpg.imeji.presentation.search.URLQueryTransformer;
+import org.apache.log4j.Logger;
+
+import java.net.URI;
 
 /**
  * {@link Facet} with extended

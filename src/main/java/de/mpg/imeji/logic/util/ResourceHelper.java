@@ -1,5 +1,7 @@
 package de.mpg.imeji.logic.util;
 
+import org.apache.log4j.Logger;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -9,7 +11,10 @@ import java.nio.file.Paths;
  */
 public class ResourceHelper {
 
+    private static Logger LOGGER = Logger.getLogger(ResourceHelper.class);
+
     public static String getStringFromPath(String path) throws IOException {
         return new String(Files.readAllBytes(Paths.get(path)), "UTF-8");
     }
+
 }

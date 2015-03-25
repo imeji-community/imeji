@@ -17,6 +17,7 @@ import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
 import de.mpg.imeji.rest.to.*;
 import de.mpg.imeji.rest.to.predefinedMetadataTO.*;
 import de.mpg.j2j.misc.LocalizedString;
+
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
@@ -26,11 +27,13 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import util.JenaUtil;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -509,6 +512,5 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
         itemId = itemTO.getId();
 
     }
-
 
 }

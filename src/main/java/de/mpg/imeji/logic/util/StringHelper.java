@@ -1,9 +1,11 @@
 package de.mpg.imeji.logic.util;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 
-import org.apache.commons.codec.digest.DigestUtils;
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
  * Static functions to manipulate {@link String}
@@ -111,5 +113,16 @@ public class StringHelper
             return filename.substring(i + 1);
         }
         return null;
+    }
+
+    /**
+     * Check string if it is empty include trim()
+     *
+     * @param str
+     * @return
+     */
+    public static boolean isNullOrEmptyTrim(String str)
+    {
+         return isNullOrEmpty(str) ? true : "".equals(str.trim());
     }
 }

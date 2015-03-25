@@ -1,16 +1,9 @@
 package de.mpg.imeji.presentation.mdProfile;
 
-import java.io.IOException;
-
-import javax.faces.context.FacesContext;
-import javax.faces.event.ValueChangeEvent;
-
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
-import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.collection.ViewCollectionBean;
@@ -18,8 +11,12 @@ import de.mpg.imeji.presentation.mdProfile.wrapper.StatementWrapper;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
-import de.mpg.imeji.presentation.util.UrlHelper;
 import de.mpg.imeji.presentation.util.VocabularyHelper;
+import org.apache.log4j.Logger;
+
+import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
+import java.io.IOException;
 
 /**
  * Java Bean for the edit metadata Profile page

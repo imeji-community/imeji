@@ -7,13 +7,13 @@ import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.CollectionController.MetadataProfileCreationMethod;
 import de.mpg.imeji.logic.controller.ProfileController;
+import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.presentation.beans.ContainerBean;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.mdProfile.wrapper.StatementWrapper;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.UrlHelper;
 import org.apache.log4j.Logger;
 
 import javax.faces.event.AjaxBehaviorEvent;

@@ -28,20 +28,19 @@
  */
 package de.mpg.imeji.logic.export.format.explain;
 
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.net.URI;
-
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.export.format.ExplainExport;
 import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.query.URLQueryTransformer;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.util.ObjectCachedLoader;
+import org.apache.log4j.Logger;
+
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.net.URI;
 
 /**
  * {@link ExplainExport} for the metadata search index

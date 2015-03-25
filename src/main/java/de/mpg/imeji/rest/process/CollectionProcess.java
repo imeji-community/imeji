@@ -2,12 +2,10 @@ package de.mpg.imeji.rest.process;
 
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.JSONResponse;
-import de.mpg.imeji.rest.to.PersonTO;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -30,6 +28,21 @@ public class CollectionProcess {
 		return resp;
 
 	}
+
+    public static  JSONResponse readCollectionItems(HttpServletRequest req, String id, String q) {
+        JSONResponse resp;
+
+        User u = BasicAuthentication.auth(req);
+
+        CollectionService ccrud = new CollectionService();
+        try {
+            resp = RestProcessUtils.buildResponse(OK.getStatusCode(), ccrud.readItems(id, u, q));
+        } catch (Exception e) {
+            resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
+        }
+        return resp;
+    }
+
 
 	public static JSONResponse createCollection(HttpServletRequest req) {
 		JSONResponse resp; 

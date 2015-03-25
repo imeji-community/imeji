@@ -11,6 +11,7 @@ import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.query.URLQueryTransformer;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -28,6 +29,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
+import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
 
 /**
  * CRUD controller for {@link CollectionImeji}, plus search mehtods related to
@@ -154,6 +156,31 @@ public class CollectionController extends ImejiController {
         return retrieve(ObjectHelper.getURI(CollectionImeji.class, id), user);
 	}
 
+    /**
+	 * Retrieve all items of the collection
+	 *
+	 * @param id
+     * @param user
+	 * @param q
+     * @return
+	 * @throws ImejiException
+	 */
+	public List<Item> retrieveItems(String id, User user, String q) throws ImejiException {
+        ItemController ic = new ItemController();
+        List<Item> itemList = new ArrayList();
+        try {
+            for (String itemId: ic.search(ObjectHelper.getURI(CollectionImeji.class, id),
+                    !isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q) : null,
+                    null, null, user).getResults()) {
+                itemList.add(ic.retrieve(URI.create(itemId), user));
+            }
+        } catch (Exception e) {
+            throw new UnprocessableError("Cannot retrieve items:", e);
+
+        }
+        return itemList;
+	}
+
 	/**
 	 * Retrieve the {@link CollectionImeji} without its {@link Item}
 	 * 
@@ -220,7 +247,8 @@ public class CollectionController extends ImejiController {
 	 * @throws ImejiException
 	 */
 	public CollectionImeji updateLazy(CollectionImeji ic, User user) throws ImejiException {
-		writeUpdateProperties(ic, user);
+        validateCollection(ic, user);
+        writeUpdateProperties(ic, user);
 		writer.updateLazy(WriterFacade.toList(ic), user);
         return retrieveLazy(ic.getId(), user);
 	}

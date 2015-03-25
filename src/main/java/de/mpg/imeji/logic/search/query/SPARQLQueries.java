@@ -209,9 +209,12 @@ public class SPARQLQueries {
 	public static String selectUsersToBeNotifiedByFileDownload(User user,
 			CollectionImeji c) {
 		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> "
-				+ "SELECT DISTINCT ?s WHERE {" + "filter(?c='"
-				+ ObjectHelper.getId(c.getId()) + "'"
-                + ( user != null ? " && ?s!=<"+ user.getId().toString() + "> " : "" )
+				+ "SELECT DISTINCT ?s WHERE {"
+				+ "filter(?c='"
+				+ ObjectHelper.getId(c.getId())
+				+ "'"
+				+ (user != null ? " && ?s!=<" + user.getId().toString() + "> "
+						: "")
 				+ ") . ?s <http://imeji.org/terms/observedCollections> ?c }";
 	}
 
@@ -397,6 +400,29 @@ public class SPARQLQueries {
 				+ "> ?s . ?s <http://imeji.org/terms/statement> ?st"
 				+ " . NOT EXISTS{<" + profileURI
 				+ "> <http://imeji.org/terms/statement> ?st}" + " . ?s ?p ?o }";
+	}
+
+	/**
+	 * Update the filesize of a {@link Item}
+	 * 
+	 * @param itemId
+	 * @param fileSize
+	 * @return
+	 */
+	public static String insertFileSize(String itemId, String fileSize) {
+		return "WITH <http://imeji.org/item> " + "INSERT {<" + itemId
+				+ "> <http://imeji.org/terms/fileSize> " + fileSize + "}"
+				+ "USING <http://imeji.org/item> " + "WHERE{<" + itemId
+				+ "> ?p ?o}";
+	}
+
+	/**
+	 * Remove all Filesize of all {@link Item}
+	 * 
+	 * @return
+	 */
+	public static String deleteAllFileSize() {
+		return "WITH <http://imeji.org/item> DELETE {?s <http://imeji.org/terms/fileSize> ?size} where{?s <http://imeji.org/terms/fileSize> ?size}";
 	}
 
 	/**

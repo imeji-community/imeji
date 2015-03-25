@@ -23,113 +23,116 @@ import de.mpg.j2j.transaction.Transaction;
 /**
  * imeji WRITE operations (create/delete/update) in {@link Jena} <br/>
  * - Use {@link Transaction} <br/>
- * - For concurrency purpose, each write {@link Transaction} is made within a single {@link Thread}. Use
- * {@link ThreadedTransaction} <br/>
+ * - For concurrency purpose, each write {@link Transaction} is made within a
+ * single {@link Thread}. Use {@link ThreadedTransaction} <br/>
  * - for READ operations, uses {@link JenaReader}
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class JenaWriter implements Writer
-{
-    private String modelURI;
+public class JenaWriter implements Writer {
+	private String modelURI;
 
-    /**
-     * Construct one {@link JenaWriter} for one {@link Model}
-     * 
-     * @param modelURI
-     */
-    public JenaWriter(String modelURI)
-    {
-        this.modelURI = modelURI;
-    }
+	/**
+	 * Construct one {@link JenaWriter} for one {@link Model}
+	 * 
+	 * @param modelURI
+	 */
+	public JenaWriter(String modelURI) {
+		this.modelURI = modelURI;
+	}
 
-    /**
-     * Create a {@link List} of {@link Object} in {@link Jena}
-     * 
-     * @param objects
-     * @param user
-     * @throws Exception
-     */
-    public void create(List<Object> objects, User user) throws ImejiException
-    {
-        runTransaction(objects, GrantType.CREATE, false);
-    }
+	/**
+	 * Create a {@link List} of {@link Object} in {@link Jena}
+	 * 
+	 * @param objects
+	 * @param user
+	 * @throws Exception
+	 */
+	public void create(List<Object> objects, User user) throws ImejiException {
+		runTransaction(objects, GrantType.CREATE, false);
+	}
 
-    /**
-     * Delete a {@link List} of {@link Object} in {@link Jena}
-     * 
-     * @param objects
-     * @param user
-     * @throws Exception
-     */
-    public void delete(List<Object> objects, User user) throws ImejiException
-    {
-        runTransaction(objects, GrantType.DELETE, false);
-        for (Object o : objects)
-        {
-            URI uri = WriterFacade.extractID(o);
-            if (uri != null)
-                ImejiSPARQL.execUpdate(SPARQLQueries.updateRemoveGrantsFor(uri.toString()));
-        }
-    }
+	/**
+	 * Delete a {@link List} of {@link Object} in {@link Jena}
+	 * 
+	 * @param objects
+	 * @param user
+	 * @throws Exception
+	 */
+	public void delete(List<Object> objects, User user) throws ImejiException {
+		runTransaction(objects, GrantType.DELETE, false);
+		for (Object o : objects) {
+			URI uri = WriterFacade.extractID(o);
+			if (uri != null)
+				ImejiSPARQL.execUpdate(SPARQLQueries.updateRemoveGrantsFor(uri
+						.toString()));
+		}
+	}
 
-    /**
-     * Update a {@link List} of {@link Object} in {@link Jena}
-     * 
-     * @param objects
-     * @param user
-     * @throws Exception
-     */
-    public void update(List<Object> objects, User user) throws ImejiException
-    {
-        runTransaction(objects, GrantType.UPDATE, false);
-    }
+	/**
+	 * Update a {@link List} of {@link Object} in {@link Jena}
+	 * 
+	 * @param objects
+	 * @param user
+	 * @throws Exception
+	 */
+	public void update(List<Object> objects, User user) throws ImejiException {
+		runTransaction(objects, GrantType.UPDATE, false);
+	}
 
-    /**
-     * Update LAZY a {@link List} of {@link Object} in {@link Jena}<br/>
-     * - {@link List} contained within the {@link Object} are not updated: faster performance, especially for objects
-     * with huge {@link List}
-     * 
-     * @param objects
-     * @param user
-     * @throws Exception
-     */
-    public void updateLazy(List<Object> objects, User user) throws ImejiException
-    {
-        runTransaction(objects, GrantType.UPDATE, true);
-    }
+	/**
+	 * Update LAZY a {@link List} of {@link Object} in {@link Jena}<br/>
+	 * - {@link List} contained within the {@link Object} are not updated:
+	 * faster performance, especially for objects with huge {@link List}
+	 * 
+	 * @param objects
+	 * @param user
+	 * @throws Exception
+	 */
+	public void updateLazy(List<Object> objects, User user)
+			throws ImejiException {
+		runTransaction(objects, GrantType.UPDATE, true);
+	}
 
-    /**
-     * Run one WRITE operation in {@link Transaction} within a {@link ThreadedTransaction}
-     * 
-     * @param objects
-     * @param type
-     * @param lazy
-     * @throws Exception
-     */
-    private void runTransaction(List<Object> objects, GrantType type, boolean lazy) throws ImejiException
-    {
-        index(objects);
-        Transaction t = new CRUDTransaction(objects, type, modelURI, lazy);
-        // Write Transaction needs to be added in a new Thread
-        ThreadedTransaction.run(new ThreadedTransaction(t));
-    }
+	/**
+	 * Run one WRITE operation in {@link Transaction} within a
+	 * {@link ThreadedTransaction}
+	 * 
+	 * @param objects
+	 * @param type
+	 * @param lazy
+	 * @throws Exception
+	 */
+	private void runTransaction(List<Object> objects, GrantType type,
+			boolean lazy) throws ImejiException {
+		index(objects);
+		// int n = 5000;
+		// for (int i = 0; i < objects.size(); i = i + n) {
+		// int max = i + n < objects.size() ? i + n : objects.size() ;
+		// Transaction t = new CRUDTransaction(objects.subList(i, max), type,
+		// modelURI, lazy);
+		// // Write Transaction needs to be added in a new Thread
+		// ThreadedTransaction.run(new ThreadedTransaction(t));
+		// }
+		Transaction t = new CRUDTransaction(objects, type, modelURI, lazy);
+		// Write Transaction needs to be added in a new Thread
+		ThreadedTransaction.run(new ThreadedTransaction(t));
 
-    /**
-     * Set the fulltext value of each imeji object (based on the metadata values, the author, etc.)
-     * 
-     * @param l
-     */
-    private void index(List<Object> l)
-    {
-        for (Object o : l)
-        {
-            if (o instanceof FulltextIndex)
-            {
-                ((FulltextIndex)o).indexFulltext();
-            }
-        }
-    }
+	}
+
+	/**
+	 * Set the fulltext value of each imeji object (based on the metadata
+	 * values, the author, etc.)
+	 * 
+	 * @param l
+	 */
+	private void index(List<Object> l) {
+		for (Object o : l) {
+			if (o instanceof FulltextIndex) {
+				((FulltextIndex) o).indexFulltext();
+			}
+		}
+	}
 }

@@ -124,7 +124,7 @@ public class EmailMessages
     }
 
     /**
-     * Create the content of an email according to the parameters
+     * Create the content of an email according to the parameters  
      * 
      * @param password
      * @param email

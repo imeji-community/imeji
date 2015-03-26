@@ -115,7 +115,7 @@ public class AdminBean {
 	/**
 	 * Remove all unused {@link MetadataProfile}
 	 */
-	public void cleanUnusedMetadataProfiles() {
+	public void deleteUnusedProfiles() {
 		Imeji.executor.submit(new CleanMetadataProfileJob(true));
 	}
 

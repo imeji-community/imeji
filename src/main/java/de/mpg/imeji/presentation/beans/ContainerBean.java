@@ -324,4 +324,14 @@ public abstract class ContainerBean implements Serializable
         }
         return false;
     }
+    
+    public boolean isCollectionType()
+    {
+    	return getType().equals(CONTAINER_TYPE.COLLECTION.toString());
+    }
+
+    public boolean isAlbumType()
+    {
+    	return getType().equals(CONTAINER_TYPE.ALBUM.toString());
+    }
 }

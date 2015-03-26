@@ -23,39 +23,25 @@
 	  			<h2 class="imj_headline">#{lbl.collection}: #{metadataBean.colContext.collection.metadata.title}</h2>
 				<div class="imj_metadataProfileList imj_edit">
 					<div class="imj_listHeader">
-						<div class="imj_metadataSet">
+						<h:panelGroup  id="profileName" layout="block" class="imj_metadataSet">
 							<h:outputLabel styleClass="imj_metadataLabel" for="mdProfileTitle">
 								<h:outputText value="#{lbl.profile_name}"/>
 								<span class="imj_noDisplay">: </span>
 							</h:outputLabel>
 							<h:inputText value="#{metadataBean.profile.title}" id="mdProfileTitle" valueChangeListener="#{metadataBean.titleListener}" styleClass="imj_metadataValue"/>
-						</div>
-						<ui:fragment rendered="#{empty metadataBean.wrappers}">
-							<ul class="imj_listHeaderMenu">
-								<li>
-									<h:commandButton id="addFirstStatement" type="submit" styleClass="imj_submitButton" action="#{metadataBean.addFirstStatement}" value="#{lbl.profile_start_new}"/>
-								</li>
-								<ui:fragment rendered="#{metadataBean.profilesMenu.size() > 1}">
-									<li class="imj_inlineButtonGroup">
-										<h:outputLabel value="#{lbl.or_small}" for="chooseGivenTemplate"/>
-										<div class="imj_customSelectbox">
-											<div class="imj_showSelection">
-												<div class="imj_selectionText">#{lbl.profile_use_template}</div>
-												<div class="imj_buttonSortDescending_16"> </div>
-											</div>
-										
-											<h:selectOneMenu value="#{metadataBean.template}" id="chooseGivenTemplate" onchange="submit();" valueChangeListener="#{metadataBean.templateListener}">
-												<f:selectItems value="#{metadataBean.profilesMenu}"/>
-											</h:selectOneMenu>
-										</div>
-									</li>
-								</ui:fragment>
-							</ul>
-						</ui:fragment>
+						</h:panelGroup>
+						<h:panelGroup  id="profileDescription" layout="block" class="imj_metadataSet">
+							<h:outputLabel styleClass="imj_metadataLabel" for="mdProfileDescription">
+								<h:outputText value="#{lbl.description}"/>
+								<span class="imj_noDisplay">: </span>
+							</h:outputLabel>
+							<h:inputTextarea value="#{metadataBean.profile.description}" id="mdProfileDescription" valueChangeListener="#{metadataBean.descriptionListener}" styleClass="imj_metadataValue"/>
+						</h:panelGroup>
 						<ui:fragment rendered="#{!(empty metadataBean.wrappers)}">
 							<h2 class="imj_headline"><h:outputText value="#{lbl.profile_move_info}"/></h2>
 						</ui:fragment>
 					</div>
+
 					<div class="imj_listBody">
 						<ui:fragment rendered="#{!(empty metadataBean.wrappers)}">
 							

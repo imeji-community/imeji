@@ -7,10 +7,8 @@ import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.collection.ViewCollectionBean;
-import de.mpg.imeji.presentation.mdProfile.wrapper.StatementWrapper;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.VocabularyHelper;
 import org.apache.log4j.Logger;
 
@@ -74,7 +72,7 @@ public class EditMdProfileBean extends MdProfileBean
                     BeanHelper.error(session.getLabel("error") + ": No profile Id found in URL");
                 }
                 init = false;
-                setTemplate(null);
+                //setTemplate(null);
             }
             super.getInit();
         }
@@ -163,18 +161,32 @@ public class EditMdProfileBean extends MdProfileBean
             this.getProfile().setTitle(event.getNewValue().toString());
         }
     }
-
+    
     /**
-     * Method when button addfirstStatement
+     * Listener for the description input
      * 
-     * @return
+     * @param event
      */
-    public void addFirstStatement()
+    public void descriptionListener(ValueChangeEvent event)
     {
-        Statement firstStatement = ImejiFactory.newStatement();
-        getWrappers().add(new StatementWrapper(firstStatement, getProfile().getId(), getLevel(firstStatement)));
+        if (event.getNewValue() != null && event.getNewValue() != event.getOldValue())
+        {
+            this.getProfile().setTitle(event.getNewValue().toString());
+        }
     }
 
+//TODO CleanUp
+//    /**
+//     * Method when button addfirstStatement
+//     * 
+//     * @return
+//     */
+//    public void addFirstStatement()
+//    {
+//        Statement firstStatement = ImejiFactory.newStatement();
+//        getWrappers().add(new StatementWrapper(firstStatement, getProfile().getId(), getLevel(firstStatement)));
+//    }
+//
     @Override
     protected String getNavigationString()
     {

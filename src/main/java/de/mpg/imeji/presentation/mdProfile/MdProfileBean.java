@@ -44,7 +44,7 @@ public class MdProfileBean
     private String id = null;
     private List<SelectItem> profilesMenu = null;
     private SessionBean sessionBean;
-    private String template;
+    //private String template;
     private int statementPosition = 0;
     /**
      * Position of the dragged element at the start
@@ -84,16 +84,18 @@ public class MdProfileBean
         parseID();
         initMenus();
         cleanMetadata = false;
-        updateFirstTemplateProfileLabel();
+        //updateFirstTemplateProfileLabel();
         if (UrlHelper.getParameterBoolean("reset"))
         {
             reset();
         }
         if (UrlHelper.getParameterBoolean("init"))
         {
-            if (profile.getStatements().isEmpty())
-                loadtemplates();
+            
             initStatementWrappers(profile);
+            if (profile.getStatements().isEmpty()) {
+            	addFirstStatement();
+            }
         }
         return "";
     }
@@ -109,6 +111,12 @@ public class MdProfileBean
             mdTypesMenu.add(new SelectItem(t.getClazzNamespace(), ((SessionBean)BeanHelper
                     .getSessionBean(SessionBean.class)).getLabel("facet_" + t.name().toLowerCase())));
         }
+    }
+    
+    public void addFirstStatement()
+    {
+      Statement firstStatement = ImejiFactory.newStatement();
+      getWrappers().add(new StatementWrapper(firstStatement, getProfile().getId(), getLevel(firstStatement)));
     }
 
     /**
@@ -153,64 +161,64 @@ public class MdProfileBean
         }
     }
 
-    /**
-     * Comparator of {@link MetadataProfile} names, to sort a {@link List} of {@link MetadataProfile} according to their
-     * name
-     * 
-     * @author saquet (initial creation)
-     * @author $Author$ (last modification)
-     * @version $Revision$ $LastChangedDate$
-     */
-    static class profilesLabelComparator implements Comparator<Object>
-    {
-        @Override
-        public int compare(Object o1, Object o2)
-        {
-            SelectItem profile1 = (SelectItem)o1;
-            SelectItem profile2 = (SelectItem)o2;
-            String profile1Label = profile1.getLabel();
-            String profile1Labe2 = profile2.getLabel();
-            return profile1Label.compareTo(profile1Labe2);
-        }
-    }
+//    /**
+//     * Comparator of {@link MetadataProfile} names, to sort a {@link List} of {@link MetadataProfile} according to their
+//     * name
+//     * 
+//     * @author saquet (initial creation)
+//     * @author $Author$ (last modification)
+//     * @version $Revision$ $LastChangedDate$
+//     */
+//    static class profilesLabelComparator implements Comparator<Object>
+//    {
+//        @Override
+//        public int compare(Object o1, Object o2)
+//        {
+//            SelectItem profile1 = (SelectItem)o1;
+//            SelectItem profile2 = (SelectItem)o2;
+//            String profile1Label = profile1.getLabel();
+//            String profile1Labe2 = profile2.getLabel();
+//            return profile1Label.compareTo(profile1Labe2);
+//        }
+//    }
 
-    /**
-     * Load the templates (i.e. the {@link MetadataProfile} that can be used by the {@link User}), and add it the the
-     * menu (sorted by name)
-     */
-    public void loadtemplates()
-    {
-        profilesMenu = new ArrayList<SelectItem>();
-        try
-        {
-            ProfileController pc = new ProfileController();
-            for (MetadataProfile mdp : pc.search(sessionBean.getUser()))
-            {
-                if (!mdp.getId().toString().equals(profile.getId().toString()) && !mdp.getStatements().isEmpty())
-                {
-                    profilesMenu.add(new SelectItem(mdp.getId().toString(), mdp.getTitle()));
-                }
-            }
-            // sort profilesMenu
-            Collections.sort(profilesMenu, new profilesLabelComparator());
-            // add title to first position
-            profilesMenu.add(0, new SelectItem(null, sessionBean.getLabel("profile_select_template")));
-        }
-        catch (Exception e)
-        {
-            BeanHelper.error(sessionBean.getMessage("error_profile_template_load"));
-        }
-    }
-    
-    public void updateFirstTemplateProfileLabel()
-    {
-    	if(profilesMenu != null && profilesMenu.size() >0)
-    	{
-    		profilesMenu.remove(0);
-    		profilesMenu.add(0, new SelectItem(null, sessionBean.getLabel("profile_select_template")));
-    	}
-    }
-    
+//    /**
+//     * Load the templates (i.e. the {@link MetadataProfile} that can be used by the {@link User}), and add it the the
+//     * menu (sorted by name)
+//     */
+//    public void loadtemplates()
+//    {
+//        profilesMenu = new ArrayList<SelectItem>();
+//        try
+//        {
+//            ProfileController pc = new ProfileController();
+//            for (MetadataProfile mdp : pc.search(sessionBean.getUser()))
+//            {
+//                if (!mdp.getId().toString().equals(profile.getId().toString()) && !mdp.getStatements().isEmpty())
+//                {
+//                    profilesMenu.add(new SelectItem(mdp.getId().toString(), mdp.getTitle()));
+//                }
+//            }
+//            // sort profilesMenu
+//            Collections.sort(profilesMenu, new profilesLabelComparator());
+//            // add title to first position
+//            profilesMenu.add(0, new SelectItem(null, sessionBean.getLabel("profile_select_template")));
+//        }
+//        catch (Exception e)
+//        {
+//            BeanHelper.error(sessionBean.getMessage("error_profile_template_load"));
+//        }
+//    }
+//    
+//    public void updateFirstTemplateProfileLabel()
+//    {
+//    	if(profilesMenu != null && profilesMenu.size() >0)
+//    	{
+//    		profilesMenu.remove(0);
+//    		profilesMenu.add(0, new SelectItem(null, sessionBean.getLabel("profile_select_template")));
+//    	}
+//    }
+//    
 
     /**
      * Check all profile elements, and return true if all are valid. Error messages are logged for the user to help him
@@ -263,26 +271,26 @@ public class MdProfileBean
         return true;
     }
 
-    /**
-     * Listener for the template value
-     * 
-     * @param event
-     * @throws Exception
-     */
-    public void templateListener(ValueChangeEvent event) throws Exception
-    {
-        if (event != null && event.getNewValue() != event.getOldValue())
-        {
-            this.template = event.getNewValue().toString();
-            MetadataProfile tp = ObjectCachedLoader.loadProfile(URI.create(this.template));
-            if (tp.getStatements().isEmpty())
-                profile.getStatements().add(ImejiFactory.newStatement());
-            else
-                profile.setStatements(tp.clone().getStatements());
-            collectionSession.setProfile(profile);
-            initStatementWrappers(profile);
-        }
-    }
+//    /**
+//     * Listener for the template value
+//     * 
+//     * @param event
+//     * @throws Exception
+//     */
+//    public void templateListener(ValueChangeEvent event) throws Exception
+//    {
+//        if (event != null && event.getNewValue() != event.getOldValue())
+//        {
+//            this.template = event.getNewValue().toString();
+//            MetadataProfile tp = ObjectCachedLoader.loadProfile(URI.create(this.template));
+//            if (tp.getStatements().isEmpty())
+//                profile.getStatements().add(ImejiFactory.newStatement());
+//            else
+//                profile.setStatements(tp.clone().getStatements());
+//            collectionSession.setProfile(profile);
+//            initStatementWrappers(profile);
+//        }
+//    }
 
     /**
      * Parse the id defined in the url
@@ -922,26 +930,26 @@ public class MdProfileBean
         this.profilesMenu = profilesMenu;
     }
 
-    /**
-     * getter
-     * 
-     * @return
-     */
-    public String getTemplate()
-    {
-        return template;
-    }
-
-    /**
-     * setter
-     * 
-     * @param template
-     */
-    public void setTemplate(String template)
-    {
-        this.template = template;
-    }
-
+//    /**
+//     * getter
+//     * 
+//     * @return
+//     */
+//    public String getTemplate()
+//    {
+//        return template;
+//    }
+//
+//    /**
+//     * setter
+//     * 
+//     * @param template
+//     */
+//    public void setTemplate(String template)
+//    {
+//        this.template = template;
+//    }
+//
     /**
      * getter
      * 

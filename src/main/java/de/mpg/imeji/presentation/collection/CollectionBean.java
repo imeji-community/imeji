@@ -66,9 +66,12 @@ public abstract class CollectionBean extends ContainerBean {
 
 
     private boolean sendEmailNotification = false;
+    
+    private boolean collectionCreateMode = true;
+    
+    private boolean profileSelectMode = false;
 
-
-    private static final int MARGIN_PIXELS_FOR_STATEMENT_CHILD = 5;
+	private static final int MARGIN_PIXELS_FOR_STATEMENT_CHILD = 5;
     	
 	/**
 	 * New default {@link CollectionBean}
@@ -136,9 +139,13 @@ public abstract class CollectionBean extends ContainerBean {
             	}  
             }            
             selectedProfileItem = (String) profileItems.get(0).getValue();
-            this.profile = new MetadataProfile();
-            profile.setTitle(profiles.get(0).getTitle());
-            this.profileTemplate = pc.retrieve(selectedProfileItem, sessionBean.getUser());
+            // do this only in creation mode, if it is editing collection mode, keep the profile of the old collection
+            // the update will be done when the collection is saved again
+            if (isCollectionCreateMode()) {
+	            this.profile = new MetadataProfile();
+	            profile.setTitle(profiles.get(0).getTitle());
+            }
+	        this.profileTemplate = pc.retrieve(selectedProfileItem, sessionBean.getUser());
 			initStatementWrappers(this.profileTemplate);
 
         }
@@ -153,12 +160,19 @@ public abstract class CollectionBean extends ContainerBean {
     {
 		if(!"".equals(selectedProfileItem))
 		{  
-        ProfileController pc = new ProfileController();
-        MetadataProfile mProfile = pc.retrieve(selectedProfileItem, sessionBean.getUser());
-        setProfile(mProfile);
-		this.profileTemplate = pc.retrieve(selectedProfileItem, sessionBean.getUser());
-		initStatementWrappers(this.profileTemplate);
-		this.profile.setTitle(profileTemplate.getTitle());
+			//change Listener should not automatically change the old profile of the collection in Edit Mode, as there is already a profile 
+			//automatically created in any case by the collection controller during the collection creation.
+			//this is to be done by the Edit collection bean and the save existing collection
+			ProfileController pc = new ProfileController();
+			if (isCollectionCreateMode()) {
+		        MetadataProfile mProfile = pc.retrieve(selectedProfileItem, sessionBean.getUser());
+		        setProfile(mProfile);
+				this.profile.setTitle(profileTemplate.getTitle());
+			}
+		
+			this.profileTemplate = pc.retrieve(selectedProfileItem, sessionBean.getUser());
+			initStatementWrappers(this.profileTemplate);
+
 		}
     }
     
@@ -490,6 +504,22 @@ public abstract class CollectionBean extends ContainerBean {
 			return true;
 		}
 		return false;
+	}
+	
+	public boolean isCollectionCreateMode() {
+			return collectionCreateMode;
+	}
+
+	public void setCollectionCreateMode(boolean collectionCreateMode) {
+			this.collectionCreateMode = collectionCreateMode;
+	}
+	
+    public boolean isProfileSelectMode() {
+		return profileSelectMode;
+	}
+
+	public void setProfileSelectMode(boolean profileSelectMode) {
+		this.profileSelectMode = profileSelectMode;
 	}
 
  }

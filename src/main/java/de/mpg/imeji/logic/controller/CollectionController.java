@@ -104,6 +104,7 @@ public class CollectionController extends ImejiController {
 				p.setDescription(c.getMetadata().getDescription());
 				p.setTitle(c.getMetadata().getTitle()+metadataProfileName);
 				p = pc.create(p, user);
+				System.out.println("Creating a profile with Id "+p.getIdString());
 			}
 			else if ( p != null && !method.equals(MetadataProfileCreationMethod.REFERENCE)) {
 				if (method.equals(MetadataProfileCreationMethod.COPY)) {
@@ -125,6 +126,7 @@ public class CollectionController extends ImejiController {
 			// Prepare grants
 			GrantController gc = new GrantController();
 			gc.addGrants(user, AuthorizationPredefinedRoles.admin(c.getId().toString(), p.getId().toString()), user);
+			System.out.println("Created collection and a profile with Id "+c.getProfile().toString());
 			return c.getId();
 	}
 
@@ -253,6 +255,45 @@ public class CollectionController extends ImejiController {
         return retrieveLazy(ic.getId(), user);
 	}
 
+	
+	/**
+	 * Update the {@link CollectionImeji} but not iths {@link Item}
+	 * 
+	 * @param ic
+	 * @param user
+	 * @throws ImejiException
+	 */
+	public CollectionImeji updateLazyWithProfile(CollectionImeji ic, MetadataProfile mp, User user, MetadataProfileCreationMethod method) throws ImejiException {
+        validateCollection(ic, user);
+
+        //check if there had been change in the metadata profile of this collection
+        //update of the profile will be performed only when the metadata profile is different from the metadata profile of the collection
+        //and only if the old profile does not have any statements
+        ProfileController pc = new ProfileController();
+		MetadataProfile originalMP = pc.retrieve(ic.getProfile(), user);
+		System.out.println("Setting the profile from "+ originalMP.getIdString()+" to "+mp.getIdString()+" in UPDATELAYZ");
+		if (!originalMP.getId().equals(mp.getId()) && originalMP.getStatements().size()==0){
+			if (method.equals(MetadataProfileCreationMethod.REFERENCE)) {
+				//if it is a reference, only change the reference to the new metadata profile, and do not forget to delete old metadata profile
+				ic.setProfile(mp.getId());
+				pc.delete(originalMP, user);
+			}
+			else {
+				//copy all statements from the template profile to the original metadata profile
+				MetadataProfile newMP = mp.cloneWithTitle();
+				originalMP.setStatements(newMP.getStatements());
+				System.out.println(originalMP.getIdString()+" is this still the same?");
+				pc.update(originalMP, user);
+			}
+		}
+
+        writeUpdateProperties(ic, user);
+		writer.updateLazy(WriterFacade.toList(ic), user);
+		
+        return retrieveLazy(ic.getId(), user);
+	}
+	
+	
 	/**
 	 * Delete a {@link CollectionImeji} and all its {@link Item}
 	 * 

@@ -55,6 +55,7 @@ public class CreateCollectionBean extends CollectionBean {
 	 * Method called when paged is loaded (defined in pretty-config.xml)
 	 */
 	public void initialize() {
+		setCollectionCreateMode(true);
 		setCollection(ImejiFactory.newCollection());
 		((List<Person>) getCollection().getMetadata().getPersons()).set(0, sessionBean.getUser().getPerson().clone());
         vocabularyHelper = new VocabularyHelper();

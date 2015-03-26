@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import org.apache.commons.io.FileUtils;
@@ -17,6 +18,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.jobs.CleanMetadataProfileJob;
 import de.mpg.imeji.logic.jobs.ImportFileFromEscidocToInternalStorageJob;
 import de.mpg.imeji.logic.jobs.RefreshFileSizeJob;
 import de.mpg.imeji.logic.jobs.StorageUsageAnalyseJob;
@@ -59,6 +61,7 @@ public class AdminBean {
 	private String lastUpdateStorageStatistics;
 	private Future<Integer> storageAnalyseStatus;
 	private String cleanDatabaseReport = "";
+	private List<MetadataProfile> unusedProfiles = new ArrayList<MetadataProfile>();
 
 	public AdminBean() throws IOException, URISyntaxException {
 
@@ -93,6 +96,27 @@ public class AdminBean {
 		StorageController controller = new StorageController();
 		controller.getAdministrator().clean();
 		return "pretty:";
+	}
+
+	/**
+	 * Find all unused {@link MetadataProfile}
+	 * 
+	 * @throws InterruptedException
+	 * @throws ExecutionException
+	 */
+	public void findUnusedProfiles() throws InterruptedException,
+			ExecutionException {
+		CleanMetadataProfileJob job = new CleanMetadataProfileJob(false);
+		Future<Integer> f = Imeji.executor.submit(job);
+		f.get();
+		this.unusedProfiles = job.getProfiles();
+	}
+
+	/**
+	 * Remove all unused {@link MetadataProfile}
+	 */
+	public void cleanUnusedMetadataProfiles() {
+		Imeji.executor.submit(new CleanMetadataProfileJob(true));
 	}
 
 	/**
@@ -364,5 +388,13 @@ public class AdminBean {
 
 	public String getCleanDatabaseReport() {
 		return cleanDatabaseReport;
+	}
+
+	public List<MetadataProfile> getUnusedProfiles() {
+		return unusedProfiles;
+	}
+
+	public void setUnusedProfiles(List<MetadataProfile> unusedProfiles) {
+		this.unusedProfiles = unusedProfiles;
 	}
 }

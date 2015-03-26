@@ -366,7 +366,7 @@ public class Java2Jena
                             }
                         }
                         // Search for other objects
-                        for (Object o : ((ArrayList<?>)r2))
+                        for (Object o : ((List<?>)r2))
                         {
                             if (J2JHelper.isResource(o) && exists(o))
                             {

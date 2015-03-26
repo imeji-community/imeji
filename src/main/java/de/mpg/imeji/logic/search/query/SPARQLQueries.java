@@ -90,6 +90,18 @@ public class SPARQLQueries {
 	}
 
 	/**
+	 * Select {@link MetadataProfile} which are not used by any
+	 * {@link CollectionImeji}
+	 * 
+	 * @return
+	 */
+	public static String selectUnusedMetadataProfiles() {
+		return " SELECT DISTINCT ?s WHERE { "
+				+ "?s a <http://imeji.org/terms/mdprofile> . not exists{?c <http://imeji.org/terms/mdprofile> ?s}"
+				+ "}";
+	}
+
+	/**
 	 * Select all {@link Username}
 	 * 
 	 * @return

@@ -26,6 +26,8 @@ import java.util.List;
 import java.util.Map;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
+import static de.mpg.imeji.logic.notification.CommonMessages.getSuccessCollectionDeleteMessage;
+
 /**
  * Abstract bean for all collection beans
  * 
@@ -312,8 +314,7 @@ public abstract class CollectionBean extends ContainerBean {
 		CollectionController cc = new CollectionController();
 		try {
 			cc.delete(collection, sessionBean.getUser());
-			// BeanHelper.info(sessionBean.getMessage("success_collection_delete"));
-			BeanHelper.info(sessionBean.getMessage("success_collection_delete").replace("XXX_collectionName_XXX", this.collection.getMetadata().getTitle()));
+			BeanHelper.info(getSuccessCollectionDeleteMessage(this.collection.getMetadata().getTitle(), sessionBean));
 		} catch (Exception e) {
 			BeanHelper.error(sessionBean.getMessage("error_collection_delete"));
 			logger.error("Error delete collection", e);

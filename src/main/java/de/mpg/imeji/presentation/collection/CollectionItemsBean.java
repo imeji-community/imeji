@@ -31,6 +31,8 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static de.mpg.imeji.logic.notification.CommonMessages.getSuccessCollectionDeleteMessage;
+
 /**
  * {@link ItemsBean} to browse {@link Item} of a {@link CollectionImeji}
  * 
@@ -196,11 +198,11 @@ public class CollectionItemsBean extends ItemsBean
         try
         {
             cc.delete(collection, sb.getUser());
-            BeanHelper.info(sb.getMessage("success_collection_delete"));
+            BeanHelper.info(getSuccessCollectionDeleteMessage(collection.getMetadata().getTitle(), sb));
         }
         catch (Exception e)
         {
-            BeanHelper.error(sb.getMessage("success_collection_delete"));
+            BeanHelper.error(getSuccessCollectionDeleteMessage(collection.getMetadata().getTitle(), sb));
             BeanHelper.error(e.getMessage());
             logger.error("Error deleting collection", e);
         }

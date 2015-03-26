@@ -42,6 +42,8 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.util.List;
 
+import static de.mpg.imeji.logic.notification.CommonMessages.getSuccessCollectionDeleteMessage;
+
 /**
  * Bean for the upload page
  * 
@@ -429,8 +431,7 @@ public class UploadBean implements Serializable {
 				.getSessionBean(SessionBean.class);
 		try {
 			cc.delete(collection, sessionBean.getUser());
-			BeanHelper
-					.info(sessionBean.getMessage("success_collection_delete"));
+			BeanHelper.info(getSuccessCollectionDeleteMessage(collection.getMetadata().getTitle(), sessionBean));
 		} catch (Exception e) {
 			BeanHelper.error(sessionBean.getMessage("error_collection_delete"));
 			logger.error("Error delete collection", e);

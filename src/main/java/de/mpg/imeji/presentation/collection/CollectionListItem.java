@@ -3,13 +3,6 @@
  */
 package de.mpg.imeji.presentation.collection;
 
-import java.net.URI;
-import java.util.Collection;
-
-import javax.faces.event.ValueChangeEvent;
-
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -22,6 +15,13 @@ import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CommonUtils;
 import de.mpg.imeji.presentation.util.ObjectLoader;
+import org.apache.log4j.Logger;
+
+import javax.faces.event.ValueChangeEvent;
+import java.net.URI;
+import java.util.Collection;
+
+import static de.mpg.imeji.logic.notification.CommonMessages.getSuccessCollectionDeleteMessage;
 
 /**
  * Item of the collections page.
@@ -169,8 +169,9 @@ public class CollectionListItem
         CollectionController cc = new CollectionController();
         try
         {
-            cc.delete(cc.retrieve(uri, sessionBean.getUser()), sessionBean.getUser());
-            BeanHelper.info(sessionBean.getMessage("success_collection_delete"));
+            CollectionImeji c = cc.retrieve(uri, sessionBean.getUser());
+            cc.delete(c, sessionBean.getUser());
+            BeanHelper.info(getSuccessCollectionDeleteMessage(c.getMetadata().getTitle(), sessionBean));
         }
         catch (Exception e)
         {

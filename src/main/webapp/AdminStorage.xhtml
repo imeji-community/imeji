@@ -75,6 +75,30 @@
 								    <input type="submit" value="#{lbl.execute}" formtarget="_blank" class="imj_editButton"/>
 								</FORM>	
 							</div>
+							
+							<!-- Admin - Clean storage -->
+							<div class="imj_headline">
+								<h2>
+									<h:outputText value="#{lbl.admin_clean_unused_profiles}"/>
+								</h2>
+							</div>
+							
+							<div class="imj_content">
+								<h:outputText value="#{lbl.admin_clean_storage_description}"/> 				
+								<h:panelGroup layout="block" styleClass="imj_adminEditPanel">
+									<h:form>
+										<h:commandLink styleClass="imj_editButton" action="#{AdminBean.findUnusedProfiles}" value="#{lbl.admin_find_unused_profiles}" rendered="#{empty AdminBean.unusedProfiles}"/>
+										<h:commandLink styleClass="imj_cancelButton" action="#{AdminBean.deleteUnusedProfiles}" value="#{lbl.delete_all}" rendered="#{!empty AdminBean.unusedProfiles}"/>
+									</h:form>
+									<ui:repeat var="profile" value="#{AdminBean.unusedProfiles}">
+										<div class="imj_metadataSet imj_metadataLabel">
+											<h:outputText value="#{profile.title}"/>
+											<h:outputLink value="#{Navigation.profileUrl}#{profile.idString}"><h:outputText value="#{lbl.view}"/></h:outputLink>
+										</div>
+									</ui:repeat>	
+								</h:panelGroup>
+							</div>
+							
 							<!-- Admin - Clean storage -->
 							<div class="imj_headline">
 								<h2>

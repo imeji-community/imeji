@@ -47,7 +47,7 @@
 							<div class="imj_content">
 								<FORM action="#{Navigation.applicationUrl}/sparql">
 								  	<p>
-								        <textarea name="q" cols="40" rows="10" maxlength="10240000" >SELECT * WHERE{?s ?p ?o}</textarea>
+								        <textarea name="q" cols="40" rows="10" maxlength="10240000" >SELECT * WHERE{?s ?p ?o} limit 1000</textarea>
 								   	</p>
 								  	<p>
 										#{lbl.model} 
@@ -63,8 +63,8 @@
 									 <p>
 										#{lbl.format} 
 										<select name="format">
-											<option value="" selected="selected">RDF-XML</option>
-											<option value="table">Table</option>
+											<option value="table" selected="selected">Table</option>
+											<option value="" >RDF-XML</option>
 											<option value="json">JSON</option>
 											<option value="ttl">TTL</option>
 											<option value="bio">BIO</option>
@@ -84,7 +84,7 @@
 							</div>
 							
 							<div class="imj_content">
-								<h:outputText value="#{lbl.admin_clean_storage_description}"/> 				
+								<h:outputText value="#{lbl.admin_clean_unused_profiles_description}"/> 				
 								<h:panelGroup id="clean_profiles" layout="block" styleClass="imj_adminEditPanel">
 									<h:form>
 										<h:commandLink styleClass="imj_editButton" action="#{AdminBean.findUnusedProfiles}" value="#{lbl.admin_find_unused_profiles}" rendered="#{empty AdminBean.unusedProfiles}"/>

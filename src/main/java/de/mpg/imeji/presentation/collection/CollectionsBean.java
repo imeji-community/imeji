@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import static de.mpg.imeji.logic.notification.CommonMessages.getSuccessCollectionDeleteMessage;
+
 /**
  * Bean for the collections page
  * 
@@ -149,8 +151,7 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
             collectionController.delete(collection, sb.getUser());
             count++;
             
-            BeanHelper.info(sb.getMessage("success_collection_delete").replace("XXX_collectionName_XXX",
-                    collection.getMetadata().getTitle()));
+            BeanHelper.info(getSuccessCollectionDeleteMessage(collection.getMetadata().getTitle(), sb));
         }
         sb.getSelectedCollections().clear();
         if (count == 0)

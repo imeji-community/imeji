@@ -116,13 +116,13 @@ public class StringHelper
     }
 
     /**
-     * Check string if it is empty include trim()
+     * Trimmed {@link com.google.common.base.Strings#isNullOrEmpty(String) isNullOrEmpty}
      *
      * @param str
      * @return
      */
     public static boolean isNullOrEmptyTrim(String str)
     {
-         return isNullOrEmpty(str) ? true : "".equals(str.trim());
+         return isNullOrEmpty(str) || "".equals(str.trim());
     }
 }

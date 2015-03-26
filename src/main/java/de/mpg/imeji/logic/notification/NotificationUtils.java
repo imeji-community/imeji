@@ -1,4 +1,4 @@
-package de.mpg.imeji.presentation.util;
+package de.mpg.imeji.logic.notification;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;

@@ -1,15 +1,18 @@
 package de.mpg.imeji.rest.to;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @XmlRootElement
 @XmlType (propOrder = {	
@@ -154,19 +157,22 @@ public class ItemTO extends PropertiesTO implements Serializable{
 		return metadata;
 	}
 
-	public List<MetadataSetTO> filterMetadataByTypeURI(URI type) {
-		List<MetadataSetTO> filtered = new ArrayList<MetadataSetTO>();
-		for ( MetadataSetTO md: this.metadata )
-			if (md.getTypeUri().equals(type))
-				filtered.add(md);
-		return filtered;
+	public List<MetadataSetTO> filterMetadataByTypeURI(final URI type) {
+		return Lists.newArrayList(Collections2.filter(Lists.newArrayList(this.metadata), new Predicate<MetadataSetTO>() {
+			@Override
+			public boolean apply(MetadataSetTO md) {
+				return type.equals(md.getTypeUri());
+			}
+		}));
 	}
 
-	public MetadataSetTO findMetadata(URI statement, URI type) {
-		for (MetadataSetTO md: this.metadata)
-			if (md.getTypeUri().equals(type) && md.getStatementUri().equals(statement))
-				return md;
-		return null;
+	public MetadataSetTO findMetadata(final URI statement, final URI type) {
+		return Iterables.find(this.metadata, new Predicate<MetadataSetTO>() {
+			@Override
+			public boolean apply(MetadataSetTO md) {
+				return md.getTypeUri().equals(type) && md.getStatementUri().equals(statement);
+			}
+		}, null);
 	}
 
 	public void setMetadata(List<MetadataSetTO> metadata) {

@@ -579,7 +579,9 @@ public class CollectionTest extends ImejiTestBase {
         }
 
         //profile COPY
-        assertThat("Should be new profileId", uc.getProfile().getProfileId(), not(equalTo(storedProfileId)));
+        //Test is wrong 
+        //in case of profile COPY, only statements are copied from the referenced profile, has nothing to do with the stored ProfileId
+        //assertThat("Should be new profileId", uc.getProfile().getProfileId(), not(equalTo(storedProfileId)));
 
 
         //profile REFERENCE
@@ -638,13 +640,16 @@ public class CollectionTest extends ImejiTestBase {
 
         //wrong profile id
         stored = collectionTO.getProfile().getProfileId();
-        collectionTO.getProfile().setMethod(stored + CHANGED);
+        collectionTO.getProfile().setProfileId(stored + CHANGED);
         response = getResponse(request, collectionTO);
-        assertEquals(BAD_REQUEST.getStatusCode(), response.getStatus());
+        assertEquals(UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
         collectionTO.getProfile().setProfileId(stored);
 
-        //wrong profile method
+        //wrong profile method, we need another collection profile..
+        String storedProfileId = collectionTO.getProfile().getProfileId();
+        initCollection();
         collectionTO.getProfile().setMethod("wrong_method");
+        collectionTO.getProfile().setProfileId(storedProfileId);
         response = getResponse(request, collectionTO);
         assertEquals(BAD_REQUEST.getStatusCode(), response.getStatus());
         collectionTO.getProfile().setMethod("");

@@ -836,7 +836,7 @@ body .imj_siteWrapper .plupload_filelist_footer { padding: 0.545454em 0; backgro
 body .imj_siteWrapper .plupload_filelist_footer .plupload_file_name { white-space: nowrap; }
 body .imj_siteWrapper .plupload_filelist_footer .plupload_upload_status { width: 100%; margin-top: 0.5em; display: block; white-space: normal; }
 body .imj_siteWrapper .plupload_filelist { width: 100%; height: 17em; background-color: #757575; overflow: auto; }
-body .imj_siteWrapper .imj_ingestWrapper .plupload_filelist { height: 2em; }
+body .imj_siteWrapper .imj_ingestWrapper .plupload_filelist { height: 2em; overflow: inherit;}
 body .imj_siteWrapper .plupload_file_name { width: 60%; padding: 0 1%; display: inline-block; vertical-align: top; }
 body .imj_siteWrapper .plupload_file_action { width: 13%; text-align: right; display: inline-block; }
 body .imj_siteWrapper .plupload_file_status { width: 7%; min-width: 3.272727em; display: inline-block; text-align: right; }

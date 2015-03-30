@@ -2,15 +2,21 @@ package de.mpg.imeji.rest.api;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.process.TransferObjectFactory;
+import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.MetadataProfileTO;
 
 import java.net.URI;
 import java.util.List;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 
 
 
@@ -49,8 +55,9 @@ public class ProfileService implements API<MetadataProfileTO>{
 
 	@Override
 	public boolean delete(String id, User u) throws ImejiException {
-		// TODO Auto-generated method stub
-		return false;
+		ProfileController pcontroller = new ProfileController();
+		pcontroller.delete(pcontroller.retrieve(id, u), u);
+		return true;
 	}
 
 	@Override
@@ -86,6 +93,19 @@ public class ProfileService implements API<MetadataProfileTO>{
 		return null;
 	}
 
+	public List<MetadataProfileTO> readAll(User u) throws ImejiException {
+	        ProfileController cc = new ProfileController();
+	        return Lists.transform(cc.search(u),
+	                new Function<MetadataProfile, MetadataProfileTO>() {
+	                    @Override
+	                    public MetadataProfileTO apply(MetadataProfile vo) {
+	                        MetadataProfileTO to = new MetadataProfileTO();
+	                        TransferObjectFactory.transferMetadataProfile(vo, to);
+	                        return to;
+	                    }
+	                }
+	        );
+	    }
 
 
 }

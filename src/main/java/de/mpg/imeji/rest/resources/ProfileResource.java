@@ -11,6 +11,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import static de.mpg.imeji.rest.process.CollectionProcess.readCollectionItems;
 import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONResponse;
 
 
@@ -21,7 +22,8 @@ public class ProfileResource implements ImejiResource {
     @GET  
     @Produces(MediaType.APPLICATION_JSON)
 	public Response readAll(@Context HttpServletRequest req) {
-		return null;
+    	JSONResponse resp = ProfileProcess.readAll(req);
+        return buildJSONResponse(resp);
 	}
   
     @GET   
@@ -47,6 +49,5 @@ public class ProfileResource implements ImejiResource {
 		JSONResponse resp = ProfileProcess.deleteProfile(req, id);
 		return buildJSONResponse(resp);
 	}
-
 	
 }

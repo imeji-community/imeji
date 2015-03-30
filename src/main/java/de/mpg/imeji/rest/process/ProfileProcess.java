@@ -1,10 +1,13 @@
 package de.mpg.imeji.rest.process;
 
+import static javax.ws.rs.core.Response.Status.OK;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response.Status;
 
 import de.mpg.imeji.exceptions.AuthenticationError;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ProfileService;
 import de.mpg.imeji.rest.to.JSONResponse;
 
@@ -46,4 +49,18 @@ public class ProfileProcess {
 		return resp;
 
 	}
+	
+	public static  JSONResponse readAll(HttpServletRequest req) {
+        JSONResponse resp;
+
+        User u = BasicAuthentication.auth(req);
+
+        ProfileService ccrud = new ProfileService();
+        try {
+            resp = RestProcessUtils.buildResponse(OK.getStatusCode(), ccrud.readAll(u));
+        } catch (Exception e) {
+            resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
+        }
+        return resp;
+    }
 }

@@ -23,7 +23,7 @@
 					<ui:fragment rendered="#{empty logicBean.profile.statements and Auth.update(logicBean.profile) and logicBean.profile.status != 'WITHDRAWN'}">
 						<h2 class="imj_headline imj_messageInfo">#{msg.error_collection_profile_not_exist}
 							<br/>
-							<h:outputLink value="#{Navigation.collectionUrl}#{logicBean.id}/#{Navigation.editPath}?profileSelect=1" title="#{lbl.create_now_from_template}">
+							<h:outputLink value="#{Navigation.collectionUrl}#{logicBean.id}/#{Navigation.editPath}?profileSelect=1" title="#{lbl.create_now_from_template}" rendered="#{logicBean.hasProfiles}">
 									<span class="imj_entryPagePreviewTiledListLinkArrow"> </span>
 									<h:outputText value="#{lbl.create_now_from_template}"/>
 							</h:outputLink>

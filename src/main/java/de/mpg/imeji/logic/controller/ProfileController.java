@@ -283,7 +283,7 @@ public class ProfileController extends ImejiController {
             try {
                 path = PropertyReader.getProperty(DEFAULT_METADATA_PROFILE_PATH_PROPERTY);
                 if (isNullOrEmpty(path)) {
-                	System.out.println("There is no default metadata profile defined! This is not an error, Imeji will still work. Default metadata profile is a convenience for quick start!" +
+                	logger.info("There is no default metadata profile defined! This is not an error, Imeji will still work. Default metadata profile is a convenience for quick start!" +
                 			"Check more about it at the IMEJI Documentation.");
                 	return null;
                 }
@@ -326,4 +326,15 @@ public class ProfileController extends ImejiController {
 			throw new BadRequestException("error_profile_need_title");
 		}
 	}
+	
+	public boolean isReferencedByOtherResources(String profileUri, String resourceUri) {
+		Search s = new SPARQLSearch(SearchType.ALL, null);
+		List<String> r = s.searchSimpleForQuery(
+				SPARQLQueries.hasOtherMetadataProfileReferences(profileUri, resourceUri)).getResults();
+		if (r.size()>0) {
+			return true;
+		}
+		return false;
+	}
+	
 }

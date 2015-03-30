@@ -22,7 +22,7 @@
 		<div class="imj_metadataProfileList">
 			<div class="imj_listHeader">
 				<h3 class="imj_headline">
-					<h:outputText value="#{cc.attrs.headline}"/>
+					<h:outputText value="#{cc.attrs.headline}: #{cc.attrs.metadataProfile.title}"/>
 				</h3>
 				
 				<div class="imj_listHeaderMenu">
@@ -54,6 +54,16 @@
 						<a href="#{cc.attrs.profileUrl.trim()}" title="#{cc.attrs.profileUrl.trim()}">
 							<h:outputText value="#{cc.attrs.profileUrl.trim()}"/>
 						</a>
+					</span>
+				</h:panelGroup>
+				
+				<h:panelGroup layout="block" styleClass="imj_metadataSet">
+					<label class="imj_metadataLabel">							
+						<h:outputText value="#{lbl.description}"/>
+						<span class="imj_noDisplay">: </span>
+					</label>
+					<span class="imj_metadataValue">
+						<h:outputText value="#{cc.attrs.metadataProfile.description}"/>
 					</span>
 				</h:panelGroup>
 				

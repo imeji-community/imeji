@@ -204,6 +204,8 @@ public class ItemController extends ImejiController {
 		}
 		writer.create(J2JHelper.cast2ObjectList(new ArrayList<Item>(items)),
 				user);
+		//TODO NB:29.03.2014 Why collection update by item creation? Why collection contains list of items each time?
+		//Not performant
 		cc.update(ic, user);
 
 	}

@@ -110,18 +110,14 @@ public class EditCollectionBean extends CollectionBean
 		    	 CollectionController collectionController = new CollectionController();
 		         User user = sessionBean.getUser();
 		         //collectionController.updateLazy(getCollection(), user);
-		         System.out.println("Collection Profile now is = "+getProfile().getIdString()+" or ? "+getProfileId());
 		         
 		         if (isUseMDProfileTemplate() && getProfileTemplate() != null) {
-		         	System.out.println("Now I am going to change the profile of the collection to "+
-		             getProfileTemplate().getIdString()+ " from "+getProfile().getIdString()+ "with method "+getSelectedCreationMethod());
 		         	collectionController.updateLazyWithProfile(getCollection(), getProfileTemplate(), user, 
 		         							collectionController.getProfileCreationMethod(getSelectedCreationMethod()));
 		         }
 		         else
 		         {
 		            collectionController.updateLazy(getCollection(), user);
-		            System.out.println("No profile update here !!!");
 		         }
 		
 		         UserController uc = new UserController(user);

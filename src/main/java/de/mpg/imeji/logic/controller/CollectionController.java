@@ -6,14 +6,20 @@ package de.mpg.imeji.logic.controller;
 import de.mpg.imeji.exceptions.*;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
+import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
+import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.query.URLQueryTransformer;
+import de.mpg.imeji.logic.search.vo.SearchElement;
+import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
+import de.mpg.imeji.logic.search.vo.SearchElement.SEARCH_ELEMENTS;
+import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.logic.vo.Properties.Status;
@@ -104,7 +110,6 @@ public class CollectionController extends ImejiController {
 				p.setDescription(c.getMetadata().getDescription());
 				p.setTitle(c.getMetadata().getTitle()+metadataProfileName);
 				p = pc.create(p, user);
-				System.out.println("Creating a profile with Id "+p.getIdString());
 			}
 			else if ( p != null && !method.equals(MetadataProfileCreationMethod.REFERENCE)) {
 				if (method.equals(MetadataProfileCreationMethod.COPY)) {
@@ -126,7 +131,6 @@ public class CollectionController extends ImejiController {
 			// Prepare grants
 			GrantController gc = new GrantController();
 			gc.addGrants(user, AuthorizationPredefinedRoles.admin(c.getId().toString(), p.getId().toString()), user);
-			System.out.println("Created collection and a profile with Id "+c.getProfile().toString());
 			return c.getId();
 	}
 
@@ -242,6 +246,22 @@ public class CollectionController extends ImejiController {
 	}
 
 	/**
+	 * Update a {@link CollectionImeji} (inclusive its {@link Item}: slow for
+	 * huge {@link CollectionImeji})
+	 * 
+	 * @param ic
+	 * @param user
+	 * @throws ImejiException
+	 */
+	public CollectionImeji updateWithProfile(CollectionImeji ic, MetadataProfile mp, User user, MetadataProfileCreationMethod method) throws ImejiException {
+		validateCollection(ic, user);
+		updateCollectionProfile(ic, mp, user, method);
+		writeUpdateProperties(ic, user);
+		writer.update(WriterFacade.toList(ic), user);
+        return retrieve(ic.getId(), user);
+	}
+	
+	/**
 	 * Update the {@link CollectionImeji} but not iths {@link Item}
 	 * 
 	 * @param ic
@@ -255,6 +275,32 @@ public class CollectionController extends ImejiController {
         return retrieveLazy(ic.getId(), user);
 	}
 
+
+	public CollectionImeji updateCollectionProfile(CollectionImeji ic, MetadataProfile mp, User user, MetadataProfileCreationMethod method) throws ImejiException {
+        if (mp == null)
+        	return ic;
+        //check if there had been change in the metadata profile of this collection
+        //update of the profile will be performed only when the metadata profile is different from the metadata profile of the collection
+        //and only if the old profile does not have any statements
+        ProfileController pc = new ProfileController();
+		MetadataProfile originalMP = pc.retrieve(ic.getProfile(), user);
+		if (!originalMP.getId().equals(mp.getId()) && originalMP.getStatements().size()==0){
+			if (method.equals(MetadataProfileCreationMethod.REFERENCE)) {
+				//if it is a reference, only change the reference to the new metadata profile, and do not forget to delete old metadata profile
+				ic.setProfile(mp.getId());
+				pc.delete(originalMP, user);
+			}
+			else {
+				//copy all statements from the template profile to the original metadata profile
+				MetadataProfile newMP = mp.cloneWithTitle();
+				//Title format as CollectionName (Metadata profile) (copy of <copied metadata profile name>))
+				//newMP.setTitle(ic.getMetadata().getTitle()+"(Metadata profile)"+newMP.getTitle());
+				originalMP.setStatements(newMP.getStatements());
+				pc.update(originalMP, user);
+			}
+		}
+		return ic;
+	}
 	
 	/**
 	 * Update the {@link CollectionImeji} but not iths {@link Item}
@@ -265,31 +311,9 @@ public class CollectionController extends ImejiController {
 	 */
 	public CollectionImeji updateLazyWithProfile(CollectionImeji ic, MetadataProfile mp, User user, MetadataProfileCreationMethod method) throws ImejiException {
         validateCollection(ic, user);
-
-        //check if there had been change in the metadata profile of this collection
-        //update of the profile will be performed only when the metadata profile is different from the metadata profile of the collection
-        //and only if the old profile does not have any statements
-        ProfileController pc = new ProfileController();
-		MetadataProfile originalMP = pc.retrieve(ic.getProfile(), user);
-		System.out.println("Setting the profile from "+ originalMP.getIdString()+" to "+mp.getIdString()+" in UPDATELAYZ");
-		if (!originalMP.getId().equals(mp.getId()) && originalMP.getStatements().size()==0){
-			if (method.equals(MetadataProfileCreationMethod.REFERENCE)) {
-				//if it is a reference, only change the reference to the new metadata profile, and do not forget to delete old metadata profile
-				ic.setProfile(mp.getId());
-				pc.delete(originalMP, user);
-			}
-			else {
-				//copy all statements from the template profile to the original metadata profile
-				MetadataProfile newMP = mp.cloneWithTitle();
-				originalMP.setStatements(newMP.getStatements());
-				System.out.println(originalMP.getIdString()+" is this still the same?");
-				pc.update(originalMP, user);
-			}
-		}
-
+        updateCollectionProfile(ic, mp, user, method);
         writeUpdateProperties(ic, user);
 		writer.updateLazy(WriterFacade.toList(ic), user);
-		
         return retrieveLazy(ic.getId(), user);
 	}
 	
@@ -321,9 +345,16 @@ public class CollectionController extends ImejiController {
 			ProfileController pc = new ProfileController();
 			try {
 				MetadataProfile collectionMdp= pc.retrieve(collection.getProfile(), user);
-				if (collectionMdp != null) {
-					pc.delete(collectionMdp, user);
-					
+				if ( ( pc.isReferencedByOtherResources(collectionMdp.getId().toString(), collection.getId().toString())) ||
+					  (!AuthUtil.staticAuth().delete(user, collectionMdp.getId().toString())) )
+				{
+					logger.info("Metadata profile related to this collection is referenced elsewhere, or user does not have permission to delete this profile."+
+				                "Profile <"+ collectionMdp.getId().toString()+"> will not be deleted!");
+				}
+				else
+				{
+					logger.info("Metadata profile <"+ collectionMdp.getId().toString()+"> is not referenced elsewhere, will be deleted!");
+						pc.delete(collectionMdp, user);
 				}
 			}
 			catch (NotFoundException e){
@@ -430,6 +461,8 @@ public class CollectionController extends ImejiController {
 		Search search = SearchFactory.create(SearchType.COLLECTION);
 		return search.search(searchQuery, sortCri, user);
 	}
+	
+	
 	
 	/**
 	 * Validate the collection information provided, before it has been submitted to the writer

@@ -122,42 +122,50 @@ public class CollectionService implements API<CollectionTO> {
     @Override
     public CollectionTO update(CollectionTO to, User u)
             throws ImejiException {
-        ProfileController pc = new ProfileController();
+    	
+    	ProfileController pc = new ProfileController();
         CollectionController cc = new CollectionController();
 
         CollectionImeji vo = getCollectionVO(cc, to.getId(), u);
+        MetadataProfile originalMp= pc.retrieve(vo.getProfile(), u);
+        String hasStatements = originalMp.getStatements().size() >0?
+        		" Existing metadata profile has already defined metadata elements. It is not allowed to update it: remove the profileId from your input."
+        		:"";
 
         //profile is defined
         CollectionProfileTO profTO = to.getProfile();
-        if (profTO != null) {
-            String profileId = profTO.getProfileId();
-            String method = profTO.getMethod();
-            MetadataProfile mp;
-
+        String profileId = (profTO!=null)?profTO.getProfileId():"";
+        String method = (profTO!=null)?profTO.getMethod():"";
+        
+        MetadataProfile mp = null;
+        
+        transferCollection(to, vo, UPDATE);
             //profileId is filled
-            if ( !isNullOrEmpty(profileId) ) {
+        if ( !isNullOrEmpty(profileId) ) {
                 try {
                     mp = pc.retrieve(profileId, u);
                 } catch (ImejiException e) {
-                    throw new BadRequestException("Can not find the metadata profile you have referenced in the JSON body: " + profileId);
+                    throw new UnprocessableError("Can not retrieve the metadata profile provided in the JSON body with id: " + profileId+hasStatements);
                 }
-                if (METHOD.COPY.toString().equals(method)) {
-                    mp = pc.create(mp.clone(), u);
-                    //other profile id
-                }  else if (isNullOrEmpty(method) || METHOD.REFERENCE.toString().equals(method)) {
-                    profTO.setMethod(METHOD.REFERENCE.toString());
-                } else
-                    throw new BadRequestException("Wrong metadata profile update method: " + method);
+                
+                if (!profileId.equals(originalMp.getIdString())){
 
-                profTO.setProfileId(mp.getId().toString());
-                vo.setProfile(mp.getId());
-            }
-        }
-        transferCollection(to, vo, UPDATE);
+		                if (!METHOD.COPY.toString().equals(method) && !METHOD.REFERENCE.toString().equals(method)) {
+		                    throw new BadRequestException("Wrong metadata profile update method: " + method+" ! Allowed values are {copy, reference}. ");
+		                }
+
+                		//if the original profile already has statements, no profile update is allowed
+                		if (originalMp.getStatements().size()>0 ) {
+		                	throw new UnprocessableError("It is not allowed to update related metadata profile which has already defined metadata elements.");
+		                }
+        		}
+                
+         }
+
+    	CollectionImeji updatedCollection = cc.updateWithProfile(vo, mp, u, cc.getProfileCreationMethod(method));
         CollectionTO newTO = new CollectionTO();
-        TransferObjectFactory.transferCollection(cc.update(vo, u), newTO);
+        TransferObjectFactory.transferCollection(updatedCollection, newTO);
         return newTO;
-
     }
 
 	@Override

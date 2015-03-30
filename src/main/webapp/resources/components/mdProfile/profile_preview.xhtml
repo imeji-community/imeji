@@ -6,57 +6,56 @@
 	
 	<composite:interface>
 		<composite:attribute name="statementWrappers" required="true"/>
+		<composite:attribute name="profileDescription" required="false"/>
 	</composite:interface>
 	
 	<composite:implementation>
 		<h:panelGroup layout="block" styleClass="imj_metadataList imj_metadataProfilePreviewList">
 			<div class="imj_listHeader">
-				<h2 class="imj_headline">Metadata Profile Preview</h2>
+				<h:outputText value="#{cc.attrs.profileDescription}"/>
 			</div>
 					
 			<ul class="imj_listBody"><!-- created by every hierachy level 0 element -->
 				<ui:repeat var="wrapper" value="#{cc.attrs.statementWrappers}">
 					<li class="imj_listItem">
 						<dl style="margin-left: #{wrapper.level}%;">
-							<dt class="imj_headline">
-								#{lbl.metadata} #{lbl.type}: 
-								<h:outputText value="#{MdProfileBean.getTypeLabel(wrapper.statement.type)}"/>
-							</dt>
-							<dd>
-								<ul class="imj_metadataBox">
+							<dt class="imj_headline">#{lbl.metadata}:
 									<ui:repeat var="label" value="#{wrapper.statement.labels}" varStatus="indexO">
-										<li>
-											<dl>
-												<dt>
-													<h:outputText value="(#{label.lang}): " title="#{lbl.label} (#{label.lang}): #{label.value}"/>
-												</dt>
-												<dd>
-													<h:outputText value="#{label.value}" title="#{lbl.label} (#{label.lang}): #{label.value}"/>
-												</dd>
-											</dl>
-										</li>
+										<h:outputText value="#{label.value} " title="#{lbl.label} (#{label.lang}): #{label.value}"/>
+										<h:outputText value="(#{label.lang})" title="#{lbl.label} (#{label.lang}): #{label.value}"/>
+										<h:outputText value=", " rendered="#{!(indexO.last)}"/>
 									</ui:repeat>
-								</ul>
-								
-								<div class="imj_metadataBox">
+							</dt>
+							<div class="imj_listBody">
+							<dt>
+								<h:outputText value="#{lbl.metadata_detail}: "/>
+							    <h:outputText value="#{MdProfileBean.getTypeLabel(wrapper.statement.type)} #{lbl.type}"/>
+								<h:outputText value=", #{lbl.multiple_values}" rendered="#{wrapper.multiple}"/>
+							</dt>
+							
+							<dt>
+								<!--<div class="imj_metadataBox"> -->
 									<ui:fragment rendered="#{!(empty wrapper.statement.literalConstraints)}">
-										<div class="imj_customSelectbox">
-											<div class="imj_showSelection">
-												<div class="imj_selectionText">predefined values</div>
-												<div class="imj_buttonSortDescending_16"></div>
-											</div>
-											<select>
-												<ui:repeat id="constraints" var="constraint" value="#{wrapper.statement.literalConstraints}">
-													<option>#{constraint}</option>
-												</ui:repeat>
-											</select>
-										</div>
+										#{lbl.constraints}:
+										<ui:repeat id="constraints" var="constraint" value="#{wrapper.statement.literalConstraints}" varStatus="indexB">
+												<h:outputText value="#{constraint}" />
+												<h:outputText value=", " rendered="#{!(indexB.last)}"/>
+										</ui:repeat>
 									</ui:fragment>
 									<ui:fragment rendered="#{wrapper.statement.vocabulary != null}">
-										<h:outputText value="#{CreateCollectionBean.getVocabularyLabel(wrapper.statement.vocabulary)}"/>
+										<h:outputText value="#{lbl.vocabulary}: #{CreateCollectionBean.getVocabularyLabel(wrapper.statement.vocabulary)}"/>
 									</ui:fragment>
-								</div>
-							</dd>
+								<!--</div> -->
+							</dt>
+							<dt>
+							    <h:outputText value="#{lbl.metadata_detail_imeji}: "/>
+							    <h:outputText value="#{lbl.preview}" rendered="#{wrapper.statement.preview}"/>
+								<h:outputText value="#{lbl.not_preview}" rendered="#{!wrapper.statement.preview}"/>
+							    <h:outputText value=", " rendered="#{wrapper.statement.preview and wrapper.statement.description}"/>
+								<h:outputText value="#{lbl.used_as_description}" rendered="#{wrapper.statement.description}" />
+							</dt>
+							<!-- </ul> -->
+							</div>
 						</dl>
 					</li> <!-- END MDSet -->
 				</ui:repeat>

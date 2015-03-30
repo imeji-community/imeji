@@ -4,9 +4,12 @@
 package de.mpg.imeji.presentation.collection;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.CollectionController.MetadataProfileCreationMethod;
 import de.mpg.imeji.logic.controller.ProfileController;
+import de.mpg.imeji.logic.search.SPARQLSearch;
+import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.presentation.beans.ContainerBean;
@@ -153,7 +156,7 @@ public abstract class CollectionBean extends ContainerBean {
         }
         catch (Exception e)
         {
-            BeanHelper.error(sessionBean.getMessage("error_profile_template_load"));
+            BeanHelper.info(sessionBean.getMessage("error_profile_template_load"));
         }
     }
     
@@ -522,5 +525,21 @@ public abstract class CollectionBean extends ContainerBean {
 	public void setProfileSelectMode(boolean profileSelectMode) {
 		this.profileSelectMode = profileSelectMode;
 	}
+	
+    /**
+     * Load the templates (i.e. the {@link MetadataProfile} that can be used by the {@link User}), and add it the the
+     * menu (sorted by name)
+     */
+    public boolean isHasProfiles()
+    {    
+          ProfileController pc = new ProfileController();
+          try {
+              return (pc.search(sessionBean.getUser()).size()>0);        	  
+          }
+          catch (ImejiException e) {
+        	  return false;
+          }
 
- }
+    }
+
+}

@@ -100,7 +100,22 @@ public class SPARQLQueries {
 				+ "?s a <http://imeji.org/terms/mdprofile> . not exists{?c <http://imeji.org/terms/mdprofile> ?s}"
 				+ "}";
 	}
+	
+	/**
+	 * Checks if provided {@link MetadataProfile} uri has other references than the reference in the provided resource 
+	 * {@link CollectionImeji}
+	 * 
+	 * @return
+	 */
+	public static String hasOtherMetadataProfileReferences(String profileUri, String resourceUri) {
+		return " SELECT ?s WHERE { "
+				+ "?s <http://imeji.org/terms/mdprofile> <"+profileUri+">." +
+				" FILTER (?s != <"+ resourceUri +">  && ?s != <"+profileUri+"> )} LIMIT 1";
+		
+	}
 
+	
+	
 	/**
 	 * Select all {@link Username}
 	 * 

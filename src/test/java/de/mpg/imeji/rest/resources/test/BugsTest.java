@@ -47,7 +47,7 @@ public class BugsTest {
 
         EmailMessages em = new EmailMessages();
         assertThat(em.getEmailOnZipDownload_Body(mockedToUser, null, UrlHelper.encodeQuery(url), url, mockedSession)
-                .replaceAll("at.*CET", ""), equalTo(expected.replaceAll("at.*CET", "")));
+                .replaceAll("at.*\\d{4}\\.", ""), equalTo(expected.replaceAll("at.*\\d{4}\\.", "")));
 
     }
 

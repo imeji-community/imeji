@@ -189,6 +189,12 @@ public class ProfileController extends ImejiController {
 	 * @throws ImejiException
 	 */
 	public void delete(MetadataProfile mdp, User user) throws ImejiException {
+		if (isReferencedByAnyResources(mdp.getId().toString())) {
+			throw new UnprocessableError("error_profile_is_referenced_cannot_be_deleted");
+		}
+		else if (mdp.getDefault()) {
+			throw new UnprocessableError("error_profile_is_default_cannot_be_deleted");
+		}
 		writer.delete(WriterFacade.toList(mdp), user);
 	}
 
@@ -337,4 +343,13 @@ public class ProfileController extends ImejiController {
 		return false;
 	}
 	
+	public boolean isReferencedByAnyResources(String profileUri) {
+		Search s = new SPARQLSearch(SearchType.ALL, null);
+		List<String> r = s.searchSimpleForQuery(
+				SPARQLQueries.hasMetadataProfileReferences(profileUri)).getResults();
+		if (r.size()>0) {
+			return true;
+		}
+		return false;
+	}
 }

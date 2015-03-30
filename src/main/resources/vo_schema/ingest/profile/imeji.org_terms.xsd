@@ -17,6 +17,8 @@
 
   <xs:element name="discardComment" type="xs:string"/>
 
+  <xs:element name="default" type="xs:boolean"/>
+  
   <xs:element name="escidocId" type="xs:string"/>
 
   <xs:element name="filename" type="xs:string"/>

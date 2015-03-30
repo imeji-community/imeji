@@ -5,6 +5,8 @@ import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ProfileService;
 import de.mpg.imeji.rest.to.MetadataProfileTO;
+import net.java.dev.webdav.jaxrs.ResponseStatus;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -90,4 +92,32 @@ public class ProfileTest extends ImejiTestBase{
 
 
     }
+	
+	@Test
+	public void test_3_DeleteProfile_NotAuthorized(){
+		String profileId = collectionTO.getProfile().getProfileId();
+		Response response = target(pathPrefix).path(profileId)
+				.register(authAsUser2)
+				.request(MediaType.APPLICATION_JSON).delete();
+		assertEquals(Status.FORBIDDEN.getStatusCode(),response.getStatus());
+    }
+
+	@Test
+	public void test_3_DeleteProfile_Referenced(){
+		String profileId = collectionTO.getProfile().getProfileId();
+		Response response = target(pathPrefix).path(profileId)
+				.register(authAsUser)
+				.request(MediaType.APPLICATION_JSON).delete();
+		assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(),response.getStatus());
+    }
+	
+	@Test
+	public void test_3_DeleteProfile_notExists(){
+		String profileId = collectionTO.getProfile().getProfileId()+"_doesNotExist";
+		Response response = target(pathPrefix).path(profileId)
+				.register(authAsUser)
+				.request(MediaType.APPLICATION_JSON).delete();
+		assertEquals(Status.NOT_FOUND.getStatusCode(),response.getStatus());
+    }
+
 }

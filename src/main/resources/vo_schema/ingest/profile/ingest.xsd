@@ -221,6 +221,7 @@
 		<xs:complexContent>
 			<xs:extension base="properties">
 				<xs:sequence>
+					<xs:element ref="imeji:default" minOccurs="0" />
 					<xs:element ref="dc:description" minOccurs="0" />
 					<xs:element ref="imeji:statement" minOccurs="0"
 						maxOccurs="unbounded" />

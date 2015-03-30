@@ -114,6 +114,19 @@ public class SPARQLQueries {
 		
 	}
 
+	/**
+	 * Checks if provided {@link MetadataProfile} uri has any collection references
+	 * {@link CollectionImeji}
+	 * 
+	 * @return
+	 */
+	public static String hasMetadataProfileReferences(String profileUri) {
+		return " SELECT ?s WHERE { "
+				+ "?s <http://imeji.org/terms/mdprofile> <"+profileUri+">." +
+				" FILTER (?s != <"+profileUri+"> )} LIMIT 1";
+		
+	}
+
 	
 	
 	/**

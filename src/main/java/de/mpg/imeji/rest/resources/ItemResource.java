@@ -18,6 +18,14 @@ import java.io.InputStream;
 import static de.mpg.imeji.rest.process.ItemProcess.*;
 import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONResponse;
 
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
+
+import de.mpg.imeji.rest.process.ItemProcess;
+import de.mpg.imeji.rest.process.RestProcessUtils;
+import de.mpg.imeji.rest.to.JSONResponse;
+
 @Path("/items")
 @Api(value = "rest/items", description = "Operations on items")
 public class ItemResource implements ImejiResource {
@@ -32,7 +40,6 @@ public class ItemResource implements ImejiResource {
 		JSONResponse resp = readItems(req, q);
 		return buildJSONResponse(resp);
 	}
-
 
 	@GET
 	@Path("/{id}")

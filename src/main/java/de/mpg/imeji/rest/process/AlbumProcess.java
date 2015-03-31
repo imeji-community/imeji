@@ -125,20 +125,39 @@ public class AlbumProcess {
 		return resp;
 	}
 	
-	public static JSONResponse addItem(HttpServletRequest req,	String id)	{
+	public static JSONResponse addItems(HttpServletRequest req,	String id)	{
 		JSONResponse resp;
 		User u = BasicAuthentication.auth(req);
 		AlbumService service = new AlbumService();
 
         try {
             List<String> itemIds = (List) buildTOFromJSON(req, List.class);
-            resp= buildResponse(Status.OK.getStatusCode(), service.addItem(id, u, itemIds));
+            resp= buildResponse(Status.OK.getStatusCode(), service.addItems(id, u, itemIds));
 		} catch (Exception e) {
 			resp = localExceptionHandler(e, e.getLocalizedMessage());
 		}
 		return resp;
 	}
 		
-
-
+	public static JSONResponse removeItems(HttpServletRequest req,	String id, boolean removeAllItems)	{
+		JSONResponse resp;
+		User u = BasicAuthentication.auth(req);
+		AlbumService service = new AlbumService();
+		List<String> itemIds = null;
+        try {
+            if (!removeAllItems) {
+	            itemIds = (List)buildTOFromJSON(req, List.class);
+	            resp= buildResponse(Status.NO_CONTENT.getStatusCode(), service.removeItems(id, u, itemIds, false));
+            }
+            else
+            {
+            	resp = buildResponse(Status.NO_CONTENT.getStatusCode(), service.removeItems(id, u, itemIds, true));
+            }
+	          
+		} catch (Exception e) {
+			resp = localExceptionHandler(e, e.getLocalizedMessage());
+		}
+		return resp;
+	}
+	
 }

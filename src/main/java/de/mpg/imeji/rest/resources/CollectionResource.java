@@ -36,13 +36,13 @@ public class CollectionResource implements ImejiResource {
         return buildJSONResponse(resp);
 	}
 
+    
     @GET
-    @ApiOperation(value = "Get all collections user has access to.")
-	@Produces(MediaType.APPLICATION_JSON)
-    public Response readAll(@Context HttpServletRequest req ) {
-    	        JSONResponse resp = readAllCollections(req, null);
-    	        return buildJSONResponse(resp);
-    }
+    @Produces(MediaType.APPLICATION_JSON)
+  	public Response readAll(@Context HttpServletRequest req,  @QueryParam("q") String q) {
+      	JSONResponse resp = readAllCollections(req, q);
+    	return buildJSONResponse(resp);
+      }
 
     @GET
     @Path("/{id}")
@@ -114,13 +114,5 @@ public class CollectionResource implements ImejiResource {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@GET
-	@Path("/search")
-	@ApiOperation(value = "Get all collections user has access to." , notes = "The result set can be filtered by query (optional)")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response search (@Context HttpServletRequest req,  @QueryParam("q") String q) {
-	    	JSONResponse resp = readAllCollections(req, q);
-	    	return buildJSONResponse(resp);
-	}
+	
 }

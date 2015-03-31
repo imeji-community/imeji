@@ -8,7 +8,7 @@ import javax.ws.rs.core.Response;
 public interface ImejiResource {
 	
 
-    public Response readAll(HttpServletRequest req);
+    public Response readAll(HttpServletRequest req, String q);
     
     public Response read(HttpServletRequest req, String id);
     

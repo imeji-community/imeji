@@ -1,28 +1,26 @@
 package de.mpg.imeji.rest.process;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.Response.Status;
-
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.io.ByteStreams;
 import com.google.common.io.Files;
 import de.mpg.imeji.exceptions.BadRequestException;
-
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.api.ItemService;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
 import de.mpg.imeji.rest.to.JSONResponse;
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Response.Status;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static javax.ws.rs.core.Response.Status.OK;
 
 
 public class ItemProcess {
@@ -57,6 +55,20 @@ public class ItemProcess {
 		}
 		return resp;
 
+	}
+
+	public static JSONResponse readItems(HttpServletRequest req, String q) {
+		JSONResponse resp;
+
+		User u = BasicAuthentication.auth(req);
+
+		ItemService is = new ItemService();
+		try {
+			resp = RestProcessUtils.buildResponse(OK.getStatusCode(), is.readItems(u, q));
+		} catch (Exception e) {
+			resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
+		}
+		return resp;
 	}
 
 	public static JSONResponse createItem(HttpServletRequest req,

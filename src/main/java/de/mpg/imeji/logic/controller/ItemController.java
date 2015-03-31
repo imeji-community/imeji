@@ -13,6 +13,7 @@ import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
+import de.mpg.imeji.logic.search.query.URLQueryTransformer;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.storage.Storage;
@@ -40,6 +41,7 @@ import java.util.*;
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static de.mpg.imeji.logic.storage.util.StorageUtils.calculateChecksum;
 import static de.mpg.imeji.logic.storage.util.StorageUtils.getMimeType;
+import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
 
 /**
  * Implements CRUD and Search methods for {@link Item}
@@ -290,6 +292,30 @@ public class ItemController extends ImejiController {
 			throw new RuntimeException(
 					"Error loading items: " + e.getMessage(), e);
 		}
+	}
+
+
+	/**
+	 * Retrieve all items filtered by query
+	 *
+	 * @param user
+	 * @param q
+	 * @return
+	 * @throws ImejiException
+	 */
+	public List<Item> retrieve(final User user, String q) throws ImejiException, IOException {
+		List<Item> itemList = new ArrayList();
+		try {
+			for (String itemId: search(null,
+					!isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q) : null,
+					null, null, user).getResults()) {
+				itemList.add(retrieve(URI.create(itemId), user));
+			}
+		} catch (Exception e) {
+			throw new UnprocessableError("Cannot retrieve items:", e);
+
+		}
+		return itemList;
 	}
 
 	/**

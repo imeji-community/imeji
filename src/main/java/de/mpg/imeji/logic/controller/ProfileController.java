@@ -199,7 +199,7 @@ public class ProfileController extends ImejiController {
 	}
 
 	/**
-	 * Delete a {@link MetadataProfile} from within a collection
+	 * Delete a {@link MetadataProfile} , checks if there are any references in other collections before deletion
 	 * 
 	 * @param mdp
 	 * @param user

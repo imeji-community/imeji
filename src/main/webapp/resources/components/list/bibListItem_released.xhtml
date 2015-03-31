@@ -13,7 +13,7 @@
 		<composite:attribute name="metadataNavigationURL" required="true"/>
 		<composite:attribute name="withdrawConfirmationText" required="true"/>
 	</composite:interface>
-	
+	<h1>TODO. IF THIS PAGE APPEARS ELSEWHERE PLEASE REMOVE IT - THIS PAGE SHOULD BE DELETED-USE BIBLISTITEM_DRAFT INSTEAD</h1>
 	<composite:implementation>
 		<ui:param name="withdrawID" value="listItem-#{cc.attrs.itemIndex}-dialDiscardContainer-dialogWithdraw"/>
 		
@@ -75,6 +75,7 @@
 						
 					<div class="imj_itemActionArea">
 						<ul>
+							<div> this is released list</div>
 							<li>
 								<h:outputLink value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}">
 									<h:outputText value="#{lbl.startpage}"/>

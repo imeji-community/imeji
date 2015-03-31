@@ -196,6 +196,11 @@ public class AlbumController extends ImejiController {
 	 * @throws ImejiException
 	 */
 	public List<URI> addToAlbum(Album album, List<String> uris, User user) throws ImejiException {
+
+		if (Status.WITHDRAWN.equals(album.getStatus())) { 
+				throw new UnprocessableError("error_album_withdrawn_members_can_not_be_added");
+		}
+		
 		ItemController ic = new ItemController();
 		List<String> inAlbums = ic.search(album.getId(), null, null, null, user).getResults();
 		List<String> notAddedUris = new ArrayList<String>();
@@ -234,6 +239,7 @@ public class AlbumController extends ImejiController {
 	 */
 	public int removeFromAlbum(Album album, List<String> toDelete, User user)
 			throws ImejiException {
+		
 		List<URI> inAlbums = new ArrayList<URI>(album.getImages());
 		album.getImages().clear();
 		for (URI uri : inAlbums) {

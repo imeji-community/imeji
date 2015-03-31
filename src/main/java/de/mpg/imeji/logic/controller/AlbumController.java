@@ -16,6 +16,7 @@ import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.query.URLQueryTransformer;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
+import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.writer.WriterFacade;
@@ -373,4 +374,21 @@ public class AlbumController extends ImejiController {
 			throw new BadRequestException("error_album_need_one_author");
 		}
 	}
+	
+	public List<Item> retrieveItems(String id, User user, String q) throws ImejiException {
+        ItemController ic = new ItemController();
+        List<Item> itemList = new ArrayList();
+        try {
+            for (String itemId: ic.search(ObjectHelper.getURI(Album.class, id),
+                    !isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q) : null,
+                    null, null, user).getResults()) {
+                itemList.add(ic.retrieve(URI.create(itemId), user));
+            }
+        } catch (Exception e) {
+            throw new UnprocessableError("Cannot retrieve items:", e);
+
+        }
+        return itemList;
+	}
+
 }

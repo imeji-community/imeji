@@ -63,6 +63,17 @@ public class AlbumResource implements ImejiResource{
 		return RestProcessUtils.buildJSONResponse(resp);
 	}
 
+	@GET
+	@Path("/{id}/members")
+	@ApiOperation(value = "Get album members")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response readAllMembers(@Context HttpServletRequest req,
+			@PathParam("id") String id,
+			@QueryParam("q") String q) {
+		JSONResponse resp = AlbumProcess.readAlbumItems(req, id, q);
+		return RestProcessUtils.buildJSONResponse(resp);
+	}
+
 	@Override
 	public Response create(HttpServletRequest req) {
 		// TODO Auto-generated method stub

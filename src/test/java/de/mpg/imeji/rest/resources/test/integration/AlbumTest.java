@@ -6,6 +6,7 @@ import de.mpg.imeji.rest.api.AlbumService;
 import de.mpg.imeji.rest.process.RestProcessUtils;
 import de.mpg.imeji.rest.resources.test.TestUtils;
 import de.mpg.imeji.rest.to.AlbumTO;
+import de.mpg.imeji.rest.to.ItemTO;
 import net.java.dev.webdav.jaxrs.ResponseStatus;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.junit.Assert;
@@ -133,6 +134,53 @@ public class AlbumTest extends ImejiTestBase{
 
 	}
 
+	@Test
+	public void test_2_ReadAlbum_6_ReadAlbumItemsWithQuery() throws IOException, UnprocessableError {
+		initCollection();
+		initItem();
+		
+		Response response = target(pathPrefix)
+				.path("/" + albumId + "/members/link").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));	
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		
+		response = target(pathPrefix)
+				.path("/" + albumId + "/members")
+				.queryParam("q", itemTO.getFilename())
+				.register(authAsUser).request(MediaType.APPLICATION_JSON)
+				.get();
+		
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		List<ItemTO> itemList = RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), ItemTO.class);
+		Assert.assertThat(itemList, not(empty()));
+		Assert.assertThat(itemList.get(0).getFilename(), equalTo(itemTO.getFilename()));
+
+	}
+	
+	@Test
+	public void test_2_ReadAlbum_6_ReadAlbumItemsWithQueryForNoResultsAndOneItemInAlbum() throws IOException, UnprocessableError {
+		initCollection();
+		initItem();
+		
+		Response response = target(pathPrefix)
+				.path("/" + albumId + "/members/link").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));	
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		
+		response = target(pathPrefix)
+				.path("/" + albumId + "/members")
+				.queryParam("q", itemTO.getFilename()+"_new")
+				.register(authAsUser).request(MediaType.APPLICATION_JSON)
+				.get();
+		
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		List<ItemTO> itemList = RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), ItemTO.class);
+		Assert.assertThat(itemList, empty());
+
+	}
+	
 	@Test
 	public void test_3_DeleteAlbum_1_WithAuth() throws ImejiException {
 

@@ -18,6 +18,7 @@ import com.hp.hpl.jena.rdf.model.Resource;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.jobs.CleanMetadataJob;
 import de.mpg.imeji.logic.jobs.CleanMetadataProfileJob;
 import de.mpg.imeji.logic.jobs.ImportFileFromEscidocToInternalStorageJob;
 import de.mpg.imeji.logic.jobs.RefreshFileSizeJob;
@@ -182,12 +183,6 @@ public class AdminBean {
 	 */
 	private void invokeCleanMethods() throws Exception {
 		cleanStatement();
-		/*
-		 * TODO Clean Metadata not working: the metadata is not completely
-		 * removed. All element in the metadata are removed, but the metadata it
-		 * self not. Since a metadata is a abstract class, j2j can not instance
-		 * a new metadata since it doesn't know the type
-		 */
 		cleanMetadata();
 		cleanGrants();
 	}
@@ -196,11 +191,17 @@ public class AdminBean {
 	 * Find all {@link Metadata} which are not related to a {@link Statement}
 	 */
 	private void cleanMetadata() {
-		Search search = SearchFactory.create();
-		List<String> uris = search.searchSimpleForQuery(
-				SPARQLQueries.selectMetadataUnbounded()).getResults();
-		cleanDatabaseReport += "Metadata Without Statement: " + uris.size()
-				+ " found  <br/> ";
+		logger.info("Cleaning Metadata");
+		if (clean = false) {
+			Search search = SearchFactory.create();
+
+			List<String> uris = search.searchSimpleForQuery(
+					SPARQLQueries.selectMetadataUnbounded()).getResults();
+			cleanDatabaseReport += "Metadata Without Statement: " + uris.size()
+					+ " found  <br/> ";
+		} else {
+			Imeji.executor.submit(new CleanMetadataJob(null));
+		}
 	}
 
 	/**
@@ -255,7 +256,9 @@ public class AdminBean {
 	private synchronized void removeResources(List<String> uris,
 			String modelName, Object obj) throws InstantiationException,
 			IllegalAccessException, Exception {
-		removeObjects(loadResourcesAsObjects(uris, modelName, obj), modelName);
+		if (clean)
+			removeObjects(loadResourcesAsObjects(uris, modelName, obj),
+					modelName);
 	}
 
 	/**

@@ -1,15 +1,14 @@
 package de.mpg.imeji.rest.process;
 
-import static javax.ws.rs.core.Response.Status.OK;
+import de.mpg.imeji.exceptions.AuthenticationError;
+import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.rest.api.ProfileService;
+import de.mpg.imeji.rest.to.JSONResponse;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response.Status;
 
-import de.mpg.imeji.exceptions.AuthenticationError;
-import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.rest.api.CollectionService;
-import de.mpg.imeji.rest.api.ProfileService;
-import de.mpg.imeji.rest.to.JSONResponse;
+import static javax.ws.rs.core.Response.Status.OK;
 
 public class ProfileProcess {
 

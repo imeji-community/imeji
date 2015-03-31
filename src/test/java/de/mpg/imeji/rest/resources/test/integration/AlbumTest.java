@@ -616,7 +616,7 @@ public class AlbumTest extends ImejiTestBase{
 		assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
 	}
 	
-/*	
+	
 	@Test
 	public void test_8_UnlinkItemsToAlbum_1_WithAuth() throws ImejiException {
 		initCollection();
@@ -628,7 +628,7 @@ public class AlbumTest extends ImejiTestBase{
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.json("[\"" + itemId + "\"]"));	
 
-		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
 	}
 	
 	@Test
@@ -674,15 +674,14 @@ public class AlbumTest extends ImejiTestBase{
 	
 	@Test
 	public void test_8_UnlinkItemsToAlbum_5_NonExistingItem() throws ImejiException {
-		
+		//in principle it does not care if item exists or not, it will simply do nothing
 		Response response = target(pathPrefix)
 				.path("/" + albumId + "/members/unlink").register(authAsUser)
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.json("[\"" + "adfgsh" + "\"]"));	
 
-		assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
+		assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
 	}
 	
-	*/
 
 }

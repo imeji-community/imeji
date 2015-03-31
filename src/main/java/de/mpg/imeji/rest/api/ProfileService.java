@@ -1,24 +1,18 @@
 package de.mpg.imeji.rest.api;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.process.TransferObjectFactory;
-import de.mpg.imeji.rest.to.CollectionTO;
-import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.MetadataProfileTO;
 
 import java.net.URI;
 import java.util.List;
-
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
 
 
 

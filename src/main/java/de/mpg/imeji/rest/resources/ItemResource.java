@@ -1,40 +1,36 @@
 package de.mpg.imeji.rest.resources;
 
-import java.io.InputStream;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
-import org.glassfish.jersey.media.multipart.FormDataParam;
-
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
-
-import de.mpg.imeji.rest.process.ItemProcess;
 import de.mpg.imeji.rest.process.RestProcessUtils;
 import de.mpg.imeji.rest.to.JSONResponse;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.io.InputStream;
+
+import static de.mpg.imeji.rest.process.ItemProcess.*;
+import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONResponse;
 
 @Path("/items")
 @Api(value = "rest/items", description = "Operations on items")
 public class ItemResource implements ImejiResource {
 
+
 	@GET
+	@ApiOperation(value = "Get all items filtered by query (optional)")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response readAll(@Context HttpServletRequest req,  @QueryParam("q") String q) {
-		return null;
+	public Response readAll(@Context HttpServletRequest req,
+							@QueryParam("q") String q
+	) {
+		JSONResponse resp = readItems(req, q);
+		return buildJSONResponse(resp);
 	}
 
 	@GET
@@ -43,7 +39,7 @@ public class ItemResource implements ImejiResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response read(@Context HttpServletRequest req,
 			@PathParam("id") String id) {
-		JSONResponse resp = ItemProcess.readItem(req, id);
+		JSONResponse resp = readItem(req, id);
 		return RestProcessUtils.buildJSONResponse(resp);
 	}
 
@@ -73,7 +69,7 @@ public class ItemResource implements ImejiResource {
 						   @ApiParam(required = true) @FormDataParam("json") String json,
 						   @FormDataParam("file") FormDataContentDisposition fileDetail) {
 		String origName = fileDetail != null ? fileDetail.getFileName() : null;
-		return RestProcessUtils.buildJSONResponse(ItemProcess.createItem(req, file, json, origName));
+		return RestProcessUtils.buildJSONResponse(createItem(req, file, json, origName));
 	}
 
 	@PUT
@@ -102,7 +98,7 @@ public class ItemResource implements ImejiResource {
 						   @FormDataParam("file") FormDataContentDisposition fileDetail,
 						   @PathParam("id") String id) {
 		String filename = fileDetail != null ? fileDetail.getFileName() : null;
-		return RestProcessUtils.buildJSONResponse(ItemProcess.updateItem(req, id,
+		return RestProcessUtils.buildJSONResponse(updateItem(req, id,
 				file, json, filename));
 	}
 
@@ -116,7 +112,7 @@ public class ItemResource implements ImejiResource {
 	@ApiOperation(value = "Delete item by id")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response delete(@Context HttpServletRequest req, @PathParam("id") String id) {
-		JSONResponse resp = ItemProcess.deleteItem(req, id);
+		JSONResponse resp = deleteItem(req, id);
 		return RestProcessUtils.buildJSONResponse(resp);
 	}
 

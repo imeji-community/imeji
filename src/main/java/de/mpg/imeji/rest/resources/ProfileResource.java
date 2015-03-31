@@ -11,9 +11,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import static de.mpg.imeji.rest.process.CollectionProcess.readCollectionItems;
-import static de.mpg.imeji.rest.process.CollectionProcess.releaseCollection;
-import static de.mpg.imeji.rest.process.CollectionProcess.withdrawCollection;
 import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONResponse;
 
 

@@ -1,41 +1,39 @@
 package de.mpg.imeji.rest.resources.test.integration;
 
-import static javax.ws.rs.core.Response.Status.CREATED;
-import static javax.ws.rs.core.Response.Status.FORBIDDEN;
-import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.isEmptyOrNullString;
-import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Map;
-
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.Form;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.rest.api.AlbumService;
+import de.mpg.imeji.rest.process.RestProcessUtils;
+import de.mpg.imeji.rest.resources.test.TestUtils;
+import de.mpg.imeji.rest.to.AlbumTO;
 import net.java.dev.webdav.jaxrs.ResponseStatus;
-
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import util.JenaUtil;
-import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.rest.api.AlbumService;
-import de.mpg.imeji.rest.resources.test.TestUtils;
+
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Form;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.Map;
+
+import static javax.ws.rs.core.Response.Status.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 
 
@@ -111,7 +109,7 @@ public class AlbumTest extends ImejiTestBase{
 		Response response = target(pathPrefix).path(albumId)
 				.register(authAsUser2).request(MediaType.APPLICATION_JSON)
 				.get();
-		assertThat(response.getStatus(),equalTo(FORBIDDEN.getStatusCode()));
+		assertThat(response.getStatus(), equalTo(FORBIDDEN.getStatusCode()));
 	}
 
 	@Test
@@ -121,7 +119,20 @@ public class AlbumTest extends ImejiTestBase{
 				.get();
 		assertThat(response.getStatus(), equalTo(Status.NOT_FOUND.getStatusCode()));
 	}
-	
+
+	@Test
+	public void test_2_ReadAlbum_5_ReadAlbumsWithQuery() throws IOException, UnprocessableError {
+		Response response = target(pathPrefix)
+				.queryParam("q", albumTO.getTitle())
+				.register(authAsUser).request(MediaType.APPLICATION_JSON)
+				.get();
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		List<AlbumTO> albumList = RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), AlbumTO.class);
+		Assert.assertThat(albumList, not(empty()));
+		Assert.assertThat(albumList.get(0).getTitle(), equalTo(albumTO.getTitle()));
+
+	}
+
 	@Test
 	public void test_3_DeleteAlbum_1_WithAuth() throws ImejiException {
 
@@ -171,7 +182,7 @@ public class AlbumTest extends ImejiTestBase{
 	@Test
 	public void test_3_DeleteAlbum_5_NonExistingAlbum(){
 		Response response = target(pathPrefix)
-				.path("/" + albumId+"i_do_not_exist").register(authAsUser)
+				.path("/" + albumId + "i_do_not_exist").register(authAsUser)
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.delete();
 
@@ -306,7 +317,7 @@ public class AlbumTest extends ImejiTestBase{
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.json("[\"" + itemId + "\"]"));	
 
-		assertThat(response.getStatus(),equalTo(UNAUTHORIZED.getStatusCode()));
+		assertThat(response.getStatus(), equalTo(UNAUTHORIZED.getStatusCode()));
 	}
 	
 	@Test
@@ -319,7 +330,7 @@ public class AlbumTest extends ImejiTestBase{
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.json("[\"" + itemId + "\"]"));	
 
-		assertThat(response.getStatus(),equalTo(FORBIDDEN.getStatusCode()));;
+		assertThat(response.getStatus(), equalTo(FORBIDDEN.getStatusCode()));;
 	}
 	
 	@Test
@@ -367,7 +378,7 @@ public class AlbumTest extends ImejiTestBase{
 		
 		Form form= new Form();
 		form.param("id", albumId);
-		form.param("discardComment", "test_6_WithdrawAlbum_1_WithAuth_"+System.currentTimeMillis());
+		form.param("discardComment", "test_6_WithdrawAlbum_1_WithAuth_" + System.currentTimeMillis());
 		response = target(pathPrefix)
 				.path("/" + albumId + "/discard").register(authAsUser)
 				.request((MediaType.APPLICATION_JSON_TYPE))
@@ -393,7 +404,7 @@ public class AlbumTest extends ImejiTestBase{
 		
 		Form form= new Form();
 		form.param("id", albumId);
-		form.param("discardComment", "test_6_WithdrawAlbum_2_WithUnAuth_"+System.currentTimeMillis());
+		form.param("discardComment", "test_6_WithdrawAlbum_2_WithUnAuth_" + System.currentTimeMillis());
 		response = target(pathPrefix)
 				.path("/" + albumId + "/discard").register(authAsUser2)
 				.request((MediaType.APPLICATION_JSON_TYPE))
@@ -416,7 +427,7 @@ public class AlbumTest extends ImejiTestBase{
 		
 		Form form= new Form();
 		form.param("id", albumId);
-		form.param("discardComment", "test_6_WithdrawAlbum_3_WithNonAuth_"+System.currentTimeMillis());
+		form.param("discardComment", "test_6_WithdrawAlbum_3_WithNonAuth_" + System.currentTimeMillis());
 		response = target(pathPrefix)
 				.path("/" + albumId + "/discard")
 				.request((MediaType.APPLICATION_JSON_TYPE))
@@ -439,7 +450,7 @@ public class AlbumTest extends ImejiTestBase{
 		
 		Form form= new Form();
 		form.param("id", albumId);
-		form.param("discardComment", "test_6_WithdrawAlbum_4_NotReleasedCollection_"+System.currentTimeMillis());
+		form.param("discardComment", "test_6_WithdrawAlbum_4_NotReleasedCollection_" + System.currentTimeMillis());
 		response = target(pathPrefix)
 				.path("/" + albumId + "/discard").register(authAsUser)
 				.request((MediaType.APPLICATION_JSON_TYPE))
@@ -478,7 +489,7 @@ public class AlbumTest extends ImejiTestBase{
 		
 		Form form= new Form();
 		form.param("id", albumId + "i_do_not_exist");
-		form.param("discardComment", "test_6_WithdrawAlbum_6_NotExistingAlbum_"+System.currentTimeMillis());
+		form.param("discardComment", "test_6_WithdrawAlbum_6_NotExistingAlbum_" + System.currentTimeMillis());
 		Response response = target(pathPrefix)
 				.path("/" + albumId + "i_do_not_exist/discard").register(authAsUser)
 				.request((MediaType.APPLICATION_JSON_TYPE))
@@ -641,7 +652,7 @@ public class AlbumTest extends ImejiTestBase{
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.json("[\"" + itemId + "\"]"));	
 
-		assertThat(response.getStatus(),equalTo(UNAUTHORIZED.getStatusCode()));
+		assertThat(response.getStatus(), equalTo(UNAUTHORIZED.getStatusCode()));
 	}
 	
 	@Test
@@ -654,7 +665,7 @@ public class AlbumTest extends ImejiTestBase{
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.json("[\"" + itemId + "\"]"));	
 
-		assertThat(response.getStatus(),equalTo(FORBIDDEN.getStatusCode()));;
+		assertThat(response.getStatus(), equalTo(FORBIDDEN.getStatusCode()));;
 	}
 	
 	@Test

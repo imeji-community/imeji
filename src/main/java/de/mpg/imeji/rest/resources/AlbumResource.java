@@ -1,33 +1,22 @@
 package de.mpg.imeji.rest.resources;
 
-import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONResponse;
-
-import java.io.InputStream;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
-
 import de.mpg.imeji.rest.process.AlbumProcess;
 import de.mpg.imeji.rest.process.RestProcessUtils;
 import de.mpg.imeji.rest.to.JSONResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.io.InputStream;
+
+import static de.mpg.imeji.rest.process.AlbumProcess.readAllAlbums;
+import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONResponse;
 
 
 @Path("/albums")
@@ -46,10 +35,12 @@ public class AlbumResource implements ImejiResource{
 		return RestProcessUtils.buildJSONResponse(resp);
 	}
 
-	@Override
-	public Response readAll(HttpServletRequest req,  @QueryParam("q") String q) {
-		// TODO Auto-generated method stub
-		return null;
+	@GET
+	@ApiOperation(value = "Read all albums filtered by query")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response readAll(@Context HttpServletRequest req,  @QueryParam("q") String q) {
+		JSONResponse resp = readAllAlbums(req, q);
+		return buildJSONResponse(resp);
 	}
 	
 	@PUT

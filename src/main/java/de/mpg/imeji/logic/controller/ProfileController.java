@@ -5,6 +5,7 @@ package de.mpg.imeji.logic.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
+
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotFoundException;
@@ -12,6 +13,8 @@ import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
+import de.mpg.imeji.logic.jobs.CleanMetadataJob;
+import de.mpg.imeji.logic.jobs.CleanMetadataProfileJob;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.Search;
@@ -32,6 +35,7 @@ import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.imeji.rest.process.RestProcessUtils;
 import de.mpg.imeji.rest.to.MetadataProfileTO;
 import de.mpg.j2j.helper.DateHelper;
+
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -155,6 +159,7 @@ public class ProfileController extends ImejiController {
 	public void update(MetadataProfile mdp, User user) throws ImejiException {
 		writeUpdateProperties(mdp, user);
 		writer.update(WriterFacade.toList(mdp), user);
+		Imeji.executor.submit(new CleanMetadataJob(mdp));
 	}
 
 	/**
@@ -188,27 +193,34 @@ public class ProfileController extends ImejiController {
 	 * @param user
 	 * @throws ImejiException
 	 */
-	public void delete(MetadataProfile mdp, User user, String collectionId) throws ImejiException {
-		if ( ( isNullOrEmpty(collectionId) && isReferencedByAnyResources(mdp.getId().toString())) ||
-			   !isNullOrEmpty(collectionId) && isReferencedByOtherResources(mdp.getId().toString(), collectionId)
-				) {
-			throw new UnprocessableError("error_profile_is_referenced_cannot_be_deleted");
-		}
-		else if (mdp.getDefault()) {
-			throw new UnprocessableError("error_profile_is_default_cannot_be_deleted");
+	public void delete(MetadataProfile mdp, User user, String collectionId)
+			throws ImejiException {
+		if ((isNullOrEmpty(collectionId) && isReferencedByAnyResources(mdp
+				.getId().toString()))
+				|| !isNullOrEmpty(collectionId)
+				&& isReferencedByOtherResources(mdp.getId().toString(),
+						collectionId)) {
+			throw new UnprocessableError(
+					"error_profile_is_referenced_cannot_be_deleted");
+		} else if (mdp.getDefault()) {
+			throw new UnprocessableError(
+					"error_profile_is_default_cannot_be_deleted");
 		}
 		writer.delete(WriterFacade.toList(mdp), user);
+		Imeji.executor.submit(new CleanMetadataProfileJob(true));
+		Imeji.executor.submit(new CleanMetadataJob(mdp));
 	}
 
 	/**
-	 * Delete a {@link MetadataProfile} , checks if there are any references in other collections before deletion
+	 * Delete a {@link MetadataProfile} , checks if there are any references in
+	 * other collections before deletion
 	 * 
 	 * @param mdp
 	 * @param user
 	 * @throws ImejiException
 	 */
 	public void delete(MetadataProfile mdp, User user) throws ImejiException {
-			this.delete(mdp, user, "");
+		this.delete(mdp, user, "");
 	}
 
 	/**
@@ -219,9 +231,10 @@ public class ProfileController extends ImejiController {
 	 * @throws ImejiException
 	 */
 	public void withdraw(MetadataProfile mdp, User user) throws ImejiException {
-		
+
 		if (mdp.getDefault()) {
-			throw new UnprocessableError("error_profile_is_default_cannot_be_withdrawn");
+			throw new UnprocessableError(
+					"error_profile_is_default_cannot_be_withdrawn");
 		}
 		mdp.setStatus(Status.WITHDRAWN);
 		mdp.setVersionDate(DateHelper.getCurrentDate());

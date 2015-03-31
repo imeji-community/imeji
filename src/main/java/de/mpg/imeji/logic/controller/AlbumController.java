@@ -3,19 +3,7 @@
  */
 package de.mpg.imeji.logic.controller;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
-
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import de.mpg.imeji.exceptions.AuthenticationError;
-import de.mpg.imeji.exceptions.BadRequestException;
-import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.exceptions.NotFoundException;
-import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.exceptions.*;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
@@ -25,19 +13,23 @@ import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
+import de.mpg.imeji.logic.search.query.URLQueryTransformer;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
-import de.mpg.imeji.logic.vo.Album;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Organization;
-import de.mpg.imeji.logic.vo.Person;
+import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.logic.vo.Properties.Status;
-import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.j2j.helper.DateHelper;
 import de.mpg.j2j.helper.J2JHelper;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
 
 /**
  * Implements CRUD and Search methods for {@link Album}
@@ -125,6 +117,29 @@ public class AlbumController extends ImejiController {
 		return (Album) reader.read(selectedAlbumId.toString(), user,
 				new Album());
 	}
+
+	/**
+	 * Retrieve albums filtered by query
+	 *
+	 * @param user
+	 * @param q
+	 * @return
+	 * @throws ImejiException
+	 */
+	public List<Album> retrieve(User user, String q) throws ImejiException {
+		List<Album> aList = new ArrayList<>();
+		try {
+			SearchQuery sq= URLQueryTransformer.parseStringQuery(q);
+			for (String albId: search(!isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q) : null, user, null, 0, 0).getResults()) {
+				aList.add(retrieve(URI.create(albId), user));
+			}
+		} catch (Exception e) {
+			throw new UnprocessableError("Cannot retrieve albums:", e);
+
+		}
+		return aList;
+	}
+
 
 	/**
 	 * Retrieve an {@link Album} without its {@link Item}

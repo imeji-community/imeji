@@ -67,8 +67,20 @@ public class CollectionService implements API<CollectionTO> {
         );
     }
 
-
-
+    public List<CollectionTO> readAll(User u, String q) throws ImejiException {
+        CollectionController cc = new CollectionController();
+        return Lists.transform(cc.retrieveCollections( u, q),
+                new Function<CollectionImeji, CollectionTO>() {
+                    @Override
+                    public CollectionTO apply(CollectionImeji vo) {
+                    	CollectionTO to = new CollectionTO();
+                        TransferObjectFactory.transferCollection(vo, to);
+                        return to;
+                    }
+                }
+        );
+    }
+    
 	@Override
 	public CollectionTO create(CollectionTO to, User u) throws ImejiException {
 		return createAskValidate(to, u, true);

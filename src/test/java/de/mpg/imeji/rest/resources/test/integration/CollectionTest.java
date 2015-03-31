@@ -407,7 +407,7 @@ public class CollectionTest extends ImejiTestBase {
 
     @Test
     public void test_5_DeleteCollection_1_WithAuth() throws ImejiException {
-
+    	System.out.println("Problematic Test 1");
         initCollection();
 
         Response response = target(pathPrefix)
@@ -428,9 +428,7 @@ public class CollectionTest extends ImejiTestBase {
 
     @Test
     public void test_5_DeleteCollection_2_WithUnauth() throws ImejiException{
-        initCollection();
-        ItemService itemStatus = new ItemService();
-
+    	initCollection();
         Response response = target(pathPrefix)
                 .path("/" + collectionId).register(authAsUser2)
                 .request(MediaType.APPLICATION_JSON_TYPE)
@@ -480,7 +478,6 @@ public class CollectionTest extends ImejiTestBase {
     }
     @Test
     public void test_5_DeleteCollection_4_WithOutUser(){
-
         initCollection();
 
         Response response = target(pathPrefix)

@@ -132,5 +132,19 @@ public class CollectionProcess {
 		}
 		return resp;
 	}
+	
+	public static  JSONResponse readAllCollections (HttpServletRequest req, String q) {
+        JSONResponse resp;
+
+        User u = BasicAuthentication.auth(req);
+
+        CollectionService ccrud = new CollectionService();
+        try {
+            resp = RestProcessUtils.buildResponse(OK.getStatusCode(), ccrud.readAll(u, q));
+        } catch (Exception e) {
+            resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
+        }
+        return resp;
+    }
 
 }

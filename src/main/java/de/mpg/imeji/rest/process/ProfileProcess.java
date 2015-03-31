@@ -63,4 +63,33 @@ public class ProfileProcess {
         }
         return resp;
     }
+	
+	public static JSONResponse releaseProfile(HttpServletRequest req,
+			String id)  {
+		JSONResponse resp;
+		User u = BasicAuthentication.auth(req);
+		ProfileService service = new ProfileService(); 
+		
+		try {
+			resp= RestProcessUtils.buildResponse(OK.getStatusCode(), service.release(id, u));
+		} catch (Exception e) {
+			resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
+		}
+		return resp;
+	}
+	
+	public static JSONResponse withdrawProfile(HttpServletRequest req, String id, String discardComment)  {
+		JSONResponse resp;
+
+		User u = BasicAuthentication.auth(req);
+		ProfileService service = new ProfileService();
+
+		try {
+				resp = RestProcessUtils.buildResponse(OK.getStatusCode(), service.withdraw(id, u, discardComment));
+			} 
+		catch (Exception e)	{
+				resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
+			}
+		return resp;
+	}
 }

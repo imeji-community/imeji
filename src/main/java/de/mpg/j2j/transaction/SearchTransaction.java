@@ -55,7 +55,7 @@ public class SearchTransaction extends Transaction
         Query q = QueryFactory.create(searchQuery, Syntax.syntaxARQ);
         QueryExecution qexec = initQueryExecution(ds, q);
         qexec.getContext().set(TDB.symUnionDefaultGraph, true);
-        qexec.setTimeout(20000);
+        qexec.setTimeout(100000);
         try
         {
             ResultSet rs = qexec.execSelect();	

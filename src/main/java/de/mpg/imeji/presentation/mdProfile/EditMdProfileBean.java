@@ -4,6 +4,7 @@ import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.controller.ProfileController;
+import de.mpg.imeji.logic.jobs.CleanMetadataJob;
 import de.mpg.imeji.logic.jobs.CleanMetadataProfileJob;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.util.UrlHelper;
@@ -140,6 +141,7 @@ public class EditMdProfileBean extends MdProfileBean
                 ProfileController profileController = new ProfileController();
                 profileController.update(getProfile(), session.getUser());
                 Imeji.executor.submit(new CleanMetadataProfileJob(true));
+                Imeji.executor.submit(new CleanMetadataJob(getProfile()));
                 session.getProfileCached().clear();
                 BeanHelper.info(session.getMessage("success_profile_save"));
             }

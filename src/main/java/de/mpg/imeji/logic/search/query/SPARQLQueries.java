@@ -100,35 +100,35 @@ public class SPARQLQueries {
 				+ "?s a <http://imeji.org/terms/mdprofile> . not exists{?c <http://imeji.org/terms/mdprofile> ?s}"
 				+ "}";
 	}
-	
+
 	/**
-	 * Checks if provided {@link MetadataProfile} uri has other references than the reference in the provided resource 
-	 * {@link CollectionImeji}
+	 * Checks if provided {@link MetadataProfile} uri has other references than
+	 * the reference in the provided resource {@link CollectionImeji}
 	 * 
 	 * @return
 	 */
-	public static String hasOtherMetadataProfileReferences(String profileUri, String resourceUri) {
+	public static String hasOtherMetadataProfileReferences(String profileUri,
+			String resourceUri) {
 		return " SELECT ?s WHERE { "
-				+ "?s <http://imeji.org/terms/mdprofile> <"+profileUri+">." +
-				" FILTER (?s != <"+ resourceUri +">  && ?s != <"+profileUri+"> )} LIMIT 1";
-		
+				+ "?s <http://imeji.org/terms/mdprofile> <" + profileUri + ">."
+				+ " FILTER (?s != <" + resourceUri + ">  && ?s != <"
+				+ profileUri + "> )} LIMIT 1";
+
 	}
 
 	/**
-	 * Checks if provided {@link MetadataProfile} uri has any collection references
-	 * {@link CollectionImeji}
+	 * Checks if provided {@link MetadataProfile} uri has any collection
+	 * references {@link CollectionImeji}
 	 * 
 	 * @return
 	 */
 	public static String hasMetadataProfileReferences(String profileUri) {
 		return " SELECT ?s WHERE { "
-				+ "?s <http://imeji.org/terms/mdprofile> <"+profileUri+">." +
-				" FILTER (?s != <"+profileUri+"> )} LIMIT 1";
-		
+				+ "?s <http://imeji.org/terms/mdprofile> <" + profileUri + ">."
+				+ " FILTER (?s != <" + profileUri + "> )} LIMIT 1";
+
 	}
 
-	
-	
 	/**
 	 * Select all {@link Username}
 	 * 
@@ -431,15 +431,17 @@ public class SPARQLQueries {
 	 */
 	public static String updateRemoveAllMetadataWithoutStatement(
 			String profileURI) {
+		String profileQuery = profileURI != null ? "<" + profileURI + ">"
+				: "?profile";
 		return "WITH <http://imeji.org/item> " + "DELETE {?mds <"
 				+ ImejiNamespaces.METADATA + "> ?s . ?s ?p ?o } "
 				+ "USING <http://imeji.org/item> "
 				+ "USING <http://imeji.org/metadataProfile> "
-				+ "WHERE {?mds <http://imeji.org/terms/mdprofile> <"
-				+ profileURI + "> . ?mds <" + ImejiNamespaces.METADATA
+				+ "WHERE {?mds <http://imeji.org/terms/mdprofile> "
+				+ profileQuery + " . ?mds <" + ImejiNamespaces.METADATA
 				+ "> ?s . ?s <http://imeji.org/terms/statement> ?st"
-				+ " . NOT EXISTS{<" + profileURI
-				+ "> <http://imeji.org/terms/statement> ?st}" + " . ?s ?p ?o }";
+				+ " . NOT EXISTS{" + profileQuery
+				+ " <http://imeji.org/terms/statement> ?st}" + " . ?s ?p ?o }";
 	}
 
 	/**

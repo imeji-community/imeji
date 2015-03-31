@@ -6,8 +6,10 @@ package de.mpg.imeji.presentation.metadata.editors;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.jobs.CleanMetadataJob;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.util.MetadataFactory;
 import de.mpg.imeji.logic.vo.Item;

@@ -228,6 +228,24 @@ public class AlbumController extends ImejiController {
 		update(album, user);
 		return inAlbums.size() - album.getImages().size();
 	}
+	
+	/**
+	 * Remove a list of {@link Item} (as a {@link List} of {@link URI}) to an
+	 * {@link Album}
+	 * 
+	 * @param album
+	 * @param toDelete
+	 * @param user
+	 * @return
+	 * @throws ImejiException
+	 */
+	public boolean clearAlbumItems(Album album, User user)
+			throws ImejiException {
+
+		album.getImages().clear();
+		update(album, user);
+		return true;
+	}
 
 	/**
 	 * Withdraw an {@link Album}: Set the {@link Status} as withdraw and remove

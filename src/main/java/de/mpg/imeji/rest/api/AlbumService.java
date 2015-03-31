@@ -134,7 +134,7 @@ public class AlbumService implements API<AlbumTO>{
 		return null;
 	}
 	
-	public List<String> addItem(String id, User u, List<String> itemIds) throws ImejiException {
+	public List<String> addItems(String id, User u, List<String> itemIds) throws ImejiException {
 		AlbumController controller = new AlbumController();
 		Album vo = controller.retrieve(ObjectHelper.getURI(Album.class, id), u);
 		List<String> itemUris = new ArrayList<>();
@@ -147,6 +147,26 @@ public class AlbumService implements API<AlbumTO>{
 		for(URI itemURI : controller.addToAlbum(vo, itemUris, u))
 			ids.add(CommonUtils.extractIDFromURI(itemURI));
 		return ids;
+	}
+	
+   public boolean removeItems(String id, User u, List<String> itemIds, boolean removeAll) throws ImejiException {
+		AlbumController controller = new AlbumController();
+		Album vo = controller.retrieve(ObjectHelper.getURI(Album.class, id), u);
+		List<String> itemUris = new ArrayList<>();
+		
+		//Convert Ids to Uris
+		for(String itemId : itemIds){
+			itemUris.add(ObjectHelper.getURI(Item.class, itemId).toASCIIString());
+		}
+		
+		if (!removeAll) {
+			controller.removeFromAlbum(vo, itemUris, u);
+		}
+		else
+		{
+			controller.clearAlbumItems(vo, u);
+		}
+		return true;
 	}
 
 }

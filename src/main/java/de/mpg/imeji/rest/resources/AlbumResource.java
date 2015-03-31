@@ -14,6 +14,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -46,7 +47,7 @@ public class AlbumResource implements ImejiResource{
 	}
 
 	@Override
-	public Response readAll(HttpServletRequest req) {
+	public Response readAll(HttpServletRequest req,  @QueryParam("q") String q) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -108,8 +109,8 @@ public class AlbumResource implements ImejiResource{
 	}
 	
 	@PUT
-	@Path("/{id}/add")
-	@ApiOperation(value = "Add Items to album", notes = "Add list of items to an album:"
+	@Path("/{id}/members/link")
+	@ApiOperation(value = "Link Items to album", notes = "Add list of items to an album:"
 			+ "<br/> 1) Album ID "
 			+ "<br/> 2) List of item IDs"
 			+ "<br/><br/>"
@@ -120,9 +121,42 @@ public class AlbumResource implements ImejiResource{
 			+ "<br/>")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response addItem(@PathParam("id") String id, @Context HttpServletRequest req, InputStream json) throws Exception {
-		JSONResponse resp = AlbumProcess.addItem(req, id);
+		JSONResponse resp = AlbumProcess.addItems(req, id);
 		return RestProcessUtils.buildJSONResponse(resp);
 	}
 	
+	@PUT
+	@Path("/{id}/members/unlink")
+	@ApiOperation(value = "Remove Items to album", notes = "Add list of items to an album:"
+			+ "<br/> 1) Album ID "
+			+ "<br/> 2) List of item IDs"
+			+ "<br/><br/>"
+			+ "Json example:"
+			+ "<div class=\"json_example\">"
+			+ "[\"Item-ID 1\" , \"Item-ID 2\" , \"Item-ID 3\" , \"Item-ID 4\" ...]"
+			+ "</div>"
+			+ "<br/>")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response removeItem(@PathParam("id") String id, @Context HttpServletRequest req, InputStream json) throws Exception {
+		JSONResponse resp = AlbumProcess.removeItems(req, id, false);
+		return RestProcessUtils.buildJSONResponse(resp);
+	}
+	
+	@PUT
+	@Path("/{id}/members/unlink/all")
+	@ApiOperation(value = "Remove Items to album", notes = "Add list of items to an album:"
+			+ "<br/> 1) Album ID "
+			+ "<br/> 2) List of item IDs"
+			+ "<br/><br/>"
+			+ "Json example:"
+			+ "<div class=\"json_example\">"
+			+ "[\"Item-ID 1\" , \"Item-ID 2\" , \"Item-ID 3\" , \"Item-ID 4\" ...]"
+			+ "</div>"
+			+ "<br/>")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response removeAllItems(@PathParam("id") String id, @Context HttpServletRequest req) throws Exception {
+		JSONResponse resp = AlbumProcess.removeItems(req, id, true);
+		return RestProcessUtils.buildJSONResponse(resp);
+	}
 	
 }

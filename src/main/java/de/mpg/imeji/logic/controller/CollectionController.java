@@ -186,6 +186,28 @@ public class CollectionController extends ImejiController {
         }
         return itemList;
 	}
+	
+	/**
+	 * Retrieve all collections user can see
+	 *
+	 * @param id
+     * @param user
+	 * @param q
+     * @return
+	 * @throws ImejiException
+	 */
+	public List<CollectionImeji> retrieveCollections(User user, String q) throws ImejiException {
+        List<CollectionImeji> cList = new ArrayList<CollectionImeji>();
+        try {
+        		for (String colId: search(!isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q) : null, null,0, 0, user).getResults()) {
+                cList.add(retrieve(URI.create(colId), user));
+            }
+        } catch (Exception e) {
+            throw new UnprocessableError("Cannot retrieve collections:", e);
+
+        }
+        return cList;
+	}
 
 	/**
 	 * Retrieve the {@link CollectionImeji} without its {@link Item}
@@ -288,7 +310,7 @@ public class CollectionController extends ImejiController {
 			if (method.equals(MetadataProfileCreationMethod.REFERENCE)) {
 				//if it is a reference, only change the reference to the new metadata profile, and do not forget to delete old metadata profile
 				ic.setProfile(mp.getId());
-				pc.delete(originalMP, user);
+				pc.delete(originalMP, user, null);
 			}
 			else {
 				//copy all statements from the template profile to the original metadata profile
@@ -335,7 +357,7 @@ public class CollectionController extends ImejiController {
 							.getMessage("collection_locked"));
 		} else {
 			if (collection.getStatus() != Status.PENDING && !user.isAdmin()) {
-				throw new UnprocessableError("Collection is not pending and can not be released!");
+				throw new UnprocessableError("Collection is not pending and can not be deleted!");
 			}
 			// Delete images
 			List<Item> items = (List<Item>) itemController.retrieve(itemUris,
@@ -354,7 +376,7 @@ public class CollectionController extends ImejiController {
 				else
 				{
 					logger.info("Metadata profile <"+ collectionMdp.getId().toString()+"> is not referenced elsewhere, will be deleted!");
-						pc.delete(collectionMdp, user);
+						pc.delete(collectionMdp, user, collection.getId().toString());
 				}
 			}
 			catch (NotFoundException e){

@@ -182,20 +182,33 @@ public class ProfileController extends ImejiController {
 	}
 
 	/**
-	 * Delete a {@link MetadataProfile}
+	 * Delete a {@link MetadataProfile} from within a collection
 	 * 
 	 * @param mdp
 	 * @param user
 	 * @throws ImejiException
 	 */
-	public void delete(MetadataProfile mdp, User user) throws ImejiException {
-		if (isReferencedByAnyResources(mdp.getId().toString())) {
+	public void delete(MetadataProfile mdp, User user, String collectionId) throws ImejiException {
+		if ( ( isNullOrEmpty(collectionId) && isReferencedByAnyResources(mdp.getId().toString())) ||
+			   !isNullOrEmpty(collectionId) && isReferencedByOtherResources(mdp.getId().toString(), collectionId)
+				) {
 			throw new UnprocessableError("error_profile_is_referenced_cannot_be_deleted");
 		}
 		else if (mdp.getDefault()) {
 			throw new UnprocessableError("error_profile_is_default_cannot_be_deleted");
 		}
 		writer.delete(WriterFacade.toList(mdp), user);
+	}
+
+	/**
+	 * Delete a {@link MetadataProfile} from within a collection
+	 * 
+	 * @param mdp
+	 * @param user
+	 * @throws ImejiException
+	 */
+	public void delete(MetadataProfile mdp, User user) throws ImejiException {
+			this.delete(mdp, user, "");
 	}
 
 	/**
@@ -206,6 +219,10 @@ public class ProfileController extends ImejiController {
 	 * @throws ImejiException
 	 */
 	public void withdraw(MetadataProfile mdp, User user) throws ImejiException {
+		
+		if (mdp.getDefault()) {
+			throw new UnprocessableError("error_profile_is_default_cannot_be_withdrawn");
+		}
 		mdp.setStatus(Status.WITHDRAWN);
 		mdp.setVersionDate(DateHelper.getCurrentDate());
 		update(mdp, user);

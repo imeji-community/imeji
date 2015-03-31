@@ -11,7 +11,6 @@ ShowLog ()
 {
 	tail -f $BIN_DIR/../logs/catalina.out
 }
-
 ShowLess ()
 {
 	less $BIN_DIR/../logs/catalina.out
@@ -19,6 +18,14 @@ ShowLess ()
 ShowStatus ()
 {
 	ps -ef | grep $BIN_DIR | grep -v grep
+}
+
+CheckStatus ()
+{
+	if [ -n "$(ShowStatus)" ]; then
+	    echo "Please stop $SERVICE_NAME first"
+	    exit 1
+	fi
 }
 
 
@@ -50,11 +57,7 @@ case "$1" in
 
    backup)
 	echo "Backup $SERVICE_NAME..."
-	STAT=$(ShowStatus)
-	if [ -n "$STAT" ]; then
-	    echo "Please stop $SERVICE_NAME first"
-	    exit 1
-	fi
+	CheckStatus
 	if [ -z $2 ]; then
 	    echo "Please define backup directory in backup root $BACKUP_ROOT_DIR"
 	    $0 *
@@ -106,9 +109,11 @@ case "$1" in
 	ShowStatus
     ;;
 
-    clean)
+	clean)
+	CheckStatus
 	rm -rf $BIN_DIR/../temp/*
 	rm -rf $BIN_DIR/../work/*
+	rm -rf $BIN_DIR/../webapps/$SERVICE_NAME
     ;;
 
     usage)

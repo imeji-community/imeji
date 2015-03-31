@@ -1,6 +1,7 @@
 package de.mpg.imeji.rest.process;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -19,6 +20,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 
@@ -45,6 +47,15 @@ public class RestProcessUtils {
 		ObjectReader reader = new ObjectMapper().reader().withType(type);
 		try {
 			return reader.readValue(req.getInputStream());
+		} catch (Exception e) {
+            throw new UnprocessableError("Cannot parse json: " + e.getLocalizedMessage());
+		}
+	}
+
+	public static <T> List<Object> buildTOListFromJSON(String jsonSting, final Class<T> type) throws UnprocessableError {
+		ObjectReader reader = new ObjectMapper().reader().withType(new TypeReference<List<T>>(){});
+		try {
+			return reader.readValue(jsonSting);
 		} catch (Exception e) {
             throw new UnprocessableError("Cannot parse json: " + e.getLocalizedMessage());
 		}
@@ -100,7 +111,7 @@ public class RestProcessUtils {
 		error.setExceptionReport(e);
 		error.setCode(errorCodeLocal);
 		error.setTitle(errorTitleLocal);
-		error.setMessage(errorCodeLocal+"-message");
+		error.setMessage(errorCodeLocal + "-message");
 		ex.setError(error);
 		return ex;
 	}

@@ -18,21 +18,13 @@ import java.io.InputStream;
 import static de.mpg.imeji.rest.process.ItemProcess.*;
 import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONResponse;
 
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
-
-import de.mpg.imeji.rest.process.ItemProcess;
-import de.mpg.imeji.rest.process.RestProcessUtils;
-import de.mpg.imeji.rest.to.JSONResponse;
-
 @Path("/items")
 @Api(value = "rest/items", description = "Operations on items")
 public class ItemResource implements ImejiResource {
 
 
 	@GET
-	@ApiOperation(value = "Get all items filtered by query")
+	@ApiOperation(value = "Get all items filtered by query (optional)")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response readAll(@Context HttpServletRequest req,
 							@QueryParam("q") String q

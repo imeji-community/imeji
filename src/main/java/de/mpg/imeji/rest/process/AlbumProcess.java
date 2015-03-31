@@ -2,16 +2,13 @@ package de.mpg.imeji.rest.process;
 
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.api.AlbumService;
 import de.mpg.imeji.rest.to.AlbumTO;
 import de.mpg.imeji.rest.to.JSONResponse;
-import de.mpg.imeji.rest.to.PersonTO;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response.Status;
-
 import java.util.List;
 
 import static com.google.common.base.Strings.isNullOrEmpty;

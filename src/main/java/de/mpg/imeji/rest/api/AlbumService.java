@@ -1,23 +1,15 @@
 package de.mpg.imeji.rest.api;
 
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.AlbumController;
-import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
-import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.process.CommonUtils;
 import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.to.AlbumTO;
-import de.mpg.imeji.rest.to.CollectionTO;
-import de.mpg.imeji.rest.to.CollectionProfileTO.METHOD;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,11 +17,9 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
 import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE.CREATE;
 import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE.UPDATE;
 import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.transferAlbum;
-import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.transferCollection;
 
 public class AlbumService implements API<AlbumTO>{
 

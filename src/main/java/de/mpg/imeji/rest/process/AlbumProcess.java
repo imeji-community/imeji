@@ -145,15 +145,10 @@ public class AlbumProcess {
 		AlbumService service = new AlbumService();
 		List<String> itemIds = null;
         try {
-            if (!removeAllItems) {
-	            itemIds = (List)buildTOFromJSON(req, List.class);
-	            resp= buildResponse(Status.NO_CONTENT.getStatusCode(), service.removeItems(id, u, itemIds, false));
-            }
-            else
-            {
-            	resp = buildResponse(Status.NO_CONTENT.getStatusCode(), service.removeItems(id, u, itemIds, true));
-            }
-	          
+        	    
+        		if (!removeAllItems) 
+        			itemIds =  (List)buildTOFromJSON(req, List.class);
+	            resp= buildResponse(Status.NO_CONTENT.getStatusCode(), service.removeItems(id, u, itemIds, removeAllItems));
 		} catch (Exception e) {
 			resp = localExceptionHandler(e, e.getLocalizedMessage());
 		}

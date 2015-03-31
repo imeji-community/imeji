@@ -153,13 +153,12 @@ public class AlbumService implements API<AlbumTO>{
 		AlbumController controller = new AlbumController();
 		Album vo = controller.retrieve(ObjectHelper.getURI(Album.class, id), u);
 		List<String> itemUris = new ArrayList<>();
-		
-		//Convert Ids to Uris
-		for(String itemId : itemIds){
-			itemUris.add(ObjectHelper.getURI(Item.class, itemId).toASCIIString());
-		}
-		
 		if (!removeAll) {
+			//Convert Ids to Uris
+			for(String itemId : itemIds){
+				itemUris.add(ObjectHelper.getURI(Item.class, itemId).toASCIIString());
+			}
+			
 			controller.removeFromAlbum(vo, itemUris, u);
 		}
 		else

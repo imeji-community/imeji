@@ -1,11 +1,11 @@
 package de.mpg.imeji.rest.process;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 import de.mpg.imeji.exceptions.*;
 import de.mpg.imeji.rest.to.HTTPError;
 import de.mpg.imeji.rest.to.JSONException;
@@ -52,8 +52,8 @@ public class RestProcessUtils {
 		}
 	}
 
-	public static <T> List<Object> buildTOListFromJSON(String jsonSting, final Class<T> type) throws UnprocessableError {
-		ObjectReader reader = new ObjectMapper().reader().withType(new TypeReference<List<T>>(){});
+	public static <T> List<T> buildTOListFromJSON(String jsonSting, final Class<T> type) throws UnprocessableError {
+		ObjectReader reader = new ObjectMapper().reader().withType(TypeFactory.defaultInstance().constructCollectionType(List.class, type));
 		try {
 			return reader.readValue(jsonSting);
 		} catch (Exception e) {

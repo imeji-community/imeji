@@ -16,7 +16,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -136,10 +135,9 @@ public class ItemReadTest extends ImejiTestBase {
                 .request(MediaType.APPLICATION_JSON_TYPE)).get();
 
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
-        List<Object> itemList = RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), ItemTO.class);
+        List<ItemTO> itemList = RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), ItemTO.class);
         assertThat(itemList, not(empty()));
-        String filename = ((HashMap<String, String>) itemList.get(0)).get("filename");
-        assertThat(filename, equalTo(itemTO.getFilename()));
+        assertThat(itemList.get(0).getFilename(), equalTo(itemTO.getFilename()));
     }
 
 

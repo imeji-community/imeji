@@ -1,41 +1,40 @@
 package de.mpg.imeji.rest.resources.test.integration;
 
-import static javax.ws.rs.core.Response.Status.CREATED;
-import static javax.ws.rs.core.Response.Status.FORBIDDEN;
-import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.isEmptyOrNullString;
-import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Map;
-
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.Form;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.rest.api.AlbumService;
+import de.mpg.imeji.rest.process.RestProcessUtils;
+import de.mpg.imeji.rest.resources.test.TestUtils;
+import de.mpg.imeji.rest.to.AlbumTO;
 import net.java.dev.webdav.jaxrs.ResponseStatus;
-
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import util.JenaUtil;
-import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.rest.api.AlbumService;
-import de.mpg.imeji.rest.resources.test.TestUtils;
+
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Form;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static javax.ws.rs.core.Response.Status.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 
 
@@ -121,7 +120,21 @@ public class AlbumTest extends ImejiTestBase{
 				.get();
 		assertThat(response.getStatus(), equalTo(Status.NOT_FOUND.getStatusCode()));
 	}
-	
+
+	@Test
+	public void test_2_ReadAlbum_5_ReadAlbumsWithQuery() throws IOException, UnprocessableError {
+		Response response = target(pathPrefix)
+				.queryParam("q", albumTO.getTitle())
+				.register(authAsUser).request(MediaType.APPLICATION_JSON)
+				.get();
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		List<Object> albumList = RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), AlbumTO.class);
+		Assert.assertThat(albumList, not(empty()));
+		String filename = ((HashMap<String, String>) albumList.get(0)).get("title");
+		Assert.assertThat(filename, equalTo(albumTO.getTitle()));
+
+	}
+
 	@Test
 	public void test_3_DeleteAlbum_1_WithAuth() throws ImejiException {
 

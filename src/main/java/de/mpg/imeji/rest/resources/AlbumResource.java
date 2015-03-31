@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.InputStream;
 
+import static de.mpg.imeji.rest.process.AlbumProcess.readAllAlbums;
 import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONResponse;
 
 
@@ -34,10 +35,12 @@ public class AlbumResource implements ImejiResource{
 		return RestProcessUtils.buildJSONResponse(resp);
 	}
 
-	@Override
-	public Response readAll(HttpServletRequest req,  @QueryParam("q") String q) {
-		// TODO Auto-generated method stub
-		return null;
+	@GET
+	@ApiOperation(value = "Read all albums filtered by query")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response readAll(@Context HttpServletRequest req,  @QueryParam("q") String q) {
+		JSONResponse resp = readAllAlbums(req, q);
+		return buildJSONResponse(resp);
 	}
 	
 	@PUT

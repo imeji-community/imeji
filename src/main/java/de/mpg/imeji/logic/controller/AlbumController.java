@@ -13,6 +13,7 @@ import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
+import de.mpg.imeji.logic.search.query.URLQueryTransformer;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.vo.*;
@@ -28,6 +29,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
+import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
 
 /**
  * Implements CRUD and Search methods for {@link Album}
@@ -115,6 +117,29 @@ public class AlbumController extends ImejiController {
 		return (Album) reader.read(selectedAlbumId.toString(), user,
 				new Album());
 	}
+
+	/**
+	 * Retrieve albums filtered by query
+	 *
+	 * @param user
+	 * @param q
+	 * @return
+	 * @throws ImejiException
+	 */
+	public List<Album> retrieve(User user, String q) throws ImejiException {
+		List<Album> aList = new ArrayList<>();
+		try {
+			SearchQuery sq= URLQueryTransformer.parseStringQuery(q);
+			for (String albId: search(!isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q) : null, user, null, 0, 0).getResults()) {
+				aList.add(retrieve(URI.create(albId), user));
+			}
+		} catch (Exception e) {
+			throw new UnprocessableError("Cannot retrieve albums:", e);
+
+		}
+		return aList;
+	}
+
 
 	/**
 	 * Retrieve an {@link Album} without its {@link Item}

@@ -35,6 +35,18 @@ public class AlbumProcess {
 
 	}
 
+	public static  JSONResponse readAllAlbums(HttpServletRequest req, String q) {
+		JSONResponse resp;
+		User u = BasicAuthentication.auth(req);
+		AlbumService as = new AlbumService();
+		try {
+			resp = RestProcessUtils.buildResponse(OK.getStatusCode(), as.readAll(u, q));
+		} catch (Exception e) {
+			resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
+		}
+		return resp;
+	}
+
 	public static JSONResponse createAlbum(HttpServletRequest req) {
 		JSONResponse resp; 
 

@@ -36,10 +36,12 @@ public class CollectionResource implements ImejiResource {
         return buildJSONResponse(resp);
 	}
 
-
-    @Override
-    public Response readAll(HttpServletRequest req) {
-        return null;
+    @GET
+    @ApiOperation(value = "Get all collections user has access to.")
+	@Produces(MediaType.APPLICATION_JSON)
+    public Response readAll(@Context HttpServletRequest req ) {
+    	        JSONResponse resp = readAllCollections(req, null);
+    	        return buildJSONResponse(resp);
     }
 
     @GET
@@ -113,4 +115,12 @@ public class CollectionResource implements ImejiResource {
 		return null;
 	}
 
+	@GET
+	@Path("/search")
+	@ApiOperation(value = "Get all collections user has access to." , notes = "The result set can be filtered by query (optional)")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response search (@Context HttpServletRequest req,  @QueryParam("q") String q) {
+	    	JSONResponse resp = readAllCollections(req, q);
+	    	return buildJSONResponse(resp);
+	}
 }

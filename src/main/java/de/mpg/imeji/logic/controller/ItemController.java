@@ -190,7 +190,7 @@ public class ItemController extends ImejiController {
 	public void create(Collection<Item> items, URI coll, User user)
 			throws ImejiException {
 		CollectionController cc = new CollectionController();
-		CollectionImeji ic = cc.retrieve(coll, user);
+		CollectionImeji ic = cc.retrieveLazy(coll, user);
 		for (Item img : items) {
 			writeCreateProperties(img, user);
 			if (Status.PENDING.equals(ic.getStatus())) {
@@ -207,6 +207,8 @@ public class ItemController extends ImejiController {
 		//TODO NB:29.03.2014 Why collection update by item creation? Why collection contains list of items each time?
 		//Not performant
 		cc.update(ic, user);
+		// Performant and working: but means that we don't save the items within the collection, only referenced via the item
+		cc.updateLazy(ic, user);
 
 	}
 
@@ -352,7 +354,7 @@ public class ItemController extends ImejiController {
 
 		StorageController sc = new StorageController();
 		UploadResult uploadResult = sc.upload(item.getFilename(), f, c
-				.retrieve(item.getCollection(), user).getIdString());
+				.retrieveLazy(item.getCollection(), user).getIdString());
 
 		item.setFiletype(getMimeType(f));
 		item.setChecksum(calculateChecksum(f));

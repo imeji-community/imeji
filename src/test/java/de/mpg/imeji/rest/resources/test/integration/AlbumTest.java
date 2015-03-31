@@ -286,6 +286,7 @@ public class AlbumTest extends ImejiTestBase{
 	public void test_5_AddItemsToAlbum_1_WithAuth() throws ImejiException {
 		initCollection();
 		initItem();
+		initAlbum();
 		
 		Response response = target(pathPrefix)
 				.path("/" + albumId + "/add").register(authAsUser)
@@ -353,10 +354,11 @@ public class AlbumTest extends ImejiTestBase{
 		
 		initCollection();
 		initItem();
+	
 		Response response = target(pathPrefix)
 				.path("/" + albumId + "/add").register(authAsUser)
 				.request(MediaType.APPLICATION_JSON_TYPE)
-				.put(Entity.json("[\"" + itemId + "\"]"));	
+				.put(Entity.json("[\"" + itemId + "\"]"));
 		
 		AlbumService s = new AlbumService();
 		s.release(albumId, JenaUtil.testUser);

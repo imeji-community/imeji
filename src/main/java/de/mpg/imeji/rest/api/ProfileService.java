@@ -5,10 +5,12 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.process.TransferObjectFactory;
+import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.MetadataProfileTO;
 
@@ -62,14 +64,23 @@ public class ProfileService implements API<MetadataProfileTO>{
 
 	@Override
 	public MetadataProfileTO release(String id, User u) throws ImejiException {
-        // TODO Auto-generated method stub
-		return null;
+		ProfileController pcontroller = new ProfileController();
+		pcontroller.release(pcontroller.retrieve(id, u), u);
+		
+		return getMetadataProfileTO(pcontroller, id, u);
 	}
 
 	@Override
 	public MetadataProfileTO withdraw(String id, User u, String discardComment) throws ImejiException {
-		// TODO Auto-generated method stub
-		return null;
+
+			ProfileController controller = new ProfileController();
+			MetadataProfile vo = controller.retrieve(
+					ObjectHelper.getURI(MetadataProfile.class, id), u);
+			vo.setDiscardComment(discardComment);
+			controller.withdraw(vo, u);
+
+			//Now Read the withdrawn collection and return it back
+			return getMetadataProfileTO(controller, id, u);
 		
 	}
 
@@ -106,6 +117,18 @@ public class ProfileService implements API<MetadataProfileTO>{
 	                }
 	        );
 	    }
+	
+	private MetadataProfileTO getMetadataProfileTO (ProfileController cc, String id, User u) throws ImejiException {
+		MetadataProfileTO to = new MetadataProfileTO();
+        TransferObjectFactory.transferMetadataProfile(getMetadataProfileVO(cc, id, u), to);
+		return to;
+	}
+	
+	private MetadataProfile getMetadataProfileVO (ProfileController cc, String id, User u) throws ImejiException {
+		return cc.retrieve(ObjectHelper.getURI(MetadataProfile.class, id), u);
+	}
+
+
 
 
 }

@@ -53,15 +53,14 @@ import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.transferMet
  * @version $Revision$ $LastChangedDate$
  */
 public class ProfileController extends ImejiController {
-    private static final ReaderFacade reader = new ReaderFacade(
+	private static final ReaderFacade reader = new ReaderFacade(
 			Imeji.profileModel);
 	private static final WriterFacade writer = new WriterFacade(
 			Imeji.profileModel);
-    public static final String DEFAULT_METADATA_PROFILE_PATH_PROPERTY = "imeji.default.metadata.profile.path";
-    private static Logger logger = Logger.getLogger(ProfileController.class);
+	public static final String DEFAULT_METADATA_PROFILE_PATH_PROPERTY = "imeji.default.metadata.profile.path";
+	private static Logger logger = Logger.getLogger(ProfileController.class);
 
-
-    /**
+	/**
 	 * Default Constructor
 	 */
 	public ProfileController() {
@@ -81,12 +80,11 @@ public class ProfileController extends ImejiController {
 		writeCreateProperties(p, user);
 		p.setStatus(Status.PENDING);
 		writer.create(WriterFacade.toList(p), user);
-        if (!user.isAdmin()){
-            GrantController gc = new GrantController();
-            gc.addGrants(user,
-                    AuthorizationPredefinedRoles.admin(null, p.getId().toString()),
-                    user);
-        }
+		if (!user.isAdmin()) {
+			GrantController gc = new GrantController();
+			gc.addGrants(user, AuthorizationPredefinedRoles.admin(null, p
+					.getId().toString()), user);
+		}
 		return p;
 	}
 
@@ -111,11 +109,10 @@ public class ProfileController extends ImejiController {
 	 * @throws NotFoundException
 	 * @throws ImejiException
 	 */
-	public MetadataProfile retrieve(URI uri, User user)
-			throws ImejiException {
-			MetadataProfile p = null;
-			p = ((MetadataProfile) reader.read(uri.toString(), user,
-					new MetadataProfile()));
+	public MetadataProfile retrieve(URI uri, User user) throws ImejiException {
+		MetadataProfile p = null;
+		p = ((MetadataProfile) reader.read(uri.toString(), user,
+				new MetadataProfile()));
 		Collections.sort((List<Statement>) p.getStatements());
 		return p;
 	}
@@ -124,7 +121,7 @@ public class ProfileController extends ImejiController {
 	 * Retrieve a {@link User} by its {@link URI}
 	 *
 	 * @param collectionId
-     * @param user
+	 * @param user
 	 * @return
 	 * @throws NotFoundException
 	 * @throws ImejiException
@@ -137,8 +134,9 @@ public class ProfileController extends ImejiController {
 		try {
 			c = cc.retrieve(collectionId, user);
 		} catch (ImejiException e) {
-			//e.printStackTrace();
-			throw new UnprocessableError("Invalid collection: " + e.getLocalizedMessage());
+			// e.printStackTrace();
+			throw new UnprocessableError("Invalid collection: "
+					+ e.getLocalizedMessage());
 		}
 
 		return retrieve(c.getProfile(), user);
@@ -149,7 +147,7 @@ public class ProfileController extends ImejiController {
 	 * user is collection editor
 	 * 
 	 * @param mdp
-     * @param user
+	 * @param user
 	 * @throws ImejiException
 	 */
 	public void update(MetadataProfile mdp, User user) throws ImejiException {
@@ -170,7 +168,7 @@ public class ProfileController extends ImejiController {
 		update(mdp, user);
 	}
 
-    /**
+	/**
 	 * Release a {@link MetadataProfile}
 	 *
 	 * @param id
@@ -178,24 +176,37 @@ public class ProfileController extends ImejiController {
 	 * @throws ImejiException
 	 */
 	public void release(String id, User user) throws ImejiException {
-        release(retrieve(id, user), user);
+		release(retrieve(id, user), user);
 	}
 
 	/**
-	 * Delete a {@link MetadataProfile}
+	 * Delete a {@link MetadataProfile} from within a collection
 	 * 
 	 * @param mdp
 	 * @param user
 	 * @throws ImejiException
 	 */
-	public void delete(MetadataProfile mdp, User user) throws ImejiException {
-		if (isReferencedByAnyResources(mdp.getId().toString())) {
+	public void delete(MetadataProfile mdp, User user, String collectionId) throws ImejiException {
+		if ( ( isNullOrEmpty(collectionId) && isReferencedByAnyResources(mdp.getId().toString())) ||
+			   !isNullOrEmpty(collectionId) && isReferencedByOtherResources(mdp.getId().toString(), collectionId)
+				) {
 			throw new UnprocessableError("error_profile_is_referenced_cannot_be_deleted");
 		}
 		else if (mdp.getDefault()) {
 			throw new UnprocessableError("error_profile_is_default_cannot_be_deleted");
 		}
 		writer.delete(WriterFacade.toList(mdp), user);
+	}
+
+	/**
+	 * Delete a {@link MetadataProfile} , checks if there are any references in other collections before deletion
+	 * 
+	 * @param mdp
+	 * @param user
+	 * @throws ImejiException
+	 */
+	public void delete(MetadataProfile mdp, User user) throws ImejiException {
+			this.delete(mdp, user, "");
 	}
 
 	/**
@@ -206,6 +217,10 @@ public class ProfileController extends ImejiController {
 	 * @throws ImejiException
 	 */
 	public void withdraw(MetadataProfile mdp, User user) throws ImejiException {
+		
+		if (mdp.getDefault()) {
+			throw new UnprocessableError("error_profile_is_default_cannot_be_withdrawn");
+		}
 		mdp.setStatus(Status.WITHDRAWN);
 		mdp.setVersionDate(DateHelper.getCurrentDate());
 		update(mdp, user);
@@ -220,8 +235,10 @@ public class ProfileController extends ImejiController {
 	 */
 	public SearchResult search(SearchQuery query, User user) {
 		Search search = SearchFactory.create(SearchType.PROFILE);
-		//Automatically sort by profile title
-		SortCriterion sortCri = new SortCriterion(SPARQLSearch.getIndex(SearchIndex.names.prof.name()), SortOrder.ASCENDING);
+		// Automatically sort by profile title
+		SortCriterion sortCri = new SortCriterion(
+				SPARQLSearch.getIndex(SearchIndex.names.prof.name()),
+				SortOrder.ASCENDING);
 		SearchResult result = search.search(query, sortCri, user);
 		return result;
 	}
@@ -234,9 +251,11 @@ public class ProfileController extends ImejiController {
 	 */
 	public List<MetadataProfile> search(User user) throws ImejiException {
 		Search search = SearchFactory.create(SearchType.PROFILE);
-		
-        //Automatically sort by profile title
-		SortCriterion sortCri = new SortCriterion(SPARQLSearch.getIndex(SearchIndex.names.prof.name()), SortOrder.ASCENDING);
+
+		// Automatically sort by profile title
+		SortCriterion sortCri = new SortCriterion(
+				SPARQLSearch.getIndex(SearchIndex.names.prof.name()),
+				SortOrder.ASCENDING);
 		SearchResult result = search.search(new SearchQuery(), sortCri, user);
 		List<MetadataProfile> l = new ArrayList<MetadataProfile>();
 		for (String uri : result.getResults()) {
@@ -249,69 +268,72 @@ public class ProfileController extends ImejiController {
 		return l;
 	}
 
-    /**
-     * Find default profile.
-     *
-     * @return default metadata profile
-     * @throws ImejiException
-     */
+	/**
+	 * Find default profile.
+	 *
+	 * @return default metadata profile
+	 * @throws ImejiException
+	 */
 
-    public MetadataProfile retrieveDefaultProfile() throws ImejiException {
-        Search search = SearchFactory.create();
-        List<String> uris = search.searchSimpleForQuery(
-                SPARQLQueries.selectDefaultMetadataProfile())
-                .getResults();
-        if (uris.size() == 1) {
-            return retrieve(URI.create(uris.get(0)), Imeji.adminUser);
-        } else if (uris.size() > 1) {
-            throw new ImejiException("Data inconsistency: " + uris.size()  + " + default metadata profile have been found.");
-        } else {
-            logger.info("Cannot find default metadata profile...");
-        }
-        return null;
-    }
+	public MetadataProfile retrieveDefaultProfile() throws ImejiException {
+		Search search = SearchFactory.create();
+		List<String> uris = search.searchSimpleForQuery(
+				SPARQLQueries.selectDefaultMetadataProfile()).getResults();
+		if (uris.size() == 1) {
+			return retrieve(URI.create(uris.get(0)), Imeji.adminUser);
+		} else if (uris.size() > 1) {
+			throw new ImejiException("Data inconsistency: " + uris.size()
+					+ " + default metadata profile have been found.");
+		} else {
+			logger.info("Cannot find default metadata profile...");
+		}
+		return null;
+	}
 
-    /**
-     * Create default profile.
-     *
-     * @return default metadata profile
-     * @throws ImejiException
-     */
+	/**
+	 * Create default profile.
+	 *
+	 * @return default metadata profile
+	 * @throws ImejiException
+	 */
 
-    public MetadataProfile initDefaultMetadataProfile() throws ImejiException {
+	public MetadataProfile initDefaultMetadataProfile() throws ImejiException {
 
-        MetadataProfile mdpVO = retrieveDefaultProfile();
+		MetadataProfile mdpVO = retrieveDefaultProfile();
 
-        if (mdpVO == null) {
-            String path = null;
-            String profileJSON = null;
-            MetadataProfileTO mdpTO = null;
-            try {
-                path = PropertyReader.getProperty(DEFAULT_METADATA_PROFILE_PATH_PROPERTY);
-                if (isNullOrEmpty(path)) {
-                	logger.info("There is no default metadata profile defined! This is not an error, Imeji will still work. Default metadata profile is a convenience for quick start!" +
-                			"Check more about it at the IMEJI Documentation.");
-                	return null;
-                }
-                profileJSON = getStringFromPath(path);
-                mdpTO = (MetadataProfileTO) RestProcessUtils.buildTOFromJSON(profileJSON, MetadataProfileTO.class);
-            } catch (UnrecognizedPropertyException e) {
-                throw new ImejiException("Error reading property " + DEFAULT_METADATA_PROFILE_PATH_PROPERTY + ": " + e);
-            } catch (JsonProcessingException e) {
-                throw new ImejiException("Cannot process json: " + e);
-            } catch (URISyntaxException | IOException e) {
-                throw new ImejiException("Wrong path: " + e);
-            }
-            mdpVO = new MetadataProfile();
-            transferMetadataProfile(mdpTO, mdpVO, TRANSFER_MODE.CREATE);
-            mdpVO.setDefault(true);
-            mdpVO = create(mdpVO, Imeji.adminUser);
-            release(mdpVO, Imeji.adminUser);
+		if (mdpVO == null) {
+			String path = null;
+			String profileJSON = null;
+			MetadataProfileTO mdpTO = null;
+			try {
+				path = PropertyReader
+						.getProperty(DEFAULT_METADATA_PROFILE_PATH_PROPERTY);
+				if (isNullOrEmpty(path)) {
+					logger.info("There is no default metadata profile defined! This is not an error, Imeji will still work. Default metadata profile is a convenience for quick start!"
+							+ "Check more about it at the IMEJI Documentation.");
+					return null;
+				}
+				profileJSON = getStringFromPath(path);
+				mdpTO = (MetadataProfileTO) RestProcessUtils.buildTOFromJSON(
+						profileJSON, MetadataProfileTO.class);
+			} catch (UnrecognizedPropertyException e) {
+				throw new ImejiException("Error reading property "
+						+ DEFAULT_METADATA_PROFILE_PATH_PROPERTY + ": " + e);
+			} catch (JsonProcessingException e) {
+				throw new ImejiException("Cannot process json: " + e);
+			} catch (URISyntaxException | IOException e) {
+				throw new ImejiException("Wrong path: " + e);
+			}
+			mdpVO = new MetadataProfile();
+			transferMetadataProfile(mdpTO, mdpVO, TRANSFER_MODE.CREATE);
+			mdpVO.setDefault(true);
+			mdpVO = create(mdpVO, Imeji.adminUser);
+			release(mdpVO, Imeji.adminUser);
 
-        }
-        return mdpVO;
+		}
+		return mdpVO;
 
-    }
+	}
 
 	/**
 	 * Remove all the {@link Metadata} not having a {@link Statement}. This
@@ -319,35 +341,38 @@ public class ProfileController extends ImejiController {
 	 * {@link MetadataProfile}.
 	 */
 	public void removeMetadataWithoutStatement(MetadataProfile p) {
-		ImejiSPARQL
-				.execUpdate(SPARQLQueries
-						.updateRemoveAllMetadataWithoutStatement((p.getId()
-								.toString())));
+		String id = p != null ? p.getId().toString() : null;
+		ImejiSPARQL.execUpdate(SPARQLQueries
+				.updateRemoveAllMetadataWithoutStatement(id));
 		ImejiSPARQL.execUpdate(SPARQLQueries.updateEmptyMetadata());
 	}
-	
-	public void validateProfile (MetadataProfile profile, User u) throws ImejiException {
-		//Copied from Collection Bean in presentation  
-		if ( isNullOrEmpty (profile.getTitle())) {
+
+	public void validateProfile(MetadataProfile profile, User u)
+			throws ImejiException {
+		// Copied from Collection Bean in presentation
+		if (isNullOrEmpty(profile.getTitle())) {
 			throw new BadRequestException("error_profile_need_title");
 		}
 	}
-	
-	public boolean isReferencedByOtherResources(String profileUri, String resourceUri) {
+
+	public boolean isReferencedByOtherResources(String profileUri,
+			String resourceUri) {
 		Search s = new SPARQLSearch(SearchType.ALL, null);
 		List<String> r = s.searchSimpleForQuery(
-				SPARQLQueries.hasOtherMetadataProfileReferences(profileUri, resourceUri)).getResults();
-		if (r.size()>0) {
+				SPARQLQueries.hasOtherMetadataProfileReferences(profileUri,
+						resourceUri)).getResults();
+		if (r.size() > 0) {
 			return true;
 		}
 		return false;
 	}
-	
+
 	public boolean isReferencedByAnyResources(String profileUri) {
 		Search s = new SPARQLSearch(SearchType.ALL, null);
 		List<String> r = s.searchSimpleForQuery(
-				SPARQLQueries.hasMetadataProfileReferences(profileUri)).getResults();
-		if (r.size()>0) {
+				SPARQLQueries.hasMetadataProfileReferences(profileUri))
+				.getResults();
+		if (r.size() > 0) {
 			return true;
 		}
 		return false;

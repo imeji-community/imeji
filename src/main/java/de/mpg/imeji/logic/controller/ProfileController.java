@@ -19,6 +19,7 @@ import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
+import de.mpg.imeji.logic.search.query.URLQueryTransformer;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
@@ -42,6 +43,7 @@ import java.util.List;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static de.mpg.imeji.logic.util.ResourceHelper.getStringFromPath;
+import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
 import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE;
 import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.transferMetadataProfile;
 
@@ -244,30 +246,42 @@ public class ProfileController extends ImejiController {
 	}
 
 	/**
-	 * Search all profile allowed for the current user. Not sorted.
+	 * Search all profile allowed for the current user. Sorted by profile name, query parameter possible.
 	 * 
 	 * @return
 	 * @throws ImejiException
 	 */
-	public List<MetadataProfile> search(User user) throws ImejiException {
+	public List<MetadataProfile> search(User user, String q) throws ImejiException {
 		Search search = SearchFactory.create(SearchType.PROFILE);
 
 		// Automatically sort by profile title
 		SortCriterion sortCri = new SortCriterion(
 				SPARQLSearch.getIndex(SearchIndex.names.prof.name()),
 				SortOrder.ASCENDING);
-		SearchResult result = search.search(new SearchQuery(), sortCri, user);
+		SearchResult result;
 		List<MetadataProfile> l = new ArrayList<MetadataProfile>();
-		for (String uri : result.getResults()) {
-			try {
+		try {
+			result = search.search(!isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q) : null, sortCri, user);
+			for (String uri : result.getResults()) {
 				l.add(retrieve(URI.create(uri), user));
-			} catch (Exception e) {
-				logger.error(e);
 			}
+		} catch (Exception e) {
+			logger.error(e);
 		}
 		return l;
 	}
 
+	
+	/**
+	 * Search all profile allowed for the current user, Sorted by profile name, no query parameter
+	 * 
+	 * @return
+	 * @throws ImejiException
+	 */
+	public List<MetadataProfile> search(User user) throws ImejiException {
+		return search(user, "");
+	}
+	
 	/**
 	 * Find default profile.
 	 *

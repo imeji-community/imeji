@@ -50,14 +50,14 @@ public class ProfileProcess {
 
 	}
 	
-	public static  JSONResponse readAll(HttpServletRequest req) {
+	public static  JSONResponse readAll(HttpServletRequest req, String q) {
         JSONResponse resp;
 
         User u = BasicAuthentication.auth(req);
 
         ProfileService ccrud = new ProfileService();
         try {
-            resp = RestProcessUtils.buildResponse(OK.getStatusCode(), ccrud.readAll(u));
+            resp = RestProcessUtils.buildResponse(OK.getStatusCode(), ccrud.readAll(u, q));
         } catch (Exception e) {
             resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
         }

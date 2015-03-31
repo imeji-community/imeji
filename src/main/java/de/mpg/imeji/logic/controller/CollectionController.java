@@ -197,18 +197,14 @@ public class CollectionController extends ImejiController {
 	 * @throws ImejiException
 	 */
 	public List<CollectionImeji> retrieveCollections(User user, String q) throws ImejiException {
-        List<CollectionImeji> cList = new ArrayList<CollectionImeji>();
-        System.out.println("Query= "+q);
+		
+		List<CollectionImeji> cList = new ArrayList<CollectionImeji>();
         try {
-        	    SearchQuery sq= URLQueryTransformer.parseStringQuery(q);
-        	    System.out.println(sq.isEmpty()+"is Empty");
         		for (String colId: search(!isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q) : null, null,0, 0, user).getResults()) {
                 cList.add(retrieve(URI.create(colId), user));
             }
-        	System.out.println("Fouznd = "+cList.size());
         } catch (Exception e) {
             throw new UnprocessableError("Cannot retrieve collections:", e);
-
         }
         return cList;
 	}

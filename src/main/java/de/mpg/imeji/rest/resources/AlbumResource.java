@@ -110,7 +110,7 @@ public class AlbumResource implements ImejiResource{
 	
 	@PUT
 	@Path("/{id}/members/link")
-	@ApiOperation(value = "Link Items to album", notes = "Add list of items to an album:"
+	@ApiOperation(value = "Link Items to album", notes = "Link items to an album with following parameters:"
 			+ "<br/> 1) Album ID "
 			+ "<br/> 2) List of item IDs"
 			+ "<br/><br/>"
@@ -127,7 +127,7 @@ public class AlbumResource implements ImejiResource{
 	
 	@PUT
 	@Path("/{id}/members/unlink")
-	@ApiOperation(value = "Remove Items to album", notes = "Add list of items to an album:"
+	@ApiOperation(value = "Unlink Items from an album", notes = "Unlink items from an album with following parameters:"
 			+ "<br/> 1) Album ID "
 			+ "<br/> 2) List of item IDs"
 			+ "<br/><br/>"
@@ -144,15 +144,7 @@ public class AlbumResource implements ImejiResource{
 	
 	@PUT
 	@Path("/{id}/members/unlink/all")
-	@ApiOperation(value = "Remove Items to album", notes = "Add list of items to an album:"
-			+ "<br/> 1) Album ID "
-			+ "<br/> 2) List of item IDs"
-			+ "<br/><br/>"
-			+ "Json example:"
-			+ "<div class=\"json_example\">"
-			+ "[\"Item-ID 1\" , \"Item-ID 2\" , \"Item-ID 3\" , \"Item-ID 4\" ...]"
-			+ "</div>"
-			+ "<br/>")
+	@ApiOperation(value = "Unlink all items from an album (empty an album from items)", notes = "Empty album with provided ID from items")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response removeAllItems(@PathParam("id") String id, @Context HttpServletRequest req) throws Exception {
 		JSONResponse resp = AlbumProcess.removeItems(req, id, true);

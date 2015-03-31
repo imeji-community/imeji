@@ -37,7 +37,8 @@ public class CollectionResource implements ImejiResource {
 	}
 
     
-    @GET
+    @GET  
+    @ApiOperation(value = "Get all collections user has access to.", notes ="With provided query parameter you filter only some collections")
     @Produces(MediaType.APPLICATION_JSON)
   	public Response readAll(@Context HttpServletRequest req,  @QueryParam("q") String q) {
       	JSONResponse resp = readAllCollections(req, q);

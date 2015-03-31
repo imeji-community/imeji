@@ -616,7 +616,73 @@ public class AlbumTest extends ImejiTestBase{
 		assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
 	}
 	
-	
+/*	
+	@Test
+	public void test_8_UnlinkItemsToAlbum_1_WithAuth() throws ImejiException {
+		initCollection();
+		initItem();
+		initAlbum();
+		
+		Response response = target(pathPrefix)
+				.path("/" + albumId + "/members/unlink").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));	
 
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+	}
+	
+	@Test
+	public void test_8_UnlinkItemsToAlbum_2_WithUnauth() throws ImejiException {
+		initCollection();
+		initItem();
+		
+		Response response = target(pathPrefix)
+				.path("/" + albumId + "/members/unlink")
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));	
+
+		assertThat(response.getStatus(),equalTo(UNAUTHORIZED.getStatusCode()));
+	}
+	
+	@Test
+	public void test_8_UnlinkItemsToAlbum_3_WithNonAuth() throws ImejiException {
+		initCollection();
+		initItem();
+		
+		Response response = target(pathPrefix)
+				.path("/" + albumId + "/members/unlink").register(authAsUser2)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));	
+
+		assertThat(response.getStatus(),equalTo(FORBIDDEN.getStatusCode()));;
+	}
+	
+	@Test
+	public void test_8_UnlinkItemsToAlbum_4_NonExistingAlbum() throws ImejiException {
+		initCollection();
+		initItem();
+		
+		Response response = target(pathPrefix)
+				.path("/" + albumId+"i_do_not_exist" + "/members/unlink").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));	
+
+		assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
+	}
+	
+	
+	
+	@Test
+	public void test_8_UnlinkItemsToAlbum_5_NonExistingItem() throws ImejiException {
+		
+		Response response = target(pathPrefix)
+				.path("/" + albumId + "/members/unlink").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + "adfgsh" + "\"]"));	
+
+		assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
+	}
+	
+	*/
 
 }

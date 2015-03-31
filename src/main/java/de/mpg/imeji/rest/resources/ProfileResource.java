@@ -25,7 +25,7 @@ public class ProfileResource implements ImejiResource {
     @ApiOperation(value = "Get all profiles user has access to.")
     @Produces(MediaType.APPLICATION_JSON)
 	public Response readAll(@Context HttpServletRequest req,  @QueryParam("q") String q) {
-    	JSONResponse resp = ProfileProcess.readAll(req);
+    	JSONResponse resp = ProfileProcess.readAll(req, q);
         return buildJSONResponse(resp);
 	}
   

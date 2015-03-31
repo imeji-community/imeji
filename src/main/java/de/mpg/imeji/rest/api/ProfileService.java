@@ -104,9 +104,9 @@ public class ProfileService implements API<MetadataProfileTO>{
 		return null;
 	}
 
-	public List<MetadataProfileTO> readAll(User u) throws ImejiException {
+	public List<MetadataProfileTO> readAll(User u, String q) throws ImejiException {
 	        ProfileController cc = new ProfileController();
-	        return Lists.transform(cc.search(u),
+	        return Lists.transform(cc.search(u, q),
 	                new Function<MetadataProfile, MetadataProfileTO>() {
 	                    @Override
 	                    public MetadataProfileTO apply(MetadataProfile vo) {

@@ -10,11 +10,16 @@ import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
+import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.query.URLQueryTransformer;
+import de.mpg.imeji.logic.search.vo.SearchElement;
+import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
+import de.mpg.imeji.logic.search.vo.SearchElement.SEARCH_ELEMENTS;
+import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.logic.vo.Properties.Status;
@@ -191,15 +196,14 @@ public class CollectionController extends ImejiController {
 	 * @throws ImejiException
 	 */
 	public List<CollectionImeji> retrieveCollections(User user, String q) throws ImejiException {
-        List<CollectionImeji> cList = new ArrayList<CollectionImeji>();
+		
+		List<CollectionImeji> cList = new ArrayList<CollectionImeji>();
         try {
-        	    SearchQuery sq= URLQueryTransformer.parseStringQuery(q);
-        		for (String colId: search(!isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q) : null, null, 0, 0, user).getResults()) {
+        		for (String colId: search(!isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q) : null, null,0, 0, user).getResults()) {
                 cList.add(retrieve(URI.create(colId), user));
             }
         } catch (Exception e) {
             throw new UnprocessableError("Cannot retrieve collections:", e);
-
         }
         return cList;
 	}

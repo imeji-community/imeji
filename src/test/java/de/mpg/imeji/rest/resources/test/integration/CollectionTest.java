@@ -405,7 +405,6 @@ public class CollectionTest extends ImejiTestBase {
 
     @Test
     public void test_5_DeleteCollection_1_WithAuth() throws ImejiException {
-    	System.out.println("Problematic Test 1");
         initCollection();
 
         Response response = target(pathPrefix)

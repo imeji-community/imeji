@@ -188,12 +188,10 @@ public class CollectionTest extends ImejiTestBase {
 
     @Test
     public void test_2_ReadCollection_6_AllItems_WithQuery() throws Exception {
-        initItem();
-        initItem();
-        initItem();
-        initItem();
-        initItem();
-        initItem();
+        final int ITEM_AMOUNT = 6;
+        for (int i = 1; i <= ITEM_AMOUNT; i++) {
+            initItem();
+        }
         Response response = target(pathPrefix).path(collectionId + "/items")
                 .queryParam("q", "test.png")
                 .register(authAsUser).request(MediaType.APPLICATION_JSON)
@@ -201,7 +199,7 @@ public class CollectionTest extends ImejiTestBase {
         assertEquals(OK.getStatusCode(), response.getStatus());
         String jsonStr = response.readEntity(String.class);
         assertThat(jsonStr, not(isEmptyOrNullString()));
-        assertThat(StringUtils.countMatches(jsonStr, "test.png"), equalTo(6));
+        assertThat(StringUtils.countMatches(jsonStr, "test.png"), equalTo(ITEM_AMOUNT));
 
     }
 

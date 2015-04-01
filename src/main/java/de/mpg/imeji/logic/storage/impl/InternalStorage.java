@@ -39,6 +39,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -178,7 +179,7 @@ public class InternalStorage implements Storage
     @Override
     public String getCollectionId(String url)
     {
-        return url.replace(manager.getStorageUrl(), "").split("/", 2)[0];
+        return URI.create(url).getPath().replace(URI.create(manager.getStorageUrl()).getPath(), "").split("/", 2)[0];
     }
     
     

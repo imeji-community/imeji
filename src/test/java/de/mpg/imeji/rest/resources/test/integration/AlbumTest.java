@@ -742,22 +742,54 @@ public class AlbumTest extends ImejiTestBase{
 		assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
 	}
 	
-	/*@Test
-	public void test_8_UnlinkAllItemsToAlbum_5_NonExistingItem() throws ImejiException {
+	@Test
+	public void test_8_UnlinkAllItemsFromAlbum() throws ImejiException {
 		//in principle it does not care if item exists or not, it will simply do nothing
-		Response response = target(pathPrefix)
-				.path("/" + albumId + "/members/unlink/all").register(authAsUser)
-				.request(MediaType.APPLICATION_JSON_TYPE)
-				.put(Entity.json(null));	
-
-		assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+		initCollection();
+		initItem();
 		
+		Response response = target(pathPrefix)
+				.path("/" + albumId + "/members/link").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));	
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		
+		initItem();
+
+		response = target(pathPrefix)
+				.path("/" + albumId + "/members/link").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));	
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		
+		//read two items from the Album
+		response = target(pathPrefix)
+				.path("/" + albumId + "/members")
+				.register(authAsUser).request(MediaType.APPLICATION_JSON)
+				.get();
+		
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		List<ItemTO> itemList = RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), ItemTO.class);
+		Assert.assertThat(itemList, not(empty()));
+		Assert.assertEquals(2, itemList.size());
+
+		//remove all album mebres
 		response = target(pathPrefix)
 				.path("/" + albumId + "/members").register(authAsUser)
-				.request(MediaType.APPLICATION_JSON_TYPE).get();	
-
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.delete();	
 		assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
-	}*/
+		
+		//read no items from the Album
+		response = target(pathPrefix)
+						.path("/" + albumId + "/members")
+						.register(authAsUser).request(MediaType.APPLICATION_JSON)
+						.get();
+				
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		itemList = RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), ItemTO.class);
+		Assert.assertThat(itemList, empty());
+	}
 	
 
 }

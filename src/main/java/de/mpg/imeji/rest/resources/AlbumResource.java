@@ -144,8 +144,8 @@ public class AlbumResource implements ImejiResource{
 		return RestProcessUtils.buildJSONResponse(resp);
 	}
 	
-	@PUT
-	@Path("/{id}/members/unlink/all")
+	@DELETE
+	@Path("/{id}/members")
 	@ApiOperation(value = "Unlink all items from an album (empty an album from items)", notes = "Empty album with provided ID from items")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response removeAllItems(@PathParam("id") String id, @Context HttpServletRequest req) throws Exception {

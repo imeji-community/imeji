@@ -16,28 +16,28 @@
 		
 		<div class="imj_entryPagePreviewTiledList">
 			<ui:fragment rendered="#{cc.attrs.mediaLogicBean.container.status != 'WITHDRAWN'}">
-				<div class="imj_listBody">
-					<ul class="imj_thumbnailsPreview">
-					<!-- MEDIA - Entry Page - Thumbnails -->
-					<ui:repeat var="thumb" value="#{cc.attrs.mediaLogicBean.items}">
-						<li class="imj_tileItem">
-						<h:outputLink value="#{cc.attrs.mediaLogicBean.id}/item/#{thumb.idString}" title="#{lbl.view_detail}" rendered="#{cc.attrs.mediaLogicBean.items.size() > 0}">
-							<h:graphicImage styleClass="imj_entryPagePreviewPicture" value="#{cc.attrs.applicationUrl}file?id=#{thumb.thumbnailImageUrl}"/>
-						</h:outputLink>
-						</li>
-					</ui:repeat>
-					</ul>
 					<!-- MEDIA - Link to Collection -->
 					<h:outputLink value="#{cc.attrs.mediaLogicBean.id}/#{cc.attrs.browsePath}?q=" title="#{gotoLabel}" rendered="#{cc.attrs.mediaLogicBean.items.size() > 0}">
+					<div class="imj_listBody imj_entryPagePreviewTiledListArea">
+					    <ul class="imj_thumbnailsPreview">
+							<!-- MEDIA - Entry Page - Thumbnails -->
+							<ui:repeat var="thumb" value="#{cc.attrs.mediaLogicBean.items}">
+								<li class="imj_tileItem">
+								<!-- <h:outputLink value="#{cc.attrs.mediaLogicBean.id}/#{cc.attrs.browsePath}?q=" title="#{gotoLabel}" rendered="#{cc.attrs.mediaLogicBean.items.size() > 0}"> -->
+									<h:graphicImage styleClass="imj_entryPagePreviewPicture" value="#{cc.attrs.applicationUrl}file?id=#{thumb.thumbnailImageUrl}"/>
+								<!-- </h:outputLink> -->
+								</li>
+							</ui:repeat>
+						</ul>
+						
 						<h:panelGroup styleClass="imj_entryPagePreviewTiledListLink">
 							<h:outputText value ="#{cc.attrs.lbl.collection_view_all_images}" rendered="#{cc.attrs.mediaLogicBean.type == 'COLLECTION'}"/>
 							<h:outputText value ="#{cc.attrs.lbl.album_view_all_images}" rendered="#{cc.attrs.mediaLogicBean.type == 'ALBUM'}"/>
 							<span class="imj_entryPagePreviewTiledListLinkArrow"> </span>
 						</h:panelGroup>
-					</h:outputLink>
-				</div>
-
-				<ui:fragment rendered="#{cc.attrs.mediaLogicBean.items.size() == 0  and cc.attrs.mediaLogicBean.type == 'COLLECTION'}">
+					</div>
+				</h:outputLink>
+					<ui:fragment rendered="#{cc.attrs.mediaLogicBean.items.size() == 0  and cc.attrs.mediaLogicBean.type == 'COLLECTION'}">
 					<h2 class="imj_headline imj_messageInfo">
   					   <h:outputText value="#{lbl.no_item_collection}"/>
 					    <br/>

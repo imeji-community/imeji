@@ -151,7 +151,7 @@ public class InternalStorageManager implements Serializable {
 	 */
 	public void removeItem(InternalStorageItem item) {
 		if (item.getId() != null && !item.getId().trim().equals("")) {
-			removeFile(storagePath + item.getId());
+			removeFile(transformPathToUrl(storagePath + item.getId()));
 		}
 	}
 

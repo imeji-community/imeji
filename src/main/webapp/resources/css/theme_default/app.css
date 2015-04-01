@@ -854,4 +854,4 @@ body .imj_siteWrapper .plupload_delete .plupload_file_action a { display: inline
 body .imj_siteWrapper .plupload_delete .plupload_file_action a:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjButtonMinusRoundedBorderOpen_16.png") 0 0 no-repeat; }
 body .imj_siteWrapper .moxie-shim input { border-radius: 0; -webkit-border-radius: 0; -moz-border-radius: 0; -o-border-radius: 0; -ms-border-radius: 0; padding: 0; margin: 0; cursor: pointer; }
 
-.imj_listBody.imj_entryPagePreviewTiledListArea:hover {border: 1px groove #6CAE2F;}
+.imj_listBody.imj_entryPagePreviewTiledListArea:hover {background-color: #292929;}

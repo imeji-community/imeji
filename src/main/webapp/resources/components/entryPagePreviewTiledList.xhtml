@@ -21,7 +21,7 @@
 					<!-- MEDIA - Entry Page - Thumbnails -->
 					<ui:repeat var="thumb" value="#{cc.attrs.mediaLogicBean.items}">
 						<li class="imj_tileItem">
-						<h:outputLink value="#{cc.attrs.mediaLogicBean.id}/#{cc.attrs.browsePath}?q=" title="#{gotoLabel}" rendered="#{cc.attrs.mediaLogicBean.items.size() > 0}">
+						<h:outputLink value="#{cc.attrs.mediaLogicBean.id}/item/#{thumb.idString}" title="#{lbl.view_detail}" rendered="#{cc.attrs.mediaLogicBean.items.size() > 0}">
 							<h:graphicImage styleClass="imj_entryPagePreviewPicture" value="#{cc.attrs.applicationUrl}file?id=#{thumb.thumbnailImageUrl}"/>
 						</h:outputLink>
 						</li>
@@ -36,17 +36,20 @@
 						</h:panelGroup>
 					</h:outputLink>
 				</div>
-				
-				<h:outputLink value="#{cc.attrs.mediaLogicBean.id}/#{Navigation.uploadPath}?init=1" rendered="#{Auth.create(cc.attrs.mediaLogicBean.container) and cc.attrs.mediaLogicBean.items.size() == 0 and cc.attrs.mediaLogicBean.type == 'COLLECTION'}">
-					<h:panelGroup styleClass="imj_entryPagePreviewTiledListLink">
-						<h:outputText value ="#{lbl.uploadFiles}"/>
-						<span class="imj_entryPagePreviewTiledListLinkArrow"> </span>
-					</h:panelGroup>				
-				</h:outputLink>
-				
-				<ui:fragment rendered="#{cc.attrs.mediaLogicBean.items.size() == 0}">
+
+				<ui:fragment rendered="#{cc.attrs.mediaLogicBean.items.size() == 0  and cc.attrs.mediaLogicBean.type == 'COLLECTION'}">
+					<h2 class="imj_headline imj_messageInfo">
+  					   <h:outputText value="#{lbl.no_item_collection}"/>
+					    <br/>
+						<h:outputLink value="#{cc.attrs.mediaLogicBean.id}/#{Navigation.uploadPath}?init=1" rendered="#{Auth.create(cc.attrs.mediaLogicBean.container) and cc.attrs.mediaLogicBean.items.size() == 0 and cc.attrs.mediaLogicBean.type == 'COLLECTION'}">
+								<span class="imj_entryPagePreviewTiledListLinkArrow"> </span>
+								<h:outputText value ="#{lbl.upload_images}"/>
+						</h:outputLink>
+					</h2>
+				</ui:fragment>
+				<ui:fragment rendered="#{cc.attrs.mediaLogicBean.items.size() == 0 and cc.attrs.mediaLogicBean.type == 'ALBUM'}">
 					<h:panelGroup  styleClass="imj_entryPagePreviewTiledListItem">
-						<h2><h:outputText value="#{lbl.no_item} "/></h2>
+						<h2><h:outputText value="#{lbl.no_item_album} "/></h2>
 					</h:panelGroup>
 				</ui:fragment>
 			</ui:fragment>

@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.AlbumController;
+import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Item;
@@ -12,6 +13,8 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.process.CommonUtils;
 import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.to.AlbumTO;
+import de.mpg.imeji.rest.to.ItemTO;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,6 +57,19 @@ public class AlbumService implements API<AlbumTO> {
         );
     }
 
+    public List<ItemTO> readItems(String id, User u, String q) throws ImejiException {
+        AlbumController cc = new AlbumController();
+        return Lists.transform(cc.retrieveItems(id, u, q),
+                new Function<Item, ItemTO>() {
+                    @Override
+                    public ItemTO apply(Item vo) {
+                        ItemTO to = new ItemTO();
+                        TransferObjectFactory.transferItem(vo, to);
+                        return to;
+                    }
+                }
+        );
+    }
 
     @Override
     public AlbumTO create(AlbumTO o, User u) throws ImejiException {
@@ -128,50 +144,52 @@ public class AlbumService implements API<AlbumTO> {
 
     }
 
+	@Override
+	public List<String> search(String q, User u) throws ImejiException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public List<String> addItems(String id, User u, List<String> itemIds) throws ImejiException {
+		AlbumController controller = new AlbumController();
+		Album vo = controller.retrieve(ObjectHelper.getURI(Album.class, id), u);
+		List<String> itemUris = new ArrayList<>();
+		
+		//Convert Ids to Uris
+		for(String itemId : itemIds){
+			itemUris.add(ObjectHelper.getURI(Item.class, itemId).toASCIIString());
+		}
+		List<String> ids = new ArrayList<String>();
+		for(URI itemURI : controller.addToAlbum(vo, itemUris, u))
+			ids.add(CommonUtils.extractIDFromURI(itemURI));
+		return ids;
+	}
+	
+   public boolean removeItems(String id, User u, List<String> itemIds, boolean removeAll) throws ImejiException {
+		AlbumController controller = new AlbumController();
+		Album vo = controller.retrieve(ObjectHelper.getURI(Album.class, id), u);
+		List<String> itemUris = new ArrayList<>();
+		if (!removeAll) {
+			//Convert Ids to Uris
+			for(String itemId : itemIds){
+				itemUris.add(ObjectHelper.getURI(Item.class, itemId).toASCIIString());
+			}
+			
+			controller.removeFromAlbum(vo, itemUris, u);
+		}
+		else
+		{
+			controller.clearAlbumItems(vo, u);
+		}
+		return true;
+	}
+
+
+
     @Override
     public void unshare(String id, String userId, List<String> roles, User u)
-            throws ImejiException {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public List<String> search(String q, User u) throws ImejiException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public List<String> addItems(String id, User u, List<String> itemIds) throws ImejiException {
-        AlbumController controller = new AlbumController();
-        Album vo = controller.retrieve(ObjectHelper.getURI(Album.class, id), u);
-        List<String> itemUris = new ArrayList<>();
-
-        //Convert Ids to Uris
-        for (String itemId : itemIds) {
-            itemUris.add(ObjectHelper.getURI(Item.class, itemId).toASCIIString());
-        }
-        List<String> ids = new ArrayList<String>();
-        for (URI itemURI : controller.addToAlbum(vo, itemUris, u))
-            ids.add(CommonUtils.extractIDFromURI(itemURI));
-        return ids;
-    }
-
-    public boolean removeItems(String id, User u, List<String> itemIds, boolean removeAll) throws ImejiException {
-        AlbumController controller = new AlbumController();
-        Album vo = controller.retrieve(ObjectHelper.getURI(Album.class, id), u);
-        List<String> itemUris = new ArrayList<>();
-
-        //Convert Ids to Uris
-        for (String itemId : itemIds) {
-            itemUris.add(ObjectHelper.getURI(Item.class, itemId).toASCIIString());
-        }
-
-        if (!removeAll) {
-            controller.removeFromAlbum(vo, itemUris, u);
-        } else {
-            controller.clearAlbumItems(vo, u);
-        }
-        return true;
+    throws ImejiException {
+    // TODO Auto-generated method stub
     }
 
 }

@@ -38,14 +38,19 @@
 			
 			
 			<div class="imj_statusArea">
-				<ui:fragment rendered="#{cc.attrs.item.status != 'WITHDRAWN'}">
+				<ui:fragment rendered="#{cc.attrs.item.status == 'PENDING'}">
 					<span class="imj_iconStatusPrivate_24" title="#{lbl.privateContent}">
 						<h:outputText value="&#160;"/>
 					</span>
 				</ui:fragment>
 				
-				<ui:fragment rendered="#{!cc.attrs.item.owner}">
+				<ui:fragment rendered="#{!cc.attrs.item.owner and cc.attrs.item.status=='RELEASED'}">
 					<span class="imj_iconStatusShareable_24" title="#{lbl.sharedContent}">
+						<h:outputText value="&#160;"/>
+					</span>
+				</ui:fragment>
+				<ui:fragment rendered="#{cc.attrs.item.status=='WITHDRAWN'}">
+					<span class="imj_iconStatusWithdrawn_24" title="#{lbl.discardedContent}">
 						<h:outputText value="&#160;"/>
 					</span>
 				</ui:fragment>
@@ -115,11 +120,11 @@
 									</h:outputLink>
 								</li>
 							</ui:fragment>
-							<ui:fragment rendered="#{cc.attrs.isActivatable == 'yes' and cc.attrs.item.status=='PENDING'}">
+							<ui:fragment rendered="#{cc.attrs.isActivatable == 'yes'}">
 								<li>
 									<ui:fragment rendered="#{Auth.create(cc.attrs.item)}">
 										<h:form>
-											<h:commandButton id="btnActivate" value="#{lbl.make_active}" action="#{cc.attrs.item.makeActive}" styleClass="imj_submitButton" rendered="#{!cc.attrs.item.active}">
+											<h:commandButton id="btnActivate" value="#{lbl.make_active}" action="#{cc.attrs.item.makeActive}" styleClass="imj_submitButton" rendered="#{!cc.attrs.item.active and cc.attrs.item.status!='WITHDRAWN'}">
 												<f:ajax execute="@this" render="@form :imj_pageMessageArea"/>
 											</h:commandButton>
 											<h:commandButton id="btnDeactivate" value="#{lbl.make_inactive}" action="#{cc.attrs.item.makeInactive}" styleClass="imj_submitButton" rendered="#{cc.attrs.item.active}">
@@ -128,7 +133,7 @@
 										</h:form>
 									</ui:fragment>
 									<ui:fragment rendered="#{!Auth.create(cc.attrs.item) and !cc.attrs.item.active}">
-										<h:outputText value="Only View allowed"/>
+										<h:outputText value="#{lbl.only_view_allowed}"/>
 									</ui:fragment>
 								</li>
 							</ui:fragment>

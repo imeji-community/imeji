@@ -4,7 +4,9 @@ import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.api.AlbumService;
+import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.to.AlbumTO;
+import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.JSONResponse;
 
 import javax.servlet.http.HttpServletRequest;
@@ -46,6 +48,21 @@ public class AlbumProcess {
 		}
 		return resp;
 	}
+	
+	 public static  JSONResponse readAlbumItems(HttpServletRequest req, String id, String q) {
+	        JSONResponse resp;
+
+	        User u = BasicAuthentication.auth(req);
+
+	        AlbumService ccrud = new AlbumService();
+	        try {
+	            resp = RestProcessUtils.buildResponse(OK.getStatusCode(), ccrud.readItems(id, u, q));
+	        } catch (Exception e) {
+	            resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
+	        }
+	        return resp;
+	    }
+
 
 	public static JSONResponse createAlbum(HttpServletRequest req) {
 		JSONResponse resp; 
@@ -154,15 +171,10 @@ public class AlbumProcess {
 		AlbumService service = new AlbumService();
 		List<String> itemIds = null;
         try {
-            if (!removeAllItems) {
-	            itemIds = (List)buildTOFromJSON(req, List.class);
-	            resp= buildResponse(Status.NO_CONTENT.getStatusCode(), service.removeItems(id, u, itemIds, false));
-            }
-            else
-            {
-            	resp = buildResponse(Status.NO_CONTENT.getStatusCode(), service.removeItems(id, u, itemIds, true));
-            }
-	          
+        	    
+        		if (!removeAllItems) 
+        			itemIds =  (List)buildTOFromJSON(req, List.class);
+	            resp= buildResponse(Status.NO_CONTENT.getStatusCode(), service.removeItems(id, u, itemIds, removeAllItems));
 		} catch (Exception e) {
 			resp = localExceptionHandler(e, e.getLocalizedMessage());
 		}

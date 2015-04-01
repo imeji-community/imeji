@@ -23,13 +23,13 @@
 			<h:panelGroup id="ajaxList" styleClass="imj_listBody">
 				<ul>
 					<ui:repeat var="container" value="#{cc.attrs.mediaList.currentPartList}" id="list" rows="0"  varStatus="index">
-						<ui:fragment rendered="#{container.status != 'RELEASED'}">
+						<ui:fragment >
 							<list:bibListItem_draft itemClass="imj_bibliographicListItem" item="#{container}" itemIndex="#{index.index}" deleteItemConfirmationText="#{cc.attrs.deleteItemConfirmationText}" releaseItemConfirmationText="#{cc.attrs.releaseItemConfirmationText}" isActivatable="#{cc.attrs.isActivatable}" metadataNavigationURL="#{cc.attrs.metadataNavigationURL}" withdrawConfirmationText="#{cc.attrs.withdrawItemConfirmationText}"/>
 						</ui:fragment>
-						<ui:fragment rendered="#{container.status == 'RELEASED'}">
-							<list:bibListItem_released itemClass="imj_bibliographicListItem" item="#{container}" itemIndex="#{index.index}" metadataNavigationURL="#{cc.attrs.metadataNavigationURL}" deleteItemConfirmationText="#{cc.attrs.deleteItemConfirmationText}" withdrawConfirmationText="#{cc.attrs.withdrawItemConfirmationText}"/>
+<!-- 						<ui:fragment rendered="#{container.status == 'RELEASED'}">
+							<list:bibListItem_released itemClass="imj_bibliographicListItem" item="#{container}" itemIndex="#{index.index}" isActivatable="#{cc.attrs.isActivatable}" metadataNavigationURL="#{cc.attrs.metadataNavigationURL}" deleteItemConfirmationText="#{cc.attrs.deleteItemConfirmationText}" withdrawConfirmationText="#{cc.attrs.withdrawItemConfirmationText}"/>
 						</ui:fragment>
-					</ui:repeat>
+ -->					</ui:repeat>
 				</ul>
 			</h:panelGroup>
 	   </div> <!-- END OF BIBLIOGRAPHIC LIST -->

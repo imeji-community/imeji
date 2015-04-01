@@ -16,6 +16,7 @@ import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.query.URLQueryTransformer;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
+import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.writer.WriterFacade;
@@ -195,6 +196,11 @@ public class AlbumController extends ImejiController {
 	 * @throws ImejiException
 	 */
 	public List<URI> addToAlbum(Album album, List<String> uris, User user) throws ImejiException {
+
+		if (Status.WITHDRAWN.equals(album.getStatus())) { 
+				throw new UnprocessableError("error_album_withdrawn_members_can_not_be_added");
+		}
+		
 		ItemController ic = new ItemController();
 		List<String> inAlbums = ic.search(album.getId(), null, null, null, user).getResults();
 		List<String> notAddedUris = new ArrayList<String>();
@@ -233,6 +239,7 @@ public class AlbumController extends ImejiController {
 	 */
 	public int removeFromAlbum(Album album, List<String> toDelete, User user)
 			throws ImejiException {
+		
 		List<URI> inAlbums = new ArrayList<URI>(album.getImages());
 		album.getImages().clear();
 		for (URI uri : inAlbums) {
@@ -373,4 +380,21 @@ public class AlbumController extends ImejiController {
 			throw new BadRequestException("error_album_need_one_author");
 		}
 	}
+	
+	public List<Item> retrieveItems(String id, User user, String q) throws ImejiException {
+        ItemController ic = new ItemController();
+        List<Item> itemList = new ArrayList();
+        try {
+            for (String itemId: ic.search(ObjectHelper.getURI(Album.class, id),
+                    !isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q) : null,
+                    null, null, user).getResults()) {
+                itemList.add(ic.retrieve(URI.create(itemId), user));
+            }
+        } catch (Exception e) {
+            throw new UnprocessableError("Cannot retrieve items:", e);
+
+        }
+        return itemList;
+	}
+
 }

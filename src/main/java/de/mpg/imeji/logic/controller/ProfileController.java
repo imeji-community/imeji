@@ -207,7 +207,6 @@ public class ProfileController extends ImejiController {
 					"error_profile_is_default_cannot_be_deleted");
 		}
 		writer.delete(WriterFacade.toList(mdp), user);
-		Imeji.executor.submit(new CleanMetadataProfileJob(true));
 		Imeji.executor.submit(new CleanMetadataJob(mdp));
 	}
 

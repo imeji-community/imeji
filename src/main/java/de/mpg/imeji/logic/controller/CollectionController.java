@@ -304,7 +304,7 @@ public class CollectionController extends ImejiController {
 			if (method.equals(MetadataProfileCreationMethod.REFERENCE)) {
 				//if it is a reference, only change the reference to the new metadata profile, and do not forget to delete old metadata profile
 				ic.setProfile(mp.getId());
-				pc.delete(originalMP, user, null);
+				pc.delete(originalMP, user, ic.getId().toString());
 			}
 			else {
 				//copy all statements from the template profile to the original metadata profile

@@ -1,0 +1,15 @@
+PREFIX afn: <http://jena.hpl.hp.com/ARQ/function#>
+WITH <http://imeji.org/item>
+DELETE
+{
+?s <http://imeji.org/terms/status> <http://imeji.org/terms/status#PENDING>
+}
+INSERT
+{
+?s <http://imeji.org/terms/status> <http://imeji.org/terms/status#RELEASED>
+}
+WHERE
+{
+?s <http://imeji.org/terms/collection> <XXX_BASE_URI_XXXcollection/___COLLECTION_ID___> .
+?s <http://imeji.org/terms/status> <http://imeji.org/terms/status#PENDING>
+}

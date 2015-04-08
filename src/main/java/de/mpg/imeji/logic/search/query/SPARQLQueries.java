@@ -601,7 +601,7 @@ public class SPARQLQueries {
 	/**
 	 * Chararters ( and ) can not be accepted in the sparql query and must
 	 * therefore removed
-	 * 
+	 *
 	 * @param s
 	 * @return
 	 */
@@ -612,5 +612,16 @@ public class SPARQLQueries {
 		}
 		return s;
 	}
+
+	/**
+	 *
+	 * @return
+	 */
+	public static String selectUserCompleteName(URI uri) {
+		return "SELECT (str(?cn) as ?s) WHERE{ <" + uri.toString() + "> " +
+				"<http://xmlns.com/foaf/0.1/person> ?o " +
+				". ?o <http://purl.org/escidoc/metadata/terms/0.1/complete-name> ?cn}";
+	}
+
 
 }

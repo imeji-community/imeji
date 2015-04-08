@@ -1,0 +1,20 @@
+##########################################################
+# Set visibility of private items to public
+# Note: please replace ___COLLECTION_ID___ with real ID
+##########################################################
+
+PREFIX afn: <http://jena.hpl.hp.com/ARQ/function#>
+WITH <http://imeji.org/item>
+DELETE
+{
+?s <http://imeji.org/terms/visibility> <http://imeji.org/terms/visibility#PRIVATE>
+}
+INSERT
+{
+?s <http://imeji.org/terms/visibility> <http://imeji.org/terms/visibility#PUBLIC>
+}
+WHERE
+{
+?s <http://imeji.org/terms/collection> <XXX_BASE_URI_XXXcollection/___COLLECTION_ID___> .
+?s <http://imeji.org/terms/visibility> <http://imeji.org/terms/visibility#PRIVATE>
+}

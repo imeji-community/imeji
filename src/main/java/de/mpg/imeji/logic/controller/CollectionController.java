@@ -418,7 +418,8 @@ public class CollectionController extends ImejiController {
 			itemController.release(items, user);
 			update(collection, user);
 			ProfileController pc = new ProfileController();
-			//pc.release(pc.retrieve(collection.getProfile(), user), user);
+			//TODO check if profile can be released by user, and check test (a new test should be written when not allowed)
+			pc.release(pc.retrieve(collection.getProfile(), user), user);
 		}
 	}
 

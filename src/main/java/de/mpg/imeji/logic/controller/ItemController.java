@@ -5,7 +5,9 @@ package de.mpg.imeji.logic.controller;
 
 import de.mpg.imeji.exceptions.*;
 import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.ImejiSPARQL;
+import de.mpg.imeji.logic.ImejiTriple;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
@@ -29,6 +31,7 @@ import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.imeji.rest.process.CommonUtils;
 import de.mpg.j2j.helper.J2JHelper;
+
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
@@ -206,10 +209,12 @@ public class ItemController extends ImejiController {
 		}
 		writer.create(J2JHelper.cast2ObjectList(new ArrayList<Item>(items)),
 				user);
-		//TODO NB:29.03.2014 Why collection update by item creation? Why collection contains list of items each time?
-		//Not performant
+		// TODO NB:29.03.2014 Why collection update by item creation? Why
+		// collection contains list of items each time?
+		// Not performant
 		cc.update(ic, user);
-		// Performant and working: but means that we don't save the items within the collection, only referenced via the item
+		// Performant and working: but means that we don't save the items within
+		// the collection, only referenced via the item
 		cc.updateLazy(ic, user);
 
 	}
@@ -294,7 +299,6 @@ public class ItemController extends ImejiController {
 		}
 	}
 
-
 	/**
 	 * Retrieve all items filtered by query
 	 *
@@ -303,12 +307,15 @@ public class ItemController extends ImejiController {
 	 * @return
 	 * @throws ImejiException
 	 */
-	public List<Item> retrieve(final User user, String q) throws ImejiException, IOException {
-		List<Item> itemList = new ArrayList();
+	public List<Item> retrieve(final User user, String q)
+			throws ImejiException, IOException {
+		List<Item> itemList = new ArrayList<Item>();
 		try {
-			for (String itemId: search(null,
-					!isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q) : null,
-					null, null, user).getResults()) {
+			for (String itemId : search(
+					null,
+					!isNullOrEmptyTrim(q) ? URLQueryTransformer
+							.parseStringQuery(q) : null, null, null, user)
+					.getResults()) {
 				itemList.add(retrieve(URI.create(itemId), user));
 			}
 		} catch (Exception e) {
@@ -580,13 +587,15 @@ public class ItemController extends ImejiController {
 	 * @throws ImejiException
 	 */
 	public void release(List<Item> l, User user) throws ImejiException {
+		List<ImejiTriple> triples = new ArrayList<ImejiTriple>();
 		for (Item item : l) {
 			if (Status.PENDING.equals(item.getStatus())) {
-				writeReleaseProperty(item, user);
-				item.setVisibility(Visibility.PUBLIC);
+				triples.addAll(getReleaseTriples(item.getId().toString(), item));
+				triples.addAll(getUpdateTriples(item.getId().toString(), user,
+						item));
 			}
 		}
-		update(l, user);
+		writer.patch(triples, user);
 	}
 
 	/**
@@ -613,28 +622,26 @@ public class ItemController extends ImejiController {
 	 */
 	public void withdraw(List<Item> items, String comment, User user)
 			throws ImejiException {
-		Map<String, URI> cMap = new HashMap<String, URI>();
+		List<ImejiTriple> triples = new ArrayList<ImejiTriple>();
 		for (Item item : items) {
 			if (!item.getStatus().equals(Status.RELEASED)) {
 				throw new RuntimeException("Error discard " + item.getId()
 						+ " must be release (found: " + item.getStatus() + ")");
 			} else {
-				writeWithdrawProperties(item, comment);
-				item.setVisibility(Visibility.PUBLIC);
+				triples.addAll(getWithdrawTriples(item.getId().toString(), item, comment));
+				triples.addAll(getUpdateTriples(item.getId().toString(), user,
+						item));
+				// writeWithdrawProperties(item, comment);
+				// item.setVisibility(Visibility.PUBLIC);
+
 				if (item.getEscidocId() != null) {
 					removeFileFromStorage(item.getStorageId());
 					item.setEscidocId(null);
 				}
 			}
 		}
-		update(items, user);
-		// Remove items from their collections
-		for (URI uri : cMap.values()) {
-			CollectionController cc = new CollectionController();
-			CollectionImeji c = cc.retrieveLazy(uri, user);
-			c = (CollectionImeji) searchAndSetContainerItems(c, user, -1, 0);
-			cc.update(c, user);
-		}
+		writer.patch(triples, user);
+		// update(items, user);
 	}
 
 	/**
@@ -649,7 +656,6 @@ public class ItemController extends ImejiController {
 				.countAlbumSize(c.getId());
 		return ImejiSPARQL.execCount(q, null);
 	}
-	
 
 	/**
 	 * Remove a file from the current {@link Storage}

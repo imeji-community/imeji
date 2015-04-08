@@ -128,7 +128,7 @@ public abstract class ImejiController {
 		List<ImejiTriple> triples = new ArrayList<ImejiTriple>();
 		if (comment != null && !"".equals(comment))
 			triples.add(new ImejiTriple(uri,
-					"http://imeji.org/terms/discardComment", 1, o));
+					"http://imeji.org/terms/discardComment", comment, o));
 		else
 			throw new UnprocessableError(
 					"Discard error: A Discard comment is needed");

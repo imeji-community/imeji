@@ -418,7 +418,7 @@ public class CollectionController extends ImejiController {
 			itemController.release(items, user);
 			update(collection, user);
 			ProfileController pc = new ProfileController();
-			pc.release(pc.retrieve(collection.getProfile(), user), user);
+			//pc.release(pc.retrieve(collection.getProfile(), user), user);
 		}
 	}
 

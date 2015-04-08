@@ -52,7 +52,7 @@ public class SearchIndexInitializer
         indexes = put(indexes, new SearchIndex(SearchIndex.names.editor.name(), "http://imeji.org/terms/modifiedBy"));
         indexes = put(indexes, new SearchIndex(SearchIndex.names.created.name(), "http://purl.org/dc/terms/created"));
         indexes = put(indexes, new SearchIndex(SearchIndex.names.modified.name(), "http://purl.org/dc/terms/modified"));
-        indexes = put(indexes, new SearchIndex(SearchIndex.names.status.name(), "http://imeji.org/terms/status"));
+        indexes = put(indexes, new SearchIndex(SearchIndex.names.status.name(), ImejiNamespaces.STATUS));
         indexes = put(indexes, new SearchIndex(SearchIndex.names.checksum.name(), "http://imeji.org/terms/checksum"));
         /**
          * Grant indexes

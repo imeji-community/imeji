@@ -29,14 +29,17 @@
 package de.mpg.imeji.logic.search.query;
 
 import com.hp.hpl.jena.sparql.pfunction.library.container;
+
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
+import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.j2j.helper.J2JHelper;
+
 import org.apache.commons.lang3.text.translate.UnicodeEscaper;
 import org.opensaml.ws.wssecurity.Username;
 
@@ -489,7 +492,9 @@ public class SPARQLQueries {
 	public static String countCollectionSize(URI uri) {
 		return "SELECT count(DISTINCT ?s) WHERE {?s <http://imeji.org/terms/collection> <"
 				+ uri.toString()
-				+ "> . ?s <http://imeji.org/terms/status> ?status . FILTER (?status!=<http://imeji.org/terms/status#WITHDRAWN>)}";
+				+ "> . ?s <"
+				+ ImejiNamespaces.STATUS
+				+ "> ?status . FILTER (?status!=<" + Status.WITHDRAWN.getUriString() + ">)}";
 	}
 
 	/**
@@ -499,9 +504,10 @@ public class SPARQLQueries {
 	 * @return
 	 */
 	public static String countAlbumSize(URI uri) {
-		return "SELECT count(DISTINCT ?s) WHERE {<"
-				+ uri.toString()
-				+ "> <http://imeji.org/terms/item> ?s . ?s <http://imeji.org/terms/status> ?status . FILTER (?status!=<http://imeji.org/terms/status#WITHDRAWN>)}";
+		return "SELECT count(DISTINCT ?s) WHERE {<" + uri.toString()
+				+ "> <http://imeji.org/terms/item> ?s . ?s <"
+				+ ImejiNamespaces.STATUS + "> ?status . FILTER (?status!=<"
+				+ Status.WITHDRAWN.getUriString() + ">)}";
 	}
 
 	/**
@@ -515,14 +521,21 @@ public class SPARQLQueries {
 		if (user == null)
 			return "SELECT DISTINCT ?s WHERE {?s <http://imeji.org/terms/collection> <"
 					+ uri.toString()
-					+ "> . ?s <http://imeji.org/terms/status> ?status .  filter(?status=<http://imeji.org/terms/status#RELEASED>)} LIMIT "
-					+ limit;
+					+ "> . ?s <"
+					+ ImejiNamespaces.STATUS
+					+ "> ?status .  filter(?status=<"
+					+ Status.RELEASED.getUriString()
+					+ ">)} LIMIT " + limit;
 		return "SELECT DISTINCT ?s WHERE {?s <http://imeji.org/terms/collection> <"
 				+ uri.toString()
-				+ "> . ?s <http://imeji.org/terms/status> ?status . OPTIONAL{<"
+				+ "> . ?s <"
+				+ ImejiNamespaces.STATUS
+				+ "> ?status . OPTIONAL{<"
 				+ user.getId().toString()
-				+ "> <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> ?c} . filter(bound(?g) || ?status=<http://imeji.org/terms/status#RELEASED>) . FILTER (?status!=<http://imeji.org/terms/status#WITHDRAWN>)} LIMIT "
-				+ limit;
+				+ "> <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> ?c} . filter(bound(?g) || ?status=<"
+				+ Status.RELEASED.getUriString()
+				+ ">) . FILTER (?status!=<"
+				+ Status.WITHDRAWN.getUriString() + ">)} LIMIT " + limit;
 	}
 
 	/**
@@ -537,7 +550,9 @@ public class SPARQLQueries {
 		if (user == null)
 			return "SELECT DISTINCT ?s WHERE {<"
 					+ uri.toString()
-					+ "> <http://imeji.org/terms/item> ?s . ?s <http://imeji.org/terms/status> ?status .  filter(?status=<http://imeji.org/terms/status#RELEASED>)} LIMIT "
+					+ "> <http://imeji.org/terms/item> ?s . ?s <"
+					+ ImejiNamespaces.STATUS
+					+ "> ?status .  filter(?status=<" + Status.RELEASED.getUriString() + ">)} LIMIT "
 					+ limit;
 		return "SELECT DISTINCT ?s WHERE {<"
 				+ uri.toString()
@@ -546,7 +561,9 @@ public class SPARQLQueries {
 						.queryFactory(user,
 								J2JHelper.getResourceNamespace(new Item()),
 								null, false)
-				+ " ?s <http://imeji.org/terms/status> ?status . ?s <http://imeji.org/terms/collection> ?c} LIMIT "
+				+ " ?s <"
+				+ ImejiNamespaces.STATUS
+				+ "> ?status . ?s <http://imeji.org/terms/collection> ?c} LIMIT "
 				+ limit;
 	}
 
@@ -557,7 +574,9 @@ public class SPARQLQueries {
 				+ filename
 				+ "\\\\..+', 'i')) .?s <http://imeji.org/terms/collection> <"
 				+ containerURI.toString()
-				+ "> . ?s <http://imeji.org/terms/status> ?status . FILTER (?status!=<http://imeji.org/terms/status#WITHDRAWN>)} LIMIT 2";
+				+ "> . ?s <"
+				+ ImejiNamespaces.STATUS
+				+ "> ?status . FILTER (?status!=<" + Status.WITHDRAWN.getUriString() + ">)} LIMIT 2";
 
 	}
 

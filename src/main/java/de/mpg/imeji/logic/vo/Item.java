@@ -71,8 +71,6 @@ public class Item extends Properties implements FulltextIndex, Serializable {
 	@j2jLiteral("http://imeji.org/terms/fileSize")
 	private long fileSize;
 
-	
-
 	public Item() {
 	}
 
@@ -93,7 +91,7 @@ public class Item extends Properties implements FulltextIndex, Serializable {
 	public URI getWebImageUrl() {
 		return webImageUrl;
 	}
-	
+
 	public void setWebImageUrl(URI webImageUrl) {
 		this.webImageUrl = webImageUrl;
 	}
@@ -157,6 +155,19 @@ public class Item extends Properties implements FulltextIndex, Serializable {
 	@XmlElement(name = "filetype", namespace = "http://imeji.org/terms/")
 	public String getFiletype() {
 		return filetype;
+	}
+
+	/**
+	 * Return the same Ite but empty (same id and same collection). Used for
+	 * patch update
+	 * 
+	 * @return
+	 */
+	public Item copyEmpty() {
+		Item emptyItem = new Item();
+		emptyItem.setId(this.getId());
+		emptyItem.setCollection(collection);
+		return emptyItem;
 	}
 
 	/**
@@ -246,7 +257,8 @@ public class Item extends Properties implements FulltextIndex, Serializable {
 				fulltext += " " + md.asFulltext();
 			}
 		}
-		fulltext = fulltext.trim();
+		if (fulltext != null)
+			fulltext = fulltext.trim();
 	}
 
 	/**
@@ -272,12 +284,12 @@ public class Item extends Properties implements FulltextIndex, Serializable {
 	public long getFileSize() {
 		return fileSize;
 	}
-	
+
 	/**
 	 * 
 	 * @return human readable file size
 	 */
-	public String getFileSizeHumanReadable(){
+	public String getFileSizeHumanReadable() {
 		return FileUtils.byteCountToDisplaySize(fileSize);
 	}
 

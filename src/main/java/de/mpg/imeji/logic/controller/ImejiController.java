@@ -3,12 +3,15 @@
  */
 package de.mpg.imeji.logic.controller;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.ImejiNamespaces;
+import de.mpg.imeji.logic.ImejiTriple;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.vo.Album;
@@ -79,19 +82,76 @@ public abstract class ImejiController {
 	}
 
 	/**
+	 * Get all the triples which need to be updated by a release
+	 * 
+	 * @param uri
+	 * @param securityUri
+	 * @return
+	 */
+	protected List<ImejiTriple> getUpdateTriples(String uri, User user, Object o) {
+		List<ImejiTriple> triples = new ArrayList<ImejiTriple>();
+		triples.add(new ImejiTriple(uri, "http://imeji.org/terms/modifiedBy",
+				user.getId(), o));
+		triples.add(new ImejiTriple(uri, "http://purl.org/dc/terms/modified",
+				DateHelper.getCurrentDate(), o));
+		return triples;
+	}
+
+	/**
+	 * Get all the triples which need to be updated by an update
+	 * 
+	 * @param uri
+	 * @param securityUri
+	 * @return
+	 */
+	protected List<ImejiTriple> getReleaseTriples(String uri, Object o) {
+		List<ImejiTriple> triples = new ArrayList<ImejiTriple>();
+		triples.add(new ImejiTriple(uri,
+				"http://imeji.org/terms/versionNumber", 1, o));
+		triples.add(new ImejiTriple(uri, "http://purl.org/dc/terms/issued",
+				DateHelper.getCurrentDate(), o));
+		triples.add(new ImejiTriple(uri, ImejiNamespaces.STATUS,
+				Status.RELEASED.getURI(), o));
+		return triples;
+	}
+
+	/**
+	 * Get all the triples which need to be updated by an update
+	 * 
+	 * @param uri
+	 * @param securityUri
+	 * @return
+	 * @throws UnprocessableError
+	 */
+	protected List<ImejiTriple> getWithdrawTriples(String uri, Object o,
+			String comment) throws UnprocessableError {
+		List<ImejiTriple> triples = new ArrayList<ImejiTriple>();
+		if (comment != null && !"".equals(comment))
+			triples.add(new ImejiTriple(uri,
+					"http://imeji.org/terms/discardComment", 1, o));
+		else
+			throw new UnprocessableError(
+					"Discard error: A Discard comment is needed");
+		triples.add(new ImejiTriple(uri, ImejiNamespaces.STATUS,
+				Status.WITHDRAWN.getURI(), o));
+		return triples;
+	}
+
+	/**
 	 * Add the {@link Properties} to an imeji object when it is withdrawn
 	 * 
 	 * @param properties
 	 * @param comment
-	 * @throws UnprocessableError 
+	 * @throws UnprocessableError
 	 */
-	protected void writeWithdrawProperties(Properties properties, String comment) throws ImejiException {
+	protected void writeWithdrawProperties(Properties properties, String comment)
+			throws ImejiException {
 		if (comment != null && !"".equals(comment)) {
 			properties.setDiscardComment(comment);
 		}
 		if (properties.getDiscardComment() == null
 				|| "".equals(properties.getDiscardComment())) {
-			throw new UnprocessableError (
+			throw new UnprocessableError(
 					"Discard error: A Discard comment is needed");
 		}
 		properties.setStatus(Status.WITHDRAWN);

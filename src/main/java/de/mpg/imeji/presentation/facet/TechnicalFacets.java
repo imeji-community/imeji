@@ -89,7 +89,7 @@ public class TechnicalFacets extends Facets
                     if (!fs.isFilter("pending_images") && !fs.isNoResultFilter("pending_images"))
                     {
                         SearchPair privatePair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.status),
-                                SearchOperators.EQUALS, Status.PENDING.getUri().toString());
+                                SearchOperators.EQUALS, Status.PENDING.getUriString());
                         count = getCount(searchQuery, privatePair, allImages.getResults());
                         if (count > 0)
                         {
@@ -100,7 +100,7 @@ public class TechnicalFacets extends Facets
                     if (!fs.isFilter("released_images") && !fs.isNoResultFilter("released_images"))
                     {
                         SearchPair publicPair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.status),
-                                SearchOperators.EQUALS, Status.RELEASED.getUri().toString());
+                                SearchOperators.EQUALS, Status.RELEASED.getUriString().toString());
                         count = getCount(searchQuery, publicPair, allImages.getResults());
                         if (count > 0)
                         {

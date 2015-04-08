@@ -55,7 +55,8 @@ public class SimpleQueryFactory {
 	public static String getQuery(String modelName, String rdfType,
 			SearchPair pair, SortCriterion sortCriterion, User user,
 			boolean isCollection, String specificQuery) {
-		PATTERN_SELECT = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 XXX_MODEL_NAMES_XXX WHERE {XXX_SECURITY_FILTER_XXX XXX_SEARCH_ELEMENT_XXX XXX_SPECIFIC_QUERY_XXX XXX_SEARCH_TYPE_ELEMENT_XXX  ?s <http://imeji.org/terms/status> ?status XXX_SORT_ELEMENT_XXX}";
+		PATTERN_SELECT = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 XXX_MODEL_NAMES_XXX WHERE {XXX_SECURITY_FILTER_XXX XXX_SEARCH_ELEMENT_XXX XXX_SPECIFIC_QUERY_XXX XXX_SEARCH_TYPE_ELEMENT_XXX  ?s <"
+				+ ImejiNamespaces.STATUS + "> ?status XXX_SORT_ELEMENT_XXX}";
 		return PATTERN_SELECT
 				.replace("XXX_MODEL_NAMES_XXX",
 						getModelNames(modelName, pair, specificQuery))
@@ -324,13 +325,14 @@ public class SimpleQueryFactory {
 		if (pair != null
 				&& SearchIndex.names.status.name().equals(
 						pair.getIndex().getName())) {
-			if ("http://imeji.org/terms/status#PENDING".equals(pair.getValue())) {
+			if (Status.PENDING.getUriString().equals(pair
+					.getValue())) {
 				return Status.PENDING;
-			} else if ("http://imeji.org/terms/status#RELEASED".equals(pair
-					.getValue())) {
+			} else if (Status.RELEASED.getUriString()
+					.equals(pair.getValue())) {
 				return Status.RELEASED;
-			} else if ("http://imeji.org/terms/status#WITHDRAWN".equals(pair
-					.getValue())) {
+			} else if (Status.WITHDRAWN.getUriString()
+					.equals(pair.getValue())) {
 				return Status.WITHDRAWN;
 			}
 		}
@@ -382,8 +384,8 @@ public class SimpleQueryFactory {
 					sortCriterion.getIndex().getName())) {
 				return ". ?s <" + sortCriterion.getIndex().getNamespace()
 						+ "> ?sort0";
-			}
-			else if (SearchIndex.names.prof.name().equals(sortCriterion.getIndex().getName())) {
+			} else if (SearchIndex.names.prof.name().equals(
+					sortCriterion.getIndex().getName())) {
 				return (item ? " . ?c" : " . ?s")
 						+ " <http://purl.org/dc/elements/1.1/title> ?sort0 ";
 			}

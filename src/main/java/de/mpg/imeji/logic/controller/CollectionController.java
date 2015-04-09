@@ -26,6 +26,8 @@ import de.mpg.j2j.helper.J2JHelper;
 
 import org.apache.log4j.Logger;
 
+import scala.annotation.StaticAnnotation;
+
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -458,10 +460,11 @@ public class CollectionController extends ImejiController {
 					-1, 0, user);
 			itemController.release(items, user);
 			update(collection, user);
-			ProfileController pc = new ProfileController();
-			// TODO check if profile can be released by user, and check test (a
-			// new test should be written when not allowed)
-			pc.release(pc.retrieve(collection.getProfile(), user), user);
+			if (AuthUtil.staticAuth().administrate(user,
+					collection.getProfile().toString())) {
+				ProfileController pc = new ProfileController();
+				pc.release(pc.retrieve(collection.getProfile(), user), user);
+			}
 		}
 	}
 
@@ -500,9 +503,12 @@ public class CollectionController extends ImejiController {
 					.withdraw(items, collection.getDiscardComment(), user);
 			writeWithdrawProperties(collection, null);
 			update(collection, user);
-			// Withdraw profile
-			ProfileController pc = new ProfileController();
-			pc.withdraw(pc.retrieve(collection.getProfile(), user), user);
+			if (AuthUtil.staticAuth().administrate(user,
+					collection.getProfile().toString())) {
+				// Withdraw profile
+				ProfileController pc = new ProfileController();
+				pc.withdraw(pc.retrieve(collection.getProfile(), user), user);
+			}
 		}
 	}
 

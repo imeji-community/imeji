@@ -90,10 +90,11 @@ public abstract class ImejiController {
 	 */
 	protected List<ImejiTriple> getUpdateTriples(String uri, User user, Object o) {
 		List<ImejiTriple> triples = new ArrayList<ImejiTriple>();
-		triples.add(new ImejiTriple(uri, "http://imeji.org/terms/modifiedBy",
-				user.getId(), o));
-		triples.add(new ImejiTriple(uri, "http://purl.org/dc/terms/modified",
-				DateHelper.getCurrentDate(), o));
+		triples.add(new ImejiTriple(uri, ImejiNamespaces.MODIFIED_BY, user
+				.getId(), o));
+		triples.add(new ImejiTriple(uri,
+				ImejiNamespaces.LAST_MODIFICATION_DATE, DateHelper
+						.getCurrentDate(), o));
 		return triples;
 	}
 
@@ -106,9 +107,8 @@ public abstract class ImejiController {
 	 */
 	protected List<ImejiTriple> getReleaseTriples(String uri, Object o) {
 		List<ImejiTriple> triples = new ArrayList<ImejiTriple>();
-		triples.add(new ImejiTriple(uri,
-				"http://imeji.org/terms/versionNumber", 1, o));
-		triples.add(new ImejiTriple(uri, "http://purl.org/dc/terms/issued",
+		triples.add(new ImejiTriple(uri, ImejiNamespaces.VERSION, 1, o));
+		triples.add(new ImejiTriple(uri, ImejiNamespaces.VERSION_DATE,
 				DateHelper.getCurrentDate(), o));
 		triples.add(new ImejiTriple(uri, ImejiNamespaces.STATUS,
 				Status.RELEASED.getURI(), o));
@@ -128,7 +128,7 @@ public abstract class ImejiController {
 		List<ImejiTriple> triples = new ArrayList<ImejiTriple>();
 		if (comment != null && !"".equals(comment))
 			triples.add(new ImejiTriple(uri,
-					"http://imeji.org/terms/discardComment", comment, o));
+					ImejiNamespaces.DISCARD_COMMENT, comment, o));
 		else
 			throw new UnprocessableError(
 					"Discard error: A Discard comment is needed");

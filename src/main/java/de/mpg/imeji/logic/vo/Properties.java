@@ -37,21 +37,21 @@ import de.mpg.j2j.annotations.j2jResource;
 public class Properties implements Serializable {
 	private static final long serialVersionUID = 6874979775433576816L;
 	private URI id;
-	@j2jResource("http://purl.org/dc/terms/creator")
+	@j2jResource(ImejiNamespaces.CREATOR)
 	private URI createdBy;
-	@j2jResource("http://imeji.org/terms/modifiedBy")
+	@j2jResource(ImejiNamespaces.MODIFIED_BY)
 	private URI modifiedBy;
-	@j2jLiteral("http://purl.org/dc/terms/created")
+	@j2jLiteral(ImejiNamespaces.DATE_CREATED)
 	private Calendar created;
-	@j2jLiteral("http://purl.org/dc/terms/modified")
+	@j2jLiteral(ImejiNamespaces.LAST_MODIFICATION_DATE)
 	private Calendar modified;
-	@j2jLiteral("http://purl.org/dc/terms/issued")
+	@j2jLiteral(ImejiNamespaces.VERSION_DATE)
 	private Calendar versionDate;
 	@j2jResource(ImejiNamespaces.STATUS)
 	private URI status = URI.create(Status.PENDING.getUriString());
-	@j2jLiteral("http://imeji.org/terms/versionNumber")
+	@j2jLiteral(ImejiNamespaces.VERSION)
 	private int version = 0;
-	@j2jLiteral("http://imeji.org/terms/discardComment")
+	@j2jLiteral(ImejiNamespaces.DISCARD_COMMENT)
 	private String discardComment;
 
 	private static Logger logger = Logger.getLogger(Properties.class);
@@ -70,8 +70,8 @@ public class Properties implements Serializable {
 		public String getUriString() {
 			return uri;
 		}
-		
-		public URI getURI(){
+
+		public URI getURI() {
 			return URI.create(uri);
 		}
 	}

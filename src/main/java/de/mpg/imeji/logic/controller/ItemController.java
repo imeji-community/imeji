@@ -615,7 +615,7 @@ public class ItemController extends ImejiController {
 						item));
 			}
 		}
-		writer.patch(triples, user);
+		patch(triples, user);
 	}
 
 	/**
@@ -661,8 +661,7 @@ public class ItemController extends ImejiController {
 				}
 			}
 		}
-		writer.patch(triples, user);
-		// update(items, user);
+		patch(triples, user);
 	}
 
 	/**

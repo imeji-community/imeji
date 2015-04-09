@@ -65,8 +65,7 @@ public class SessionBean implements Serializable {
 	private int numberOfItemsPerPage = 18;
 	private int numberOfContainersPerPage = 10;
 
-
-    private String applicationUrl;
+	private String applicationUrl;
 	/*
 	 * Cookies name
 	 */
@@ -98,8 +97,7 @@ public class SessionBean implements Serializable {
 		instituteId = findInstituteId();
 	}
 
-
-    /**
+	/**
 	 * Initialize the number of items per page by:<br/>
 	 * 1- Reading the property<br/>
 	 * 2- Reading the Cookie<br/>
@@ -238,21 +236,21 @@ public class SessionBean implements Serializable {
 		}
 	}
 
-    /**
-     * Read application URL from the imeji properties
-     */
-    private void initApplicationUrl() {
-        try {
-            applicationUrl = StringHelper.normalizeURI(PropertyReader.getProperty("imeji.instance.url"));
-        } catch (Exception e) {
-            applicationUrl = "http://localhost:8080/imeji";
-        }
-    }
+	/**
+	 * Read application URL from the imeji properties
+	 */
+	private void initApplicationUrl() {
+		try {
+			applicationUrl = StringHelper.normalizeURI(PropertyReader
+					.getProperty("imeji.instance.url"));
+		} catch (Exception e) {
+			applicationUrl = "http://localhost:8080/imeji";
+		}
+	}
 
-    public String getApplicationUrl() {
-        return applicationUrl;
-    }
-
+	public String getApplicationUrl() {
+		return applicationUrl;
+	}
 
 	/**
 	 * First read the {@link Locale} in the request. This is the default
@@ -685,6 +683,8 @@ public class SessionBean implements Serializable {
 		if (ipAddress == null) {
 			ipAddress = request.getRemoteAddr();
 		}
+		if (ipAddress != null && ipAddress.split(",").length > 1)
+			ipAddress = ipAddress.split(",")[0];
 		return ipAddress;
 	}
 }

@@ -111,7 +111,6 @@ public class Java2Jena {
 		Resource r = model.createResource(uri);
 		Property p = model.createProperty(property);
 		model.removeAll(r, p, null);
-		// Literal o = literalHelper.java2Literal(value);
 		if (obj instanceof URI) {
 			Resource o = model.createResource(((URI) obj).toString());
 			if (o != null) {

@@ -209,14 +209,10 @@ public class ItemController extends ImejiController {
 		}
 		writer.create(J2JHelper.cast2ObjectList(new ArrayList<Item>(items)),
 				user);
-		// TODO NB:29.03.2014 Why collection update by item creation? Why
-		// collection contains list of items each time?
-		// Not performant
-		cc.update(ic, user);
-		// Performant and working: but means that we don't save the items within
-		// the collection, only referenced via the item
-		cc.updateLazy(ic, user);
-
+		List<ImejiTriple> triples = getUpdateTriples(coll.toString(), user,
+				items.iterator().next());
+		// Update the collection
+		cc.patch(triples, user);
 	}
 
 	public Item create(Item item, File uploadedFile, String filename, User u,
@@ -258,6 +254,18 @@ public class ItemController extends ImejiController {
 		}
 
 		return newItem;
+	}
+
+	/**
+	 * Patch an Item !!! Use with Care !!!
+	 * 
+	 * @param triples
+	 * @param user
+	 * @throws ImejiException
+	 */
+	public void patch(List<ImejiTriple> triples, User user)
+			throws ImejiException {
+		writer.patch(triples, user);
 	}
 
 	/**
@@ -628,7 +636,8 @@ public class ItemController extends ImejiController {
 				throw new RuntimeException("Error discard " + item.getId()
 						+ " must be release (found: " + item.getStatus() + ")");
 			} else {
-				triples.addAll(getWithdrawTriples(item.getId().toString(), item, comment));
+				triples.addAll(getWithdrawTriples(item.getId().toString(),
+						item, comment));
 				triples.addAll(getUpdateTriples(item.getId().toString(), user,
 						item));
 				// writeWithdrawProperties(item, comment);

@@ -304,7 +304,10 @@ public class CollectionController extends ImejiController {
 			if (method.equals(MetadataProfileCreationMethod.REFERENCE)) {
 				//if it is a reference, only change the reference to the new metadata profile, and do not forget to delete old metadata profile
 				ic.setProfile(mp.getId());
+				//here update of the new profile for all Items
+				System.out.println("collection profile set to "+ic.getProfile().toString()+" and I will delete "+originalMP.getIdString());
 				pc.delete(originalMP, user, ic.getId().toString());
+				updateCollectionItemsProfile (ic, mp.getId(), user);
 			}
 			else {
 				//copy all statements from the template profile to the original metadata profile
@@ -362,7 +365,7 @@ public class CollectionController extends ImejiController {
 			try {
 				MetadataProfile collectionMdp= pc.retrieve(collection.getProfile(), user);
 				if ( ( pc.isReferencedByOtherResources(collectionMdp.getId().toString(), collection.getId().toString())) ||
-					  (!AuthUtil.staticAuth().delete(user, collectionMdp.getId().toString())) )
+					  (!AuthUtil.staticAuth().delete(user, collectionMdp.getId().toString())) || collectionMdp.getDefault() )
 				{
 					logger.info("Metadata profile related to this collection is referenced elsewhere, or user does not have permission to delete this profile."+
 				                "Profile <"+ collectionMdp.getId().toString()+"> will not be deleted!");
@@ -417,8 +420,13 @@ public class CollectionController extends ImejiController {
 					-1, 0, user);
 			itemController.release(items, user);
 			update(collection, user);
-			ProfileController pc = new ProfileController();
-			pc.release(pc.retrieve(collection.getProfile(), user), user);
+			
+			//update the profile only if the user has permissions. Otherwise, the profile stays in the status as is, no status changes..
+			if ( (AuthUtil.staticAuth().update(user, collection.getProfile()) ))
+			{
+				ProfileController pc = new ProfileController();
+				pc.release(pc.retrieve(collection.getProfile(), user), user);
+			}
 		}
 	}
 
@@ -458,8 +466,12 @@ public class CollectionController extends ImejiController {
 			writeWithdrawProperties(collection, null);
 			update(collection, user);
 			// Withdraw profile
-			ProfileController pc = new ProfileController();
-			pc.withdraw(pc.retrieve(collection.getProfile(), user), user);
+			if ( (AuthUtil.staticAuth().update(user, collection.getProfile()) ))
+			{
+				ProfileController pc = new ProfileController();
+				pc.withdraw(pc.retrieve(collection.getProfile(), user), user);
+			}
+			
 		}
 	}
 
@@ -538,18 +550,22 @@ public class CollectionController extends ImejiController {
 		}
 	}
 	
-//TODO Update needed, it doesn't work by creating new collection withour using profile template
-		/*
-		//Check the collection Profile
-		ProfileController pc = new ProfileController();
-		if (!isNullOrEmpty(collection.getProfile().toString())) {
-		try {
-			pc.retrieve(collection.getProfile(), u);
-		} catch (ImejiException e) {
-			throw new UnprocessableError("error_provided_metadata_profile_does_not_exist");
+
+	public void updateCollectionItemsProfile (CollectionImeji ic, URI newProfileUri, User user) {
+		ItemController itemController = new ItemController();
+		List<String> itemUris = itemController.search(ic.getId(), null,
+				null, null, user).getResults();
+		
+		List<Item> items = (List<Item>) itemController.retrieve(itemUris,-1, 0, user);
+		for (Item it: items){
+			it.getMetadataSet().setProfile(newProfileUri);
+			try {
+				itemController.update(it, user);
+			} catch (ImejiException e) {
+				// TODO Auto-generated catch block
+				logger.error("Could not update the metadata profile of the Item");
+			}
 		}
-		}
-		*/
-		//if (collection.getProfile()
+	}
 	
 }

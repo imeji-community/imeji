@@ -188,8 +188,8 @@ public class SPARQLSearch implements Search
         }
         return results;
     }
-
-    /**
+    
+     /**
      * Simple search for search with one {@link SearchPair}
      * 
      * @param pair
@@ -202,6 +202,8 @@ public class SPARQLSearch implements Search
         String sparqlQuery = SimpleQueryFactory.getQuery(getModelName(type), getRDFType(type), pair, sortCri, user,  (containerURI != null), getSpecificQuery(user));
         return ImejiSPARQL.exec(sparqlQuery, null);
     }
+
+    
 
     /**
      * Perform {@link LOGICAL_RELATIONS} between 2 {@link List} of {@link String}

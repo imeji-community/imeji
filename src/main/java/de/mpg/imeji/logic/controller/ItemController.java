@@ -210,7 +210,7 @@ public class ItemController extends ImejiController {
 		//Not performant
 		cc.update(ic, user);
 		// Performant and working: but means that we don't save the items within the collection, only referenced via the item
-		cc.updateLazy(ic, user);
+		//cc.updateLazy(ic, user);
 
 	}
 

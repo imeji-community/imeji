@@ -10,14 +10,17 @@ import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.Container;
+import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.presentation.filter.Filter;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CookieUtils;
 import de.mpg.imeji.presentation.util.PropertyReader;
+
 import org.apache.log4j.Logger;
 
 import javax.faces.model.SelectItem;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -157,17 +160,17 @@ public abstract class SuperContainerBean<T> extends
 			pair = new SearchPair(
 					SPARQLSearch.getIndex(SearchIndex.names.status),
 					SearchOperators.EQUALS,
-					"http://imeji.org/terms/status#PENDING");
+					Status.PENDING.getUriString());
 		} else if ("public".equals(selectedFilter)) {
 			pair = new SearchPair(
 					SPARQLSearch.getIndex(SearchIndex.names.status),
 					SearchOperators.EQUALS,
-					"http://imeji.org/terms/status#RELEASED");
+					Status.RELEASED.getUriString());
 		} else if ("withdrawn".equals(selectedFilter)) {
 			pair = new SearchPair(
 					SPARQLSearch.getIndex(SearchIndex.names.status),
 					SearchOperators.EQUALS,
-					"http://imeji.org/terms/status#WITHDRAWN");
+					Status.WITHDRAWN.getUriString());
 		}
 		return pair;
 	}

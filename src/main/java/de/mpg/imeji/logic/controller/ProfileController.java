@@ -195,6 +195,7 @@ public class ProfileController extends ImejiController {
 	 */
 	public void delete(MetadataProfile mdp, User user, String collectionId)
 			throws ImejiException {
+		//First check if there are empty metadata records 
 		if ((isNullOrEmpty(collectionId) && isReferencedByAnyResources(mdp
 				.getId().toString()))
 				|| !isNullOrEmpty(collectionId)

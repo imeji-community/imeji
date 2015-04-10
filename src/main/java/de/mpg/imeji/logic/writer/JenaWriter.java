@@ -11,12 +11,14 @@ import com.hp.hpl.jena.rdf.model.Model;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.ImejiSPARQL;
+import de.mpg.imeji.logic.ImejiTriple;
 import de.mpg.imeji.logic.reader.JenaReader;
 import de.mpg.imeji.logic.search.FulltextIndex;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.j2j.transaction.CRUDTransaction;
+import de.mpg.j2j.transaction.PatchTransaction;
 import de.mpg.j2j.transaction.ThreadedTransaction;
 import de.mpg.j2j.transaction.Transaction;
 
@@ -96,6 +98,14 @@ public class JenaWriter implements Writer {
 		runTransaction(objects, GrantType.UPDATE, true);
 	}
 
+	@Override
+	public void patch(List<ImejiTriple> triples, User user)
+			throws ImejiException {
+		Transaction t = new PatchTransaction(triples, modelURI);
+		ThreadedTransaction.run(new ThreadedTransaction(t));
+
+	}
+
 	/**
 	 * Run one WRITE operation in {@link Transaction} within a
 	 * {@link ThreadedTransaction}
@@ -135,4 +145,5 @@ public class JenaWriter implements Writer {
 			}
 		}
 	}
+
 }

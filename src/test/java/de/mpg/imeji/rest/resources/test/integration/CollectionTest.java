@@ -3,6 +3,8 @@ package de.mpg.imeji.rest.resources.test.integration;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
 import de.mpg.imeji.rest.resources.test.TestUtils;
@@ -72,7 +74,7 @@ public class CollectionTest extends ImejiTestBase {
         collectionId = (String) collData.get("id");
         assertThat("Empty collection id", collectionId,
                 not(isEmptyOrNullString()));
-    }
+   }
 
     @Test
     public void test_1_CreateCollection_2_CopyProfile() throws ImejiException, UnsupportedEncodingException, IOException {
@@ -655,4 +657,5 @@ public class CollectionTest extends ImejiTestBase {
         return request.put(Entity.entity(new Form()
                 .param("json", buildJSONFromObject(collTO)), MediaType.APPLICATION_FORM_URLENCODED_TYPE));
     }
+  
 }

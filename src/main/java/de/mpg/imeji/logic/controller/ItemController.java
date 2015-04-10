@@ -3,9 +3,34 @@
  */
 package de.mpg.imeji.logic.controller;
 
-import de.mpg.imeji.exceptions.*;
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static de.mpg.imeji.logic.storage.util.StorageUtils.calculateChecksum;
+import static de.mpg.imeji.logic.storage.util.StorageUtils.getMimeType;
+import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
+
+import de.mpg.imeji.exceptions.AuthenticationError;
+import de.mpg.imeji.exceptions.BadRequestException;
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.NotAllowedError;
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.ImejiSPARQL;
+import de.mpg.imeji.logic.ImejiTriple;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
@@ -21,27 +46,23 @@ import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.UploadResult;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.*;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Container;
+import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Item.Visibility;
+import de.mpg.imeji.logic.vo.Metadata;
+import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Properties.Status;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.imeji.rest.process.CommonUtils;
+import de.mpg.j2j.annotations.j2jModel;
+import de.mpg.j2j.annotations.j2jResource;
+import de.mpg.j2j.helper.DateHelper;
 import de.mpg.j2j.helper.J2JHelper;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Logger;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.URI;
-import java.util.*;
-
-import static com.google.common.base.Strings.isNullOrEmpty;
-import static de.mpg.imeji.logic.storage.util.StorageUtils.calculateChecksum;
-import static de.mpg.imeji.logic.storage.util.StorageUtils.getMimeType;
-import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
 
 /**
  * Implements CRUD and Search methods for {@link Item}
@@ -206,12 +227,10 @@ public class ItemController extends ImejiController {
 		}
 		writer.create(J2JHelper.cast2ObjectList(new ArrayList<Item>(items)),
 				user);
-		//TODO NB:29.03.2014 Why collection update by item creation? Why collection contains list of items each time?
-		//Not performant
-		cc.update(ic, user);
-		// Performant and working: but means that we don't save the items within the collection, only referenced via the item
-		//cc.updateLazy(ic, user);
-
+		List<ImejiTriple> triples = getUpdateTriples(coll.toString(), user,
+				items.iterator().next());
+		// Update the collection
+		cc.patch(triples, user);
 	}
 
 	public Item create(Item item, File uploadedFile, String filename, User u,
@@ -256,6 +275,18 @@ public class ItemController extends ImejiController {
 	}
 
 	/**
+	 * Patch an Item !!! Use with Care !!!
+	 * 
+	 * @param triples
+	 * @param user
+	 * @throws ImejiException
+	 */
+	public void patch(List<ImejiTriple> triples, User user)
+			throws ImejiException {
+		writer.patch(triples, user);
+	}
+
+	/**
 	 * User ObjectLoader to load image
 	 * 
 	 * @param imgUri
@@ -294,7 +325,6 @@ public class ItemController extends ImejiController {
 		}
 	}
 
-
 	/**
 	 * Retrieve all items filtered by query
 	 *
@@ -303,12 +333,15 @@ public class ItemController extends ImejiController {
 	 * @return
 	 * @throws ImejiException
 	 */
-	public List<Item> retrieve(final User user, String q) throws ImejiException, IOException {
-		List<Item> itemList = new ArrayList();
+	public List<Item> retrieve(final User user, String q)
+			throws ImejiException, IOException {
+		List<Item> itemList = new ArrayList<Item>();
 		try {
-			for (String itemId: search(null,
-					!isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q) : null,
-					null, null, user).getResults()) {
+			for (String itemId : search(
+					null,
+					!isNullOrEmptyTrim(q) ? URLQueryTransformer
+							.parseStringQuery(q) : null, null, null, user)
+					.getResults()) {
 				itemList.add(retrieve(URI.create(itemId), user));
 			}
 		} catch (Exception e) {
@@ -580,13 +613,15 @@ public class ItemController extends ImejiController {
 	 * @throws ImejiException
 	 */
 	public void release(List<Item> l, User user) throws ImejiException {
+		List<ImejiTriple> triples = new ArrayList<ImejiTriple>();
 		for (Item item : l) {
 			if (Status.PENDING.equals(item.getStatus())) {
-				writeReleaseProperty(item, user);
-				item.setVisibility(Visibility.PUBLIC);
+				triples.addAll(getReleaseTriples(item.getId().toString(), item));
+				triples.addAll(getUpdateTriples(item.getId().toString(), user,
+						item));
 			}
 		}
-		update(l, user);
+		patch(triples, user);
 	}
 
 	/**
@@ -613,28 +648,26 @@ public class ItemController extends ImejiController {
 	 */
 	public void withdraw(List<Item> items, String comment, User user)
 			throws ImejiException {
-		Map<String, URI> cMap = new HashMap<String, URI>();
+		List<ImejiTriple> triples = new ArrayList<ImejiTriple>();
 		for (Item item : items) {
 			if (!item.getStatus().equals(Status.RELEASED)) {
 				throw new RuntimeException("Error discard " + item.getId()
 						+ " must be release (found: " + item.getStatus() + ")");
 			} else {
-				writeWithdrawProperties(item, comment);
-				item.setVisibility(Visibility.PUBLIC);
+				triples.addAll(getWithdrawTriples(item.getId().toString(),
+						item, comment));
+				triples.addAll(getUpdateTriples(item.getId().toString(), user,
+						item));
+				// writeWithdrawProperties(item, comment);
+				// item.setVisibility(Visibility.PUBLIC);
+
 				if (item.getEscidocId() != null) {
 					removeFileFromStorage(item.getStorageId());
 					item.setEscidocId(null);
 				}
 			}
 		}
-		update(items, user);
-		// Remove items from their collections
-		for (URI uri : cMap.values()) {
-			CollectionController cc = new CollectionController();
-			CollectionImeji c = cc.retrieveLazy(uri, user);
-			c = (CollectionImeji) searchAndSetContainerItems(c, user, -1, 0);
-			cc.update(c, user);
-		}
+		patch(triples, user);
 	}
 
 	/**
@@ -649,7 +682,6 @@ public class ItemController extends ImejiController {
 				.countAlbumSize(c.getId());
 		return ImejiSPARQL.execCount(q, null);
 	}
-	
 
 	/**
 	 * Remove a file from the current {@link Storage}
@@ -710,5 +742,41 @@ public class ItemController extends ImejiController {
 	private boolean downloadFile(String fetchUrl) {
 		return !isNullOrEmpty(fetchUrl);
 	}
-
+	
+	
+	/**
+	 * Set the status of a {@link List} of {@link Item} to released
+	 * 
+	 * @param l
+	 * @param user
+	 * @throws ImejiException
+	 */
+	public void updateItemsProfile(List<Item> l, User user, String profileUri) throws ImejiException {
+		List<ImejiTriple> triples = new ArrayList<ImejiTriple>();
+		for (Item item : l) {
+			if (!profileUri.equals(item.getMetadataSet().getProfile())) {
+				triples.add(getProfileTriple(item.getMetadataSet().getId().toString(), item, profileUri));
+				triples.addAll(getUpdateTriples(item.getId().toString(), user, item));
+			}
+		}
+		patch(triples, user);
+	}
+	
+	/**
+	 * Get the triples which need to be updated with the profile update
+	 * 
+	 * @param uri
+	 * @param securityUri
+	 * @return
+	 */
+	protected ImejiTriple getProfileTriple(String itemUri, Object permissionObject, String profileUri) {
+		String profileProperty = MetadataProfile.class.getAnnotation(j2jResource.class).value();
+		try {
+			return new ImejiTriple(itemUri, profileProperty, new URI(profileUri), permissionObject);
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

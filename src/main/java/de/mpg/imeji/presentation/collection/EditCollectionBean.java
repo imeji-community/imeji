@@ -128,6 +128,7 @@ public class EditCollectionBean extends CollectionBean
     	 }
     	 catch (ImejiException e)
     	 {
+    		 e.printStackTrace();
     		 BeanHelper.info(sessionBean.getMessage("error_collection_save"));
     		 return false;
     	 }

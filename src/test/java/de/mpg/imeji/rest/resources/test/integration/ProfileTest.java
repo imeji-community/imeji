@@ -1,9 +1,11 @@
 package de.mpg.imeji.rest.resources.test.integration;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ProfileService;
+import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.MetadataProfileTO;
 import net.java.dev.webdav.jaxrs.ResponseStatus;
 
@@ -47,7 +49,7 @@ public class ProfileTest extends ImejiTestBase{
 		CollectionService cs = new CollectionService();
 		cs.release(collectionId, JenaUtil.testUser);
 		String profileId = collectionTO.getProfile().getProfileId();
-		Response response = target(pathPrefix).path(profileId)
+		Response response = target(pathPrefix).path(profileId).register(authAsUser2)
 				.request(MediaType.APPLICATION_JSON).get();
 		assertEquals(Status.OK.getStatusCode(),response.getStatus());
 	}
@@ -68,6 +70,15 @@ public class ProfileTest extends ImejiTestBase{
 				.register(authAsUser)
 				.request(MediaType.APPLICATION_JSON).get();
 		assertEquals(Status.NOT_FOUND.getStatusCode(),response.getStatus());
+	}
+	
+	@Test
+	public void test_1_ReadProfiles_RegularProfileId(){
+		String profileId = collectionTO.getProfile().getProfileId();
+		Response response = target(pathPrefix).path(profileId)
+				.register(authAsUser)
+				.request(MediaType.APPLICATION_JSON).get();
+		assertEquals(Status.OK.getStatusCode(),response.getStatus());
 	}
 
 	@Test
@@ -119,5 +130,36 @@ public class ProfileTest extends ImejiTestBase{
 				.request(MediaType.APPLICATION_JSON).delete();
 		assertEquals(Status.NOT_FOUND.getStatusCode(),response.getStatus());
     }
+	
+	
+	/*
+	 * At the moment no standalone test for delete profile can be created. 
+	 * Imeji silently deletes it if its not related with anything else through the update of the collection
+	 * 
+	 
+	 @Test
+	public void test_3_DeleteProfile() throws ImejiException{
+		initCollection();
+		//keep data from the old collection
+		String myOldProfileId = collectionTO.getProfile().getProfileId();
+		String myOldCollection = collectionTO.getId();
+		CollectionTO oldCollectionTO = collectionTO; 
+		//create new collection and new profile
+		initCollection();
+		//set the old collection profile to the newly created collection profile from the new collection
+		oldCollectionTO.setProfile(collectionTO.getProfile());
+		CollectionService cs = new CollectionService();
+		oldCollectionTO.getProfile().setMethod("reference");
+		cs.update(oldCollectionTO, JenaUtil.testUser);
 
+		Response response = target(pathPrefix).path(myOldProfileId)
+				.register(authAsUser)
+				.request(MediaType.APPLICATION_JSON).delete();
+		assertEquals(Status.NO_CONTENT.getStatusCode(),response.getStatus());
+		
+		response = target(pathPrefix).path(myOldProfileId).register(authAsUser)
+				.request(MediaType.APPLICATION_JSON).get();
+		assertEquals(Status.NOT_FOUND.getStatusCode(),response.getStatus());
+    }
+	* */
 }

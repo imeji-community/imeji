@@ -109,10 +109,18 @@ public class SPARQLQueries {
 	 */
 	public static String hasOtherMetadataProfileReferences(String profileUri,
 			String resourceUri) {
-		return " SELECT ?s WHERE { "
+		String q=  " SELECT ?s WHERE { ?s ?p ?o ."
 				+ "?s <http://imeji.org/terms/mdprofile> <" + profileUri + ">."
 				+ " FILTER (?s != <" + resourceUri + ">  && ?s != <"
-				+ profileUri + "> )} LIMIT 1";
+				+ profileUri + ">) "
+				+ " NOT EXISTS { "
+				+ "?item <http://imeji.org/terms/metadataSet> ?s. "
+				+ "?s <http://imeji.org/terms/mdprofile> ?o. "
+				+ "?item <http://imeji.org/terms/collection> ?collection." 
+				+ "FILTER (?collection = <"+resourceUri+">) }"
+				+ "} LIMIT 1";
+		System.out.println(q);
+		return q;
 
 	}
 

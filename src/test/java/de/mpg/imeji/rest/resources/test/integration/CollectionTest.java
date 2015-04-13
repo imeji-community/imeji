@@ -32,6 +32,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 
 import static de.mpg.imeji.logic.util.ResourceHelper.getStringFromPath;
@@ -293,7 +296,6 @@ public class CollectionTest extends ImejiTestBase {
         assertEquals("RELEASED", itemStatus.read(itemId, JenaUtil.testUser).getStatus());
 
         Form form= new Form();
-        form.param("id", collectionId);
         form.param("discardComment", "test_4_WithdrawCollection_1_WithAuth_" + System.currentTimeMillis());
         Response response = target(pathPrefix)
                 .path("/" + collectionId + "/discard").register(authAsUser)
@@ -321,7 +323,6 @@ public class CollectionTest extends ImejiTestBase {
         assertEquals("RELEASED", s.read(collectionId, JenaUtil.testUser).getStatus());
 
         Form form= new Form();
-        form.param("id", collectionId);
         form.param("discardComment", "test_4_WithdrawCollection_2_WithUnAuth_"+System.currentTimeMillis());
         Response response = target(pathPrefix)
                 .path("/" + collectionId + "/discard").register(authAsUser2)
@@ -340,7 +341,6 @@ public class CollectionTest extends ImejiTestBase {
         assertEquals("RELEASED", s.read(collectionId, JenaUtil.testUser).getStatus());
 
         Form form= new Form();
-        form.param("id", collectionId);
         form.param("discardComment", "test_4_WithdrawCollection_3_WithNonAuth_"+System.currentTimeMillis());
         Response response = target(pathPrefix)
                 .path("/" + collectionId + "/discard")
@@ -359,7 +359,6 @@ public class CollectionTest extends ImejiTestBase {
         assertEquals("PENDING", s.read(collectionId, JenaUtil.testUser).getStatus());
 
         Form form= new Form();
-        form.param("id", collectionId);
         form.param("discardComment", "test_4_WithdrawCollection_4_NotReleasedCollection_"+System.currentTimeMillis());
         Response response = target(pathPrefix)
                 .path("/" + collectionId + "/discard").register(authAsUser)
@@ -380,7 +379,6 @@ public class CollectionTest extends ImejiTestBase {
         assertEquals("WITHDRAWN", s.read(collectionId, JenaUtil.testUser).getStatus());
 
         Form form= new Form();
-        form.param("id", collectionId);
         form.param("discardComment", "test_4_WithdrawCollection_5_WithdrawCollectionTwice_SecondTime_"+System.currentTimeMillis());
         Response response = target(pathPrefix)
                 .path("/" + collectionId + "/discard").register(authAsUser)
@@ -394,7 +392,6 @@ public class CollectionTest extends ImejiTestBase {
     public void test_4_WithdrawCollection_6_NotExistingCollection() throws ImejiException{
 
         Form form= new Form();
-        form.param("id", collectionId+"i_do_not_exist");
         form.param("discardComment", "test_4_WithdrawCollection_6_NotExistingCollection_"+System.currentTimeMillis());
         Response response = target(pathPrefix)
                 .path("/" + collectionId + "i_do_not_exist/discard").register(authAsUser)
@@ -533,16 +530,14 @@ public class CollectionTest extends ImejiTestBase {
             }
         }
 
-        Form form= new Form();
-        form.param("json", buildJSONFromObject(collectionTO));
-
+        
         Builder request = target(pathPrefix)
                 .path("/" + collectionId).register(authAsUser)
                 .register(JacksonFeature.class)
                 .request(MediaType.APPLICATION_JSON_TYPE);
 
         Response response = request
-                .put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+                .put(Entity.entity(buildJSONFromObject(collectionTO), MediaType.APPLICATION_JSON));
         assertEquals(OK.getStatusCode(), response.getStatus());
 
         CollectionTO uc = response.readEntity(CollectionTO.class);
@@ -654,8 +649,7 @@ public class CollectionTest extends ImejiTestBase {
     }
 
     private static Response getResponse(Builder request, CollectionTO collTO) throws UnprocessableError {
-        return request.put(Entity.entity(new Form()
-                .param("json", buildJSONFromObject(collTO)), MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+        return request.put(Entity.entity(buildJSONFromObject(collTO), MediaType.APPLICATION_JSON));
     }
   
 }

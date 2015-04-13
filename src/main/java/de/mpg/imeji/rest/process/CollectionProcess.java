@@ -64,7 +64,7 @@ public class CollectionProcess {
 		return resp;
 	}
 
-    public static JSONResponse updateCollection(HttpServletRequest req, String id, String json) {
+    public static JSONResponse updateCollection(HttpServletRequest req, String id) {
 		JSONResponse resp;
 
 		User u = BasicAuthentication.auth(req);
@@ -74,7 +74,7 @@ public class CollectionProcess {
 		} else {
 			CollectionService service = new CollectionService();
             try {
-                CollectionTO to = (CollectionTO) RestProcessUtils.buildTOFromJSON(json, CollectionTO.class);
+                CollectionTO to = (CollectionTO) RestProcessUtils.buildTOFromJSON(req, CollectionTO.class);
                 if (!id.equals(to.getId())) {
                     throw new BadRequestException("Collection id is not equal in request URL and in json");
                 }

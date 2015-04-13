@@ -37,7 +37,7 @@ public class ProfileTest extends ImejiTestBase{
 	
 	@Test
 	public void test_1_ReadProfiles(){
-		String profileId = collectionTO.getProfile().getProfileId();
+		String profileId = collectionTO.getProfile().getId();
 		Response response = target(pathPrefix).path(profileId)
 				.register(authAsUser)
 				.request(MediaType.APPLICATION_JSON).get();
@@ -48,7 +48,7 @@ public class ProfileTest extends ImejiTestBase{
 	public void test_1_ReadProfiles_ReleaseCollection() throws Exception{
 		CollectionService cs = new CollectionService();
 		cs.release(collectionId, JenaUtil.testUser);
-		String profileId = collectionTO.getProfile().getProfileId();
+		String profileId = collectionTO.getProfile().getId();
 		Response response = target(pathPrefix).path(profileId).register(authAsUser2)
 				.request(MediaType.APPLICATION_JSON).get();
 		assertEquals(Status.OK.getStatusCode(),response.getStatus());
@@ -57,7 +57,7 @@ public class ProfileTest extends ImejiTestBase{
 	
 	@Test
 	public void test_1_ReadProfiles_Unauthorized(){
-		String profileId = collectionTO.getProfile().getProfileId();
+		String profileId = collectionTO.getProfile().getId();
 		Response response = target(pathPrefix).path(profileId)
 				.request(MediaType.APPLICATION_JSON).get();
 		assertEquals(Status.UNAUTHORIZED.getStatusCode(),response.getStatus());
@@ -65,7 +65,7 @@ public class ProfileTest extends ImejiTestBase{
 	
 	@Test
 	public void test_1_ReadProfiles_InvalidProfileId(){
-		String profileId = collectionTO.getProfile().getProfileId();
+		String profileId = collectionTO.getProfile().getId();
 		Response response = target(pathPrefix).path(profileId+"invalidID")
 				.register(authAsUser)
 				.request(MediaType.APPLICATION_JSON).get();
@@ -74,7 +74,7 @@ public class ProfileTest extends ImejiTestBase{
 	
 	@Test
 	public void test_1_ReadProfiles_RegularProfileId(){
-		String profileId = collectionTO.getProfile().getProfileId();
+		String profileId = collectionTO.getProfile().getId();
 		Response response = target(pathPrefix).path(profileId)
 				.register(authAsUser)
 				.request(MediaType.APPLICATION_JSON).get();
@@ -83,7 +83,7 @@ public class ProfileTest extends ImejiTestBase{
 
 	@Test
 	public void test_1_ReadProfiles_NotAllowedUser(){
-		String profileId = collectionTO.getProfile().getProfileId();
+		String profileId = collectionTO.getProfile().getId();
 		Response response = target(pathPrefix).path(profileId)
 				.register(authAsUser2)
 				.request(MediaType.APPLICATION_JSON).get();
@@ -106,7 +106,7 @@ public class ProfileTest extends ImejiTestBase{
 	
 	@Test
 	public void test_3_DeleteProfile_NotAuthorized(){
-		String profileId = collectionTO.getProfile().getProfileId();
+		String profileId = collectionTO.getProfile().getId();
 		Response response = target(pathPrefix).path(profileId)
 				.register(authAsUser2)
 				.request(MediaType.APPLICATION_JSON).delete();
@@ -115,7 +115,7 @@ public class ProfileTest extends ImejiTestBase{
 
 	@Test
 	public void test_3_DeleteProfile_Referenced(){
-		String profileId = collectionTO.getProfile().getProfileId();
+		String profileId = collectionTO.getProfile().getId();
 		Response response = target(pathPrefix).path(profileId)
 				.register(authAsUser)
 				.request(MediaType.APPLICATION_JSON).delete();
@@ -124,7 +124,7 @@ public class ProfileTest extends ImejiTestBase{
 	
 	@Test
 	public void test_3_DeleteProfile_notExists(){
-		String profileId = collectionTO.getProfile().getProfileId()+"_doesNotExist";
+		String profileId = collectionTO.getProfile().getId()+"_doesNotExist";
 		Response response = target(pathPrefix).path(profileId)
 				.register(authAsUser)
 				.request(MediaType.APPLICATION_JSON).delete();
@@ -141,7 +141,7 @@ public class ProfileTest extends ImejiTestBase{
 	public void test_3_DeleteProfile() throws ImejiException{
 		initCollection();
 		//keep data from the old collection
-		String myOldProfileId = collectionTO.getProfile().getProfileId();
+		String myOldProfileId = collectionTO.getProfile().getId();
 		String myOldCollection = collectionTO.getId();
 		CollectionTO oldCollectionTO = collectionTO; 
 		//create new collection and new profile

@@ -65,7 +65,7 @@ public class TransferObjectFactory {
 		//TODO: versionOf
 
 		//in output jsen reference to mdprofile
-		to.getProfile().setProfileId(CommonUtils.extractIDFromURI(vo.getProfile()));
+		to.getProfile().setId(CommonUtils.extractIDFromURI(vo.getProfile()));
 		to.getProfile().setMethod("");
 
 		for(Person p : vo.getMetadata().getPersons())

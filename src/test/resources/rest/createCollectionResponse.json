@@ -172,7 +172,7 @@
   ],
   "versionOf": "",
   "profile": {
-    "profileId": "http://mydomain.org/imeji/metadataProfile/YYKETtC37yMV6PeT",
+    "id": "http://mydomain.org/imeji/metadataProfile/YYKETtC37yMV6PeT",
     "method": "reference"
   }
 }

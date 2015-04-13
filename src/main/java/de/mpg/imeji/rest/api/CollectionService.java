@@ -97,7 +97,7 @@ public class CollectionService implements API<CollectionTO> {
 
 
 		MetadataProfile mp = null;
-		String profileId = to.getProfile().getProfileId();
+		String profileId = to.getProfile().getId();
 		String method = to.getProfile().getMethod();
 		String newId = null;
 		// create new profile (take default)
@@ -117,7 +117,7 @@ public class CollectionService implements API<CollectionTO> {
 		}
 		
 		CollectionImeji vo = new CollectionImeji();
-		transferCollection(to, vo, CREATE);
+		transferCollection(to, vo, CREATE, u);
 
 		URI collectionURI = null;
 		if (validate) {
@@ -145,12 +145,12 @@ public class CollectionService implements API<CollectionTO> {
 
         //profile is defined
         CollectionProfileTO profTO = to.getProfile();
-        String profileId = (profTO!=null)?profTO.getProfileId():"";
+        String profileId = (profTO!=null)?profTO.getId():"";
         String method = (profTO!=null)?profTO.getMethod():"";
         
         MetadataProfile mp = null;
         
-        transferCollection(to, vo, UPDATE);
+        transferCollection(to, vo, UPDATE, u);
             //profileId is filled
         if ( !isNullOrEmpty(profileId) ) {
                 try {

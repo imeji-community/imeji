@@ -64,7 +64,7 @@ public class CollectionServiceTest {
 			CollectionTO collectionTO= (CollectionTO) RestProcessUtils.buildTOFromJSON(jsonString, CollectionTO.class);
 			collectionTO = collService.create(collectionTO, JenaUtil.testUser);
 		
-			ReverseTransferObjectFactory.transferCollection(collectionTO, collection, TRANSFER_MODE.CREATE);
+			ReverseTransferObjectFactory.transferCollection(collectionTO, collection, TRANSFER_MODE.CREATE, JenaUtil.testUser);
 			collection.setId(URI.create(collectionTO.getId()));
 			
 		} catch (Exception e) {

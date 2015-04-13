@@ -83,7 +83,7 @@ public class AlbumService implements API<AlbumTO> {
     private AlbumTO createAskValidate(AlbumTO to, User u, boolean validate) throws ImejiException {
         AlbumController ac = new AlbumController();
         Album vo = new Album();
-        transferAlbum(to, vo, CREATE);
+        transferAlbum(to, vo, CREATE, u);
         URI albumURI;
         if (validate) {
             albumURI = ac.create(vo, u);
@@ -101,7 +101,7 @@ public class AlbumService implements API<AlbumTO> {
         if (vo == null)
             throw new UnprocessableError("Album not found");
 
-        transferAlbum(to, vo, UPDATE);
+        transferAlbum(to, vo, UPDATE, u);
         AlbumTO newTO = new AlbumTO();
         TransferObjectFactory.transferAlbum(ac.update(vo, u), newTO);
         return newTO;

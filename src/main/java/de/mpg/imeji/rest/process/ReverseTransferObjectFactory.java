@@ -32,7 +32,7 @@ public class ReverseTransferObjectFactory {
 
     public enum TRANSFER_MODE {CREATE, UPDATE}
 
-	public static void transferCollection(CollectionTO to, CollectionImeji vo, TRANSFER_MODE mode) {
+	public static void transferCollection(CollectionTO to, CollectionImeji vo, TRANSFER_MODE mode, User u) {
 		
 		ContainerMetadata metadata = new ContainerMetadata();
 
@@ -40,18 +40,18 @@ public class ReverseTransferObjectFactory {
 		metadata.setDescription(to.getDescription());
 
 		// set contributors
-		transferCollectionContributors(to.getContributors(), metadata, mode);
+		transferCollectionContributors(to.getContributors(), metadata, u, mode);
 		vo.setMetadata(metadata);
 
 	}
 	
-	public static void transferAlbum(AlbumTO to, Album vo, TRANSFER_MODE mode){
+	public static void transferAlbum(AlbumTO to, Album vo, TRANSFER_MODE mode, User u){
 		ContainerMetadata metadata = new ContainerMetadata();
 		metadata.setTitle(to.getTitle());
 		metadata.setDescription(to.getDescription());
 
 		// set contributors
-		transferCollectionContributors(to.getContributors(), metadata, mode);
+		transferCollectionContributors(to.getContributors(), metadata, u, mode);
 		vo.setMetadata(metadata);
 	}
 
@@ -282,7 +282,7 @@ public class ReverseTransferObjectFactory {
 	}
 
 	public static void transferCollectionContributors(List<PersonTO> persons,
-		ContainerMetadata metadata, TRANSFER_MODE mode) {
+		ContainerMetadata metadata, User u, TRANSFER_MODE mode) {
 		for (PersonTO pTO : persons) {
 			Person person = new Person();
 			person.setFamilyName(pTO.getFamilyName());
@@ -305,6 +305,23 @@ public class ReverseTransferObjectFactory {
 			// set organizations
 			transferContributorOrganizations(pTO.getOrganizations(), person, mode);
 			metadata.getPersons().add(person);
+		}
+		
+		if (metadata.getPersons().size()==0 && TRANSFER_MODE.CREATE.equals(mode)) {
+			Person personU = new Person();
+			PersonTO pTo = new PersonTO();
+			personU.setFamilyName(u.getPerson().getFamilyName());
+			personU.setGivenName(u.getPerson().getGivenName());
+			personU.setCompleteName(u.getPerson().getCompleteName());
+			personU.setAlternativeName(u.getPerson().getAlternativeName());
+			if (!isNullOrEmpty(u.getPerson().getIdentifier())) {
+				IdentifierTO ito = new IdentifierTO();
+				ito.setValue(u.getPerson().getIdentifier());
+				personU.setIdentifier(ito.getValue());
+			}
+			personU.setOrganizations(u.getPerson().getOrganizations());
+			personU.setRole(URI.create(pTo.getRole()));
+			metadata.getPersons().add(personU);
 		}
 
 	}

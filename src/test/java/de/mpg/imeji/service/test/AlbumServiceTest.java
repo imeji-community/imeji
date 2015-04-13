@@ -54,7 +54,7 @@ public class AlbumServiceTest {
 			AlbumTO to = (AlbumTO) RestProcessUtils.buildTOFromJSON(jsonString, AlbumTO.class);
 			to = service.create(to, JenaUtil.testUser);
 		
-			ReverseTransferObjectFactory.transferAlbum(to, vo, TRANSFER_MODE.CREATE);
+			ReverseTransferObjectFactory.transferAlbum(to, vo, TRANSFER_MODE.CREATE, JenaUtil.testUser);
 			vo.setId(URI.create(to.getId()));
 			
 			System.out.println("IdString= "+ vo.getIdString());

@@ -83,7 +83,7 @@ public class CollectionTest extends ImejiTestBase {
     public void test_1_CreateCollection_2_CopyProfile() throws ImejiException, UnsupportedEncodingException, IOException {
         String jsonString = getStringFromPath(STATIC_CONTEXT_REST + "/createCollectionWithProfile.json");
         jsonString = jsonString.replace("___PROFILE_ID___",
-                collectionTO.getProfile().getProfileId()).replace(
+                collectionTO.getProfile().getId()).replace(
                 "___METHOD___", "copy");
 
         Response response = target(pathPrefix)
@@ -93,7 +93,7 @@ public class CollectionTest extends ImejiTestBase {
                 .post(Entity
                         .entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
 
-        assertEquals(response.getStatus(), CREATED.getStatusCode());
+        assertEquals( CREATED.getStatusCode(), response.getStatus());
         Map<String, Object> collData = TestUtils.jsonToPOJO(response);
         assertNotNull("Created collection is null", collData);
         collectionId = (String) collData.get("id");
@@ -105,7 +105,7 @@ public class CollectionTest extends ImejiTestBase {
     public void test_1_CreateCollection_3_ReferenceProfile() throws ImejiException, UnsupportedEncodingException, IOException {
         String jsonString = getStringFromPath(STATIC_CONTEXT_REST + "/createCollectionWithProfile.json");
         jsonString = jsonString.replace("___PROFILE_ID___",
-                collectionTO.getProfile().getProfileId()).replace(
+                collectionTO.getProfile().getId()).replace(
                 "___METHOD___", "reference");
 
         Response response = target(pathPrefix)
@@ -114,7 +114,7 @@ public class CollectionTest extends ImejiTestBase {
                 .post(Entity
                         .entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
 
-        assertEquals(response.getStatus(), CREATED.getStatusCode());
+        assertEquals(CREATED.getStatusCode(), response.getStatus());
         Map<String, Object> collData = TestUtils.jsonToPOJO(response);
         assertNotNull("Created collection is null", collData);
         collectionId = (String) collData.get("id");
@@ -127,7 +127,7 @@ public class CollectionTest extends ImejiTestBase {
             throws ImejiException, UnsupportedEncodingException, IOException {
         String jsonString = getStringFromPath(STATIC_CONTEXT_REST + "/createCollectionWithProfile.json");
         jsonString = jsonString.replace("___PROFILE_ID___",
-                collectionTO.getProfile().getProfileId() + "shmarrn").replace(
+                collectionTO.getProfile().getId() + "shmarrn").replace(
                 "___METHOD___", "reference");
         Response response = target(pathPrefix)
                 .register(authAsUser)
@@ -461,7 +461,7 @@ public class CollectionTest extends ImejiTestBase {
         }
         catch (ImejiException e)
         {
-            System.out.println("Could not withdraw the collection");
+            System.out.println("Could not discard the collection");
         }
 
         response = target(pathPrefix)
@@ -505,7 +505,7 @@ public class CollectionTest extends ImejiTestBase {
         collectionTO.setTitle(collectionTO.getTitle() + CHANGED);
         collectionTO.setDescription(collectionTO.getDescription() + CHANGED);
 
-        String storedProfileId = collectionTO.getProfile().getProfileId();
+        String storedProfileId = collectionTO.getProfile().getId();
         collectionTO.getProfile().setMethod(METHOD.COPY.toString());
 
         for (PersonTO p : collectionTO.getContributors()) {
@@ -580,7 +580,7 @@ public class CollectionTest extends ImejiTestBase {
         response = getResponse(request, collectionTO);
         assertEquals(OK.getStatusCode(), response.getStatus());
         uc = response.readEntity(CollectionTO.class);
-        assertThat("Should be same profileId", uc.getProfile().getProfileId(), equalTo(collectionTO.getProfile().getProfileId()));
+        assertThat("Should be same profileId", uc.getProfile().getId(), equalTo(collectionTO.getProfile().getId()));
         collectionTO.getProfile().setMethod("");
 
     }
@@ -630,17 +630,17 @@ public class CollectionTest extends ImejiTestBase {
         org.setName(stored);
 
         //wrong profile id
-        stored = collectionTO.getProfile().getProfileId();
-        collectionTO.getProfile().setProfileId(stored + CHANGED);
+        stored = collectionTO.getProfile().getId();
+        collectionTO.getProfile().setId(stored + CHANGED);
         response = getResponse(request, collectionTO);
         assertEquals(UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
-        collectionTO.getProfile().setProfileId(stored);
+        collectionTO.getProfile().setId(stored);
 
         //wrong profile method, we need another collection profile..
-        String storedProfileId = collectionTO.getProfile().getProfileId();
+        String storedProfileId = collectionTO.getProfile().getId();
         initCollection();
         collectionTO.getProfile().setMethod("wrong_method");
-        collectionTO.getProfile().setProfileId(storedProfileId);
+        collectionTO.getProfile().setId(storedProfileId);
         response = getResponse(request, collectionTO);
         assertEquals(BAD_REQUEST.getStatusCode(), response.getStatus());
         collectionTO.getProfile().setMethod("");

@@ -74,8 +74,8 @@ public class ImejiTestBase extends JerseyTest {
 	public static void initProfile() {
 		try {
 			ProfileService s = new ProfileService();
-			profileId = s.create(new MetadataProfileTO(), JenaUtil.testUser)
-					.getId();
+			profileId = s.create(new MetadataProfileTO(), JenaUtil.testUser).getId();
+			System.out.println("InitiProfile "+profileId);
 		} catch (Exception e) {
 			logger.error("Cannot init profile", e);
 		}

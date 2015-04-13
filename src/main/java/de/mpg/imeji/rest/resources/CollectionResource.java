@@ -59,13 +59,11 @@ public class CollectionResource implements ImejiResource {
 	@PUT
 	@Path("/{id}")
 	@ApiOperation(value = "Update collection by id")
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response update(
             @Context HttpServletRequest req,
-            @PathParam("id") String id,
-            @FormParam("json") String json) throws Exception {
-		JSONResponse resp = updateCollection(req, id, json);
+            @PathParam("id") String id) throws Exception {
+		JSONResponse resp = updateCollection(req, id);
 		return buildJSONResponse(resp);
 	}
 
@@ -85,7 +83,7 @@ public class CollectionResource implements ImejiResource {
 	@ApiOperation(value = "Discard a collection by id, with mandatory discard comment")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response withdraw(@Context HttpServletRequest req,
-			@FormParam("id") String id, @FormParam("discardComment") String discardComment) throws Exception {
+			@PathParam("id") String id, @FormParam("discardComment") String discardComment) throws Exception {
 		JSONResponse resp = withdrawCollection(req, id, discardComment);
 		return buildJSONResponse(resp);
 	}

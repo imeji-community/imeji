@@ -3,10 +3,7 @@
  */
 package de.mpg.imeji.logic.vo;
 
-import de.mpg.j2j.annotations.j2jId;
-import de.mpg.j2j.annotations.j2jLiteral;
-import de.mpg.j2j.annotations.j2jModel;
-import de.mpg.j2j.annotations.j2jResource;
+import de.mpg.j2j.annotations.*;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -14,6 +11,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * imeji space
@@ -46,16 +45,15 @@ public class Space extends Properties implements Serializable {
 	private int maxHeight = 0;
 	@j2jLiteral("http://imeji.org/terms/maxWidth")
 	private int maxWidth = 0;
-	@j2jLiteral("http://imeji.org/terms/storageId")
-	private String storageId;
-
+	@j2jList("http://imeji.org/terms/spaceCollections")
+	private Collection<String> spaceCollections = new ArrayList<String>();
 
 	@XmlElement(name = "logoUrl", namespace = "http://imeji.org/terms/")
 	public URI getLogoUrl() {
 		return logoUrl;
 	}
 
-	public void setLogoImageUrl(URI logoUrl) {
+	public void setLogoUrl(URI logoUrl) {
 		this.logoUrl = logoUrl;
 	}
 
@@ -99,14 +97,6 @@ public class Space extends Properties implements Serializable {
 	}
 
 
-	public String getStorageId() {
-		return storageId;
-	}
-
-	public void setStorageId(String storageId) {
-		this.storageId = storageId;
-	}
-
 	@XmlElement(name = "maxHeight", namespace = "http://imeji.org/terms/")
 	public int getMaxHeight() {
 		return maxHeight;
@@ -123,6 +113,37 @@ public class Space extends Properties implements Serializable {
 
 	public void setMaxWidth(int maxWidth) {
 		this.maxWidth = maxWidth;
+	}
+
+	/**
+	 * @return
+	 */
+	public Collection<String> getSpaceCollections() {
+		return spaceCollections;
+	}
+
+	/**
+	 * @return
+	 */
+	public String addSpaceCollection(String id) {
+		if (!this.spaceCollections.contains(id))
+			this.spaceCollections.add(id);
+		return id;
+	}
+
+	/**
+	 * @return
+	 */
+	public void removeSpaceCollection(String id) {
+		this.spaceCollections.remove(id);
+	}
+
+
+	/**
+	 * @param observedCollections
+	 */
+	public void setSpaceCollections(Collection<String> spaceCollections) {
+		this.spaceCollections = spaceCollections;
 	}
 
 }

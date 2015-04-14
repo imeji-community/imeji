@@ -1,0 +1,118 @@
+<ui:composition template="templates/template_site.xhtml"  
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:menu="http://java.sun.com/jsf/composite/components/menu">
+	
+	<ui:param name="headline" value="#{lbl.admin_space_edit_welcome}"/>
+	<ui:param name="currentMainMenu" value="admin"/>
+	
+	<ui:define name="actionsMenu">
+		<menu:context_actionMenu isUserLoggedIn="#{Auth.loggedIn}" 
+								 curMainMenu="#{currentMainMenu}" 
+								 downloadEnabled="false"
+								 actionEnabled="false"
+								 navBean="#{Navigation}"/>
+	</ui:define>
+	
+	<ui:define name="additonalFooterScripts">
+		<script type="text/javascript">
+		/* <![CDATA[ */
+			$('.imj_clearInput').click(function(evt){
+				var datatarget, parent, target;
+				if ($(this).data('target')) {
+					datatarget = $(this).data('target');
+					parent = datatarget.split(" ")[0];
+					target = datatarget.replace((parent + " "), "");
+					
+					if (parent) {
+						if (target) {
+							$(this).parents(parent).find(target).val('');
+						} else {
+							$(this).parents(parent).val('');
+						}
+					}
+				}
+			});
+		/*	]]> */
+		</script>
+	</ui:define>
+	
+	<ui:define name="mainContent">
+		<!-- Breadcrumb - History -->
+		<ui:include src="include/History.xhtml"></ui:include>
+		
+		<!-- Are You Admin? -->	
+		<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!Auth.admin}">
+			<h:outputText value="#{lbl.view_page_disallowed}" styleClass="imj_messageInfo" rendered="#{!Auth.loggedIn}"/>
+			<h:outputText value="#{lbl.view_page_disallowed2}" styleClass="imj_messageInfo" rendered="#{Auth.loggedIn}"/>
+		</h:panelGroup>
+		
+		<div class="imj_spaceConfigPage">
+			<!-- Admin - TiledList -->
+			<div class="imj_administrationTiledList imj_maxWidth">
+				
+				<h:panelGroup layout="block" styleClass="imj_listBody" rendered="#{Auth.admin}">
+					<h:form>
+						<div class="imj_adminPanel">
+							<div class="imj_headline">
+								<h2>
+									<h:outputText value="#{lbl.startPageHtmlSnippet}"/>
+		<ui:remove>
+		<!-- TODO: BEAN-ACTION -->
+									<h:commandButton action="" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
+		</ui:remove>
+								</h2>
+							</div>
+							<div class="imj_content">
+								<ui:repeat value="#{Configuration.snippets}" var="snippet">
+									<h:panelGroup layout="block" styleClass="imj_admindataSet">
+										<div class="imj_admindataLabel">
+										 	<h:outputText value="#{Internationalization.getLanguageLabel(snippet.lang)}"/>
+											<span class="imj_noDisplay">: </span>
+										</div>
+										<div class="imj_admindataValue">
+		<ui:remove>
+		<!-- TODO: BEAN-LISTENER / BEAN-VALUE -->
+											<h:inputTextarea value="" styleClass="imj_admindataEdit imj_additionalCodeSnippet" valueChangeListener=""/>
+		</ui:remove>
+										</div>
+										<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+									</h:panelGroup>
+								</ui:repeat>
+							</div>
+						</div>
+						
+						<div class="imj_adminPanel">
+							<div class="imj_headline">
+								<h2>
+									<h:outputText value="#{lbl.startPageFooterLogos}"/>
+		<ui:remove>
+		<!-- TODO: BEAN-ACTION -->
+									<h:commandButton action="" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
+		</ui:remove>
+								</h2>
+							</div>
+							<div class="imj_content">
+								<h:panelGroup layout="block" styleClass="imj_admindataSet">
+									<div class="imj_admindataLabel">
+										<h:outputText value="#{lbl.html}"/>
+										<span class="imj_noDisplay">: </span>
+									</div>
+									<div class="imj_admindataValue">
+		<ui:remove>
+		<!-- TODO: BEAN-VALUE -->
+										<h:inputTextarea value="" styleClass="imj_admindataEdit imj_additionalCodeSnippet"/>
+		</ui:remove>
+									</div>
+									<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+								</h:panelGroup>
+							</div> 
+						</div>
+					</h:form>
+				</h:panelGroup>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

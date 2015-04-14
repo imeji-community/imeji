@@ -13,29 +13,29 @@
 								 curMainMenu="#{currentMainMenu}" 
 								 downloadEnabled="false"
 								 actionEnabled="false"
-								 navBean="#{Navigation}"  />
+								 navBean="#{Navigation}"/>
 	</ui:define>
 	
 	<ui:define name="mainContent">
-	
+		
 		<!-- Breadcrumb - History -->
 		<ui:include src="include/History.xhtml"></ui:include>
 		
-		<!-- Are You Admin? -->	
+		<!-- Are You Admin? -->
 		<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!Auth.admin}">
 			<h:outputText value="#{lbl.view_page_disallowed}" styleClass="imj_messageInfo" rendered="#{!Auth.loggedIn}"/>
 			<h:outputText value="#{lbl.view_page_disallowed2}" styleClass="imj_messageInfo" rendered="#{Auth.loggedIn}"/>
 		</h:panelGroup>
-
-		<ui:fragment rendered="#{Auth.admin}">
-		<!-- Only for Admins -->				
 		
+		<ui:fragment rendered="#{Auth.admin}">
+		<!-- Only for Admins -->
+			
 			<!-- Admin - TiledList -->
 			<div class="imj_administrationTiledList">
-			
-				<div class="imj_listBody">
 				
-					<h:panelGroup layout="block" styleClass="imj_adminPanel imj_userConfig">						
+				<div class="imj_listBody">
+					
+					<h:panelGroup layout="block" styleClass="imj_adminPanel imj_userConfig">
 						<div class="imj_headline">
 							<h2><h:outputText value="#{lbl.admin_user_info}"/></h2>
 						</div>
@@ -57,9 +57,9 @@
 									</a>
 								</li>
 							</ul>
-						</div>												
-					</h:panelGroup>				
-				
+						</div>
+					</h:panelGroup>
+					
 					<h:panelGroup layout="block" styleClass="imj_adminPanel imj_config">
 						<ui:fragment rendered="#{Auth.admin}">
 							<div class="imj_headline">
@@ -74,8 +74,23 @@
 									</li>
 								</ul>
 							</div>
-						</ui:fragment>	
-					</h:panelGroup>				
+						</ui:fragment>
+					</h:panelGroup>
+					
+					<h:panelGroup layout="block" styleClass="imj_adminPanel imj_spaceConfig">
+						<div class="imj_headline">
+							<h2><h:outputText value="#{lbl.admin_space_config}"/></h2>
+						</div>
+						<div class="imj_content">
+							<ul>
+								<li>
+									<a href="#{Navigation.applicationUrl}space" title="#{lbl.admin_space_create}">
+										<h:outputText value="#{lbl.admin_space_create}"/>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</h:panelGroup>
 					
 					<h:panelGroup layout="block" styleClass="imj_adminPanel imj_storageConfig">
 						<ui:fragment rendered="#{Auth.admin}">
@@ -89,7 +104,6 @@
 											<h:outputText value="#{lbl.view_detail}" />
 										</a>
 									</li>
-									
 									<li>
 										<a href="#{Navigation.applicationUri}/admin/storage/statistics" title="#{lbl.storage_statistics}">
 											<h:outputText value="#{lbl.storage_statistics}" />
@@ -101,12 +115,11 @@
 											<h:outputText value="#{lbl.storage_tools}" />
 										</a>
 									</li>
-																		
 								</ul>
 							</div>
-						</ui:fragment>	
+						</ui:fragment>
 					</h:panelGroup>
-				
+					
 					<h:panelGroup layout="block" styleClass="imj_adminPanel imj_advancedConfig" rendered="false">
 						<ui:fragment rendered="#{Auth.admin}">
 							<div class="imj_headline">
@@ -114,7 +127,7 @@
 							</div>
 							<div class="imj_content">
 							</div>
-						</ui:fragment>	
+						</ui:fragment>
 					</h:panelGroup>
 				
 				</div> <!-- END LIST BODY -->

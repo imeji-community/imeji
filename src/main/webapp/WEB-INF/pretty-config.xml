@@ -218,5 +218,10 @@
 		<pattern value="/admin/storage/statistics"></pattern>
 		<view-id>/jsf/StorageStatistics.xhtml</view-id>
 	</url-mapping>
+	
+	<url-mapping id="space">
+		<pattern value="/space"></pattern>
+		<view-id>/jsf/AdminSpaceCreate.xhtml</view-id>
+	</url-mapping>
 
 </pretty-config>

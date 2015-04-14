@@ -16,6 +16,37 @@
 								 navBean="#{Navigation}"/>
 	</ui:define>
 	
+	<ui:define name="additonalFooterScripts">
+		<script type="text/javascript">
+		/* <![CDATA[ */
+			function clearToSlug(str) {
+				str = str.replace(/ /g, "_");
+				str = str.replace(/#/g, "_");
+				str = str.replace(/ä/g, "ae");
+				str = str.replace(/ö/g, "oe");
+				str = str.replace(/ü/g, "ue");
+				str = str.replace(/ß/g, "ss");
+				return str;
+			}
+			function updateSlug() {
+				$('#spaceTitle').keyup(function(evt){
+					var slug = $(this).parents('form').find('#spaceSlug');
+					var tmp = $(this).val();
+					tmp = clearToSlug(tmp);
+					slug.val(tmp);
+					$('#previewSpaceSlugUrl').text('http://' + location.host + '/' + tmp + '/');
+				});
+				$('#spaceSlug').keyup(function(evt){
+					var tmp = clearToSlug($(this).val());
+					$(this).val(tmp);
+					$('#previewSpaceSlugUrl').text(location.protocoll + '//' + location.host + '/' + tmp + '/');
+				});
+			}
+			updateSlug();
+		/*	]]> */
+		</script>
+	</ui:define>
+	
 	<ui:define name="mainContent">
 		<!-- Breadcrumb - History -->
 		<ui:include src="include/History.xhtml"></ui:include>
@@ -27,56 +58,46 @@
 		</h:panelGroup>
 		
 		<div class="imj_spaceConfigPage">
-			<h:form>
-				<!-- title description logo slug -->
-				<div class="imj_metadataSet">
-					<label class="imj_metadataLabel">{#lbl.title} / #{lbl.name}</label>
-					<input class="imj_metadataValue" id="spaceTitle" type="text"/>
-				</div>
-				<div class="imj_metadataSet">
-					<label class="imj_metadataLabel">{#lbl.description}</label>
-					<textarea class="imj_metadataValue"></textarea>
-				</div>
-				<div class="imj_metadataSet">
-					<label class="imj_metadataLabel">{#lbl.logo}</label>
-					<input class="imj_metadataValue" type="file"/>
-				</div>
-				<div class="imj_metadataSet">
-					<label class="imj_metadataLabel">{#lbl.slug}</label>
-					<span class="imj_metadataValue">
-						<input id="spaceSlug" type="text"/>
-						<span id="previewSpaceSlugUrl"></span>
-					</span>
-				</div>
-			</h:form>
-			<script type="text/javascript">
-			/* <![CDATA[ */
-				function clearToSlug(str) {
-					str = str.replace(/ /g, "_");
-					str = str.replace(/#/g, "_");
-					str = str.replace(/ä/g, "ae");
-					str = str.replace(/ö/g, "oe");
-					str = str.replace(/ü/g, "ue");
-					str = str.replace(/ß/g, "ss");
-					return str;
-				}
-				function updateSlug() {
-					$('#spaceTitle').keyup(function(evt){
-						var slug = $(this).parents('form').find('#spaceSlug');
-						var tmp = $(this).val();
-						tmp = clearToSlug(tmp);
-						slug.val(tmp);
-						$('#previewSpaceSlugUrl').text('http://' + location.host + '/' + tmp + '/');
-					});
-					$('#spaceSlug').keyup(function(evt){
-						var tmp = clearToSlug($(this).val());
-						$(this).val(tmp);
-						$('#previewSpaceSlugUrl').text(location.protocoll + '//' + location.host + '/' + tmp + '/');
-					});
-				}
-				updateSlug();
-			/*	]]> */
-			</script>
+			<div class="imj_administrationTiledList imj_maxWidth">
+				
+				<h:panelGroup layout="block" styleClass="imj_listBody" rendered="#{Auth.admin}">
+					<h:form>
+					<div class="imj_adminPanel">
+							<div class="imj_headline">
+								<h2>
+									<h:outputText value="#{lbl.metadata}"/>
+		<ui:remove>
+		<!-- TODO: BEAN-ACTION -->
+									<h:commandButton action="" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
+		</ui:remove>
+								</h2>
+							</div>
+							<div class="imj_content">
+								<!-- title description logo slug -->
+								<div class="imj_metadataSet">
+									<label class="imj_metadataLabel">{#lbl.title} / #{lbl.name}</label>
+									<input class="imj_metadataValue" id="spaceTitle" type="text"/>
+								</div>
+								<div class="imj_metadataSet">
+									<label class="imj_metadataLabel">{#lbl.description}</label>
+									<textarea class="imj_metadataValue"></textarea>
+								</div>
+								<div class="imj_metadataSet">
+									<label class="imj_metadataLabel">{#lbl.logo}</label>
+									<input class="imj_metadataValue" type="file"/>
+								</div>
+								<div class="imj_metadataSet">
+									<label class="imj_metadataLabel">{#lbl.slug}</label>
+									<span class="imj_metadataValue">
+										<input id="spaceSlug" type="text"/>
+										<span id="previewSpaceSlugUrl"></span>
+									</span>
+								</div>
+							</div>
+						</div>
+					</h:form>
+				</h:panelGroup>
+			</div>
 		</div>
 	</ui:define>
 </ui:composition>

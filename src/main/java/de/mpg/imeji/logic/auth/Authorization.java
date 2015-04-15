@@ -28,25 +28,18 @@
  */
 package de.mpg.imeji.logic.auth;
 
-import java.net.URI;
-import java.util.List;
-
 import de.mpg.imeji.exceptions.NotAllowedError;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
-import de.mpg.imeji.logic.vo.Album;
-import de.mpg.imeji.logic.vo.Container;
-import de.mpg.imeji.logic.vo.Grant;
+import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Organization;
-import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.Properties.Status;
-import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.album.AlbumBean;
 import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.collection.CollectionListItem;
+
+import java.net.URI;
+import java.util.List;
 
 /**
  * Authorization rules for imeji objects (defined by their uri) for one
@@ -454,6 +447,8 @@ public class Authorization {
 			return isPublicStatus(((Item) obj).getStatus());
 		else if (obj instanceof Container)
 			return isPublicStatus(((Container) obj).getStatus());
+		else if (obj instanceof Space)
+			return isPublicStatus(((Space) obj).getStatus());
 		else if (obj instanceof MetadataProfile)
 			return isPublicStatus(((MetadataProfile) obj).getStatus());
 		else if (obj instanceof Person)

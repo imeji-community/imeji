@@ -28,11 +28,11 @@
  */
 package de.mpg.imeji.logic.search;
 
-import java.util.List;
-
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.vo.User;
+
+import java.util.List;
 
 /**
  * Search Interface for imeji
@@ -52,7 +52,7 @@ public interface Search
      */
     public static enum SearchType
     {
-        ITEM, COLLECTION, ALBUM, PROFILE, USER, ALL;
+        ITEM, COLLECTION, ALBUM, SPACE, PROFILE, USER, ALL;
     }
 
     /**

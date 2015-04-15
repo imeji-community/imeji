@@ -51,6 +51,7 @@ public class Imeji {
     public static String profileModel;
     public static String statementModel;
     public static String counterModel = "http://imeji.org/counter";
+    public static String spaceModel;
     public static Dataset dataset;
     public static URI counterID = URI.create("http://imeji.org/counter/0");
 	public static User adminUser;
@@ -127,12 +128,14 @@ public class Imeji {
 		userModel = getModelName(User.class);
 		statementModel = getModelName(Statement.class);
 		profileModel = getModelName(MetadataProfile.class);
+		spaceModel = getModelName(Space.class);
 		initModel(albumModel);
 		initModel(collectionModel);
 		initModel(imageModel);
 		initModel(userModel);
 		initModel(statementModel);
 		initModel(profileModel);
+		initModel(spaceModel);
 		initModel(counterModel);
         logger.info("... models done!");
         initadminUser();

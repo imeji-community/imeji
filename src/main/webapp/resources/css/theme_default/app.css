@@ -122,7 +122,6 @@ body .imj_iconCollapse_16:hover { background: transparent url("/imeji/resources/
 body .imj_iconCollapse_16:focus { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjArrowToText_16.png") 0 0 no-repeat; }
 body .imj_iconStatusPrivate_24 { display: inline-block; width: 24px; height: 24px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjLocked_24.png") left center no-repeat; }
 body .imj_iconStatusShareable_24 { display: inline-block; width: 24px; height: 24px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjArrowRightToPeople_24.png") left center no-repeat; }
-body .imj_iconStatusWithdrawn_24 { display: inline-block; width: 24px; height: 24px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjDocumentDelete_24.png") left center no-repeat; }
 body .imj_icoStatusWithdrawn_32 { display: inline-block; width: 32px; height: 32px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjDocumentDelete_32.png") left center no-repeat; }
 body .imj_icoStatusPending_32 { display: inline-block; width: 32px; height: 32px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjDocumentPending_32.png") left center no-repeat; }
 body .imj_icoStatusReleased_32 { display: inline-block; width: 32px; height: 32px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjDocumentPublished_32.png") left center no-repeat; }
@@ -351,7 +350,7 @@ select.imj_metadataEditText { min-height: 0; }
 .imj_simpleSearch input[type=radio] + label { margin-left: 0.181818em; margin-right: 1em; }
 .imj_simpleSearch .imj_simpleSearchLinkAdvancedsearch { margin-top: 0.181818em; margin-left: 1.090909em; white-space: nowrap; display: inline-block; }
 
-.imj_isAdmin .imj_simpleSearch { margin-top: -5.1em; }
+.imj_isAdmin .imj_simpleSearch { margin-top: -6em; }
 .imj_isAdmin .imj_simpleSearch .imj_simpleSearchInput { width: 15em; }
 
 .imj_subHeaderMessageSpace { clear: both; float: left; display: inline; overflow: hidden; margin: 0.65em 0.0909em 0 0; width: 81.3636em; }
@@ -423,8 +422,8 @@ select.imj_metadataEditText { min-height: 0; }
 .imj_singlePageBrowser .imj_buttonBrowseToFirst_16, .imj_singlePageBrowser .imj_buttonBrowseBackward_16, .imj_singlePageBrowser .imj_buttonBrowseForward_16, .imj_singlePageBrowser .imj_buttonBrowseToLast_16 { cursor: pointer; }
 .imj_singlePageBrowser .imj_buttonBrowseToFirst_16.imj_deactivated, .imj_singlePageBrowser .imj_buttonBrowseBackward_16.imj_deactivated, .imj_singlePageBrowser .imj_buttonBrowseForward_16.imj_deactivated, .imj_singlePageBrowser .imj_buttonBrowseToLast_16.imj_deactivated { cursor: default; }
 .imj_singlePageBrowser .imj_separator { display: inline-block; height: 1.81818181em; vertical-align: middle; }
-.imj_singlePageBrowser .imj_pageNumber { padding: 0 1em; background-color: transparent; border: 0 none; font-size: 1em; color: #6CAE2F; }
-.imj_singlePageBrowser .imj_pageNumber:hover { color: #F0F0F0; cursor: pointer; }
+.imj_singlePageBrowser .imj_pageNumber { padding: 0 1em; background-color: transparent; border: 0 none; font-size: 1em; color: #6CAE2F; cursor: pointer; }
+.imj_singlePageBrowser .imj_pageNumber:hover { color: #F0F0F0; }
 .imj_singlePageBrowser .imj_currentPageNumber { padding: 0 1em; color: #F0F0F0; background-color: transparent; border: 0 none; }
 
 .imj_imageInfoLayer { width: 95.95%; padding: 0 2%; }
@@ -565,7 +564,7 @@ iframe#twitter-widget-0 div.root div.stream { height: 20em !important; }
 .imj_mainMenuStandard { display: inline-block; padding: 0 3%; font-size: 135%; letter-spacing: 0.090909em; text-align: left; text-transform: uppercase; }
 .imj_mainMenuStandard .imj_mainMenuStandardItem { display: inline-block; padding: 0.272727em 0.181818em 0.272727em 0.272727em; margin-right: 0.454545em; text-decoration: none; background-color: #313131; -moz-border-radius: 0.41667em; -webkit-border-radius: 0.41667em; border-radius: 0.41667em; }
 
-.imj_metaMenuStandardSingleLine { width: 100%; margin-top: 0.363636em; text-align: right;}
+.imj_metaMenuStandardSingleLine { width: 100%; margin-top: 0.363636em; text-align: right; }
 .imj_metaMenuStandardSingleLine .imj_metaMenuSeparator { height: 1.545454em; width: 0.090909em; margin: 0 0.727272em; border-right: 0.1em solid #6CAE2F; display: inline-block; visibility: hidden; }
 .imj_metaMenuStandardSingleLine .imj_metaMenuItem:not[select] { display: inline; }
 .imj_metaMenuStandardSingleLine .imj_metaMenuItem { vertical-align: baseline; }
@@ -837,7 +836,7 @@ body .imj_siteWrapper .plupload_filelist_footer { padding: 0.545454em 0; backgro
 body .imj_siteWrapper .plupload_filelist_footer .plupload_file_name { white-space: nowrap; }
 body .imj_siteWrapper .plupload_filelist_footer .plupload_upload_status { width: 100%; margin-top: 0.5em; display: block; white-space: normal; }
 body .imj_siteWrapper .plupload_filelist { width: 100%; height: 17em; background-color: #757575; overflow: auto; }
-body .imj_siteWrapper .imj_ingestWrapper .plupload_filelist { height: 2em; overflow: inherit;}
+body .imj_siteWrapper .imj_ingestWrapper .plupload_filelist { height: 2em; }
 body .imj_siteWrapper .plupload_file_name { width: 60%; padding: 0 1%; display: inline-block; vertical-align: top; }
 body .imj_siteWrapper .plupload_file_action { width: 13%; text-align: right; display: inline-block; }
 body .imj_siteWrapper .plupload_file_status { width: 7%; min-width: 3.272727em; display: inline-block; text-align: right; }
@@ -853,5 +852,3 @@ body .imj_siteWrapper .plupload_delete .plupload_file_action { vertical-align: t
 body .imj_siteWrapper .plupload_delete .plupload_file_action a { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/D80000/imjButtonMinusRoundedBorderOpen_16.png") 0 0 no-repeat; }
 body .imj_siteWrapper .plupload_delete .plupload_file_action a:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjButtonMinusRoundedBorderOpen_16.png") 0 0 no-repeat; }
 body .imj_siteWrapper .moxie-shim input { border-radius: 0; -webkit-border-radius: 0; -moz-border-radius: 0; -o-border-radius: 0; -ms-border-radius: 0; padding: 0; margin: 0; cursor: pointer; }
-
-.imj_listBody.imj_entryPagePreviewTiledListArea:hover {background-color: #292929;}

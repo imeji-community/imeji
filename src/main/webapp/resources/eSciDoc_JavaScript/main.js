@@ -387,7 +387,9 @@ function handleDisableButton(data) {
 /**
  * Add the previous method to jsf
  */
-jsf.ajax.addOnEvent(handleDisableButton);
+if (typeof jsf !== 'undefined') {
+	jsf.ajax.addOnEvent(handleDisableButton);
+}
 
 /*
  * open a dialog functions are shifted and modified from old template.xhtml

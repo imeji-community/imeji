@@ -90,7 +90,7 @@
 									
 									<ui:fragment rendered="#{cc.attrs.facetBean.navigationString == 'pretty:collectionBrowse' and cc.attrs.facetBean.collection != null and Auth.updateContent(cc.attrs.facetBean.collection) and cc.attrs.facetBean.profile.statements.size() > 0}">
 										<li>
-											<h:outputLink value="#{Navigation.applicationUrl}edit?type=all&amp;c=#{cc.attrs.facetBean.collection.id}&amp;q=#{cc.attrs.facetBean.query}" id="lnkSelectEdit2">
+											<h:outputLink value="#{Navigation.applicationSpaceUrl}edit?type=all&amp;c=#{cc.attrs.facetBean.collection.id}&amp;q=#{cc.attrs.facetBean.query}" id="lnkSelectEdit2">
 												<h:outputText value="#{lbl.edit_all}"/>
 											</h:outputLink>
 										</li>
@@ -159,7 +159,7 @@
 									<ui:fragment rendered="#{cc.attrs.facetBean.navigationString == 'pretty:collectionBrowse' and cc.attrs.facetBean.collection != null and Auth.updateContent(cc.attrs.facetBean.collection) and cc.attrs.facetBean.profile.statements.size() > 0}">
 										<li class="imj_overlayMenuListItem">
 											<!-- Edit selected -->
-											<h:outputLink value="#{Navigation.applicationUrl}edit?type=selected&amp;c=#{cc.attrs.facetBean.collection.id}&amp;q=#{cc.attrs.facetBean.query}" id="lnkSelectEdit">
+											<h:outputLink value="#{Navigation.applicationSpaceUrl}edit?type=selected&amp;c=#{cc.attrs.facetBean.collection.id}&amp;q=#{cc.attrs.facetBean.query}" id="lnkSelectEdit">
 												<h:outputText value="#{lbl.edit_selected}"/>
 											</h:outputLink>
 										</li>

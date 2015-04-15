@@ -116,6 +116,7 @@ public class ContentNegotiationFilter implements Filter
      * @param request
      * @return
      */
+    //TODO NAVI
     private String getType(HttpServletRequest request)
     {
         String path = request.getServletPath();

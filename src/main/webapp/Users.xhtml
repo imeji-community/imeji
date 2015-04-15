@@ -56,7 +56,7 @@
 								<h:inputText value="#{UsersBean.query}" styleClass="imj_simpleSearchInput" />
 								<h:commandButton action="#{UsersBean.search()}" value="#{lbl.search}" styleClass="imj_simpleSearchButtonSubmit" />
 							</h:form>
-							<h:outputLink value="#{Navigation.applicationUrl}users?group=#{UsersBean.group.id}" title="#{lbl.clear}" rendered="#{UsersBean.query != ''}" styleClass="imj_cancelButton">
+							<h:outputLink value="#{Navigation.applicationSpaceUrl}users?group=#{UsersBean.group.id}" title="#{lbl.clear}" rendered="#{UsersBean.query != ''}" styleClass="imj_cancelButton">
 								<h:outputText value="#{lbl.clear}" />
 							</h:outputLink>
 						</div>
@@ -75,7 +75,7 @@
 									<ui:fragment rendered="#{UsersBean.group == null}">
 										<!-- AdminDataList - User Email -->
 										<div class="imj_adminEditPanel">
-											<h:outputLink value="#{Navigation.applicationUrl}user?id=#{user.email}">
+											<h:outputLink value="#{Navigation.applicationSpaceUrl}user?id=#{user.email}">
 												<h:outputText value="#{lbl.view_detail}" styleClass="imj_editButton"/>
 											</h:outputLink>
 											<!-- AdminDataList - User Password -->

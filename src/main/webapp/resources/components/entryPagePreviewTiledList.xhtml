@@ -24,7 +24,8 @@
 							<ui:repeat var="thumb" value="#{cc.attrs.mediaLogicBean.items}">
 								<li class="imj_tileItem">
 								<!-- <h:outputLink value="#{cc.attrs.mediaLogicBean.id}/#{cc.attrs.browsePath}?q=" title="#{gotoLabel}" rendered="#{cc.attrs.mediaLogicBean.items.size() > 0}"> -->
-									<h:graphicImage styleClass="imj_entryPagePreviewPicture" value="#{cc.attrs.applicationUrl}file?id=#{thumb.thumbnailImageUrl}"/>
+								<!-- Note NB 15.04: concat used in the EL in order to get string value, otherwise, errors are reported with error: URI can not be casted to String -->
+									<h:graphicImage styleClass="imj_entryPagePreviewPicture" value="#{''.concat(thumb.thumbnailImageUrl)}"/>
 								<!-- </h:outputLink> -->
 								</li>
 							</ui:repeat>

@@ -13,7 +13,7 @@
         <imeji:escidocId></imeji:escidocId>
         <imeji:filename>Jellyfish.jpg</imeji:filename>
         <imeji:fullImageUrl>http://localhost:8080/imeji/file/jfBeOSNzh_Ev_e2C/ed/a8/df/8d-c00d-477c-bc5c-c459c11ca295/0/original/bd6661231506e0fe52c15a3a77ecc1e7.jpg</imeji:fullImageUrl>
-        <imeji:fulltext>Jellyfish.jpg Jellyfish Jellyfish http://localhost:8080/imeji/file?id=http%3A//localhost%3A8080/imeji/file/jfBeOSNzh_Ev_e2C/ed/a8/df/8d-c00d-477c-bc5c-c459c11ca295/0/original/bd6661231506e0fe52c15a3a77ecc1e7.jpg</imeji:fulltext>
+        <imeji:fulltext>Jellyfish.jpg Jellyfish Jellyfish http://localhost:8080/imeji/file/jfBeOSNzh_Ev_e2C/ed/a8/df/8d-c00d-477c-bc5c-c459c11ca295/0/original/bd6661231506e0fe52c15a3a77ecc1e7.jpg</imeji:fulltext>
         <imeji:metadataSet id="http://localhost:8080/imeji/item/sNoxkDCuGFvSlsM/metadataSet/0">
             <imeji:metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="" xsi:type="text" id="http://imeji.org/terms/metadata/GxRTbvjLRkj3JcnR">
                 <imeji:position>0</imeji:position>
@@ -23,7 +23,7 @@
             <imeji:metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="" xsi:type="link" id="http://imeji.org/terms/metadata/jeScnj3xlFCG6DQd">
                 <imeji:position>0</imeji:position>
                 <rdfs:label>Jellyfish</rdfs:label>
-                <imeji:uri>http://localhost:8080/imeji/file?id=http%3A//localhost%3A8080/imeji/file/jfBeOSNzh_Ev_e2C/ed/a8/df/8d-c00d-477c-bc5c-c459c11ca295/0/original/bd6661231506e0fe52c15a3a77ecc1e7.jpg</imeji:uri>
+                <imeji:uri>http://localhost:8080/imeji/file/jfBeOSNzh_Ev_e2C/ed/a8/df/8d-c00d-477c-bc5c-c459c11ca295/0/original/bd6661231506e0fe52c15a3a77ecc1e7.jpg</imeji:uri>
                 <imeji:statement>http://imeji.org/terms/statement/ft6bbpk4Te_4P5kF</imeji:statement>
             </imeji:metadata>
             <imeji:profile>http://localhost:8080/imeji/metadataProfile/qnkPKyb_nuNUcg6n</imeji:profile>
@@ -46,7 +46,7 @@
         <imeji:escidocId></imeji:escidocId>
         <imeji:filename>Lighthouse.jpg</imeji:filename>
         <imeji:fullImageUrl>http://localhost:8080/imeji/file/jfBeOSNzh_Ev_e2C/89/8e/2e/96-ade0-4986-b8f8-f8b394b977cf/0/original/4f6a306c94af679657ced7273b5ad4ea.jpg</imeji:fullImageUrl>
-        <imeji:fulltext>Lighthouse.jpg Lighthouse Lighthouse http://localhost:8080/imeji/file?id=http%3A//localhost%3A8080/imeji/file/jfBeOSNzh_Ev_e2C/89/8e/2e/96-ade0-4986-b8f8-f8b394b977cf/0/original/4f6a306c94af679657ced7273b5ad4ea.jpg</imeji:fulltext>
+        <imeji:fulltext>Lighthouse.jpg Lighthouse Lighthouse http://localhost:8080/imeji/file/jfBeOSNzh_Ev_e2C/89/8e/2e/96-ade0-4986-b8f8-f8b394b977cf/0/original/4f6a306c94af679657ced7273b5ad4ea.jpg</imeji:fulltext>
         <imeji:metadataSet id="http://localhost:8080/imeji/item/mbIvgG4BkIiFKq7/metadataSet/0">
             <imeji:metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="" xsi:type="text" id="http://imeji.org/terms/metadata/i94TiqJzKxBhTbOX">
                 <imeji:position>0</imeji:position>
@@ -56,7 +56,7 @@
             <imeji:metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="" xsi:type="link" id="http://imeji.org/terms/metadata/9Zp1_4TPO5BguOl">
                 <imeji:position>0</imeji:position>
                 <rdfs:label>Lighthouse</rdfs:label>
-                <imeji:uri>http://localhost:8080/imeji/file?id=http%3A//localhost%3A8080/imeji/file/jfBeOSNzh_Ev_e2C/89/8e/2e/96-ade0-4986-b8f8-f8b394b977cf/0/original/4f6a306c94af679657ced7273b5ad4ea.jpg</imeji:uri>
+                <imeji:uri>http://localhost:8080/imeji/file/jfBeOSNzh_Ev_e2C/89/8e/2e/96-ade0-4986-b8f8-f8b394b977cf/0/original/4f6a306c94af679657ced7273b5ad4ea.jpg</imeji:uri>
                 <imeji:statement>http://imeji.org/terms/statement/ft6bbpk4Te_4P5kF</imeji:statement>
             </imeji:metadata>
             <imeji:profile>http://localhost:8080/imeji/metadataProfile/qnkPKyb_nuNUcg6n</imeji:profile>
@@ -79,7 +79,7 @@
         <imeji:escidocId></imeji:escidocId>
         <imeji:filename>Penguins.jpg</imeji:filename>
         <imeji:fullImageUrl>http://localhost:8080/imeji/file/jfBeOSNzh_Ev_e2C/ad/13/ba/28-4a4a-4d82-87fa-31ac897e49d7/0/original/571e32a9497bc9ce85a05dda04543fd6.jpg</imeji:fullImageUrl>
-        <imeji:fulltext>Penguins.jpg Penguins Penguins http://localhost:8080/imeji/file?id=http%3A//localhost%3A8080/imeji/file/jfBeOSNzh_Ev_e2C/ad/13/ba/28-4a4a-4d82-87fa-31ac897e49d7/0/original/571e32a9497bc9ce85a05dda04543fd6.jpg</imeji:fulltext>
+        <imeji:fulltext>Penguins.jpg Penguins Penguins http://localhost:8080/imeji/file/jfBeOSNzh_Ev_e2C/ad/13/ba/28-4a4a-4d82-87fa-31ac897e49d7/0/original/571e32a9497bc9ce85a05dda04543fd6.jpg</imeji:fulltext>
         <imeji:metadataSet id="http://localhost:8080/imeji/item/I12lKM5ag9ZbZSVd/metadataSet/0">
             <imeji:metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="" xsi:type="text" id="http://imeji.org/terms/metadata/hNoJuSA2Qi8bxqx">
                 <imeji:position>0</imeji:position>
@@ -89,7 +89,7 @@
             <imeji:metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="" xsi:type="link" id="http://imeji.org/terms/metadata/JtOM9dr2ecQil9gp">
                 <imeji:position>0</imeji:position>
                 <rdfs:label>Penguins</rdfs:label>
-                <imeji:uri>http://localhost:8080/imeji/file?id=http%3A//localhost%3A8080/imeji/file/jfBeOSNzh_Ev_e2C/ad/13/ba/28-4a4a-4d82-87fa-31ac897e49d7/0/original/571e32a9497bc9ce85a05dda04543fd6.jpg</imeji:uri>
+                <imeji:uri>http://localhost:8080/imeji/file/jfBeOSNzh_Ev_e2C/ad/13/ba/28-4a4a-4d82-87fa-31ac897e49d7/0/original/571e32a9497bc9ce85a05dda04543fd6.jpg</imeji:uri>
                 <imeji:statement>http://imeji.org/terms/statement/ft6bbpk4Te_4P5kF</imeji:statement>
             </imeji:metadata>
             <imeji:profile>http://localhost:8080/imeji/metadataProfile/qnkPKyb_nuNUcg6n</imeji:profile>
@@ -112,7 +112,7 @@
         <imeji:escidocId></imeji:escidocId>
         <imeji:filename>Chrysanthemum.jpg</imeji:filename>
         <imeji:fullImageUrl>http://localhost:8080/imeji/file/jfBeOSNzh_Ev_e2C/3e/41/37/bd-bcfc-457d-95fe-0d74d4e59be7/0/original/453859528b76397a5a12a9d2f36ba702.jpg</imeji:fullImageUrl>
-        <imeji:fulltext>Chrysanthemum.jpg Chrysanthemum Chrysanthemum http://localhost:8080/imeji/file?id=http%3A//localhost%3A8080/imeji/file/jfBeOSNzh_Ev_e2C/3e/41/37/bd-bcfc-457d-95fe-0d74d4e59be7/0/original/453859528b76397a5a12a9d2f36ba702.jpg</imeji:fulltext>
+        <imeji:fulltext>Chrysanthemum.jpg Chrysanthemum Chrysanthemum http://localhost:8080/imeji/file/jfBeOSNzh_Ev_e2C/3e/41/37/bd-bcfc-457d-95fe-0d74d4e59be7/0/original/453859528b76397a5a12a9d2f36ba702.jpg</imeji:fulltext>
         <imeji:metadataSet id="http://localhost:8080/imeji/item/xaJTzIm31IZeqdu/metadataSet/0">
             <imeji:metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="" xsi:type="text" id="http://imeji.org/terms/metadata/PadxYWUT8_CdNwzU">
                 <imeji:position>0</imeji:position>
@@ -122,7 +122,7 @@
             <imeji:metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="" xsi:type="link" id="http://imeji.org/terms/metadata/Jdv3kn7W8YVw3ije">
                 <imeji:position>0</imeji:position>
                 <rdfs:label>Chrysanthemum</rdfs:label>
-                <imeji:uri>http://localhost:8080/imeji/file?id=http%3A//localhost%3A8080/imeji/file/jfBeOSNzh_Ev_e2C/3e/41/37/bd-bcfc-457d-95fe-0d74d4e59be7/0/original/453859528b76397a5a12a9d2f36ba702.jpg</imeji:uri>
+                <imeji:uri>http://localhost:8080/imeji/file/jfBeOSNzh_Ev_e2C/3e/41/37/bd-bcfc-457d-95fe-0d74d4e59be7/0/original/453859528b76397a5a12a9d2f36ba702.jpg</imeji:uri>
             	<imeji:statement>http://imeji.org/terms/statement/ft6bbpk4Te_4P5kF</imeji:statement>
             </imeji:metadata>
             <imeji:profile>http://localhost:8080/imeji/metadataProfile/qnkPKyb_nuNUcg6n</imeji:profile>
@@ -145,7 +145,7 @@
         <imeji:escidocId></imeji:escidocId>
         <imeji:filename>Koala.jpg</imeji:filename>
         <imeji:fullImageUrl>http://localhost:8080/imeji/file/jfBeOSNzh_Ev_e2C/90/dc/da/dd-dba3-407a-af4c-bd3d631d54f8/0/original/06d3bc740e8ba0c8f64427649f537269.jpg</imeji:fullImageUrl>
-        <imeji:fulltext>Koala.jpg Koala Koala http://localhost:8080/imeji/file?id=http%3A//localhost%3A8080/imeji/file/jfBeOSNzh_Ev_e2C/90/dc/da/dd-dba3-407a-af4c-bd3d631d54f8/0/original/06d3bc740e8ba0c8f64427649f537269.jpg</imeji:fulltext>
+        <imeji:fulltext>Koala.jpg Koala Koala http://localhost:8080/imeji/file/jfBeOSNzh_Ev_e2C/90/dc/da/dd-dba3-407a-af4c-bd3d631d54f8/0/original/06d3bc740e8ba0c8f64427649f537269.jpg</imeji:fulltext>
         <imeji:metadataSet id="http://localhost:8080/imeji/item/5qWV9QkyiuBzyO8q/metadataSet/0">
             <imeji:metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="" xsi:type="text" id="http://imeji.org/terms/metadata/uhtGJlO5mg_IO5M">
                 <imeji:position>0</imeji:position>
@@ -155,7 +155,7 @@
             <imeji:metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="" xsi:type="link" id="http://imeji.org/terms/metadata/d2CjESuQ3djloL9f">
                 <imeji:position>0</imeji:position>
                 <rdfs:label>Koala</rdfs:label>
-				<imeji:uri>http://localhost:8080/imeji/file?id=http%3A//localhost%3A8080/imeji/file/jfBeOSNzh_Ev_e2C/90/dc/da/dd-dba3-407a-af4c-bd3d631d54f8/0/original/06d3bc740e8ba0c8f64427649f537269.jpg</imeji:uri>
+				<imeji:uri>http://localhost:8080/imeji/file/jfBeOSNzh_Ev_e2C/90/dc/da/dd-dba3-407a-af4c-bd3d631d54f8/0/original/06d3bc740e8ba0c8f64427649f537269.jpg</imeji:uri>
                 <imeji:statement>http://imeji.org/terms/statement/ft6bbpk4Te_4P5kF</imeji:statement>
             </imeji:metadata>
             <imeji:profile>http://localhost:8080/imeji/metadataProfile/qnkPKyb_nuNUcg6n</imeji:profile>
@@ -178,7 +178,7 @@
         <imeji:escidocId></imeji:escidocId>
         <imeji:filename>Hydrangeas.jpg</imeji:filename>
         <imeji:fullImageUrl>http://localhost:8080/imeji/file/jfBeOSNzh_Ev_e2C/03/f2/9c/57-cfd6-47b0-a5dd-0a1f8a52f2cb/0/original/a49fe8914df0eada4d4b7d530d7fa5ba.jpg</imeji:fullImageUrl>
-        <imeji:fulltext>Hydrangeas.jpg Hydrangeas Hydrangeas http://localhost:8080/imeji/file?id=http%3A//localhost%3A8080/imeji/file/jfBeOSNzh_Ev_e2C/03/f2/9c/57-cfd6-47b0-a5dd-0a1f8a52f2cb/0/original/a49fe8914df0eada4d4b7d530d7fa5ba.jpg</imeji:fulltext>
+        <imeji:fulltext>Hydrangeas.jpg Hydrangeas Hydrangeas http://localhost:8080/imeji/file/jfBeOSNzh_Ev_e2C/03/f2/9c/57-cfd6-47b0-a5dd-0a1f8a52f2cb/0/original/a49fe8914df0eada4d4b7d530d7fa5ba.jpg</imeji:fulltext>
         <imeji:metadataSet id="http://localhost:8080/imeji/item/OmXI9y5xzNYleAVr/metadataSet/0">
             <imeji:metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="" xsi:type="text" id="http://imeji.org/terms/metadata/i_XUPACuLV0JmCPb">
                 <imeji:position>0</imeji:position>
@@ -188,7 +188,7 @@
             <imeji:metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="" xsi:type="link" id="http://imeji.org/terms/metadata/XD9LV3RNjS5arhc">
                 <imeji:position>0</imeji:position>
                 <rdfs:label>Hydrangeas</rdfs:label>
-				<imeji:uri>http://localhost:8080/imeji/file?id=http%3A//localhost%3A8080/imeji/file/jfBeOSNzh_Ev_e2C/03/f2/9c/57-cfd6-47b0-a5dd-0a1f8a52f2cb/0/original/a49fe8914df0eada4d4b7d530d7fa5ba.jpg</imeji:uri>
+				<imeji:uri>http://localhost:8080/imeji/file/jfBeOSNzh_Ev_e2C/03/f2/9c/57-cfd6-47b0-a5dd-0a1f8a52f2cb/0/original/a49fe8914df0eada4d4b7d530d7fa5ba.jpg</imeji:uri>
                 <imeji:statement>http://imeji.org/terms/statement/ft6bbpk4Te_4P5kF</imeji:statement>
             </imeji:metadata>
             <imeji:profile>http://localhost:8080/imeji/metadataProfile/qnkPKyb_nuNUcg6n</imeji:profile>
@@ -211,7 +211,7 @@
         <imeji:escidocId></imeji:escidocId>
         <imeji:filename>Desert.jpg</imeji:filename>
         <imeji:fullImageUrl>http://localhost:8080/imeji/file/jfBeOSNzh_Ev_e2C/eb/20/f5/73-3c39-47fb-88ae-809c1cd892ed/0/original/87d07f90f10c40ed8075f45c042fe6f6.jpg</imeji:fullImageUrl>
-        <imeji:fulltext>Desert.jpg Desert Desert http://localhost:8080/imeji/file?id=http%3A//localhost%3A8080/imeji/file/jfBeOSNzh_Ev_e2C/eb/20/f5/73-3c39-47fb-88ae-809c1cd892ed/0/original/87d07f90f10c40ed8075f45c042fe6f6.jpg</imeji:fulltext>
+        <imeji:fulltext>Desert.jpg Desert Desert http://localhost:8080/imeji/file/jfBeOSNzh_Ev_e2C/eb/20/f5/73-3c39-47fb-88ae-809c1cd892ed/0/original/87d07f90f10c40ed8075f45c042fe6f6.jpg</imeji:fulltext>
         <imeji:metadataSet id="http://localhost:8080/imeji/item/cwJQ82v5GlfhtYD/metadataSet/0">
             <imeji:metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="" xsi:type="text" id="http://imeji.org/terms/metadata/Nve1cLkFNGAiBGDx">
                 <imeji:position>0</imeji:position>
@@ -221,7 +221,7 @@
             <imeji:metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="" xsi:type="link" id="http://imeji.org/terms/metadata/Sbjf2bs3pYgfR5sB">
                 <imeji:position>0</imeji:position>
                 <rdfs:label>Desert</rdfs:label>
-                <imeji:uri>http://localhost:8080/imeji/file?id=http%3A//localhost%3A8080/imeji/file/jfBeOSNzh_Ev_e2C/eb/20/f5/73-3c39-47fb-88ae-809c1cd892ed/0/original/87d07f90f10c40ed8075f45c042fe6f6.jpg</imeji:uri>
+                <imeji:uri>http://localhost:8080/imeji/file/jfBeOSNzh_Ev_e2C/eb/20/f5/73-3c39-47fb-88ae-809c1cd892ed/0/original/87d07f90f10c40ed8075f45c042fe6f6.jpg</imeji:uri>
                 <imeji:statement>http://imeji.org/terms/statement/ft6bbpk4Te_4P5kF</imeji:statement>
             </imeji:metadata>
             <imeji:profile>http://localhost:8080/imeji/metadataProfile/qnkPKyb_nuNUcg6n</imeji:profile>
@@ -244,7 +244,7 @@
         <imeji:escidocId></imeji:escidocId>
         <imeji:filename>Tulips.jpg</imeji:filename>
         <imeji:fullImageUrl>http://localhost:8080/imeji/file/jfBeOSNzh_Ev_e2C/2e/9d/01/9f-c4bf-4104-9dc3-c3cfc4a0fb15/0/original/538dcf9d8b98ac9a193a01f25d975ad2.jpg</imeji:fullImageUrl>
-        <imeji:fulltext>Tulips.jpg Tulips Tulips http://localhost:8080/imeji/file?id=http%3A//localhost%3A8080/imeji/file/jfBeOSNzh_Ev_e2C/2e/9d/01/9f-c4bf-4104-9dc3-c3cfc4a0fb15/0/original/538dcf9d8b98ac9a193a01f25d975ad2.jpg</imeji:fulltext>
+        <imeji:fulltext>Tulips.jpg Tulips Tulips http://localhost:8080/imeji/file/jfBeOSNzh_Ev_e2C/2e/9d/01/9f-c4bf-4104-9dc3-c3cfc4a0fb15/0/original/538dcf9d8b98ac9a193a01f25d975ad2.jpg</imeji:fulltext>
         <imeji:metadataSet id="http://localhost:8080/imeji/item/dPASZdD1Qhe8Uy21/metadataSet/0">
             <imeji:metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="" xsi:type="text" id="http://imeji.org/terms/metadata/ySbX5JnE6haBdhHe">
                 <imeji:position>0</imeji:position>
@@ -254,7 +254,7 @@
             <imeji:metadata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="" xsi:type="link" id="http://imeji.org/terms/metadata/NxH8AN0lmIBFMifl">
                 <imeji:position>0</imeji:position>
                 <rdfs:label>Tulips</rdfs:label>
-                <imeji:uri>http://localhost:8080/imeji/file?id=http%3A//localhost%3A8080/imeji/file/jfBeOSNzh_Ev_e2C/2e/9d/01/9f-c4bf-4104-9dc3-c3cfc4a0fb15/0/original/538dcf9d8b98ac9a193a01f25d975ad2.jpg</imeji:uri>
+                <imeji:uri>http://localhost:8080/imeji/file/jfBeOSNzh_Ev_e2C/2e/9d/01/9f-c4bf-4104-9dc3-c3cfc4a0fb15/0/original/538dcf9d8b98ac9a193a01f25d975ad2.jpg</imeji:uri>
            	  	<imeji:statement>http://imeji.org/terms/statement/ft6bbpk4Te_4P5kF</imeji:statement>
             </imeji:metadata>
             <imeji:profile>http://localhost:8080/imeji/metadataProfile/qnkPKyb_nuNUcg6n</imeji:profile>

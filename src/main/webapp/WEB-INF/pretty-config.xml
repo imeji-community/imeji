@@ -219,6 +219,17 @@
 		<view-id>/jsf/StorageStatistics.xhtml</view-id>
 	</url-mapping>
 	
+	<url-mapping id="spaceCreate">
+		<pattern value="/createspace"></pattern>
+		<view-id>/jsf/AdminSpaceCreate.xhtml</view-id>
+	</url-mapping>
+	
+	<url-mapping id="spaceWelcome">
+		<pattern value="/spaceinfo"></pattern>
+		<view-id>/jsf/AdminSpaceWelcome.xhtml</view-id>
+	</url-mapping>
+	
+	
 	<!-- Begin UrlMappings -->
 	<url-mapping id="space_home">
 		<pattern value="/#{SessionBean.spaceId}" />
@@ -427,6 +438,16 @@
 	<url-mapping id="space_storageStatistics">
 		<pattern value="/#{SessionBean.spaceId}/admin/storage/statistics"></pattern>
 		<view-id>/jsf/StorageStatistics.xhtml</view-id>
+	</url-mapping>
+
+	<url-mapping id="space_spaceCreate">
+		<pattern value="/#{SessionBean.spaceId}/createspace"></pattern>
+		<view-id>/jsf/AdminSpaceCreate.xhtml</view-id>
+	</url-mapping>
+	
+	<url-mapping id="space_spaceWelcome">
+		<pattern value="/#{SessionBean.spaceId}/spaceinfo"></pattern>
+		<view-id>/jsf/AdminSpaceWelcome.xhtml</view-id>
 	</url-mapping>
 
 </pretty-config>

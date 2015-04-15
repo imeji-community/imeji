@@ -20,8 +20,10 @@ import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRegistration;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -69,6 +71,8 @@ public class HistoryFilter implements Filter {
 			FilterChain chain) throws IOException, ServletException {
 		try {
 			
+			HttpServletRequest myRequest = (HttpServletRequest)serv;
+			
 			// Limit the case to filter: dispachertype only forward, and only
 			// HTTP GET method
 			if (DispatcherType.FORWARD.compareTo(serv.getDispatcherType()) == 0) {
@@ -78,6 +82,7 @@ public class HistoryFilter implements Filter {
 					dofilterImpl(request, resp);
 				}
 			}
+			
 		} catch (Exception e) {
 			if (e instanceof NotFoundException || e instanceof NotFoundException
 					|| e instanceof NullPointerException) {
@@ -142,7 +147,6 @@ public class HistoryFilter implements Filter {
 		HistorySession hs = getHistorySession(request, resp);
 		Navigation nav = getNavigation(request, resp);
 		SessionBean session = getSessionBean(request, resp);
-			
 		if (session != null) {
 			checkSpaceMatching(request, session, hs); 
 			String h = request.getParameter("h");
@@ -279,19 +283,20 @@ public class HistoryFilter implements Filter {
 			//System.out.println("URL IS MAPPED "+matchingUrl);
 			UrlMapping myMap = 
 				pc.getMappingForUrl(PrettyContext.getCurrentInstance(request).getRequestURL());
-				//System.out.println(myMap.getPattern()+" id= "+myMap.getId());
+			//System.out.println("URL IS MAPPED with pattern "+myMap.getPattern()+" and id "+myMap.getId());
 
 			if (myMap.getId().startsWith("space_")){
 				String mySpaceId = PrettyContext.getCurrentInstance(request).getRequestURL().toURL();
+				//System.out.println("PreCalculated mySpaceId= "+mySpaceId+" 2");
 				mySpaceId = !spaceHome.equals(myMap.getId())? StringUtils.substringBetween(matchingUrl, "/"):
-					StringUtils.substringAfter(matchingUrl, "/");
-				//System.out.println("SpaceId = "+mySpaceId);
-				if (!potentialSpaces.contains(mySpaceId)) { 
+					StringUtils.substringAfter(matchingUrl, "/space/");
+				//System.out.println("Calculated mySpaceId= "+mySpaceId+" 2");
+				if (!potentialSpaces.contains(mySpaceId) ) { 
 					session.setSpaceId("");
 					throw new NotFoundException("RESOURCE_NOT_FOUND");
 				}
 				//Clean old history pages when switching to a new space
-				if (!mySpaceId.equals(session.getSpaceId())) {
+				if (!mySpaceId.equals(session.getSpaceId()) ) {
 					hs.getPages().clear();
 					session.setSpaceId(mySpaceId);
 				}
@@ -304,6 +309,10 @@ public class HistoryFilter implements Filter {
 					session.setSpaceId("");
 				}
 			}
+		}
+		else
+		{
+			System.out.println("can not match the url now ");
 		}
 		//System.out.println("SpaceId set to "+session.getSpaceId());
 	}

@@ -53,6 +53,7 @@ public class Navigation implements Serializable
     public final Page SINGLEUPLOAD = new Page("Single upload", "singleupload");
     // session
     private SessionBean sessionBean = null;
+    public final String spaceCommonSlug = "space/";
 
     /**
      * Application bean managing navigation
@@ -101,8 +102,9 @@ public class Navigation implements Serializable
 
     public String getHomeUrl()
     {
+    	//TODO NB.15.04. Change this String
     	if (!"".equals(getSpacePath())){
-    			return applicationUrl+getSpacePath();
+    			return applicationUrl+spaceCommonSlug+getSpacePath();
     	}
     	return getApplicationUri();
     }

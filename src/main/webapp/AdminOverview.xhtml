@@ -61,7 +61,7 @@
 					</h:panelGroup>
 					
 					<h:panelGroup layout="block" styleClass="imj_adminPanel imj_config">
-						<ui:fragment rendered="#{Auth.admin}">
+						<ui:fragment rendered="#{Auth.admin} and #{SessionBean.spaceId==''}">
 							<div class="imj_headline">
 								<h2><h:outputText value="#{lbl.configuration}"/></h2>
 							</div>
@@ -84,13 +84,13 @@
 						<div class="imj_content">
 							<ul>
 								<li>
-									<a href="#{Navigation.applicationUrl}space" title="#{lbl.admin_space_create}">
+									<a href="#{Navigation.applicationUrl}createspace" title="#{lbl.admin_space_create}">
 										<h:outputText value="#{lbl.admin_space_create}"/>
 									</a>
 								</li>
 								<li>
-									<a href="#{Navigation.applicationUrl}space/welcome" title="#{lbl.admin_space_edit_welcome}">
-										<h:outputText value="#{lbl.admin_space_edit_welcome}"/>
+									<a href="#{Navigation.applicationUrl}space/#{SessionBean.spaceId}" title="#{lbl.admin_space_welcome}">
+										<h:outputText value="#{lbl.admin_space_welcome}"/>
 									</a>
 								</li>
 							</ul>
@@ -105,18 +105,18 @@
 							<div class="imj_content">
 								<ul>
 									<li>
-										<a href="#{Navigation.applicationUri}/admin/storage/details" title="#{lbl.view_detail}">
+										<a href="#{Navigation.applicationSpaceUrl}admin/storage/details" title="#{lbl.view_detail}">
 											<h:outputText value="#{lbl.view_detail}" />
 										</a>
 									</li>
 									<li>
-										<a href="#{Navigation.applicationUri}/admin/storage/statistics" title="#{lbl.storage_statistics}">
+										<a href="#{Navigation.applicationSpaceUrl}admin/storage/statistics" title="#{lbl.storage_statistics}">
 											<h:outputText value="#{lbl.storage_statistics}" />
 										</a>
 									</li>
 									
 									<li>
-										<a href="#{Navigation.applicationUri}/admin/storage/tools" title="#{lbl.storage_tools}">
+										<a href="#{Navigation.applicationSpaceUrl}admin/storage/tools" title="#{lbl.storage_tools}">
 											<h:outputText value="#{lbl.storage_tools}" />
 										</a>
 									</li>

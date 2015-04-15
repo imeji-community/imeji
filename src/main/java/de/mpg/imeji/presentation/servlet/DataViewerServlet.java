@@ -53,6 +53,7 @@ public class DataViewerServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		try {  
+			System.out.println("Data Viewer");
 			SessionBean sb = (SessionBean)req.getSession(false).getAttribute(SessionBean.class.getSimpleName());
 			ConfigurationBean config = new ConfigurationBean();
 
@@ -123,6 +124,7 @@ public class DataViewerServlet extends HttpServlet {
 	}
 
 	private String viewGenericUrl(String originalUrl, String fileType, String dataViewerServiceTargetURL) throws FileNotFoundException, IOException, URISyntaxException {
+		    System.out.println(dataViewerServiceTargetURL+"?"+"mimetype="+fileType+"&url="+originalUrl);
 			return dataViewerServiceTargetURL+"?"+"mimetype="+fileType+"&url="+originalUrl;
 		}
 

@@ -224,11 +224,6 @@
 		<view-id>/jsf/AdminSpaceCreate.xhtml</view-id>
 	</url-mapping>
 	
-	<url-mapping id="spaceWelcome">
-		<pattern value="/spaceinfo"></pattern>
-		<view-id>/jsf/AdminSpaceWelcome.xhtml</view-id>
-	</url-mapping>
-	
 	
 	<!-- Begin UrlMappings -->
 	<url-mapping id="space_home">

@@ -6,6 +6,8 @@ package de.mpg.imeji.presentation.history;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import javax.faces.FactoryFinder;
@@ -28,7 +30,17 @@ import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotAllowedException;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
+
 import com.ocpsoft.pretty.PrettyContext;
+import com.ocpsoft.pretty.PrettyFilter;
+import com.ocpsoft.pretty.faces.application.PrettyNavigationHandler;
+import com.ocpsoft.pretty.faces.config.PrettyConfig;
+import com.ocpsoft.pretty.faces.config.PrettyConfigParser;
+import com.ocpsoft.pretty.faces.config.PrettyConfigurator;
+import com.ocpsoft.pretty.faces.config.mapping.UrlMapping;
+import com.ocpsoft.pretty.faces.url.URL;
 
 import de.mpg.imeji.exceptions.AuthenticationError;
 import de.mpg.imeji.exceptions.NotAllowedError;
@@ -56,6 +68,7 @@ public class HistoryFilter implements Filter {
 	public void doFilter(ServletRequest serv, ServletResponse resp,
 			FilterChain chain) throws IOException, ServletException {
 		try {
+			
 			// Limit the case to filter: dispachertype only forward, and only
 			// HTTP GET method
 			if (DispatcherType.FORWARD.compareTo(serv.getDispatcherType()) == 0) {
@@ -129,7 +142,9 @@ public class HistoryFilter implements Filter {
 		HistorySession hs = getHistorySession(request, resp);
 		Navigation nav = getNavigation(request, resp);
 		SessionBean session = getSessionBean(request, resp);
+			
 		if (session != null) {
+			checkSpaceMatching(request, session, hs); 
 			String h = request.getParameter("h");
 			String url = nav.getApplicationUri()
 					+ PrettyContext.getCurrentInstance(request).getRequestURL()
@@ -160,6 +175,7 @@ public class HistoryFilter implements Filter {
 	private SessionBean getSessionBean(HttpServletRequest req,
 			ServletResponse resp) {
 		return (SessionBean) getBean(SessionBean.class, req, resp);
+		
 	}
 
 	/**
@@ -231,6 +247,7 @@ public class HistoryFilter implements Filter {
 		UIViewRoot view = facesContext.getApplication().getViewHandler()
 				.createView(facesContext, "imeji");
 		facesContext.setViewRoot(view);
+	
 		return facesContext;
 	}
 
@@ -247,5 +264,47 @@ public class HistoryFilter implements Filter {
 				FacesContext facesContext) {
 			FacesContext.setCurrentInstance(facesContext);
 		}
+	}
+	
+	private void checkSpaceMatching (HttpServletRequest request, SessionBean session, HistorySession hs) throws NotFoundException{
+		//TODO CHANGE ME
+		String spaceHome = "space_home";
+		
+		List<String> potentialSpaces= Arrays.asList("345", "567");
+		String matchingUrl= PrettyContext.getCurrentInstance(request).getRequestURL().toURL();
+
+		PrettyConfig pc = PrettyContext.getCurrentInstance(FacesContext.getCurrentInstance()).getConfig();
+		
+		if (pc.isURLMapped(new URL(matchingUrl))) {
+			//System.out.println("URL IS MAPPED "+matchingUrl);
+			UrlMapping myMap = 
+				pc.getMappingForUrl(PrettyContext.getCurrentInstance(request).getRequestURL());
+				//System.out.println(myMap.getPattern()+" id= "+myMap.getId());
+
+			if (myMap.getId().startsWith("space_")){
+				String mySpaceId = PrettyContext.getCurrentInstance(request).getRequestURL().toURL();
+				mySpaceId = !spaceHome.equals(myMap.getId())? StringUtils.substringBetween(matchingUrl, "/"):
+					StringUtils.substringAfter(matchingUrl, "/");
+				//System.out.println("SpaceId = "+mySpaceId);
+				if (!potentialSpaces.contains(mySpaceId)) { 
+					session.setSpaceId("");
+					throw new NotFoundException("RESOURCE_NOT_FOUND");
+				}
+				//Clean old history pages when switching to a new space
+				if (!mySpaceId.equals(session.getSpaceId())) {
+					hs.getPages().clear();
+					session.setSpaceId(mySpaceId);
+				}
+			}
+			else
+			{
+				if (!("".equals(session.getSpaceId()))) {
+					//Clean old history pages when switching to a new space
+					hs.getPages().clear();
+					session.setSpaceId("");
+				}
+			}
+		}
+		//System.out.println("SpaceId set to "+session.getSpaceId());
 	}
 }

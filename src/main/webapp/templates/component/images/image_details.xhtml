@@ -13,19 +13,19 @@
 			<h:outputLink id="lnkPicFullResolution" value="#{Navigation.applicationUrl}file/#{itemBean.encodedFileName}?id=#{itemBean.image.fullImageUrl}" target="_blank" rendered="#{!itemBean.viewInDigilib and !itemBean.viewInDataViewer}">
 				<h:graphicImage id="picWebResolution" title="#{itemBean.image.filename}" alt="#{itemBean.image.filename}" value="#{Navigation.applicationUrl}file/#{itemBean.encodedFileName}?id=#{itemBean.image.webImageUrl}" />
 			</h:outputLink>
-			<h:outputLink id="lnkPicInternalDigilib" value="#{Navigation.applicationUrl}digilibImage?fn=#{Property.internalStorageBase}/#{itemBean.image.storageId}/original/#{itemBean.itemStorageIdFilename}" target="_blank" rendered="#{itemBean.viewInDigilib}">
-				<h:graphicImage id="picWebResolutionInternalDigilib" title="#{itemBean.image.filename}" alt="#{itemBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{itemBean.image.webImageUrl}" />
+			<h:outputLink id="lnkPicInternalDigilib" value="#{Navigation.applicationSpaceUrl}digilibImage?fn=#{Property.internalStorageBase}/#{itemBean.image.storageId}/original/#{itemBean.itemStorageIdFilename}" target="_blank" rendered="#{itemBean.viewInDigilib}">
+				<h:graphicImage id="picWebResolutionInternalDigilib" title="#{itemBean.image.filename}" alt="#{itemBean.image.filename}" value="#{itemBean.image.webImageUrl}" />
 			</h:outputLink>
-			<h:outputLink id="lnkPicInternalDataViewer" value="#{Navigation.applicationUrl}dataviewer?id=#{itemBean.image.idString}" target="_blank" rendered="#{itemBean.viewInDataViewer}">
-				<h:graphicImage title="#{itemBean.image.filename}" alt="#{itemBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{itemBean.image.webImageUrl}" />
+			<h:outputLink id="lnkPicInternalDataViewer" value="#{Navigation.applicationSpaceUrl}dataviewer?id=#{itemBean.image.idString}" target="_blank" rendered="#{itemBean.viewInDataViewer}">
+				<h:graphicImage title="#{itemBean.image.filename}" alt="#{itemBean.image.filename}" value="#{itemBean.image.webImageUrl}" />
 			</h:outputLink>
 		</ui:fragment>
 		<ui:fragment rendered="#{itemBean.videoFile}">
-			<video id="imejiVideoPlayer" src="#{Navigation.applicationUrl}file?id=#{itemBean.image.fullImageUrl}" controls="controls" 
-			poster="#{Navigation.applicationUrl}file?id=#{itemBean.image.webImageUrl}" preload="auto" height="264"></video>
+			<video id="imejiVideoPlayer" src="#{itemBean.image.fullImageUrl}" controls="controls" 
+			poster="#{itemBean.image.webImageUrl}" preload="auto" height="264"></video>
 		</ui:fragment>
 		<ui:fragment rendered="#{itemBean.audioFile}">
-			<audio id="imejiAudioPlayer" src="#{Navigation.applicationUrl}file?id=#{itemBean.image.fullImageUrl}" controls="controls" preload="auto">
+			<audio id="imejiAudioPlayer" src="#{itemBean.image.fullImageUrl}" controls="controls" preload="auto">
 				<h:outputText value="#{lbl.playing} #{itemBean.image.filename} " />
 			</audio>
 		</ui:fragment>
@@ -45,11 +45,11 @@
 			
 			<h:form id="itemForm">
 				
-				<h:outputLink id="lnkDataViewer" value="#{Navigation.applicationUrl}dataviewer?id=#{itemBean.image.idString}" rendered="#{itemBean.viewInDataViewer}" styleClass="imj_mediaEditPanelItem imj_submitButton" target="_blank">
+				<h:outputLink id="lnkDataViewer" value="#{Navigation.applicationSpaceUrl}dataviewer?id=#{itemBean.image.idString}" rendered="#{itemBean.viewInDataViewer}" styleClass="imj_mediaEditPanelItem imj_submitButton" target="_blank">
 					<h:outputText value="#{lbl.view}"/>
 				</h:outputLink>
 				
-				<h:outputLink id="lnkDigilib" value="#{Navigation.applicationUrl}digilibImage?fn=#{Property.internalStorageBase}/#{itemBean.image.storageId}/original/#{itemBean.itemStorageIdFilename}" target="_blank" rendered="#{itemBean.viewInDigilib}" styleClass="imj_mediaEditPanelItem imj_submitButton">
+				<h:outputLink id="lnkDigilib" value="#{Navigation.applicationSpaceUrl}digilibImage?fn=#{Property.internalStorageBase}/#{itemBean.image.storageId}/original/#{itemBean.itemStorageIdFilename}" target="_blank" rendered="#{itemBean.viewInDigilib}" styleClass="imj_mediaEditPanelItem imj_submitButton">
 					<h:outputText value="#{lbl.view}"/>
 				</h:outputLink>
 				
@@ -265,6 +265,23 @@
 											<h:outputLink value="#{itemBean.collection.profile}/#{Navigation.editPath}?init=1&amp;col=#{itemBean.collection.idString}" title="#{lbl.create_now}">
 												<h:outputText value="#{lbl.create_now}"/>
 											</h:outputLink>
+											
+											<!--  CHANGE ME HERE  
+											
+												<h3 class="imj_headline imj_messageInfo">#{msg.error_collection_profile_not_exist}
+													<br/>
+													<h:outputLink value="#{Navigation.collectionUrl}#{itemBean.collectionId}/#{Navigation.editPath}?profileSelect=1" title="#{lbl.create_now_from_template}" rendered="#{logicBean.hasProfiles}">
+															<span class="imj_entryPagePreviewTiledListLinkArrow"> </span>
+															<h:outputText value="#{lbl.create_now_from_template}"/>
+													</h:outputLink>
+													<br/>
+													<h:outputLink value="#{Navigation.profileUrl}#{logicBean.profileId}/#{Navigation.editPath}?init=1&amp;col=#{logicBean.id}" title="#{lbl.create_now_new}">
+															<span class="imj_entryPagePreviewTiledListLinkArrow"> </span>
+															<h:outputText value="#{lbl.create_now}"/>
+													</h:outputLink>
+												</h3>
+											 -->
+											
 										</h3>
 									</ui:fragment>
 								</ui:repeat>

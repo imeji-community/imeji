@@ -20,7 +20,7 @@
 					<div id="shareButtons" class="imj_submitPanel">
 						<h:commandButton value="#{lbl.share_new}" action="#" styleClass="imj_submitButton" type="button" onclick="$('#share').show();$('#shareButtons').hide();"/>
 						<h:outputText value="#{lbl.or_big}" styleClass="imj_submitPanelSeparator"/>
-						<h:outputLink value="#{Navigation.applicationUrl}usergroups?back=#{Navigation.applicationUri}#{ShareBean.pageUrl}" styleClass="imj_submitButton">
+						<h:outputLink value="#{Navigation.applicationSpaceUrl}usergroups?back=#{Navigation.applicationUri}#{ShareBean.pageUrl}" styleClass="imj_submitButton">
 							<h:outputText value="#{lbl.share_with_group}"/>
 						</h:outputLink>
 					</div>

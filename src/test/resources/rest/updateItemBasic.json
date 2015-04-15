@@ -121,7 +121,7 @@
     {
       "value": {
         "link": "LinkTitle",
-        "url": "http://dev-faces.mpdl.mpg.de/imeji/file?id=http%3A//dev-faces.mpdl.mpg.de/imeji/file/xVkq7ovYUOGveQH2/8c/9e/59/45-27ab-4b5e-94c3-5aa68f38af55/0/web/f66a15ca0b26de7f5849cef559f189ec.jpg"
+        "url": "http://dev-faces.mpdl.mpg.de/imeji/file/xVkq7ovYUOGveQH2/8c/9e/59/45-27ab-4b5e-94c3-5aa68f38af55/0/web/f66a15ca0b26de7f5849cef559f189ec.jpg"
       },
       "statementUri": "http://dev-faces.mpdl.mpg.de/imeji/statement/YA9MGNhkggp2lRA",
       "typeUri": "http://imeji.org/terms/metadata#link"

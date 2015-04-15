@@ -11,6 +11,7 @@ import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
  * Defines the page names and Path for imeji. All changes here must be synchronized with WEB-INF/pretty-config.xml The
@@ -65,11 +66,17 @@ public class Navigation implements Serializable
             frameworkUrl = StringHelper.normalizeURI(frameworkUrl);
         applicationUrl = StringHelper.normalizeURI(PropertyReader.getProperty("imeji.instance.url"));
         externalDigilibUrl = PropertyReader.getProperty("digilib.imeji.instance.url");
+        //sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     }
 
     public String getApplicationUrl()
     {
         return applicationUrl;
+    }
+
+    public String getApplicationSpaceUrl()
+    {
+        return applicationUrl+getSpacePath();
     }
 
     public String getApplicationUri()
@@ -94,72 +101,76 @@ public class Navigation implements Serializable
 
     public String getHomeUrl()
     {
-        return getApplicationUri();
+    	if (!"".equals(getSpacePath())){
+    			return applicationUrl+getSpacePath();
+    	}
+    	return getApplicationUri();
     }
 
     public String getBrowseUrl()
     {
-        return applicationUrl + BROWSE.getPath();
+        return applicationUrl +getSpacePath()+BROWSE.getPath();
     }
 
     public String getItemUrl()
     {
-        return applicationUrl + ITEM.getPath() + "/";
+        return applicationUrl+getSpacePath()+ ITEM.getPath() + "/";
     }
 
     public String getCollectionUrl()
     {
-        return applicationUrl + COLLECTION.getPath() + "/";
+    	//System.out.println("CollectoinUrl = "+ applicationUrl+getSpacePath()+ COLLECTION.getPath() + "/");
+        return applicationUrl+getSpacePath()+ COLLECTION.getPath() + "/";
     }
 
     public String getAlbumUrl()
     {
-        return applicationUrl + ALBUM.getPath() + "/";
+        return applicationUrl+getSpacePath()+ ALBUM.getPath() + "/";
     }
 
     public String getProfileUrl()
     {
-        return applicationUrl + PROFILE.getPath() + "/";
+        return applicationUrl+getSpacePath()+ PROFILE.getPath() + "/";
     }
 
     public String getAlbumsUrl()
     {
-        return applicationUrl + ALBUMS.getPath();
+        return applicationUrl+getSpacePath()+ ALBUMS.getPath();
     }
 
     public String getCollectionsUrl()
     {
-        return applicationUrl + COLLECTIONS.getPath();
+        return applicationUrl+getSpacePath()+ COLLECTIONS.getPath();
     }
     
     public String getSingleUploadUrl()
     {
-    	return applicationUrl + SINGLEUPLOAD.getPath();
+    	return applicationUrl+getSpacePath()+ SINGLEUPLOAD.getPath();
     }
 
     public String getCreateCollectionUrl()
     {
-        return applicationUrl + CREATE.getPath() + COLLECTION.getPath();
+        return applicationUrl+getSpacePath()+ CREATE.getPath() + COLLECTION.getPath();
     }
 
     public String getCreateAlbumUrl()
     {
-        return applicationUrl + CREATE.getPath() + ALBUM.getPath();
+        return applicationUrl+getSpacePath()+ CREATE.getPath() + ALBUM.getPath();
     }
 
     public String getSearchUrl()
     {
-        return applicationUrl + SEARCH.getPath();
+        return applicationUrl+getSpacePath()+ SEARCH.getPath();
     }
 
     public String getHelpUrl()
     {
-        return applicationUrl + HELP.getPath() + getContext();
+        return applicationUrl+getSpacePath()+ HELP.getPath() + getContext();
     }
 
     public String getExportUrl()
     {
-        return applicationUrl + EXPORT.getPath();
+        return applicationUrl+getSpacePath()+ EXPORT.getPath();
     }
 
     public String getBlogUrl() throws IOException, URISyntaxException
@@ -169,17 +180,17 @@ public class Navigation implements Serializable
 
     public String getShareUrl()
     {
-        return applicationUrl + SHARE.getPath();
+        return applicationUrl+getSpacePath()+ SHARE.getPath();
     }
 
     public String getUserUrl()
     {
-        return applicationUrl + USER.getPath();
+        return applicationUrl+getSpacePath()+ USER.getPath();
     }
 
     public String getAdminUrl()
     {
-        return applicationUrl + ADMIN.getPath();
+        return applicationUrl+getSpacePath()+ ADMIN.getPath();
     }
 
     public String getAutocompleteUrl()
@@ -219,6 +230,14 @@ public class Navigation implements Serializable
     {
         return UPLOAD.path;
     }
+    
+    public String getSpacePath()
+    {
+    	if (!(isNullOrEmpty(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getSpaceId()))) {
+    		return StringHelper.normalizeURI(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getSpaceId());
+    	}
+    	return "";
+    }
 
     /**
      * Get the context for the context sensitive search.
@@ -227,7 +246,7 @@ public class Navigation implements Serializable
      */
     public String getContext()
     {
-        sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+    	sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         if (sessionBean.getCurrentPage() == null)
         {
             return "";

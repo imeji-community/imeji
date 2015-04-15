@@ -131,7 +131,7 @@ public class CollectionItemsBean extends ItemsBean
         {
             return "";
         }
-        return navigation.getApplicationUrl() + "collection/" + this.id;
+        return navigation.getApplicationSpaceUrl() + "collection/" + this.id+"/";
     }
 
     /**

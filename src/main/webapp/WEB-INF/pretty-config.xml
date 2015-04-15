@@ -218,5 +218,215 @@
 		<pattern value="/admin/storage/statistics"></pattern>
 		<view-id>/jsf/StorageStatistics.xhtml</view-id>
 	</url-mapping>
+	
+	<!-- Begin UrlMappings -->
+	<url-mapping id="space_home">
+		<pattern value="/#{SessionBean.spaceId}" />
+		<view-id>/jsf/Welcome.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="space_albums">
+		<pattern value="/#{SessionBean.spaceId}/albums" />
+		<view-id>/jsf/Albums.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="space_collections">
+		<pattern value="/#{SessionBean.spaceId}/collections" />
+		<view-id>/jsf/Collections.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="space_browse">
+		<pattern value="/#{SessionBean.spaceId}/browse" />
+		<view-id>/jsf/Items.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="space_editPage">
+		<pattern value="/#{SessionBean.spaceId}/edit"></pattern>
+		<view-id>/jsf/BatchEdit.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="space_item">
+		<pattern value="/#{SessionBean.spaceId}/item/#{ItemBean.id}" />
+		<view-id>/jsf/Item.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="space_upload">
+		<pattern value="/#{SessionBean.spaceId}/collection/#{UploadBean.id}/upload" />
+		<view-id>/jsf/Upload.xhtml</view-id>
+	</url-mapping>
+	
+	<url-mapping id="space_singleupload">
+		<pattern value="/#{SessionBean.spaceId}/singleupload" />
+		<view-id>/jsf/SingleUpload.xhtml</view-id>
+	</url-mapping>
+	
+	<url-mapping id="space_ingest">
+		<pattern value="/#{SessionBean.spaceId}/collection/#{IngestBean.collectionId}/ingest" />
+		<view-id>/jsf/Ingest.xhtml</view-id>
+		<action onPostback="false">#{IngestBean.status}</action>
+	</url-mapping>
+	<!-- Collection pages -->
+	<url-mapping id="space_collection">
+		<pattern value="/#{SessionBean.spaceId}/collection/#{ViewCollectionBean.id}" />
+		<view-id>/jsf/CollectionEntryPage.xhtml</view-id>
+		<action onPostback="true">#{ViewCollectionBean.init}</action>
+	</url-mapping>
+	<url-mapping id="space_collectionInfos">
+		<pattern value="/#{SessionBean.spaceId}/collection/#{ViewCollectionBean.id}/infos" />
+		<view-id>/jsf/CollectionView.xhtml</view-id>
+		<action onPostback="true">#{ViewCollectionBean.init}</action>
+	</url-mapping>
+	<url-mapping id="space_collectionBrowse">
+		<pattern value="/#{SessionBean.spaceId}/collection/#{CollectionItemsBean.id}/browse" />
+		<view-id>/jsf/CollectionBrowse.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="space_collectionItem">
+		<pattern
+			value="/#{SessionBean.spaceId}/collection/#{CollectionItemBean.collectionId}/item/#{CollectionItemBean.id}" />
+		<view-id>/jsf/CollectionImage.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="space_editCollection">
+		<pattern value="/#{SessionBean.spaceId}/collection/#{EditCollectionBean.id}/edit" />
+		<view-id>/jsf/CollectionEdit.xhtml</view-id>
+		<action onPostback="false">#{EditCollectionBean.init}</action>
+	</url-mapping>
+	<url-mapping id="space_createCollection">
+		<pattern value="/#{SessionBean.spaceId}/createcollection" />
+		<view-id>/jsf/CollectionCreate.xhtml</view-id>
+		<!--  <action onPostback="false">#{CreateCollectionBean.init}</action>-->
+	</url-mapping>
+	<url-mapping id="space_shareCollection">
+		<pattern value="/#{SessionBean.spaceId}/collection/#{ShareBean.id}/share"></pattern>
+		<view-id>/jsf/Share.xhtml</view-id>
+		<action onPostback="false">#{ShareBean.initShareCollection}</action>
+	</url-mapping>
+	<!-- Profile Pages -->
+	<url-mapping id="space_viewProfile">
+		<pattern value="/#{SessionBean.spaceId}/profile/#{ViewMdProfileBean.id}" />
+		<view-id>/jsf/ProfileView.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="space_editProfile">
+		<pattern value="/#{SessionBean.spaceId}/profile/#{EditMdProfileBean.id}/edit" />
+		<view-id>/jsf/ProfileEdit.xhtml</view-id>
+	</url-mapping>
+	<!-- Album Pages -->
+	<url-mapping id="space_createalbum">
+		<pattern value="/#{SessionBean.spaceId}/createalbum" />
+		<view-id>/jsf/AlbumCreate.xhtml</view-id>
+		<action onPostback="false">#{CreateAlbumBean.init}</action>
+	</url-mapping>
+
+	<url-mapping id="space_editAlbum">
+		<pattern value="/#{SessionBean.spaceId}/album/#{AlbumBean.id}/edit" />
+		<view-id>/jsf/AlbumEdit.xhtml</view-id>
+		<action onPostback="false">#{AlbumBean.initEdit}</action>
+	</url-mapping>
+
+	<url-mapping id="space_album">
+		<pattern value="/#{SessionBean.spaceId}/album/#{AlbumBean.id}" />
+		<view-id>/jsf/AlbumEntryPage.xhtml</view-id>
+		<action>#{AlbumBean.initView}</action>
+	</url-mapping>
+
+	<url-mapping id="space_albumInfos">
+		<pattern value="/#{SessionBean.spaceId}/album/#{AlbumBean.id}/infos" />
+		<view-id>/jsf/AlbumView.xhtml</view-id>
+		<action>#{AlbumBean.initView}</action>
+	</url-mapping>
+
+	<url-mapping id="space_albumBrowse">
+		<pattern value="/#{SessionBean.spaceId}/album/#{AlbumItemsBean.id}/browse" />
+		<view-id>/jsf/AlbumBrowse.xhtml</view-id>
+	</url-mapping>
+	<url-mapping id="space_shareAlbum">
+		<pattern value="/#{SessionBean.spaceId}/album/#{ShareBean.id}/share"></pattern>
+		<view-id>/jsf/Share.xhtml</view-id>
+		<action onPostback="false">#{ShareBean.initShareAlbum}</action>
+	</url-mapping>
+
+	<url-mapping id="space_albumItem">
+		<pattern value="/#{SessionBean.spaceId}/album/#{AlbumItemBean.albumId}/item/#{AlbumItemBean.id}" />
+		<view-id>/jsf/AlbumImage.xhtml</view-id>
+	</url-mapping>
+
+	<!-- Search Pages -->
+	<url-mapping id="space_search">
+		<pattern value="/#{SessionBean.spaceId}/search"></pattern>
+		<view-id>/jsf/SearchAdvanced.xhtml</view-id>
+	</url-mapping>
+
+	<url-mapping id="space_help">
+		<pattern value="/#{SessionBean.spaceId}/help"></pattern>
+		<view-id>/jsf/Help.xhtml</view-id>
+	</url-mapping>
+
+	<url-mapping id="space_userPage">
+		<pattern value="/#{SessionBean.spaceId}/user"></pattern>
+		<view-id>/jsf/User.xhtml</view-id>
+	</url-mapping>
+
+	<url-mapping id="space_privatePage">
+		<pattern value="/#{SessionBean.spaceId}/private"></pattern>
+		<view-id>/jsf/Private.xhtml</view-id>
+	</url-mapping>
+
+	<url-mapping id="space_administration">
+		<pattern value="/#{SessionBean.spaceId}/admin"></pattern>
+		<view-id>/jsf/AdminOverview.xhtml</view-id>
+	</url-mapping>
+	
+	<url-mapping id="space_storageTools">
+		<pattern value="/#{SessionBean.spaceId}/admin/storage/tools"></pattern>
+		<view-id>/jsf/AdminStorage.xhtml</view-id>
+	</url-mapping>
+	
+	<url-mapping id="space_storageDetails">
+		<pattern value="/#{SessionBean.spaceId}/admin/storage/details"></pattern>
+		<view-id>/jsf/AdminInterface.xhtml</view-id>
+	</url-mapping>
+
+	<url-mapping id="space_createUser">
+		<pattern value="/#{SessionBean.spaceId}/createuser"></pattern>
+		<view-id>/jsf/UserCreate.xhtml</view-id>
+	</url-mapping>
+
+	<url-mapping id="space_users">
+		<pattern value="/#{SessionBean.spaceId}/users"></pattern>
+		<view-id>/jsf/Users.xhtml</view-id>
+	</url-mapping>
+	
+	<url-mapping id="space_userGroup">
+		<pattern value="/#{SessionBean.spaceId}/usergroup"></pattern>
+		<view-id>/jsf/UserGroup.xhtml</view-id>
+	</url-mapping>
+	
+	<url-mapping id="space_userGroups">
+		<pattern value="/#{SessionBean.spaceId}/usergroups"></pattern>
+		<view-id>/jsf/UserGroups.xhtml</view-id>
+	</url-mapping>
+	
+	<url-mapping id="space_createUserGroup" >
+		<pattern value="/#{SessionBean.spaceId}/createusergroup" ></pattern>
+		<view-id>/jsf/UserGroupCreate.xhtml</view-id>
+	</url-mapping>
+
+	<url-mapping id="space_admin">
+		<pattern value="/#{SessionBean.spaceId}/admin"></pattern>
+		<view-id>/jsf/UserAdministrationPage.xhtml</view-id>
+	</url-mapping>
+
+	<url-mapping id="space_config">
+		<pattern value="/#{SessionBean.spaceId}/config"></pattern>
+		<view-id>/jsf/Config.xhtml</view-id>
+	</url-mapping>
+
+	<url-mapping id="space_digilibImage">
+		<pattern value="/#{SessionBean.spaceId}/digilibImage"></pattern>
+		<view-id>/jsf/DigilibImage.xhtml</view-id>
+	</url-mapping>
+	
+	<url-mapping id="space_loginFormular">
+		<pattern value="/#{SessionBean.spaceId}/login" />
+		<view-id>/jsf/Login.xhtml</view-id>
+	</url-mapping>
+	
+	<url-mapping id="space_storageStatistics">
+		<pattern value="/#{SessionBean.spaceId}/admin/storage/statistics"></pattern>
+		<view-id>/jsf/StorageStatistics.xhtml</view-id>
+	</url-mapping>
 
 </pretty-config>

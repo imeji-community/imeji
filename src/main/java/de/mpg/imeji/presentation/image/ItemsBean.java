@@ -455,7 +455,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
 	 * @return
 	 */
 	public String getImageBaseUrl() {
-		return navigation.getApplicationUri();
+		return navigation.getApplicationSpaceUrl();
 	}
 
 	public String getBackUrl() {

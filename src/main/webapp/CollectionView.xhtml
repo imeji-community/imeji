@@ -46,7 +46,7 @@
 		<imjc:metadataProfile_view headline="#{lbl.collection_profile}" metadataBean="#{metadataBean}" metadataContextBean="#{metadataContextBean}" 
 		metadataProfile="#{metadataBean.profile}" 
 		profileUrl="#{Navigation.profileUrl}#{metadataBean.profile.idString}" 
-		exportUrl="#{Navigation.applicationUrl}export?format=xml&amp;type=profile&amp;q=prof==&quot;#{metadataContextBean.profile}&quot;" 
+		exportUrl="#{Navigation.applicationSpaceUrl}export?format=xml&amp;type=profile&amp;q=prof==&quot;#{metadataContextBean.profile}&quot;" 
 		editable="#{Auth.update(metadataBean.profile) and metadataContextBean.status != 'WITHDRAWN'}" 
 		editUrl="#{Navigation.profileUrl}#{metadataBean.profileId}/#{Navigation.editPath}?init=1&amp;col=#{metadataBean.id}"/>
 	</ui:define>

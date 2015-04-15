@@ -120,19 +120,21 @@ public class LoginBean {
 	 * @throws IOException
 	 */
 	public void logout() throws IOException {
-		FacesContext fc = FacesContext.getCurrentInstance();
-		HttpSession session = (HttpSession) fc.getExternalContext().getSession(
-				false);
-		session.invalidate();
-		sb.setUser(null);
-		sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-		sb.setShowLogin(false);
-		BeanHelper.info(sb.getMessage("success_log_out"));
-		fc = FacesContext.getCurrentInstance();
-		Navigation nav = (Navigation) BeanHelper
-				.getApplicationBean(Navigation.class);
-		FacesContext.getCurrentInstance().getExternalContext()
-				.redirect(nav.getHomeUrl());
-		
+			FacesContext fc = FacesContext.getCurrentInstance();
+			String spaceId= sb.getSpaceId();
+			HttpSession session = (HttpSession) fc.getExternalContext().getSession(
+					false);
+			session.invalidate();
+			sb.setUser(null);
+			sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+			sb.setShowLogin(false);
+			sb.setSpaceId(spaceId);
+			BeanHelper.info(sb.getMessage("success_log_out"));
+			fc = FacesContext.getCurrentInstance();
+			Navigation nav = (Navigation) BeanHelper
+					.getApplicationBean(Navigation.class);
+			FacesContext.getCurrentInstance().getExternalContext()
+					.redirect(nav.getHomeUrl());
+			
 	}
 }

@@ -18,6 +18,10 @@ import de.mpg.imeji.presentation.util.PropertyReader;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
+import com.ocpsoft.pretty.PrettyContext;
+import com.ocpsoft.pretty.faces.config.PrettyConfig;
+import com.ocpsoft.pretty.faces.config.mapping.UrlMapping;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -66,6 +70,7 @@ public class SessionBean implements Serializable {
 	private int numberOfContainersPerPage = 10;
 
 	private String applicationUrl;
+	private String spaceId;
 	/*
 	 * Cookies name
 	 */
@@ -686,5 +691,13 @@ public class SessionBean implements Serializable {
 		if (ipAddress != null && ipAddress.split(",").length > 1)
 			ipAddress = ipAddress.split(",")[0];
 		return ipAddress;
+	}
+	
+	public void setSpaceId(String spaceIdString){
+		this.spaceId=spaceIdString;
+	}
+
+	public String getSpaceId(){
+		return this.spaceId;
 	}
 }

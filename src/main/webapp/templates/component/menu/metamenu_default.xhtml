@@ -42,7 +42,7 @@ All rights reserved. Use is subject to license terms.
 			
 			<!-- Username if logged in -->
 			<ui:fragment rendered="#{Auth.loggedIn}">
-				<h:outputLink id="txtAccountUserName" title="#{lbl.goto_user_profile}" styleClass="imj_metaMenuItem" value="#{Navigation.applicationUrl}user?id=#{Auth.sessionUser.email}">
+				<h:outputLink id="txtAccountUserName" title="#{lbl.goto_user_profile}" styleClass="imj_metaMenuItem" value="#{Navigation.applicationSpaceUrl}user?id=#{Auth.sessionUser.email}">
 					<h:outputText value="#{Auth.sessionUser.name}"/>
 				</h:outputLink>
 				
@@ -66,7 +66,7 @@ All rights reserved. Use is subject to license terms.
 				</h:panelGroup>
 				
 				<!-- <h:commandLink id="lnkLogout" title="#{lbl.logout}" value="#{lbl.logout}" action="#{LoginBean.logout}" styleClass="imj_metaMenuItem" rendered="#{Auth.loggedIn}"/>-->
-				<h:outputLink id="lnkLogout" title="#{lbl.logout}" value="#{Navigation.applicationUrl}login?logout=1" styleClass="imj_metaMenuItem" rendered="#{Auth.loggedIn}">
+				<h:outputLink id="lnkLogout" title="#{lbl.logout}" value="#{Navigation.applicationSpaceUrl}login?logout=1" styleClass="imj_metaMenuItem" rendered="#{Auth.loggedIn}">
 					<h:outputText value="#{lbl.logout}"/>
 				</h:outputLink>
 			</h:form>
@@ -106,7 +106,6 @@ All rights reserved. Use is subject to license terms.
 			<h:outputLink id="lnkHelp" styleClass="imj_metaMenuItem" title="#{lbl.goto_help}" value="#{Navigation.helpUrl}" target="_blank">
 				<h:outputText value="#{lbl.help}"/>
 			</h:outputLink>
-			
 		</h:panelGroup>
 	</h:panelGroup>
 	

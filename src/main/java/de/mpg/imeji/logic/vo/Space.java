@@ -45,7 +45,7 @@ public class Space extends Properties implements Serializable {
 	private int maxHeight = 0;
 	@j2jLiteral("http://imeji.org/terms/maxWidth")
 	private int maxWidth = 0;
-	@j2jList("http://imeji.org/terms/spaceCollections")
+	@j2jList("http://imeji.org/terms/collection")
 	private Collection<String> spaceCollections = new ArrayList<String>();
 
 	@XmlElement(name = "logoUrl", namespace = "http://imeji.org/terms/")
@@ -140,7 +140,7 @@ public class Space extends Properties implements Serializable {
 
 
 	/**
-	 * @param observedCollections
+	 * @param spaceCollections
 	 */
 	public void setSpaceCollections(Collection<String> spaceCollections) {
 		this.spaceCollections = spaceCollections;

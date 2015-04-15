@@ -224,15 +224,9 @@
 		<view-id>/jsf/AdminSpaceCreate.xhtml</view-id>
 	</url-mapping>
 	
-	<url-mapping id="spaceWelcome">
-		<pattern value="/spaceinfo"></pattern>
-		<view-id>/jsf/AdminSpaceWelcome.xhtml</view-id>
-	</url-mapping>
-	
-	
 	<!-- Begin UrlMappings -->
 	<url-mapping id="space_home">
-		<pattern value="/#{SessionBean.spaceId}" />
+		<pattern value="/space/#{SessionBean.spaceId}" />
 		<view-id>/jsf/Welcome.xhtml</view-id>
 	</url-mapping>
 	<url-mapping id="space_albums">
@@ -445,9 +439,14 @@
 		<view-id>/jsf/AdminSpaceCreate.xhtml</view-id>
 	</url-mapping>
 	
-	<url-mapping id="space_spaceWelcome">
+<!-- 
+	NB 15.04. Not needed anylonger will redirect to space home page in any case
+	AdminSpaceWelcome content to be used for space/welcome page perhaps.
+    <url-mapping id="space_spaceWelcome">
 		<pattern value="/#{SessionBean.spaceId}/spaceinfo"></pattern>
 		<view-id>/jsf/AdminSpaceWelcome.xhtml</view-id>
 	</url-mapping>
 
-</pretty-config>
+ -->
+ 
+ </pretty-config>

@@ -28,25 +28,19 @@
  */
 package de.mpg.imeji.logic.writer;
 
-import java.net.URI;
-import java.security.Security;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotAllowedError;
 import de.mpg.imeji.logic.ImejiTriple;
 import de.mpg.imeji.logic.auth.Authorization;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
-import de.mpg.imeji.logic.vo.Container;
-import de.mpg.imeji.logic.vo.Grant;
+import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.logic.vo.UserGroup;
+import org.apache.log4j.Logger;
+
+import java.net.URI;
+import java.security.Security;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Facade implementing Writer {@link Authorization}
@@ -203,6 +197,8 @@ public class WriterFacade implements Writer {
 			return ((Container) o).getId();
 		} else if (o instanceof MetadataProfile) {
 			return ((MetadataProfile) o).getId();
+		} else if (o instanceof Space) {
+			return ((Space) o).getId();
 		} else if (o instanceof User) {
 			return ((User) o).getId();
 		} else if (o instanceof UserGroup) {

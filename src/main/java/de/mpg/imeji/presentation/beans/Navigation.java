@@ -104,7 +104,7 @@ public class Navigation implements Serializable
     {
     	//TODO NB.15.04. Change this String
     	if (!"".equals(getSpacePath())){
-    			return applicationUrl+spaceCommonSlug+getSpacePath();
+    			return applicationUrl+getSpacePath();
     	}
     	return getApplicationUri();
     }
@@ -236,7 +236,7 @@ public class Navigation implements Serializable
     public String getSpacePath()
     {
     	if (!(isNullOrEmpty(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getSpaceId()))) {
-    		return StringHelper.normalizeURI(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getSpaceId());
+    		return spaceCommonSlug+StringHelper.normalizeURI(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getSpaceId());
     	}
     	return "";
     }

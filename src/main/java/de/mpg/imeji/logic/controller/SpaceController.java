@@ -4,9 +4,12 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.reader.ReaderFacade;
+import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.StringHelper;
@@ -21,6 +24,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.google.common.io.Files.copy;
@@ -53,7 +57,8 @@ public class SpaceController extends ImejiController {
 
     public SpaceController() {
         try {
-            File storageDir = new File(
+
+        	File storageDir = new File(
                     PropertyReader.getProperty("imeji.spaces.storage.path"));
             storagePath = StringHelper.normalizePath(storageDir
                     .getAbsolutePath());
@@ -273,6 +278,25 @@ public class SpaceController extends ImejiController {
      */
     public Space retrieveLazy(URI uri, User user) throws ImejiException {
         return (Space) reader.readLazy(uri.toString(), user, new Space());
+    }
+    
+    public boolean isSpaceByLabel(String spaceId) throws ImejiException {
+//		Search s = SearchFactory.create();
+//    	List<String> r = s.searchSimpleForQuery(SPARQLQueries.getSpaceByLabel(spaceId)).getResults();
+//		if (!r.isEmpty() && r.get(0) != null) {
+//			return true;
+//		} else {
+//			return false;
+//		}
+		
+		//TODO ChangeMe
+		List<String> potentialSpaces= Arrays.asList("345", "567");
+		
+		if (potentialSpaces.contains(spaceId)) {
+			return true;
+		}
+		return false;
+
     }
 
     /**

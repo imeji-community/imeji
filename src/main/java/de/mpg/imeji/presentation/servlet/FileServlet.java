@@ -104,11 +104,13 @@ public class FileServlet extends HttpServlet {
 		}
 		resp.setContentType(StorageUtils.getMimeType(StringHelper
 				.getFileExtension(url)));
+		
 		SessionBean session = getSession(req);
 		User user = getUser(req, session);
-
+		
 		try {
 			Item fileItem = getItem(url, user);
+
 			if ("NO_THUMBNAIL_URL".equals(url)) {
 				ExternalStorage eStorage = new ExternalStorage();
 				eStorage.read(
@@ -119,7 +121,6 @@ public class FileServlet extends HttpServlet {
 
 				if (download)
 					resp.setHeader("Content-disposition", "attachment;");
-
 				storageController.read(url, resp.getOutputStream(), true);
 
 				// message to observer if item downloaded

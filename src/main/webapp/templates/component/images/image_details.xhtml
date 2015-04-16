@@ -10,14 +10,14 @@
 	<!-- MediaDisplayContainer - START -->
 	<h:panelGroup layout="block" styleClass="imj_mediaDisplayContainer">
 		<ui:fragment rendered="#{!itemBean.videoFile and !itemBean.audioFile and !itemBean.swcFile}">
-			<h:outputLink id="lnkPicFullResolution" value="#{Navigation.applicationUrl}file/#{itemBean.encodedFileName}?id=#{itemBean.image.fullImageUrl}" target="_blank" rendered="#{!itemBean.viewInDigilib and !itemBean.viewInDataViewer}">
-				<h:graphicImage id="picWebResolution" title="#{itemBean.image.filename}" alt="#{itemBean.image.filename}" value="#{''.concat(itemBean.image.webImageUrl)}" />
+			<h:outputLink id="lnkPicFullResolution" value="#{itemBean.image.fullImageUrl}" target="_blank" rendered="#{!itemBean.viewInDigilib and !itemBean.viewInDataViewer}">
+				<h:graphicImage id="picWebResolution" title="#{itemBean.image.filename}" alt="#{itemBean.image.filename}" value="#{itemBean.image.webImageLink}" />
 			</h:outputLink>
 			<h:outputLink id="lnkPicInternalDigilib" value="#{Navigation.applicationUrl}digilibImage?fn=#{Property.internalStorageBase}/#{itemBean.image.storageId}/original/#{itemBean.itemStorageIdFilename}" target="_blank" rendered="#{itemBean.viewInDigilib}">
-				<h:graphicImage id="picWebResolutionInternalDigilib" title="#{itemBean.image.filename}" alt="#{itemBean.image.filename}" value="#{''.concat(itemBean.image.webImageUrl)}" />
+				<h:graphicImage id="picWebResolutionInternalDigilib" title="#{itemBean.image.filename}" alt="#{itemBean.image.filename}" value="#{itemBean.image.webImageLink}" />
 			</h:outputLink>
 			<h:outputLink id="lnkPicInternalDataViewer" value="#{Navigation.applicationUrl}dataviewer?id=#{itemBean.image.idString}" target="_blank" rendered="#{itemBean.viewInDataViewer}">
-				<h:graphicImage title="#{itemBean.image.filename}" alt="#{itemBean.image.filename}" value="#{''.concat(itemBean.image.webImageUrl)}" />
+				<h:graphicImage title="#{itemBean.image.filename}" alt="#{itemBean.image.filename}" value="#{itemBean.image.webImageLink}" />
 			</h:outputLink>
 		</ui:fragment>
 		<ui:fragment rendered="#{itemBean.videoFile}">
@@ -53,11 +53,11 @@
 					<h:outputText value="#{lbl.view}"/>
 				</h:outputLink>
 				
-				<h:outputLink id="lnkOriginalData" value="#{''.concat(itemBean.image.fullImageUrl)}" target="_blank" rendered="#{!itemBean.viewInDigilib and !itemBean.viewInDataViewer}" styleClass="imj_mediaEditPanelItem imj_submitButton">
+				<h:outputLink id="lnkOriginalData" value="#{itemBean.image.fullImageUrl}" target="_blank" rendered="#{!itemBean.viewInDigilib and !itemBean.viewInDataViewer}" styleClass="imj_mediaEditPanelItem imj_submitButton">
 					<h:outputText value="#{lbl.view}"/>
 				</h:outputLink>
 				
-				<h:outputLink styleClass="imj_mediaEditPanelItem imj_submitButton" id="lnkDownload" value="#{Navigation.applicationUrl}file/#{itemBean.encodedFileName}?id=#{itemBean.image.fullImageUrl}&amp;download=1" target="_blank">
+				<h:outputLink styleClass="imj_mediaEditPanelItem imj_submitButton" id="lnkDownload" value="#{itemBean.image.fullImageUrl}?download=1" target="_blank">
 					<h:outputText value="#{lbl.download}"/>
 				</h:outputLink>
 				

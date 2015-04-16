@@ -414,6 +414,15 @@ public class SPARQLQueries {
 		return "SELECT ?s WHERE { ?s a <http://imeji.org/terms/space>}";
 	}
 
+	/**
+	 * Select a {@link Space} by its label
+	 *
+	 * @return
+	 */
+	public static String getSpaceByLabel(String spaceId) {
+		//toDo ChangeME
+		return "SELECT ?o WHERE { ?s ?p ?o . ?s a <http://imeji.org/terms/space> }";
+	}
 
 
 	/**

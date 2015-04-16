@@ -71,7 +71,6 @@ public class ThumbnailBean {
 		Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
 		this.id = ObjectHelper.getId(uri);
 		link = navigation.getFileUrl() + item.getThumbnailImageUrl().toString();
-		System.out.println(link);
 		if (AuthUtil.canReadItemButNotCollection(sessionBean.getUser(), item)) {
 			this.profile = ObjectLoader.loadProfile(item.getMetadataSet()
 					.getProfile(), Imeji.adminUser);

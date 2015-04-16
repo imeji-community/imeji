@@ -10,23 +10,22 @@
 	<!-- MediaDisplayContainer - START -->
 	<h:panelGroup layout="block" styleClass="imj_mediaDisplayContainer">
 		<ui:fragment rendered="#{!itemBean.videoFile and !itemBean.audioFile and !itemBean.swcFile}">
-			<h:outputLink id="lnkPicFullResolution" value="#{itemBean.image.fullImageUrl}" target="_blank" rendered="#{!itemBean.viewInDigilib and !itemBean.viewInDataViewer}">
-				<h:graphicImage id="picWebResolution" title="#{itemBean.image.filename}" alt="#{itemBean.image.filename}" value="#{itemBean.image.webImageLink}" />
+			<h:outputLink id="lnkPicFullResolution" value="#{Navigation.fileUrl}#{itemBean.image.fullImageUrl}" target="_blank" rendered="#{!itemBean.viewInDigilib and !itemBean.viewInDataViewer}">
+				<h:graphicImage id="picWebResolution" title="#{itemBean.image.filename}" alt="#{itemBean.image.filename}" value="#{Navigation.fileUrl}#{itemBean.image.webImageUrl}" />
 			</h:outputLink>
-
 			<h:outputLink id="lnkPicInternalDigilib" value="#{Navigation.applicationSpaceUrl}digilibImage?fn=#{Property.internalStorageBase}/#{itemBean.image.storageId}/original/#{itemBean.itemStorageIdFilename}" target="_blank" rendered="#{itemBean.viewInDigilib}">
 				<h:graphicImage id="picWebResolutionInternalDigilib" title="#{itemBean.image.filename}" alt="#{itemBean.image.filename}" value="#{Navigation.fileUrl}#{itemBean.image.webImageUrl}" />
 			</h:outputLink>
 			<h:outputLink id="lnkPicInternalDataViewer" value="#{Navigation.applicationUrl}dataviewer?id=#{itemBean.image.idString}" target="_blank" rendered="#{itemBean.viewInDataViewer}">
-				<h:graphicImage title="#{itemBean.image.filename}" alt="#{itemBean.image.filename}" value="#{itemBean.image.webImageLink}" />
+				<h:graphicImage title="#{itemBean.image.filename}" alt="#{itemBean.image.filename}" value="#{Navigation.fileUrl}#{itemBean.image.webImageUrl}" />
 			</h:outputLink>
 		</ui:fragment>
 		<ui:fragment rendered="#{itemBean.videoFile}">
-			<video id="imejiVideoPlayer" src="#{itemBean.image.fullImageUrl}" controls="controls" 
+			<video id="imejiVideoPlayer" src="#{Navigation.fileUrl}#{itemBean.image.fullImageUrl}" controls="controls" 
 			poster="#{itemBean.image.webImageUrl}" preload="auto" height="264"></video>
 		</ui:fragment>
 		<ui:fragment rendered="#{itemBean.audioFile}">
-			<audio id="imejiAudioPlayer" src="#{itemBean.image.fullImageUrl}" controls="controls" preload="auto">
+			<audio id="imejiAudioPlayer" src="#{Navigation.fileUrl}#{itemBean.image.fullImageUrl}" controls="controls" preload="auto">
 				<h:outputText value="#{lbl.playing} #{itemBean.image.filename} " />
 			</audio>
 		</ui:fragment>

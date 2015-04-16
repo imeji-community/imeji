@@ -18,7 +18,6 @@
 			<script src="https://servicehub.mpdl.mpg.de/swc/js/threejs/three.js"></script>
 		    <script src="https://servicehub.mpdl.mpg.de/swc/js/threejs/TrackballControls.js"></script>
 		    <script src="https://servicehub.mpdl.mpg.de/swc/js/shark_viewer.js"></script>
-		
 		    <!-- optional only if show_stats = true -->
 		    <script src="https://servicehub.mpdl.mpg.de/swc/js/threejs/Stats.js"></script>
 		    <!-- optional only if effect='rift' -->
@@ -27,25 +26,42 @@
 	   		<script src="https://servicehub.mpdl.mpg.de/swc/js/threejs/ParallaxBarrierEffect.js"></script>
    		</ui:fragment>
    		<script type="text/javascript" id="#{cc.attrs.swcID}">#{cc.attrs.itemBean.getStringContent()}</script>
-		<input id="#{cc.attrs.swcID}source" type="hidden" data-swc-source="#{cc.attrs.itemBean.image.fullImageUrl}" data-target-id="#{cc.attrs.swcID}target" data-target-width="357" data-target-height="357" data-placeholder-id="#{cc.attrs.swcID}NoSupportPlaceholder" data-failed-msg-id="#{cc.attrs.swcID}NoSupportMsg"/>
-		<h2 id="#{cc.attrs.swcID}NoSupportMsg" style="display: none;" class="imj_headline">Your browser doesn't support WebGL</h2>
-		<h:outputLink id="#{cc.attrs.swcID}NoSupportPlaceholder" value="#{cc.attrs.itemBean.image.fullImageUrl}" target="_blank" rendered="#{cc.attrs.itemBean.viewInDataViewer}">
-			<h:graphicImage title="#{cc.attrs.itemBean.image.filename}" alt="#{cc.attrs.itemBean.image.filename}" value="#{cc.attrs.itemBean.image.webImageLink}" />
-		</h:outputLink>
-		<div id="#{cc.attrs.swcID}target"></div>
-		<!-- info on screen display -->
-		<script type="text/javascript">
-			$(document).ready(function() {
-				/* start function is defined because of checking fully loaded main.js */
-				function startSWCViewer() {
-					if (typeof loadSWC === 'function') {
-						loadSWC('##{cc.attrs.swcID}source', '#{cc.attrs.swcID}');
-					} else {
-						setTimeout(startSWCViewer, 250);
+   		<ui:remove>
+   			<!-- Doesn't work by me local: out commented until a clear understanding of the problem. Alternative below seems to work for now -->
+			<input id="#{cc.attrs.swcID}source" type="hidden" data-swc-source="#{Navigation.fileUrl}#{cc.attrs.itemBean.image.fullImageUrl}" data-target-id="#{cc.attrs.swcID}target" data-target-width="357" data-target-height="357" data-placeholder-id="#{cc.attrs.swcID}NoSupportPlaceholder" data-failed-msg-id="#{cc.attrs.swcID}NoSupportMsg"/>
+			<h2 id="#{cc.attrs.swcID}NoSupportMsg" style="display: none;" class="imj_headline">Your browser doesn't support WebGL</h2>
+			<h:outputLink id="#{cc.attrs.swcID}NoSupportPlaceholder" value="#{Navigation.fileUrl}#{cc.attrs.itemBean.image.fullImageUrl}" target="_blank" rendered="#{cc.attrs.itemBean.viewInDataViewer}">
+				<h:graphicImage title="#{cc.attrs.itemBean.image.filename}" alt="#{cc.attrs.itemBean.image.filename}" value="#{Navigation.fileUrl}#{cc.attrs.itemBean.image.webImageLink}" />
+			</h:outputLink>
+			<div id="#{cc.attrs.swcID}target"></div>
+			<!-- info on screen display -->
+			<script type="text/javascript">
+				$(document).ready(function() {
+					/* start function is defined because of checking fully loaded main.js */
+					function startSWCViewer() {
+						if (typeof loadSWC === 'function') {
+							loadSWC('##{cc.attrs.swcID}source', '#{cc.attrs.swcID}');
+						} else {
+							setTimeout(startSWCViewer, 250);
+						}
 					}
-				}
-				startSWCViewer();
-			});
-		</script>
+					startSWCViewer();
+				});
+			</script>
+		</ui:remove>
+		<div id="containerForSWC"></div>
+		<script type='text/javascript'>
+        window.onload = function(){
+        	var canvas = document.createElement('canvas');
+        	if ( window.WebGLRenderingContext &amp;&amp; (canvas.getContext("webgl") || canvas.getContext("experimental-webgl")) ) {
+	            var swc = swc_parser(document.getElementById('#{cc.attrs.swcID}').text);
+    	        var s = new SharkViewer({swc: swc, dom_element: 'containerForSWC', WIDTH: 357, HEIGHT: 357,  center_node: -1, show_stats:false, screenshot: false});
+        	    s.init();
+            	s.animate();
+        	} else {
+        		document.getElementById('#{cc.attrs.swcID}NoSupportMsg').style.display="block";
+        	}
+        }
+    </script>
 	</composite:implementation>
 </html>

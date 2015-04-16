@@ -1,26 +1,14 @@
 package de.mpg.imeji.logic.controller;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
-import util.JenaUtil;
 import de.mpg.imeji.exceptions.AlreadyExistsException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
 import de.mpg.imeji.logic.vo.User;
+import org.junit.Assert;
+import org.junit.Test;
+import util.JenaUtil;
 
-public class UserControllerTest {
-	@Before
-	public void setup() {
-		JenaUtil.initJena();
-	}
-
-	@After
-	public void tearDown() throws Exception {
-		JenaUtil.closeJena();
-	}
+public class UserControllerTest extends ControllerTest{
 
 	@Test
 	public void createAlreadyExistingUserTest() {

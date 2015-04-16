@@ -300,5 +300,17 @@ public class Item extends Properties implements FulltextIndex, Serializable {
 	public void setFileSize(long fileSize) {
 		this.fileSize = fileSize;
 	}
+	
+	public String getFullImageLink() {
+		return fullImageUrl.toString();
+	}
+	
+	public String getThumbnailImageLink() {
+		return thumbnailImageUrl.toString();
+	}
+
+	public String getWebImageLink() {
+		return thumbnailImageUrl.toString();
+	}
 
 }

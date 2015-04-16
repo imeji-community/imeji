@@ -29,7 +29,6 @@
 package de.mpg.imeji.logic.search.query;
 
 import com.hp.hpl.jena.sparql.pfunction.library.container;
-
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
@@ -39,7 +38,6 @@ import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.j2j.helper.J2JHelper;
-
 import org.apache.commons.lang3.text.translate.UnicodeEscaper;
 import org.opensaml.ws.wssecurity.Username;
 
@@ -406,6 +404,26 @@ public class SPARQLQueries {
 	public static String selectAlbumAll() {
 		return "SELECT ?s WHERE { ?s a <http://imeji.org/terms/album>}";
 	}
+
+	/**
+	 * Select all {@link Space} available imeji
+	 *
+	 * @return
+	 */
+	public static String selectSpaceAll() {
+		return "SELECT ?s WHERE { ?s a <http://imeji.org/terms/space>}";
+	}
+
+	/**
+	 * Select a {@link Space} by its label
+	 *
+	 * @return
+	 */
+	public static String getSpaceByLabel(String spaceId) {
+		//toDo ChangeME
+		return "SELECT ?o WHERE { ?s ?p ?o . ?s a <http://imeji.org/terms/space> }";
+	}
+
 
 	/**
 	 * Select all {@link Item} available imeji

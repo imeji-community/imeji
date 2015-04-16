@@ -61,7 +61,7 @@
 					</h:panelGroup>
 					
 					<h:panelGroup layout="block" styleClass="imj_adminPanel imj_config">
-						<ui:fragment rendered="#{Auth.admin} and #{SessionBean.spaceId==''}">
+						<ui:fragment rendered="#{Auth.admin}">
 							<div class="imj_headline">
 								<h2><h:outputText value="#{lbl.configuration}"/></h2>
 							</div>
@@ -86,11 +86,6 @@
 								<li>
 									<a href="#{Navigation.applicationUrl}createspace" title="#{lbl.admin_space_create}">
 										<h:outputText value="#{lbl.admin_space_create}"/>
-									</a>
-								</li>
-								<li>
-									<a href="#{Navigation.applicationUrl}space/#{SessionBean.spaceId}" title="#{lbl.admin_space_welcome}">
-										<h:outputText value="#{lbl.admin_space_welcome}"/>
 									</a>
 								</li>
 							</ul>

@@ -76,7 +76,7 @@ public class ConfigurationBean {
 	 * @version $Revision$ $LastChangedDate$
 	 */
 	private enum CONFIGURATION {
-		SNIPPET, CSS_DEFAULT, CSS_ALT, MAX_FILE_SIZE, FILE_TYPES, STARTPAGE_HTML, DATA_VIEWER_FORMATS, DATA_VIEWER_URL, AUTOSUGGEST_USERS, AUTOSUGGEST_ORGAS, STARTPAGE_FOOTER_LOGOS;
+		SNIPPET, CSS_DEFAULT, CSS_ALT, MAX_FILE_SIZE, FILE_TYPES, STARTPAGE_HTML, DATA_VIEWER_FORMATS, DATA_VIEWER_URL, AUTOSUGGEST_USERS, AUTOSUGGEST_ORGAS, STARTPAGE_FOOTER_LOGOS, META_DESCRIPTION;
 	}
 
 	private Properties config;
@@ -280,8 +280,8 @@ public class ConfigurationBean {
 	 * @return
 	 */
 	public String getStartPageFooterLogos() {
-		String html = (String) config
-				.get(CONFIGURATION.STARTPAGE_FOOTER_LOGOS.name());
+		String html = (String) config.get(CONFIGURATION.STARTPAGE_FOOTER_LOGOS
+				.name());
 		return html != null ? html : "";
 	}
 
@@ -475,5 +475,23 @@ public class ConfigurationBean {
 	public void setAutoSuggestForUsers(String s) {
 		config.setProperty(CONFIGURATION.AUTOSUGGEST_USERS.name(), s);
 
+	}
+	
+	/**
+	 * Set the meta description
+	 * 
+	 * @param url
+	 */
+	public void setMetaDescription(String s) {
+		setProperty(CONFIGURATION.META_DESCRIPTION.name(), s);
+	}
+
+	/**
+	 * Return the meta description
+	 * 
+	 * @return
+	 */
+	public String getMetaDescription() {
+		return (String) config.get(CONFIGURATION.META_DESCRIPTION.name());
 	}
 }

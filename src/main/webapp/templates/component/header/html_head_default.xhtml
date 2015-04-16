@@ -41,7 +41,7 @@ All rights reserved. Use is subject to license terms.
 	<title><h:outputText value="#{PropertyBean.appName} - #{HistorySession.currentPage.internationalizedName}"/></title>
 	
 	<ui:fragment rendered="#{PropertyBean.appMetaDescription != ''}">
-		<meta name="description" content="#{PropertyBean.appMetaDescription}"/>
+		<meta name="description" content="#{Configuration.metaDescription}"/>
 	</ui:fragment>
 		
 	<h:inputHidden value="#{SessionBean.checkCss(Configuration.defaultCss, Configuration.alternativeCss)}" />

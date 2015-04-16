@@ -177,24 +177,4 @@ public class PropertyBean
         return applicationURL;
     }
 
-//    public static String getCss_default()
-//    {
-//        return css_default;
-//    }
-//
-//    public static void setCss_default(String css_default)
-//    {
-//        PropertyBean.css_default = css_default;
-//    }
-//
-//    public static String getCss_alternate()
-//    {
-//        return css_alternate;
-//    }
-//
-//    public static void setCss_dark(String css_alternate)
-//    {
-//        PropertyBean.css_alternate = css_alternate;
-//    }
-
 }

@@ -21,6 +21,7 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
+import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.metadata.MetadataSetBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.session.SessionObjectsController;
@@ -67,8 +68,10 @@ public class ThumbnailBean {
 		this.sessionBean = (SessionBean) BeanHelper
 				.getSessionBean(SessionBean.class);
 		this.uri = item.getId();
+		Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
 		this.id = ObjectHelper.getId(uri);
-		link = item.getThumbnailImageUrl().toString();
+		link = navigation.getFileUrl() + item.getThumbnailImageUrl().toString();
+		System.out.println(link);
 		if (AuthUtil.canReadItemButNotCollection(sessionBean.getUser(), item)) {
 			this.profile = ObjectLoader.loadProfile(item.getMetadataSet()
 					.getProfile(), Imeji.adminUser);

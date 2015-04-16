@@ -14,7 +14,7 @@
 				<h:graphicImage id="picWebResolution" title="#{itemBean.image.filename}" alt="#{itemBean.image.filename}" value="#{''.concat(itemBean.image.webImageUrl)}" />
 			</h:outputLink>
 			<h:outputLink id="lnkPicInternalDigilib" value="#{Navigation.applicationSpaceUrl}digilibImage?fn=#{Property.internalStorageBase}/#{itemBean.image.storageId}/original/#{itemBean.itemStorageIdFilename}" target="_blank" rendered="#{itemBean.viewInDigilib}">
-				<h:graphicImage id="picWebResolutionInternalDigilib" title="#{itemBean.image.filename}" alt="#{itemBean.image.filename}" value="#{''.concat(itemBean.image.webImageUrl)}" />
+				<h:graphicImage id="picWebResolutionInternalDigilib" title="#{itemBean.image.filename}" alt="#{itemBean.image.filename}" value="#{Navigation.fileUrl}#{itemBean.image.webImageUrl}" />
 			</h:outputLink>
 			<h:outputLink id="lnkPicInternalDataViewer" value="#{Navigation.applicationSpaceUrl}dataviewer?id=#{itemBean.image.idString}" target="_blank" rendered="#{itemBean.viewInDataViewer}">
 				<h:graphicImage title="#{itemBean.image.filename}" alt="#{itemBean.image.filename}" value="#{''.concat(itemBean.image.webImageUrl)}" />

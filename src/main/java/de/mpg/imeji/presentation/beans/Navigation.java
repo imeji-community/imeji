@@ -197,6 +197,10 @@ public class Navigation implements Serializable
     {
         return applicationUrl + "autocompleter";
     }
+    
+    public String getFileUrl(){
+    	 return applicationUrl + "file/?id=";
+    }
 
     /*
      * Paths

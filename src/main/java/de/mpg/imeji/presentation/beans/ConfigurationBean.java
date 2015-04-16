@@ -76,7 +76,7 @@ public class ConfigurationBean {
 	 * @version $Revision$ $LastChangedDate$
 	 */
 	private enum CONFIGURATION {
-		SNIPPET, CSS_DEFAULT, CSS_ALT, MAX_FILE_SIZE, FILE_TYPES, STARTPAGE_HTML, DATA_VIEWER_FORMATS, DATA_VIEWER_URL, AUTOSUGGEST_USERS, AUTOSUGGEST_ORGAS, STARTPAGE_FOOTER_LOGOS, META_DESCRIPTION;
+		SNIPPET, CSS_DEFAULT, CSS_ALT, MAX_FILE_SIZE, FILE_TYPES, STARTPAGE_HTML, DATA_VIEWER_FORMATS, DATA_VIEWER_URL, AUTOSUGGEST_USERS, AUTOSUGGEST_ORGAS, STARTPAGE_FOOTER_LOGOS, META_DESCRIPTION, INSTANCE_NAME;
 	}
 
 	private Properties config;
@@ -493,5 +493,23 @@ public class ConfigurationBean {
 	 */
 	public String getMetaDescription() {
 		return (String) config.get(CONFIGURATION.META_DESCRIPTION.name());
+	}
+	
+	/**
+	 * Set the name of the instance
+	 * 
+	 * @param url
+	 */
+	public void setInstanceName(String s) {
+		setProperty(CONFIGURATION.INSTANCE_NAME.name(), s);
+	}
+
+	/**
+	 * Return the name of the instance
+	 * 
+	 * @return
+	 */
+	public String getInstanceName() {
+		return (String) config.get(CONFIGURATION.INSTANCE_NAME.name());
 	}
 }

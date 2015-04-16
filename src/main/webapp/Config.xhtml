@@ -63,8 +63,32 @@
 				
 					<h:panelGroup layout="block" styleClass="imj_listBody" rendered="#{Auth.admin}">
 						<h:form id="configForm">
+							
+							
 							<div class="imj_adminPanel">
 							
+								<div class="imj_headline">
+									<h2>
+										<h:outputText value="#{lbl.instance_name}"/>
+										<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
+									</h2>
+								</div>
+													
+									<div class="imj_content">
+										<!-- Admin - Snippet Insert -->	
+										<div class="imj_admindataSet">
+											<div class="imj_admindataLabel">
+												<h:outputText value="#{lbl.name}"/>
+												<span class="imj_noDisplay">: </span>
+											</div>
+											<div class="imj_admindataValue">
+												<h:inputText value="#{Configuration.instanceName}" styleClass="imj_admindataEdit"/>
+											</div>
+											<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+										</div>
+									</div>
+								</div>
+							<div class="imj_adminPanel">
 								<div class="imj_headline">
 									<h2>
 										<h:outputText value="#{lbl.snippet}"/>

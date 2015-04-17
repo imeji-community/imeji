@@ -4,6 +4,7 @@
 package de.mpg.imeji.presentation.upload;
 
 import com.ocpsoft.pretty.PrettyContext;
+
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.Search;
@@ -292,7 +293,8 @@ public class UploadBean implements Serializable {
 			}
 		}
 	}
-
+	
+	
 	/**
 	 * Upload one File and create the {@link de.mpg.imeji.logic.vo.Item}
 	 * 
@@ -317,6 +319,7 @@ public class UploadBean implements Serializable {
 			}
 			
 			validateName(file, title);
+			
 			Item item = null;
 			ItemController controller = new ItemController();
 			if (isImportImageToFile()) {
@@ -333,7 +336,7 @@ public class UploadBean implements Serializable {
 			return item;
 		} catch (Exception e) {
 			getfFiles().add(
-					" File " + title + " not uploaded: " + e.getMessage());
+					" File " + title + " not uploaded: " + e.getLocalizedMessage());
 			logger.error("Error uploading item: ", e);
 			return null;
 		}
@@ -379,6 +382,7 @@ public class UploadBean implements Serializable {
 						FilenameUtils.getBaseName(filename)))
 				.getNumberOfRecords() > 0;
 	}
+
 
 	/**
 	 * Load the collection

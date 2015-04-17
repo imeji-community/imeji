@@ -28,7 +28,6 @@ import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotAllowedError;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.ImejiTriple;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
@@ -59,9 +58,7 @@ import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.imeji.rest.process.CommonUtils;
-import de.mpg.j2j.annotations.j2jModel;
 import de.mpg.j2j.annotations.j2jResource;
-import de.mpg.j2j.helper.DateHelper;
 import de.mpg.j2j.helper.J2JHelper;
 
 /**
@@ -127,6 +124,9 @@ public class ItemController extends ImejiController {
 			throw new NotAllowedError(
 					"User not Allowed to upload files in collection "
 							+ c.getIdString());
+		
+		
+		validateChecksum(c.getId(), f);
 		StorageController sc = new StorageController();
 		String mimeType = StorageUtils.getMimeType(f);
 		UploadResult uploadResult = sc.upload(filename, f, c.getIdString());
@@ -189,6 +189,9 @@ public class ItemController extends ImejiController {
 				// UnprocessableError("There has been a problem with the file upload. ");
 				throw new UnprocessableError(e.getLocalizedMessage());
 			}
+			
+			validateChecksum(item.getCollection(), tmp);
+
 			item = createWithFile(item, tmp, filename, c, user);
 		} else {
 			// Reference the file
@@ -244,6 +247,9 @@ public class ItemController extends ImejiController {
 			throw new BadRequestException(
 					"Filename or reference must not be empty!");
 		}
+		
+		validateChecksum(item.getCollection(), uploadedFile);
+
 		Item newItem = new Item(item);
 		CollectionController cc = new CollectionController();
 		CollectionImeji collection;
@@ -404,6 +410,8 @@ public class ItemController extends ImejiController {
 	 */
 	public Item updateFile(Item item, File f, User user) throws ImejiException {
 
+		validateChecksum(item.getCollection(), f);
+		
 		// First remove the old File from the Internal Storage if its there
 		if (!isNullOrEmpty(item.getStorageId())) {
 			removeFileFromStorage(item.getStorageId());
@@ -452,6 +460,9 @@ public class ItemController extends ImejiController {
 				File tmp = File.createTempFile("imeji",
 						"." + FilenameUtils.getExtension(origName));
 				sc.read(externalFileUrl, new FileOutputStream(tmp), true);
+				
+				validateChecksum(item.getCollection(), tmp);
+
 				item = updateFile(item, tmp, u);
 			} catch (Exception e) {
 				throw new UnprocessableError(
@@ -779,4 +790,50 @@ public class ItemController extends ImejiController {
 		}
 		return null;
 	}
+	
+	/**
+	 * Throws an {@link Exception} if the file cannot be uploaded. The
+	 * validation will only occur when the file has been stored locally)
+	 * @throws ImejiException 
+	 * @throws UnprocessableError 
+	 */
+	private void validateChecksum(URI collectionURI, File file) throws UnprocessableError, ImejiException {
+		  if (isValidateChecksum()) {
+			if (checksumExistsInCollection(collectionURI, StorageUtils.calculateChecksum(file))) {
+				throw new UnprocessableError("Same file already exists in the collection (same checksum). Please choose another file.");
+			}
+		  }
+	}
+	
+	/**
+	 * True if the checksum already exists within another {@link Item} in this
+	 * {@link CollectionImeji}
+	 * 
+	 * @param filename
+	 * @return
+	 */
+	private boolean checksumExistsInCollection(URI collectionId, String checksum) {
+		Search s = SearchFactory.create(SearchType.ITEM);
+		System.out.println(SPARQLQueries.selectItemByChecksum(collectionId, checksum));
+		return s.searchSimpleForQuery(
+				SPARQLQueries.selectItemByChecksum(collectionId, checksum))
+				.getNumberOfRecords() > 0;
+	}
+
+
+	private boolean isValidateChecksum(){
+        String validateChecksum;
+		try {
+			validateChecksum = PropertyReader.getProperty("imeji.validate.checksum.in.collection");
+		} catch (Exception e) {
+			return true;
+		}
+        
+        if (isNullOrEmpty(validateChecksum))
+        	return true;
+        
+        return Boolean.valueOf(validateChecksum);
+
+	}
+
 }

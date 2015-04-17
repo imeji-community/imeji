@@ -605,6 +605,19 @@ public class SPARQLQueries {
 	}
 
 	/**
+	 * Search for any file with the same checksum (in any collection)
+	 * 
+	 * @return
+	 */
+	public static String selectItemByChecksum(URI containerURI, String checksum) {
+			return "SELECT DISTINCT ?s WHERE {?s <http://imeji.org/terms/checksum> \""+checksum + "\"^^<http://www.w3.org/2001/XMLSchema#string>. "
+					+"?s <http://imeji.org/terms/collection> <"	+ containerURI.toString()+ "> . "
+					+"?s <"+ ImejiNamespaces.STATUS	+ "> ?status . "+
+					" FILTER (?status!=<" + Status.WITHDRAWN.getUriString() + ">)} LIMIT 1";
+			
+	}
+	
+	/**
 	 * Search for all Institute of all {@link User} . An institute is defined by
 	 * the emai of the {@link User}, for instance user@mpdl.mpg.de has institute
 	 * mpdl.mpg.de

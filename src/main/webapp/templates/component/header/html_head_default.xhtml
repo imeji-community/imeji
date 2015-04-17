@@ -40,7 +40,7 @@ All rights reserved. Use is subject to license terms.
 	<meta http-equiv="expires" content="0"/>
 	<title><h:outputText value="#{Configuration.instanceName} - #{HistorySession.currentPage.internationalizedName}"/></title>
 	
-	<ui:fragment rendered="#{PropertyBean.appMetaDescription != ''}">
+	<ui:fragment rendered="#{Configuration.metaDescription != ''}">
 		<meta name="description" content="#{Configuration.metaDescription}"/>
 	</ui:fragment>
 		

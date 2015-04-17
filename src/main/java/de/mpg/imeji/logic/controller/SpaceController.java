@@ -4,12 +4,9 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.reader.ReaderFacade;
-import de.mpg.imeji.logic.search.Search;
-import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.StringHelper;
@@ -43,6 +40,7 @@ public class SpaceController extends ImejiController {
 
     private static final ReaderFacade reader = new ReaderFacade(Imeji.spaceModel);
     private static final WriterFacade writer = new WriterFacade(Imeji.spaceModel);
+    public static final String SPACES_STORAGE_SUBDIRECTORY = "/spaces";
 
     /**
      * The directory path where files are stored
@@ -59,12 +57,13 @@ public class SpaceController extends ImejiController {
         try {
 
         	File storageDir = new File(
-                    PropertyReader.getProperty("imeji.spaces.storage.path"));
+                    PropertyReader.getProperty("imeji.storage.path") + SPACES_STORAGE_SUBDIRECTORY);
             storagePath = StringHelper.normalizePath(storageDir
                     .getAbsolutePath());
             storageUrl = StringHelper.normalizeURI(PropertyReader
                     .getProperty("imeji.instance.url"))
-                    + "spaces/file"
+                    + "file"
+                    + SPACES_STORAGE_SUBDIRECTORY
                     + StringHelper.urlSeparator;
         } catch (Exception e) {
             throw new RuntimeException(

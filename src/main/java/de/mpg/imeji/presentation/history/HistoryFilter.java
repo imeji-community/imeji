@@ -20,8 +20,10 @@ import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRegistration;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -43,8 +45,10 @@ import com.ocpsoft.pretty.faces.config.mapping.UrlMapping;
 import com.ocpsoft.pretty.faces.url.URL;
 
 import de.mpg.imeji.exceptions.AuthenticationError;
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotAllowedError;
 import de.mpg.imeji.exceptions.NotFoundException;
+import de.mpg.imeji.logic.controller.SpaceController;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
 
@@ -69,6 +73,7 @@ public class HistoryFilter implements Filter {
 			FilterChain chain) throws IOException, ServletException {
 		try {
 			
+			
 			// Limit the case to filter: dispachertype only forward, and only
 			// HTTP GET method
 			if (DispatcherType.FORWARD.compareTo(serv.getDispatcherType()) == 0) {
@@ -78,11 +83,21 @@ public class HistoryFilter implements Filter {
 					dofilterImpl(request, resp);
 				}
 			}
+			
 		} catch (Exception e) {
 			if (e instanceof NotFoundException || e instanceof NotFoundException
-					|| e instanceof NullPointerException) {
-				((HttpServletResponse) resp).sendError(
-						Status.NOT_FOUND.getStatusCode(), "RESOURCE_NOT_FOUND");
+					|| e instanceof NullPointerException) 
+			{
+				if ("SPACE_NOT_FOUND".equals(e.getMessage())) {
+					
+					((HttpServletResponse) resp).sendRedirect( ((Navigation)getNavigation((HttpServletRequest)serv, resp)).getApplicationUrl() );
+				}
+				else
+				{
+					((HttpServletResponse) resp).sendError(
+							Status.NOT_FOUND.getStatusCode(), "RESOURCE_NOT_FOUND");
+				}
+				
 			} else if (e instanceof AuthenticationError) {
 				redirectToLoginPage(serv, resp);
 			} else if (e instanceof NotAllowedError
@@ -142,9 +157,9 @@ public class HistoryFilter implements Filter {
 		HistorySession hs = getHistorySession(request, resp);
 		Navigation nav = getNavigation(request, resp);
 		SessionBean session = getSessionBean(request, resp);
-			
 		if (session != null) {
 			checkSpaceMatching(request, session, hs); 
+			//System.out.println("In dofilterImpl= "+session.getSpaceId());
 			String h = request.getParameter("h");
 			String url = nav.getApplicationUri()
 					+ PrettyContext.getCurrentInstance(request).getRequestURL()
@@ -266,11 +281,10 @@ public class HistoryFilter implements Filter {
 		}
 	}
 	
-	private void checkSpaceMatching (HttpServletRequest request, SessionBean session, HistorySession hs) throws NotFoundException{
+	private void checkSpaceMatching (HttpServletRequest request, SessionBean session, HistorySession hs) throws NotFoundException, ImejiException   {
 		//TODO CHANGE ME
 		String spaceHome = "space_home";
 		
-		List<String> potentialSpaces= Arrays.asList("345", "567");
 		String matchingUrl= PrettyContext.getCurrentInstance(request).getRequestURL().toURL();
 
 		PrettyConfig pc = PrettyContext.getCurrentInstance(FacesContext.getCurrentInstance()).getConfig();
@@ -279,21 +293,21 @@ public class HistoryFilter implements Filter {
 			//System.out.println("URL IS MAPPED "+matchingUrl);
 			UrlMapping myMap = 
 				pc.getMappingForUrl(PrettyContext.getCurrentInstance(request).getRequestURL());
-				//System.out.println(myMap.getPattern()+" id= "+myMap.getId());
+				//System.out.println("URL IS MAPPED with pattern "+myMap.getPattern()+" and id "+myMap.getId());
 
 			if (myMap.getId().startsWith("space_")){
 				String mySpaceId = PrettyContext.getCurrentInstance(request).getRequestURL().toURL();
-				mySpaceId = !spaceHome.equals(myMap.getId())? StringUtils.substringBetween(matchingUrl, "/"):
-					StringUtils.substringAfter(matchingUrl, "/");
-				//System.out.println("SpaceId = "+mySpaceId);
-				if (!potentialSpaces.contains(mySpaceId)) { 
-					session.setSpaceId("");
-					throw new NotFoundException("RESOURCE_NOT_FOUND");
-				}
-				//Clean old history pages when switching to a new space
+				//System.out.println("PreCalculated mySpaceId= "+mySpaceId+" 2");
+				//System.out.println(StringUtils.substringAfter(matchingUrl, "/space/"));
+				mySpaceId = spaceHome.equals(myMap.getId())?StringUtils.substringAfter(matchingUrl, "/space/"): 
+							StringUtils.substringBefore(StringUtils.substringAfter(matchingUrl, "/space/"), "/");
+				//System.out.println("Calculated mySpaceId= "+mySpaceId+ " sessopmSüace= "+session.getSpaceId());
 				if (!mySpaceId.equals(session.getSpaceId())) {
-					hs.getPages().clear();
-					session.setSpaceId(mySpaceId);
+					SpaceController sc = new SpaceController();
+						if (!sc.isSpaceByLabel(mySpaceId) ) {
+							session.setSpaceId("");
+							throw new NotFoundException("SPACE_NOT_FOUND");
+						}
 				}
 			}
 			else
@@ -305,6 +319,5 @@ public class HistoryFilter implements Filter {
 				}
 			}
 		}
-		//System.out.println("SpaceId set to "+session.getSpaceId());
 	}
 }

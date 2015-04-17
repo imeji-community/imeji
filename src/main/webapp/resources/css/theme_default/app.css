@@ -350,8 +350,8 @@ select.imj_metadataEditText { min-height: 0; }
 .imj_simpleSearch input[type=radio] + label { margin-left: 0.181818em; margin-right: 1em; }
 .imj_simpleSearch .imj_simpleSearchLinkAdvancedsearch { margin-top: 0.181818em; margin-left: 1.090909em; white-space: nowrap; display: inline-block; }
 
-.imj_isAdmin .imj_simpleSearch { margin-top: -6em; }
-.imj_isAdmin .imj_simpleSearch .imj_simpleSearchInput { width: 15em; }
+.imj_isAdmin .imj_simpleSearch { margin-right: -2em; }
+.imj_isAdmin .imj_simpleSearch .imj_simpleSearchInput { width: 12em; }
 
 .imj_subHeaderMessageSpace { clear: both; float: left; display: inline; overflow: hidden; margin: 0.65em 0.0909em 0 0; width: 81.3636em; }
 

@@ -200,12 +200,11 @@ function include_javascripts() {
 // window.onunload=function(e){setStyleCookie();};
 
 
-
 addEvent(window, 'load', function(){window.setTimeout('install_javascripts()', 1);});
 
 
 function updateCustomSelectbox(selectbox) {
-	var customSelectbox, select, val, textContainer, icon;
+	var customSelectbox, select, val, textContainer, icon, textWidth;
 	select = selectbox;
 	customSelectbox = select.parents(".imj_customSelectbox");
 	customSelectbox.width(select.width());
@@ -222,7 +221,8 @@ function updateCustomSelectbox(selectbox) {
 		}
 	});
 	text.text(val);
-	text.width( ( select.width() - icon.width() - Math.round(Number(icon.css("margin-left").replace("px", ""))) ) );
+	textWidth = select.width() - icon.width() - Math.round(Number(icon.css("margin-left").replace("px", ""))) + 2;
+	text.width( textWidth );
 }
 
 /* this function updates the selectText container with the selected item of selectbox */

@@ -58,15 +58,11 @@ public class PropertyBean
      * The base of the path to the internal storage
      */
     private String internalStorageBase = "files";
-    private String appName;
-    private String appMetaDescription;
     /**
      * The base of the uri of imeji objects
      */
     private static String baseURI;
     private static String applicationURL;
-    private static String css_default;
-    private static String css_alternate;
 
     /**
      * Default constructor
@@ -79,11 +75,7 @@ public class PropertyBean
             this.internalStorageBase = FilenameUtils.getBaseName(FilenameUtils.normalizeNoEndSeparator(PropertyReader
                     .getProperty("imeji.storage.path")));
             applicationURL = StringHelper.normalizeURI(PropertyReader.getProperty("imeji.instance.url"));
-            css_default = PropertyReader.getProperty("imeji.layout.css_default");
-            css_alternate = PropertyReader.getProperty("imeji.layout.css_alternate");
             readBaseUri();
-            this.appName = this.getProperty("imeji.instance.name");
-            this.appMetaDescription = this.getProperty("imeji.instance.meta.description");
         }
         catch (Exception e)
         {
@@ -104,26 +96,6 @@ public class PropertyBean
         {
             throw new RuntimeException("Error reading properties: ", e);
         }
-    }
-
-    public String getAppName()
-    {
-        return appName;
-    }
-
-    public void setAppName(String appName)
-    {
-        this.appName = appName;
-    }
-    
-    public String getAppMetaDescription()
-    {
-        return appMetaDescription;
-    }
-
-    public void setAppMetaDescription(String description)
-    {
-        this.appMetaDescription = description;
     }
 
     /**
@@ -204,25 +176,5 @@ public class PropertyBean
     {
         return applicationURL;
     }
-
-//    public static String getCss_default()
-//    {
-//        return css_default;
-//    }
-//
-//    public static void setCss_default(String css_default)
-//    {
-//        PropertyBean.css_default = css_default;
-//    }
-//
-//    public static String getCss_alternate()
-//    {
-//        return css_alternate;
-//    }
-//
-//    public static void setCss_dark(String css_alternate)
-//    {
-//        PropertyBean.css_alternate = css_alternate;
-//    }
 
 }

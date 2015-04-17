@@ -54,10 +54,8 @@ public class SpaceControllerTest extends ImejiTestBase{
         String changed = "_CHANGED";
         space.setTitle(space.getTitle() + changed);
 
-        initCollection();
-        space.addSpaceCollection(collectionId);
-        initCollection();
-        space.addSpaceCollection(collectionId);
+        space.addSpaceCollection(initCollection());
+        space.addSpaceCollection(initCollection());
 
         space = sc.update(space, adminUser);
         assertThat(space.getTitle(), endsWith(changed));
@@ -92,7 +90,7 @@ public class SpaceControllerTest extends ImejiTestBase{
 
     @Test
     public void test_6_Delete() throws Exception {
-        for ( Space s : sc.retrieveAll()) {
+        for (Space s : sc.retrieveAll()) {
             sc.delete(s, adminUser);
         }
         assertThat(sc.retrieveAll(), empty());

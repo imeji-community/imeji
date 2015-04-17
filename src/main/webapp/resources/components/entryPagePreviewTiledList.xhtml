@@ -25,7 +25,7 @@
 								<li class="imj_tileItem">
 								<!-- <h:outputLink value="#{cc.attrs.mediaLogicBean.id}/#{cc.attrs.browsePath}?q=" title="#{gotoLabel}" rendered="#{cc.attrs.mediaLogicBean.items.size() > 0}"> -->
 								<!-- Note NB 15.04: concat used in the EL in order to get string value, otherwise, errors are reported with error: URI can not be casted to String -->
-									<h:graphicImage styleClass="imj_entryPagePreviewPicture" value="#{''.concat(thumb.thumbnailImageUrl)}"/>
+									<h:graphicImage styleClass="imj_entryPagePreviewPicture" value="#{Navigation.fileUrl}#{thumb.thumbnailImageUrl}"/>
 								<!-- </h:outputLink> -->
 								</li>
 							</ui:repeat>

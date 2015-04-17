@@ -89,7 +89,7 @@ public class ImejiTestBase extends JerseyTest {
 	 * 
 	 * @throws Exception
 	 */
-	public static void initCollection()  {
+	public static String initCollection()  {
 		CollectionService s = new CollectionService();
 		try {
             collectionTO= (CollectionTO) RestProcessUtils.buildTOFromJSON(
@@ -99,6 +99,7 @@ public class ImejiTestBase extends JerseyTest {
 		} catch (Exception e) {
 			logger.error("Cannot init Collection", e);
 		}
+		return collectionId;
 	}
 
 	/**

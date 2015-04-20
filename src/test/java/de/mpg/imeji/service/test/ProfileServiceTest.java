@@ -15,15 +15,19 @@ import de.mpg.imeji.rest.api.ProfileService;
 import de.mpg.imeji.rest.to.MetadataProfileTO;
 import de.mpg.imeji.rest.to.StatementTO;
 import de.mpg.j2j.misc.LocalizedString;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import util.JenaUtil;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -182,11 +186,13 @@ public class ProfileServiceTest {
 	}
 
     @Test
-	public void testDefaultProfile() throws ImejiException, IOException {
+	public void testDefaultProfile() throws ImejiException, IOException, URISyntaxException {
 
         ProfileController pc = new ProfileController();
-
-        MetadataProfileTO pFromJSON = (MetadataProfileTO) buildTOFromJSON(getStringFromPath(DEFAULT_PROFILE_JSON_PATH), MetadataProfileTO.class);
+        String path = new File(this.getClass().getClassLoader()
+				.getResource(ProfileController.DEFAULT_METADATA_PROFILE_PATH_PROPERTY)
+				.toURI()).getAbsolutePath();
+        MetadataProfileTO pFromJSON = (MetadataProfileTO) buildTOFromJSON(getStringFromPath(path), MetadataProfileTO.class);
 
         MetadataProfile pFromController = pc.retrieveDefaultProfile();
 

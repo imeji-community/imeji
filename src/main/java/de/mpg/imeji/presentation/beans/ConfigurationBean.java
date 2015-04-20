@@ -76,7 +76,7 @@ public class ConfigurationBean {
 	 * @version $Revision$ $LastChangedDate$
 	 */
 	private enum CONFIGURATION {
-		SNIPPET, CSS_DEFAULT, CSS_ALT, MAX_FILE_SIZE, FILE_TYPES, STARTPAGE_HTML, DATA_VIEWER_FORMATS, DATA_VIEWER_URL, AUTOSUGGEST_USERS, AUTOSUGGEST_ORGAS, STARTPAGE_FOOTER_LOGOS, META_DESCRIPTION, INSTANCE_NAME, CONTACT_EMAIL, EMAIL_SERVER, EMAIL_SERVER_USER, EMAIL_SERVER_PASSWORD, EMAIL_SERVER_ENABLE_AUTHENTICATION, EMAIL_SERVER_SENDER, EMAIL_SERVER_PORT, STARTPAGE_CAROUSEL_QUERY, UPLOAD_WHITE_LIST, UPLOAD_BLACK_LIST;
+		SNIPPET, CSS_DEFAULT, CSS_ALT, MAX_FILE_SIZE, FILE_TYPES, STARTPAGE_HTML, DATA_VIEWER_FORMATS, DATA_VIEWER_URL, AUTOSUGGEST_USERS, AUTOSUGGEST_ORGAS, STARTPAGE_FOOTER_LOGOS, META_DESCRIPTION, INSTANCE_NAME, CONTACT_EMAIL, EMAIL_SERVER, EMAIL_SERVER_USER, EMAIL_SERVER_PASSWORD, EMAIL_SERVER_ENABLE_AUTHENTICATION, EMAIL_SERVER_SENDER, EMAIL_SERVER_PORT, STARTPAGE_CAROUSEL_QUERY, STARTPAGE_CAROUSEL_QUERY_ORDER, UPLOAD_WHITE_LIST, UPLOAD_BLACK_LIST;
 	}
 
 	private Properties config;
@@ -162,7 +162,7 @@ public class ConfigurationBean {
 				setProperty(CONFIGURATION.DATA_VIEWER_URL.name(), dataViewerUrl);
 			config.storeToXML(new FileOutputStream(configFile),
 					"imeji configuration File");
-			//BeanHelper.removeBeanFromMap(this.getClass());
+			// BeanHelper.removeBeanFromMap(this.getClass());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -611,6 +611,15 @@ public class ConfigurationBean {
 				.name());
 	}
 
+	public void setStartPageCarouselQueryOrder(String s) {
+		setProperty(CONFIGURATION.STARTPAGE_CAROUSEL_QUERY_ORDER.name(), s);
+	}
+
+	public String getStartPageCarouselQueryOrder() {
+		return (String) config.get(CONFIGURATION.STARTPAGE_CAROUSEL_QUERY_ORDER
+				.name());
+	}
+
 	public void setUploadBlackList(String s) {
 		setProperty(CONFIGURATION.UPLOAD_BLACK_LIST.name(), s);
 	}
@@ -624,6 +633,8 @@ public class ConfigurationBean {
 	}
 
 	public String getUploadWhiteList() {
-		return (String) config.get(CONFIGURATION.UPLOAD_WHITE_LIST.name());
+		if (config.get(CONFIGURATION.UPLOAD_WHITE_LIST.name()) != null)
+			return (String) config.get(CONFIGURATION.UPLOAD_WHITE_LIST.name());
+		return "";
 	}
 }

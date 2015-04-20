@@ -30,7 +30,7 @@ import java.util.Random;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-@ManagedBean(name="StartPageBean")
+@ManagedBean(name = "StartPageBean")
 @ViewScoped
 public class StartPageBean {
 	private List<ThumbnailBean> carousselImages = new ArrayList<ThumbnailBean>();
@@ -63,7 +63,9 @@ public class StartPageBean {
 	 */
 	private SearchQuery readSearchQueryInProperty() throws IOException,
 			URISyntaxException {
-		String prop = ((ConfigurationBean)BeanHelper.getApplicationBean(ConfigurationBean.class)).getStartPageCarouselQuery();
+		String prop = ((ConfigurationBean) BeanHelper
+				.getApplicationBean(ConfigurationBean.class))
+				.getStartPageCarouselQuery();
 		if (prop != null) {
 			return URLQueryTransformer.parseStringQuery(prop);
 		}
@@ -80,8 +82,9 @@ public class StartPageBean {
 	private SortCriterion readSortCriterionInProperty() throws IOException,
 			URISyntaxException {
 		try {
-			String[] prop = PropertyReader.getProperty(
-					"imeji.home.caroussel.sort").split("-");
+			String[] prop = ((ConfigurationBean) BeanHelper
+					.getApplicationBean(ConfigurationBean.class))
+					.getStartPageCarouselQueryOrder().split("-");
 			if ("".equals(prop[0]) && "".equals(prop[1]))
 				return new SortCriterion(SPARQLSearch.getIndex(prop[0]),
 						SortOrder.valueOf(prop[1].toUpperCase()));

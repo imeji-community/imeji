@@ -133,7 +133,7 @@ public class CollectionProcess {
 		return resp;
 	}
 	
-	public static  JSONResponse readAllCollections (HttpServletRequest req, String q) {
+	public static  JSONResponse readAllCollections(HttpServletRequest req, String q) {
         JSONResponse resp;
 
         User u = BasicAuthentication.auth(req);

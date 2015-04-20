@@ -424,6 +424,12 @@ public class SPARQLQueries {
 		return "SELECT ?o WHERE { ?s ?p ?o . ?s a <http://imeji.org/terms/space> }";
 	}
 
+	public static String selectCollectionsOfSpace(URI id) {
+		return "SELECT ?s WHERE{ ?s <http://imeji.org/terms/space> "
+				+ "<" + id.toString() + "> "
+				+ " . ?s a <http://imeji.org/terms/collection> }";
+	}
+
 
 	/**
 	 * Select all {@link Item} available imeji

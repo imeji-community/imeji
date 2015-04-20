@@ -3,7 +3,10 @@
  */
 package de.mpg.imeji.logic.vo;
 
-import de.mpg.j2j.annotations.*;
+import de.mpg.j2j.annotations.j2jId;
+import de.mpg.j2j.annotations.j2jLiteral;
+import de.mpg.j2j.annotations.j2jModel;
+import de.mpg.j2j.annotations.j2jResource;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -45,8 +48,10 @@ public class Space extends Properties implements Serializable {
 	private int maxHeight = 0;
 	@j2jLiteral("http://imeji.org/terms/maxWidth")
 	private int maxWidth = 0;
-	@j2jList("http://imeji.org/terms/collection")
+
+//	@j2jList("http://imeji.org/terms/collection")
 	private Collection<String> spaceCollections = new ArrayList<String>();
+
 
 	@XmlElement(name = "logoUrl", namespace = "http://imeji.org/terms/")
 	public URI getLogoUrl() {
@@ -85,7 +90,6 @@ public class Space extends Properties implements Serializable {
 		this.description = description;
 	}
 
-
 	public void setVisibility(Item.Visibility visibility) {
 		this.visibility = URI.create("http://imeji.org/terms/visibility#"
 				+ visibility.name());
@@ -115,33 +119,23 @@ public class Space extends Properties implements Serializable {
 		this.maxWidth = maxWidth;
 	}
 
-	/**
-	 * @return
-	 */
+
 	public Collection<String> getSpaceCollections() {
 		return spaceCollections;
 	}
 
-	/**
-	 * @return
-	 */
 	public String addSpaceCollection(String id) {
 		if (!this.spaceCollections.contains(id))
 			this.spaceCollections.add(id);
 		return id;
 	}
 
-	/**
-	 * @return
-	 */
+
 	public void removeSpaceCollection(String id) {
 		this.spaceCollections.remove(id);
 	}
 
 
-	/**
-	 * @param spaceCollections
-	 */
 	public void setSpaceCollections(Collection<String> spaceCollections) {
 		this.spaceCollections = spaceCollections;
 	}

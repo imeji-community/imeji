@@ -8,6 +8,8 @@ import de.mpg.imeji.rest.resources.test.TestUtils;
 import de.mpg.imeji.rest.to.AlbumTO;
 import de.mpg.imeji.rest.to.ItemTO;
 import net.java.dev.webdav.jaxrs.ResponseStatus;
+
+import org.apache.commons.lang.StringUtils;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.junit.Assert;
 import org.junit.Before;
@@ -791,5 +793,178 @@ public class AlbumTest extends ImejiTestBase{
 		Assert.assertThat(itemList, empty());
 	}
 	
+	@Test
+	public void test_9_UnlinkItemsToReleasedAlbum_1_WithAuth() throws ImejiException {
+		initCollection();
+		initItem();
+		initAlbum();
+		
+		
+		Response response = target(pathPrefix)
+				.path("/" + albumId + "/members/link").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		
+		response = target(pathPrefix)
+				.path("/" + albumId + "/release").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("{}"));	
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+		initItem("test1");
+		response = target(pathPrefix)
+				.path("/" + albumId + "/members/link").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+		response = target(pathPrefix)
+				.path("/" + albumId + "/members/unlink").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));
+		assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+		
+		response = target(pathPrefix)
+				.path("/" + albumId + "/members")
+				.register(authAsUser).request(MediaType.APPLICATION_JSON)
+				.get();
+		
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		List<ItemTO> itemList = RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), ItemTO.class);
+		Assert.assertThat(itemList, not(empty()));
+		Assert.assertEquals(1, itemList.size());
+	}
+
+	@Test
+	public void test_9_UnlinkAllItemsFromReleasedAlbum() throws ImejiException {
+		//in principle it does not care if item exists or not, it will simply do nothing
+		initCollection();
+		initAlbum();
+		
+		initItem("test");
+		
+		Response response = target(pathPrefix)
+				.path("/" + albumId + "/members/link").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));	
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		
+		initItem("test2");
+
+		response = target(pathPrefix)
+				.path("/" + albumId + "/members/link").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));	
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		
+		//read two items from the Album
+		response = target(pathPrefix)
+				.path("/" + albumId + "/members")
+				.register(authAsUser).request(MediaType.APPLICATION_JSON)
+				.get();
+		
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		List<ItemTO> itemList = RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), ItemTO.class);
+		Assert.assertThat(itemList, not(empty()));
+		Assert.assertEquals(2, itemList.size());
+		
+		response = target(pathPrefix)
+				.path("/" + albumId + "/release").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("{}"));	
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		
+
+		//remove all album mebres
+		response = target(pathPrefix)
+				.path("/" + albumId + "/members").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.delete();	
+		assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+		
+		//read all items from the Album
+		response = target(pathPrefix)
+						.path("/" + albumId + "/members")
+						.register(authAsUser).request(MediaType.APPLICATION_JSON)
+						.get();
+				
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		itemList = RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), ItemTO.class);
+		Assert.assertEquals(itemList.size(), 2);
+	}
+	
+	@Test
+	public void test_9_Unlink_AllItems_withPUT_unlink_FromReleasedAlbum() throws ImejiException {
+		//in principle it does not care if item exists or not, it will simply do nothing
+		initCollection();
+		initAlbum();
+		
+		initItem("test");
+		
+		Response response = target(pathPrefix)
+				.path("/" + albumId + "/members/link").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));	
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		
+		initItem("test2");
+
+		response = target(pathPrefix)
+				.path("/" + albumId + "/members/link").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));	
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		
+		//read two items from the Album
+		response = target(pathPrefix)
+				.path("/" + albumId + "/members")
+				.register(authAsUser).request(MediaType.APPLICATION_JSON)
+				.get();
+		
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		List<ItemTO> itemList = RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), ItemTO.class);
+		Assert.assertThat(itemList, not(empty()));
+		Assert.assertEquals(2, itemList.size());
+		
+
+		response = target(pathPrefix)
+				.path("/" + albumId + "/release").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("{}"));	
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		
+		String itemsToUnlinkFromAlbum = "[";
+		for (ItemTO it:itemList) {
+			itemsToUnlinkFromAlbum+= "\""+it.getId()+"\",";
+		}
+		itemsToUnlinkFromAlbum = itemsToUnlinkFromAlbum.substring(0, itemsToUnlinkFromAlbum.length()-1);
+		itemsToUnlinkFromAlbum += "]";
+		
+		response = target(pathPrefix)
+				.path("/" + albumId + "/members/unlink").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json(itemsToUnlinkFromAlbum));	
+
+		assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+		
+
+		//remove all album mebres
+		response = target(pathPrefix)
+				.path("/" + albumId + "/members").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.delete();	
+		assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+		
+		//read all items from the Album
+		response = target(pathPrefix)
+						.path("/" + albumId + "/members")
+						.register(authAsUser).request(MediaType.APPLICATION_JSON)
+						.get();
+				
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		itemList = RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), ItemTO.class);
+		Assert.assertEquals(itemList.size(), 2);
+	}
 
 }

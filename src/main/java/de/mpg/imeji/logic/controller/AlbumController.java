@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.opensaml.saml1.core.impl.StatusImpl;
+
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
 
@@ -247,6 +249,11 @@ public class AlbumController extends ImejiController {
 				album.getImages().add(uri);
 			}
 		}
+
+		if (album.getImages().size()== 0 && Status.RELEASED.equals(album.getStatus())) {
+				throw new UnprocessableError("Album has been released! You are trying to remove all items from this album! Discard the album if necessary!");
+		}
+		
 		update(album, user);
 		return inAlbums.size() - album.getImages().size();
 	}
@@ -264,6 +271,9 @@ public class AlbumController extends ImejiController {
 	public boolean clearAlbumItems(Album album, User user)
 			throws ImejiException {
 
+		if (Status.RELEASED.equals(album.getStatus())) {
+			throw new UnprocessableError("Album has been released! It is not possible to remove all items from this album! Discard the album if necessary!");
+		}
 		album.getImages().clear();
 		update(album, user);
 		return true;

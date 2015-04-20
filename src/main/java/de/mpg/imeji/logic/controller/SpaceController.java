@@ -1,6 +1,8 @@
 package de.mpg.imeji.logic.controller;
 
 import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
@@ -22,6 +24,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import static com.google.common.io.Files.copy;
@@ -51,6 +54,8 @@ public class SpaceController extends ImejiController {
      * internal storage to parse file location)
      */
     private String storageUrl = null;
+
+    private static CollectionController cc = new CollectionController();
 
 
     public SpaceController() {
@@ -260,11 +265,71 @@ public class SpaceController extends ImejiController {
                         try {
                             return retrieve(URI.create(id), Imeji.adminUser);
                         } catch (ImejiException e) {
-                            LOGGER.info("Cannot retrieve space: " + id );
+                            LOGGER.info("Cannot retrieve space: " + id);
                         }
                         return null;
                     }
                 });
+    }
+
+    /**
+     * Retrieve all {@link CollectionImeji}s of {@link Space}
+     *
+     * @param space
+     * @return
+     * @throws ImejiException
+     */
+    public Collection<String> retrieveCollections(Space space) throws ImejiException {
+        if ( Iterables.isEmpty(space.getSpaceCollections()) )
+            space.setSpaceCollections(ImejiSPARQL.exec(SPARQLQueries.selectCollectionsOfSpace(space.getId()), null));
+        return space.getSpaceCollections();
+    }
+
+    /**
+     * Add {@link CollectionImeji} to {@link Space}
+     *
+     * @param space
+     * @param collId
+     * @param user
+     * @throws ImejiException
+     */
+    public void addCollection(Space space, String collId, User user) throws ImejiException {
+        if (!Iterables.contains(space.getSpaceCollections(), collId)) {
+            space.getSpaceCollections().add(collId);
+            update(space, user);
+            updateCollectionSpace(space, collId, user);
+        }
+    }
+
+    /**
+     *
+     * Remove {@link CollectionImeji} from the {@link Space}
+     *
+     * @param space
+     * @param collId
+     * @param user
+     * @return renewed list
+     * @throws ImejiException
+     */
+    public Collection<String> removeCollection(Space space, final String collId, User user) throws ImejiException {
+        Collection<String> colls = retrieveCollections(space);
+        if (Iterables.removeIf(colls, new Predicate<String>() {
+            @Override
+            public boolean apply(String col) {
+                return col.equals(collId);
+            }
+        })) {
+            space.setSpaceCollections(colls);
+            update(space, user);
+            updateCollectionSpace(space, ObjectHelper.getId(URI.create(collId)), user);
+        }
+        return colls;
+    }
+
+    private void updateCollectionSpace(Space space, String collId, User user) throws ImejiException {
+        CollectionImeji c = cc.retrieve(collId, user);
+        c.setSpace(space.getId());
+        cc.update(c, user);
     }
 
     /**

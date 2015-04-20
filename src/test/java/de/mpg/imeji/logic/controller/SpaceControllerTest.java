@@ -1,5 +1,6 @@
 package de.mpg.imeji.logic.controller;
 
+import com.google.common.collect.Iterables;
 import de.mpg.imeji.logic.vo.Space;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
@@ -30,12 +31,14 @@ public class SpaceControllerTest extends ImejiTestBase{
             .getLogger(SpaceControllerTest.class);
 
     private static SpaceController sc;
+    private static CollectionController cc;
     private static URI spaceId;
     private static Space space;
 
     @BeforeClass
     public static void specificSetup() {
         sc = new SpaceController();
+        cc = new CollectionController();
     }
 
     @Test
@@ -53,14 +56,13 @@ public class SpaceControllerTest extends ImejiTestBase{
     public void test_2_Update() throws Exception {
         String changed = "_CHANGED";
         space.setTitle(space.getTitle() + changed);
-
-        space.addSpaceCollection(initCollection());
-        space.addSpaceCollection(initCollection());
-
-        space = sc.update(space, adminUser);
+        sc.addCollection(space, initCollection(), adminUser);
+        String collId2 = initCollection();
+        sc.addCollection(space, collId2, adminUser);
+        //duplicates are not added!
+        sc.addCollection(space, collId2, adminUser);
         assertThat(space.getTitle(), endsWith(changed));
-        assertThat(space.getSpaceCollections(), hasSize(2));
-
+        assertThat(sc.retrieveCollections(space), hasSize(2));
     }
 
     @Test
@@ -71,7 +73,7 @@ public class SpaceControllerTest extends ImejiTestBase{
         space = sc.updateFile(space, uploadFile, adminUser);
         assertTrue(FileUtils.contentEquals(uploadFile,
                 new File(sc.transformUrlToPath(space.getLogoUrl().toURL().toString()))
-             ));
+        ));
     }
 
     @Test
@@ -89,7 +91,19 @@ public class SpaceControllerTest extends ImejiTestBase{
     }
 
     @Test
-    public void test_6_Delete() throws Exception {
+    public void test_6_RemoveCollection() throws Exception {
+        assertThat(
+                sc.removeCollection(space, Iterables.getLast(sc.retrieveCollections(space)), adminUser),
+                hasSize(1)
+        );
+        assertThat(
+                cc.retrieve(URI.create(Iterables.getFirst(space.getSpaceCollections(), null)), adminUser).getSpace(),
+                equalTo(spaceId)
+        );
+    }
+
+    @Test
+    public void test_7_Delete() throws Exception {
         for (Space s : sc.retrieveAll()) {
             sc.delete(s, adminUser);
         }

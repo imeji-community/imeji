@@ -3,9 +3,11 @@
  */
 package de.mpg.imeji.presentation.user.util;
 
+import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
+
 import org.apache.log4j.Logger;
 
 import javax.mail.*;
@@ -13,6 +15,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Date;
@@ -43,14 +46,15 @@ public class EmailClient
      */
     public void sendMail(String to, String from, String subject, String message) throws IOException, URISyntaxException
     {
-        String emailUser = PropertyReader.getProperty("imeji.email.user");
-        String password = PropertyReader.getProperty("imeji.email.password");
-        String server = PropertyReader.getProperty("imeji.email.server.smtp");
+    	ConfigurationBean config = (ConfigurationBean) BeanHelper.getApplicationBean(ConfigurationBean.class);
+        String emailUser = config.getEmailServerUser();
+        String password = config.getEmailServerPassword();
+        String server = config.getEmailServer();
         String port = PropertyReader.getProperty("imeji.email.smtp.port");
         if(isNullOrEmpty(port))
             port = "25";
-        String auth = PropertyReader.getProperty("imeji.email.auth");
-        String sender = PropertyReader.getProperty("imeji.email.sender");
+        String auth = Boolean.toString(config.getEmailServerEnableAuthentication());
+        String sender = config.getEmailServerSender();
         if (from != null)
         {
             sender = from;

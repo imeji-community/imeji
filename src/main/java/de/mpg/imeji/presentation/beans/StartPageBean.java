@@ -63,11 +63,11 @@ public class StartPageBean {
 	 */
 	private SearchQuery readSearchQueryInProperty() throws IOException,
 			URISyntaxException {
-		String prop = PropertyReader.getProperty("imeji.home.caroussel.query");
+		String prop = ((ConfigurationBean)BeanHelper.getApplicationBean(ConfigurationBean.class)).getStartPageCarouselQuery();
 		if (prop != null) {
 			return URLQueryTransformer.parseStringQuery(prop);
 		}
-		return null;
+		return URLQueryTransformer.parseStringQuery("");
 	}
 
 	/**

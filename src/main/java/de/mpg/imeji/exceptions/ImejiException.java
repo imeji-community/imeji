@@ -9,7 +9,7 @@ public class ImejiException extends Exception  {
 	        
 	    }
 		
-		ImejiException(String message, Throwable e) {
+		public ImejiException(String message, Throwable e) {
 			super(message, e);
 		}
 

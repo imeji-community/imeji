@@ -76,7 +76,7 @@ public class ConfigurationBean {
 	 * @version $Revision$ $LastChangedDate$
 	 */
 	private enum CONFIGURATION {
-		SNIPPET, CSS_DEFAULT, CSS_ALT, MAX_FILE_SIZE, FILE_TYPES, STARTPAGE_HTML, DATA_VIEWER_FORMATS, DATA_VIEWER_URL, AUTOSUGGEST_USERS, AUTOSUGGEST_ORGAS, STARTPAGE_FOOTER_LOGOS, META_DESCRIPTION, INSTANCE_NAME;
+		SNIPPET, CSS_DEFAULT, CSS_ALT, MAX_FILE_SIZE, FILE_TYPES, STARTPAGE_HTML, DATA_VIEWER_FORMATS, DATA_VIEWER_URL, AUTOSUGGEST_USERS, AUTOSUGGEST_ORGAS, STARTPAGE_FOOTER_LOGOS, META_DESCRIPTION, INSTANCE_NAME, CONTACT_EMAIL, EMAIL_SERVER, EMAIL_SERVER_USER, EMAIL_SERVER_PASSWORD, EMAIL_SERVER_ENABLE_AUTHENTICATION, EMAIL_SERVER_SENDER, EMAIL_SERVER_PORT, STARTPAGE_CAROUSEL_QUERY, STARTPAGE_CAROUSEL_QUERY_ORDER, UPLOAD_WHITE_LIST, UPLOAD_BLACK_LIST;
 	}
 
 	private Properties config;
@@ -87,6 +87,7 @@ public class ConfigurationBean {
 			.getLogger(ConfigurationBean.class);
 	// A list of predefined file types, which is set when imeji is initialized
 	private final static String predefinedFileTypes = "[Image@en,Bilder@de=jpg,jpeg,tiff,tiff,jp2,pbm,gif,png,psd][Video@en,Video@de=wmv,swf,rm,mp4,mpg,m4v,avi,mov.asf,flv,srt,vob][Audio@en,Ton@de=aif,iff,m3u,m4a,mid,mpa,mp3,ra,wav,wma][Document@en,Dokument@de=doc,docx,odt,pages,rtf,tex,rtf,bib,csv,ppt,pps,pptx,key,xls,xlr,xlsx,gsheet,nb,numbers,ods,indd,pdf,dtx]";
+	private final static String predefinedUploadBlackList = "386,aru,atm,aut,bat,bin,bkd,blf,bll,bmw,boo,bqf,buk,bxz,cc,ce0,ceo,cfxxe,chm,cih,cla,class,cmd,com,cpl,cxq,cyw,dbd,dev,dlb,dli,dll,dllx,dom,drv,dx,dxz,dyv,dyz,eml,exe,exe1,exe_renamed,ezt,fag,fjl,fnr,fuj,hlp,hlw,hsq,hts,ini,iva,iws,jar,js,kcd,let,lik,lkh,lnk,lok,mfu,mjz,nls,oar,ocx,osa,ozd,pcx,pgm,php2,php3,pid,pif,plc,pr,qit,rhk,rna,rsc_tmp,s7p,scr,scr,shs,ska,smm,smtmp,sop,spam,ssy,swf,sys,tko,tps,tsa,tti,txs,upa,uzy,vb,vba,vbe,vbs,vbx,vexe,vsd,vxd,vzr,wlpginstall,wmf,ws,wsc,wsf,wsh,wss,xdu,xir,xlm,xlv,xnt,zix,zvz";
 
 	private String dataViewerUrl;
 
@@ -127,8 +128,26 @@ public class ConfigurationBean {
 			saveConfig();
 		} else
 			this.fileTypes = new FileTypes((String) ft);
-
+		initPropertyWithDefaultValue(CONFIGURATION.UPLOAD_BLACK_LIST,
+				predefinedUploadBlackList);
 		return "";
+	}
+
+	/**
+	 * Init a property with its default value if null or empty
+	 * 
+	 * @param c
+	 * @param defaultValue
+	 */
+	private void initPropertyWithDefaultValue(CONFIGURATION c,
+			String defaultValue) {
+		String currentValue = (String) config.get(c.name());
+		if (currentValue != null && !"".equals(currentValue)) {
+			setProperty(c.name(), currentValue);
+		} else {
+			setProperty(c.name(), defaultValue);
+		}
+		saveConfig();
 	}
 
 	/**
@@ -143,7 +162,7 @@ public class ConfigurationBean {
 				setProperty(CONFIGURATION.DATA_VIEWER_URL.name(), dataViewerUrl);
 			config.storeToXML(new FileOutputStream(configFile),
 					"imeji configuration File");
-			BeanHelper.removeBeanFromMap(this.getClass());
+			// BeanHelper.removeBeanFromMap(this.getClass());
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -476,7 +495,7 @@ public class ConfigurationBean {
 		config.setProperty(CONFIGURATION.AUTOSUGGEST_USERS.name(), s);
 
 	}
-	
+
 	/**
 	 * Set the meta description
 	 * 
@@ -494,7 +513,7 @@ public class ConfigurationBean {
 	public String getMetaDescription() {
 		return (String) config.get(CONFIGURATION.META_DESCRIPTION.name());
 	}
-	
+
 	/**
 	 * Set the name of the instance
 	 * 
@@ -511,5 +530,111 @@ public class ConfigurationBean {
 	 */
 	public String getInstanceName() {
 		return (String) config.get(CONFIGURATION.INSTANCE_NAME.name());
+	}
+
+	/**
+	 * Set the contact email
+	 * 
+	 * @param url
+	 */
+	public void setContactEmail(String s) {
+		setProperty(CONFIGURATION.CONTACT_EMAIL.name(), s);
+	}
+
+	/**
+	 * Return contact email
+	 * 
+	 * @return
+	 */
+	public String getContactEmail() {
+		if ((String) config.get(CONFIGURATION.CONTACT_EMAIL.name()) != null)
+			return (String) config.get(CONFIGURATION.CONTACT_EMAIL.name());
+		return "";
+	}
+
+	public void setEmailServer(String s) {
+		setProperty(CONFIGURATION.EMAIL_SERVER.name(), s);
+	}
+
+	public String getEmailServer() {
+		return (String) config.get(CONFIGURATION.EMAIL_SERVER.name());
+	}
+
+	public void setEmailServerUser(String s) {
+		setProperty(CONFIGURATION.EMAIL_SERVER_USER.name(), s);
+	}
+
+	public String getEmailServerUser() {
+		return (String) config.get(CONFIGURATION.EMAIL_SERVER_USER.name());
+	}
+
+	public void setEmailServerPassword(String s) {
+		setProperty(CONFIGURATION.EMAIL_SERVER_PASSWORD.name(), s);
+	}
+
+	public String getEmailServerPassword() {
+		return (String) config.get(CONFIGURATION.EMAIL_SERVER_PASSWORD.name());
+	}
+
+	public void setEmailServerEnableAuthentication(boolean b) {
+		setProperty(CONFIGURATION.EMAIL_SERVER_ENABLE_AUTHENTICATION.name(),
+				Boolean.toString(b));
+	}
+
+	public boolean getEmailServerEnableAuthentication() {
+		return Boolean.parseBoolean((String) config
+				.get(CONFIGURATION.EMAIL_SERVER_ENABLE_AUTHENTICATION.name()));
+	}
+
+	public void setEmailServerSender(String s) {
+		setProperty(CONFIGURATION.EMAIL_SERVER_SENDER.name(), s);
+	}
+
+	public String getEmailServerSender() {
+		return (String) config.get(CONFIGURATION.EMAIL_SERVER_SENDER.name());
+	}
+
+	public void setEmailServerPort(String s) {
+		setProperty(CONFIGURATION.EMAIL_SERVER_PORT.name(), s);
+	}
+
+	public String getEmailServerPort() {
+		return (String) config.get(CONFIGURATION.EMAIL_SERVER_PORT.name());
+	}
+
+	public void setStartPageCarouselQuery(String s) {
+		setProperty(CONFIGURATION.STARTPAGE_CAROUSEL_QUERY.name(), s);
+	}
+
+	public String getStartPageCarouselQuery() {
+		return (String) config.get(CONFIGURATION.STARTPAGE_CAROUSEL_QUERY
+				.name());
+	}
+
+	public void setStartPageCarouselQueryOrder(String s) {
+		setProperty(CONFIGURATION.STARTPAGE_CAROUSEL_QUERY_ORDER.name(), s);
+	}
+
+	public String getStartPageCarouselQueryOrder() {
+		return (String) config.get(CONFIGURATION.STARTPAGE_CAROUSEL_QUERY_ORDER
+				.name());
+	}
+
+	public void setUploadBlackList(String s) {
+		setProperty(CONFIGURATION.UPLOAD_BLACK_LIST.name(), s);
+	}
+
+	public String getUploadBlackList() {
+		return (String) config.get(CONFIGURATION.UPLOAD_BLACK_LIST.name());
+	}
+
+	public void setUploadWhiteList(String s) {
+		setProperty(CONFIGURATION.UPLOAD_WHITE_LIST.name(), s);
+	}
+
+	public String getUploadWhiteList() {
+		if (config.get(CONFIGURATION.UPLOAD_WHITE_LIST.name()) != null)
+			return (String) config.get(CONFIGURATION.UPLOAD_WHITE_LIST.name());
+		return "";
 	}
 }

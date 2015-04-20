@@ -7,6 +7,7 @@ import de.mpg.imeji.logic.auth.Authentication;
 import de.mpg.imeji.logic.auth.AuthenticationFactory;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.history.HistoryPage;
 import de.mpg.imeji.presentation.history.HistorySession;
@@ -19,6 +20,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
+
 import java.io.IOException;
 import java.net.URLDecoder;
 
@@ -87,12 +89,13 @@ public class LoginBean {
 			sb.setUser(user);
 			BeanHelper.info(sb.getMessage("success_log_in"));
 		} else {
+			String name = ((ConfigurationBean) BeanHelper
+					.getApplicationBean(ConfigurationBean.class))
+					.getInstanceName();
 			BeanHelper.error(sb.getMessage("error_log_in").replace(
-					"XXX_INSTANCE_NAME_XXX",
-					PropertyReader.getProperty("imeji.instance.name")));
+					"XXX_INSTANCE_NAME_XXX", name));
 			BeanHelper.error(sb.getMessage("error_log_in_description").replace(
-					"XXX_INSTANCE_NAME_XXX",
-					PropertyReader.getProperty("imeji.instance.name")));
+					"XXX_INSTANCE_NAME_XXX", name));
 		}
 		if (redirect == null || "".equals(redirect)) {
 			HistoryPage current = ((HistorySession) BeanHelper
@@ -101,7 +104,7 @@ public class LoginBean {
 				redirect = current.getCompleteUrl();
 			}
 		}
-		//redirect = UrlHelper.addParameter(redirect, "login", "1");
+		// redirect = UrlHelper.addParameter(redirect, "login", "1");
 		FacesContext.getCurrentInstance().getExternalContext()
 				.redirect(redirect);
 	}
@@ -120,21 +123,21 @@ public class LoginBean {
 	 * @throws IOException
 	 */
 	public void logout() throws IOException {
-			FacesContext fc = FacesContext.getCurrentInstance();
-			String spaceId= sb.getSpaceId();
-			HttpSession session = (HttpSession) fc.getExternalContext().getSession(
-					false);
-			session.invalidate();
-			sb.setUser(null);
-			sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-			sb.setShowLogin(false);
-			sb.setSpaceId(spaceId);
-			BeanHelper.info(sb.getMessage("success_log_out"));
-			fc = FacesContext.getCurrentInstance();
-			Navigation nav = (Navigation) BeanHelper
-					.getApplicationBean(Navigation.class);
-			FacesContext.getCurrentInstance().getExternalContext()
-					.redirect(nav.getHomeUrl());
-			
+		FacesContext fc = FacesContext.getCurrentInstance();
+		String spaceId = sb.getSpaceId();
+		HttpSession session = (HttpSession) fc.getExternalContext().getSession(
+				false);
+		session.invalidate();
+		sb.setUser(null);
+		sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+		sb.setShowLogin(false);
+		sb.setSpaceId(spaceId);
+		BeanHelper.info(sb.getMessage("success_log_out"));
+		fc = FacesContext.getCurrentInstance();
+		Navigation nav = (Navigation) BeanHelper
+				.getApplicationBean(Navigation.class);
+		FacesContext.getCurrentInstance().getExternalContext()
+				.redirect(nav.getHomeUrl());
+
 	}
 }

@@ -10,11 +10,14 @@ import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.beans.Navigation.Page;
 import de.mpg.imeji.presentation.user.ShareBean.ShareType;
+import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CookieUtils;
 import de.mpg.imeji.presentation.util.MaxPlanckInstitutUtils;
 import de.mpg.imeji.presentation.util.PropertyReader;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
@@ -27,6 +30,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
@@ -235,7 +239,9 @@ public class SessionBean implements Serializable {
 	 */
 	public String getInstanceName() {
 		try {
-			return PropertyReader.getProperty("imeji.instance.name");
+			return ((ConfigurationBean) BeanHelper
+					.getApplicationBean(ConfigurationBean.class))
+					.getInstanceName();
 		} catch (Exception e) {
 			return "imeji";
 		}
@@ -692,12 +698,12 @@ public class SessionBean implements Serializable {
 			ipAddress = ipAddress.split(",")[0];
 		return ipAddress;
 	}
-	
-	public void setSpaceId(String spaceIdString){
-		this.spaceId=spaceIdString;
+
+	public void setSpaceId(String spaceIdString) {
+		this.spaceId = spaceIdString;
 	}
 
-	public String getSpaceId(){
+	public String getSpaceId() {
 		return this.spaceId;
 	}
 }

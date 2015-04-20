@@ -41,6 +41,7 @@ import org.apache.commons.io.FilenameUtils;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -51,10 +52,8 @@ import de.mpg.imeji.presentation.util.PropertyReader;
  * @version $Revision$ $LastChangedDate$
  */
 public class StorageController implements Serializable {
-	private static final long serialVersionUID = -2651970941029421673L;
-	public static final String UPLOAD_BLACKLIST_PROPERTY = "imeji.upload.blacklist";
+	private static final long serialVersionUID = -2651970941029421673L;;
 	public static final String IMEJI_STORAGE_NAME_PROPERTY = "imeji.storage.name";
-	public static final String UPLOAD_WHITELIST_PROPERTY = "imeji.upload.whitelist";
 	private Storage storage;
 
 	private String formatWhiteList;
@@ -67,11 +66,10 @@ public class StorageController implements Serializable {
 	public StorageController() {
 		String name;
 		try {
+			ConfigurationBean config = new ConfigurationBean();
 			name = PropertyReader.getProperty(IMEJI_STORAGE_NAME_PROPERTY);
-			formatBlackList = PropertyReader
-					.getProperty(UPLOAD_BLACKLIST_PROPERTY);
-			formatWhiteList = PropertyReader
-					.getProperty(UPLOAD_WHITELIST_PROPERTY);
+			formatBlackList = config.getUploadBlackList();
+			formatWhiteList = config.getUploadWhiteList();
 		} catch (Exception e) {
 			throw new RuntimeException("Error reading property: ", e);
 		}
@@ -201,7 +199,7 @@ public class StorageController implements Serializable {
 	public Storage getStorage() {
 		return storage;
 	}
-	
+
 	/**
 	 * Call read method of the controlled {@link Storage}
 	 * 
@@ -209,7 +207,16 @@ public class StorageController implements Serializable {
 	 * @param out
 	 * @throws ImejiException
 	 */
-	public String readFileStringContent(String url){
+	public String readFileStringContent(String url) {
 		return storage.readFileStringContent(url);
 	}
+	
+	public String getFormatBlackList() {
+		return formatBlackList;
+	}
+	
+	public String getFormatWhiteList() {
+		return formatWhiteList;
+	}
+
 }

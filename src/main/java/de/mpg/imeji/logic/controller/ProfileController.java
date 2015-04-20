@@ -3,6 +3,21 @@
  */
 package de.mpg.imeji.logic.controller;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static de.mpg.imeji.logic.util.ResourceHelper.getStringFromPath;
+import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
+import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.transferMetadataProfile;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 
@@ -14,7 +29,6 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.jobs.CleanMetadataJob;
-import de.mpg.imeji.logic.jobs.CleanMetadataProfileJob;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.Search;
@@ -28,28 +42,17 @@ import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.*;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Metadata;
+import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;
+import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.writer.WriterFacade;
-import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.imeji.rest.process.RestProcessUtils;
+import de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE;
 import de.mpg.imeji.rest.to.MetadataProfileTO;
 import de.mpg.j2j.helper.DateHelper;
-
-import org.apache.log4j.Logger;
-
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import static com.google.common.base.Strings.isNullOrEmpty;
-import static de.mpg.imeji.logic.util.ResourceHelper.getStringFromPath;
-import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
-import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE;
-import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.transferMetadataProfile;
 
 /**
  * Controller for {@link MetadataProfile}
@@ -63,7 +66,7 @@ public class ProfileController extends ImejiController {
 			Imeji.profileModel);
 	private static final WriterFacade writer = new WriterFacade(
 			Imeji.profileModel);
-	public static final String DEFAULT_METADATA_PROFILE_PATH_PROPERTY = "imeji.default.metadata.profile.path";
+	public static final String DEFAULT_METADATA_PROFILE_PATH_PROPERTY = "default-metadata-profile.json";
 	private static Logger logger = Logger.getLogger(ProfileController.class);
 
 	/**
@@ -138,7 +141,7 @@ public class ProfileController extends ImejiController {
 		CollectionController cc = new CollectionController();
 		CollectionImeji c;
 		try {
-				c = cc.retrieve(collectionId, user);
+			c = cc.retrieve(collectionId, user);
 		} catch (NotFoundException e) {
 			throw new UnprocessableError("Invalid collection: "
 					+ e.getLocalizedMessage());
@@ -193,7 +196,7 @@ public class ProfileController extends ImejiController {
 	 */
 	public void delete(MetadataProfile mdp, User user, String collectionId)
 			throws ImejiException {
-		//First check if there are empty metadata records 
+		// First check if there are empty metadata records
 		if ((isNullOrEmpty(collectionId) && isReferencedByAnyResources(mdp
 				.getId().toString()))
 				|| !isNullOrEmpty(collectionId)
@@ -257,12 +260,14 @@ public class ProfileController extends ImejiController {
 	}
 
 	/**
-	 * Search all profile allowed for the current user. Sorted by profile name, query parameter possible.
+	 * Search all profile allowed for the current user. Sorted by profile name,
+	 * query parameter possible.
 	 * 
 	 * @return
 	 * @throws ImejiException
 	 */
-	public List<MetadataProfile> search(User user, String q) throws ImejiException {
+	public List<MetadataProfile> search(User user, String q)
+			throws ImejiException {
 		Search search = SearchFactory.create(SearchType.PROFILE);
 
 		// Automatically sort by profile title
@@ -272,7 +277,9 @@ public class ProfileController extends ImejiController {
 		SearchResult result;
 		List<MetadataProfile> l = new ArrayList<MetadataProfile>();
 		try {
-			result = search.search(!isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q) : null, sortCri, user);
+			result = search.search(
+					!isNullOrEmptyTrim(q) ? URLQueryTransformer
+							.parseStringQuery(q) : null, sortCri, user);
 			for (String uri : result.getResults()) {
 				l.add(retrieve(URI.create(uri), user));
 			}
@@ -282,9 +289,9 @@ public class ProfileController extends ImejiController {
 		return l;
 	}
 
-	
 	/**
-	 * Search all profile allowed for the current user, Sorted by profile name, no query parameter
+	 * Search all profile allowed for the current user, Sorted by profile name,
+	 * no query parameter
 	 * 
 	 * @return
 	 * @throws ImejiException
@@ -292,7 +299,7 @@ public class ProfileController extends ImejiController {
 	public List<MetadataProfile> search(User user) throws ImejiException {
 		return search(user, "");
 	}
-	
+
 	/**
 	 * Find default profile.
 	 *
@@ -331,8 +338,9 @@ public class ProfileController extends ImejiController {
 			String profileJSON = null;
 			MetadataProfileTO mdpTO = null;
 			try {
-				path = PropertyReader
-						.getProperty(DEFAULT_METADATA_PROFILE_PATH_PROPERTY);
+				path = new File(this.getClass().getClassLoader()
+						.getResource(DEFAULT_METADATA_PROFILE_PATH_PROPERTY)
+						.toURI()).getAbsolutePath();
 				if (isNullOrEmpty(path)) {
 					logger.info("There is no default metadata profile defined! This is not an error, Imeji will still work. Default metadata profile is a convenience for quick start!"
 							+ "Check more about it at the IMEJI Documentation.");
@@ -346,8 +354,8 @@ public class ProfileController extends ImejiController {
 						+ DEFAULT_METADATA_PROFILE_PATH_PROPERTY + ": " + e);
 			} catch (JsonProcessingException e) {
 				throw new ImejiException("Cannot process json: " + e);
-			} catch (URISyntaxException | IOException e) {
-				throw new ImejiException("Wrong path: " + e);
+			} catch (IOException | URISyntaxException e) {
+				throw new ImejiException("Wrong path: " + path, e);
 			}
 			mdpVO = new MetadataProfile();
 			transferMetadataProfile(mdpTO, mdpVO, TRANSFER_MODE.CREATE);

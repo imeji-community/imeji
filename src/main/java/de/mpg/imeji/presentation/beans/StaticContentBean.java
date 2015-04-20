@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -92,7 +93,7 @@ public class StaticContentBean
         try
         {
             String helpProp = PropertyReader.getProperty("imeji.help.url");
-            String supportEmail = PropertyReader.getProperty("imeji.support.email");
+            String supportEmail = ((ConfigurationBean)BeanHelper.getApplicationBean(ConfigurationBean.class)).getContactEmail();
             html = getContent(new URL(helpProp));
             html = html.replaceAll("XXX_SUPPORT_EMAIL_XXX", supportEmail);
         }

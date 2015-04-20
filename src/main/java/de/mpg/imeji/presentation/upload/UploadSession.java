@@ -54,8 +54,6 @@ public class UploadSession
 {
     private List<Item> sFiles;
     private List<String> fFiles;
-    private String formatBlackList = "";
-    private String formatWhiteList = "";
     private boolean importImageToFile = false;
     private boolean uploadFileToItem = false;
     private boolean checkNameUnique = true;
@@ -70,8 +68,6 @@ public class UploadSession
     {
         this.sFiles = new ArrayList<Item>();
         this.fFiles = new ArrayList<String>();
-        formatBlackList = PropertyReader.getProperty("imeji.upload.blacklist");
-        formatWhiteList = PropertyReader.getProperty("imeji.upload.whitelist");
     }
 
     /**
@@ -151,37 +147,6 @@ public class UploadSession
         this.fFiles = fFiles;
     }
 
-    /**
-     * @return the formatBlackList
-     */
-    public String getFormatBlackList()
-    {
-        return formatBlackList;
-    }
-
-    /**
-     * @param formatBlackList the formatBlackList to set
-     */
-    public void setFormatBlackList(String formatBlackList)
-    {
-        this.formatBlackList = formatBlackList;
-    }
-
-    /**
-     * @return the formatWhiteList
-     */
-    public String getFormatWhiteList()
-    {
-        return formatWhiteList;
-    }
-
-    /**
-     * @param formatWhiteList the formatWhiteList to set
-     */
-    public void setFormatWhiteList(String formatWhiteList)
-    {
-        this.formatWhiteList = formatWhiteList;
-    }
 
     /**
      * @return the importImageToFile

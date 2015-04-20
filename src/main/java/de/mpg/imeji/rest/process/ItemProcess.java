@@ -20,7 +20,9 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
+import static de.mpg.imeji.rest.process.CommonUtils.USER_MUST_BE_LOGGED_IN;
 import static javax.ws.rs.core.Response.Status.OK;
+import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
 
 
 public class ItemProcess {
@@ -78,13 +80,17 @@ public class ItemProcess {
 
 		// Load User (if provided)
 		User u = BasicAuthentication.auth(req);
-
+		
+//		if (u == null) {
+//			resp = RestProcessUtils.buildJSONAndExceptionResponse(UNAUTHORIZED.getStatusCode(), USER_MUST_BE_LOGGED_IN);
+//			return resp;
+//		}
+//
 		// Parse json into to
 		ItemWithFileTO to = null;
 		try {
 			to = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(json,
 					ItemWithFileTO.class);
-			
 			if (file != null){
 				File tmp = File.createTempFile("imejiAPI", null);
 				IOUtils.copy(file, new FileOutputStream(tmp));
@@ -109,6 +115,7 @@ public class ItemProcess {
 			try {
 				resp= RestProcessUtils.buildResponse(Status.CREATED.getStatusCode(), service.create(to, u));
 			} catch (Exception e) {
+				//System.out.println("MESSAGE= "+e.getLocalizedMessage());
 				resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
 
 			}

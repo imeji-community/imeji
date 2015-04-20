@@ -746,7 +746,7 @@ public class AlbumTest extends ImejiTestBase{
 	public void test_8_UnlinkAllItemsFromAlbum() throws ImejiException {
 		//in principle it does not care if item exists or not, it will simply do nothing
 		initCollection();
-		initItem();
+		initItem("test");
 		
 		Response response = target(pathPrefix)
 				.path("/" + albumId + "/members/link").register(authAsUser)
@@ -754,7 +754,7 @@ public class AlbumTest extends ImejiTestBase{
 				.put(Entity.json("[\"" + itemId + "\"]"));	
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
 		
-		initItem();
+		initItem("test2");
 
 		response = target(pathPrefix)
 				.path("/" + albumId + "/members/link").register(authAsUser)

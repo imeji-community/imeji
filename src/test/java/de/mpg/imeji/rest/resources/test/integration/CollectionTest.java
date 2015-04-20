@@ -139,6 +139,17 @@ public class CollectionTest extends ImejiTestBase {
 
     }
 
+    @Test
+    public void test_1_CreateCollection_5_NoAuth() throws IOException {
+        String jsonString = getStringFromPath(STATIC_CONTEXT_REST + "/createCollection.json");
+        Response response = target(pathPrefix)
+                .register(MultiPartFeature.class)
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .post(Entity
+                        .entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(response.getStatus(), UNAUTHORIZED.getStatusCode());
+   }
+
     //TODO: TEST for user who does not have right to create collection
 
     @Test
@@ -195,16 +206,17 @@ public class CollectionTest extends ImejiTestBase {
     public void test_2_ReadCollection_6_AllItems_WithQuery() throws Exception {
         final int ITEM_AMOUNT = 6;
         for (int i = 1; i <= ITEM_AMOUNT; i++) {
-            initItem();
+            initItem("test"+i);
         }
         Response response = target(pathPrefix).path(collectionId + "/items")
-                .queryParam("q", "test.png")
+                .queryParam("q", "test1.jpg test2.jpg test3.jpg test4.jpg test5.jpg test6.jpg")
                 .register(authAsUser).request(MediaType.APPLICATION_JSON)
                 .get();
         assertEquals(OK.getStatusCode(), response.getStatus());
         String jsonStr = response.readEntity(String.class);
         assertThat(jsonStr, not(isEmptyOrNullString()));
-        assertThat(StringUtils.countMatches(jsonStr, "test.png"), equalTo(ITEM_AMOUNT));
+        //check how many times "filename" appears in the result (it should be 6, for all 6 newly created items)
+        assertThat(StringUtils.countMatches(jsonStr, "filename"), equalTo(ITEM_AMOUNT));
 
     }
 

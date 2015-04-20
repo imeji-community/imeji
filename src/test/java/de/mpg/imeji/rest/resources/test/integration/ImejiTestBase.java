@@ -144,5 +144,19 @@ public class ImejiTestBase extends JerseyTest {
 		}
 	}
 
+	public static void initItem(String fileName) {
+		ItemService s = new ItemService();
+		ItemWithFileTO to = new ItemWithFileTO();
+		to.setCollectionId(collectionId);
+		to.setFile(new File(STATIC_CONTEXT_STORAGE + "/"+fileName+".jpg"));
+		to.setStatus("PENDING");
+		try {
+			itemTO = s.create(to, JenaUtil.testUser);
+			itemId = itemTO.getId();
+		} catch (Exception e) {
+			logger.error("Cannot init Item", e);
+
+		}
+	}
 
 }

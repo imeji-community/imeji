@@ -27,11 +27,16 @@ public class StatisticsControllerTest extends ImejiTestBase{
 	
     @Test
     public void test_3_ReleaseCollection_1_WithAuth() throws ImejiException {
+    	long totalFileSize =0; 
         ItemService itemStatus = new ItemService();
 		initCollection();
-		initItem();	//+1
-        initItem(); //+2
-        initItem(); //+3
+		initItem("test");	//+1
+		totalFileSize += itemStatus.read(itemId, JenaUtil.testUser).getFileSize();
+        initItem("test2"); //+2
+		totalFileSize += itemStatus.read(itemId, JenaUtil.testUser).getFileSize();
+        initItem("test3"); //+3
+        long lastAddedItemSize = itemStatus.read(itemId, JenaUtil.testUser).getFileSize();
+		totalFileSize += itemStatus.read(itemId, JenaUtil.testUser).getFileSize();
         
 		//deleteItem 
         Form form= new Form();
@@ -40,7 +45,8 @@ public class StatisticsControllerTest extends ImejiTestBase{
 				.path("/" + itemId)
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.delete(); //+2
-        
+		
+        totalFileSize -= lastAddedItemSize;
 		//init Collection with testUser2
         CollectionService cs = new CollectionService();
 		try {
@@ -55,7 +61,7 @@ public class StatisticsControllerTest extends ImejiTestBase{
 		ItemService s = new ItemService();
 		ItemWithFileTO to = new ItemWithFileTO();
 		to.setCollectionId(collectionId);
-		to.setFile(new File(STATIC_CONTEXT_STORAGE + "/test.png"));
+		to.setFile(new File(STATIC_CONTEXT_STORAGE + "/test4.jpg"));
 		to.setStatus("PENDING");
 		try {
 			itemTO = s.create(to, JenaUtil.testUser2); //+3
@@ -67,7 +73,7 @@ public class StatisticsControllerTest extends ImejiTestBase{
         StatisticsController controller = new StatisticsController();
         long result = controller.getUsedStorageSizeForInstitute("imeji.org");
 
-        assertEquals(itemStatus.read(itemId, JenaUtil.testUser2).getFileSize() * 3, result);
+        assertEquals(itemStatus.read(itemId, JenaUtil.testUser2).getFileSize() +totalFileSize, result);
 
     }
 

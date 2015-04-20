@@ -3,6 +3,8 @@
  */
 package de.mpg.imeji.logic;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 import com.hp.hpl.jena.Jena;
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.query.ReadWrite;
@@ -268,5 +270,26 @@ public class Imeji {
 		} finally {
 			dataset.end();
 		}
+	}
+
+	/**
+	 * Returns true if checksum of uploaded files will be checked for duplicates within a single collection according to settings in properties.
+	 * If properties do not exist, checksum duplicate checking will be set as default 
+	 * 
+	 */
+	
+	public static boolean isValidateChecksumInCollection(){
+        String validateChecksum;
+		try {
+			validateChecksum = PropertyReader.getProperty("imeji.validate.checksum.in.collection");
+		} catch (Exception e) {
+			return true;
+		}
+        
+        if (isNullOrEmpty(validateChecksum))
+        	return true;
+        
+        return Boolean.valueOf(validateChecksum);
+
 	}
 }

@@ -103,6 +103,8 @@ public class ItemUpdateFileTest extends ImejiTestBase {
 	@Test
 	public void test_1_UpdateItem_2_WithFile_Fetched() throws  ImejiException, IOException {
 
+		initCollection();
+		initItem();
 		final String fileURL = target().getUri()
 				+ STATIC_CONTEXT_PATH.substring(1) + "/test2.jpg";
 
@@ -206,8 +208,9 @@ public class ItemUpdateFileTest extends ImejiTestBase {
 	@Test
 	public void test_1_UpdateItem_5_WithFile_Attached_Referenced()
 			throws IOException, ImejiException {
-
-		File newFile = new File(STATIC_CONTEXT_STORAGE + "/test.png");
+		initCollection();
+		initItem();
+		File newFile = new File(STATIC_CONTEXT_STORAGE + "/test2.jpg");
 
 		FileDataBodyPart filePart = new FileDataBodyPart("file", newFile);
 
@@ -281,12 +284,14 @@ public class ItemUpdateFileTest extends ImejiTestBase {
 	@Test
 	public void test_1_UpdateItem_7_WithFile_Attached_Fetched_Referenced()
 			throws IOException, ImejiException {
-
-		File newFile = new File(STATIC_CONTEXT_STORAGE + "/test.png");
+		initCollection();
+		initItem();
+		
+		File newFile = new File(STATIC_CONTEXT_STORAGE + "/test1.jpg");
 		FileDataBodyPart filePart = new FileDataBodyPart("file", newFile);
 
 		final String fileURL = target().getUri()
-				+ STATIC_CONTEXT_PATH.substring(1) + "/test.jpg";
+				+ STATIC_CONTEXT_PATH.substring(1) + "/test1.jpg";
 
 		FormDataMultiPart multiPart = new FormDataMultiPart();
 		multiPart.bodyPart(filePart);

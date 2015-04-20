@@ -1,5 +1,6 @@
 package de.mpg.imeji.rest.resources.test.integration.item;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
 import de.mpg.imeji.rest.resources.test.TestUtils;
@@ -8,6 +9,8 @@ import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
 import net.java.dev.webdav.jaxrs.ResponseStatus;
 
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
@@ -29,6 +32,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import static de.mpg.imeji.logic.util.ResourceHelper.getStringFromPath;
+import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONResponse;
 import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_PATH;
 import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_STORAGE;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
@@ -84,7 +88,7 @@ public class ItemCreateTest extends ImejiTestBase {
     //see bug https://github.com/imeji-community/imeji/issues/1023
     @Test
     public void createItemWithFile_NullAsExtensionInFileUrl_Bug1023() throws IOException {
-
+    	initCollection();
         FileDataBodyPart filePart = new FileDataBodyPart("file", new File("src/test/resources/storage/test"));
         FormDataMultiPart multiPart = new FormDataMultiPart();
         multiPart.bodyPart(filePart);
@@ -109,6 +113,7 @@ public class ItemCreateTest extends ImejiTestBase {
     @Test
     public void createItemWithoutFilename() throws IOException {
 
+    	initCollection();
         FileDataBodyPart filePart = new FileDataBodyPart("file", TEST_PNG_FILE);
         FormDataMultiPart multiPart = new FormDataMultiPart();
         multiPart.bodyPart(filePart);
@@ -131,7 +136,7 @@ public class ItemCreateTest extends ImejiTestBase {
 
     @Test
     public void createItemWithFilename() throws IOException {
-
+    	initCollection();
         FileDataBodyPart filePart = new FileDataBodyPart("file", TEST_PNG_FILE);
         FormDataMultiPart multiPart = new FormDataMultiPart();
         multiPart.bodyPart(filePart);
@@ -189,7 +194,7 @@ public class ItemCreateTest extends ImejiTestBase {
 
     @Test
     public void createItemInNotExistingCollection() throws IOException {
-
+    	initCollection();
         FileDataBodyPart filePart = new FileDataBodyPart("file", TEST_PNG_FILE);
         FormDataMultiPart multiPart = new FormDataMultiPart();
         multiPart.bodyPart(filePart);
@@ -208,7 +213,7 @@ public class ItemCreateTest extends ImejiTestBase {
     
     @Test
     public void createItem_NotLoggedIn() throws IOException {
-
+    	initCollection();
         FileDataBodyPart filePart = new FileDataBodyPart("file", TEST_PNG_FILE);
         FormDataMultiPart multiPart = new FormDataMultiPart();
         multiPart.bodyPart(filePart);
@@ -228,7 +233,7 @@ public class ItemCreateTest extends ImejiTestBase {
     @Test
     public void createItem_InReleasedCollection() throws Exception {
     	initCollection();
-    	initItem();
+    	initItem("test1");
     	CollectionService sc = new CollectionService();
     	sc.release(collectionId, JenaUtil.testUser);
         assertEquals("RELEASED", sc.read(collectionId, JenaUtil.testUser).getStatus());
@@ -281,7 +286,7 @@ public class ItemCreateTest extends ImejiTestBase {
     
     @Test
     public void createItem_WithNotAllowedUser() throws Exception {
-    	
+    	initCollection();
         FileDataBodyPart filePart = new FileDataBodyPart("file", TEST_PNG_FILE);
         FormDataMultiPart multiPart = new FormDataMultiPart();
         multiPart.bodyPart(filePart);
@@ -301,7 +306,7 @@ public class ItemCreateTest extends ImejiTestBase {
        
     @Test
     public void createItem_SyntaxInvalidJSONFile() throws Exception {
-    	
+    	initCollection();
         FileDataBodyPart filePart = new FileDataBodyPart("file", TEST_PNG_FILE);
         FormDataMultiPart multiPart = new FormDataMultiPart();
         multiPart.bodyPart(filePart);
@@ -442,6 +447,32 @@ public class ItemCreateTest extends ImejiTestBase {
     }
 
 
-    
+    @Test
+    public void createItemChecksumTest() throws IOException, JSONException {
+    	initCollection();
+    	initItem();
+    	//init Item creates already one item with test.png file , thus checksum is expected
+        FileDataBodyPart filePart = new FileDataBodyPart("file", TEST_PNG_FILE);
+        FormDataMultiPart multiPart = new FormDataMultiPart();
+        multiPart.bodyPart(filePart);
+        multiPart.field("json", itemJSON
+                .replace("___COLLECTION_ID___", collectionId)
+                .replace("___FILENAME___", "test.png"));
+
+        Response response = target(pathPrefix).register(authAsUser)
+                .register(MultiPartFeature.class)
+                .register(JacksonFeature.class)
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .post(Entity.entity(multiPart, multiPart.getMediaType()));
+        
+        if (Imeji.isValidateChecksumInCollection()) {
+        	assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+        }
+        else
+        {
+        	assertEquals(Status.CREATED.getStatusCode(), response.getStatus());
+        }
+    }
+
     
 }

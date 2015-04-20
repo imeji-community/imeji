@@ -138,13 +138,11 @@ public class ProfileController extends ImejiController {
 		CollectionController cc = new CollectionController();
 		CollectionImeji c;
 		try {
-			c = cc.retrieve(collectionId, user);
-		} catch (ImejiException e) {
-			// e.printStackTrace();
+				c = cc.retrieve(collectionId, user);
+		} catch (NotFoundException e) {
 			throw new UnprocessableError("Invalid collection: "
 					+ e.getLocalizedMessage());
 		}
-
 		return retrieve(c.getProfile(), user);
 	}
 

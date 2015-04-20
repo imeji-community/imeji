@@ -11,7 +11,6 @@ public class BasicAuthentication {
 	public static User auth(HttpServletRequest req){
 		Authentication auth = AuthenticationFactory.factory(req);
 		User u = auth.doLogin();
-		
 		return u; 
 		
 	}

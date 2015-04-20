@@ -126,7 +126,6 @@ public class ItemController extends ImejiController {
 							+ c.getIdString());
 		
 		
-		validateChecksum(c.getId(), f);
 		StorageController sc = new StorageController();
 		String mimeType = StorageUtils.getMimeType(f);
 		UploadResult uploadResult = sc.upload(filename, f, c.getIdString());
@@ -138,6 +137,8 @@ public class ItemController extends ImejiController {
 			throw new UnprocessableError(
 					"Filename or reference must not be empty!");
 		}
+		
+		validateChecksum(c.getId(), f);
 
 		item = ImejiFactory.newItem(item, c, user, uploadResult.getId(),
 				filename, URI.create(uploadResult.getOrginal()),
@@ -184,6 +185,7 @@ public class ItemController extends ImejiController {
 				tmp = File.createTempFile("imeji", null);
 				sController.read(externalFileUrl, new FileOutputStream(tmp),
 						true);
+				validateChecksum(item.getCollection(), tmp);
 			} catch (Exception e) {
 				// throw new
 				// UnprocessableError("There has been a problem with the file upload. ");
@@ -248,7 +250,6 @@ public class ItemController extends ImejiController {
 					"Filename or reference must not be empty!");
 		}
 		
-		validateChecksum(item.getCollection(), uploadedFile);
 
 		Item newItem = new Item(item);
 		CollectionController cc = new CollectionController();
@@ -798,7 +799,7 @@ public class ItemController extends ImejiController {
 	 * @throws UnprocessableError 
 	 */
 	private void validateChecksum(URI collectionURI, File file) throws UnprocessableError, ImejiException {
-		  if (isValidateChecksum()) {
+		  if (isValidateChecksumInCollection()) {
 			if (checksumExistsInCollection(collectionURI, StorageUtils.calculateChecksum(file))) {
 				throw new UnprocessableError("Same file already exists in the collection (same checksum). Please choose another file.");
 			}
@@ -814,26 +815,14 @@ public class ItemController extends ImejiController {
 	 */
 	private boolean checksumExistsInCollection(URI collectionId, String checksum) {
 		Search s = SearchFactory.create(SearchType.ITEM);
-		System.out.println(SPARQLQueries.selectItemByChecksum(collectionId, checksum));
 		return s.searchSimpleForQuery(
 				SPARQLQueries.selectItemByChecksum(collectionId, checksum))
 				.getNumberOfRecords() > 0;
 	}
 
 
-	private boolean isValidateChecksum(){
-        String validateChecksum;
-		try {
-			validateChecksum = PropertyReader.getProperty("imeji.validate.checksum.in.collection");
-		} catch (Exception e) {
-			return true;
-		}
-        
-        if (isNullOrEmpty(validateChecksum))
-        	return true;
-        
-        return Boolean.valueOf(validateChecksum);
-
+	private boolean isValidateChecksumInCollection(){
+        return Imeji.isValidateChecksumInCollection();
 	}
 
 }

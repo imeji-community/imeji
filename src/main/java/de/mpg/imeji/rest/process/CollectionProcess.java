@@ -48,7 +48,7 @@ public class CollectionProcess {
 		JSONResponse resp; 
 
 		User u = BasicAuthentication.auth(req);
-		
+
 		if (u == null) {
 			resp = RestProcessUtils.buildJSONAndExceptionResponse(UNAUTHORIZED.getStatusCode(), USER_MUST_BE_LOGGED_IN);
 		} else {

@@ -82,16 +82,6 @@ public class PropertyBean {
 		}
 	}
 
-	/**
-	 * Reload the Properties from the server
-	 * 
-	 * @throws IOException
-	 * @throws URISyntaxException
-	 */
-	public void reload() throws IOException, URISyntaxException {
-		PropertyReader.loadProperties();
-		BeanHelper.removeBeanFromMap(this.getClass());
-	}
 
 	/**
 	 * Function reads each property from imeji.properties file

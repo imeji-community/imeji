@@ -46,11 +46,11 @@ public class EmailClient
      */
     public void sendMail(String to, String from, String subject, String message) throws IOException, URISyntaxException
     {
-    	ConfigurationBean config = (ConfigurationBean) BeanHelper.getApplicationBean(ConfigurationBean.class);
+    	ConfigurationBean config = new ConfigurationBean();
         String emailUser = config.getEmailServerUser();
         String password = config.getEmailServerPassword();
         String server = config.getEmailServer();
-        String port = PropertyReader.getProperty("imeji.email.smtp.port");
+        String port = config.getEmailServerPort();
         if(isNullOrEmpty(port))
             port = "25";
         String auth = Boolean.toString(config.getEmailServerEnableAuthentication());

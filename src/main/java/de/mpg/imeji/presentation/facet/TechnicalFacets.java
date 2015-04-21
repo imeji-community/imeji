@@ -161,7 +161,7 @@ public class TechnicalFacets extends Facets
         ItemController ic = new ItemController();
         SearchQuery sq = new SearchQuery();
         sq.addPair(pair);
-        return ic.search(null, sq, null, allImages, sb.getUser()).getNumberOfRecords();
+        return ic.search(null, sq, null, allImages, sb.getUser(),  sb.getSelectedSpaceString()).getNumberOfRecords();
     }
 
     /*

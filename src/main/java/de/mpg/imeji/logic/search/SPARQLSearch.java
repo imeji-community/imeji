@@ -73,11 +73,12 @@ public class SPARQLSearch implements Search
      * @param user
      * @return
      */
-    public SearchResult search(SearchQuery sq, SortCriterion sortCri, User user)
+    public SearchResult search(SearchQuery sq, SortCriterion sortCri, User user, String spaceId)
     {
-        return new SearchResult(advanced(sq, sortCri, user), sortCri);
+        return new SearchResult(advanced(sq, sortCri, user, spaceId), sortCri);
     }
 
+ 
     /**
      * Search for {@link SearchQuery} according to {@link User} permissions, within a set of possible results
      * @param sq
@@ -87,9 +88,9 @@ public class SPARQLSearch implements Search
      * 
      * @return
      */
-    public SearchResult search(SearchQuery sq, SortCriterion sortCri, User user, List<String> uris)
+    public SearchResult search(SearchQuery sq, SortCriterion sortCri, User user, List<String> uris, String spaceId)
     {
-        return new SearchResult(advanced(uris, sq, sortCri, user), sortCri);
+        return new SearchResult(advanced(uris, sq, sortCri, user, spaceId), sortCri);
     }
     
 
@@ -112,9 +113,9 @@ public class SPARQLSearch implements Search
      * @param user
      * @return
      */
-    private List<String> advanced(SearchQuery sq, SortCriterion sortCri, User user)
+    private List<String> advanced(SearchQuery sq, SortCriterion sortCri, User user, String spaceId)
     {
-        return advanced(new ArrayList<String>(), sq, sortCri, user);
+        return advanced(new ArrayList<String>(), sq, sortCri, user, spaceId);
     }
 
     /**
@@ -128,7 +129,7 @@ public class SPARQLSearch implements Search
      * @param user
      * @return
      */
-    private List<String> advanced(List<String> previousResults, SearchQuery sq, SortCriterion sortCri, User user)
+    private List<String> advanced(List<String> previousResults, SearchQuery sq, SortCriterion sortCri, User user, String spaceId)
     {
         //indexes = SearchIndexInitializer.init();
         // Set null parameters
@@ -144,7 +145,7 @@ public class SPARQLSearch implements Search
         // second case is useless so far, since all query within a container are container specific.
         if (sq.isEmpty() || (containerURI != null && results.isEmpty() && false))
         {
-            results = simple(null, sortCri, user);
+            results = simple(null, sortCri, user, spaceId);
         }
         boolean isFirstResult = results.isEmpty();
         LOGICAL_RELATIONS logic = LOGICAL_RELATIONS.AND;
@@ -155,17 +156,17 @@ public class SPARQLSearch implements Search
             {
                 case GROUP:
                     subResults = new ArrayList<String>(advanced(new SearchQuery(((SearchGroup)se).getGroup()), sortCri,
-                            user));
+                            user, spaceId));
                     results = doLogicalOperation(SortHelper.removeSortValue(subResults), logic,
                             SortHelper.removeSortValue(results));
                     break;
                 case PAIR:
-                    subResults = new ArrayList<String>(simple((SearchPair)se, sortCri, user));
+                    subResults = new ArrayList<String>(simple((SearchPair)se, sortCri, user, spaceId));
                     results = doLogicalOperation(SortHelper.removeSortValue(subResults), logic,
                             SortHelper.removeSortValue(results));
                     break;
                 case METADATA:
-                    subResults = new ArrayList<String>(simple((SearchPair)se, sortCri, user));
+                    subResults = new ArrayList<String>(simple((SearchPair)se, sortCri, user, spaceId));
                     results = doLogicalOperation(SortHelper.removeSortValue(subResults), logic,
                             SortHelper.removeSortValue(results));
                     break;
@@ -197,9 +198,10 @@ public class SPARQLSearch implements Search
      * @param user
      * @return
      */
-    private List<String> simple(SearchPair pair, SortCriterion sortCri, User user)
+    private List<String> simple(SearchPair pair, SortCriterion sortCri, User user, String spaceId)
     {
-        String sparqlQuery = SimpleQueryFactory.getQuery(getModelName(type), getRDFType(type), pair, sortCri, user,  (containerURI != null), getSpecificQuery(user));
+        String sparqlQuery = SimpleQueryFactory.getQuery(getModelName(type), getRDFType(type), pair, sortCri, user,  (containerURI != null), getSpecificQuery(user), spaceId);
+        //System.out.println("SparqlSearch.getQuery="+sparqlQuery);
         return ImejiSPARQL.exec(sparqlQuery, null);
     }
 

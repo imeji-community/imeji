@@ -340,14 +340,14 @@ public class ItemController extends ImejiController {
 	 * @return
 	 * @throws ImejiException
 	 */
-	public List<Item> retrieve(final User user, String q)
+	public List<Item> retrieve(final User user, String q, String spaceId)
 			throws ImejiException, IOException {
 		List<Item> itemList = new ArrayList<Item>();
 		try {
 			for (String itemId : search(
 					null,
 					!isNullOrEmptyTrim(q) ? URLQueryTransformer
-							.parseStringQuery(q) : null, null, null, user)
+							.parseStringQuery(q) : null, null, null, user, spaceId)
 					.getResults()) {
 				itemList.add(retrieve(URI.create(itemId), user));
 			}
@@ -571,11 +571,11 @@ public class ItemController extends ImejiController {
 	 * @return
 	 */
 	public SearchResult search(URI containerUri, SearchQuery searchQuery,
-			SortCriterion sortCri, List<String> uris, User user) {
+			SortCriterion sortCri, List<String> uris, User user, String spaceId) {
 		String uriString = containerUri != null ? containerUri.toString()
 				: null;
 		Search search = SearchFactory.create(SearchType.ITEM, uriString);
-		return search.search(searchQuery, sortCri, user, uris);
+		return search.search(searchQuery, sortCri, user, uris, spaceId);
 	}
 
 	/**
@@ -588,7 +588,7 @@ public class ItemController extends ImejiController {
 	public Container searchAndSetContainerItems(Container c, User user,
 			int limit, int offset) {
 		ItemController ic = new ItemController();
-		List<String> newUris = ic.search(c.getId(), null, null, null, user)
+		List<String> newUris = ic.search(c.getId(), null, null, null, user, "")
 				.getResults();
 		c.getImages().clear();
 		for (String s : newUris) {

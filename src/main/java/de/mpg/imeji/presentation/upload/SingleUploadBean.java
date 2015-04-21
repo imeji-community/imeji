@@ -285,7 +285,8 @@ public class SingleUploadBean implements Serializable{
         SortCriterion sortCriterion = new SortCriterion();
         sortCriterion.setIndex(SPARQLSearch.getIndex("user"));
         sortCriterion.setSortOrder(SortOrder.valueOf("DESCENDING"));
-        SearchResult results = cc.search(sq, sortCriterion, -1, 0, user);
+        //TODO: check if here space restriction is needed
+        SearchResult results = cc.search(sq, sortCriterion, -1, 0, user, null);
 		collections = cc.retrieveLazy(results.getResults(), -1, 0, user);
 		collectionItems.add(new SelectItem("", "-- select collection --"));
 		for(CollectionImeji c : collections)

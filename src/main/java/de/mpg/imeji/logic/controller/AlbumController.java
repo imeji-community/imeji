@@ -129,11 +129,11 @@ public class AlbumController extends ImejiController {
 	 * @return
 	 * @throws ImejiException
 	 */
-	public List<Album> retrieve(User user, String q) throws ImejiException {
+	public List<Album> retrieve(User user, String q, String spaceId) throws ImejiException {
 		List<Album> aList = new ArrayList<>();
 		try {
 			SearchQuery sq= URLQueryTransformer.parseStringQuery(q);
-			for (String albId: search(!isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q) : null, user, null, 0, 0).getResults()) {
+			for (String albId: search(!isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q) : null, user, null, 0, 0, spaceId).getResults()) {
 				aList.add(retrieve(URI.create(albId), user));
 			}
 		} catch (Exception e) {
@@ -204,7 +204,7 @@ public class AlbumController extends ImejiController {
 		}
 		
 		ItemController ic = new ItemController();
-		List<String> inAlbums = ic.search(album.getId(), null, null, null, user).getResults();
+		List<String> inAlbums = ic.search(album.getId(), null, null, null, user, null).getResults();
 		List<String> notAddedUris = new ArrayList<String>();
 		for (String uri : uris) {
 			try {
@@ -313,9 +313,9 @@ public class AlbumController extends ImejiController {
 	 * @return
 	 */
 	public SearchResult search(SearchQuery searchQuery, User user,
-			SortCriterion sortCri, int limit, int offset) {
+			SortCriterion sortCri, int limit, int offset, String spaceId) {
 		Search search = SearchFactory.create(SearchType.ALBUM);
-		return search.search(searchQuery, sortCri, user);
+		return search.search(searchQuery, sortCri, user, spaceId);
 	}
 
 	/**
@@ -397,7 +397,7 @@ public class AlbumController extends ImejiController {
         try {
             for (String itemId: ic.search(ObjectHelper.getURI(Album.class, id),
                     !isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q) : null,
-                    null, null, user).getResults()) {
+                    null, null, user, null).getResults()) {
                 itemList.add(ic.retrieve(URI.create(itemId), user));
             }
         } catch (Exception e) {

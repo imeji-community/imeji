@@ -538,7 +538,7 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
             CollectionController cc = new CollectionController();
             CollectionImeji ci = new CollectionImeji();
             ReverseTransferObjectFactory.transferCollection(collectionTO, ci, TRANSFER_MODE.CREATE, JenaUtil.testUser);
-            collectionId = ObjectHelper.getId(cc.create(ci, p, JenaUtil.testUser, MetadataProfileCreationMethod.REFERENCE));
+            collectionId = ObjectHelper.getId(cc.create(ci, p, JenaUtil.testUser, MetadataProfileCreationMethod.REFERENCE, null));
 
         } catch (Exception e) {
             LOGGER.error("Cannot init Collection", e);

@@ -85,7 +85,7 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
         SortCriterion sortCriterion = new SortCriterion();  
         sortCriterion.setIndex(SPARQLSearch.getIndex(getSelectedSortCriterion()));
         sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
-        SearchResult results = controller.search(searchQuery, sortCriterion, limit, offset, sb.getUser());
+        SearchResult results = controller.search(searchQuery, sortCriterion, limit, offset, sb.getUser(),  sb.getSelectedSpaceString());
         collections = controller.retrieveLazy(results.getResults(), limit, offset, sb.getUser());
         totalNumberOfRecords = results.getNumberOfRecords();
         return ImejiFactory.collectionListToListItem(collections, sb.getUser());

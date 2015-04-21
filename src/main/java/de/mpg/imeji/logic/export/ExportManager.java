@@ -75,6 +75,7 @@ public class ExportManager {
 	 * @return
 	 * @throws IOException
 	 */
+	//TODO NB 21.04.2015 Check if here space restriction is needed
 	public SearchResult search() throws IOException {
 		String collectionId = export.getParam("col");
 		String albumId = export.getParam("album");
@@ -90,11 +91,11 @@ public class ExportManager {
 		if ("collection".equals(searchType) || "metadata".equals(searchType)) {
 			CollectionController collectionController = new CollectionController();
 			result = collectionController.search(searchQuery, null,
-					maximumNumberOfRecords, 0, user);
+					maximumNumberOfRecords, 0, user, null);
 		} else if ("album".equals(searchType)) {
 			AlbumController albumController = new AlbumController();
 			result = albumController.search(searchQuery, user, null,
-					maximumNumberOfRecords, 0);
+					maximumNumberOfRecords, 0, null);
 		} else if ("profile".equals(searchType)) {
 			// List<String> uris = new ArrayList<String>();
 			// result = new SearchResult(uris, new SortCriterion());
@@ -105,14 +106,14 @@ public class ExportManager {
 			if (collectionId != null) {
 				result = itemController.search(ObjectHelper.getURI(
 						CollectionImeji.class, collectionId), searchQuery,
-						null, null, user);
+						null, null, user, null);
 			} else if (albumId != null) {
 				result = itemController.search(
 						ObjectHelper.getURI(Album.class, albumId), searchQuery,
-						null, null, user);
+						null, null, user, null);
 			} else {
 				result = itemController.search(null, searchQuery, null, null,
-						user);
+						user, null);
 			}
 		}
 		if (result != null && result.getNumberOfRecords() > 0

@@ -255,7 +255,7 @@ public class ProfileController extends ImejiController {
 		SortCriterion sortCri = new SortCriterion(
 				SPARQLSearch.getIndex(SearchIndex.names.prof.name()),
 				SortOrder.ASCENDING);
-		SearchResult result = search.search(query, sortCri, user);
+		SearchResult result = search.search(query, sortCri, user, null);
 		return result;
 	}
 
@@ -279,7 +279,7 @@ public class ProfileController extends ImejiController {
 		try {
 			result = search.search(
 					!isNullOrEmptyTrim(q) ? URLQueryTransformer
-							.parseStringQuery(q) : null, sortCri, user);
+							.parseStringQuery(q) : null, sortCri, user, null);
 			for (String uri : result.getResults()) {
 				l.add(retrieve(URI.create(uri), user));
 			}

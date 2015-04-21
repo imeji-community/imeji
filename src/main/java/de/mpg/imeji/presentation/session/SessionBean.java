@@ -3,12 +3,36 @@
  */
 package de.mpg.imeji.presentation.session;
 
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.controller.SpaceController;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.ResourceBundle;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Space;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.beans.Navigation.Page;
@@ -18,25 +42,7 @@ import de.mpg.imeji.presentation.util.CookieUtils;
 import de.mpg.imeji.presentation.util.MaxPlanckInstitutUtils;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-
-import com.ocpsoft.pretty.PrettyContext;
-import com.ocpsoft.pretty.faces.config.PrettyConfig;
-import com.ocpsoft.pretty.faces.config.mapping.UrlMapping;
-
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
-import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
-import javax.servlet.http.HttpServletRequest;
-
-import java.io.IOException;
-import java.io.Serializable;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
-
+import static com.google.common.base.Strings.isNullOrEmpty;
 /**
  * The session Bean for imeji.
  * 
@@ -75,6 +81,7 @@ public class SessionBean implements Serializable {
 
 	private String applicationUrl;
 	private String spaceId;
+	private URI selectedSpace;
 	/*
 	 * Cookies name
 	 */
@@ -699,11 +706,41 @@ public class SessionBean implements Serializable {
 		return ipAddress;
 	}
 
-	public void setSpaceId(String spaceIdString) {
+	public void setSpaceId(String spaceIdString)  {
 		this.spaceId = spaceIdString;
+		if (!isNullOrEmpty(spaceIdString)) {
+			SpaceController sc = new SpaceController();
+			try {
+					Space selectedSpace =  sc.retrieveSpaceByLabel(spaceIdString, this.user);
+					if (selectedSpace != null) {
+						this.selectedSpace = selectedSpace.getId();
+					}
+					else
+					{
+						this.selectedSpace = null;
+						this.spaceId =""; 
+					}
+			}
+			catch (ImejiException e) 
+			{
+				this.selectedSpace = null;
+				this.spaceId =""; 
+			}
+		}
 	}
 
 	public String getSpaceId() {
 		return this.spaceId;
 	}
+	
+	public String getSelectedSpaceString() {
+		if (this.selectedSpace != null)
+			return this.selectedSpace.toString();
+		return "";
+	}
+
+	public URI getSelectedSpace() {
+			return this.selectedSpace;
+	}
 }
+

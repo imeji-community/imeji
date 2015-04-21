@@ -63,7 +63,7 @@ public interface Search
      * @param user
      * @return
      */
-    public SearchResult search(SearchQuery query, SortCriterion sortCri, User user);
+    public SearchResult search(SearchQuery query, SortCriterion sortCri, User user, String spaceId);
 
     /**
      * Search for imeji objects belonging to a predefined list of possible results
@@ -72,14 +72,19 @@ public interface Search
      * @param sortCri
      * @param user
      * @param uris
+     * @param spaceId
      * @return
      */
-    public SearchResult search(SearchQuery query, SortCriterion sortCri, User user, List<String> uris);
+    public SearchResult search(SearchQuery query, SortCriterion sortCri, User user, List<String> uris, String spaceId);
 
     /**
      * Search with a Simple {@link String}
      * 
      * @param query
+     * @param sortCri
+     * @param user
+     * @param uris
+     * @param spaceId
      * @return
      */
     public SearchResult searchSimpleForQuery(String query);

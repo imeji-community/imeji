@@ -59,7 +59,7 @@ public class ItemService implements API<ItemTO> {
 	}
 
 	public List<ItemTO> readItems(User u, String q) throws ImejiException, IOException {
-		return Lists.transform(new ItemController().retrieve(u, q),
+		return Lists.transform(new ItemController().retrieve(u, q, null),
 				new Function<Item, ItemTO>() {
 					@Override
 					public ItemTO apply(Item vo) {

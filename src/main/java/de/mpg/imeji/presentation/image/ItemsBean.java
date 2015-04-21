@@ -169,7 +169,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
 			SortCriterion sortCriterion) {
 		ItemController controller = new ItemController();
 		return controller.search(null, searchQuery, sortCriterion, null,
-				session.getUser());
+				session.getUser(),  session.getSelectedSpaceString());
 	}
 
 	/**

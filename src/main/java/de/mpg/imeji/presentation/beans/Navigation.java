@@ -175,10 +175,10 @@ public class Navigation implements Serializable
         return applicationUrl+getSpacePath()+ EXPORT.getPath();
     }
 
-    public String getBlogUrl() throws IOException, URISyntaxException
-    {
-        return PropertyReader.getProperty("imeji.blog.url");
-    }
+//    public String getBlogUrl() throws IOException, URISyntaxException
+//    {
+//        return PropertyReader.getProperty("imeji.blog.url");
+//    }
 
     public String getShareUrl()
     {

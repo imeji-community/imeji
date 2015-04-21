@@ -54,12 +54,14 @@ public class SimpleQueryFactory {
 	 */
 	public static String getQuery(String modelName, String rdfType,
 			SearchPair pair, SortCriterion sortCriterion, User user,
-			boolean isCollection, String specificQuery) {
-		PATTERN_SELECT = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 XXX_MODEL_NAMES_XXX WHERE {XXX_SECURITY_FILTER_XXX XXX_SEARCH_ELEMENT_XXX XXX_SPECIFIC_QUERY_XXX XXX_SEARCH_TYPE_ELEMENT_XXX  ?s <"
+			boolean isCollection, String specificQuery, String spaceId) {
+		PATTERN_SELECT = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 XXX_MODEL_NAMES_XXX WHERE {XXX_SPACE_FILTER_XXX XXX_SECURITY_FILTER_XXX XXX_SEARCH_ELEMENT_XXX XXX_SPECIFIC_QUERY_XXX XXX_SEARCH_TYPE_ELEMENT_XXX  ?s <"
 				+ ImejiNamespaces.STATUS + "> ?status XXX_SORT_ELEMENT_XXX}";
 		return PATTERN_SELECT
 				.replace("XXX_MODEL_NAMES_XXX",
 						getModelNames(modelName, pair, specificQuery))
+				.replace("XXX_SPACE_FILTER_XXX", 
+						 getSpaceRestriction (spaceId, modelName))
 				.replace(
 						"XXX_SECURITY_FILTER_XXX",
 						SimpleSecurityQuery.queryFactory(user, rdfType,
@@ -74,6 +76,8 @@ public class SimpleQueryFactory {
 				.replace("XXX_SPECIFIC_QUERY_XXX", specificQuery);
 	}
 
+	
+	
 	/**
 	 * Return the RDF Type of the search objects
 	 * 
@@ -84,6 +88,34 @@ public class SimpleQueryFactory {
 		if (rdfType == null || rdfType.equals(""))
 			return "";
 		return "?s a <" + rdfType + "> .";
+	}
+
+
+	/**
+	 * Return the space query of the search objects. It checks the query for model and adds respectively the spaceUri
+	 * Space restriction will only work for search and for explicitly provided model in this case
+	 * 
+	 * @param spaceURI
+	 * @return
+	 */
+	private static String getSpaceRestriction (String spaceUri, String modelName) {
+		if (spaceUri == null || spaceUri.equals(""))
+			return "";
+		
+		boolean searchInSpace = false;
+		if (modelName == null || modelName.equals("")) {
+			return "";
+		}
+		
+		boolean isCollection = modelName.equals(Imeji.collectionModel);
+		boolean isImage = modelName.equals(Imeji.imageModel);
+		//boolean isAlbum = modelName.equals(Imeji.albumModel);
+
+		if ( !isCollection && !isImage )
+			return "";
+		
+		return isCollection ? "?s <http://imeji.org/terms/space> <" + spaceUri + "> ." :
+							  "?s <http://imeji.org/terms/collection> ?coll . ?coll  <http://imeji.org/terms/space>  <"+ spaceUri + "> ." ;
 	}
 
 	/**

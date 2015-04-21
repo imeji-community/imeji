@@ -87,7 +87,7 @@ public class PrivateBean extends SuperContainerBean<CollectionListItem> {
 		sortCriterion.setIndex(SPARQLSearch.getIndex("user"));
 		sortCriterion.setSortOrder(SortOrder.valueOf("DESCENDING"));
 		SearchResult results = cc.search(searchQuery, sortCriterion, limit,
-				offset, user);
+				offset, user, sb.getSpaceId());
 		Collection<CollectionImeji> collections = new ArrayList<CollectionImeji>();
 		collections = cc
 				.retrieveLazy(results.getResults(), limit, offset, user);

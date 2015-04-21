@@ -1,13 +1,21 @@
 package de.mpg.imeji.logic.controller;
 
 import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.reader.ReaderFacade;
+import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.SearchFactory;
+import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
+import de.mpg.imeji.logic.search.vo.SearchQuery;
+import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.*;
@@ -22,10 +30,12 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import static com.google.common.io.Files.copy;
 import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
+
 
 /**
  * CRUD methods for {@link Space}
@@ -51,6 +61,8 @@ public class SpaceController extends ImejiController {
      * internal storage to parse file location)
      */
     private String storageUrl = null;
+
+    private static CollectionController cc = new CollectionController();
 
 
     public SpaceController() {
@@ -260,11 +272,108 @@ public class SpaceController extends ImejiController {
                         try {
                             return retrieve(URI.create(id), Imeji.adminUser);
                         } catch (ImejiException e) {
-                            LOGGER.info("Cannot retrieve space: " + id );
+                            LOGGER.info("Cannot retrieve space: " + id);
                         }
                         return null;
                     }
                 });
+    }
+    
+    /**
+     * Retrieve all imeji {@link Album}
+     *
+     * @return
+     * @throws ImejiException
+     */
+    public List<String> retrieveAllSpaceSlugs() throws ImejiException {
+        return Lists.transform(ImejiSPARQL.exec(SPARQLQueries.selectSpaceAll(),
+                        Imeji.spaceModel),
+                new Function<String, String>() {
+                    @Override
+                    public String apply(String id) {
+                        try {
+                            return retrieve(URI.create(id), Imeji.adminUser).getSlug().toString();
+                        } catch (ImejiException e) {
+                            LOGGER.info("Cannot retrieve space: " + id);
+                        }
+                        return null;
+                    }
+                });
+    }
+
+    /**
+     * Retrieve all {@link CollectionImeji}s of {@link Space}
+     *
+     * @param space
+     * @return
+     * @throws ImejiException
+     */
+    public Collection<String> retrieveCollections(Space space) throws ImejiException {
+        if ( Iterables.isEmpty(space.getSpaceCollections()) )
+            space.setSpaceCollections(ImejiSPARQL.exec(SPARQLQueries.selectCollectionsOfSpace(space.getId()), null));
+        return space.getSpaceCollections();
+    }
+
+    /**
+     * Add {@link CollectionImeji} to {@link Space}
+     *
+     * @param space
+     * @param collId
+     * @param user
+     * @throws ImejiException
+     */
+    public void addCollection(Space space, String collId, User user) throws ImejiException {
+        if (!Iterables.contains(space.getSpaceCollections(), collId)) {
+            space.getSpaceCollections().add(collId);
+            update(space, user);
+            updateCollectionSpace(space, collId, user);
+        }
+    }
+
+    
+    /**
+     * Add {@link CollectionImeji} to {@link Space}
+     *
+     * @param spaceId
+     * @param collId
+     * @param user
+     * @throws ImejiException
+     */
+    public void addCollection(String spaceId, String collId, User user) throws ImejiException {
+    	Space sp = retrieve(ObjectHelper.getURI(Space.class, spaceId), user);
+    	addCollection(sp, collId, user);
+    }
+
+    
+    /**
+     *
+     * Remove {@link CollectionImeji} from the {@link Space}
+     *
+     * @param space
+     * @param collId
+     * @param user
+     * @return renewed list
+     * @throws ImejiException
+     */
+    public Collection<String> removeCollection(Space space, final String collId, User user) throws ImejiException {
+        Collection<String> colls = retrieveCollections(space);
+        if (Iterables.removeIf(colls, new Predicate<String>() {
+            @Override
+            public boolean apply(String col) {
+                return col.equals(collId);
+            }
+        })) {
+            space.setSpaceCollections(colls);
+            update(space, user);
+            updateCollectionSpace(space, ObjectHelper.getId(URI.create(collId)), user);
+        }
+        return colls;
+    }
+
+    private void updateCollectionSpace(Space space, String collId, User user) throws ImejiException {
+        CollectionImeji c = cc.retrieve(collId, user);
+        c.setSpace(space.getId());
+        cc.update(c, user);
     }
 
     /**
@@ -280,24 +389,42 @@ public class SpaceController extends ImejiController {
     }
     
     public boolean isSpaceByLabel(String spaceId) throws ImejiException {
-//		Search s = SearchFactory.create();
-//    	List<String> r = s.searchSimpleForQuery(SPARQLQueries.getSpaceByLabel(spaceId)).getResults();
-//		if (!r.isEmpty() && r.get(0) != null) {
-//			return true;
-//		} else {
-//			return false;
-//		}
-		
 		//TODO ChangeMe
-		List<String> potentialSpaces= Arrays.asList("345", "567");
-		
+		List<String> potentialSpaces= retrieveAllSpaceSlugs();
 		if (potentialSpaces.contains(spaceId)) {
 			return true;
 		}
 		return false;
 
     }
+    
+    /**
+	 * Search for {@link Space}
+	 * 
+	 * @param searchQuery
+	 * @param sortCri
+	 * @param limit
+	 * @param offset
+	 * @return
+	 */
+	public SearchResult search(SearchQuery searchQuery, SortCriterion sortCri,
+			int limit, int offset, User user, String spaceId) {
+		Search search = SearchFactory.create(SearchType.SPACE);
+		return search.search(searchQuery, sortCri, user, null);
+	}
 
+
+    
+    public Space retrieveSpaceByLabel(String spaceId, User user) throws ImejiException {
+		Search s = SearchFactory.create();
+    	List<String> r = s.searchSimpleForQuery(SPARQLQueries.getSpaceByLabel(spaceId)).getResults();
+		if (!r.isEmpty() && !isNullOrEmptyTrim(r.get(0))) {
+			return retrieve(ObjectHelper.getURI(Space.class, r.get(0)), user);
+		} else {
+			return null;
+		}
+    }
+    
     /**
      * Delete the {@link Space}
      *

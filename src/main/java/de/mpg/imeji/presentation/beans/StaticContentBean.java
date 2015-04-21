@@ -21,7 +21,6 @@ public class StaticContentBean
 {
     private boolean about = true;
     private boolean legal = true;
-    private boolean blog = true;
 
     /**
      * Construct the {@link StaticContentBean} by reading in the imeji.properties which external content are defined
@@ -38,10 +37,6 @@ public class StaticContentBean
         if ("".equals(PropertyReader.getProperty("imeji.legal.url")))
         {
             legal = false;
-        }
-        if ("".equals(PropertyReader.getProperty("imeji.blog.url")))
-        {
-            blog = false;
         }
     }
 
@@ -239,15 +234,5 @@ public class StaticContentBean
     public void setLegal(boolean legal)
     {
         this.legal = legal;
-    }
-
-    public boolean isBlog()
-    {
-        return blog;
-    }
-
-    public void setBlog(boolean blog)
-    {
-        this.blog = blog;
     }
 }

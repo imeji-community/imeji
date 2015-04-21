@@ -130,7 +130,7 @@ public class CollectionFacets extends Facets
             sq.addLogicalRelation(LOGICAL_RELATIONS.AND);
             sq.addPair(pair);
         }
-        return ic.search(colURI, sq, null, collectionImages, sb.getUser()).getNumberOfRecords();
+        return ic.search(colURI, sq, null, collectionImages, sb.getUser(), null).getNumberOfRecords();
     }
 
     /*

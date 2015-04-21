@@ -111,7 +111,7 @@ public class CreateCollectionBean extends CollectionBean {
             MetadataProfile whichProfile = isUseMDProfileTemplate() ? getProfileTemplate() :null;
             //feature below will always create a collection with a new metadata profile copied (cloned)
             //if there is no metadata profile template selected, then it will create a new metadata profile 
-            URI id = collectionController.create(getCollection(), whichProfile, user, collectionController.getProfileCreationMethod(getSelectedCreationMethod()));
+            URI id = collectionController.create(getCollection(), whichProfile, user, collectionController.getProfileCreationMethod(getSelectedCreationMethod()), sessionBean.getSelectedSpaceString());
             setCollection(collectionController.retrieve(id, user));
             setId(ObjectHelper.getId(id));
             

@@ -3,6 +3,7 @@
  */
 package de.mpg.imeji.presentation.user;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.auth.Authentication;
 import de.mpg.imeji.logic.auth.AuthenticationFactory;
 import de.mpg.imeji.logic.util.UrlHelper;
@@ -132,6 +133,7 @@ public class LoginBean {
 		sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
 		sb.setShowLogin(false);
 		sb.setSpaceId(spaceId);
+
 		BeanHelper.info(sb.getMessage("success_log_out"));
 		fc = FacesContext.getCurrentInstance();
 		Navigation nav = (Navigation) BeanHelper

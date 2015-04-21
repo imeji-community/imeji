@@ -181,11 +181,6 @@
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
-		<managed-bean-name>BlogBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.beans.BlogBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
 		<managed-bean-name>SessionBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.session.SessionBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>

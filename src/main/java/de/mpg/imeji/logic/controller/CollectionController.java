@@ -73,10 +73,10 @@ public class CollectionController extends ImejiController {
 	 * @return
 	 * @throws ImejiException
 	 */
-	public URI create(CollectionImeji c, MetadataProfile p, User user)
+	public URI create(CollectionImeji c, MetadataProfile p, User user, String spaceId)
 			throws ImejiException {
 		return createAskValidate(c, p, user, true,
-				MetadataProfileCreationMethod.COPY);
+				MetadataProfileCreationMethod.COPY, spaceId);
 	}
 
 	/**
@@ -90,18 +90,18 @@ public class CollectionController extends ImejiController {
 	 * @throws ImejiException
 	 */
 	public URI create(CollectionImeji c, MetadataProfile p, User user,
-			MetadataProfileCreationMethod method) throws ImejiException {
-		return createAskValidate(c, p, user, true, method);
+			MetadataProfileCreationMethod method, String spaceId) throws ImejiException {
+		return createAskValidate(c, p, user, true, method, spaceId);
 	}
 
 	public URI createNoValidate(CollectionImeji c, MetadataProfile p,
-			User user, MetadataProfileCreationMethod method)
+			User user, MetadataProfileCreationMethod method, String spaceId)
 			throws ImejiException {
-		return createAskValidate(c, p, user, false, method);
+		return createAskValidate(c, p, user, false, method, spaceId);
 	}
 
 	private URI createAskValidate(CollectionImeji c, MetadataProfile p,
-			User user, boolean validate, MetadataProfileCreationMethod method)
+			User user, boolean validate, MetadataProfileCreationMethod method, String spaceId)
 			throws ImejiException {
 
 		ProfileController pc = new ProfileController();
@@ -127,11 +127,22 @@ public class CollectionController extends ImejiController {
 
 		writeCreateProperties(c, user);
 		c.setProfile(p.getId());
+		
 		writer.create(WriterFacade.toList(c), user);
 		// Prepare grants
 		GrantController gc = new GrantController();
 		gc.addGrants(user, AuthorizationPredefinedRoles.admin(c.getId()
 				.toString(), p.getId().toString()), user);
+		
+		//check the space 
+		//Just read SessionBean for SpaceId
+		
+		if (!isNullOrEmpty(spaceId)) {
+			SpaceController sp = new SpaceController();
+			sp.addCollection(spaceId, c.getId().toString(), user);
+		}
+		
+
 		return c.getId();
 	}
 
@@ -179,7 +190,7 @@ public class CollectionController extends ImejiController {
 			for (String itemId : ic.search(
 					ObjectHelper.getURI(CollectionImeji.class, id),
 					!isNullOrEmptyTrim(q) ? URLQueryTransformer
-							.parseStringQuery(q) : null, null, null, user)
+							.parseStringQuery(q) : null, null, null, user, null)
 					.getResults()) {
 				itemList.add(ic.retrieve(URI.create(itemId), user));
 			}
@@ -198,14 +209,14 @@ public class CollectionController extends ImejiController {
 	 * @return
 	 * @throws ImejiException
 	 */
-	public List<CollectionImeji> retrieveCollections(User user, String q)
+	public List<CollectionImeji> retrieveCollections(User user, String q, String spaceId)
 			throws ImejiException {
 
 		List<CollectionImeji> cList = new ArrayList<CollectionImeji>();
 		try {
 			for (String colId : search(
 					!isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q)
-							: null, null, 0, 0, user).getResults()) {
+							: null, null, 0, 0, user, spaceId).getResults()) {
 				cList.add(retrieve(URI.create(colId), user));
 			}
 		} catch (Exception e) {
@@ -385,7 +396,7 @@ public class CollectionController extends ImejiController {
 			throws ImejiException {
 		ItemController itemController = new ItemController();
 		List<String> itemUris = itemController.search(collection.getId(), null,
-				null, null, user).getResults();
+				null, null, user, null).getResults();
 		if (hasImageLocked(itemUris, user)) {
 			throw new RuntimeException(
 					((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
@@ -443,7 +454,7 @@ public class CollectionController extends ImejiController {
 		}
 
 		List<String> itemUris = itemController.search(collection.getId(), null,
-				null, null, user).getResults();
+				null, null, user, null).getResults();
 
 		if (hasImageLocked(itemUris, user)) {
 			throw new UnprocessableError(
@@ -489,7 +500,7 @@ public class CollectionController extends ImejiController {
 		}
 
 		List<String> itemUris = itemController.search(collection.getId(), null,
-				null, null, user).getResults();
+				null, null, user, null).getResults();
 		if (hasImageLocked(itemUris, user)) {
 			throw new UnprocessableError(
 					((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
@@ -524,9 +535,9 @@ public class CollectionController extends ImejiController {
 	 * @return
 	 */
 	public SearchResult search(SearchQuery searchQuery, SortCriterion sortCri,
-			int limit, int offset, User user) {
+			int limit, int offset, User user, String spaceId) {
 		Search search = SearchFactory.create(SearchType.COLLECTION);
-		return search.search(searchQuery, sortCri, user);
+		return search.search(searchQuery, sortCri, user, spaceId);
 	}
 
 	/**
@@ -592,7 +603,7 @@ public class CollectionController extends ImejiController {
 	public void updateCollectionItemsProfile(CollectionImeji ic, URI newProfileUri, User user) throws ImejiException {
 			ItemController itemController = new ItemController();
 			List<String> itemUris = itemController.search(ic.getId(), null,
-					null, null, user).getResults();
+					null, null, user, null).getResults();
 			
 			List<Item> items = (List<Item>) itemController.retrieve(itemUris,-1, 0, user);
 			itemController.updateItemsProfile(items, user, newProfileUri.toString());
@@ -608,7 +619,7 @@ public class CollectionController extends ImejiController {
     {
     	List<CollectionImeji> cols = new ArrayList<CollectionImeji>();
     	String q = SPARQLQueries.selectCollectionImejiOfSpace(uri);
-    	retrieveCollections(user, q);
+    //	retrieveCollections(user, q);
     	return cols;
     }
     

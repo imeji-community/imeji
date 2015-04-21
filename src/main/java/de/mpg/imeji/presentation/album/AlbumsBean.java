@@ -73,7 +73,7 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean> {
 			searchQuery.addPair(getFilter());
 		}
 		SearchResult searchResult = controller.search(searchQuery,
-				sb.getUser(), sortCriterion, limit, offset);
+				sb.getUser(), sortCriterion, limit, offset, sb.getSelectedSpaceString());
 		totalNumberOfRecords = searchResult.getNumberOfRecords();
 		return ImejiFactory.albumListToBeanList(controller.loadAlbumsLazy(
 				searchResult.getResults(), sb.getUser(), limit, offset));

@@ -109,7 +109,7 @@ public class ProfileServiceTest {
 		c.setProfile(p.getId());
 
 		pController.create(p, testUser);
-		cController.createNoValidate(c, p, testUser, cController.getProfileCreationMethod("reference"));
+		cController.createNoValidate(c, p, testUser, cController.getProfileCreationMethod("reference"), null);
 	}
 
 	@Test

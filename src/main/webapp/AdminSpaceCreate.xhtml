@@ -111,17 +111,16 @@
 									<h:inputTextarea id="spaceDescription" styleClass="imj_metadataValue" value="#{CreateSpaceBean.space.description}"/>
 								</div>
 
-<ui:remove>								
+							
 								<div class="imj_metadataSet">				
-									<h:selectManyCheckbox id="selectCollections" value="#{CreateSpaceBean.selectedCollections}" onclick="document.getElementById('selectCollectionForSpace').click();">
-										<f:selectItems value="#{CreateSpaceBean.collections}" />
+									<h:selectManyCheckbox id="selectCollections" value="#{CreateSpaceBean.selectedCollections}" >
+										<f:selectItems value="#{CreateSpaceBean.getCollectionItems()}" />
 									</h:selectManyCheckbox>
 									
 									<h:commandButton id="selectCollectionForSpace" value="Check" action="#{CreateSpaceBean.check()}" styleClass="imj_noDisplay">
 										<f:ajax execute="@form" render="@form"/>
 									</h:commandButton>
 								</div>
-</ui:remove>
 								
 							</div>
 						</div>

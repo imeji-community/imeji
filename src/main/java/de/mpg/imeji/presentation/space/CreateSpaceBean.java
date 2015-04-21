@@ -1,5 +1,8 @@
 package de.mpg.imeji.presentation.space;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.net.URI;
@@ -10,7 +13,12 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
+import javax.servlet.ServletContext;
 import javax.servlet.http.Part;
+
+import com.google.common.io.ByteStreams;
+import com.google.common.io.Files;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.CollectionController;
@@ -21,6 +29,7 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.rest.process.CommonUtils;
 
 @ManagedBean(name ="CreateSpaceBean")
 @ViewScoped
@@ -33,11 +42,13 @@ public class CreateSpaceBean implements Serializable{
 	private Part logoFile;
 	private SessionBean sessionBean;
 	private Navigation navigation;
-    private List<CollectionImeji> collections = new ArrayList<CollectionImeji>();
+    private List<CollectionImeji> collections;
+
     private List<String> selectedCollections = new ArrayList<String>();
     
     public CreateSpaceBean() {
     	space = new Space();
+    	collections = new ArrayList<CollectionImeji>();
     	sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
     	navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
     	init();
@@ -57,6 +68,13 @@ public class CreateSpaceBean implements Serializable{
 		}
     	
     }
+      
+	public List<SelectItem> getCollectionItems() {
+		List<SelectItem> itemList = new ArrayList<SelectItem>();
+		for(CollectionImeji ci : collections)
+			itemList.add(new SelectItem(ci.getIdString(), ci.getMetadata().getTitle()));
+		return itemList;
+	}
     
     public String save() throws Exception {
     	if(createdSpace())
@@ -72,7 +90,20 @@ public class CreateSpaceBean implements Serializable{
 		}
     	if(logoFile != null)
     	{
-//    		InputStream inputStream = logoFile.getInputStream();
+    		try {
+				InputStream inputStream = logoFile.getInputStream();
+	    		ServletContext servletContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+	    		File tmpPath = (File)servletContext.getAttribute(CommonUtils.JAVAX_SERVLET_CONTEXT_TEMPDIR);
+	    		File tmpFile = File.createTempFile("spaceLogo", "." + Files.getFileExtension(logoFile.getName()), tmpPath);
+	    		ByteStreams.copy(inputStream, new FileOutputStream(tmpFile));
+	    		//...Upload To Server
+	    		
+	    		
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
     	}
     	
     	SpaceController spaceController = new SpaceController();
@@ -92,7 +123,6 @@ public class CreateSpaceBean implements Serializable{
         */
         
         BeanHelper.info(sessionBean.getMessage("success_space_create"));
-
         return true;
     }
 	
@@ -132,6 +162,14 @@ public class CreateSpaceBean implements Serializable{
 
 	public void setSlug(String slug) {
 		this.slug = slug;
+	}
+
+	public List<String> getSelectedCollections() {
+		return selectedCollections;
+	}
+
+	public void setSelectedCollections(List<String> selectedCollections) {
+		this.selectedCollections = selectedCollections;
 	}
 	
 	

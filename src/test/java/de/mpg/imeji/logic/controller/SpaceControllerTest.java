@@ -35,7 +35,7 @@ public class SpaceControllerTest extends ImejiTestBase{
 
     private static final Logger LOGGER = LoggerFactory
             .getLogger(SpaceControllerTest.class);
-    public static final int COL_NUM = 100;
+    public static final int COL_NUM = 1000;
 
     private static SpaceController sc;
     private static CollectionController cc;

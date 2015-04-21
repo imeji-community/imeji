@@ -1,5 +1,6 @@
 package de.mpg.imeji.presentation.space;
 
+import java.io.InputStream;
 import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -10,8 +11,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.Part;
-
-import org.apache.commons.httpclient.util.URIUtil;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.CollectionController;
@@ -35,7 +34,7 @@ public class CreateSpaceBean implements Serializable{
 	private SessionBean sessionBean;
 	private Navigation navigation;
     private List<CollectionImeji> collections = new ArrayList<CollectionImeji>();
-    private List<String> selectedRoles = new ArrayList<String>();
+    private List<String> selectedCollections = new ArrayList<String>();
     
     public CreateSpaceBean() {
     	space = new Space();
@@ -49,7 +48,9 @@ public class CreateSpaceBean implements Serializable{
     	String q = "";  
     	User user = sessionBean.getUser();
     	try {
-    		collections = cc.retrieveCollections(user, q);
+    		if(space.getIdString() != null)
+    			collections = cc.retrieveCollections(user, q, space.getIdString());
+   			collections.addAll(cc.retrieveCollectionsNotInSpace(user));
 		} catch (ImejiException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -69,6 +70,10 @@ public class CreateSpaceBean implements Serializable{
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
+    	if(logoFile != null)
+    	{
+    		InputStream inputStream = logoFile.getInputStream();
+    	}
     	
     	SpaceController spaceController = new SpaceController();
     	try {

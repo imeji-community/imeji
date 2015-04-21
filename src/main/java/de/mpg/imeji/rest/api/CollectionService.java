@@ -68,7 +68,7 @@ public class CollectionService implements API<CollectionTO> {
 
     public List<CollectionTO> readAll(User u, String q) throws ImejiException {
         CollectionController cc = new CollectionController();
-        return Lists.transform(cc.retrieveCollections(u, q),
+        return Lists.transform(cc.retrieveCollections(u, q, null),
                 new Function<CollectionImeji, CollectionTO>() {
                     @Override
                     public CollectionTO apply(CollectionImeji vo) {
@@ -121,11 +121,11 @@ public class CollectionService implements API<CollectionTO> {
 
 		URI collectionURI = null;
 		if (validate) {
-			collectionURI = cc.create(vo, mp, u, cc.getProfileCreationMethod(method));
+			collectionURI = cc.create(vo, mp, u, cc.getProfileCreationMethod(method), null);
 		}
 		else
 		{
-			collectionURI = cc.createNoValidate(vo, mp, u, cc.getProfileCreationMethod(method));
+			collectionURI = cc.createNoValidate(vo, mp, u, cc.getProfileCreationMethod(method), null);
 		}
 		return read(CommonUtils.extractIDFromURI(collectionURI), u);
 	}

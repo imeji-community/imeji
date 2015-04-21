@@ -45,7 +45,7 @@ public class AlbumService implements API<AlbumTO> {
 
 
     public List<AlbumTO> readAll(User u, String q) throws ImejiException {
-        return Lists.transform(new AlbumController().retrieve(u, q),
+        return Lists.transform(new AlbumController().retrieve(u, q, null),
                 new Function<Album, AlbumTO>() {
                     @Override
                     public AlbumTO apply(Album vo) {

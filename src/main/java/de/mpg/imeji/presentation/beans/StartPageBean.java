@@ -110,9 +110,9 @@ public class StartPageBean {
 					SearchOperators.GREATER,
 					getTimeforNDaybeforeNow(searchforItemCreatedForLessThan)));
 			return new SearchResult(ic.search(null, sq, sc, null,
-					session.getUser()).getResults(), null);
+					session.getUser(),  session.getSelectedSpaceString()).getResults(), null);
 		}
-		return ic.search(null, sq, sc, null, session.getUser());
+		return ic.search(null, sq, sc, null, session.getUser(), session.getSelectedSpaceString());
 	}
 
 	/**

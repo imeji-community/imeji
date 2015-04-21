@@ -147,7 +147,7 @@ public class AdvancedSearchBean
         SortCriterion sortCriterion = new SortCriterion();
         sortCriterion.setIndex(SPARQLSearch.getIndex(SearchIndex.names.cont_title.name()));
         sortCriterion.setSortOrder(SortOrder.valueOf(SortOrder.DESCENDING.name()));
-        for (String uri : cc.search(new SearchQuery(), sortCriterion, -1, 0,session.getUser()).getResults())
+        for (String uri : cc.search(new SearchQuery(), sortCriterion, -1, 0,session.getUser(), session.getSelectedSpaceString()).getResults())
         {
             CollectionImeji c = ObjectLoader.loadCollectionLazy(URI.create(uri), session.getUser());
             l.add(c);

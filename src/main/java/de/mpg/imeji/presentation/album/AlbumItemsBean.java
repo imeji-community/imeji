@@ -74,7 +74,7 @@ public class AlbumItemsBean extends ItemsBean
     public SearchResult search(SearchQuery searchQuery, SortCriterion sortCriterion)
     {
         ItemController controller = new ItemController();
-        return controller.search(uri, searchQuery, sortCriterion, null, sb.getUser());
+        return controller.search(uri, searchQuery, sortCriterion, null, sb.getUser(), null);
     }
 
     /**

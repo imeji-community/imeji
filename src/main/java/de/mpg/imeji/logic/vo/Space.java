@@ -43,7 +43,7 @@ public class Space extends Properties implements Serializable {
 	@j2jResource("http://imeji.org/terms/logoUrl")
 	private URI logoUrl;
 	@j2jResource("http://imeji.org/terms/slug")
-	private URI slug;
+	private String slug;
 	@j2jLiteral("http://imeji.org/terms/maxHeight")
 	private int maxHeight = 0;
 	@j2jLiteral("http://imeji.org/terms/maxWidth")
@@ -63,11 +63,11 @@ public class Space extends Properties implements Serializable {
 	}
 
 	@XmlElement(name = "slug", namespace = "http://imeji.org/terms/")
-	public URI getSlug() {
+	public String getSlug() {
 		return slug;
 	}
 
-	public void setSlug(URI slug) {
+	public void setSlug(String slug) {
 		this.slug = slug;
 	}
 

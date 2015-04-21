@@ -72,7 +72,7 @@ public class CreateSpaceBean implements Serializable{
 		}
     	if(logoFile != null)
     	{
-    		InputStream inputStream = logoFile.getInputStream();
+//    		InputStream inputStream = logoFile.getInputStream();
     	}
     	
     	SpaceController spaceController = new SpaceController();

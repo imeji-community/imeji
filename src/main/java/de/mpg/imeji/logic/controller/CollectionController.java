@@ -5,6 +5,7 @@ package de.mpg.imeji.logic.controller;
 
 import de.mpg.imeji.exceptions.*;
 import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.ImejiTriple;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
@@ -13,6 +14,7 @@ import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.query.URLQueryTransformer;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
@@ -25,6 +27,9 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.j2j.helper.J2JHelper;
 
 import org.apache.log4j.Logger;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 
 import scala.annotation.StaticAnnotation;
 
@@ -606,5 +611,22 @@ public class CollectionController extends ImejiController {
 			
 			List<Item> items = (List<Item>) itemController.retrieve(itemUris,-1, 0, user);
 			itemController.updateItemsProfile(items, user, newProfileUri.toString());
+	}
+	
+	
+	public List<CollectionImeji> retrieveCollectionsNotInSpace(final User u) {
+		 return Lists.transform(ImejiSPARQL.exec(SPARQLQueries.selectCollectionsNotInSpace(),
+                 Imeji.collectionModel),
+         new Function<String, CollectionImeji>() {
+             @Override
+             public CollectionImeji apply(String id) {
+                 try {
+                     return retrieve(URI.create(id), u);
+                 } catch (ImejiException e) {
+                     logger.info("Cannot retrieve collection: " + id);
+                 }
+                 return null;
+             }
+         });
 	}
 }

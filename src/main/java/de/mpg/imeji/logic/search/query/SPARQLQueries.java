@@ -425,9 +425,13 @@ public class SPARQLQueries {
 	}
 
 	public static String selectCollectionsOfSpace(URI id) {
-		return "SELECT ?s WHERE{ ?s <http://imeji.org/terms/space> "
+		return "SELECT DISTINCT ?s WHERE{ ?s <http://imeji.org/terms/space> "
 				+ "<" + id.toString() + "> "
 				+ " . ?s a <http://imeji.org/terms/collection> }";
+	}
+	
+	public static String selectCollectionsNotInSpace() {
+		return "SELECT DISTINCT ?s  WHERE {  FILTER NOT EXISTS {?s <http://imeji.org/terms/space> ?o} . ?s a <http://imeji.org/terms/collection> } ";
 	}
 
 

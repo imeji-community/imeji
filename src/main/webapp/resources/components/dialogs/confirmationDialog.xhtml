@@ -10,6 +10,8 @@
 		<composite:attribute name="submitLabel" required="true" type="java.lang.String"/>
 		<composite:attribute name="confirmationText" required="true" type="java.lang.String"/>
 		<composite:attribute name="dialogId" required="true" type="java.lang.String"/>
+		<composite:attribute name="identifierName" required="false" type="java.lang.String"/>
+		<composite:attribute name="identifierValue" required="false"/>
 	</composite:interface>
 	
 	<composite:implementation>
@@ -25,6 +27,9 @@
 					</button>
 					
 					<h:form>
+						<ui:fragment rendered="#{not empty cc.attrs.identifierName and not empty cc.attrs.identifierValue}">
+							<input type="hidden" name="#{cc.attrs.identifierName}" value="#{cc.attrs.identifierValue}"/>
+						</ui:fragment>
 				 		<h:commandButton action="#{cc.attrs.bean[cc.attrs.submitAction]}" value="#{cc.attrs.submitLabel}" styleClass="imj_submitButton"/>
 				 	</h:form>
 				</div>

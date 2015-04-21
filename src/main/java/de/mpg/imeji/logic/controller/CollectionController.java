@@ -13,6 +13,7 @@ import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.query.URLQueryTransformer;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
@@ -596,4 +597,19 @@ public class CollectionController extends ImejiController {
 			List<Item> items = (List<Item>) itemController.retrieve(itemUris,-1, 0, user);
 			itemController.updateItemsProfile(items, user, newProfileUri.toString());
 	}
+	
+	
+    /**
+     * Retrieve all {@link CollectionImeji} which belong to one space
+     * 
+     * @return
+     */
+    public List<CollectionImeji> searchBySpaceId(User user, String uri) throws ImejiException 
+    {
+    	List<CollectionImeji> cols = new ArrayList<CollectionImeji>();
+    	String q = SPARQLQueries.selectCollectionImejiOfSpace(uri);
+    	retrieveCollections(user, q);
+    	return cols;
+    }
+    
 }

@@ -92,16 +92,16 @@
 							<div class="imj_headline">
 								<h2>
 									<h:outputText value="#{lbl.admin_space_seo}"/>
-
-									<h:commandButton action="#{CreateSpaceBean.save}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
-								
+<ui:remove>
+									<h:commandButton action="" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
+</ui:remove>							
 								</h2>
 							</div>
 							<div class="imj_content">
 								<div class="imj_metadataSet">
 									<label class="imj_metadataLabel">{#lbl.url_slug}</label>
 									<span class="imj_metadataValue">
-										<h:inputText id="spaceSlug" value="#{CreateSpaceBean.space.slug}"/>
+										<h:inputText id="spaceSlug" value="#{CreateSpaceBean.slug}"/>
 										<span id="previewSpaceSlugUrl"></span>
 									</span>
 								</div>
@@ -110,8 +110,28 @@
 									<label class="imj_metadataLabel">{#lbl.html_meta_description}</label>
 									<h:inputTextarea id="spaceDescription" styleClass="imj_metadataValue" value="#{CreateSpaceBean.space.description}"/>
 								</div>
+
+<ui:remove>								
+								<div class="imj_metadataSet">				
+									<h:selectManyCheckbox id="selectCollections" value="#{CreateSpaceBean.selectedCollections}" onclick="document.getElementById('selectCollectionForSpace').click();">
+										<f:selectItems value="#{CreateSpaceBean.collections}" />
+									</h:selectManyCheckbox>
+									
+									<h:commandButton id="selectCollectionForSpace" value="Check" action="#{CreateSpaceBean.check()}" styleClass="imj_noDisplay">
+										<f:ajax execute="@form" render="@form"/>
+									</h:commandButton>
+								</div>
+</ui:remove>
+								
 							</div>
 						</div>
+						
+						<h:panelGroup layout="block" id="submitButtonPanel" class="imj_submitPanel">
+							<h:outputLink value="#{HistorySession.previousPage.completeUrlWithHistory}" styleClass="imj_cancelButton">
+								<h:outputText value="#{lbl.cancel}"/>
+							</h:outputLink>
+							<h:commandButton action="#{CreateSpaceBean.save}" value="#{lbl.save}" styleClass="imj_submitButton" />
+						</h:panelGroup>
 					</h:form>
 				</h:panelGroup>
 			</div>

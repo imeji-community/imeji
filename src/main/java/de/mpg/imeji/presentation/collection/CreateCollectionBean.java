@@ -23,8 +23,6 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
-import org.eclipse.persistence.descriptors.SelectedFieldsLockingPolicy;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;

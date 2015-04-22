@@ -614,6 +614,20 @@ public class CollectionController extends ImejiController {
 	}
 	
 	
+    /**
+     * Retrieve all {@link CollectionImeji} which belong to one space
+     * 
+     * @return
+     */
+    public List<CollectionImeji> searchBySpaceId(User user, String uri) throws ImejiException 
+    {
+    	List<CollectionImeji> cols = new ArrayList<CollectionImeji>();
+    	String q = SPARQLQueries.selectCollectionImejiOfSpace(uri);
+    //	retrieveCollections(user, q);
+    	return cols;
+    }
+    
+
 	public List<CollectionImeji> retrieveCollectionsNotInSpace(final User u) {
 		 return Lists.transform(ImejiSPARQL.exec(SPARQLQueries.selectCollectionsNotInSpace(),
                  Imeji.collectionModel),
@@ -629,4 +643,5 @@ public class CollectionController extends ImejiController {
              }
          });
 	}
+
 }

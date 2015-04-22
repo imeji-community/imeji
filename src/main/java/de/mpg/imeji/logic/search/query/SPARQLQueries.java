@@ -227,13 +227,24 @@ public class SPARQLQueries {
 	}
 
 	/**
-	 * Select all {@link UserGroup}
+	 * Select {@link UserGroup} of User
 	 * 
 	 * @return
 	 */
 	public static String selectUserGroupOfUser(User user) {
 		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s a <http://imeji.org/terms/userGroup> . ?s <http://xmlns.com/foaf/0.1/member> <"
 				+ user.getId().toString() + ">}";
+	}
+	
+	/**
+	 * Select {@link CollectionImeji} of space
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public static String selectCollectionImejiOfSpace(String uri) {
+		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s a <http://imeji.org/terms/collection> . ?s <http://imeji.org/terms/space> <"
+				+ uri + ">}";
 	}
 
 	/**

@@ -11,6 +11,7 @@ import java.util.List;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.SearchResult;
@@ -98,11 +99,11 @@ public class AlbumItemsBean extends ItemsBean
      * @return
      * @throws Exception
      */
-    public String removeFromAlbum() throws Exception
+    public String removeFromAlbum() 
     {
         removeFromAlbum(sb.getSelected());
         sb.getSelected().clear();
-        return "pretty:";
+    	return "pretty:";
     }
 
     /**
@@ -172,9 +173,10 @@ public class AlbumItemsBean extends ItemsBean
      * @param uris
      * @throws Exception
      */
-    private void removeFromAlbum(List<String> uris) throws Exception
+    private void removeFromAlbum(List<String> uris) 
     {
-        if (sb.getActiveAlbum() != null && album.getId().toString().equals(sb.getActiveAlbum().getId().toString()))
+        try {
+    	if (sb.getActiveAlbum() != null && album.getId().toString().equals(sb.getActiveAlbum().getId().toString()))
         {
             // if the current album is the active album as well
             removeFromActive(uris);
@@ -184,8 +186,12 @@ public class AlbumItemsBean extends ItemsBean
             ItemController ic = new ItemController();
             album = (Album)ic.searchAndSetContainerItems(album, sb.getUser(), -1, 0);
             AlbumController ac = new AlbumController();
-            int deletedCount = ac.removeFromAlbum(album, uris, sb.getUser());
-            BeanHelper.info(deletedCount + " " + sb.getMessage("success_album_remove_images"));
+	            int deletedCount = ac.removeFromAlbum(album, uris, sb.getUser());
+	            BeanHelper.info(deletedCount + " " + sb.getMessage("success_album_remove_images"));
+            }
+        }
+        catch (Exception e) {
+    		BeanHelper.error(e.getMessage());
         }
     }
 

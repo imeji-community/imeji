@@ -271,8 +271,9 @@ public class SpaceController extends ImejiController {
      * @throws ImejiException
      */
     public Space retrieve(URI spaceId, User user) throws ImejiException {
-        return (Space) reader.read(spaceId.toString(), user,
-                new Space());
+        Space space = (Space) reader.read(spaceId.toString(), user, new Space());
+        space.setSpaceCollections(retrieveCollections(space));
+        return space;
     }
 
     /**

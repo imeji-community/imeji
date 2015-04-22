@@ -1,6 +1,7 @@
 package de.mpg.imeji.logic.controller;
 
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.vo.Space;
@@ -21,6 +22,7 @@ import util.JenaUtil;
 
 import java.io.File;
 import java.net.URI;
+import java.util.Collection;
 import java.util.List;
 
 import static de.mpg.imeji.logic.Imeji.adminUser;
@@ -110,15 +112,35 @@ public class SpaceControllerTest extends ImejiTestBase{
          
         assertThat(
                 sc.removeCollection(space, Iterables.getLast(sc.retrieveCollections(space)), adminUser),
-                hasSize(1) );
+                hasSize(1));
         assertThat(
                 cc.retrieve(Iterables.getFirst(space.getSpaceCollections(), null), adminUser).getSpace(),
                 equalTo(spaceId)
         );
     }
 
+
     @Test
-    public void test_7_Delete() throws Exception {
+    public void test_7_CreateFull() throws Exception {
+
+        Space sp1 = ImejiFactory.newSpace();
+        sp1.setTitle("Space Full Create");
+
+        Collection<String> colls = Lists.newArrayList(initCollection(), initCollection());
+        sp1.setSpaceCollections(colls);
+
+        File uploadFile = new File("src/test/resources/storage/test.jpg");
+
+        space = sc.retrieve(sc.create(sp1, colls, uploadFile, adminUser), adminUser);
+        assertThat(space.getTitle(), equalTo(sp1.getTitle()));
+        assertTrue(Iterables.removeAll(space.getSpaceCollections(), sp1.getSpaceCollections()));
+        assertTrue(FileUtils.contentEquals(uploadFile,
+                new File(sc.transformUrlToPath(space.getLogoUrl().toURL().toString()))
+        ));
+    }
+
+    @Test
+    public void test_8_Delete() throws Exception {
         for (Space s : sc.retrieveAll()) {
             sc.delete(s, adminUser);
         }
@@ -128,7 +150,7 @@ public class SpaceControllerTest extends ImejiTestBase{
     
     
     @Test
-    public void test_8_RetrieveSpaceCollections() throws Exception {
+    public void test_9_RetrieveSpaceCollections() throws Exception {
         Space sp2 = ImejiFactory.newSpace();
         sp2.setTitle("Space Collections Test");
         sc.create(sp2, adminUser);
@@ -141,12 +163,6 @@ public class SpaceControllerTest extends ImejiTestBase{
         assertThat(cc.retrieveCollectionsNotInSpace(adminUser), hasSize(collectionsOutOfSpace));
     }
 
-//    @Ignore
-    @Test
-    public void test_9_CreateFull() throws Exception {
-
-
-    }
 
     @Ignore
     @Test

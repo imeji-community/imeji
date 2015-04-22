@@ -10,6 +10,7 @@ import de.mpg.imeji.rest.to.CollectionTO;
 import org.apache.commons.io.FileUtils;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
@@ -137,7 +138,7 @@ public class SpaceControllerTest extends ImejiTestBase{
         assertThat(cc.retrieveCollectionsNotInSpace(adminUser) , hasSize(collectionsOutOfSpace));
     }
 
-//    @Ignore
+    @Ignore
     @Test
     public void test_9_Performance() throws Exception {
 

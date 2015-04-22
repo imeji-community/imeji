@@ -1,6 +1,8 @@
 package de.mpg.imeji.logic.controller;
 
 import com.google.common.collect.Iterables;
+import de.mpg.imeji.logic.ImejiSPARQL;
+import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.vo.Space;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.rest.api.CollectionService;
@@ -19,6 +21,7 @@ import util.JenaUtil;
 
 import java.io.File;
 import java.net.URI;
+import java.util.List;
 
 import static de.mpg.imeji.logic.Imeji.adminUser;
 import static de.mpg.imeji.logic.util.ResourceHelper.getStringFromPath;
@@ -133,14 +136,21 @@ public class SpaceControllerTest extends ImejiTestBase{
     	int collectionsOutOfSpace = cc.retrieveCollectionsNotInSpace(adminUser).size();
         sc.addCollection(sp2, collectionId, adminUser);
         assertThat(sc.retrieveCollections(sp2), hasSize(1));
-        assertThat(cc.retrieveCollectionsNotInSpace(adminUser) , hasSize(collectionsOutOfSpace-1));
+        assertThat(cc.retrieveCollectionsNotInSpace(adminUser), hasSize(collectionsOutOfSpace - 1));
         sc.removeCollection(sp2, collectionId, adminUser);
-        assertThat(cc.retrieveCollectionsNotInSpace(adminUser) , hasSize(collectionsOutOfSpace));
+        assertThat(cc.retrieveCollectionsNotInSpace(adminUser), hasSize(collectionsOutOfSpace));
+    }
+
+//    @Ignore
+    @Test
+    public void test_9_CreateFull() throws Exception {
+
+
     }
 
     @Ignore
     @Test
-    public void test_9_Performance() throws Exception {
+    public void test_999_Performance() throws Exception {
 
 
         //create space
@@ -149,6 +159,8 @@ public class SpaceControllerTest extends ImejiTestBase{
         spaceId = sc.create(sp1, adminUser);
         space = sc.retrieve(sp1.getId(), adminUser);
         assertThat(sp1.getTitle(), equalTo(space.getTitle()));
+
+        List<String> results = ImejiSPARQL.exec(SPARQLQueries.countTriplesAll(), null);
 
         //create COL_NUM collections
         String[] colIds = new String[COL_NUM];

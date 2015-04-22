@@ -431,7 +431,7 @@ public class SPARQLQueries {
 	 * @return
 	 */
 	public static String getSpaceByLabel(String spaceId) {
-		return "SELECT ?o WHERE { ?s <http://imeji.org/terms/slug> \""+spaceId+"\"^^<http://www.w3.org/2001/XMLSchema#string>. ?s a <http://imeji.org/terms/space> }";
+		return "SELECT ?s WHERE { ?s <http://imeji.org/terms/slug> \""+spaceId+"\"^^<http://www.w3.org/2001/XMLSchema#string>. ?s a <http://imeji.org/terms/space> }";
 	}
 
 	public static String selectCollectionsOfSpace(URI id) {

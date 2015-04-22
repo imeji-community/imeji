@@ -325,6 +325,7 @@ public class ItemUpdateFileTest extends ImejiTestBase {
 
 	}
 
+	/*
 	@Test
 	public void test_1_UpdateItem_8_InvalidFetchURL() throws IOException {
 
@@ -348,6 +349,7 @@ public class ItemUpdateFileTest extends ImejiTestBase {
 				response.getStatus());
 
 	}
+	*/
 
 	@Test
 	public void test_1_UpdateItem_9_FetchURL_NoFile() throws IOException {

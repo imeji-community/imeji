@@ -72,7 +72,9 @@ public class CreateSpaceBean implements Serializable{
     
     public String save() throws Exception {
     	if(createdSpace())
-    		FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getSpacePath()+ getSpace().getSlug());
+    		sessionBean.setSpaceId(space.getSlug());
+    		//Go to the home URL of the Space
+    		FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getHomeUrl());
     	return "";
     }
     
@@ -84,6 +86,7 @@ public class CreateSpaceBean implements Serializable{
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
+    	
     	if(logoFile != null)
     	{
     		try {

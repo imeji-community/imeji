@@ -59,7 +59,7 @@
 			<div class="imj_administrationTiledList imj_maxWidth">
 				
 				<h:panelGroup layout="block" styleClass="imj_listBody" rendered="#{Auth.admin}">
-					<h:form>
+					<h:form id="spaceForm" enctype="multipart/form-data">
 					<div class="imj_adminPanel">
 							<div class="imj_headline">
 								<h2>
@@ -84,7 +84,17 @@
 									<label class="imj_metadataLabel">{#lbl.logo}</label>
 									<h:inputFile id="logo" styleClass="imj_metadataValue" value="#{CreateSpaceBean.logoFile}"/>
 								</div>
-								
+								<div class="imj_metadataSet">
+									<label class="imj_metadataLabel">{#lbl.related_collections}</label>
+									
+									<h:selectManyMenu value="#{CreateSpaceBean.selectedCollections}" id="selectSpaceCollections" style="height:150px; width:100%;" class="imj_metadataValue">
+										<f:selectItems value="#{CreateSpaceBean.getCollectionItems()}"/>
+									</h:selectManyMenu>
+									
+									<h:commandButton id="selectCollectionForSpace" value="Check" action="#{CreateSpaceBean.check()}" styleClass="imj_noDisplay">
+										<f:ajax execute="@form" render="@form"/>
+									</h:commandButton>
+								</div>
 							</div>
 						</div>
 						
@@ -111,17 +121,6 @@
 									<h:inputTextarea id="spaceDescription" styleClass="imj_metadataValue" value="#{CreateSpaceBean.space.description}"/>
 								</div>
 
-							
-								<div class="imj_metadataSet">				
-									<h:selectManyCheckbox id="selectCollections" value="#{CreateSpaceBean.selectedCollections}" >
-										<f:selectItems value="#{CreateSpaceBean.getCollectionItems()}" />
-									</h:selectManyCheckbox>
-									
-									<h:commandButton id="selectCollectionForSpace" value="Check" action="#{CreateSpaceBean.check()}" styleClass="imj_noDisplay">
-										<f:ajax execute="@form" render="@form"/>
-									</h:commandButton>
-								</div>
-								
 							</div>
 						</div>
 						

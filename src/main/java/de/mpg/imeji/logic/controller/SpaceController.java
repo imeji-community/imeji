@@ -444,7 +444,7 @@ public class SpaceController extends ImejiController {
 		Search s = SearchFactory.create();
     	List<String> r = s.searchSimpleForQuery(SPARQLQueries.getSpaceByLabel(spaceId)).getResults();
 		if (!r.isEmpty() && !isNullOrEmptyTrim(r.get(0))) {
-			return retrieve(ObjectHelper.getURI(Space.class, r.get(0)), user);
+			return retrieve(URI.create(r.get(0)), user);
 		} else {
 			return null;
 		}

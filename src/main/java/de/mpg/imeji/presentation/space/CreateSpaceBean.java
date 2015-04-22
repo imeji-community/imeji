@@ -85,6 +85,7 @@ public class CreateSpaceBean implements Serializable{
     public boolean createdSpace(){
     	try {
     		URI slugTest = new URI(slug);
+    		//above creatino of URI in order to check if it is a sintactically valid slug
 			space.setSlug(slug);
 		} catch (URISyntaxException e) {
 			e.printStackTrace();

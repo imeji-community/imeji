@@ -138,7 +138,7 @@ public class ItemController extends ImejiController {
 					"Filename or reference must not be empty!");
 		}
 		
-		validateChecksum(c.getId(), f);
+		validateChecksum(c.getId(), f, false);
 
 		item = ImejiFactory.newItem(item, c, user, uploadResult.getId(),
 				filename, URI.create(uploadResult.getOrginal()),
@@ -185,15 +185,12 @@ public class ItemController extends ImejiController {
 				tmp = File.createTempFile("imeji", null);
 				sController.read(externalFileUrl, new FileOutputStream(tmp),
 						true);
-				validateChecksum(item.getCollection(), tmp);
 			} catch (Exception e) {
 				// throw new
 				// UnprocessableError("There has been a problem with the file upload. ");
 				throw new UnprocessableError(e.getLocalizedMessage());
 			}
 			
-			validateChecksum(item.getCollection(), tmp);
-
 			item = createWithFile(item, tmp, filename, c, user);
 		} else {
 			// Reference the file
@@ -411,7 +408,7 @@ public class ItemController extends ImejiController {
 	 */
 	public Item updateFile(Item item, File f, User user) throws ImejiException {
 
-		validateChecksum(item.getCollection(), f);
+		validateChecksum(item.getCollection(), f, true);
 		
 		// First remove the old File from the Internal Storage if its there
 		if (!isNullOrEmpty(item.getStorageId())) {
@@ -462,12 +459,10 @@ public class ItemController extends ImejiController {
 						"." + FilenameUtils.getExtension(origName));
 				sc.read(externalFileUrl, new FileOutputStream(tmp), true);
 				
-				validateChecksum(item.getCollection(), tmp);
-
 				item = updateFile(item, tmp, u);
-			} catch (Exception e) {
+			} catch (IOException e) {
 				throw new UnprocessableError(
-						"There was a problem with file update");
+						"There was a problem with saving this file to the temporary storage!");
 			}
 		} else {
 
@@ -798,10 +793,11 @@ public class ItemController extends ImejiController {
 	 * @throws ImejiException 
 	 * @throws UnprocessableError 
 	 */
-	private void validateChecksum(URI collectionURI, File file) throws UnprocessableError, ImejiException {
+	private void validateChecksum(URI collectionURI, File file, Boolean isUpdate) throws UnprocessableError, ImejiException {
 		  if (isValidateChecksumInCollection()) {
 			if (checksumExistsInCollection(collectionURI, StorageUtils.calculateChecksum(file))) {
-				throw new UnprocessableError("Same file already exists in the collection (same checksum). Please choose another file.");
+				throw new UnprocessableError((!isUpdate)? "Same file already exists in the collection (with same checksum). Please choose another file.":
+					"Same file already exists in the collection or you are trying to upload same file for the item (with same checksum). Please choose another file.");
 			}
 		  }
 	}

@@ -727,6 +727,11 @@ public class SessionBean implements Serializable {
 				this.spaceId =""; 
 			}
 		}
+		else
+		{
+			this.selectedSpace = null;
+			this.spaceId =""; 
+		}
 	}
 
 	public String getSpaceId() {

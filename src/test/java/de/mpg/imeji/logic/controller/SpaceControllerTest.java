@@ -1,6 +1,9 @@
 package de.mpg.imeji.logic.controller;
 
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import de.mpg.imeji.logic.ImejiSPARQL;
+import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.vo.Space;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.rest.api.CollectionService;
@@ -15,11 +18,12 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import util.JenaUtil;
 
 import java.io.File;
 import java.net.URI;
+import java.util.Collection;
+import java.util.List;
 
 import static de.mpg.imeji.logic.Imeji.adminUser;
 import static de.mpg.imeji.logic.util.ResourceHelper.getStringFromPath;
@@ -65,17 +69,17 @@ public class SpaceControllerTest extends ImejiTestBase{
         String changed = "_CHANGED";
         space.setTitle(space.getTitle() + changed);
         sc.addCollection(space, initCollection(), adminUser);
-        sc.addCollection(space, initCollection(), adminUser);
+        String collId2 = initCollection();
+        sc.addCollection(space, collId2, adminUser);
         //duplicates are not added!
-        sc.addCollection(space, collectionId, adminUser);
-        space = sc.retrieve(spaceId, adminUser);
+        sc.addCollection(space, collId2, adminUser);
+
         assertThat(space.getTitle(), endsWith(changed));
         assertThat(sc.retrieveCollections(space), hasSize(2));
     }
 
     @Test
     public void test_3_UpdateFile() throws Exception {
-    	
         File uploadFile = new File("src/test/resources/storage/test.jpg");
         space = sc.updateFile(space, uploadFile, adminUser);
         uploadFile = new File("src/test/resources/storage/test2.jpg");
@@ -108,15 +112,35 @@ public class SpaceControllerTest extends ImejiTestBase{
          
         assertThat(
                 sc.removeCollection(space, Iterables.getLast(sc.retrieveCollections(space)), adminUser),
-                hasSize(1) );
+                hasSize(1));
         assertThat(
                 cc.retrieve(Iterables.getFirst(space.getSpaceCollections(), null), adminUser).getSpace(),
                 equalTo(spaceId)
         );
     }
 
+
     @Test
-    public void test_7_Delete() throws Exception {
+    public void test_7_CreateFull() throws Exception {
+
+        Space sp1 = ImejiFactory.newSpace();
+        sp1.setTitle("Space Full Create");
+
+        Collection<String> colls = Lists.newArrayList(initCollection(), initCollection());
+        sp1.setSpaceCollections(colls);
+
+        File uploadFile = new File("src/test/resources/storage/test.jpg");
+
+        space = sc.retrieve(sc.create(sp1, colls, uploadFile, adminUser), adminUser);
+        assertThat(space.getTitle(), equalTo(sp1.getTitle()));
+        assertTrue(Iterables.removeAll(space.getSpaceCollections(), sp1.getSpaceCollections()));
+        assertTrue(FileUtils.contentEquals(uploadFile,
+                new File(sc.transformUrlToPath(space.getLogoUrl().toURL().toString()))
+        ));
+    }
+
+    @Test
+    public void test_8_Delete() throws Exception {
         for (Space s : sc.retrieveAll()) {
             sc.delete(s, adminUser);
         }
@@ -126,22 +150,23 @@ public class SpaceControllerTest extends ImejiTestBase{
     
     
     @Test
-    public void test_8_RetrieveSpaceCollections() throws Exception {
+    public void test_9_RetrieveSpaceCollections() throws Exception {
         Space sp2 = ImejiFactory.newSpace();
         sp2.setTitle("Space Collections Test");
         sc.create(sp2, adminUser);
         initCollection();
     	int collectionsOutOfSpace = cc.retrieveCollectionsNotInSpace(adminUser).size();
-        sc.addCollection(sp2,collectionId , adminUser);
+        sc.addCollection(sp2, collectionId, adminUser);
         assertThat(sc.retrieveCollections(sp2), hasSize(1));
-        assertThat(cc.retrieveCollectionsNotInSpace(adminUser) , hasSize(collectionsOutOfSpace-1));
+        assertThat(cc.retrieveCollectionsNotInSpace(adminUser), hasSize(collectionsOutOfSpace - 1));
         sc.removeCollection(sp2, collectionId, adminUser);
-        assertThat(cc.retrieveCollectionsNotInSpace(adminUser) , hasSize(collectionsOutOfSpace));
+        assertThat(cc.retrieveCollectionsNotInSpace(adminUser), hasSize(collectionsOutOfSpace));
     }
+
 
     @Ignore
     @Test
-    public void test_8_Performance() throws Exception {
+    public void test_999_Performance() throws Exception {
 
 
         //create space
@@ -151,6 +176,8 @@ public class SpaceControllerTest extends ImejiTestBase{
         space = sc.retrieve(sp1.getId(), adminUser);
         assertThat(sp1.getTitle(), equalTo(space.getTitle()));
 
+        List<String> results = ImejiSPARQL.exec(SPARQLQueries.countTriplesAll(), null);
+
         //create COL_NUM collections
         String[] colIds = new String[COL_NUM];
         collectionTO= (CollectionTO) RestProcessUtils.buildTOFromJSON(
@@ -159,7 +186,7 @@ public class SpaceControllerTest extends ImejiTestBase{
         long startTime = System.currentTimeMillis();
         for (int i = 0; i < COL_NUM; i++) {
             collectionTO.setTitle("Collection " + i);
-            colIds[i] = cs.create(collectionTO, adminUser).getId();
+            colIds[i] = cs.create(collectionTO, JenaUtil.testUser).getId();
         }
         LOGGER.info("creation time: " + (System.currentTimeMillis() - startTime ) + "ms");
 
@@ -171,7 +198,6 @@ public class SpaceControllerTest extends ImejiTestBase{
         LOGGER.info("addition time:" + (System.currentTimeMillis() - startTime )  + "ms");
 
     }
-    
+
+
 }
-
-

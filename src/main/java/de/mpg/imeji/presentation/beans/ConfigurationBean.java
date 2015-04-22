@@ -161,7 +161,8 @@ public class ConfigurationBean {
 			if (dataViewerUrl != null)
 				setProperty(CONFIGURATION.DATA_VIEWER_URL.name(), dataViewerUrl);
 			config.storeToXML(new FileOutputStream(configFile),
-					"imeji configuration File");
+					"imeji configuration File", "UTF-8");
+			logger.info("saving imeji config");
 			// BeanHelper.removeBeanFromMap(this.getClass());
 		} catch (Exception e) {
 			throw new RuntimeException(e);

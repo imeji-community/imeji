@@ -7,11 +7,13 @@ import javax.faces.event.ValueChangeEvent;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.UrlHelper;
+import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.collection.ViewCollectionBean;
 import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -30,7 +32,7 @@ public class EditMdProfileBean extends MdProfileBean {
 	private String colId = null;
 	private static Logger logger = Logger.getLogger(EditMdProfileBean.class);
 	private VocabularyHelper vocabularyHelper;
-	private ViewCollectionBean colContext;
+	private CollectionImeji collection;
 
 	/**
 	 * Constructor
@@ -43,33 +45,30 @@ public class EditMdProfileBean extends MdProfileBean {
 
 	@Override
 	public String getInit() {
-		try {
-			readUrl();
-			vocabularyHelper = new VocabularyHelper();
-			if (init) {
-				if (this.getId() != null) {
-					try {
-						colContext = (ViewCollectionBean) BeanHelper
-								.getSessionBean(ViewCollectionBean.class);
-						colContext.setId(getColId());
-						colContext.init();
-						setProfile((colContext).getProfile());
 
-					} catch (Exception e) {
-						throw new RuntimeException(e);
+		readUrl();
+		vocabularyHelper = new VocabularyHelper();
+		if (init) {
+			// set object to null (since this is a session bean)
+			setProfile(null);
+			setCollection(null);
+			if (getId() != null) {
+				try {
+					if (colId != null) {
+						// load the collection if provided in the url
+						CollectionController cc = new CollectionController();
+						setCollection(cc.retrieve(colId, session.getUser()));
 					}
-				} else {
-					BeanHelper.error(session.getLabel("error")
-							+ ": No profile Id found in URL");
+					// load the profile
+					ProfileController pc = new ProfileController();
+					setProfile(pc.retrieve(getId(), session.getUser()));
+				} catch (ImejiException e) {
+					BeanHelper.error(e.getMessage());
 				}
-				init = false;
-				// setTemplate(null);
 			}
-			super.getInit();
-		} catch (Exception e) {
-			BeanHelper.error(e.getMessage());
-			logger.error("Error Initializing profile editor", e);
+			init = false;
 		}
+		super.getInit();
 		return "";
 	}
 
@@ -164,19 +163,6 @@ public class EditMdProfileBean extends MdProfileBean {
 		}
 	}
 
-	// TODO CleanUp
-	// /**
-	// * Method when button addfirstStatement
-	// *
-	// * @return
-	// */
-	// public void addFirstStatement()
-	// {
-	// Statement firstStatement = ImejiFactory.newStatement();
-	// getWrappers().add(new StatementWrapper(firstStatement,
-	// getProfile().getId(), getLevel(firstStatement)));
-	// }
-	//
 	@Override
 	protected String getNavigationString() {
 		return "pretty:editProfile";
@@ -215,18 +201,11 @@ public class EditMdProfileBean extends MdProfileBean {
 		this.vocabularyHelper = vocabularyHelper;
 	}
 
-	/**
-	 * @return the colContext
-	 */
-	public ViewCollectionBean getColContext() {
-		return colContext;
+	public CollectionImeji getCollection() {
+		return collection;
 	}
 
-	/**
-	 * @param colContext
-	 *            the colContext to set
-	 */
-	public void setColContext(ViewCollectionBean colContext) {
-		this.colContext = colContext;
+	public void setCollection(CollectionImeji collection) {
+		this.collection = collection;
 	}
 }

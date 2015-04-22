@@ -3,6 +3,7 @@
  */
 package de.mpg.imeji.presentation.mdProfile;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.Metadata;
@@ -21,6 +22,7 @@ import de.mpg.j2j.misc.LocalizedString;
 
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLEncoder;
@@ -78,6 +80,8 @@ public class MdProfileBean
      * Method called on the html page to trigger the initialization of the bean
      * 
      * @return
+     * @throws ImejiException 
+     * @throws Exception 
      */
     public String getInit()
     {
@@ -89,7 +93,7 @@ public class MdProfileBean
         {
             reset();
         }
-        if (UrlHelper.getParameterBoolean("init"))
+        if (UrlHelper.getParameterBoolean("init") && profile != null)
         {
             
             initStatementWrappers(profile);

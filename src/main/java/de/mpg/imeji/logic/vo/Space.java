@@ -42,7 +42,7 @@ public class Space extends Properties implements Serializable {
 			+ Item.Visibility.PRIVATE.name());
 	@j2jResource("http://imeji.org/terms/logoUrl")
 	private URI logoUrl;
-	@j2jResource("http://imeji.org/terms/slug")
+	@j2jLiteral("http://imeji.org/terms/slug")
 	private String slug;
 	@j2jLiteral("http://imeji.org/terms/maxHeight")
 	private int maxHeight = 0;

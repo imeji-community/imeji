@@ -143,7 +143,7 @@ public class CollectionController extends ImejiController {
 		
 		if (!isNullOrEmpty(spaceId)) {
 			SpaceController sp = new SpaceController();
-			sp.addCollection(spaceId, c.getId().toString(), user);
+			sp.addCollection(spaceId, c.getIdString(), user);
 		}
 		
 

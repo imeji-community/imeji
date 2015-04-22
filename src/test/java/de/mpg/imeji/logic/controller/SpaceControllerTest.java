@@ -10,11 +10,11 @@ import de.mpg.imeji.rest.to.CollectionTO;
 import org.apache.commons.io.FileUtils;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import util.JenaUtil;
 
 import java.io.File;
 import java.net.URI;
@@ -25,7 +25,6 @@ import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactor
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static util.JenaUtil.testUser;
 
 /**
  * Created by vlad on 15.04.15.
@@ -131,14 +130,14 @@ public class SpaceControllerTest extends ImejiTestBase{
         sc.create(sp2, adminUser);
         initCollection();
     	int collectionsOutOfSpace = cc.retrieveCollectionsNotInSpace(adminUser).size();
-        sc.addCollection(sp2,collectionId , adminUser);
+        sc.addCollection(sp2, collectionId, adminUser);
         assertThat(sc.retrieveCollections(sp2), hasSize(1));
         assertThat(cc.retrieveCollectionsNotInSpace(adminUser) , hasSize(collectionsOutOfSpace-1));
         sc.removeCollection(sp2, collectionId, adminUser);
         assertThat(cc.retrieveCollectionsNotInSpace(adminUser) , hasSize(collectionsOutOfSpace));
     }
 
-    @Ignore
+//    @Ignore
     @Test
     public void test_9_Performance() throws Exception {
 
@@ -158,7 +157,7 @@ public class SpaceControllerTest extends ImejiTestBase{
         long startTime = System.currentTimeMillis();
         for (int i = 0; i < COL_NUM; i++) {
             collectionTO.setTitle("Collection " + i);
-            colIds[i] = cs.create(collectionTO, adminUser).getId();
+            colIds[i] = cs.create(collectionTO, JenaUtil.testUser).getId();
         }
         LOGGER.info("creation time: " + (System.currentTimeMillis() - startTime ) + "ms");
 

@@ -10,9 +10,9 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
@@ -255,6 +255,18 @@ public class SpaceController extends ImejiController {
     public Space retrieve(URI spaceId, User user) throws ImejiException {
         return (Space) reader.read(spaceId.toString(), user,
                 new Space());
+    }
+
+    /**
+     * Retrieve {@link Space}
+     *
+     * @param space
+     * @param user
+     * @return
+     * @throws ImejiException
+     */
+    public Space retrieve(Space space, User user) throws ImejiException {
+        return retrieve(space.getId(), user);
     }
 
 

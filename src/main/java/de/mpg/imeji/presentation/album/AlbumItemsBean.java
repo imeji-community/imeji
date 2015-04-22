@@ -210,7 +210,7 @@ public class AlbumItemsBean extends ItemsBean
     {
         if (album == null || album.getId() == null)
             return "";
-        return navigation.getApplicationSpaceUrl() + "album/" + this.id;
+        return navigation.getApplicationSpaceUrl() + "album/" + this.id + "/";
     }
 
     @Override

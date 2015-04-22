@@ -5,7 +5,9 @@ package de.mpg.imeji.presentation.mdProfile;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.ProfileController;
+import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
@@ -32,6 +34,8 @@ public class ViewMdProfileBean extends MdProfileBean
 
     /**
      * Initialize the page
+     * @throws ImejiException 
+     * @throws Exception 
      */
     @Override
     public String getInit()

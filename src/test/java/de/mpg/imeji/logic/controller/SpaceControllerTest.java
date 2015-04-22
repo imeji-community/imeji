@@ -135,17 +135,21 @@ public class SpaceControllerTest extends ImejiTestBase{
         collectionTO= (CollectionTO) RestProcessUtils.buildTOFromJSON(
                 getStringFromPath(STATIC_CONTEXT_REST + "/createCollection.json"), CollectionTO.class);
         CollectionService cs = new CollectionService();
-        long startTime = System.currentTimeMillis();
+        long startTime;
         for (int i = 0; i < COL_NUM; i++) {
             collectionTO.setTitle("Collection " + i);
+            startTime = System.currentTimeMillis();
             colIds[i] = cs.create(collectionTO, testUser).getId();
+            LOGGER.info( i + ": " + (System.currentTimeMillis() - startTime ) + "ms\n");
+
         }
-        LOGGER.info("creation time: " + (System.currentTimeMillis() - startTime ) + "ms");
+        //LOGGER.info("creation time: " + (System.currentTimeMillis() - startTime ) + "ms");
 
         startTime = System.currentTimeMillis();
         //add collections to space
         for (int i = 0; i < COL_NUM; i++) {
             sc.addCollection(space, colIds[i], adminUser);
+            LOGGER.info(i + "\n");
         }
         LOGGER.info("addition time:" + (System.currentTimeMillis() - startTime )  + "ms");
 

@@ -15,8 +15,10 @@ import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.rdf.model.Resource;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
+import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.jobs.CleanMetadataJob;
 import de.mpg.imeji.logic.jobs.CleanMetadataProfileJob;
@@ -40,6 +42,7 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.writer.WriterFacade;
+import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
@@ -76,6 +79,17 @@ public class AdminBean {
 		this.freeSpaceInStorage = FileUtils
 				.byteCountToDisplaySize(storageUsageAnalyse.getFreeSpace());
 		this.lastUpdateStorageStatistics = storageUsageAnalyse.getLastUpdate();
+	}
+
+	/**
+	 * Return the Id of the default {@link MetadataProfile}
+	 * 
+	 * @return
+	 * @throws ImejiException
+	 */
+	public String getDefaultProfileId() throws ImejiException {
+		ProfileController c = new ProfileController();
+		return c.retrieveDefaultProfile().getIdString();
 	}
 
 	/**

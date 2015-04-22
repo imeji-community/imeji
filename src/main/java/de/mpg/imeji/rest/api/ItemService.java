@@ -35,7 +35,6 @@ public class ItemService implements API<ItemTO> {
 			// transfer TO into item
 			Item item = new Item();
 			
-			
 			ReverseTransferObjectFactory.transferItem(to, item, u, CREATE);
 			
 			item = controller.create(item, ((ItemWithFileTO) to).getFile(), filename, u, ((ItemWithFileTO) to).getFetchUrl(), ((ItemWithFileTO) to).getReferenceUrl());

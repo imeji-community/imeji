@@ -135,7 +135,7 @@ public class ItemController extends ImejiController {
 
 		if (filename == null || filename.equals("")) {
 			throw new UnprocessableError(
-					"Filename or reference must not be empty!");
+					"Filename must not be empty!");
 		}
 		
 		validateChecksum(c.getId(), f, false);
@@ -172,8 +172,13 @@ public class ItemController extends ImejiController {
 			filename = filename + "." + FilenameUtils.getExtension(origName);
 
 		if (filename == null || filename.equals("")) {
-			throw new UnprocessableError(
-					"Filename or reference must not be empty!");
+			throw new BadRequestException(
+					"Could not derive the filename. Please provide the filename with the request!");
+		}
+		
+		if (externalFileUrl == null || externalFileUrl.equals("") ) {
+			throw new BadRequestException(
+					"Please provide fetchUrl or referenceUrl with the request!");
 		}
 
 		StorageController sController = new StorageController("external");
@@ -242,11 +247,16 @@ public class ItemController extends ImejiController {
 			throw new AuthenticationError(CommonUtils.USER_MUST_BE_LOGGED_IN);
 		}
 
-		if (filename == null || filename.isEmpty()) {
+		if (uploadedFile != null && isNullOrEmpty(filename)) {
 			throw new BadRequestException(
-					"Filename or reference must not be empty!");
+					"Filename for the uploaded file must not be empty!");
 		}
 		
+
+		if (uploadedFile == null && isNullOrEmpty(fetchUrl) && isNullOrEmpty(referenceUrl)) {
+			throw new BadRequestException ("Please upload a file or provide one of the fetchUrl or referenceUrl as input.");
+			
+		}
 
 		Item newItem = new Item(item);
 		CollectionController cc = new CollectionController();
@@ -269,7 +279,7 @@ public class ItemController extends ImejiController {
 			// If no file, but either a fetchUrl or a referenceUrl
 			newItem = createWithExternalFile(item, collection,
 					getExternalFileUrl(fetchUrl, referenceUrl), filename,
-					downloadFile(fetchUrl), u);
+					downloadFile(getExternalFileUrl(fetchUrl, referenceUrl)), u);
 		} else {
 			throw new BadRequestException(
 					"Filename or reference must not be empty!");

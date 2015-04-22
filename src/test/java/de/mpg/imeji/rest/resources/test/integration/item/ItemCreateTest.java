@@ -372,7 +372,7 @@ public class ItemCreateTest extends ImejiTestBase {
                 .request(MediaType.APPLICATION_JSON_TYPE)
                 .post(Entity.entity(multiPart, multiPart.getMediaType()));
 
-        assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+        assertEquals(Status.CREATED.getStatusCode(), response.getStatus());
        
        
     }
@@ -389,6 +389,13 @@ public class ItemCreateTest extends ImejiTestBase {
                 .replaceAll("\"fetchUrl\"\\s*:\\s*\"___FETCH_URL___\",", "")
          
         		);
+        
+        
+        System.out.println(itemJSON.replace("___COLLECTION_ID___", collectionId)
+                .replace("___FILENAME___", "test.png")
+                .replace("___REFERENCE_URL___", "http://th03.deviantart.net/fs71/PRE/i/2012/242/1/f/png_moon_by_paradise234-d5czhdo.png")
+                .replaceAll("\"fetchUrl\"\\s*:\\s*\"___FETCH_URL___\",", "")
+         );
 
         Response response = target(pathPrefix)
                 .register(authAsUser).register(MultiPartFeature.class)

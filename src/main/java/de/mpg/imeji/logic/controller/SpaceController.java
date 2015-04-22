@@ -29,7 +29,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.util.Arrays;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -307,10 +308,16 @@ public class SpaceController extends ImejiController {
      * @param space
      * @return
      * @throws ImejiException
+     * @throws URISyntaxException 
      */
-    public Collection<String> retrieveCollections(Space space) throws ImejiException {
-        if ( Iterables.isEmpty(space.getSpaceCollections()) )
-            space.setSpaceCollections(ImejiSPARQL.exec(SPARQLQueries.selectCollectionsOfSpace(space.getId()), null));
+    public Collection<String> retrieveCollections(Space space) throws ImejiException{
+        List<String> currentSpaceCollections = new ArrayList<String>();
+        if ( Iterables.isEmpty(space.getSpaceCollections()) ) {
+           for (String colUri:ImejiSPARQL.exec(SPARQLQueries.selectCollectionsOfSpace(space.getId()), null)) {
+        	   currentSpaceCollections.add(ObjectHelper.getId(URI.create(colUri)));
+           }
+           space.setSpaceCollections(currentSpaceCollections);
+        }
         return space.getSpaceCollections();
     }
 
@@ -326,7 +333,7 @@ public class SpaceController extends ImejiController {
         if (!Iterables.contains(space.getSpaceCollections(), collId)) {
             space.getSpaceCollections().add(collId);
             update(space, user);
-            updateCollectionSpace(space, collId, user);
+            updateCollectionSpace(space, collId, user, false);
         }
     }
 
@@ -340,7 +347,7 @@ public class SpaceController extends ImejiController {
      * @throws ImejiException
      */
     public void addCollection(String spaceId, String collId, User user) throws ImejiException {
-    	Space sp = retrieve(ObjectHelper.getURI(Space.class, spaceId), user);
+    	Space sp = retrieve(URI.create(spaceId), user);
     	addCollection(sp, collId, user);
     }
 
@@ -365,14 +372,20 @@ public class SpaceController extends ImejiController {
         })) {
             space.setSpaceCollections(colls);
             update(space, user);
-            updateCollectionSpace(space, ObjectHelper.getId(URI.create(collId)), user);
+            updateCollectionSpace(space, collId, user, true);
         }
         return colls;
     }
 
-    private void updateCollectionSpace(Space space, String collId, User user) throws ImejiException {
+    private void updateCollectionSpace(Space space, String collId, User user, boolean remove) throws ImejiException {
         CollectionImeji c = cc.retrieve(collId, user);
-        c.setSpace(space.getId());
+        if (!remove ) {
+        	c.setSpace(space.getId());
+        }
+        else
+        {
+        	c.setSpace(null);
+        }
         cc.update(c, user);
     }
 

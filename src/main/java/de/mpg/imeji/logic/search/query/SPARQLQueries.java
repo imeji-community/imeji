@@ -703,4 +703,14 @@ public class SPARQLQueries {
 				+ ". ?o <http://purl.org/escidoc/metadata/terms/0.1/complete-name> ?cn}";
 	}
 
+
+
+
+	/**
+	 *	Helpers
+	 */
+	public static String countTriplesAll() {
+		return "SELECT (str(count(?ss)) as ?s) WHERE {?ss ?p ?o}";
+	}
+
 }

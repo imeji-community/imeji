@@ -44,7 +44,11 @@ All rights reserved. Use is subject to license terms.
 			<ui:include src="../menu/metamenu_default.xhtml"/>
 			
 			<h:outputLink id="lnkStartPage" title="#{lbl.goto_startpage}" value="#{Navigation.homeUrl}">
-				<h:panelGroup styleClass="imj_logo"/>
+				<!-- default imeji logo -->
+				<h:panelGroup styleClass="imj_logo" rendered="#{empty (SessionBean.selectedSpaceLogoURL) or (SessionBean.selectedSpaceLogoURL.trim() == '')}"/>
+				
+				<!-- space specific logo -->
+				<h:graphicImage value="#{SessionBean.selectedSpaceLogoURL}" alt="space logo" styleClass="imj_spaceLogo" rendered="#{not empty (SessionBean.selectedSpaceLogoURL.trim()) and SessionBean.selectedSpaceLogoURL.trim() != '' }"/> 
 			</h:outputLink>
 			
 			<div class="imj_siteHeaderMenuSearchSection">

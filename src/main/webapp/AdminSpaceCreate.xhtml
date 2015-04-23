@@ -32,11 +32,11 @@
 				var protocoll, tmp;
 				tmp = clearToSlug(str);
 				protocoll = location.protocoll || 'http:';
-				$('#spaceSlug').val(tmp);
-				$('#previewSpaceSlugUrl').text(protocoll + '//' + location.host + '/' + tmp + '/');
+				$('input[id$="spaceSlug"]').val(tmp);
+				$('#previewSpaceSlugUrl').text(protocoll + '//' + location.host + '/space/' + tmp + '/');
 			}
 			function initSlugUpdate() {
-				$('#spaceTitle, #spaceSlug').keyup(function(evt){
+				$('input[id$="spaceTitle"], input[id$="spaceSlug"]').keyup(function(evt){
 					updateSlug($(this).val());
 				});
 			}
@@ -60,7 +60,7 @@
 				
 				<h:panelGroup layout="block" styleClass="imj_listBody" rendered="#{Auth.admin}">
 					<h:form id="spaceForm">
-					<div class="imj_adminPanel">
+						<div class="imj_adminPanel">
 							<div class="imj_headline">
 								<h2>
 									<h:outputText value="#{lbl.admin_space_global_information}"/>
@@ -73,15 +73,15 @@
 							<div class="imj_content">
 								<!-- title description logo slug -->
 								<div class="imj_metadataSet">
-									<label class="imj_metadataLabel">{#lbl.title} / #{lbl.name}</label>
+									<label class="imj_metadataLabel">#{lbl.title} / #{lbl.name}</label>
 									<h:inputText id="spaceTitle" styleClass="imj_metadataValue"  value="#{CreateSpaceBean.space.title}"/>
 								</div>
 								<div class="imj_metadataSet">
-									<label class="imj_metadataLabel">{#lbl.space_welcome_text}</label>
+									<label class="imj_metadataLabel">#{lbl.space_welcome_text}</label>
 									<textarea id="spaceWelcomeText" class="imj_metadataValue" />
 								</div>
 								
-													<div id="uploader" class="imj_fileUploadContainer imj_singleUpload">
+						<div id="uploader" class="imj_fileUploadContainer imj_singleUpload">
 						<div id="filelist">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
 		
 						<div id="container">
@@ -135,16 +135,16 @@
 					</div>
 
 								<div class="imj_metadataSet">
-									<label class="imj_metadataLabel">{#lbl.related_collections}</label>
+									<label class="imj_metadataLabel">#{lbl.related_collections}</label>
 									
 									<h:selectManyMenu value="#{CreateSpaceBean.selectedCollections}" id="selectSpaceCollections" style="height:150px; width:100%;" class="imj_metadataValue">
 										<f:selectItems value="#{CreateSpaceBean.getCollectionItems()}"/>
 									</h:selectManyMenu>
 									
-<!-- 									<h:commandButton id="selectCollectionForSpace" value="Check" action="#{CreateSpaceBean.check()}" styleClass="imj_noDisplay">
+ 									<h:commandButton id="selectCollectionForSpace" value="Check" action="#{CreateSpaceBean.check()}" styleClass="imj_noDisplay">
 										<f:ajax execute="@form" render="@form"/>
 									</h:commandButton>
- -->									
+								
 								</div>
 							</div>
 						</div>
@@ -160,7 +160,7 @@
 							</div>
 							<div class="imj_content">
 								<div class="imj_metadataSet">
-									<label class="imj_metadataLabel">{#lbl.url_slug}</label>
+									<label class="imj_metadataLabel">#{lbl.url_slug}</label>
 									<span class="imj_metadataValue">
 										<h:inputText id="spaceSlug" value="#{CreateSpaceBean.slug}"/>
 										<span id="previewSpaceSlugUrl"></span>
@@ -168,7 +168,7 @@
 								</div>
 								
 								<div class="imj_metadataSet">
-									<label class="imj_metadataLabel">{#lbl.html_meta_description}</label>
+									<label class="imj_metadataLabel">#{lbl.html_meta_description}</label>
 									<h:inputTextarea id="spaceDescription" styleClass="imj_metadataValue" value="#{CreateSpaceBean.space.description}"/>
 								</div>
 

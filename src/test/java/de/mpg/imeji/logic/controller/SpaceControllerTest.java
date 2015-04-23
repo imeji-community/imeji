@@ -126,14 +126,18 @@ public class SpaceControllerTest extends ImejiTestBase{
         Space sp1 = ImejiFactory.newSpace();
         sp1.setTitle("Space Full Create");
 
-        Collection<String> colls = Lists.newArrayList(initCollection(), initCollection());
+        final Collection<String> colls = Lists.newArrayList(initCollection(), initCollection());
         sp1.setSpaceCollections(colls);
 
         File uploadFile = new File("src/test/resources/storage/test.jpg");
 
         space = sc.retrieve(sc.create(sp1, colls, uploadFile, adminUser), adminUser);
         assertThat(space.getTitle(), equalTo(sp1.getTitle()));
-        assertTrue(Iterables.removeAll(space.getSpaceCollections(), sp1.getSpaceCollections()));
+
+        Collection<String> spaceCollections = space.getSpaceCollections();
+        Iterables.removeAll(spaceCollections, colls);
+        assertThat(spaceCollections, empty());
+        
         assertTrue(FileUtils.contentEquals(uploadFile,
                 new File(sc.transformUrlToPath(space.getLogoUrl().toURL().toString()))
         ));

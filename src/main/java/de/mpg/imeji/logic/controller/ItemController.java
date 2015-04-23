@@ -447,6 +447,7 @@ public class ItemController extends ImejiController {
 		item.setFilename(filename);
 
 		StorageController sc = new StorageController("external");
+		
 		if (download) {
 			// download the file in storage
 			try {
@@ -458,6 +459,9 @@ public class ItemController extends ImejiController {
 			} catch (IOException e) {
 				throw new UnprocessableError(
 						"There was a problem with saving this file to the temporary storage!");
+			} catch (Exception e) {
+				throw new UnprocessableError(
+						"There was a problem with fetching of provide fileURL to the temporary storage!");
 			}
 		} else {
 

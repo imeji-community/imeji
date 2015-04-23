@@ -229,6 +229,7 @@ public class CollectionController extends ImejiController {
 		return cList;
 	}
 
+	
 	/**
 	 * Retrieve the {@link CollectionImeji} without its {@link Item}
 	 * 
@@ -621,6 +622,7 @@ public class CollectionController extends ImejiController {
      */
     public List<CollectionImeji> searchBySpaceId(User user, String uri) throws ImejiException 
     {
+    	//TODO remove?
     	List<CollectionImeji> cols = new ArrayList<CollectionImeji>();
     	String q = SPARQLQueries.selectCollectionImejiOfSpace(uri);
     //	retrieveCollections(user, q);
@@ -643,5 +645,6 @@ public class CollectionController extends ImejiController {
              }
          });
 	}
+
 
 }

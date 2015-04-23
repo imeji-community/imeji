@@ -125,9 +125,13 @@ public class SpaceController extends ImejiController {
             space.setSpaceCollections(newSpaceCollections);
         }
         URI id = create(space, user, true);
+
         if (file != null && file.exists()) {
+
             updateFile(space, file, user);
+
         }
+
         return id;
     }
 
@@ -445,8 +449,10 @@ public class SpaceController extends ImejiController {
         return colls;
     }
 
+    //Note: these are the StringIds (not URIIds)
     private void setSpaceInCollections(Space space, Collection<String> collIds, User user, boolean remove) throws ImejiException {
         for (String collId : collIds) {
+        	//NB comment: seems the whole collIdURI comes from input
             CollectionImeji c = cc.retrieve(collId, user);
             c.setSpace(remove ? null : space.getId());
             cc.update(c, user);

@@ -80,10 +80,60 @@
 									<label class="imj_metadataLabel">{#lbl.space_welcome_text}</label>
 									<textarea id="spaceWelcomeText" class="imj_metadataValue" />
 								</div>
-								<div class="imj_metadataSet">
-									<label class="imj_metadataLabel">{#lbl.logo}</label>
-									<h:inputFile id="logo" styleClass="imj_metadataValue" value="#{CreateSpaceBean.logoFile}"/>
-								</div>
+								
+													<div id="uploader" class="imj_fileUploadContainer imj_singleUpload">
+						<div id="filelist">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
+		
+						<div id="container">
+						    <a id="pickfiles" href="javascript:;">[#{lbl.uploadFile}]</a>
+						</div>
+	
+						<script type="text/javascript" src="#{Navigation.applicationUrl}resources/plupload/2.1.2/js/plupload.full.min.js"></script>
+						<script type="text/javascript">
+							var uploader = new plupload.Uploader({
+								runtimes : 'html5,flash,silverlight,html4',
+								browse_button : 'pickfiles', // you can pass in id...
+								container: document.getElementById('container'), // ... or DOM Element itself
+								url : location.pathname  + "?start=1",
+								max_file_size : '#{Configuration.uploadMaxFileSize}kb',
+								multi_selection : false,
+								init: {
+									PostInit: function() {
+										document.getElementById('filelist').innerHTML = '';					
+									},
+									
+									FilesAdded: function(up, files) {
+										
+										plupload.each(files, function(file) {
+											if(up.files.length > 1)
+											{
+												up.removeFile(file);
+											}
+											
+											document.getElementById('filelist').innerHTML = '<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
+										});
+										uploader.start();
+										
+									},
+									
+									UploadProgress: function(up, file) {
+										document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+									},
+									 StateChanged: function(up) {
+											// Called when the state of the queue is changed
+											if( up.state == plupload.STOPPED)
+												report();
+									},
+								}
+							});
+							
+							uploader.init();
+							function report(){
+								//window.location.href = location.pathname ;
+							}
+						</script>
+					</div>
+
 								<div class="imj_metadataSet">
 									<label class="imj_metadataLabel">{#lbl.related_collections}</label>
 									
@@ -91,9 +141,10 @@
 										<f:selectItems value="#{CreateSpaceBean.getCollectionItems()}"/>
 									</h:selectManyMenu>
 									
-									<h:commandButton id="selectCollectionForSpace" value="Check" action="#{CreateSpaceBean.check()}" styleClass="imj_noDisplay">
+<!-- 									<h:commandButton id="selectCollectionForSpace" value="Check" action="#{CreateSpaceBean.check()}" styleClass="imj_noDisplay">
 										<f:ajax execute="@form" render="@form"/>
 									</h:commandButton>
+ -->									
 								</div>
 							</div>
 						</div>
@@ -128,7 +179,10 @@
 							<h:outputLink value="#{HistorySession.previousPage.completeUrlWithHistory}" styleClass="imj_cancelButton">
 								<h:outputText value="#{lbl.cancel}"/>
 							</h:outputLink>
-							<h:commandButton action="#{CreateSpaceBean.save}" value="#{lbl.save}" styleClass="imj_submitButton" />
+							<h:commandButton action="#{CreateSpaceBean.save}" value="#{lbl.save}" styleClass="imj_submitButton">
+											<f:ajax execute="@form" render="@form"/>
+							</h:commandButton>
+
 						</h:panelGroup>
 					</h:form>
 				</h:panelGroup>

@@ -73,19 +73,19 @@
 							<div class="imj_content">
 								<!-- title description logo slug -->
 								<div class="imj_metadataSet">
-									<label class="imj_metadataLabel">{#lbl.title} / #{lbl.name}</label>
+									<label class="imj_metadataLabel">#{lbl.title} / #{lbl.name}</label>
 									<h:inputText id="spaceTitle" styleClass="imj_metadataValue"  value="#{CreateSpaceBean.space.title}"/>
 								</div>
 								<div class="imj_metadataSet">
-									<label class="imj_metadataLabel">{#lbl.space_welcome_text}</label>
+									<label class="imj_metadataLabel">#{lbl.space_welcome_text}</label>
 									<textarea id="spaceWelcomeText" class="imj_metadataValue" />
 								</div>
 								<div class="imj_metadataSet">
-									<label class="imj_metadataLabel">{#lbl.logo}</label>
+									<label class="imj_metadataLabel">#{lbl.logo}</label>
 									<h:inputFile id="logo" styleClass="imj_metadataValue" value="#{CreateSpaceBean.logoFile}"/>
 								</div>
 								<div class="imj_metadataSet">
-									<label class="imj_metadataLabel">{#lbl.related_collections}</label>
+									<label class="imj_metadataLabel">#{lbl.related_collections}</label>
 									
 									<h:selectManyMenu value="#{CreateSpaceBean.selectedCollections}" id="selectSpaceCollections" style="height:150px; width:100%;" class="imj_metadataValue">
 										<f:selectItems value="#{CreateSpaceBean.getCollectionItems()}"/>
@@ -109,7 +109,7 @@
 							</div>
 							<div class="imj_content">
 								<div class="imj_metadataSet">
-									<label class="imj_metadataLabel">{#lbl.url_slug}</label>
+									<label class="imj_metadataLabel">#{lbl.url_slug}</label>
 									<span class="imj_metadataValue">
 										<h:inputText id="spaceSlug" value="#{CreateSpaceBean.slug}"/>
 										<span id="previewSpaceSlugUrl"></span>
@@ -117,7 +117,7 @@
 								</div>
 								
 								<div class="imj_metadataSet">
-									<label class="imj_metadataLabel">{#lbl.html_meta_description}</label>
+									<label class="imj_metadataLabel">#{lbl.html_meta_description}</label>
 									<h:inputTextarea id="spaceDescription" styleClass="imj_metadataValue" value="#{CreateSpaceBean.space.description}"/>
 								</div>
 

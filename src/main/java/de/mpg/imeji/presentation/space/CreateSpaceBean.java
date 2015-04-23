@@ -2,6 +2,7 @@ package de.mpg.imeji.presentation.space;
 
 import com.google.common.io.ByteStreams;
 import com.google.common.io.Files;
+
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.SpaceController;
@@ -107,7 +108,6 @@ public class CreateSpaceBean implements Serializable{
 		} catch (URISyntaxException e) {
 			BeanHelper.error(sessionBean.getMessage("This is not a valid value for a space slug! Please make sure it is a valid URI!"));
 		}
-
     	SpaceController spaceController = new SpaceController();
     	try {
 			spaceController.validate(space, sessionBean.getUser());
@@ -120,7 +120,7 @@ public class CreateSpaceBean implements Serializable{
 			BeanHelper.error(sessionBean.getMessage(e.getMessage()));
 			e.printStackTrace();
 			return false;
-		}
+		} 
         
         /*
          * Update User Grant

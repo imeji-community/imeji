@@ -741,6 +741,7 @@ public class SessionBean implements Serializable {
 		{
 			this.selectedSpace = null;
 			this.spaceId =""; 
+			this.selectedSpaceLogoURL="";
 		}
 	}
 

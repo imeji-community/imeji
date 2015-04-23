@@ -74,7 +74,7 @@
 								<!-- title description logo slug -->
 								<div class="imj_metadataSet">
 									<label class="imj_metadataLabel">#{lbl.title} / #{lbl.name}</label>
-									<h:inputText id="spaceTitle" styleClass="imj_metadataValue"  value="#{CreateSpaceBean.space.title}"/>
+									<h:inputText id="spaceTitle" styleClass="imj_metadataValue"  value="#{CreateSpaceBean.space.title}" required="true" requiredMessage="#{msg.error_profile_name_required}"/>
 								</div>
 								<div class="imj_metadataSet">
 									<label class="imj_metadataLabel">#{lbl.space_welcome_text}</label>

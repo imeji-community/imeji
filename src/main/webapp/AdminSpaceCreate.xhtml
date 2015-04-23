@@ -32,11 +32,11 @@
 				var protocoll, tmp;
 				tmp = clearToSlug(str);
 				protocoll = location.protocoll || 'http:';
-				$('#spaceSlug').val(tmp);
-				$('#previewSpaceSlugUrl').text(protocoll + '//' + location.host + '/' + tmp + '/');
+				$('input[id$="spaceSlug"]').val(tmp);
+				$('#previewSpaceSlugUrl').text(protocoll + '//' + location.host + '/space/' + tmp + '/');
 			}
 			function initSlugUpdate() {
-				$('#spaceTitle, #spaceSlug').keyup(function(evt){
+				$('input[id$="spaceTitle"], input[id$="spaceSlug"]').keyup(function(evt){
 					updateSlug($(this).val());
 				});
 			}
@@ -60,7 +60,7 @@
 				
 				<h:panelGroup layout="block" styleClass="imj_listBody" rendered="#{Auth.admin}">
 					<h:form id="spaceForm">
-					<div class="imj_adminPanel">
+						<div class="imj_adminPanel">
 							<div class="imj_headline">
 								<h2>
 									<h:outputText value="#{lbl.admin_space_global_information}"/>

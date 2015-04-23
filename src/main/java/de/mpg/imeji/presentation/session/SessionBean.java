@@ -84,6 +84,7 @@ public class SessionBean implements Serializable {
 	private String spaceId;
 	private URI selectedSpace;
 	private String selectedSpaceLogoURL;
+
 	/*
 	 * Cookies name
 	 */
@@ -768,5 +769,6 @@ public class SessionBean implements Serializable {
 	public void setSpaceLogoIngestImage(IngestImage spaceLogoIngestImage) {
 		this.spaceLogoIngestImage = spaceLogoIngestImage;
 	}
+	
 }
 

@@ -46,6 +46,7 @@ public class SpaceControllerTest extends ImejiTestBase{
     private static CollectionController cc;
     private static URI spaceId;
     private static Space space;
+    private static final File uploadFile = new File("src/test/resources/storage/test.jpg");
 
     @BeforeClass
     public static void specificSetup() {
@@ -81,14 +82,13 @@ public class SpaceControllerTest extends ImejiTestBase{
 
     @Test
     public void test_3_UpdateFile() throws Exception {
-        File uploadFile = new File("src/test/resources/storage/test.jpg");
+
         space = sc.updateFile(space, uploadFile, adminUser);
-        uploadFile = new File("src/test/resources/storage/test2.jpg");
-        space = sc.updateFile(space, uploadFile, adminUser);
-        assertTrue(FileUtils.contentEquals(uploadFile,
+        File updateFile = new File("src/test/resources/storage/test2.jpg");
+        space = sc.updateFile(space, updateFile, adminUser);
+        assertTrue(FileUtils.contentEquals(updateFile,
                 new File(sc.transformUrlToPath(space.getLogoUrl().toURL().toString()))
         ));
-        
         assertThat(sc.retrieveCollections(space), hasSize(2));
     }
 
@@ -129,8 +129,6 @@ public class SpaceControllerTest extends ImejiTestBase{
 
         final Collection<String> colls = Lists.newArrayList(initCollection(), initCollection());
         sp1.setSpaceCollections(colls);
-
-        File uploadFile = new File("src/test/resources/storage/test.jpg");
 
         space = sc.retrieve(sc.create(sp1, colls, uploadFile, adminUser), adminUser);
         assertThat(space.getTitle(), equalTo(sp1.getTitle()));

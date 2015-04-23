@@ -46,7 +46,7 @@
 							<h:form id="itemSelectForm">
 								<h:panelGroup layout="block" id="imgFrame" styleClass="#{item.selected ? 'imj_selected'  : ''} imj_tileThumbnailArea #{item.inActiveAlbum ? 'inAlbum' : ''}">
 									<!-- Image with link to the details view -->
-									<h:outputLink id="lnkPicDetailBrowse" value="#{cc.attrs.picList.imageBaseUrl}/item/#{item.id}">
+									<h:outputLink id="lnkPicDetailBrowse" value="#{cc.attrs.picList.imageBaseUrl}item/#{item.id}">
 										<h:graphicImage alt="#{item.caption}" title="#{item.caption}" id="thumbnail" url="#{item.link}"/>		
 									</h:outputLink>
 								</h:panelGroup>

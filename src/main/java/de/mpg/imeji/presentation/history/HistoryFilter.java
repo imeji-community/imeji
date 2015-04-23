@@ -303,6 +303,7 @@ public class HistoryFilter implements Filter {
 							StringUtils.substringBefore(StringUtils.substringAfter(matchingUrl, "/space/"), "/");
 				//System.out.println("Calculated mySpaceId= "+mySpaceId+ " sessopmSüace= "+session.getSpaceId());
 				if (!mySpaceId.equals(session.getSpaceId())) {
+					hs.getPages().clear();
 					SpaceController sc = new SpaceController();
 						if (!sc.isSpaceByLabel(mySpaceId) ) {
 							session.setSpaceId("");

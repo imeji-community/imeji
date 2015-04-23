@@ -3,6 +3,8 @@
  */
 package de.mpg.imeji.logic.controller;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 import de.mpg.imeji.exceptions.*;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
@@ -25,13 +27,7 @@ import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.j2j.helper.J2JHelper;
-
 import org.apache.log4j.Logger;
-
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
-
-import scala.annotation.StaticAnnotation;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -488,10 +484,10 @@ public class CollectionController extends ImejiController {
 	/**
 	 * Withdraw a {@link CollectionImeji} and all its {@link Item}
 	 * 
-	 * @param collection
+	 * @param coll
 	 * @throws ImejiException
 	 */
-	public void withdraw(CollectionImeji collection, User user)
+	public void withdraw(CollectionImeji coll, User user)
 			throws ImejiException {
 		ItemController itemController = new ItemController();
 
@@ -499,32 +495,34 @@ public class CollectionController extends ImejiController {
 			throw new AuthenticationError("User must be signed-in");
 		}
 
-		if (collection == null) {
+		if (coll == null) {
 			throw new NotFoundException("Collection does not exists");
 		}
 
-		List<String> itemUris = itemController.search(collection.getId(), null,
+		List<String> itemUris = itemController.search(coll.getId(), null,
 				null, null, user, null).getResults();
 		if (hasImageLocked(itemUris, user)) {
 			throw new UnprocessableError(
 					((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
 							.getMessage("collection_locked"));
-		} else if (!Status.RELEASED.equals(collection.getStatus())) {
+		} else if (!Status.RELEASED.equals(coll.getStatus())) {
 
 			throw new UnprocessableError(
 					"Withdraw collection: Collection must be released");
 		} else {
 			List<Item> items = (List<Item>) itemController.retrieve(itemUris,
 					-1, 0, user);
-			itemController
-					.withdraw(items, collection.getDiscardComment(), user);
-			writeWithdrawProperties(collection, null);
-			update(collection, user);
-			if (AuthUtil.staticAuth().administrate(user,
-					collection.getProfile().toString())) {
+			itemController.withdraw(items, coll.getDiscardComment(), user);
+			writeWithdrawProperties(coll, null);
+			update(coll, user);
+			if (
+					!coll.getProfile().equals(Imeji.defaultMetadataProfile.getId())
+					&& AuthUtil.staticAuth().administrate(user, coll.getProfile().toString())
+			) {
 				// Withdraw profile
 				ProfileController pc = new ProfileController();
-				pc.withdraw(pc.retrieve(collection.getProfile(), user), user);
+				if(!pc.isReferencedByOtherResources(coll.getProfile().toString(), coll.getId().toString()))
+					pc.withdraw(pc.retrieve(coll.getProfile(), user), user);
 			}
 		}
 	}

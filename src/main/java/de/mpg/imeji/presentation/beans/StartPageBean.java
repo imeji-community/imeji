@@ -1,6 +1,8 @@
 package de.mpg.imeji.presentation.beans;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.controller.SpaceController;
 import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.query.URLQueryTransformer;
@@ -8,6 +10,7 @@ import de.mpg.imeji.logic.search.vo.*;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.util.DateFormatter;
 import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.Space;
 import de.mpg.imeji.presentation.image.ThumbnailBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -190,4 +193,19 @@ public class StartPageBean {
 	public List<ThumbnailBean> getCarousselImages() {
 		return carousselImages;
 	}
+	
+	public Space getSelectedSpaceResource() {
+		if (session.getSelectedSpace() == null) 
+			return new Space();
+		SpaceController sc = new SpaceController();
+		try {
+			return sc.retrieve(session.getSelectedSpace(), session.getUser());
+		} catch (ImejiException e) {
+			Space scc= new Space();
+			scc.setTitle("Space Not Found");
+			scc.setDescription("Space Not Found");
+			return scc;
+		}
+}
+
 }

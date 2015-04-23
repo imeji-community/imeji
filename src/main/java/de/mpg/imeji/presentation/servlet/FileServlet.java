@@ -96,6 +96,7 @@ public class FileServlet extends HttpServlet {
 			throws ServletException, IOException {
 		String url = req.getParameter("id");
 		boolean download = "1".equals(req.getParameter("download"));
+		boolean isSpaceLogo = false;
 		if (url == null) {
 			// if the id parameter is null, interpret the whole url as a direct
 			// to the file (can only work if the
@@ -104,12 +105,17 @@ public class FileServlet extends HttpServlet {
 		}
 		resp.setContentType(StorageUtils.getMimeType(StringHelper
 				.getFileExtension(url)));
+		System.out.println("doGet FFFSS "+url);
+		if (url.contains("/file/spaces")) {
+			isSpaceLogo = true;
+		}
 		
 		SessionBean session = getSession(req);
 		User user = getUser(req, session);
 		
+		
 		try {
-			Item fileItem = getItem(url, user);
+				Item fileItem = isSpaceLogo? null: getItem(url, user);
 
 			if ("NO_THUMBNAIL_URL".equals(url)) {
 				ExternalStorage eStorage = new ExternalStorage();
@@ -124,9 +130,10 @@ public class FileServlet extends HttpServlet {
 				storageController.read(url, resp.getOutputStream(), true);
 
 				// message to observer if item downloaded
-				if (download)
+				if (download && !isSpaceLogo)
 					NotificationUtils.notifyByItemDownload(user, fileItem,
 							session);
+				
 
 			}
 		} catch (Exception e) {

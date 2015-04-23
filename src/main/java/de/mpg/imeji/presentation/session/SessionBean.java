@@ -36,6 +36,7 @@ import de.mpg.imeji.logic.vo.Space;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.beans.Navigation.Page;
+import de.mpg.imeji.presentation.upload.IngestImage;
 import de.mpg.imeji.presentation.user.ShareBean.ShareType;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CookieUtils;
@@ -82,6 +83,8 @@ public class SessionBean implements Serializable {
 	private String applicationUrl;
 	private String spaceId;
 	private URI selectedSpace;
+	private String selectedSpaceLogoURL;
+
 	/*
 	 * Cookies name
 	 */
@@ -94,6 +97,10 @@ public class SessionBean implements Serializable {
 	 */
 	public String institute;
 	public String instituteId;
+	
+	//TODO 
+	//Provide better handling for ingest image uploader; here temporary code provided in order to fulfill the sprint deadline 
+	private IngestImage spaceLogoIngestImage;
 
 	/**
 	 * The session Bean for imeji
@@ -714,23 +721,27 @@ public class SessionBean implements Serializable {
 					Space selectedSpace =  sc.retrieveSpaceByLabel(spaceIdString, this.user);
 					if (selectedSpace != null) {
 						this.selectedSpace = selectedSpace.getId();
+						this.selectedSpaceLogoURL = selectedSpace.getLogoUrl().toString();
 					}
 					else
 					{
 						this.selectedSpace = null;
 						this.spaceId =""; 
+						this.selectedSpaceLogoURL="";
 					}
 			}
 			catch (ImejiException e) 
 			{
 				this.selectedSpace = null;
-				this.spaceId =""; 
+				this.spaceId ="";
+				this.selectedSpaceLogoURL="";
 			}
 		}
 		else
 		{
 			this.selectedSpace = null;
 			this.spaceId =""; 
+			this.selectedSpaceLogoURL="";
 		}
 	}
 
@@ -747,5 +758,18 @@ public class SessionBean implements Serializable {
 	public URI getSelectedSpace() {
 			return this.selectedSpace;
 	}
+
+	public String getSelectedSpaceLogoURL() {
+		return this.selectedSpaceLogoURL;
+	}
+
+	public IngestImage getSpaceLogoIngestImage() {
+		return spaceLogoIngestImage;
+	}
+
+	public void setSpaceLogoIngestImage(IngestImage spaceLogoIngestImage) {
+		this.spaceLogoIngestImage = spaceLogoIngestImage;
+	}
+	
 }
 

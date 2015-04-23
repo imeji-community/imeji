@@ -70,6 +70,7 @@ public class SpaceControllerTest extends ImejiTestBase{
         space.setTitle(space.getTitle() + changed);
         sc.addCollection(space, initCollection(), adminUser);
         String collId2 = initCollection();
+        
         sc.addCollection(space, collId2, adminUser);
         //duplicates are not added!
         sc.addCollection(space, collId2, adminUser);

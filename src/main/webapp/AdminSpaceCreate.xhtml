@@ -78,7 +78,7 @@
 								</div>
 								<div class="imj_metadataSet">
 									<label class="imj_metadataLabel">#{lbl.space_welcome_text}</label>
-									<textarea id="spaceWelcomeText" class="imj_metadataValue" />
+									<h:inputTextarea id="spaceWelcomeText" styleClass="imj_metadataValue" value="#{CreateSpaceBean.space.description}"/>
 								</div>
 								
 								<div class="imj_metadataSet">
@@ -145,12 +145,7 @@
 									
 									<h:selectManyMenu value="#{CreateSpaceBean.selectedCollections}" id="selectSpaceCollections" style="height:150px; width:100%;" class="imj_metadataValue">
 										<f:selectItems value="#{CreateSpaceBean.getCollectionItems()}"/>
-									</h:selectManyMenu>
-									
- 									<h:commandButton id="selectCollectionForSpace" value="Check" action="#{CreateSpaceBean.check()}" styleClass="imj_noDisplay">
-										<f:ajax execute="@form" render="@form"/>
-									</h:commandButton>
-								
+									</h:selectManyMenu>								
 								</div>
 							</div>
 						</div>
@@ -173,10 +168,7 @@
 									</span>
 								</div>
 								
-								<div class="imj_metadataSet">
-									<label class="imj_metadataLabel">#{lbl.html_meta_description}</label>
-									<h:inputTextarea id="spaceDescription" styleClass="imj_metadataValue" value="#{CreateSpaceBean.space.description}"/>
-								</div>
+
 
 							</div>
 						</div>

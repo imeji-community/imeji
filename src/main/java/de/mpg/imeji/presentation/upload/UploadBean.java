@@ -284,7 +284,7 @@ public class UploadBean implements Serializable {
 			}
 			StorageController sc = new StorageController();
 			String guessedNotAllowedFormat = sc.guessNotAllowedFormat(file);
-			if (guessedNotAllowedFormat != null) {
+			if (StorageUtils.BAD_FORMAT.equals(guessedNotAllowedFormat)) {
 				SessionBean sessionBean = (SessionBean) BeanHelper
 						.getSessionBean(SessionBean.class);
 				throw new RuntimeException(

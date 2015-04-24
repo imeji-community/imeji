@@ -1,6 +1,7 @@
 package de.mpg.imeji.rest.resources.test.integration;
 
 
+import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
@@ -508,7 +509,7 @@ public class CollectionTest extends ImejiTestBase {
 
 
     @Test
-    public void test_6_UpdateCollection_1_Metadata_AllowedChanges() throws IOException, UnprocessableError {
+    public void test_6_UpdateCollection_1_Metadata_AllowedChanges() throws IOException, BadRequestException, UnprocessableError {
 
         initCollection();
 
@@ -597,7 +598,7 @@ public class CollectionTest extends ImejiTestBase {
 
     }
     @Test
-    public void test_6_UpdateCollection_2_Metadata_NotAllowedChanges() throws IOException, UnprocessableError {
+    public void test_6_UpdateCollection_2_Metadata_NotAllowedChanges() throws IOException, BadRequestException {
 
         initCollection();
 
@@ -660,7 +661,7 @@ public class CollectionTest extends ImejiTestBase {
 
     }
 
-    private static Response getResponse(Builder request, CollectionTO collTO) throws UnprocessableError {
+    private static Response getResponse(Builder request, CollectionTO collTO) throws BadRequestException {
         return request.put(Entity.entity(buildJSONFromObject(collTO), MediaType.APPLICATION_JSON));
     }
   

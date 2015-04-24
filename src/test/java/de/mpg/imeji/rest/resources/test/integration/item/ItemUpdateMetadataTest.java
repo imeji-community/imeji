@@ -1,5 +1,6 @@
 package de.mpg.imeji.rest.resources.test.integration.item;
 
+import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.CollectionController.MetadataProfileCreationMethod;
@@ -80,7 +81,7 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
     }
 
     @Test
-    public void test_1_UpdateItem_1_Change_Metadata_Statements_Allowed_Common() throws IOException, UnprocessableError {
+    public void test_1_UpdateItem_1_Change_Metadata_Statements_Allowed_Common() throws IOException, BadRequestException {
 
         final String CHANGED = "allowed_change";
         double NUM = 12345;
@@ -183,7 +184,7 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
     }
 
     @Test
-    public void test_2_UpdateItem_2_Change_Metadata_Statements_Not_Allowed() throws IOException, UnprocessableError {
+    public void test_2_UpdateItem_2_Change_Metadata_Statements_Not_Allowed() throws IOException, BadRequestException {
 
         final String CHANGED = "not_allowed_change";
         final String REP_CHANGED = "$1\"" + CHANGED + "\"";
@@ -309,7 +310,7 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
 
 
     @Test
-    public void test_2_UpdateItem_3_Change_Metadata_Statements_Wrong_StatementUri() throws IOException, UnprocessableError {
+    public void test_2_UpdateItem_3_Change_Metadata_Statements_Wrong_StatementUri() throws IOException, BadRequestException {
 
         final String CHANGED = "wrong_statementUri";
         final String REP_CHANGED = "$1\"" + CHANGED + "\"";
@@ -333,7 +334,7 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
     }
 
     @Test
-    public void test_2_UpdateItem_4_Change_Metadata_Statements_Wrong_typeUri() throws IOException, UnprocessableError {
+    public void test_2_UpdateItem_4_Change_Metadata_Statements_Wrong_typeUri() throws IOException, BadRequestException {
 
         final String CHANGED = "wrong_typeUri";
         final String REP_CHANGED = "$1\"" + CHANGED + "\"";
@@ -357,7 +358,7 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
     }
 
     @Test
-    public void test_3_UpdateItem_1_Change_Metadata_Statements_EmptyValues() throws IOException, UnprocessableError {
+    public void test_3_UpdateItem_1_Change_Metadata_Statements_EmptyValues() throws IOException, BadRequestException {
 
         final String REP_CHANGED = "$1\"\"";
 
@@ -401,7 +402,7 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
    }
 
     @Test
-    public void test_3_UpdateItem_2_Change_Metadata_Statements_EmptyStatements_SomeSections() throws IOException, UnprocessableError {
+    public void test_3_UpdateItem_2_Change_Metadata_Statements_EmptyStatements_SomeSections() throws IOException, BadRequestException {
 
         FormDataMultiPart multiPart = new FormDataMultiPart();
 
@@ -427,7 +428,7 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
     }
 
     @Test
-    public void test_3_UpdateItem_3_Change_Metadata_Statements_EmptyStatements_CompleteSection() throws IOException, UnprocessableError {
+    public void test_3_UpdateItem_3_Change_Metadata_Statements_EmptyStatements_CompleteSection() throws IOException, BadRequestException {
 
         final String CHANGED = "$1";
         FormDataMultiPart multiPart = new FormDataMultiPart();

@@ -38,8 +38,11 @@ import java.io.Serializable;
 
 import org.apache.commons.io.FilenameUtils;
 
+import com.ctc.wstx.util.StringUtil;
+
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
+import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.util.PropertyReader;
@@ -161,11 +164,19 @@ public class StorageController implements Serializable {
 	 * @return not allowed file format extension
 	 */
 	public String guessNotAllowedFormat(File file) {
+		boolean canBeUploaded = false;
+		
+		String guessedExtension =FilenameUtils.getExtension(file.getName());
+		if (!"".equals(guessedExtension)) {
+			canBeUploaded = isAllowedFormat(guessedExtension);
+		}
+		//In Any case check the extension by Tika results
+		guessedExtension = guessExtension(file);
+		
+		//file can be uploaded only if both results are true
+		canBeUploaded = canBeUploaded && isAllowedFormat(guessedExtension);
 
-		String guessedExtension = FilenameUtils.getExtension(file.getName());
-		if ("".equals(guessedExtension))
-			guessedExtension = guessExtension(file);
-		return isAllowedFormat(guessedExtension) ? null : guessedExtension;
+		return canBeUploaded ? guessedExtension : StorageUtils.BAD_FORMAT;
 	}
 
 	/**
@@ -176,6 +187,8 @@ public class StorageController implements Serializable {
 	 */
 	private boolean isAllowedFormat(String extension) {
 		// If no extension, not possible to recognized the format
+		// Imeji will uprfont guess the extension for the uploaded file if it is not provided
+		// Thus this method is not public and cannot be used as public method
 		if ("".equals(extension.trim()))
 			return false;
 		// check in white list, if found then allowed

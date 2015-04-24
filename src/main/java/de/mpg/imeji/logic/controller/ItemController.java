@@ -26,6 +26,8 @@ import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.logic.vo.Item.Visibility;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.writer.WriterFacade;
+import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.imeji.rest.process.CommonUtils;
@@ -112,7 +114,6 @@ public class ItemController extends ImejiController {
 		
 		
 		StorageController sc = new StorageController();
-		String mimeType = StorageUtils.getMimeType(f);
 		UploadResult uploadResult = sc.upload(filename, f, c.getIdString());
 
 		if (item == null)
@@ -124,7 +125,13 @@ public class ItemController extends ImejiController {
 		}
 		
 		validateChecksum(c.getId(), f, false);
+		String guessedNotAllowedFormat = sc.guessNotAllowedFormat(f);
+		if (StorageUtils.BAD_FORMAT.equals(guessedNotAllowedFormat)) {
+				throw new UnprocessableError ("upload_format_not_allowed: "	+ " (" + guessedNotAllowedFormat + ")");
+		}
 
+		String mimeType = StorageUtils.getMimeType(guessedNotAllowedFormat);
+		
 		item = ImejiFactory.newItem(item, c, user, uploadResult.getId(),
 				filename, URI.create(uploadResult.getOrginal()),
 				URI.create(uploadResult.getThumb()),
@@ -237,7 +244,7 @@ public class ItemController extends ImejiController {
 					"Filename for the uploaded file must not be empty!");
 		}
 		
-
+		
 		if (uploadedFile == null && isNullOrEmpty(fetchUrl) && isNullOrEmpty(referenceUrl)) {
 			throw new BadRequestException ("Please upload a file or provide one of the fetchUrl or referenceUrl as input.");
 			

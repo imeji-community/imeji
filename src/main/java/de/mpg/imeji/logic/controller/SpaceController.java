@@ -93,10 +93,6 @@ public class SpaceController extends ImejiController {
             throws ImejiException {
         return create(space, user, true);
     }
-    public URI createNoValidate(Space space, User user)
-            throws ImejiException {
-        return create(space, user, false);
-    }
 
     public URI create(Space space, User user, boolean validate) throws ImejiException {
         if(validate){

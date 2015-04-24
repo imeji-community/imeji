@@ -59,10 +59,15 @@ public class SpaceControllerTest extends ImejiTestBase{
 
         Space sp1 = ImejiFactory.newSpace();
         sp1.setTitle("Space 1");
+        sp1.setDescription("Space 1 Description");
+        sp1.setMaxHeight(600);
+        sp1.setMaxWidth(800);
         spaceId = sc.create(sp1, adminUser);
         space = sc.retrieve(sp1.getId(), adminUser);
         assertThat(sp1.getTitle(), equalTo(space.getTitle()));
-
+        assertThat(sp1.getDescription(), equalTo(space.getDescription()));
+        assertThat(sp1.getMaxHeight(), equalTo(space.getMaxHeight()));
+        assertThat(sp1.getMaxWidth(), equalTo(space.getMaxWidth()));
     }
 
     @Test

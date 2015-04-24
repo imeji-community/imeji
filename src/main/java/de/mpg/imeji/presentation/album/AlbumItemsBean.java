@@ -68,7 +68,7 @@ public class AlbumItemsBean extends ItemsBean
     @Override
     public String getNavigationString()
     {
-        return "pretty:albumBrowse";
+        return sb.getPrettySpacePage("pretty:albumBrowse");
     }
 
     @Override
@@ -259,7 +259,7 @@ public class AlbumItemsBean extends ItemsBean
 			logger.error("Error during delete album items ", e);
 		}
         ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).delete();
-        return "pretty:albums";
+        return sb.getPrettySpacePage("pretty:albums");
     }
 
     /**

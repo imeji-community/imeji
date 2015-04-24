@@ -328,15 +328,15 @@ public abstract class CollectionBean extends ContainerBean {
 	 * @return
 	 */
 	public String delete() {
-		CollectionController cc = new CollectionController();
-		try {
-			cc.delete(collection, sessionBean.getUser());
-			BeanHelper.info(getSuccessCollectionDeleteMessage(this.collection.getMetadata().getTitle(), sessionBean));
-		} catch (Exception e) {
-			BeanHelper.error(sessionBean.getMessage("error_collection_delete"));
-			logger.error("Error delete collection", e);
-		}
-		return "pretty:collections";
+//		CollectionController cc = new CollectionController();
+//		try {
+//			cc.delete(collection, sessionBean.getUser());
+//			BeanHelper.info(getSuccessCollectionDeleteMessage(this.collection.getMetadata().getTitle(), sessionBean));
+//		} catch (Exception e) {
+//			BeanHelper.error(sessionBean.getMessage("error_collection_delete"));
+//			logger.error("Error delete collection", e);
+//		}
+		return sessionBean.getPrettySpacePage("pretty:collections");
 	}
 
 	/**

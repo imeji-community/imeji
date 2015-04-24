@@ -85,6 +85,7 @@ public class HistoryFilter implements Filter {
 			}
 			
 		} catch (Exception e) {
+			System.out.println("In History filter Exception");
 			if (e instanceof NotFoundException || e instanceof NotFoundException
 					|| e instanceof NullPointerException) 
 			{

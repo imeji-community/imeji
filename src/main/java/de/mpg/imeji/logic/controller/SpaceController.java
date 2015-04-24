@@ -5,6 +5,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.reader.ReaderFacade;
@@ -19,6 +20,7 @@ import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.logic.writer.WriterFacade;
+import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
@@ -92,10 +94,6 @@ public class SpaceController extends ImejiController {
     public URI create(Space space, User user)
             throws ImejiException {
         return create(space, user, true);
-    }
-    public URI createNoValidate(Space space, User user)
-            throws ImejiException {
-        return create(space, user, false);
     }
 
     public URI create(Space space, User user, boolean validate) throws ImejiException {
@@ -251,6 +249,23 @@ public class SpaceController extends ImejiController {
         if (isNullOrEmptyTrim(space.getTitle())) {
             throw new BadRequestException("error_space_need_title");
         }
+        
+        if (isSpaceByLabel(space.getSlug())) {
+            throw new  BadRequestException("error_there_is_another_space_with_same_slug");
+        }
+        
+        if (isNullOrEmptyTrim(space.getSlug())) {
+        	throw new BadRequestException("error_space_needs_slug");
+        }
+        try {
+    		URI slugTest = new URI(space.getSlug());
+    		//above creatino of URI in order to check if it is a sintactically valid slug
+		} catch (URISyntaxException e) {
+			//BeanHelper.error(sessionBean.getMessage("This is not a valid value for a space slug! Please make sure it is a valid URI!"));
+			//throw new TypeNotAllowedException(sessionBean.getMessage("Logo_single_upload_invalid_content_format"));
+			//throw new BadRequestException("This is not a valid value for a space slug! Please make sure it is a valid URI!");
+			throw new BadRequestException("error_space_invalid_slug");
+		}
     }
 
     /**

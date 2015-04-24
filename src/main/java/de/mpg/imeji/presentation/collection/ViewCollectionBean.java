@@ -105,7 +105,7 @@ public class ViewCollectionBean extends CollectionBean {
 
 	@Override
 	protected String getNavigationString() {
-		return "pretty:collectionInfos";
+		return sessionBean.getPrettySpacePage("pretty:collectionInfos");
 	}
 
 	public String getSmallDescription() {

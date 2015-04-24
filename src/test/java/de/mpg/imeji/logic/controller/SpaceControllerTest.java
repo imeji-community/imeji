@@ -38,6 +38,7 @@ import static org.junit.Assert.assertTrue;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SpaceControllerTest extends ImejiTestBase{
 
+	
     private static final Logger LOGGER = LoggerFactory
             .getLogger(SpaceControllerTest.class);
     public static final int COL_NUM = 100;

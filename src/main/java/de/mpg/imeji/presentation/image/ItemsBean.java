@@ -197,7 +197,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
 
 	@Override
 	public String getNavigationString() {
-		return "pretty:browse";
+		return session.getPrettySpacePage("pretty:browse");
 	}
 
 	@Override

@@ -101,7 +101,7 @@ public class CollectionItemsBean extends ItemsBean
     @Override
     public String getNavigationString()
     {
-        return "pretty:collectionBrowse";
+        return sb.getPrettySpacePage("pretty:collectionBrowse");
     }
 
     @Override
@@ -206,7 +206,7 @@ public class CollectionItemsBean extends ItemsBean
             BeanHelper.error(e.getMessage());
             logger.error("Error deleting collection", e);
         }
-        return "pretty:collections";
+        return sb.getPrettySpacePage("pretty:collections");
     }
 
     /**

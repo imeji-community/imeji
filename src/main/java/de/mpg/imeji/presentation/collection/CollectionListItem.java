@@ -178,7 +178,7 @@ public class CollectionListItem
             BeanHelper.error(sessionBean.getMessage("error_collection_delete") + ":" + e.getMessage());
             logger.error(sessionBean.getMessage("error_collection_delete"), e);
         }
-        return "pretty:collections";
+        return ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getPrettySpacePage("pretty:collections");
     }
 
     /**

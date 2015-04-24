@@ -144,7 +144,7 @@ public class CreateCollectionBean extends CollectionBean {
 
 	@Override
 	protected String getNavigationString() {
-		return "pretty:createCollection";
+		return sessionBean.getPrettySpacePage("pretty:createCollection");
 	}
 	  
 	public String getVocabularyLabel(URI id){

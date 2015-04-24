@@ -37,7 +37,7 @@ public class AlbumItemBean extends ItemBean
     public AlbumItemBean() throws Exception
     {
         super();
-        this.prettyLink = "pretty:editImageOfAlbum";
+        this.prettyLink = session.getPrettySpacePage("pretty:editImageOfAlbum");
         navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
     }
 
@@ -78,7 +78,7 @@ public class AlbumItemBean extends ItemBean
             BeanHelper.info(session.getLabel("image") + " " + getImage().getFilename() + " "
                     + session.getMessage("success_album_remove_from"));
         }
-        return "pretty:albumBrowse";
+        return session.getPrettySpacePage("pretty:albumBrowse");
     }
 
     @Override
@@ -106,7 +106,7 @@ public class AlbumItemBean extends ItemBean
     @Override
     public String getNavigationString()
     {
-        return "pretty:albumItem";
+        return session.getPrettySpacePage("pretty:albumItem");
     }
 
     public Album getAlbum()

@@ -5,6 +5,7 @@ import com.google.common.io.Files;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.CollectionController;
+import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.controller.SpaceController;
 import de.mpg.imeji.logic.controller.exceptions.TypeNotAllowedException;
 import de.mpg.imeji.logic.util.StringHelper;
@@ -12,6 +13,7 @@ import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Space;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.beans.MessagesBean;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.metadata.extractors.TikaExtractor;
 import de.mpg.imeji.presentation.session.SessionBean;
@@ -49,8 +51,8 @@ public class CreateSpaceBean implements Serializable{
 
 	private static final long serialVersionUID = -5469506610392004531L;
 	private Space space;
-	private String slug;
-	private Part logoFile;
+	//private String slug;
+	//private Part logoFile;
 	private SessionBean sessionBean;
 	private Navigation navigation;
     private List<CollectionImeji> collections;
@@ -93,43 +95,29 @@ public class CreateSpaceBean implements Serializable{
 	}
     
     public String save() throws Exception {
-    	if(createdSpace())
-    		sessionBean.setSpaceId(space.getSlug());
-    		//Go to the home URL of the Space
-    		FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getHomeUrl());
-    	return "";
+    	if(createdSpace()) {
+	    		sessionBean.setSpaceId(space.getSlug());
+	    		//Go to the home URL of the Space
+	    		FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getHomeUrl());
+	    	}
+		   	
+   		return "";
     }
     
-    public boolean createdSpace(){
-    	try {
-    		URI slugTest = new URI(slug);
-    		//above creatino of URI in order to check if it is a sintactically valid slug
-			space.setSlug(slug);
-		} catch (URISyntaxException e) {
-			BeanHelper.error(sessionBean.getMessage("This is not a valid value for a space slug! Please make sure it is a valid URI!"));
-		}
+    public boolean createdSpace() throws ImejiException, IOException 
+    {
+    	if (valid()) {
     	SpaceController spaceController = new SpaceController();
-    	try {
-			spaceController.validate(space, sessionBean.getUser());
-	    	URI uri = spaceController.create(space, getSelectedCollections(), sessionBean.getSpaceLogoIngestImage().getFile(), sessionBean.getUser());
-	    	setSpace(spaceController.retrieve(uri, sessionBean.getUser()));
+   	   	File spaceLogoFile = (sessionBean.getSpaceLogoIngestImage() != null) ? sessionBean.getSpaceLogoIngestImage().getFile():null;
+    	URI uri = spaceController.create(space, getSelectedCollections(), spaceLogoFile, sessionBean.getUser());
+    	setSpace(spaceController.retrieve(uri, sessionBean.getUser()));
 	    	//reset the Session bean and this local, as anyway it will navigate back to the home page
 	    	//Note: check how it will work with eDit!
-	    	setIngestImage(null);
-		} catch (Exception e) {
-			BeanHelper.error(sessionBean.getMessage(e.getMessage()));
-			e.printStackTrace();
-			return false;
-		} 
-        
-        /*
-         * Update User Grant
-        UserController uc = new UserController(user);
-        uc.update(sessionBean.getUser(), user);
-        */
-        
+    	setIngestImage(null);
         BeanHelper.info(sessionBean.getMessage("success_space_create"));
-        return true;
+    	return true;
+    	}
+    	return false;
     }
 	
 	public Space getSpace() {
@@ -146,13 +134,13 @@ public class CreateSpaceBean implements Serializable{
 		this.collections = collections;
 	}
 
-	public Part getLogoFile() {
-		return logoFile;
-	}
-
-	public void setLogoFile(Part logoFile) {
-		this.logoFile = logoFile;
-	}
+//	public Part getLogoFile() {
+//		return logoFile;
+//	}
+//
+//	public void setLogoFile(Part logoFile) {
+//		this.logoFile = logoFile;
+//	}
 
 	public SessionBean getSessionBean() {
 		return sessionBean;
@@ -162,13 +150,13 @@ public class CreateSpaceBean implements Serializable{
 		this.sessionBean = sessionBean;
 	}
 
-	public String getSlug() {
-		return slug;
-	}
-
-	public void setSlug(String slug) {
-		this.slug = slug;
-	}
+//	public String getSlug() {
+//		return slug;
+//	}
+//
+//	public void setSlug(String slug) {
+//		this.slug = slug;
+//	}
 
 	public List<String> getSelectedCollections() {
 		return selectedCollections;
@@ -243,6 +231,17 @@ public class CreateSpaceBean implements Serializable{
 	}
 	
 	
-	
+	public boolean valid(){
+			SpaceController cc = new SpaceController();
+			try {
+				cc.validate(space, sessionBean.getUser());
+				return true;
+			} catch (Exception e) 
+			{
+				BeanHelper.error(sessionBean.getMessage(e.getMessage()));
+				return false;
+			}
+
+		}
 
 }

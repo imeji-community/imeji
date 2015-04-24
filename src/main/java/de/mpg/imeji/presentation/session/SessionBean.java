@@ -721,7 +721,7 @@ public class SessionBean implements Serializable {
 					Space selectedSpace =  sc.retrieveSpaceByLabel(spaceIdString, this.user);
 					if (selectedSpace != null) {
 						this.selectedSpace = selectedSpace.getId();
-						this.selectedSpaceLogoURL = selectedSpace.getLogoUrl().toString();
+						this.selectedSpaceLogoURL = String.valueOf(selectedSpace.getLogoUrl());
 					}
 					else
 					{
@@ -769,6 +769,13 @@ public class SessionBean implements Serializable {
 
 	public void setSpaceLogoIngestImage(IngestImage spaceLogoIngestImage) {
 		this.spaceLogoIngestImage = spaceLogoIngestImage;
+	}
+	
+	public String getPrettySpacePage(String prettyPage){
+		if (isNullOrEmpty(this.spaceId))
+			return prettyPage;
+		return prettyPage.replace("pretty:", "pretty:space_");
+				
 	}
 	
 }

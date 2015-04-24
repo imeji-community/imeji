@@ -13,7 +13,9 @@ import de.mpg.imeji.logic.controller.GrantController;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
+import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.user.ShareBean.SharedObjectType;
+import de.mpg.imeji.presentation.util.BeanHelper;
 
 public class SharedHistory implements Serializable
 {
@@ -120,7 +122,8 @@ public class SharedHistory implements Serializable
             logger.error(e);
             throw new RuntimeException(e);
         }
-        return "pretty:shareCollection";
+        //TODO: CHECK PRETTY PAGE
+        return ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getPrettySpacePage("pretty:shareCollection");
     }
 
     /**

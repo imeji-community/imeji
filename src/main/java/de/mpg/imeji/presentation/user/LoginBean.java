@@ -58,8 +58,7 @@ public class LoginBean {
 				FacesContext.getCurrentInstance().getExternalContext()
 						.redirect(nav.getHomeUrl());
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				new RuntimeException(e);
 			}
 		}
 		try {

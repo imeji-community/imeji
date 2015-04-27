@@ -86,7 +86,7 @@
 		<div class="imj_mainContentWrapper">
 		
 			<!-- in case of space, the welcome get only one text with the carousel on right hand side -->
-			<ui:fragment rendered="#{StartPageBean.getSelectedSpaceResource().id != '' and StartPageBean.getSelectedSpaceResource().getDescription().trim() != ''}">
+			<ui:fragment rendered="#{StartPageBean.selectedSpaceResource.id != '' and not empty StartPageBean.selectedSpaceResource.id and StartPageBean.selectedSpaceResource.description.trim() != ''}">
 				
 				<!-- Main Content -->							
 				<div id="imj_welcomeInfoWrapper" class="imj_welcomeInfo">

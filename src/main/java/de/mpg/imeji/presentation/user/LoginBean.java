@@ -50,6 +50,18 @@ public class LoginBean {
 	@PostConstruct
 	public void init() {
 		this.sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+		if (!"".equals(sb.getSpaceId())) {
+			sb.logoutFromSpot();
+			Navigation nav = (Navigation) BeanHelper
+					.getApplicationBean(Navigation.class);
+			try {
+				FacesContext.getCurrentInstance().getExternalContext()
+						.redirect(nav.getHomeUrl());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		try {
 			if (UrlHelper.getParameterBoolean("logout")) {
 				logout();

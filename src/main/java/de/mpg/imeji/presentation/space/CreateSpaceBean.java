@@ -66,7 +66,6 @@ public class CreateSpaceBean implements Serializable{
     	CollectionController cc = new CollectionController();
     	String q = "";  
     	User user = sessionBean.getUser();
-    	System.out.println("spaceIdString= "+space.getIdString());
     	try {
     		if (!StringHelper.isNullOrEmptyTrim(space.getIdString())) {
     			collections = cc.retrieveCollections(user, q, space.getIdString());
@@ -171,7 +170,8 @@ public class CreateSpaceBean implements Serializable{
 		try {
 			setIngestImage(getUploadedIngestFile(request));
 		} catch (FileUploadException|TypeNotAllowedException e) {
-			BeanHelper.error(e.getMessage());
+			BeanHelper.error("Could not upload the image " + e.getMessage());
+			e.printStackTrace();
 		}
 
     }
@@ -201,15 +201,20 @@ public class CreateSpaceBean implements Serializable{
 					{
 						try {
 							IOUtils.copy(in, fos);
-						}finally{
-							in.close();
-							fos.close();
 						}
+						catch (Exception e) {
+							BeanHelper.error("Could not process uploaded Logo file streams");
+						}
+						
 					}
+					in.close();
+					fos.close();
 				}
 				ii.setFile(tmp);
+				
 			} catch (IOException | FileUploadException e) {
-				logger.info("Could not get uploaded Logo file",e);
+				ii.setFile(null);
+				BeanHelper.error("Could not process uploaded Logo file");
 			}
 		}
 		return ii;

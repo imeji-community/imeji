@@ -1,34 +1,19 @@
 package de.mpg.imeji.presentation.space;
 
-import com.google.common.io.ByteStreams;
-import com.google.common.io.Files;
-
-import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.controller.ProfileController;
-import de.mpg.imeji.logic.controller.SpaceController;
-import de.mpg.imeji.logic.controller.exceptions.TypeNotAllowedException;
-import de.mpg.imeji.logic.util.StringHelper;
-import de.mpg.imeji.logic.util.UrlHelper;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Space;
-import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.beans.MessagesBean;
-import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.metadata.extractors.TikaExtractor;
-import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.upload.IngestImage;
-import de.mpg.imeji.presentation.upload.SingleUploadBean;
-import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.rest.process.CommonUtils;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Serializable;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.Part;
 
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
@@ -38,11 +23,19 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
-import java.io.*;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.controller.CollectionController;
+import de.mpg.imeji.logic.controller.SpaceController;
+import de.mpg.imeji.logic.controller.exceptions.TypeNotAllowedException;
+import de.mpg.imeji.logic.util.StringHelper;
+import de.mpg.imeji.logic.util.UrlHelper;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Space;
+import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.upload.IngestImage;
+import de.mpg.imeji.presentation.util.BeanHelper;
 
 @ManagedBean(name ="CreateSpaceBean")
 @ViewScoped
@@ -73,13 +66,18 @@ public class CreateSpaceBean implements Serializable{
     	CollectionController cc = new CollectionController();
     	String q = "";  
     	User user = sessionBean.getUser();
+    	System.out.println("spaceIdString= "+space.getIdString());
     	try {
-    		if(!StringHelper.isNullOrEmptyTrim(space.getIdString())) 
+    		if (!StringHelper.isNullOrEmptyTrim(space.getIdString())) {
     			collections = cc.retrieveCollections(user, q, space.getIdString());
-   			collections.addAll(cc.retrieveCollectionsNotInSpace(user));
+    		}
+    		else
+    		{
+    			collections.addAll(cc.retrieveCollectionsNotInSpace(user));
+    		}
 		} catch (ImejiException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			BeanHelper.info(sessionBean.getMessage("could_not_load_collections_for_space"));
 		}
     	if(UrlHelper.getParameterBoolean("start")){
     		upload();			
@@ -195,7 +193,7 @@ public class CreateSpaceBean implements Serializable{
 					}
 
 					InputStream in = fis.openStream();
-					tmp = File.createTempFile("singleupload", "." + FilenameUtils.getExtension(fis.getName()));
+					tmp = File.createTempFile("spacelogo", "." + FilenameUtils.getExtension(fis.getName()));
 					FileOutputStream fos = new FileOutputStream(tmp);
 					if(fis.getName() != null)
 						ii.setName(fis.getName());

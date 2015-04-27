@@ -53,7 +53,7 @@ All rights reserved. Use is subject to license terms.
 			<!-- LogIn, LogOut -->
 			<h:form id="loginForm">
 				<h:panelGroup rendered="#{!Auth.loggedIn}" styleClass="imj_metaMenuItem">
-					<h:panelGroup rendered="#{!SessionBean.showLogin}">
+					<h:panelGroup rendered="#{!SessionBean.showLogin and SessionBean.spaceId==''}">
 						<h:commandLink  id="lnkLogin1"  title="#{lbl.login}" action ="#{LoginBean.loginClick}" styleClass="imj_metaMenuItem">
 			    			<h:outputText value="#{lbl.login}"></h:outputText>
 			    			<f:ajax render="@form" execute="@this"/>

@@ -112,7 +112,7 @@ public class CreateSpaceBean implements Serializable{
     	URI uri = spaceController.create(space, getSelectedCollections(), spaceLogoFile, sessionBean.getUser());
     	setSpace(spaceController.retrieve(uri, sessionBean.getUser()));
 	    	//reset the Session bean and this local, as anyway it will navigate back to the home page
-	    	//Note: check how it will work with eDit!
+	    	//Note: check how it will work with eDit! Edit bean should be implemented
     	setIngestImage(null);
         BeanHelper.info(sessionBean.getMessage("success_space_create"));
     	return true;

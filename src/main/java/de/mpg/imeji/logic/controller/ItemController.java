@@ -228,8 +228,8 @@ public class ItemController extends ImejiController {
 				user);
 		List<ImejiTriple> triples = getUpdateTriples(coll.toString(), user,
 				items.iterator().next());
-		// Update the collection
-		cc.patch(triples, user);
+		// Update the collection 
+		cc.patch(triples, user, false);
 	}
 
 	public Item create(Item item, File uploadedFile, String filename, User u,
@@ -289,7 +289,7 @@ public class ItemController extends ImejiController {
 	 */
 	public void patch(List<ImejiTriple> triples, User user)
 			throws ImejiException {
-		writer.patch(triples, user);
+		writer.patch(triples, user, true);
 	}
 
 	/**

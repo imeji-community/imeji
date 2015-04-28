@@ -88,6 +88,6 @@ public interface Writer {
 	 * @param user
 	 * @throws ImejiException
 	 */
-	public void patch(List<ImejiTriple> triples, User user)
+	public void patch(List<ImejiTriple> triples, User user, boolean doCheckSecurity)
 			throws ImejiException;
 }

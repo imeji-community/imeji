@@ -99,7 +99,7 @@ public class JenaWriter implements Writer {
 	}
 
 	@Override
-	public void patch(List<ImejiTriple> triples, User user)
+	public void patch(List<ImejiTriple> triples, User user, boolean doCheckSecurity)
 			throws ImejiException {
 		Transaction t = new PatchTransaction(triples, modelURI);
 		ThreadedTransaction.run(new ThreadedTransaction(t));

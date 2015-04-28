@@ -40,8 +40,6 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 @ManagedBean(name ="CreateSpaceBean")
 @ViewScoped
 public class CreateSpaceBean implements Serializable{
-	private static Logger logger = Logger.getLogger(CreateSpaceBean.class);
-
 	private static final long serialVersionUID = -5469506610392004531L;
 	private Space space;
 	//private String slug;
@@ -75,7 +73,6 @@ public class CreateSpaceBean implements Serializable{
     			collections.addAll(cc.retrieveCollectionsNotInSpace(user));
     		}
 		} catch (ImejiException e) {
-			// TODO Auto-generated catch block
 			BeanHelper.info(sessionBean.getMessage("could_not_load_collections_for_space"));
 		}
     	if(UrlHelper.getParameterBoolean("start")){

@@ -182,6 +182,7 @@ public class CreateSpaceBean implements Serializable{
 			ServletFileUpload upload=new ServletFileUpload();
 			try {    
 				FileItemIterator iter = upload.getItemIterator(request);
+
 				while (iter.hasNext()) {  
 					FileItemStream fis = iter.next();
 					if(fis.getName() != null && FilenameUtils.getExtension(fis.getName()).matches("ini|exe|sh|bin"))

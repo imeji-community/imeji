@@ -94,7 +94,7 @@ public abstract class SuperContainerBean<T> extends
 			selectedMenu = UrlHelper.getParameterValue("tab");
 		}
 		query = UrlHelper.getParameterValue("q");
-		if (selectedFilter == null || UrlHelper.getParameterBoolean("login")) {
+		if (selectedFilter == null || UrlHelper.getParameterBoolean("login") || sb.getUser() == null) {
 			if (sb.getUser() != null) {
 				selectedFilter = "my";
 			} else {
@@ -152,7 +152,7 @@ public abstract class SuperContainerBean<T> extends
 	 */
 	public SearchPair getFilter() {
 		SearchPair pair = null;
-		if ("my".equals(selectedFilter)) {
+		if ("my".equals(selectedFilter) ) {
 			pair = new SearchPair(
 					SPARQLSearch.getIndex(SearchIndex.names.user),
 					SearchOperators.EQUALS, sb.getUser().getId().toString());

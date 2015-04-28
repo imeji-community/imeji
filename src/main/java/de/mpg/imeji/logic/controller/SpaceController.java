@@ -466,7 +466,10 @@ public class SpaceController extends ImejiController {
     }
     
     public boolean isSpaceByLabel(String spaceId) throws ImejiException {
-        if (ImejiSPARQL.exec(SPARQLQueries.getSpaceByLabel(spaceId), Imeji.spaceModel).size() > 0) {
+    	if (isNullOrEmptyTrim(spaceId))
+    		return false;
+       
+    	if (ImejiSPARQL.exec(SPARQLQueries.getSpaceByLabel(spaceId), Imeji.spaceModel).size() > 0) {
         	return true;
         }
         return false;

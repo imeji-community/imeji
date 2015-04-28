@@ -74,7 +74,7 @@
 								<!-- title description logo slug -->
 								<div class="imj_metadataSet">
 									<label class="imj_metadataLabel">#{lbl.title} / #{lbl.name}</label>
-									<h:inputText id="spaceTitle" styleClass="imj_metadataValue"  value="#{CreateSpaceBean.space.title}" required="true" requiredMessage="#{msg.error_profile_name_required}"/>
+									<h:inputText id="spaceTitle" styleClass="imj_metadataValue"  value="#{CreateSpaceBean.space.title}" required="true" requiredMessage="#{msg.error_space_need_title}"/>
 								</div>
 								<div class="imj_metadataSet">
 									<label class="imj_metadataLabel">#{lbl.space_welcome_text}</label>
@@ -164,7 +164,7 @@
 								<div class="imj_metadataSet">
 									<label class="imj_metadataLabel">#{lbl.url_slug}</label>
 									<span class="imj_metadataValue">
-										<h:inputText id="spaceSlug" value="#{CreateSpaceBean.space.slug}"/>
+										<h:inputText id="spaceSlug" value="#{CreateSpaceBean.space.slug}" requiredMessage="#{msg.error_space_needs_slug}"/>
 										<span id="previewSpaceSlugUrl"></span>
 									</span>
 								</div>

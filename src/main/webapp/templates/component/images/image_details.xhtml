@@ -65,7 +65,7 @@
 					<h:outputText value="#{lbl.remove}"/>
 				</h:outputLink>
 				
-				<h:commandLink styleClass="imj_mediaEditPanelItem imj_removeButton" id="lnkPicRemoveFromAlbum" action="#{itemBean.removeFromAlbum}" rendered="#{itemBean.navigationString == 'pretty:albumItem' and Auth.create(itemBean.album)}">
+				<h:commandLink styleClass="imj_mediaEditPanelItem imj_removeButton" id="lnkPicRemoveFromAlbum" action="#{itemBean.removeFromAlbum}" rendered="#{itemBean.navigationString == 'pretty:albumItem' and SessionBean.activeAlbum != null and Auth.update(SessionBean.activeAlbum.id)}">
 					<h:outputText value="#{lbl.remove_from_album}"/>
 				</h:commandLink>
 				

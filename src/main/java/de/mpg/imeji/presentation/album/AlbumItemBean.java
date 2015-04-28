@@ -8,12 +8,14 @@ import java.util.List;
 
 import javax.faces.context.FacesContext;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.image.ItemBean;
+import de.mpg.imeji.presentation.image.ItemsBean;
 import de.mpg.imeji.presentation.image.SingleItemBrowse;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -44,11 +46,19 @@ public class AlbumItemBean extends ItemBean
     @Override
     public void initBrowsing() throws Exception
     {
-        String tempId = (String)FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
-                .get("AlbumItemsBean.id");
-        setBrowse(new SingleItemBrowse((AlbumItemsBean)BeanHelper.getSessionBean(AlbumItemsBean.class), getImage(),
-                "album", tempId));
-        this.setAlbum(this.loadAlbum());
+        try {
+	        String tempId = (String)FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+	                .get("AlbumItemsBean.id");
+	        setBrowse(new SingleItemBrowse((AlbumItemsBean)BeanHelper.getSessionBean(AlbumItemsBean.class), getImage(),
+	                "album", tempId));
+	    	//Should redirect to the Item if user can not see the Album, but can see the Item (this is by default)
+       		Album alb= this.loadAlbum();
+               this.setAlbum(alb);
+        }
+        catch (ImejiException e) {
+        	setBrowse(new SingleItemBrowse((ItemsBean)BeanHelper.getSessionBean(ItemsBean.class), getImage(),"item", ""));
+        }
+
     }
 
     private Album loadAlbum() throws Exception

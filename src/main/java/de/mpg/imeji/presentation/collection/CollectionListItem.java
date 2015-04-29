@@ -10,14 +10,18 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.beans.BasePaginatorListSessionBean.PAGINATOR_TYPE;
+import de.mpg.imeji.presentation.beans.ContainerBean.CONTAINER_TYPE;
 import de.mpg.imeji.presentation.image.ThumbnailBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CommonUtils;
 import de.mpg.imeji.presentation.util.ObjectLoader;
+
 import org.apache.log4j.Logger;
 
 import javax.faces.event.ValueChangeEvent;
+
 import java.net.URI;
 import java.util.Collection;
 
@@ -395,6 +399,10 @@ public class CollectionListItem
 
 	public void setOwner(boolean isOwner) {
 		this.isOwner = isOwner;
+	}
+	
+	public String getType() {
+		return  CONTAINER_TYPE.COLLECTION.name();
 	}
     
 }

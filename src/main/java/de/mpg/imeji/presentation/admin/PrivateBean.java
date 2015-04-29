@@ -212,4 +212,9 @@ public class PrivateBean extends SuperContainerBean<CollectionListItem> {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
+	@Override
+	public String getType() {
+		return PAGINATOR_TYPE.PRIVATE.name();
+	}
 }

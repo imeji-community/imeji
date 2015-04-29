@@ -341,4 +341,9 @@ public abstract class SuperContainerBean<T> extends
 	public String getQuery() {
 		return query;
 	}
+	
+	@Override
+	public String getType(){
+		return "supercontainer";
+	}
 }

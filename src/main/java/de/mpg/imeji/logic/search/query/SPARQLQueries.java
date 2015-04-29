@@ -606,8 +606,8 @@ public class SPARQLQueries {
 								null, false)
 				+ " ?s <"
 				+ ImejiNamespaces.STATUS
-				+ "> ?status . ?s <http://imeji.org/terms/collection> ?c} LIMIT "
-				+ limit;
+				+ "> ?status } "
+				+ ((limit > 0) ? (" LIMIT "+limit):"");
 	}
 
 	public static String selectContainerItemByFilename(URI containerURI,

@@ -53,6 +53,7 @@ public class AlbumItemsBean extends ItemsBean
         super();
         sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         this.navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
+        
     }
 
     @Override
@@ -319,5 +320,11 @@ public class AlbumItemsBean extends ItemsBean
     public Album getAlbum()
     {
         return album;
+    }
+    
+    @Override
+    public String getType() {
+    	return PAGINATOR_TYPE.ALBUM_ITEMS.name();
+    	
     }
 }

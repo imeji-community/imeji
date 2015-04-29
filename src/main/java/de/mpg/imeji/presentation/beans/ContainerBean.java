@@ -111,7 +111,8 @@ public abstract class ContainerBean implements Serializable
     protected void findItems(User user, int size)
     {
         ItemController ic = new ItemController();
-        ic.searchAndSetContainerItemsFast(getContainer(), user, size);
+        ic.searchAndSetContainerItems(getContainer(), user, 0, 0);
+        //Fast(getContainer(), user, size);
     }
 
     /**

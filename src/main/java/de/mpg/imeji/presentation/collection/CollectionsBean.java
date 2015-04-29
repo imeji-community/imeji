@@ -4,6 +4,7 @@
 package de.mpg.imeji.presentation.collection;
 
 import com.hp.hpl.jena.sparql.pfunction.library.container;
+
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchResult;
@@ -50,7 +51,6 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
     {
         super();
         this.sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        System.out.println("System.out.println");
     }
 
     @Override
@@ -205,4 +205,9 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
     {
         this.discardComment = discardComment;
     }
+
+	@Override
+	public String getType() {
+		return PAGINATOR_TYPE.COLLECTION_ITEMS.name();
+	}
 }

@@ -58,8 +58,11 @@ public class SimpleQueryFactory {
 		PATTERN_SELECT = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 XXX_MODEL_NAMES_XXX WHERE {XXX_SPACE_FILTER_XXX XXX_SECURITY_FILTER_XXX XXX_SEARCH_ELEMENT_XXX XXX_SPECIFIC_QUERY_XXX XXX_SEARCH_TYPE_ELEMENT_XXX  ?s <"
 				+ ImejiNamespaces.STATUS + "> ?status XXX_SORT_ELEMENT_XXX}";
 		return PATTERN_SELECT
-				.replace("XXX_MODEL_NAMES_XXX",
-						getModelNames(modelName, pair, specificQuery))
+				.replace(
+						"XXX_MODEL_NAMES_XXX",
+						getModelNames(modelName, pair, specificQuery,
+								!"".equals(getSpaceRestriction(spaceId,
+										modelName))))
 				.replace("XXX_SPACE_FILTER_XXX",
 						getSpaceRestriction(spaceId, modelName))
 				.replace(
@@ -125,13 +128,13 @@ public class SimpleQueryFactory {
 	 * @return
 	 */
 	private static String getModelNames(String modelName, SearchPair pair,
-			String specificQuery) {
+			String specificQuery, boolean isInSpace) {
 		if (specificQuery != null && !specificQuery.equals(""))
 			return "";
 		String names = "";
 		if (modelName != null && !modelName.equals("")) {
 			names = "FROM <" + modelName + "> FROM <" + Imeji.userModel + ">";
-			if (Imeji.profileModel.equals(modelName)) {
+			if (Imeji.profileModel.equals(modelName) || isInSpace) {
 				names += " FROM <" + Imeji.collectionModel + ">";
 			}
 			if (pair != null

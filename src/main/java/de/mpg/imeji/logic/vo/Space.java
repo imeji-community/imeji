@@ -44,10 +44,6 @@ public class Space extends Properties implements Serializable {
 	private URI logoUrl;
 	@j2jLiteral("http://imeji.org/terms/slug")
 	private String slug;
-	@j2jLiteral("http://imeji.org/terms/maxHeight")
-	private int maxHeight = 0;
-	@j2jLiteral("http://imeji.org/terms/maxWidth")
-	private int maxWidth = 0;
 
 //	@j2jList("http://imeji.org/terms/collection")
 	private Collection<String> spaceCollections = new ArrayList<String>();
@@ -98,25 +94,6 @@ public class Space extends Properties implements Serializable {
 	@XmlElement(name = "visibility", namespace = "http://imeji.org/terms/")
 	public Item.Visibility getVisibility() {
 		return Item.Visibility.valueOf(visibility.getFragment());
-	}
-
-
-	@XmlElement(name = "maxHeight", namespace = "http://imeji.org/terms/")
-	public int getMaxHeight() {
-		return maxHeight;
-	}
-
-	public void setMaxHeight(int maxHeight) {
-		this.maxHeight = maxHeight;
-	}
-
-	@XmlElement(name = "maxWidth", namespace = "http://imeji.org/terms/")
-	public int getMaxWidth() {
-		return maxWidth;
-	}
-
-	public void setMaxWidth(int maxWidth) {
-		this.maxWidth = maxWidth;
 	}
 
 

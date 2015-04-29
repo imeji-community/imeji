@@ -1,9 +1,6 @@
 package de.mpg.imeji.rest.process;
 
-import com.google.common.io.ByteStreams;
-import com.google.common.io.Files;
 import de.mpg.imeji.exceptions.BadRequestException;
-import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
@@ -12,7 +9,6 @@ import de.mpg.imeji.rest.api.ItemService;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
 import de.mpg.imeji.rest.to.JSONResponse;
-
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -26,9 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
-import static de.mpg.imeji.rest.process.CommonUtils.USER_MUST_BE_LOGGED_IN;
 import static javax.ws.rs.core.Response.Status.OK;
-import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
 
 
 public class ItemProcess {

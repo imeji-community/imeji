@@ -4,7 +4,6 @@
 package de.mpg.imeji.presentation.upload;
 
 import com.ocpsoft.pretty.PrettyContext;
-
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.Search;

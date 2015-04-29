@@ -28,24 +28,19 @@
  */
 package de.mpg.imeji.logic.storage;
 
-import static de.mpg.imeji.logic.storage.util.StorageUtils.calculateChecksum;
-import static de.mpg.imeji.logic.storage.util.StorageUtils.compareExtension;
-import static de.mpg.imeji.logic.storage.util.StorageUtils.guessExtension;
-
-import java.io.File;
-import java.io.OutputStream;
-import java.io.Serializable;
-
-import org.apache.commons.io.FilenameUtils;
-
-import com.ctc.wstx.util.StringUtil;
-
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.util.PropertyReader;
+import org.apache.commons.io.FilenameUtils;
+
+import java.io.File;
+import java.io.OutputStream;
+import java.io.Serializable;
+
+import static de.mpg.imeji.logic.storage.util.StorageUtils.*;
 
 /**
  * Controller for the {@link Storage} objects

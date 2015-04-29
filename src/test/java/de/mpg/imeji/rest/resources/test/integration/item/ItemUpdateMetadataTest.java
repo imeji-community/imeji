@@ -1,7 +1,6 @@
 package de.mpg.imeji.rest.resources.test.integration.item;
 
 import de.mpg.imeji.exceptions.BadRequestException;
-import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.CollectionController.MetadataProfileCreationMethod;
 import de.mpg.imeji.logic.controller.ProfileController;

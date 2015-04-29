@@ -1,9 +1,7 @@
 package de.mpg.imeji.rest.resources.test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import de.mpg.imeji.exceptions.BadRequestException;
-import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.rest.process.RestProcessUtils;
 import de.mpg.imeji.rest.to.ItemTO;
 import org.junit.Test;

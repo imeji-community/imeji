@@ -3,11 +3,6 @@
  */
 package de.mpg.imeji.presentation.album;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.faces.context.FacesContext;
-
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -20,6 +15,10 @@ import de.mpg.imeji.presentation.image.SingleItemBrowse;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
+
+import javax.faces.context.FacesContext;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Bean for the detail {@link Item} page within an {@link Album}

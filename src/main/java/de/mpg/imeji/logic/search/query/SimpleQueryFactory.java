@@ -58,10 +58,13 @@ public class SimpleQueryFactory {
 		PATTERN_SELECT = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 XXX_MODEL_NAMES_XXX WHERE {XXX_SPACE_FILTER_XXX XXX_SECURITY_FILTER_XXX XXX_SEARCH_ELEMENT_XXX XXX_SPECIFIC_QUERY_XXX XXX_SEARCH_TYPE_ELEMENT_XXX  ?s <"
 				+ ImejiNamespaces.STATUS + "> ?status XXX_SORT_ELEMENT_XXX}";
 		return PATTERN_SELECT
-				.replace("XXX_MODEL_NAMES_XXX",
-						getModelNames(modelName, pair, specificQuery))
-				.replace("XXX_SPACE_FILTER_XXX", 
-						 getSpaceRestriction (spaceId, modelName))
+				.replace(
+						"XXX_MODEL_NAMES_XXX",
+						getModelNames(modelName, pair, specificQuery,
+								!"".equals(getSpaceRestriction(spaceId,
+										modelName))))
+				.replace("XXX_SPACE_FILTER_XXX",
+						getSpaceRestriction(spaceId, modelName))
 				.replace(
 						"XXX_SECURITY_FILTER_XXX",
 						SimpleSecurityQuery.queryFactory(user, rdfType,
@@ -76,8 +79,6 @@ public class SimpleQueryFactory {
 				.replace("XXX_SPECIFIC_QUERY_XXX", specificQuery);
 	}
 
-	
-	
 	/**
 	 * Return the RDF Type of the search objects
 	 * 
@@ -90,32 +91,34 @@ public class SimpleQueryFactory {
 		return "?s a <" + rdfType + "> .";
 	}
 
-
 	/**
-	 * Return the space query of the search objects. It checks the query for model and adds respectively the spaceUri
-	 * Space restriction will only work for search and for explicitly provided model in this case
+	 * Return the space query of the search objects. It checks the query for
+	 * model and adds respectively the spaceUri Space restriction will only work
+	 * for search and for explicitly provided model in this case
 	 * 
 	 * @param spaceURI
 	 * @return
 	 */
-	private static String getSpaceRestriction (String spaceUri, String modelName) {
+	private static String getSpaceRestriction(String spaceUri, String modelName) {
 		if (spaceUri == null || spaceUri.equals(""))
 			return "";
-		
+
 		boolean searchInSpace = false;
 		if (modelName == null || modelName.equals("")) {
 			return "";
 		}
-		
+
 		boolean isCollection = modelName.equals(Imeji.collectionModel);
 		boolean isImage = modelName.equals(Imeji.imageModel);
-		//boolean isAlbum = modelName.equals(Imeji.albumModel);
+		// boolean isAlbum = modelName.equals(Imeji.albumModel);
 
-		if ( !isCollection && !isImage )
+		if (!isCollection && !isImage)
 			return "";
-		
-		return isCollection ? "?s <http://imeji.org/terms/space> <" + spaceUri + "> ." :
-							  "?s <http://imeji.org/terms/collection> ?coll . ?coll  <http://imeji.org/terms/space>  <"+ spaceUri + "> ." ;
+
+		return isCollection ? "?s <http://imeji.org/terms/space> <" + spaceUri
+				+ "> ."
+				: "?s <http://imeji.org/terms/collection> ?coll . ?coll  <http://imeji.org/terms/space>  <"
+						+ spaceUri + "> .";
 	}
 
 	/**
@@ -125,13 +128,13 @@ public class SimpleQueryFactory {
 	 * @return
 	 */
 	private static String getModelNames(String modelName, SearchPair pair,
-			String specificQuery) {
+			String specificQuery, boolean isInSpace) {
 		if (specificQuery != null && !specificQuery.equals(""))
 			return "";
 		String names = "";
 		if (modelName != null && !modelName.equals("")) {
 			names = "FROM <" + modelName + "> FROM <" + Imeji.userModel + ">";
-			if (Imeji.profileModel.equals(modelName)) {
+			if (Imeji.profileModel.equals(modelName) || isInSpace) {
 				names += " FROM <" + Imeji.collectionModel + ">";
 			}
 			if (pair != null
@@ -359,14 +362,11 @@ public class SimpleQueryFactory {
 		if (pair != null
 				&& SearchIndex.names.status.name().equals(
 						pair.getIndex().getName())) {
-			if (Status.PENDING.getUriString().equals(pair
-					.getValue())) {
+			if (Status.PENDING.getUriString().equals(pair.getValue())) {
 				return Status.PENDING;
-			} else if (Status.RELEASED.getUriString()
-					.equals(pair.getValue())) {
+			} else if (Status.RELEASED.getUriString().equals(pair.getValue())) {
 				return Status.RELEASED;
-			} else if (Status.WITHDRAWN.getUriString()
-					.equals(pair.getValue())) {
+			} else if (Status.WITHDRAWN.getUriString().equals(pair.getValue())) {
 				return Status.WITHDRAWN;
 			}
 		}
@@ -440,27 +440,28 @@ public class SimpleQueryFactory {
 			return getTextSearchFilter(pair, variable);
 		}
 		String filter = "";
-		variable = "?" + variable;
 		if (pair.getValue() != null) {
 			switch (pair.getOperator()) {
 			case REGEX:
-				filter += "regex(str(" + variable + "), '"
-						+ escapeApostroph(pair.getValue()) + "', 'i')";
+				filter += getTextSearchFilter(pair, variable);
 				break;
 			case EQUALS:
-				filter += variable
+				filter += "?"
+						+ variable
 						+ "="
 						+ getSearchValueInSPARQL(pair.getValue(),
 								isRDFDate(pair));
 				break;
 			case GREATER:
-				filter += variable
+				filter += "?"
+						+ variable
 						+ ">="
 						+ getSearchValueInSPARQL(pair.getValue(),
 								isRDFDate(pair));
 				break;
 			case LESSER:
-				filter += variable
+				filter += "?"
+						+ variable
 						+ "<="
 						+ getSearchValueInSPARQL(pair.getValue(),
 								isRDFDate(pair));

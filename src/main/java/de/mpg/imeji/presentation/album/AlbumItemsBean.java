@@ -6,6 +6,7 @@ package de.mpg.imeji.presentation.album;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
@@ -14,6 +15,7 @@ import javax.faces.event.ValueChangeEvent;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.ingest.vo.Items;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
@@ -156,10 +158,11 @@ public class AlbumItemsBean extends ItemsBean
         {
             // if the current album is the active album as well
             List<String> uris = new ArrayList<>();
-            for (ThumbnailBean uri : this.getCurrentPartList())
-                uris.add(uri.getUri().toString());
+            for (URI uri : sb.getActiveAlbum().getImages()){
+                 uris.add(uri.toString());
+            }
             removeFromActive(uris);
-        }
+        }    
         else
         {
             album.setImages(new ArrayList<URI>());

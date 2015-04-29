@@ -32,7 +32,6 @@
 					<h:outputText value="#{lbl.collection_back_to_images}"/>
 				</h:outputLink>
 			</ui:fragment>
-			
 			<ui:fragment rendered="#{cc.attrs.showSelectMenu}">
 				<h:form id="preListForm">
 					
@@ -40,10 +39,10 @@
 						<h:outputText value="/" styleClass="imj_facetSeparator"/>
 						<h:outputText value="#{filter.internationalizedLabel}"/>
 						<h:outputText value="(#{filter.notDefineType})" rendered="#{filter.notDefine}"/>
-						<h:outputLink styleClass="imj_removeFacetButton" value="#{Navigation.browseUrl}?q=#{filter.removeQuery}" rendered="#{cc.attrs.facetBean.navigationString == 'pretty:browse'}">
+						<h:outputLink styleClass="imj_removeFacetButton" value="#{Navigation.browseUrl}?q=#{filter.removeQuery}" rendered="#{cc.attrs.facetBean.navigationString == SessionBean.getPrettySpacePage('pretty:browse')}">
 							<h:outputText value="[x]"/>
 						</h:outputLink>
-						<h:outputLink styleClass="imj_removeFacetButton" value="#{Navigation.collectionUrl}#{cc.attrs.facetBean.id}/#{Navigation.browsePath}?q=#{filter.removeQuery}" rendered="#{cc.attrs.facetBean.navigationString != 'pretty:browse' and cc.attrs.facetBean.collection != null}">
+						<h:outputLink styleClass="imj_removeFacetButton" value="#{Navigation.collectionUrl}#{cc.attrs.facetBean.id}/#{Navigation.browsePath}?q=#{filter.removeQuery}" rendered="#{cc.attrs.facetBean.navigationString != SessionBean.getPrettySpacePage('pretty:browse')}">
 							<h:outputText value="[x]"/>
 						</h:outputLink>
 					</ui:repeat>

@@ -163,7 +163,7 @@ public class SingleUploadBean implements Serializable{
 		if (StorageUtils.hasExtension(title)) {
 			StorageController sc = new StorageController();
 			String guessedNotAllowedFormat = sc.guessNotAllowedFormat(file);
-			if (guessedNotAllowedFormat != null) {
+			if (StorageUtils.BAD_FORMAT.equals(guessedNotAllowedFormat)) {
 				SessionBean sessionBean = (SessionBean) BeanHelper
 						.getSessionBean(SessionBean.class);
 				throw new RuntimeException(

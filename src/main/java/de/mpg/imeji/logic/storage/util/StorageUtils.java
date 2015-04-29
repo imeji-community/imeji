@@ -62,6 +62,7 @@ public class StorageUtils {
 	 * The generic mime-type, when no mime-type is known
 	 */
 	public final static String DEFAULT_MIME_TYPE = "application/octet-stream";
+	public final static String BAD_FORMAT="bad-extension/other";
 
 	/**
 	 * Transform an {@link InputStream} to a {@link Byte} array
@@ -205,7 +206,7 @@ public class StorageUtils {
 			logger.error("Error guessing file format", e);
 		}
 
-		return "bad-extension/other";
+		return BAD_FORMAT;
 	}
 
 	/**

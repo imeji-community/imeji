@@ -1,6 +1,7 @@
 package de.mpg.imeji.rest.resources.test.integration.item;
 
 import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
 import de.mpg.imeji.rest.resources.test.TestUtils;
@@ -481,5 +482,26 @@ public class ItemCreateTest extends ImejiTestBase {
         }
     }
 
+    @Test
+    public void createItemExtensionsTest() throws IOException, JSONException {
+    	//NOTE: test assumes .exe file will never be allowed!!!!
+    	initCollection();
+    	initItem();
+    	//init Item creates already one item with test.png file , thus checksum is expected
+        FileDataBodyPart filePart = new FileDataBodyPart("file", TEST_PNG_FILE);
+        FormDataMultiPart multiPart = new FormDataMultiPart();
+        multiPart.bodyPart(filePart);
+        multiPart.field("json", itemJSON
+                .replace("___COLLECTION_ID___", collectionId)
+                .replace("___FILENAME___", "test.exe"));
+
+        Response response = target(pathPrefix).register(authAsUser)
+                .register(MultiPartFeature.class)
+                .register(JacksonFeature.class)
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .post(Entity.entity(multiPart, multiPart.getMediaType()));
+        
+       	assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+    }
     
 }

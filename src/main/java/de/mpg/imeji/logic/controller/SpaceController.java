@@ -311,27 +311,6 @@ public class SpaceController extends ImejiController {
                 });
     }
     
-    /**
-     * Retrieve all imeji {@link Album}
-     *
-     * @return
-     * @throws ImejiException
-     */
-    public List<String> retrieveAllSpaceSlugs() throws ImejiException {
-        return Lists.transform(ImejiSPARQL.exec(SPARQLQueries.selectSpaceAll(),
-                        Imeji.spaceModel),
-                new Function<String, String>() {
-                    @Override
-                    public String apply(String id) {
-                        try {
-                            return retrieve(URI.create(id), Imeji.adminUser).getSlug().toString();
-                        } catch (ImejiException e) {
-                            LOGGER.info("Cannot retrieve space: " + id);
-                        }
-                        return null;
-                    }
-                });
-    }
 
     /**
      * Retrieve all {@link CollectionImeji}s of {@link Space}
@@ -468,14 +447,16 @@ public class SpaceController extends ImejiController {
     }
     
     public boolean isSpaceByLabel(String spaceId) throws ImejiException {
-		//TODO ChangeMe
-		List<String> potentialSpaces= retrieveAllSpaceSlugs();
-		if (potentialSpaces.contains(spaceId)) {
-			return true;
-		}
-		return false;
-
+    	if (isNullOrEmptyTrim(spaceId))
+    		return false;
+       
+    	if (ImejiSPARQL.exec(SPARQLQueries.getSpaceByLabel(spaceId), Imeji.spaceModel).size() > 0) {
+        	return true;
+        }
+        return false;
     }
+    	
+    	
     
     /**
 	 * Search for {@link Space}

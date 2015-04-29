@@ -114,7 +114,7 @@ public class AlbumBean extends ContainerBean
             album = ObjectLoader.loadAlbumLazy(ObjectHelper.getURI(Album.class, id), sessionBean.getUser());
             if (album != null)
             {
-                findItems(sessionBean.getUser(), 13);
+                findItems(sessionBean.getUser(), album.getImages().size());
                 loadItems(sessionBean.getUser());
                 countItems();
                 if (sessionBean.getActiveAlbum() != null && sessionBean.getActiveAlbum().getId().equals(album.getId()))

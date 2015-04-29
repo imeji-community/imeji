@@ -50,6 +50,7 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
     {
         super();
         this.sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        System.out.println("System.out.println");
     }
 
     @Override

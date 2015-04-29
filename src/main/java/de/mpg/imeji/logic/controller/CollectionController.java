@@ -381,9 +381,9 @@ public class CollectionController extends ImejiController {
 	 * @param user
 	 * @throws ImejiException
 	 */
-	public void patch(List<ImejiTriple> triples, User user)
+	public void patch(List<ImejiTriple> triples, User user, boolean checkSecurity)
 			throws ImejiException {
-		writer.patch(triples, user);
+		writer.patch(triples, user, checkSecurity);
 	}
 
 	/**

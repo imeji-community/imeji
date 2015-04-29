@@ -1,5 +1,6 @@
 package de.mpg.imeji.rest.resources.test.integration;
 
+import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.rest.api.AlbumService;
@@ -124,7 +125,7 @@ public class AlbumTest extends ImejiTestBase{
 	}
 
 	@Test
-	public void test_2_ReadAlbum_5_ReadAlbumsWithQuery() throws IOException, UnprocessableError {
+	public void test_2_ReadAlbum_5_ReadAlbumsWithQuery() throws IOException, BadRequestException {
 		Response response = target(pathPrefix)
 				.queryParam("q", albumTO.getTitle())
 				.register(authAsUser).request(MediaType.APPLICATION_JSON)
@@ -137,7 +138,7 @@ public class AlbumTest extends ImejiTestBase{
 	}
 
 	@Test
-	public void test_2_ReadAlbum_6_ReadAlbumItemsWithQuery() throws IOException, UnprocessableError {
+	public void test_2_ReadAlbum_6_ReadAlbumItemsWithQuery() throws IOException, BadRequestException {
 		initCollection();
 		initItem();
 		
@@ -161,7 +162,7 @@ public class AlbumTest extends ImejiTestBase{
 	}
 	
 	@Test
-	public void test_2_ReadAlbum_6_ReadAlbumItemsWithQueryForNoResultsAndOneItemInAlbum() throws IOException, UnprocessableError {
+	public void test_2_ReadAlbum_6_ReadAlbumItemsWithQueryForNoResultsAndOneItemInAlbum() throws IOException, BadRequestException {
 		initCollection();
 		initItem();
 		

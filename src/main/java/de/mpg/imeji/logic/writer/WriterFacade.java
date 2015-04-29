@@ -116,13 +116,14 @@ public class WriterFacade implements Writer {
 	 * de.mpg.imeji.logic.vo.User)
 	 */
 	@Override
-	public void patch(List<ImejiTriple> triples, User user)
+	public void patch(List<ImejiTriple> triples, User user, boolean doCheckSecurity)
 			throws ImejiException {
 		List<Object> l = new ArrayList<Object>();
 		for (ImejiTriple t : triples)
 			l.add(t.getObject());
-		checkSecurity(l, user, GrantType.UPDATE);
-		writer.patch(triples, user);
+		if (doCheckSecurity)
+			checkSecurity(l, user, GrantType.UPDATE);
+		writer.patch(triples, user, doCheckSecurity);
 
 	}
 

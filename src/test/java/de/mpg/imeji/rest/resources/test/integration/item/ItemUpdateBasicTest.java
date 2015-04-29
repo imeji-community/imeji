@@ -1,5 +1,6 @@
 package de.mpg.imeji.rest.resources.test.integration.item;
 
+import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
 import de.mpg.imeji.rest.to.ItemTO;
@@ -59,7 +60,7 @@ public class ItemUpdateBasicTest extends ImejiTestBase {
 
 
     @Test
-    public void test_1_UpdateItem_1_Basic() throws IOException, UnprocessableError {
+    public void test_1_UpdateItem_1_Basic() throws IOException, BadRequestException {
         FormDataMultiPart multiPart = new FormDataMultiPart();
 
         //remove all metadata!!!
@@ -162,7 +163,7 @@ public class ItemUpdateBasicTest extends ImejiTestBase {
                 .request(MediaType.APPLICATION_JSON_TYPE)
                 .put(Entity.entity(multiPart, multiPart.getMediaType()));
         
-        assertEquals(response.getStatus(), Status.NOT_FOUND.getStatusCode());
+        assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
     }
 
 

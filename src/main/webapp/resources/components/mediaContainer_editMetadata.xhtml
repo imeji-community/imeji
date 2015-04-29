@@ -54,10 +54,10 @@
 									<!-- Add/Remove Author buttons -->
 									<span class="imj_inlineButtonGroup"> 
 										<h:commandButton styleClass="imj_buttonAdd_16" title="#{lbl.add_author}" action="#{cc.attrs.formularBean.addAuthor(indexA.index)}">
-											<f:ajax execute="@this" render="@form" />
+											<f:ajax execute="@form" render="@form" />
 										</h:commandButton>
 										<h:commandButton styleClass="imj_buttonRemove_16" title="#{lbl.remove_author}" action="#{cc.attrs.formularBean.removeAuthor(indexA.index)}">
-											<f:ajax execute="@this" render="@form" />
+											<f:ajax execute="@form" render="@form" />
 										</h:commandButton>
 									</span>
 									<h:outputText value=" #{lbl.authors}" />

@@ -62,13 +62,13 @@ All rights reserved. Use is subject to license terms.
 	<script type="text/javascript" src="#{Navigation.applicationUrl}resources/jquery/jquery-1.11.1.min.js"></script>
 	
 	<ui:fragment rendered="#{SessionBean.locale == 'en' or SessionBean.locale == 'es'}">
-		<script type="text/javascript">var placeholder_username = 'username'; var placeholder_password = 'password'; var placeholder_simpleSearch = 'search for ...';</script>
+		<script type="text/javascript">var placeholder_simpleSearch = 'search for ...';</script>
 	</ui:fragment>
 	<ui:fragment rendered="#{SessionBean.locale == 'de'}">
-		<script type="text/javascript">var placeholder_username = 'Benutzername'; var placeholder_password = 'Passwort'; var placeholder_simpleSearch = 'Suche nach ...';</script>
+		<script type="text/javascript">var placeholder_simpleSearch = 'Suche nach ...';</script>
 	</ui:fragment>
 	<ui:fragment rendered="#{SessionBean.locale == 'jp' or SessionBean.locale == 'ja'}">
-		<script type="text/javascript">var placeholder_username = 'username'; var placeholder_password = 'password'; var placeholder_simpleSearch = '検索キーワード...';</script>
+		<script type="text/javascript">var placeholder_simpleSearch = '検索キーワード...';</script>
 	</ui:fragment>
 	
 	
@@ -78,8 +78,8 @@ All rights reserved. Use is subject to license terms.
 		 
 		$(function(){
 			//add placeholders for meta menu (username and password) and simple search
-			$(".imj_metaMenuStandardSingleLine input[type='text']").attr("placeholder", placeholder_username);
-			$(".imj_metaMenuStandardSingleLine input[type='password']").attr("placeholder", placeholder_password);
+			//$(".imj_metaMenuStandardSingleLine input[type='text']").attr("placeholder", placeholder_username);
+			//$(".imj_metaMenuStandardSingleLine input[type='password']").attr("placeholder", placeholder_password);
 			$(".imj_simpleSearchInput").attr("placeholder", placeholder_simpleSearch);
 		});
 	</script>

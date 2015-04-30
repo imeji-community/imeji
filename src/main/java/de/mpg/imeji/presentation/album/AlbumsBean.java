@@ -141,4 +141,9 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean> {
 		}
 		return "";
 	}
+
+	@Override
+	public String getType() {
+		return PAGINATOR_TYPE.ALBUMS.name();
+	}
 }

@@ -15,6 +15,7 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.beans.BasePaginatorListSessionBean.PAGINATOR_TYPE;
 import de.mpg.imeji.presentation.facet.FacetsBean;
 import de.mpg.imeji.presentation.image.ItemsBean;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
@@ -25,6 +26,7 @@ import de.mpg.imeji.presentation.util.ObjectLoader;
 
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -247,5 +249,11 @@ public class CollectionItemsBean extends ItemsBean
     public void setProfile(MetadataProfile profile)
     {
         this.profile = profile;
+    }
+    
+    @Override
+    public String getType() {
+    	return PAGINATOR_TYPE.COLLECTION_ITEMS.name();
+    	
     }
 }

@@ -16,11 +16,13 @@ import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CommonUtils;
 import de.mpg.imeji.presentation.util.ObjectLoader;
+
 import org.apache.log4j.Logger;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -109,27 +111,32 @@ public class AlbumBean extends ContainerBean
      */
     public void initView() throws Exception
     {
-        if (id != null)
-        {
-            album = ObjectLoader.loadAlbumLazy(ObjectHelper.getURI(Album.class, id), sessionBean.getUser());
-            if (album != null)
-            {
-                findItems(sessionBean.getUser(), album.getImages().size());
-                loadItems(sessionBean.getUser());
-                countItems();
-                if (sessionBean.getActiveAlbum() != null && sessionBean.getActiveAlbum().getId().equals(album.getId()))
-                {
-                    active = true;
-                    sessionBean.setActiveAlbum(album);
-                }
-                if (getPrivateCount() != 0)
-                {
-                	BeanHelper.info(sessionBean.getMessage("album_Private_Content").replace("XXX_COUNT_XXX", getPrivateCount()+""));
-                }
-            }
-            
-        }
-    	
+     try {
+	    	if (id != null)
+	        {
+	            album = ObjectLoader.loadAlbumLazy(ObjectHelper.getURI(Album.class, id), sessionBean.getUser());
+	            if (album != null)
+	            {
+	                findItems(sessionBean.getUser(), album.getImages().size());
+	                loadItems(sessionBean.getUser());
+	                countItems();
+	                if (sessionBean.getActiveAlbum() != null && sessionBean.getActiveAlbum().getId().equals(album.getId()))
+	                {
+	                    active = true;
+	                    sessionBean.setActiveAlbum(album);
+	                }
+	                if (getPrivateCount() != 0)
+	                {
+	                	BeanHelper.info(sessionBean.getMessage("album_Private_Content").replace("XXX_COUNT_XXX", getPrivateCount()+""));
+	                }
+	            }
+	            
+	        }
+     	} catch (Exception e) {
+			// Has to be in try/catch block, otherwise redirct from
+			// HistoryFilter will not work.
+			// Here simply do nothing
+		}
     }
 
     /**

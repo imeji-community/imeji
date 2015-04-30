@@ -30,6 +30,7 @@ import de.mpg.imeji.presentation.util.PropertyReader;
 import javax.faces.application.FacesMessage;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
+
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -60,6 +61,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
 	private String discardComment;
 	private String selectedImagesContext;
 	private SearchResult searchResult;
+	
 	/**
 	 * The context of the browse page (browse, collection browse, album browse)
 	 */
@@ -596,5 +598,10 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
 	 */
 	public SearchResult getSearchResult() {
 		return searchResult;
+	}
+
+	@Override
+	public String getType() {
+		return PAGINATOR_TYPE.ITEMS.name();
 	}
 }

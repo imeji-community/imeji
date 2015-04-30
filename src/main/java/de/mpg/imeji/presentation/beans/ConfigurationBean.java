@@ -49,6 +49,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
+import org.apache.tools.ant.property.GetProperty;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 
@@ -177,6 +178,17 @@ public class ConfigurationBean {
 	 */
 	private void setProperty(String name, String value) {
 		config.setProperty(name, value);
+	}
+
+	/**
+	 * Return a property as a non null String to avoid null pointer exception
+	 * 
+	 * @param name
+	 * @return
+	 */
+	private String getPropertyAsNonNullString(String name) {
+		String v = (String) config.get(name);
+		return v == null ? "" : v;
 	}
 
 	/**
@@ -530,7 +542,7 @@ public class ConfigurationBean {
 	 * @return
 	 */
 	public String getInstanceName() {
-		return (String) config.get(CONFIGURATION.INSTANCE_NAME.name());
+		return getPropertyAsNonNullString(CONFIGURATION.INSTANCE_NAME.name());
 	}
 
 	/**

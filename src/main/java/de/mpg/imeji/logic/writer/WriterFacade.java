@@ -88,7 +88,20 @@ public class WriterFacade implements Writer {
 	 * (non-Javadoc)
 	 * 
 	 * @see de.mpg.imeji.logic.writer.Writer#update(java.util.List,
-	 * de.mpg.imeji.logic.vo.User)
+	 * de.mpg.imeji.logic.vo.User), choose to check security
+	 */
+	
+	public void update(List<Object> objects, User user, boolean doCheckSecurity) throws ImejiException {
+		if ( doCheckSecurity)
+			checkSecurity(objects, user, GrantType.UPDATE);
+		writer.update(objects, user);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see de.mpg.imeji.logic.writer.Writer#update(java.util.List,
+	 * de.mpg.imeji.logic.vo.User), always check security
 	 */
 	@Override
 	public void update(List<Object> objects, User user) throws ImejiException {

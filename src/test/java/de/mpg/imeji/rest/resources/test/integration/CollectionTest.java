@@ -55,7 +55,6 @@ public class CollectionTest extends ImejiTestBase {
     @Before
     public void specificSetup() {
         initCollection();
-
     }
 
     @Test

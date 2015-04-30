@@ -16,13 +16,11 @@ import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CommonUtils;
 import de.mpg.imeji.presentation.util.ObjectLoader;
-
 import org.apache.log4j.Logger;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

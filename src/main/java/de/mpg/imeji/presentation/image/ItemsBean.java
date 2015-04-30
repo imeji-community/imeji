@@ -30,7 +30,6 @@ import de.mpg.imeji.presentation.util.PropertyReader;
 import javax.faces.application.FacesMessage;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
-
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -171,7 +170,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
 			SortCriterion sortCriterion) {
 		ItemController controller = new ItemController();
 		return controller.search(null, searchQuery, sortCriterion, null,
-				session.getUser(),  session.getSelectedSpaceString());
+				session.getUser(), session.getSelectedSpaceString());
 	}
 
 	/**

@@ -4,7 +4,6 @@
 package de.mpg.imeji.presentation.collection;
 
 import com.hp.hpl.jena.sparql.pfunction.library.container;
-
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchResult;

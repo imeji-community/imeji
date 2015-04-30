@@ -79,17 +79,17 @@ public class ImejiAuthBean implements Serializable
         return auth.read(user, uri);
     }
 
-    /**
-     * True if the {@link User} can create the uri
-     * 
-     * @param user
-     * @param uri
-     * @return
-     */
-    public boolean createUri(User user, String uri)
-    {
-        return auth.create(user, uri);
-    }
+//    /**
+//     * True if the {@link User} can create the uri
+//     * 
+//     * @param user
+//     * @param uri
+//     * @return
+//     */
+//    public boolean createUri(User user, String uri)
+//    {
+//        return auth.create(user, uri);
+//    }
 
     /**
      * True if the {@link User} can update the uri
@@ -163,17 +163,17 @@ public class ImejiAuthBean implements Serializable
         return auth.read(sessionUser, uri);
     }
 
-    /**
-     * True if the current {@link User} in the session can create the uri
-     * 
-     * @param user
-     * @param uri
-     * @return
-     */
-    public boolean createUri(String uri)
-    {
-        return auth.create(sessionUser, uri);
-    }
+//    /**
+//     * True if the current {@link User} in the session can create the uri
+//     * 
+//     * @param user
+//     * @param uri
+//     * @return
+//     */
+//    public boolean createUri(String uri)
+//    {
+//        return auth.create(sessionUser, uri);
+//    }
 
     /**
      * True if the {@link User} can update the uri

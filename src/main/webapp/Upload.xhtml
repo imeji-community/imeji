@@ -69,7 +69,7 @@
 					init : {
 						PostInit: function(up) {
 							// Called when the state of the queue is changed
-							var testStatus = '#{UploadBean.validCollectionStatusForUpload}';
+							var testStatus = '#{Auth.create(UploadBean.collection)}';
 							if (testStatus != 'true') {
 								up.disableBrowse(true);
 							}
@@ -81,7 +81,7 @@
 					
 						 StateChanged: function(up) {
 								// Called when the state of the queue is changed
-								var testStatus = '#{UploadBean.validCollectionStatusForUpload}';
+								var testStatus = '#{Auth.create(UploadBean.collection)}';
 								if (testStatus != 'true') {
 									stop();
 									destroy();
@@ -107,7 +107,7 @@
 							},
 						FilesAdded: function() {
 								// Called when the state of the queue is changed
-								var testStatus = '#{UploadBean.validCollectionStatusForUpload}';
+								var testStatus = '#{Auth.create(UploadBean.collection)}';
 								if (testStatus != 'true') {
 										reportNoUpload();
 								}

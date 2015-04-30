@@ -3,13 +3,35 @@
  */
 package de.mpg.imeji.logic.controller;
 
-import de.mpg.imeji.exceptions.*;
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static de.mpg.imeji.logic.storage.util.StorageUtils.calculateChecksum;
+import static de.mpg.imeji.logic.storage.util.StorageUtils.getMimeType;
+import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
+
+import de.mpg.imeji.exceptions.AuthenticationError;
+import de.mpg.imeji.exceptions.BadRequestException;
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.NotAllowedError;
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.ImejiTriple;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.reader.ReaderFacade;
-import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchFactory;
@@ -23,30 +45,21 @@ import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.UploadResult;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.*;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Container;
+import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Item.Visibility;
+import de.mpg.imeji.logic.vo.Metadata;
+import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Properties.Status;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.imeji.rest.process.CommonUtils;
 import de.mpg.j2j.annotations.j2jResource;
 import de.mpg.j2j.helper.J2JHelper;
-
-import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Logger;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
-
-import static com.google.common.base.Strings.isNullOrEmpty;
-import static de.mpg.imeji.logic.storage.util.StorageUtils.calculateChecksum;
-import static de.mpg.imeji.logic.storage.util.StorageUtils.getMimeType;
-import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
 
 /**
  * Implements CRUD and Search methods for {@link Item}
@@ -107,12 +120,11 @@ public class ItemController extends ImejiController {
 	 */
 	public Item createWithFile(Item item, File f, String filename,
 			CollectionImeji c, User user) throws ImejiException {
-		if (!AuthUtil.staticAuth().create(user, item))
+		if (!AuthUtil.staticAuth().create(user, c))
 			throw new NotAllowedError(
 					"User not Allowed to upload files in collection "
 							+ c.getIdString());
-		
-		
+
 		StorageController sc = new StorageController();
 		UploadResult uploadResult = sc.upload(filename, f, c.getIdString());
 
@@ -120,23 +132,18 @@ public class ItemController extends ImejiController {
 			item = ImejiFactory.newItem(c);
 
 		if (filename == null || filename.equals("")) {
-			throw new UnprocessableError(
-					"Filename must not be empty!");
+			throw new UnprocessableError("Filename must not be empty!");
 		}
-
-		//Validate the collection status
-		CollectionController cc = new CollectionController();
-		cc.isAllowedUploadByStatus(c.getId().toString());
-
 		validateChecksum(c.getId(), f, false);
-		
+
 		String guessedNotAllowedFormat = sc.guessNotAllowedFormat(f);
 		if (StorageUtils.BAD_FORMAT.equals(guessedNotAllowedFormat)) {
-				throw new UnprocessableError ("upload_format_not_allowed: "	+ " (" + guessedNotAllowedFormat + ")");
+			throw new UnprocessableError("upload_format_not_allowed: " + " ("
+					+ guessedNotAllowedFormat + ")");
 		}
 
 		String mimeType = StorageUtils.getMimeType(guessedNotAllowedFormat);
-		
+
 		item = ImejiFactory.newItem(item, c, user, uploadResult.getId(),
 				filename, URI.create(uploadResult.getOrginal()),
 				URI.create(uploadResult.getThumb()),
@@ -172,8 +179,8 @@ public class ItemController extends ImejiController {
 			throw new BadRequestException(
 					"Could not derive the filename. Please provide the filename with the request!");
 		}
-		
-		if (externalFileUrl == null || externalFileUrl.equals("") ) {
+
+		if (externalFileUrl == null || externalFileUrl.equals("")) {
 			throw new BadRequestException(
 					"Please provide fetchUrl or referenceUrl with the request!");
 		}
@@ -188,11 +195,9 @@ public class ItemController extends ImejiController {
 				sController.read(externalFileUrl, new FileOutputStream(tmp),
 						true);
 			} catch (Exception e) {
-				// throw new
-				// UnprocessableError("There has been a problem with the file upload. ");
 				throw new UnprocessableError(e.getLocalizedMessage());
 			}
-			
+
 			item = createWithFile(item, tmp, filename, c, user);
 		} else {
 			// Reference the file
@@ -225,6 +230,7 @@ public class ItemController extends ImejiController {
 			} else {
 				img.setVisibility(Visibility.PUBLIC);
 			}
+			img.setStatus(ic.getStatus());
 			img.setCollection(coll);
 			img.getMetadataSet().setProfile(ic.getProfile());
 			ic.getImages().add(img.getId());
@@ -233,7 +239,7 @@ public class ItemController extends ImejiController {
 				user);
 		List<ImejiTriple> triples = getUpdateTriples(coll.toString(), user,
 				items.iterator().next());
-		// Update the collection 
+		// Update the collection
 		cc.patch(triples, user, false);
 	}
 
@@ -248,11 +254,12 @@ public class ItemController extends ImejiController {
 			throw new BadRequestException(
 					"Filename for the uploaded file must not be empty!");
 		}
-		
-		
-		if (uploadedFile == null && isNullOrEmpty(fetchUrl) && isNullOrEmpty(referenceUrl)) {
-			throw new BadRequestException ("Please upload a file or provide one of the fetchUrl or referenceUrl as input.");
-			
+
+		if (uploadedFile == null && isNullOrEmpty(fetchUrl)
+				&& isNullOrEmpty(referenceUrl)) {
+			throw new BadRequestException(
+					"Please upload a file or provide one of the fetchUrl or referenceUrl as input.");
+
 		}
 
 		Item newItem = new Item(item);
@@ -260,13 +267,14 @@ public class ItemController extends ImejiController {
 		CollectionImeji collection;
 		try {
 			collection = cc.retrieve(item.getCollection(), u);
-			if (collection.getStatus().equals(Status.WITHDRAWN)) {
-				throw new UnprocessableError(
-						"Collection is withdrawn, you can not create an item.");
-			}
+			// if (collection.getStatus().equals(Status.WITHDRAWN)) {
+			// throw new UnprocessableError(
+			// "Collection is withdrawn, you can not create an item.");
+			// }
 		} catch (Exception e) {
 			throw new UnprocessableError(
-					"There was a problem with specified collection: "+e.getLocalizedMessage());
+					"There was a problem with specified collection: "
+							+ e.getLocalizedMessage());
 		}
 
 		if (uploadedFile != null) {
@@ -351,8 +359,8 @@ public class ItemController extends ImejiController {
 			for (String itemId : search(
 					null,
 					!isNullOrEmptyTrim(q) ? URLQueryTransformer
-							.parseStringQuery(q) : null, null, null, user, spaceId)
-					.getResults()) {
+							.parseStringQuery(q) : null, null, null, user,
+					spaceId).getResults()) {
 				itemList.add(retrieve(URI.create(itemId), user));
 			}
 		} catch (Exception e) {
@@ -416,7 +424,7 @@ public class ItemController extends ImejiController {
 	public Item updateFile(Item item, File f, User user) throws ImejiException {
 
 		validateChecksum(item.getCollection(), f, true);
-		
+
 		// First remove the old File from the Internal Storage if its there
 		if (!isNullOrEmpty(item.getStorageId())) {
 			removeFileFromStorage(item.getStorageId());
@@ -459,14 +467,14 @@ public class ItemController extends ImejiController {
 		item.setFilename(filename);
 
 		StorageController sc = new StorageController("external");
-		
+
 		if (download) {
 			// download the file in storage
 			try {
 				File tmp = File.createTempFile("imeji",
 						"." + FilenameUtils.getExtension(origName));
 				sc.read(externalFileUrl, new FileOutputStream(tmp), true);
-				
+
 				item = updateFile(item, tmp, u);
 			} catch (IOException e) {
 				throw new UnprocessableError(
@@ -760,8 +768,7 @@ public class ItemController extends ImejiController {
 	private boolean downloadFile(String fetchUrl) {
 		return !isNullOrEmpty(fetchUrl);
 	}
-	
-	
+
 	/**
 	 * Set the status of a {@link List} of {@link Item} to released
 	 * 
@@ -769,17 +776,20 @@ public class ItemController extends ImejiController {
 	 * @param user
 	 * @throws ImejiException
 	 */
-	public void updateItemsProfile(List<Item> l, User user, String profileUri) throws ImejiException {
+	public void updateItemsProfile(List<Item> l, User user, String profileUri)
+			throws ImejiException {
 		List<ImejiTriple> triples = new ArrayList<ImejiTriple>();
 		for (Item item : l) {
 			if (!profileUri.equals(item.getMetadataSet().getProfile())) {
-				triples.add(getProfileTriple(item.getMetadataSet().getId().toString(), item, profileUri));
-				triples.addAll(getUpdateTriples(item.getId().toString(), user, item));
+				triples.add(getProfileTriple(item.getMetadataSet().getId()
+						.toString(), item, profileUri));
+				triples.addAll(getUpdateTriples(item.getId().toString(), user,
+						item));
 			}
 		}
 		patch(triples, user);
 	}
-	
+
 	/**
 	 * Get the triples which need to be updated with the profile update
 	 * 
@@ -787,32 +797,39 @@ public class ItemController extends ImejiController {
 	 * @param securityUri
 	 * @return
 	 */
-	protected ImejiTriple getProfileTriple(String itemUri, Object permissionObject, String profileUri) {
-		String profileProperty = MetadataProfile.class.getAnnotation(j2jResource.class).value();
+	protected ImejiTriple getProfileTriple(String itemUri,
+			Object permissionObject, String profileUri) {
+		String profileProperty = MetadataProfile.class.getAnnotation(
+				j2jResource.class).value();
 		try {
-			return new ImejiTriple(itemUri, profileProperty, new URI(profileUri), permissionObject);
+			return new ImejiTriple(itemUri, profileProperty,
+					new URI(profileUri), permissionObject);
 		} catch (URISyntaxException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Throws an {@link Exception} if the file cannot be uploaded. The
 	 * validation will only occur when the file has been stored locally)
-	 * @throws ImejiException 
-	 * @throws UnprocessableError 
+	 * 
+	 * @throws ImejiException
+	 * @throws UnprocessableError
 	 */
-	private void validateChecksum(URI collectionURI, File file, Boolean isUpdate) throws UnprocessableError, ImejiException {
-		  if (isValidateChecksumInCollection()) {
-			if (checksumExistsInCollection(collectionURI, StorageUtils.calculateChecksum(file))) {
-				throw new UnprocessableError((!isUpdate)? "Same file already exists in the collection (with same checksum). Please choose another file.":
-					"Same file already exists in the collection or you are trying to upload same file for the item (with same checksum). Please choose another file.");
+	private void validateChecksum(URI collectionURI, File file, Boolean isUpdate)
+			throws UnprocessableError, ImejiException {
+		if (isValidateChecksumInCollection()) {
+			if (checksumExistsInCollection(collectionURI,
+					StorageUtils.calculateChecksum(file))) {
+				throw new UnprocessableError(
+						(!isUpdate) ? "Same file already exists in the collection (with same checksum). Please choose another file."
+								: "Same file already exists in the collection or you are trying to upload same file for the item (with same checksum). Please choose another file.");
 			}
-		  }
+		}
 	}
-	
+
 	/**
 	 * True if the checksum already exists within another {@link Item} in this
 	 * {@link CollectionImeji}
@@ -827,16 +844,15 @@ public class ItemController extends ImejiController {
 				.getNumberOfRecords() > 0;
 	}
 
-
-	private boolean isValidateChecksumInCollection(){
-        return Imeji.isValidateChecksumInCollection();
+	private boolean isValidateChecksumInCollection() {
+		return Imeji.isValidateChecksumInCollection();
 	}
-	
-	
-	public void validateCollectionStatus(Status st) throws UnprocessableError{
-		
-		if (Status.WITHDRAWN.equals(st)) 
-			throw new UnprocessableError("Collection status does not allow item upload! The collection is discarded!");
+
+	public void validateCollectionStatus(Status st) throws UnprocessableError {
+
+		if (Status.WITHDRAWN.equals(st))
+			throw new UnprocessableError(
+					"Collection status does not allow item upload! The collection is discarded!");
 	}
 
 }

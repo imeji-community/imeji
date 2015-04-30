@@ -59,14 +59,14 @@ public class Authorization {
 	 * @return
 	 * @throws NotAllowedError
 	 */
-	public boolean create(User user, String uri) {
-		if (hasGrant(
-				user,
-				toGrant(uri,
-						getGrantTypeAccordingToObjectType(uri, GrantType.CREATE))))
-			return true;
-		return false;
-	}
+//	public boolean create(User user, String uri) {
+//		if (hasGrant(
+//				user,
+//				toGrant(uri,
+//						getGrantTypeAccordingToObjectType(uri, GrantType.CREATE))))
+//			return true;
+//		return false;
+//	}
 
 	/**
 	 * Return true if the {@link User} can read the object defined by the uri
@@ -191,7 +191,8 @@ public class Authorization {
 		if (hasGrant(
 				user,
 				toGrant(getRelevantURIForSecurity(obj, false, true),
-						GrantType.CREATE)))
+						GrantType.CREATE))
+				&& !isDiscarded(obj))
 			return true;
 		return false;
 	}
@@ -459,6 +460,28 @@ public class Authorization {
 	}
 
 	/**
+	 * True if an object is discarded
+	 * 
+	 * @param obj
+	 * @return
+	 */
+	private boolean isDiscarded(Object obj) {
+		if (obj instanceof Item)
+			return isDiscardedStatus(((Item) obj).getStatus());
+		else if (obj instanceof Container)
+			return isDiscardedStatus(((Container) obj).getStatus());
+		else if (obj instanceof Space)
+			return isDiscardedStatus(((Space) obj).getStatus());
+		else if (obj instanceof MetadataProfile)
+			return isDiscardedStatus(((MetadataProfile) obj).getStatus());
+		else if (obj instanceof Person)
+			return false;
+		else if (obj instanceof Organization)
+			return false;
+		return false;
+	}
+
+	/**
 	 * True if the {@link Status} is a public status(i.e. not need to have
 	 * special grants to read the object)
 	 * 
@@ -468,5 +491,15 @@ public class Authorization {
 	private boolean isPublicStatus(Status status) {
 		return status.equals(Status.RELEASED)
 				|| status.equals(Status.WITHDRAWN);
+	}
+
+	/**
+	 * True if the {@link Status} is discarded status
+	 * 
+	 * @param status
+	 * @return
+	 */
+	private boolean isDiscardedStatus(Status status) {
+		return status.equals(Status.WITHDRAWN);
 	}
 }

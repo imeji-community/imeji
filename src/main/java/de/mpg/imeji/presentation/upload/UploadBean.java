@@ -84,7 +84,8 @@ public class UploadBean implements Serializable {
 	/**
 	 * Method checking the url parameters and triggering then the
 	 * {@link UploadBean} methods
-	 * @throws UnprocessableError 
+	 * 
+	 * @throws UnprocessableError
 	 * 
 	 * @throws Exception
 	 */
@@ -103,15 +104,13 @@ public class UploadBean implements Serializable {
 			} else if (UrlHelper.getParameterBoolean("done")) {
 				((UploadSession) BeanHelper.getSessionBean(UploadSession.class))
 						.resetProperties();
-			}
-			else
-			{
+			} else {
 				BeanHelper.error("I can not get to the collection id ");
 			}
 
-	} catch (Exception e) {
-		BeanHelper.error(e.getLocalizedMessage());
-	 }
+		} catch (Exception e) {
+			BeanHelper.error(e.getLocalizedMessage());
+		}
 
 	}
 
@@ -134,15 +133,15 @@ public class UploadBean implements Serializable {
 		HttpServletRequest req = (HttpServletRequest) FacesContext
 				.getCurrentInstance().getExternalContext().getRequest();
 		boolean isMultipart = ServletFileUpload.isMultipartContent(req);
-		if (isMultipart ) {
+		if (isMultipart) {
 			// Parse the request
 			try {
 				ServletFileUpload upload = new ServletFileUpload();
-				validateCollectionStatusLazy(collection.getId().toString());
+				// validateCollectionStatusLazy(collection.getId().toString());
 				FileItemIterator iter = upload.getItemIterator(req);
 				while (iter.hasNext()) {
 					FileItemStream fis = iter.next();
-					
+
 					InputStream stream = fis.openStream();
 					if (!fis.isFormField()) {
 						File tmp = createTmpFile(fis.getName());
@@ -305,8 +304,7 @@ public class UploadBean implements Serializable {
 			}
 		}
 	}
-	
-	
+
 	/**
 	 * Upload one File and create the {@link de.mpg.imeji.logic.vo.Item}
 	 * 
@@ -315,23 +313,24 @@ public class UploadBean implements Serializable {
 	 */
 	private Item uploadFile(File fileUploaded, String title) {
 		try {
-			
-			
-			String calculatedExtension = StorageUtils.guessExtension(fileUploaded);
-			File file=fileUploaded;
 
-			//TODO: not certain we should change the extensions even if these are not provided! Thus commented at the moment
-			//	if (!StorageUtils.hasExtension(title)) {
-			//		title += "."+calculatedExtension;
-			//	}
-			
+			String calculatedExtension = StorageUtils
+					.guessExtension(fileUploaded);
+			File file = fileUploaded;
+
+			// TODO: not certain we should change the extensions even if these
+			// are not provided! Thus commented at the moment
+			// if (!StorageUtils.hasExtension(title)) {
+			// title += "."+calculatedExtension;
+			// }
+
 			if (!fileUploaded.getName().endsWith(calculatedExtension)) {
-				file = new File(file.getName()+calculatedExtension);
+				file = new File(file.getName() + calculatedExtension);
 				FileUtils.moveFile(fileUploaded, file);
 			}
-			
+
 			validateName(file, title);
-			
+
 			Item item = null;
 			ItemController controller = new ItemController();
 			if (isImportImageToFile()) {
@@ -348,7 +347,8 @@ public class UploadBean implements Serializable {
 			return item;
 		} catch (Exception e) {
 			getfFiles().add(
-					" File " + title + " not uploaded: " + e.getLocalizedMessage());
+					" File " + title + " not uploaded: "
+							+ e.getLocalizedMessage());
 			logger.error("Error uploading item: ", e);
 			return null;
 		}
@@ -386,27 +386,31 @@ public class UploadBean implements Serializable {
 	 */
 	private boolean filenameExistsInCollection(String filename) {
 		Search s = SearchFactory.create(SearchType.ITEM);
-		//filename = org.apache.xerces.impl.xpath.regex.REUtil.quoteMeta(filename);
-		//filename = Pattern.quote(FilenameUtils.removeExtension(filename));
-		//filename = filename.replace(")", "\\u+0029").replace("(", "\\u+0028");
+		// filename =
+		// org.apache.xerces.impl.xpath.regex.REUtil.quoteMeta(filename);
+		// filename = Pattern.quote(FilenameUtils.removeExtension(filename));
+		// filename = filename.replace(")", "\\u+0029").replace("(",
+		// "\\u+0028");
 		return s.searchSimpleForQuery(
 				SPARQLQueries.selectContainerItemByFilename(collection.getId(),
 						FilenameUtils.getBaseName(filename)))
 				.getNumberOfRecords() > 0;
 	}
 
-
 	/**
 	 * Load the collection
-	 * @throws Exception 
+	 * 
+	 * @throws Exception
 	 * 
 	 * @throws Exception
 	 */
-	public void loadCollection() throws Exception  {
+	public void loadCollection() throws Exception {
 		SessionBean sessionBean = (SessionBean) BeanHelper
 				.getSessionBean(SessionBean.class);
 		if (id != null) {
-			validateCollectionStatus();
+			// validateCollectionStatus();
+			collection = ObjectLoader.loadCollectionLazy(
+					ObjectHelper.getURI(CollectionImeji.class, id), user);
 			if (collection != null && getCollection().getId() != null) {
 				ItemController ic = new ItemController();
 				collectionSize = ic.countContainerSize(collection);
@@ -449,7 +453,8 @@ public class UploadBean implements Serializable {
 				.getSessionBean(SessionBean.class);
 		try {
 			cc.delete(collection, sessionBean.getUser());
-			BeanHelper.info(getSuccessCollectionDeleteMessage(collection.getMetadata().getTitle(), sessionBean));
+			BeanHelper.info(getSuccessCollectionDeleteMessage(collection
+					.getMetadata().getTitle(), sessionBean));
 		} catch (Exception e) {
 			BeanHelper.error(sessionBean.getMessage("error_collection_delete"));
 			logger.error("Error delete collection", e);
@@ -664,31 +669,34 @@ public class UploadBean implements Serializable {
 	public void setRecursive(boolean recursive) {
 		this.recursive = recursive;
 	}
-	
-	public boolean isValidCollectionStatusForUpload() {
-		//Method used both from bean and from Xhtml page
-			try {
-				collection = ObjectLoader.loadCollectionLazy(
-					ObjectHelper.getURI(CollectionImeji.class, id), user);
-			if (collection.getStatus().equals(Status.WITHDRAWN)) 
-					return false;
-			return true;
-			} catch (ImejiException e) {
-				return false;
-			}
-	}
-	
-	public void validateCollectionStatus() throws UnprocessableError {
-		if (!isValidCollectionStatusForUpload()) {
-					throw new UnprocessableError("Collection is discarded, you can not create an item.");
-		}
-	 }
-	
-	public void validateCollectionStatusLazy(String collectionId) throws UnprocessableError {
-		CollectionController cc = new CollectionController();
-		if (!cc.isAllowedUploadByStatus(collectionId)) {
-					throw new UnprocessableError("Collection is discarded, you can not create an item.");
-		}
-	}
+
+	// public boolean isValidCollectionStatusForUpload() {
+	// //Method used both from bean and from Xhtml page
+	// try {
+	// collection = ObjectLoader.loadCollectionLazy(
+	// ObjectHelper.getURI(CollectionImeji.class, id), user);
+	// if (collection.getStatus().equals(Status.WITHDRAWN))
+	// return false;
+	// return true;
+	// } catch (ImejiException e) {
+	// return false;
+	// }
+	// }
+	//
+	// public void validateCollectionStatus() throws UnprocessableError {
+	// if (!isValidCollectionStatusForUpload()) {
+	// throw new
+	// UnprocessableError("Collection is discarded, you can not create an item.");
+	// }
+	// }
+	//
+	// public void validateCollectionStatusLazy(String collectionId) throws
+	// UnprocessableError {
+	// CollectionController cc = new CollectionController();
+	// if (!cc.isAllowedUploadByStatus(collectionId)) {
+	// throw new
+	// UnprocessableError("Collection is discarded, you can not create an item.");
+	// }
+	// }
 
 }

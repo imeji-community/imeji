@@ -4,6 +4,7 @@
 package de.mpg.imeji.presentation.session;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.SpaceController;
 
 import java.io.IOException;
@@ -23,6 +24,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.httpclient.auth.AuthChallengeException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
@@ -35,16 +37,13 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Space;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
-
 import de.mpg.imeji.presentation.beans.Navigation.Page;
 import de.mpg.imeji.presentation.upload.IngestImage;
-
 import de.mpg.imeji.presentation.user.ShareBean.ShareType;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CookieUtils;
 import de.mpg.imeji.presentation.util.MaxPlanckInstitutUtils;
 import de.mpg.imeji.presentation.util.PropertyReader;
-
 import static com.google.common.base.Strings.isNullOrEmpty;
 /**
  * The session Bean for imeji.
@@ -469,6 +468,11 @@ public class SessionBean implements Serializable {
 	 * @return
 	 */
 	public Album getActiveAlbum() {
+		//
+		if (activeAlbum != null && ( !AuthUtil.staticAuth().read(getUser(), activeAlbum.getId()) ||
+									 !AuthUtil.staticAuth().create(getUser(), activeAlbum.getId()) )) {
+			setActiveAlbum(null);
+		}
 		return activeAlbum;
 	}
 

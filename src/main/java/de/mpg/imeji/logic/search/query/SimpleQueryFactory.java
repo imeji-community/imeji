@@ -298,6 +298,8 @@ public class SimpleQueryFactory {
 					+ " <"
 					+ pair.getIndex().getNamespace() + "> ?el ";
 		}
+		
+
 		if (pair instanceof SearchMetadata) {
 			searchQuery = searchQuery
 					+ " . ?md <http://imeji.org/terms/statement> ?el1 ";

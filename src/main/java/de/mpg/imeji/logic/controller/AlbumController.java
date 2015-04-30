@@ -29,8 +29,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.opensaml.saml1.core.impl.StatusImpl;
-
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
 

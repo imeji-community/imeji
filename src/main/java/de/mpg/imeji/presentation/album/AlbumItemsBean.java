@@ -3,19 +3,8 @@
  */
 package de.mpg.imeji.presentation.album;
 
-import java.io.IOException;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import javax.faces.context.FacesContext;
-import javax.faces.event.ValueChangeEvent;
-
-import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.ingest.vo.Items;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
@@ -25,11 +14,17 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.image.ItemsBean;
-import de.mpg.imeji.presentation.image.ThumbnailBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.session.SessionObjectsController;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
+
+import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
+import java.io.IOException;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * {@link ItemsBean} within an {@link Album}: Used to browse {@link Item} of an {@link Album}
@@ -71,7 +66,7 @@ public class AlbumItemsBean extends ItemsBean
     @Override
     public String getNavigationString()
     {
-        return sb.getPrettySpacePage("pretty:albumBrowse");
+        return "pretty:albumBrowse";
     }
 
     @Override
@@ -263,7 +258,7 @@ public class AlbumItemsBean extends ItemsBean
 			logger.error("Error during delete album items ", e);
 		}
         ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).delete();
-        return sb.getPrettySpacePage("pretty:albums");
+        return "pretty:albums";
     }
 
     /**

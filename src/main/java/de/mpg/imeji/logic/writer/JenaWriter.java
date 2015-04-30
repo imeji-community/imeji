@@ -3,12 +3,8 @@
  */
 package de.mpg.imeji.logic.writer;
 
-import java.net.URI;
-import java.util.List;
-
 import com.hp.hpl.jena.Jena;
 import com.hp.hpl.jena.rdf.model.Model;
-
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.ImejiTriple;
@@ -21,6 +17,9 @@ import de.mpg.j2j.transaction.CRUDTransaction;
 import de.mpg.j2j.transaction.PatchTransaction;
 import de.mpg.j2j.transaction.ThreadedTransaction;
 import de.mpg.j2j.transaction.Transaction;
+
+import java.net.URI;
+import java.util.List;
 
 /**
  * imeji WRITE operations (create/delete/update) in {@link Jena} <br/>

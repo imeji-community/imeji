@@ -4,7 +4,6 @@
 package de.mpg.imeji.presentation.collection;
 
 import com.hp.hpl.jena.sparql.pfunction.library.container;
-
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchResult;
@@ -56,7 +55,7 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
     @Override
     public String getNavigationString()
     {
-        return sb.getPrettySpacePage("pretty:collections");
+        return "pretty:collections";
     }
 
     @Override
@@ -159,7 +158,7 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
         {
             BeanHelper.warn(sb.getMessage("error_delete_no_collection_selected"));
         }
-        return sb.getPrettySpacePage("pretty:collections");
+        return "pretty:collections";
     }
 
     /**

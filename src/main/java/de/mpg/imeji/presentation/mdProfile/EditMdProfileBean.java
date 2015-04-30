@@ -165,7 +165,7 @@ public class EditMdProfileBean extends MdProfileBean {
 
 	@Override
 	protected String getNavigationString() {
-		return session.getPrettySpacePage("pretty:editProfile");
+		return "pretty:editProfile";
 	}
 
 	/**

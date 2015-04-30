@@ -3,11 +3,6 @@
  */
 package de.mpg.imeji.presentation.album;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.faces.context.FacesContext;
-
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -20,6 +15,10 @@ import de.mpg.imeji.presentation.image.SingleItemBrowse;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
+
+import javax.faces.context.FacesContext;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Bean for the detail {@link Item} page within an {@link Album}
@@ -39,7 +38,7 @@ public class AlbumItemBean extends ItemBean
     public AlbumItemBean() throws Exception
     {
         super();
-        this.prettyLink = session.getPrettySpacePage("pretty:editImageOfAlbum");
+        this.prettyLink = "pretty:editImageOfAlbum";
         navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
     }
 
@@ -88,7 +87,7 @@ public class AlbumItemBean extends ItemBean
             BeanHelper.info(session.getLabel("image") + " " + getImage().getFilename() + " "
                     + session.getMessage("success_album_remove_from"));
         }
-        return session.getPrettySpacePage("pretty:albumBrowse");
+        return "pretty:albumBrowse";
     }
 
     @Override
@@ -116,7 +115,7 @@ public class AlbumItemBean extends ItemBean
     @Override
     public String getNavigationString()
     {
-        return session.getPrettySpacePage("pretty:albumItem");
+        return "pretty:albumItem";
     }
 
     public Album getAlbum()

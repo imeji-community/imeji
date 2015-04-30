@@ -38,7 +38,7 @@ public class CollectionItemBean extends ItemBean
     public CollectionItemBean() throws Exception
     {
         super();
-        this.prettyLink =  getSessionBean().getPrettySpacePage("pretty:EditImageOfCollection");
+        this.prettyLink = "pretty:EditImageOfCollection";
         navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
     }
 
@@ -78,6 +78,6 @@ public class CollectionItemBean extends ItemBean
     @Override
     public String getNavigationString()
     {
-        return getSessionBean().getPrettySpacePage("pretty:CollectionItem");
+        return "pretty:CollectionItem";
     }
 }

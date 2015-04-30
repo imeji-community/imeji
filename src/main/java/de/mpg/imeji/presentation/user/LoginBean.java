@@ -3,7 +3,6 @@
  */
 package de.mpg.imeji.presentation.user;
 
-import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.auth.Authentication;
 import de.mpg.imeji.logic.auth.AuthenticationFactory;
 import de.mpg.imeji.logic.util.UrlHelper;
@@ -14,14 +13,12 @@ import de.mpg.imeji.presentation.history.HistoryPage;
 import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.PropertyReader;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
-
 import java.io.IOException;
 import java.net.URLDecoder;
 

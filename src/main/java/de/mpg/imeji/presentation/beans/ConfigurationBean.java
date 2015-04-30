@@ -28,6 +28,24 @@
  */
 package de.mpg.imeji.presentation.beans;
 
+import de.mpg.imeji.logic.storage.util.MediaUtils;
+import de.mpg.imeji.presentation.lang.InternationalizationBean;
+import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.PropertyReader;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+import org.apache.log4j.Logger;
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
+
+import javax.faces.bean.ApplicationScoped;
+import javax.faces.bean.ManagedBean;
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.model.SelectItem;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -36,27 +54,6 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-
-import javax.faces.bean.ApplicationScoped;
-import javax.faces.bean.ManagedBean;
-import javax.faces.event.ValueChangeEvent;
-import javax.faces.model.SelectItem;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
-import org.apache.log4j.Logger;
-import org.apache.tools.ant.property.GetProperty;
-import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONException;
-
-import de.mpg.imeji.logic.storage.util.MediaUtils;
-import de.mpg.imeji.presentation.lang.InternationalizationBean;
-import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
  * JavaBean managing the imeji configuration which is made directly by the

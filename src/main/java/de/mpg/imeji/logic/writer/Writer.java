@@ -28,11 +28,11 @@
  */
 package de.mpg.imeji.logic.writer;
 
-import java.util.List;
-
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.ImejiTriple;
 import de.mpg.imeji.logic.vo.User;
+
+import java.util.List;
 
 /**
  * Write imeji objects in the persistence layer. Important: {@link Writer} 

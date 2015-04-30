@@ -13,6 +13,7 @@ import javax.faces.model.SelectItem;
 
 import com.ocpsoft.pretty.PrettyContext;
 
+import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CookieUtils;
@@ -52,7 +53,7 @@ public class InternationalizationBean
     /**
      * Initialize the bean
      */
-    private void init()
+    public void init()
     {
         try
         { 
@@ -73,7 +74,7 @@ public class InternationalizationBean
      * 
      * @param supportedLanguages
      */
-    private void initLanguagesMenu()
+    public void initLanguagesMenu()
     {
         // Add first languages out of properties
         languages = new ArrayList<SelectItem>();
@@ -93,11 +94,12 @@ public class InternationalizationBean
      * 
      * @return
      */
-    private void readSupportedLanguagesProperty()
+    public void readSupportedLanguagesProperty()
     {
         try
         {
             supportedLanguages = PropertyReader.getProperty("imeji.i18n.languages").split(",");
+        	supportedLanguages = ConfigurationBean.getLanguagesStatic().split(",");
         }
         catch (Exception e)
         {

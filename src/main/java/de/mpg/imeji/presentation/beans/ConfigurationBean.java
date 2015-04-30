@@ -77,10 +77,10 @@ public class ConfigurationBean {
 	 * @version $Revision$ $LastChangedDate$
 	 */
 	private enum CONFIGURATION {
-		SNIPPET, CSS_DEFAULT, CSS_ALT, MAX_FILE_SIZE, FILE_TYPES, STARTPAGE_HTML, DATA_VIEWER_FORMATS, DATA_VIEWER_URL, AUTOSUGGEST_USERS, AUTOSUGGEST_ORGAS, STARTPAGE_FOOTER_LOGOS, META_DESCRIPTION, INSTANCE_NAME, CONTACT_EMAIL, EMAIL_SERVER, EMAIL_SERVER_USER, EMAIL_SERVER_PASSWORD, EMAIL_SERVER_ENABLE_AUTHENTICATION, EMAIL_SERVER_SENDER, EMAIL_SERVER_PORT, STARTPAGE_CAROUSEL_QUERY, STARTPAGE_CAROUSEL_QUERY_ORDER, UPLOAD_WHITE_LIST, UPLOAD_BLACK_LIST;
+		SNIPPET, CSS_DEFAULT, CSS_ALT, MAX_FILE_SIZE, FILE_TYPES, STARTPAGE_HTML, DATA_VIEWER_FORMATS, DATA_VIEWER_URL, AUTOSUGGEST_USERS, AUTOSUGGEST_ORGAS, STARTPAGE_FOOTER_LOGOS, META_DESCRIPTION, INSTANCE_NAME, CONTACT_EMAIL, EMAIL_SERVER, EMAIL_SERVER_USER, EMAIL_SERVER_PASSWORD, EMAIL_SERVER_ENABLE_AUTHENTICATION, EMAIL_SERVER_SENDER, EMAIL_SERVER_PORT, STARTPAGE_CAROUSEL_QUERY, STARTPAGE_CAROUSEL_QUERY_ORDER, UPLOAD_WHITE_LIST, UPLOAD_BLACK_LIST, LANGUAGES;
 	}
 
-	private Properties config;
+	private static Properties config;
 	private File configFile;
 	private FileTypes fileTypes;
 	private String lang = "en";
@@ -89,7 +89,7 @@ public class ConfigurationBean {
 	// A list of predefined file types, which is set when imeji is initialized
 	private final static String predefinedFileTypes = "[Image@en,Bilder@de=jpg,jpeg,tiff,tiff,jp2,pbm,gif,png,psd][Video@en,Video@de=wmv,swf,rm,mp4,mpg,m4v,avi,mov.asf,flv,srt,vob][Audio@en,Ton@de=aif,iff,m3u,m4a,mid,mpa,mp3,ra,wav,wma][Document@en,Dokument@de=doc,docx,odt,pages,rtf,tex,rtf,bib,csv,ppt,pps,pptx,key,xls,xlr,xlsx,gsheet,nb,numbers,ods,indd,pdf,dtx]";
 	private final static String predefinedUploadBlackList = "386,aru,atm,aut,bat,bin,bkd,blf,bll,bmw,boo,bqf,buk,bxz,cc,ce0,ceo,cfxxe,chm,cih,cla,class,cmd,com,cpl,cxq,cyw,dbd,dev,dlb,dli,dll,dllx,dom,drv,dx,dxz,dyv,dyz,eml,exe,exe1,exe_renamed,ezt,fag,fjl,fnr,fuj,hlp,hlw,hsq,hts,ini,iva,iws,jar,js,kcd,let,lik,lkh,lnk,lok,mfu,mjz,nls,oar,ocx,osa,ozd,pcx,pgm,php2,php3,pid,pif,plc,pr,qit,rhk,rna,rsc_tmp,s7p,scr,scr,shs,ska,smm,smtmp,sop,spam,ssy,swf,sys,tko,tps,tsa,tti,txs,upa,uzy,vb,vba,vbe,vbs,vbx,vexe,vsd,vxd,vzr,wlpginstall,wmf,ws,wsc,wsf,wsh,wss,xdu,xir,xlm,xlv,xnt,zix,zvz";
-
+	private final static String predefinedLanguages = "en,de,ja,es";
 	private String dataViewerUrl;
 
 	/**
@@ -99,7 +99,6 @@ public class ConfigurationBean {
 	 * @throws IOException
 	 */
 	public ConfigurationBean() throws IOException, URISyntaxException {
-
 		configFile = new File(PropertyReader.getProperty("imeji.tdb.path")
 				+ "/conf.xml");
 		if (!configFile.exists())
@@ -126,11 +125,13 @@ public class ConfigurationBean {
 		Object ft = config.get(CONFIGURATION.FILE_TYPES.name());
 		if (ft == null) {
 			this.fileTypes = new FileTypes(predefinedFileTypes);
-			saveConfig();
 		} else
 			this.fileTypes = new FileTypes((String) ft);
 		initPropertyWithDefaultValue(CONFIGURATION.UPLOAD_BLACK_LIST,
 				predefinedUploadBlackList);
+		initPropertyWithDefaultValue(CONFIGURATION.LANGUAGES,
+				predefinedLanguages);
+		saveConfig();
 		return "";
 	}
 
@@ -148,7 +149,7 @@ public class ConfigurationBean {
 		} else {
 			setProperty(c.name(), defaultValue);
 		}
-		saveConfig();
+
 	}
 
 	/**
@@ -187,6 +188,18 @@ public class ConfigurationBean {
 	 * @return
 	 */
 	private String getPropertyAsNonNullString(String name) {
+		String v = (String) config.get(name);
+		return v == null ? "" : v;
+	}
+
+	/**
+	 * Return a property as a non null String to avoid null pointer exception
+	 * for static methods
+	 * 
+	 * @param name
+	 * @return
+	 */
+	private static String getPropertyAsNonNullStringStatic(String name) {
 		String v = (String) config.get(name);
 		return v == null ? "" : v;
 	}
@@ -649,5 +662,22 @@ public class ConfigurationBean {
 		if (config.get(CONFIGURATION.UPLOAD_WHITE_LIST.name()) != null)
 			return (String) config.get(CONFIGURATION.UPLOAD_WHITE_LIST.name());
 		return "";
+	}
+
+	public String getLanguages() {
+		return getPropertyAsNonNullString(CONFIGURATION.LANGUAGES.name());
+	}
+
+	public static String getLanguagesStatic() {
+		return getPropertyAsNonNullStringStatic(CONFIGURATION.LANGUAGES.name());
+	}
+
+	public void setLanguages(String value) {
+		setProperty(CONFIGURATION.LANGUAGES.name(), value);
+//		InternationalizationBean internationalizationBean = (InternationalizationBean) BeanHelper
+//				.getApplicationBean(InternationalizationBean.class);
+//		internationalizationBean.init();
+////		internationalizationBean.readSupportedLanguagesProperty();
+////		internationalizationBean.initLanguagesMenu();
 	}
 }

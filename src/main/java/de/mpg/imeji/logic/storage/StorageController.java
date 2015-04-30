@@ -64,10 +64,9 @@ public class StorageController implements Serializable {
 	public StorageController() {
 		String name;
 		try {
-			ConfigurationBean config = new ConfigurationBean();
 			name = PropertyReader.getProperty(IMEJI_STORAGE_NAME_PROPERTY);
-			formatBlackList = config.getUploadBlackList();
-			formatWhiteList = config.getUploadWhiteList();
+			formatBlackList = ConfigurationBean.getUploadBlackListStatic();
+			formatWhiteList = ConfigurationBean.getUploadWhiteListStatic();
 		} catch (Exception e) {
 			throw new RuntimeException("Error reading property: ", e);
 		}
@@ -160,15 +159,15 @@ public class StorageController implements Serializable {
 	 */
 	public String guessNotAllowedFormat(File file) {
 		boolean canBeUploaded = false;
-		
-		String guessedExtension =FilenameUtils.getExtension(file.getName());
+
+		String guessedExtension = FilenameUtils.getExtension(file.getName());
 		if (!"".equals(guessedExtension)) {
 			canBeUploaded = isAllowedFormat(guessedExtension);
 		}
-		//In Any case check the extension by Tika results
+		// In Any case check the extension by Tika results
 		guessedExtension = guessExtension(file);
-		
-		//file can be uploaded only if both results are true
+
+		// file can be uploaded only if both results are true
 		canBeUploaded = canBeUploaded && isAllowedFormat(guessedExtension);
 
 		return canBeUploaded ? guessedExtension : StorageUtils.BAD_FORMAT;
@@ -182,7 +181,8 @@ public class StorageController implements Serializable {
 	 */
 	private boolean isAllowedFormat(String extension) {
 		// If no extension, not possible to recognized the format
-		// Imeji will uprfont guess the extension for the uploaded file if it is not provided
+		// Imeji will uprfont guess the extension for the uploaded file if it is
+		// not provided
 		// Thus this method is not public and cannot be used as public method
 		if ("".equals(extension.trim()))
 			return false;
@@ -218,11 +218,11 @@ public class StorageController implements Serializable {
 	public String readFileStringContent(String url) {
 		return storage.readFileStringContent(url);
 	}
-	
+
 	public String getFormatBlackList() {
 		return formatBlackList;
 	}
-	
+
 	public String getFormatWhiteList() {
 		return formatWhiteList;
 	}

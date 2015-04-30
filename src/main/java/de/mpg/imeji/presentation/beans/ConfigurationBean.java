@@ -439,7 +439,13 @@ public class ConfigurationBean {
 	 * @return the url of the data viewer service
 	 */
 	public String getDataViewerUrl() {
-		// return dataViewerUrl;
+		return config.getProperty(CONFIGURATION.DATA_VIEWER_URL.name());
+	}
+	
+	/**
+	 * @return the url of the data viewer service in a static way
+	 */
+	public static String getDataViewerUrlStatic() {
 		return config.getProperty(CONFIGURATION.DATA_VIEWER_URL.name());
 	}
 
@@ -583,6 +589,10 @@ public class ConfigurationBean {
 		return (String) config.get(CONFIGURATION.EMAIL_SERVER.name());
 	}
 
+	public static String getEmailServerStatic() {
+		return (String) config.get(CONFIGURATION.EMAIL_SERVER.name());
+	}
+
 	public void setEmailServerUser(String s) {
 		setProperty(CONFIGURATION.EMAIL_SERVER_USER.name(), s);
 	}
@@ -591,11 +601,19 @@ public class ConfigurationBean {
 		return (String) config.get(CONFIGURATION.EMAIL_SERVER_USER.name());
 	}
 
+	public static String getEmailServerUserStatic() {
+		return (String) config.get(CONFIGURATION.EMAIL_SERVER_USER.name());
+	}
+
 	public void setEmailServerPassword(String s) {
 		setProperty(CONFIGURATION.EMAIL_SERVER_PASSWORD.name(), s);
 	}
 
 	public String getEmailServerPassword() {
+		return (String) config.get(CONFIGURATION.EMAIL_SERVER_PASSWORD.name());
+	}
+
+	public static String getEmailServerPasswordStatic() {
 		return (String) config.get(CONFIGURATION.EMAIL_SERVER_PASSWORD.name());
 	}
 
@@ -609,6 +627,11 @@ public class ConfigurationBean {
 				.get(CONFIGURATION.EMAIL_SERVER_ENABLE_AUTHENTICATION.name()));
 	}
 
+	public static boolean getEmailServerEnableAuthenticationStatic() {
+		return Boolean.parseBoolean((String) config
+				.get(CONFIGURATION.EMAIL_SERVER_ENABLE_AUTHENTICATION.name()));
+	}
+
 	public void setEmailServerSender(String s) {
 		setProperty(CONFIGURATION.EMAIL_SERVER_SENDER.name(), s);
 	}
@@ -617,11 +640,19 @@ public class ConfigurationBean {
 		return (String) config.get(CONFIGURATION.EMAIL_SERVER_SENDER.name());
 	}
 
+	public static String getEmailServerSenderStatic() {
+		return (String) config.get(CONFIGURATION.EMAIL_SERVER_SENDER.name());
+	}
+
 	public void setEmailServerPort(String s) {
 		setProperty(CONFIGURATION.EMAIL_SERVER_PORT.name(), s);
 	}
 
 	public String getEmailServerPort() {
+		return (String) config.get(CONFIGURATION.EMAIL_SERVER_PORT.name());
+	}
+
+	public static String getEmailServerPortStatic() {
 		return (String) config.get(CONFIGURATION.EMAIL_SERVER_PORT.name());
 	}
 
@@ -651,11 +682,21 @@ public class ConfigurationBean {
 		return (String) config.get(CONFIGURATION.UPLOAD_BLACK_LIST.name());
 	}
 
+	public static String getUploadBlackListStatic() {
+		return (String) config.get(CONFIGURATION.UPLOAD_BLACK_LIST.name());
+	}
+
 	public void setUploadWhiteList(String s) {
 		setProperty(CONFIGURATION.UPLOAD_WHITE_LIST.name(), s);
 	}
 
 	public String getUploadWhiteList() {
+		if (config.get(CONFIGURATION.UPLOAD_WHITE_LIST.name()) != null)
+			return (String) config.get(CONFIGURATION.UPLOAD_WHITE_LIST.name());
+		return "";
+	}
+
+	public static String getUploadWhiteListStatic() {
 		if (config.get(CONFIGURATION.UPLOAD_WHITE_LIST.name()) != null)
 			return (String) config.get(CONFIGURATION.UPLOAD_WHITE_LIST.name());
 		return "";
@@ -671,10 +712,11 @@ public class ConfigurationBean {
 
 	public void setLanguages(String value) {
 		setProperty(CONFIGURATION.LANGUAGES.name(), value);
-//		InternationalizationBean internationalizationBean = (InternationalizationBean) BeanHelper
-//				.getApplicationBean(InternationalizationBean.class);
-//		internationalizationBean.init();
-////		internationalizationBean.readSupportedLanguagesProperty();
-////		internationalizationBean.initLanguagesMenu();
+		// InternationalizationBean internationalizationBean =
+		// (InternationalizationBean) BeanHelper
+		// .getApplicationBean(InternationalizationBean.class);
+		// internationalizationBean.init();
+		// // internationalizationBean.readSupportedLanguagesProperty();
+		// // internationalizationBean.initLanguagesMenu();
 	}
 }

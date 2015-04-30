@@ -3,25 +3,31 @@
  */
 package de.mpg.imeji.presentation.user.util;
 
-import de.mpg.imeji.presentation.beans.ConfigurationBean;
-import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.PropertyReader;
-
-import org.apache.log4j.Logger;
-
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.Properties;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
+import javax.mail.Authenticator;
+import javax.mail.BodyPart;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+
+import org.apache.log4j.Logger;
+
+import de.mpg.imeji.presentation.beans.ConfigurationBean;
+import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * Client to send email
@@ -46,15 +52,14 @@ public class EmailClient
      */
     public void sendMail(String to, String from, String subject, String message) throws IOException, URISyntaxException
     {
-    	ConfigurationBean config = new ConfigurationBean();
-        String emailUser = config.getEmailServerUser();
-        String password = config.getEmailServerPassword();
-        String server = config.getEmailServer();
-        String port = config.getEmailServerPort();
+        String emailUser = ConfigurationBean.getEmailServerUserStatic();
+        String password = ConfigurationBean.getEmailServerPasswordStatic();
+        String server = ConfigurationBean.getEmailServerStatic();
+        String port = ConfigurationBean.getEmailServerPortStatic();
         if(isNullOrEmpty(port))
             port = "25";
-        String auth = Boolean.toString(config.getEmailServerEnableAuthentication());
-        String sender = config.getEmailServerSender();
+        String auth = Boolean.toString(ConfigurationBean.getEmailServerEnableAuthenticationStatic());
+        String sender = ConfigurationBean.getEmailServerSenderStatic();
         if (from != null)
         {
             sender = from;

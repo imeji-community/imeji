@@ -5,6 +5,7 @@ package de.mpg.imeji.logic.controller;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
+
 import de.mpg.imeji.exceptions.*;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
@@ -27,6 +28,7 @@ import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.j2j.helper.J2JHelper;
+
 import org.apache.log4j.Logger;
 
 import java.net.URI;
@@ -644,5 +646,14 @@ public class CollectionController extends ImejiController {
          });
 	}
 
+	public boolean isAllowedUploadByStatus(String collectionId) {
+	    	if (isNullOrEmptyTrim(collectionId))
+	    		return false;
+	       
+	    	if (ImejiSPARQL.exec(SPARQLQueries.getAllowedUpdateByStatus(collectionId), Imeji.spaceModel).size() > 0) {
+	        	return false;
+	        }
+	        return true;
+	    }
 
 }

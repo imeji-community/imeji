@@ -415,6 +415,17 @@ public class SPARQLQueries {
 	public static String selectAlbumAll() {
 		return "SELECT ?s WHERE { ?s a <http://imeji.org/terms/album>}";
 	}
+	
+
+	/**
+	 * Check if {@link CollectionImeji} status is not WITHDRAWN
+	 *
+	 * @return
+	 */
+	public static String getAllowedUpdateByStatus(String collectionId) {
+		return "SELECT * WHERE { "+collectionId + " "+ImejiNamespaces.STATUS+ " <"+Status.WITHDRAWN.getUriString()+"> }";
+	}
+
 
 	/**
 	 * Select all {@link Space} available imeji

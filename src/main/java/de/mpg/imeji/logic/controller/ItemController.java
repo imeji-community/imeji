@@ -9,6 +9,7 @@ import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.ImejiTriple;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.reader.ReaderFacade;
+import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchFactory;
@@ -33,6 +34,7 @@ import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.imeji.rest.process.CommonUtils;
 import de.mpg.j2j.annotations.j2jResource;
 import de.mpg.j2j.helper.J2JHelper;
+
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
@@ -123,8 +125,13 @@ public class ItemController extends ImejiController {
 			throw new UnprocessableError(
 					"Filename must not be empty!");
 		}
-		
+
+		//Validate the collection status
+		CollectionController cc = new CollectionController();
+		cc.isAllowedUploadByStatus(c.getId().toString());
+
 		validateChecksum(c.getId(), f, false);
+		
 		String guessedNotAllowedFormat = sc.guessNotAllowedFormat(f);
 		if (StorageUtils.BAD_FORMAT.equals(guessedNotAllowedFormat)) {
 				throw new UnprocessableError ("upload_format_not_allowed: "	+ " (" + guessedNotAllowedFormat + ")");
@@ -261,7 +268,7 @@ public class ItemController extends ImejiController {
 			}
 		} catch (Exception e) {
 			throw new UnprocessableError(
-					"There was a problem with specified collection. Check the collectionID for correctness!");
+					"There was a problem with specified collection: "+e.getLocalizedMessage());
 		}
 
 		if (uploadedFile != null) {
@@ -825,6 +832,13 @@ public class ItemController extends ImejiController {
 
 	private boolean isValidateChecksumInCollection(){
         return Imeji.isValidateChecksumInCollection();
+	}
+	
+	
+	public void validateCollectionStatus(Status st) throws UnprocessableError{
+		
+		if (Status.WITHDRAWN.equals(st)) 
+			throw new UnprocessableError("Collection status does not allow item upload! The collection is discarded!");
 	}
 
 }

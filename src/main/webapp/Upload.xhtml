@@ -67,15 +67,51 @@
 					flash_swf_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/plupload/2.1.2/js/Moxie.swf',
 					silverlight_xap_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources//plupload/2.1.2/js/Moxie.xap',
 					init : {
+						PostInit: function(up) {
+							// Called when the state of the queue is changed
+							var testStatus = '#{UploadBean.validCollectionStatusForUpload}';
+							if (testStatus != 'true') {
+								up.disableBrowse(true);
+							}
+							else
+							{
+								up.disableBrowse(false);
+							}
+						},
+					
 						 StateChanged: function(up) {
 								// Called when the state of the queue is changed
-								if( up.state == plupload.STOPPED){
-									report();
+								var testStatus = '#{UploadBean.validCollectionStatusForUpload}';
+								if (testStatus != 'true') {
+									stop();
+									destroy();
+									reportNoUpload();
 								}
-								if( up.state == plupload.STARTED){
-									openDialog('dialogWait');
+								
+								if( up.state == plupload.STOPPED ){
+									if (testStatus == 'true') {
+										report();
+									}
+								}
+								if ( up.state == plupload.STARTED){
+									if (testStatus != 'true') {
+										stop(); //stop uploading)
+										destroy(); //destroy the current instance
+										reportNoUpload(); //refresh the page 
+									}
+									else
+									{
+										openDialog('dialogWait');
+									}
 								}
 							},
+						FilesAdded: function() {
+								// Called when the state of the queue is changed
+								var testStatus = '#{UploadBean.validCollectionStatusForUpload}';
+								if (testStatus != 'true') {
+										reportNoUpload();
+								}
+							}
 					 }
 					});
 			});
@@ -83,6 +119,11 @@
 			function report() {
 				window.location.href = location.pathname + "?done=1";
 			}
+
+			function reportNoUpload() {
+				window.location.href = location.pathname;
+			}
+
 		</script>
 	</ui:define>
 	

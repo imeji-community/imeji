@@ -168,7 +168,6 @@ public class CreateSpaceBean implements Serializable{
 			setIngestImage(getUploadedIngestFile(request));
 		} catch (FileUploadException|TypeNotAllowedException e) {
 			BeanHelper.error("Could not upload the image " + e.getMessage());
-			e.printStackTrace();
 		}
 
     }

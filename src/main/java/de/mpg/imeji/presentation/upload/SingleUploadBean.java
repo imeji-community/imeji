@@ -1,5 +1,7 @@
 package de.mpg.imeji.presentation.upload;
 
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
@@ -21,6 +23,7 @@ import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectLoader;
+
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.FileUploadException;
@@ -37,6 +40,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
+
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -136,20 +140,16 @@ public class SingleUploadBean implements Serializable{
 		
 	}
 	*/
-	    
+	    //No throw Exception
 	private Item uploadFileToItem(File file, String title) {
 		try {    
-			if (!StorageUtils.hasExtension(title))
-				title += StorageUtils.guessExtension(file);
-			validateName(file, title);
-			Item item = null;
+			Item item = ImejiFactory.newItem(getCollection());
 			ItemController controller = new ItemController();
-			item = controller.createWithFile(null, file, title, getCollection(), user);
+			item = controller.create(item, file, title, user, null, null);
 			sus.setUploadedItem(item);
 			return item;
 		} catch (Exception e) {	
 			sus.setfFile(" File " + title + " not uploaded: " + e.getMessage());
-			logger.error("Error uploading item: ", e);
 			return null;
 		}
 	}
@@ -159,18 +159,18 @@ public class SingleUploadBean implements Serializable{
 	 * file has an extension (therefore, for file without extension, the
 	 * validation will only occur when the file has been stored locally)
 	 */
-	private void validateName(File file, String title) {
-		if (StorageUtils.hasExtension(title)) {
-			StorageController sc = new StorageController();
-			String guessedNotAllowedFormat = sc.guessNotAllowedFormat(file);
-			if (StorageUtils.BAD_FORMAT.equals(guessedNotAllowedFormat)) {
-				SessionBean sessionBean = (SessionBean) BeanHelper
-						.getSessionBean(SessionBean.class);
-				throw new RuntimeException(
-						sessionBean.getMessage("upload_format_not_allowed") + " (" + guessedNotAllowedFormat + ")");
-			}
-		}
-	}
+//	private void validateName(File file, String title) {
+//		if (StorageUtils.hasExtension(title)) {
+//			StorageController sc = new StorageController();
+//			String guessedNotAllowedFormat = sc.guessNotAllowedFormat(file);
+//			if (StorageUtils.BAD_FORMAT.equals(guessedNotAllowedFormat)) {
+//				SessionBean sessionBean = (SessionBean) BeanHelper
+//						.getSessionBean(SessionBean.class);
+//				throw new RuntimeException(
+//						sessionBean.getMessage("upload_format_not_allowed") + " (" + guessedNotAllowedFormat + ")");
+//			}
+//		}
+//	}
 
 	
 	public void upload() {  

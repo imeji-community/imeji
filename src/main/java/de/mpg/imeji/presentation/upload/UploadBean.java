@@ -5,6 +5,8 @@ package de.mpg.imeji.presentation.upload;
 
 import com.ocpsoft.pretty.PrettyContext;
 
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.Search;
@@ -18,11 +20,14 @@ import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.vo.Properties.Status;
+import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.collection.CollectionBean;
 import de.mpg.imeji.presentation.history.HistoryUtil;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
+
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -36,6 +41,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
+
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -80,6 +86,7 @@ public class UploadBean implements Serializable {
 	/**
 	 * Method checking the url parameters and triggering then the
 	 * {@link UploadBean} methods
+	 * @throws UnprocessableError 
 	 * 
 	 * @throws Exception
 	 */
@@ -88,20 +95,26 @@ public class UploadBean implements Serializable {
 		readId();
 		try {
 			loadCollection();
-		} catch (Exception e) {
-			throw new RuntimeException("collection couldn't be loaded", e);
-		}
-		if (UrlHelper.getParameterBoolean("init")) {
-			((UploadSession) BeanHelper.getSessionBean(UploadSession.class))
-					.reset();
-			externalUrl = null;
-			localDirectory = null;
-		} else if (UrlHelper.getParameterBoolean("start")) {
-			upload();
-		} else if (UrlHelper.getParameterBoolean("done")) {
-			((UploadSession) BeanHelper.getSessionBean(UploadSession.class))
-					.resetProperties();
-		}
+			if (UrlHelper.getParameterBoolean("init")) {
+				((UploadSession) BeanHelper.getSessionBean(UploadSession.class))
+						.reset();
+				externalUrl = null;
+				localDirectory = null;
+			} else if (UrlHelper.getParameterBoolean("start")) {
+				upload();
+			} else if (UrlHelper.getParameterBoolean("done")) {
+				((UploadSession) BeanHelper.getSessionBean(UploadSession.class))
+						.resetProperties();
+			}
+			else
+			{
+				BeanHelper.error("I can not get to the collection id ");
+			}
+
+	} catch (Exception e) {
+		BeanHelper.error(e.getLocalizedMessage());
+	 }
+
 	}
 
 	/**
@@ -123,10 +136,11 @@ public class UploadBean implements Serializable {
 		HttpServletRequest req = (HttpServletRequest) FacesContext
 				.getCurrentInstance().getExternalContext().getRequest();
 		boolean isMultipart = ServletFileUpload.isMultipartContent(req);
-		if (isMultipart) {
-			ServletFileUpload upload = new ServletFileUpload();
+		if (isMultipart ) {
 			// Parse the request
 			try {
+				ServletFileUpload upload = new ServletFileUpload();
+				validateCollectionStatusLazy(collection.getId().toString());
 				FileItemIterator iter = upload.getItemIterator(req);
 				while (iter.hasNext()) {
 					FileItemStream fis = iter.next();
@@ -386,21 +400,22 @@ public class UploadBean implements Serializable {
 
 	/**
 	 * Load the collection
+	 * @throws Exception 
 	 * 
 	 * @throws Exception
 	 */
-	public void loadCollection() throws Exception {
+	public void loadCollection() throws Exception  {
+		SessionBean sessionBean = (SessionBean) BeanHelper
+				.getSessionBean(SessionBean.class);
 		if (id != null) {
-			collection = ObjectLoader.loadCollectionLazy(
-					ObjectHelper.getURI(CollectionImeji.class, id), user);
+			validateCollectionStatus();
 			if (collection != null && getCollection().getId() != null) {
 				ItemController ic = new ItemController();
 				collectionSize = ic.countContainerSize(collection);
 			}
 		} else {
-			SessionBean sessionBean = (SessionBean) BeanHelper
-					.getSessionBean(SessionBean.class);
 			BeanHelper.error(sessionBean.getLabel("error") + "No ID in URL");
+			throw new RuntimeException();
 		}
 	}
 
@@ -650,6 +665,32 @@ public class UploadBean implements Serializable {
 	 */
 	public void setRecursive(boolean recursive) {
 		this.recursive = recursive;
+	}
+	
+	public boolean isValidCollectionStatusForUpload() {
+		//Method used both from bean and from Xhtml page
+			try {
+				collection = ObjectLoader.loadCollectionLazy(
+					ObjectHelper.getURI(CollectionImeji.class, id), user);
+			if (collection.getStatus().equals(Status.WITHDRAWN)) 
+					return false;
+			return true;
+			} catch (ImejiException e) {
+				return false;
+			}
+	}
+	
+	public void validateCollectionStatus() throws UnprocessableError {
+		if (!isValidCollectionStatusForUpload()) {
+					throw new UnprocessableError("Collection is discarded, you can not create an item.");
+		}
+	 }
+	
+	public void validateCollectionStatusLazy(String collectionId) throws UnprocessableError {
+		CollectionController cc = new CollectionController();
+		if (!cc.isAllowedUploadByStatus(collectionId)) {
+					throw new UnprocessableError("Collection is discarded, you can not create an item.");
+		}
 	}
 
 }

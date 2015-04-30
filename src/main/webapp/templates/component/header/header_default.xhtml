@@ -42,15 +42,18 @@ All rights reserved. Use is subject to license terms.
 			
 			<!-- import meta menu here -->
 			<ui:include src="../menu/metamenu_default.xhtml"/>
-			
+
 			<h:outputLink id="lnkStartPage" title="#{lbl.goto_startpage}" value="#{Navigation.homeUrl}">
 				<!-- default imeji logo -->
-				<h:panelGroup styleClass="imj_logo" rendered="#{empty (SessionBean.selectedSpaceLogoURL) or (SessionBean.selectedSpaceLogoURL.trim() == '')}"/>
-				
+				<h:panelGroup styleClass="imj_logo"
+						  rendered="#{SessionBean.spaceId == '' or SessionBean.selectedSpaceLogoURL.trim() == 'null'}" />
 				<!-- space specific logo -->
-				<h:graphicImage value="#{SessionBean.selectedSpaceLogoURL}" alt="space logo" styleClass="imj_spaceLogo" rendered="#{not empty (SessionBean.selectedSpaceLogoURL.trim()) and SessionBean.selectedSpaceLogoURL.trim() != '' }"/> 
+				<h:panelGroup rendered="#{not (SessionBean.spaceId == '' or SessionBean.selectedSpaceLogoURL.trim() == 'null') }">
+					<h:graphicImage value="#{SessionBean.selectedSpaceLogoURL}" alt="space logo" styleClass="imj_spaceLogo" />
+				</h:panelGroup>
+
 			</h:outputLink>
-			
+
 			<div class="imj_siteHeaderMenuSearchSection">
 				<!-- place main menu here -->
 				<menu:mainMenu navBean="#{Navigation}" curMainMenu="#{currentMainMenu}" menuClass="imj_mainMenuStandard" userHasAdminRights="#{Auth.admin}"/>			

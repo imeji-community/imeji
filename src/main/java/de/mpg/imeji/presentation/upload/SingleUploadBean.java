@@ -19,6 +19,7 @@ import de.mpg.imeji.presentation.metadata.MetadataSetBean;
 import de.mpg.imeji.presentation.metadata.SingleEditBean;
 import de.mpg.imeji.presentation.metadata.SuperMetadataBean;
 import de.mpg.imeji.presentation.metadata.extractors.TikaExtractor;
+import de.mpg.imeji.presentation.metadata.util.SuggestBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
@@ -236,6 +237,7 @@ public class SingleUploadBean implements Serializable{
 			try {     
 				CollectionImeji collection = ObjectLoader.loadCollectionLazy(new URI(selectedCollectionItem), user);
 				MetadataProfile profile = ObjectLoader.loadProfile(collection.getProfile(), user);
+				((SuggestBean) BeanHelper.getSessionBean(SuggestBean.class)).init(profile);
 				MetadataSet mdSet = ImejiFactory.newMetadataSet(profile.getId());
 				MetadataSetBean mdSetBean = new MetadataSetBean(mdSet, profile, true);
 				

@@ -38,7 +38,6 @@ import static org.junit.Assert.assertTrue;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SpaceControllerTest extends ImejiTestBase{
 
-	
     private static final Logger LOGGER = LoggerFactory
             .getLogger(SpaceControllerTest.class);
     public static final int COL_NUM = 100;
@@ -60,11 +59,11 @@ public class SpaceControllerTest extends ImejiTestBase{
 
         Space sp1 = ImejiFactory.newSpace();
         sp1.setTitle("Space 1");
-        sp1.setSlug("Space1");
+        sp1.setDescription("Space 1 Description");
         spaceId = sc.create(sp1, adminUser);
         space = sc.retrieve(sp1.getId(), adminUser);
         assertThat(sp1.getTitle(), equalTo(space.getTitle()));
-
+        assertThat(sp1.getDescription(), equalTo(space.getDescription()));
     }
 
     @Test
@@ -84,6 +83,7 @@ public class SpaceControllerTest extends ImejiTestBase{
 
     @Test
     public void test_3_UpdateFile() throws Exception {
+
         space = sc.updateFile(space, uploadFile, adminUser);
         File updateFile = new File("src/test/resources/storage/test2.jpg");
         space = sc.updateFile(space, updateFile, adminUser);
@@ -103,7 +103,6 @@ public class SpaceControllerTest extends ImejiTestBase{
     public void test_5_RetrieveAll() throws Exception {
         Space sp2 = ImejiFactory.newSpace();
         sp2.setTitle("Space 2");
-        sp2.setSlug("Space2");
         sc.create(sp2, adminUser);
         assertThat(sc.retrieveAll(), hasSize(2));
     }
@@ -128,10 +127,10 @@ public class SpaceControllerTest extends ImejiTestBase{
 
         Space sp1 = ImejiFactory.newSpace();
         sp1.setTitle("Space Full Create");
-        sp1.setSlug("SpaceFullCreate");
+
         final Collection<String> colls = Lists.newArrayList(initCollection(), initCollection());
         sp1.setSpaceCollections(colls);
-        
+
         space = sc.retrieve(sc.create(sp1, colls, uploadFile, adminUser), adminUser);
         assertThat(space.getTitle(), equalTo(sp1.getTitle()));
 
@@ -158,7 +157,6 @@ public class SpaceControllerTest extends ImejiTestBase{
     public void test_9_RetrieveSpaceCollections() throws Exception {
         Space sp2 = ImejiFactory.newSpace();
         sp2.setTitle("Space Collections Test");
-        sp2.setSlug("SpaceCollectionsTest");
         sc.create(sp2, adminUser);
         initCollection();
     	int collectionsOutOfSpace = cc.retrieveCollectionsNotInSpace(adminUser).size();

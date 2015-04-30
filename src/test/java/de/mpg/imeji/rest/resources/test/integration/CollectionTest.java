@@ -4,8 +4,6 @@ package de.mpg.imeji.rest.resources.test.integration;
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
-import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
 import de.mpg.imeji.rest.resources.test.TestUtils;
@@ -33,9 +31,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Map;
 
 import static de.mpg.imeji.logic.util.ResourceHelper.getStringFromPath;
@@ -60,7 +55,6 @@ public class CollectionTest extends ImejiTestBase {
     @Before
     public void specificSetup() {
         initCollection();
-
     }
 
     @Test

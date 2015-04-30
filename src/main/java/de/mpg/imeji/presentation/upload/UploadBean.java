@@ -4,7 +4,6 @@
 package de.mpg.imeji.presentation.upload;
 
 import com.ocpsoft.pretty.PrettyContext;
-
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.CollectionController;
@@ -21,7 +20,6 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.Properties.Status;
-import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.collection.CollectionBean;
 import de.mpg.imeji.presentation.history.HistoryUtil;
 import de.mpg.imeji.presentation.session.SessionBean;
@@ -456,7 +454,7 @@ public class UploadBean implements Serializable {
 			BeanHelper.error(sessionBean.getMessage("error_collection_delete"));
 			logger.error("Error delete collection", e);
 		}
-		return sessionBean.getPrettySpacePage("pretty:collections");
+		return "pretty:collections";
 	}
 
 	/**

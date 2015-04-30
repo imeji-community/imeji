@@ -62,6 +62,6 @@ public class CreateMdProfileBean extends MdProfileBean
     @Override
     protected String getNavigationString()
     {
-        return session.getPrettySpacePage("pretty:createProfile");
+        return "pretty:createProfile";
     }
 }

@@ -421,12 +421,14 @@ function handleDisableButton(data) {
 
 
 /** START **/
+if (typeof jsf !== 'undefined') {
 jsf.ajax.addOnEvent(function(data) {
     if (data.status == "success") {
         fixViewState(data.responseXML);
     }
     handleDisableButton(data);
 });
+}
 
 function fixViewState(responseXML) {
     var viewState = getViewState(responseXML);

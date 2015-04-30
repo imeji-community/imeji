@@ -105,7 +105,6 @@ public class FileServlet extends HttpServlet {
 		}
 		resp.setContentType(StorageUtils.getMimeType(StringHelper
 				.getFileExtension(url)));
-
 		if (url.contains("/file/spaces")) {
 			isSpaceLogo = true;
 		}

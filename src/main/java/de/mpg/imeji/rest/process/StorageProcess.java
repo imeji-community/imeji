@@ -1,12 +1,12 @@
 package de.mpg.imeji.rest.process;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
-
-import javax.ws.rs.core.Response.Status;
-
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.rest.to.JSONResponse;
 import de.mpg.imeji.rest.to.StorageTO;
+
+import javax.ws.rs.core.Response.Status;
+
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 
 /**

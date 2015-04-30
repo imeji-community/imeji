@@ -15,7 +15,6 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.beans.BasePaginatorListSessionBean.PAGINATOR_TYPE;
 import de.mpg.imeji.presentation.facet.FacetsBean;
 import de.mpg.imeji.presentation.image.ItemsBean;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
@@ -26,7 +25,6 @@ import de.mpg.imeji.presentation.util.ObjectLoader;
 
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
-
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -103,7 +101,7 @@ public class CollectionItemsBean extends ItemsBean
     @Override
     public String getNavigationString()
     {
-        return sb.getPrettySpacePage("pretty:collectionBrowse");
+        return "pretty:collectionBrowse";
     }
 
     @Override
@@ -208,7 +206,7 @@ public class CollectionItemsBean extends ItemsBean
             BeanHelper.error(e.getMessage());
             logger.error("Error deleting collection", e);
         }
-        return sb.getPrettySpacePage("pretty:collections");
+        return "pretty:collections";
     }
 
     /**

@@ -2,15 +2,12 @@ package de.mpg.imeji.rest.resources.test.integration;
 
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.rest.api.AlbumService;
 import de.mpg.imeji.rest.process.RestProcessUtils;
 import de.mpg.imeji.rest.resources.test.TestUtils;
 import de.mpg.imeji.rest.to.AlbumTO;
 import de.mpg.imeji.rest.to.ItemTO;
 import net.java.dev.webdav.jaxrs.ResponseStatus;
-
-import org.apache.commons.lang.StringUtils;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.junit.Assert;
 import org.junit.Before;

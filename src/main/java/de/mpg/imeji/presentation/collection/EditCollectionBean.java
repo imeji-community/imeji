@@ -149,7 +149,7 @@ public class EditCollectionBean extends CollectionBean
     @Override
     protected String getNavigationString()
     {
-        return sessionBean.getPrettySpacePage("pretty:editCollection");
+        return "pretty:editCollection";
     }
     
 	 /**

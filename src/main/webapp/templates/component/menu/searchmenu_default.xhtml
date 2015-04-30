@@ -2,7 +2,8 @@
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core">
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
 <ui:remove>
 <!--
 /* 
@@ -44,13 +45,14 @@ All rights reserved. Use is subject to license terms.
 		   			<h:outputText value="#{lbl.advanced_search}"/>
 		   		</h:outputLink>
 			</h:panelGroup>
-			
-			<h:selectOneRadio id="quickSearchRadioBox" value="#{QuickSearchBean.selectedSearchType}" 
+			<h:selectOneRadio id="quickSearchRadioBox" value="#{QuickSearchBean.selectedSearchType}"
 							  valueChangeListener="#{QuickSearchBean.selectedSearchTypeListener}" >
 				<f:selectItem id="selIm" itemLabel="#{lbl.images}" itemValue="images" itemEscaped="false"/>
 				<f:selectItem id="selCol" itemLabel="#{lbl.collections}" itemValue="collections" itemEscaped="false"/>
-				<f:selectItem id="selAlb" itemLabel="#{lbl.history_albums}" itemValue="albums" itemEscaped="false"/>			
-			</h:selectOneRadio>	   	
+				<c:if test="#{empty SessionBean.spaceId}">
+					<f:selectItem id="selAlb" itemLabel="#{lbl.history_albums}" itemValue="albums" itemEscaped="false"/>
+				</c:if>
+			</h:selectOneRadio>
 		</h:form>
 	</h:panelGroup>
 	

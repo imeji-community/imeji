@@ -1,9 +1,9 @@
-<ui:composition template="templates/template_site.xhtml" 
-	xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:pretty="http://ocpsoft.com/prettyfaces">
+<ui:composition template="templates/template_site.xhtml"
+				xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+		>
 	
 	<ui:param name="headline" value="#{lbl.search_advanced}"/>
 		
@@ -12,9 +12,11 @@
 	</ui:define>
 	
 	<ui:define name="searchQuery">
-		<h:panelGroup layout="block" id="imj_searchQueryMessageArea">
+		<h:panelGroup layout="block" id="imj_searchQueryMessageArea" styleClass="imj_searchQueryDisplay">
 			<h:outputText value="#{lbl.search_query}: "/>
-			<h:outputText value="#{AdvancedSearchBean.simpleQuery}" styleClass="#{AdvancedSearchBean.errorQuery ? 'imj_messageError' : ''}"/>
+			<span class="imj_searchQueryText">
+				<h:outputText value="#{AdvancedSearchBean.simpleQuery}" styleClass="#{AdvancedSearchBean.errorQuery ? 'imj_messageError' : ''}"/>
+			</span>
 		</h:panelGroup>
 	</ui:define>
 	

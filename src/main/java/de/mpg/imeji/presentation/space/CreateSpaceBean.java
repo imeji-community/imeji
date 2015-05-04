@@ -13,6 +13,7 @@ import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.upload.IngestImage;
 import de.mpg.imeji.presentation.util.BeanHelper;
+
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.FileUploadException;
@@ -25,9 +26,12 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
+
 import java.io.*;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @ManagedBean(name ="CreateSpaceBean")
@@ -65,6 +69,12 @@ public class CreateSpaceBean implements Serializable{
     		{
     			collections.addAll(cc.retrieveCollectionsNotInSpace(user));
     		}
+    		Collections.sort(collections, new Comparator<CollectionImeji>(){
+				@Override
+				public int compare(CollectionImeji coll1, CollectionImeji coll2) {
+					return coll1.getMetadata().getTitle().compareToIgnoreCase(coll2.getMetadata().getTitle());
+				}    			
+    		});
 		} catch (ImejiException e) {
 			BeanHelper.info(sessionBean.getMessage("could_not_load_collections_for_space"));
 		}

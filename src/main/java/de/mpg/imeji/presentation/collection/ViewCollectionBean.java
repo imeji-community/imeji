@@ -38,6 +38,10 @@ public class ViewCollectionBean extends CollectionBean {
 	private static final long serialVersionUID = 6473181109648137472L;
 	private List<Person> persons = null;
 	private static Logger logger = Logger.getLogger(ViewCollectionBean.class);
+	/**
+	 * Maximum number of items displayed on collection start page
+	 */
+	private static final int MAX_ITEM_NUM_VIEW = 13;
 
 	/**
 	 * Construct a default {@link ViewCollectionBean}
@@ -64,7 +68,7 @@ public class ViewCollectionBean extends CollectionBean {
 			setCollection(requestedCollection);
 
 			if (getCollection() != null && getCollection().getId() != null) {
-				findItems(user, 13);
+				findItems(user, MAX_ITEM_NUM_VIEW);
 				loadItems(user);
 				countItems();
 			}

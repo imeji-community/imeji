@@ -51,6 +51,11 @@ public class AlbumBean extends ContainerBean
      * Maximum number of character displayed in the list for the description
      */
     private static final int DESCRIPTION_MAX_SIZE = 300;
+    
+    /**
+     * Maximum number of items displayed on album start page
+     */    
+    private static final int MAX_ITEM_NUM_VIEW = 13;
     /**
      * A small description when the description of the {@link Album} is too large for the list view
      */
@@ -115,7 +120,7 @@ public class AlbumBean extends ContainerBean
 	            album = ObjectLoader.loadAlbumLazy(ObjectHelper.getURI(Album.class, id), sessionBean.getUser());
 	            if (album != null)
 	            {
-	                findItems(sessionBean.getUser(), album.getImages().size());
+	                findItems(sessionBean.getUser(), MAX_ITEM_NUM_VIEW);
 	                loadItems(sessionBean.getUser());
 	                countItems();
 	                if (sessionBean.getActiveAlbum() != null && sessionBean.getActiveAlbum().getId().equals(album.getId()))

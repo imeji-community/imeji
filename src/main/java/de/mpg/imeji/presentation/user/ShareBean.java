@@ -72,7 +72,7 @@ public class ShareBean implements Serializable
 
     public enum ShareType
     {
-        READ, CREATE, EDIT_ITEM, DELETE, EDIT_CONTAINER, EDIT_PROFILE, ADMIN
+        READ, CREATE, EDIT_ITEM, DELETE_ITEM, EDIT_CONTAINER, EDIT_PROFILE, ADMIN
     }
 
     /**
@@ -357,7 +357,7 @@ public class ShareBean implements Serializable
         }
         if (type == SharedObjectType.COLLECTION && hasDeleteItemGrants(grants, containerUri))
         {
-            l.add(ShareType.DELETE.toString());
+            l.add(ShareType.DELETE_ITEM.toString());
         }
         if (hasEditContainerGrants(grants, containerUri))
         {
@@ -446,7 +446,7 @@ public class ShareBean implements Serializable
                     case "EDIT_ITEM":
                         grantsStr += "- " + sb.getLabel("collection_share_image_edit") + "\n";
                         break;
-                    case "DELETE":
+                    case "DELETE_ITEM":
                         grantsStr += "- " + sb.getLabel("collection_share_image_delete") + "\n";
                         break;
                     case "EDIT_CONTAINER":
@@ -527,7 +527,7 @@ public class ShareBean implements Serializable
                 case "EDIT_ITEM":
                     grants.addAll(AuthorizationPredefinedRoles.edit(containerUri, profileUri));
                     break;
-                case "DELETE":
+                case "DELETE_ITEM":
                     grants.addAll(AuthorizationPredefinedRoles.delete(containerUri, profileUri));
                     break;
                 case "EDIT_CONTAINER":
@@ -784,7 +784,7 @@ public class ShareBean implements Serializable
                     selectedGrants.add(ShareType.READ.toString());
                     selectedGrants.add(ShareType.CREATE.toString());
                     selectedGrants.add(ShareType.EDIT_ITEM.toString());
-                    selectedGrants.add(ShareType.DELETE.toString());
+                    selectedGrants.add(ShareType.DELETE_ITEM.toString());
                     selectedGrants.add(ShareType.EDIT_CONTAINER.toString());
                     selectedGrants.add(ShareType.EDIT_PROFILE.toString());
                     selectedGrants.add(ShareType.ADMIN.toString());

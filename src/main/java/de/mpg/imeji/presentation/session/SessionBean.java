@@ -566,7 +566,7 @@ public class SessionBean implements Serializable {
 				getLabel("collection_share_image_upload")));
 		itemList.add(new SelectItem(ShareType.EDIT_ITEM,
 				getLabel("collection_share_image_edit")));
-		itemList.add(new SelectItem(ShareType.DELETE,
+		itemList.add(new SelectItem(ShareType.DELETE_ITEM,
 				getLabel("collection_share_image_delete")));
 		itemList.add(new SelectItem(ShareType.EDIT_CONTAINER,
 				getLabel("collection_share_collection_edit")));

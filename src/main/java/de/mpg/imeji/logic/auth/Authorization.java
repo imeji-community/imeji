@@ -52,134 +52,6 @@ import java.util.List;
 public class Authorization {
 
 	/**
-	 * Return true if the {@link User} can create the object defined by the uri
-	 * 
-	 * @param user
-	 * @param uri
-	 * @return
-	 * @throws NotAllowedError
-	 */
-//	public boolean create(User user, String uri) {
-//		if (hasGrant(
-//				user,
-//				toGrant(uri,
-//						getGrantTypeAccordingToObjectType(uri, GrantType.CREATE))))
-//			return true;
-//		return false;
-//	}
-
-	/**
-	 * Return true if the {@link User} can read the object defined by the uri
-	 * 
-	 * @param user
-	 * @param uri
-	 * @return
-	 * @throws NotAllowedError
-	 */
-	public boolean read(User user, String uri) {
-		if (hasGrant(
-				user,
-				toGrant(uri,
-						getGrantTypeAccordingToObjectType(uri, GrantType.READ))))
-			return true;
-		return false;
-	}
-
-	/**
-	 * Return true if the {@link User} can update the object defined by the uri
-	 * 
-	 * @param user
-	 * @param uri
-	 * @return
-	 * @throws NotAllowedError
-	 */
-	public boolean update(User user, String uri) {
-		if (hasGrant(
-				user,
-				toGrant(uri,
-						getGrantTypeAccordingToObjectType(uri, GrantType.UPDATE))))
-			return true;
-		return false;
-	}
-
-	/**
-	 * Return true if the {@link User} can delete the object defined by the uri
-	 * 
-	 * @param user
-	 * @param uri
-	 * @return
-	 * @throws NotAllowedError
-	 */
-	public boolean delete(User user, String uri) {
-		if (hasGrant(
-				user,
-				toGrant(uri,
-						getGrantTypeAccordingToObjectType(uri, GrantType.DELETE))))
-			return true;
-		return false;
-	}
-
-	/**
-	 * Return true if the {@link User} can administrate the object defined by
-	 * the uri
-	 * 
-	 * @param user
-	 * @param uri
-	 * @return
-	 * @throws NotAllowedError
-	 */
-	public boolean administrate(User user, String uri) {
-		if (hasGrant(
-				user,
-				toGrant(uri,
-						getGrantTypeAccordingToObjectType(uri, GrantType.ADMIN))))
-			return true;
-		return false;
-	}
-
-	/**
-	 * Return true if the user can update the content of the object defined by
-	 * the uri
-	 * 
-	 * @param user
-	 * @param uri
-	 * @return
-	 */
-	public boolean updateContent(User user, String uri) {
-		if (hasGrant(user, toGrant(uri, GrantType.UPDATE_CONTENT)))
-			return true;
-		return false;
-	}
-
-	/**
-	 * Return true if the user can delete the content of the object defined by
-	 * the uri
-	 * 
-	 * @param user
-	 * @param uri
-	 * @return
-	 */
-	public boolean deleteContent(User user, String uri) {
-		if (hasGrant(user, toGrant(uri, GrantType.DELETE_CONTENT)))
-			return true;
-		return false;
-	}
-
-	/**
-	 * Return true if the user can administrate the content of the object
-	 * defined by the uri
-	 * 
-	 * @param user
-	 * @param uri
-	 * @return
-	 */
-	public boolean adminContent(User user, String uri) {
-		if (hasGrant(user, toGrant(uri, GrantType.ADMIN_CONTENT)))
-			return true;
-		return false;
-	}
-
-	/**
 	 * Return true if the {@link User} can create the object
 	 * 
 	 * @param user
@@ -190,31 +62,13 @@ public class Authorization {
 	public boolean create(User user, Object obj) {
 		if (hasGrant(
 				user,
-				toGrant(getRelevantURIForSecurity(obj, false, true),
+				toGrant(getRelevantURIForSecurity(obj, true, true),
 						GrantType.CREATE))
 				&& !isDiscarded(obj))
 			return true;
 		return false;
 	}
 
-	/**
-	 * Check if the object can be created when the object is not existing
-	 * 
-	 * @param user
-	 * @param url
-	 * @return
-	 * @throws NotAllowedError
-	 */
-	public boolean createNew(User user, Object obj) {
-		if (user != null && obj instanceof Album)
-			return true;
-		if (hasGrant(
-				user,
-				toGrant(getRelevantURIForSecurity(obj, true, true),
-						GrantType.CREATE)))
-			return true;
-		return false;
-	}
 
 	/**
 	 * Return true if the {@link User} can read the object
@@ -374,29 +228,31 @@ public class Authorization {
 
 	/**
 	 * Return the uri which is relevant for the {@link Authorization}
-	 * 
+	 *
 	 * @param obj
 	 * @return
 	 */
-	private String getRelevantURIForSecurity(Object obj, boolean createNew,
+	public String getRelevantURIForSecurity(Object obj, boolean create,
 			boolean getContainer) {
 		if (obj instanceof Item)
 			return getContainer ? ((Item) obj).getCollection().toString()
 					: ((Item) obj).getId().toString();
 		else if (obj instanceof Container)
-			return createNew ? AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI
+			return create ? AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI
 					: ((Container) obj).getId().toString();
 		else if (obj instanceof CollectionListItem)
 			return ((CollectionListItem) obj).getUri().toString();
 		else if (obj instanceof AlbumBean)
 			return ((AlbumBean) obj).getAlbum().getId().toString();
 		else if (obj instanceof MetadataProfile)
-			return createNew ? AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI
+			return create ? AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI
 					: ((MetadataProfile) obj).getId().toString();
 		else if (obj instanceof User)
 			return ((User) obj).getId().toString();
 		else if (obj instanceof URI)
 			return obj.toString();
+		else if (obj instanceof String)
+			return (String) obj;
 		return PropertyBean.baseURI();
 	}
 

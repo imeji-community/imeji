@@ -90,9 +90,10 @@ public class WriterFacade implements Writer {
 	 * @see de.mpg.imeji.logic.writer.Writer#update(java.util.List,
 	 * de.mpg.imeji.logic.vo.User), choose to check security
 	 */
-	
-	public void update(List<Object> objects, User user, boolean doCheckSecurity) throws ImejiException {
-		if ( doCheckSecurity)
+
+	public void update(List<Object> objects, User user, boolean doCheckSecurity)
+			throws ImejiException {
+		if (doCheckSecurity)
 			checkSecurity(objects, user, GrantType.UPDATE);
 		writer.update(objects, user);
 	}
@@ -129,8 +130,8 @@ public class WriterFacade implements Writer {
 	 * de.mpg.imeji.logic.vo.User)
 	 */
 	@Override
-	public void patch(List<ImejiTriple> triples, User user, boolean doCheckSecurity)
-			throws ImejiException {
+	public void patch(List<ImejiTriple> triples, User user,
+			boolean doCheckSecurity) throws ImejiException {
 		List<Object> l = new ArrayList<Object>();
 		for (ImejiTriple t : triples)
 			l.add(t.getObject());
@@ -159,8 +160,8 @@ public class WriterFacade implements Writer {
 			// TODO: Thorough tests
 			if (gt == GrantType.CREATE) {
 				throwAuthorizationException(
-						AuthUtil.staticAuth().createNew(user, o),
-						user.getEmail() + messageHelper);
+						AuthUtil.staticAuth().create(user, o), user.getEmail()
+								+ messageHelper);
 			} else if (gt == GrantType.UPDATE) {
 				throwAuthorizationException(
 						AuthUtil.staticAuth().update(user, o), user.getEmail()

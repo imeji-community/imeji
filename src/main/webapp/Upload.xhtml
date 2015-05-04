@@ -67,51 +67,15 @@
 					flash_swf_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources/plupload/2.1.2/js/Moxie.swf',
 					silverlight_xap_url : '<h:outputText value="#{Navigation.applicationUrl}"/>resources//plupload/2.1.2/js/Moxie.xap',
 					init : {
-						PostInit: function(up) {
-							// Called when the state of the queue is changed
-							var testStatus = '#{Auth.create(UploadBean.collection)}';
-							if (testStatus != 'true') {
-								up.disableBrowse(true);
-							}
-							else
-							{
-								up.disableBrowse(false);
-							}
-						},
-					
 						 StateChanged: function(up) {
 								// Called when the state of the queue is changed
-								var testStatus = '#{Auth.create(UploadBean.collection)}';
-								if (testStatus != 'true') {
-									stop();
-									destroy();
-									reportNoUpload();
+								if( up.state == plupload.STOPPED){
+									report();
 								}
-								
-								if( up.state == plupload.STOPPED ){
-									if (testStatus == 'true') {
-										report();
-									}
-								}
-								if ( up.state == plupload.STARTED){
-									if (testStatus != 'true') {
-										stop(); //stop uploading)
-										destroy(); //destroy the current instance
-										reportNoUpload(); //refresh the page 
-									}
-									else
-									{
-										openDialog('dialogWait');
-									}
+								if( up.state == plupload.STARTED){
+									openDialog('dialogWait');
 								}
 							},
-						FilesAdded: function() {
-								// Called when the state of the queue is changed
-								var testStatus = '#{Auth.create(UploadBean.collection)}';
-								if (testStatus != 'true') {
-										reportNoUpload();
-								}
-							}
 					 }
 					});
 			});
@@ -136,109 +100,110 @@
 		<!-- AJAX Wrapper - START -->
 		<h:panelGroup layout="block" id="imj_ajaxWrapper">
 			<!-- START UPLOAD -->
-			<h:panelGroup layout="block" styleClass="imj_upload" rendered="#{Auth.create(UploadBean.collection)}">
-				<h2 class="imj_headline">
-					<h:outputText value="#{lbl.uploadFiles}"/>
-				</h2>
-				
-				<div class="imj_uploadInputWrapper">
-					<div id="tabsUpload" class="id_tabs imj_tabList">
-						<!-- tabs -->
-						<ul class="imj_tabMenu">
-							<li><a href="#tabsUpload-1">#{lbl.select_files}</a></li>
-							<li><a href="#tabsUpload-2">#{lbl.upload_from_link_menu}</a></li>
-							<ui:fragment rendered="#{Auth.admin}">
-								<li><a href="#tabsUpload-3">#{lbl.upload_directory_menu}</a></li>
-							</ui:fragment>
-						</ul>
-						
-						<!--  tabs content -->
-						<div id="tabsUpload-1" class="imj_tabContent">
-							<div id="uploader" class="imj_uploadDropArea">
-								Your browser doesn't support native upload!<br /> 
-								Please use HTML5 compatible browser (Firefox 4.x, Safari 4, Chrome) or download following tools:<br /> 
-								<a href="http://www.microsoft.com/germany/silverlight/downloads.aspx" target="_blank">Download Siverlight</a> 
-								<h:outputText value=" #{lbl.or_small} "/> 
-								<a href="http://get.adobe.com/de/flashplayer/download/" target="_blank">Download Flash</a>
-							</div>
-						</div>
-						<div id="tabsUpload-2" class="imj_tabContent">
-							<div class="imj_uploadUrlReference">
-								<h:form>
-									<h:outputLabel value="#{lbl.upload_from_link}" for="uploadInputText"/>
-									<h:inputText value="#{UploadBean.externalUrl}" id="uploadInputText"/>
-								
-									<div class="imj_submitPanel">
-										<h:commandLink value="#{lbl.upload_start}" action="#{UploadBean.uploadFromLink}" styleClass="imj_submitButton" onclick="openDialog('dialogWait');"/>
-									</div>
-								</h:form>
-							</div>
-						</div>
-						<ui:fragment rendered="#{Auth.admin}">
-							<div id="tabsUpload-3" class="imj_tabContent">
+			<div class="imj_upload">
+				<ui:fragment rendered="#{Auth.create(UploadBean.collection)}">
+					<h2 class="imj_headline">
+						<h:outputText value="#{lbl.uploadFiles}"/>
+					</h2>
+					
+					<div class="imj_uploadInputWrapper">
+						<div id="tabsUpload" class="id_tabs imj_tabList">
+							<!-- tabs -->
+							<ul class="imj_tabMenu">
+								<li><a href="#tabsUpload-1">#{lbl.select_files}</a></li>
+								<li><a href="#tabsUpload-2">#{lbl.upload_from_link_menu}</a></li>
+								<ui:fragment rendered="#{Auth.admin}">
+									<li><a href="#tabsUpload-3">#{lbl.upload_directory_menu}</a></li>
+								</ui:fragment>
+							</ul>
 							
+							<!--  tabs content -->
+							<div id="tabsUpload-1" class="imj_tabContent">
+								<div id="uploader" class="imj_uploadDropArea">
+									Your browser doesn't support native upload!<br /> 
+									Please use HTML5 compatible browser (Firefox 4.x, Safari 4, Chrome) or download following tools:<br /> 
+									<a href="http://www.microsoft.com/germany/silverlight/downloads.aspx" target="_blank">Download Siverlight</a> 
+									<h:outputText value=" #{lbl.or_small} "/> 
+									<a href="http://get.adobe.com/de/flashplayer/download/" target="_blank">Download Flash</a>
+								</div>
+							</div>
+							<div id="tabsUpload-2" class="imj_tabContent">
 								<div class="imj_uploadUrlReference">
 									<h:form>
-										<h:outputLabel value="#{lbl.upload_directory}" for="uploadInputDir"/>
-										<h:inputText value="#{UploadBean.localDirectory}" id="uploadInputDir"/>
+										<h:outputLabel value="#{lbl.upload_from_link}" for="uploadInputText"/>
+										<h:inputText value="#{UploadBean.externalUrl}" id="uploadInputText"/>
+									
 										<div class="imj_submitPanel">
-											<h:commandLink value="#{lbl.upload_start}" action="#{UploadBean.uploadFromLocalDirectory}" styleClass="imj_submitButton" onclick="openDialog('dialogWait');">
-												<f:ajax execute="@form" render="@none" />
-											</h:commandLink>
-										
+											<h:commandLink value="#{lbl.upload_start}" action="#{UploadBean.uploadFromLink}" styleClass="imj_submitButton" onclick="openDialog('dialogWait');"/>
 										</div>
 									</h:form>
 								</div>
-							
 							</div>
-						</ui:fragment>
+							<ui:fragment rendered="#{Auth.admin}">
+								<div id="tabsUpload-3" class="imj_tabContent">
+								
+									<div class="imj_uploadUrlReference">
+										<h:form>
+											<h:outputLabel value="#{lbl.upload_directory}" for="uploadInputDir"/>
+											<h:inputText value="#{UploadBean.localDirectory}" id="uploadInputDir"/>
+											<div class="imj_submitPanel">
+												<h:commandLink value="#{lbl.upload_start}" action="#{UploadBean.uploadFromLocalDirectory}" styleClass="imj_submitButton" onclick="openDialog('dialogWait');">
+													<f:ajax execute="@form" render="@none" />
+												</h:commandLink>
+											
+											</div>
+										</h:form>
+									</div>
+								
+								</div>
+							</ui:fragment>
+						</div>
+						<script type="text/javascript">
+							jQuery(function(){
+								jQuery(".id_tabs").tabs();
+							});
+						</script>
 					</div>
-					<script type="text/javascript">
-						jQuery(function(){
-							jQuery(".id_tabs").tabs();
-						});
-					</script>
-				</div>
-				
-				<div class="imj_uploadOptionsArea">
 					
-					<h3 class="imj_sectionHeadline">
-						<h:outputText value="#{lbl.options}"/>
-					</h3>
-
-					<h:form>
-						<div class="imj_optionSet">
-							<h:selectBooleanCheckbox styleClass="imj_optionCheckbox" id="selUploadThumb" value="#{UploadSession.importImageToFile}" valueChangeListener="#{UploadSession.importImageToFileListener}">
-								<f:ajax event="click" render="@none"/>
-							</h:selectBooleanCheckbox>
-							<h:outputLabel styleClass="imj_optionLabel" value="#{lbl.upload_item_thumbnail}" for="selUploadThumb"/>
-						</div>
+					<div class="imj_uploadOptionsArea">
 						
-						<div class="imj_optionSet">
-							<h:selectBooleanCheckbox styleClass="imj_optionCheckbox" id="selUploadFile" value="#{UploadSession.uploadFileToItem}" valueChangeListener="#{UploadSession.uploadFileToItemListener}">
-								<f:ajax event="click" render="@none"/>
-							</h:selectBooleanCheckbox>
-							<h:outputLabel styleClass="imj_optionLabel" value="#{lbl.upload_item_file}" for="selUploadFile"/>
-						</div>
-						
-						<div class="imj_optionSet">
-							<h:selectBooleanCheckbox styleClass="imj_optionCheckbox" id="selUniqueNames" value="#{UploadSession.checkNameUnique}"  valueChangeListener="#{UploadSession.checkNameUniqueListener()}">
-								<f:ajax event="click" render="@none"/>
-							</h:selectBooleanCheckbox>
-							<h:outputLabel styleClass="imj_optionLabel" value="#{lbl.upload_unique_filename}" for="selUniqueNames"/>
-						</div>
-						
-						<ui:fragment rendered="#{Auth.admin}">
-							<div class="imj_optionSet right">
-								<h:selectBooleanCheckbox styleClass="imj_optionCheckbox" id="selRecursive" value="#{UploadBean.recursive}">
+						<h3 class="imj_sectionHeadline">
+							<h:outputText value="#{lbl.options}"/>
+						</h3>
+	
+						<h:form>
+							<div class="imj_optionSet">
+								<h:selectBooleanCheckbox styleClass="imj_optionCheckbox" id="selUploadThumb" value="#{UploadSession.importImageToFile}" valueChangeListener="#{UploadSession.importImageToFileListener}">
 									<f:ajax event="click" render="@none"/>
 								</h:selectBooleanCheckbox>
-								<h:outputLabel styleClass="imj_optionLabel" value="#{lbl.upload_directory_recursive}" for="selRecursive"/>
+								<h:outputLabel styleClass="imj_optionLabel" value="#{lbl.upload_item_thumbnail}" for="selUploadThumb"/>
 							</div>
-						</ui:fragment>
-					</h:form>
-				</div>
-				
+							
+							<div class="imj_optionSet">
+								<h:selectBooleanCheckbox styleClass="imj_optionCheckbox" id="selUploadFile" value="#{UploadSession.uploadFileToItem}" valueChangeListener="#{UploadSession.uploadFileToItemListener}">
+									<f:ajax event="click" render="@none"/>
+								</h:selectBooleanCheckbox>
+								<h:outputLabel styleClass="imj_optionLabel" value="#{lbl.upload_item_file}" for="selUploadFile"/>
+							</div>
+							
+							<div class="imj_optionSet">
+								<h:selectBooleanCheckbox styleClass="imj_optionCheckbox" id="selUniqueNames" value="#{UploadSession.checkNameUnique}"  valueChangeListener="#{UploadSession.checkNameUniqueListener()}">
+									<f:ajax event="click" render="@none"/>
+								</h:selectBooleanCheckbox>
+								<h:outputLabel styleClass="imj_optionLabel" value="#{lbl.upload_unique_filename}" for="selUniqueNames"/>
+							</div>
+							
+							<ui:fragment rendered="#{Auth.admin}">
+								<div class="imj_optionSet right">
+									<h:selectBooleanCheckbox styleClass="imj_optionCheckbox" id="selRecursive" value="#{UploadBean.recursive}">
+										<f:ajax event="click" render="@none"/>
+									</h:selectBooleanCheckbox>
+									<h:outputLabel styleClass="imj_optionLabel" value="#{lbl.upload_directory_recursive}" for="selRecursive"/>
+								</div>
+							</ui:fragment>
+						</h:form>
+					</div>
+				</ui:fragment>
 				<ui:fragment rendered="#{UploadBean.getfFiles().size() > 0 or UploadBean.getsFiles().size() > 0}">
 					<div class="imj_uploadMessageArea">
 						<h2 class="imj_headline">
@@ -273,7 +238,7 @@
 						<h:outputText id="resetMessages" value="#{UploadSession.resetUploads()}" />
 					</div>
 				</ui:fragment>
-			</h:panelGroup>
+			</div>
 		</h:panelGroup>
 	</ui:define>
 </ui:composition>

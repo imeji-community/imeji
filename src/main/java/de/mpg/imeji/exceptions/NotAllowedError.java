@@ -28,7 +28,6 @@
  */
 package de.mpg.imeji.exceptions;
 
-import de.mpg.imeji.logic.auth.Authorization;
 
 /**
  * 

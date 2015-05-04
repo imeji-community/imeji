@@ -137,7 +137,6 @@ public class UploadBean implements Serializable {
 			// Parse the request
 			try {
 				ServletFileUpload upload = new ServletFileUpload();
-				// validateCollectionStatusLazy(collection.getId().toString());
 				FileItemIterator iter = upload.getItemIterator(req);
 				while (iter.hasNext()) {
 					FileItemStream fis = iter.next();
@@ -408,9 +407,9 @@ public class UploadBean implements Serializable {
 		SessionBean sessionBean = (SessionBean) BeanHelper
 				.getSessionBean(SessionBean.class);
 		if (id != null) {
-			// validateCollectionStatus();
 			collection = ObjectLoader.loadCollectionLazy(
 					ObjectHelper.getURI(CollectionImeji.class, id), user);
+			isDiscaded();
 			if (collection != null && getCollection().getId() != null) {
 				ItemController ic = new ItemController();
 				collectionSize = ic.countContainerSize(collection);
@@ -418,6 +417,20 @@ public class UploadBean implements Serializable {
 		} else {
 			BeanHelper.error(sessionBean.getLabel("error") + "No ID in URL");
 			throw new RuntimeException();
+		}
+	}
+
+	/**
+	 * True if the {@link CollectionImeji} is discaded
+	 * 
+	 * @throws UnprocessableError
+	 */
+	private void isDiscaded() throws UnprocessableError {
+		if (collection.getStatus().equals(Status.WITHDRAWN)) {
+			SessionBean sessionBean = (SessionBean) BeanHelper
+					.getSessionBean(SessionBean.class);
+			throw new UnprocessableError(
+					sessionBean.getMessage("error_collection_discarded_upload"));
 		}
 	}
 
@@ -550,88 +563,6 @@ public class UploadBean implements Serializable {
 				.isUploadFileToItem();
 	}
 
-	// public void uploadFileToItemListener()
-	// {
-	// this.importImageToFile = BooleanUtils.negate(importImageToFile);
-	// }
-	//
-	// public void importImageToFileListener()
-	// {
-	// this.uploadFileToItem = BooleanUtils.negate(uploadFileToItem);
-	// }
-	//
-	// public void checkNameUniqueListener()
-	// {
-	// this.checkNameUnique = BooleanUtils.negate(checkNameUnique);
-	// }
-	//
-	// /**
-	// * @return the importImageToFile
-	// */
-	// public boolean isImportImageToFile()
-	// {
-	// return importImageToFile;
-	// }
-	//
-	// /**
-	// * @param importImageToFile the importImageToFile to set
-	// */
-	// public void setImportImageToFile(boolean importImageToFile)
-	// {
-	// this.importImageToFile = importImageToFile;
-	// }
-	//
-	// /**
-	// * @return the uploadFileToItem
-	// */
-	// public boolean isUploadFileToItem()
-	// {
-	// return uploadFileToItem;
-	// }
-	//
-	// /**
-	// * @param uploadFileToItem the uploadFileToItem to set
-	// */
-	// public void setUploadFileToItem(boolean uploadFileToItem)
-	// {
-	// this.uploadFileToItem = uploadFileToItem;
-	// }
-	//
-	// /**
-	// * @return the checkNameUnique
-	// */
-	// public boolean isCheckNameUnique()
-	// {
-	// return checkNameUnique;
-	// }
-	//
-	// /**
-	// * @param checkNameUnique the checkNameUnique to set
-	// */
-	// public void setCheckNameUnique(boolean checkNameUnique)
-	// {
-	// this.checkNameUnique = checkNameUnique;
-	// }
-	//
-	// public List<Item> getsFiles()
-	// {
-	// return sFiles;
-	// }
-	//
-	// public void setsFiles(List<Item> sFiles)
-	// {
-	// this.sFiles = sFiles;
-	// }
-	//
-	// public List<String> getfFiles()
-	// {
-	// return fFiles;
-	// }
-	//
-	// public void setfFiles(List<String> fFiles)
-	// {
-	// this.fFiles = fFiles;
-	// }
 	public String getDiscardComment() {
 		return collection.getDiscardComment();
 	}
@@ -669,34 +600,5 @@ public class UploadBean implements Serializable {
 	public void setRecursive(boolean recursive) {
 		this.recursive = recursive;
 	}
-
-	// public boolean isValidCollectionStatusForUpload() {
-	// //Method used both from bean and from Xhtml page
-	// try {
-	// collection = ObjectLoader.loadCollectionLazy(
-	// ObjectHelper.getURI(CollectionImeji.class, id), user);
-	// if (collection.getStatus().equals(Status.WITHDRAWN))
-	// return false;
-	// return true;
-	// } catch (ImejiException e) {
-	// return false;
-	// }
-	// }
-	//
-	// public void validateCollectionStatus() throws UnprocessableError {
-	// if (!isValidCollectionStatusForUpload()) {
-	// throw new
-	// UnprocessableError("Collection is discarded, you can not create an item.");
-	// }
-	// }
-	//
-	// public void validateCollectionStatusLazy(String collectionId) throws
-	// UnprocessableError {
-	// CollectionController cc = new CollectionController();
-	// if (!cc.isAllowedUploadByStatus(collectionId)) {
-	// throw new
-	// UnprocessableError("Collection is discarded, you can not create an item.");
-	// }
-	// }
 
 }

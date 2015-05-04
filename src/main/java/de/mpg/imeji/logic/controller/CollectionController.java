@@ -649,7 +649,7 @@ public class CollectionController extends ImejiController {
 	public boolean isAllowedUploadByStatus(String collectionId) {
 	    	if (isNullOrEmptyTrim(collectionId))
 	    		return false;
-	    	if (ImejiSPARQL.exec(SPARQLQueries.getAllowedUpdateByStatus(collectionId), Imeji.spaceModel).size() > 0) {
+	    	if (ImejiSPARQL.exec(SPARQLQueries.getAllowedUpdateByStatus(collectionId), Imeji.collectionModel).size() > 0) {
 	        	return false;
 	        }
 	        return true;

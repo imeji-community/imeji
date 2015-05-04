@@ -152,7 +152,6 @@ public class WriterFacade implements Writer {
 	private void checkSecurity(List<Object> list, User user, GrantType gt)
 			throws NotAllowedError {
 		String messageHelper = null;
-		// TODO: Complete Rework of staticAUTH
 		for (Object o : list) {
 
 			messageHelper = " not allowed to " + Grant.getGrantTypeName(gt)

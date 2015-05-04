@@ -75,8 +75,8 @@ public class CollectionController extends ImejiController {
 	 * @return
 	 * @throws ImejiException
 	 */
-	public URI create(CollectionImeji c, MetadataProfile p, User user, String spaceId)
-			throws ImejiException {
+	public URI create(CollectionImeji c, MetadataProfile p, User user,
+			String spaceId) throws ImejiException {
 		return createAskValidate(c, p, user, true,
 				MetadataProfileCreationMethod.COPY, spaceId);
 	}
@@ -92,7 +92,8 @@ public class CollectionController extends ImejiController {
 	 * @throws ImejiException
 	 */
 	public URI create(CollectionImeji c, MetadataProfile p, User user,
-			MetadataProfileCreationMethod method, String spaceId) throws ImejiException {
+			MetadataProfileCreationMethod method, String spaceId)
+			throws ImejiException {
 		return createAskValidate(c, p, user, true, method, spaceId);
 	}
 
@@ -103,8 +104,8 @@ public class CollectionController extends ImejiController {
 	}
 
 	private URI createAskValidate(CollectionImeji c, MetadataProfile p,
-			User user, boolean validate, MetadataProfileCreationMethod method, String spaceId)
-			throws ImejiException {
+			User user, boolean validate, MetadataProfileCreationMethod method,
+			String spaceId) throws ImejiException {
 
 		ProfileController pc = new ProfileController();
 		String metadataProfileName = " (Metadata profile)";
@@ -129,21 +130,20 @@ public class CollectionController extends ImejiController {
 
 		writeCreateProperties(c, user);
 		c.setProfile(p.getId());
-		
+
 		writer.create(WriterFacade.toList(c), user);
 		// Prepare grants
 		GrantController gc = new GrantController();
 		gc.addGrants(user, AuthorizationPredefinedRoles.admin(c.getId()
 				.toString(), p.getId().toString()), user);
-		
-		//check the space 
-		//Just read SessionBean for SpaceId
-		
+
+		// check the space
+		// Just read SessionBean for SpaceId
+
 		if (!isNullOrEmpty(spaceId)) {
 			SpaceController sp = new SpaceController();
 			sp.addCollection(spaceId, c.getIdString(), user);
 		}
-		
 
 		return c.getId();
 	}
@@ -189,11 +189,11 @@ public class CollectionController extends ImejiController {
 		ItemController ic = new ItemController();
 		List<Item> itemList = new ArrayList();
 		try {
-			for (String itemId : ic.search(
-					ObjectHelper.getURI(CollectionImeji.class, id),
-					!isNullOrEmptyTrim(q) ? URLQueryTransformer
-							.parseStringQuery(q) : null, null, null, user, null)
-					.getResults()) {
+			for (String itemId : ic
+					.search(ObjectHelper.getURI(CollectionImeji.class, id),
+							!isNullOrEmptyTrim(q) ? URLQueryTransformer
+									.parseStringQuery(q) : null, null, null,
+							user, null).getResults()) {
 				itemList.add(ic.retrieve(URI.create(itemId), user));
 			}
 		} catch (Exception e) {
@@ -211,8 +211,8 @@ public class CollectionController extends ImejiController {
 	 * @return
 	 * @throws ImejiException
 	 */
-	public List<CollectionImeji> retrieveCollections(User user, String q, String spaceId)
-			throws ImejiException {
+	public List<CollectionImeji> retrieveCollections(User user, String q,
+			String spaceId) throws ImejiException {
 
 		List<CollectionImeji> cList = new ArrayList<CollectionImeji>();
 		try {
@@ -227,7 +227,6 @@ public class CollectionController extends ImejiController {
 		return cList;
 	}
 
-	
 	/**
 	 * Retrieve the {@link CollectionImeji} without its {@link Item}
 	 * 
@@ -340,12 +339,14 @@ public class CollectionController extends ImejiController {
 				// metadata profile, and do not forget to delete old metadata
 				// profile
 				ic.setProfile(mp.getId());
-				//delete the old profile of the Collection (procedure checks if there are no other relations, should not be if profile is empty)
+				// delete the old profile of the Collection (procedure checks if
+				// there are no other relations, should not be if profile is
+				// empty)
 				pc.delete(originalMP, user, ic.getId().toString());
-				//here update of the newly referenced profile for all Items (if there are any, patch is applied) 
-				updateCollectionItemsProfile (ic, mp.getId(), user);
-			}
-			else {
+				// here update of the newly referenced profile for all Items (if
+				// there are any, patch is applied)
+				updateCollectionItemsProfile(ic, mp.getId(), user);
+			} else {
 				// copy all statements from the template profile to the original
 				// metadata profile
 				MetadataProfile newMP = mp.cloneWithTitle();
@@ -383,8 +384,8 @@ public class CollectionController extends ImejiController {
 	 * @param user
 	 * @throws ImejiException
 	 */
-	public void patch(List<ImejiTriple> triples, User user, boolean checkSecurity)
-			throws ImejiException {
+	public void patch(List<ImejiTriple> triples, User user,
+			boolean checkSecurity) throws ImejiException {
 		writer.patch(triples, user, checkSecurity);
 	}
 
@@ -417,12 +418,17 @@ public class CollectionController extends ImejiController {
 			ProfileController pc = new ProfileController();
 			try {
 
-				MetadataProfile collectionMdp= pc.retrieve(collection.getProfile(), user);
-				if ( ( pc.isReferencedByOtherResources(collectionMdp.getId().toString(), collection.getId().toString())) ||
-					  (!AuthUtil.staticAuth().delete(user, collectionMdp.getId().toString())) || collectionMdp.getDefault() )
-				{
-					logger.info("Metadata profile related to this collection is referenced elsewhere, or user does not have permission to delete this profile."+
-				                "Profile <"+ collectionMdp.getId().toString()+"> will not be deleted!");
+				MetadataProfile collectionMdp = pc.retrieve(
+						collection.getProfile(), user);
+				if ((pc.isReferencedByOtherResources(collectionMdp.getId()
+						.toString(), collection.getId().toString()))
+						|| (!AuthUtil.staticAuth().delete(user,
+								collectionMdp.getId().toString()))
+						|| collectionMdp.getDefault()) {
+					logger.info("Metadata profile related to this collection is referenced elsewhere, or user does not have permission to delete this profile."
+							+ "Profile <"
+							+ collectionMdp.getId().toString()
+							+ "> will not be deleted!");
 				} else {
 					logger.info("Metadata profile <"
 							+ collectionMdp.getId().toString()
@@ -490,8 +496,7 @@ public class CollectionController extends ImejiController {
 	 * @param coll
 	 * @throws ImejiException
 	 */
-	public void withdraw(CollectionImeji coll, User user)
-			throws ImejiException {
+	public void withdraw(CollectionImeji coll, User user) throws ImejiException {
 		ItemController itemController = new ItemController();
 
 		if (user == null) {
@@ -502,8 +507,8 @@ public class CollectionController extends ImejiController {
 			throw new NotFoundException("Collection does not exists");
 		}
 
-		List<String> itemUris = itemController.search(coll.getId(), null,
-				null, null, user, null).getResults();
+		List<String> itemUris = itemController.search(coll.getId(), null, null,
+				null, user, null).getResults();
 		if (hasImageLocked(itemUris, user)) {
 			throw new UnprocessableError(
 					((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
@@ -518,13 +523,13 @@ public class CollectionController extends ImejiController {
 			itemController.withdraw(items, coll.getDiscardComment(), user);
 			writeWithdrawProperties(coll, null);
 			update(coll, user);
-			if (
-					!coll.getProfile().equals(Imeji.defaultMetadataProfile.getId())
-					&& AuthUtil.staticAuth().administrate(user, coll.getProfile().toString())
-			) {
+			if (!coll.getProfile().equals(Imeji.defaultMetadataProfile.getId())
+					&& AuthUtil.staticAuth().administrate(user,
+							coll.getProfile().toString())) {
 				// Withdraw profile
 				ProfileController pc = new ProfileController();
-				if(!pc.isReferencedByOtherResources(coll.getProfile().toString(), coll.getId().toString()))
+				if (!pc.isReferencedByOtherResources(coll.getProfile()
+						.toString(), coll.getId().toString()))
 					pc.withdraw(pc.retrieve(coll.getProfile(), user), user);
 			}
 		}
@@ -573,8 +578,6 @@ public class CollectionController extends ImejiController {
 				}
 			}
 
-
-
 			if (!isNullOrEmpty(c.getFamilyName().trim())) {
 				if (orgs.size() > 0) {
 					pers.add(c);
@@ -603,56 +606,59 @@ public class CollectionController extends ImejiController {
 			return MetadataProfileCreationMethod.NEW;
 		}
 	}
-	
 
-	public void updateCollectionItemsProfile(CollectionImeji ic, URI newProfileUri, User user) throws ImejiException {
-			ItemController itemController = new ItemController();
-			List<String> itemUris = itemController.search(ic.getId(), null,
-					null, null, user, null).getResults();
-			
-			List<Item> items = (List<Item>) itemController.retrieve(itemUris,-1, 0, user);
-			itemController.updateItemsProfile(items, user, newProfileUri.toString());
+	public void updateCollectionItemsProfile(CollectionImeji ic,
+			URI newProfileUri, User user) throws ImejiException {
+		ItemController itemController = new ItemController();
+		List<String> itemUris = itemController.search(ic.getId(), null, null,
+				null, user, null).getResults();
+
+		List<Item> items = (List<Item>) itemController.retrieve(itemUris, -1,
+				0, user);
+		itemController
+				.updateItemsProfile(items, user, newProfileUri.toString());
 	}
-	
-	
-    /**
-     * Retrieve all {@link CollectionImeji} which belong to one space
-     * 
-     * @return
-     */
-    public List<CollectionImeji> searchBySpaceId(User user, String uri) throws ImejiException 
-    {
-    	//TODO remove?
-    	List<CollectionImeji> cols = new ArrayList<CollectionImeji>();
-    	String q = SPARQLQueries.selectCollectionImejiOfSpace(uri);
-    //	retrieveCollections(user, q);
-    	return cols;
-    }
-    
+
+	/**
+	 * Retrieve all {@link CollectionImeji} which belong to one space
+	 * 
+	 * @return
+	 */
+	public List<CollectionImeji> searchBySpaceId(User user, String uri)
+			throws ImejiException {
+		// TODO remove?
+		List<CollectionImeji> cols = new ArrayList<CollectionImeji>();
+		String q = SPARQLQueries.selectCollectionImejiOfSpace(uri);
+		// retrieveCollections(user, q);
+		return cols;
+	}
 
 	public List<CollectionImeji> retrieveCollectionsNotInSpace(final User u) {
-		 return Lists.transform(ImejiSPARQL.exec(SPARQLQueries.selectCollectionsNotInSpace(),
-                 Imeji.collectionModel),
-         new Function<String, CollectionImeji>() {
-             @Override
-             public CollectionImeji apply(String id) {
-                 try {
-                     return retrieve(URI.create(id), u);
-                 } catch (ImejiException e) {
-                     logger.info("Cannot retrieve collection: " + id);
-                 }
-                 return null;
-             }
-         });
+		return Lists.transform(ImejiSPARQL.exec(
+				SPARQLQueries.selectCollectionsNotInSpace(),
+				Imeji.collectionModel),
+				new Function<String, CollectionImeji>() {
+					@Override
+					public CollectionImeji apply(String id) {
+						try {
+							return retrieve(URI.create(id), u);
+						} catch (ImejiException e) {
+							logger.info("Cannot retrieve collection: " + id);
+						}
+						return null;
+					}
+				});
 	}
 
-	public boolean isAllowedUploadByStatus(String collectionId) {
-	    	if (isNullOrEmptyTrim(collectionId))
-	    		return false;
-	    	if (ImejiSPARQL.exec(SPARQLQueries.getAllowedUpdateByStatus(collectionId), Imeji.collectionModel).size() > 0) {
-	        	return false;
-	        }
-	        return true;
-	    }
+	private boolean isAllowedUploadByStatus(String collectionId) {
+		if (isNullOrEmptyTrim(collectionId))
+			return false;
+		if (ImejiSPARQL.exec(
+				SPARQLQueries.getAllowedUpdateByStatus(collectionId),
+				Imeji.collectionModel).size() > 0) {
+			return false;
+		}
+		return true;
+	}
 
 }

@@ -14,6 +14,7 @@ import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.user.ShareBean;
@@ -73,6 +74,22 @@ public class AuthorizationTest {
 		// Test if the user has grant to upload the item
 		Assert.assertTrue(AuthUtil.staticAuth().create(user, getItem()));
 	}
+	
+	@Test
+	public void uploadItemDiscardedCollection() {
+		User user = getDefaultUser();
+		List<String> roles = new ArrayList<String>();
+		roles.add(ShareBean.ShareType.READ.toString());
+		roles.add(ShareBean.ShareType.CREATE.toString());
+		user.getGrants().addAll(
+				ShareBean.getGrantsAccordingtoRoles(roles, testCollectionURI,
+						testProfileURI));
+		// Discard the collection
+		CollectionImeji c = getCollection();
+		c.setStatus(Status.WITHDRAWN);
+		// Test if the user has grant to upload in the collection
+		Assert.assertFalse(AuthUtil.staticAuth().create(user, c));
+	}
 
 	@Test
 	public void updateCollectionTest() {
@@ -122,6 +139,25 @@ public class AuthorizationTest {
 						testProfileURI));
 		// Is allowed to delete the collection?
 		Assert.assertTrue(AuthUtil.staticAuth().delete(user, getCollection()));
+	}
+	
+	/**
+	 * Only collection admin can delete a collection
+	 */
+	@Test
+	public void deleteCollectionReleasedTest() {
+		User user = getDefaultUser();
+		List<String> roles = new ArrayList<String>();
+		roles.add(ShareBean.ShareType.READ.toString());
+		roles.add(ShareBean.ShareType.ADMIN.toString());
+		user.getGrants().addAll(
+				ShareBean.getGrantsAccordingtoRoles(roles, testCollectionURI,
+						testProfileURI));
+		// Release collection
+		CollectionImeji c = getCollection();
+		c.setStatus(Status.RELEASED);
+		// Is allowed to delete the collection?
+		Assert.assertFalse(AuthUtil.staticAuth().delete(user, c));
 	}
 
 	/**

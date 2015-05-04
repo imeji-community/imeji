@@ -5,11 +5,30 @@
 	xmlns:f="http://java.sun.com/jsf/core">
 	<h:panelGroup layout="block" styleClass="imj_siteFooter">
 		<!-- begin: footer section-->
-		<h:outputText value="Powered by "/>
-		<h:outputLink target="_blank" value="http://imeji.org">
-			<h:outputText value="imeji"/>
-		</h:outputLink>
-		<h:outputText value=" - #{SessionBean.version} "/>
+		<div class="imj_startpageFooterLogos">
+			<div class="imj_poweredby_software">
+				<div class="imj_poweredby_software_text">
+					<h:outputText value="Powered by " />
+				</div>
+				<div class="imj_poweredby_software_image">
+					<h:outputLink target="_blank" value="http://imeji.org">
+						<img alt="imeji community logo" src="#{Navigation.applicationUrl}resources/icon/imeji_community_bright.png" height="50em" class="imj_community_logo"/>
+					</h:outputLink>
+				</div>
+			</div>
+			<div class="imj_poweredby_institution">
+				<ui:fragment rendered="#{Configuration.startPageFooterLogos != ''}">
+							<h:outputText value="#{Configuration.startPageFooterLogos}" escape="false"/>
+				</ui:fragment>
+				<ui:fragment rendered="#{Configuration.startPageFooterLogos == ''}">
+				  <h:outputLink title="Max Planck Digital Library" target="_blank" value="http://mpdl.mpg.de">
+				  		<img class="imj_community_logo" height="50em" src="https://spot.mpdl.mpg.de/style/mpdl.png" alt="MPDL logo"/>
+				  </h:outputLink>
+				</ui:fragment>
+
+			</div>
+			<h:outputText value=" - #{SessionBean.version} " rendered="#{SessionBean.user.admin}"/>
+		</div>
 		<!-- end: footer section -->
 	</h:panelGroup>
 	<h:inputHidden id="instituteNameForIP" value="#{SessionBean.instituteNameByIP}"/>

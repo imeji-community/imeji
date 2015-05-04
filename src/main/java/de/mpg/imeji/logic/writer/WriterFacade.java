@@ -153,10 +153,8 @@ public class WriterFacade implements Writer {
 			throws NotAllowedError {
 		String messageHelper = null;
 		for (Object o : list) {
-
 			messageHelper = " not allowed to " + Grant.getGrantTypeName(gt)
 					+ " " + extractID(o);
-			// TODO: Thorough tests
 			if (gt == GrantType.CREATE) {
 				throwAuthorizationException(
 						AuthUtil.staticAuth().create(user, o), user.getEmail()

@@ -124,12 +124,12 @@ public class SimpleQueryFactory {
 	 * @return
 	 */
 	private static String getModelNames(String modelName, SearchPair pair,
-			String specificQuery, boolean isInSpace) {
+			String specificQuery, boolean isInSpace) {  
 		if (specificQuery != null && !specificQuery.equals(""))
 			return "";
 		String names = "";
 		if (modelName != null && !modelName.equals("")) {
-			names = "FROM <" + modelName + "> FROM <" + Imeji.userModel + ">";
+			names = "FROM <" + modelName + "> FROM <" + Imeji.userModel + "> FROM <" + Imeji.collectionModel + ">" ;
 			if (Imeji.profileModel.equals(modelName) || isInSpace) {
 				names += " FROM <" + Imeji.collectionModel + ">";
 			}

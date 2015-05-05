@@ -106,6 +106,28 @@
 										</div>
 										<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
 									</div>
+									<div class="imj_admindataSet">
+										<div class="imj_admindataLabel">
+											<h:outputText value="#{lbl.imprint_url}"/>
+											<span class="imj_noDisplay">: </span>
+										</div>
+										<div class="imj_admindataValue">
+											<h:inputText value="#{Configuration.impressumUrl}" styleClass="imj_admindataEdit"/>
+										</div>
+										<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+									</div>
+									<div class="imj_admindataSet">
+										<div class="imj_admindataLabel">
+											<h:outputText value="#{lbl.imprint}"/>
+											<span class="imj_noDisplay">: </span>
+										</div>
+										<div class="imj_admindataValue">
+											<h:inputTextarea value="#{Configuration.impressumText}" styleClass="imj_admindataEdit imj_additionalCodeSnippet"/>
+										</div>
+										<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+									</div>	
+									
+									
 								</div>
 							</div>
 							

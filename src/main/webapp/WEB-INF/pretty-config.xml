@@ -204,6 +204,11 @@
 		<view-id>/jsf/Config.xhtml</view-id>
 	</url-mapping>
 
+	<url-mapping id="imprint">
+		<pattern value="/imprint"></pattern>
+		<view-id>/jsf/Imprint.xhtml</view-id>
+	</url-mapping>
+	
 	<url-mapping id="digilibImage">
 		<pattern value="/digilibImage"></pattern>
 		<view-id>/jsf/DigilibImage.xhtml</view-id>
@@ -418,6 +423,12 @@
 		<pattern value="/space/#{SessionBean.spaceId}/config"></pattern>
 		<view-id>/jsf/Config.xhtml</view-id>
 	</url-mapping>
+	
+	<url-mapping id="space_imprint">
+		<pattern value="/space/#{SessionBean.spaceId}/imprint"></pattern>
+		<view-id>/jsf/Imprint.xhtml</view-id>
+	</url-mapping>
+	
 
 	<url-mapping id="space_digilibImage">
 		<pattern value="/space/#{SessionBean.spaceId}/digilibImage"></pattern>

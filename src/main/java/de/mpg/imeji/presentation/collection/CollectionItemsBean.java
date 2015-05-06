@@ -92,9 +92,9 @@ public class CollectionItemsBean extends ItemsBean
     {
         List<SelectItem> sortMenu = new ArrayList<SelectItem>();
         sortMenu.add(new SelectItem(null, "--"));
-        sortMenu.add(new SelectItem(SearchIndex.names.created, sb.getLabel("sort_img_date_created")));
-        sortMenu.add(new SelectItem(SearchIndex.names.modified, sb.getLabel("sort_date_mod")));
-        sortMenu.add(new SelectItem(SearchIndex.names.filename, sb.getLabel("sort_img_filename")));
+        sortMenu.add(new SelectItem(SearchIndex.IndexNames.created, sb.getLabel("sort_img_date_created")));
+        sortMenu.add(new SelectItem(SearchIndex.IndexNames.modified, sb.getLabel("sort_date_mod")));
+        sortMenu.add(new SelectItem(SearchIndex.IndexNames.filename, sb.getLabel("sort_img_filename")));
         setSortMenu(sortMenu);
     }
 

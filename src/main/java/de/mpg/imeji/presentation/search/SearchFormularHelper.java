@@ -23,7 +23,7 @@ public class SearchFormularHelper
         for (SearchElement se : searchGroup.getElements())
         {
             if (se.getType().equals(SEARCH_ELEMENTS.PAIR)
-                    && SearchIndex.names.col.name().equals(((SearchPair)se).getIndex().getName()))
+                    && SearchIndex.IndexNames.col.name().equals(((SearchPair)se).getIndex().getName()))
             {
                 return ((SearchPair)se).getValue();
             }

@@ -48,7 +48,7 @@ public abstract class SuperContainerBean<T> extends
 	public SuperContainerBean() {
 		sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
 		initMenus();
-		selectedSortCriterion = SearchIndex.names.modified.name();
+		selectedSortCriterion = SearchIndex.IndexNames.modified.name();
 		selectedSortOrder = SortOrder.DESCENDING.name();
 		setElementsPerPage(sb.getNumberOfContainersPerPage());
 		try {
@@ -111,17 +111,17 @@ public abstract class SuperContainerBean<T> extends
 	 */
 	protected void initMenus() {
 		sortMenu = new ArrayList<SelectItem>();
-		sortMenu.add(new SelectItem(SearchIndex.names.cont_title.name(), sb
+		sortMenu.add(new SelectItem(SearchIndex.IndexNames.cont_title.name(), sb
 				.getLabel("sort_title")));
-		sortMenu.add(new SelectItem(SearchIndex.names.modified.name(), sb
+		sortMenu.add(new SelectItem(SearchIndex.IndexNames.modified.name(), sb
 				.getLabel("sort_date_mod")));
-		sortMenu.add(new SelectItem(SearchIndex.names.creator.name(), sb
+		sortMenu.add(new SelectItem(SearchIndex.IndexNames.creator.name(), sb
 				.getLabel("sort_author")));
 		filterMenu = new ArrayList<SelectItem>();
 		filterMenu.add(new SelectItem("all", sb
 				.getLabel("all_except_withdrawn")));
 		if (sb.getUser() != null) {
-			sortMenu.add(new SelectItem(SearchIndex.names.status.name(), sb
+			sortMenu.add(new SelectItem(SearchIndex.IndexNames.status.name(), sb
 					.getLabel("sort_status")));
 			filterMenu.add(new SelectItem("my", sb
 					.getLabel("my_except_withdrawn")));
@@ -152,21 +152,21 @@ public abstract class SuperContainerBean<T> extends
 		SearchPair pair = null;
 		if ("my".equals(selectedFilter) ) {
 			pair = new SearchPair(
-					SPARQLSearch.getIndex(SearchIndex.names.user),
+					SPARQLSearch.getIndex(SearchIndex.IndexNames.user),
 					SearchOperators.EQUALS, sb.getUser().getId().toString());
 		} else if ("private".equals(selectedFilter)) {
 			pair = new SearchPair(
-					SPARQLSearch.getIndex(SearchIndex.names.status),
+					SPARQLSearch.getIndex(SearchIndex.IndexNames.status),
 					SearchOperators.EQUALS,
 					Status.PENDING.getUriString());
 		} else if ("public".equals(selectedFilter)) {
 			pair = new SearchPair(
-					SPARQLSearch.getIndex(SearchIndex.names.status),
+					SPARQLSearch.getIndex(SearchIndex.IndexNames.status),
 					SearchOperators.EQUALS,
 					Status.RELEASED.getUriString());
 		} else if ("withdrawn".equals(selectedFilter)) {
 			pair = new SearchPair(
-					SPARQLSearch.getIndex(SearchIndex.names.status),
+					SPARQLSearch.getIndex(SearchIndex.IndexNames.status),
 					SearchOperators.EQUALS,
 					Status.WITHDRAWN.getUriString());
 		}

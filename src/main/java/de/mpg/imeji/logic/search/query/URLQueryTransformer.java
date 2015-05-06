@@ -150,7 +150,7 @@ public class URLQueryTransformer {
 		}
 		if (!"".equals(query) && searchQuery.isEmpty()) {
 			searchQuery.addPair(new SearchPair(SPARQLSearch
-					.getIndex(SearchIndex.names.all), SearchOperators.REGEX,
+					.getIndex(SearchIndex.IndexNames.all), SearchOperators.REGEX,
 					query.trim()));
 		}
 		return searchQuery;
@@ -223,7 +223,7 @@ public class URLQueryTransformer {
 		for (SearchElement element : searchQuery.getElements()) {
 			if (SEARCH_ELEMENTS.PAIR.equals(element.getType())
 					&& ((SearchPair) element).getIndex().getName()
-							.equals(SearchIndex.names.all.name())) {
+							.equals(SearchIndex.IndexNames.all.name())) {
 				return true;
 			}
 		}
@@ -360,7 +360,7 @@ public class URLQueryTransformer {
 	private static String searchPair2PrettyQuery(SearchPair pair) {
 		if (pair.getValue() == null || pair.getValue() == "")
 			return "";
-		if (pair.getIndex().getName().equals(SearchIndex.names.all.name())) {
+		if (pair.getIndex().getName().equals(SearchIndex.IndexNames.all.name())) {
 			return pair.getValue();
 		} else {
 			return indexNamespace2PrettyQuery(pair.getIndex().getNamespace())

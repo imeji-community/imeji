@@ -11,7 +11,7 @@ import de.mpg.imeji.logic.search.query.SimpleQueryFactory;
 import de.mpg.imeji.logic.search.util.CollectionUtils;
 import de.mpg.imeji.logic.search.util.SearchIndexInitializer;
 import de.mpg.imeji.logic.search.vo.*;
-import de.mpg.imeji.logic.search.vo.SearchIndex.names;
+import de.mpg.imeji.logic.search.vo.SearchIndex.IndexNames;
 import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.*;
@@ -188,8 +188,8 @@ public class SPARQLSearch implements Search
      */
     private List<String> simple(SearchPair pair, SortCriterion sortCri, User user, String spaceId)
     {
-        String sparqlQuery = SimpleQueryFactory.getQuery(getModelName(type), getRDFType(type), pair, sortCri, user,  (containerURI != null), getSpecificQuery(user), spaceId);
-        return ImejiSPARQL.exec(sparqlQuery, null);
+    	String sparqlQuery = SimpleQueryFactory.getQuery(getModelName(type), getRDFType(type), pair, sortCri, user,  (containerURI != null), getSpecificQuery(user), spaceId);
+    	return ImejiSPARQL.exec(sparqlQuery, null);
     }
 
     
@@ -315,12 +315,12 @@ public class SPARQLSearch implements Search
     }
 
     /**
-     * Get {@link SearchIndex} from its {@link names}
+     * Get {@link SearchIndex} from its {@link IndexNames}
      * 
      * @param indexname
      * @return
      */
-    public static SearchIndex getIndex(SearchIndex.names indexname)
+    public static SearchIndex getIndex(SearchIndex.IndexNames indexname)
     {
         return getIndex(indexname.name());
     }

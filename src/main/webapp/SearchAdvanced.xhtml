@@ -61,17 +61,23 @@
 			    		</div>
 						
 						<div class="imj_searchSelectbox">
-							<h:selectOneMenu id="selCollection" value="#{g.profileId}" onchange="$(this).next().click();">
+							<h:selectOneMenu id="selProfile" value="#{g.profileId}" onchange="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':changeGroup').click();">
 								<f:selectItems value="#{AdvancedSearchBean.profilesMenu}"/>
 							</h:selectOneMenu>
 							<h:commandButton id="changeGroup" action="#{AdvancedSearchBean.changeGroup}" styleClass="imj_ajaxChangeElementButton">
 								<f:ajax execute="@form" render="@form :imj_searchQueryMessageArea"/>
 								<f:param name="gPos" value="#{gIndex.index}"/>
 							</h:commandButton>
+							
 						</div>
-						
-						
-						
+						<div class="imj_searchSelectbox">
+							<h:panelGroup layout="block" styleClass="imj_searchDetails" rendered="#{!empty g.collectionsMenu}">
+								<h:selectOneMenu id="selCollection" value="#{g.collection}">
+									<f:selectItems value="#{g.collectionsMenu}"/>
+									<f:ajax event="change" execute="@form" render="@form :imj_searchQueryMessageArea "/>
+								</h:selectOneMenu>
+							</h:panelGroup>
+						</div>
 						<ui:repeat id="els" var="el" value="#{g.searchElementForms}" rows="0" varStatus="elIndex">
 							<div class="imj_searchDetails">
 								

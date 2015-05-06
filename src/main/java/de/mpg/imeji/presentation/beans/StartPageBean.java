@@ -109,7 +109,7 @@ public class StartPageBean {
 		if (sq.isEmpty() && searchforItemCreatedForLessThan > 0) {
 			// Search for item which have been for less than n hours
 			sq.addPair(new SearchPair(SPARQLSearch
-					.getIndex(SearchIndex.names.created),
+					.getIndex(SearchIndex.IndexNames.created),
 					SearchOperators.GREATER,
 					getTimeforNDaybeforeNow(searchforItemCreatedForLessThan)));
 			return new SearchResult(ic.search(null, sq, sc, null,

@@ -135,7 +135,7 @@ public class ItemBean {
 		relatedAlbums = new ArrayList<Album>();
 		AlbumController ac = new AlbumController();
 		SearchQuery q = new SearchQuery();
-		q.addPair(new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.item),
+		q.addPair(new SearchPair(SPARQLSearch.getIndex(SearchIndex.IndexNames.item),
 				SearchOperators.EQUALS, getImage().getId().toString()));
 		//TODO NB: check if related albums should be space restricted?
 		relatedAlbums = (List<Album>) ac.loadAlbumsLazy(

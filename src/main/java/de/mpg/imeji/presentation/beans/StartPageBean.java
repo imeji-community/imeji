@@ -138,6 +138,9 @@ public class StartPageBean {
 	 * @param random
 	 */
 	private void loadItemInCaroussel(SearchResult sr, boolean random) {
+		if (sr == null) {
+			return;
+		}
 		ItemController ic = new ItemController();
 		List<String> uris = new ArrayList<String>();
 		if (random) {

@@ -3,10 +3,20 @@
  */
 package de.mpg.imeji.logic.controller;
 
+import static com.google.common.io.Files.copy;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import org.apache.commons.io.FileUtils;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
@@ -14,13 +24,17 @@ import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.ImejiTriple;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
 import de.mpg.imeji.logic.util.IdentifierUtil;
+import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.j2j.helper.DateHelper;
 import de.mpg.j2j.helper.J2JHelper;
 
@@ -39,6 +53,9 @@ public abstract class ImejiController {
 	 */
 	public ImejiController() {
 	}
+
+	
+	public static final String LOGO_STORAGE_SUBDIRECTORY = "/thumbnail";
 
 	/**
 	 * Add the {@link Properties} to an imeji object when it is created
@@ -114,6 +131,21 @@ public abstract class ImejiController {
 				Status.RELEASED.getURI(), o));
 		return triples;
 	}
+	
+	/**
+	 * Get all the triples which need to be updated by an update
+	 * 
+	 * @param uri
+	 * @param securityUri
+	 * @return
+	 */
+	protected List<ImejiTriple> getContainerLogoTriples(String uri, Object o, String logoUrl) {
+		List<ImejiTriple> triples = new ArrayList<ImejiTriple>();
+		triples.add(new ImejiTriple(uri, ImejiNamespaces.CONTAINER_LOGO,
+				URI.create(logoUrl), o));
+		return triples;
+	}
+	
 
 	/**
 	 * Get all the triples which need to be updated by an update
@@ -184,4 +216,106 @@ public abstract class ImejiController {
 		list.add(o);
 		return list;
 	}
+	
+	
+	  /**
+     * Update logo of {@link Container}
+     *
+     * @param Container
+     * @param f
+     * @param user
+     * @return
+     * @throws ImejiException
+	 * @throws URISyntaxException 
+     */
+    public Container updateFile(Container container, File f, User user) throws ImejiException, IOException, URISyntaxException {
+    	String storageUrl = StringHelper.normalizeURI(PropertyReader
+                .getProperty("imeji.instance.url"))
+                + "file/"
+                + container.getIdString() 
+                + LOGO_STORAGE_SUBDIRECTORY
+                + StringHelper.urlSeparator;
+    	
+    	File storageDir = new File(
+                PropertyReader.getProperty("imeji.storage.path") + container.getIdString()+LOGO_STORAGE_SUBDIRECTORY);
+        
+    	String storagePath = StringHelper.normalizePath(storageDir.getAbsolutePath());
+    	if (f != null) {
+	    	container.setLogoUrl(URI.create(generateUrl(ObjectHelper.getId(container.getId()), f.getName(), storageUrl)));
+	        update(f, transformUrlToPath(container.getLogoUrl().toURL().toString(), storageUrl, storagePath));
+    	}
+    	else
+    	{
+    		System.out.println("Deletring file from "+container.getLogoUrl().toURL().toString());
+    		deleteFile(transformUrlToPath(container.getLogoUrl().toURL().toString(), storageUrl, storagePath));
+	    	container.setLogoUrl(null);
+    	}
+        
+        return container;
+    }
+    
+    /**
+     * Delete logo of {@link Container}
+     *
+     * @param Container
+     * @param f
+     * @param user
+     * @return
+     * @throws ImejiException
+	 * @throws URISyntaxException 
+     */
+    public void deleteFile(String fileUrl) throws ImejiException, IOException, URISyntaxException {
+    	File f = new File(fileUrl);
+    	FileUtils.deleteQuietly(f.getParentFile());
+    }
+    
+    /**
+     * Create the URL of the file from its filename, its id, and its resolution.
+     * Important: the filename is decoded, to avoid problems by reading this url
+     *
+     * @param id
+     * @param filename
+     * @return
+     * @throws URISyntaxException 
+     * @throws IOException 
+     * @throws UnsupportedEncodingException
+     */
+    public String generateUrl(String id, String filename, String storageUrl) throws IOException, URISyntaxException {
+        filename = StringHelper.normalizeFilename(filename);
+        return storageUrl + filename;
+    }
+    
+    /**
+     * Copy the file in the file system
+     *
+     * @param toCopy
+     * @param path
+     * @return
+     * @throws IOException
+     */
+    private String update(File toCopy, String path) throws IOException {
+
+        File f = new File(path);
+        if (f.getParentFile().exists()) {
+            //clean space dir
+            FileUtils.cleanDirectory(f.getParentFile());
+        } else {
+            //create space dir
+            f.getParentFile().mkdirs();
+        }
+        copy(toCopy, f);
+        return f.getAbsolutePath();
+    }
+    
+
+    /**
+     * Transform an url to a file system path
+     *
+     * @param url
+     * @return
+     */
+    public String transformUrlToPath(String url, String storageUrl, String storagePath) {
+        return URI.create(url).getPath().replace(URI.create(storageUrl).getPath(), storagePath).replace(
+                StringHelper.urlSeparator, StringHelper.fileSeparator);
+    }
 }

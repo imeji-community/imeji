@@ -13,11 +13,17 @@ import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.upload.IngestImage;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.LinkedList;
 
 @ManagedBean(name = "EditCollectionBean")
@@ -85,6 +91,10 @@ public class EditCollectionBean extends CollectionBean
             BeanHelper.error(sessionBean.getLabel("error") + " : no ID in URL");
         }
         
+        if(UrlHelper.getParameterBoolean("start")){
+    		upload();			
+    	}
+    	
     }
 
     public String save() throws Exception
@@ -111,27 +121,53 @@ public class EditCollectionBean extends CollectionBean
 		         User user = sessionBean.getUser();
 		         //collectionController.updateLazy(getCollection(), user);
 		         
+		         
+		         CollectionImeji icPre = collectionController.retrieve(getCollection().getId(), user);
+		         CollectionImeji ic;
+		        		 
 		         if (isUseMDProfileTemplate() && getProfileTemplate() != null) {
-		         	collectionController.updateLazyWithProfile(getCollection(), getProfileTemplate(), user, 
+		         	ic = collectionController.updateLazyWithProfile(getCollection(), getProfileTemplate(), user, 
 		         							collectionController.getProfileCreationMethod(getSelectedCreationMethod()));
 		         }
 		         else
 		         {
-		            collectionController.updateLazy(getCollection(), user);
+		            ic= collectionController.update(getCollection(), user);
 		         }
 		
+		         if (icPre.getLogoUrl() != null && getCollection().getLogoUrl() == null) {
+		        	 collectionController.updateCollectionLogo(icPre, null, user);
+		         }
+		         //System.out.println("In save edited Collection "+ic.getLogoUrl().toString());
 		         UserController uc = new UserController(user);
 		         uc.update(user, user);
 		         
-		         BeanHelper.info(sessionBean.getMessage("success_collection_save"));
+		         //here separate update for the Logo only, as it will only be allowed by edited collection through the web application
+		         //not yet for REST 
+		         //getIngestImage is inherited from Container!
+
+		         if (getIngestImage()!= null ) {
+		        	 collectionController.updateCollectionLogo(ic, getIngestImage().getFile(), user);
+		        	 setIngestImage(null);
+    	 		 }
+		         
+
+	        	 BeanHelper.info(sessionBean.getMessage("success_collection_save"));
 		         return true;
     	 }
     	 catch (ImejiException e)
     	 {
-    		 e.printStackTrace();
+    		 
     		 BeanHelper.info(sessionBean.getMessage("error_collection_save"));
     		 return false;
-    	 }
+    	 } catch (IOException e) {
+			// TODO Auto-generated catch block
+    		 BeanHelper.info(sessionBean.getMessage("error_collection_logo_save"));
+    		 return false;
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			BeanHelper.info(sessionBean.getMessage("error_collection_logo_uri_save"));
+   		 	return false;
+		}
 
     }
     /**

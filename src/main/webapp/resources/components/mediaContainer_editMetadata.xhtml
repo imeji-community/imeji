@@ -88,6 +88,87 @@
 						</h:outputLabel>
 					</h:panelGroup>
 				</ui:fragment>
+				<!-- Logo upload -->
+				
+				<ui:fragment rendered="#{cc.attrs.formularBean.collectionType and cc.attrs.formularBean.id != null}">
+					<h:panelGroup layout="block" styleClass="imj_collectionLogoUpload">
+						<div class="imj_sectionHeadline">
+							<h4>
+								<h:outputText value=" #{lbl.logo}" />
+								<span class="imj_noDisplay">: </span>
+							</h4>
+						</div>
+						<div class="imj_metadataSet">
+									<div class="imj_metadataValue">
+										<div id="uploader" class="imj_fileUploadContainer imj_singleUpload">
+											<div id="filelist">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
+							
+											<div id="container">
+											    <a id="pickfiles" href="javascript:;">[#{lbl.uploadLogo}]</a>
+											</div>
+						
+											<script type="text/javascript" src="#{Navigation.applicationUrl}resources/plupload/2.1.2/js/plupload.full.min.js"></script>
+											<script type="text/javascript">
+												var uploader = new plupload.Uploader({
+													runtimes : 'html5,flash,silverlight,html4',
+													browse_button : 'pickfiles', // you can pass in id...
+													container: document.getElementById('container'), // ... or DOM Element itself
+													url : location.pathname  + "?start=1",
+													max_file_size : '#{Configuration.uploadMaxFileSize}kb',
+													multi_selection : false,
+													init: {
+														PostInit: function() {
+															document.getElementById('filelist').innerHTML = '';					
+														},
+														
+														FilesAdded: function(up, files) {
+															
+															plupload.each(files, function(file) {
+																if(up.files.length > 1)
+																{
+																	up.removeFile(file);
+																}
+																
+																document.getElementById('filelist').innerHTML = '<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
+															});
+															uploader.start();
+															
+														},
+														
+														UploadProgress: function(up, file) {
+															document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+														},
+														 StateChanged: function(up) {
+																// Called when the state of the queue is changed
+																if( up.state == plupload.STOPPED)
+																	report();
+														},
+													}
+												});
+												
+												uploader.init();
+												function report(){
+													//window.location.href = location.pathname ;
+												}
+											</script>
+										</div>
+									</div>
+								</div>
+								<ui:fragment rendered= "#{cc.attrs.formularBean.collection.logoUrl!=null}">
+								<div class="imj_metadataValue">
+									<img alt="Logo" src="#{cc.attrs.formularBean.collection.logoUrl}" height="50em" class="imj_community_logo"/>
+									<span class="imj_inlineButtonGroup"> 
+										<h:outputText value="#{lbl.removeLogo}"/>
+										<h:commandButton styleClass="imj_buttonRemove_16" title="#{lbl.removeLogo}" action="#{cc.attrs.formularBean.removeContainerLogo}">
+												<f:ajax execute="@form" render="@form" />
+									    </h:commandButton>
+								    </span>
+								</div>
+								</ui:fragment>
+								
+								
+							</h:panelGroup>
+						</ui:fragment>
 				<br/>
 		</c:if> <!-- END profileSelectMode, basicInfoAria -->
 

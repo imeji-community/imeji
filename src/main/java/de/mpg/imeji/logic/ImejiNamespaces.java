@@ -19,6 +19,8 @@ public class ImejiNamespaces {
 	public static final String CREATOR = "http://purl.org/dc/terms/creator";
 	public static final String DATE_CREATED = "http://purl.org/dc/terms/created";
 	public static final String DISCARD_COMMENT = "http://imeji.org/terms/discardComment";
+	public static final String CONTAINER_LOGO = "http://imeji.org/terms/logoUrl";
+	
 	/*
 	 * Metadata
 	 */

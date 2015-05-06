@@ -94,8 +94,10 @@ public class Java2Jena {
 					+ " with a null id");
 		}
 		Resource r = model.getResource(J2JHelper.getId(o).toString());// createResource(o);
+
 		model.removeAll(r, null, null);
 		for (Resource e : getEmbeddedResources(r, o)) {
+
 			model.removeAll(e, null, null);
 		}
 	}

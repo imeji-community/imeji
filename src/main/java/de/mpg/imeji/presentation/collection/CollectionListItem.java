@@ -89,15 +89,18 @@ public class CollectionListItem
             {
                 versionDate = collection.getVersionDate().getTime().toString();
             }
-            // Get first thumbnail of the collection
-            ItemController ic = new ItemController();
-            if (ic.searchAndSetContainerItemsFast(collection, user, 1).getImages().iterator().hasNext())
-            {
-               URI uri = ic.searchAndSetContainerItemsFast(collection, user, 1).getImages().iterator().next();
-               if (uri != null)
-               {
-                 this.thumbnail = new ThumbnailBean(ic.retrieve(uri, user));                
-               }
+            // Get first thumbnail of the collection and modify the image link if the collection has own explicit logo
+	            ItemController ic = new ItemController();
+	            if (ic.searchAndSetContainerItemsFast(collection, user, 1).getImages().iterator().hasNext())
+	            {
+	               URI uri = ic.searchAndSetContainerItemsFast(collection, user, 1).getImages().iterator().next();
+	               if (uri != null)
+	               {
+	                 this.thumbnail = new ThumbnailBean(ic.retrieve(uri, user));
+	                 if (collection.getLogoUrl() != null ) {
+	                	 thumbnail.setLink(collection.getLogoUrl().toString());
+	                 }
+	               }
              }
              // initializations
              initSize(collection, user);

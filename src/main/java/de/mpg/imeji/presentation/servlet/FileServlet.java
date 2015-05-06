@@ -96,6 +96,8 @@ public class FileServlet extends HttpServlet {
 			throws ServletException, IOException {
 		String url = req.getParameter("id");
 		boolean download = "1".equals(req.getParameter("download"));
+		
+		//isSpaceLogo is used also for Collection or Album Logo i.e. for matching to Logo Files which are not items themselves
 		boolean isSpaceLogo = false;
 		if (url == null) {
 			// if the id parameter is null, interpret the whole url as a direct
@@ -105,13 +107,15 @@ public class FileServlet extends HttpServlet {
 		}
 		resp.setContentType(StorageUtils.getMimeType(StringHelper
 				.getFileExtension(url)));
-		if (url.contains("/file/spaces")) {
+		
+		//If its Space Logo or Collection Logo or Album Logo, file servlet should not retrieve item
+		//Regex below assumes in case of collection/album logo, logo file must have extension!
+		if (url.contains("/file/spaces") || url.matches(".*/file/\\w*[^/]/thumbnail/.*\\..+")) {
 			isSpaceLogo = true;
 		}
 		
 		SessionBean session = getSession(req);
 		User user = getUser(req, session);
-		
 		
 		try {
 				Item fileItem = isSpaceLogo? null: getItem(url, user);

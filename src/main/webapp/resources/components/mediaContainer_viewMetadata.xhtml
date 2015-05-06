@@ -79,6 +79,18 @@
 					</p>
 				</div>
 				
+				<ui:fragment rendered="#{cc.attrs.metadataContextBean.logoUrl != null}">
+				<div class="imj_metadataSet" >
+					<label class="imj_metadataLabel" >
+						<h:outputText value="#{lbl.logo}"/>
+						<span class="imj_noDisplay">: </span>
+					</label>
+					<div class="imj_metadataValue">
+									<img alt="Logo" src="#{cc.attrs.metadataContextBean.logoUrl}" height="50em" class="imj_community_logo"/>
+					</div>
+				</div>
+				</ui:fragment>
+				
 				<!-- Authors -->
 				<div class="imj_metadataSet">
 					<label class="imj_metadataLabel">

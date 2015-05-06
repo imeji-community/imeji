@@ -22,21 +22,29 @@ import de.mpg.imeji.logic.search.query.URLQueryTransformer;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.j2j.helper.J2JHelper;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
+import static com.google.common.io.Files.copy;
 import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
 
 /**
@@ -57,6 +65,7 @@ public class CollectionController extends ImejiController {
 	public static enum MetadataProfileCreationMethod {
 		COPY, REFERENCE, NEW;
 	}
+	
 
 	/**
 	 * Default constructor
@@ -303,6 +312,28 @@ public class CollectionController extends ImejiController {
 		writeUpdateProperties(ic, user);
 		writer.update(WriterFacade.toList(ic), user);
 		return retrieve(ic.getId(), user);
+	}
+	
+	/**
+	 * Update a {@link CollectionImeji} (with its Logo)
+	 * 
+	 * @param ic
+	 * @param user
+	 * @throws ImejiException
+	 */
+	public void updateCollectionLogo(CollectionImeji ic, File f, User u) throws ImejiException, IOException, URISyntaxException
+	{
+		
+		ic = (CollectionImeji) updateFile(ic, f, u);
+		if (f != null && f.exists()) {
+
+			// Update the collection as a patch only with collection Logo Triple
+			List<ImejiTriple> triples = getContainerLogoTriples(ic.getId().toString(), ic, ic.getLogoUrl().toString()) ;
+			patch(triples, u, true);
+
+        }
+		
+		
 	}
 
 	/**

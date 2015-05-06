@@ -151,7 +151,7 @@ public class SearchGroupForm {
 		List<SelectItem> l = new ArrayList<SelectItem>();
 		SessionBean session = (SessionBean) BeanHelper
 				.getSessionBean(SessionBean.class);
-		l.add(new SelectItem(null, session.getLabel("select_collection")));
+		l.add(new SelectItem(null, session.getLabel("adv_search_collection_restrict")));
 		for (String uri : cc.search(q, null, -1, 0, session.getUser(),
 				session.getSpaceId()).getResults()) {
 			CollectionImeji c = ObjectLoader.loadCollectionLazy(

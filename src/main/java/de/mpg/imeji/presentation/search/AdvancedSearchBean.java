@@ -3,6 +3,20 @@
  */
 package de.mpg.imeji.presentation.search;
 
+import java.io.IOException;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
+
+import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
+
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.controller.CollectionController;
@@ -10,9 +24,13 @@ import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.query.URLQueryTransformer;
-import de.mpg.imeji.logic.search.util.SearchIndexInitializer;
-import de.mpg.imeji.logic.search.vo.*;
+import de.mpg.imeji.logic.search.vo.SearchGroup;
+import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
+import de.mpg.imeji.logic.search.vo.SearchOperators;
+import de.mpg.imeji.logic.search.vo.SearchPair;
+import de.mpg.imeji.logic.search.vo.SearchQuery;
+import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -26,16 +44,6 @@ import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
-
-import org.apache.log4j.Logger;
-
-import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
-
-import java.io.IOException;
-import java.net.URI;
-import java.util.*;
-import java.util.regex.Pattern;
 
 /**
  * Java bean for the advanced search page
@@ -115,7 +123,6 @@ public class AdvancedSearchBean {
 	 * @throws Exception
 	 */
 	public void initForm(SearchQuery searchQuery) throws Exception {
-		loadProfilesAndInitMenu(loadCollections());
 		Map<String, MetadataProfile> profs = loadProfilesAndInitMenu();
 		((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class))
 				.init1((new ArrayList<MetadataProfile>(profs.values())));
@@ -137,56 +144,11 @@ public class AdvancedSearchBean {
 	}
 
 	/**
-	 * Load all {@link CollectionImeji} which are searchable for the current
-	 * {@link User}
+	 * Load all available profiles
 	 * 
 	 * @return
-	 * @throws Exception
+	 * @throws ImejiException
 	 */
-	private List<CollectionImeji> loadCollections() throws Exception {
-		CollectionController cc = new CollectionController();
-		List<CollectionImeji> l = new ArrayList<>();
-		SortCriterion sortCriterion = new SortCriterion();
-		sortCriterion.setIndex(SPARQLSearch
-				.getIndex(SearchIndex.IndexNames.cont_title.name()));
-		sortCriterion.setSortOrder(SortOrder.valueOf(SortOrder.DESCENDING
-				.name()));
-		for (String uri : cc.search(new SearchQuery(), sortCriterion, -1, 0,
-				session.getUser(), session.getSelectedSpaceString())
-				.getResults()) {
-			CollectionImeji c = ObjectLoader.loadCollectionLazy(
-					URI.create(uri), session.getUser());
-			l.add(c);
-		}
-		return l;
-	}
-
-	/**
-	 * Load the {@link MetadataProfile} of the {@link Collection} and init the
-	 * collectionmenu
-	 * 
-	 * @param collections
-	 * @return
-	 */
-	private Map<String, MetadataProfile> loadProfilesAndInitMenu(
-			Collection<CollectionImeji> collections) {
-		collectionsMenu = new ArrayList<SelectItem>();
-		collectionsMenu.add(new SelectItem(null, session
-				.getLabel("select_collection")));
-		Map<String, MetadataProfile> map = new HashMap<String, MetadataProfile>();
-		for (CollectionImeji c : collections) {
-			MetadataProfile p = ObjectLoader.loadProfile(c.getProfile(),
-					session.getUser());
-			if (p != null && p.getStatements() != null
-					&& p.getStatements().size() > 0 && !isEmpty(c)) {
-				map.put(p.getId().toString(), p);
-				collectionsMenu.add(new SelectItem(p.getId().toString(), c
-						.getMetadata().getTitle()));
-			}
-		}
-		return map;
-	}
-
 	private Map<String, MetadataProfile> loadProfilesAndInitMenu()
 			throws ImejiException {
 		profilesMenu = new ArrayList<SelectItem>();
@@ -293,7 +255,8 @@ public class AdvancedSearchBean {
 
 	/**
 	 * Change the {@link SearchGroup}
-	 * @throws ImejiException 
+	 * 
+	 * @throws ImejiException
 	 */
 	public void changeGroup() throws ImejiException {
 		int gPos = Integer.parseInt(FacesContext.getCurrentInstance()

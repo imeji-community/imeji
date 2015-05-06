@@ -70,9 +70,14 @@
 							</h:commandButton>
 							
 						</div>
-						
-						
-						
+						<div class="imj_searchSelectbox">
+							<h:panelGroup layout="block" styleClass="imj_searchDetails" rendered="#{!empty g.collectionsMenu}">
+								<h:selectOneMenu id="selCollection" value="#{g.collection}">
+									<f:selectItems value="#{g.collectionsMenu}"/>
+									<f:ajax event="change" execute="@form" render="@form :imj_searchQueryMessageArea "/>
+								</h:selectOneMenu>
+							</h:panelGroup>
+						</div>
 						<ui:repeat id="els" var="el" value="#{g.searchElementForms}" rows="0" varStatus="elIndex">
 							<div class="imj_searchDetails">
 								

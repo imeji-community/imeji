@@ -132,15 +132,18 @@ public class SearchForm {
 	 */
 	public void addElement(int groupPos, int elPos) {
 		SearchGroupForm group = groups.get(groupPos);
-		SearchMetadataForm fe = new SearchMetadataForm();
-		String namespace = (String) group.getStatementMenu().get(0).getValue();
-		fe.setNamespace(namespace);
-		fe.initStatement(profilesMap.get(group.getProfileId()), namespace);
-		fe.initOperatorMenu();
-		if (elPos >= group.getSearchElementForms().size()) {
-			group.getSearchElementForms().add(fe);
-		} else {
-			group.getSearchElementForms().add(elPos + 1, fe);
+		if (group.getStatementMenu().size() > 0) {
+			SearchMetadataForm fe = new SearchMetadataForm();
+			String namespace = (String) group.getStatementMenu().get(0)
+					.getValue();
+			fe.setNamespace(namespace);
+			fe.initStatement(profilesMap.get(group.getProfileId()), namespace);
+			fe.initOperatorMenu();
+			if (elPos >= group.getSearchElementForms().size()) {
+				group.getSearchElementForms().add(fe);
+			} else {
+				group.getSearchElementForms().add(elPos + 1, fe);
+			}
 		}
 	}
 

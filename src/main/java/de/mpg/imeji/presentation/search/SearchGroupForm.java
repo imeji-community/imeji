@@ -47,8 +47,15 @@ public class SearchGroupForm {
 	 * Default Constructor
 	 */
 	public SearchGroupForm() {
+		reset();
+	}
+
+	private void reset() {
+		profileId = null;
+		collectionId = null;
 		elements = new ArrayList<SearchMetadataForm>();
 		statementMenu = new ArrayList<SelectItem>();
+		collectionsMenu = new ArrayList<SelectItem>();
 	}
 
 	/**
@@ -64,7 +71,8 @@ public class SearchGroupForm {
 		this();
 		if (profile != null) {
 			this.setProfileId(profile.getId().toString());
-			this.collectionId = SearchFormularHelper.getCollectionId(searchGroup);
+			this.collectionId = SearchFormularHelper
+					.getCollectionId(searchGroup);
 			SearchGroup metadataGroup;
 			if (this.collectionId != null) {
 				// case where: query = (collection AND (metadata))
@@ -120,17 +128,21 @@ public class SearchGroupForm {
 	 * @throws ImejiException
 	 */
 	public void initStatementsMenu(MetadataProfile p) throws ImejiException {
-		if (p.getStatements() != null) {
-			for (Statement st : p.getStatements()) {
-				String stName = ((MetadataLabels) BeanHelper
-						.getSessionBean(MetadataLabels.class))
-						.getInternationalizedLabels().get(st.getId());
-				statementMenu
-						.add(new SelectItem(st.getId().toString(), stName));
+		if (p != null) {
+			if (p.getStatements() != null) {
+				for (Statement st : p.getStatements()) {
+					String stName = ((MetadataLabels) BeanHelper
+							.getSessionBean(MetadataLabels.class))
+							.getInternationalizedLabels().get(st.getId());
+					statementMenu.add(new SelectItem(st.getId().toString(),
+							stName));
+				}
 			}
+			setCollectionsMenu(getCollectionsMenu(p));
+		} else {
+			reset();
 		}
 
-		setCollectionsMenu(getCollectionsMenu(p));
 	}
 
 	/**
@@ -151,7 +163,8 @@ public class SearchGroupForm {
 		List<SelectItem> l = new ArrayList<SelectItem>();
 		SessionBean session = (SessionBean) BeanHelper
 				.getSessionBean(SessionBean.class);
-		l.add(new SelectItem(null, session.getLabel("adv_search_collection_restrict")));
+		l.add(new SelectItem(null, session
+				.getLabel("adv_search_collection_restrict")));
 		for (String uri : cc.search(q, null, -1, 0, session.getUser(),
 				session.getSpaceId()).getResults()) {
 			CollectionImeji c = ObjectLoader.loadCollectionLazy(

@@ -282,7 +282,7 @@ public class SingleUploadBean implements Serializable{
 
 		CollectionController cc = new CollectionController();
 		SearchQuery sq = new SearchQuery();
-		SearchPair sp = new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.user), SearchOperators.EQUALS, user.getId().toString());
+		SearchPair sp = new SearchPair(SPARQLSearch.getIndex(SearchIndex.IndexNames.user), SearchOperators.EQUALS, user.getId().toString());
 		sq.addPair(sp);
         SortCriterion sortCriterion = new SortCriterion();
         sortCriterion.setIndex(SPARQLSearch.getIndex("user"));

@@ -253,7 +253,7 @@ public class ProfileController extends ImejiController {
 		Search search = SearchFactory.create(SearchType.PROFILE);
 		// Automatically sort by profile title
 		SortCriterion sortCri = new SortCriterion(
-				SPARQLSearch.getIndex(SearchIndex.names.prof.name()),
+				SPARQLSearch.getIndex(SearchIndex.IndexNames.prof.name()),
 				SortOrder.ASCENDING);
 		SearchResult result = search.search(query, sortCri, user, null);
 		return result;
@@ -272,7 +272,7 @@ public class ProfileController extends ImejiController {
 
 		// Automatically sort by profile title
 		SortCriterion sortCri = new SortCriterion(
-				SPARQLSearch.getIndex(SearchIndex.names.prof.name()),
+				SPARQLSearch.getIndex(SearchIndex.IndexNames.prof.name()),
 				SortOrder.ASCENDING);
 		SearchResult result;
 		List<MetadataProfile> l = new ArrayList<MetadataProfile>();

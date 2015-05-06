@@ -74,7 +74,7 @@ public class PrivateBean extends SuperContainerBean<CollectionListItem> {
 		CollectionController cc = new CollectionController();
 		SearchQuery searchQuery = new SearchQuery();
 		SearchPair sp = new SearchPair(
-				SPARQLSearch.getIndex(SearchIndex.names.user),
+				SPARQLSearch.getIndex(SearchIndex.IndexNames.user),
 				SearchOperators.EQUALS, user.getId().toString());
 		searchQuery.addPair(sp);
 		SortCriterion sortCriterion = new SortCriterion();

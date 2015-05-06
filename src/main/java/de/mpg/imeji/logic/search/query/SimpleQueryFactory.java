@@ -428,11 +428,15 @@ public class SimpleQueryFactory {
 		if (pair != null
 				&& SearchIndex.IndexNames.status.name().equals(
 						pair.getIndex().getName())) {
-			if (Status.PENDING.getUriString().equals(pair.getValue())) {
+			if (Status.PENDING.getUriString().equals(pair.getValue())
+					|| Status.PENDING.name().equalsIgnoreCase(pair.getValue())) {
 				return Status.PENDING;
-			} else if (Status.RELEASED.getUriString().equals(pair.getValue())) {
+			} else if (Status.RELEASED.getUriString().equals(pair.getValue())
+					|| Status.RELEASED.name().equalsIgnoreCase(pair.getValue())) {
 				return Status.RELEASED;
-			} else if (Status.WITHDRAWN.getUriString().equals(pair.getValue())) {
+			} else if (Status.WITHDRAWN.getUriString().equals(pair.getValue())
+					|| Status.WITHDRAWN.name()
+							.equalsIgnoreCase(pair.getValue())) {
 				return Status.WITHDRAWN;
 			}
 		}

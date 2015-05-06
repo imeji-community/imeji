@@ -2,8 +2,7 @@
 				xmlns="http://www.w3.org/1999/xhtml"
 				xmlns:ui="http://java.sun.com/jsf/facelets"
 				xmlns:h="http://java.sun.com/jsf/html"
-				xmlns:f="http://java.sun.com/jsf/core"
-		>
+				xmlns:f="http://java.sun.com/jsf/core">
 	
 	<ui:param name="headline" value="#{lbl.search_advanced}"/>
 		
@@ -21,9 +20,7 @@
 	</ui:define>
 	
 	<ui:define name="mainContent">
-		<script>
-
-		</script>
+		
 		<ui:include src="./include/History.xhtml"/>
 		
 		<!-- AJAX Wrapper - START -->
@@ -46,6 +43,18 @@
 				<ui:repeat id="groups" var="g" value="#{AdvancedSearchBean.formular.groups}" offset="0" varStatus="gIndex">
 					
 					<div class="imj_searchUnit">
+						
+						<div class="imj_inlineButtonGroup">
+							<h:commandButton  value="" action="#{AdvancedSearchBean.addGroup}" render="imj_ajaxWrapper :imj_searchQueryMessageArea" styleClass="imj_buttonAdd_16" title="#{lbl.add_collection}">
+								<f:ajax execute="@form" render="@form :imj_searchQueryMessageArea"/>
+								<f:param name="gPos" value="#{gIndex.index}"/>
+							</h:commandButton>
+							<h:commandButton value="" action="#{AdvancedSearchBean.removeGroup}" render="imj_ajaxWrapper :imj_searchQueryMessageArea" styleClass="imj_buttonRemove_16" title="#{lbl.remove_collection}">
+								<f:ajax execute="@form" render="@form :imj_searchQueryMessageArea"/>
+								<f:param name="gPos" value="#{gIndex.index}"/>
+							</h:commandButton>
+						</div>
+						
 						<div class="imj_logicalConnector">
 				    		<h:outputLabel value="#{lbl.or_big}" rendered="#{gIndex.index > 0}"/>
 				    		<h:outputText value="&#160;" rendered="#{gIndex.index == 0}"/>
@@ -62,107 +71,118 @@
 							
 						</div>
 						
-						<div class="imj_inlineButtonGroup">
-							<h:commandButton  value="" action="#{AdvancedSearchBean.addGroup}" render="imj_ajaxWrapper :imj_searchQueryMessageArea" styleClass="imj_buttonAdd_16" title="#{lbl.add_collection}">
-								<f:ajax execute="@form" render="@form :imj_searchQueryMessageArea"/>
-								<f:param name="gPos" value="#{gIndex.index}"/>
-							</h:commandButton>
-							<h:commandButton value="" action="#{AdvancedSearchBean.removeGroup}" render="imj_ajaxWrapper :imj_searchQueryMessageArea" styleClass="imj_buttonRemove_16" title="#{lbl.remove_collection}">
-								<f:ajax execute="@form" render="@form :imj_searchQueryMessageArea"/>
-								<f:param name="gPos" value="#{gIndex.index}"/>
-							</h:commandButton>
-						</div>
-						<h:panelGroup layout="block" styleClass="imj_searchDetails" rendered="#{!empty g.collectionsMenu}">
-							<h:selectOneMenu id="selCollection" value="#{g.collection}">
-								<f:selectItems value="#{g.collectionsMenu}"/>
-								<f:ajax event="change" execute="@form" render="@form :imj_searchQueryMessageArea "/>
-							</h:selectOneMenu>
-						</h:panelGroup>
+						
 						
 						<ui:repeat id="els" var="el" value="#{g.searchElementForms}" rows="0" varStatus="elIndex">
 							<div class="imj_searchDetails">
-								<h:panelGroup class="imj_logicalSearchGroup">
-									<h:selectOneMenu id="selNot" value="#{el.inverse}" styleClass="imj_notSelector" onchange="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();">
-										<f:selectItem itemValue="false" itemLabel="--"/>
-										<f:selectItem itemValue="true" itemLabel="#{lbl.NOT}"/>
-									</h:selectOneMenu>
-								</h:panelGroup>
-								<h:panelGroup class="imj_searchStatement">	
+								
+								<div class="imj_searchStatement">	
 									<h:selectOneMenu id="selStatement" value="#{el.namespace}" onchange="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':changeEl').click();">
 										<f:selectItems value="#{g.statementMenu}"/>
 									</h:selectOneMenu>
-								</h:panelGroup>
+								</div>
 								
-								<h:outputLabel value="#{lbl.is}" styleClass="imj_compareLabel"/>								
+								<div class="imj_logicalSearchGroup">
+									<h:selectOneMenu id="selNot" value="#{el.inverse}" styleClass="imj_notSelector" onchange="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();">
+										<f:selectItem itemValue="false" itemLabel="#{lbl.is}"/>
+										<f:selectItem itemValue="true" itemLabel="#{lbl.is} #{lbl.NOT}"/>
+									</h:selectOneMenu>
+								</div>
 								
 								<h:outputText value=" = " styleClass="imj_noDisplay" rendered="#{el.operatorMenu == null}"/>
 								
-								<h:panelGroup class="imj_logicalSearchGroup">
+								<div class="imj_logicalSearchGroup">
 									<h:selectOneMenu id="selFilter" value="#{el.operator}" rendered="#{el.operatorMenu != null}" onchange="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();">
 										<f:selectItems value="#{el.operatorMenu}"/>
 									</h:selectOneMenu>
-								</h:panelGroup>	
-								<h:panelGroup styleClass="imj_searchInput">
+								</div>
+								
+								<div class="imj_searchInput">
 									<ui:fragment rendered="#{el.predefinedValues == null}">
-										<span class="imj_searchInputValue">
-											<h:inputText id="input" value="#{el.searchValue}" onkeyup="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();">
-												<f:validateRegex pattern="[0-9]+" disabled="#{el.type != 'DATE'}" />										
-											</h:inputText>
-											<h:outputText value="#{lbl.name}" rendered="#{el.type == 'GEOLOCATION' or el.type == 'LICENSE' or el.type == 'LINK'}"/>
-											<h:outputText value="#{lbl.complete_name}" rendered="#{el.type == 'CONE_PERSON'}"/>
-										</span>
-										<ui:fragment rendered="#{el.type == 'CONE_PERSON'}">
-											<div class="imj_searchInputValue">
-												<h:inputText id="inputFamilyName" value="#{el.familyName}" onkeyup="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();"/>
-												<h:outputLabel value="#{lbl.family_name}" for="inputFamilyName" />
-											</div>
-											<div class="imj_searchInputValue">
-												<h:inputText id="inputGivenName" value="#{el.givenName}" onkeyup="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();"/>
-												<h:outputLabel value="#{lbl.first_name}" for="inputGivenName" />
-											</div>
-											<div class="imj_searchInputValue">
-												<h:inputText id="inputConeUri" value="#{el.uri}" onkeyup="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();"/>
-												<h:outputLabel value="#{lbl.identifier}" />
-											</div>
-												<div class="imj_searchInputValue">
-												<h:inputText id="inputOrgName" value="#{el.orgName}" onkeyup="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();"/>
-												<h:outputLabel value="#{lbl.organization}" />
-											</div>
+										
+										<ui:fragment rendered="#{el.type != 'CONE_PERSON' and el.type != 'GEOLOCATION' and el.type != 'LICENSE' and el.type != 'LINK'}">
+											<h:panelGroup styleClass="imj_searchInputValue">
+												<h:inputText id="input" value="#{el.searchValue}" onkeyup="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();">
+													<f:validateRegex pattern="[0-9]+" disabled="#{el.type != 'DATE'}" />										
+												</h:inputText>
+												<h:outputText value="#{lbl.name}" rendered="#{el.type == 'GEOLOCATION' or el.type == 'LICENSE' or el.type == 'LINK'}"/>
+											</h:panelGroup>
 										</ui:fragment>
+										
+										<ui:fragment rendered="#{el.type == 'CONE_PERSON'}">
+											<ul class="imj_searchInputList">
+												<li class="imj_searchInputValue">
+													<h:inputText id="inputCP" value="#{el.searchValue}" onkeyup="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();"/>
+													<h:outputLabel value=" #{lbl.complete_name}" for="inputCP" rendered="#{el.type == 'CONE_PERSON'}"/>
+												</li>
+												<li class="imj_searchInputValue">
+													<h:inputText id="inputFamilyName" value="#{el.familyName}" onkeyup="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();"/>
+													<h:outputLabel value=" #{lbl.family_name}" for="inputFamilyName" />
+												</li>
+												<li class="imj_searchInputValue">
+													<h:inputText id="inputGivenName" value="#{el.givenName}" onkeyup="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();"/>
+													<h:outputLabel value=" #{lbl.first_name}" for="inputGivenName" />
+												</li>
+												<li class="imj_searchInputValue">
+													<h:inputText id="inputConeUri" value="#{el.uri}" onkeyup="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();"/>
+													<h:outputLabel value=" #{lbl.identifier}" for="inputConeUri"/>
+												</li>
+												<li class="imj_searchInputValue">
+													<h:inputText id="inputOrgName" value="#{el.orgName}" onkeyup="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();"/>
+													<h:outputLabel value=" #{lbl.organization}" for="inputOrgName"/>
+												</li>
+											</ul>
+										</ui:fragment>
+										
 										<ui:fragment rendered="#{el.type == 'GEOLOCATION'}">
-											<div class="imj_searchInputValue">
-												<h:inputText id="inputLatitude" value="#{el.latitude}" onkeyup="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();"/>
-												<h:outputLabel value="#{lbl.geolocation_latitude}" />
-											</div>
-											<div class="imj_searchInputValue">
-												<h:inputText id="inputlongitude" value="#{el.longitude}" onkeyup="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();"/>
-												<h:outputLabel value="#{lbl.geolocation_longitude}" />
-											</div>
+											<ul class="imj_searchInputList">
+												<li class="imj_searchInputValue">
+													<h:inputText id="inputGEO" value="#{el.searchValue}" onkeyup="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();"/>
+													<h:outputLabel value="#{lbl.name}" for="inputGEO"/>
+												</li>
+												<li class="imj_searchInputValue">
+													<h:inputText id="inputLatitude" value="#{el.latitude}" onkeyup="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();"/>
+													<h:outputLabel value="#{lbl.geolocation_latitude}" for="inputLatitude"/>
+												</li>
+												<li class="imj_searchInputValue">
+													<h:inputText id="inputlongitude" value="#{el.longitude}" onkeyup="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();"/>
+													<h:outputLabel value="#{lbl.geolocation_longitude}" for="inputlongitude"/>
+												</li>
+											</ul>
 										</ui:fragment>
 										<ui:fragment rendered="#{el.type == 'LICENSE' or el.type == 'LINK'}">
-											<div class="imj_searchInputValue">
-												<h:inputText id="inputUri" value="#{el.uri}" onkeyup="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();"/>
-												<h:outputLabel value="#{lbl.url}" />
-											</div>
+											<ul class="imj_searchInputList">
+												<li class="imj_searchInputValue">
+													<h:inputText id="inputLICLINK" value="#{el.searchValue}" onkeyup="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();"/>
+													<h:outputLabel value="#{lbl.name}" for="inputLICLINK"/>
+												</li>
+												<li class="imj_searchInputValue">
+													<h:inputText id="inputUri" value="#{el.uri}" onkeyup="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();"/>
+													<h:outputLabel value="#{lbl.url}" for="inputUri"/>
+												</li>
+											</ul>
 										</ui:fragment>									
 									</ui:fragment>
+									
 									<h:selectOneMenu id="select" value="#{el.searchValue}" rendered="#{el.predefinedValues != null}" onchange="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();">
 										<f:selectItems value="#{el.predefinedValues}"/>
 									</h:selectOneMenu>
-									
+								</div> <!-- END of imj_searchInput -->
+								
+								<div class="imj_submitPanel">
 									<h:panelGroup styleClass="imj_inlineButtonGroup"> <!-- This panelGroup is needed for IE -->
-									<h:commandButton value="" action="#{AdvancedSearchBean.addElement}" render="imj_ajaxWrapper, imj_searchQueryMessageArea" styleClass="imj_buttonAdd_16">
-										<f:ajax execute="@form" render="@form :imj_searchQueryMessageArea"/>
-										<f:param name="gPos" value="#{gIndex.index}"/>
-										<f:param name="elPos" value="#{elIndex.index}"/>
-									</h:commandButton>
-									<h:commandButton value="" action="#{AdvancedSearchBean.removeElement}" render="imj_ajaxWrapper, imj_searchQueryMessageArea" styleClass="imj_buttonRemove_16">
-										<f:ajax execute="@form" render="@form :imj_searchQueryMessageArea"/>
-										<f:param name="gPos" value="#{gIndex.index}"/>
-										<f:param name="elPos" value="#{elIndex.index}"/>
-									</h:commandButton>
-								</h:panelGroup>
-								</h:panelGroup>
+										<h:commandButton value="" action="#{AdvancedSearchBean.addElement}" render="imj_ajaxWrapper, imj_searchQueryMessageArea" styleClass="imj_buttonAdd_16">
+											<f:ajax execute="@form" render="@form :imj_searchQueryMessageArea"/>
+											<f:param name="gPos" value="#{gIndex.index}"/>
+											<f:param name="elPos" value="#{elIndex.index}"/>
+										</h:commandButton>
+										<h:commandButton value="" action="#{AdvancedSearchBean.removeElement}" render="imj_ajaxWrapper, imj_searchQueryMessageArea" styleClass="imj_buttonRemove_16">
+											<f:ajax execute="@form" render="@form :imj_searchQueryMessageArea"/>
+											<f:param name="gPos" value="#{gIndex.index}"/>
+											<f:param name="elPos" value="#{elIndex.index}"/>
+										</h:commandButton>
+									</h:panelGroup>
+								</div>
 								
 								<h:commandButton type="submit" id="changeEl" action="#{AdvancedSearchBean.changeElement}" styleClass="imj_ajaxChangeElementButton">
 									<f:ajax execute="@form" render="@form :imj_searchQueryMessageArea"/>
@@ -174,29 +194,30 @@
 									<f:param name="gPos" value="#{gIndex.index}"/>
 									<f:param name="elPos" value="#{elIndex.index}"/>
 								</h:commandButton>
-								
-								<h:panelGroup layout="block" styleClass="imj_logicalDetailConnector" rendered="#{elIndex.index &lt; (g.size - 1)}">
-									<h:selectOneMenu id="selLogicalRelation" value="#{el.logicalRelation}" styleClass="tiny_marginLExcl small_area0" onchange="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();">
-										<f:selectItems value="#{AdvancedSearchBean.operatorsMenu}"/>
-									</h:selectOneMenu>
-								</h:panelGroup>
-							</div>
+							</div> <!-- END of imj_searchDetails -->
 							
+							<h:panelGroup layout="block" styleClass="imj_logicalDetailConnector" rendered="#{elIndex.index &lt; (g.size - 1)}">
+								<h:selectOneMenu id="selLogicalRelation" value="#{el.logicalRelation}" styleClass="tiny_marginLExcl small_area0" onchange="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();">
+									<f:selectItems value="#{AdvancedSearchBean.operatorsMenu}"/>
+								</h:selectOneMenu>
+							</h:panelGroup>
 						</ui:repeat>
 						
-					</div>
+					</div> <!-- END of imj_searchUnit -->
+					
 				</ui:repeat>
+				
+				
 				<!-- submit panel -->
-				<span class="imj_submitPanel">
+				<div class="imj_submitPanel">
 					<h:outputLink value="#{Navigation.searchUrl}" styleClass="imj_cancelButton">
 						<h:outputText value="#{lbl.clear_all_values}" />
 					</h:outputLink>
 					<h:commandButton id="submit"  value="#{lbl.search}" type="submit" action="#{AdvancedSearchBean.search}" styleClass="imj_submitButton">
 						<f:ajax execute="@form" render=":imj_pageMessageArea"/>
 					</h:commandButton>
-				</span>
+				</div>
 			</h:form>
 		</h:panelGroup>
-		
 	</ui:define>
 </ui:composition>

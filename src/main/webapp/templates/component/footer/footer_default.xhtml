@@ -16,6 +16,16 @@
 					</h:outputLink>
 				</div>
 			</div>
+			<div class="imj_poweredby_imprint">
+	 		    <h:outputLink title="#{lbl.imprint}" target="_blank" value="#{Configuration.impressumUrl}" rendered="#{Configuration.impressumText==''}">
+	 		    	<h:outputText value="#{lbl.imprint}" />
+	 		    </h:outputLink>
+	 		    <h:outputLink title="#{lbl.imprint}" target="_blank" value="#{Navigation.applicationSpaceUrl}imprint" rendered="#{Configuration.impressumText!=''}">
+	 		    	<h:outputText value="#{lbl.imprint}" />
+	 		    </h:outputLink>
+				<h:outputText value=" - #{SessionBean.version} " rendered="#{SessionBean.user.admin}"/>
+			</div>
+
 			<div class="imj_poweredby_institution">
 				<ui:fragment rendered="#{Configuration.startPageFooterLogos != ''}">
 							<h:outputText value="#{Configuration.startPageFooterLogos}" escape="false"/>
@@ -27,7 +37,6 @@
 				</ui:fragment>
 
 			</div>
-			<h:outputText value=" - #{SessionBean.version} " rendered="#{SessionBean.user.admin}"/>
 		</div>
 		<!-- end: footer section -->
 	</h:panelGroup>

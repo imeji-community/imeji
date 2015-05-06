@@ -116,7 +116,7 @@ public class AlbumBean extends ContainerBean
     {
      try {
 	    	if (id != null)
-	        {
+	    	{
 	            album = ObjectLoader.loadAlbumLazy(ObjectHelper.getURI(Album.class, id), sessionBean.getUser());
 	            if (album != null)
 	            {
@@ -126,7 +126,7 @@ public class AlbumBean extends ContainerBean
 	                if (sessionBean.getActiveAlbum() != null && sessionBean.getActiveAlbum().getId().equals(album.getId()))
 	                {
 	                    active = true;
-	                    sessionBean.setActiveAlbum(album);
+//	                    sessionBean.setActiveAlbum(album);
 	                }
 	                if (getPrivateCount() != 0)
 	                {

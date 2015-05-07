@@ -41,9 +41,11 @@
 						<h:outputLink styleClass="imj_removeFacetButton" value="#{Navigation.browseUrl}?q=#{filter.removeQuery}" rendered="#{cc.attrs.facetBean.navigationString == SessionBean.getPrettySpacePage('pretty:browse')}">
 							<h:outputText value="[x]"/>
 						</h:outputLink>
-						<h:outputLink styleClass="imj_removeFacetButton" value="#{Navigation.collectionUrl}#{cc.attrs.facetBean.id}/#{Navigation.browsePath}?q=#{filter.removeQuery}" rendered="#{cc.attrs.facetBean.navigationString != SessionBean.getPrettySpacePage('pretty:browse')}">
-							<h:outputText value="[x]"/>
-						</h:outputLink>
+						<ui:fragment rendered="#{cc.attrs.facetBean.navigationString != SessionBean.getPrettySpacePage('pretty:browse')}">
+							<h:outputLink styleClass="imj_removeFacetButton" value="#{Navigation.collectionUrl}#{cc.attrs.facetBean.id}/#{Navigation.browsePath}?q=#{filter.removeQuery}">
+								<h:outputText value="[x]"/>
+							</h:outputLink>
+						</ui:fragment>
 					</ui:repeat>
 					
 					<ui:fragment rendered="#{!Auth.loggedIn}">

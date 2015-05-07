@@ -101,7 +101,7 @@ public class CollectionItemsBean extends ItemsBean
     @Override
     public String getNavigationString()
     {
-        return "pretty:collectionBrowse";
+        return sb.getPrettySpacePage("pretty:collectionBrowse");
     }
 
     @Override

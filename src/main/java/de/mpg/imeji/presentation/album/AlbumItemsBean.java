@@ -66,7 +66,7 @@ public class AlbumItemsBean extends ItemsBean
     @Override
     public String getNavigationString()
     {
-        return "pretty:albumBrowse";
+        return sb.getPrettySpacePage("pretty:albumBrowse");
     }
 
     @Override

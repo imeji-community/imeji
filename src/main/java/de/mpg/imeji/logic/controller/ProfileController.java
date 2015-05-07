@@ -266,7 +266,7 @@ public class ProfileController extends ImejiController {
 	 * @return
 	 * @throws ImejiException
 	 */
-	public List<MetadataProfile> search(User user, String q)
+	public List<MetadataProfile> search(User user, String q, String spaceId)
 			throws ImejiException {
 		Search search = SearchFactory.create(SearchType.PROFILE);
 
@@ -279,7 +279,7 @@ public class ProfileController extends ImejiController {
 		try {
 			result = search.search(
 					!isNullOrEmptyTrim(q) ? URLQueryTransformer
-							.parseStringQuery(q) : null, sortCri, user, null);
+							.parseStringQuery(q) : null, sortCri, user, spaceId);
 			for (String uri : result.getResults()) {
 				l.add(retrieve(URI.create(uri), user));
 			}
@@ -296,8 +296,8 @@ public class ProfileController extends ImejiController {
 	 * @return
 	 * @throws ImejiException
 	 */
-	public List<MetadataProfile> search(User user) throws ImejiException {
-		return search(user, "");
+	public List<MetadataProfile> search(User user, String spaceId) throws ImejiException {
+		return search(user, "", spaceId);
 	}
 
 	/**

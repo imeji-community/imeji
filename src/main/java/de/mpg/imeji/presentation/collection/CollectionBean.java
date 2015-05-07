@@ -120,7 +120,7 @@ public abstract class CollectionBean extends ContainerBean {
         try
         {    
             ProfileController pc = new ProfileController();
-            List<MetadataProfile> profiles = pc.search(sessionBean.getUser());
+            List<MetadataProfile> profiles = pc.search(sessionBean.getUser(), sessionBean.getSpaceId());
             String profileTitle="";
         	useMDProfileTemplate = false;
             MetadataProfile defaultMetadataProfile = pc.retrieveDefaultProfile();
@@ -534,7 +534,7 @@ public abstract class CollectionBean extends ContainerBean {
     {    
           ProfileController pc = new ProfileController();
           try {
-              return (pc.search(sessionBean.getUser()).size()>0);        	  
+              return (pc.search(sessionBean.getUser(), sessionBean.getSpaceId()).size()>0);        	  
           }
           catch (ImejiException e) {
         	  return false;

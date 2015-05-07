@@ -166,7 +166,7 @@ public class SearchGroupForm {
 		l.add(new SelectItem(null, session
 				.getLabel("adv_search_collection_restrict")));
 		for (String uri : cc.search(q, null, -1, 0, session.getUser(),
-				session.getSpaceId()).getResults()) {
+				session.getSelectedSpaceString()).getResults()) {
 			CollectionImeji c = ObjectLoader.loadCollectionLazy(
 					URI.create(uri), session.getUser());
 			l.add(new SelectItem(c.getId().toString(), c.getMetadata()

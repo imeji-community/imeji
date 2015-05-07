@@ -155,9 +155,9 @@ public class AdvancedSearchBean {
 		profilesMenu.add(new SelectItem(null, session
 				.getLabel("select_profile")));
 		ProfileController controller = new ProfileController();
-
 		Map<String, MetadataProfile> map = new HashMap<String, MetadataProfile>();
-		for (MetadataProfile p : controller.search(session.getUser())) {
+		for (MetadataProfile p : controller.search(session.getUser(),
+				session.getSelectedSpaceString())) {
 			if (p != null && p.getStatements() != null
 					&& p.getStatements().size() > 0) {
 				map.put(p.getId().toString(), p);

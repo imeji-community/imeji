@@ -99,19 +99,20 @@ public class SimpleQueryFactory {
 	private static String getSpaceRestriction(String spaceUri, String modelName) {
 		if (spaceUri == null || spaceUri.equals(""))
 			return "";
-
-		boolean searchInSpace = false;
 		if (modelName == null || modelName.equals("")) {
 			return "";
 		}
 
 		boolean isCollection = modelName.equals(Imeji.collectionModel);
 		boolean isImage = modelName.equals(Imeji.imageModel);
+		boolean isProfile = modelName.equals(Imeji.profileModel);
 		// boolean isAlbum = modelName.equals(Imeji.albumModel);
 
-		if (!isCollection && !isImage)
+		if (!isCollection && !isImage && !isProfile)
 			return "";
 
+		if (isProfile)
+			return "?c <http://imeji.org/terms/mdprofile> ?s . ?c <http://imeji.org/terms/space> <" + spaceUri + "> .";
 		return isCollection ? "?s <http://imeji.org/terms/space> <" + spaceUri
 				+ "> ."
 				: "?s <http://imeji.org/terms/collection> ?coll . ?coll  <http://imeji.org/terms/space>  <"

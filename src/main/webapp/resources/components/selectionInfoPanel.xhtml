@@ -110,7 +110,7 @@
 									</ui:fragment>
 									
 									<!-- Remove all from album -->
-									<ui:fragment rendered="#{cc.attrs.facetBean.navigationString == 'pretty:albumBrowse' and Auth.create(cc.attrs.facetBean.album)}">
+									<ui:fragment rendered="#{cc.attrs.facetBean.navigationString == 'pretty:albumBrowse' and Auth.createContent(cc.attrs.facetBean.album)}">
 										<li>
 											<h:commandLink value="#{lbl.remove_from_album_all}" action="#{cc.attrs.facetBean.removeAllFromAlbum}">
 											</h:commandLink>
@@ -177,7 +177,7 @@
 										</li>
 									</ui:fragment>
 									
-									<ui:fragment rendered="#{cc.attrs.facetBean.navigationString == 'pretty:albumBrowse' and Auth.create(cc.attrs.facetBean.album)}">
+									<ui:fragment rendered="#{cc.attrs.facetBean.navigationString == 'pretty:albumBrowse' and Auth.createContent(cc.attrs.facetBean.album)}">
 										<li class="imj_overlayMenuListItem">
 											<!-- Remove selected from album -->
 											<h:commandLink value="#{lbl.remove_from_album}" action="#{cc.attrs.facetBean.removeFromAlbum}"/>

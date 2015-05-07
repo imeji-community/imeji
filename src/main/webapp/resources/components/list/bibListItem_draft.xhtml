@@ -23,7 +23,7 @@
 				<div class="imj_previewImage imj_imageStack">			
 					<h:outputLink value="#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}/#{Navigation.browsePath}?q=">						
 						<h:graphicImage value="#{cc.attrs.item.thumbnail.link}" alt="preview picture" 
-										rendered="#{cc.attrs.item.thumbnail.link != null and cc.attrs.item.size > 0 and cc.attrs.item.status!='WITHDRAWN'}"/>
+										rendered="#{cc.attrs.item.thumbnail.link != null and cc.attrs.item.size > 0 and cc.attrs.item.status!='WITHDRAWN' and (cc.attrs.item.type != 'ALBUM' or cc.attrs.item.privateCount != cc.attrs.item.size)}"/>
 					  	<h:graphicImage value="#{Navigation.applicationUrl}resources/icon/empty.png" alt="preview picture" 
 					    				rendered="#{cc.attrs.item.size == 0 and cc.attrs.item.status != 'WITHDRAWN' and !(type == 'ALBUM' and cc.attrs.item.size == cc.attrs.item.privateCount)}" title="#{lbl.ContainerEmpty}"/>
 					    <h:graphicImage value="#{Navigation.applicationUrl}resources/icon/discarded.png" alt="preview picture" 

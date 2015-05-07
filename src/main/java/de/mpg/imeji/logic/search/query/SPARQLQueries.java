@@ -110,15 +110,14 @@ public class SPARQLQueries {
 	 */
 	public static String hasOtherMetadataProfileReferences(String profileUri,
 			String resourceUri) {
-		String q=  " SELECT ?s WHERE { ?s ?p ?o ."
+		String q = " SELECT ?s WHERE { ?s ?p ?o ."
 				+ "?s <http://imeji.org/terms/mdprofile> <" + profileUri + ">."
 				+ " FILTER (?s != <" + resourceUri + ">  && ?s != <"
-				+ profileUri + ">) "
-				+ " NOT EXISTS { "
+				+ profileUri + ">) " + " NOT EXISTS { "
 				+ "?item <http://imeji.org/terms/metadataSet> ?s. "
 				+ "?s <http://imeji.org/terms/mdprofile> ?o. "
-				+ "?item <http://imeji.org/terms/collection> ?collection." 
-				+ "FILTER (?collection = <"+resourceUri+">) }"
+				+ "?item <http://imeji.org/terms/collection> ?collection."
+				+ "FILTER (?collection = <" + resourceUri + ">) }"
 				+ "} LIMIT 1";
 		return q;
 
@@ -235,7 +234,7 @@ public class SPARQLQueries {
 		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s a <http://imeji.org/terms/userGroup> . ?s <http://xmlns.com/foaf/0.1/member> <"
 				+ user.getId().toString() + ">}";
 	}
-	
+
 	/**
 	 * Select {@link CollectionImeji} of space
 	 * 
@@ -415,7 +414,6 @@ public class SPARQLQueries {
 	public static String selectAlbumAll() {
 		return "SELECT ?s WHERE { ?s a <http://imeji.org/terms/album>}";
 	}
-	
 
 	/**
 	 * Check if {@link CollectionImeji} status is not WITHDRAWN
@@ -423,9 +421,10 @@ public class SPARQLQueries {
 	 * @return
 	 */
 	public static String getAllowedUpdateByStatus(String collectionId) {
-		return "SELECT * WHERE { "+collectionId + " "+ImejiNamespaces.STATUS+ " <"+Status.WITHDRAWN.getUriString()+"> }";
+		return "SELECT * WHERE { " + collectionId + " "
+				+ ImejiNamespaces.STATUS + " <"
+				+ Status.WITHDRAWN.getUriString() + "> }";
 	}
-
 
 	/**
 	 * Select all {@link Space} available imeji
@@ -442,7 +441,9 @@ public class SPARQLQueries {
 	 * @return
 	 */
 	public static String getSpaceByLabel(String spaceId) {
-		return "SELECT ?s WHERE { ?s <http://imeji.org/terms/slug> \""+spaceId+"\"^^<http://www.w3.org/2001/XMLSchema#string>. ?s a <http://imeji.org/terms/space> }";
+		return "SELECT ?s WHERE { ?s <http://imeji.org/terms/slug> \""
+				+ spaceId
+				+ "\"^^<http://www.w3.org/2001/XMLSchema#string>. ?s a <http://imeji.org/terms/space> }";
 	}
 
 	public static String selectCollectionsOfSpace(URI id) {
@@ -450,11 +451,10 @@ public class SPARQLQueries {
 				+ "<" + id.toString() + "> "
 				+ " . ?s a <http://imeji.org/terms/collection> }";
 	}
-	
+
 	public static String selectCollectionsNotInSpace() {
 		return "SELECT DISTINCT ?s  WHERE {  FILTER NOT EXISTS {?s <http://imeji.org/terms/space> ?o} . ?s a <http://imeji.org/terms/collection> } ";
 	}
-
 
 	/**
 	 * Select all {@link Item} available imeji
@@ -614,11 +614,8 @@ public class SPARQLQueries {
 				+ SimpleSecurityQuery
 						.queryFactory(user,
 								J2JHelper.getResourceNamespace(new Item()),
-								null, false)
-				+ " ?s <"
-				+ ImejiNamespaces.STATUS
-				+ "> ?status } "
-				+ ((limit > 0) ? (" LIMIT "+limit):"");
+								null, false) + " ?s <" + ImejiNamespaces.STATUS
+				+ "> ?status } " + ((limit > 0) ? (" LIMIT " + limit) : "");
 	}
 
 	public static String selectContainerItemByFilename(URI containerURI,
@@ -641,13 +638,21 @@ public class SPARQLQueries {
 	 * @return
 	 */
 	public static String selectItemByChecksum(URI containerURI, String checksum) {
-			return "SELECT DISTINCT ?s WHERE {?s <http://imeji.org/terms/checksum> \""+checksum + "\"^^<http://www.w3.org/2001/XMLSchema#string>. "
-					+"?s <http://imeji.org/terms/collection> <"	+ containerURI.toString()+ "> . "
-					+"?s <"+ ImejiNamespaces.STATUS	+ "> ?status . "+
-					" FILTER (?status!=<" + Status.WITHDRAWN.getUriString() + ">)} LIMIT 1";
-			
+		return "SELECT DISTINCT ?s WHERE {?s <http://imeji.org/terms/checksum> \""
+				+ checksum
+				+ "\"^^<http://www.w3.org/2001/XMLSchema#string>. "
+				+ "?s <http://imeji.org/terms/collection> <"
+				+ containerURI.toString()
+				+ "> . "
+				+ "?s <"
+				+ ImejiNamespaces.STATUS
+				+ "> ?status . "
+				+ " FILTER (?status!=<"
+				+ Status.WITHDRAWN.getUriString()
+				+ ">)} LIMIT 1";
+
 	}
-	
+
 	/**
 	 * Search for all Institute of all {@link User} . An institute is defined by
 	 * the emai of the {@link User}, for instance user@mpdl.mpg.de has institute
@@ -715,10 +720,8 @@ public class SPARQLQueries {
 	}
 
 
-
-
 	/**
-	 *	Helpers
+	 * Helpers
 	 */
 	public static String countTriplesAll() {
 		return "SELECT (str(count(?ss)) as ?s) WHERE {?ss ?p ?o}";

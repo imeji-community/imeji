@@ -29,8 +29,11 @@
 package de.mpg.imeji.logic.auth;
 
 import de.mpg.imeji.exceptions.NotAllowedError;
+import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
+import de.mpg.imeji.logic.search.SPARQLSearch;
+import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.Properties.Status;
@@ -62,13 +65,12 @@ public class Authorization {
 	public boolean create(User user, Object obj) {
 		if (hasGrant(
 				user,
-				toGrant(getRelevantURIForSecurity(obj, true, true),
+				toGrant(getRelevantURIForSecurity(obj, false, true),
 						GrantType.CREATE))
 				&& !isDiscarded(obj))
 			return true;
 		return false;
 	}
-
 
 	/**
 	 * Return true if the {@link User} can read the object
@@ -83,7 +85,7 @@ public class Authorization {
 			return true;
 		else if (hasGrant(
 				user,
-				toGrant(getRelevantURIForSecurity(obj, false, true),
+				toGrant(getRelevantURIForSecurity(obj, true, false),
 						getGrantTypeAccordingToObjectType(obj, GrantType.READ))))
 			return true;
 		else if (hasGrant(
@@ -105,7 +107,7 @@ public class Authorization {
 	public boolean update(User user, Object obj) {
 		if (hasGrant(
 				user,
-				toGrant(getRelevantURIForSecurity(obj, false, true),
+				toGrant(getRelevantURIForSecurity(obj, false, false),
 						getGrantTypeAccordingToObjectType(obj, GrantType.UPDATE))))
 			return true;
 		return false;
@@ -123,7 +125,7 @@ public class Authorization {
 		if (!isPublic(obj)
 				&& hasGrant(
 						user,
-						toGrant(getRelevantURIForSecurity(obj, false, true),
+						toGrant(getRelevantURIForSecurity(obj, false, false),
 								getGrantTypeAccordingToObjectType(obj,
 										GrantType.DELETE))))
 			return true;
@@ -141,8 +143,26 @@ public class Authorization {
 	public boolean administrate(User user, Object obj) {
 		if (hasGrant(
 				user,
-				toGrant(getRelevantURIForSecurity(obj, false, true),
+				toGrant(getRelevantURIForSecurity(obj, false, false),
 						getGrantTypeAccordingToObjectType(obj, GrantType.ADMIN))))
+			return true;
+		return false;
+	}
+
+	/**
+	 * Return true if the user can create content in the object. For instance,
+	 * upload an item in a collection, or add/remove an item to an album
+	 * 
+	 * @param user
+	 * @param obj
+	 * @return
+	 */
+	public boolean createContent(User user, Object obj) {
+		if (hasGrant(
+				user,
+				toGrant(getRelevantURIForSecurity(obj, false, false),
+						GrantType.CREATE))
+				&& !isDiscarded(obj))
 			return true;
 		return false;
 	}
@@ -157,7 +177,7 @@ public class Authorization {
 	public boolean updateContent(User user, Object obj) {
 		if (hasGrant(
 				user,
-				toGrant(getRelevantURIForSecurity(obj, false, true),
+				toGrant(getRelevantURIForSecurity(obj, false, false),
 						GrantType.UPDATE_CONTENT)))
 			return true;
 		return false;
@@ -174,7 +194,7 @@ public class Authorization {
 		if (!isPublic(obj)
 				&& hasGrant(
 						user,
-						toGrant(getRelevantURIForSecurity(obj, false, true),
+						toGrant(getRelevantURIForSecurity(obj, false, false),
 								GrantType.DELETE_CONTENT)))
 			return true;
 		return AuthUtil.isSysAdmin(user);
@@ -190,7 +210,7 @@ public class Authorization {
 	public boolean adminContent(User user, Object obj) {
 		if (hasGrant(
 				user,
-				toGrant(getRelevantURIForSecurity(obj, false, true),
+				toGrant(getRelevantURIForSecurity(obj, false, false),
 						GrantType.ADMIN_CONTENT)))
 			return true;
 		return false;
@@ -228,24 +248,26 @@ public class Authorization {
 
 	/**
 	 * Return the uri which is relevant for the {@link Authorization}
-	 *
+	 * 
 	 * @param obj
+	 * @param hasItemGrant
+	 * @param getContext
 	 * @return
 	 */
-	public String getRelevantURIForSecurity(Object obj, boolean create,
-			boolean getContainer) {
+	public String getRelevantURIForSecurity(Object obj, boolean hasItemGrant,
+			boolean getContext) {
 		if (obj instanceof Item)
-			return getContainer ? ((Item) obj).getCollection().toString()
-					: ((Item) obj).getId().toString();
+			return hasItemGrant ? ((Item) obj).getId().toString()
+					: ((Item) obj).getCollection().toString();
 		else if (obj instanceof Container)
-			return create ? AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI
+			return getContext ? AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI
 					: ((Container) obj).getId().toString();
 		else if (obj instanceof CollectionListItem)
 			return ((CollectionListItem) obj).getUri().toString();
 		else if (obj instanceof AlbumBean)
 			return ((AlbumBean) obj).getAlbum().getId().toString();
 		else if (obj instanceof MetadataProfile)
-			return create ? AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI
+			return getContext ? AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI
 					: ((MetadataProfile) obj).getId().toString();
 		else if (obj instanceof User)
 			return ((User) obj).getId().toString();

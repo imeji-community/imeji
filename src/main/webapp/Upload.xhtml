@@ -14,7 +14,7 @@
 									contextUrl="#{Navigation.collectionUrl}" 
 									curMainMenu="#{currentMainMenu}" 
 									userHasAdminRights="#{Auth.admin}" 
-									userHasUploadRights="#{Auth.create(UploadBean.collection) and UploadBean.collection.status !='WITHDRAWN'}" 
+									userHasUploadRights="#{Auth.createContent(UploadBean.collection) and UploadBean.collection.status !='WITHDRAWN'}" 
 									navBean="#{Navigation}" 
 									activeMenu="upload" 
 									hasContent="#{UploadBean.collectionSize > 0}"/>
@@ -101,7 +101,7 @@
 		<h:panelGroup layout="block" id="imj_ajaxWrapper">
 			<!-- START UPLOAD -->
 			<div class="imj_upload">
-				<ui:fragment rendered="#{Auth.create(UploadBean.collection)}">
+				<ui:fragment rendered="#{Auth.createContent(UploadBean.collection)}">
 					<h2 class="imj_headline">
 						<h:outputText value="#{lbl.uploadFiles}"/>
 					</h2>

@@ -7,6 +7,7 @@ import de.mpg.imeji.exceptions.*;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
+import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
@@ -28,6 +29,8 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import com.thoughtworks.xstream.io.naming.NoNameCoder;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
@@ -58,17 +61,17 @@ public class AlbumController extends ImejiController {
 	 * @param album
 	 * @param user
 	 */
-	public URI create(Album album, User user)
-			throws ImejiException {  
+	public URI create(Album album, User user) throws ImejiException {
 		return createAskValidate(album, user, true);
 	}
-	public URI createNoValidate(Album album, User user)
-			throws ImejiException {  
+
+	public URI createNoValidate(Album album, User user) throws ImejiException {
 		return createAskValidate(album, user, false);
 	}
-	
-	public URI createAskValidate(Album album, User user, boolean validate) throws ImejiException {
-		if(validate){
+
+	public URI createAskValidate(Album album, User user, boolean validate)
+			throws ImejiException {
+		if (validate) {
 			validateAlbum(album, user);
 		}
 		writeCreateProperties(album, user);
@@ -80,22 +83,25 @@ public class AlbumController extends ImejiController {
 	}
 
 	/**
-	 * Updates an album -Logged in users: --User is album owner --OR
-	 * user is album editor, by choice checking the security
+	 * Updates an album -Logged in users: --User is album owner --OR user is
+	 * album editor, by choice checking the security
 	 * 
 	 * @param ic
 	 * @param user
 	 * @throws ImejiException
 	 */
-	public Album update(Album ic, User user, boolean doCheckSecurity) throws ImejiException {
+	public Album updateAlbumItems(Album ic, User user) throws ImejiException {
+		if (!AuthUtil.staticAuth().create(user, ic)) {
+			throw new NotAllowedError("album_not_allowed_to_add_item");
+		}
 		writeUpdateProperties(ic, user);
-		writer.update(WriterFacade.toList(ic), user, doCheckSecurity);
+		writer.update(WriterFacade.toList(ic), user, false);
 		return retrieve(ic.getId(), user);
 	}
-	
+
 	/**
-	 * Updates an album -Logged in users: --User is album owner --OR
-	 * user is album editor, always checking the security
+	 * Updates an album -Logged in users: --User is album owner --OR user is
+	 * album editor, always checking the security
 	 * 
 	 * @param ic
 	 * @param user
@@ -108,8 +114,8 @@ public class AlbumController extends ImejiController {
 	}
 
 	/**
-	 * Updates an album -Logged in users: --User is album owner --OR
-	 * user is album editor
+	 * Updates an album -Logged in users: --User is album owner --OR user is
+	 * album editor
 	 * 
 	 * @param ic
 	 * @param user
@@ -141,11 +147,14 @@ public class AlbumController extends ImejiController {
 	 * @return
 	 * @throws ImejiException
 	 */
-	public List<Album> retrieve(User user, String q, String spaceId) throws ImejiException {
+	public List<Album> retrieve(User user, String q, String spaceId)
+			throws ImejiException {
 		List<Album> aList = new ArrayList<>();
 		try {
-			SearchQuery sq= URLQueryTransformer.parseStringQuery(q);
-			for (String albId: search(!isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q) : null, user, null, 0, 0, spaceId).getResults()) {
+			SearchQuery sq = URLQueryTransformer.parseStringQuery(q);
+			for (String albId : search(
+					!isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q)
+							: null, user, null, 0, 0, spaceId).getResults()) {
 				aList.add(retrieve(URI.create(albId), user));
 			}
 		} catch (Exception e) {
@@ -154,7 +163,6 @@ public class AlbumController extends ImejiController {
 		}
 		return aList;
 	}
-
 
 	/**
 	 * Retrieve an {@link Album} without its {@link Item}
@@ -191,9 +199,10 @@ public class AlbumController extends ImejiController {
 		album = (Album) ic.searchAndSetContainerItems(album, user, -1, 0);
 		if (album.getImages().isEmpty()) {
 			throw new UnprocessableError("An empty album can not be released!");
-		} else if(album.getStatus().equals(Status.RELEASED)){
-			throw new UnprocessableError("The status of album is " + album.getStatus() + " and can not be released again!");
-		}else {
+		} else if (album.getStatus().equals(Status.RELEASED)) {
+			throw new UnprocessableError("The status of album is "
+					+ album.getStatus() + " and can not be released again!");
+		} else {
 			writeReleaseProperty(album, user);
 			update(album, user);
 		}
@@ -201,7 +210,8 @@ public class AlbumController extends ImejiController {
 
 	/**
 	 * Add a list of {@link Item} (as a {@link List} of {@link URI}) to an
-	 * {@link Album}. Return {@link List} of {@link URI} {@link Item} of the album.
+	 * {@link Album}. Return {@link List} of {@link URI} {@link Item} of the
+	 * album.
 	 * 
 	 * @param album
 	 * @param uris
@@ -209,19 +219,25 @@ public class AlbumController extends ImejiController {
 	 * @return
 	 * @throws ImejiException
 	 */
-	public List<URI> addToAlbum(Album album, List<String> uris, User user) throws ImejiException {
+	public List<URI> addToAlbum(Album album, List<String> uris, User user)
+			throws ImejiException {
 
-		if (Status.WITHDRAWN.equals(album.getStatus())) { 
-				throw new UnprocessableError("error_album_withdrawn_members_can_not_be_added");
+		if (Status.WITHDRAWN.equals(album.getStatus())) {
+			throw new UnprocessableError(
+					"error_album_withdrawn_members_can_not_be_added");
 		}
-		
+		if (!AuthUtil.staticAuth().create(user, album)) {
+			throw new NotAllowedError("album_not_allowed_to_add_item");
+		}
+
 		ItemController ic = new ItemController();
-		List<String> inAlbums = ic.search(album.getId(), null, null, null, user, null).getResults();
+		List<String> inAlbums = ic.search(album.getId(), null, null, null,
+				user, null).getResults();
 		List<String> notAddedUris = new ArrayList<String>();
 		for (String uri : uris) {
 			try {
-				Item item = ic.retrieve(new URI(uri), user);			
-				if(item != null){
+				Item item = ic.retrieve(new URI(uri), user);
+				if (item != null) {
 					if (!inAlbums.contains(uri)) {
 						inAlbums.add(uri);
 					} else {
@@ -230,15 +246,14 @@ public class AlbumController extends ImejiController {
 				}
 			} catch (URISyntaxException e) {
 				e.printStackTrace();
-			}	
+			}
 		}
 		album.getImages().clear();
 		for (String uri : inAlbums) {
 			album.getImages().add(URI.create(uri));
 		}
-		// Force admin user since th user might not have right to edit the album
-		update(album, user, false);
-		return new ArrayList(album.getImages());
+		updateAlbumItems(album, user);
+		return new ArrayList<URI>(album.getImages());
 	}
 
 	/**
@@ -253,7 +268,6 @@ public class AlbumController extends ImejiController {
 	 */
 	public int removeFromAlbum(Album album, List<String> toDelete, User user)
 			throws ImejiException {
-		
 		List<URI> inAlbums = new ArrayList<URI>(album.getImages());
 		album.getImages().clear();
 		for (URI uri : inAlbums) {
@@ -262,14 +276,16 @@ public class AlbumController extends ImejiController {
 			}
 		}
 
-		if (album.getImages().size()== 0 && Status.RELEASED.equals(album.getStatus())) {
-				throw new UnprocessableError("Album has been released! You are trying to remove all items from this album! Discard the album if necessary!");
+		if (album.getImages().size() == 0
+				&& Status.RELEASED.equals(album.getStatus())) {
+			throw new UnprocessableError(
+					"Album has been released! You are trying to remove all items from this album! Discard the album if necessary!");
 		}
-		
-		update(album, user, false);
+
+		updateAlbumItems(album, user);
 		return inAlbums.size() - album.getImages().size();
 	}
-	
+
 	/**
 	 * Remove a list of {@link Item} (as a {@link List} of {@link URI}) to an
 	 * {@link Album}
@@ -282,9 +298,9 @@ public class AlbumController extends ImejiController {
 	 */
 	public boolean clearAlbumItems(Album album, User user)
 			throws ImejiException {
-
 		if (Status.RELEASED.equals(album.getStatus())) {
-			throw new UnprocessableError("Album has been released! It is not possible to remove all items from this album! Discard the album if necessary!");
+			throw new UnprocessableError(
+					"Album has been released! It is not possible to remove all items from this album! Discard the album if necessary!");
 		}
 		album.getImages().clear();
 		update(album, user);
@@ -299,14 +315,15 @@ public class AlbumController extends ImejiController {
 	 * @throws ImejiException
 	 */
 	public void withdraw(Album album, User user) throws ImejiException {
-		if (user == null ) {
+		if (user == null) {
 			throw new AuthenticationError("User must be signed-in");
 		}
 		if (album == null) {
 			throw new NotFoundException("Album does not exists");
 		}
 		if (!Status.RELEASED.equals(album.getStatus())) {
-			throw new UnprocessableError ("Withdraw album: Album must be released");
+			throw new UnprocessableError(
+					"Withdraw album: Album must be released");
 		}
 		album.setStatus(Status.WITHDRAWN);
 		album.setVersionDate(DateHelper.getCurrentDate());
@@ -365,36 +382,36 @@ public class AlbumController extends ImejiController {
 				Imeji.albumModel);
 		return (List<Album>) loadAlbumsLazy(uris, user, -1, 0);
 	}
-	
-	public void validateAlbum (Album album, User u) throws ImejiException {
-		//Copied from Collection Bean in presentation  
-		if ( isNullOrEmpty (album.getMetadata().getTitle().trim())) {
+
+	public void validateAlbum(Album album, User u) throws ImejiException {
+		// Copied from Collection Bean in presentation
+		if (isNullOrEmpty(album.getMetadata().getTitle().trim())) {
 			throw new BadRequestException("error_album_need_title");
 		}
 
 		List<Person> pers = new ArrayList<Person>();
-		
+
 		for (Person c : album.getMetadata().getPersons()) {
 			List<Organization> orgs = new ArrayList<Organization>();
 			for (Organization o : c.getOrganizations()) {
 				if (!isNullOrEmpty(o.getName().trim())) {
 					orgs.add(o);
-				}
-				else
-				{
-					throw new BadRequestException("error_organization_need_name");
+				} else {
+					throw new BadRequestException(
+							"error_organization_need_name");
 				}
 			}
-			
-			
-			if (! isNullOrEmpty(c.getFamilyName().trim())) {
+
+			if (!isNullOrEmpty(c.getFamilyName().trim())) {
 				if (orgs.size() > 0) {
 					pers.add(c);
 				} else {
-					throw new BadRequestException("error_author_need_one_organization");
+					throw new BadRequestException(
+							"error_author_need_one_organization");
 				}
 			} else {
-				throw new BadRequestException("error_author_need_one_family_name");
+				throw new BadRequestException(
+						"error_author_need_one_family_name");
 			}
 		}
 
@@ -402,21 +419,24 @@ public class AlbumController extends ImejiController {
 			throw new BadRequestException("error_album_need_one_author");
 		}
 	}
-	
-	public List<Item> retrieveItems(String id, User user, String q) throws ImejiException {
-        ItemController ic = new ItemController();
-        List<Item> itemList = new ArrayList();
-        try {
-            for (String itemId: ic.search(ObjectHelper.getURI(Album.class, id),
-                    !isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q) : null,
-                    null, null, user, null).getResults()) {
-                itemList.add(ic.retrieve(URI.create(itemId), user));
-            }
-        } catch (Exception e) {
-            throw new UnprocessableError("Cannot retrieve items:", e);
 
-        }
-        return itemList;
+	public List<Item> retrieveItems(String id, User user, String q)
+			throws ImejiException {
+		ItemController ic = new ItemController();
+		List<Item> itemList = new ArrayList();
+		try {
+			for (String itemId : ic
+					.search(ObjectHelper.getURI(Album.class, id),
+							!isNullOrEmptyTrim(q) ? URLQueryTransformer
+									.parseStringQuery(q) : null, null, null,
+							user, null).getResults()) {
+				itemList.add(ic.retrieve(URI.create(itemId), user));
+			}
+		} catch (Exception e) {
+			throw new UnprocessableError("Cannot retrieve items:", e);
+
+		}
+		return itemList;
 	}
 
 }

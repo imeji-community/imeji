@@ -29,11 +29,12 @@
 				return str;
 			}
 			function updateSlug(str) {
-				var protocoll, tmp;
+				var protocoll, tmp, spaceSlugString;
 				tmp = clearToSlug(str);
 				protocoll = location.protocoll || 'http:';
+				spaceSlugString = location.href;
 				$('input[id$="spaceSlug"]').val(tmp);
-				$('#previewSpaceSlugUrl').text(protocoll + '//' + location.host + '/space/' + tmp + '/');
+				$('#previewSpaceSlugUrl').text(spaceSlugString.replace("createspace", "space/") + tmp );
 			}
 			function initSlugUpdate() {
 				$('input[id$="spaceTitle"], input[id$="spaceSlug"]').keyup(function(evt){

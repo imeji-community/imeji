@@ -449,6 +449,7 @@ select.imj_metadataEditText { min-height: 0; }
 .imj_startpageFooter img { margin: 0 1%; }
 .imj_startpageFooter .imj_startpageFooterLogos { width: 100%; padding: 1em 1.25em 1.25em 1em; text-align: center; }
 .imj_startpageFooter .imj_community_logo { padding: 1%; margin-right: 5%; -moz-border-radius: 0.41667em; -webkit-border-radius: 0.41667em; border-radius: 0.41667em; }
+.imj_startpageFooterLogos .imj_poweredby_imprint { width: 50%; margin: 0 auto;} 
 
 #imj_welcomeInfoWrapper { display: inline-block; width: 48%; }
 

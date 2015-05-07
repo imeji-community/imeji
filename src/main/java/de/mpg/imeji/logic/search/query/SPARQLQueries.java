@@ -607,7 +607,9 @@ public class SPARQLQueries {
 			return "SELECT DISTINCT ?s WHERE {<" + uri.toString()
 					+ "> <http://imeji.org/terms/item> ?s . ?s <"
 					+ ImejiNamespaces.STATUS + "> ?status .  filter(?status=<"
-					+ Status.RELEASED.getUriString() + ">)} LIMIT " + limit;
+					+ Status.RELEASED.getUriString() + ">)}"
+					+ ((limit > 0) ? (" LIMIT " + limit) : "");
+
 		return "SELECT DISTINCT ?s WHERE {<"
 				+ uri.toString()
 				+ "> <http://imeji.org/terms/item> ?s . "
@@ -615,7 +617,8 @@ public class SPARQLQueries {
 						.queryFactory(user,
 								J2JHelper.getResourceNamespace(new Item()),
 								null, false) + " ?s <" + ImejiNamespaces.STATUS
-				+ "> ?status } " + ((limit > 0) ? (" LIMIT " + limit) : "");
+				+ "> ?status . ?s <http://imeji.org/terms/collection> ?c} "
+				+ ((limit > 0) ? (" LIMIT " + limit) : "");
 	}
 
 	public static String selectContainerItemByFilename(URI containerURI,
@@ -718,7 +721,6 @@ public class SPARQLQueries {
 				+ "<http://xmlns.com/foaf/0.1/person> ?o "
 				+ ". ?o <http://purl.org/escidoc/metadata/terms/0.1/complete-name> ?cn}";
 	}
-
 
 	/**
 	 * Helpers

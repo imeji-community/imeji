@@ -621,14 +621,27 @@ public class ItemController extends ImejiController {
 	 */
 	public Container searchAndSetContainerItemsFast(Container c, User user,
 			int size) {
+		c.getImages().clear();
+		for (String s : seachContainerItemsFast(c, user, size)) {
+			c.getImages().add(URI.create(s));
+		}
+		return c;
+	}
+
+	/**
+	 * Search all items of {@link Container}
+	 * 
+	 * @param c
+	 * @param user
+	 * @param size
+	 * @return
+	 */
+	public List<String> seachContainerItemsFast(Container c, User user, int size) {
 		String q = c instanceof CollectionImeji ? SPARQLQueries
 				.selectCollectionItems(c.getId(), user, size) : SPARQLQueries
 				.selectAlbumItems(c.getId(), user, size);
 		c.getImages().clear();
-		for (String s : ImejiSPARQL.exec(q, null)) {
-			c.getImages().add(URI.create(s));
-		}
-		return c;
+		return ImejiSPARQL.exec(q, null);
 	}
 
 	/**

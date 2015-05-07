@@ -246,7 +246,6 @@ public abstract class ImejiController {
     	}
     	else
     	{
-    		System.out.println("Deletring file from "+container.getLogoUrl().toURL().toString());
     		deleteFile(transformUrlToPath(container.getLogoUrl().toURL().toString(), storageUrl, storagePath));
 	    	container.setLogoUrl(null);
     	}
@@ -294,7 +293,6 @@ public abstract class ImejiController {
      * @throws IOException
      */
     private String update(File toCopy, String path) throws IOException {
-
         File f = new File(path);
         if (f.getParentFile().exists()) {
             //clean space dir

@@ -90,7 +90,7 @@
 				</ui:fragment>
 				<!-- Logo upload -->
 				
-				<ui:fragment rendered="#{cc.attrs.formularBean.collectionType and cc.attrs.formularBean.id != null}">
+				<ui:fragment rendered="#{cc.attrs.formularBean.id != null}">
 					<h:panelGroup layout="block" styleClass="imj_collectionLogoUpload">
 						<div class="imj_sectionHeadline">
 							<h4>
@@ -129,7 +129,7 @@
 																	up.removeFile(file);
 																}
 																
-																document.getElementById('filelist').innerHTML = '<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
+																document.getElementById('filelist').innerHTML = '<div id="' + file.id + '">'+ file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
 															});
 															uploader.start();
 															
@@ -138,15 +138,16 @@
 														UploadProgress: function(up, file) {
 															document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
 														},
-														 StateChanged: function(up) {
+  													 StateChanged: function(up) {
 																// Called when the state of the queue is changed
-																if( up.state == plupload.STOPPED)
+																if( up.state == plupload.STOPPED) 
 																	report();
 														},
 													}
 												});
 												
-												uploader.init();
+												uploader.init();													
+
 												function report(){
 													//window.location.href = location.pathname ;
 												}
@@ -154,16 +155,16 @@
 										</div>
 									</div>
 								</div>
-								<ui:fragment rendered= "#{cc.attrs.formularBean.collection.logoUrl!=null}">
-								<div class="imj_metadataValue">
-									<img alt="Logo" src="#{cc.attrs.formularBean.collection.logoUrl}" height="50em" class="imj_community_logo"/>
-									<span class="imj_inlineButtonGroup"> 
-										<h:outputText value="#{lbl.removeLogo}"/>
-										<h:commandButton styleClass="imj_buttonRemove_16" title="#{lbl.removeLogo}" action="#{cc.attrs.formularBean.removeContainerLogo}">
-												<f:ajax execute="@form" render="@form" />
-									    </h:commandButton>
-								    </span>
-								</div>
+								<ui:fragment rendered= "#{cc.attrs.formularBean.container.logoUrl!=null}">
+									<div class="imj_metadataValue">
+										<img alt="Logo" src="#{cc.attrs.formularBean.container.logoUrl}" height="50em" class="imj_community_logo"/>
+										<span class="imj_inlineButtonGroup"> 
+											<h:outputText value="#{lbl.removeLogo}"/>
+											<h:commandButton styleClass="imj_buttonRemove_16" title="#{lbl.removeLogo}" action="#{cc.attrs.formularBean.removeContainerLogo}">
+													<f:ajax execute="@form" render="@form" />
+										    </h:commandButton>
+									    </span>
+									</div>
 								</ui:fragment>
 								
 								

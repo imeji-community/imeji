@@ -6,6 +6,7 @@ package de.mpg.imeji.logic.controller;
 import de.mpg.imeji.exceptions.*;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
+import de.mpg.imeji.logic.ImejiTriple;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
@@ -23,6 +24,8 @@ import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.j2j.helper.DateHelper;
 import de.mpg.j2j.helper.J2JHelper;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -418,5 +421,38 @@ public class AlbumController extends ImejiController {
         }
         return itemList;
 	}
+	
+	/**
+	 * Patch an album. !!! Use with Care !!!
+	 * 
+	 * @param triples
+	 * @param user
+	 * @throws ImejiException
+	 */
+	public void patch(List<ImejiTriple> triples, User user,
+			boolean checkSecurity) throws ImejiException {
+		writer.patch(triples, user, checkSecurity);
+	}
+
+
+	/**
+	 * Update a {@link Album} (with its Logo)
+	 * 
+	 * @param ic
+	 * @param user
+	 * @throws ImejiException
+	 */
+	public void updateAlbumLogo(Album ic, File f, User u) throws ImejiException, IOException, URISyntaxException
+	{
+		ic = (Album) updateFile(ic, f, u);
+		if (f != null && f.exists()) {
+
+			// Update the collection as a patch only with collection Logo Triple
+			List<ImejiTriple> triples = getContainerLogoTriples(ic.getId().toString(), ic, ic.getLogoUrl().toString()) ;
+			patch(triples, u, true);
+
+        }
+	}
+		
 
 }

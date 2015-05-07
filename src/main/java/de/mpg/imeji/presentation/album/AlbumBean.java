@@ -16,11 +16,13 @@ import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CommonUtils;
 import de.mpg.imeji.presentation.util.ObjectLoader;
+
 import org.apache.log4j.Logger;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -94,8 +96,11 @@ public class AlbumBean extends ContainerBean
                 {
                     description = description.substring(0, DESCRIPTION_MAX_SIZE) + "...";
                 }
-                if (!getItems().isEmpty())
+                if (!getItems().isEmpty()) {
                     thumbnail = new ThumbnailBean(getItems().get(0));
+                    if (album.getLogoUrl()!=null)
+                    	thumbnail.setLink(album.getLogoUrl().toString());
+                }
             }
         }
     }
@@ -107,6 +112,7 @@ public class AlbumBean extends ContainerBean
     {
         sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
     }
+    
 
     /**
      * Load the {@link Album} and its {@link Item} when the {@link AlbumBean} page is called, and initialize it.
@@ -151,17 +157,29 @@ public class AlbumBean extends ContainerBean
         try
         {
             setAlbum(ac.retrieveLazy(ObjectHelper.getURI(Album.class, id), sessionBean.getUser()));
+            findItems(sessionBean.getUser(), MAX_ITEM_NUM_VIEW);
+            loadItems(sessionBean.getUser());
+            countItems();
+            
             if (sessionBean.getActiveAlbum() != null
                     && sessionBean.getActiveAlbum().getId().toString().equals(album.getId().toString()))
             {
                 active = true;
             }
+            
+            sessionBean.setSpaceLogoIngestImage(null);
+            setIngestImage(null);
         }
         catch (Exception e)
         {
             BeanHelper.error(e.getMessage());
             logger.error("Error init album edit", e);
         }
+
+        if(UrlHelper.getParameterBoolean("start")){
+    		upload();
+    	}
+    	
     }
 
     /**
@@ -309,7 +327,16 @@ public class AlbumBean extends ContainerBean
      */
     public String save() throws Exception
     {
-        update();
+        if (update()){
+            Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
+            FacesContext
+                    .getCurrentInstance()
+                    .getExternalContext()
+                    .redirect(
+                            navigation.getAlbumUrl() + ObjectHelper.getId(getAlbum().getId()) + "/"
+                                    + navigation.getInfosPath() + "?init=1");
+
+        }
         return "";
     }
 
@@ -319,22 +346,35 @@ public class AlbumBean extends ContainerBean
      * @return
      * @throws Exception
      */
-    public String update() throws Exception
+    public boolean update() throws Exception
     {
         AlbumController ac = new AlbumController();
         if (valid())
         {
-            ac.updateLazy(album, sessionBean.getUser());
+
+        	Album icPre = ac.retrieveLazy(album.getId(), sessionBean.getUser());
+        	if (icPre.getLogoUrl() != null && album.getLogoUrl() == null) {
+	        	 ac.updateAlbumLogo(icPre, null, sessionBean.getUser());
+	         }
+        	
+            ac.updateLazy(getAlbum(), sessionBean.getUser());
+	         //here separate update for the Logo only, as it will only be allowed by edited collection through the web application
+	         //not yet for REST 
+	         //getIngestImage is inherited from Container!
+
+	         if (sessionBean.getSpaceLogoIngestImage()!= null ) {
+	        	 ac.updateAlbumLogo(getAlbum(), sessionBean.getSpaceLogoIngestImage().getFile(), sessionBean.getUser());
+	        	 setIngestImage(null);
+	        	 sessionBean.setSpaceLogoIngestImage(null);
+	 		 }
+	         
+//	         if (active) {
+//	        	 sessionBean.setActiveAlbum(ac.retrieveLazy(album.getId(), sessionBean.getUser()));
+//	         }
+//	         
             BeanHelper.info(sessionBean.getMessage("success_album_update"));
-            Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-            FacesContext
-                    .getCurrentInstance()
-                    .getExternalContext()
-                    .redirect(
-                            navigation.getAlbumUrl() + ObjectHelper.getId(getAlbum().getId()) + "/"
-                                    + navigation.getInfosPath() + "?init=1");
         }
-        return "";
+        return true;
     }
 
     /**

@@ -60,6 +60,7 @@ public class SpaceControllerTest extends ImejiTestBase{
         Space sp1 = ImejiFactory.newSpace();
         sp1.setTitle("Space 1");
         sp1.setDescription("Space 1 Description");
+        sp1.setSlug("space_1");
         spaceId = sc.create(sp1, adminUser);
         space = sc.retrieve(sp1.getId(), adminUser);
         assertThat(sp1.getTitle(), equalTo(space.getTitle()));
@@ -103,6 +104,7 @@ public class SpaceControllerTest extends ImejiTestBase{
     public void test_5_RetrieveAll() throws Exception {
         Space sp2 = ImejiFactory.newSpace();
         sp2.setTitle("Space 2");
+        sp2.setSlug("space_2");
         sc.create(sp2, adminUser);
         assertThat(sc.retrieveAll(), hasSize(2));
     }
@@ -127,6 +129,7 @@ public class SpaceControllerTest extends ImejiTestBase{
 
         Space sp1 = ImejiFactory.newSpace();
         sp1.setTitle("Space Full Create");
+        sp1.setSlug("space_full_create");
 
         final Collection<String> colls = Lists.newArrayList(initCollection(), initCollection());
         sp1.setSpaceCollections(colls);
@@ -157,6 +160,7 @@ public class SpaceControllerTest extends ImejiTestBase{
     public void test_9_RetrieveSpaceCollections() throws Exception {
         Space sp2 = ImejiFactory.newSpace();
         sp2.setTitle("Space Collections Test");
+        sp2.setSlug("space_collections_test");
         sc.create(sp2, adminUser);
         initCollection();
     	int collectionsOutOfSpace = cc.retrieveCollectionsNotInSpace(adminUser).size();
@@ -176,6 +180,7 @@ public class SpaceControllerTest extends ImejiTestBase{
         //create space
         Space sp1 = ImejiFactory.newSpace();
         sp1.setTitle("Space 1");
+        sp1.setSlug("space_1");
         spaceId = sc.create(sp1, adminUser);
         space = sc.retrieve(sp1.getId(), adminUser);
         assertThat(sp1.getTitle(), equalTo(space.getTitle()));

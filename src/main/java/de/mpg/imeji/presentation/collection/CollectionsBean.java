@@ -55,7 +55,7 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
     @Override
     public String getNavigationString()
     {
-        return "pretty:collections";
+        return sb.getPrettySpacePage("pretty:collections");
     }
 
     @Override
@@ -158,7 +158,7 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
         {
             BeanHelper.warn(sb.getMessage("error_delete_no_collection_selected"));
         }
-        return "pretty:collections";
+        return sb.getPrettySpacePage("pretty:collections");
     }
 
     /**

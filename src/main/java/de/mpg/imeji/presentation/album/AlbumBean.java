@@ -4,6 +4,7 @@
 package de.mpg.imeji.presentation.album;
 
 import de.mpg.imeji.logic.controller.AlbumController;
+import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
@@ -34,694 +35,664 @@ import java.util.List;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class AlbumBean extends ContainerBean
-{
-    private static final long serialVersionUID = -8161410292667767348L;
-    protected SessionBean sessionBean = null;
-    private Album album = null;
-    private String id = null;
-    private List<SelectItem> profilesMenu = new ArrayList<SelectItem>();
-    private boolean active;
-    private String tab;
-    /**
-     * True if the {@link AlbumBean} is used for the create page, else false
-     */
-    // protected boolean create;
-    private boolean selected;
-    private static Logger logger = Logger.getLogger(AlbumBean.class);
-    /**
-     * Maximum number of character displayed in the list for the description
-     */
-    private static final int DESCRIPTION_MAX_SIZE = 300;
-    
-    /**
-     * Maximum number of items displayed on album start page
-     */    
-    private static final int MAX_ITEM_NUM_VIEW = 13;
-    /**
-     * A small description when the description of the {@link Album} is too large for the list view
-     */
-    // private String smallDescription = null;
-    private String description = "";
-    private String descriptionFull = null;
-    private ThumbnailBean thumbnail;
+public class AlbumBean extends ContainerBean {
+	private static final long serialVersionUID = -8161410292667767348L;
+	protected SessionBean sessionBean = null;
+	private Album album = null;
+	private String id = null;
+	private List<SelectItem> profilesMenu = new ArrayList<SelectItem>();
+	private boolean active;
+	private String tab;
+	/**
+	 * True if the {@link AlbumBean} is used for the create page, else false
+	 */
+	// protected boolean create;
+	private boolean selected;
+	private static Logger logger = Logger.getLogger(AlbumBean.class);
+	/**
+	 * Maximum number of character displayed in the list for the description
+	 */
+	private static final int DESCRIPTION_MAX_SIZE = 300;
 
-    /**
-     * Construct an {@link AlbumBean} from an {@link Album}
-     * 
-     * @param album
-     * @throws Exception 
-     */
-    public AlbumBean(Album album) throws Exception 
-    {
-        this.album = album;
-        if (album != null)
-        {
-            this.id = ObjectHelper.getId(album.getId());
-            // album = ObjectLoader.loadAlbumLazy(ObjectHelper.getURI(Album.class, id), sessionBean.getUser());
-            sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-            if (sessionBean.getActiveAlbum() != null && sessionBean.getActiveAlbum().getId().equals(album.getId()))
-            {
-                active = true;
-            }
-            if (album.getId() != null)
-            {
-                findItems(sessionBean.getUser(), 1);
-                loadItems(sessionBean.getUser());
-                countItems();
-                description = album.getMetadata().getDescription();
-                descriptionFull = description;
-                description = CommonUtils.removeTags(description);
-                if (description != null && description.length() > DESCRIPTION_MAX_SIZE)
-                {
-                    description = description.substring(0, DESCRIPTION_MAX_SIZE) + "...";
-                }
-                if (!getItems().isEmpty()) {
-                    thumbnail = new ThumbnailBean(getItems().get(0));
-                    if (album.getLogoUrl()!=null)
-                    	thumbnail.setLink(album.getLogoUrl().toString());
-                }
-            }
-        }
-    }
+	/**
+	 * Maximum number of items displayed on album start page
+	 */
+	private static final int MAX_ITEM_NUM_VIEW = 13;
+	/**
+	 * A small description when the description of the {@link Album} is too
+	 * large for the list view
+	 */
+	// private String smallDescription = null;
+	private String description = "";
+	private String descriptionFull = null;
+	private ThumbnailBean thumbnail;
+	// number of items which the current user is allowed to see
+	private int allowedItemsSize;
 
-    /**
-     * Construct an emtpy {@link AlbumBean}
-     */
-    public AlbumBean()
-    {
-        sessionBean = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-    }
-    
+	/**
+	 * Construct an {@link AlbumBean} from an {@link Album}
+	 * 
+	 * @param album
+	 * @throws Exception
+	 */
+	public AlbumBean(Album album) throws Exception {
+		this.album = album;
+		if (album != null) {
+			this.id = ObjectHelper.getId(album.getId());
+			// album =
+			// ObjectLoader.loadAlbumLazy(ObjectHelper.getURI(Album.class, id),
+			// sessionBean.getUser());
+			sessionBean = (SessionBean) BeanHelper
+					.getSessionBean(SessionBean.class);
+			if (sessionBean.getActiveAlbum() != null
+					&& sessionBean.getActiveAlbum().getId()
+							.equals(album.getId())) {
+				active = true;
+			}
+			if (album.getId() != null) {
+				findItems(sessionBean.getUser(), 1);
+				loadItems(sessionBean.getUser());
+				countItems();
+				description = album.getMetadata().getDescription();
+				descriptionFull = description;
+				description = CommonUtils.removeTags(description);
+				if (description != null
+						&& description.length() > DESCRIPTION_MAX_SIZE) {
+					description = description
+							.substring(0, DESCRIPTION_MAX_SIZE) + "...";
+				}
+				if (!getItems().isEmpty()) {
+					thumbnail = new ThumbnailBean(getItems().get(0));
+					if (album.getLogoUrl() != null)
+						thumbnail.setLink(album.getLogoUrl().toString());
+				}
+			}
+		}
+	}
 
-    /**
-     * Load the {@link Album} and its {@link Item} when the {@link AlbumBean} page is called, and initialize it.
-     * @throws Exception 
-     */
-    public void initView() throws Exception
-    {
-     try {
-	    	if (id != null)
-	    	{
-	            album = ObjectLoader.loadAlbumLazy(ObjectHelper.getURI(Album.class, id), sessionBean.getUser());
-	            if (album != null)
-	            {
-	                findItems(sessionBean.getUser(), MAX_ITEM_NUM_VIEW);
-	                loadItems(sessionBean.getUser());
-	                countItems();
-	                if (sessionBean.getActiveAlbum() != null && sessionBean.getActiveAlbum().getId().equals(album.getId()))
-	                {
-	                    active = true;
-//	                    sessionBean.setActiveAlbum(album);
-	                }
-	                if (getPrivateCount() != 0)
-	                {
-	                	BeanHelper.info(sessionBean.getMessage("album_Private_Content").replace("XXX_COUNT_XXX", getPrivateCount()+""));
-	                }
-	            }
-	            
-	        }
-     	} catch (Exception e) {
+	/**
+	 * Construct an emtpy {@link AlbumBean}
+	 */
+	public AlbumBean() {
+		sessionBean = (SessionBean) BeanHelper
+				.getSessionBean(SessionBean.class);
+	}
+
+	/**
+	 * Load the {@link Album} and its {@link Item} when the {@link AlbumBean}
+	 * page is called, and initialize it.
+	 * 
+	 * @throws Exception
+	 */
+	public void initView() throws Exception {
+		try {
+			if (id != null) {
+				album = ObjectLoader.loadAlbumLazy(
+						ObjectHelper.getURI(Album.class, id),
+						sessionBean.getUser());
+				if (album != null) {
+					findItems(sessionBean.getUser(), MAX_ITEM_NUM_VIEW);
+					loadItems(sessionBean.getUser());
+					countItems();
+					countAllowedItems();
+					if (sessionBean.getActiveAlbum() != null
+							&& sessionBean.getActiveAlbum().getId()
+									.equals(album.getId())) {
+						active = true;
+						// sessionBean.setActiveAlbum(album);
+					}
+					if (getPrivateCount() != 0) {
+						BeanHelper.info(sessionBean.getMessage(
+								"album_Private_Content").replace(
+								"XXX_COUNT_XXX", getPrivateCount() + ""));
+					}
+				}
+
+			}
+		} catch (Exception e) {
+			logger.error("", e);
 			// Has to be in try/catch block, otherwise redirct from
 			// HistoryFilter will not work.
 			// Here simply do nothing
 		}
-    }
+	}
 
-    /**
-     * Initialize the album form to edit the metadata of the album
-     */
-    public void initEdit()
-    {
-        AlbumController ac = new AlbumController();
-        try
-        {
-            setAlbum(ac.retrieveLazy(ObjectHelper.getURI(Album.class, id), sessionBean.getUser()));
-            findItems(sessionBean.getUser(), MAX_ITEM_NUM_VIEW);
-            loadItems(sessionBean.getUser());
-            countItems();
-            
-            if (sessionBean.getActiveAlbum() != null
-                    && sessionBean.getActiveAlbum().getId().toString().equals(album.getId().toString()))
-            {
-                active = true;
-            }
-            
-            sessionBean.setSpaceLogoIngestImage(null);
-            setIngestImage(null);
-        }
-        catch (Exception e)
-        {
-            BeanHelper.error(e.getMessage());
-            logger.error("Error init album edit", e);
-        }
+	/**
+	 * Initialize the album form to edit the metadata of the album
+	 */
+	public void initEdit() {
+		AlbumController ac = new AlbumController();
+		try {
+			setAlbum(ac.retrieveLazy(ObjectHelper.getURI(Album.class, id),
+					sessionBean.getUser()));
+			findItems(sessionBean.getUser(), MAX_ITEM_NUM_VIEW);
+			loadItems(sessionBean.getUser());
+			countItems();
 
-        if(UrlHelper.getParameterBoolean("start")){
-    		upload();
-    	}
-    	
-    }
+			if (sessionBean.getActiveAlbum() != null
+					&& sessionBean.getActiveAlbum().getId().toString()
+							.equals(album.getId().toString())) {
+				active = true;
+			}
 
-    /**
-     * Return the link for the Cancel button
-     * 
-     * @return
-     */
-    public String getCancel()
-    {
-        Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-        return nav.getAlbumUrl() + id + "/" + nav.getInfosPath();
-    }
+			sessionBean.setSpaceLogoIngestImage(null);
+			setIngestImage(null);
+		} catch (Exception e) {
+			BeanHelper.error(e.getMessage());
+			logger.error("Error init album edit", e);
+		}
 
-    /**
-     * True if a the information about the {@link Album} are valid
-     * 
-     * @return
-     */
-    public boolean valid()
-    {
-        boolean valid = true;
-        boolean hasAuthor = false;
-        if (getAlbum().getMetadata().getTitle() == null || "".equals(getAlbum().getMetadata().getTitle()))
-        {
-            BeanHelper.error(sessionBean.getMessage("collection_create_error_title"));
-            valid = false;
-        }
-        for (Person c : getAlbum().getMetadata().getPersons())
-        {
-            boolean hasOrganization = false;
-            if (!"".equals(c.getFamilyName()))
-            {
-                hasAuthor = true;
-            }
-            for (Organization o : c.getOrganizations())
-            {
-                if (!"".equals(o.getName()) || "".equals(c.getFamilyName()))
-                {
-                    hasOrganization = true;
-                }
-                if (hasOrganization && "".equals(c.getFamilyName()))
-                {
-                    BeanHelper.error(sessionBean.getMessage("error_author_need_one_family_name"));
-                    valid = false;
-                }
-            }
-            if (!hasOrganization)
-            {
-                BeanHelper.error(sessionBean.getMessage("error_author_need_one_organization"));
-                valid = false;
-            }
-        }
-        if (!hasAuthor)
-        {
-            BeanHelper.error(sessionBean.getMessage("error_album_need_one_author"));
-            valid = false;
-        }
-        return valid;
-    }
+		if (UrlHelper.getParameterBoolean("start")) {
+			upload();
+		}
 
-    @Override
-    protected String getErrorMessageNoAuthor()
-    {
-        return "error_album_need_one_author";
-    }
+	}
 
-    /**
-     * Listener for the discard comment
-     * 
-     * @param event
-     */
-    public void discardCommentListener(ValueChangeEvent event)
-    {
-        if (event.getNewValue() != null && event.getNewValue().toString().trim().length() > 0)
-        {
-            album.setDiscardComment(event.getNewValue().toString().trim());
-        }
-    }
+	/**
+	 * Return the link for the Cancel button
+	 * 
+	 * @return
+	 */
+	public String getCancel() {
+		Navigation nav = (Navigation) BeanHelper
+				.getApplicationBean(Navigation.class);
+		return nav.getAlbumUrl() + id + "/" + nav.getInfosPath();
+	}
 
-    /**
-     * getter
-     * 
-     * @return
-     */
-    protected String getNavigationString()
-    {
-        return "pretty:";
-    }
+	/**
+	 * True if a the information about the {@link Album} are valid
+	 * 
+	 * @return
+	 */
+	public boolean valid() {
+		boolean valid = true;
+		boolean hasAuthor = false;
+		if (getAlbum().getMetadata().getTitle() == null
+				|| "".equals(getAlbum().getMetadata().getTitle())) {
+			BeanHelper.error(sessionBean
+					.getMessage("collection_create_error_title"));
+			valid = false;
+		}
+		for (Person c : getAlbum().getMetadata().getPersons()) {
+			boolean hasOrganization = false;
+			if (!"".equals(c.getFamilyName())) {
+				hasAuthor = true;
+			}
+			for (Organization o : c.getOrganizations()) {
+				if (!"".equals(o.getName()) || "".equals(c.getFamilyName())) {
+					hasOrganization = true;
+				}
+				if (hasOrganization && "".equals(c.getFamilyName())) {
+					BeanHelper.error(sessionBean
+							.getMessage("error_author_need_one_family_name"));
+					valid = false;
+				}
+			}
+			if (!hasOrganization) {
+				BeanHelper.error(sessionBean
+						.getMessage("error_author_need_one_organization"));
+				valid = false;
+			}
+		}
+		if (!hasAuthor) {
+			BeanHelper.error(sessionBean
+					.getMessage("error_album_need_one_author"));
+			valid = false;
+		}
+		return valid;
+	}
 
-    /**
-     * @return the id
-     */
-    public String getId()
-    {
-        return id;
-    }
+	@Override
+	protected String getErrorMessageNoAuthor() {
+		return "error_album_need_one_author";
+	}
 
-    /**
-     * @param id the id to set
-     */
-    public void setId(String id)
-    {
-        this.id = id;
-    }
+	/**
+	 * Listener for the discard comment
+	 * 
+	 * @param event
+	 */
+	public void discardCommentListener(ValueChangeEvent event) {
+		if (event.getNewValue() != null
+				&& event.getNewValue().toString().trim().length() > 0) {
+			album.setDiscardComment(event.getNewValue().toString().trim());
+		}
+	}
 
-    /**
-     * getter
-     * 
-     * @return
-     */
-    public List<SelectItem> getProfilesMenu()
-    {
-        return profilesMenu;
-    }
+	/**
+	 * getter
+	 * 
+	 * @return
+	 */
+	protected String getNavigationString() {
+		return "pretty:";
+	}
 
-    /**
-     * setter
-     * 
-     * @param profilesMenu
-     */
-    public void setProfilesMenu(List<SelectItem> profilesMenu)
-    {
-        this.profilesMenu = profilesMenu;
-    }
+	/**
+	 * @return the id
+	 */
+	public String getId() {
+		return id;
+	}
 
-    /**
-     * True if the current user is the owner of the albun
-     * 
-     * @return
-     */
-    // public boolean getIsOwner()
-    // {
-    // if (sessionBean.getUser() != null)
-    // {
-    // return getAlbum().getCreatedBy().equals(ObjectHelper.getURI(User.class, sessionBean.getUser().getEmail()));
-    // }
-    // else
-    // return false;
-    // }
-    /**
-     * Save (create or update) the {@link Album} in the database
-     * 
-     * @return
-     * @throws Exception
-     */
-    public String save() throws Exception
-    {
-        if (update()){
-            Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-            FacesContext
-                    .getCurrentInstance()
-                    .getExternalContext()
-                    .redirect(
-                            navigation.getAlbumUrl() + ObjectHelper.getId(getAlbum().getId()) + "/"
-                                    + navigation.getInfosPath() + "?init=1");
+	/**
+	 * @param id
+	 *            the id to set
+	 */
+	public void setId(String id) {
+		this.id = id;
+	}
 
-        }
-        return "";
-    }
+	/**
+	 * getter
+	 * 
+	 * @return
+	 */
+	public List<SelectItem> getProfilesMenu() {
+		return profilesMenu;
+	}
 
-    /**
-     * Update the {@link Album} in the dabatase with the values defined in this {@link AlbumBean}
-     * 
-     * @return
-     * @throws Exception
-     */
-    public boolean update() throws Exception
-    {
-        AlbumController ac = new AlbumController();
-        if (valid())
-        {
+	/**
+	 * setter
+	 * 
+	 * @param profilesMenu
+	 */
+	public void setProfilesMenu(List<SelectItem> profilesMenu) {
+		this.profilesMenu = profilesMenu;
+	}
 
-        	Album icPre = ac.retrieveLazy(album.getId(), sessionBean.getUser());
-        	if (icPre.getLogoUrl() != null && album.getLogoUrl() == null) {
-	        	 ac.updateAlbumLogo(icPre, null, sessionBean.getUser());
-	         }
-        	
-            ac.updateLazy(getAlbum(), sessionBean.getUser());
-	         //here separate update for the Logo only, as it will only be allowed by edited collection through the web application
-	         //not yet for REST 
-	         //getIngestImage is inherited from Container!
+	/**
+	 * True if the current user is the owner of the albun
+	 * 
+	 * @return
+	 */
+	// public boolean getIsOwner()
+	// {
+	// if (sessionBean.getUser() != null)
+	// {
+	// return getAlbum().getCreatedBy().equals(ObjectHelper.getURI(User.class,
+	// sessionBean.getUser().getEmail()));
+	// }
+	// else
+	// return false;
+	// }
+	/**
+	 * Save (create or update) the {@link Album} in the database
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public String save() throws Exception {
+		if (update()) {
+			Navigation navigation = (Navigation) BeanHelper
+					.getApplicationBean(Navigation.class);
+			FacesContext
+					.getCurrentInstance()
+					.getExternalContext()
+					.redirect(
+							navigation.getAlbumUrl()
+									+ ObjectHelper.getId(getAlbum().getId())
+									+ "/" + navigation.getInfosPath()
+									+ "?init=1");
 
-	         if (sessionBean.getSpaceLogoIngestImage()!= null ) {
-	        	 ac.updateAlbumLogo(getAlbum(), sessionBean.getSpaceLogoIngestImage().getFile(), sessionBean.getUser());
-	        	 setIngestImage(null);
-	        	 sessionBean.setSpaceLogoIngestImage(null);
-	 		 }
-	         
-//	         if (active) {
-//	        	 sessionBean.setActiveAlbum(ac.retrieveLazy(album.getId(), sessionBean.getUser()));
-//	         }
-//	         
-            BeanHelper.info(sessionBean.getMessage("success_album_update"));
-        }
-        return true;
-    }
+		}
+		return "";
+	}
 
-    /**
-     * setter
-     * 
-     * @param album
-     */
-    public void setAlbum(Album album)
-    {
-        this.album = album;
-    }
+	/**
+	 * Update the {@link Album} in the dabatase with the values defined in this
+	 * {@link AlbumBean}
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public boolean update() throws Exception {
+		AlbumController ac = new AlbumController();
+		if (valid()) {
 
-    /**
-     * getter
-     * 
-     * @return
-     */
-    public Album getAlbum()
-    {
-        return album;
-    }
+			Album icPre = ac.retrieveLazy(album.getId(), sessionBean.getUser());
+			if (icPre.getLogoUrl() != null && album.getLogoUrl() == null) {
+				ac.updateAlbumLogo(icPre, null, sessionBean.getUser());
+			}
 
-    /**
-     * Return the all author of this album as a single {@link String}
-     * 
-     * @return
-     */
-    public String getPersonString()
-    {
-        String personString = "";
-        for (Person p : album.getMetadata().getPersons())
-        {
-            if (!"".equals(personString))
-            {
-                personString += "; ";
-            }
-            personString += p.getFamilyName() + ", " + p.getGivenName();
-        }
-        return personString;
-    }
+			ac.updateLazy(getAlbum(), sessionBean.getUser());
+			// here separate update for the Logo only, as it will only be
+			// allowed by edited collection through the web application
+			// not yet for REST
+			// getIngestImage is inherited from Container!
 
-    /**
-     * setter
-     * 
-     * @param active
-     */
-    public void setActive(boolean active)
-    {
-        this.active = active;
-    }
+			if (sessionBean.getSpaceLogoIngestImage() != null) {
+				ac.updateAlbumLogo(getAlbum(), sessionBean
+						.getSpaceLogoIngestImage().getFile(), sessionBean
+						.getUser());
+				setIngestImage(null);
+				sessionBean.setSpaceLogoIngestImage(null);
+			}
 
-    /**
-     * getter
-     * 
-     * @return
-     */
-    public boolean getActive()
-    {
-        return active;
-    }
+			// if (active) {
+			// sessionBean.setActiveAlbum(ac.retrieveLazy(album.getId(),
+			// sessionBean.getUser()));
+			// }
+			//
+			BeanHelper.info(sessionBean.getMessage("success_album_update"));
+		}
+		return true;
+	}
 
-    /**
-     * Make the current {@link Album} active
-     * 
-     * @return
-     */
-    public String makeActive()
-    {    
-        findItems(sessionBean.getUser(), getSize());
-        sessionBean.setActiveAlbum(this.album);
-        this.setActive(true);
-        return "pretty:";
-    }
-  
-    /**
-     * Make the current {@link Album} inactive
-     * 
-     * @return
-     */
-    public String makeInactive()
-    { 
-        sessionBean.setActiveAlbum(null);
-        this.setActive(false);
-        return "pretty:";
-    }
+	/**
+	 * setter
+	 * 
+	 * @param album
+	 */
+	public void setAlbum(Album album) {
+		this.album = album;
+	}
 
-    /**
-     * Release the current {@link Album}
-     * 
-     * @return
-     */
-    public String release()
-    {
-        AlbumController ac = new AlbumController();
-        try
-        {
-            ac.release(album, sessionBean.getUser());
-            makeInactive();
-            BeanHelper.info(sessionBean.getMessage("success_album_release"));
-        }
-        catch (Exception e)
-        {
-            BeanHelper.error(sessionBean.getMessage("error_album_release"));
-            BeanHelper.error(e.getMessage());
-            logger.error("Issue during release", e);
-        }
-        return "pretty:";
-    }
+	/**
+	 * getter
+	 * 
+	 * @return
+	 */
+	public Album getAlbum() {
+		return album;
+	}
 
-    /**
-     * delete an {@link Album}
-     * 
-     * @return
-     */
-    public String delete()
-    {
-        AlbumController c = new AlbumController();
-        try
-        {
-            makeInactive();
-            c.delete(album, sessionBean.getUser());
-            BeanHelper.info(sessionBean.getMessage("success_album_delete").replace("XXX_albumName_XXX",
-                    this.album.getMetadata().getTitle()));
-        }
-        catch (Exception e)
-        {
-            BeanHelper.error(sessionBean.getMessage("error_album_delete"));
-            BeanHelper.error(e.getMessage());
-            logger.error("Error during delete album", e);
-        }
-        return "pretty:albums";
-    }
+	/**
+	 * Return the all author of this album as a single {@link String}
+	 * 
+	 * @return
+	 */
+	public String getPersonString() {
+		String personString = "";
+		for (Person p : album.getMetadata().getPersons()) {
+			if (!"".equals(personString)) {
+				personString += "; ";
+			}
+			personString += p.getFamilyName() + ", " + p.getGivenName();
+		}
+		return personString;
+	}
 
-    /**
-     * Discard the {@link AlbumImeji} of this {@link Album}
-     * 
-     * @return
-     * @throws Exception
-     */
-    public String withdraw() throws Exception
-    {
-        AlbumController c = new AlbumController();
-        try
-        {
-            c.withdraw(album, sessionBean.getUser());
-            BeanHelper.info(sessionBean.getMessage("success_album_withdraw"));
-        }
-        catch (Exception e)
-        {
-            BeanHelper.error(sessionBean.getMessage("error_album_withdraw"));
-            BeanHelper.error(e.getMessage());
-            logger.error("Error during withdraw album", e);
-        }
-        return "pretty:";
-    }
+	/**
+	 * setter
+	 * 
+	 * @param active
+	 */
+	public void setActive(boolean active) {
+		this.active = active;
+	}
 
-    /**
-     * True if the {@link Album} is selected in the album list
-     * 
-     * @return
-     */
-    public boolean getSelected()
-    {
-        if (sessionBean.getSelectedAlbums().contains(album.getId()))
-            selected = true;
-        else
-            selected = false;
-        return selected;
-    }
+	/**
+	 * getter
+	 * 
+	 * @return
+	 */
+	public boolean getActive() {
+		return active;
+	}
 
-    /**
-     * setter: called when the user click on the select box to select the {@link Album}. Set the status "selected" in
-     * the session
-     * 
-     * @param selected
-     */
-    public void setSelected(boolean selected)
-    {
-        if (selected)
-        {
-            if (!(sessionBean.getSelectedAlbums().contains(album.getId())))
-                sessionBean.getSelectedAlbums().add(album.getId());
-        }
-        else
-            sessionBean.getSelectedAlbums().remove(album.getId());
-        this.selected = selected;
-    }
+	/**
+	 * Make the current {@link Album} active
+	 * 
+	 * @return
+	 */
+	public String makeActive() {
+		findItems(sessionBean.getUser(), getSize());
+		sessionBean.setActiveAlbum(this.album);
+		this.setActive(true);
+		return "pretty:";
+	}
 
-    /**
-     * getter
-     * 
-     * @return the thumbnail
-     */
-    public ThumbnailBean getThumbnail()
-    {
-        return thumbnail;
-    }
+	/**
+	 * Make the current {@link Album} inactive
+	 * 
+	 * @return
+	 */
+	public String makeInactive() {
+		sessionBean.setActiveAlbum(null);
+		this.setActive(false);
+		return "pretty:";
+	}
 
-    /**
-     * setter
-     * 
-     * @param thumbnail the thumbnail to set
-     */
-    public void setThumbnail(ThumbnailBean thumbnail)
-    {
-        this.thumbnail = thumbnail;
-    }
+	/**
+	 * Release the current {@link Album}
+	 * 
+	 * @return
+	 */
+	public String release() {
+		AlbumController ac = new AlbumController();
+		try {
+			ac.release(album, sessionBean.getUser());
+			makeInactive();
+			BeanHelper.info(sessionBean.getMessage("success_album_release"));
+		} catch (Exception e) {
+			BeanHelper.error(sessionBean.getMessage("error_album_release"));
+			BeanHelper.error(e.getMessage());
+			logger.error("Issue during release", e);
+		}
+		return "pretty:";
+	}
 
-    public String getFormattedDescription()
-    {
-        if (this.getAlbum() == null || this.getAlbum().getMetadata().getDescription() == null)
-            return "";
-        return this.getAlbum().getMetadata().getDescription().replaceAll("\n", "<br/>");
-    }
+	/**
+	 * delete an {@link Album}
+	 * 
+	 * @return
+	 */
+	public String delete() {
+		AlbumController c = new AlbumController();
+		try {
+			makeInactive();
+			c.delete(album, sessionBean.getUser());
+			BeanHelper.info(sessionBean.getMessage("success_album_delete")
+					.replace("XXX_albumName_XXX",
+							this.album.getMetadata().getTitle()));
+		} catch (Exception e) {
+			BeanHelper.error(sessionBean.getMessage("error_album_delete"));
+			BeanHelper.error(e.getMessage());
+			logger.error("Error during delete album", e);
+		}
+		return "pretty:albums";
+	}
 
-    public void setDescription(String description)
-    {
-        this.description = description;
-    }
+	/**
+	 * Discard the {@link AlbumImeji} of this {@link Album}
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public String withdraw() throws Exception {
+		AlbumController c = new AlbumController();
+		try {
+			c.withdraw(album, sessionBean.getUser());
+			BeanHelper.info(sessionBean.getMessage("success_album_withdraw"));
+		} catch (Exception e) {
+			BeanHelper.error(sessionBean.getMessage("error_album_withdraw"));
+			BeanHelper.error(e.getMessage());
+			logger.error("Error during withdraw album", e);
+		}
+		return "pretty:";
+	}
 
-    public String getDescription()
-    {
-        return description;
-    }
+	/**
+	 * True if the {@link Album} is selected in the album list
+	 * 
+	 * @return
+	 */
+	public boolean getSelected() {
+		if (sessionBean.getSelectedAlbums().contains(album.getId()))
+			selected = true;
+		else
+			selected = false;
+		return selected;
+	}
 
-    public String getDescriptionFull()
-    {
-        return descriptionFull;
-    }
+	/**
+	 * setter: called when the user click on the select box to select the
+	 * {@link Album}. Set the status "selected" in the session
+	 * 
+	 * @param selected
+	 */
+	public void setSelected(boolean selected) {
+		if (selected) {
+			if (!(sessionBean.getSelectedAlbums().contains(album.getId())))
+				sessionBean.getSelectedAlbums().add(album.getId());
+		} else
+			sessionBean.getSelectedAlbums().remove(album.getId());
+		this.selected = selected;
+	}
 
-    public void setDescriptionFull(String descriptionFull)
-    {
-        this.descriptionFull = descriptionFull;
-    }
+	/**
+	 * getter
+	 * 
+	 * @return the thumbnail
+	 */
+	public ThumbnailBean getThumbnail() {
+		return thumbnail;
+	}
 
-    public String getTab()
-    {
-        if (UrlHelper.getParameterValue("tab") != null)
-        {
-            tab = UrlHelper.getParameterValue("tab").toUpperCase();
-        }
-        return tab;
-    }
+	/**
+	 * setter
+	 * 
+	 * @param thumbnail
+	 *            the thumbnail to set
+	 */
+	public void setThumbnail(ThumbnailBean thumbnail) {
+		this.thumbnail = thumbnail;
+	}
 
-    public void setTab(String tab)
-    {
-        this.tab = tab.toUpperCase();
-    }
+	public String getFormattedDescription() {
+		if (this.getAlbum() == null
+				|| this.getAlbum().getMetadata().getDescription() == null)
+			return "";
+		return this.getAlbum().getMetadata().getDescription()
+				.replaceAll("\n", "<br/>");
+	}
 
-    public String getPageUrl()
-    {
-        return ((Navigation)BeanHelper.getApplicationBean(Navigation.class)).getAlbumUrl() + id;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public User getAlbumCreator() throws Exception
-    {
-        UserController uc = new UserController(sessionBean.getUser());
-        User user = uc.retrieve(album.getCreatedBy());
-        return user;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public String getCitation()
-    {
-        String title = album.getMetadata().getTitle();
-        String author = this.getPersonString();
-        String url = this.getPageUrl();
-        String citation = title + " " + sessionBean.getLabel("from") + " <i>" + author + "</i></br>" + url;
-        return citation;
-    }
+	public String getDescriptionFull() {
+		return descriptionFull;
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see de.mpg.imeji.presentation.beans.ContainerBean#getType()
-     */
-    @Override
-    public String getType()
-    {
-        return CONTAINER_TYPE.ALBUM.name();
-    }
+	public void setDescriptionFull(String descriptionFull) {
+		this.descriptionFull = descriptionFull;
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see de.mpg.imeji.presentation.beans.ContainerBean#getContainer()
-     */
-    @Override
-    public Container getContainer()
-    {
-        return getAlbum();
-    }
+	public String getTab() {
+		if (UrlHelper.getParameterValue("tab") != null) {
+			tab = UrlHelper.getParameterValue("tab").toUpperCase();
+		}
+		return tab;
+	}
 
-    /*
-     * (non-Javadoc) following getter functions are for standardization and simplification the output of album data in a
-     * general template system
-     */
-    public String getTitle()
-    {
-        if (getContainer() != null)
-            return getContainer().getMetadata().getTitle();
-        return null;
-    }
+	public void setTab(String tab) {
+		this.tab = tab.toUpperCase();
+	}
 
-    public String getAuthors()
-    {
-        return this.getPersonString();
-    }
+	public String getPageUrl() {
+		return ((Navigation) BeanHelper.getApplicationBean(Navigation.class))
+				.getAlbumUrl() + id;
+	}
 
-    public Date getCreationDate()
-    {
-        return this.getContainer().getCreated().getTime();
-    }
+	public User getAlbumCreator() throws Exception {
+		UserController uc = new UserController(sessionBean.getUser());
+		User user = uc.retrieve(album.getCreatedBy());
+		return user;
+	}
 
-    public Date getLastModificationDate()
-    {
-        return this.getContainer().getModified().getTime();
-    }
+	public String getCitation() {
+		String title = album.getMetadata().getTitle();
+		String author = this.getPersonString();
+		String url = this.getPageUrl();
+		String citation = title + " " + sessionBean.getLabel("from") + " <i>"
+				+ author + "</i></br>" + url;
+		return citation;
+	}
 
-    public Date getVersionDate()
-    {
-        return this.getContainer().getVersionDate().getTime();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see de.mpg.imeji.presentation.beans.ContainerBean#getType()
+	 */
+	@Override
+	public String getType() {
+		return CONTAINER_TYPE.ALBUM.name();
+	}
 
-    public Status getStatus()
-    {
-        return this.getContainer().getStatus();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see de.mpg.imeji.presentation.beans.ContainerBean#getContainer()
+	 */
+	@Override
+	public Container getContainer() {
+		return getAlbum();
+	}
 
-    public String getDiscardComment()
-    {
-        return this.getContainer().getDiscardComment();
-    }
+	/*
+	 * (non-Javadoc) following getter functions are for standardization and
+	 * simplification the output of album data in a general template system
+	 */
+	public String getTitle() {
+		if (getContainer() != null)
+			return getContainer().getMetadata().getTitle();
+		return null;
+	}
 
-    public void setDiscardComment(String comment)
-    {
-        this.getContainer().setDiscardComment(comment);
-    }
-    
-    /**
-     * Compute the amount of private items within an album
-     * @return
-     */
-    public int getPrivateCount ()
-    {
-    	int count = 0;
-    	if (this.getSize() > this.getContainer().getImages().size())
-    	{
-        	count = this.getSize() - this.getContainer().getImages().size();       	
-    	}
-    	return count;
-    }
+	public String getAuthors() {
+		return this.getPersonString();
+	}
+
+	public Date getCreationDate() {
+		return this.getContainer().getCreated().getTime();
+	}
+
+	public Date getLastModificationDate() {
+		return this.getContainer().getModified().getTime();
+	}
+
+	public Date getVersionDate() {
+		return this.getContainer().getVersionDate().getTime();
+	}
+
+	public Status getStatus() {
+		return this.getContainer().getStatus();
+	}
+
+	public String getDiscardComment() {
+		return this.getContainer().getDiscardComment();
+	}
+
+	public void setDiscardComment(String comment) {
+		this.getContainer().setDiscardComment(comment);
+	}
+
+	/**
+	 * Compute the amount of private items within an album
+	 * 
+	 * @return
+	 */
+	public int getPrivateCount() {
+		int count = 0;
+		if (this.getSize() > allowedItemsSize) {
+			count = this.getSize() - allowedItemsSize;
+		}
+		return count;
+	}
+
+	/**
+	 * Count the amount of items a user is allow to see
+	 */
+	private void countAllowedItems() {
+		ItemController ic = new ItemController();
+		this.allowedItemsSize = ic.seachContainerItemsFast(getContainer(),
+				sessionBean.getUser(), -1).size();
+	}
+
 }

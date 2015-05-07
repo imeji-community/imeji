@@ -247,6 +247,23 @@ public class SpaceController extends ImejiController {
         if (isNullOrEmptyTrim(space.getTitle())) {
             throw new BadRequestException("error_space_need_title");
         }
+        
+        if (isSpaceByLabel(space.getSlug())) {
+            throw new  BadRequestException("error_there_is_another_space_with_same_slug");
+        }
+        
+        if (isNullOrEmptyTrim(space.getSlug())) {
+        	throw new BadRequestException("error_space_needs_slug");
+        }
+        try {
+    		URI slugTest = new URI(space.getSlug());
+    		//above creatino of URI in order to check if it is a sintactically valid slug
+		} catch (URISyntaxException e) {
+			//BeanHelper.error(sessionBean.getMessage("This is not a valid value for a space slug! Please make sure it is a valid URI!"));
+			//throw new TypeNotAllowedException(sessionBean.getMessage("Logo_single_upload_invalid_content_format"));
+			//throw new BadRequestException("This is not a valid value for a space slug! Please make sure it is a valid URI!");
+			throw new BadRequestException("error_space_invalid_slug");
+		}
     }
 
     /**

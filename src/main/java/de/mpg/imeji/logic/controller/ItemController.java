@@ -643,7 +643,8 @@ public class ItemController extends ImejiController {
 		c.getImages().clear();
 		return ImejiSPARQL.exec(q, null);
 	}
-
+	
+	
 	/**
 	 * Set the status of a {@link List} of {@link Item} to released
 	 * 

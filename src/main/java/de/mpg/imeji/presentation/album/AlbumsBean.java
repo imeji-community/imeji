@@ -51,7 +51,7 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean> {
 	}
 
 	@Override
-	public List<AlbumBean> retrieveList(int offset, int limit) throws Exception {  
+	public List<AlbumBean> retrieveList(int offset, int limit) throws Exception {
 		UserController uc = new UserController(sb.getUser());
 		if (sb.getUser() != null) {
 			sb.setUser(uc.retrieve(sb.getUser().getEmail()));

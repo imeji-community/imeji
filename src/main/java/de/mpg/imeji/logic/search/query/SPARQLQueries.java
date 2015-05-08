@@ -621,6 +621,7 @@ public class SPARQLQueries {
 				+ ImejiNamespaces.STATUS
 				+ "> ?status } "
 				+ ((limit > 0) ? (" LIMIT " + limit) : "");
+		
 	}
 
 	public static String selectContainerItemByFilename(URI containerURI,

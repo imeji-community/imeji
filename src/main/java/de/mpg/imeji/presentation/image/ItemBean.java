@@ -83,7 +83,7 @@ public class ItemBean {
 				.getSessionBean(SessionBean.class);
 		navigation = (Navigation) BeanHelper
 				.getApplicationBean(Navigation.class);
-		prettyLink = "pretty:editImage";
+		prettyLink = sessionBean.getPrettySpacePage("pretty:editImage");
 		labels = (MetadataLabels) BeanHelper
 				.getSessionBean(MetadataLabels.class);
 	}
@@ -314,7 +314,7 @@ public class ItemBean {
 	}
 
 	public String getNavigationString() {
-		return "pretty:item";
+		return sessionBean.getPrettySpacePage("pretty:item");
 	}
 
 	public SessionBean getSessionBean() {

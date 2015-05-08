@@ -206,7 +206,7 @@ public class CollectionItemsBean extends ItemsBean
             BeanHelper.error(e.getMessage());
             logger.error("Error deleting collection", e);
         }
-        return "pretty:collections";
+        return sb.getPrettySpacePage("pretty:collections");
     }
 
     /**

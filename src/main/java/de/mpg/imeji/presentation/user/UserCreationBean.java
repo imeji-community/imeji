@@ -70,7 +70,7 @@ public class UserCreationBean {
 					}
 					logger.info("New user created: " + user.getEmail());
 					BeanHelper.info(sb.getMessage("success_user_create"));
-					return "pretty:users";
+					return sb.getPrettySpacePage("pretty:users");
 				}
 			} catch (Exception e) {
 				BeanHelper.error(sb.getMessage("error") + ": " + e);

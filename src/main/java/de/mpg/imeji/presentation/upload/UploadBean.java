@@ -472,7 +472,7 @@ public class UploadBean implements Serializable {
 			BeanHelper.error(sessionBean.getMessage("error_collection_delete"));
 			logger.error("Error delete collection", e);
 		}
-		return "pretty:collections";
+		return sessionBean.getPrettySpacePage("pretty:collections");
 	}
 
 	/**

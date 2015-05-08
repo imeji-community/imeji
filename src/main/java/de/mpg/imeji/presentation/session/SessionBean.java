@@ -4,6 +4,7 @@
 package de.mpg.imeji.presentation.session;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.SpaceController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -17,6 +18,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CookieUtils;
 import de.mpg.imeji.presentation.util.MaxPlanckInstitutUtils;
 import de.mpg.imeji.presentation.util.PropertyReader;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
@@ -25,6 +27,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
@@ -455,7 +458,12 @@ public class SessionBean implements Serializable {
 	 * @return
 	 */
 	public Album getActiveAlbum() {
-		return activeAlbum;
+			//
+			if (activeAlbum != null && ( !AuthUtil.staticAuth().read(getUser(), activeAlbum.getId()) ||
+										 !AuthUtil.staticAuth().create(getUser(), activeAlbum.getId()) )) {
+				setActiveAlbum(null);
+			}
+			return activeAlbum;
 	}
 
 	/**

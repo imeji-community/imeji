@@ -37,9 +37,6 @@ public class Space extends Properties implements Serializable {
 	private String title;
 	@j2jLiteral("http://purl.org/dc/elements/1.1/description")
 	private String description;
-	@j2jResource("http://imeji.org/terms/visibility")
-	private URI visibility = URI.create("http://imeji.org/terms/visibility#"
-			+ Item.Visibility.PRIVATE.name());
 	@j2jResource("http://imeji.org/terms/logoUrl")
 	private URI logoUrl;
 	@j2jLiteral("http://imeji.org/terms/slug")
@@ -84,16 +81,6 @@ public class Space extends Properties implements Serializable {
 	public void setDescription(String description)
 	{
 		this.description = description;
-	}
-
-	public void setVisibility(Item.Visibility visibility) {
-		this.visibility = URI.create("http://imeji.org/terms/visibility#"
-				+ visibility.name());
-	}
-
-	@XmlElement(name = "visibility", namespace = "http://imeji.org/terms/")
-	public Item.Visibility getVisibility() {
-		return Item.Visibility.valueOf(visibility.getFragment());
 	}
 
 

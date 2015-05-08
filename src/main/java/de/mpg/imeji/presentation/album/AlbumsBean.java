@@ -42,7 +42,7 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean> {
 
 	@Override
 	public String getNavigationString() {
-		return "pretty:albums";
+		return sb.getPrettySpacePage("pretty:albums");
 	}
 
 	@Override
@@ -109,7 +109,7 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean> {
 	public String deleteAll() {
 		if (sb.getSelectedAlbums().size() == 0) {
 			BeanHelper.warn(sb.getMessage("error_delete_no_albums_selected"));
-			return "pretty:albums";
+			return sb.getPrettySpacePage("pretty:albums");
 		}
 		for (AlbumBean b : getCurrentPartList()) {
 			if (b.getSelected()) {
@@ -117,7 +117,7 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean> {
 			}
 		}
 		sb.getSelectedAlbums().clear();
-		return "pretty:albums";
+		return sb.getPrettySpacePage("pretty:albums");
 	}
 
 	/**

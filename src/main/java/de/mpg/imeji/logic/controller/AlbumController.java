@@ -115,6 +115,20 @@ public class AlbumController extends ImejiController {
 		writer.update(WriterFacade.toList(ic), user);
 		return retrieve(ic.getId(), user);
 	}
+	
+	/**
+	 * Updates an album -Logged in users: --User is album owner --OR
+	 * user is album editor, by choice checking the security
+	 * 
+	 * @param ic
+	 * @param user
+	 * @throws ImejiException
+	 */
+	public Album update(Album ic, User user, boolean doCheckSecurity) throws ImejiException {
+		writeUpdateProperties(ic, user);
+		writer.update(WriterFacade.toList(ic), user, doCheckSecurity);
+		return retrieve(ic.getId(), user);
+	}
 
 	/**
 	 * Updates an album -Logged in users: --User is album owner --OR user is
@@ -255,7 +269,8 @@ public class AlbumController extends ImejiController {
 		for (String uri : inAlbums) {
 			album.getImages().add(URI.create(uri));
 		}
-		updateAlbumItems(album, user);
+		// Force admin user since th user might not have right to edit the album
+		update(album, user, false);
 		return new ArrayList<URI>(album.getImages());
 	}
 
@@ -285,7 +300,7 @@ public class AlbumController extends ImejiController {
 					"Album has been released! You are trying to remove all items from this album! Discard the album if necessary!");
 		}
 
-		updateAlbumItems(album, user);
+		update(album, user, false);
 		return inAlbums.size() - album.getImages().size();
 	}
 

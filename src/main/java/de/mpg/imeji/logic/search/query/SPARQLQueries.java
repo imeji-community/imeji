@@ -616,8 +616,10 @@ public class SPARQLQueries {
 				+ SimpleSecurityQuery
 						.queryFactory(user,
 								J2JHelper.getResourceNamespace(new Item()),
-								null, false) + " ?s <" + ImejiNamespaces.STATUS
-				+ "> ?status . ?s <http://imeji.org/terms/collection> ?c} "
+								null, false) 
+				+ " ?s <" 
+				+ ImejiNamespaces.STATUS
+				+ "> ?status } "
 				+ ((limit > 0) ? (" LIMIT " + limit) : "");
 	}
 

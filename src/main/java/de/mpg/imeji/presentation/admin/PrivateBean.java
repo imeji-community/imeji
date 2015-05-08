@@ -65,7 +65,7 @@ public class PrivateBean extends SuperContainerBean<CollectionListItem> {
 
 	@Override
 	public String getNavigationString() {
-		return "pretty:privatePage";
+		return sb.getPrettySpacePage("pretty:privatePage");
 	}
 
 	@Override

@@ -258,7 +258,7 @@ public class AlbumItemsBean extends ItemsBean
 			logger.error("Error during delete album items ", e);
 		}
         ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).delete();
-        return "pretty:albums";
+        return sb.getPrettySpacePage("pretty:albums");
     }
 
     /**

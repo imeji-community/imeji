@@ -482,7 +482,7 @@ public class SimpleQueryFactory {
 				return ". ?s <http://imeji.org/terms/container/metadata> ?contmd . ?contmd <http://xmlns.com/foaf/0.1/person> ?person . ?person <http://purl.org/escidoc/metadata/terms/0.1/complete-name> ?sort0";
 			} else if (SearchIndex.IndexNames.cont_title.name().equals(
 					sortCriterion.getIndex().getName())) {
-				return (item ? " . ?c" : " . ?s")
+				return (item ? " . ?s <http://imeji.org/terms/collection> ?c . ?c" : " . ?s")
 						+ " <http://imeji.org/terms/container/metadata> ?title . ?title <"
 						+ sortCriterion.getIndex().getNamespace() + "> ?sort0";
 			} else if (SearchIndex.IndexNames.filename.name().equals(

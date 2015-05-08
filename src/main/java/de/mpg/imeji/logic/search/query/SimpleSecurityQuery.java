@@ -116,18 +116,12 @@ public class SimpleSecurityQuery {
 			uris = AuthUtil.getListOfAllowedCollections(user);
 		}
 		String s = "";
-//		boolean hasCollections=false;
+
 		for (String uri : uris) {
 			if (!"".equals(s))
 				s += " || ";
 			s += "?" + getVariableName(rdfType) + "=<" + uri + ">";
-//			if ("c".equals(getVariableName(rdfType))) {
-//				hasCollections = true;
-//			}
 		}
-//		if (hasCollections) {
-//			s+=
-//		}
 		if (J2JHelper.getResourceNamespace(new Item()).equals(rdfType)) {
 			// searching for items. Add to the Filter the item for which the
 			// user has extra rights as well as the item which are public

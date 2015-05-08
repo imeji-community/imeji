@@ -50,7 +50,8 @@ public class ObjectLoader {
 		} catch (NotFoundException e) {
 			writeErrorNotFound("collection", id);
 		} catch (ImejiException e) {
-			logger.error("Error Object loader for " + id, e);
+			//logger.error("Error Object loader for " + id, e);
+			//Commented out no need to log handled ImejiException
 			throw e;
 		}
 		return null;
@@ -247,7 +248,8 @@ public class ObjectLoader {
 	 * @throws Exception 
 	 */
 	private static void writeException(ImejiException e, String id) throws ImejiException {
-		logger.error("Error Object loader for " + id, e);
+		//logger.error("Error Object loader for " + id, e);
+		//No need to log handled ImejiException
 		throw e;
 	}
 }

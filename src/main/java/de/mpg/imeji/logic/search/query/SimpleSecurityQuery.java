@@ -3,6 +3,7 @@
  */
 package de.mpg.imeji.logic.search.query;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.vo.*;
@@ -54,8 +55,13 @@ public class SimpleSecurityQuery {
 		// else, check the grant and add the status filter...
 		// return getUserGrantsAsFilter(user, rdfType) + statusFilter +
 		// " . ?s a <" + rdfType + "> ";
-		return getUserGrantsAsFilterSimple(user, rdfType, isUserSearch)
+		String userGrantsAsFilterSimple= getUserGrantsAsFilterSimple(user, rdfType, isUserSearch)
 				+ statusFilter + " .";
+		if (userGrantsAsFilterSimple.contains("?c="))
+			userGrantsAsFilterSimple+="?s <"+ImejiNamespaces.COLLECTION+"> ?c .";
+		return userGrantsAsFilterSimple;
+		//return getUserGrantsAsFilterSimple(user, rdfType, isUserSearch)
+			//	+ statusFilter + " .";
 	}
 
 	/**
@@ -110,11 +116,18 @@ public class SimpleSecurityQuery {
 			uris = AuthUtil.getListOfAllowedCollections(user);
 		}
 		String s = "";
+//		boolean hasCollections=false;
 		for (String uri : uris) {
 			if (!"".equals(s))
 				s += " || ";
 			s += "?" + getVariableName(rdfType) + "=<" + uri + ">";
+//			if ("c".equals(getVariableName(rdfType))) {
+//				hasCollections = true;
+//			}
 		}
+//		if (hasCollections) {
+//			s+=
+//		}
 		if (J2JHelper.getResourceNamespace(new Item()).equals(rdfType)) {
 			// searching for items. Add to the Filter the item for which the
 			// user has extra rights as well as the item which are public

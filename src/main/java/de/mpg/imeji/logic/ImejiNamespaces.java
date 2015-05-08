@@ -20,6 +20,8 @@ public class ImejiNamespaces {
 	public static final String DATE_CREATED = "http://purl.org/dc/terms/created";
 	public static final String DISCARD_COMMENT = "http://imeji.org/terms/discardComment";
 	public static final String CONTAINER_LOGO = "http://imeji.org/terms/logoUrl";
+	public static final String COLLECTION="http://imeji.org/terms/collection";
+	
 	
 	/*
 	 * Metadata

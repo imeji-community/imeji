@@ -93,6 +93,7 @@ public class AlbumBean extends ContainerBean {
 				findItems(sessionBean.getUser(), 1);
 				loadItems(sessionBean.getUser());
 				countItems();
+				countAllowedItems();
 				description = album.getMetadata().getDescription();
 				descriptionFull = description;
 				description = CommonUtils.removeTags(description);
@@ -141,15 +142,18 @@ public class AlbumBean extends ContainerBean {
 						active = true;
 						// sessionBean.setActiveAlbum(album);
 					}
-					if (getPrivateCount() != 0) {
+					
+					int myPrivateCount = getPrivateCount();
+					if (myPrivateCount != 0) {
 						BeanHelper.info(sessionBean.getMessage(
 								"album_Private_Content").replace(
-								"XXX_COUNT_XXX", getPrivateCount() + ""));
+								"XXX_COUNT_XXX", myPrivateCount + ""));
 					}
 				}
 
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			logger.error("", e);
 			// Has to be in try/catch block, otherwise redirct from
 			// HistoryFilter will not work.

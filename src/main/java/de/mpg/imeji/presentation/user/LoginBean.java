@@ -96,6 +96,7 @@ public class LoginBean {
 		User user = auth.doLogin();
 		if (user != null) {
 			sb.setUser(user);
+			BeanHelper.cleanMessages();
 			BeanHelper.info(sb.getMessage("success_log_in"));
 		} else {
 			String name = ((ConfigurationBean) BeanHelper

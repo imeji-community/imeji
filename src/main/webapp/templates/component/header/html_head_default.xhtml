@@ -39,6 +39,7 @@ All rights reserved. Use is subject to license terms.
 	<meta http-equiv="cache-control" content="no-cache"/>
 	<meta http-equiv="expires" content="0"/>
 	<title><h:outputText value="#{Configuration.instanceName} - #{HistorySession.currentPage.internationalizedName}"/></title>
+	<link rel="shortcut icon" type="image/png" href="#{Navigation.applicationUrl}resources/icon/imeji.ico"/>
 	
 	<ui:fragment rendered="#{Configuration.metaDescription != ''}">
 		<meta name="description" content="#{Configuration.metaDescription}"/>
@@ -58,7 +59,7 @@ All rights reserved. Use is subject to license terms.
 	
 	<h:outputStylesheet library="css/theme_default" name="app.css" id="themeDefault" rendered="#{SessionBean.selectedCss == 'NONE'}"/>
 	
-	<link rel="shortcut icon" type="image/x-ico" href="#{Navigation.applicationUrl}resources/icon/imeji.ico"/>
+
 	<script type="text/javascript" src="#{Navigation.applicationUrl}resources/jquery/jquery-1.11.1.min.js"></script>
 	
 	<ui:fragment rendered="#{SessionBean.locale == 'en' or SessionBean.locale == 'es'}">

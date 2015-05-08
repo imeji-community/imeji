@@ -81,18 +81,16 @@ public class CollectionFacets extends Facets {
 				List<Facet> group = new ArrayList<Facet>();
 				if (st.isPreview() && !fs.isFilter(getName(st.getId()))) {
 					SearchPair pair = new SearchPair(
-							SPARQLSearch.getIndex(SearchIndex.IndexNames.statement),
+							SPARQLSearch
+									.getIndex(SearchIndex.IndexNames.statement),
 							SearchOperators.EQUALS, st.getId().toString());
 					count = getCount(searchQuery, pair, allImages.getResults());
 
-					if (count > 0 || true) {
-						group.add(new Facet(
-								uriFactory.createFacetURI(baseURI, pair,
-										getName(st.getId()),
-										FacetType.COLLECTION), getName(st
-										.getId()), count, FacetType.COLLECTION,
-								st.getId()));
-					}
+					group.add(new Facet(uriFactory.createFacetURI(baseURI,
+							pair, getName(st.getId()), FacetType.COLLECTION),
+							getName(st.getId()), count, FacetType.COLLECTION,
+							st.getId()));
+
 					if (count <= sizeAllImages) {
 						pair.setNot(true);
 						group.add(new Facet(uriFactory.createFacetURI(baseURI,

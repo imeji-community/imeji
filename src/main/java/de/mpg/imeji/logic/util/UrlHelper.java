@@ -93,9 +93,8 @@ public class UrlHelper {
 		try {
 			return URLDecoder.decode(s, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			new RuntimeException(e);
+			throw new RuntimeException(e);
 		}
-		return null;
 	}
 
 	/**
@@ -108,9 +107,8 @@ public class UrlHelper {
 		try {
 			return URLEncoder.encode(s, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			new RuntimeException(e);
+			throw new RuntimeException(e);
 		}
-		return null;
 	}
 
     /**

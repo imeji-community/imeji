@@ -793,7 +793,7 @@ public class ItemController extends ImejiController {
 			throws ImejiException {
 		List<ImejiTriple> triples = new ArrayList<ImejiTriple>();
 		for (Item item : l) {
-			if (!profileUri.equals(item.getMetadataSet().getProfile())) {
+			if (!profileUri.equals(item.getMetadataSet().getProfile().toString())) {
 				triples.add(getProfileTriple(item.getMetadataSet().getId()
 						.toString(), item, profileUri));
 				triples.addAll(getUpdateTriples(item.getId().toString(), user,

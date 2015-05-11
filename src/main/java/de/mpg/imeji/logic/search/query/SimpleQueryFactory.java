@@ -133,9 +133,6 @@ public class SimpleQueryFactory {
 		if (modelName != null && !modelName.equals("")) {
 			names = "FROM <" + modelName + "> FROM <" + Imeji.userModel
 					+ "> FROM <" + Imeji.collectionModel + ">";
-			if (Imeji.profileModel.equals(modelName) || isInSpace) {
-				names += " FROM <" + Imeji.collectionModel + ">";
-			}
 			if (pair != null
 					&& SearchIndex.IndexNames.item.name().equals(
 							pair.getIndex().getName())

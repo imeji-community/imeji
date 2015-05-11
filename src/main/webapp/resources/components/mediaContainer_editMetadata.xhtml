@@ -205,7 +205,7 @@
 				<h:panelGroup layout="block" id="profileCreationMethodPanel">
 					<ui:fragment rendered="#{cc.attrs.formularBean.useMDProfileTemplate}">
 					<div>
-						<h:outputText value="Please select whether you would like to copy or reference the metadata profile you selected. Blah Blah... "/>
+						<h:outputText value="#{lbl.copy_or_reference_metadata_profile}"/>
 					</div>
 					<div>
 							<h:selectOneRadio value="#{cc.attrs.formularBean.selectedCreationMethod}">

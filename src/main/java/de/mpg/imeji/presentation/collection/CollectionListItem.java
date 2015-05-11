@@ -7,6 +7,7 @@ import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
@@ -16,9 +17,11 @@ import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CommonUtils;
 import de.mpg.imeji.presentation.util.ObjectLoader;
+
 import org.apache.log4j.Logger;
 
 import javax.faces.event.ValueChangeEvent;
+
 import java.net.URI;
 import java.util.Collection;
 
@@ -91,9 +94,10 @@ public class CollectionListItem
             }
             // Get first thumbnail of the collection and modify the image link if the collection has own explicit logo
 	            ItemController ic = new ItemController();
-	            if (ic.searchAndSetContainerItemsFast(collection, user, 1).getImages().iterator().hasNext())
+	            Container searchedContainer = ic.searchAndSetContainerItemsFast(collection, user, 1);
+	            if (searchedContainer.getImages().iterator().hasNext())
 	            {
-	               URI uri = ic.searchAndSetContainerItemsFast(collection, user, 1).getImages().iterator().next();
+	               URI uri = searchedContainer.getImages().iterator().next();
 	               if (uri != null)
 	               {
 	                 this.thumbnail = new ThumbnailBean(ic.retrieve(uri, user));

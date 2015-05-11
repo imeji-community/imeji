@@ -55,13 +55,14 @@ public class SimpleSecurityQuery {
 		// else, check the grant and add the status filter...
 		// return getUserGrantsAsFilter(user, rdfType) + statusFilter +
 		// " . ?s a <" + rdfType + "> ";
-		String userGrantsAsFilterSimple= getUserGrantsAsFilterSimple(user, rdfType, isUserSearch)
-				+ statusFilter + " .";
-		if (userGrantsAsFilterSimple.contains("?c="))
-			userGrantsAsFilterSimple+="?s <"+ImejiNamespaces.COLLECTION+"> ?c .";
+		String userGrantsAsFilterSimple = getUserGrantsAsFilterSimple(user,
+				rdfType, isUserSearch) + statusFilter + " .";
+		if (userGrantsAsFilterSimple.contains("?c=") && rdfType.equals(ImejiNamespaces.ITEM))
+			userGrantsAsFilterSimple += "?s <" + ImejiNamespaces.COLLECTION
+					+ "> ?c .";
 		return userGrantsAsFilterSimple;
-		//return getUserGrantsAsFilterSimple(user, rdfType, isUserSearch)
-			//	+ statusFilter + " .";
+		// return getUserGrantsAsFilterSimple(user, rdfType, isUserSearch)
+		// + statusFilter + " .";
 	}
 
 	/**
@@ -72,7 +73,8 @@ public class SimpleSecurityQuery {
 	 */
 	private static String getStatusAsFilter(Status status) {
 		if (status == null) {
-			return "FILTER (?status!=<" + Status.WITHDRAWN.getUriString() + ">)";
+			return "FILTER (?status!=<" + Status.WITHDRAWN.getUriString()
+					+ ">)";
 		} else {
 			return "FILTER (?status=<" + status.getUriString() + ">)";
 		}

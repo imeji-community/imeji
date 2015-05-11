@@ -106,11 +106,9 @@ public class AdvancedSearchBean {
 				.getLabel("and_small")));
 		operatorsMenu.add(new SelectItem(LOGICAL_RELATIONS.OR, session
 				.getLabel("or_small")));
-		ConfigurationBean config = (ConfigurationBean) BeanHelper
-				.getApplicationBean(ConfigurationBean.class);
 		fileTypesMenu = new ArrayList<>();
 		fileTypesSelected = new ArrayList<>();
-		for (Type type : config.getFileTypes().getTypes()) {
+		for (Type type : ConfigurationBean.getFileTypesStatic().getTypes()) {
 			fileTypesMenu.add(new SelectItem(type.getName(session.getLocale()
 					.getLanguage())));
 		}

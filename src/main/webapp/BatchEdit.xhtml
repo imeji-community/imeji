@@ -110,8 +110,9 @@
 						
 						<!-- Items -->
 						<h:panelGroup layout="block" id="imagesMetadata" styleClass="imj_batchEditItemList" rendered="#{EditItemMetadataBean.profileWithStatements and EditItemMetadataBean.editType == 'selected'}">
+							<h:panelGroup rendered="#{EditItemMetadataBean.editor.itemsSize > 4}">
 							<div class="imj_listHeader">
-								<div class="imj_submitPanel">
+								<div class="imj_submitPanel"> 
 									<h:commandButton  styleClass="imj_cancelButton" type="submit" action="#{EditItemMetadataBean.clearAll}" value="#{lbl.clear_all}">
 										<f:ajax render="ajaxContent"/>
 									</h:commandButton >
@@ -129,6 +130,7 @@
 									</h:commandButton>
 								</div>
 							</div>
+							</h:panelGroup>
 							
 				        	<div class="imj_listBody">
 			        			<ui:repeat id="imagesList" var="item" value="#{EditItemMetadataBean.editor.items}" varStatus="indexImage">

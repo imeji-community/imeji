@@ -172,6 +172,10 @@ public abstract class MetadataEditor
     {
         return items;
     }
+    
+    public int getItemsSize(){
+    	return items.size();
+    }
 
     public void setItems(List<EditorItemBean> items)
     {

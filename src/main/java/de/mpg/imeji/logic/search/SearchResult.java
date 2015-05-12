@@ -40,7 +40,7 @@ public class SearchResult
         if (sort != null)
         {
             // ???
-            if (sort.getIndex() != null && sort.getIndex().getName().equals(SearchIndex.names.cont_title.name()))
+            if (sort.getIndex() != null && sort.getIndex().getName().equals(SearchIndex.IndexNames.cont_title.name()))
             {
                 sort.toggle();
             }

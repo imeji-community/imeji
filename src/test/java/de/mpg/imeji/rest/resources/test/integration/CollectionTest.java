@@ -1,6 +1,7 @@
 package de.mpg.imeji.rest.resources.test.integration;
 
 
+import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.rest.api.CollectionService;
@@ -11,6 +12,7 @@ import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.IdentifierTO;
 import de.mpg.imeji.rest.to.OrganizationTO;
 import de.mpg.imeji.rest.to.PersonTO;
+import org.apache.commons.lang.StringUtils;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.junit.Before;
@@ -53,7 +55,6 @@ public class CollectionTest extends ImejiTestBase {
     @Before
     public void specificSetup() {
         initCollection();
-
     }
 
     @Test
@@ -71,13 +72,13 @@ public class CollectionTest extends ImejiTestBase {
         collectionId = (String) collData.get("id");
         assertThat("Empty collection id", collectionId,
                 not(isEmptyOrNullString()));
-    }
+   }
 
     @Test
     public void test_1_CreateCollection_2_CopyProfile() throws ImejiException, UnsupportedEncodingException, IOException {
         String jsonString = getStringFromPath(STATIC_CONTEXT_REST + "/createCollectionWithProfile.json");
         jsonString = jsonString.replace("___PROFILE_ID___",
-                collectionTO.getProfile().getProfileId()).replace(
+                collectionTO.getProfile().getId()).replace(
                 "___METHOD___", "copy");
 
         Response response = target(pathPrefix)
@@ -87,7 +88,7 @@ public class CollectionTest extends ImejiTestBase {
                 .post(Entity
                         .entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
 
-        assertEquals(response.getStatus(), CREATED.getStatusCode());
+        assertEquals( CREATED.getStatusCode(), response.getStatus());
         Map<String, Object> collData = TestUtils.jsonToPOJO(response);
         assertNotNull("Created collection is null", collData);
         collectionId = (String) collData.get("id");
@@ -99,7 +100,7 @@ public class CollectionTest extends ImejiTestBase {
     public void test_1_CreateCollection_3_ReferenceProfile() throws ImejiException, UnsupportedEncodingException, IOException {
         String jsonString = getStringFromPath(STATIC_CONTEXT_REST + "/createCollectionWithProfile.json");
         jsonString = jsonString.replace("___PROFILE_ID___",
-                collectionTO.getProfile().getProfileId()).replace(
+                collectionTO.getProfile().getId()).replace(
                 "___METHOD___", "reference");
 
         Response response = target(pathPrefix)
@@ -108,7 +109,7 @@ public class CollectionTest extends ImejiTestBase {
                 .post(Entity
                         .entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
 
-        assertEquals(response.getStatus(), CREATED.getStatusCode());
+        assertEquals(CREATED.getStatusCode(), response.getStatus());
         Map<String, Object> collData = TestUtils.jsonToPOJO(response);
         assertNotNull("Created collection is null", collData);
         collectionId = (String) collData.get("id");
@@ -121,7 +122,7 @@ public class CollectionTest extends ImejiTestBase {
             throws ImejiException, UnsupportedEncodingException, IOException {
         String jsonString = getStringFromPath(STATIC_CONTEXT_REST + "/createCollectionWithProfile.json");
         jsonString = jsonString.replace("___PROFILE_ID___",
-                collectionTO.getProfile().getProfileId() + "shmarrn").replace(
+                collectionTO.getProfile().getId() + "shmarrn").replace(
                 "___METHOD___", "reference");
         Response response = target(pathPrefix)
                 .register(authAsUser)
@@ -132,6 +133,17 @@ public class CollectionTest extends ImejiTestBase {
         assertEquals(response.getStatus(), UNPROCESSABLE_ENTITY.getStatusCode());
 
     }
+
+    @Test
+    public void test_1_CreateCollection_5_NoAuth() throws IOException {
+        String jsonString = getStringFromPath(STATIC_CONTEXT_REST + "/createCollection.json");
+        Response response = target(pathPrefix)
+                .register(MultiPartFeature.class)
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .post(Entity
+                        .entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
+        assertEquals(response.getStatus(), UNAUTHORIZED.getStatusCode());
+   }
 
     //TODO: TEST for user who does not have right to create collection
 
@@ -173,6 +185,36 @@ public class CollectionTest extends ImejiTestBase {
         assertThat(response.getStatus(),
                 equalTo(NOT_FOUND.getStatusCode()));
     }
+
+    @Test
+    public void test_2_ReadCollection_5_AllItems() throws Exception {
+        initItem();
+        Response response = target(pathPrefix).path(collectionId + "/items")
+                .register(authAsUser).request(MediaType.APPLICATION_JSON)
+                .get();
+        assertEquals(OK.getStatusCode(), response.getStatus());
+        String jsonStr = response.readEntity(String.class);
+        assertThat(jsonStr, not(isEmptyOrNullString()));
+    }
+
+    @Test
+    public void test_2_ReadCollection_6_AllItems_WithQuery() throws Exception {
+        final int ITEM_AMOUNT = 6;
+        for (int i = 1; i <= ITEM_AMOUNT; i++) {
+            initItem("test"+i);
+        }
+        Response response = target(pathPrefix).path(collectionId + "/items")
+                .queryParam("q", "test1.jpg test2.jpg test3.jpg test4.jpg test5.jpg test6.jpg")
+                .register(authAsUser).request(MediaType.APPLICATION_JSON)
+                .get();
+        assertEquals(OK.getStatusCode(), response.getStatus());
+        String jsonStr = response.readEntity(String.class);
+        assertThat(jsonStr, not(isEmptyOrNullString()));
+        //check how many times "filename" appears in the result (it should be 6, for all 6 newly created items)
+        assertThat(StringUtils.countMatches(jsonStr, "filename"), equalTo(ITEM_AMOUNT));
+
+    }
+
 
     @Test
     public void test_3_ReleaseCollection_1_WithAuth() throws ImejiException {
@@ -261,7 +303,6 @@ public class CollectionTest extends ImejiTestBase {
         assertEquals("RELEASED", itemStatus.read(itemId, JenaUtil.testUser).getStatus());
 
         Form form= new Form();
-        form.param("id", collectionId);
         form.param("discardComment", "test_4_WithdrawCollection_1_WithAuth_" + System.currentTimeMillis());
         Response response = target(pathPrefix)
                 .path("/" + collectionId + "/discard").register(authAsUser)
@@ -289,7 +330,6 @@ public class CollectionTest extends ImejiTestBase {
         assertEquals("RELEASED", s.read(collectionId, JenaUtil.testUser).getStatus());
 
         Form form= new Form();
-        form.param("id", collectionId);
         form.param("discardComment", "test_4_WithdrawCollection_2_WithUnAuth_"+System.currentTimeMillis());
         Response response = target(pathPrefix)
                 .path("/" + collectionId + "/discard").register(authAsUser2)
@@ -308,7 +348,6 @@ public class CollectionTest extends ImejiTestBase {
         assertEquals("RELEASED", s.read(collectionId, JenaUtil.testUser).getStatus());
 
         Form form= new Form();
-        form.param("id", collectionId);
         form.param("discardComment", "test_4_WithdrawCollection_3_WithNonAuth_"+System.currentTimeMillis());
         Response response = target(pathPrefix)
                 .path("/" + collectionId + "/discard")
@@ -327,7 +366,6 @@ public class CollectionTest extends ImejiTestBase {
         assertEquals("PENDING", s.read(collectionId, JenaUtil.testUser).getStatus());
 
         Form form= new Form();
-        form.param("id", collectionId);
         form.param("discardComment", "test_4_WithdrawCollection_4_NotReleasedCollection_"+System.currentTimeMillis());
         Response response = target(pathPrefix)
                 .path("/" + collectionId + "/discard").register(authAsUser)
@@ -348,7 +386,6 @@ public class CollectionTest extends ImejiTestBase {
         assertEquals("WITHDRAWN", s.read(collectionId, JenaUtil.testUser).getStatus());
 
         Form form= new Form();
-        form.param("id", collectionId);
         form.param("discardComment", "test_4_WithdrawCollection_5_WithdrawCollectionTwice_SecondTime_"+System.currentTimeMillis());
         Response response = target(pathPrefix)
                 .path("/" + collectionId + "/discard").register(authAsUser)
@@ -362,7 +399,6 @@ public class CollectionTest extends ImejiTestBase {
     public void test_4_WithdrawCollection_6_NotExistingCollection() throws ImejiException{
 
         Form form= new Form();
-        form.param("id", collectionId+"i_do_not_exist");
         form.param("discardComment", "test_4_WithdrawCollection_6_NotExistingCollection_"+System.currentTimeMillis());
         Response response = target(pathPrefix)
                 .path("/" + collectionId + "i_do_not_exist/discard").register(authAsUser)
@@ -375,7 +411,6 @@ public class CollectionTest extends ImejiTestBase {
 
     @Test
     public void test_5_DeleteCollection_1_WithAuth() throws ImejiException {
-
         initCollection();
 
         Response response = target(pathPrefix)
@@ -396,9 +431,7 @@ public class CollectionTest extends ImejiTestBase {
 
     @Test
     public void test_5_DeleteCollection_2_WithUnauth() throws ImejiException{
-        initCollection();
-        ItemService itemStatus = new ItemService();
-
+    	initCollection();
         Response response = target(pathPrefix)
                 .path("/" + collectionId).register(authAsUser2)
                 .request(MediaType.APPLICATION_JSON_TYPE)
@@ -435,7 +468,7 @@ public class CollectionTest extends ImejiTestBase {
         }
         catch (ImejiException e)
         {
-            System.out.println("Could not withdraw the collection");
+            System.out.println("Could not discard the collection");
         }
 
         response = target(pathPrefix)
@@ -448,7 +481,6 @@ public class CollectionTest extends ImejiTestBase {
     }
     @Test
     public void test_5_DeleteCollection_4_WithOutUser(){
-
         initCollection();
 
         Response response = target(pathPrefix)
@@ -471,7 +503,7 @@ public class CollectionTest extends ImejiTestBase {
 
 
     @Test
-    public void test_6_UpdateCollection_1_Metadata_AllowedChanges() throws IOException, UnprocessableError {
+    public void test_6_UpdateCollection_1_Metadata_AllowedChanges() throws IOException, BadRequestException, UnprocessableError {
 
         initCollection();
 
@@ -480,7 +512,7 @@ public class CollectionTest extends ImejiTestBase {
         collectionTO.setTitle(collectionTO.getTitle() + CHANGED);
         collectionTO.setDescription(collectionTO.getDescription() + CHANGED);
 
-        String storedProfileId = collectionTO.getProfile().getProfileId();
+        String storedProfileId = collectionTO.getProfile().getId();
         collectionTO.getProfile().setMethod(METHOD.COPY.toString());
 
         for (PersonTO p : collectionTO.getContributors()) {
@@ -505,16 +537,14 @@ public class CollectionTest extends ImejiTestBase {
             }
         }
 
-        Form form= new Form();
-        form.param("json", buildJSONFromObject(collectionTO));
-
+        
         Builder request = target(pathPrefix)
                 .path("/" + collectionId).register(authAsUser)
                 .register(JacksonFeature.class)
                 .request(MediaType.APPLICATION_JSON_TYPE);
 
         Response response = request
-                .put(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+                .put(Entity.entity(buildJSONFromObject(collectionTO), MediaType.APPLICATION_JSON));
         assertEquals(OK.getStatusCode(), response.getStatus());
 
         CollectionTO uc = response.readEntity(CollectionTO.class);
@@ -547,7 +577,9 @@ public class CollectionTest extends ImejiTestBase {
         }
 
         //profile COPY
-        assertThat("Should be new profileId", uc.getProfile().getProfileId(), not(equalTo(storedProfileId)));
+        //Test is wrong 
+        //in case of profile COPY, only statements are copied from the referenced profile, has nothing to do with the stored ProfileId
+        //assertThat("Should be new profileId", uc.getProfile().getProfileId(), not(equalTo(storedProfileId)));
 
 
         //profile REFERENCE
@@ -555,12 +587,12 @@ public class CollectionTest extends ImejiTestBase {
         response = getResponse(request, collectionTO);
         assertEquals(OK.getStatusCode(), response.getStatus());
         uc = response.readEntity(CollectionTO.class);
-        assertThat("Should be same profileId", uc.getProfile().getProfileId(), equalTo(collectionTO.getProfile().getProfileId()));
+        assertThat("Should be same profileId", uc.getProfile().getId(), equalTo(collectionTO.getProfile().getId()));
         collectionTO.getProfile().setMethod("");
 
     }
     @Test
-    public void test_6_UpdateCollection_2_Metadata_NotAllowedChanges() throws IOException, UnprocessableError {
+    public void test_6_UpdateCollection_2_Metadata_NotAllowedChanges() throws IOException, BadRequestException {
 
         initCollection();
 
@@ -605,14 +637,17 @@ public class CollectionTest extends ImejiTestBase {
         org.setName(stored);
 
         //wrong profile id
-        stored = collectionTO.getProfile().getProfileId();
-        collectionTO.getProfile().setMethod(stored + CHANGED);
+        stored = collectionTO.getProfile().getId();
+        collectionTO.getProfile().setId(stored + CHANGED);
         response = getResponse(request, collectionTO);
-        assertEquals(BAD_REQUEST.getStatusCode(), response.getStatus());
-        collectionTO.getProfile().setProfileId(stored);
+        assertEquals(UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+        collectionTO.getProfile().setId(stored);
 
-        //wrong profile method
+        //wrong profile method, we need another collection profile..
+        String storedProfileId = collectionTO.getProfile().getId();
+        initCollection();
         collectionTO.getProfile().setMethod("wrong_method");
+        collectionTO.getProfile().setId(storedProfileId);
         response = getResponse(request, collectionTO);
         assertEquals(BAD_REQUEST.getStatusCode(), response.getStatus());
         collectionTO.getProfile().setMethod("");
@@ -620,8 +655,8 @@ public class CollectionTest extends ImejiTestBase {
 
     }
 
-    private static Response getResponse(Builder request, CollectionTO collTO) throws UnprocessableError {
-        return request.put(Entity.entity(new Form()
-                .param("json", buildJSONFromObject(collTO)), MediaType.APPLICATION_FORM_URLENCODED_TYPE));
+    private static Response getResponse(Builder request, CollectionTO collTO) throws BadRequestException {
+        return request.put(Entity.entity(buildJSONFromObject(collTO), MediaType.APPLICATION_JSON));
     }
+  
 }

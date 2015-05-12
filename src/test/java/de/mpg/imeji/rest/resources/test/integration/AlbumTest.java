@@ -1,41 +1,40 @@
 package de.mpg.imeji.rest.resources.test.integration;
 
-import static javax.ws.rs.core.Response.Status.CREATED;
-import static javax.ws.rs.core.Response.Status.FORBIDDEN;
-import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.isEmptyOrNullString;
-import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Map;
-
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.Form;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
+import de.mpg.imeji.exceptions.BadRequestException;
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.rest.api.AlbumService;
+import de.mpg.imeji.rest.process.RestProcessUtils;
+import de.mpg.imeji.rest.resources.test.TestUtils;
+import de.mpg.imeji.rest.to.AlbumTO;
+import de.mpg.imeji.rest.to.ItemTO;
 import net.java.dev.webdav.jaxrs.ResponseStatus;
-
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import util.JenaUtil;
-import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.rest.api.AlbumService;
-import de.mpg.imeji.rest.resources.test.TestUtils;
+
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Form;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.Map;
+
+import static javax.ws.rs.core.Response.Status.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 
 
@@ -111,7 +110,7 @@ public class AlbumTest extends ImejiTestBase{
 		Response response = target(pathPrefix).path(albumId)
 				.register(authAsUser2).request(MediaType.APPLICATION_JSON)
 				.get();
-		assertThat(response.getStatus(),equalTo(FORBIDDEN.getStatusCode()));
+		assertThat(response.getStatus(), equalTo(FORBIDDEN.getStatusCode()));
 	}
 
 	@Test
@@ -120,6 +119,66 @@ public class AlbumTest extends ImejiTestBase{
 				.register(authAsUser).request(MediaType.APPLICATION_JSON)
 				.get();
 		assertThat(response.getStatus(), equalTo(Status.NOT_FOUND.getStatusCode()));
+	}
+
+	@Test
+	public void test_2_ReadAlbum_5_ReadAlbumsWithQuery() throws IOException, BadRequestException {
+		Response response = target(pathPrefix)
+				.queryParam("q", albumTO.getTitle())
+				.register(authAsUser).request(MediaType.APPLICATION_JSON)
+				.get();
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		List<AlbumTO> albumList = RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), AlbumTO.class);
+		Assert.assertThat(albumList, not(empty()));
+		Assert.assertThat(albumList.get(0).getTitle(), equalTo(albumTO.getTitle()));
+
+	}
+
+	@Test
+	public void test_2_ReadAlbum_6_ReadAlbumItemsWithQuery() throws IOException, BadRequestException {
+		initCollection();
+		initItem();
+		
+		Response response = target(pathPrefix)
+				.path("/" + albumId + "/members/link").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));	
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		
+		response = target(pathPrefix)
+				.path("/" + albumId + "/members")
+				.queryParam("q", itemTO.getFilename())
+				.register(authAsUser).request(MediaType.APPLICATION_JSON)
+				.get();
+		
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		List<ItemTO> itemList = RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), ItemTO.class);
+		Assert.assertThat(itemList, not(empty()));
+		Assert.assertThat(itemList.get(0).getFilename(), equalTo(itemTO.getFilename()));
+
+	}
+	
+	@Test
+	public void test_2_ReadAlbum_6_ReadAlbumItemsWithQueryForNoResultsAndOneItemInAlbum() throws IOException, BadRequestException {
+		initCollection();
+		initItem();
+		
+		Response response = target(pathPrefix)
+				.path("/" + albumId + "/members/link").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));	
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		
+		response = target(pathPrefix)
+				.path("/" + albumId + "/members")
+				.queryParam("q", itemTO.getFilename()+"_new")
+				.register(authAsUser).request(MediaType.APPLICATION_JSON)
+				.get();
+		
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		List<ItemTO> itemList = RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), ItemTO.class);
+		Assert.assertThat(itemList, empty());
+
 	}
 	
 	@Test
@@ -171,7 +230,7 @@ public class AlbumTest extends ImejiTestBase{
 	@Test
 	public void test_3_DeleteAlbum_5_NonExistingAlbum(){
 		Response response = target(pathPrefix)
-				.path("/" + albumId+"i_do_not_exist").register(authAsUser)
+				.path("/" + albumId + "i_do_not_exist").register(authAsUser)
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.delete();
 
@@ -188,7 +247,7 @@ public class AlbumTest extends ImejiTestBase{
 				.put(Entity.json("{}"));
 		
 		target(pathPrefix)
-		.path("/" + albumId + "/add").register(authAsUser)
+		.path("/" + albumId + "/members/link").register(authAsUser)
 		.request(MediaType.APPLICATION_JSON_TYPE)
 		.put(Entity.json("[\"" + itemId + "\"]"));
 		
@@ -209,7 +268,7 @@ public class AlbumTest extends ImejiTestBase{
 		initCollection();
 		initItem();
 		target(pathPrefix)
-		.path("/" + albumId + "/add").register(authAsUser)
+		.path("/" + albumId + "/members/link").register(authAsUser)
 		.request(MediaType.APPLICATION_JSON_TYPE)
 		.put(Entity.json("[\"" + itemId + "\"]"));
 		
@@ -250,7 +309,7 @@ public class AlbumTest extends ImejiTestBase{
 				.put(Entity.json("{}"));
 		
 		target(pathPrefix)
-		.path("/" + albumId + "/add").register(authAsUser)
+		.path("/" + albumId + "/members/link").register(authAsUser)
 		.request(MediaType.APPLICATION_JSON_TYPE)
 		.put(Entity.json("[\"" + itemId + "\"]"));
 		
@@ -286,9 +345,10 @@ public class AlbumTest extends ImejiTestBase{
 	public void test_5_AddItemsToAlbum_1_WithAuth() throws ImejiException {
 		initCollection();
 		initItem();
+		initAlbum();
 		
 		Response response = target(pathPrefix)
-				.path("/" + albumId + "/add").register(authAsUser)
+				.path("/" + albumId + "/members/link").register(authAsUser)
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.json("[\"" + itemId + "\"]"));	
 
@@ -301,11 +361,11 @@ public class AlbumTest extends ImejiTestBase{
 		initItem();
 		
 		Response response = target(pathPrefix)
-				.path("/" + albumId + "/add")
+				.path("/" + albumId + "/members/link")
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.json("[\"" + itemId + "\"]"));	
 
-		assertThat(response.getStatus(),equalTo(UNAUTHORIZED.getStatusCode()));
+		assertThat(response.getStatus(), equalTo(UNAUTHORIZED.getStatusCode()));
 	}
 	
 	@Test
@@ -314,11 +374,11 @@ public class AlbumTest extends ImejiTestBase{
 		initItem();
 		
 		Response response = target(pathPrefix)
-				.path("/" + albumId + "/add").register(authAsUser2)
+				.path("/" + albumId + "/members/link").register(authAsUser2)
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.json("[\"" + itemId + "\"]"));	
 
-		assertThat(response.getStatus(),equalTo(FORBIDDEN.getStatusCode()));;
+		assertThat(response.getStatus(), equalTo(FORBIDDEN.getStatusCode()));;
 	}
 	
 	@Test
@@ -327,7 +387,7 @@ public class AlbumTest extends ImejiTestBase{
 		initItem();
 		
 		Response response = target(pathPrefix)
-				.path("/" + albumId+"i_do_not_exist" + "/add").register(authAsUser)
+				.path("/" + albumId+"i_do_not_exist" + "/members/link").register(authAsUser)
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.json("[\"" + itemId + "\"]"));	
 
@@ -340,7 +400,7 @@ public class AlbumTest extends ImejiTestBase{
 	public void test_5_AddItemsToAlbum_5_NonExistingItem() throws ImejiException {
 		
 		Response response = target(pathPrefix)
-				.path("/" + albumId + "/add").register(authAsUser)
+				.path("/" + albumId + "/members/link").register(authAsUser)
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.json("[\"" + "adfgsh" + "\"]"));	
 
@@ -353,10 +413,11 @@ public class AlbumTest extends ImejiTestBase{
 		
 		initCollection();
 		initItem();
+	
 		Response response = target(pathPrefix)
-				.path("/" + albumId + "/add").register(authAsUser)
+				.path("/" + albumId + "/members/link").register(authAsUser)
 				.request(MediaType.APPLICATION_JSON_TYPE)
-				.put(Entity.json("[\"" + itemId + "\"]"));	
+				.put(Entity.json("[\"" + itemId + "\"]"));
 		
 		AlbumService s = new AlbumService();
 		s.release(albumId, JenaUtil.testUser);
@@ -365,7 +426,7 @@ public class AlbumTest extends ImejiTestBase{
 		
 		Form form= new Form();
 		form.param("id", albumId);
-		form.param("discardComment", "test_6_WithdrawAlbum_1_WithAuth_"+System.currentTimeMillis());
+		form.param("discardComment", "test_6_WithdrawAlbum_1_WithAuth_" + System.currentTimeMillis());
 		response = target(pathPrefix)
 				.path("/" + albumId + "/discard").register(authAsUser)
 				.request((MediaType.APPLICATION_JSON_TYPE))
@@ -381,7 +442,7 @@ public class AlbumTest extends ImejiTestBase{
 		initCollection();
 		initItem();
 		Response response = target(pathPrefix)
-				.path("/" + albumId + "/add").register(authAsUser)
+				.path("/" + albumId + "/members/link").register(authAsUser)
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.json("[\"" + itemId + "\"]"));	
 		AlbumService s = new AlbumService();
@@ -391,7 +452,7 @@ public class AlbumTest extends ImejiTestBase{
 		
 		Form form= new Form();
 		form.param("id", albumId);
-		form.param("discardComment", "test_6_WithdrawAlbum_2_WithUnAuth_"+System.currentTimeMillis());
+		form.param("discardComment", "test_6_WithdrawAlbum_2_WithUnAuth_" + System.currentTimeMillis());
 		response = target(pathPrefix)
 				.path("/" + albumId + "/discard").register(authAsUser2)
 				.request((MediaType.APPLICATION_JSON_TYPE))
@@ -405,7 +466,7 @@ public class AlbumTest extends ImejiTestBase{
 		initCollection();
 		initItem();
 		Response response = target(pathPrefix)
-				.path("/" + albumId + "/add").register(authAsUser)
+				.path("/" + albumId + "/members/link").register(authAsUser)
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.json("[\"" + itemId + "\"]"));	
 		AlbumService s = new AlbumService();
@@ -414,7 +475,7 @@ public class AlbumTest extends ImejiTestBase{
 		
 		Form form= new Form();
 		form.param("id", albumId);
-		form.param("discardComment", "test_6_WithdrawAlbum_3_WithNonAuth_"+System.currentTimeMillis());
+		form.param("discardComment", "test_6_WithdrawAlbum_3_WithNonAuth_" + System.currentTimeMillis());
 		response = target(pathPrefix)
 				.path("/" + albumId + "/discard")
 				.request((MediaType.APPLICATION_JSON_TYPE))
@@ -429,7 +490,7 @@ public class AlbumTest extends ImejiTestBase{
 		initCollection();
 		initItem();
 		Response response = target(pathPrefix)
-				.path("/" + albumId + "/add").register(authAsUser)
+				.path("/" + albumId + "/members/link").register(authAsUser)
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.json("[\"" + itemId + "\"]"));	
 		AlbumService s = new AlbumService();
@@ -437,7 +498,7 @@ public class AlbumTest extends ImejiTestBase{
 		
 		Form form= new Form();
 		form.param("id", albumId);
-		form.param("discardComment", "test_6_WithdrawAlbum_4_NotReleasedCollection_"+System.currentTimeMillis());
+		form.param("discardComment", "test_6_WithdrawAlbum_4_NotReleasedCollection_" + System.currentTimeMillis());
 		response = target(pathPrefix)
 				.path("/" + albumId + "/discard").register(authAsUser)
 				.request((MediaType.APPLICATION_JSON_TYPE))
@@ -451,7 +512,7 @@ public class AlbumTest extends ImejiTestBase{
 		initCollection();
 		initItem();
 		Response response = target(pathPrefix)
-				.path("/" + albumId + "/add").register(authAsUser)
+				.path("/" + albumId + "/members/link").register(authAsUser)
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.json("[\"" + itemId + "\"]"));	
 		AlbumService s = new AlbumService();
@@ -476,7 +537,7 @@ public class AlbumTest extends ImejiTestBase{
 		
 		Form form= new Form();
 		form.param("id", albumId + "i_do_not_exist");
-		form.param("discardComment", "test_6_WithdrawAlbum_6_NotExistingAlbum_"+System.currentTimeMillis());
+		form.param("discardComment", "test_6_WithdrawAlbum_6_NotExistingAlbum_" + System.currentTimeMillis());
 		Response response = target(pathPrefix)
 				.path("/" + albumId + "i_do_not_exist/discard").register(authAsUser)
 				.request((MediaType.APPLICATION_JSON_TYPE))
@@ -615,6 +676,293 @@ public class AlbumTest extends ImejiTestBase{
 	}
 	
 	
+	@Test
+	public void test_8_UnlinkItemsToAlbum_1_WithAuth() throws ImejiException {
+		initCollection();
+		initItem();
+		initAlbum();
+		
+		Response response = target(pathPrefix)
+				.path("/" + albumId + "/members/unlink").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));	
 
+		assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+	}
+	
+	@Test
+	public void test_8_UnlinkItemsToAlbum_2_WithUnauth() throws ImejiException {
+		initCollection();
+		initItem();
+		
+		Response response = target(pathPrefix)
+				.path("/" + albumId + "/members/unlink")
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));	
+
+		assertThat(response.getStatus(), equalTo(UNAUTHORIZED.getStatusCode()));
+	}
+	
+	@Test
+	public void test_8_UnlinkItemsToAlbum_3_WithNonAuth() throws ImejiException {
+		initCollection();
+		initItem();
+		
+		Response response = target(pathPrefix)
+				.path("/" + albumId + "/members/unlink").register(authAsUser2)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));	
+
+		assertThat(response.getStatus(), equalTo(FORBIDDEN.getStatusCode()));;
+	}
+	
+	@Test
+	public void test_8_UnlinkItemsToAlbum_4_NonExistingAlbum() throws ImejiException {
+		initCollection();
+		initItem();
+		
+		Response response = target(pathPrefix)
+				.path("/" + albumId+"i_do_not_exist" + "/members/unlink").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));	
+
+		assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
+	}
+	
+	
+	
+	@Test
+	public void test_8_UnlinkItemsToAlbum_5_NonExistingItem() throws ImejiException {
+		//in principle it does not care if item exists or not, it will simply do nothing
+		Response response = target(pathPrefix)
+				.path("/" + albumId + "/members/unlink").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + "adfgsh" + "\"]"));	
+
+		assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+	}
+	
+	@Test
+	public void test_8_UnlinkAllItemsFromAlbum() throws ImejiException {
+		//in principle it does not care if item exists or not, it will simply do nothing
+		initCollection();
+		initItem("test");
+		
+		Response response = target(pathPrefix)
+				.path("/" + albumId + "/members/link").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));	
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		
+		initItem("test2");
+
+		response = target(pathPrefix)
+				.path("/" + albumId + "/members/link").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));	
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		
+		//read two items from the Album
+		response = target(pathPrefix)
+				.path("/" + albumId + "/members")
+				.register(authAsUser).request(MediaType.APPLICATION_JSON)
+				.get();
+		
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		List<ItemTO> itemList = RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), ItemTO.class);
+		Assert.assertThat(itemList, not(empty()));
+		Assert.assertEquals(2, itemList.size());
+
+		//remove all album mebres
+		response = target(pathPrefix)
+				.path("/" + albumId + "/members").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.delete();	
+		assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+		
+		//read no items from the Album
+		response = target(pathPrefix)
+						.path("/" + albumId + "/members")
+						.register(authAsUser).request(MediaType.APPLICATION_JSON)
+						.get();
+				
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		itemList = RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), ItemTO.class);
+		Assert.assertThat(itemList, empty());
+	}
+	
+	@Test
+	public void test_9_UnlinkItemsToReleasedAlbum_1_WithAuth() throws ImejiException {
+		initCollection();
+		initItem();
+		initAlbum();
+		
+		
+		Response response = target(pathPrefix)
+				.path("/" + albumId + "/members/link").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		
+		response = target(pathPrefix)
+				.path("/" + albumId + "/release").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("{}"));	
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+		initItem("test1");
+		response = target(pathPrefix)
+				.path("/" + albumId + "/members/link").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+
+		response = target(pathPrefix)
+				.path("/" + albumId + "/members/unlink").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));
+		assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+		
+		response = target(pathPrefix)
+				.path("/" + albumId + "/members")
+				.register(authAsUser).request(MediaType.APPLICATION_JSON)
+				.get();
+		
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		List<ItemTO> itemList = RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), ItemTO.class);
+		Assert.assertThat(itemList, not(empty()));
+		Assert.assertEquals(1, itemList.size());
+	}
+
+	@Test
+	public void test_9_UnlinkAllItemsFromReleasedAlbum() throws ImejiException {
+		//in principle it does not care if item exists or not, it will simply do nothing
+		initCollection();
+		initAlbum();
+		
+		initItem("test");
+		
+		Response response = target(pathPrefix)
+				.path("/" + albumId + "/members/link").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));	
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		
+		initItem("test2");
+
+		response = target(pathPrefix)
+				.path("/" + albumId + "/members/link").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));	
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		
+		//read two items from the Album
+		response = target(pathPrefix)
+				.path("/" + albumId + "/members")
+				.register(authAsUser).request(MediaType.APPLICATION_JSON)
+				.get();
+		
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		List<ItemTO> itemList = RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), ItemTO.class);
+		Assert.assertThat(itemList, not(empty()));
+		Assert.assertEquals(2, itemList.size());
+		
+		response = target(pathPrefix)
+				.path("/" + albumId + "/release").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("{}"));	
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		
+
+		//remove all album mebres
+		response = target(pathPrefix)
+				.path("/" + albumId + "/members").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.delete();	
+		assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+		
+		//read all items from the Album
+		response = target(pathPrefix)
+						.path("/" + albumId + "/members")
+						.register(authAsUser).request(MediaType.APPLICATION_JSON)
+						.get();
+				
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		itemList = RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), ItemTO.class);
+		Assert.assertEquals(itemList.size(), 2);
+	}
+	
+	@Test
+	public void test_9_Unlink_AllItems_withPUT_unlink_FromReleasedAlbum() throws ImejiException {
+		//in principle it does not care if item exists or not, it will simply do nothing
+		initCollection();
+		initAlbum();
+		
+		initItem("test");
+		
+		Response response = target(pathPrefix)
+				.path("/" + albumId + "/members/link").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));	
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		
+		initItem("test2");
+
+		response = target(pathPrefix)
+				.path("/" + albumId + "/members/link").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("[\"" + itemId + "\"]"));	
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		
+		//read two items from the Album
+		response = target(pathPrefix)
+				.path("/" + albumId + "/members")
+				.register(authAsUser).request(MediaType.APPLICATION_JSON)
+				.get();
+		
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		List<ItemTO> itemList = RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), ItemTO.class);
+		Assert.assertThat(itemList, not(empty()));
+		Assert.assertEquals(2, itemList.size());
+		
+
+		response = target(pathPrefix)
+				.path("/" + albumId + "/release").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json("{}"));	
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		
+		String itemsToUnlinkFromAlbum = "[";
+		for (ItemTO it:itemList) {
+			itemsToUnlinkFromAlbum+= "\""+it.getId()+"\",";
+		}
+		itemsToUnlinkFromAlbum = itemsToUnlinkFromAlbum.substring(0, itemsToUnlinkFromAlbum.length()-1);
+		itemsToUnlinkFromAlbum += "]";
+		
+		response = target(pathPrefix)
+				.path("/" + albumId + "/members/unlink").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.json(itemsToUnlinkFromAlbum));	
+
+		assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+		
+
+		//remove all album mebres
+		response = target(pathPrefix)
+				.path("/" + albumId + "/members").register(authAsUser)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.delete();	
+		assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+		
+		//read all items from the Album
+		response = target(pathPrefix)
+						.path("/" + albumId + "/members")
+						.register(authAsUser).request(MediaType.APPLICATION_JSON)
+						.get();
+				
+		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+		itemList = RestProcessUtils.buildTOListFromJSON(response.readEntity(String.class), ItemTO.class);
+		Assert.assertEquals(itemList.size(), 2);
+	}
 
 }

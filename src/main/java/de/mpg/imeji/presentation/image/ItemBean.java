@@ -17,10 +17,10 @@ import de.mpg.imeji.logic.search.vo.SearchOperators;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.storage.StorageController;
-import de.mpg.imeji.logic.storage.internal.InternalStorageManager;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.StringHelper;
+import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.beans.Navigation;
@@ -33,19 +33,15 @@ import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.session.SessionObjectsController;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
-import de.mpg.imeji.presentation.util.UrlHelper;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringUtils;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,7 +83,7 @@ public class ItemBean {
 				.getSessionBean(SessionBean.class);
 		navigation = (Navigation) BeanHelper
 				.getApplicationBean(Navigation.class);
-		prettyLink = "pretty:editImage";
+		prettyLink = sessionBean.getPrettySpacePage("pretty:editImage");
 		labels = (MetadataLabels) BeanHelper
 				.getSessionBean(MetadataLabels.class);
 	}
@@ -139,10 +135,11 @@ public class ItemBean {
 		relatedAlbums = new ArrayList<Album>();
 		AlbumController ac = new AlbumController();
 		SearchQuery q = new SearchQuery();
-		q.addPair(new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.item),
+		q.addPair(new SearchPair(SPARQLSearch.getIndex(SearchIndex.IndexNames.item),
 				SearchOperators.EQUALS, getImage().getId().toString()));
+		//TODO NB: check if related albums should be space restricted?
 		relatedAlbums = (List<Album>) ac.loadAlbumsLazy(
-				ac.search(q, sessionBean.getUser(), null, -1, 0).getResults(), sessionBean.getUser(),
+				ac.search(q, sessionBean.getUser(), null, -1, 0, null).getResults(), sessionBean.getUser(),
 				-1, 0);
 	}
 
@@ -317,7 +314,7 @@ public class ItemBean {
 	}
 
 	public String getNavigationString() {
-		return "pretty:item";
+		return sessionBean.getPrettySpacePage("pretty:item");
 	}
 
 	public SessionBean getSessionBean() {

@@ -3,25 +3,24 @@
  */
 package de.mpg.imeji.presentation.user;
 
-import java.io.IOException;
-import java.net.URLDecoder;
+import de.mpg.imeji.logic.auth.Authentication;
+import de.mpg.imeji.logic.auth.AuthenticationFactory;
+import de.mpg.imeji.logic.util.UrlHelper;
+import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.beans.ConfigurationBean;
+import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.history.HistoryPage;
+import de.mpg.imeji.presentation.history.HistorySession;
+import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.util.BeanHelper;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
-
-import de.mpg.imeji.logic.auth.Authentication;
-import de.mpg.imeji.logic.auth.AuthenticationFactory;
-import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.history.HistoryPage;
-import de.mpg.imeji.presentation.history.HistorySession;
-import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.PropertyReader;
-import de.mpg.imeji.presentation.util.UrlHelper;
+import java.io.IOException;
+import java.net.URLDecoder;
 
 /**
  * Bean for login features
@@ -48,6 +47,17 @@ public class LoginBean {
 	@PostConstruct
 	public void init() {
 		this.sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+		if (!"".equals(sb.getSpaceId())) {
+			sb.logoutFromSpot();
+			Navigation nav = (Navigation) BeanHelper
+					.getApplicationBean(Navigation.class);
+			try {
+				FacesContext.getCurrentInstance().getExternalContext()
+						.redirect(nav.getHomeUrl());
+			} catch (IOException e) {
+				new RuntimeException(e);
+			}
+		}
 		try {
 			if (UrlHelper.getParameterBoolean("logout")) {
 				logout();
@@ -61,7 +71,7 @@ public class LoginBean {
 	}
 
 	public void setLogin(String login) {
-		this.login = login;
+		this.login = login.trim();
 	}
 
 	public String getLogin() {
@@ -69,7 +79,7 @@ public class LoginBean {
 	}
 
 	public void setPasswd(String passwd) {
-		this.passwd = passwd;
+		this.passwd = passwd.trim();
 	}
 
 	public String getPasswd() {
@@ -86,14 +96,16 @@ public class LoginBean {
 		User user = auth.doLogin();
 		if (user != null) {
 			sb.setUser(user);
+			BeanHelper.cleanMessages();
 			BeanHelper.info(sb.getMessage("success_log_in"));
 		} else {
+			String name = ((ConfigurationBean) BeanHelper
+					.getApplicationBean(ConfigurationBean.class))
+					.getInstanceName();
 			BeanHelper.error(sb.getMessage("error_log_in").replace(
-					"XXX_INSTANCE_NAME_XXX",
-					PropertyReader.getProperty("imeji.instance.name")));
+					"XXX_INSTANCE_NAME_XXX", name));
 			BeanHelper.error(sb.getMessage("error_log_in_description").replace(
-					"XXX_INSTANCE_NAME_XXX",
-					PropertyReader.getProperty("imeji.instance.name")));
+					"XXX_INSTANCE_NAME_XXX", name));
 		}
 		if (redirect == null || "".equals(redirect)) {
 			HistoryPage current = ((HistorySession) BeanHelper
@@ -102,7 +114,7 @@ public class LoginBean {
 				redirect = current.getCompleteUrl();
 			}
 		}
-		//redirect = UrlHelper.addParameter(redirect, "login", "1");
+		// redirect = UrlHelper.addParameter(redirect, "login", "1");
 		FacesContext.getCurrentInstance().getExternalContext()
 				.redirect(redirect);
 	}
@@ -122,18 +134,21 @@ public class LoginBean {
 	 */
 	public void logout() throws IOException {
 		FacesContext fc = FacesContext.getCurrentInstance();
+		String spaceId = sb.getSpaceId();
 		HttpSession session = (HttpSession) fc.getExternalContext().getSession(
 				false);
 		session.invalidate();
 		sb.setUser(null);
 		sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
 		sb.setShowLogin(false);
+		sb.setSpaceId(spaceId);
+
 		BeanHelper.info(sb.getMessage("success_log_out"));
 		fc = FacesContext.getCurrentInstance();
 		Navigation nav = (Navigation) BeanHelper
 				.getApplicationBean(Navigation.class);
 		FacesContext.getCurrentInstance().getExternalContext()
 				.redirect(nav.getHomeUrl());
-		
+
 	}
 }

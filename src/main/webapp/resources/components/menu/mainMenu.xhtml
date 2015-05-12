@@ -1,8 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:composite="http://java.sun.com/jsf/composite">
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:composite="http://java.sun.com/jsf/composite">
 	
 	<composite:interface>
 		<composite:attribute name="navBean" type="java.lang.Object" required="true" shortDescription="@type: Object, used for several URL paths"/>
@@ -31,16 +30,18 @@
 					<h:outputText value="#{lbl.header_collections}"/>
 				</h:outputLink>
 			</li>
+			<ui:fragment rendered="#{cc.attrs.navBean.spacePath == ''}">
 			<li class="#{cc.attrs.menuClass.trim()}Item#{ (cc.attrs.curMainMenu == 'album') ? ' imj_active' : ''}">
 				<h:outputLink id="lnkAlbums" title="#{lbl.goto_albums}" value="#{cc.attrs.navBean.albumsUrl}?page=1">
 					<h:outputText value="#{lbl.header_albums}"/>
 				</h:outputLink>
 			</li>
-			<li class="#{cc.attrs.menuClass.trim()}Item#{ (cc.attrs.curMainMenu == 'upload') ? ' imj_active' : ''}">
-				<h:outputLink id="lnkUpload" title="#{lbl.goto_upload}" value="#{cc.attrs.navBean.singleUploadUrl}?init=1">
-					<h:outputText value="#{lbl.header_upload}"/>
-				</h:outputLink>
-			</li>
+				<li class="#{cc.attrs.menuClass.trim()}Item#{ (cc.attrs.curMainMenu == 'upload') ? ' imj_active' : ''}">
+					<h:outputLink id="lnkUpload" title="#{lbl.goto_upload}" value="#{cc.attrs.navBean.singleUploadUrl}?init=1">
+						<h:outputText value="#{lbl.header_upload}"/>
+					</h:outputLink>
+				</li>
+			</ui:fragment>
 			<ui:fragment rendered="#{cc.attrs.userHasAdminRights}">
 				<li class="#{cc.attrs.menuClass.trim()}Item#{ (cc.attrs.curMainMenu == 'admin') ? ' imj_active' : ''}">
 					<h:outputLink id="lnkAdmin" title="#{lbl.goto_admin}" value="#{cc.attrs.navBean.adminUrl}">

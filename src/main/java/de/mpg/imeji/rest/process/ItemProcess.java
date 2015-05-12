@@ -1,28 +1,28 @@
 package de.mpg.imeji.rest.process;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.Response.Status;
-
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.common.io.ByteStreams;
-import com.google.common.io.Files;
 import de.mpg.imeji.exceptions.BadRequestException;
-
-import de.mpg.imeji.exceptions.NotFoundException;
+import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.storage.StorageController;
+import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.api.ItemService;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
 import de.mpg.imeji.rest.to.JSONResponse;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Response.Status;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static javax.ws.rs.core.Response.Status.OK;
 
 
 public class ItemProcess {
@@ -59,6 +59,20 @@ public class ItemProcess {
 
 	}
 
+	public static JSONResponse readItems(HttpServletRequest req, String q) {
+		JSONResponse resp;
+
+		User u = BasicAuthentication.auth(req);
+
+		ItemService is = new ItemService();
+		try {
+			resp = RestProcessUtils.buildResponse(OK.getStatusCode(), is.readItems(u, q));
+		} catch (Exception e) {
+			resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
+		}
+		return resp;
+	}
+
 	public static JSONResponse createItem(HttpServletRequest req,
 			InputStream file, String json, String origName) {
 		// / write response
@@ -66,29 +80,19 @@ public class ItemProcess {
 
 		// Load User (if provided)
 		User u = BasicAuthentication.auth(req);
-
+		
 		// Parse json into to
 		ItemWithFileTO to = null;
 		try {
 			to = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(json,
 					ItemWithFileTO.class);
-			
 			if (file != null){
-				File tmp = File.createTempFile("imejiAPI", null);
-				IOUtils.copy(file, new FileOutputStream(tmp));
-				to.setFile(tmp);
-				to.setFilename((!isNullOrEmpty(to.getFilename()))?to.getFilename():(to.getFilename()==null?origName:to.getFilename()));
-	
+				to = uploadAndValidateFile(file, to, origName);
 			}
 			
-			if (to.getFile() == null && isNullOrEmpty(to.getFetchUrl()) && isNullOrEmpty(to.getReferenceUrl()) ) {
-				throw new BadRequestException("A file must be uploaded, referenced or fetched from external location.");
-			}
-			
-		} catch (Exception e) {
-			e = new BadRequestException(e.getLocalizedMessage());
-			resp= RestProcessUtils.localExceptionHandler(e, CommonUtils.JSON_Invalid);
-			return resp;
+		} 
+		catch (Exception e) {
+			return  RestProcessUtils.localExceptionHandler(e, e.getMessage());
 		}
 		
 		// create item with the file
@@ -97,6 +101,7 @@ public class ItemProcess {
 			try {
 				resp= RestProcessUtils.buildResponse(Status.CREATED.getStatusCode(), service.create(to, u));
 			} catch (Exception e) {
+				//System.out.println("MESSAGE= "+e.getLocalizedMessage());
 				resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
 
 			}
@@ -109,47 +114,59 @@ public class ItemProcess {
 
 		User u = BasicAuthentication.auth(req);
 
-		JSONResponse resp; 
 		ItemService service = new ItemService();
 		ItemTO to = new ItemTO();
+		boolean fileUpdate = !isNullOrEmpty(json) && (fileInputStream != null || json.indexOf("fetchUrl") > 0 || json.indexOf("referenceUrl") > 0);
 		try {
-			to = !isNullOrEmpty(json) && (fileInputStream != null || json.indexOf("fetchUrl") > 0 || json.indexOf("referenceUrl") > 0) ?
+			to = fileUpdate ?
 					(ItemWithFileTO) RestProcessUtils.buildTOFromJSON(json, ItemWithFileTO.class) :
 					(ItemTO) RestProcessUtils.buildTOFromJSON(json, ItemTO.class);
-		} catch (Exception e) {
-			e = new BadRequestException("A file must be uploaded, referenced or fetched from external location.");
-			resp= RestProcessUtils.localExceptionHandler(e, CommonUtils.JSON_Invalid);
-			return resp;
-		}
-		try {
+
 			validateId(id, to);
 			to.setId(id);
-			if (fileInputStream != null) {
 
-				if (isNullOrEmpty(to.getFilename()) && !isNullOrEmpty(filename)) {
-					to.setFilename(filename);
-				}
-
-				File tmpPath = (File)req.getServletContext().getAttribute(CommonUtils.JAVAX_SERVLET_CONTEXT_TEMPDIR);
-				File tmpFile = File.createTempFile("imejiAPI", "." + Files.getFileExtension(to.getFilename()), tmpPath);
-
-				ByteStreams.copy(fileInputStream, new FileOutputStream(tmpFile));
-
-				((ItemWithFileTO)to).setFile(tmpFile);
-
-			}
-			resp = RestProcessUtils.buildResponse(Status.OK.getStatusCode(), service.update(to, u));
+			if (fileUpdate){
+				to = uploadAndValidateFile(fileInputStream, (ItemWithFileTO)to, filename);
+ 			 }
+				
+			return RestProcessUtils.buildResponse(Status.OK.getStatusCode(), service.update(to, u));
 		} catch (Exception e) {
-			resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
+			return  RestProcessUtils.localExceptionHandler(e, e.getMessage());
 		}
 
-		return resp;
 	}
 
-	private static void validateId(String id, ItemTO to) throws NotFoundException {
+	private static void validateId(String id, ItemTO to) throws BadRequestException {
 		if ( !isNullOrEmpty(id) && !isNullOrEmpty(to.getId()) && !id.equals(to.getId())) {
-			throw new NotFoundException("Ambiguous item id: <" + id +"> in path; <" + to.getId() + "> in JSON");
+			throw new BadRequestException ("Ambiguous item id: <" + id +"> in path; <" + to.getId() + "> in JSON");
 		}
+	}
+	
+	private static ItemWithFileTO uploadAndValidateFile(InputStream file, ItemWithFileTO to, String origName) throws IOException, UnprocessableError, BadRequestException{
+		if (file != null){
+			String calculatedFilename= (!isNullOrEmpty(to.getFilename()))?to.getFilename():(to.getFilename()==null?origName:to.getFilename());
+			String calculatedExtension = FilenameUtils.getExtension(calculatedFilename);
+			calculatedExtension = !isNullOrEmpty(calculatedExtension)?"."+calculatedExtension:null;
+
+			//Note: createTempFile suffix must be provided in order not to rename the file to .tmp
+			File tmp = File.createTempFile("imejiAPI", calculatedExtension);
+			IOUtils.copy(file, new FileOutputStream(tmp));
+
+			StorageController c = new StorageController();
+			//convenience call to stop the processing here asap. Item controller checks it anyway
+			String guessNotAllowedFormatUploaded = c.guessNotAllowedFormat(tmp);
+			if (StorageUtils.BAD_FORMAT.equals(guessNotAllowedFormatUploaded)) {
+				throw new UnprocessableError("upload_format_not_allowed: "	+ " (" + calculatedExtension + ")");
+			}
+			to.setFile(tmp);
+			to.setFilename(calculatedFilename);
+			
+			if (to.getFile() == null && isNullOrEmpty(to.getFetchUrl()) && isNullOrEmpty(to.getReferenceUrl()) ) {
+				throw new BadRequestException("A file must be uploaded, referenced or fetched from external location.");
+			}
+		}
+		return to;
+
 	}
 
 }

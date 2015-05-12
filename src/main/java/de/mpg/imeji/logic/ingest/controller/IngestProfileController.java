@@ -49,6 +49,8 @@ public class IngestProfileController
         ProfileController pc = new ProfileController();
         MetadataProfile original = pc.retrieve(profile, user);
         original.setStatements(mdp.getStatements());
+        //ingested profile can never be default profile
+        original.setDefault(false);
         try
         {
             pc.update(original, user);

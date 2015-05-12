@@ -1,32 +1,30 @@
 package de.mpg.imeji.presentation.beans;
 
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.controller.SpaceController;
+import de.mpg.imeji.logic.search.SPARQLSearch;
+import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.query.URLQueryTransformer;
+import de.mpg.imeji.logic.search.vo.*;
+import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
+import de.mpg.imeji.logic.util.DateFormatter;
+import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.Space;
+import de.mpg.imeji.presentation.image.ThumbnailBean;
+import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.ImejiFactory;
+import de.mpg.imeji.presentation.util.PropertyReader;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
-
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-
-import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.search.SPARQLSearch;
-import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.vo.SearchIndex;
-import de.mpg.imeji.logic.search.vo.SearchOperators;
-import de.mpg.imeji.logic.search.vo.SearchPair;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
-import de.mpg.imeji.logic.search.vo.SortCriterion;
-import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
-import de.mpg.imeji.logic.util.DateFormatter;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.presentation.image.ThumbnailBean;
-import de.mpg.imeji.presentation.search.URLQueryTransformer;
-import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ImejiFactory;
-import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
  * the Java Bean for the Start Page
@@ -35,7 +33,7 @@ import de.mpg.imeji.presentation.util.PropertyReader;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-@ManagedBean(name="StartPageBean")
+@ManagedBean(name = "StartPageBean")
 @ViewScoped
 public class StartPageBean {
 	private List<ThumbnailBean> carousselImages = new ArrayList<ThumbnailBean>();
@@ -68,11 +66,13 @@ public class StartPageBean {
 	 */
 	private SearchQuery readSearchQueryInProperty() throws IOException,
 			URISyntaxException {
-		String prop = PropertyReader.getProperty("imeji.home.caroussel.query");
+		String prop = ((ConfigurationBean) BeanHelper
+				.getApplicationBean(ConfigurationBean.class))
+				.getStartPageCarouselQuery();
 		if (prop != null) {
 			return URLQueryTransformer.parseStringQuery(prop);
 		}
-		return null;
+		return URLQueryTransformer.parseStringQuery("");
 	}
 
 	/**
@@ -85,8 +85,9 @@ public class StartPageBean {
 	private SortCriterion readSortCriterionInProperty() throws IOException,
 			URISyntaxException {
 		try {
-			String[] prop = PropertyReader.getProperty(
-					"imeji.home.caroussel.sort").split("-");
+			String[] prop = ((ConfigurationBean) BeanHelper
+					.getApplicationBean(ConfigurationBean.class))
+					.getStartPageCarouselQueryOrder().split("-");
 			if ("".equals(prop[0]) && "".equals(prop[1]))
 				return new SortCriterion(SPARQLSearch.getIndex(prop[0]),
 						SortOrder.valueOf(prop[1].toUpperCase()));
@@ -108,13 +109,13 @@ public class StartPageBean {
 		if (sq.isEmpty() && searchforItemCreatedForLessThan > 0) {
 			// Search for item which have been for less than n hours
 			sq.addPair(new SearchPair(SPARQLSearch
-					.getIndex(SearchIndex.names.created),
+					.getIndex(SearchIndex.IndexNames.created),
 					SearchOperators.GREATER,
 					getTimeforNDaybeforeNow(searchforItemCreatedForLessThan)));
 			return new SearchResult(ic.search(null, sq, sc, null,
-					session.getUser()).getResults(), null);
+					session.getUser(),  session.getSelectedSpaceString()).getResults(), null);
 		}
-		return ic.search(null, sq, sc, null, session.getUser());
+		return ic.search(null, sq, sc, null, session.getUser(), session.getSelectedSpaceString());
 	}
 
 	/**
@@ -137,6 +138,9 @@ public class StartPageBean {
 	 * @param random
 	 */
 	private void loadItemInCaroussel(SearchResult sr, boolean random) {
+		if (sr == null) {
+			return;
+		}
 		ItemController ic = new ItemController();
 		List<String> uris = new ArrayList<String>();
 		if (random) {
@@ -192,4 +196,19 @@ public class StartPageBean {
 	public List<ThumbnailBean> getCarousselImages() {
 		return carousselImages;
 	}
+	
+	public Space getSelectedSpaceResource() {
+		if (session.getSelectedSpace() == null) 
+			return new Space();
+		SpaceController sc = new SpaceController();
+		try {
+			return sc.retrieve(session.getSelectedSpace(), session.getUser());
+		} catch (ImejiException e) {
+			Space scc= new Space();
+			scc.setTitle("Space Not Found");
+			scc.setDescription("Space Not Found");
+			return scc;
+		}
+}
+
 }

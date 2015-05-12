@@ -3,24 +3,23 @@
  */
 package de.mpg.imeji.presentation.album;
 
-import java.util.List;
-
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.query.URLQueryTransformer;
 import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
-import de.mpg.imeji.logic.vo.Album;
+import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.presentation.beans.SuperContainerBean;
-import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
-import de.mpg.imeji.presentation.util.UrlHelper;
+
+import java.util.List;
 
 /**
  * Bean for the Albums page
@@ -43,7 +42,7 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean> {
 
 	@Override
 	public String getNavigationString() {
-		return "pretty:albums";
+		return sb.getPrettySpacePage("pretty:albums");
 	}
 
 	@Override
@@ -52,7 +51,7 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean> {
 	}
 
 	@Override
-	public List<AlbumBean> retrieveList(int offset, int limit) throws Exception {  
+	public List<AlbumBean> retrieveList(int offset, int limit) throws Exception {
 		UserController uc = new UserController(sb.getUser());
 		if (sb.getUser() != null) {
 			sb.setUser(uc.retrieve(sb.getUser().getEmail()));
@@ -74,7 +73,7 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean> {
 			searchQuery.addPair(getFilter());
 		}
 		SearchResult searchResult = controller.search(searchQuery,
-				sb.getUser(), sortCriterion, limit, offset);
+				sb.getUser(), sortCriterion, limit, offset, sb.getSelectedSpaceString());
 		totalNumberOfRecords = searchResult.getNumberOfRecords();
 		return ImejiFactory.albumListToBeanList(controller.loadAlbumsLazy(
 				searchResult.getResults(), sb.getUser(), limit, offset));
@@ -110,7 +109,7 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean> {
 	public String deleteAll() {
 		if (sb.getSelectedAlbums().size() == 0) {
 			BeanHelper.warn(sb.getMessage("error_delete_no_albums_selected"));
-			return "pretty:albums";
+			return sb.getPrettySpacePage("pretty:albums");
 		}
 		for (AlbumBean b : getCurrentPartList()) {
 			if (b.getSelected()) {
@@ -118,7 +117,7 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean> {
 			}
 		}
 		sb.getSelectedAlbums().clear();
-		return "pretty:albums";
+		return sb.getPrettySpacePage("pretty:albums");
 	}
 
 	/**
@@ -141,5 +140,10 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean> {
 			return query;
 		}
 		return "";
+	}
+
+	@Override
+	public String getType() {
+		return PAGINATOR_TYPE.ALBUMS.name();
 	}
 }

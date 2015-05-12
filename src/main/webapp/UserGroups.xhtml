@@ -49,7 +49,7 @@
 								<h:inputText value="#{UserGroups.query}" styleClass="imj_simpleSearchInput" />
 								<h:commandButton action="#{UserGroups.search()}" type="submit" value="#{lbl.search}" styleClass="imj_simpleSearchButtonSubmit"/>
 							</h:form>
-							<h:outputLink value="#{Navigation.applicationUrl}usergroups?back=#{UserGroups.backContainerUrl}" title="#{lbl.clear}" rendered="#{UserGroups.query != ''}" styleClass="imj_cancelButton">
+							<h:outputLink value="#{Navigation.applicationSpaceUrl}usergroups?back=#{UserGroups.backContainerUrl}" title="#{lbl.clear}" rendered="#{UserGroups.query != ''}" styleClass="imj_cancelButton">
 								<h:outputText value="#{lbl.clear}" />
 							</h:outputLink>
 						</div>
@@ -70,7 +70,7 @@
 										<h:outputLink value="#{UserGroups.backContainerUrl}group=#{group.id}" styleClass="imj_editButton" rendered="#{UserGroups.backContainerUrl != null}">
 											<h:outputText value="#{lbl.share_with}"/>
 										</h:outputLink>
-										<h:outputLink value="#{Navigation.applicationUrl}usergroup?id=#{group.id}" styleClass="imj_editButton" rendered="#{Auth.admin}">
+										<h:outputLink value="#{Navigation.applicationSpaceUrl}usergroup?id=#{group.id}" styleClass="imj_editButton" rendered="#{Auth.admin}">
 											<h:outputText value="#{lbl.view_detail}"/>
 										</h:outputLink>
 										<h:form>

@@ -22,7 +22,7 @@
 		<div class="imj_metadataProfileList">
 			<div class="imj_listHeader">
 				<h3 class="imj_headline">
-					<h:outputText value="#{cc.attrs.headline}"/>
+					<h:outputText value="#{cc.attrs.headline}: #{cc.attrs.metadataProfile.title}"/>
 				</h3>
 				
 				<div class="imj_listHeaderMenu">
@@ -42,7 +42,7 @@
 					</h:outputLink>
 				</div>
 			</div>
-			<div class="imj_listBody">
+			<div class="imj_listHeader">
 				<!-- Metadata Profile -->
 				
 				<h:panelGroup layout="block" styleClass="imj_metadataSet" rendered="#{cc.attrs.profileUrl.trim().length() > 0}">
@@ -57,33 +57,25 @@
 					</span>
 				</h:panelGroup>
 				
+				<h:panelGroup layout="block" styleClass="imj_metadataSet">
+					<label class="imj_metadataLabel">							
+						<h:outputText value="#{lbl.description}"/>
+						<span class="imj_noDisplay">: </span>
+					</label>
+					<span class="imj_metadataValue">
+						<h:outputText value="#{cc.attrs.metadataProfile.description}"/>
+					</span>
+				</h:panelGroup>
+             </div>
+
 				<ui:repeat var="statement" value="#{cc.attrs.metadataProfile.statements}">
+				<h:panelGroup layout="block" styleClass="imj_listHeader">
 					<div class="imj_metadataProfileItem">
 						<div class="imj_sectionHeadline">
-							<h4>
+							<h3>
 								<h:outputText value="#{lbl.metadata}"/>
 								<span class="imj_noDisplay">: </span>
-							</h4>
-						</div>
-						
-						<div class="imj_metadataSet">
-							<label class="imj_metadataLabel">							
-								<h:outputText value="#{lbl.metadata_id}"/>
-								<span class="imj_noDisplay">: </span>
-							</label>
-							<span class="imj_metadataValue">
-								<h:outputText value="#{statement.id}"/>
-							</span>
-						</div>
-						
-						<div class="imj_metadataSet">
-							<label class="imj_metadataLabel">
-								<h:outputText value="#{lbl.type}"/>
-								<span class="imj_noDisplay">: </span>
-							</label>
-							<span class="imj_metadataValue">
-								<h:outputText value="#{statement.type}"/>
-							</span>
+							</h3>
 						</div>
 						
 						<div class="imj_metadataSet">
@@ -99,7 +91,26 @@
 								</ui:repeat>
 							</span>
 						</div>
+
+						<div class="imj_metadataSet">
+							<label class="imj_metadataLabel">
+								<h:outputText value="#{lbl.type}"/>
+								<span class="imj_noDisplay">: </span>
+							</label>
+							<span class="imj_metadataValue">
+								<h:outputText value="#{statement.type}"/>
+							</span>
+						</div>
 						
+						<div class="imj_metadataSet">
+							<label class="imj_metadataLabel">							
+								<h:outputText value="#{lbl.metadata_id}"/>
+								<span class="imj_noDisplay">: </span>
+							</label>
+							<span class="imj_metadataValue">
+								<h:outputText value="#{statement.id}"/>
+							</span>
+						</div>
 						<ui:fragment rendered="#{!(empty statement.literalConstraints)}">
 							<div class="imj_metadataSet">
 								<label class="imj_metadataLabel">
@@ -111,6 +122,34 @@
 										<h:outputText value=", " rendered="#{indexO.index > 0}"/>
 										<h:outputText value="#{value}"/>
 									</ui:repeat>
+								</span>
+							</div>
+						</ui:fragment>
+
+						<ui:fragment rendered="#{'unbounded'==statement.maxOccurs}">
+							<div class="imj_metadataSet">
+								<label class="imj_metadataLabel">
+									<h:outputText value="#{lbl.multiple}"/>
+									<span class="imj_noDisplay">: </span>
+								</label>
+								<span class="imj_metadataValue">
+								    <h:outputText value="#{lbl.multiple_values}" />
+								</span>
+							</div>
+						</ui:fragment>
+
+
+						<ui:fragment>
+							<div class="imj_metadataSet">
+								<label class="imj_metadataLabel">
+									<h:outputText value="#{lbl.metadata_detail_imeji}"/>
+									<span class="imj_noDisplay">: </span>
+								</label>
+								<span class="imj_metadataValue">
+							    <h:outputText value="#{lbl.preview}" rendered="#{statement.preview}"/>
+								<h:outputText value="#{lbl.not_preview}" rendered="#{!statement.preview}"/>
+							    <h:outputText value=", " rendered="#{statement.preview and statement.description}"/>
+								<h:outputText value="#{lbl.used_as_description}" rendered="#{statement.description}" />
 								</span>
 							</div>
 						</ui:fragment>
@@ -127,8 +166,8 @@
 							</div>
 						</ui:fragment>
 					</div>
+					</h:panelGroup>
 				</ui:repeat>
-			</div>
 		</div>
 	</composite:implementation>
 </html>

@@ -17,7 +17,7 @@
 										contextUrl="#{Navigation.collectionUrl}" 
 										curMainMenu="#{currentMainMenu}" 
 										userHasAdminRights="#{Auth.admin}" 
-										userHasUploadRights="#{Auth.create(metadataContextBean) and metadataContextBean.status != 'WITHDRAWN'}" 
+										userHasUploadRights="#{Auth.createContent(metadataContextBean) and metadataContextBean.status != 'WITHDRAWN'}" 
 										hasContent="#{metadataContextBean.images.size() > 0}" 
 										navBean="#{Navigation}" 
 										activeMenu="metadata"/>

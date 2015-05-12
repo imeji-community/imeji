@@ -4,7 +4,7 @@
 	xmlns:f="http://java.sun.com/jsf/core">
 	<f:subview id="Details">
 		<!-- TODO: build up as component -->
-		<ui:param name="navigationPath" value="#{cc.attrs.picList.imageBaseUrl}/#{Navigation.itemPath}/#{item.id}"/>
+		<ui:param name="navigationPath" value="#{cc.attrs.picList.imageBaseUrl}#{Navigation.itemPath}/#{item.id}"/>
 		
 		<div class="imj_imageInfoLayer">
 			<h:outputText value="#{item.initPopup}"/>
@@ -14,7 +14,7 @@
 					<h:panelGroup styleClass="imj_iconEyeOpen_16"/>
 					<h:outputText value=" #{lbl.view_detail}"/>
 				</h:outputLink>
-				<h:outputLink value="#{navigationPath}?edit=1" rendered="#{Auth.updateContentUri(item.collection.id) and item.statements.size() >0 }">
+				<h:outputLink value="#{navigationPath}?edit=1" rendered="#{Auth.updateContent(item.collection) and item.statements.size() >0 }">
 					<h:panelGroup styleClass="imj_buttonEdit_16"/>
 					<h:outputText value="#{lbl.metadata_edit}"/>
 				</h:outputLink>

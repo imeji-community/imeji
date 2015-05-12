@@ -3,25 +3,29 @@
  */
 package de.mpg.imeji.presentation.collection;
 
-import java.net.URI;
-import java.util.Collection;
-
-import javax.faces.event.ValueChangeEvent;
-
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.beans.ContainerBean.CONTAINER_TYPE;
 import de.mpg.imeji.presentation.image.ThumbnailBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CommonUtils;
 import de.mpg.imeji.presentation.util.ObjectLoader;
+
+import org.apache.log4j.Logger;
+
+import javax.faces.event.ValueChangeEvent;
+
+import java.net.URI;
+import java.util.Collection;
+
+import static de.mpg.imeji.logic.notification.CommonMessages.getSuccessCollectionDeleteMessage;
 
 /**
  * Item of the collections page.
@@ -88,15 +92,19 @@ public class CollectionListItem
             {
                 versionDate = collection.getVersionDate().getTime().toString();
             }
-            // Get first thumbnail of the collection
-            ItemController ic = new ItemController();
-            if (ic.searchAndSetContainerItemsFast(collection, user, 1).getImages().iterator().hasNext())
-            {
-               URI uri = ic.searchAndSetContainerItemsFast(collection, user, 1).getImages().iterator().next();
-               if (uri != null)
-               {
-                 this.thumbnail = new ThumbnailBean(ic.retrieve(uri, user));                
-               }
+            // Get first thumbnail of the collection and modify the image link if the collection has own explicit logo
+	            ItemController ic = new ItemController();
+	            Container searchedContainer = ic.searchAndSetContainerItemsFast(collection, user, 1);
+	            if (searchedContainer.getImages().iterator().hasNext())
+	            {
+	               URI uri = searchedContainer.getImages().iterator().next();
+	               if (uri != null)
+	               {
+	                 this.thumbnail = new ThumbnailBean(ic.retrieve(uri, user));
+	                 if (collection.getLogoUrl() != null ) {
+	                	 thumbnail.setLink(collection.getLogoUrl().toString());
+	                 }
+	               }
              }
              // initializations
              initSize(collection, user);
@@ -169,15 +177,16 @@ public class CollectionListItem
         CollectionController cc = new CollectionController();
         try
         {
-            cc.delete(cc.retrieve(uri, sessionBean.getUser()), sessionBean.getUser());
-            BeanHelper.info(sessionBean.getMessage("success_collection_delete"));
+            CollectionImeji c = cc.retrieve(uri, sessionBean.getUser());
+            cc.delete(c, sessionBean.getUser());
+            BeanHelper.info(getSuccessCollectionDeleteMessage(c.getMetadata().getTitle(), sessionBean));
         }
         catch (Exception e)
         {
             BeanHelper.error(sessionBean.getMessage("error_collection_delete") + ":" + e.getMessage());
             logger.error(sessionBean.getMessage("error_collection_delete"), e);
         }
-        return "pretty:collections";
+        return ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getPrettySpacePage("pretty:collections");
     }
 
     /**
@@ -394,6 +403,10 @@ public class CollectionListItem
 
 	public void setOwner(boolean isOwner) {
 		this.isOwner = isOwner;
+	}
+	
+	public String getType() {
+		return  CONTAINER_TYPE.COLLECTION.name();
 	}
     
 }

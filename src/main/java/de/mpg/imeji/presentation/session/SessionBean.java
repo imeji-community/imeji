@@ -3,18 +3,22 @@
  */
 package de.mpg.imeji.presentation.session;
 
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.auth.util.AuthUtil;
+import de.mpg.imeji.logic.controller.SpaceController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.StringHelper;
-import de.mpg.imeji.logic.vo.Album;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.vo.*;
+import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.beans.Navigation.Page;
+import de.mpg.imeji.presentation.upload.IngestImage;
 import de.mpg.imeji.presentation.user.ShareBean.ShareType;
+import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CookieUtils;
 import de.mpg.imeji.presentation.util.MaxPlanckInstitutUtils;
 import de.mpg.imeji.presentation.util.PropertyReader;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
@@ -23,12 +27,14 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
 /**
  * The session Bean for imeji.
  * 
@@ -65,8 +71,11 @@ public class SessionBean implements Serializable {
 	private int numberOfItemsPerPage = 18;
 	private int numberOfContainersPerPage = 10;
 
+	private String applicationUrl;
+	private String spaceId;
+	private URI selectedSpace;
+	private String selectedSpaceLogoURL;
 
-    private String applicationUrl;
 	/*
 	 * Cookies name
 	 */
@@ -79,6 +88,10 @@ public class SessionBean implements Serializable {
 	 */
 	public String institute;
 	public String instituteId;
+	
+	//TODO 
+	//Provide better handling for ingest image uploader; here temporary code provided in order to fulfill the sprint deadline 
+	private IngestImage spaceLogoIngestImage;
 
 	/**
 	 * The session Bean for imeji
@@ -98,8 +111,7 @@ public class SessionBean implements Serializable {
 		instituteId = findInstituteId();
 	}
 
-
-    /**
+	/**
 	 * Initialize the number of items per page by:<br/>
 	 * 1- Reading the property<br/>
 	 * 2- Reading the Cookie<br/>
@@ -232,27 +244,29 @@ public class SessionBean implements Serializable {
 	 */
 	public String getInstanceName() {
 		try {
-			return PropertyReader.getProperty("imeji.instance.name");
+			return ((ConfigurationBean) BeanHelper
+					.getApplicationBean(ConfigurationBean.class))
+					.getInstanceName();
 		} catch (Exception e) {
 			return "imeji";
 		}
 	}
 
-    /**
-     * Read application URL from the imeji properties
-     */
-    private void initApplicationUrl() {
-        try {
-            applicationUrl = StringHelper.normalizeURI(PropertyReader.getProperty("imeji.instance.url"));
-        } catch (Exception e) {
-            applicationUrl = "http://localhost:8080/imeji";
-        }
-    }
+	/**
+	 * Read application URL from the imeji properties
+	 */
+	private void initApplicationUrl() {
+		try {
+			applicationUrl = StringHelper.normalizeURI(PropertyReader
+					.getProperty("imeji.instance.url"));
+		} catch (Exception e) {
+			applicationUrl = "http://localhost:8080/imeji";
+		}
+	}
 
-    public String getApplicationUrl() {
-        return applicationUrl;
-    }
-
+	public String getApplicationUrl() {
+		return applicationUrl;
+	}
 
 	/**
 	 * First read the {@link Locale} in the request. This is the default
@@ -444,7 +458,12 @@ public class SessionBean implements Serializable {
 	 * @return
 	 */
 	public Album getActiveAlbum() {
-		return activeAlbum;
+			//
+			if (activeAlbum != null && ( !AuthUtil.staticAuth().read(getUser(), activeAlbum.getId()) ||
+										 !AuthUtil.staticAuth().create(getUser(), activeAlbum.getId()) )) {
+				setActiveAlbum(null);
+			}
+			return activeAlbum;
 	}
 
 	/**
@@ -555,7 +574,7 @@ public class SessionBean implements Serializable {
 				getLabel("collection_share_image_upload")));
 		itemList.add(new SelectItem(ShareType.EDIT_ITEM,
 				getLabel("collection_share_image_edit")));
-		itemList.add(new SelectItem(ShareType.DELETE,
+		itemList.add(new SelectItem(ShareType.DELETE_ITEM,
 				getLabel("collection_share_image_delete")));
 		itemList.add(new SelectItem(ShareType.EDIT_CONTAINER,
 				getLabel("collection_share_collection_edit")));
@@ -685,6 +704,88 @@ public class SessionBean implements Serializable {
 		if (ipAddress == null) {
 			ipAddress = request.getRemoteAddr();
 		}
+		if (ipAddress != null && ipAddress.split(",").length > 1)
+			ipAddress = ipAddress.split(",")[0];
 		return ipAddress;
 	}
+
+	public void setSpaceId(String spaceIdString)  {
+		this.spaceId = spaceIdString;
+		if (!isNullOrEmpty(spaceIdString)) {
+			SpaceController sc = new SpaceController();
+			try {
+					Space selectedSpace =  sc.retrieveSpaceByLabel(spaceIdString, this.user);
+					if (selectedSpace != null) {
+						this.selectedSpace = selectedSpace.getId();
+						this.selectedSpaceLogoURL = String.valueOf(selectedSpace.getLogoUrl());
+						logoutFromSpot();
+					}
+					else
+					{
+						this.selectedSpace = null;
+						this.spaceId =""; 
+						this.selectedSpaceLogoURL="";
+					}
+			}
+			catch (ImejiException e) 
+			{
+				this.selectedSpace = null;
+				this.spaceId ="";
+				this.selectedSpaceLogoURL="";
+			}
+		}
+		else
+		{
+			this.selectedSpace = null;
+			this.spaceId =""; 
+			this.selectedSpaceLogoURL="";
+		}
+	}
+
+	public String getSpaceId() {
+		return this.spaceId;
+	}
+	
+	public String getSelectedSpaceString() {
+		if (this.selectedSpace != null)
+			return this.selectedSpace.toString();
+		return "";
+	}
+
+	public URI getSelectedSpace() {
+			return this.selectedSpace;
+	}
+
+	public String getSelectedSpaceLogoURL() {
+		return this.selectedSpaceLogoURL;
+	}
+
+	public IngestImage getSpaceLogoIngestImage() {
+		return spaceLogoIngestImage;
+	}
+
+	public void setSpaceLogoIngestImage(IngestImage spaceLogoIngestImage) {
+		this.spaceLogoIngestImage = spaceLogoIngestImage;
+	}
+	
+	public String getPrettySpacePage(String prettyPage){
+		if (isNullOrEmpty(this.spaceId))
+			return prettyPage;
+		return prettyPage.replace("pretty:", "pretty:space_");
+				
+	}
+	
+	/**
+	 * Logout and redirect to the home page
+	 * 
+	 * @throws IOException
+	 */
+	public void logoutFromSpot()  {
+		if (getUser()!=null && !getUser().isAdmin()) {
+			setUser(null);
+			setShowLogin(false);
+		}
+	}
+	
 }
+

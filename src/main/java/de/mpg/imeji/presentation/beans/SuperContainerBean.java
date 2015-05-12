@@ -3,25 +3,24 @@
  */
 package de.mpg.imeji.presentation.beans;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.faces.model.SelectItem;
-
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchOperators;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
+import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.Container;
+import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.presentation.filter.Filter;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CookieUtils;
 import de.mpg.imeji.presentation.util.PropertyReader;
-import de.mpg.imeji.presentation.util.UrlHelper;
+import org.apache.log4j.Logger;
+
+import javax.faces.model.SelectItem;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Java Bean for {@link Container} browse pages (collections and albums)
@@ -49,7 +48,7 @@ public abstract class SuperContainerBean<T> extends
 	public SuperContainerBean() {
 		sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
 		initMenus();
-		selectedSortCriterion = SearchIndex.names.modified.name();
+		selectedSortCriterion = SearchIndex.IndexNames.modified.name();
 		selectedSortOrder = SortOrder.DESCENDING.name();
 		setElementsPerPage(sb.getNumberOfContainersPerPage());
 		try {
@@ -93,7 +92,7 @@ public abstract class SuperContainerBean<T> extends
 			selectedMenu = UrlHelper.getParameterValue("tab");
 		}
 		query = UrlHelper.getParameterValue("q");
-		if (selectedFilter == null || UrlHelper.getParameterBoolean("login")) {
+		if (selectedFilter == null || UrlHelper.getParameterBoolean("login") || sb.getUser() == null) {
 			if (sb.getUser() != null) {
 				selectedFilter = "my";
 			} else {
@@ -112,17 +111,17 @@ public abstract class SuperContainerBean<T> extends
 	 */
 	protected void initMenus() {
 		sortMenu = new ArrayList<SelectItem>();
-		sortMenu.add(new SelectItem(SearchIndex.names.cont_title.name(), sb
+		sortMenu.add(new SelectItem(SearchIndex.IndexNames.cont_title.name(), sb
 				.getLabel("sort_title")));
-		sortMenu.add(new SelectItem(SearchIndex.names.modified.name(), sb
+		sortMenu.add(new SelectItem(SearchIndex.IndexNames.modified.name(), sb
 				.getLabel("sort_date_mod")));
-		sortMenu.add(new SelectItem(SearchIndex.names.creator.name(), sb
+		sortMenu.add(new SelectItem(SearchIndex.IndexNames.creator.name(), sb
 				.getLabel("sort_author")));
 		filterMenu = new ArrayList<SelectItem>();
 		filterMenu.add(new SelectItem("all", sb
 				.getLabel("all_except_withdrawn")));
 		if (sb.getUser() != null) {
-			sortMenu.add(new SelectItem(SearchIndex.names.status.name(), sb
+			sortMenu.add(new SelectItem(SearchIndex.IndexNames.status.name(), sb
 					.getLabel("sort_status")));
 			filterMenu.add(new SelectItem("my", sb
 					.getLabel("my_except_withdrawn")));
@@ -151,25 +150,25 @@ public abstract class SuperContainerBean<T> extends
 	 */
 	public SearchPair getFilter() {
 		SearchPair pair = null;
-		if ("my".equals(selectedFilter)) {
+		if ("my".equals(selectedFilter) ) {
 			pair = new SearchPair(
-					SPARQLSearch.getIndex(SearchIndex.names.user),
+					SPARQLSearch.getIndex(SearchIndex.IndexNames.user),
 					SearchOperators.EQUALS, sb.getUser().getId().toString());
 		} else if ("private".equals(selectedFilter)) {
 			pair = new SearchPair(
-					SPARQLSearch.getIndex(SearchIndex.names.status),
+					SPARQLSearch.getIndex(SearchIndex.IndexNames.status),
 					SearchOperators.EQUALS,
-					"http://imeji.org/terms/status#PENDING");
+					Status.PENDING.getUriString());
 		} else if ("public".equals(selectedFilter)) {
 			pair = new SearchPair(
-					SPARQLSearch.getIndex(SearchIndex.names.status),
+					SPARQLSearch.getIndex(SearchIndex.IndexNames.status),
 					SearchOperators.EQUALS,
-					"http://imeji.org/terms/status#RELEASED");
+					Status.RELEASED.getUriString());
 		} else if ("withdrawn".equals(selectedFilter)) {
 			pair = new SearchPair(
-					SPARQLSearch.getIndex(SearchIndex.names.status),
+					SPARQLSearch.getIndex(SearchIndex.IndexNames.status),
 					SearchOperators.EQUALS,
-					"http://imeji.org/terms/status#WITHDRAWN");
+					Status.WITHDRAWN.getUriString());
 		}
 		return pair;
 	}
@@ -339,5 +338,10 @@ public abstract class SuperContainerBean<T> extends
 	 */
 	public String getQuery() {
 		return query;
+	}
+	
+	@Override
+	public String getType(){
+		return "supercontainer";
 	}
 }

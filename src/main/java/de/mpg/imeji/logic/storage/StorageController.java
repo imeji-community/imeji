@@ -28,20 +28,19 @@
  */
 package de.mpg.imeji.logic.storage;
 
-import static de.mpg.imeji.logic.storage.util.StorageUtils.calculateChecksum;
-import static de.mpg.imeji.logic.storage.util.StorageUtils.compareExtension;
-import static de.mpg.imeji.logic.storage.util.StorageUtils.guessExtension;
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
+import de.mpg.imeji.logic.storage.util.StorageUtils;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.presentation.beans.ConfigurationBean;
+import de.mpg.imeji.presentation.util.PropertyReader;
+import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.io.OutputStream;
 import java.io.Serializable;
 
-import org.apache.commons.io.FilenameUtils;
-
-import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.presentation.util.PropertyReader;
+import static de.mpg.imeji.logic.storage.util.StorageUtils.*;
 
 /**
  * Controller for the {@link Storage} objects
@@ -51,10 +50,8 @@ import de.mpg.imeji.presentation.util.PropertyReader;
  * @version $Revision$ $LastChangedDate$
  */
 public class StorageController implements Serializable {
-	private static final long serialVersionUID = -2651970941029421673L;
-	public static final String UPLOAD_BLACKLIST_PROPERTY = "imeji.upload.blacklist";
+	private static final long serialVersionUID = -2651970941029421673L;;
 	public static final String IMEJI_STORAGE_NAME_PROPERTY = "imeji.storage.name";
-	public static final String UPLOAD_WHITELIST_PROPERTY = "imeji.upload.whitelist";
 	private Storage storage;
 
 	private String formatWhiteList;
@@ -68,10 +65,8 @@ public class StorageController implements Serializable {
 		String name;
 		try {
 			name = PropertyReader.getProperty(IMEJI_STORAGE_NAME_PROPERTY);
-			formatBlackList = PropertyReader
-					.getProperty(UPLOAD_BLACKLIST_PROPERTY);
-			formatWhiteList = PropertyReader
-					.getProperty(UPLOAD_WHITELIST_PROPERTY);
+			formatBlackList = ConfigurationBean.getUploadBlackListStatic();
+			formatWhiteList = ConfigurationBean.getUploadWhiteListStatic();
 		} catch (Exception e) {
 			throw new RuntimeException("Error reading property: ", e);
 		}
@@ -163,11 +158,19 @@ public class StorageController implements Serializable {
 	 * @return not allowed file format extension
 	 */
 	public String guessNotAllowedFormat(File file) {
+		boolean canBeUploaded = false;
 
 		String guessedExtension = FilenameUtils.getExtension(file.getName());
-		if ("".equals(guessedExtension))
-			guessedExtension = guessExtension(file);
-		return isAllowedFormat(guessedExtension) ? null : guessedExtension;
+		if (!"".equals(guessedExtension)) {
+			canBeUploaded = isAllowedFormat(guessedExtension);
+		}
+		// In Any case check the extension by Tika results
+		guessedExtension = guessExtension(file);
+
+		// file can be uploaded only if both results are true
+		canBeUploaded = canBeUploaded && isAllowedFormat(guessedExtension);
+
+		return canBeUploaded ? guessedExtension : StorageUtils.BAD_FORMAT;
 	}
 
 	/**
@@ -178,6 +181,9 @@ public class StorageController implements Serializable {
 	 */
 	private boolean isAllowedFormat(String extension) {
 		// If no extension, not possible to recognized the format
+		// Imeji will uprfont guess the extension for the uploaded file if it is
+		// not provided
+		// Thus this method is not public and cannot be used as public method
 		if ("".equals(extension.trim()))
 			return false;
 		// check in white list, if found then allowed
@@ -201,7 +207,7 @@ public class StorageController implements Serializable {
 	public Storage getStorage() {
 		return storage;
 	}
-	
+
 	/**
 	 * Call read method of the controlled {@link Storage}
 	 * 
@@ -209,7 +215,16 @@ public class StorageController implements Serializable {
 	 * @param out
 	 * @throws ImejiException
 	 */
-	public String readFileStringContent(String url){
+	public String readFileStringContent(String url) {
 		return storage.readFileStringContent(url);
 	}
+
+	public String getFormatBlackList() {
+		return formatBlackList;
+	}
+
+	public String getFormatWhiteList() {
+		return formatWhiteList;
+	}
+
 }

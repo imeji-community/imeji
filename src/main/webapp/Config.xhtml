@@ -63,11 +63,79 @@
 				
 					<h:panelGroup layout="block" styleClass="imj_listBody" rendered="#{Auth.admin}">
 						<h:form id="configForm">
+							
+							
 							<div class="imj_adminPanel">
 							
 								<div class="imj_headline">
 									<h2>
-										<h:outputText value="#{lbl.snippet}"/>
+										<h:outputText value="#{lbl.config_general}"/>
+										<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
+									</h2>
+								</div>
+													
+								<div class="imj_content">
+									<!-- Admin - Snippet Insert -->	
+									<div class="imj_admindataSet">
+										<div class="imj_admindataLabel">
+											<h:outputText value="#{lbl.instance_name}"/>
+											<span class="imj_noDisplay">: </span>
+										</div>
+										<div class="imj_admindataValue">
+											<h:inputText value="#{Configuration.instanceName}" styleClass="imj_admindataEdit"/>
+										</div>
+										<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+									</div>
+									<div class="imj_admindataSet">
+										<div class="imj_admindataLabel">
+											<h:outputText value="#{lbl.contact_email}"/>
+											<span class="imj_noDisplay">: </span>
+										</div>
+										<div class="imj_admindataValue">
+											<h:inputText value="#{Configuration.contactEmail}" styleClass="imj_admindataEdit"/>
+										</div>
+										<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+									</div>
+									<div class="imj_admindataSet">
+										<div class="imj_admindataLabel">
+											<h:outputText value="#{lbl.config_languages}"/>
+											<span class="imj_noDisplay">: </span>
+										</div>
+										<div class="imj_admindataValue">
+											<h:inputText value="#{Configuration.languages}" styleClass="imj_admindataEdit"/>
+										</div>
+										<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+									</div>
+									<div class="imj_admindataSet">
+										<div class="imj_admindataLabel">
+											<h:outputText value="#{lbl.imprint_url}"/>
+											<span class="imj_noDisplay">: </span>
+										</div>
+										<div class="imj_admindataValue">
+											<h:inputText value="#{Configuration.impressumUrl}" styleClass="imj_admindataEdit"/>
+										</div>
+										<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+									</div>
+									<div class="imj_admindataSet">
+										<div class="imj_admindataLabel">
+											<h:outputText value="#{lbl.imprint}"/>
+											<span class="imj_noDisplay">: </span>
+										</div>
+										<div class="imj_admindataValue">
+											<h:inputTextarea value="#{Configuration.impressumText}" styleClass="imj_admindataEdit imj_additionalCodeSnippet"/>
+										</div>
+										<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+									</div>	
+									
+									
+								</div>
+							</div>
+							
+							
+							<div class="imj_adminPanel">
+								<div class="imj_headline">
+									<h2>
+										<h:outputText value="#{lbl.config_appearance}"/>
 										<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
 									</h2>
 								</div>
@@ -76,7 +144,7 @@
 									<!-- Admin - Snippet Insert -->	
 									<div class="imj_admindataSet">
 										<div class="imj_admindataLabel">
-											<h:outputText value="Snippet"/>
+											<h:outputText value="#{lbl.snippet}"/>
 											<span class="imj_noDisplay">: </span>
 										</div>
 										<div class="imj_admindataValue">
@@ -84,18 +152,16 @@
 										</div>
 										<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
 									</div>
-								</div>
-							</div>
-							
-							<div class="imj_adminPanel">
-								<div class="imj_headline">
-									<h2>
-										<h:outputText value="CSS"/>
-										<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
-									</h2>
-								</div>
-							
-								<div class="imj_content">					
+									<div class="imj_admindataSet">
+										<div class="imj_admindataLabel">
+											<h:outputText value="#{lbl.meta_description}"/>
+											<span class="imj_noDisplay">: </span>
+										</div>
+										<div class="imj_admindataValue">
+											<h:inputTextarea value="#{Configuration.metaDescription}" styleClass="imj_admindataEdit imj_additionalCodeSnippet"/>
+										</div>
+										<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+									</div>	
 									<!-- Admin - Snippet Insert -->	
 									<h:panelGroup layout="block" styleClass="imj_admindataSet">
 										<div class="imj_admindataLabel">
@@ -119,7 +185,86 @@
 									</h:panelGroup>
 								</div>
 							</div>
-								
+							
+					
+							<!-- EMAIL SERVER -->
+							<div class="imj_adminPanel">
+							
+								<div class="imj_headline">
+									<h2>
+										<h:outputText value="#{lbl.email_server}"/>
+										<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
+									</h2>
+								</div>
+													
+								<div class="imj_content">
+									<!-- Admin - Snippet Insert -->	
+									<div class="imj_admindataSet">
+										<div class="imj_admindataLabel">
+											<h:outputText value="#{lbl.server_address}"/>
+											<span class="imj_noDisplay">: </span>
+										</div>
+										<div class="imj_admindataValue">
+											<h:inputText value="#{Configuration.emailServer}" styleClass="imj_admindataEdit"/>
+										</div>
+										<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+									</div>
+									<div class="imj_admindataSet">
+										<div class="imj_admindataLabel">
+											<h:outputText value="#{lbl.email_server_port}"/>
+											<span class="imj_noDisplay">: </span>
+										</div>
+										<div class="imj_admindataValue">
+											<h:inputText value="#{Configuration.emailServerPort}" styleClass="imj_admindataEdit"/>
+										</div>
+										<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+									</div>
+									<div class="imj_admindataSet">
+										<div class="imj_admindataLabel">
+											<h:outputText value="#{lbl.email_server_sender}"/>
+											<span class="imj_noDisplay">: </span>
+										</div>
+										<div class="imj_admindataValue">
+											<h:inputText value="#{Configuration.emailServerSender}" styleClass="imj_admindataEdit"/>
+										</div>
+										<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+									</div>
+									<div class="imj_admindataSet">
+										<div class="imj_admindataLabel">
+											<h:outputText value="#{lbl.server_enable_authentication}"/>
+											<span class="imj_noDisplay">: </span>
+										</div>
+										<div class="imj_admindataValue">
+											<h:selectOneRadio value="#{Configuration.emailServerEnableAuthentication}">
+												<f:selectItem itemLabel="#{lbl.no}" itemValue="false"/>
+												<f:selectItem itemLabel="#{lbl.yes}" itemValue="true"/>
+											</h:selectOneRadio>
+										</div>
+										<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+									</div>
+									<div class="imj_admindataSet">
+										<div class="imj_admindataLabel">
+											<h:outputText value="#{lbl.user}"/>
+											<span class="imj_noDisplay">: </span>
+										</div>
+										<div class="imj_admindataValue">
+											<h:inputText value="#{Configuration.emailServerUser}" styleClass="imj_admindataEdit"/>
+										</div>
+										<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+									</div>
+									<div class="imj_admindataSet">
+										<div class="imj_admindataLabel">
+											<h:outputText value="#{lbl.password}"/>
+											<span class="imj_noDisplay">: </span>
+										</div>
+										<div class="imj_admindataValue">
+											<h:inputSecret value="#{Configuration.emailServerPassword}" styleClass="imj_admindataEdit" autocomplete="off"/>
+										</div>
+										<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+									</div>
+								</div>
+							</div>
+							
 							<div class="imj_adminPanel">
 								<div class="imj_headline">
 									<h2>
@@ -180,7 +325,7 @@
 							<div class="imj_adminPanel">
 								<div class="imj_headline">
 									<h2>
-										<h:outputText value="#{lbl.uploadFiles}"/>
+										<h:outputText value="#{lbl.upload}"/>
 										<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
 									</h2>
 								</div>
@@ -194,13 +339,32 @@
 											<h:inputText value="#{Configuration.uploadMaxFileSize}" styleClass="imj_admindataEdit"/>
 										</div>
 									</h:panelGroup>
-								</div> 
+									<h:panelGroup layout="block" styleClass="imj_admindataSet">
+										<div class="imj_admindataLabel">
+											<h:outputText value="#{lbl.upload_black_list}"/>
+											<span class="imj_noDisplay">: </span>
+										</div>
+										<div class="imj_admindataValue">
+											<h:inputText value="#{Configuration.uploadBlackList}" styleClass="imj_admindataEdit"/>
+										</div>
+									</h:panelGroup>
+									<h:panelGroup layout="block" styleClass="imj_admindataSet">
+										<div class="imj_admindataLabel">
+											<h:outputText value="#{lbl.upload_white_list}"/>
+											<span class="imj_noDisplay">: </span>
+										</div>
+										<div class="imj_admindataValue">
+											<h:inputText value="#{Configuration.uploadWhiteList}" styleClass="imj_admindataEdit"/>
+										</div>
+									</h:panelGroup>
+								</div>
+									
 							</div>
 								
 							<div class="imj_adminPanel">
 								<div class="imj_headline">
 									<h2>
-										<h:outputText value="#{lbl.startPageHtmlSnippet}"/>
+										<h:outputText value="#{lbl.start_page}"/>
 										<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
 									</h2>
 								</div>
@@ -208,6 +372,7 @@
 									<ui:repeat value="#{Configuration.snippets}" var="snippet">
 										<h:panelGroup layout="block" styleClass="imj_admindataSet">
 											<div class="imj_admindataLabel">
+											 	<h:outputText value="#{lbl.startPageHtmlSnippet}"/><br/>
 											 	<h:outputText value="#{Internationalization.getLanguageLabel(snippet.lang)}"/>
 												<span class="imj_noDisplay">: </span>
 											</div>
@@ -217,20 +382,29 @@
 											<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
 										</h:panelGroup>
 									</ui:repeat>
-								</div> 
-							</div>
-							
-							<div class="imj_adminPanel">
-								<div class="imj_headline">
-									<h2>
-										<h:outputText value="#{lbl.startPageFooterLogos}"/>
-										<h:commandButton action="#{Configuration.saveConfig}" title="#{lbl.configuration_save_all}" value="#{lbl.configuration_save_all}" styleClass="imj_submitButton"/>
-									</h2>
-								</div>
-								<div class="imj_content">
 									<h:panelGroup layout="block" styleClass="imj_admindataSet">
 										<div class="imj_admindataLabel">
-											<h:outputText value="#{lbl.html}"/>
+											<h:outputText value="#{lbl.carousel_search_query}"/>
+											<span class="imj_noDisplay">: </span>
+										</div>
+										<div class="imj_admindataValue">
+											<h:inputTextarea value="#{Configuration.startPageCarouselQuery}" styleClass="imj_admindataEdit imj_additionalCodeSnippet"/>
+										</div>
+										<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+									</h:panelGroup>
+									<h:panelGroup layout="block" styleClass="imj_admindataSet">
+										<div class="imj_admindataLabel">
+											<h:outputText value="#{lbl.carousel_search_query_order}"/>
+											<span class="imj_noDisplay">: </span>
+										</div>
+										<div class="imj_admindataValue">
+											<h:inputText value="#{Configuration.startPageCarouselQueryOrder}" styleClass="imj_admindataEdit"/>
+										</div>
+										<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+									</h:panelGroup>
+									<h:panelGroup layout="block" styleClass="imj_admindataSet">
+										<div class="imj_admindataLabel">
+											<h:outputText value="#{lbl.startPageFooterLogos} (#{lbl.html})"/>
 											<span class="imj_noDisplay">: </span>
 										</div>
 										<div class="imj_admindataValue">
@@ -240,7 +414,7 @@
 									</h:panelGroup>
 								</div> 
 							</div>
-								
+
 							<div class="imj_adminPanel">
 								<div class="imj_headline">
 									<h2>

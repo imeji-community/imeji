@@ -84,7 +84,6 @@ public class ReaderFacade implements Reader
         if (o == null ) {
         	throw new NotFoundException("Object is not found or authentication is required.");
         }
-        
         checkSecurity(toList(o), user);
         return o;
     }

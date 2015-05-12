@@ -3,13 +3,12 @@
  */
 package de.mpg.imeji.presentation.mdProfile;
 
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.logic.controller.ProfileController;
+import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.UrlHelper;
+import org.apache.log4j.Logger;
 
 /**
  * Java Bean for {@link MetadataProfile} create page
@@ -63,6 +62,6 @@ public class CreateMdProfileBean extends MdProfileBean
     @Override
     protected String getNavigationString()
     {
-        return "pretty:createProfile";
+    	return session.getPrettySpacePage("pretty:createProfile");
     }
 }

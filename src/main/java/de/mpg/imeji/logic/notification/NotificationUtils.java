@@ -1,4 +1,4 @@
-package de.mpg.imeji.presentation.util;
+package de.mpg.imeji.logic.notification;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
@@ -6,6 +6,7 @@ import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.export.Export;
 import de.mpg.imeji.logic.export.format.ZIPExport;
+import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
@@ -85,7 +86,7 @@ public class NotificationUtils {
                                 (msgsPerEmail.containsKey(key) ? msgsPerEmail.get(key) + "\r\n" : "")
                                         + "XXX_COLLECTION_XXX URI"
                                         + (isNullOrEmpty(q)? ": " : " (XXX_FILTERED_XXX): ")
-                                        + entry.getKey().toString() + q
+                                        + UrlHelper.encodeQuery(entry.getKey().toString() + q)
                                         + ", XXX_ITEMS_COUNT_XXX: " + entry.getValue().intValue()
                         );
                         usersPerEmail.put(key, u);
@@ -99,7 +100,7 @@ public class NotificationUtils {
                             msgs.getEmailOnZipDownload_Body(u, user, entry.getValue(), url, session));
                     LOGGER.info("Sent notification email to user: " + u.getName() + "<" + u.getEmail()
                             + ">;" + " zip download query: <" + url
-                            + ">; message: <" + entry.getValue().replaceAll("[\\r\\n]]", ";") );
+                            + ">; message: <" + entry.getValue().replaceAll("[\\r\\n]]", ";") + ">" );
                 }
             }
         }

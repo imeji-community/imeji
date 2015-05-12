@@ -3,6 +3,9 @@ package de.mpg.imeji.rest.api;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotSupportedMethodException;
 import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.SearchFactory;
+import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.vo.User;
 
 import java.net.URI;
@@ -74,7 +77,6 @@ public class UserService implements API<User>{
 	}
 	
 	public User read(URI uri) throws ImejiException {
-        //TODO: admin cannot read itself???!!! workaround:
         return adminUser.getId().equals(uri) ? adminUser :
                 new UserController(adminUser).retrieve(uri);
 	}
@@ -84,4 +86,10 @@ public class UserService implements API<User>{
                 new UserController(adminUser).retrieve(email);
 	}
 
+	public String getCompleteName(URI uri) throws ImejiException {
+		Search search = SearchFactory.create();
+		List<String> results = search.searchSimpleForQuery(
+				SPARQLQueries.selectUserCompleteName(uri)).getResults();
+		return results.size() == 1 ? results.get(0) : null;
+	}
 }

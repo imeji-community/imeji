@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -20,7 +21,6 @@ public class StaticContentBean
 {
     private boolean about = true;
     private boolean legal = true;
-    private boolean blog = true;
 
     /**
      * Construct the {@link StaticContentBean} by reading in the imeji.properties which external content are defined
@@ -37,10 +37,6 @@ public class StaticContentBean
         if ("".equals(PropertyReader.getProperty("imeji.legal.url")))
         {
             legal = false;
-        }
-        if ("".equals(PropertyReader.getProperty("imeji.blog.url")))
-        {
-            blog = false;
         }
     }
 
@@ -92,7 +88,7 @@ public class StaticContentBean
         try
         {
             String helpProp = PropertyReader.getProperty("imeji.help.url");
-            String supportEmail = PropertyReader.getProperty("imeji.support.email");
+            String supportEmail = ((ConfigurationBean)BeanHelper.getApplicationBean(ConfigurationBean.class)).getContactEmail();
             html = getContent(new URL(helpProp));
             html = html.replaceAll("XXX_SUPPORT_EMAIL_XXX", supportEmail);
         }
@@ -238,15 +234,5 @@ public class StaticContentBean
     public void setLegal(boolean legal)
     {
         this.legal = legal;
-    }
-
-    public boolean isBlog()
-    {
-        return blog;
-    }
-
-    public void setBlog(boolean blog)
-    {
-        this.blog = blog;
     }
 }

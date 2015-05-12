@@ -3,7 +3,7 @@
   "description": "some description",
   "versionOf": "",
   "profile": {
-    "profileId": "___PROFILE_ID___",
+    "id": "___PROFILE_ID___",
     "method": "___METHOD___"
   },
   "contributors": [

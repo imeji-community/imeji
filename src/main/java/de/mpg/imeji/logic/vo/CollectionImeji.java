@@ -3,15 +3,15 @@
  */
 package de.mpg.imeji.logic.vo;
 
-import java.io.Serializable;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collection;
-
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jList;
 import de.mpg.j2j.annotations.j2jModel;
 import de.mpg.j2j.annotations.j2jResource;
+
+import java.io.Serializable;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * imeji collection has one {@link MetadataProfile} and contains {@link Item}
@@ -30,10 +30,10 @@ public class CollectionImeji extends Container implements Serializable
     private URI profile = null;
     @j2jResource("http://imeji.org/terms/metadataSet")
     private MetadataSet metadataSet = new MetadataSet();
-    /**
-     * Item list is not defined as a {@link j2jList}, i.e. there is no triple like "collection has item", but only
-     * "item is in collection". This avoid performance issue when the collection is growing.
-     */
+
+    @j2jResource("http://imeji.org/terms/space")
+    private URI space;
+
     private Collection<URI> images = new ArrayList<URI>();
 
     public URI getProfile()
@@ -65,4 +65,13 @@ public class CollectionImeji extends Container implements Serializable
     {
         return images;
     }
+
+    public URI getSpace() {
+        return space;
+    }
+
+    public void setSpace(URI space) {
+        this.space = space;
+    }
+
 }

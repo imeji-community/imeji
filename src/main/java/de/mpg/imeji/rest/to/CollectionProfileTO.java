@@ -17,15 +17,15 @@ public class CollectionProfileTO implements Serializable{
         }
     }
 
-    private String profileId;
+    private String id;
     private String method;
 
-    public String getProfileId() {
-        return profileId;
+    public String getId() {
+        return id;
     }
 
-    public void setProfileId(String profileId) {
-        this.profileId = profileId;
+    public void setId(String profileId) {
+        this.id = profileId;
     }
 
     public String getMethod() {

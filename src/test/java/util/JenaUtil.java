@@ -18,6 +18,7 @@ import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
@@ -84,6 +85,8 @@ public class JenaUtil {
 			// Create new tdb
 			Imeji.init(TDB_PATH);
 			initTestUser();
+			// init imeji configuration
+			new ConfigurationBean();
 		} catch (Exception e) {
 			throw new RuntimeException("Error initialiting Jena for testing: ",
 					e);

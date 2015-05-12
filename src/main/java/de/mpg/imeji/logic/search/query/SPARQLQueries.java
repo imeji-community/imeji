@@ -35,6 +35,7 @@ import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
+import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.j2j.helper.J2JHelper;
 import org.apache.commons.lang3.text.translate.UnicodeEscaper;
@@ -87,6 +88,52 @@ public class SPARQLQueries {
 		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE { "
 				+ "?s a <http://imeji.org/terms/mdprofile> . ?s <http://imeji.org/terms/default> true"
 				+ "}";
+	}
+
+	/**
+	 * Select {@link MetadataProfile} which are not used by any
+	 * {@link CollectionImeji}
+	 * 
+	 * @return
+	 */
+	public static String selectUnusedMetadataProfiles() {
+		return " SELECT DISTINCT ?s WHERE { "
+				+ "?s a <http://imeji.org/terms/mdprofile> . not exists{?c <http://imeji.org/terms/mdprofile> ?s}"
+				+ "}";
+	}
+
+	/**
+	 * Checks if provided {@link MetadataProfile} uri has other references than
+	 * the reference in the provided resource {@link CollectionImeji}
+	 * 
+	 * @return
+	 */
+	public static String hasOtherMetadataProfileReferences(String profileUri,
+			String resourceUri) {
+		String q = " SELECT ?s WHERE { ?s ?p ?o ."
+				+ "?s <http://imeji.org/terms/mdprofile> <" + profileUri + ">."
+				+ " FILTER (?s != <" + resourceUri + ">  && ?s != <"
+				+ profileUri + ">) " + " NOT EXISTS { "
+				+ "?item <http://imeji.org/terms/metadataSet> ?s. "
+				+ "?s <http://imeji.org/terms/mdprofile> ?o. "
+				+ "?item <http://imeji.org/terms/collection> ?collection."
+				+ "FILTER (?collection = <" + resourceUri + ">) }"
+				+ "} LIMIT 1";
+		return q;
+
+	}
+
+	/**
+	 * Checks if provided {@link MetadataProfile} uri has any collection
+	 * references {@link CollectionImeji}
+	 * 
+	 * @return
+	 */
+	public static String hasMetadataProfileReferences(String profileUri) {
+		return " SELECT ?s WHERE { "
+				+ "?s <http://imeji.org/terms/mdprofile> <" + profileUri + ">."
+				+ " FILTER (?s != <" + profileUri + "> )} LIMIT 1";
+
 	}
 
 	/**
@@ -179,13 +226,24 @@ public class SPARQLQueries {
 	}
 
 	/**
-	 * Select all {@link UserGroup}
+	 * Select {@link UserGroup} of User
 	 * 
 	 * @return
 	 */
 	public static String selectUserGroupOfUser(User user) {
 		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s a <http://imeji.org/terms/userGroup> . ?s <http://xmlns.com/foaf/0.1/member> <"
 				+ user.getId().toString() + ">}";
+	}
+
+	/**
+	 * Select {@link CollectionImeji} of space
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public static String selectCollectionImejiOfSpace(String uri) {
+		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s a <http://imeji.org/terms/collection> . ?s <http://imeji.org/terms/space> <"
+				+ uri + ">}";
 	}
 
 	/**
@@ -209,9 +267,12 @@ public class SPARQLQueries {
 	public static String selectUsersToBeNotifiedByFileDownload(User user,
 			CollectionImeji c) {
 		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> "
-				+ "SELECT DISTINCT ?s WHERE {" + "filter(?c='"
-				+ ObjectHelper.getId(c.getId()) + "'"
-                + ( user != null ? " && ?s!=<"+ user.getId().toString() + "> " : "" )
+				+ "SELECT DISTINCT ?s WHERE {"
+				+ "filter(?c='"
+				+ ObjectHelper.getId(c.getId())
+				+ "'"
+				+ (user != null ? " && ?s!=<" + user.getId().toString() + "> "
+						: "")
 				+ ") . ?s <http://imeji.org/terms/observedCollections> ?c }";
 	}
 
@@ -355,6 +416,47 @@ public class SPARQLQueries {
 	}
 
 	/**
+	 * Check if {@link CollectionImeji} status is not WITHDRAWN
+	 *
+	 * @return
+	 */
+	public static String getAllowedUpdateByStatus(String collectionId) {
+		return "SELECT * WHERE { " + collectionId + " "
+				+ ImejiNamespaces.STATUS + " <"
+				+ Status.WITHDRAWN.getUriString() + "> }";
+	}
+
+	/**
+	 * Select all {@link Space} available imeji
+	 *
+	 * @return
+	 */
+	public static String selectSpaceAll() {
+		return "SELECT ?s WHERE { ?s a <http://imeji.org/terms/space>}";
+	}
+
+	/**
+	 * Select a {@link Space} by its label
+	 *
+	 * @return
+	 */
+	public static String getSpaceByLabel(String spaceId) {
+		return "SELECT ?s WHERE { ?s <http://imeji.org/terms/slug> \""
+				+ spaceId
+				+ "\"^^<http://www.w3.org/2001/XMLSchema#string>. ?s a <http://imeji.org/terms/space> }";
+	}
+
+	public static String selectCollectionsOfSpace(URI id) {
+		return "SELECT DISTINCT ?s WHERE{ ?s <http://imeji.org/terms/space> "
+				+ "<" + id.toString() + "> "
+				+ " . ?s a <http://imeji.org/terms/collection> }";
+	}
+
+	public static String selectCollectionsNotInSpace() {
+		return "SELECT DISTINCT ?s  WHERE {  FILTER NOT EXISTS {?s <http://imeji.org/terms/space> ?o} . ?s a <http://imeji.org/terms/collection> } ";
+	}
+
+	/**
 	 * Select all {@link Item} available imeji
 	 * 
 	 * @return
@@ -388,15 +490,40 @@ public class SPARQLQueries {
 	 */
 	public static String updateRemoveAllMetadataWithoutStatement(
 			String profileURI) {
+		String profileQuery = profileURI != null ? "<" + profileURI + ">"
+				: "?profile";
 		return "WITH <http://imeji.org/item> " + "DELETE {?mds <"
 				+ ImejiNamespaces.METADATA + "> ?s . ?s ?p ?o } "
 				+ "USING <http://imeji.org/item> "
 				+ "USING <http://imeji.org/metadataProfile> "
-				+ "WHERE {?mds <http://imeji.org/terms/mdprofile> <"
-				+ profileURI + "> . ?mds <" + ImejiNamespaces.METADATA
+				+ "WHERE {?mds <http://imeji.org/terms/mdprofile> "
+				+ profileQuery + " . ?mds <" + ImejiNamespaces.METADATA
 				+ "> ?s . ?s <http://imeji.org/terms/statement> ?st"
-				+ " . NOT EXISTS{<" + profileURI
-				+ "> <http://imeji.org/terms/statement> ?st}" + " . ?s ?p ?o }";
+				+ " . NOT EXISTS{" + profileQuery
+				+ " <http://imeji.org/terms/statement> ?st}" + " . ?s ?p ?o }";
+	}
+
+	/**
+	 * Update the filesize of a {@link Item}
+	 * 
+	 * @param itemId
+	 * @param fileSize
+	 * @return
+	 */
+	public static String insertFileSize(String itemId, String fileSize) {
+		return "WITH <http://imeji.org/item> " + "INSERT {<" + itemId
+				+ "> <http://imeji.org/terms/fileSize> " + fileSize + "}"
+				+ "USING <http://imeji.org/item> " + "WHERE{<" + itemId
+				+ "> ?p ?o}";
+	}
+
+	/**
+	 * Remove all Filesize of all {@link Item}
+	 * 
+	 * @return
+	 */
+	public static String deleteAllFileSize() {
+		return "WITH <http://imeji.org/item> DELETE {?s <http://imeji.org/terms/fileSize> ?size} where{?s <http://imeji.org/terms/fileSize> ?size}";
 	}
 
 	/**
@@ -421,7 +548,10 @@ public class SPARQLQueries {
 	public static String countCollectionSize(URI uri) {
 		return "SELECT count(DISTINCT ?s) WHERE {?s <http://imeji.org/terms/collection> <"
 				+ uri.toString()
-				+ "> . ?s <http://imeji.org/terms/status> ?status . FILTER (?status!=<http://imeji.org/terms/status#WITHDRAWN>)}";
+				+ "> . ?s <"
+				+ ImejiNamespaces.STATUS
+				+ "> ?status . FILTER (?status!=<"
+				+ Status.WITHDRAWN.getUriString() + ">)}";
 	}
 
 	/**
@@ -431,9 +561,10 @@ public class SPARQLQueries {
 	 * @return
 	 */
 	public static String countAlbumSize(URI uri) {
-		return "SELECT count(DISTINCT ?s) WHERE {<"
-				+ uri.toString()
-				+ "> <http://imeji.org/terms/item> ?s . ?s <http://imeji.org/terms/status> ?status . FILTER (?status!=<http://imeji.org/terms/status#WITHDRAWN>)}";
+		return "SELECT count(DISTINCT ?s) WHERE {<" + uri.toString()
+				+ "> <http://imeji.org/terms/item> ?s . ?s <"
+				+ ImejiNamespaces.STATUS + "> ?status . FILTER (?status!=<"
+				+ Status.WITHDRAWN.getUriString() + ">)}";
 	}
 
 	/**
@@ -447,14 +578,20 @@ public class SPARQLQueries {
 		if (user == null)
 			return "SELECT DISTINCT ?s WHERE {?s <http://imeji.org/terms/collection> <"
 					+ uri.toString()
-					+ "> . ?s <http://imeji.org/terms/status> ?status .  filter(?status=<http://imeji.org/terms/status#RELEASED>)} LIMIT "
-					+ limit;
+					+ "> . ?s <"
+					+ ImejiNamespaces.STATUS
+					+ "> ?status .  filter(?status=<"
+					+ Status.RELEASED.getUriString() + ">)} LIMIT " + limit;
 		return "SELECT DISTINCT ?s WHERE {?s <http://imeji.org/terms/collection> <"
 				+ uri.toString()
-				+ "> . ?s <http://imeji.org/terms/status> ?status . OPTIONAL{<"
+				+ "> . ?s <"
+				+ ImejiNamespaces.STATUS
+				+ "> ?status . OPTIONAL{<"
 				+ user.getId().toString()
-				+ "> <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> ?c} . filter(bound(?g) || ?status=<http://imeji.org/terms/status#RELEASED>) . FILTER (?status!=<http://imeji.org/terms/status#WITHDRAWN>)} LIMIT "
-				+ limit;
+				+ "> <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> ?c} . filter(bound(?g) || ?status=<"
+				+ Status.RELEASED.getUriString()
+				+ ">) . FILTER (?status!=<"
+				+ Status.WITHDRAWN.getUriString() + ">)} LIMIT " + limit;
 	}
 
 	/**
@@ -467,19 +604,24 @@ public class SPARQLQueries {
 	 */
 	public static String selectAlbumItems(URI uri, User user, int limit) {
 		if (user == null)
-			return "SELECT DISTINCT ?s WHERE {<"
-					+ uri.toString()
-					+ "> <http://imeji.org/terms/item> ?s . ?s <http://imeji.org/terms/status> ?status .  filter(?status=<http://imeji.org/terms/status#RELEASED>)} LIMIT "
-					+ limit;
+			return "SELECT DISTINCT ?s WHERE {<" + uri.toString()
+					+ "> <http://imeji.org/terms/item> ?s . ?s <"
+					+ ImejiNamespaces.STATUS + "> ?status .  filter(?status=<"
+					+ Status.RELEASED.getUriString() + ">)}"
+					+ ((limit > 0) ? (" LIMIT " + limit) : "");
+
 		return "SELECT DISTINCT ?s WHERE {<"
 				+ uri.toString()
 				+ "> <http://imeji.org/terms/item> ?s . "
 				+ SimpleSecurityQuery
 						.queryFactory(user,
 								J2JHelper.getResourceNamespace(new Item()),
-								null, false)
-				+ " ?s <http://imeji.org/terms/status> ?status . ?s <http://imeji.org/terms/collection> ?c} LIMIT "
-				+ limit;
+								null, false) 
+				+ " ?s <" 
+				+ ImejiNamespaces.STATUS
+				+ "> ?status } "
+				+ ((limit > 0) ? (" LIMIT " + limit) : "");
+		
 	}
 
 	public static String selectContainerItemByFilename(URI containerURI,
@@ -489,7 +631,31 @@ public class SPARQLQueries {
 				+ filename
 				+ "\\\\..+', 'i')) .?s <http://imeji.org/terms/collection> <"
 				+ containerURI.toString()
-				+ "> . ?s <http://imeji.org/terms/status> ?status . FILTER (?status!=<http://imeji.org/terms/status#WITHDRAWN>)} LIMIT 2";
+				+ "> . ?s <"
+				+ ImejiNamespaces.STATUS
+				+ "> ?status . FILTER (?status!=<"
+				+ Status.WITHDRAWN.getUriString() + ">)} LIMIT 2";
+
+	}
+
+	/**
+	 * Search for any file with the same checksum (in any collection)
+	 * 
+	 * @return
+	 */
+	public static String selectItemByChecksum(URI containerURI, String checksum) {
+		return "SELECT DISTINCT ?s WHERE {?s <http://imeji.org/terms/checksum> \""
+				+ checksum
+				+ "\"^^<http://www.w3.org/2001/XMLSchema#string>. "
+				+ "?s <http://imeji.org/terms/collection> <"
+				+ containerURI.toString()
+				+ "> . "
+				+ "?s <"
+				+ ImejiNamespaces.STATUS
+				+ "> ?status . "
+				+ " FILTER (?status!=<"
+				+ Status.WITHDRAWN.getUriString()
+				+ ">)} LIMIT 1";
 
 	}
 
@@ -512,7 +678,9 @@ public class SPARQLQueries {
 	 * @return
 	 */
 	public static String selectInstituteFileSize(String instituteName) {
-		return "SELECT (SUM(?size) AS ?s) WHERE {?c <http://purl.org/dc/terms/creator> ?user . ?user <http://xmlns.com/foaf/0.1/email> ?email .filter(regex(?email, '"
+		return "SELECT (SUM(?size) AS ?s) WHERE {?c <"
+				+ ImejiNamespaces.CREATOR
+				+ "> ?user . ?user <http://xmlns.com/foaf/0.1/email> ?email .filter(regex(?email, '"
 				+ instituteName
 				+ "', 'i')) . ?c a <http://imeji.org/terms/collection> . ?item <http://imeji.org/terms/collection> ?c . ?item <http://imeji.org/terms/fileSize> ?size}";
 	}
@@ -533,7 +701,7 @@ public class SPARQLQueries {
 	/**
 	 * Chararters ( and ) can not be accepted in the sparql query and must
 	 * therefore removed
-	 * 
+	 *
 	 * @param s
 	 * @return
 	 */
@@ -543,6 +711,25 @@ public class SPARQLQueries {
 			s = s.replace(forbidden[i], ".");
 		}
 		return s;
+	}
+
+	/**
+	 *
+	 * @return
+	 */
+	public static String selectUserCompleteName(URI uri) {
+		return "SELECT (str(?cn) as ?s) WHERE{ <"
+				+ uri.toString()
+				+ "> "
+				+ "<http://xmlns.com/foaf/0.1/person> ?o "
+				+ ". ?o <http://purl.org/escidoc/metadata/terms/0.1/complete-name> ?cn}";
+	}
+
+	/**
+	 * Helpers
+	 */
+	public static String countTriplesAll() {
+		return "SELECT (str(count(?ss)) as ?s) WHERE {?ss ?p ?o}";
 	}
 
 }

@@ -150,7 +150,15 @@ public class J2JHelper
     public static String getNamespace(Field f)
     {
         if (isResource(f))
-            return getResourceNamespace(f);
+        	if (getResourceNamespace(f)!= null) {
+        		
+        		return getResourceNamespace(f);
+        	}
+        	else
+        	{
+        		//Fix: update lazy of triples which are resources, but do not have associated VO Class (such as logoUrl)
+        		return f.getAnnotation(j2jResource.class).value();
+        	}
         else if (isLiteral(f))
             return getLiteralNamespace(f);
         else if (isList(f))

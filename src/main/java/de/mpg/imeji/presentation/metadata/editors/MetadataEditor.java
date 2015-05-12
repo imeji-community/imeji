@@ -87,7 +87,7 @@ public abstract class MetadataEditor
      */
     public void save()
     {
-        SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+    	SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         ItemController ic = new ItemController();
         try
         {

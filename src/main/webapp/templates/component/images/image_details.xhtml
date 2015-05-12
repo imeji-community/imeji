@@ -235,8 +235,7 @@
 							
 							<ui:fragment rendered="#{itemBean.edit.toggleState == 'editMd' and Auth.updateContent(itemBean.image) and !itemBean.locked}">
 								<ui:repeat id="editItem" var="item" value="#{itemBean.edit.editor.items}" rows="0" varStatus="indexMetadata">
-									<ui:repeat id="metadata" var="metadata" value="#{item.mds.tree.list}" rows="0" varStatus="indexMetadata">
-										
+									<ui:repeat id="metadata" var="metadata" value="#{item.mds.tree.list}" rows="0" varStatus="indexMetadata">									
 										<!-- MetaDataList - edit panel container set -->
 										<div class="imj_metadataSet">
 											<div class="imj_metadataLabel">

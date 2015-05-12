@@ -3,27 +3,21 @@
  */
 package de.mpg.imeji.presentation.collection;
 
-import de.mpg.imeji.logic.controller.StatisticsController;
-import de.mpg.imeji.logic.search.SPARQLSearch;
-import de.mpg.imeji.logic.search.Search;
-import de.mpg.imeji.logic.search.Search.SearchType;
-import de.mpg.imeji.logic.search.query.SPARQLQueries;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
+
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.util.ObjectLoader;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
-
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Bean for the pages "CollectionEntryPage" and "ViewCollection"
@@ -38,6 +32,10 @@ public class ViewCollectionBean extends CollectionBean {
 	private static final long serialVersionUID = 6473181109648137472L;
 	private List<Person> persons = null;
 	private static Logger logger = Logger.getLogger(ViewCollectionBean.class);
+	/**
+	 * Maximum number of items displayed on collection start page
+	 */
+	private static final int MAX_ITEM_NUM_VIEW = 13;
 
 	/**
 	 * Construct a default {@link ViewCollectionBean}
@@ -64,12 +62,15 @@ public class ViewCollectionBean extends CollectionBean {
 			setCollection(requestedCollection);
 
 			if (getCollection() != null && getCollection().getId() != null) {
-				findItems(user, 13);
+				findItems(user, MAX_ITEM_NUM_VIEW);
 				loadItems(user);
 				countItems();
 			}
-			setSendEmailNotification(sessionBean.getUser()
-					.getObservedCollections().contains(id));
+
+			if (sessionBean.getUser() != null) {
+				setSendEmailNotification(sessionBean.getUser()
+						.getObservedCollections().contains(id));
+			}
 			if (getCollection() != null) {
 				setProfile(ObjectLoader.loadProfile(getCollection()
 						.getProfile(), user));
@@ -88,6 +89,7 @@ public class ViewCollectionBean extends CollectionBean {
 				getCollection().getMetadata().setPersons(persons);
 			}
 		} catch (Exception e) {
+			logger.error("", e);
 			// Has to be in try/catch block, otherwise redirct from
 			// HistoryFilter will not work.
 			// Here simply do nothing
@@ -105,7 +107,7 @@ public class ViewCollectionBean extends CollectionBean {
 
 	@Override
 	protected String getNavigationString() {
-		return "pretty:collectionInfos";
+		return sessionBean.getPrettySpacePage("pretty:collectionInfos");
 	}
 
 	public String getSmallDescription() {

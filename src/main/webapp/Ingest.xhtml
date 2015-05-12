@@ -14,7 +14,7 @@
 									contextUrl="#{Navigation.collectionUrl}" 
 									curMainMenu="#{currentMainMenu}" 	
 									userHasAdminRights="#{Auth.admin}" 
-									userHasUploadRights="#{Auth.create(IngestBean.collection) and IngestBean.collection.status !='WITHDRAWN'}" 
+									userHasUploadRights="#{Auth.createContent(IngestBean.collection) and IngestBean.collection.status !='WITHDRAWN'}" 
 									navBean="#{Navigation}" 
 									activeMenu="ingest" 
 									hasContent="#{IngestBean.collectionSize > 0}"/>

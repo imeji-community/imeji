@@ -3,16 +3,11 @@
  */
 package de.mpg.imeji.presentation.collection;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import com.hp.hpl.jena.sparql.pfunction.library.container;
-
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.query.URLQueryTransformer;
 import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
@@ -21,10 +16,16 @@ import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.presentation.beans.SuperContainerBean;
-import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
+
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import static de.mpg.imeji.logic.notification.CommonMessages.getSuccessCollectionDeleteMessage;
 
 /**
  * Bean for the collections page
@@ -54,7 +55,7 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
     @Override
     public String getNavigationString()
     {
-        return "pretty:collections";
+        return sb.getPrettySpacePage("pretty:collections");
     }
 
     @Override
@@ -84,7 +85,7 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
         SortCriterion sortCriterion = new SortCriterion();  
         sortCriterion.setIndex(SPARQLSearch.getIndex(getSelectedSortCriterion()));
         sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
-        SearchResult results = controller.search(searchQuery, sortCriterion, limit, offset, sb.getUser());
+        SearchResult results = controller.search(searchQuery, sortCriterion, limit, offset, sb.getUser(),  sb.getSelectedSpaceString());
         collections = controller.retrieveLazy(results.getResults(), limit, offset, sb.getUser());
         totalNumberOfRecords = results.getNumberOfRecords();
         return ImejiFactory.collectionListToListItem(collections, sb.getUser());
@@ -150,15 +151,14 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
             collectionController.delete(collection, sb.getUser());
             count++;
             
-            BeanHelper.info(sb.getMessage("success_collection_delete").replace("XXX_collectionName_XXX",
-                    collection.getMetadata().getTitle()));
+            BeanHelper.info(getSuccessCollectionDeleteMessage(collection.getMetadata().getTitle(), sb));
         }
         sb.getSelectedCollections().clear();
         if (count == 0)
         {
             BeanHelper.warn(sb.getMessage("error_delete_no_collection_selected"));
         }
-        return "pretty:collections";
+        return sb.getPrettySpacePage("pretty:collections");
     }
 
     /**
@@ -204,4 +204,9 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
     {
         this.discardComment = discardComment;
     }
+
+	@Override
+	public String getType() {
+		return PAGINATOR_TYPE.COLLECTION_ITEMS.name();
+	}
 }

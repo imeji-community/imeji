@@ -52,392 +52,232 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  */
 @ManagedBean(name = "Auth")
 @ViewScoped
-public class ImejiAuthBean implements Serializable
-{
-    private static final long serialVersionUID = 4905896901833448372L;
-    private static Authorization auth = new Authorization();
-    private User sessionUser;
+public class ImejiAuthBean implements Serializable {
+	private static final long serialVersionUID = 4905896901833448372L;
+	private static Authorization auth = new Authorization();
+	private User sessionUser;
 
-    /**
+	/**
      * 
      * 
      */
-    public ImejiAuthBean()
-    {
-        this.sessionUser = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getUser();
-    }
+	public ImejiAuthBean() {
+		this.sessionUser = ((SessionBean) BeanHelper
+				.getSessionBean(SessionBean.class)).getUser();
+	}
 
-    /**
-     * True if the {@link User} can read the uri
-     * 
-     * @param user
-     * @param uri
-     * @return
-     */
-    public boolean readUri(User user, String uri)
-    {
-        return auth.read(user, uri);
-    }
+	/**
+	 * True if the {@link User} can read the object
+	 * 
+	 * @param user
+	 * @param url
+	 * @return
+	 */
+	public boolean read(User user, Object obj) {
+		return auth.read(user, obj);
+	}
 
-    /**
-     * True if the {@link User} can create the uri
-     * 
-     * @param user
-     * @param uri
-     * @return
-     */
-    public boolean createUri(User user, String uri)
-    {
-        return auth.create(user, uri);
-    }
+	/**
+	 * True if the {@link User} can create the object
+	 * 
+	 * @param user
+	 * @param url
+	 * @return
+	 */
+	public boolean create(User user, Object obj) {
+		return auth.create(user, obj);
+	}
 
-    /**
-     * True if the {@link User} can update the uri
-     * 
-     * @param user
-     * @param uri
-     * @return
-     */
-    public boolean updateUri(User user, String uri)
-    {
-        return auth.update(user, uri);
-    }
+	/**
+	 * True if the {@link User} can update the object
+	 * 
+	 * @param user
+	 * @param url
+	 * @return
+	 */
+	public boolean update(User user, Object obj) {
+		return auth.update(user, obj);
+	}
 
-    /**
-     * True if the {@link User} can delete the uri
-     * 
-     * @param user
-     * @param uri
-     * @return
-     */
-    public boolean deleteUri(User user, String uri)
-    {
-        return auth.delete(user, uri);
-    }
+	/**
+	 * True if the {@link User} can delete the object
+	 * 
+	 * @param user
+	 * @param url
+	 * @return
+	 */
+	public boolean delete(User user, Object obj) {
+		return auth.delete(user, obj);
+	}
 
-    /**
-     * True if the {@link User} can administrate the uri
-     * 
-     * @param user
-     * @param uri
-     * @return
-     */
-    public boolean adminUri(User user, String uri)
-    {
-        return auth.administrate(user, uri);
-    }
+	/**
+	 * True if the {@link User} can administrate the object
+	 * 
+	 * @param user
+	 * @param url
+	 * @return
+	 */
+	public boolean admin(User user, Object obj) {
+		return auth.administrate(user, obj);
+	}
 
-    /**
-     * True if the {@link User} can update the content the uri
-     * 
-     * @param user
-     * @param uri
-     * @return
-     */
-    public boolean updateContentUri(User user, String uri)
-    {
-        return auth.updateContent(user, uri);
-    }
+	/**
+	 * Return true if the user can create content in the object. For instance,
+	 * upload an item in a collection, or add/remove an item to an album
+	 * 
+	 * @param user
+	 * @param url
+	 * @return
+	 */
+	public boolean createContent(User user, Object obj) {
+		return auth.createContent(user, obj);
+	}
 
-    /**
-     * True if the {@link User} can delete the content the uri
-     * 
-     * @param user
-     * @param uri
-     * @return
-     */
-    public boolean deleteContentUri(User user, String uri)
-    {
-        return auth.deleteContent(user, uri);
-    }
+	/**
+	 * True if the {@link User} can update the content of the object
+	 * 
+	 * @param user
+	 * @param url
+	 * @return
+	 */
+	public boolean updateContent(User user, Object obj) {
+		return auth.updateContent(user, obj);
+	}
 
-    /**
-     * True if the current {@link User} in the session can read the uri
-     * 
-     * @param user
-     * @param uri
-     * @return
-     */
-    public boolean readUri(String uri)
-    {
-        return auth.read(sessionUser, uri);
-    }
+	/**
+	 * True if the {@link User} can delete the content of the object
+	 * 
+	 * @param user
+	 * @param url
+	 * @return
+	 */
+	public boolean deleteContent(User user, Object obj) {
+		return auth.deleteContent(user, obj);
+	}
 
-    /**
-     * True if the current {@link User} in the session can create the uri
-     * 
-     * @param user
-     * @param uri
-     * @return
-     */
-    public boolean createUri(String uri)
-    {
-        return auth.create(sessionUser, uri);
-    }
+	/**
+	 * True if the current {@link User} in the session can read the object
+	 * 
+	 * @param user
+	 * @param url
+	 * @return
+	 */
+	public boolean read(Object obj) {
+		return auth.read(sessionUser, obj);
+	}
 
-    /**
-     * True if the {@link User} can update the uri
-     * 
-     * @param user
-     * @param uri
-     * @return
-     */
-    public boolean updateUri(String uri)
-    {
-        return auth.update(sessionUser, uri);
-    }
+	/**
+	 * True if the current {@link User} in the session can create the object
+	 * 
+	 * @param user
+	 * @param url
+	 * @return
+	 */
+	public boolean create(Object obj) {
+		return auth.create(sessionUser, obj);
+	}
 
-    /**
-     * True if the current {@link User} in the session can delete the uri
-     * 
-     * @param user
-     * @param uri
-     * @return
-     */
-    public boolean deleteUri(String uri)
-    {
-        return auth.delete(sessionUser, uri);
-    }
+	/**
+	 * True if the {@link User} can update the object
+	 * 
+	 * @param user
+	 * @param url
+	 * @return
+	 */
+	public boolean update(Object obj) {
+		return auth.update(sessionUser, obj);
+	}
 
-    /**
-     * True if the current {@link User} in the session can administrate the uri
-     * 
-     * @param user
-     * @param uri
-     * @return
-     */
-    public boolean adminUri(String uri)
-    {
-        return auth.administrate(sessionUser, uri);
-    }
+	/**
+	 * True if the current {@link User} in the session can delete the object
+	 * 
+	 * @param user
+	 * @param url
+	 * @return
+	 */
+	public boolean delete(Object obj) {
+		return auth.delete(sessionUser, obj);
+	}
 
-    /**
-     * True if the {@link User} can update the content the uri
-     * 
-     * @param user
-     * @param uri
-     * @return
-     */
-    public boolean updateContentUri(String uri)
-    {
-        return auth.updateContent(sessionUser, uri);
-    }
+	/**
+	 * True if the current {@link User} in the session can administrate the
+	 * object
+	 * 
+	 * @param user
+	 * @param url
+	 * @return
+	 */
+	public boolean admin(Object obj) {
+		return auth.administrate(sessionUser, obj);
+	}
 
-    /**
-     * True if the {@link User} can delete the content the uri
-     * 
-     * @param user
-     * @param uri
-     * @return
-     */
-    public boolean deleteContentUri(String uri)
-    {
-        return auth.deleteContent(sessionUser, uri);
-    }
+	/**
+	 * Return true if the user can create content in the object. For instance,
+	 * upload an item in a collection, or add/remove an item to an album
+	 * 
+	 * @param user
+	 * @param url
+	 * @return
+	 */
+	public boolean createContent(Object obj) {
+		return auth.createContent(sessionUser, obj);
+	}
 
-    /**
-     * True if the {@link User} can read the object
-     * 
-     * @param user
-     * @param url
-     * @return
-     */
-    public boolean read(User user, Object obj)
-    {
-        return auth.read(user, obj);
-    }
+	/**
+	 * True if the {@link User} can update the content of the object
+	 * 
+	 * @param user
+	 * @param url
+	 * @return
+	 */
+	public boolean updateContent(Object obj) {
+		return auth.updateContent(sessionUser, obj);
+	}
 
-    /**
-     * True if the {@link User} can create the object
-     * 
-     * @param user
-     * @param url
-     * @return
-     */
-    public boolean create(User user, Object obj)
-    {
-        return auth.create(user, obj);
-    }
+	/**
+	 * True if the {@link User} can delete the content of the object
+	 * 
+	 * @param user
+	 * @param url
+	 * @return
+	 */
+	public boolean deleteContent(Object obj) {
+		return auth.deleteContent(sessionUser, obj);
+	}
 
-    /**
-     * True if the {@link User} can update the object
-     * 
-     * @param user
-     * @param url
-     * @return
-     */
-    public boolean update(User user, Object obj)
-    {
-        return auth.update(user, obj);
-    }
+	/**
+	 * True if the current {@link User} in the session can administrate imeji
+	 * (i.e. is system administrator)
+	 * 
+	 * @param user
+	 * @param url
+	 * @return
+	 */
+	public boolean isAdmin() {
+		return auth.administrate(sessionUser, PropertyBean.baseURI());
+	}
 
-    /**
-     * True if the {@link User} can delete the object
-     * 
-     * @param user
-     * @param url
-     * @return
-     */
-    public boolean delete(User user, Object obj)
-    {
-        return auth.delete(user, obj);
-    }
+	/**
+	 * True if a user is currently logged in
+	 * 
+	 * @return
+	 */
+	public boolean isLoggedIn() {
+		return sessionUser != null;
+	}
 
-    /**
-     * True if the {@link User} can administrate the object
-     * 
-     * @param user
-     * @param url
-     * @return
-     */
-    public boolean admin(User user, Object obj)
-    {
-        return auth.administrate(user, obj);
-    }
+	/**
+	 * @return the sessionUser
+	 */
+	public User getSessionUser() {
+		return sessionUser;
+	}
 
-    /**
-     * True if the {@link User} can update the content of the object
-     * 
-     * @param user
-     * @param url
-     * @return
-     */
-    public boolean updateContent(User user, Object obj)
-    {
-        return auth.updateContent(user, obj);
-    }
-
-    /**
-     * True if the {@link User} can delete the content of the object
-     * 
-     * @param user
-     * @param url
-     * @return
-     */
-    public boolean deleteContent(User user, Object obj)
-    {
-        return auth.deleteContent(user, obj);
-    }
-
-    /**
-     * True if the current {@link User} in the session can read the object
-     * 
-     * @param user
-     * @param url
-     * @return
-     */
-    public boolean read(Object obj)
-    {
-        return auth.read(sessionUser, obj);
-    }
-
-    /**
-     * True if the current {@link User} in the session can create the object
-     * 
-     * @param user
-     * @param url
-     * @return
-     */
-    public boolean create(Object obj)
-    {
-        return auth.create(sessionUser, obj);
-    }
-
-    /**
-     * True if the {@link User} can update the object
-     * 
-     * @param user
-     * @param url
-     * @return
-     */
-    public boolean update(Object obj)
-    {
-        return auth.update(sessionUser, obj);
-    }
-
-    /**
-     * True if the current {@link User} in the session can delete the object
-     * 
-     * @param user
-     * @param url
-     * @return
-     */
-    public boolean delete(Object obj)
-    {
-        return auth.delete(sessionUser, obj);
-    }
-
-    /**
-     * True if the current {@link User} in the session can administrate the object
-     * 
-     * @param user
-     * @param url
-     * @return
-     */
-    public boolean admin(Object obj)
-    {
-        return auth.administrate(sessionUser, obj);
-    }
-
-    /**
-     * True if the {@link User} can update the content of the object
-     * 
-     * @param user
-     * @param url
-     * @return
-     */
-    public boolean updateContent(Object obj)
-    {
-        return auth.updateContent(sessionUser, obj);
-    }
-
-    /**
-     * True if the {@link User} can delete the content of the object
-     * 
-     * @param user
-     * @param url
-     * @return
-     */
-    public boolean deleteContent(Object obj)
-    {
-        return auth.deleteContent(sessionUser, obj);
-    }
-
-    /**
-     * True if the current {@link User} in the session can administrate imeji (i.e. is system administrator)
-     * 
-     * @param user
-     * @param url
-     * @return
-     */
-    public boolean isAdmin()
-    {
-        return auth.administrate(sessionUser, PropertyBean.baseURI());
-    }
-
-    /**
-     * True if a user is currently logged in
-     * 
-     * @return
-     */
-    public boolean isLoggedIn()
-    {
-        return sessionUser != null;
-    }
-
-    /**
-     * @return the sessionUser
-     */
-    public User getSessionUser()
-    {
-        return sessionUser;
-    }
-
-    /**
-     * @param sessionUser the sessionUser to set
-     */
-    public void setSessionUser(User sessionUser)
-    {
-        this.sessionUser = sessionUser;
-    }
+	/**
+	 * @param sessionUser
+	 *            the sessionUser to set
+	 */
+	public void setSessionUser(User sessionUser) {
+		this.sessionUser = sessionUser;
+	}
 }

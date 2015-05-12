@@ -19,9 +19,11 @@ import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONResponse;
 public class ProfileResource implements ImejiResource {
 
     @GET  
+    @ApiOperation(value = "Get all profiles user has access to.")
     @Produces(MediaType.APPLICATION_JSON)
-	public Response readAll(@Context HttpServletRequest req) {
-		return null;
+	public Response readAll(@Context HttpServletRequest req,  @QueryParam("q") String q) {
+    	JSONResponse resp = ProfileProcess.readAll(req, q);
+        return buildJSONResponse(resp);
 	}
   
     @GET   
@@ -47,6 +49,26 @@ public class ProfileResource implements ImejiResource {
 		JSONResponse resp = ProfileProcess.deleteProfile(req, id);
 		return buildJSONResponse(resp);
 	}
-
 	
+    @PUT
+	@Path("/{id}/release")
+	@ApiOperation(value = "Release profile by id")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response release(@Context HttpServletRequest req,
+			@PathParam("id") String id) throws Exception {
+		JSONResponse resp = ProfileProcess.releaseProfile(req,id);
+		return buildJSONResponse(resp);
+	}
+    
+    @PUT
+	@Path("/{id}/discard")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@ApiOperation(value = "Discard a metadata profile by id, with mandatory discard comment")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response withdraw(@Context HttpServletRequest req,
+			@FormParam("id") String id, @FormParam("discardComment") String discardComment) throws Exception {
+		JSONResponse resp = ProfileProcess.withdrawProfile(req, id, discardComment);
+		return buildJSONResponse(resp);
+	}
+
 }

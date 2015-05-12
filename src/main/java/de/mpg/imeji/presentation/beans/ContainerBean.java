@@ -28,24 +28,35 @@
  */
 package de.mpg.imeji.presentation.beans;
 
+import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.controller.exceptions.TypeNotAllowedException;
+import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.vo.*;
+import de.mpg.imeji.presentation.album.AlbumBean;
+import de.mpg.imeji.presentation.collection.CollectionBean;
+import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.upload.IngestImage;
+import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.ImejiFactory;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Container;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Organization;
-import de.mpg.imeji.logic.vo.Person;
-import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.album.AlbumBean;
-import de.mpg.imeji.presentation.collection.CollectionBean;
-import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ImejiFactory;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.fileupload.FileItemIterator;
+import org.apache.commons.fileupload.FileItemStream;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 
 /**
  * Super Java Bean for containers bean {@link AlbumBean} and {@link CollectionBean}
@@ -61,6 +72,8 @@ public abstract class ContainerBean implements Serializable
     private int organizationPosition;
     private int size;
     private List<Item> items;
+    private IngestImage ingestImage;
+    //protected SessionBean sessionBean;
 
     /**
      * Types of containers
@@ -111,7 +124,7 @@ public abstract class ContainerBean implements Serializable
     protected void findItems(User user, int size)
     {
         ItemController ic = new ItemController();
-        ic.searchAndSetContainerItemsFast(getContainer(), user, size);
+        ic.searchAndSetContainerItemsFast(getContainer(), user, size); 
     }
 
     /**
@@ -324,4 +337,96 @@ public abstract class ContainerBean implements Serializable
         }
         return false;
     }
+    
+    public boolean isCollectionType()
+    {
+    	return getType().equals(CONTAINER_TYPE.COLLECTION.toString());
+    }
+
+    public boolean isAlbumType()
+    {
+    	return getType().equals(CONTAINER_TYPE.ALBUM.toString());
+    }
+    
+	public void upload() {  
+		HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+		try {
+			setIngestImage(getUploadedIngestFile(request));
+		} catch (FileUploadException|TypeNotAllowedException e) {
+			BeanHelper.error("Could not upload the image " + e.getMessage());
+		}
+
+    }
+	
+	
+	private IngestImage getUploadedIngestFile(HttpServletRequest request) throws FileUploadException, TypeNotAllowedException{
+		File tmp = null;
+		boolean isMultipart=ServletFileUpload.isMultipartContent(request);
+		IngestImage ii = new IngestImage();
+		if (isMultipart) {
+			ServletFileUpload upload=new ServletFileUpload();
+			try {    
+				FileItemIterator iter = upload.getItemIterator(request);
+
+				while (iter.hasNext()) {  
+					FileItemStream fis = iter.next();
+					if(fis.getName() != null && FilenameUtils.getExtension(fis.getName()).matches("ini|exe|sh|bin"))
+					{
+						
+						
+	                	throw new TypeNotAllowedException(((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getMessage("Logo_single_upload_invalid_content_format"));
+					}
+
+					InputStream in = fis.openStream();
+					tmp = File.createTempFile("containerlogo", "." + FilenameUtils.getExtension(fis.getName()));
+					FileOutputStream fos = new FileOutputStream(tmp);
+					if(fis.getName() != null)
+						ii.setName(fis.getName());
+					if(!fis.isFormField())
+					{
+						try {
+							IOUtils.copy(in, fos);
+						}
+						catch (Exception e) {
+							BeanHelper.error("Could not process uploaded Logo file streams");
+						}
+						
+					}
+					in.close();
+					fos.close();
+				}
+				ii.setFile(tmp);
+				
+			} catch (IOException | FileUploadException e) {
+				ii.setFile(null);
+				BeanHelper.error("Could not process uploaded Logo file");
+			}
+		}
+		return ii;
+	}   
+
+	
+	public void setIngestImage (IngestImage im)
+	{
+		this.ingestImage = im;
+		((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).setSpaceLogoIngestImage(im);
+	}
+	
+	
+	public IngestImage getIngestImage ()
+	{
+		return this.ingestImage;
+	}
+	
+	  /**
+     * Remove an author of the {@link CollectionImeji}
+     * 
+     * @return
+     */
+    public String removeContainerLogo()
+    {
+    	getContainer().setLogoUrl(null);
+    	return "";
+    }
+	 
 }

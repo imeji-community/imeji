@@ -1,5 +1,7 @@
 package de.mpg.imeji.rest.api;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.ProfileController;
@@ -49,20 +51,30 @@ public class ProfileService implements API<MetadataProfileTO>{
 
 	@Override
 	public boolean delete(String id, User u) throws ImejiException {
-		// TODO Auto-generated method stub
-		return false;
+		ProfileController pcontroller = new ProfileController();
+		pcontroller.delete(pcontroller.retrieve(id, u), u);
+		return true;
 	}
 
 	@Override
 	public MetadataProfileTO release(String id, User u) throws ImejiException {
-        // TODO Auto-generated method stub
-		return null;
+		ProfileController pcontroller = new ProfileController();
+		pcontroller.release(pcontroller.retrieve(id, u), u);
+		
+		return getMetadataProfileTO(pcontroller, id, u);
 	}
 
 	@Override
 	public MetadataProfileTO withdraw(String id, User u, String discardComment) throws ImejiException {
-		// TODO Auto-generated method stub
-		return null;
+
+			ProfileController controller = new ProfileController();
+			MetadataProfile vo = controller.retrieve(
+					ObjectHelper.getURI(MetadataProfile.class, id), u);
+			vo.setDiscardComment(discardComment);
+			controller.withdraw(vo, u);
+
+			//Now Read the withdrawn collection and return it back
+			return getMetadataProfileTO(controller, id, u);
 		
 	}
 
@@ -85,6 +97,31 @@ public class ProfileService implements API<MetadataProfileTO>{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public List<MetadataProfileTO> readAll(User u, String q) throws ImejiException {
+	        ProfileController cc = new ProfileController();
+	        return Lists.transform(cc.search(u, q),
+	                new Function<MetadataProfile, MetadataProfileTO>() {
+	                    @Override
+	                    public MetadataProfileTO apply(MetadataProfile vo) {
+	                        MetadataProfileTO to = new MetadataProfileTO();
+	                        TransferObjectFactory.transferMetadataProfile(vo, to);
+	                        return to;
+	                    }
+	                }
+	        );
+	    }
+	
+	private MetadataProfileTO getMetadataProfileTO (ProfileController cc, String id, User u) throws ImejiException {
+		MetadataProfileTO to = new MetadataProfileTO();
+        TransferObjectFactory.transferMetadataProfile(getMetadataProfileVO(cc, id, u), to);
+		return to;
+	}
+	
+	private MetadataProfile getMetadataProfileVO (ProfileController cc, String id, User u) throws ImejiException {
+		return cc.retrieve(ObjectHelper.getURI(MetadataProfile.class, id), u);
+	}
+
 
 
 

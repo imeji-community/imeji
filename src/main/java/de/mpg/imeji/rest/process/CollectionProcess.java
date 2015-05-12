@@ -2,12 +2,10 @@ package de.mpg.imeji.rest.process;
 
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.JSONResponse;
-import de.mpg.imeji.rest.to.PersonTO;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -31,11 +29,26 @@ public class CollectionProcess {
 
 	}
 
+    public static  JSONResponse readCollectionItems(HttpServletRequest req, String id, String q) {
+        JSONResponse resp;
+
+        User u = BasicAuthentication.auth(req);
+
+        CollectionService ccrud = new CollectionService();
+        try {
+            resp = RestProcessUtils.buildResponse(OK.getStatusCode(), ccrud.readItems(id, u, q));
+        } catch (Exception e) {
+            resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
+        }
+        return resp;
+    }
+
+
 	public static JSONResponse createCollection(HttpServletRequest req) {
 		JSONResponse resp; 
 
 		User u = BasicAuthentication.auth(req);
-		
+
 		if (u == null) {
 			resp = RestProcessUtils.buildJSONAndExceptionResponse(UNAUTHORIZED.getStatusCode(), USER_MUST_BE_LOGGED_IN);
 		} else {
@@ -51,7 +64,7 @@ public class CollectionProcess {
 		return resp;
 	}
 
-    public static JSONResponse updateCollection(HttpServletRequest req, String id, String json) {
+    public static JSONResponse updateCollection(HttpServletRequest req, String id) {
 		JSONResponse resp;
 
 		User u = BasicAuthentication.auth(req);
@@ -61,7 +74,7 @@ public class CollectionProcess {
 		} else {
 			CollectionService service = new CollectionService();
             try {
-                CollectionTO to = (CollectionTO) RestProcessUtils.buildTOFromJSON(json, CollectionTO.class);
+                CollectionTO to = (CollectionTO) RestProcessUtils.buildTOFromJSON(req, CollectionTO.class);
                 if (!id.equals(to.getId())) {
                     throw new BadRequestException("Collection id is not equal in request URL and in json");
                 }
@@ -119,5 +132,19 @@ public class CollectionProcess {
 		}
 		return resp;
 	}
+	
+	public static  JSONResponse readAllCollections(HttpServletRequest req, String q) {
+        JSONResponse resp;
+
+        User u = BasicAuthentication.auth(req);
+
+        CollectionService ccrud = new CollectionService();
+        try {
+            resp = RestProcessUtils.buildResponse(OK.getStatusCode(), ccrud.readAll(u, q));
+        } catch (Exception e) {
+            resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
+        }
+        return resp;
+    }
 
 }

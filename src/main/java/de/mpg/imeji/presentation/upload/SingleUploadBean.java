@@ -1,25 +1,29 @@
 package de.mpg.imeji.presentation.upload;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Serializable;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-import javax.faces.event.AjaxBehaviorEvent;
-import javax.faces.model.SelectItem;
-import javax.servlet.http.HttpServletRequest;
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.auth.util.AuthUtil;
+import de.mpg.imeji.logic.controller.CollectionController;
+import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.controller.exceptions.TypeNotAllowedException;
+import de.mpg.imeji.logic.search.SPARQLSearch;
+import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.vo.*;
+import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
+import de.mpg.imeji.logic.storage.StorageController;
+import de.mpg.imeji.logic.storage.util.StorageUtils;
+import de.mpg.imeji.logic.util.UrlHelper;
+import de.mpg.imeji.logic.vo.*;
+import de.mpg.imeji.presentation.lang.MetadataLabels;
+import de.mpg.imeji.presentation.metadata.MetadataSetBean;
+import de.mpg.imeji.presentation.metadata.SingleEditBean;
+import de.mpg.imeji.presentation.metadata.SuperMetadataBean;
+import de.mpg.imeji.presentation.metadata.extractors.TikaExtractor;
+import de.mpg.imeji.presentation.metadata.util.SuggestBean;
+import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.ImejiFactory;
+import de.mpg.imeji.presentation.util.ObjectLoader;
 
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
@@ -29,35 +33,21 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.auth.util.AuthUtil;
-import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.controller.exceptions.TypeNotAllowedException;
-import de.mpg.imeji.logic.search.SPARQLSearch;
-import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.vo.SearchIndex;
-import de.mpg.imeji.logic.search.vo.SearchOperators;
-import de.mpg.imeji.logic.search.vo.SearchPair;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
-import de.mpg.imeji.logic.search.vo.SortCriterion;
-import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
-import de.mpg.imeji.logic.storage.StorageController;
-import de.mpg.imeji.logic.storage.util.StorageUtils;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.MetadataSet;
-import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.lang.MetadataLabels;
-import de.mpg.imeji.presentation.metadata.MetadataSetBean;
-import de.mpg.imeji.presentation.metadata.SingleEditBean;
-import de.mpg.imeji.presentation.metadata.SuperMetadataBean;
-import de.mpg.imeji.presentation.metadata.extractors.TikaExtractor;
-import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ImejiFactory;
-import de.mpg.imeji.presentation.util.ObjectLoader;
-import de.mpg.imeji.presentation.util.UrlHelper;
+import javax.annotation.PostConstruct;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
+import javax.faces.model.SelectItem;
+import javax.servlet.http.HttpServletRequest;
+
+import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @ManagedBean(name = "SingleUploadBean")
 @ViewScoped
@@ -151,20 +141,16 @@ public class SingleUploadBean implements Serializable{
 		
 	}
 	*/
-	    
+	    //No throw Exception
 	private Item uploadFileToItem(File file, String title) {
 		try {    
-			if (!StorageUtils.hasExtension(title))
-				title += StorageUtils.guessExtension(file);
-			validateName(file, title);
-			Item item = null;
+			Item item = ImejiFactory.newItem(getCollection());
 			ItemController controller = new ItemController();
-			item = controller.createWithFile(null, file, title, getCollection(), user);
+			item = controller.create(item, file, title, user, null, null);
 			sus.setUploadedItem(item);
 			return item;
 		} catch (Exception e) {	
 			sus.setfFile(" File " + title + " not uploaded: " + e.getMessage());
-			logger.error("Error uploading item: ", e);
 			return null;
 		}
 	}
@@ -174,18 +160,18 @@ public class SingleUploadBean implements Serializable{
 	 * file has an extension (therefore, for file without extension, the
 	 * validation will only occur when the file has been stored locally)
 	 */
-	private void validateName(File file, String title) {
-		if (StorageUtils.hasExtension(title)) {
-			StorageController sc = new StorageController();
-			String guessedNotAllowedFormat = sc.guessNotAllowedFormat(file);
-			if (guessedNotAllowedFormat != null) {
-				SessionBean sessionBean = (SessionBean) BeanHelper
-						.getSessionBean(SessionBean.class);
-				throw new RuntimeException(
-						sessionBean.getMessage("upload_format_not_allowed") + " (" + guessedNotAllowedFormat + ")");
-			}
-		}
-	}
+//	private void validateName(File file, String title) {
+//		if (StorageUtils.hasExtension(title)) {
+//			StorageController sc = new StorageController();
+//			String guessedNotAllowedFormat = sc.guessNotAllowedFormat(file);
+//			if (StorageUtils.BAD_FORMAT.equals(guessedNotAllowedFormat)) {
+//				SessionBean sessionBean = (SessionBean) BeanHelper
+//						.getSessionBean(SessionBean.class);
+//				throw new RuntimeException(
+//						sessionBean.getMessage("upload_format_not_allowed") + " (" + guessedNotAllowedFormat + ")");
+//			}
+//		}
+//	}
 
 	
 	public void upload() {  
@@ -251,6 +237,7 @@ public class SingleUploadBean implements Serializable{
 			try {     
 				CollectionImeji collection = ObjectLoader.loadCollectionLazy(new URI(selectedCollectionItem), user);
 				MetadataProfile profile = ObjectLoader.loadProfile(collection.getProfile(), user);
+				((SuggestBean) BeanHelper.getSessionBean(SuggestBean.class)).init(profile);
 				MetadataSet mdSet = ImejiFactory.newMetadataSet(profile.getId());
 				MetadataSetBean mdSetBean = new MetadataSetBean(mdSet, profile, true);
 				
@@ -295,12 +282,13 @@ public class SingleUploadBean implements Serializable{
 
 		CollectionController cc = new CollectionController();
 		SearchQuery sq = new SearchQuery();
-		SearchPair sp = new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.user), SearchOperators.EQUALS, user.getId().toString());
+		SearchPair sp = new SearchPair(SPARQLSearch.getIndex(SearchIndex.IndexNames.user), SearchOperators.EQUALS, user.getId().toString());
 		sq.addPair(sp);
         SortCriterion sortCriterion = new SortCriterion();
         sortCriterion.setIndex(SPARQLSearch.getIndex("user"));
         sortCriterion.setSortOrder(SortOrder.valueOf("DESCENDING"));
-        SearchResult results = cc.search(sq, sortCriterion, -1, 0, user);
+        //TODO: check if here space restriction is needed
+        SearchResult results = cc.search(sq, sortCriterion, -1, 0, user, null);
 		collections = cc.retrieveLazy(results.getResults(), -1, 0, user);
 		collectionItems.add(new SelectItem("", "-- select collection --"));
 		for(CollectionImeji c : collections)

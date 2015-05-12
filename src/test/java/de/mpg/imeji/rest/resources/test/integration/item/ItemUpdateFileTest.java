@@ -1,6 +1,7 @@
 package de.mpg.imeji.rest.resources.test.integration.item;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.rest.process.RestProcessUtils;
 import de.mpg.imeji.rest.resources.test.TestUtils;
 import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
@@ -66,7 +67,6 @@ public class ItemUpdateFileTest extends ImejiTestBase {
 
 	@Test
 	public void test_1_UpdateItem_1_WithFile_Attached() throws IOException {
-
 		FileDataBodyPart filePart = new FileDataBodyPart("file", ATTACHED_FILE);
 		FormDataMultiPart multiPart = new FormDataMultiPart();
 		multiPart.bodyPart(filePart);
@@ -84,25 +84,28 @@ public class ItemUpdateFileTest extends ImejiTestBase {
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.put(Entity.entity(multiPart, multiPart.getMediaType()));
 
-		assertEquals(OK.getStatusCode(), response.getStatus());
-		ItemWithFileTO itemWithFileTO = response
-				.readEntity(ItemWithFileTO.class);
-		assertThat("Wrong file name", itemWithFileTO.getFilename(),
-				equalTo(ATTACHED_FILE.getName()));
-		assertThat(itemWithFileTO.getFetchUrl(), isEmptyOrNullString());
-		assertThat(itemWithFileTO.getReferenceUrl(), isEmptyOrNullString());
-
-		storedFileURL = target().getUri()
-				+ itemWithFileTO.getFileUrl().getPath().substring(1);
-        assertEquals(ATTACHED_FILE.length(),itemWithFileTO.getFileSize());
-
-		// LOGGER.info(RestProcessUtils.buildJSONFromObject(itemWithFileTO));
-
+			assertEquals(OK.getStatusCode(), response.getStatus());
+			ItemWithFileTO itemWithFileTO = response
+					.readEntity(ItemWithFileTO.class);
+			assertThat("Wrong file name", itemWithFileTO.getFilename(),
+					equalTo(ATTACHED_FILE.getName()));
+			assertThat(itemWithFileTO.getFetchUrl(), isEmptyOrNullString());
+			assertThat(itemWithFileTO.getReferenceUrl(), isEmptyOrNullString());
+	
+			storedFileURL = target().getUri()
+					+ itemWithFileTO.getFileUrl().getPath().substring(1);
+	        assertEquals(ATTACHED_FILE.length(),itemWithFileTO.getFileSize());
+	
+			// LOGGER.info(RestProcessUtils.buildJSONFromObject(itemWithFileTO));
 	}
+	
+	
 
 	@Test
 	public void test_1_UpdateItem_2_WithFile_Fetched() throws  ImejiException, IOException {
 
+		initCollection();
+		initItem();
 		final String fileURL = target().getUri()
 				+ STATIC_CONTEXT_PATH.substring(1) + "/test2.jpg";
 
@@ -206,8 +209,9 @@ public class ItemUpdateFileTest extends ImejiTestBase {
 	@Test
 	public void test_1_UpdateItem_5_WithFile_Attached_Referenced()
 			throws IOException, ImejiException {
-
-		File newFile = new File(STATIC_CONTEXT_STORAGE + "/test.png");
+		initCollection();
+		initItem();
+		File newFile = new File(STATIC_CONTEXT_STORAGE + "/test2.jpg");
 
 		FileDataBodyPart filePart = new FileDataBodyPart("file", newFile);
 
@@ -281,12 +285,14 @@ public class ItemUpdateFileTest extends ImejiTestBase {
 	@Test
 	public void test_1_UpdateItem_7_WithFile_Attached_Fetched_Referenced()
 			throws IOException, ImejiException {
-
-		File newFile = new File(STATIC_CONTEXT_STORAGE + "/test.png");
+		initCollection();
+		initItem();
+		
+		File newFile = new File(STATIC_CONTEXT_STORAGE + "/test1.jpg");
 		FileDataBodyPart filePart = new FileDataBodyPart("file", newFile);
 
 		final String fileURL = target().getUri()
-				+ STATIC_CONTEXT_PATH.substring(1) + "/test.jpg";
+				+ STATIC_CONTEXT_PATH.substring(1) + "/test1.jpg";
 
 		FormDataMultiPart multiPart = new FormDataMultiPart();
 		multiPart.bodyPart(filePart);
@@ -398,7 +404,88 @@ public class ItemUpdateFileTest extends ImejiTestBase {
 	}
 
 
+	public void test_3_UpdateItem_1_WithFile_AndCheckSumTest() throws IOException {
+		initItem("test2");
+		FileDataBodyPart filePart = new FileDataBodyPart("file", ATTACHED_FILE);
+		FormDataMultiPart multiPart = new FormDataMultiPart();
+		multiPart.bodyPart(filePart);
+		multiPart.field(
+				"json",
+				getStringFromPath(UPDATE_ITEM_FILE_JSON)
+						.replace("___FILE_NAME___", "checksum_"+ATTACHED_FILE.getName())
+						.replace("___FETCH_URL___", "")
+						.replaceAll("\"id\"\\s*:\\s*\"__ITEM_ID__\",", "")
+						.replace("___REFERENCE_URL___", ""));
 
+		Response response = target(PATH_PREFIX).path("/" + itemId)
+				.register(authAsUser).register(MultiPartFeature.class)
+				.register(JacksonFeature.class)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.entity(multiPart, multiPart.getMediaType()));
+
+		if (!Imeji.isValidateChecksumInCollection()) {
+			assertEquals(OK.getStatusCode(), response.getStatus());
+			ItemWithFileTO itemWithFileTO = response
+					.readEntity(ItemWithFileTO.class);
+			assertThat("Wrong file name", itemWithFileTO.getFilename(),
+					equalTo(ATTACHED_FILE.getName()));
+			assertThat(itemWithFileTO.getFetchUrl(), isEmptyOrNullString());
+			assertThat(itemWithFileTO.getReferenceUrl(), isEmptyOrNullString());
+	
+			storedFileURL = target().getUri()
+					+ itemWithFileTO.getFileUrl().getPath().substring(1);
+	        assertEquals(ATTACHED_FILE.length(),itemWithFileTO.getFileSize());
+	
+			// LOGGER.info(RestProcessUtils.buildJSONFromObject(itemWithFileTO));
+		}
+		else
+		{
+			assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+		}
+	}
+
+	@Test
+	public void test_3_UpdateItem_1_WithFile_Attached_CheckSumTest() throws IOException {
+		initCollection();
+		initItem("test2");
+		FileDataBodyPart filePart = new FileDataBodyPart("file", ATTACHED_FILE);
+		FormDataMultiPart multiPart = new FormDataMultiPart();
+		multiPart.bodyPart(filePart);
+		multiPart.field(
+				"json",
+				getStringFromPath(UPDATE_ITEM_FILE_JSON)
+						.replace("___FILE_NAME___", "checksum_"+ATTACHED_FILE.getName())
+						.replace("___FETCH_URL___", "")
+						.replaceAll("\"id\"\\s*:\\s*\"__ITEM_ID__\",", "")
+						.replace("___REFERENCE_URL___", ""));
+
+		Response response = target(PATH_PREFIX).path("/" + itemId)
+				.register(authAsUser).register(MultiPartFeature.class)
+				.register(JacksonFeature.class)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.put(Entity.entity(multiPart, multiPart.getMediaType()));
+
+		if (!Imeji.isValidateChecksumInCollection()) {
+			assertEquals(OK.getStatusCode(), response.getStatus());
+			ItemWithFileTO itemWithFileTO = response
+				.readEntity(ItemWithFileTO.class);
+		assertThat("Wrong file name", itemWithFileTO.getFilename(),
+				equalTo(ATTACHED_FILE.getName()));
+		assertThat(itemWithFileTO.getFetchUrl(), isEmptyOrNullString());
+		assertThat(itemWithFileTO.getReferenceUrl(), isEmptyOrNullString());
+
+		storedFileURL = target().getUri()
+				+ itemWithFileTO.getFileUrl().getPath().substring(1);
+        assertEquals(ATTACHED_FILE.length(),itemWithFileTO.getFileSize());
+		}
+		else
+		{
+			assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+		}
+
+		// LOGGER.info(RestProcessUtils.buildJSONFromObject(itemWithFileTO));
+
+	}
 
 
 }

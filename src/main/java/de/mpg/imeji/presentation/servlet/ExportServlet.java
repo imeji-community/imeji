@@ -4,10 +4,10 @@
 package de.mpg.imeji.presentation.servlet;
 
 import de.mpg.imeji.logic.export.ExportManager;
+import de.mpg.imeji.logic.notification.NotificationUtils;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.util.NotificationUtils;
 import org.apache.http.client.HttpResponseException;
 
 import javax.faces.FactoryFinder;

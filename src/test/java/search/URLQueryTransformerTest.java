@@ -28,15 +28,13 @@
  */
 package search;
 
-import java.io.IOException;
-import java.net.URLEncoder;
-
+import de.mpg.imeji.logic.search.query.URLQueryTransformer;
+import de.mpg.imeji.logic.search.vo.SearchQuery;
 import junit.framework.Assert;
-
 import org.junit.Test;
 
-import de.mpg.imeji.logic.search.vo.SearchQuery;
-import de.mpg.imeji.presentation.search.URLQueryTransformer;
+import java.io.IOException;
+import java.net.URLEncoder;
 
 /**
  * Tests for the methods in {@link URLQueryTransformer}

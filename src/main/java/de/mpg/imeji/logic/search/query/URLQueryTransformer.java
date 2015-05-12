@@ -1,7 +1,17 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-package de.mpg.imeji.presentation.search;
+package de.mpg.imeji.logic.search.query;
+
+import de.mpg.imeji.logic.search.SPARQLSearch;
+import de.mpg.imeji.logic.search.vo.*;
+import de.mpg.imeji.logic.search.vo.SearchElement.SEARCH_ELEMENTS;
+import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
+import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.presentation.lang.MetadataLabels;
+import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.util.BeanHelper;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -11,23 +21,6 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
-
-import de.mpg.imeji.logic.search.SPARQLSearch;
-import de.mpg.imeji.logic.search.vo.SearchElement;
-import de.mpg.imeji.logic.search.vo.SearchElement.SEARCH_ELEMENTS;
-import de.mpg.imeji.logic.search.vo.SearchGroup;
-import de.mpg.imeji.logic.search.vo.SearchIndex;
-import de.mpg.imeji.logic.search.vo.SearchLogicalRelation;
-import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
-import de.mpg.imeji.logic.search.vo.SearchMetadata;
-import de.mpg.imeji.logic.search.vo.SearchOperators;
-import de.mpg.imeji.logic.search.vo.SearchPair;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
-import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.presentation.lang.MetadataLabels;
-import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * Static methods to manipulate imeji url search queries
@@ -157,7 +150,7 @@ public class URLQueryTransformer {
 		}
 		if (!"".equals(query) && searchQuery.isEmpty()) {
 			searchQuery.addPair(new SearchPair(SPARQLSearch
-					.getIndex(SearchIndex.names.all), SearchOperators.REGEX,
+					.getIndex(SearchIndex.IndexNames.all), SearchOperators.REGEX,
 					query.trim()));
 		}
 		return searchQuery;
@@ -230,7 +223,7 @@ public class URLQueryTransformer {
 		for (SearchElement element : searchQuery.getElements()) {
 			if (SEARCH_ELEMENTS.PAIR.equals(element.getType())
 					&& ((SearchPair) element).getIndex().getName()
-							.equals(SearchIndex.names.all.name())) {
+							.equals(SearchIndex.IndexNames.all.name())) {
 				return true;
 			}
 		}
@@ -367,7 +360,7 @@ public class URLQueryTransformer {
 	private static String searchPair2PrettyQuery(SearchPair pair) {
 		if (pair.getValue() == null || pair.getValue() == "")
 			return "";
-		if (pair.getIndex().getName().equals(SearchIndex.names.all.name())) {
+		if (pair.getIndex().getName().equals(SearchIndex.IndexNames.all.name())) {
 			return pair.getValue();
 		} else {
 			return indexNamespace2PrettyQuery(pair.getIndex().getNamespace())

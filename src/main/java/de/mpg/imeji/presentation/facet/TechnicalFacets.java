@@ -73,7 +73,7 @@ public class TechnicalFacets extends Facets
                 {
                     if (!fs.isFilter("my_images") && !fs.isNoResultFilter("my_images"))
                     {
-                        SearchPair myImageSearchPair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.user),
+                        SearchPair myImageSearchPair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.IndexNames.user),
                                 SearchOperators.EQUALS, sb.getUser().getEmail());
                         count = getCount(searchQuery, myImageSearchPair, allImages.getResults());
                         if (count > 0)
@@ -88,8 +88,8 @@ public class TechnicalFacets extends Facets
                     }
                     if (!fs.isFilter("pending_images") && !fs.isNoResultFilter("pending_images"))
                     {
-                        SearchPair privatePair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.status),
-                                SearchOperators.EQUALS, Status.PENDING.getUri().toString());
+                        SearchPair privatePair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.IndexNames.status),
+                                SearchOperators.EQUALS, Status.PENDING.getUriString());
                         count = getCount(searchQuery, privatePair, allImages.getResults());
                         if (count > 0)
                         {
@@ -99,8 +99,8 @@ public class TechnicalFacets extends Facets
                     }
                     if (!fs.isFilter("released_images") && !fs.isNoResultFilter("released_images"))
                     {
-                        SearchPair publicPair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.status),
-                                SearchOperators.EQUALS, Status.RELEASED.getUri().toString());
+                        SearchPair publicPair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.IndexNames.status),
+                                SearchOperators.EQUALS, Status.RELEASED.getUriString().toString());
                         count = getCount(searchQuery, publicPair, allImages.getResults());
                         if (count > 0)
                         {
@@ -113,7 +113,7 @@ public class TechnicalFacets extends Facets
                 {
                     if (!fs.isFilter(t.name()) && !fs.isNoResultFilter(t.name()))
                     {
-                        SearchPair pair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.type),
+                        SearchPair pair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.IndexNames.type),
                                 SearchOperators.EQUALS, t.getClazzNamespace());
                         count = getCount(searchQuery, pair, allImages.getResults());
                         if (count > 0)
@@ -161,7 +161,7 @@ public class TechnicalFacets extends Facets
         ItemController ic = new ItemController();
         SearchQuery sq = new SearchQuery();
         sq.addPair(pair);
-        return ic.search(null, sq, null, allImages, sb.getUser()).getNumberOfRecords();
+        return ic.search(null, sq, null, allImages, sb.getUser(),  sb.getSelectedSpaceString()).getNumberOfRecords();
     }
 
     /*

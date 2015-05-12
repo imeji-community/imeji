@@ -116,6 +116,7 @@ public class ContentNegotiationFilter implements Filter
      * @param request
      * @return
      */
+    //TODO NAVI
     private String getType(HttpServletRequest request)
     {
         String path = request.getServletPath();
@@ -141,16 +142,16 @@ public class ContentNegotiationFilter implements Filter
     {
         String path = request.getServletPath();
         if (path.startsWith("/item/"))
-            return "q=" + SearchIndex.names.item.name() + "==\""
+            return "q=" + SearchIndex.IndexNames.item.name() + "==\""
                     + URLEncoder.encode(ObjectHelper.getURI(Item.class, getID(path)).toString(), "UTF-8") + "\"";
         if (path.startsWith("/collection/"))
-            return "q=" + SearchIndex.names.col.name() + "==\""
+            return "q=" + SearchIndex.IndexNames.col.name() + "==\""
                     + ObjectHelper.getURI(CollectionImeji.class, getID(path)) + "\"";
         if (path.startsWith("/album/"))
-            return "q=" + SearchIndex.names.alb.name() + "==\""
+            return "q=" + SearchIndex.IndexNames.alb.name() + "==\""
                     + URLEncoder.encode(ObjectHelper.getURI(Album.class, getID(path)).toString(), "UTF-8") + "\"";
         if (path.startsWith("/profile/"))
-            return "q=" + SearchIndex.names.prof.name() + "==\""
+            return "q=" + SearchIndex.IndexNames.prof.name() + "==\""
                     + URLEncoder.encode(ObjectHelper.getURI(MetadataProfile.class, getID(path)).toString(), "UTF-8")
                     + "\"";
         return request.getQueryString();

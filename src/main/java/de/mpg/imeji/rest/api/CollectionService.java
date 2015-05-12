@@ -1,5 +1,7 @@
 package de.mpg.imeji.rest.api;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
@@ -7,14 +9,15 @@ import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.rest.process.CommonUtils;
 import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.to.CollectionProfileTO;
 import de.mpg.imeji.rest.to.CollectionProfileTO.METHOD;
 import de.mpg.imeji.rest.to.CollectionTO;
+import de.mpg.imeji.rest.to.ItemTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,11 +48,38 @@ public class CollectionService implements API<CollectionTO> {
 	public CollectionTO read(String id, User u) throws ImejiException {
 		
 		CollectionController controller = new CollectionController();
-//		CollectionImeji vo = controller.retrieve(
-//				ObjectHelper.getURI(CollectionImeji.class, id), u);
 		return getCollectionTO(controller, id, u);
 	}
 
+
+    public List<ItemTO> readItems(String id, User u, String q) throws ImejiException {
+        CollectionController cc = new CollectionController();
+        return Lists.transform(cc.retrieveItems(id, u, q),
+                new Function<Item, ItemTO>() {
+                    @Override
+                    public ItemTO apply(Item vo) {
+                        ItemTO to = new ItemTO();
+                        TransferObjectFactory.transferItem(vo, to);
+                        return to;
+                    }
+                }
+        );
+    }
+
+    public List<CollectionTO> readAll(User u, String q) throws ImejiException {
+        CollectionController cc = new CollectionController();
+        return Lists.transform(cc.retrieveCollections(u, q, null),
+                new Function<CollectionImeji, CollectionTO>() {
+                    @Override
+                    public CollectionTO apply(CollectionImeji vo) {
+                    	CollectionTO to = new CollectionTO();
+                        TransferObjectFactory.transferCollection(vo, to);
+                        return to;
+                    }
+                }
+        );
+    }
+    
 	@Override
 	public CollectionTO create(CollectionTO to, User u) throws ImejiException {
 		return createAskValidate(to, u, true);
@@ -67,14 +97,14 @@ public class CollectionService implements API<CollectionTO> {
 
 
 		MetadataProfile mp = null;
-		String profileId = to.getProfile().getProfileId();
+		String profileId = to.getProfile().getId();
 		String method = to.getProfile().getMethod();
 		String newId = null;
 		// create new profile (take default)
-		if (isNullOrEmpty(profileId))
-			mp = pc.create(ImejiFactory.newProfile(), u);
+//		if (isNullOrEmpty(profileId))
+//			mp = pc.create(ImejiFactory.newProfile(), u);
 		// set reference to existed profile
-		else if (profileId != null && "reference".equalsIgnoreCase(method))
+		if (!isNullOrEmpty(profileId)) {
 			try {
 				mp = pc.retrieve(
 					ObjectHelper.getURI(MetadataProfile.class, profileId), u);
@@ -84,83 +114,69 @@ public class CollectionService implements API<CollectionTO> {
 				throw new UnprocessableError("Can not find the metadata profile you have referenced in the JSON body");
 				
 			}
-		// copy existed profile
-		else if (profileId != null && "copy".equalsIgnoreCase(method)) {
-			try {
-			mp = pc.retrieve(
-					ObjectHelper.getURI(MetadataProfile.class, profileId), u);
-			}
-			catch (ImejiException e)
-			{
-				throw new UnprocessableError("Can not find the metadata profile you want to copy from in the JSON body");
-			}
-			mp = pc.create(mp.clone(), u);
-			pc.update(mp, u);
-		} else {
-			// throw exception if no method specified
-			final String msg = "Bad metadata profile method definition:"
-					+ method;
-			LOGGER.error(msg);
-			throw new BadRequestException(msg);
 		}
+		
 		CollectionImeji vo = new CollectionImeji();
-		transferCollection(to, vo, CREATE);
-//		try {
+		transferCollection(to, vo, CREATE, u);
+
 		URI collectionURI = null;
 		if (validate) {
-			collectionURI = cc.create(vo, mp, u);
+			collectionURI = cc.create(vo, mp, u, cc.getProfileCreationMethod(method), null);
 		}
 		else
 		{
-			collectionURI = cc.createNoValidate(vo, mp, u);
+			collectionURI = cc.createNoValidate(vo, mp, u, cc.getProfileCreationMethod(method), null);
 		}
 		return read(CommonUtils.extractIDFromURI(collectionURI), u);
-//		} catch (Exception e) {
-//			LOGGER.error("Cannot create collection:");
-//			e.printStackTrace();
-//			return null;
-//		}
 	}
 
     @Override
     public CollectionTO update(CollectionTO to, User u)
             throws ImejiException {
-        ProfileController pc = new ProfileController();
+    	
+    	ProfileController pc = new ProfileController();
         CollectionController cc = new CollectionController();
 
         CollectionImeji vo = getCollectionVO(cc, to.getId(), u);
+        MetadataProfile originalMp= pc.retrieve(vo.getProfile(), u);
+        String hasStatements = originalMp.getStatements().size() >0?
+        		" Existing metadata profile has already defined metadata elements. It is not allowed to update it: remove the profileId from your input."
+        		:"";
 
         //profile is defined
         CollectionProfileTO profTO = to.getProfile();
-        if (profTO != null) {
-            String profileId = profTO.getProfileId();
-            String method = profTO.getMethod();
-            MetadataProfile mp;
-
+        String profileId = (profTO!=null)?profTO.getId():"";
+        String method = (profTO!=null)?profTO.getMethod():"";
+        
+        MetadataProfile mp = null;
+        
+        transferCollection(to, vo, UPDATE, u);
             //profileId is filled
-            if ( !isNullOrEmpty(profileId) ) {
+        if ( !isNullOrEmpty(profileId) ) {
                 try {
                     mp = pc.retrieve(profileId, u);
                 } catch (ImejiException e) {
-                    throw new BadRequestException("Can not find the metadata profile you have referenced in the JSON body: " + profileId);
+                    throw new UnprocessableError("Can not retrieve the metadata profile provided in the JSON body with id: " + profileId+hasStatements);
                 }
-                if (METHOD.COPY.toString().equals(method)) {
-                    mp = pc.create(mp.clone(), u);
-                    //other profile id
-                }  else if (isNullOrEmpty(method) || METHOD.REFERENCE.toString().equals(method)) {
-                    profTO.setMethod(METHOD.REFERENCE.toString());
-                } else
-                    throw new BadRequestException("Wrong metadata profile update method: " + method);
+                
+                if (!profileId.equals(originalMp.getIdString())){
 
-                profTO.setProfileId(mp.getId().toString());
-                vo.setProfile(mp.getId());
-            }
-        }
-        transferCollection(to, vo, UPDATE);
+		                if (!METHOD.COPY.toString().equals(method) && !METHOD.REFERENCE.toString().equals(method)) {
+		                    throw new BadRequestException("Wrong metadata profile update method: " + method+" ! Allowed values are {copy, reference}. ");
+		                }
+
+                		//if the original profile already has statements, no profile update is allowed
+                		if (originalMp.getStatements().size()>0 ) {
+		                	throw new UnprocessableError("It is not allowed to update related metadata profile which has already defined metadata elements.");
+		                }
+        		}
+                
+         }
+
+    	CollectionImeji updatedCollection = cc.updateWithProfile(vo, mp, u, cc.getProfileCreationMethod(method));
         CollectionTO newTO = new CollectionTO();
-        TransferObjectFactory.transferCollection(cc.update(vo, u), newTO);
+        TransferObjectFactory.transferCollection(updatedCollection, newTO);
         return newTO;
-
     }
 
 	@Override
@@ -218,5 +234,6 @@ public class CollectionService implements API<CollectionTO> {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 
 }

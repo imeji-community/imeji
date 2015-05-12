@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import org.apache.commons.io.FileUtils;
@@ -14,9 +15,13 @@ import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.rdf.model.Resource;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
+import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.jobs.CleanMetadataJob;
+import de.mpg.imeji.logic.jobs.CleanMetadataProfileJob;
 import de.mpg.imeji.logic.jobs.ImportFileFromEscidocToInternalStorageJob;
 import de.mpg.imeji.logic.jobs.RefreshFileSizeJob;
 import de.mpg.imeji.logic.jobs.StorageUsageAnalyseJob;
@@ -37,6 +42,7 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.writer.WriterFacade;
+import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
@@ -59,6 +65,7 @@ public class AdminBean {
 	private String lastUpdateStorageStatistics;
 	private Future<Integer> storageAnalyseStatus;
 	private String cleanDatabaseReport = "";
+	private List<MetadataProfile> unusedProfiles = new ArrayList<MetadataProfile>();
 
 	public AdminBean() throws IOException, URISyntaxException {
 
@@ -72,6 +79,17 @@ public class AdminBean {
 		this.freeSpaceInStorage = FileUtils
 				.byteCountToDisplaySize(storageUsageAnalyse.getFreeSpace());
 		this.lastUpdateStorageStatistics = storageUsageAnalyse.getLastUpdate();
+	}
+
+	/**
+	 * Return the Id of the default {@link MetadataProfile}
+	 * 
+	 * @return
+	 * @throws ImejiException
+	 */
+	public String getDefaultProfileId() throws ImejiException {
+		ProfileController c = new ProfileController();
+		return c.retrieveDefaultProfile().getIdString();
 	}
 
 	/**
@@ -93,6 +111,27 @@ public class AdminBean {
 		StorageController controller = new StorageController();
 		controller.getAdministrator().clean();
 		return "pretty:";
+	}
+
+	/**
+	 * Find all unused {@link MetadataProfile}
+	 * 
+	 * @throws InterruptedException
+	 * @throws ExecutionException
+	 */
+	public void findUnusedProfiles() throws InterruptedException,
+			ExecutionException {
+		CleanMetadataProfileJob job = new CleanMetadataProfileJob(false);
+		Future<Integer> f = Imeji.executor.submit(job);
+		f.get();
+		this.unusedProfiles = job.getProfiles();
+	}
+
+	/**
+	 * Remove all unused {@link MetadataProfile}
+	 */
+	public void deleteUnusedProfiles() {
+		Imeji.executor.submit(new CleanMetadataProfileJob(true));
 	}
 
 	/**
@@ -158,12 +197,6 @@ public class AdminBean {
 	 */
 	private void invokeCleanMethods() throws Exception {
 		cleanStatement();
-		/*
-		 * TODO Clean Metadata not working: the metadata is not completely
-		 * removed. All element in the metadata are removed, but the metadata it
-		 * self not. Since a metadata is a abstract class, j2j can not instance
-		 * a new metadata since it doesn't know the type
-		 */
 		cleanMetadata();
 		cleanGrants();
 	}
@@ -172,11 +205,17 @@ public class AdminBean {
 	 * Find all {@link Metadata} which are not related to a {@link Statement}
 	 */
 	private void cleanMetadata() {
-		Search search = SearchFactory.create();
-		List<String> uris = search.searchSimpleForQuery(
-				SPARQLQueries.selectMetadataUnbounded()).getResults();
-		cleanDatabaseReport += "Metadata Without Statement: " + uris.size()
-				+ " found  <br/> ";
+		logger.info("Cleaning Metadata");
+		if (clean = false) {
+			Search search = SearchFactory.create();
+
+			List<String> uris = search.searchSimpleForQuery(
+					SPARQLQueries.selectMetadataUnbounded()).getResults();
+			cleanDatabaseReport += "Metadata Without Statement: " + uris.size()
+					+ " found  <br/> ";
+		} else {
+			Imeji.executor.submit(new CleanMetadataJob(null));
+		}
 	}
 
 	/**
@@ -231,7 +270,9 @@ public class AdminBean {
 	private synchronized void removeResources(List<String> uris,
 			String modelName, Object obj) throws InstantiationException,
 			IllegalAccessException, Exception {
-		removeObjects(loadResourcesAsObjects(uris, modelName, obj), modelName);
+		if (clean)
+			removeObjects(loadResourcesAsObjects(uris, modelName, obj),
+					modelName);
 	}
 
 	/**
@@ -364,5 +405,13 @@ public class AdminBean {
 
 	public String getCleanDatabaseReport() {
 		return cleanDatabaseReport;
+	}
+
+	public List<MetadataProfile> getUnusedProfiles() {
+		return unusedProfiles;
+	}
+
+	public void setUnusedProfiles(List<MetadataProfile> unusedProfiles) {
+		this.unusedProfiles = unusedProfiles;
 	}
 }

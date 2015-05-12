@@ -6,6 +6,7 @@ package de.mpg.imeji.logic.export.format.rdf;
 import java.util.HashMap;
 
 import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.export.format.RDFExport;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.vo.Album;
@@ -19,8 +20,9 @@ import de.mpg.imeji.logic.vo.User;
 public class RDFAlbumExport extends RDFExport
 {
     private String[] filteredTriples = { "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-            "http://purl.org/escidoc/metadata/profiles/0.1/pos", "http://purl.org/dc/terms/creator",
-            "http://imeji.org/terms/modifiedBy" };
+			"http://purl.org/escidoc/metadata/profiles/0.1/pos",
+			ImejiNamespaces.CREATOR,
+            ImejiNamespaces.MODIFIED_BY };
 
     @Override
     public void init()

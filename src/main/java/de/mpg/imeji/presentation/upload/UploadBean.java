@@ -3,37 +3,9 @@
  */
 package de.mpg.imeji.presentation.upload;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Serializable;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.util.List;
-import java.util.regex.Pattern;
-
-import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.fileupload.FileItemIterator;
-import org.apache.commons.fileupload.FileItemStream;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.log4j.Logger;
-import org.apache.regexp.REUtil;
-
-import com.hp.hpl.jena.query.ParameterizedSparqlString;
 import com.ocpsoft.pretty.PrettyContext;
-
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.Search;
@@ -43,15 +15,39 @@ import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.presentation.collection.CollectionBean;
 import de.mpg.imeji.presentation.history.HistoryUtil;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
-import de.mpg.imeji.presentation.util.UrlHelper;
+
+import org.apache.commons.fileupload.FileItemIterator;
+import org.apache.commons.fileupload.FileItemStream;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
+
+import javax.annotation.PostConstruct;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
+
+import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.util.List;
+
+import static de.mpg.imeji.logic.notification.CommonMessages.getSuccessCollectionDeleteMessage;
 
 /**
  * Bean for the upload page
@@ -89,6 +85,8 @@ public class UploadBean implements Serializable {
 	 * Method checking the url parameters and triggering then the
 	 * {@link UploadBean} methods
 	 * 
+	 * @throws UnprocessableError
+	 * 
 	 * @throws Exception
 	 */
 	@PostConstruct
@@ -96,20 +94,24 @@ public class UploadBean implements Serializable {
 		readId();
 		try {
 			loadCollection();
+			if (UrlHelper.getParameterBoolean("init")) {
+				((UploadSession) BeanHelper.getSessionBean(UploadSession.class))
+						.reset();
+				externalUrl = null;
+				localDirectory = null;
+			} else if (UrlHelper.getParameterBoolean("start")) {
+				upload();
+			} else if (UrlHelper.getParameterBoolean("done")) {
+				((UploadSession) BeanHelper.getSessionBean(UploadSession.class))
+						.resetProperties();
+			} else {
+				BeanHelper.error("I can not get to the collection id ");
+			}
+
 		} catch (Exception e) {
-			throw new RuntimeException("collection couldn't be loaded", e);
+			BeanHelper.error(e.getLocalizedMessage());
 		}
-		if (UrlHelper.getParameterBoolean("init")) {
-			((UploadSession) BeanHelper.getSessionBean(UploadSession.class))
-					.reset();
-			externalUrl = null;
-			localDirectory = null;
-		} else if (UrlHelper.getParameterBoolean("start")) {
-			upload();
-		} else if (UrlHelper.getParameterBoolean("done")) {
-			((UploadSession) BeanHelper.getSessionBean(UploadSession.class))
-					.resetProperties();
-		}
+
 	}
 
 	/**
@@ -132,12 +134,13 @@ public class UploadBean implements Serializable {
 				.getCurrentInstance().getExternalContext().getRequest();
 		boolean isMultipart = ServletFileUpload.isMultipartContent(req);
 		if (isMultipart) {
-			ServletFileUpload upload = new ServletFileUpload();
 			// Parse the request
 			try {
+				ServletFileUpload upload = new ServletFileUpload();
 				FileItemIterator iter = upload.getItemIterator(req);
 				while (iter.hasNext()) {
 					FileItemStream fis = iter.next();
+
 					InputStream stream = fis.openStream();
 					if (!fis.isFormField()) {
 						File tmp = createTmpFile(fis.getName());
@@ -291,7 +294,7 @@ public class UploadBean implements Serializable {
 			}
 			StorageController sc = new StorageController();
 			String guessedNotAllowedFormat = sc.guessNotAllowedFormat(file);
-			if (guessedNotAllowedFormat != null) {
+			if (StorageUtils.BAD_FORMAT.equals(guessedNotAllowedFormat)) {
 				SessionBean sessionBean = (SessionBean) BeanHelper
 						.getSessionBean(SessionBean.class);
 				throw new RuntimeException(
@@ -309,22 +312,24 @@ public class UploadBean implements Serializable {
 	 */
 	private Item uploadFile(File fileUploaded, String title) {
 		try {
-			
-			
-			String calculatedExtension = StorageUtils.guessExtension(fileUploaded);
-			File file=fileUploaded;
 
-			//TODO: not certain we should change the extensions even if these are not provided! Thus commented at the moment
-			//	if (!StorageUtils.hasExtension(title)) {
-			//		title += "."+calculatedExtension;
-			//	}
-			
+			String calculatedExtension = StorageUtils
+					.guessExtension(fileUploaded);
+			File file = fileUploaded;
+
+			// TODO: not certain we should change the extensions even if these
+			// are not provided! Thus commented at the moment
+			// if (!StorageUtils.hasExtension(title)) {
+			// title += "."+calculatedExtension;
+			// }
+
 			if (!fileUploaded.getName().endsWith(calculatedExtension)) {
-				file = new File(file.getName()+calculatedExtension);
+				file = new File(file.getName() + calculatedExtension);
 				FileUtils.moveFile(fileUploaded, file);
 			}
-			
+
 			validateName(file, title);
+
 			Item item = null;
 			ItemController controller = new ItemController();
 			if (isImportImageToFile()) {
@@ -341,7 +346,8 @@ public class UploadBean implements Serializable {
 			return item;
 		} catch (Exception e) {
 			getfFiles().add(
-					" File " + title + " not uploaded: " + e.getMessage());
+					" File " + title + " not uploaded: "
+							+ e.getLocalizedMessage());
 			logger.error("Error uploading item: ", e);
 			return null;
 		}
@@ -379,9 +385,11 @@ public class UploadBean implements Serializable {
 	 */
 	private boolean filenameExistsInCollection(String filename) {
 		Search s = SearchFactory.create(SearchType.ITEM);
-		//filename = org.apache.xerces.impl.xpath.regex.REUtil.quoteMeta(filename);
-		//filename = Pattern.quote(FilenameUtils.removeExtension(filename));
-		//filename = filename.replace(")", "\\u+0029").replace("(", "\\u+0028");
+		// filename =
+		// org.apache.xerces.impl.xpath.regex.REUtil.quoteMeta(filename);
+		// filename = Pattern.quote(FilenameUtils.removeExtension(filename));
+		// filename = filename.replace(")", "\\u+0029").replace("(",
+		// "\\u+0028");
 		return s.searchSimpleForQuery(
 				SPARQLQueries.selectContainerItemByFilename(collection.getId(),
 						FilenameUtils.getBaseName(filename)))
@@ -392,19 +400,37 @@ public class UploadBean implements Serializable {
 	 * Load the collection
 	 * 
 	 * @throws Exception
+	 * 
+	 * @throws Exception
 	 */
 	public void loadCollection() throws Exception {
+		SessionBean sessionBean = (SessionBean) BeanHelper
+				.getSessionBean(SessionBean.class);
 		if (id != null) {
 			collection = ObjectLoader.loadCollectionLazy(
 					ObjectHelper.getURI(CollectionImeji.class, id), user);
+			isDiscaded();
 			if (collection != null && getCollection().getId() != null) {
 				ItemController ic = new ItemController();
 				collectionSize = ic.countContainerSize(collection);
 			}
 		} else {
+			BeanHelper.error(sessionBean.getLabel("error") + "No ID in URL");
+			throw new RuntimeException();
+		}
+	}
+
+	/**
+	 * True if the {@link CollectionImeji} is discaded
+	 * 
+	 * @throws UnprocessableError
+	 */
+	private void isDiscaded() throws UnprocessableError {
+		if (collection.getStatus().equals(Status.WITHDRAWN)) {
 			SessionBean sessionBean = (SessionBean) BeanHelper
 					.getSessionBean(SessionBean.class);
-			BeanHelper.error(sessionBean.getLabel("error") + "No ID in URL");
+			throw new UnprocessableError(
+					sessionBean.getMessage("error_collection_discarded_upload"));
 		}
 	}
 
@@ -440,13 +466,13 @@ public class UploadBean implements Serializable {
 				.getSessionBean(SessionBean.class);
 		try {
 			cc.delete(collection, sessionBean.getUser());
-			BeanHelper
-					.info(sessionBean.getMessage("success_collection_delete"));
+			BeanHelper.info(getSuccessCollectionDeleteMessage(collection
+					.getMetadata().getTitle(), sessionBean));
 		} catch (Exception e) {
 			BeanHelper.error(sessionBean.getMessage("error_collection_delete"));
 			logger.error("Error delete collection", e);
 		}
-		return "pretty:collections";
+		return sessionBean.getPrettySpacePage("pretty:collections");
 	}
 
 	/**
@@ -537,88 +563,6 @@ public class UploadBean implements Serializable {
 				.isUploadFileToItem();
 	}
 
-	// public void uploadFileToItemListener()
-	// {
-	// this.importImageToFile = BooleanUtils.negate(importImageToFile);
-	// }
-	//
-	// public void importImageToFileListener()
-	// {
-	// this.uploadFileToItem = BooleanUtils.negate(uploadFileToItem);
-	// }
-	//
-	// public void checkNameUniqueListener()
-	// {
-	// this.checkNameUnique = BooleanUtils.negate(checkNameUnique);
-	// }
-	//
-	// /**
-	// * @return the importImageToFile
-	// */
-	// public boolean isImportImageToFile()
-	// {
-	// return importImageToFile;
-	// }
-	//
-	// /**
-	// * @param importImageToFile the importImageToFile to set
-	// */
-	// public void setImportImageToFile(boolean importImageToFile)
-	// {
-	// this.importImageToFile = importImageToFile;
-	// }
-	//
-	// /**
-	// * @return the uploadFileToItem
-	// */
-	// public boolean isUploadFileToItem()
-	// {
-	// return uploadFileToItem;
-	// }
-	//
-	// /**
-	// * @param uploadFileToItem the uploadFileToItem to set
-	// */
-	// public void setUploadFileToItem(boolean uploadFileToItem)
-	// {
-	// this.uploadFileToItem = uploadFileToItem;
-	// }
-	//
-	// /**
-	// * @return the checkNameUnique
-	// */
-	// public boolean isCheckNameUnique()
-	// {
-	// return checkNameUnique;
-	// }
-	//
-	// /**
-	// * @param checkNameUnique the checkNameUnique to set
-	// */
-	// public void setCheckNameUnique(boolean checkNameUnique)
-	// {
-	// this.checkNameUnique = checkNameUnique;
-	// }
-	//
-	// public List<Item> getsFiles()
-	// {
-	// return sFiles;
-	// }
-	//
-	// public void setsFiles(List<Item> sFiles)
-	// {
-	// this.sFiles = sFiles;
-	// }
-	//
-	// public List<String> getfFiles()
-	// {
-	// return fFiles;
-	// }
-	//
-	// public void setfFiles(List<String> fFiles)
-	// {
-	// this.fFiles = fFiles;
-	// }
 	public String getDiscardComment() {
 		return collection.getDiscardComment();
 	}

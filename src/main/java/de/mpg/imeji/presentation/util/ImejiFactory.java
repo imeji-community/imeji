@@ -3,30 +3,20 @@
  */
 package de.mpg.imeji.presentation.util;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
-import de.mpg.imeji.logic.vo.Album;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.ContainerMetadata;
-import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.logic.vo.Item.Visibility;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.MetadataSet;
-import de.mpg.imeji.logic.vo.Organization;
-import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.Properties.Status;
-import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.album.AlbumBean;
 import de.mpg.imeji.presentation.collection.CollectionListItem;
 import de.mpg.imeji.presentation.image.ThumbnailBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.j2j.misc.LocalizedString;
+import org.apache.log4j.Logger;
+
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Create objects ready to be displayed in JSF
@@ -61,6 +51,12 @@ public class ImejiFactory {
 		return cm;
 	}
 
+	public static Space newSpace() {
+		Space s = new Space();
+		return s;
+	}
+
+
 	/**
 	 * Crate a new emtpy {@link Statement}
 	 * 
@@ -76,7 +72,6 @@ public class ImejiFactory {
 	 * Create an emtpy {@link Statement} as a child of another {@link Statement}
 	 * 
 	 * @param parent
-	 * @param isFirstChild
 	 * @return
 	 */
 	public static Statement newStatement(URI parent) {

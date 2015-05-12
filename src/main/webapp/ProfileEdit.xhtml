@@ -6,20 +6,20 @@
 	xmlns:menu="http://java.sun.com/jsf/composite/components/menu">
 	
 	<ui:param name="metadataBean" value="#{EditMdProfileBean}"/>
-	<ui:param name="metadataContextBean" value="#{metadataBean.colContext}"/>
+	
 	<ui:param name="headline" value="#{lbl.metadata_profile} #{lbl.edit.toString().toLowerCase()}"/>
 	<ui:param name="currentMainMenu" value="collection"/>
 	<ui:param name="containerHeadline" value="#{lbl.collection_info}"/>
 	
 	<ui:define name="actionsMenu">
 		
-		<ui:fragment rendered="#{Auth.read(metadataContextBean.collection)}">
-				<menu:context_subNavigation contextId="#{metadataContextBean.collection.idString}" 
+		<ui:fragment rendered="#{metadataBean.collection != null and Auth.read(metadataBean.collection)}">
+				<menu:context_subNavigation contextId="#{metadataBean.collection.idString}" 
 											contextUrl="#{Navigation.collectionUrl}" 
 											curMainMenu="#{currentMainMenu}" 
 											userHasAdminRights="#{Auth.admin}" 
-											userHasUploadRights="#{Auth.create(metadataContextBean.collection) and metadataContextBean.collection.status != 'WITHDRAWN'}" 
-											hasContent="#{metadataContextBean.collection.images.size() > 0}" 
+											userHasUploadRights="#{Auth.createContent(metadataBean.collection) and metadataBean.collection.status != 'WITHDRAWN'}" 
+											hasContent="#{metadataBean.collection.images.size() > 0}" 
 											navBean="#{Navigation}" 
 											activeMenu="metadata"/>
 											

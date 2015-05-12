@@ -3,24 +3,15 @@
  */
 package de.mpg.imeji.presentation.image;
 
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import javax.faces.application.FacesMessage;
-import javax.faces.event.ValueChangeEvent;
-import javax.faces.model.SelectItem;
-
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.query.URLQueryTransformer;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
+import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.presentation.beans.BasePaginatorListSessionBean;
@@ -30,13 +21,21 @@ import de.mpg.imeji.presentation.facet.FacetsBean;
 import de.mpg.imeji.presentation.filter.Filter;
 import de.mpg.imeji.presentation.filter.FiltersBean;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
-import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.session.SessionObjectsController;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.PropertyReader;
-import de.mpg.imeji.presentation.util.UrlHelper;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.model.SelectItem;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * The bean for all list of images
@@ -61,6 +60,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
 	private String discardComment;
 	private String selectedImagesContext;
 	private SearchResult searchResult;
+	
 	/**
 	 * The context of the browse page (browse, collection browse, album browse)
 	 */
@@ -134,13 +134,13 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
 	public void initMenus() {
 		sortMenu = new ArrayList<SelectItem>();
 		sortMenu.add(new SelectItem(null, "--"));
-		sortMenu.add(new SelectItem(SearchIndex.names.created, session
+		sortMenu.add(new SelectItem(SearchIndex.IndexNames.created, session
 				.getLabel("sort_img_date_created")));
-		sortMenu.add(new SelectItem(SearchIndex.names.modified, session
+		sortMenu.add(new SelectItem(SearchIndex.IndexNames.modified, session
 				.getLabel("sort_date_mod")));
-		sortMenu.add(new SelectItem(SearchIndex.names.cont_title, session
+		sortMenu.add(new SelectItem(SearchIndex.IndexNames.cont_title, session
 				.getLabel("sort_img_collection")));
-		sortMenu.add(new SelectItem(SearchIndex.names.filename, session
+		sortMenu.add(new SelectItem(SearchIndex.IndexNames.filename, session
 				.getLabel("sort_img_filename")));
 	}
 
@@ -170,7 +170,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
 			SortCriterion sortCriterion) {
 		ItemController controller = new ItemController();
 		return controller.search(null, searchQuery, sortCriterion, null,
-				session.getUser());
+				session.getUser(), session.getSelectedSpaceString());
 	}
 
 	/**
@@ -198,7 +198,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
 
 	@Override
 	public String getNavigationString() {
-		return "pretty:browse";
+		return session.getPrettySpacePage("pretty:browse");
 	}
 
 	@Override
@@ -456,7 +456,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
 	 * @return
 	 */
 	public String getImageBaseUrl() {
-		return navigation.getApplicationUri();
+		return navigation.getApplicationSpaceUrl();
 	}
 
 	public String getBackUrl() {
@@ -597,5 +597,10 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
 	 */
 	public SearchResult getSearchResult() {
 		return searchResult;
+	}
+
+	@Override
+	public String getType() {
+		return PAGINATOR_TYPE.ITEMS.name();
 	}
 }

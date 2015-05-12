@@ -1,7 +1,8 @@
 package de.mpg.imeji.rest.resources.test.integration.item;
 
-import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.logic.controller.CollectionController;
+import de.mpg.imeji.logic.controller.CollectionController.MetadataProfileCreationMethod;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -33,13 +34,12 @@ import javax.ws.rs.core.Response;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static com.google.common.collect.Iterables.getFirst;
+import static com.google.common.collect.Iterables.getLast;
 import static de.mpg.imeji.logic.util.ResourceHelper.getStringFromPath;
 import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONFromObject;
 import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_REST;
@@ -67,16 +67,20 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
 
     private static String updateJSON;
     private static final String PATH_PREFIX = "/rest/items";
+    private static URI unboundedStatementId;
+
+    private static ProfileController pc = new ProfileController();
+
 
     @BeforeClass
     public static void specificSetup() throws Exception {
         updateJSON = getStringFromPath(STATIC_CONTEXT_REST + "/updateItemBasic.json");
-        initCollectionWithProfile();
+        initCollectionWithProfile(getBasicStatements());
         initItemWithFullMedatada();
     }
 
     @Test
-    public void test_1_UpdateItem_1_Change_Metadata_Statements_Allowed_Common() throws IOException, UnprocessableError {
+    public void test_1_UpdateItem_1_Change_Metadata_Statements_Allowed_Common() throws IOException, BadRequestException {
 
         final String CHANGED = "allowed_change";
         double NUM = 12345;
@@ -179,7 +183,7 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
     }
 
     @Test
-    public void test_2_UpdateItem_2_Change_Metadata_Statements_Not_Allowed() throws IOException, UnprocessableError {
+    public void test_2_UpdateItem_2_Change_Metadata_Statements_Not_Allowed() throws IOException, BadRequestException {
 
         final String CHANGED = "not_allowed_change";
         final String REP_CHANGED = "$1\"" + CHANGED + "\"";
@@ -305,7 +309,7 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
 
 
     @Test
-    public void test_2_UpdateItem_3_Change_Metadata_Statements_Wrong_StatementUri() throws IOException, UnprocessableError {
+    public void test_2_UpdateItem_3_Change_Metadata_Statements_Wrong_StatementUri() throws IOException, BadRequestException {
 
         final String CHANGED = "wrong_statementUri";
         final String REP_CHANGED = "$1\"" + CHANGED + "\"";
@@ -329,7 +333,7 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
     }
 
     @Test
-    public void test_2_UpdateItem_4_Change_Metadata_Statements_Wrong_typeUri() throws IOException, UnprocessableError {
+    public void test_2_UpdateItem_4_Change_Metadata_Statements_Wrong_typeUri() throws IOException, BadRequestException {
 
         final String CHANGED = "wrong_typeUri";
         final String REP_CHANGED = "$1\"" + CHANGED + "\"";
@@ -353,7 +357,7 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
     }
 
     @Test
-    public void test_3_UpdateItem_1_Change_Metadata_Statements_EmptyValues() throws IOException, UnprocessableError {
+    public void test_3_UpdateItem_1_Change_Metadata_Statements_EmptyValues() throws IOException, BadRequestException {
 
         final String REP_CHANGED = "$1\"\"";
 
@@ -386,18 +390,18 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
         assertThat(json, not(containsString("\"date\"")));
         assertThat(json, allOf(
                 not(containsString("\"license\"")),
-                not(containsString("\"url\""))) );
+                not(containsString("\"url\""))));
         assertThat(json, allOf(
                 not(containsString("\"link\"")),
-                not(containsString("\"url\""))) );
+                not(containsString("\"url\""))));
         assertThat(json, allOf(
                 not(containsString("\"format\"")),
                 not(containsString("\"publication\"")),
-                not(containsString("\"citation\""))  ) );
+                not(containsString("\"citation\""))));
    }
 
     @Test
-    public void test_3_UpdateItem_2_Change_Metadata_Statements_EmptyStatements_SomeSections() throws IOException, UnprocessableError {
+    public void test_3_UpdateItem_2_Change_Metadata_Statements_EmptyStatements_SomeSections() throws IOException, BadRequestException {
 
         FormDataMultiPart multiPart = new FormDataMultiPart();
 
@@ -423,7 +427,7 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
     }
 
     @Test
-    public void test_3_UpdateItem_3_Change_Metadata_Statements_EmptyStatements_CompleteSection() throws IOException, UnprocessableError {
+    public void test_3_UpdateItem_3_Change_Metadata_Statements_EmptyStatements_CompleteSection() throws IOException, BadRequestException {
 
         final String CHANGED = "$1";
         FormDataMultiPart multiPart = new FormDataMultiPart();
@@ -445,48 +449,102 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
 
     }
 
+    @Test
+    public void test_4_UpdateItem_3_Change_Metadata_Statements_Add_MultipleStatement() throws Exception {
+
+        initCollectionWithProfile(getMultipleStatements());
+        initItemWithMultipleStatements();
+
+        String ADDED_TITLE = "addedMultipleText";
+        FormDataMultiPart multiPart = new FormDataMultiPart();
+
+        MetadataSetTO md = new MetadataSetTO();
+        md.setStatementUri(unboundedStatementId);
+        MetadataSetTO mdLast = getLast(itemTO.getMetadata());
+        md.setTypeUri(mdLast.getTypeUri());
+        md.setLabels(mdLast.getLabels());
+        TextTO text = new TextTO();
+        text.setText(ADDED_TITLE);
+        md.setValue(text);
+        itemTO.getMetadata().add(md);
+
+        multiPart.field("json", buildJSONFromObject(itemTO));
+
+        Response response = target(PATH_PREFIX).path("/" + itemId)
+                .register(authAsUser)
+                .register(MultiPartFeature.class)
+                .register(JacksonFeature.class)
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .put(Entity.entity(multiPart, multiPart.getMediaType()));
+
+        assertEquals(OK.getStatusCode(), response.getStatus());
+        ItemTO updItem = (ItemTO) response.readEntity(ItemWithFileTO.class);
+
+        assertThat(updItem.getMetadata(), hasSize(itemTO.getMetadata().size()));
+        assertThat(((TextTO) getLast(updItem.getMetadata()).getValue()).getText(),
+                equalTo(ADDED_TITLE));
+
+    }
+
+    @Test
+    public void test_4_UpdateItem_3_Change_Metadata_Statements_Add_NonMultipleStatement() throws Exception {
+
+        initCollectionWithProfile(getMultipleStatements());
+        initItemWithMultipleStatements();
+
+        String ADDED_TITLE = "addedNonMultipleText";
+        FormDataMultiPart multiPart = new FormDataMultiPart();
+
+        MetadataSetTO md = new MetadataSetTO();
+        MetadataSetTO mdFirst = getFirst(itemTO.getMetadata(), null);
+        md.setStatementUri(mdFirst.getStatementUri());
+        md.setTypeUri(mdFirst.getTypeUri());
+        md.setLabels(mdFirst.getLabels());
+        TextTO text = new TextTO();
+        text.setText(ADDED_TITLE);
+        md.setValue(text);
+        itemTO.getMetadata().add(md);
+
+        multiPart.field("json", buildJSONFromObject(itemTO));
+
+        Response response = target(PATH_PREFIX).path("/" + itemId)
+                .register(authAsUser)
+                .register(MultiPartFeature.class)
+                .register(JacksonFeature.class)
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .put(Entity.entity(multiPart, multiPart.getMediaType()));
+
+        assertEquals(BAD_REQUEST.getStatusCode(), response.getStatus());
+
+    }
 
 
 
-
-    private static void initCollectionWithProfile() throws Exception {
-
-        Collection<Statement> statements = new ArrayList<Statement>();
-        Statement st;
-        for (String type: new String[]{"text", "number", "conePerson" , "geolocation", "date", "license", "link", "publication"}) {
-            st = new Statement();
-            st.setType(URI.create("http://imeji.org/terms/metadata#" + type));
-            st.getLabels().add(new LocalizedString(type + "Label", "en"));
-            statements.add(st);
-        }
+    private static void initCollectionWithProfile(Collection<Statement> statements) throws Exception {
 
         MetadataProfile p = ImejiFactory.newProfile();
 
         p.setStatements(statements);
 
-        ProfileController pc = new ProfileController();
         MetadataProfile mp = pc.create(p, JenaUtil.testUser);
 
         profileId = ObjectHelper.getId(mp.getId());
-        
-		try {
-			Path jsonPath = Paths
-					.get("src/test/resources/rest/createCollection.json");
-			String jsonString = new String(Files.readAllBytes(jsonPath), "UTF-8");
-			
-			collectionTO= (CollectionTO) RestProcessUtils.buildTOFromJSON(jsonString, CollectionTO.class); 
-			
-	        CollectionController cc = new CollectionController();
-	        CollectionImeji ci = new CollectionImeji();
-	        ReverseTransferObjectFactory.transferCollection(collectionTO, ci, TRANSFER_MODE.CREATE);
-	        collectionId = ObjectHelper.getId(cc.create(ci, p, JenaUtil.testUser));
-			
-		} catch (Exception e) {
-			LOGGER.error("Cannot init Collection", e);
-		}
-	     
-    }
 
+		try {
+
+			collectionTO= (CollectionTO) RestProcessUtils.buildTOFromJSON(
+                    getStringFromPath("src/test/resources/rest/createCollection.json"), CollectionTO.class);
+
+            CollectionController cc = new CollectionController();
+            CollectionImeji ci = new CollectionImeji();
+            ReverseTransferObjectFactory.transferCollection(collectionTO, ci, TRANSFER_MODE.CREATE, JenaUtil.testUser);
+            collectionId = ObjectHelper.getId(cc.create(ci, p, JenaUtil.testUser, MetadataProfileCreationMethod.REFERENCE, null));
+
+        } catch (Exception e) {
+            LOGGER.error("Cannot init Collection", e);
+        }
+
+    }
 
     private static void initItemWithFullMedatada() throws Exception {
         ItemService s = new ItemService();
@@ -495,8 +553,7 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
         ((ItemWithFileTO)itemTO).setFile(new File("src/test/resources/storage/test.png"));
 
 
-        ProfileController pc = new ProfileController();
-        MetadataProfile mp = pc.retrieve(ObjectHelper.getURI(MetadataProfile.class, profileId), JenaUtil.testUser);
+        MetadataProfile mp = pc.retrieve(profileId, JenaUtil.testUser);
 
         //set real statementURIs
         for (Statement st: mp.getStatements()) {
@@ -507,6 +564,65 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
         itemTO = s.create(itemTO, JenaUtil.testUser);
         itemId = itemTO.getId();
 
+    }
+
+    private static void initItemWithMultipleStatements() throws Exception {
+        ItemService s = new ItemService();
+
+        itemTO = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(
+                getStringFromPath(STATIC_CONTEXT_REST + "/updateItemBasicMultipleStatements.json")
+                        //set real statementURI for multiple
+                        .replaceAll("___MULTIPLE_STATEMENT_URI___", unboundedStatementId.toString()),
+                ItemWithFileTO.class);
+        itemTO.setCollectionId(collectionId);
+        ((ItemWithFileTO) itemTO).setFile(new File("src/test/resources/storage/test.png"));
+
+        MetadataProfile mp = pc.retrieve(profileId, JenaUtil.testUser);
+
+        //set real statementURIs except multiple
+        for (Statement st: mp.getStatements()) {
+            if (!"unbounded".equals(st.getMaxOccurs())) {
+                final MetadataSetTO md = itemTO.filterMetadataByTypeURI(st.getType()).get(0);
+                md.setStatementUri(st.getId());
+            }
+        }
+
+        itemTO = s.create(itemTO, JenaUtil.testUser);
+        itemId = itemTO.getId();
+
+    }
+
+
+    private Collection<Statement> getMultipleStatements() {
+        Collection<Statement> statements = new ArrayList<>();
+        Statement st;
+        for (String type: new String[]{"text", "number"}) {
+            st = new Statement();
+            st.setType(URI.create("http://imeji.org/terms/metadata#" + type));
+            st.getLabels().add(new LocalizedString(type + "Label", "en"));
+            statements.add(st);
+        }
+
+        //Add multiple statement
+        st = new Statement();
+        st.setType(URI.create("http://imeji.org/terms/metadata#text"));
+        st.setMaxOccurs("unbounded");
+        st.getLabels().add(new LocalizedString("multipleText Label", "en"));
+        unboundedStatementId = st.getId();
+        statements.add(st);
+        return statements;
+    }
+
+    private static Collection<Statement> getBasicStatements() {
+        Collection<Statement> statements = new ArrayList<Statement>();
+        Statement st;
+        for (String type: new String[]{"text", "number", "conePerson" , "geolocation", "date", "license", "link", "publication"}) {
+            st = new Statement();
+            st.setType(URI.create("http://imeji.org/terms/metadata#" + type));
+            st.getLabels().add(new LocalizedString(type + "Label", "en"));
+            statements.add(st);
+        }
+        return statements;
     }
 
 

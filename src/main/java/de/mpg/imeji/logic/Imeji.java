@@ -3,6 +3,8 @@
  */
 package de.mpg.imeji.logic;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 import com.hp.hpl.jena.Jena;
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.query.ReadWrite;
@@ -51,6 +53,7 @@ public class Imeji {
     public static String profileModel;
     public static String statementModel;
     public static String counterModel = "http://imeji.org/counter";
+    public static String spaceModel;
     public static Dataset dataset;
     public static URI counterID = URI.create("http://imeji.org/counter/0");
 	public static User adminUser;
@@ -127,12 +130,14 @@ public class Imeji {
 		userModel = getModelName(User.class);
 		statementModel = getModelName(Statement.class);
 		profileModel = getModelName(MetadataProfile.class);
+		spaceModel = getModelName(Space.class);
 		initModel(albumModel);
 		initModel(collectionModel);
 		initModel(imageModel);
 		initModel(userModel);
 		initModel(statementModel);
 		initModel(profileModel);
+		initModel(spaceModel);
 		initModel(counterModel);
         logger.info("... models done!");
         initadminUser();
@@ -222,7 +227,7 @@ public class Imeji {
 		logger.info("dataset closed");
 		TDB.closedown();
 		logger.info("tdb closed");
-		TDBMaker.releaseLocation(new Location(Imeji.tdbPath));
+		TDBMaker.releaseLocation(Location.create(Imeji.tdbPath));
 		logger.info("location released");
 		logger.info("...done!");
 
@@ -265,5 +270,26 @@ public class Imeji {
 		} finally {
 			dataset.end();
 		}
+	}
+
+	/**
+	 * Returns true if checksum of uploaded files will be checked for duplicates within a single collection according to settings in properties.
+	 * If properties do not exist, checksum duplicate checking will be set as default 
+	 * 
+	 */
+	
+	public static boolean isValidateChecksumInCollection(){
+        String validateChecksum;
+		try {
+			validateChecksum = PropertyReader.getProperty("imeji.validate.checksum.in.collection");
+		} catch (Exception e) {
+			return true;
+		}
+        
+        if (isNullOrEmpty(validateChecksum))
+        	return true;
+        
+        return Boolean.valueOf(validateChecksum);
+
 	}
 }

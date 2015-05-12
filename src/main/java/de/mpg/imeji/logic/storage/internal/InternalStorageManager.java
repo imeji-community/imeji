@@ -36,10 +36,12 @@ import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.presentation.util.PropertyReader;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import java.io.*;
+import java.net.URI;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static de.mpg.imeji.logic.storage.util.StorageUtils.*;
@@ -149,7 +151,7 @@ public class InternalStorageManager implements Serializable {
 	 */
 	public void removeItem(InternalStorageItem item) {
 		if (item.getId() != null && !item.getId().trim().equals("")) {
-			removeFile(storagePath + item.getId());
+			removeFile(transformPathToUrl(storagePath + item.getId()));
 		}
 	}
 
@@ -177,7 +179,7 @@ public class InternalStorageManager implements Serializable {
 	 */
 	public String transformUrlToPath(String url) {
 		// String filename = getFileName(url, StringHelper.urlSeparator);
-		return url.replace(storageUrl, storagePath).replace(
+		return URI.create(url).getPath().replace(URI.create(storageUrl).getPath(), storagePath).replace(
 				StringHelper.urlSeparator, StringHelper.fileSeparator);
 		// .replace(filename, StringHelper.normalizeFilename(filename));
 	}

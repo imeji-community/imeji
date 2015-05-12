@@ -24,33 +24,46 @@ public class CollectionResource implements ImejiResource {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(CollectionResource.class);
 
-	@GET
+    @GET
+    @Path("/{id}/items")
+    @ApiOperation(value = "Get all items of collection by id.", notes = "The result set can be filtered by query (optional)")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response readAll(@Context HttpServletRequest req) {
-		return null;
+	public Response readItemsWithQuery(@Context HttpServletRequest req,
+                                 @PathParam("id") String id,
+                                 @QueryParam("q") String q
+    ) {
+        JSONResponse resp = readCollectionItems(req, id, q);
+        return buildJSONResponse(resp);
 	}
 
-	@GET
-	@Path("/{id}")
-	@ApiOperation(value = "Get collection by id")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response read(@Context HttpServletRequest req,
-			@PathParam("id") String id) {
-		JSONResponse resp = readCollection(req, id);
-		return buildJSONResponse(resp);
-	}
-	
+    
+    @GET  
+    @ApiOperation(value = "Get all collections user has access to.", notes ="With provided query parameter you filter only some collections")
+    @Produces(MediaType.APPLICATION_JSON)
+  	public Response readAll(@Context HttpServletRequest req,  @QueryParam("q") String q) {
+      	JSONResponse resp = readAllCollections(req, q);
+    	return buildJSONResponse(resp);
+      }
+
+    @GET
+    @Path("/{id}")
+    @ApiOperation(value = "Get collection by id")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response read(@Context HttpServletRequest req,
+                         @PathParam("id") String id) {
+        JSONResponse resp = readCollection(req, id);
+        return buildJSONResponse(resp);
+    }
+
 
 	@PUT
 	@Path("/{id}")
 	@ApiOperation(value = "Update collection by id")
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response update(
             @Context HttpServletRequest req,
-            @PathParam("id") String id,
-            @FormParam("json") String json) throws Exception {
-		JSONResponse resp = updateCollection(req, id, json);
+            @PathParam("id") String id) throws Exception {
+		JSONResponse resp = updateCollection(req, id);
 		return buildJSONResponse(resp);
 	}
 
@@ -70,7 +83,7 @@ public class CollectionResource implements ImejiResource {
 	@ApiOperation(value = "Discard a collection by id, with mandatory discard comment")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response withdraw(@Context HttpServletRequest req,
-			@FormParam("id") String id, @FormParam("discardComment") String discardComment) throws Exception {
+			@PathParam("id") String id, @FormParam("discardComment") String discardComment) throws Exception {
 		JSONResponse resp = withdrawCollection(req, id, discardComment);
 		return buildJSONResponse(resp);
 	}
@@ -100,5 +113,5 @@ public class CollectionResource implements ImejiResource {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
 }

@@ -22,7 +22,7 @@
 										contextUrl="#{Navigation.collectionUrl}" 
 										curMainMenu="#{currentMainMenu}" 
 										userHasAdminRights="#{Auth.admin}" 
-										userHasUploadRights="#{Auth.create(metadataBean.collection) and metadataContextBean.status != 'WITHDRAWN'}" 
+										userHasUploadRights="#{Auth.createContent(metadataBean.collection) and metadataContextBean.status != 'WITHDRAWN'}" 
 										hasContent="#{metadataBean.size > 0}" 
 										navBean="#{Navigation}" 
 										activeMenu="metadata" />
@@ -45,8 +45,8 @@
 	<ui:define name="metadataProfile">
 		<imjc:metadataProfile_view headline="#{lbl.collection_profile}" metadataBean="#{metadataBean}" metadataContextBean="#{metadataContextBean}" 
 		metadataProfile="#{metadataBean.profile}" 
-		profileUrl="#{metadataContextBean.profile}" 
-		exportUrl="#{Navigation.applicationUrl}export?format=xml&amp;type=profile&amp;q=prof==&quot;#{metadataContextBean.profile}&quot;" 
+		profileUrl="#{Navigation.profileUrl}#{metadataBean.profile.idString}" 
+		exportUrl="#{Navigation.applicationSpaceUrl}export?format=xml&amp;type=profile&amp;q=prof==&quot;#{metadataContextBean.profile}&quot;" 
 		editable="#{Auth.update(metadataBean.profile) and metadataContextBean.status != 'WITHDRAWN'}" 
 		editUrl="#{Navigation.profileUrl}#{metadataBean.profileId}/#{Navigation.editPath}?init=1&amp;col=#{metadataBean.id}"/>
 	</ui:define>

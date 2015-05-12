@@ -10,22 +10,22 @@
 	<!-- MediaDisplayContainer - START -->
 	<h:panelGroup layout="block" styleClass="imj_mediaDisplayContainer">
 		<ui:fragment rendered="#{!itemBean.videoFile and !itemBean.audioFile and !itemBean.swcFile}">
-			<h:outputLink id="lnkPicFullResolution" value="#{Navigation.applicationUrl}file/#{itemBean.encodedFileName}?id=#{itemBean.image.fullImageUrl}" target="_blank" rendered="#{!itemBean.viewInDigilib and !itemBean.viewInDataViewer}">
-				<h:graphicImage id="picWebResolution" title="#{itemBean.image.filename}" alt="#{itemBean.image.filename}" value="#{Navigation.applicationUrl}file/#{itemBean.encodedFileName}?id=#{itemBean.image.webImageUrl}" />
+			<h:outputLink id="lnkPicFullResolution" value="#{Navigation.fileUrl}#{itemBean.image.fullImageUrl}" target="_blank" rendered="#{!itemBean.viewInDigilib and !itemBean.viewInDataViewer}">
+				<h:graphicImage id="picWebResolution" title="#{itemBean.image.filename}" alt="#{itemBean.image.filename}" value="#{Navigation.fileUrl}#{itemBean.image.webImageUrl}" />
 			</h:outputLink>
-			<h:outputLink id="lnkPicInternalDigilib" value="#{Navigation.applicationUrl}digilibImage?fn=#{Property.internalStorageBase}/#{itemBean.image.storageId}/original/#{itemBean.itemStorageIdFilename}" target="_blank" rendered="#{itemBean.viewInDigilib}">
-				<h:graphicImage id="picWebResolutionInternalDigilib" title="#{itemBean.image.filename}" alt="#{itemBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{itemBean.image.webImageUrl}" />
+			<h:outputLink id="lnkPicInternalDigilib" value="#{Navigation.applicationSpaceUrl}digilibImage?fn=#{Property.internalStorageBase}/#{itemBean.image.storageId}/original/#{itemBean.itemStorageIdFilename}" target="_blank" rendered="#{itemBean.viewInDigilib}">
+				<h:graphicImage id="picWebResolutionInternalDigilib" title="#{itemBean.image.filename}" alt="#{itemBean.image.filename}" value="#{Navigation.fileUrl}#{itemBean.image.webImageUrl}" />
 			</h:outputLink>
 			<h:outputLink id="lnkPicInternalDataViewer" value="#{Navigation.applicationUrl}dataviewer?id=#{itemBean.image.idString}" target="_blank" rendered="#{itemBean.viewInDataViewer}">
-				<h:graphicImage title="#{itemBean.image.filename}" alt="#{itemBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{itemBean.image.webImageUrl}" />
+				<h:graphicImage title="#{itemBean.image.filename}" alt="#{itemBean.image.filename}" value="#{Navigation.fileUrl}#{itemBean.image.webImageUrl}" />
 			</h:outputLink>
 		</ui:fragment>
 		<ui:fragment rendered="#{itemBean.videoFile}">
-			<video id="imejiVideoPlayer" src="#{Navigation.applicationUrl}file?id=#{itemBean.image.fullImageUrl}" controls="controls" 
-			poster="#{Navigation.applicationUrl}file?id=#{itemBean.image.webImageUrl}" preload="auto" height="264"></video>
+			<video id="imejiVideoPlayer" src="#{Navigation.fileUrl}#{itemBean.image.fullImageUrl}" controls="controls" 
+			poster="#{itemBean.image.webImageUrl}" preload="auto" height="264"></video>
 		</ui:fragment>
 		<ui:fragment rendered="#{itemBean.audioFile}">
-			<audio id="imejiAudioPlayer" src="#{Navigation.applicationUrl}file?id=#{itemBean.image.fullImageUrl}" controls="controls" preload="auto">
+			<audio id="imejiAudioPlayer" src="#{Navigation.fileUrl}#{itemBean.image.fullImageUrl}" controls="controls" preload="auto">
 				<h:outputText value="#{lbl.playing} #{itemBean.image.filename} " />
 			</audio>
 		</ui:fragment>
@@ -53,11 +53,11 @@
 					<h:outputText value="#{lbl.view}"/>
 				</h:outputLink>
 				
-				<h:outputLink id="lnkOriginalData" value="#{Navigation.applicationUrl}file/#{itemBean.encodedFileName}?id=#{itemBean.image.fullImageUrl}" target="_blank" rendered="#{!itemBean.viewInDigilib and !itemBean.viewInDataViewer}" styleClass="imj_mediaEditPanelItem imj_submitButton">
+				<h:outputLink id="lnkOriginalData" value="#{itemBean.image.fullImageUrl}" target="_blank" rendered="#{!itemBean.viewInDigilib and !itemBean.viewInDataViewer}" styleClass="imj_mediaEditPanelItem imj_submitButton">
 					<h:outputText value="#{lbl.view}"/>
 				</h:outputLink>
 				
-				<h:outputLink styleClass="imj_mediaEditPanelItem imj_submitButton" id="lnkDownload" value="#{Navigation.applicationUrl}file/#{itemBean.encodedFileName}?id=#{itemBean.image.fullImageUrl}&amp;download=1" target="_blank">
+				<h:outputLink styleClass="imj_mediaEditPanelItem imj_submitButton" id="lnkDownload" value="#{itemBean.image.fullImageUrl}?download=1" target="_blank">
 					<h:outputText value="#{lbl.download}"/>
 				</h:outputLink>
 				
@@ -65,7 +65,7 @@
 					<h:outputText value="#{lbl.remove}"/>
 				</h:outputLink>
 				
-				<h:commandLink styleClass="imj_mediaEditPanelItem imj_removeButton" id="lnkPicRemoveFromAlbum" action="#{itemBean.removeFromAlbum}" rendered="#{itemBean.navigationString == 'pretty:albumItem' and Auth.create(itemBean.album)}">
+				<h:commandLink styleClass="imj_mediaEditPanelItem imj_removeButton" id="lnkPicRemoveFromAlbum" action="#{itemBean.removeFromAlbum}" rendered="#{itemBean.navigationString == 'pretty:albumItem' and SessionBean.activeAlbum != null and Auth.update(SessionBean.activeAlbum.id)}">
 					<h:outputText value="#{lbl.remove_from_album}"/>
 				</h:commandLink>
 				
@@ -265,6 +265,23 @@
 											<h:outputLink value="#{itemBean.collection.profile}/#{Navigation.editPath}?init=1&amp;col=#{itemBean.collection.idString}" title="#{lbl.create_now}">
 												<h:outputText value="#{lbl.create_now}"/>
 											</h:outputLink>
+											
+											<!--  CHANGE ME HERE  
+											
+												<h3 class="imj_headline imj_messageInfo">#{msg.error_collection_profile_not_exist}
+													<br/>
+													<h:outputLink value="#{Navigation.collectionUrl}#{itemBean.collectionId}/#{Navigation.editPath}?profileSelect=1" title="#{lbl.create_now_from_template}" rendered="#{logicBean.hasProfiles}">
+															<span class="imj_entryPagePreviewTiledListLinkArrow"> </span>
+															<h:outputText value="#{lbl.create_now_from_template}"/>
+													</h:outputLink>
+													<br/>
+													<h:outputLink value="#{Navigation.profileUrl}#{logicBean.profileId}/#{Navigation.editPath}?init=1&amp;col=#{logicBean.id}" title="#{lbl.create_now_new}">
+															<span class="imj_entryPagePreviewTiledListLinkArrow"> </span>
+															<h:outputText value="#{lbl.create_now}"/>
+													</h:outputLink>
+												</h3>
+											 -->
+											
 										</h3>
 									</ui:fragment>
 								</ui:repeat>

@@ -28,25 +28,21 @@
  */
 package de.mpg.imeji.logic.auth;
 
-import java.net.URI;
-import java.util.List;
-
 import de.mpg.imeji.exceptions.NotAllowedError;
+import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
-import de.mpg.imeji.logic.vo.Album;
-import de.mpg.imeji.logic.vo.Container;
-import de.mpg.imeji.logic.vo.Grant;
+import de.mpg.imeji.logic.search.SPARQLSearch;
+import de.mpg.imeji.logic.search.query.SPARQLQueries;
+import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Organization;
-import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.Properties.Status;
-import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.album.AlbumBean;
 import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.collection.CollectionListItem;
+
+import java.net.URI;
+import java.util.List;
 
 /**
  * Authorization rules for imeji objects (defined by their uri) for one
@@ -57,134 +53,6 @@ import de.mpg.imeji.presentation.collection.CollectionListItem;
  * @version $Revision$ $LastChangedDate$
  */
 public class Authorization {
-
-	/**
-	 * Return true if the {@link User} can create the object defined by the uri
-	 * 
-	 * @param user
-	 * @param uri
-	 * @return
-	 * @throws NotAllowedError
-	 */
-	public boolean create(User user, String uri) {
-		if (hasGrant(
-				user,
-				toGrant(uri,
-						getGrantTypeAccordingToObjectType(uri, GrantType.CREATE))))
-			return true;
-		return false;
-	}
-
-	/**
-	 * Return true if the {@link User} can read the object defined by the uri
-	 * 
-	 * @param user
-	 * @param uri
-	 * @return
-	 * @throws NotAllowedError
-	 */
-	public boolean read(User user, String uri) {
-		if (hasGrant(
-				user,
-				toGrant(uri,
-						getGrantTypeAccordingToObjectType(uri, GrantType.READ))))
-			return true;
-		return false;
-	}
-
-	/**
-	 * Return true if the {@link User} can update the object defined by the uri
-	 * 
-	 * @param user
-	 * @param uri
-	 * @return
-	 * @throws NotAllowedError
-	 */
-	public boolean update(User user, String uri) {
-		if (hasGrant(
-				user,
-				toGrant(uri,
-						getGrantTypeAccordingToObjectType(uri, GrantType.UPDATE))))
-			return true;
-		return false;
-	}
-
-	/**
-	 * Return true if the {@link User} can delete the object defined by the uri
-	 * 
-	 * @param user
-	 * @param uri
-	 * @return
-	 * @throws NotAllowedError
-	 */
-	public boolean delete(User user, String uri) {
-		if (hasGrant(
-				user,
-				toGrant(uri,
-						getGrantTypeAccordingToObjectType(uri, GrantType.DELETE))))
-			return true;
-		return false;
-	}
-
-	/**
-	 * Return true if the {@link User} can administrate the object defined by
-	 * the uri
-	 * 
-	 * @param user
-	 * @param uri
-	 * @return
-	 * @throws NotAllowedError
-	 */
-	public boolean administrate(User user, String uri) {
-		if (hasGrant(
-				user,
-				toGrant(uri,
-						getGrantTypeAccordingToObjectType(uri, GrantType.ADMIN))))
-			return true;
-		return false;
-	}
-
-	/**
-	 * Return true if the user can update the content of the object defined by
-	 * the uri
-	 * 
-	 * @param user
-	 * @param uri
-	 * @return
-	 */
-	public boolean updateContent(User user, String uri) {
-		if (hasGrant(user, toGrant(uri, GrantType.UPDATE_CONTENT)))
-			return true;
-		return false;
-	}
-
-	/**
-	 * Return true if the user can delete the content of the object defined by
-	 * the uri
-	 * 
-	 * @param user
-	 * @param uri
-	 * @return
-	 */
-	public boolean deleteContent(User user, String uri) {
-		if (hasGrant(user, toGrant(uri, GrantType.DELETE_CONTENT)))
-			return true;
-		return false;
-	}
-
-	/**
-	 * Return true if the user can administrate the content of the object
-	 * defined by the uri
-	 * 
-	 * @param user
-	 * @param uri
-	 * @return
-	 */
-	public boolean adminContent(User user, String uri) {
-		if (hasGrant(user, toGrant(uri, GrantType.ADMIN_CONTENT)))
-			return true;
-		return false;
-	}
 
 	/**
 	 * Return true if the {@link User} can create the object
@@ -198,26 +66,8 @@ public class Authorization {
 		if (hasGrant(
 				user,
 				toGrant(getRelevantURIForSecurity(obj, false, true),
-						GrantType.CREATE)))
-			return true;
-		return false;
-	}
-
-	/**
-	 * Check if the object can be created when the object is not existing
-	 * 
-	 * @param user
-	 * @param url
-	 * @return
-	 * @throws NotAllowedError
-	 */
-	public boolean createNew(User user, Object obj) {
-		if (user != null && obj instanceof Album)
-			return true;
-		if (hasGrant(
-				user,
-				toGrant(getRelevantURIForSecurity(obj, true, true),
-						GrantType.CREATE)))
+						GrantType.CREATE))
+				&& !isDiscarded(obj))
 			return true;
 		return false;
 	}
@@ -235,7 +85,7 @@ public class Authorization {
 			return true;
 		else if (hasGrant(
 				user,
-				toGrant(getRelevantURIForSecurity(obj, false, true),
+				toGrant(getRelevantURIForSecurity(obj, true, false),
 						getGrantTypeAccordingToObjectType(obj, GrantType.READ))))
 			return true;
 		else if (hasGrant(
@@ -257,7 +107,7 @@ public class Authorization {
 	public boolean update(User user, Object obj) {
 		if (hasGrant(
 				user,
-				toGrant(getRelevantURIForSecurity(obj, false, true),
+				toGrant(getRelevantURIForSecurity(obj, false, false),
 						getGrantTypeAccordingToObjectType(obj, GrantType.UPDATE))))
 			return true;
 		return false;
@@ -275,7 +125,7 @@ public class Authorization {
 		if (!isPublic(obj)
 				&& hasGrant(
 						user,
-						toGrant(getRelevantURIForSecurity(obj, false, true),
+						toGrant(getRelevantURIForSecurity(obj, false, false),
 								getGrantTypeAccordingToObjectType(obj,
 										GrantType.DELETE))))
 			return true;
@@ -293,8 +143,26 @@ public class Authorization {
 	public boolean administrate(User user, Object obj) {
 		if (hasGrant(
 				user,
-				toGrant(getRelevantURIForSecurity(obj, false, true),
+				toGrant(getRelevantURIForSecurity(obj, false, false),
 						getGrantTypeAccordingToObjectType(obj, GrantType.ADMIN))))
+			return true;
+		return false;
+	}
+
+	/**
+	 * Return true if the user can create content in the object. For instance,
+	 * upload an item in a collection, or add/remove an item to an album
+	 * 
+	 * @param user
+	 * @param obj
+	 * @return
+	 */
+	public boolean createContent(User user, Object obj) {
+		if (hasGrant(
+				user,
+				toGrant(getRelevantURIForSecurity(obj, false, false),
+						GrantType.CREATE))
+				&& !isDiscarded(obj))
 			return true;
 		return false;
 	}
@@ -309,7 +177,7 @@ public class Authorization {
 	public boolean updateContent(User user, Object obj) {
 		if (hasGrant(
 				user,
-				toGrant(getRelevantURIForSecurity(obj, false, true),
+				toGrant(getRelevantURIForSecurity(obj, false, false),
 						GrantType.UPDATE_CONTENT)))
 			return true;
 		return false;
@@ -326,7 +194,7 @@ public class Authorization {
 		if (!isPublic(obj)
 				&& hasGrant(
 						user,
-						toGrant(getRelevantURIForSecurity(obj, false, true),
+						toGrant(getRelevantURIForSecurity(obj, false, false),
 								GrantType.DELETE_CONTENT)))
 			return true;
 		return AuthUtil.isSysAdmin(user);
@@ -342,7 +210,7 @@ public class Authorization {
 	public boolean adminContent(User user, Object obj) {
 		if (hasGrant(
 				user,
-				toGrant(getRelevantURIForSecurity(obj, false, true),
+				toGrant(getRelevantURIForSecurity(obj, false, false),
 						GrantType.ADMIN_CONTENT)))
 			return true;
 		return false;
@@ -382,27 +250,31 @@ public class Authorization {
 	 * Return the uri which is relevant for the {@link Authorization}
 	 * 
 	 * @param obj
+	 * @param hasItemGrant
+	 * @param getContext
 	 * @return
 	 */
-	private String getRelevantURIForSecurity(Object obj, boolean createNew,
-			boolean getContainer) {
+	public String getRelevantURIForSecurity(Object obj, boolean hasItemGrant,
+			boolean getContext) {
 		if (obj instanceof Item)
-			return getContainer ? ((Item) obj).getCollection().toString()
-					: ((Item) obj).getId().toString();
+			return hasItemGrant ? ((Item) obj).getId().toString()
+					: ((Item) obj).getCollection().toString();
 		else if (obj instanceof Container)
-			return createNew ? AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI
+			return getContext ? AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI
 					: ((Container) obj).getId().toString();
 		else if (obj instanceof CollectionListItem)
 			return ((CollectionListItem) obj).getUri().toString();
 		else if (obj instanceof AlbumBean)
 			return ((AlbumBean) obj).getAlbum().getId().toString();
 		else if (obj instanceof MetadataProfile)
-			return createNew ? AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI
+			return getContext ? AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI
 					: ((MetadataProfile) obj).getId().toString();
 		else if (obj instanceof User)
 			return ((User) obj).getId().toString();
 		else if (obj instanceof URI)
 			return obj.toString();
+		else if (obj instanceof String)
+			return (String) obj;
 		return PropertyBean.baseURI();
 	}
 
@@ -454,12 +326,36 @@ public class Authorization {
 			return isPublicStatus(((Item) obj).getStatus());
 		else if (obj instanceof Container)
 			return isPublicStatus(((Container) obj).getStatus());
+		else if (obj instanceof Space)
+			return isPublicStatus(((Space) obj).getStatus());
 		else if (obj instanceof MetadataProfile)
 			return isPublicStatus(((MetadataProfile) obj).getStatus());
 		else if (obj instanceof Person)
 			return true;
 		else if (obj instanceof Organization)
 			return true;
+		return false;
+	}
+
+	/**
+	 * True if an object is discarded
+	 * 
+	 * @param obj
+	 * @return
+	 */
+	private boolean isDiscarded(Object obj) {
+		if (obj instanceof Item)
+			return isDiscardedStatus(((Item) obj).getStatus());
+		else if (obj instanceof Container)
+			return isDiscardedStatus(((Container) obj).getStatus());
+		else if (obj instanceof Space)
+			return isDiscardedStatus(((Space) obj).getStatus());
+		else if (obj instanceof MetadataProfile)
+			return isDiscardedStatus(((MetadataProfile) obj).getStatus());
+		else if (obj instanceof Person)
+			return false;
+		else if (obj instanceof Organization)
+			return false;
 		return false;
 	}
 
@@ -473,5 +369,15 @@ public class Authorization {
 	private boolean isPublicStatus(Status status) {
 		return status.equals(Status.RELEASED)
 				|| status.equals(Status.WITHDRAWN);
+	}
+
+	/**
+	 * True if the {@link Status} is discarded status
+	 * 
+	 * @param status
+	 * @return
+	 */
+	private boolean isDiscardedStatus(Status status) {
+		return status.equals(Status.WITHDRAWN);
 	}
 }

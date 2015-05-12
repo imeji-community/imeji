@@ -40,7 +40,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.apache.tika.Tika;
 import org.apache.tika.mime.MimeType;
-import org.apache.tika.mime.MimeTypeException;
 import org.apache.tika.mime.MimeTypes;
 import org.apache.tools.ant.taskdefs.Get;
 
@@ -62,6 +61,7 @@ public class StorageUtils {
 	 * The generic mime-type, when no mime-type is known
 	 */
 	public final static String DEFAULT_MIME_TYPE = "application/octet-stream";
+	public final static String BAD_FORMAT="bad-extension/other";
 
 	/**
 	 * Transform an {@link InputStream} to a {@link Byte} array
@@ -163,7 +163,8 @@ public class StorageUtils {
 	 * @param url
 	 * @return
 	 */
-	public static GetMethod newGetMethod(HttpClient client, String url) throws ImejiException {
+	public static GetMethod newGetMethod(HttpClient client, String url)
+			throws ImejiException {
 		GetMethod method = new GetMethod(url);
 		method.addRequestHeader("Cache-Control", "public");
 		method.setRequestHeader("Connection", "close");
@@ -193,19 +194,18 @@ public class StorageUtils {
 			MimeType type = allTypes.forName(t.detect(file));
 			if (!type.getExtensions().isEmpty()) {
 				return type.getExtensions().get(0).replace(".", "");
-			}
-			else
-			{
-				String calculatedExtension =  FilenameUtils.getExtension(file.getName());
-				if (!isNullOrEmpty(calculatedExtension)){
+			} else {
+				String calculatedExtension = FilenameUtils.getExtension(file
+						.getName());
+				if (!isNullOrEmpty(calculatedExtension)) {
 					return calculatedExtension;
 				}
 			}
 		} catch (Exception e) {
 			logger.error("Error guessing file format", e);
 		}
-		
-		return "bad-extension/other";
+
+		return BAD_FORMAT;
 	}
 
 	/**
@@ -305,18 +305,19 @@ public class StorageUtils {
 			return "audio/x-wav";
 		} else if ("wma".equals(extension)) {
 			return "audio/x-ms-wma";
+		} else if ("cmd".equals(extension)) {
+			return "application/cmd";
 		}
-		
+
 		Tika t = new Tika();
-		String calculatedMimeType =	t.detect("name."+extension);
-			
+		String calculatedMimeType = t.detect("name." + extension);
+
 		if ("".equals(calculatedMimeType)) {
-				return "application/octet-stream";
-		}
-		else {
+			return "application/octet-stream";
+		} else {
 			return calculatedMimeType;
 		}
-			
+
 	}
 
 	/**
@@ -324,7 +325,8 @@ public class StorageUtils {
 	 *
 	 * @return update url
 	 */
-	public static String replaceExtension(String url, String newExt) throws IOException {
+	public static String replaceExtension(String url, String newExt)
+			throws IOException {
 		return FilenameUtils.removeExtension(url) + "." + newExt;
 	}
 
@@ -344,14 +346,14 @@ public class StorageUtils {
 		} catch (IOException e) {
 			throw new UnprocessableError(
 					"Error calculating the cheksum of the file: ");
-		} 
-		
-//		finally {
-//			if (fis != null)
-//				fis.close();
-//		}
-//		
-		
+		}
+
+		// finally {
+		// if (fis != null)
+		// fis.close();
+		// }
+		//
+
 	}
 
 	/**

@@ -1,5 +1,6 @@
 package de.mpg.imeji.rest.process;
 
+import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.logic.vo.predefinedMetadata.*;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
@@ -64,7 +65,7 @@ public class TransferObjectFactory {
 		//TODO: versionOf
 
 		//in output jsen reference to mdprofile
-		to.getProfile().setProfileId(CommonUtils.extractIDFromURI(vo.getProfile()));
+		to.getProfile().setId(CommonUtils.extractIDFromURI(vo.getProfile()));
 		to.getProfile().setMethod("");
 
 		for(Person p : vo.getMetadata().getPersons())
@@ -130,22 +131,25 @@ public class TransferObjectFactory {
 		//set createdBy
 		UserService ucrud = new UserService();
 		User u = new User();
+		String completeName = null;
+		URI userId = vo.getCreatedBy();
 		try {
-			u = ucrud.read(vo.getCreatedBy());
+			completeName = ucrud.getCompleteName(vo.getCreatedBy());
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			LOGGER.info("Something nasty happened during properties transfer", e);
+			LOGGER.info("Cannot read createdBy user: " + userId, e);
 		}
-		to.setCreatedBy(new PersonTOBasic(u.getPerson().getCompleteName(), CommonUtils.extractIDFromURI(u.getPerson().getId())));
+		//set createdBy
+		to.setCreatedBy(new PersonTOBasic(completeName,  ObjectHelper.getId(userId)));
+		if (!vo.getModifiedBy().equals(vo.getCreatedBy())) {
+			userId = vo.getModifiedBy();
+			try {
+				completeName = ucrud.getCompleteName(vo.getModifiedBy());
+			} catch (Exception e) {
+				LOGGER.info("Cannot read modifiedBy user: " + userId, e);
+			}
+		}
 		//set modifiedBy
-		try {
-			u = ucrud.read(vo.getModifiedBy());
-
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			LOGGER.info("Something nasty happened during reading from modified date VO", e);
-		}
-		to.setModifiedBy(new PersonTOBasic(u.getPerson().getCompleteName(), CommonUtils.extractIDFromURI(u.getPerson().getId())));
+		to.setModifiedBy(new PersonTOBasic(completeName, ObjectHelper.getId(userId)));
 		//set createdDate, modifiedDate, versionDate
 		to.setCreatedDate(CommonUtils.formatDate(vo.getCreated().getTime()));
 		to.setModifiedDate(CommonUtils.formatDate(vo.getModified().getTime()));

@@ -1,9 +1,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:composite="http://java.sun.com/jsf/composite"
-	xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs">
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:h="http://java.sun.com/jsf/html"
+	  xmlns:composite="http://java.sun.com/jsf/composite"
+		>
 	<composite:interface>
 		<composite:attribute name="fSession" required="false"/>
 		<composite:attribute name="facetBean" required="false"/>
@@ -21,7 +20,7 @@
 				</h:outputLink>
 			</ui:fragment>
 			
-			<ui:fragment rendered="#{cc.attrs.currentMainMenu == 'album'}">
+			<ui:fragment rendered="#{cc.attrs.currentMainMenu == 'album' and SessionBean.activeAlbum!=null}">
 				<h:outputLink value="#{cc.attrs.browseToAllUrl}" title="#{lbl.album_back_to_images}">
 					<h:outputText value="#{lbl.album_back_to_images}"/>
 				</h:outputLink>
@@ -32,7 +31,6 @@
 					<h:outputText value="#{lbl.collection_back_to_images}"/>
 				</h:outputLink>
 			</ui:fragment>
-			
 			<ui:fragment rendered="#{cc.attrs.showSelectMenu}">
 				<h:form id="preListForm">
 					
@@ -40,12 +38,14 @@
 						<h:outputText value="/" styleClass="imj_facetSeparator"/>
 						<h:outputText value="#{filter.internationalizedLabel}"/>
 						<h:outputText value="(#{filter.notDefineType})" rendered="#{filter.notDefine}"/>
-						<h:outputLink styleClass="imj_removeFacetButton" value="#{Navigation.browseUrl}?q=#{filter.removeQuery}" rendered="#{cc.attrs.facetBean.navigationString == 'pretty:browse'}">
+						<h:outputLink styleClass="imj_removeFacetButton" value="#{Navigation.browseUrl}?q=#{filter.removeQuery}" rendered="#{cc.attrs.facetBean.navigationString == SessionBean.getPrettySpacePage('pretty:browse')}">
 							<h:outputText value="[x]"/>
 						</h:outputLink>
-						<h:outputLink styleClass="imj_removeFacetButton" value="#{Navigation.collectionUrl}#{cc.attrs.facetBean.id}/#{Navigation.browsePath}?q=#{filter.removeQuery}" rendered="#{cc.attrs.facetBean.navigationString != 'pretty:browse' and cc.attrs.facetBean.collection != null}">
-							<h:outputText value="[x]"/>
-						</h:outputLink>
+						<ui:fragment rendered="#{cc.attrs.facetBean.navigationString != SessionBean.getPrettySpacePage('pretty:browse')}">
+							<h:outputLink styleClass="imj_removeFacetButton" value="#{Navigation.collectionUrl}#{cc.attrs.facetBean.id}/#{Navigation.browsePath}?q=#{filter.removeQuery}">
+								<h:outputText value="[x]"/>
+							</h:outputLink>
+						</ui:fragment>
 					</ui:repeat>
 					
 					<ui:fragment rendered="#{!Auth.loggedIn}">
@@ -90,7 +90,7 @@
 									
 									<ui:fragment rendered="#{cc.attrs.facetBean.navigationString == 'pretty:collectionBrowse' and cc.attrs.facetBean.collection != null and Auth.updateContent(cc.attrs.facetBean.collection) and cc.attrs.facetBean.profile.statements.size() > 0}">
 										<li>
-											<h:outputLink value="#{Navigation.applicationUrl}edit?type=all&amp;c=#{cc.attrs.facetBean.collection.id}&amp;q=#{cc.attrs.facetBean.query}" id="lnkSelectEdit2">
+											<h:outputLink value="#{Navigation.applicationSpaceUrl}edit?type=all&amp;c=#{cc.attrs.facetBean.collection.id}&amp;q=#{cc.attrs.facetBean.query}" id="lnkSelectEdit2">
 												<h:outputText value="#{lbl.edit_all}"/>
 											</h:outputLink>
 										</li>
@@ -112,7 +112,7 @@
 									</ui:fragment>
 									
 									<!-- Remove all from album -->
-									<ui:fragment rendered="#{cc.attrs.facetBean.navigationString == 'pretty:albumBrowse' and Auth.create(cc.attrs.facetBean.album)}">
+									<ui:fragment rendered="#{cc.attrs.facetBean.navigationString == 'pretty:albumBrowse' and Auth.createContent(cc.attrs.facetBean.album)}">
 										<li>
 											<h:commandLink value="#{lbl.remove_from_album_all}" action="#{cc.attrs.facetBean.removeAllFromAlbum}">
 											</h:commandLink>
@@ -159,7 +159,7 @@
 									<ui:fragment rendered="#{cc.attrs.facetBean.navigationString == 'pretty:collectionBrowse' and cc.attrs.facetBean.collection != null and Auth.updateContent(cc.attrs.facetBean.collection) and cc.attrs.facetBean.profile.statements.size() > 0}">
 										<li class="imj_overlayMenuListItem">
 											<!-- Edit selected -->
-											<h:outputLink value="#{Navigation.applicationUrl}edit?type=selected&amp;c=#{cc.attrs.facetBean.collection.id}&amp;q=#{cc.attrs.facetBean.query}" id="lnkSelectEdit">
+											<h:outputLink value="#{Navigation.applicationSpaceUrl}edit?type=selected&amp;c=#{cc.attrs.facetBean.collection.id}&amp;q=#{cc.attrs.facetBean.query}" id="lnkSelectEdit">
 												<h:outputText value="#{lbl.edit_selected}"/>
 											</h:outputLink>
 										</li>
@@ -179,7 +179,7 @@
 										</li>
 									</ui:fragment>
 									
-									<ui:fragment rendered="#{cc.attrs.facetBean.navigationString == 'pretty:albumBrowse' and Auth.create(cc.attrs.facetBean.album)}">
+									<ui:fragment rendered="#{cc.attrs.facetBean.navigationString == 'pretty:albumBrowse' and Auth.createContent(cc.attrs.facetBean.album)}">
 										<li class="imj_overlayMenuListItem">
 											<!-- Remove selected from album -->
 											<h:commandLink value="#{lbl.remove_from_album}" action="#{cc.attrs.facetBean.removeFromAlbum}"/>

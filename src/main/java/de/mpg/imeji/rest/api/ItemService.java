@@ -1,8 +1,9 @@
 package de.mpg.imeji.rest.api;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Item;
@@ -14,6 +15,7 @@ import de.mpg.imeji.rest.to.ItemWithFileTO;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ObjectUtils;
 
+import java.io.IOException;
 import java.util.List;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
@@ -33,7 +35,6 @@ public class ItemService implements API<ItemTO> {
 			// transfer TO into item
 			Item item = new Item();
 			
-			
 			ReverseTransferObjectFactory.transferItem(to, item, u, CREATE);
 			
 			item = controller.create(item, ((ItemWithFileTO) to).getFile(), filename, u, ((ItemWithFileTO) to).getFetchUrl(), ((ItemWithFileTO) to).getReferenceUrl());
@@ -50,11 +51,23 @@ public class ItemService implements API<ItemTO> {
 
 	@Override
 	public ItemTO read(String id, User u) throws ImejiException {
-
 		ItemTO to = new ItemTO();
 		Item item = controller.retrieve(ObjectHelper.getURI(Item.class, id), u);
 		TransferObjectFactory.transferItem(item, to);
 		return to;
+	}
+
+	public List<ItemTO> readItems(User u, String q) throws ImejiException, IOException {
+		return Lists.transform(new ItemController().retrieve(u, q, null),
+				new Function<Item, ItemTO>() {
+					@Override
+					public ItemTO apply(Item vo) {
+						ItemTO to = new ItemTO();
+						TransferObjectFactory.transferItem(vo, to);
+						return to;
+					}
+				}
+		);
 	}
 
 	@Override
@@ -68,7 +81,7 @@ public class ItemService implements API<ItemTO> {
 			if(tof.getFile() != null){
 				item = controller.updateFile(item, tof.getFile(), u);
 			}
-			else if (url != null) {
+			else if (!isNullOrEmpty(url)) {
 				item = controller.updateWithExternalFile(item,
 						getExternalFileUrl(tof), to.getFilename(),
 						downloadFile(tof), u);

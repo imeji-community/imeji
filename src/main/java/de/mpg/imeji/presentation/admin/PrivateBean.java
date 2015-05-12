@@ -1,21 +1,5 @@
 package de.mpg.imeji.presentation.admin;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.controller.CollectionController;
@@ -23,11 +7,7 @@ import de.mpg.imeji.logic.controller.GrantController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.vo.SearchIndex;
-import de.mpg.imeji.logic.search.vo.SearchOperators;
-import de.mpg.imeji.logic.search.vo.SearchPair;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
-import de.mpg.imeji.logic.search.vo.SortCriterion;
+import de.mpg.imeji.logic.search.vo.*;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.User;
@@ -36,6 +16,20 @@ import de.mpg.imeji.presentation.collection.CollectionListItem;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
+import org.apache.log4j.Logger;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @ManagedBean(name = "PrivateBean")
 @SessionScoped
@@ -71,7 +65,7 @@ public class PrivateBean extends SuperContainerBean<CollectionListItem> {
 
 	@Override
 	public String getNavigationString() {
-		return "pretty:privatePage";
+		return sb.getPrettySpacePage("pretty:privatePage");
 	}
 
 	@Override
@@ -80,14 +74,14 @@ public class PrivateBean extends SuperContainerBean<CollectionListItem> {
 		CollectionController cc = new CollectionController();
 		SearchQuery searchQuery = new SearchQuery();
 		SearchPair sp = new SearchPair(
-				SPARQLSearch.getIndex(SearchIndex.names.user),
+				SPARQLSearch.getIndex(SearchIndex.IndexNames.user),
 				SearchOperators.EQUALS, user.getId().toString());
 		searchQuery.addPair(sp);
 		SortCriterion sortCriterion = new SortCriterion();
 		sortCriterion.setIndex(SPARQLSearch.getIndex("user"));
 		sortCriterion.setSortOrder(SortOrder.valueOf("DESCENDING"));
 		SearchResult results = cc.search(searchQuery, sortCriterion, limit,
-				offset, user);
+				offset, user, sb.getSpaceId());
 		Collection<CollectionImeji> collections = new ArrayList<CollectionImeji>();
 		collections = cc
 				.retrieveLazy(results.getResults(), limit, offset, user);
@@ -211,5 +205,10 @@ public class PrivateBean extends SuperContainerBean<CollectionListItem> {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	@Override
+	public String getType() {
+		return PAGINATOR_TYPE.PRIVATE.name();
 	}
 }

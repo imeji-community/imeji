@@ -146,12 +146,14 @@ public class ItemServiceTest {
 	@Test
 	public void updateItemTest() throws Exception {
 
+		//make sure other tests did not create item with same file in the collection, due to checksum check
+		initCollection();
 		ItemService is = new ItemService();
 		ItemTO itemTo = is.create(itemTO, JenaUtil.testUser);
 		
 		
 		// update item with new file
-		String uploadFilePath = "src/test/resources/storage/test.jpg";
+		String uploadFilePath = "src/test/resources/storage/test1.jpg";
 		File uploadFile = new File(uploadFilePath);
 
 		itemTO.setId(itemTo.getId());
@@ -185,6 +187,8 @@ public class ItemServiceTest {
 		assertThat(itemTo.getWebResolutionUrlUrl().toString(), endsWith(ItemController.NO_THUMBNAIL_FILE_NAME));
 
 		//update item with new file and new fetch url, the new file should be  updated, not though the fetch url
+		 uploadFilePath = "src/test/resources/storage/test2.jpg";
+		 uploadFile = new File(uploadFilePath);
 		itemTO.setFile(uploadFile);
 		itemTO.setFetchUrl(url);
 		itemTo = is.update(itemTO, JenaUtil.testUser);
@@ -197,6 +201,9 @@ public class ItemServiceTest {
 //		assertThat("the web image url does not updated", itemTo.getThumbnailUrl().toString(), is(not("NO_WEBIMAGE_URL")));
 		
 		//update item with new file and new referenced url, the new file should be  updated, not though the referenced url 
+		 uploadFilePath = "src/test/resources/storage/test3.jpg";
+		 uploadFile = new File(uploadFilePath);
+
 		itemTO.setFile(uploadFile);
 		itemTO.setReferenceUrl(url);
 		itemTo = is.update(itemTO, JenaUtil.testUser);

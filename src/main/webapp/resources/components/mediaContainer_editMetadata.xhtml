@@ -17,117 +17,216 @@
 
 	<h:panelGroup layout="block" class="imj_mediaContainerEditMD">
 		<h:form id="mediaContainerForm">
+		
 			<div class="imj_headline">
-				<h3>
-					<h:outputText value="#{cc.attrs.headline}" />
-				</h3>
+				<br/>
 			</div>
 			<div class="imj_descriptionArea">
-				<!-- Title -->
-				<div class="imj_metadataSet">
-					<label class="imj_metadataLabel"> <h:outputText
-							value="#{lbl.title} *" /> <span class="imj_noDisplay">: </span>
-					</label>
-					<h:inputText id="inputTitleText" styleClass="imj_metadataValue"
-						value="#{cc.attrs.formularContextBean.metadata.title}" />
-				</div>
+				 <c:if test="#{cc.attrs.formularBean.albumType or cc.attrs.formularBean.collectionType and !cc.attrs.formularBean.profileSelectMode}"> 
+				 <!-- Title -->
+					<div class="imj_metadataSet">
+						<label class="imj_metadataLabel"> <h:outputText
+								value="#{lbl.title} *" /> <span class="imj_noDisplay">: </span>
+						</label>
+						<h:inputText id="inputTitleText" styleClass="imj_metadataValue"
+							value="#{cc.attrs.formularContextBean.metadata.title}" />
+					</div>
 
-				<!-- Description -->
-				<div class="imj_metadataSet">
-					<label class="imj_metadataLabel">
-                        <h:outputText value="#{lbl.description}" /> <span class="imj_noDisplay">:
-					</span>
-					</label>
-					<h:inputTextarea id="inputDescription"
-						styleClass="imj_metadataValue"
-						value="#{cc.attrs.formularContextBean.metadata.description}" />
-				</div>
-				
-				<h:outputText value="* #{lbl.mandatory}" />
-				
-				<!-- Author data -->
-				<ui:repeat id="persons" var="creator" value="#{cc.attrs.formularContextBean.metadata.persons}" varStatus="indexA">
-					<h:panelGroup layout="block" styleClass="imj_authorMetadataSet">
+
+					<!-- Description -->
+					<div class="imj_metadataSet">
+						<label class="imj_metadataLabel">
+							<h:outputText value="#{lbl.description}" /> <span class="imj_noDisplay">:
+						</span>
+						</label>
+						<h:inputTextarea id="inputDescription"
+							styleClass="imj_metadataValue"
+							value="#{cc.attrs.formularContextBean.metadata.description}" />
+					</div>
+					
+					<h:outputText value="* #{lbl.mandatory}" />
+					
+					<!-- Author data -->
+					<ui:repeat id="persons" var="creator" value="#{cc.attrs.formularContextBean.metadata.persons}" varStatus="indexA">
+						<h:panelGroup layout="block" styleClass="imj_authorMetadataSet">
+							<div class="imj_sectionHeadline">
+								<h4> <!-- TODO NB: sectionHeadlines please not additionally style with h4, this should be in the class definition -->
+									<!-- Add/Remove Author buttons -->
+									<span class="imj_inlineButtonGroup"> 
+										<h:commandButton styleClass="imj_buttonAdd_16" title="#{lbl.add_author}" action="#{cc.attrs.formularBean.addAuthor(indexA.index)}">
+											<f:ajax execute="@form" render="@form" />
+										</h:commandButton>
+										<h:commandButton styleClass="imj_buttonRemove_16" title="#{lbl.remove_author}" action="#{cc.attrs.formularBean.removeAuthor(indexA.index)}">
+											<f:ajax execute="@form" render="@form" />
+										</h:commandButton>
+									</span>
+									<h:outputText value=" #{lbl.authors}" />
+									<span class="imj_noDisplay">: </span>
+								</h4>
+							</div>
+							
+							<!-- The user of the person -->
+							<imjc:person id="collectionAuthor" person="#{creator}" bean="#{cc.attrs.formularBean}" position="#{indexA.index}" />
+
+						</h:panelGroup>
+					</ui:repeat>
+
+
+				<!-- Notifications -->
+				<ui:fragment rendered="#{cc.attrs.formularBean.collectionType}">                
+					<h:panelGroup layout="block" styleClass="imj_collectionNotifications">
 						<div class="imj_sectionHeadline">
 							<h4>
-								<!-- Add/Remove Author buttons -->
-								<span class="imj_inlineButtonGroup"> 
-									<h:commandButton styleClass="imj_buttonAdd_16" title="#{lbl.add_author}" action="#{cc.attrs.formularBean.addAuthor(indexA.index)}">
-										<f:ajax execute="@this" render="@form" />
-									</h:commandButton>
-									<h:commandButton styleClass="imj_buttonRemove_16" title="#{lbl.remove_author}" action="#{cc.attrs.formularBean.removeAuthor(indexA.index)}">
-										<f:ajax execute="@this" render="@form" />
-									</h:commandButton>
-								</span>
-								<h:outputText value=" #{lbl.author}" />
+								<h:outputText value=" #{lbl.notifications}" />
 								<span class="imj_noDisplay">: </span>
 							</h4>
 						</div>
-						
-						<!-- The user of the person -->
-						<imjc:person id="collectionAuthor" person="#{creator}" bean="#{cc.attrs.formularBean}" position="#{indexA.index}" />
-
+						<h:selectBooleanCheckbox  id="notificationCheckBox" value="#{cc.attrs.formularBean.sendEmailNotification}" />
+							<h:outputLabel styleClass="imj_metadataLabel" for="notificationCheckBox">
+								<h:outputText value="#{lbl.send_email_on_download}"/>
+								<span class="imj_noDisplay">: </span>
+						</h:outputLabel>
 					</h:panelGroup>
-				</ui:repeat>
+				</ui:fragment>
+				<!-- Logo upload -->
+				
+				<ui:fragment rendered="#{cc.attrs.formularBean.id != null}">
+					<h:panelGroup layout="block" styleClass="imj_collectionLogoUpload">
+						<div class="imj_sectionHeadline">
+							<h4>
+								<h:outputText value=" #{lbl.logo}" />
+								<span class="imj_noDisplay">: </span>
+							</h4>
+						</div>
+						<div class="imj_metadataSet">
+									<div class="imj_metadataValue">
+										<div id="uploader" class="imj_fileUploadContainer imj_singleUpload">
+											<div id="filelist">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
+							
+											<div id="container">
+											    <a id="pickfiles" href="javascript:;">[#{lbl.uploadLogo}]</a>
+											</div>
+						
+											<script type="text/javascript" src="#{Navigation.applicationUrl}resources/plupload/2.1.2/js/plupload.full.min.js"></script>
+											<script type="text/javascript">
+												var uploader = new plupload.Uploader({
+													runtimes : 'html5,flash,silverlight,html4',
+													browse_button : 'pickfiles', // you can pass in id...
+													container: document.getElementById('container'), // ... or DOM Element itself
+													url : location.pathname  + "?start=1",
+													max_file_size : '#{Configuration.uploadMaxFileSize}kb',
+													multi_selection : false,
+													init: {
+														PostInit: function() {
+															document.getElementById('filelist').innerHTML = '';					
+														},
+														
+														FilesAdded: function(up, files) {
+															
+															plupload.each(files, function(file) {
+																if(up.files.length > 1)
+																{
+																	up.removeFile(file);
+																}
+																
+																document.getElementById('filelist').innerHTML = '<div id="' + file.id + '">'+ file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
+															});
+															uploader.start();
+															
+														},
+														
+														UploadProgress: function(up, file) {
+															document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+														},
+  													 StateChanged: function(up) {
+																// Called when the state of the queue is changed
+																if( up.state == plupload.STOPPED) 
+																	report();
+														},
+													}
+												});
+												
+												uploader.init();													
 
-
+												function report(){
+													//window.location.href = location.pathname ;
+												}
+											</script>
+										</div>
+									</div>
+								</div>
+								<ui:fragment rendered= "#{cc.attrs.formularBean.container.logoUrl!=null}">
+									<div class="imj_metadataValue">
+										<img alt="Logo" src="#{cc.attrs.formularBean.container.logoUrl}" height="50em" class="imj_community_logo"/>
+										<span class="imj_inlineButtonGroup"> 
+											<h:outputText value="#{lbl.removeLogo}"/>
+											<h:commandButton styleClass="imj_buttonRemove_16" title="#{lbl.removeLogo}" action="#{cc.attrs.formularBean.removeContainerLogo}">
+													<f:ajax execute="@form" render="@form" />
+										    </h:commandButton>
+									    </span>
+									</div>
+								</ui:fragment>
+								
+								
+							</h:panelGroup>
+						</ui:fragment>
+				<br/>
+		</c:if> <!-- END profileSelectMode, basicInfoAria -->
 
 		<!-- START NEW FEATURE -->
-			<c:if test="#{cc.attrs.formularBean.getClass() == 'class de.mpg.imeji.presentation.collection.CreateCollectionBean'}">
-				<h:panelGroup layout="block" id="previewArea" >
-					<div class="imj_metadataSet" id="newProfileName">
-						<h:outputLabel styleClass="imj_metadataLabel" for="mdProfileTitle">
-							<h:outputText value="#{lbl.profile_name}"/>
-							<span class="imj_noDisplay">: </span>
-						</h:outputLabel>
-						<h:inputText value="#{cc.attrs.formularBean.profile.title}" id="mdProfileTitle"  styleClass="imj_metadataValue"/>
-					</div>
+			<c:if test="#{cc.attrs.formularBean.collectionType}">
+				<h:panelGroup layout="block" id="previewArea"  rendered="#{cc.attrs.formularBean.profileItems.size()>0 and cc.attrs.formularBean.collectionCreateMode}">
+						<div class="imj_sectionHeadline">
+							<h4>
+								<h:outputText value=" #{lbl.metadata_profile}" />
+								<span class="imj_noDisplay">: </span>
+							</h4>
+						</div>
 					<h:selectBooleanCheckbox  id="useTemplate" value="#{cc.attrs.formularBean.useMDProfileTemplate}">
-						<f:ajax event="change" execute="@this" render="previewArea submitButtonPanel" />
+						<f:ajax event="change" execute="@this" render="previewArea selectProfilesPanel profileCreationMethodPanel submitButtonPanel" />
 					</h:selectBooleanCheckbox>
-					<label for="useTemplate">#{lbl.profile_use_template}</label>
-					
+					<h:outputLabel styleClass="imj_metadataLabel" for="useTemplate">
+						<h:outputText value="#{lbl.profile_use_template}"/>
+						<span class="imj_noDisplay">: </span>
+					</h:outputLabel>
+				</h:panelGroup>
+				<h:panelGroup layout="block" id="selectProfilesPanel">
 					<ui:fragment rendered="#{cc.attrs.formularBean.useMDProfileTemplate}">
-		
 						<div>
 							<h:selectOneMenu id="profileTemplates" value="#{cc.attrs.formularBean.selectedProfileItem}" >
-								<f:ajax  execute="@this" render="previewArea" listener="#{cc.attrs.formularBean.profileChangeListener}"/>
+									<f:ajax  execute="@this" render="previewArea selectProfilesPanel" listener="#{cc.attrs.formularBean.profileChangeListener}"/>
 								<f:selectItems value="#{cc.attrs.formularBean.profileItems}"/>
 							</h:selectOneMenu> 
 						</div>														
 
-						<mdprofile:profile_preview statementWrappers="#{cc.attrs.formularBean.statementWrappers}"/> 
+						<mdprofile:profile_preview statementWrappers="#{cc.attrs.formularBean.statementWrappers}" profileDescription="#{cc.attrs.formularBean.profileTemplate.description}"/> 
 					</ui:fragment>
 				</h:panelGroup>
-
+				<h:panelGroup layout="block" id="profileCreationMethodPanel">
+					<ui:fragment rendered="#{cc.attrs.formularBean.useMDProfileTemplate}">
+					<div>
+						<h:outputText value="#{lbl.copy_or_reference_metadata_profile}"/>
+					</div>
+					<div>
+							<h:selectOneRadio value="#{cc.attrs.formularBean.selectedCreationMethod}">
+											<f:ajax  execute="@this" render="submitButtonPanel" />
+									<f:selectItems value="#{cc.attrs.formularBean.profileCreationMethod}"/>
+							</h:selectOneRadio>
+					</div>
+					</ui:fragment>
+				</h:panelGroup>
 			</c:if>
 		<!-- START END FEATURE -->
-
-            <!-- Notifications -->
-			<ui:fragment rendered="#{cc.attrs.formularBean.type == 'COLLECTION'}">                
-				<h:panelGroup layout="block" styleClass="imj_collectionNotifications">
-                    <h:selectBooleanCheckbox  id="notificationCheckBox" value="#{cc.attrs.formularBean.sendEmailNotification}" />
-                    <h:outputLabel styleClass="imj_metadataLabel" for="notificationCheckBox">
-                        <h:outputText value="#{lbl.send_email_on_download}"/>
-                        <span class="imj_noDisplay">: </span>
-                    </h:outputLabel>
-                </h:panelGroup>
-            </ui:fragment>
-
 
 			<h:panelGroup layout="block" id="submitButtonPanel" class="imj_submitPanel">
 				<h:outputLink value="#{HistorySession.previousPage.completeUrlWithHistory}" styleClass="imj_cancelButton">
 					<h:outputText value="#{lbl.cancel}"/>
 				</h:outputLink>
-				<h:commandButton action="#{cc.attrs.formularBean.saveAndEditProfile()}" value="#{lbl.save_and_edit_profile}" styleClass="imj_submitButton" onclick="openDialog('dialogWait');" rendered="#{cc.attrs.formularBean.getClass() == 'class de.mpg.imeji.presentation.collection.CreateCollectionBean' and cc.attrs.formularBean.useMDProfileTemplate }"/>
+				<h:commandButton action="#{cc.attrs.formularBean.saveAndEditProfile()}" value="#{lbl.save_and_edit_profile}" styleClass="imj_submitButton" onclick="openDialog('dialogWait');" rendered="#{cc.attrs.formularBean.collectionType and cc.attrs.formularBean.useMDProfileTemplate and cc.attrs.formularBean.copyProfileMethod}"/>
 				<h:commandButton action="#{cc.attrs.formularBean.save()}" value="#{lbl.save}" styleClass="imj_submitButton" onclick="openDialog('dialogWait');"/>
 			</h:panelGroup>
 		
 			</div>
-		
-		
-			
-
 		</h:form>
 	</h:panelGroup>
 </composite:implementation>

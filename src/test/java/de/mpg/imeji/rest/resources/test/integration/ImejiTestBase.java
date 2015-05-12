@@ -74,8 +74,8 @@ public class ImejiTestBase extends JerseyTest {
 	public static void initProfile() {
 		try {
 			ProfileService s = new ProfileService();
-			profileId = s.create(new MetadataProfileTO(), JenaUtil.testUser)
-					.getId();
+			profileId = s.create(new MetadataProfileTO(), JenaUtil.testUser).getId();
+			System.out.println("InitiProfile "+profileId);
 		} catch (Exception e) {
 			logger.error("Cannot init profile", e);
 		}
@@ -89,7 +89,7 @@ public class ImejiTestBase extends JerseyTest {
 	 * 
 	 * @throws Exception
 	 */
-	public static void initCollection()  {
+	public static String initCollection()  {
 		CollectionService s = new CollectionService();
 		try {
             collectionTO= (CollectionTO) RestProcessUtils.buildTOFromJSON(
@@ -99,6 +99,7 @@ public class ImejiTestBase extends JerseyTest {
 		} catch (Exception e) {
 			logger.error("Cannot init Collection", e);
 		}
+		return collectionId;
 	}
 
 	/**
@@ -142,6 +143,20 @@ public class ImejiTestBase extends JerseyTest {
 
 		}
 	}
-	
+
+	public static void initItem(String fileName) {
+		ItemService s = new ItemService();
+		ItemWithFileTO to = new ItemWithFileTO();
+		to.setCollectionId(collectionId);
+		to.setFile(new File(STATIC_CONTEXT_STORAGE + "/"+fileName+".jpg"));
+		to.setStatus("PENDING");
+		try {
+			itemTO = s.create(to, JenaUtil.testUser);
+			itemId = itemTO.getId();
+		} catch (Exception e) {
+			logger.error("Cannot init Item", e);
+
+		}
+	}
 
 }

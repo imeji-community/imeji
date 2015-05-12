@@ -37,7 +37,7 @@
 //import de.mpg.imeji.presentation.user.util.EmailMessages;
 //import de.mpg.imeji.presentation.util.BeanHelper;
 //import de.mpg.imeji.presentation.util.ObjectLoader;
-//import de.mpg.imeji.presentation.util.UrlHelper;
+//import de.mpg.imeji.logic.util.UrlHelper;
 //
 ///**
 // * Bean for the share page

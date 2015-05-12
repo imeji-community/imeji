@@ -12,6 +12,7 @@ import de.mpg.imeji.logic.auth.AuthenticationFactory;
 import de.mpg.imeji.logic.auth.Authorization;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.notification.NotificationUtils;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
@@ -27,7 +28,6 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.util.NotificationUtils;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.PropertyReader;
 import org.apache.commons.io.FilenameUtils;
@@ -96,6 +96,9 @@ public class FileServlet extends HttpServlet {
 			throws ServletException, IOException {
 		String url = req.getParameter("id");
 		boolean download = "1".equals(req.getParameter("download"));
+		
+		//isSpaceLogo is used also for Collection or Album Logo i.e. for matching to Logo Files which are not items themselves
+		boolean isSpaceLogo = false;
 		if (url == null) {
 			// if the id parameter is null, interpret the whole url as a direct
 			// to the file (can only work if the
@@ -104,11 +107,19 @@ public class FileServlet extends HttpServlet {
 		}
 		resp.setContentType(StorageUtils.getMimeType(StringHelper
 				.getFileExtension(url)));
+		
+		//If its Space Logo or Collection Logo or Album Logo, file servlet should not retrieve item
+		//Regex below assumes in case of collection/album logo, logo file must have extension!
+		if (url.contains("/file/spaces") || url.matches(".*/file/\\w*[^/]/thumbnail/.*\\..+")) {
+			isSpaceLogo = true;
+		}
+		
 		SessionBean session = getSession(req);
 		User user = getUser(req, session);
-
+		
 		try {
-			Item fileItem = getItem(url, user);
+				Item fileItem = isSpaceLogo? null: getItem(url, user);
+
 			if ("NO_THUMBNAIL_URL".equals(url)) {
 				ExternalStorage eStorage = new ExternalStorage();
 				eStorage.read(
@@ -119,13 +130,13 @@ public class FileServlet extends HttpServlet {
 
 				if (download)
 					resp.setHeader("Content-disposition", "attachment;");
-
 				storageController.read(url, resp.getOutputStream(), true);
 
 				// message to observer if item downloaded
-				if (download)
+				if (download && !isSpaceLogo)
 					NotificationUtils.notifyByItemDownload(user, fileItem,
 							session);
+				
 
 			}
 		} catch (Exception e) {

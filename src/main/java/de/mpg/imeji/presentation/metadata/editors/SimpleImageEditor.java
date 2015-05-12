@@ -52,11 +52,12 @@ public class SimpleImageEditor extends MetadataEditor
     @Override
     public boolean prepareUpdate()
     {  
+    	/*
         for (EditorItemBean eib : items)
         {	
         	eib.getMds().trim();
         }
-        
+        */        
         if (items.size() == 0)
         {
             return false;

@@ -79,7 +79,7 @@ public class ConfigurationBean {
 
 	private static Properties config;
 	private File configFile;
-	private FileTypes fileTypes;
+	private static FileTypes fileTypes;
 	private String lang = "en";
 	private final static Logger logger = Logger
 			.getLogger(ConfigurationBean.class);
@@ -121,9 +121,9 @@ public class ConfigurationBean {
 				.name());
 		Object ft = config.get(CONFIGURATION.FILE_TYPES.name());
 		if (ft == null) {
-			this.fileTypes = new FileTypes(predefinedFileTypes);
+			fileTypes = new FileTypes(predefinedFileTypes);
 		} else
-			this.fileTypes = new FileTypes((String) ft);
+			fileTypes = new FileTypes((String) ft);
 		initPropertyWithDefaultValue(CONFIGURATION.UPLOAD_BLACK_LIST,
 				predefinedUploadBlackList);
 		initPropertyWithDefaultValue(CONFIGURATION.LANGUAGES,
@@ -292,7 +292,7 @@ public class ConfigurationBean {
 	 * @return
 	 */
 	public FileTypes getFileTypes() {
-		return this.fileTypes;
+		return fileTypes;
 	}
 
 	/**
@@ -301,7 +301,16 @@ public class ConfigurationBean {
 	 * @param types
 	 */
 	public void setFileTypes(FileTypes types) {
-		this.fileTypes = types;
+		fileTypes = types;
+	}
+	
+	/**
+	 * Get the type of Files
+	 * 
+	 * @return
+	 */
+	public static FileTypes getFileTypesStatic() {
+		return fileTypes;
 	}
 
 	/**

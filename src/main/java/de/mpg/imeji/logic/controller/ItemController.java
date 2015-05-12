@@ -405,7 +405,6 @@ public class ItemController extends ImejiController {
 	public void update(Collection<Item> items, User user) throws ImejiException {
 		List<Object> imBeans = new ArrayList<Object>();
 		for (Item item : items) {
-
 			writeUpdateProperties(item, user);
 			imBeans.add(createFulltextForMetadata(item));
 		}

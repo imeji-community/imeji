@@ -217,13 +217,10 @@ public class SimpleQueryFactory {
 		case editor:
 			break;
 		case filetype: // Search for filetype ( image, video, audio...)
-			// TODO Make access to config via static method and not beans
-			ConfigurationBean config = (ConfigurationBean) BeanHelper
-					.getApplicationBean(ConfigurationBean.class);
 			String regex = "";
 			String types = pair.getValue();
 			for (String typeName : types.split(Pattern.quote("|"))) {
-				Type type = config.getFileTypes().getType(typeName);
+				Type type = ConfigurationBean.getFileTypesStatic().getType(typeName);
 				if (type != null) {
 					if (!regex.equals(""))
 						regex += "|";

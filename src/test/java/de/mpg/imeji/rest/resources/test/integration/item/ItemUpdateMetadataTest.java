@@ -523,7 +523,7 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
     private static void initCollectionWithProfile(Collection<Statement> statements) throws Exception {
 
         MetadataProfile p = ImejiFactory.newProfile();
-
+        p.setTitle("test");
         p.setStatements(statements);
 
         MetadataProfile mp = pc.create(p, JenaUtil.testUser);

@@ -86,6 +86,7 @@ public class ProfileController extends ImejiController {
 	 */
 	public MetadataProfile create(MetadataProfile p, User user)
 			throws ImejiException {
+		validateProfile(p);
 		writeCreateProperties(p, user);
 		p.setStatus(Status.PENDING);
 		writer.create(WriterFacade.toList(p), user);
@@ -158,6 +159,7 @@ public class ProfileController extends ImejiController {
 	 * @throws ImejiException
 	 */
 	public void update(MetadataProfile mdp, User user) throws ImejiException {
+		validateProfile(mdp);
 		writeUpdateProperties(mdp, user);
 		writer.update(WriterFacade.toList(mdp), user);
 		Imeji.executor.submit(new CleanMetadataJob(mdp));
@@ -277,8 +279,8 @@ public class ProfileController extends ImejiController {
 		SearchResult result;
 		List<MetadataProfile> l = new ArrayList<MetadataProfile>();
 		try {
-			result = search.search(
-					!isNullOrEmptyTrim(q) ? URLQueryTransformer
+			result = search
+					.search(!isNullOrEmptyTrim(q) ? URLQueryTransformer
 							.parseStringQuery(q) : null, sortCri, user, spaceId);
 			for (String uri : result.getResults()) {
 				l.add(retrieve(URI.create(uri), user));
@@ -296,7 +298,8 @@ public class ProfileController extends ImejiController {
 	 * @return
 	 * @throws ImejiException
 	 */
-	public List<MetadataProfile> search(User user, String spaceId) throws ImejiException {
+	public List<MetadataProfile> search(User user, String spaceId)
+			throws ImejiException {
 		return search(user, "", spaceId);
 	}
 
@@ -380,11 +383,20 @@ public class ProfileController extends ImejiController {
 		ImejiSPARQL.execUpdate(SPARQLQueries.updateEmptyMetadata());
 	}
 
-	public void validateProfile(MetadataProfile profile, User u)
-			throws ImejiException {
-		// Copied from Collection Bean in presentation
+	/**
+	 * Validate a {@link MetadataProfile}
+	 * 
+	 * @param profile
+	 * @throws ImejiException
+	 */
+	public void validateProfile(MetadataProfile profile) throws ImejiException {
 		if (isNullOrEmpty(profile.getTitle())) {
 			throw new BadRequestException("error_profile_need_title");
+		}
+		for (Statement s : profile.getStatements()) {
+			if (s.getLabels().isEmpty())
+				throw new UnprocessableError(
+						"STatement must have at least one label");
 		}
 	}
 

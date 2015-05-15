@@ -96,8 +96,8 @@ public class FileServlet extends HttpServlet {
 			throws ServletException, IOException {
 		String url = req.getParameter("id");
 		boolean download = "1".equals(req.getParameter("download"));
-		
-		//isSpaceLogo is used also for Collection or Album Logo i.e. for matching to Logo Files which are not items themselves
+		// isSpaceLogo is used also for Collection or Album Logo i.e. for
+		// matching to Logo Files which are not items themselves
 		boolean isSpaceLogo = false;
 		if (url == null) {
 			// if the id parameter is null, interpret the whole url as a direct
@@ -107,19 +107,20 @@ public class FileServlet extends HttpServlet {
 		}
 		resp.setContentType(StorageUtils.getMimeType(StringHelper
 				.getFileExtension(url)));
-		
-		//If its Space Logo or Collection Logo or Album Logo, file servlet should not retrieve item
-		//Regex below assumes in case of collection/album logo, logo file must have extension!
-		if (url.contains("/file/spaces") || url.matches(".*/file/\\w*[^/]/thumbnail/.*\\..+")) {
+
+		// If its Space Logo or Collection Logo or Album Logo, file servlet
+		// should not retrieve item
+		// Regex below assumes in case of collection/album logo, logo file must
+		// have extension!
+		if (url.contains("/file/spaces")
+				|| url.matches(".*/file/\\w*[^/]/thumbnail/.*\\..+")) {
 			isSpaceLogo = true;
 		}
-		
+
 		SessionBean session = getSession(req);
 		User user = getUser(req, session);
-		
-		try {
-				Item fileItem = isSpaceLogo? null: getItem(url, user);
 
+		try {
 			if ("NO_THUMBNAIL_URL".equals(url)) {
 				ExternalStorage eStorage = new ExternalStorage();
 				eStorage.read(
@@ -133,10 +134,11 @@ public class FileServlet extends HttpServlet {
 				storageController.read(url, resp.getOutputStream(), true);
 
 				// message to observer if item downloaded
-				if (download && !isSpaceLogo)
+				if (download && !isSpaceLogo) {
+					Item fileItem = getItem(url, user);
 					NotificationUtils.notifyByItemDownload(user, fileItem,
 							session);
-				
+				}
 
 			}
 		} catch (Exception e) {
@@ -150,7 +152,8 @@ public class FileServlet extends HttpServlet {
 				resp.sendError(HttpServletResponse.SC_NOT_FOUND,
 						"The resource you are trying to retrieve does not exist!");
 			} else {
-				if (!resp.isCommitted())
+				e.printStackTrace();
+					if (!resp.isCommitted())
 					resp.sendError(422, "Unprocessable entity!");
 
 				/*

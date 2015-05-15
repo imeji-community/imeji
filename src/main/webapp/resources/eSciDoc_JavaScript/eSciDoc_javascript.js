@@ -21,6 +21,12 @@
 * CDDL HEADER END
 */
 
+/*
+* Copyright 2006-2007 Fachinformationszentrum Karlsruhe Gesellschaft
+* f�r wissenschaftlich-technische Information mbH and Max-Planck-
+* Gesellschaft zur F�rderung der Wissenschaft e.V.
+* All rights reserved. Use is subject to license terms.
+*/
 
 /*ADDS MULTIPLE EVENTS TO A EVENTLISTENER*/
 function addEvent(obj, evType, fn){
@@ -39,8 +45,9 @@ function addEvent(obj, evType, fn){
 
 /*START ALL EXTERNAL JAVASCRIPTS*/
 function install_javascripts() {
-
 }
+
+
 
 addEvent(window, 'load', function(){window.setTimeout('install_javascripts()', 1);});
 
@@ -77,6 +84,6 @@ function customSelectbox(obj) {
 		});
 	}
 }
-$(
+$(function(){
 	customSelectbox();
-);
+});

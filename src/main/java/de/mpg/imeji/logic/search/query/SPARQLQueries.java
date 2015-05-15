@@ -81,7 +81,7 @@ public class SPARQLQueries {
 
 	/**
 	 * Select default {@link MetadataProfile}
-	 *
+	 * 
 	 * @return
 	 */
 	public static String selectDefaultMetadataProfile() {
@@ -259,7 +259,7 @@ public class SPARQLQueries {
 	/**
 	 * Select Users to be notified by file download Note: Current
 	 * <code>user</code> is excluded from the result set
-	 *
+	 * 
 	 * @return
 	 * @param user
 	 * @param c
@@ -298,14 +298,12 @@ public class SPARQLQueries {
 	 * @return
 	 */
 	public static String selectItemIdOfFile(String fileUrl) {
+		String path = URI.create(fileUrl).getPath();
 		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {"
-				+ "optional{"
-				+ "?s <http://imeji.org/terms/webImageUrl> <"
-				+ fileUrl
-				+ ">} . optional {?s <http://imeji.org/terms/thumbnailImageUrl> <"
-				+ fileUrl
-				+ ">} . optional{ ?s <http://imeji.org/terms/fullImageUrl> <"
-				+ fileUrl + ">}} LIMIT 1 ";
+				+ "?s <http://imeji.org/terms/webImageUrl> ?url1 . ?s <http://imeji.org/terms/thumbnailImageUrl> ?url2 . ?s <http://imeji.org/terms/fullImageUrl> ?url3 . FILTER(REGEX(str(?url1), '"
+				+ path + "', 'i') || REGEX(str(?url2), '"
+				+ path + "', 'i') || REGEX(str(?url3), '"
+				+ path + "', 'i'))} LIMIT 1 ";
 	}
 
 	/**
@@ -417,7 +415,7 @@ public class SPARQLQueries {
 
 	/**
 	 * Check if {@link CollectionImeji} status is not WITHDRAWN
-	 *
+	 * 
 	 * @return
 	 */
 	public static String getAllowedUpdateByStatus(String collectionId) {
@@ -428,7 +426,7 @@ public class SPARQLQueries {
 
 	/**
 	 * Select all {@link Space} available imeji
-	 *
+	 * 
 	 * @return
 	 */
 	public static String selectSpaceAll() {
@@ -437,7 +435,7 @@ public class SPARQLQueries {
 
 	/**
 	 * Select a {@link Space} by its label
-	 *
+	 * 
 	 * @return
 	 */
 	public static String getSpaceByLabel(String spaceId) {
@@ -616,12 +614,9 @@ public class SPARQLQueries {
 				+ SimpleSecurityQuery
 						.queryFactory(user,
 								J2JHelper.getResourceNamespace(new Item()),
-								null, false) 
-				+ " ?s <" 
-				+ ImejiNamespaces.STATUS
-				+ "> ?status } "
-				+ ((limit > 0) ? (" LIMIT " + limit) : "");
-		
+								null, false) + " ?s <" + ImejiNamespaces.STATUS
+				+ "> ?status } " + ((limit > 0) ? (" LIMIT " + limit) : "");
+
 	}
 
 	public static String selectContainerItemByFilename(URI containerURI,
@@ -701,7 +696,7 @@ public class SPARQLQueries {
 	/**
 	 * Chararters ( and ) can not be accepted in the sparql query and must
 	 * therefore removed
-	 *
+	 * 
 	 * @param s
 	 * @return
 	 */
@@ -714,7 +709,7 @@ public class SPARQLQueries {
 	}
 
 	/**
-	 *
+	 * 
 	 * @return
 	 */
 	public static String selectUserCompleteName(URI uri) {

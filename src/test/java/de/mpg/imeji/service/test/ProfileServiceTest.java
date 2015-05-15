@@ -100,7 +100,7 @@ public class ProfileServiceTest {
 
 		c = ImejiFactory.newCollection();
 		p = ImejiFactory.newProfile();
-
+		p.setTitle("test profile");
 		c.getMetadata().setTitle("test collection");
 		p.setStatements(statements);
         p.setDefault(false);

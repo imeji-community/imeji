@@ -102,7 +102,7 @@ public abstract class CollectionBean extends ContainerBean {
 		try {
 			cc.validateCollection(collection, sessionBean.getUser());
 			if (useMDProfileTemplate && profile != null) {
-				pc.validateProfile(profile, sessionBean.getUser());
+				pc.validateProfile(profile);
 			}
 			return true;
 		} catch (ImejiException e) {

@@ -137,6 +137,9 @@
 			        				<div class="imj_batchEditListItem">
 				        				<div class="imj_previewArea">
 											<h:graphicImage alt="#{item.filename}" id="picThumbResolutionBrowse" url="#{Navigation.fileUrl}#{item.thumbnail}"/>
+											<div>
+											<h:outputLabel value="#{item.filename}"/>
+											</div>
 				        				</div>
 				        				<h:panelGroup layout="block" styleClass="imj_informationContent" rendered="#{item.profile == EditItemMetadataBean.profile.id}">
 					        				<ui:repeat id="metadata" var="md" value="#{item.mds.tree.list}" varStatus="indexMetadata">

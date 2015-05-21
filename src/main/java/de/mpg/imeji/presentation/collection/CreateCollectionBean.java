@@ -38,10 +38,8 @@ import java.util.List;
 @ViewScoped
 public class CreateCollectionBean extends CollectionBean {
 	private static final long serialVersionUID = 1257698224590957642L;
-    private VocabularyHelper vocabularyHelper;
+	private VocabularyHelper vocabularyHelper;
 
-
-    
 	/**
 	 * Bean Constructor
 	 */
@@ -55,16 +53,15 @@ public class CreateCollectionBean extends CollectionBean {
 	public void initialize() {
 		setCollectionCreateMode(true);
 		setCollection(ImejiFactory.newCollection());
-		((List<Person>) getCollection().getMetadata().getPersons()).set(0, sessionBean.getUser().getPerson().clone());
-        vocabularyHelper = new VocabularyHelper();
-        loadProfiles();
-        if (getProfileItems().size()==0) {
-        	setUseMDProfileTemplate(false);
-        }
-        
+		((List<Person>) getCollection().getMetadata().getPersons()).set(0,
+				sessionBean.getUser().getPerson().clone());
+		vocabularyHelper = new VocabularyHelper();
+		loadProfiles();
+		if (getProfileItems().size() == 0) {
+			setUseMDProfileTemplate(false);
+		}
+
 	}
-	
-	
 
 	/**
 	 * Method for save button. Create the {@link CollectionImeji} according to
@@ -74,62 +71,85 @@ public class CreateCollectionBean extends CollectionBean {
 	 * @throws Exception
 	 */
 	public String save() throws Exception {
-		if(createdCollection())
-			FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getCollectionUrl()+ getCollection().getIdString());
+		if (createdCollection())
+			FacesContext
+					.getCurrentInstance()
+					.getExternalContext()
+					.redirect(
+							navigation.getCollectionUrl()
+									+ getCollection().getIdString());
 		return "";
 	}
+
 	/**
-	 * Method for save&editProfile button. Create the {@link CollectionImeji} according to
-	 * the form
+	 * Method for save&editProfile button. Create the {@link CollectionImeji}
+	 * according to the form
 	 * 
 	 * @return
 	 * @throws Exception
-	 */  
+	 */
 	public String saveAndEditProfile() throws Exception {
-		if(createdCollection());
-			FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getProfileUrl()+extractIDFromURI(getCollection().getProfile())+"/edit?init=1&col="+ getCollection().getIdString());
+		if (createdCollection())
+			FacesContext
+					.getCurrentInstance()
+					.getExternalContext()
+					.redirect(
+							navigation.getProfileUrl()
+									+ extractIDFromURI(getCollection()
+											.getProfile())
+									+ "/edit?init=1&col="
+									+ getCollection().getIdString());
 		return "";
 	}
 
-    public boolean createdCollection() throws ImejiException, URISyntaxException {
-        if (valid()) {
-            CollectionController collectionController = new CollectionController();
-            int pos = 0;
-            // Set the position of the statement (used for the sorting later)
-            for (Person p : getCollection().getMetadata().getPersons()) {
-                p.setPos(pos);
-                pos++;
-                int pos2 = 0;
-                for (Organization o : p.getOrganizations()) {
-                    o.setPos(pos2);
-                    pos2++;
-                }
-            }
-            User user = sessionBean.getUser();
-           
+	public boolean createdCollection() throws ImejiException,
+			URISyntaxException {
+		if (valid()) {
+			CollectionController collectionController = new CollectionController();
+			int pos = 0;
+			// Set the position of the statement (used for the sorting later)
+			for (Person p : getCollection().getMetadata().getPersons()) {
+				p.setPos(pos);
+				pos++;
+				int pos2 = 0;
+				for (Organization o : p.getOrganizations()) {
+					o.setPos(pos2);
+					pos2++;
+				}
+			}
+			User user = sessionBean.getUser();
 
-            MetadataProfile whichProfile = isUseMDProfileTemplate() ? getProfileTemplate() :null;
-            //feature below will always create a collection with a new metadata profile copied (cloned)
-            //if there is no metadata profile template selected, then it will create a new metadata profile 
-            URI id = collectionController.create(getCollection(), whichProfile, user, collectionController.getProfileCreationMethod(getSelectedCreationMethod()), sessionBean.getSelectedSpaceString());
-            setCollection(collectionController.retrieve(id, user));
-            setId(ObjectHelper.getId(id));
-            
-            //Setting user email notification for the collection downloads
-            setSendEmailNotification(isSendEmailNotification());
-            UserController uc = new UserController(user);
-            uc.update(user, user);
-            
-            BeanHelper.info(sessionBean.getMessage("success_collection_create"));
+			MetadataProfile whichProfile = isUseMDProfileTemplate() ? getProfileTemplate()
+					: null;
+			// feature below will always create a collection with a new metadata
+			// profile copied (cloned)
+			// if there is no metadata profile template selected, then it will
+			// create a new metadata profile
+			URI id = collectionController
+					.create(getCollection(),
+							whichProfile,
+							user,
+							collectionController
+									.getProfileCreationMethod(getSelectedCreationMethod()),
+							sessionBean.getSelectedSpaceString());
+			setCollection(collectionController.retrieve(id, user));
+			setId(ObjectHelper.getId(id));
 
-            return true;
-        }
-        return false;
+			// Setting user email notification for the collection downloads
+			setSendEmailNotification(isSendEmailNotification());
+			UserController uc = new UserController(user);
+			uc.update(user, user);
 
-    }
+			BeanHelper
+					.info(sessionBean.getMessage("success_collection_create"));
 
+			return true;
+		}
+		return false;
 
-    public static String extractIDFromURI(URI uri) {
+	}
+
+	public static String extractIDFromURI(URI uri) {
 		return uri.getPath().substring(uri.getPath().lastIndexOf("/") + 1);
 	}
 
@@ -146,19 +166,15 @@ public class CreateCollectionBean extends CollectionBean {
 	protected String getNavigationString() {
 		return sessionBean.getPrettySpacePage("pretty:createCollection");
 	}
-	  
-	public String getVocabularyLabel(URI id){
-			for(SelectItem item : vocabularyHelper.getVocabularies())
-			{
-				
-				if(id.toString().equals(item.getValue().toString()))
-				{
-					return item.getLabel();
-				}
+
+	public String getVocabularyLabel(URI id) {
+		for (SelectItem item : vocabularyHelper.getVocabularies()) {
+
+			if (id.toString().equals(item.getValue().toString())) {
+				return item.getLabel();
 			}
-		return "";		
+		}
+		return "";
 	}
-	
-	
 
 }

@@ -130,7 +130,6 @@ public class TransferObjectFactory {
 		to.setId(vo.getIdString());
 		//set createdBy
 		UserService ucrud = new UserService();
-		User u = new User();
 		String completeName = null;
 		URI userId = vo.getCreatedBy();
 		try {

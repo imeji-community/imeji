@@ -72,8 +72,7 @@ public class HistoryFilter implements Filter {
 	public void doFilter(ServletRequest serv, ServletResponse resp,
 			FilterChain chain) throws IOException, ServletException {
 		try {
-			
-			
+
 			// Limit the case to filter: dispachertype only forward, and only
 			// HTTP GET method
 			if (DispatcherType.FORWARD.compareTo(serv.getDispatcherType()) == 0) {
@@ -83,21 +82,22 @@ public class HistoryFilter implements Filter {
 					dofilterImpl(request, resp);
 				}
 			}
-			
+
 		} catch (Exception e) {
-			if (e instanceof NotFoundException || e instanceof NotFoundException
-					|| e instanceof NullPointerException) 
-			{
+			if (e instanceof NotFoundException
+					|| e instanceof NullPointerException) {
 				if ("SPACE_NOT_FOUND".equals(e.getMessage())) {
-					
-					((HttpServletResponse) resp).sendRedirect( ((Navigation)getNavigation((HttpServletRequest)serv, resp)).getApplicationUrl() );
-				}
-				else
-				{
+
+					((HttpServletResponse) resp)
+							.sendRedirect(((Navigation) getNavigation(
+									(HttpServletRequest) serv, resp))
+									.getApplicationUrl());
+				} else {
 					((HttpServletResponse) resp).sendError(
-							Status.NOT_FOUND.getStatusCode(), "RESOURCE_NOT_FOUND");
+							Status.NOT_FOUND.getStatusCode(),
+							"RESOURCE_NOT_FOUND");
 				}
-				
+
 			} else if (e instanceof AuthenticationError) {
 				redirectToLoginPage(serv, resp);
 			} else if (e instanceof NotAllowedError
@@ -118,7 +118,7 @@ public class HistoryFilter implements Filter {
 			chain.doFilter(serv, resp);
 		}
 	}
-	
+
 	/**
 	 * Redicrect the request to the login page
 	 * 
@@ -158,8 +158,8 @@ public class HistoryFilter implements Filter {
 		Navigation nav = getNavigation(request, resp);
 		SessionBean session = getSessionBean(request, resp);
 		if (session != null) {
-			checkSpaceMatching(request, session, hs); 
-			//System.out.println("In dofilterImpl= "+session.getSpaceId());
+			checkSpaceMatching(request, session, hs);
+			// System.out.println("In dofilterImpl= "+session.getSpaceId());
 			String h = request.getParameter("h");
 			String url = nav.getApplicationUri()
 					+ PrettyContext.getCurrentInstance(request).getRequestURL()
@@ -190,7 +190,7 @@ public class HistoryFilter implements Filter {
 	private SessionBean getSessionBean(HttpServletRequest req,
 			ServletResponse resp) {
 		return (SessionBean) getBean(SessionBean.class, req, resp);
-		
+
 	}
 
 	/**
@@ -262,7 +262,7 @@ public class HistoryFilter implements Filter {
 		UIViewRoot view = facesContext.getApplication().getViewHandler()
 				.createView(facesContext, "imeji");
 		facesContext.setViewRoot(view);
-	
+
 		return facesContext;
 	}
 
@@ -280,41 +280,48 @@ public class HistoryFilter implements Filter {
 			FacesContext.setCurrentInstance(facesContext);
 		}
 	}
-	
-	private void checkSpaceMatching (HttpServletRequest request, SessionBean session, HistorySession hs) throws NotFoundException, ImejiException   {
-		//TODO CHANGE ME
+
+	private void checkSpaceMatching(HttpServletRequest request,
+			SessionBean session, HistorySession hs) throws NotFoundException,
+			ImejiException {
+		// TODO CHANGE ME
 		String spaceHome = "space_home";
-		
-		String matchingUrl= PrettyContext.getCurrentInstance(request).getRequestURL().toURL();
 
-		PrettyConfig pc = PrettyContext.getCurrentInstance(FacesContext.getCurrentInstance()).getConfig();
-		
+		String matchingUrl = PrettyContext.getCurrentInstance(request)
+				.getRequestURL().toURL();
+
+		PrettyConfig pc = PrettyContext.getCurrentInstance(
+				FacesContext.getCurrentInstance()).getConfig();
+
 		if (pc.isURLMapped(new URL(matchingUrl))) {
-			//System.out.println("URL IS MAPPED "+matchingUrl);
-			UrlMapping myMap = 
-				pc.getMappingForUrl(PrettyContext.getCurrentInstance(request).getRequestURL());
-				//System.out.println("URL IS MAPPED with pattern "+myMap.getPattern()+" and id "+myMap.getId());
+			// System.out.println("URL IS MAPPED "+matchingUrl);
+			UrlMapping myMap = pc.getMappingForUrl(PrettyContext
+					.getCurrentInstance(request).getRequestURL());
+			// System.out.println("URL IS MAPPED with pattern "+myMap.getPattern()+" and id "+myMap.getId());
 
-			if (myMap.getId().startsWith("space_")){
-				String mySpaceId = PrettyContext.getCurrentInstance(request).getRequestURL().toURL();
-				//System.out.println("PreCalculated mySpaceId= "+mySpaceId+" 2");
-				//System.out.println(StringUtils.substringAfter(matchingUrl, "/space/"));
-				mySpaceId = spaceHome.equals(myMap.getId())?StringUtils.substringAfter(matchingUrl, "/space/"): 
-							StringUtils.substringBefore(StringUtils.substringAfter(matchingUrl, "/space/"), "/");
-				//System.out.println("Calculated mySpaceId= "+mySpaceId+ " sessopmSüace= "+session.getSpaceId());
+			if (myMap.getId().startsWith("space_")) {
+				String mySpaceId = PrettyContext.getCurrentInstance(request)
+						.getRequestURL().toURL();
+				// System.out.println("PreCalculated mySpaceId= "+mySpaceId+" 2");
+				// System.out.println(StringUtils.substringAfter(matchingUrl,
+				// "/space/"));
+				mySpaceId = spaceHome.equals(myMap.getId()) ? StringUtils
+						.substringAfter(matchingUrl, "/space/") : StringUtils
+						.substringBefore(StringUtils.substringAfter(
+								matchingUrl, "/space/"), "/");
+				// System.out.println("Calculated mySpaceId= "+mySpaceId+
+				// " sessopmSüace= "+session.getSpaceId());
 				if (!mySpaceId.equals(session.getSpaceId())) {
 					hs.getPages().clear();
 					SpaceController sc = new SpaceController();
-						if (!sc.isSpaceByLabel(mySpaceId) ) {
-							session.setSpaceId("");
-							throw new NotFoundException("SPACE_NOT_FOUND");
-						}
+					if (!sc.isSpaceByLabel(mySpaceId)) {
+						session.setSpaceId("");
+						throw new NotFoundException("SPACE_NOT_FOUND");
+					}
 				}
-			}
-			else
-			{
+			} else {
 				if (!("".equals(session.getSpaceId()))) {
-					//Clean old history pages when switching to a new space
+					// Clean old history pages when switching to a new space
 					hs.getPages().clear();
 					session.setSpaceId("");
 				}

@@ -1,5 +1,6 @@
 package de.mpg.imeji.presentation.metadata;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,8 @@ import de.mpg.imeji.presentation.util.SearchAndExportHelper;
  * 
  * @author saquet
  */
-public class SuperMetadataBean implements Comparable<SuperMetadataBean> {
+public class SuperMetadataBean implements Comparable<SuperMetadataBean>, Serializable {
+	private static final long serialVersionUID = 5166665303590747237L;
 	/**
 	 * The {@link Metadata} defined within thie {@link SuperMetadataBean}
 	 */

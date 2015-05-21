@@ -153,12 +153,12 @@ public class RestProcessUtils {
 	 * @param message
 	 * @return
 	 */
-	public static JSONResponse localExceptionHandler(Exception eX, String message) {
-		String localMessage = message;
+	public static JSONResponse localExceptionHandler(Exception eX,
+			String message) {
 		if ( isNullOrEmpty(message) ) {
 			message = eX.getLocalizedMessage();
 		}
-				
+		String localMessage = message;	
 		JSONResponse resp;
 				
 		if (eX instanceof AuthenticationError)  {

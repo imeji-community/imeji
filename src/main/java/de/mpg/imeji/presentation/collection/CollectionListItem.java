@@ -109,7 +109,7 @@ public class CollectionListItem
              // initializations
              initSize(collection, user);
              initSelected();
-             if (collection != null && user != null)
+             if (user != null)
              {
                  isOwner = collection.getCreatedBy().equals(user.getId());
              }

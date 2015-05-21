@@ -3,7 +3,9 @@ package de.mpg.imeji.rest.to;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 
@@ -13,6 +15,7 @@ import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 
 /**
  * Created by vlad on 11.12.14.
@@ -37,11 +40,13 @@ public class MetadataSetTODeserializer extends JsonDeserializer<MetadataSetTO> {
         if (statementUri != null) {
             mdSet.setStatementUri(URI.create(statementUri.asText()));
         }
-
-        JsonNode labels = rootNode.get("labels");
+        ArrayNode labels = (ArrayNode) rootNode.get("labels");
         if (labels != null) {
             List<LabelTO> ltoList = new ArrayList<LabelTO>();
-            ltoList = codec.treeToValue(labels, ltoList.getClass());
+            for (Iterator<JsonNode> iterator = labels.iterator(); iterator.hasNext();) {
+				JsonNode labelJSON =  iterator.next();
+				ltoList.add(new LabelTO(labelJSON.get("language").asText(), labelJSON.get("value").asText()));
+			}
             mdSet.setLabels(ltoList);
         }
 

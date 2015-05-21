@@ -701,7 +701,7 @@ public class SPARQLQueries {
 	 * @return
 	 */
 	public static String removeforbiddenCharacters(String s) {
-		String[] forbidden = { "(", ")" };
+		String[] forbidden = { "(", ")", "'" };
 		for (int i = 0; i < forbidden.length; i++) {
 			s = s.replace(forbidden[i], ".");
 		}

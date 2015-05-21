@@ -208,7 +208,7 @@ public class UploadBean implements Serializable {
 			logger.error("Error uploading file from link: " + externalUrl, e);
 			BeanHelper.error(e.getMessage());
 		}
-		return "pretty:";
+		return "";
 	}
 
 	/**

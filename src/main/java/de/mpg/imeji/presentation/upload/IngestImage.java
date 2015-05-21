@@ -1,8 +1,10 @@
 package de.mpg.imeji.presentation.upload;
 
 import java.io.File;
+import java.io.Serializable;
 
-public class IngestImage {
+public class IngestImage implements Serializable{
+	private static final long serialVersionUID = 1108032535748498628L;
 	private File file;
 	private String name;
 	

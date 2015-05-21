@@ -282,11 +282,9 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
             assertThat( mds.getStatementUri().toString(), not(equalTo(CHANGED)));
             assertThat( mds.getTypeUri().toString(), not(equalTo(CHANGED)));
             //labels
-            //very strange....
-            for (Object o: mds.getLabels()) {
-                LinkedHashMap<String, String> lbl = (LinkedHashMap<String, String>) o;
-                assertThat( lbl.get("value"), not(equalTo(CHANGED)));
-                assertThat( lbl.get("language"), not(equalTo(CHANGED)));
+            for (LabelTO l : mds.getLabels()) {
+            	assertThat(l.getValue(), not(equalTo(CHANGED)));
+            	assertThat( l.getLanguage(), not(equalTo(CHANGED)));
             }
         }
 

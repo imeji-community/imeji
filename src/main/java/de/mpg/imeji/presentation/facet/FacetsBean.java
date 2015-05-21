@@ -46,15 +46,15 @@ public class FacetsBean implements Callable<Boolean>
      */
     public FacetsBean(SearchQuery searchQuery)
     {
-        try
-        {
-            facetsClass = new TechnicalFacets(searchQuery);
-        }
-        catch (Exception e)
-        {
-            BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("error")
-                    + ", Facets intialization: " + e.getMessage());
-        }
+//        try
+//        {
+//            facetsClass = new TechnicalFacets(searchQuery);
+//        }
+//        catch (Exception e)
+//        {
+//            BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("error")
+//                    + ", Facets intialization: " + e.getMessage());
+//        }
     }
 
     /**
@@ -65,15 +65,15 @@ public class FacetsBean implements Callable<Boolean>
      */
     public FacetsBean(CollectionImeji col, SearchQuery searchQuery)
     {
-        try
-        {
-            facetsClass = new CollectionFacets(col, searchQuery);
-        }
-        catch (Exception e)
-        {
-            BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("error")
-                    + ", Facets intialization: " + e.getMessage());
-        }
+//        try
+//        {
+//            facetsClass = new CollectionFacets(col, searchQuery);
+//        }
+//        catch (Exception e)
+//        {
+//            BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("error")
+//                    + ", Facets intialization: " + e.getMessage());
+//        }
     }
 
     /**

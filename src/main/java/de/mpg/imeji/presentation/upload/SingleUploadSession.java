@@ -1,5 +1,6 @@
 package de.mpg.imeji.presentation.upload;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,8 +16,8 @@ import de.mpg.imeji.presentation.metadata.MetadataSetBean;
 
 @ManagedBean(name = "SingleUploadSession")
 @SessionScoped
-public class SingleUploadSession {
-	
+public class SingleUploadSession implements Serializable{
+	private static final long serialVersionUID = -7330919735840276789L;
 	private String selectedCollectionItem;
 	private CollectionImeji collection;
 	private MetadataProfile profile;

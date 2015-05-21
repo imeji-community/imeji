@@ -114,7 +114,6 @@ public class ProfileServiceTest {
 
 	@Test
 	public void testProfileCRUD_TO()  {
-		CollectionService collcrud = new CollectionService();
 		ProfileService pCrud = new ProfileService();
 		MetadataProfileTO profile = new MetadataProfileTO();
 

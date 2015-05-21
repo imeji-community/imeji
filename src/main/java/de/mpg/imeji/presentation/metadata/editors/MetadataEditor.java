@@ -113,7 +113,8 @@ public abstract class MetadataEditor
                     }
                     catch (Exception e)
                     {
-                        BeanHelper.error(sb.getMessage("error_metadata_edit") + ": " + e.getMessage());
+                        BeanHelper.error(sb.getMessage("error_metadata_edit") + ": " + e.getLocalizedMessage());
+                        e.printStackTrace();
                     }
                 }
                 else

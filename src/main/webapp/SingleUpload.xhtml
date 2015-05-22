@@ -140,7 +140,7 @@
 									<h3 class="imj_sectionHeadline">
 										<h:outputText value="#{msg.success_upload}:" />
 									</h3>
-									<h:outputLink value="#{Navigation.collectionUrl}#{SingleUploadBean.extractIDFromURI(SingleUploadBean.getItem().collection)}/item/#{SingleUploadBean.getItem().idString}">
+									<h:outputLink value="#{Navigation.collectionUrl}#{SingleUploadBean.extractIDFromURI(SingleUploadBean.getItem().collection)}/item/#{SingleUploadBean.getItem().idString}?reload=1">
 										<h:outputText value="#{SingleUploadBean.getItem().filename}"/>		
 									</h:outputLink>
 							</h:panelGroup>

@@ -169,7 +169,7 @@ public class ObjectHelper {
                 for (Field f1 : getAllObjectFields(obj1.getClass()))
                 {
                     f1.setAccessible(true);
-                    if (f1.getName().equals(f2.getName()) && f1.getType().equals(f2.getType()) && !f1.toGenericString().contains("final"))
+                    if (f1.getName().equals(f2.getName()) && f1.getType().equals(f2.getType()) && !f2.toGenericString().contains("final"))
                     {
                         f2.set(obj2, f1.get(obj1));
                     }

@@ -3,7 +3,21 @@
  */
 package de.mpg.imeji.logic.controller;
 
-import de.mpg.imeji.exceptions.*;
+import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import de.mpg.imeji.exceptions.AuthenticationError;
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.NotAllowedError;
+import de.mpg.imeji.exceptions.NotFoundException;
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.ImejiTriple;
@@ -19,24 +33,13 @@ import de.mpg.imeji.logic.search.query.URLQueryTransformer;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.*;
+import de.mpg.imeji.logic.vo.Album;
+import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Properties.Status;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.j2j.helper.DateHelper;
 import de.mpg.j2j.helper.J2JHelper;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import com.thoughtworks.xstream.io.naming.NoNameCoder;
-
-import static com.google.common.base.Strings.isNullOrEmpty;
-import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
 
 /**
  * Implements CRUD and Search methods for {@link Album}
@@ -65,23 +68,11 @@ public class AlbumController extends ImejiController {
 	 * @param user
 	 */
 	public URI create(Album album, User user) throws ImejiException {
-		return createAskValidate(album, user, true);
-	}
-
-	public URI createNoValidate(Album album, User user) throws ImejiException {
-		return createAskValidate(album, user, false);
-	}
-
-	public URI createAskValidate(Album album, User user, boolean validate)
-			throws ImejiException {
-		if (validate) {
-			validateAlbum(album, user);
-		}
 		writeCreateProperties(album, user);
 		GrantController gc = new GrantController();
 		gc.addGrants(user, AuthorizationPredefinedRoles.admin(album.getId()
 				.toString(), null), user);
-		writer.create(WriterFacade.toList(album), user);
+		writer.create(WriterFacade.toList(album), null, user);
 		return album.getId();
 	}
 
@@ -98,7 +89,7 @@ public class AlbumController extends ImejiController {
 			throw new NotAllowedError("album_not_allowed_to_add_item");
 		}
 		writeUpdateProperties(ic, user);
-		writer.update(WriterFacade.toList(ic), user, false);
+		writer.update(WriterFacade.toList(ic), null, user, false);
 		return retrieve(ic.getId(), user);
 	}
 
@@ -112,21 +103,22 @@ public class AlbumController extends ImejiController {
 	 */
 	public Album update(Album ic, User user) throws ImejiException {
 		writeUpdateProperties(ic, user);
-		writer.update(WriterFacade.toList(ic), user);
+		writer.update(WriterFacade.toList(ic), null, user, true);
 		return retrieve(ic.getId(), user);
 	}
-	
+
 	/**
-	 * Updates an album -Logged in users: --User is album owner --OR
-	 * user is album editor, by choice checking the security
+	 * Updates an album -Logged in users: --User is album owner --OR user is
+	 * album editor, by choice checking the security
 	 * 
 	 * @param ic
 	 * @param user
 	 * @throws ImejiException
 	 */
-	public Album update(Album ic, User user, boolean doCheckSecurity) throws ImejiException {
+	public Album update(Album ic, User user, boolean doCheckSecurity)
+			throws ImejiException {
 		writeUpdateProperties(ic, user);
-		writer.update(WriterFacade.toList(ic), user, doCheckSecurity);
+		writer.update(WriterFacade.toList(ic), null, user, doCheckSecurity);
 		return retrieve(ic.getId(), user);
 	}
 
@@ -140,7 +132,7 @@ public class AlbumController extends ImejiController {
 	 */
 	public void updateLazy(Album ic, User user) throws ImejiException {
 		writeUpdateProperties(ic, user);
-		writer.updateLazy(WriterFacade.toList(ic), user);
+		writer.updateLazy(WriterFacade.toList(ic), null, user);
 	}
 
 	/**
@@ -401,43 +393,6 @@ public class AlbumController extends ImejiController {
 		return (List<Album>) loadAlbumsLazy(uris, user, -1, 0);
 	}
 
-	public void validateAlbum(Album album, User u) throws ImejiException {
-		// Copied from Collection Bean in presentation
-		if (isNullOrEmpty(album.getMetadata().getTitle().trim())) {
-			throw new BadRequestException("error_album_need_title");
-		}
-
-		List<Person> pers = new ArrayList<Person>();
-
-		for (Person c : album.getMetadata().getPersons()) {
-			List<Organization> orgs = new ArrayList<Organization>();
-			for (Organization o : c.getOrganizations()) {
-				if (!isNullOrEmpty(o.getName().trim())) {
-					orgs.add(o);
-				} else {
-					throw new BadRequestException(
-							"error_organization_need_name");
-				}
-			}
-
-			if (!isNullOrEmpty(c.getFamilyName().trim())) {
-				if (orgs.size() > 0) {
-					pers.add(c);
-				} else {
-					throw new BadRequestException(
-							"error_author_need_one_organization");
-				}
-			} else {
-				throw new BadRequestException(
-						"error_author_need_one_family_name");
-			}
-		}
-
-		if (pers.size() == 0 || pers == null || pers.isEmpty()) {
-			throw new BadRequestException("error_album_need_one_author");
-		}
-	}
-
 	public List<Item> retrieveItems(String id, User user, String q)
 			throws ImejiException {
 		ItemController ic = new ItemController();
@@ -456,7 +411,7 @@ public class AlbumController extends ImejiController {
 		}
 		return itemList;
 	}
-	
+
 	/**
 	 * Patch an album. !!! Use with Care !!!
 	 * 
@@ -469,7 +424,6 @@ public class AlbumController extends ImejiController {
 		writer.patch(triples, user, checkSecurity);
 	}
 
-
 	/**
 	 * Update a {@link Album} (with its Logo)
 	 * 
@@ -477,17 +431,17 @@ public class AlbumController extends ImejiController {
 	 * @param user
 	 * @throws ImejiException
 	 */
-	public void updateAlbumLogo(Album ic, File f, User u) throws ImejiException, IOException, URISyntaxException
-	{
+	public void updateAlbumLogo(Album ic, File f, User u)
+			throws ImejiException, IOException, URISyntaxException {
 		ic = (Album) updateFile(ic, f, u);
 		if (f != null && f.exists()) {
 
 			// Update the collection as a patch only with collection Logo Triple
-			List<ImejiTriple> triples = getContainerLogoTriples(ic.getId().toString(), ic, ic.getLogoUrl().toString()) ;
+			List<ImejiTriple> triples = getContainerLogoTriples(ic.getId()
+					.toString(), ic, ic.getLogoUrl().toString());
 			patch(triples, u, true);
 
-        }
+		}
 	}
-		
 
 }

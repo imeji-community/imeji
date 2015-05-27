@@ -21,7 +21,6 @@ import org.apache.log4j.Logger;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 
-import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.exceptions.UnprocessableError;
@@ -86,10 +85,9 @@ public class ProfileController extends ImejiController {
 	 */
 	public MetadataProfile create(MetadataProfile p, User user)
 			throws ImejiException {
-		validateProfile(p);
 		writeCreateProperties(p, user);
 		p.setStatus(Status.PENDING);
-		writer.create(WriterFacade.toList(p), user);
+		writer.create(WriterFacade.toList(p), null, user);
 		if (!user.isAdmin()) {
 			GrantController gc = new GrantController();
 			gc.addGrants(user, AuthorizationPredefinedRoles.admin(null, p
@@ -159,9 +157,8 @@ public class ProfileController extends ImejiController {
 	 * @throws ImejiException
 	 */
 	public void update(MetadataProfile mdp, User user) throws ImejiException {
-		validateProfile(mdp);
 		writeUpdateProperties(mdp, user);
-		writer.update(WriterFacade.toList(mdp), user);
+		writer.update(WriterFacade.toList(mdp), null, user, true);
 		Imeji.executor.submit(new CleanMetadataJob(mdp));
 	}
 
@@ -381,23 +378,6 @@ public class ProfileController extends ImejiController {
 		ImejiSPARQL.execUpdate(SPARQLQueries
 				.updateRemoveAllMetadataWithoutStatement(id));
 		ImejiSPARQL.execUpdate(SPARQLQueries.updateEmptyMetadata());
-	}
-
-	/**
-	 * Validate a {@link MetadataProfile}
-	 * 
-	 * @param profile
-	 * @throws ImejiException
-	 */
-	public void validateProfile(MetadataProfile profile) throws ImejiException {
-		if (isNullOrEmpty(profile.getTitle())) {
-			throw new BadRequestException("error_profile_need_title");
-		}
-		for (Statement s : profile.getStatements()) {
-			if (s.getLabels().isEmpty())
-				throw new UnprocessableError(
-						"STatement must have at least one label");
-		}
 	}
 
 	public boolean isReferencedByOtherResources(String profileUri,

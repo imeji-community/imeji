@@ -52,123 +52,115 @@ import de.mpg.imeji.logic.writer.WriterFacade;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class UserGroupController
-{
-    private static final ReaderFacade reader = new ReaderFacade(Imeji.userModel);
-    private static final WriterFacade writer = new WriterFacade(Imeji.userModel);
-    static Logger logger = Logger.getLogger(UserGroupController.class);
+public class UserGroupController {
+	private static final ReaderFacade reader = new ReaderFacade(Imeji.userModel);
+	private static final WriterFacade writer = new WriterFacade(Imeji.userModel);
+	static Logger logger = Logger.getLogger(UserGroupController.class);
 
-    /**
-     * Create a {@link UserGroup}
-     * 
-     * @param group
-     * @throws ImejiException
-     */
-    public void create(UserGroup group, User user) throws ImejiException
-    {
-        writer.create(WriterFacade.toList(group), user);
-    }
+	/**
+	 * Create a {@link UserGroup}
+	 * 
+	 * @param group
+	 * @throws ImejiException
+	 */
+	public void create(UserGroup group, User user) throws ImejiException {
+		writer.create(WriterFacade.toList(group), null, user);
+	}
 
-    /**
-     * Read a {@link UserGroup} with the given uri
-     * 
-     * @param uri
-     * @return
-     * @throws ImejiException
-     */
-    public UserGroup read(String uri, User user) throws ImejiException
-    {
-        return (UserGroup)reader.read(uri, user, new UserGroup());
-    }
+	/**
+	 * Read a {@link UserGroup} with the given uri
+	 * 
+	 * @param uri
+	 * @return
+	 * @throws ImejiException
+	 */
+	public UserGroup read(String uri, User user) throws ImejiException {
+		return (UserGroup) reader.read(uri, user, new UserGroup());
+	}
 
-    /**
-     * Read a {@link UserGroup} with the given {@link URI}
-     * 
-     * @param uri
-     * @return
-     * @throws ImejiException
-     */
-    public UserGroup read(URI uri, User user) throws ImejiException
-    {
-        return read(uri.toString(), user);
-    }
+	/**
+	 * Read a {@link UserGroup} with the given {@link URI}
+	 * 
+	 * @param uri
+	 * @return
+	 * @throws ImejiException
+	 */
+	public UserGroup read(URI uri, User user) throws ImejiException {
+		return read(uri.toString(), user);
+	}
 
-    /**
-     * Update a {@link UserGroup}
-     * 
-     * @param group
-     * @param user
-     * @throws ImejiException
-     */
-    public void update(UserGroup group, User user) throws ImejiException
-    {
-        writer.update(WriterFacade.toList(group), user);
-    }
+	/**
+	 * Update a {@link UserGroup}
+	 * 
+	 * @param group
+	 * @param user
+	 * @throws ImejiException
+	 */
+	public void update(UserGroup group, User user) throws ImejiException {
+		writer.update(WriterFacade.toList(group), null, user, true);
+	}
 
-    /**
-     * Delete a {@link UserGroup}
-     * 
-     * @param group
-     * @param user
-     * @throws ImejiException
-     */
-    public void delete(UserGroup group, User user) throws ImejiException
-    {
-        writer.delete(WriterFacade.toList(group), user);
-    }
+	/**
+	 * Delete a {@link UserGroup}
+	 * 
+	 * @param group
+	 * @param user
+	 * @throws ImejiException
+	 */
+	public void delete(UserGroup group, User user) throws ImejiException {
+		writer.delete(WriterFacade.toList(group), user);
+	}
 
-    /**
-     * Search all {@link UserGroup} having a {@link Grant} for the object defined in grantFor
-     * 
-     * @param grantFor
-     * @param user
-     * @return
-     */
-    public Collection<UserGroup> searchByGrantFor(String grantFor, User user)
-    {
-        return searchBySPARQLQuery(SPARQLQueries.selectUserGroupWithGrantFor(grantFor), user);
-    }
+	/**
+	 * Search all {@link UserGroup} having a {@link Grant} for the object
+	 * defined in grantFor
+	 * 
+	 * @param grantFor
+	 * @param user
+	 * @return
+	 */
+	public Collection<UserGroup> searchByGrantFor(String grantFor, User user) {
+		return searchBySPARQLQuery(
+				SPARQLQueries.selectUserGroupWithGrantFor(grantFor), user);
+	}
 
-    /**
-     * Retrieve all {@link UserGroup} Only allowed for System administrator
-     * 
-     * @return
-     */
-    public Collection<UserGroup> searchByName(String q, User user)
-    {
-        return searchBySPARQLQuery(SPARQLQueries.selectUserGroupAll(q), user);
-    }
+	/**
+	 * Retrieve all {@link UserGroup} Only allowed for System administrator
+	 * 
+	 * @return
+	 */
+	public Collection<UserGroup> searchByName(String q, User user) {
+		return searchBySPARQLQuery(SPARQLQueries.selectUserGroupAll(q), user);
+	}
 
-    /**
-     * Retrieve all {@link UserGroup} a user is member of
-     * 
-     * @return
-     */
-    public Collection<UserGroup> searchByUser(User member, User user)
-    {
-        return searchBySPARQLQuery(SPARQLQueries.selectUserGroupOfUser(member), Imeji.adminUser);
-    }
+	/**
+	 * Retrieve all {@link UserGroup} a user is member of
+	 * 
+	 * @return
+	 */
+	public Collection<UserGroup> searchByUser(User member, User user) {
+		return searchBySPARQLQuery(SPARQLQueries.selectUserGroupOfUser(member),
+				Imeji.adminUser);
+	}
 
-    /**
-     * Search {@link UserGroup} according a SPARQL Query
-     * 
-     * @param q
-     * @param user
-     * @return
-     */
-    private Collection<UserGroup> searchBySPARQLQuery(String q, User user) 
-    {
-        Collection<UserGroup> userGroups = new ArrayList<UserGroup>();
-        Search search = SearchFactory.create();
-        for (String uri : search.searchSimpleForQuery(q).getResults())
-        {
-        		try {
-						userGroups.add((UserGroup)reader.read(uri, user, new UserGroup()));
-        		}
-        		catch (ImejiException e) {
-        			logger.info("User group with uri "+uri+" not found.");
-        		}
-        }
-        return userGroups;
-    }
+	/**
+	 * Search {@link UserGroup} according a SPARQL Query
+	 * 
+	 * @param q
+	 * @param user
+	 * @return
+	 */
+	private Collection<UserGroup> searchBySPARQLQuery(String q, User user) {
+		Collection<UserGroup> userGroups = new ArrayList<UserGroup>();
+		Search search = SearchFactory.create();
+		for (String uri : search.searchSimpleForQuery(q).getResults()) {
+			try {
+				userGroups.add((UserGroup) reader.read(uri, user,
+						new UserGroup()));
+			} catch (ImejiException e) {
+				logger.info("User group with uri " + uri + " not found.");
+			}
+		}
+		return userGroups;
+	}
 }

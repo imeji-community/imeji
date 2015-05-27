@@ -3,6 +3,7 @@
  */
 package de.mpg.imeji.presentation.album;
 
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.UserController;
@@ -142,7 +143,7 @@ public class AlbumBean extends ContainerBean {
 						active = true;
 						// sessionBean.setActiveAlbum(album);
 					}
-					
+
 					int myPrivateCount = getPrivateCount();
 					if (myPrivateCount != 0) {
 						BeanHelper.info(sessionBean.getMessage(
@@ -201,49 +202,6 @@ public class AlbumBean extends ContainerBean {
 		Navigation nav = (Navigation) BeanHelper
 				.getApplicationBean(Navigation.class);
 		return nav.getAlbumUrl() + id + "/" + nav.getInfosPath();
-	}
-
-	/**
-	 * True if a the information about the {@link Album} are valid
-	 * 
-	 * @return
-	 */
-	public boolean valid() {
-		boolean valid = true;
-		boolean hasAuthor = false;
-		if (getAlbum().getMetadata().getTitle() == null
-				|| "".equals(getAlbum().getMetadata().getTitle())) {
-			BeanHelper.error(sessionBean
-					.getMessage("collection_create_error_title"));
-			valid = false;
-		}
-		for (Person c : getAlbum().getMetadata().getPersons()) {
-			boolean hasOrganization = false;
-			if (!"".equals(c.getFamilyName())) {
-				hasAuthor = true;
-			}
-			for (Organization o : c.getOrganizations()) {
-				if (!"".equals(o.getName()) || "".equals(c.getFamilyName())) {
-					hasOrganization = true;
-				}
-				if (hasOrganization && "".equals(c.getFamilyName())) {
-					BeanHelper.error(sessionBean
-							.getMessage("error_author_need_one_family_name"));
-					valid = false;
-				}
-			}
-			if (!hasOrganization) {
-				BeanHelper.error(sessionBean
-						.getMessage("error_author_need_one_organization"));
-				valid = false;
-			}
-		}
-		if (!hasAuthor) {
-			BeanHelper.error(sessionBean
-					.getMessage("error_album_need_one_author"));
-			valid = false;
-		}
-		return valid;
 	}
 
 	@Override
@@ -352,7 +310,7 @@ public class AlbumBean extends ContainerBean {
 	 */
 	public boolean update() throws Exception {
 		AlbumController ac = new AlbumController();
-		if (valid()) {
+		try {
 
 			Album icPre = ac.retrieveLazy(album.getId(), sessionBean.getUser());
 			if (icPre.getLogoUrl() != null && album.getLogoUrl() == null) {
@@ -379,8 +337,12 @@ public class AlbumBean extends ContainerBean {
 			// }
 			//
 			BeanHelper.info(sessionBean.getMessage("success_album_update"));
+			return true;
+		} catch (UnprocessableError e) {
+			BeanHelper.error(sessionBean.getMessage(e.getMessage()));
+			return false;
 		}
-		return true;
+
 	}
 
 	/**

@@ -8,6 +8,8 @@ import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Organization;
+import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.rest.api.CollectionService;
@@ -105,11 +107,15 @@ public class ProfileServiceTest {
 		p.setStatements(statements);
         p.setDefault(false);
         p.setDescription(PROFILE_DESCRIPTION);
-
+        Person pers = c.getMetadata().getPersons().iterator().next();
+        Organization org = pers.getOrganizations().iterator().next();
+        org.setName("TEST");
+        pers.setFamilyName("TEST");
+        c.getMetadata().setTitle("TEST");
 		c.setProfile(p.getId());
 
 		pController.create(p, testUser);
-		cController.createNoValidate(c, p, testUser, cController.getProfileCreationMethod("reference"), null);
+		cController.create(c, p, testUser, cController.getProfileCreationMethod("reference"), null);
 	}
 
 	@Test

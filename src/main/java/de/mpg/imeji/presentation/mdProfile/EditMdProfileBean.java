@@ -8,6 +8,7 @@ import javax.faces.event.ValueChangeEvent;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.UrlHelper;
@@ -123,18 +124,19 @@ public class EditMdProfileBean extends MdProfileBean {
 			st.setPos(pos);
 			pos++;
 		}
-		if (validateProfile(getProfile())) {
-			try {
-				ProfileController profileController = new ProfileController();
-				profileController.update(getProfile(), session.getUser());
-				session.getProfileCached().clear();
-				BeanHelper.info(session.getMessage("success_profile_save"));
-			} catch (Exception e) {
-				BeanHelper.error(session.getMessage("error_profile_save"),
-						e.getMessage());
-				logger.error(session.getMessage("error_profile_save"), e);
-			}
+
+		try {
+			ProfileController profileController = new ProfileController();
+			profileController.update(getProfile(), session.getUser());
+			session.getProfileCached().clear();
+			BeanHelper.info(session.getMessage("success_profile_save"));
 			cancel();
+		} catch (UnprocessableError e) {
+			BeanHelper.error(session.getMessage(e.getMessage()));
+		} catch (Exception e) {
+			BeanHelper.error(session.getMessage("error_profile_save"),
+					e.getMessage());
+			logger.error(session.getMessage("error_profile_save"), e);
 		}
 		return "";
 	}

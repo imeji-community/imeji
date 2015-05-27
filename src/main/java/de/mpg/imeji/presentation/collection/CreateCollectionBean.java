@@ -3,11 +3,19 @@
  */
 package de.mpg.imeji.presentation.collection;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
+
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.controller.CollectionController.MetadataProfileCreationMethod;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -17,15 +25,6 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.VocabularyHelper;
-
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
-
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
 
 /**
  * Java Bean for the create Collection Page
@@ -104,10 +103,10 @@ public class CreateCollectionBean extends CollectionBean {
 
 	public boolean createdCollection() throws ImejiException,
 			URISyntaxException {
-		if (valid()) {
+		try {
 			CollectionController collectionController = new CollectionController();
 			int pos = 0;
-			// Set the position of the statement (used for the sorting later)
+			// Set the position of the persons and organizations (used for the sorting later)
 			for (Person p : getCollection().getMetadata().getPersons()) {
 				p.setPos(pos);
 				pos++;
@@ -144,9 +143,11 @@ public class CreateCollectionBean extends CollectionBean {
 					.info(sessionBean.getMessage("success_collection_create"));
 
 			return true;
+		} catch (UnprocessableError e) {
+			BeanHelper.error(sessionBean.getMessage(e.getMessage()));
+			getCollection().setId(null);
+			return false;
 		}
-		return false;
-
 	}
 
 	public static String extractIDFromURI(URI uri) {

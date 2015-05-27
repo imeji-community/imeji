@@ -33,6 +33,8 @@ import de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
+import de.mpg.imeji.rest.to.OrganizationTO;
+import de.mpg.imeji.rest.to.PersonTO;
 
 public class CollectionServiceTest {
 
@@ -121,12 +123,20 @@ public class CollectionServiceTest {
 	public void test_createCollection() throws Exception{
 
 		CollectionTO to = new CollectionTO();
+		to.setTitle("test");
+		PersonTO p = new PersonTO();
+		p.setFamilyName("Test");
+		OrganizationTO o = new OrganizationTO();
+		o.setName("Test");
+		p.getOrganizations().add(o);
+		to.getContributors().add(p);
 		try {
 			
-			to = collService.createNoValidate(to, JenaUtil.testUser);
+			to = collService.create(to, JenaUtil.testUser);
 		} catch (Exception e) {
-			fail();
 			logger.error("test_createCollectionCollection", e);
+			fail();
+			
 		}
 		// check the collection be created and has new id
 		assertNotNull(to.getId());

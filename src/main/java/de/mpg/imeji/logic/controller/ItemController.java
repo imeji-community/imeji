@@ -235,8 +235,11 @@ public class ItemController extends ImejiController {
 			img.getMetadataSet().setProfile(ic.getProfile());
 			ic.getImages().add(img.getId());
 		}
-		writer.create(J2JHelper.cast2ObjectList(new ArrayList<Item>(items)),
-				user);
+		ProfileController pc = new ProfileController();
+		writer.create(
+				J2JHelper.cast2ObjectList(new ArrayList<Item>(items)),
+				pc.retrieve(items.iterator().next().getMetadataSet()
+						.getProfile(), user), user);
 		List<ImejiTriple> triples = getUpdateTriples(coll.toString(), user,
 				items.iterator().next());
 		// Update the collection
@@ -408,7 +411,11 @@ public class ItemController extends ImejiController {
 			writeUpdateProperties(item, user);
 			imBeans.add(createFulltextForMetadata(item));
 		}
-		writer.update(imBeans, user);
+		ProfileController pc = new ProfileController();
+		writer.update(
+				imBeans,
+				pc.retrieve(items.iterator().next().getMetadataSet()
+						.getProfile(), user), user, true);
 	}
 
 	/**
@@ -642,8 +649,7 @@ public class ItemController extends ImejiController {
 		c.getImages().clear();
 		return ImejiSPARQL.exec(q, null);
 	}
-	
-	
+
 	/**
 	 * Set the status of a {@link List} of {@link Item} to released
 	 * 
@@ -793,7 +799,8 @@ public class ItemController extends ImejiController {
 			throws ImejiException {
 		List<ImejiTriple> triples = new ArrayList<ImejiTriple>();
 		for (Item item : l) {
-			if (!profileUri.equals(item.getMetadataSet().getProfile().toString())) {
+			if (!profileUri.equals(item.getMetadataSet().getProfile()
+					.toString())) {
 				triples.add(getProfileTriple(item.getMetadataSet().getId()
 						.toString(), item, profileUri));
 				triples.addAll(getUpdateTriples(item.getId().toString(), user,

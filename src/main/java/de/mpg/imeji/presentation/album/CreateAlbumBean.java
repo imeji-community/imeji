@@ -34,6 +34,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.vo.Person;
@@ -50,62 +51,64 @@ import de.mpg.imeji.presentation.util.ImejiFactory;
  */
 @ManagedBean(name = "CreateAlbumBean")
 @SessionScoped
-public class CreateAlbumBean extends AlbumBean
-{
-    private static final long serialVersionUID = -3257133789269212025L;
+public class CreateAlbumBean extends AlbumBean {
+	private static final long serialVersionUID = -3257133789269212025L;
 
-    /**
-     * DEfault constructor
-     */
-    public CreateAlbumBean()
-    {
-        super();
-    }
+	/**
+	 * DEfault constructor
+	 */
+	public CreateAlbumBean() {
+		super();
+	}
 
-    /**
-     * Called when bean page is called
-     */
-    public void init()
-    {
-    	setAlbum(ImejiFactory.newAlbum());
-    	((List<Person>)getAlbum().getMetadata().getPersons()).set(0, sessionBean.getUser().getPerson().clone());
-    }
+	/**
+	 * Called when bean page is called
+	 */
+	public void init() {
+		setAlbum(ImejiFactory.newAlbum());
+		((List<Person>) getAlbum().getMetadata().getPersons()).set(0,
+				sessionBean.getUser().getPerson().clone());
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see de.mpg.imeji.presentation.album.AlbumBean#getCancel()
-     */
-    @Override
-    public String getCancel()
-    {
-        Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-        return nav.getAlbumsUrl();
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see de.mpg.imeji.presentation.album.AlbumBean#getCancel()
+	 */
+	@Override
+	public String getCancel() {
+		Navigation nav = (Navigation) BeanHelper
+				.getApplicationBean(Navigation.class);
+		return nav.getAlbumsUrl();
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see de.mpg.imeji.presentation.album.AlbumBean#save()
-     */
-    @Override
-    public String save() throws Exception
-    {
-        AlbumController ac = new AlbumController();
-        if (valid())
-        {
-            ac.create(getAlbum(), sessionBean.getUser());
-            UserController uc = new UserController(sessionBean.getUser());
-            sessionBean.setUser(uc.retrieve(sessionBean.getUser().getEmail()));
-            BeanHelper.info(sessionBean.getMessage("success_album_create"));
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see de.mpg.imeji.presentation.album.AlbumBean#save()
+	 */
+	@Override
+	public String save() throws Exception {
+		try {
+			AlbumController ac = new AlbumController();
+			ac.create(getAlbum(), sessionBean.getUser());
+			UserController uc = new UserController(sessionBean.getUser());
+			sessionBean.setUser(uc.retrieve(sessionBean.getUser().getEmail()));
+			BeanHelper.info(sessionBean.getMessage("success_album_create"));
 
-            Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
+			Navigation nav = (Navigation) BeanHelper
+					.getApplicationBean(Navigation.class);
 
-            ((AlbumBean)BeanHelper.getSessionBean(AlbumBean.class)).setAlbum(getAlbum());
-            sessionBean.setActiveAlbum(getAlbum());
+			((AlbumBean) BeanHelper.getSessionBean(AlbumBean.class))
+					.setAlbum(getAlbum());
+			sessionBean.setActiveAlbum(getAlbum());
 
-            FacesContext.getCurrentInstance().getExternalContext().redirect
-                 (nav.getAlbumUrl()+getAlbum().getIdString());
-            return "";
-        }
-        return "";
-    }
+			FacesContext.getCurrentInstance().getExternalContext()
+					.redirect(nav.getAlbumUrl() + getAlbum().getIdString());
+		} catch (UnprocessableError e) {
+			BeanHelper.error(sessionBean.getMessage(e.getMessage()));
+			getAlbum().setId(null);
+		}
+		return "";
+	}
 }

@@ -34,9 +34,7 @@ public class UserController {
 	private User user;
 	static Logger logger = Logger.getLogger(UserController.class);
 
-
-
-    /**
+	/**
 	 * User type (restricted: can not create collection)
 	 * 
 	 * @author saquet
@@ -90,7 +88,7 @@ public class UserController {
 		}
 		u.setName(u.getPerson().getGivenName() + " "
 				+ u.getPerson().getFamilyName());
-		writer.create(WriterFacade.toList(u), user);
+		writer.create(WriterFacade.toList(u), null, user);
 		return u;
 	}
 
@@ -151,7 +149,8 @@ public class UserController {
 	 *            : The user who does the update
 	 * @throws ImejiException
 	 */
-	public void update(User updatedUser, User currentUser) throws ImejiException {
+	public void update(User updatedUser, User currentUser)
+			throws ImejiException {
 		try {
 			User u = retrieve(updatedUser.getEmail());
 			if (!u.getId().toString().equals(updatedUser.getId().toString()))
@@ -163,7 +162,7 @@ public class UserController {
 		}
 		updatedUser.setName(updatedUser.getPerson().getGivenName() + " "
 				+ updatedUser.getPerson().getFamilyName());
-		writer.update(WriterFacade.toList(updatedUser), currentUser);
+		writer.update(WriterFacade.toList(updatedUser), null, currentUser, true);
 	}
 
 	/**
@@ -327,16 +326,16 @@ public class UserController {
 	 * 
 	 * @param uris
 	 * @return
-	 * @throws ImejiAPIException 
+	 * @throws ImejiAPIException
 	 */
-	public Collection<User> loadUsers(List<String> uris)  {
+	public Collection<User> loadUsers(List<String> uris) {
 		Collection<User> users = new ArrayList<User>();
 		for (String uri : uris) {
 			try {
 
 				users.add((User) reader.read(uri, user, new User()));
 			} catch (ImejiException e) {
-				logger.info("Could not find user with URI "+uri, e);
+				logger.info("Could not find user with URI " + uri, e);
 			}
 		}
 		return users;
@@ -372,13 +371,12 @@ public class UserController {
 	private Collection<Person> loadPersons(List<String> uris, String model) {
 		Collection<Person> p = new ArrayList<Person>();
 		for (String uri : uris) {
-				try {
-					ReaderFacade reader = new ReaderFacade(model);
-					p.add((Person) reader.read(uri, user, new Person()));
-				}
-				catch (ImejiException e){
-				
-				}
+			try {
+				ReaderFacade reader = new ReaderFacade(model);
+				p.add((Person) reader.read(uri, user, new Person()));
+			} catch (ImejiException e) {
+
+			}
 		}
 		return p;
 	}
@@ -420,18 +418,18 @@ public class UserController {
 		return admins;
 	}
 
-    /**
-     * Search for users to be notified by item download of the collection
-     *
-     * @param user
-     * @param c
-     * @return
-     */
-    public List<User> searchUsersToBeNotified(User user, CollectionImeji c) {
-        Search search = SearchFactory.create();
-        List<String> uris = search.searchSimpleForQuery(
-                SPARQLQueries.selectUsersToBeNotifiedByFileDownload(user, c))
-        .getResults();
-        return (List<User>)loadUsers(uris);
-    }
+	/**
+	 * Search for users to be notified by item download of the collection
+	 *
+	 * @param user
+	 * @param c
+	 * @return
+	 */
+	public List<User> searchUsersToBeNotified(User user, CollectionImeji c) {
+		Search search = SearchFactory.create();
+		List<String> uris = search.searchSimpleForQuery(
+				SPARQLQueries.selectUsersToBeNotifiedByFileDownload(user, c))
+				.getResults();
+		return (List<User>) loadUsers(uris);
+	}
 }

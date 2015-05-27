@@ -608,7 +608,7 @@ public class CollectionTest extends ImejiTestBase {
         stored = collectionTO.getTitle();
         collectionTO.setTitle("");
         Response response = getResponse(request, collectionTO);
-        assertEquals(BAD_REQUEST.getStatusCode(), response.getStatus());
+        assertEquals(UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
         //TODO: BAD_REQUEST response message is not correctly generated
         collectionTO.setTitle(stored);
 
@@ -625,7 +625,7 @@ public class CollectionTest extends ImejiTestBase {
         stored = contrib.getFamilyName();
         contrib.setFamilyName("");
         response = getResponse(request, collectionTO);
-        assertEquals(BAD_REQUEST.getStatusCode(), response.getStatus());
+        assertEquals(UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
         contrib.setFamilyName(stored);
 
         //empty organization name
@@ -633,7 +633,7 @@ public class CollectionTest extends ImejiTestBase {
         stored = org.getName();
         org.setName("");
         response = getResponse(request, collectionTO);
-        assertEquals(BAD_REQUEST.getStatusCode(), response.getStatus());
+        assertEquals(UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
         org.setName(stored);
 
         //wrong profile id

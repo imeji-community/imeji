@@ -1,6 +1,14 @@
 package de.mpg.imeji.logic.validation.impl;
 
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import org.apache.axis.holders.URIHolder;
+import org.apache.commons.httpclient.util.URIUtil;
+
 import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.validation.Validator;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -48,28 +56,28 @@ public class MetadataValidator implements Validator<Metadata> {
 	private boolean validataMetadata(Metadata md, Statement s) {
 		if (md instanceof Text) {
 			String value = ((Text) md).getText();
-			return value != null && isAllowedValue(value, s);
+			return value != null && isAllowedValueString(value, s);
 		} else if (md instanceof Number) {
-			String value = Double.toString(((Number) md).getNumber());
-			return value != null && isAllowedValue(value, s);
+			double value = ((Number) md).getNumber();
+			return isAllowedValueDouble(value, s);
 		} else if (md instanceof Date) {
 			String value = ((Date) md).getDate();
-			return value != null && isAllowedValue(value, s);
+			return value != null && isAllowedValueString(value, s);
 		} else if (md instanceof Geolocation) {
 			String value = ((Geolocation) md).getName();
-			return value != null && isAllowedValue(value, s);
+			return value != null && isAllowedValueString(value, s);
 		} else if (md instanceof ConePerson) {
 			String value = ((ConePerson) md).getPerson().getCompleteName();
-			return value != null && isAllowedValue(value, s);
+			return value != null && isAllowedValueString(value, s);
 		} else if (md instanceof Link) {
-			String value = ((Link) md).getUri().toString();
-			return value != null && isAllowedValue(value, s);
+			URI value = ((Link) md).getUri();
+			return value != null && isAllowedValueURI(value, s);
 		} else if (md instanceof License) {
 			String value = ((License) md).getLicense();
-			return value != null && isAllowedValue(value, s);
+			return value != null && isAllowedValueString(value, s);
 		} else if (md instanceof Publication) {
-			String value = ((Publication) md).getUri().toString();
-			return value != null && isAllowedValue(value, s);
+			URI value = ((Publication) md).getUri();
+			return value != null && isAllowedValueURI(value, s);
 		}
 		return false;
 	}
@@ -81,11 +89,83 @@ public class MetadataValidator implements Validator<Metadata> {
 	 * @param s
 	 * @return
 	 */
-	private boolean isAllowedValue(String value, Statement s) {
+	private boolean isAllowedValueString(String value, Statement s) {
 		if (s.getLiteralConstraints() != null
-				&& s.getLiteralConstraints().size() > 0)
-			return s.getLiteralConstraints().contains(s);
+				&& s.getLiteralConstraints().size() > 0) {
+			return containsString(s.getLiteralConstraints(), value);
+		}
 		return true;
+	}
+
+	/**
+	 * Check if the value is allowed according the literal constraints
+	 * 
+	 * @param value
+	 * @param s
+	 * @return
+	 */
+	private boolean isAllowedValueDouble(double value, Statement s) {
+		if (s.getLiteralConstraints() != null
+				&& s.getLiteralConstraints().size() > 0) {
+			return containsDouble(s.getLiteralConstraints(), value);
+		}
+		return true;
+	}
+
+	/**
+	 * Check if the value is allowed according the literal constraints
+	 * 
+	 * @param value
+	 * @param s
+	 * @return
+	 */
+	private boolean isAllowedValueURI(URI value, Statement s) {
+		if (s.getLiteralConstraints() != null
+				&& s.getLiteralConstraints().size() > 0) {
+			return containsURI(s.getLiteralConstraints(), value);
+		}
+		return true;
+	}
+
+	/**
+	 * Test if the {@link Collection} contains the {@link String}
+	 * 
+	 * @param l
+	 * @param value
+	 * @return
+	 */
+	private boolean containsString(Collection<String> l, String value) {
+		for (String s : l)
+			if (s.equals(value))
+				return true;
+		return false;
+	}
+
+	/**
+	 * Test if the {@link Collection} contains the {@link Double}
+	 * 
+	 * @param l
+	 * @param value
+	 * @return
+	 */
+	private boolean containsDouble(Collection<String> l, double value) {
+		for (String s : l)
+			if (Double.parseDouble(s) == value)
+				return true;
+		return false;
+	}
+
+	/**
+	 * Test if the {@link Collection} contains the {@link URI}
+	 * @param l
+	 * @param value
+	 * @return
+	 */
+	private boolean containsURI(Collection<String> l, URI value) {
+		for (String s : l)
+			if (URI.create(s).equals(value))
+				return true;
+		return false;
 	}
 
 }

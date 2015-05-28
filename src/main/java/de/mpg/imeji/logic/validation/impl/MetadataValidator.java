@@ -42,7 +42,7 @@ public class MetadataValidator implements Validator<Metadata> {
 			throws UnprocessableError {
 		Statement s = ProfileHelper.getStatement(md.getStatement(), p);
 		if (!validataMetadata(md, s))
-			throw new UnprocessableError("Metadata value not valid");
+			throw new UnprocessableError("Metadata value not valid: " + md.asFulltext());
 
 	}
 

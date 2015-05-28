@@ -42,7 +42,8 @@ public class MetadataValidator implements Validator<Metadata> {
 			throws UnprocessableError {
 		Statement s = ProfileHelper.getStatement(md.getStatement(), p);
 		if (!validataMetadata(md, s))
-			throw new UnprocessableError("Metadata value not valid: " + md.asFulltext());
+			throw new UnprocessableError("Metadata value not valid: "
+					+ md.asFulltext());
 
 	}
 
@@ -63,21 +64,21 @@ public class MetadataValidator implements Validator<Metadata> {
 		} else if (md instanceof Date) {
 			String value = ((Date) md).getDate();
 			return value != null && isAllowedValueString(value, s);
-		} else if (md instanceof Geolocation) {
-			String value = ((Geolocation) md).getName();
-			return value != null && isAllowedValueString(value, s);
-		} else if (md instanceof ConePerson) {
-			String value = ((ConePerson) md).getPerson().getCompleteName();
-			return value != null && isAllowedValueString(value, s);
 		} else if (md instanceof Link) {
 			URI value = ((Link) md).getUri();
 			return value != null && isAllowedValueURI(value, s);
+		} else if (md instanceof Geolocation) {
+			String value = ((Geolocation) md).getName();
+			return value != null;// No Predefined Value supported
+		} else if (md instanceof ConePerson) {
+			String value = ((ConePerson) md).getPerson().getCompleteName();
+			return value != null; // No Predefined Value supported;
 		} else if (md instanceof License) {
 			String value = ((License) md).getLicense();
-			return value != null && isAllowedValueString(value, s);
+			return value != null;// No Predefined Value supported
 		} else if (md instanceof Publication) {
 			URI value = ((Publication) md).getUri();
-			return value != null && isAllowedValueURI(value, s);
+			return value != null;// No Predefined Value supported
 		}
 		return false;
 	}
@@ -157,6 +158,7 @@ public class MetadataValidator implements Validator<Metadata> {
 
 	/**
 	 * Test if the {@link Collection} contains the {@link URI}
+	 * 
 	 * @param l
 	 * @param value
 	 * @return

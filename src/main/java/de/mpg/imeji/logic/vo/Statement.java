@@ -121,6 +121,11 @@ public class Statement implements Comparable<Statement>, Serializable,
 		this.minOccurs = minOccurs;
 	}
 
+	/**
+	 * If statement is multiple return "unbounded" else return "1"
+	 * 
+	 * @return
+	 */
 	@XmlElement(name = "maxOccurs", namespace = "http://imeji.org/terms/")
 	public String getMaxOccurs() {
 		return maxOccurs;
@@ -243,11 +248,10 @@ public class Statement implements Comparable<Statement>, Serializable,
 		 * 
 		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
 		 */
-		public int compare(Object o1, Object o2)
-        {
-        	if("".equals((String)o1))
-        		return 1;
-            return ((String)o1).compareToIgnoreCase((String)o2);
-        }
+		public int compare(Object o1, Object o2) {
+			if ("".equals((String) o1))
+				return 1;
+			return ((String) o1).compareToIgnoreCase((String) o2);
+		}
 	}
 }

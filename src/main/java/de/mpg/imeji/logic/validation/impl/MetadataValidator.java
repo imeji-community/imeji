@@ -1,14 +1,9 @@
 package de.mpg.imeji.logic.validation.impl;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.Collection;
 
-import org.apache.axis.holders.URIHolder;
-import org.apache.commons.httpclient.util.URIUtil;
-
 import de.mpg.imeji.exceptions.UnprocessableError;
-import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.validation.Validator;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -63,7 +58,8 @@ public class MetadataValidator implements Validator<Metadata> {
 			return isAllowedValueDouble(value, s);
 		} else if (md instanceof Date) {
 			String value = ((Date) md).getDate();
-			return value != null && isAllowedValueString(value, s);
+			return ((Date) md).getTime() != Long.MIN_VALUE && value != null
+					&& isAllowedValueString(value, s);
 		} else if (md instanceof Link) {
 			URI value = ((Link) md).getUri();
 			return value != null && isAllowedValueURI(value, s);

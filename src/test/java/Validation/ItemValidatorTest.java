@@ -329,6 +329,21 @@ public class ItemValidatorTest {
 		}
 	}
 
+	@Test
+	public void validateDateWrongFormat() {
+		Date md = (Date) MetadataFactory
+				.createMetadata(DATE_PREDEFINED_MULTIPLE);
+		md.setDate("not a date");
+		Item item = getItem();
+		item.getMetadataSet().getMetadata().add(md);
+		try {
+			validator.validate(item, profile);
+			Assert.fail("Wrong date format, should not be validated");
+		} catch (UnprocessableError e) {
+			// good
+		}
+	}
+
 	private static Item getItem() {
 		Item item = new Item();
 		item.getMetadataSet().setProfile(profile.getId());

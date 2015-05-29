@@ -65,7 +65,9 @@ public class MetadataValidator implements Validator<Metadata> {
 			return value != null && isAllowedValueURI(value, s);
 		} else if (md instanceof Geolocation) {
 			String value = ((Geolocation) md).getName();
-			return value != null;// No Predefined Value supported
+			Double latitude = ((Geolocation) md).getLatitude();
+			Double longitude = ((Geolocation) md).getLongitude();
+			return value != null && latitude >= -90 && latitude <= 90 && longitude >= -180 && longitude <= 180;// No Predefined Value supported
 		} else if (md instanceof ConePerson) {
 			String value = ((ConePerson) md).getPerson().getCompleteName();
 			return value != null; // No Predefined Value supported;

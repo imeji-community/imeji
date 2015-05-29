@@ -230,6 +230,7 @@ public class ItemController extends ImejiController {
 			} else {
 				img.setVisibility(Visibility.PUBLIC);
 			}
+			img.setFilename(FilenameUtils.getName(img.getFilename()));
 			img.setStatus(ic.getStatus());
 			img.setCollection(coll);
 			img.getMetadataSet().setProfile(ic.getProfile());
@@ -409,6 +410,7 @@ public class ItemController extends ImejiController {
 		List<Object> imBeans = new ArrayList<Object>();
 		for (Item item : items) {
 			writeUpdateProperties(item, user);
+			item.setFilename(FilenameUtils.getName(item.getFilename()));
 			imBeans.add(createFulltextForMetadata(item));
 		}
 		ProfileController pc = new ProfileController();

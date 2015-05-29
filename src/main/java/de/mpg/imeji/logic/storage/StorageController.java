@@ -94,7 +94,7 @@ public class StorageController implements Serializable {
 	 */
 	public UploadResult upload(String filename, File file, String collectionId)
 			throws ImejiException {
-
+		filename = FilenameUtils.getName(filename);
 		UploadResult result = storage.upload(filename, file, collectionId);
 		result.setChecksum(calculateChecksum(file));
 		result.setFileSize(file.length());

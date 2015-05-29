@@ -278,22 +278,20 @@ public class AlbumController extends ImejiController {
 	 */
 	public int removeFromAlbum(Album album, List<String> toDelete, User user)
 			throws ImejiException {
-		List<URI> inAlbums = new ArrayList<URI>(album.getImages());
-		album.getImages().clear();
-		for (URI uri : inAlbums) {
-			if (!toDelete.contains(uri.toString())) {
-				album.getImages().add(uri);
+		ItemController ic = new ItemController();
+		List<String> inAlbums1 = ic.seachContainerItemsFast(album, user, -1);
+		for (String uri : inAlbums1) {
+			if (!toDelete.contains(uri)) {
+				album.getImages().add(URI.create(uri));
 			}
 		}
-
 		if (album.getImages().size() == 0
 				&& Status.RELEASED.equals(album.getStatus())) {
 			throw new UnprocessableError(
-					"Album has been released! You are trying to remove all items from this album! Discard the album if necessary!");
+					"Album is released! You are trying to remove all items from this album! Discard the album if necessary!");
 		}
-
 		update(album, user, false);
-		return inAlbums.size() - album.getImages().size();
+		return inAlbums1.size() - album.getImages().size();
 	}
 
 	/**
@@ -396,7 +394,7 @@ public class AlbumController extends ImejiController {
 	public List<Item> retrieveItems(String id, User user, String q)
 			throws ImejiException {
 		ItemController ic = new ItemController();
-		List<Item> itemList = new ArrayList();
+		List<Item> itemList = new ArrayList<Item>();
 		try {
 			for (String itemId : ic
 					.search(ObjectHelper.getURI(Album.class, id),

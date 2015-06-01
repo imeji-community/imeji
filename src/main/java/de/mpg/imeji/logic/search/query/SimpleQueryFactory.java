@@ -182,8 +182,8 @@ public class SimpleQueryFactory {
 							rdfType))
 				searchQuery = " ?s <" + pair.getIndex().getNamespace()
 						+ "> ?c .";
-			// Search for collection/album by id (uri)
-			return "FILTER("
+			// Search for collection by id (uri)
+			return " ?s <"+ImejiNamespaces.COLLECTION+"> ?c. FILTER("
 					+ getSimpleFilter(pair,
 							SimpleSecurityQuery.getVariableName(rdfType),
 							pair.isNot()) + ") ." + searchQuery;

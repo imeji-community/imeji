@@ -158,7 +158,6 @@ public class TransferObjectFactory {
 						}
 						else
 						{
-							System.err.println(String.valueOf(max));
 							throw new BadRequestException(key + " has " + max + " value. Input " + key + "_" + String.valueOf(max+1) + " instead of " + key + "_" + pos + " to add the " + String.valueOf(max+1) + ". value.");
 						}
 						

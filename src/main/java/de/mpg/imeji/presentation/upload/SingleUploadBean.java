@@ -1,19 +1,52 @@
 package de.mpg.imeji.presentation.upload;
 
-import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.exceptions.UnprocessableError;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Serializable;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
+import javax.faces.model.SelectItem;
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.fileupload.FileItemIterator;
+import org.apache.commons.fileupload.FileItemStream;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.exceptions.TypeNotAllowedException;
 import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.vo.*;
+import de.mpg.imeji.logic.search.vo.SearchIndex;
+import de.mpg.imeji.logic.search.vo.SearchOperators;
+import de.mpg.imeji.logic.search.vo.SearchPair;
+import de.mpg.imeji.logic.search.vo.SearchQuery;
+import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.UrlHelper;
-import de.mpg.imeji.logic.vo.*;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.MetadataSet;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.metadata.MetadataSetBean;
 import de.mpg.imeji.presentation.metadata.SingleEditBean;
@@ -24,30 +57,6 @@ import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectLoader;
-
-import org.apache.commons.fileupload.FileItemIterator;
-import org.apache.commons.fileupload.FileItemStream;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
-
-import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-import javax.faces.event.AjaxBehaviorEvent;
-import javax.faces.model.SelectItem;
-import javax.servlet.http.HttpServletRequest;
-
-import java.io.*;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 @ManagedBean(name = "SingleUploadBean")
 @ViewScoped
@@ -72,27 +81,22 @@ public class SingleUploadBean implements Serializable {
 	private IngestImage ingestImage;
 
 	public SingleUploadBean() {
-
 	}
 
-	@PostConstruct
 	public void init() {
 		if (user != null) {
 			try {
-				loadCollections();
 				if (UrlHelper.getParameterBoolean("init")) {
 					sus.reset();
-
 				} else if (UrlHelper.getParameterBoolean("start")) {
 					upload();
 				} else if (UrlHelper.getParameterBoolean("done")) {
-					sus.copyToTemp();
+					prepareEditor();
 				}
 			} catch (Exception e) {
-				logger.info("Some exception happened during initialization", e);
+				BeanHelper.error(e.getMessage());
 			}
 		}
-
 	}
 
 	public String save() {
@@ -110,24 +114,23 @@ public class SingleUploadBean implements Serializable {
 		return "";
 	}
 
-	/*
-	 * public void copyValueToItem(List <SuperMetadataBean> itemStatements, List
-	 * <SuperMetadataBean> statements){ for(SuperMetadataBean smdb1 :
-	 * itemStatements) { for(SuperMetadataBean smdb2 : statements) {
-	 * if(smdb1.getStatement().getId().equals(smdb2.getStatement().getId())) {
-	 * smdb1.setText(smdb2.getText()); smdb1.setDate(smdb2.getDate());
-	 * smdb1.setCitation(smdb2.getCitation());
-	 * smdb1.setConeId(smdb2.getConeId()); smdb1.setPerson(smdb2.getPerson());
-	 * smdb1.setName(smdb2.getName()); smdb1.setLatitude(smdb2.getLatitude());
-	 * smdb1.setLongitude(smdb2.getLongitude());
-	 * smdb1.setLicense(smdb2.getLicense());
-	 * smdb1.setExternalUri(smdb2.getExternalUri());
-	 * smdb1.setLabel(smdb2.getLabel()); smdb1.setNumber(smdb2.getNumber());
-	 * smdb1.setExportFormat(smdb2.getExportFormat());
-	 * smdb1.setCitation(smdb2.getCitation()); } } }
+	/**
+	 * After the file has been uploaded
 	 * 
-	 * }
+	 * @throws Exception
 	 */
+	private void prepareEditor() throws Exception {
+		StorageController sc = new StorageController();
+		if (sc.guessNotAllowedFormat(sus.getIngestImage().getFile()).equals(
+				StorageUtils.BAD_FORMAT)) {
+			sus.reset();
+			throw new TypeNotAllowedException(
+					sb.getMessage("single_upload_invalid_content_format"));
+		}
+		loadCollections();
+		sus.copyToTemp();
+	}
+
 	// No throw Exception
 	private Item uploadFileToItem(File file, String title) {
 		try {
@@ -137,45 +140,38 @@ public class SingleUploadBean implements Serializable {
 			sus.setUploadedItem(item);
 			return item;
 		} catch (Exception e) {
-			sus.setfFile(" File " + title + " not uploaded: " + e.getMessage());
+			// sus.setfFile(" File " + title + " not uploaded: " +
+			// e.getMessage());
+			BeanHelper.error(e.getMessage());
 			return null;
 		}
 	}
 
 	/**
-	 * Throws an {@link Exception} if the file ca be upload. Works only if the
-	 * file has an extension (therefore, for file without extension, the
-	 * validation will only occur when the file has been stored locally)
+	 * Upload the file and read the technical Metadata
+	 * 
+	 * @throws FileUploadException
+	 * @throws TypeNotAllowedException
 	 */
-	// private void validateName(File file, String title) {
-	// if (StorageUtils.hasExtension(title)) {
-	// StorageController sc = new StorageController();
-	// String guessedNotAllowedFormat = sc.guessNotAllowedFormat(file);
-	// if (StorageUtils.BAD_FORMAT.equals(guessedNotAllowedFormat)) {
-	// SessionBean sessionBean = (SessionBean) BeanHelper
-	// .getSessionBean(SessionBean.class);
-	// throw new RuntimeException(
-	// sessionBean.getMessage("upload_format_not_allowed") + " (" +
-	// guessedNotAllowedFormat + ")");
-	// }
-	// }
-	// }
-
-	public void upload() {
+	public void upload() throws FileUploadException, TypeNotAllowedException {
 		HttpServletRequest request = (HttpServletRequest) FacesContext
 				.getCurrentInstance().getExternalContext().getRequest();
 		List<String> techMd = new ArrayList<String>();
-		try {
-			this.ingestImage = getUploadedIngestFile(request);
-			sus.setIngestImage(ingestImage);
-			techMd = TikaExtractor.extractFromFile(ingestImage.getFile());
-			sus.setTechMD(techMd);
-		} catch (FileUploadException | TypeNotAllowedException e) {
-			BeanHelper.error(e.getMessage());
-		}
+		this.ingestImage = getUploadedIngestFile(request);
+		sus.setIngestImage(ingestImage);
+		techMd = TikaExtractor.extractFromFile(ingestImage.getFile());
+		sus.setTechMD(techMd);
 
 	}
 
+	/**
+	 * Upload the file
+	 * 
+	 * @param request
+	 * @return
+	 * @throws FileUploadException
+	 * @throws TypeNotAllowedException
+	 */
 	private IngestImage getUploadedIngestFile(HttpServletRequest request)
 			throws FileUploadException, TypeNotAllowedException {
 		File tmp = null;
@@ -198,12 +194,6 @@ public class SingleUploadBean implements Serializable {
 						} finally {
 							in.close();
 							fos.close();
-							StorageController sc = new StorageController();
-							if (sc.guessNotAllowedFormat(tmp).equals(
-									StorageUtils.BAD_FORMAT)) {
-								throw new TypeNotAllowedException(
-										sb.getMessage("single_upload_invalid_content_format"));
-							}
 							ii.setName(filename);
 						}
 

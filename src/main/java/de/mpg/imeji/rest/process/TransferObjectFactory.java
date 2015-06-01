@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.thrift.meta_data.ListMetaData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -78,7 +79,6 @@ public class TransferObjectFactory {
 			boolean exitMD = false; 
 			for(StatementTO sTO : profileTO.getStatements())
 			{
-
 				for(LocalizedString label : sTO.getLabels())
 				{
 					if(entry.getKey().equals(label.getValue()))
@@ -87,9 +87,13 @@ public class TransferObjectFactory {
 						update = true;
 						break;
 					}	
-					else if("unbounded".equals(sTO.getMaxOccurs()))
+					else if(!("1".equals(sTO.getMaxOccurs())))
 					{ 
+						try{
 						key = entry.getKey().substring(0, entry.getKey().lastIndexOf("_"));
+						}catch(StringIndexOutOfBoundsException e){
+							break;
+						}
 						if(key.equals(label.getValue())){
 							try
 							{
@@ -98,15 +102,15 @@ public class TransferObjectFactory {
 								break;
 							}
 							update = true;
-							if(pos > 1)
-								exitMD = true;
 							break;
 						}
 					}
 				}
 				if(update)
-				{
-					MetadataSetTO mdTO = new MetadataSetTO();				
+				{  
+					MetadataSetTO mdTO = new MetadataSetTO();
+					int max = 0;
+					List<MetadataSetTO> sets = new ArrayList<MetadataSetTO>();
 					for(MetadataSetTO mdTO2 : itemTO.getMetadata())
 					{
 						for(LabelTO label : mdTO2.getLabels())
@@ -115,11 +119,13 @@ public class TransferObjectFactory {
 							{
 								mdTO = mdTO2;
 								exitMD = true;
+								sets.add(mdTO2);
+								max ++;
 								break;
 							}
 						}												
 					} 
-					
+					  
 					if(!exitMD)
 					{
 						List<LabelTO> labels = new ArrayList<LabelTO>();
@@ -132,18 +138,8 @@ public class TransferObjectFactory {
 						mdTO.setTypeUri(sTO.getType());
 						itemTO.getMetadata().add(mdTO);
 					}
-					else if(pos > 1)
+					else if(pos != -1)
 					{
-						int max = 0;
-						for(MetadataSetTO mdTO2 : itemTO.getMetadata())
-						{
-							for(LabelTO label : mdTO2.getLabels()){
-								if(key.equals(label.getValue()))
-								{
-									max ++;
-								}
-							}
-						}
 						if(max == pos-1)
 						{
 							List<LabelTO> labels = new ArrayList<LabelTO>();
@@ -156,11 +152,16 @@ public class TransferObjectFactory {
 							mdTO.setTypeUri(sTO.getType());
 							itemTO.getMetadata().add(mdTO);
 						}
-						else
+						else if(max != pos)
 						{
-							throw new BadRequestException(key + " has " + max + " value. Input " + key + "_" + String.valueOf(max+1) + " instead of " + key + "_" + pos + " to add the " + String.valueOf(max+1) + ". value.");
+							try
+							{
+								mdTO = sets.get(pos-1);
+							}catch(IndexOutOfBoundsException e)
+							{
+								throw new BadRequestException(key + " has " + max + " value. Input " + key + "_" + String.valueOf(max+1) + " instead of " + key + "_" + pos + " to add the " + String.valueOf(max+1) + ". value.");
+							}
 						}
-						
 					}
 					
 					JsonNode node = entry.getValue();

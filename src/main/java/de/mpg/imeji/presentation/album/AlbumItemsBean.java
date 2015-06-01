@@ -200,9 +200,7 @@ public class AlbumItemsBean extends ItemsBean {
 	 */
 	private void removeFromActive(List<String> uris) throws ImejiException {
 		SessionObjectsController soc = new SessionObjectsController();
-		int before = sb.getActiveAlbumSize();
-		soc.removeFromActiveAlbum(uris);
-		int deleted = before - sb.getActiveAlbumSize();
+		int deleted = soc.removeFromActiveAlbum(uris);
 		sb.getSelected().clear();
 		BeanHelper.info(deleted + " "
 				+ sb.getMessage("success_album_remove_images"));

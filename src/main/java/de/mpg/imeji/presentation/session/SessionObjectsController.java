@@ -73,11 +73,12 @@ public class SessionObjectsController
      * @param uris
      * @throws Exception
      */
-    public void removeFromActiveAlbum(List<String> uris) throws ImejiException
+    public int removeFromActiveAlbum(List<String> uris) throws ImejiException
     {
         AlbumController ac = new AlbumController();
-        ac.removeFromAlbum(session.getActiveAlbum(), uris, session.getUser());
+        int deleted = ac.removeFromAlbum(session.getActiveAlbum(), uris, session.getUser());
         reloadActiveAlbum();
+        return deleted;
     }
 
     /**

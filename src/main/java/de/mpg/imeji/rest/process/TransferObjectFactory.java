@@ -37,6 +37,7 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
 import de.mpg.imeji.rest.api.ProfileService;
 import de.mpg.imeji.rest.api.UserService;
 import de.mpg.imeji.rest.to.AlbumTO;
+import de.mpg.imeji.rest.to.CollectionProfileTO;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.EasyItemTO;
 import de.mpg.imeji.rest.to.IdentifierTO;
@@ -69,43 +70,65 @@ public class TransferObjectFactory {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TransferObjectFactory.class);
 	
-	public static void transferEasyItemTOItem(EasyItemTO easyTO, ItemTO to){
+	public static void transferEasyItemTOItem(MetadataProfileTO profileTO, EasyItemTO easyTO, ItemTO itemTO) throws JsonParseException, JsonMappingException{
 		for(Map.Entry<String, JsonNode> entry : easyTO.getEz_metadata().entrySet()){  
-//		for(EasyTO eTO : easyTO.getEz_metadata()){
-			for(MetadataSetTO mdTO : to.getMetadata())
+
+			for(StatementTO sTO : profileTO.getStatements())
 			{
 				boolean update = false;
-				for(LabelTO label : mdTO.getLabels())
+				for(LocalizedString label : sTO.getLabels())
 				{
 					if(entry.getKey().equals(label.getValue()))
 					{
-//					if(eTO.getKey().equals(label.getValue()))
 						update = true;
 						break;
 					}
 				}
 				if(update)
 				{
-//					if(mdTO.getValue() instanceof TextTO)
-//					{
-//						
-//					}
+					MetadataSetTO mdTO = new MetadataSetTO();
+					boolean exitMD = false;  
+					for(MetadataSetTO mdTO2 : itemTO.getMetadata())
+					{
+						for(LabelTO label : mdTO2.getLabels()){
+							if(entry.getKey().equals(label.getValue()))
+							{
+								mdTO = mdTO2;
+								exitMD = true;
+								break;
+							}
+						}												
+					}
+					if(!exitMD)
+					{
+						List<LabelTO> labels = new ArrayList<LabelTO>();
+						for(LocalizedString label : sTO.getLabels())
+						{
+							labels.add(new LabelTO(label.getLang(), label.getValue()));
+						}
+						mdTO.setLabels(labels);
+						mdTO.setStatementUri(URI.create("http://localhost:8080/imeji/statement/"+ sTO.getId()));
+						mdTO.setTypeUri(sTO.getType());
+						itemTO.getMetadata().add(mdTO);
+					}
 					JsonNode node = entry.getValue();
 					JsonFactory factory = new JsonFactory();
 					ObjectMapper mapper = new ObjectMapper(factory);
-//					Object newValue = eTO.getValue();
-					switch (mdTO.getValue().getClass().getName()) {
-						case "de.mpg.imeji.rest.to.predefinedMetadataTO.TextTO":
+					  
+					//switch (mdTO.getValue().getClass().getName()) 
+					switch(sTO.getType().toString())
+					{
+						case "http://imeji.org/terms/metadata#text":
 							TextTO newT = new TextTO();
 							newT.setText(node.textValue());
 							mdTO.setValue(newT);
 							break;
-						case "de.mpg.imeji.rest.to.predefinedMetadataTO.NumberTO":
+						case "http://imeji.org/terms/metadata#number":
 							NumberTO newNT = new NumberTO();
 							newNT.setNumber(node.asDouble());
 							mdTO.setValue(newNT);
 							break;
-						case "de.mpg.imeji.rest.to.predefinedMetadataTO.ConePersonTO":
+						case "http://imeji.org/terms/metadata#conePerson":
 
 							EasyConePersonTO easyCPTO = null;
 							try {
@@ -127,32 +150,26 @@ public class TransferObjectFactory {
 							newCone.setPerson(newP);
 							mdTO.setValue(newCone);
 							break;
-						case "de.mpg.imeji.rest.to.predefinedMetadataTO.DateTO":
+						case "http://imeji.org/terms/metadata#date":
 							DateTO newDT = new DateTO();
 							newDT.setDate(node.textValue());
 							mdTO.setValue(newDT);
 							break;
-						case "de.mpg.imeji.rest.to.predefinedMetadataTO.GeolocationTO":  
+						case "http://imeji.org/terms/metadata#geolocation":  
 							EasyGeolocationTO easyGeoTO = null;
 							try {
 								easyGeoTO = mapper.readValue(node.toString(), new TypeReference<EasyGeolocationTO>(){});
-							} catch (JsonParseException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} catch (JsonMappingException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
 							} catch (IOException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
-							}
+							} 
 							GeolocationTO newGT = new GeolocationTO();
 							newGT.setName(easyGeoTO.getName());
 							newGT.setLatitude(easyGeoTO.getLatitude());
 							newGT.setLongitude(easyGeoTO.getLongitude());
 							mdTO.setValue(newGT);
 							break;
-						case "de.mpg.imeji.rest.to.predefinedMetadataTO.LicenseTO":
+						case "http://imeji.org/terms/metadata#license":
 							EasyLicenseTO easyLTO = null;
 							try {
 								easyLTO = mapper.readValue(node.toString(), new TypeReference<EasyLicenseTO>(){});
@@ -171,7 +188,7 @@ public class TransferObjectFactory {
 							newLicense.setUrl(easyLTO.getUrl());
 							mdTO.setValue(newLicense);
 							break;
-						case "de.mpg.imeji.rest.to.predefinedMetadataTO.LinkTO":
+						case "http://imeji.org/terms/metadata#link":
 							EasyLinkTO easyLinkTO = null;
 							try {
 								easyLinkTO = mapper.readValue(node.toString(), new TypeReference<EasyLinkTO>(){});
@@ -190,7 +207,7 @@ public class TransferObjectFactory {
 							newLink.setUrl(easyLinkTO.getUrl());
 							mdTO.setValue(newLink);
 							break;
-						case "de.mpg.imeji.rest.to.predefinedMetadataTO.PublicationTO":
+						case "http://imeji.org/terms/metadata#publication":
 							EasyPublicationTO easyPTO = null;
 							try {
 								easyPTO = mapper.readValue(node.toString(), new TypeReference<EasyPublicationTO>(){});
@@ -211,7 +228,6 @@ public class TransferObjectFactory {
 							mdTO.setValue(newPub);
 							break;
 					}
-					break;
 				}
 				else{
 					//Exception

@@ -9,13 +9,10 @@ import static de.mpg.imeji.rest.process.RestProcessUtils.localExceptionHandler;
 import static javax.ws.rs.core.Response.Status.OK;
 import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response.Status;
@@ -25,23 +22,22 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
-import de.mpg.imeji.rest.to.AlbumTO;
+import de.mpg.imeji.rest.api.ProfileService;
+import de.mpg.imeji.rest.to.CollectionProfileTO;
+import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.EasyItemTO;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
 import de.mpg.imeji.rest.to.JSONResponse;
+import de.mpg.imeji.rest.to.MetadataProfileTO;
 
 public class ItemProcess {
 
@@ -133,13 +129,17 @@ public class ItemProcess {
 		if (u == null) {    
 			resp = buildJSONAndExceptionResponse(UNAUTHORIZED.getStatusCode(), USER_MUST_BE_LOGGED_IN);
 		} else {
-			try {
-				ItemService service = new ItemService();		
+			try { 
+				ItemService icrud = new ItemService();		
 //				EasyItemTO easyTO = RestProcessUtils.buildEasyItemTOFromJSON(req); 
 				EasyItemTO easyTO = (EasyItemTO)buildTOFromJSON(req, EasyItemTO.class);
-				ItemTO to = service.read(id, u);
-				TransferObjectFactory.transferEasyItemTOItem(easyTO, to);
-	            resp = buildResponse(OK.getStatusCode(), service.update(to, u));
+				ItemTO itemTO = icrud.read(id, u);
+				CollectionService ccrud = new CollectionService();			
+				CollectionTO col = ccrud.read(itemTO.getCollectionId(), u);
+				ProfileService pcrud = new ProfileService();
+				MetadataProfileTO profileTO = pcrud.read(col.getProfile().getId(), u);
+				TransferObjectFactory.transferEasyItemTOItem(profileTO, easyTO, itemTO);
+	            resp = buildResponse(OK.getStatusCode(), icrud.update(itemTO, u));
 		} catch (ImejiException e) {
 			resp = localExceptionHandler(e, e.getLocalizedMessage());
 		}

@@ -70,10 +70,9 @@ public class ItemService implements API<ItemTO> {
 		);
 	}
 
-	@Override
+	@Override  
 	public ItemTO update(ItemTO to, User u) throws ImejiException {
-		Item item = controller.retrieve(
-				ObjectHelper.getURI(Item.class, to.getId()), u);
+		Item item = controller.retrieve(ObjectHelper.getURI(Item.class, to.getId()), u);
 		ReverseTransferObjectFactory.transferItem(to, item, u, UPDATE);
 		if (to instanceof ItemWithFileTO) {
 			ItemWithFileTO tof = (ItemWithFileTO) to;

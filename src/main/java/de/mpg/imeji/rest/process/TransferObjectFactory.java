@@ -1,26 +1,226 @@
 package de.mpg.imeji.rest.process;
 
-import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.*;
-import de.mpg.imeji.logic.vo.predefinedMetadata.*;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
-import de.mpg.imeji.rest.api.ProfileService;
-import de.mpg.imeji.rest.api.UserService;
-import de.mpg.imeji.rest.to.*;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.*;
-import de.mpg.j2j.misc.LocalizedString;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.vo.Album;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.Metadata;
+import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Organization;
+import de.mpg.imeji.logic.vo.Person;
+import de.mpg.imeji.logic.vo.Properties;
+import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
+import de.mpg.imeji.logic.vo.predefinedMetadata.License;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
+import de.mpg.imeji.rest.api.ProfileService;
+import de.mpg.imeji.rest.api.UserService;
+import de.mpg.imeji.rest.to.AlbumTO;
+import de.mpg.imeji.rest.to.CollectionTO;
+import de.mpg.imeji.rest.to.EasyItemTO;
+import de.mpg.imeji.rest.to.IdentifierTO;
+import de.mpg.imeji.rest.to.ItemTO;
+import de.mpg.imeji.rest.to.LabelTO;
+import de.mpg.imeji.rest.to.LiteralConstraintTO;
+import de.mpg.imeji.rest.to.MetadataProfileTO;
+import de.mpg.imeji.rest.to.MetadataSetTO;
+import de.mpg.imeji.rest.to.OrganizationTO;
+import de.mpg.imeji.rest.to.PersonTO;
+import de.mpg.imeji.rest.to.PersonTOBasic;
+import de.mpg.imeji.rest.to.PropertiesTO;
+import de.mpg.imeji.rest.to.StatementTO;
+import de.mpg.imeji.rest.to.predefinedEasyMetadataTO.EasyConePersonTO;
+import de.mpg.imeji.rest.to.predefinedEasyMetadataTO.EasyGeolocationTO;
+import de.mpg.imeji.rest.to.predefinedEasyMetadataTO.EasyLicenseTO;
+import de.mpg.imeji.rest.to.predefinedEasyMetadataTO.EasyLinkTO;
+import de.mpg.imeji.rest.to.predefinedEasyMetadataTO.EasyPublicationTO;
+import de.mpg.imeji.rest.to.predefinedMetadataTO.ConePersonTO;
+import de.mpg.imeji.rest.to.predefinedMetadataTO.DateTO;
+import de.mpg.imeji.rest.to.predefinedMetadataTO.GeolocationTO;
+import de.mpg.imeji.rest.to.predefinedMetadataTO.LicenseTO;
+import de.mpg.imeji.rest.to.predefinedMetadataTO.LinkTO;
+import de.mpg.imeji.rest.to.predefinedMetadataTO.NumberTO;
+import de.mpg.imeji.rest.to.predefinedMetadataTO.PublicationTO;
+import de.mpg.imeji.rest.to.predefinedMetadataTO.TextTO;
+import de.mpg.j2j.misc.LocalizedString;
 
 public class TransferObjectFactory {
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(TransferObjectFactory.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TransferObjectFactory.class);
+	
+	public static void transferEasyItemTOItem(EasyItemTO easyTO, ItemTO to){
+		for(Map.Entry<String, JsonNode> entry : easyTO.getEz_metadata().entrySet()){  
+//		for(EasyTO eTO : easyTO.getEz_metadata()){
+			for(MetadataSetTO mdTO : to.getMetadata())
+			{
+				boolean update = false;
+				for(LabelTO label : mdTO.getLabels())
+				{
+					if(entry.getKey().equals(label.getValue()))
+//					if(eTO.getKey().equals(label.getValue()))
+						update = true;
+					break;
+				}
+				if(update)
+				{
+//					if(mdTO.getValue() instanceof TextTO)
+//					{
+//						
+//					}
+					JsonNode node = entry.getValue();
+					JsonFactory factory = new JsonFactory();
+					ObjectMapper mapper = new ObjectMapper(factory);
+//					Object newValue = eTO.getValue();
+					switch (mdTO.getValue().getClass().getName()) {
+						case "de.mpg.imeji.rest.to.predefinedMetadataTO.TextTO":
+							TextTO newT = new TextTO();
+							newT.setText(node.textValue());
+							mdTO.setValue(newT);
+							break;
+						case "de.mpg.imeji.rest.to.predefinedMetadataTO.NumberTO":
+							NumberTO newNT = new NumberTO();
+							newNT.setNumber(Double.parseDouble(node.textValue()));
+							mdTO.setValue(newNT);
+							break;
+						case "de.mpg.imeji.rest.to.predefinedMetadataTO.ConePersonTO":
+
+							EasyConePersonTO easyCPTO = null;
+							try {
+								easyCPTO = mapper.readValue(node.toString(), new TypeReference<EasyConePersonTO>(){});
+							} catch (JsonParseException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (JsonMappingException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							ConePersonTO newCone = (ConePersonTO)mdTO.getValue();
+							PersonTO newP = newCone.getPerson();
+							newP.setFamilyName(easyCPTO.getFamilyName());
+							newP.setGivenName(easyCPTO.getGivenName());
+							newCone.setPerson(newP);
+							mdTO.setValue(newCone);
+							break;
+						case "de.mpg.imeji.rest.to.predefinedMetadataTO.DateTO":
+							DateTO newDT = new DateTO();
+							newDT.setDate(node.textValue());
+							mdTO.setValue(newDT);
+							break;
+						case "de.mpg.imeji.rest.to.predefinedMetadataTO.GeolocationTO":  
+							EasyGeolocationTO easyGeoTO = null;
+							try {
+								easyGeoTO = mapper.readValue(node.toString(), new TypeReference<EasyGeolocationTO>(){});
+							} catch (JsonParseException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (JsonMappingException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							GeolocationTO newGT = new GeolocationTO();
+							newGT.setName(easyGeoTO.getName());
+							newGT.setLatitude(easyGeoTO.getLatitude());
+							newGT.setLongitude(easyGeoTO.getLongitude());
+							mdTO.setValue(newGT);
+							break;
+						case "de.mpg.imeji.rest.to.predefinedMetadataTO.LicenseTO":
+							EasyLicenseTO easyLTO = null;
+							try {
+								easyLTO = mapper.readValue(node.toString(), new TypeReference<EasyLicenseTO>(){});
+							} catch (JsonParseException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (JsonMappingException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							LicenseTO newLicense = new LicenseTO();
+							newLicense.setLicense(easyLTO.getLicense());
+							newLicense.setUrl(easyLTO.getUrl());
+							mdTO.setValue(newLicense);
+							break;
+						case "de.mpg.imeji.rest.to.predefinedMetadataTO.LinkTO":
+							EasyLinkTO easyLinkTO = null;
+							try {
+								easyLinkTO = mapper.readValue(node.toString(), new TypeReference<EasyLinkTO>(){});
+							} catch (JsonParseException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (JsonMappingException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							LinkTO newLink = new LinkTO();
+							newLink.setLink(easyLinkTO.getLink());
+							newLink.setUrl(easyLinkTO.getUrl());
+							mdTO.setValue(newLink);
+							break;
+						case "de.mpg.imeji.rest.to.predefinedMetadataTO.PublicationTO":
+							EasyPublicationTO easyPTO = null;
+							try {
+								easyPTO = mapper.readValue(node.toString(), new TypeReference<EasyPublicationTO>(){});
+							} catch (JsonParseException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (JsonMappingException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							PublicationTO newPub = new PublicationTO();
+							newPub.setCitation(easyPTO.getCitation());
+							newPub.setFormat(easyPTO.getFormat());
+							newPub.setPublication(easyPTO.getPublication());
+							mdTO.setValue(newPub);
+							break;
+					}
+					break;
+				}
+				else{
+					//Exception
+				}
+
+			}
+		}
+
+		
+	}
+	
 	
 	public static void transferMetadataProfile(MetadataProfile vo, MetadataProfileTO to){
 		transferProperties(vo, to);

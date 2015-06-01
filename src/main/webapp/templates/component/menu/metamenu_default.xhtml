@@ -86,7 +86,7 @@ All rights reserved. Use is subject to license terms.
 			<h:outputText styleClass="imj_metaMenuSeparator" value="&#160;"/>
 			
 			<!-- Language -->
-			<h:form id="langForm" onsubmit="setTimeout(function () { window.location.reload(); }, 20);">
+			<h:form id="langForm">
 				<div class="imj_customSelectbox">
 					<div class="imj_showSelection">
 						<div class="imj_selectionText"></div>
@@ -96,13 +96,12 @@ All rights reserved. Use is subject to license terms.
 						<f:selectItems value="#{Internationalization.internationalizedLanguages}"/>
 					</h:selectOneMenu>
 					<h:commandButton id="submitLang" action="#{Internationalization.changeLanguage}" value="Change language" styleClass="imj_noDisplay">
-					<f:ajax execute="@form" render="@form"></f:ajax>
+						<f:ajax execute="@form" render="@form"></f:ajax>
 					</h:commandButton>
 				</div>
 			</h:form>
 			
 			<h:outputText styleClass="imj_metaMenuSeparator" value="&#160;"/>
-		
 			<!-- Help -->
 			<h:outputLink id="lnkHelp" styleClass="imj_metaMenuItem" title="#{lbl.goto_help}" value="#{Navigation.helpUrl}" target="_blank">
 				<h:outputText value="#{lbl.help}"/>

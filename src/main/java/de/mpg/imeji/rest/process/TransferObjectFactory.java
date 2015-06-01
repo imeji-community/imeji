@@ -78,9 +78,11 @@ public class TransferObjectFactory {
 				for(LabelTO label : mdTO.getLabels())
 				{
 					if(entry.getKey().equals(label.getValue()))
+					{
 //					if(eTO.getKey().equals(label.getValue()))
 						update = true;
-					break;
+						break;
+					}
 				}
 				if(update)
 				{
@@ -100,7 +102,7 @@ public class TransferObjectFactory {
 							break;
 						case "de.mpg.imeji.rest.to.predefinedMetadataTO.NumberTO":
 							NumberTO newNT = new NumberTO();
-							newNT.setNumber(Double.parseDouble(node.textValue()));
+							newNT.setNumber(node.asDouble());
 							mdTO.setValue(newNT);
 							break;
 						case "de.mpg.imeji.rest.to.predefinedMetadataTO.ConePersonTO":

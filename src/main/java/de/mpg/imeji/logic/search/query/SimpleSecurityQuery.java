@@ -42,6 +42,7 @@ public class SimpleSecurityQuery {
 			// If searching for released or withdrawn objects, no grant filter
 			// is needed (released and withdrawn objects
 			// are all public)
+			
 			return statusFilter + " .";
 		} else if (user != null && user.getGrants().isEmpty()
 				&& Status.PENDING.equals(status)) {
@@ -92,13 +93,13 @@ public class SimpleSecurityQuery {
 		if (user.isAdmin())
 			return "";
 		
+		String appendReleasedFilterStatus = " FILTER (?status=<"+Status.RELEASED.getUriString() + "> ) .";
 		String containerFilter = getAllowedContainersFilter(user, rdfType);
 		if (!isUserSearch)
 
-			return  !containerFilter.equals("")? (  containerFilter +" . "):"";
+			return  !containerFilter.equals("")? (  containerFilter +" . "):appendReleasedFilterStatus;
 		else
-			return containerFilter.equals("") ? "filter(?status=<"
-			+ Status.RELEASED.getUriString() + ">)" : containerFilter ;
+			return containerFilter.equals("") ? appendReleasedFilterStatus : containerFilter ;
 
 	}
 
@@ -144,11 +145,10 @@ public class SimpleSecurityQuery {
 				builder.append(" <"+uri+"> " + (j==uris.size()?"":",") );
 			}
 			allowedContainerString = uris.size() > 0 ? "  FILTER (?s in ("+ builder.toString()+") ":"";
-			if (addReleasedStatus) {
-				s= allowedContainerString + " || ( ?status = <"+ Status.RELEASED.getUriString()+"> )"; 
+			if (addReleasedStatus && uris.size()>0) {
+				s= allowedContainerString + " || ( ?status = <"+ Status.RELEASED.getUriString()+"> )";
+				s+=") ";
 			}
-			
-			s+=") ";
 		}
 		
 		if (J2JHelper.getResourceNamespace(new Item()).equals(rdfType)) {

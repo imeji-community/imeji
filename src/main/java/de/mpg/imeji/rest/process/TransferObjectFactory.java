@@ -36,6 +36,7 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
+import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.rest.api.ProfileService;
 import de.mpg.imeji.rest.api.UserService;
 import de.mpg.imeji.rest.to.AlbumTO;
@@ -76,7 +77,7 @@ public class TransferObjectFactory {
 	 	{
 	 		itemTO.getMetadata().clear();
 	 	}else
-	 	{
+	 	{  
 			for(Map.Entry<String, JsonNode> entry : easyTO.getEz_metadata().entrySet()){  
 				boolean update = false;
 				String key = "";
@@ -142,7 +143,7 @@ public class TransferObjectFactory {
 								labels.add(new LabelTO(label.getLang(), label.getValue()));
 							}
 							mdTO.setLabels(labels);
-							mdTO.setStatementUri(URI.create("http://localhost:8080/imeji/statement/"+ sTO.getId()));
+							mdTO.setStatementUri(ObjectHelper.getURI(Statement.class, sTO.getId()));
 							mdTO.setTypeUri(sTO.getType());
 							itemTO.getMetadata().add(mdTO);
 						}
@@ -155,8 +156,8 @@ public class TransferObjectFactory {
 								{
 									labels.add(new LabelTO(label.getLang(), label.getValue()));
 								}
-								mdTO.setLabels(labels);
-								mdTO.setStatementUri(URI.create("http://localhost:8080/imeji/statement/"+ sTO.getId()));
+								mdTO.setLabels(labels);;
+								mdTO.setStatementUri(ObjectHelper.getURI(Statement.class, sTO.getId()));
 								mdTO.setTypeUri(sTO.getType());
 								itemTO.getMetadata().add(mdTO);
 							}

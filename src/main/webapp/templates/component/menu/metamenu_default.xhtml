@@ -96,6 +96,7 @@ All rights reserved. Use is subject to license terms.
 						<f:selectItems value="#{Internationalization.internationalizedLanguages}"/>
 					</h:selectOneMenu>
 					<h:commandButton id="submitLang" action="#{Internationalization.changeLanguage}" value="Change language" styleClass="imj_noDisplay">
+					<f:ajax execute="@form" render="@form"></f:ajax>
 					</h:commandButton>
 				</div>
 			</h:form>

@@ -160,7 +160,6 @@ public class AlbumController extends ImejiController {
 			throws ImejiException {
 		List<Album> aList = new ArrayList<>();
 		try {
-			SearchQuery sq = URLQueryTransformer.parseStringQuery(q);
 			for (String albId : search(
 					!isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q)
 							: null, user, null, 0, 0, spaceId).getResults()) {
@@ -278,22 +277,20 @@ public class AlbumController extends ImejiController {
 	 */
 	public int removeFromAlbum(Album album, List<String> toDelete, User user)
 			throws ImejiException {
-		List<URI> inAlbums = new ArrayList<URI>(album.getImages());
-		album.getImages().clear();
-		for (URI uri : inAlbums) {
-			if (!toDelete.contains(uri.toString())) {
-				album.getImages().add(uri);
+		ItemController ic = new ItemController();
+		List<String> before = ic.seachContainerItemsFast(album, user, -1);
+		for (String uri : before) {
+			if (!toDelete.contains(uri)) {
+				album.getImages().add(URI.create(uri));
 			}
 		}
-
 		if (album.getImages().size() == 0
 				&& Status.RELEASED.equals(album.getStatus())) {
 			throw new UnprocessableError(
-					"Album has been released! You are trying to remove all items from this album! Discard the album if necessary!");
+					"Album is released! You are trying to remove all items from this album! Discard the album if necessary!");
 		}
-
-		update(album, user, false);
-		return inAlbums.size() - album.getImages().size();
+		Album after = update(album, user, false);
+		return before.size() - after.getImages().size();
 	}
 
 	/**
@@ -393,10 +390,19 @@ public class AlbumController extends ImejiController {
 		return (List<Album>) loadAlbumsLazy(uris, user, -1, 0);
 	}
 
+	/**
+	 * Retrieve Items of and album
+	 * 
+	 * @param id
+	 * @param user
+	 * @param q
+	 * @return
+	 * @throws ImejiException
+	 */
 	public List<Item> retrieveItems(String id, User user, String q)
 			throws ImejiException {
 		ItemController ic = new ItemController();
-		List<Item> itemList = new ArrayList();
+		List<Item> itemList = new ArrayList<Item>();
 		try {
 			for (String itemId : ic
 					.search(ObjectHelper.getURI(Album.class, id),

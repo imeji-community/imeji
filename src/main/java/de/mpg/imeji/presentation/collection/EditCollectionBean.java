@@ -112,8 +112,6 @@ public class EditCollectionBean extends CollectionBean {
 		try {
 			CollectionController collectionController = new CollectionController();
 			User user = sessionBean.getUser();
-			// collectionController.updateLazy(getCollection(), user);
-
 			CollectionImeji icPre = collectionController.retrieve(
 					getCollection().getId(), user);
 			CollectionImeji ic;
@@ -134,7 +132,6 @@ public class EditCollectionBean extends CollectionBean {
 					&& getCollection().getLogoUrl() == null) {
 				collectionController.updateCollectionLogo(icPre, null, user);
 			}
-			// System.out.println("In save edited Collection "+ic.getLogoUrl().toString());
 			UserController uc = new UserController(user);
 			uc.update(user, user);
 

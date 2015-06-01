@@ -1,14 +1,9 @@
 package de.mpg.imeji.logic.validation.impl;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.Collection;
 
-import org.apache.axis.holders.URIHolder;
-import org.apache.commons.httpclient.util.URIUtil;
-
 import de.mpg.imeji.exceptions.UnprocessableError;
-import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.validation.Validator;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -63,13 +58,16 @@ public class MetadataValidator implements Validator<Metadata> {
 			return isAllowedValueDouble(value, s);
 		} else if (md instanceof Date) {
 			String value = ((Date) md).getDate();
-			return value != null && isAllowedValueString(value, s);
+			return ((Date) md).getTime() != Long.MIN_VALUE && value != null
+					&& isAllowedValueString(value, s);
 		} else if (md instanceof Link) {
 			URI value = ((Link) md).getUri();
 			return value != null && isAllowedValueURI(value, s);
 		} else if (md instanceof Geolocation) {
 			String value = ((Geolocation) md).getName();
-			return value != null;// No Predefined Value supported
+			Double latitude = ((Geolocation) md).getLatitude();
+			Double longitude = ((Geolocation) md).getLongitude();
+			return value != null && latitude >= -90 && latitude <= 90 && longitude >= -180 && longitude <= 180;// No Predefined Value supported
 		} else if (md instanceof ConePerson) {
 			String value = ((ConePerson) md).getPerson().getCompleteName();
 			return value != null; // No Predefined Value supported;

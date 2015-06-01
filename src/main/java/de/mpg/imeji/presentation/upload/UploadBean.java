@@ -140,13 +140,13 @@ public class UploadBean implements Serializable {
 				FileItemIterator iter = upload.getItemIterator(req);
 				while (iter.hasNext()) {
 					FileItemStream fis = iter.next();
-
 					InputStream stream = fis.openStream();
 					if (!fis.isFormField()) {
-						File tmp = createTmpFile(fis.getName());
+						String filename = fis.getName();
+						File tmp = createTmpFile(filename);
 						try {
 							writeInTmpFile(tmp, stream);
-							uploadFile(tmp, fis.getName());
+							uploadFile(tmp, filename);
 						} finally {
 							stream.close();
 							FileUtils.deleteQuietly(tmp);

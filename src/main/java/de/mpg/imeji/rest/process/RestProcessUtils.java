@@ -1,28 +1,48 @@
 package de.mpg.imeji.rest.process;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectReader;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.type.TypeFactory;
-import de.mpg.imeji.exceptions.*;
-import de.mpg.imeji.rest.to.HTTPError;
-import de.mpg.imeji.rest.to.JSONException;
-import de.mpg.imeji.rest.to.JSONResponse;
-import net.java.dev.webdav.jaxrs.ResponseStatus;
-import org.apache.log4j.Logger;
+import static com.google.common.base.Strings.isNullOrEmpty;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
+import net.java.dev.webdav.jaxrs.ResponseStatus;
+
+import org.apache.log4j.Logger;
+import org.json.simple.JSONValue;
+import org.json.simple.parser.ContainerFactory;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.type.TypeFactory;
+
+import de.mpg.imeji.exceptions.AuthenticationError;
+import de.mpg.imeji.exceptions.BadRequestException;
+import de.mpg.imeji.exceptions.NotAllowedError;
+import de.mpg.imeji.exceptions.NotFoundException;
+import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.rest.to.EasyItemTO;
+import de.mpg.imeji.rest.to.EasyMetadataTO;
+import de.mpg.imeji.rest.to.HTTPError;
+import de.mpg.imeji.rest.to.JSONException;
+import de.mpg.imeji.rest.to.JSONResponse;
 
 public class RestProcessUtils {
 	
@@ -42,10 +62,49 @@ public class RestProcessUtils {
             throw new BadRequestException("Cannot parse json: " + e.getLocalizedMessage());
 		}
 	}
+	
+	
+	
+	public static EasyItemTO buildEasyItemTOFromJSON(HttpServletRequest req) throws BadRequestException {
+		EasyItemTO easyTO = new EasyItemTO();
+		try {
+			JsonFactory factory = new JsonFactory(); 
+			ObjectMapper mapper = new ObjectMapper(factory);
+			JsonNode rootNode =mapper.readTree(req.getInputStream());
+			easyTO.setFetchUrl(rootNode.path("fetchUrl").asText());
+			easyTO.setCollectionId(rootNode.path("collectionId").asText());   	
+			
+			String ez_metadataText  = rootNode.path("ez_metadata").toString();
+		    rootNode = mapper.readTree(ez_metadataText);  
+		    Iterator<Map.Entry<String,JsonNode>> fieldsIterator = rootNode.fields();
+		    while (fieldsIterator.hasNext()) {
+		    	Map.Entry<String,JsonNode> field = fieldsIterator.next();
+		    	rootNode = mapper.readTree(field.getValue().toString());
+		    	Iterator<Map.Entry<String,JsonNode>> fieldsIterator2 = rootNode.fields();
+		    	while (fieldsIterator2.hasNext()) {
+		    		Map.Entry<String,JsonNode> field2 = fieldsIterator2.next();
+		    		System.out.println("Key2: " + field2.getKey() + "\tValue2:" + field2.getValue());
+		    	}
+		    	
+		    	System.out.println("Key1: " + field.getKey() + "\tValue1:" + field.getValue());
+		       }
+
+			
+//			Map<String, EasyMetadataTO> map = mapper.readValue(rootNode.path("ez_metadata").toString(), new TypeReference<Map<String, EasyMetadataTO>>(){});
+//			easyTO.setEz_metadata(map);
+//			TypeReference<List<EasyMetadataSetTO>> typeRef = new TypeReference<List<EasyMetadataSetTO>>() {};  
+//			List<EasyMetadataSetTO> easyMDTo = mapper.readValue(rootNode.path("ez_metadata").asText(), typeRef);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return easyTO;
+
+	}
 
 	public static <T> Object buildTOFromJSON(HttpServletRequest req, Class<T> type) throws BadRequestException {
 		ObjectReader reader = new ObjectMapper().reader().withType(type);
-		try {
+		try {  
 			return reader.readValue(req.getInputStream());
 		} catch (Exception e) {
             throw new BadRequestException("Cannot parse json: " + e.getLocalizedMessage());

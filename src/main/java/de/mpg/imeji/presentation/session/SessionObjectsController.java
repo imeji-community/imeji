@@ -2,6 +2,7 @@ package de.mpg.imeji.presentation.session;
 
 import java.util.List;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.vo.Album;
@@ -72,11 +73,12 @@ public class SessionObjectsController
      * @param uris
      * @throws Exception
      */
-    public void removeFromActiveAlbum(List<String> uris) throws Exception
+    public int removeFromActiveAlbum(List<String> uris) throws ImejiException
     {
         AlbumController ac = new AlbumController();
-        ac.removeFromAlbum(session.getActiveAlbum(), uris, session.getUser());
+        int deleted = ac.removeFromAlbum(session.getActiveAlbum(), uris, session.getUser());
         reloadActiveAlbum();
+        return deleted;
     }
 
     /**

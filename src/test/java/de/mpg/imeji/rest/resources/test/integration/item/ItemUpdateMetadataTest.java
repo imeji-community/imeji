@@ -83,7 +83,7 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
     public void test_1_UpdateItem_1_Change_Metadata_Statements_Allowed_Common() throws IOException, BadRequestException {
 
         final String CHANGED = "allowed_change";
-        double NUM = 12345;
+        double NUM = 90;
         final String REP_CHANGED = "$1\"" + CHANGED + "\"";
         final String NUM_CHANGED = "$1"+ NUM;
         DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD");

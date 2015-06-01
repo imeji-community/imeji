@@ -21,6 +21,10 @@ import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.ImejiTriple;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
+import de.mpg.imeji.logic.storage.Storage.FileResolution;
+import de.mpg.imeji.logic.storage.StorageController;
+import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
+import de.mpg.imeji.logic.storage.internal.InternalStorageManager;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.StringHelper;
@@ -52,7 +56,6 @@ public abstract class ImejiController {
 	public ImejiController() {
 	}
 
-	
 	public static final String LOGO_STORAGE_SUBDIRECTORY = "/thumbnail";
 
 	/**
@@ -129,7 +132,7 @@ public abstract class ImejiController {
 				Status.RELEASED.getURI(), o));
 		return triples;
 	}
-	
+
 	/**
 	 * Get all the triples which need to be updated by an update
 	 * 
@@ -137,13 +140,13 @@ public abstract class ImejiController {
 	 * @param securityUri
 	 * @return
 	 */
-	protected List<ImejiTriple> getContainerLogoTriples(String uri, Object o, String logoUrl) {
+	protected List<ImejiTriple> getContainerLogoTriples(String uri, Object o,
+			String logoUrl) {
 		List<ImejiTriple> triples = new ArrayList<ImejiTriple>();
-		triples.add(new ImejiTriple(uri, ImejiNamespaces.CONTAINER_LOGO,
-				URI.create(logoUrl), o));
+		triples.add(new ImejiTriple(uri, ImejiNamespaces.CONTAINER_LOGO, URI
+				.create(logoUrl), o));
 		return triples;
 	}
-	
 
 	/**
 	 * Get all the triples which need to be updated by an update
@@ -157,8 +160,8 @@ public abstract class ImejiController {
 			String comment) throws UnprocessableError {
 		List<ImejiTriple> triples = new ArrayList<ImejiTriple>();
 		if (comment != null && !"".equals(comment))
-			triples.add(new ImejiTriple(uri,
-					ImejiNamespaces.DISCARD_COMMENT, comment, o));
+			triples.add(new ImejiTriple(uri, ImejiNamespaces.DISCARD_COMMENT,
+					comment, o));
 		else
 			throw new UnprocessableError(
 					"Discard error: A Discard comment is needed");
@@ -214,104 +217,30 @@ public abstract class ImejiController {
 		list.add(o);
 		return list;
 	}
-	
-	
-	  /**
-     * Update logo of {@link Container}
-     *
-     * @param Container
-     * @param f
-     * @param user
-     * @return
-     * @throws ImejiException
-	 * @throws URISyntaxException 
-     */
-    public Container updateFile(Container container, File f, User user) throws ImejiException, IOException, URISyntaxException {
-    	String storageUrl = StringHelper.normalizeURI(PropertyReader
-                .getProperty("imeji.instance.url"))
-                + "file/"
-                + container.getIdString() 
-                + LOGO_STORAGE_SUBDIRECTORY
-                + StringHelper.urlSeparator;
-    	
-    	File storageDir = new File(
-                PropertyReader.getProperty("imeji.storage.path") + container.getIdString()+LOGO_STORAGE_SUBDIRECTORY);
-        
-    	String storagePath = StringHelper.normalizePath(storageDir.getAbsolutePath());
-    	if (f != null) {
-	    	container.setLogoUrl(URI.create(generateUrl(ObjectHelper.getId(container.getId()), f.getName(), storageUrl)));
-	        update(f, transformUrlToPath(container.getLogoUrl().toURL().toString(), storageUrl, storagePath));
-    	}
-    	else
-    	{
-    		deleteFile(transformUrlToPath(container.getLogoUrl().toURL().toString(), storageUrl, storagePath));
-	    	container.setLogoUrl(null);
-    	}
-        
-        return container;
-    }
-    
-    /**
-     * Delete logo of {@link Container}
-     *
-     * @param Container
-     * @param f
-     * @param user
-     * @return
-     * @throws ImejiException
-	 * @throws URISyntaxException 
-     */
-    public void deleteFile(String fileUrl) throws ImejiException, IOException, URISyntaxException {
-    	File f = new File(fileUrl);
-    	FileUtils.deleteQuietly(f.getParentFile());
-    }
-    
-    /**
-     * Create the URL of the file from its filename, its id, and its resolution.
-     * Important: the filename is decoded, to avoid problems by reading this url
-     *
-     * @param id
-     * @param filename
-     * @return
-     * @throws URISyntaxException 
-     * @throws IOException 
-     * @throws UnsupportedEncodingException
-     */
-    public String generateUrl(String id, String filename, String storageUrl) throws IOException, URISyntaxException {
-        filename = StringHelper.normalizeFilename(filename);
-        return storageUrl + filename;
-    }
-    
-    /**
-     * Copy the file in the file system
-     *
-     * @param toCopy
-     * @param path
-     * @return
-     * @throws IOException
-     */
-    private String update(File toCopy, String path) throws IOException {
-        File f = new File(path);
-        if (f.getParentFile().exists()) {
-            //clean space dir
-            FileUtils.cleanDirectory(f.getParentFile());
-        } else {
-            //create space dir
-            f.getParentFile().mkdirs();
-        }
-        copy(toCopy, f);
-        return f.getAbsolutePath();
-    }
-    
 
-    /**
-     * Transform an url to a file system path
-     *
-     * @param url
-     * @return
-     */
-    public String transformUrlToPath(String url, String storageUrl, String storagePath) {
-        return URI.create(url).getPath().replace(URI.create(storageUrl).getPath(), storagePath).replace(
-                StringHelper.urlSeparator, StringHelper.fileSeparator);
-    }
+	/**
+	 * Update logo of {@link Container}
+	 *
+	 * @param Container
+	 * @param f
+	 * @param user
+	 * @return
+	 * @throws ImejiException
+	 * @throws URISyntaxException
+	 */
+	public Container updateFile(Container container, File f, User user)
+			throws ImejiException, IOException, URISyntaxException {
+		InternalStorageManager ism = new InternalStorageManager();
+		if (f != null) {
+			String url = ism.generateUrl(container.getIdString(), f.getName(),
+					FileResolution.THUMBNAIL);
+			container.setLogoUrl(URI.create(url));
+			ism.replaceFile(f, url);
+		} else {
+			ism.removeFile(container.getLogoUrl().toString());
+			container.setLogoUrl(null);
+		}
+		return container;
+	}
+
 }

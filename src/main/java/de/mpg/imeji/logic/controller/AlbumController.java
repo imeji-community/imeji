@@ -160,7 +160,6 @@ public class AlbumController extends ImejiController {
 			throws ImejiException {
 		List<Album> aList = new ArrayList<>();
 		try {
-			SearchQuery sq = URLQueryTransformer.parseStringQuery(q);
 			for (String albId : search(
 					!isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q)
 							: null, user, null, 0, 0, spaceId).getResults()) {

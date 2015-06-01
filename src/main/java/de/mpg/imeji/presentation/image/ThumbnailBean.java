@@ -58,17 +58,25 @@ public class ThumbnailBean {
 	private MetadataProfile profile;
 
 	/**
+	 * Emtpy {@link ThumbnailBean}
+	 */
+	public ThumbnailBean() {
+
+	}
+
+	/**
 	 * Bean for Thumbnail list elements. Each element of a list with thumbnail
 	 * is an instance of a {@link ThumbnailBean}
 	 * 
 	 * @param item
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public ThumbnailBean(Item item) throws Exception {
 		this.sessionBean = (SessionBean) BeanHelper
 				.getSessionBean(SessionBean.class);
 		this.uri = item.getId();
-		Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
+		Navigation navigation = (Navigation) BeanHelper
+				.getApplicationBean(Navigation.class);
 		this.id = ObjectHelper.getId(uri);
 		link = navigation.getFileUrl() + item.getThumbnailImageUrl().toString();
 		if (AuthUtil.canReadItemButNotCollection(sessionBean.getUser(), item)) {

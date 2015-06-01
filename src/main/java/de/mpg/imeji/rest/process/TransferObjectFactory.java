@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -37,7 +38,6 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
 import de.mpg.imeji.rest.api.ProfileService;
 import de.mpg.imeji.rest.api.UserService;
 import de.mpg.imeji.rest.to.AlbumTO;
-import de.mpg.imeji.rest.to.CollectionProfileTO;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.EasyItemTO;
 import de.mpg.imeji.rest.to.IdentifierTO;
@@ -70,12 +70,14 @@ public class TransferObjectFactory {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TransferObjectFactory.class);
 	
-	public static void transferEasyItemTOItem(MetadataProfileTO profileTO, EasyItemTO easyTO, ItemTO itemTO) throws JsonParseException, JsonMappingException{
+	public static void transferEasyItemTOItem(MetadataProfileTO profileTO, EasyItemTO easyTO, ItemTO itemTO) throws BadRequestException, JsonParseException, JsonMappingException{
 		for(Map.Entry<String, JsonNode> entry : easyTO.getEz_metadata().entrySet()){  
 
+			boolean update = false;
+			
 			for(StatementTO sTO : profileTO.getStatements())
 			{
-				boolean update = false;
+
 				for(LocalizedString label : sTO.getLabels())
 				{
 					if(entry.getKey().equals(label.getValue()))
@@ -98,7 +100,7 @@ public class TransferObjectFactory {
 								break;
 							}
 						}												
-					}
+					} 
 					if(!exitMD)
 					{
 						List<LabelTO> labels = new ArrayList<LabelTO>();
@@ -160,7 +162,6 @@ public class TransferObjectFactory {
 							try {
 								easyGeoTO = mapper.readValue(node.toString(), new TypeReference<EasyGeolocationTO>(){});
 							} catch (IOException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							} 
 							GeolocationTO newGT = new GeolocationTO();
@@ -173,12 +174,6 @@ public class TransferObjectFactory {
 							EasyLicenseTO easyLTO = null;
 							try {
 								easyLTO = mapper.readValue(node.toString(), new TypeReference<EasyLicenseTO>(){});
-							} catch (JsonParseException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} catch (JsonMappingException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
 							} catch (IOException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -192,12 +187,6 @@ public class TransferObjectFactory {
 							EasyLinkTO easyLinkTO = null;
 							try {
 								easyLinkTO = mapper.readValue(node.toString(), new TypeReference<EasyLinkTO>(){});
-							} catch (JsonParseException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} catch (JsonMappingException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
 							} catch (IOException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -211,12 +200,6 @@ public class TransferObjectFactory {
 							EasyPublicationTO easyPTO = null;
 							try {
 								easyPTO = mapper.readValue(node.toString(), new TypeReference<EasyPublicationTO>(){});
-							} catch (JsonParseException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} catch (JsonMappingException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
 							} catch (IOException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -228,11 +211,12 @@ public class TransferObjectFactory {
 							mdTO.setValue(newPub);
 							break;
 					}
+					
+					break;
 				}
-				else{
-					//Exception
-				}
-
+			}
+			if(!update){
+				throw new BadRequestException(entry+ " does not find in the profile");
 			}
 		}
 

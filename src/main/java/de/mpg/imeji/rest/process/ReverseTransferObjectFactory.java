@@ -244,8 +244,6 @@ public class ReverseTransferObjectFactory {
 
 
 	private static Statement lookUpStatement(Collection<Statement> statements, final URI type, final URI statementUri) {
-		System.out.println("type = " + type.toString());
-		System.out.println("statementUti = " + statementUri.toString());
 		return Iterables.find(statements, new Predicate<Statement>() {
 			@Override
 			public boolean apply(Statement st) {

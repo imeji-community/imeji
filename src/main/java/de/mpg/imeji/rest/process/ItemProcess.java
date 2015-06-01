@@ -129,7 +129,7 @@ public class ItemProcess {
 		if (u == null) {    
 			resp = buildJSONAndExceptionResponse(UNAUTHORIZED.getStatusCode(), USER_MUST_BE_LOGGED_IN);
 		} else {
-			try { 
+			try {
 				ItemService icrud = new ItemService();		
 //				EasyItemTO easyTO = RestProcessUtils.buildEasyItemTOFromJSON(req); 
 				EasyItemTO easyTO = (EasyItemTO)buildTOFromJSON(req, EasyItemTO.class);
@@ -140,10 +140,10 @@ public class ItemProcess {
 				MetadataProfileTO profileTO = pcrud.read(col.getProfile().getId(), u);
 				TransferObjectFactory.transferEasyItemTOItem(profileTO, easyTO, itemTO);
 	            resp = buildResponse(OK.getStatusCode(), icrud.update(itemTO, u));
-		} catch (ImejiException e) {
-			resp = localExceptionHandler(e, e.getLocalizedMessage());
-		}
-	}
+	            } catch (ImejiException  e) {
+	            	resp = localExceptionHandler(e, e.getLocalizedMessage());
+	            	}
+			}
 	return resp;
 	}
 

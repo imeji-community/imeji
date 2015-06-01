@@ -37,7 +37,13 @@ public class SimpleSecurityQuery {
 	 */
 	public static String queryFactory(User user, String rdfType, Status status,
 			boolean isUserSearch) {
+
 		String statusFilter = getStatusAsFilter(status);
+
+		if (Status.PENDING.equals(status) && !user.isAdmin()) {
+			//add this explicitly in order to avoid too long queries. Only if Admin user should not be set explicitly again
+			isUserSearch = true;
+		}
 		if (Status.RELEASED.equals(status) || Status.WITHDRAWN.equals(status)) {
 			// If searching for released or withdrawn objects, no grant filter
 			// is needed (released and withdrawn objects
@@ -56,14 +62,15 @@ public class SimpleSecurityQuery {
 			// objects
 			return "FILTER(?status=<" + Status.RELEASED.getUriString() + ">) .";
 		}
-		// else, check the grant and add the status filter...
-		// return getUserGrantsAsFilter(user, rdfType) + statusFilter +
-		// " . ?s a <" + rdfType + "> ";
+
+		//Logic below is invoked for logged-in users. Grants must be always checked. 
+		// If user has no grants for requested objects, simply no data should be returned
+		// that's why FILTER(false)
 		String userGrantsAsFilterSimple = getUserGrantsAsFilterSimple(user,
-				rdfType, isUserSearch) +  statusFilter + " .";
- 	    return userGrantsAsFilterSimple;
-		// return getUserGrantsAsFilterSimple(user, rdfType, isUserSearch)
-		// + statusFilter + " .";
+				rdfType, isUserSearch);
+		return userGrantsAsFilterSimple.equals("")?
+				                      (user.isAdmin()?statusFilter:" FILTER(false) ")
+				                      :userGrantsAsFilterSimple + statusFilter + " .";
 	}
 
 	/**
@@ -90,17 +97,10 @@ public class SimpleSecurityQuery {
 	 */
 	private static String getUserGrantsAsFilterSimple(User user,
 			String rdfType, boolean isUserSearch) {
-		if (user.isAdmin())
+
+		if (user.isAdmin() && !isUserSearch)
 			return "";
-		
-		String appendReleasedFilterStatus = " FILTER (?status=<"+Status.RELEASED.getUriString() + "> ) .";
-		String containerFilter = getAllowedContainersFilter(user, rdfType);
-		if (!isUserSearch)
-
-			return  !containerFilter.equals("")? (  containerFilter +" . "):appendReleasedFilterStatus;
-		else
-			return containerFilter.equals("") ? appendReleasedFilterStatus : containerFilter ;
-
+		return getAllowedContainersFilter(user, rdfType, isUserSearch);
 	}
 
 	/**
@@ -111,8 +111,9 @@ public class SimpleSecurityQuery {
 	 * @param rdfType
 	 * @return
 	 */
-	private static String getAllowedContainersFilter(User user, String rdfType) {
+	private static String getAllowedContainersFilter(User user, String rdfType, boolean isUserSearch) {
 		List<String> uris = new ArrayList<>();
+
 		if (J2JHelper.getResourceNamespace(new Album()).equals(rdfType)) {
 			uris = AuthUtil.getListOfAllowedAlbums(user);
 		} else {
@@ -120,7 +121,7 @@ public class SimpleSecurityQuery {
 		}
 		
 		String s = "";
-		boolean addReleasedStatus = uris.size()>0;
+		boolean addReleasedStatus = !isUserSearch;
 
 		StringBuilder builder = new StringBuilder();
 		String allowedContainerString = "";
@@ -132,7 +133,7 @@ public class SimpleSecurityQuery {
 			}
 			allowedContainerString = builder.toString();
 			if (addReleasedStatus) {
-				s= allowedContainerString + " UNION { ?s <"+ImejiNamespaces.STATUS+"> <"+ Status.RELEASED.getUriString()+"> }"; 
+				s= allowedContainerString + (uris.size()>0?" UNION ":"")+" { ?s <"+ImejiNamespaces.STATUS+"> <"+ Status.RELEASED.getUriString()+"> }"; 
 			}
 		}
 		else if ( (J2JHelper.getResourceNamespace(new CollectionImeji()).equals(
@@ -145,10 +146,15 @@ public class SimpleSecurityQuery {
 				builder.append(" <"+uri+"> " + (j==uris.size()?"":",") );
 			}
 			allowedContainerString = uris.size() > 0 ? "  FILTER (?s in ("+ builder.toString()+") ":"";
-			if (addReleasedStatus && uris.size()>0) {
-				s= allowedContainerString + " || ( ?status = <"+ Status.RELEASED.getUriString()+"> )";
-				s+=") ";
+			
+			if (addReleasedStatus) {
+				allowedContainerString = allowedContainerString + 
+										( uris.size()>0?" || ":". FILTER ") +
+										"( ?status = <"+ Status.RELEASED.getUriString()+"> )"+
+										( uris.size()>0?"":". ");
 			}
+			
+			s= allowedContainerString+ ( uris.size()>0?") .":"");
 		}
 		
 		if (J2JHelper.getResourceNamespace(new Item()).equals(rdfType)) {

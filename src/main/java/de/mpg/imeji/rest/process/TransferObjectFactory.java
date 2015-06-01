@@ -72,9 +72,10 @@ public class TransferObjectFactory {
 	
 	public static void transferEasyItemTOItem(MetadataProfileTO profileTO, EasyItemTO easyTO, ItemTO itemTO) throws BadRequestException, JsonParseException, JsonMappingException{
 		for(Map.Entry<String, JsonNode> entry : easyTO.getEz_metadata().entrySet()){  
-
 			boolean update = false;
-			
+			String key = "";
+			int pos = -1;
+			boolean exitMD = false; 
 			for(StatementTO sTO : profileTO.getStatements())
 			{
 
@@ -82,18 +83,35 @@ public class TransferObjectFactory {
 				{
 					if(entry.getKey().equals(label.getValue()))
 					{
+						key = entry.getKey();
 						update = true;
 						break;
+					}	
+					else if("unbounded".equals(sTO.getMaxOccurs()))
+					{ 
+						key = entry.getKey().substring(0, entry.getKey().lastIndexOf("_"));
+						if(key.equals(label.getValue())){
+							try
+							{
+								pos = Integer.parseInt(entry.getKey().substring(entry.getKey().lastIndexOf("_")+1));
+							}catch(NumberFormatException e){
+								break;
+							}
+							update = true;
+							if(pos > 1)
+								exitMD = true;
+							break;
+						}
 					}
 				}
 				if(update)
 				{
-					MetadataSetTO mdTO = new MetadataSetTO();
-					boolean exitMD = false;  
+					MetadataSetTO mdTO = new MetadataSetTO();				
 					for(MetadataSetTO mdTO2 : itemTO.getMetadata())
 					{
-						for(LabelTO label : mdTO2.getLabels()){
-							if(entry.getKey().equals(label.getValue()))
+						for(LabelTO label : mdTO2.getLabels())
+						{
+							if(key.equals(label.getValue()))
 							{
 								mdTO = mdTO2;
 								exitMD = true;
@@ -101,6 +119,7 @@ public class TransferObjectFactory {
 							}
 						}												
 					} 
+					
 					if(!exitMD)
 					{
 						List<LabelTO> labels = new ArrayList<LabelTO>();
@@ -113,11 +132,42 @@ public class TransferObjectFactory {
 						mdTO.setTypeUri(sTO.getType());
 						itemTO.getMetadata().add(mdTO);
 					}
+					else if(pos > 1)
+					{
+						int max = 0;
+						for(MetadataSetTO mdTO2 : itemTO.getMetadata())
+						{
+							for(LabelTO label : mdTO2.getLabels()){
+								if(key.equals(label.getValue()))
+								{
+									max ++;
+								}
+							}
+						}
+						if(max == pos-1)
+						{
+							List<LabelTO> labels = new ArrayList<LabelTO>();
+							for(LocalizedString label : sTO.getLabels())
+							{
+								labels.add(new LabelTO(label.getLang(), label.getValue()));
+							}
+							mdTO.setLabels(labels);
+							mdTO.setStatementUri(URI.create("http://localhost:8080/imeji/statement/"+ sTO.getId()));
+							mdTO.setTypeUri(sTO.getType());
+							itemTO.getMetadata().add(mdTO);
+						}
+						else
+						{
+							System.err.println(String.valueOf(max));
+							throw new BadRequestException(key + " has " + max + " value. Input " + key + "_" + String.valueOf(max+1) + " instead of " + key + "_" + pos + " to add the " + String.valueOf(max+1) + ". value.");
+						}
+						
+					}
+					
 					JsonNode node = entry.getValue();
 					JsonFactory factory = new JsonFactory();
 					ObjectMapper mapper = new ObjectMapper(factory);
-					  
-					//switch (mdTO.getValue().getClass().getName()) 
+
 					switch(sTO.getType().toString())
 					{
 						case "http://imeji.org/terms/metadata#text":
@@ -135,16 +185,9 @@ public class TransferObjectFactory {
 							EasyConePersonTO easyCPTO = null;
 							try {
 								easyCPTO = mapper.readValue(node.toString(), new TypeReference<EasyConePersonTO>(){});
-							} catch (JsonParseException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} catch (JsonMappingException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
+							} catch (Exception e) {
+								throw new BadRequestException( entry + e.getMessage());
+							} 
 							ConePersonTO newCone = (ConePersonTO)mdTO.getValue();
 							PersonTO newP = newCone.getPerson();
 							newP.setFamilyName(easyCPTO.getFamilyName());
@@ -161,8 +204,8 @@ public class TransferObjectFactory {
 							EasyGeolocationTO easyGeoTO = null;
 							try {
 								easyGeoTO = mapper.readValue(node.toString(), new TypeReference<EasyGeolocationTO>(){});
-							} catch (IOException e) {
-								e.printStackTrace();
+							} catch (Exception e) {
+								throw new BadRequestException( entry + e.getMessage());
 							} 
 							GeolocationTO newGT = new GeolocationTO();
 							newGT.setName(easyGeoTO.getName());
@@ -174,10 +217,9 @@ public class TransferObjectFactory {
 							EasyLicenseTO easyLTO = null;
 							try {
 								easyLTO = mapper.readValue(node.toString(), new TypeReference<EasyLicenseTO>(){});
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
+							} catch (Exception e) {
+								throw new BadRequestException( entry + e.getMessage());
+							} 
 							LicenseTO newLicense = new LicenseTO();
 							newLicense.setLicense(easyLTO.getLicense());
 							newLicense.setUrl(easyLTO.getUrl());
@@ -187,10 +229,9 @@ public class TransferObjectFactory {
 							EasyLinkTO easyLinkTO = null;
 							try {
 								easyLinkTO = mapper.readValue(node.toString(), new TypeReference<EasyLinkTO>(){});
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
+							} catch (Exception e) {
+								throw new BadRequestException( entry + e.getMessage());
+							} 
 							LinkTO newLink = new LinkTO();
 							newLink.setLink(easyLinkTO.getLink());
 							newLink.setUrl(easyLinkTO.getUrl());
@@ -200,10 +241,9 @@ public class TransferObjectFactory {
 							EasyPublicationTO easyPTO = null;
 							try {
 								easyPTO = mapper.readValue(node.toString(), new TypeReference<EasyPublicationTO>(){});
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
+							} catch (Exception e) {
+								throw new BadRequestException( entry + e.getMessage());
+							} 
 							PublicationTO newPub = new PublicationTO();
 							newPub.setCitation(easyPTO.getCitation());
 							newPub.setFormat(easyPTO.getFormat());

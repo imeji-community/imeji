@@ -26,13 +26,13 @@
 										rendered="#{cc.attrs.item.thumbnail.link != null and cc.attrs.item.status!='WITHDRAWN'}"/>
 						<h:graphicImage value="#{Navigation.applicationUrl}resources/icon/discarded.png" alt="preview picture" 
 										rendered="#{cc.attrs.item.status =='WITHDRAWN'}"/>
-						<ui:fragment rendered="#{cc.attrs.item.type == 'ALBUM'}">
+						<ui:fragment rendered="#{cc.attrs.item.type == 'ALBUM' and  cc.attrs.item.status!='WITHDRAWN'}">
 							<h:graphicImage value="#{Navigation.applicationUrl}resources/icon/empty.png" alt="preview picture" 
 										rendered="#{cc.attrs.item.thumbnail.link == null and cc.attrs.item.privateCount == 0}" title="#{lbl.ContainerEmpty}"/>
 							<h:graphicImage value="#{Navigation.applicationUrl}resources/icon/private_grey.png" alt="#{lbl.ContainerPrivate}" 
 										rendered="#{cc.attrs.item.thumbnail.link == null and cc.attrs.item.privateCount &gt; 0}"  title="#{lbl.ContainerPrivate}"/>
 						</ui:fragment>
-						<ui:fragment rendered="#{cc.attrs.item.type == 'COLLECTION'}">
+						<ui:fragment rendered="#{cc.attrs.item.type == 'COLLECTION' and  cc.attrs.item.status!='WITHDRAWN'}">
 							<h:graphicImage value="#{Navigation.applicationUrl}resources/icon/empty.png" alt="preview picture" 
 										rendered="#{cc.attrs.item.thumbnail.link == null}" title="#{lbl.ContainerEmpty}"/>
 						</ui:fragment>

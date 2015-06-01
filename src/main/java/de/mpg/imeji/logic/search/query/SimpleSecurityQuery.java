@@ -185,15 +185,19 @@ public class SimpleSecurityQuery {
 			int pNo = 0;
 			List<String> allowedProfiles = AuthUtil.getListOfAllowedProfiles(user);
 			String allowedProfilesString = "";
+			String releasedStatusFilter = "( ?status = <"+ Status.RELEASED.getUriString()+"> )";
 			if (allowedProfiles.size()> 0) {
 				for (String uri:allowedProfiles){
 					pNo++;
 					builderProfiles.append(" <"+uri+"> "+(pNo==allowedProfiles.size()?"":",") );
 				}
 				
-				allowedProfilesString = " { ?s <"+ImejiNamespaces.STATUS+"> ?status. FILTER (?s in ("+ builderProfiles.toString()+") || ( ?status = <"+ Status.RELEASED.getUriString()+"> )) }";
+				allowedProfilesString = " { ?s <"+ImejiNamespaces.STATUS+"> ?status. FILTER (?s in ("+ builderProfiles.toString()+") || "+releasedStatusFilter+") }";
 			}
 			
+			allowedProfilesString = " { ?s <"+ImejiNamespaces.STATUS+"> ?status. FILTER ("+
+			                       ( (allowedProfiles.size()>0) ? ( " ?s in ("+ builderProfiles.toString()+") || ") : "") +
+			                       releasedStatusFilter+") }";
 			s += allowedProfilesString;
 
 		}

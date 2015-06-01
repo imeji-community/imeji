@@ -5,6 +5,7 @@ package de.mpg.imeji.logic.search.query;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiNamespaces;
+import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.logic.vo.Properties.Status;
@@ -12,6 +13,8 @@ import de.mpg.j2j.helper.J2JHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cern.colt.Arrays;
 
 /**
  * Simple security query add to any imeji sparql query, a security filter
@@ -56,11 +59,8 @@ public class SimpleSecurityQuery {
 		// return getUserGrantsAsFilter(user, rdfType) + statusFilter +
 		// " . ?s a <" + rdfType + "> ";
 		String userGrantsAsFilterSimple = getUserGrantsAsFilterSimple(user,
-				rdfType, isUserSearch) + statusFilter + " .";
-		if (userGrantsAsFilterSimple.contains("?c=") && rdfType.equals(ImejiNamespaces.ITEM))
-			userGrantsAsFilterSimple += "?s <" + ImejiNamespaces.COLLECTION
-					+ "> ?c .";
-		return userGrantsAsFilterSimple;
+				rdfType, isUserSearch) +  statusFilter + " .";
+ 	    return userGrantsAsFilterSimple;
 		// return getUserGrantsAsFilterSimple(user, rdfType, isUserSearch)
 		// + statusFilter + " .";
 	}
@@ -91,15 +91,15 @@ public class SimpleSecurityQuery {
 			String rdfType, boolean isUserSearch) {
 		if (user.isAdmin())
 			return "";
+		
 		String containerFilter = getAllowedContainersFilter(user, rdfType);
 		if (!isUserSearch)
-			return "filter(" + containerFilter
-					+ (containerFilter.equals("") ? "" : "|| ") + "?status=<"
-					+ Status.RELEASED.getUriString() + ">) .";
+
+			return  !containerFilter.equals("")? (  containerFilter +" . "):"";
 		else
 			return containerFilter.equals("") ? "filter(?status=<"
-					+ Status.RELEASED.getUriString() + ">)" : "filter("
-					+ containerFilter + ") .";
+			+ Status.RELEASED.getUriString() + ">)" : containerFilter ;
+
 	}
 
 	/**
@@ -117,31 +117,79 @@ public class SimpleSecurityQuery {
 		} else {
 			uris = AuthUtil.getListOfAllowedCollections(user);
 		}
+		
 		String s = "";
+		boolean addReleasedStatus = uris.size()>0;
 
-		for (String uri : uris) {
-			if (!"".equals(s))
-				s += " || ";
-			s += "?" + getVariableName(rdfType) + "=<" + uri + ">";
+		StringBuilder builder = new StringBuilder();
+		String allowedContainerString = "";
+		if (J2JHelper.getResourceNamespace(new Item()).equals(rdfType)) {
+			int i = 0;
+			for (String uri:uris){
+				i++;
+				builder.append((i==1?"{ ":" UNION {") + "?s "+getPredicateName(rdfType) +" <"+uri+"> }");
+			}
+			allowedContainerString = builder.toString();
+			if (addReleasedStatus) {
+				s= allowedContainerString + " UNION { ?s <"+ImejiNamespaces.STATUS+"> <"+ Status.RELEASED.getUriString()+"> }"; 
+			}
 		}
+		else if ( (J2JHelper.getResourceNamespace(new CollectionImeji()).equals(
+				rdfType)
+				|| J2JHelper.getResourceNamespace(new Album()).equals(rdfType)))
+		{
+			int j = 0;
+			for (String uri:uris){
+				j++;
+				builder.append(" <"+uri+"> " + (j==uris.size()?"":",") );
+			}
+			allowedContainerString = uris.size() > 0 ? "  FILTER (?s in ("+ builder.toString()+") ":"";
+			if (addReleasedStatus) {
+				s= allowedContainerString + " || ( ?status = <"+ Status.RELEASED.getUriString()+"> )"; 
+			}
+			
+			s+=") ";
+		}
+		
 		if (J2JHelper.getResourceNamespace(new Item()).equals(rdfType)) {
 			// searching for items. Add to the Filter the item for which the
 			// user has extra rights as well as the item which are public
-			for (String uri : AuthUtil.getListOfAllowedItem(user)) {
-				if (!"".equals(s))
-					s += " || ";
-				s += "?s=<" + uri + ">";
+			StringBuilder builderItems = new StringBuilder();
+			int itNo = 0;
+			List<String> allowedItems = AuthUtil.getListOfAllowedItem(user);
+			String allowedItemsString = "";
+			if (allowedItems.size()> 0) {
+				for (String uri:allowedItems){
+					itNo++;
+					builderItems.append(" <"+uri+"> "+(itNo==allowedItems.size()?"":",") );
+				}
+				
+				allowedItemsString = " UNION { ?s <"+ImejiNamespaces.STATUS+"> ?status. FILTER (?s in ("+ builderItems.toString()+")) }";
 			}
+			
+			s += allowedItemsString;
 		}
+		
 		if (J2JHelper.getResourceNamespace(new MetadataProfile()).equals(
 				rdfType)) {
-			// searching for items. Add to the Filter the profiles for which the
+			// searching for profiles. Add to the Filter the profiles for which the
 			// user has extra rights as well as the item which are public
-			for (String uri : AuthUtil.getListOfAllowedProfiles(user)) {
-				if (!"".equals(s))
-					s += " || ";
-				s += "?s=<" + uri + ">";
+			
+			StringBuilder builderProfiles = new StringBuilder();
+			int pNo = 0;
+			List<String> allowedProfiles = AuthUtil.getListOfAllowedProfiles(user);
+			String allowedProfilesString = "";
+			if (allowedProfiles.size()> 0) {
+				for (String uri:allowedProfiles){
+					pNo++;
+					builderProfiles.append(" <"+uri+"> "+(pNo==allowedProfiles.size()?"":",") );
+				}
+				
+				allowedProfilesString = " { ?s <"+ImejiNamespaces.STATUS+"> ?status. FILTER (?s in ("+ builderProfiles.toString()+") || ( ?status = <"+ Status.RELEASED.getUriString()+"> )) }";
 			}
+			
+			s += allowedProfilesString;
+
 		}
 		return s;
 	}
@@ -160,6 +208,25 @@ public class SimpleSecurityQuery {
 			return "s";
 		} else {
 			return "c";
+		}
+	}
+	
+	/**
+	 * Return the predicate for the object on with the security is
+	 * checked
+	 * 
+	 * @param rdfType
+	 * @return
+	 */
+	public static String getPredicateName(String rdfType) {
+		if (J2JHelper.getResourceNamespace(new CollectionImeji()).equals(
+				rdfType)
+				|| J2JHelper.getResourceNamespace(new Album()).equals(rdfType)) {
+			return " a ";
+		}
+		else
+		{
+			return "<"+ImejiNamespaces.COLLECTION+">";
 		}
 	}
 }

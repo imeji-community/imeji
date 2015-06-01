@@ -303,7 +303,7 @@ public class ConfigurationBean {
 	public void setFileTypes(FileTypes types) {
 		fileTypes = types;
 	}
-	
+
 	/**
 	 * Get the type of Files
 	 * 
@@ -450,7 +450,7 @@ public class ConfigurationBean {
 	public String getDataViewerUrl() {
 		return config.getProperty(CONFIGURATION.DATA_VIEWER_URL.name());
 	}
-	
+
 	/**
 	 * @return the url of the data viewer service in a static way
 	 */
@@ -728,14 +728,13 @@ public class ConfigurationBean {
 		// // internationalizationBean.readSupportedLanguagesProperty();
 		// // internationalizationBean.initLanguagesMenu();
 	}
-	
+
 	public void setImpressumUrl(String s) {
 		setProperty(CONFIGURATION.IMPRESSUM_URL.name(), s);
 	}
 
 	public String getImpressumUrl() {
-		return (String) config.get(CONFIGURATION.IMPRESSUM_URL
-				.name());
+		return (String) config.get(CONFIGURATION.IMPRESSUM_URL.name());
 	}
 
 	public void setImpressumText(String s) {
@@ -743,8 +742,7 @@ public class ConfigurationBean {
 	}
 
 	public String getImpressumText() {
-		return (String) config.get(CONFIGURATION.IMPRESSUM_TEXT
-				.name());
+		return (String) config.get(CONFIGURATION.IMPRESSUM_TEXT.name());
 	}
-	
+
 }

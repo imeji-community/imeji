@@ -61,7 +61,6 @@ public class TechnicalFacets extends Facets
     @Override
     public void init()
     {
-    	System.out.println("Init Technical Facets");
     	FacetURIFactory uriFactory = new FacetURIFactory(searchQuery);
         List<Facet> techFacets = new ArrayList<Facet>();
         try
@@ -70,25 +69,20 @@ public class TechnicalFacets extends Facets
             int sizeAllImages = allImages.getNumberOfRecords();
             if (sizeAllImages > 0)
             {
-            	System.out.println("1");
                 if (sb.getUser() != null)
                 {
-                	System.out.println("2");
                 	if (!fs.isFilter("my_images") && !fs.isNoResultFilter("my_images"))
                     {
-                		System.out.println("3");
                         SearchPair myImageSearchPair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.IndexNames.user),
                                 SearchOperators.EQUALS, sb.getUser().getEmail());
                         count = getCount(searchQuery, myImageSearchPair, allImages.getResults());
                         if (count > 0)
                         {
-                        	System.out.println("4");
                             techFacets.add(new Facet(uriFactory.createFacetURI(baseURI, myImageSearchPair, "my_images",
                                     FacetType.TECHNICAL), "my_images", count, FacetType.TECHNICAL, null));
                         }
                         else
                         {
-                        	System.out.println("5");
                             fs.getNoResultsFilters().add(new Filter("My images", "", 0, FacetType.TECHNICAL, null));
                         }
                     }
@@ -99,7 +93,6 @@ public class TechnicalFacets extends Facets
                         count = getCount(searchQuery, privatePair, allImages.getResults());
                         if (count > 0)
                         {
-                        	System.out.println("7");
                             techFacets.add(new Facet(uriFactory.createFacetURI(baseURI, privatePair, "pending_images",
                                     FacetType.TECHNICAL), "pending_images", count, FacetType.TECHNICAL, null));
                         }
@@ -120,11 +113,10 @@ public class TechnicalFacets extends Facets
                 boolean showFacet = false;
                 for (Metadata.Types t : Metadata.Types.values())
                 {
-//                	showFacet = (  Metadata.Types.GEOLOCATION.name().equals(t.name()) || 
-//                				 	Metadata.Types.LICENSE.name().equals(t.name()) ||
-//                				 	Metadata.Types.PUBLICATION.name().equals(t.name()) );
-                	System.out.println("Populating facets");
-                    if (!fs.isFilter(t.name()) && !fs.isNoResultFilter(t.name()) )
+                	showFacet = (  Metadata.Types.GEOLOCATION.name().equals(t.name()) || 
+                				 	Metadata.Types.LICENSE.name().equals(t.name()) ||
+                				 	Metadata.Types.PUBLICATION.name().equals(t.name()) );
+                    if (!fs.isFilter(t.name()) && !fs.isNoResultFilter(t.name()) && showFacet)
                     {
                     	
                         SearchPair pair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.IndexNames.type),

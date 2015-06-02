@@ -54,6 +54,7 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
 import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.PropertyReader;
@@ -236,6 +237,7 @@ public class ItemController extends ImejiController {
 			img.getMetadataSet().setProfile(ic.getProfile());
 			ic.getImages().add(img.getId());
 		}
+		cleanMetadata((List<Item>) items);
 		ProfileController pc = new ProfileController();
 		writer.create(
 				J2JHelper.cast2ObjectList(new ArrayList<Item>(items)),
@@ -247,6 +249,18 @@ public class ItemController extends ImejiController {
 		cc.patch(triples, user, false);
 	}
 
+	/**
+	 * Create an {@link Item} 
+	 * 
+	 * @param item
+	 * @param uploadedFile
+	 * @param filename
+	 * @param u
+	 * @param fetchUrl
+	 * @param referenceUrl
+	 * @return
+	 * @throws ImejiException
+	 */
 	public Item create(Item item, File uploadedFile, String filename, User u,
 			String fetchUrl, String referenceUrl) throws ImejiException {
 
@@ -413,6 +427,7 @@ public class ItemController extends ImejiController {
 			item.setFilename(FilenameUtils.getName(item.getFilename()));
 			imBeans.add(createFulltextForMetadata(item));
 		}
+		cleanMetadata((List<Item>) items);
 		ProfileController pc = new ProfileController();
 		writer.update(
 				imBeans,
@@ -875,6 +890,19 @@ public class ItemController extends ImejiController {
 		if (Status.WITHDRAWN.equals(st))
 			throw new UnprocessableError(
 					"Collection status does not allow item upload! The collection is discarded!");
+	}
+
+	/**
+	 * Clean the values of all {@link Metadata} of an {@link Item}
+	 * 
+	 * @param l
+	 */
+	private void cleanMetadata(List<Item> l) {
+		for (Item item : l) {
+			for (Metadata md : item.getMetadataSet().getMetadata()) {
+				md.clean();
+			}
+		}
 	}
 
 }

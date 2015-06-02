@@ -325,7 +325,7 @@ public class ItemValidatorTest {
 		} catch (UnprocessableError e) {
 			Assert.fail("Error validating multiple values for "
 					+ md.getTypeNamespace()
-					+ ": multiple value should be allowed");
+					+ ": multiple value should be allowed: " + e.getMessage());
 		}
 	}
 

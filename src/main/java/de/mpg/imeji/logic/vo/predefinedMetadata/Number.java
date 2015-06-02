@@ -86,4 +86,10 @@ public class Number extends Metadata
     {
         return Double.toString(number);
     }
+
+	@Override
+	public void clean() {
+		// TODO Auto-generated method stub
+		
+	}
 }

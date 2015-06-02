@@ -113,4 +113,10 @@ public class Geolocation extends Metadata
     {
         return name + " " + " lat:" + latitude + " long:" + longitude;
     }
+
+	@Override
+	public void clean() {
+		// TODO Auto-generated method stub
+		
+	}
 }

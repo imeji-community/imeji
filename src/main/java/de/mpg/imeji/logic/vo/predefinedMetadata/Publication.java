@@ -109,4 +109,10 @@ public class Publication extends Metadata
     {
         return citation + " " + (uri != null ? uri.toString() : "");
     }
+
+	@Override
+	public void clean() {
+		// TODO Auto-generated method stub
+		
+	}
 }

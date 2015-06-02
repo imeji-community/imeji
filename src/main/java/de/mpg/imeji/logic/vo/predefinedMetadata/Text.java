@@ -31,55 +31,51 @@ import de.mpg.j2j.annotations.j2jResource;
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "text", namespace = ImejiNamespaces.METADATA)
 @XmlType(propOrder = { "text", "statement" })
-public class Text extends Metadata
-{
-    private static final long serialVersionUID = 3394338221875432545L;
-    @j2jLiteral("http://imeji.org/terms/text")
-    private String text;
+public class Text extends Metadata {
+	private static final long serialVersionUID = 3394338221875432545L;
+	@j2jLiteral("http://imeji.org/terms/text")
+	private String text;
 
-    public Text()
-    {
-    }
+	public Text() {
+	}
 
-    @j2jResource("http://imeji.org/terms/statement")
-    private URI statement;
+	@j2jResource("http://imeji.org/terms/statement")
+	private URI statement;
 
-    @XmlElement(name = "text", namespace = "http://imeji.org/terms/")
-    public String getText()
-    {
-        return text;
-    }
+	@XmlElement(name = "text", namespace = "http://imeji.org/terms/")
+	public String getText() {
+		return text;
+	}
 
-    public void setText(String str)
-    {
-        text = str;
-    }
+	public void setText(String str) {
+		text = str;
+	}
 
-    @XmlElement(name = "statement", namespace = "http://imeji.org/terms/")
-    public URI getStatement()
-    {
-        return statement;
-    }
+	@XmlElement(name = "statement", namespace = "http://imeji.org/terms/")
+	public URI getStatement() {
+		return statement;
+	}
 
-    public void setStatement(URI namespace)
-    {
-        this.statement = namespace;
-    }
+	public void setStatement(URI namespace) {
+		this.statement = namespace;
+	}
 
-    @Override
-    public void copy(Metadata metadata)
-    {
-        if (metadata instanceof Text)
-        {
-            setPos(metadata.getPos());
-            this.text = ((Text)metadata).getText();
-            setStatement(metadata.getStatement());
-        }
-    }
+	@Override
+	public void copy(Metadata metadata) {
+		if (metadata instanceof Text) {
+			setPos(metadata.getPos());
+			this.text = ((Text) metadata).getText();
+			setStatement(metadata.getStatement());
+		}
+	}
 
-    @Override
-    public String asFulltext()
-    {
-        return text;
-    }
+	@Override
+	public String asFulltext() {
+		return text;
+	}
+
+	@Override
+	public void clean() {
+		text = text.trim();
+	}
 }

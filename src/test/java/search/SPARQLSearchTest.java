@@ -16,26 +16,26 @@ import util.JenaUtil;
 
 public class SPARQLSearchTest {
 
-	@BeforeClass
-	public void setUp() throws Exception {
-		JenaUtil.initJena();
-	}
-	
-	@BeforeClass
-	public static void init() {
-		new PropertyBean();
-	}
-
-
-	@AfterClass
-	public void tearDown() throws Exception {
-		JenaUtil.closeJena();
-	}
-
-	@Test
-	public void testCollectionSearch() {
-		fail("Not yet implemented");
-	}
+//	@BeforeClass
+//	public void setUp() throws Exception {
+//		JenaUtil.initJena();
+//	}
+//	
+//	@BeforeClass
+//	public static void init() {
+//		new PropertyBean();
+//	}
+//
+//
+//	@AfterClass
+//	public void tearDown() throws Exception {
+//		JenaUtil.closeJena();
+//	}
+//
+//	@Test
+//	public void testCollectionSearch() {
+//		fail("Not yet implemented");
+//	}
 //
 //	@Test
 //	public void testSearchSearchQuerySortCriterionUser() {

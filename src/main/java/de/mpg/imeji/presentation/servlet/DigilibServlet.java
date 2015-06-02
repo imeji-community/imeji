@@ -129,24 +129,21 @@ public class DigilibServlet extends Scaler {
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException {
-		String url = req.getParameter("id");
-		String fn = req.getParameter("fn");
-		if (url != null) {
-			String path = internalStorageBase
-					+ url.replaceAll(navigation.getApplicationUrl()
-							+ FileServlet.SERVLET_PATH, "");
-			path = path.replace("\\", "/");
-			try {
+		try {
+			String url = req.getParameter("id");
+			String fn = req.getParameter("fn");
+			if (url != null) {
+				String path = internalStorageBase
+						+ url.replaceAll(navigation.getApplicationUrl()
+								+ FileServlet.SERVLET_PATH, "");
+				path = path.replace("\\", "/");
 				resp.sendRedirect(req.getRequestURL().toString() + "?fn="
 						+ path + "&dw=1000");
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
-		} else if (fn != null) {
-			SessionBean session = getSession(req);
-			url = navigation.getApplicationUrl() + FileServlet.SERVLET_PATH
-					+ fn.replace(internalStorageBase, "");
-			try {
+			} else if (fn != null) {
+				SessionBean session = getSession(req);
+				url = navigation.getApplicationUrl() + FileServlet.SERVLET_PATH
+						+ fn.replace(internalStorageBase, "");
+
 				if (authorization
 						.read(getUser(session), loadItem(url, session))) {
 					super.doGet(req, resp);
@@ -154,9 +151,10 @@ public class DigilibServlet extends Scaler {
 					resp.sendError(403,
 							"Security warning: You are not allowed to view this file.");
 				}
-			} catch (Exception e) {
-				throw new RuntimeException(e);
 			}
+		} catch (Exception e) {
+			logger.error(e);
+			throw new RuntimeException(e);
 		}
 	}
 

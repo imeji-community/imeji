@@ -72,7 +72,8 @@ public class MetadataValidator implements Validator<Metadata> {
 						&& longitude >= -180 && longitude <= 180;
 			return value != null;// No Predefined Value supported
 		} else if (md instanceof ConePerson) {
-			String value = ((ConePerson) md).getPerson().getCompleteName();
+			String value = ((ConePerson) md).getPerson().getFamilyName()
+					+ ((ConePerson) md).getPerson().getGivenName();
 			return value != null; // No Predefined Value supported;
 		} else if (md instanceof License) {
 			String value = ((License) md).getLicense();

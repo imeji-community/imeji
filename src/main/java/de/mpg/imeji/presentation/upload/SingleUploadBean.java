@@ -27,9 +27,13 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.exceptions.BadRequestException;
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.CollectionController;
+import de.mpg.imeji.logic.controller.CollectionController.MetadataProfileCreationMethod;
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.controller.exceptions.TypeNotAllowedException;
 import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchResult;
@@ -46,6 +50,8 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.MetadataSet;
+import de.mpg.imeji.logic.vo.Organization;
+import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.metadata.MetadataSetBean;
@@ -88,13 +94,14 @@ public class SingleUploadBean implements Serializable {
 			try {
 				if (UrlHelper.getParameterBoolean("init")) {
 					sus.reset();
+					loadCollections(true);
 				} else if (UrlHelper.getParameterBoolean("start")) {
 					upload();
 				} else if (UrlHelper.getParameterBoolean("done")) {
 					prepareEditor();
 				}
 			} catch (Exception e) {
-				BeanHelper.error(e.getMessage());
+				BeanHelper.error(e.getLocalizedMessage());
 			}
 		}
 	}
@@ -127,7 +134,7 @@ public class SingleUploadBean implements Serializable {
 			throw new TypeNotAllowedException(
 					sb.getMessage("single_upload_invalid_content_format"));
 		}
-		loadCollections();
+		loadCollections(false);
 		sus.copyToTemp();
 	}
 
@@ -208,6 +215,10 @@ public class SingleUploadBean implements Serializable {
 	}
 
 	public void colChangeListener(AjaxBehaviorEvent event) throws Exception {
+			methodColChangeListener();
+	}
+	
+	private void methodColChangeListener() throws ImejiException {
 		if (!"".equals(selectedCollectionItem)) {
 			sus.setSelectedCollectionItem(selectedCollectionItem);
 			try {
@@ -234,7 +245,6 @@ public class SingleUploadBean implements Serializable {
 		} else {
 
 		}
-
 	}
 
 	/**
@@ -257,8 +267,13 @@ public class SingleUploadBean implements Serializable {
 	/**
 	 * Load the collection
 	 */
-	public void loadCollections() throws Exception {
-
+	public void loadCollections(boolean checkSizeOnly) throws Exception {
+		/*
+		 * NB 02.06.2015 method changed, it is called two times
+		 * once to check the size of collection list, and eventually create a collection
+		 * second time to populate the collection list
+		 * 
+		 */
 		CollectionController cc = new CollectionController();
 		SearchQuery sq = new SearchQuery();
 		SearchPair sp = new SearchPair(
@@ -269,14 +284,64 @@ public class SingleUploadBean implements Serializable {
 		sortCriterion.setIndex(SPARQLSearch.getIndex("user"));
 		sortCriterion.setSortOrder(SortOrder.valueOf("DESCENDING"));
 		// TODO: check if here space restriction is needed
-		SearchResult results = cc.search(sq, sortCriterion, -1, 0, user, null);
-		collections = cc.retrieveLazy(results.getResults(), -1, 0, user);
-		collectionItems.add(new SelectItem("", "-- select collection --"));
-		for (CollectionImeji c : collections) {
-			if (AuthUtil.staticAuth().create(user, c))
-				collectionItems.add(new SelectItem(c.getId(), c.getMetadata()
-						.getTitle()));
+		SearchResult results = cc.search(sq, sortCriterion, -1, 0, user, sb.getSpaceId());
+		if (!checkSizeOnly) {
+			collections = cc.retrieveLazy(results.getResults(), -1, 0, user);
+			for (CollectionImeji c : collections) {
+					if (AuthUtil.staticAuth().create(user, c))
+						collectionItems.add(new SelectItem(c.getId(), c.getMetadata()
+								.getTitle()));
+			}
+			if (collectionItems.size()> 1) {
+				collectionItems.add(0, new SelectItem("", "-- Select a collection to upload your file --"));
+			}
+			else if (collectionItems.size()>0)
+			{
+				setSelectedCollection(((SelectItem)collectionItems.get(0)).getValue().toString());
+				methodColChangeListener();
+			}
 		}
+		else {
+			if (results.getNumberOfRecords()==0) {
+				String errorMessage = "cannot_create_collection";
+				if (user.isAllowedToCreateCollection()) {
+					createDefaultCollection();
+					sus.setCanUpload(true);
+				}
+				else
+				{
+					sus.setCanUpload(false);
+					throw new BadRequestException(sb.getMessage(errorMessage));
+				}
+			}
+		}
+	}
+	
+	private void createDefaultCollection() throws ImejiException{
+		CollectionController cc = new CollectionController();
+		CollectionImeji newC = ImejiFactory.newCollection();
+		newC.getMetadata().setTitle("Default first collection of "+user.getPerson().getCompleteName());
+
+
+		Person creatorUser = getUser().getPerson();
+		
+		
+		//If there are no organizations for Current User, add one
+		if ("".equals(creatorUser.getOrganizationString())) {
+			Organization creatorOrganization = new Organization();
+		    creatorUser.getOrganizations().clear();
+		    creatorOrganization.setName("Organization name not specified");
+		    creatorUser.getOrganizations().add(creatorOrganization);
+		}
+		
+		//ImejiFactory initiates new Empty Person, which is not needed 
+		newC.getMetadata().getPersons().clear();
+		// Add current user as Author 
+		newC.getMetadata().getPersons().add(creatorUser);
+		
+		ProfileController pc = new ProfileController();
+		newC.setProfile(pc.retrieveDefaultProfile().getId());
+		cc.create(newC, pc.retrieveDefaultProfile(), user, MetadataProfileCreationMethod.COPY, sb.getSpaceId());
 	}
 
 	public List<SelectItem> getCollectionItems() {

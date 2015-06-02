@@ -72,8 +72,10 @@ public class Facet
                     .getInternationalizedLabels().get(metadataURI);
             if (isNotDefine())
             {
-                internationalizedLabel = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class))
-                        .getLabel("facet_not_define");
+            	 internationalizedLabel = ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class))
+                         .getInternationalizedLabels().get(metadataURI);
+//                internationalizedLabel = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class))
+//                        .getLabel("facet_not_define");
             }
         }
         else if (FacetType.SEARCH.name().equals(type.name()))

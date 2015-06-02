@@ -3,6 +3,11 @@
  */
 package de.mpg.imeji.presentation.history;
 
+import de.mpg.imeji.logic.search.SPARQLSearch;
+import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.Search.SearchType;
+import de.mpg.imeji.logic.search.SearchFactory;
+import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.User;
@@ -60,7 +65,8 @@ public class HistoryPage {
 				return ObjectLoader.loadAlbumLazy(uri, user).getMetadata()
 						.getTitle();
 			} else if (ImejiPages.ITEM_DETAIL.matches(uriStr)) {
-				return ObjectLoader.loadItem(uri, user).getFilename();
+				Search s  = new SPARQLSearch(SearchType.ITEM, null);
+				return s.searchSimpleForQuery(SPARQLQueries.selectItemFileName(uriStr)).getResults().get(0);
 			} else if (ImejiPages.USER_GROUP == imejiPage) {
 				String groupUri = UrlHelper.decode(ObjectHelper.getId(uri));
 				return ObjectLoader.loadUserGroupLazy(URI.create(groupUri),

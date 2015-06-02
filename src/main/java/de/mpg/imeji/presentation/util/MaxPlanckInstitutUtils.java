@@ -41,11 +41,11 @@ public class MaxPlanckInstitutUtils {
 	 */
 	public static String getInstituteNameForIP(String userIP) {
 		Map<String, String> mpiMap = getMPINameMap();
-		if (mpiMap == null )
-			return null;
-		for (String ipRange : mpiMap.keySet()) {
-			if (IPUtils.isInRange(ipRange, userIP))
-				return mpiMap.get(ipRange);
+		if (mpiMap != null) {
+			for (String ipRange : mpiMap.keySet()) {
+				if (IPUtils.isInRange(ipRange, userIP))
+					return mpiMap.get(ipRange);
+			}
 		}
 		return null;
 	}
@@ -58,11 +58,11 @@ public class MaxPlanckInstitutUtils {
 	 */
 	public static String getInstituteIdForIP(String userIP) {
 		Map<String, String> mpiMap = getIdMap();
-		if (mpiMap == null )
-			return null;
-		for (String ipRange : mpiMap.keySet()) {
-			if (IPUtils.isInRange(ipRange, userIP))
-				return mpiMap.get(ipRange);
+		if (mpiMap != null) {
+			for (String ipRange : mpiMap.keySet()) {
+				if (IPUtils.isInRange(ipRange, userIP))
+					return mpiMap.get(ipRange);
+			}
 		}
 		return null;
 	}

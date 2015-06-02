@@ -157,6 +157,7 @@ public class SimpleSecurityQuery {
 			s= allowedContainerString+ ( uris.size()>0?") .":"");
 		}
 		
+
 		if (J2JHelper.getResourceNamespace(new Item()).equals(rdfType)) {
 			// searching for items. Add to the Filter the item for which the
 			// user has extra rights as well as the item which are public
@@ -170,7 +171,7 @@ public class SimpleSecurityQuery {
 					builderItems.append(" <"+uri+"> "+(itNo==allowedItems.size()?"":",") );
 				}
 				
-				allowedItemsString = " UNION { ?s <"+ImejiNamespaces.STATUS+"> ?status. FILTER (?s in ("+ builderItems.toString()+")) }";
+				allowedItemsString = ((!"".equals(s))?" UNION ":"")+" { ?s <"+ImejiNamespaces.STATUS+"> ?status. FILTER (?s in ("+ builderItems.toString()+")) }";
 			}
 			
 			s += allowedItemsString;

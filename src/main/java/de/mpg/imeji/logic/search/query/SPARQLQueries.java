@@ -301,9 +301,12 @@ public class SPARQLQueries {
 		String path = URI.create(fileUrl).getPath();
 		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {"
 				+ "?s <http://imeji.org/terms/webImageUrl> ?url1 . ?s <http://imeji.org/terms/thumbnailImageUrl> ?url2 . ?s <http://imeji.org/terms/fullImageUrl> ?url3 . FILTER(REGEX(str(?url1), '"
-				+ path + "', 'i') || REGEX(str(?url2), '"
-				+ path + "', 'i') || REGEX(str(?url3), '"
-				+ path + "', 'i'))} LIMIT 1 ";
+				+ path
+				+ "', 'i') || REGEX(str(?url2), '"
+				+ path
+				+ "', 'i') || REGEX(str(?url3), '"
+				+ path
+				+ "', 'i'))} LIMIT 1 ";
 	}
 
 	/**
@@ -651,6 +654,17 @@ public class SPARQLQueries {
 				+ " FILTER (?status!=<"
 				+ Status.WITHDRAWN.getUriString()
 				+ ">)} LIMIT 1";
+
+	}
+
+	/**
+	 * Search for any file with the same checksum (in any collection)
+	 * 
+	 * @return
+	 */
+	public static String selectItemFileName(String itemURi) {
+		return "SELECT DISTINCT (str(?name) as ?s) WHERE {<" + itemURi
+				+ "> <http://imeji.org/terms/filename> ?name } LIMIT 1";
 
 	}
 

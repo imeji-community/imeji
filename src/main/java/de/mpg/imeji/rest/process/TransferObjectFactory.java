@@ -217,8 +217,8 @@ public class TransferObjectFactory {
 									} catch (Exception e) {
 										throw new BadRequestException( entry + e.getMessage());
 									} 
-									ConePersonTO newCone = (ConePersonTO)mdTO.getValue();
-									PersonTO newP = newCone.getPerson();
+									ConePersonTO newCone = (mdTO.getValue() != null) ? ((ConePersonTO)mdTO.getValue()) : (new ConePersonTO());
+									PersonTO newP = (mdTO.getValue() != null) ? (newCone.getPerson()) : (new PersonTO());
 									newP.setFamilyName(easyCPTO.getFamilyName());
 									newP.setGivenName(easyCPTO.getGivenName());
 									newCone.setPerson(newP);

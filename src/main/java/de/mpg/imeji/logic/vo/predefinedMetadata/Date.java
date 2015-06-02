@@ -100,4 +100,10 @@ public class Date extends Metadata
     {
         return date;
     }
+
+	@Override
+	public void clean() {
+		// TODO Auto-generated method stub
+		
+	}
 }

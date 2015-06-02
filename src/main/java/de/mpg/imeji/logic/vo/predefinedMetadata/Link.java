@@ -97,4 +97,10 @@ public class Link extends Metadata
             return label + " " + uri.toString();
         return label;
     }
+
+	@Override
+	public void clean() {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -54,7 +54,6 @@ public abstract class Metadata implements Comparable<Metadata>, Serializable {
 	@j2jLiteral("http://imeji.org/terms/position")
 	private int pos = 0;
 
-
 	@XmlEnum(Types.class)
 	public enum Types {
 		TEXT(Text.class), NUMBER(Number.class), CONE_PERSON(ConePerson.class), DATE(
@@ -78,8 +77,9 @@ public abstract class Metadata implements Comparable<Metadata>, Serializable {
 	public Metadata() {
 	}
 
-	public static Metadata createNewInstance(URI typeUri) throws IllegalAccessException, InstantiationException {
-		for (Types type: Types.values()) {
+	public static Metadata createNewInstance(URI typeUri)
+			throws IllegalAccessException, InstantiationException {
+		for (Types type : Types.values()) {
 			if (type.getClazzNamespace().equals(typeUri.toString())) {
 				return type.getClazz().newInstance();
 			}
@@ -115,6 +115,11 @@ public abstract class Metadata implements Comparable<Metadata>, Serializable {
 
 	public abstract String asFulltext();
 
+	/**
+	 * Clean the {@link Metadata} values
+	 */
+	public abstract void clean();
+
 	protected void copyMetadata(Metadata metadata) {
 		this.id = metadata.getId();
 	}
@@ -143,9 +148,12 @@ public abstract class Metadata implements Comparable<Metadata>, Serializable {
 		try {
 			method = this.getClass().getMethod(methodName);
 			ret = method.invoke(this);
-		} catch (SecurityException | NoSuchMethodException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
-			logger.error("Some problems in Metadata getting values from Method ", e);
-		} 
+		} catch (SecurityException | NoSuchMethodException
+				| IllegalArgumentException | IllegalAccessException
+				| InvocationTargetException e) {
+			logger.error(
+					"Some problems in Metadata getting values from Method ", e);
+		}
 		return ret;
 	}
 }

@@ -118,4 +118,10 @@ public class License extends Metadata
     {
         return license + " " + getDateString();
     }
+
+	@Override
+	public void clean() {
+		// TODO Auto-generated method stub
+		
+	}
 }

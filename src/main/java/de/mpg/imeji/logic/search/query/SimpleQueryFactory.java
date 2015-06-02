@@ -326,9 +326,9 @@ public class SimpleQueryFactory {
 		case title:
 			break;
 		case type:// Search for metadata type (Text, Date, Person...) //Use EXISTS in FILTER in order not to produce performance issues
-			return "EXISTS { ?s <http://imeji.org/terms/metadataSet> ?mds . ?mds <"
+			return " ?s <http://imeji.org/terms/metadataSet> ?mds . ?mds <"
 					+ ImejiNamespaces.METADATA + "> ?md  . ?md a <"
-					+ pair.getValue() + "> } .";
+					+ pair.getValue() + ">  .";
 		case url:
 			break;
 		case user:

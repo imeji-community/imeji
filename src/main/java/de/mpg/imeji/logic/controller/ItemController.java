@@ -54,6 +54,7 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
 import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.PropertyReader;
@@ -230,19 +231,36 @@ public class ItemController extends ImejiController {
 			} else {
 				img.setVisibility(Visibility.PUBLIC);
 			}
+			img.setFilename(FilenameUtils.getName(img.getFilename()));
 			img.setStatus(ic.getStatus());
 			img.setCollection(coll);
 			img.getMetadataSet().setProfile(ic.getProfile());
 			ic.getImages().add(img.getId());
 		}
-		writer.create(J2JHelper.cast2ObjectList(new ArrayList<Item>(items)),
-				user);
+		cleanMetadata((List<Item>) items);
+		ProfileController pc = new ProfileController();
+		writer.create(
+				J2JHelper.cast2ObjectList(new ArrayList<Item>(items)),
+				pc.retrieve(items.iterator().next().getMetadataSet()
+						.getProfile(), user), user);
 		List<ImejiTriple> triples = getUpdateTriples(coll.toString(), user,
 				items.iterator().next());
 		// Update the collection
 		cc.patch(triples, user, false);
 	}
 
+	/**
+	 * Create an {@link Item} 
+	 * 
+	 * @param item
+	 * @param uploadedFile
+	 * @param filename
+	 * @param u
+	 * @param fetchUrl
+	 * @param referenceUrl
+	 * @return
+	 * @throws ImejiException
+	 */
 	public Item create(Item item, File uploadedFile, String filename, User u,
 			String fetchUrl, String referenceUrl) throws ImejiException {
 
@@ -406,9 +424,15 @@ public class ItemController extends ImejiController {
 		List<Object> imBeans = new ArrayList<Object>();
 		for (Item item : items) {
 			writeUpdateProperties(item, user);
+			item.setFilename(FilenameUtils.getName(item.getFilename()));
 			imBeans.add(createFulltextForMetadata(item));
 		}
-		writer.update(imBeans, user);
+		cleanMetadata((List<Item>) items);
+		ProfileController pc = new ProfileController();
+		writer.update(
+				imBeans,
+				pc.retrieve(items.iterator().next().getMetadataSet()
+						.getProfile(), user), user, true);
 	}
 
 	/**
@@ -642,8 +666,7 @@ public class ItemController extends ImejiController {
 		c.getImages().clear();
 		return ImejiSPARQL.exec(q, null);
 	}
-	
-	
+
 	/**
 	 * Set the status of a {@link List} of {@link Item} to released
 	 * 
@@ -793,7 +816,8 @@ public class ItemController extends ImejiController {
 			throws ImejiException {
 		List<ImejiTriple> triples = new ArrayList<ImejiTriple>();
 		for (Item item : l) {
-			if (!profileUri.equals(item.getMetadataSet().getProfile().toString())) {
+			if (!profileUri.equals(item.getMetadataSet().getProfile()
+					.toString())) {
 				triples.add(getProfileTriple(item.getMetadataSet().getId()
 						.toString(), item, profileUri));
 				triples.addAll(getUpdateTriples(item.getId().toString(), user,
@@ -866,6 +890,19 @@ public class ItemController extends ImejiController {
 		if (Status.WITHDRAWN.equals(st))
 			throw new UnprocessableError(
 					"Collection status does not allow item upload! The collection is discarded!");
+	}
+
+	/**
+	 * Clean the values of all {@link Metadata} of an {@link Item}
+	 * 
+	 * @param l
+	 */
+	private void cleanMetadata(List<Item> l) {
+		for (Item item : l) {
+			for (Metadata md : item.getMetadataSet().getMetadata()) {
+				md.clean();
+			}
+		}
 	}
 
 }

@@ -55,7 +55,7 @@ public class LoginBean {
 				FacesContext.getCurrentInstance().getExternalContext()
 						.redirect(nav.getHomeUrl());
 			} catch (IOException e) {
-				new RuntimeException(e);
+				throw new RuntimeException(e);
 			}
 		}
 		try {
@@ -66,7 +66,7 @@ public class LoginBean {
 				this.redirect = URLDecoder.decode(
 						UrlHelper.getParameterValue("redirect"), "UTF-8");
 		} catch (Exception e) {
-			new RuntimeException(e);
+			throw new RuntimeException(e);
 		}
 	}
 

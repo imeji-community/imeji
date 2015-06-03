@@ -61,7 +61,7 @@ public class TechnicalFacets extends Facets
     @Override
     public void init()
     {
-        FacetURIFactory uriFactory = new FacetURIFactory(searchQuery);
+    	FacetURIFactory uriFactory = new FacetURIFactory(searchQuery);
         List<Facet> techFacets = new ArrayList<Facet>();
         try
         {
@@ -71,7 +71,7 @@ public class TechnicalFacets extends Facets
             {
                 if (sb.getUser() != null)
                 {
-                    if (!fs.isFilter("my_images") && !fs.isNoResultFilter("my_images"))
+                	if (!fs.isFilter("my_images") && !fs.isNoResultFilter("my_images"))
                     {
                         SearchPair myImageSearchPair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.IndexNames.user),
                                 SearchOperators.EQUALS, sb.getUser().getEmail());
@@ -109,10 +109,16 @@ public class TechnicalFacets extends Facets
                         }
                     }
                 }
+
+                boolean showFacet = false;
                 for (Metadata.Types t : Metadata.Types.values())
                 {
-                    if (!fs.isFilter(t.name()) && !fs.isNoResultFilter(t.name()))
+                	showFacet = (  Metadata.Types.GEOLOCATION.name().equals(t.name()) || 
+                				 	Metadata.Types.LICENSE.name().equals(t.name()) ||
+                				 	Metadata.Types.PUBLICATION.name().equals(t.name()) );
+                    if (!fs.isFilter(t.name()) && !fs.isNoResultFilter(t.name()) && showFacet)
                     {
+                    	
                         SearchPair pair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.IndexNames.type),
                                 SearchOperators.EQUALS, t.getClazzNamespace());
                         count = getCount(searchQuery, pair, allImages.getResults());

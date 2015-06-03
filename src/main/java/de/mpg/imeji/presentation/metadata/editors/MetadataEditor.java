@@ -87,7 +87,7 @@ public abstract class MetadataEditor
      */
     public void save()
     {
-        SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+    	SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
         ItemController ic = new ItemController();
         try
         {
@@ -113,7 +113,8 @@ public abstract class MetadataEditor
                     }
                     catch (Exception e)
                     {
-                        BeanHelper.error(sb.getMessage("error_metadata_edit") + ": " + e.getMessage());
+                        BeanHelper.error(sb.getMessage("error_metadata_edit") + ": " + e.getLocalizedMessage());
+                        e.printStackTrace();
                     }
                 }
                 else

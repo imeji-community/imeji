@@ -91,6 +91,7 @@ public class CollectionFacets extends Facets {
 							getName(st.getId()), count, FacetType.COLLECTION,
 							st.getId()));
 
+					//create this facet only if there are no 
 					if (count <= sizeAllImages) {
 						pair.setNot(true);
 						group.add(new Facet(uriFactory.createFacetURI(baseURI,

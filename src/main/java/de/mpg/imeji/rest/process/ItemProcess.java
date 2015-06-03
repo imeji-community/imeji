@@ -1,35 +1,49 @@
 package de.mpg.imeji.rest.process;
 
-import de.mpg.imeji.exceptions.BadRequestException;
-import de.mpg.imeji.exceptions.UnprocessableError;
-import de.mpg.imeji.logic.storage.StorageController;
-import de.mpg.imeji.logic.storage.util.StorageUtils;
-import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.rest.api.ItemService;
-import de.mpg.imeji.rest.to.ItemTO;
-import de.mpg.imeji.rest.to.ItemWithFileTO;
-import de.mpg.imeji.rest.to.JSONResponse;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static de.mpg.imeji.rest.process.CommonUtils.USER_MUST_BE_LOGGED_IN;
+import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONAndExceptionResponse;
+import static de.mpg.imeji.rest.process.RestProcessUtils.buildResponse;
+import static de.mpg.imeji.rest.process.RestProcessUtils.buildTOFromJSON;
+import static de.mpg.imeji.rest.process.RestProcessUtils.localExceptionHandler;
+import static javax.ws.rs.core.Response.Status.OK;
+import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.Response.Status;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
-import static javax.ws.rs.core.Response.Status.OK;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Response.Status;
 
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import de.mpg.imeji.exceptions.BadRequestException;
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.storage.StorageController;
+import de.mpg.imeji.logic.storage.util.StorageUtils;
+import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.rest.api.CollectionService;
+import de.mpg.imeji.rest.api.ItemService;
+import de.mpg.imeji.rest.api.ProfileService;
+import de.mpg.imeji.rest.to.CollectionProfileTO;
+import de.mpg.imeji.rest.to.CollectionTO;
+import de.mpg.imeji.rest.to.EasyItemTO;
+import de.mpg.imeji.rest.to.ItemTO;
+import de.mpg.imeji.rest.to.ItemWithFileTO;
+import de.mpg.imeji.rest.to.JSONResponse;
+import de.mpg.imeji.rest.to.MetadataProfileTO;
 
 public class ItemProcess {
 
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ItemProcess.class);
-
+	
 	public static JSONResponse deleteItem(HttpServletRequest req, String id) {
 		User u = BasicAuthentication.auth(req);
 		JSONResponse resp; 
@@ -107,6 +121,30 @@ public class ItemProcess {
 			}
 			
 		return resp;
+	}
+	
+	public static JSONResponse easyUpdateItem(HttpServletRequest req, String id) throws IOException {
+		JSONResponse resp = null;  
+		User u = BasicAuthentication.auth(req);
+		if (u == null) {    
+			resp = buildJSONAndExceptionResponse(UNAUTHORIZED.getStatusCode(), USER_MUST_BE_LOGGED_IN);
+		} else {
+			try {
+				ItemService icrud = new ItemService();		
+//				EasyItemTO easyTO = RestProcessUtils.buildEasyItemTOFromJSON(req); 
+				EasyItemTO easyTO = (EasyItemTO)buildTOFromJSON(req, EasyItemTO.class);
+				ItemTO itemTO = icrud.read(id, u);
+				CollectionService ccrud = new CollectionService();			
+				CollectionTO col = ccrud.read(itemTO.getCollectionId(), u);
+				ProfileService pcrud = new ProfileService();
+				MetadataProfileTO profileTO = pcrud.read(col.getProfile().getId(), u);
+				TransferObjectFactory.transferEasyItemTOItem(profileTO, easyTO, itemTO);
+	            resp = buildResponse(OK.getStatusCode(), icrud.update(itemTO, u));
+	            } catch (ImejiException  e) {
+	            	resp = localExceptionHandler(e, e.getLocalizedMessage());
+	            	}
+			}
+	return resp;
 	}
 
 

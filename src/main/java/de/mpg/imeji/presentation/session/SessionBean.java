@@ -682,6 +682,10 @@ public class SessionBean implements Serializable {
 	 * Find the Name of the Institute of the current user
 	 */
 	public String findInstitute() {
+		if (institute != null )
+		{
+			return institute;
+		}
 		return MaxPlanckInstitutUtils.getInstituteNameForIP(readUserIp());
 	}
 
@@ -689,6 +693,10 @@ public class SessionBean implements Serializable {
 	 * Find the Name of the Institute of the current user
 	 */
 	public String findInstituteId() {
+		if (instituteId != null )
+		{
+			return instituteId;
+		}
 		return MaxPlanckInstitutUtils.getInstituteIdForIP(readUserIp());
 	}
 

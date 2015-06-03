@@ -3,10 +3,26 @@
  */
 package de.mpg.imeji.logic.controller;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
-import de.mpg.imeji.exceptions.*;
+import de.mpg.imeji.exceptions.AuthenticationError;
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.NotFoundException;
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.ImejiTriple;
@@ -22,30 +38,15 @@ import de.mpg.imeji.logic.search.query.URLQueryTransformer;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.util.StringHelper;
-import de.mpg.imeji.logic.vo.*;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.j2j.helper.J2JHelper;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import static com.google.common.base.Strings.isNullOrEmpty;
-import static com.google.common.io.Files.copy;
-import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
 
 /**
  * CRUD controller for {@link CollectionImeji}, plus search mehtods related to
@@ -65,7 +66,6 @@ public class CollectionController extends ImejiController {
 	public static enum MetadataProfileCreationMethod {
 		COPY, REFERENCE, NEW;
 	}
-	
 
 	/**
 	 * Default constructor
@@ -86,8 +86,7 @@ public class CollectionController extends ImejiController {
 	 */
 	public URI create(CollectionImeji c, MetadataProfile p, User user,
 			String spaceId) throws ImejiException {
-		return createAskValidate(c, p, user, true,
-				MetadataProfileCreationMethod.COPY, spaceId);
+		return create(c, p, user, MetadataProfileCreationMethod.COPY, spaceId);
 	}
 
 	/**
@@ -103,19 +102,6 @@ public class CollectionController extends ImejiController {
 	public URI create(CollectionImeji c, MetadataProfile p, User user,
 			MetadataProfileCreationMethod method, String spaceId)
 			throws ImejiException {
-		return createAskValidate(c, p, user, true, method, spaceId);
-	}
-
-	public URI createNoValidate(CollectionImeji c, MetadataProfile p,
-			User user, MetadataProfileCreationMethod method, String spaceId)
-			throws ImejiException {
-		return createAskValidate(c, p, user, false, method, spaceId);
-	}
-
-	private URI createAskValidate(CollectionImeji c, MetadataProfile p,
-			User user, boolean validate, MetadataProfileCreationMethod method,
-			String spaceId) throws ImejiException {
-
 		ProfileController pc = new ProfileController();
 		String metadataProfileName = " (Metadata profile)";
 		if (p == null || method.equals(MetadataProfileCreationMethod.NEW)) {
@@ -131,16 +117,10 @@ public class CollectionController extends ImejiController {
 
 			p = pc.create(p.cloneWithTitle(), user);
 		}
-
 		c.setProfile(p.getId());
-
-		if (validate)
-			validateCollection(c, user);
-
 		writeCreateProperties(c, user);
 		c.setProfile(p.getId());
-
-		writer.create(WriterFacade.toList(c), user);
+		writer.create(WriterFacade.toList(c), p, user);
 		// Prepare grants
 		GrantController gc = new GrantController();
 		gc.addGrants(user, AuthorizationPredefinedRoles.admin(c.getId()
@@ -148,7 +128,6 @@ public class CollectionController extends ImejiController {
 
 		// check the space
 		// Just read SessionBean for SpaceId
-
 		if (!isNullOrEmpty(spaceId)) {
 			SpaceController sp = new SpaceController();
 			sp.addCollection(spaceId, c.getIdString(), user);
@@ -196,7 +175,7 @@ public class CollectionController extends ImejiController {
 	public List<Item> retrieveItems(String id, User user, String q)
 			throws ImejiException {
 		ItemController ic = new ItemController();
-		List<Item> itemList = new ArrayList();
+		List<Item> itemList = new ArrayList<Item>();
 		try {
 			for (String itemId : ic
 					.search(ObjectHelper.getURI(CollectionImeji.class, id),
@@ -290,9 +269,8 @@ public class CollectionController extends ImejiController {
 	 */
 	public CollectionImeji update(CollectionImeji ic, User user)
 			throws ImejiException {
-		validateCollection(ic, user);
 		writeUpdateProperties(ic, user);
-		writer.update(WriterFacade.toList(ic), user);
+		writer.update(WriterFacade.toList(ic), null, user, true);
 		return retrieve(ic.getId(), user);
 	}
 
@@ -307,13 +285,12 @@ public class CollectionController extends ImejiController {
 	public CollectionImeji updateWithProfile(CollectionImeji ic,
 			MetadataProfile mp, User user, MetadataProfileCreationMethod method)
 			throws ImejiException {
-		validateCollection(ic, user);
 		updateCollectionProfile(ic, mp, user, method);
 		writeUpdateProperties(ic, user);
-		writer.update(WriterFacade.toList(ic), user);
+		writer.update(WriterFacade.toList(ic), null, user, true);
 		return retrieve(ic.getId(), user);
 	}
-	
+
 	/**
 	 * Update a {@link CollectionImeji} (with its Logo)
 	 * 
@@ -321,19 +298,18 @@ public class CollectionController extends ImejiController {
 	 * @param user
 	 * @throws ImejiException
 	 */
-	public void updateCollectionLogo(CollectionImeji ic, File f, User u) throws ImejiException, IOException, URISyntaxException
-	{
-		
+	public void updateCollectionLogo(CollectionImeji ic, File f, User u)
+			throws ImejiException, IOException, URISyntaxException {
+
 		ic = (CollectionImeji) updateFile(ic, f, u);
 		if (f != null && f.exists()) {
 
 			// Update the collection as a patch only with collection Logo Triple
-			List<ImejiTriple> triples = getContainerLogoTriples(ic.getId().toString(), ic, ic.getLogoUrl().toString()) ;
+			List<ImejiTriple> triples = getContainerLogoTriples(ic.getId()
+					.toString(), ic, ic.getLogoUrl().toString());
 			patch(triples, u, true);
 
-        }
-		
-		
+		}
 	}
 
 	/**
@@ -345,9 +321,8 @@ public class CollectionController extends ImejiController {
 	 */
 	public CollectionImeji updateLazy(CollectionImeji ic, User user)
 			throws ImejiException {
-		validateCollection(ic, user);
 		writeUpdateProperties(ic, user);
-		writer.updateLazy(WriterFacade.toList(ic), user);
+		writer.updateLazy(WriterFacade.toList(ic), null, user);
 		return retrieveLazy(ic.getId(), user);
 	}
 
@@ -401,10 +376,9 @@ public class CollectionController extends ImejiController {
 	public CollectionImeji updateLazyWithProfile(CollectionImeji ic,
 			MetadataProfile mp, User user, MetadataProfileCreationMethod method)
 			throws ImejiException {
-		validateCollection(ic, user);
 		updateCollectionProfile(ic, mp, user, method);
 		writeUpdateProperties(ic, user);
-		writer.updateLazy(WriterFacade.toList(ic), user);
+		writer.updateLazy(WriterFacade.toList(ic), null, user);
 		return retrieveLazy(ic.getId(), user);
 	}
 
@@ -581,53 +555,6 @@ public class CollectionController extends ImejiController {
 		return search.search(searchQuery, sortCri, user, spaceId);
 	}
 
-	/**
-	 * Validate the collection information provided, before it has been
-	 * submitted to the writer
-	 * 
-	 * @param collection
-	 * @param u
-	 * @throws ImejiException
-	 */
-	public void validateCollection(CollectionImeji collection, User u)
-			throws ImejiException {
-		// Copied from Collection Bean in presentation
-		if (isNullOrEmpty(collection.getMetadata().getTitle().trim())) {
-			throw new BadRequestException("error_collection_need_title");
-		}
-
-		List<Person> pers = new ArrayList<Person>();
-
-		for (Person c : collection.getMetadata().getPersons()) {
-			List<Organization> orgs = new ArrayList<Organization>();
-			for (Organization o : c.getOrganizations()) {
-				if (!isNullOrEmpty(o.getName().trim())) {
-					orgs.add(o);
-				} else {
-					throw new BadRequestException(
-							"error_organization_need_name");
-				}
-			}
-
-			if (!isNullOrEmpty(c.getFamilyName().trim())) {
-				if (orgs.size() > 0) {
-					pers.add(c);
-				} else {
-					throw new BadRequestException(
-							"error_author_need_one_organization");
-				}
-			} else {
-				throw new BadRequestException(
-						"error_author_need_one_family_name");
-			}
-		}
-
-		if (pers.size() == 0 || pers == null || pers.isEmpty()) {
-			throw new BadRequestException("error_collection_need_one_author");
-		}
-
-	}
-
 	public MetadataProfileCreationMethod getProfileCreationMethod(String method) {
 		if ("reference".equalsIgnoreCase(method)) {
 			return MetadataProfileCreationMethod.REFERENCE;
@@ -650,20 +577,6 @@ public class CollectionController extends ImejiController {
 				.updateItemsProfile(items, user, newProfileUri.toString());
 	}
 
-	/**
-	 * Retrieve all {@link CollectionImeji} which belong to one space
-	 * 
-	 * @return
-	 */
-	public List<CollectionImeji> searchBySpaceId(User user, String uri)
-			throws ImejiException {
-		// TODO remove?
-		List<CollectionImeji> cols = new ArrayList<CollectionImeji>();
-		String q = SPARQLQueries.selectCollectionImejiOfSpace(uri);
-		// retrieveCollections(user, q);
-		return cols;
-	}
-
 	public List<CollectionImeji> retrieveCollectionsNotInSpace(final User u) {
 		return Lists.transform(ImejiSPARQL.exec(
 				SPARQLQueries.selectCollectionsNotInSpace(),
@@ -680,16 +593,4 @@ public class CollectionController extends ImejiController {
 					}
 				});
 	}
-
-	private boolean isAllowedUploadByStatus(String collectionId) {
-		if (isNullOrEmptyTrim(collectionId))
-			return false;
-		if (ImejiSPARQL.exec(
-				SPARQLQueries.getAllowedUpdateByStatus(collectionId),
-				Imeji.collectionModel).size() > 0) {
-			return false;
-		}
-		return true;
-	}
-
 }

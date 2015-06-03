@@ -50,7 +50,7 @@
 		<h:outputText value="#{md.name} (" rendered="#{md.name != null}"/>
 		<h:outputText value="#{md.longitude}/#{md.latitude}"/>
 		<h:outputText value=")" rendered="#{md.name != null}"/>
-		<h:outputLink value="http://maps.google.com/maps?q=#{md.latitude},#{md.longitude}" target="_blank">
+		<h:outputLink value="http://maps.google.com/maps?q=#{md.name},#{md.latitude},#{md.longitude}" target="_blank">
 			<h:outputText styleClass="imj_metadataValueEntryViewMap" value="View in Google maps"/>
 		</h:outputLink>
 	</ui:fragment>

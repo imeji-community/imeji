@@ -18,6 +18,7 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
@@ -56,21 +57,31 @@ public class ThumbnailBean {
 	private CollectionImeji collection;
 	private String collectionName = "";
 	private MetadataProfile profile;
+	
+	/**
+	 * Emtpy {@link ThumbnailBean}
+	 */
+	public ThumbnailBean() {
+
+	}
 
 	/**
 	 * Bean for Thumbnail list elements. Each element of a list with thumbnail
 	 * is an instance of a {@link ThumbnailBean}
 	 * 
 	 * @param item
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public ThumbnailBean(Item item) throws Exception {
 		this.sessionBean = (SessionBean) BeanHelper
 				.getSessionBean(SessionBean.class);
 		this.uri = item.getId();
-		Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
+		Navigation navigation = (Navigation) BeanHelper
+				.getApplicationBean(Navigation.class);
 		this.id = ObjectHelper.getId(uri);
-		link = navigation.getFileUrl() + item.getThumbnailImageUrl().toString();
+		link = ( Status.WITHDRAWN != item.getStatus()) ? 
+				navigation.getFileUrl() + item.getThumbnailImageUrl().toString() :
+				navigation.applicationUrl+"resources/icon/discarded.png";
 		if (AuthUtil.canReadItemButNotCollection(sessionBean.getUser(), item)) {
 			this.profile = ObjectLoader.loadProfile(item.getMetadataSet()
 					.getProfile(), Imeji.adminUser);

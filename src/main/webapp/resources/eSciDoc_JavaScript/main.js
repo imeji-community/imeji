@@ -24,7 +24,7 @@ function formatNumber(n){
 function validateInputNumber(input) {
 	input.value = formatNumber(input.value);
 	if (!isNumber(input.value)) {
-		input.value = input.value.substring(0,input.value.length - 1);
+		input.value = '';
 	}
 }
 

@@ -1,22 +1,42 @@
 package de.mpg.imeji.rest.resources;
 
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
-import de.mpg.imeji.rest.process.RestProcessUtils;
-import de.mpg.imeji.rest.to.JSONResponse;
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
-import org.glassfish.jersey.media.multipart.FormDataParam;
+import static de.mpg.imeji.rest.process.ItemProcess.createItem;
+import static de.mpg.imeji.rest.process.ItemProcess.deleteItem;
+import static de.mpg.imeji.rest.process.ItemProcess.readItem;
+import static de.mpg.imeji.rest.process.ItemProcess.readItems;
+import static de.mpg.imeji.rest.process.ItemProcess.updateItem;
+import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONResponse;
+
+import java.io.InputStream;
+import java.io.StringWriter;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.InputStream;
 
-import static de.mpg.imeji.rest.process.ItemProcess.*;
-import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONResponse;
+import org.apache.commons.io.IOUtils;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
+
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
+import com.wordnik.swagger.jaxrs.PATCH;
+
+import de.mpg.imeji.rest.process.ItemProcess;
+import de.mpg.imeji.rest.process.RestProcessUtils;
+import de.mpg.imeji.rest.to.JSONResponse;
+
 
 @Path("/items")
 @Api(value = "rest/items", description = "Operations on items")
@@ -100,6 +120,65 @@ public class ItemResource implements ImejiResource {
 		String filename = fileDetail != null ? fileDetail.getFileName() : null;
 		return RestProcessUtils.buildJSONResponse(updateItem(req, id,
 				file, json, filename));
+	}
+	
+	@PATCH
+	@Path("/{id}")
+	@ApiOperation(value = "Easy Update Item Metadata by id", notes = "Update Metadata of an already existed item:"
+			+ "<br/><br/>"
+			+ "Json example:"
+			+ "<div class=\"json_example\">"
+			+ "{"
+			
+			+ "<br/>\"ez_metadate\":"
+			+ "<br/>{"
+			
+			+ "<br/>\"TEXT_LABEL\" : \"abc123\","
+			+ "<br/>\"NUMBER_LABEL\" : nr,"
+			+ "<br/>\"DATE_LABEL\" : \"YYYY-MM-DD\","
+			
+			+ "<br/>\"PERSON_LABEL\" : "
+			+ "<br/>{"
+			+ "<br/>\"familyName\": \"familyname...\","		
+			+ "<br/>\"givenName\" : \"givenname...\""
+			+ "<br/>},"
+			
+			+ "<br/>\"GEOLOCATION_LABEL\" : "
+			+ "<br/>{"
+			+ "<br/>\"name\": \"name...\","		
+			+ "<br/>\"longitude\" : \"longitude...\""
+			+ "<br/>\"latitude\" : \"latitude...\""
+			+ "<br/>},"
+			
+			+ "<br/>\"LICENSE_LABEL\" : "
+			+ "<br/>{"
+			+ "<br/>\"license\": \"license...\","		
+			+ "<br/>\"url\" : \"license url...\""
+			+ "<br/>},"
+			
+			+ "<br/>\"LINK_LABEL\" : "
+			+ "<br/>{"
+			+ "<br/>\"link\": \"link...\","		
+			+ "<br/>\"url\" : \"link url...\""
+			+ "<br/>},"
+			
+			+ "<br/>\"PUBLICATION_LABEL\" : "
+			+ "<br/>{"
+			+ "<br/>\"format\": \"format...\","		
+			+ "<br/>\"publication\" : \"publication...\","
+			+ "<br/>\"citation\" : \"citation...\""
+			+ "<br/>}"
+			
+			+ "<br/>}"
+			
+			+ "<br/>}"
+			+"</div>"
+			+ "<br/><br/>"
+			+ "The metadata parameter allows to define the metadata of item during the creation of the item. To get an example of how to do it, please try the get item method")
+	@Produces(MediaType.APPLICATION_JSON)  
+	public Response easyUpdate(@PathParam("id") String id, @Context HttpServletRequest req, InputStream json) throws Exception{
+		JSONResponse resp = ItemProcess.easyUpdateItem(req, id);
+		return buildJSONResponse(resp);
 	}
 
 

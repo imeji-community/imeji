@@ -1,5 +1,6 @@
 package de.mpg.imeji.presentation.upload;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,8 +16,8 @@ import de.mpg.imeji.presentation.metadata.MetadataSetBean;
 
 @ManagedBean(name = "SingleUploadSession")
 @SessionScoped
-public class SingleUploadSession {
-	
+public class SingleUploadSession implements Serializable{
+	private static final long serialVersionUID = -7330919735840276789L;
 	private String selectedCollectionItem;
 	private CollectionImeji collection;
 	private MetadataProfile profile;
@@ -28,6 +29,7 @@ public class SingleUploadSession {
 	private boolean uploadFileToItem = false;
 	private Item uploadedItem;
 	private String fFile;
+	private boolean canUpload = true;
 	
 	public void reset()
 	{
@@ -42,6 +44,7 @@ public class SingleUploadSession {
 		uploadFileToItem = false;
 		uploadedItem = null;
 		fFile = "";
+		canUpload = true;
 	}
 	
 	public void copyToTemp()
@@ -64,6 +67,7 @@ public class SingleUploadSession {
 		uploadFileToTemp = false;
 		uploadFileToItem = true;
 		fFile = "";
+		canUpload=true;
 	}
 
 
@@ -153,6 +157,14 @@ public class SingleUploadSession {
 
 	public void setProfile(MetadataProfile profile) {
 		this.profile = profile;
+	}
+	
+	public void setCanUpload(boolean canUploadHasCollections) {
+		this.canUpload = canUploadHasCollections;
+	}
+	
+	public boolean isCanUpload() {
+		return canUpload;
 	}
 	
 	

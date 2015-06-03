@@ -52,8 +52,11 @@ public class SimpleQueryFactory {
 	public static String getQuery(String modelName, String rdfType,
 			SearchPair pair, SortCriterion sortCriterion, User user,
 			boolean isCollection, String specificQuery, String spaceId) {
-		PATTERN_SELECT = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 XXX_MODEL_NAMES_XXX WHERE {XXX_SPACE_FILTER_XXX XXX_SECURITY_FILTER_XXX XXX_SEARCH_ELEMENT_XXX XXX_SPECIFIC_QUERY_XXX XXX_SEARCH_TYPE_ELEMENT_XXX  ?s <"
-				+ ImejiNamespaces.STATUS + "> ?status XXX_SORT_ELEMENT_XXX}";
+//		PATTERN_SELECT = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 XXX_MODEL_NAMES_XXX WHERE {XXX_SPACE_FILTER_XXX XXX_SECURITY_FILTER_XXX XXX_SEARCH_ELEMENT_XXX XXX_SPECIFIC_QUERY_XXX XXX_SEARCH_TYPE_ELEMENT_XXX  ?s <"
+//				+ ImejiNamespaces.STATUS + "> ?status XXX_SORT_ELEMENT_XXX}";
+		PATTERN_SELECT = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 WHERE {XXX_SPACE_FILTER_XXX XXX_SEARCH_ELEMENT_XXX XXX_SPECIFIC_QUERY_XXX XXX_SEARCH_TYPE_ELEMENT_XXX  ?s <"
+				+ ImejiNamespaces.STATUS + "> ?status XXX_SORT_ELEMENT_XXX XXX_SECURITY_FILTER_XXX }";
+
 		return PATTERN_SELECT
 				.replace(
 						"XXX_MODEL_NAMES_XXX",
@@ -75,7 +78,7 @@ public class SimpleQueryFactory {
 								"http://imeji.org/terms/item".equals(rdfType)))
 				.replace("XXX_SPECIFIC_QUERY_XXX", specificQuery);
 	}
-
+	
 	/**
 	 * Return the RDF Type of the search objects
 	 * 
@@ -179,8 +182,8 @@ public class SimpleQueryFactory {
 							rdfType))
 				searchQuery = " ?s <" + pair.getIndex().getNamespace()
 						+ "> ?c .";
-			// Search for collection/album by id (uri)
-			return "FILTER("
+			// Search for collection by id (uri)
+			return " ?s <"+ImejiNamespaces.COLLECTION+"> ?c. FILTER("
 					+ getSimpleFilter(pair,
 							SimpleSecurityQuery.getVariableName(rdfType),
 							pair.isNot()) + ") ." + searchQuery;
@@ -322,10 +325,10 @@ public class SimpleQueryFactory {
 			break;
 		case title:
 			break;
-		case type:// Search for metadata type (Text, Date, Person...)
-			return "?s <http://imeji.org/terms/metadataSet> ?mds . ?mds <"
+		case type:// Search for metadata type (Text, Date, Person...) //Use EXISTS in FILTER in order not to produce performance issues
+			return " ?s <http://imeji.org/terms/metadataSet> ?mds . ?mds <"
 					+ ImejiNamespaces.METADATA + "> ?md  . ?md a <"
-					+ pair.getValue() + "> .";
+					+ pair.getValue() + ">  .";
 		case url:
 			break;
 		case user:

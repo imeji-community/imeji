@@ -65,11 +65,11 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
     private static final Logger LOGGER = LoggerFactory
             .getLogger(ItemUpdateMetadataTest.class);
 
-    private static String updateJSON;
+    protected static String updateJSON;
     private static final String PATH_PREFIX = "/rest/items";
     private static URI unboundedStatementId;
 
-    private static ProfileController pc = new ProfileController();
+    protected static ProfileController pc = new ProfileController();
 
 
     @BeforeClass
@@ -83,7 +83,7 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
     public void test_1_UpdateItem_1_Change_Metadata_Statements_Allowed_Common() throws IOException, BadRequestException {
 
         final String CHANGED = "allowed_change";
-        double NUM = 12345;
+        double NUM = 90;
         final String REP_CHANGED = "$1\"" + CHANGED + "\"";
         final String NUM_CHANGED = "$1"+ NUM;
         DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD");
@@ -282,11 +282,9 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
             assertThat( mds.getStatementUri().toString(), not(equalTo(CHANGED)));
             assertThat( mds.getTypeUri().toString(), not(equalTo(CHANGED)));
             //labels
-            //very strange....
-            for (Object o: mds.getLabels()) {
-                LinkedHashMap<String, String> lbl = (LinkedHashMap<String, String>) o;
-                assertThat( lbl.get("value"), not(equalTo(CHANGED)));
-                assertThat( lbl.get("language"), not(equalTo(CHANGED)));
+            for (LabelTO l : mds.getLabels()) {
+            	assertThat(l.getValue(), not(equalTo(CHANGED)));
+            	assertThat( l.getLanguage(), not(equalTo(CHANGED)));
             }
         }
 
@@ -520,10 +518,10 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
 
 
 
-    private static void initCollectionWithProfile(Collection<Statement> statements) throws Exception {
+    protected static void initCollectionWithProfile(Collection<Statement> statements) throws Exception {
 
         MetadataProfile p = ImejiFactory.newProfile();
-
+        p.setTitle("test");
         p.setStatements(statements);
 
         MetadataProfile mp = pc.create(p, JenaUtil.testUser);
@@ -546,7 +544,7 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
 
     }
 
-    private static void initItemWithFullMedatada() throws Exception {
+    protected static void initItemWithFullMedatada() throws Exception {
         ItemService s = new ItemService();
         itemTO = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(updateJSON, ItemWithFileTO.class);
         itemTO.setCollectionId(collectionId);
@@ -613,7 +611,7 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
         return statements;
     }
 
-    private static Collection<Statement> getBasicStatements() {
+    protected static Collection<Statement> getBasicStatements() {
         Collection<Statement> statements = new ArrayList<Statement>();
         Statement st;
         for (String type: new String[]{"text", "number", "conePerson" , "geolocation", "date", "license", "link", "publication"}) {

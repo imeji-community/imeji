@@ -34,7 +34,7 @@ public class DateFormatter
         if (d != null)
             return d.getTime();
         else
-            throw new RuntimeException("Wrong date format");
+            return Long.MIN_VALUE;
     }
 
     /**

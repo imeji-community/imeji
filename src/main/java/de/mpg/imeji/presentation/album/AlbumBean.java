@@ -3,13 +3,30 @@
  */
 package de.mpg.imeji.presentation.album;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.model.SelectItem;
+
+import org.apache.log4j.Logger;
+
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
-import de.mpg.imeji.logic.vo.*;
+import de.mpg.imeji.logic.vo.Album;
+import de.mpg.imeji.logic.vo.Container;
+import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.Properties.Status;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.ContainerBean;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.image.ThumbnailBean;
@@ -18,16 +35,6 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CommonUtils;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 
-import org.apache.log4j.Logger;
-
-import javax.faces.context.FacesContext;
-import javax.faces.event.ValueChangeEvent;
-import javax.faces.model.SelectItem;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 /**
  * The javabean for the {@link Album}
  * 
@@ -35,6 +42,8 @@ import java.util.List;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
+@ManagedBean(name = "AlbumBean")
+@ViewScoped
 public class AlbumBean extends ContainerBean {
 	private static final long serialVersionUID = -8161410292667767348L;
 	protected SessionBean sessionBean = null;
@@ -102,10 +111,15 @@ public class AlbumBean extends ContainerBean {
 					description = description
 							.substring(0, DESCRIPTION_MAX_SIZE) + "...";
 				}
-				if (!getItems().isEmpty()) {
+				/*
+				 * Set Logo: if a logo is defined, use it, else take first
+				 * picture of the album
+				 */
+				if (album.getLogoUrl() != null) {
+					thumbnail = new ThumbnailBean();
+					thumbnail.setLink(album.getLogoUrl().toString());
+				} else if (!getItems().isEmpty()) {
 					thumbnail = new ThumbnailBean(getItems().get(0));
-					if (album.getLogoUrl() != null)
-						thumbnail.setLink(album.getLogoUrl().toString());
 				}
 			}
 		}
@@ -142,7 +156,7 @@ public class AlbumBean extends ContainerBean {
 						active = true;
 						// sessionBean.setActiveAlbum(album);
 					}
-					
+
 					int myPrivateCount = getPrivateCount();
 					if (myPrivateCount != 0) {
 						BeanHelper.info(sessionBean.getMessage(
@@ -201,49 +215,6 @@ public class AlbumBean extends ContainerBean {
 		Navigation nav = (Navigation) BeanHelper
 				.getApplicationBean(Navigation.class);
 		return nav.getAlbumUrl() + id + "/" + nav.getInfosPath();
-	}
-
-	/**
-	 * True if a the information about the {@link Album} are valid
-	 * 
-	 * @return
-	 */
-	public boolean valid() {
-		boolean valid = true;
-		boolean hasAuthor = false;
-		if (getAlbum().getMetadata().getTitle() == null
-				|| "".equals(getAlbum().getMetadata().getTitle())) {
-			BeanHelper.error(sessionBean
-					.getMessage("collection_create_error_title"));
-			valid = false;
-		}
-		for (Person c : getAlbum().getMetadata().getPersons()) {
-			boolean hasOrganization = false;
-			if (!"".equals(c.getFamilyName())) {
-				hasAuthor = true;
-			}
-			for (Organization o : c.getOrganizations()) {
-				if (!"".equals(o.getName()) || "".equals(c.getFamilyName())) {
-					hasOrganization = true;
-				}
-				if (hasOrganization && "".equals(c.getFamilyName())) {
-					BeanHelper.error(sessionBean
-							.getMessage("error_author_need_one_family_name"));
-					valid = false;
-				}
-			}
-			if (!hasOrganization) {
-				BeanHelper.error(sessionBean
-						.getMessage("error_author_need_one_organization"));
-				valid = false;
-			}
-		}
-		if (!hasAuthor) {
-			BeanHelper.error(sessionBean
-					.getMessage("error_album_need_one_author"));
-			valid = false;
-		}
-		return valid;
 	}
 
 	@Override
@@ -352,7 +323,7 @@ public class AlbumBean extends ContainerBean {
 	 */
 	public boolean update() throws Exception {
 		AlbumController ac = new AlbumController();
-		if (valid()) {
+		try {
 
 			Album icPre = ac.retrieveLazy(album.getId(), sessionBean.getUser());
 			if (icPre.getLogoUrl() != null && album.getLogoUrl() == null) {
@@ -379,8 +350,12 @@ public class AlbumBean extends ContainerBean {
 			// }
 			//
 			BeanHelper.info(sessionBean.getMessage("success_album_update"));
+			return true;
+		} catch (UnprocessableError e) {
+			BeanHelper.error(sessionBean.getMessage(e.getMessage()));
+			return false;
 		}
-		return true;
+
 	}
 
 	/**

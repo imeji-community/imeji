@@ -6,6 +6,10 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
+import de.mpg.imeji.logic.auth.util.AuthUtil;
+
 /**
  * Utility Class for specific method for the Max Planck Institute
  * 
@@ -13,6 +17,7 @@ import java.util.Map;
  *
  */
 public class MaxPlanckInstitutUtils {
+	private static final Logger LOGGER = Logger.getLogger(MaxPlanckInstitutUtils.class);
 
 	/**
 	 * URL of the file with IP range information for all MPIs
@@ -36,9 +41,11 @@ public class MaxPlanckInstitutUtils {
 	 */
 	public static String getInstituteNameForIP(String userIP) {
 		Map<String, String> mpiMap = getMPINameMap();
-		for (String ipRange : mpiMap.keySet()) {
-			if (IPUtils.isInRange(ipRange, userIP))
-				return mpiMap.get(ipRange);
+		if (mpiMap != null) {
+			for (String ipRange : mpiMap.keySet()) {
+				if (IPUtils.isInRange(ipRange, userIP))
+					return mpiMap.get(ipRange);
+			}
 		}
 		return null;
 	}
@@ -51,9 +58,11 @@ public class MaxPlanckInstitutUtils {
 	 */
 	public static String getInstituteIdForIP(String userIP) {
 		Map<String, String> mpiMap = getIdMap();
-		for (String ipRange : mpiMap.keySet()) {
-			if (IPUtils.isInRange(ipRange, userIP))
-				return mpiMap.get(ipRange);
+		if (mpiMap != null) {
+			for (String ipRange : mpiMap.keySet()) {
+				if (IPUtils.isInRange(ipRange, userIP))
+					return mpiMap.get(ipRange);
+			}
 		}
 		return null;
 	}
@@ -66,7 +75,14 @@ public class MaxPlanckInstitutUtils {
 	 */
 	public static Map<String, String> getMPINameMap() {
 		if (MPINameMap == null)
-			MPINameMap = getMPIMap(1, 4);
+			try {
+					MPINameMap = getMPIMap(1, 4);
+			}
+			catch (Exception e)
+			{
+				LOGGER.error("There was a problem with finding the MPINameMap: "+e.getLocalizedMessage());
+				return null;
+			}
 		return MPINameMap;
 	}
 
@@ -78,7 +94,14 @@ public class MaxPlanckInstitutUtils {
 	 */
 	public static Map<String, String> getIdMap() {
 		if (IdMap == null)
-			IdMap = getMPIMap(1, 2);
+			try {
+				IdMap = getMPIMap(1, 2);
+			}
+			catch (Exception e)
+			{
+				LOGGER.error("There was a problem with finding the IdMap: "+e.getLocalizedMessage());
+				return null;
+			}
 		return IdMap;
 	}
 
@@ -94,6 +117,7 @@ public class MaxPlanckInstitutUtils {
 			int valuePosition) {
 		try {
 			URL mpiCSV = new URL(MAX_PLANCK_INSTITUTES_IP_URL);
+
 			BufferedReader br = new BufferedReader(new InputStreamReader(
 					mpiCSV.openStream()));
 			String line = "";
@@ -107,9 +131,9 @@ public class MaxPlanckInstitutUtils {
 			return maps;
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("There was a problem by getting the MPI Map: ("+e.getLocalizedMessage()+")! Check your internet connection. ");
+			return null;
 		}
-		return null;
 	}
 
 }

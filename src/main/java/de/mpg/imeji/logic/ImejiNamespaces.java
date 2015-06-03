@@ -22,6 +22,7 @@ public class ImejiNamespaces {
 	public static final String CONTAINER_LOGO = "http://imeji.org/terms/logoUrl";
 	public static final String COLLECTION="http://imeji.org/terms/collection";
 	public static final String ITEM="http://imeji.org/terms/item";
+	public static final String PROFILE="http://imeji.org/terms/mdprofile";
 	
 	
 	/*

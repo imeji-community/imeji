@@ -5,6 +5,7 @@ package de.mpg.imeji.logic.search.query;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiNamespaces;
+import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.logic.vo.Properties.Status;
@@ -12,6 +13,8 @@ import de.mpg.j2j.helper.J2JHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cern.colt.Arrays;
 
 /**
  * Simple security query add to any imeji sparql query, a security filter
@@ -34,11 +37,18 @@ public class SimpleSecurityQuery {
 	 */
 	public static String queryFactory(User user, String rdfType, Status status,
 			boolean isUserSearch) {
+
 		String statusFilter = getStatusAsFilter(status);
+
+		if (Status.PENDING.equals(status) && !user.isAdmin()) {
+			//add this explicitly in order to avoid too long queries. Only if Admin user should not be set explicitly again
+			isUserSearch = true;
+		}
 		if (Status.RELEASED.equals(status) || Status.WITHDRAWN.equals(status)) {
 			// If searching for released or withdrawn objects, no grant filter
 			// is needed (released and withdrawn objects
 			// are all public)
+			
 			return statusFilter + " .";
 		} else if (user != null && user.getGrants().isEmpty()
 				&& Status.PENDING.equals(status)) {
@@ -52,17 +62,15 @@ public class SimpleSecurityQuery {
 			// objects
 			return "FILTER(?status=<" + Status.RELEASED.getUriString() + ">) .";
 		}
-		// else, check the grant and add the status filter...
-		// return getUserGrantsAsFilter(user, rdfType) + statusFilter +
-		// " . ?s a <" + rdfType + "> ";
+
+		//Logic below is invoked for logged-in users. Grants must be always checked. 
+		// If user has no grants for requested objects, simply no data should be returned
+		// that's why FILTER(false)
 		String userGrantsAsFilterSimple = getUserGrantsAsFilterSimple(user,
-				rdfType, isUserSearch) + statusFilter + " .";
-		if (userGrantsAsFilterSimple.contains("?c=") && rdfType.equals(ImejiNamespaces.ITEM))
-			userGrantsAsFilterSimple += "?s <" + ImejiNamespaces.COLLECTION
-					+ "> ?c .";
-		return userGrantsAsFilterSimple;
-		// return getUserGrantsAsFilterSimple(user, rdfType, isUserSearch)
-		// + statusFilter + " .";
+				rdfType, isUserSearch);
+		return userGrantsAsFilterSimple.equals("")?
+				                      (user.isAdmin()?statusFilter:" FILTER(false) ")
+				                      :userGrantsAsFilterSimple + statusFilter + " .";
 	}
 
 	/**
@@ -89,17 +97,10 @@ public class SimpleSecurityQuery {
 	 */
 	private static String getUserGrantsAsFilterSimple(User user,
 			String rdfType, boolean isUserSearch) {
-		if (user.isAdmin())
+
+		if (user.isAdmin() && !isUserSearch)
 			return "";
-		String containerFilter = getAllowedContainersFilter(user, rdfType);
-		if (!isUserSearch)
-			return "filter(" + containerFilter
-					+ (containerFilter.equals("") ? "" : "|| ") + "?status=<"
-					+ Status.RELEASED.getUriString() + ">) .";
-		else
-			return containerFilter.equals("") ? "filter(?status=<"
-					+ Status.RELEASED.getUriString() + ">)" : "filter("
-					+ containerFilter + ") .";
+		return getAllowedContainersFilter(user, rdfType, isUserSearch);
 	}
 
 	/**
@@ -110,38 +111,96 @@ public class SimpleSecurityQuery {
 	 * @param rdfType
 	 * @return
 	 */
-	private static String getAllowedContainersFilter(User user, String rdfType) {
+	private static String getAllowedContainersFilter(User user, String rdfType, boolean isUserSearch) {
 		List<String> uris = new ArrayList<>();
+
 		if (J2JHelper.getResourceNamespace(new Album()).equals(rdfType)) {
 			uris = AuthUtil.getListOfAllowedAlbums(user);
 		} else {
 			uris = AuthUtil.getListOfAllowedCollections(user);
 		}
+		
 		String s = "";
+		boolean addReleasedStatus = !isUserSearch;
 
-		for (String uri : uris) {
-			if (!"".equals(s))
-				s += " || ";
-			s += "?" + getVariableName(rdfType) + "=<" + uri + ">";
+		StringBuilder builder = new StringBuilder();
+		String allowedContainerString = "";
+		if (J2JHelper.getResourceNamespace(new Item()).equals(rdfType)) {
+			int i = 0;
+			for (String uri:uris){
+				i++;
+				builder.append((i==1?"{ ":" UNION {") + "?s "+getPredicateName(rdfType) +" <"+uri+"> }");
+			}
+			allowedContainerString = builder.toString();
+			if (addReleasedStatus) {
+				s= allowedContainerString + (uris.size()>0?" UNION ":"")+" { ?s <"+ImejiNamespaces.STATUS+"> <"+ Status.RELEASED.getUriString()+"> }"; 
+			}
 		}
+		else if ( (J2JHelper.getResourceNamespace(new CollectionImeji()).equals(
+				rdfType)
+				|| J2JHelper.getResourceNamespace(new Album()).equals(rdfType)))
+		{
+			int j = 0;
+			for (String uri:uris){
+				j++;
+				builder.append(" <"+uri+"> " + (j==uris.size()?"":",") );
+			}
+			allowedContainerString = uris.size() > 0 ? "  FILTER (?s in ("+ builder.toString()+") ":"";
+			
+			if (addReleasedStatus) {
+				allowedContainerString = allowedContainerString + 
+										( uris.size()>0?" || ":". FILTER ") +
+										"( ?status = <"+ Status.RELEASED.getUriString()+"> )"+
+										( uris.size()>0?"":". ");
+			}
+			
+			s= allowedContainerString+ ( uris.size()>0?") .":"");
+		}
+		
+
 		if (J2JHelper.getResourceNamespace(new Item()).equals(rdfType)) {
 			// searching for items. Add to the Filter the item for which the
 			// user has extra rights as well as the item which are public
-			for (String uri : AuthUtil.getListOfAllowedItem(user)) {
-				if (!"".equals(s))
-					s += " || ";
-				s += "?s=<" + uri + ">";
+			StringBuilder builderItems = new StringBuilder();
+			int itNo = 0;
+			List<String> allowedItems = AuthUtil.getListOfAllowedItem(user);
+			String allowedItemsString = "";
+			if (allowedItems.size()> 0) {
+				for (String uri:allowedItems){
+					itNo++;
+					builderItems.append(" <"+uri+"> "+(itNo==allowedItems.size()?"":",") );
+				}
+				
+				allowedItemsString = ((!"".equals(s))?" UNION ":"")+" { ?s <"+ImejiNamespaces.STATUS+"> ?status. FILTER (?s in ("+ builderItems.toString()+")) }";
 			}
+			
+			s += allowedItemsString;
 		}
+		
 		if (J2JHelper.getResourceNamespace(new MetadataProfile()).equals(
 				rdfType)) {
-			// searching for items. Add to the Filter the profiles for which the
+			// searching for profiles. Add to the Filter the profiles for which the
 			// user has extra rights as well as the item which are public
-			for (String uri : AuthUtil.getListOfAllowedProfiles(user)) {
-				if (!"".equals(s))
-					s += " || ";
-				s += "?s=<" + uri + ">";
+			
+			StringBuilder builderProfiles = new StringBuilder();
+			int pNo = 0;
+			List<String> allowedProfiles = AuthUtil.getListOfAllowedProfiles(user);
+			String allowedProfilesString = "";
+			String releasedStatusFilter = "( ?status = <"+ Status.RELEASED.getUriString()+"> )";
+			if (allowedProfiles.size()> 0) {
+				for (String uri:allowedProfiles){
+					pNo++;
+					builderProfiles.append(" <"+uri+"> "+(pNo==allowedProfiles.size()?"":",") );
+				}
+				
+				allowedProfilesString = " { ?s <"+ImejiNamespaces.STATUS+"> ?status. FILTER (?s in ("+ builderProfiles.toString()+") || "+releasedStatusFilter+") }";
 			}
+			
+			allowedProfilesString = " { ?s <"+ImejiNamespaces.STATUS+"> ?status. FILTER ("+
+			                       ( (allowedProfiles.size()>0) ? ( " ?s in ("+ builderProfiles.toString()+") || ") : "") +
+			                       releasedStatusFilter+") }";
+			s += allowedProfilesString;
+
 		}
 		return s;
 	}
@@ -160,6 +219,25 @@ public class SimpleSecurityQuery {
 			return "s";
 		} else {
 			return "c";
+		}
+	}
+	
+	/**
+	 * Return the predicate for the object on with the security is
+	 * checked
+	 * 
+	 * @param rdfType
+	 * @return
+	 */
+	public static String getPredicateName(String rdfType) {
+		if (J2JHelper.getResourceNamespace(new CollectionImeji()).equals(
+				rdfType)
+				|| J2JHelper.getResourceNamespace(new Album()).equals(rdfType)) {
+			return " a ";
+		}
+		else
+		{
+			return "<"+ImejiNamespaces.COLLECTION+">";
 		}
 	}
 }

@@ -107,6 +107,12 @@ public class Publication extends Metadata
     @Override
     public String asFulltext()
     {
-        return citation + " " + uri.toString();
+        return citation + " " + (uri != null ? uri.toString() : "");
     }
+
+	@Override
+	public void clean() {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -30,11 +30,16 @@ package search;
 
 import de.mpg.imeji.logic.search.query.URLQueryTransformer;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
-import junit.framework.Assert;
-import org.junit.Test;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsNot.not;
+
 
 import java.io.IOException;
 import java.net.URLEncoder;
+
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Tests for the methods in {@link URLQueryTransformer}

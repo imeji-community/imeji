@@ -104,7 +104,7 @@ public class RawFileImageGenerator implements ImageGenerator
         //display the filename extension. 
         //if filename extension is null, simply show the mimetype (if recognized) which comes with the extension parameter of the method.
         String fileNameExtension = FilenameUtils.getExtension(fileName);
-        if (fileNameExtension != "") {
+        if (!fileNameExtension.equals("")) {
         	extension = fileNameExtension;
         }
         

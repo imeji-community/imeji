@@ -21,7 +21,6 @@ import org.apache.log4j.Logger;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 
-import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.exceptions.UnprocessableError;
@@ -88,7 +87,7 @@ public class ProfileController extends ImejiController {
 			throws ImejiException {
 		writeCreateProperties(p, user);
 		p.setStatus(Status.PENDING);
-		writer.create(WriterFacade.toList(p), user);
+		writer.create(WriterFacade.toList(p), null, user);
 		if (!user.isAdmin()) {
 			GrantController gc = new GrantController();
 			gc.addGrants(user, AuthorizationPredefinedRoles.admin(null, p
@@ -159,7 +158,7 @@ public class ProfileController extends ImejiController {
 	 */
 	public void update(MetadataProfile mdp, User user) throws ImejiException {
 		writeUpdateProperties(mdp, user);
-		writer.update(WriterFacade.toList(mdp), user);
+		writer.update(WriterFacade.toList(mdp), null, user, true);
 		Imeji.executor.submit(new CleanMetadataJob(mdp));
 	}
 
@@ -277,8 +276,8 @@ public class ProfileController extends ImejiController {
 		SearchResult result;
 		List<MetadataProfile> l = new ArrayList<MetadataProfile>();
 		try {
-			result = search.search(
-					!isNullOrEmptyTrim(q) ? URLQueryTransformer
+			result = search
+					.search(!isNullOrEmptyTrim(q) ? URLQueryTransformer
 							.parseStringQuery(q) : null, sortCri, user, spaceId);
 			for (String uri : result.getResults()) {
 				l.add(retrieve(URI.create(uri), user));
@@ -296,7 +295,8 @@ public class ProfileController extends ImejiController {
 	 * @return
 	 * @throws ImejiException
 	 */
-	public List<MetadataProfile> search(User user, String spaceId) throws ImejiException {
+	public List<MetadataProfile> search(User user, String spaceId)
+			throws ImejiException {
 		return search(user, "", spaceId);
 	}
 
@@ -378,14 +378,6 @@ public class ProfileController extends ImejiController {
 		ImejiSPARQL.execUpdate(SPARQLQueries
 				.updateRemoveAllMetadataWithoutStatement(id));
 		ImejiSPARQL.execUpdate(SPARQLQueries.updateEmptyMetadata());
-	}
-
-	public void validateProfile(MetadataProfile profile, User u)
-			throws ImejiException {
-		// Copied from Collection Bean in presentation
-		if (isNullOrEmpty(profile.getTitle())) {
-			throw new BadRequestException("error_profile_need_title");
-		}
 	}
 
 	public boolean isReferencedByOtherResources(String profileUri,

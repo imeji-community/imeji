@@ -18,58 +18,50 @@ import de.mpg.imeji.presentation.metadata.EditorItemBean;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class SimpleImageEditor extends MetadataEditor
-{
-    /**
-     * Editor for one item (by the item detail page)
-     * 
-     * @param items
-     * @param profile
-     * @param statement
-     */
-    public SimpleImageEditor(List<Item> items, MetadataProfile profile, Statement statement)
-    {
-        super(items, profile, statement, true);
-    }
+public class SimpleImageEditor extends MetadataEditor {
+	/**
+	 * Editor for one item (by the item detail page)
+	 * 
+	 * @param items
+	 * @param profile
+	 * @param statement
+	 */
+	public SimpleImageEditor(List<Item> items, MetadataProfile profile,
+			Statement statement) {
+		super(items, profile, statement, true);
+	}
 
-    /**
-     * Convenient constructor for one {@link Item}
-     * 
-     * @param item
-     * @param profile
-     * @param statement
-     */
-    public SimpleImageEditor(Item item, MetadataProfile profile, Statement statement)
-    {
-        super(Arrays.asList(item), profile, statement, true);
-    }
+	/**
+	 * Convenient constructor for one {@link Item}
+	 * 
+	 * @param item
+	 * @param profile
+	 * @param statement
+	 */
+	public SimpleImageEditor(Item item, MetadataProfile profile,
+			Statement statement) {
+		super(Arrays.asList(item), profile, statement, true);
+	}
 
-    @Override
-    public void initialize()
-    {
-    }
+	@Override
+	public void initialize() {
+	}
 
-    @Override
-    public boolean prepareUpdate()
-    {  
-    	/*
-        for (EditorItemBean eib : items)
-        {	
-        	eib.getMds().trim();
-        }
-        */        
-        if (items.size() == 0)
-        {
-            return false;
-        }
-        return true;
-    }
-  
-    @Override
-    public boolean validateMetadataofImages()
-    {
-    	// TODO Auto-generated method stub
-        return true;
-    }
+	@Override
+	public boolean prepareUpdate() {
+		for (EditorItemBean eib : items) {
+			eib.getMds().trim();
+		}
+		if (items.size() == 0) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public boolean validateMetadataofImages() {
+		// TODO Auto-generated method stub
+		return true;
+	}
 
 }

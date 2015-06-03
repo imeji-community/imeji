@@ -3,33 +3,35 @@
  */
 package de.mpg.imeji.presentation.collection;
 
-import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.auth.util.AuthUtil;
-import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.controller.CollectionController.MetadataProfileCreationMethod;
-import de.mpg.imeji.logic.controller.ProfileController;
-import de.mpg.imeji.logic.search.SPARQLSearch;
-import de.mpg.imeji.logic.search.query.SPARQLQueries;
-import de.mpg.imeji.logic.util.UrlHelper;
-import de.mpg.imeji.logic.vo.*;
-import de.mpg.imeji.presentation.beans.ContainerBean;
-import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.mdProfile.wrapper.StatementWrapper;
-import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.util.BeanHelper;
-import org.apache.log4j.Logger;
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static de.mpg.imeji.logic.notification.CommonMessages.getSuccessCollectionDeleteMessage;
 
-import javax.faces.event.AjaxBehaviorEvent;
-import javax.faces.event.ValueChangeEvent;
-import javax.faces.model.SelectItem;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
-import static de.mpg.imeji.logic.notification.CommonMessages.getSuccessCollectionDeleteMessage;
+import javax.faces.event.AjaxBehaviorEvent;
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.model.SelectItem;
+
+import org.apache.log4j.Logger;
+
+import de.mpg.imeji.logic.controller.CollectionController;
+import de.mpg.imeji.logic.controller.CollectionController.MetadataProfileCreationMethod;
+import de.mpg.imeji.logic.controller.ProfileController;
+import de.mpg.imeji.logic.util.UrlHelper;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Container;
+import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.beans.ContainerBean;
+import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.mdProfile.wrapper.StatementWrapper;
+import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * Abstract bean for all collection beans
@@ -89,27 +91,6 @@ public abstract class CollectionBean extends ContainerBean {
 				.getSessionBean(SessionBean.class);
 		navigation = (Navigation) BeanHelper
 				.getApplicationBean(Navigation.class);
-	}
-
-	/**
-	 * Validate whether the {@link CollectionImeji} values are correct
-	 * 
-	 * @return
-	 */
-	public boolean valid() {
-		CollectionController cc = new CollectionController();
-		ProfileController pc = new ProfileController();
-		try {
-			cc.validateCollection(collection, sessionBean.getUser());
-			if (useMDProfileTemplate && profile != null) {
-				pc.validateProfile(profile, sessionBean.getUser());
-			}
-			return true;
-		} catch (ImejiException e) {
-			BeanHelper.error(sessionBean.getMessage(e.getMessage()));
-			return false;
-		}
-
 	}
 
 	/**

@@ -105,7 +105,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
 	/**
 	 * Initialization for all browse pages for get queries (non ajax queries)
 	 */
-	protected void browseInit() {
+	public void browseInit() {
 		try {
 			String q = UrlHelper.getParameterValue("q");
 			if (q != null) {

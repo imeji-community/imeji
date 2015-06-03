@@ -140,13 +140,13 @@ public class UploadBean implements Serializable {
 				FileItemIterator iter = upload.getItemIterator(req);
 				while (iter.hasNext()) {
 					FileItemStream fis = iter.next();
-
 					InputStream stream = fis.openStream();
 					if (!fis.isFormField()) {
-						File tmp = createTmpFile(fis.getName());
+						String filename = fis.getName();
+						File tmp = createTmpFile(filename);
 						try {
 							writeInTmpFile(tmp, stream);
-							uploadFile(tmp, fis.getName());
+							uploadFile(tmp, filename);
 						} finally {
 							stream.close();
 							FileUtils.deleteQuietly(tmp);
@@ -208,7 +208,7 @@ public class UploadBean implements Serializable {
 			logger.error("Error uploading file from link: " + externalUrl, e);
 			BeanHelper.error(e.getMessage());
 		}
-		return "pretty:";
+		return "";
 	}
 
 	/**
@@ -385,11 +385,6 @@ public class UploadBean implements Serializable {
 	 */
 	private boolean filenameExistsInCollection(String filename) {
 		Search s = SearchFactory.create(SearchType.ITEM);
-		// filename =
-		// org.apache.xerces.impl.xpath.regex.REUtil.quoteMeta(filename);
-		// filename = Pattern.quote(FilenameUtils.removeExtension(filename));
-		// filename = filename.replace(")", "\\u+0029").replace("(",
-		// "\\u+0028");
 		return s.searchSimpleForQuery(
 				SPARQLQueries.selectContainerItemByFilename(collection.getId(),
 						FilenameUtils.getBaseName(filename)))

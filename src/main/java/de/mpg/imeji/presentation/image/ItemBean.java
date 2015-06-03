@@ -3,6 +3,18 @@
  */
 package de.mpg.imeji.presentation.image;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.model.SelectItem;
+
+import org.apache.commons.io.FilenameUtils;
+
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.Imeji;
@@ -21,7 +33,13 @@ import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
-import de.mpg.imeji.logic.vo.*;
+import de.mpg.imeji.logic.vo.Album;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.Metadata;
+import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.beans.PropertyBean;
@@ -33,17 +51,6 @@ import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.session.SessionObjectsController;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang.StringUtils;
-
-import javax.faces.context.FacesContext;
-import javax.faces.event.ValueChangeEvent;
-import javax.faces.model.SelectItem;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Bean for a Single image
@@ -71,7 +78,7 @@ public class ItemBean {
 	private String dateCreated;
 	private String newFilename;
 	private String stringContent = null;
-	
+
 	/**
 	 * Construct a default {@link ItemBean}
 	 * 
@@ -98,17 +105,14 @@ public class ItemBean {
 		tab = UrlHelper.getParameterValue("tab");
 		if ("".equals(tab))
 			tab = null;
-			try {
-				loadImage();
-			}
-			catch (Exception e)
-			{
-				FacesContext.getCurrentInstance().getExternalContext()
-				.responseSendError(404, "404_NOT_FOUND");
+		try {
+			loadImage();
+		} catch (Exception e) {
+			FacesContext.getCurrentInstance().getExternalContext()
+					.responseSendError(404, "404_NOT_FOUND");
 
-			}
-			
-			
+		}
+
 		if (item != null) {
 			if ("techmd".equals(tab)) {
 				initViewTechnicalMetadata();
@@ -135,12 +139,13 @@ public class ItemBean {
 		relatedAlbums = new ArrayList<Album>();
 		AlbumController ac = new AlbumController();
 		SearchQuery q = new SearchQuery();
-		q.addPair(new SearchPair(SPARQLSearch.getIndex(SearchIndex.IndexNames.item),
-				SearchOperators.EQUALS, getImage().getId().toString()));
-		//TODO NB: check if related albums should be space restricted?
+		q.addPair(new SearchPair(SPARQLSearch
+				.getIndex(SearchIndex.IndexNames.item), SearchOperators.EQUALS,
+				getImage().getId().toString()));
+		// TODO NB: check if related albums should be space restricted?
 		relatedAlbums = (List<Album>) ac.loadAlbumsLazy(
-				ac.search(q, sessionBean.getUser(), null, -1, 0, null).getResults(), sessionBean.getUser(),
-				-1, 0);
+				ac.search(q, sessionBean.getUser(), null, -1, 0, null)
+						.getResults(), sessionBean.getUser(), -1, 0);
 	}
 
 	/**
@@ -186,23 +191,30 @@ public class ItemBean {
 
 	/**
 	 * Initiliaue the {@link SingleItemBrowse} for this {@link ItemBean}
-	 * @throws Exception 
+	 * 
+	 * @throws Exception
 	 */
 	public void initBrowsing() throws Exception {
-		if (item != null)
-			browse = new SingleItemBrowse(
-					(ItemsBean) BeanHelper.getSessionBean(ItemsBean.class),
-					item, "item", "");
+		if (item != null) {
+			ItemsBean itemsBean = (ItemsBean) BeanHelper
+					.getSessionBean(ItemsBean.class);
+			if (UrlHelper.getParameterBoolean("reload")) {
+				itemsBean.browseInit(); // search the items
+				itemsBean.update(); // Load the items
+			}
+			browse = new SingleItemBrowse(itemsBean, item, "item", "");
+		}
 	}
 
 	/**
 	 * Load the item according to the idntifier defined in the URL
-	 * @throws Exception 
+	 * 
+	 * @throws Exception
 	 */
 	public void loadImage() throws Exception {
 		item = ObjectLoader.loadItem(ObjectHelper.getURI(Item.class, id),
 				sessionBean.getUser());
-		if (item == null ) {
+		if (item == null) {
 			throw new NotFoundException("LoadImage: empty");
 		}
 	}
@@ -329,12 +341,14 @@ public class ItemBean {
 	public void makePublic() throws Exception {
 		ItemController c = new ItemController();
 		c.release((List<Item>) c.toList(item), sessionBean.getUser());
+		item = c.retrieve(item.getId(), sessionBean.getUser());
 	}
 
 	@SuppressWarnings("unchecked")
 	public void makePrivate() throws Exception {
 		ItemController c = new ItemController();
 		c.unRelease((List<Item>) c.toList(item), sessionBean.getUser());
+		item = c.retrieve(item.getId(), sessionBean.getUser());
 	}
 
 	/**
@@ -514,17 +528,19 @@ public class ItemBean {
 		}
 		return item.getFilename();
 	}
-	
+
 	/**
 	 * Function to return the content of the item
+	 * 
 	 * @return String
 	 */
 	public String getStringContent() throws ImejiException {
 		StorageController sc = new StorageController();
-		stringContent = sc.readFileStringContent(item.getFullImageUrl().toString());
-        return stringContent;
+		stringContent = sc.readFileStringContent(item.getFullImageUrl()
+				.toString());
+		return stringContent;
 	}
-	
+
 	/**
 	 * Returns a list of all albums this image is added to.
 	 * 
@@ -646,14 +662,14 @@ public class ItemBean {
 				FilenameUtils.getExtension(item.getFilename())).contains(
 				"application/pdf");
 	}
-	
+
 	/**
 	 * Function checks if the file ends with swc
 	 */
 	public boolean isSwcFile() {
 		return item.getFullImageUrl().toString().endsWith(".swc");
 	}
-	
+
 	/**
 	 * True if the current file is an audio
 	 * 
@@ -686,7 +702,7 @@ public class ItemBean {
 	}
 
 	public void setNewFilename(String newFilename) {
-		if(!"".equals(newFilename))
+		if (!"".equals(newFilename))
 			getImage().setFilename(newFilename);
 	}
 }

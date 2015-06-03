@@ -28,19 +28,27 @@
  */
 package de.mpg.imeji.logic.writer;
 
-import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.exceptions.NotAllowedError;
-import de.mpg.imeji.logic.ImejiTriple;
-import de.mpg.imeji.logic.auth.Authorization;
-import de.mpg.imeji.logic.auth.util.AuthUtil;
-import de.mpg.imeji.logic.vo.*;
-import de.mpg.imeji.logic.vo.Grant.GrantType;
-import org.apache.log4j.Logger;
-
 import java.net.URI;
 import java.security.Security;
 import java.util.ArrayList;
 import java.util.List;
+
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.NotAllowedError;
+import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.ImejiTriple;
+import de.mpg.imeji.logic.auth.Authorization;
+import de.mpg.imeji.logic.auth.util.AuthUtil;
+import de.mpg.imeji.logic.validation.Validator;
+import de.mpg.imeji.logic.validation.ValidatorFactory;
+import de.mpg.imeji.logic.vo.Container;
+import de.mpg.imeji.logic.vo.Grant;
+import de.mpg.imeji.logic.vo.Grant.GrantType;
+import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Space;
+import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.vo.UserGroup;
 
 /**
  * Facade implementing Writer {@link Authorization}
@@ -49,8 +57,7 @@ import java.util.List;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class WriterFacade implements Writer {
-	private static final Logger logger = Logger.getLogger(WriterFacade.class);
+public class WriterFacade {
 	private Writer writer;
 
 	/**
@@ -66,9 +73,9 @@ public class WriterFacade implements Writer {
 	 * @see de.mpg.imeji.logic.writer.Writer#create(java.util.List,
 	 * de.mpg.imeji.logic.vo.User)
 	 */
-	@Override
-	public void create(List<Object> objects, User user) throws ImejiException {
+	public void create(List<Object> objects, MetadataProfile profile, User user) throws ImejiException {
 		checkSecurity(objects, user, GrantType.CREATE);
+		validate(objects, profile);
 		writer.create(objects, user);
 	}
 
@@ -78,7 +85,6 @@ public class WriterFacade implements Writer {
 	 * @see de.mpg.imeji.logic.writer.Writer#delete(java.util.List,
 	 * de.mpg.imeji.logic.vo.User)
 	 */
-	@Override
 	public void delete(List<Object> objects, User user) throws ImejiException {
 		checkSecurity(objects, user, GrantType.DELETE);
 		writer.delete(objects, user);
@@ -90,23 +96,11 @@ public class WriterFacade implements Writer {
 	 * @see de.mpg.imeji.logic.writer.Writer#update(java.util.List,
 	 * de.mpg.imeji.logic.vo.User), choose to check security
 	 */
-
-	public void update(List<Object> objects, User user, boolean doCheckSecurity)
+	public void update(List<Object> objects, MetadataProfile profile, User user, boolean doCheckSecurity)
 			throws ImejiException {
 		if (doCheckSecurity)
 			checkSecurity(objects, user, GrantType.UPDATE);
-		writer.update(objects, user);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see de.mpg.imeji.logic.writer.Writer#update(java.util.List,
-	 * de.mpg.imeji.logic.vo.User), always check security
-	 */
-	@Override
-	public void update(List<Object> objects, User user) throws ImejiException {
-		checkSecurity(objects, user, GrantType.UPDATE);
+		validate(objects, profile);
 		writer.update(objects, user);
 	}
 
@@ -116,10 +110,10 @@ public class WriterFacade implements Writer {
 	 * @see de.mpg.imeji.logic.writer.Writer#updateLazy(java.util.List,
 	 * de.mpg.imeji.logic.vo.User)
 	 */
-	@Override
-	public void updateLazy(List<Object> objects, User user)
+	public void updateLazy(List<Object> objects, MetadataProfile profile, User user)
 			throws ImejiException {
 		checkSecurity(objects, user, GrantType.UPDATE);
+		validate(objects, profile);
 		writer.updateLazy(objects, user);
 	}
 
@@ -129,7 +123,6 @@ public class WriterFacade implements Writer {
 	 * @see de.mpg.imeji.logic.writer.Writer#updatePatch(java.util.List,
 	 * de.mpg.imeji.logic.vo.User)
 	 */
-	@Override
 	public void patch(List<ImejiTriple> triples, User user,
 			boolean doCheckSecurity) throws ImejiException {
 		List<Object> l = new ArrayList<Object>();
@@ -139,6 +132,13 @@ public class WriterFacade implements Writer {
 			checkSecurity(l, user, GrantType.UPDATE);
 		writer.patch(triples, user, doCheckSecurity);
 
+	}
+	
+	private void validate(List<Object> list, MetadataProfile profile) throws UnprocessableError{
+		Validator<Object> validator = (Validator<Object>) ValidatorFactory.newValidator(list.get(0));
+		for(Object o : list){
+			validator.validate(o, profile);
+		}
 	}
 
 	/**

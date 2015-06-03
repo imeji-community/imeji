@@ -9,6 +9,7 @@ import org.junit.runners.Suite;
         ItemCreateTest.class,
         ItemReadTest.class,
         ItemUpdateBasicTest.class,
+        ItemEasyUpdateTest.class,
         ItemUpdateFileTest.class,
         ItemUpdateMetadataTest.class,
         ItemDeleteTest.class

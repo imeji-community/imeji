@@ -120,7 +120,7 @@ public class CollectionController extends ImejiController {
 		c.setProfile(p.getId());
 		writeCreateProperties(c, user);
 		c.setProfile(p.getId());
-		writer.create(WriterFacade.toList(c), null, user);
+		writer.create(WriterFacade.toList(c), p, user);
 		// Prepare grants
 		GrantController gc = new GrantController();
 		gc.addGrants(user, AuthorizationPredefinedRoles.admin(c.getId()

@@ -65,11 +65,11 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
     private static final Logger LOGGER = LoggerFactory
             .getLogger(ItemUpdateMetadataTest.class);
 
-    private static String updateJSON;
+    protected static String updateJSON;
     private static final String PATH_PREFIX = "/rest/items";
     private static URI unboundedStatementId;
 
-    private static ProfileController pc = new ProfileController();
+    protected static ProfileController pc = new ProfileController();
 
 
     @BeforeClass
@@ -518,7 +518,7 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
 
 
 
-    private static void initCollectionWithProfile(Collection<Statement> statements) throws Exception {
+    protected static void initCollectionWithProfile(Collection<Statement> statements) throws Exception {
 
         MetadataProfile p = ImejiFactory.newProfile();
         p.setTitle("test");
@@ -544,7 +544,7 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
 
     }
 
-    private static void initItemWithFullMedatada() throws Exception {
+    protected static void initItemWithFullMedatada() throws Exception {
         ItemService s = new ItemService();
         itemTO = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(updateJSON, ItemWithFileTO.class);
         itemTO.setCollectionId(collectionId);
@@ -611,7 +611,7 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
         return statements;
     }
 
-    private static Collection<Statement> getBasicStatements() {
+    protected static Collection<Statement> getBasicStatements() {
         Collection<Statement> statements = new ArrayList<Statement>();
         Statement st;
         for (String type: new String[]{"text", "number", "conePerson" , "geolocation", "date", "license", "link", "publication"}) {

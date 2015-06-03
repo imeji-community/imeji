@@ -54,11 +54,20 @@
 								<h:outputText value="#{md.person.completeName}" title="#{md.person.completeName}"/>
 								<h:outputText value="(#{md.person.organizationString})" title="(#{md.person.organizationString})" rendered="#{md.person.organizationString} != ''"/>
 							</h:panelGroup>
-							<h:outputLink value="http://maps.google.com/maps?q=#{md.latitude},#{md.longitude}" title="http://maps.google.com/maps?q=#{md.latitude},#{md.longitude}" target="_blank" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation'}">
-								<h:outputText value="#{md.name} (" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation' and md.name != null}"/>
-								<h:outputText value="#{md.longitude}/#{md.latitude}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation'}"/>
-								<h:outputText value=")" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation' and md.name != null}"/>
-							</h:outputLink>
+							<ui:fragment rendered="#{md.latitude == 'NaN' or md.latitude == '' or md.latitude == null or  md.longitude == 'NaN' or md.longitude == '' or md.longitude == null }">
+								<h:outputLink value="http://maps.google.com/maps?q=#{md.name}" target="_blank">
+									<h:outputText value="#{md.name} (" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation' and md.name != null}"/>
+									<h:outputText value="#{md.longitude}/#{md.latitude}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation'}"/>
+									<h:outputText value=")" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation' and md.name != null}"/>
+								</h:outputLink>
+							</ui:fragment>
+							<ui:fragment rendered="#{!(md.latitude == 'NaN' or md.latitude == '' or md.latitude == null or  md.longitude == 'NaN' or md.longitude == '' or md.longitude == null)}">
+								<h:outputLink value="http://maps.google.com/maps?q=#{md.latitude},#{md.longitude}" target="_blank">
+									<h:outputText value="#{md.name} (" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation' and md.name != null}"/>
+									<h:outputText value="#{md.longitude}/#{md.latitude}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation'}"/>
+									<h:outputText value=")" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#geolocation' and md.name != null}"/>
+								</h:outputLink>
+							</ui:fragment>
 							<h:panelGroup layout="block" styleClass="imj_metadataPublicationArea" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#publication'}">
 								<div class="imj_citation">
 									<h:outputText value="#{md.citation}" rendered="#{md.citation != ''}" escape="false"/>

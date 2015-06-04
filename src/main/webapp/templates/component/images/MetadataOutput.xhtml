@@ -50,9 +50,16 @@
 		<h:outputText value="#{md.name} (" rendered="#{md.name != null}"/>
 		<h:outputText value="#{md.longitude}/#{md.latitude}"/>
 		<h:outputText value=")" rendered="#{md.name != null}"/>
-		<h:outputLink value="http://maps.google.com/maps?q=#{md.name},#{md.latitude},#{md.longitude}" target="_blank">
-			<h:outputText styleClass="imj_metadataValueEntryViewMap" value="View in Google maps"/>
-		</h:outputLink>
+		<ui:fragment rendered="#{md.latitude == 'NaN' or md.latitude == '' or md.latitude == null or  md.longitude == 'NaN' or md.longitude == '' or md.longitude == null }">
+			<h:outputLink value="http://maps.google.com/maps?q=#{md.name}" target="_blank">
+				<h:outputText styleClass="imj_metadataValueEntryViewMap" value="View in Google maps"/>
+			</h:outputLink>
+		</ui:fragment>
+		<ui:fragment rendered="#{!(md.latitude == 'NaN' or md.latitude == '' or md.latitude == null or  md.longitude == 'NaN' or md.longitude == '' or md.longitude == null)}">
+			<h:outputLink value="http://maps.google.com/maps?q=#{md.latitude},#{md.longitude}" target="_blank">
+				<h:outputText styleClass="imj_metadataValueEntryViewMap" value="View in Google maps"/>
+			</h:outputLink>
+		</ui:fragment>
 	</ui:fragment>
 			
 <!-- MetaDataOutput END -->

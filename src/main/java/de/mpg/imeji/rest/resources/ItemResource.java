@@ -124,25 +124,57 @@ public class ItemResource implements ImejiResource {
 	
 	@PATCH
 	@Path("/{id}")
-	@ApiOperation(value = "Easy Update Item Metadata by id", notes = "Update Metadata of an already existed item:"
+	@ApiOperation(value = "Easy Update Item Metadata by id", notes = "Update Metadata of an already existing item:"
 			+ "<br/><br/>"
 			+ "Json example:"
-			+ "(format: metadata_key : new_value)"
 			+ "<div class=\"json_example\">"
 			+ "{"
-			+ "<br/>\"ez_metadate\":"
+			
+			+ "<br/>\"ez_metadata\":"
 			+ "<br/>{"
-			+ "<br/>\"Titel\" : \"abc123\","
-			+ "<br/>\"Author\" : "
+			
+			+ "<br/>\"TEXT_LABEL\" : \"abc123\","
+			+ "<br/>\"NUMBER_LABEL\" : nr,"
+			+ "<br/>\"DATE_LABEL\" : \"YYYY-MM-DD\","
+			
+			+ "<br/>\"PERSON_LABEL\" : "
 			+ "<br/>{"
-			+ "<br/>\"familyName\": \"aaa\","		
-			+ "<br/>\"givenName\" : \"bbb\""
+			+ "<br/>\"familyName\": \"familyname...\","		
+			+ "<br/>\"givenName\" : \"givenname...\""
+			+ "<br/>},"
+			
+			+ "<br/>\"GEOLOCATION_LABEL\" : "
+			+ "<br/>{"
+			+ "<br/>\"name\": \"name...\","		
+			+ "<br/>\"longitude\" : \"longitude...\","
+			+ "<br/>\"latitude\" : \"latitude...\""
+			+ "<br/>},"
+			
+			+ "<br/>\"LICENSE_LABEL\" : "
+			+ "<br/>{"
+			+ "<br/>\"license\": \"license...\","		
+			+ "<br/>\"url\" : \"license url...\""
+			+ "<br/>},"
+			
+			+ "<br/>\"LINK_LABEL\" : "
+			+ "<br/>{"
+			+ "<br/>\"link\": \"link...\","		
+			+ "<br/>\"url\" : \"link url...\""
+			+ "<br/>},"
+			
+			+ "<br/>\"PUBLICATION_LABEL\" : "
+			+ "<br/>{"
+			+ "<br/>\"format\": \"format...\","		
+			+ "<br/>\"publication\" : \"publication...\","
+			+ "<br/>\"citation\" : \"citation...\""
 			+ "<br/>}"
+			
 			+ "<br/>}"
+			
 			+ "<br/>}"
 			+"</div>"
 			+ "<br/><br/>"
-			+ "The metadata parameter allows to define the metadata of item during the creation of the item. To get an example of how to do it, please try the get item method")
+			+ "The metadata parameter allows to define the metadata of an item during the creation of the item.")
 	@Produces(MediaType.APPLICATION_JSON)  
 	public Response easyUpdate(@PathParam("id") String id, @Context HttpServletRequest req, InputStream json) throws Exception{
 		JSONResponse resp = ItemProcess.easyUpdateItem(req, id);

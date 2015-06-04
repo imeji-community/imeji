@@ -106,7 +106,7 @@
 				<div class="imj_metadataSet">
 					<h:outputLabel for="exportFormatSelection" value="#{lbl.export_formats}" styleClass="imj_metadataLabel"/>
 					<div class="imj_metadataValue">
-						<h:selectOneMenu id="exportFormatSelection" value="#{cc.attrs.itemBean.exportFormat}" valueChangeListener="#{cc.attrs.itemBean.citationUriListener}">
+						<h:selectOneMenu id="exportFormatSelection" value="#{cc.attrs.itemBean.exportFormat}" valueChangeListener="#{cc.attrs.itemBean.resetCitationListener}">
 							<f:selectItem itemLabel="APA" itemValue="APA"/>
 							<f:selectItem itemLabel="AJP" itemValue="AJP"/>
 							<f:selectItem itemLabel="JUS" itemValue="JUS"/>

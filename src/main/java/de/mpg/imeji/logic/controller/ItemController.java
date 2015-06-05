@@ -93,7 +93,7 @@ public class ItemController extends ImejiController {
 
 	/**
 	 * Create an {@link Item} in a {@link CollectionImeji}
-	 *
+	 * 
 	 * @param item
 	 * @param coll
 	 * @param user
@@ -250,7 +250,7 @@ public class ItemController extends ImejiController {
 	}
 
 	/**
-	 * Create an {@link Item} 
+	 * Create an {@link Item}
 	 * 
 	 * @param item
 	 * @param uploadedFile
@@ -364,7 +364,7 @@ public class ItemController extends ImejiController {
 
 	/**
 	 * Retrieve all items filtered by query
-	 *
+	 * 
 	 * @param user
 	 * @param q
 	 * @return
@@ -444,7 +444,8 @@ public class ItemController extends ImejiController {
 	 * @return
 	 * @throws ImejiException
 	 */
-	public Item updateFile(Item item, File f, User user) throws ImejiException {
+	public Item updateFile(Item item, File f, String filename, User user)
+			throws ImejiException {
 
 		validateChecksum(item.getCollection(), f, true);
 
@@ -466,13 +467,15 @@ public class ItemController extends ImejiController {
 		item.setThumbnailImageUrl(URI.create(uploadResult.getThumb()));
 		item.setWebImageUrl(URI.create(uploadResult.getWeb()));
 		item.setFileSize(uploadResult.getFileSize());
+		if (filename != null)
+			item.setFilename(filename);
 
 		return update(item, user);
 	}
 
 	/**
 	 * Update the {@link Item} with External link to File.
-	 *
+	 * 
 	 * @param item
 	 * @param externalFileUrl
 	 * @param filename
@@ -498,7 +501,7 @@ public class ItemController extends ImejiController {
 						"." + FilenameUtils.getExtension(origName));
 				sc.read(externalFileUrl, new FileOutputStream(tmp), true);
 
-				item = updateFile(item, tmp, u);
+				item = updateFile(item, tmp, filename, u);
 			} catch (IOException e) {
 				throw new UnprocessableError(
 						"There was a problem with saving this file to the temporary storage!");

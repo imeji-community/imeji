@@ -40,6 +40,15 @@ public class ImejiFactory {
 		return coll;
 	}
 
+	public static CollectionImeji newCollection(String title,
+			String firstAuthorFamilyName, String firstAuthorGivenName,
+			String firstAuthorOrganization) {
+		CollectionImeji coll = new CollectionImeji();
+		coll.setMetadata(newContainerMetadata(title, firstAuthorFamilyName,
+				firstAuthorGivenName, firstAuthorOrganization));
+		return coll;
+	}
+
 	public static MetadataProfile newProfile() {
 		MetadataProfile p = new MetadataProfile();
 		return p;
@@ -51,11 +60,21 @@ public class ImejiFactory {
 		return cm;
 	}
 
+	public static ContainerMetadata newContainerMetadata(String title,
+			String firstAuthorFamilyName, String firstAuthorGivenName,
+			String firstAuthorOrganization) {
+		ContainerMetadata cm = new ContainerMetadata();
+		cm.setTitle(title);
+		cm.getPersons().add(
+				newPerson(firstAuthorFamilyName, firstAuthorGivenName,
+						firstAuthorOrganization));
+		return cm;
+	}
+
 	public static Space newSpace() {
 		Space s = new Space();
 		return s;
 	}
-
 
 	/**
 	 * Crate a new emtpy {@link Statement}
@@ -89,9 +108,25 @@ public class ImejiFactory {
 		return pers;
 	}
 
+	public static Person newPerson(String familyName, String givenName,
+			String firstOrganization) {
+		Person pers = new Person();
+		pers.setAlternativeName("");
+		pers.setFamilyName(familyName);
+		pers.setGivenName(givenName);
+		pers.getOrganizations().add(newOrganization(firstOrganization));
+		return pers;
+	}
+
 	public static Organization newOrganization() {
 		Organization org = new Organization();
 		org.setName("");
+		return org;
+	}
+
+	public static Organization newOrganization(String name) {
+		Organization org = new Organization();
+		org.setName(name);
 		return org;
 	}
 
@@ -193,7 +228,7 @@ public class ImejiFactory {
 	 * 
 	 * @param albumList
 	 * @return
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public static List<AlbumBean> albumListToBeanList(
 			Collection<Album> albumList) throws Exception {

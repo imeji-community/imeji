@@ -57,7 +57,7 @@
 					<h:outputText value="#{lbl.view}"/>
 				</h:outputLink>
 				
-				<h:outputLink styleClass="imj_mediaEditPanelItem imj_submitButton" id="lnkDownload" value="#{itemBean.image.fullImageUrl}?download=1" target="_blank">
+				<h:outputLink styleClass="imj_mediaEditPanelItem imj_submitButton" id="lnkDownload" value="#{Navigation.applicationUrl}file/#{itemBean.encodedFileName}?id=#{itemBean.image.fullImageUrl}&amp;download=1" target="_blank">
 					<h:outputText value="#{lbl.download}"/>
 				</h:outputLink>
 				

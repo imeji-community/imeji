@@ -57,6 +57,9 @@ public class CollectionFacets extends Facets {
 	 * @param searchQuery
 	 */
 	public CollectionFacets(CollectionImeji col, SearchQuery searchQuery) {
+		if (col == null)
+			return;
+		
 		this.colURI = col.getId();
 		this.searchQuery = searchQuery;
 		this.profile = ObjectCachedLoader.loadProfile(col.getProfile());

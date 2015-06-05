@@ -124,13 +124,13 @@ public class ItemResource implements ImejiResource {
 	
 	@PATCH
 	@Path("/{id}")
-	@ApiOperation(value = "Easy Update Item Metadata by id", notes = "Update Metadata of an already existed item:"
+	@ApiOperation(value = "Easy Update Item Metadata by id", notes = "Update Metadata of an already existing item:"
 			+ "<br/><br/>"
 			+ "Json example:"
 			+ "<div class=\"json_example\">"
 			+ "{"
 			
-			+ "<br/>\"ez_metadate\":"
+			+ "<br/>\"ez_metadata\":"
 			+ "<br/>{"
 			
 			+ "<br/>\"TEXT_LABEL\" : \"abc123\","
@@ -146,7 +146,7 @@ public class ItemResource implements ImejiResource {
 			+ "<br/>\"GEOLOCATION_LABEL\" : "
 			+ "<br/>{"
 			+ "<br/>\"name\": \"name...\","		
-			+ "<br/>\"longitude\" : \"longitude...\""
+			+ "<br/>\"longitude\" : \"longitude...\","
 			+ "<br/>\"latitude\" : \"latitude...\""
 			+ "<br/>},"
 			
@@ -174,7 +174,7 @@ public class ItemResource implements ImejiResource {
 			+ "<br/>}"
 			+"</div>"
 			+ "<br/><br/>"
-			+ "The metadata parameter allows to define the metadata of item during the creation of the item. To get an example of how to do it, please try the get item method")
+			+ "The metadata parameter allows to define the metadata of an item during the creation of the item.")
 	@Produces(MediaType.APPLICATION_JSON)  
 	public Response easyUpdate(@PathParam("id") String id, @Context HttpServletRequest req, InputStream json) throws Exception{
 		JSONResponse resp = ItemProcess.easyUpdateItem(req, id);

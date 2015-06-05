@@ -345,7 +345,7 @@ public class StorageUtils {
 			return DigestUtils.md5Hex(fis);
 		} catch (IOException e) {
 			throw new UnprocessableError(
-					"Error calculating the cheksum of the file: ");
+					"Error calculating the cheksum of the file: ", e);
 		}
 
 		// finally {

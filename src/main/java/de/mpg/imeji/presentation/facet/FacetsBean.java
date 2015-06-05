@@ -53,7 +53,7 @@ public class FacetsBean implements Callable<Boolean>
         catch (Exception e)
         {
             BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("error")
-                    + ", Facets intialization: " + e.getMessage());
+                    + ", Technical Facets intialization: " + e.getMessage());
         }
     }
 
@@ -72,7 +72,7 @@ public class FacetsBean implements Callable<Boolean>
         catch (Exception e)
         {
             BeanHelper.error(((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getLabel("error")
-                    + ", Facets intialization: " + e.getMessage());
+                    + ", Collection Facets intialization : " + e.getMessage());
         }
     }
 

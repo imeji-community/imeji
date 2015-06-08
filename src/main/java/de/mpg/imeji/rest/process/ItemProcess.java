@@ -31,9 +31,8 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
 import de.mpg.imeji.rest.api.ProfileService;
-import de.mpg.imeji.rest.to.CollectionProfileTO;
+import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
 import de.mpg.imeji.rest.to.CollectionTO;
-import de.mpg.imeji.rest.to.EasyItemTO;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
 import de.mpg.imeji.rest.to.JSONResponse;
@@ -131,8 +130,7 @@ public class ItemProcess {
 		} else {
 			try {
 				ItemService icrud = new ItemService();		
-//				EasyItemTO easyTO = RestProcessUtils.buildEasyItemTOFromJSON(req); 
-				EasyItemTO easyTO = (EasyItemTO)buildTOFromJSON(req, EasyItemTO.class);
+				DefaultItemTO easyTO = (DefaultItemTO)buildTOFromJSON(req, DefaultItemTO.class);
 				ItemTO itemTO = icrud.read(id, u);
 				CollectionService ccrud = new CollectionService();			
 				CollectionTO col = ccrud.read(itemTO.getCollectionId(), u);

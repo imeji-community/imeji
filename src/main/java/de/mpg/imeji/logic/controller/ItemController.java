@@ -121,6 +121,11 @@ public class ItemController extends ImejiController {
 	 */
 	public Item createWithFile(Item item, File f, String filename,
 			CollectionImeji c, User user) throws ImejiException {
+		if (!AuthUtil.staticAuth().createContent(user, c))
+			throw new NotAllowedError(
+					"User not Allowed to upload files in collection "
+							+ c.getIdString());
+
 		StorageController sc = new StorageController();
 		UploadResult uploadResult = sc.upload(filename, f, c.getIdString());
 

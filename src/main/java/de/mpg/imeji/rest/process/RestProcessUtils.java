@@ -5,8 +5,6 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -19,10 +17,6 @@ import javax.ws.rs.core.Response.Status;
 import net.java.dev.webdav.jaxrs.ResponseStatus;
 
 import org.apache.log4j.Logger;
-import org.json.simple.JSONValue;
-import org.json.simple.parser.ContainerFactory;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -38,8 +32,7 @@ import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.NotAllowedError;
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.exceptions.UnprocessableError;
-import de.mpg.imeji.rest.to.EasyItemTO;
-import de.mpg.imeji.rest.to.EasyMetadataTO;
+import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
 import de.mpg.imeji.rest.to.HTTPError;
 import de.mpg.imeji.rest.to.JSONException;
 import de.mpg.imeji.rest.to.JSONResponse;
@@ -65,8 +58,8 @@ public class RestProcessUtils {
 	
 	
 	
-	public static EasyItemTO buildEasyItemTOFromJSON(HttpServletRequest req) throws BadRequestException {
-		EasyItemTO easyTO = new EasyItemTO();
+	public static DefaultItemTO buildEasyItemTOFromJSON(HttpServletRequest req) throws BadRequestException {
+		DefaultItemTO easyTO = new DefaultItemTO();
 		try {
 			JsonFactory factory = new JsonFactory(); 
 			ObjectMapper mapper = new ObjectMapper(factory);

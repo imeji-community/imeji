@@ -1,13 +1,11 @@
 package de.mpg.imeji.rest.process;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.thrift.meta_data.ListMetaData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,12 +34,16 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
-import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.rest.api.ProfileService;
 import de.mpg.imeji.rest.api.UserService;
+import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
+import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultConePersonTO;
+import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultGeolocationTO;
+import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultLicenseTO;
+import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultLinkTO;
+import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultPublicationTO;
 import de.mpg.imeji.rest.to.AlbumTO;
 import de.mpg.imeji.rest.to.CollectionTO;
-import de.mpg.imeji.rest.to.EasyItemTO;
 import de.mpg.imeji.rest.to.IdentifierTO;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.LabelTO;
@@ -53,11 +55,6 @@ import de.mpg.imeji.rest.to.PersonTO;
 import de.mpg.imeji.rest.to.PersonTOBasic;
 import de.mpg.imeji.rest.to.PropertiesTO;
 import de.mpg.imeji.rest.to.StatementTO;
-import de.mpg.imeji.rest.to.predefinedEasyMetadataTO.EasyConePersonTO;
-import de.mpg.imeji.rest.to.predefinedEasyMetadataTO.EasyGeolocationTO;
-import de.mpg.imeji.rest.to.predefinedEasyMetadataTO.EasyLicenseTO;
-import de.mpg.imeji.rest.to.predefinedEasyMetadataTO.EasyLinkTO;
-import de.mpg.imeji.rest.to.predefinedEasyMetadataTO.EasyPublicationTO;
 import de.mpg.imeji.rest.to.predefinedMetadataTO.ConePersonTO;
 import de.mpg.imeji.rest.to.predefinedMetadataTO.DateTO;
 import de.mpg.imeji.rest.to.predefinedMetadataTO.GeolocationTO;
@@ -72,13 +69,13 @@ public class TransferObjectFactory {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(TransferObjectFactory.class);
 	
-	public static void transferEasyItemTOItem(MetadataProfileTO profileTO, EasyItemTO easyTO, ItemTO itemTO) throws BadRequestException, JsonParseException, JsonMappingException{
-	 	if(easyTO.getEz_metadata() == null)
+	public static void transferEasyItemTOItem(MetadataProfileTO profileTO, DefaultItemTO easyTO, ItemTO itemTO) throws BadRequestException, JsonParseException, JsonMappingException{
+	 	if(easyTO.getMetadata() == null)
 	 	{
 	 		itemTO.getMetadata().clear();
 	 	}else
 	 	{  
-			for(Map.Entry<String, JsonNode> entry : easyTO.getEz_metadata().entrySet()){  
+			for(Map.Entry<String, JsonNode> entry : easyTO.getMetadata().entrySet()){  
 				boolean update = false;
 				String key = "";
 				int pos = -1;
@@ -211,9 +208,9 @@ public class TransferObjectFactory {
 								}
 								else
 								{
-									EasyConePersonTO easyCPTO = null;
+									DefaultConePersonTO easyCPTO = null;
 									try {
-										easyCPTO = mapper.readValue(node.toString(), new TypeReference<EasyConePersonTO>(){});
+										easyCPTO = mapper.readValue(node.toString(), new TypeReference<DefaultConePersonTO>(){});
 									} catch (Exception e) {
 										throw new BadRequestException( entry + e.getMessage());
 									} 
@@ -244,9 +241,9 @@ public class TransferObjectFactory {
 								}
 								else
 								{
-									EasyGeolocationTO easyGeoTO = null;
+									DefaultGeolocationTO easyGeoTO = null;
 									try {
-										easyGeoTO = mapper.readValue(node.toString(), new TypeReference<EasyGeolocationTO>(){});
+										easyGeoTO = mapper.readValue(node.toString(), new TypeReference<DefaultGeolocationTO>(){});
 									} catch (Exception e) {
 										throw new BadRequestException( entry + e.getMessage());
 									} 
@@ -264,9 +261,9 @@ public class TransferObjectFactory {
 								}
 								else
 								{
-									EasyLicenseTO easyLTO = null;
+									DefaultLicenseTO easyLTO = null;
 									try {
-										easyLTO = mapper.readValue(node.toString(), new TypeReference<EasyLicenseTO>(){});
+										easyLTO = mapper.readValue(node.toString(), new TypeReference<DefaultLicenseTO>(){});
 									} catch (Exception e) {
 										throw new BadRequestException( entry + e.getMessage());
 									} 
@@ -283,9 +280,9 @@ public class TransferObjectFactory {
 								}
 								else
 								{
-									EasyLinkTO easyLinkTO = null;
+									DefaultLinkTO easyLinkTO = null;
 									try {
-										easyLinkTO = mapper.readValue(node.toString(), new TypeReference<EasyLinkTO>(){});
+										easyLinkTO = mapper.readValue(node.toString(), new TypeReference<DefaultLinkTO>(){});
 									} catch (Exception e) {
 										throw new BadRequestException( entry + e.getMessage());
 									} 
@@ -302,9 +299,9 @@ public class TransferObjectFactory {
 								}
 								else
 								{
-									EasyPublicationTO easyPTO = null;
+									DefaultPublicationTO easyPTO = null;
 									try {
-										easyPTO = mapper.readValue(node.toString(), new TypeReference<EasyPublicationTO>(){});
+										easyPTO = mapper.readValue(node.toString(), new TypeReference<DefaultPublicationTO>(){});
 									} catch (Exception e) {
 										throw new BadRequestException( entry + e.getMessage());
 									} 

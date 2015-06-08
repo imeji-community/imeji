@@ -11,17 +11,21 @@ import javax.faces.event.ValueChangeEvent;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
+import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
+import de.mpg.imeji.presentation.beans.ContainerBean;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.metadata.MetadataSetBean;
 import de.mpg.imeji.presentation.session.SessionBean;
@@ -46,7 +50,6 @@ public class ThumbnailBean {
 	private String caption = "";
 	private URI uri = null;
 	private String id;
-	// private URI profile = null;
 	private List<Metadata> metadata = new ArrayList<Metadata>();
 	private List<Statement> statements = new ArrayList<Statement>();
 	private boolean selected = false;
@@ -54,9 +57,10 @@ public class ThumbnailBean {
 	private SessionBean sessionBean;
 	private static Logger logger = Logger.getLogger(ThumbnailBean.class);
 	private MetadataSetBean mds;
-	private CollectionImeji collection;
-	private String collectionName = "";
 	private MetadataProfile profile;
+	private MetadataSet mdSet;
+	private URI collectionUri;
+	
 	
 	/**
 	 * Emtpy {@link ThumbnailBean}
@@ -75,35 +79,25 @@ public class ThumbnailBean {
 	public ThumbnailBean(Item item) throws Exception {
 		this.sessionBean = (SessionBean) BeanHelper
 				.getSessionBean(SessionBean.class);
-		this.uri = item.getId();
+		setUri(item.getId());
 		Navigation navigation = (Navigation) BeanHelper
 				.getApplicationBean(Navigation.class);
-		this.id = ObjectHelper.getId(uri);
-		link = ( Status.WITHDRAWN != item.getStatus()) ? 
+		setId(ObjectHelper.getId(getUri()));
+		setLink(( Status.WITHDRAWN != item.getStatus()) ? 
 				navigation.getFileUrl() + item.getThumbnailImageUrl().toString() :
-				navigation.applicationUrl+"resources/icon/discarded.png";
-		if (AuthUtil.canReadItemButNotCollection(sessionBean.getUser(), item)) {
-			this.profile = ObjectLoader.loadProfile(item.getMetadataSet()
-					.getProfile(), Imeji.adminUser);
-			this.collection = ObjectLoader.loadCollection(item.getCollection(),
-					Imeji.adminUser);
-		} else {
-			this.profile = ObjectCachedLoader.loadProfile(item.getMetadataSet()
-					.getProfile());
-			this.collection = ObjectCachedLoader.loadCollection(item
-					.getCollection());
-		}
-		this.filename = item.getFilename();
-		this.metadata = (List<Metadata>) item.getMetadataSet().getMetadata();
-		this.statements = loadStatements(item.getMetadataSet().getProfile());
-		this.collectionName = this.collection.getMetadata().getTitle();
-		this.caption = findCaption();
-		this.selected = sessionBean.getSelected().contains(uri.toString());
+				navigation.getApplicationUrl()+"resources/icon/discarded.png");
+		setFilename(item.getFilename());
+		setMdSet(item.getMetadataSet());
+		setMetadata((List<Metadata>) item.getMetadataSet().getMetadata());
+		setCaption(findCaption());
+		setSelected(sessionBean.getSelected().contains(uri.toString()));
 		if (sessionBean.getActiveAlbum() != null) {
-			this.isInActiveAlbum = sessionBean.getActiveAlbum().getImages()
-					.contains(item.getId());
+			setInActiveAlbum(sessionBean.getActiveAlbum().getImages()
+					.contains(item.getId()));
 		}
-		this.mds = new MetadataSetBean(item.getMetadataSet(), profile, false);
+
+		setCollectionUri(item.getCollection());
+
 	}
 
 	/**
@@ -114,10 +108,10 @@ public class ThumbnailBean {
 	 * @throws Exception
 	 */
 	public String getInitPopup() throws Exception {
-		List<Item> l = new ArrayList<Item>();
-		Item im = new Item();
-		im.getMetadataSets().add(ImejiFactory.newMetadataSet(profile.getId()));
-		l.add(im);
+		//TODO: This method should be left ofer to execute ONLY after Hover from the presentation (or on explicit action) and not always for each ThumbnailBean!
+		setProfile(ObjectCachedLoader.loadProfileWithoutPrivs(getMdSet().getProfile()));
+		setMds(new MetadataSetBean(getMdSet(), getProfile(), false));
+		setStatements(loadStatements(getProfile().getId()));
 		return "";
 	}
 
@@ -130,8 +124,8 @@ public class ThumbnailBean {
 	 */
 	private List<Statement> loadStatements(URI uri) {
 		try {
-			if (profile != null) {
-				return (List<Statement>) profile.getStatements();
+			if (getProfile() != null) {
+				return (List<Statement>) getProfile().getStatements();
 			}
 		} catch (Exception e) {
 			BeanHelper.error(sessionBean.getMessage("error_profile_load") + " "
@@ -150,9 +144,9 @@ public class ThumbnailBean {
 	 * @return
 	 */
 	private String findCaption() {
-		for (Statement s : statements) {
+		for (Statement s : getStatements()) {
 			if (s.isDescription()) {
-				for (Metadata md : metadata) {
+				for (Metadata md : getMetadata()) {
 					if (md.getStatement().equals(s.getId())) {
 						String str = "";
 						if (md instanceof Link)
@@ -168,7 +162,7 @@ public class ThumbnailBean {
 				}
 			}
 		}
-		return filename;
+		return getFilename();
 	}
 
 	/**
@@ -180,10 +174,10 @@ public class ThumbnailBean {
 		SessionObjectsController soc = new SessionObjectsController();
 		if (event.getNewValue().toString().equals("true")) {
 			setSelected(true);
-			soc.selectItem(uri.toString());
+			soc.selectItem(getUri().toString());
 		} else if (event.getNewValue().toString().equals("false")) {
 			setSelected(false);
-			soc.unselectItem(uri.toString());
+			soc.unselectItem(getUri().toString());
 		}
 	}
 
@@ -366,33 +360,34 @@ public class ThumbnailBean {
 		this.mds = mds;
 	}
 
+	public URI getCollectionUri() {
+		return collectionUri;
+	}
+	
+	public void setCollectionUri(URI colUri) {
+		this.collectionUri = colUri;
+	}
+
+	public MetadataProfile getProfile() {
+		return profile;
+	}
+
+	public void setProfile(MetadataProfile profile) {
+		this.profile = profile;
+	}
+	
 	/**
-	 * @return the collection
+	 * @return the mdSet
 	 */
-	public CollectionImeji getCollection() {
-		return collection;
+	public MetadataSet getMdSet() {
+		return mdSet;
 	}
 
 	/**
-	 * @param collection
-	 *            the collection to set
+	 * @param mdSet the mdSet to set
 	 */
-	public void setCollection(CollectionImeji collection) {
-		this.collection = collection;
+	public void setMdSet(MetadataSet mdSet) {
+		this.mdSet = mdSet;
 	}
 
-	/**
-	 * @return the collectionName
-	 */
-	public String getCollectionName() {
-		return collectionName;
-	}
-
-	/**
-	 * @param collectionName
-	 *            the collectionName to set
-	 */
-	public void setCollectionName(String collectionName) {
-		this.collectionName = collectionName;
-	}
 }

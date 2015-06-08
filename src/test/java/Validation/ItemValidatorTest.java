@@ -1,4 +1,4 @@
-package Validation;
+package validation;
 
 import java.net.URI;
 import java.util.ArrayList;

@@ -10,8 +10,12 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.AuthenticationError;
 import de.mpg.imeji.exceptions.ImejiException;
@@ -53,6 +57,8 @@ public class AlbumController extends ImejiController {
 			Imeji.albumModel);
 	private static final WriterFacade writer = new WriterFacade(
 			Imeji.albumModel);
+	
+	private static Logger logger = Logger.getLogger(AlbumController.class);
 
 	/**
 	 * Construct a new controller for {@link Album}
@@ -253,7 +259,7 @@ public class AlbumController extends ImejiController {
 					}
 				}
 			} catch (URISyntaxException e) {
-				e.printStackTrace();
+				logger.info(e.getMessage());
 			}
 		}
 		album.getImages().clear();
@@ -298,7 +304,6 @@ public class AlbumController extends ImejiController {
 	 * {@link Album}
 	 * 
 	 * @param album
-	 * @param toDelete
 	 * @param user
 	 * @return
 	 * @throws ImejiException
@@ -366,16 +371,22 @@ public class AlbumController extends ImejiController {
 	public Collection<Album> loadAlbumsLazy(List<String> uris, User user,
 			int limit, int offset) throws ImejiException {
 		List<Album> albs = new ArrayList<Album>();
-		int counter = 0;
-		for (String s : uris) {
-			if (offset <= counter
-					&& (counter < (limit + offset) || limit == -1)) {
-				albs.add((Album) J2JHelper.setId(new Album(), URI.create(s)));
-			}
-			counter++;
+		
+		List<String> retrieveUris = uris.size()>0 && limit>0? 
+				uris.subList(offset, Collections.min(Arrays.asList(offset+limit, uris.size()))):new ArrayList<String>();
+		
+		for (String s : retrieveUris) {
+			albs.add((Album) J2JHelper.setId(new Album(), URI.create(s)));
 		}
-		reader.readLazy(J2JHelper.cast2ObjectList(albs), user);
-		return albs;
+		
+		try {
+			reader.readLazy(J2JHelper.cast2ObjectList(albs), user);
+			return albs;
+		}
+		catch (ImejiException e) {
+				logger.error("Error loading albums: " + e.getMessage(), e);
+				return null;
+		}
 	}
 
 	/**

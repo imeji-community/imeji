@@ -8,7 +8,6 @@ import static de.mpg.imeji.rest.process.ItemProcess.updateItem;
 import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONResponse;
 
 import java.io.InputStream;
-import java.io.StringWriter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -24,7 +23,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.commons.io.IOUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 

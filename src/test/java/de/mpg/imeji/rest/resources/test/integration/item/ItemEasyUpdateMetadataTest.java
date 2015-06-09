@@ -1,56 +1,48 @@
 package de.mpg.imeji.rest.resources.test.integration.item;
 
 import static de.mpg.imeji.logic.util.ResourceHelper.getStringFromPath;
-import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONFromObject;
+import static de.mpg.imeji.rest.process.RestProcessUtils.buildResponse;
+import static de.mpg.imeji.rest.process.RestProcessUtils.buildTOFromJSON;
 import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_REST;
 import static javax.ws.rs.core.Response.Status.OK;
-import static org.junit.Assert.assertEquals;
 
-import java.io.IOException;
 import java.net.URI;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.StringRequestEntity;
-import org.apache.commons.httpclient.params.HttpParams;
-import org.apache.commons.io.IOUtils;
-import org.glassfish.jersey.jackson.JacksonFeature;
-import org.glassfish.jersey.media.multipart.FormDataBodyPart;
-import org.glassfish.jersey.media.multipart.FormDataMultiPart;
-import org.glassfish.jersey.media.multipart.MultiPartFeature;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.util.EntityUtils;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import util.JenaUtil;
-import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.util.Patch;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.util.ImejiFactory;
-import de.mpg.imeji.rest.api.ItemService;
+import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
+import de.mpg.imeji.rest.process.RestProcessUtils;
+import de.mpg.imeji.rest.process.ReverseTransferObjectFactory;
+import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
-import de.mpg.imeji.rest.to.EasyItemTO;
 import de.mpg.imeji.rest.to.ItemTO;
-import de.mpg.imeji.rest.to.ItemWithFileTO;
+import de.mpg.imeji.rest.to.MetadataProfileTO;
+import de.mpg.imeji.rest.to.MetadataSetTO;
 import de.mpg.j2j.misc.LocalizedString;
 
 /**
@@ -62,40 +54,46 @@ import de.mpg.j2j.misc.LocalizedString;
 public class ItemEasyUpdateMetadataTest extends ImejiTestBase {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ItemEasyUpdateMetadataTest.class);
-	private static EasyItemTO itemTO;
+	private static Item item;
 	private static String collectionId;
 	private static String profileId;
+	private static MetadataProfile profile;
 	private static String easyItemJSON;
-	private static final String PATH_PREFIX = "/rest/items/";
-	private static final String SERVICE_ADDRESS = "http://localhost:9998";
+	private static final String ITEM_SERVICE_ADDRESS = "http://localhost:9998/rest/items/";
 
 	@BeforeClass
 	public static void specificSetup() throws Exception {
 		easyItemJSON = getStringFromPath(STATIC_CONTEXT_REST
 				+ "/easyUpdateItemBasic.json");
-		// initCollectionWithProfile(getBasicStatements());
-		// createItem();
+		initCollectionWithProfile(getBasicStatements());
+		createItem();
 	}
 
 	@Test
-	public void simnpleEdit() throws BadRequestException {
-		// TODO PATCH Method not supported by Jersey Client -> find a
-		// workaround
-
-		// FormDataMultiPart multiPart = new FormDataMultiPart();
-		// multiPart.field("json", easyItemJSON);
-		// LOGGER.info(multiPart.getField("json").getValue());
-		// Response response = target(PATH_PREFIX + "?_HttpMethod=PATCH")
-		// .path("/" + itemId).register(authAsUser)
-		// .register(MultiPartFeature.class)
-		// .register(JacksonFeature.class)
-		// .request(MediaType.APPLICATION_JSON_TYPE)
-		// .post(Entity.entity(multiPart, multiPart.getMediaType()));
-		//
-		// assertEquals(response.getStatus(), OK.getStatusCode());
-		// EasyItemTO updatedItem = (EasyItemTO) response
-		// .readEntity(EasyItemTO.class);
-
+	public void test_1_simpleEdit() throws Exception {
+		Patch patch = new Patch(URI.create(ITEM_SERVICE_ADDRESS + itemId),
+				JenaUtil.TEST_USER_EMAIL, JenaUtil.TEST_USER_PWD);
+		try {
+			patch.executeJSON(easyItemJSON);
+			CloseableHttpResponse response = patch.getResponse();
+			Assert.assertEquals(response.getStatusLine().getStatusCode(),
+					HttpServletResponse.SC_OK);
+			String responseJSON = EntityUtils.toString(response.getEntity());
+//			System.out.println(responseJSON);
+//			DefaultItemTO easyTO = (DefaultItemTO) buildTOFromJSON(
+//					responseJSON, DefaultItemTO.class);
+//			MetadataProfileTO profileTO = new MetadataProfileTO();
+//			TransferObjectFactory.transferMetadataProfile(profile, profileTO);
+//			ItemTO to = new ItemTO();
+//			TransferObjectFactory.transferEasyItemTOItem(profileTO, easyTO,
+//					itemTO);
+//			String requestJSON = RestProcessUtils.buildJSONFromObject(itemTO);
+//			System.out.println(requestJSON);
+//			System.out.println(responseJSON);
+			
+		} finally {
+			patch.close();
+		}
 	}
 
 	protected static void createItem() throws Exception {
@@ -104,10 +102,10 @@ public class ItemEasyUpdateMetadataTest extends ImejiTestBase {
 		CollectionImeji coll = cc.retrieve(
 				ObjectHelper.getURI(CollectionImeji.class, collectionId),
 				JenaUtil.testUser);
-		Item item = ImejiFactory.newItem(coll);
+		item = ImejiFactory.newItem(coll);
 		item = ic.create(item, coll.getId(), JenaUtil.testUser);
 		itemId = item.getIdString();
-
+		//TransferObjectFactory.transferItem(item, itemTO);
 	}
 
 	protected static void initCollectionWithProfile(
@@ -117,8 +115,8 @@ public class ItemEasyUpdateMetadataTest extends ImejiTestBase {
 		p.setTitle("test");
 		p.setStatements(statements);
 		ProfileController pc = new ProfileController();
-		MetadataProfile mp = pc.create(p, JenaUtil.testUser);
-		profileId = ObjectHelper.getId(mp.getId());
+		profile = pc.create(p, JenaUtil.testUser);
+		profileId = ObjectHelper.getId(profile.getId());
 
 		try {
 			CollectionController cc = new CollectionController();
@@ -134,8 +132,8 @@ public class ItemEasyUpdateMetadataTest extends ImejiTestBase {
 			List<Person> pers = new ArrayList<Person>();
 			pers.add(per);
 			col.getMetadata().setPersons(pers);
-			col.setProfile(mp.getId());
-			collectionId = ObjectHelper.getId(cc.create(col, mp,
+			col.setProfile(profile.getId());
+			collectionId = ObjectHelper.getId(cc.create(col, profile,
 					JenaUtil.testUser, null));
 		} catch (Exception e) {
 			LOGGER.error("Cannot init Collection", e);
@@ -146,7 +144,7 @@ public class ItemEasyUpdateMetadataTest extends ImejiTestBase {
 	protected static Collection<Statement> getBasicStatements() {
 		Collection<Statement> statements = new ArrayList<Statement>();
 		Statement st;
-		for (String type : new String[] { "text", "number", "conePerson",
+		for (String type : new String[] { "text", "number", "person",
 				"geolocation", "date", "license", "link", "publication" }) {
 			st = new Statement();
 			st.setType(URI.create("http://imeji.org/terms/metadata#" + type));

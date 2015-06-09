@@ -70,6 +70,10 @@ public class Item extends Properties implements FulltextIndex, Serializable {
 	private String checksum;
 	@j2jLiteral("http://imeji.org/terms/fileSize")
 	private long fileSize;
+	@j2jLiteral("http://www.w3.org/2003/12/exif/ns#width")
+	private long width;
+	@j2jLiteral("http://www.w3.org/2003/12/exif/ns#height")
+	private long height;
 
 	public Item() {
 	}
@@ -300,11 +304,27 @@ public class Item extends Properties implements FulltextIndex, Serializable {
 	public void setFileSize(long fileSize) {
 		this.fileSize = fileSize;
 	}
-	
+
+	public void setHeight(long height) {
+		this.height = height;
+	}
+
+	public long getHeight() {
+		return height;
+	}
+
+	public void setWidth(long width) {
+		this.width = width;
+	}
+
+	public long getWidth() {
+		return width;
+	}
+
 	public String getFullImageLink() {
 		return fullImageUrl.toString();
 	}
-	
+
 	public String getThumbnailImageLink() {
 		return thumbnailImageUrl.toString();
 	}

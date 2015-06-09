@@ -14,6 +14,9 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.tika.mime.MediaType;
+import org.apache.tika.mime.MimeType;
+import org.apache.tika.mime.MimeTypes;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotFoundException;
@@ -602,6 +605,7 @@ public class ItemBean {
 				"image");
 	}
 
+
 	/**
 	 * True if the data can be viewed in the data viewer (defined in the
 	 * configuration)
@@ -623,11 +627,16 @@ public class ItemBean {
 	public boolean isViewInDigilib() {
 		return ((PropertyBean) BeanHelper
 				.getApplicationBean(PropertyBean.class)).isDigilibEnabled()
-				&& StorageUtils.getMimeType(
-						FilenameUtils.getExtension(item.getFilename()))
-						.contains("image")
-				&& !"svg"
-						.equals(FilenameUtils.getExtension(item.getFilename()));
+				&& isImageFile() && !isSVGFile();
+	}
+
+	/**
+	 * True if the file is an svg
+	 * 
+	 * @return
+	 */
+	public boolean isSVGFile() {
+		return "svg".equals(FilenameUtils.getExtension(item.getFullImageUrl().toString()));
 	}
 
 	/**

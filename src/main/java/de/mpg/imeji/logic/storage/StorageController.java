@@ -30,12 +30,15 @@ package de.mpg.imeji.logic.storage;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
+import de.mpg.imeji.logic.storage.util.ImageUtils;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.util.PropertyReader;
+
 import org.apache.commons.io.FilenameUtils;
 
+import java.awt.Dimension;
 import java.io.File;
 import java.io.OutputStream;
 import java.io.Serializable;
@@ -98,6 +101,12 @@ public class StorageController implements Serializable {
 		UploadResult result = storage.upload(filename, file, collectionId);
 		result.setChecksum(calculateChecksum(file));
 		result.setFileSize(file.length());
+		// If the file is an image, read the dimension of the image
+		if (StorageUtils.getMimeType(file).contains("image")) {
+			Dimension d = ImageUtils.getImageDimension(file);
+			result.setHeight(d.height);
+			result.setWidth(d.width);
+		}
 		return result;
 	}
 
@@ -191,7 +200,6 @@ public class StorageController implements Serializable {
 			if (compareExtension(extension, s.trim()))
 				return true;
 		// check black list, if found then forbidden
-
 		for (String s : formatBlackList.split(","))
 			if (compareExtension(extension, s.trim()))
 				return false;

@@ -47,7 +47,7 @@ public class RefreshFileSizeJob implements Callable<Integer> {
 						.toString());
 				f = new File(path);
 				Dimension d = ImageUtils.getImageDimension(f);
-				if (d.width > 0 && d.height > 0) {
+				if (d != null && d.width > 0 && d.height > 0) {
 					ImejiSPARQL.execUpdate(SPARQLQueries
 							.insertFileSizeAndDimension(
 									item.getId().toString(),

@@ -358,7 +358,7 @@ public class ImageUtils {
 					reader.dispose();
 				}
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			logger.error("Error reading image dimension: ", e);
 		}
 		return null;

@@ -53,12 +53,12 @@ public class ExportServlet extends HttpServlet
                 exportName += ".zip";
             }
             resp.setHeader("Connection", "close");
-            resp.setHeader("Content-Type", exportManager.getContentType());
+            resp.setHeader("Content-Type", exportManager.getContentType()+ ";charset=UTF-8");
             resp.setHeader("Content-disposition", "filename=" + exportName);
             resp.setStatus(HttpServletResponse.SC_OK);
             SearchResult result = exportManager.search();
             exportManager.export(result);
-
+            
             NotificationUtils.notifyByExport(user, exportManager.getExport(), session);
 
             resp.getOutputStream().flush();

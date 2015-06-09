@@ -517,6 +517,25 @@ public class SPARQLQueries {
 				+ "USING <http://imeji.org/item> " + "WHERE{<" + itemId
 				+ "> ?p ?o}";
 	}
+	
+	/**
+	 * Update the filesize of a {@link Item}
+	 * 
+	 * @param itemId
+	 * @param fileSize
+	 * @return
+	 */
+	public static String insertFileSizeAndDimension(String itemId, String fileSize,
+			String width, String height) {
+		return "WITH <http://imeji.org/item> " + "INSERT {<" + itemId
+				+ "> <http://imeji.org/terms/fileSize> " + fileSize + " . <"
+				+ itemId + "> <http://www.w3.org/2003/12/exif/ns#width> "
+				+ width + " . <" + itemId
+				+ "> <http://www.w3.org/2003/12/exif/ns#height> " + height
+				+ "}" + "USING <http://imeji.org/item> " + "WHERE{<" + itemId
+				+ "> ?p ?o}";
+	}
+
 
 	/**
 	 * Remove all Filesize of all {@link Item}

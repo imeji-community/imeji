@@ -215,6 +215,17 @@
 										<h:outputText value="#{itemBean.image.fileSizeHumanReadable}"/>
 								</div>
 							</h:panelGroup>
+							
+							<!-- MetaDataList - image dimension Size -->
+							<h:panelGroup layout="block" styleClass="imj_metadataSet" rendered="#{itemBean.image.width &gt; 0 and itemBean.image.height &gt; 0}">
+								<div class="imj_metadataLabel">
+									<h:outputText value="#{lbl.width} x #{lbl.height}"/>
+									<span class="imj_invisible">: </span>
+								</div>
+								<div class="imj_metadataValue">
+										<h:outputText value="#{itemBean.image.width} x #{itemBean.image.height}"/>
+								</div>
+							</h:panelGroup>
 						</h:panelGroup>
 
 						<!-- MetaDataList - further metadata - single edit panel - Wrapper -->				

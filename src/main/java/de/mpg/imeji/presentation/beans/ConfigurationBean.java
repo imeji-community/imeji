@@ -30,8 +30,10 @@ package de.mpg.imeji.presentation.beans;
 
 import de.mpg.imeji.logic.storage.util.MediaUtils;
 import de.mpg.imeji.presentation.lang.InternationalizationBean;
+import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -46,6 +48,7 @@ import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -74,7 +77,7 @@ public class ConfigurationBean {
 	 * @version $Revision$ $LastChangedDate$
 	 */
 	private enum CONFIGURATION {
-		SNIPPET, CSS_DEFAULT, CSS_ALT, MAX_FILE_SIZE, FILE_TYPES, STARTPAGE_HTML, DATA_VIEWER_FORMATS, DATA_VIEWER_URL, AUTOSUGGEST_USERS, AUTOSUGGEST_ORGAS, STARTPAGE_FOOTER_LOGOS, META_DESCRIPTION, INSTANCE_NAME, CONTACT_EMAIL, EMAIL_SERVER, EMAIL_SERVER_USER, EMAIL_SERVER_PASSWORD, EMAIL_SERVER_ENABLE_AUTHENTICATION, EMAIL_SERVER_SENDER, EMAIL_SERVER_PORT, STARTPAGE_CAROUSEL_QUERY, STARTPAGE_CAROUSEL_QUERY_ORDER, UPLOAD_WHITE_LIST, UPLOAD_BLACK_LIST, LANGUAGES, IMPRESSUM_URL, IMPRESSUM_TEXT;
+		SNIPPET, CSS_DEFAULT, CSS_ALT, MAX_FILE_SIZE, FILE_TYPES, STARTPAGE_HTML, DATA_VIEWER_FORMATS, DATA_VIEWER_URL, AUTOSUGGEST_USERS, AUTOSUGGEST_ORGAS, STARTPAGE_FOOTER_LOGOS, META_DESCRIPTION, INSTANCE_NAME, CONTACT_EMAIL, EMAIL_SERVER, EMAIL_SERVER_USER, EMAIL_SERVER_PASSWORD, EMAIL_SERVER_ENABLE_AUTHENTICATION, EMAIL_SERVER_SENDER, EMAIL_SERVER_PORT, STARTPAGE_CAROUSEL_QUERY, STARTPAGE_CAROUSEL_QUERY_ORDER, UPLOAD_WHITE_LIST, UPLOAD_BLACK_LIST, LANGUAGES, IMPRESSUM_URL, IMPRESSUM_TEXT, FAVICON_URL, LOGO;
 	}
 
 	private static Properties config;
@@ -743,6 +746,40 @@ public class ConfigurationBean {
 
 	public String getImpressumText() {
 		return (String) config.get(CONFIGURATION.IMPRESSUM_TEXT.name());
+	}
+
+	public void setFaviconUrl(String s) {
+		setProperty(CONFIGURATION.FAVICON_URL.name(), s);
+	}
+
+	/**
+	 * Return the url of the favicon
+	 * 
+	 * @return
+	 */
+	public String getFaviconUrl() {
+		String myFavicon = (String) config.get(CONFIGURATION.FAVICON_URL.name());
+		if (myFavicon == null || "".equals(myFavicon)){
+			Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class) ;
+			return navigation.getApplicationUrl()+"resources/icon/imeji.ico";
+		}
+		else
+		{
+			return (String) config.get(CONFIGURATION.FAVICON_URL.name());
+		}
+	}
+
+	public void setLogoUrl(String s) {
+		setProperty(CONFIGURATION.LOGO.name(), s);
+	}
+
+	/**
+	 * Return the url of the favicon
+	 * 
+	 * @return
+	 */
+	public String getLogoUrl() {
+		return (String) config.get(CONFIGURATION.LOGO.name());
 	}
 
 }

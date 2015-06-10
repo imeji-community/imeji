@@ -57,6 +57,7 @@ p { display: block; margin: 1em 0; }
 
 /* ===[ ICONS - Buttons ]=== ================================================== */
 body .imj_logo { width: 13em; height: 5em; padding: 0; display: inline-block; background: transparent url("/imeji/resources/imj_iconset/logo_imeji.gif") -1.90909em 0 no-repeat; }
+body .imj_logo_alt {max-height: 154px; margin-top: -25px; margin-bottom:-25px;}
 body .imj_buttonStyleSwitcher { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; margin: 0 0.727272em; outline: none; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjButtonMonitorColor_16.png") 0 0 no-repeat; }
 body .imj_buttonStyleSwitcher:hover { border: 0 none; outline: none; background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjButtonMonitorColor_16.png") 0 0 no-repeat; }
 body .imj_iconTriangleBottomRight_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjTriangleLargeBottomRight_16.png") 0 0 no-repeat; }

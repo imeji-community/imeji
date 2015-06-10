@@ -114,6 +114,12 @@ public class ThumbnailBean {
 		setStatements(loadStatements(getProfile().getId()));
 		return "";
 	}
+	
+	public void initPopup(){
+		setProfile(ObjectCachedLoader.loadProfileWithoutPrivs(getMdSet().getProfile()));
+		setMds(new MetadataSetBean(getMdSet(), getProfile(), false));
+		setStatements(loadStatements(getProfile().getId()));
+	}
 
 	/**
 	 * Load the statements of a {@link MetadataProfile} according to its id (

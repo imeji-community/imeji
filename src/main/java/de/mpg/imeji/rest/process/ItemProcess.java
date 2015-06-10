@@ -144,13 +144,13 @@ public class ItemProcess {
 		} else {
 			try {
 				ItemService icrud = new ItemService();		
-				DefaultItemTO easyTO = (DefaultItemTO)buildTOFromJSON(req, DefaultItemTO.class);
+				DefaultItemTO defaultTO = (DefaultItemTO)buildTOFromJSON(req, DefaultItemTO.class);
 				ItemTO itemTO = (ItemTO) icrud.read(id, u);
 				CollectionService ccrud = new CollectionService();			
 				CollectionTO col = ccrud.read(itemTO.getCollectionId(), u);
 				ProfileService pcrud = new ProfileService();
 				MetadataProfileTO profileTO = pcrud.read(col.getProfile().getId(), u);
-				ReverseTransferObjectFactory.transferDefaultItemTOtoItem(profileTO, easyTO, itemTO);
+				ReverseTransferObjectFactory.transferDefaultItemTOtoItemTO(profileTO, defaultTO, itemTO);
 	            resp = buildResponse(OK.getStatusCode(), icrud.update(itemTO, u));
 	            } catch (ImejiException  e) {
 	            	resp = localExceptionHandler(e, e.getLocalizedMessage());

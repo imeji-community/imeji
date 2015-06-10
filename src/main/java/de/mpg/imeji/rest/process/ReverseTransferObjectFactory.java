@@ -401,8 +401,7 @@ public class ReverseTransferObjectFactory {
 			org.setCountry(orgTO.getCountry());
 
 			// set the identifier of current organization
-
-<<<<<<< HEAD
+		}
     }
     
     
@@ -411,7 +410,7 @@ public class ReverseTransferObjectFactory {
 	 * 
 	 * @return 
 	 */
-	public static void transferDefaultItemTOtoItem(MetadataProfileTO profileTO, DefaultItemTO defaultTO, ItemTO itemTO) throws BadRequestException, JsonParseException, JsonMappingException{
+	public static void transferDefaultItemTOtoItemTO(MetadataProfileTO profileTO, DefaultItemTO defaultTO, ItemTO itemTO) throws BadRequestException, JsonParseException, JsonMappingException{
 	 	if(defaultTO.getMetadata() == null)
 	 	{
 	 		itemTO.getMetadata().clear();
@@ -654,8 +653,7 @@ public class ReverseTransferObjectFactory {
 									mdTO.setValue(newPub);
 								}
 								break;
-						}
-						
+						}						
 						break;
 					}
 				}
@@ -664,15 +662,6 @@ public class ReverseTransferObjectFactory {
 				}
 			}
 	 	}
-
-		
-	}
-	
-=======
-			person.getOrganizations().add(org);
-		}
->>>>>>> origin/develop
-
 	}
 
 }

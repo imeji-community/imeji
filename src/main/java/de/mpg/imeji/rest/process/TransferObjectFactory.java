@@ -62,14 +62,8 @@ import de.mpg.j2j.misc.LocalizedString;
 
 public class TransferObjectFactory {
 
-<<<<<<< HEAD
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(TransferObjectFactory.class);
-	
-	
-	public static void transferMetadataProfile(MetadataProfile vo, MetadataProfileTO to){
-=======
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(TransferObjectFactory.class);
 
 	/**
 	 * Transfer a {@link DefaultItemTO} into an {@link ItemTO} according to
@@ -82,259 +76,6 @@ public class TransferObjectFactory {
 	 * @throws JsonParseException
 	 * @throws JsonMappingException
 	 */
-	public static void transferEasyItemTOItem(MetadataProfileTO profileTO,
-			DefaultItemTO easyTO, ItemTO itemTO) throws BadRequestException,
-			JsonParseException, JsonMappingException {
-		if (easyTO.getMetadata() == null) {
-			itemTO.getMetadata().clear();
-		} else {
-			for (Map.Entry<String, JsonNode> entry : easyTO.getMetadata()
-					.entrySet()) {
-				boolean update = false;
-				String key = "";
-				int pos = -1;
-				boolean exitMD = false;
-				for (StatementTO sTO : profileTO.getStatements()) {
-					for (LocalizedString label : sTO.getLabels()) {
-						if (entry.getKey().equals(label.getValue())) {
-							key = entry.getKey();
-							update = true;
-							break;
-						} else if (!("1".equals(sTO.getMaxOccurs()))) {
-							try {
-								key = entry.getKey().substring(0,
-										entry.getKey().lastIndexOf("_"));
-							} catch (StringIndexOutOfBoundsException e) {
-								break;
-							}
-							if (key.equals(label.getValue())) {
-								try {
-									pos = Integer.parseInt(entry.getKey()
-											.substring(
-													entry.getKey().lastIndexOf(
-															"_") + 1));
-								} catch (NumberFormatException e) {
-									break;
-								}
-								update = true;
-								break;
-							}
-						}
-					}
-					if (update) {
-						MetadataSetTO mdTO = new MetadataSetTO();
-						int max = 0;
-						List<MetadataSetTO> sets = new ArrayList<MetadataSetTO>();
-						if (!(pos == -1 && "unbounded".equals(sTO
-								.getMaxOccurs()))) {
-
-							for (MetadataSetTO mdTO2 : itemTO.getMetadata()) {
-								for (LabelTO label : mdTO2.getLabels()) {
-									if (key.equals(label.getValue())) {
-										mdTO = mdTO2;
-										exitMD = true;
-										sets.add(mdTO2);
-										max++;
-										break;
-									}
-								}
-							}
-						}
-
-						if (!exitMD) {
-							List<LabelTO> labels = new ArrayList<LabelTO>();
-							for (LocalizedString label : sTO.getLabels()) {
-								labels.add(new LabelTO(label.getLang(), label
-										.getValue()));
-							}
-							mdTO.setLabels(labels);
-							mdTO.setStatementUri(ObjectHelper.getURI(
-									Statement.class, sTO.getId()));
-							mdTO.setTypeUri(sTO.getType());
-							itemTO.getMetadata().add(mdTO);
-						} else if (pos != -1) {
-							if (max == pos - 1) {
-								List<LabelTO> labels = new ArrayList<LabelTO>();
-								for (LocalizedString label : sTO.getLabels()) {
-									labels.add(new LabelTO(label.getLang(),
-											label.getValue()));
-								}
-								mdTO.setLabels(labels);
-								;
-								mdTO.setStatementUri(ObjectHelper.getURI(
-										Statement.class, sTO.getId()));
-								mdTO.setTypeUri(sTO.getType());
-								itemTO.getMetadata().add(mdTO);
-							} else if (max != pos) {
-								try {
-									mdTO = sets.get(pos - 1);
-								} catch (IndexOutOfBoundsException e) {
-									throw new BadRequestException(key + " has "
-											+ max + " value. Input " + key
-											+ "_" + String.valueOf(max + 1)
-											+ " instead of " + key + "_" + pos
-											+ " to add the "
-											+ String.valueOf(max + 1)
-											+ ". value.");
-								}
-							}
-						}
-
-						JsonNode node = entry.getValue();
-						JsonFactory factory = new JsonFactory();
-						ObjectMapper mapper = new ObjectMapper(factory);
-
-						switch (sTO.getType().toString()) {
-						case "http://imeji.org/terms/metadata#text":
-							if (node == null) {
-								itemTO.getMetadata().remove(mdTO);
-							} else {
-								TextTO newT = new TextTO();
-								newT.setText(node.textValue());
-								mdTO.setValue(newT);
-							}
-							break;
-						case "http://imeji.org/terms/metadata#number":
-							if (node == null) {
-								itemTO.getMetadata().remove(mdTO);
-							} else {
-								NumberTO newNT = new NumberTO();
-								newNT.setNumber(node.asDouble());
-								mdTO.setValue(newNT);
-							}
-							break;
-						case "http://imeji.org/terms/metadata#conePerson":
-							if (node == null) {
-								itemTO.getMetadata().remove(mdTO);
-							} else {
-								DefaultConePersonTO easyCPTO = null;
-								try {
-									easyCPTO = mapper
-											.readValue(
-													node.toString(),
-													new TypeReference<DefaultConePersonTO>() {
-													});
-								} catch (Exception e) {
-									throw new BadRequestException(entry
-											+ e.getMessage());
-								}
-								ConePersonTO newCone = (mdTO.getValue() != null) ? ((ConePersonTO) mdTO
-										.getValue()) : (new ConePersonTO());
-								PersonTO newP = (mdTO.getValue() != null) ? (newCone
-										.getPerson()) : (new PersonTO());
-								newP.setFamilyName(easyCPTO.getFamilyName());
-								newP.setGivenName(easyCPTO.getGivenName());
-								newCone.setPerson(newP);
-								mdTO.setValue(newCone);
-							}
-							break;
-						case "http://imeji.org/terms/metadata#date":
-							if (node == null) {
-								itemTO.getMetadata().remove(mdTO);
-							} else {
-								DateTO newDT = new DateTO();
-								newDT.setDate(node.textValue());
-								mdTO.setValue(newDT);
-							}
-							break;
-						case "http://imeji.org/terms/metadata#geolocation":
-							if (node == null) {
-								itemTO.getMetadata().remove(mdTO);
-							} else {
-								DefaultGeolocationTO easyGeoTO = null;
-								try {
-									easyGeoTO = mapper
-											.readValue(
-													node.toString(),
-													new TypeReference<DefaultGeolocationTO>() {
-													});
-								} catch (Exception e) {
-									throw new BadRequestException(entry
-											+ e.getMessage());
-								}
-								GeolocationTO newGT = new GeolocationTO();
-								newGT.setName(easyGeoTO.getName());
-								newGT.setLatitude(easyGeoTO.getLatitude());
-								newGT.setLongitude(easyGeoTO.getLongitude());
-								mdTO.setValue(newGT);
-							}
-							break;
-						case "http://imeji.org/terms/metadata#license":
-							if (node == null) {
-								itemTO.getMetadata().remove(mdTO);
-							} else {
-								DefaultLicenseTO easyLTO = null;
-								try {
-									easyLTO = mapper
-											.readValue(
-													node.toString(),
-													new TypeReference<DefaultLicenseTO>() {
-													});
-								} catch (Exception e) {
-									throw new BadRequestException(entry
-											+ e.getMessage());
-								}
-								LicenseTO newLicense = new LicenseTO();
-								newLicense.setLicense(easyLTO.getLicense());
-								newLicense.setUrl(easyLTO.getUrl());
-								mdTO.setValue(newLicense);
-							}
-							break;
-						case "http://imeji.org/terms/metadata#link":
-							if (node == null) {
-								itemTO.getMetadata().remove(mdTO);
-							} else {
-								DefaultLinkTO easyLinkTO = null;
-								try {
-									easyLinkTO = mapper.readValue(
-											node.toString(),
-											new TypeReference<DefaultLinkTO>() {
-											});
-								} catch (Exception e) {
-									throw new BadRequestException(entry
-											+ e.getMessage());
-								}
-								LinkTO newLink = new LinkTO();
-								newLink.setLink(easyLinkTO.getLink());
-								newLink.setUrl(easyLinkTO.getUrl());
-								mdTO.setValue(newLink);
-							}
-							break;
-						case "http://imeji.org/terms/metadata#publication":
-							if (node == null) {
-								itemTO.getMetadata().remove(mdTO);
-							} else {
-								DefaultPublicationTO easyPTO = null;
-								try {
-									easyPTO = mapper
-											.readValue(
-													node.toString(),
-													new TypeReference<DefaultPublicationTO>() {
-													});
-								} catch (Exception e) {
-									throw new BadRequestException(entry
-											+ e.getMessage());
-								}
-								PublicationTO newPub = new PublicationTO();
-								newPub.setCitation(easyPTO.getCitation());
-								newPub.setFormat(easyPTO.getFormat());
-								newPub.setPublication(easyPTO.getPublication());
-								mdTO.setValue(newPub);
-							}
-							break;
-						}
-
-						break;
-					}
-				}
-				if (!update) {
-					throw new BadRequestException(entry
-							+ " does not find in the profile");
-				}
-			}
-		}
-
-	}
 
 	/**
 	 * Transfer a {@link MetadataProfile} into a {@link MetadataProfileTO}
@@ -342,9 +83,7 @@ public class TransferObjectFactory {
 	 * @param vo
 	 * @param to
 	 */
-	public static void transferMetadataProfile(MetadataProfile vo,
-			MetadataProfileTO to) {
->>>>>>> origin/develop
+	public static void transferMetadataProfile(MetadataProfile vo, MetadataProfileTO to) {
 		transferProperties(vo, to);
 		to.setTitle(vo.getTitle());
 		to.setDefault(vo.getDefault());
@@ -485,9 +224,6 @@ public class TransferObjectFactory {
 		to.setDiscardComment(vo.getDiscardComment());
 	}
 
-<<<<<<< HEAD
-	public static void transferItem(Item vo, ItemTO to) {	
-=======
 	/**
 	 * Transfer an {@link Item} into a {@link ItemTO}
 	 * 
@@ -495,7 +231,6 @@ public class TransferObjectFactory {
 	 * @param to
 	 */
 	public static void transferItem(Item vo, ItemTO to) {
->>>>>>> origin/develop
 		transferProperties(vo, to);
 		// set visibility
 		to.setVisibility(vo.getVisibility().toString());

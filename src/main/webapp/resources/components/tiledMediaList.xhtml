@@ -46,7 +46,7 @@
 							<h:form id="itemSelectForm">
 								<h:panelGroup layout="block" id="imgFrame" styleClass="#{item.selected ? 'imj_selected'  : ''} imj_tileThumbnailArea #{item.inActiveAlbum ? 'inAlbum' : ''}">
 									<!-- Image with link to the details view -->
-									<h:outputLink id="lnkPicDetailBrowse" value="#{cc.attrs.picList.imageBaseUrl}item/#{item.id}">
+									<h:outputLink onmouseover="document.getElementById('browseContent:pictureList:#{index.index}:metadata:initPopUp').click();" id="lnkPicDetailBrowse" value="#{cc.attrs.picList.imageBaseUrl}item/#{item.id}">
 										<h:graphicImage alt="#{item.caption}" title="#{item.caption}" id="thumbnail" url="#{item.link}"/>		
 									</h:outputLink>
 								</h:panelGroup>
@@ -62,7 +62,12 @@
 								</span>
 							</h:form>
 							<div class="imj_tooltip">
-								<ui:include src="../../templates/component/images/MetadataPopup.xhtml"/>
+								<h:form id="metadata">
+									<h:commandButton id="initPopUp" action="#{item.initPopup}" value="init popup" style="display: none;">
+										<f:ajax render="@form"/>
+									</h:commandButton>
+									<ui:include src="../../templates/component/images/MetadataPopup.xhtml"/>
+								</h:form>
 							</div>
 						</li>
 					</ui:repeat>

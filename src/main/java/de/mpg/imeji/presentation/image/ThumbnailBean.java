@@ -60,8 +60,7 @@ public class ThumbnailBean {
 	private MetadataProfile profile;
 	private MetadataSet mdSet;
 	private URI collectionUri;
-	
-	
+
 	/**
 	 * Emtpy {@link ThumbnailBean}
 	 */
@@ -83,9 +82,10 @@ public class ThumbnailBean {
 		Navigation navigation = (Navigation) BeanHelper
 				.getApplicationBean(Navigation.class);
 		setId(ObjectHelper.getId(getUri()));
-		setLink(( Status.WITHDRAWN != item.getStatus()) ? 
-				navigation.getFileUrl() + item.getThumbnailImageUrl().toString() :
-				navigation.getApplicationUrl()+"resources/icon/discarded.png");
+		setLink((Status.WITHDRAWN != item.getStatus()) ? navigation
+				.getFileUrl() + item.getThumbnailImageUrl().toString()
+				: navigation.getApplicationUrl()
+						+ "resources/icon/discarded.png");
 		setFilename(item.getFilename());
 		setMdSet(item.getMetadataSet());
 		setMetadata((List<Metadata>) item.getMetadataSet().getMetadata());
@@ -108,17 +108,23 @@ public class ThumbnailBean {
 	 * @throws Exception
 	 */
 	public String getInitPopup() throws Exception {
-		//TODO: This method should be left ofer to execute ONLY after Hover from the presentation (or on explicit action) and not always for each ThumbnailBean!
-		setProfile(ObjectCachedLoader.loadProfileWithoutPrivs(getMdSet().getProfile()));
+		// TODO: This method should be left ofer to execute ONLY after Hover
+		// from the presentation (or on explicit action) and not always for each
+		// ThumbnailBean!
+		setProfile(ObjectCachedLoader.loadProfileWithoutPrivs(getMdSet()
+				.getProfile()));
 		setMds(new MetadataSetBean(getMdSet(), getProfile(), false));
 		setStatements(loadStatements(getProfile().getId()));
 		return "";
 	}
-	
-	public void initPopup(){
-		setProfile(ObjectCachedLoader.loadProfileWithoutPrivs(getMdSet().getProfile()));
-		setMds(new MetadataSetBean(getMdSet(), getProfile(), false));
-		setStatements(loadStatements(getProfile().getId()));
+
+	public void initPopup() {
+		if (getMds() == null) {
+			setProfile(ObjectCachedLoader.loadProfileWithoutPrivs(getMdSet()
+					.getProfile()));
+			setMds(new MetadataSetBean(getMdSet(), getProfile(), false));
+			setStatements(loadStatements(getProfile().getId()));
+		}
 	}
 
 	/**
@@ -369,7 +375,7 @@ public class ThumbnailBean {
 	public URI getCollectionUri() {
 		return collectionUri;
 	}
-	
+
 	public void setCollectionUri(URI colUri) {
 		this.collectionUri = colUri;
 	}
@@ -381,7 +387,7 @@ public class ThumbnailBean {
 	public void setProfile(MetadataProfile profile) {
 		this.profile = profile;
 	}
-	
+
 	/**
 	 * @return the mdSet
 	 */
@@ -390,7 +396,8 @@ public class ThumbnailBean {
 	}
 
 	/**
-	 * @param mdSet the mdSet to set
+	 * @param mdSet
+	 *            the mdSet to set
 	 */
 	public void setMdSet(MetadataSet mdSet) {
 		this.mdSet = mdSet;

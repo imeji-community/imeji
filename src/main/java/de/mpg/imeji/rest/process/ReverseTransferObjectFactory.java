@@ -399,8 +399,7 @@ public class ReverseTransferObjectFactory {
 			org.setDescription(orgTO.getDescription());
 			org.setCity(orgTO.getCity());
 			org.setCountry(orgTO.getCountry());
-
-			// set the identifier of current organization
+			person.getOrganizations().add(org);
 		}
     }
     

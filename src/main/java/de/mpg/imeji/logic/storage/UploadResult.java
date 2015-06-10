@@ -28,6 +28,8 @@
  */
 package de.mpg.imeji.logic.storage;
 
+import de.mpg.j2j.annotations.j2jLiteral;
+
 /**
  * Result of an Upload
  * 
@@ -43,6 +45,8 @@ public class UploadResult {
 	private String checksum;
 	private String status;
 	private long fileSize;
+	private long width;
+	private long height;
 
 	/**
 	 * Default constructor
@@ -132,5 +136,21 @@ public class UploadResult {
 
 	public void setFileSize(long fileSize) {
 		this.fileSize = fileSize;
+	}
+
+	public long getWidth() {
+		return width;
+	}
+
+	public void setWidth(long width) {
+		this.width = width;
+	}
+
+	public long getHeight() {
+		return height;
+	}
+
+	public void setHeight(long height) {
+		this.height = height;
 	}
 }

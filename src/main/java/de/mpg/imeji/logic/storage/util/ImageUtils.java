@@ -3,6 +3,7 @@
  */
 package de.mpg.imeji.logic.storage.util;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -11,11 +12,15 @@ import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.util.Iterator;
 
 import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
 
 import org.apache.log4j.Logger;
 
@@ -338,5 +343,24 @@ public class ImageUtils {
 			throws IOException, URISyntaxException {
 		return PropertyReader
 				.getProperty("xsd.metadata.content-category.original-resolution");
+	}
+
+	public static Dimension getImageDimension(File f) {
+		try (ImageInputStream in = ImageIO.createImageInputStream(f)) {
+			final Iterator<ImageReader> readers = ImageIO.getImageReaders(in);
+			if (readers.hasNext()) {
+				ImageReader reader = readers.next();
+				try {
+					reader.setInput(in);
+					return new Dimension(reader.getWidth(0),
+							reader.getHeight(0));
+				} finally {
+					reader.dispose();
+				}
+			}
+		} catch (Exception e) {
+			logger.error("Error reading image dimension: ", e);
+		}
+		return null;
 	}
 }

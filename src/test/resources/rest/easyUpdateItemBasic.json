@@ -1,5 +1,5 @@
 {
-	"ez_metadata" : {
+	"metadata" : {
 		"text" : "value1",
 		"number" : 123,
 		"date" : "2013-12-26",
@@ -9,7 +9,7 @@
 		},
 		"license" : {
 			"license" : "cc-by",
-			"uri" : "http://test.org"
+			"url" : "http://test.org"
 		},
 		"geolocation" : {
 			"name" : "munich",

@@ -92,4 +92,5 @@ public class UserService implements API<User>{
 				SPARQLQueries.selectUserCompleteName(uri)).getResults();
 		return results.size() == 1 ? results.get(0) : null;
 	}
+
 }

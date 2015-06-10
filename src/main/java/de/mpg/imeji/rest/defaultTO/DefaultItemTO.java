@@ -2,9 +2,7 @@ package de.mpg.imeji.rest.defaultTO;
 
 import java.io.Serializable;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -12,6 +10,8 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.JsonNode;
+
+import de.mpg.imeji.rest.to.PropertiesTO;
 
 @XmlRootElement
 @XmlType (propOrder = {	
@@ -35,7 +35,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 		"metadata"
 		})
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class DefaultItemTO extends DefaultPropertiesTO implements Serializable{
+public class DefaultItemTO extends PropertiesTO implements Serializable{
 	
 	private static final long serialVersionUID = -1870847854605861134L;
 	
@@ -49,13 +49,21 @@ public class DefaultItemTO extends DefaultPropertiesTO implements Serializable{
     
     private String checksumMd5;
 
-    private URI webResolutionUrlUrl;
+    public long getFileSize() {
+		return fileSize;
+	}
+
+	public void setFileSize(long fileSize) {
+		this.fileSize = fileSize;
+	}
+
+	private URI webResolutionUrlUrl;
     
     private URI thumbnailUrl;
     
     private URI fileUrl;
-	
-	private String fetchUrl;
+    
+    private long fileSize;    
 	
 	private Map<String, JsonNode> metadata = new HashMap<String, JsonNode>();
 
@@ -66,14 +74,6 @@ public class DefaultItemTO extends DefaultPropertiesTO implements Serializable{
 	public void setCollectionId(String collectionId) {
 		this.collectionId = collectionId;
 	}
-
-	public String getFetchUrl() {
-		return fetchUrl;
-	}
-
-	public void setFetchUrl(String fetchUrl) {
-		this.fetchUrl = fetchUrl;
-	}	
 
 	public Map<String, JsonNode> getMetadata() {
 		return metadata;

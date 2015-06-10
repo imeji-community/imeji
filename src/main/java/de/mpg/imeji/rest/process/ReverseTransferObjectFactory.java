@@ -1,23 +1,43 @@
 package de.mpg.imeji.rest.process;
 
+import com.fasterxml.jackson.core.JsonFactory;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import de.mpg.imeji.exceptions.BadRequestException;
+
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
-import de.mpg.imeji.exceptions.BadRequestException;
+
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.logic.vo.predefinedMetadata.*;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
+import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
+import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultConePersonTO;
+import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultGeolocationTO;
+import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultLicenseTO;
+import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultLinkTO;
+import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultPublicationTO;
 import de.mpg.imeji.rest.to.*;
 import de.mpg.imeji.rest.to.predefinedMetadataTO.*;
+import de.mpg.j2j.misc.LocalizedString;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
@@ -354,6 +374,270 @@ public class ReverseTransferObjectFactory {
         }
 
     }
+    
+    
+	/**
+	 * Transfer Default Item Json format to item
+	 * 
+	 * @return 
+	 */
+	public static void transferDefaultItemTOtoItem(MetadataProfileTO profileTO, DefaultItemTO defaultTO, ItemTO itemTO) throws BadRequestException, JsonParseException, JsonMappingException{
+	 	if(defaultTO.getMetadata() == null)
+	 	{
+	 		itemTO.getMetadata().clear();
+	 	}else
+	 	{  
+			for(Map.Entry<String, JsonNode> entry : defaultTO.getMetadata().entrySet()){  
+				boolean update = false;
+				String key = "";
+				int pos = -1;
+				boolean exitMD = false; 
+				for(StatementTO sTO : profileTO.getStatements())
+				{ 
+					for(LocalizedString label : sTO.getLabels())
+					{
+						if(entry.getKey().equals(label.getValue()))
+						{
+							key = entry.getKey();
+							update = true;
+							break;
+						}	
+						else if(!("1".equals(sTO.getMaxOccurs())))
+						{ 
+							try{
+							key = entry.getKey().substring(0, entry.getKey().lastIndexOf("_"));
+							}catch(StringIndexOutOfBoundsException e){
+								break;
+							}
+							if(key.equals(label.getValue())){
+								try
+								{
+									pos = Integer.parseInt(entry.getKey().substring(entry.getKey().lastIndexOf("_")+1));
+								}catch(NumberFormatException e){
+									break;
+								}
+								update = true;
+								break;
+							}
+						}
+					}
+					if(update)
+					{
+						MetadataSetTO mdTO = new MetadataSetTO();
+						int max = 0;
+						List<MetadataSetTO> sets = new ArrayList<MetadataSetTO>();
+						if( !(pos ==-1 && "unbounded".equals(sTO.getMaxOccurs()))){
+							
+							for(MetadataSetTO mdTO2 : itemTO.getMetadata())
+							{
+								for(LabelTO label : mdTO2.getLabels())
+								{
+									if(key.equals(label.getValue()))
+									{
+										mdTO = mdTO2;
+										exitMD = true;
+										sets.add(mdTO2);
+										max ++;
+										break;
+									}
+								}												
+							} 
+						}
+						  
+						if(!exitMD)
+						{
+							List<LabelTO> labels = new ArrayList<LabelTO>();
+							for(LocalizedString label : sTO.getLabels())
+							{
+								labels.add(new LabelTO(label.getLang(), label.getValue()));
+							}
+							mdTO.setLabels(labels);
+							mdTO.setStatementUri(ObjectHelper.getURI(Statement.class, sTO.getId()));
+							mdTO.setTypeUri(sTO.getType());
+							itemTO.getMetadata().add(mdTO);
+						}
+						else if(pos != -1)
+						{
+							if(max == pos-1)
+							{
+								List<LabelTO> labels = new ArrayList<LabelTO>();
+								for(LocalizedString label : sTO.getLabels())
+								{
+									labels.add(new LabelTO(label.getLang(), label.getValue()));
+								}
+								mdTO.setLabels(labels);;
+								mdTO.setStatementUri(ObjectHelper.getURI(Statement.class, sTO.getId()));
+								mdTO.setTypeUri(sTO.getType());
+								itemTO.getMetadata().add(mdTO);
+							}
+							else if(max != pos)
+							{
+								try
+								{
+									mdTO = sets.get(pos-1);
+								}catch(IndexOutOfBoundsException e)
+								{
+									throw new BadRequestException(key + " has " + max + " value. Input " + key + "_" + String.valueOf(max+1) + " instead of " + key + "_" + pos + " to add the " + String.valueOf(max+1) + ". value.");
+								}
+							}
+						}  
+						
+						
+						JsonNode node = entry.getValue();
+						JsonFactory factory = new JsonFactory();
+						ObjectMapper mapper = new ObjectMapper(factory);
+	
+						switch(sTO.getType().toString())
+						{
+							case "http://imeji.org/terms/metadata#text": 
+								if(node == null)
+								{
+									itemTO.getMetadata().remove(mdTO);
+								}
+								else
+								{
+									TextTO newT = new TextTO();
+									newT.setText(node.textValue());
+									mdTO.setValue(newT);
+								}
+								break;
+							case "http://imeji.org/terms/metadata#number":
+								if(node == null)
+								{
+									itemTO.getMetadata().remove(mdTO);
+								}
+								else
+								{
+									NumberTO newNT = new NumberTO();
+									newNT.setNumber(node.asDouble());
+									mdTO.setValue(newNT);
+								}
+								break;
+							case "http://imeji.org/terms/metadata#conePerson":
+								if(node == null)
+								{
+									itemTO.getMetadata().remove(mdTO);
+								}
+								else
+								{
+									DefaultConePersonTO easyCPTO = null;
+									try {
+										easyCPTO = mapper.readValue(node.toString(), new TypeReference<DefaultConePersonTO>(){});
+									} catch (Exception e) {
+										throw new BadRequestException( entry + e.getMessage());
+									} 
+									ConePersonTO newCone = (mdTO.getValue() != null) ? ((ConePersonTO)mdTO.getValue()) : (new ConePersonTO());
+									PersonTO newP = (mdTO.getValue() != null) ? (newCone.getPerson()) : (new PersonTO());
+									newP.setFamilyName(easyCPTO.getFamilyName());
+									newP.setGivenName(easyCPTO.getGivenName());
+									newCone.setPerson(newP);
+									mdTO.setValue(newCone);
+								}
+								break;
+							case "http://imeji.org/terms/metadata#date":
+								if(node == null)
+								{
+									itemTO.getMetadata().remove(mdTO);
+								}
+								else
+								{
+									DateTO newDT = new DateTO();
+									newDT.setDate(node.textValue());
+									mdTO.setValue(newDT);
+								}
+								break;
+							case "http://imeji.org/terms/metadata#geolocation":  
+								if(node == null)
+								{
+									itemTO.getMetadata().remove(mdTO);
+								}
+								else
+								{
+									DefaultGeolocationTO easyGeoTO = null;
+									try {
+										easyGeoTO = mapper.readValue(node.toString(), new TypeReference<DefaultGeolocationTO>(){});
+									} catch (Exception e) {
+										throw new BadRequestException( entry + e.getMessage());
+									} 
+									GeolocationTO newGT = new GeolocationTO();
+									newGT.setName(easyGeoTO.getName());
+									newGT.setLatitude(easyGeoTO.getLatitude());
+									newGT.setLongitude(easyGeoTO.getLongitude());
+									mdTO.setValue(newGT);
+								}
+								break;
+							case "http://imeji.org/terms/metadata#license":
+								if(node == null)
+								{
+									itemTO.getMetadata().remove(mdTO);
+								}
+								else
+								{
+									DefaultLicenseTO easyLTO = null;
+									try {
+										easyLTO = mapper.readValue(node.toString(), new TypeReference<DefaultLicenseTO>(){});
+									} catch (Exception e) {
+										throw new BadRequestException( entry + e.getMessage());
+									} 
+									LicenseTO newLicense = new LicenseTO();
+									newLicense.setLicense(easyLTO.getLicense());
+									newLicense.setUrl(easyLTO.getUrl());
+									mdTO.setValue(newLicense);
+								}
+								break;
+							case "http://imeji.org/terms/metadata#link":
+								if(node == null)
+								{
+									itemTO.getMetadata().remove(mdTO);
+								}
+								else
+								{
+									DefaultLinkTO easyLinkTO = null;
+									try {
+										easyLinkTO = mapper.readValue(node.toString(), new TypeReference<DefaultLinkTO>(){});
+									} catch (Exception e) {
+										throw new BadRequestException( entry + e.getMessage());
+									} 
+									LinkTO newLink = new LinkTO();
+									newLink.setLink(easyLinkTO.getLink());
+									newLink.setUrl(easyLinkTO.getUrl());
+									mdTO.setValue(newLink);
+								}
+								break;
+							case "http://imeji.org/terms/metadata#publication":
+								if(node == null)
+								{
+									itemTO.getMetadata().remove(mdTO);
+								}
+								else
+								{
+									DefaultPublicationTO easyPTO = null;
+									try {
+										easyPTO = mapper.readValue(node.toString(), new TypeReference<DefaultPublicationTO>(){});
+									} catch (Exception e) {
+										throw new BadRequestException( entry + e.getMessage());
+									} 
+									PublicationTO newPub = new PublicationTO();
+									newPub.setCitation(easyPTO.getCitation());
+									newPub.setFormat(easyPTO.getFormat());
+									newPub.setPublication(easyPTO.getPublication());
+									mdTO.setValue(newPub);
+								}
+								break;
+						}
+						
+						break;
+					}
+				}
+				if(!update){
+					throw new BadRequestException(entry+ " does not find in the profile");
+				}
+			}
+	 	}
+
+		
+	}
+	
 
 
 }

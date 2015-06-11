@@ -244,22 +244,26 @@ public class CollectionController extends ImejiController {
 	public Collection<CollectionImeji> retrieveLazy(List<String> uris,
 			int limit, int offset, User user) throws ImejiException {
 		List<CollectionImeji> cols = new ArrayList<CollectionImeji>();
-		int counter = 0;
-		for (String s : uris) {
-			if (offset <= counter
-					&& (counter < (limit + offset) || limit == -1)) {
-				try {
+		
+		List<String> retrieveUris = uris.size()>0 && limit>0? 
+				uris.subList(offset, Collections.min(Arrays.asList(offset+limit, uris.size()))):new ArrayList<String>();
+		
+		for (String s : retrieveUris) {
+				
 					cols.add((CollectionImeji) J2JHelper.setId(
 							new CollectionImeji(), URI.create(s)));
-				} catch (Exception e) {
-					logger.error("Error loading collection " + s, e);
-				}
-			}
-			counter++;
 		}
-		reader.readLazy(J2JHelper.cast2ObjectList(cols), user);
-		return cols;
+		
+		try {
+			reader.readLazy(J2JHelper.cast2ObjectList(cols), user);
+			return cols;
+		}
+		catch (ImejiException e) {
+				logger.error("Error loading collections: " + e.getMessage(), e);
+				return null;
+		}
 	}
+
 
 	/**
 	 * Update a {@link CollectionImeji} (inclusive its {@link Item}: slow for

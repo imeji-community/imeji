@@ -117,7 +117,7 @@ public class AuthUtil
         }
         return uris;
     }
-
+    
     /**
      * Return the {@link List} of uri of all {@link de.mpg.imeji.logic.vo.MetadataProfile}, the {@link User} is allowed to see
      *

@@ -9,7 +9,7 @@
 	
 	<composite:implementation>
 		<h:panelGroup layout="block" styleClass="imj_searchQueryDisplay">
-			<h:outputText value=" #{lbl.search_query}: "/>
+			<h:outputText value=" #{lbl.search_query} #{lbl.for_type} #{cc.attrs.searchBean.typeLabel}:"/>
 			<span class="imj_searchQueryText">
 				(<h:outputText value="#{cc.attrs.searchBean.simpleQuery}"/>)
 			</span>

@@ -4,10 +4,13 @@
 package de.mpg.imeji.presentation.collection;
 
 import com.hp.hpl.jena.sparql.pfunction.library.container;
+
 import de.mpg.imeji.logic.controller.CollectionController;
+import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.query.URLQueryTransformer;
+import de.mpg.imeji.logic.search.vo.SearchElement;
 import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
@@ -25,6 +28,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.faces.context.FacesContext;
+
 import static de.mpg.imeji.logic.notification.CommonMessages.getSuccessCollectionDeleteMessage;
 
 /**
@@ -36,8 +41,7 @@ import static de.mpg.imeji.logic.notification.CommonMessages.getSuccessCollectio
  */
 public class CollectionsBean extends SuperContainerBean<CollectionListItem>
 {
-    private int totalNumberOfRecords;
-    private SessionBean sb;
+   
     /**
      * The comment required to discard a {@link container}
      */
@@ -59,58 +63,18 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
     }
 
     @Override
-    public int getTotalNumberOfRecords()
-    {
-        return totalNumberOfRecords;
-    }
-
-    @Override
     public List<CollectionListItem> retrieveList(int offset, int limit) throws Exception
     {   
-        // initMenus();
         CollectionController controller = new CollectionController();
         Collection<CollectionImeji> collections = new ArrayList<CollectionImeji>();
-        SearchQuery searchQuery = new SearchQuery();
-      
-        if (!"".equals(query))
-        {
-            searchQuery = URLQueryTransformer.parseStringQuery(query);
-        }
-        SearchPair sp = getFilter();
-        if (sp != null)
-        {
-            searchQuery.addLogicalRelation(LOGICAL_RELATIONS.AND);
-            searchQuery.addPair(sp);
-        }
-        SortCriterion sortCriterion = new SortCriterion();  
-        sortCriterion.setIndex(SPARQLSearch.getIndex(getSelectedSortCriterion()));
-        sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
-        SearchResult results = controller.search(searchQuery, sortCriterion, limit, offset, sb.getUser(),  sb.getSelectedSpaceString());
-        collections = controller.retrieveLazy(results.getResults(), limit, offset, sb.getUser());
-        totalNumberOfRecords = results.getNumberOfRecords();
-        return ImejiFactory.collectionListToListItem(collections, sb.getUser());
+        int myOffset = offset;
+        myOffset = prepareList(offset);
+        setTotalNumberOfRecords(searchResult.getNumberOfRecords());
+        collections = controller.retrieveLazy(searchResult.getResults(), limit, myOffset, sb.getUser());
+            return ImejiFactory.collectionListToListItem(collections, sb.getUser());
     }
-
-    /**
-     * getter
-     * 
-     * @return
-     */
-    public SessionBean getSb()
-    {
-        return sb;
-    }
-
-    /**
-     * setter
-     * 
-     * @param sb
-     */
-    public void setSb(SessionBean sb)
-    {
-        this.sb = sb;
-    }
-
+    
+  
     @Override
     public String selectAll()
     {
@@ -161,29 +125,6 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
         return sb.getPrettySpacePage("pretty:collections");
     }
 
-    /**
-     * needed for searchQueryDisplayArea.xhtml component
-     * 
-     * @return
-     */
-    public String getSimpleQuery()
-    {
-        if (query != null)
-        {
-            return query;
-        }
-        return "";
-    }
-
-    /**
-     * Collection search is always a simple search (needed for searchQueryDisplayArea.xhtml component)
-     * 
-     * @return
-     */
-    public boolean isSimpleSearch()
-    {
-        return true;
-    }
 
     /**
      * getter
@@ -209,4 +150,24 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem>
 	public String getType() {
 		return PAGINATOR_TYPE.COLLECTION_ITEMS.name();
 	}
+
+	/* (non-Javadoc)
+	 * @see de.mpg.imeji.presentation.beans.SuperContainerBean#search(de.mpg.imeji.logic.search.vo.SearchQuery, de.mpg.imeji.logic.search.vo.SortCriterion)
+	 * 
+	 * @param searchQuery
+	 * @param sortCriterion
+	 * @return
+	 */
+	@Override
+	public SearchResult search(SearchQuery searchQuery,
+			SortCriterion sortCriterion) {
+		CollectionController controller = new CollectionController();
+		return controller.search(searchQuery, sortCriterion, -1, 0, sb.getUser(),  sb.getSelectedSpaceString());
+	}
+	
+	public String getTypeLabel() {
+		return sb.getLabel("type_"+getType().toLowerCase());
+	}
+	
+	
 }

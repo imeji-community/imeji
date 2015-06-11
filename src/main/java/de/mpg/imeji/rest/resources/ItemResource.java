@@ -40,11 +40,11 @@ public class ItemResource implements ImejiResource {
 	@Path("/{id}")
 	@ApiOperation(value = "Get item by id")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response read(@Context HttpServletRequest req,
-			@PathParam("id") String id) {
-		JSONResponse resp = readItem(req, id);
+	public Response read(@Context HttpServletRequest req, @PathParam("id") String id, @QueryParam("syntax") String syntax) {
+		JSONResponse resp = ("extended".equalsIgnoreCase(syntax)) ? readItem(req, id) : readDefaultItem(req, id);
 		return RestProcessUtils.buildJSONResponse(resp);
 	}
+
 
 	@POST
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -177,6 +177,12 @@ public class ItemResource implements ImejiResource {
 	public Response delete(@Context HttpServletRequest req, @PathParam("id") String id) {
 		JSONResponse resp = deleteItem(req, id);
 		return RestProcessUtils.buildJSONResponse(resp);
+	}
+
+	@Override
+	public Response read(HttpServletRequest req, String id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

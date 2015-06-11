@@ -951,5 +951,7 @@ public class ShareBean implements Serializable
 		this.sb = sb;
 	}
     
-    
+    public int getSharedWithNum(){
+    	return getSharedWith().size();
+    }
 }

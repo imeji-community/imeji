@@ -2,6 +2,7 @@ package de.mpg.imeji.rest.api;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
+
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.ProfileController;
@@ -121,8 +122,5 @@ public class ProfileService implements API<MetadataProfileTO>{
 	private MetadataProfile getMetadataProfileVO (ProfileController cc, String id, User u) throws ImejiException {
 		return cc.retrieve(ObjectHelper.getURI(MetadataProfile.class, id), u);
 	}
-
-
-
 
 }

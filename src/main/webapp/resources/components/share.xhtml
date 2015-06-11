@@ -95,6 +95,7 @@
 				
 				
 				<!-- user table which shows all user with existing rights -->
+				<ui:fragment rendered="#{ShareBean.sharedWithNum > 0}">
 				<div class="imj_shareRightsOverview">
 					<h2 class="imj_sectionHeadline">
 						<h:outputText value="#{lbl.shared_with}"/>
@@ -148,6 +149,7 @@
 						</div>
 					</h:form>
 				</div>
+				</ui:fragment>
 			</div>
 		</ui:fragment>
 	</composite:implementation>

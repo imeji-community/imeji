@@ -449,4 +449,5 @@ public class AdvancedSearchBean {
 	public void setCollectionsMenu(List<SelectItem> collectionsMenu) {
 		this.collectionsMenu = collectionsMenu;
 	}
+	
 }

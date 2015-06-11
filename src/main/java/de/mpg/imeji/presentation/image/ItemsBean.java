@@ -30,6 +30,7 @@ import de.mpg.imeji.presentation.util.PropertyReader;
 import javax.faces.application.FacesMessage;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
+
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -126,6 +127,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
 		initFilters();
 		cleanFacets();
 		initFacets();
+		setCurrentPageNumber(1);
 	}
 
 	/**
@@ -603,4 +605,9 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
 	public String getType() {
 		return PAGINATOR_TYPE.ITEMS.name();
 	}
+	
+	public String getTypeLabel() {
+		return session.getLabel("type_"+getType().toLowerCase());
+	}
+
 }

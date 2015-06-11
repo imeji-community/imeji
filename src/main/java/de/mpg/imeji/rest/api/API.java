@@ -39,7 +39,8 @@ public interface API<V> {
 	 * @param u
 	 * @return
 	 */
-	public V read(String id, User u) throws ImejiException;
+	public Object read(String id, User u) throws ImejiException;
+
 
 	/**
 	 * Update an object in imeji

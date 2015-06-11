@@ -59,8 +59,9 @@ public class ItemTO extends PropertiesTO implements Serializable{
     
     private URI fileUrl;
     
-    private List<MetadataSetTO> metadata = new ArrayList<MetadataSetTO>();
+    protected List<MetadataSetTO> metadata = new ArrayList<MetadataSetTO>();
     
+    private long fileSize;    
     private long fileSize;
 
 	public static enum SYNTAX {

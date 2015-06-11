@@ -280,4 +280,5 @@ public class ImejiAuthBean implements Serializable {
 	public void setSessionUser(User sessionUser) {
 		this.sessionUser = sessionUser;
 	}
+	
 }

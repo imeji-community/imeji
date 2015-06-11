@@ -11,9 +11,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -246,7 +244,7 @@ public class CollectionController extends ImejiController {
 		List<CollectionImeji> cols = new ArrayList<CollectionImeji>();
 		
 		List<String> retrieveUris = uris.size()>0 && limit>0? 
-				uris.subList(offset, Collections.min(Arrays.asList(offset+limit, uris.size()))):new ArrayList<String>();
+				uris.subList(offset, getMin(offset+limit, uris.size())):new ArrayList<String>();
 		
 		for (String s : retrieveUris) {
 				

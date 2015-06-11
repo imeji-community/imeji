@@ -10,9 +10,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -373,7 +371,7 @@ public class AlbumController extends ImejiController {
 		List<Album> albs = new ArrayList<Album>();
 		
 		List<String> retrieveUris = uris.size()>0 && limit>0? 
-				uris.subList(offset, Collections.min(Arrays.asList(offset+limit, uris.size()))):new ArrayList<String>();
+				uris.subList(offset, getMin(offset+limit, uris.size())):new ArrayList<String>();
 		
 		for (String s : retrieveUris) {
 			albs.add((Album) J2JHelper.setId(new Album(), URI.create(s)));

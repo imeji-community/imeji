@@ -162,15 +162,9 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
 			previousPartList = new ArrayList<ListElementType>();
 			previousPartList.addAll(currentPartList);
 			currentPartList = new ArrayList<>();
-			try {
-				currentPartList = retrieveList(getOffset(), elementsPerPage);
-			} catch (IllegalArgumentException e) {
-				// The list if list is shorter than the given current page
-				// number allows
-				setCurrentPageNumber(1);
-				currentPartList = retrieveList(getOffset(), elementsPerPage);
-			}
+			currentPartList = retrieveList(getOffset(), elementsPerPage);
 			totalNumberOfElements = getTotalNumberOfRecords();
+
 			paginatorPageList.clear();
 			for (int i = 0; i < ((getTotalNumberOfElements() - 1) / elementsPerPage) + 1; i++) {
 				paginatorPageList.add(new PaginatorPage(i + 1));

@@ -3,23 +3,36 @@
  */
 package de.mpg.imeji.presentation.beans;
 
+import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.search.SPARQLSearch;
+import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.query.URLQueryTransformer;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchOperators;
 import de.mpg.imeji.logic.search.vo.SearchPair;
+import de.mpg.imeji.logic.search.vo.SearchQuery;
+import de.mpg.imeji.logic.search.vo.SortCriterion;
+import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.util.UrlHelper;
+import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Properties.Status;
+import de.mpg.imeji.presentation.collection.CollectionListItem;
 import de.mpg.imeji.presentation.filter.Filter;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CookieUtils;
+import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.PropertyReader;
+
 import org.apache.log4j.Logger;
 
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -37,16 +50,22 @@ public abstract class SuperContainerBean<T> extends
 	private String selectedSortCriterion;
 	private String selectedSortOrder;
 	private String selectedFilter;
-	private SessionBean sb;
+	protected SessionBean sb;
 	private List<SelectItem> sortMenu = new ArrayList<SelectItem>();
 	protected List<SelectItem> filterMenu = new ArrayList<SelectItem>();
 	private static Logger logger = Logger.getLogger(SuperContainerBean.class);
+	//private SearchQuery searchQuery ;
+	protected SearchPair selectedFilterSearch;
+    protected SearchQuery searchQuery = new SearchQuery();
+	protected SearchResult searchResult;
+	private int totalNumberOfRecords;
 
 	/**
 	 * Constructor
 	 */
 	public SuperContainerBean() {
 		sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+
 		initMenus();
 		selectedSortCriterion = SearchIndex.IndexNames.modified.name();
 		selectedSortOrder = SortOrder.DESCENDING.name();
@@ -83,15 +102,23 @@ public abstract class SuperContainerBean<T> extends
 	 * @return
 	 */
 	public String getInit() {
+
+		setSelectedFilterSearch(null);
+		setSearchQuery(null);
+
 		if (UrlHelper.getParameterValue("f") != null
 				&& !UrlHelper.getParameterValue("f").equals("")) {
-			selectedFilter = UrlHelper.getParameterValue("f");
+			selectedFilter = UrlHelper.getParameterValue("f");		
 		}
 		if (UrlHelper.getParameterValue("tab") != null
 				&& !UrlHelper.getParameterValue("tab").equals("")) {
 			selectedMenu = UrlHelper.getParameterValue("tab");
 		}
-		query = UrlHelper.getParameterValue("q");
+		
+		if ( FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().containsKey("q") ){
+			query = UrlHelper.getParameterValue("q");
+		}
+
 		if (selectedFilter == null || UrlHelper.getParameterBoolean("login") || sb.getUser() == null) {
 			if (sb.getUser() != null) {
 				selectedFilter = "my";
@@ -344,4 +371,145 @@ public abstract class SuperContainerBean<T> extends
 	public String getType(){
 		return "supercontainer";
 	}
+	
+
+	/**
+	 * @return the searchQuery
+	 */
+	public SearchQuery getSearchQuery() {
+		return searchQuery;
+	}
+
+	/**
+	 * @param searchQuery the searchQuery to set
+	 */
+	public void setSearchQuery(SearchQuery searchQuery) {
+		this.searchQuery = searchQuery;
+	}
+	
+
+	/**
+	 * @return the selectedFilterSearch
+	 */
+	public SearchPair getSelectedFilterSearch() {
+		return selectedFilterSearch;
+	}
+
+	/**
+	 * @param selectedFilterSearch the selectedFilterSearch to set
+	 */
+	public void setSelectedFilterSearch(SearchPair selectedFilterSearch) {
+		this.selectedFilterSearch = selectedFilterSearch;
+	}
+	
+	
+	/**
+	 * Checks if filters between two different searches have been changed in order to trigger new query execution
+	 * @param p1
+	 * @param p2
+	 * @return
+	 */
+	protected boolean changedFilters(SearchPair p1, SearchPair p2) {
+	    	if ((p1 == null  && p2 != null) || ( p1 != null && p2==null))
+	    		return true;
+	    	
+	    	if (p1 != null && p2 != null ) {
+	    		if (p1.getValue()!= p2.getValue())
+	    			return true;
+	    	}
+	    	
+	    	return false;
+	    }
+	
+	
+	   public int prepareList(int offset) throws Exception
+	    {   
+
+		    SearchQuery searchQuery = new SearchQuery();
+	        int myOffset = offset;
+	       
+		        if (!"".equals(getQuery()))
+		        {
+		            searchQuery = URLQueryTransformer.parseStringQuery(getQuery());
+		        }
+		        //get Filters for Collections
+		        SearchPair sp = getFilter();
+		        
+
+		        if (sp != null)
+		        {
+		            searchQuery.addLogicalRelation(LOGICAL_RELATIONS.AND);
+		            searchQuery.addPair(sp);
+		        }
+		        
+		        if (getSearchQuery() == null || changedFilters(sp, getSelectedFilterSearch())) {
+		            SortCriterion sortCriterion = new SortCriterion();  
+			        sortCriterion.setIndex(SPARQLSearch.getIndex(getSelectedSortCriterion()));
+			        sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
+
+			        searchResult = search(searchQuery, sortCriterion);
+			        setSearchQuery(searchQuery); 
+			        setSelectedFilterSearch(sp);
+					searchResult.setQuery(getQuery());
+					//setQuery(getQuery());
+
+					searchResult.setSort(sortCriterion);
+					
+					setTotalNumberOfRecords(searchResult.getNumberOfRecords());
+					setCurrentPageNumber(1);
+					setGoToPage("1");
+					myOffset = 0; 
+	            }
+		        
+		        return myOffset;
+	    }
+	
+	public SearchResult search(SearchQuery searchQuery, SortCriterion sortCriterion) {
+		SearchResult sr  = null;
+		return sr;
+			
+	}
+
+	/* (non-Javadoc)
+	 * @see de.mpg.imeji.presentation.beans.BasePaginatorListSessionBean#getTotalNumberOfRecords()
+	 */
+	@Override
+	public int getTotalNumberOfRecords() {
+		return totalNumberOfRecords;
+	}
+	
+
+	/**
+	 * @param totalNumberOfRecords the totalNumberOfRecords to set
+	 */
+	public void setTotalNumberOfRecords(int totalNumberOfRecords) {
+		this.totalNumberOfRecords = totalNumberOfRecords;
+	}
+
+
+
+    /**
+     * needed for searchQueryDisplayArea.xhtml component
+     * 
+     * @return
+     */
+    public String getSimpleQuery()
+    {
+        if (query != null)
+        {
+            return query;
+        }
+        return "";
+    }
+
+    /**
+     *  search is always a simple search (needed for searchQueryDisplayArea.xhtml component)
+     * 
+     * @return
+     */
+    public boolean isSimpleSearch()
+    {
+        return true;
+    }
+	
 }

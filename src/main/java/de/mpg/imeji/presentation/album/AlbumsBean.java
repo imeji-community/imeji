@@ -4,21 +4,29 @@
 package de.mpg.imeji.presentation.album;
 
 import de.mpg.imeji.logic.controller.AlbumController;
+import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.query.URLQueryTransformer;
 import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
+import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.util.UrlHelper;
+import de.mpg.imeji.logic.vo.Album;
+import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.presentation.beans.SuperContainerBean;
+import de.mpg.imeji.presentation.beans.BasePaginatorListSessionBean.PAGINATOR_TYPE;
+import de.mpg.imeji.presentation.collection.CollectionListItem;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -29,25 +37,18 @@ import java.util.List;
  * @version $Revision$ $LastChangedDate$
  */
 public class AlbumsBean extends SuperContainerBean<AlbumBean> {
-	private int totalNumberOfRecords;
-	private SessionBean sb;
 
 	/**
 	 * Bean for the Albums page
 	 */
 	public AlbumsBean() {
 		super();
-		sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+		this.sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
 	}
 
 	@Override
 	public String getNavigationString() {
 		return sb.getPrettySpacePage("pretty:albums");
-	}
-
-	@Override
-	public int getTotalNumberOfRecords() {
-		return totalNumberOfRecords;
 	}
 
 	@Override
@@ -57,34 +58,13 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean> {
 			sb.setUser(uc.retrieve(sb.getUser().getEmail()));
 		}
 		AlbumController controller = new AlbumController();
-		SortCriterion sortCriterion = new SortCriterion();
-		sortCriterion.setIndex(SPARQLSearch
-				.getIndex(getSelectedSortCriterion()));
-		sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
-		SearchQuery searchQuery = new SearchQuery();
-		query = UrlHelper.getParameterValue("q");
-		if (query == null)
-			query = "";
-		if (!"".equals(query)) {
-			searchQuery = URLQueryTransformer.parseStringQuery(query);
-		}
-		if (getFilter() != null) {
-			searchQuery.addLogicalRelation(LOGICAL_RELATIONS.AND);
-			searchQuery.addPair(getFilter());
-		}
-		SearchResult searchResult = controller.search(searchQuery,
-				sb.getUser(), sortCriterion, limit, offset, sb.getSelectedSpaceString());
-		totalNumberOfRecords = searchResult.getNumberOfRecords();
-		return ImejiFactory.albumListToBeanList(controller.loadAlbumsLazy(
-				searchResult.getResults(), sb.getUser(), limit, offset));
-	}
-
-	public SessionBean getSb() {
-		return sb;
-	}
-
-	public void setSb(SessionBean sb) {
-		this.sb = sb;
+        Collection<Album> albums = new ArrayList<Album>();
+        int myOffset = offset;
+        myOffset = prepareList(offset);
+        
+        setTotalNumberOfRecords(searchResult.getNumberOfRecords());
+        albums = controller.loadAlbumsLazy(searchResult.getResults(), sb.getUser(), limit, myOffset);
+        return ImejiFactory.albumListToBeanList(albums);
 	}
 
 	@Override
@@ -120,30 +100,28 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean> {
 		return sb.getPrettySpacePage("pretty:albums");
 	}
 
-	/**
-	 * Collection search is always a simple search (needed for
-	 * searchQueryDisplayArea.xhtml component)
-	 * 
-	 * @return
-	 */
-	public boolean isSimpleSearch() {
-		return true;
-	}
-
-	/**
-	 * needed for searchQueryDisplayArea.xhtml component
-	 * 
-	 * @return
-	 */
-	public String getSimpleQuery() {
-		if (query != null) {
-			return query;
-		}
-		return "";
-	}
 
 	@Override
 	public String getType() {
 		return PAGINATOR_TYPE.ALBUMS.name();
+	}
+ 
+	/* 
+	 * Perform the {@link SPARQLSearch}
+	 * 
+	 * @param searchQuery
+	 * @param sortCriterion
+	 * @return
+	 * @see de.mpg.imeji.presentation.beans.SuperContainerBean#search(de.mpg.imeji.logic.search.vo.SearchQuery, de.mpg.imeji.logic.search.vo.SortCriterion)
+	 */
+	@Override
+	public SearchResult search(SearchQuery searchQuery,
+			SortCriterion sortCriterion) {
+		AlbumController controller = new AlbumController();
+		return controller.search(searchQuery, sb.getUser(), sortCriterion, -1, 0, sb.getSelectedSpaceString());
+	}
+	
+	public String getTypeLabel() {
+		return sb.getLabel("type_"+getType().toLowerCase());
 	}
 }

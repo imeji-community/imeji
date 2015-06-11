@@ -168,6 +168,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
 				// The list if list is shorter than the given current page
 				// number allows
 				setCurrentPageNumber(1);
+				setGoToPage("1");
 				currentPartList = retrieveList(getOffset(), elementsPerPage);
 			}
 			totalNumberOfElements = getTotalNumberOfRecords();

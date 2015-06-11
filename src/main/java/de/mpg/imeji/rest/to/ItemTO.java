@@ -14,6 +14,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
+
 @XmlRootElement
 @XmlType (propOrder = {	
 		"id",
@@ -60,7 +62,20 @@ public class ItemTO extends PropertiesTO implements Serializable{
     private List<MetadataSetTO> metadata = new ArrayList<MetadataSetTO>();
     
     private long fileSize;
-    
+
+	public static enum SYNTAX {
+		EXTENDED, EASY;
+		public static SYNTAX guessType(String type) {
+			//if null return DefaultItemTO
+			if (isNullOrEmptyTrim(type) || type.trim().equalsIgnoreCase(EASY.toString()))
+				return EASY;
+			else if (type.trim().equalsIgnoreCase(EXTENDED.toString()))
+				return EXTENDED;
+			else
+				return null;
+		}
+	};
+
 
 	public long getFileSize() {
 		return fileSize;

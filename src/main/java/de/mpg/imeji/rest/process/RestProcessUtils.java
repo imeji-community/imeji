@@ -1,41 +1,32 @@
 package de.mpg.imeji.rest.process;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.google.common.io.ByteStreams;
+import de.mpg.imeji.exceptions.*;
+import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
+import de.mpg.imeji.rest.to.HTTPError;
+import de.mpg.imeji.rest.to.JSONException;
+import de.mpg.imeji.rest.to.JSONResponse;
+import net.java.dev.webdav.jaxrs.ResponseStatus;
+import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
-import net.java.dev.webdav.jaxrs.ResponseStatus;
-
-import org.apache.log4j.Logger;
-
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectReader;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.type.TypeFactory;
-
-import de.mpg.imeji.exceptions.AuthenticationError;
-import de.mpg.imeji.exceptions.BadRequestException;
-import de.mpg.imeji.exceptions.NotAllowedError;
-import de.mpg.imeji.exceptions.NotFoundException;
-import de.mpg.imeji.exceptions.UnprocessableError;
-import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
-import de.mpg.imeji.rest.to.HTTPError;
-import de.mpg.imeji.rest.to.JSONException;
-import de.mpg.imeji.rest.to.JSONResponse;
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 public class RestProcessUtils {
 	
@@ -250,5 +241,12 @@ public class RestProcessUtils {
         output += "T" + f.format(d);
         return output;
     }
-
+	public static Map<String, Object> jsonToPOJO(Response response) throws IOException {
+		ObjectMapper mapper = new ObjectMapper();
+		return mapper.readValue(ByteStreams.toByteArray(response.readEntity(InputStream.class)), Map.class);
+	}
+	public static Map<String, Object> jsonToPOJO(String str) throws IOException {
+		ObjectMapper mapper = new ObjectMapper();
+		return mapper.readValue(str, Map.class);
+	}
 }

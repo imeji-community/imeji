@@ -4,7 +4,6 @@ import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.rest.api.AlbumService;
 import de.mpg.imeji.rest.process.RestProcessUtils;
-import de.mpg.imeji.rest.resources.test.TestUtils;
 import de.mpg.imeji.rest.to.AlbumTO;
 import de.mpg.imeji.rest.to.ItemTO;
 import net.java.dev.webdav.jaxrs.ResponseStatus;
@@ -30,6 +29,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
+import static de.mpg.imeji.rest.process.RestProcessUtils.jsonToPOJO;
 import static javax.ws.rs.core.Response.Status.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -66,7 +66,7 @@ public class AlbumTest extends ImejiTestBase{
 				.post(Entity
 						.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
 		assertEquals(response.getStatus(), CREATED.getStatusCode());
-		Map<String, Object> albData = TestUtils.jsonToPOJO(response);
+		Map<String, Object> albData = jsonToPOJO(response);
 		assertNotNull("Created album is null", albData);
 		albumId = (String) albData.get("id");
 		assertThat("Empty album id", albumId,
@@ -569,7 +569,7 @@ public class AlbumTest extends ImejiTestBase{
 				.put(Entity.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
 		
 		assertEquals(Status.OK.getStatusCode(), response.getStatus());
-		Map<String, Object> albData = TestUtils.jsonToPOJO(response);
+		Map<String, Object> albData = jsonToPOJO(response);
 		assertEquals("TestAlbumUpdate", albData.get("title"));
 	}
 	

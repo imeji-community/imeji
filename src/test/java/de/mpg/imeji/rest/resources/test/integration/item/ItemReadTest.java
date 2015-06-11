@@ -2,7 +2,6 @@ package de.mpg.imeji.rest.resources.test.integration.item;
 
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.process.RestProcessUtils;
-import de.mpg.imeji.rest.resources.test.TestUtils;
 import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
 import de.mpg.imeji.rest.to.ItemTO;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
@@ -19,6 +18,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import static de.mpg.imeji.rest.process.RestProcessUtils.jsonToPOJO;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.IsNot.not;
@@ -47,7 +47,7 @@ public class ItemReadTest extends ImejiTestBase {
                 .request(MediaType.APPLICATION_JSON_TYPE)).get();
 
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
-        Map<String, Object> itemData = TestUtils.jsonToPOJO(response);
+        Map<String, Object> itemData = jsonToPOJO(response);
         assertEquals(itemId, (String) itemData.get("id"));
     }
 

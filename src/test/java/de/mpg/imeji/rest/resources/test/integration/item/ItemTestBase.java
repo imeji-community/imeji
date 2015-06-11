@@ -30,10 +30,8 @@ public class ItemTestBase extends ImejiTestBase {
 
     private static Logger logger = Logger.getLogger(ItemTestBase.class);
 
-    public static String profileId;
     public static MetadataProfile profile;
     public static Item item;
-    public static String collectionId;
 
     protected static ProfileController pc = new ProfileController();
 

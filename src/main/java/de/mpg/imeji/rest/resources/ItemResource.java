@@ -70,7 +70,7 @@ public class ItemResource implements ImejiResource {
 	public Response create(@Context HttpServletRequest req,
 						   @FormDataParam("file") InputStream file,
 						   @ApiParam(required = true) @FormDataParam("json") String json,
-						   @FormDataParam("syntax") String syntax,
+						   @QueryParam("syntax") String syntax,
 						   @FormDataParam("file") FormDataContentDisposition fileDetail) {
 		String origName = fileDetail != null ? fileDetail.getFileName() : null;
 		return RestProcessUtils.buildJSONResponse(createItem(req, file, json, syntax, origName));

@@ -1,5 +1,7 @@
 package de.mpg.imeji.rest.resources.test.integration.item;
 
+import de.mpg.imeji.rest.to.ItemTO;
+import de.mpg.imeji.rest.to.ItemWithFileTO;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
@@ -14,6 +16,9 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 
 import static de.mpg.imeji.logic.util.ResourceHelper.getStringFromPath;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -54,6 +59,13 @@ public class ItemEasyCreateTest extends ItemTestBase {
 				.post(Entity.entity(multiPart, multiPart.getMediaType()));
 
 		assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatus());
+
+		ItemTO itemTO = response.readEntity(ItemWithFileTO.class);
+		assertThat(itemTO.getMetadata(), hasSize(7)); //check easyCreateItem.json
+		assertThat(itemTO.getCollectionId(), equalTo(collectionId));
+
+
+
 	}
 
 

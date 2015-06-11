@@ -1,64 +1,23 @@
 package de.mpg.imeji.rest.process;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.fasterxml.jackson.databind.JsonNode;
-
 import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.Album;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.Metadata;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Organization;
-import de.mpg.imeji.logic.vo.Person;
+import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.logic.vo.Properties;
-import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
-import de.mpg.imeji.logic.vo.predefinedMetadata.License;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
+import de.mpg.imeji.logic.vo.predefinedMetadata.*;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
 import de.mpg.imeji.rest.api.ProfileService;
 import de.mpg.imeji.rest.api.UserService;
 import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
-import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultConePersonTO;
-import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultGeolocationTO;
-import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultLicenseTO;
-import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultLinkTO;
-import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultPublicationTO;
-import de.mpg.imeji.rest.to.AlbumTO;
-import de.mpg.imeji.rest.to.CollectionTO;
-import de.mpg.imeji.rest.to.IdentifierTO;
-import de.mpg.imeji.rest.to.ItemTO;
-import de.mpg.imeji.rest.to.LabelTO;
-import de.mpg.imeji.rest.to.LiteralConstraintTO;
-import de.mpg.imeji.rest.to.MetadataProfileTO;
-import de.mpg.imeji.rest.to.MetadataSetTO;
-import de.mpg.imeji.rest.to.OrganizationTO;
-import de.mpg.imeji.rest.to.PersonTO;
-import de.mpg.imeji.rest.to.PersonTOBasic;
-import de.mpg.imeji.rest.to.PropertiesTO;
-import de.mpg.imeji.rest.to.StatementTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.ConePersonTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.DateTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.GeolocationTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.LicenseTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.LinkTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.NumberTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.PublicationTO;
-import de.mpg.imeji.rest.to.predefinedMetadataTO.TextTO;
+import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.*;
+import de.mpg.imeji.rest.to.*;
+import de.mpg.imeji.rest.to.predefinedMetadataTO.*;
 import de.mpg.j2j.misc.LocalizedString;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.net.URI;
+import java.util.*;
 
 public class TransferObjectFactory {
 
@@ -253,7 +212,7 @@ public class TransferObjectFactory {
 			// TODO Auto-generated catch block
 			LOGGER.info("Something nasty happend after reading the profile", e);
 		}
-		tranferItemMetadata(profile, vo.getMetadataSet().getMetadata(), to);
+		transferItemMetadata(profile, vo.getMetadataSet().getMetadata(), to);
 	}
 	
 	
@@ -280,10 +239,10 @@ public class TransferObjectFactory {
 			// TODO Auto-generated catch block
 			LOGGER.info("Something nasty happend after reading the profile", e);
 		}
-		tranferItemMetadataDefault(profile, vo.getMetadataSet().getMetadata(), to);
+		transferItemMetadataDefault(profile, vo.getMetadataSet().getMetadata(), to);
 	}
 	
-	public static void tranferItemMetadataDefault(MetadataProfile profile, Collection<Metadata> voMds, DefaultItemTO to) {  
+	public static void transferItemMetadataDefault(MetadataProfile profile, Collection<Metadata> voMds, DefaultItemTO to) {
 		if(voMds.size() == 0)
 			return; 
 		Map<String, JsonNode> metadata = new HashMap<String, JsonNode>();
@@ -352,8 +311,8 @@ public class TransferObjectFactory {
 	
 	
 
-	public static void tranferItemMetadata(MetadataProfile profile,
-			Collection<Metadata> voMds, ItemTO to) {
+	public static void transferItemMetadata(MetadataProfile profile,
+											Collection<Metadata> voMds, ItemTO to) {
 
 		if (voMds.size() == 0) {
 			// to.setMetadata(null);

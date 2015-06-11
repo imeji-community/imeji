@@ -1,27 +1,5 @@
 package de.mpg.imeji.rest.process;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
-import static de.mpg.imeji.rest.process.CommonUtils.USER_MUST_BE_LOGGED_IN;
-import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONAndExceptionResponse;
-import static de.mpg.imeji.rest.process.RestProcessUtils.buildResponse;
-import static de.mpg.imeji.rest.process.RestProcessUtils.buildTOFromJSON;
-import static de.mpg.imeji.rest.process.RestProcessUtils.localExceptionHandler;
-import static javax.ws.rs.core.Response.Status.OK;
-import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.Response.Status;
-
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
@@ -32,11 +10,29 @@ import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
 import de.mpg.imeji.rest.api.ProfileService;
 import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
-import de.mpg.imeji.rest.to.CollectionTO;
-import de.mpg.imeji.rest.to.ItemTO;
-import de.mpg.imeji.rest.to.ItemWithFileTO;
-import de.mpg.imeji.rest.to.JSONResponse;
-import de.mpg.imeji.rest.to.MetadataProfileTO;
+import de.mpg.imeji.rest.to.*;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Response.Status;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static de.mpg.imeji.rest.process.CommonUtils.USER_MUST_BE_LOGGED_IN;
+import static de.mpg.imeji.rest.process.RestProcessUtils.*;
+import static de.mpg.imeji.rest.to.ItemTO.SYNTAX.guessType;
+import static javax.ws.rs.core.Response.Status.OK;
+import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
 
 public class ItemProcess {
 
@@ -101,7 +97,7 @@ public class ItemProcess {
 	}
 
 	public static JSONResponse createItem(HttpServletRequest req,
-			InputStream file, String json, String origName) {
+										  InputStream file, String json, String syntax, String origName) {
 		// / write response
 		JSONResponse resp; 
 
@@ -111,8 +107,32 @@ public class ItemProcess {
 		// Parse json into to
 		ItemWithFileTO to = null;
 		try {
-			to = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(json,
-					ItemWithFileTO.class);
+
+			switch (guessType(syntax)) {
+				case EXTENDED:
+					to = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(json,
+							ItemWithFileTO.class);
+					break;
+				case EASY:
+					//extract metadata node
+					Map<String, Object> itemMap = jsonToPOJO(json);
+					HashMap<String, Object> metadata = (LinkedHashMap<String, Object>)((List)itemMap.remove("metadata")).get(0);
+					//parse as normal ItemTO
+					to = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(buildJSONFromObject(itemMap),
+							ItemWithFileTO.class);
+					//update metadata part
+					DefaultItemTO easyTO = (DefaultItemTO)buildTOFromJSON(
+							"{\"metadata\":" + buildJSONFromObject(metadata) + "}", DefaultItemTO.class);
+					CollectionService ccrud = new CollectionService();
+					CollectionTO col = ccrud.read(to.getCollectionId(), u);
+					ProfileService pcrud = new ProfileService();
+					MetadataProfileTO profileTO = pcrud.read(col.getProfile().getId(), u);
+					ReverseTransferObjectFactory.transferDefaultItemTOtoItemTO(profileTO, easyTO, to);
+					break;
+				default:
+					throw new BadRequestException("Bad syntax type: " + syntax);
+			}
+
 			if (file != null){
 				to = uploadAndValidateFile(file, to, origName);
 			}

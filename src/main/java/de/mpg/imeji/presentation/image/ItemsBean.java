@@ -30,7 +30,6 @@ import de.mpg.imeji.presentation.util.PropertyReader;
 import javax.faces.application.FacesMessage;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
-
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;

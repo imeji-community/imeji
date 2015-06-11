@@ -1,19 +1,10 @@
 package de.mpg.imeji.rest.resources.test.integration.item;
 
 import de.mpg.imeji.exceptions.BadRequestException;
-import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.controller.CollectionController.MetadataProfileCreationMethod;
-import de.mpg.imeji.logic.controller.ProfileController;
-import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.rest.api.ItemService;
 import de.mpg.imeji.rest.process.RestProcessUtils;
-import de.mpg.imeji.rest.process.ReverseTransferObjectFactory;
-import de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE;
-import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
 import de.mpg.imeji.rest.to.*;
 import de.mpg.imeji.rest.to.predefinedMetadataTO.*;
 import de.mpg.j2j.misc.LocalizedString;
@@ -36,7 +27,10 @@ import java.io.IOException;
 import java.net.URI;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 import static com.google.common.collect.Iterables.getFirst;
 import static com.google.common.collect.Iterables.getLast;
@@ -60,7 +54,7 @@ import static org.junit.Assert.assertEquals;
  */
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class ItemUpdateMetadataTest extends ImejiTestBase {
+public class ItemUpdateMetadataTest extends ItemTestBase {
 
     private static final Logger LOGGER = LoggerFactory
             .getLogger(ItemUpdateMetadataTest.class);
@@ -69,14 +63,13 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
     private static final String PATH_PREFIX = "/rest/items";
     private static URI unboundedStatementId;
 
-    protected static ProfileController pc = new ProfileController();
 
 
     @BeforeClass
     public static void specificSetup() throws Exception {
         updateJSON = getStringFromPath(STATIC_CONTEXT_REST + "/updateItemBasic.json");
         initCollectionWithProfile(getBasicStatements());
-        initItemWithFullMedatada();
+        initItemWithFullMetadata();
     }
 
     @Test
@@ -518,33 +511,7 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
 
 
 
-    protected static void initCollectionWithProfile(Collection<Statement> statements) throws Exception {
-
-        MetadataProfile p = ImejiFactory.newProfile();
-        p.setTitle("test");
-        p.setStatements(statements);
-
-        MetadataProfile mp = pc.create(p, JenaUtil.testUser);
-
-        profileId = ObjectHelper.getId(mp.getId());
-
-		try {
-
-			collectionTO= (CollectionTO) RestProcessUtils.buildTOFromJSON(
-                    getStringFromPath("src/test/resources/rest/createCollection.json"), CollectionTO.class);
-
-            CollectionController cc = new CollectionController();
-            CollectionImeji ci = new CollectionImeji();
-            ReverseTransferObjectFactory.transferCollection(collectionTO, ci, TRANSFER_MODE.CREATE, JenaUtil.testUser);
-            collectionId = ObjectHelper.getId(cc.create(ci, p, JenaUtil.testUser, MetadataProfileCreationMethod.REFERENCE, null));
-
-        } catch (Exception e) {
-            LOGGER.error("Cannot init Collection", e);
-        }
-
-    }
-
-    protected static void initItemWithFullMedatada() throws Exception {
+    protected static void initItemWithFullMetadata() throws Exception {
         ItemService s = new ItemService();
         itemTO = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(updateJSON, ItemWithFileTO.class);
         itemTO.setCollectionId(collectionId);
@@ -611,17 +578,6 @@ public class ItemUpdateMetadataTest extends ImejiTestBase {
         return statements;
     }
 
-    protected static Collection<Statement> getBasicStatements() {
-        Collection<Statement> statements = new ArrayList<Statement>();
-        Statement st;
-        for (String type: new String[]{"text", "number", "conePerson" , "geolocation", "date", "license", "link", "publication"}) {
-            st = new Statement();
-            st.setType(URI.create("http://imeji.org/terms/metadata#" + type));
-            st.getLabels().add(new LocalizedString(type + "Label", "en"));
-            statements.add(st);
-        }
-        return statements;
-    }
 
 
 }

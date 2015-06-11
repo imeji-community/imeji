@@ -6,7 +6,6 @@ import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
-import de.mpg.imeji.rest.resources.test.TestUtils;
 import de.mpg.imeji.rest.to.CollectionProfileTO.METHOD;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.IdentifierTO;
@@ -35,6 +34,7 @@ import java.util.Map;
 
 import static de.mpg.imeji.logic.util.ResourceHelper.getStringFromPath;
 import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONFromObject;
+import static de.mpg.imeji.rest.process.RestProcessUtils.jsonToPOJO;
 import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_REST;
 import static javax.ws.rs.core.Response.Status.*;
 import static net.java.dev.webdav.jaxrs.ResponseStatus.UNPROCESSABLE_ENTITY;
@@ -67,7 +67,7 @@ public class CollectionTest extends ImejiTestBase {
                 .post(Entity
                         .entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
         assertEquals(response.getStatus(), CREATED.getStatusCode());
-        Map<String, Object> collData = TestUtils.jsonToPOJO(response);
+        Map<String, Object> collData = jsonToPOJO(response);
         assertNotNull("Created collection is null", collData);
         collectionId = (String) collData.get("id");
         assertThat("Empty collection id", collectionId,
@@ -89,7 +89,7 @@ public class CollectionTest extends ImejiTestBase {
                         .entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
 
         assertEquals( CREATED.getStatusCode(), response.getStatus());
-        Map<String, Object> collData = TestUtils.jsonToPOJO(response);
+        Map<String, Object> collData = jsonToPOJO(response);
         assertNotNull("Created collection is null", collData);
         collectionId = (String) collData.get("id");
         assertThat("Empty collection id", collectionId,
@@ -110,7 +110,7 @@ public class CollectionTest extends ImejiTestBase {
                         .entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
 
         assertEquals(CREATED.getStatusCode(), response.getStatus());
-        Map<String, Object> collData = TestUtils.jsonToPOJO(response);
+        Map<String, Object> collData = jsonToPOJO(response);
         assertNotNull("Created collection is null", collData);
         collectionId = (String) collData.get("id");
         assertThat("Empty collection id", collectionId,

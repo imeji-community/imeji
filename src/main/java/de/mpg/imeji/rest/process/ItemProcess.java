@@ -127,7 +127,7 @@ public class ItemProcess {
 					CollectionTO col = ccrud.read(to.getCollectionId(), u);
 					ProfileService pcrud = new ProfileService();
 					MetadataProfileTO profileTO = pcrud.read(col.getProfile().getId(), u);
-					TransferObjectFactory.transferEasyItemTOItem(profileTO, easyTO, to);
+					ReverseTransferObjectFactory.transferDefaultItemTOtoItemTO(profileTO, easyTO, to);
 					break;
 				default:
 					throw new BadRequestException("Bad syntax type: " + syntax);

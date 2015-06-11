@@ -1,11 +1,10 @@
 package de.mpg.imeji.rest.api;
 
-import java.util.List;
-
-import javax.ws.rs.NotSupportedException;
-
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.vo.User;
+
+import javax.ws.rs.NotSupportedException;
+import java.util.List;
 
 /**
  * The generic Interface defining all methods (i.e verbs) available for the

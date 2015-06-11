@@ -1,17 +1,15 @@
 package de.mpg.imeji.rest.defaultTO;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.JsonNode;
+import de.mpg.imeji.rest.to.PropertiesTO;
+
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.JsonNode;
-
-import de.mpg.imeji.rest.to.PropertiesTO;
 
 @XmlRootElement
 @XmlType (propOrder = {	

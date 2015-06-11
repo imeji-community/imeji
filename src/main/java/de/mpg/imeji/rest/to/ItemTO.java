@@ -61,7 +61,6 @@ public class ItemTO extends PropertiesTO implements Serializable{
     
     protected List<MetadataSetTO> metadata = new ArrayList<MetadataSetTO>();
     
-    private long fileSize;    
     private long fileSize;
 
 	public static enum SYNTAX {

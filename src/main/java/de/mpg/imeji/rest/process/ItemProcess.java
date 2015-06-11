@@ -56,8 +56,22 @@ public class ItemProcess {
 			}
 		return resp;
 	}
-	
 
+	
+	public static JSONResponse readDefaultItem(HttpServletRequest req, String id) {
+		User u = BasicAuthentication.auth(req);
+		JSONResponse resp; 
+
+		ItemService icrud = new ItemService();
+		try {
+			resp= RestProcessUtils.buildResponse(Status.OK.getStatusCode(), icrud.readDefault(id, u));
+		} catch (Exception e) {
+			resp= RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
+		}
+		return resp;
+
+	}
+	
 	public static JSONResponse readItem(HttpServletRequest req, String id) {
 		User u = BasicAuthentication.auth(req);
 		JSONResponse resp; 
@@ -130,13 +144,13 @@ public class ItemProcess {
 		} else {
 			try {
 				ItemService icrud = new ItemService();		
-				DefaultItemTO easyTO = (DefaultItemTO)buildTOFromJSON(req, DefaultItemTO.class);
-				ItemTO itemTO = icrud.read(id, u);
+				DefaultItemTO defaultTO = (DefaultItemTO)buildTOFromJSON(req, DefaultItemTO.class);
+				ItemTO itemTO = (ItemTO) icrud.read(id, u);
 				CollectionService ccrud = new CollectionService();			
 				CollectionTO col = ccrud.read(itemTO.getCollectionId(), u);
 				ProfileService pcrud = new ProfileService();
 				MetadataProfileTO profileTO = pcrud.read(col.getProfile().getId(), u);
-				TransferObjectFactory.transferEasyItemTOItem(profileTO, easyTO, itemTO);
+				ReverseTransferObjectFactory.transferDefaultItemTOtoItemTO(profileTO, defaultTO, itemTO);
 	            resp = buildResponse(OK.getStatusCode(), icrud.update(itemTO, u));
 	            } catch (ImejiException  e) {
 	            	resp = localExceptionHandler(e, e.getLocalizedMessage());

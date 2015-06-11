@@ -61,7 +61,7 @@ public class CollectionResource implements ImejiResource {
 	@ApiOperation(value = "Update collection by id")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response update(
-            @Context HttpServletRequest req,
+            @Context HttpServletRequest req, InputStream json,
             @PathParam("id") String id) throws Exception {
 		JSONResponse resp = updateCollection(req, id);
 		return buildJSONResponse(resp);

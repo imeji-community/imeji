@@ -2,6 +2,8 @@ package de.mpg.imeji.rest.process;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
@@ -19,6 +21,8 @@ import net.java.dev.webdav.jaxrs.ResponseStatus;
 import org.apache.log4j.Logger;
 
 import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -57,18 +61,23 @@ public class RestProcessUtils {
 	}
 	
 	
+	public static JsonNode buildJsonNode(Object obj){
+		ObjectMapper mapper = new ObjectMapper();
+		JsonFactory factory = mapper.getFactory();
+		return mapper.convertValue(obj, JsonNode.class);
+	}
 	
-	public static DefaultItemTO buildEasyItemTOFromJSON(HttpServletRequest req) throws BadRequestException {
+	
+	public static DefaultItemTO buildDefaultItemTOFromJSON(HttpServletRequest req) throws BadRequestException {
 		DefaultItemTO easyTO = new DefaultItemTO();
 		try {
 			JsonFactory factory = new JsonFactory(); 
 			ObjectMapper mapper = new ObjectMapper(factory);
 			JsonNode rootNode =mapper.readTree(req.getInputStream());
-			easyTO.setFetchUrl(rootNode.path("fetchUrl").asText());
 			easyTO.setCollectionId(rootNode.path("collectionId").asText());   	
 			
-			String ez_metadataText  = rootNode.path("ez_metadata").toString();
-		    rootNode = mapper.readTree(ez_metadataText);  
+			String metadataText  = rootNode.path("metadata").toString();
+		    rootNode = mapper.readTree(metadataText);  
 		    Iterator<Map.Entry<String,JsonNode>> fieldsIterator = rootNode.fields();
 		    while (fieldsIterator.hasNext()) {
 		    	Map.Entry<String,JsonNode> field = fieldsIterator.next();
@@ -81,12 +90,6 @@ public class RestProcessUtils {
 		    	
 		    	System.out.println("Key1: " + field.getKey() + "\tValue1:" + field.getValue());
 		       }
-
-			
-//			Map<String, EasyMetadataTO> map = mapper.readValue(rootNode.path("ez_metadata").toString(), new TypeReference<Map<String, EasyMetadataTO>>(){});
-//			easyTO.setEz_metadata(map);
-//			TypeReference<List<EasyMetadataSetTO>> typeRef = new TypeReference<List<EasyMetadataSetTO>>() {};  
-//			List<EasyMetadataSetTO> easyMDTo = mapper.readValue(rootNode.path("ez_metadata").asText(), typeRef);
 			
 		} catch (Exception e) {
 			e.printStackTrace();

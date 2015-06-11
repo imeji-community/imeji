@@ -2,16 +2,19 @@ package de.mpg.imeji.rest.api;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
+
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
 import de.mpg.imeji.rest.process.ReverseTransferObjectFactory;
 import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
+
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ObjectUtils;
 
@@ -47,16 +50,25 @@ public class ItemService implements API<ItemTO> {
 		{
 			throw new BadRequestException("A file must be uploaded, referenced or fetched from external location.");
 		}
-}
+	}
+
+	public DefaultItemTO readDefault(String id, User u) throws ImejiException{
+		DefaultItemTO defaultTO = new DefaultItemTO();
+		Item item = controller.retrieve(ObjectHelper.getURI(Item.class, id), u);
+		TransferObjectFactory.transferDefaultItem(item, defaultTO);
+		return defaultTO;
+	}
 
 	@Override
 	public ItemTO read(String id, User u) throws ImejiException {
-		ItemTO to = new ItemTO();
 		Item item = controller.retrieve(ObjectHelper.getURI(Item.class, id), u);
+
+		ItemTO to = new ItemTO();
 		TransferObjectFactory.transferItem(item, to);
 		return to;
-	}
 
+	}
+	
 	public List<ItemTO> readItems(User u, String q) throws ImejiException, IOException {
 		return Lists.transform(new ItemController().retrieve(u, q, null),
 				new Function<Item, ItemTO>() {
@@ -174,5 +186,7 @@ public class ItemService implements API<ItemTO> {
 	private boolean downloadFile(ItemWithFileTO to) {
 		return !isNullOrEmpty(to.getFetchUrl());
 	}
+
+
 
 }

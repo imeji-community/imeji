@@ -141,6 +141,7 @@ public class ImejiAuthBean implements Serializable {
 	 * @return
 	 */
 	public boolean updateContent(User user, Object obj) {
+		System.out.println("Can update "+auth.updateContent(user, obj));
 		return auth.updateContent(user, obj);
 	}
 
@@ -280,4 +281,5 @@ public class ImejiAuthBean implements Serializable {
 	public void setSessionUser(User sessionUser) {
 		this.sessionUser = sessionUser;
 	}
+	
 }

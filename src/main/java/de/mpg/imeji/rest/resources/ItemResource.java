@@ -1,8 +1,10 @@
 package de.mpg.imeji.rest.resources;
 
 import static de.mpg.imeji.rest.process.ItemProcess.createItem;
+
 import static de.mpg.imeji.rest.process.ItemProcess.deleteItem;
 import static de.mpg.imeji.rest.process.ItemProcess.readItem;
+import static de.mpg.imeji.rest.process.ItemProcess.readDefaultItem;
 import static de.mpg.imeji.rest.process.ItemProcess.readItems;
 import static de.mpg.imeji.rest.process.ItemProcess.updateItem;
 import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONResponse;
@@ -55,11 +57,11 @@ public class ItemResource implements ImejiResource {
 	@Path("/{id}")
 	@ApiOperation(value = "Get item by id")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response read(@Context HttpServletRequest req,
-			@PathParam("id") String id) {
-		JSONResponse resp = readItem(req, id);
+	public Response read(@Context HttpServletRequest req, @PathParam("id") String id, @QueryParam("syntax") String syntax) {
+		JSONResponse resp = ("extended".equalsIgnoreCase(syntax)) ? readItem(req, id) : readDefaultItem(req, id);
 		return RestProcessUtils.buildJSONResponse(resp);
 	}
+
 
 	@POST
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -191,6 +193,12 @@ public class ItemResource implements ImejiResource {
 	public Response delete(@Context HttpServletRequest req, @PathParam("id") String id) {
 		JSONResponse resp = deleteItem(req, id);
 		return RestProcessUtils.buildJSONResponse(resp);
+	}
+
+	@Override
+	public Response read(HttpServletRequest req, String id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

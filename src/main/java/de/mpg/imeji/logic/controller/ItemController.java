@@ -348,22 +348,26 @@ public class ItemController extends ImejiController {
 	 */
 	public Collection<Item> retrieve(List<String> uris, int limit, int offset,
 			User user) {
-
-		List<String> retrieveUris = uris.size() > 0 && limit > 0 ? uris
+		
+		List<String> retrieveUris;
+		if (limit < 0) {
+			retrieveUris = uris;
+		}
+		else
+		{
+			retrieveUris= uris.size() > 0 && limit > 0 ? uris
 				.subList(
 						offset, getMin(offset + limit, uris.size())) : new ArrayList<String>();
-
-		if (limit < 0)
-			retrieveUris = uris;
-
+		}
+						
 		List<Item> items = new ArrayList<Item>();
 
 		for (String s : retrieveUris) {
-
 			items.add((Item) J2JHelper.setId(new Item(), URI.create(s)));
 		}
+		
 		try {
-			reader.read(J2JHelper.cast2ObjectList(items), user);
+			reader.readLazy(J2JHelper.cast2ObjectList(items), user);
 			return items;
 		} catch (Exception e) {
 			throw new RuntimeException(

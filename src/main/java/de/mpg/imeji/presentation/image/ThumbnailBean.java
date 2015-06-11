@@ -89,6 +89,9 @@ public class ThumbnailBean {
 		setFilename(item.getFilename());
 		setMdSet(item.getMetadataSet());
 		setMetadata((List<Metadata>) item.getMetadataSet().getMetadata());
+		setProfile(ObjectCachedLoader.loadProfileWithoutPrivs(getMdSet()
+				.getProfile()));
+		setStatements(loadStatements(getMdSet().getProfile()));
 		setCaption(findCaption());
 		setSelected(sessionBean.getSelected().contains(uri.toString()));
 		if (sessionBean.getActiveAlbum() != null) {
@@ -108,22 +111,21 @@ public class ThumbnailBean {
 	 * @throws Exception
 	 */
 	public String getInitPopup() throws Exception {
-		// TODO: This method should be left ofer to execute ONLY after Hover
-		// from the presentation (or on explicit action) and not always for each
-		// ThumbnailBean!
-		setProfile(ObjectCachedLoader.loadProfileWithoutPrivs(getMdSet()
-				.getProfile()));
+		// TODO: find better way. IN any case, metadata profile had to be loaded because of the caption
+		// alternatively, find another way to fetch the item caption
+//		setProfile(ObjectCachedLoader.loadProfileWithoutPrivs(getMdSet()
+//				.getProfile()));
 		setMds(new MetadataSetBean(getMdSet(), getProfile(), false));
-		setStatements(loadStatements(getProfile().getId()));
+		//Statements have to be filledin for sake of caption
+		//setStatements(loadStatements(getProfile().getId()));
 		return "";
 	}
 
 	public void initPopup() {
 		if (getMds() == null) {
-			setProfile(ObjectCachedLoader.loadProfileWithoutPrivs(getMdSet()
-					.getProfile()));
 			setMds(new MetadataSetBean(getMdSet(), getProfile(), false));
-			setStatements(loadStatements(getProfile().getId()));
+			//Commented out, statements have to be filled in for sake of Caption
+			//setStatements(loadStatements(getProfile().getId()));
 		}
 	}
 

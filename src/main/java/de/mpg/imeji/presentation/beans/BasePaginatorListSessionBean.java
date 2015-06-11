@@ -51,7 +51,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
 	 * The list containing the current elements of the displayed list
 	 */
 	private List<ListElementType> currentPartList;
-	private List<ListElementType> previousPartList;
+	//private List<ListElementType> previousPartList;
 	/**
 	 * The current number of elements per page
 	 */
@@ -159,8 +159,8 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
 			}
 			setGoToPageBottom(Integer.toString(currentPageNumber));
 			setGoToPageTop(Integer.toString(currentPageNumber));
-			previousPartList = new ArrayList<ListElementType>();
-			previousPartList.addAll(currentPartList);
+//			previousPartList = new ArrayList<ListElementType>();
+//			previousPartList.addAll(currentPartList);
 			currentPartList = new ArrayList<>();
 			currentPartList = retrieveList(getOffset(), elementsPerPage);
 			totalNumberOfElements = getTotalNumberOfRecords();

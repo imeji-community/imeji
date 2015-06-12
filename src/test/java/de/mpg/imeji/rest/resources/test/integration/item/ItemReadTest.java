@@ -2,7 +2,6 @@ package de.mpg.imeji.rest.resources.test.integration.item;
 
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.process.RestProcessUtils;
-import de.mpg.imeji.rest.resources.test.TestUtils;
 import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
 import de.mpg.imeji.rest.to.ItemTO;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
@@ -20,6 +19,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import static de.mpg.imeji.rest.process.RestProcessUtils.jsonToPOJO;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.IsNot.not;
@@ -42,20 +42,19 @@ public class ItemReadTest extends ImejiTestBase {
     @Test
     public void test_1_ReadItem_Default() throws Exception {
 
-        Response response = (target(PATH_PREFIX).path("/" + itemId).queryParam("syntax", "")
+        Response response = (target(PATH_PREFIX).path("/" + itemId).queryParam("syntax", "extended")
                 .register(authAsUser)
                 .register(MultiPartFeature.class)
                 .request(MediaType.APPLICATION_JSON_TYPE)).get();
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
-        System.out.println(response.readEntity(String.class));
-        Map<String, Object> itemData = TestUtils.jsonToPOJO(response);
+        Map<String, Object> itemData = jsonToPOJO(response);
         assertEquals(itemId, (String) itemData.get("id"));
     }
 
     @Ignore
     @Test
     public void test_2_ReadItem_Unauthorized() throws IOException {
-        Response response = (target(PATH_PREFIX).path("/" + itemId)
+        Response response = (target(PATH_PREFIX).path("/" + itemId).queryParam("syntax", "extended")
                 .register(MultiPartFeature.class)
                 .request(MediaType.APPLICATION_JSON_TYPE)).get();
         assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
@@ -71,7 +70,7 @@ public class ItemReadTest extends ImejiTestBase {
     @Test
     public void test_3_ReadItem_Forbidden() throws IOException {
 
-        Response response2 = (target(PATH_PREFIX).path("/" + itemId)
+        Response response2 = (target(PATH_PREFIX).path("/" + itemId).queryParam("syntax", "extended")
                 .register(authAsUser2)
                 .register(MultiPartFeature.class)
                 .request(MediaType.APPLICATION_JSON_TYPE)).get();
@@ -122,7 +121,7 @@ public class ItemReadTest extends ImejiTestBase {
     @Test
     public void test_6_ReadItem_NotFound() throws Exception {
 
-        Response response = (target(PATH_PREFIX).path("/" + itemId + "_not_exist_item")
+        Response response = (target(PATH_PREFIX).path("/" + itemId + "_not_exist_item").queryParam("syntax", "extended")
                 .register(authAsUser)
                 .register(MultiPartFeature.class)
                 .request(MediaType.APPLICATION_JSON_TYPE)).get();

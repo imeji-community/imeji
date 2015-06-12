@@ -12,7 +12,7 @@ import org.junit.runners.Suite;
         ItemUpdateFileTest.class,
         ItemUpdateMetadataTest.class,
         ItemDeleteTest.class,
-        ItemEasyCreateTest.class,
+        ItemDefaultMdCreateTest.class,
         ItemEasyUpdateTest.class
 })
 public class ItemTestSuite { }

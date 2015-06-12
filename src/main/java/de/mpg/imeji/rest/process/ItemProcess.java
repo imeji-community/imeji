@@ -30,6 +30,7 @@ import java.util.Map;
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static de.mpg.imeji.rest.process.CommonUtils.USER_MUST_BE_LOGGED_IN;
 import static de.mpg.imeji.rest.process.RestProcessUtils.*;
+import static de.mpg.imeji.rest.to.ItemTO.SYNTAX.IMEJI;
 import static de.mpg.imeji.rest.to.ItemTO.SYNTAX.guessType;
 import static javax.ws.rs.core.Response.Status.OK;
 import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
@@ -105,57 +106,65 @@ public class ItemProcess {
 		User u = BasicAuthentication.auth(req);
 		
 		// Parse json into to
-		ItemWithFileTO to = null;
-		try {
+		ItemWithFileTO itemTO = null;
+        ItemTO.SYNTAX SYNTAX_TYPE = guessType(syntax);
+        try {
 
-			switch (guessType(syntax)) {
-				case EXTENDED:
-					to = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(json,
+            switch (SYNTAX_TYPE) {
+                case IMEJI:
+					itemTO = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(json,
 							ItemWithFileTO.class);
 					break;
-				case EASY:
+                case DEFAULT:
 					//extract metadata node
 					Map<String, Object> itemMap = jsonToPOJO(json);
 					HashMap<String, Object> metadata = (LinkedHashMap<String, Object>)((List)itemMap.remove("metadata")).get(0);
 					//parse as normal ItemTO
-					to = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(buildJSONFromObject(itemMap),
+					itemTO = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(buildJSONFromObject(itemMap),
 							ItemWithFileTO.class);
 					//update metadata part
 					DefaultItemTO easyTO = (DefaultItemTO)buildTOFromJSON(
 							"{\"metadata\":" + buildJSONFromObject(metadata) + "}", DefaultItemTO.class);
-					CollectionService ccrud = new CollectionService();
-					CollectionTO col = ccrud.read(to.getCollectionId(), u);
-					ProfileService pcrud = new ProfileService();
-					MetadataProfileTO profileTO = pcrud.read(col.getProfile().getId(), u);
-					ReverseTransferObjectFactory.transferDefaultItemTOtoItemTO(profileTO, easyTO, to);
+					ReverseTransferObjectFactory.transferDefaultItemTOtoItemTO(
+							getMetadataProfileTO(itemTO, u), easyTO, itemTO);
 					break;
 				default:
 					throw new BadRequestException("Bad syntax type: " + syntax);
 			}
 
 			if (file != null){
-				to = uploadAndValidateFile(file, to, origName);
+				itemTO = uploadAndValidateFile(file, itemTO, origName);
 			}
 			
 		} 
 		catch (Exception e) {
 			return  RestProcessUtils.localExceptionHandler(e, e.getMessage());
 		}
-		
-		// create item with the file
-			ItemService service = new ItemService();
 
-			try {
-				resp= RestProcessUtils.buildResponse(Status.CREATED.getStatusCode(), service.create(to, u));
-			} catch (Exception e) {
-				//System.out.println("MESSAGE= "+e.getLocalizedMessage());
-				resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
+        // create item with the file
+        ItemService is = new ItemService();
+        try {
+            ItemTO createdItem = is.create(itemTO, u);
+            resp = RestProcessUtils.buildResponse(Status.CREATED.getStatusCode(),
+                    SYNTAX_TYPE == IMEJI ?
+                            createdItem :
+                            is.readDefault(createdItem.getId(), u)
+            );
 
-			}
-			
-		return resp;
+        } catch (Exception e) {
+            //System.out.println("MESSAGE= "+e.getLocalizedMessage());
+            resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
+
+        }
+
+        return resp;
 	}
-	
+
+	private static MetadataProfileTO getMetadataProfileTO(ItemTO to, User u) throws ImejiException {
+		CollectionTO col = new CollectionService().read(to.getCollectionId(), u);
+		return new ProfileService().read(col.getProfile().getId(), u);
+	}
+
 	public static JSONResponse easyUpdateItem(HttpServletRequest req, String id) throws IOException {
 		JSONResponse resp = null;  
 		User u = BasicAuthentication.auth(req);
@@ -166,11 +175,8 @@ public class ItemProcess {
 				ItemService icrud = new ItemService();		
 				DefaultItemTO defaultTO = (DefaultItemTO)buildTOFromJSON(req, DefaultItemTO.class);
 				ItemTO itemTO = (ItemTO) icrud.read(id, u);
-				CollectionService ccrud = new CollectionService();			
-				CollectionTO col = ccrud.read(itemTO.getCollectionId(), u);
-				ProfileService pcrud = new ProfileService();
-				MetadataProfileTO profileTO = pcrud.read(col.getProfile().getId(), u);
-				ReverseTransferObjectFactory.transferDefaultItemTOtoItemTO(profileTO, defaultTO, itemTO);
+				ReverseTransferObjectFactory.transferDefaultItemTOtoItemTO(
+						getMetadataProfileTO(itemTO, u), defaultTO, itemTO);
 	            resp = buildResponse(OK.getStatusCode(), icrud.update(itemTO, u));
 	            } catch (ImejiException  e) {
 	            	resp = localExceptionHandler(e, e.getLocalizedMessage());

@@ -32,7 +32,7 @@ public class ItemEasyUpdateMetadataTest extends ItemTestBase {
 	public static void specificSetup() throws Exception {
 		easyItemJSON = getStringFromPath(STATIC_CONTEXT_REST
 				+ "/easyUpdateItemBasic.json");
-		initCollectionWithProfile(getEasyBasicStatements());
+		initCollectionWithProfile(getDefaultBasicStatements());
 		createItem();
 	}
 

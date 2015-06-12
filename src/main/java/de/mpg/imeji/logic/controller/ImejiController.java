@@ -227,7 +227,7 @@ public abstract class ImejiController {
 		return container;
 	}
 	
-	public int getMin(int a, int b) {
+	public static int getMin(int a, int b) {
 		if (a < b)
 			return a;
 		return b;

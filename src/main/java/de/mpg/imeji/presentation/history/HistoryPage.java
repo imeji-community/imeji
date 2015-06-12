@@ -3,6 +3,7 @@
  */
 package de.mpg.imeji.presentation.history;
 
+import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.Search.SearchType;
@@ -16,6 +17,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -56,6 +58,9 @@ public class HistoryPage {
 	 * @throws Exception
 	 */
 	private String loadTitle(URI uri, User user) throws Exception {
+		//TODO: find better way to "touch" objects for necessary information with permissions
+		//or change when the title of the history page should be loaded (after successful request)
+		//otherwise the redirect to proper pages comes from here in addition
 		if (uri != null) {
 			String uriStr = UrlHelper.decode(uri.toString());
 			if (ImejiPages.COLLECTION_HOME.matches(uriStr)) {
@@ -65,8 +70,7 @@ public class HistoryPage {
 				return ObjectLoader.loadAlbumLazy(uri, user).getMetadata()
 						.getTitle();
 			} else if (ImejiPages.ITEM_DETAIL.matches(uriStr)) {
-				Search s  = new SPARQLSearch(SearchType.ITEM, null);
-				return s.searchSimpleForQuery(SPARQLQueries.selectItemFileName(uriStr)).getResults().get(0);
+				return ObjectLoader.loadItem(uri, user).getFilename();
 			} else if (ImejiPages.USER_GROUP == imejiPage) {
 				String groupUri = UrlHelper.decode(ObjectHelper.getId(uri));
 				return ObjectLoader.loadUserGroupLazy(URI.create(groupUri),

@@ -6,6 +6,7 @@ import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.jaxrs.PATCH;
 import de.mpg.imeji.rest.process.ItemProcess;
 import de.mpg.imeji.rest.process.RestProcessUtils;
+import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.JSONResponse;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -41,7 +42,7 @@ public class ItemResource implements ImejiResource {
 	@ApiOperation(value = "Get item by id")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response read(@Context HttpServletRequest req, @PathParam("id") String id, @QueryParam("syntax") String syntax) {
-		JSONResponse resp = ("extended".equalsIgnoreCase(syntax)) ? readItem(req, id) : readDefaultItem(req, id);
+		JSONResponse resp = (ItemTO.SYNTAX.IMEJI.toString().equalsIgnoreCase(syntax)) ? readItem(req, id) : readDefaultItem(req, id);
 		return RestProcessUtils.buildJSONResponse(resp);
 	}
 

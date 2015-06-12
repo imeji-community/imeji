@@ -30,6 +30,7 @@ import java.util.Map;
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static de.mpg.imeji.rest.process.CommonUtils.USER_MUST_BE_LOGGED_IN;
 import static de.mpg.imeji.rest.process.RestProcessUtils.*;
+import static de.mpg.imeji.rest.to.ItemTO.SYNTAX.IMEJI;
 import static de.mpg.imeji.rest.to.ItemTO.SYNTAX.guessType;
 import static javax.ws.rs.core.Response.Status.OK;
 import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
@@ -106,9 +107,10 @@ public class ItemProcess {
 		
 		// Parse json into to
 		ItemWithFileTO itemTO = null;
-		try {
+        ItemTO.SYNTAX SYNTAX_TYPE = guessType(syntax);
+        try {
 
-			switch (guessType(syntax)) {
+            switch (SYNTAX_TYPE) {
                 case IMEJI:
 					itemTO = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(json,
 							ItemWithFileTO.class);
@@ -138,19 +140,24 @@ public class ItemProcess {
 		catch (Exception e) {
 			return  RestProcessUtils.localExceptionHandler(e, e.getMessage());
 		}
-		
-		// create item with the file
-			ItemService service = new ItemService();
 
-			try {
-				resp= RestProcessUtils.buildResponse(Status.CREATED.getStatusCode(), service.create(itemTO, u));
-			} catch (Exception e) {
-				//System.out.println("MESSAGE= "+e.getLocalizedMessage());
-				resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
+        // create item with the file
+        ItemService is = new ItemService();
+        try {
+            ItemTO createdItem = is.create(itemTO, u);
+            resp = RestProcessUtils.buildResponse(Status.CREATED.getStatusCode(),
+                    SYNTAX_TYPE == IMEJI ?
+                            createdItem :
+                            is.readDefault(createdItem.getId(), u)
+            );
 
-			}
-			
-		return resp;
+        } catch (Exception e) {
+            //System.out.println("MESSAGE= "+e.getLocalizedMessage());
+            resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
+
+        }
+
+        return resp;
 	}
 
 	private static MetadataProfileTO getMetadataProfileTO(ItemTO to, User u) throws ImejiException {

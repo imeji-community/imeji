@@ -2,7 +2,6 @@ package de.mpg.imeji.rest.api;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
-
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.ProfileController;

@@ -1,41 +1,24 @@
 package de.mpg.imeji.rest.resources;
 
-import static de.mpg.imeji.rest.process.ItemProcess.createItem;
-
-import static de.mpg.imeji.rest.process.ItemProcess.deleteItem;
-import static de.mpg.imeji.rest.process.ItemProcess.readItem;
-import static de.mpg.imeji.rest.process.ItemProcess.readDefaultItem;
-import static de.mpg.imeji.rest.process.ItemProcess.readItems;
-import static de.mpg.imeji.rest.process.ItemProcess.updateItem;
-import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONResponse;
-
-import java.io.InputStream;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
-import org.glassfish.jersey.media.multipart.FormDataParam;
-
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import com.wordnik.swagger.jaxrs.PATCH;
-
 import de.mpg.imeji.rest.process.ItemProcess;
 import de.mpg.imeji.rest.process.RestProcessUtils;
 import de.mpg.imeji.rest.to.JSONResponse;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.io.InputStream;
+
+import static de.mpg.imeji.rest.process.ItemProcess.*;
+import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONResponse;
 
 
 @Path("/items")
@@ -87,9 +70,10 @@ public class ItemResource implements ImejiResource {
 	public Response create(@Context HttpServletRequest req,
 						   @FormDataParam("file") InputStream file,
 						   @ApiParam(required = true) @FormDataParam("json") String json,
+						   @QueryParam("syntax") String syntax,
 						   @FormDataParam("file") FormDataContentDisposition fileDetail) {
 		String origName = fileDetail != null ? fileDetail.getFileName() : null;
-		return RestProcessUtils.buildJSONResponse(createItem(req, file, json, origName));
+		return RestProcessUtils.buildJSONResponse(createItem(req, file, json, syntax, origName));
 	}
 
 	@PUT

@@ -3,30 +3,7 @@
  */
 package de.mpg.imeji.logic.controller;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
-import static de.mpg.imeji.logic.storage.util.StorageUtils.calculateChecksum;
-import static de.mpg.imeji.logic.storage.util.StorageUtils.getMimeType;
-import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Logger;
-
-import de.mpg.imeji.exceptions.AuthenticationError;
-import de.mpg.imeji.exceptions.BadRequestException;
-import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.exceptions.NotAllowedError;
-import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.exceptions.*;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.ImejiTriple;
@@ -45,22 +22,29 @@ import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.UploadResult;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Container;
-import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.logic.vo.Item.Visibility;
-import de.mpg.imeji.logic.vo.Metadata;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Properties.Status;
-import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
 import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.imeji.rest.process.CommonUtils;
 import de.mpg.j2j.annotations.j2jResource;
 import de.mpg.j2j.helper.J2JHelper;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.*;
+
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static de.mpg.imeji.logic.storage.util.StorageUtils.calculateChecksum;
+import static de.mpg.imeji.logic.storage.util.StorageUtils.getMimeType;
+import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
 
 /**
  * Implements CRUD and Search methods for {@link Item}
@@ -348,22 +332,26 @@ public class ItemController extends ImejiController {
 	 */
 	public Collection<Item> retrieve(List<String> uris, int limit, int offset,
 			User user) {
-
-		List<String> retrieveUris = uris.size() > 0 && limit > 0 ? uris
+		
+		List<String> retrieveUris;
+		if (limit < 0) {
+			retrieveUris = uris;
+		}
+		else
+		{
+			retrieveUris= uris.size() > 0 && limit > 0 ? uris
 				.subList(
 						offset, getMin(offset + limit, uris.size())) : new ArrayList<String>();
-
-		if (limit < 0)
-			retrieveUris = uris;
-
+		}
+						
 		List<Item> items = new ArrayList<Item>();
 
 		for (String s : retrieveUris) {
-
 			items.add((Item) J2JHelper.setId(new Item(), URI.create(s)));
 		}
+		
 		try {
-			reader.read(J2JHelper.cast2ObjectList(items), user);
+			reader.readLazy(J2JHelper.cast2ObjectList(items), user);
 			return items;
 		} catch (Exception e) {
 			throw new RuntimeException(

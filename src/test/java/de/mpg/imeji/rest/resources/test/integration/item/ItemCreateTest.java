@@ -3,17 +3,10 @@ package de.mpg.imeji.rest.resources.test.integration.item;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
-import de.mpg.imeji.rest.resources.test.TestUtils;
-import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
-import de.mpg.imeji.rest.to.HTTPError;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
 import net.java.dev.webdav.jaxrs.ResponseStatus;
-
 import org.apache.commons.httpclient.HttpStatus;
-import org.apache.http.HttpException;
-import org.apache.http.HttpResponse;
-import org.apache.http.protocol.HTTP;
 import org.codehaus.jettison.json.JSONException;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
@@ -23,19 +16,18 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import util.JenaUtil;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
 import static de.mpg.imeji.logic.util.ResourceHelper.getStringFromPath;
+import static de.mpg.imeji.rest.process.RestProcessUtils.jsonToPOJO;
 import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_PATH;
 import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_STORAGE;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
@@ -49,7 +41,7 @@ import static org.junit.Assert.assertEquals;
  * Created by vlad on 09.12.14.
  */
 
-public class ItemCreateTest extends ImejiTestBase {
+public class ItemCreateTest extends ItemTestBase {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ItemCreateTest.class);
@@ -69,17 +61,19 @@ public class ItemCreateTest extends ImejiTestBase {
 	}
 
 	@Test
-	public void createItemWithEmtpyFilename() throws IOException {
+	public void createItemWithEmptyFilename() throws IOException {
 
 		FileDataBodyPart filePart = new FileDataBodyPart("file", TEST_PNG_FILE);
 		FormDataMultiPart multiPart = new FormDataMultiPart();
 		multiPart.bodyPart(filePart);
 		multiPart.field(
-				"json",
-				itemJSON.replace("___COLLECTION_ID___", collectionId).replace(
-						"___FILENAME___", ""));
+				"json", itemJSON
+						.replace("___COLLECTION_ID___", collectionId)
+						.replace("___FILENAME___", "")
+		);
 
 		Response response = target(pathPrefix).register(authAsUser)
+				.queryParam("syntax", "extended")
 				.register(MultiPartFeature.class)
 				.register(JacksonFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)
@@ -105,6 +99,7 @@ public class ItemCreateTest extends ImejiTestBase {
 								""));
 
 		Response response = target(pathPrefix).register(authAsUser)
+				.queryParam("syntax", "extended")
 				.register(MultiPartFeature.class)
 				.register(JacksonFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)
@@ -133,6 +128,7 @@ public class ItemCreateTest extends ImejiTestBase {
 								""));
 
 		Response response = target(pathPrefix).register(authAsUser)
+				.queryParam("syntax", "extended")
 				.register(MultiPartFeature.class)
 				.register(JacksonFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)
@@ -157,13 +153,14 @@ public class ItemCreateTest extends ImejiTestBase {
 						"___FILENAME___", "test.png"));
 
 		Response response = target(pathPrefix).register(authAsUser)
+				.queryParam("syntax", "extended")
 				.register(MultiPartFeature.class)
 				.register(JacksonFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.post(Entity.entity(multiPart, multiPart.getMediaType()));
 
 		assertEquals(CREATED.getStatusCode(), response.getStatus());
-		Map<String, Object> itemData = TestUtils.jsonToPOJO(response);
+		Map<String, Object> itemData = jsonToPOJO(response);
 		assertEquals(Long.toString(TEST_PNG_FILE.length()),
 				Integer.toString((Integer) itemData.get("fileSize")));
 	}
@@ -177,6 +174,7 @@ public class ItemCreateTest extends ImejiTestBase {
 		multiPart.field("json", itemJSON);
 
 		Response response = target(pathPrefix).register(authAsUser)
+				.queryParam("syntax", "extended")
 				.register(MultiPartFeature.class)
 				.register(JacksonFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)
@@ -202,6 +200,7 @@ public class ItemCreateTest extends ImejiTestBase {
 										""));
 
 		Response response = target(pathPrefix).register(authAsUser)
+				.queryParam("syntax", "extended")
 				.register(MultiPartFeature.class)
 				.register(JacksonFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)
@@ -223,6 +222,7 @@ public class ItemCreateTest extends ImejiTestBase {
 						"___FILENAME___", "test.png"));
 
 		Response response = target(pathPrefix).register(authAsUser)
+				.queryParam("syntax", "extended")
 				.register(MultiPartFeature.class)
 				.register(JacksonFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)
@@ -244,6 +244,7 @@ public class ItemCreateTest extends ImejiTestBase {
 						"___FILENAME___", "test.png"));
 
 		Response response = target(pathPrefix).register(MultiPartFeature.class)
+				.queryParam("syntax", "extended")
 				.register(JacksonFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.post(Entity.entity(multiPart, multiPart.getMediaType()));
@@ -269,6 +270,7 @@ public class ItemCreateTest extends ImejiTestBase {
 						"___FILENAME___", "test.png"));
 
 		Response response = target(pathPrefix).register(authAsUser)
+				.queryParam("syntax", "extended")
 				.register(MultiPartFeature.class)
 				.register(JacksonFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)
@@ -301,6 +303,7 @@ public class ItemCreateTest extends ImejiTestBase {
 						"___FILENAME___", "test.png"));
 
 		Response response = target(pathPrefix).register(authAsUser)
+				.queryParam("syntax", "extended")
 				.register(MultiPartFeature.class)
 				.register(JacksonFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)
@@ -322,6 +325,7 @@ public class ItemCreateTest extends ImejiTestBase {
 						"___FILENAME___", "test.png"));
 
 		Response response = target(pathPrefix).register(authAsUser2)
+				.queryParam("syntax", "extended")
 				.register(MultiPartFeature.class)
 				.register(JacksonFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)
@@ -347,6 +351,7 @@ public class ItemCreateTest extends ImejiTestBase {
 		LOGGER.info(multiPart.getField("json").getValue());
 
 		Response response = target(pathPrefix).register(authAsUser)
+				.queryParam("syntax", "extended")
 				.register(MultiPartFeature.class)
 				.register(JacksonFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)
@@ -372,6 +377,7 @@ public class ItemCreateTest extends ImejiTestBase {
 		);
 
 		Response response = target(pathPrefix).register(authAsUser)
+				.queryParam("syntax", "extended")
 				.register(MultiPartFeature.class)
 				.register(JacksonFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)
@@ -396,6 +402,7 @@ public class ItemCreateTest extends ImejiTestBase {
 						.replace("___FILENAME___", ""));
 
 		Response response = target(pathPrefix).register(authAsUser)
+				.queryParam("syntax", "extended")
 				.register(MultiPartFeature.class)
 				.register(JacksonFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)
@@ -433,6 +440,7 @@ public class ItemCreateTest extends ImejiTestBase {
 								"\"fetchUrl\"\\s*:\\s*\"___FETCH_URL___\",", ""));
 
 		Response response = target(pathPrefix).register(authAsUser)
+				.queryParam("syntax", "extended")
 				.register(MultiPartFeature.class)
 				.register(JacksonFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)
@@ -455,6 +463,7 @@ public class ItemCreateTest extends ImejiTestBase {
 		);
 
 		Response response = target(pathPrefix).register(authAsUser)
+				.queryParam("syntax", "extended")
 				.register(MultiPartFeature.class)
 				.register(JacksonFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)
@@ -478,6 +487,7 @@ public class ItemCreateTest extends ImejiTestBase {
 		);
 
 		Response response = target(pathPrefix).register(authAsUser)
+				.queryParam("syntax", "extended")
 				.register(MultiPartFeature.class)
 				.register(JacksonFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)
@@ -503,6 +513,7 @@ public class ItemCreateTest extends ImejiTestBase {
 						"___FILENAME___", "test.png"));
 
 		Response response = target(pathPrefix).register(authAsUser)
+				.queryParam("syntax", "extended")
 				.register(MultiPartFeature.class)
 				.register(JacksonFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)
@@ -532,6 +543,7 @@ public class ItemCreateTest extends ImejiTestBase {
 						"___FILENAME___", "test.exe"));
 
 		Response response = target(pathPrefix).register(authAsUser)
+				.queryParam("syntax", "extended")
 				.register(MultiPartFeature.class)
 				.register(JacksonFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)

@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
@@ -118,7 +117,7 @@ public class ItemProcess {
                 case DEFAULT:
 					//extract metadata node
 					Map<String, Object> itemMap = jsonToPOJO(json);
-					HashMap<String, Object> metadata = (LinkedHashMap<String, Object>)((List)itemMap.remove("metadata")).get(0);
+					HashMap<String, Object> metadata = (LinkedHashMap<String, Object>)itemMap.remove("metadata");
 					//parse as normal ItemTO
 					itemTO = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(buildJSONFromObject(itemMap),
 							ItemWithFileTO.class);

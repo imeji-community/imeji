@@ -21,6 +21,8 @@ import static de.mpg.imeji.logic.util.ResourceHelper.getStringFromPath;
 import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_STORAGE;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -33,7 +35,6 @@ public class ItemDefaultMdCreateTest extends ItemTestBase {
 			.getLogger(ItemDefaultMdCreateTest.class);
 
 	private static final String referenceUrl = "http://th03.deviantart.net/fs71/PRE/i/2012/242/1/f/png_moon_by_paradise234-d5czhdo.png";
-    public static final File TEST_PNG_FILE = new File(STATIC_CONTEXT_STORAGE + "/test.png");
 
     private static String itemJSON;
     private static final String pathPrefix = "/rest/items";
@@ -78,10 +79,10 @@ public class ItemDefaultMdCreateTest extends ItemTestBase {
 	public void test_2_createItem_with_defaultMetadata_defaultSyntax() throws IOException {
 
 		FormDataMultiPart multiPart = new FormDataMultiPart();
-        multiPart.bodyPart(new FileDataBodyPart("file", TEST_PNG_FILE));
+        multiPart.bodyPart(new FileDataBodyPart("file", new File(STATIC_CONTEXT_STORAGE + "/test.jpg")));
         multiPart.field("json",
 						itemJSON.replace("___COLLECTION_ID___", collectionId)
-								.replace("___FILENAME___", "test.png")
+								.replace("___FILENAME___", "test.jpg")
 								.replaceAll("\"fetchUrl\"\\s*:\\s*\"___FETCH_URL___\",", "")
                                 .replaceAll("\"referenceUrl\"\\s*:\\s*\"___REFERENCE_URL___\",", "")
         );
@@ -95,17 +96,43 @@ public class ItemDefaultMdCreateTest extends ItemTestBase {
 		assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatus());
 
         defaultItemTO = response.readEntity(DefaultItemTO.class);
-        //TODO: decide about [] or {}!!!
-        //assertThat(defaultItemTO.getMetadata(), hasSize(7)); //check defaultCreateItem.json
+        assertThat(defaultItemTO.getMetadata().keySet(), hasSize(7)); //check defaultCreateItem.json
+		assertThat(defaultItemTO.getCollectionId(), equalTo(collectionId));
+
+	}
+
+    @Test
+	public void test_3_createItem_with_defaultMetadata_empty_defaultSyntax () throws IOException {
+
+		FormDataMultiPart multiPart = new FormDataMultiPart();
+        multiPart.bodyPart(new FileDataBodyPart("file", new File(STATIC_CONTEXT_STORAGE + "/test.png")));
+        multiPart.field("json",
+						itemJSON.replace("___COLLECTION_ID___", collectionId)
+								.replace("___FILENAME___", "test.png")
+								.replaceAll("\"fetchUrl\"\\s*:\\s*\"___FETCH_URL___\",", "")
+                                .replaceAll("\"referenceUrl\"\\s*:\\s*\"___REFERENCE_URL___\",", "")
+                                .replaceAll("\"metadata\"\\s*:\\s*\\{[\\d\\D]*\\}", "\"metadata\":{}}")
+        );
+		Response response = target(pathPrefix).register(authAsUser)
+                .queryParam("syntax", ItemTO.SYNTAX.DEFAULT.toString().toLowerCase())
+				.register(MultiPartFeature.class)
+				.register(JacksonFeature.class)
+				.request(MediaType.APPLICATION_JSON_TYPE)
+				.post(Entity.entity(multiPart, multiPart.getMediaType()));
+
+		assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatus());
+
+        defaultItemTO = response.readEntity(DefaultItemTO.class);
+        assertThat(defaultItemTO.getMetadata().keySet(), empty()); //check defaultCreateItem.json
 		assertThat(defaultItemTO.getCollectionId(), equalTo(collectionId));
 
 	}
 
 	@Test
-	public void test_3_createItem_with_defaultMetadata_imejiSyntax() throws IOException {
+	public void test_4_createItem_with_defaultMetadata_imejiSyntax() throws IOException {
 
 		FormDataMultiPart multiPart = new FormDataMultiPart();
-        multiPart.bodyPart(new FileDataBodyPart("file", TEST_PNG_FILE));
+        multiPart.bodyPart(new FileDataBodyPart("file", new File(STATIC_CONTEXT_STORAGE + "/test.png")));
         multiPart.field("json",
 						itemJSON.replace("___COLLECTION_ID___", collectionId)
 								.replace("___FILENAME___", "test.png")

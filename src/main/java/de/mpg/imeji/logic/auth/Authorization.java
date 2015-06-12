@@ -63,6 +63,8 @@ public class Authorization {
 	 * @throws NotAllowedError
 	 */
 	public boolean create(User user, Object obj) {
+		if(obj instanceof Album)
+			return true; // everybody is allowed to create albums
 		if (hasGrant(
 				user,
 				toGrant(getRelevantURIForSecurity(obj, false, true),

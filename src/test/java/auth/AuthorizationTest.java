@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.constraints.AssertTrue;
+
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -207,6 +209,12 @@ public class AuthorizationTest {
 				getCollection().getProfile()));
 		// Is allowed to edit the profile?
 		Assert.assertTrue(AuthUtil.staticAuth().update(user, getProfile()));
+	}
+	
+	@Test
+	public void createAlbumForRestrictedUser(){
+		User user = getRestrictedUser();
+		Assert.assertTrue(AuthUtil.staticAuth().create(user, getAlbum()));
 	}
 
 	@Test

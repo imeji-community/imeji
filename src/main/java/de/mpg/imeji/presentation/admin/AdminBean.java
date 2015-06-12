@@ -206,7 +206,7 @@ public class AdminBean {
 	 */
 	private void cleanMetadata() {
 		logger.info("Cleaning Metadata");
-		if (clean = false) {
+		if (clean == false) {
 			Search search = SearchFactory.create();
 
 			List<String> uris = search.searchSimpleForQuery(
@@ -224,11 +224,12 @@ public class AdminBean {
 	 * @throws Exception
 	 */
 	private void cleanStatement() throws Exception {
+		logger.info("Searching for statement without profile...");
 		Search search = SearchFactory.create();
 		List<String> uris = search.searchSimpleForQuery(
 				SPARQLQueries.selectStatementUnbounded()).getResults();
 		logger.info("...found " + uris.size());
-		cleanDatabaseReport += "Unbounded Statements: " + uris.size()
+		cleanDatabaseReport += "Statement without any profile " + uris.size()
 				+ " found  <br/> ";
 		removeResources(uris, Imeji.profileModel, new Statement());
 	}
@@ -239,23 +240,26 @@ public class AdminBean {
 	 * @throws Exception
 	 */
 	private void cleanGrants() throws Exception {
-		logger.info("Searching not bounded grants...");
+		if (clean) {
+
+			ImejiSPARQL.execUpdate(SPARQLQueries.removeGrantWithoutObject());
+			ImejiSPARQL.execUpdate(SPARQLQueries.removeGrantWithoutUser());
+			ImejiSPARQL.execUpdate(SPARQLQueries.removeGrantEmtpy());
+		}
+		logger.info("Searching for problematic grants...");
 		Search search = SearchFactory.create();
 		List<String> uris = search.searchSimpleForQuery(
 				SPARQLQueries.selectGrantWithoutUser()).getResults();
-		cleanDatabaseReport += "Unbounded Grants: " + uris.size()
+		cleanDatabaseReport += "Grants without users: " + uris.size()
 				+ " found  <br/>";
-		removeResources(uris, Imeji.userModel, new Grant());
-		uris = search.searchSimpleForQuery(SPARQLQueries.selectGrantBroken())
-				.getResults();
-		cleanDatabaseReport += "Broken Grants: " + uris.size() + " found <br/>";
-		removeResources(uris, Imeji.userModel, new Grant());
-		logger.info("Searching emtpy grants...");
-		if (clean)
-			ImejiSPARQL.execUpdate(SPARQLQueries.removeGrantEmtpy());
+		uris = search.searchSimpleForQuery(
+				SPARQLQueries.selectGrantWithoutObjects()).getResults();
+		cleanDatabaseReport += "Grants on non existing objects: " + uris.size()
+				+ " found <br/>";
 		uris = search.searchSimpleForQuery(SPARQLQueries.selectGrantEmtpy())
 				.getResults();
 		cleanDatabaseReport += "Empty Grants: " + uris.size() + " found  <br/>";
+		logger.info("...done");
 	}
 
 	/**

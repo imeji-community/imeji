@@ -356,6 +356,18 @@ public class SPARQLQueries {
 		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE { ?s <http://imeji.org/terms/grantType> ?type"
 				+ " . not exists{ ?user <http://imeji.org/terms/grant> ?s}}";
 	}
+	
+	/**
+	 * Remove the grants withtout users
+	 * @return
+	 */
+	public static String removeGrantWithoutUser() {
+		return "WITH <http://imeji.org/user> "
+				+ "DELETE {?user <http://imeji.org/terms/grant> ?s . ?s ?p ?o}  "
+				+ "USING <http://imeji.org/user> "
+				+ "WHERE { ?s <http://imeji.org/terms/grantType> ?type "
+				+ ". not exists{ ?user <http://imeji.org/terms/grant> ?s} . ?s ?p ?o}";
+	}
 
 	/**
 	 * Select {@link Grant} which don't have any triple
@@ -380,10 +392,27 @@ public class SPARQLQueries {
 	 * 
 	 * @return
 	 */
-	public static String selectGrantBroken() {
+	public static String selectGrantWithoutObjects() {
 		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s <http://imeji.org/terms/grantFor> ?for"
 				+ " . not exists{?for ?p ?o} .filter (?for!= <http://imeji.org/> &&  ?for != <"
 				+ PropertyBean.baseURI() + ">)}";
+	}
+
+	/**
+	 * Remove Grant which don't have a grantfor
+	 * @return
+	 */
+	public static String removeGrantWithoutObject() {
+		return "WITH <http://imeji.org/user> "
+				+ "DELETE {?s ?prop ?sub}"
+				+ "USING <http://imeji.org/user> "
+				+ "USING <http://imeji.org/item> "
+				+ "USING <http://imeji.org/collection> "
+				+ "USING <http://imeji.org/album> "
+				+ "USING <http://imeji.org/metadataProfile> "
+				+ " WHERE {?s <http://imeji.org/terms/grantFor> ?for"
+				+ " . not exists{?for ?p ?o} .filter (?for!= <http://imeji.org/> &&  ?for != <"
+				+ PropertyBean.baseURI() + ">) . ?s ?prop ?sub}";
 	}
 
 	/**
@@ -394,7 +423,8 @@ public class SPARQLQueries {
 	 */
 	public static String updateRemoveGrantsFor(String uri) {
 		return "WITH <http://imeji.org/user> DELETE {?user <http://imeji.org/terms/grant> ?s . ?s ?p ?o } "
-				+ "USING <http://imeji.org/user>  WHERE {?user <http://imeji.org/terms/grant> ?s . ?s <http://imeji.org/terms/grantFor> <"
+				+ "USING <http://imeji.org/user> "
+				+ " WHERE {?user <http://imeji.org/terms/grant> ?s . ?s <http://imeji.org/terms/grantFor> <"
 				+ uri + "> . ?s ?p ?o}";
 	}
 
@@ -517,7 +547,7 @@ public class SPARQLQueries {
 				+ "USING <http://imeji.org/item> " + "WHERE{<" + itemId
 				+ "> ?p ?o}";
 	}
-	
+
 	/**
 	 * Update the filesize of a {@link Item}
 	 * 
@@ -525,8 +555,8 @@ public class SPARQLQueries {
 	 * @param fileSize
 	 * @return
 	 */
-	public static String insertFileSizeAndDimension(String itemId, String fileSize,
-			String width, String height) {
+	public static String insertFileSizeAndDimension(String itemId,
+			String fileSize, String width, String height) {
 		return "WITH <http://imeji.org/item> " + "INSERT {<" + itemId
 				+ "> <http://imeji.org/terms/fileSize> " + fileSize + " . <"
 				+ itemId + "> <http://www.w3.org/2003/12/exif/ns#width> "
@@ -535,7 +565,6 @@ public class SPARQLQueries {
 				+ "}" + "USING <http://imeji.org/item> " + "WHERE{<" + itemId
 				+ "> ?p ?o}";
 	}
-
 
 	/**
 	 * Remove all Filesize of all {@link Item}

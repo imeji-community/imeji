@@ -31,6 +31,7 @@ package de.mpg.imeji.presentation.beans;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.exceptions.TypeNotAllowedException;
 import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.util.TempFileUtil;
 import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.presentation.album.AlbumBean;
 import de.mpg.imeji.presentation.collection.CollectionBean;
@@ -378,7 +379,7 @@ public abstract class ContainerBean implements Serializable
 					}
 
 					InputStream in = fis.openStream();
-					tmp = File.createTempFile("containerlogo", "." + FilenameUtils.getExtension(fis.getName()));
+					tmp = TempFileUtil.createTempFile("containerlogo", "." + FilenameUtils.getExtension(fis.getName()));
 					FileOutputStream fos = new FileOutputStream(tmp);
 					if(fis.getName() != null)
 						ii.setName(fis.getName());

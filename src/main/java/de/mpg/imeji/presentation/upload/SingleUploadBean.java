@@ -45,6 +45,7 @@ import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
+import de.mpg.imeji.logic.util.TempFileUtil;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
@@ -192,7 +193,7 @@ public class SingleUploadBean implements Serializable {
 					FileItemStream fis = iter.next();
 					String filename = fis.getName();
 					InputStream in = fis.openStream();
-					tmp = File.createTempFile("singleupload", "."
+					tmp = TempFileUtil.createTempFile("singleupload", "."
 							+ FilenameUtils.getExtension(filename));
 					FileOutputStream fos = new FileOutputStream(tmp);
 					if (!fis.isFormField()) {

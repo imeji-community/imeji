@@ -1,11 +1,13 @@
 package de.mpg.imeji.presentation.ingest;
 
 import de.mpg.imeji.logic.ingest.controller.IngestController;
+import de.mpg.imeji.logic.util.TempFileUtil;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.presentation.collection.ViewCollectionBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
+
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -15,6 +17,7 @@ import org.xml.sax.SAXParseException;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.JAXBException;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -242,7 +245,7 @@ public class IngestBean
      */
     private File write2File(String fileName, InputStream is) throws Exception
     {
-        File f = new File(System.getProperty("java.io.tmpdir"), fileName);
+        File f = TempFileUtil.createTempFile("ingest", fileName);
         try
         {
             OutputStream os = new FileOutputStream(f);

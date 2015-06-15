@@ -22,6 +22,7 @@ import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.UploadResult;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.util.TempFileUtil;
 import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.logic.vo.Item.Visibility;
 import de.mpg.imeji.logic.vo.Properties.Status;
@@ -31,6 +32,7 @@ import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.imeji.rest.process.CommonUtils;
 import de.mpg.j2j.annotations.j2jResource;
 import de.mpg.j2j.helper.J2JHelper;
+
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
@@ -180,7 +182,7 @@ public class ItemController extends ImejiController {
 		if (download) {
 			// download the file in storage
 			try {
-				tmp = File.createTempFile("imeji", null);
+				tmp = TempFileUtil.createTempFile("createWithExternalFile", null);
 				sController.read(externalFileUrl, new FileOutputStream(tmp),
 						true);
 			} catch (Exception e) {
@@ -498,7 +500,7 @@ public class ItemController extends ImejiController {
 		if (download) {
 			// download the file in storage
 			try {
-				File tmp = File.createTempFile("imeji",
+				File tmp = TempFileUtil.createTempFile("updateWithExternalFile",
 						"." + FilenameUtils.getExtension(origName));
 				sc.read(externalFileUrl, new FileOutputStream(tmp), true);
 

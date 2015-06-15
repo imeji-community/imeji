@@ -6,6 +6,7 @@ import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.SpaceController;
 import de.mpg.imeji.logic.controller.exceptions.TypeNotAllowedException;
 import de.mpg.imeji.logic.util.StringHelper;
+import de.mpg.imeji.logic.util.TempFileUtil;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Space;
@@ -210,7 +211,7 @@ public class CreateSpaceBean implements Serializable {
 					}
 
 					InputStream in = fis.openStream();
-					tmp = File.createTempFile("spacelogo",
+					tmp = TempFileUtil.createTempFile("spacelogo",
 							"." + FilenameUtils.getExtension(fis.getName()));
 					FileOutputStream fos = new FileOutputStream(tmp);
 					if (fis.getName() != null)

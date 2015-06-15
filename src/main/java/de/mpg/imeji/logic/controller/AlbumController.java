@@ -20,6 +20,7 @@ import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
+import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
@@ -160,15 +161,15 @@ public class AlbumController extends ImejiController {
 			throws ImejiException {
 		List<Album> aList = new ArrayList<>();
 		try {
-			for (String albId : search(
+			 List<String>results = search(
 					!isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q)
-							: null, user, null, 0, 0, spaceId).getResults()) {
-				aList.add(retrieve(URI.create(albId), user));
-			}
+							: null, user, null, 500, 0, spaceId).getResults();  
+				aList = (List<Album>)loadAlbumsLazy(results, user, getMin(results.size(), 500), 0);
 		} catch (Exception e) {
 			throw new UnprocessableError("Cannot retrieve albums:", e);
 
 		}
+		
 		return aList;
 	}
 

@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -41,7 +42,9 @@ import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;
@@ -52,6 +55,7 @@ import de.mpg.imeji.rest.process.RestProcessUtils;
 import de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE;
 import de.mpg.imeji.rest.to.MetadataProfileTO;
 import de.mpg.j2j.helper.DateHelper;
+import de.mpg.j2j.helper.J2JHelper;
 
 /**
  * Controller for {@link MetadataProfile}
@@ -275,15 +279,13 @@ public class ProfileController extends ImejiController {
 				SortOrder.ASCENDING);
 		SearchResult result;
 		List<MetadataProfile> l = new ArrayList<MetadataProfile>();
+
 		try {
-			result = search
-					.search(!isNullOrEmptyTrim(q) ? URLQueryTransformer
+			result = search.search(!isNullOrEmptyTrim(q) ? URLQueryTransformer
 							.parseStringQuery(q) : null, sortCri, user, spaceId);
-			for (String uri : result.getResults()) {
-				l.add(retrieve(URI.create(uri), user));
-			}
+		    l = (List<MetadataProfile>)retrieveLazy(result.getResults(), getMin(result.getResults().size(), 1000), 0, user);
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("Cannot retrieve profiles:", e);
 		}
 		return l;
 	}
@@ -402,4 +404,51 @@ public class ProfileController extends ImejiController {
 		}
 		return false;
 	}
+	
+	/*
+	 * 
+	 * /**
+	 * Load {@link MetadataProfile} defined in a {@link List} of uris. Don't
+	 * load the {@link Item} contained in the {@link MetadataProfile}
+	 * 
+	 * @param uris
+	 * @param limit
+	 * @param offset
+	 * @return
+	 * @throws ImejiException
+	 */
+	public Collection<MetadataProfile> retrieveLazy(List<String> uris,
+			int limit, int offset, User user) throws ImejiException {
+
+		List<MetadataProfile> cols = new ArrayList<MetadataProfile>();
+		
+		List<String> retrieveUris;
+		if (limit < 0) {
+			retrieveUris = uris;
+		}
+		else
+		{
+			retrieveUris= uris.size() > 0 && limit > 0 ? uris
+				.subList(
+						offset, getMin(offset + limit, uris.size())) : new ArrayList<String>();
+		}
+		
+		
+		for (String s : retrieveUris) {
+				
+					cols.add((MetadataProfile) J2JHelper.setId(
+							new MetadataProfile(), URI.create(s)));
+		}
+		
+		try {
+			reader.readLazy(J2JHelper.cast2ObjectList(cols), user);
+			return cols;
+		}
+		catch (ImejiException e) {
+				logger.error("Error loading metadataProfiles: " + e.getMessage(), e);
+				return null;
+		}
+	}
+
+	
 }

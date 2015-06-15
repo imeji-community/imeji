@@ -172,22 +172,22 @@ public class CollectionController extends ImejiController {
 	 * @return
 	 * @throws ImejiException
 	 */
+	//TODO
 	public List<Item> retrieveItems(String id, User user, String q)
 			throws ImejiException {
 		ItemController ic = new ItemController();
-		List<Item> itemList = new ArrayList<Item>();
+		List<Item> itemList ;
 		try {
-			for (String itemId : ic
-					.search(ObjectHelper.getURI(CollectionImeji.class, id),
-							!isNullOrEmptyTrim(q) ? URLQueryTransformer
-									.parseStringQuery(q) : null, null, null,
-							user, null).getResults()) {
-				itemList.add(ic.retrieve(URI.create(itemId), user));
-			}
+
+			List<String> results =  ic.search(ObjectHelper.getURI(CollectionImeji.class, id),	
+											!isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q) : null, 
+											null, null, user, null).getResults();
+			itemList = (List<Item>)ic.retrieve(results, getMin(results.size(), 500), 0, user);
 		} catch (Exception e) {
-			throw new UnprocessableError("Cannot retrieve items:", e);
+			throw new UnprocessableError("Cannot retrieve collections:", e);
 
 		}
+
 		return itemList;
 	}
 
@@ -204,14 +204,16 @@ public class CollectionController extends ImejiController {
 
 		List<CollectionImeji> cList = new ArrayList<CollectionImeji>();
 		try {
-			for (String colId : search(
-					!isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q)
-							: null, null, 0, 0, user, spaceId).getResults()) {
-				cList.add(retrieve(URI.create(colId), user));
-			}
+
+			List<String> results =  search(	
+											!isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q) : null, 
+											null, 1000, 0, user,spaceId).getResults();
+			cList = (List<CollectionImeji>)retrieveLazy(results, getMin(results.size(), 500), 0, user);
 		} catch (Exception e) {
 			throw new UnprocessableError("Cannot retrieve collections:", e);
+
 		}
+			
 		return cList;
 	}
 

@@ -100,7 +100,7 @@ public class ProfileService implements API<MetadataProfileTO>{
 
 	public List<MetadataProfileTO> readAll(User u, String q) throws ImejiException {
 	        ProfileController cc = new ProfileController();
-	        return Lists.transform(cc.search(u, q),
+	        return Lists.transform(cc.search(u, q, null),
 	                new Function<MetadataProfile, MetadataProfileTO>() {
 	                    @Override
 	                    public MetadataProfileTO apply(MetadataProfile vo) {

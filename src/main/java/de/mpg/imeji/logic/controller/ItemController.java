@@ -371,13 +371,11 @@ public class ItemController extends ImejiController {
 			throws ImejiException, IOException {
 		List<Item> itemList = new ArrayList<Item>();
 		try {
-			for (String itemId : search(
-					null,
-					!isNullOrEmptyTrim(q) ? URLQueryTransformer
-							.parseStringQuery(q) : null, null, null, user,
-					spaceId).getResults()) {
-				itemList.add(retrieve(URI.create(itemId), user));
-			}
+
+			List<String> results =  search(	null,
+											!isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q) : null, 
+											null, null, user,spaceId).getResults();
+			itemList = (List<Item>)retrieve(results, getMin(results.size(), 500), 0, user);
 		} catch (Exception e) {
 			throw new UnprocessableError("Cannot retrieve items:", e);
 

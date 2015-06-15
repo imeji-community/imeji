@@ -68,7 +68,6 @@ public class ItemDefaultMdCreateTest extends ItemTestBase {
 		assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatus());
 
         defaultItemTO = response.readEntity(DefaultItemTO.class);
-        //TODO: decide about [] or {}!!!
         //assertThat(defaultItemTO.getMetadata(), hasSize(7)); //check defaultCreateItem.json
 		assertThat(defaultItemTO.getCollectionId(), equalTo(collectionId));
 

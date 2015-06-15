@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import util.JenaUtil;
 
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -72,11 +73,7 @@ public class ItemCreateTest extends ItemTestBase {
 						.replace("___FILENAME___", "")
 		);
 
-		Response response = target(pathPrefix).register(authAsUser)
-				.queryParam("syntax", "extended")
-				.register(MultiPartFeature.class)
-				.register(JacksonFeature.class)
-				.request(MediaType.APPLICATION_JSON_TYPE)
+		Response response = getAuthTarget()
 				.post(Entity.entity(multiPart, multiPart.getMediaType()));
 
 		assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
@@ -98,11 +95,7 @@ public class ItemCreateTest extends ItemTestBase {
 								"\\s*\"filename\":\\s*\"___FILENAME___\"\\s*,",
 								""));
 
-		Response response = target(pathPrefix).register(authAsUser)
-				.queryParam("syntax", "extended")
-				.register(MultiPartFeature.class)
-				.register(JacksonFeature.class)
-				.request(MediaType.APPLICATION_JSON_TYPE)
+		Response response = getAuthTarget()
 				.post(Entity.entity(multiPart, multiPart.getMediaType()));
 
 		assertEquals(CREATED.getStatusCode(), response.getStatus());
@@ -127,11 +120,7 @@ public class ItemCreateTest extends ItemTestBase {
 								"\\s*\"filename\":\\s*\"___FILENAME___\"\\s*,",
 								""));
 
-		Response response = target(pathPrefix).register(authAsUser)
-				.queryParam("syntax", "extended")
-				.register(MultiPartFeature.class)
-				.register(JacksonFeature.class)
-				.request(MediaType.APPLICATION_JSON_TYPE)
+		Response response = getAuthTarget()
 				.post(Entity.entity(multiPart, multiPart.getMediaType()));
 
 		assertEquals(CREATED.getStatusCode(), response.getStatus());
@@ -152,11 +141,7 @@ public class ItemCreateTest extends ItemTestBase {
 				itemJSON.replace("___COLLECTION_ID___", collectionId).replace(
 						"___FILENAME___", "test.png"));
 
-		Response response = target(pathPrefix).register(authAsUser)
-				.queryParam("syntax", "extended")
-				.register(MultiPartFeature.class)
-				.register(JacksonFeature.class)
-				.request(MediaType.APPLICATION_JSON_TYPE)
+		Response response = getAuthTarget()
 				.post(Entity.entity(multiPart, multiPart.getMediaType()));
 
 		assertEquals(CREATED.getStatusCode(), response.getStatus());
@@ -173,11 +158,7 @@ public class ItemCreateTest extends ItemTestBase {
 		multiPart.bodyPart(filePart);
 		multiPart.field("json", itemJSON);
 
-		Response response = target(pathPrefix).register(authAsUser)
-				.queryParam("syntax", "extended")
-				.register(MultiPartFeature.class)
-				.register(JacksonFeature.class)
-				.request(MediaType.APPLICATION_JSON_TYPE)
+		Response response = getAuthTarget()
 				.post(Entity.entity(multiPart, multiPart.getMediaType()));
 
 		assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(),
@@ -199,11 +180,7 @@ public class ItemCreateTest extends ItemTestBase {
 										"\"referenceUrl\"\\s*:\\s*\"___REFERENCE_URL___\",",
 										""));
 
-		Response response = target(pathPrefix).register(authAsUser)
-				.queryParam("syntax", "extended")
-				.register(MultiPartFeature.class)
-				.register(JacksonFeature.class)
-				.request(MediaType.APPLICATION_JSON_TYPE)
+		Response response = getAuthTarget()
 				.post(Entity.entity(multiPart, multiPart.getMediaType()));
 
 		assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
@@ -221,11 +198,7 @@ public class ItemCreateTest extends ItemTestBase {
 						collectionId + "i_do_not_exist").replace(
 						"___FILENAME___", "test.png"));
 
-		Response response = target(pathPrefix).register(authAsUser)
-				.queryParam("syntax", "extended")
-				.register(MultiPartFeature.class)
-				.register(JacksonFeature.class)
-				.request(MediaType.APPLICATION_JSON_TYPE)
+		Response response = getAuthTarget()
 				.post(Entity.entity(multiPart, multiPart.getMediaType()));
 
 		assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(),
@@ -243,8 +216,9 @@ public class ItemCreateTest extends ItemTestBase {
 				itemJSON.replace("___COLLECTION_ID___", collectionId).replace(
 						"___FILENAME___", "test.png"));
 
-		Response response = target(pathPrefix).register(MultiPartFeature.class)
-				.queryParam("syntax", "extended")
+		Response response = target(pathPrefix)
+				.register(MultiPartFeature.class)
+				.queryParam("syntax", ItemTO.SYNTAX.IMEJI.toString().toLowerCase())
 				.register(JacksonFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.post(Entity.entity(multiPart, multiPart.getMediaType()));
@@ -269,11 +243,7 @@ public class ItemCreateTest extends ItemTestBase {
 				itemJSON.replace("___COLLECTION_ID___", collectionId).replace(
 						"___FILENAME___", "test.png"));
 
-		Response response = target(pathPrefix).register(authAsUser)
-				.queryParam("syntax", "extended")
-				.register(MultiPartFeature.class)
-				.register(JacksonFeature.class)
-				.request(MediaType.APPLICATION_JSON_TYPE)
+		Response response = getAuthTarget()
 				.post(Entity.entity(multiPart, multiPart.getMediaType()));
 
 		assertEquals(Status.CREATED.getStatusCode(), response.getStatus());
@@ -302,11 +272,7 @@ public class ItemCreateTest extends ItemTestBase {
 				itemJSON.replace("___COLLECTION_ID___", collectionId).replace(
 						"___FILENAME___", "test.png"));
 
-		Response response = target(pathPrefix).register(authAsUser)
-				.queryParam("syntax", "extended")
-				.register(MultiPartFeature.class)
-				.register(JacksonFeature.class)
-				.request(MediaType.APPLICATION_JSON_TYPE)
+		Response response = getAuthTarget()
 				.post(Entity.entity(multiPart, multiPart.getMediaType()));
 
 		assertEquals(HttpStatus.SC_FORBIDDEN, response.getStatus());
@@ -324,8 +290,9 @@ public class ItemCreateTest extends ItemTestBase {
 				itemJSON.replace("___COLLECTION_ID___", collectionId).replace(
 						"___FILENAME___", "test.png"));
 
-		Response response = target(pathPrefix).register(authAsUser2)
-				.queryParam("syntax", "extended")
+		Response response = target(pathPrefix)
+				.register(authAsUser2)
+				.queryParam("syntax", ItemTO.SYNTAX.IMEJI.toString().toLowerCase())
 				.register(MultiPartFeature.class)
 				.register(JacksonFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)
@@ -350,11 +317,7 @@ public class ItemCreateTest extends ItemTestBase {
 
 		LOGGER.info(multiPart.getField("json").getValue());
 
-		Response response = target(pathPrefix).register(authAsUser)
-				.queryParam("syntax", "extended")
-				.register(MultiPartFeature.class)
-				.register(JacksonFeature.class)
-				.request(MediaType.APPLICATION_JSON_TYPE)
+		Response response = getAuthTarget()
 				.post(Entity.entity(multiPart, multiPart.getMediaType()));
 
 		LOGGER.info(response.readEntity(String.class));
@@ -376,11 +339,7 @@ public class ItemCreateTest extends ItemTestBase {
 
 		);
 
-		Response response = target(pathPrefix).register(authAsUser)
-				.queryParam("syntax", "extended")
-				.register(MultiPartFeature.class)
-				.register(JacksonFeature.class)
-				.request(MediaType.APPLICATION_JSON_TYPE)
+		Response response = getAuthTarget()
 				.post(Entity.entity(multiPart, multiPart.getMediaType()));
 
 		assertEquals(Status.CREATED.getStatusCode(), response.getStatus());
@@ -401,11 +360,7 @@ public class ItemCreateTest extends ItemTestBase {
 						.replace("___FETCH_URL___", fileURL)
 						.replace("___FILENAME___", ""));
 
-		Response response = target(pathPrefix).register(authAsUser)
-				.queryParam("syntax", "extended")
-				.register(MultiPartFeature.class)
-				.register(JacksonFeature.class)
-				.request(MediaType.APPLICATION_JSON_TYPE)
+		Response response = getAuthTarget()
 				.post(Entity.entity(multiPart, multiPart.getMediaType()));
 
 		assertEquals(Status.CREATED.getStatusCode(), response.getStatus());
@@ -439,11 +394,7 @@ public class ItemCreateTest extends ItemTestBase {
 						.replaceAll(
 								"\"fetchUrl\"\\s*:\\s*\"___FETCH_URL___\",", ""));
 
-		Response response = target(pathPrefix).register(authAsUser)
-				.queryParam("syntax", "extended")
-				.register(MultiPartFeature.class)
-				.register(JacksonFeature.class)
-				.request(MediaType.APPLICATION_JSON_TYPE)
+		Response response = getAuthTarget()
 				.post(Entity.entity(multiPart, multiPart.getMediaType()));
 
 		assertEquals(Status.CREATED.getStatusCode(), response.getStatus());
@@ -462,11 +413,7 @@ public class ItemCreateTest extends ItemTestBase {
 
 		);
 
-		Response response = target(pathPrefix).register(authAsUser)
-				.queryParam("syntax", "extended")
-				.register(MultiPartFeature.class)
-				.register(JacksonFeature.class)
-				.request(MediaType.APPLICATION_JSON_TYPE)
+		Response response = getAuthTarget()
 				.post(Entity.entity(multiPart, multiPart.getMediaType()));
 
 		assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(),
@@ -486,11 +433,7 @@ public class ItemCreateTest extends ItemTestBase {
 
 		);
 
-		Response response = target(pathPrefix).register(authAsUser)
-				.queryParam("syntax", "extended")
-				.register(MultiPartFeature.class)
-				.register(JacksonFeature.class)
-				.request(MediaType.APPLICATION_JSON_TYPE)
+		Response response = getAuthTarget()
 				.post(Entity.entity(multiPart, multiPart.getMediaType()));
 
 		assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(),
@@ -512,11 +455,7 @@ public class ItemCreateTest extends ItemTestBase {
 				itemJSON.replace("___COLLECTION_ID___", collectionId).replace(
 						"___FILENAME___", "test.png"));
 
-		Response response = target(pathPrefix).register(authAsUser)
-				.queryParam("syntax", "extended")
-				.register(MultiPartFeature.class)
-				.register(JacksonFeature.class)
-				.request(MediaType.APPLICATION_JSON_TYPE)
+		Response response = getAuthTarget()
 				.post(Entity.entity(multiPart, multiPart.getMediaType()));
 
 		if (Imeji.isValidateChecksumInCollection()) {
@@ -542,15 +481,20 @@ public class ItemCreateTest extends ItemTestBase {
 				itemJSON.replace("___COLLECTION_ID___", collectionId).replace(
 						"___FILENAME___", "test.exe"));
 
-		Response response = target(pathPrefix).register(authAsUser)
-				.queryParam("syntax", "extended")
-				.register(MultiPartFeature.class)
-				.register(JacksonFeature.class)
-				.request(MediaType.APPLICATION_JSON_TYPE)
+		Response response = getAuthTarget()
 				.post(Entity.entity(multiPart, multiPart.getMediaType()));
 
 		assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(),
 				response.getStatus());
+	}
+
+	// Default Authorized Target with imeji syntax
+	private Invocation.Builder getAuthTarget() {
+		return target(pathPrefix).register(authAsUser)
+				.queryParam("syntax", ItemTO.SYNTAX.IMEJI.toString().toLowerCase())
+				.register(MultiPartFeature.class)
+				.register(JacksonFeature.class)
+				.request(MediaType.APPLICATION_JSON_TYPE);
 	}
 
 }

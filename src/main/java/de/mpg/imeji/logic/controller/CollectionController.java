@@ -5,6 +5,7 @@ package de.mpg.imeji.logic.controller;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
+
 import de.mpg.imeji.exceptions.AuthenticationError;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotFoundException;
@@ -33,6 +34,7 @@ import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.j2j.helper.J2JHelper;
+
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -239,10 +241,20 @@ public class CollectionController extends ImejiController {
 	 */
 	public Collection<CollectionImeji> retrieveLazy(List<String> uris,
 			int limit, int offset, User user) throws ImejiException {
+
 		List<CollectionImeji> cols = new ArrayList<CollectionImeji>();
 		
-		List<String> retrieveUris = uris.size()>0 && limit>0? 
-				uris.subList(offset, getMin(offset+limit, uris.size())):new ArrayList<String>();
+		List<String> retrieveUris;
+		if (limit < 0) {
+			retrieveUris = uris;
+		}
+		else
+		{
+			retrieveUris= uris.size() > 0 && limit > 0 ? uris
+				.subList(
+						offset, getMin(offset + limit, uris.size())) : new ArrayList<String>();
+		}
+		
 		
 		for (String s : retrieveUris) {
 				

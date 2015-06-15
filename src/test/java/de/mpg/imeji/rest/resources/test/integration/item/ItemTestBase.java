@@ -61,7 +61,7 @@ public class ItemTestBase extends ImejiTestBase {
 
     }
 
-    protected static Collection<Statement> getEasyBasicStatements() {
+    protected static Collection<Statement> getDefaultBasicStatements() {
         Collection<Statement> statements = new ArrayList<Statement>();
         Statement st;
         for (String type : new String[] { "text", "number", "person",

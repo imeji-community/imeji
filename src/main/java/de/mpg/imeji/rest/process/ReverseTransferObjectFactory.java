@@ -480,7 +480,7 @@ public class ReverseTransferObjectFactory {
 								{
 									labels.add(new LabelTO(label.getLang(), label.getValue()));
 								}
-								mdTO.setLabels(labels);;
+								mdTO.setLabels(labels);
 								mdTO.setStatementUri(ObjectHelper.getURI(Statement.class, sTO.getId()));
 								mdTO.setTypeUri(sTO.getType());
 								itemTO.getMetadata().add(mdTO);
@@ -501,8 +501,8 @@ public class ReverseTransferObjectFactory {
 						JsonNode node = entry.getValue();
 						JsonFactory factory = new JsonFactory();
 						ObjectMapper mapper = new ObjectMapper(factory);
-	
-						switch(sTO.getType().toString())
+
+                        switch(sTO.getType().toString())
 						{
 							case "http://imeji.org/terms/metadata#text": 
 								if(node == null)
@@ -511,9 +511,15 @@ public class ReverseTransferObjectFactory {
 								}
 								else
 								{
-									TextTO newT = new TextTO();
-									newT.setText(node.textValue());
-									mdTO.setValue(newT);
+                                    String textValue = node.textValue();
+                                    if (textValue == null) {
+                                        throw new BadRequestException("Wrong value <" + node.toString() + "> in metadata of type " + sTO.getType().toString()
+                                                + " with label " + key) ;
+                                    } else {
+                                        TextTO newT = new TextTO();
+                                        newT.setText(textValue);
+                                        mdTO.setValue(newT);
+                                    }
 								}
 								break;
 							case "http://imeji.org/terms/metadata#number":

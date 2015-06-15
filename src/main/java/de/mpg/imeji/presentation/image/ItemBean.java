@@ -14,10 +14,6 @@ import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
 import org.apache.commons.io.FilenameUtils;
-import org.apache.tika.mime.MediaType;
-import org.apache.tika.mime.MimeType;
-import org.apache.tika.mime.MimeTypes;
-
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.Imeji;

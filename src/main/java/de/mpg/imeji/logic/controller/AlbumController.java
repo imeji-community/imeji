@@ -26,6 +26,7 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.j2j.helper.DateHelper;
 import de.mpg.j2j.helper.J2JHelper;
+
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -365,8 +366,16 @@ public class AlbumController extends ImejiController {
 			int limit, int offset) throws ImejiException {
 		List<Album> albs = new ArrayList<Album>();
 		
-		List<String> retrieveUris = uris.size()>0 && limit>0? 
-				uris.subList(offset, getMin(offset+limit, uris.size())):new ArrayList<String>();
+		List<String> retrieveUris;
+		if (limit < 0) {
+			retrieveUris = uris;
+		}
+		else
+		{
+			retrieveUris= uris.size() > 0 && limit > 0 ? uris
+				.subList(
+						offset, getMin(offset + limit, uris.size())) : new ArrayList<String>();
+		}
 		
 		for (String s : retrieveUris) {
 			albs.add((Album) J2JHelper.setId(new Album(), URI.create(s)));

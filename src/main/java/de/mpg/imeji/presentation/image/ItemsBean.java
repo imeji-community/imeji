@@ -25,11 +25,13 @@ import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.session.SessionObjectsController;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
+import de.mpg.imeji.presentation.util.ProfileHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
+
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -153,9 +155,10 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
 		Collection<Item> items = loadImages(searchResult.getResults(), offset,
 				limit);
 		// Init the labels for the item
-		if (!items.isEmpty())
+		if (!items.isEmpty()) {
 			((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class))
-					.init((List<Item>) items);
+				.init((List<Item>) items);
+		}
 		// Return the item as thumbnailBean
 		return ImejiFactory.imageListToThumbList(items);
 	}
@@ -184,7 +187,9 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
 		ItemController controller = new ItemController();
 		return controller.retrieve(uris, limit, offset, session.getUser());
 	}
-
+	
+	
+	
 	/**
 	 * Clean the list of select {@link Item} in the session if the selected
 	 * images context is not "pretty:browse"

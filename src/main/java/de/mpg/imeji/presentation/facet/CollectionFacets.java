@@ -6,7 +6,6 @@ package de.mpg.imeji.presentation.facet;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchResult;
@@ -20,13 +19,12 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.collection.CollectionItemsBean;
 import de.mpg.imeji.presentation.facet.Facet.FacetType;
 import de.mpg.imeji.presentation.filter.FiltersSession;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.ObjectCachedLoader;
+import de.mpg.imeji.presentation.util.ObjectLoader;
 
 /**
  * Facets for the item browsed within a collection
@@ -43,8 +41,6 @@ public class CollectionFacets extends Facets {
 	private List<List<Facet>> facets = new ArrayList<List<Facet>>();
 	private URI colURI = null;
 	private SearchQuery searchQuery;
-	private Navigation nav = (Navigation) BeanHelper
-			.getApplicationBean(Navigation.class);
 	private SearchResult allImages = ((CollectionItemsBean) BeanHelper
 			.getSessionBean(CollectionItemsBean.class)).getSearchResult();
 	private MetadataProfile profile;
@@ -62,7 +58,8 @@ public class CollectionFacets extends Facets {
 		
 		this.colURI = col.getId();
 		this.searchQuery = searchQuery;
-		this.profile = ObjectCachedLoader.loadProfile(col.getProfile());
+		sb = (SessionBean) BeanHelper .getSessionBean(SessionBean.class);
+		this.profile = ObjectLoader.loadProfile(col.getProfile(), sb.getUser());
 	}
 
 	/*
@@ -76,6 +73,7 @@ public class CollectionFacets extends Facets {
 		// + "/" + nav.getBrowsePath() + "?q=";
 		String baseURI = "?q=";
 		FacetURIFactory uriFactory = new FacetURIFactory(searchQuery);
+
 
 		int count = 0;
 		int sizeAllImages = allImages.getNumberOfRecords();

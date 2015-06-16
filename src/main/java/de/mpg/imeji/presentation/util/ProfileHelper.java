@@ -9,9 +9,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.presentation.session.SessionBean;
 
 /**
  * Helper methods related to {@link MetadataProfile}
@@ -32,14 +34,20 @@ public class ProfileHelper
     public static Map<URI, MetadataProfile> loadProfiles(List<Item> imgs)
     {
         Map<URI, MetadataProfile> pMap = new HashMap<URI, MetadataProfile>();
+        
         for (Item im : imgs)
         {
             if (pMap.get(im.getMetadataSet().getProfile()) == null)
             {
-                pMap.put(im.getMetadataSet().getProfile(),
-                        ObjectCachedLoader.loadProfile(im.getMetadataSet().getProfile()));
+            	//safe to retrieve the profile as an admin user, as there is only one call to this method
+            	pMap.put(im.getMetadataSet().getProfile(),
+                       ObjectLoader.loadProfile(im.getMetadataSet().getProfile(), Imeji.adminUser));
+            		//ObjectCachedLoader.loadProfile(im.getMetadataSet().getProfile()));
             }
         }
+        
+        ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).setProfileCached(pMap);
+        
         return pMap;
     }
 

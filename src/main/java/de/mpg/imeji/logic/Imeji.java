@@ -5,6 +5,19 @@ package de.mpg.imeji.logic;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URI;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import org.apache.jena.atlas.lib.AlarmClock;
+import org.apache.log4j.Logger;
+import org.apache.log4j.lf5.util.StreamUtils;
+
 import com.hp.hpl.jena.Jena;
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.query.ReadWrite;
@@ -14,25 +27,23 @@ import com.hp.hpl.jena.tdb.TDB;
 import com.hp.hpl.jena.tdb.TDBFactory;
 import com.hp.hpl.jena.tdb.base.file.Location;
 import com.hp.hpl.jena.tdb.sys.TDBMaker;
+
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.controller.ProfileController;
+import de.mpg.imeji.logic.jobs.executors.NightlyExecutor;
 import de.mpg.imeji.logic.util.StringHelper;
-import de.mpg.imeji.logic.vo.*;
+import de.mpg.imeji.logic.vo.Album;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Organization;
+import de.mpg.imeji.logic.vo.Person;
+import de.mpg.imeji.logic.vo.Space;
+import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.j2j.annotations.j2jModel;
-import org.apache.jena.atlas.lib.AlarmClock;
-import org.apache.log4j.Logger;
-import org.apache.log4j.lf5.util.StreamUtils;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.URI;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * {@link Jena} interface for imeji
@@ -43,19 +54,19 @@ import java.util.concurrent.Executors;
  */
 public class Imeji {
 
-    private static Logger logger = Logger.getLogger(Imeji.class);
+	private static Logger logger = Logger.getLogger(Imeji.class);
 
-    public static String tdbPath = null;
-    public static String collectionModel;
-    public static String albumModel;
-    public static String imageModel;
-    public static String userModel;
-    public static String profileModel;
-    public static String statementModel;
-    public static String counterModel = "http://imeji.org/counter";
-    public static String spaceModel;
-    public static Dataset dataset;
-    public static URI counterID = URI.create("http://imeji.org/counter/0");
+	public static String tdbPath = null;
+	public static String collectionModel;
+	public static String albumModel;
+	public static String imageModel;
+	public static String userModel;
+	public static String profileModel;
+	public static String statementModel;
+	public static String counterModel = "http://imeji.org/counter";
+	public static String spaceModel;
+	public static Dataset dataset;
+	public static URI counterID = URI.create("http://imeji.org/counter/0");
 	public static User adminUser;
 	public static MetadataProfile defaultMetadataProfile;
 	private static final String ADMIN_EMAIL_INIT = "admin@imeji.org";
@@ -64,6 +75,10 @@ public class Imeji {
 	 * The {@link ExecutorService} which runs the thread in imeji
 	 */
 	public static ExecutorService executor = Executors.newCachedThreadPool();
+	/**
+	 * Executes jobs over night
+	 */
+	public static NightlyExecutor nightlyExecutor = new NightlyExecutor();
 
 	/**
 	 * Initialize the {@link Jena} database according to imeji.properties<br/>
@@ -77,6 +92,7 @@ public class Imeji {
 					e);
 		}
 		init(tdbPath);
+		nightlyExecutor.start();
 	}
 
 	/**
@@ -139,13 +155,12 @@ public class Imeji {
 		initModel(profileModel);
 		initModel(spaceModel);
 		initModel(counterModel);
-        logger.info("... models done!");
-        initadminUser();
-        initDefaultMetadataProfile();
+		logger.info("... models done!");
+		initadminUser();
+		initDefaultMetadataProfile();
 	}
 
-
-    /**
+	/**
 	 * Initialize (Create when not existing) a {@link Model} with a given name
 	 * 
 	 * @param name
@@ -190,35 +205,37 @@ public class Imeji {
 		} catch (Exception e) {
 			throw new RuntimeException("error creating admin user: ", e);
 		}
-		
+
 		adminUser.getGrants().addAll(
 				AuthorizationPredefinedRoles.imejiAdministrator(adminUser
 						.getId().toString()));
 	}
 
-    private static void initDefaultMetadataProfile() {
+	private static void initDefaultMetadataProfile() {
 
-        ProfileController pc = new ProfileController();
-        logger.info("Initializing default metadata profile...");
-        try {
-            defaultMetadataProfile = pc.initDefaultMetadataProfile();
-        } catch (Exception e) {
-        	throw new RuntimeException("error retrieving/creating default metadata profile: ", e);
-        }
-        if (defaultMetadataProfile != null) {
-        	logger.info("Default metadata profile is set-up to "+defaultMetadataProfile.getId());
-        }
-        else
-        {
-        	logger.info("Checking for default metadata profile is finished: no default metadata profile has been set.");
-        	
-        }
-    }
+		ProfileController pc = new ProfileController();
+		logger.info("Initializing default metadata profile...");
+		try {
+			defaultMetadataProfile = pc.initDefaultMetadataProfile();
+		} catch (Exception e) {
+			throw new RuntimeException(
+					"error retrieving/creating default metadata profile: ", e);
+		}
+		if (defaultMetadataProfile != null) {
+			logger.info("Default metadata profile is set-up to "
+					+ defaultMetadataProfile.getId());
+		} else {
+			logger.info("Checking for default metadata profile is finished: no default metadata profile has been set.");
+
+		}
+	}
 
 	public static void shutdown() {
 		logger.info("Shutting down thread executor...");
 		Imeji.executor.shutdown();
-		logger.info("executor shutdown shutdown? " + Imeji.executor.isShutdown());
+		nightlyExecutor.stop();
+		logger.info("executor shutdown shutdown? "
+				+ Imeji.executor.isShutdown());
 
 		logger.info("Closing Jena! TDB...");
 		TDB.sync(Imeji.dataset);
@@ -273,23 +290,26 @@ public class Imeji {
 	}
 
 	/**
-	 * Returns true if checksum of uploaded files will be checked for duplicates within a single collection according to settings in properties.
-	 * If properties do not exist, checksum duplicate checking will be set as default 
+	 * Returns true if checksum of uploaded files will be checked for duplicates
+	 * within a single collection according to settings in properties. If
+	 * properties do not exist, checksum duplicate checking will be set as
+	 * default
 	 * 
 	 */
-	
-	public static boolean isValidateChecksumInCollection(){
-        String validateChecksum;
+
+	public static boolean isValidateChecksumInCollection() {
+		String validateChecksum;
 		try {
-			validateChecksum = PropertyReader.getProperty("imeji.validate.checksum.in.collection");
+			validateChecksum = PropertyReader
+					.getProperty("imeji.validate.checksum.in.collection");
 		} catch (Exception e) {
 			return true;
 		}
-        
-        if (isNullOrEmpty(validateChecksum))
-        	return true;
-        
-        return Boolean.valueOf(validateChecksum);
+
+		if (isNullOrEmpty(validateChecksum))
+			return true;
+
+		return Boolean.valueOf(validateChecksum);
 
 	}
 }

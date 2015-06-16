@@ -13,6 +13,7 @@ import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.UploadResult;
 import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.util.TempFileUtil;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
 
@@ -51,7 +52,7 @@ public class ImportFileFromEscidocToInternalStorageJob implements
 				escidoc.read(escidocUrl.toString(), out, true);
 				// Upload the file in the internal storage
 				if (out.toByteArray() != null) {
-					tmp = File.createTempFile("import",
+					tmp = TempFileUtil.createTempFile("ImportFileFromEscidocToInternalStorageJob",
 							FilenameUtils.getExtension(item.getFilename()));
 					FileUtils.writeByteArrayToFile(tmp, out.toByteArray());
 					UploadResult result = internal.upload(item.getFilename(),

@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.File;
@@ -48,7 +49,7 @@ public class ItemDefaultMdCreateTest extends ItemTestBase {
 	}
 
 	@Test
-	public void test_1_createItem_with_defaultMetadata_emptySyntax() throws IOException {
+	public void test_1_createItem_emptySyntax() throws IOException {
 
 		FormDataMultiPart multiPart = new FormDataMultiPart();
 		multiPart.field("json",
@@ -59,16 +60,12 @@ public class ItemDefaultMdCreateTest extends ItemTestBase {
 										"")
 								.replaceAll("___REFERENCE_URL___",referenceUrl));
 
-		Response response = target(pathPrefix).register(authAsUser)
-				.register(MultiPartFeature.class)
-				.register(JacksonFeature.class)
-				.request(MediaType.APPLICATION_JSON_TYPE)
+		Response response = getTargetAuth()
 				.post(Entity.entity(multiPart, multiPart.getMediaType()));
 
 		assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatus());
 
         defaultItemTO = response.readEntity(DefaultItemTO.class);
-        //TODO: decide about [] or {}!!!
         //assertThat(defaultItemTO.getMetadata(), hasSize(7)); //check defaultCreateItem.json
 		assertThat(defaultItemTO.getCollectionId(), equalTo(collectionId));
 
@@ -76,7 +73,7 @@ public class ItemDefaultMdCreateTest extends ItemTestBase {
 	}
 
 	@Test
-	public void test_2_createItem_with_defaultMetadata_defaultSyntax() throws IOException {
+	public void test_2_createItem_defaultSyntax() throws IOException {
 
 		FormDataMultiPart multiPart = new FormDataMultiPart();
         multiPart.bodyPart(new FileDataBodyPart("file", new File(STATIC_CONTEXT_STORAGE + "/test.jpg")));
@@ -102,7 +99,7 @@ public class ItemDefaultMdCreateTest extends ItemTestBase {
 	}
 
     @Test
-	public void test_3_createItem_with_defaultMetadata_empty_defaultSyntax () throws IOException {
+	public void test_3_createItem_empty_defaultSyntax () throws IOException {
 
 		FormDataMultiPart multiPart = new FormDataMultiPart();
         multiPart.bodyPart(new FileDataBodyPart("file", new File(STATIC_CONTEXT_STORAGE + "/test.png")));
@@ -129,8 +126,7 @@ public class ItemDefaultMdCreateTest extends ItemTestBase {
 	}
 
 	@Test
-	public void test_4_createItem_with_defaultMetadata_imejiSyntax() throws IOException {
-
+	public void test_4_createItem_imejiSyntax() throws IOException {
 		FormDataMultiPart multiPart = new FormDataMultiPart();
         multiPart.bodyPart(new FileDataBodyPart("file", new File(STATIC_CONTEXT_STORAGE + "/test.png")));
         multiPart.field("json",
@@ -148,9 +144,34 @@ public class ItemDefaultMdCreateTest extends ItemTestBase {
 
 		assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
 
-
 	}
 
+    @Test
+    public void test_5_createItem_defaultSyntax_badTextValue() throws IOException {
+
+        FormDataMultiPart multiPart = new FormDataMultiPart();
+        multiPart.bodyPart(new FileDataBodyPart("file", new File(STATIC_CONTEXT_STORAGE + "/test.jpg")));
+        multiPart.field("json",
+                itemJSON.replace("___COLLECTION_ID___", collectionId)
+                        .replace("___FILENAME___", "test.jpg")
+                        .replaceAll("\"fetchUrl\"\\s*:\\s*\"___FETCH_URL___\",", "")
+                        .replaceAll("\"referenceUrl\"\\s*:\\s*\"___REFERENCE_URL___\",", "")
+                        //bad value: int instead of text in quotes
+                        .replaceAll("(\"text\"\\s*:\\s*)\".*\",", "$112345,")
+        );
+        Response response = getTargetAuth()
+                .post(Entity.entity(multiPart, multiPart.getMediaType()));
+
+        assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+
+    }
+
+    private Invocation.Builder getTargetAuth() {
+        return target(pathPrefix).register(authAsUser)
+                .register(MultiPartFeature.class)
+                .register(JacksonFeature.class)
+                .request(MediaType.APPLICATION_JSON_TYPE);
+    }
 
 
 }

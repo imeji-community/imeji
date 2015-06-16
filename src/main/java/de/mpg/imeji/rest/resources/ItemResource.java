@@ -52,7 +52,8 @@ public class ItemResource implements ImejiResource {
 	@ApiOperation(value = "Create new item with a File", notes = "Create an item with a file. File can be defined either as (by order of priority):"
 			+ "<br/> 1) form parameter (multipart/form-data)<br/> 2) json parameter: \"fetchUrl\" : \"http://example.org/myFile.png\" (myFile.png will be uploaded in imeji) "
 			+ "<br/> 3) json parameter \"referenceUrl\" : \"http://example.org/myFile.png\" (myFile.png will be only referenced in imeji, i.e. not uploaded)"
-			+ "<br/><br/>"
+            + "<br/> 4) syntax: json format syntax, values: default|imeji. Omitted value is default."
+            + "<br/><br/>"
 			+ "Json example:"
 			+ "<div class=\"json_example\">"
 			+ "{"
@@ -73,7 +74,7 @@ public class ItemResource implements ImejiResource {
 						   @ApiParam(required = true) @FormDataParam("json") String json,
 						   @QueryParam("syntax") String syntax,
 						   @FormDataParam("file") FormDataContentDisposition fileDetail) {
-		String origName = fileDetail != null ? fileDetail.getFileName() : null;
+		String origName = fileDetail != null ? fileDetail.getFileName() : null   ;
 		return RestProcessUtils.buildJSONResponse(createItem(req, file, json, syntax, origName));
 	}
 

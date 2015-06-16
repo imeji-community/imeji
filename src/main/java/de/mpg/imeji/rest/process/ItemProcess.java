@@ -5,12 +5,14 @@ import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
+import de.mpg.imeji.logic.util.TempFileUtil;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
 import de.mpg.imeji.rest.api.ProfileService;
 import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
 import de.mpg.imeji.rest.to.*;
+
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -18,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response.Status;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -37,9 +40,10 @@ import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
 public class ItemProcess {
 
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ItemProcess.class);
-	
-	public static JSONResponse deleteItem(HttpServletRequest req, String id) {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ItemProcess.class);
+    public static final String METADATA_KEY = "metadata";
+
+    public static JSONResponse deleteItem(HttpServletRequest req, String id) {
 		User u = BasicAuthentication.auth(req);
 		JSONResponse resp; 
 
@@ -117,13 +121,13 @@ public class ItemProcess {
                 case DEFAULT:
 					//extract metadata node
 					Map<String, Object> itemMap = jsonToPOJO(json);
-					HashMap<String, Object> metadata = (LinkedHashMap<String, Object>)itemMap.remove("metadata");
+					HashMap<String, Object> metadata = (LinkedHashMap<String, Object>)itemMap.remove(METADATA_KEY);
 					//parse as normal ItemTO
 					itemTO = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(buildJSONFromObject(itemMap),
 							ItemWithFileTO.class);
 					//update metadata part
 					DefaultItemTO easyTO = (DefaultItemTO)buildTOFromJSON(
-							"{\"metadata\":" + buildJSONFromObject(metadata) + "}", DefaultItemTO.class);
+							"{\"" + METADATA_KEY + "\":" + buildJSONFromObject(metadata) + "}", DefaultItemTO.class);
 					ReverseTransferObjectFactory.transferDefaultItemTOtoItemTO(
 							getMetadataProfileTO(itemTO, u), easyTO, itemTO);
 					break;
@@ -224,7 +228,7 @@ public class ItemProcess {
 			calculatedExtension = !isNullOrEmpty(calculatedExtension)?"."+calculatedExtension:null;
 
 			//Note: createTempFile suffix must be provided in order not to rename the file to .tmp
-			File tmp = File.createTempFile("imejiAPI", calculatedExtension);
+			File tmp = TempFileUtil.createTempFile("imejiAPI", calculatedExtension);
 			IOUtils.copy(file, new FileOutputStream(tmp));
 
 			StorageController c = new StorageController();

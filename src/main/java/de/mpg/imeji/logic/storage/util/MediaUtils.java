@@ -15,6 +15,7 @@ import org.im4java.core.IM4JavaException;
 import org.im4java.core.IMOperation;
 import org.im4java.core.Info;
 
+import de.mpg.imeji.logic.util.TempFileUtil;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -81,7 +82,7 @@ public class MediaUtils
         op.flatten();
         op.addImage(path);
         // op.colorspace("RGB");
-        File jpeg = File.createTempFile("uploadMagick", ".jpg");
+        File jpeg = TempFileUtil.createTempFile("uploadMagick", ".jpg");
         try
         {
             op.addImage(jpeg.getAbsolutePath());
@@ -171,7 +172,7 @@ public class MediaUtils
             op.fuzz(10.0, true);
             op.trim();
             op.addImage();
-            File trim = File.createTempFile("trim", ".jpg");
+            File trim = TempFileUtil.createTempFile("trim", ".jpg");
             try
             {
                 cmd.run(op, f.getAbsolutePath(), trim.getAbsolutePath());

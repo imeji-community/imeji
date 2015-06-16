@@ -4,7 +4,7 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:imjc="http://java.sun.com/jsf/composite/components">
 	
-	<ui:define name="init">
+ 	<ui:define name="init">
 		<h:outputText value="#{itemBean.init}"/>
 	</ui:define>
 	
@@ -13,9 +13,8 @@
 	
 	<!-- Main Content - Image Detail View -->
 	<ui:define name="mainContent">
-	  
+		<!-- Breadcrumb - History -->
 		<ui:fragment rendered="#{itemBean.image != null}">
-			<!-- Breadcrumb - History -->
 			<ui:include src="../../include/History.xhtml"></ui:include> 
 			
 			<!-- AJAX Wrapper - START -->

@@ -16,6 +16,7 @@ import org.openimaj.image.feature.local.keypoints.Keypoint;
 import org.openimaj.video.Video;
 import org.openimaj.video.xuggle.XuggleVideo;
 
+import de.mpg.imeji.logic.util.TempFileUtil;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 public class VideoUtils
@@ -121,7 +122,7 @@ public class VideoUtils
      */
     public static byte[] videoFileToByteAray(byte[] bytes, float[] threshold, String fileExtention) throws IOException
     {
-        File tempFile = File.createTempFile(new String(bytes), "." + fileExtention);
+        File tempFile = TempFileUtil.createTempFile("videoFileToByteAray", "." + fileExtention);
         FileOutputStream fos = new FileOutputStream(tempFile);
         try
         {

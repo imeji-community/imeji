@@ -42,6 +42,7 @@ import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.util.TempFileUtil;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
@@ -251,7 +252,7 @@ public class UploadBean implements Serializable {
 	 */
 	private File createTmpFile(String title) {
 		try {
-			return File.createTempFile("upload",
+			return TempFileUtil.createTempFile("upload",
 					"." + FilenameUtils.getExtension(title));
 		} catch (Exception e) {
 			throw new RuntimeException("Error creating a temp file", e);

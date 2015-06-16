@@ -284,12 +284,13 @@ public class AlbumController extends ImejiController {
 				album.getImages().add(URI.create(uri));
 			}
 		}
-		if (album.getImages().size() == 0
-				&& Status.RELEASED.equals(album.getStatus())) {
-			throw new UnprocessableError(
-					"Album is released! You are trying to remove all items from this album! Discard the album if necessary!");
+
+		if (album.getImages().size() == 0)
+		{
+			validateReleasedAlbumImagesRemoval(album.getStatus());
 		}
 		Album after = update(album, user, false);
+		
 		return before.size() - after.getImages().size();
 	}
 
@@ -304,10 +305,7 @@ public class AlbumController extends ImejiController {
 	 */
 	public boolean clearAlbumItems(Album album, User user)
 			throws ImejiException {
-		if (Status.RELEASED.equals(album.getStatus())) {
-			throw new UnprocessableError(
-					"Album has been released! It is not possible to remove all items from this album! Discard the album if necessary!");
-		}
+		validateReleasedAlbumImagesRemoval(album.getStatus());
 		album.getImages().clear();
 		update(album, user);
 		return true;
@@ -460,6 +458,14 @@ public class AlbumController extends ImejiController {
 					.toString(), ic, ic.getLogoUrl().toString());
 			patch(triples, u, true);
 
+		}
+	}
+	
+	public void validateReleasedAlbumImagesRemoval (Status status) throws UnprocessableError
+	{
+		if (Status.RELEASED.equals(status)) {
+			throw new UnprocessableError(
+					"Album is released! You are trying to remove all items from this album! Discard the album if necessary!");
 		}
 	}
 

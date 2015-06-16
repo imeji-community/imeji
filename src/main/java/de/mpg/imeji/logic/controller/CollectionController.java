@@ -178,16 +178,14 @@ public class CollectionController extends ImejiController {
 		ItemController ic = new ItemController();
 		List<Item> itemList ;
 		try {
-
 			List<String> results =  ic.search(ObjectHelper.getURI(CollectionImeji.class, id),	
 											!isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q) : null, 
 											null, null, user, null).getResults();
 			itemList = (List<Item>)ic.retrieve(results, getMin(results.size(), 500), 0, user);
 		} catch (Exception e) {
-			throw new UnprocessableError("Cannot retrieve collections:", e);
+			throw new UnprocessableError("Cannot retrieve items:", e);
 
 		}
-
 		return itemList;
 	}
 
@@ -204,16 +202,13 @@ public class CollectionController extends ImejiController {
 
 		List<CollectionImeji> cList = new ArrayList<CollectionImeji>();
 		try {
-
 			List<String> results =  search(	
 											!isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q) : null, 
-											null, 1000, 0, user,spaceId).getResults();
+											null, 500, 0, user,spaceId).getResults();
 			cList = (List<CollectionImeji>)retrieveLazy(results, getMin(results.size(), 500), 0, user);
 		} catch (Exception e) {
 			throw new UnprocessableError("Cannot retrieve collections:", e);
-
 		}
-			
 		return cList;
 	}
 

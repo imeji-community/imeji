@@ -380,7 +380,6 @@ public class ItemController extends ImejiController {
 			itemList = (List<Item>)retrieve(results, getMin(results.size(), 500), 0, user);
 		} catch (Exception e) {
 			throw new UnprocessableError("Cannot retrieve items:", e);
-
 		}
 		return itemList;
 	}

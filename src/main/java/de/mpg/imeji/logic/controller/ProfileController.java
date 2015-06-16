@@ -41,10 +41,8 @@ import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
-import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;
@@ -145,11 +143,11 @@ public class ProfileController extends ImejiController {
 		CollectionImeji c;
 		try {
 			c = cc.retrieve(collectionId, user);
+			return retrieve(c.getProfile(), user);
 		} catch (NotFoundException e) {
 			throw new UnprocessableError("Invalid collection: "
 					+ e.getLocalizedMessage());
 		}
-		return retrieve(c.getProfile(), user);
 	}
 
 	/**
@@ -283,7 +281,7 @@ public class ProfileController extends ImejiController {
 		try {
 			result = search.search(!isNullOrEmptyTrim(q) ? URLQueryTransformer
 							.parseStringQuery(q) : null, sortCri, user, spaceId);
-		    l = (List<MetadataProfile>)retrieveLazy(result.getResults(), getMin(result.getResults().size(), 1000), 0, user);
+		    l = (List<MetadataProfile>)retrieveLazy(result.getResults(), getMin(result.getResults().size(), 500), 0, user);
 		} catch (Exception e) {
 			logger.error("Cannot retrieve profiles:", e);
 		}

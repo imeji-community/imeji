@@ -21,6 +21,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.fileupload.FileItemIterator;
@@ -48,6 +49,7 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.collection.CollectionBean;
 import de.mpg.imeji.presentation.history.HistoryUtil;
 import de.mpg.imeji.presentation.session.SessionBean;
@@ -438,8 +440,9 @@ public class UploadBean implements Serializable {
 	 * release the {@link CollectionImeji}
 	 * 
 	 * @return
+	 * @throws IOException 
 	 */
-	public String release() {
+	public String release() throws IOException {
 		CollectionController cc = new CollectionController();
 		SessionBean sessionBean = (SessionBean) BeanHelper
 				.getSessionBean(SessionBean.class);
@@ -447,12 +450,29 @@ public class UploadBean implements Serializable {
 			cc.release(collection, user);
 			BeanHelper.info(sessionBean
 					.getMessage("success_collection_release"));
+			
+			
+			
+			
 		} catch (Exception e) {
 			BeanHelper
 					.error(sessionBean.getMessage("error_collection_release"));
 			BeanHelper.error(e.getMessage());
 		}
-		return "pretty:";
+		
+		Navigation navigation = (Navigation) BeanHelper
+				.getApplicationBean(Navigation.class);
+		FacesContext
+				.getCurrentInstance()
+				.getExternalContext()
+				.redirect(
+						navigation.getCollectionUrl()
+								+ ObjectHelper.getId(collection.getId())
+								+ "/" + navigation.getUploadPath()
+								+ "?init=1");
+				
+		return "";
+
 	}
 
 	/**
@@ -495,7 +515,18 @@ public class UploadBean implements Serializable {
 			BeanHelper.error(e.getMessage());
 			logger.error("Error discarding collection:", e);
 		}
-		return "pretty:";
+		
+		Navigation navigation = (Navigation) BeanHelper
+				.getApplicationBean(Navigation.class);
+		FacesContext
+				.getCurrentInstance()
+				.getExternalContext()
+				.redirect(
+						navigation.getCollectionUrl()
+								+ ObjectHelper.getId(collection.getId()));
+		
+		return "";
+		
 	}
 
 	public CollectionImeji getCollection() {
@@ -600,5 +631,18 @@ public class UploadBean implements Serializable {
 	public void setRecursive(boolean recursive) {
 		this.recursive = recursive;
 	}
+	
+	/**
+	 * Listener for the discard comment
+	 * 
+	 * @param event
+	 */
+	public void discardCommentListener(ValueChangeEvent event) {
+		if (event.getNewValue() != null
+				&& event.getNewValue().toString().trim().length() > 0) {
+			collection.setDiscardComment(event.getNewValue().toString().trim());
+		}
+	}
+
 
 }

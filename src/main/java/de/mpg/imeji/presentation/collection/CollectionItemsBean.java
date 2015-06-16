@@ -71,7 +71,9 @@ public class CollectionItemsBean extends ItemsBean
     {
         uri = ObjectHelper.getURI(CollectionImeji.class, id);
         collection = ObjectLoader.loadCollectionLazy(uri, sb.getUser());
-        this.profile = ObjectCachedLoader.loadProfile(collection.getProfile());
+        this.profile = ObjectLoader.loadProfile(collection.getProfile(), sb.getUser());
+
+        //Initialize the metadata labels
         ((MetadataLabels)BeanHelper.getSessionBean(MetadataLabels.class)).init(profile);
         // browse context must be initialized before browseinit(), since the browseinit() will check if the selected
         // items must be removed

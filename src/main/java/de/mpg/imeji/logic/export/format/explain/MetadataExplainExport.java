@@ -29,6 +29,7 @@
 package de.mpg.imeji.logic.export.format.explain;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.export.format.ExplainExport;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.query.URLQueryTransformer;
@@ -36,6 +37,8 @@ import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.util.ObjectCachedLoader;
+import de.mpg.imeji.presentation.util.ObjectLoader;
+
 import org.apache.log4j.Logger;
 
 import java.io.OutputStream;
@@ -67,8 +70,9 @@ public class MetadataExplainExport extends ExplainExport
             for (String colURI : sr.getResults())
             {
             	try {
+            		//TODO Change this, logic should not call presentation!!!
 	            	CollectionImeji col = ObjectCachedLoader.loadCollection(URI.create(colURI));
-	                for (Statement st : ObjectCachedLoader.loadProfile(col.getProfile()).getStatements())
+	                for (Statement st : ObjectLoader.loadProfile(col.getProfile(),Imeji.adminUser).getStatements())
 	                {
 	                    for (SearchIndex index : SearchIndex.getAllIndexForStatement(st))
 	                    {

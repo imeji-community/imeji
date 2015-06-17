@@ -377,10 +377,9 @@ public class ItemController extends ImejiController {
 			List<String> results =  search(	null,
 											!isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q) : null, 
 											null, null, user,spaceId).getResults();
-			itemList = (List<Item>)retrieve(results, getMin(results.size(), 1000), 0, user);
+			itemList = (List<Item>)retrieve(results, getMin(results.size(), 500), 0, user);
 		} catch (Exception e) {
 			throw new UnprocessableError("Cannot retrieve items:", e);
-
 		}
 		return itemList;
 	}

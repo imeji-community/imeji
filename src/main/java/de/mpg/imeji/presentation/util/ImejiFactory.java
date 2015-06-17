@@ -273,13 +273,7 @@ public class ImejiFactory {
 	public static List<ThumbnailBean> imageListToThumbList(
 			Collection<Item> itemList) {
 		List<ThumbnailBean> beanList = new ArrayList<ThumbnailBean>();
-		try {
-			((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-					.setProfileCached(ProfileHelper
-							.loadProfiles(new ArrayList<Item>(itemList)));
-		} catch (Exception e) {
-			logger.error("Error loading profiles", e);
-		}
+		
 		for (Item img : itemList) {
 			try {
 				beanList.add(new ThumbnailBean(img));

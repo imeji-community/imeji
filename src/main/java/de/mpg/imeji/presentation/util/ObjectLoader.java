@@ -212,7 +212,7 @@ public class ObjectLoader {
 			MetadataProfile p = pc.retrieve(id, user);
 			return p;
 		} catch (Exception e) {
-			// do nothing
+			logger.info("There was a problem loading the profile with id "+id.toString(), e);
 		}
 		return null;
 	}

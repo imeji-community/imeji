@@ -196,12 +196,14 @@ public class Imeji {
 		try {
 			// Init the User
 			adminUser = new User();
-			adminUser.setPerson(ImejiFactory.newPerson("Admin", "imeji",
-					"imeji community"));
+			adminUser.setPerson(ImejiFactory.newPerson("Admin", "imeji", "imeji community"));
 			adminUser.setEmail(ADMIN_EMAIL_INIT);
 			adminUser.setEncryptedPassword(StringHelper
 					.convertToMD5(ADMIN_PASSWORD_INIT));
-			// Create the user in the database
+			adminUser.getGrants().addAll(
+					AuthorizationPredefinedRoles.imejiAdministrator(adminUser
+							.getId().toString()));
+			// create
 			UserController uc = new UserController(Imeji.adminUser);
 			List<User> admins = uc.retrieveAllAdmins();
 			if (admins.size() == 0) {

@@ -86,7 +86,8 @@ public class ItemControllerTest extends ControllerTest {
 	}
 
 
-	private static void createItem() throws ImejiException {
+	
+	protected static void createItem() throws ImejiException {
 		ItemController controller = new ItemController();
 		if(collection == null) {
 			createCollection();

@@ -518,21 +518,29 @@ public class ShareBean implements Serializable {
 		ShareController shareController = new ShareController();
 		if (toUser != null) {
 			shareController.share(fromUser, toUser, uri, rolesMenu);
-			if (rolesMenu.contains(ShareBean.ShareMenu.EDIT_PROFILE.toString())) {
-				shareController.share(fromUser, toUser, profileUri,
-						ShareController.rolesAsList(ShareRoles.EDIT));
-			} else {
-				shareController.share(fromUser, toUser, profileUri,
-						ShareController.rolesAsList(ShareRoles.READ));
+			if (profileUri != null) {
+				if (rolesMenu.contains(ShareBean.ShareMenu.EDIT_PROFILE
+						.toString())) {
+					shareController.share(fromUser, toUser, profileUri,
+							ShareController.rolesAsList(ShareRoles.EDIT));
+				} else {
+					shareController.share(fromUser, toUser, profileUri,
+							ShareController.rolesAsList(ShareRoles.READ));
+				}
 			}
 		} else if (toGroup != null) {
 			shareController.shareWithGroup(fromUser, toGroup, uri, rolesMenu);
-			if (rolesMenu.contains(ShareBean.ShareMenu.EDIT_PROFILE.toString())) {
-				shareController.shareWithGroup(fromUser, toGroup, profileUri,
-						ShareController.rolesAsList(ShareRoles.EDIT));
-			} else {
-				shareController.shareWithGroup(fromUser, toGroup, profileUri,
-						ShareController.rolesAsList(ShareRoles.READ));
+			if (profileUri != null) {
+				if (rolesMenu.contains(ShareBean.ShareMenu.EDIT_PROFILE
+						.toString())) {
+					shareController.shareWithGroup(fromUser, toGroup,
+							profileUri,
+							ShareController.rolesAsList(ShareRoles.EDIT));
+				} else {
+					shareController.shareWithGroup(fromUser, toGroup,
+							profileUri,
+							ShareController.rolesAsList(ShareRoles.READ));
+				}
 			}
 		}
 	}
@@ -552,10 +560,13 @@ public class ShareBean implements Serializable {
 				.getGrants();
 		List<String> menu = ShareController.transformGrantsToRoles(
 				(List<Grant>) grants, uri);
-		List<String> profileMenu = ShareController.transformGrantsToRoles(
-				(List<Grant>) grants, profileUri);
-		if (profileMenu.contains(ShareRoles.EDIT.toString()))
-			menu.add(ShareMenu.EDIT_PROFILE.toString());
+		if (profileUri != null) {
+			List<String> profileMenu = ShareController.transformGrantsToRoles(
+					(List<Grant>) grants, profileUri);
+			if (profileMenu.contains(ShareRoles.EDIT.toString()))
+				menu.add(ShareMenu.EDIT_PROFILE.toString());
+		}
+
 		return menu;
 	}
 

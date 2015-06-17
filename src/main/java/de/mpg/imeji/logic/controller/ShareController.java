@@ -12,13 +12,17 @@ import org.apache.log4j.Logger;
 import de.escidoc.core.resources.aa.useraccount.Grants;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
+import de.mpg.imeji.logic.search.SPARQLSearch;
+import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.imeji.presentation.user.ShareBean.SharedObjectType;
+import de.mpg.imeji.presentation.util.ObjectLoader;
 
 /**
  * Controller for {@link Grant}
@@ -85,8 +89,9 @@ public class ShareController extends ImejiController {
 	private User shareGrants(User fromUser, User toUser,
 			String sharedObjectUri, List<Grant> grants) throws ImejiException {
 		if (toUser != null) {
-//			UserController userController = new UserController(Imeji.adminUser);
-//			toUser = userController.retrieve(toUser.getEmail());
+			// UserController userController = new
+			// UserController(Imeji.adminUser);
+			// toUser = userController.retrieve(toUser.getEmail());
 			toUser = removeGrants(toUser, AuthUtil.extractGrantsFor(
 					(List<Grant>) toUser.getGrants(), sharedObjectUri),
 					Imeji.adminUser);
@@ -368,6 +373,16 @@ public class ShareController extends ImejiController {
 	 * @return
 	 */
 	private boolean isAllowedToAddGrant(User user, Grant g) {
+		if (g.getGrantFor().toString().contains("/item/")) {
+			// If the grantFor is an Item, the collection is needed to know if
+			// the user can administrate it
+			List<String> c = ImejiSPARQL
+					.exec(SPARQLQueries.selectCollectionIdOfItem(g
+							.getGrantFor().toString()), null);
+			if (!c.isEmpty())
+				return AuthUtil.staticAuth().administrate(user, c.get(0));
+
+		}
 		return AuthUtil.staticAuth().administrate(user, g.getGrantFor());
 	}
 

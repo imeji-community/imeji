@@ -297,6 +297,15 @@ public class SPARQLQueries {
 	 * @param fileUrl
 	 * @return
 	 */
+	public static String selectCollectionIdOfItem(String itemUri) {
+		return " SELECT DISTINCT ?s WHERE {<" + itemUri
+				+ "> <http://imeji.org/terms/collection> ?s} LIMIT 1 ";
+	}
+
+	/**
+	 * @param fileUrl
+	 * @return
+	 */
 	public static String selectItemIdOfFile(String fileUrl) {
 		String path = URI.create(fileUrl).getPath();
 		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {"
@@ -356,9 +365,10 @@ public class SPARQLQueries {
 		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE { ?s <http://imeji.org/terms/grantType> ?type"
 				+ " . not exists{ ?user <http://imeji.org/terms/grant> ?s}}";
 	}
-	
+
 	/**
 	 * Remove the grants withtout users
+	 * 
 	 * @return
 	 */
 	public static String removeGrantWithoutUser() {
@@ -400,6 +410,7 @@ public class SPARQLQueries {
 
 	/**
 	 * Remove Grant which don't have a grantfor
+	 * 
 	 * @return
 	 */
 	public static String removeGrantWithoutObject() {

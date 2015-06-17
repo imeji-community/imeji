@@ -29,6 +29,7 @@ public class ShareControllerTest extends ControllerTest {
 		try {
 			createProfile();
 			createCollection();
+			createItem();
 		} catch (ImejiException e) {
 			logger.error("Error initializing collection or item", e);
 		}
@@ -96,6 +97,20 @@ public class ShareControllerTest extends ControllerTest {
 			Assert.fail("User shouldn't be abble to release the profile");
 		} catch (Exception e) {
 			// OK
+		}
+	}
+
+	@Test
+	public void shareItem() throws ImejiException {
+		ShareController shareController = new ShareController();
+		shareController.share(JenaUtil.testUser, JenaUtil.testUser2, item
+				.getId().toString(), ShareController
+				.rolesAsList(ShareRoles.READ));
+		ItemController itemController = new ItemController();
+		try {
+			itemController.retrieve(item.getId(), JenaUtil.testUser2);
+		} catch (Exception e) {
+			Assert.fail(e.getMessage());
 		}
 	}
 

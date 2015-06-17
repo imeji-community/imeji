@@ -32,8 +32,10 @@ import java.net.URI;
 import java.util.List;
 
 import de.mpg.imeji.exceptions.NotAllowedError;
+import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
+import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Grant;
@@ -68,11 +70,11 @@ public class Authorization {
 	 * @throws NotAllowedError
 	 */
 	public boolean create(User user, Object obj) {
-		if(obj instanceof Album)
+		if (obj instanceof Album)
 			return true; // everybody is allowed to create albums
 		if (hasGrant(
 				user,
-				toGrant(getRelevantURIForSecurity(obj, false, true),
+				toGrant(getRelevantURIForSecurity(obj, false, true, false),
 						GrantType.CREATE))
 				&& !isDiscarded(obj))
 			return true;
@@ -92,12 +94,12 @@ public class Authorization {
 			return true;
 		else if (hasGrant(
 				user,
-				toGrant(getRelevantURIForSecurity(obj, true, false),
+				toGrant(getRelevantURIForSecurity(obj, true, false, false),
 						getGrantTypeAccordingToObjectType(obj, GrantType.READ))))
 			return true;
 		else if (hasGrant(
 				user,
-				toGrant(getRelevantURIForSecurity(obj, false, false),
+				toGrant(getRelevantURIForSecurity(obj, false, false, false),
 						getGrantTypeAccordingToObjectType(obj, GrantType.READ))))
 			return true;
 		return false;
@@ -114,7 +116,7 @@ public class Authorization {
 	public boolean update(User user, Object obj) {
 		if (hasGrant(
 				user,
-				toGrant(getRelevantURIForSecurity(obj, false, false),
+				toGrant(getRelevantURIForSecurity(obj, false, false, false),
 						getGrantTypeAccordingToObjectType(obj, GrantType.UPDATE))))
 			return true;
 		return false;
@@ -132,7 +134,8 @@ public class Authorization {
 		if (!isPublic(obj)
 				&& hasGrant(
 						user,
-						toGrant(getRelevantURIForSecurity(obj, false, false),
+						toGrant(getRelevantURIForSecurity(obj, false, false,
+								false),
 								getGrantTypeAccordingToObjectType(obj,
 										GrantType.DELETE))))
 			return true;
@@ -150,7 +153,7 @@ public class Authorization {
 	public boolean administrate(User user, Object obj) {
 		if (hasGrant(
 				user,
-				toGrant(getRelevantURIForSecurity(obj, false, false),
+				toGrant(getRelevantURIForSecurity(obj, false, false, false),
 						getGrantTypeAccordingToObjectType(obj, GrantType.ADMIN))))
 			return true;
 		return false;
@@ -167,7 +170,7 @@ public class Authorization {
 	public boolean createContent(User user, Object obj) {
 		if (hasGrant(
 				user,
-				toGrant(getRelevantURIForSecurity(obj, false, false),
+				toGrant(getRelevantURIForSecurity(obj, false, false, false),
 						GrantType.CREATE))
 				&& !isDiscarded(obj))
 			return true;
@@ -184,7 +187,7 @@ public class Authorization {
 	public boolean updateContent(User user, Object obj) {
 		if (hasGrant(
 				user,
-				toGrant(getRelevantURIForSecurity(obj, false, false),
+				toGrant(getRelevantURIForSecurity(obj, false, false, false),
 						GrantType.UPDATE_CONTENT)))
 			return true;
 		return false;
@@ -201,8 +204,8 @@ public class Authorization {
 		if (!isPublic(obj)
 				&& hasGrant(
 						user,
-						toGrant(getRelevantURIForSecurity(obj, false, false),
-								GrantType.DELETE_CONTENT)))
+						toGrant(getRelevantURIForSecurity(obj, false, false,
+								false), GrantType.DELETE_CONTENT)))
 			return true;
 		return AuthUtil.isSysAdmin(user);
 	}
@@ -217,7 +220,7 @@ public class Authorization {
 	public boolean adminContent(User user, Object obj) {
 		if (hasGrant(
 				user,
-				toGrant(getRelevantURIForSecurity(obj, false, false),
+				toGrant(getRelevantURIForSecurity(obj, false, false, false),
 						GrantType.ADMIN_CONTENT)))
 			return true;
 		return false;
@@ -234,7 +237,7 @@ public class Authorization {
 	private boolean hasGrant(User user, Grant g) {
 		List<Grant> all = AuthUtil.getAllGrantsOfUser(user);
 		if (all.contains(g))
-			return true; 
+			return true;
 		if (all.contains(toGrant(PropertyBean.baseURI(), GrantType.ADMIN)))
 			return true;
 		return false;
@@ -259,10 +262,12 @@ public class Authorization {
 	 * @param obj
 	 * @param hasItemGrant
 	 * @param getContext
+	 * @param isReadGrant
+	 *            TODO
 	 * @return
 	 */
 	public String getRelevantURIForSecurity(Object obj, boolean hasItemGrant,
-			boolean getContext) {
+			boolean getContext, boolean isReadGrant) {
 		if (obj instanceof Item)
 			return hasItemGrant ? ((Item) obj).getId().toString()
 					: ((Item) obj).getCollection().toString();
@@ -279,10 +284,29 @@ public class Authorization {
 		else if (obj instanceof User)
 			return ((User) obj).getId().toString();
 		else if (obj instanceof URI)
-			return obj.toString();
+			return getCollectionUri(obj.toString(), isReadGrant);
 		else if (obj instanceof String)
-			return (String) obj;
+			return getCollectionUri((String) obj, isReadGrant);
 		return PropertyBean.baseURI();
+	}
+
+	/**
+	 * Return the collection of an Item. Useful for Non Read Operation, since it
+	 * is not possible to give a non read grant to an item. Thus, if the
+	 * authorization is called with an Item Id
+	 * 
+	 * @param itemUri
+	 * @return
+	 */
+	private String getCollectionUri(String uri, boolean isReadGrant) {
+		if (!isReadGrant && uri.contains("/item/")) {
+			List<String> c = ImejiSPARQL.exec(
+					SPARQLQueries.selectCollectionIdOfItem(uri), null);
+			if (!c.isEmpty()) {
+				return c.get(0);
+			}
+		}
+		return uri;
 	}
 
 	/**

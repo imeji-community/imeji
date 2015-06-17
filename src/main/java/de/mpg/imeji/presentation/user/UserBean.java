@@ -16,6 +16,7 @@ import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.ShareController;
 import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.controller.ShareController.ShareRoles;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Grant;
@@ -148,9 +149,9 @@ public class UserBean {
 			shareController.removeGrants(user,
 					(List<Grant>) shareController.toList(g), session.getUser());
 		} else {
-			shareController.share(session.getUser(), user, PropertyBean
-					.baseURI(), (List<String>) shareController
-					.toList(ShareController.ShareRoles.ADMIN));
+			shareController.share(session.getUser(), user,
+					PropertyBean.baseURI(),
+					ShareController.rolesAsList(ShareRoles.ADMIN));
 		}
 	}
 

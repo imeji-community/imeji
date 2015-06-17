@@ -126,6 +126,20 @@ public class UserController {
 		throw new NotFoundException("User with email " + email + " not found");
 	}
 
+	public User retrieve(String email, User currentUser) throws ImejiException {
+		Search search = SearchFactory.create();
+		SearchResult result = search.searchSimpleForQuery(SPARQLQueries
+				.selectUserByEmail(email));
+		if (result.getNumberOfRecords() == 1) {
+			String id = result.getResults().get(0);
+			User u = (User) reader.read(id, currentUser, new User());
+			UserGroupController ugc = new UserGroupController();
+			u.setGroups((List<UserGroup>) ugc.searchByUser(u, currentUser));
+			return u;
+		}
+		throw new NotFoundException("User with email " + email + " not found");
+	}
+
 	/**
 	 * Retrieve a {@link User} according to its uri (id)
 	 * 
@@ -149,8 +163,9 @@ public class UserController {
 	 *            : The user who does the update
 	 * @throws ImejiException
 	 */
-	public void update(User updatedUser, User currentUser)
+	public User update(User updatedUser, User currentUser)
 			throws ImejiException {
+		this.user = currentUser;
 		try {
 			User u = retrieve(updatedUser.getEmail());
 			if (!u.getId().toString().equals(updatedUser.getId().toString()))
@@ -163,6 +178,7 @@ public class UserController {
 		updatedUser.setName(updatedUser.getPerson().getGivenName() + " "
 				+ updatedUser.getPerson().getFamilyName());
 		writer.update(WriterFacade.toList(updatedUser), null, currentUser, true);
+		return updatedUser;
 	}
 
 	/**

@@ -25,7 +25,6 @@ import de.mpg.imeji.presentation.util.ImejiFactory;
  */
 public class ItemControllerTest extends ControllerTest {
 	private static Item item;
-	private static CollectionImeji collection;
 	private static final Logger logger = Logger
 			.getLogger(ItemControllerTest.class);
 	private static File originalFile = new File(
@@ -86,17 +85,13 @@ public class ItemControllerTest extends ControllerTest {
 
 	}
 
-	private static void createCollection() throws ImejiException {
-		CollectionController controller = new CollectionController();
-		collection = ImejiFactory.newCollection("test", "Planck", "Max", "MPG");
-		controller.create(collection, null, JenaUtil.testUser, null);
-
-	}
 
 	private static void createItem() throws ImejiException {
 		ItemController controller = new ItemController();
+		if(collection == null) {
+			createCollection();
+		}
 		item = ImejiFactory.newItem(collection);
-		;
 		item = controller.createWithFile(item, originalFile, "test.jpg",
 				collection, JenaUtil.testUser);
 	}

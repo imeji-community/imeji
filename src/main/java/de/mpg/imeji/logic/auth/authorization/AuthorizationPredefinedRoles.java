@@ -118,59 +118,39 @@ public class AuthorizationPredefinedRoles {
 		return l;
 	}
 
-	public static List<Grant> read(String containerUri, String profileUri) {
-		List<Grant> l = toGrantList(read, containerUri);
-		if (profileUri != null)
-			l.addAll(toGrantList(read, profileUri));
+	public static List<Grant> read(String uri) {
+		List<Grant> l = toGrantList(read, uri);
 		return l;
 	}
 
-	public static List<Grant> upload(String containerUri, String profileUri) {
-		List<Grant> l = toGrantList(upload, containerUri);
-		if (profileUri != null)
-			l.addAll(toGrantList(read, profileUri));
+	public static List<Grant> upload(String uri) {
+		List<Grant> l = toGrantList(upload, uri);
 		return l;
 	}
 
-	public static List<Grant> edit(String containerUri, String profileUri) {
-		List<Grant> l = toGrantList(edit_items, containerUri);
-		if (profileUri != null)
-			l.addAll(toGrantList(read, profileUri));
+	public static List<Grant> editContent(String uri) {
+		List<Grant> l = toGrantList(edit_items, uri);
 		return l;
 	}
 
-	public static List<Grant> delete(String containerUri, String profileUri) {
-		List<Grant> l = toGrantList(delete_items, containerUri);
-		if (profileUri != null)
-			l.addAll(toGrantList(read, profileUri));
+	public static List<Grant> delete(String uri) {
+		List<Grant> l = toGrantList(delete_items, uri);
 		return l;
 	}
 
-	public static List<Grant> editContainer(String containerUri,
-			String profileUri) {
-		List<Grant> l = toGrantList(edit_container, containerUri);
-		if (profileUri != null)
-			l.addAll(toGrantList(read, profileUri));
+	public static List<Grant> edit(String uri) {
+		List<Grant> l = toGrantList(edit_container, uri);
 		return l;
 	}
 
-	public static List<Grant> editProfile(String profileUri) {
-		return profileUri != null ? toGrantList(edit_profile, profileUri)
-				: new ArrayList<Grant>();
-	}
 
-	public static List<Grant> admin(String containerUri, String profileUri) {
+	public static List<Grant> admin(String uri) {
 		List<Grant> l = new ArrayList<Grant>();
-
-		if (profileUri != null) {
-			// Add grant for a profile
-			l.addAll(toGrantList(admin_album, profileUri));
-		}
-		if (containerUri != null) {
+		if (uri != null) {
 			// add grant for the container (collection or album)
-			GrantType[] g = containerUri.contains("/collection/") ? admin_collection
+			GrantType[] g = uri.contains("/collection/") ? admin_collection
 					: admin_album;
-			l = toGrantList(g, containerUri);
+			l = toGrantList(g, uri);
 		}
 		return l;
 	}

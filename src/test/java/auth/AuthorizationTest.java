@@ -4,8 +4,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.validation.constraints.AssertTrue;
-
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -13,6 +11,8 @@ import org.junit.Test;
 import de.mpg.imeji.logic.auth.Authorization;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
+import de.mpg.imeji.logic.controller.ShareController;
+import de.mpg.imeji.logic.controller.ShareController.ShareRoles;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
@@ -20,7 +20,6 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.PropertyBean;
-import de.mpg.imeji.presentation.user.ShareBean;
 
 /**
  * JUnit tests for the {@link Authorization}
@@ -44,10 +43,10 @@ public class AuthorizationTest {
 	public void readCollectionTest() {
 		User user = getDefaultUser();
 		List<String> roles = new ArrayList<String>();
-		roles.add(ShareBean.ShareType.READ.toString());
+		roles.add(ShareRoles.READ.toString());
 		user.getGrants().addAll(
-				ShareBean.getGrantsAccordingtoRoles(roles, testCollectionURI,
-						testProfileURI));
+				ShareController.transformRolesToGrants(roles,
+						testCollectionURI));
 		Assert.assertTrue(AuthUtil.staticAuth().read(user, getCollection()));
 	}
 
@@ -69,11 +68,11 @@ public class AuthorizationTest {
 	public void uploadItem() {
 		User user = getDefaultUser();
 		List<String> roles = new ArrayList<String>();
-		roles.add(ShareBean.ShareType.READ.toString());
-		roles.add(ShareBean.ShareType.CREATE.toString());
+		roles.add(ShareRoles.READ.toString());
+		roles.add(ShareRoles.CREATE.toString());
 		user.getGrants().addAll(
-				ShareBean.getGrantsAccordingtoRoles(roles, testCollectionURI,
-						testProfileURI));
+				ShareController.transformRolesToGrants(roles,
+						testCollectionURI));
 		// Test if the user has grant to upload in the collection
 		Assert.assertTrue(AuthUtil.staticAuth().createContent(user,
 				getCollection()));
@@ -91,11 +90,11 @@ public class AuthorizationTest {
 	public void uploadItemDiscardedCollection() {
 		User user = getDefaultUser();
 		List<String> roles = new ArrayList<String>();
-		roles.add(ShareBean.ShareType.READ.toString());
-		roles.add(ShareBean.ShareType.CREATE.toString());
+		roles.add(ShareRoles.READ.toString());
+		roles.add(ShareRoles.CREATE.toString());
 		user.getGrants().addAll(
-				ShareBean.getGrantsAccordingtoRoles(roles, testCollectionURI,
-						testProfileURI));
+				ShareController.transformRolesToGrants(roles,
+						testCollectionURI));
 		// Discard the collection
 		CollectionImeji c = getCollection();
 		c.setStatus(Status.WITHDRAWN);
@@ -107,11 +106,11 @@ public class AuthorizationTest {
 	public void updateCollectionTest() {
 		User user = getDefaultUser();
 		List<String> roles = new ArrayList<String>();
-		roles.add(ShareBean.ShareType.READ.toString());
-		roles.add(ShareBean.ShareType.EDIT_CONTAINER.toString());
+		roles.add(ShareRoles.READ.toString());
+		roles.add(ShareRoles.EDIT.toString());
 		user.getGrants().addAll(
-				ShareBean.getGrantsAccordingtoRoles(roles, testCollectionURI,
-						testProfileURI));
+				ShareController.transformRolesToGrants(roles,
+						testCollectionURI));
 		// is allowed to update the collection?
 		Assert.assertTrue(AuthUtil.staticAuth().update(user, getCollection()));
 		// is NOT allowed to update the items of the collection?
@@ -124,11 +123,11 @@ public class AuthorizationTest {
 	public void updateCollectionItemsTest() {
 		User user = getDefaultUser();
 		List<String> roles = new ArrayList<String>();
-		roles.add(ShareBean.ShareType.READ.toString());
-		roles.add(ShareBean.ShareType.EDIT_ITEM.toString());
+		roles.add(ShareRoles.READ.toString());
+		roles.add(ShareRoles.EDIT_ITEM.toString());
 		user.getGrants().addAll(
-				ShareBean.getGrantsAccordingtoRoles(roles, testCollectionURI,
-						testProfileURI));
+				ShareController.transformRolesToGrants(roles,
+						testCollectionURI));
 		// is allowed to update the items of the collection?
 		Assert.assertTrue(AuthUtil.staticAuth().updateContent(user,
 				getCollection()));
@@ -144,11 +143,11 @@ public class AuthorizationTest {
 	public void deleteCollectionTest() {
 		User user = getDefaultUser();
 		List<String> roles = new ArrayList<String>();
-		roles.add(ShareBean.ShareType.READ.toString());
-		roles.add(ShareBean.ShareType.ADMIN.toString());
+		roles.add(ShareRoles.READ.toString());
+		roles.add(ShareRoles.ADMIN.toString());
 		user.getGrants().addAll(
-				ShareBean.getGrantsAccordingtoRoles(roles, testCollectionURI,
-						testProfileURI));
+				ShareController.transformRolesToGrants(roles,
+						testCollectionURI));
 		// Is allowed to delete the collection?
 		Assert.assertTrue(AuthUtil.staticAuth().delete(user, getCollection()));
 	}
@@ -160,11 +159,11 @@ public class AuthorizationTest {
 	public void deleteCollectionReleasedTest() {
 		User user = getDefaultUser();
 		List<String> roles = new ArrayList<String>();
-		roles.add(ShareBean.ShareType.READ.toString());
-		roles.add(ShareBean.ShareType.ADMIN.toString());
+		roles.add(ShareRoles.READ.toString());
+		roles.add(ShareRoles.ADMIN.toString());
 		user.getGrants().addAll(
-				ShareBean.getGrantsAccordingtoRoles(roles, testCollectionURI,
-						testProfileURI));
+				ShareController.transformRolesToGrants(roles,
+						testCollectionURI));
 		// Release collection
 		CollectionImeji c = getCollection();
 		c.setStatus(Status.RELEASED);
@@ -179,11 +178,11 @@ public class AuthorizationTest {
 	public void deleteCollectionItemTest() {
 		User user = getDefaultUser();
 		List<String> roles = new ArrayList<String>();
-		roles.add(ShareBean.ShareType.READ.toString());
-		roles.add(ShareBean.ShareType.DELETE_ITEM.toString());
+		roles.add(ShareRoles.READ.toString());
+		roles.add(ShareRoles.DELETE_ITEM.toString());
 		user.getGrants().addAll(
-				ShareBean.getGrantsAccordingtoRoles(roles, testCollectionURI,
-						testProfileURI));
+				ShareController.transformRolesToGrants(roles,
+						testCollectionURI));
 		// Is allowed to delete the items collection?
 		Assert.assertTrue(AuthUtil.staticAuth().deleteContent(user,
 				getCollection()));
@@ -199,20 +198,20 @@ public class AuthorizationTest {
 	public void editCollectionProfileTest() {
 		User user = getDefaultUser();
 		List<String> roles = new ArrayList<String>();
-		roles.add(ShareBean.ShareType.READ.toString());
-		roles.add(ShareBean.ShareType.EDIT_PROFILE.toString());
+		roles.add(ShareRoles.READ.toString());
+		roles.add(ShareRoles.EDIT.toString());
 		user.getGrants().addAll(
-				ShareBean.getGrantsAccordingtoRoles(roles, testCollectionURI,
-						testProfileURI));
+				ShareController.transformRolesToGrants(roles,
+						testProfileURI ));
 		// Is allowed to edit the profile of the collection?
 		Assert.assertTrue(AuthUtil.staticAuth().update(user,
 				getCollection().getProfile()));
 		// Is allowed to edit the profile?
 		Assert.assertTrue(AuthUtil.staticAuth().update(user, getProfile()));
 	}
-	
+
 	@Test
-	public void createAlbumForRestrictedUser(){
+	public void createAlbumForRestrictedUser() {
 		User user = getRestrictedUser();
 		Assert.assertTrue(AuthUtil.staticAuth().create(user, getAlbum()));
 	}
@@ -221,11 +220,11 @@ public class AuthorizationTest {
 	public void viewAlbumTest() {
 		User user = getDefaultUser();
 		List<String> roles = new ArrayList<String>();
-		roles.add(ShareBean.ShareType.READ.toString());
+		roles.add(ShareRoles.READ.toString());
 		Album album = getAlbum();
 		user.getGrants().addAll(
-				ShareBean.getGrantsAccordingtoRoles(roles, album.getId()
-						.toString(), null));
+				ShareController.transformRolesToGrants(roles, album.getId()
+						.toString()));
 		// Is allowed to view the album?
 		Assert.assertTrue(AuthUtil.staticAuth().read(user, album));
 	}
@@ -234,11 +233,11 @@ public class AuthorizationTest {
 	public void addRemoveItemToAlbumTest() {
 		User user = getDefaultUser();
 		List<String> roles = new ArrayList<String>();
-		roles.add(ShareBean.ShareType.CREATE.toString());
+		roles.add(ShareRoles.CREATE.toString());
 		Album album = getAlbum();
 		user.getGrants().addAll(
-				ShareBean.getGrantsAccordingtoRoles(roles, album.getId()
-						.toString(), null));
+				ShareController.transformRolesToGrants(roles, album.getId()
+						.toString()));
 		// Is allowed to add an Item to the album
 		Assert.assertTrue(AuthUtil.staticAuth().createContent(user, album));
 		// Is not allowed to add/remove an item
@@ -250,11 +249,11 @@ public class AuthorizationTest {
 	public void editAlbumTest() {
 		User user = getDefaultUser();
 		List<String> roles = new ArrayList<String>();
-		roles.add(ShareBean.ShareType.EDIT_CONTAINER.toString());
+		roles.add(ShareRoles.EDIT.toString());
 		Album album = getAlbum();
 		user.getGrants().addAll(
-				ShareBean.getGrantsAccordingtoRoles(roles, album.getId()
-						.toString(), null));
+				ShareController.transformRolesToGrants(roles, album.getId()
+						.toString()));
 		// Is allowed to edit an album
 		Assert.assertTrue(AuthUtil.staticAuth().update(user, album));
 	}
@@ -266,10 +265,10 @@ public class AuthorizationTest {
 	public void readItemTest() {
 		User user = getDefaultUser();
 		List<String> roles = new ArrayList<String>();
-		roles.add(ShareBean.ShareType.READ.toString());
+		roles.add(ShareRoles.READ.toString());
 		user.getGrants().addAll(
-				ShareBean.getGrantsAccordingtoRoles(roles,
-						getItem().getId().toString(), null));
+				ShareController.transformRolesToGrants(roles, getItem().getId()
+						.toString()));
 		// Is allowed to view the item?
 		Assert.assertTrue(AuthUtil.staticAuth().read(user, getItem()));
 		// Is allowed to view the collection?

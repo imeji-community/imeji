@@ -26,7 +26,6 @@ import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
-import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.jobs.CleanMetadataJob;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.SPARQLSearch;
@@ -88,11 +87,8 @@ public class ProfileController extends ImejiController {
 		writeCreateProperties(p, user);
 		p.setStatus(Status.PENDING);
 		writer.create(WriterFacade.toList(p), null, user);
-		if (!user.isAdmin()) {
-			GrantController gc = new GrantController();
-			gc.addGrants(user, AuthorizationPredefinedRoles.admin(null, p
-					.getId().toString()), user);
-		}
+		ShareController shareController = new ShareController();
+		user = shareController.shareWithCreator(user,p.getId().toString());
 		return p;
 	}
 

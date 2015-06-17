@@ -10,9 +10,11 @@ import de.mpg.imeji.rest.to.MetadataProfileTO;
 import net.java.dev.webdav.jaxrs.ResponseStatus;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import util.JenaUtil;
 
 import javax.ws.rs.core.MediaType;
@@ -33,6 +35,7 @@ public class ProfileTest extends ImejiTestBase{
 	public void specificSetup() {
 		initCollection();
 		initItem();
+		initProfile();
 	}
 	
 	@Test
@@ -54,7 +57,7 @@ public class ProfileTest extends ImejiTestBase{
 		assertEquals(Status.OK.getStatusCode(),response.getStatus());
 	}
 	
-	
+	@Ignore // Everybody ca read any profiles
 	@Test
 	public void test_1_ReadProfiles_Unauthorized(){
 		String profileId = collectionTO.getProfile().getId();
@@ -81,6 +84,7 @@ public class ProfileTest extends ImejiTestBase{
 		assertEquals(Status.OK.getStatusCode(),response.getStatus());
 	}
 
+	@Ignore // Everybody ca read any profiles
 	@Test
 	public void test_1_ReadProfiles_NotAllowedUser(){
 		String profileId = collectionTO.getProfile().getId();
@@ -106,7 +110,6 @@ public class ProfileTest extends ImejiTestBase{
 	
 	@Test
 	public void test_3_DeleteProfile_NotAuthorized(){
-		String profileId = collectionTO.getProfile().getId();
 		Response response = target(pathPrefix).path(profileId)
 				.register(authAsUser2)
 				.request(MediaType.APPLICATION_JSON).delete();

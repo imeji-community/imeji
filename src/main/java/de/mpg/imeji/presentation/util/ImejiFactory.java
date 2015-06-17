@@ -3,20 +3,32 @@
  */
 package de.mpg.imeji.presentation.util;
 
-import de.mpg.imeji.logic.vo.*;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+
+import de.mpg.imeji.logic.vo.Album;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.ContainerMetadata;
+import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Item.Visibility;
+import de.mpg.imeji.logic.vo.Metadata.Types;
+import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.MetadataSet;
+import de.mpg.imeji.logic.vo.Organization;
+import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.Properties.Status;
+import de.mpg.imeji.logic.vo.Space;
+import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.album.AlbumBean;
 import de.mpg.imeji.presentation.collection.CollectionListItem;
 import de.mpg.imeji.presentation.image.ThumbnailBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.j2j.misc.LocalizedString;
-import org.apache.log4j.Logger;
-
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * Create objects ready to be displayed in JSF
@@ -84,6 +96,18 @@ public class ImejiFactory {
 	public static Statement newStatement() {
 		Statement s = new Statement();
 		s.getLabels().add(new LocalizedString("", null));
+		return s;
+	}
+
+	/**
+	 * Crate a new emtpy {@link Statement}
+	 * 
+	 * @return
+	 */
+	public static Statement newStatement(String label, String lang, Types type) {
+		Statement s = new Statement();
+		s.getLabels().add(new LocalizedString(label, lang));
+		s.setType(URI.create(type.getClazzNamespace()));
 		return s;
 	}
 

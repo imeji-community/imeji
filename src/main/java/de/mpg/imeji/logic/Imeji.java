@@ -28,8 +28,12 @@ import com.hp.hpl.jena.tdb.TDBFactory;
 import com.hp.hpl.jena.tdb.base.file.Location;
 import com.hp.hpl.jena.tdb.sys.TDBMaker;
 
+import de.mpg.imeji.exceptions.AlreadyExistsException;
+import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.controller.ProfileController;
+import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
 import de.mpg.imeji.logic.jobs.executors.NightlyExecutor;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Album;
@@ -189,26 +193,42 @@ public class Imeji {
 	 * in imeji.properties
 	 */
 	private static void initadminUser() {
-		adminUser = new User();
-		Person adminPerson = ImejiFactory.newPerson();
-		adminPerson.setFamilyName("Admin");
-		adminPerson.setGivenName("imeji");
-		((List<Organization>) adminPerson.getOrganizations()).get(0).setName(
-				"imeji Community");
-		adminUser.setPerson(adminPerson);
-		adminUser.setEmail(ADMIN_EMAIL_INIT);
-		// adminUser.setName("imeji Sysadmin");
-		// adminUser.setNick("sysadmin");
 		try {
+			// Init the User
+			adminUser = new User();
+			adminUser.setPerson(ImejiFactory.newPerson("Admin", "imeji",
+					"imeji community"));
+			adminUser.setEmail(ADMIN_EMAIL_INIT);
 			adminUser.setEncryptedPassword(StringHelper
 					.convertToMD5(ADMIN_PASSWORD_INIT));
+			// Create the user in the database
+			UserController uc = new UserController(Imeji.adminUser);
+			List<User> admins = uc.retrieveAllAdmins();
+			if (admins.size() == 0) {
+				try {
+					uc.retrieve(Imeji.adminUser.getEmail());
+				} catch (NotFoundException e) {
+					logger.info("!!! IMPORTANT !!! Create admin@imeji.org as system administrator with password admin. !!! CHANGE PASSWORD !!!");
+					uc.create(Imeji.adminUser, USER_TYPE.ADMIN);
+					logger.info("Created admin user successfully:"
+							+ Imeji.adminUser.getEmail());
+				}
+			} else {
+				logger.info("Admin user already exists:");
+				for (User admin : admins) {
+					logger.info(admin.getEmail() + " is admin + ("
+							+ admin.getId() + ")");
+				}
+			}
+		} catch (AlreadyExistsException e) {
+			logger.warn(Imeji.adminUser.getEmail() + " already exists");
 		} catch (Exception e) {
-			throw new RuntimeException("error creating admin user: ", e);
+			if (e.getCause() instanceof AlreadyExistsException) {
+				logger.warn(Imeji.adminUser.getEmail() + " already exists");
+			} else {
+				throw new RuntimeException("Error initializing Admin user! ", e);
+			}
 		}
-
-		adminUser.getGrants().addAll(
-				AuthorizationPredefinedRoles.imejiAdministrator(adminUser
-						.getId().toString()));
 	}
 
 	private static void initDefaultMetadataProfile() {
@@ -218,7 +238,7 @@ public class Imeji {
 		try {
 			defaultMetadataProfile = pc.initDefaultMetadataProfile();
 		} catch (Exception e) {
-			throw new RuntimeException(
+			logger.error(
 					"error retrieving/creating default metadata profile: ", e);
 		}
 		if (defaultMetadataProfile != null) {

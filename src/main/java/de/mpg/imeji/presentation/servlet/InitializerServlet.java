@@ -29,7 +29,7 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.concurrency.locks.LocksSurveyor;
-import de.mpg.imeji.logic.controller.GrantController;
+import de.mpg.imeji.logic.controller.ShareController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
 import de.mpg.imeji.logic.util.IdentifierUtil;
@@ -63,7 +63,6 @@ public class InitializerServlet extends HttpServlet {
 		}
 		startLocksSurveyor();
 		initModel();
-		createSysAdminUser();
 	}
 
 	/**
@@ -83,45 +82,6 @@ public class InitializerServlet extends HttpServlet {
 	 */
 	private void startLocksSurveyor() {
 		locksSurveyor.start();
-	}
-
-	/**
-	 * Create the imeji system user if it doesn't exists
-	 */
-	private void createSysAdminUser() {
-		try {
-			UserController uc = new UserController(Imeji.adminUser);
-			List<User> admins = uc.retrieveAllAdmins();
-			if (admins.size() == 0) {
-				try {
-					User admin = uc.retrieve(Imeji.adminUser.getEmail());
-					logger.info("Add admin grant to admin@imeji.org user");
-					GrantController gc = new GrantController();
-					gc.addGrants(admin, AuthorizationPredefinedRoles
-							.imejiAdministrator(admin.getId().toString()),
-							admin);
-				} catch (NotFoundException e) {
-					logger.info("!!! IMPORTANT !!! Create admin@imeji.org as system administrator with password admin. !!! CHANGE PASSWORD !!!");
-					uc.create(Imeji.adminUser, USER_TYPE.ADMIN);
-					logger.info("Created admin user successfully:"
-							+ Imeji.adminUser.getEmail());
-				}
-			} else {
-				logger.info("Admin user already exists:");
-				for (User admin : admins) {
-					logger.info(admin.getEmail() + " is admin + ("
-							+ admin.getId() + ")");
-				}
-			}
-		} catch (AlreadyExistsException e) {
-			logger.warn(Imeji.adminUser.getEmail() + " already exists");
-		} catch (Exception e) {
-			if (e.getCause() instanceof AlreadyExistsException) {
-				logger.warn(Imeji.adminUser.getEmail() + " already exists");
-			} else {
-				throw new RuntimeException("Error initializing Admin user! ", e);
-			}
-		}
 	}
 
 	/**

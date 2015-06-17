@@ -30,12 +30,14 @@ package de.mpg.imeji.logic.auth.util;
 
 import de.mpg.imeji.logic.auth.Authorization;
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.user.ShareBean.SharedObjectType;
 import de.mpg.imeji.presentation.user.SharedHistory;
 import de.mpg.imeji.presentation.util.ObjectLoader;
+
 import org.apache.bcel.generic.ReturnaddressType;
 import org.apache.log4j.Logger;
 
@@ -192,13 +194,10 @@ public class AuthUtil {
 	 * @return
 	 */
 	public static List<Grant> extractGrantsFor(List<Grant> grants,
-			String grantForUri, String profileUri) {
+			String grantForUri) {
 		List<Grant> l = new ArrayList<Grant>();
 		for (Grant g : filterUnvalidGrants(grants)) {
 			if (g.getGrantFor().toString().equals(grantForUri))
-				l.add(g);
-			else if (profileUri != null
-					&& g.getGrantFor().toString().equals(profileUri))
 				l.add(g);
 		}
 		return l;
@@ -215,9 +214,9 @@ public class AuthUtil {
 	 * @return
 	 */
 	public static Grant extractGrant(List<Grant> grants, String grantForUri,
-			String profileUri, GrantType type) {
-		for (Grant g : AuthUtil.extractGrantsFor(grants,
-				PropertyBean.baseURI(), null))
+			GrantType type) {
+		for (Grant g : AuthUtil
+				.extractGrantsFor(grants, PropertyBean.baseURI()))
 			if (g.getGrantType().compareTo(AuthUtil.toGrantTypeURI(type)) == 0)
 				return g;
 		return null;
@@ -267,23 +266,26 @@ public class AuthUtil {
 			if (sharedWith.contains("/collection/")) {
 				CollectionImeji c = ObjectLoader.loadCollectionLazy(
 						URI.create(sharedWith), sessionUser);
-				if (c != null)
-					;
-				roles.add(new SharedHistory(user, SharedObjectType.COLLECTION,
-						sharedWith, c.getProfile().toString(), c.getMetadata()
-								.getTitle()));
+				if (c != null) {
+					roles.add(new SharedHistory(user,
+							SharedObjectType.COLLECTION, sharedWith, c
+									.getProfile().toString(), c.getMetadata()
+									.getTitle()));
+				}
 			} else if (sharedWith.contains("/album/")) {
 				Album a = ObjectLoader.loadAlbumLazy(URI.create(sharedWith),
 						sessionUser);
-				if (a != null)
+				if (a != null) {
 					roles.add(new SharedHistory(user, SharedObjectType.ALBUM,
 							sharedWith, null, a.getMetadata().getTitle()));
+				}
 			} else if (sharedWith.contains("/item/")) {
 				ItemController c = new ItemController();
 				Item it = c.retrieve(URI.create(sharedWith), sessionUser);
-				if (it != null)
+				if (it != null) {
 					roles.add(new SharedHistory(user, SharedObjectType.ITEM,
 							sharedWith, null, it.getFilename()));
+				}
 			}
 		}
 		return roles;

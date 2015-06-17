@@ -3,6 +3,19 @@
  */
 package de.mpg.imeji.logic.controller;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
@@ -13,7 +26,6 @@ import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.ImejiTriple;
-import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
@@ -34,19 +46,6 @@ import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.j2j.helper.J2JHelper;
-
-import org.apache.log4j.Logger;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import static com.google.common.base.Strings.isNullOrEmpty;
-import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
 
 /**
  * CRUD controller for {@link CollectionImeji}, plus search mehtods related to
@@ -114,7 +113,6 @@ public class CollectionController extends ImejiController {
 			if (method.equals(MetadataProfileCreationMethod.COPY)) {
 				p.setTitle(c.getMetadata().getTitle() + metadataProfileName);
 			}
-
 			p = pc.create(p.cloneWithTitle(), user);
 		}
 		c.setProfile(p.getId());
@@ -122,17 +120,14 @@ public class CollectionController extends ImejiController {
 		c.setProfile(p.getId());
 		writer.create(WriterFacade.toList(c), p, user);
 		// Prepare grants
-		GrantController gc = new GrantController();
-		gc.addGrants(user, AuthorizationPredefinedRoles.admin(c.getId()
-				.toString(), p.getId().toString()), user);
-
+		ShareController shareController = new ShareController();
+		user = shareController.shareWithCreator(user, c.getId().toString());
 		// check the space
 		// Just read SessionBean for SpaceId
 		if (!isNullOrEmpty(spaceId)) {
 			SpaceController sp = new SpaceController();
 			sp.addCollection(spaceId, c.getIdString(), user);
 		}
-
 		return c.getId();
 	}
 
@@ -243,35 +238,30 @@ public class CollectionController extends ImejiController {
 			int limit, int offset, User user) throws ImejiException {
 
 		List<CollectionImeji> cols = new ArrayList<CollectionImeji>();
-		
+
 		List<String> retrieveUris;
 		if (limit < 0) {
 			retrieveUris = uris;
+		} else {
+			retrieveUris = uris.size() > 0 && limit > 0 ? uris.subList(offset,
+					getMin(offset + limit, uris.size()))
+					: new ArrayList<String>();
 		}
-		else
-		{
-			retrieveUris= uris.size() > 0 && limit > 0 ? uris
-				.subList(
-						offset, getMin(offset + limit, uris.size())) : new ArrayList<String>();
-		}
-		
-		
+
 		for (String s : retrieveUris) {
-				
-					cols.add((CollectionImeji) J2JHelper.setId(
-							new CollectionImeji(), URI.create(s)));
+
+			cols.add((CollectionImeji) J2JHelper.setId(new CollectionImeji(),
+					URI.create(s)));
 		}
-		
+
 		try {
 			reader.readLazy(J2JHelper.cast2ObjectList(cols), user);
 			return cols;
-		}
-		catch (ImejiException e) {
-				logger.error("Error loading collections: " + e.getMessage(), e);
-				return null;
+		} catch (ImejiException e) {
+			logger.error("Error loading collections: " + e.getMessage(), e);
+			return null;
 		}
 	}
-
 
 	/**
 	 * Update a {@link CollectionImeji} (inclusive its {@link Item}: slow for

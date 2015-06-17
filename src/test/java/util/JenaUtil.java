@@ -123,6 +123,7 @@ public class JenaUtil {
 			logger.info(u.getEmail() + " already exists. Must not be created");
 		}
 	}
+	
 
 	/**
 	 * REturn a Mockup User with default rights

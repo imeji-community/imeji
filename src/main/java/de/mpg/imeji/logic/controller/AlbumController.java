@@ -51,7 +51,7 @@ public class AlbumController extends ImejiController {
 			Imeji.albumModel);
 	private static final WriterFacade writer = new WriterFacade(
 			Imeji.albumModel);
-	
+
 	private static Logger logger = Logger.getLogger(AlbumController.class);
 
 	/**
@@ -69,9 +69,8 @@ public class AlbumController extends ImejiController {
 	 */
 	public URI create(Album album, User user) throws ImejiException {
 		writeCreateProperties(album, user);
-		GrantController gc = new GrantController();
-		gc.addGrants(user, AuthorizationPredefinedRoles.admin(album.getId()
-				.toString(), null), user);
+		ShareController shareController = new ShareController();
+		shareController.shareWithCreator(user, album.getId().toString());
 		writer.create(WriterFacade.toList(album), null, user);
 		return album.getId();
 	}
@@ -365,29 +364,26 @@ public class AlbumController extends ImejiController {
 	public Collection<Album> loadAlbumsLazy(List<String> uris, User user,
 			int limit, int offset) throws ImejiException {
 		List<Album> albs = new ArrayList<Album>();
-		
+
 		List<String> retrieveUris;
 		if (limit < 0) {
 			retrieveUris = uris;
+		} else {
+			retrieveUris = uris.size() > 0 && limit > 0 ? uris.subList(offset,
+					getMin(offset + limit, uris.size()))
+					: new ArrayList<String>();
 		}
-		else
-		{
-			retrieveUris= uris.size() > 0 && limit > 0 ? uris
-				.subList(
-						offset, getMin(offset + limit, uris.size())) : new ArrayList<String>();
-		}
-		
+
 		for (String s : retrieveUris) {
 			albs.add((Album) J2JHelper.setId(new Album(), URI.create(s)));
 		}
-		
+
 		try {
 			reader.readLazy(J2JHelper.cast2ObjectList(albs), user);
 			return albs;
-		}
-		catch (ImejiException e) {
-				logger.error("Error loading albums: " + e.getMessage(), e);
-				return null;
+		} catch (ImejiException e) {
+			logger.error("Error loading albums: " + e.getMessage(), e);
+			return null;
 		}
 	}
 

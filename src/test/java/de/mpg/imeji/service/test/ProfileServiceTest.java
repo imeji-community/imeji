@@ -123,14 +123,6 @@ public class ProfileServiceTest {
 		ProfileService pCrud = new ProfileService();
 		MetadataProfileTO profile = new MetadataProfileTO();
 
-		// read profile without login
-		try {
-			pCrud.read(p.getIdString(), null);
-			fail("Not logged in should not allowed to read profile");
-		} catch (Exception e) {
-
-		}
-
 		// read profile with login
 		try {
 			profile = pCrud.read(p.getIdString(), testUser);

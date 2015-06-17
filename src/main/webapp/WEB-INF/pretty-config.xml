@@ -149,10 +149,7 @@
 		<view-id>/jsf/User.xhtml</view-id>
 	</url-mapping>
 
-	<url-mapping id="privatePage">
-		<pattern value="/private"></pattern>
-		<view-id>/jsf/Private.xhtml</view-id>
-	</url-mapping>
+
 
 	<url-mapping id="administration">
 		<pattern value="/admin"></pattern>
@@ -369,11 +366,7 @@
 		<view-id>/jsf/User.xhtml</view-id>
 	</url-mapping>
 
-	<url-mapping id="space_privatePage">
-		<pattern value="/space/#{SessionBean.spaceId}/private"></pattern>
-		<view-id>/jsf/Private.xhtml</view-id>
-	</url-mapping>
-
+	
 	<url-mapping id="space_administration">
 		<pattern value="/space/#{SessionBean.spaceId}/admin"></pattern>
 		<view-id>/jsf/AdminOverview.xhtml</view-id>

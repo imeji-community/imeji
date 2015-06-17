@@ -27,7 +27,7 @@
 	
 		<ui:include src="./include/History.xhtml"/>
 		<!-- ID must not be changed. The share page would not work anymore -->
-		<imjc:share id="share" roles="#{ShareBean.type == 'COLLECTION' ? SessionBean.shareCollectionGrantItems : SessionBean.shareAlbumGrantItems}"/>
+		<imjc:share id="share" roles="#{ShareBean.type == 'COLLECTION' ? ShareBean.shareCollectionGrantItems : SessionBean.shareAlbumGrantItems}"/>
 		
 	</ui:define>
 </ui:composition>

@@ -1,5 +1,13 @@
 package de.mpg.imeji.rest.resources.test.integration;
 
+import de.mpg.imeji.logic.controller.ProfileController;
+import de.mpg.imeji.logic.util.MetadataFactory;
+import de.mpg.imeji.logic.vo.Metadata.Types;
+import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
+import de.mpg.imeji.logic.vo.predefinedMetadata.util.MetadataTypesHelper;
+import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.rest.MyApplication;
 import de.mpg.imeji.rest.api.AlbumService;
 import de.mpg.imeji.rest.api.CollectionService;
@@ -7,6 +15,8 @@ import de.mpg.imeji.rest.api.ItemService;
 import de.mpg.imeji.rest.api.ProfileService;
 import de.mpg.imeji.rest.process.RestProcessUtils;
 import de.mpg.imeji.rest.to.*;
+import de.mpg.j2j.misc.LocalizedString;
+
 import org.apache.log4j.Logger;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.test.JerseyTest;
@@ -14,12 +24,15 @@ import org.glassfish.jersey.test.spi.TestContainerException;
 import org.glassfish.jersey.test.spi.TestContainerFactory;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+
 import util.JenaUtil;
 
 import javax.ws.rs.core.Application;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.net.URISyntaxException;
 
 import static de.mpg.imeji.logic.util.ResourceHelper.getStringFromPath;
@@ -43,7 +56,7 @@ public class ImejiTestBase extends JerseyTest {
 	protected static CollectionTO collectionTO;
 	protected static AlbumTO albumTO;
 	protected static ItemTO itemTO;
-	
+
 	private static Logger logger = Logger.getLogger(ImejiTestBase.class);
 
 	@Override
@@ -73,26 +86,33 @@ public class ImejiTestBase extends JerseyTest {
 	 */
 	public static void initProfile() {
 		try {
-			ProfileService s = new ProfileService();
-			profileId = s.create(new MetadataProfileTO(), JenaUtil.testUser).getId();
+			ProfileController pc = new ProfileController();
+			MetadataProfile p = new MetadataProfile();
+			p.setTitle("Test");
+			Statement s = new Statement();
+			s.getLabels().add(new LocalizedString("Test", null));
+			s.setType(URI.create(Types.TEXT.getClazzNamespace()));
+			p.getStatements().add(s);
+			profileId = pc.create(p, JenaUtil.testUser).getIdString();
 		} catch (Exception e) {
 			logger.error("Cannot init profile", e);
 		}
 	}
 
-
 	/**
 	 * Create a new collection and set the collectionid
-	 * @throws IOException 
-	 * @throws UnsupportedEncodingException 
+	 * 
+	 * @throws IOException
+	 * @throws UnsupportedEncodingException
 	 * 
 	 * @throws Exception
 	 */
-	public static String initCollection()  {
+	public static String initCollection() {
 		CollectionService s = new CollectionService();
 		try {
-            collectionTO= (CollectionTO) RestProcessUtils.buildTOFromJSON(
-                    getStringFromPath(STATIC_CONTEXT_REST + "/createCollection.json"), CollectionTO.class);
+			collectionTO = (CollectionTO) RestProcessUtils.buildTOFromJSON(
+					getStringFromPath(STATIC_CONTEXT_REST
+							+ "/createCollection.json"), CollectionTO.class);
 			collectionTO = s.create(collectionTO, JenaUtil.testUser);
 			collectionId = collectionTO.getId();
 		} catch (Exception e) {
@@ -103,25 +123,26 @@ public class ImejiTestBase extends JerseyTest {
 
 	/**
 	 * Create a new album and set the albumid
-	 * @throws IOException 
-	 * @throws UnsupportedEncodingException 
+	 * 
+	 * @throws IOException
+	 * @throws UnsupportedEncodingException
 	 * 
 	 * @throws Exception
 	 */
-	public static void initAlbum(){
+	public static void initAlbum() {
 		AlbumService s = new AlbumService();
-		try{
-            albumTO = (AlbumTO) RestProcessUtils.buildTOFromJSON(
-                    getStringFromPath(STATIC_CONTEXT_REST + "/createAlbum.json"), AlbumTO.class);
+		try {
+			albumTO = (AlbumTO) RestProcessUtils
+					.buildTOFromJSON(getStringFromPath(STATIC_CONTEXT_REST
+							+ "/createAlbum.json"), AlbumTO.class);
 			albumTO = s.create(albumTO, JenaUtil.testUser);
 			albumId = albumTO.getId();
-			
-		}catch (Exception e) {
+
+		} catch (Exception e) {
 			logger.error("Cannot init Album", e);
 		}
 	}
-	
-	
+
 	/**
 	 * Create an item in the test collection (initCollection must be called
 	 * before)
@@ -142,12 +163,12 @@ public class ImejiTestBase extends JerseyTest {
 
 		}
 	}
-	
+
 	public static void initItem(String fileName) {
 		ItemService s = new ItemService();
 		ItemWithFileTO to = new ItemWithFileTO();
 		to.setCollectionId(collectionId);
-		to.setFile(new File(STATIC_CONTEXT_STORAGE + "/"+fileName+".jpg"));
+		to.setFile(new File(STATIC_CONTEXT_STORAGE + "/" + fileName + ".jpg"));
 		to.setStatus("PENDING");
 		try {
 			itemTO = s.create(to, JenaUtil.testUser);

@@ -4,7 +4,6 @@
 package de.mpg.imeji.presentation.user;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +14,7 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
-import de.mpg.imeji.logic.controller.GrantController;
+import de.mpg.imeji.logic.controller.ShareController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.util.StringHelper;
@@ -75,7 +74,8 @@ public class UserBean {
 
 	/**
 	 * Retrieve the current user
-	 * @throws Exception 
+	 * 
+	 * @throws Exception
 	 */
 	public void retrieveUser() throws Exception {
 		if (id != null && session.getUser() != null) {
@@ -141,15 +141,16 @@ public class UserBean {
 	 */
 	@SuppressWarnings("unchecked")
 	public void toggleAdmin() throws Exception {
-		GrantController gc = new GrantController();
+		ShareController shareController = new ShareController();
 		if (user.isAdmin()) {
 			Grant g = AuthUtil.extractGrant((List<Grant>) user.getGrants(),
-					PropertyBean.baseURI(), null, GrantType.ADMIN);
-			gc.removeGrants(user, (List<Grant>) gc.toList(g), session.getUser());
+					PropertyBean.baseURI(), GrantType.ADMIN);
+			shareController.removeGrants(user,
+					(List<Grant>) shareController.toList(g), session.getUser());
 		} else {
-			Grant g = new Grant(GrantType.ADMIN, URI.create(PropertyBean
-					.baseURI()));
-			gc.addGrants(user, (List<Grant>) gc.toList(g), session.getUser());
+			shareController.share(session.getUser(), user, PropertyBean
+					.baseURI(), (List<String>) shareController
+					.toList(ShareController.ShareRoles.ADMIN));
 		}
 	}
 
@@ -165,15 +166,16 @@ public class UserBean {
 	 */
 	@SuppressWarnings("unchecked")
 	public void toggleCreateCollection() throws Exception {
-		GrantController gc = new GrantController();
+		ShareController shareController = new ShareController();
 		if (user.isAllowedToCreateCollection()) {
 			Grant g = AuthUtil.extractGrant((List<Grant>) user.getGrants(),
-					PropertyBean.baseURI(), null, GrantType.CREATE);
-			gc.removeGrants(user, (List<Grant>) gc.toList(g), session.getUser());
+					PropertyBean.baseURI(), GrantType.CREATE);
+			shareController.removeGrants(user,
+					(List<Grant>) shareController.toList(g), session.getUser());
 		} else {
-			Grant g = new Grant(GrantType.CREATE, URI.create(PropertyBean
-					.baseURI()));
-			gc.addGrants(user, (List<Grant>) gc.toList(g), session.getUser());
+			shareController.share(session.getUser(), user, PropertyBean
+					.baseURI(), (List<String>) shareController
+					.toList(ShareController.ShareRoles.CREATE));
 		}
 	}
 
@@ -203,7 +205,8 @@ public class UserBean {
 			FacesContext.getCurrentInstance().getExternalContext()
 					.redirect(getUserPageUrl());
 		} catch (IOException e) {
-			Logger.getLogger(UserBean.class).info("Some reloadPage exception", e);
+			Logger.getLogger(UserBean.class).info("Some reloadPage exception",
+					e);
 		}
 	}
 
@@ -241,7 +244,6 @@ public class UserBean {
 	public void setRepeatedPassword(String repeatedPassword) {
 		this.repeatedPassword = repeatedPassword;
 	}
-
 
 	/**
 	 * @return the roles

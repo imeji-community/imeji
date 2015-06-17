@@ -13,7 +13,7 @@ import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.beans.Navigation.Page;
 import de.mpg.imeji.presentation.upload.IngestImage;
-import de.mpg.imeji.presentation.user.ShareBean.ShareType;
+import de.mpg.imeji.presentation.user.ShareBean.ShareMenu;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CookieUtils;
 import de.mpg.imeji.presentation.util.MaxPlanckInstitutUtils;
@@ -568,39 +568,39 @@ public class SessionBean implements Serializable {
 
 	public List<SelectItem> getShareCollectionGrantItems() {
 		List<SelectItem> itemList = new ArrayList<SelectItem>();
-		itemList.add(new SelectItem(ShareType.READ,
+		itemList.add(new SelectItem(ShareMenu.READ,
 				getLabel("collection_share_read")));
-		itemList.add(new SelectItem(ShareType.CREATE,
+		itemList.add(new SelectItem(ShareMenu.CREATE,
 				getLabel("collection_share_image_upload")));
-		itemList.add(new SelectItem(ShareType.EDIT_ITEM,
+		itemList.add(new SelectItem(ShareMenu.EDIT_ITEM,
 				getLabel("collection_share_image_edit")));
-		itemList.add(new SelectItem(ShareType.DELETE_ITEM,
+		itemList.add(new SelectItem(ShareMenu.DELETE_ITEM,
 				getLabel("collection_share_image_delete")));
-		itemList.add(new SelectItem(ShareType.EDIT_CONTAINER,
+		itemList.add(new SelectItem(ShareMenu.EDIT,
 				getLabel("collection_share_collection_edit")));
-		itemList.add(new SelectItem(ShareType.EDIT_PROFILE,
+		itemList.add(new SelectItem(ShareMenu.EDIT_PROFILE,
 				getLabel("collection_share_profile_edit")));
-		itemList.add(new SelectItem(ShareType.ADMIN,
+		itemList.add(new SelectItem(ShareMenu.ADMIN,
 				getLabel("collection_share_admin")));
 		return itemList;
 	}
 
 	public List<SelectItem> getShareItemGrantItems() {
 		List<SelectItem> itemList = new ArrayList<SelectItem>();
-		itemList.add(new SelectItem(ShareType.READ,
+		itemList.add(new SelectItem(ShareMenu.READ,
 				getLabel("collection_share_read")));
 		return itemList;
 	}
 
 	public List<SelectItem> getShareAlbumGrantItems() {
 		List<SelectItem> itemList = new ArrayList<SelectItem>();
-		itemList.add(new SelectItem(ShareType.READ,
+		itemList.add(new SelectItem(ShareMenu.READ,
 				getLabel("album_share_read")));
-		itemList.add(new SelectItem(ShareType.CREATE,
+		itemList.add(new SelectItem(ShareMenu.CREATE,
 				getLabel("album_share_image_add")));
-		itemList.add(new SelectItem(ShareType.EDIT_CONTAINER,
+		itemList.add(new SelectItem(ShareMenu.EDIT,
 				getLabel("album_share_album_edit")));
-		itemList.add(new SelectItem(ShareType.ADMIN,
+		itemList.add(new SelectItem(ShareMenu.ADMIN,
 				getLabel("album_share_admin")));
 		return itemList;
 	}

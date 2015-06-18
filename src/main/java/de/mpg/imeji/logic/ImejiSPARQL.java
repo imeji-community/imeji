@@ -40,8 +40,7 @@ public class ImejiSPARQL
         }
         catch (ImejiException e)
         {
-            
-        	Logger.getLogger(ImejiSPARQL.class).error("There has bin some SPARQL issue", e);
+        	Logger.getLogger(ImejiSPARQL.class).error("There has been some SPARQL issue", e);
         }
         return results;
     }

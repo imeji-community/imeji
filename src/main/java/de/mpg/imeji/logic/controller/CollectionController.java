@@ -121,7 +121,7 @@ public class CollectionController extends ImejiController {
 		writer.create(WriterFacade.toList(c), p, user);
 		// Prepare grants
 		ShareController shareController = new ShareController();
-		user = shareController.shareWithCreator(user, c.getId().toString());
+		user = shareController.shareToCreator(user, c.getId().toString());
 		// check the space
 		// Just read SessionBean for SpaceId
 		if (!isNullOrEmpty(spaceId)) {

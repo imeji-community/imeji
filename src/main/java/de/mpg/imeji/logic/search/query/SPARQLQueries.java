@@ -294,12 +294,25 @@ public class SPARQLQueries {
 	}
 
 	/**
+	 * Find the collection of an item and return its uri
+	 * 
 	 * @param fileUrl
 	 * @return
 	 */
 	public static String selectCollectionIdOfItem(String itemUri) {
 		return " SELECT DISTINCT ?s WHERE {<" + itemUri
 				+ "> <http://imeji.org/terms/collection> ?s} LIMIT 1 ";
+	}
+
+	/**
+	 * Find the profile of a collection and return its uri
+	 * 
+	 * @param collectionUri
+	 * @return
+	 */
+	public static String selectProfileIdOfCollection(String collectionUri) {
+		return " SELECT DISTINCT ?s WHERE {<" + collectionUri
+				+ "> <http://imeji.org/terms/mdprofile> ?s} LIMIT 1 ";
 	}
 
 	/**

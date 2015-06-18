@@ -42,7 +42,7 @@ public class ShareControllerTest extends ControllerTest {
 		User user = userController.retrieve(JenaUtil.TEST_USER_EMAIL);
 		User user2 = userController.retrieve(JenaUtil.TEST_USER_EMAIL_2);
 		ShareController controller = new ShareController();
-		controller.share(user, user2, profile.getId().toString(),
+		controller.shareToUser(user, user2, profile.getId().toString(),
 				(List<String>) ShareController.rolesAsList(ShareRoles.EDIT));
 		ProfileController profileController = new ProfileController();
 		CollectionController collectionController = new CollectionController();
@@ -73,7 +73,7 @@ public class ShareControllerTest extends ControllerTest {
 		User user = userController.retrieve(JenaUtil.TEST_USER_EMAIL);
 		User user2 = userController.retrieve(JenaUtil.TEST_USER_EMAIL_2);
 		ShareController controller = new ShareController();
-		controller.share(user, user2, collection.getId().toString(),
+		controller.shareToUser(user, user2, collection.getId().toString(),
 				(List<String>) ShareController.rolesAsList(ShareRoles.EDIT));
 		ProfileController profileController = new ProfileController();
 		CollectionController collectionController = new CollectionController();
@@ -103,7 +103,7 @@ public class ShareControllerTest extends ControllerTest {
 	@Test
 	public void shareItem() throws ImejiException {
 		ShareController shareController = new ShareController();
-		shareController.share(JenaUtil.testUser, JenaUtil.testUser2, item
+		shareController.shareToUser(JenaUtil.testUser, JenaUtil.testUser2, item
 				.getId().toString(), ShareController
 				.rolesAsList(ShareRoles.READ));
 		ItemController itemController = new ItemController();

@@ -70,7 +70,7 @@ public class AlbumController extends ImejiController {
 	public URI create(Album album, User user) throws ImejiException {
 		writeCreateProperties(album, user);
 		ShareController shareController = new ShareController();
-		shareController.shareWithCreator(user, album.getId().toString());
+		shareController.shareToCreator(user, album.getId().toString());
 		writer.create(WriterFacade.toList(album), null, user);
 		return album.getId();
 	}

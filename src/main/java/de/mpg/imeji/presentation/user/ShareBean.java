@@ -79,10 +79,6 @@ public class ShareBean implements Serializable {
 		COLLECTION, ALBUM, ITEM
 	}
 
-	public enum ShareMenu {
-		READ, CREATE, EDIT_ITEM, DELETE_ITEM, EDIT, EDIT_PROFILE, ADMIN
-	}
-
 	/**
 	 * Init {@link ShareBean} for {@link CollectionImeji}
 	 * 
@@ -517,31 +513,9 @@ public class ShareBean implements Serializable {
 			throws Exception {
 		ShareController shareController = new ShareController();
 		if (toUser != null) {
-			shareController.share(fromUser, toUser, uri, rolesMenu);
-			if (profileUri != null) {
-				if (rolesMenu.contains(ShareBean.ShareMenu.EDIT_PROFILE
-						.toString())) {
-					shareController.share(fromUser, toUser, profileUri,
-							ShareController.rolesAsList(ShareRoles.EDIT));
-				} else {
-					shareController.share(fromUser, toUser, profileUri,
-							ShareController.rolesAsList(ShareRoles.READ));
-				}
-			}
+			shareController.shareToUser(fromUser, toUser, uri, rolesMenu);
 		} else if (toGroup != null) {
-			shareController.shareWithGroup(fromUser, toGroup, uri, rolesMenu);
-			if (profileUri != null) {
-				if (rolesMenu.contains(ShareBean.ShareMenu.EDIT_PROFILE
-						.toString())) {
-					shareController.shareWithGroup(fromUser, toGroup,
-							profileUri,
-							ShareController.rolesAsList(ShareRoles.EDIT));
-				} else {
-					shareController.shareWithGroup(fromUser, toGroup,
-							profileUri,
-							ShareController.rolesAsList(ShareRoles.READ));
-				}
-			}
+			shareController.shareToGroup(fromUser, toGroup, uri, rolesMenu);
 		}
 	}
 
@@ -564,7 +538,7 @@ public class ShareBean implements Serializable {
 			List<String> profileMenu = ShareController.transformGrantsToRoles(
 					(List<Grant>) grants, profileUri);
 			if (profileMenu.contains(ShareRoles.EDIT.toString()))
-				menu.add(ShareMenu.EDIT_PROFILE.toString());
+				menu.add(ShareRoles.EDIT_PROFILE.toString());
 		}
 
 		return menu;
@@ -679,33 +653,33 @@ public class ShareBean implements Serializable {
 		case COLLECTION:
 			if (selectedGrants.contains("ADMIN")) {
 				selectedGrants.clear();
-				selectedGrants.add(ShareMenu.READ.toString());
-				selectedGrants.add(ShareMenu.CREATE.toString());
-				selectedGrants.add(ShareMenu.EDIT_ITEM.toString());
-				selectedGrants.add(ShareMenu.DELETE_ITEM.toString());
-				selectedGrants.add(ShareMenu.EDIT.toString());
-				selectedGrants.add(ShareMenu.EDIT_PROFILE.toString());
-				selectedGrants.add(ShareMenu.ADMIN.toString());
+				selectedGrants.add(ShareRoles.READ.toString());
+				selectedGrants.add(ShareRoles.CREATE.toString());
+				selectedGrants.add(ShareRoles.EDIT_ITEM.toString());
+				selectedGrants.add(ShareRoles.DELETE_ITEM.toString());
+				selectedGrants.add(ShareRoles.EDIT.toString());
+				selectedGrants.add(ShareRoles.EDIT_PROFILE.toString());
+				selectedGrants.add(ShareRoles.ADMIN.toString());
 			} else {
 				if (!selectedGrants.contains("READ"))
-					selectedGrants.add(ShareMenu.READ.toString());
+					selectedGrants.add(ShareRoles.READ.toString());
 			}
 			break;
 		case ALBUM:
 			if (selectedGrants.contains("ADMIN")) {
 				selectedGrants.clear();
-				selectedGrants.add(ShareMenu.READ.toString());
-				selectedGrants.add(ShareMenu.CREATE.toString());
-				selectedGrants.add(ShareMenu.EDIT.toString());
-				selectedGrants.add(ShareMenu.ADMIN.toString());
+				selectedGrants.add(ShareRoles.READ.toString());
+				selectedGrants.add(ShareRoles.CREATE.toString());
+				selectedGrants.add(ShareRoles.EDIT.toString());
+				selectedGrants.add(ShareRoles.ADMIN.toString());
 			} else {
 				if (!selectedGrants.contains("READ"))
-					selectedGrants.add(ShareMenu.READ.toString());
+					selectedGrants.add(ShareRoles.READ.toString());
 			}
 			break;
 		case ITEM:
 			selectedGrants.clear();
-			selectedGrants.add(ShareMenu.READ.toString());
+			selectedGrants.add(ShareRoles.READ.toString());
 			break;
 		}
 		return selectedGrants;
@@ -830,24 +804,59 @@ public class ShareBean implements Serializable {
 		return getSharedWith().size();
 	}
 
+	/**
+	 * Menu for sharing collection
+	 * 
+	 * @return
+	 */
 	public List<SelectItem> getShareCollectionGrantItems() {
 		List<SelectItem> itemList = new ArrayList<SelectItem>();
-		itemList.add(new SelectItem(ShareMenu.READ, sb
+		itemList.add(new SelectItem(ShareRoles.READ, sb
 				.getLabel("collection_share_read")));
-		itemList.add(new SelectItem(ShareMenu.CREATE, sb
+		itemList.add(new SelectItem(ShareRoles.CREATE, sb
 				.getLabel("collection_share_image_upload")));
-		itemList.add(new SelectItem(ShareMenu.EDIT_ITEM, sb
+		itemList.add(new SelectItem(ShareRoles.EDIT_ITEM, sb
 				.getLabel("collection_share_image_edit")));
-		itemList.add(new SelectItem(ShareMenu.DELETE_ITEM, sb
+		itemList.add(new SelectItem(ShareRoles.DELETE_ITEM, sb
 				.getLabel("collection_share_image_delete")));
-		itemList.add(new SelectItem(ShareMenu.EDIT, sb
+		itemList.add(new SelectItem(ShareRoles.EDIT, sb
 				.getLabel("collection_share_collection_edit")));
 		if (AuthUtil.staticAuth().administrate(sb.getUser(), profileUri)) {
-			itemList.add(new SelectItem(ShareMenu.EDIT_PROFILE, sb
+			itemList.add(new SelectItem(ShareRoles.EDIT_PROFILE, sb
 					.getLabel("collection_share_profile_edit")));
 		}
-		itemList.add(new SelectItem(ShareMenu.ADMIN, sb
+		itemList.add(new SelectItem(ShareRoles.ADMIN, sb
 				.getLabel("collection_share_admin")));
+		return itemList;
+	}
+
+	/**
+	 * Menu for sharing items
+	 * 
+	 * @return
+	 */
+	public List<SelectItem> getShareItemGrantItems() {
+		List<SelectItem> itemList = new ArrayList<SelectItem>();
+		itemList.add(new SelectItem(ShareRoles.READ, sb
+				.getLabel("collection_share_read")));
+		return itemList;
+	}
+
+	/**
+	 * Menu for sharing Album
+	 * 
+	 * @return
+	 */
+	public List<SelectItem> getShareAlbumGrantItems() {
+		List<SelectItem> itemList = new ArrayList<SelectItem>();
+		itemList.add(new SelectItem(ShareRoles.READ, sb
+				.getLabel("album_share_read")));
+		itemList.add(new SelectItem(ShareRoles.CREATE, sb
+				.getLabel("album_share_image_add")));
+		itemList.add(new SelectItem(ShareRoles.EDIT, sb
+				.getLabel("album_share_album_edit")));
+		itemList.add(new SelectItem(ShareRoles.ADMIN, sb
+				.getLabel("album_share_admin")));
 		return itemList;
 	}
 

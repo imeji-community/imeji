@@ -152,9 +152,10 @@ public class FileServlet extends HttpServlet {
 				resp.sendError(HttpServletResponse.SC_NOT_FOUND,
 						"The resource you are trying to retrieve does not exist!");
 			} else {
-				e.printStackTrace();
-					if (!resp.isCommitted())
+				logger.error(e.getMessage());
+				if (!resp.isCommitted()) {
 					resp.sendError(422, "Unprocessable entity!");
+				}
 
 				/*
 				 * ExternalStorage eStorage = new ExternalStorage();

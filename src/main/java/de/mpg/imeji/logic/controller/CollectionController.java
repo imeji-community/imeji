@@ -37,6 +37,9 @@ import de.mpg.imeji.logic.search.query.URLQueryTransformer;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.validation.Validator;
+import de.mpg.imeji.logic.validation.ValidatorFactory;
+import de.mpg.imeji.logic.validation.impl.CollectionValidator;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -101,6 +104,9 @@ public class CollectionController extends ImejiController {
 	public URI create(CollectionImeji c, MetadataProfile p, User user,
 			MetadataProfileCreationMethod method, String spaceId)
 			throws ImejiException {
+		// First validate the collection, to avoid to create a zombie profile...
+		CollectionValidator validator = new CollectionValidator();
+		validator.validate(c);
 		ProfileController pc = new ProfileController();
 		String metadataProfileName = " (Metadata profile)";
 		if (p == null || method.equals(MetadataProfileCreationMethod.NEW)) {
@@ -113,7 +119,7 @@ public class CollectionController extends ImejiController {
 			if (method.equals(MetadataProfileCreationMethod.COPY)) {
 				p.setTitle(c.getMetadata().getTitle() + metadataProfileName);
 			}
-			p = pc.create(p.cloneWithTitle(), user);
+			p = pc.create(p.clone(), user);
 		}
 		c.setProfile(p.getId());
 		writeCreateProperties(c, user);
@@ -121,7 +127,7 @@ public class CollectionController extends ImejiController {
 		writer.create(WriterFacade.toList(c), p, user);
 		// Prepare grants
 		ShareController shareController = new ShareController();
-		user = shareController.shareWithCreator(user, c.getId().toString());
+		user = shareController.shareToCreator(user, c.getId().toString());
 		// check the space
 		// Just read SessionBean for SpaceId
 		if (!isNullOrEmpty(spaceId)) {
@@ -167,16 +173,19 @@ public class CollectionController extends ImejiController {
 	 * @return
 	 * @throws ImejiException
 	 */
-	//TODO
+	// TODO
 	public List<Item> retrieveItems(String id, User user, String q)
 			throws ImejiException {
 		ItemController ic = new ItemController();
-		List<Item> itemList ;
+		List<Item> itemList;
 		try {
-			List<String> results =  ic.search(ObjectHelper.getURI(CollectionImeji.class, id),	
-											!isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q) : null, 
-											null, null, user, null).getResults();
-			itemList = (List<Item>)ic.retrieve(results, getMin(results.size(), 500), 0, user);
+			List<String> results = ic
+					.search(ObjectHelper.getURI(CollectionImeji.class, id),
+							!isNullOrEmptyTrim(q) ? URLQueryTransformer
+									.parseStringQuery(q) : null, null, null,
+							user, null).getResults();
+			itemList = (List<Item>) ic.retrieve(results,
+					getMin(results.size(), 500), 0, user);
 		} catch (Exception e) {
 			throw new UnprocessableError("Cannot retrieve items:", e);
 
@@ -197,10 +206,11 @@ public class CollectionController extends ImejiController {
 
 		List<CollectionImeji> cList = new ArrayList<CollectionImeji>();
 		try {
-			List<String> results =  search(	
-											!isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q) : null, 
-											null, 500, 0, user,spaceId).getResults();
-			cList = (List<CollectionImeji>)retrieveLazy(results, getMin(results.size(), 500), 0, user);
+			List<String> results = search(
+					!isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q)
+							: null, null, 500, 0, user, spaceId).getResults();
+			cList = (List<CollectionImeji>) retrieveLazy(results,
+					getMin(results.size(), 500), 0, user);
 		} catch (Exception e) {
 			throw new UnprocessableError("Cannot retrieve collections:", e);
 		}
@@ -356,7 +366,7 @@ public class CollectionController extends ImejiController {
 			} else {
 				// copy all statements from the template profile to the original
 				// metadata profile
-				MetadataProfile newMP = mp.cloneWithTitle();
+				MetadataProfile newMP = mp.clone();
 				// Title format as CollectionName (Metadata profile) (copy of
 				// <copied metadata profile name>))
 				// newMP.setTitle(ic.getMetadata().getTitle()+"(Metadata profile)"+newMP.getTitle());

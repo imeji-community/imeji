@@ -149,7 +149,7 @@ public class UserBean {
 			shareController.removeGrants(user,
 					(List<Grant>) shareController.toList(g), session.getUser());
 		} else {
-			shareController.share(session.getUser(), user,
+			shareController.shareToUser(session.getUser(), user,
 					PropertyBean.baseURI(),
 					ShareController.rolesAsList(ShareRoles.ADMIN));
 		}
@@ -174,7 +174,7 @@ public class UserBean {
 			shareController.removeGrants(user,
 					(List<Grant>) shareController.toList(g), session.getUser());
 		} else {
-			shareController.share(session.getUser(), user, PropertyBean
+			shareController.shareToUser(session.getUser(), user, PropertyBean
 					.baseURI(), (List<String>) shareController
 					.toList(ShareController.ShareRoles.CREATE));
 		}

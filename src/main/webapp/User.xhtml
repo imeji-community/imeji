@@ -185,8 +185,8 @@
 									
 									<div class="imj_admindataValue">
 										<ui:repeat var="shareHistory" value="#{UserBean.roles}" rows="0" varStatus="row">
-											<ui:param name="roles" value="#{shareHistory.type == 'COLLECTION' ? SessionBean.shareCollectionGrantItems : SessionBean.shareAlbumGrantItems}"/>
-											<ui:param name="roles" value="#{shareHistory.type == 'ITEM' ? SessionBean.shareItemGrantItems : roles}"/>
+											<ui:param name="roles" value="#{shareHistory.type == 'COLLECTION' ? ShareBean.shareCollectionGrantItems : ShareBean.shareAlbumGrantItems}"/>
+											<ui:param name="roles" value="#{shareHistory.type == 'ITEM' ? ShareBean.shareItemGrantItems : roles}"/>
 											
 											<div class="imj_admindataSet">
 												<div class="imj_admindataLabel">

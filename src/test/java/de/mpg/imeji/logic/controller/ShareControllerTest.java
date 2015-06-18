@@ -1,5 +1,6 @@
 package de.mpg.imeji.logic.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -42,7 +43,7 @@ public class ShareControllerTest extends ControllerTest {
 		User user = userController.retrieve(JenaUtil.TEST_USER_EMAIL);
 		User user2 = userController.retrieve(JenaUtil.TEST_USER_EMAIL_2);
 		ShareController controller = new ShareController();
-		controller.share(user, user2, profile.getId().toString(),
+		controller.shareToUser(user, user2, profile.getId().toString(),
 				(List<String>) ShareController.rolesAsList(ShareRoles.EDIT));
 		ProfileController profileController = new ProfileController();
 		CollectionController collectionController = new CollectionController();
@@ -73,7 +74,7 @@ public class ShareControllerTest extends ControllerTest {
 		User user = userController.retrieve(JenaUtil.TEST_USER_EMAIL);
 		User user2 = userController.retrieve(JenaUtil.TEST_USER_EMAIL_2);
 		ShareController controller = new ShareController();
-		controller.share(user, user2, collection.getId().toString(),
+		controller.shareToUser(user, user2, collection.getId().toString(),
 				(List<String>) ShareController.rolesAsList(ShareRoles.EDIT));
 		ProfileController profileController = new ProfileController();
 		CollectionController collectionController = new CollectionController();
@@ -103,7 +104,7 @@ public class ShareControllerTest extends ControllerTest {
 	@Test
 	public void shareItem() throws ImejiException {
 		ShareController shareController = new ShareController();
-		shareController.share(JenaUtil.testUser, JenaUtil.testUser2, item
+		shareController.shareToUser(JenaUtil.testUser, JenaUtil.testUser2, item
 				.getId().toString(), ShareController
 				.rolesAsList(ShareRoles.READ));
 		ItemController itemController = new ItemController();
@@ -111,6 +112,26 @@ public class ShareControllerTest extends ControllerTest {
 			itemController.retrieve(item.getId(), JenaUtil.testUser2);
 		} catch (Exception e) {
 			Assert.fail(e.getMessage());
+		}
+	}
+
+	@Test
+	public void unshareCollection() throws ImejiException {
+		ShareController shareController = new ShareController();
+		// First share...
+		shareController.shareToUser(JenaUtil.testUser, JenaUtil.testUser2,
+				collection.getId().toString(),
+				ShareController.rolesAsList(ShareRoles.READ));
+		// ... then unshare
+		shareController.shareToUser(JenaUtil.testUser, JenaUtil.testUser2,
+				collection.getId().toString(), new ArrayList<String>());
+		CollectionController collectionController = new CollectionController();
+		try {
+			collectionController.retrieve(collection.getId(),
+					JenaUtil.testUser2);
+			Assert.fail("Unshare of collection not working");
+		} catch (Exception e) {
+			// good
 		}
 	}
 

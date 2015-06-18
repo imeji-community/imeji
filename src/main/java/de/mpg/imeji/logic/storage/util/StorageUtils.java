@@ -109,37 +109,6 @@ public class StorageUtils {
 			if (close)
 				IOUtils.closeQuietly(out);
 		}
-		// byte[] buffer = new byte[1024];
-		// int numRead;
-		// try
-		// {
-		// while ((numRead = in.read(buffer)) != -1)
-		// {
-		// out.write(buffer, 0, numRead);
-		// }
-		// }
-		// catch (Exception e)
-		// {
-		// throw new
-		// RuntimeException("Error writing inputstream in outputstream: ", e);
-		// }
-		// finally
-		// {
-		// try
-		// {
-		// in.close();
-		// out.flush();
-		// if (close)
-		// {
-		// out.close();
-		// }
-		// }
-		// catch (IOException e)
-		// {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		// }
 	}
 
 	/**

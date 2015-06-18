@@ -90,6 +90,8 @@ public class MetadataProfile extends Properties implements Cloneable
     public MetadataProfile clone()
     {
         MetadataProfile clone = ImejiFactory.newProfile();
+        clone.setTitle(this.title);
+        clone.setDescription(this.description);
         // the mapping between the new uris (created by cloning) and the old uris
         Map<String, URI> idMapping = new HashMap<String, URI>();
         for (Statement s : statements)
@@ -103,14 +105,6 @@ public class MetadataProfile extends Properties implements Cloneable
             if (s.getParent() != null)
                 s.setParent(idMapping.get(s.getParent().toString()));
         
-        return clone;
-    }
-    
-    public MetadataProfile cloneWithTitle()
-    {
-        MetadataProfile clone = clone();
-        clone.setTitle(this.title);
-        clone.setDescription(this.description);
         return clone;
     }
 

@@ -29,90 +29,98 @@ import java.util.Map;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
 public class RestProcessUtils {
-	
+
 	private static Logger logger = Logger.getLogger(RestProcessUtils.class);
+
 	/**
 	 * Parse a json file and construct a new Object of type T
 	 * 
 	 * @param json
 	 * @param type
-	 * @return 
+	 * @return
 	 */
-	public static <T> Object buildTOFromJSON(String json, Class<T> type) throws BadRequestException {
+	public static <T> Object buildTOFromJSON(String json, Class<T> type)
+			throws BadRequestException {
 		try {
-            ObjectReader reader = new ObjectMapper().reader().withType(type);
-            return reader.readValue(json);
+			ObjectReader reader = new ObjectMapper().reader().withType(type);
+			return reader.readValue(json);
 		} catch (Exception e) {
-            throw new BadRequestException("Cannot parse json: " + e.getLocalizedMessage());
+			throw new BadRequestException("Cannot parse json: "
+					+ e.getLocalizedMessage());
 		}
 	}
-	
-	
-	public static JsonNode buildJsonNode(Object obj){
+
+	public static JsonNode buildJsonNode(Object obj) {
 		ObjectMapper mapper = new ObjectMapper();
 		JsonFactory factory = mapper.getFactory();
 		return mapper.convertValue(obj, JsonNode.class);
 	}
-	
-	
-	public static DefaultItemTO buildDefaultItemTOFromJSON(HttpServletRequest req) throws BadRequestException {
+
+	public static DefaultItemTO buildDefaultItemTOFromJSON(
+			HttpServletRequest req) throws BadRequestException {
 		DefaultItemTO easyTO = new DefaultItemTO();
 		try {
-			JsonFactory factory = new JsonFactory(); 
+			JsonFactory factory = new JsonFactory();
 			ObjectMapper mapper = new ObjectMapper(factory);
-			JsonNode rootNode =mapper.readTree(req.getInputStream());
-			easyTO.setCollectionId(rootNode.path("collectionId").asText());   	
-			
-			String metadataText  = rootNode.path("metadata").toString();
-		    rootNode = mapper.readTree(metadataText);  
-		    Iterator<Map.Entry<String,JsonNode>> fieldsIterator = rootNode.fields();
-		    while (fieldsIterator.hasNext()) {
-		    	Map.Entry<String,JsonNode> field = fieldsIterator.next();
-		    	rootNode = mapper.readTree(field.getValue().toString());
-		    	Iterator<Map.Entry<String,JsonNode>> fieldsIterator2 = rootNode.fields();
-		    	while (fieldsIterator2.hasNext()) {
-		    		Map.Entry<String,JsonNode> field2 = fieldsIterator2.next();
-		    		System.out.println("Key2: " + field2.getKey() + "\tValue2:" + field2.getValue());
-		    	}
-		    	
-		    	System.out.println("Key1: " + field.getKey() + "\tValue1:" + field.getValue());
-		       }
-			
+			JsonNode rootNode = mapper.readTree(req.getInputStream());
+			easyTO.setCollectionId(rootNode.path("collectionId").asText());
+
+			String metadataText = rootNode.path("metadata").toString();
+			rootNode = mapper.readTree(metadataText);
+			Iterator<Map.Entry<String, JsonNode>> fieldsIterator = rootNode
+					.fields();
+			while (fieldsIterator.hasNext()) {
+				Map.Entry<String, JsonNode> field = fieldsIterator.next();
+				rootNode = mapper.readTree(field.getValue().toString());
+				Iterator<Map.Entry<String, JsonNode>> fieldsIterator2 = rootNode
+						.fields();
+				while (fieldsIterator2.hasNext()) {
+					Map.Entry<String, JsonNode> field2 = fieldsIterator2.next();
+				}
+			}
+
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		return easyTO;
 
 	}
 
-	public static <T> Object buildTOFromJSON(HttpServletRequest req, Class<T> type) throws BadRequestException {
+	public static <T> Object buildTOFromJSON(HttpServletRequest req,
+			Class<T> type) throws BadRequestException {
 		ObjectReader reader = new ObjectMapper().reader().withType(type);
-		try {  
+		try {
 			return reader.readValue(req.getInputStream());
 		} catch (Exception e) {
-            throw new BadRequestException("Cannot parse json: " + e.getLocalizedMessage());
+			throw new BadRequestException("Cannot parse json: "
+					+ e.getLocalizedMessage());
 		}
 	}
 
-	public static <T> List<T> buildTOListFromJSON(String jsonSting, final Class<T> type) throws BadRequestException {
-		ObjectReader reader = new ObjectMapper().reader().withType(TypeFactory.defaultInstance().constructCollectionType(List.class, type));
+	public static <T> List<T> buildTOListFromJSON(String jsonSting,
+			final Class<T> type) throws BadRequestException {
+		ObjectReader reader = new ObjectMapper().reader().withType(
+				TypeFactory.defaultInstance().constructCollectionType(
+						List.class, type));
 		try {
 			return reader.readValue(jsonSting);
 		} catch (Exception e) {
-            throw new BadRequestException("Cannot parse json: " + e.getLocalizedMessage());
+			throw new BadRequestException("Cannot parse json: "
+					+ e.getLocalizedMessage());
 		}
 	}
 
-	public static String buildJSONFromObject(Object obj) throws BadRequestException {
-		ObjectWriter ow = new ObjectMapper().writer()
-				.with(SerializationFeature.INDENT_OUTPUT);
+	public static String buildJSONFromObject(Object obj)
+			throws BadRequestException {
+		ObjectWriter ow = new ObjectMapper().writer().with(
+				SerializationFeature.INDENT_OUTPUT);
 		try {
 			return ow.writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new BadRequestException("Cannot parse json: " + e.getLocalizedMessage());
-        }
+		} catch (Exception e) {
+			throw new BadRequestException("Cannot parse json: "
+					+ e.getLocalizedMessage());
+		}
 	}
-
 
 	public static Response buildJSONResponse(JSONResponse resp) {
 		ObjectWriter ow = new ObjectMapper().writer()
@@ -122,7 +130,9 @@ public class RestProcessUtils {
 			json = ow.writeValueAsString(resp.getObject());
 		} catch (JsonProcessingException e) {
 
-			logger.error("Have a JSON Processing Exception during building JSON Response", e);
+			logger.error(
+					"Have a JSON Processing Exception during building JSON Response",
+					e);
 
 		}
 		return Response.status(resp.getStatus()).entity(json)
@@ -132,24 +142,23 @@ public class RestProcessUtils {
 	public static Object buildExceptionResponse(int errorCode, String e) {
 		JSONException ex = new JSONException();
 		HTTPError error = new HTTPError();
-		String errorCodeLocal = "1"+ errorCode;
+		String errorCodeLocal = "1" + errorCode;
 		error.setCode(errorCodeLocal);
 		String errorTitleLocal = "";
 		Status localStatus = Status.fromStatusCode(errorCode);
 		if (localStatus != null) {
 			errorTitleLocal = localStatus.getReasonPhrase();
-		}
-		else
-		{
-			if (errorCode == ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode()) {
-				errorTitleLocal = ResponseStatus.UNPROCESSABLE_ENTITY.getReasonPhrase();
+		} else {
+			if (errorCode == ResponseStatus.UNPROCESSABLE_ENTITY
+					.getStatusCode()) {
+				errorTitleLocal = ResponseStatus.UNPROCESSABLE_ENTITY
+						.getReasonPhrase();
+			} else {
+				errorTitleLocal = Status.INTERNAL_SERVER_ERROR
+						.getReasonPhrase();
 			}
-			else
-			{
-				errorTitleLocal = Status.INTERNAL_SERVER_ERROR.getReasonPhrase();
-			}
 		}
-		
+
 		error.setExceptionReport(e);
 		error.setCode(errorCodeLocal);
 		error.setTitle(errorTitleLocal);
@@ -157,16 +166,18 @@ public class RestProcessUtils {
 		ex.setError(error);
 		return ex;
 	}
-	
 
 	/**
-	 * This method builds exception response. Based on the error Code, local title and message (which can be localized through the Language Bundles) are built
-	 *  
+	 * This method builds exception response. Based on the error Code, local
+	 * title and message (which can be localized through the Language Bundles)
+	 * are built
+	 * 
 	 * @param errorCode
 	 * @param e
 	 * @return
 	 */
-	public static JSONResponse buildJSONAndExceptionResponse(int errorCode, String e) {
+	public static JSONResponse buildJSONAndExceptionResponse(int errorCode,
+			String e) {
 		JSONResponse resp = new JSONResponse();
 		resp.setStatus(errorCode);
 		resp.setObject(buildExceptionResponse(errorCode, e));
@@ -174,21 +185,25 @@ public class RestProcessUtils {
 	}
 
 	/**
-	 * This method builds the response for successfully created, updated, deleted, released etc. object.
-	 * It is a convenience method to save 3 lines of code every time the HTTP Response needs to be built after success 
+	 * This method builds the response for successfully created, updated,
+	 * deleted, released etc. object. It is a convenience method to save 3 lines
+	 * of code every time the HTTP Response needs to be built after success
+	 * 
 	 * @param statusCode
 	 * @param responseObject
 	 * @return
 	 */
-	public static JSONResponse buildResponse(int statusCode, Object responseObject) {
+	public static JSONResponse buildResponse(int statusCode,
+			Object responseObject) {
 		JSONResponse resp = new JSONResponse();
 		resp.setStatus(statusCode);
 		resp.setObject(responseObject);
 		return resp;
 	}
-	
+
 	/**
-	 * This method checks the exception type and returns appropriate JSON Response with properly set-up HTTP Code.
+	 * This method checks the exception type and returns appropriate JSON
+	 * Response with properly set-up HTTP Code.
 	 * 
 	 * 
 	 * @param eX
@@ -197,53 +212,60 @@ public class RestProcessUtils {
 	 */
 	public static JSONResponse localExceptionHandler(Exception eX,
 			String message) {
-		if ( isNullOrEmpty(message) ) {
+		if (isNullOrEmpty(message)) {
 			message = eX.getLocalizedMessage();
 		}
-		String localMessage = message;	
+		String localMessage = message;
 		JSONResponse resp;
-				
-		if (eX instanceof AuthenticationError)  {
-			resp = RestProcessUtils.buildJSONAndExceptionResponse(Status.UNAUTHORIZED.getStatusCode(), localMessage);
+
+		if (eX instanceof AuthenticationError) {
+			resp = RestProcessUtils.buildJSONAndExceptionResponse(
+					Status.UNAUTHORIZED.getStatusCode(), localMessage);
+		} else if (eX instanceof NotAllowedError) {
+			resp = RestProcessUtils.buildJSONAndExceptionResponse(
+					Status.FORBIDDEN.getStatusCode(), localMessage);
+
+		} else if (eX instanceof NotFoundException) {
+			resp = RestProcessUtils.buildJSONAndExceptionResponse(
+					Status.NOT_FOUND.getStatusCode(), localMessage);
+		} else if (eX instanceof UnprocessableError) {
+			resp = RestProcessUtils.buildJSONAndExceptionResponse(
+					ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(),
+					localMessage);
+		} else if (eX instanceof InternalServerErrorException) {
+			resp = RestProcessUtils.buildJSONAndExceptionResponse(
+					Status.INTERNAL_SERVER_ERROR.getStatusCode(), localMessage);
+		} else if (eX instanceof BadRequestException) {
+			resp = RestProcessUtils.buildJSONAndExceptionResponse(
+					Status.BAD_REQUEST.getStatusCode(), localMessage);
+		} else if (eX instanceof ClassCastException) {
+			resp = RestProcessUtils.buildJSONAndExceptionResponse(
+					Status.BAD_REQUEST.getStatusCode(), localMessage);
+		} else {
+			resp = RestProcessUtils.buildJSONAndExceptionResponse(
+					Status.INTERNAL_SERVER_ERROR.getStatusCode(), localMessage);
 		}
-		else if (eX instanceof NotAllowedError) {
-			resp = RestProcessUtils.buildJSONAndExceptionResponse(Status.FORBIDDEN.getStatusCode(), localMessage);
-			
-		}
-		else if (eX instanceof NotFoundException) {
-			resp = RestProcessUtils.buildJSONAndExceptionResponse(Status.NOT_FOUND.getStatusCode(),localMessage);
-		}
-		else if (eX instanceof UnprocessableError) {
-			resp = RestProcessUtils.buildJSONAndExceptionResponse(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(),localMessage);
-		}
-		else if (eX instanceof InternalServerErrorException) {
-			resp = RestProcessUtils.buildJSONAndExceptionResponse(Status.INTERNAL_SERVER_ERROR.getStatusCode(), localMessage);
-		}
-		else if (eX instanceof BadRequestException) {
-			resp = RestProcessUtils.buildJSONAndExceptionResponse(Status.BAD_REQUEST.getStatusCode(), localMessage);
-		}
-		else if (eX instanceof ClassCastException) {
-			resp = RestProcessUtils.buildJSONAndExceptionResponse(Status.BAD_REQUEST.getStatusCode(), localMessage);
-		}
-		else {
-			resp = RestProcessUtils.buildJSONAndExceptionResponse(Status.INTERNAL_SERVER_ERROR.getStatusCode(), localMessage);
-		}
-		
+
 		return resp;
-		
+
 	}
 
-    public static String formatDate(Date d) {
-        SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
-        String output = f.format(d);
-        f = new SimpleDateFormat("HH:mm:SS Z");
-        output += "T" + f.format(d);
-        return output;
-    }
-	public static Map<String, Object> jsonToPOJO(Response response) throws IOException {
-		ObjectMapper mapper = new ObjectMapper();
-		return mapper.readValue(ByteStreams.toByteArray(response.readEntity(InputStream.class)), Map.class);
+	public static String formatDate(Date d) {
+		SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+		String output = f.format(d);
+		f = new SimpleDateFormat("HH:mm:SS Z");
+		output += "T" + f.format(d);
+		return output;
 	}
+
+	public static Map<String, Object> jsonToPOJO(Response response)
+			throws IOException {
+		ObjectMapper mapper = new ObjectMapper();
+		return mapper
+				.readValue(ByteStreams.toByteArray(response
+						.readEntity(InputStream.class)), Map.class);
+	}
+
 	public static Map<String, Object> jsonToPOJO(String str) throws IOException {
 		ObjectMapper mapper = new ObjectMapper();
 		return mapper.readValue(str, Map.class);

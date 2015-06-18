@@ -15,14 +15,11 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
-import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.logic.writer.WriterFacade;
-import de.mpg.imeji.presentation.user.ShareBean.SharedObjectType;
-import de.mpg.imeji.presentation.util.ObjectLoader;
 
 /**
  * Controller for {@link Grant}
@@ -42,7 +39,7 @@ public class ShareController extends ImejiController {
 	 *
 	 */
 	public enum ShareRoles {
-		READ, CREATE, EDIT_ITEM, DELETE_ITEM, EDIT, ADMIN
+		READ, CREATE, EDIT_ITEM, DELETE_ITEM, EDIT, ADMIN, EDIT_PROFILE;
 	}
 
 	/**
@@ -61,41 +58,12 @@ public class ShareController extends ImejiController {
 	 *            - The roles given to the shared user
 	 * @throws ImejiException
 	 */
-	public User share(User fromUser, User toUser, String sharedObjectUri,
+	public User shareToUser(User fromUser, User toUser, String sharedObjectUri,
 			List<String> roles) throws ImejiException {
 		if (toUser != null) {
 			List<Grant> grants = transformRolesToGrants(roles, sharedObjectUri);
-			toUser = shareGrants(fromUser, toUser, sharedObjectUri, grants);
-		}
-		return toUser;
-	}
-
-	/**
-	 * Share an object (Item, Collection, Album) to a {@link User}
-	 * 
-	 * @param fromUser
-	 *            - The User sharing the object
-	 * @param toUser
-	 *            - The user the object is shared to
-	 * @param sharedObjectUri
-	 *            - The uri of the shared object
-	 * @param profileUri
-	 *            - (only for collections) the uri of the profile of the
-	 *            collection
-	 * @param grants
-	 *            - The grants given to the shared user
-	 * @throws ImejiException
-	 */
-	private User shareGrants(User fromUser, User toUser,
-			String sharedObjectUri, List<Grant> grants) throws ImejiException {
-		if (toUser != null) {
-			// UserController userController = new
-			// UserController(Imeji.adminUser);
-			// toUser = userController.retrieve(toUser.getEmail());
-			toUser = removeGrants(toUser, AuthUtil.extractGrantsFor(
-					(List<Grant>) toUser.getGrants(), sharedObjectUri),
-					Imeji.adminUser);
-			toUser = addGrants(toUser, grants, fromUser);
+			toUser = shareGrantsToUser(fromUser, toUser, sharedObjectUri,
+					grants);
 		}
 		return toUser;
 	}
@@ -116,53 +84,76 @@ public class ShareController extends ImejiController {
 	 *            - The roles given to the shared user
 	 * @throws ImejiException
 	 */
-	public void shareWithGroup(User fromUser, UserGroup toGroup,
+	public void shareToGroup(User fromUser, UserGroup toGroup,
 			String sharedObjectUri, List<String> roles) throws ImejiException {
 		if (toGroup != null) {
 			List<Grant> grants = transformRolesToGrants(roles, sharedObjectUri);
-			shareGrantsWithGroup(fromUser, toGroup, sharedObjectUri, grants);
-		}
-	}
-
-	/**
-	 * Share an object (Item, Collection, Album) to a {@link UserGroup}
-	 * 
-	 * @param fromUser
-	 *            - The User sharing the object
-	 * @param toGroup
-	 *            - The group the object is shared to
-	 * @param sharedObjectUri
-	 *            - The uri of the shared object
-	 * @param profileUri
-	 *            - (only for collections) the uri of the profile of the
-	 *            collection
-	 * @param grants
-	 *            - The grants given to the shared user
-	 * @throws ImejiException
-	 */
-	private void shareGrantsWithGroup(User fromUser, UserGroup toGroup,
-			String sharedObjectUri, List<Grant> grants) throws ImejiException {
-		if (toGroup != null) {
-			removeGrants(toGroup, AuthUtil.extractGrantsFor(
-					(List<Grant>) toGroup.getGrants(), sharedObjectUri),
-					Imeji.adminUser);
-			addGrants(toGroup, grants, Imeji.adminUser);
+			shareGrantsToGroup(fromUser, toGroup, sharedObjectUri, grants);
 		}
 	}
 
 	/**
 	 * Share an Object with its creator. Should be called when a user creates an
-	 * object, to give him all the grants on the created object
+	 * object, to give him all the grants on the created object.
 	 * 
 	 * @param creator
 	 * @param sharedObjectUri
 	 * @param profileUri
 	 * @throws ImejiException
 	 */
-	public User shareWithCreator(User creator, String sharedObjectUri)
+	public User shareToCreator(User creator, String sharedObjectUri)
 			throws ImejiException {
-		return shareGrants(Imeji.adminUser, creator, sharedObjectUri,
+		return shareGrantsToUser(Imeji.adminUser, creator, sharedObjectUri,
 				AuthorizationPredefinedRoles.admin(sharedObjectUri));
+	}
+
+	/**
+	 * Share an object (Item, Collection, Album) to a {@link User}
+	 * 
+	 * @param fromUser
+	 *            - The User sharing the object
+	 * @param toUser
+	 *            - The user the object is shared to
+	 * @param sharedObjectUri
+	 *            - The uri of the shared object
+	 * @param profileUri
+	 *            - (only for collections) the uri of the profile of the
+	 *            collection
+	 * @param grants
+	 *            - The grants given to the shared user
+	 * @throws ImejiException
+	 */
+	private User shareGrantsToUser(User fromUser, User toUser,
+			String sharedObjectUri, List<Grant> grants) throws ImejiException {
+		if (toUser != null) {
+			cleanUserGrants(fromUser, toUser, grants, sharedObjectUri);
+			addGrants(toUser, fromUser, grants);
+		}
+		return toUser;
+	}
+
+	/**
+	 * Share an object (Item, Collection, Album) to a {@link UserGroup}
+	 * 
+	 * @param fromUser
+	 *            - The User sharing the object
+	 * @param toGroup
+	 *            - The group the object is shared to
+	 * @param sharedObjectUri
+	 *            - The uri of the shared object
+	 * @param profileUri
+	 *            - (only for collections) the uri of the profile of the
+	 *            collection
+	 * @param grants
+	 *            - The grants given to the shared user
+	 * @throws ImejiException
+	 */
+	private void shareGrantsToGroup(User fromUser, UserGroup toGroup,
+			String sharedObjectUri, List<Grant> grants) throws ImejiException {
+		if (toGroup != null) {
+			cleanGroupGrants(fromUser, toGroup, grants, sharedObjectUri);
+			addGrants(Imeji.adminUser, toGroup, grants);
+		}
 	}
 
 	/**
@@ -176,26 +167,35 @@ public class ShareController extends ImejiController {
 	public static List<Grant> transformRolesToGrants(List<String> roles,
 			String uri) {
 		List<Grant> grants = new ArrayList<Grant>();
+		String profileUri = getProfileUri(uri);
+		if (profileUri != null) {
+			// Only for sharing collection
+			grants.addAll(AuthorizationPredefinedRoles.read(profileUri));
+		}
 		for (String g : roles) {
-			switch (g) {
-			case "READ":
+			switch (ShareRoles.valueOf(g)) {
+			case READ:
 				grants.addAll(AuthorizationPredefinedRoles.read(uri));
 				break;
-			case "CREATE":
+			case CREATE:
 				grants.addAll(AuthorizationPredefinedRoles.upload(uri));
 				break;
-			case "EDIT_ITEM":
+			case EDIT_ITEM:
 				grants.addAll(AuthorizationPredefinedRoles.editContent(uri));
 				break;
-			case "DELETE_ITEM":
+			case DELETE_ITEM:
 				grants.addAll(AuthorizationPredefinedRoles.delete(uri));
 				break;
-			case "EDIT":
+			case EDIT:
 				grants.addAll(AuthorizationPredefinedRoles.edit(uri));
 				break;
-			case "ADMIN":
+			case ADMIN:
 				grants.addAll(AuthorizationPredefinedRoles.admin(uri));
 				break;
+			case EDIT_PROFILE:
+				if (profileUri != null) {
+					grants.addAll(AuthorizationPredefinedRoles.edit(profileUri));
+				}
 			}
 		}
 		return grants;
@@ -252,18 +252,18 @@ public class ShareController extends ImejiController {
 	 * Add to the {@link User} the {@link List} of {@link Grant} and update the
 	 * user in the database
 	 * 
-	 * @param user
+	 * @param toUser
 	 * @param g
 	 * @throws ImejiException
 	 */
-	private User addGrants(User user, List<Grant> grants, User currentUser)
+	private User addGrants(User toUser, User fromUser, List<Grant> grants)
 			throws ImejiException {
-		user.getGrants().addAll(
-				filterNewGrants(user.getGrants(), grants, currentUser));
-		UserController c = new UserController(currentUser);
+		toUser.getGrants().addAll(
+				filterNewGrants(toUser.getGrants(), grants, fromUser));
+		UserController c = new UserController(fromUser);
 		// Admin is the only User which can update other users
-		c.update(user, Imeji.adminUser);
-		return user;
+		c.update(toUser, Imeji.adminUser);
+		return toUser;
 
 	}
 
@@ -271,28 +271,105 @@ public class ShareController extends ImejiController {
 	 * Add to the {@link UserGroup} the {@link List} of {@link Grant} and update
 	 * the user in the database
 	 * 
-	 * @param group
-	 * @param g
-	 * @param currentUser
+	 * @param toUser
+	 * @param toGroup
+	 * @param grants
+	 * 
 	 * @throws ImejiException
 	 */
-	public void addGrants(UserGroup group, List<Grant> g, User currentUser)
+	private void addGrants(User toUser, UserGroup toGroup, List<Grant> grants)
 			throws ImejiException {
-		group.getGrants().addAll(
-				filterNewGrants(group.getGrants(), g, currentUser));
+		toGroup.getGrants().addAll(
+				filterNewGrants(toGroup.getGrants(), grants, toUser));
 		UserGroupController c = new UserGroupController();
-		c.update(group, Imeji.adminUser);// Admin is the only User which can
-											// update other users
-
+		// Admin is the only User which can update other users
+		c.update(toGroup, Imeji.adminUser);
 	}
 
 	/**
-	 * Remove {@link List} of {@link Grant} from the {@link User} {@link Grant}
+	 * Clean all {@link Grant} for an object
+	 * 
+	 * @param user
+	 * @param uri
+	 * @param currentUser
+	 */
+	private void cleanUserGrants(User fromUser, User toUser,
+			List<Grant> grants, String uri) {
+		List<Grant> notRemovedGrants = new ArrayList<Grant>();
+		List<Grant> removedGrants = new ArrayList<Grant>();
+		List<String> grantFor = getGrantFor(grants);
+		for (Grant g : toUser.getGrants()) {
+			if (grantFor.contains(g.getGrantFor().toString())
+					|| uri.equals(g.getGrantFor().toString())) {
+				removedGrants.add(g);
+			} else {
+				notRemovedGrants.add(g);
+			}
+		}
+		toUser.setGrants(notRemovedGrants);
+		UserController c = new UserController(fromUser);
+		try {
+			toUser = c.update(toUser, Imeji.adminUser);
+			writer.delete(new ArrayList<Object>(removedGrants), fromUser);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+
+	/**
+	 * Clean all {@link Grant} for an object
+	 * 
+	 * @param user
+	 * @param uri
+	 * @param currentUser
+	 */
+	private void cleanGroupGrants(User fromUser, UserGroup toGroup,
+			List<Grant> grants, String uri) {
+		List<Grant> notRemovedGrants = new ArrayList<Grant>();
+		List<Grant> removedGrants = new ArrayList<Grant>();
+		List<String> grantFor = getGrantFor(grants);
+		for (Grant g : toGroup.getGrants()) {
+			if (grantFor.contains(g.getGrantFor().toString())
+					|| uri.equals(g.getGrantFor().toString())) {
+				removedGrants.add(g);
+			} else {
+				notRemovedGrants.add(g);
+			}
+		}
+		toGroup.setGrants(notRemovedGrants);
+		UserGroupController c = new UserGroupController();
+		try {
+			c.update(toGroup, fromUser);
+			writer.delete(new ArrayList<Object>(removedGrants), fromUser);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+	}
+
+	/**
+	 * Get all Objects uri which are in this list of {@link Grant}
+	 * 
+	 * @param grants
+	 * @return
+	 */
+	private List<String> getGrantFor(List<Grant> grants) {
+		List<String> l = new ArrayList<String>();
+		for (Grant g : grants) {
+			if (!l.contains(g.getGrantFor().toString())) {
+				l.add(g.getGrantFor().toString());
+			}
+		}
+		return l;
+	}
+
+	/**
+	 * REplace method with share
 	 * 
 	 * @param user
 	 * @param toRemove
 	 * @param currentUser
 	 */
+	@Deprecated
 	public User removeGrants(User user, List<Grant> toRemove, User currentUser) {
 		user.setGrants(getNotRemovedGrants(user.getGrants(), toRemove));
 		UserController c = new UserController(currentUser);
@@ -303,25 +380,6 @@ public class ShareController extends ImejiController {
 			logger.error(e);
 		}
 		return user;
-	}
-
-	/**
-	 * Remove {@link List} of {@link Grant} from the {@link User} {@link Grant}
-	 * 
-	 * @param group
-	 * @param toRemove
-	 * @param currentUser
-	 */
-	public void removeGrants(UserGroup group, List<Grant> toRemove,
-			User currentUser) {
-		group.setGrants(getNotRemovedGrants(group.getGrants(), toRemove));
-		UserGroupController c = new UserGroupController();
-		try {
-			c.update(group, currentUser);
-			writer.delete(new ArrayList<Object>(toRemove), currentUser);
-		} catch (Exception e) {
-			logger.error(e);
-		}
 	}
 
 	/**
@@ -424,12 +482,30 @@ public class ShareController extends ImejiController {
 	 * @param grantList
 	 * @return
 	 */
-	public static boolean grantNotExist(List<Grant> userGrants,
+	private static boolean grantNotExist(List<Grant> userGrants,
 			List<Grant> grantList) {
 		boolean b = false;
 		for (Grant g : grantList)
 			if (!userGrants.contains(g))
 				b = true;
 		return b;
+	}
+
+	/**
+	 * Find the profile of a collection
+	 * 
+	 * @param collectionUri
+	 * @return
+	 */
+	private static String getProfileUri(String collectionUri) {
+		if (collectionUri.contains("/collection/")) {
+			List<String> r = ImejiSPARQL.exec(
+					SPARQLQueries.selectProfileIdOfCollection(collectionUri),
+					null);
+			if (!r.isEmpty()) {
+				return r.get(0);
+			}
+		}
+		return null;
 	}
 }

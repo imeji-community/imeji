@@ -90,7 +90,7 @@ public class ProfileController extends ImejiController {
 		p.setStatus(Status.PENDING);
 		writer.create(WriterFacade.toList(p), null, user);
 		ShareController shareController = new ShareController();
-		user = shareController.shareWithCreator(user,p.getId().toString());
+		user = shareController.shareToCreator(user,p.getId().toString());
 		return p;
 	}
 

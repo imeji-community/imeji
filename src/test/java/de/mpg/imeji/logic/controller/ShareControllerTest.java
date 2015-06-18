@@ -1,5 +1,6 @@
 package de.mpg.imeji.logic.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -111,6 +112,26 @@ public class ShareControllerTest extends ControllerTest {
 			itemController.retrieve(item.getId(), JenaUtil.testUser2);
 		} catch (Exception e) {
 			Assert.fail(e.getMessage());
+		}
+	}
+
+	@Test
+	public void unshareCollection() throws ImejiException {
+		ShareController shareController = new ShareController();
+		// First share...
+		shareController.shareToUser(JenaUtil.testUser, JenaUtil.testUser2,
+				collection.getId().toString(),
+				ShareController.rolesAsList(ShareRoles.READ));
+		// ... then unshare
+		shareController.shareToUser(JenaUtil.testUser, JenaUtil.testUser2,
+				collection.getId().toString(), new ArrayList<String>());
+		CollectionController collectionController = new CollectionController();
+		try {
+			collectionController.retrieve(collection.getId(),
+					JenaUtil.testUser2);
+			Assert.fail("Unshare of collection not working");
+		} catch (Exception e) {
+			// good
 		}
 	}
 

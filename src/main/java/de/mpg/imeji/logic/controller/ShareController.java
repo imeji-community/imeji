@@ -62,11 +62,12 @@ public class ShareController extends ImejiController {
 			List<String> roles) throws ImejiException {
 		if (toUser != null) {
 			List<Grant> grants = transformRolesToGrants(roles, sharedObjectUri);
-			toUser = shareGrants(fromUser, toUser, sharedObjectUri, grants);
+			toUser = shareGrantsToUser(fromUser, toUser, sharedObjectUri,
+					grants);
 		}
 		return toUser;
 	}
-	
+
 	/**
 	 * Share an object (Item, Collection, Album) to a {@link UserGroup}
 	 * 
@@ -87,10 +88,10 @@ public class ShareController extends ImejiController {
 			String sharedObjectUri, List<String> roles) throws ImejiException {
 		if (toGroup != null) {
 			List<Grant> grants = transformRolesToGrants(roles, sharedObjectUri);
-			shareGrantsWithGroup(fromUser, toGroup, sharedObjectUri, grants);
+			shareGrantsToGroup(fromUser, toGroup, sharedObjectUri, grants);
 		}
 	}
-	
+
 	/**
 	 * Share an Object with its creator. Should be called when a user creates an
 	 * object, to give him all the grants on the created object.
@@ -102,7 +103,7 @@ public class ShareController extends ImejiController {
 	 */
 	public User shareToCreator(User creator, String sharedObjectUri)
 			throws ImejiException {
-		return shareGrants(Imeji.adminUser, creator, sharedObjectUri,
+		return shareGrantsToUser(Imeji.adminUser, creator, sharedObjectUri,
 				AuthorizationPredefinedRoles.admin(sharedObjectUri));
 	}
 
@@ -122,15 +123,14 @@ public class ShareController extends ImejiController {
 	 *            - The grants given to the shared user
 	 * @throws ImejiException
 	 */
-	private User shareGrants(User fromUser, User toUser,
+	private User shareGrantsToUser(User fromUser, User toUser,
 			String sharedObjectUri, List<Grant> grants) throws ImejiException {
 		if (toUser != null) {
-			cleanUserGrants(fromUser, toUser, grants);
+			cleanUserGrants(fromUser, toUser, grants, sharedObjectUri);
 			addGrants(toUser, fromUser, grants);
 		}
 		return toUser;
 	}
-
 
 	/**
 	 * Share an object (Item, Collection, Album) to a {@link UserGroup}
@@ -148,15 +148,13 @@ public class ShareController extends ImejiController {
 	 *            - The grants given to the shared user
 	 * @throws ImejiException
 	 */
-	private void shareGrantsWithGroup(User fromUser, UserGroup toGroup,
+	private void shareGrantsToGroup(User fromUser, UserGroup toGroup,
 			String sharedObjectUri, List<Grant> grants) throws ImejiException {
 		if (toGroup != null) {
-			cleanGroupGrants(fromUser, toGroup, grants);
+			cleanGroupGrants(fromUser, toGroup, grants, sharedObjectUri);
 			addGrants(Imeji.adminUser, toGroup, grants);
 		}
 	}
-
-	
 
 	/**
 	 * Transform a list of {@link ShareRoles} into a list of {@link Grant}
@@ -295,12 +293,14 @@ public class ShareController extends ImejiController {
 	 * @param uri
 	 * @param currentUser
 	 */
-	private void cleanUserGrants(User fromUser, User toUser, List<Grant> grants) {
+	private void cleanUserGrants(User fromUser, User toUser,
+			List<Grant> grants, String uri) {
 		List<Grant> notRemovedGrants = new ArrayList<Grant>();
 		List<Grant> removedGrants = new ArrayList<Grant>();
 		List<String> grantFor = getGrantFor(grants);
 		for (Grant g : toUser.getGrants()) {
-			if (grantFor.contains(g.getGrantFor().toString())) {
+			if (grantFor.contains(g.getGrantFor().toString())
+					|| uri.equals(g.getGrantFor().toString())) {
 				removedGrants.add(g);
 			} else {
 				notRemovedGrants.add(g);
@@ -324,12 +324,13 @@ public class ShareController extends ImejiController {
 	 * @param currentUser
 	 */
 	private void cleanGroupGrants(User fromUser, UserGroup toGroup,
-			List<Grant> grants) {
+			List<Grant> grants, String uri) {
 		List<Grant> notRemovedGrants = new ArrayList<Grant>();
 		List<Grant> removedGrants = new ArrayList<Grant>();
 		List<String> grantFor = getGrantFor(grants);
 		for (Grant g : toGroup.getGrants()) {
-			if (grantFor.contains(g.getGrantFor().toString())) {
+			if (grantFor.contains(g.getGrantFor().toString())
+					|| uri.equals(g.getGrantFor().toString())) {
 				removedGrants.add(g);
 			} else {
 				notRemovedGrants.add(g);

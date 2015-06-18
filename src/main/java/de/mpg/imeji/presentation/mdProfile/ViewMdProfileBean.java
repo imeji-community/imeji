@@ -44,12 +44,6 @@ public class ViewMdProfileBean extends MdProfileBean {
 				ProfileController profileController = new ProfileController();
 				this.setProfile(profileController.retrieve(this.getId(),
 						session.getUser()));
-				for (Grant g : session.getUser().getGrants()) {
-					System.out.println(g.getGrantType() + " FOR "
-							+ g.getGrantFor());
-				}
-				System.out.println(AuthUtil.staticAuth().update(
-						session.getUser(), getProfile()));
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}

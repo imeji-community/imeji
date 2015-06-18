@@ -15,7 +15,6 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.StorageController;
-import de.mpg.imeji.logic.util.DateFormatter;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -59,7 +58,6 @@ public class StorageUsageAnalyseJob implements Callable<Integer> {
 
 	@Override
 	public Integer call() throws Exception {
-
 		logger.info("Analysing the storage...");
 		StorageController sc = new StorageController();
 		storageProperties.setProperty(StorageUsage.NUMBER_OF_FILES.name(),

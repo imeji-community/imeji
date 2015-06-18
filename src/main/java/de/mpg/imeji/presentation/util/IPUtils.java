@@ -4,6 +4,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 
 /**
  * Utility Classs for IP operations
@@ -12,6 +13,7 @@ import org.apache.commons.lang.StringUtils;
  *
  */
 public class IPUtils {
+	private static final Logger logger = Logger.getLogger(IPUtils.class);
 
 	/**
 	 * True if the ip is include into the IP Range. IP range can be: <br/>
@@ -31,7 +33,7 @@ public class IPUtils {
 			return ipToLong(InetAddress.getByName(ip)) >= ipToLong(getMinIP(ipRange))
 					&& ipToLong(InetAddress.getByName(ip)) <= ipToLong(getMaxIP(ipRange));
 		} catch (UnknownHostException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		return false;
 	}

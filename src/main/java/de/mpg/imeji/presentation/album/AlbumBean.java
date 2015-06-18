@@ -167,8 +167,7 @@ public class AlbumBean extends ContainerBean {
 
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error("", e);
+			logger.error(e.getMessage());
 			// Has to be in try/catch block, otherwise redirct from
 			// HistoryFilter will not work.
 			// Here simply do nothing

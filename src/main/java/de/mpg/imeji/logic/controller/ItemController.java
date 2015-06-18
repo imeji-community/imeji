@@ -845,8 +845,7 @@ public class ItemController extends ImejiController {
 			return new ImejiTriple(itemUri, profileProperty,
 					new URI(profileUri), permissionObject);
 		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(e.getMessage());
 		}
 		return null;
 	}

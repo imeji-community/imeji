@@ -19,6 +19,11 @@ public class NightlyJob implements Runnable {
 	public void run() {
 		logger.info("Running Nightly Jobs");
 		Imeji.executor.submit(new CleanTempFilesJob());
+		try {
+			Imeji.executor.submit(new StorageUsageAnalyseJob());
+		} catch (Exception e) {
+			logger.error("Error: " + e.getMessage());
+		}
 	}
 
 }

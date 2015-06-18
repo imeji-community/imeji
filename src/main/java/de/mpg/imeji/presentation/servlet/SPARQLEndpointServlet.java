@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
@@ -18,7 +20,6 @@ import com.hp.hpl.jena.query.Syntax;
 import com.hp.hpl.jena.sparql.resultset.ResultsFormat;
 import com.hp.hpl.jena.tdb.TDB;
 
-import de.mpg.imeji.exceptions.AuthenticationError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.presentation.session.SessionBean;
 
@@ -29,6 +30,9 @@ import de.mpg.imeji.presentation.session.SessionBean;
  *
  */
 public class SPARQLEndpointServlet extends HttpServlet {
+
+	private static Logger logger = Logger
+			.getLogger(SPARQLEndpointServlet.class);
 
 	/**
 	 * 
@@ -59,7 +63,7 @@ public class SPARQLEndpointServlet extends HttpServlet {
 							getFormat(format));
 
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error("spraql error: ", e);
 				Imeji.dataset.abort();
 			} finally {
 				Imeji.dataset.commit();

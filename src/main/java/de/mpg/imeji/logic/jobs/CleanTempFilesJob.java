@@ -21,7 +21,7 @@ public class CleanTempFilesJob implements Callable<Integer> {
 	public Integer call() throws Exception {
 		IOFileFilter filter = new WildcardFileFilter(IMEJI_TEMP_FILE_REGEX);
 		logger.info("Deleting all imeji temp file from: "
-				+ FileUtils.getTempDirectory());
+				+ FileUtils.getTempDirectory() +" ...");
 		Iterator<File> iterator = FileUtils.iterateFiles(
 				FileUtils.getTempDirectory(), filter, null);
 		while (iterator.hasNext()) {
@@ -33,6 +33,7 @@ public class CleanTempFilesJob implements Callable<Integer> {
 						+ " can not be deleted");
 			}
 		}
+		logger.info("... done!");
 		return 1;
 	}
 

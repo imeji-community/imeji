@@ -47,6 +47,7 @@ public class ThumbnailBean {
 	private MetadataProfile profile;
 	private MetadataSet mdSet;
 	private URI collectionUri;
+	private boolean isPrivate = true;
 
 	/**
 	 * Emtpy {@link ThumbnailBean}
@@ -84,6 +85,7 @@ public class ThumbnailBean {
 			this.isInActiveAlbum = sessionBean.getActiveAlbum().getImages()
 					.contains(item.getId());
 		}
+		this.setPrivate(item.getStatus().toString().equals("PENDING") ? true : false); 
 
 	}
 
@@ -301,6 +303,14 @@ public class ThumbnailBean {
 
 	public void setProfile(MetadataProfile profile) {
 		this.profile = profile;
+	}
+
+	public boolean isPrivate() {
+		return isPrivate;
+	}
+
+	public void setPrivate(boolean isPrivate) {
+		this.isPrivate = isPrivate;
 	}
 
 }

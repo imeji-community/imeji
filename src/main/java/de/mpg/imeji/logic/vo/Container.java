@@ -7,6 +7,8 @@ import java.io.Serializable;
 import java.net.URI;
 import java.util.Collection;
 
+import javax.xml.bind.annotation.XmlElement;
+
 import de.mpg.imeji.logic.search.FulltextIndex;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jLiteral;
@@ -28,6 +30,12 @@ public abstract class Container extends Properties implements FulltextIndex, Ser
     private ContainerMetadata metadata = new ContainerMetadata();
     @j2jLiteral("http://imeji.org/terms/fulltext")
     private String fulltext;
+
+    //same property used as in Space
+    //property is provided on Container level, in order to fit both Collection and Album
+	@j2jResource("http://imeji.org/terms/logoUrl")
+	private URI logoUrl;
+
 
     public void setMetadata(ContainerMetadata metadata)
     {
@@ -69,4 +77,13 @@ public abstract class Container extends Properties implements FulltextIndex, Ser
         }
         fulltext = fulltext.trim();
     }
+    
+	@XmlElement(name = "logoUrl", namespace = "http://imeji.org/terms/")
+	public URI getLogoUrl() {
+		return this.logoUrl;
+	}
+
+	public void setLogoUrl(URI logoUrl) {
+		this.logoUrl = logoUrl;
+	}
 }

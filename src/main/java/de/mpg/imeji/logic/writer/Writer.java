@@ -28,53 +28,66 @@
  */
 package de.mpg.imeji.logic.writer;
 
-import java.util.List;
-
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.ImejiTriple;
 import de.mpg.imeji.logic.vo.User;
 
+import java.util.List;
+
 /**
- * Write imeji objects in the persistence layer. Important: {@link Writer} doens't check Authorization. Please use
- * {@link WriterFacade} instead.
+ * Write imeji objects in the persistence layer. Important: {@link Writer} 
+ * doens't check Authorization. Please use {@link WriterFacade} instead.
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public interface Writer
-{
-    /**
-     * Create a list of objects
-     * 
-     * @param objects
-     * @param user
-     * @throws Exception
-     */
-    public void create(List<Object> objects, User user) throws Exception;
+public interface Writer {
+	/**
+	 * Create a list of objects
+	 * 
+	 * @param objects
+	 * @param user
+	 * @throws ImejiException
+	 */
+	public void create(List<Object> objects, User user) throws ImejiException;
 
-    /**
-     * Delete a list of objects
-     * 
-     * @param objects
-     * @param user
-     * @throws Exception
-     */
-    public void delete(List<Object> objects, User user) throws Exception;
+	/**
+	 * Delete a list of objects
+	 * 
+	 * @param objects
+	 * @param user
+	 * @throws ImejiException
+	 */
+	public void delete(List<Object> objects, User user) throws ImejiException;
 
-    /**
-     * Update a list of objects
-     * 
-     * @param objects
-     * @param user
-     * @throws Exception
-     */
-    public void update(List<Object> objects, User user) throws Exception;
+	/**
+	 * Update a list of objects
+	 * 
+	 * @param objects
+	 * @param user
+	 * @throws ImejiException
+	 */
+	public void update(List<Object> objects, User user) throws ImejiException;
 
-    /**
-     * Lazy Update a list of objects (don't update lazy list)
-     * 
-     * @param objects
-     * @param user
-     * @throws Exception
-     */
-    public void updateLazy(List<Object> objects, User user) throws Exception;
+	/**
+	 * Lazy Update a list of objects (don't update lazy list)
+	 * 
+	 * @param objects
+	 * @param user
+	 * @throws ImejiException
+	 */
+	public void updateLazy(List<Object> objects, User user)
+			throws ImejiException;
+
+	/**
+	 * Patch update: Allow to update single triples. Is faster than update
+	 * complete objects
+	 * 
+	 * @param triples
+	 * @param user
+	 * @throws ImejiException
+	 */
+	public void patch(List<ImejiTriple> triples, User user, boolean doCheckSecurity)
+			throws ImejiException;
 }

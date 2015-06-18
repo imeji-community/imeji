@@ -41,6 +41,7 @@ public abstract class Export
      * 
      * @param out
      * @param sr
+     * 
      */
     public abstract void export(OutputStream out, SearchResult sr);
 

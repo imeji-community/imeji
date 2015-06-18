@@ -3,23 +3,18 @@
  */
 package de.mpg.imeji.logic.vo;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import de.mpg.imeji.presentation.util.ImejiFactory;
+import de.mpg.j2j.annotations.*;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import de.mpg.imeji.presentation.util.ImejiFactory;
-import de.mpg.j2j.annotations.j2jId;
-import de.mpg.j2j.annotations.j2jList;
-import de.mpg.j2j.annotations.j2jLiteral;
-import de.mpg.j2j.annotations.j2jModel;
-import de.mpg.j2j.annotations.j2jResource;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Profile where {@link Item} {@link Metadata} are defined
@@ -32,7 +27,7 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jId(getMethod = "getId", setMethod = "setId")
 @j2jModel("metadataProfile")
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlRootElement(name = "mdprofile", namespace = "http://imeji.org/terms")
+@XmlRootElement(name = "mdprofile", namespace = "http://imeji.org/terms/")
 public class MetadataProfile extends Properties implements Cloneable
 {
     private static final long serialVersionUID = -3303333109346078736L;
@@ -43,7 +38,10 @@ public class MetadataProfile extends Properties implements Cloneable
     @j2jList("http://imeji.org/terms/statement")
     private Collection<Statement> statements = new ArrayList<Statement>();
 
-    @XmlElement(name = "title", namespace = "http://purl.org/dc/elements/1.1")
+    @j2jLiteral("http://imeji.org/terms/default")
+    private boolean def = false;
+
+    @XmlElement(name = "title", namespace = "http://purl.org/dc/elements/1.1/")
     public String getTitle()
     {
         return title;
@@ -54,7 +52,7 @@ public class MetadataProfile extends Properties implements Cloneable
         this.title = title;
     }
 
-    @XmlElement(name = "description", namespace = "http://purl.org/dc/elements/1.1")
+    @XmlElement(name = "description", namespace = "http://purl.org/dc/elements/1.1/")
     public String getDescription()
     {
         return description;
@@ -65,7 +63,7 @@ public class MetadataProfile extends Properties implements Cloneable
         this.description = description;
     }
 
-    @XmlElement(name = "statement", namespace = "http://imeji.org/terms")
+    @XmlElement(name = "statement", namespace = "http://imeji.org/terms/")
     public Collection<Statement> getStatements()
     {
         return statements;
@@ -74,6 +72,15 @@ public class MetadataProfile extends Properties implements Cloneable
     public void setStatements(Collection<Statement> statements)
     {
         this.statements = statements;
+    }
+
+    @XmlElement(name = "default", namespace = "http://imeji.org/terms/")
+    public boolean getDefault() {
+        return def;
+    }
+
+    public void setDefault(boolean def) {
+        this.def = def;
     }
 
     /*
@@ -95,6 +102,16 @@ public class MetadataProfile extends Properties implements Cloneable
         for (Statement s : clone.statements)
             if (s.getParent() != null)
                 s.setParent(idMapping.get(s.getParent().toString()));
+        
         return clone;
     }
+    
+    public MetadataProfile cloneWithTitle()
+    {
+        MetadataProfile clone = clone();
+        clone.setTitle(this.title);
+        clone.setDescription(this.description);
+        return clone;
+    }
+
 }

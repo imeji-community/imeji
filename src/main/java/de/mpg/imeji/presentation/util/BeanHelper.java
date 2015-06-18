@@ -3,6 +3,8 @@
  */
 package de.mpg.imeji.presentation.util;
 
+import java.util.Iterator;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
 import javax.faces.component.UIComponent;
@@ -289,13 +291,13 @@ public class BeanHelper
     public static void fatal(String summary, String detail, UIComponent component)
     {
         message(summary, detail, component, FacesMessage.SEVERITY_FATAL);
-    }
+    } 
 
     /**
      * @param summary summary text
      */
     public static void message(String summary, String detail, UIComponent component, Severity severity)
-    {
+    {  
         FacesMessage fm = new FacesMessage(severity, summary, detail);
         if (component == null)
         {
@@ -306,4 +308,16 @@ public class BeanHelper
             FacesContext.getCurrentInstance().addMessage(component.getId(), fm);
         }
     }
+    
+    /**
+     * @param summary summary text
+     */
+    public static void cleanMessages()
+    {  
+    	Iterator<FacesMessage> it = FacesContext.getCurrentInstance().getMessages();
+    	while (it.hasNext()){
+    			it.next();
+    			it.remove();
+  			}
+	  }
 }

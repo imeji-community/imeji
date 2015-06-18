@@ -35,6 +35,7 @@ All rights reserved. Use is subject to license terms.
 	
 	<f:loadBundle var="lbl" basename="labels"/>
 	<f:loadBundle var="msg" basename="messages"/>
+	<ui:param name="siteWrapperClass" value="#{Auth.admin ? 'imj_siteWrapper imj_isAdmin' : 'imj_siteWrapper'}" />
 	
 	<html xmlns="http://www.w3.org/1999/xhtml">
 		
@@ -43,7 +44,7 @@ All rights reserved. Use is subject to license terms.
 		</h:head>
 		
 		<h:body lang="#{SessionBean.locale}">
-			<div class="imj_siteWrapper">
+			<div class="#{siteWrapperClass}">
 				<ui:insert name="init"/>
 				<ui:include src="component/header/header_default.xhtml"/>
 				<ui:insert name="actionsMenu"/>
@@ -58,7 +59,7 @@ All rights reserved. Use is subject to license terms.
 				</h:panelGroup>
 				
 				<h:panelGroup id="imj_pageMessageArea">
-					<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{MessagesBean.hasMessages or (SessionBean.activeAlbum != null and HistorySession.currentPage.name != 'help')}">
+					<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{MessagesBean.hasMessages or (SessionBean.activeAlbum != null and HistorySession.currentPage.title != 'help')}">
 						
 						<ui:fragment rendered="#{MessagesBean.hasMessages}">
 							<ui:fragment rendered="#{MessagesBean.numberOfMessages == 1}">
@@ -84,7 +85,7 @@ All rights reserved. Use is subject to license terms.
 							</ui:fragment>
 						</ui:fragment>
 						
-						<ui:fragment rendered="#{SessionBean.activeAlbum != null and HistorySession.currentPage.name != 'help'}">
+						<ui:fragment rendered="#{SessionBean.activeAlbum != null and HistorySession.currentPage.title != 'help'}">
 							<h:panelGroup id="preListHeaderActiveAlbum1" layout="block" styleClass="imj_messageStatus">
 								<h:outputText value="#{lbl.active_album}: "/>
 								<h:outputLink value="#{Navigation.albumUrl}#{SessionBean.activeAlbumId}/#{Navigation.browsePath}">

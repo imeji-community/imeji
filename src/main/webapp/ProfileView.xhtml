@@ -25,8 +25,8 @@
 		<!-- AJAX Wrapper - START -->
 		<h:panelGroup layout="block" id="imj_ajaxWrapper" rendered="#{Auth.read(ViewMdProfileBean.profile)}">
 			<imjc:metadataProfile_view headline="#{lbl.profile_basics}" metadataBean="#{itemBean}" metadataContextBean="#{profileBean}" metadataProfile="#{profileBean}"
-				exportUrl="#{Navigation.applicationUrl}export?format=xml&amp;type=profile&amp;q=prof==&quot;#{ViewMdProfileBean.profile.id}&quot;"
-				relatedCollectionsUrl="#{Navigation.applicationUrl}collections?q=prof==&quot;#{ViewMdProfileBean.encodedId}&quot;"/>
+				exportUrl="#{Navigation.applicationSpaceUrl}export?format=xml&amp;type=profile&amp;q=prof==&quot;#{ViewMdProfileBean.profile.id}&quot;"
+				relatedCollectionsUrl="#{Navigation.applicationSpaceUrl}collections?q=prof==&quot;#{ViewMdProfileBean.encodedId}&quot;"/>
 		</h:panelGroup>
 	</ui:define>
 </ui:composition>

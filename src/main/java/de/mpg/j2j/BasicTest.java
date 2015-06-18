@@ -1,6 +1,8 @@
 package de.mpg.j2j;
 
 
+import org.apache.log4j.Logger;
+
 import com.hp.hpl.jena.query.Dataset;
 import com.hp.hpl.jena.query.ReadWrite;
 import com.hp.hpl.jena.rdf.model.Model;
@@ -8,15 +10,16 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.tdb.TDBFactory;
 
+import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.util.ImejiFactory;
-import de.mpg.j2j.exceptions.NotFoundException;
 
 /**
  * Class for developer testing purpose
@@ -53,7 +56,7 @@ public class BasicTest
         }
         catch (NotFoundException e)
         {
-            uc.create(getTestUser());
+            uc.create(getTestUser(), USER_TYPE.DEFAULT);
         }
         ProfileController pc = new ProfileController();
         pc.create(new MetadataProfile(), getTestUser());
@@ -188,7 +191,8 @@ public class BasicTest
         catch (Exception e1)
         {
             // TODO Auto-generated catch block
-            e1.printStackTrace();
+			Logger.getLogger(BasicTest.class).info("Getting test user failed", e1);
+
         }
         return adminUser;
     }
@@ -206,8 +210,9 @@ public class BasicTest
         catch (Exception e1)
         {
             // TODO Auto-generated catch block
-            e1.printStackTrace();
+        	Logger.getLogger(BasicTest.class).info("Getting test ADMIN user failed", e1);
         }
         return adminUser;
     }
+    
 }

@@ -3,7 +3,8 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:menu="http://java.sun.com/jsf/composite/components/menu">
+	xmlns:menu="http://java.sun.com/jsf/composite/components/menu"
+	xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs">
 	
 	<ui:param name="headline" value="#{lbl.admin_users_head}"/>
 	<ui:param name="currentMainMenu" value="admin"/>
@@ -56,7 +57,7 @@
 								<h:inputText value="#{UsersBean.query}" styleClass="imj_simpleSearchInput" />
 								<h:commandButton action="#{UsersBean.search()}" value="#{lbl.search}" styleClass="imj_simpleSearchButtonSubmit" />
 							</h:form>
-							<h:outputLink value="#{Navigation.applicationUrl}users?group=#{UsersBean.group.id}" title="#{lbl.clear}" rendered="#{UsersBean.query != ''}" styleClass="imj_cancelButton">
+							<h:outputLink value="#{Navigation.applicationSpaceUrl}users?group=#{UsersBean.group.id}" title="#{lbl.clear}" rendered="#{UsersBean.query != ''}" styleClass="imj_cancelButton">
 								<h:outputText value="#{lbl.clear}" />
 							</h:outputLink>
 						</div>
@@ -64,7 +65,7 @@
 					
 					<div class="imj_listBody">
 					
-						<ui:repeat id="userList" var="user" value="#{UsersBean.users}" rows="0">
+						<ui:repeat id="userList" var="user" value="#{UsersBean.users}" rows="0" varStatus="row">
 							<div class="imj_adminPanel imj_userConfig">
 								<!-- AdminDataList - Users List - Name -->
 								<div class="imj_admindataSet">									
@@ -75,18 +76,21 @@
 									<ui:fragment rendered="#{UsersBean.group == null}">
 										<!-- AdminDataList - User Email -->
 										<div class="imj_adminEditPanel">
-											<h:outputLink value="#{Navigation.applicationUrl}user?id=#{user.email}">
+											<h:outputLink value="#{Navigation.applicationSpaceUrl}user?id=#{user.email}">
 												<h:outputText value="#{lbl.view_detail}" styleClass="imj_editButton"/>
 											</h:outputLink>
+											
 											<!-- AdminDataList - User Password -->
-											<h:form>
-												<h:commandLink styleClass="imj_editButton" action="#{UsersBean.sendPassword}" value="#{lbl.user_admin_newPwd}" onclick="if (confirm('Do you really want to reset the password? (A message will be sent to the user)')) return true; return false;">
-													<f:param name="email" value="#{user.email}"/>
-												</h:commandLink>
-												<h:commandLink styleClass="imj_cancelButton" action="#{UsersBean.deleteUser}" value="#{lbl.user_admin_delete}" onclick="if (confirm('Do you really want to delete this user?')) return true; return false;">
-													<f:param name="email" value="#{user.email}"/>
-												</h:commandLink>
-											</h:form>
+											<h:outputLink value="#" styleClass="imj_editButton" title="#{lbl.user_admin_newPwd}" onclick="openDialog('sendNewPassword#{row.index}');">
+												<h:outputText value="#{lbl.user_admin_newPwd}"/>
+											</h:outputLink>
+											<dialog:confirmationDialog submitAction="sendPassword" bean="#{UsersBean}" confirmationText="#{msg.confirmation_new_password}" submitLabel="#{lbl.user_admin_newPwd}" dialogId="sendNewPassword#{row.index}" identifierName="email" identifierValue="#{user.email}"/>
+											
+											<!-- AdminDataList - Delete User -->
+											<h:outputLink value="#" styleClass="imj_cancelButton" title="#{lbl.user_admin_delete}" onclick="openDialog('deleteUser#{row.index}');">
+												<h:outputText value="#{lbl.user_admin_delete}"/>
+											</h:outputLink>
+											<dialog:confirmationDialog submitAction="deleteUser" bean="#{UsersBean}" confirmationText="#{msg.confirmation_delete_user}" submitLabel="#{lbl.user_admin_delete}" dialogId="deleteUser#{row.index}" identifierName="email" identifierValue="#{user.email}"/>
 										</div>
 									</ui:fragment>
 									<ui:fragment rendered="#{UsersBean.group != null}">

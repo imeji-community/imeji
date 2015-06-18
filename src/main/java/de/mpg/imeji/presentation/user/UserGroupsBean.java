@@ -28,26 +28,24 @@
  */
 package de.mpg.imeji.presentation.user;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.net.URI;
-import java.util.Collection;
+import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.controller.UserGroupController;
+import de.mpg.imeji.logic.util.UrlHelper;
+import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.vo.UserGroup;
+import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.util.BeanHelper;
+import org.apache.log4j.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-
-import org.apache.log4j.Logger;
-
-import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.controller.UserGroupController;
-import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.logic.vo.UserGroup;
-import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.UrlHelper;
+import java.io.IOException;
+import java.io.Serializable;
+import java.net.URI;
+import java.util.Collection;
 
 /**
  * JSF Bean to browse {@link UserGroup}
@@ -135,7 +133,6 @@ public class UserGroupsBean implements Serializable
             {
                 BeanHelper.error("Error removing group");
                 logger.error(e);
-                e.printStackTrace();
             }
         }
         return "pretty:";

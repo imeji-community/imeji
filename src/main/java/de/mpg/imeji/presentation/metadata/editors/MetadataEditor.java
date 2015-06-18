@@ -6,8 +6,10 @@ package de.mpg.imeji.presentation.metadata.editors;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.jobs.CleanMetadataJob;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.util.MetadataFactory;
 import de.mpg.imeji.logic.vo.Item;
@@ -85,8 +87,8 @@ public abstract class MetadataEditor
      */
     public void save()
     {
-        SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        ItemController ic = new ItemController(sb.getUser());
+    	SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
+        ItemController ic = new ItemController();
         try
         {
 
@@ -102,8 +104,7 @@ public abstract class MetadataEditor
                         {
                             itemList.add(eib.asItem());
                         }
-                        ic.update(itemList);
-                        ImejiSPARQL.execUpdate(SPARQLQueries.updateEmptyMetadata());
+                        ic.update(itemList, sb.getUser());
                         //BeanHelper.info(sb.getMessage("success_editor_edit"));
                         String str = items.size() + " " + sb.getMessage("success_editor_images");
                         if (items.size() == 1)
@@ -112,8 +113,8 @@ public abstract class MetadataEditor
                     }
                     catch (Exception e)
                     {
+                        BeanHelper.error(sb.getMessage("error_metadata_edit") + ": " + e.getLocalizedMessage());
                         e.printStackTrace();
-                        BeanHelper.error(sb.getMessage("error_metadata_edit") + ": " + e.getMessage());
                     }
                 }
                 else
@@ -171,6 +172,10 @@ public abstract class MetadataEditor
     public List<EditorItemBean> getItems()
     {
         return items;
+    }
+    
+    public int getItemsSize(){
+    	return items.size();
     }
 
     public void setItems(List<EditorItemBean> items)

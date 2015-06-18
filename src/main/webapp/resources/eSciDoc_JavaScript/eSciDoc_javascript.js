@@ -27,122 +27,7 @@
 * Gesellschaft zur F�rderung der Wissenschaft e.V.
 * All rights reserved. Use is subject to license terms.
 */
-/*
-if(typeof cookieVersion=='undefined') {
-	var cookieVersion = "1.1";
-}
-if(typeof jsURL=='undefined') {
-	var jsURL = './resources/eSciDoc_JavaScript/';
-}
-if(typeof coneURL=='undefined') {
-	var coneURL = '../../cone/';
-}
-if (typeof jsfURL == 'undefined') {
-	var jsfURL = './';
-}
 
-var hiddenThemesEnabled = false;
-
-function applyCookieStyle() {
-	var cookieValue = ""
-	var cookie = "layout=";
-	var dc = document.cookie;
-	if (dc.length > 0) {
-		var start = dc.indexOf(cookie);
-		if (start != -1) {
-			start += cookie.length;
-			var stop = dc.indexOf(";", start);
-			if (stop == -1) stop = dc.length;
-			cookieValue = unescape(dc.substring(start,stop));
-		}
-	}
-	var enableHiddenShemes = false;
-	cookie = "enableHiddenSchemes=";
-	if (dc.length > 0) {
-		var start = dc.indexOf(cookie);
-		if (start != -1) {
-			start += cookie.length;
-			var stop = dc.indexOf(";", start);
-			if (stop == -1) stop = dc.length;
-			if(unescape(dc.substring(start,stop)) == 'true') {enableHiddenShemes = true; hiddenThemesEnabled = true;};
-		}
-	}
-	var isCorrectCookieVersion = false;
-	cookie = "cVersion=";
-	if (dc.length > 0) {
-		var start = dc.indexOf(cookie);
-		if (start != -1) {
-			start += cookie.length;
-			var stop = dc.indexOf(";", start);
-			if (stop == -1) stop = dc.length;
-			if(unescape(dc.substring(start,stop)) == cookieVersion) {isCorrectCookieVersion = true;};
-		}
-	}
-	if (cookieValue != "" && isCorrectCookieVersion && document.getElementsByTagName) {
-		var el = document.getElementsByTagName("link");
-		for (var i = 0; i < el.length; i++ ) {
-			if (el[i].getAttribute("rel").indexOf("style") != -1 && el[i].getAttribute("id") == cookieValue && enableHiddenShemes && (el[i].getAttribute("title") == null || el[i].getAttribute("title") == "" ) ) {
-				el[i].setAttribute("title", el[i].getAttribute("id"));
-			}
-			if (el[i].getAttribute("rel").indexOf("style") != -1 && el[i].getAttribute("id")) {
-				el[i].disabled = true;
-				if (el[i].getAttribute("id") == cookieValue) el[i].disabled = false;
-			}
-		}
-	}
-}
-
-function setStyleCookie() {
-	var cookieValue = "";
-	if(document.getElementsByTagName) {
-		var el = document.getElementsByTagName("link");
-		for (var i = 0; i < el.length; i++ ) {
-			var enabledCounter = 0;
-			if (el[i].getAttribute("rel").indexOf("style") != -1 && el[i].getAttribute("id") && el[i].getAttribute("title") && el[i].disabled == false && enabledCounter == 0) {
-				cookieValue = el[i].getAttribute("id");
-				enabledCounter++;
-			}
-		}
-	}
-	var now = new Date();
-	var exp = new Date(now.getTime() + (1000*60*60*24*30));
-	if(cookieValue != "") {
-		if(hiddenThemesEnabled) {
-			document.cookie = "layout=" + escape(cookieValue) + ";" +
-								"cVersion=" + cookieVersion + ";" +
-								"expires=" + exp.toGMTString() + ";" +
-								"path=/";
-			document.cookie = "cVersion=" + cookieVersion + ";" +
-								"expires=" + exp.toGMTString() + ";" +
-								"path=/";
-			document.cookie = "enableHiddenSchemes=true;" +
-								"expires=" + exp.toGMTString() + ";" +
-								"path=/";
-		} else {
-			document.cookie = "layout=" + escape(cookieValue) + ";" +
-								"cVersion=" + cookieVersion + ";" +
-								"expires=" + exp.toGMTString() + ";" +
-								"path=/";
-			document.cookie = "cVersion=" + cookieVersion + ";" +
-								"expires=" + exp.toGMTString() + ";" +
-								"path=/";
-		}
-	}
-}
-
-var included = false;
-*/
- /*INCLUDES EXTERNAL JAVASCRIPT TO PAGE DOM*/ /*
-function include_dom(script_filename) {
-    var html_doc = document.getElementsByTagName('head').item(0);
-    var js = document.createElement('script');
-    js.setAttribute('language', 'javascript');
-    js.setAttribute('type', 'text/javascript');
-    js.setAttribute('src', script_filename);
-    html_doc.appendChild(js);
-    return false;
-}
-*/
 /*ADDS MULTIPLE EVENTS TO A EVENTLISTENER*/
 function addEvent(obj, evType, fn){
     if (obj.addEventListener) {
@@ -160,75 +45,42 @@ function addEvent(obj, evType, fn){
 
 /*START ALL EXTERNAL JAVASCRIPTS*/
 function install_javascripts() {
-	installExtPaginator();
-	installItemList();
-	installFullItem();
-	installQuickSearchShortcut();
-	installDateTextbox();
-	installSameHeight();
-//	bindSuggests();	//from autoSuggestFunctions.js
-//	themeCookieInit();
 }
-
-/* INCLUDES EXTERNAL JAVASCRIPTS */ 
- /*
-function include_javascripts() {
-	if(!included){
-//		include_dom(jsURL + 'jquery/jquery.min.js');	// a double include from jQuery starts incompatibility, generates errors in webkit - image overlay	
-		include_dom(jsfURL + 'jsf/a4j/g/3_3_3.Final/org/ajax4jsf/framework.pack.js');	//import the great jQuery library automatically
-		
-		include_dom(coneURL + 'js/jquery.suggest.js')
-		include_dom(jsURL + 'eSciDoc_component_JavaScript/eSciDoc_ext_paginator.js');
-		include_dom(jsURL + 'eSciDoc_component_JavaScript/eSciDoc_item_list.js');
-		include_dom(jsURL + 'eSciDoc_component_JavaScript/eSciDoc_full_item.js');
-		include_dom(jsURL + 'eSciDoc_component_JavaScript/eSciDoc_single_elements.js');
-//		include_dom(jsURL + 'autoSuggestFunctions.js');									// not needed in imeji
-		include_dom(jsURL + 'theme_cookie.js');
-		include_dom(jsURL + 'jquery.shiftcheckbox.js');
-		
-		/*REITERATION NEEDED TO START ALL INCLUDED JAVASCRIPTS*/ /*
-		included = true;
-		include_javascripts();
-	} else {
-			addEvent(window, 'load', function(){window.setTimeout('install_javascripts()', 1);});
-		}
-}
-*/
-
-//include_javascripts();
-// applyCookieStyle();
-// window.onunload=function(e){setStyleCookie();};
 
 
 
 addEvent(window, 'load', function(){window.setTimeout('install_javascripts()', 1);});
 
 
+function updateCustomSelectbox(selectbox) {
+	var customSelectbox, select, val, textContainer, icon, textWidth;
+	select = selectbox;
+	customSelectbox = select.parents(".imj_customSelectbox");
+	customSelectbox.width(select.width());
+	
+	text = customSelectbox.find(".imj_selectionText");
+	icon = customSelectbox.find(".imj_buttonSortDescending_16");
+	
+	val = select.val(); // is the logic value of the current selectbox, but not the text which is displayed
+	
+	select.find("option").each(function(i, opt){ // find the right option to get the right text value
+		if ($(opt).val() == val) {
+			val = $(opt).text(); // is now the option text
+			$(opt).parent().attr("title", val);
+		}
+	});
+	text.text(val);
+	textWidth = select.width() - icon.width() - Math.round(Number(icon.css("margin-left").replace("px", ""))) + 2;
+	text.width( textWidth );
+}
+
 /* this function updates the selectText container with the selected item of selectbox */
-// a.t.m. is implemented only for meta menu
 function customSelectbox(obj) {
 	if (obj) {
 		// implement the onchange functionality
 	} else {
-		$(".imj_metaMenuStandardSingleLine select").each(function(i) { // if you wish to select all, delete the selector for meta menu in front of select
-			var customSelectbox, select, val, textContainer, icon;
-			select = $(this);
-			customSelectbox = select.parents(".imj_customSelectbox");
-			customSelectbox.width(select.width());
-			
-			text = customSelectbox.find(".imj_selectionText");
-			icon = customSelectbox.find(".imj_buttonSortDescending_16");
-			
-			val = select.val(); // is the technical value of the current selectbox, but not the text wich is displayed
-			
-			select.find("option").each(function(i, opt){ // find the right option to get the right text value
-				if ($(opt).val() == val) {
-					val = $(opt).text(); // is now the option text
-					$(opt).parent().attr("title", val);
-				}
-			});
-			text.text(val);
-			text.width( ( select.width() - icon.width() - Math.round(Number(icon.css("margin-left").replace("px", ""))) ) );
+		$(".imj_customSelectbox select").each(function(i) { // search for every select inside of .imj_customSelectbox in DOM and update the text
+			updateCustomSelectbox($(this));
 		});
 	}
 }

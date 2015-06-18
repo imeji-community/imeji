@@ -100,11 +100,6 @@
 
 	<!-- Album Beans -->
 	<managed-bean>
-		<managed-bean-name>AlbumBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.album.AlbumBean</managed-bean-class>
-		<managed-bean-scope>view</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
 		<managed-bean-name>AlbumsBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.album.AlbumsBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
@@ -133,12 +128,6 @@
 		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
 
-	<!-- Other Beans -->
-	<managed-bean>
-		<managed-bean-name>LoginBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.user.LoginBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
 
 	<managed-bean>
 		<managed-bean-name>MessagesBean</managed-bean-name>
@@ -187,11 +176,6 @@
 		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
-		<managed-bean-name>BlogBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.beans.BlogBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
 		<managed-bean-name>SessionBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.session.SessionBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
@@ -215,11 +199,6 @@
 		<managed-bean-name>Internationalization</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.lang.InternationalizationBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>StartPageBean</managed-bean-name>
-		<managed-bean-class>de.mpg.imeji.presentation.beans.StartPageBean</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
 	</managed-bean>
 	<converter>
 		<converter-id>DoubleConverter</converter-id>

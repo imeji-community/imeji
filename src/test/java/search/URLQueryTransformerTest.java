@@ -28,21 +28,18 @@
  */
 package search;
 
+import de.mpg.imeji.logic.search.query.URLQueryTransformer;
+import de.mpg.imeji.logic.search.vo.SearchQuery;
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsNot.not;
+
+
 import java.io.IOException;
 import java.net.URLEncoder;
 
-import junit.framework.Assert;
-
-import org.junit.Before;
+import org.junit.Assert;
 import org.junit.Test;
-
-import util.JenaUtil;
-
-import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
-import de.mpg.imeji.presentation.beans.PropertyBean;
-import de.mpg.imeji.presentation.search.URLQueryTransformer;
 
 /**
  * Tests for the methods in {@link URLQueryTransformer}

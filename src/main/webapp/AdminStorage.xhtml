@@ -9,7 +9,14 @@
 	<ui:define name="mainContent">
 	
 		<!-- Breadcrumb - History -->
-		<ui:include src="include/History.xhtml"></ui:include>			
+		<ui:include src="include/History.xhtml"></ui:include>	
+		
+		<!-- AdminDataList - Back Button -->
+			<h:panelGroup layout="block" styleClass="imj_backPanel">
+				<h:outputLink value="#{Navigation.adminUrl}">
+					<h:outputText value="#{lbl.back_to_admin}" styleClass="imj_backButton"/>
+				</h:outputLink>
+			</h:panelGroup>		
 		
 		<!-- Are You Admin? -->	
 		<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!Auth.admin}">
@@ -28,8 +35,133 @@
 					<div class="imj_listBody">
 					
 						<h:panelGroup layout="block" styleClass="imj_adminPanel imj_userConfig" rendered="#{Auth.admin}">
-					
-							<!-- Admin - Import -->
+								
+							<h:outputText value="#{lbl.admin_tools_warning}"/>			
+							<br/>
+							<!-- Admin - SPARQL -->
+							<div class="imj_headline">
+								<h2>
+									<h:outputText value="#{lbl.admin_sparql}"/>
+								</h2>
+							</div>
+							<div class="imj_content">
+								<FORM action="#{Navigation.applicationUrl}sparql">
+								  	<p>
+								        <textarea name="q" cols="40" rows="10" maxlength="10240000" >SELECT * WHERE{?s ?p ?o} limit 1000</textarea>
+								   	</p>
+								  	<p>
+										#{lbl.model} 
+										<select name="model">
+											<option value="" selected="selected">All (Union)</option>
+											<option value="item">Item</option>
+											<option value="collection">Collection</option>
+											<option value="album">Album</option>
+											<option value="user">User</option>
+											<option value="profile">Profile</option>
+										</select>
+									 </p>
+									 <p>
+										#{lbl.format} 
+										<select name="format">
+											<option value="table" selected="selected">Table</option>
+											<option value="" >RDF-XML</option>
+											<option value="json">JSON</option>
+											<option value="ttl">TTL</option>
+											<option value="bio">BIO</option>
+											<option value="tsv">TSV</option>
+											<option value="csv">CSV</option>
+										</select>
+									</p>
+								    <input type="submit" value="#{lbl.execute}" formtarget="_blank" class="imj_editButton"/>
+								</FORM>	
+							</div>
+							
+							<!-- Admin - Clean storage -->
+							<div class="imj_headline">
+								<h2>
+									<h:outputText value="#{lbl.admin_clean_unused_profiles}"/>
+								</h2>
+							</div>
+							
+							<div class="imj_content">
+								<h:outputText value="#{lbl.admin_clean_unused_profiles_description}"/> 				
+								<h:panelGroup id="clean_profiles" layout="block" styleClass="imj_adminEditPanel">
+									<h:form>
+										<h:commandLink styleClass="imj_editButton" action="#{AdminBean.findUnusedProfiles}" value="#{lbl.admin_find_unused_profiles}" rendered="#{empty AdminBean.unusedProfiles}"/>
+										<h:commandButton styleClass="imj_cancelButton #{empty AdminBean.unusedProfiles ? 'imj_noDisplay' : ''}" style="#{empty AdminBean.unusedProfiles} ? 'visibility:none' : ''" action="#{AdminBean.deleteUnusedProfiles}" value="#{lbl.delete_all}"/>
+									</h:form>
+									<ui:repeat var="profile" value="#{AdminBean.unusedProfiles}">
+										<div class="imj_metadataSet imj_metadataLabel">
+											<h:outputText value="#{profile.title}"/>
+											<h:outputLink value="#{Navigation.profileUrl}#{profile.idString}"><h:outputText value="#{lbl.view}"/></h:outputLink>
+										</div>
+									</ui:repeat>
+								</h:panelGroup>
+							</div>
+							
+							<!-- Admin - Clean storage -->
+							<div class="imj_headline">
+								<h2>
+									<h:outputText value="#{lbl.admin_clean_storage}"/>
+								</h2>
+							</div>
+							
+							<div class="imj_content">
+								<h:outputText value="#{lbl.admin_clean_storage_description}"/> 				
+								<h:form>
+									<h:panelGroup layout="block" styleClass="imj_adminEditPanel">
+										<h:commandLink styleClass="imj_editButton" action="#{AdminBean.cleanStorage}" value="#{lbl.admin_clean_storage}: #{AdminBean.internalStorageLocation}"  onclick="openDialog('dialogWait');">
+											<f:ajax/>
+										</h:commandLink>
+									</h:panelGroup>		
+								</h:form>
+							</div>
+							
+							<!-- Admin - Clean database -->
+							<div class="imj_headline">
+								<h2>
+									<h:outputText value="#{lbl.admin_advanced_clean}"/>
+								</h2>
+							</div>
+							<div class="imj_content">
+								<h:outputText value="#{lbl.admin_advanced_clean_description}"/> 		
+								<h:form>
+									<h:panelGroup layout="block" styleClass="imj_adminEditPanel">
+										<h:commandLink action="#{AdminBean.status}" value="#{lbl.admin_advanced_state}" title="#{lbl.admin_advanced_state}" styleClass="imj_editButton">
+										</h:commandLink>
+									</h:panelGroup>
+								</h:form>
+								<h:outputText value="#{AdminBean.cleanDatabaseReport}" escape="false"/>
+							</div>
+							<div class="imj_content">
+								<h:outputText value="#{lbl.admin_advanced_clean_warning}"/>	
+								<h:form>
+									<h:panelGroup layout="block" styleClass="imj_adminEditPanel">
+										<h:commandLink action="#{AdminBean.clean}" value="#{lbl.admin_advanced_clean}" title="#{lbl.admin_advanced_clean}" styleClass="imj_cancelButton">
+											<f:ajax/>
+										</h:commandLink>
+									</h:panelGroup>
+								</h:form>
+							</div>
+							
+								<!-- Admin - Import -->
+							<div class="imj_headline">
+								<h2>
+									<h:outputText value="#{lbl.admin_refresh_file_size}"/>
+								</h2>
+							</div>
+							
+							<div class="imj_content">
+								<h:outputText value="#{lbl.admin_refresh_file_size_description}"/>							
+								<h:form>
+									<h:panelGroup layout="block" styleClass="imj_adminEditPanel">
+										<h:commandLink styleClass="imj_editButton" action="#{AdminBean.refreshFileSize}" value="#{lbl.admin_refresh_file_size_buttontext}"/>
+									</h:panelGroup>	
+								</h:form>
+							</div>
+							
+							
+							<!-- Admin - Import escidoc Pictures to imeji internal Storage -->
 							<div class="imj_headline">
 								<h2>
 									<h:outputText value="#{lbl.import_to_internal}"/>
@@ -37,13 +169,8 @@
 							</div>
 							
 							<div class="imj_content">
+								<h:outputText value="#{lbl.import_to_internal_warning}"/>													
 								<h:form>
-									<h:panelGroup layout="block" styleClass="imj_adminEditPanel">
-										<h:commandLink styleClass="imj_editButton" action="#{AdminBean.cleanStorage}" value="#{lbl.admin_clean_storage}: #{AdminBean.internalStorageLocation}"  onclick="openDialog('dialogWait');">
-											<f:ajax/>
-										</h:commandLink>
-									</h:panelGroup>		
-									<h:outputText value="Important: Please make sure to do a backup before running this method! When the import is done (check in the log file), restart imeji with the correct storage!"/> <!-- internationalized info message lbl missing -->					
 									<h:panelGroup layout="block" styleClass="imj_adminEditPanel">
 										<h:commandLink styleClass="imj_editButton" action="#{AdminBean.importToInternalStorage}" value="#{lbl.import_to_internal}: #{AdminBean.internalStorageLocation}"  onclick="openDialog('dialogWait');">
 											<f:ajax/>
@@ -61,12 +188,7 @@
 			</div> <!-- END USER CONFIG -->
 		
 		
-			<!-- AdminDataList - Back Button -->
-			<h:panelGroup layout="block" styleClass="imj_backPanel">
-				<h:outputLink value="#{Navigation.adminUrl}">
-					<h:outputText value="#{lbl.back_to_admin}" styleClass="imj_backButton"/>
-				</h:outputLink>
-			</h:panelGroup>
+			
 		
 		</ui:fragment>
 		

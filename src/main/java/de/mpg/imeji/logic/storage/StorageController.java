@@ -28,17 +28,19 @@
  */
 package de.mpg.imeji.logic.storage;
 
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
+import de.mpg.imeji.logic.storage.util.StorageUtils;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.presentation.beans.ConfigurationBean;
+import de.mpg.imeji.presentation.util.PropertyReader;
+import org.apache.commons.io.FilenameUtils;
+
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
 
-import org.apache.commons.codec.digest.DigestUtils;
-
-import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.presentation.util.PropertyReader;
+import static de.mpg.imeji.logic.storage.util.StorageUtils.*;
 
 /**
  * Controller for the {@link Storage} objects
@@ -47,145 +49,182 @@ import de.mpg.imeji.presentation.util.PropertyReader;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class StorageController implements Serializable
-{
-    private static final long serialVersionUID = -2651970941029421673L;
-    private Storage storage;
+public class StorageController implements Serializable {
+	private static final long serialVersionUID = -2651970941029421673L;;
+	public static final String IMEJI_STORAGE_NAME_PROPERTY = "imeji.storage.name";
+	private Storage storage;
 
-    /**
-     * Create new {@link StorageController} for the {@link Storage} defined in imeji.properties
-     */
-    public StorageController()
-    {
-        String name;
-        try
-        {
-            name = PropertyReader.getProperty("imeji.storage.name");
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException("Error reading storage name property: ", e);
-        }
-        storage = StorageFactory.create(name);
-    }
+	private String formatWhiteList;
+	private String formatBlackList;
 
-    /**
-     * Construct a {@link StorageController} for one {@link Storage}
-     * 
-     * @param name - The name of the storage, as defined by getName() method
-     */
-    public StorageController(String name)
-    {
-        storage = StorageFactory.create(name);
-    }
+	/**
+	 * Create new {@link StorageController} for the {@link Storage} defined in
+	 * imeji.properties
+	 */
+	public StorageController() {
+		String name;
+		try {
+			name = PropertyReader.getProperty(IMEJI_STORAGE_NAME_PROPERTY);
+			formatBlackList = ConfigurationBean.getUploadBlackListStatic();
+			formatWhiteList = ConfigurationBean.getUploadWhiteListStatic();
+		} catch (Exception e) {
+			throw new RuntimeException("Error reading property: ", e);
+		}
+		storage = StorageFactory.create(name);
+	}
 
-    /**
-     * Call upload method of the controlled {@link Storage}
-     * 
-     * @param filename
-     * @param file
-     * @param collectionId
-     * @return
-     */
-    public UploadResult upload(String filename, File file, String collectionId)
-    {
-        UploadResult result = storage.upload(filename, file, collectionId);
-        try
-        {
-            result.setChecksum(calculateChecksum(file));
-        }
-        catch (IOException e)
-        {
-            throw new RuntimeException(e);
-        }
-        return result;
-    }
+	/**
+	 * Construct a {@link StorageController} for one {@link Storage}
+	 * 
+	 * @param name
+	 *            - The name of the storage, as defined by getName() method
+	 */
+	public StorageController(String name) {
+		storage = StorageFactory.create(name);
+	}
 
-    /**
-     * Call read method of the controlled {@link Storage}
-     * 
-     * @param url
-     * @param out
-     */
-    public void read(String url, OutputStream out, boolean close)
-    {
-        storage.read(url, out, close);
-    }
+	/**
+	 * Call upload method of the controlled {@link Storage}
+	 * 
+	 * @param filename
+	 * @param file
+	 * @param collectionId
+	 * @return
+	 * @throws ImejiException
+	 */
+	public UploadResult upload(String filename, File file, String collectionId)
+			throws ImejiException {
+		filename = FilenameUtils.getName(filename);
+		UploadResult result = storage.upload(filename, file, collectionId);
+		result.setChecksum(calculateChecksum(file));
+		result.setFileSize(file.length());
+		return result;
+	}
 
-    /**
-     * Call delete method of the controlled {@link Storage}
-     * 
-     * @param url
-     */
-    public void delete(String url)
-    {
-        storage.delete(url);
-    }
+	/**
+	 * Call read method of the controlled {@link Storage}
+	 * 
+	 * @param url
+	 * @param out
+	 * @throws ImejiException
+	 */
+	public void read(String url, OutputStream out, boolean close)
+			throws ImejiException {
+		storage.read(url, out, close);
+	}
 
-    /**
-     * Call update method of the controlled {@link Storage}
-     * 
-     * @param url
-     * @param bytes
-     */
-    public void update(String url, File file)
-    {
-        storage.update(url, file);
-    }
+	/**
+	 * Call delete method of the controlled {@link Storage}
+	 * 
+	 * @param url
+	 */
+	public void delete(String url) {
+		storage.delete(url);
+	}
 
-    /**
-     * Return the {@link StorageAdministrator} of the current {@link Storage}
-     * 
-     * @return
-     */
-    public StorageAdministrator getAdministrator()
-    {
-        return storage.getAdministrator();
-    }
+	/**
+	 * Call update method of the controlled {@link Storage}
+	 * 
+	 * @param url
+	 * @param bytes
+	 */
+	public void update(String url, File file) {
+		storage.update(url, file);
+	}
 
-    /**
-     * Return the id of the {@link CollectionImeji} of this file
-     * 
-     * @return
-     */
-    public String getCollectionId(String url)
-    {
-        return storage.getCollectionId(url);
-    }
+	/**
+	 * Return the {@link StorageAdministrator} of the current {@link Storage}
+	 * 
+	 * @return
+	 */
+	public StorageAdministrator getAdministrator() {
+		return storage.getAdministrator();
+	}
 
-    /**
-     * Calculate the Checksum of a byte array with MD5 algorithm displayed in Hexadecimal
-     * 
-     * @param bytes
-     * @return
-     * @throws IOException
-     */
-    public String calculateChecksum(File file) throws IOException
-    {
-        FileInputStream fis = null;
-        try
-        {
-            fis = new FileInputStream(file);
-            return DigestUtils.md5Hex(fis);
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException("Error calculating the cheksum of the file: ", e);
-        }
-        finally
-        {
-            if (fis != null)
-                fis.close();
-        }
-    }
+	/**
+	 * Return the id of the {@link CollectionImeji} of this file
+	 * 
+	 * @return
+	 */
+	public String getCollectionId(String url) {
+		return storage.getCollectionId(url);
+	}
 
-    /**
-     * Get the {@link Storage} used by the {@link StorageController}
-     * 
-     * @return
-     */
-    public Storage getStorage()
-    {
-        return storage;
-    }
+	/**
+	 * Null if the file format related to the passed extension can be uploaded,
+	 * not allowed file type exception otherwise
+	 *
+	 * @param file
+	 * @return not allowed file format extension
+	 */
+	public String guessNotAllowedFormat(File file) {
+		boolean canBeUploaded = false;
+
+		String guessedExtension = FilenameUtils.getExtension(file.getName());
+		if (!"".equals(guessedExtension)) {
+			canBeUploaded = isAllowedFormat(guessedExtension);
+		}
+		// In Any case check the extension by Tika results
+		guessedExtension = guessExtension(file);
+
+		// file can be uploaded only if both results are true
+		canBeUploaded = canBeUploaded && isAllowedFormat(guessedExtension);
+
+		return canBeUploaded ? guessedExtension : StorageUtils.BAD_FORMAT;
+	}
+
+	/**
+	 * True if the file format related to the passed extension can be download
+	 *
+	 * @param extension
+	 * @return
+	 */
+	private boolean isAllowedFormat(String extension) {
+		// If no extension, not possible to recognized the format
+		// Imeji will uprfont guess the extension for the uploaded file if it is
+		// not provided
+		// Thus this method is not public and cannot be used as public method
+		if ("".equals(extension.trim()))
+			return false;
+		// check in white list, if found then allowed
+		for (String s : formatWhiteList.split(","))
+			if (compareExtension(extension, s.trim()))
+				return true;
+		// check black list, if found then forbidden
+
+		for (String s : formatBlackList.split(","))
+			if (compareExtension(extension, s.trim()))
+				return false;
+		// Not found in both list: if white list is empty, allowed
+		return "".equals(formatWhiteList.trim());
+	}
+
+	/**
+	 * Get the {@link Storage} used by the {@link StorageController}
+	 * 
+	 * @return
+	 */
+	public Storage getStorage() {
+		return storage;
+	}
+
+	/**
+	 * Call read method of the controlled {@link Storage}
+	 * 
+	 * @param url
+	 * @param out
+	 * @throws ImejiException
+	 */
+	public String readFileStringContent(String url) {
+		return storage.readFileStringContent(url);
+	}
+
+	public String getFormatBlackList() {
+		return formatBlackList;
+	}
+
+	public String getFormatWhiteList() {
+		return formatWhiteList;
+	}
+
 }

@@ -9,6 +9,7 @@ import javax.xml.bind.JAXBException;
 
 import org.xml.sax.SAXException;
 
+import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.ingest.mapper.ItemMapperTask;
 import de.mpg.imeji.logic.ingest.parser.ItemParser;
@@ -21,7 +22,6 @@ import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
-import de.mpg.j2j.exceptions.NotFoundException;
 
 /**
  * Controller to ingest {@link Item}
@@ -66,7 +66,7 @@ public class IngestItemController
             ItemContentValidator.validate(itemList);
             ItemMapperTask im = new ItemMapperTask(itemList);
             im.execute();
-            ItemController ic = new ItemController(user);
+            ItemController ic = new ItemController();
             ic.update(im.get(), user);
         }
         catch (Exception e)
@@ -170,8 +170,8 @@ public class IngestItemController
      */
     private Item retrieveItem(Item item) throws Exception
     {
-        ItemController ic = new ItemController(user);
-        return ic.retrieve(item.getId());
+        ItemController ic = new ItemController();
+        return ic.retrieve(item.getId(), user);
     }
 
     /**

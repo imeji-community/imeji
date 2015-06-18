@@ -26,10 +26,10 @@ function appendScript(link) {
 }
 
 //appendScript(coneURL + 'js/jquery.suggest.js');
-appendScript(jsURL + 'eSciDoc_component_JavaScript/eSciDoc_ext_paginator.js');
-appendScript(jsURL + 'eSciDoc_component_JavaScript/eSciDoc_item_list.js');
-appendScript(jsURL + 'eSciDoc_component_JavaScript/eSciDoc_full_item.js');
-appendScript(jsURL + 'eSciDoc_component_JavaScript/eSciDoc_single_elements.js');
-appendScript(jsURL + 'jquery.shiftcheckbox.js');
+//appendScript(jsURL + 'eSciDoc_component_JavaScript/eSciDoc_ext_paginator.js');
+//appendScript(jsURL + 'eSciDoc_component_JavaScript/eSciDoc_item_list.js');
+//appendScript(jsURL + 'eSciDoc_component_JavaScript/eSciDoc_full_item.js');
+//appendScript(jsURL + 'eSciDoc_component_JavaScript/eSciDoc_single_elements.js');
+//appendScript(jsURL + 'jquery.shiftcheckbox.js');
 appendScript(jsURL + 'eSciDoc_javascript.js');
 appendScript(jsURL + 'main.js');

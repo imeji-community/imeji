@@ -1,23 +1,39 @@
 package search;
 
-import static org.junit.Assert.*;
-
 import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
+
+import de.mpg.imeji.logic.auth.Authentication;
+import de.mpg.imeji.logic.auth.authentication.SimpleAuthentication;
+import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.beans.PropertyBean;
+import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
+import util.JenaUtil;
 
 public class SPARQLSearchTest {
 
-	@Before
-	public void setUp() throws Exception {
-	}
-
-	@After
-	public void tearDown() throws Exception {
-	}
-
+//	@BeforeClass
+//	public void setUp() throws Exception {
+//		JenaUtil.initJena();
+//	}
+//	
+//	@BeforeClass
+//	public static void init() {
+//		new PropertyBean();
+//	}
+//
+//
+//	@AfterClass
+//	public void tearDown() throws Exception {
+//		JenaUtil.closeJena();
+//	}
+//
 //	@Test
-//	public void testSPARQLSearch() {
+//	public void testCollectionSearch() {
 //		fail("Not yet implemented");
 //	}
 //

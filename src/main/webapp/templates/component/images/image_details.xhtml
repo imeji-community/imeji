@@ -4,52 +4,71 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:imjc="http://java.sun.com/jsf/composite/components"
-	xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs">
+	xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs"
+	xmlns:list="http://java.sun.com/jsf/composite/components/list">
 
 	<!-- MediaDisplayContainer - START -->
-	<h:panelGroup layout="block" styleClass="imj_mediaDisplayContainer">
-		<h:outputLink id="lnkPicFullResolution" value="#{Navigation.applicationUrl}file/#{itemBean.encodedFileName}?id=#{itemBean.image.fullImageUrl}" target="_blank" rendered="#{(itemBean.imageFile and !Property.digilibEnabled) or itemBean.rawFile or itemBean.pdfFile}">
-			<h:graphicImage id="picWebResolution" title="#{itemBean.image.filename}" alt="#{itemBean.image.filename}" value="#{Navigation.applicationUrl}file/#{itemBean.encodedFileName}?id=#{itemBean.image.webImageUrl}" />
-		</h:outputLink>
-		<h:outputLink id="lnkPicInternalDigilib" value="#{Navigation.applicationUrl}digilibImage?fn=#{Property.internalStorageBase}/#{itemBean.image.storageId}/original/#{itemBean.itemStorageIdFilename}" target="_blank" rendered="#{itemBean.imageFile and Property.digilibEnabled and (empty Navigation.externalDigilibUrl)}">
-			<h:graphicImage id="picWebResolutionInternalDigilib" title="#{itemBean.image.filename}" alt="#{itemBean.image.filename}" value="#{Navigation.applicationUrl}file?id=#{itemBean.image.webImageUrl}" />
-		</h:outputLink>
-		<h:panelGroup rendered="#{itemBean.videoFile}">
-			<video id="imejiVideoPlayer" src="#{Navigation.applicationUrl}file?id=#{itemBean.image.fullImageUrl}" controls="controls" 
-			poster="#{Navigation.applicationUrl}file?id=#{itemBean.image.webImageUrl}" preload="auto" height="264"></video>
-		</h:panelGroup>
-		<h:panelGroup rendered="#{itemBean.audioFile}">
-			<audio id="imejiAudioPlayer" src="#{Navigation.applicationUrl}file?id=#{itemBean.image.fullImageUrl}" controls="controls" preload="auto">
+	<h:panelGroup layout="block" styleClass="imj_mediaDisplayContainer" rendered="#{itemBean.image.status != 'WITHDRAWN'}">
+		<ui:fragment rendered="#{!itemBean.videoFile and !itemBean.audioFile and !itemBean.swcFile}">
+			<h:outputLink id="lnkPicFullResolution" value="#{Navigation.fileUrl}#{itemBean.image.fullImageUrl}" target="_blank" rendered="#{!itemBean.viewInDigilib and !itemBean.viewInDataViewer}">
+				<h:graphicImage id="picWebResolution" title="#{itemBean.image.filename}" alt="#{itemBean.image.filename}" value="#{Navigation.fileUrl}#{itemBean.image.webImageUrl}" />
+			</h:outputLink>
+			<h:outputLink id="lnkPicInternalDigilib" value="#{Navigation.applicationSpaceUrl}digilibImage?fn=#{Property.internalStorageBase}/#{itemBean.image.storageId}/original/#{itemBean.itemStorageIdFilename}" target="_blank" rendered="#{itemBean.viewInDigilib}">
+				<h:graphicImage id="picWebResolutionInternalDigilib" title="#{itemBean.image.filename}" alt="#{itemBean.image.filename}" value="#{Navigation.fileUrl}#{itemBean.image.webImageUrl}" rendered="#{itemBean.image.status!='WITHDRAWN'}"/>
+			</h:outputLink>
+			<h:outputLink id="lnkPicInternalDataViewer" value="#{Navigation.applicationUrl}dataviewer?id=#{itemBean.image.idString}" target="_blank" rendered="#{itemBean.viewInDataViewer}">
+				<h:graphicImage title="#{itemBean.image.filename}" alt="#{itemBean.image.filename}" value="#{Navigation.fileUrl}#{itemBean.image.webImageUrl}" />
+			</h:outputLink>
+		</ui:fragment>
+		<ui:fragment rendered="#{itemBean.videoFile}">
+			<video id="imejiVideoPlayer" src="#{Navigation.fileUrl}#{itemBean.image.fullImageUrl}" controls="controls" 
+			poster="#{itemBean.image.webImageUrl}" preload="auto" height="264"></video>
+		</ui:fragment>
+		<ui:fragment rendered="#{itemBean.audioFile}">
+			<audio id="imejiAudioPlayer" src="#{Navigation.fileUrl}#{itemBean.image.fullImageUrl}" controls="controls" preload="auto">
 				<h:outputText value="#{lbl.playing} #{itemBean.image.filename} " />
 			</audio>
-		</h:panelGroup>
-		<h:panelGroup layout="block" styleClass="imj_mediaWithdrawn" rendered="#{itemBean.image.status == 'WITHDRAWN'}">
-			<h:outputText styleClass="" value="#{lbl.withdraw_image_content}"/>
-		</h:panelGroup>
+		</ui:fragment>
+		<ui:fragment rendered="#{itemBean.image.status == 'WITHDRAWN'}">
+			<div class="imj_mediaWithdrawn">
+				<h:outputText value="#{lbl.withdraw_image_content}"/>
+			</div>
+		</ui:fragment>
 		
-				
+		<ui:fragment rendered='#{itemBean.swcFile}'>
+    		<imjc:swcViewer itemBean="#{itemBean}" swcID="swc3d" loadJSLibraries="true"/>
+	    </ui:fragment>
+		
+		
 		<!-- MediaEditPanel - select, add, remove media items -->
 		<h:panelGroup id="image" layout="block" rendered="#{itemBean.image.status != 'WITHDRAWN'}" styleClass="imj_mediaEditPanel">
-			<h:outputLink styleClass="imj_mediaEditPanelItem" id="lnkDownload" value="#{Navigation.applicationUrl}file/#{itemBean.encodedFileName}?id=#{itemBean.image.fullImageUrl}&amp;download=1" target="_blank">
-				<h:outputText value="#{lbl.fileDownload}"/>
-			</h:outputLink>
+			
 			<h:form id="itemForm">
-				<h:outputText value=":" styleClass="imj_invisible"/>
 				
-				<span class="imj_optionSet">
-					<h:selectBooleanCheckbox styleClass="imj_mediaEditPanelItem imj_selectMedia imj_optionCheckbox" id="pictureCheckbox" value="#{itemBean.selected}" valueChangeListener="#{itemBean.selectedChanged}" rendered="#{Auth.loggedIn}">
-						<f:ajax execute="@this" render=":selectionInfoPanel :paginatorTop"/>
-					</h:selectBooleanCheckbox>
-					<h:outputLabel value="#{lbl.selected}" for="pictureCheckbox" styleClass="imj_optionLabel" rendered="#{Auth.loggedIn}"/>
-				</span>
-				
-				<h:outputLink value="#" styleClass="imj_mediaEditPanelItem imj_removeButton" onclick="openDialog('deleteMenuItemDialog');" rendered="#{Auth.delete(itemBean.image)}">
-					<h:outputText value="#{lbl.remove_from_col}"/>
+				<h:outputLink id="lnkDataViewer" value="#{Navigation.applicationUrl}dataviewer?id=#{itemBean.image.idString}" rendered="#{itemBean.viewInDataViewer}" styleClass="imj_mediaEditPanelItem imj_submitButton" target="_blank">
+					<h:outputText value="#{lbl.view}"/>
 				</h:outputLink>
 				
-				<h:commandLink styleClass="imj_mediaEditPanelItem imj_removeButton" id="lnkPicRemoveFromAlbum" action="#{itemBean.removeFromAlbum}" rendered="#{itemBean.navigationString == 'pretty:albumItem' and Auth.create(itemBean.album)}">
+				<h:outputLink id="lnkDigilib" value="#{Navigation.applicationUrl}digilibImage?fn=#{Property.internalStorageBase}/#{itemBean.image.storageId}/original/#{itemBean.itemStorageIdFilename}" target="_blank" rendered="#{itemBean.viewInDigilib}" styleClass="imj_mediaEditPanelItem imj_submitButton">
+					<h:outputText value="#{lbl.view}"/>
+				</h:outputLink>
+				
+				<h:outputLink id="lnkOriginalData" value="#{itemBean.image.fullImageUrl}" target="_blank" rendered="#{!itemBean.viewInDigilib and !itemBean.viewInDataViewer}" styleClass="imj_mediaEditPanelItem imj_submitButton">
+					<h:outputText value="#{lbl.view}"/>
+				</h:outputLink>
+				
+				<h:outputLink styleClass="imj_mediaEditPanelItem imj_submitButton" id="lnkDownload" value="#{Navigation.applicationUrl}file/#{itemBean.encodedFileName}?id=#{itemBean.image.fullImageUrl}&amp;download=1" target="_blank">
+					<h:outputText value="#{lbl.download}"/>
+				</h:outputLink>
+				
+				<h:outputLink value="#" styleClass="imj_mediaEditPanelItem imj_cancelButton" onclick="openDialog('deleteMenuItemDialog');" rendered="#{Auth.delete(itemBean.image)}">
+					<h:outputText value="#{lbl.remove}"/>
+				</h:outputLink>
+				
+				<h:commandLink styleClass="imj_mediaEditPanelItem imj_removeButton" id="lnkPicRemoveFromAlbum" action="#{itemBean.removeFromAlbum}" rendered="#{itemBean.navigationString == 'pretty:albumItem' and SessionBean.activeAlbum != null and Auth.update(SessionBean.activeAlbum.id)}">
 					<h:outputText value="#{lbl.remove_from_album}"/>
 				</h:commandLink>
+				
 				<h:commandLink styleClass="imj_mediaEditPanelItem imj_addMedia" id="lnkPicFullResolution2" action="#{itemBean.addToActiveAlbum}" rendered="#{!itemBean.isInActiveAlbum and SessionBean.activeAlbum != null}">
 					<h:outputText value="#{lbl.add_to_active_album}"/>
 				</h:commandLink>
@@ -66,12 +85,21 @@
 					</h:commandLink>
 					<h:outputText value=")"/>
 				</h:panelGroup>
+				
 			</h:form>
 		</h:panelGroup>
 		
 		<dialog:confirmationDialog submitAction="delete" bean="#{itemBean}" confirmationText="#{msg.confirmation_delete_item}?" submitLabel="#{lbl.delete}" dialogId="deleteMenuItemDialog" rendered="#{Auth.delete(itemBean.image)}"/>
 		
 	</h:panelGroup> <!-- Media Display Container - END -->
+	
+	<h:panelGroup layout="block" styleClass="imj_mediaDisplayContainer" rendered="#{itemBean.image.status == 'WITHDRAWN'}">
+		<h:outputLink id="lnkPicFullResolution_Withdrawn" value="#">
+				<h:graphicImage id="picWebResolution_Withdrawn" title="#{itemBean.image.filename}" alt="#{itemBean.image.filename}" value="#{Navigation.applicationUrl}resources/icon/discarded.png"/>
+		</h:outputLink>
+		<dialog:confirmationDialog submitAction="delete" bean="#{itemBean}" confirmationText="#{msg.confirmation_delete_item}?" submitLabel="#{lbl.delete}" dialogId="deleteMenuItemDialog" rendered="#{Auth.delete(itemBean.image)}"/>
+	</h:panelGroup>
+
 		
 	
 	<!-- MetaDataList - START -->
@@ -79,27 +107,27 @@
 	
 		<!-- MetaDataTypes ListHeader - show media meta data, tech., other -->
 		<div class="imj_listHeader">
-			<h:outputLink id="lnkShareItem" styleClass="imj_active" value="#{itemBean.pageUrl}?tab=share" rendered="#{ itemBean.tab == 'share'}">
+			<h:outputLink id="lnkShareItem" styleClass="imj_active" value="#{itemBean.pageUrl}?tab=share" rendered="#{ itemBean.tab == 'share' and itemBean.image.status!='WITHDRAWN'}">
 				<h:outputText value="#{lbl.share}"/>
 			</h:outputLink>
-			<h:outputLink id="lnkShareItem2" value="#{itemBean.pageUrl}?tab=share" rendered="#{Auth.admin(itemBean.image) and itemBean.tab != 'share'}">
+			<h:outputLink id="lnkShareItem2" value="#{itemBean.pageUrl}?tab=share" rendered="#{Auth.admin(itemBean.image) and itemBean.tab != 'share' and itemBean.image.status!='WITHDRAWN'}">
 				<h:outputText value="#{lbl.share}"/>
 			</h:outputLink>
-			<h:panelGroup styleClass="imj_separator" rendered="#{Auth.admin(itemBean.image)}"/>
-			<h:outputLink id="lnkViewItemUtilPage" styleClass="imj_active" value="#{itemBean.pageUrl}?tab=util" rendered="#{itemBean.tab == 'util'}">
+			<h:panelGroup styleClass="imj_separator" rendered="#{Auth.admin(itemBean.image) and itemBean.image.status!='WITHDRAWN'}"/>
+			<h:outputLink id="lnkViewItemUtilPage" styleClass="imj_active" value="#{itemBean.pageUrl}?tab=util" rendered="#{itemBean.tab == 'util' and itemBean.image.status!='WITHDRAWN'}">
 				<h:outputText value="#{lbl.view_util}"/>
 			</h:outputLink>
-			<h:outputLink id="lnkViewItemUtilPage2" value="#{itemBean.pageUrl}?tab=util" rendered="#{itemBean.tab != 'util'}">
+			<h:outputLink id="lnkViewItemUtilPage2" value="#{itemBean.pageUrl}?tab=util" rendered="#{itemBean.tab != 'util' and itemBean.image.status!='WITHDRAWN'}">
 				<h:outputText value="#{lbl.view_util}"/>
 			</h:outputLink>
-			<h:panelGroup styleClass="imj_separator"/>
-			<h:outputLink id="lnkViewItemMdPage" styleClass="imj_active" value="#{itemBean.pageUrl}?tab=techmd" rendered="#{itemBean.tab == 'techmd'}">
+			<h:panelGroup styleClass="imj_separator" rendered = "#{itemBean.image.status!='WITHDRAWN'}"/>
+			<h:outputLink id="lnkViewItemMdPage" styleClass="imj_active" value="#{itemBean.pageUrl}?tab=techmd" rendered="#{itemBean.tab == 'techmd' and itemBean.image.status!='WITHDRAWN'}">
 				<h:outputText value="#{lbl.view_tech_md}"/>
 			</h:outputLink>
-			<h:outputLink id="lnkViewItemMdPage2" value="#{itemBean.pageUrl}?tab=techmd" rendered="#{itemBean.tab != 'techmd'}">
+			<h:outputLink id="lnkViewItemMdPage2" value="#{itemBean.pageUrl}?tab=techmd" rendered="#{itemBean.tab != 'techmd' and itemBean.image.status!='WITHDRAWN'}">
 				<h:outputText value="#{lbl.view_tech_md}"/>
 			</h:outputLink>
-			<h:panelGroup styleClass="imj_separator"/>
+			<h:panelGroup styleClass="imj_separator"  rendered = "#{itemBean.image.status!='WITHDRAWN'}"/>
 			<h:outputLink id="lnkViewItemPage" styleClass="imj_active" value="#{itemBean.pageUrl}" rendered="#{itemBean.tab == null}">
 				<h:outputText value="#{lbl.view_md}"/>
 			</h:outputLink>
@@ -117,9 +145,9 @@
 					<h:panelGroup layout="block" styleClass="imj_metadataSubPanel">
 						<span class="imj_metadataSubPanelItem">
 							<h:outputText id="lblViewItemFull_lblBasic" value="#{lbl.metadata} "/>
-								<h:commandLink rendered="#{Auth.updateContent(itemBean.image) and !itemBean.locked and itemBean.edit.toggleState == 'displayMd' and itemBean.profile.statements.size() > 0}" value="#{lbl.edit}" action="#{itemBean.edit.showEditor}">
-									<f:ajax execute="@this" render="@form"/>
-								</h:commandLink>
+							<h:commandLink rendered="#{Auth.updateContent(itemBean.image) and itemBean.image.status != 'WITHDRAWN'  and !itemBean.locked and itemBean.edit.toggleState == 'displayMd'}" value="#{lbl.edit}" action="#{itemBean.edit.showEditor}">
+								<f:ajax execute="@this" render="@form"/>
+							</h:commandLink>
 						</span>
 							<h:outputText value="Item locked " rendered="#{Auth.updateContent(itemBean.image) and itemBean.locked}"/>
 							<h:outputLink value="#" title="#{msg.warning_locked}" rendered="#{Auth.updateContent(itemBean.image) and itemBean.locked}">[info]</h:outputLink>
@@ -149,10 +177,21 @@
 									<h:outputText value="#{lbl.filename} "/>
 									<span class="imj_invisible">: </span>
 								</div>
+
+							<ui:fragment rendered="#{itemBean.edit.toggleState == 'displayMd'}">
 								<div class="imj_metadataValue">
 									<h:outputText id="txtUrl" value="#{itemBean.image.filename}"/>
+								</div>							
+							</ui:fragment>
+							
+							<ui:fragment rendered="#{itemBean.edit.toggleState == 'editMd'}">
+								<div class="imj_metadataValue">
+									<h:inputText value="#{itemBean.newFilename}"/>
 								</div>
+							</ui:fragment>
+			
 							</h:panelGroup>
+							
 							<!-- MetaDataList - Collection -->
 							<h:panelGroup layout="block" styleClass="imj_metadataSet">
 								<div class="imj_metadataLabel">
@@ -163,6 +202,17 @@
 									<h:outputLink value="#{Navigation.collectionUrl}#{itemBean.collection.idString}">
 										<h:outputText value="#{itemBean.collection.metadata.title}"/>
 									</h:outputLink>
+								</div>
+							</h:panelGroup>
+							
+							<!-- MetaDataList - File Size -->
+							<h:panelGroup layout="block" styleClass="imj_metadataSet">
+								<div class="imj_metadataLabel">
+									<h:outputText value="#{lbl.file_size}"/>
+									<span class="imj_invisible">: </span>
+								</div>
+								<div class="imj_metadataValue">
+										<h:outputText value="#{itemBean.image.fileSizeHumanReadable}"/>
 								</div>
 							</h:panelGroup>
 						</h:panelGroup>
@@ -193,8 +243,7 @@
 							
 							<ui:fragment rendered="#{itemBean.edit.toggleState == 'editMd' and Auth.updateContent(itemBean.image) and !itemBean.locked}">
 								<ui:repeat id="editItem" var="item" value="#{itemBean.edit.editor.items}" rows="0" varStatus="indexMetadata">
-									<ui:repeat id="metadata" var="metadata" value="#{item.mds.tree.list}" rows="0" varStatus="indexMetadata">
-										
+									<ui:repeat id="metadata" var="metadata" value="#{item.mds.tree.list}" rows="0" varStatus="indexMetadata">									
 										<!-- MetaDataList - edit panel container set -->
 										<div class="imj_metadataSet">
 											<div class="imj_metadataLabel">
@@ -202,14 +251,9 @@
 												<span class="imj_invisible">: </span>
 											</div>
 											<div class="imj_metadataValue">
-												<div class="imj_metadataValueEntry" style="margin-left: #{metadata.hierarchyLevel}em;">
+												<div style="margin-left: #{metadata.hierarchyLevel}em;">
 													<!-- MetaDataInput -->
-													<ui:include src="MetadataInput.xhtml">
-														<ui:param name="statement" value="#{metadata.statement}"/>
-														<ui:param name="metadata" value="#{metadata}"/>
-														<ui:param name="areaClass" value="double_txtArea"/>
-														<ui:param name="hideLabel" value="true"/>
-													</ui:include>
+													<list:batchEditList_singleStatement itemBean="#{metadata}" itemStatement="#{metadata.statement}" itemLabelBean="#{MetadataLabels}" hideLabel="true" navBean="#{Navigation}" suggestBean="#{SuggestBean}"/>		
 												</div>
 												<!-- imj_multipleButtons (-) (+) command buttons -->
 												<div class="imj_metadataEditButtonArea">
@@ -223,7 +267,34 @@
 											</div>
 										</div>
 									</ui:repeat>
+									<ui:fragment rendered="#{ empty item.mds.tree.list}">
+										<h3 class="imj_headline">#{msg.error_collection_profile_not_exist}
+											<h:outputLink value="#{Navigation.profileUrl}#{itemBean.profile.idString}/#{Navigation.editPath}?init=1&amp;col=#{itemBean.collection.idString}" title="#{lbl.create_now}">
+												<h:outputText value="#{lbl.create_now}"/>
+											</h:outputLink>
+											
+											<!-- CHANGE ME HERE  
+											
+												<h3 class="imj_headline imj_messageInfo">#{msg.error_collection_profile_not_exist}
+													<br/>
+													<h:outputLink value="#{Navigation.collectionUrl}#{itemBean.collectionId}/#{Navigation.editPath}?profileSelect=1" title="#{lbl.create_now_from_template}" rendered="#{logicBean.hasProfiles}">
+															<span class="imj_entryPagePreviewTiledListLinkArrow"> </span>
+															<h:outputText value="#{lbl.create_now_from_template}"/>
+													</h:outputLink>
+													<br/>
+													<h:outputLink value="#{Navigation.profileUrl}#{logicBean.profileId}/#{Navigation.editPath}?init=1&amp;col=#{logicBean.id}" title="#{lbl.create_now_new}">
+															<span class="imj_entryPagePreviewTiledListLinkArrow"> </span>
+															<h:outputText value="#{lbl.create_now}"/>
+													</h:outputLink>
+												</h3>
+												 -->
+											
+											
+										</h3>
+									</ui:fragment>
 								</ui:repeat>
+								
+								
 																
 								<!-- MetaDataList - EDIT - imj_submitPanel - cancel + submit command buttons -->
 								<h:panelGroup layout="block" styleClass="imj_submitPanel">
@@ -243,7 +314,7 @@
 	
 	
 			<!-- Tech Data List Body - tech data list - show media tech data entries -->		
-			<ui:fragment rendered="#{itemBean.tab == 'techmd'}">
+			<ui:fragment rendered="#{itemBean.tab == 'techmd' and itemBean.image.status!='WITHDRAWN'}">
 				<h:panelGroup layout="block" styleClass="imj_metadataSubPanel">
 						<!-- <h:outputText id="" styleClass="imj_metadataSubPanelItem" value=""/>  - - - new label for value="#{lbl.techMD}" and id="lblViewItemFull_lbltechMD needed here! -->
 				</h:panelGroup>	
@@ -256,7 +327,7 @@
 		
 		
 			<!-- Utilities List Body - info data list - show MD5, album name, QR-Tag, link to image versions in blank page -->		
-			<ui:fragment rendered="#{itemBean.tab == 'util'}">
+			<ui:fragment rendered="#{itemBean.tab == 'util' and itemBean.image.status!='WITHDRAWN'}">
 				<h:panelGroup id="util" layout="block" styleClass="imj_infodataWrapper">
 					<h:panelGroup layout="block" styleClass="imj_metadataSubPanel">
 						<h:outputText id="lblViewItemFull_lblUtil" styleClass="imj_metadataSubPanelItem" value="#{lbl.imageUtil}"/>
@@ -368,7 +439,7 @@
 				</h:panelGroup>
 			</ui:fragment>
 			
-			<ui:fragment rendered="#{itemBean.tab == 'share'}">
+			<ui:fragment rendered="#{itemBean.tab == 'share' and itemBean.image.status!='WITHDRAWN'}">
 				<h:panelGroup layout="block" id="sharePanel">
 					<h:panelGroup styleClass="imj_infodataWrapper">
 						<div class="imj_metadataSubPanel">

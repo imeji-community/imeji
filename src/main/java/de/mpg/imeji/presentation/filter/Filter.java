@@ -3,11 +3,12 @@
  */
 package de.mpg.imeji.presentation.filter;
 
-import java.net.URI;
-
+import de.mpg.imeji.logic.search.query.URLQueryTransformer;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.presentation.facet.Facet;
-import de.mpg.imeji.presentation.search.URLQueryTransformer;
+import org.apache.log4j.Logger;
+
+import java.net.URI;
 
 /**
  * {@link Facet} with extended
@@ -59,7 +60,7 @@ public class Filter extends Facet
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+        	Logger.getLogger(Filter.class).error("Some issues during Filter initialization", e);
         }
     }
 

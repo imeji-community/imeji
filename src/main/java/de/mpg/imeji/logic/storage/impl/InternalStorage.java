@@ -28,17 +28,21 @@
  */
 package de.mpg.imeji.logic.storage.impl;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.UploadResult;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.storage.internal.InternalStorageItem;
 import de.mpg.imeji.logic.storage.internal.InternalStorageManager;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * imeji internal {@link Storage}
@@ -86,16 +90,38 @@ public class InternalStorage implements Storage
     @Override
     public void read(String url, OutputStream out, boolean close)
     {
+        final String path = manager.transformUrlToPath(url);
         try
         {
-            FileInputStream fis = new FileInputStream(manager.transformUrlToPath(url));
+            FileInputStream fis = new FileInputStream(path);
             StorageUtils.writeInOut(fis, out, close);
         }
         catch (Exception e)
         {
-            throw new RuntimeException("Error reading file " + manager.transformUrlToPath(url)
+            throw new RuntimeException("Error reading file " + path
                     + " in internal storage: ", e);
         }
+    }
+
+    /**
+     * Read file in internal storage
+     * @param url
+     * @return
+     */
+    public File readFile(String url)
+    {
+        final String path = manager.transformUrlToPath(url);
+        File file;
+        try
+        {
+            file = new File(path);
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Error reading file " + path
+                    + " in internal storage: ", e);
+        }
+        return file;
     }
 
     /*
@@ -153,6 +179,24 @@ public class InternalStorage implements Storage
     @Override
     public String getCollectionId(String url)
     {
-        return url.replace(manager.getStorageUrl(), "").split("/", 2)[0];
+        return URI.create(url).getPath().replace(URI.create(manager.getStorageUrl()).getPath(), "").split("/", 2)[0];
+    }
+    
+    
+    /* (non-Javadoc)
+     * @see de.mpg.imeji.logic.storage.Storage#readFileStringContent(java.lang.String)
+     */
+    @Override
+    public String readFileStringContent(String url) {
+		String pathString = manager.transformUrlToPath(url);
+		Path path = Paths.get(pathString );
+		String stringFromFile = "";
+	    try {
+	    	stringFromFile = new String(Files.readAllBytes(path));
+	    }
+	    catch (Exception e) {
+	    	stringFromFile = "";
+	    }
+	    return stringFromFile;
     }
 }

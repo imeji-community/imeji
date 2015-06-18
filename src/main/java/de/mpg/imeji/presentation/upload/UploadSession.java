@@ -28,23 +28,21 @@
  */
 package de.mpg.imeji.presentation.upload;
 
+import de.mpg.imeji.logic.util.UrlHelper;
+import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.presentation.util.PropertyReader;
+import org.apache.commons.lang.BooleanUtils;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
-
-import org.apache.commons.lang.BooleanUtils;
-
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.presentation.util.PropertyReader;
-import de.mpg.imeji.presentation.util.UrlHelper;
-
 /**
- * Session for the upload page for the parameter which must be in a sesion (because of the upload which call the page
- * many times)
+ * Session for the upload page for the parameter which must be in a sesion
+ * (because of the upload which call the page many times)
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
@@ -52,184 +50,134 @@ import de.mpg.imeji.presentation.util.UrlHelper;
  */
 @ManagedBean(name = "UploadSession")
 @SessionScoped
-public class UploadSession
-{
-    private List<Item> sFiles;
-    private List<String> fFiles;
-    private String formatBlackList = "";
-    private String formatWhiteList = "";
-    private boolean importImageToFile = false;
-    private boolean uploadFileToItem = false;
-    private boolean checkNameUnique = true;
+public class UploadSession {
+	private List<Item> sFiles;
+	private List<String> fFiles;
+	private boolean importImageToFile = false;
+	private boolean uploadFileToItem = false;
+	private boolean checkNameUnique = true;
 
-    /**
-     * DEfault Constructor
-     * 
-     * @throws URISyntaxException
-     * @throws IOException
-     */
-    public UploadSession() throws IOException, URISyntaxException
-    {
-        this.sFiles = new ArrayList<Item>();
-        this.fFiles = new ArrayList<String>();
-        formatBlackList = PropertyReader.getProperty("imeji.upload.blacklist");
-        formatWhiteList = PropertyReader.getProperty("imeji.upload.whitelist");
-    }
+	/**
+	 * DEfault Constructor
+	 * 
+	 * @throws URISyntaxException
+	 * @throws IOException
+	 */
+	public UploadSession() throws IOException, URISyntaxException {
+		this.sFiles = new ArrayList<Item>();
+		this.fFiles = new ArrayList<String>();
+	}
 
-    /**
-     * Reset to default value
-     */
-    public void reset()
-    {
-        sFiles.clear();
-        fFiles.clear();
-        resetProperties();
-    }
+	/**
+	 * Reset to default value
+	 */
+	public void reset() {
+		sFiles.clear();
+		fFiles.clear();
+		resetProperties();
+	}
 
-    public void resetProperties()
-    {
-        importImageToFile = false;
-        uploadFileToItem = false;
-        checkNameUnique = true;
-    }
+	public void resetProperties() {
+		importImageToFile = false;
+		uploadFileToItem = false;
+		checkNameUnique = true;
+	}
 
-    /**
-     * Reset to default value
-     */
-    public String resetUploads()
-    {
-        if (UrlHelper.getParameterBoolean("done"))
-        {
-            sFiles.clear();
-            fFiles.clear();
-        }
-        return "";
-    }
+	/**
+	 * Reset to default value
+	 */
+	public String resetUploads() {
+		if (UrlHelper.getParameterBoolean("done")) {
+			sFiles.clear();
+			fFiles.clear();
+		}
+		return "";
+	}
 
-    public void uploadFileToItemListener()
-    {
-        this.importImageToFile = BooleanUtils.negate(importImageToFile);
-    }
+	public void uploadFileToItemListener() {
+		this.uploadFileToItem = BooleanUtils.negate(uploadFileToItem);
+	}
 
-    public void importImageToFileListener()
-    {
-        this.uploadFileToItem = BooleanUtils.negate(uploadFileToItem);
-    }
+	public void importImageToFileListener() {
+		this.importImageToFile = BooleanUtils.negate(importImageToFile);
+	}
 
-    public void checkNameUniqueListener()
-    {
-        this.checkNameUnique = BooleanUtils.negate(checkNameUnique);
-    }
+	public void checkNameUniqueListener() {
+		this.checkNameUnique = BooleanUtils.negate(checkNameUnique);
+	}
 
-    /**
-     * @return the sFiles
-     */
-    public List<Item> getsFiles()
-    {
-        return sFiles;
-    }
+	/**
+	 * @return the sFiles
+	 */
+	public List<Item> getsFiles() {
+		return sFiles;
+	}
 
-    /**
-     * @param sFiles the sFiles to set
-     */
-    public void setsFiles(List<Item> sFiles)
-    {
-        this.sFiles = sFiles;
-    }
+	/**
+	 * @param sFiles
+	 *            the sFiles to set
+	 */
+	public void setsFiles(List<Item> sFiles) {
+		this.sFiles = sFiles;
+	}
 
-    /**
-     * @return the fFiles
-     */
-    public List<String> getfFiles()
-    {
-        return fFiles;
-    }
+	/**
+	 * @return the fFiles
+	 */
+	public List<String> getfFiles() {
+		return fFiles;
+	}
 
-    /**
-     * @param fFiles the fFiles to set
-     */
-    public void setfFiles(List<String> fFiles)
-    {
-        this.fFiles = fFiles;
-    }
+	/**
+	 * @param fFiles
+	 *            the fFiles to set
+	 */
+	public void setfFiles(List<String> fFiles) {
+		this.fFiles = fFiles;
+	}
 
-    /**
-     * @return the formatBlackList
-     */
-    public String getFormatBlackList()
-    {
-        return formatBlackList;
-    }
+	/**
+	 * @return the importImageToFile
+	 */
+	public boolean isImportImageToFile() {
+		return importImageToFile;
+	}
 
-    /**
-     * @param formatBlackList the formatBlackList to set
-     */
-    public void setFormatBlackList(String formatBlackList)
-    {
-        this.formatBlackList = formatBlackList;
-    }
+	/**
+	 * @param importImageToFile
+	 *            the importImageToFile to set
+	 */
+	public void setImportImageToFile(boolean importImageToFile) {
+		this.importImageToFile = importImageToFile;
+	}
 
-    /**
-     * @return the formatWhiteList
-     */
-    public String getFormatWhiteList()
-    {
-        return formatWhiteList;
-    }
+	/**
+	 * @return the uploadFileToItem
+	 */
+	public boolean isUploadFileToItem() {
+		return uploadFileToItem;
+	}
 
-    /**
-     * @param formatWhiteList the formatWhiteList to set
-     */
-    public void setFormatWhiteList(String formatWhiteList)
-    {
-        this.formatWhiteList = formatWhiteList;
-    }
+	/**
+	 * @param uploadFileToItem
+	 *            the uploadFileToItem to set
+	 */
+	public void setUploadFileToItem(boolean uploadFileToItem) {
+		this.uploadFileToItem = uploadFileToItem;
+	}
 
-    /**
-     * @return the importImageToFile
-     */
-    public boolean isImportImageToFile()
-    {
-        return importImageToFile;
-    }
+	/**
+	 * @return the checkNameUnique
+	 */
+	public boolean isCheckNameUnique() {
+		return checkNameUnique;
+	}
 
-    /**
-     * @param importImageToFile the importImageToFile to set
-     */
-    public void setImportImageToFile(boolean importImageToFile)
-    {
-        this.importImageToFile = importImageToFile;
-    }
-
-    /**
-     * @return the uploadFileToItem
-     */
-    public boolean isUploadFileToItem()
-    {
-        return uploadFileToItem;
-    }
-
-    /**
-     * @param uploadFileToItem the uploadFileToItem to set
-     */
-    public void setUploadFileToItem(boolean uploadFileToItem)
-    {
-        this.uploadFileToItem = uploadFileToItem;
-    }
-
-    /**
-     * @return the checkNameUnique
-     */
-    public boolean isCheckNameUnique()
-    {
-        return checkNameUnique;
-    }
-
-    /**
-     * @param checkNameUnique the checkNameUnique to set
-     */
-    public void setCheckNameUnique(boolean checkNameUnique)
-    {
-        this.checkNameUnique = checkNameUnique;
-    }
+	/**
+	 * @param checkNameUnique
+	 *            the checkNameUnique to set
+	 */
+	public void setCheckNameUnique(boolean checkNameUnique) {
+		this.checkNameUnique = checkNameUnique;
+	}
 }

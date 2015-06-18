@@ -15,6 +15,7 @@ import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.tdb.TDB;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.j2j.helper.SortHelper;
 
 /**
@@ -49,12 +50,12 @@ public class SearchTransaction extends Transaction
     }
 
     @Override
-    protected void execute(Dataset ds) throws Exception
+    protected void execute(Dataset ds) throws ImejiException
     {
         Query q = QueryFactory.create(searchQuery, Syntax.syntaxARQ);
         QueryExecution qexec = initQueryExecution(ds, q);
         qexec.getContext().set(TDB.symUnionDefaultGraph, true);
-        qexec.setTimeout(20000);
+        qexec.setTimeout(100000);
         try
         {
             ResultSet rs = qexec.execSelect();	
@@ -154,7 +155,19 @@ public class SearchTransaction extends Transaction
             return SortHelper.addSortValue(qs.getResource("s").toString(), sortValue);
         }
         RDFNode node = qs.get("s");
-        return node.isURIResource() ? node.asResource().getURI() : node.asLiteral().toString();
+        
+        /* Was causing internal Server error when node was Null (i.e. there were no results), 
+           
+           see https://github.com/imeji-community/imeji/issues/1010
+        */
+        if (node != null) {
+        	return node.isURIResource() ? node.asResource().getURI() : node.asLiteral().toString();
+        }
+        else
+        {
+        	return null;
+        }
+        	
     }
 
     @Override

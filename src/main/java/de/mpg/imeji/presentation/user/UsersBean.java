@@ -3,22 +3,10 @@
  */
 package de.mpg.imeji.presentation.user;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserGroupController;
 import de.mpg.imeji.logic.util.StringHelper;
+import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.presentation.beans.Navigation;
@@ -28,7 +16,17 @@ import de.mpg.imeji.presentation.user.util.EmailMessages;
 import de.mpg.imeji.presentation.user.util.PasswordGenerator;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
-import de.mpg.imeji.presentation.util.UrlHelper;
+import org.apache.log4j.Logger;
+
+import javax.annotation.PostConstruct;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Java Bean for the view users page
@@ -90,7 +88,7 @@ public class UsersBean implements Serializable
     {
         UserController controller = new UserController(sessionUser);
         users = new ArrayList<User>();
-        for (User user : controller.retrieveAll(query))
+        for (User user : controller.searchUserByName(query))
         {
             users.add(user);
         }
@@ -102,7 +100,7 @@ public class UsersBean implements Serializable
      */
     public void retrieveGroup()
     {
-        if (UrlHelper.getParameterValue("group") != null && "".equals(UrlHelper.getParameterValue("group")))
+        if (UrlHelper.getParameterValue("group") != null && !"".equals(UrlHelper.getParameterValue("group")))
         {
             UserGroupController c = new UserGroupController();
             try
@@ -138,7 +136,7 @@ public class UsersBean implements Serializable
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            logger.info("Could not send password", e);
         }
         BeanHelper.info(session.getMessage("success_email"));
         return "";

@@ -3,14 +3,20 @@
  */
 package de.mpg.imeji.logic.util;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.apache.log4j.Logger;
 
 import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.j2j.annotations.j2jModel;
@@ -23,8 +29,10 @@ import de.mpg.j2j.annotations.j2jResource;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class ObjectHelper
-{
+public class ObjectHelper {
+	
+	private static Logger logger = Logger.getLogger(ObjectHelper.class);
+	
     /**
      * Ensure that the {@link URI} uses the correct base uri (see property imeji.jena.resource.base_uri)
      * 
@@ -139,7 +147,7 @@ public class ObjectHelper
             }
             catch (Exception e)
             {
-                e.printStackTrace();
+                logger.error("CopyFields issue", e);
             }
         }
     }
@@ -161,7 +169,7 @@ public class ObjectHelper
                 for (Field f1 : getAllObjectFields(obj1.getClass()))
                 {
                     f1.setAccessible(true);
-                    if (f1.getName().equals(f2.getName()) && f1.getType().equals(f2.getType()))
+                    if (f1.getName().equals(f2.getName()) && f1.getType().equals(f2.getType()) && !f2.toGenericString().contains("final"))
                     {
                         f2.set(obj2, f1.get(obj1));
                     }
@@ -169,8 +177,52 @@ public class ObjectHelper
             }
             catch (Exception e)
             {
-                e.printStackTrace();
+                logger.error("copyAllFields issue", e);
             }
         }
+    }
+
+    /**
+     * Transfer a value from {@code obj1} to {@code obj2}. Value wil be get with the {@code getter} method and set
+     * with {@code setter} method. Type of the transferred value should be same for {@code obj1} and {@code obj2}
+     *
+     * @param obj1
+     * @param obj2
+     * 
+     */
+    public static void transferField(String getter, Object obj1, String setter, Object obj2) {
+        if (obj1 == null || obj2 == null || isNullOrEmpty(getter) || isNullOrEmpty(setter))
+            return;
+        Class fromClass = obj1.getClass();
+        Class toClass = obj2.getClass();
+        try {
+
+            Method getterMethod = null;
+            Method setterMethod = null;
+            for (Method m: fromClass.getMethods()) {
+                if (m.getName().equalsIgnoreCase(getter)) {
+                    getterMethod = m;
+                    break;
+                }
+            }
+            for (Method m: toClass.getMethods()) {
+                if (m.getName().equalsIgnoreCase(setter)) {
+                    setterMethod = m;
+                    break;
+                }
+            }
+            if ( getterMethod != null && setterMethod!= null) {
+                Object val = null;
+                val = getterMethod.invoke(obj1);
+                if (val != null) {
+                    setterMethod.invoke(obj2, val);
+                }
+            }
+        } catch (InvocationTargetException e) {
+            logger.error("Invocation Target in transfer Fields", e);
+        } catch (IllegalAccessException e) {
+            logger.error("Illegal Access in transfer fields", e);
+        }
+
     }
 }

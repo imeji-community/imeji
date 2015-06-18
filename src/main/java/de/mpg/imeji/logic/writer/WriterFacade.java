@@ -33,17 +33,22 @@ import java.security.Security;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.NotAllowedError;
+import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.ImejiTriple;
 import de.mpg.imeji.logic.auth.Authorization;
-import de.mpg.imeji.logic.auth.exception.NotAllowedError;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
+import de.mpg.imeji.logic.validation.Validator;
+import de.mpg.imeji.logic.validation.ValidatorFactory;
 import de.mpg.imeji.logic.vo.Container;
+import de.mpg.imeji.logic.vo.Grant;
+import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Space;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
-import de.mpg.imeji.logic.vo.Grant.GrantType;
 
 /**
  * Facade implementing Writer {@link Authorization}
@@ -52,153 +57,193 @@ import de.mpg.imeji.logic.vo.Grant.GrantType;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class WriterFacade implements Writer
-{
-    private static final Logger logger = Logger.getLogger(WriterFacade.class);
-    private Writer writer;
+public class WriterFacade {
+	private Writer writer;
 
-    /**
-     * Constructor for one model
-     */
-    public WriterFacade(String modelURI)
-    {
-        this.writer = WriterFactory.create(modelURI);
-    }
+	/**
+	 * Constructor for one model
+	 */
+	public WriterFacade(String modelURI) {
+		this.writer = WriterFactory.create(modelURI);
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see de.mpg.imeji.logic.writer.Writer#create(java.util.List, de.mpg.imeji.logic.vo.User)
-     */
-    @Override
-    public void create(List<Object> objects, User user) throws Exception
-    {
-        checkSecurity(objects, user, GrantType.CREATE);
-        writer.create(objects, user);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see de.mpg.imeji.logic.writer.Writer#create(java.util.List,
+	 * de.mpg.imeji.logic.vo.User)
+	 */
+	public void create(List<Object> objects, MetadataProfile profile, User user) throws ImejiException {
+		checkSecurity(objects, user, GrantType.CREATE);
+		validate(objects, profile);
+		writer.create(objects, user);
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see de.mpg.imeji.logic.writer.Writer#delete(java.util.List, de.mpg.imeji.logic.vo.User)
-     */
-    @Override
-    public void delete(List<Object> objects, User user) throws Exception
-    {
-        checkSecurity(objects, user, GrantType.DELETE);
-        writer.delete(objects, user);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see de.mpg.imeji.logic.writer.Writer#delete(java.util.List,
+	 * de.mpg.imeji.logic.vo.User)
+	 */
+	public void delete(List<Object> objects, User user) throws ImejiException {
+		checkSecurity(objects, user, GrantType.DELETE);
+		writer.delete(objects, user);
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see de.mpg.imeji.logic.writer.Writer#update(java.util.List, de.mpg.imeji.logic.vo.User)
-     */
-    @Override
-    public void update(List<Object> objects, User user) throws Exception
-    {
-        checkSecurity(objects, user, GrantType.UPDATE);
-        writer.update(objects, user);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see de.mpg.imeji.logic.writer.Writer#update(java.util.List,
+	 * de.mpg.imeji.logic.vo.User), choose to check security
+	 */
+	public void update(List<Object> objects, MetadataProfile profile, User user, boolean doCheckSecurity)
+			throws ImejiException {
+		if (doCheckSecurity)
+			checkSecurity(objects, user, GrantType.UPDATE);
+		validate(objects, profile);
+		writer.update(objects, user);
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see de.mpg.imeji.logic.writer.Writer#updateLazy(java.util.List, de.mpg.imeji.logic.vo.User)
-     */
-    @Override
-    public void updateLazy(List<Object> objects, User user) throws Exception
-    {
-        checkSecurity(objects, user, GrantType.UPDATE);
-        writer.updateLazy(objects, user);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see de.mpg.imeji.logic.writer.Writer#updateLazy(java.util.List,
+	 * de.mpg.imeji.logic.vo.User)
+	 */
+	public void updateLazy(List<Object> objects, MetadataProfile profile, User user)
+			throws ImejiException {
+		checkSecurity(objects, user, GrantType.UPDATE);
+		validate(objects, profile);
+		writer.updateLazy(objects, user);
+	}
 
-    /**
-     * Check {@link Security} for WRITE operations
-     * 
-     * @param list
-     * @param user
-     * @param opType
-     * @throws NotAllowedError
-     */
-    private void checkSecurity(List<Object> list, User user, GrantType gt) throws NotAllowedError
-    {
-        for (Object o : list)
-        {
-            switch (gt)
-            {
-                case CREATE:
-                    throwAuthorizationException(AuthUtil.staticAuth().createNew(user, o), user.getEmail()
-                            + " not allowed to create " + extractID(o));
-                    break;
-                case DELETE:
-                    throwAuthorizationException(AuthUtil.staticAuth().delete(user, o), user.getEmail()
-                            + " not allowed to delete " + extractID(o));
-                    break;
-                case UPDATE:
-                    throwAuthorizationException(AuthUtil.staticAuth().update(user, o), user.getEmail()
-                            + " not allowed to update " + extractID(o));
-                    break;
-                default:
-                    throw new RuntimeException("Wrong Grant type: " + gt);
-            }
-        }
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see de.mpg.imeji.logic.writer.Writer#updatePatch(java.util.List,
+	 * de.mpg.imeji.logic.vo.User)
+	 */
+	public void patch(List<ImejiTriple> triples, User user,
+			boolean doCheckSecurity) throws ImejiException {
+		List<Object> l = new ArrayList<Object>();
+		for (ImejiTriple t : triples)
+			l.add(t.getObject());
+		if (doCheckSecurity)
+			checkSecurity(l, user, GrantType.UPDATE);
+		writer.patch(triples, user, doCheckSecurity);
 
-    /**
-     * Extract the id (as {@link URI}) of an imeji {@link Object},
-     * 
-     * @param o
-     * @return
-     */
-    public static URI extractID(Object o)
-    {
-        if (o instanceof Item)
-        {
-            return ((Item)o).getId();
-        }
-        else if (o instanceof Container)
-        {
-            return ((Container)o).getId();
-        }
-        else if (o instanceof MetadataProfile)
-        {
-            return ((MetadataProfile)o).getId();
-        }
-        else if (o instanceof User)
-        {
-            return URI.create(((User)o).getEmail());
-        }
-        else if (o instanceof UserGroup)
-        {
-            return ((UserGroup)o).getId();
-        }
-        return null;
-    }
+	}
+	
+	private void validate(List<Object> list, MetadataProfile profile) throws UnprocessableError{
+		Validator<Object> validator = (Validator<Object>) ValidatorFactory.newValidator(list.get(0));
+		for(Object o : list){
+			validator.validate(o, profile);
+		}
+	}
 
-    /**
-     * If false, throw a {@link NotAllowedError}
-     * 
-     * @param b
-     * @param message
-     * @throws NotAllowedError
-     */
-    private void throwAuthorizationException(boolean allowed, String message) throws NotAllowedError
-    {
-        if (!allowed)
-        {
-            NotAllowedError e = new NotAllowedError(message);
-            logger.error(e);
-            throw e;
-        }
-    }
+	/**
+	 * Check {@link Security} for WRITE operations
+	 * 
+	 * @param list
+	 * @param user
+	 * @param opType
+	 * @throws NotAllowedError
+	 */
+	private void checkSecurity(List<Object> list, User user, GrantType gt)
+			throws NotAllowedError {
+		String messageHelper = null;
+		for (Object o : list) {
+			messageHelper = " not allowed to " + Grant.getGrantTypeName(gt)
+					+ " " + extractID(o);
+			if (gt == GrantType.CREATE) {
+				throwAuthorizationException(
+						AuthUtil.staticAuth().create(user, o), user.getEmail()
+								+ messageHelper);
+			} else if (gt == GrantType.UPDATE) {
+				throwAuthorizationException(
+						AuthUtil.staticAuth().update(user, o), user.getEmail()
+								+ messageHelper);
 
-    /**
-     * Transform a single {@link Object} into a {@link List} with one {@link Object}
-     * 
-     * @param o
-     * @return
-     */
-    public static List<Object> toList(Object o)
-    {
-        List<Object> list = new ArrayList<Object>();
-        list.add(o);
-        return list;
-    }
+			} else if (gt == GrantType.DELETE) {
+				throwAuthorizationException(
+						AuthUtil.staticAuth().delete(user, o), user.getEmail()
+								+ messageHelper);
+
+			} else if (gt == GrantType.UPDATE_CONTENT) {
+				throwAuthorizationException(AuthUtil.staticAuth()
+						.updateContent(user, o), user.getEmail()
+						+ messageHelper);
+
+			} else if (gt == GrantType.ADMIN_CONTENT) {
+				throwAuthorizationException(
+						AuthUtil.staticAuth().adminContent(user, o),
+						user.getEmail() + messageHelper);
+
+			}
+		}
+	}
+
+	/**
+	 * Check {@link Security} for WRITE operations
+	 * 
+	 * @param list
+	 * @param user
+	 * @param opType
+	 * @throws NotAllowedError
+	 */
+	public void checkSecurityParentObject(List<Object> list, User user,
+			GrantType gt) throws NotAllowedError {
+		checkSecurity(list, user, gt);
+	}
+
+	/**
+	 * Extract the id (as {@link URI}) of an imeji {@link Object},
+	 * 
+	 * @param o
+	 * @return
+	 */
+	public static URI extractID(Object o) {
+		if (o instanceof Item) {
+			return ((Item) o).getId();
+		} else if (o instanceof Container) {
+			return ((Container) o).getId();
+		} else if (o instanceof MetadataProfile) {
+			return ((MetadataProfile) o).getId();
+		} else if (o instanceof Space) {
+			return ((Space) o).getId();
+		} else if (o instanceof User) {
+			return ((User) o).getId();
+		} else if (o instanceof UserGroup) {
+			return ((UserGroup) o).getId();
+		}
+		return null;
+	}
+
+	/**
+	 * If false, throw a {@link NotAllowedError}
+	 * 
+	 * @param b
+	 * @param message
+	 * @throws NotAllowedError
+	 */
+	private void throwAuthorizationException(boolean allowed, String message)
+			throws NotAllowedError {
+		if (!allowed) {
+			throw new NotAllowedError(message);
+		}
+	}
+
+	/**
+	 * Transform a single {@link Object} into a {@link List} with one
+	 * {@link Object}
+	 * 
+	 * @param o
+	 * @return
+	 */
+	public static List<Object> toList(Object o) {
+		List<Object> list = new ArrayList<Object>();
+		list.add(o);
+		return list;
+	}
+
 }

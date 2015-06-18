@@ -10,6 +10,7 @@ import java.util.List;
 import com.hp.hpl.jena.Jena;
 import com.hp.hpl.jena.rdf.model.Model;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.writer.JenaWriter;
@@ -52,7 +53,7 @@ public class JenaReader implements Reader
      * @return
      * @throws Exception
      */
-    public Object readLazy(String uri, User user, Object o) throws Exception
+    public Object readLazy(String uri, User user, Object o) throws ImejiException
     {
         this.lazy = true;
         return read(uri, user, o);
@@ -67,7 +68,7 @@ public class JenaReader implements Reader
      * @return
      * @throws Exception
      */
-    public Object read(String uri, User user, Object o) throws Exception
+    public Object read(String uri, User user, Object o) throws ImejiException
     {
         J2JHelper.setId(o, URI.create(uri));
         List<Object> objects = new ArrayList<Object>();
@@ -87,7 +88,7 @@ public class JenaReader implements Reader
      * @return
      * @throws Exception
      */
-    public List<Object> read(List<Object> objects, User user) throws Exception
+    public List<Object> read(List<Object> objects, User user) throws ImejiException
     {
         Transaction t = new CRUDTransaction(objects, GrantType.READ, modelURI, lazy);
         t.start();
@@ -104,7 +105,7 @@ public class JenaReader implements Reader
      * @return
      * @throws Exception
      */
-    public List<Object> readLazy(List<Object> objects, User user) throws Exception
+    public List<Object> readLazy(List<Object> objects, User user) throws ImejiException
     {
         this.lazy = true;
         return read(objects, user);

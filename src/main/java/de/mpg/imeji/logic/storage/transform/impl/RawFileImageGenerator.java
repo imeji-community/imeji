@@ -41,6 +41,7 @@ import java.net.URISyntaxException;
 import javax.imageio.ImageIO;
 import javax.imageio.stream.FileImageInputStream;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.storage.transform.ImageGenerator;
@@ -78,7 +79,7 @@ public class RawFileImageGenerator implements ImageGenerator
     {
         BufferedImage icon = ImageIO.read(new FileImageInputStream(new File(RawFileImageGenerator.class
                 .getClassLoader().getResource(PATH_TO_DEFAULT_IMAGE).toURI())));
-        icon = writeTextOnImage(icon, extension);
+        icon = writeTextOnImage(icon, extension, file.getName());
         return ImageUtils.toBytes(icon, StorageUtils.getMimeType("jpg"));
     }
 
@@ -89,7 +90,7 @@ public class RawFileImageGenerator implements ImageGenerator
      * @param extension
      * @return
      */
-    private BufferedImage writeTextOnImage(BufferedImage old, String extension)
+    private BufferedImage writeTextOnImage(BufferedImage old, String extension, String fileName)
     {
         int w = old.getWidth();
         int h = old.getHeight();
@@ -99,6 +100,14 @@ public class RawFileImageGenerator implements ImageGenerator
         g2d.setPaint(Color.WHITE);
         g2d.setFont(new Font("Serif", Font.BOLD, TEXT_FONT_SIZE));
         FontMetrics fm = g2d.getFontMetrics();
+
+        //display the filename extension. 
+        //if filename extension is null, simply show the mimetype (if recognized) which comes with the extension parameter of the method.
+        String fileNameExtension = FilenameUtils.getExtension(fileName);
+        if (!fileNameExtension.equals("")) {
+        	extension = fileNameExtension;
+        }
+        
         extension = formatExtension(extension);
         g2d.drawString(extension, TEXT_POSITION_X - fm.stringWidth(extension), TEXT_POSITION_Y);
         g2d.dispose();

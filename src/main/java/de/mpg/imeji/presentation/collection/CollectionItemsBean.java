@@ -3,18 +3,10 @@
  */
 package de.mpg.imeji.presentation.collection;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
-
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.query.URLQueryTransformer;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
@@ -26,11 +18,20 @@ import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.facet.FacetsBean;
 import de.mpg.imeji.presentation.image.ItemsBean;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
-import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectCachedLoader;
 import de.mpg.imeji.presentation.util.ObjectLoader;
+
+import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import static de.mpg.imeji.logic.notification.CommonMessages.getSuccessCollectionDeleteMessage;
 
 /**
  * {@link ItemsBean} to browse {@link Item} of a {@link CollectionImeji}
@@ -66,7 +67,7 @@ public class CollectionItemsBean extends ItemsBean
      * @throws Exception
      */
     @Override
-    public String getInitPage()
+    public String getInitPage() throws Exception
     {
         uri = ObjectHelper.getURI(CollectionImeji.class, id);
         collection = ObjectLoader.loadCollectionLazy(uri, sb.getUser());
@@ -82,8 +83,8 @@ public class CollectionItemsBean extends ItemsBean
     @Override
     public SearchResult search(SearchQuery searchQuery, SortCriterion sortCriterion)
     {
-        ItemController controller = new ItemController(sb.getUser());
-        return controller.search(uri, searchQuery, sortCriterion, null);
+        ItemController controller = new ItemController();
+        return controller.search(uri, searchQuery, sortCriterion, null, sb.getUser(), null);
     }
 
     @Override
@@ -91,16 +92,16 @@ public class CollectionItemsBean extends ItemsBean
     {
         List<SelectItem> sortMenu = new ArrayList<SelectItem>();
         sortMenu.add(new SelectItem(null, "--"));
-        sortMenu.add(new SelectItem(SearchIndex.names.created, sb.getLabel("sort_img_date_created")));
-        sortMenu.add(new SelectItem(SearchIndex.names.modified, sb.getLabel("sort_date_mod")));
-        sortMenu.add(new SelectItem(SearchIndex.names.filename, sb.getLabel("sort_img_filename")));
+        sortMenu.add(new SelectItem(SearchIndex.IndexNames.created, sb.getLabel("sort_img_date_created")));
+        sortMenu.add(new SelectItem(SearchIndex.IndexNames.modified, sb.getLabel("sort_date_mod")));
+        sortMenu.add(new SelectItem(SearchIndex.IndexNames.filename, sb.getLabel("sort_img_filename")));
         setSortMenu(sortMenu);
     }
 
     @Override
     public String getNavigationString()
     {
-        return "pretty:collectionBrowse";
+        return sb.getPrettySpacePage("pretty:collectionBrowse");
     }
 
     @Override
@@ -130,7 +131,7 @@ public class CollectionItemsBean extends ItemsBean
         {
             return "";
         }
-        return navigation.getApplicationUrl() + "collection/" + this.id;
+        return navigation.getApplicationSpaceUrl() + "collection/" + this.id+"/";
     }
 
     /**
@@ -197,15 +198,15 @@ public class CollectionItemsBean extends ItemsBean
         try
         {
             cc.delete(collection, sb.getUser());
-            BeanHelper.info(sb.getMessage("success_collection_delete"));
+            BeanHelper.info(getSuccessCollectionDeleteMessage(collection.getMetadata().getTitle(), sb));
         }
         catch (Exception e)
         {
-            BeanHelper.error(sb.getMessage("success_collection_delete"));
+            BeanHelper.error(getSuccessCollectionDeleteMessage(collection.getMetadata().getTitle(), sb));
             BeanHelper.error(e.getMessage());
             logger.error("Error deleting collection", e);
         }
-        return "pretty:collections";
+        return sb.getPrettySpacePage("pretty:collections");
     }
 
     /**
@@ -246,5 +247,11 @@ public class CollectionItemsBean extends ItemsBean
     public void setProfile(MetadataProfile profile)
     {
         this.profile = profile;
+    }
+    
+    @Override
+    public String getType() {
+    	return PAGINATOR_TYPE.COLLECTION_ITEMS.name();
+    	
     }
 }

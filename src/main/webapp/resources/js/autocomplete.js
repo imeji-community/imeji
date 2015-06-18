@@ -45,7 +45,8 @@ function setInputValue(inputId, value) {
 $(function() {
 
 	// This add auto-complete to all input fields on page,
-	$(":input[type=text], textarea")
+	//$(":input[type=text], textarea")
+	$(".autocomplete_js")
 	// don't navigate away from the field on tab when selecting an item
 	.bind(
 			"keydown",
@@ -125,14 +126,11 @@ $(function() {
 			}
 			// Write the value of the current input
 			setInputValue(this.id, ui.item.value);
-			setInputValue(inputId + "inputFamilyName", ui.item.family);
-			setInputValue(inputId + "inputFirstName", ui.item.givenname);
-			setInputValue(inputId + "inputAlternative", ui.item.alternatives);
 			setInputValue(inputId + "inputIdentifier", ui.item.id);
-			setInputValue(inputId + "inputOrganization", ui.item.orgs);
 			setInputValue(inputId + "inputLatitude", ui.item.latitude);
 			setInputValue(inputId + "inputLongitude", ui.item.longitude);
 			setInputValue(inputId + "inputLicenseId", ui.item.licenseId);
+			
 			return false;
 		}
 	}).focus(function() {

@@ -1,22 +1,7 @@
 package de.mpg.imeji.presentation.user;
 
-import java.io.Serializable;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-
-import org.apache.log4j.Logger;
-
 import com.hp.hpl.jena.sparql.pfunction.library.container;
 import com.ocpsoft.pretty.PrettyContext;
-
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
@@ -25,23 +10,27 @@ import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserGroupController;
 import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.Album;
-import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.Container;
-import de.mpg.imeji.logic.vo.Grant;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Properties;
-import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.logic.vo.UserGroup;
+import de.mpg.imeji.logic.util.UrlHelper;
+import de.mpg.imeji.logic.vo.*;
 import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.history.PageURIHelper;
+import de.mpg.imeji.presentation.history.HistoryUtil;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.user.util.EmailClient;
 import de.mpg.imeji.presentation.user.util.EmailMessages;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
-import de.mpg.imeji.presentation.util.UrlHelper;
+import org.apache.log4j.Logger;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import java.io.Serializable;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 @ManagedBean(name = "ShareBean")
 @ViewScoped
@@ -83,13 +72,14 @@ public class ShareBean implements Serializable
 
     public enum ShareType
     {
-        READ, CREATE, EDIT_ITEM, DELETE, EDIT_CONTAINER, EDIT_PROFILE, ADMIN
+        READ, CREATE, EDIT_ITEM, DELETE_ITEM, EDIT_CONTAINER, EDIT_PROFILE, ADMIN
     }
 
     /**
      * Init {@link ShareBean} for {@link CollectionImeji}
+     * @throws Exception 
      */
-    public void initShareCollection()
+    public void initShareCollection() throws Exception
     {
         this.shareTo = null;
         this.profileUri = null;
@@ -109,8 +99,9 @@ public class ShareBean implements Serializable
 
     /**
      * Init {@link ShareBean} for {@link Album}
+     * @throws Exception 
      */
-    public void initShareAlbum()
+    public void initShareAlbum() throws Exception
     {
         this.type = SharedObjectType.ALBUM;
         this.shareTo = null;
@@ -131,13 +122,14 @@ public class ShareBean implements Serializable
      * Loaded when the shre component is called from the item page
      * 
      * @return
+     * @throws Exception 
      */
-    public String getInitShareItem()
+    public String getInitShareItem() throws Exception
     {
         this.type = SharedObjectType.ITEM;
         this.profileUri = null;
         this.shareTo = null;
-        this.uri = PageURIHelper.extractId(PrettyContext.getCurrentInstance().getRequestURL().toString());
+        this.uri = HistoryUtil.extractURI(PrettyContext.getCurrentInstance().getRequestURL().toString());
         Item item = ObjectLoader.loadItem(uri, user);
         if (item != null)
         {
@@ -320,7 +312,7 @@ public class ShareBean implements Serializable
     public void retrieveSharedUserWithGrants()
     {
         UserController uc = new UserController(Imeji.adminUser);
-        Collection<User> allUser = uc.retrieveUserWithGrantFor(getShareToUri());
+        Collection<User> allUser = uc.searchByGrantFor(getShareToUri());
         sharedWith = new ArrayList<>();
         for (User u : allUser)
         {
@@ -365,7 +357,7 @@ public class ShareBean implements Serializable
         }
         if (type == SharedObjectType.COLLECTION && hasDeleteItemGrants(grants, containerUri))
         {
-            l.add(ShareType.DELETE.toString());
+            l.add(ShareType.DELETE_ITEM.toString());
         }
         if (hasEditContainerGrants(grants, containerUri))
         {
@@ -454,7 +446,7 @@ public class ShareBean implements Serializable
                     case "EDIT_ITEM":
                         grantsStr += "- " + sb.getLabel("collection_share_image_edit") + "\n";
                         break;
-                    case "DELETE":
+                    case "DELETE_ITEM":
                         grantsStr += "- " + sb.getLabel("collection_share_image_delete") + "\n";
                         break;
                     case "EDIT_CONTAINER":
@@ -535,7 +527,7 @@ public class ShareBean implements Serializable
                 case "EDIT_ITEM":
                     grants.addAll(AuthorizationPredefinedRoles.edit(containerUri, profileUri));
                     break;
-                case "DELETE":
+                case "DELETE_ITEM":
                     grants.addAll(AuthorizationPredefinedRoles.delete(containerUri, profileUri));
                     break;
                 case "EDIT_CONTAINER":
@@ -704,8 +696,8 @@ public class ShareBean implements Serializable
      */
     private boolean hasContent(Container c)
     {
-        ItemController ic = new ItemController(user);
-        return ic.findContainerItems(c, user, 1).getImages().size() > 0;
+        ItemController ic = new ItemController();
+        return ic.searchAndSetContainerItemsFast(c, user, 1).getImages().size() > 0;
     }
 
     public void clearError()
@@ -792,7 +784,7 @@ public class ShareBean implements Serializable
                     selectedGrants.add(ShareType.READ.toString());
                     selectedGrants.add(ShareType.CREATE.toString());
                     selectedGrants.add(ShareType.EDIT_ITEM.toString());
-                    selectedGrants.add(ShareType.DELETE.toString());
+                    selectedGrants.add(ShareType.DELETE_ITEM.toString());
                     selectedGrants.add(ShareType.EDIT_CONTAINER.toString());
                     selectedGrants.add(ShareType.EDIT_PROFILE.toString());
                     selectedGrants.add(ShareType.ADMIN.toString());

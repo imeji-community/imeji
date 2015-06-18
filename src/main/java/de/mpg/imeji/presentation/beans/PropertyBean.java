@@ -37,6 +37,7 @@ import javax.faces.bean.ManagedBean;
 import org.apache.commons.io.FilenameUtils;
 
 import de.mpg.imeji.logic.util.StringHelper;
+import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
@@ -48,154 +49,124 @@ import de.mpg.imeji.presentation.util.PropertyReader;
  */
 @ManagedBean(name = "Property")
 @ApplicationScoped
-public class PropertyBean
-{
-    /**
-     * True if Digilib is enabled
-     */
-    private boolean digilibEnabled = false;
-    /**
-     * The base of the path to the internal storage
-     */
-    private String internalStorageBase = "files";
-    private String appName;
-    /**
-     * The base of the uri of imeji objects
-     */
-    private static String baseURI;
-    private static String applicationURL;
-    private static String css_default;
-    private static String css_alternate;
+public class PropertyBean {
+	/**
+	 * True if Digilib is enabled
+	 */
+	private boolean digilibEnabled = false;
+	/**
+	 * The base of the path to the internal storage
+	 */
+	private String internalStorageBase = "files";
+	/**
+	 * The base of the uri of imeji objects
+	 */
+	private static String baseURI;
+	private static String applicationURL;
 
-    /**
-     * Default constructor
-     */
-    public PropertyBean()
-    {
-        try
-        {
-            this.digilibEnabled = Boolean.parseBoolean(PropertyReader.getProperty("imeji.digilib.enable"));
-            this.internalStorageBase = FilenameUtils.getBaseName(FilenameUtils.normalizeNoEndSeparator(PropertyReader
-                    .getProperty("imeji.storage.path")));
-            applicationURL = StringHelper.normalizeURI(PropertyReader.getProperty("imeji.instance.url"));
-            css_default = PropertyReader.getProperty("imeji.layout.css_default");
-            css_alternate = PropertyReader.getProperty("imeji.layout.css_alternate");
-            readBaseUri();
-            this.appName = PropertyReader.getProperty("imeji.instance.name");
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException("Error reading properties: ", e);
-        }
-    }
+	/**
+	 * Default constructor
+	 */
+	public PropertyBean() {
+		try {
+			this.digilibEnabled = Boolean.parseBoolean(PropertyReader
+					.getProperty("imeji.digilib.enable"));
+			this.internalStorageBase = FilenameUtils.getBaseName(FilenameUtils
+					.normalizeNoEndSeparator(PropertyReader
+							.getProperty("imeji.storage.path")));
+			applicationURL = StringHelper.normalizeURI(PropertyReader
+					.getProperty("imeji.instance.url"));
+			readBaseUri();
+		} catch (Exception e) {
+			throw new RuntimeException("Error reading properties: ", e);
+		}
+	}
 
-    public String getAppName()
-    {
-        return appName;
-    }
 
-    public void setAppName(String appName)
-    {
-        this.appName = appName;
-    }
+	/**
+	 * Function reads each property from imeji.properties file
+	 * 
+	 * @param key
+	 *            - property name
+	 * @return String - trimmed value of key
+	 */
+	public String getProperty(String key) {
+		try {
+			return PropertyReader.getProperty(key).trim();
+		} catch (Exception e) {
+			throw new RuntimeException("Error reading properties: ", e);
+		}
+	}
 
-    /**
-     * Read in the property the base Uri
-     */
-    private void readBaseUri()
-    {
-        try
-        {
-            baseURI = StringHelper.normalizeURI(PropertyReader.getProperty("imeji.jena.resource.base_uri"));
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException("Error reading properties: ", e);
-        }
-        if (baseURI == null || baseURI.trim().equals("/"))
-        {
-            baseURI = applicationURL;
-        }
-        if (baseURI == null)
-        {
-            throw new RuntimeException("Error in properties. Check property: imeji.instance.url");
-        }
-    }
+	/**
+	 * Read in the property the base Uri
+	 */
+	private void readBaseUri() {
+		try {
+			baseURI = StringHelper.normalizeURI(PropertyReader
+					.getProperty("imeji.jena.resource.base_uri"));
+		} catch (Exception e) {
+			throw new RuntimeException("Error reading properties: ", e);
+		}
+		if (baseURI == null || baseURI.trim().equals("/")) {
+			baseURI = applicationURL;
+		}
+		if (baseURI == null) {
+			throw new RuntimeException(
+					"Error in properties. Check property: imeji.instance.url");
+		}
+	}
 
-    /**
-     * @return the digilibEnabled
-     */
-    public boolean isDigilibEnabled()
-    {
-        return digilibEnabled;
-    }
+	/**
+	 * @return the digilibEnabled
+	 */
+	public boolean isDigilibEnabled() {
+		return digilibEnabled;
+	}
 
-    /**
-     * @return the internalStorageBase
-     * @throws URISyntaxException
-     * @throws IOException
-     */
-    public String getInternalStorageBase() throws IOException, URISyntaxException
-    {
-        this.internalStorageBase = FilenameUtils.getBaseName(FilenameUtils.normalizeNoEndSeparator(PropertyReader
-                .getProperty("imeji.storage.path")));
-        return internalStorageBase;
-    }
+	/**
+	 * @return the internalStorageBase
+	 * @throws URISyntaxException
+	 * @throws IOException
+	 */
+	public String getInternalStorageBase() throws IOException,
+			URISyntaxException {
+		this.internalStorageBase = FilenameUtils.getBaseName(FilenameUtils
+				.normalizeNoEndSeparator(PropertyReader
+						.getProperty("imeji.storage.path")));
+		return internalStorageBase;
+	}
 
-    /**
-     * @return the baseURI
-     */
-    public String getBaseURI()
-    {
-        return baseURI;
-    }
+	/**
+	 * @return the baseURI
+	 */
+	public String getBaseURI() {
+		return baseURI;
+	}
 
-    /**
-     * Static getter
-     * 
-     * @return
-     */
-    public static String baseURI()
-    {
-        return baseURI;
-    }
+	/**
+	 * Static getter
+	 * 
+	 * @return
+	 */
+	public static String baseURI() {
+		return baseURI;
+	}
 
-    /**
-     * @return the applicationURL
-     */
-    public static String getApplicationURL()
-    {
-        return applicationURL;
-    }
+	/**
+	 * @return the applicationURL
+	 */
+	public static String getApplicationURL() {
+		return applicationURL;
+	}
 
-    /**
-     * Static getter
-     * 
-     * @return
-     */
-    public static String applicationURL()
-    {
-        return applicationURL;
-    }
-
-//    public static String getCss_default()
-//    {
-//        return css_default;
-//    }
-//
-//    public static void setCss_default(String css_default)
-//    {
-//        PropertyBean.css_default = css_default;
-//    }
-//
-//    public static String getCss_alternate()
-//    {
-//        return css_alternate;
-//    }
-//
-//    public static void setCss_dark(String css_alternate)
-//    {
-//        PropertyBean.css_alternate = css_alternate;
-//    }
+	/**
+	 * Static getter
+	 * 
+	 * @return
+	 */
+	public static String applicationURL() {
+		return applicationURL;
+	}
 
 }

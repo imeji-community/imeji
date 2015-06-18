@@ -3,8 +3,12 @@
  */
 package de.mpg.imeji.presentation.servlet;
 
-import java.io.IOException;
-import java.util.Date;
+import de.mpg.imeji.logic.export.ExportManager;
+import de.mpg.imeji.logic.notification.NotificationUtils;
+import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.session.SessionBean;
+import org.apache.http.client.HttpResponseException;
 
 import javax.faces.FactoryFinder;
 import javax.faces.component.UIViewRoot;
@@ -18,17 +22,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import org.apache.http.client.HttpResponseException;
-
-import de.mpg.imeji.logic.export.ExportManager;
-import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.session.SessionBean;
+import java.io.IOException;
+import java.util.Date;
 
 public class ExportServlet extends HttpServlet
 {
     private static final long serialVersionUID = -777947169051357999L;
+
 
     /**
      * {@inheritDoc}
@@ -58,7 +58,12 @@ public class ExportServlet extends HttpServlet
             resp.setStatus(HttpServletResponse.SC_OK);
             SearchResult result = exportManager.search();
             exportManager.export(result);
+
+            NotificationUtils.notifyByExport(user, exportManager.getExport(), session);
+
             resp.getOutputStream().flush();
+
+
         }
         catch (HttpResponseException he)
         {
@@ -69,6 +74,7 @@ public class ExportServlet extends HttpServlet
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
+
 
     /**
      * Get the {@link SessionBean} from the {@link HttpSession}

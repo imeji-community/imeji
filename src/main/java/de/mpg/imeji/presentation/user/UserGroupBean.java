@@ -177,7 +177,7 @@ public class UserGroupBean implements Serializable
         {
             BeanHelper.error("Error creating user group");
         }
-        return "pretty:userGroups";
+        return ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getPrettySpacePage("pretty:userGroups");
     }
     
     /**

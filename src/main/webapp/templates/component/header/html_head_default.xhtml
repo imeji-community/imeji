@@ -1,8 +1,8 @@
-<ui:composition 
-	xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core">
+<ui:composition
+		xmlns="http://www.w3.org/1999/xhtml"
+		xmlns:ui="http://java.sun.com/jsf/facelets"
+		xmlns:h="http://java.sun.com/jsf/html"
+		>
 <ui:remove>
 <!--
 /* 
@@ -38,10 +38,13 @@ All rights reserved. Use is subject to license terms.
 	<meta http-equiv="pragma" content="no-cache"/>
 	<meta http-equiv="cache-control" content="no-cache"/>
 	<meta http-equiv="expires" content="0"/>
-	<title><h:outputText value="#{PropertyBean.appName} - #{HistorySession.currentPage.internationalizedName}"/></title>
-		
-	<link type="text/css" rel="stylesheet" href="/imeji/jsf/javax.faces.resource/basic.css?ln=css" />
+	<title><h:outputText value="#{Configuration.instanceName} - #{HistorySession.currentPage.internationalizedName}"/></title>
+	<link rel="shortcut icon" type="image/png" href="#{Navigation.applicationUrl}resources/icon/imeji.ico"/>
 	
+	<ui:fragment rendered="#{Configuration.metaDescription != ''}">
+		<meta name="description" content="#{Configuration.metaDescription}"/>
+	</ui:fragment>
+		
 	<h:inputHidden value="#{SessionBean.checkCss(Configuration.defaultCss, Configuration.alternativeCss)}" />
 	
 	<ui:fragment rendered="#{SessionBean.selectedCss != 'NONE'}">
@@ -53,19 +56,20 @@ All rights reserved. Use is subject to license terms.
 		</ui:fragment>
 	</ui:fragment>
 	
+	
 	<h:outputStylesheet library="css/theme_default" name="app.css" id="themeDefault" rendered="#{SessionBean.selectedCss == 'NONE'}"/>
 	
-	<link rel="shortcut icon" type="image/x-ico" href="#{Navigation.applicationUrl}resources/icon/imeji.ico"/>
-	<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+
+	<script type="text/javascript" src="#{Navigation.applicationUrl}resources/jquery/jquery-1.11.1.min.js"></script>
 	
 	<ui:fragment rendered="#{SessionBean.locale == 'en' or SessionBean.locale == 'es'}">
-		<script type="text/javascript">var placeholder_username = 'username'; var placeholder_password = 'password'; var placeholder_simpleSearch = 'search for ...';</script>
+		<script type="text/javascript">var placeholder_simpleSearch = 'search for ...';</script>
 	</ui:fragment>
 	<ui:fragment rendered="#{SessionBean.locale == 'de'}">
-		<script type="text/javascript">var placeholder_username = 'Benutzername'; var placeholder_password = 'Passwort'; var placeholder_simpleSearch = 'Suche nach ...';</script>
+		<script type="text/javascript">var placeholder_simpleSearch = 'Suche nach ...';</script>
 	</ui:fragment>
 	<ui:fragment rendered="#{SessionBean.locale == 'jp' or SessionBean.locale == 'ja'}">
-		<script type="text/javascript">var placeholder_username = 'username'; var placeholder_password = 'password'; var placeholder_simpleSearch = '検索キーワード...';</script>
+		<script type="text/javascript">var placeholder_simpleSearch = '検索キーワード...';</script>
 	</ui:fragment>
 	
 	
@@ -75,15 +79,15 @@ All rights reserved. Use is subject to license terms.
 		 
 		$(function(){
 			//add placeholders for meta menu (username and password) and simple search
-			$(".imj_metaMenuStandardSingleLine input[type='text']").attr("placeholder", placeholder_username);
-			$(".imj_metaMenuStandardSingleLine input[type='password']").attr("placeholder", placeholder_password);
+			//$(".imj_metaMenuStandardSingleLine input[type='text']").attr("placeholder", placeholder_username);
+			//$(".imj_metaMenuStandardSingleLine input[type='password']").attr("placeholder", placeholder_password);
 			$(".imj_simpleSearchInput").attr("placeholder", placeholder_simpleSearch);
 		});
 	</script>
 	
 	<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/eSciDoc_inc.js"></script>
 	
-	<script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
+	<script src="#{Navigation.applicationUrl}resources/jquery/ui/1.10.4/jquery-ui.min.js"></script>
 	
 	<ui:insert name="additonalHeaderScripts"/>
 	

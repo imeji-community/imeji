@@ -34,6 +34,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -44,6 +47,7 @@ import de.escidoc.core.client.Authentication;
 import de.escidoc.core.client.ItemHandlerClient;
 import de.escidoc.core.client.StagingHandlerClient;
 import de.escidoc.core.resources.om.item.Item;
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.UploadResult;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
@@ -129,7 +133,7 @@ public class EscidocStorage implements Storage
      * @see de.mpg.imeji.logic.storage.Storage#read(java.lang.String)
      */
     @Override
-    public void read(String url, OutputStream out, boolean close)
+    public void read(String url, OutputStream out, boolean close) throws ImejiException
     {
         GetMethod get = StorageUtils.newGetMethod(client, url);
         get.addRequestHeader("Cookie", getEscidocCookie());
@@ -294,5 +298,14 @@ public class EscidocStorage implements Storage
     {
         // TODO Auto-generated method stub
         return null;
+    }
+    
+    
+    /* (non-Javadoc)
+     * @see de.mpg.imeji.logic.storage.Storage#readFileStringContent(java.lang.String)
+     */
+    @Override
+    public String readFileStringContent(String url) {
+		return null;
     }
 }

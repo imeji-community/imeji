@@ -28,17 +28,19 @@
  */
 package de.mpg.imeji.logic.export.format.explain;
 
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.net.URI;
-
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.export.format.ExplainExport;
 import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.query.URLQueryTransformer;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.presentation.search.URLQueryTransformer;
 import de.mpg.imeji.presentation.util.ObjectCachedLoader;
+import org.apache.log4j.Logger;
+
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.net.URI;
 
 /**
  * {@link ExplainExport} for the metadata search index
@@ -49,7 +51,9 @@ import de.mpg.imeji.presentation.util.ObjectCachedLoader;
  */
 public class MetadataExplainExport extends ExplainExport
 {
-    /*
+
+    private static Logger logger = Logger.getLogger(MetadataExplainExport.class);
+/*
      * (non-Javadoc)
      * @see de.mpg.imeji.logic.export.Export#export(java.io.OutputStream, de.mpg.imeji.logic.search.SearchResult)
      */
@@ -62,15 +66,20 @@ public class MetadataExplainExport extends ExplainExport
             writer.append(getRDFTagOpen());
             for (String colURI : sr.getResults())
             {
-                CollectionImeji col = ObjectCachedLoader.loadCollection(URI.create(colURI));
-                for (Statement st : ObjectCachedLoader.loadProfile(col.getProfile()).getStatements())
-                {
-                    for (SearchIndex index : SearchIndex.getAllIndexForStatement(st))
-                    {
-                        writer.append(getIndexTag(URLQueryTransformer.transformStatementToIndex(st.getId(), index),
-                                index.getNamespace()));
-                    }
-                }
+            	try {
+	            	CollectionImeji col = ObjectCachedLoader.loadCollection(URI.create(colURI));
+	                for (Statement st : ObjectCachedLoader.loadProfile(col.getProfile()).getStatements())
+	                {
+	                    for (SearchIndex index : SearchIndex.getAllIndexForStatement(st))
+	                    {
+	                        writer.append(getIndexTag(URLQueryTransformer.transformStatementToIndex(st.getId(), index),
+	                                index.getNamespace()));
+	                    }
+	                }
+            	}
+            	catch (ImejiException iec) {
+            		logger.info("Could not export the Collection with URI="+ colURI);
+            	}
             }
             writer.append(getRDFTagClose());
         }

@@ -42,100 +42,92 @@ import de.mpg.imeji.logic.vo.User;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class HttpAuthentication implements Authentication
-{
-    /**
-     * The content of the http header
-     */
-    private String usernamePassword = null;
+public class HttpAuthentication implements Authentication {
+	/**
+	 * The content of the http header
+	 */
+	private String usernamePassword = null;
 
-    /**
-     * Constructor
-     */
-    public HttpAuthentication(HttpServletRequest request)
-    {
-        usernamePassword = getUsernamePassword(request);
-    }
+	/**
+	 * Constructor
+	 */
+	public HttpAuthentication(HttpServletRequest request) {
+		usernamePassword = getUsernamePassword(request);
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see de.mpg.imeji.logic.auth.Authentification#doLogin()
-     */
-    @Override
-    public User doLogin()
-    {
-        if (usernamePassword != null)
-        {
-            int p = usernamePassword.indexOf(":");
-            if (p != -1)
-            {
-                SimpleAuthentication simpleAuthentification = new SimpleAuthentication(getUserLogin(),
-                        getUserPassword());
-                return simpleAuthentification.doLogin();
-            }
-        }
-        return null;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see de.mpg.imeji.logic.auth.Authentification#doLogin()
+	 */
+	@Override
+	public User doLogin() {
+		if (usernamePassword != null) {
+			int p = usernamePassword.indexOf(":");
+			if (p != -1) {
+				SimpleAuthentication simpleAuthentification = new SimpleAuthentication(
+						getUserLogin(), getUserPassword());
+				return simpleAuthentification.doLogin();
+			}
+		}
+		return null;
+	}
 
-    /**
-     * Utility method to read the username and password in the {@link HttpServletRequest} (separated by a colon).
-     * 
-     * @param request
-     * @return The username and password combination
-     */
-    private String getUsernamePassword(HttpServletRequest request)
-    {
-        String authHeader = request.getHeader("Authorization");
-        if (authHeader != null)
-        {
-            String userPass = new String(Base64.decodeBase64(authHeader.getBytes()));
-            return userPass;
-        }
-        return null;
-    }
+	/**
+	 * Utility method to read the username and password in the
+	 * {@link HttpServletRequest} (separated by a colon).
+	 * 
+	 * @param request
+	 * @return The username and password combination
+	 */
+	private String getUsernamePassword(HttpServletRequest request) {
+		String authHeader = request.getHeader("Authorization");
+		if (authHeader != null) {
+			String userPass = new String(Base64.decodeBase64(authHeader
+					.replace("Basic ", "").trim().getBytes()));
+			return userPass;
+		}
+		return null;
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see de.mpg.imeji.logic.auth.Authentification#getUserLogin()
-     */
-    @Override
-    public String getUserLogin()
-    {
-        if (usernamePassword != null)
-        {
-            int p = usernamePassword.indexOf(":");
-            if (p != -1)
-            {
-                return usernamePassword.substring(0, p);
-            }
-        }
-        return null;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see de.mpg.imeji.logic.auth.Authentification#getUserLogin()
+	 */
+	@Override
+	public String getUserLogin() {
+		if (usernamePassword != null) {
+			int p = usernamePassword.indexOf(":");
+			if (p != -1) {
+				return usernamePassword.substring(0, p);
+			}
+		}
+		return null;
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see de.mpg.imeji.logic.auth.Authentification#getUserPassword()
-     */
-    @Override
-    public String getUserPassword()
-    {
-        if (usernamePassword != null)
-        {
-            int p = usernamePassword.indexOf(":");
-            if (p != -1)
-            {
-                return usernamePassword.substring(p + 1);
-            }
-        }
-        return null;
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see de.mpg.imeji.logic.auth.Authentification#getUserPassword()
+	 */
+	@Override
+	public String getUserPassword() {
+		if (usernamePassword != null) {
+			int p = usernamePassword.indexOf(":");
+			if (p != -1) {
+				return usernamePassword.substring(p + 1);
+			}
+		}
+		return null;
+	}
 
-    /**
-     * True if the request has informations about the login (user and password)
-     * @return
-     */
-    public boolean hasLoginInfos()
-    {
-        return usernamePassword != null;
-    }
+	/**
+	 * True if the request has informations about the login (user and password)
+	 * 
+	 * @return
+	 */
+	public boolean hasLoginInfos() {
+		return usernamePassword != null;
+	}
 }

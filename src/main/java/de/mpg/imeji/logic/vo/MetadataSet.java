@@ -18,8 +18,11 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.log4j.Logger;
+
 import com.hp.hpl.jena.ontology.Profile;
 
+import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jList;
 import de.mpg.j2j.annotations.j2jResource;
@@ -34,21 +37,23 @@ import de.mpg.j2j.annotations.j2jResource;
 @j2jResource("http://imeji.org/terms/metadataSet")
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlRootElement(name = "metadataSet", namespace = "http://imeji.org/terms")
+@XmlRootElement(name = "metadataSet", namespace = "http://imeji.org/terms/")
 public class MetadataSet implements Serializable
 {
     private static final long serialVersionUID = 6306551656394348422L;
-    @j2jList("http://imeji.org/terms/metadata")
+    @j2jList(ImejiNamespaces.METADATA)
     private Collection<Metadata> metadata = new ArrayList<Metadata>();
     @j2jResource("http://imeji.org/terms/mdprofile")
     private URI profile;
     private URI id;
+    
+	private static Logger logger = Logger.getLogger(MetadataSet.class);
 
     public MetadataSet()
     {
     }
 
-    @XmlElement(name = "metadata", namespace = "http://imeji.org/terms")
+    @XmlElement(name = "metadata", namespace = "http://imeji.org/terms/")
     public Collection<Metadata> getMetadata()
     {
         sortMetadata();
@@ -60,7 +65,7 @@ public class MetadataSet implements Serializable
         this.metadata = metadata;
     }
 
-    @XmlElement(name = "profile", namespace = "http://imeji.org/terms")
+    @XmlElement(name = "profile", namespace = "http://imeji.org/terms/")
     public URI getProfile()
     {
         return profile;
@@ -99,28 +104,9 @@ public class MetadataSet implements Serializable
             method = this.getClass().getMethod(methodName);
             ret = method.invoke(this);
         }
-        catch (SecurityException e)
+        catch (SecurityException | NoSuchMethodException | IllegalArgumentException | IllegalAccessException | InvocationTargetException e)
         {
-            e.printStackTrace();
-        }
-        catch (NoSuchMethodException e)
-        {
-            e.printStackTrace();
-        }
-        catch (IllegalArgumentException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        catch (IllegalAccessException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        catch (InvocationTargetException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        	logger.error("Some issues with getValueFromMethod ", e);
         }
         return ret;
     }

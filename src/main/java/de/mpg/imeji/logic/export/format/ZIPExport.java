@@ -28,18 +28,7 @@
  */
 package de.mpg.imeji.logic.export.format;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipException;
-import java.util.zip.ZipOutputStream;
-
-import org.apache.http.client.HttpResponseException;
-
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.export.Export;
@@ -49,6 +38,20 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import org.apache.http.client.HttpResponseException;
+import org.apache.log4j.Logger;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
+import java.util.zip.ZipOutputStream;
 
 /**
  * {@link Export} images in zip
@@ -61,6 +64,12 @@ public class ZIPExport extends Export
 {
     protected List<String> filteredResources = new ArrayList<String>();
     protected String modelURI;
+    private static Logger logger = Logger.getLogger(ZIPExport.class);
+
+
+
+    private Map<URI, Integer> itemsPerCollection;
+
 
     /**
      * @param type
@@ -69,6 +78,7 @@ public class ZIPExport extends Export
      */
     public ZIPExport(String type) throws HttpResponseException
     {
+        itemsPerCollection = new HashMap<URI, Integer>();
         boolean supported = false;
         if ("image".equalsIgnoreCase(type))
         {
@@ -96,7 +106,7 @@ public class ZIPExport extends Export
         catch (Exception e)
         {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.info("Some problems with ZIP Export",  e);
         }
     }
 
@@ -117,11 +127,12 @@ public class ZIPExport extends Export
 
     /**
      * This method exports all images of the current browse page as a zip file
+     * @throws ImejiException 
      * 
      * @throws Exception
      * @throws URISyntaxException
      */
-    public void exportAllImages(SearchResult sr, OutputStream out) throws URISyntaxException, Exception
+    public void exportAllImages(SearchResult sr, OutputStream out) throws ImejiException 
     {
         List<String> source = sr.getResults();
         ZipOutputStream zip = new ZipOutputStream(out);
@@ -131,11 +142,14 @@ public class ZIPExport extends Export
             for (int i = 0; i < source.size(); i++)
             {
                 SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-                ItemController ic = new ItemController(session.getUser());
-                Item item = ic.retrieve(new URI(source.get(i)));
-                StorageController sc = new StorageController();
+                ItemController ic = new ItemController();
+                Item item = null;
+                StorageController sc = null;
                 try
                 {
+                 item = ic.retrieve(new URI(source.get(i)), session.getUser());
+                 updateMetrics(item);
+                 sc = new StorageController();
                     zip.putNextEntry(new ZipEntry(item.getFilename()));
                     sc.read(item.getFullImageUrl().toString(), zip, false);
                     // Complete the entry
@@ -151,17 +165,44 @@ public class ZIPExport extends Export
                         // Complete the entry
                         zip.closeEntry();
                     }
+                 }
+                catch (ImejiException e) {
+                	logger.info("Could not retrieve Item for export!");
+                }
+                catch (URISyntaxException eui) {
+                	logger.info("Could not create URI during retrieval and export! ");
                 }
             }
         }
         catch (IOException e)
         {
-            e.printStackTrace();
+            logger.info("Some IO Exception when exporting all images!", e);
         }
-        finally
-        {
-            // Complete the ZIP file
-            zip.close();
+       
+        try {
+        // 	Complete the ZIP file
+        	zip.close();
+        }
+        catch (IOException ioe) {
+        	logger.info("Could not close the ZIP File!");
         }
     }
+
+    private void updateMetrics(Item item) {
+        //only images for the moment!
+        if ( modelURI.equals(Imeji.imageModel) ) {
+            if (itemsPerCollection.containsKey(item.getCollection())) {
+                int newVal = itemsPerCollection.get(item.getCollection()).intValue() + 1;
+                itemsPerCollection.put(item.getCollection(), Integer.valueOf(newVal));
+            } else {
+                itemsPerCollection.put(item.getCollection(), new Integer(1));
+            }
+        }
+    }
+
+    public Map<URI, Integer> getItemsPerCollection() {
+        return itemsPerCollection;
+    }
+
+
 }

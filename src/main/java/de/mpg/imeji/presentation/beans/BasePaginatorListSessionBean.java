@@ -3,19 +3,17 @@
  */
 package de.mpg.imeji.presentation.beans;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.faces.context.FacesContext;
-import javax.faces.event.ValueChangeEvent;
-import javax.faces.model.SelectItem;
-
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CookieUtils;
 import de.mpg.imeji.presentation.util.PropertyReader;
+import org.apache.log4j.Logger;
+
+import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.model.SelectItem;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This abstract bean class is used to manage lists with one or two paginators. It can work together with different
@@ -82,6 +80,18 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
      */
     private int totalNumberOfElements = 0;
     private boolean ajaxMode = true;
+    
+    /**
+     * Types of paginators
+     * 
+     * @author saquet (initial creation)
+     * @author $Author$ (last modification)
+     * @version $Revision$ $LastChangedDate$
+     */
+    public enum PAGINATOR_TYPE
+    {
+        ITEMS, COLLECTIONS, ALBUMS, ALBUM_ITEMS, COLLECTION_ITEMS, PRIVATE;
+    }
 
     /**
      * Initializes a new BasePaginatorListSessionBean
@@ -173,7 +183,6 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
         {
             BeanHelper.error(e.getMessage());
             logger.error("Error paginator list update ", e);
-            e.printStackTrace();
         }
     }
 
@@ -698,4 +707,11 @@ public abstract class BasePaginatorListSessionBean<ListElementType>
     {
         return ajaxMode;
     }
+    
+    /**
+     * return the {@link PAGINATOR_TYPE} of the current bean
+     * 
+     * @return
+     */
+    public abstract String getType();
 }

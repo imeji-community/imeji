@@ -11,6 +11,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.j2j.annotations.j2jDataType;
 import de.mpg.j2j.annotations.j2jId;
@@ -19,67 +20,62 @@ import de.mpg.j2j.annotations.j2jResource;
 
 /**
  * {@link Metadata} of type text
- * 
+ *
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-@j2jResource("http://imeji.org/terms/metadata")
+@j2jResource(ImejiNamespaces.METADATA)
 @j2jDataType("http://imeji.org/terms/metadata#text")
 @j2jId(getMethod = "getId", setMethod = "setId")
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlRootElement(name = "text", namespace = "http://imeji.org/terms/metadata")
+@XmlRootElement(name = "text", namespace = ImejiNamespaces.METADATA)
 @XmlType(propOrder = { "text", "statement" })
-public class Text extends Metadata
-{
-    private static final long serialVersionUID = 3394338221875432545L;
-    @j2jLiteral("http://imeji.org/terms/text")
-    private String text;
-    @j2jResource("http://imeji.org/terms/statement")
-    private URI statement;
+public class Text extends Metadata {
+	private static final long serialVersionUID = 3394338221875432545L;
+	@j2jLiteral("http://imeji.org/terms/text")
+	private String text;
 
-    public Text()
-    {
-    }
+	public Text() {
+	}
 
-    @XmlElement(name = "text", namespace = "http://imeji.org/terms")
-    public String getText()
-    {
-        return text;
-    }
+	@j2jResource("http://imeji.org/terms/statement")
+	private URI statement;
 
-    public void setText(String str)
-    {
-        text = str;
-    }
+	@XmlElement(name = "text", namespace = "http://imeji.org/terms/")
+	public String getText() {
+		return text;
+	}
 
-    @Override
-    @XmlElement(name = "statement", namespace = "http://imeji.org/terms")
-    public URI getStatement()
-    {
-        return statement;
-    }
+	public void setText(String str) {
+		text = str;
+	}
 
-    @Override
-    public void setStatement(URI namespace)
-    {
-        this.statement = namespace;
-    }
+	@XmlElement(name = "statement", namespace = "http://imeji.org/terms/")
+	public URI getStatement() {
+		return statement;
+	}
 
-    @Override
-    public void copy(Metadata metadata)
-    {
-        if (metadata instanceof Text)
-        {
-            setPos(metadata.getPos());
-            this.text = ((Text)metadata).getText();
-            this.statement = metadata.getStatement();
-        }
-    }
+	public void setStatement(URI namespace) {
+		this.statement = namespace;
+	}
 
-    @Override
-    public String asFulltext()
-    {
-        return text;
-    }
+	@Override
+	public void copy(Metadata metadata) {
+		if (metadata instanceof Text) {
+			setPos(metadata.getPos());
+			this.text = ((Text) metadata).getText();
+			setStatement(metadata.getStatement());
+		}
+	}
+
+	@Override
+	public String asFulltext() {
+		return text;
+	}
+
+	@Override
+	public void clean() {
+		text = text.trim();
+	}
 }

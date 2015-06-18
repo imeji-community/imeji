@@ -24,7 +24,7 @@ public class SearchIndex
      * @author $Author$ (last modification)
      * @version $Revision$ $LastChangedDate$
      */
-    public static enum names
+    public static enum IndexNames
     {
         item, user, prop, creator, editor, created, modified, status, grant, grant_type, grant_for, filename, visibility, mds, col, alb, prof, type, cont_md, cont_title, cont_description, cont_person, cont_person_family, cont_person_given, cont_person_name, cont_person_org, cont_person_org_name, md, statement, all, text, number, date, time, title, longitude, latitude, license, url, label, citation, citation_style, cone, person, person_name, person_family, person_given, person_id, person_role, person_org, person_org_title, person_org_id, person_org_description, person_org_city, person_org_country, checksum, filetype;
     }
@@ -94,31 +94,31 @@ public class SearchIndex
         switch (MetadataTypesHelper.getTypesForNamespace(st.getType().toString()))
         {
             case DATE:
-                list.add(SPARQLSearch.getIndex(SearchIndex.names.time.name()));
+                list.add(SPARQLSearch.getIndex(SearchIndex.IndexNames.time.name()));
                 break;
             case GEOLOCATION:
-                list.add(SPARQLSearch.getIndex(SearchIndex.names.title.name()));
+                list.add(SPARQLSearch.getIndex(SearchIndex.IndexNames.title.name()));
                 break;
             case LICENSE:
-                list.add(SPARQLSearch.getIndex(SearchIndex.names.license.name()));
+                list.add(SPARQLSearch.getIndex(SearchIndex.IndexNames.license.name()));
                 break;
             case NUMBER:
-                list.add(SPARQLSearch.getIndex(SearchIndex.names.number.name()));
+                list.add(SPARQLSearch.getIndex(SearchIndex.IndexNames.number.name()));
                 break;
             case CONE_PERSON:
-                list.add(SPARQLSearch.getIndex(SearchIndex.names.person_family.name()));
-                list.add(SPARQLSearch.getIndex(SearchIndex.names.person_given.name()));
-                list.add(SPARQLSearch.getIndex(SearchIndex.names.person_org_title.name()));
+                list.add(SPARQLSearch.getIndex(SearchIndex.IndexNames.person_family.name()));
+                list.add(SPARQLSearch.getIndex(SearchIndex.IndexNames.person_given.name()));
+                list.add(SPARQLSearch.getIndex(SearchIndex.IndexNames.person_org_title.name()));
                 break;
             case PUBLICATION:
-                list.add(SPARQLSearch.getIndex(SearchIndex.names.citation.name()));
+                list.add(SPARQLSearch.getIndex(SearchIndex.IndexNames.citation.name()));
                 break;
             case TEXT:
-                list.add(SPARQLSearch.getIndex(SearchIndex.names.text.name()));
+                list.add(SPARQLSearch.getIndex(SearchIndex.IndexNames.text.name()));
                 break;
             case LINK:
-                list.add(SPARQLSearch.getIndex(SearchIndex.names.url.name()));
-                list.add(SPARQLSearch.getIndex(SearchIndex.names.label.name()));
+                list.add(SPARQLSearch.getIndex(SearchIndex.IndexNames.url.name()));
+                list.add(SPARQLSearch.getIndex(SearchIndex.IndexNames.label.name()));
                 break;
         }
         return list;

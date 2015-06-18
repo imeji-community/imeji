@@ -1,5 +1,3 @@
-target/
-
 #################
 ## Eclipse
 #################
@@ -60,7 +58,6 @@ local.properties
 *.tlb
 *.tli
 *.tlh
-*.tmp
 *.vspscc
 .builds
 *.dotCover
@@ -164,6 +161,23 @@ pip-log.txt
 # Mac crap
 .DS_Store
 /YOUR JREBEL LICENSE HAS EXPIRED!.error
-src/main/webapp/WEB-INF/digilib-config.xml
-src/test/resources/ingest/items-out.xml
-src/main/webapp/WEB-INF/digilib-config.xml
+digilib-config.xml
+items-out.xml
+
+# jRebel
+rebel.xml
+rebel-remote.xml
+
+# intellij IDEA
+imeji.iml
+.idea/
+target/
+
+# sublime
+*.sublime-workspace
+*.sublime-project
+
+#runtime errors logs
+hs_err*.log
+
+atlassian-ide-plugin.xml

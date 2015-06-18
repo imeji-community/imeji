@@ -7,6 +7,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchResult;
@@ -59,7 +61,7 @@ public class TechnicalFacets extends Facets
     @Override
     public void init()
     {
-        FacetURIFactory uriFactory = new FacetURIFactory(searchQuery);
+    	FacetURIFactory uriFactory = new FacetURIFactory(searchQuery);
         List<Facet> techFacets = new ArrayList<Facet>();
         try
         {
@@ -69,9 +71,9 @@ public class TechnicalFacets extends Facets
             {
                 if (sb.getUser() != null)
                 {
-                    if (!fs.isFilter("my_images") && !fs.isNoResultFilter("my_images"))
+                	if (!fs.isFilter("my_images") && !fs.isNoResultFilter("my_images"))
                     {
-                        SearchPair myImageSearchPair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.user),
+                        SearchPair myImageSearchPair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.IndexNames.user),
                                 SearchOperators.EQUALS, sb.getUser().getEmail());
                         count = getCount(searchQuery, myImageSearchPair, allImages.getResults());
                         if (count > 0)
@@ -86,8 +88,8 @@ public class TechnicalFacets extends Facets
                     }
                     if (!fs.isFilter("pending_images") && !fs.isNoResultFilter("pending_images"))
                     {
-                        SearchPair privatePair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.status),
-                                SearchOperators.EQUALS, Status.PENDING.getUri().toString());
+                        SearchPair privatePair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.IndexNames.status),
+                                SearchOperators.EQUALS, Status.PENDING.getUriString());
                         count = getCount(searchQuery, privatePair, allImages.getResults());
                         if (count > 0)
                         {
@@ -97,8 +99,8 @@ public class TechnicalFacets extends Facets
                     }
                     if (!fs.isFilter("released_images") && !fs.isNoResultFilter("released_images"))
                     {
-                        SearchPair publicPair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.status),
-                                SearchOperators.EQUALS, Status.RELEASED.getUri().toString());
+                        SearchPair publicPair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.IndexNames.status),
+                                SearchOperators.EQUALS, Status.RELEASED.getUriString().toString());
                         count = getCount(searchQuery, publicPair, allImages.getResults());
                         if (count > 0)
                         {
@@ -107,11 +109,17 @@ public class TechnicalFacets extends Facets
                         }
                     }
                 }
+
+                boolean showFacet = false;
                 for (Metadata.Types t : Metadata.Types.values())
                 {
-                    if (!fs.isFilter(t.name()) && !fs.isNoResultFilter(t.name()))
+                	showFacet = (  Metadata.Types.GEOLOCATION.name().equals(t.name()) || 
+                				 	Metadata.Types.LICENSE.name().equals(t.name()) ||
+                				 	Metadata.Types.PUBLICATION.name().equals(t.name()) );
+                    if (!fs.isFilter(t.name()) && !fs.isNoResultFilter(t.name()) && showFacet)
                     {
-                        SearchPair pair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.names.type),
+                    	
+                        SearchPair pair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.IndexNames.type),
                                 SearchOperators.EQUALS, t.getClazzNamespace());
                         count = getCount(searchQuery, pair, allImages.getResults());
                         if (count > 0)
@@ -131,7 +139,7 @@ public class TechnicalFacets extends Facets
         }
         catch (UnsupportedEncodingException e)
         {
-            e.printStackTrace();
+        	Logger.getLogger(TechnicalFacets.class).error("There had been some issues with the technical facets", e);
         }
     }
 
@@ -156,10 +164,10 @@ public class TechnicalFacets extends Facets
      */
     public int getCount(SearchQuery searchQuery, SearchPair pair, List<String> allImages)
     {
-        ItemController ic = new ItemController(sb.getUser());
+        ItemController ic = new ItemController();
         SearchQuery sq = new SearchQuery();
         sq.addPair(pair);
-        return ic.search(null, sq, null, allImages).getNumberOfRecords();
+        return ic.search(null, sq, null, allImages, sb.getUser(),  sb.getSelectedSpaceString()).getNumberOfRecords();
     }
 
     /*

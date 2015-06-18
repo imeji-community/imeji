@@ -1,15 +1,24 @@
 package util;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
+
+import com.hp.hpl.jena.tdb.TDB;
+import com.hp.hpl.jena.tdb.TDBFactory;
+import com.hp.hpl.jena.tdb.base.block.FileMode;
+import com.hp.hpl.jena.tdb.base.file.Location;
+import com.hp.hpl.jena.tdb.sys.SystemTDB;
+import com.hp.hpl.jena.tdb.sys.TDBMaker;
 
 import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
@@ -48,54 +57,96 @@ import de.mpg.imeji.presentation.util.PropertyReader;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class JenaUtil
-{
-    /**
-     * Init a Jena Instance for Testing
-     */
-    public static void initJena()
-    {
-        try
-        {
-            // Init PropertyBean
-            new PropertyBean();
-            // Read tdb location
-            String tdb = PropertyReader.getProperty("imeji.tdb.path");
-            // remove old Database
-            File f = new File(tdb);
-            if(f.exists())
-            	FileUtils.cleanDirectory(f);
-            // Create new tdb
-            Imeji.init(tdb);
-        }
-        catch (IOException | URISyntaxException e)
-        {
-            throw new RuntimeException("Error initialiting Jena for testing: ", e);
-        }
-    }
+public class JenaUtil {
+	private static Logger logger = Logger.getLogger(JenaUtil.class);
+	public static User testUser;
+	public static User testUser2;
+	public static String TEST_USER_EMAIL = "test@imeji.org";
+	public static String TEST_USER_EMAIL_2 = "test2@imeji.org";
+	public static String TEST_USER_NAME = "Test User";
+	public static String TEST_USER_PWD = "password";
+	public static String TDB_PATH;
 
-    /**
-     * Add a User to Jena
-     * 
-     * @param email
-     * @param name
-     * @param pwd
-     */
-    public static void addUser(String email, String name, String pwd)
-    {
-        try
-        {
-            UserController c = new UserController(Imeji.adminUser);
-            User user = new User();
-            user.setEmail(email);
-            user.setName(name);
-            user.setEncryptedPassword(StringHelper.convertToMD5(pwd));
-            c.create(user);
-        }
-        catch (Exception e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
+	/**
+	 * Init a Jena Instance for Testing
+	 */
+	public static void initJena() {
+
+		try {
+			// Init PropertyBean
+			new PropertyBean();
+			// Read tdb location
+			TDB_PATH = PropertyReader.getProperty("imeji.tdb.path");
+			// remove old Database
+			deleteTDBDirectory();
+			// Set Filemode: important to be able to delete TDB directory by
+			// closing Jena
+			SystemTDB.setFileMode(FileMode.direct);
+			// Create new tdb
+			Imeji.init(TDB_PATH);
+			initTestUser();
+			// init imeji configuration
+			new ConfigurationBean();
+		} catch (Exception e) {
+			throw new RuntimeException("Error initialiting Jena for testing: ",
+					e);
+		}
+	}
+
+	public static void closeJena() throws InterruptedException {
+		logger.info("Closing Jena:");
+		TDB.sync(Imeji.dataset);
+		logger.info("Jena Sync done! ");
+		TDBFactory.reset();
+		logger.info("Reset internal state, releasing all datasets done! ");
+		Imeji.dataset.close();
+		logger.info("Dataset closed!");
+		TDB.closedown();
+		TDBMaker.releaseLocation(new Location(TDB_PATH));
+		logger.info("TDB Location released!");
+		deleteTDBDirectory();
+	}
+
+	private static void initTestUser() throws Exception {
+		testUser = getMockupUser(TEST_USER_EMAIL, TEST_USER_NAME, TEST_USER_PWD);
+		testUser2 = getMockupUser(TEST_USER_EMAIL_2, TEST_USER_NAME,
+				TEST_USER_PWD);
+		createUser(testUser);
+		createUser(testUser2);
+	}
+
+	private static void createUser(User u) {
+		try {
+			UserController c = new UserController(Imeji.adminUser);
+			c.create(u, USER_TYPE.DEFAULT);
+		} catch (Exception e) {
+			logger.info(u.getEmail() + " already exists. Must not be created");
+		}
+	}
+
+	/**
+	 * REturn a Mockup User with default rights
+	 * 
+	 * @param email
+	 * @param name
+	 * @param pwd
+	 * @throws Exception
+	 */
+	private static User getMockupUser(String email, String name, String pwd)
+			throws Exception {
+
+		User user = new User();
+		user.setEmail(email);
+		user.setName(name);
+		user.setEncryptedPassword(StringHelper.convertToMD5(pwd));
+		user.setGrants(AuthorizationPredefinedRoles.defaultUser(user.getId()
+				.toString()));
+		return user;
+	}
+
+	private static void deleteTDBDirectory() {
+		File f = new File(TDB_PATH);
+		if (f.exists())
+			logger.info("TDB directory deleted: " + FileUtils.deleteQuietly(f));
+	}
 }

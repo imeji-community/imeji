@@ -149,7 +149,7 @@ public class AlbumController extends ImejiController {
 
 	/**
 	 * Retrieve albums filtered by query
-	 *
+	 * 
 	 * @param user
 	 * @param q
 	 * @return
@@ -159,15 +159,16 @@ public class AlbumController extends ImejiController {
 			throws ImejiException {
 		List<Album> aList = new ArrayList<>();
 		try {
-			 List<String>results = search(
+			List<String> results = search(
 					!isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q)
-							: null, user, null, 500, 0, spaceId).getResults();  
-				aList = (List<Album>)loadAlbumsLazy(results, user, getMin(results.size(), 500), 0);
+							: null, user, null, 500, 0, spaceId).getResults();
+			aList = (List<Album>) loadAlbumsLazy(results, user,
+					getMin(results.size(), 500), 0);
 		} catch (Exception e) {
 			throw new UnprocessableError("Cannot retrieve albums:", e);
 
 		}
-		
+
 		return aList;
 	}
 
@@ -238,8 +239,10 @@ public class AlbumController extends ImejiController {
 		}
 
 		ItemController ic = new ItemController();
-		List<String> inAlbums = ic.search(album.getId(), null, null, null,
-				user, null).getResults();
+		// Search must be done with admin in oder to avoid to remove private
+		// items
+		List<String> inAlbums = ic.seachContainerItemsFast(album,
+				Imeji.adminUser, -1);
 		List<String> notAddedUris = new ArrayList<String>();
 		for (String uri : uris) {
 			try {
@@ -259,7 +262,7 @@ public class AlbumController extends ImejiController {
 		for (String uri : inAlbums) {
 			album.getImages().add(URI.create(uri));
 		}
-		// Force admin user since th user might not have right to edit the album
+		// Force admin user since the user might not have right to edit the album
 		update(album, user, false);
 		return new ArrayList<URI>(album.getImages());
 	}
@@ -277,19 +280,21 @@ public class AlbumController extends ImejiController {
 	public int removeFromAlbum(Album album, List<String> toDelete, User user)
 			throws ImejiException {
 		ItemController ic = new ItemController();
-		List<String> before = ic.seachContainerItemsFast(album, user, -1);
+		// Search must be done with admin in oder to avoid to remove private
+		// items
+		List<String> before = ic.seachContainerItemsFast(album,
+				Imeji.adminUser, -1);
 		for (String uri : before) {
 			if (!toDelete.contains(uri)) {
 				album.getImages().add(URI.create(uri));
 			}
 		}
 
-		if (album.getImages().size() == 0)
-		{
+		if (album.getImages().size() == 0) {
 			validateReleasedAlbumImagesRemoval(album.getStatus());
 		}
 		Album after = update(album, user, false);
-		
+
 		return before.size() - after.getImages().size();
 	}
 
@@ -456,9 +461,9 @@ public class AlbumController extends ImejiController {
 
 		}
 	}
-	
-	public void validateReleasedAlbumImagesRemoval (Status status) throws UnprocessableError
-	{
+
+	public void validateReleasedAlbumImagesRemoval(Status status)
+			throws UnprocessableError {
 		if (Status.RELEASED.equals(status)) {
 			throw new UnprocessableError(
 					"Album is released! You are trying to remove all items from this album! Discard the album if necessary!");

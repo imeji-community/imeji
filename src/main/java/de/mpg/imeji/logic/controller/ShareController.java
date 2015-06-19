@@ -36,7 +36,7 @@ public class ShareController extends ImejiController {
 	 * The Roles which can be shared to every object
 	 * 
 	 * @author saquet
-	 *
+	 * 
 	 */
 	public enum ShareRoles {
 		READ, CREATE, EDIT_ITEM, DELETE_ITEM, EDIT, ADMIN, EDIT_PROFILE;
@@ -167,6 +167,9 @@ public class ShareController extends ImejiController {
 	public static List<Grant> transformRolesToGrants(List<String> roles,
 			String uri) {
 		List<Grant> grants = new ArrayList<Grant>();
+		if (roles == null) {
+			return grants;
+		}
 		String profileUri = getProfileUri(uri);
 		if (profileUri != null) {
 			// Only for sharing collection

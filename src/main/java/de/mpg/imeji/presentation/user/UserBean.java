@@ -140,14 +140,12 @@ public class UserBean {
 	 * 
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
 	public void toggleAdmin() throws Exception {
 		ShareController shareController = new ShareController();
 		if (user.isAdmin()) {
-			Grant g = AuthUtil.extractGrant((List<Grant>) user.getGrants(),
-					PropertyBean.baseURI(), GrantType.ADMIN);
-			shareController.removeGrants(user,
-					(List<Grant>) shareController.toList(g), session.getUser());
+			shareController.shareToUser(session.getUser(), user,
+					PropertyBean.baseURI(),
+					ShareController.rolesAsList(ShareRoles.CREATE));
 		} else {
 			shareController.shareToUser(session.getUser(), user,
 					PropertyBean.baseURI(),
@@ -165,18 +163,19 @@ public class UserBean {
 	 * 
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
 	public void toggleCreateCollection() throws Exception {
 		ShareController shareController = new ShareController();
-		if (user.isAllowedToCreateCollection()) {
-			Grant g = AuthUtil.extractGrant((List<Grant>) user.getGrants(),
-					PropertyBean.baseURI(), GrantType.CREATE);
-			shareController.removeGrants(user,
-					(List<Grant>) shareController.toList(g), session.getUser());
-		} else {
-			shareController.shareToUser(session.getUser(), user, PropertyBean
-					.baseURI(), (List<String>) shareController
-					.toList(ShareController.ShareRoles.CREATE));
+		if (!user.isAdmin()) {
+			// admin can not be forbidden to create collections
+			if (user.isAllowedToCreateCollection()) {
+				shareController.shareToUser(session.getUser(), user,
+						PropertyBean.baseURI(), null);
+			} else {
+				shareController
+						.shareToUser(session.getUser(), user, PropertyBean
+								.baseURI(), ShareController
+								.rolesAsList(ShareController.ShareRoles.CREATE));
+			}
 		}
 	}
 

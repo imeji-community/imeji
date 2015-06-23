@@ -178,6 +178,20 @@ public class SPARQLQueries {
 	}
 
 	/**
+	 * Select a User by its Email
+	 * 
+	 * @param email
+	 * @return
+	 */
+	public static String selectUserByRegistrationToken(String registrationToken) {
+		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE { "
+			   + " ?s <http://imeji.org/terms/registrationToken> \""
+	           + registrationToken 
+	           + "\"^^<http://www.w3.org/2001/XMLSchema#string> . "
+			   +" ?s a <http://imeji.org/terms/user> }";
+	}
+
+	/**
 	 * Find all the user which have SysAdmin rights for imeji
 	 * 
 	 * @return
@@ -588,6 +602,11 @@ public class SPARQLQueries {
 				+ "> <http://www.w3.org/2003/12/exif/ns#height> " + height
 				+ "}" + "USING <http://imeji.org/item> " + "WHERE{<" + itemId
 				+ "> ?p ?o}";
+	}
+	
+	
+	public static String getInactiveUsers() {
+		return "select ?s where { ?s a <http://imeji.org/terms/user> . ?s <http://imeji.org/terms/userStatus> <http://imeji.org/terms/userStatus#INACTIVE>}";
 	}
 
 	/**

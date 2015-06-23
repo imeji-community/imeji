@@ -77,7 +77,7 @@ public class ConfigurationBean {
 	 * @version $Revision$ $LastChangedDate$
 	 */
 	private enum CONFIGURATION {
-		SNIPPET, CSS_DEFAULT, CSS_ALT, MAX_FILE_SIZE, FILE_TYPES, STARTPAGE_HTML, DATA_VIEWER_FORMATS, DATA_VIEWER_URL, AUTOSUGGEST_USERS, AUTOSUGGEST_ORGAS, STARTPAGE_FOOTER_LOGOS, META_DESCRIPTION, INSTANCE_NAME, CONTACT_EMAIL, EMAIL_SERVER, EMAIL_SERVER_USER, EMAIL_SERVER_PASSWORD, EMAIL_SERVER_ENABLE_AUTHENTICATION, EMAIL_SERVER_SENDER, EMAIL_SERVER_PORT, STARTPAGE_CAROUSEL_QUERY, STARTPAGE_CAROUSEL_QUERY_ORDER, UPLOAD_WHITE_LIST, UPLOAD_BLACK_LIST, LANGUAGES, IMPRESSUM_URL, IMPRESSUM_TEXT, FAVICON_URL, LOGO;
+		SNIPPET, CSS_DEFAULT, CSS_ALT, MAX_FILE_SIZE, FILE_TYPES, STARTPAGE_HTML, DATA_VIEWER_FORMATS, DATA_VIEWER_URL, AUTOSUGGEST_USERS, AUTOSUGGEST_ORGAS, STARTPAGE_FOOTER_LOGOS, META_DESCRIPTION, INSTANCE_NAME, CONTACT_EMAIL, EMAIL_SERVER, EMAIL_SERVER_USER, EMAIL_SERVER_PASSWORD, EMAIL_SERVER_ENABLE_AUTHENTICATION, EMAIL_SERVER_SENDER, EMAIL_SERVER_PORT, STARTPAGE_CAROUSEL_QUERY, STARTPAGE_CAROUSEL_QUERY_ORDER, UPLOAD_WHITE_LIST, UPLOAD_BLACK_LIST, LANGUAGES, IMPRESSUM_URL, IMPRESSUM_TEXT, FAVICON_URL, LOGO, REGISTRATION_TOKEN_EXPIRY;
 	}
 
 	private static Properties config;
@@ -90,6 +90,7 @@ public class ConfigurationBean {
 	private final static String predefinedFileTypes = "[Image@en,Bilder@de=jpg,jpeg,tiff,tiff,jp2,pbm,gif,png,psd][Video@en,Video@de=wmv,swf,rm,mp4,mpg,m4v,avi,mov.asf,flv,srt,vob][Audio@en,Ton@de=aif,iff,m3u,m4a,mid,mpa,mp3,ra,wav,wma][Document@en,Dokument@de=doc,docx,odt,pages,rtf,tex,rtf,bib,csv,ppt,pps,pptx,key,xls,xlr,xlsx,gsheet,nb,numbers,ods,indd,pdf,dtx]";
 	private final static String predefinedUploadBlackList = "386,aru,atm,aut,bat,bin,bkd,blf,bll,bmw,boo,bqf,buk,bxz,cc,ce0,ceo,cfxxe,chm,cih,cla,class,cmd,com,cpl,cxq,cyw,dbd,dev,dlb,dli,dll,dllx,dom,drv,dx,dxz,dyv,dyz,eml,exe,exe1,exe_renamed,ezt,fag,fjl,fnr,fuj,hlp,hlw,hsq,hts,ini,iva,iws,jar,js,kcd,let,lik,lkh,lnk,lok,mfu,mjz,nls,oar,ocx,osa,ozd,pcx,pgm,php2,php3,pid,pif,plc,pr,qit,rhk,rna,rsc_tmp,s7p,scr,scr,shs,ska,smm,smtmp,sop,spam,ssy,swf,sys,tko,tps,tsa,tti,txs,upa,uzy,vb,vba,vbe,vbs,vbx,vexe,vsd,vxd,vzr,wlpginstall,wmf,ws,wsc,wsf,wsh,wss,xdu,xir,xlm,xlv,xnt,zix,zvz";
 	private final static String predefinedLanguages = "en,de,ja,es";
+	private final static String predefinedRegistrationTokenExpirationDays = "1";
 	private String dataViewerUrl;
 
 	/**
@@ -752,6 +753,28 @@ public class ConfigurationBean {
 		setProperty(CONFIGURATION.FAVICON_URL.name(), s);
 	}
 
+	
+	public void setRegistrationTokenExpiry(String s) {
+		try {
+				int sInt = Integer.valueOf(s);
+		}
+		catch (NumberFormatException e) {
+			logger.info("Could not understand the Registration Token Expiry Setting, setting it to default (1 day).");
+			s= predefinedRegistrationTokenExpirationDays;
+		}
+		
+		setProperty(CONFIGURATION.REGISTRATION_TOKEN_EXPIRY.name(), s);
+	}
+
+	public static int getRegistrationTokenExpiryStatic() {
+		return Integer.valueOf(registrationTokenCompute());
+	}
+	
+	
+	public String getRegistrationTokenExpiry() {
+		return registrationTokenCompute();
+	}
+	
 	/**
 	 * Return the url of the favicon
 	 * 
@@ -780,6 +803,17 @@ public class ConfigurationBean {
 	 */
 	public String getLogoUrl() {
 		return (String) config.get(CONFIGURATION.LOGO.name());
+	}
+	
+	private static String registrationTokenCompute(){
+		String myToken = (String) config.get(CONFIGURATION.REGISTRATION_TOKEN_EXPIRY.name());
+		if (myToken == null || "".equals(myToken)){
+			return predefinedRegistrationTokenExpirationDays;
+		}
+		else
+		{
+			return (String) config.get(CONFIGURATION.REGISTRATION_TOKEN_EXPIRY.name());
+		}
 	}
 
 }

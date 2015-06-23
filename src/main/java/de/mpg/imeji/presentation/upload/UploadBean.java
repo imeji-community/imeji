@@ -4,7 +4,6 @@
 package de.mpg.imeji.presentation.upload;
 
 import static de.mpg.imeji.logic.notification.CommonMessages.getSuccessCollectionDeleteMessage;
-import static de.mpg.imeji.logic.storage.util.StorageUtils.guessExtension;
 
 import java.io.File;
 import java.io.FileOutputStream;

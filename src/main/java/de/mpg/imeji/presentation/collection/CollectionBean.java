@@ -112,7 +112,9 @@ public abstract class CollectionBean extends ContainerBean {
 				useMDProfileTemplate = true;
 				profileItems.add(new SelectItem(defaultMetadataProfile
 						.getIdString(), defaultMetadataProfile.getTitle()));
+				profiles.add(defaultMetadataProfile);
 			}
+
 
 			for (MetadataProfile mdp : profiles) {
 				if (mdp.getStatements().size() > 0) {

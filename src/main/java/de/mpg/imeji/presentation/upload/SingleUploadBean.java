@@ -54,6 +54,7 @@ import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.metadata.MetadataSetBean;
 import de.mpg.imeji.presentation.metadata.SingleEditBean;
@@ -90,9 +91,9 @@ public class SingleUploadBean implements Serializable {
 	public SingleUploadBean() {
 	}
 
-	public void init() {
-		if (user != null) {
-			try {
+	public void init() throws IOException {
+		if (user != null && user.isAllowedToCreateCollection()) {
+			 try {
 				if (UrlHelper.getParameterBoolean("init")) {
 					sus.reset();
 					loadCollections(true);
@@ -104,6 +105,17 @@ public class SingleUploadBean implements Serializable {
 			} catch (Exception e) {
 				BeanHelper.error(e.getLocalizedMessage());
 			}
+		}
+		else
+		{
+			BeanHelper.error("You have no right to create collections, thus you can not upload items!");
+			Navigation navigation = (Navigation) BeanHelper
+						.getApplicationBean(Navigation.class);
+				FacesContext
+				.getCurrentInstance()
+				.getExternalContext()
+				.redirect(
+						navigation.getHomeUrl());
 		}
 	}
 

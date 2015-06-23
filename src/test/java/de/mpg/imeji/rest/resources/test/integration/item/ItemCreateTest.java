@@ -218,7 +218,7 @@ public class ItemCreateTest extends ItemTestBase {
 
 		Response response = target(pathPrefix)
 				.register(MultiPartFeature.class)
-				.queryParam("syntax", ItemTO.SYNTAX.IMEJI.toString().toLowerCase())
+				.queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase())
 				.register(JacksonFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)
 				.post(Entity.entity(multiPart, multiPart.getMediaType()));
@@ -292,7 +292,7 @@ public class ItemCreateTest extends ItemTestBase {
 
 		Response response = target(pathPrefix)
 				.register(authAsUser2)
-				.queryParam("syntax", ItemTO.SYNTAX.IMEJI.toString().toLowerCase())
+				.queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase())
 				.register(MultiPartFeature.class)
 				.register(JacksonFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)
@@ -491,7 +491,7 @@ public class ItemCreateTest extends ItemTestBase {
 	// Default Authorized Target with imeji syntax
 	private Invocation.Builder getAuthTarget() {
 		return target(pathPrefix).register(authAsUser)
-				.queryParam("syntax", ItemTO.SYNTAX.IMEJI.toString().toLowerCase())
+				.queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase())
 				.register(MultiPartFeature.class)
 				.register(JacksonFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE);

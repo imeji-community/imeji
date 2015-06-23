@@ -277,19 +277,20 @@ public class SingleUploadBean implements Serializable {
 		 */
 		CollectionController cc = new CollectionController();
 		SearchQuery sq = new SearchQuery();
-		SearchPair sp = new SearchPair(
-				SPARQLSearch.getIndex(SearchIndex.IndexNames.user),
-				SearchOperators.EQUALS, user.getId().toString());
-		sq.addPair(sp);
+//		SearchPair sp = new SearchPair(
+//				SPARQLSearch.getIndex(SearchIndex.IndexNames.user),
+//				SearchOperators.EQUALS, user.getId().toString());
+//		sq.addPair(sp);
 		SortCriterion sortCriterion = new SortCriterion();
-		sortCriterion.setIndex(SPARQLSearch.getIndex("user"));
+		sortCriterion.setIndex(SPARQLSearch.getIndex("cont_title"));
+		//For some funny reasons this took me a while to debug, search results for cont_title are toggled, if you need ascending, provide "DESCENDING" 
 		sortCriterion.setSortOrder(SortOrder.valueOf("DESCENDING"));
 		// TODO: check if here space restriction is needed
 		SearchResult results = cc.search(sq, sortCriterion, -1, 0, user, sb.getSpaceId());
 		if (!checkSizeOnly) {
 			collections = cc.retrieveLazy(results.getResults(), -1, 0, user);
 			for (CollectionImeji c : collections) {
-					if (AuthUtil.staticAuth().create(user, c))
+					if (AuthUtil.staticAuth().createContent(user, c))
 						collectionItems.add(new SelectItem(c.getId(), c.getMetadata()
 								.getTitle()));
 			}

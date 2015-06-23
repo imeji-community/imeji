@@ -32,7 +32,7 @@ import java.util.Map;
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static de.mpg.imeji.rest.process.CommonUtils.USER_MUST_BE_LOGGED_IN;
 import static de.mpg.imeji.rest.process.RestProcessUtils.*;
-import static de.mpg.imeji.rest.to.ItemTO.SYNTAX.IMEJI;
+import static de.mpg.imeji.rest.to.ItemTO.SYNTAX.RAW;
 import static de.mpg.imeji.rest.to.ItemTO.SYNTAX.guessType;
 import static javax.ws.rs.core.Response.Status.OK;
 import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
@@ -114,7 +114,7 @@ public class ItemProcess {
         try {
 
             switch (SYNTAX_TYPE) {
-                case IMEJI:
+                case RAW:
 					itemTO = (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(json,
 							ItemWithFileTO.class);
 					break;
@@ -149,7 +149,7 @@ public class ItemProcess {
         try {
             ItemTO createdItem = is.create(itemTO, u);
             resp = RestProcessUtils.buildResponse(Status.CREATED.getStatusCode(),
-                    SYNTAX_TYPE == IMEJI ?
+                    SYNTAX_TYPE == RAW ?
                             createdItem :
                             is.readDefault(createdItem.getId(), u)
             );

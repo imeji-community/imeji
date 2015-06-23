@@ -64,13 +64,13 @@ public class ItemTO extends PropertiesTO implements Serializable{
     private long fileSize;
 
 	public static enum SYNTAX {
-		DEFAULT, IMEJI;
+		DEFAULT, RAW;
 		public static SYNTAX guessType(String type) {
 			//if null return DefaultItemTO
 			if (isNullOrEmptyTrim(type) || type.trim().equalsIgnoreCase(DEFAULT.toString()))
 				return DEFAULT;
-			else if (type.trim().equalsIgnoreCase(IMEJI.toString()))
-				return IMEJI;
+			else if (type.trim().equalsIgnoreCase(RAW.toString()))
+				return RAW;
 			else
 				return null;
 		}

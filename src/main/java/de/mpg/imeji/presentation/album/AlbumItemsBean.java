@@ -161,9 +161,8 @@ public class AlbumItemsBean extends ItemsBean {
 			removeFromActive(uris);
 		} else {
 			AlbumController ac = new AlbumController();
-			ac.validateReleasedAlbumImagesRemoval(album.getStatus());
-			album.setImages(new ArrayList<URI>());
-			ac.update(album, sb.getUser());
+			ItemController ic = new ItemController();
+			ac.removeFromAlbum(album, ic.seachContainerItemsFast(album, sb.getUser(), -1), sb.getUser());
 		}
 	}
 

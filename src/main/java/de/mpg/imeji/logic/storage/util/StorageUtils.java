@@ -28,8 +28,17 @@
  */
 package de.mpg.imeji.logic.storage.util;
 
-import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.exceptions.UnprocessableError;
+import static com.google.common.base.Strings.isNullOrEmpty;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
@@ -43,10 +52,8 @@ import org.apache.tika.mime.MimeType;
 import org.apache.tika.mime.MimeTypes;
 import org.apache.tools.ant.taskdefs.Get;
 
-import java.io.*;
-import java.net.URL;
-
-import static com.google.common.base.Strings.isNullOrEmpty;
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.UnprocessableError;
 
 /**
  * Util class fore the storage package
@@ -61,7 +68,7 @@ public class StorageUtils {
 	 * The generic mime-type, when no mime-type is known
 	 */
 	public final static String DEFAULT_MIME_TYPE = "application/octet-stream";
-	public final static String BAD_FORMAT="bad-extension/other";
+	public final static String BAD_FORMAT = "bad-extension/other";
 
 	/**
 	 * Transform an {@link InputStream} to a {@link Byte} array
@@ -162,7 +169,12 @@ public class StorageUtils {
 			MimeTypes allTypes = MimeTypes.getDefaultMimeTypes();
 			MimeType type = allTypes.forName(t.detect(file));
 			if (!type.getExtensions().isEmpty()) {
-				return type.getExtensions().get(0).replace(".", "");
+				String ext = type.getExtensions().get(0).replace(".", "");
+				if (FilenameUtils.getExtension(file.getName()).equals("smr")
+						&& "bin".equals(ext)) {
+					return "smr";
+				}
+				return ext;
 			} else {
 				String calculatedExtension = FilenameUtils.getExtension(file
 						.getName());

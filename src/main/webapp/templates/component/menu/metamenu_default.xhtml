@@ -54,7 +54,7 @@ All rights reserved. Use is subject to license terms.
 			<h:form id="loginForm">
 				<h:panelGroup rendered="#{!Auth.loggedIn}" styleClass="imj_metaMenuItem">
 					<h:panelGroup rendered="#{!SessionBean.showLogin and SessionBean.spaceId==''}">
-						<h:commandLink  id="lnkLogin1"  title="#{lbl.login}" action ="#{LoginBean.loginClick}" styleClass="imj_metaMenuItem">
+						<h:commandLink id="lnkLogin1" title="#{lbl.login}" action="#{LoginBean.loginClick}" styleClass="imj_metaMenuItem">
 			    			<h:outputText value="#{lbl.login}"></h:outputText>
 			    			<f:ajax render="@form" execute="@this"/>
 			   			</h:commandLink>
@@ -73,9 +73,17 @@ All rights reserved. Use is subject to license terms.
 			</h:form>
 			
 			
+			<!-- Register -->
+			<h:form rendered="#{!Auth.loggedIn}">
+				<h:outputText styleClass="imj_metaMenuSeparator" value="&#160;"/>
+				<h:outputLink value="#{Navigation.applicationSpaceUrl}register" title="#{lbl.register}" styleClass="imj_metaMenuItem">
+					<h:outputText value="#{lbl.register}"/>
+				</h:outputLink>
+			</h:form>
+			
+			
 			<!-- CSS Switcher -->
 			<ui:fragment rendered="#{Configuration.alternativeCss != null and Configuration.alternativeCss != ''}">
-				
 				<h:outputText styleClass="imj_metaMenuSeparator" value="&#160;"/>
 				
 				<h:form>

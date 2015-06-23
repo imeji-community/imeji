@@ -28,8 +28,16 @@
  */
 package de.mpg.imeji.logic.storage.util;
 
-import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.exceptions.UnprocessableError;
+import static com.google.common.base.Strings.isNullOrEmpty;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.httpclient.HttpClient;
@@ -44,11 +52,8 @@ import org.apache.tika.mime.MimeType;
 import org.apache.tika.mime.MimeTypes;
 import org.apache.tools.ant.taskdefs.Get;
 
-import java.io.*;
-import java.net.URL;
-import java.nio.file.Files;
-
-import static com.google.common.base.Strings.isNullOrEmpty;
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.UnprocessableError;
 
 /**
  * Util class fore the storage package

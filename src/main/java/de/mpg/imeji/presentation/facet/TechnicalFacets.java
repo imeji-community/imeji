@@ -73,6 +73,8 @@ public class TechnicalFacets extends Facets
                 {
                 	if (!fs.isFilter("my_images") && !fs.isNoResultFilter("my_images"))
                     {
+                		// NOT WORKING AND NOT USEFULL SO FAR
+                		/*
                         SearchPair myImageSearchPair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.IndexNames.user),
                                 SearchOperators.EQUALS, sb.getUser().getEmail());
                         count = getCount(searchQuery, myImageSearchPair, allImages.getResults());
@@ -85,6 +87,7 @@ public class TechnicalFacets extends Facets
                         {
                             fs.getNoResultsFilters().add(new Filter("My images", "", 0, FacetType.TECHNICAL, null));
                         }
+                        */
                     }
                     if (!fs.isFilter("pending_images") && !fs.isNoResultFilter("pending_images"))
                     {
@@ -122,7 +125,7 @@ public class TechnicalFacets extends Facets
                         SearchPair pair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.IndexNames.type),
                                 SearchOperators.EQUALS, t.getClazzNamespace());
                         count = getCount(searchQuery, pair, allImages.getResults());
-                        if (count > 0)
+                        if (count > 0 && count < allImages.getNumberOfRecords())
                         {
                             techFacets.add(new Facet(uriFactory.createFacetURI(baseURI, pair, t.name(),
                                     FacetType.TECHNICAL), t.toString(), count, FacetType.TECHNICAL, null));

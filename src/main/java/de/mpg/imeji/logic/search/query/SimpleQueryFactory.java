@@ -3,6 +3,14 @@
  */
 package de.mpg.imeji.logic.search.query;
 
+import java.io.IOException;
+import java.io.StringReader;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.regex.Pattern;
+
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.search.SPARQLSearch;
@@ -13,20 +21,15 @@ import de.mpg.imeji.logic.search.vo.SearchPair;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.util.DateFormatter;
 import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.*;
+import de.mpg.imeji.logic.vo.Album;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.beans.FileTypes.Type;
-import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.j2j.helper.J2JHelper;
-
-import java.io.IOException;
-import java.io.StringReader;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.regex.Pattern;
 
 /**
  * Factory to created Sparql query from a {@link SearchPair}
@@ -52,10 +55,12 @@ public class SimpleQueryFactory {
 	public static String getQuery(String modelName, String rdfType,
 			SearchPair pair, SortCriterion sortCriterion, User user,
 			boolean isCollection, String specificQuery, String spaceId) {
-//		PATTERN_SELECT = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 XXX_MODEL_NAMES_XXX WHERE {XXX_SPACE_FILTER_XXX XXX_SECURITY_FILTER_XXX XXX_SEARCH_ELEMENT_XXX XXX_SPECIFIC_QUERY_XXX XXX_SEARCH_TYPE_ELEMENT_XXX  ?s <"
-//				+ ImejiNamespaces.STATUS + "> ?status XXX_SORT_ELEMENT_XXX}";
+		// PATTERN_SELECT =
+		// "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 XXX_MODEL_NAMES_XXX WHERE {XXX_SPACE_FILTER_XXX XXX_SECURITY_FILTER_XXX XXX_SEARCH_ELEMENT_XXX XXX_SPECIFIC_QUERY_XXX XXX_SEARCH_TYPE_ELEMENT_XXX  ?s <"
+		// + ImejiNamespaces.STATUS + "> ?status XXX_SORT_ELEMENT_XXX}";
 		PATTERN_SELECT = "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 WHERE {XXX_SPACE_FILTER_XXX XXX_SEARCH_ELEMENT_XXX XXX_SPECIFIC_QUERY_XXX XXX_SEARCH_TYPE_ELEMENT_XXX  ?s <"
-				+ ImejiNamespaces.STATUS + "> ?status XXX_SORT_ELEMENT_XXX XXX_SECURITY_FILTER_XXX }";
+				+ ImejiNamespaces.STATUS
+				+ "> ?status XXX_SORT_ELEMENT_XXX XXX_SECURITY_FILTER_XXX }";
 
 		return PATTERN_SELECT
 				.replace(
@@ -78,7 +83,7 @@ public class SimpleQueryFactory {
 								"http://imeji.org/terms/item".equals(rdfType)))
 				.replace("XXX_SPECIFIC_QUERY_XXX", specificQuery);
 	}
-	
+
 	/**
 	 * Return the RDF Type of the search objects
 	 * 
@@ -115,7 +120,8 @@ public class SimpleQueryFactory {
 			return "";
 
 		if (isProfile)
-			return "?c <http://imeji.org/terms/mdprofile> ?s . ?c <http://imeji.org/terms/space> <" + spaceUri + "> .";
+			return "?c <http://imeji.org/terms/mdprofile> ?s . ?c <http://imeji.org/terms/space> <"
+					+ spaceUri + "> .";
 		return isCollection ? "?s <http://imeji.org/terms/space> <" + spaceUri
 				+ "> ."
 				: "?s <http://imeji.org/terms/collection> ?coll . ?coll  <http://imeji.org/terms/space>  <"
@@ -183,7 +189,9 @@ public class SimpleQueryFactory {
 				searchQuery = " ?s <" + pair.getIndex().getNamespace()
 						+ "> ?c .";
 			// Search for collection by id (uri)
-			return " ?s <"+ImejiNamespaces.COLLECTION+"> ?c. FILTER("
+			return " ?s <"
+					+ ImejiNamespaces.COLLECTION
+					+ "> ?c. FILTER("
 					+ getSimpleFilter(pair,
 							SimpleSecurityQuery.getVariableName(rdfType),
 							pair.isNot()) + ") ." + searchQuery;
@@ -223,7 +231,8 @@ public class SimpleQueryFactory {
 			String regex = "";
 			String types = pair.getValue();
 			for (String typeName : types.split(Pattern.quote("|"))) {
-				Type type = ConfigurationBean.getFileTypesStatic().getType(typeName);
+				Type type = ConfigurationBean.getFileTypesStatic().getType(
+						typeName);
 				if (type != null) {
 					if (!regex.equals(""))
 						regex += "|";
@@ -325,10 +334,11 @@ public class SimpleQueryFactory {
 			break;
 		case title:
 			break;
-		case type:// Search for metadata type (Text, Date, Person...) //Use EXISTS in FILTER in order not to produce performance issues
-			return " ?s <http://imeji.org/terms/metadataSet> ?mds . ?mds <"
+		case type:
+			// Search for metadata type (Text, Date, Person...)
+			return "OPTIONAL{ ?s <http://imeji.org/terms/metadataSet> ?mds . ?mds <"
 					+ ImejiNamespaces.METADATA + "> ?md  . ?md a <"
-					+ pair.getValue() + ">  .";
+					+ pair.getValue() + "> }  .";
 		case url:
 			break;
 		case user:
@@ -479,7 +489,8 @@ public class SimpleQueryFactory {
 				return ". ?s <http://imeji.org/terms/container/metadata> ?contmd . ?contmd <http://xmlns.com/foaf/0.1/person> ?person . ?person <http://purl.org/escidoc/metadata/terms/0.1/complete-name> ?sort0";
 			} else if (SearchIndex.IndexNames.cont_title.name().equals(
 					sortCriterion.getIndex().getName())) {
-				return (item ? " . ?s <http://imeji.org/terms/collection> ?c . ?c" : " . ?s")
+				return (item ? " . ?s <http://imeji.org/terms/collection> ?c . ?c"
+						: " . ?s")
 						+ " <http://imeji.org/terms/container/metadata> ?title . ?title <"
 						+ sortCriterion.getIndex().getNamespace() + "> ?sort0";
 			} else if (SearchIndex.IndexNames.filename.name().equals(

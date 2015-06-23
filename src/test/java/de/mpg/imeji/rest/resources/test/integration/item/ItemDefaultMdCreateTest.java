@@ -136,7 +136,7 @@ public class ItemDefaultMdCreateTest extends ItemTestBase {
                                 .replaceAll("\"referenceUrl\"\\s*:\\s*\"___REFERENCE_URL___\",", "")
         );
 		Response response = target(pathPrefix).register(authAsUser)
-                .queryParam("syntax", ItemTO.SYNTAX.IMEJI.toString().toLowerCase())
+                .queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase())
 				.register(MultiPartFeature.class)
 				.register(JacksonFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)

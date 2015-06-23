@@ -4,6 +4,7 @@
 package de.mpg.imeji.presentation.upload;
 
 import static de.mpg.imeji.logic.notification.CommonMessages.getSuccessCollectionDeleteMessage;
+import static de.mpg.imeji.logic.storage.util.StorageUtils.guessExtension;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -306,7 +307,7 @@ public class UploadBean implements Serializable {
 						.getSessionBean(SessionBean.class);
 				throw new RuntimeException(
 						sessionBean.getMessage("upload_format_not_allowed")
-								+ " (" + guessedNotAllowedFormat + ")");
+								+ " (" + StorageUtils.guessExtension(file) + ")");
 			}
 		}
 	}

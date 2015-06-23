@@ -278,7 +278,7 @@
 											</div>
 										</div>
 									</ui:repeat>
-									<ui:fragment rendered="#{ empty item.mds.tree.list}">
+									<ui:fragment rendered="#{empty item.mds.tree.list and Auth.update(itemBean.profile)}">
 										<h3 class="imj_headline">#{msg.error_collection_profile_not_exist}
 											<h:outputLink value="#{Navigation.profileUrl}#{itemBean.profile.idString}/#{Navigation.editPath}?init=1&amp;col=#{itemBean.collection.idString}" title="#{lbl.create_now}">
 												<h:outputText value="#{lbl.create_now}"/>

@@ -4,18 +4,25 @@
 package de.mpg.imeji.logic.vo;
 
 import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.UserGroupController;
 import de.mpg.imeji.logic.util.IdentifierUtil;
+import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.j2j.annotations.*;
+
 import org.apache.log4j.Logger;
 
 import java.io.Serializable;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlEnum;
 
 /**
  * imeji user
@@ -44,6 +51,17 @@ public class User implements Serializable
     private Collection<Grant> grants = new ArrayList<Grant>();
     private URI id = IdentifierUtil.newURI(User.class);
     private List<UserGroup> groups = new ArrayList<>();
+
+    //User properties for registration
+	@j2jLiteral(ImejiNamespaces.DATE_CREATED)
+	private Calendar created;
+	
+	@j2jResource(ImejiNamespaces.USER_STATUS)
+	private URI userStatus = URI.create(UserStatus.ACTIVE.getUriString());
+
+
+    @j2jLiteral("http://imeji.org/terms/registrationToken")
+    private String registrationToken;
 
 
     @j2jList("http://imeji.org/terms/observedCollections")
@@ -261,5 +279,61 @@ public class User implements Serializable
     public void setObservedCollections(Collection<String> observedCollections) {
         this.observedCollections = observedCollections;
     }
+    
+    @XmlEnum(String.class)
+	public enum UserStatus {
+		ACTIVE(new String(ImejiNamespaces.USER_STATUS + "#ACTIVE")), INACTIVE(
+				new String(ImejiNamespaces.USER_STATUS + "#INACTIVE"));
+
+		private String uri;
+
+		private UserStatus(String uri) {
+			this.uri = uri;
+		}
+
+		public String getUriString() {
+			return uri;
+		}
+
+		public URI getURI() {
+			return URI.create(uri);
+		}
+	}
+    
+    @XmlElement(name = "created", namespace = "http://purl.org/dc/terms/")
+	public Calendar getCreated() {
+		return created;
+	}
+
+	public void setCreated(Calendar created) {
+		this.created = created;
+	}
+	
+	public void setUserStatus(UserStatus status) {
+		this.userStatus = URI.create(status.getUriString());
+	}
+
+	@XmlElement(name = "userStatus", namespace = "http://imeji.org/terms/")
+	public UserStatus getUserStatus() {
+		return UserStatus.valueOf(userStatus.getFragment());
+	}
+	
+    
+	@XmlElement(name = "registrationToken", namespace = "http://imeji.org/terms/")
+	public String getRegistrationToken()
+    {
+        return registrationToken;
+    }
+
+    public void setRegistrationToken(String token)
+    {
+        this.registrationToken = token;
+    }
+
+    public boolean isActive()
+    {
+    	return userStatus.equals(UserStatus.ACTIVE.getURI());
+    }
+
 
 }

@@ -77,9 +77,11 @@ public class ThumbnailBean {
 						+ "resources/icon/discarded.png";
 		this.filename = item.getFilename();
 		this.mdSet = item.getMetadataSet();
+		
 		this.profile = ObjectCachedLoader.loadProfileWithoutPrivs(this.mdSet
 				.getProfile());
 		this.caption = findCaption();
+		
 		this.selected = sessionBean.getSelected().contains(uri.toString());
 		if (sessionBean.getActiveAlbum() != null) {
 			this.isInActiveAlbum = sessionBean.getActiveAlbum().getImages()
@@ -93,8 +95,7 @@ public class ThumbnailBean {
 	 * Initialize the {@link MetadataSetBean} which is used in the Popup
 	 */
 	public void initPopup() {
-		if (getMds() == null) {
-			setMds(new MetadataSetBean(mdSet, getProfile(), false));
+		if (getMds() == null) {			setMds(new MetadataSetBean(mdSet, getProfile(), false));
 			// Commented out, statements have to be filled in for sake of
 			// Caption
 			// setStatements(loadStatements(getProfile().getId()));

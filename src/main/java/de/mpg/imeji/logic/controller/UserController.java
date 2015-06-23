@@ -3,9 +3,21 @@
  */
 package de.mpg.imeji.logic.controller;
 
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.exceptions.AlreadyExistsException;
+import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotFoundException;
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.reader.ReaderFacade;
@@ -14,12 +26,18 @@ import de.mpg.imeji.logic.search.Search.SearchType;
 import de.mpg.imeji.logic.search.SearchFactory;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
-import de.mpg.imeji.logic.vo.*;
+import de.mpg.imeji.logic.util.IdentifierUtil;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Metadata;
+import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Organization;
+import de.mpg.imeji.logic.vo.Person;
+import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.logic.writer.WriterFacade;
-import org.apache.log4j.Logger;
-
-import java.net.URI;
-import java.util.*;
+import de.mpg.imeji.presentation.beans.ConfigurationBean;
+import de.mpg.j2j.helper.DateHelper;
 
 /**
  * Controller for {@link User}
@@ -41,7 +59,7 @@ public class UserController {
 	 * 
 	 */
 	public enum USER_TYPE {
-		DEFAULT, ADMIN, RESTRICTED, COPY;
+		DEFAULT, ADMIN, RESTRICTED, COPY, INACTIVE;
 	}
 
 	/**
@@ -63,6 +81,14 @@ public class UserController {
 	 * @throws ImejiException
 	 */
 	public User create(User u, USER_TYPE type) throws ImejiException {
+		
+		if (user == null && !USER_TYPE.INACTIVE.equals(type)) {
+			throw new BadRequestException("Not sufficient permissions to create user other than a user with status INACTIVE!");
+		}
+		
+		//Now set up the creator to Admin User, as necessary for permissions
+		user = Imeji.adminUser;
+		
 		try {
 			retrieve(u.getEmail());
 			throw new AlreadyExistsException("Email" + u.getEmail()
@@ -70,6 +96,8 @@ public class UserController {
 		} catch (NotFoundException e) {
 			// fine, user can be created
 		}
+		u.setUserStatus(User.UserStatus.ACTIVE);
+		
 		switch (type) {
 		case ADMIN:
 			u.setGrants(AuthorizationPredefinedRoles.imejiAdministrator(u
@@ -85,9 +113,17 @@ public class UserController {
 		case COPY:
 			// Don't change the grants of the user
 			break;
+		case INACTIVE:
+			//Don't change the grants of the user, but set the status to Inactive
+			u.setUserStatus(User.UserStatus.INACTIVE);
+			u.setRegistrationToken(IdentifierUtil.newUniversalUniqueId());
 		}
 		u.setName(u.getPerson().getGivenName() + " "
 				+ u.getPerson().getFamilyName());
+		
+		Calendar now = DateHelper.getCurrentDate();
+		u.setCreated(now);
+		
 		writer.create(WriterFacade.toList(u), null, user);
 		return u;
 	}
@@ -125,6 +161,25 @@ public class UserController {
 		}
 		throw new NotFoundException("User with email " + email + " not found");
 	}
+	
+	/**
+	 * Retrieve a {@link User} according to its email
+	 * 
+	 * @param email
+	 * @return
+	 * @throws ImejiException
+	 */
+	public User retrieveRegisteredUser(String registrationToken) throws ImejiException {
+		Search search = SearchFactory.create();
+		SearchResult result = search.searchSimpleForQuery(SPARQLQueries
+				.selectUserByRegistrationToken(registrationToken));
+		if (result.getNumberOfRecords() == 1) {
+			String id = result.getResults().get(0);
+			User u = (User) reader.read(id, user, new User());
+			return u;
+		}
+		throw new NotFoundException("Invalid registration token!");
+	}
 
 	public User retrieve(String email, User currentUser) throws ImejiException {
 		Search search = SearchFactory.create();
@@ -149,8 +204,10 @@ public class UserController {
 	 */
 	public User retrieve(URI uri) throws ImejiException {
 		User u = (User) reader.read(uri.toString(), user, new User());
-		UserGroupController ugc = new UserGroupController();
-		u.setGroups((List<UserGroup>) ugc.searchByUser(u, user));
+		if (u.isActive()) {
+			UserGroupController ugc = new UserGroupController();
+			u.setGroups((List<UserGroup>) ugc.searchByUser(u, user));
+		}
 		return u;
 	}
 
@@ -177,10 +234,50 @@ public class UserController {
 		}
 		updatedUser.setName(updatedUser.getPerson().getGivenName() + " "
 				+ updatedUser.getPerson().getFamilyName());
+		
 		writer.update(WriterFacade.toList(updatedUser), null, currentUser, true);
 		return updatedUser;
 	}
 
+	
+	/**
+	 * Activae a {@link User}
+	 * 
+	 * @param activateUser
+	 *            : The user who should be activated
+	 * 
+	 * @throws ImejiException
+	 */
+	public User activate (String registrationToken)
+			throws ImejiException {
+		
+		try {
+			User activateUser = retrieveRegisteredUser(registrationToken);
+
+			if (activateUser.isActive())
+				throw new UnprocessableError("User is already activated!");
+			
+			Calendar now = DateHelper.getCurrentDate();
+			if (!(activateUser.getCreated().before(now)))
+				throw new UnprocessableError("Registration date does not match, its bigger then the current date!");
+
+			//TODO: wait for the ConfigurationBean setting here
+			Calendar validUntil = activateUser.getCreated();
+			validUntil.add(Calendar.DAY_OF_MONTH, ConfigurationBean.getRegistrationTokenExpiryStatic());
+			
+			if ((now.after(validUntil)))
+				throw new UnprocessableError("Activation period expired, user should be deleted!");
+			
+			activateUser.setUserStatus(User.UserStatus.ACTIVE);
+			activateUser.setGrants(AuthorizationPredefinedRoles.defaultUser(activateUser.getId()
+					.toString()));
+			writer.update(WriterFacade.toList(activateUser), null, activateUser, true);
+			return activateUser;
+
+		} catch (NotFoundException e) {
+			throw new NotFoundException("Invalid registration token!"); 
+		}
+	}
 	/**
 	 * Retrieve all {@link User} in imeji<br/>
 	 * Only allowed for System administrator
@@ -447,5 +544,41 @@ public class UserController {
 				SPARQLQueries.selectUsersToBeNotifiedByFileDownload(user, c))
 				.getResults();
 		return (List<User>) loadUsers(uris);
+	}
+	
+	/*
+	 * Returns the user with which the UserController is invoked
+	 * 
+	 */
+	public User getControllerUser ()
+	{
+		return user;
+	}
+	
+	
+	/**
+	 * Remove all the {@link Metadata} not having a {@link Statement}. This
+	 * happens when a {@link Statement} has been removed from a
+	 * {@link MetadataProfile}.
+	 */
+	public int cleanInactiveUsers() {
+		Search search = SearchFactory.create();
+		List<String> uris = search.searchSimpleForQuery(SPARQLQueries.getInactiveUsers()).getResults();
+		List<User> cleaningCandidates = (List<User>)loadUsers(uris);
+		int i = 0;
+		for (User u:cleaningCandidates) {
+			Calendar expiry=u.getCreated();
+			expiry.add(Calendar.DAY_OF_MONTH, ConfigurationBean.getRegistrationTokenExpiryStatic()); 
+			if (!u.isActive() && DateHelper.getCurrentDate().after(expiry)) {
+				try{
+					delete (u);
+					i++;
+				} catch (ImejiException e) {
+					// TODO Auto-generated catch block
+					logger.info("There has been an error in the expiry for users. Inactive user with email "+u.getEmail()+" could not be removed!", e);
+				}
+			}
+		}
+		return i;
 	}
 }

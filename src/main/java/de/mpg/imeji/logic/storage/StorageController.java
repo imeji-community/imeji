@@ -104,8 +104,10 @@ public class StorageController implements Serializable {
 		// If the file is an image, read the dimension of the image
 		if (StorageUtils.getMimeType(file).contains("image")) {
 			Dimension d = ImageUtils.getImageDimension(file);
-			result.setHeight(d.height);
-			result.setWidth(d.width);
+			if (d != null) {
+				result.setHeight(d.height);
+				result.setWidth(d.width);
+			}
 		}
 		return result;
 	}

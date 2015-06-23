@@ -306,7 +306,7 @@ public class UploadBean implements Serializable {
 						.getSessionBean(SessionBean.class);
 				throw new RuntimeException(
 						sessionBean.getMessage("upload_format_not_allowed")
-								+ " (" + guessedNotAllowedFormat + ")");
+								+ " (" + StorageUtils.guessExtension(file) + ")");
 			}
 		}
 	}

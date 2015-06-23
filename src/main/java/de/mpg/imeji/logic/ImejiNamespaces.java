@@ -1,5 +1,9 @@
 package de.mpg.imeji.logic;
 
+import java.util.Calendar;
+
+import de.mpg.j2j.annotations.j2jLiteral;
+
 /**
  * All Namespaces used in imeji //TODO finish classes
  * 
@@ -23,7 +27,9 @@ public class ImejiNamespaces {
 	public static final String COLLECTION="http://imeji.org/terms/collection";
 	public static final String ITEM="http://imeji.org/terms/item";
 	public static final String PROFILE="http://imeji.org/terms/mdprofile";
-	
+	public static final String USER_STATUS = "http://imeji.org/terms/userStatus";
+	public static final String REGISTRATION_TOKEN="http://imeji.org/terms/registrationToken";
+
 	
 	/*
 	 * Metadata

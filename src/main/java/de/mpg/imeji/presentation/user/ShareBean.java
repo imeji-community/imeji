@@ -1,20 +1,5 @@
 package de.mpg.imeji.presentation.user;
 
-import java.io.Serializable;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
-
-import org.apache.log4j.Logger;
-
 import com.hp.hpl.jena.sparql.pfunction.library.container;
 import com.ocpsoft.pretty.PrettyContext;
 
@@ -22,9 +7,9 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.ShareController;
+import de.mpg.imeji.logic.controller.ShareController.ShareRoles;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserGroupController;
-import de.mpg.imeji.logic.controller.ShareController.ShareRoles;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.Album;
@@ -42,6 +27,23 @@ import de.mpg.imeji.presentation.user.util.EmailClient;
 import de.mpg.imeji.presentation.user.util.EmailMessages;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
+
+import org.apache.log4j.Logger;
+
+import java.io.Serializable;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
+
+import static de.mpg.imeji.presentation.user.util.EmailClient.isValidEmail;
 
 @ManagedBean(name = "ShareBean")
 @ViewScoped
@@ -273,7 +275,7 @@ public class ShareBean implements Serializable {
 			List<String> inputValues = Arrays.asList(getEmailInput().split(
 					"\\s*[|,;\\n]\\s*"));
 			for (String value : inputValues) {
-				if (UserCreationBean.isValidEmail(value)) {
+				if (isValidEmail(value)) {
 					try {
 						UserController uc = new UserController(Imeji.adminUser);
 						uc.retrieve(value);
@@ -332,7 +334,7 @@ public class ShareBean implements Serializable {
 	 * 
 	 * @param dest
 	 * @param subject
-	 * @param message
+	 * @param grants
 	 */
 	private void sendEmail(User dest, String subject, List<Grant> grants) {
 		EmailClient emailClient = new EmailClient();
@@ -440,7 +442,6 @@ public class ShareBean implements Serializable {
 	 * 
 	 * @param group
 	 * @param subject
-	 * @param message
 	 */
 	private void sendEmailToGroup(UserGroup group, String subject) {
 		UserController c = new UserController(Imeji.adminUser);
@@ -466,7 +467,6 @@ public class ShareBean implements Serializable {
 	 * {@link UserGroup}
 	 * 
 	 * @param toList
-	 * @return
 	 */
 	public void shareTo(List<String> toList) {
 		for (String to : toList) {
@@ -476,7 +476,7 @@ public class ShareBean implements Serializable {
 				User toUser = null;
 				UserGroup toGroup = null;
 
-				if (UserCreationBean.isValidEmail(to)) {
+				if (isValidEmail(to)) {
 					toUser = ObjectLoader.loadUser(to, Imeji.adminUser);
 				} else {
 					toGroup = retrieveGroup(to);
@@ -565,7 +565,7 @@ public class ShareBean implements Serializable {
 	/**
 	 * Search a {@link UserGroup} by name
 	 * 
-	 * @param q
+	 * @param uri
 	 * @return
 	 */
 	private UserGroup retrieveGroup(String uri) {

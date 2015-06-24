@@ -3,16 +3,6 @@
  */
 package de.mpg.imeji.logic.controller;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.exceptions.AlreadyExistsException;
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
@@ -38,6 +28,16 @@ import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.j2j.helper.DateHelper;
+
+import org.apache.log4j.Logger;
+
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Controller for {@link User}
@@ -75,7 +75,7 @@ public class UserController {
 	 * Create a new user in the database with predefined roles (ADMIN, DEFAULT
 	 * or RESTRICTED)
 	 * 
-	 * @param newUser
+	 * @param u
 	 * @param type
 	 * @return
 	 * @throws ImejiException
@@ -165,7 +165,7 @@ public class UserController {
 	/**
 	 * Retrieve a {@link User} according to its email
 	 * 
-	 * @param email
+	 * @param registrationToken
 	 * @return
 	 * @throws ImejiException
 	 */
@@ -198,7 +198,7 @@ public class UserController {
 	/**
 	 * Retrieve a {@link User} according to its uri (id)
 	 * 
-	 * @param email
+	 * @param uri
 	 * @return
 	 * @throws ImejiException
 	 */
@@ -216,9 +216,9 @@ public class UserController {
 	 * 
 	 * @param updatedUser
 	 *            : The user who is updated in the database
-	 * @param currentUSer
-	 *            : The user who does the update
+	 * @param currentUser
 	 * @throws ImejiException
+	 * @return
 	 */
 	public User update(User updatedUser, User currentUser)
 			throws ImejiException {
@@ -243,10 +243,9 @@ public class UserController {
 	/**
 	 * Activae a {@link User}
 	 * 
-	 * @param activateUser
-	 *            : The user who should be activated
-	 * 
+	 * @param registrationToken
 	 * @throws ImejiException
+	 * @return
 	 */
 	public User activate (String registrationToken)
 			throws ImejiException {
@@ -439,7 +438,7 @@ public class UserController {
 	 * 
 	 * @param uris
 	 * @return
-	 * @throws ImejiAPIException
+	 * @throws ImejiException
 	 */
 	public Collection<User> loadUsers(List<String> uris) {
 		Collection<User> users = new ArrayList<User>();
@@ -458,6 +457,7 @@ public class UserController {
 	 * Load Organizations
 	 * 
 	 * @param uris
+	 * @param model
 	 * @return
 	 */
 	public Collection<Organization> loadOrganizations(List<String> uris,
@@ -479,6 +479,7 @@ public class UserController {
 	 * Load Organizations
 	 * 
 	 * @param uris
+	 * @param model
 	 * @return
 	 */
 	private Collection<Person> loadPersons(List<String> uris, String model) {

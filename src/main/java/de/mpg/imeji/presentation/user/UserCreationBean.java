@@ -50,32 +50,17 @@ public class UserCreationBean {
 	 */
 	public String create() {
 
-		if (user.getPerson() == null
-				|| "".equals(user.getPerson().getFamilyName())
-				|| user.getPerson().getFamilyName() == null) {
-			BeanHelper.error(sb.getMessage("error_user_name_unfilled"));
-			if (!isValidEmail(user.getEmail()))
-				BeanHelper.error(sb.getMessage("error_user_email_not_valid"));
-		} else if (!isValidEmail(user.getEmail())) {
-			BeanHelper.error(sb.getMessage("error_user_email_not_valid"));
-		} else {
 			try {
-				if (userAlreadyExists(user)) {
-					BeanHelper
-							.error(sb.getMessage("error_user_already_exists"));
-				} else {
 					String password = createNewUser();
 					if (sendEmail) {
 						sendNewAccountEmail(password);
 					}
-					logger.info("New user created: " + user.getEmail());
 					BeanHelper.info(sb.getMessage("success_user_create"));
 					return sb.getPrettySpacePage("pretty:users");
 				}
-			} catch (Exception e) {
-				BeanHelper.error(sb.getMessage("error") + ": " + e);
+			catch (Exception e) {
+				BeanHelper.error(sb.getMessage(e.getLocalizedMessage()));
 			}
-		}
 		return "pretty:";
 	}
 

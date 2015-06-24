@@ -11,6 +11,8 @@ import javax.faces.context.FacesContext;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
@@ -19,6 +21,8 @@ import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.ShareController.ShareRoles;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.util.StringHelper;
+import de.mpg.imeji.logic.validation.Validator;
+import de.mpg.imeji.logic.validation.ValidatorFactory;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.Organization;
@@ -39,6 +43,7 @@ public class UserBean {
 	private String id;
 	private List<SharedHistory> roles = new ArrayList<SharedHistory>();
 	private boolean edit = false;
+	private String userEmailOrigin= "";
 
 	public UserBean() {
 	}
@@ -61,9 +66,12 @@ public class UserBean {
 	private void init(String id) {
 		try {
 			this.id = id;
+
 			newPassword = null;
 			repeatedPassword = null;
+			
 			retrieveUser();
+
 			if (user != null) {
 				this.roles = AuthUtil.getAllRoles(user, session.getUser());
 				this.setEdit(false);
@@ -81,6 +89,7 @@ public class UserBean {
 	public void retrieveUser() throws Exception {
 		if (id != null && session.getUser() != null) {
 			user = ObjectLoader.loadUser(id, session.getUser());
+			userEmailOrigin = user.getEmail(); 
 		} else if (id != null && session.getUser() == null) {
 			LoginBean loginBean = (LoginBean) BeanHelper
 					.getRequestBean(LoginBean.class);
@@ -181,19 +190,20 @@ public class UserBean {
 
 	/**
 	 * Update the user in jena
+	 * @throws ImejiException 
 	 */
-	public void updateUser() {
+	public void updateUser () throws ImejiException {
 		if (user != null) {
-			UserController controller = new UserController(session.getUser());
-			try {
-				controller.update(user, session.getUser());
-			} catch (Exception e) {
-				BeanHelper.error(e.getMessage());
-			}
-			reloadPage();
+					UserController controller = new UserController(session.getUser());
+					try {
+						controller.update(user, session.getUser());
+						reloadPage();
+					} catch (Exception e) {
+						BeanHelper.error(session.getMessage(e.getLocalizedMessage()));
+					}
 		}
-
 	}
+	
 
 	/**
 	 * Reload the page with the current user
@@ -201,13 +211,13 @@ public class UserBean {
 	 * @throws IOException
 	 */
 	private void reloadPage() {
-		try {
-			FacesContext.getCurrentInstance().getExternalContext()
-					.redirect(getUserPageUrl());
-		} catch (IOException e) {
-			Logger.getLogger(UserBean.class).info("Some reloadPage exception",
-					e);
-		}
+			try {
+				FacesContext.getCurrentInstance().getExternalContext()
+						.redirect(getUserPageUrl());
+			} catch (IOException e) {
+				Logger.getLogger(UserBean.class).info("Some reloadPage exception",
+						e);
+			}
 	}
 
 	/**
@@ -218,7 +228,8 @@ public class UserBean {
 	public String getUserPageUrl() {
 		Navigation navigation = (Navigation) BeanHelper
 				.getApplicationBean(Navigation.class);
-		return navigation.getUserUrl() + "?id=" + user.getEmail();
+
+		return navigation.getUserUrl() + "?id=" + userEmailOrigin;
 	}
 
 	public User getUser() {

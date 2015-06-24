@@ -6,11 +6,13 @@ import de.mpg.imeji.logic.validation.impl.ItemValidator;
 import de.mpg.imeji.logic.validation.impl.MetadataValidator;
 import de.mpg.imeji.logic.validation.impl.ProfileValidator;
 import de.mpg.imeji.logic.validation.impl.PseudoValidator;
+import de.mpg.imeji.logic.validation.impl.UserValidator;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.User;
 
 /**
  * Factory for {@link Validator}
@@ -38,6 +40,8 @@ public class ValidatorFactory {
 			return new AlbumValidator();
 		} else if (obj instanceof MetadataProfile) {
 			return new ProfileValidator();
+		} else if (obj instanceof User) {
+			return new UserValidator();
 		}
 		return new PseudoValidator();
 	}

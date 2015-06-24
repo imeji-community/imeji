@@ -31,6 +31,7 @@
 			</h:panelGroup>
 		</ui:fragment>
 		
+		
 		<ui:fragment rendered="#{Auth.admin(UserBean.user)}">
 			<h:panelGroup layout="block" styleClass="imj_backPanel" rendered="#{Auth.admin}">
 				<a href="#{Navigation.applicationSpaceUrl}users" title="#{lbl.admin_user_view}">
@@ -54,6 +55,7 @@
 							<div class="imj_content">
 								
 								<h:form id="userForm">
+									
 									<h:panelGroup layout="block" id="userInfos" class="imj_userGlobalInformation">				
 										<!-- User Edit - Email -->
 										<h:panelGroup layout="block" styleClass="imj_admindataSet">
@@ -114,7 +116,9 @@
 											<h:outputLink id="lnkCancelUserdata" value="#{UserBean.userPageUrl}" rendered="#{UserBean.edit}" styleClass="imj_cancelButton" type="submit">
 												<h:outputText value="#{lbl.cancel}"/>
 											</h:outputLink>
-											<h:commandLink action="#{UserBean.updateUser}" value="#{lbl.save}" styleClass="imj_submitButton"  rendered="#{UserBean.edit}" type="submit"/>
+											<h:commandLink action="#{UserBean.updateUser}" value="#{lbl.save}" styleClass="imj_submitButton"  rendered="#{UserBean.edit}" type="submit">
+												<f:ajax execute="@form"  render=":userForm:userInfos :imj_pageMessageArea"/>
+											</h:commandLink>
 										</div>
 									
 									</h:panelGroup> <!-- END user infos -->

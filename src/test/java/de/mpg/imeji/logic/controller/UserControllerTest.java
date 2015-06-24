@@ -39,8 +39,10 @@ public class UserControllerTest extends ControllerTest{
 		} catch (AlreadyExistsException e) {
 			// everything fine
 		} catch (Exception e1) {
-			Assert.fail("An error happened by creating the user "
-					+ e1.getMessage());
+			Assert.assertSame("error_user_already_exists", e1.getMessage());
+			
+//			Assert.fail("An error happened by creating the user "
+//					+ e1.getMessage());
 		}
 	}
 
@@ -51,6 +53,7 @@ public class UserControllerTest extends ControllerTest{
 			// Set Email of user2 to user
 			User user = JenaUtil.testUser;
 			user.setEmail(JenaUtil.TEST_USER_EMAIL_2);
+			user.getPerson().setFamilyName(JenaUtil.TEST_USER_NAME);
 			c.update(user, Imeji.adminUser);
 			Assert.fail("User should not be updated, since the email is already used by another user");
 		} catch (AlreadyExistsException e) {
@@ -67,6 +70,7 @@ public class UserControllerTest extends ControllerTest{
 			// Create a new user with a new id but with the same email
 			User user = new User();
 			user.setEmail("inactive@imeji.org");
+			user.getPerson().setFamilyName(JenaUtil.TEST_USER_NAME);
 			c.create(user, USER_TYPE.INACTIVE);
 			assertTrue(!user.isActive());
 	}
@@ -78,6 +82,7 @@ public class UserControllerTest extends ControllerTest{
 			// Create a new user with a new id but with the same email
 			User user = new User();
 			user.setEmail("active@imeji.org");
+			user.getPerson().setFamilyName(JenaUtil.TEST_USER_NAME);
 			try {
 				user=c.create(user, USER_TYPE.DEFAULT);
 				Assert.fail("User should not be created in other state than inactive!");
@@ -93,6 +98,7 @@ public class UserControllerTest extends ControllerTest{
 	public void createAndActivateInactiveUserTest() throws ImejiException {
 		User user = new User(); 
 		user.setEmail("inactive2@imeji.org");
+		user.getPerson().setFamilyName(JenaUtil.TEST_USER_NAME);
 		UserController c = new UserController(user);
 		try {
 			// Create a new user with a new id but with the same email
@@ -165,6 +171,7 @@ public class UserControllerTest extends ControllerTest{
 		for (int i=1;i<10;i++ ){
 			User user = new User(); 
 			user.setEmail(email+i);
+			user.getPerson().setFamilyName(JenaUtil.TEST_USER_NAME);
 			user=c.create(user, USER_TYPE.INACTIVE);
 			assertTrue(!user.isActive());
 			Calendar originalCreateDate = user.getCreated();

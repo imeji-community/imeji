@@ -17,6 +17,7 @@ import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
 import de.mpg.imeji.logic.util.StringHelper;
+import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.beans.PropertyBean;
@@ -109,8 +110,7 @@ public class JenaUtil {
 
 	private static void initTestUser() throws Exception {
 		testUser = getMockupUser(TEST_USER_EMAIL, TEST_USER_NAME, TEST_USER_PWD);
-		testUser2 = getMockupUser(TEST_USER_EMAIL_2, TEST_USER_NAME,
-				TEST_USER_PWD);
+		testUser2 = getMockupUser(TEST_USER_EMAIL_2, TEST_USER_NAME, TEST_USER_PWD);
 		createUser(testUser);
 		createUser(testUser2);
 	}
@@ -138,6 +138,9 @@ public class JenaUtil {
 
 		User user = new User();
 		user.setEmail(email);
+		Person userPerson = user.getPerson();
+		userPerson.setFamilyName(name);
+		user.setPerson(userPerson);
 		user.setName(name);
 		user.setEncryptedPassword(StringHelper.convertToMD5(pwd));
 		user.setGrants(AuthorizationPredefinedRoles.defaultUser(user.getId()

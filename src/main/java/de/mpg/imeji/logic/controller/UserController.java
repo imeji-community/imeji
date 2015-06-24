@@ -89,13 +89,12 @@ public class UserController {
 		//Now set up the creator to Admin User, as necessary for permissions
 		user = Imeji.adminUser;
 		
-		try {
-			retrieve(u.getEmail());
-			throw new AlreadyExistsException("Email" + u.getEmail()
-					+ "already used by another user");
-		} catch (NotFoundException e) {
-			// fine, user can be created
-		}
+//		try {
+//			retrieve(u.getEmail());
+//			throw new AlreadyExistsException(" Please use another email account, or check the !");
+//		} catch (NotFoundException e) {
+//			// fine, user can be created
+//		}
 		u.setUserStatus(User.UserStatus.ACTIVE);
 		
 		switch (type) {
@@ -160,6 +159,40 @@ public class UserController {
 			return u;
 		}
 		throw new NotFoundException("User with email " + email + " not found");
+	}
+	
+	/**
+	 * Retrieve a {@link User} according to its email
+	 * 
+	 * @param email
+	 * @return
+	 * @throws ImejiException
+	 */
+	public boolean existsUserWitheMailAndId (String email, URI userId) {
+		Search search = SearchFactory.create();
+		SearchResult result = search.searchSimpleForQuery(SPARQLQueries
+				.selectUserByEmailAndId(email, userId));
+		if (result.getNumberOfRecords() > 0) {
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Retrieve a {@link User} according to its email
+	 * 
+	 * @param email
+	 * @return
+	 * @throws ImejiException
+	 */
+	public boolean existsUserWitheMail (String email) {
+		Search search = SearchFactory.create();
+		SearchResult result = search.searchSimpleForQuery(SPARQLQueries
+				.selectUserByEmail(email));
+		if (result.getNumberOfRecords() > 0) {
+			return true;
+		}
+		return false;
 	}
 	
 	/**

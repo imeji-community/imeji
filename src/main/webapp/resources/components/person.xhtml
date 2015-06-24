@@ -102,7 +102,8 @@
 			</div>
 			<div class="imj_admindataValue">
 				<div class="imj_admindataValueEntry">
-					<h:inputText id="inputFamilyNameText" styleClass="imj_admindataEdit autocomplete_person" value="#{cc.attrs.person.familyName}" onfocus="setUserSource('#{cc.attrs.userSource}')"/>
+					<h:inputText id="inputFamilyNameText" styleClass="imj_admindataEdit autocomplete_person" value="#{cc.attrs.person.familyName}" onfocus="setUserSource('#{cc.attrs.userSource}')" rendered="#{cc.attrs.userSource != ''}"/>
+					<h:inputText id="inputFamilyNameText1" styleClass="imj_admindataEdit autocomplete_person" value="#{cc.attrs.person.familyName}" rendered="#{cc.attrs.userSource == ''}"/>
 				</div>
 			</div>
 		</h:panelGroup>
@@ -113,7 +114,8 @@
 			</div>
 			<div class="imj_admindataValue">
 				<div class="imj_admindataValueEntry">
-					<h:inputText id="inputGiveNameText" styleClass="imj_admindataEdit autocomplete_person" value="#{cc.attrs.person.givenName}" onfocus="setUserSource('#{cc.attrs.userSource}')"/>
+					<h:inputText id="inputGiveNameText" styleClass="imj_admindataEdit autocomplete_person" value="#{cc.attrs.person.givenName}" onfocus="setUserSource('#{cc.attrs.userSource}')" rendered="#{cc.attrs.userSource != ''}"/>
+					<h:inputText id="inputGiveNameText1" styleClass="imj_admindataEdit autocomplete_person" value="#{cc.attrs.person.givenName}" rendered="#{cc.attrs.userSource == ''}"/>
 				</div>
 			</div>
 		</h:panelGroup>
@@ -125,7 +127,8 @@
 			</div>
 			<div class="imj_admindataValue">
 				<div class="imj_admindataValueEntry">
-					<h:inputText id="inputAlternativeName" styleClass="imj_admindataEdit autocomplete_person" value="#{cc.attrs.person.alternativeName}" onfocus="setUserSource('#{cc.attrs.userSource}')"/>
+					<h:inputText id="inputAlternativeName" styleClass="imj_admindataEdit autocomplete_person" value="#{cc.attrs.person.alternativeName}" onfocus="setUserSource('#{cc.attrs.userSource}')" rendered="#{cc.attrs.userSource != ''}"/>
+					<h:inputText id="inputAlternativeName1" styleClass="imj_admindataEdit autocomplete_person" value="#{cc.attrs.person.alternativeName}" rendered="#{cc.attrs.userSource == ''}"/>
 				</div>
 			</div>
 		</h:panelGroup>
@@ -137,7 +140,8 @@
 			</div>
 			<div class="imj_admindataValue">
 				<div class="imj_admindataValueEntry">
-					<h:inputText id="inputIdentifier" styleClass="imj_admindataEdit" value="#{cc.attrs.person.identifier}" onfocus="setUserSource('#{cc.attrs.userSource}')"/>
+					<h:inputText id="inputIdentifier" styleClass="imj_admindataEdit" value="#{cc.attrs.person.identifier}" onfocus="setUserSource('#{cc.attrs.userSource}')" rendered="#{cc.attrs.userSource != ''}"/>
+					<h:inputText id="inputIdentifier1" styleClass="imj_admindataEdit" value="#{cc.attrs.person.identifier}" rendered="#{cc.attrs.userSource == ''}"/>
 				</div>
 			</div>
 		</h:panelGroup>
@@ -146,7 +150,9 @@
 		<!-- Organisation -->
 		<ui:repeat var="org" value="#{cc.attrs.person.organizations}" varStatus="index">
 			<div class="imj_organisation">
-				<h:inputText id="inputOrgaURI" styleClass="input_hidden_orga_uri imj_noDisplay" value="#{PersonBean.orgaURI}" valueChangeListener="#{PersonBean.orgaListener}" onfocus="setOrgaSource('#{cc.attrs.orgsSource}');"/>
+			
+				<h:inputText id="inputOrgaURI" styleClass="input_hidden_orga_uri imj_noDisplay" value="#{PersonBean.orgaURI}" valueChangeListener="#{PersonBean.orgaListener}" onfocus="setOrgaSource('#{cc.attrs.orgsSource}');" rendered="#{cc.attrs.orgsSource != ''}"/>
+				<h:inputText id="inputOrgaURI1" styleClass="input_hidden_orga_uri imj_noDisplay" value="#{PersonBean.orgaURI}" valueChangeListener="#{PersonBean.orgaListener}" rendered="#{cc.attrs.orgsSource == ''}"/>
 	
 				<h:commandButton id="changeOrgaButton" styleClass="button_change_button imj_noDisplay" action="#{PersonBean.changeOrga(cc.attrs.bean, cc.attrs.position,  index.index)}">
 					<f:ajax render="@form" execute="@form"/>
@@ -171,7 +177,8 @@
 					</div>
 					<div class="imj_admindataValue">
 						<div class="imj_admindataValueEntry">
-							<h:inputText id="inputOrgaName" styleClass="imj_admindataEdit autocomplete_org" value="#{org.name}" onfocus="setOrgaSource('#{cc.attrs.orgsSource}');"/>
+							<h:inputText id="inputOrgaName" styleClass="imj_admindataEdit autocomplete_org" value="#{org.name}" onfocus="setOrgaSource('#{cc.attrs.orgsSource}');" rendered="#{cc.attrs.orgsSource != ''}"/>
+							<h:inputText id="inputOrgaName1" styleClass="imj_admindataEdit autocomplete_org" value="#{org.name}" rendered="#{cc.attrs.orgsSource == ''}"/>
 						</div>
 					</div>
 				</h:panelGroup>
@@ -182,7 +189,8 @@
 					</div>
 					<div class="imj_admindataValue">
 						<div class="imj_admindataValueEntry">
-							<h:inputTextarea id="inputOrgaDescription" styleClass="imj_admindataEdit" value="#{org.description}" onfocus="setOrgaSource('#{cc.attrs.orgsSource}');"/>
+							<h:inputTextarea id="inputOrgaDescription" styleClass="imj_admindataEdit" value="#{org.description}" onfocus="setOrgaSource('#{cc.attrs.orgsSource}');" rendered="#{cc.attrs.orgsSource != ''}"/>
+							<h:inputTextarea id="inputOrgaDescription1" styleClass="imj_admindataEdit" value="#{org.description}" rendered="#{cc.attrs.orgsSource == ''}"/>
 						</div>
 					</div>
 				</h:panelGroup>
@@ -193,7 +201,8 @@
 					</div>
 					<div class="imj_admindataValue">
 						<div class="imj_admindataValueEntry">
-							<h:inputText id="inputOrgaIdentifier" styleClass="imj_admindataEdit" value="#{org.identifier}" onfocus="setOrgaSource('#{cc.attrs.orgsSource}');"/>
+							<h:inputText id="inputOrgaIdentifier" styleClass="imj_admindataEdit" value="#{org.identifier}" onfocus="setOrgaSource('#{cc.attrs.orgsSource}');" rendered="#{cc.attrs.orgsSource != ''}"/>
+							<h:inputText id="inputOrgaIdentifier1" styleClass="imj_admindataEdit" value="#{org.identifier}" rendered="#{cc.attrs.orgsSource == ''}"/>
 						</div>
 					</div>
 				</h:panelGroup>
@@ -204,7 +213,8 @@
 					</div>
 					<div class="imj_admindataValue">
 						<div class="imj_admindataValueEntry">
-							<h:inputText id="inputOrgaCity" styleClass="imj_admindataEdit" value="#{org.city}" onfocus="setOrgaSource('#{cc.attrs.orgsSource}');"/>
+							<h:inputText id="inputOrgaCity" styleClass="imj_admindataEdit" value="#{org.city}" onfocus="setOrgaSource('#{cc.attrs.orgsSource}');" rendered="#{cc.attrs.orgsSource != ''}"/>
+							<h:inputText id="inputOrgaCity1" styleClass="imj_admindataEdit" value="#{org.city}" rendered="#{cc.attrs.orgsSource == ''}"/>
 						</div>
 					</div>
 				</h:panelGroup>
@@ -215,7 +225,8 @@
 					</div>
 					<div class="imj_admindataValue">
 						<div class="imj_admindataValueEntry">
-							<h:inputText id="inputOrgaCountry" styleClass="imj_admindataEdit" value="#{org.country}" onfocus="setOrgaSource('#{cc.attrs.orgsSource}');"/>
+							<h:inputText id="inputOrgaCountry" styleClass="imj_admindataEdit" value="#{org.country}" onfocus="setOrgaSource('#{cc.attrs.orgsSource}');" rendered="#{cc.attrs.orgsSource != ''}"/>
+							<h:inputText id="inputOrgaCountry1" styleClass="imj_admindataEdit" value="#{org.country}" rendered="#{cc.attrs.orgsSource == ''}"/>
 						</div>
 					</div>
 				</h:panelGroup>
@@ -224,4 +235,3 @@
 			
 	</composite:implementation>
 </html>
-

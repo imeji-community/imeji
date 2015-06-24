@@ -227,7 +227,7 @@ public class ItemController extends ImejiController {
 			img.getMetadataSet().setProfile(ic.getProfile());
 			ic.getImages().add(img.getId());
 		}
-		cleanMetadata((List<Item>) items);
+		cleanMetadata(items);
 		ProfileController pc = new ProfileController();
 		writer.create(
 				J2JHelper.cast2ObjectList(new ArrayList<Item>(items)),
@@ -423,7 +423,7 @@ public class ItemController extends ImejiController {
 			item.setFilename(FilenameUtils.getName(item.getFilename()));
 			imBeans.add(createFulltextForMetadata(item));
 		}
-		cleanMetadata((List<Item>) items);
+		cleanMetadata(items);
 		ProfileController pc = new ProfileController();
 		writer.update(
 				imBeans,
@@ -899,7 +899,7 @@ public class ItemController extends ImejiController {
 	 * 
 	 * @param l
 	 */
-	private void cleanMetadata(List<Item> l) {
+	private void cleanMetadata(Collection<Item> l) {
 		for (Item item : l) {
 			for (Metadata md : item.getMetadataSet().getMetadata()) {
 				md.clean();

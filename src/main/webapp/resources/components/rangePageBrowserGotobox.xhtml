@@ -22,7 +22,7 @@
 		<div class="imj_paginator">
 			<h:form>
 			 	<div id="imj_rangeSelector" class="imj_rangeSelector">
-				 		<h:selectOneMenu id="extSelectTop" value="#{cc.attrs.paginatorBean.elementsPerPageTop}" valueChangeListener="#{cc.attrs.paginatorBean.elementsPerPageTopListener}" onchange="setContentLoadingStatus();">
+				 		<h:selectOneMenu id="extSelectTop" value="#{cc.attrs.paginatorBean.elementsPerPage}" valueChangeListener="#{cc.attrs.paginatorBean.elementsPerPageListener}" onchange="setContentLoadingStatus();">
 				 			<f:selectItems value="#{cc.attrs.paginatorBean.elementsPerPageSelectItems}"/>
 				 			<f:ajax execute="@form" event="change" render=":ajaxWrapper :imj_pageMessageArea"/>
 				 		</h:selectOneMenu>
@@ -88,11 +88,13 @@
 			 </h:form>			
 			 <div class="imj_gotoBox">
 			 	<h:form>
-			 		<h:outputLabel for="inpGoToPageTop"><h:outputText id="lblList_lblGoToPage" value="#{lbl.paginator_goToPage} "/></h:outputLabel>
-			 		<h:inputText id="inpGoToPageTop" styleClass="imj_pageInput" value="#{cc.attrs.paginatorBean.goToPageTop}"/>
+			 		<h:outputLabel for="inpGoToPageTop" value="#{lbl.paginator_goToPage}"/>
+			 		<h:inputText id="inpGoToPageTop" styleClass="imj_pageInput" value="#{cc.attrs.paginatorBean.goToPage}"/>
 			 		<h:outputText id="lblItemList_of" value="#{lbl.paginator_of} "/>
 			 		<h:outputText id="lblPaginatorPageSize" value="#{cc.attrs.paginatorBean.paginatorPageSize}"/>
-			 		<h:commandButton id="btList_btGo" styleClass="imj_submitButton" value="#{lbl.paginator_go}" title="#{tip.List_btGo}" action="#{cc.attrs.paginatorBean.goToPageTop}" onclick="setContentLoadingStatus();"/>
+			 		<h:commandButton type="submit" id="btList_btGo" styleClass="imj_submitButton" value="#{lbl.paginator_go}" title="#{tip.List_btGo}" action="#{cc.attrs.paginatorBean.goToPage}" onclick="setContentLoadingStatus();">
+			 			<f:ajax execute="@form" render=":ajaxWrapper :imj_pageMessageArea"/>
+			 		</h:commandButton>
 			 	</h:form>
 			 </div>
 		</div>

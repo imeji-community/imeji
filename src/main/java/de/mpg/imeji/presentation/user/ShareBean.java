@@ -486,8 +486,11 @@ public class ShareBean implements Serializable {
 						profileUri, selectedRoles);
 
 				if (sendEmail) {
-					sendEmail(toUser, title, grants);
-					sendEmailToGroup(toGroup, title);
+					if(toUser != null){
+						sendEmail(toUser, title, grants);
+					}else if(toGroup != null){
+						sendEmailToGroup(toGroup, title);
+					}
 				}
 
 			} catch (Exception e) {

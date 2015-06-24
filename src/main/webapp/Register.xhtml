@@ -1,13 +1,60 @@
 <ui:composition template="templates/template_site.xhtml"
-				xmlns="http://www.w3.org/1999/xhtml"
-				xmlns:ui="http://java.sun.com/jsf/facelets"
-				xmlns:h="http://java.sun.com/jsf/html"
-				xmlns:menu="http://java.sun.com/jsf/composite/components/menu">
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:imjc="http://java.sun.com/jsf/composite/components">
 
-	<ui:param name="headline" value=""/>
+	<ui:param name="headline" value="#{lbl.register}"/>
 	
 	<ui:define name="mainContent">
-		<h1>Hallo</h1>
+		
+		<div class="imj_mainContentWrapper">
+			
+			<!-- Register form -->
+			<ul class="imj_registerSteps">
+				<li class="imj_active">1. #{lbl.register}</li>
+				<li>2. Activate the link from Verification-Email</li>
+			</ul>
+			<h2 class="imj_headline">#{lbl.register}</h2>
+			<h:form id="userForm">
+				<!-- The person component -->
+				<imjc:person id="userPersonRegister" person="#{UserCreationBean.user.person}" bean="#{UserCreationBean}" position="0"/>
+				
+				<h:panelGroup layout="block" styleClass="imj_submitPanel">
+					<h:commandButton action="#{UserCreationBean.create}" type="submit" value="#{lbl.register_now}" styleClass="imj_submitButton" />
+				</h:panelGroup>
+			</h:form>
+			
+			
+			
+			<!-- Register form was submitted -->
+			<ul class="imj_registerSteps">
+				<li class="imj_active">1. #{lbl.register}<span class="imj_submitted">Success</span></li>
+				<li>2. Activate the link from Verification-Email</li>
+			</ul>
+			<h2 class="imj_headline">#{msg.registration_thank_you}</h2>
+			<p>#{msg.registration_check_email}</p>
+			
+			
+			
+			<!-- Activation (positive/negative) -->
+			<ul class="imj_registerSteps">
+				<li>1. #{lbl.register}</li>
+				<li class="imj_active">2. Activate the link from Verification-Email</li>
+			</ul>
+			<h2 class="imj_headline">Activation</h2>
+			<p>
+				<h:outputText value="#{msg.registration_success}"/>
+				<h:outputText value="#{msg.registration_timeout}"/>
+			</p>
+			<!-- LogIn -->
+			<h:form id="loginForm">
+				<h:inputText value="#{LoginBean.login}"/>
+				<h:inputSecret value="#{LoginBean.passwd}"/>
+				<h:commandButton id="lnkLogin" title="#{lbl.login}" value="#{lbl.login}" action="#{LoginBean.doLogin}"/>
+			</h:form>
+		</div>
 	</ui:define>
 
 </ui:composition>

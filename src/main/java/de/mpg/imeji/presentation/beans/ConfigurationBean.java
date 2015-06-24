@@ -77,7 +77,7 @@ public class ConfigurationBean {
 	 * @version $Revision$ $LastChangedDate$
 	 */
 	private enum CONFIGURATION {
-		SNIPPET, CSS_DEFAULT, CSS_ALT, MAX_FILE_SIZE, FILE_TYPES, STARTPAGE_HTML, DATA_VIEWER_FORMATS, DATA_VIEWER_URL, AUTOSUGGEST_USERS, AUTOSUGGEST_ORGAS, STARTPAGE_FOOTER_LOGOS, META_DESCRIPTION, INSTANCE_NAME, CONTACT_EMAIL, EMAIL_SERVER, EMAIL_SERVER_USER, EMAIL_SERVER_PASSWORD, EMAIL_SERVER_ENABLE_AUTHENTICATION, EMAIL_SERVER_SENDER, EMAIL_SERVER_PORT, STARTPAGE_CAROUSEL_QUERY, STARTPAGE_CAROUSEL_QUERY_ORDER, UPLOAD_WHITE_LIST, UPLOAD_BLACK_LIST, LANGUAGES, IMPRESSUM_URL, IMPRESSUM_TEXT, FAVICON_URL, LOGO, REGISTRATION_TOKEN_EXPIRY;
+		SNIPPET, CSS_DEFAULT, CSS_ALT, MAX_FILE_SIZE, FILE_TYPES, STARTPAGE_HTML, DATA_VIEWER_FORMATS, DATA_VIEWER_URL, AUTOSUGGEST_USERS, AUTOSUGGEST_ORGAS, STARTPAGE_FOOTER_LOGOS, META_DESCRIPTION, INSTANCE_NAME, CONTACT_EMAIL, EMAIL_SERVER, EMAIL_SERVER_USER, EMAIL_SERVER_PASSWORD, EMAIL_SERVER_ENABLE_AUTHENTICATION, EMAIL_SERVER_SENDER, EMAIL_SERVER_PORT, STARTPAGE_CAROUSEL_QUERY, STARTPAGE_CAROUSEL_QUERY_ORDER, UPLOAD_WHITE_LIST, UPLOAD_BLACK_LIST, LANGUAGES, IMPRESSUM_URL, IMPRESSUM_TEXT, FAVICON_URL, LOGO, REGISTRATION_TOKEN_EXPIRY, REGISTRATION_ENABLED;
 	}
 
 	private static Properties config;
@@ -753,41 +753,49 @@ public class ConfigurationBean {
 		setProperty(CONFIGURATION.FAVICON_URL.name(), s);
 	}
 
-	
 	public void setRegistrationTokenExpiry(String s) {
 		try {
-				int sInt = Integer.valueOf(s);
+			Integer.valueOf(s);
+		} catch (NumberFormatException e) {
+			logger.info("Could not understand the Registration Token Expiry Setting, setting it to default ("
+					+ predefinedRegistrationTokenExpirationDays + " day).");
+			s = predefinedRegistrationTokenExpirationDays;
 		}
-		catch (NumberFormatException e) {
-			logger.info("Could not understand the Registration Token Expiry Setting, setting it to default (1 day).");
-			s= predefinedRegistrationTokenExpirationDays;
-		}
-		
+
 		setProperty(CONFIGURATION.REGISTRATION_TOKEN_EXPIRY.name(), s);
 	}
 
 	public static int getRegistrationTokenExpiryStatic() {
 		return Integer.valueOf(registrationTokenCompute());
 	}
-	
-	
+
 	public String getRegistrationTokenExpiry() {
 		return registrationTokenCompute();
 	}
-	
+
+	public boolean isRegistrationEnabled() {
+		return Boolean.parseBoolean((String) config
+				.get(CONFIGURATION.REGISTRATION_ENABLED.name()));
+	}
+
+	public void setRegistrationEnabled(boolean enabled) {
+		config.setProperty(CONFIGURATION.REGISTRATION_ENABLED.name(),
+				Boolean.toString(enabled));
+	}
+
 	/**
 	 * Return the url of the favicon
 	 * 
 	 * @return
 	 */
 	public String getFaviconUrl() {
-		String myFavicon = (String) config.get(CONFIGURATION.FAVICON_URL.name());
-		if (myFavicon == null || "".equals(myFavicon)){
-			Navigation navigation = (Navigation)BeanHelper.getApplicationBean(Navigation.class) ;
-			return navigation.getApplicationUrl()+"resources/icon/imeji.ico";
-		}
-		else
-		{
+		String myFavicon = (String) config
+				.get(CONFIGURATION.FAVICON_URL.name());
+		if (myFavicon == null || "".equals(myFavicon)) {
+			Navigation navigation = (Navigation) BeanHelper
+					.getApplicationBean(Navigation.class);
+			return navigation.getApplicationUrl() + "resources/icon/imeji.ico";
+		} else {
 			return (String) config.get(CONFIGURATION.FAVICON_URL.name());
 		}
 	}
@@ -804,15 +812,15 @@ public class ConfigurationBean {
 	public String getLogoUrl() {
 		return (String) config.get(CONFIGURATION.LOGO.name());
 	}
-	
-	private static String registrationTokenCompute(){
-		String myToken = (String) config.get(CONFIGURATION.REGISTRATION_TOKEN_EXPIRY.name());
-		if (myToken == null || "".equals(myToken)){
+
+	private static String registrationTokenCompute() {
+		String myToken = (String) config
+				.get(CONFIGURATION.REGISTRATION_TOKEN_EXPIRY.name());
+		if (myToken == null || "".equals(myToken)) {
 			return predefinedRegistrationTokenExpirationDays;
-		}
-		else
-		{
-			return (String) config.get(CONFIGURATION.REGISTRATION_TOKEN_EXPIRY.name());
+		} else {
+			return (String) config.get(CONFIGURATION.REGISTRATION_TOKEN_EXPIRY
+					.name());
 		}
 	}
 

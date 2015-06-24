@@ -73,8 +73,9 @@ public class VocabularyHelper
                     try
                     {
                         instream = PropertyReader.getInputStream("vocabulary.properties");
-                        properties = new Properties();
-                        properties.load(instream);
+                        Properties p = new Properties();
+                        p.load(instream);
+                        properties = p;
                     }
                     catch (Exception e)
                     {

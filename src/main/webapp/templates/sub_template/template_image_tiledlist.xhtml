@@ -56,5 +56,13 @@
 		</h:panelGroup>
 	</ui:define>
 	<!-- Main Content - END -->
+	<script>
+	$('form input[type=text]').die('keydown').keydown(function(e){
+	    if(e.keyCode == 13 ) {
+	        $('form\\:submitButton').click();
+	        return false;
+	    }
+	});
+	</script>
 	
 </ui:composition>

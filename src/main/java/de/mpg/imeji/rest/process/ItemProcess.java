@@ -100,8 +100,7 @@ public class ItemProcess {
 		return resp;
 	}
 
-	public static JSONResponse createItem(HttpServletRequest req,
-										  InputStream file, String json, String syntax, String origName) {
+	public static JSONResponse createItem(HttpServletRequest req, InputStream file, String json, String syntax, String origName) {
 		// / write response
 		JSONResponse resp; 
 
@@ -189,30 +188,51 @@ public class ItemProcess {
 	}
 
 
-	public static JSONResponse updateItem(HttpServletRequest req, String id, InputStream fileInputStream, String json, String filename) {
+	public static JSONResponse updateItem(HttpServletRequest req, String id, InputStream fileInputStream, String json, String filename, String syntax) {
 
 		User u = BasicAuthentication.auth(req);
-
+  
 		ItemService service = new ItemService();
+		
 		ItemTO to = new ItemTO();
+		
 		boolean fileUpdate = !isNullOrEmpty(json) && (fileInputStream != null || json.indexOf("fetchUrl") > 0 || json.indexOf("referenceUrl") > 0);
-		try {
-			to = fileUpdate ?
-					(ItemWithFileTO) RestProcessUtils.buildTOFromJSON(json, ItemWithFileTO.class) :
-					(ItemTO) RestProcessUtils.buildTOFromJSON(json, ItemTO.class);
+        ItemTO.SYNTAX SYNTAX_TYPE = guessType(syntax);
+        try {
 
-			validateId(id, to);
-			to.setId(id);
+            switch (SYNTAX_TYPE) {
+                case RAW:
+        			to = fileUpdate ?
+        					(ItemWithFileTO) RestProcessUtils.buildTOFromJSON(json, ItemWithFileTO.class) :
+        					(ItemTO) RestProcessUtils.buildTOFromJSON(json, ItemTO.class);
+
+        			validateId(id, to);
+        			to.setId(id);
+					break;
+                case DEFAULT:
+					//extract metadata node
+					Map<String, Object> itemMap = jsonToPOJO(json);
+					HashMap<String, Object> metadata = (LinkedHashMap<String, Object>)itemMap.remove(METADATA_KEY);
+					//parse as normal ItemTO
+					to = fileUpdate ? (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(buildJSONFromObject(itemMap), ItemWithFileTO.class) : (ItemTO) RestProcessUtils.buildTOFromJSON(buildJSONFromObject(itemMap), ItemTO.class);
+					//update metadata part
+					DefaultItemTO easyTO = (DefaultItemTO)buildTOFromJSON(
+							"{\"" + METADATA_KEY + "\":" + buildJSONFromObject(metadata) + "}", DefaultItemTO.class);
+					ReverseTransferObjectFactory.transferDefaultItemTOtoItemTO(getMetadataProfileTO(to, u), easyTO, to);
+					break;
+				default:
+					throw new BadRequestException("Bad syntax type: " + syntax);
+			}
 
 			if (fileUpdate){
 				to = uploadAndValidateFile(fileInputStream, (ItemWithFileTO)to, filename);
- 			 }
-				
+			}
+			
 			return RestProcessUtils.buildResponse(Status.OK.getStatusCode(), service.update(to, u));
-		} catch (Exception e) {
+		} 
+		catch (Exception e) {
 			return  RestProcessUtils.localExceptionHandler(e, e.getMessage());
 		}
-
 	}
 
 	private static void validateId(String id, ItemTO to) throws BadRequestException {
@@ -220,6 +240,7 @@ public class ItemProcess {
 			throw new BadRequestException ("Ambiguous item id: <" + id +"> in path; <" + to.getId() + "> in JSON");
 		}
 	}
+	
 	
 	private static ItemWithFileTO uploadAndValidateFile(InputStream file, ItemWithFileTO to, String origName) throws IOException, UnprocessableError, BadRequestException{
 		if (file != null){

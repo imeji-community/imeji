@@ -70,7 +70,7 @@ public class ItemUpdateBasicTest extends ImejiTestBase {
                 .replace("___FILE_NAME___", UPDATED_FILE_NAME));
 
         Response response = target(PATH_PREFIX).path("/" + itemId)
-        		.queryParam("syntax", "RAW")
+        		.queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase())
                 .register(authAsUser)
                 .register(MultiPartFeature.class)
                 .register(JacksonFeature.class)
@@ -90,7 +90,7 @@ public class ItemUpdateBasicTest extends ImejiTestBase {
         FormDataMultiPart multiPart = new FormDataMultiPart();
         multiPart.field("json", updateJSON);
         Response response = target(PATH_PREFIX).path("/" + itemId)
-        		.queryParam("syntax", "RAW")
+        		.queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase())
                 .register(authAsUser2)
                 .register(MultiPartFeature.class)
                 .register(JacksonFeature.class)
@@ -104,7 +104,7 @@ public class ItemUpdateBasicTest extends ImejiTestBase {
         FormDataMultiPart multiPart = new FormDataMultiPart();
         multiPart.field("json", updateJSON);
         Response response = target(PATH_PREFIX).path("/" + itemId+"_not_exist_item")
-        		.queryParam("syntax", "RAW")
+        		.queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase())
                 .register(authAsUser)
                 .register(MultiPartFeature.class)
                 .register(JacksonFeature.class)
@@ -119,7 +119,7 @@ public class ItemUpdateBasicTest extends ImejiTestBase {
         FormDataMultiPart multiPart = new FormDataMultiPart();
         multiPart.field("json", updateJSON);
         Response response = target(PATH_PREFIX).path("/" + itemId)
-        		.queryParam("syntax", "RAW")
+        		.queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase())
                 .register(MultiPartFeature.class)
                 .register(JacksonFeature.class)
                 .request(MediaType.APPLICATION_JSON_TYPE)
@@ -143,7 +143,7 @@ public class ItemUpdateBasicTest extends ImejiTestBase {
                 .replace("___FILENAME___", "test.png"));
 
         Response response = target(PATH_PREFIX).path("/" + itemId)
-        		.queryParam("syntax", "RAW")
+        		.queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase())
         		.register(authAsUser)
                 .register(MultiPartFeature.class)
                 .register(JacksonFeature.class)
@@ -161,7 +161,7 @@ public class ItemUpdateBasicTest extends ImejiTestBase {
         		getStringFromPath(UPDATE_ITEM_FILE_JSON).replace("___ITEM_ID___", "12345"));
 
         Response response = target(PATH_PREFIX).path("/" + itemId)
-        		.queryParam("syntax", "RAW")
+        		.queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase())
                 .register(authAsUser)
                 .register(MultiPartFeature.class)
                 .register(JacksonFeature.class)

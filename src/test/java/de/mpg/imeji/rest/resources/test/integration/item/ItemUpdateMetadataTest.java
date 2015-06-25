@@ -121,7 +121,7 @@ public class ItemUpdateMetadataTest extends ItemTestBase {
         LOGGER.info(multiPart.getField("json").getValue());
 
         Response response = target(PATH_PREFIX).path("/" + itemId)
-        		.queryParam("syntax", "RAW")
+        		.queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase())
                 .register(authAsUser)
                 .register(MultiPartFeature.class)
                 .register(JacksonFeature.class)
@@ -235,7 +235,7 @@ public class ItemUpdateMetadataTest extends ItemTestBase {
         //LOGGER.info(multiPart.getField("json").getValue());
 
         Response response = target(PATH_PREFIX).path("/" + itemId)
-        		.queryParam("syntax", "RAW")
+        		.queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase())
                 .register(authAsUser)
                 .register(MultiPartFeature.class)
                 .register(JacksonFeature.class)
@@ -316,7 +316,7 @@ public class ItemUpdateMetadataTest extends ItemTestBase {
         LOGGER.info(multiPart.getField("json").getValue());
 
         Response response = target(PATH_PREFIX).path("/" + itemId)
-        		.queryParam("syntax", "RAW")
+        		.queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase())
                 .register(authAsUser)
                 .register(MultiPartFeature.class)
                 .register(JacksonFeature.class)
@@ -341,7 +341,7 @@ public class ItemUpdateMetadataTest extends ItemTestBase {
         LOGGER.info(multiPart.getField("json").getValue());
 
         Response response = target(PATH_PREFIX).path("/" + itemId)
-        		.queryParam("syntax", "RAW")
+        		.queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase())
                 .register(authAsUser)
                 .register(MultiPartFeature.class)
                 .register(JacksonFeature.class)
@@ -371,7 +371,7 @@ public class ItemUpdateMetadataTest extends ItemTestBase {
         LOGGER.info(multiPart.getField("json").getValue());
 
         Response response = target(PATH_PREFIX).path("/" + itemId)
-        		.queryParam("syntax", "RAW")
+        		.queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase())
                 .register(authAsUser)
                 .register(MultiPartFeature.class)
                 .register(JacksonFeature.class)
@@ -409,7 +409,7 @@ public class ItemUpdateMetadataTest extends ItemTestBase {
         LOGGER.info(multiPart.getField("json").getValue());
 
         Response response = target(PATH_PREFIX).path("/" + itemId)
-        		.queryParam("syntax", "RAW")
+        		.queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase())
                 .register(authAsUser)
                 .register(MultiPartFeature.class)
                 .register(JacksonFeature.class)
@@ -433,7 +433,7 @@ public class ItemUpdateMetadataTest extends ItemTestBase {
         multiPart.field("json", buildJSONFromObject(itemTO));
 
         Response response = target(PATH_PREFIX).path("/" + itemId)
-        		.queryParam("syntax", "RAW")
+        		.queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase())
                 .register(authAsUser)
                 .register(MultiPartFeature.class)
                 .register(JacksonFeature.class)
@@ -469,7 +469,7 @@ public class ItemUpdateMetadataTest extends ItemTestBase {
         multiPart.field("json", buildJSONFromObject(itemTO));
 
         Response response = target(PATH_PREFIX).path("/" + itemId)
-        		.queryParam("syntax", "RAW")
+        		.queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase())
                 .register(authAsUser)
                 .register(MultiPartFeature.class)
                 .register(JacksonFeature.class)
@@ -507,7 +507,7 @@ public class ItemUpdateMetadataTest extends ItemTestBase {
         multiPart.field("json", buildJSONFromObject(itemTO));
 
         Response response = target(PATH_PREFIX).path("/" + itemId)
-        		.queryParam("syntax", "RAW")
+        		.queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase())
                 .register(authAsUser)
                 .register(MultiPartFeature.class)
                 .register(JacksonFeature.class)

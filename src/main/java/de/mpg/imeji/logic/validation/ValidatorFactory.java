@@ -31,8 +31,9 @@ public class ValidatorFactory {
 	 */
 	public static Validator<?> newValidator(Object obj, Validator.Method method ) {
 		//For now, do not do anything with Delete, just a possiblity
-		
-		
+		if (Validator.Method.DELETE.equals(method))
+			return new PseudoValidator(method);
+
 		if (obj instanceof Item) {
 			return new ItemValidator(method);
 		} else if (obj instanceof Metadata) {
@@ -46,6 +47,7 @@ public class ValidatorFactory {
 		} else if (obj instanceof User) {
 			return new UserValidator(method);
 		}
-		return new PseudoValidator();
+		
+		return new PseudoValidator(method);
 	}
 }

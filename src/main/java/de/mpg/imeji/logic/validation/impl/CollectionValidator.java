@@ -26,6 +26,9 @@ public class CollectionValidator extends ObjectValidator  implements Validator<C
 
 	@Override
 	public void validate(CollectionImeji collection) throws UnprocessableError {
+		if (isDelete())
+			return;
+
 		if (isNullOrEmpty(collection.getMetadata().getTitle().trim())) {
 			throw new UnprocessableError("error_collection_need_title");
 		}

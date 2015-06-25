@@ -26,6 +26,9 @@ public class AlbumValidator extends ObjectValidator implements Validator<Album> 
 
 	@Override
 	public void validate(Album album) throws UnprocessableError {
+		if (isDelete())
+			return;
+
 		if (isNullOrEmpty(album.getMetadata().getTitle().trim())) {
 			throw new UnprocessableError("error_album_need_title");
 		}

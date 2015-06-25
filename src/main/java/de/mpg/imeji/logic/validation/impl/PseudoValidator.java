@@ -11,16 +11,18 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
  * @author saquet
  *
  */
-public class PseudoValidator implements Validator<Object> {
-
+public class PseudoValidator extends ObjectValidator implements Validator<Object> {
+	
+	public PseudoValidator(Validator.Method method) {
+		super(method);
+	}
+	
 	@Override
 	public void validate(Object t) throws UnprocessableError {
-		// Do nothing
 	}
 
 	@Override
 	public void validate(Object t, MetadataProfile p) throws UnprocessableError {
-		// Do nothing
 	}
 
 }

@@ -27,6 +27,9 @@ public class SpaceValidator extends ObjectValidator implements Validator<Space> 
 
 	@Override
 	public void validate(Space space) throws UnprocessableError {
+		if (isDelete())
+			return;
+
 		if (isNullOrEmptyTrim(space.getTitle())) {
 			throw new UnprocessableError("error_space_need_title");
 		}

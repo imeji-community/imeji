@@ -27,6 +27,7 @@ public class ItemValidator extends ObjectValidator implements Validator<Item>  {
 	@Override
 	@Deprecated
 	public void validate(Item t) throws UnprocessableError {
+		
 		throw new UnsupportedOperationException();
 
 	}
@@ -34,6 +35,10 @@ public class ItemValidator extends ObjectValidator implements Validator<Item>  {
 	@Override
 	public void validate(Item item, MetadataProfile p)
 			throws UnprocessableError {
+
+		if (isDelete())
+			return;
+		
 		MetadataValidator mdValidator = new MetadataValidator(getValidateForMethod());
 		// List of the statement which are not defined as Multiple
 		List<String> nonMultipleStatement = new ArrayList<String>();

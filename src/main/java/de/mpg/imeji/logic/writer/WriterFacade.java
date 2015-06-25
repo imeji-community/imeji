@@ -74,6 +74,8 @@ public class WriterFacade {
 	 * de.mpg.imeji.logic.vo.User)
 	 */
 	public void create(List<Object> objects, MetadataProfile profile, User user) throws ImejiException {
+		if (objects.isEmpty())
+			return;
 		checkSecurity(objects, user, GrantType.CREATE);
 		validate(objects, profile, Validator.Method.CREATE);
 		writer.create(objects, user);
@@ -86,6 +88,8 @@ public class WriterFacade {
 	 * de.mpg.imeji.logic.vo.User)
 	 */
 	public void delete(List<Object> objects, User user) throws ImejiException {
+		if (objects.isEmpty())
+			return;
 		checkSecurity(objects, user, GrantType.DELETE);
 		validate(objects, null, Validator.Method.DELETE);
 		writer.delete(objects, user);
@@ -99,6 +103,8 @@ public class WriterFacade {
 	 */
 	public void update(List<Object> objects, MetadataProfile profile, User user, boolean doCheckSecurity)
 			throws ImejiException {
+		if (objects.isEmpty())
+			return;
 		if (doCheckSecurity)
 			checkSecurity(objects, user, GrantType.UPDATE);
 		validate(objects, profile, Validator.Method.UPDATE);
@@ -113,6 +119,8 @@ public class WriterFacade {
 	 */
 	public void updateLazy(List<Object> objects, MetadataProfile profile, User user)
 			throws ImejiException {
+		if (objects.isEmpty())
+			return;
 		checkSecurity(objects, user, GrantType.UPDATE);
 		validate(objects, profile,Validator.Method.UPDATE);
 		writer.updateLazy(objects, user);
@@ -126,6 +134,8 @@ public class WriterFacade {
 	 */
 	public void patch(List<ImejiTriple> triples, User user,
 			boolean doCheckSecurity) throws ImejiException {
+		if (triples.isEmpty())
+			return;
 		List<Object> l = new ArrayList<Object>();
 		for (ImejiTriple t : triples)
 			l.add(t.getObject());
@@ -136,9 +146,11 @@ public class WriterFacade {
 	}
 	
 	private void validate(List<Object> list, MetadataProfile profile, Validator.Method method) throws UnprocessableError{
+		if (list.isEmpty())
+			return;
 		Validator<Object> validator = (Validator<Object>) ValidatorFactory.newValidator(list.get(0), method);
 		for(Object o : list){
-			validator.validate(o, profile);
+				validator.validate(o, profile);
 		}
 	}
 
@@ -194,6 +206,8 @@ public class WriterFacade {
 	 */
 	public void checkSecurityParentObject(List<Object> list, User user,
 			GrantType gt) throws NotAllowedError {
+		if (list.isEmpty())
+			return;
 		checkSecurity(list, user, gt);
 	}
 

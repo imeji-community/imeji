@@ -430,7 +430,9 @@ public class CollectionController extends ImejiController {
 			// Delete images
 			List<Item> items = (List<Item>) itemController.retrieve(itemUris,
 					-1, 0, user);
+			
 			itemController.delete(items, user);
+			
 			// Delete profile
 			ProfileController pc = new ProfileController();
 			try {
@@ -456,6 +458,7 @@ public class CollectionController extends ImejiController {
 			} catch (NotFoundException e) {
 				logger.info("Collection profile does not exist, could not be deleted.");
 			}
+			
 			writer.delete(WriterFacade.toList(collection), user);
 		}
 	}

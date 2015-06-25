@@ -24,14 +24,11 @@ public class ControllerTest {
 
 	@BeforeClass
 	public static void setup() {
-		System.out.println("Initializing JENA");
 		JenaUtil.initJena();
-		System.out.println("Initializing JENA FINISHED");
 	}
 
 	@AfterClass
 	public static void tearDown() throws Exception {
-		System.out.println("ClOSING JENA");
 		JenaUtil.closeJena();
 	}
 

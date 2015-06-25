@@ -1,8 +1,10 @@
 package auth;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import util.JenaUtil;
@@ -18,13 +20,13 @@ import de.mpg.imeji.logic.vo.User;
  */
 public class SimpleAuthenticationTest {
 
-	@Before
-	public void setup() {
+	@BeforeClass
+	public static void setup() {
 		JenaUtil.initJena();
 	}
 
-	@After
-	public void tearDown() throws Exception {
+	@AfterClass
+	public static void tearDown() throws Exception {
 		JenaUtil.closeJena();
 	}
 

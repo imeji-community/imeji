@@ -114,7 +114,7 @@ public class LoginBean {
 				redirect = current.getCompleteUrl();
 			}
 		}
-		// redirect = UrlHelper.addParameter(redirect, "login", "1");
+
 		FacesContext.getCurrentInstance().getExternalContext()
 				.redirect(redirect);
 	}

@@ -109,14 +109,21 @@ public class SingleUploadBean implements Serializable {
 		}
 		else
 		{
-			BeanHelper.error("You have no right to create collections, thus you can not upload items!");
-			Navigation navigation = (Navigation) BeanHelper
-						.getApplicationBean(Navigation.class);
-				FacesContext
-				.getCurrentInstance()
-				.getExternalContext()
-				.redirect(
-						navigation.getHomeUrl());
+			if (user != null ) {
+				BeanHelper.cleanMessages();
+				BeanHelper.info("You have no right to create collections, thus you can not upload items!");
+
+				Navigation navigation = (Navigation) BeanHelper
+							.getApplicationBean(Navigation.class);
+
+				
+					FacesContext
+					.getCurrentInstance()
+					.getExternalContext()
+					.redirect(
+							navigation.getHomeUrl());
+
+			}
 		}
 	}
 

@@ -18,7 +18,11 @@ import de.mpg.j2j.misc.LocalizedString;
  * @author saquet
  *
  */
-public class ProfileValidator implements Validator<MetadataProfile> {
+public class ProfileValidator extends ObjectValidator implements Validator<MetadataProfile> {
+
+	public ProfileValidator(Validator.Method method) {
+		super(method);
+	}
 
 	@Override
 	public void validate(MetadataProfile profile) throws UnprocessableError {

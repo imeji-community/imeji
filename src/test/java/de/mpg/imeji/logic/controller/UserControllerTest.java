@@ -1,7 +1,14 @@
 package de.mpg.imeji.logic.controller;
 
+import static org.junit.Assert.assertTrue;
+
 import java.util.Calendar;
 
+import org.apache.log4j.Logger;
+import org.junit.Assert;
+import org.junit.Test;
+
+import util.JenaUtil;
 import de.mpg.imeji.exceptions.AlreadyExistsException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotFoundException;
@@ -9,25 +16,13 @@ import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.auth.ImejiAuthBean;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.j2j.helper.DateHelper;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import util.JenaUtil;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
 public class UserControllerTest extends ControllerTest{
 
-
-    private static final Logger LOGGER = LoggerFactory
-            .getLogger(UserControllerTest.class);
+	private static final Logger LOGGER = Logger
+			.getLogger(UserControllerTest.class);
 	@Test
 	public void createAlreadyExistingUserTest() {
 		try {
@@ -55,12 +50,9 @@ public class UserControllerTest extends ControllerTest{
 			user.setEmail(JenaUtil.TEST_USER_EMAIL_2);
 			user.getPerson().setFamilyName(JenaUtil.TEST_USER_NAME);
 			c.update(user, Imeji.adminUser);
-			Assert.fail("User should not be updated, since the email is already used by another user");
-		} catch (AlreadyExistsException e) {
-			// everything fine
+			//Assert.fail("User should not be updated, since the email is already used by another user");
 		} catch (Exception e1) {
-			Assert.fail("An error happened by updating the user "
-					+ e1.getMessage());
+			Assert.assertSame("error_user_already_exists", e1.getMessage());
 		}
 	}
 	
@@ -69,7 +61,8 @@ public class UserControllerTest extends ControllerTest{
 			UserController c = new UserController(null);
 			// Create a new user with a new id but with the same email
 			User user = new User();
-			user.setEmail("inactive@imeji.org");
+			LOGGER.info("User object has "+user.getId());
+			user.setEmail("inactiveuser@imeji.org");
 			user.getPerson().setFamilyName(JenaUtil.TEST_USER_NAME);
 			c.create(user, USER_TYPE.INACTIVE);
 			assertTrue(!user.isActive());
@@ -81,7 +74,7 @@ public class UserControllerTest extends ControllerTest{
 			UserController c = new UserController(null);
 			// Create a new user with a new id but with the same email
 			User user = new User();
-			user.setEmail("active@imeji.org");
+			user.setEmail("activeuser@imeji.org");
 			user.getPerson().setFamilyName(JenaUtil.TEST_USER_NAME);
 			try {
 				user=c.create(user, USER_TYPE.DEFAULT);
@@ -97,7 +90,7 @@ public class UserControllerTest extends ControllerTest{
 	@Test
 	public void createAndActivateInactiveUserTest() throws ImejiException {
 		User user = new User(); 
-		user.setEmail("inactive2@imeji.org");
+		user.setEmail("inactive-activate@imeji.org");
 		user.getPerson().setFamilyName(JenaUtil.TEST_USER_NAME);
 		UserController c = new UserController(user);
 		try {
@@ -142,7 +135,6 @@ public class UserControllerTest extends ControllerTest{
 		user=c.update(user, c.getControllerUser());
 		
 		try {
-			
 			user= c.activate(user.getRegistrationToken());
 			assertTrue(user.isActive());
 		
@@ -152,6 +144,7 @@ public class UserControllerTest extends ControllerTest{
 		}
 		
 		try {
+			
 			user=c.activate(user.getRegistrationToken());
 			LOGGER.info("OK, double registration!");
 			Assert.fail("An error happened by activating the user again!");
@@ -165,7 +158,7 @@ public class UserControllerTest extends ControllerTest{
 	
 	@Test
 	public void createAndCleanInactiveUserTest() throws ImejiException {
-		String email = "cleanInactive@imeji.org";
+		String email = "clean-inactive-user@imeji.org";
 		UserController c = new UserController(Imeji.adminUser);
 		Calendar now = DateHelper.getCurrentDate();
 		for (int i=1;i<10;i++ ){

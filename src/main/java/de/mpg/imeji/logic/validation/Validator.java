@@ -28,5 +28,9 @@ public interface Validator<T> {
 	 * @throws UnprocessableError
 	 */
 	public void validate(T t, MetadataProfile p) throws UnprocessableError;
-
+	
+	public enum Method
+    {
+        CREATE, UPDATE, DELETE, ALL;
+    }
 }

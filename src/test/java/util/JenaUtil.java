@@ -24,32 +24,28 @@ import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
 /*
- *
+ * 
  * CDDL HEADER START
- *
- * The contents of this file are subject to the terms of the
- * Common Development and Distribution License, Version 1.0 only
- * (the "License"). You may not use this file except in compliance
- * with the License.
- *
- * You can obtain a copy of the license at license/ESCIDOC.LICENSE
- * or http://www.escidoc.de/license.
- * See the License for the specific language governing permissions
- * and limitations under the License.
- *
- * When distributing Covered Code, include this CDDL HEADER in each
- * file and include the License file at license/ESCIDOC.LICENSE.
- * If applicable, add the following below this CDDL HEADER, with the
- * fields enclosed by brackets "[]" replaced with your own identifying
- * information: Portions Copyright [yyyy] [name of copyright owner]
- *
+ * 
+ * The contents of this file are subject to the terms of the Common Development and Distribution
+ * License, Version 1.0 only (the "License"). You may not use this file except in compliance with
+ * the License.
+ * 
+ * You can obtain a copy of the license at license/ESCIDOC.LICENSE or http://www.escidoc.de/license.
+ * See the License for the specific language governing permissions and limitations under the
+ * License.
+ * 
+ * When distributing Covered Code, include this CDDL HEADER in each file and include the License
+ * file at license/ESCIDOC.LICENSE. If applicable, add the following below this CDDL HEADER, with
+ * the fields enclosed by brackets "[]" replaced with your own identifying information: Portions
+ * Copyright [yyyy] [name of copyright owner]
+ * 
  * CDDL HEADER END
  */
 /*
- * Copyright 2006-2007 Fachinformationszentrum Karlsruhe Gesellschaft
- * für wissenschaftlich-technische Information mbH and Max-Planck-
- * Gesellschaft zur Förderung der Wissenschaft e.V.
- * All rights reserved. Use is subject to license terms.
+ * Copyright 2006-2007 Fachinformationszentrum Karlsruhe Gesellschaft für
+ * wissenschaftlich-technische Information mbH and Max-Planck- Gesellschaft zur Förderung der
+ * Wissenschaft e.V. All rights reserved. Use is subject to license terms.
  */
 /**
  * Utility class to use Jena in the unit test
@@ -59,98 +55,99 @@ import de.mpg.imeji.presentation.util.PropertyReader;
  * @version $Revision$ $LastChangedDate$
  */
 public class JenaUtil {
-	private static Logger logger = Logger.getLogger(JenaUtil.class);
-	public static User testUser;
-	public static User testUser2;
-	public static String TEST_USER_EMAIL = "test@imeji.org";
-	public static String TEST_USER_EMAIL_2 = "test2@imeji.org";
-	public static String TEST_USER_NAME = "Test User";
-	public static String TEST_USER_PWD = "password";
-	public static String TDB_PATH;
+  private static Logger logger = Logger.getLogger(JenaUtil.class);
+  public static User testUser;
+  public static User testUser2;
+  public static String TEST_USER_EMAIL = "test@imeji.org";
+  public static String TEST_USER_EMAIL_2 = "test2@imeji.org";
+  public static String TEST_USER_NAME = "Test User";
+  public static String TEST_USER_PWD = "password";
+  public static String TDB_PATH;
 
-	/**
-	 * Init a Jena Instance for Testing
-	 */
-	public static void initJena() {
+  /**
+   * Init a Jena Instance for Testing
+   */
+  public static void initJena() {
 
-		try {
-			// Init PropertyBean
-			new PropertyBean();
-			// Read tdb location
-			TDB_PATH = PropertyReader.getProperty("imeji.tdb.path");
-			// remove old Database
-			deleteTDBDirectory();
-			// Set Filemode: important to be able to delete TDB directory by
-			// closing Jena
-			SystemTDB.setFileMode(FileMode.direct);
-			// Create new tdb
-			Imeji.init(TDB_PATH);
-			initTestUser();
-			// init imeji configuration
-			new ConfigurationBean();
-		} catch (Exception e) {
-			throw new RuntimeException("Error initialiting Jena for testing: ",
-					e);
-		}
-	}
+    try {
+      // Init PropertyBean
+      new PropertyBean();
+      // Read tdb location
+      TDB_PATH = PropertyReader.getProperty("imeji.tdb.path");
+      // remove old Database
+      deleteTDBDirectory();
+      // Set Filemode: important to be able to delete TDB directory by
+      // closing Jena
+      SystemTDB.setFileMode(FileMode.direct);
+      // Create new tdb
+      Imeji.init(TDB_PATH);
+      initTestUser();
+      // init imeji configuration
+      new ConfigurationBean();
+    } catch (Exception e) {
+      throw new RuntimeException("Error initialiting Jena for testing: ", e);
+    }
+  }
 
-	public static void closeJena() throws InterruptedException {
-		logger.info("Closing Jena:");
-		TDB.sync(Imeji.dataset);
-		logger.info("Jena Sync done! ");
-		TDBFactory.reset();
-		logger.info("Reset internal state, releasing all datasets done! ");
-		Imeji.dataset.close();
-		logger.info("Dataset closed!");
-		TDB.closedown();
-		TDBMaker.releaseLocation(new Location(TDB_PATH));
-		logger.info("TDB Location released!");
-		deleteTDBDirectory();
-	}
+  public static void closeJena() throws InterruptedException {
+    logger.info("Closing Jena:");
+    TDB.sync(Imeji.dataset);
+    logger.info("Jena Sync done! ");
+    TDBFactory.reset();
+    logger.info("Reset internal state, releasing all datasets done! ");
+    Imeji.dataset.close();
+    logger.info("Dataset closed!");
+    TDB.closedown();
+    TDBMaker.releaseLocation(new Location(TDB_PATH));
+    logger.info("TDB Location released!");
+    deleteTDBDirectory();
+  }
 
-	private static void initTestUser() throws Exception {
+private static void initTestUser() throws Exception {
 		testUser = getMockupUser(TEST_USER_EMAIL, TEST_USER_NAME, TEST_USER_PWD);
 		testUser2 = getMockupUser(TEST_USER_EMAIL_2, TEST_USER_NAME, TEST_USER_PWD);
 		createUser(testUser);
 		createUser(testUser2);
 	}
 
-	private static void createUser(User u) {
-		try {
-			UserController c = new UserController(Imeji.adminUser);
-			c.create(u, USER_TYPE.DEFAULT);
-		} catch (Exception e) {
-			logger.info(u.getEmail() + " already exists. Must not be created");
-		}
-	}
-	
 
-	/**
-	 * REturn a Mockup User with default rights
-	 * 
-	 * @param email
-	 * @param name
-	 * @param pwd
-	 * @throws Exception
-	 */
-	private static User getMockupUser(String email, String name, String pwd)
-			throws Exception {
+  private static void createUser(User u) {
+    try {
+      UserController c = new UserController(Imeji.adminUser);
+      c.create(u, USER_TYPE.DEFAULT);
+    } catch (Exception e) {
+      logger.info(u.getEmail() + " already exists. Must not be created");
+    }
+  }
 
-		User user = new User();
-		user.setEmail(email);
-		Person userPerson = user.getPerson();
-		userPerson.setFamilyName(name);
-		user.setPerson(userPerson);
-		user.setName(name);
-		user.setEncryptedPassword(StringHelper.convertToMD5(pwd));
-		user.setGrants(AuthorizationPredefinedRoles.defaultUser(user.getId()
-				.toString()));
-		return user;
-	}
+  /**
+   * REturn a Mockup User with default rights
+   * 
+   * @param email
+   * @param name
+   * @param pwd
+   * @throws Exception
+   */
+  private static User getMockupUser(String email, String name, String pwd) throws Exception {
+	User user = new User();
+	user.setEmail(email);
+	Person userPerson = user.getPerson();
+	userPerson.setFamilyName(name);
+	user.setPerson(userPerson);
+	user.setName(name);
+	user.setEncryptedPassword(StringHelper.convertToMD5(pwd));
+	user.setGrants(AuthorizationPredefinedRoles.defaultUser(user.getId()
+			.toString()));
+	return user;
+  }
 
-	private static void deleteTDBDirectory() {
-		File f = new File(TDB_PATH);
-		if (f.exists())
-			logger.info("TDB directory deleted: " + FileUtils.deleteQuietly(f));
-	}
+  private static void deleteTDBDirectory() {
+    File f = new File(TDB_PATH);
+     if (f.exists()) {
+     logger.info("TDB directory deleted: " + FileUtils.deleteQuietly(f));
+     }
+//    while (f.exists()) {
+//      logger.info("TDB directory deleted: " + FileUtils.deleteQuietly(f));
+//    }
+  }
 }

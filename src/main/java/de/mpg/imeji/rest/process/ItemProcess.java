@@ -198,8 +198,11 @@ public class ItemProcess {
 		
 		boolean fileUpdate = !isNullOrEmpty(json) && (fileInputStream != null || json.indexOf("fetchUrl") > 0 || json.indexOf("referenceUrl") > 0);
         ItemTO.SYNTAX SYNTAX_TYPE = guessType(syntax);
-        try {
 
+        try {
+          if(SYNTAX_TYPE == null){
+            throw new BadRequestException("Bad syntax type: " + syntax);
+          }
             switch (SYNTAX_TYPE) {
                 case RAW:
         			to = fileUpdate ?
@@ -214,14 +217,16 @@ public class ItemProcess {
 					Map<String, Object> itemMap = jsonToPOJO(json);
 					HashMap<String, Object> metadata = (LinkedHashMap<String, Object>)itemMap.remove(METADATA_KEY);
 					//parse as normal ItemTO
-					to = fileUpdate ? (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(buildJSONFromObject(itemMap), ItemWithFileTO.class) : (ItemTO) RestProcessUtils.buildTOFromJSON(buildJSONFromObject(itemMap), ItemTO.class);
+					to = fileUpdate ? 
+					    (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(buildJSONFromObject(itemMap), ItemWithFileTO.class) : 
+					      (ItemTO) RestProcessUtils.buildTOFromJSON(buildJSONFromObject(itemMap), ItemTO.class);
+					    
+					validateId(id, to);
 					//update metadata part
 					DefaultItemTO easyTO = (DefaultItemTO)buildTOFromJSON(
 							"{\"" + METADATA_KEY + "\":" + buildJSONFromObject(metadata) + "}", DefaultItemTO.class);
 					ReverseTransferObjectFactory.transferDefaultItemTOtoItemTO(getMetadataProfileTO(to, u), easyTO, to);
-					break;
-				default:
-					throw new BadRequestException("Bad syntax type: " + syntax);
+					break;					
 			}
 
 			if (fileUpdate){

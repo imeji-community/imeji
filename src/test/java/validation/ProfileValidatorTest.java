@@ -16,8 +16,10 @@ import org.junit.Test;
 
 
 
+
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.validation.Validator;
+import de.mpg.imeji.logic.validation.Validator.Method;
 import de.mpg.imeji.logic.validation.ValidatorFactory;
 import de.mpg.imeji.logic.validation.impl.ProfileValidator;
 import de.mpg.imeji.logic.vo.Item;
@@ -34,7 +36,7 @@ public class ProfileValidatorTest {
 	
 	@BeforeClass
 	public static void init() {
-		validator = new ProfileValidator();
+		validator = new ProfileValidator(Method.ALL);
 		profile = new MetadataProfile();
 		profile.setTitle("Profile");
 	}

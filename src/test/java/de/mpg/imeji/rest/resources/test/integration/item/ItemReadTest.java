@@ -42,7 +42,8 @@ public class ItemReadTest extends ImejiTestBase {
     @Test
     public void test_1_ReadItem_Default() throws Exception {
 
-        Response response = (target(PATH_PREFIX).path("/" + itemId).queryParam("syntax", "extended")
+        Response response = (target(PATH_PREFIX).path("/" + itemId)
+        		.queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase())
                 .register(authAsUser)
                 .register(MultiPartFeature.class)
                 .request(MediaType.APPLICATION_JSON_TYPE)).get();
@@ -51,10 +52,10 @@ public class ItemReadTest extends ImejiTestBase {
         assertEquals(itemId, (String) itemData.get("id"));
     }
 
-    @Ignore
     @Test
     public void test_2_ReadItem_Unauthorized() throws IOException {
-        Response response = (target(PATH_PREFIX).path("/" + itemId).queryParam("syntax", "extended")
+        Response response = (target(PATH_PREFIX).path("/" + itemId)
+        		.queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase())
                 .register(MultiPartFeature.class)
                 .request(MediaType.APPLICATION_JSON_TYPE)).get();
         assertEquals(Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
@@ -66,11 +67,12 @@ public class ItemReadTest extends ImejiTestBase {
 
     }
 
-    @Ignore
+
     @Test
     public void test_3_ReadItem_Forbidden() throws IOException {
 
-        Response response2 = (target(PATH_PREFIX).path("/" + itemId).queryParam("syntax", "extended")
+        Response response2 = (target(PATH_PREFIX).path("/" + itemId)
+        		.queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase())
                 .register(authAsUser2)
                 .register(MultiPartFeature.class)
                 .request(MediaType.APPLICATION_JSON_TYPE)).get();
@@ -78,7 +80,7 @@ public class ItemReadTest extends ImejiTestBase {
 
     }
 
-    @Ignore
+
     @Test
     public void test_4_ReadItem_InReleaseCollection() throws Exception {
         CollectionService s = new CollectionService();
@@ -87,6 +89,7 @@ public class ItemReadTest extends ImejiTestBase {
                 .getStatus());
 
         Response response = (target(PATH_PREFIX).path("/" + itemId)
+        		.queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase())
                 .register(MultiPartFeature.class)
                 .request(MediaType.APPLICATION_JSON_TYPE)).get();
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
@@ -98,7 +101,6 @@ public class ItemReadTest extends ImejiTestBase {
         assertEquals(Status.OK.getStatusCode(), response2.getStatus());
     }
 
-    @Ignore
     @Test
     public void test_5_ReadItem_InWithDrawnCollection() throws Exception {
         CollectionService s = new CollectionService();
@@ -110,6 +112,7 @@ public class ItemReadTest extends ImejiTestBase {
         assertEquals("WITHDRAWN", s.read(collectionId, JenaUtil.testUser).getStatus());
 
         Response response = (target(PATH_PREFIX).path("/" + itemId)
+        		.queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase())
                 .register(authAsUser)
                 .register(MultiPartFeature.class)
                 .request(MediaType.APPLICATION_JSON_TYPE)).get();
@@ -117,11 +120,11 @@ public class ItemReadTest extends ImejiTestBase {
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
     }
 
-    @Ignore
     @Test
     public void test_6_ReadItem_NotFound() throws Exception {
 
-        Response response = (target(PATH_PREFIX).path("/" + itemId + "_not_exist_item").queryParam("syntax", "extended")
+        Response response = (target(PATH_PREFIX).path("/" + itemId + "_not_exist_item")
+        		.queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase())
                 .register(authAsUser)
                 .register(MultiPartFeature.class)
                 .request(MediaType.APPLICATION_JSON_TYPE)).get();
@@ -129,11 +132,11 @@ public class ItemReadTest extends ImejiTestBase {
         assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
     }
 
-    @Ignore
     @Test
     public void test_7_ReadItemsWithQuery() throws Exception {
         Response response = (target(PATH_PREFIX)
                 .queryParam("q", itemTO.getFilename())
+                .queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase())
                 .register(authAsUser)
                 .register(MultiPartFeature.class)
                 .request(MediaType.APPLICATION_JSON_TYPE)).get();

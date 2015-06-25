@@ -14,6 +14,7 @@ import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.util.MetadataFactory;
 import de.mpg.imeji.logic.validation.Validator;
 import de.mpg.imeji.logic.validation.ValidatorFactory;
+import de.mpg.imeji.logic.validation.Validator.Method;
 import de.mpg.imeji.logic.validation.impl.ItemValidator;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
@@ -114,7 +115,7 @@ public class ItemValidatorTest {
 	@BeforeClass
 	public static void init() {
 		initProfile();
-		validator = (Validator<Item>) ValidatorFactory.newValidator(getItem());
+		validator = (Validator<Item>) ValidatorFactory.newValidator(getItem(), Method.ALL);
 
 	}
 

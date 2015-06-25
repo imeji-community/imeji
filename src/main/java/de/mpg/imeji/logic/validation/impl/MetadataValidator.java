@@ -24,7 +24,11 @@ import de.mpg.imeji.presentation.util.ProfileHelper;
  * @author saquet
  *
  */
-public class MetadataValidator implements Validator<Metadata> {
+public class MetadataValidator extends ObjectValidator implements Validator<Metadata> {
+
+	public MetadataValidator(Validator.Method method) {
+		super(method);
+	}
 
 	@Override
 	@Deprecated

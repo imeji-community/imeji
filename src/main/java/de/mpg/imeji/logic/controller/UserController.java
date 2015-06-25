@@ -88,13 +88,6 @@ public class UserController {
 		
 		//Now set up the creator to Admin User, as necessary for permissions
 		user = Imeji.adminUser;
-		
-//		try {
-//			retrieve(u.getEmail());
-//			throw new AlreadyExistsException(" Please use another email account, or check the !");
-//		} catch (NotFoundException e) {
-//			// fine, user can be created
-//		}
 		u.setUserStatus(User.UserStatus.ACTIVE);
 		
 		switch (type) {
@@ -119,10 +112,10 @@ public class UserController {
 		}
 		u.setName(u.getPerson().getGivenName() + " "
 				+ u.getPerson().getFamilyName());
-		
+
 		Calendar now = DateHelper.getCurrentDate();
 		u.setCreated(now);
-		
+
 		writer.create(WriterFacade.toList(u), null, user);
 		return u;
 	}
@@ -161,22 +154,6 @@ public class UserController {
 		throw new NotFoundException("User with email " + email + " not found");
 	}
 	
-	/**
-	 * Retrieve a {@link User} according to its email
-	 * 
-	 * @param email
-	 * @return
-	 * @throws ImejiException
-	 */
-	public boolean existsUserWitheMailAndId (String email, URI userId) {
-		Search search = SearchFactory.create();
-		SearchResult result = search.searchSimpleForQuery(SPARQLQueries
-				.selectUserByEmailAndId(email, userId));
-		if (result.getNumberOfRecords() > 0) {
-			return true;
-		}
-		return false;
-	}
 	
 	/**
 	 * Retrieve a {@link User} according to its email
@@ -185,14 +162,28 @@ public class UserController {
 	 * @return
 	 * @throws ImejiException
 	 */
-	public boolean existsUserWitheMail (String email) {
-		Search search = SearchFactory.create();
+	public boolean existsUserWitheMail (String email, String userUri, boolean newUser) {
+		Search search = SearchFactory.create(SearchType.USER);
 		SearchResult result = search.searchSimpleForQuery(SPARQLQueries
 				.selectUserByEmail(email));
-		if (result.getNumberOfRecords() > 0) {
-			return true;
+		if (result.getNumberOfRecords()==0) {
+			return false;
 		}
-		return false;
+		else
+		{
+			//New users always have assigned Id, thus we do not check if it is existing user here 
+			if (newUser && result.getNumberOfRecords()>0)
+				return true;
+
+			//Check if it is existing user here who has same email 
+			boolean thereIsOtherUser = false;
+			for (String userId:result.getResults()){
+				if (!userUri.equals(userId)){
+					thereIsOtherUser = true;
+				}
+			}
+			return thereIsOtherUser;
+		}
 	}
 	
 	/**
@@ -258,10 +249,6 @@ public class UserController {
 		this.user = currentUser;
 		try {
 			User u = retrieve(updatedUser.getEmail());
-			if (!u.getId().toString().equals(updatedUser.getId().toString()))
-				throw new AlreadyExistsException("Email"
-						+ updatedUser.getEmail()
-						+ "already used by another user");
 		} catch (NotFoundException e) {
 			// fine, user can be updated
 		}

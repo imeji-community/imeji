@@ -1,7 +1,6 @@
 package de.mpg.imeji.logic.validation.impl;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import de.mpg.imeji.exceptions.UnprocessableError;
@@ -19,7 +18,11 @@ import de.mpg.imeji.presentation.util.ProfileHelper;
  * @author saquet
  *
  */
-public class ItemValidator implements Validator<Item> {
+public class ItemValidator extends ObjectValidator implements Validator<Item>  {
+
+	public ItemValidator(Validator.Method method) {
+		super(method);
+	}
 
 	@Override
 	@Deprecated
@@ -31,7 +34,7 @@ public class ItemValidator implements Validator<Item> {
 	@Override
 	public void validate(Item item, MetadataProfile p)
 			throws UnprocessableError {
-		MetadataValidator mdValidator = new MetadataValidator();
+		MetadataValidator mdValidator = new MetadataValidator(getValidateForMethod());
 		// List of the statement which are not defined as Multiple
 		List<String> nonMultipleStatement = new ArrayList<String>();
 		for (Metadata md : item.getMetadataSet().getMetadata()) {

@@ -186,7 +186,7 @@ public class SPARQLQueries {
 	 * @return
 	 */
 	public static String selectUserByEmailAndId(String email, URI userId) {
-		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE { <"+userId.toString()+"> a  <http://imeji.org/terms/user>. "
+		return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE { ?s a  <http://imeji.org/terms/user>. "
 				+" ?s <http://xmlns.com/foaf/0.1/email> \""
 				+ email 
 				+ "\"^^<http://www.w3.org/2001/XMLSchema#string> }"; 

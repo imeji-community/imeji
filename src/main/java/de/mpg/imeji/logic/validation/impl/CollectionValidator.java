@@ -18,7 +18,11 @@ import de.mpg.imeji.logic.vo.Person;
  * @author saquet
  *
  */
-public class CollectionValidator implements Validator<CollectionImeji> {
+public class CollectionValidator extends ObjectValidator  implements Validator<CollectionImeji> {
+
+	public CollectionValidator(Validator.Method method) {
+		super(method);
+	}
 
 	@Override
 	public void validate(CollectionImeji collection) throws UnprocessableError {

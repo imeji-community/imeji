@@ -18,7 +18,11 @@ import de.mpg.imeji.logic.vo.Person;
  * @author saquet
  *
  */
-public class AlbumValidator implements Validator<Album> {
+public class AlbumValidator extends ObjectValidator implements Validator<Album> {
+
+	public AlbumValidator(Validator.Method method) {
+		super(method);
+	}
 
 	@Override
 	public void validate(Album album) throws UnprocessableError {

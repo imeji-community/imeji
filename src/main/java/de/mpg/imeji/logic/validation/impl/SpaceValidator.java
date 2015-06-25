@@ -19,7 +19,11 @@ import de.mpg.imeji.logic.vo.Space;
  * @author saquet
  *
  */
-public class SpaceValidator implements Validator<Space> {
+public class SpaceValidator extends ObjectValidator implements Validator<Space> {
+
+	public SpaceValidator(Validator.Method method) {
+		super(method);
+	}
 
 	@Override
 	public void validate(Space space) throws UnprocessableError {

@@ -75,7 +75,7 @@ public class WriterFacade {
 	 */
 	public void create(List<Object> objects, MetadataProfile profile, User user) throws ImejiException {
 		checkSecurity(objects, user, GrantType.CREATE);
-		validate(objects, profile);
+		validate(objects, profile, Validator.Method.CREATE);
 		writer.create(objects, user);
 	}
 
@@ -87,6 +87,7 @@ public class WriterFacade {
 	 */
 	public void delete(List<Object> objects, User user) throws ImejiException {
 		checkSecurity(objects, user, GrantType.DELETE);
+		validate(objects, null, Validator.Method.DELETE);
 		writer.delete(objects, user);
 	}
 
@@ -100,7 +101,7 @@ public class WriterFacade {
 			throws ImejiException {
 		if (doCheckSecurity)
 			checkSecurity(objects, user, GrantType.UPDATE);
-		validate(objects, profile);
+		validate(objects, profile, Validator.Method.UPDATE);
 		writer.update(objects, user);
 	}
 
@@ -113,7 +114,7 @@ public class WriterFacade {
 	public void updateLazy(List<Object> objects, MetadataProfile profile, User user)
 			throws ImejiException {
 		checkSecurity(objects, user, GrantType.UPDATE);
-		validate(objects, profile);
+		validate(objects, profile,Validator.Method.UPDATE);
 		writer.updateLazy(objects, user);
 	}
 
@@ -134,8 +135,8 @@ public class WriterFacade {
 
 	}
 	
-	private void validate(List<Object> list, MetadataProfile profile) throws UnprocessableError{
-		Validator<Object> validator = (Validator<Object>) ValidatorFactory.newValidator(list.get(0));
+	private void validate(List<Object> list, MetadataProfile profile, Validator.Method method) throws UnprocessableError{
+		Validator<Object> validator = (Validator<Object>) ValidatorFactory.newValidator(list.get(0), method);
 		for(Object o : list){
 			validator.validate(o, profile);
 		}

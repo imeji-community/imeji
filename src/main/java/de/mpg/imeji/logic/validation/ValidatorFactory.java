@@ -29,19 +29,22 @@ public class ValidatorFactory {
 	 * @param t
 	 * @return
 	 */
-	public static Validator<?> newValidator(Object obj) {
+	public static Validator<?> newValidator(Object obj, Validator.Method method ) {
+		//For now, do not do anything with Delete, just a possiblity
+		
+		
 		if (obj instanceof Item) {
-			return new ItemValidator();
+			return new ItemValidator(method);
 		} else if (obj instanceof Metadata) {
-			return new MetadataValidator();
+			return new MetadataValidator(method);
 		} else if (obj instanceof CollectionImeji) {
-			return new CollectionValidator();
+			return new CollectionValidator(method);
 		} else if (obj instanceof Album) {
-			return new AlbumValidator();
+			return new AlbumValidator(method);
 		} else if (obj instanceof MetadataProfile) {
-			return new ProfileValidator();
+			return new ProfileValidator(method);
 		} else if (obj instanceof User) {
-			return new UserValidator();
+			return new UserValidator(method);
 		}
 		return new PseudoValidator();
 	}

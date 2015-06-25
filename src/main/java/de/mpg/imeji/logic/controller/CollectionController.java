@@ -38,6 +38,7 @@ import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.validation.Validator;
+import de.mpg.imeji.logic.validation.Validator.Method;
 import de.mpg.imeji.logic.validation.ValidatorFactory;
 import de.mpg.imeji.logic.validation.impl.CollectionValidator;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -105,7 +106,7 @@ public class CollectionController extends ImejiController {
 			MetadataProfileCreationMethod method, String spaceId)
 			throws ImejiException {
 		// First validate the collection, to avoid to create a zombie profile...
-		CollectionValidator validator = new CollectionValidator();
+		CollectionValidator validator = new CollectionValidator(Method.CREATE);
 		validator.validate(c);
 		ProfileController pc = new ProfileController();
 		String metadataProfileName = " (Metadata profile)";

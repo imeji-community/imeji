@@ -203,16 +203,17 @@ public class EmailMessages {
 	 * Create the body of the registration request email
 	 *
 	 * @param to
-	 * @param token
 	 * @param session
 	 * @return
 	 */
-	public String getEmailOnRegistrationRequest_Body(User to, String token, SessionBean session) {
+	public String getEmailOnRegistrationRequest_Body(User to, SessionBean session) {
 		return session
 				.getMessage("email_registration_request_body")
-				.replace("XXX_USER_NAME_XXX", to.getName())
-				.replace("XXX_TOKEN_LINK_XXX",
-						"<a href=\"" + session.getInstanceName() + "/register?token=" + token +"\">" + token + "</a>");
+				.replace("XXX_LOGIN_XXX", to.getEmail())
+				.replace("XXX_USER_PLAIN_TEXT_PASSWORD_XXX", "XXX_USER_PLAIN_TEXT_PASSWORD_XXX")
+				.replace("XXX_INSTANCE_NAME_XXX", session.getInstanceName())
+				.replace("XXX_ACTIVATION_LINK_XXX",
+						session.getApplicationUrl() + "register?token=" + to.getRegistrationToken());
 	}
 
 	/**

@@ -5,6 +5,7 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.user.util.EmailClient;
 import de.mpg.imeji.presentation.user.util.EmailMessages;
@@ -34,11 +35,14 @@ public class RegistrationBean {
     private UserController uc = new UserController(Imeji.adminUser);
 
     private SessionBean sb;
-    private User user;
+    private User user = new User();
 
 
     private String token = null;
     private boolean registration_submitted = false;
+
+
+    private boolean registration_success = false;
     private boolean activation_submitted = false;
     private boolean activation_success = false;
     private String activation_message;
@@ -54,20 +58,21 @@ public class RegistrationBean {
         }
     }
 
-    private String register() {
+    public void register() {
         try {
             this.activation_submitted = false;
             this.registration_submitted = true;
             user = uc.create(user, UserController.USER_TYPE.INACTIVE);
-            sendRegistrationEmail();
+            sendRegistrationNotification();
+            this.registration_success = true;
         } catch (ImejiException e) {
+            //TODO: remove
+            //uc.delete(user);
             BeanHelper.error(sb.getMessage(e.getLocalizedMessage()));
         }
-        return "pretty:";
     }
 
-    private String activate() {
-        //retrieve
+    private void activate() {
         try {
             this.activation_submitted = true;
             this.registration_submitted = false;
@@ -77,24 +82,24 @@ public class RegistrationBean {
         } catch (ImejiException e) {
             this.activation_success = false;
             this.activation_message = e.getLocalizedMessage();
-            //TODO: redirect?
+
         }
-        return "pretty:";
     }
 
     /**
-     * Send registered email
+     * Send registration email
      */
-    private void sendRegistrationEmail() {
+    private void sendRegistrationNotification() {
         EmailClient emailClient = new EmailClient();
         EmailMessages emailMessages = new EmailMessages();
         try {
             //send to requester
+            //TODO: send plain text password
             emailClient.sendMail(
                     user.getEmail(),
-                    null, //from support?
+                    ConfigurationBean.getEmailServerSenderStatic(),
                     emailMessages.getEmailOnRegistrationRequest_Subject(sb),
-                    emailMessages.getEmailOnRegistrationRequest_Body(user, user.getRegistrationToken(), sb));
+                    emailMessages.getEmailOnRegistrationRequest_Body(user, sb));
         } catch (Exception e) {
             logger.error("Error sending email", e);
             BeanHelper.error(sb.getMessage("error") + ": Email not sent");
@@ -127,7 +132,6 @@ public class RegistrationBean {
     }
 
     public boolean isActivation_success() {
-
         return activation_success;
     }
 
@@ -141,6 +145,14 @@ public class RegistrationBean {
 
     public void setActivation_message(String activation_message) {
         this.activation_message = activation_message;
+    }
+
+    public boolean isRegistration_success() {
+        return registration_success;
+    }
+
+    public void setRegistration_success(boolean registration_success) {
+        this.registration_success = registration_success;
     }
 
 }

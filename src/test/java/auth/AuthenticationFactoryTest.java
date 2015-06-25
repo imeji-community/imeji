@@ -18,15 +18,15 @@ public class AuthenticationFactoryTest {
 	private SimpleAuthentication simp;
 	@Before
 	public void setUp() throws Exception {
-		new PropertyBean();
-		JenaUtil.initJena();
+		//new PropertyBean();
+		//JenaUtil.initJena();
 		// TODO Write test
 		//JenaUtil.addUser("test@imeji.org", null, "test");
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		JenaUtil.closeJena();
+		//JenaUtil.closeJena();
 	}
 
 //	@Test

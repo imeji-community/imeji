@@ -339,8 +339,12 @@ public class ShareBean implements Serializable {
 		SessionBean sb = (SessionBean) BeanHelper
 				.getSessionBean(SessionBean.class);
 		if (grants != null && grants.size() > 0) {
+			try{
 			this.getEmailMessage(this.user.getName(), dest.getName(), title,
 					getShareToUri());
+			}catch(Exception e){
+				BeanHelper.error(sb.getMessage("error") + ": Email not sent\n" + "User: " + user + "\nDestination:" + dest );
+			}
 			try {
 				this.addRoles(grants);
 				emailClient.sendMail(

@@ -143,11 +143,8 @@ private static void initTestUser() throws Exception {
 
   private static void deleteTDBDirectory() {
     File f = new File(TDB_PATH);
-     if (f.exists()) {
-     logger.info("TDB directory deleted: " + FileUtils.deleteQuietly(f));
-     }
-//    while (f.exists()) {
-//      logger.info("TDB directory deleted: " + FileUtils.deleteQuietly(f));
-//    }
+    if (f.exists()) {
+      logger.info("TDB directory deleted: " + FileUtils.deleteQuietly(f));
+    }
   }
 }

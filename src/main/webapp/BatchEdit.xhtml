@@ -86,7 +86,7 @@
 									</div>
 								</div>
 								
-								<h:panelGroup styleClass="imj_submitPanel" rendered="#{EditItemMetadataBean.editType == 'selected'}">
+								<h:panelGroup styleClass="imj_submitPanel" rendered="#{EditItemMetadataBean.editType == 'selected' and EditItemMetadataBean.profileWithStatements}">
 									<h:commandButton styleClass="imj_submitButton" type="submit" action="#{EditItemMetadataBean.addToAll}" value="#{lbl.add_to_all}" onclick="document.getElementById('batchEditForm:ajaxContent').style.opacity='0.2';">
 										<f:ajax render="ajaxContent" execute="@form"/>
 									</h:commandButton>

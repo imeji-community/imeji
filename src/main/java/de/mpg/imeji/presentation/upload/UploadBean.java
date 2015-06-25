@@ -76,8 +76,10 @@ public class UploadBean implements Serializable {
 	@ManagedProperty(value = "#{SessionBean.user}")
 	private User user;
 	private boolean recursive;
+    private SessionBean session = (SessionBean) BeanHelper
+        .getSessionBean(SessionBean.class);
 
-	/**
+  /**
 	 * Construct the Bean and initalize the pages
 	 * 
 	 * @throws Exception
@@ -104,6 +106,7 @@ public class UploadBean implements Serializable {
 			if (UrlHelper.getParameterBoolean("init")) {
 				((UploadSession) BeanHelper.getSessionBean(UploadSession.class))
 						.reset();
+		        session.getSelected().clear();
 				externalUrl = null;
 				localDirectory = null;
 			} else if (UrlHelper.getParameterBoolean("start")) {
@@ -153,7 +156,8 @@ public class UploadBean implements Serializable {
 						File tmp = createTmpFile(filename);
 						try {
 							writeInTmpFile(tmp, stream);
-							uploadFile(tmp, filename);
+							Item item = uploadFile(tmp, filename);
+							session.addToSelected(item.getId().toString());
 						} finally {
 							stream.close();
 							FileUtils.deleteQuietly(tmp);
@@ -642,6 +646,10 @@ public class UploadBean implements Serializable {
 				&& event.getNewValue().toString().trim().length() > 0) {
 			collection.setDiscardComment(event.getNewValue().toString().trim());
 		}
+	}
+	
+	public int numSuccessUploaded(){
+	  return session.getSelectedSize();
 	}
 
 

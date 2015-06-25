@@ -214,7 +214,11 @@ public class ItemProcess {
 					Map<String, Object> itemMap = jsonToPOJO(json);
 					HashMap<String, Object> metadata = (LinkedHashMap<String, Object>)itemMap.remove(METADATA_KEY);
 					//parse as normal ItemTO
-					to = fileUpdate ? (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(buildJSONFromObject(itemMap), ItemWithFileTO.class) : (ItemTO) RestProcessUtils.buildTOFromJSON(buildJSONFromObject(itemMap), ItemTO.class);
+					to = fileUpdate ? 
+					    (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(buildJSONFromObject(itemMap), ItemWithFileTO.class) : 
+					      (ItemTO) RestProcessUtils.buildTOFromJSON(buildJSONFromObject(itemMap), ItemTO.class);
+					    
+					validateId(id, to);
 					//update metadata part
 					DefaultItemTO easyTO = (DefaultItemTO)buildTOFromJSON(
 							"{\"" + METADATA_KEY + "\":" + buildJSONFromObject(metadata) + "}", DefaultItemTO.class);

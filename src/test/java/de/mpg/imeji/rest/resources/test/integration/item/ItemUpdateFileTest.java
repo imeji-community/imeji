@@ -79,6 +79,7 @@ public class ItemUpdateFileTest extends ImejiTestBase {
 						.replace("___REFERENCE_URL___", ""));
 
 		Response response = target(PATH_PREFIX).path("/" + itemId)
+        		.queryParam("syntax", "RAW")
 				.register(authAsUser).register(MultiPartFeature.class)
 				.register(JacksonFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)
@@ -119,6 +120,7 @@ public class ItemUpdateFileTest extends ImejiTestBase {
 						.replace("___REFERENCE_URL___", ""));
 
 		Response response = target(PATH_PREFIX).path("/" + itemId)
+        		.queryParam("syntax", "RAW")
 				.register(authAsUser).register(MultiPartFeature.class)
 				.register(JacksonFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)
@@ -146,6 +148,7 @@ public class ItemUpdateFileTest extends ImejiTestBase {
 						.replace("___REFERENCE_URL___", storedFileURL));
 
 		Response response = target(PATH_PREFIX).path("/" + itemId)
+        		.queryParam("syntax", "RAW")
 				.register(authAsUser).register(MultiPartFeature.class)
 				.register(JacksonFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)
@@ -188,6 +191,7 @@ public class ItemUpdateFileTest extends ImejiTestBase {
 						.replace("___REFERENCE_URL___", ""));
 
 		Response response = target(PATH_PREFIX).path("/" + itemId)
+        		.queryParam("syntax", "RAW")
 				.register(authAsUser).register(MultiPartFeature.class)
 				.register(JacksonFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)
@@ -226,6 +230,7 @@ public class ItemUpdateFileTest extends ImejiTestBase {
 						.replace("___REFERENCE_URL___", storedFileURL));
 
 		Response response = target(PATH_PREFIX).path("/" + itemId)
+        		.queryParam("syntax", "RAW")
 				.register(authAsUser).register(MultiPartFeature.class)
 				.register(JacksonFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)
@@ -260,6 +265,7 @@ public class ItemUpdateFileTest extends ImejiTestBase {
 						.replace("___REFERENCE_URL___", storedFileURL));
 
 		Response response = target(PATH_PREFIX).path("/" + itemId)
+        		.queryParam("syntax", "RAW")
 				.register(authAsUser).register(MultiPartFeature.class)
 				.register(JacksonFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)
@@ -305,6 +311,7 @@ public class ItemUpdateFileTest extends ImejiTestBase {
 						.replace("___REFERENCE_URL___", storedFileURL));
 
 		Response response = target(PATH_PREFIX).path("/" + itemId)
+        		.queryParam("syntax", "RAW")
 				.register(authAsUser).register(MultiPartFeature.class)
 				.register(JacksonFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)
@@ -339,6 +346,7 @@ public class ItemUpdateFileTest extends ImejiTestBase {
 		);
 
 		Response response = target(PATH_PREFIX).path("/" + itemId)
+        		.queryParam("syntax", "RAW")
 				.register(authAsUser).register(MultiPartFeature.class)
 				.register(JacksonFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)
@@ -363,6 +371,7 @@ public class ItemUpdateFileTest extends ImejiTestBase {
 		);
 
 		Response response = target(PATH_PREFIX).path("/" + itemId)
+        		.queryParam("syntax", "RAW")
 				.register(authAsUser).register(MultiPartFeature.class)
 				.register(JacksonFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)
@@ -388,6 +397,7 @@ public class ItemUpdateFileTest extends ImejiTestBase {
                         .replace("___REFERENCE_URL___", ""));
 
         Response response = target(PATH_PREFIX).path("/" + itemId)
+        		.queryParam("syntax", "RAW")
                 .register(authAsUser).register(MultiPartFeature.class)
                 .register(JacksonFeature.class)
                 .request(MediaType.APPLICATION_JSON_TYPE)
@@ -418,6 +428,7 @@ public class ItemUpdateFileTest extends ImejiTestBase {
 						.replace("___REFERENCE_URL___", ""));
 
 		Response response = target(PATH_PREFIX).path("/" + itemId)
+        		.queryParam("syntax", "RAW")
 				.register(authAsUser).register(MultiPartFeature.class)
 				.register(JacksonFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)
@@ -460,6 +471,7 @@ public class ItemUpdateFileTest extends ImejiTestBase {
 						.replace("___REFERENCE_URL___", ""));
 
 		Response response = target(PATH_PREFIX).path("/" + itemId)
+        		.queryParam("syntax", "RAW")
 				.register(authAsUser).register(MultiPartFeature.class)
 				.register(JacksonFeature.class)
 				.request(MediaType.APPLICATION_JSON_TYPE)

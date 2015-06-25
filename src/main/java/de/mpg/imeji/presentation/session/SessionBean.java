@@ -387,6 +387,16 @@ public class SessionBean implements Serializable {
 	public int getSelectedSize() {
 		return selected.size();
 	}
+	
+	   /**
+     * Add item to selected
+     * 
+     * @return
+     */
+    public void addToSelected(String selection) {
+        selected.add(selection);
+    }
+	
 
 	/**
 	 * getter

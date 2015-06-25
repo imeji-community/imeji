@@ -62,6 +62,7 @@ import de.mpg.imeji.presentation.metadata.SuperMetadataBean;
 import de.mpg.imeji.presentation.metadata.extractors.TikaExtractor;
 import de.mpg.imeji.presentation.metadata.util.SuggestBean;
 import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.user.UserBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectLoader;
@@ -127,12 +128,36 @@ public class SingleUploadBean implements Serializable {
 			MetadataSetBean newSet = getMdSetBean();
 			edit.getEditor().getItems().get(0).setMds(newSet);
 			edit.save();
+			BeanHelper.cleanMessages();
+			BeanHelper.info(sb.getMessage("success_item_create"));
 			sus.uploaded();
+			reloadItemPage(item.getIdString());
 		} catch (Exception e) {
 			BeanHelper.error(e.getMessage());
 		}
 		return "";
 	}
+	
+	/**
+	 * Reload the page with the current user
+	 * 
+	 * @throws IOException
+	 */
+	private void reloadItemPage(String itemIdString) {
+			try {
+				Navigation navigation = (Navigation) BeanHelper
+						.getApplicationBean(Navigation.class);
+
+				String redirectUrl = navigation.getItemUrl() + itemIdString;
+				
+				FacesContext.getCurrentInstance().getExternalContext()
+						.redirect(redirectUrl);
+			} catch (IOException e) {
+				Logger.getLogger(UserBean.class).info("Some reloadPage exception",
+						e);
+			}
+	}
+
 
 	/**
 	 * After the file has been uploaded

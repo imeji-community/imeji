@@ -119,6 +119,20 @@ public class Authorization {
 				toGrant(getRelevantURIForSecurity(obj, false, false, false),
 						getGrantTypeAccordingToObjectType(obj, GrantType.UPDATE))))
 			return true;
+		return canUpdateOrDeleteSharedItem(user, obj);
+	}
+	
+	public boolean isItem(Object obj){
+		return (obj instanceof Item || isItemUri(obj.toString()));
+	}
+	
+	public boolean canUpdateOrDeleteSharedItem (User user, Object obj)
+	{
+		if (isItem(obj)) 
+		{
+			if (read(user, obj) && ((Item)obj).getCreatedBy().equals(user.getId()))
+				return true;
+		}
 		return false;
 	}
 
@@ -131,6 +145,9 @@ public class Authorization {
 	 * @throws NotAllowedError
 	 */
 	public boolean delete(User user, Object obj) {
+		if (AuthUtil.isSysAdmin(user))
+			return true;
+		
 		if (!isPublic(obj)
 				&& hasGrant(
 						user,
@@ -139,7 +156,8 @@ public class Authorization {
 								getGrantTypeAccordingToObjectType(obj,
 										GrantType.DELETE))))
 			return true;
-		return AuthUtil.isSysAdmin(user);
+		
+		return canUpdateOrDeleteSharedItem(user, obj);
 	}
 
 	/**
@@ -190,7 +208,7 @@ public class Authorization {
 				toGrant(getRelevantURIForSecurity(obj, false, false, false),
 						GrantType.UPDATE_CONTENT)))
 			return true;
-		return false;
+		return canUpdateOrDeleteSharedItem(user, obj);
 	}
 
 	/**
@@ -201,13 +219,18 @@ public class Authorization {
 	 * @return
 	 */
 	public boolean deleteContent(User user, Object obj) {
+		
+		if (AuthUtil.isSysAdmin(user))
+			return true;
+		
 		if (!isPublic(obj)
 				&& hasGrant(
 						user,
 						toGrant(getRelevantURIForSecurity(obj, false, false,
 								false), GrantType.DELETE_CONTENT)))
 			return true;
-		return AuthUtil.isSysAdmin(user);
+		
+		return canUpdateOrDeleteSharedItem(user, obj);
 	}
 
 	/**

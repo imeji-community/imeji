@@ -38,7 +38,7 @@ public class RegistrationBean {
 
 
     private String token = null;
-    private boolean resgistration_submitted = false;
+    private boolean registration_submitted = false;
     private boolean activation_submitted = false;
     private boolean activation_success = false;
     private String activation_message;
@@ -57,7 +57,7 @@ public class RegistrationBean {
     private String register() {
         try {
             this.activation_submitted = false;
-            this.resgistration_submitted = true;
+            this.registration_submitted = true;
             user = uc.create(user, UserController.USER_TYPE.INACTIVE);
             sendRegistrationEmail();
         } catch (ImejiException e) {
@@ -70,7 +70,7 @@ public class RegistrationBean {
         //retrieve
         try {
             this.activation_submitted = true;
-            this.resgistration_submitted = false;
+            this.registration_submitted = false;
             user = uc.activate(this.token);
             this.activation_success = true;
             this.activation_message = sb.getMessage("activation_success");
@@ -102,12 +102,12 @@ public class RegistrationBean {
     }
 
 
-    public boolean isResgistration_submitted() {
-        return resgistration_submitted;
+    public boolean isRegistration_submitted() {
+        return registration_submitted;
     }
 
-    public void setResgistration_submitted(boolean resgistration_submitted) {
-        this.resgistration_submitted = resgistration_submitted;
+    public void setRegistration_submitted(boolean registration_submitted) {
+        this.registration_submitted = registration_submitted;
     }
 
     public User getUser() {

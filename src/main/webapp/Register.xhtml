@@ -12,7 +12,7 @@
 			
 			<!-- Register form , TODO: switched on by all statuses false -->
 
-            <ui:fragment rendered="#{!RegistrationBean.resgistration_submitted and !RegistrationBean.activation_submitted}">
+            <ui:fragment rendered="#{!RegistrationBean.registration_submitted and !RegistrationBean.activation_submitted}">
                 <ul class="imj_registerSteps">
                     <li class="imj_active">1. #{lbl.register}</li>
                     <li>2. Activate the link from Verification-Email</li>
@@ -20,7 +20,7 @@
                 <h2 class="imj_headline">#{lbl.register}</h2>
                 <h:form id="userForm">
                     <!-- The person component -->
-                    <imjc:person id="userPersonRegister" person="#{RegistrationBean.user.person}" bean="#{RegistrationBean}" position="0"/>
+                    <imjc:person id="userPersonRegister" person="#{PersonBean.user.person}" bean="#{PersonBean}" position="0"/>
                     <h:panelGroup layout="block" styleClass="imj_submitPanel">
                         <h:commandButton action="#{RegistrationBean.register}" type="submit" value="#{lbl.register_now}" styleClass="imj_submitButton" />
                     </h:panelGroup>
@@ -30,7 +30,7 @@
 			
 			
 			<!-- Register form was submitted -->
-            <ui:fragment rendered="#{RegistrationBean.resgistration_submitted and !RegistrationBean.activation_submitted}">
+            <ui:fragment rendered="#{RegistrationBean.registration_submitted and !RegistrationBean.activation_submitted}">
                 <ul class="imj_registerSteps">
                     <li class="imj_active">1. #{lbl.register}<span class="imj_submitted">Success</span></li>
                     <li>2. Activate the link from Verification-Email</li>

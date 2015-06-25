@@ -96,7 +96,7 @@ public class URLQueryTransformer {
 								.valueOf(scString.trim())));
 				scString = "";
 			}
-			if (scString.trim().equals("NOT") || scString.trim().equals("NOT")) {
+			if (scString.trim().equals("NOT")) {
 				not = true;
 				scString = "";
 			}

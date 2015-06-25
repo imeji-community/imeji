@@ -312,7 +312,7 @@ public class ShareController extends ImejiController {
 		toUser.setGrants(notRemovedGrants);
 		UserController c = new UserController(fromUser);
 		try {
-			toUser = c.update(toUser, Imeji.adminUser);
+			 c.update(toUser, Imeji.adminUser);
 			writer.delete(new ArrayList<Object>(removedGrants), fromUser);
 		} catch (Exception e) {
 			logger.error(e);

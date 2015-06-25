@@ -107,10 +107,10 @@ public class ItemResource implements ImejiResource {
 						   @FormDataParam("file") InputStream file,
 						   @ApiParam(required = true) @FormDataParam("json") String json,
 						   @FormDataParam("file") FormDataContentDisposition fileDetail,
-						   @PathParam("id") String id) {
+						   @PathParam("id") String id,
+						   @QueryParam("syntax") String syntax) {
 		String filename = fileDetail != null ? fileDetail.getFileName() : null;
-		return RestProcessUtils.buildJSONResponse(updateItem(req, id,
-				file, json, filename));
+		return RestProcessUtils.buildJSONResponse(updateItem(req, id, file, json, filename, syntax));
 	}
 	
 	@PATCH

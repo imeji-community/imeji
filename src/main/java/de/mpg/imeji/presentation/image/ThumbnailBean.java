@@ -3,11 +3,10 @@
  */
 package de.mpg.imeji.presentation.image;
 
+import java.io.Serializable;
 import java.net.URI;
 
 import javax.faces.event.ValueChangeEvent;
-
-import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Item;
@@ -27,291 +26,285 @@ import de.mpg.imeji.presentation.util.CommonUtils;
 import de.mpg.imeji.presentation.util.ObjectCachedLoader;
 
 /**
- * Bean for Thumbnail list elements. Each element of a list with thumbnail is an
- * instance of a {@link ThumbnailBean}
+ * Bean for Thumbnail list elements. Each element of a list with thumbnail is an instance of a
+ * {@link ThumbnailBean}
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class ThumbnailBean {
-	private static Logger logger = Logger.getLogger(ThumbnailBean.class);
-	private String link = "";
-	private String filename = "";
-	private String caption = "";
-	private URI uri = null;
-	private String id;
-	private boolean selected = false;
-	private boolean isInActiveAlbum = false;
-	private MetadataSetBean mds;
-	private MetadataProfile profile;
-	private MetadataSet mdSet;
-	private URI collectionUri;
-	private boolean isPrivate = true;
+public class ThumbnailBean implements Serializable {
+  private static final long serialVersionUID = -8084039496592141508L;
+  private String link = "";
+  private String filename = "";
+  private String caption = "";
+  private URI uri = null;
+  private String id;
+  private boolean selected = false;
+  private boolean isInActiveAlbum = false;
+  private MetadataSetBean mds;
+  private MetadataProfile profile;
+  private MetadataSet mdSet;
+  private URI collectionUri;
+  private boolean isPrivate = true;
 
-	/**
-	 * Emtpy {@link ThumbnailBean}
-	 */
-	public ThumbnailBean() {
+  /**
+   * Emtpy {@link ThumbnailBean}
+   */
+  public ThumbnailBean() {
 
-	}
+  }
 
-	/**
-	 * Bean for Thumbnail list elements. Each element of a list with thumbnail
-	 * is an instance of a {@link ThumbnailBean}
-	 * 
-	 * @param item
-	 * @throws Exception
-	 */
-	public ThumbnailBean(Item item) throws Exception {
-		SessionBean sessionBean = (SessionBean) BeanHelper
-				.getSessionBean(SessionBean.class);
-		Navigation navigation = (Navigation) BeanHelper
-				.getApplicationBean(Navigation.class);
-		this.uri = item.getId();
-		this.collectionUri = item.getCollection();
-		this.id = ObjectHelper.getId(getUri());
-		this.link = Status.WITHDRAWN != item.getStatus() ? navigation
-				.getFileUrl() + item.getThumbnailImageUrl().toString()
-				: navigation.getApplicationUrl()
-						+ "resources/icon/discarded.png";
-		this.filename = item.getFilename();
-		this.mdSet = item.getMetadataSet();
-		
-		this.profile = ObjectCachedLoader.loadProfileWithoutPrivs(this.mdSet
-				.getProfile());
-		this.caption = findCaption();
-		
-		this.selected = sessionBean.getSelected().contains(uri.toString());
-		if (sessionBean.getActiveAlbum() != null) {
-			this.isInActiveAlbum = sessionBean.getActiveAlbum().getImages()
-					.contains(item.getId());
-		}
-		this.setPrivate(item.getStatus().toString().equals("PENDING") ? true : false); 
+  /**
+   * Bean for Thumbnail list elements. Each element of a list with thumbnail is an instance of a
+   * {@link ThumbnailBean}
+   * 
+   * @param item
+   * @throws Exception
+   */
+  public ThumbnailBean(Item item) throws Exception {
+    SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+    Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
+    this.uri = item.getId();
+    this.collectionUri = item.getCollection();
+    this.id = ObjectHelper.getId(getUri());
+    this.link =
+        Status.WITHDRAWN != item.getStatus() ? navigation.getFileUrl()
+            + item.getThumbnailImageUrl().toString() : navigation.getApplicationUrl()
+            + "resources/icon/discarded.png";
+    this.filename = item.getFilename();
+    this.mdSet = item.getMetadataSet();
 
-	}
+    this.profile = ObjectCachedLoader.loadProfileWithoutPrivs(this.mdSet.getProfile());
+    this.caption = findCaption();
 
-	/**
-	 * Initialize the {@link MetadataSetBean} which is used in the Popup
-	 */
-	public void initPopup() {
-		if (getMds() == null) {			setMds(new MetadataSetBean(mdSet, getProfile(), false));
-			// Commented out, statements have to be filled in for sake of
-			// Caption
-			// setStatements(loadStatements(getProfile().getId()));
-		}
-	}
+    this.selected = sessionBean.getSelected().contains(uri.toString());
+    if (sessionBean.getActiveAlbum() != null) {
+      this.isInActiveAlbum = sessionBean.getActiveAlbum().getImages().contains(item.getId());
+    }
+    this.setPrivate(item.getStatus().toString().equals("PENDING") ? true : false);
 
-	/**
-	 * Find the caption for this {@link ThumbnailBean} as defined in the
-	 * {@link MetadataProfile}. If none defined in the {@link MetadataProfile}
-	 * return the filename
-	 * 
-	 * @return
-	 */
-	private String findCaption() {
-		for (Statement s : profile.getStatements()) {
-			if (s.isDescription()) {
-				for (Metadata md : mdSet.getMetadata()) {
-					if (md.getStatement().equals(s.getId())) {
-						String str = "";
-						if (md instanceof Link)
-							str = ((Link) md).getLabel();
-						else if (md instanceof Publication)
-							str = CommonUtils.removeTags(((Publication) md)
-									.getCitation());
-						else
-							str = md.asFulltext();
-						if (!"".equals(str.trim()))
-							return str;
-					}
-				}
-			}
-		}
-		return getFilename();
-	}
+  }
 
-	/**
-	 * Listener for the select box of this {@link ThumbnailBean}
-	 * 
-	 * @param event
-	 */
-	public void selectedChanged(ValueChangeEvent event) {
-		SessionObjectsController soc = new SessionObjectsController();
-		if (event.getNewValue().toString().equals("true")) {
-			setSelected(true);
-			soc.selectItem(getUri().toString());
-		} else if (event.getNewValue().toString().equals("false")) {
-			setSelected(false);
-			soc.unselectItem(getUri().toString());
-		}
-	}
+  /**
+   * Initialize the {@link MetadataSetBean} which is used in the Popup
+   */
+  public void initPopup() {
+    if (getMds() == null) {
+      setMds(new MetadataSetBean(mdSet, getProfile(), false));
+      // Commented out, statements have to be filled in for sake of
+      // Caption
+      // setStatements(loadStatements(getProfile().getId()));
+    }
+  }
 
-	/**
-	 * getter
-	 * 
-	 * @return
-	 */
-	public String getLink() {
-		return link;
-	}
+  /**
+   * Find the caption for this {@link ThumbnailBean} as defined in the {@link MetadataProfile}. If
+   * none defined in the {@link MetadataProfile} return the filename
+   * 
+   * @return
+   */
+  private String findCaption() {
+    for (Statement s : profile.getStatements()) {
+      if (s.isDescription()) {
+        for (Metadata md : mdSet.getMetadata()) {
+          if (md.getStatement().equals(s.getId())) {
+            String str = "";
+            if (md instanceof Link)
+              str = ((Link) md).getLabel();
+            else if (md instanceof Publication)
+              str = CommonUtils.removeTags(((Publication) md).getCitation());
+            else
+              str = md.asFulltext();
+            if (!"".equals(str.trim()))
+              return str;
+          }
+        }
+      }
+    }
+    return getFilename();
+  }
 
-	/**
-	 * setter
-	 * 
-	 * @param link
-	 */
-	public void setLink(String link) {
-		this.link = link;
-	}
+  /**
+   * Listener for the select box of this {@link ThumbnailBean}
+   * 
+   * @param event
+   */
+  public void selectedChanged(ValueChangeEvent event) {
+    SessionObjectsController soc = new SessionObjectsController();
+    if (event.getNewValue().toString().equals("true")) {
+      setSelected(true);
+      soc.selectItem(getUri().toString());
+    } else if (event.getNewValue().toString().equals("false")) {
+      setSelected(false);
+      soc.unselectItem(getUri().toString());
+    }
+  }
 
-	/**
-	 * getter
-	 * 
-	 * @return
-	 */
-	public String getFilename() {
-		return filename;
-	}
+  /**
+   * getter
+   * 
+   * @return
+   */
+  public String getLink() {
+    return link;
+  }
 
-	/**
-	 * setter
-	 * 
-	 * @param filename
-	 */
-	public void setFilename(String filename) {
-		this.filename = filename;
-	}
+  /**
+   * setter
+   * 
+   * @param link
+   */
+  public void setLink(String link) {
+    this.link = link;
+  }
 
-	/**
-	 * getter
-	 * 
-	 * @return
-	 */
-	public String getCaption() {
-		return caption;
-	}
+  /**
+   * getter
+   * 
+   * @return
+   */
+  public String getFilename() {
+    return filename;
+  }
 
-	/**
-	 * setter
-	 * 
-	 * @param caption
-	 */
-	public void setCaption(String caption) {
-		this.caption = caption;
-	}
+  /**
+   * setter
+   * 
+   * @param filename
+   */
+  public void setFilename(String filename) {
+    this.filename = filename;
+  }
 
-	/**
-	 * getter
-	 * 
-	 * @return
-	 */
-	public URI getUri() {
-		return uri;
-	}
+  /**
+   * getter
+   * 
+   * @return
+   */
+  public String getCaption() {
+    return caption;
+  }
 
-	/**
-	 * setter
-	 * 
-	 * @param id
-	 */
-	public void setUri(URI id) {
-		this.uri = id;
-	}
+  /**
+   * setter
+   * 
+   * @param caption
+   */
+  public void setCaption(String caption) {
+    this.caption = caption;
+  }
 
-	/**
-	 * getter
-	 * 
-	 * @return
-	 */
-	public boolean isSelected() {
-		return selected;
-	}
+  /**
+   * getter
+   * 
+   * @return
+   */
+  public URI getUri() {
+    return uri;
+  }
 
-	/**
-	 * setter
-	 * 
-	 * @param selected
-	 */
-	public void setSelected(boolean selected) {
-		this.selected = selected;
-	}
+  /**
+   * setter
+   * 
+   * @param id
+   */
+  public void setUri(URI id) {
+    this.uri = id;
+  }
 
-	/**
-	 * getter
-	 * 
-	 * @return
-	 */
-	public boolean isInActiveAlbum() {
-		return isInActiveAlbum;
-	}
+  /**
+   * getter
+   * 
+   * @return
+   */
+  public boolean isSelected() {
+    return selected;
+  }
 
-	/**
-	 * setter
-	 * 
-	 * @param isInActiveAlbum
-	 */
-	public void setInActiveAlbum(boolean isInActiveAlbum) {
-		this.isInActiveAlbum = isInActiveAlbum;
-	}
+  /**
+   * setter
+   * 
+   * @param selected
+   */
+  public void setSelected(boolean selected) {
+    this.selected = selected;
+  }
 
-	/**
-	 * getter
-	 * 
-	 * @return
-	 */
-	public String getId() {
-		return id;
-	}
+  /**
+   * getter
+   * 
+   * @return
+   */
+  public boolean isInActiveAlbum() {
+    return isInActiveAlbum;
+  }
 
-	/**
-	 * @param id
-	 */
-	public void setId(String id) {
-		this.id = id;
-	}
+  /**
+   * setter
+   * 
+   * @param isInActiveAlbum
+   */
+  public void setInActiveAlbum(boolean isInActiveAlbum) {
+    this.isInActiveAlbum = isInActiveAlbum;
+  }
 
-	/**
-	 * getter
-	 * 
-	 * @return the mds
-	 */
-	public MetadataSetBean getMds() {
-		return mds;
-	}
+  /**
+   * getter
+   * 
+   * @return
+   */
+  public String getId() {
+    return id;
+  }
 
-	/**
-	 * setter
-	 * 
-	 * @param mds
-	 *            the mds to set
-	 */
-	public void setMds(MetadataSetBean mds) {
-		this.mds = mds;
-	}
+  /**
+   * @param id
+   */
+  public void setId(String id) {
+    this.id = id;
+  }
 
-	public URI getCollectionUri() {
-		return collectionUri;
-	}
+  /**
+   * getter
+   * 
+   * @return the mds
+   */
+  public MetadataSetBean getMds() {
+    return mds;
+  }
 
-	public void setCollectionUri(URI colUri) {
-		this.collectionUri = colUri;
-	}
+  /**
+   * setter
+   * 
+   * @param mds the mds to set
+   */
+  public void setMds(MetadataSetBean mds) {
+    this.mds = mds;
+  }
 
-	public MetadataProfile getProfile() {
-		return profile;
-	}
+  public URI getCollectionUri() {
+    return collectionUri;
+  }
 
-	public void setProfile(MetadataProfile profile) {
-		this.profile = profile;
-	}
+  public void setCollectionUri(URI colUri) {
+    this.collectionUri = colUri;
+  }
 
-	public boolean isPrivate() {
-		return isPrivate;
-	}
+  public MetadataProfile getProfile() {
+    return profile;
+  }
 
-	public void setPrivate(boolean isPrivate) {
-		this.isPrivate = isPrivate;
-	}
+  public void setProfile(MetadataProfile profile) {
+    this.profile = profile;
+  }
+
+  public boolean isPrivate() {
+    return isPrivate;
+  }
+
+  public void setPrivate(boolean isPrivate) {
+    this.isPrivate = isPrivate;
+  }
 
 }

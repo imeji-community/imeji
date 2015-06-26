@@ -3,10 +3,6 @@
  */
 package de.mpg.imeji.presentation.user;
 
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
@@ -19,6 +15,12 @@ import de.mpg.imeji.presentation.user.util.EmailMessages;
 import de.mpg.imeji.presentation.user.util.PasswordGenerator;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
+
+import org.apache.log4j.Logger;
+
+import java.util.List;
+
+import static de.mpg.imeji.presentation.user.util.EmailClient.isValidEmail;
 
 /**
  * Java Bean for the Create new user page
@@ -79,15 +81,7 @@ public class UserCreationBean {
 		return password;
 	}
 
-	/**
-	 * Is true if the Email is valid
-	 * 
-	 * @return
-	 */
-	public static boolean isValidEmail(String email) {
-		String regexEmailMatch = "([^.@]+)(\\.[^.@]+)*@([^.@]+\\.)+([^.@]+)";
-		return email.matches(regexEmailMatch);
-	}
+
 
 	/**
 	 * True if the {@link User} exists
@@ -120,7 +114,7 @@ public class UserCreationBean {
 			emailClient.sendMail(
 					user.getEmail(),
 					null,
-					emailMessages.getEmailSubject(true),
+					emailMessages.getEmailOnAccountAction_Subject(true),
 					emailMessages.getNewAccountMessage(password,
 							user.getEmail(), user.getName()));
 		} catch (Exception e) {

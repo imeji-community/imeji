@@ -60,7 +60,7 @@ All rights reserved. Use is subject to license terms.
 				
 				<h:panelGroup id="imj_pageMessageArea">
 					<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{MessagesBean.hasMessages or (SessionBean.activeAlbum != null and HistorySession.currentPage.title != 'help')}">
-						
+
 						<ui:fragment rendered="#{MessagesBean.hasMessages}">
 							<ui:fragment rendered="#{MessagesBean.numberOfMessages == 1}">
 									<h:messages styleClass="imj_messageList"

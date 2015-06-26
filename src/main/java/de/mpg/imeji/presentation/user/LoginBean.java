@@ -14,13 +14,14 @@ import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
+import java.io.IOException;
+import java.net.URLDecoder;
+
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.net.URLDecoder;
 
 /**
  * Bean for login features
@@ -35,6 +36,15 @@ public class LoginBean {
 	private String login;
 	private String passwd;
 	private SessionBean sb;
+
+	public String getRedirect() {
+		return redirect;
+	}
+
+	public void setRedirect(String redirect) {
+		this.redirect = redirect;
+	}
+
 	private String redirect;
 
 	/**

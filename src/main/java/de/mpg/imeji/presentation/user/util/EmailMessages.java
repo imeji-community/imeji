@@ -203,18 +203,38 @@ public class EmailMessages {
 	 * Create the body of the registration request email
 	 *
 	 * @param to
-	 * @param session
-	 * @return
+	 * @param password
+	 *@param session  @return
 	 */
-	public String getEmailOnRegistrationRequest_Body(User to, SessionBean session) {
+	public String getEmailOnRegistrationRequest_Body(User to, String password, SessionBean session) {
 		return session
 				.getMessage("email_registration_request_body")
+				.replace("XXX_USER_NAME_XXX", to.getName())
 				.replace("XXX_LOGIN_XXX", to.getEmail())
-				.replace("XXX_USER_PLAIN_TEXT_PASSWORD_XXX", "XXX_USER_PLAIN_TEXT_PASSWORD_XXX")
-				.replace("XXX_INSTANCE_NAME_XXX", session.getInstanceName())
+				.replace("XXX_USER_PLAIN_TEXT_PASSWORD_XXX", password)
+				.replaceAll("XXX_INSTANCE_NAME_XXX", session.getInstanceName())
 				.replace("XXX_ACTIVATION_LINK_XXX",
 						session.getApplicationUrl() + "register?token=" + to.getRegistrationToken());
 	}
+
+	/**
+	 * Create the subject of an account activation email
+	 *
+	 * @param session
+	 * @return
+	 */
+	public String getEmailOnAccountActivation_Subject(User u, SessionBean session) {
+		return session.getMessage("email_account_activation_subject")
+				.replace("XXX_USER_NAME_XXX", u.getName());
+	}
+
+	public String getEmailOnAccountActivation_Body(User u, SessionBean session) {
+		return session.getMessage("email_account_activation_body")
+				.replace("XXX_USER_NAME_XXX", u.getName())
+				.replace("XXX_USER_EMAIL_XXX", u.getEmail())
+				.replace("XXX_TIME_XXX", new Date().toString());
+	}
+
 
 	/**
 	 * Generate email body for "Send notification email by item download"

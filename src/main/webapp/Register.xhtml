@@ -3,7 +3,8 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:imjc="http://java.sun.com/jsf/composite/components"
-                xmlns:f="http://xmlns.jcp.org/jsf/core">
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
 
     <ui:param name="headline" value="#{lbl.register}"/>
 
@@ -84,12 +85,13 @@
                 <!-- LogIn -->
                 <ui:fragment rendered="#{RegistrationBean.activation_success}">
                     <h:form id="loginForm">
-                        <h:inputText value="#{RegistrationBean.user.email}"/>
-                        <h:inputSecret value=""/>
+                        <h:inputText value="#{LoginBean.login}"/>
+                        <h:inputSecret value="#{LoginBean.passwd}" p:placeholder="#{lbl.password}"/>
                         <h:commandButton id="lnkLogin" title="#{lbl.login}" value="#{lbl.login}"
                                          action="#{LoginBean.doLogin}"/>
                     </h:form>
                 </ui:fragment>
+
             </ui:fragment>
         </div>
     </ui:define>

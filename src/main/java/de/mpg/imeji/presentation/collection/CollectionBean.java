@@ -18,6 +18,8 @@ import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.CollectionController.MetadataProfileCreationMethod;
 import de.mpg.imeji.logic.controller.ProfileController;
@@ -515,5 +517,27 @@ public abstract class CollectionBean extends ContainerBean {
 	public void setProfileSelectMode(boolean profileSelectMode) {
 		this.profileSelectMode = profileSelectMode;
 	}
-
+	
+	public boolean isShowCheckBoxUseTemplate() {
+		if (collectionCreateMode){
+			return collectionCreateMode;
+		}
+		else
+		{
+			ProfileController pc = new ProfileController();
+			MetadataProfile collectionProfile = null;
+			try {
+				collectionProfile = pc.retrieve(collection.getProfile(), sessionBean.getUser());
+			} catch (NotFoundException e) {
+				return true;
+			}
+			catch (ImejiException e) {
+				BeanHelper.error(sessionBean.getMessage("error_retrieving_metadata_profile"));
+			}
+			if ( collectionProfile.getStatements().isEmpty() )
+				return true;
+			else
+				return false;
+		}
+	}
 }

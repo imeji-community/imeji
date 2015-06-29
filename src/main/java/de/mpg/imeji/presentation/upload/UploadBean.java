@@ -156,8 +156,7 @@ public class UploadBean implements Serializable {
 						File tmp = createTmpFile(filename);
 						try {
 							writeInTmpFile(tmp, stream);
-							Item item = uploadFile(tmp, filename);
-							session.addToSelected(item.getId().toString());
+							uploadFile(tmp, filename);
 						} finally {
 							stream.close();
 							FileUtils.deleteQuietly(tmp);
@@ -648,8 +647,13 @@ public class UploadBean implements Serializable {
 		}
 	}
 	
-	public int numSuccessUploaded(){
-	  return session.getSelectedSize();
+	
+	public void prepareBatchedit(){
+	  session.getSelected().clear();
+	  for(Item item : getsFiles()){
+	    session.addToSelected(item.getId().toString());
+	  }
+	  
 	}
 
 

@@ -760,7 +760,7 @@ public class SessionBean implements Serializable {
 	 * 
 	 * @throws IOException
 	 */
-	public void logoutFromSpot()  {
+	private void logoutFromSpot()  {
 		if (getUser()!=null && !getUser().isAdmin()) {
 			setUser(null);
 			setShowLogin(false);

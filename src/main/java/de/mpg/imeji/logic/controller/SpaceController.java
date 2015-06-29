@@ -100,14 +100,15 @@ public class SpaceController extends ImejiController {
 		 * AuthorizationPredefinedRoles.admin(space.getId() .toString(), null),
 		 * user);
 		 */
-
+		
+		writer.create(WriterFacade.toList(space), null, user);
+		
 		// add collections if exist
 		Collection<String> spaceCollections = space.getSpaceCollections();
 		if (spaceCollections != null && !spaceCollections.isEmpty()) {
 			setSpaceInCollections(space, spaceCollections, user, false);
 		}
-
-		writer.create(WriterFacade.toList(space), null, user);
+		
 		return space.getId();
 	}
 

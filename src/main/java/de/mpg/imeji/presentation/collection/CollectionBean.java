@@ -102,7 +102,7 @@ public abstract class CollectionBean extends ContainerBean {
 		try {
 			ProfileController pc = new ProfileController();
 			List<MetadataProfile> profiles = pc.search(sessionBean.getUser(),
-					sessionBean.getSpaceId());
+					sessionBean.getSelectedSpaceString());
 			String profileTitle = "";
 			useMDProfileTemplate = false;
 			MetadataProfile defaultMetadataProfile = pc

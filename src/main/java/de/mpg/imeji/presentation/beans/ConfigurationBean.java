@@ -30,7 +30,6 @@ package de.mpg.imeji.presentation.beans;
 
 import de.mpg.imeji.logic.storage.util.MediaUtils;
 import de.mpg.imeji.presentation.lang.InternationalizationBean;
-import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
@@ -44,11 +43,6 @@ import org.apache.log4j.Logger;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 
-import javax.faces.bean.ApplicationScoped;
-import javax.faces.bean.ManagedBean;
-import javax.faces.event.ValueChangeEvent;
-import javax.faces.model.SelectItem;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -57,6 +51,11 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+
+import javax.faces.bean.ApplicationScoped;
+import javax.faces.bean.ManagedBean;
+import javax.faces.event.ValueChangeEvent;
+import javax.faces.model.SelectItem;
 
 /**
  * JavaBean managing the imeji configuration which is made directly by the
@@ -573,7 +572,6 @@ public class ConfigurationBean {
 	public String getInstanceName() {
 		return getPropertyAsNonNullString(CONFIGURATION.INSTANCE_NAME.name());
 	}
-
 	/**
 	 * Set the contact email
 	 * 
@@ -593,6 +591,11 @@ public class ConfigurationBean {
 			return (String) config.get(CONFIGURATION.CONTACT_EMAIL.name());
 		return "";
 	}
+
+	public static String getContactEmailStatic() {
+		return (String) config.get(CONFIGURATION.CONTACT_EMAIL.name());
+	}
+
 
 	public void setEmailServer(String s) {
 		setProperty(CONFIGURATION.EMAIL_SERVER.name(), s);

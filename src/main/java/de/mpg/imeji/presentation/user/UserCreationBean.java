@@ -20,8 +20,6 @@ import org.apache.log4j.Logger;
 
 import java.util.List;
 
-import static de.mpg.imeji.presentation.user.util.EmailClient.isValidEmail;
-
 /**
  * Java Bean for the Create new user page
  * 

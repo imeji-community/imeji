@@ -6,12 +6,14 @@ import de.mpg.imeji.logic.validation.impl.ItemValidator;
 import de.mpg.imeji.logic.validation.impl.MetadataValidator;
 import de.mpg.imeji.logic.validation.impl.ProfileValidator;
 import de.mpg.imeji.logic.validation.impl.PseudoValidator;
+import de.mpg.imeji.logic.validation.impl.SpaceValidator;
 import de.mpg.imeji.logic.validation.impl.UserValidator;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Space;
 import de.mpg.imeji.logic.vo.User;
 
 /**
@@ -46,8 +48,9 @@ public class ValidatorFactory {
 			return new ProfileValidator(method);
 		} else if (obj instanceof User) {
 			return new UserValidator(method);
+		} else if (obj instanceof Space) {
+			return new SpaceValidator(method);
 		}
-		
 		return new PseudoValidator(method);
 	}
 }

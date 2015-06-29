@@ -91,7 +91,7 @@ public class MetadataSetBean implements Serializable {
 	public void trim() {
 		for (SuperMetadataBean smb : metadataTree.getList()) {
 			if (smb.isEmpty())
-				metadataTree.remove(smb);
+				metadataTree.removeButKeepChilds(smb);
 		}
 	}
 

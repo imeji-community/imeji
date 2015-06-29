@@ -6,8 +6,6 @@ package de.mpg.imeji.presentation.history;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 import javax.faces.FactoryFinder;
@@ -20,10 +18,8 @@ import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -32,15 +28,10 @@ import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotAllowedException;
 import javax.ws.rs.core.Response.Status;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.ocpsoft.pretty.PrettyContext;
-import com.ocpsoft.pretty.PrettyFilter;
-import com.ocpsoft.pretty.faces.application.PrettyNavigationHandler;
 import com.ocpsoft.pretty.faces.config.PrettyConfig;
-import com.ocpsoft.pretty.faces.config.PrettyConfigParser;
-import com.ocpsoft.pretty.faces.config.PrettyConfigurator;
 import com.ocpsoft.pretty.faces.config.mapping.UrlMapping;
 import com.ocpsoft.pretty.faces.url.URL;
 

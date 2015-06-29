@@ -12,7 +12,6 @@ import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.PropertyReader;
 
 import org.apache.log4j.Logger;
 
@@ -39,7 +38,7 @@ public class EmailMessages {
 	 */
 	public String getNewAccountMessage(String password, String email,
 			String username) {
-		return getEmailMessage(password, email, username, "email_new_user");
+		return getEmailOnAccountAction_Body(password, email, username, "email_new_user");
 	}
 
 	/**
@@ -57,7 +56,7 @@ public class EmailMessages {
 			String name = ((ConfigurationBean) BeanHelper
 					.getApplicationBean(ConfigurationBean.class))
 					.getInstanceName();
-			return getEmailMessage(password, email, username,
+			return getEmailOnAccountAction_Body(password, email, username,
 					"email_new_password")
 					.replace("XXX_INSTANCE_NAME_XXX", name);
 		} catch (Exception e) {
@@ -148,8 +147,8 @@ public class EmailMessages {
 	 * @param message_bundle
 	 * @return
 	 */
-	private String getEmailMessage(String password, String email,
-			String username, String message_bundle) {
+	private String getEmailOnAccountAction_Body(String password, String email,
+												String username, String message_bundle) {
 		Navigation navigation = (Navigation) BeanHelper
 				.getApplicationBean(Navigation.class);
 		String userPage = navigation.getApplicationUrl() + "user?id=" + email;
@@ -175,7 +174,7 @@ public class EmailMessages {
 	 * @param newAccount
 	 * @return
 	 */
-	public String getEmailSubject(boolean newAccount) {
+	public String getEmailOnAccountAction_Subject(boolean newAccount) {
 		SessionBean session = (SessionBean) BeanHelper
 				.getSessionBean(SessionBean.class);
 		String emailsubject = "";
@@ -187,6 +186,55 @@ public class EmailMessages {
 		return emailsubject.replaceAll("XXX_INSTANCE_NAME_XXX",
 				session.getInstanceName());
 	}
+
+    /**
+	 * Create the subject of the registration request email
+	 *
+	 * @return
+	 */
+	public String getEmailOnRegistrationRequest_Subject(SessionBean session) {
+        return session.getMessage("email_registration_request_subject")
+		        .replaceAll("XXX_INSTANCE_NAME_XXX",
+						session.getInstanceName());
+	}
+
+
+	/**
+	 * Create the body of the registration request email
+	 *
+	 * @param to
+	 * @param password
+	 *@param session  @return
+	 */
+	public String getEmailOnRegistrationRequest_Body(User to, String password, SessionBean session) {
+		return session
+				.getMessage("email_registration_request_body")
+				.replace("XXX_USER_NAME_XXX", to.getName())
+				.replace("XXX_LOGIN_XXX", to.getEmail())
+				.replace("XXX_USER_PLAIN_TEXT_PASSWORD_XXX", password)
+				.replaceAll("XXX_INSTANCE_NAME_XXX", session.getInstanceName())
+				.replace("XXX_ACTIVATION_LINK_XXX",
+						session.getApplicationUrl() + "register?token=" + to.getRegistrationToken());
+	}
+
+	/**
+	 * Create the subject of an account activation email
+	 *
+	 * @param session
+	 * @return
+	 */
+	public String getEmailOnAccountActivation_Subject(User u, SessionBean session) {
+		return session.getMessage("email_account_activation_subject")
+				.replace("XXX_USER_NAME_XXX", u.getName());
+	}
+
+	public String getEmailOnAccountActivation_Body(User u, SessionBean session) {
+		return session.getMessage("email_account_activation_body")
+				.replace("XXX_USER_NAME_XXX", u.getName())
+				.replace("XXX_USER_EMAIL_XXX", u.getEmail())
+				.replace("XXX_TIME_XXX", new Date().toString());
+	}
+
 
 	/**
 	 * Generate email body for "Send notification email by item download"

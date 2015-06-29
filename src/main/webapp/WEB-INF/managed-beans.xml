@@ -114,8 +114,9 @@
 		<managed-bean-class>de.mpg.imeji.presentation.album.AlbumItemBean</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
-	<!-- Users bean -->
 
+
+	<!-- Users bean -->
 	<managed-bean>
 		<managed-bean-name>UserBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.user.UserBean</managed-bean-class>
@@ -128,6 +129,12 @@
 		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
 
+    <!-- Registration bean -->
+    <managed-bean>
+        <managed-bean-name>RegistrationBean</managed-bean-name>
+        <managed-bean-class>de.mpg.imeji.presentation.user.RegistrationBean</managed-bean-class>
+        <managed-bean-scope>view</managed-bean-scope>
+    </managed-bean>
 
 	<managed-bean>
 		<managed-bean-name>MessagesBean</managed-bean-name>

@@ -16,17 +16,19 @@ import de.mpg.imeji.presentation.user.util.EmailMessages;
 import de.mpg.imeji.presentation.user.util.PasswordGenerator;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
+
 import org.apache.log4j.Logger;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Java Bean for the view users page
@@ -155,7 +157,7 @@ public class UsersBean implements Serializable
         EmailMessages emailMessages = new EmailMessages();
         try
         {
-            emailClient.sendMail(email, null, emailMessages.getEmailSubject(false),
+            emailClient.sendMail(email, null, emailMessages.getEmailOnAccountAction_Subject(false),
                     emailMessages.getNewPasswordMessage(password, email, username));
         }
         catch (Exception e)

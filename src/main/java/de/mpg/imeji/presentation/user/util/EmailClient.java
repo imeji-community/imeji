@@ -3,7 +3,11 @@
  */
 package de.mpg.imeji.presentation.user.util;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
+import de.mpg.imeji.presentation.beans.ConfigurationBean;
+import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.util.BeanHelper;
+
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -23,11 +27,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
-import org.apache.log4j.Logger;
-
-import de.mpg.imeji.presentation.beans.ConfigurationBean;
-import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.util.BeanHelper;
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
  * Client to send email
@@ -208,6 +208,15 @@ public class EmailClient
         }
     }
 
+    /**
+     * Is true if the Email is valid
+     *
+     * @return
+     */
+    public static boolean isValidEmail(String email) {
+        String regexEmailMatch = "([^.@]+)(\\.[^.@]+)*@([^.@]+\\.)+([^.@]+)";
+        return email.matches(regexEmailMatch);
+    }
 
 
 }

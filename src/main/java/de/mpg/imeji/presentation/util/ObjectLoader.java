@@ -235,13 +235,6 @@ public class ObjectLoader {
 				+ " "
 				+ ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
 						.getLabel("not_found"));
-		logger.error(((SessionBean) BeanHelper
-				.getSessionBean(SessionBean.class)).getLabel(objectType)
-				+ " "
-				+ id
-				+ " "
-				+ ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-						.getLabel("not_found"));
 	}
 
 	/**

@@ -9,90 +9,91 @@
     <ui:param name="headline" value="#{lbl.register}"/>
 
     <ui:define name="mainContent">
-
+		<style type="text/css">
+			.imj_registerSteps { float: right; }
+			.imj_registerSteps li { margin-bottom: 1em; }
+			.imj_registerSteps .imj_active { font-size: 145%; }
+			.imj_registerSteps:after { content: " "; float: none; clear:both; }
+			.imj_registerSteps .imj_submitted { padding: 0.272727em; background-color: #6CAE2F; }
+		</style>
         <div class="imj_mainContentWrapper">
 
             <!-- Register form , TODO: switched on by all statuses false -->
 
-            <h:panelGroup id="registerArea">
-
-                <ui:fragment
-                        rendered="#{!RegistrationBean.activation_submitted and !RegistrationBean.registration_submitted and !RegistrationBean.registration_success}">
-                    <ul class="imj_registerSteps">
-                        <li class="imj_active">1. #{lbl.register}</li>
-                        <li>2. Activate the link from Verification-Email</li>
-                    </ul>
-                    <h2 class="imj_headline">#{lbl.register}</h2>
-
-                    <ui:fragment id="formArea">
-                        <h:form id="userForm" rendered="#{!RegistrationBean.registration_success}">
-                            <!-- The person component -->
-                            <div class="imj_admindataSet">
-                                <div class="imj_admindataLabel">#{lbl.email}</div>
-                                <div class="imj_admindataValue">
-                                    <div class="imj_admindataValueEntry">
-                                        <h:inputText type="text" name="email"
-                                                     value="#{RegistrationBean.user.email}"
-                                                     styleClass="imj_admindataEdit"/>
-                                    </div>
-                                </div>
-                            </div>
-                            <imjc:person id="userPersonRegister"
-                                         person="#{RegistrationBean.user.person}"
-                                         bean="#{RegistrationBean}" position="0"/>
-                            <h:panelGroup layout="block" styleClass="imj_submitPanel">
-                                <h:commandButton action="#{RegistrationBean.register}" type="submit"
-                                                 value="#{lbl.register_now}"
-                                                 styleClass="imj_submitButton">
-                                    <f:ajax execute="@form"
-                                            render=":registerArea :imj_pageMessageArea"/>
-                                </h:commandButton>
-                            </h:panelGroup>
-                        </h:form>
-                    </ui:fragment>
+            <h:panelGroup layout="block" id="registerArea">
+            
+            	<ui:fragment rendered="#{!RegistrationBean.activation_submitted}">
+	            	<h2 class="imj_headline">#{lbl.registration}</h2>
+					
+	                <ui:fragment rendered="#{!RegistrationBean.activation_submitted and !RegistrationBean.registration_success}">
+	                    <ul class="imj_registerSteps">
+	                        <li class="imj_active">1. #{lbl.register}</li>
+	                        <li>2. #{lbl.register_activate}</li>
+	                    </ul>
+						
+	                    <ui:fragment id="formArea">
+	                        <h:form id="userForm" rendered="#{!RegistrationBean.registration_success}">
+	                            <!-- The person component -->
+	                            <div class="imj_admindataSet">
+	                                <div class="imj_admindataLabel">#{lbl.email}</div>
+	                                <div class="imj_admindataValue">
+	                                    <div class="imj_admindataValueEntry">
+	                                        <h:inputText type="text" name="email" value="#{RegistrationBean.user.email}" styleClass="imj_admindataEdit"/>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                            <imjc:person id="userPersonRegister" person="#{RegistrationBean.user.person}" bean="#{RegistrationBean}" position="0"/>
+	                            <h:panelGroup layout="block" styleClass="imj_submitPanel">
+	                                <h:commandButton action="#{RegistrationBean.register}" type="submit" value="#{lbl.register_now}" styleClass="imj_submitButton">
+	                                    <f:ajax execute="@form" render=":registerArea :imj_pageMessageArea"/>
+	                                </h:commandButton>
+	                            </h:panelGroup>
+	                        </h:form>
+	                    </ui:fragment>
+	                </ui:fragment>
+	
+	                <!-- Registration was successfull -->
+	                <ui:fragment rendered="#{RegistrationBean.registration_submitted and RegistrationBean.registration_success}">
+	                    <ul class="imj_registerSteps">
+	                        <li class="imj_active imj_submitted">1. #{lbl.register}</li>
+	                        <li>2. #{lbl.register_activate}</li>
+	                    </ul>
+	                    <p>#{msg.registration_thank_you}</p>
+	                    <p>#{msg.registration_check_email}</p>
+	                </ui:fragment>
                 </ui:fragment>
-
-                <!-- Registration was successfull -->
-                <ui:fragment
-                        rendered="#{RegistrationBean.registration_submitted and RegistrationBean.registration_success}">
-                    <ul class="imj_registerSteps">
-                        <li class="imj_active">1. #{lbl.register}<span
-                                class="imj_submitted">Success</span></li>
-                        <li>2. Activate the link from Verification-Email</li>
-                    </ul>
-                    <h2 class="imj_headline">#{msg.registration_thank_you}</h2>
-                </ui:fragment>
-
+				
+				<!-- Activation (positive/negative) -->
+	            <ui:fragment rendered="#{RegistrationBean.activation_submitted}">
+	            	<h2 class="imj_headline">#{lbl.register_activation}</h2>
+	                
+	                <ul class="imj_registerSteps">
+	                    <li>1. #{lbl.register}</li>
+	                    <ui:fragment rendered="#{RegistrationBean.activation_success}">
+	                    	<li class="imj_active imj_submitted">2. #{lbl.register_activate}</li>
+	                    </ui:fragment>
+	                    <ui:fragment rendered="#{!RegistrationBean.activation_success}">
+	                    	<li class="imj_active">2. #{lbl.register_activate}</li>
+	                    </ui:fragment>
+	                </ul>
+	
+	                <p>
+	                    <h:outputText styleClass="imj_messageStatus" value="#{RegistrationBean.activation_message}" rendered="#{RegistrationBean.activation_success}"/>
+	                    <h:outputText styleClass="imj_messageError" value="#{RegistrationBean.activation_message}" rendered="#{!RegistrationBean.activation_success}"/>
+	                </p>
+	                <!-- LogIn -->
+	                <ui:fragment rendered="#{RegistrationBean.activation_success}">
+	                    <h:form id="loginForm">
+	                        <h:inputText value="#{LoginBean.login}"/>
+	                        <h:inputSecret value="#{LoginBean.passwd}" p:placeholder="#{lbl.password}"/>
+	                        <h:commandButton id="lnkLogin" title="#{lbl.login}" value="#{lbl.login}" action="#{LoginBean.doLogin}"/>
+	                    </h:form>
+	                </ui:fragment>
+	
+	            </ui:fragment>
+				
             </h:panelGroup>
-
-
-            <!-- Activation (positive/negative) -->
-            <ui:fragment rendered="#{RegistrationBean.activation_submitted}">
-                <ul class="imj_registerSteps">
-                    <li>1. #{lbl.register}</li>
-                    <li class="imj_active">2. Activate the link from Verification-Email</li>
-                </ul>
-                <h2 class="imj_headline">Activation</h2>
-
-                <p>
-                    <h:outputText styleClass="imj_messageStatus"
-                                  value="#{RegistrationBean.activation_message}"
-                                  rendered="#{RegistrationBean.activation_success}"/>
-                    <h:outputText styleClass="imj_messageError"
-                                  value="#{RegistrationBean.activation_message}"
-                                  rendered="#{!RegistrationBean.activation_success}"/>
-                </p>
-                <!-- LogIn -->
-                <ui:fragment rendered="#{RegistrationBean.activation_success}">
-                    <h:form id="loginForm">
-                        <h:inputText value="#{LoginBean.login}"/>
-                        <h:inputSecret value="#{LoginBean.passwd}" p:placeholder="#{lbl.password}"/>
-                        <h:commandButton id="lnkLogin" title="#{lbl.login}" value="#{lbl.login}"
-                                         action="#{LoginBean.doLogin}"/>
-                    </h:form>
-                </ui:fragment>
-
-            </ui:fragment>
+            
         </div>
     </ui:define>
 

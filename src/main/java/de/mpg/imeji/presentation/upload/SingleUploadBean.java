@@ -127,23 +127,22 @@ public class SingleUploadBean implements Serializable {
 		}
 	}
 
-	public String save() {
-		try {
-			Item item = uploadFileToItem(getIngestImage().getFile(),
-					getIngestImage().getName());
-			SingleEditBean edit = new SingleEditBean(item, sus.getProfile(), "");
-			MetadataSetBean newSet = getMdSetBean();
-			edit.getEditor().getItems().get(0).setMds(newSet);
-			edit.save();
-			BeanHelper.cleanMessages();
-			BeanHelper.info(sb.getMessage("success_item_create"));
-			sus.uploaded();
-			reloadItemPage(item.getIdString());
-		} catch (Exception e) {
-			BeanHelper.error(e.getMessage());
-		}
-		return "";
-	}
+	 public String save() {
+		    try {
+		      Item item = ImejiFactory.newItem(getCollection());
+		      SingleEditBean edit = new SingleEditBean(item, sus.getProfile(), "");
+		      MetadataSetBean newSet = getMdSetBean();
+		      edit.getEditor().getItems().get(0).setMds(newSet);
+		      edit.getEditor().validateAndFormatItemsForSaving();
+		      uploadFileToItem(item, getIngestImage().getFile(), getIngestImage().getName());
+		      BeanHelper.cleanMessages();
+		      sus.uploaded();
+		      reloadItemPage(item.getIdString());
+		    } catch (Exception e) {
+		      BeanHelper.error(e.getMessage());
+		    }
+		    return "";
+		 }
 	
 	/**
 	 * Reload the page with the current user
@@ -160,8 +159,7 @@ public class SingleUploadBean implements Serializable {
 				FacesContext.getCurrentInstance().getExternalContext()
 						.redirect(redirectUrl);
 			} catch (IOException e) {
-				Logger.getLogger(UserBean.class).info("Some reloadPage exception",
-						e);
+				Logger.getLogger(UserBean.class).info("Error reloading the page", e);
 			}
 	}
 
@@ -183,21 +181,13 @@ public class SingleUploadBean implements Serializable {
 		sus.copyToTemp();
 	}
 
-	// No throw Exception
-	private Item uploadFileToItem(File file, String title) {
-		try {
-			Item item = ImejiFactory.newItem(getCollection());
+	private Item uploadFileToItem(Item item, File file, String title) throws ImejiException {
+
 			ItemController controller = new ItemController();
 			item = controller.create(item, file, title, user, null, null);
 			sus.setUploadedItem(item);
 			return item;
-		} catch (Exception e) {
-			// sus.setfFile(" File " + title + " not uploaded: " +
-			// e.getMessage());
-			BeanHelper.error(e.getMessage());
-			return null;
 		}
-	}
 
 	/**
 	 * Upload the file and read the technical Metadata

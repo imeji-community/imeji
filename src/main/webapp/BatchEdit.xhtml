@@ -58,6 +58,7 @@
 						</ui:fragment>
 						
 						<!-- COMMON METADATA -->
+						<ui:fragment rendered="#{EditItemMetadataBean.profileWithStatements}">
 						<div class="imj_editGlobalAssignment">
 							<div class="imj_metadataSet">
 								<div class="imj_metadataLabel">
@@ -86,7 +87,7 @@
 									</div>
 								</div>
 								
-								<h:panelGroup styleClass="imj_submitPanel" rendered="#{EditItemMetadataBean.editType == 'selected' and EditItemMetadataBean.profileWithStatements}">
+								<h:panelGroup styleClass="imj_submitPanel" rendered="#{EditItemMetadataBean.editType == 'selected'}">
 									<h:commandButton styleClass="imj_submitButton" type="submit" action="#{EditItemMetadataBean.addToAll}" value="#{lbl.add_to_all}" onclick="document.getElementById('batchEditForm:ajaxContent').style.opacity='0.2';">
 										<f:ajax render="ajaxContent" execute="@form"/>
 									</h:commandButton>
@@ -105,6 +106,7 @@
 								</h:commandButton>
 							</h:panelGroup>
 						</div>
+						</ui:fragment>
 						
 						
 						

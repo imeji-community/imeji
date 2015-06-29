@@ -3,14 +3,13 @@
  */
 package de.mpg.imeji.presentation.beans;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.net.URISyntaxException;
-
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
+
+import java.io.Serializable;
+
 import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
@@ -50,6 +49,7 @@ public class Navigation implements Serializable {
 	public final Page ADMIN = new Page("Admin", "admin");
 	public final Page DIGILIB = new Page("Digilib", "digilib");
 	public final Page SINGLEUPLOAD = new Page("Single upload", "singleupload");
+	public final Page REGISTRATION = new Page("Registration", "register");
 	// session
 	private SessionBean sessionBean = null;
 	public final String spaceCommonSlug = "space/";
@@ -175,6 +175,10 @@ public class Navigation implements Serializable {
 		return applicationUrl + getSpacePath() + ADMIN.getPath();
 	}
 
+	public String getRegistrationUrl() {
+		return applicationUrl + getSpacePath() + REGISTRATION.getPath();
+	}
+
 	public String getAutocompleteUrl() {
 		return applicationUrl + "autocompleter";
 	}
@@ -281,9 +285,9 @@ public class Navigation implements Serializable {
 		private String name;
 		private String path;
 
-		public Page(String name, String file) {
+		public Page(String name, String path) {
 			this.name = name;
-			this.path = file;
+			this.path = path;
 		}
 
 		public String getName() {

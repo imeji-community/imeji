@@ -201,20 +201,22 @@ public class EmailMessages {
 
 	/**
 	 * Create the body of the registration request email
-	 *
 	 * @param to
 	 * @param password
-	 *@param session  @return
+	 * @param contactEmail
+	 * @param session  @return
+	 * @param navigationUrl
 	 */
-	public String getEmailOnRegistrationRequest_Body(User to, String password, SessionBean session) {
+	public String getEmailOnRegistrationRequest_Body(User to, String password, String contactEmail, SessionBean session, String navigationUrl) {
 		return session
 				.getMessage("email_registration_request_body")
 				.replace("XXX_USER_NAME_XXX", to.getName())
 				.replace("XXX_LOGIN_XXX", to.getEmail())
 				.replace("XXX_USER_PLAIN_TEXT_PASSWORD_XXX", password)
 				.replaceAll("XXX_INSTANCE_NAME_XXX", session.getInstanceName())
+				.replaceAll("XXX_CONTACT_EMAIL_XXX", contactEmail)
 				.replace("XXX_ACTIVATION_LINK_XXX",
-						session.getApplicationUrl() + "register?token=" + to.getRegistrationToken());
+						navigationUrl + "?token=" + to.getRegistrationToken());
 	}
 
 	/**
@@ -230,8 +232,10 @@ public class EmailMessages {
 
 	public String getEmailOnAccountActivation_Body(User u, SessionBean session) {
 		return session.getMessage("email_account_activation_body")
+				.replaceAll("XXX_INSTANCE_NAME_XXX", session.getInstanceName())
 				.replace("XXX_USER_NAME_XXX", u.getName())
 				.replace("XXX_USER_EMAIL_XXX", u.getEmail())
+				.replace("XXX_ORGANIZATION_XXX", u.getPerson().getOrganizationString())
 				.replace("XXX_TIME_XXX", new Date().toString());
 	}
 

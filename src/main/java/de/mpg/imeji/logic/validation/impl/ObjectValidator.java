@@ -37,4 +37,14 @@ public abstract class ObjectValidator {
 		return this.validateForMethod.equals(Validator.Method.DELETE);
 	}
 	
+	public boolean isCreate()
+	{
+		return this.validateForMethod.equals(Validator.Method.CREATE);
+	}
+	
+	public boolean isUpdate()
+	{
+		return this.validateForMethod.equals(Validator.Method.UPDATE);
+	}
+	
 }

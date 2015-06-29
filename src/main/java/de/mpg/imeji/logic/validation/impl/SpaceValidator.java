@@ -4,6 +4,7 @@ import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
@@ -29,12 +30,12 @@ public class SpaceValidator extends ObjectValidator implements Validator<Space> 
 	public void validate(Space space) throws UnprocessableError {
 		if (isDelete())
 			return;
-
+		
 		if (isNullOrEmptyTrim(space.getTitle())) {
 			throw new UnprocessableError("error_space_need_title");
 		}
 
-		if (isSpaceByLabel(space.getSlug())) {
+		if ( isSpaceByLabel(space.getSlug(), space.getId())) {
 			throw new UnprocessableError(
 					"error_there_is_another_space_with_same_slug");
 		}
@@ -52,12 +53,22 @@ public class SpaceValidator extends ObjectValidator implements Validator<Space> 
 
 	}
 
-	private boolean isSpaceByLabel(String spaceId) {
+	private boolean isSpaceByLabel(String spaceId, URI spaceUriId) {
 		if (isNullOrEmptyTrim(spaceId))
 			return false;
-		if (ImejiSPARQL.exec(SPARQLQueries.getSpaceByLabel(spaceId),
-				Imeji.spaceModel).size() > 0) {
-			return true;
+		
+		List<String> spaceUrisFound = ImejiSPARQL.exec(SPARQLQueries.getSpaceByLabel(spaceId),
+				Imeji.spaceModel);
+		if (spaceUrisFound.size() == 0) {
+			return false;
+		}
+		else
+		{
+			for (String spaceUri:spaceUrisFound){
+				if (!spaceUri.equals(spaceUriId.toString())){
+					return true;
+				}
+			}
 		}
 		return false;
 	}

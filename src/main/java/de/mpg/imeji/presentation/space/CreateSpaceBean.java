@@ -126,7 +126,7 @@ public class CreateSpaceBean implements Serializable {
 			BeanHelper.info(sessionBean.getMessage("success_space_create"));
 			return true;
 		} catch (UnprocessableError e) {
-			BeanHelper.error(e.getMessage());
+			BeanHelper.error(sessionBean.getMessage(e.getMessage()));
 		}
 		return false;
 	}

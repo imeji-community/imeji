@@ -330,7 +330,7 @@ public class SingleUploadBean implements Serializable {
 		//For some funny reasons this took me a while to debug, search results for cont_title are toggled, if you need ascending, provide "DESCENDING" 
 		sortCriterion.setSortOrder(SortOrder.valueOf("DESCENDING"));
 		// TODO: check if here space restriction is needed
-		SearchResult results = cc.search(sq, sortCriterion, -1, 0, user, sb.getSpaceId());
+		SearchResult results = cc.search(sq, sortCriterion, -1, 0, user, sb.getSelectedSpaceString());
 		if (!checkSizeOnly) {
 			collections = cc.retrieveLazy(results.getResults(), -1, 0, user);
 			for (CollectionImeji c : collections) {
@@ -387,7 +387,7 @@ public class SingleUploadBean implements Serializable {
 		
 		ProfileController pc = new ProfileController();
 		newC.setProfile(pc.retrieveDefaultProfile().getId());
-		cc.create(newC, pc.retrieveDefaultProfile(), user, MetadataProfileCreationMethod.COPY, sb.getSpaceId());
+		cc.create(newC, pc.retrieveDefaultProfile(), user, MetadataProfileCreationMethod.COPY, sb.getSelectedSpaceString());
 	}
 
 	public List<SelectItem> getCollectionItems() {

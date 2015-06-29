@@ -30,8 +30,9 @@
 				<div class="imj_searchUnit">
 					<div class="imj_searchDetails">
 						<h:outputText value="#{lbl.select_file_type}" />
-						<h:selectManyCheckbox value="#{AdvancedSearchBean.fileTypesSelected}">
+						<h:selectManyCheckbox value="#{AdvancedSearchBean.fileTypesSelected}" valueChangeListener="#{AdvancedSearchBean.fileTypeListener}">
 							<f:selectItems value="#{AdvancedSearchBean.fileTypesMenu}"></f:selectItems>
+							<f:ajax execute="@this" render=":imj_searchQueryMessageArea"/>
 						</h:selectManyCheckbox>
 					</div>
 					<div class="imj_logicalConnector">

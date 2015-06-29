@@ -6,7 +6,6 @@ import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.user.util.EmailClient;
@@ -24,6 +23,8 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
+import static de.mpg.imeji.presentation.beans.ConfigurationBean.getContactEmailStatic;
+import static de.mpg.imeji.presentation.beans.ConfigurationBean.getEmailServerSenderStatic;
 
 /**
  * Bean for registration workflow
@@ -41,6 +42,7 @@ public class RegistrationBean {
     private UserController uc = new UserController(Imeji.adminUser);
 
     private SessionBean sb;
+    private Navigation nb;
     private User user = new User();
 
 
@@ -57,6 +59,7 @@ public class RegistrationBean {
     @PostConstruct
     public void init() {
         sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+        nb = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
         //get token etc
         this.token = UrlHelper.getParameterValue("token");
         if (!isNullOrEmptyTrim(token)) {
@@ -65,9 +68,8 @@ public class RegistrationBean {
                 activate();
             else {
                 //if user is activated and logged in, redirect to home page
-                Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
                 try {
-                    FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getHomeUrl());
+                    FacesContext.getCurrentInstance().getExternalContext().redirect(nb.getHomeUrl());
                 } catch (IOException e) {
                     BeanHelper.error(e.getLocalizedMessage());
                 }
@@ -119,9 +121,9 @@ public class RegistrationBean {
             //TODO: send plain text password
             emailClient.sendMail(
                     getUser().getEmail(),
-                    ConfigurationBean.getEmailServerSenderStatic(),
+                    getEmailServerSenderStatic(),
                     emailMessages.getEmailOnRegistrationRequest_Subject(sb),
-                    emailMessages.getEmailOnRegistrationRequest_Body(getUser(), password, sb));
+                    emailMessages.getEmailOnRegistrationRequest_Body(getUser(), password, getContactEmailStatic(), sb, nb.getRegistrationUrl()));
         } catch (Exception e) {
             logger.error("Error sending email", e);
             BeanHelper.error(sb.getMessage("error") + ": Email not sent");
@@ -137,7 +139,7 @@ public class RegistrationBean {
         try {
             //send to support
             emailClient.sendMail(
-                    ConfigurationBean.getEmailServerSenderStatic(),
+                    getEmailServerSenderStatic(),
                     null,
                     emailMessages.getEmailOnAccountActivation_Subject(user, sb),
                     emailMessages.getEmailOnAccountActivation_Body(user, sb));

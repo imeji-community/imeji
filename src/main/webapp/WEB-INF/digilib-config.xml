@@ -15,7 +15,7 @@
   <!-- List of directories where images are searched.
        Directories with low-resolution images are LAST!!! in list.
 	   Use OS-specific path separators (":" for Unix, ";" for Windows) --> 
-  <parameter name="basedir-list" value="/data/imeji" />
+  <parameter name="basedir-list" value="/data/imeji;/data/imeji/" />
 
   <!-- Java class to use for image operations -->
   <parameter name="docuimage-class" value="digilib.image.ImageLoaderDocuImage" />
@@ -76,3 +76,4 @@
   <parameter name="img-diskcache-allowed" value="false"/>
 
 </digilib-config>
+

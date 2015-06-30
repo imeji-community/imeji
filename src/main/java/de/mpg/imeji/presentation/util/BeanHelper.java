@@ -320,4 +320,10 @@ public class BeanHelper
     			it.remove();
   			}
 	  }
+    
+    public static void addMessage(String message)
+    {  
+    	FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(message));
+	  }
+
 }

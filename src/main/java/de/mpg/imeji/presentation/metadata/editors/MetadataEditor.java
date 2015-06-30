@@ -4,7 +4,10 @@
 package de.mpg.imeji.presentation.metadata.editors;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import org.apache.commons.lang3.ArrayUtils;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
@@ -79,7 +82,7 @@ public abstract class MetadataEditor {
   /**
    * Save the {@link Item} and {@link Metadata} defined in the editor
    */
-  public void save() {
+  public boolean save() {
     SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
     ItemController ic = new ItemController();
     try {
@@ -89,8 +92,17 @@ public abstract class MetadataEditor {
       if (items.size() == 1)
         str = sb.getMessage("success_editor_image");
       BeanHelper.info(str);
+      return true;
+      
     } catch (Exception e) {
+      BeanHelper.cleanMessages();
+      List<String> listOfErrors = 
+    		  Arrays.asList(e.getMessage().split(";"));
+      for (String errorM:listOfErrors){
+    	  BeanHelper.addMessage(errorM);
+      }
       BeanHelper.error(sb.getMessage("error_metadata_edit"));
+      return false;
     }
   }
 

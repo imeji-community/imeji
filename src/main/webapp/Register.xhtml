@@ -9,18 +9,11 @@
     <ui:param name="headline" value="#{lbl.register}"/>
 
     <ui:define name="mainContent">
-		<style type="text/css">
-			.imj_registerSteps { float: right; }
-			.imj_registerSteps li { margin-bottom: 1em; }
-			.imj_registerSteps .imj_active { font-size: 145%; }
-			.imj_registerSteps:after { content: " "; float: none; clear:both; }
-			.imj_registerSteps .imj_submitted { padding: 0.272727em; background-color: #6CAE2F; }
-		</style>
+		
         <div class="imj_mainContentWrapper">
 
             <!-- Register form , TODO: switched on by all statuses false -->
-
-            <h:panelGroup layout="block" id="registerArea">
+            <h:panelGroup layout="block" id="registerArea" rendered="#{Configuration.registrationEnabled}">
             
             	<ui:fragment rendered="#{!RegistrationBean.activation_submitted}">
 	            	<h2 class="imj_headline">#{lbl.registration}</h2>
@@ -42,7 +35,7 @@
 	                                    </div>
 	                                </div>
 	                            </div>
-	                            <imjc:person id="userPersonRegister" person="#{RegistrationBean.user.person}" bean="#{RegistrationBean}" position="0"/>
+	                            <imjc:person id="userPersonRegister" person="#{RegistrationBean.user.person}" bean="#{RegistrationBean}" position="0" userSource=""/>
 	                            <h:panelGroup layout="block" styleClass="imj_submitPanel">
 	                                <h:commandButton action="#{RegistrationBean.register}" type="submit" value="#{lbl.register_now}" styleClass="imj_submitButton">
 	                                    <f:ajax execute="@form" render=":registerArea :imj_pageMessageArea"/>

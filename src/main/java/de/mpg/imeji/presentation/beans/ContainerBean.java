@@ -73,7 +73,9 @@ public abstract class ContainerBean implements Serializable
     private int organizationPosition;
     private int size;
     private List<Item> items;
+    private List<Item> discardedItems;
     private IngestImage ingestImage;
+    private int sizeDiscarded;
     //protected SessionBean sessionBean;
 
     /**
@@ -155,6 +157,38 @@ public abstract class ContainerBean implements Serializable
             }
             ItemController ic = new ItemController();
             setItems((List<Item>)ic.retrieve(uris, -1, 0, user));
+        }
+    }
+    
+    /**
+     * Load the {@link Item} of the {@link Container}
+     */
+    protected void loadDiscardedItems(User user)
+    {
+        setDiscardedItems(new ArrayList<Item>());
+        if (getContainer() != null)
+        {
+            List<String> uris = new ArrayList<String>();
+            ItemController ic = new ItemController();
+            ic.searchDiscardedContainerItemsFast(getContainer(), user, 0);
+            setDiscardedItems((List<Item>)ic.retrieve(uris, -1, 0, user));
+        }
+    }
+
+    /**
+     * Load the {@link Item} of the {@link Container}
+     */
+    public void countDiscardedItems(User user)
+    {
+        if (getContainer() != null)
+        {
+            List<String> uris = new ArrayList<String>();
+            ItemController ic = new ItemController();
+            setSizeDiscarded( ic.searchDiscardedContainerItemsFast(getContainer(), user, 0).size());
+        }
+        else
+        {
+        	setSizeDiscarded(0);
         }
     }
 
@@ -301,11 +335,27 @@ public abstract class ContainerBean implements Serializable
     }
 
     /**
+     * @return the discarded items
+     */
+    public List<Item> getDiscardedItems()
+    {
+        return discardedItems;
+    }
+
+    /**
      * @param items the items to set
      */
     public void setItems(List<Item> items)
     {
         this.items = items;
+    }
+
+    /**
+     * @param discarded items setter
+     */
+    public void setDiscardedItems(List<Item> items)
+    {
+        this.discardedItems = items;
     }
 
     /**
@@ -322,6 +372,19 @@ public abstract class ContainerBean implements Serializable
     public void setSize(int size)
     {
         this.size = size;
+    }
+
+    /**
+     * @param size the size to set
+     */
+    public void setSizeDiscarded(int size)
+    {
+        this.sizeDiscarded = size;
+    }
+
+    public int getSizeDiscarded()
+    {
+        return sizeDiscarded;
     }
 
     /**

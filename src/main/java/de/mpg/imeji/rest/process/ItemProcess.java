@@ -17,8 +17,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,9 +34,15 @@ import org.slf4j.LoggerFactory;
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.search.SPARQLSearch;
+import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.Search.SearchType;
+import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
+import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.TempFileUtil;
+import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
@@ -172,8 +180,15 @@ public class ItemProcess {
   }
 
   private static MetadataProfileTO getMetadataProfileTO(ItemTO to, User u) throws ImejiException {
-    CollectionTO col = new CollectionService().read(to.getCollectionId(), u);
-    return new ProfileService().read(col.getProfile().getId(), u);
+    Search s = new SPARQLSearch(SearchType.ITEM, null);
+    List<String> r =
+        s.searchSimpleForQuery(
+            SPARQLQueries.selectProfileIdOfItem(ObjectHelper.getURI(Item.class, to.getId())
+                .toString())).getResults();
+    if (!r.isEmpty()) {
+      return new ProfileService().read(ObjectHelper.getId(URI.create(r.get(0))), u);
+    }
+    throw new UnprocessableError("Item's profile not found");
   }
 
   public static JSONResponse easyUpdateItem(HttpServletRequest req, String id) throws IOException {
@@ -242,6 +257,7 @@ public class ItemProcess {
 
           validateId(id, to);
           to.setId(id);
+
           // update metadata part
           DefaultItemTO easyTO =
               (DefaultItemTO) buildTOFromJSON("{\"" + METADATA_KEY + "\":"

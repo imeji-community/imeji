@@ -3,6 +3,7 @@
  */
 package de.mpg.imeji.presentation.metadata.util;
 
+import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Date;
@@ -83,6 +84,18 @@ public class MetadataHelper {
 				if (id.contains("http")) {
 					((ConePerson) md).setConeId(java.net.URI.create(id));
 					return md;
+				}
+				
+				String familyName = ((ConePerson) md).getPerson().getFamilyName();
+				String givenName =  ((ConePerson) md).getPerson().getGivenName();
+				String completeName = givenName
+						+ ((givenName == null || givenName.isEmpty()
+						|| familyName == null || familyName.isEmpty()) ? ""
+						: ", ") + familyName;
+				completeName = completeName.trim();
+				
+				if (!StringHelper.isNullOrEmptyTrim(familyName)){
+					((ConePerson) md).getPerson().setCompleteName(completeName);
 				}
 			} catch (Exception e) {
 				BeanHelper.error(((SessionBean) BeanHelper

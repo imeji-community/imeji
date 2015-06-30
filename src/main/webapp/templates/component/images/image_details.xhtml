@@ -8,7 +8,7 @@
 	xmlns:list="http://java.sun.com/jsf/composite/components/list">
 
 	<!-- MediaDisplayContainer - START -->
-	<h:panelGroup layout="block" styleClass="imj_mediaDisplayContainer" rendered="#{itemBean.image.status != 'WITHDRAWN'}">
+	<h:panelGroup layout="block" styleClass="imj_mediaDisplayContainer" rendered="#{itemBean.image.status != 'WITHDRAWN'}" id="topPanel">
 		<ui:fragment rendered="#{!itemBean.videoFile and !itemBean.audioFile and !itemBean.swcFile}">
 			<h:outputLink id="lnkPicFullResolution" value="#{Navigation.fileUrl}#{itemBean.image.fullImageUrl}" target="_blank" rendered="#{!itemBean.viewInDigilib and !itemBean.viewInDataViewer}">
 				<h:graphicImage id="picWebResolution" title="#{itemBean.image.filename}" alt="#{itemBean.image.filename}" value="#{Navigation.fileUrl}#{itemBean.image.webImageUrl}" />
@@ -313,8 +313,9 @@
 										<f:ajax execute="@this" render="@form"/>
 										<h:outputText value="#{lbl.cancel}"/>
 									</h:commandLink>
-									<h:commandButton type="submit" styleClass="imj_submitButton"  action="#{itemBean.edit.save}" value="#{lbl.save}">
-									</h:commandButton>
+									<h:commandLink type="submit" styleClass="imj_submitButton"  action="#{itemBean.edit.save}" value="#{lbl.save}">
+										<f:ajax execute="@form" render=":topPanel :imj_pageMessageArea"/>
+									</h:commandLink>
 								</h:panelGroup>
 							</ui:fragment> <!-- MetaDataList - EDIT MetaData - panel END -->
 						</h:panelGroup> <!-- MetaDataList - further metadata - single edit panel - Wrapper END -->

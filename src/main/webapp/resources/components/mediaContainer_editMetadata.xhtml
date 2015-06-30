@@ -174,7 +174,7 @@
 
 		<!-- START NEW FEATURE -->
 			<c:if test="#{cc.attrs.formularBean.collectionType}">
-				<h:panelGroup layout="block" id="previewArea"  rendered="#{cc.attrs.formularBean.profileItems.size()>0 and cc.attrs.formularBean.collectionCreateMode}">
+				<h:panelGroup layout="block" id="previewArea"  rendered="#{cc.attrs.formularBean.profileItems.size()>0 and !cc.attrs.formularBean.profileSelectMode and cc.attrs.formularBean.showCheckBoxUseTemplate}">
 						<div class="imj_sectionHeadline">
 							<h4>
 								<h:outputText value=" #{lbl.metadata_profile}" />

@@ -57,7 +57,6 @@ p { display: block; margin: 1em 0; }
 
 /* ===[ ICONS - Buttons ]=== ================================================== */
 body .imj_logo { width: 13em; height: 5em; padding: 0; display: inline-block; background: transparent url("/imeji/resources/imj_iconset/logo_imeji.gif") -1.90909em 0 no-repeat; }
-body .imj_logo_alt { max-height: 154px; margin-top: -25px; margin-bottom: -25px; }
 body .imj_buttonStyleSwitcher { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; margin: 0 0.727272em; outline: none; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjButtonMonitorColor_16.png") 0 0 no-repeat; }
 body .imj_buttonStyleSwitcher:hover { border: 0 none; outline: none; background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjButtonMonitorColor_16.png") 0 0 no-repeat; }
 body .imj_iconTriangleBottomRight_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjTriangleLargeBottomRight_16.png") 0 0 no-repeat; }
@@ -122,7 +121,6 @@ body .imj_iconCollapse_16 { display: inline-block; width: 16px; height: 16px; ve
 body .imj_iconCollapse_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjArrowToText_16.png") 0 0 no-repeat; }
 body .imj_iconCollapse_16:focus { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjArrowToText_16.png") 0 0 no-repeat; }
 body .imj_iconStatusPrivate_24 { display: inline-block; width: 24px; height: 24px; vertical-align: middle; border: 0 none; background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjLocked_24.png") left center no-repeat; }
-body .imj_iconStatusPrivate_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjLocked_16.png") left center no-repeat; float: left; }
 body .imj_iconStatusShareable_24 { display: inline-block; width: 24px; height: 24px; vertical-align: middle; border: 0 none; background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjArrowRightToPeople_24.png") left center no-repeat; }
 body .imj_icoStatusWithdrawn_32 { display: inline-block; width: 32px; height: 32px; vertical-align: middle; border: 0 none; background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjDocumentDelete_32.png") left center no-repeat; }
 body .imj_icoStatusPending_32 { display: inline-block; width: 32px; height: 32px; vertical-align: middle; border: 0 none; background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjDocumentPending_32.png") left center no-repeat; }
@@ -434,7 +432,7 @@ select.imj_metadataEditText { min-height: 0; }
 .imj_imageInfoLayer { width: 95.95%; padding: 0 2%; }
 .imj_imageInfoLayer .imj_metadataValue { width: 72.33%; margin-left: 0.727272em; }
 .imj_imageInfoLayer .highlight_area.imj_highlightDependencies { background-color: #4d4d4d; }
-.imj_imageInfoLayer .imj_infoNavigation { width: 90%; padding: 0 2%; text-align: right; margin-bottom: 1.454545em; float: right; }
+.imj_imageInfoLayer .imj_infoNavigation { width: 95.95%; padding: 0 2%; text-align: right; margin-bottom: 1.454545em; }
 .imj_imageInfoLayer .imj_infoNavigation .imj_buttonEdit_16 { margin-right: 0.181818em; }
 .imj_imageInfoLayer .imj_infoNavigation a { margin-left: 1em; }
 
@@ -447,12 +445,16 @@ select.imj_metadataEditText { min-height: 0; }
 
 .imj_loginFormSite { width: 91.25%; padding: 1% 4%; border-top: 0.1em solid #6CAE2F; }
 
+.imj_registerSteps { float: right; }
+.imj_registerSteps li { margin-bottom: 1em; }
+.imj_registerSteps .imj_active { font-size: 145%; }
+.imj_registerSteps .imj_submitted { padding: 0.272727em; background-color: #6CAE2F; }
+.imj_registerSteps:after { content: " "; float: none; clear: both; }
+
 .imj_startpageFooter { clear: both; width: 100%; padding: 1em 0; }
 .imj_startpageFooter img { margin: 0 1%; }
 .imj_startpageFooter .imj_startpageFooterLogos { width: 100%; padding: 1em 1.25em 1.25em 1em; text-align: center; }
 .imj_startpageFooter .imj_community_logo { padding: 1%; margin-right: 5%; -moz-border-radius: 0.41667em; -webkit-border-radius: 0.41667em; border-radius: 0.41667em; }
-
-.imj_startpageFooterLogos .imj_poweredby_imprint { width: 50%; margin: 0 auto; }
 
 #imj_welcomeInfoWrapper { display: inline-block; width: 48%; }
 

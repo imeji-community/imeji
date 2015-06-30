@@ -11,6 +11,7 @@ import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.metadata.editors.SimpleImageEditor;
 import de.mpg.imeji.presentation.metadata.util.SuggestBean;
 import de.mpg.imeji.presentation.session.SessionBean;
@@ -18,6 +19,8 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.faces.context.FacesContext;
 
 /**
  * Metadata Editor for the detail item page
@@ -85,10 +88,11 @@ public class SingleEditBean
      */ 
     public String save() throws Exception
     {
-        editor.save();
-//        Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
-//        FacesContext.getCurrentInstance().getExternalContext().redirect
-//        (nav.getItemUrl()+ item.getIdString());
+        if (editor.save()) {
+	        Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
+	        FacesContext.getCurrentInstance().getExternalContext().redirect
+	        	(nav.getItemUrl()+ item.getIdString());
+        }
         return "";
     }
 

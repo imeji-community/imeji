@@ -654,6 +654,7 @@ public class ItemController extends ImejiController {
 		return c;
 	}
 
+
 	/**
 	 * Search all items of {@link Container}
 	 * 
@@ -667,6 +668,21 @@ public class ItemController extends ImejiController {
 				.selectCollectionItems(c.getId(), user, size) : SPARQLQueries
 				.selectAlbumItems(c.getId(), user, size);
 		c.getImages().clear();
+		return ImejiSPARQL.exec(q, null);
+	}
+
+	/**
+	 * Search all items of {@link Container}
+	 * 
+	 * @param c
+	 * @param user
+	 * @param size
+	 * @return
+	 */
+	public List<String> searchDiscardedContainerItemsFast(Container c, User user, int size) {
+		String q = c instanceof CollectionImeji ? SPARQLQueries
+				.selectDiscardedCollectionItems(c.getId(), user, size) : SPARQLQueries
+				.selectDiscardedAlbumItems(c.getId(), user, size);
 		return ImejiSPARQL.exec(q, null);
 	}
 

@@ -103,6 +103,7 @@ public class AlbumBean extends ContainerBean {
 				loadItems(sessionBean.getUser());
 				countItems();
 				countAllowedItems();
+				countDiscardedItems(sessionBean.getUser());
 				description = album.getMetadata().getDescription();
 				descriptionFull = description;
 				description = CommonUtils.removeTags(description);

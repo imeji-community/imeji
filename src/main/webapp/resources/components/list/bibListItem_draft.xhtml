@@ -124,6 +124,15 @@
 									</h:outputLink>
 								</li>
 							</ui:fragment>
+
+							<ui:fragment rendered="#{cc.attrs.item.sizeDiscarded > 0}">
+								<li>
+									<h:outputLink value='#{cc.attrs.metadataNavigationURL}#{cc.attrs.item.id}/#{Navigation.browsePath}?q=status="WITHDRAWN"'>
+										<h:outputText value="#{lbl.view_discarded_images}"/>
+									</h:outputLink>
+								</li>
+							</ui:fragment>
+
 							<ui:fragment rendered="#{cc.attrs.isActivatable == 'yes'}">
 								<li>
 									<ui:fragment rendered="#{Auth.create(cc.attrs.item)}">

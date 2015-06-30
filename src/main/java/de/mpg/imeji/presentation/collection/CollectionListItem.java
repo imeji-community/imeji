@@ -38,6 +38,7 @@ public class CollectionListItem {
 	private String descriptionFull = "";
 	private String authors = "";
 	private int size = 0;
+	private int discardedSize = 0;
 	private String status = Status.PENDING.toString();
 	private String id = null;
 	private URI uri = null;
@@ -109,6 +110,7 @@ public class CollectionListItem {
 			}
 			// initializations
 			initSize(collection, user);
+			initDiscardedSize(collection, user);
 			initSelected();
 			if (user != null) {
 				isOwner = collection.getCreatedBy().equals(user.getId());
@@ -126,6 +128,16 @@ public class CollectionListItem {
 	private void initSize(CollectionImeji collection, User user) {
 		ItemController ic = new ItemController();
 		size = ic.countContainerSize(collection);
+	}
+
+	private void initDiscardedSize(CollectionImeji collection, User user) {
+		ItemController ic = new ItemController();
+		discardedSize= ic.searchDiscardedContainerItemsFast(collection, user, 0).size();
+	}
+	
+	public int getSizeDiscarded()
+	{
+		return discardedSize;
 	}
 
 	/**

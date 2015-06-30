@@ -702,6 +702,22 @@ public class SPARQLQueries {
 	}
 
 	/**
+	 * Return all discarded {@link Item} of a {@link container}
+	 * 
+	 * @param uri
+	 * @param limit
+	 * @return
+	 */
+	public static String selectDiscardedCollectionItems(URI uri, User user, int limit) {
+			return "SELECT DISTINCT ?s WHERE {?s <http://imeji.org/terms/collection> <"
+					+ uri.toString()
+					+ "> . ?s <"
+					+ ImejiNamespaces.STATUS
+					+ "> ?status .  filter(?status=<"
+					+ Status.WITHDRAWN.getUriString() + ">)} LIMIT " + limit;
+	}
+
+	/**
 	 * Return all the {@link Item} of a {@link Album}
 	 * 
 	 * @param uri
@@ -726,6 +742,22 @@ public class SPARQLQueries {
 								null, false) + " ?s <" + ImejiNamespaces.STATUS
 				+ "> ?status } " + ((limit > 0) ? (" LIMIT " + limit) : "");
 
+	}
+
+	/**
+	 * Return all discarded {@link Item} of a {@link Album}
+	 * 
+	 * @param uri
+	 * @param user
+	 * @param limit
+	 * @return
+	 */
+	public static String selectDiscardedAlbumItems(URI uri, User user, int limit) {
+			return "SELECT DISTINCT ?s WHERE {<" + uri.toString()
+					+ "> <http://imeji.org/terms/item> ?s . ?s <"
+					+ ImejiNamespaces.STATUS + "> ?status .  filter(?status=<"
+					+ Status.WITHDRAWN.getUriString() + ">)}"
+					+ ((limit > 0) ? (" LIMIT " + limit) : "");
 	}
 
 	public static String selectContainerItemByFilename(URI containerURI,

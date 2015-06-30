@@ -21,6 +21,7 @@ import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +32,7 @@ import de.mpg.imeji.rest.to.ItemTO;
 /**
  * Created by vlad on 09.12.14.
  */
-
+@Ignore
 public class ItemDefaultMdCreateTest extends ItemTestBase {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ItemDefaultMdCreateTest.class);

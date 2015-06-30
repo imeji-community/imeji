@@ -96,7 +96,7 @@ public class ItemUpdateMetadataTest extends ItemTestBase {
     double NUM = 90;
     final String REP_CHANGED = "$1\"" + CHANGED + "\"";
     final String NUM_CHANGED = "$1" + NUM;
-    DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD");
+    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     Date date = new Date();
     final String DATE_CHANGED = "$1\"" + dateFormat.format(date) + "\"";
 

@@ -13,8 +13,7 @@
         <div class="imj_mainContentWrapper">
 
             <!-- Register form , TODO: switched on by all statuses false -->
-
-            <h:panelGroup layout="block" id="registerArea">
+            <h:panelGroup layout="block" id="registerArea" rendered="#{Configuration.registrationEnabled}">
             
             	<ui:fragment rendered="#{!RegistrationBean.activation_submitted}">
 	            	<h2 class="imj_headline">#{lbl.registration}</h2>

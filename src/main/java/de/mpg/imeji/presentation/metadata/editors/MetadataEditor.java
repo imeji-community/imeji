@@ -90,7 +90,7 @@ public abstract class MetadataEditor {
         str = sb.getMessage("success_editor_image");
       BeanHelper.info(str);
     } catch (Exception e) {
-      throw new RuntimeException(sb.getMessage("error_metadata_edit") + " ", e);
+      BeanHelper.error(sb.getMessage("error_metadata_edit"));
     }
   }
 

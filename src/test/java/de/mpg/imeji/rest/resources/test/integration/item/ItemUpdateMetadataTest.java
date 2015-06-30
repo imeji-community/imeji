@@ -36,7 +36,6 @@ import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
@@ -193,7 +192,7 @@ public class ItemUpdateMetadataTest extends ItemTestBase {
     assertThat(((PublicationTO) mds.get(7).getValue()).getPublication(), equalTo(CHANGED));
   }
 
-  @Ignore
+
   @Test
   public void test_2_UpdateItem_2_Change_Metadata_Statements_Not_Allowed() throws IOException,
       BadRequestException {
@@ -369,7 +368,6 @@ public class ItemUpdateMetadataTest extends ItemTestBase {
     assertEquals(BAD_REQUEST.getStatusCode(), response.getStatus());
   }
 
-  @Ignore
   @Test
   public void test_3_UpdateItem_1_Change_Metadata_Statements_EmptyValues() throws IOException,
       BadRequestException {

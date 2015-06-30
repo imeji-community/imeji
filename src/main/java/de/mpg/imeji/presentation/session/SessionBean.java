@@ -9,7 +9,11 @@ import de.mpg.imeji.logic.controller.SpaceController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.StringHelper;
-import de.mpg.imeji.logic.vo.*;
+import de.mpg.imeji.logic.vo.Album;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Space;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.beans.Navigation.Page;
 import de.mpg.imeji.presentation.upload.IngestImage;
@@ -21,17 +25,22 @@ import de.mpg.imeji.presentation.util.PropertyReader;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
-import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
-import javax.servlet.http.HttpServletRequest;
-
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 /**
@@ -56,7 +65,8 @@ public class SessionBean implements Serializable {
 	public static final String MESSAGES_BUNDLE = "messages";
 	public static final String METADATA_BUNDLE = "metadata";
 	// imeji locale
-	private Locale locale = new Locale("en");
+	private final Locale defaultLocale = new Locale("en");
+	private Locale locale = defaultLocale;
 	private Page currentPage;
 	private List<String> selected;
 	private List<URI> selectedCollections;
@@ -196,8 +206,13 @@ public class SessionBean implements Serializable {
 	 */
 	public String getMessage(String placeholder) {
 		try {
-			return ResourceBundle.getBundle(this.getSelectedMessagesBundle())
-					.getString(placeholder);
+			try {
+                return ResourceBundle.getBundle(this.getSelectedMessagesBundle())
+                        .getString(placeholder);
+            } catch (MissingResourceException e) {
+                return ResourceBundle.getBundle(this.getDefaultMessagesBundle())
+                        .getString(placeholder);
+            }
 		} catch (Exception e) {
 			return placeholder;
 		}
@@ -213,12 +228,30 @@ public class SessionBean implements Serializable {
 	}
 
 	/**
+	 * Get the default bundle for the labels
+	 *
+	 * @return
+	 */
+	private String getDefaultLabelBundle() {
+		return LABEL_BUNDLE + "_" + defaultLocale.getLanguage();
+	}
+
+	/**
 	 * Get the bundle for the messages
 	 * 
 	 * @return
 	 */
 	private String getSelectedMessagesBundle() {
 		return MESSAGES_BUNDLE + "_" + locale.getLanguage();
+	}
+
+	/**
+	 * Get the default bundle for the messages
+	 *
+	 * @return
+	 */
+	private String getDefaultMessagesBundle() {
+		return MESSAGES_BUNDLE + "_" + defaultLocale.getLanguage();
 	}
 
 	// public String getSelectedMetadataBundle()
@@ -279,7 +312,7 @@ public class SessionBean implements Serializable {
 		if (req.getLocale() != null) {
 			locale = req.getLocale();
 		} else {
-			locale = new Locale("en");
+			locale = defaultLocale;
 		}
 		locale = new Locale(CookieUtils.readNonNull(langCookieName,
 				locale.getLanguage()));

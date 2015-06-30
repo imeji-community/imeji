@@ -37,162 +37,160 @@ import static de.mpg.imeji.presentation.beans.ConfigurationBean.getEmailServerSe
 @ViewScoped
 public class RegistrationBean {
 
-  private static Logger logger = Logger.getLogger(RegistrationBean.class);
+    private static Logger logger = Logger.getLogger(RegistrationBean.class);
 
-  private UserController uc = new UserController(Imeji.adminUser);
+    private UserController uc = new UserController(Imeji.adminUser);
 
-  private SessionBean sb;
-  private Navigation nb;
-  private User user = new User();
-
-
-  private String token = null;
-  private boolean registration_submitted = false;
+    private SessionBean sb;
+    private Navigation nb;
+    private User user = new User();
 
 
-  private boolean registration_success = false;
-  private boolean activation_submitted = false;
-  private boolean activation_success = false;
-  private String activation_message;
+    private String token = null;
+    private boolean registration_submitted = false;
 
 
-  @PostConstruct
-  public void init() {
-    sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-    nb = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
-    // get token etc
-    this.token = UrlHelper.getParameterValue("token");
-    if (sb.getUser() == null) {
-      if (!isNullOrEmptyTrim(token)) {
-        // if user is not yet activated, activate it
-        activate();
-      }
-    } else
-      // if is logged in, redirect to home page
-      try {
-        FacesContext.getCurrentInstance().getExternalContext().redirect(nb.getHomeUrl());
-      } catch (IOException e) {
-        BeanHelper.error(e.getLocalizedMessage());
-      }
+    private boolean registration_success = false;
+    private boolean activation_submitted = false;
+    private boolean activation_success = false;
+    private String activation_message;
 
-  }
 
-  public void register() {
-    try {
-      this.activation_submitted = false;
-      this.registration_submitted = true;
-      PasswordGenerator generator = new PasswordGenerator();
-      String password = generator.generatePassword();
-      user.setEncryptedPassword(StringHelper.convertToMD5(password));
-      user = uc.create(user, UserController.USER_TYPE.INACTIVE);
-      sendRegistrationNotification(password);
-      this.registration_success = true;
-    } catch (Exception e) {
-      BeanHelper.error(sb.getMessage(e.getLocalizedMessage()));
-    }
-  }
-
-  private void activate() {
-    try {
-      this.activation_submitted = true;
-      this.registration_submitted = false;
-      this.user = uc.activate(this.token);
-      sendActivationNotification();
-      this.activation_success = true;
-      this.activation_message = sb.getMessage("activation_success");
-      LoginBean loginBean = (LoginBean) BeanHelper.getRequestBean(LoginBean.class);
-      loginBean.setLogin(user.getEmail());
-    } catch (ImejiException e) {
-      this.activation_success = false;
-      this.activation_message = e.getLocalizedMessage();
+    @PostConstruct
+    public void init() {
+        sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+        nb = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
+        // get token etc
+        this.token = UrlHelper.getParameterValue("token");
+        if (sb.getUser() == null) {
+            if (!isNullOrEmptyTrim(token)) {
+                // if user is not yet activated, activate it
+                activate();
+            }
+        } else
+            // if is logged in, redirect to home page
+            try {
+                FacesContext.getCurrentInstance().getExternalContext().redirect(nb.getHomeUrl());
+            } catch (IOException e) {
+                BeanHelper.error(e.getLocalizedMessage());
+            }
 
     }
-  }
 
-  /**
-   * Send registration email
-   * 
-   * @param password
-   */
-  private void sendRegistrationNotification(String password) {
-    EmailClient emailClient = new EmailClient();
-    EmailMessages emailMessages = new EmailMessages();
-    try {
-      // send to requester
-      // TODO: send plain text password
-      emailClient.sendMail(getUser().getEmail(), getEmailServerSenderStatic(), emailMessages
-          .getEmailOnRegistrationRequest_Subject(sb), emailMessages
-          .getEmailOnRegistrationRequest_Body(getUser(), password, getContactEmailStatic(), sb,
-              nb.getRegistrationUrl()));
-    } catch (Exception e) {
-      logger.error("Error sending email", e);
-      BeanHelper.error(sb.getMessage("error") + ": Email not sent");
+    public void register() {
+        try {
+            this.activation_submitted = false;
+            this.registration_submitted = true;
+            PasswordGenerator generator = new PasswordGenerator();
+            String password = generator.generatePassword();
+            user.setEncryptedPassword(StringHelper.convertToMD5(password));
+            user = uc.create(user, UserController.USER_TYPE.INACTIVE);
+            sendRegistrationNotification(password);
+            this.registration_success = true;
+        } catch (Exception e) {
+            BeanHelper.error(sb.getMessage(e.getLocalizedMessage()));
+        }
     }
-  }
 
-  /**
-   * Send account activation email
-   */
-  private void sendActivationNotification() {
-    EmailClient emailClient = new EmailClient();
-    EmailMessages emailMessages = new EmailMessages();
-    try {
-      // send to support
-      emailClient.sendMail(getEmailServerSenderStatic(), null,
-          emailMessages.getEmailOnAccountActivation_Subject(user, sb),
-          emailMessages.getEmailOnAccountActivation_Body(user, sb));
-    } catch (Exception e) {
-      logger.error("Error sending email", e);
-      BeanHelper.error(sb.getMessage("error") + ": Email not sent");
+    private void activate() {
+        try {
+            this.activation_submitted = true;
+            this.registration_submitted = false;
+            this.user = uc.activate(this.token);
+            sendActivationNotification();
+            this.activation_success = true;
+            this.activation_message = sb.getMessage("activation_success");
+            LoginBean loginBean = (LoginBean) BeanHelper.getRequestBean(LoginBean.class);
+            loginBean.setLogin(user.getEmail());
+        } catch (ImejiException e) {
+            this.activation_success = false;
+            this.activation_message = e.getLocalizedMessage();
+
+        }
     }
-  }
 
-  public boolean isRegistration_submitted() {
-    return registration_submitted;
-  }
+    /**
+     * Send registration email
+     */
+    private void sendRegistrationNotification(String password) {
+        EmailClient emailClient = new EmailClient();
+        EmailMessages emailMessages = new EmailMessages();
+        try {
+            // send to requester
+            // TODO: send plain text password
+            emailClient.sendMail(getUser().getEmail(), getEmailServerSenderStatic(), emailMessages
+                    .getEmailOnRegistrationRequest_Subject(sb), emailMessages
+                    .getEmailOnRegistrationRequest_Body(getUser(), password, getContactEmailStatic(), sb,
+                            nb.getRegistrationUrl()));
+        } catch (Exception e) {
+            logger.error("Error sending email", e);
+            BeanHelper.error(sb.getMessage("error") + ": Email not sent");
+        }
+    }
 
-  public void setRegistration_submitted(boolean registration_submitted) {
-    this.registration_submitted = registration_submitted;
-  }
+    /**
+     * Send account activation email
+     */
+    private void sendActivationNotification() {
+        EmailClient emailClient = new EmailClient();
+        EmailMessages emailMessages = new EmailMessages();
+        try {
+            // send to support
+            emailClient.sendMail(getEmailServerSenderStatic(), null,
+                    emailMessages.getEmailOnAccountActivation_Subject(user, sb),
+                    emailMessages.getEmailOnAccountActivation_Body(user, sb));
+        } catch (Exception e) {
+            logger.error("Error sending email", e);
+            BeanHelper.error(sb.getMessage("error") + ": Email not sent");
+        }
+    }
 
-  public User getUser() {
-    return user;
-  }
+    public boolean isRegistration_submitted() {
+        return registration_submitted;
+    }
 
-  public void setUser(User user) {
-    this.user = user;
-  }
+    public void setRegistration_submitted(boolean registration_submitted) {
+        this.registration_submitted = registration_submitted;
+    }
 
-  public boolean isActivation_submitted() {
-    return activation_submitted;
-  }
+    public User getUser() {
+        return user;
+    }
 
-  public void setActivation_submitted(boolean activation_submitted) {
-    this.activation_submitted = activation_submitted;
-  }
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-  public boolean isActivation_success() {
-    return activation_success;
-  }
+    public boolean isActivation_submitted() {
+        return activation_submitted;
+    }
 
-  public void setActivation_success(boolean activation_success) {
-    this.activation_success = activation_success;
-  }
+    public void setActivation_submitted(boolean activation_submitted) {
+        this.activation_submitted = activation_submitted;
+    }
 
-  public String getActivation_message() {
-    return activation_message;
-  }
+    public boolean isActivation_success() {
+        return activation_success;
+    }
 
-  public void setActivation_message(String activation_message) {
-    this.activation_message = activation_message;
-  }
+    public void setActivation_success(boolean activation_success) {
+        this.activation_success = activation_success;
+    }
 
-  public boolean isRegistration_success() {
-    return registration_success;
-  }
+    public String getActivation_message() {
+        return activation_message;
+    }
 
-  public void setRegistration_success(boolean registration_success) {
-    this.registration_success = registration_success;
-  }
+    public void setActivation_message(String activation_message) {
+        this.activation_message = activation_message;
+    }
+
+    public boolean isRegistration_success() {
+        return registration_success;
+    }
+
+    public void setRegistration_success(boolean registration_success) {
+        this.registration_success = registration_success;
+    }
 
 }

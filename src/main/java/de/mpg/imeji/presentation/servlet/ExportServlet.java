@@ -39,9 +39,10 @@ public class ExportServlet extends HttpServlet
         SessionBean session = getSessionBean(req, resp);
         String instanceName = session.getInstanceName();
         User user = session.getUser();
+
         try
         {
-            ExportManager exportManager = new ExportManager(resp.getOutputStream(), user, req.getParameterMap());
+            ExportManager exportManager = new ExportManager(resp.getOutputStream(), user, req.getParameterMap(), session.getSelected());
             String exportName = instanceName + "_";
             exportName += new Date().toString().replace(" ", "_").replace(":", "-");
             if (exportManager.getContentType().equalsIgnoreCase("application/xml"))

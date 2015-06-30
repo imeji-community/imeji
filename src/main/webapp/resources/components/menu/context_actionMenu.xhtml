@@ -73,7 +73,7 @@
 			<ui:fragment rendered="#{cc.attrs.navBean != null and cc.attrs.downloadEnabled}">					
 					<div class="imj_overlayMenu #{cc.attrs.menuClass.trim()}Item">
 						<div class="imj_menuHeader">
-							<h:outputText value="#{lbl.download}" styleClass="imj_headerEntry"/>
+							<h:outputText value="#{lbl.download}" styleClass="imj_headerEntry" title="#{lbl.download_selected}"/>
 						</div>
 						<div class="imj_menuBody">
 							<ul class="imj_overlayMenuList">

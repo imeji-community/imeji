@@ -438,6 +438,11 @@
 		<view-id>/jsf/Login.xhtml</view-id>
 	</url-mapping>
 	
+	<url-mapping id="registerFormular">
+		<pattern value="/space/#{SessionBean.spaceId}/register"/>
+		<view-id>/jsf/Register.xhtml</view-id>
+	</url-mapping>
+	
 	<url-mapping id="space_storageStatistics">
 		<pattern value="/space/#{SessionBean.spaceId}/admin/storage/statistics"></pattern>
 		<view-id>/jsf/StorageStatistics.xhtml</view-id>

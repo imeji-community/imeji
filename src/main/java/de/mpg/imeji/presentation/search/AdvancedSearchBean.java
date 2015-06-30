@@ -74,19 +74,13 @@ public class AdvancedSearchBean {
    * @return
    */
   public String getNewSearch() {
-	  System.out.println("1");
     initMenus();
-    System.out.println("2");
     try {
       String query =
           FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("q");
-      System.out.println("3");
       if (!UrlHelper.getParameterBoolean("error")) {
-    	  System.out.println("4");
         errorQuery = false;
-        System.out.println("5");
         initForm(URLQueryTransformer.parseStringQuery(query));
-        System.out.println("6");
       }
     } catch (Exception e) {
       logger.error("Error initializing advanced search", e);

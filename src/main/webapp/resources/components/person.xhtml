@@ -147,30 +147,28 @@
 			</div>
 		</h:panelGroup>
 	
-		
+		<h:panelGroup layout="block" styleClass="imj_admindataSet">
+			<div class="imj_admindataLabel">
+				<h:outputText value="#{lbl.organization}"/>
+				<span class="imj_noDisplay">: </span>
+			</div>
+			<div class="imj_admindataValue">
+				<div class="imj_admindataValueEntry">
+				
+				</div>
+			</div>
+		</h:panelGroup>
+
 		<!-- Organisation -->
 		<ui:repeat var="org" value="#{cc.attrs.person.organizations}" varStatus="index">
 			<div class="imj_organisation">
-			
 				<h:inputText id="inputOrgaURI" styleClass="input_hidden_orga_uri imj_noDisplay" value="#{PersonBean.orgaURI}" valueChangeListener="#{PersonBean.orgaListener}" onfocus="setOrgaSource('#{cc.attrs.orgsSource}');" rendered="#{cc.attrs.orgsSource != ''}"/>
 				<h:inputText id="inputOrgaURI1" styleClass="input_hidden_orga_uri imj_noDisplay" value="#{PersonBean.orgaURI}" valueChangeListener="#{PersonBean.orgaListener}" rendered="#{cc.attrs.orgsSource == ''}"/>
 	
 				<h:commandButton id="changeOrgaButton" styleClass="button_change_button imj_noDisplay" action="#{PersonBean.changeOrga(cc.attrs.bean, cc.attrs.position,  index.index)}">
 					<f:ajax render="@form" execute="@form"/>
 				</h:commandButton>
-				
-				<h5 class="imj_sectionHeadline">
-					<span class="imj_inlineButtonGroup"> 
-						<h:commandButton styleClass="imj_buttonAdd_16" type="submit" title="#{lbl.add_organization}" action="#{PersonBean.addOrganization(index.index + 1)}">
-							<f:ajax execute="@form" render="@form"/>
-						</h:commandButton> 
-						<h:commandButton styleClass="imj_buttonRemove_16" type="submit" title="#{lbl.remove_organization}" action="#{PersonBean.removeOrganization(index.index)}">
-							<f:ajax execute="@form" render="@form"/>
-						</h:commandButton>
-					</span>
-					<h:outputText value="#{lbl.organization}"/>
-					<span class="imj_noDisplay">: </span>
-				</h5>
+			
 				<h:panelGroup layout="block" styleClass="imj_admindataSet">
 					<div class="imj_admindataLabel">
 						<h:outputText value="#{lbl.name}"/>
@@ -231,6 +229,18 @@
 						</div>
 					</div>
 				</h:panelGroup>
+				
+				<h5 class="imj_sectionHeadline">
+					<span class="imj_inlineButtonGroup"> 
+						<h:commandButton styleClass="imj_buttonAdd_16" type="submit" title="#{lbl.add_organization}" action="#{PersonBean.addOrganization(index.index + 1)}">
+							<f:ajax execute="@form" render="@form"/>
+						</h:commandButton> 
+						<h:commandButton styleClass="imj_buttonRemove_16" type="submit" title="#{lbl.remove_organization}" action="#{PersonBean.removeOrganization(index.index)}">
+							<f:ajax execute="@form" render="@form"/>
+						</h:commandButton>
+					</span>
+					
+				</h5>
 			</div>
 		</ui:repeat>
 			

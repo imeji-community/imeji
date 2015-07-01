@@ -16,6 +16,8 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -88,7 +90,13 @@ public class RegistrationBean {
             sendRegistrationNotification(password);
             this.registration_success = true;
         } catch (Exception e) {
-            BeanHelper.error(sb.getMessage(e.getLocalizedMessage()));
+        	 BeanHelper.cleanMessages();
+             BeanHelper.error(sb.getMessage("error_during_user_registration"));
+             List<String> listOfErrors = 
+           		  Arrays.asList(e.getMessage().split(";"));
+             for (String errorM:listOfErrors){
+           	  	BeanHelper.error(sb.getMessage(errorM));
+             }
         }
     }
 

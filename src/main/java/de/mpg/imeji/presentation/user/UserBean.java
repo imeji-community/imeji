@@ -5,6 +5,7 @@ package de.mpg.imeji.presentation.user;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
@@ -199,7 +200,13 @@ public class UserBean {
 						controller.update(user, session.getUser());
 						reloadPage();
 					} catch (Exception e) {
-						BeanHelper.error(session.getMessage(e.getLocalizedMessage()));
+						 BeanHelper.cleanMessages();
+			             BeanHelper.error(session.getMessage("error_during_user_update"));
+			             List<String> listOfErrors = 
+			           		  Arrays.asList(e.getMessage().split(";"));
+			             for (String errorM:listOfErrors){
+			           	  	BeanHelper.error(session.getMessage(errorM));
+			             }
 					}
 		}
 	}

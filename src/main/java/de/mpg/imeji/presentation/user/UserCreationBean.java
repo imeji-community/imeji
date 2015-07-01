@@ -18,6 +18,7 @@ import de.mpg.imeji.presentation.util.ImejiFactory;
 
 import org.apache.log4j.Logger;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -59,7 +60,13 @@ public class UserCreationBean {
 					return sb.getPrettySpacePage("pretty:users");
 				}
 			catch (Exception e) {
-				BeanHelper.error(sb.getMessage(e.getLocalizedMessage()));
+				 BeanHelper.cleanMessages();
+	             BeanHelper.error(sb.getMessage("error_during_user_create"));
+	             List<String> listOfErrors = 
+	           		  Arrays.asList(e.getMessage().split(";"));
+	             for (String errorM:listOfErrors){
+	           	  	BeanHelper.error(sb.getMessage(errorM));
+	             }
 			}
 		return "pretty:";
 	}

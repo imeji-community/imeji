@@ -1,12 +1,17 @@
 package de.mpg.imeji.logic.validation.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.validation.Validator;
 import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * {@link Validator} for {@link CollectionImeji}
@@ -26,19 +31,40 @@ public class UserValidator extends ObjectValidator implements Validator<User>  {
 	public void validate(User user) throws UnprocessableError {
 		if (isDelete())
 			return;
-		if (!isValidEmail(user.getEmail())) {
-				throw new UnprocessableError("error_user_email_not_valid");
+		
+		List<String> errorMessages = new ArrayList<String>();
+		StringBuilder builder = new StringBuilder();
+		boolean hasError = false;
+		
+		if (user.getEmail() == null || "".equals(user.getEmail().trim()))
+		{
+			hasError = true;
+			builder.append("error_user_email_unfilled"+";");
+		}
+		else if (!isValidEmail(user.getEmail())) {
+				hasError = true;
+				builder.append("error_user_email_not_valid"+";");
 		} 
 
 		if (userAlreadyExists(user)) {
-			throw new UnprocessableError("error_user_already_exists");
+			hasError = true;
+			builder.append("error_user_already_exists"+";");
 		} 
 
 		if (user.getPerson() == null
 				|| "".equals(user.getPerson().getFamilyName())
 				|| user.getPerson().getFamilyName() == null) {
-			throw new UnprocessableError("error_user_name_unfilled");
+			hasError = true;
+			builder.append("error_user_name_unfilled"+";");
 		}
+		
+		if (user.getPerson() != null && "".equals(user.getPerson().getOrganizationString())) {
+			hasError = true;
+			builder.append("error_user_organization_unfilled"+";");
+		}
+		
+		if (hasError)
+			throw new UnprocessableError(builder.toString());
 	
 	}
 	

@@ -147,7 +147,7 @@
 			</div>
 		</h:panelGroup>
 	
-		<h:panelGroup layout="block" styleClass="imj_admindataSet">
+		<h:panelGroup layout="block" styleClass="imj_admindataSet" rendered="#{!cc.attrs.minimized}">
 			<div class="imj_admindataLabel">
 				<h:outputText value="#{lbl.organization}"/>
 				<span class="imj_noDisplay">: </span>
@@ -161,7 +161,7 @@
 
 		<!-- Organisation -->
 		<ui:repeat var="org" value="#{cc.attrs.person.organizations}" varStatus="index">
-			<div class="imj_organisation">
+			<div class="#{cc.attrs.minimized? ' ':'imj_organisation'}">
 				<h:inputText id="inputOrgaURI" styleClass="input_hidden_orga_uri imj_noDisplay" value="#{PersonBean.orgaURI}" valueChangeListener="#{PersonBean.orgaListener}" onfocus="setOrgaSource('#{cc.attrs.orgsSource}');" rendered="#{cc.attrs.orgsSource != ''}"/>
 				<h:inputText id="inputOrgaURI1" styleClass="input_hidden_orga_uri imj_noDisplay" value="#{PersonBean.orgaURI}" valueChangeListener="#{PersonBean.orgaListener}" rendered="#{cc.attrs.orgsSource == ''}"/>
 	
@@ -171,7 +171,7 @@
 			
 				<h:panelGroup layout="block" styleClass="imj_admindataSet">
 					<div class="imj_admindataLabel imj_requiredMarker">
-						<h:outputText value="#{lbl.name}"/>
+						<h:outputText value="#{cc.attrs.minimized? lbl.organization : lbl.name}"/>
 						<span class="imj_noDisplay">: </span>
 					</div>
 					<div class="imj_admindataValue">
@@ -229,18 +229,18 @@
 						</div>
 					</div>
 				</h:panelGroup>
-				
-				<h5 class="imj_sectionHeadline">
-					<span class="imj_inlineButtonGroup"> 
-						<h:commandButton styleClass="imj_buttonAdd_16" type="submit" title="#{lbl.add_organization}" action="#{PersonBean.addOrganization(index.index + 1)}">
-							<f:ajax execute="@form" render="@form"/>
-						</h:commandButton> 
-						<h:commandButton styleClass="imj_buttonRemove_16" type="submit" title="#{lbl.remove_organization}" action="#{PersonBean.removeOrganization(index.index)}">
-							<f:ajax execute="@form" render="@form"/>
-						</h:commandButton>
-					</span>
-					
-				</h5>
+				<ui:fragment rendered="#{!cc.attrs.minimized}">
+					<h5 class="imj_sectionHeadline">
+						<span class="imj_inlineButtonGroup"> 
+							<h:commandButton styleClass="imj_buttonAdd_16" type="submit" title="#{lbl.add_organization}" action="#{PersonBean.addOrganization(index.index + 1)}">
+								<f:ajax execute="@form" render="@form"/>
+							</h:commandButton> 
+							<h:commandButton styleClass="imj_buttonRemove_16" type="submit" title="#{lbl.remove_organization}" action="#{PersonBean.removeOrganization(index.index)}">
+								<f:ajax execute="@form" render="@form"/>
+							</h:commandButton>
+						</span>
+					</h5>
+				</ui:fragment>
 			</div>
 		</ui:repeat>
 			

@@ -23,12 +23,12 @@
 	                        <li class="imj_active">1. #{lbl.register}</li>
 	                        <li>2. #{lbl.register_activate}</li>
 	                    </ul>
-						
+	                    
 	                    <ui:fragment id="formArea">
 	                        <h:form id="userForm" rendered="#{!RegistrationBean.registration_success}">
 	                            <!-- The person component -->
 	                            <div class="imj_admindataSet">
-	                                <div class="imj_admindataLabel">#{lbl.email}</div>
+	                                <div class="imj_admindataLabel imj_requiredMarker">#{lbl.email}</div>
 	                                <div class="imj_admindataValue">
 	                                    <div class="imj_admindataValueEntry">
 	                                        <h:inputText type="text" name="email" value="#{RegistrationBean.user.email}" styleClass="imj_admindataEdit"/>
@@ -43,6 +43,7 @@
 	                            </h:panelGroup>
 	                        </h:form>
 	                    </ui:fragment>
+	                    <h:outputText value="#{lbl.required_marker} #{lbl.required}"/>
 	                </ui:fragment>
 	
 	                <!-- Registration was successfull -->

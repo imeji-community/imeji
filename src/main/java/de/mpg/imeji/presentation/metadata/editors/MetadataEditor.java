@@ -96,12 +96,12 @@ public abstract class MetadataEditor {
       
     } catch (Exception e) {
       BeanHelper.cleanMessages();
+      BeanHelper.error(sb.getMessage("error_metadata_edit"));
       List<String> listOfErrors = 
     		  Arrays.asList(e.getMessage().split(";"));
       for (String errorM:listOfErrors){
-    	  BeanHelper.addMessage(errorM);
+    	  BeanHelper.error(errorM);
       }
-      BeanHelper.error(sb.getMessage("error_metadata_edit"));
       return false;
     }
   }

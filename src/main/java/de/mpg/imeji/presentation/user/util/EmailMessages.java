@@ -216,7 +216,7 @@ public class EmailMessages {
 				.replaceAll("XXX_INSTANCE_NAME_XXX", session.getInstanceName())
 				.replaceAll("XXX_CONTACT_EMAIL_XXX", contactEmail)
 				.replace("XXX_ACTIVATION_LINK_XXX",
-						navigationUrl + "?token=" + to.getRegistrationToken());
+						navigationUrl + "?token=" + to.getRegistrationToken() + "&login=" + to.getEmail());
 	}
 
 	/**

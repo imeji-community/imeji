@@ -34,7 +34,7 @@ public class UserControllerTest extends ControllerTest{
 		} catch (AlreadyExistsException e) {
 			// everything fine
 		} catch (Exception e1) {
-			Assert.assertSame("error_user_already_exists", e1.getMessage());
+			Assert.assertTrue (e1.getMessage().contains("error_user_already_exists"));
 			
 //			Assert.fail("An error happened by creating the user "
 //					+ e1.getMessage());
@@ -52,7 +52,7 @@ public class UserControllerTest extends ControllerTest{
 			c.update(user, Imeji.adminUser);
 			//Assert.fail("User should not be updated, since the email is already used by another user");
 		} catch (Exception e1) {
-			Assert.assertSame("error_user_already_exists", e1.getMessage());
+			Assert.assertTrue(e1.getMessage().contains("error_user_already_exists"));
 		}
 	}
 	
@@ -64,6 +64,7 @@ public class UserControllerTest extends ControllerTest{
 			LOGGER.info("User object has "+user.getId());
 			user.setEmail("inactiveuser@imeji.org");
 			user.getPerson().setFamilyName(JenaUtil.TEST_USER_NAME);
+			user.getPerson().setOrganizations(JenaUtil.testUser.getPerson().getOrganizations());
 			c.create(user, USER_TYPE.INACTIVE);
 			assertTrue(!user.isActive());
 	}
@@ -76,6 +77,7 @@ public class UserControllerTest extends ControllerTest{
 			User user = new User();
 			user.setEmail("activeuser@imeji.org");
 			user.getPerson().setFamilyName(JenaUtil.TEST_USER_NAME);
+			user.getPerson().setOrganizations(JenaUtil.testUser.getPerson().getOrganizations());
 			try {
 				user=c.create(user, USER_TYPE.DEFAULT);
 				Assert.fail("User should not be created in other state than inactive!");
@@ -92,6 +94,7 @@ public class UserControllerTest extends ControllerTest{
 		User user = new User(); 
 		user.setEmail("inactive-activate@imeji.org");
 		user.getPerson().setFamilyName(JenaUtil.TEST_USER_NAME);
+		user.getPerson().setOrganizations(JenaUtil.testUser.getPerson().getOrganizations());
 		UserController c = new UserController(user);
 		try {
 			// Create a new user with a new id but with the same email
@@ -165,6 +168,7 @@ public class UserControllerTest extends ControllerTest{
 			User user = new User(); 
 			user.setEmail(email+i);
 			user.getPerson().setFamilyName(JenaUtil.TEST_USER_NAME);
+			user.getPerson().setOrganizations(JenaUtil.testUser.getPerson().getOrganizations());
 			user=c.create(user, USER_TYPE.INACTIVE);
 			assertTrue(!user.isActive());
 			Calendar originalCreateDate = user.getCreated();

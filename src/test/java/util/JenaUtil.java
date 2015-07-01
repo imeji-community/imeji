@@ -1,6 +1,9 @@
 package util;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -17,6 +20,7 @@ import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
 import de.mpg.imeji.logic.util.StringHelper;
+import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
@@ -133,8 +137,14 @@ private static void initTestUser() throws Exception {
 	user.setEmail(email);
 	Person userPerson = user.getPerson();
 	userPerson.setFamilyName(name);
+	Organization org = new Organization();
+	org.setName("TEST-ORGANIZATION");
+	List<Organization> orgCol = new ArrayList<Organization>();
+	orgCol.add(org);
+	userPerson.setOrganizations(orgCol);
 	user.setPerson(userPerson);
 	user.setName(name);
+	
 	user.setEncryptedPassword(StringHelper.convertToMD5(pwd));
 	user.setGrants(AuthorizationPredefinedRoles.defaultUser(user.getId()
 			.toString()));

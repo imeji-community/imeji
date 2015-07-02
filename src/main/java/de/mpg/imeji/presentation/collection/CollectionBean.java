@@ -27,6 +27,7 @@ import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.ContainerBean;
@@ -117,9 +118,8 @@ public abstract class CollectionBean extends ContainerBean {
 				profiles.add(defaultMetadataProfile);
 			}
 
-
 			for (MetadataProfile mdp : profiles) {
-				if (mdp.getStatements().size() > 0) {
+				if (( mdp.getCreatedBy().equals(sessionBean.getUser().getId()) || Status.RELEASED.equals(mdp.getStatus())) && mdp.getStatements().size() > 0) {
 					profileTitle = isNullOrEmpty(mdp.getTitle()) ? (mdp
 							.getIdString() + " - " + "No Title provided") : mdp
 							.getTitle();

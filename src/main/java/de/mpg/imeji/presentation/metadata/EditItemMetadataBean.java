@@ -92,7 +92,6 @@ public class EditItemMetadataBean {
 		reset();
 		try {
 			List<String> uris = findItems();
-			System.out.println("Edit "+uris.size());
 			if (uris != null && !uris.isEmpty()) {
 				lockImages(uris);
 				if ("selected".equals(type))

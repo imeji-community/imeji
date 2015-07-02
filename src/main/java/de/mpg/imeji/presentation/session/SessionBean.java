@@ -190,8 +190,13 @@ public class SessionBean implements Serializable {
 	 */
 	public String getLabel(String placeholder) {
 		try {
-			return ResourceBundle.getBundle(this.getSelectedLabelBundle())
-					.getString(placeholder);
+			try {
+				return ResourceBundle.getBundle(this.getSelectedLabelBundle())
+						.getString(placeholder);
+			} catch (MissingResourceException e) {
+				return ResourceBundle.getBundle(this.getDefaultLabelBundle())
+						.getString(placeholder);
+			}
 		} catch (Exception e) {
 			return placeholder;
 		}

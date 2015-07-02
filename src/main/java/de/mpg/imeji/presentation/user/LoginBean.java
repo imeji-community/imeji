@@ -23,6 +23,8 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
+import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
+
 /**
  * Bean for login features
  *
@@ -51,6 +53,10 @@ public class LoginBean {
 		try {
 			if (UrlHelper.getParameterBoolean("logout")) {
 				logout();
+			}
+			String login = UrlHelper.getParameterValue("login");
+			if (!isNullOrEmptyTrim(login)) {
+				setLogin(login);
 			}
 			if (UrlHelper.getParameterValue("redirect") != null)
 				this.redirect = URLDecoder.decode(UrlHelper.getParameterValue("redirect"), "UTF-8");
@@ -94,7 +100,7 @@ public class LoginBean {
 			BeanHelper.error(sb.getMessage("error_log_in_description").replace("XXX_INSTANCE_NAME_XXX",
 					name));
 		}
-		if (redirect == null || "".equals(redirect)) {
+		if (isNullOrEmptyTrim(redirect)) {
 			HistoryPage current =
 					((HistorySession) BeanHelper.getSessionBean(HistorySession.class)).getCurrentPage();
 			if (current != null) {

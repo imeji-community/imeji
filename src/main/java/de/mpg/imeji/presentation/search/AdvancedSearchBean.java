@@ -125,8 +125,10 @@ public class AdvancedSearchBean {
   private void initFileTypesSelected() {
     fileTypesSelected = new ArrayList<String>();
     for (String t : formular.getFileTypeSearch().getValue().split(Pattern.quote("|"))) {
-      fileTypesSelected.add(ConfigurationBean.getFileTypesStatic().getType(t)
-          .getName(session.getLocale().getLanguage()));
+      Type type = ConfigurationBean.getFileTypesStatic().getType(t);
+      if (type != null) {
+        fileTypesSelected.add(type.getName(session.getLocale().getLanguage()));
+      }
       fileTypesSelected.add(t);
     }
   }

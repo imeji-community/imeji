@@ -28,7 +28,7 @@ public enum ImejiPages {
 			".*/usergroup\\?id=(.*)&?"), USER_GROUPS("admin_userGroups_view",
 			"/usergroups"), HELP("help", "/help"), SEARCH(
 			"history_advanced_search", "/search"), BATCH_EDIT_ITEMS(
-			"edit_images", "/edit"), UPLOAD("upload", "/singleupload"), BROWSE(
+			"edit_images", ".*/edit\\?.*type=.*"), UPLOAD("upload", "/singleupload"), BROWSE(
 			"history_images", "/browse"), CREATE_COLLECTION("collection_create", ".*/createcollection.*"),  CREATE_ALBUM("album_create", ".*/createalbum"), HOME("history_home", "/");
 
 	/**

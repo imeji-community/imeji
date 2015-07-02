@@ -96,9 +96,6 @@ public class UserGroupsBean implements Serializable
         try
         {
         	
-        	System.out.println(nav.getApplicationUrl() + "usergroups?q=" + query
-                    + (backContainerUrl != null ? "&back=" + backContainerUrl : ""));
-        	
         	String redirectTo= nav.getApplicationSpaceUrl() + "usergroups?q=" + query
                     + (backContainerUrl != null ? "&back=" + backContainerUrl : "");
         	

@@ -28,6 +28,7 @@ import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.imeji.presentation.session.SessionBean;
@@ -269,6 +270,15 @@ public class UserBean {
 	public List<SharedHistory> getRoles() {
 		return roles;
 	}
+	
+	public List<SharedHistory> getGroupRoles(UserGroup userGroup) throws Exception {
+		if (userGroup != null)
+			return AuthUtil.getAllRoles(userGroup, session.getUser());
+		else
+			return null;
+	};
+	
+	
 
 	/**
 	 * @param roles
@@ -292,4 +302,6 @@ public class UserBean {
 	public void setEdit(boolean edit) {
 		this.edit = edit;
 	}
+	
+	
 }

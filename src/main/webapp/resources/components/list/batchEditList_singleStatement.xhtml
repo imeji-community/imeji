@@ -86,7 +86,9 @@
 			<!-- METADATA TYPE PUBLICATION -->
 			<ui:fragment rendered="#{cc.attrs.itemBean.typeNamespace=='http://imeji.org/terms/metadata#publication'}">
 				<div class="imj_metadataSet">
-					<h:outputText value="#{cc.attrs.itemLabelBean.internationalizedLabels[cc.attrs.itemStatement.id]} (#{cc.attrs.itemLabelBean.lang})" styleClass="imj_metadataLabel" rendered="#{cc.attrs.hideLabel == false}"/>
+					<h4 class="imj_sectionHeadline">
+						<h:outputText value="#{cc.attrs.itemLabelBean.internationalizedLabels[cc.attrs.itemStatement.id]} (#{cc.attrs.itemLabelBean.lang})" styleClass="imj_metadataLabel" rendered="#{cc.attrs.hideLabel == false}"/>
+					</h4>
 					
 					<ui:fragment rendered="#{!cc.attrs.suggestBean.suggests[cc.attrs.itemStatement.id].hasRestrictedValues}">
 						<h:outputLabel value="#{lbl.link}" styleClass="imj_metadataLabel"/>

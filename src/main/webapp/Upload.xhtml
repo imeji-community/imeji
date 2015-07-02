@@ -238,8 +238,8 @@
 							</ol>
 						<!-- Edit selected -->
 						<ui:fragment rendered="#{UploadBean.getsFiles().size() > 0}">
-						<h:outputLink value="#{Navigation.applicationSpaceUrl}edit?type=selected&amp;c=#{Navigation.collectionUrl}#{UploadBean.id}&amp;q=#{UploadBean.prepareBatchedit()}" id="lnkSelectEdit">
-							<h:outputText value="#{lbl.edit_images}"/>
+						<h:outputLink value="#{Navigation.collectionUrl}#{UploadBean.id}/upload?edituploaded=1" id="lnkSelectEdit">
+							<h:outputText value="#{lbl.edit_uploaded_images}"/>
 						</h:outputLink>
 						</ui:fragment>
 						</h:panelGroup>

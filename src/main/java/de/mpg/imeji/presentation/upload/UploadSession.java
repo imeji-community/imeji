@@ -57,6 +57,8 @@ public class UploadSession {
 	private boolean uploadFileToItem = false;
 	private boolean checkNameUnique = true;
 
+	private List<Item> itemsToEdit;
+
 	/**
 	 * DEfault Constructor
 	 * 
@@ -75,6 +77,7 @@ public class UploadSession {
 		sFiles.clear();
 		fFiles.clear();
 		resetProperties();
+		itemsToEdit = new ArrayList<Item>();
 	}
 
 	public void resetProperties() {
@@ -88,6 +91,7 @@ public class UploadSession {
 	 */
 	public String resetUploads() {
 		if (UrlHelper.getParameterBoolean("done")) {
+			itemsToEdit.addAll(sFiles);
 			sFiles.clear();
 			fFiles.clear();
 		}
@@ -180,4 +184,16 @@ public class UploadSession {
 	public void setCheckNameUnique(boolean checkNameUnique) {
 		this.checkNameUnique = checkNameUnique;
 	}
+	
+	/**
+	 * @return the itemsToEdit
+	 */
+	public List<Item> getItemsToEdit() {
+		return itemsToEdit;
+	}
+
+	public void setItemsToEdit(List<Item> itemsToEdit) {
+		this.itemsToEdit= itemsToEdit;
+	}
+
 }

@@ -10,11 +10,13 @@ import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.query.URLQueryTransformer;
 import de.mpg.imeji.logic.search.vo.SearchQuery;
 import de.mpg.imeji.logic.util.MetadataFactory;
+import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.metadata.editors.MetadataEditor;
@@ -26,10 +28,12 @@ import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 import de.mpg.imeji.presentation.util.ProfileHelper;
+
 import org.apache.log4j.Logger;
 
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
@@ -88,13 +92,13 @@ public class EditItemMetadataBean {
 		reset();
 		try {
 			List<String> uris = findItems();
-			if (uris != null) {
+			System.out.println("Edit "+uris.size());
+			if (uris != null && !uris.isEmpty()) {
 				lockImages(uris);
 				if ("selected".equals(type))
 					allItems = loaditems(uris);
 				else
 					allItems = loaditems(uris.subList(0, 1));
-			}
 			initProfileAndStatement(allItems);
 			initStatementsMenu();
 			initEmtpyEditorItem();
@@ -104,6 +108,13 @@ public class EditItemMetadataBean {
 			initialized = true;
 			noChangesEditor = editor.clone();
 			initModeMenu();
+			}
+			else
+			{
+				redirectToCollectionItemsPage(collectionId);
+				BeanHelper.error((((SessionBean) BeanHelper
+							.getSessionBean(SessionBean.class))).getMessage("no_items_to_edit"));
+			}
 		} catch (Exception e) {
 			BeanHelper.error(((SessionBean) BeanHelper
 					.getSessionBean(SessionBean.class)).getLabel("error")
@@ -699,5 +710,15 @@ public class EditItemMetadataBean {
 	 */
 	public void setEditorItem(EditorItemBean editorItemBean) {
 		this.editorItem = editorItemBean;
+	}
+	
+	public void redirectToCollectionItemsPage(String collectionId) throws IOException{
+		  Navigation navigation = (Navigation) BeanHelper
+					.getApplicationBean(Navigation.class);
+		  
+		  FacesContext
+					.getCurrentInstance()
+					.getExternalContext()
+					.redirect(navigation.getApplicationSpaceUrl()+navigation.getCollectionPath()+"/"+ObjectHelper.getId(URI.create(collectionId))+"/"+navigation.getBrowsePath());
 	}
 }

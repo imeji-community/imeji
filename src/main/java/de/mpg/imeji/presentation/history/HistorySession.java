@@ -46,7 +46,8 @@ public class HistorySession {
 			} else {
 				// If the page is the same, it might be that the params have
 				// been changed
-				getCurrentPage().setParams(page.getParams());
+				if (!page.getParams().containsKey("edituploaded"))
+					getCurrentPage().setParams(page.getParams());
 			}
 		}
 	}

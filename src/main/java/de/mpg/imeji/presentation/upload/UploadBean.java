@@ -14,6 +14,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -21,6 +22,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.servlet.http.HttpServletRequest;
 
@@ -103,17 +105,18 @@ public class UploadBean implements Serializable {
 		readId();
 		try {
 			loadCollection();
+			
 			if (UrlHelper.getParameterBoolean("init")) {
-				((UploadSession) BeanHelper.getSessionBean(UploadSession.class))
-						.reset();
+				((UploadSession) BeanHelper.getSessionBean(UploadSession.class)).reset();
 		        session.getSelected().clear();
 				externalUrl = null;
 				localDirectory = null;
 			} else if (UrlHelper.getParameterBoolean("start")) {
 				upload();
 			} else if (UrlHelper.getParameterBoolean("done")) {
-				((UploadSession) BeanHelper.getSessionBean(UploadSession.class))
-						.resetProperties();
+				((UploadSession) BeanHelper.getSessionBean(UploadSession.class)).resetProperties();
+			} else if ((UrlHelper.getParameterBoolean("edituploaded"))){
+				prepareBatchEdit();
 			} else {
 				BeanHelper.error("I can not get to the collection id ");
 			}
@@ -582,6 +585,17 @@ public class UploadBean implements Serializable {
 				.getsFiles();
 	}
 
+	public List<Item> getItemsToEdit() {
+		return ((UploadSession) BeanHelper.getSessionBean(UploadSession.class))
+				.getItemsToEdit();
+	}
+
+	public void resetItemsToEdit() {
+		((UploadSession) BeanHelper.getSessionBean(UploadSession.class))
+				.getItemsToEdit().clear();
+	}
+
+	
 	private boolean isCheckNameUnique() {
 		return ((UploadSession) BeanHelper.getSessionBean(UploadSession.class))
 				.isCheckNameUnique();
@@ -604,6 +618,11 @@ public class UploadBean implements Serializable {
 	public void setDiscardComment(String comment) {
 		collection.setDiscardComment(comment);
 	}
+	
+	public boolean isSuccessUpload(){
+			return ((UploadSession) BeanHelper.getSessionBean(UploadSession.class))
+					.getsFiles().size() > 0;
+		}
 
 	/**
 	 * @return the localDirectory
@@ -648,12 +667,21 @@ public class UploadBean implements Serializable {
 	}
 	
 	
-	public void prepareBatchedit(){
+	public void prepareBatchEdit() throws Exception{
 	  session.getSelected().clear();
-	  for(Item item : getsFiles()){
+	  for(Item item : getItemsToEdit()){
 	    session.addToSelected(item.getId().toString());
 	  }
 	  
+	  resetItemsToEdit();
+
+	  Navigation navigation = (Navigation) BeanHelper
+				.getApplicationBean(Navigation.class);
+	  
+	  FacesContext
+				.getCurrentInstance()
+				.getExternalContext()
+				.redirect(navigation.getApplicationSpaceUrl()+navigation.getEditPath()+"?type=selected&c="+getCollection().getId().toString()+"&q=");
 	}
 
 

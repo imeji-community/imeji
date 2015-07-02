@@ -35,13 +35,17 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.util.BeanHelper;
+
 import org.apache.log4j.Logger;
+
+import scala.collection.parallel.ParSeqLike.LastIndexWhere;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
@@ -91,12 +95,23 @@ public class UserGroupsBean implements Serializable
        Navigation nav = (Navigation)BeanHelper.getApplicationBean(Navigation.class);
         try
         {
+        	
+        	System.out.println(nav.getApplicationUrl() + "usergroups?q=" + query
+                    + (backContainerUrl != null ? "&back=" + backContainerUrl : ""));
+        	
+        	String redirectTo= nav.getApplicationSpaceUrl() + "usergroups?q=" + query
+                    + (backContainerUrl != null ? "&back=" + backContainerUrl : "");
+        	
+            if (redirectTo.endsWith("?"))
+            	redirectTo = redirectTo.substring(0, redirectTo.lastIndexOf("?"));
+
+            if (redirectTo.endsWith("&"))
+            	redirectTo = redirectTo.substring(0, redirectTo.lastIndexOf("?"));
+            
             FacesContext
                     .getCurrentInstance()
                     .getExternalContext()
-                    .redirect(
-                            nav.getApplicationUrl() + "usergroups?q=" + query
-                                    + (backContainerUrl != null ? "&back=" + backContainerUrl : ""));
+                    .redirect(redirectTo);
         }
         catch (IOException e)
         {

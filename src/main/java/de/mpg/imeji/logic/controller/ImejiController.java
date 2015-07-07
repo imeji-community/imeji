@@ -131,6 +131,23 @@ public abstract class ImejiController {
 				.create(logoUrl), o));
 		return triples;
 	}
+	
+	/**
+	 * Get all the triples which need to be updated by an update of a space
+	 * 
+	 * @param uri
+	 * @param securityUri
+	 * @return
+	 */
+	protected List<ImejiTriple> getContainerSpaceTriples(String uri, Object o,
+			URI spaceId) {
+		List<ImejiTriple> triples = new ArrayList<ImejiTriple>();
+		URI myUri = URI.create(uri);
+		System.out.println("uri="+uri );
+		System.out.println("Myuri="+myUri.toString() );
+		triples.add(new ImejiTriple(uri, ImejiNamespaces.SPACE, URI.create(spaceId.toString()), o));
+		return triples;
+	}
 
 	/**
 	 * Get all the triples which need to be updated by an update

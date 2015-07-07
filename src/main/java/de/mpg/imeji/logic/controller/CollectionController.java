@@ -133,7 +133,7 @@ public class CollectionController extends ImejiController {
 		// Just read SessionBean for SpaceId
 		if (!isNullOrEmpty(spaceId)) {
 			SpaceController sp = new SpaceController();
-			sp.addCollection(spaceId, c.getIdString(), user);
+			sp.addCollection(spaceId, c.getId().toString(), user);
 		}
 		return c.getId();
 	}
@@ -324,6 +324,32 @@ public class CollectionController extends ImejiController {
 		}
 	}
 
+	/**
+	 * Update a {@link CollectionImeji} (with its Logo)
+	 * 
+	 * @param ic
+	 * @param user
+	 * @throws ImejiException
+	 */
+	public void updateCollectionSpace(CollectionImeji ic, User u, URI spaceId)
+			throws ImejiException, IOException, URISyntaxException {
+			// Update the collection as a patch only with collection Logo Triple
+//			List<ImejiTriple> triples = getContainerSpaceTriples(ic.getId().toString(), ic, spaceId);
+//			System.out.println("Listing found triples ");
+//			for (ImejiTriple trip:triples){
+//
+//				System.out.println(trip.getUri()+" - "+trip.getValue()+ " "+trip.getProperty());
+//			}
+//			System.out.println("before patch found triples ");
+//			patch(triples, u, true);
+//			System.out.println("After patch found triples ");
+		
+			ic.setSpace(spaceId);
+			update (ic, u);
+			
+	}
+
+	
 	/**
 	 * Update the {@link CollectionImeji} but not iths {@link Item}
 	 * 
@@ -607,5 +633,10 @@ public class CollectionController extends ImejiController {
 						return null;
 					}
 				});
+	}
+	
+	public List<String> retrieveAllCollectionIdsInSpace(URI spaceId) {
+		return ImejiSPARQL.exec(SPARQLQueries.selectCollectionImejiOfSpace(spaceId.toString()),
+								Imeji.collectionModel);
 	}
 }

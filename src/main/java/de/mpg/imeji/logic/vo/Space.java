@@ -84,6 +84,10 @@ public class Space extends Properties implements Serializable {
 	}
 
 
+	/**
+	 * Getters and Setters below are only VO getters and setters, not written in JENA
+	 * 
+	 */
 	public Collection<String> getSpaceCollections() {
 		return spaceCollections;
 	}

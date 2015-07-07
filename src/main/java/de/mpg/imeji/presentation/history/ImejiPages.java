@@ -29,7 +29,12 @@ public enum ImejiPages {
 			"/usergroups"), HELP("help", "/help"), SEARCH(
 			"history_advanced_search", "/search"), BATCH_EDIT_ITEMS(
 			"edit_images", ".*/edit\\?.*type=.*"), UPLOAD("upload", "/singleupload"), BROWSE(
-			"history_images", "/browse"), CREATE_COLLECTION("collection_create", ".*/createcollection.*"),  CREATE_ALBUM("album_create", ".*/createalbum"), HOME("history_home", "/");
+			"history_images", "/browse"), CREATE_COLLECTION("collection_create", ".*/createcollection.*"),  
+			CREATE_ALBUM("album_create", ".*/createalbum"), 
+			SPACES("spaces", ".*/spaces"),
+			CREATE_SPACE("admin_space_create", ".*/createspace"),
+			EDIT_SPACE("admin_space_edit", ".*/space/.*/editspace"),
+			HOME("history_home", "/");
 
 	/**
 	 * The key to the label

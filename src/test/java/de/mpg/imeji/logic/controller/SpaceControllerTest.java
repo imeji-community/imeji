@@ -2,14 +2,18 @@ package de.mpg.imeji.logic.controller;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+
+import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.search.query.SPARQLQueries;
+import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Space;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.process.RestProcessUtils;
 import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
 import de.mpg.imeji.rest.to.CollectionTO;
+
 import org.apache.commons.io.FileUtils;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
@@ -18,6 +22,7 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import util.JenaUtil;
 
 import java.io.File;
@@ -36,7 +41,7 @@ import static org.junit.Assert.assertTrue;
  * Created by vlad on 15.04.15.
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class SpaceControllerTest extends ImejiTestBase{
+public class SpaceControllerTest extends ControllerTest{
 
     private static final Logger LOGGER = LoggerFactory
             .getLogger(SpaceControllerTest.class);
@@ -61,7 +66,8 @@ public class SpaceControllerTest extends ImejiTestBase{
         sp1.setTitle("Space 1");
         sp1.setDescription("Space 1 Description");
         sp1.setSlug("space_1");
-        spaceId = sc.create(sp1, adminUser);
+        space = sc.create(sp1, adminUser);
+        spaceId = space.getId();
         space = sc.retrieve(sp1.getId(), adminUser);
         assertThat(sp1.getTitle(), equalTo(space.getTitle()));
         assertThat(sp1.getDescription(), equalTo(space.getDescription()));
@@ -71,12 +77,17 @@ public class SpaceControllerTest extends ImejiTestBase{
     public void test_2_Update() throws Exception {
         String changed = "_CHANGED";
         space.setTitle(space.getTitle() + changed);
-        sc.addCollection(space, initCollection(), adminUser);
-        String collId2 = initCollection();
         
-        sc.addCollection(space, collId2, adminUser);
-        //duplicates are not added!
-        sc.addCollection(space, collId2, adminUser);
+        createCollection();
+        CollectionImeji ci1 = collection;
+        
+        createCollection();
+        CollectionImeji ci2 = collection;
+        space = sc.update(space, adminUser);
+        sc.addCollection(space, ci1.getId().toString(), adminUser);
+        sc.addCollection(space, ci2.getId().toString(), adminUser);
+        //Duplicates are not added
+        sc.addCollection(space, ci2.getId().toString(), adminUser);
 
         assertThat(space.getTitle(), endsWith(changed));
         assertThat(sc.retrieveCollections(space), hasSize(2));
@@ -117,8 +128,9 @@ public class SpaceControllerTest extends ImejiTestBase{
         assertThat(
                 sc.removeCollection(space, Iterables.getLast(sc.retrieveCollections(space)), adminUser),
                 hasSize(1));
+        space.setSpaceCollections(sc.retrieveCollections(space));
         assertThat(
-                cc.retrieve(Iterables.getFirst(space.getSpaceCollections(), null), adminUser).getSpace(),
+                cc.retrieve(URI.create(Iterables.getFirst(space.getSpaceCollections(), null)), adminUser).getSpace(),
                 equalTo(spaceId)
         );
     }
@@ -130,8 +142,14 @@ public class SpaceControllerTest extends ImejiTestBase{
         Space sp1 = ImejiFactory.newSpace();
         sp1.setTitle("Space Full Create");
         sp1.setSlug("space_full_create");
-
-        final Collection<String> colls = Lists.newArrayList(initCollection(), initCollection());
+        
+        createCollection();
+        CollectionImeji ci1 = collection;
+        
+        createCollection();
+        CollectionImeji ci2 = collection;
+        
+        final Collection<String> colls = Lists.newArrayList(ci1.getId().toString(), ci2.getId().toString());
         sp1.setSpaceCollections(colls);
 
         space = sc.retrieve(sc.create(sp1, colls, uploadFile, adminUser), adminUser);
@@ -162,16 +180,17 @@ public class SpaceControllerTest extends ImejiTestBase{
         sp2.setTitle("Space Collections Test");
         sp2.setSlug("space_collections_test");
         sc.create(sp2, adminUser);
-        initCollection();
+        createCollection();
+        CollectionImeji ci3 = collection;
     	int collectionsOutOfSpace = cc.retrieveCollectionsNotInSpace(adminUser).size();
-        sc.addCollection(sp2, collectionId, adminUser);
+        sc.addCollection(sp2, ci3.getId().toString(), adminUser);
         assertThat(sc.retrieveCollections(sp2), hasSize(1));
         assertThat(cc.retrieveCollectionsNotInSpace(adminUser), hasSize(collectionsOutOfSpace - 1));
-        sc.removeCollection(sp2, collectionId, adminUser);
+        sc.removeCollection(sp2, ci3.getId().toString(), adminUser);
         assertThat(cc.retrieveCollectionsNotInSpace(adminUser), hasSize(collectionsOutOfSpace));
     }
 
-
+/*
     @Ignore
     @Test
     public void test_999_Performance() throws Exception {
@@ -181,8 +200,8 @@ public class SpaceControllerTest extends ImejiTestBase{
         Space sp1 = ImejiFactory.newSpace();
         sp1.setTitle("Space 1");
         sp1.setSlug("space_1");
-        spaceId = sc.create(sp1, adminUser);
-        space = sc.retrieve(sp1.getId(), adminUser);
+        space = sc.create(sp1, adminUser);
+        spaceId = space.getId();
         assertThat(sp1.getTitle(), equalTo(space.getTitle()));
 
         List<String> results = ImejiSPARQL.exec(SPARQLQueries.countTriplesAll(), null);
@@ -208,5 +227,5 @@ public class SpaceControllerTest extends ImejiTestBase{
 
     }
 
-
+*/
 }

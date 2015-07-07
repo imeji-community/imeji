@@ -93,16 +93,25 @@
 						</div>
 						<div class="imj_content">
 							<ul>
-								<li>
-									<a href="#{Navigation.applicationUrl}createspace" title="#{lbl.admin_space_create}">
-										<h:outputText value="#{lbl.create}"/>
-									</a>
-								</li>
-								<!-- <li>
-									<a href="#{Navigation.applicationSpaceUrl}editspace" title="#{lbl.admin_space_edit}">
-										<h:outputText value="#{lbl.edit}"/>
-									</a>
-								</li> -->
+							 	<ui:fragment rendered="#{Auth.admin and SessionBean.spaceId == ''}">
+									<li>
+										<a href="#{Navigation.applicationUrl}spaces" title="#{lbl.admin_space_create}">
+											<h:outputText value="#{lbl.admin_space_list}"/>
+										</a>
+									</li>
+									<li>
+										<a href="#{Navigation.applicationUrl}createspace" title="#{lbl.admin_space_create}">
+											<h:outputText value="#{lbl.create}"/>
+										</a>
+									</li>
+								</ui:fragment>
+								<ui:fragment rendered="#{Auth.admin and SessionBean.spaceId != ''}">
+									<li>
+										<a href="#{Navigation.applicationSpaceUrl}editspace" title="#{lbl.admin_space_edit}">
+											<h:outputText value="#{lbl.edit}"/>
+										</a>
+									</li>
+								</ui:fragment>
 							</ul>
 						</div>
 					</h:panelGroup>

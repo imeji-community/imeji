@@ -5,6 +5,7 @@ package de.mpg.imeji.presentation.beans;
 
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.space.SpacesBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.PropertyReader;
 
@@ -53,6 +54,8 @@ public class Navigation implements Serializable {
 	// session
 	private SessionBean sessionBean = null;
 	public final String spaceCommonSlug = "space/";
+	public final String spacesAllSlug = "spaces";
+
 
 	/**
 	 * Application bean managing navigation
@@ -130,6 +133,11 @@ public class Navigation implements Serializable {
 
 	public String getCollectionsUrl() {
 		return applicationUrl + getSpacePath() + COLLECTIONS.getPath();
+	}
+
+	public String getSpacesUrl(){
+		//No need to getSpacePath() Space Path HERE
+		return applicationUrl + "spaces";
 	}
 
 	public String getSingleUploadUrl() {
@@ -305,5 +313,6 @@ public class Navigation implements Serializable {
 		public void setPath(String file) {
 			this.path = file;
 		}
+		
 	}
 }

@@ -506,7 +506,11 @@ public class SPARQLQueries {
   }
 
   public static String selectCollectionsNotInSpace() {
-    return "SELECT DISTINCT ?s  WHERE {  FILTER NOT EXISTS {?s <http://imeji.org/terms/space> ?o} . ?s a <http://imeji.org/terms/collection> } ";
+    return "SELECT DISTINCT ?s  WHERE {"
+    		+" FILTER NOT EXISTS {?s <http://imeji.org/terms/space> ?o} ."
+    		+ "  ?s a <http://imeji.org/terms/collection> ."
+    		+" FILTER NOT EXISTS {?s <"+ImejiNamespaces.STATUS+"> <"+Status.WITHDRAWN.getUriString()+"> }"
+    		+ "} ";
   }
 
   /**

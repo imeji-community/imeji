@@ -3,7 +3,16 @@
  */
 package de.mpg.imeji.logic.controller;
 
-import de.mpg.imeji.exceptions.AlreadyExistsException;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotFoundException;
@@ -28,16 +37,6 @@ import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.j2j.helper.DateHelper;
-
-import org.apache.log4j.Logger;
-
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Controller for {@link User}

@@ -5,7 +5,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
@@ -20,69 +19,65 @@ import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
- * Java Bean for the view spaces  page
+ * Java Bean for the view spaces page
  * 
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
 @ManagedBean(name = "SpacesBean")
 @ViewScoped
-public class SpacesBean implements Serializable
-{
-    private static final long serialVersionUID = 909531319532057427L;
+public class SpacesBean implements Serializable {
+  private static final long serialVersionUID = 909531319532057427L;
 
-    private List<Space> spaces;
-	private static Logger logger = Logger.getLogger(SpacesBean.class);
-	private SessionBean sessionBean;
-	private Navigation navigation;
-	
-	public SpacesBean() {
-		spaces = new ArrayList<Space>();
-		sessionBean = (SessionBean) BeanHelper
-				.getSessionBean(SessionBean.class);
-		navigation = (Navigation) BeanHelper
-				.getApplicationBean(Navigation.class);
+  private List<Space> spaces;
+  private static Logger logger = Logger.getLogger(SpacesBean.class);
+  private SessionBean sessionBean;
+  private Navigation navigation;
 
-		init();
-	}
-	  
-	public void init() {
-			SpaceController sc = new SpaceController();
-			try {
-				spaces = sc.retrieveAll();
-			} catch (ImejiException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	}
+  public SpacesBean() {
+    spaces = new ArrayList<Space>();
+    sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+    navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
 
-	/**
-	 * @return the spaces
-	 */
-	public List<Space> getSpaces() {
-		return spaces;
-	}
+    init();
+  }
+
+  public void init() {
+    SpaceController sc = new SpaceController();
+    try {
+      spaces = sc.retrieveAll();
+    } catch (ImejiException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * @return the spaces
+   */
+  public List<Space> getSpaces() {
+    return spaces;
+  }
 
 
-	/**
-	 * @param spaces the spaces to set
-	 */
-	public void setSpaces(List<Space> spaces) {
-		this.spaces = spaces;
-	}
+  /**
+   * @param spaces the spaces to set
+   */
+  public void setSpaces(List<Space> spaces) {
+    this.spaces = spaces;
+  }
 
-	public void delete(Space delSpace) throws IOException {
-		SpaceController sc = new SpaceController();
-		try {
-			sc.delete(delSpace, sessionBean.getUser());
-		} catch (Exception e) {
-			BeanHelper.error(sessionBean.getMessage("error_delete_space"));
-		}
+  public void delete(Space delSpace) throws IOException {
+    SpaceController sc = new SpaceController();
+    try {
+      sc.delete(delSpace, sessionBean.getUser());
+    } catch (Exception e) {
+      BeanHelper.error(sessionBean.getMessage("error_delete_space"));
+    }
 
-		FacesContext.getCurrentInstance().getExternalContext()
-			.redirect(navigation.getSpacesUrl());
+    FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getSpacesUrl());
 
-	}
-  
+  }
+
 
 }

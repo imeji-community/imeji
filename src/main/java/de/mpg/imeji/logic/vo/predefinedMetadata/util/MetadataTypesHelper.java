@@ -13,23 +13,19 @@ import de.mpg.imeji.logic.vo.Metadata.Types;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class MetadataTypesHelper
-{
-    /**
-     * Return the {@link Types} for one namespace
-     * 
-     * @param namespace
-     * @return
-     */
-    public static Metadata.Types getTypesForNamespace(String namespace)
-    {
-        for (Types t : Types.values())
-        {
-            if (t.getClazzNamespace().equals(namespace))
-            {
-                return t;
-            }
-        }
-        return null;
+public class MetadataTypesHelper {
+  /**
+   * Return the {@link Types} for one namespace
+   * 
+   * @param namespace
+   * @return
+   */
+  public static Metadata.Types getTypesForNamespace(String namespace) {
+    for (Types t : Types.values()) {
+      if (t.getClazzNamespace().equals(namespace)) {
+        return t;
+      }
     }
+    return null;
+  }
 }

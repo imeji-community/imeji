@@ -1,154 +1,127 @@
 package de.mpg.imeji.rest.defaultTO;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.JsonNode;
-import de.mpg.imeji.rest.to.PropertiesTO;
-
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.JsonNode;
+
+import de.mpg.imeji.rest.to.PropertiesTO;
+
 @XmlRootElement
-@XmlType (propOrder = {	
-		"id",
-		"createdBy",
-		"modifiedBy",
-		"createdDate",
-		"modifiedDate",
-		"versionDate",
-		"status",
-		"visibility",
-		"version",
-		"discardComment",
-		"collectionId",
-		"filename",
-		"mimetype",
-		"checksumMd5",
-		"webResolutionUrlUrl",
-		"thumbnailUrl",
-		"fileUrl",
-		"metadata"
-		})
+@XmlType(propOrder = {"id", "createdBy", "modifiedBy", "createdDate", "modifiedDate",
+    "versionDate", "status", "visibility", "version", "discardComment", "collectionId", "filename",
+    "mimetype", "checksumMd5", "webResolutionUrlUrl", "thumbnailUrl", "fileUrl", "metadata"})
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class DefaultItemTO extends PropertiesTO implements Serializable{
-	
-	private static final long serialVersionUID = -1870847854605861134L;
-	
-	private String visibility;
-	
-	private String collectionId;
-	
-    private String filename;
-    
-    private String mimetype;
-    
-    private String checksumMd5;
+public class DefaultItemTO extends PropertiesTO implements Serializable {
 
-    public long getFileSize() {
-		return fileSize;
-	}
+  private static final long serialVersionUID = -1870847854605861134L;
 
-	public void setFileSize(long fileSize) {
-		this.fileSize = fileSize;
-	}
+  private String visibility;
 
-	private URI webResolutionUrlUrl;
-    
-    private URI thumbnailUrl;
-    
-    private URI fileUrl;
-    
-    private long fileSize;    
-	
-	private Map<String, JsonNode> metadata = new HashMap<String, JsonNode>();
+  private String collectionId;
 
-	public String getCollectionId() {
-		return collectionId;
-	}
+  private String filename;
 
-	public void setCollectionId(String collectionId) {
-		this.collectionId = collectionId;
-	}
+  private String mimetype;
 
-	public Map<String, JsonNode> getMetadata() {
-		return metadata;
-	}
+  private String checksumMd5;
 
-	public void setMetadata(Map<String, JsonNode> metadata) {
-		this.metadata = metadata;
-	}
+  public long getFileSize() {
+    return fileSize;
+  }
 
-	public String getVisibility() {
-		return visibility;
-	}
+  public void setFileSize(long fileSize) {
+    this.fileSize = fileSize;
+  }
 
-	public void setVisibility(String visibility) {
-		this.visibility = visibility;
-	}
+  private URI webResolutionUrlUrl;
 
-	public String getFilename() {
-		return filename;
-	}
+  private URI thumbnailUrl;
 
-	public void setFilename(String filename) {
-		this.filename = filename;
-	}
+  private URI fileUrl;
 
-	public String getMimetype() {
-		return mimetype;
-	}
+  private long fileSize;
 
-	public void setMimetype(String mimetype) {
-		this.mimetype = mimetype;
-	}
+  private Map<String, JsonNode> metadata = new HashMap<String, JsonNode>();
 
-	public String getChecksumMd5() {
-		return checksumMd5;
-	}
+  public String getCollectionId() {
+    return collectionId;
+  }
 
-	public void setChecksumMd5(String checksumMd5) {
-		this.checksumMd5 = checksumMd5;
-	}
+  public void setCollectionId(String collectionId) {
+    this.collectionId = collectionId;
+  }
 
-	public URI getWebResolutionUrlUrl() {
-		return webResolutionUrlUrl;
-	}
+  public Map<String, JsonNode> getMetadata() {
+    return metadata;
+  }
 
-	public void setWebResolutionUrlUrl(URI webResolutionUrlUrl) {
-		this.webResolutionUrlUrl = webResolutionUrlUrl;
-	}
+  public void setMetadata(Map<String, JsonNode> metadata) {
+    this.metadata = metadata;
+  }
 
-	public URI getThumbnailUrl() {
-		return thumbnailUrl;
-	}
+  public String getVisibility() {
+    return visibility;
+  }
 
-	public void setThumbnailUrl(URI thumbnailUrl) {
-		this.thumbnailUrl = thumbnailUrl;
-	}
+  public void setVisibility(String visibility) {
+    this.visibility = visibility;
+  }
 
-	public URI getFileUrl() {
-		return fileUrl;
-	}
+  public String getFilename() {
+    return filename;
+  }
 
-	public void setFileUrl(URI fileUrl) {
-		this.fileUrl = fileUrl;
-	}
+  public void setFilename(String filename) {
+    this.filename = filename;
+  }
 
-	
-	
+  public String getMimetype() {
+    return mimetype;
+  }
+
+  public void setMimetype(String mimetype) {
+    this.mimetype = mimetype;
+  }
+
+  public String getChecksumMd5() {
+    return checksumMd5;
+  }
+
+  public void setChecksumMd5(String checksumMd5) {
+    this.checksumMd5 = checksumMd5;
+  }
+
+  public URI getWebResolutionUrlUrl() {
+    return webResolutionUrlUrl;
+  }
+
+  public void setWebResolutionUrlUrl(URI webResolutionUrlUrl) {
+    this.webResolutionUrlUrl = webResolutionUrlUrl;
+  }
+
+  public URI getThumbnailUrl() {
+    return thumbnailUrl;
+  }
+
+  public void setThumbnailUrl(URI thumbnailUrl) {
+    this.thumbnailUrl = thumbnailUrl;
+  }
+
+  public URI getFileUrl() {
+    return fileUrl;
+  }
+
+  public void setFileUrl(URI fileUrl) {
+    this.fileUrl = fileUrl;
+  }
 
 
-
-	
-	
-	
-
-	
-	
-	
-	
 
 }

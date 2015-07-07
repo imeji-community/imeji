@@ -28,130 +28,127 @@ import de.mpg.j2j.misc.LocalizedString;
  * @version $Revision$ $LastChangedDate$
  */
 public class MetadataLabels implements Serializable {
-	private static final long serialVersionUID = -5672593145712801376L;
-	private String lang = "en";
-	private Map<URI, String> labels = new HashMap<URI, String>();
-	private Map<URI, String> internationalizedLabels = new HashMap<URI, String>();
+  private static final long serialVersionUID = -5672593145712801376L;
+  private String lang = "en";
+  private Map<URI, String> labels = new HashMap<URI, String>();
+  private Map<URI, String> internationalizedLabels = new HashMap<URI, String>();
 
-	/**
-	 * Initialize the labels for a {@link List} of {@link Item}
-	 * 
-	 * @param items
-	 * @throws Exception
-	 */
-	public void init(List<Item> items) {
-		labels = new HashMap<URI, String>();
-		Map<URI, MetadataProfile> profiles = ProfileHelper.loadProfiles(items);
-		init1(new ArrayList<MetadataProfile>(profiles.values()));
-	}
+  /**
+   * Initialize the labels for a {@link List} of {@link Item}
+   * 
+   * @param items
+   * @throws Exception
+   */
+  public void init(List<Item> items) {
+    labels = new HashMap<URI, String>();
+    Map<URI, MetadataProfile> profiles = ProfileHelper.loadProfiles(items);
+    init1(new ArrayList<MetadataProfile>(profiles.values()));
+  }
 
-	/**
-	 * initialize the labels for a {@link List} of {@link MetadataProfile}
-	 * 
-	 * @param profiles
-	 * @throws Exception
-	 */
-	public void init1(List<MetadataProfile> profiles) {
-		HashMap<URI, String> map = new HashMap<URI, String>();
-		for (MetadataProfile p : profiles) {
-			if (p != null) {
-				init(p);
-				map.putAll(internationalizedLabels);
-			}
-		}
-		internationalizedLabels = new HashMap<URI, String>(map);
-	}
+  /**
+   * initialize the labels for a {@link List} of {@link MetadataProfile}
+   * 
+   * @param profiles
+   * @throws Exception
+   */
+  public void init1(List<MetadataProfile> profiles) {
+    HashMap<URI, String> map = new HashMap<URI, String>();
+    for (MetadataProfile p : profiles) {
+      if (p != null) {
+        init(p);
+        map.putAll(internationalizedLabels);
+      }
+    }
+    internationalizedLabels = new HashMap<URI, String>(map);
+  }
 
-	/**
-	 * Initialize the labels for one {@link MetadataProfile}
-	 * 
-	 * @param profile
-	 * @throws Exception
-	 */
-	public void init(MetadataProfile profile) {
-		labels = new HashMap<URI, String>();
-		internationalizedLabels = new HashMap<URI, String>();
-		lang = ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-				.getLocale().getLanguage();
-		if (profile != null) {
-			for (Statement s : profile.getStatements()) {
-				boolean hasInternationalizedLabel = false;
-				boolean hasEnglishLabel = false;
-				String labelFallBack = null;
-				for (LocalizedString ls : s.getLabels()) {
-					if (ls.getLang().equals("en")) {
-						labels.put(s.getId(), ls.getValue());
-						hasEnglishLabel = true;
-					}
-					if (ls.getLang().equals(lang)) {
-						internationalizedLabels.put(s.getId(), ls.getValue());
-						hasInternationalizedLabel = true;
-					}
-					labelFallBack = ls.getValue();
-				}
-				if (!hasEnglishLabel) {
-					labels.put(s.getId(), labelFallBack);
-				}
-				if (!hasInternationalizedLabel) {
-					internationalizedLabels.put(s.getId(),
-							labels.get(s.getId()));
-				}
-			}
-		}
-	}
+  /**
+   * Initialize the labels for one {@link MetadataProfile}
+   * 
+   * @param profile
+   * @throws Exception
+   */
+  public void init(MetadataProfile profile) {
+    labels = new HashMap<URI, String>();
+    internationalizedLabels = new HashMap<URI, String>();
+    lang = ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLocale().getLanguage();
+    if (profile != null) {
+      for (Statement s : profile.getStatements()) {
+        boolean hasInternationalizedLabel = false;
+        boolean hasEnglishLabel = false;
+        String labelFallBack = null;
+        for (LocalizedString ls : s.getLabels()) {
+          if (ls.getLang().equals("en")) {
+            labels.put(s.getId(), ls.getValue());
+            hasEnglishLabel = true;
+          }
+          if (ls.getLang().equals(lang)) {
+            internationalizedLabels.put(s.getId(), ls.getValue());
+            hasInternationalizedLabel = true;
+          }
+          labelFallBack = ls.getValue();
+        }
+        if (!hasEnglishLabel) {
+          labels.put(s.getId(), labelFallBack);
+        }
+        if (!hasInternationalizedLabel) {
+          internationalizedLabels.put(s.getId(), labels.get(s.getId()));
+        }
+      }
+    }
+  }
 
-	/**
-	 * Getter
-	 * 
-	 * @return
-	 */
-	public String getLang() {
-		return lang;
-	}
+  /**
+   * Getter
+   * 
+   * @return
+   */
+  public String getLang() {
+    return lang;
+  }
 
-	/**
-	 * Setter
-	 * 
-	 * @param lang
-	 */
-	public void setLang(String lang) {
-		this.lang = lang;
-	}
+  /**
+   * Setter
+   * 
+   * @param lang
+   */
+  public void setLang(String lang) {
+    this.lang = lang;
+  }
 
-	/**
-	 * getter
-	 * 
-	 * @return
-	 */
-	public Map<URI, String> getLabels() {
-		return labels;
-	}
+  /**
+   * getter
+   * 
+   * @return
+   */
+  public Map<URI, String> getLabels() {
+    return labels;
+  }
 
-	/**
-	 * setter
-	 * 
-	 * @param labels
-	 */
-	public void setLabels(Map<URI, String> labels) {
-		this.labels = labels;
-	}
+  /**
+   * setter
+   * 
+   * @param labels
+   */
+  public void setLabels(Map<URI, String> labels) {
+    this.labels = labels;
+  }
 
-	/**
-	 * getter
-	 * 
-	 * @return
-	 */
-	public Map<URI, String> getInternationalizedLabels() {
-		return internationalizedLabels;
-	}
+  /**
+   * getter
+   * 
+   * @return
+   */
+  public Map<URI, String> getInternationalizedLabels() {
+    return internationalizedLabels;
+  }
 
-	/**
-	 * setter
-	 * 
-	 * @param internationalizedLabels
-	 */
-	public void setInternationalizedLabels(
-			Map<URI, String> internationalizedLabels) {
-		this.internationalizedLabels = internationalizedLabels;
-	}
+  /**
+   * setter
+   * 
+   * @param internationalizedLabels
+   */
+  public void setInternationalizedLabels(Map<URI, String> internationalizedLabels) {
+    this.internationalizedLabels = internationalizedLabels;
+  }
 }

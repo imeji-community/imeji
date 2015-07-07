@@ -9,20 +9,18 @@ import de.mpg.j2j.annotations.j2jDataType;
 
 @XmlRootElement
 @j2jDataType("http://imeji.org/terms/metadata#conePerson")
-@XmlType(propOrder = {
-		"person",
-		})
-public class ConePersonTO extends MetadataTO{
-	private static final long serialVersionUID = -7123511172438572514L;
-	private PersonTO person;
+@XmlType(propOrder = {"person",})
+public class ConePersonTO extends MetadataTO {
+  private static final long serialVersionUID = -7123511172438572514L;
+  private PersonTO person;
 
-	public PersonTO getPerson() {
-		return person;
-	}
+  public PersonTO getPerson() {
+    return person;
+  }
 
-	public void setPerson(PersonTO person) {
-		this.person = person;
-	}
+  public void setPerson(PersonTO person) {
+    this.person = person;
+  }
 
 
 }

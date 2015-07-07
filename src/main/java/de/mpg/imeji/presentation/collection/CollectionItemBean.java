@@ -22,70 +22,63 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  * @version $Revision$ $LastChangedDate$
  */
 public class CollectionItemBean extends ItemBean {
-	private String collectionId;
-	private Navigation navigation;
-	private CollectionItemsBean collectionImagesBean;
+  private String collectionId;
+  private Navigation navigation;
+  private CollectionItemsBean collectionImagesBean;
 
-	public CollectionItemsBean getCollectionImagesBean() {
-		return collectionImagesBean;
-	}
+  public CollectionItemsBean getCollectionImagesBean() {
+    return collectionImagesBean;
+  }
 
-	public void setCollectionImagesBean(CollectionItemsBean collectionImagesBean) {
-		this.collectionImagesBean = collectionImagesBean;
-	}
+  public void setCollectionImagesBean(CollectionItemsBean collectionImagesBean) {
+    this.collectionImagesBean = collectionImagesBean;
+  }
 
-	public CollectionItemBean() throws Exception {
-		super();
-		this.prettyLink = getSessionBean().getPrettySpacePage(
-				"pretty:EditImageOfCollection");
-		navigation = (Navigation) BeanHelper
-				.getApplicationBean(Navigation.class);
-	}
+  public CollectionItemBean() throws Exception {
+    super();
+    this.prettyLink = getSessionBean().getPrettySpacePage("pretty:EditImageOfCollection");
+    navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
+  }
 
-	@Override
-	public void initBrowsing() {
-		if (getImage() != null) {
-			ItemsBean itemsBean = (CollectionItemsBean) BeanHelper
-					.getSessionBean(CollectionItemsBean.class);
-			String tempId = (String) FacesContext.getCurrentInstance()
-					.getExternalContext().getSessionMap()
-					.get("CollectionItemsBean.id");
-			if (UrlHelper.getParameterBoolean("reload")) {
-				itemsBean.browseInit(); // search the items
-				itemsBean.update(); // Load the items
-			}
-			setBrowse(new SingleItemBrowse(itemsBean, getImage(), "collection",
-					tempId));
-		}
+  @Override
+  public void initBrowsing() {
+    if (getImage() != null) {
+      ItemsBean itemsBean =
+          (CollectionItemsBean) BeanHelper.getSessionBean(CollectionItemsBean.class);
+      String tempId =
+          (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+              .get("CollectionItemsBean.id");
+      if (UrlHelper.getParameterBoolean("reload")) {
+        itemsBean.browseInit(); // search the items
+        itemsBean.update(); // Load the items
+      }
+      setBrowse(new SingleItemBrowse(itemsBean, getImage(), "collection", tempId));
+    }
 
-	}
+  }
 
-	@Override
-	public void redirectToBrowsePage() throws IOException {
-		FacesContext
-				.getCurrentInstance()
-				.getExternalContext()
-				.redirect(
-						navigation.getCollectionUrl() + collectionId + "/"
-								+ navigation.getBrowsePath());
-	}
+  @Override
+  public void redirectToBrowsePage() throws IOException {
+    FacesContext.getCurrentInstance().getExternalContext()
+        .redirect(navigation.getCollectionUrl() + collectionId + "/" + navigation.getBrowsePath());
+  }
 
-	public String getCollectionId() {
-		return collectionId;
-	}
+  public String getCollectionId() {
+    return collectionId;
+  }
 
-	public void setCollectionId(String collectionId) {
-		this.collectionId = collectionId;
-	}
+  public void setCollectionId(String collectionId) {
+    this.collectionId = collectionId;
+  }
 
-	@Override
-	public String getPageUrl() {
-		return navigation.getCollectionUrl() + collectionId + "/"
-				+ navigation.ITEM.getPath() + "/" + getId();
-	}
+  @Override
+  public String getPageUrl() {
+    return navigation.getCollectionUrl() + collectionId + "/" + navigation.ITEM.getPath() + "/"
+        + getId();
+  }
 
-	@Override
-	public String getNavigationString() {
-		return getSessionBean().getPrettySpacePage("pretty:CollectionItem");
-	}
+  @Override
+  public String getNavigationString() {
+    return getSessionBean().getPrettySpacePage("pretty:CollectionItem");
+  }
 }

@@ -43,6 +43,7 @@ import de.mpg.imeji.rest.to.JSONResponse;
 public class ItemResource implements ImejiResource {
 
 
+  @Override
   @GET
   @ApiOperation(value = "Get all items filtered by query (optional)")
   @Produces(MediaType.APPLICATION_JSON)
@@ -234,10 +235,12 @@ public class ItemResource implements ImejiResource {
   }
 
 
+  @Override
   public Response create(HttpServletRequest req) {
     return null;
   }
 
+  @Override
   @DELETE
   @Path("/{id}")
   @ApiOperation(value = "Delete item by id")

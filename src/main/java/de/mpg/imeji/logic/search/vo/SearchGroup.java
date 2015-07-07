@@ -10,45 +10,37 @@ import java.util.List;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class SearchGroup extends SearchElement
-{
-    private List<SearchElement> group;
-    private boolean not;
+public class SearchGroup extends SearchElement {
+  private List<SearchElement> group;
+  private boolean not;
 
-    public SearchGroup()
-    {
-        group = new ArrayList<SearchElement>();
-    }
+  public SearchGroup() {
+    group = new ArrayList<SearchElement>();
+  }
 
-    public void setGroup(List<SearchElement> group)
-    {
-        this.group = group;
-    }
+  public void setGroup(List<SearchElement> group) {
+    this.group = group;
+  }
 
-    public List<SearchElement> getGroup()
-    {
-        return group;
-    }
+  public List<SearchElement> getGroup() {
+    return group;
+  }
 
-    @Override
-    public SEARCH_ELEMENTS getType()
-    {
-        return SEARCH_ELEMENTS.GROUP;
-    }
+  @Override
+  public SEARCH_ELEMENTS getType() {
+    return SEARCH_ELEMENTS.GROUP;
+  }
 
-    @Override
-    public List<SearchElement> getElements()
-    {
-        return group;
-    }
+  @Override
+  public List<SearchElement> getElements() {
+    return group;
+  }
 
-    public void setNot(boolean not)
-    {
-        this.not = not;
-    }
+  public void setNot(boolean not) {
+    this.not = not;
+  }
 
-    public boolean isNot()
-    {
-        return not;
-    }
+  public boolean isNot() {
+    return not;
+  }
 }

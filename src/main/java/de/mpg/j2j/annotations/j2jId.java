@@ -12,9 +12,8 @@ import java.net.URI;
  * @version $Revision$ $LastChangedDate$
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface j2jId
-{
-    public String setMethod();
+public @interface j2jId {
+  public String setMethod();
 
-    public String getMethod();
+  public String getMethod();
 }

@@ -37,300 +37,288 @@ import de.mpg.j2j.annotations.j2jResource;
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "item", namespace = "http://imeji.org/terms/")
 public class Item extends Properties implements FulltextIndex, Serializable {
-	private static final long serialVersionUID = 3989965275269803885L;
+  private static final long serialVersionUID = 3989965275269803885L;
 
-	public enum Visibility {
-		PUBLIC, PRIVATE;
-	}
+  public enum Visibility {
+    PUBLIC, PRIVATE;
+  }
 
-	@j2jResource("http://imeji.org/terms/collection")
-	private URI collection;
-	@j2jList("http://imeji.org/terms/metadataSet")
-	private List<MetadataSet> metadataSets = new ArrayList<MetadataSet>();
-	@j2jResource("http://imeji.org/terms/webImageUrl")
-	private URI webImageUrl;
-	@j2jResource("http://imeji.org/terms/thumbnailImageUrl")
-	private URI thumbnailImageUrl;
-	@j2jResource("http://imeji.org/terms/fullImageUrl")
-	private URI fullImageUrl;
-	@j2jResource("http://imeji.org/terms/visibility")
-	private URI visibility = URI.create("http://imeji.org/terms/visibility#"
-			+ Visibility.PRIVATE.name());
-	@j2jLiteral("http://imeji.org/terms/filename")
-	private String filename;
-	@j2jLiteral("http://imeji.org/terms/filetype")
-	private String filetype;
-	@j2jLiteral("http://imeji.org/terms/escidocId")
-	private String escidocId;
-	@j2jLiteral("http://imeji.org/terms/storageId")
-	private String storageId;
-	@j2jLiteral("http://imeji.org/terms/fulltext")
-	private String fulltext;
-	@j2jLiteral("http://imeji.org/terms/checksum")
-	private String checksum;
-	@j2jLiteral("http://imeji.org/terms/fileSize")
-	private long fileSize;
-	@j2jLiteral("http://www.w3.org/2003/12/exif/ns#width")
-	private long width;
-	@j2jLiteral("http://www.w3.org/2003/12/exif/ns#height")
-	private long height;
+  @j2jResource("http://imeji.org/terms/collection")
+  private URI collection;
+  @j2jList("http://imeji.org/terms/metadataSet")
+  private List<MetadataSet> metadataSets = new ArrayList<MetadataSet>();
+  @j2jResource("http://imeji.org/terms/webImageUrl")
+  private URI webImageUrl;
+  @j2jResource("http://imeji.org/terms/thumbnailImageUrl")
+  private URI thumbnailImageUrl;
+  @j2jResource("http://imeji.org/terms/fullImageUrl")
+  private URI fullImageUrl;
+  @j2jResource("http://imeji.org/terms/visibility")
+  private URI visibility = URI.create("http://imeji.org/terms/visibility#"
+      + Visibility.PRIVATE.name());
+  @j2jLiteral("http://imeji.org/terms/filename")
+  private String filename;
+  @j2jLiteral("http://imeji.org/terms/filetype")
+  private String filetype;
+  @j2jLiteral("http://imeji.org/terms/escidocId")
+  private String escidocId;
+  @j2jLiteral("http://imeji.org/terms/storageId")
+  private String storageId;
+  @j2jLiteral("http://imeji.org/terms/fulltext")
+  private String fulltext;
+  @j2jLiteral("http://imeji.org/terms/checksum")
+  private String checksum;
+  @j2jLiteral("http://imeji.org/terms/fileSize")
+  private long fileSize;
+  @j2jLiteral("http://www.w3.org/2003/12/exif/ns#width")
+  private long width;
+  @j2jLiteral("http://www.w3.org/2003/12/exif/ns#height")
+  private long height;
 
-	public Item() {
-	}
+  public Item() {}
 
-	public Item(Item im) {
-		copyInFields(im);
-	}
+  public Item(Item im) {
+    copyInFields(im);
+  }
 
-	@XmlElement(name = "escidocId", namespace = "http://imeji.org/terms/")
-	public String getEscidocId() {
-		return escidocId;
-	}
+  @XmlElement(name = "escidocId", namespace = "http://imeji.org/terms/")
+  public String getEscidocId() {
+    return escidocId;
+  }
 
-	public void setEscidocId(String escidocId) {
-		this.escidocId = escidocId;
-	}
+  public void setEscidocId(String escidocId) {
+    this.escidocId = escidocId;
+  }
 
-	@XmlElement(name = "webImageUrl", namespace = "http://imeji.org/terms/")
-	public URI getWebImageUrl() {
-		return webImageUrl;
-	}
+  @XmlElement(name = "webImageUrl", namespace = "http://imeji.org/terms/")
+  public URI getWebImageUrl() {
+    return webImageUrl;
+  }
 
-	public void setWebImageUrl(URI webImageUrl) {
-		this.webImageUrl = webImageUrl;
-	}
+  public void setWebImageUrl(URI webImageUrl) {
+    this.webImageUrl = webImageUrl;
+  }
 
-	@XmlElement(name = "thumbnailImageUrl", namespace = "http://imeji.org/terms/")
-	public URI getThumbnailImageUrl() {
-		return thumbnailImageUrl;
-	}
+  @XmlElement(name = "thumbnailImageUrl", namespace = "http://imeji.org/terms/")
+  public URI getThumbnailImageUrl() {
+    return thumbnailImageUrl;
+  }
 
-	public void setThumbnailImageUrl(URI thumbnailImageUrl) {
-		this.thumbnailImageUrl = thumbnailImageUrl;
-	}
+  public void setThumbnailImageUrl(URI thumbnailImageUrl) {
+    this.thumbnailImageUrl = thumbnailImageUrl;
+  }
 
-	@XmlElement(name = "fullImageUrl", namespace = "http://imeji.org/terms/")
-	public URI getFullImageUrl() {
-		return fullImageUrl;
-	}
+  @XmlElement(name = "fullImageUrl", namespace = "http://imeji.org/terms/")
+  public URI getFullImageUrl() {
+    return fullImageUrl;
+  }
 
-	public void setFullImageUrl(URI fullImageUrl) {
-		this.fullImageUrl = fullImageUrl;
-	}
+  public void setFullImageUrl(URI fullImageUrl) {
+    this.fullImageUrl = fullImageUrl;
+  }
 
-	public void setVisibility(Visibility visibility) {
-		this.visibility = URI.create("http://imeji.org/terms/visibility#"
-				+ visibility.name());
-	}
+  public void setVisibility(Visibility visibility) {
+    this.visibility = URI.create("http://imeji.org/terms/visibility#" + visibility.name());
+  }
 
-	@XmlElement(name = "visibility", namespace = "http://imeji.org/terms/")
-	public Visibility getVisibility() {
-		return Visibility.valueOf(visibility.getFragment());
-	}
+  @XmlElement(name = "visibility", namespace = "http://imeji.org/terms/")
+  public Visibility getVisibility() {
+    return Visibility.valueOf(visibility.getFragment());
+  }
 
-	public MetadataSet getMetadataSet() {
-		if (metadataSets.size() == 0)
-			metadataSets.add(new MetadataSet());
-		return metadataSets.get(0);
-	}
+  public MetadataSet getMetadataSet() {
+    if (metadataSets.size() == 0)
+      metadataSets.add(new MetadataSet());
+    return metadataSets.get(0);
+  }
 
-	public void setCollection(URI collection) {
-		this.collection = collection;
-	}
+  public void setCollection(URI collection) {
+    this.collection = collection;
+  }
 
-	@XmlElement(name = "collection", namespace = "http://imeji.org/terms/")
-	public URI getCollection() {
-		return collection;
-	}
+  @XmlElement(name = "collection", namespace = "http://imeji.org/terms/")
+  public URI getCollection() {
+    return collection;
+  }
 
-	public void setFilename(String filename) {
-		this.filename = filename;
-	}
+  public void setFilename(String filename) {
+    this.filename = filename;
+  }
 
-	@XmlElement(name = "filename", namespace = "http://imeji.org/terms/")
-	public String getFilename() {
-		return filename;
-	}
+  @XmlElement(name = "filename", namespace = "http://imeji.org/terms/")
+  public String getFilename() {
+    return filename;
+  }
 
-	public void setFiletype(String filetype) {
-		this.filetype = filetype;
-	}
+  public void setFiletype(String filetype) {
+    this.filetype = filetype;
+  }
 
-	@XmlElement(name = "filetype", namespace = "http://imeji.org/terms/")
-	public String getFiletype() {
-		return filetype;
-	}
+  @XmlElement(name = "filetype", namespace = "http://imeji.org/terms/")
+  public String getFiletype() {
+    return filetype;
+  }
 
-	/**
-	 * Return the same Ite but empty (same id and same collection). Used for
-	 * patch update
-	 * 
-	 * @return
-	 */
-	public Item copyEmpty() {
-		Item emptyItem = new Item();
-		emptyItem.setId(this.getId());
-		emptyItem.setCollection(collection);
-		return emptyItem;
-	}
+  /**
+   * Return the same Ite but empty (same id and same collection). Used for patch update
+   * 
+   * @return
+   */
+  public Item copyEmpty() {
+    Item emptyItem = new Item();
+    emptyItem.setId(this.getId());
+    emptyItem.setCollection(collection);
+    return emptyItem;
+  }
 
-	/**
-	 * Copy all {@link Fields} of an {@link Item} (including {@link Metadata})
-	 * to the current {@link Item}
-	 * 
-	 * @param copyFrom
-	 */
-	protected void copyInFields(Item copyFrom) {
-		Class<? extends Item> copyFromClass = copyFrom.getClass();
-		Class<? extends Item> copyToClass = this.getClass();
-		for (Method methodFrom : copyFromClass.getDeclaredMethods()) {
-			String setMethodName = null;
-			if (methodFrom.getName().startsWith("get")) {
-				setMethodName = "set"
-						+ methodFrom.getName().substring(3,
-								methodFrom.getName().length());
-			} else if (methodFrom.getName().startsWith("is")) {
-				setMethodName = "set"
-						+ methodFrom.getName().substring(2,
-								methodFrom.getName().length());
-			}
-			if (setMethodName != null) {
-				try {
-					Method methodTo = copyToClass.getMethod(setMethodName,
-							methodFrom.getReturnType());
-					try {
-						methodTo.invoke(this,
-								methodFrom.invoke(copyFrom, (Object) null));
-					} catch (Exception e) {
-						// logger.error("Could not copy field from method: " +
-						// methodFrom.getName(), e);
-					}
-				}
-				// No setter, do nothing.
-				catch (NoSuchMethodException e) {
-				}
-			}
-		}
-	}
+  /**
+   * Copy all {@link Fields} of an {@link Item} (including {@link Metadata}) to the current
+   * {@link Item}
+   * 
+   * @param copyFrom
+   */
+  protected void copyInFields(Item copyFrom) {
+    Class<? extends Item> copyFromClass = copyFrom.getClass();
+    Class<? extends Item> copyToClass = this.getClass();
+    for (Method methodFrom : copyFromClass.getDeclaredMethods()) {
+      String setMethodName = null;
+      if (methodFrom.getName().startsWith("get")) {
+        setMethodName = "set" + methodFrom.getName().substring(3, methodFrom.getName().length());
+      } else if (methodFrom.getName().startsWith("is")) {
+        setMethodName = "set" + methodFrom.getName().substring(2, methodFrom.getName().length());
+      }
+      if (setMethodName != null) {
+        try {
+          Method methodTo = copyToClass.getMethod(setMethodName, methodFrom.getReturnType());
+          try {
+            methodTo.invoke(this, methodFrom.invoke(copyFrom, (Object) null));
+          } catch (Exception e) {
+            // logger.error("Could not copy field from method: " +
+            // methodFrom.getName(), e);
+          }
+        }
+        // No setter, do nothing.
+        catch (NoSuchMethodException e) {
+        }
+      }
+    }
+  }
 
-	public void setMetadataSets(List<MetadataSet> metadataSets) {
-		this.metadataSets = metadataSets;
-	}
+  public void setMetadataSets(List<MetadataSet> metadataSets) {
+    this.metadataSets = metadataSets;
+  }
 
-	@XmlElement(name = "metadataSet", namespace = "http://imeji.org/terms/")
-	public List<MetadataSet> getMetadataSets() {
-		return metadataSets;
-	}
+  @XmlElement(name = "metadataSet", namespace = "http://imeji.org/terms/")
+  public List<MetadataSet> getMetadataSets() {
+    return metadataSets;
+  }
 
-	/**
-	 * @return the storageId
-	 */
-	@XmlElement(name = "storageId", namespace = "http://imeji.org/terms/")
-	public String getStorageId() {
-		return storageId;
-	}
+  /**
+   * @return the storageId
+   */
+  @XmlElement(name = "storageId", namespace = "http://imeji.org/terms/")
+  public String getStorageId() {
+    return storageId;
+  }
 
-	/**
-	 * @param storageId
-	 *            the storageId to set
-	 */
-	public void setStorageId(String storageId) {
-		this.storageId = storageId;
-	}
+  /**
+   * @param storageId the storageId to set
+   */
+  public void setStorageId(String storageId) {
+    this.storageId = storageId;
+  }
 
-	@Override
-	public void setFulltextIndex(String fulltext) {
-		this.fulltext = fulltext;
-	}
+  @Override
+  public void setFulltextIndex(String fulltext) {
+    this.fulltext = fulltext;
+  }
 
-	@Override
-	@XmlElement(name = "fulltext", namespace = "http://imeji.org/terms/")
-	public String getFulltextIndex() {
-		return fulltext;
-	}
+  @Override
+  @XmlElement(name = "fulltext", namespace = "http://imeji.org/terms/")
+  public String getFulltextIndex() {
+    return fulltext;
+  }
 
-	/**
-	 * Set the value for the fulltext search (according to all {@link Metadata}
-	 * values)
-	 */
-	@Override
-	public void indexFulltext() {
-		fulltext = filename;
-		for (Metadata md : getMetadataSet().getMetadata()) {
-			if (!"".equals(md.asFulltext())) {
-				fulltext += " " + md.asFulltext();
-			}
-		}
-		if (fulltext != null)
-			fulltext = fulltext.trim();
-	}
+  /**
+   * Set the value for the fulltext search (according to all {@link Metadata} values)
+   */
+  @Override
+  public void indexFulltext() {
+    fulltext = filename;
+    for (Metadata md : getMetadataSet().getMetadata()) {
+      if (!"".equals(md.asFulltext())) {
+        fulltext += " " + md.asFulltext();
+      }
+    }
+    if (fulltext != null)
+      fulltext = fulltext.trim();
+  }
 
-	/**
-	 * @return the checksum
-	 */
-	@XmlElement(name = "checksum", namespace = "http://imeji.org/terms/")
-	public String getChecksum() {
-		return checksum;
-	}
+  /**
+   * @return the checksum
+   */
+  @XmlElement(name = "checksum", namespace = "http://imeji.org/terms/")
+  public String getChecksum() {
+    return checksum;
+  }
 
-	/**
-	 * @param checksum
-	 *            the checksum to set
-	 */
-	public void setChecksum(String checksum) {
-		this.checksum = checksum;
-	}
+  /**
+   * @param checksum the checksum to set
+   */
+  public void setChecksum(String checksum) {
+    this.checksum = checksum;
+  }
 
-	/**
-	 * 
-	 * @return
-	 */
-	public long getFileSize() {
-		return fileSize;
-	}
+  /**
+   * 
+   * @return
+   */
+  public long getFileSize() {
+    return fileSize;
+  }
 
-	/**
-	 * 
-	 * @return human readable file size
-	 */
-	public String getFileSizeHumanReadable() {
-		return FileUtils.byteCountToDisplaySize(fileSize);
-	}
+  /**
+   * 
+   * @return human readable file size
+   */
+  public String getFileSizeHumanReadable() {
+    return FileUtils.byteCountToDisplaySize(fileSize);
+  }
 
-	/**
-	 * 
-	 * @param fileSize
-	 */
-	public void setFileSize(long fileSize) {
-		this.fileSize = fileSize;
-	}
+  /**
+   * 
+   * @param fileSize
+   */
+  public void setFileSize(long fileSize) {
+    this.fileSize = fileSize;
+  }
 
-	public void setHeight(long height) {
-		this.height = height;
-	}
+  public void setHeight(long height) {
+    this.height = height;
+  }
 
-	public long getHeight() {
-		return height;
-	}
+  public long getHeight() {
+    return height;
+  }
 
-	public void setWidth(long width) {
-		this.width = width;
-	}
+  public void setWidth(long width) {
+    this.width = width;
+  }
 
-	public long getWidth() {
-		return width;
-	}
+  public long getWidth() {
+    return width;
+  }
 
-	public String getFullImageLink() {
-		return fullImageUrl.toString();
-	}
+  public String getFullImageLink() {
+    return fullImageUrl.toString();
+  }
 
-	public String getThumbnailImageLink() {
-		return thumbnailImageUrl.toString();
-	}
+  public String getThumbnailImageLink() {
+    return thumbnailImageUrl.toString();
+  }
 
-	public String getWebImageLink() {
-		return thumbnailImageUrl.toString();
-	}
+  public String getWebImageLink() {
+    return thumbnailImageUrl.toString();
+  }
 
 }

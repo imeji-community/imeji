@@ -20,52 +20,50 @@ import de.mpg.imeji.logic.vo.Person;
  */
 public class AlbumValidator extends ObjectValidator implements Validator<Album> {
 
-	public AlbumValidator(Validator.Method method) {
-		super(method);
-	}
+  public AlbumValidator(Validator.Method method) {
+    super(method);
+  }
 
-	@Override
-	public void validate(Album album) throws UnprocessableError {
-		if (isDelete())
-			return;
+  @Override
+  public void validate(Album album) throws UnprocessableError {
+    if (isDelete())
+      return;
 
-		if (isNullOrEmpty(album.getMetadata().getTitle().trim())) {
-			throw new UnprocessableError("error_album_need_title");
-		}
-		List<Person> pers = new ArrayList<Person>();
+    if (isNullOrEmpty(album.getMetadata().getTitle().trim())) {
+      throw new UnprocessableError("error_album_need_title");
+    }
+    List<Person> pers = new ArrayList<Person>();
 
-		for (Person c : album.getMetadata().getPersons()) {
-			List<Organization> orgs = new ArrayList<Organization>();
-			for (Organization o : c.getOrganizations()) {
-				if (!isNullOrEmpty(o.getName().trim())) {
-					orgs.add(o);
-				} else {
-					throw new UnprocessableError("error_organization_need_name");
-				}
-			}
+    for (Person c : album.getMetadata().getPersons()) {
+      List<Organization> orgs = new ArrayList<Organization>();
+      for (Organization o : c.getOrganizations()) {
+        if (!isNullOrEmpty(o.getName().trim())) {
+          orgs.add(o);
+        } else {
+          throw new UnprocessableError("error_organization_need_name");
+        }
+      }
 
-			if (!isNullOrEmpty(c.getFamilyName().trim())) {
-				if (orgs.size() > 0) {
-					pers.add(c);
-				} else {
-					throw new UnprocessableError(
-							"error_author_need_one_organization");
-				}
-			} else {
-				throw new UnprocessableError(
-						"error_author_need_one_family_name");
-			}
-		}
+      if (!isNullOrEmpty(c.getFamilyName().trim())) {
+        if (orgs.size() > 0) {
+          pers.add(c);
+        } else {
+          throw new UnprocessableError("error_author_need_one_organization");
+        }
+      } else {
+        throw new UnprocessableError("error_author_need_one_family_name");
+      }
+    }
 
-		if (pers.size() == 0 || pers == null || pers.isEmpty()) {
-			throw new UnprocessableError("error_album_need_one_author");
-		}
+    if (pers.size() == 0 || pers == null || pers.isEmpty()) {
+      throw new UnprocessableError("error_album_need_one_author");
+    }
 
-	}
+  }
 
-	@Override
-	public void validate(Album t, MetadataProfile p) throws UnprocessableError {
-		validate(t);
-	}
+  @Override
+  public void validate(Album t, MetadataProfile p) throws UnprocessableError {
+    validate(t);
+  }
 
 }

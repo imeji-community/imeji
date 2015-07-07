@@ -10,27 +10,27 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @XmlRootElement
 @JsonInclude(Include.NON_NULL)
-public class DefaultLinkTO implements Serializable{
+public class DefaultLinkTO implements Serializable {
 
-	private static final long serialVersionUID = -4439636670664475938L;
-	private String link;
-	private String url;
+  private static final long serialVersionUID = -4439636670664475938L;
+  private String link;
+  private String url;
 
-	public String getLink() {
-		return link;
-	}
+  public String getLink() {
+    return link;
+  }
 
-	public void setLink(String link) {
-		this.link = link;
-	}
-	
-	public String getUrl() {
-		return url;
-	}
+  public void setLink(String link) {
+    this.link = link;
+  }
 
-	public void setUrl(String url) {
-		this.url = url;
-	}
-	
+  public String getUrl() {
+    return url;
+  }
+
+  public void setUrl(String url) {
+    this.url = url;
+  }
+
 
 }

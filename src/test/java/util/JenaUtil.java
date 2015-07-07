@@ -107,12 +107,12 @@ public class JenaUtil {
     deleteTDBDirectory();
   }
 
-private static void initTestUser() throws Exception {
-		testUser = getMockupUser(TEST_USER_EMAIL, TEST_USER_NAME, TEST_USER_PWD);
-		testUser2 = getMockupUser(TEST_USER_EMAIL_2, TEST_USER_NAME, TEST_USER_PWD);
-		createUser(testUser);
-		createUser(testUser2);
-	}
+  private static void initTestUser() throws Exception {
+    testUser = getMockupUser(TEST_USER_EMAIL, TEST_USER_NAME, TEST_USER_PWD);
+    testUser2 = getMockupUser(TEST_USER_EMAIL_2, TEST_USER_NAME, TEST_USER_PWD);
+    createUser(testUser);
+    createUser(testUser2);
+  }
 
 
   private static void createUser(User u) {
@@ -133,22 +133,21 @@ private static void initTestUser() throws Exception {
    * @throws Exception
    */
   private static User getMockupUser(String email, String name, String pwd) throws Exception {
-	User user = new User();
-	user.setEmail(email);
-	Person userPerson = user.getPerson();
-	userPerson.setFamilyName(name);
-	Organization org = new Organization();
-	org.setName("TEST-ORGANIZATION");
-	List<Organization> orgCol = new ArrayList<Organization>();
-	orgCol.add(org);
-	userPerson.setOrganizations(orgCol);
-	user.setPerson(userPerson);
-	user.setName(name);
-	
-	user.setEncryptedPassword(StringHelper.convertToMD5(pwd));
-	user.setGrants(AuthorizationPredefinedRoles.defaultUser(user.getId()
-			.toString()));
-	return user;
+    User user = new User();
+    user.setEmail(email);
+    Person userPerson = user.getPerson();
+    userPerson.setFamilyName(name);
+    Organization org = new Organization();
+    org.setName("TEST-ORGANIZATION");
+    List<Organization> orgCol = new ArrayList<Organization>();
+    orgCol.add(org);
+    userPerson.setOrganizations(orgCol);
+    user.setPerson(userPerson);
+    user.setName(name);
+
+    user.setEncryptedPassword(StringHelper.convertToMD5(pwd));
+    user.setGrants(AuthorizationPredefinedRoles.defaultUser(user.getId().toString()));
+    return user;
   }
 
   private static void deleteTDBDirectory() {

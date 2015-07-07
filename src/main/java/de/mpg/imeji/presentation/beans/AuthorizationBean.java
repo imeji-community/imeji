@@ -1,4 +1,4 @@
-///*
+// /*
 // *
 // * CDDL HEADER START
 // *
@@ -20,128 +20,129 @@
 // *
 // * CDDL HEADER END
 // */
-///*
+// /*
 // * Copyright 2006-2007 Fachinformationszentrum Karlsruhe Gesellschaft
 // * für wissenschaftlich-technische Information mbH and Max-Planck-
 // * Gesellschaft zur Förderung der Wissenschaft e.V.
 // * All rights reserved. Use is subject to license terms.
 // */
-//package de.mpg.imeji.presentation.beans;
+// package de.mpg.imeji.presentation.beans;
 //
-//import java.net.URI;
+// import java.net.URI;
 //
-//import de.mpg.imeji.logic.auth.Security;
-//import de.mpg.imeji.logic.security.Operations.OperationsType;
-//import de.mpg.imeji.logic.vo.CollectionImeji;
-//import de.mpg.imeji.logic.vo.Item;
-//import de.mpg.imeji.logic.vo.Properties.Status;
-//import de.mpg.imeji.logic.vo.User;
-//import de.mpg.imeji.presentation.session.SessionBean;
-//import de.mpg.imeji.presentation.util.BeanHelper;
+// import de.mpg.imeji.logic.auth.Security;
+// import de.mpg.imeji.logic.security.Operations.OperationsType;
+// import de.mpg.imeji.logic.vo.CollectionImeji;
+// import de.mpg.imeji.logic.vo.Item;
+// import de.mpg.imeji.logic.vo.Properties.Status;
+// import de.mpg.imeji.logic.vo.User;
+// import de.mpg.imeji.presentation.session.SessionBean;
+// import de.mpg.imeji.presentation.util.BeanHelper;
 //
-///**
-// * Java Bean for the imeji authorization for the current {@link User} in the {@link SessionBean}. Uses {@link Security}
-// * 
+// /**
+// * Java Bean for the imeji authorization for the current {@link User} in the {@link SessionBean}.
+// Uses {@link Security}
+// *
 // * @author saquet (initial creation)
 // * @author $Author$ (last modification)
 // * @version $Revision$ $LastChangedDate$
 // */
-//public class AuthorizationBean
-//{
-//    private Security security;
-//    private User user;
-//    // Authorization
-//    private boolean edit = false;
-//    private boolean imageEdit = false;
-//    private boolean view = false;
-//    private boolean delete = false;
-//    private boolean admin = false;
+// public class AuthorizationBean
+// {
+// private Security security;
+// private User user;
+// // Authorization
+// private boolean edit = false;
+// private boolean imageEdit = false;
+// private boolean view = false;
+// private boolean delete = false;
+// private boolean admin = false;
 //
-//    /**
-//     * Default constructor
-//     */
-//    public AuthorizationBean()
-//    {
-//        security = new Security();
-//    }
+// /**
+// * Default constructor
+// */
+// public AuthorizationBean()
+// {
+// security = new Security();
+// }
 //
-//    /**
-//     * Constructor with a {@link CollectionImeji}
-//     * 
-//     * @param collection
-//     */
-//    public void init(CollectionImeji collection)
-//    {
-//        user = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getUser();
-//        admin = security.isAdmin(user);
-//        edit = security.check(OperationsType.UPDATE, user, collection);
-//        imageEdit = collectionItemAllEditable(collection);
-//        view = security.check(OperationsType.READ, user, collection);
-//        delete = security.check(OperationsType.DELETE, user, collection);
-//        if (collection.getStatus().equals(Status.RELEASED) && security.isAdmin(user))
-//        {
-//            delete = false;
-//        }
-//    }
+// /**
+// * Constructor with a {@link CollectionImeji}
+// *
+// * @param collection
+// */
+// public void init(CollectionImeji collection)
+// {
+// user = ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getUser();
+// admin = security.isAdmin(user);
+// edit = security.check(OperationsType.UPDATE, user, collection);
+// imageEdit = collectionItemAllEditable(collection);
+// view = security.check(OperationsType.READ, user, collection);
+// delete = security.check(OperationsType.DELETE, user, collection);
+// if (collection.getStatus().equals(Status.RELEASED) && security.isAdmin(user))
+// {
+// delete = false;
+// }
+// }
 //
-//    /**
-//     * Check if all item of {@link CollectionImeji} can be edited by the {@link User}
-//     * 
-//     * @param collection
-//     * @return
-//     */
-//    private boolean collectionItemAllEditable(CollectionImeji collection)
-//    {
-//        Item item = new Item();
-//        item.setCollection(collection.getId());
-//        for (URI uri : collection.getImages())
-//        {
-//            item.setId(uri);
-//            if (!security.check(OperationsType.UPDATE, user, item))
-//            {
-//                return false;
-//            }
-//        }
-//        return true;
-//    }
+// /**
+// * Check if all item of {@link CollectionImeji} can be edited by the {@link User}
+// *
+// * @param collection
+// * @return
+// */
+// private boolean collectionItemAllEditable(CollectionImeji collection)
+// {
+// Item item = new Item();
+// item.setCollection(collection.getId());
+// for (URI uri : collection.getImages())
+// {
+// item.setId(uri);
+// if (!security.check(OperationsType.UPDATE, user, item))
+// {
+// return false;
+// }
+// }
+// return true;
+// }
 //
-//    /**
-//     * @return the admin
-//     */
-//    public boolean isAdmin()
-//    {
-//        return admin;
-//    }
+// /**
+// * @return the admin
+// */
+// public boolean isAdmin()
+// {
+// return admin;
+// }
 //
-//    /**
-//     * @return the delete
-//     */
-//    public boolean isDelete()
-//    {
-//        return delete;
-//    }
+// /**
+// * @return the delete
+// */
+// public boolean isDelete()
+// {
+// return delete;
+// }
 //
-//    /**
-//     * @return the edit
-//     */
-//    public boolean isEdit()
-//    {
-//        return edit;
-//    }
+// /**
+// * @return the edit
+// */
+// public boolean isEdit()
+// {
+// return edit;
+// }
 //
-//    /**
-//     * @return the imageEdit
-//     */
-//    public boolean isImageEdit()
-//    {
-//        return imageEdit;
-//    }
+// /**
+// * @return the imageEdit
+// */
+// public boolean isImageEdit()
+// {
+// return imageEdit;
+// }
 //
-//    /**
-//     * @return the view
-//     */
-//    public boolean isView()
-//    {
-//        return view;
-//    }
-//}
+// /**
+// * @return the view
+// */
+// public boolean isView()
+// {
+// return view;
+// }
+// }

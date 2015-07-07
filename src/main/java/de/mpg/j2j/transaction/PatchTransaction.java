@@ -16,24 +16,24 @@ import de.mpg.j2j.persistence.Java2Jena;
  *
  */
 public class PatchTransaction extends Transaction {
-	private List<ImejiTriple> triples;
+  private List<ImejiTriple> triples;
 
-	public PatchTransaction(List<ImejiTriple> triples, String modelURI) {
-		super(modelURI);
-		this.triples = triples;
-	}
+  public PatchTransaction(List<ImejiTriple> triples, String modelURI) {
+    super(modelURI);
+    this.triples = triples;
+  }
 
-	@Override
-	protected void execute(Dataset ds) throws ImejiException {
-		Java2Jena writer = new Java2Jena(getModel(ds), false);
-		for (ImejiTriple t : triples) {
-			writer.update(t.getUri(), t.getProperty(), t.getValue());
-		}
-	}
+  @Override
+  protected void execute(Dataset ds) throws ImejiException {
+    Java2Jena writer = new Java2Jena(getModel(ds), false);
+    for (ImejiTriple t : triples) {
+      writer.update(t.getUri(), t.getProperty(), t.getValue());
+    }
+  }
 
-	@Override
-	protected ReadWrite getLockType() {
-		return ReadWrite.WRITE;
-	}
+  @Override
+  protected ReadWrite getLockType() {
+    return ReadWrite.WRITE;
+  }
 
 }

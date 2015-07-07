@@ -2,30 +2,29 @@ package de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO;
 
 import java.io.Serializable;
 
-public class DefaultConePersonTO implements Serializable{
-	private static final long serialVersionUID = 1645461293418318845L;
+public class DefaultConePersonTO implements Serializable {
+  private static final long serialVersionUID = 1645461293418318845L;
 
-	private String familyName;
-	
-	private String givenName;
+  private String familyName;
 
-	public String getFamilyName() {
-		return familyName;
-	}
+  private String givenName;
 
-	public void setFamilyName(String familyName) {
-		this.familyName = familyName;
-	}
+  public String getFamilyName() {
+    return familyName;
+  }
 
-	public String getGivenName() {
-		return givenName;
-	}
+  public void setFamilyName(String familyName) {
+    this.familyName = familyName;
+  }
 
-	public void setGivenName(String givenName) {
-		this.givenName = givenName;
-	}
-	
-	
-	
+  public String getGivenName() {
+    return givenName;
+  }
+
+  public void setGivenName(String givenName) {
+    this.givenName = givenName;
+  }
+
+
 
 }

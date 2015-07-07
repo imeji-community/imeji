@@ -18,41 +18,39 @@ import de.mpg.imeji.presentation.util.ImejiFactory;
  */
 public class ControllerTest {
 
-	protected static CollectionImeji collection = null;
-	protected static MetadataProfile profile = null;
-	protected static Item item = null;
+  protected static CollectionImeji collection = null;
+  protected static MetadataProfile profile = null;
+  protected static Item item = null;
 
-	@BeforeClass
-	public static void setup() {
-		JenaUtil.initJena();
-	}
+  @BeforeClass
+  public static void setup() {
+    JenaUtil.initJena();
+  }
 
-	@AfterClass
-	public static void tearDown() throws Exception {
-		JenaUtil.closeJena();
-	}
+  @AfterClass
+  public static void tearDown() throws Exception {
+    JenaUtil.closeJena();
+  }
 
-	protected static void createCollection() throws ImejiException {
-		CollectionController controller = new CollectionController();
-		collection = ImejiFactory.newCollection("test", "Planck", "Max", "MPG");
-		URI uri = controller.create(collection, profile, JenaUtil.testUser,
-				null);
-		collection = controller.retrieve(uri, JenaUtil.testUser);
-	}
+  protected static void createCollection() throws ImejiException {
+    CollectionController controller = new CollectionController();
+    collection = ImejiFactory.newCollection("test", "Planck", "Max", "MPG");
+    URI uri = controller.create(collection, profile, JenaUtil.testUser, null);
+    collection = controller.retrieve(uri, JenaUtil.testUser);
+  }
 
-	protected static void createProfile() throws ImejiException {
-		ProfileController controller = new ProfileController();
-		profile = new MetadataProfile();
-		profile.setTitle("test");
-		profile.getStatements().add(
-				ImejiFactory.newStatement("md", "en", Types.TEXT));
-		profile = controller.create(profile, JenaUtil.testUser);
-	}
+  protected static void createProfile() throws ImejiException {
+    ProfileController controller = new ProfileController();
+    profile = new MetadataProfile();
+    profile.setTitle("test");
+    profile.getStatements().add(ImejiFactory.newStatement("md", "en", Types.TEXT));
+    profile = controller.create(profile, JenaUtil.testUser);
+  }
 
-	protected static void createItem() throws ImejiException {
-		ItemController controller = new ItemController();
-		item = controller.create(ImejiFactory.newItem(collection), collection.getId(),
-				JenaUtil.testUser);
-	}
+  protected static void createItem() throws ImejiException {
+    ItemController controller = new ItemController();
+    item =
+        controller.create(ImejiFactory.newItem(collection), collection.getId(), JenaUtil.testUser);
+  }
 
 }

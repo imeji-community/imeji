@@ -44,139 +44,136 @@ import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactor
  */
 public class ImejiTestBase extends JerseyTest {
 
-	protected static HttpAuthenticationFeature authAsUser = HttpAuthenticationFeature
-			.basic(JenaUtil.TEST_USER_EMAIL, JenaUtil.TEST_USER_PWD);
-	protected static HttpAuthenticationFeature authAsUser2 = HttpAuthenticationFeature
-			.basic(JenaUtil.TEST_USER_EMAIL_2, JenaUtil.TEST_USER_PWD);
+  protected static HttpAuthenticationFeature authAsUser = HttpAuthenticationFeature.basic(
+      JenaUtil.TEST_USER_EMAIL, JenaUtil.TEST_USER_PWD);
+  protected static HttpAuthenticationFeature authAsUser2 = HttpAuthenticationFeature.basic(
+      JenaUtil.TEST_USER_EMAIL_2, JenaUtil.TEST_USER_PWD);
 
-	protected static String collectionId;
-	protected static String albumId;
-	protected static String profileId;
-	protected static String itemId;
-	protected static CollectionTO collectionTO;
-	protected static AlbumTO albumTO;
-	protected static ItemTO itemTO;
+  protected static String collectionId;
+  protected static String albumId;
+  protected static String profileId;
+  protected static String itemId;
+  protected static CollectionTO collectionTO;
+  protected static AlbumTO albumTO;
+  protected static ItemTO itemTO;
 
-	private static Logger logger = Logger.getLogger(ImejiTestBase.class);
+  private static Logger logger = Logger.getLogger(ImejiTestBase.class);
 
-	@Override
-	protected Application configure() {
-		return new MyApplication();
-	}
+  @Override
+  protected Application configure() {
+    return new MyApplication();
+  }
 
-	@Override
-	protected TestContainerFactory getTestContainerFactory()
-			throws TestContainerException {
-		return new MyTestContainerFactory();
-	}
+  @Override
+  protected TestContainerFactory getTestContainerFactory() throws TestContainerException {
+    return new MyTestContainerFactory();
+  }
 
-	@BeforeClass
-	public static void setup() throws IOException, URISyntaxException {
-		JenaUtil.initJena();
-	}
+  @BeforeClass
+  public static void setup() throws IOException, URISyntaxException {
+    JenaUtil.initJena();
+  }
 
-	@AfterClass
-	public static void shutdown() throws IOException, URISyntaxException,
-			InterruptedException {
-		JenaUtil.closeJena();
-	}
+  @AfterClass
+  public static void shutdown() throws IOException, URISyntaxException, InterruptedException {
+    JenaUtil.closeJena();
+  }
 
-	/**
-	 * Create a profile
-	 */
-	public static void initProfile() {
-		try {
-			ProfileController pc = new ProfileController();
-			MetadataProfile p = new MetadataProfile();
-			p.setTitle("Test");
-			Statement s = new Statement();
-			s.getLabels().add(new LocalizedString("Test", null));
-			s.setType(URI.create(Types.TEXT.getClazzNamespace()));
-			p.getStatements().add(s);
-			profileId = pc.create(p, JenaUtil.testUser).getIdString();
-		} catch (Exception e) {
-			logger.error("Cannot init profile", e);
-		}
-	}
+  /**
+   * Create a profile
+   */
+  public static void initProfile() {
+    try {
+      ProfileController pc = new ProfileController();
+      MetadataProfile p = new MetadataProfile();
+      p.setTitle("Test");
+      Statement s = new Statement();
+      s.getLabels().add(new LocalizedString("Test", null));
+      s.setType(URI.create(Types.TEXT.getClazzNamespace()));
+      p.getStatements().add(s);
+      profileId = pc.create(p, JenaUtil.testUser).getIdString();
+    } catch (Exception e) {
+      logger.error("Cannot init profile", e);
+    }
+  }
 
-	/**
-	 * Create a new collection and set the collectionid
-	 * 
-	 * @throws IOException
-	 * @throws UnsupportedEncodingException
-	 * 
-	 * @throws Exception
-	 */
-	public static String initCollection() {
-		CollectionService s = new CollectionService();
-		try {
-			collectionTO = (CollectionTO) RestProcessUtils.buildTOFromJSON(
-					getStringFromPath(STATIC_CONTEXT_REST
-							+ "/createCollection.json"), CollectionTO.class);
-			collectionTO = s.create(collectionTO, JenaUtil.testUser);
-			collectionId = collectionTO.getId();
-		} catch (Exception e) {
-			logger.error("Cannot init Collection", e);
-		}
-		return collectionId;
-	}
+  /**
+   * Create a new collection and set the collectionid
+   * 
+   * @throws IOException
+   * @throws UnsupportedEncodingException
+   * 
+   * @throws Exception
+   */
+  public static String initCollection() {
+    CollectionService s = new CollectionService();
+    try {
+      collectionTO =
+          (CollectionTO) RestProcessUtils.buildTOFromJSON(getStringFromPath(STATIC_CONTEXT_REST
+              + "/createCollection.json"), CollectionTO.class);
+      collectionTO = s.create(collectionTO, JenaUtil.testUser);
+      collectionId = collectionTO.getId();
+    } catch (Exception e) {
+      logger.error("Cannot init Collection", e);
+    }
+    return collectionId;
+  }
 
-	/**
-	 * Create a new album and set the albumid
-	 * 
-	 * @throws IOException
-	 * @throws UnsupportedEncodingException
-	 * 
-	 * @throws Exception
-	 */
-	public static void initAlbum() {
-		AlbumService s = new AlbumService();
-		try {
-			albumTO = (AlbumTO) RestProcessUtils
-					.buildTOFromJSON(getStringFromPath(STATIC_CONTEXT_REST
-							+ "/createAlbum.json"), AlbumTO.class);
-			albumTO = s.create(albumTO, JenaUtil.testUser);
-			albumId = albumTO.getId();
+  /**
+   * Create a new album and set the albumid
+   * 
+   * @throws IOException
+   * @throws UnsupportedEncodingException
+   * 
+   * @throws Exception
+   */
+  public static void initAlbum() {
+    AlbumService s = new AlbumService();
+    try {
+      albumTO =
+          (AlbumTO) RestProcessUtils.buildTOFromJSON(getStringFromPath(STATIC_CONTEXT_REST
+              + "/createAlbum.json"), AlbumTO.class);
+      albumTO = s.create(albumTO, JenaUtil.testUser);
+      albumId = albumTO.getId();
 
-		} catch (Exception e) {
-			logger.error("Cannot init Album", e);
-		}
-	}
+    } catch (Exception e) {
+      logger.error("Cannot init Album", e);
+    }
+  }
 
-	/**
-	 * Create an item in the test collection (initCollection must be called
-	 * before)
-	 * 
-	 * @throws Exception
-	 */
-	public static void initItem() {
-		ItemService s = new ItemService();
-		ItemWithFileTO to = new ItemWithFileTO();
-		to.setCollectionId(collectionId);
-		to.setFile(new File(STATIC_CONTEXT_STORAGE + "/test.png"));
-		to.setStatus("PENDING");
-		try {
-			itemTO = s.create(to, JenaUtil.testUser);
-			itemId = itemTO.getId();
-		} catch (Exception e) {
-			logger.error("Cannot init Item", e);
+  /**
+   * Create an item in the test collection (initCollection must be called before)
+   * 
+   * @throws Exception
+   */
+  public static void initItem() {
+    ItemService s = new ItemService();
+    ItemWithFileTO to = new ItemWithFileTO();
+    to.setCollectionId(collectionId);
+    to.setFile(new File(STATIC_CONTEXT_STORAGE + "/test.png"));
+    to.setStatus("PENDING");
+    try {
+      itemTO = s.create(to, JenaUtil.testUser);
+      itemId = itemTO.getId();
+    } catch (Exception e) {
+      logger.error("Cannot init Item", e);
 
-		}
-	}
+    }
+  }
 
-	public static void initItem(String fileName) {
-		ItemService s = new ItemService();
-		ItemWithFileTO to = new ItemWithFileTO();
-		to.setCollectionId(collectionId);
-		to.setFile(new File(STATIC_CONTEXT_STORAGE + "/" + fileName + ".jpg"));
-		to.setStatus("PENDING");
-		try {
-			itemTO = s.create(to, JenaUtil.testUser);
-			itemId = itemTO.getId();
-		} catch (Exception e) {
-			logger.error("Cannot init Item", e);
+  public static void initItem(String fileName) {
+    ItemService s = new ItemService();
+    ItemWithFileTO to = new ItemWithFileTO();
+    to.setCollectionId(collectionId);
+    to.setFile(new File(STATIC_CONTEXT_STORAGE + "/" + fileName + ".jpg"));
+    to.setStatus("PENDING");
+    try {
+      itemTO = s.create(to, JenaUtil.testUser);
+      itemId = itemTO.getId();
+    } catch (Exception e) {
+      logger.error("Cannot init Item", e);
 
-		}
-	}
+    }
+  }
 
 }

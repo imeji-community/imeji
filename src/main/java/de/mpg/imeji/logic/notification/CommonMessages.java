@@ -9,8 +9,9 @@ import de.mpg.imeji.presentation.session.SessionBean;
  */
 public class CommonMessages {
 
-    public static String getSuccessCollectionDeleteMessage(String collectionName, SessionBean sb) {
-        return sb.getMessage("success_collection_delete").replace("XXX_collectionName_XXX", collectionName);
-    }
+  public static String getSuccessCollectionDeleteMessage(String collectionName, SessionBean sb) {
+    return sb.getMessage("success_collection_delete").replace("XXX_collectionName_XXX",
+        collectionName);
+  }
 
 }

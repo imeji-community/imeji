@@ -7,13 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.lang3.ArrayUtils;
-
-import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.jobs.CleanMetadataJob;
-import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.util.MetadataFactory;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
@@ -71,6 +65,7 @@ public abstract class MetadataEditor {
   /**
    * Clone as a {@link MetadataMultipleEditor}
    */
+  @Override
   public MetadataEditor clone() {
     MetadataEditor editor = new MetadataMultipleEditor();
     editor.setItems(items);
@@ -93,14 +88,13 @@ public abstract class MetadataEditor {
         str = sb.getMessage("success_editor_image");
       BeanHelper.info(str);
       return true;
-      
+
     } catch (Exception e) {
       BeanHelper.cleanMessages();
       BeanHelper.error(sb.getMessage("error_metadata_edit"));
-      List<String> listOfErrors = 
-    		  Arrays.asList(e.getMessage().split(";"));
-      for (String errorM:listOfErrors){
-    	  BeanHelper.error(errorM);
+      List<String> listOfErrors = Arrays.asList(e.getMessage().split(";"));
+      for (String errorM : listOfErrors) {
+        BeanHelper.error(errorM);
       }
       return false;
     }

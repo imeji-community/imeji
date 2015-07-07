@@ -21,32 +21,32 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
  */
 public class CleanMetadataProfileJob implements Callable<Integer> {
 
-	private boolean delete = false;
-	private List<MetadataProfile> profiles = new ArrayList<MetadataProfile>();
+  private boolean delete = false;
+  private List<MetadataProfile> profiles = new ArrayList<MetadataProfile>();
 
-	public CleanMetadataProfileJob(boolean delete) {
-		this.delete = delete;
-	}
+  public CleanMetadataProfileJob(boolean delete) {
+    this.delete = delete;
+  }
 
-	@Override
-	public Integer call() throws Exception {
-		Search s = new SPARQLSearch(SearchType.ALL, null);
-		List<String> r = s.searchSimpleForQuery(
-				SPARQLQueries.selectUnusedMetadataProfiles()).getResults();
-		ProfileController pc = new ProfileController();
-		for (String uri : r) {
-			profiles.add(pc.retrieve(URI.create(uri), Imeji.adminUser));
-		}
-		if (delete) {
-			for (MetadataProfile mdp : profiles) {
-				pc.delete(mdp, Imeji.adminUser);
-			}
-		}
-		return 1;
-	}
+  @Override
+  public Integer call() throws Exception {
+    Search s = new SPARQLSearch(SearchType.ALL, null);
+    List<String> r =
+        s.searchSimpleForQuery(SPARQLQueries.selectUnusedMetadataProfiles()).getResults();
+    ProfileController pc = new ProfileController();
+    for (String uri : r) {
+      profiles.add(pc.retrieve(URI.create(uri), Imeji.adminUser));
+    }
+    if (delete) {
+      for (MetadataProfile mdp : profiles) {
+        pc.delete(mdp, Imeji.adminUser);
+      }
+    }
+    return 1;
+  }
 
-	public List<MetadataProfile> getProfiles() {
-		return profiles;
-	}
+  public List<MetadataProfile> getProfiles() {
+    return profiles;
+  }
 
 }

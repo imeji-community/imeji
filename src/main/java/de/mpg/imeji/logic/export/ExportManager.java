@@ -3,6 +3,15 @@
  */
 package de.mpg.imeji.logic.export;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpResponseException;
+
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
@@ -15,16 +24,6 @@ import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpResponseException;
-
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Manage {@link Export}
@@ -48,8 +47,8 @@ public class ExportManager {
    * @param params
    * @throws HttpResponseException
    */
-  public ExportManager(OutputStream out, User user, Map<String, String[]> params, List<String> selectedItems)
-      throws HttpResponseException {
+  public ExportManager(OutputStream out, User user, Map<String, String[]> params,
+      List<String> selectedItems) throws HttpResponseException {
     this.out = out;
     this.user = user;
     export = Export.factory(params);
@@ -95,41 +94,42 @@ public class ExportManager {
       maximumNumberOfRecords = Integer.parseInt(export.getParam("n"));
     }
     SearchResult result = null;
-    if (!selectedItemsToExport.isEmpty()){
-	      ItemController itemController = new ItemController();
-		  List <Item> itemResult = (List<Item>)itemController.retrieve(selectedItemsToExport, 500, 0, user);
-		  List <String> sr = new ArrayList<String>();
-		  for (Item it:itemResult){
-			  sr.add(it.getId().toString());
-		  }
-		  result = new SearchResult(sr, null);
-    }
-    else
-    {
-	    if ("collection".equals(searchType) || "metadata".equals(searchType)) {
-	      CollectionController collectionController = new CollectionController();
-	      result =
-	          collectionController.search(searchQuery, null, maximumNumberOfRecords, 0, user, spaceId);
-	    } else if ("album".equals(searchType)) {
-	      AlbumController albumController = new AlbumController();
-	      result = albumController.search(searchQuery, user, null, maximumNumberOfRecords, 0, spaceId);
-	    } else if ("profile".equals(searchType)) {
-	      ProfileController pc = new ProfileController();
-	      result = pc.search(searchQuery, user);
-	    } else if ("image".equals(searchType)) {
-	      ItemController itemController = new ItemController();
-	      if (collectionId != null) {
-	        result =
-	            itemController.search(ObjectHelper.getURI(CollectionImeji.class, collectionId),
-	                searchQuery, null, null, user, spaceId);
-	      } else if (albumId != null) {
-	        result =
-	            itemController.search(ObjectHelper.getURI(Album.class, albumId), searchQuery, null,
-	                null, user, spaceId);
-	      } else {
-	    		  result = itemController.search(null, searchQuery, null, null, user, spaceId);
-	      }
-	    }
+    if (!selectedItemsToExport.isEmpty()) {
+      ItemController itemController = new ItemController();
+      List<Item> itemResult =
+          (List<Item>) itemController.retrieve(selectedItemsToExport, 500, 0, user);
+      List<String> sr = new ArrayList<String>();
+      for (Item it : itemResult) {
+        sr.add(it.getId().toString());
+      }
+      result = new SearchResult(sr, null);
+    } else {
+      if ("collection".equals(searchType) || "metadata".equals(searchType)) {
+        CollectionController collectionController = new CollectionController();
+        result =
+            collectionController
+                .search(searchQuery, null, maximumNumberOfRecords, 0, user, spaceId);
+      } else if ("album".equals(searchType)) {
+        AlbumController albumController = new AlbumController();
+        result =
+            albumController.search(searchQuery, user, null, maximumNumberOfRecords, 0, spaceId);
+      } else if ("profile".equals(searchType)) {
+        ProfileController pc = new ProfileController();
+        result = pc.search(searchQuery, user);
+      } else if ("image".equals(searchType)) {
+        ItemController itemController = new ItemController();
+        if (collectionId != null) {
+          result =
+              itemController.search(ObjectHelper.getURI(CollectionImeji.class, collectionId),
+                  searchQuery, null, null, user, spaceId);
+        } else if (albumId != null) {
+          result =
+              itemController.search(ObjectHelper.getURI(Album.class, albumId), searchQuery, null,
+                  null, user, spaceId);
+        } else {
+          result = itemController.search(null, searchQuery, null, null, user, spaceId);
+        }
+      }
     }
     if (result != null && result.getNumberOfRecords() > 0
         && result.getNumberOfRecords() > maximumNumberOfRecords) {

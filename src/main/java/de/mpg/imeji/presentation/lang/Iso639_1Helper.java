@@ -3,6 +3,8 @@
  */
 package de.mpg.imeji.presentation.lang;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +17,7 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.imeji.presentation.util.ProxyHelper;
-import static com.google.common.base.Strings.isNullOrEmpty;
+
 /**
  * Utility class for Iso638_1 languages vocabulary
  * 
@@ -24,75 +26,75 @@ import static com.google.common.base.Strings.isNullOrEmpty;
  * @version $Revision$ $LastChangedDate$
  */
 public class Iso639_1Helper {
-	private static Logger logger = Logger.getLogger(Iso639_1Helper.class);
-	private List<SelectItem> list = null;
+  private static Logger logger = Logger.getLogger(Iso639_1Helper.class);
+  private List<SelectItem> list = null;
 
-	/**
-	 * Default constructor
-	 */
-	public Iso639_1Helper() {
-		list = new ArrayList<SelectItem>();
-		parseVocabularyString(getVocabularyString());
-	}
+  /**
+   * Default constructor
+   */
+  public Iso639_1Helper() {
+    list = new ArrayList<SelectItem>();
+    parseVocabularyString(getVocabularyString());
+  }
 
-	/**
-	 * Get the Iso638_1 languages vocabulary from CoNe with the options format
-	 * 
-	 * @return
-	 */
-	private String getVocabularyString() {
-		try {
-			HttpClient client = new HttpClient();
-			String coneVocabularyPath = PropertyReader.getProperty("cone.isos639_1.all");
-			if (isNullOrEmpty(coneVocabularyPath)) {
-				logger.info("CONE Service Property for Language Vocabularies has not been set-up. Will use default vocabulary for languages."+
-			                "NOTE: This is not an error: for more information on setting cone, check http://imeji.org/?s=cone.isos639_1.all ");
-				return null;
-				
-			}
-			GetMethod getMethod = new GetMethod(coneVocabularyPath +"?format=options");
-			ProxyHelper.executeMethod(client, getMethod);
-			return IOUtils.toString(getMethod.getResponseBodyAsStream());
-		} catch (Exception e) {
-			logger.error("Couldn't read ISO639_1 vocabulary, will use default one! Error: "
-					+ e);
-			return null;
-		}
-	}
+  /**
+   * Get the Iso638_1 languages vocabulary from CoNe with the options format
+   * 
+   * @return
+   */
+  private String getVocabularyString() {
+    try {
+      HttpClient client = new HttpClient();
+      String coneVocabularyPath = PropertyReader.getProperty("cone.isos639_1.all");
+      if (isNullOrEmpty(coneVocabularyPath)) {
+        logger
+            .info("CONE Service Property for Language Vocabularies has not been set-up. Will use default vocabulary for languages."
+                + "NOTE: This is not an error: for more information on setting cone, check http://imeji.org/?s=cone.isos639_1.all ");
+        return null;
 
-	/**
-	 * Parse the Result as defined in Cone
-	 * 
-	 * @param v
-	 */
-	private void parseVocabularyString(String v) {
-		try {
-			for (String l : v.split("\n")) {
-				String[] s = l.split("\\|");
-				list.add(new SelectItem(s[0], s[1]));
-			}
-		} catch (Exception e) {
-			list = new ArrayList<SelectItem>();
-			list.add(new SelectItem("en", "en - English"));
-			list.add(new SelectItem("de", "de - German"));
-		}
-	}
+      }
+      GetMethod getMethod = new GetMethod(coneVocabularyPath + "?format=options");
+      ProxyHelper.executeMethod(client, getMethod);
+      return IOUtils.toString(getMethod.getResponseBodyAsStream());
+    } catch (Exception e) {
+      logger.error("Couldn't read ISO639_1 vocabulary, will use default one! Error: " + e);
+      return null;
+    }
+  }
 
-	/**
-	 * getter
-	 * 
-	 * @return
-	 */
-	public List<SelectItem> getList() {
-		return list;
-	}
+  /**
+   * Parse the Result as defined in Cone
+   * 
+   * @param v
+   */
+  private void parseVocabularyString(String v) {
+    try {
+      for (String l : v.split("\n")) {
+        String[] s = l.split("\\|");
+        list.add(new SelectItem(s[0], s[1]));
+      }
+    } catch (Exception e) {
+      list = new ArrayList<SelectItem>();
+      list.add(new SelectItem("en", "en - English"));
+      list.add(new SelectItem("de", "de - German"));
+    }
+  }
 
-	/**
-	 * setter
-	 * 
-	 * @param list
-	 */
-	public void setList(List<SelectItem> list) {
-		this.list = list;
-	}
+  /**
+   * getter
+   * 
+   * @return
+   */
+  public List<SelectItem> getList() {
+    return list;
+  }
+
+  /**
+   * setter
+   * 
+   * @param list
+   */
+  public void setList(List<SelectItem> list) {
+    this.list = list;
+  }
 }

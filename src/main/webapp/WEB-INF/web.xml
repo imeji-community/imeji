@@ -13,9 +13,9 @@
 	Information mbH and Max-Planck- Gesellschaft zur Förderung der Wissenschaft
 	e.V. All rights reserved. Use is subject to license terms. -->
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-	version="3.0">
+		 xmlns="http://java.sun.com/xml/ns/javaee"
+		 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+		 version="3.0">
 	<!-- Servlets -->
 	<servlet>
 		<servlet-name>Faces Servlet</servlet-name>
@@ -113,7 +113,7 @@
 	  </init-param>
 	  <init-param>
 	    <param-name>swagger.api.basepath</param-name>
-	    <param-value>/imeji/rest</param-value>
+	    <param-value>/rest</param-value>
 	  </init-param>
 	  <load-on-startup>2</load-on-startup>
 	</servlet>

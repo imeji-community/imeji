@@ -3,6 +3,9 @@ package de.mpg.imeji.rest.version;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
+
+import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.rest.api.API;
 import de.mpg.imeji.rest.version.exception.DeprecatedAPIVersionException;
 import de.mpg.imeji.rest.version.exception.UnknowAPIVersionException;
@@ -18,6 +21,7 @@ public class VersionManager {
   private Pattern p = Pattern.compile(".*/rest/v([0-9]+)/.*");
   private String path;
   private boolean hasVersion = false;
+  private static Logger logger = Logger.getLogger(VersionManager.class);
 
   /**
    * Default constructor
@@ -37,12 +41,25 @@ public class VersionManager {
     requestedVersion = parseVersionNumber(path);
     if (!isAnExistingVersion()) {
       throw new UnknowAPIVersionException("API version v" + requestedVersion
-          + " is not a valid version. Please use the last version v" + API.CURRENT_VERSION);
+          + " is not a valid version. Please use the latest version v" + API.CURRENT_VERSION
+          + ". For more information see " + linkToAPIDoc());
     } else if (isOldVersion()) {
       throw new DeprecatedAPIVersionException("API version v" + requestedVersion
-          + " is no longer supported. Please upgrade to version v" + API.CURRENT_VERSION);
+          + " is no longer supported. Please use the latest version v" + API.CURRENT_VERSION
+          + ". For more information see " + linkToAPIDoc());
     }
     // everything fine!
+  }
+
+  private String linkToAPIDoc() {
+    try {
+      Navigation navigation = new Navigation();
+      return navigation.getApplicationUrl() + "rest-doc/index.html";
+    } catch (Exception e) {
+      logger.error(e.getMessage());
+    }
+    return "http://imeji.org/development/technical-specification/api";
+
   }
 
   /**

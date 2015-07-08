@@ -7,6 +7,7 @@ import javax.ws.rs.NotSupportedException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.vo.User;
 
+
 /**
  * The generic Interface defining all methods (i.e verbs) available for the imeji objects (Item,
  * Collection, etc.). <br/>
@@ -21,6 +22,7 @@ import de.mpg.imeji.logic.vo.User;
  * @param <V>
  */
 public interface API<V> {
+  public final static int CURRENT_VERSION = 1;
 
   /**
    * Create an Object in imeji

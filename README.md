@@ -9,7 +9,7 @@
 <p>imeji is developed by the <a href="http://imeji.org/community/" target="_blank" title="imeji community">imeji community</a> under the <a href="http://hub.opensolaris.org/bin/download/Main/licensing/cddllicense.txt" target="_blank">CDDL-License</a>.</p>
 
 <h2>REST API v1</h2>
-<p>See <a href="https://github.com/imeji-community/imeji/wiki/A_Home-imeji-API-V1">REST API v1</a><p>
+<p>See <a href="https://github.com/imeji-community/imeji/wiki/A_Home-imeji-API-V1">REST API v1 (imeji Community wiki)</a><p>
 
 <h2>The imeji demo version</h2>
 <p>Try the <a href="http://demo.imeji.org/" title="Go to the demo page" target="_blank">demo version</a></p>

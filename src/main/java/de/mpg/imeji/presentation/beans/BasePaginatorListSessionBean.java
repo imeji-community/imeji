@@ -226,18 +226,6 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
     return elementsPerPage;
   }
 
-  /**
-   * Used as action when the user changes the upper number of elements menu.
-   * 
-   * @return
-   * @throws Exception
-   */
-  public String changeElementsPerPage() throws Exception {
-    // set new PageNumber to a number where the first element of the current
-    // Page is still displayed
-    setCurrentPageNumber(((currentPageNumber - 1 * elementsPerPage + 1) / (elementsPerPage)) + 1);
-    return getPrettyNavigation();
-  }
 
   /**
    * Listener for elementsPerPageTop
@@ -248,6 +236,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
   public void elementsPerPageListener(ValueChangeEvent event) throws Exception {
     if (event != null) {
       setElementsPerPage((Integer) event.getNewValue());
+      setCurrentPageNumber(1);
     }
   }
 

@@ -113,7 +113,7 @@
 	  </init-param>
 	  <init-param>
 	    <param-name>swagger.api.basepath</param-name>
-	    <param-value>/rest</param-value>
+	    <param-value>/imeji/rest</param-value>
 	  </init-param>
 	  <load-on-startup>2</load-on-startup>
 	</servlet>
@@ -135,6 +135,11 @@
 	<filter>
 		<filter-name>Content Negotiation Filter</filter-name>
 		<filter-class>de.mpg.imeji.presentation.contentNegotiation.ContentNegotiationFilter</filter-class>
+		<async-supported>true</async-supported>
+	</filter>
+	<filter>
+		<filter-name>API Version Filter</filter-name>
+		<filter-class>de.mpg.imeji.rest.version.APIVersionFilter</filter-class>
 		<async-supported>true</async-supported>
 	</filter>
 	<filter>
@@ -162,6 +167,10 @@
 		<url-pattern>/*</url-pattern>
 		<dispatcher>REQUEST</dispatcher>
 		<dispatcher>FORWARD</dispatcher>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>API Version Filter</filter-name>
+		<url-pattern>/rest/*</url-pattern>
 	</filter-mapping>
 	<servlet-mapping>
 		<servlet-name>Faces Servlet</servlet-name>

@@ -63,7 +63,6 @@ public class HistoryFilter implements Filter {
   public void doFilter(ServletRequest serv, ServletResponse resp, FilterChain chain)
       throws IOException, ServletException {
     try {
-
       // Limit the case to filter: dispachertype only forward, and only
       // HTTP GET method
       if (DispatcherType.FORWARD.compareTo(serv.getDispatcherType()) == 0) {
@@ -77,9 +76,8 @@ public class HistoryFilter implements Filter {
     } catch (Exception e) {
       if (e instanceof NotFoundException || e instanceof NullPointerException) {
         if ("SPACE_NOT_FOUND".equals(e.getMessage())) {
-
-          ((HttpServletResponse) resp).sendRedirect(getNavigation(
-              (HttpServletRequest) serv, resp).getApplicationUrl());
+          ((HttpServletResponse) resp).sendRedirect(getNavigation((HttpServletRequest) serv, resp)
+              .getApplicationUrl());
         } else {
           ((HttpServletResponse) resp).sendError(Status.NOT_FOUND.getStatusCode(),
               "RESOURCE_NOT_FOUND");

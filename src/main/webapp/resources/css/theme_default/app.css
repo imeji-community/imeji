@@ -56,81 +56,81 @@ label { min-width: 24%; }
 p { display: block; margin: 1em 0; }
 
 /* ===[ ICONS - Buttons ]=== ================================================== */
-body .imj_logo { width: 13em; height: 5em; padding: 0; display: inline-block; background: transparent url("/imeji/resources/imj_iconset/logo_imeji.gif") -1.90909em 0 no-repeat; }
+body .imj_logo { width: 13em; height: 5em; padding: 0; display: inline-block; background: transparent url("../../resources/imj_iconset/logo_imeji.gif") -1.90909em 0 no-repeat; }
 body .imj_logo_alt { max-height: 154px; margin-top: -25px; margin-bottom: -25px; }
-body .imj_buttonStyleSwitcher { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; margin: 0 0.727272em; outline: none; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjButtonMonitorColor_16.png") 0 0 no-repeat; }
-body .imj_buttonStyleSwitcher:hover { border: 0 none; outline: none; background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjButtonMonitorColor_16.png") 0 0 no-repeat; }
-body .imj_iconTriangleBottomRight_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjTriangleLargeBottomRight_16.png") 0 0 no-repeat; }
-body .imj_iconTriangleBottomRight_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjTriangleLargeBottomRight_16.png") 0 0 no-repeat; }
-body .imj_overlayMenu:hover .imj_iconTriangleBottomRight_16 { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjTriangleLargeBottomRight_16.png") 0 0 no-repeat; }
-body .imj_iconEyeOpen_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjEyeOpen_16.png") 0 0 no-repeat; }
-body .imj_iconEyeOpen_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjEyeOpen_16.png") 0 0 no-repeat; }
-body a:hover .imj_iconEyeOpen_16 { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjEyeOpen_16.png") 0 0 no-repeat; }
-body .imj_buttonEdit_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjEditPen_16.png") 0 0 no-repeat; }
-body .imj_buttonEdit_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjEditPen_16.png") 0 0 no-repeat; }
-body a:hover .imj_buttonEdit_16 { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjEditPen_16.png") 0 0 no-repeat; }
-body .imj_iconErase_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjButtonCross_16.png") 0 0 no-repeat; }
-body .imj_iconErase_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjButtonCross_16.png") 0 0 no-repeat; }
-body .imj_buttonSortAscending_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; margin-right: 0.5em; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjButtonTriangleSortAsc_16.png") 0 0 no-repeat; }
-body .imj_buttonSortAscending_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjButtonTriangleSortAsc_16.png") 0 0 no-repeat; }
-body .imj_buttonSortDescending_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; margin-right: 0.5em; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjButtonTriangleSortDesc_16.png") 0 0 no-repeat; }
-body .imj_buttonSortDescending_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjButtonTriangleSortDesc_16.png") 0 0 no-repeat; }
-body .imj_buttonOrderByAsc_16 { display: inline-block; width: 2.36364em; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjButtonTriangleSortAsc_16.png") 0 0 no-repeat; }
-body .imj_buttonOrderByAsc_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjButtonTriangleSortAsc_16.png") 0 0 no-repeat; }
-body .imj_buttonOrderByDesc_16 { display: inline-block; width: 2.36364em; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjButtonTriangleSortDesc_16.png") 0 0 no-repeat; }
-body .imj_buttonOrderByDesc_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjButtonTriangleSortDesc_16.png") 0 0 no-repeat; }
-body a:hover .imj_buttonSortDescending_16 { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjButtonTriangleSortDesc_16.png") 0 0 no-repeat; }
-body a:hover .imj_buttonSortAscending_16 { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjButtonTriangleSortAsc_16.png") 0 0 no-repeat; }
+body .imj_buttonStyleSwitcher { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; margin: 0 0.727272em; outline: none; background: transparent url("../../resources/imj_iconset/6CAE2F/imjButtonMonitorColor_16.png") 0 0 no-repeat; }
+body .imj_buttonStyleSwitcher:hover { border: 0 none; outline: none; background: transparent url("../../resources/imj_iconset/F0F0F0/imjButtonMonitorColor_16.png") 0 0 no-repeat; }
+body .imj_iconTriangleBottomRight_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("../../resources/imj_iconset/6CAE2F/imjTriangleLargeBottomRight_16.png") 0 0 no-repeat; }
+body .imj_iconTriangleBottomRight_16:hover { background: transparent url("../../resources/imj_iconset/F0F0F0/imjTriangleLargeBottomRight_16.png") 0 0 no-repeat; }
+body .imj_overlayMenu:hover .imj_iconTriangleBottomRight_16 { background: transparent url("../../resources/imj_iconset/F0F0F0/imjTriangleLargeBottomRight_16.png") 0 0 no-repeat; }
+body .imj_iconEyeOpen_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("../../resources/imj_iconset/6CAE2F/imjEyeOpen_16.png") 0 0 no-repeat; }
+body .imj_iconEyeOpen_16:hover { background: transparent url("../../resources/imj_iconset/F0F0F0/imjEyeOpen_16.png") 0 0 no-repeat; }
+body a:hover .imj_iconEyeOpen_16 { background: transparent url("../../resources/imj_iconset/F0F0F0/imjEyeOpen_16.png") 0 0 no-repeat; }
+body .imj_buttonEdit_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("../../resources/imj_iconset/6CAE2F/imjEditPen_16.png") 0 0 no-repeat; }
+body .imj_buttonEdit_16:hover { background: transparent url("../../resources/imj_iconset/F0F0F0/imjEditPen_16.png") 0 0 no-repeat; }
+body a:hover .imj_buttonEdit_16 { background: transparent url("../../resources/imj_iconset/F0F0F0/imjEditPen_16.png") 0 0 no-repeat; }
+body .imj_iconErase_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("../../resources/imj_iconset/6CAE2F/imjButtonCross_16.png") 0 0 no-repeat; }
+body .imj_iconErase_16:hover { background: transparent url("../../resources/imj_iconset/F0F0F0/imjButtonCross_16.png") 0 0 no-repeat; }
+body .imj_buttonSortAscending_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; margin-right: 0.5em; background: transparent url("../../resources/imj_iconset/6CAE2F/imjButtonTriangleSortAsc_16.png") 0 0 no-repeat; }
+body .imj_buttonSortAscending_16:hover { background: transparent url("../../resources/imj_iconset/F0F0F0/imjButtonTriangleSortAsc_16.png") 0 0 no-repeat; }
+body .imj_buttonSortDescending_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; margin-right: 0.5em; background: transparent url("../../resources/imj_iconset/6CAE2F/imjButtonTriangleSortDesc_16.png") 0 0 no-repeat; }
+body .imj_buttonSortDescending_16:hover { background: transparent url("../../resources/imj_iconset/F0F0F0/imjButtonTriangleSortDesc_16.png") 0 0 no-repeat; }
+body .imj_buttonOrderByAsc_16 { display: inline-block; width: 2.36364em; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("../../resources/imj_iconset/6CAE2F/imjButtonTriangleSortAsc_16.png") 0 0 no-repeat; }
+body .imj_buttonOrderByAsc_16:hover { background: transparent url("../../resources/imj_iconset/F0F0F0/imjButtonTriangleSortAsc_16.png") 0 0 no-repeat; }
+body .imj_buttonOrderByDesc_16 { display: inline-block; width: 2.36364em; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("../../resources/imj_iconset/6CAE2F/imjButtonTriangleSortDesc_16.png") 0 0 no-repeat; }
+body .imj_buttonOrderByDesc_16:hover { background: transparent url("../../resources/imj_iconset/F0F0F0/imjButtonTriangleSortDesc_16.png") 0 0 no-repeat; }
+body a:hover .imj_buttonSortDescending_16 { background: transparent url("../../resources/imj_iconset/F0F0F0/imjButtonTriangleSortDesc_16.png") 0 0 no-repeat; }
+body a:hover .imj_buttonSortAscending_16 { background: transparent url("../../resources/imj_iconset/F0F0F0/imjButtonTriangleSortAsc_16.png") 0 0 no-repeat; }
 body select + .imj_buttonOrderByAsc_16, body select + .imj_buttonOrderByDesc_16, body select + .imj_buttonSortAscending_16, body select + .imj_buttonSortDescending_16 { margin-left: 1em; }
-body .imj_iconMagnifier_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; margin-right: 0.5em; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjMagnifierTopLeft_16.png") center center no-repeat; }
-body .imj_iconMagnifier_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjMagnifierTopLeft_16.png") center center no-repeat; }
-body .imj_overlayMenu:hover .imj_iconMagnifier_16 { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjMagnifierTopLeft_16.png") center center no-repeat; }
-body .imj_iconMagnifier_24 { display: inline-block; height: 2em; width: 2em; margin-right: 0.636363em; margin-top: -0.1818em; background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjMagnifierTopLeft_24.png") center center no-repeat; }
-body .imj_iconGoTo { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjTriangleNext_16.png") center right no-repeat; }
-body .imj_iconGoTo:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjTriangleNext_16.png") center right no-repeat; }
-body .imj_iconGoTo:focus { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjTriangleNext_16.png") center right no-repeat; }
-body .imj_buttonBrowseToFirst_16 { display: inline-block; width: 2.36364em; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjGotoFirst_16.png") center left no-repeat; }
-body .imj_buttonBrowseToFirst_16.imj_deactivated { background: transparent url("/imeji/resources/imj_iconset/BBBBBB/imjGotoFirst_16.png") center left no-repeat; }
-body .imj_buttonBrowseToFirst_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjGotoFirst_16.png") center left no-repeat; }
-body .imj_buttonBrowseToFirst_16:hover.imj_deactivated { background: transparent url("/imeji/resources/imj_iconset/BBBBBB/imjGotoFirst_16.png") center left no-repeat; }
-body .imj_buttonBrowseBackward_16 { display: inline-block; width: 2.36364em; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjTrianglePrevious_16.png") center left no-repeat; }
-body .imj_buttonBrowseBackward_16.imj_deactivated { background: transparent url("/imeji/resources/imj_iconset/BBBBBB/imjTrianglePrevious_16.png") center left no-repeat; }
-body .imj_buttonBrowseBackward_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjTrianglePrevious_16.png") center left no-repeat; }
-body .imj_buttonBrowseBackward_16:hover.imj_deactivated { background: transparent url("/imeji/resources/imj_iconset/BBBBBB/imjTrianglePrevious_16.png") center left no-repeat; }
-body .imj_buttonBrowseForward_16 { display: inline-block; width: 2.36364em; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjTriangleNext_16.png") center right no-repeat; }
-body .imj_buttonBrowseForward_16.imj_deactivated { background: transparent url("/imeji/resources/imj_iconset/BBBBBB/imjTriangleNext_16.png") center right no-repeat; }
-body .imj_buttonBrowseForward_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjTriangleNext_16.png") center right no-repeat; }
-body .imj_buttonBrowseForward_16:hover.imj_deactivated { background: transparent url("/imeji/resources/imj_iconset/BBBBBB/imjTriangleNext_16.png") center right no-repeat; }
-body .imj_buttonBrowseToLast_16 { display: inline-block; width: 2.36364em; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjGotoLast_16.png") center right no-repeat; }
-body .imj_buttonBrowseToLast_16.imj_deactivated { background: transparent url("/imeji/resources/imj_iconset/BBBBBB/imjGotoLast_16.png") center right no-repeat; }
-body .imj_buttonBrowseToLast_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjGotoLast_16.png") center right no-repeat; }
-body .imj_buttonBrowseToLast_16:hover.imj_deactivated { background: transparent url("/imeji/resources/imj_iconset/BBBBBB/imjGotoLast_16.png") center right no-repeat; }
-body .imj_buttonAdd_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; margin-right: 0.181818em; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjButtonPlusBorderOpen_16.png") 0 0 no-repeat; }
-body .imj_buttonAdd_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjButtonPlusBorderOpen_16.png") 0 0 no-repeat; }
-body .imj_buttonRemove_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; margin-right: 0.182em; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjButtonMinusRoundedBorderOpen_16.png") 0 0 no-repeat; }
-body .imj_buttonRemove_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjButtonMinusRoundedBorderOpen_16.png") 0 0 no-repeat; }
-body .imj_collapse .imj_buttonRemove_16 { margin-right: 0.272727em; vertical-align: top; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjButtonMinusRoundedBorder_16.png") 0 0 no-repeat; }
-body .imj_collapse .imj_buttonRemove_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjButtonMinusRoundedBorder_16.png") 0 0 no-repeat; }
-body .imj_collapse:hover .imj_buttonRemove_16 { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjButtonMinusRoundedBorder_16.png") 0 0 no-repeat; }
-body .imj_expand .imj_buttonAdd_16 { margin-right: 0.272727em; vertical-align: top; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjButtonPlusBorder_16.png") 0 0 no-repeat; }
-body .imj_expand .imj_buttonAdd_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjButtonPlusBorder_16.png") 0 0 no-repeat; }
-body .imj_expand:hover .imj_buttonAdd_16 { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjButtonPlusBorder_16.png") 0 0 no-repeat; }
-body .imj_iconExpand_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjArrowAwayText_16.png") 0 0 no-repeat; }
-body .imj_iconExpand_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjArrowAwayText_16.png") 0 0 no-repeat; }
-body .imj_iconExpand_16:focus { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjArrowAwayText_16.png") 0 0 no-repeat; }
-body .imj_iconCollapse_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjArrowToText_16.png") 0 0 no-repeat; }
-body .imj_iconCollapse_16:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjArrowToText_16.png") 0 0 no-repeat; }
-body .imj_iconCollapse_16:focus { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjArrowToText_16.png") 0 0 no-repeat; }
-body .imj_iconStatusPrivate_24 { display: inline-block; width: 24px; height: 24px; vertical-align: middle; border: 0 none; background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjLocked_24.png") left center no-repeat; }
-body .imj_iconStatusPrivate_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjLocked_16.png") left center no-repeat; float: left; }
-body .imj_iconStatusShareable_24 { display: inline-block; width: 24px; height: 24px; vertical-align: middle; border: 0 none; background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjArrowRightToPeople_24.png") left center no-repeat; }
-body .imj_icoStatusWithdrawn_32 { display: inline-block; width: 32px; height: 32px; vertical-align: middle; border: 0 none; background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjDocumentDelete_32.png") left center no-repeat; }
-body .imj_icoStatusPending_32 { display: inline-block; width: 32px; height: 32px; vertical-align: middle; border: 0 none; background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjDocumentPending_32.png") left center no-repeat; }
-body .imj_icoStatusReleased_32 { display: inline-block; width: 32px; height: 32px; vertical-align: middle; border: 0 none; background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjDocumentPublished_32.png") left center no-repeat; }
-body .imj_entryPagePreviewTiledListLinkArrow { float: right; display: inline-block; width: 24px; height: 24px; vertical-align: middle; border: 0 none; cursor: pointer; margin-top: 1em; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjArrowThinRight_24.png") top right no-repeat; }
-body .imj_entryPagePreviewTiledListLinkArrow:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjArrowThinRight_24.png") top right no-repeat; }
+body .imj_iconMagnifier_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; margin-right: 0.5em; background: transparent url("../../resources/imj_iconset/6CAE2F/imjMagnifierTopLeft_16.png") center center no-repeat; }
+body .imj_iconMagnifier_16:hover { background: transparent url("../../resources/imj_iconset/F0F0F0/imjMagnifierTopLeft_16.png") center center no-repeat; }
+body .imj_overlayMenu:hover .imj_iconMagnifier_16 { background: transparent url("../../resources/imj_iconset/F0F0F0/imjMagnifierTopLeft_16.png") center center no-repeat; }
+body .imj_iconMagnifier_24 { display: inline-block; height: 2em; width: 2em; margin-right: 0.636363em; margin-top: -0.1818em; background: transparent url("../../resources/imj_iconset/F0F0F0/imjMagnifierTopLeft_24.png") center center no-repeat; }
+body .imj_iconGoTo { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("../../resources/imj_iconset/6CAE2F/imjTriangleNext_16.png") center right no-repeat; }
+body .imj_iconGoTo:hover { background: transparent url("../../resources/imj_iconset/F0F0F0/imjTriangleNext_16.png") center right no-repeat; }
+body .imj_iconGoTo:focus { background: transparent url("../../resources/imj_iconset/F0F0F0/imjTriangleNext_16.png") center right no-repeat; }
+body .imj_buttonBrowseToFirst_16 { display: inline-block; width: 2.36364em; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("../../resources/imj_iconset/6CAE2F/imjGotoFirst_16.png") center left no-repeat; }
+body .imj_buttonBrowseToFirst_16.imj_deactivated { background: transparent url("../../resources/imj_iconset/BBBBBB/imjGotoFirst_16.png") center left no-repeat; }
+body .imj_buttonBrowseToFirst_16:hover { background: transparent url("../../resources/imj_iconset/F0F0F0/imjGotoFirst_16.png") center left no-repeat; }
+body .imj_buttonBrowseToFirst_16:hover.imj_deactivated { background: transparent url("../../resources/imj_iconset/BBBBBB/imjGotoFirst_16.png") center left no-repeat; }
+body .imj_buttonBrowseBackward_16 { display: inline-block; width: 2.36364em; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("../../resources/imj_iconset/6CAE2F/imjTrianglePrevious_16.png") center left no-repeat; }
+body .imj_buttonBrowseBackward_16.imj_deactivated { background: transparent url("../../resources/imj_iconset/BBBBBB/imjTrianglePrevious_16.png") center left no-repeat; }
+body .imj_buttonBrowseBackward_16:hover { background: transparent url("../../resources/imj_iconset/F0F0F0/imjTrianglePrevious_16.png") center left no-repeat; }
+body .imj_buttonBrowseBackward_16:hover.imj_deactivated { background: transparent url("../../resources/imj_iconset/BBBBBB/imjTrianglePrevious_16.png") center left no-repeat; }
+body .imj_buttonBrowseForward_16 { display: inline-block; width: 2.36364em; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("../../resources/imj_iconset/6CAE2F/imjTriangleNext_16.png") center right no-repeat; }
+body .imj_buttonBrowseForward_16.imj_deactivated { background: transparent url("../../resources/imj_iconset/BBBBBB/imjTriangleNext_16.png") center right no-repeat; }
+body .imj_buttonBrowseForward_16:hover { background: transparent url("../../resources/imj_iconset/F0F0F0/imjTriangleNext_16.png") center right no-repeat; }
+body .imj_buttonBrowseForward_16:hover.imj_deactivated { background: transparent url("../../resources/imj_iconset/BBBBBB/imjTriangleNext_16.png") center right no-repeat; }
+body .imj_buttonBrowseToLast_16 { display: inline-block; width: 2.36364em; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("../../resources/imj_iconset/6CAE2F/imjGotoLast_16.png") center right no-repeat; }
+body .imj_buttonBrowseToLast_16.imj_deactivated { background: transparent url("../../resources/imj_iconset/BBBBBB/imjGotoLast_16.png") center right no-repeat; }
+body .imj_buttonBrowseToLast_16:hover { background: transparent url("../../resources/imj_iconset/F0F0F0/imjGotoLast_16.png") center right no-repeat; }
+body .imj_buttonBrowseToLast_16:hover.imj_deactivated { background: transparent url("../../resources/imj_iconset/BBBBBB/imjGotoLast_16.png") center right no-repeat; }
+body .imj_buttonAdd_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; margin-right: 0.181818em; background: transparent url("../../resources/imj_iconset/6CAE2F/imjButtonPlusBorderOpen_16.png") 0 0 no-repeat; }
+body .imj_buttonAdd_16:hover { background: transparent url("../../resources/imj_iconset/F0F0F0/imjButtonPlusBorderOpen_16.png") 0 0 no-repeat; }
+body .imj_buttonRemove_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; margin-right: 0.182em; background: transparent url("../../resources/imj_iconset/6CAE2F/imjButtonMinusRoundedBorderOpen_16.png") 0 0 no-repeat; }
+body .imj_buttonRemove_16:hover { background: transparent url("../../resources/imj_iconset/F0F0F0/imjButtonMinusRoundedBorderOpen_16.png") 0 0 no-repeat; }
+body .imj_collapse .imj_buttonRemove_16 { margin-right: 0.272727em; vertical-align: top; background: transparent url("../../resources/imj_iconset/6CAE2F/imjButtonMinusRoundedBorder_16.png") 0 0 no-repeat; }
+body .imj_collapse .imj_buttonRemove_16:hover { background: transparent url("../../resources/imj_iconset/F0F0F0/imjButtonMinusRoundedBorder_16.png") 0 0 no-repeat; }
+body .imj_collapse:hover .imj_buttonRemove_16 { background: transparent url("../../resources/imj_iconset/F0F0F0/imjButtonMinusRoundedBorder_16.png") 0 0 no-repeat; }
+body .imj_expand .imj_buttonAdd_16 { margin-right: 0.272727em; vertical-align: top; background: transparent url("../../resources/imj_iconset/6CAE2F/imjButtonPlusBorder_16.png") 0 0 no-repeat; }
+body .imj_expand .imj_buttonAdd_16:hover { background: transparent url("../../resources/imj_iconset/F0F0F0/imjButtonPlusBorder_16.png") 0 0 no-repeat; }
+body .imj_expand:hover .imj_buttonAdd_16 { background: transparent url("../../resources/imj_iconset/F0F0F0/imjButtonPlusBorder_16.png") 0 0 no-repeat; }
+body .imj_iconExpand_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("../../resources/imj_iconset/6CAE2F/imjArrowAwayText_16.png") 0 0 no-repeat; }
+body .imj_iconExpand_16:hover { background: transparent url("../../resources/imj_iconset/F0F0F0/imjArrowAwayText_16.png") 0 0 no-repeat; }
+body .imj_iconExpand_16:focus { background: transparent url("../../resources/imj_iconset/F0F0F0/imjArrowAwayText_16.png") 0 0 no-repeat; }
+body .imj_iconCollapse_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("../../resources/imj_iconset/6CAE2F/imjArrowToText_16.png") 0 0 no-repeat; }
+body .imj_iconCollapse_16:hover { background: transparent url("../../resources/imj_iconset/F0F0F0/imjArrowToText_16.png") 0 0 no-repeat; }
+body .imj_iconCollapse_16:focus { background: transparent url("../../resources/imj_iconset/F0F0F0/imjArrowToText_16.png") 0 0 no-repeat; }
+body .imj_iconStatusPrivate_24 { display: inline-block; width: 24px; height: 24px; vertical-align: middle; border: 0 none; background: transparent url("../../resources/imj_iconset/F0F0F0/imjLocked_24.png") left center no-repeat; }
+body .imj_iconStatusPrivate_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; background: transparent url("../../resources/imj_iconset/F0F0F0/imjLocked_16.png") left center no-repeat; float: left; }
+body .imj_iconStatusShareable_24 { display: inline-block; width: 24px; height: 24px; vertical-align: middle; border: 0 none; background: transparent url("../../resources/imj_iconset/F0F0F0/imjArrowRightToPeople_24.png") left center no-repeat; }
+body .imj_icoStatusWithdrawn_32 { display: inline-block; width: 32px; height: 32px; vertical-align: middle; border: 0 none; background: transparent url("../../resources/imj_iconset/F0F0F0/imjDocumentDelete_32.png") left center no-repeat; }
+body .imj_icoStatusPending_32 { display: inline-block; width: 32px; height: 32px; vertical-align: middle; border: 0 none; background: transparent url("../../resources/imj_iconset/F0F0F0/imjDocumentPending_32.png") left center no-repeat; }
+body .imj_icoStatusReleased_32 { display: inline-block; width: 32px; height: 32px; vertical-align: middle; border: 0 none; background: transparent url("../../resources/imj_iconset/F0F0F0/imjDocumentPublished_32.png") left center no-repeat; }
+body .imj_entryPagePreviewTiledListLinkArrow { float: right; display: inline-block; width: 24px; height: 24px; vertical-align: middle; border: 0 none; cursor: pointer; margin-top: 1em; background: transparent url("../../resources/imj_iconset/6CAE2F/imjArrowThinRight_24.png") top right no-repeat; }
+body .imj_entryPagePreviewTiledListLinkArrow:hover { background: transparent url("../../resources/imj_iconset/F0F0F0/imjArrowThinRight_24.png") top right no-repeat; }
 body .imj_entryPagePreviewTiledListLinkArrow:after { clear: both; content: ""; }
-body a:hover .imj_entryPagePreviewTiledListLinkArrow { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjArrowThinRight_24.png") top right no-repeat; }
+body a:hover .imj_entryPagePreviewTiledListLinkArrow { background: transparent url("../../resources/imj_iconset/F0F0F0/imjArrowThinRight_24.png") top right no-repeat; }
 
 .imj_siteWrapper { overflow: hidden; width: 100%; max-width: 84.0909em; height: auto !important; min-height: 100%; margin: 0 auto; margin-bottom: -2.001em; border-left: 0.1em dotted #6CAE2F; border-right: 0.1em dotted #6CAE2F; }
 .imj_siteWrapper .imj_siteHeader { padding: 0 4%; }
@@ -797,10 +797,10 @@ body .ui-helper-hidden-accessible { display: none; }
 body .ui-datepicker { width: 15em; padding: 0.363636em 0.636363em; box-shadow: 0 0 0.45455em 0 rgba(0, 0, 0, 0.75); border-radius: 0.454545em; }
 body .ui-datepicker-calendar, body .ui-datepicker-rtl { width: 96%; }
 body .ui-datepicker, body .ui-datepicker-calendar, body .ui-datepicker-rtl { background-color: #292929; }
-body .ui-datepicker-next { float: right; cursor: pointer; padding-right: 1.454545em; display: inline-block; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjTriangleNext_16.png") right center no-repeat; }
-body .ui-datepicker-next:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjTriangleNext_16.png") right center no-repeat; }
-body .ui-datepicker-prev { padding-left: 1.454545em; display: inline-block; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjTrianglePrevious_16.png") left center no-repeat; }
-body .ui-datepicker-prev:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjTrianglePrevious_16.png") left center no-repeat; }
+body .ui-datepicker-next { float: right; cursor: pointer; padding-right: 1.454545em; display: inline-block; background: transparent url("../../resources/imj_iconset/6CAE2F/imjTriangleNext_16.png") right center no-repeat; }
+body .ui-datepicker-next:hover { background: transparent url("../../resources/imj_iconset/F0F0F0/imjTriangleNext_16.png") right center no-repeat; }
+body .ui-datepicker-prev { padding-left: 1.454545em; display: inline-block; cursor: pointer; background: transparent url("../../resources/imj_iconset/6CAE2F/imjTrianglePrevious_16.png") left center no-repeat; }
+body .ui-datepicker-prev:hover { background: transparent url("../../resources/imj_iconset/F0F0F0/imjTrianglePrevious_16.png") left center no-repeat; }
 body .ui-datepicker-title { text-align: center; }
 body .ui-datepicker-title select + select { margin-left: 0.363636em; }
 body .ui-datepicker-calendar { margin-top: 0.181818em; }
@@ -815,10 +815,10 @@ body .imj_siteWrapper .ui-helper-hidden-accessible { display: none; }
 body .imj_siteWrapper .ui-datepicker { width: 15em; padding: 0.363636em 0.636363em; box-shadow: 0 0 0.45455em 0 rgba(0, 0, 0, 0.75); border-radius: 0.454545em; }
 body .imj_siteWrapper .ui-datepicker-calendar, body .imj_siteWrapper .ui-datepicker-rtl { width: 96%; }
 body .imj_siteWrapper .ui-datepicker, body .imj_siteWrapper .ui-datepicker-calendar, body .imj_siteWrapper .ui-datepicker-rtl { background-color: #292929; }
-body .imj_siteWrapper .ui-datepicker-next { float: right; cursor: pointer; padding-right: 1.454545em; display: inline-block; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjTriangleNext_16.png") right center no-repeat; }
-body .imj_siteWrapper .ui-datepicker-next:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjTriangleNext_16.png") right center no-repeat; }
-body .imj_siteWrapper .ui-datepicker-prev { padding-left: 1.454545em; display: inline-block; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjTrianglePrevious_16.png") left center no-repeat; }
-body .imj_siteWrapper .ui-datepicker-prev:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjTrianglePrevious_16.png") left center no-repeat; }
+body .imj_siteWrapper .ui-datepicker-next { float: right; cursor: pointer; padding-right: 1.454545em; display: inline-block; background: transparent url("../../resources/imj_iconset/6CAE2F/imjTriangleNext_16.png") right center no-repeat; }
+body .imj_siteWrapper .ui-datepicker-next:hover { background: transparent url("../../resources/imj_iconset/F0F0F0/imjTriangleNext_16.png") right center no-repeat; }
+body .imj_siteWrapper .ui-datepicker-prev { padding-left: 1.454545em; display: inline-block; cursor: pointer; background: transparent url("../../resources/imj_iconset/6CAE2F/imjTrianglePrevious_16.png") left center no-repeat; }
+body .imj_siteWrapper .ui-datepicker-prev:hover { background: transparent url("../../resources/imj_iconset/F0F0F0/imjTrianglePrevious_16.png") left center no-repeat; }
 body .imj_siteWrapper .ui-datepicker-title { text-align: center; }
 body .imj_siteWrapper .ui-datepicker-title select + select { margin-left: 0.363636em; }
 body .imj_siteWrapper .ui-datepicker-calendar { margin-top: 0.181818em; }
@@ -833,10 +833,10 @@ body .imj_siteWrapper .imj_siteHeader .ui-helper-hidden-accessible, body .imj_si
 body .imj_siteWrapper .imj_siteHeader .ui-datepicker, body .imj_siteWrapper .imj_contentSubMenu .ui-datepicker, body .imj_siteWrapper .imj_mainContentWrapper .ui-datepicker, body .imj_siteWrapper .imj_siteFooter .ui-datepicker { width: 15em; padding: 0.363636em 0.636363em; box-shadow: 0 0 0.45455em 0 rgba(0, 0, 0, 0.75); border-radius: 0.454545em; }
 body .imj_siteWrapper .imj_siteHeader .ui-datepicker-calendar, body .imj_siteWrapper .imj_siteHeader .ui-datepicker-rtl, body .imj_siteWrapper .imj_contentSubMenu .ui-datepicker-calendar, body .imj_siteWrapper .imj_contentSubMenu .ui-datepicker-rtl, body .imj_siteWrapper .imj_mainContentWrapper .ui-datepicker-calendar, body .imj_siteWrapper .imj_mainContentWrapper .ui-datepicker-rtl, body .imj_siteWrapper .imj_siteFooter .ui-datepicker-calendar, body .imj_siteWrapper .imj_siteFooter .ui-datepicker-rtl { width: 96%; }
 body .imj_siteWrapper .imj_siteHeader .ui-datepicker, body .imj_siteWrapper .imj_siteHeader .ui-datepicker-calendar, body .imj_siteWrapper .imj_siteHeader .ui-datepicker-rtl, body .imj_siteWrapper .imj_contentSubMenu .ui-datepicker, body .imj_siteWrapper .imj_contentSubMenu .ui-datepicker-calendar, body .imj_siteWrapper .imj_contentSubMenu .ui-datepicker-rtl, body .imj_siteWrapper .imj_mainContentWrapper .ui-datepicker, body .imj_siteWrapper .imj_mainContentWrapper .ui-datepicker-calendar, body .imj_siteWrapper .imj_mainContentWrapper .ui-datepicker-rtl, body .imj_siteWrapper .imj_siteFooter .ui-datepicker, body .imj_siteWrapper .imj_siteFooter .ui-datepicker-calendar, body .imj_siteWrapper .imj_siteFooter .ui-datepicker-rtl { background-color: #292929; }
-body .imj_siteWrapper .imj_siteHeader .ui-datepicker-next, body .imj_siteWrapper .imj_contentSubMenu .ui-datepicker-next, body .imj_siteWrapper .imj_mainContentWrapper .ui-datepicker-next, body .imj_siteWrapper .imj_siteFooter .ui-datepicker-next { float: right; cursor: pointer; padding-right: 1.454545em; display: inline-block; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjTriangleNext_16.png") right center no-repeat; }
-body .imj_siteWrapper .imj_siteHeader .ui-datepicker-next:hover, body .imj_siteWrapper .imj_contentSubMenu .ui-datepicker-next:hover, body .imj_siteWrapper .imj_mainContentWrapper .ui-datepicker-next:hover, body .imj_siteWrapper .imj_siteFooter .ui-datepicker-next:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjTriangleNext_16.png") right center no-repeat; }
-body .imj_siteWrapper .imj_siteHeader .ui-datepicker-prev, body .imj_siteWrapper .imj_contentSubMenu .ui-datepicker-prev, body .imj_siteWrapper .imj_mainContentWrapper .ui-datepicker-prev, body .imj_siteWrapper .imj_siteFooter .ui-datepicker-prev { padding-left: 1.454545em; display: inline-block; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/6CAE2F/imjTrianglePrevious_16.png") left center no-repeat; }
-body .imj_siteWrapper .imj_siteHeader .ui-datepicker-prev:hover, body .imj_siteWrapper .imj_contentSubMenu .ui-datepicker-prev:hover, body .imj_siteWrapper .imj_mainContentWrapper .ui-datepicker-prev:hover, body .imj_siteWrapper .imj_siteFooter .ui-datepicker-prev:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjTrianglePrevious_16.png") left center no-repeat; }
+body .imj_siteWrapper .imj_siteHeader .ui-datepicker-next, body .imj_siteWrapper .imj_contentSubMenu .ui-datepicker-next, body .imj_siteWrapper .imj_mainContentWrapper .ui-datepicker-next, body .imj_siteWrapper .imj_siteFooter .ui-datepicker-next { float: right; cursor: pointer; padding-right: 1.454545em; display: inline-block; background: transparent url("../../resources/imj_iconset/6CAE2F/imjTriangleNext_16.png") right center no-repeat; }
+body .imj_siteWrapper .imj_siteHeader .ui-datepicker-next:hover, body .imj_siteWrapper .imj_contentSubMenu .ui-datepicker-next:hover, body .imj_siteWrapper .imj_mainContentWrapper .ui-datepicker-next:hover, body .imj_siteWrapper .imj_siteFooter .ui-datepicker-next:hover { background: transparent url("../../resources/imj_iconset/F0F0F0/imjTriangleNext_16.png") right center no-repeat; }
+body .imj_siteWrapper .imj_siteHeader .ui-datepicker-prev, body .imj_siteWrapper .imj_contentSubMenu .ui-datepicker-prev, body .imj_siteWrapper .imj_mainContentWrapper .ui-datepicker-prev, body .imj_siteWrapper .imj_siteFooter .ui-datepicker-prev { padding-left: 1.454545em; display: inline-block; cursor: pointer; background: transparent url("../../resources/imj_iconset/6CAE2F/imjTrianglePrevious_16.png") left center no-repeat; }
+body .imj_siteWrapper .imj_siteHeader .ui-datepicker-prev:hover, body .imj_siteWrapper .imj_contentSubMenu .ui-datepicker-prev:hover, body .imj_siteWrapper .imj_mainContentWrapper .ui-datepicker-prev:hover, body .imj_siteWrapper .imj_siteFooter .ui-datepicker-prev:hover { background: transparent url("../../resources/imj_iconset/F0F0F0/imjTrianglePrevious_16.png") left center no-repeat; }
 body .imj_siteWrapper .imj_siteHeader .ui-datepicker-title, body .imj_siteWrapper .imj_contentSubMenu .ui-datepicker-title, body .imj_siteWrapper .imj_mainContentWrapper .ui-datepicker-title, body .imj_siteWrapper .imj_siteFooter .ui-datepicker-title { text-align: center; }
 body .imj_siteWrapper .imj_siteHeader .ui-datepicker-title select + select, body .imj_siteWrapper .imj_contentSubMenu .ui-datepicker-title select + select, body .imj_siteWrapper .imj_mainContentWrapper .ui-datepicker-title select + select, body .imj_siteWrapper .imj_siteFooter .ui-datepicker-title select + select { margin-left: 0.363636em; }
 body .imj_siteWrapper .imj_siteHeader .ui-datepicker-calendar, body .imj_siteWrapper .imj_contentSubMenu .ui-datepicker-calendar, body .imj_siteWrapper .imj_mainContentWrapper .ui-datepicker-calendar, body .imj_siteWrapper .imj_siteFooter .ui-datepicker-calendar { margin-top: 0.181818em; }
@@ -864,8 +864,8 @@ body .imj_siteWrapper .plupload_buttons a:focus { color: #000000; background-col
 body .imj_siteWrapper .plupload_buttons a + a { margin-left: 1em; }
 body .imj_siteWrapper .plupload_delete:hover { background-color: rgba(0, 0, 0, 0.1); }
 body .imj_siteWrapper .plupload_delete .plupload_file_action { vertical-align: text-top; }
-body .imj_siteWrapper .plupload_delete .plupload_file_action a { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("/imeji/resources/imj_iconset/D80000/imjButtonMinusRoundedBorderOpen_16.png") 0 0 no-repeat; }
-body .imj_siteWrapper .plupload_delete .plupload_file_action a:hover { background: transparent url("/imeji/resources/imj_iconset/F0F0F0/imjButtonMinusRoundedBorderOpen_16.png") 0 0 no-repeat; }
+body .imj_siteWrapper .plupload_delete .plupload_file_action a { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("../../resources/imj_iconset/D80000/imjButtonMinusRoundedBorderOpen_16.png") 0 0 no-repeat; }
+body .imj_siteWrapper .plupload_delete .plupload_file_action a:hover { background: transparent url("../../resources/imj_iconset/F0F0F0/imjButtonMinusRoundedBorderOpen_16.png") 0 0 no-repeat; }
 body .imj_siteWrapper .moxie-shim input { border-radius: 0; -webkit-border-radius: 0; -moz-border-radius: 0; -o-border-radius: 0; -ms-border-radius: 0; padding: 0; margin: 0; cursor: pointer; }
 
 .imj_siteWrapper .imj_siteFooter { height: 70px; }

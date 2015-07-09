@@ -113,7 +113,7 @@
 	  </init-param>
 	  <init-param>
 	    <param-name>swagger.api.basepath</param-name>
-	    <param-value>/rest</param-value>
+	    <param-value>/imeji/rest</param-value>
 	  </init-param>
 	  <load-on-startup>2</load-on-startup>
 	</servlet>

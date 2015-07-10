@@ -13,82 +13,81 @@
 	Information mbH and Max-Planck- Gesellschaft zur Förderung der Wissenschaft
 	e.V. All rights reserved. Use is subject to license terms. -->
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://java.sun.com/xml/ns/javaee"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-         version="3.0">
-    <!-- Servlets -->
-    <servlet>
-        <servlet-name>Faces Servlet</servlet-name>
-        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-        <async-supported>true</async-supported>
-    </servlet>
-    <servlet>
-        <servlet-name>Initializer Servlet</servlet-name>
-        <servlet-class>de.mpg.imeji.presentation.servlet.InitializerServlet</servlet-class>
-        <load-on-startup>2</load-on-startup>
-        <async-supported>true</async-supported>
-    </servlet>
-    <servlet>
-        <servlet-name>File Servlet</servlet-name>
-        <servlet-class>de.mpg.imeji.presentation.servlet.FileServlet</servlet-class>
-        <load-on-startup>3</load-on-startup>
-        <async-supported>true</async-supported>
-    </servlet>
-    <servlet>
-        <servlet-name>Export Servlet</servlet-name>
-        <servlet-class>de.mpg.imeji.presentation.servlet.ExportServlet</servlet-class>
-        <load-on-startup>4</load-on-startup>
-        <async-supported>true</async-supported>
-    </servlet>
-    <servlet>
-        <servlet-name>Digilib Servlet</servlet-name>
-        <servlet-class>de.mpg.imeji.presentation.servlet.DigilibServlet</servlet-class>
-        <load-on-startup>5</load-on-startup>
-        <async-supported>true</async-supported>
-    </servlet>
-    <servlet>
-        <servlet-name>Data Viewer Servlet</servlet-name>
-        <servlet-class>de.mpg.imeji.presentation.servlet.DataViewerServlet</servlet-class>
-        <load-on-startup>5</load-on-startup>
-        <async-supported>true</async-supported>
-    </servlet>
-    <servlet>
-        <servlet-name>imeji SPARQL End Point</servlet-name>
-        <servlet-class>de.mpg.imeji.presentation.servlet.SPARQLEndpointServlet</servlet-class>
-        <load-on-startup>5</load-on-startup>
-        <async-supported>true</async-supported>
-    </servlet>
+		 xmlns="http://java.sun.com/xml/ns/javaee"
+		 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+		 version="3.0">
+	<!-- Servlets -->
+	<servlet>
+		<servlet-name>Faces Servlet</servlet-name>
+		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+		<async-supported>true</async-supported>
+	</servlet>
+	<servlet>
+		<servlet-name>Initializer Servlet</servlet-name>
+		<servlet-class>de.mpg.imeji.presentation.servlet.InitializerServlet</servlet-class>
+		<load-on-startup>2</load-on-startup>
+		<async-supported>true</async-supported>
+	</servlet>
+	<servlet>
+		<servlet-name>File Servlet</servlet-name>
+		<servlet-class>de.mpg.imeji.presentation.servlet.FileServlet</servlet-class>
+		<load-on-startup>3</load-on-startup>
+		<async-supported>true</async-supported>
+	</servlet>
+	<servlet>
+		<servlet-name>Export Servlet</servlet-name>
+		<servlet-class>de.mpg.imeji.presentation.servlet.ExportServlet</servlet-class>
+		<load-on-startup>4</load-on-startup>
+		<async-supported>true</async-supported>
+	</servlet>
+	<servlet>
+		<servlet-name>Digilib Servlet</servlet-name>
+		<servlet-class>de.mpg.imeji.presentation.servlet.DigilibServlet</servlet-class>
+		<load-on-startup>5</load-on-startup>
+		<async-supported>true</async-supported>
+	</servlet>
+	<servlet>
+		<servlet-name>Data Viewer Servlet</servlet-name>
+		<servlet-class>de.mpg.imeji.presentation.servlet.DataViewerServlet</servlet-class>
+		<load-on-startup>5</load-on-startup>
+		<async-supported>true</async-supported>
+	</servlet>
+	<servlet>
+		<servlet-name>imeji SPARQL End Point</servlet-name>
+		<servlet-class>de.mpg.imeji.presentation.servlet.SPARQLEndpointServlet</servlet-class>
+		<load-on-startup>5</load-on-startup>
+		<async-supported>true</async-supported>
+	</servlet>
 
-    <servlet>
-        <servlet-name>imeji REST Service</servlet-name>
-        <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
-        <init-param>
-            <param-name>jersey.config.server.provider.packages</param-name>
-            <param-value>de.mpg.imeji.rest.resources; com.wordnik.swagger.jersey.listing
-            </param-value>
-        </init-param>
-        <!--
-                <init-param>
-                    <param-name>com.sun.jersey.config.property.resourceConfigClass</param-name>
-                    <param-value>com.sun.jersey.api.core.PackagesResourceConfig</param-value>
-                </init-param>
-        -->
-        <init-param>
-            <param-name>javax.ws.rs.Application</param-name>
-            <param-value>de.mpg.imeji.rest.MyApplication</param-value>
-        </init-param>
+	<servlet>
+		<servlet-name>imeji REST Service</servlet-name>
+		<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+		<init-param>
+		     <param-name>jersey.config.server.provider.packages</param-name>
+		     <param-value>de.mpg.imeji.rest.resources; com.wordnik.swagger.jersey.listing</param-value>
+		</init-param>
+<!--
+		<init-param>
+	        <param-name>com.sun.jersey.config.property.resourceConfigClass</param-name>
+	        <param-value>com.sun.jersey.api.core.PackagesResourceConfig</param-value>
+    	</init-param>
+-->
+		<init-param>
+			<param-name>javax.ws.rs.Application</param-name>
+			<param-value>de.mpg.imeji.rest.MyApplication</param-value>
+		</init-param>
 
-        <!--
-                <init-param>
-                    <param-name>jersey.config.server.provider.classnames</param-name>
-                    <param-value>org.glassfish.jersey.filter.LoggingFilter;org.glassfish.jersey.media.multipart.MultiPartFeature</param-value>
-                </init-param>
-        -->
+<!--
+		<init-param>
+			<param-name>jersey.config.server.provider.classnames</param-name>
+			<param-value>org.glassfish.jersey.filter.LoggingFilter;org.glassfish.jersey.media.multipart.MultiPartFeature</param-value>
+		</init-param>
+-->
 
 
-        <!--
-        <init-param>
+    	<!--
+		<init-param>
             <param-name>javax.ws.rs.Application</param-name>
             <param-value>de.mpg.imeji.rest.MyApplication</param-value>
         </init-param>
@@ -119,190 +118,191 @@
         <load-on-startup>2</load-on-startup>
     </servlet>
 
-    <!-- Filters (order is important) -->
+	<!-- Filters (order is important) -->
 
 
-    <filter>
-        <filter-name>Encoder Filter</filter-name>
-        <filter-class>de.mpg.imeji.presentation.util.EncoderFilter</filter-class>
-        <async-supported>true</async-supported>
-    </filter>
-    <filter>
-        <filter-name>Authentication Filter</filter-name>
-        <filter-class>de.mpg.imeji.presentation.auth.AuthenticationFilter</filter-class>
-        <async-supported>true</async-supported>
-    </filter>
-    <filter>
-        <filter-name>Content Negotiation Filter</filter-name>
-        <filter-class>de.mpg.imeji.presentation.contentNegotiation.ContentNegotiationFilter
-        </filter-class>
-        <async-supported>true</async-supported>
-    </filter>
-    <filter>
-        <filter-name>History Filter</filter-name>
-        <filter-class>de.mpg.imeji.presentation.history.HistoryFilter</filter-class>
-        <async-supported>true</async-supported>
-    </filter>
+
+	<filter>
+		<filter-name>Encoder Filter</filter-name>
+		<filter-class>de.mpg.imeji.presentation.util.EncoderFilter</filter-class>
+		<async-supported>true</async-supported>
+	</filter>
+	<filter>
+		<filter-name>Authentication Filter</filter-name>
+		<filter-class>de.mpg.imeji.presentation.auth.AuthenticationFilter</filter-class>
+		<async-supported>true</async-supported>
+	</filter>
+	<filter>
+		<filter-name>Content Negotiation Filter</filter-name>
+		<filter-class>de.mpg.imeji.presentation.contentNegotiation.ContentNegotiationFilter</filter-class>
+		<async-supported>true</async-supported>
+	</filter>
+	<filter>
+		<filter-name>History Filter</filter-name>
+		<filter-class>de.mpg.imeji.presentation.history.HistoryFilter</filter-class>
+		<async-supported>true</async-supported>
+	</filter>
 
 
-    <!-- Mappings -->
+	<!-- Mappings -->
 
 
-    <filter-mapping>
-        <filter-name>Encoder Filter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>Content Negotiation Filter</filter-name>
-        <url-pattern>/*</url-pattern>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>FORWARD</dispatcher>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>Authentication Filter</filter-name>
-        <url-pattern>/*</url-pattern>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>FORWARD</dispatcher>
-    </filter-mapping>
-    <servlet-mapping>
-        <servlet-name>Faces Servlet</servlet-name>
-        <url-pattern>/jsf/*</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>File Servlet</servlet-name>
-        <url-pattern>/file</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>File Servlet</servlet-name>
-        <url-pattern>/file/*</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>Export Servlet</servlet-name>
-        <url-pattern>/export</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>Digilib Servlet</servlet-name>
-        <url-pattern>/digilib</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>Data Viewer Servlet</servlet-name>
-        <url-pattern>/dataviewer</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>imeji REST Service</servlet-name>
-        <url-pattern>/rest/*</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>imeji SPARQL End Point</servlet-name>
-        <url-pattern>/sparql</url-pattern>
-    </servlet-mapping>
+	<filter-mapping>
+		<filter-name>Encoder Filter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>Content Negotiation Filter</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>Authentication Filter</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+	</filter-mapping>
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>/jsf/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>File Servlet</servlet-name>
+		<url-pattern>/file</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>File Servlet</servlet-name>
+		<url-pattern>/file/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Export Servlet</servlet-name>
+		<url-pattern>/export</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Digilib Servlet</servlet-name>
+		<url-pattern>/digilib</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Data Viewer Servlet</servlet-name>
+		<url-pattern>/dataviewer</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>imeji REST Service</servlet-name>
+		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>imeji SPARQL End Point</servlet-name>
+		<url-pattern>/sparql</url-pattern>
+	</servlet-mapping>
 
 
-    <filter-mapping>
-        <filter-name>History Filter</filter-name>
-        <url-pattern>/*</url-pattern>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>FORWARD</dispatcher>
-    </filter-mapping>
-    <!-- Parameters -->
-    <context-param>
-        <param-name>com.ocpsoft.pretty.BASE_PACKAGES</param-name>
-        <param-value>de.mpg.imeji</param-value>
-    </context-param>
-    <context-param>
-        <param-name>javax.faces.DEFAULT_SUFFIX</param-name>
-        <param-value>.xhtml</param-value>
-    </context-param>
-    <context-param>
-        <param-name>javax.faces.PROJECT_STAGE</param-name>
-        <param-value>Production</param-value>
-    </context-param>
-    <context-param>
-        <param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name>
-        <param-value>true</param-value>
-    </context-param>
-    <context-param>
-        <param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
-        <param-value>true</param-value>
-    </context-param>
-    <context-param>
-        <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
-        <param-value>server</param-value>
-    </context-param>
-    <context-param>
-        <param-name>javax.faces.CONFIG_FILES</param-name>
-        <param-value>/WEB-INF/navigation.xml,/WEB-INF/managed-beans.xml
+
+	<filter-mapping>
+		<filter-name>History Filter</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+	</filter-mapping>
+	<!-- Parameters -->
+	<context-param>
+		<param-name>com.ocpsoft.pretty.BASE_PACKAGES</param-name>
+		<param-value>de.mpg.imeji</param-value>
+	</context-param>
+	<context-param>
+		<param-name>javax.faces.DEFAULT_SUFFIX</param-name>
+		<param-value>.xhtml</param-value>
+	</context-param>
+	<context-param>
+		<param-name>javax.faces.PROJECT_STAGE</param-name>
+		<param-value>Production</param-value>
+	</context-param>
+	<context-param>
+	    <param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name>
+	    <param-value>true</param-value>
+	</context-param>
+	<context-param>
+		<param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	<context-param>
+		<param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+		<param-value>server</param-value>
+	</context-param>
+	<context-param>
+		<param-name>javax.faces.CONFIG_FILES</param-name>
+		<param-value>/WEB-INF/navigation.xml,/WEB-INF/managed-beans.xml
         </param-value>
-    </context-param>
-    <context-param>
-        <param-name>org.apache.myfaces.SERIALIZE_STATE_IN_SESSION</param-name>
-        <param-value>false</param-value>
-    </context-param>
-    <context-param>
-        <param-name>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</param-name>
-        <param-value>false</param-value>
-    </context-param>
-    <context-param>
-        <param-name>com.sun.faces.responseBufferSize</param-name>
-        <param-value>500000</param-value>
-    </context-param>
-    <context-param>
-        <param-name>javax.faces.FACELETS_REFRESH_PERIOD</param-name>
-        <param-value>-1</param-value>
-    </context-param>
-    <context-param>
-        <param-name>javax.faces.PARTIAL_STATE_SAVING</param-name>
-        <param-value>true</param-value>
-    </context-param>
+	</context-param>
+	<context-param>
+		<param-name>org.apache.myfaces.SERIALIZE_STATE_IN_SESSION</param-name>
+		<param-value>false</param-value>
+	</context-param>
+	<context-param>
+		<param-name>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</param-name>
+		<param-value>false</param-value>
+	</context-param>
+	<context-param>
+		<param-name>com.sun.faces.responseBufferSize</param-name>
+		<param-value>500000</param-value>
+	</context-param>
+	<context-param>
+		<param-name>javax.faces.FACELETS_REFRESH_PERIOD</param-name>
+		<param-value>-1</param-value>
+	</context-param>
+	<context-param>
+	    <param-name>javax.faces.PARTIAL_STATE_SAVING</param-name>
+	    <param-value>true</param-value>
+	</context-param>
 
 
-    <session-config>
-        <session-timeout>180</session-timeout>
-    </session-config>
-    <welcome-file-list>
-        <welcome-file>Welcome.xhtml</welcome-file>
-    </welcome-file-list>
-    <error-page>
-        <error-code>404</error-code>
-        <location>/jsf/errorPages/404.xhtml</location>
-    </error-page>
-    <error-page>
-        <error-code>403</error-code>
-        <location>/jsf/errorPages/403.xhtml</location>
-    </error-page>
-    <error-page>
-        <error-code>401</error-code>
-        <location>/jsf/errorPages/401.xhtml</location>
-    </error-page>
-    <error-page>
-        <error-code>422</error-code>
-        <location>/jsf/errorPages/422.xhtml</location>
-    </error-page>
-    <error-page>
-        <error-code>500</error-code>
-        <location>/jsf/errorPages/500.xhtml</location>
-    </error-page>
-    <!-- Digilib staff -->
-    <!-- The Intialisation Listener -->
+	<session-config>
+		<session-timeout>180</session-timeout>
+	</session-config>
+	<welcome-file-list>
+		<welcome-file>Welcome.xhtml</welcome-file>
+	</welcome-file-list>
+	<error-page>
+		<error-code>404</error-code>
+		<location>/jsf/errorPages/404.xhtml</location>
+	</error-page>
+	<error-page>
+		<error-code>403</error-code>
+		<location>/jsf/errorPages/403.xhtml</location>
+	</error-page>
+	<error-page>
+		<error-code>401</error-code>
+		<location>/jsf/errorPages/401.xhtml</location>
+	</error-page>
+	<error-page>
+		<error-code>422</error-code>
+		<location>/jsf/errorPages/422.xhtml</location>
+	</error-page>
+	<error-page>
+		<error-code>500</error-code>
+		<location>/jsf/errorPages/500.xhtml</location>
+	</error-page>
+	<!-- Digilib staff -->
+	<!-- The Intialisation Listener -->
 
-    <listener>
-        <listener-class>digilib.conf.DigilibServletConfiguration</listener-class>
-    </listener>
-    <!-- The Scaler servlet -->
-    <servlet>
-        <servlet-name>Scaler</servlet-name>
-        <servlet-class>digilib.servlet.Scaler</servlet-class>
-        <!-- Load this servlet at server startup time -->
-        <load-on-startup>6</load-on-startup>
-        <async-supported>true</async-supported>
-    </servlet>
-    <!-- The mapping for the Scaler servlet -->
-    <servlet-mapping>
-        <servlet-name>Scaler</servlet-name>
-        <url-pattern>/servlet/Scaler/*</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>Scaler</servlet-name>
-        <url-pattern>/Scaler/*</url-pattern>
-    </servlet-mapping>
+	<listener>
+		<listener-class>digilib.conf.DigilibServletConfiguration</listener-class>
+	</listener>
+	<!-- The Scaler servlet -->
+	<servlet>
+		<servlet-name>Scaler</servlet-name>
+		<servlet-class>digilib.servlet.Scaler</servlet-class>
+		<!-- Load this servlet at server startup time -->
+		<load-on-startup>6</load-on-startup>
+		<async-supported>true</async-supported>
+	</servlet>
+	<!-- The mapping for the Scaler servlet -->
+	<servlet-mapping>
+		<servlet-name>Scaler</servlet-name>
+		<url-pattern>/servlet/Scaler/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Scaler</servlet-name>
+		<url-pattern>/Scaler/*</url-pattern>
+	</servlet-mapping>
 </web-app>

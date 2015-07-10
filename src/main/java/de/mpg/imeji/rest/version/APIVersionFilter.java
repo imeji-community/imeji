@@ -1,5 +1,8 @@
 package de.mpg.imeji.rest.version;
 
+import de.mpg.imeji.rest.version.exception.DeprecatedAPIVersionException;
+import de.mpg.imeji.rest.version.exception.UnknowAPIVersionException;
+
 import java.io.IOException;
 
 import javax.servlet.Filter;
@@ -11,9 +14,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Response.Status;
-
-import de.mpg.imeji.rest.version.exception.DeprecatedAPIVersionException;
-import de.mpg.imeji.rest.version.exception.UnknowAPIVersionException;
 
 /**
  * Filter which check if the version of the request to the API is the latest one. <br/>

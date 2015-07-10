@@ -3,6 +3,21 @@
  */
 package de.mpg.imeji.presentation.history;
 
+import com.ocpsoft.pretty.PrettyContext;
+import com.ocpsoft.pretty.faces.config.PrettyConfig;
+import com.ocpsoft.pretty.faces.config.mapping.UrlMapping;
+import com.ocpsoft.pretty.faces.url.URL;
+
+import de.mpg.imeji.exceptions.AuthenticationError;
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.NotAllowedError;
+import de.mpg.imeji.exceptions.NotFoundException;
+import de.mpg.imeji.logic.controller.SpaceController;
+import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.session.SessionBean;
+
+import org.apache.commons.lang.StringUtils;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -27,21 +42,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotAllowedException;
 import javax.ws.rs.core.Response.Status;
-
-import org.apache.commons.lang.StringUtils;
-
-import com.ocpsoft.pretty.PrettyContext;
-import com.ocpsoft.pretty.faces.config.PrettyConfig;
-import com.ocpsoft.pretty.faces.config.mapping.UrlMapping;
-import com.ocpsoft.pretty.faces.url.URL;
-
-import de.mpg.imeji.exceptions.AuthenticationError;
-import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.exceptions.NotAllowedError;
-import de.mpg.imeji.exceptions.NotFoundException;
-import de.mpg.imeji.logic.controller.SpaceController;
-import de.mpg.imeji.presentation.beans.Navigation;
-import de.mpg.imeji.presentation.session.SessionBean;
 
 /**
  * {@link Filter} for the imeji history

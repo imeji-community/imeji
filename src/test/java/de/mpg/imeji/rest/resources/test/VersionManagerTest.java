@@ -1,15 +1,15 @@
 package de.mpg.imeji.rest.resources.test;
 
-import java.io.IOException;
-
-import org.junit.Assert;
-import org.junit.Test;
-
 import de.mpg.imeji.rest.api.API;
 import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
 import de.mpg.imeji.rest.version.VersionManager;
 import de.mpg.imeji.rest.version.exception.DeprecatedAPIVersionException;
 import de.mpg.imeji.rest.version.exception.UnknowAPIVersionException;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+import java.io.IOException;
 
 /**
  * Test the {@link VersionManager}

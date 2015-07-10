@@ -3,19 +3,19 @@
  */
 package de.mpg.imeji.presentation.beans;
 
+import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.CookieUtils;
+import de.mpg.imeji.presentation.util.PropertyReader;
+
+import org.apache.log4j.Logger;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
-
-import org.apache.log4j.Logger;
-
-import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.CookieUtils;
-import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
  * This abstract bean class is used to manage lists with one or two paginators. It can work together

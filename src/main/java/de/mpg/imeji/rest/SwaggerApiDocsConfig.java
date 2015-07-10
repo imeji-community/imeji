@@ -8,6 +8,7 @@ import com.wordnik.swagger.config.ConfigFactory;
 import com.wordnik.swagger.jersey.config.JerseyJaxrsConfig;
 
 import javax.servlet.ServletConfig;
+
 public class SwaggerApiDocsConfig extends JerseyJaxrsConfig {
     @Override
     public void init(ServletConfig servletConfig) {

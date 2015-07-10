@@ -227,6 +227,7 @@ public class AlbumController extends ImejiController {
     if (Status.WITHDRAWN.equals(album.getStatus())) {
       throw new UnprocessableError("error_album_withdrawn_members_can_not_be_added");
     }
+    
     if (!AuthUtil.staticAuth().create(user, album)) {
       throw new NotAllowedError("album_not_allowed_to_add_item");
     }
@@ -240,7 +241,7 @@ public class AlbumController extends ImejiController {
       try {
         Item item = ic.retrieve(new URI(uri), user);
         if (item != null) {
-          if (!inAlbums.contains(uri)) {
+          if (!inAlbums.contains(uri) && !item.getStatus().equals(Status.WITHDRAWN)) {
             inAlbums.add(uri);
           } else {
             notAddedUris.add(uri);

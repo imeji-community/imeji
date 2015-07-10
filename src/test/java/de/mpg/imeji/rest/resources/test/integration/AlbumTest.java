@@ -3,10 +3,12 @@ package de.mpg.imeji.rest.resources.test.integration;
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.rest.api.AlbumService;
+import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.process.RestProcessUtils;
 import de.mpg.imeji.rest.to.AlbumTO;
 import de.mpg.imeji.rest.to.ItemTO;
 import net.java.dev.webdav.jaxrs.ResponseStatus;
+
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.junit.Assert;
 import org.junit.Before;
@@ -15,6 +17,7 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import util.JenaUtil;
 
 import javax.ws.rs.client.Entity;
@@ -22,6 +25,7 @@ import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -371,6 +375,25 @@ public class AlbumTest extends ImejiTestBase {
     assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
   }
 
+  @Test
+  public void test_5_AddWithdrawnItemsToAlbum_6_WithAuth() throws ImejiException {
+    initCollection();
+    initItem();
+    initAlbum();
+
+    CollectionService s = new CollectionService();
+    s.release(collectionId, JenaUtil.testUser);
+    s.withdraw(collectionId, JenaUtil.testUser, "Test discard comment");
+    
+    Response response =
+        target(pathPrefix).path("/" + albumId + "/members/link").register(authAsUser)
+            .request(MediaType.APPLICATION_JSON_TYPE).put(Entity.json("[\"" + itemId + "\"]"));
+
+    assertEquals(Status.OK.getStatusCode(), response.getStatus());
+    
+    AlbumService as= new AlbumService();
+    assertEquals(as.readItems(albumId, JenaUtil.testUser, "").size(), 0);
+  }
 
   @Test
   public void test_6_WithdrawAlbum_1_WithAuth() throws ImejiException {

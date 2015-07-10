@@ -227,6 +227,7 @@ public class AlbumController extends ImejiController {
     if (Status.WITHDRAWN.equals(album.getStatus())) {
       throw new UnprocessableError("error_album_withdrawn_members_can_not_be_added");
     }
+    
     if (!AuthUtil.staticAuth().create(user, album)) {
       throw new NotAllowedError("album_not_allowed_to_add_item");
     }
@@ -240,7 +241,7 @@ public class AlbumController extends ImejiController {
       try {
         Item item = ic.retrieve(new URI(uri), user);
         if (item != null) {
-          if (!inAlbums.contains(uri)) {
+          if (!inAlbums.contains(uri) && !item.getStatus().equals(Status.WITHDRAWN)) {
             inAlbums.add(uri);
           } else {
             notAddedUris.add(uri);
@@ -398,6 +399,8 @@ public class AlbumController extends ImejiController {
   public List<Item> retrieveItems(String id, User user, String q) throws ImejiException {
     ItemController ic = new ItemController();
     List<Item> itemList = new ArrayList<Item>();
+    //#223: retrieve an Album to check if it exists, if Album does not exists 404 NOT Found should be thrown 
+    retrieveLazy(ObjectHelper.getURI(Album.class, id), user);
     try {
       for (String itemId : ic.search(ObjectHelper.getURI(Album.class, id),
           !isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q) : null, null, null, user,

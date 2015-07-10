@@ -398,6 +398,8 @@ public class AlbumController extends ImejiController {
   public List<Item> retrieveItems(String id, User user, String q) throws ImejiException {
     ItemController ic = new ItemController();
     List<Item> itemList = new ArrayList<Item>();
+    //#223: retrieve an Album to check if it exists, if Album does not exists 404 NOT Found should be thrown 
+    retrieveLazy(ObjectHelper.getURI(Album.class, id), user);
     try {
       for (String itemId : ic.search(ObjectHelper.getURI(Album.class, id),
           !isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q) : null, null, null, user,

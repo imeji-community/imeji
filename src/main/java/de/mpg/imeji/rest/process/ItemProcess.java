@@ -42,6 +42,7 @@ import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.TempFileUtil;
+import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.api.ItemService;
@@ -195,13 +196,22 @@ public class ItemProcess {
   }
 
   private static MetadataProfileTO getMetadataProfileTO(ItemTO to, User u) throws ImejiException {
-    Search s = new SPARQLSearch(SearchType.ITEM, null);
-    List<String> r =
-        s.searchSimpleForQuery(
-            SPARQLQueries.selectProfileIdOfItem(ObjectHelper.getURI(Item.class, to.getId())
-                .toString())).getResults();
-    if (!r.isEmpty()) {
-      return new ProfileService().read(ObjectHelper.getId(URI.create(r.get(0))), u);
+    Search s = new SPARQLSearch(SearchType.ALL, null);
+    String query = null;
+    if (to.getId() != null) {
+      query =
+          SPARQLQueries.selectProfileIdOfItem(ObjectHelper.getURI(Item.class, to.getId())
+              .toString());
+    } else if (to.getCollectionId() != null) {
+      query =
+          SPARQLQueries.selectProfileIdOfCollection(ObjectHelper.getURI(CollectionImeji.class,
+              to.getCollectionId()).toString());
+    }
+    if (query != null) {
+      List<String> r = s.searchSimpleForQuery(query).getResults();
+      if (!r.isEmpty()) {
+        return new ProfileService().read(ObjectHelper.getId(URI.create(r.get(0))), u);
+      }
     }
     throw new UnprocessableError("Item's profile not found");
   }
@@ -215,7 +225,7 @@ public class ItemProcess {
       try {
         ItemService icrud = new ItemService();
         DefaultItemTO defaultTO = (DefaultItemTO) buildTOFromJSON(req, DefaultItemTO.class);
-        ItemTO itemTO = (ItemTO) icrud.read(id, u);
+        ItemTO itemTO = icrud.read(id, u);
         ReverseTransferObjectFactory.transferDefaultItemTOtoItemTO(getMetadataProfileTO(itemTO, u),
             defaultTO, itemTO);
 

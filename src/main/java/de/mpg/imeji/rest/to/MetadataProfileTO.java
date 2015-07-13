@@ -3,48 +3,48 @@ package de.mpg.imeji.rest.to;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MetadataProfileTO extends PropertiesTO{
+public class MetadataProfileTO extends PropertiesTO {
 
-    private static final long serialVersionUID = -8360877762365469585L;
+  private static final long serialVersionUID = -8360877762365469585L;
 
-    private String title;
+  private String title;
 
-    private boolean def;
+  private boolean def;
 
-    private String description;
-    
-    private List<StatementTO> statements = new ArrayList<StatementTO>();
+  private String description;
 
-	public String getTitle() {
-		return title;
-	}
+  private List<StatementTO> statements = new ArrayList<StatementTO>();
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+  public String getTitle() {
+    return title;
+  }
 
-    public boolean getDefault() {
-        return def;
-    }
+  public void setTitle(String title) {
+    this.title = title;
+  }
 
-    public void setDefault(boolean def) {
-        this.def = def;
-    }
+  public boolean getDefault() {
+    return def;
+  }
 
-	public String getDescription() {
-		return description;
-	}
+  public void setDefault(boolean def) {
+    this.def = def;
+  }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+  public String getDescription() {
+    return description;
+  }
 
-	public List<StatementTO> getStatements() {
-		return statements;
-	}
+  public void setDescription(String description) {
+    this.description = description;
+  }
 
-	public void setStatements(List<StatementTO> statements) {
-		this.statements = statements;
-	}
+  public List<StatementTO> getStatements() {
+    return statements;
+  }
+
+  public void setStatements(List<StatementTO> statements) {
+    this.statements = statements;
+  }
 
 }

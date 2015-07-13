@@ -9,42 +9,37 @@ import de.mpg.j2j.annotations.j2jDataType;
 
 @XmlRootElement
 @j2jDataType("http://imeji.org/terms/metadata#publication")
-@XmlType (propOrder = {	 
-		"publication",
-		"format",
-		"citation"	
-		})
-public class PublicationTO extends MetadataTO{
-	private static final long serialVersionUID = 5215159848857258368L;
-	private String format;
-	private String publication;
-	private String citation;
+@XmlType(propOrder = {"publication", "format", "citation"})
+public class PublicationTO extends MetadataTO {
+  private static final long serialVersionUID = 5215159848857258368L;
+  private String format;
+  private String publication;
+  private String citation;
 
-	public String getPublication() {
-		return publication;
-	}
+  public String getPublication() {
+    return publication;
+  }
 
-	public void setPublication(String publication) {
-		this.publication = publication;
-	}
+  public void setPublication(String publication) {
+    this.publication = publication;
+  }
 
-	public String getFormat() {
-		return format;
-	}
+  public String getFormat() {
+    return format;
+  }
 
-	public void setFormat(String format) {
-		this.format = format;
-	}
+  public void setFormat(String format) {
+    this.format = format;
+  }
 
-	public String getCitation() {
-		return citation;
-	}
+  public String getCitation() {
+    return citation;
+  }
 
-	public void setCitation(String citation) {
-		this.citation = citation;
-	}
-	
-	
-	
+  public void setCitation(String citation) {
+    this.citation = citation;
+  }
+
+
 
 }

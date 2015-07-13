@@ -16,18 +16,16 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class ProfileParser
-{
-    /**
-     * Parse a profile Xml
-     * 
-     * @param profileXml
-     * @return
-     * @throws SAXException
-     * @throws JAXBException
-     */
-    public MetadataProfile parse(File profileXmlFile) throws JAXBException, SAXException
-    {
-        return new JaxbGenericObject<MetadataProfile>(MetadataProfile.class).unmarshal(profileXmlFile);
-    }
+public class ProfileParser {
+  /**
+   * Parse a profile Xml
+   * 
+   * @param profileXml
+   * @return
+   * @throws SAXException
+   * @throws JAXBException
+   */
+  public MetadataProfile parse(File profileXmlFile) throws JAXBException, SAXException {
+    return new JaxbGenericObject<MetadataProfile>(MetadataProfile.class).unmarshal(profileXmlFile);
+  }
 }

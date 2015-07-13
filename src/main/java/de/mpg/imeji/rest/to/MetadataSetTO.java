@@ -14,70 +14,64 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @XmlRootElement
-@XmlType (propOrder = {	 
-		"position",
-		"Labels",
-		"value", 
-		"statementUri",
-		"typeUri",
-		})
+@XmlType(propOrder = {"position", "Labels", "value", "statementUri", "typeUri",})
 @JsonInclude(Include.NON_NULL)
 @JsonDeserialize(using = MetadataSetTODeserializer.class)
-public class MetadataSetTO implements Serializable{
+public class MetadataSetTO implements Serializable {
 
-	private static final long serialVersionUID = 5826924314949469841L;
+  private static final long serialVersionUID = 5826924314949469841L;
 
-	@JsonIgnore
-	private int position;
-	
-	private List<LabelTO> Labels = new ArrayList<LabelTO>();
+  @JsonIgnore
+  private int position;
 
-	private MetadataTO value;
-	
-	private URI statementUri;
-	
-	private URI typeUri;
-	
-	public int getPosition() {
-		return position;
-	}
+  private List<LabelTO> Labels = new ArrayList<LabelTO>();
 
-	public void setPosition(int position) {
-		this.position = position;
-	}
+  private MetadataTO value;
 
-	public List<LabelTO> getLabels() {
-		return Labels;
-	}
+  private URI statementUri;
 
-	public void setLabels(List<LabelTO> labels) {
-		Labels = labels;
-	}
+  private URI typeUri;
 
-	public MetadataTO getValue() {
-		return value;
-	}
+  public int getPosition() {
+    return position;
+  }
 
-	public void setValue(MetadataTO value) {
-		this.value = value;
+  public void setPosition(int position) {
+    this.position = position;
+  }
 
-	}
+  public List<LabelTO> getLabels() {
+    return Labels;
+  }
 
-	public URI getStatementUri() {
-		return statementUri;
-	}
+  public void setLabels(List<LabelTO> labels) {
+    Labels = labels;
+  }
 
-	public void setStatementUri(URI statementUri) {
-		this.statementUri = statementUri;
-	}
+  public MetadataTO getValue() {
+    return value;
+  }
 
-	public URI getTypeUri() {
-		return typeUri;
-	}
+  public void setValue(MetadataTO value) {
+    this.value = value;
 
-	public void setTypeUri(URI typeUri) {
-		this.typeUri = typeUri;
-	}
+  }
+
+  public URI getStatementUri() {
+    return statementUri;
+  }
+
+  public void setStatementUri(URI statementUri) {
+    this.statementUri = statementUri;
+  }
+
+  public URI getTypeUri() {
+    return typeUri;
+  }
+
+  public void setTypeUri(URI typeUri) {
+    this.typeUri = typeUri;
+  }
 
 
 }

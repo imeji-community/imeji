@@ -18,134 +18,117 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class CollectionSessionBean
-{
-    private CollectionImeji active = null;
-    private MetadataProfile profile = null;
-    private String selectedMenu = "SORTING";
-    private String filter = "all";
-    private List<Metadata> metadataTypes = null;
+public class CollectionSessionBean {
+  private CollectionImeji active = null;
+  private MetadataProfile profile = null;
+  private String selectedMenu = "SORTING";
+  private String filter = "all";
+  private List<Metadata> metadataTypes = null;
 
-    /**
-     * Constructor
-     */
-    public CollectionSessionBean()
-    {
-        try
-        {
-            init();
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException("Error initializing collection session:", e);
-        }
+  /**
+   * Constructor
+   */
+  public CollectionSessionBean() {
+    try {
+      init();
+    } catch (Exception e) {
+      throw new RuntimeException("Error initializing collection session:", e);
     }
+  }
 
-    /**
-     * Initialize the session objects
-     * 
-     * @throws Exception
-     */
-    public void init() throws Exception
-    {
-        active = new CollectionImeji();
-        profile = new MetadataProfile();
-        metadataTypes = new ArrayList<Metadata>();
-        for (Metadata.Types t : Metadata.Types.values())
-        {
-            metadataTypes.add(MetadataFactory.createMetadata(t));
-        }
+  /**
+   * Initialize the session objects
+   * 
+   * @throws Exception
+   */
+  public void init() throws Exception {
+    active = new CollectionImeji();
+    profile = new MetadataProfile();
+    metadataTypes = new ArrayList<Metadata>();
+    for (Metadata.Types t : Metadata.Types.values()) {
+      metadataTypes.add(MetadataFactory.createMetadata(t));
     }
+  }
 
-    /**
-     * @return the active
-     */
-    public CollectionImeji getActive()
-    {
-        return active;
-    }
+  /**
+   * @return the active
+   */
+  public CollectionImeji getActive() {
+    return active;
+  }
 
-    /**
-     * @param active the active to set
-     */
-    public void setActive(CollectionImeji active)
-    {
-        this.active = active;
-    }
+  /**
+   * @param active the active to set
+   */
+  public void setActive(CollectionImeji active) {
+    this.active = active;
+  }
 
-    /**
-     * @return the selectedMenu
-     */
-    public String getSelectedMenu()
-    {
-        return selectedMenu;
-    }
+  /**
+   * @return the selectedMenu
+   */
+  public String getSelectedMenu() {
+    return selectedMenu;
+  }
 
-    /**
-     * @param selectedMenu the selectedMenu to set
-     */
-    public void setSelectedMenu(String selectedMenu)
-    {
-        this.selectedMenu = selectedMenu;
-    }
+  /**
+   * @param selectedMenu the selectedMenu to set
+   */
+  public void setSelectedMenu(String selectedMenu) {
+    this.selectedMenu = selectedMenu;
+  }
 
-    /**
-     * getter
-     * 
-     * @return
-     */
-    public String getFilter()
-    {
-        return filter;
-    }
+  /**
+   * getter
+   * 
+   * @return
+   */
+  public String getFilter() {
+    return filter;
+  }
 
-    /**
-     * setter
-     * 
-     * @param filter
-     */
-    public void setFilter(String filter)
-    {
-        this.filter = filter;
-    }
+  /**
+   * setter
+   * 
+   * @param filter
+   */
+  public void setFilter(String filter) {
+    this.filter = filter;
+  }
 
-    /**
-     * setter
-     * 
-     * @param metadataTypes
-     */
-    public void setMetadataTypes(List<Metadata> metadataTypes)
-    {
-        this.metadataTypes = metadataTypes;
-    }
+  /**
+   * setter
+   * 
+   * @param metadataTypes
+   */
+  public void setMetadataTypes(List<Metadata> metadataTypes) {
+    this.metadataTypes = metadataTypes;
+  }
 
-    /**
-     * getter
-     * 
-     * @return
-     */
-    public List<Metadata> getMetadataTypes()
-    {
-        return metadataTypes;
-    }
+  /**
+   * getter
+   * 
+   * @return
+   */
+  public List<Metadata> getMetadataTypes() {
+    return metadataTypes;
+  }
 
-    /**
-     * getter
-     * 
-     * @return
-     */
-    public MetadataProfile getProfile()
-    {
-        return profile;
-    }
+  /**
+   * getter
+   * 
+   * @return
+   */
+  public MetadataProfile getProfile() {
+    return profile;
+  }
 
-    /**
-     * setter
-     * 
-     * @param profile
-     */
-    public void setProfile(MetadataProfile profile)
-    {
-        this.profile = profile;
-    }
+  /**
+   * setter
+   * 
+   * @param profile
+   */
+  public void setProfile(MetadataProfile profile) {
+    this.profile = profile;
+  }
 }

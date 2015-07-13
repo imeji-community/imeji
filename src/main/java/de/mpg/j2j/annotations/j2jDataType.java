@@ -15,7 +15,6 @@ import de.mpg.imeji.logic.vo.Metadata;
  * @version $Revision$ $LastChangedDate$
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface j2jDataType
-{
-    public String value();
+public @interface j2jDataType {
+  public String value();
 }

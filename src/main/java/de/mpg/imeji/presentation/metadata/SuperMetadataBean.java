@@ -559,9 +559,9 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>, Seriali
    * @return the empty
    */
   public boolean isEmpty() {
-//    for (SuperMetadataBean smb : childs)
-//      if (!smb.isEmpty())
-//        return false;
+    // for (SuperMetadataBean smb : childs)
+    // if (!smb.isEmpty())
+    // return false;
     return MetadataHelper.isEmpty(asMetadata());
   }
 

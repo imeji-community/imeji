@@ -3,38 +3,36 @@ package de.mpg.imeji.rest.to;
 import java.io.Serializable;
 
 
-public class PersonTOBasic implements Serializable{
-	private static final long serialVersionUID = 306199590952021003L;
+public class PersonTOBasic implements Serializable {
+  private static final long serialVersionUID = 306199590952021003L;
 
-	private String fullname;
-	
-	private String userId;
+  private String fullname;
 
-	public PersonTOBasic () {};
+  private String userId;
 
-	public PersonTOBasic(String fullname, String userId){
-		this.fullname = fullname;
-		this.userId = userId;
-	}
+  public PersonTOBasic() {};
 
-	public String getFullname() {
-		return fullname;
-	}
+  public PersonTOBasic(String fullname, String userId) {
+    this.fullname = fullname;
+    this.userId = userId;
+  }
 
-	public void setFullname(String fullname) {
-		this.fullname = fullname;
-	}
+  public String getFullname() {
+    return fullname;
+  }
 
-	public String getUserId() {
-		return userId;
-	}
+  public void setFullname(String fullname) {
+    this.fullname = fullname;
+  }
 
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
+  public String getUserId() {
+    return userId;
+  }
+
+  public void setUserId(String userId) {
+    this.userId = userId;
+  }
 
 
-	
-	
 
 }

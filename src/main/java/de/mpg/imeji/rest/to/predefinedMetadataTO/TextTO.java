@@ -8,20 +8,18 @@ import de.mpg.j2j.annotations.j2jDataType;
 
 @XmlRootElement
 @j2jDataType("http://imeji.org/terms/metadata#text")
-@XmlType (propOrder = {
-		"text"
-		})
-public class TextTO extends MetadataTO{
-	private static final long serialVersionUID = -3794700986989015104L;
-	private String text;
+@XmlType(propOrder = {"text"})
+public class TextTO extends MetadataTO {
+  private static final long serialVersionUID = -3794700986989015104L;
+  private String text;
 
-	public String getText() {
-		return text;
-	}
+  public String getText() {
+    return text;
+  }
 
-	public void setText(String text) {
-		this.text = text;
-	}
+  public void setText(String text) {
+    this.text = text;
+  }
 
 
 

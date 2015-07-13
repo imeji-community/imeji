@@ -29,120 +29,112 @@ import de.mpg.imeji.presentation.util.ObjectLoader;
 @ManagedBean(name = "ViewCollectionBean")
 @RequestScoped
 public class ViewCollectionBean extends CollectionBean {
-	private static final long serialVersionUID = 6473181109648137472L;
-	private List<Person> persons = null;
-	private static Logger logger = Logger.getLogger(ViewCollectionBean.class);
-	/**
-	 * Maximum number of items displayed on collection start page
-	 */
-	private static final int MAX_ITEM_NUM_VIEW = 13;
+  private static final long serialVersionUID = 6473181109648137472L;
+  private List<Person> persons = null;
+  private static Logger logger = Logger.getLogger(ViewCollectionBean.class);
+  /**
+   * Maximum number of items displayed on collection start page
+   */
+  private static final int MAX_ITEM_NUM_VIEW = 13;
 
-	/**
-	 * Construct a default {@link ViewCollectionBean}
-	 */
-	public ViewCollectionBean() {
-		super();
-	}
+  /**
+   * Construct a default {@link ViewCollectionBean}
+   */
+  public ViewCollectionBean() {
+    super();
+  }
 
-	/**
-	 * Initialize all elements of the page.
-	 * 
-	 * @throws Exception
-	 */
-	public void init() throws Exception {
-		try {
-			User user = super.sessionBean.getUser();
-			String id = getId();
+  /**
+   * Initialize all elements of the page.
+   * 
+   * @throws Exception
+   */
+  public void init() throws Exception {
+    try {
+      User user = super.sessionBean.getUser();
+      String id = getId();
 
-			CollectionImeji requestedCollection = null;
-			URI uRIID = ObjectHelper.getURI(CollectionImeji.class, id);
+      CollectionImeji requestedCollection = null;
+      URI uRIID = ObjectHelper.getURI(CollectionImeji.class, id);
 
-			requestedCollection = ObjectLoader.loadCollectionLazy(uRIID, user);
+      requestedCollection = ObjectLoader.loadCollectionLazy(uRIID, user);
 
-			setCollection(requestedCollection);
+      setCollection(requestedCollection);
 
-			if (getCollection() != null && getCollection().getId() != null) {
-				findItems(user, MAX_ITEM_NUM_VIEW);
-				loadItems(user);
-				countItems();
-			}
+      if (getCollection() != null && getCollection().getId() != null) {
+        findItems(user, MAX_ITEM_NUM_VIEW);
+        loadItems(user);
+        countItems();
+      }
 
-			if (sessionBean.getUser() != null) {
-				setSendEmailNotification(sessionBean.getUser()
-						.getObservedCollections().contains(id));
-			}
-			if (getCollection() != null) {
-				setProfile(ObjectLoader.loadProfile(getCollection()
-						.getProfile(), user));
-				setProfileId(ObjectHelper.getId(getProfile().getId()));
-				// super.setTab(TabType.COLLECTION);
-				persons = new ArrayList<Person>();
-				for (Person p : super.getCollection().getMetadata()
-						.getPersons()) {
-					List<Organization> orgs = new ArrayList<Organization>();
-					for (Organization o : p.getOrganizations()) {
-						orgs.add(o);
-					}
-					p.setOrganizations(orgs);
-					persons.add(p);
-				}
-				getCollection().getMetadata().setPersons(persons);
-			}
-		} catch (Exception e) {
-			logger.error("", e);
-			// Has to be in try/catch block, otherwise redirct from
-			// HistoryFilter will not work.
-			// Here simply do nothing
-		}
+      if (sessionBean.getUser() != null) {
+        setSendEmailNotification(sessionBean.getUser().getObservedCollections().contains(id));
+      }
+      if (getCollection() != null) {
+        setProfile(ObjectLoader.loadProfile(getCollection().getProfile(), user));
+        setProfileId(ObjectHelper.getId(getProfile().getId()));
+        // super.setTab(TabType.COLLECTION);
+        persons = new ArrayList<Person>();
+        for (Person p : super.getCollection().getMetadata().getPersons()) {
+          List<Organization> orgs = new ArrayList<Organization>();
+          for (Organization o : p.getOrganizations()) {
+            orgs.add(o);
+          }
+          p.setOrganizations(orgs);
+          persons.add(p);
+        }
+        getCollection().getMetadata().setPersons(persons);
+      }
+    } catch (Exception e) {
+      logger.error("", e);
+      // Has to be in try/catch block, otherwise redirct from
+      // HistoryFilter will not work.
+      // Here simply do nothing
+    }
 
-	}
+  }
 
-	public List<Person> getPersons() {
-		return persons;
-	}
+  public List<Person> getPersons() {
+    return persons;
+  }
 
-	public void setPersons(List<Person> persons) {
-		this.persons = persons;
-	}
+  public void setPersons(List<Person> persons) {
+    this.persons = persons;
+  }
 
-	@Override
-	protected String getNavigationString() {
-		return sessionBean.getPrettySpacePage("pretty:collectionInfos");
-	}
+  @Override
+  protected String getNavigationString() {
+    return sessionBean.getPrettySpacePage("pretty:collectionInfos");
+  }
 
-	public String getSmallDescription() {
-		if (this.getCollection() == null
-				|| this.getCollection().getMetadata().getDescription() == null)
-			return "No Description";
-		if (this.getCollection().getMetadata().getDescription().length() > 100) {
-			return this.getCollection().getMetadata().getDescription()
-					.substring(0, 100)
-					+ "...";
-		} else {
-			return this.getCollection().getMetadata().getDescription();
-		}
-	}
+  public String getSmallDescription() {
+    if (this.getCollection() == null || this.getCollection().getMetadata().getDescription() == null)
+      return "No Description";
+    if (this.getCollection().getMetadata().getDescription().length() > 100) {
+      return this.getCollection().getMetadata().getDescription().substring(0, 100) + "...";
+    } else {
+      return this.getCollection().getMetadata().getDescription();
+    }
+  }
 
-	/**
-	 * @return
-	 */
-	public String getFormattedDescription() {
-		if (this.getCollection() == null
-				|| this.getCollection().getMetadata().getDescription() == null)
-			return "";
-		return this.getCollection().getMetadata().getDescription()
-				.replaceAll("\n", "<br/>");
-	}
+  /**
+   * @return
+   */
+  public String getFormattedDescription() {
+    if (this.getCollection() == null || this.getCollection().getMetadata().getDescription() == null)
+      return "";
+    return this.getCollection().getMetadata().getDescription().replaceAll("\n", "<br/>");
+  }
 
-	/**
-	 * @return
-	 */
-	public String getCitation() {
-		String title = super.getCollection().getMetadata().getTitle();
-		String author = this.getPersonString();
-		String url = super.getPageUrl();
-		String citation = title + " " + sessionBean.getLabel("from") + " <i>"
-				+ author + "</i></br>" + url;
-		return citation;
-	}
+  /**
+   * @return
+   */
+  public String getCitation() {
+    String title = super.getCollection().getMetadata().getTitle();
+    String author = this.getPersonString();
+    String url = super.getPageUrl();
+    String citation =
+        title + " " + sessionBean.getLabel("from") + " <i>" + author + "</i></br>" + url;
+    return citation;
+  }
 }

@@ -200,21 +200,18 @@ public class StatementWrapper implements Comparable<StatementWrapper> {
       statement.setDescription((Boolean) event.getNewValue());
     }
   }
-  
+
   /**
-	 * Listener for the constraints fields
-	 * 
-	 * @param event
-	 */
-	public void constraintListener(ValueChangeEvent event) {
-		if (event.getNewValue() != null
-				&& event.getNewValue() != event.getOldValue()) {
-			int pos = Integer.parseInt(event.getComponent().getAttributes()
-					.get("position").toString());
-			((List<String>) statement.getLiteralConstraints()).set(pos, event
-					.getNewValue().toString());
-		}
-	}
+   * Listener for the constraints fields
+   * 
+   * @param event
+   */
+  public void constraintListener(ValueChangeEvent event) {
+    if (event.getNewValue() != null && event.getNewValue() != event.getOldValue()) {
+      int pos = Integer.parseInt(event.getComponent().getAttributes().get("position").toString());
+      ((List<String>) statement.getLiteralConstraints()).set(pos, event.getNewValue().toString());
+    }
+  }
 
   /**
    * getter

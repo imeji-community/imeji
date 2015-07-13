@@ -7,13 +7,15 @@ import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.CookieUtils;
 import de.mpg.imeji.presentation.util.PropertyReader;
+
 import org.apache.log4j.Logger;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This abstract bean class is used to manage lists with one or two paginators. It can work together
@@ -224,18 +226,6 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
     return elementsPerPage;
   }
 
-  /**
-   * Used as action when the user changes the upper number of elements menu.
-   * 
-   * @return
-   * @throws Exception
-   */
-  public String changeElementsPerPage() throws Exception {
-    // set new PageNumber to a number where the first element of the current
-    // Page is still displayed
-    setCurrentPageNumber(((currentPageNumber - 1 * elementsPerPage + 1) / (elementsPerPage)) + 1);
-    return getPrettyNavigation();
-  }
 
   /**
    * Listener for elementsPerPageTop
@@ -246,6 +236,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
   public void elementsPerPageListener(ValueChangeEvent event) throws Exception {
     if (event != null) {
       setElementsPerPage((Integer) event.getNewValue());
+      setCurrentPageNumber(1);
     }
   }
 

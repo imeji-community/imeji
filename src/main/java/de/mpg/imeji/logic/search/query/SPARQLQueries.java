@@ -24,20 +24,32 @@
  */
 package de.mpg.imeji.logic.search.query;
 
+import java.net.URI;
+
+import org.apache.commons.lang3.text.translate.CharSequenceTranslator;
+import org.apache.commons.lang3.text.translate.UnicodeEscaper;
+import org.opensaml.ws.wssecurity.Username;
+
 import com.hp.hpl.jena.sparql.pfunction.library.container;
+
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.util.ObjectHelper;
-import de.mpg.imeji.logic.vo.*;
+import de.mpg.imeji.logic.vo.Album;
+import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
+import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.Metadata;
+import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;
+import de.mpg.imeji.logic.vo.Space;
+import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.j2j.helper.J2JHelper;
-import org.apache.commons.lang3.text.translate.UnicodeEscaper;
-import org.opensaml.ws.wssecurity.Username;
-
-import java.net.URI;
 
 /**
  * SPARQL queries for imeji
@@ -506,7 +518,10 @@ public class SPARQLQueries {
   }
 
   public static String selectCollectionsNotInSpace() {
-    return "SELECT DISTINCT ?s  WHERE {  FILTER NOT EXISTS {?s <http://imeji.org/terms/space> ?o} . ?s a <http://imeji.org/terms/collection> } ";
+    return "SELECT DISTINCT ?s  WHERE {"
+        + " FILTER NOT EXISTS {?s <http://imeji.org/terms/space> ?o} ."
+        + "  ?s a <http://imeji.org/terms/collection> ." + " FILTER NOT EXISTS {?s <"
+        + ImejiNamespaces.STATUS + "> <" + Status.WITHDRAWN.getUriString() + "> }" + "} ";
   }
 
   /**
@@ -654,21 +669,18 @@ public class SPARQLQueries {
         + Status.WITHDRAWN.getUriString() + ">)} LIMIT " + limit;
   }
 
-	/**
-	 * Return all discarded {@link Item} of a {@link container}
-	 * 
-	 * @param uri
-	 * @param limit
-	 * @return
-	 */
-	public static String selectDiscardedCollectionItems(URI uri, User user, int limit) {
-			return "SELECT DISTINCT ?s WHERE {?s <http://imeji.org/terms/collection> <"
-					+ uri.toString()
-					+ "> . ?s <"
-					+ ImejiNamespaces.STATUS
-					+ "> ?status .  filter(?status=<"
-					+ Status.WITHDRAWN.getUriString() + ">)} LIMIT " + limit;
-	}
+  /**
+   * Return all discarded {@link Item} of a {@link container}
+   * 
+   * @param uri
+   * @param limit
+   * @return
+   */
+  public static String selectDiscardedCollectionItems(URI uri, User user, int limit) {
+    return "SELECT DISTINCT ?s WHERE {?s <http://imeji.org/terms/collection> <" + uri.toString()
+        + "> . ?s <" + ImejiNamespaces.STATUS + "> ?status .  filter(?status=<"
+        + Status.WITHDRAWN.getUriString() + ">)} LIMIT " + limit;
+  }
 
   /**
    * Return all the {@link Item} of a {@link Album}
@@ -694,21 +706,20 @@ public class SPARQLQueries {
 
   }
 
-	/**
-	 * Return all discarded {@link Item} of a {@link Album}
-	 * 
-	 * @param uri
-	 * @param user
-	 * @param limit
-	 * @return
-	 */
-	public static String selectDiscardedAlbumItems(URI uri, User user, int limit) {
-			return "SELECT DISTINCT ?s WHERE {<" + uri.toString()
-					+ "> <http://imeji.org/terms/item> ?s . ?s <"
-					+ ImejiNamespaces.STATUS + "> ?status .  filter(?status=<"
-					+ Status.WITHDRAWN.getUriString() + ">)}"
-					+ ((limit > 0) ? (" LIMIT " + limit) : "");
-	}
+  /**
+   * Return all discarded {@link Item} of a {@link Album}
+   * 
+   * @param uri
+   * @param user
+   * @param limit
+   * @return
+   */
+  public static String selectDiscardedAlbumItems(URI uri, User user, int limit) {
+    return "SELECT DISTINCT ?s WHERE {<" + uri.toString()
+        + "> <http://imeji.org/terms/item> ?s . ?s <" + ImejiNamespaces.STATUS
+        + "> ?status .  filter(?status=<" + Status.WITHDRAWN.getUriString() + ">)}"
+        + ((limit > 0) ? (" LIMIT " + limit) : "");
+  }
 
 
   public static String selectContainerItemByFilename(URI containerURI, String filename) {
@@ -781,7 +792,7 @@ public class SPARQLQueries {
   }
 
   private static String escapeCharacterWithUnicode(String c) {
-    return "\\u00" + UnicodeEscaper.hex(c.codePointAt(0));
+    return "\\u00" + CharSequenceTranslator.hex(c.codePointAt(0));
   }
 
   /**

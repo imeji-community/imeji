@@ -231,6 +231,11 @@
 		<view-id>/jsf/AdminSpaceCreate.xhtml</view-id>
 	</url-mapping>
 	
+	<url-mapping id="spaceList">
+		<pattern value="/spaces"></pattern>
+		<view-id>/jsf/Spaces.xhtml</view-id>
+	</url-mapping>
+	
 	<!-- Begin UrlMappings -->
 	<url-mapping id="space_home">
 		<pattern value="/space/#{SessionBean.spaceId}" />
@@ -453,6 +458,11 @@
 		<view-id>/jsf/AdminSpaceCreate.xhtml</view-id>
 	</url-mapping>
 	
+	<url-mapping id="space_spaceEdit">
+		<pattern value="/space/#{SessionBean.spaceId}/editspace"></pattern>
+		<view-id>/jsf/AdminSpaceEdit.xhtml</view-id>
+	</url-mapping>
+
 <!-- 
 	NB 15.04. Not needed anylonger will redirect to space home page in any case
 	AdminSpaceWelcome content to be used for space/welcome page perhaps.

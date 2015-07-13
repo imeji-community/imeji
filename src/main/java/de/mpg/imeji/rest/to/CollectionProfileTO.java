@@ -5,34 +5,34 @@ import java.io.Serializable;
 /**
  * Created by vlad on 25.11.14.
  */
-public class CollectionProfileTO implements Serializable{
+public class CollectionProfileTO implements Serializable {
 
-    private static final long serialVersionUID = -5210147403244095642L;
+  private static final long serialVersionUID = -5210147403244095642L;
 
-    public static enum METHOD {
-        REFERENCE, COPY;
-        @Override
-        public String toString() {
-            return super.toString().toLowerCase();
-        }
+  public static enum METHOD {
+    REFERENCE, COPY;
+    @Override
+    public String toString() {
+      return super.toString().toLowerCase();
     }
+  }
 
-    private String id;
-    private String method;
+  private String id;
+  private String method;
 
-    public String getId() {
-        return id;
-    }
+  public String getId() {
+    return id;
+  }
 
-    public void setId(String profileId) {
-        this.id = profileId;
-    }
+  public void setId(String profileId) {
+    this.id = profileId;
+  }
 
-    public String getMethod() {
-        return method;
-    }
+  public String getMethod() {
+    return method;
+  }
 
-    public void setMethod(String method) {
-        this.method = method;
-    }
+  public void setMethod(String method) {
+    this.method = method;
+  }
 }

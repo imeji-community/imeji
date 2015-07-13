@@ -3,6 +3,11 @@
  */
 package de.mpg.imeji.presentation.user;
 
+import java.util.Arrays;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
@@ -16,11 +21,6 @@ import de.mpg.imeji.presentation.user.util.PasswordGenerator;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 
-import org.apache.log4j.Logger;
-
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * Java Bean for the Create new user page
  * 
@@ -29,175 +29,166 @@ import java.util.List;
  * @version $Revision$ $LastChangedDate$
  */
 public class UserCreationBean {
-	private User user;
-	private SessionBean sb;
-	private boolean sendEmail = false;
-	private static Logger logger = Logger.getLogger(UserCreationBean.class);
-	private boolean allowedToCreateCollection = true;
+  private User user;
+  private SessionBean sb;
+  private boolean sendEmail = false;
+  private static Logger logger = Logger.getLogger(UserCreationBean.class);
+  private boolean allowedToCreateCollection = true;
 
-	/**
-	 * Construct new bean
-	 */
-	public UserCreationBean() {
-		sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-		this.setUser(new User());
-	}
+  /**
+   * Construct new bean
+   */
+  public UserCreationBean() {
+    sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+    this.setUser(new User());
+  }
 
-	/**
-	 * Method called when user create a new user
-	 * 
-	 * @return
-	 * @throws Exception
-	 */
-	public String create() {
+  /**
+   * Method called when user create a new user
+   * 
+   * @return
+   * @throws Exception
+   */
+  public String create() {
 
-			try {
-					String password = createNewUser();
-					if (sendEmail) {
-						sendNewAccountEmail(password);
-					}
-					BeanHelper.info(sb.getMessage("success_user_create"));
-					return sb.getPrettySpacePage("pretty:users");
-				}
-			catch (Exception e) {
-				 BeanHelper.cleanMessages();
-	             BeanHelper.error(sb.getMessage("error_during_user_create"));
-	             List<String> listOfErrors = 
-	           		  Arrays.asList(e.getMessage().split(";"));
-	             for (String errorM:listOfErrors){
-	           	  	BeanHelper.error(sb.getMessage(errorM));
-	             }
-			}
-		return "pretty:";
-	}
+    try {
+      String password = createNewUser();
+      if (sendEmail) {
+        sendNewAccountEmail(password);
+      }
+      BeanHelper.info(sb.getMessage("success_user_create"));
+      return sb.getPrettySpacePage("pretty:users");
+    } catch (Exception e) {
+      BeanHelper.cleanMessages();
+      BeanHelper.error(sb.getMessage("error_during_user_create"));
+      List<String> listOfErrors = Arrays.asList(e.getMessage().split(";"));
+      for (String errorM : listOfErrors) {
+        BeanHelper.error(sb.getMessage(errorM));
+      }
+    }
+    return "pretty:";
+  }
 
-	/**
-	 * Create a new {@link User}
-	 * 
-	 * @throws Exception
-	 */
-	private String createNewUser() throws Exception {
-		UserController uc = new UserController(sb.getUser());
-		PasswordGenerator generator = new PasswordGenerator();
-		String password = generator.generatePassword();
-		user.setEncryptedPassword(StringHelper.convertToMD5(password));
-		uc.create(user, allowedToCreateCollection ? USER_TYPE.DEFAULT
-				: USER_TYPE.RESTRICTED);
-		return password;
-	}
+  /**
+   * Create a new {@link User}
+   * 
+   * @throws Exception
+   */
+  private String createNewUser() throws Exception {
+    UserController uc = new UserController(sb.getUser());
+    PasswordGenerator generator = new PasswordGenerator();
+    String password = generator.generatePassword();
+    user.setEncryptedPassword(StringHelper.convertToMD5(password));
+    uc.create(user, allowedToCreateCollection ? USER_TYPE.DEFAULT : USER_TYPE.RESTRICTED);
+    return password;
+  }
 
 
 
-	/**
-	 * True if the {@link User} exists
-	 * 
-	 * @return
-	 * @throws Exception
-	 */
-	public static boolean userAlreadyExists(User user) throws Exception {
-		try {
-			SessionBean session = (SessionBean) BeanHelper
-					.getSessionBean(SessionBean.class);
-			UserController uc = new UserController(session.getUser());
-			uc.retrieve(user.getEmail());
-			return true;
-		} catch (NotFoundException e) {
-			logger.info("User not found: " + user.getEmail());
-			return false;
-		}
-	}
+  /**
+   * True if the {@link User} exists
+   * 
+   * @return
+   * @throws Exception
+   */
+  public static boolean userAlreadyExists(User user) throws Exception {
+    try {
+      SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+      UserController uc = new UserController(session.getUser());
+      uc.retrieve(user.getEmail());
+      return true;
+    } catch (NotFoundException e) {
+      logger.info("User not found: " + user.getEmail());
+      return false;
+    }
+  }
 
-	/**
-	 * Send an email to the current {@link User}
-	 * 
-	 * @param password
-	 */
-	public void sendNewAccountEmail(String password) {
-		EmailClient emailClient = new EmailClient();
-		EmailMessages emailMessages = new EmailMessages();
-		try {
-			emailClient.sendMail(
-					user.getEmail(),
-					null,
-					emailMessages.getEmailOnAccountAction_Subject(true),
-					emailMessages.getNewAccountMessage(password,
-							user.getEmail(), user.getName()));
-		} catch (Exception e) {
-			logger.error("Error sending email", e);
-			BeanHelper.error(sb.getMessage("error") + ": Email not sent");
-		}
-	}
+  /**
+   * Send an email to the current {@link User}
+   * 
+   * @param password
+   */
+  public void sendNewAccountEmail(String password) {
+    EmailClient emailClient = new EmailClient();
+    EmailMessages emailMessages = new EmailMessages();
+    try {
+      emailClient.sendMail(user.getEmail(), null,
+          emailMessages.getEmailOnAccountAction_Subject(true),
+          emailMessages.getNewAccountMessage(password, user.getEmail(), user.getName()));
+    } catch (Exception e) {
+      logger.error("Error sending email", e);
+      BeanHelper.error(sb.getMessage("error") + ": Email not sent");
+    }
+  }
 
-	/**
-	 * Add a new empty organization
-	 * 
-	 * @param index
-	 */
-	public void addOrganization(int index) {
-		((List<Organization>) this.user.getPerson().getOrganizations()).add(
-				index, ImejiFactory.newOrganization());
-	}
+  /**
+   * Add a new empty organization
+   * 
+   * @param index
+   */
+  public void addOrganization(int index) {
+    ((List<Organization>) this.user.getPerson().getOrganizations()).add(index,
+        ImejiFactory.newOrganization());
+  }
 
-	/**
-	 * Remove an nth organization
-	 * 
-	 * @param index
-	 */
-	public void removeOrganization(int index) {
-		List<Organization> orgas = (List<Organization>) this.user.getPerson()
-				.getOrganizations();
-		if (orgas.size() > 1)
-			orgas.remove(index);
-	}
+  /**
+   * Remove an nth organization
+   * 
+   * @param index
+   */
+  public void removeOrganization(int index) {
+    List<Organization> orgas = (List<Organization>) this.user.getPerson().getOrganizations();
+    if (orgas.size() > 1)
+      orgas.remove(index);
+  }
 
-	/**
-	 * setter
-	 * 
-	 * @param user
-	 */
-	public void setUser(User user) {
-		this.user = user;
-	}
+  /**
+   * setter
+   * 
+   * @param user
+   */
+  public void setUser(User user) {
+    this.user = user;
+  }
 
-	/**
-	 * getter
-	 * 
-	 * @return
-	 */
-	public User getUser() {
-		return user;
-	}
+  /**
+   * getter
+   * 
+   * @return
+   */
+  public User getUser() {
+    return user;
+  }
 
-	/**
-	 * getter - True if the selectbox "send email to user" has been selected
-	 * 
-	 * @return
-	 */
-	public boolean isSendEmail() {
-		return sendEmail;
-	}
+  /**
+   * getter - True if the selectbox "send email to user" has been selected
+   * 
+   * @return
+   */
+  public boolean isSendEmail() {
+    return sendEmail;
+  }
 
-	/**
-	 * setter
-	 * 
-	 * @param sendEmail
-	 */
-	public void setSendEmail(boolean sendEmail) {
-		this.sendEmail = sendEmail;
-	}
+  /**
+   * setter
+   * 
+   * @param sendEmail
+   */
+  public void setSendEmail(boolean sendEmail) {
+    this.sendEmail = sendEmail;
+  }
 
-	/**
-	 * @return the allowedToCreateCollection
-	 */
-	public boolean isAllowedToCreateCollection() {
-		return allowedToCreateCollection;
-	}
+  /**
+   * @return the allowedToCreateCollection
+   */
+  public boolean isAllowedToCreateCollection() {
+    return allowedToCreateCollection;
+  }
 
-	/**
-	 * @param allowedToCreateCollection
-	 *            the allowedToCreateCollection to set
-	 */
-	public void setAllowedToCreateCollection(boolean allowedToCreateCollection) {
-		this.allowedToCreateCollection = allowedToCreateCollection;
-	}
+  /**
+   * @param allowedToCreateCollection the allowedToCreateCollection to set
+   */
+  public void setAllowedToCreateCollection(boolean allowedToCreateCollection) {
+    this.allowedToCreateCollection = allowedToCreateCollection;
+  }
 }

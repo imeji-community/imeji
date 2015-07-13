@@ -13,12 +13,11 @@ import com.hp.hpl.jena.rdf.model.Resource;
  * @version $Revision$ $LastChangedDate$
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface j2jResource
-{
-    /**
-     * The namespace of the resource
-     * 
-     * @return
-     */
-    public String value();
+public @interface j2jResource {
+  /**
+   * The namespace of the resource
+   * 
+   * @return
+   */
+  public String value();
 }

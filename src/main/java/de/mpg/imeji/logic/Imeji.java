@@ -40,8 +40,6 @@ import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Organization;
-import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.Space;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
@@ -58,280 +56,263 @@ import de.mpg.j2j.annotations.j2jModel;
  */
 public class Imeji {
 
-	private static Logger logger = Logger.getLogger(Imeji.class);
+  private static Logger logger = Logger.getLogger(Imeji.class);
 
-	public static String tdbPath = null;
-	public static String collectionModel;
-	public static String albumModel;
-	public static String imageModel;
-	public static String userModel;
-	public static String profileModel;
-	public static String statementModel;
-	public static String counterModel = "http://imeji.org/counter";
-	public static String spaceModel;
-	public static Dataset dataset;
-	public static URI counterID = URI.create("http://imeji.org/counter/0");
-	public static User adminUser;
-	public static MetadataProfile defaultMetadataProfile;
-	private static final String ADMIN_EMAIL_INIT = "admin@imeji.org";
-	private static final String ADMIN_PASSWORD_INIT = "admin";
-	/**
-	 * The {@link ExecutorService} which runs the thread in imeji
-	 */
-	public static ExecutorService executor = Executors.newCachedThreadPool();
-	/**
-	 * Executes jobs over night
-	 */
-	public static NightlyExecutor nightlyExecutor = new NightlyExecutor();
+  public static String tdbPath = null;
+  public static String collectionModel;
+  public static String albumModel;
+  public static String imageModel;
+  public static String userModel;
+  public static String profileModel;
+  public static String statementModel;
+  public static String counterModel = "http://imeji.org/counter";
+  public static String spaceModel;
+  public static Dataset dataset;
+  public static URI counterID = URI.create("http://imeji.org/counter/0");
+  public static User adminUser;
+  public static MetadataProfile defaultMetadataProfile;
+  private static final String ADMIN_EMAIL_INIT = "admin@imeji.org";
+  private static final String ADMIN_PASSWORD_INIT = "admin";
+  /**
+   * The {@link ExecutorService} which runs the thread in imeji
+   */
+  public static ExecutorService executor = Executors.newCachedThreadPool();
+  /**
+   * Executes jobs over night
+   */
+  public static NightlyExecutor nightlyExecutor = new NightlyExecutor();
 
-	/**
-	 * Initialize the {@link Jena} database according to imeji.properties<br/>
-	 * Called when the server (Tomcat of JBoss) is started
-	 */
-	public static void init() {
-		try {
-			tdbPath = PropertyReader.getProperty("imeji.tdb.path");
-		} catch (Exception e) {
-			throw new RuntimeException("Error reading property imeji.tdb.path",
-					e);
-		}
-		init(tdbPath);
-		nightlyExecutor.start();
-	}
+  /**
+   * Initialize the {@link Jena} database according to imeji.properties<br/>
+   * Called when the server (Tomcat of JBoss) is started
+   */
+  public static void init() {
+    try {
+      tdbPath = PropertyReader.getProperty("imeji.tdb.path");
+    } catch (Exception e) {
+      throw new RuntimeException("Error reading property imeji.tdb.path", e);
+    }
+    init(tdbPath);
+    nightlyExecutor.start();
+  }
 
-	/**
-	 * Run the migration instruction (SPARQL Update queries defines in the
-	 * migration.xml file)
-	 * 
-	 * @throws IOException
-	 */
-	public static void runMigration() throws IOException {
-		File f = new File(Imeji.tdbPath + StringHelper.urlSeparator
-				+ "migration.txt");
-		FileInputStream in = null;
-		try {
-			in = new FileInputStream(f);
-		} catch (FileNotFoundException e) {
-			logger.info("No" + f.getAbsolutePath()
-					+ " found, no migration runs");
-		}
-		if (in != null) {
-			String migrationRequests = new String(StreamUtils.getBytes(in),
-					"UTF-8");
-			logger.info("Running migration with query: ");
-			logger.info(migrationRequests);
-			ImejiSPARQL.execUpdate(migrationRequests);
-			logger.info("Migration done!");
-		}
-	}
+  /**
+   * Run the migration instruction (SPARQL Update queries defines in the migration.xml file)
+   * 
+   * @throws IOException
+   */
+  public static void runMigration() throws IOException {
+    File f = new File(Imeji.tdbPath + StringHelper.urlSeparator + "migration.txt");
+    FileInputStream in = null;
+    try {
+      in = new FileInputStream(f);
+    } catch (FileNotFoundException e) {
+      logger.info("No" + f.getAbsolutePath() + " found, no migration runs");
+    }
+    if (in != null) {
+      String migrationRequests = new String(StreamUtils.getBytes(in), "UTF-8");
+      logger.info("Running migration with query: ");
+      logger.info(migrationRequests);
+      ImejiSPARQL.execUpdate(migrationRequests);
+      logger.info("Migration done!");
+    }
+  }
 
-	/**
-	 * Initialize a {@link Jena} database according at one path location in
-	 * filesystem
-	 * 
-	 * @param path
-	 */
-	public static void init(String path) {
-		if (path != null) {
-			File f = new File(path);
-			if (!f.exists()) {
-				f.getParentFile().mkdirs();
-			}
-			tdbPath = f.getAbsolutePath();
-		}
-		logger.info("Initializing Jena dataset (" + tdbPath + ")...");
-		dataset = tdbPath != null ? TDBFactory.createDataset(tdbPath)
-				: TDBFactory.createDataset();
-		logger.info("... dataset done!");
-		logger.info("Initializing Jena models...");
-		albumModel = getModelName(Album.class);
-		collectionModel = getModelName(CollectionImeji.class);
-		imageModel = getModelName(Item.class);
-		userModel = getModelName(User.class);
-		statementModel = getModelName(Statement.class);
-		profileModel = getModelName(MetadataProfile.class);
-		spaceModel = getModelName(Space.class);
-		initModel(albumModel);
-		initModel(collectionModel);
-		initModel(imageModel);
-		initModel(userModel);
-		initModel(statementModel);
-		initModel(profileModel);
-		initModel(spaceModel);
-		initModel(counterModel);
-		logger.info("... models done!");
-		initadminUser();
-		initDefaultMetadataProfile();
-	}
+  /**
+   * Initialize a {@link Jena} database according at one path location in filesystem
+   * 
+   * @param path
+   */
+  public static void init(String path) {
+    if (path != null) {
+      File f = new File(path);
+      if (!f.exists()) {
+        f.getParentFile().mkdirs();
+      }
+      tdbPath = f.getAbsolutePath();
+    }
+    logger.info("Initializing Jena dataset (" + tdbPath + ")...");
+    dataset = tdbPath != null ? TDBFactory.createDataset(tdbPath) : TDBFactory.createDataset();
+    logger.info("... dataset done!");
+    logger.info("Initializing Jena models...");
+    albumModel = getModelName(Album.class);
+    collectionModel = getModelName(CollectionImeji.class);
+    imageModel = getModelName(Item.class);
+    userModel = getModelName(User.class);
+    statementModel = getModelName(Statement.class);
+    profileModel = getModelName(MetadataProfile.class);
+    spaceModel = getModelName(Space.class);
+    initModel(albumModel);
+    initModel(collectionModel);
+    initModel(imageModel);
+    initModel(userModel);
+    initModel(statementModel);
+    initModel(profileModel);
+    initModel(spaceModel);
+    initModel(counterModel);
+    logger.info("... models done!");
+    initadminUser();
+    initDefaultMetadataProfile();
+  }
 
-	/**
-	 * Initialize (Create when not existing) a {@link Model} with a given name
-	 * 
-	 * @param name
-	 */
-	private static void initModel(String name) {
-		try {
-			// Careful: This is a read locks. A write lock would lead to
-			// corrupted graph
-			dataset.begin(ReadWrite.READ);
-			if (dataset.containsNamedModel(name)) {
-				dataset.getNamedModel(name);
-			} else {
-				Model m = ModelFactory.createDefaultModel();
-				dataset.addNamedModel(name, m);
-			}
-			dataset.commit();
-		} catch (Exception e) {
-			dataset.abort();
-		} finally {
-			dataset.end();
-		}
-	}
+  /**
+   * Initialize (Create when not existing) a {@link Model} with a given name
+   * 
+   * @param name
+   */
+  private static void initModel(String name) {
+    try {
+      // Careful: This is a read locks. A write lock would lead to
+      // corrupted graph
+      dataset.begin(ReadWrite.READ);
+      if (dataset.containsNamedModel(name)) {
+        dataset.getNamedModel(name);
+      } else {
+        Model m = ModelFactory.createDefaultModel();
+        dataset.addNamedModel(name, m);
+      }
+      dataset.commit();
+    } catch (Exception e) {
+      dataset.abort();
+    } finally {
+      dataset.end();
+    }
+  }
 
-	/**
-	 * Initialize the system administrator {@link User}, accoring to credentials
-	 * in imeji.properties
-	 */
-	private static void initadminUser() {
-		try {
-			// Init the User
-			adminUser = new User();
-			adminUser.setPerson(ImejiFactory.newPerson("Admin", "imeji", "imeji community"));
-			adminUser.setEmail(ADMIN_EMAIL_INIT);
-			adminUser.setEncryptedPassword(StringHelper
-					.convertToMD5(ADMIN_PASSWORD_INIT));
-			adminUser.getGrants().addAll(
-					AuthorizationPredefinedRoles.imejiAdministrator(adminUser
-							.getId().toString()));
-			// create
-			UserController uc = new UserController(Imeji.adminUser);
-			List<User> admins = uc.retrieveAllAdmins();
-			if (admins.size() == 0) {
-				try {
-					uc.retrieve(Imeji.adminUser.getEmail());
-				} catch (NotFoundException e) {
-					logger.info("!!! IMPORTANT !!! Create admin@imeji.org as system administrator with password admin. !!! CHANGE PASSWORD !!!");
-					uc.create(Imeji.adminUser, USER_TYPE.ADMIN);
-					logger.info("Created admin user successfully:"
-							+ Imeji.adminUser.getEmail());
-				}
-			} else {
-				logger.info("Admin user already exists:");
-				for (User admin : admins) {
-					logger.info(admin.getEmail() + " is admin + ("
-							+ admin.getId() + ")");
-				}
-			}
-		} catch (AlreadyExistsException e) {
-			logger.warn(Imeji.adminUser.getEmail() + " already exists");
-		} catch (Exception e) {
-			if (e.getCause() instanceof AlreadyExistsException) {
-				logger.warn(Imeji.adminUser.getEmail() + " already exists");
-			} else {
-				throw new RuntimeException("Error initializing Admin user! ", e);
-			}
-		}
-	}
+  /**
+   * Initialize the system administrator {@link User}, accoring to credentials in imeji.properties
+   */
+  private static void initadminUser() {
+    try {
+      // Init the User
+      adminUser = new User();
+      adminUser.setPerson(ImejiFactory.newPerson("Admin", "imeji", "imeji community"));
+      adminUser.setEmail(ADMIN_EMAIL_INIT);
+      adminUser.setEncryptedPassword(StringHelper.convertToMD5(ADMIN_PASSWORD_INIT));
+      adminUser.getGrants().addAll(
+          AuthorizationPredefinedRoles.imejiAdministrator(adminUser.getId().toString()));
+      // create
+      UserController uc = new UserController(Imeji.adminUser);
+      List<User> admins = uc.retrieveAllAdmins();
+      if (admins.size() == 0) {
+        try {
+          uc.retrieve(Imeji.adminUser.getEmail());
+        } catch (NotFoundException e) {
+          logger
+              .info("!!! IMPORTANT !!! Create admin@imeji.org as system administrator with password admin. !!! CHANGE PASSWORD !!!");
+          uc.create(Imeji.adminUser, USER_TYPE.ADMIN);
+          logger.info("Created admin user successfully:" + Imeji.adminUser.getEmail());
+        }
+      } else {
+        logger.info("Admin user already exists:");
+        for (User admin : admins) {
+          logger.info(admin.getEmail() + " is admin + (" + admin.getId() + ")");
+        }
+      }
+    } catch (AlreadyExistsException e) {
+      logger.warn(Imeji.adminUser.getEmail() + " already exists");
+    } catch (Exception e) {
+      if (e.getCause() instanceof AlreadyExistsException) {
+        logger.warn(Imeji.adminUser.getEmail() + " already exists");
+      } else {
+        throw new RuntimeException("Error initializing Admin user! ", e);
+      }
+    }
+  }
 
-	private static void initDefaultMetadataProfile() {
+  private static void initDefaultMetadataProfile() {
 
-		ProfileController pc = new ProfileController();
-		logger.info("Initializing default metadata profile...");
-		try {
-			defaultMetadataProfile = pc.initDefaultMetadataProfile();
-		} catch (Exception e) {
-			logger.error(
-					"error retrieving/creating default metadata profile: ", e);
-		}
-		if (defaultMetadataProfile != null) {
-			logger.info("Default metadata profile is set-up to "
-					+ defaultMetadataProfile.getId());
-		} else {
-			logger.info("Checking for default metadata profile is finished: no default metadata profile has been set.");
+    ProfileController pc = new ProfileController();
+    logger.info("Initializing default metadata profile...");
+    try {
+      defaultMetadataProfile = pc.initDefaultMetadataProfile();
+    } catch (Exception e) {
+      logger.error("error retrieving/creating default metadata profile: ", e);
+    }
+    if (defaultMetadataProfile != null) {
+      logger.info("Default metadata profile is set-up to " + defaultMetadataProfile.getId());
+    } else {
+      logger
+          .info("Checking for default metadata profile is finished: no default metadata profile has been set.");
 
-		}
-	}
+    }
+  }
 
-	public static void shutdown() {
-		logger.info("Shutting down thread executor...");
-		Imeji.executor.shutdown();
-		nightlyExecutor.stop();
-		logger.info("executor shutdown shutdown? "
-				+ Imeji.executor.isShutdown());
+  public static void shutdown() {
+    logger.info("Shutting down thread executor...");
+    Imeji.executor.shutdown();
+    nightlyExecutor.stop();
+    logger.info("executor shutdown shutdown? " + Imeji.executor.isShutdown());
 
-		logger.info("Closing Jena! TDB...");
-		TDB.sync(Imeji.dataset);
-		logger.info("sync done");
-		Imeji.dataset.close();
-		logger.info("dataset closed");
-		TDB.closedown();
-		logger.info("tdb closed");
-		TDBMaker.releaseLocation(Location.create(Imeji.tdbPath));
-		logger.info("location released");
-		logger.info("...done!");
+    logger.info("Closing Jena! TDB...");
+    TDB.sync(Imeji.dataset);
+    logger.info("sync done");
+    Imeji.dataset.close();
+    logger.info("dataset closed");
+    TDB.closedown();
+    logger.info("tdb closed");
+    TDBMaker.releaseLocation(Location.create(Imeji.tdbPath));
+    logger.info("location released");
+    logger.info("...done!");
 
-		// This is a bug of com.hp.hpl.jena.sparql.engine.QueryExecutionBase
-		// implementation:
-		// AlarmClock is not correctly released, it leads to the memory leaks
-		// after tomcat stop
-		// see https://github.com/imeji-community/imeji/issues/966!
-		logger.info("Release AlarmClock...");
-		AlarmClock alarmClock = AlarmClock.get();
-		alarmClock.release();
-		logger.info("done");
-	}
+    // This is a bug of com.hp.hpl.jena.sparql.engine.QueryExecutionBase
+    // implementation:
+    // AlarmClock is not correctly released, it leads to the memory leaks
+    // after tomcat stop
+    // see https://github.com/imeji-community/imeji/issues/966!
+    logger.info("Release AlarmClock...");
+    AlarmClock alarmClock = AlarmClock.get();
+    alarmClock.release();
+    logger.info("done");
+  }
 
-	/**
-	 * Return the name of the model if defined in a {@link Class} with
-	 * {@link j2jModel} annotation
-	 * 
-	 * @param voClass
-	 * @return
-	 */
-	public static String getModelName(Class<?> voClass) {
-		j2jModel j2jModel = voClass.getAnnotation(j2jModel.class);
-		return "http://imeji.org/" + j2jModel.value();
-	}
+  /**
+   * Return the name of the model if defined in a {@link Class} with {@link j2jModel} annotation
+   * 
+   * @param voClass
+   * @return
+   */
+  public static String getModelName(Class<?> voClass) {
+    j2jModel j2jModel = voClass.getAnnotation(j2jModel.class);
+    return "http://imeji.org/" + j2jModel.value();
+  }
 
-	/**
-	 * Print all data in one {@link Model} as RDF
-	 * 
-	 * @param modelName
-	 */
-	public static void printModel(String modelName) {
-		try {
-			dataset.begin(ReadWrite.READ);
-			dataset.getNamedModel(modelName)
-					.write(System.out, "RDF/XML-ABBREV");
-			dataset.commit();
-		} catch (Exception e) {
-			dataset.abort();
-		} finally {
-			dataset.end();
-		}
-	}
+  /**
+   * Print all data in one {@link Model} as RDF
+   * 
+   * @param modelName
+   */
+  public static void printModel(String modelName) {
+    try {
+      dataset.begin(ReadWrite.READ);
+      dataset.getNamedModel(modelName).write(System.out, "RDF/XML-ABBREV");
+      dataset.commit();
+    } catch (Exception e) {
+      dataset.abort();
+    } finally {
+      dataset.end();
+    }
+  }
 
-	/**
-	 * Returns true if checksum of uploaded files will be checked for duplicates
-	 * within a single collection according to settings in properties. If
-	 * properties do not exist, checksum duplicate checking will be set as
-	 * default
-	 * 
-	 */
+  /**
+   * Returns true if checksum of uploaded files will be checked for duplicates within a single
+   * collection according to settings in properties. If properties do not exist, checksum duplicate
+   * checking will be set as default
+   * 
+   */
 
-	public static boolean isValidateChecksumInCollection() {
-		String validateChecksum;
-		try {
-			validateChecksum = PropertyReader
-					.getProperty("imeji.validate.checksum.in.collection");
-		} catch (Exception e) {
-			return true;
-		}
+  public static boolean isValidateChecksumInCollection() {
+    String validateChecksum;
+    try {
+      validateChecksum = PropertyReader.getProperty("imeji.validate.checksum.in.collection");
+    } catch (Exception e) {
+      return true;
+    }
 
-		if (isNullOrEmpty(validateChecksum))
-			return true;
+    if (isNullOrEmpty(validateChecksum))
+      return true;
 
-		return Boolean.valueOf(validateChecksum);
+    return Boolean.valueOf(validateChecksum);
 
-	}
+  }
 }

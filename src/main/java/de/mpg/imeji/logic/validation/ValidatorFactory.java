@@ -23,34 +23,34 @@ import de.mpg.imeji.logic.vo.User;
  *
  */
 public class ValidatorFactory {
-	/**
-	 * Return a new {@link Validator} according to the object class
-	 * 
-	 * @param <T>
-	 * 
-	 * @param t
-	 * @return
-	 */
-	public static Validator<?> newValidator(Object obj, Validator.Method method ) {
-		//For now, do not do anything with Delete, just a possiblity
-		if (Validator.Method.DELETE.equals(method))
-			return new PseudoValidator(method);
+  /**
+   * Return a new {@link Validator} according to the object class
+   * 
+   * @param <T>
+   * 
+   * @param t
+   * @return
+   */
+  public static Validator<?> newValidator(Object obj, Validator.Method method) {
+    // For now, do not do anything with Delete, just a possiblity
+    if (Validator.Method.DELETE.equals(method))
+      return new PseudoValidator(method);
 
-		if (obj instanceof Item) {
-			return new ItemValidator(method);
-		} else if (obj instanceof Metadata) {
-			return new MetadataValidator(method);
-		} else if (obj instanceof CollectionImeji) {
-			return new CollectionValidator(method);
-		} else if (obj instanceof Album) {
-			return new AlbumValidator(method);
-		} else if (obj instanceof MetadataProfile) {
-			return new ProfileValidator(method);
-		} else if (obj instanceof User) {
-			return new UserValidator(method);
-		} else if (obj instanceof Space) {
-			return new SpaceValidator(method);
-		}
-		return new PseudoValidator(method);
-	}
+    if (obj instanceof Item) {
+      return new ItemValidator(method);
+    } else if (obj instanceof Metadata) {
+      return new MetadataValidator(method);
+    } else if (obj instanceof CollectionImeji) {
+      return new CollectionValidator(method);
+    } else if (obj instanceof Album) {
+      return new AlbumValidator(method);
+    } else if (obj instanceof MetadataProfile) {
+      return new ProfileValidator(method);
+    } else if (obj instanceof User) {
+      return new UserValidator(method);
+    } else if (obj instanceof Space) {
+      return new SpaceValidator(method);
+    }
+    return new PseudoValidator(method);
+  }
 }

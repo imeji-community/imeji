@@ -12,28 +12,23 @@ import javax.faces.convert.Converter;
  * 
  * @author saquet
  */
-public class DoubleConverter implements Converter
-{
-    public Object getAsObject(FacesContext arg0, UIComponent arg1, String arg2)
-    {
-        try
-        {
-            return Double.parseDouble(arg2.replace(",", "."));
-        }
-        catch (Exception e)
-        {
-            // Is not a number (NaN)
-        }
-        return Double.NaN;
+public class DoubleConverter implements Converter {
+  @Override
+  public Object getAsObject(FacesContext arg0, UIComponent arg1, String arg2) {
+    try {
+      return Double.parseDouble(arg2.replace(",", "."));
+    } catch (Exception e) {
+      // Is not a number (NaN)
     }
+    return Double.NaN;
+  }
 
-    @Override
-    public String getAsString(FacesContext arg0, UIComponent arg1, Object arg2)
-    {
-    	
-        double d = Double.parseDouble(arg2.toString());
-        if (Double.compare(Double.NaN, d) == 0)
-            return "";
-        return Double.toString(d);
-    }
+  @Override
+  public String getAsString(FacesContext arg0, UIComponent arg1, Object arg2) {
+
+    double d = Double.parseDouble(arg2.toString());
+    if (Double.compare(Double.NaN, d) == 0)
+      return "";
+    return Double.toString(d);
+  }
 }

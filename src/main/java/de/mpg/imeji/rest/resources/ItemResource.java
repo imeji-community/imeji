@@ -238,10 +238,12 @@ public class ItemResource implements ImejiResource {
   }
 
 
+  @Override
   public Response create(HttpServletRequest req) {
     return null;
   }
 
+  @Override
   @DELETE
   @Path("/{id}")
   @ApiOperation(value = "Delete item by id")

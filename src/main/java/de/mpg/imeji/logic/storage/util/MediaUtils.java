@@ -25,221 +25,196 @@ import de.mpg.imeji.presentation.util.PropertyReader;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class MediaUtils
-{
-    private static Logger logger = Logger.getLogger(MediaUtils.class);
+public class MediaUtils {
+  private static Logger logger = Logger.getLogger(MediaUtils.class);
 
-    /**
-     * Return true if imagemagick is installed on the current system<br/>
-     * TODO Ye: Execute when upload page shows and show install ImageMagick tips
-     * 
-     * @return
-     * @throws IOException
-     * @throws URISyntaxException
-     */
-    public static boolean verifyImageMagickInstallation() throws IOException, URISyntaxException
-    {
-        String imPath = getImageMagickInstallationPath();
-        ConvertCmd cmd = new ConvertCmd(false);
-        cmd.setSearchPath(imPath);
-        IMOperation op = new IMOperation();
-        // get ImageMagick version
-        op.version();
-        try
-        {
-            cmd.run(op);
-        }
-        catch (Exception e)
-        {
-            logger.error("imagemagick not installed", e);
-            return false;
-        }
-        return true;
+  /**
+   * Return true if imagemagick is installed on the current system<br/>
+   * TODO Ye: Execute when upload page shows and show install ImageMagick tips
+   * 
+   * @return
+   * @throws IOException
+   * @throws URISyntaxException
+   */
+  public static boolean verifyImageMagickInstallation() throws IOException, URISyntaxException {
+    String imPath = getImageMagickInstallationPath();
+    ConvertCmd cmd = new ConvertCmd(false);
+    cmd.setSearchPath(imPath);
+    IMOperation op = new IMOperation();
+    // get ImageMagick version
+    op.version();
+    try {
+      cmd.run(op);
+    } catch (Exception e) {
+      logger.error("imagemagick not installed", e);
+      return false;
     }
+    return true;
+  }
 
-    /**
-     * User imagemagick to convert any image into a jpeg
-     * 
-     * @param bytes
-     * @param extension
-     * @throws IOException
-     * @throws URISyntaxException
-     * @throws InterruptedException
-     * @throws IM4JavaException
-     */
-    public static byte[] convertToJPEG(File tmp, String extension) throws IOException, URISyntaxException,
-            InterruptedException, IM4JavaException
-    {
-        // In case the file is made of many frames, (for instance videos), generate only the frames from 0 to 48 to
-        // avoid high memory consumption
-        String path = tmp.getAbsolutePath() + "[0-48]";
-        ConvertCmd cmd = getConvert();
-        // create the operation, add images and operators/options
-        IMOperation op = new IMOperation();
-        if (isImage(extension))
-            op.colorspace(findColorSpace(tmp));
-        op.strip();
-        op.flatten();
-        op.addImage(path);
-        // op.colorspace("RGB");
-        File jpeg = TempFileUtil.createTempFile("uploadMagick", ".jpg");
-        try
-        {
-            op.addImage(jpeg.getAbsolutePath());
-            cmd.run(op);
-            int frame = getNonBlankFrame(jpeg.getAbsolutePath());
-            if (frame >= 0)
-            {
-                File f = new File(FilenameUtils.getFullPath(jpeg.getAbsolutePath())
-                        + FilenameUtils.getBaseName(jpeg.getAbsolutePath()) + "-" + frame + ".jpg");
-                return FileUtils.readFileToByteArray(f);
-            }
-            return FileUtils.readFileToByteArray(jpeg);
-        }
-        finally
-        {
-            removeFilesCreatedByImageMagick(jpeg.getAbsolutePath());
-            FileUtils.deleteQuietly(jpeg);
-        }
+  /**
+   * User imagemagick to convert any image into a jpeg
+   * 
+   * @param bytes
+   * @param extension
+   * @throws IOException
+   * @throws URISyntaxException
+   * @throws InterruptedException
+   * @throws IM4JavaException
+   */
+  public static byte[] convertToJPEG(File tmp, String extension) throws IOException,
+      URISyntaxException, InterruptedException, IM4JavaException {
+    // In case the file is made of many frames, (for instance videos), generate only the frames from
+    // 0 to 48 to
+    // avoid high memory consumption
+    String path = tmp.getAbsolutePath() + "[0-48]";
+    ConvertCmd cmd = getConvert();
+    // create the operation, add images and operators/options
+    IMOperation op = new IMOperation();
+    if (isImage(extension))
+      op.colorspace(findColorSpace(tmp));
+    op.strip();
+    op.flatten();
+    op.addImage(path);
+    // op.colorspace("RGB");
+    File jpeg = TempFileUtil.createTempFile("uploadMagick", ".jpg");
+    try {
+      op.addImage(jpeg.getAbsolutePath());
+      cmd.run(op);
+      int frame = getNonBlankFrame(jpeg.getAbsolutePath());
+      if (frame >= 0) {
+        File f =
+            new File(FilenameUtils.getFullPath(jpeg.getAbsolutePath())
+                + FilenameUtils.getBaseName(jpeg.getAbsolutePath()) + "-" + frame + ".jpg");
+        return FileUtils.readFileToByteArray(f);
+      }
+      return FileUtils.readFileToByteArray(jpeg);
+    } finally {
+      removeFilesCreatedByImageMagick(jpeg.getAbsolutePath());
+      FileUtils.deleteQuietly(jpeg);
     }
+  }
 
-    /**
-     * True if the extension correspond to an image file
-     * 
-     * @param extension
-     * @return
-     */
-    private static boolean isImage(String extension)
-    {
-        return StorageUtils.getMimeType(extension).contains("image");
-    }
+  /**
+   * True if the extension correspond to an image file
+   * 
+   * @param extension
+   * @return
+   */
+  private static boolean isImage(String extension) {
+    return StorageUtils.getMimeType(extension).contains("image");
+  }
 
-    public static byte[] resize()
-    {
-        return null;
-    }
+  public static byte[] resize() {
+    return null;
+  }
 
-    /**
-     * Find the colorspace of the file
-     * 
-     * @param tmp
-     * @return
-     * @throws IOException
-     * @throws InterruptedException
-     * @throws IM4JavaException
-     * @throws URISyntaxException
-     */
-    private static String findColorSpace(File tmp)
-    {
-        try
-        {
-            Info imageInfo = new Info(tmp.getAbsolutePath());
-            String cs = imageInfo.getProperty("Colorspace");
-            if (cs != null)
-                return cs;
-        }
-        catch (Exception e)
-        {
-            logger.error("No color space found!", e);
-        }
-        return "RGB";
+  /**
+   * Find the colorspace of the file
+   * 
+   * @param tmp
+   * @return
+   * @throws IOException
+   * @throws InterruptedException
+   * @throws IM4JavaException
+   * @throws URISyntaxException
+   */
+  private static String findColorSpace(File tmp) {
+    try {
+      Info imageInfo = new Info(tmp.getAbsolutePath());
+      String cs = imageInfo.getProperty("Colorspace");
+      if (cs != null)
+        return cs;
+    } catch (Exception e) {
+      logger.error("No color space found!", e);
     }
+    return "RGB";
+  }
 
-    /**
-     * Search for the first non blank image generated by imagemagick, based on commandline: convert image.jpg -shave
-     * 1%x1% -resize 40% -fuzz 10% -trim +repage info: | grep ' 1x1 '
-     * 
-     * @param path
-     * @return
-     * @throws IOException
-     * @throws URISyntaxException
-     * @throws InterruptedException
-     * @throws IM4JavaException
-     */
-    private static int getNonBlankFrame(String path) throws IOException, URISyntaxException, InterruptedException,
-            IM4JavaException
-    {
-        ConvertCmd cmd = getConvert();
-        int count = 0;
-        String dir = FilenameUtils.getFullPath(path);
-        String pathBase = FilenameUtils.getBaseName(path);
-        File f = new File(dir + pathBase + "-" + count + ".jpg");
-        while (f.exists())
-        {
-            IMOperation op = new IMOperation();
-            op.addImage();
-            op.shave(1, 1, true);
-            op.fuzz(10.0, true);
-            op.trim();
-            op.addImage();
-            File trim = TempFileUtil.createTempFile("trim", ".jpg");
-            try
-            {
-                cmd.run(op, f.getAbsolutePath(), trim.getAbsolutePath());
-                Info info = new Info(trim.getAbsolutePath());
-                if (!info.getImageGeometry().contains("1x1"))
-                    return count;
-            }
-            catch (Exception e)
-            {
-                logger.info("Some problems with getting non blank frame!", e);
-            }
-            finally
-            {
-                String newPath = f.getAbsolutePath().replace("-" + count, "-" + Integer.valueOf(count + 1));
-                f = new File(newPath);
-                count++;
-                trim.delete();
-            }
-        }
-        return -1;
+  /**
+   * Search for the first non blank image generated by imagemagick, based on commandline: convert
+   * image.jpg -shave 1%x1% -resize 40% -fuzz 10% -trim +repage info: | grep ' 1x1 '
+   * 
+   * @param path
+   * @return
+   * @throws IOException
+   * @throws URISyntaxException
+   * @throws InterruptedException
+   * @throws IM4JavaException
+   */
+  private static int getNonBlankFrame(String path) throws IOException, URISyntaxException,
+      InterruptedException, IM4JavaException {
+    ConvertCmd cmd = getConvert();
+    int count = 0;
+    String dir = FilenameUtils.getFullPath(path);
+    String pathBase = FilenameUtils.getBaseName(path);
+    File f = new File(dir + pathBase + "-" + count + ".jpg");
+    while (f.exists()) {
+      IMOperation op = new IMOperation();
+      op.addImage();
+      op.shave(1, 1, true);
+      op.fuzz(10.0, true);
+      op.trim();
+      op.addImage();
+      File trim = TempFileUtil.createTempFile("trim", ".jpg");
+      try {
+        cmd.run(op, f.getAbsolutePath(), trim.getAbsolutePath());
+        Info info = new Info(trim.getAbsolutePath());
+        if (!info.getImageGeometry().contains("1x1"))
+          return count;
+      } catch (Exception e) {
+        logger.info("Some problems with getting non blank frame!", e);
+      } finally {
+        String newPath = f.getAbsolutePath().replace("-" + count, "-" + Integer.valueOf(count + 1));
+        f = new File(newPath);
+        count++;
+        trim.delete();
+      }
     }
+    return -1;
+  }
 
-    /**
-     * Remove the files created by imagemagick.
-     * 
-     * @param path
-     */
-    private static void removeFilesCreatedByImageMagick(String path)
-    {
-        int count = 0;
-        String dir = FilenameUtils.getFullPath(path);
-        String pathBase = FilenameUtils.getBaseName(path);
-        File f = new File(dir + pathBase + "-" + count + ".jpg");
-        while (f.exists())
-        {
-            String newPath = f.getAbsolutePath().replace("-" + count, "-" + Integer.valueOf(count + 1));
-            f.delete();
-            f = new File(newPath);
-            count++;
-        }
+  /**
+   * Remove the files created by imagemagick.
+   * 
+   * @param path
+   */
+  private static void removeFilesCreatedByImageMagick(String path) {
+    int count = 0;
+    String dir = FilenameUtils.getFullPath(path);
+    String pathBase = FilenameUtils.getBaseName(path);
+    File f = new File(dir + pathBase + "-" + count + ".jpg");
+    while (f.exists()) {
+      String newPath = f.getAbsolutePath().replace("-" + count, "-" + Integer.valueOf(count + 1));
+      f.delete();
+      f = new File(newPath);
+      count++;
     }
+  }
 
-    /**
-     * Create a {@link ConvertCmd}
-     * 
-     * @return
-     * @throws IOException
-     * @throws URISyntaxException
-     */
-    private static ConvertCmd getConvert() throws IOException, URISyntaxException
-    {
-        String magickPath = getImageMagickInstallationPath();
-        // TODO Ye:ConvertCmd(true) to use GraphicsMagick, which is said faster
-        ConvertCmd cmd = new ConvertCmd(false);
-        cmd.setSearchPath(magickPath);
-        return cmd;
-    }
+  /**
+   * Create a {@link ConvertCmd}
+   * 
+   * @return
+   * @throws IOException
+   * @throws URISyntaxException
+   */
+  private static ConvertCmd getConvert() throws IOException, URISyntaxException {
+    String magickPath = getImageMagickInstallationPath();
+    // TODO Ye:ConvertCmd(true) to use GraphicsMagick, which is said faster
+    ConvertCmd cmd = new ConvertCmd(false);
+    cmd.setSearchPath(magickPath);
+    return cmd;
+  }
 
-    /**
-     * Return property imeji.imagemagick.installpath
-     * 
-     * @return
-     * @throws IOException
-     * @throws URISyntaxException
-     */
-    private static String getImageMagickInstallationPath() throws IOException, URISyntaxException
-    {
-        return PropertyReader.getProperty("imeji.imagemagick.installpath");
-    }
+  /**
+   * Return property imeji.imagemagick.installpath
+   * 
+   * @return
+   * @throws IOException
+   * @throws URISyntaxException
+   */
+  private static String getImageMagickInstallationPath() throws IOException, URISyntaxException {
+    return PropertyReader.getProperty("imeji.imagemagick.installpath");
+  }
 }

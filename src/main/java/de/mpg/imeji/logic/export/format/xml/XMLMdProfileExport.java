@@ -23,38 +23,31 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  * 
  * @author hnguyen
  */
-public class XMLMdProfileExport extends XMLExport
-{
-	
-	  private static Logger logger = Logger.getLogger(XMLMdProfileExport.class);
-    @Override
-    public void init()
-    {
-        // No initialization so far
-    }
+public class XMLMdProfileExport extends XMLExport {
 
-    @Override
-    public void export(OutputStream out, SearchResult sr)
-    {
-        SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-        ProfileController pc = new ProfileController();
-        if (sr.getNumberOfRecords() == 1)
-        {
-            try
-            {
-                JaxbUtil.writeToOutputStream(pc.retrieve(URI.create(sr.getResults().get(0)), session.getUser()), out);
-            }
-            catch (JAXBException e)
-            {
-                throw new RuntimeException(e);
-            }
-            catch (ImejiException iie) {
-            	logger.error("Could not retrieve any statements for exporting!");
-            }
-        }
-        else
-        {
-        	logger.error("Problems during XMLMDProfile Export: "+sr.getNumberOfRecords() + " profile(s) found. Only 1 profile should be found");
-        }
+  private static Logger logger = Logger.getLogger(XMLMdProfileExport.class);
+
+  @Override
+  public void init() {
+    // No initialization so far
+  }
+
+  @Override
+  public void export(OutputStream out, SearchResult sr) {
+    SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+    ProfileController pc = new ProfileController();
+    if (sr.getNumberOfRecords() == 1) {
+      try {
+        JaxbUtil.writeToOutputStream(
+            pc.retrieve(URI.create(sr.getResults().get(0)), session.getUser()), out);
+      } catch (JAXBException e) {
+        throw new RuntimeException(e);
+      } catch (ImejiException iie) {
+        logger.error("Could not retrieve any statements for exporting!");
+      }
+    } else {
+      logger.error("Problems during XMLMDProfile Export: " + sr.getNumberOfRecords()
+          + " profile(s) found. Only 1 profile should be found");
     }
+  }
 }

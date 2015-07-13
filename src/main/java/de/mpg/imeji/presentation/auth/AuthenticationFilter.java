@@ -1,30 +1,26 @@
 /*
- *
+ * 
  * CDDL HEADER START
- *
- * The contents of this file are subject to the terms of the
- * Common Development and Distribution License, Version 1.0 only
- * (the "License"). You may not use this file except in compliance
- * with the License.
- *
- * You can obtain a copy of the license at license/ESCIDOC.LICENSE
- * or http://www.escidoc.de/license.
- * See the License for the specific language governing permissions
- * and limitations under the License.
- *
- * When distributing Covered Code, include this CDDL HEADER in each
- * file and include the License file at license/ESCIDOC.LICENSE.
- * If applicable, add the following below this CDDL HEADER, with the
- * fields enclosed by brackets "[]" replaced with your own identifying
- * information: Portions Copyright [yyyy] [name of copyright owner]
- *
+ * 
+ * The contents of this file are subject to the terms of the Common Development and Distribution
+ * License, Version 1.0 only (the "License"). You may not use this file except in compliance with
+ * the License.
+ * 
+ * You can obtain a copy of the license at license/ESCIDOC.LICENSE or http://www.escidoc.de/license.
+ * See the License for the specific language governing permissions and limitations under the
+ * License.
+ * 
+ * When distributing Covered Code, include this CDDL HEADER in each file and include the License
+ * file at license/ESCIDOC.LICENSE. If applicable, add the following below this CDDL HEADER, with
+ * the fields enclosed by brackets "[]" replaced with your own identifying information: Portions
+ * Copyright [yyyy] [name of copyright owner]
+ * 
  * CDDL HEADER END
  */
 /*
- * Copyright 2006-2007 Fachinformationszentrum Karlsruhe Gesellschaft
- * für wissenschaftlich-technische Information mbH and Max-Planck-
- * Gesellschaft zur Förderung der Wissenschaft e.V.
- * All rights reserved. Use is subject to license terms.
+ * Copyright 2006-2007 Fachinformationszentrum Karlsruhe Gesellschaft für
+ * wissenschaftlich-technische Information mbH and Max-Planck- Gesellschaft zur Förderung der
+ * Wissenschaft e.V. All rights reserved. Use is subject to license terms.
  */
 package de.mpg.imeji.presentation.auth;
 
@@ -54,77 +50,76 @@ import de.mpg.imeji.presentation.session.SessionBean;
  * @version $Revision$ $LastChangedDate$
  */
 public class AuthenticationFilter implements Filter {
-	private FilterConfig filterConfig = null;
-	private Pattern jsfPattern = Pattern.compile(".*\\/jsf\\/.*\\.xhtml");
-	private static Logger logger = Logger.getLogger(AuthenticationFilter.class);
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.servlet.Filter#destroy()
-	 */
-	@Override
-	public void destroy() {
-		setFilterConfig(null);
-	}
+  private FilterConfig filterConfig = null;
+  private Pattern jsfPattern = Pattern.compile(".*\\/jsf\\/.*\\.xhtml");
+  private static Logger logger = Logger.getLogger(AuthenticationFilter.class);
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest,
-	 * javax.servlet.ServletResponse, javax.servlet.FilterChain)
-	 */
-	@Override
-	public void doFilter(ServletRequest serv, ServletResponse resp,
-			FilterChain chain) throws IOException, ServletException {
-		try {
-			HttpServletRequest request = (HttpServletRequest) serv;
-			SessionBean session = getSession(request);
-			if (session != null && session.getUser() == null) {
-				HttpAuthentication httpAuthentification = new HttpAuthentication(
-						request);
-				if (httpAuthentification.hasLoginInfos()) {
-					session.setUser(httpAuthentification.doLogin());
-				}
-			} else if (session != null && session.getUser() != null ) {
-				Matcher m = jsfPattern.matcher(request.getRequestURI());
-				if (m.matches()) {
-					// reload the user each time a jsf page is called
-					session.reloadUser();
-				}
-			}
-		} catch (Exception e) {
-			logger.info("We had some exception in Autnbentication filter", e);
-		} finally {
-			chain.doFilter(serv, resp);
-		}
-	}
+  /*
+   * (non-Javadoc)
+   * 
+   * @see javax.servlet.Filter#destroy()
+   */
+  @Override
+  public void destroy() {
+    setFilterConfig(null);
+  }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
-	 */
-	@Override
-	public void init(FilterConfig arg0) throws ServletException {
-		this.setFilterConfig(arg0);
-	}
+  /*
+   * (non-Javadoc)
+   * 
+   * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest, javax.servlet.ServletResponse,
+   * javax.servlet.FilterChain)
+   */
+  @Override
+  public void doFilter(ServletRequest serv, ServletResponse resp, FilterChain chain)
+      throws IOException, ServletException {
+    try {
+      HttpServletRequest request = (HttpServletRequest) serv;
+      SessionBean session = getSession(request);
+      if (session != null && session.getUser() == null) {
+        HttpAuthentication httpAuthentification = new HttpAuthentication(request);
+        if (httpAuthentification.hasLoginInfos()) {
+          session.setUser(httpAuthentification.doLogin());
+        }
+      } else if (session != null && session.getUser() != null) {
+        Matcher m = jsfPattern.matcher(request.getRequestURI());
+        if (m.matches()) {
+          // reload the user each time a jsf page is called
+          session.reloadUser();
+        }
+      }
+    } catch (Exception e) {
+      logger.info("We had some exception in Autnbentication filter", e);
+    } finally {
+      chain.doFilter(serv, resp);
+    }
+  }
 
-	public FilterConfig getFilterConfig() {
-		return filterConfig;
-	}
+  /*
+   * (non-Javadoc)
+   * 
+   * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
+   */
+  @Override
+  public void init(FilterConfig arg0) throws ServletException {
+    this.setFilterConfig(arg0);
+  }
 
-	public void setFilterConfig(FilterConfig filterConfig) {
-		this.filterConfig = filterConfig;
-	}
+  public FilterConfig getFilterConfig() {
+    return filterConfig;
+  }
 
-	/**
-	 * Return the {@link SessionBean} form the {@link HttpSession}
-	 * 
-	 * @param req
-	 * @return
-	 */
-	private SessionBean getSession(HttpServletRequest req) {
-		return (SessionBean) req.getSession(true).getAttribute(
-				SessionBean.class.getSimpleName());
-	}
+  public void setFilterConfig(FilterConfig filterConfig) {
+    this.filterConfig = filterConfig;
+  }
+
+  /**
+   * Return the {@link SessionBean} form the {@link HttpSession}
+   * 
+   * @param req
+   * @return
+   */
+  private SessionBean getSession(HttpServletRequest req) {
+    return (SessionBean) req.getSession(true).getAttribute(SessionBean.class.getSimpleName());
+  }
 }

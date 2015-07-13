@@ -31,89 +31,85 @@ import de.mpg.imeji.presentation.session.SessionBean;
  */
 public class SPARQLEndpointServlet extends HttpServlet {
 
-	private static Logger logger = Logger
-			.getLogger(SPARQLEndpointServlet.class);
+  private static Logger logger = Logger.getLogger(SPARQLEndpointServlet.class);
 
-	/**
+  /**
 	 * 
 	 */
-	private static final long serialVersionUID = 2718460776590689258L;
+  private static final long serialVersionUID = 2718460776590689258L;
 
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		String q = req.getParameter("q");
-		// TODO allow more formats
-		String format = req.getParameter("format");
-		String model = req.getParameter("model");
-		SessionBean session = (SessionBean) req.getSession(false).getAttribute(
-				SessionBean.class.getSimpleName());
-		if (!"".equals(q) && session.getUser() != null
-				&& session.getUser().isAdmin()) {
-			try {
-				Imeji.dataset.begin(ReadWrite.WRITE);
-				Query sparql = QueryFactory.create(q, Syntax.syntaxARQ);
-				QueryExecution exec = initQueryExecution(sparql, model);
-				exec.getContext().set(TDB.symUnionDefaultGraph, true);
-				ResultSet result = exec.execSelect();
-				if ("table".equals(format))
-					ResultSetFormatter.out(resp.getOutputStream(), result);
-				else
-					ResultSetFormatter.output(resp.getOutputStream(), result,
-							getFormat(format));
+  @Override
+  protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
+      IOException {
+    String q = req.getParameter("q");
+    // TODO allow more formats
+    String format = req.getParameter("format");
+    String model = req.getParameter("model");
+    SessionBean session =
+        (SessionBean) req.getSession(false).getAttribute(SessionBean.class.getSimpleName());
+    if (!"".equals(q) && session.getUser() != null && session.getUser().isAdmin()) {
+      try {
+        Imeji.dataset.begin(ReadWrite.WRITE);
+        Query sparql = QueryFactory.create(q, Syntax.syntaxARQ);
+        QueryExecution exec = initQueryExecution(sparql, model);
+        exec.getContext().set(TDB.symUnionDefaultGraph, true);
+        ResultSet result = exec.execSelect();
+        if ("table".equals(format))
+          ResultSetFormatter.out(resp.getOutputStream(), result);
+        else
+          ResultSetFormatter.output(resp.getOutputStream(), result, getFormat(format));
 
-			} catch (Exception e) {
-				logger.error("spraql error: ", e);
-				Imeji.dataset.abort();
-			} finally {
-				Imeji.dataset.commit();
-				Imeji.dataset.end();
-			}
+      } catch (Exception e) {
+        logger.error("spraql error: ", e);
+        Imeji.dataset.abort();
+      } finally {
+        Imeji.dataset.commit();
+        Imeji.dataset.end();
+      }
 
-		} else if (session.getUser() == null) {
-			resp.sendError(HttpServletResponse.SC_FORBIDDEN,
-					"imeji security: You need administration priviliges");
-		} else if (session.getUser().isAdmin()) {
-			resp.sendError(HttpServletResponse.SC_UNAUTHORIZED,
-					"imeji security: You need to be signed-in");
-		}
-	}
+    } else if (session.getUser() == null) {
+      resp.sendError(HttpServletResponse.SC_FORBIDDEN,
+          "imeji security: You need administration priviliges");
+    } else if (session.getUser().isAdmin()) {
+      resp.sendError(HttpServletResponse.SC_UNAUTHORIZED,
+          "imeji security: You need to be signed-in");
+    }
+  }
 
-	private QueryExecution initQueryExecution(Query sparql, String model) {
-		String modelName = getModelName(model);
-		if (modelName != null) {
-			return QueryExecutionFactory.create(sparql,
-					Imeji.dataset.getNamedModel(modelName));
-		}
-		return QueryExecutionFactory.create(sparql, Imeji.dataset);
-	}
+  private QueryExecution initQueryExecution(Query sparql, String model) {
+    String modelName = getModelName(model);
+    if (modelName != null) {
+      return QueryExecutionFactory.create(sparql, Imeji.dataset.getNamedModel(modelName));
+    }
+    return QueryExecutionFactory.create(sparql, Imeji.dataset);
+  }
 
-	private String getModelName(String name) {
-		if ("item".equals(name)) {
-			return Imeji.imageModel;
-		} else if ("collection".equals(name)) {
-			return Imeji.collectionModel;
-		} else if ("album".equals(name)) {
-			return Imeji.albumModel;
-		} else if ("profile".equals(name)) {
-			return Imeji.profileModel;
-		} else if ("user".equals(name)) {
-			return Imeji.userModel;
-		}
-		return null;
-	}
+  private String getModelName(String name) {
+    if ("item".equals(name)) {
+      return Imeji.imageModel;
+    } else if ("collection".equals(name)) {
+      return Imeji.collectionModel;
+    } else if ("album".equals(name)) {
+      return Imeji.albumModel;
+    } else if ("profile".equals(name)) {
+      return Imeji.profileModel;
+    } else if ("user".equals(name)) {
+      return Imeji.userModel;
+    }
+    return null;
+  }
 
-	private ResultsFormat getFormat(String format) {
-		if ("csv".equals(format))
-			return ResultsFormat.FMT_RS_CSV;
-		else if ("json".equals(format))
-			return ResultsFormat.FMT_RS_JSON;
-		else if ("tsv".equals(format))
-			return ResultsFormat.FMT_RS_TSV;
-		else if ("ttl".equals(format))
-			return ResultsFormat.FMT_RDF_TTL;
-		else if ("bio".equals(format))
-			return ResultsFormat.FMT_RS_BIO;
-		return ResultsFormat.FMT_RDF_XML;
-	}
+  private ResultsFormat getFormat(String format) {
+    if ("csv".equals(format))
+      return ResultsFormat.FMT_RS_CSV;
+    else if ("json".equals(format))
+      return ResultsFormat.FMT_RS_JSON;
+    else if ("tsv".equals(format))
+      return ResultsFormat.FMT_RS_TSV;
+    else if ("ttl".equals(format))
+      return ResultsFormat.FMT_RDF_TTL;
+    else if ("bio".equals(format))
+      return ResultsFormat.FMT_RS_BIO;
+    return ResultsFormat.FMT_RDF_XML;
+  }
 }

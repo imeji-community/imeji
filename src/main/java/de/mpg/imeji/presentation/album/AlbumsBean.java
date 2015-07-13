@@ -3,6 +3,10 @@
  */
 package de.mpg.imeji.presentation.album;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.search.SearchResult;
@@ -15,10 +19,6 @@ import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 /**
  * Bean for the Albums page
  * 
@@ -28,90 +28,95 @@ import java.util.List;
  */
 public class AlbumsBean extends SuperContainerBean<AlbumBean> {
 
-	/**
-	 * Bean for the Albums page
-	 */
-	public AlbumsBean() {
-		super();
-		this.sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-	}
+  /**
+   * Bean for the Albums page
+   */
+  public AlbumsBean() {
+    super();
+    this.sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+  }
 
-	@Override
-	public String getNavigationString() {
-		return sb.getPrettySpacePage("pretty:albums");
-	}
+  @Override
+  public String getNavigationString() {
+    return sb.getPrettySpacePage("pretty:albums");
+  }
 
-	@Override
-	public List<AlbumBean> retrieveList(int offset, int limit) throws Exception {
-		UserController uc = new UserController(sb.getUser());
-		if (sb.getUser() != null) {
-			sb.setUser(uc.retrieve(sb.getUser().getEmail()));
-		}
-		AlbumController controller = new AlbumController();
-        Collection<Album> albums = new ArrayList<Album>();
-        int myOffset = offset;
-        myOffset = prepareList(offset);
-        
-        setTotalNumberOfRecords(searchResult.getNumberOfRecords());
-        albums = controller.loadAlbumsLazy(searchResult.getResults(), sb.getUser(), limit, myOffset);
-        return ImejiFactory.albumListToBeanList(albums);
-	}
+  @Override
+  public List<AlbumBean> retrieveList(int offset, int limit) throws Exception {
+    UserController uc = new UserController(sb.getUser());
+    if (sb.getUser() != null) {
+      sb.setUser(uc.retrieve(sb.getUser().getEmail()));
+    }
+    AlbumController controller = new AlbumController();
+    Collection<Album> albums = new ArrayList<Album>();
+    int myOffset = offset;
+    myOffset = prepareList(offset);
 
-	@Override
-	public String selectAll() {
-		for (AlbumBean bean : getCurrentPartList()) {
-			if (bean.getAlbum().getStatus() == Status.PENDING) {
-				bean.setSelected(true);
-				if (!(sb.getSelectedAlbums().contains(bean.getAlbum().getId()))) {
-					sb.getSelectedAlbums().add(bean.getAlbum().getId());
-				}
-			}
-		}
-		return "";
-	}
+    setTotalNumberOfRecords(searchResult.getNumberOfRecords());
+    albums = controller.loadAlbumsLazy(searchResult.getResults(), sb.getUser(), limit, myOffset);
+    return ImejiFactory.albumListToBeanList(albums);
+  }
 
-	@Override
-	public String selectNone() {
-		sb.getSelectedAlbums().clear();
-		return "";
-	}
+  @Override
+  public String selectAll() {
+    for (AlbumBean bean : getCurrentPartList()) {
+      if (bean.getAlbum().getStatus() == Status.PENDING) {
+        bean.setSelected(true);
+        if (!(sb.getSelectedAlbums().contains(bean.getAlbum().getId()))) {
+          sb.getSelectedAlbums().add(bean.getAlbum().getId());
+        }
+      }
+    }
+    return "";
+  }
 
-	public String deleteAll() {
-		if (sb.getSelectedAlbums().size() == 0) {
-			BeanHelper.warn(sb.getMessage("error_delete_no_albums_selected"));
-			return sb.getPrettySpacePage("pretty:albums");
-		}
-		for (AlbumBean b : getCurrentPartList()) {
-			if (b.getSelected()) {
-				b.delete();
-			}
-		}
-		sb.getSelectedAlbums().clear();
-		return sb.getPrettySpacePage("pretty:albums");
-	}
+  @Override
+  public String selectNone() {
+    sb.getSelectedAlbums().clear();
+    return "";
+  }
+
+  public String deleteAll() {
+    if (sb.getSelectedAlbums().size() == 0) {
+      BeanHelper.warn(sb.getMessage("error_delete_no_albums_selected"));
+      return sb.getPrettySpacePage("pretty:albums");
+    }
+    for (AlbumBean b : getCurrentPartList()) {
+      if (b.getSelected()) {
+        b.delete();
+      }
+    }
+    sb.getSelectedAlbums().clear();
+    return sb.getPrettySpacePage("pretty:albums");
+  }
 
 
-	@Override
-	public String getType() {
-		return PAGINATOR_TYPE.ALBUMS.name();
-	}
- 
-	/* 
-	 * Perform the {@link SPARQLSearch}
-	 * 
-	 * @param searchQuery
-	 * @param sortCriterion
-	 * @return
-	 * @see de.mpg.imeji.presentation.beans.SuperContainerBean#search(de.mpg.imeji.logic.search.vo.SearchQuery, de.mpg.imeji.logic.search.vo.SortCriterion)
-	 */
-	@Override
-	public SearchResult search(SearchQuery searchQuery,
-			SortCriterion sortCriterion) {
-		AlbumController controller = new AlbumController();
-		return controller.search(searchQuery, sb.getUser(), sortCriterion, -1, 0, sb.getSelectedSpaceString());
-	}
-	
-	public String getTypeLabel() {
-		return sb.getLabel("type_"+getType().toLowerCase());
-	}
+  @Override
+  public String getType() {
+    return PAGINATOR_TYPE.ALBUMS.name();
+  }
+
+  /*
+   * Perform the {@link SPARQLSearch}
+   * 
+   * @param searchQuery
+   * 
+   * @param sortCriterion
+   * 
+   * @return
+   * 
+   * @see
+   * de.mpg.imeji.presentation.beans.SuperContainerBean#search(de.mpg.imeji.logic.search.vo.SearchQuery
+   * , de.mpg.imeji.logic.search.vo.SortCriterion)
+   */
+  @Override
+  public SearchResult search(SearchQuery searchQuery, SortCriterion sortCriterion) {
+    AlbumController controller = new AlbumController();
+    return controller.search(searchQuery, sb.getUser(), sortCriterion, -1, 0,
+        sb.getSelectedSpaceString());
+  }
+
+  public String getTypeLabel() {
+    return sb.getLabel("type_" + getType().toLowerCase());
+  }
 }

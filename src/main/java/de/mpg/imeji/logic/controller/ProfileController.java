@@ -5,7 +5,6 @@ package de.mpg.imeji.logic.controller;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static de.mpg.imeji.logic.util.ResourceHelper.getStringFromPath;
-import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
 import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.transferMetadataProfile;
 
 import java.io.File;
@@ -122,7 +121,7 @@ public class ProfileController extends ImejiController {
 
   /**
    * Retrieve a {@link User} by its {@link URI}
-   *
+   * 
    * @param collectionId
    * @param user
    * @return
@@ -170,7 +169,7 @@ public class ProfileController extends ImejiController {
 
   /**
    * Release a {@link MetadataProfile}
-   *
+   * 
    * @param id
    * @param user
    * @throws ImejiException
@@ -235,13 +234,13 @@ public class ProfileController extends ImejiController {
    * @param user
    * @return
    */
-  public SearchResult search(SearchQuery query, User user) {
+  public SearchResult search(SearchQuery query, User user, String spaceId) {
     Search search = SearchFactory.create(SearchType.PROFILE);
     // Automatically sort by profile title
     SortCriterion sortCri =
         new SortCriterion(SPARQLSearch.getIndex(SearchIndex.IndexNames.prof.name()),
             SortOrder.ASCENDING);
-    SearchResult result = search.search(query, sortCri, user, null);
+    SearchResult result = search.search(query, sortCri, user, spaceId);
     return result;
   }
 
@@ -253,26 +252,14 @@ public class ProfileController extends ImejiController {
    * @throws ImejiException
    */
   public List<MetadataProfile> search(User user, String q, String spaceId) throws ImejiException {
-    Search search = SearchFactory.create(SearchType.PROFILE);
-
-    // Automatically sort by profile title
-    SortCriterion sortCri =
-        new SortCriterion(SPARQLSearch.getIndex(SearchIndex.IndexNames.prof.name()),
-            SortOrder.ASCENDING);
-    SearchResult result;
-    List<MetadataProfile> l = new ArrayList<MetadataProfile>();
-
     try {
-      result =
-          search.search(!isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q) : null,
-              sortCri, user, spaceId);
-      l =
-          (List<MetadataProfile>) retrieveLazy(result.getResults(),
-              getMin(result.getResults().size(), 500), 0, user);
+      SearchResult result = search(URLQueryTransformer.parseStringQuery(q), user, spaceId);
+      return (List<MetadataProfile>) retrieveLazy(result.getResults(),
+          getMin(result.getResults().size(), 500), 0, user);
     } catch (Exception e) {
       logger.error("Cannot retrieve profiles:", e);
     }
-    return l;
+    return null;
   }
 
   /**
@@ -287,7 +274,7 @@ public class ProfileController extends ImejiController {
 
   /**
    * Find default profile.
-   *
+   * 
    * @return default metadata profile
    * @throws ImejiException
    */
@@ -309,7 +296,7 @@ public class ProfileController extends ImejiController {
 
   /**
    * Create default profile.
-   *
+   * 
    * @return default metadata profile
    * @throws ImejiException
    */
@@ -415,7 +402,6 @@ public class ProfileController extends ImejiController {
               : new ArrayList<String>();
     }
 
-
     for (String s : retrieveUris) {
 
       cols.add((MetadataProfile) J2JHelper.setId(new MetadataProfile(), URI.create(s)));
@@ -429,6 +415,5 @@ public class ProfileController extends ImejiController {
       return null;
     }
   }
-
 
 }

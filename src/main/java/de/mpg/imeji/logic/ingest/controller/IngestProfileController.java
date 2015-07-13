@@ -18,99 +18,87 @@ import de.mpg.imeji.logic.vo.User;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class IngestProfileController
-{
-    private User user;
+public class IngestProfileController {
+  private User user;
 
-    /**
-     * Constructor
-     * 
-     * @param user
-     */
-    public IngestProfileController(User user)
-    {
-        this.user = user;
-    }
+  /**
+   * Constructor
+   * 
+   * @param user
+   */
+  public IngestProfileController(User user) {
+    this.user = user;
+  }
 
-    /**
-     * Ingest a {@link MetadataProfile} as defined in an xml {@link File}
-     * 
-     * @param profileXmlFile
-     * @throws Exception
-     */
-    public void ingest(File profileXmlFile, URI profile) throws Exception
-    {
-        ProfileParser pp = new ProfileParser();
-        MetadataProfile mdp = pp.parse(profileXmlFile);
-        if (isCopyOfOther(mdp, profile))
-        {
-            changeStatementURI(mdp);
-        }
-        ProfileController pc = new ProfileController();
-        MetadataProfile original = pc.retrieve(profile, user);
-        original.setStatements(mdp.getStatements());
-        //ingested profile can never be default profile
-        original.setDefault(false);
-        try
-        {
-            pc.update(original, user);
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException(e);
-        }
-        pc.removeMetadataWithoutStatement(original);
+  /**
+   * Ingest a {@link MetadataProfile} as defined in an xml {@link File}
+   * 
+   * @param profileXmlFile
+   * @throws Exception
+   */
+  public void ingest(File profileXmlFile, URI profile) throws Exception {
+    ProfileParser pp = new ProfileParser();
+    MetadataProfile mdp = pp.parse(profileXmlFile);
+    if (isCopyOfOther(mdp, profile)) {
+      changeStatementURI(mdp);
     }
+    ProfileController pc = new ProfileController();
+    MetadataProfile original = pc.retrieve(profile, user);
+    original.setStatements(mdp.getStatements());
+    // ingested profile can never be default profile
+    original.setDefault(false);
+    try {
+      pc.update(original, user);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+    pc.removeMetadataWithoutStatement(original);
+  }
 
-    /**
-     * Change the {@link URI} of all {@link Statement}, to avoid to overwrite the orginal {@link Statement}
-     * 
-     * @param mdp
-     * @return
-     */
-    private MetadataProfile changeStatementURI(MetadataProfile mdp)
-    {
-        HashMap<URI, URI> idMap = new HashMap<URI, URI>();
-        for (Statement st : mdp.getStatements())
-        {
-            URI oldURI = st.getId();
-            st.setId(IdentifierUtil.newURI(Statement.class));
-            idMap.put(oldURI, st.getId());
-        }
-        return changeParentId(mdp, idMap);
+  /**
+   * Change the {@link URI} of all {@link Statement}, to avoid to overwrite the orginal
+   * {@link Statement}
+   * 
+   * @param mdp
+   * @return
+   */
+  private MetadataProfile changeStatementURI(MetadataProfile mdp) {
+    HashMap<URI, URI> idMap = new HashMap<URI, URI>();
+    for (Statement st : mdp.getStatements()) {
+      URI oldURI = st.getId();
+      st.setId(IdentifierUtil.newURI(Statement.class));
+      idMap.put(oldURI, st.getId());
     }
+    return changeParentId(mdp, idMap);
+  }
 
-    /**
-     * Change the {@link URI} of the parent {@link Statement} with the newly created ids
-     * 
-     * @param mdp
-     * @param idMap
-     * @return
-     */
-    private MetadataProfile changeParentId(MetadataProfile mdp, HashMap<URI, URI> idMap)
-    {
-        for (Statement st : mdp.getStatements())
-        {
-            if (st.getParent() != null)
-            {
-                if (idMap.get(st.getParent()) == null)
-                    throw new RuntimeException("Unknown parent " + st.getParent() + " in current profile");
-                st.setParent(idMap.get(st.getParent()));
-            }
-        }
-        return mdp;
+  /**
+   * Change the {@link URI} of the parent {@link Statement} with the newly created ids
+   * 
+   * @param mdp
+   * @param idMap
+   * @return
+   */
+  private MetadataProfile changeParentId(MetadataProfile mdp, HashMap<URI, URI> idMap) {
+    for (Statement st : mdp.getStatements()) {
+      if (st.getParent() != null) {
+        if (idMap.get(st.getParent()) == null)
+          throw new RuntimeException("Unknown parent " + st.getParent() + " in current profile");
+        st.setParent(idMap.get(st.getParent()));
+      }
     }
+    return mdp;
+  }
 
-    /**
-     * True if the {@link URI} is different to the {@link URI} of the {@link MetadataProfile}. In that case, the
-     * ingested file is a copy of anther existing profile
-     * 
-     * @param mdp
-     * @param uri
-     * @return
-     */
-    private boolean isCopyOfOther(MetadataProfile mdp, URI uri)
-    {
-        return uri.compareTo(mdp.getId()) != 0;
-    }
+  /**
+   * True if the {@link URI} is different to the {@link URI} of the {@link MetadataProfile}. In that
+   * case, the ingested file is a copy of anther existing profile
+   * 
+   * @param mdp
+   * @param uri
+   * @return
+   */
+  private boolean isCopyOfOther(MetadataProfile mdp, URI uri) {
+    return uri.compareTo(mdp.getId()) != 0;
+  }
 }

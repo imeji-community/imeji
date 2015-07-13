@@ -277,74 +277,97 @@ public class TransferObjectFactory {
     transferItemMetadataDefault(profile, vo.getMetadataSet().getMetadata(), to);
   }
 
+  public static int getPosition(Map<Integer, String> positions, String statement) {
+    if (!positions.containsValue(statement)) {
+      positions.put(0, statement);
+      return 0;
+    } else {
+      int i = 0;
+      for (Map.Entry<Integer, String> entry : positions.entrySet())
+        if (statement.equals(entry.getValue()))
+          i++;
+      positions.put(i, statement);
+      return i;
+    }
+  }
+
   public static void transferItemMetadataDefault(MetadataProfile profile,
       Collection<Metadata> voMds, DefaultItemTO to) {
     if (voMds.size() == 0)
       return;
     Map<String, JsonNode> metadata = new HashMap<String, JsonNode>();
+    Map<Integer, String> pos = new HashMap<Integer, String>();
     for (Metadata md : voMds) {
       for (Statement s : profile.getStatements()) {
         if (s.getId().equals(md.getStatement())) {
+          String label = "";
           for (LocalizedString ls : s.getLabels()) {
-            String key = ls.getValue();
-            switch (md.getTypeNamespace()) {
-              case "http://imeji.org/terms/metadata#text":
-                metadata.put(key, RestProcessUtils.buildJsonNode(((Text) md).getText()));
-                break;
-              case "http://imeji.org/terms/metadata#number":
-                metadata.put(key, RestProcessUtils.buildJsonNode(((Number) md).getNumber()));
-                break;
-              case "http://imeji.org/terms/metadata#conePerson":
-                ConePerson mdCP = (ConePerson) md;
-                DefaultConePersonTO dcpto = new DefaultConePersonTO();
-                dcpto.setFamilyName(mdCP.getPerson().getFamilyName());
-                dcpto.setGivenName(mdCP.getPerson().getGivenName());
-                metadata.put(key, RestProcessUtils.buildJsonNode(dcpto));
-                break;
-              case "http://imeji.org/terms/metadata#date":
-                metadata.put(key, RestProcessUtils
-                    .buildJsonNode(((de.mpg.imeji.logic.vo.predefinedMetadata.Date) md).getDate()));
-                break;
-              case "http://imeji.org/terms/metadata#geolocation":
-                Geolocation mdGeo = (Geolocation) md;
-                DefaultGeolocationTO dgto = new DefaultGeolocationTO();
-                dgto.setName(mdGeo.getName());
-                dgto.setLongitude(mdGeo.getLongitude());
-                dgto.setLatitude(mdGeo.getLatitude());
-                metadata.put(key, RestProcessUtils.buildJsonNode(dgto));
-                break;
-              case "http://imeji.org/terms/metadata#license":
-                License mdLicense = (License) md;
-                DefaultLicenseTO dlto = new DefaultLicenseTO();
-                dlto.setLicense(mdLicense.getLicense());
-                final URI externalUri = mdLicense.getExternalUri();
-                dlto.setUrl(externalUri != null ? externalUri.toString() : "");
-                metadata.put(key, RestProcessUtils.buildJsonNode(dlto));
-                break;
-              case "http://imeji.org/terms/metadata#link":
-                Link mdLink = (Link) md;
-                DefaultLinkTO dllto = new DefaultLinkTO();
-                dllto.setLink(mdLink.getLabel());
-                dllto.setUrl(mdLink.getUri().toString());
-                metadata.put(key, RestProcessUtils.buildJsonNode(dllto));
-                break;
-              case "http://imeji.org/terms/metadata#publication":
-                Publication mdP = (Publication) md;
-                DefaultPublicationTO dpto = new DefaultPublicationTO();
-                dpto.setPublication(mdP.getUri().toString());
-                dpto.setFormat(mdP.getExportFormat());
-                dpto.setCitation(mdP.getCitation());
-                metadata.put(key, RestProcessUtils.buildJsonNode(dpto));
-                break;
+            if ("".equals(label)) {
+              label = ls.getValue();
+              if ("en".equals(ls.getLang()))
+                label = ls.getValue();
             }
           }
+          if ("unbounded".equals(s.getMaxOccurs())) {
+            label = getPosition(pos, md.getStatement().toString()) + 1 + "#" + label;
+          }
+          switch (md.getTypeNamespace()) {
+            case "http://imeji.org/terms/metadata#text":
+
+              metadata.put(label, RestProcessUtils.buildJsonNode(((Text) md).getText()));
+              break;
+            case "http://imeji.org/terms/metadata#number":
+              metadata.put(label, RestProcessUtils.buildJsonNode(((Number) md).getNumber()));
+              break;
+            case "http://imeji.org/terms/metadata#conePerson":
+              ConePerson mdCP = (ConePerson) md;
+              DefaultConePersonTO dcpto = new DefaultConePersonTO();
+              dcpto.setFamilyName(mdCP.getPerson().getFamilyName());
+              dcpto.setGivenName(mdCP.getPerson().getGivenName());
+              metadata.put(label, RestProcessUtils.buildJsonNode(dcpto));
+              break;
+            case "http://imeji.org/terms/metadata#date":
+              metadata.put(label, RestProcessUtils
+                  .buildJsonNode(((de.mpg.imeji.logic.vo.predefinedMetadata.Date) md).getDate()));
+              break;
+            case "http://imeji.org/terms/metadata#geolocation":
+              Geolocation mdGeo = (Geolocation) md;
+              DefaultGeolocationTO dgto = new DefaultGeolocationTO();
+              dgto.setName(mdGeo.getName());
+              dgto.setLongitude(mdGeo.getLongitude());
+              dgto.setLatitude(mdGeo.getLatitude());
+              metadata.put(label, RestProcessUtils.buildJsonNode(dgto));
+              break;
+            case "http://imeji.org/terms/metadata#license":
+              License mdLicense = (License) md;
+              DefaultLicenseTO dlto = new DefaultLicenseTO();
+              dlto.setLicense(mdLicense.getLicense());
+              final URI externalUri = mdLicense.getExternalUri();
+              dlto.setUrl(externalUri != null ? externalUri.toString() : "");
+              metadata.put(label, RestProcessUtils.buildJsonNode(dlto));
+              break;
+            case "http://imeji.org/terms/metadata#link":
+              Link mdLink = (Link) md;
+              DefaultLinkTO dllto = new DefaultLinkTO();
+              dllto.setLink(mdLink.getLabel());
+              dllto.setUrl(mdLink.getUri().toString());
+              metadata.put(label, RestProcessUtils.buildJsonNode(dllto));
+              break;
+            case "http://imeji.org/terms/metadata#publication":
+              Publication mdP = (Publication) md;
+              DefaultPublicationTO dpto = new DefaultPublicationTO();
+              dpto.setPublication(mdP.getUri().toString());
+              dpto.setFormat(mdP.getExportFormat());
+              dpto.setCitation(mdP.getCitation());
+              metadata.put(label, RestProcessUtils.buildJsonNode(dpto));
+              break;
+          }
+
         }
       }
     }
     to.setMetadata(metadata);
   }
-
-
 
   public static void transferItemMetadata(MetadataProfile profile, Collection<Metadata> voMds,
       ItemTO to) {

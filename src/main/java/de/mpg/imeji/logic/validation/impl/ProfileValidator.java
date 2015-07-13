@@ -41,7 +41,6 @@ public class ProfileValidator extends ObjectValidator implements Validator<Metad
     // helper hashmap to validate uniqueness of metadata labels
     HashMap<String, URI> labels = new HashMap<>();
 
-
     for (Statement s : profile.getStatements()) {
       // helper check duplication language input
       List<String> langs = new ArrayList<String>();
@@ -50,6 +49,7 @@ public class ProfileValidator extends ObjectValidator implements Validator<Metad
         if (ls.getLang() == null || "".equals(ls.getLang())) {
           throw new UnprocessableError("error_profile_label_no_lang");
         }
+
         if (ls.getValue().matches("^\\d+#.*")) {
           throw new UnprocessableError("error_profile_label_not_allowed");
         }

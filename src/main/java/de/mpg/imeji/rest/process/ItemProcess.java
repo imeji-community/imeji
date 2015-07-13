@@ -1,36 +1,5 @@
 package de.mpg.imeji.rest.process;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
-import static de.mpg.imeji.rest.process.CommonUtils.USER_MUST_BE_LOGGED_IN;
-import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONAndExceptionResponse;
-import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONFromObject;
-import static de.mpg.imeji.rest.process.RestProcessUtils.buildResponse;
-import static de.mpg.imeji.rest.process.RestProcessUtils.buildTOFromJSON;
-import static de.mpg.imeji.rest.process.RestProcessUtils.jsonToPOJO;
-import static de.mpg.imeji.rest.process.RestProcessUtils.localExceptionHandler;
-import static de.mpg.imeji.rest.to.ItemTO.SYNTAX.RAW;
-import static de.mpg.imeji.rest.to.ItemTO.SYNTAX.guessType;
-import static javax.ws.rs.core.Response.Status.OK;
-import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.Response.Status;
-
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
@@ -52,6 +21,37 @@ import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
 import de.mpg.imeji.rest.to.JSONResponse;
 import de.mpg.imeji.rest.to.MetadataProfileTO;
+
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Response.Status;
+
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static de.mpg.imeji.rest.process.CommonUtils.USER_MUST_BE_LOGGED_IN;
+import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONAndExceptionResponse;
+import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONFromObject;
+import static de.mpg.imeji.rest.process.RestProcessUtils.buildResponse;
+import static de.mpg.imeji.rest.process.RestProcessUtils.buildTOFromJSON;
+import static de.mpg.imeji.rest.process.RestProcessUtils.jsonToPOJO;
+import static de.mpg.imeji.rest.process.RestProcessUtils.localExceptionHandler;
+import static de.mpg.imeji.rest.to.ItemTO.SYNTAX.RAW;
+import static de.mpg.imeji.rest.to.ItemTO.SYNTAX.guessType;
+import static javax.ws.rs.core.Response.Status.OK;
+import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
 
 public class ItemProcess {
 

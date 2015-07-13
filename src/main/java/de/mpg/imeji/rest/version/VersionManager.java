@@ -1,14 +1,14 @@
 package de.mpg.imeji.rest.version;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.rest.api.API;
 import de.mpg.imeji.rest.version.exception.DeprecatedAPIVersionException;
 import de.mpg.imeji.rest.version.exception.UnknowAPIVersionException;
+
+import org.apache.log4j.Logger;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Implements the version management of the api

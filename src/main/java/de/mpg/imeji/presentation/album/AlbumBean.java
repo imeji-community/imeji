@@ -143,6 +143,7 @@ public class AlbumBean extends ContainerBean {
           loadItems(sessionBean.getUser());
           countItems();
           countAllowedItems();
+          countDiscardedItems(sessionBean.getUser());
           if (sessionBean.getActiveAlbum() != null
               && sessionBean.getActiveAlbum().getId().equals(album.getId())) {
             active = true;

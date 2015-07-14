@@ -23,6 +23,7 @@ import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,6 +75,7 @@ public class ItemDefaultUpdateTest extends ItemTestBase {
     assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
   }
 
+  @Ignore
   @Test
   public void test_2_updateItem_deleteAllMetadata() throws IOException, BadRequestException {
 

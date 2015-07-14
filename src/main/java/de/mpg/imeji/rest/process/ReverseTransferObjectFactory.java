@@ -5,6 +5,7 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -428,39 +429,51 @@ public class ReverseTransferObjectFactory {
       itemTO.getMetadata().clear();
     } else {
       for (Map.Entry<String, JsonNode> entry : defaultTO.getMetadata().entrySet()) {
-        boolean update = false;
         String key = "";
         int pos = -1;
         boolean exitMD = false;
+        Map<String, JsonNode> updateValues = new HashMap<String, JsonNode>();
+        boolean update = false;
+
         for (StatementTO sTO : profileTO.getStatements()) {
           for (LocalizedString label : sTO.getLabels()) {
             if (entry.getKey().equals(label.getValue())) {
+              updateValues.put(entry.getKey(), entry.getValue());
               key = entry.getKey();
               update = true;
               break;
-            } else if (!("1".equals(sTO.getMaxOccurs()))) {
-              try {
-                key = entry.getKey().substring(0, entry.getKey().lastIndexOf("_"));
-              } catch (StringIndexOutOfBoundsException e) {
-                break;
-              }
+            } else if (!("1".equals(sTO.getMaxOccurs())) && entry.getKey().matches("^\\d+#.*")) {
+              key = entry.getKey().substring(entry.getKey().indexOf("#") + 1);
               if (key.equals(label.getValue())) {
-                try {
-                  pos =
-                      Integer.parseInt(entry.getKey()
-                          .substring(entry.getKey().lastIndexOf("_") + 1));
-                } catch (NumberFormatException e) {
-                  break;
-                }
+                updateValues.put(key, entry.getValue());
+                pos = Integer.parseInt(entry.getKey().substring(0, entry.getKey().indexOf("#")));
                 update = true;
                 break;
               }
             }
+
           }
+
+          // inconsistent input values update
+          if (updateValues.size() > 1) {
+            for (int i = 0; i < updateValues.size(); i++) {
+              JsonNode firstValue = updateValues.get(i);
+              List<JsonNode> newList = (List<JsonNode>) updateValues.remove(i);
+              for (JsonNode j : newList) {
+                if (firstValue.equals(j))
+                  throw new BadRequestException("inconsistent input values " + firstValue + j);
+              }
+            }
+          }
+          // end TODO
+
           if (update) {
             MetadataSetTO mdTO = new MetadataSetTO();
             int max = 0;
             List<MetadataSetTO> sets = new ArrayList<MetadataSetTO>();
+
+            // start TODO
+
             if (!(pos == -1 && "unbounded".equals(sTO.getMaxOccurs()))) {
 
               for (MetadataSetTO mdTO2 : itemTO.getMetadata()) {
@@ -475,6 +488,7 @@ public class ReverseTransferObjectFactory {
                 }
               }
             }
+            // end TODO
 
             if (!exitMD) {
               List<LabelTO> labels = new ArrayList<LabelTO>();
@@ -503,6 +517,8 @@ public class ReverseTransferObjectFactory {
                       + String.valueOf(max + 1) + " instead of " + key + "_" + pos + " to add the "
                       + String.valueOf(max + 1) + ". value.");
                 }
+              } else {
+
               }
             }
 
@@ -644,11 +660,11 @@ public class ReverseTransferObjectFactory {
             break;
           }
         }
-        if (!update) {
+
+        if (updateValues.size() == 0) {
           throw new BadRequestException(entry + " does not find in the profile");
         }
       }
     }
   }
-
 }

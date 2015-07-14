@@ -101,7 +101,7 @@ public class ExternalStorage implements Storage {
       StorageUtils.writeInOut(get.getResponseBodyAsStream(), out, close);
     } catch (Exception e) {
       // throw new RuntimeException("Error reading " + url, e);
-      throw new UnprocessableError("Error reading " + url, e);
+      throw new UnprocessableError("Error reading " + url + " (" + e.getMessage() + ")", e);
     } finally {
       get.releaseConnection();
     }

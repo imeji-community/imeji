@@ -81,7 +81,19 @@ public class ItemService implements API<ItemTO> {
     });
   }
 
-  @Override
+  public List<DefaultItemTO> readDefaultItems(User u, String q) throws ImejiException, IOException {
+
+    return Lists.transform(new ItemController().retrieve(u, q, null),
+        new Function<Item, DefaultItemTO>() {
+          public DefaultItemTO apply(Item item) {
+            DefaultItemTO defaultTO = new DefaultItemTO();
+            TransferObjectFactory.transferDefaultItem(item, defaultTO);
+            return defaultTO;
+          }
+        });
+  }
+
+
   public ItemTO update(ItemTO to, User u) throws ImejiException {
     Item item = controller.retrieve(ObjectHelper.getURI(Item.class, to.getId()), u);
     ReverseTransferObjectFactory.transferItem(to, item, u, UPDATE);

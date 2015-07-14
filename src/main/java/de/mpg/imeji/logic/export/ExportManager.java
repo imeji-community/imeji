@@ -115,7 +115,7 @@ public class ExportManager {
             albumController.search(searchQuery, user, null, maximumNumberOfRecords, 0, spaceId);
       } else if ("profile".equals(searchType)) {
         ProfileController pc = new ProfileController();
-        result = pc.search(searchQuery, user);
+        result = pc.search(searchQuery, user, spaceId);
       } else if ("image".equals(searchType)) {
         ItemController itemController = new ItemController();
         if (collectionId != null) {

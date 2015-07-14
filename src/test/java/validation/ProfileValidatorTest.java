@@ -2,23 +2,18 @@ package validation;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.mpg.imeji.exceptions.UnprocessableError;
-import de.mpg.imeji.logic.validation.Validator;
 import de.mpg.imeji.logic.validation.Validator.Method;
-import de.mpg.imeji.logic.validation.ValidatorFactory;
 import de.mpg.imeji.logic.validation.impl.ProfileValidator;
-import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.Metadata.Types;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.logic.vo.Metadata.Types;
 import de.mpg.j2j.misc.LocalizedString;
 
 public class ProfileValidatorTest {
@@ -57,14 +52,15 @@ public class ProfileValidatorTest {
 
     Collection<Statement> statements = new ArrayList<>();
     Statement text1 = newStatement(Types.TEXT, "text", "text");
-    Statement text2 = newStatement(Types.TEXT, "text2", null);
+    Statement text2 = newStatement(Types.TEXT, "text", null);
     statements.add(text1);
     statements.add(text2);
     profile.setStatements(statements);
     try {
       validator.validate(profile);
-    } catch (UnprocessableError e) {
       Assert.fail("Validation of uniqueness...false positive");
+    } catch (UnprocessableError e) {
+
     }
   }
 

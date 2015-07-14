@@ -3,6 +3,7 @@ package de.mpg.imeji.logic.validation.impl;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -41,14 +42,25 @@ public class ProfileValidator extends ObjectValidator implements Validator<Metad
     HashMap<String, URI> labels = new HashMap<>();
 
     for (Statement s : profile.getStatements()) {
+      // helper check duplication language input
+      List<String> langs = new ArrayList<String>();
+
       for (LocalizedString ls : s.getLabels()) {
         if (ls.getLang() == null || "".equals(ls.getLang())) {
           throw new UnprocessableError("error_profile_label_no_lang");
         }
+
+        if (ls.getValue().matches("^\\d+#.*")) {
+          throw new UnprocessableError("error_profile_label_not_allowed");
+        }
         // validate uniqueness of metadata labels
-        if (labels.containsKey(ls.getValue()) && !labels.get(ls.getValue()).equals(s.getId())) {
+        if (labels.containsKey(ls.getValue())) {
           throw new UnprocessableError("labels_have_to_be_unique");
+        }
+        if (langs.contains(ls.getLang())) {
+          throw new UnprocessableError("labels_duplicate_lang");
         } else {
+          langs.add(ls.getLang());
           labels.put(ls.getValue(), s.getId());
         }
       }

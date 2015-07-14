@@ -3,6 +3,7 @@ package de.mpg.imeji.rest.resources;
 import static de.mpg.imeji.rest.process.ItemProcess.createItem;
 import static de.mpg.imeji.rest.process.ItemProcess.deleteItem;
 import static de.mpg.imeji.rest.process.ItemProcess.readDefaultItem;
+import static de.mpg.imeji.rest.process.ItemProcess.readDefaultItems;
 import static de.mpg.imeji.rest.process.ItemProcess.readItem;
 import static de.mpg.imeji.rest.process.ItemProcess.readItems;
 import static de.mpg.imeji.rest.process.ItemProcess.updateItem;
@@ -43,12 +44,14 @@ import de.mpg.imeji.rest.to.JSONResponse;
 public class ItemResource implements ImejiResource {
 
 
-  @Override
   @GET
   @ApiOperation(value = "Get all items filtered by query (optional)")
   @Produces(MediaType.APPLICATION_JSON)
-  public Response readAll(@Context HttpServletRequest req, @QueryParam("q") String q) {
-    JSONResponse resp = readItems(req, q);
+  public Response readAll(@Context HttpServletRequest req, @QueryParam("q") String q,
+      @QueryParam("syntax") String syntax) {
+    JSONResponse resp =
+        (ItemTO.SYNTAX.RAW.toString().equalsIgnoreCase(syntax)) ? readItems(req, q)
+            : readDefaultItems(req, q);
     return buildJSONResponse(resp);
   }
 
@@ -252,6 +255,12 @@ public class ItemResource implements ImejiResource {
 
   @Override
   public Response read(HttpServletRequest req, String id) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public Response readAll(HttpServletRequest req, String q) {
     // TODO Auto-generated method stub
     return null;
   }

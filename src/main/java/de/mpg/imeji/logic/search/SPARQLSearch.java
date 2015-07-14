@@ -75,7 +75,6 @@ public class SPARQLSearch implements Search {
     return new SearchResult(advanced(sq, sortCri, user, spaceId), sortCri);
   }
 
-
   /**
    * Search for {@link SearchQuery} according to {@link User} permissions, within a set of possible
    * results
@@ -92,7 +91,6 @@ public class SPARQLSearch implements Search {
       String spaceId) {
     return new SearchResult(advanced(uris, sq, sortCri, user, spaceId), sortCri);
   }
-
 
   /**
    * Search for with query following sparql syntax
@@ -141,7 +139,8 @@ public class SPARQLSearch implements Search {
       results = new ArrayList<String>();
     else
       results = new ArrayList<String>(previousResults);
-    // second case is useless so far, since all query within a container are container specific.
+    // second case is useless so far, since all query within a container are
+    // container specific.
     if (sq.isEmpty() || (containerURI != null && results.isEmpty() && false)) {
       results = simple(null, sortCri, user, spaceId);
     }
@@ -177,10 +176,12 @@ public class SPARQLSearch implements Search {
           break;
       }
       if (se.getType() != SearchElement.SEARCH_ELEMENTS.LOGICAL_RELATIONS) {
-        // if the query has started with a logical relation, it should not be counted as a first
+        // if the query has started with a logical relation, it should
+        // not be counted as a first
         // result
         if (isFirstResult) {
-          // if is is the first subresults of a query, add it to the results, instead of or/and
+          // if is is the first subresults of a query, add it to the
+          // results, instead of or/and
           // operation
           results = new ArrayList<String>(subResults);
         }
@@ -204,7 +205,6 @@ public class SPARQLSearch implements Search {
             (containerURI != null), getSpecificQuery(user), spaceId);
     return ImejiSPARQL.exec(sparqlQuery, null);
   }
-
 
   /**
    * Perform {@link LOGICAL_RELATIONS} between 2 {@link List} of {@link String}
@@ -245,7 +245,8 @@ public class SPARQLSearch implements Search {
       }
     }
     if (SearchType.ITEM.equals(type) || SearchType.ALL.equals(type)) {
-      // below is already included in the security query, no need to do it again
+      // below is already included in the security query, no need to do it
+      // again
       // if (containerURI == null && user != null)
       // specificQuery += "?s <http://imeji.org/terms/collection> ?c .";
     }

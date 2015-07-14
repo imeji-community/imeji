@@ -53,7 +53,6 @@ public class AlbumServiceTest {
       ReverseTransferObjectFactory.transferAlbum(to, vo, TRANSFER_MODE.CREATE, JenaUtil.testUser);
       vo.setId(URI.create(to.getId()));
 
-      System.out.println("IdString= " + vo.getIdString());
     } catch (Exception e) {
       logger.error("Cannot init Album", e);
     }

@@ -164,7 +164,7 @@ public class ItemProcess {
               (DefaultItemTO) buildTOFromJSON("{\"" + METADATA_KEY + "\":"
                   + buildJSONFromObject(metadata) + "}", DefaultItemTO.class);
           ReverseTransferObjectFactory.transferDefaultItemTOtoItemTO(
-              getMetadataProfileTO(itemTO, u), easyTO, itemTO);
+              getMetadataProfileTO(itemTO, u), easyTO, itemTO, true);
           break;
         default:
           throw new BadRequestException("Bad syntax type: " + syntax);
@@ -227,7 +227,7 @@ public class ItemProcess {
         DefaultItemTO defaultTO = (DefaultItemTO) buildTOFromJSON(req, DefaultItemTO.class);
         ItemTO itemTO = icrud.read(id, u);
         ReverseTransferObjectFactory.transferDefaultItemTOtoItemTO(getMetadataProfileTO(itemTO, u),
-            defaultTO, itemTO);
+            defaultTO, itemTO, false);
 
         icrud.update(itemTO, u);
 
@@ -279,7 +279,6 @@ public class ItemProcess {
               fileUpdate ? (ItemWithFileTO) RestProcessUtils.buildTOFromJSON(
                   buildJSONFromObject(itemMap), ItemWithFileTO.class) : (ItemTO) RestProcessUtils
                   .buildTOFromJSON(buildJSONFromObject(itemMap), ItemTO.class);
-          to.setMetadata(service.read(id, u).getMetadata());
 
           validateId(id, to);
           to.setId(id);
@@ -289,7 +288,7 @@ public class ItemProcess {
               (DefaultItemTO) buildTOFromJSON("{\"" + METADATA_KEY + "\":"
                   + buildJSONFromObject(metadata) + "}", DefaultItemTO.class);
           ReverseTransferObjectFactory.transferDefaultItemTOtoItemTO(getMetadataProfileTO(to, u),
-              easyTO, to);
+              easyTO, to, true);
           break;
       }
 

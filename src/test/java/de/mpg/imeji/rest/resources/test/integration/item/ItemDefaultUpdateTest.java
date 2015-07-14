@@ -149,7 +149,8 @@ public class ItemDefaultUpdateTest extends ItemTestBase {
     MetadataProfileTO mdProfileTO =
         new ProfileService().read(col.getProfile().getId(), JenaUtil.testUser);
 
-    ReverseTransferObjectFactory.transferDefaultItemTOtoItemTO(mdProfileTO, defaultTO, itemTO);
+    ReverseTransferObjectFactory
+        .transferDefaultItemTOtoItemTO(mdProfileTO, defaultTO, itemTO, true);
     ItemService s = new ItemService();
     itemTO = s.create(itemTO, JenaUtil.testUser);
     System.out.println(itemTO.getMetadata().size());

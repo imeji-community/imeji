@@ -5,7 +5,6 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -50,6 +49,7 @@ import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultGeolocationTO
 import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultLicenseTO;
 import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultLinkTO;
 import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultPublicationTO;
+import de.mpg.imeji.rest.helper.ItemTransferHelper;
 import de.mpg.imeji.rest.to.AlbumTO;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.IdentifierTO;
@@ -416,6 +416,23 @@ public class ReverseTransferObjectFactory {
     }
   }
 
+  public static void sort(List<ItemTransferHelper> list, ItemTransferHelper newItem) {
+    if (list.size() == 0)
+      list.add(0, newItem);
+    else {
+      int i = 0;
+      for (ItemTransferHelper item : list) {
+        i++;
+        if (newItem.getStatementID().equals(item.getStatementID())) {
+          if (newItem.getPos() < item.getPos()) {
+            i--;
+            break;
+          }
+        }
+      }
+      list.add(i, newItem);
+    }
+  }
 
   /**
    * Transfer Default Item Json format to item
@@ -423,59 +440,48 @@ public class ReverseTransferObjectFactory {
    * @return
    */
   public static void transferDefaultItemTOtoItemTO(MetadataProfileTO profileTO,
-      DefaultItemTO defaultTO, ItemTO itemTO) throws BadRequestException, JsonParseException,
-      JsonMappingException {
+      DefaultItemTO defaultTO, ItemTO itemTO, boolean updatedAll) throws BadRequestException,
+      JsonParseException, JsonMappingException {
     if (defaultTO.getMetadata() == null) {
       itemTO.getMetadata().clear();
     } else {
+      List<ItemTransferHelper> helperList = new ArrayList<ItemTransferHelper>();
+
       for (Map.Entry<String, JsonNode> entry : defaultTO.getMetadata().entrySet()) {
         String key = "";
         int pos = -1;
         boolean exitMD = false;
-        Map<String, JsonNode> updateValues = new HashMap<String, JsonNode>();
         boolean update = false;
 
         for (StatementTO sTO : profileTO.getStatements()) {
           for (LocalizedString label : sTO.getLabels()) {
             if (entry.getKey().equals(label.getValue())) {
-              updateValues.put(entry.getKey(), entry.getValue());
+              ItemTransferHelper helper =
+                  new ItemTransferHelper(pos, key, entry.getValue(), sTO.getId(), entry);
+              sort(helperList, helper);
               key = entry.getKey();
               update = true;
               break;
             } else if (!("1".equals(sTO.getMaxOccurs())) && entry.getKey().matches("^\\d+#.*")) {
               key = entry.getKey().substring(entry.getKey().indexOf("#") + 1);
               if (key.equals(label.getValue())) {
-                updateValues.put(key, entry.getValue());
                 pos = Integer.parseInt(entry.getKey().substring(0, entry.getKey().indexOf("#")));
+                ItemTransferHelper helper =
+                    new ItemTransferHelper(pos, key, entry.getValue(), sTO.getId(), entry);
+                sort(helperList, helper);
                 update = true;
                 break;
               }
             }
 
           }
-
-          // inconsistent input values update
-          if (updateValues.size() > 1) {
-            for (int i = 0; i < updateValues.size(); i++) {
-              JsonNode firstValue = updateValues.get(i);
-              List<JsonNode> newList = (List<JsonNode>) updateValues.remove(i);
-              for (JsonNode j : newList) {
-                if (firstValue.equals(j))
-                  throw new BadRequestException("inconsistent input values " + firstValue + j);
-              }
-            }
-          }
-          // end TODO
-
           if (update) {
             MetadataSetTO mdTO = new MetadataSetTO();
             int max = 0;
             List<MetadataSetTO> sets = new ArrayList<MetadataSetTO>();
 
-            // start TODO
 
-            if (!(pos == -1 && "unbounded".equals(sTO.getMaxOccurs()))) {
-
+            if (!updatedAll && !(pos == -1 && "unbounded".equals(sTO.getMaxOccurs()))) {
               for (MetadataSetTO mdTO2 : itemTO.getMetadata()) {
                 for (LabelTO label : mdTO2.getLabels()) {
                   if (key.equals(label.getValue())) {
@@ -488,7 +494,7 @@ public class ReverseTransferObjectFactory {
                 }
               }
             }
-            // end TODO
+
 
             if (!exitMD) {
               List<LabelTO> labels = new ArrayList<LabelTO>();
@@ -660,11 +666,35 @@ public class ReverseTransferObjectFactory {
             break;
           }
         }
-
-        if (updateValues.size() == 0) {
+        if (helperList.size() == 0) {
           throw new BadRequestException(entry + " does not find in the profile");
         }
       }
+
+      if (helperList.size() > 1) {
+        if (helperList.get(0).getEntry().getKey().matches("^\\d+#.*")
+            && helperList.get(0).getPos() != 1)
+          throw new BadRequestException("1#" + helperList.get(0).getKey() + " is missing");
+        for (int i = 0; i < helperList.size() - 1; i++) {
+          if (helperList.get(i).getEntry().getKey().matches("^\\d+#.*")) {
+            if (helperList.get(i).getStatementID().equals(helperList.get(i + 1).getStatementID())) {
+              if (!(helperList.get(i).getPos() + 1 == helperList.get(i + 1).getPos()))
+                throw new BadRequestException(i + 1 + "#" + helperList.get(i).getKey()
+                    + " is missing");
+            } else {
+              if (helperList.get(i + 1).getPos() != 1
+                  && helperList.get(i + 1).getEntry().getKey().matches("^\\d+#.*"))
+                throw new BadRequestException("1#" + helperList.get(i + 1).getKey() + " is missing");
+            }
+          } else {
+            if (helperList.get(i).getStatementID().equals(helperList.get(i + 1).getStatementID())) {
+              throw new BadRequestException("inconsistent input values "
+                  + helperList.get(i).getKey());
+            }
+          }
+        }
+      }
+
     }
   }
 }

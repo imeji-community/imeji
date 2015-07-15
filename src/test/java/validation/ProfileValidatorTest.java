@@ -79,9 +79,8 @@ public class ProfileValidatorTest {
         ));
         try {
             validator.validate(profile);
-            fail("Validation of label syntax... false positive");
         } catch (UnprocessableError e) {
-            assertThat(e.getMessage(), equalTo("error_profile_label_not_allowed"));
+            fail("Unexpected error:" + e.getLocalizedMessage());
         }
     }
 

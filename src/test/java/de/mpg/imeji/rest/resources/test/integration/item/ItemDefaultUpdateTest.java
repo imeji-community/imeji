@@ -1,34 +1,5 @@
 package de.mpg.imeji.rest.resources.test.integration.item;
 
-import static de.mpg.imeji.logic.util.ResourceHelper.getStringFromPath;
-import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONFromObject;
-import static de.mpg.imeji.rest.process.RestProcessUtils.buildTOFromJSON;
-import static de.mpg.imeji.rest.process.RestProcessUtils.jsonToPOJO;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.assertEquals;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.Invocation;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
-import org.glassfish.jersey.jackson.JacksonFeature;
-import org.glassfish.jersey.media.multipart.FormDataMultiPart;
-import org.glassfish.jersey.media.multipart.MultiPartFeature;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import util.JenaUtil;
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
@@ -41,7 +12,38 @@ import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
 import de.mpg.imeji.rest.to.MetadataProfileTO;
 
+import org.glassfish.jersey.jackson.JacksonFeature;
+import org.glassfish.jersey.media.multipart.FormDataMultiPart;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import util.JenaUtil;
+
+import static de.mpg.imeji.logic.util.ResourceHelper.getStringFromPath;
+import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONFromObject;
+import static de.mpg.imeji.rest.process.RestProcessUtils.buildTOFromJSON;
+import static de.mpg.imeji.rest.process.RestProcessUtils.jsonToPOJO;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.Assert.assertEquals;
+
+
+@Ignore
 public class ItemDefaultUpdateTest extends ItemTestBase {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ItemDefaultUpdateTest.class);

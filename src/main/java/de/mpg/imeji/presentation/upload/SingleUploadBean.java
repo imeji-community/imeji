@@ -302,32 +302,23 @@ public class SingleUploadBean implements Serializable {
     // TODO: check if here space restriction is needed
     SearchResult results = cc.search(sq, sortCriterion, -1, 0, user, sb.getSelectedSpaceString());
     if (!checkSizeOnly) {
-      System.out.println("Debug 4 ");
       collections = cc.retrieveLazy(results.getResults(), -1, 0, user);
-      System.out.println("Debug 5 size=  "+collections.size());
       for (CollectionImeji c : collections) {
-        System.out.println("Debug 51 size=  ");
         if (AuthUtil.staticAuth().createContent(user, c))
-          System.out.println("Debug 52  can create content in collection title"+c.getMetadata().getTitle());
           collectionItems.add(new SelectItem(c.getId(), c.getMetadata().getTitle()));
       }
       if (collectionItems.size() > 1) {
         collectionItems.add(0, new SelectItem("", "-- Select a collection to upload your file --"));
-        System.out.println("There are more than one collection");
       } else if (collectionItems.size() > 0) {
         
         setSelectedCollection(collectionItems.get(0).getValue().toString());
-        System.out.println("There is one collection");
         methodColChangeListener();
       }
     } else {
-      if (results.getNumberOfRecords() == 0) {
+      if (collectionItems.size() == 0) {
         String errorMessage = "cannot_create_collection";
-        System.out.println("Debug 1 ");
         if (user.isAllowedToCreateCollection()) {
-          System.out.println("Debug 2 ");
           createDefaultCollection();
-          System.out.println("Debug 3 ");
           sus.setCanUpload(true);
         } else {
           sus.setCanUpload(false);

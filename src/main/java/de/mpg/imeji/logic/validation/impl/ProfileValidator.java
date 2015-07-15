@@ -1,17 +1,17 @@
 package de.mpg.imeji.logic.validation.impl;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
+import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.validation.Validator;
+import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.j2j.misc.LocalizedString;
 
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import de.mpg.imeji.exceptions.UnprocessableError;
-import de.mpg.imeji.logic.validation.Validator;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.j2j.misc.LocalizedString;
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 /**
  * {@link Validator} for {@link MetadataProfile}

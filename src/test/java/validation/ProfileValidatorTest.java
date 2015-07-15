@@ -8,7 +8,6 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.j2j.misc.LocalizedString;
 
-import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,7 +21,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ProfileValidatorTest {
 
-    private static final Logger logger = Logger.getLogger(ProfileValidator.class);
 
     private static ProfileValidator validator;
     private static MetadataProfile profile;
@@ -91,7 +89,10 @@ public class ProfileValidatorTest {
     public void validateUniqueness_sameLanguageInOneStatement() {
         Statement s = new Statement();
         s.setType(URI.create(Types.TEXT.getClazzNamespace()));
-        s.setLabels(asList(new LocalizedString("text1", "en"), new LocalizedString("text2", "en")));
+        s.setLabels(asList(
+                new LocalizedString("text1", "en"),
+                new LocalizedString("text2", "en")
+        ));
         profile.setStatements(asList(s));
         try {
             validator.validate(profile);
@@ -103,8 +104,9 @@ public class ProfileValidatorTest {
 
     @Test
     public void validateLabelSyntax_notNumberNumberHash() {
-        profile.setStatements(
-                asList(newStatement(Types.TEXT, "abcd12345#text", "text")));
+        profile.setStatements(asList(
+                newStatement(Types.TEXT, "abcd12345#text", "text")
+        ));
         try {
             validator.validate(profile);
         } catch (UnprocessableError e) {

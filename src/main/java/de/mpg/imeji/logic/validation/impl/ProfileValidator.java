@@ -17,7 +17,7 @@ import de.mpg.j2j.misc.LocalizedString;
  * {@link Validator} for {@link MetadataProfile}
  * 
  * @author saquet
- *
+ * 
  */
 public class ProfileValidator extends ObjectValidator implements Validator<MetadataProfile> {
 
@@ -49,10 +49,12 @@ public class ProfileValidator extends ObjectValidator implements Validator<Metad
         if (ls.getLang() == null || "".equals(ls.getLang())) {
           throw new UnprocessableError("error_profile_label_no_lang");
         }
-
-        if (ls.getValue().matches("^\\d+#.*")) {
-          throw new UnprocessableError("error_profile_label_not_allowed");
-        }
+        // Out-commented until the default format has been clearly defined
+        /*
+         * if (ls.getValue().matches("^\\d+#.*")) {
+         * 
+         * // throw new UnprocessableError("error_profile_label_not_allowed"); }
+         */
         // validate uniqueness of metadata labels
         if (labels.containsKey(ls.getValue())) {
           throw new UnprocessableError("labels_have_to_be_unique");

@@ -139,6 +139,11 @@
         <async-supported>true</async-supported>
     </filter>
     <filter>
+		<filter-name>API Version Filter</filter-name>
+		<filter-class>de.mpg.imeji.rest.version.APIVersionFilter</filter-class>
+		<async-supported>true</async-supported>
+	</filter>
+    <filter>
         <filter-name>History Filter</filter-name>
         <filter-class>de.mpg.imeji.presentation.history.HistoryFilter</filter-class>
         <async-supported>true</async-supported>
@@ -164,6 +169,10 @@
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
+    <filter-mapping>
+		<filter-name>API Version Filter</filter-name>
+		<url-pattern>/rest/*</url-pattern>
+	</filter-mapping>
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>/jsf/*</url-pattern>

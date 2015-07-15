@@ -114,7 +114,6 @@ public class ItemResource implements ImejiResource {
           + "<br/>\"fetchUrl\" : \"http://example.org/myFile.png\","
           + "<br/>\"referenceUrl\" : \"http://example.org/myFile.png\","
 
-
 /*
           + "<br/>\"metadata\" : "
           + "<br/>{"

@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Response.Status;
 
+import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
+
 /**
  * Filter which check if the version of the request to the API is the latest one. <br/>
  * - If yes, redirect to the API without version number (latest) <br/>
@@ -38,8 +40,9 @@ public class APIVersionFilter implements Filter {
       versionManager.checkVersion(((HttpServletRequest) request).getRequestURI());
       if (versionManager.isCurrentVersion() && versionManager.hasVersion()) {
         // redirect to non latest api (i.e. without version in the url)
-        ((HttpServletResponse) response).sendRedirect(versionManager.getPathToLatestVersion() + "?"
-            + ((HttpServletRequest) request).getQueryString());
+        String q = ((HttpServletRequest) request).getQueryString();
+        ((HttpServletResponse) response).sendRedirect(versionManager.getPathToLatestVersion()
+                + (isNullOrEmptyTrim(q) ? "" : "?" + q));
       }
     } catch (DeprecatedAPIVersionException e) {
       ((HttpServletResponse) response).sendError(Status.GONE.getStatusCode(), e.getMessage());

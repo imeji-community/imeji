@@ -1,13 +1,14 @@
 package de.mpg.imeji.rest.resources;
 
-import static de.mpg.imeji.rest.process.ItemProcess.createItem;
-import static de.mpg.imeji.rest.process.ItemProcess.deleteItem;
-import static de.mpg.imeji.rest.process.ItemProcess.readDefaultItem;
-import static de.mpg.imeji.rest.process.ItemProcess.readDefaultItems;
-import static de.mpg.imeji.rest.process.ItemProcess.readItem;
-import static de.mpg.imeji.rest.process.ItemProcess.readItems;
-import static de.mpg.imeji.rest.process.ItemProcess.updateItem;
-import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONResponse;
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
+
+import de.mpg.imeji.rest.process.RestProcessUtils;
+import de.mpg.imeji.rest.to.ItemTO;
+
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import java.io.InputStream;
 
@@ -25,18 +26,12 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
-import org.glassfish.jersey.media.multipart.FormDataParam;
-
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
-import com.wordnik.swagger.jaxrs.PATCH;
-
-import de.mpg.imeji.rest.process.ItemProcess;
-import de.mpg.imeji.rest.process.RestProcessUtils;
-import de.mpg.imeji.rest.to.ItemTO;
-import de.mpg.imeji.rest.to.JSONResponse;
+import static de.mpg.imeji.rest.process.ItemProcess.createItem;
+import static de.mpg.imeji.rest.process.ItemProcess.deleteItem;
+import static de.mpg.imeji.rest.process.ItemProcess.readItem;
+import static de.mpg.imeji.rest.process.ItemProcess.readItems;
+import static de.mpg.imeji.rest.process.ItemProcess.updateItem;
+import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONResponse;
 
 
 @Path("/items")
@@ -47,24 +42,18 @@ public class ItemResource implements ImejiResource {
   @GET
   @ApiOperation(value = "Get all items filtered by query (optional)")
   @Produces(MediaType.APPLICATION_JSON)
-  public Response readAll(@Context HttpServletRequest req, @QueryParam("q") String q,
-      @QueryParam("syntax") String syntax) {
-    JSONResponse resp =
-        (ItemTO.SYNTAX.RAW.toString().equalsIgnoreCase(syntax)) ? readItems(req, q)
-            : readDefaultItems(req, q);
-    return buildJSONResponse(resp);
+  public Response readAll(@Context HttpServletRequest req, @QueryParam("q") String q
+  ) {
+      return buildJSONResponse(readItems(req, q));
   }
 
   @GET
   @Path("/{id}")
   @ApiOperation(value = "Get item by id")
   @Produces(MediaType.APPLICATION_JSON)
-  public Response read(@Context HttpServletRequest req, @PathParam("id") String id,
-      @QueryParam("syntax") String syntax) {
-    JSONResponse resp =
-        (ItemTO.SYNTAX.RAW.toString().equalsIgnoreCase(syntax)) ? readItem(req, id)
-            : readDefaultItem(req, id);
-    return RestProcessUtils.buildJSONResponse(resp);
+  public Response read(@Context HttpServletRequest req, @PathParam("id") String id
+  ) {
+      return RestProcessUtils.buildJSONResponse(readItem(req, id));
   }
 
 
@@ -75,21 +64,23 @@ public class ItemResource implements ImejiResource {
       notes = "Create an item with a file. File can be defined either as (by order of priority):"
           + "<br/> 1) form parameter (multipart/form-data)<br/> 2) json parameter: \"fetchUrl\" : \"http://example.org/myFile.png\" (myFile.png will be uploaded in imeji) "
           + "<br/> 3) json parameter \"referenceUrl\" : \"http://example.org/myFile.png\" (myFile.png will be only referenced in imeji, i.e. not uploaded)"
-          + "<br/> 4) syntax: json format syntax, values: default|raw. Omitted value is default."
+ //         + "<br/> 4) syntax: json format syntax, values: default|raw. Omitted value is default."
           + "<br/><br/>"
-          + "Json example, default metadata syntax:"
+//          + "Json example, default metadata syntax:"
+          + "Json example:"
           + "<div class=\"json_example\">"
           + "{"
           + "<br/>\"collectionId\" : \"abc123\", (required)"
           + "<br/>\"fetchUrl\" : \"http://example.org/myFile.png\", (optional)"
           + "<br/>\"referenceUrl\" : \"http://example.org/myFile.png\", (optional)"
           + "<br/>\"filename\" : \"new filename\", (optional)"
-          + "<br/>\"metadata\" : "
-          + "{ \"Title\" : \"TitleOfItem\","
-          + " \"License\" : {"
-          + " \"license\" : \"CC0 1.0 Universal\", "
-          + " \"url\" : \"http://creativecommons.org/publicdomain/zero/1.0/\""
-          + " } }, (optional)"
+//          + "<br/>\"metadata\" : "
+//          + "{ \"Title\" : \"TitleOfItem\","
+//          + " \"License\" : {"
+//          + " \"license\" : \"CC0 1.0 Universal\", "
+//          + " \"url\" : \"http://creativecommons.org/publicdomain/zero/1.0/\""
+//          + " } }, (optional)"
+          + "<br/>\"metadata\" : [] (optional)"
           + "</br> }"
           + "</div>"
           + "<br/><br/>"
@@ -99,10 +90,9 @@ public class ItemResource implements ImejiResource {
   @Produces(MediaType.APPLICATION_JSON)
   public Response create(@Context HttpServletRequest req, @FormDataParam("file") InputStream file,
       @ApiParam(required = true) @FormDataParam("json") String json,
-      @QueryParam("syntax") String syntax,
       @FormDataParam("file") FormDataContentDisposition fileDetail) {
     String origName = fileDetail != null ? fileDetail.getFileName() : null;
-    return RestProcessUtils.buildJSONResponse(createItem(req, file, json, syntax, origName));
+    return RestProcessUtils.buildJSONResponse(createItem(req, file, json, ItemTO.SYNTAX.RAW.toString().toLowerCase(), origName));
   }
 
   @PUT
@@ -113,15 +103,19 @@ public class ItemResource implements ImejiResource {
       notes = "Update an already existed item. Both the item metadata and the item file can be updated. File can be defined either as (by order of priority):"
           + "<br/> 1) form parameter (multipart/form-data)<br/> 2) json parameter: \"fetchUrl\" : \"http://example.org/myFile.png\" (myFile.png will be uploaded in imeji) "
           + "<br/> 3) json parameter \"referenceUrl\" : \"http://example.org/myFile.png\" (myFile.png will be only referenced in imeji, i.e. not uploaded)"
-          + "<br/> 4) syntax: json format syntax, values: default|raw. Omitted value is default."
+//          + "<br/> 4) syntax: json format syntax, values: default|raw. Omitted value is default."
           + "<br/><br/>"
-          + "Json example: default metadata syntax:"
+//          + "Json example: default metadata syntax:"
+          + "Json example:"
           + "<div class=\"json_example\">"
           + "{"
           + "<br/>\"id\" : \"abc123\","
           + "<br/>\"collectionId\" : \"def123\","
           + "<br/>\"fetchUrl\" : \"http://example.org/myFile.png\","
           + "<br/>\"referenceUrl\" : \"http://example.org/myFile.png\","
+
+
+/*
           + "<br/>\"metadata\" : "
           + "<br/>{"
 
@@ -162,6 +156,112 @@ public class ItemResource implements ImejiResource {
           + "<br/>}"
 
           + "<br/>}"
+*/
+
+          + " \"metadata\": [<br/>" +
+              "    {<br/>" +
+              "      \"value\": {<br/>" +
+              "        \"text\": \"TEXT\"<br/>" +
+              "      },<br/>" +
+              "      \"statementUri\": \"STATEMENT_URI\",<br/>" +
+              "      \"typeUri\": \"http://imeji.org/terms/metadata#text\",<br/>" +
+              "      \"labels\": [<br/>" +
+              "        {<br/>" +
+              "          \"language\": \"en\",<br/>" +
+              "          \"value\": \"Title\"<br/>" +
+              "        },<br/>" +
+              "        {<br/>" +
+              "          \"language\": \"de\",<br/>" +
+              "          \"value\": \"Titel\"<br/>" +
+              "        }<br/>" +
+              "      ]<br/>" +
+              "    },<br/>" +
+              "    {<br/>" +
+              "      \"value\": {<br/>" +
+              "        \"number\": 1.2345678E7<br/>" +
+              "      },<br/>" +
+              "      \"statementUri\": \"STATEMENT_URI\",<br/>" +
+              "      \"typeUri\": \"http://imeji.org/terms/metadata#number\"<br/>" +
+              "    },<br/>" +
+              "    {<br/>" +
+              "      \"value\": {<br/>" +
+              "        \"person\": {<br/>" +
+              "          \"id\": \"USER_ID\",<br/>" +
+              "          \"familyName\": \"FAMILY_NAME\",<br/>" +
+              "          \"givenName\": \"GIVEN_NAME\",<br/>" +
+              "          \"completeName\": \"FAMILY_NAME, GIVEN_NAME\",<br/>" +
+              "          \"alternativeName\": \"ALTERNATIVE_NAME\",<br/>" +
+              "          \"role\": \"author\",<br/>" +
+              "          \"identifiers\": [<br/>" +
+              "            {<br/>" +
+              "              \"type\": \"imeji\",<br/>" +
+              "              \"value\": \"IDENTIFIER\"<br/>" +
+              "            }<br/>" +
+              "          ],<br/>" +
+              "          \"organizations\": [<br/>" +
+              "            {<br/>" +
+              "              \"id\": \"ORG_ID\",<br/>" +
+              "              \"name\": \"ORG_NAME\",<br/>" +
+              "              \"description\": \"ORG_DESCRIPTION\",<br/>" +
+              "              \"identifiers\": [<br/>" +
+              "                {<br/>" +
+              "                  \"type\": \"IDENTIFIER_TYPE\",<br/>" +
+              "                  \"value\": \"IDENTIFIER\"<br/>" +
+              "                }<br/>" +
+              "              ],<br/>" +
+              "              \"city\": \"CITY\",<br/>" +
+              "              \"country\": \"COUNTRY\"<br/>" +
+              "            }<br/>" +
+              "          ]<br/>" +
+              "        }<br/>" +
+              "      },<br/>" +
+              "      \"statementUri\": \"STATEMENT_URI\",<br/>" +
+              "      \"typeUri\": \"http://imeji.org/terms/metadata#conePerson\"<br/>" +
+              "    },<br/>" +
+              "    {<br/>" +
+              "      \"value\": {<br/>" +
+              "        \"name\": \"NAME\",<br/>" +
+              "        \"longitude\": 10.985278,<br/>" +
+              "        \"latitude\": 47.421111<br/>" +
+              "      },<br/>" +
+              "      \"statementUri\": \"STATEMENT_URI\",<br/>" +
+              "      \"typeUri\": \"http://imeji.org/terms/metadata#geolocation\"<br/>" +
+              "    },<br/>" +
+              "    {<br/>" +
+              "      \"value\": {<br/>" +
+              "        \"date\": \"YYYY-MM-DD\"<br/>" +
+              "      },<br/>" +
+              "      \"statementUri\": \"STATEMENT_URI\",<br/>" +
+              "      \"typeUri\": \"http://imeji.org/terms/metadata#date\"<br/>" +
+              "    },<br/>" +
+              "    {<br/>" +
+              "      \"value\": {<br/>" +
+              "        \"license\": \"LICENSE\",<br/>" +
+              "        \"url\": \"LICENSE_URL\"<br/>" +
+              "      },<br/>" +
+              "      \"statementUri\": \"STATEMENT_URI\",<br/>" +
+              "      \"typeUri\": \"http://imeji.org/terms/metadata#license\"<br/>" +
+              "    },<br/>" +
+              "    {<br/>" +
+              "      \"value\": {<br/>" +
+              "        \"link\": \"LINk_TITLE\",<br/>" +
+              "        \"url\": \"LINK_URL\"<br/>" +
+              "      },<br/>" +
+              "      \"statementUri\": \"STATEMENT_URI\",<br/>" +
+              "      \"typeUri\": \"http://imeji.org/terms/metadata#link\"<br/>" +
+              "    },<br/>" +
+              "    {<br/>" +
+              "      \"value\": {<br/>" +
+              "        \"format\": \"FORMAT\",<br/>" +
+              "        \"publication\": \"PUBLICATION_URL\",<br/>" +
+              "        \"citation\": \"Citation\"<br/>" +
+              "      },<br/>" +
+              "      \"statementUri\": \"STATEMENT_URI\",<br/>" +
+              "      \"typeUri\": \"http://imeji.org/terms/metadata#publication\"<br/>" +
+              "    }<br/>" +
+              "  ]"
+              
+              
           + "<br/>}"
           + "</div>"
           + "<br/><br/>"
@@ -169,11 +269,12 @@ public class ItemResource implements ImejiResource {
   @Produces(MediaType.APPLICATION_JSON)
   public Response update(@Context HttpServletRequest req, @FormDataParam("file") InputStream file,
       @ApiParam(required = true) @FormDataParam("json") String json,
-      @FormDataParam("file") FormDataContentDisposition fileDetail, @PathParam("id") String id,
-      @QueryParam("syntax") String syntax) {
+      @FormDataParam("file") FormDataContentDisposition fileDetail, @PathParam("id") String id) {
     String filename = fileDetail != null ? fileDetail.getFileName() : null;
-    return RestProcessUtils.buildJSONResponse(updateItem(req, id, file, json, filename, syntax));
+    return RestProcessUtils.buildJSONResponse(updateItem(req, id, file, json, filename, ItemTO.SYNTAX.RAW.toString().toLowerCase()));
   }
+
+/*
 
   @PATCH
   @Path("/{id}")
@@ -236,6 +337,7 @@ public class ItemResource implements ImejiResource {
     JSONResponse resp = ItemProcess.easyUpdateItem(req, id);
     return buildJSONResponse(resp);
   }
+*/
 
 
   @Override
@@ -249,20 +351,8 @@ public class ItemResource implements ImejiResource {
   @ApiOperation(value = "Delete item by id")
   @Produces(MediaType.APPLICATION_JSON)
   public Response delete(@Context HttpServletRequest req, @PathParam("id") String id) {
-    JSONResponse resp = deleteItem(req, id);
-    return RestProcessUtils.buildJSONResponse(resp);
+      return RestProcessUtils.buildJSONResponse(deleteItem(req, id));
   }
 
-  @Override
-  public Response read(HttpServletRequest req, String id) {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  public Response readAll(HttpServletRequest req, String q) {
-    // TODO Auto-generated method stub
-    return null;
-  }
 
 }

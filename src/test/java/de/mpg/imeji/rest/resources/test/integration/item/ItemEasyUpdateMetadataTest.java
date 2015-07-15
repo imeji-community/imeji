@@ -1,17 +1,21 @@
 package de.mpg.imeji.rest.resources.test.integration.item;
 
 import de.mpg.imeji.logic.util.Patch;
+
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.util.EntityUtils;
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import util.JenaUtil;
+
+import java.net.URI;
 
 import javax.servlet.http.HttpServletResponse;
-import java.net.URI;
+
+import util.JenaUtil;
 
 import static de.mpg.imeji.logic.util.ResourceHelper.getStringFromPath;
 import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_REST;
@@ -22,6 +26,7 @@ import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactor
  * @author saquet
  *
  */
+@Ignore
 public class ItemEasyUpdateMetadataTest extends ItemTestBase {
   private static final Logger LOGGER = LoggerFactory.getLogger(ItemEasyUpdateMetadataTest.class);
   private static String easyItemJSON;

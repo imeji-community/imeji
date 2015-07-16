@@ -103,7 +103,6 @@
 		<project.warName>imeji</project.warName>
 		<!-- <sonar.host.url>http://localhost:9000</sonar.host.url> -->
 		<!-- <sonar.exclusions></sonar.exclusions> -->
-		<project.scm.id>github</project.scm.id>
 	</properties>
 	<repositories>
 		<!-- <repository> <id>central</id> <url>http://central</url> <releases> 

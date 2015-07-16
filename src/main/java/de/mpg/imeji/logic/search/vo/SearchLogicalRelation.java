@@ -9,39 +9,32 @@ import java.util.List;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class SearchLogicalRelation extends SearchElement
-{
-    public enum LOGICAL_RELATIONS
-    {
-        AND, OR;
-    }
+public class SearchLogicalRelation extends SearchElement {
+  public enum LOGICAL_RELATIONS {
+    AND, OR;
+  }
 
-    private LOGICAL_RELATIONS logicalRelation;
+  private LOGICAL_RELATIONS logicalRelation;
 
-    public SearchLogicalRelation(LOGICAL_RELATIONS lr)
-    {
-        setLogicalRelation(lr);
-    }
+  public SearchLogicalRelation(LOGICAL_RELATIONS lr) {
+    setLogicalRelation(lr);
+  }
 
-    public void setLogicalRelation(LOGICAL_RELATIONS logicalRelation)
-    {
-        this.logicalRelation = logicalRelation;
-    }
+  public void setLogicalRelation(LOGICAL_RELATIONS logicalRelation) {
+    this.logicalRelation = logicalRelation;
+  }
 
-    public LOGICAL_RELATIONS getLogicalRelation()
-    {
-        return logicalRelation;
-    }
+  public LOGICAL_RELATIONS getLogicalRelation() {
+    return logicalRelation;
+  }
 
-    @Override
-    public SEARCH_ELEMENTS getType()
-    {
-        return SEARCH_ELEMENTS.LOGICAL_RELATIONS;
-    }
+  @Override
+  public SEARCH_ELEMENTS getType() {
+    return SEARCH_ELEMENTS.LOGICAL_RELATIONS;
+  }
 
-    @Override
-    public List<SearchElement> getElements()
-    {
-        return null;
-    }
+  @Override
+  public List<SearchElement> getElements() {
+    return null;
+  }
 }

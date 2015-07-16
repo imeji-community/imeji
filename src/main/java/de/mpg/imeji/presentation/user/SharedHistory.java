@@ -7,186 +7,152 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import de.escidoc.core.resources.aa.useraccount.Grants;
-import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.auth.util.AuthUtil;
-import de.mpg.imeji.logic.controller.GrantController;
-import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
+import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.user.ShareBean.SharedObjectType;
 import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.session.SessionBean;
 
-public class SharedHistory implements Serializable
-{
-    private static final long serialVersionUID = -1637916656299359982L;
-    private static Logger logger = Logger.getLogger(SharedHistory.class);
-    private User user;
-    private UserGroup group;
-    private String shareToUri;
-    private String profileUri;
-    private SharedObjectType type;
-    private List<String> sharedType = new ArrayList<String>();
-    private String title;
+public class SharedHistory implements Serializable {
+  private static final long serialVersionUID = -1637916656299359982L;
+  private static Logger logger = Logger.getLogger(SharedHistory.class);
+  private User user;
+  private UserGroup group;
+  private String shareToUri;
+  private String profileUri;
+  private SharedObjectType type;
+  private List<String> sharedType = new ArrayList<String>();
+  private String title;
 
-    /**
-     * Constructor with a {@link User}
-     * 
-     * @param user
-     * @param isCollection
-     * @param containerUri
-     * @param profileUri
-     * @param sharedType
-     */
-    public SharedHistory(User user, SharedObjectType type, String containerUri, String profileUri, String title)
-    {
-        this.user = user;
-        this.type = type;
-        this.shareToUri = containerUri;
-        this.profileUri = profileUri;
-        this.title = title;
-        this.sharedType = ShareBean.parseShareTypes((List<Grant>)user.getGrants(), containerUri, profileUri, type);
+  /**
+   * Constructor with a {@link User}
+   * 
+   * @param user
+   * @param isCollection
+   * @param containerUri
+   * @param profileUri
+   * @param sharedType
+   */
+  public SharedHistory(User user, SharedObjectType type, String containerUri, String profileUri,
+      String title) {
+    this.user = user;
+    this.type = type;
+    this.shareToUri = containerUri;
+    this.profileUri = profileUri;
+    this.title = title;
+    this.sharedType = ShareBean.initShareMenu(user, null, containerUri, profileUri);
+  }
+
+  /**
+   * Constructor with a {@link UserGroup}
+   * 
+   * @param group
+   * @param isCollection
+   * @param containerUri
+   * @param profileUri
+   * @param sharedType
+   */
+  public SharedHistory(UserGroup group, SharedObjectType type, String containerUri,
+      String profileUri, String title) {
+    this.setGroup(group);
+    this.type = type;
+    this.shareToUri = containerUri;
+    this.profileUri = profileUri;
+    this.title = title;
+    this.sharedType = ShareBean.initShareMenu(null, group, containerUri, profileUri);
+  }
+
+  public void revokeGrants() {
+    this.getSharedType().clear();
+    this.update();
+  }
+
+  public User getUser() {
+    return user;
+  }
+
+  public void setUser(User user) {
+    this.user = user;
+  }
+
+  public List<String> getSharedType() {
+    return sharedType;
+  }
+
+  public void setSharedType(List<String> sharedType) {
+    this.sharedType = ShareBean.checkGrants(type, sharedType);
+  }
+
+  /**
+   * Update {@link Grants} the {@link SharedHistory} according to the new roles
+   * 
+   * @return
+   */
+  public String update() {
+    SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+    try {
+      ShareBean.share(session.getUser(), user, group, shareToUri, profileUri, sharedType);
+    } catch (Exception e) {
+      logger.error(e);
     }
+    // TODO: CHECK PRETTY PAGE
+    return ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
+        .getPrettySpacePage("pretty:shareCollection");
+  }
 
-    /**
-     * Constructor with a {@link UserGroup}
-     * 
-     * @param group
-     * @param isCollection
-     * @param containerUri
-     * @param profileUri
-     * @param sharedType
-     */
-    public SharedHistory(UserGroup group, SharedObjectType type, String containerUri, String profileUri, String title)
-    {
-        this.setGroup(group);
-        this.type = type;
-        this.shareToUri = containerUri;
-        this.profileUri = profileUri;
-        this.title = title;
-        this.sharedType = ShareBean.parseShareTypes((List<Grant>)group.getGrants(), containerUri, profileUri, type);
-    }
-    
-    public void revokeGrants() {
-		this.getSharedType().clear();
-		this.update();
-	}
+  /**
+   * @return the group
+   */
+  public UserGroup getGroup() {
+    return group;
+  }
 
-    public User getUser()
-    {
-        return user;
-    }
+  /**
+   * @param group the group to set
+   */
+  public void setGroup(UserGroup group) {
+    this.group = group;
+  }
 
-    public void setUser(User user)
-    {
-        this.user = user;
-    }
+  /**
+   * @return the shareToUri
+   */
+  public String getShareToUri() {
+    return shareToUri;
+  }
 
-    public List<String> getSharedType()
-    {
-        return sharedType;
-    }
+  /**
+   * @param shareToUri the shareToUri to set
+   */
+  public void setShareToUri(String shareToUri) {
+    this.shareToUri = shareToUri;
+  }
 
-    public void setSharedType(List<String> sharedType)
-    {
-        this.sharedType = ShareBean.checkGrants(type, sharedType);
-    }
+  /**
+   * @return the type
+   */
+  public SharedObjectType getType() {
+    return type;
+  }
 
-    /**
-     * Update {@link Grants} the {@link SharedHistory} according to the new roles
-     * 
-     * @return
-     */
-    public String update()
-    {
-        GrantController gc = new GrantController();
-        try
-        {
-            // Remove all Grant for the current container
-            if (user != null)
-                gc.removeGrants(getUser(),
-                        AuthUtil.extractGrantsFor((List<Grant>)user.getGrants(), shareToUri, profileUri), Imeji.adminUser);
-            else if (group != null)
-                gc.removeGrants(group, AuthUtil.extractGrantsFor((List<Grant>)group.getGrants(), shareToUri, profileUri),
-                        Imeji.adminUser);
-            // Find all new Grants according to the shareType
-            List<Grant> newGrants = ShareBean.getGrantsAccordingtoRoles(sharedType, shareToUri, profileUri);
-            // Save the new Grants
-            if (user != null)
-                gc.addGrants(user, newGrants, user);
-            else if (group != null)
-                gc.addGrants(group, newGrants, Imeji.adminUser);
-        }
-        catch (Exception e)
-        {
-            logger.error(e);
-            throw new RuntimeException(e);
-        }
-        //TODO: CHECK PRETTY PAGE
-        return ((SessionBean)BeanHelper.getSessionBean(SessionBean.class)).getPrettySpacePage("pretty:shareCollection");
-    }
+  /**
+   * @param type the type to set
+   */
+  public void setType(SharedObjectType type) {
+    this.type = type;
+  }
 
-    /**
-     * @return the group
-     */
-    public UserGroup getGroup()
-    {
-        return group;
-    }
+  /**
+   * @return the title
+   */
+  public String getTitle() {
+    return title;
+  }
 
-    /**
-     * @param group the group to set
-     */
-    public void setGroup(UserGroup group)
-    {
-        this.group = group;
-    }
-
-    /**
-     * @return the shareToUri
-     */
-    public String getShareToUri()
-    {
-        return shareToUri;
-    }
-
-    /**
-     * @param shareToUri the shareToUri to set
-     */
-    public void setShareToUri(String shareToUri)
-    {
-        this.shareToUri = shareToUri;
-    }
-
-    /**
-     * @return the type
-     */
-    public SharedObjectType getType()
-    {
-        return type;
-    }
-
-    /**
-     * @param type the type to set
-     */
-    public void setType(SharedObjectType type)
-    {
-        this.type = type;
-    }
-
-    /**
-     * @return the title
-     */
-    public String getTitle()
-    {
-        return title;
-    }
-
-    /**
-     * @param title the title to set
-     */
-    public void setTitle(String title)
-    {
-        this.title = title;
-    }
+  /**
+   * @param title the title to set
+   */
+  public void setTitle(String title) {
+    this.title = title;
+  }
 }

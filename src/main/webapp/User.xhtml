@@ -6,7 +6,8 @@
 	xmlns:menu="http://java.sun.com/jsf/composite/components/menu"
 	xmlns:composite="http://java.sun.com/jsf/composite"
 	xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs"
-	xmlns:imjc="http://java.sun.com/jsf/composite/components">
+	xmlns:imjc="http://java.sun.com/jsf/composite/components"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
 	
 	<ui:param name="headline" value="User Page"/>
 	<ui:param name="currentMainMenu" value="admin"/>
@@ -31,6 +32,7 @@
 			</h:panelGroup>
 		</ui:fragment>
 		
+		
 		<ui:fragment rendered="#{Auth.admin(UserBean.user)}">
 			<h:panelGroup layout="block" styleClass="imj_backPanel" rendered="#{Auth.admin}">
 				<a href="#{Navigation.applicationSpaceUrl}users" title="#{lbl.admin_user_view}">
@@ -54,6 +56,7 @@
 							<div class="imj_content">
 								
 								<h:form id="userForm">
+									
 									<h:panelGroup layout="block" id="userInfos" class="imj_userGlobalInformation">				
 										<!-- User Edit - Email -->
 										<h:panelGroup layout="block" styleClass="imj_admindataSet">
@@ -114,7 +117,9 @@
 											<h:outputLink id="lnkCancelUserdata" value="#{UserBean.userPageUrl}" rendered="#{UserBean.edit}" styleClass="imj_cancelButton" type="submit">
 												<h:outputText value="#{lbl.cancel}"/>
 											</h:outputLink>
-											<h:commandLink action="#{UserBean.updateUser}" value="#{lbl.save}" styleClass="imj_submitButton"  rendered="#{UserBean.edit}" type="submit"/>
+											<h:commandLink action="#{UserBean.updateUser}" value="#{lbl.save}" styleClass="imj_submitButton"  rendered="#{UserBean.edit}" type="submit">
+												<f:ajax execute="@form"  render=":userForm:userInfos :imj_pageMessageArea"/>
+											</h:commandLink>
 										</div>
 									
 									</h:panelGroup> <!-- END user infos -->
@@ -173,7 +178,7 @@
 										</div>
 									</h:panelGroup>
 									<h:commandButton id="toggleCreate" action="#{UserBean.toggleCreateCollection}" value="toggle create col" styleClass="imj_noDisplay" type="submit">
-										<f:ajax render="@none"/>
+										<f:ajax render="@form"/>
 									</h:commandButton>
 									<h:commandButton id="toggleAdmin" action="#{UserBean.toggleAdmin}" value="toggle admin" styleClass="imj_noDisplay" type="submit">
 										<f:ajax render="@form"/>
@@ -185,12 +190,12 @@
 									
 									<div class="imj_admindataValue">
 										<ui:repeat var="shareHistory" value="#{UserBean.roles}" rows="0" varStatus="row">
-											<ui:param name="roles" value="#{shareHistory.type == 'COLLECTION' ? SessionBean.shareCollectionGrantItems : SessionBean.shareAlbumGrantItems}"/>
-											<ui:param name="roles" value="#{shareHistory.type == 'ITEM' ? SessionBean.shareItemGrantItems : roles}"/>
+											<ui:param name="roles" value="#{shareHistory.type == 'COLLECTION' ? ShareBean.shareCollectionGrantItems : ShareBean.shareAlbumGrantItems}"/>
+											<ui:param name="roles" value="#{shareHistory.type == 'ITEM' ? ShareBean.shareItemGrantItems : roles}"/>
 											
 											<div class="imj_admindataSet">
 												<div class="imj_admindataLabel">
-													<h:outputText value="#{shareHistory.title}" title="#{shareHistory.title}"/>
+													<h:outputText value="#{SessionBean.getLabel(shareHistory.type)}: #{shareHistory.title}" title="#{shareHistory.title}"/>
 													
 													<div class="imj_submitPanel">
 														<h:outputLink value="#" styleClass="imj_cancelButton" title="#{lbl.revoke} #{lbl.grant_for} #{shareHistory.title}" onclick="openDialog('revokeDialog#{row.index}');">
@@ -213,16 +218,32 @@
 								<h:form id="userGroups">
 									<!-- usergroups -->
 									<div class="imj_admindataSetEdit imj_admindataSet imj_connectedUserGroups">
-										<div class="imj_admindataLabel">
-											<h:outputText value="#{UserBean.user.name} #{lbl.in_following_user_groups}:"/>
-										</div>
-										<div class="imj_admindataValue">
+										<h3 class="imj_headline"><h:outputText value=" #{lbl.in_following_user_groups}" styleClass="imj_admindataValueEntry"/></h3>
 											<ui:repeat var="ug" value="#{UserBean.user.groups}" rows="0">
 												<div class="imj_admindataValueEntry">
-													<h:outputText value="Grant for #{ug.name}" styleClass="imj_admindataValueEntry"/>
+													<h4 class="imj_admindataValueEntry"><h:outputText value="#{lbl.admin_userGroup}: #{ug.name}" styleClass="imj_admindataValueEntry"/></h4>
+
+															<div class="imj_admindataSetEdit">
+																<div class="imj_admindataValue">
+																	<div class="imj_admindataValueEntry">
+																		<h:form>
+																			<ui:repeat var="sh" value="#{UserBean.getGroupRoles(ug)}">
+																				<ui:param name="roles" value="#{sh.type == 'COLLECTION' ? ShareBean.shareCollectionGrantItems : ShareBean.shareAlbumGrantItems}"/>
+																				<ui:param name="roles" value="#{sh.type == 'ITEM' ? ShareBean.shareItemGrantItems : roles}"/>
+																				<div>
+																					<h4 styleClass="imj_admindataValueEntry"><h:outputText value="#{SessionBean.getLabel(sh.type)}: #{sh.title}" /></h4>
+																					<h:selectManyCheckbox id="role" value="#{sh.sharedType}" disabled="true" layout="pageDirection">
+																						<f:selectItems value="#{roles}" />
+																					</h:selectManyCheckbox>
+																				</div>
+																				<br/>
+																			</ui:repeat>
+																		</h:form>
+																	</div>
+																</div>
+															</div>
 												</div>
 											</ui:repeat>
-										</div>
 									</div>
 								</h:form>
 					

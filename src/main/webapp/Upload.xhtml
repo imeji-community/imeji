@@ -170,21 +170,23 @@
 						<h3 class="imj_sectionHeadline">
 							<h:outputText value="#{lbl.options}"/>
 						</h3>
-	
-						<h:form>
-							<div class="imj_optionSet">
+
+                        <h:form>
+                            <div class="imj_optionSet">
 								<h:selectBooleanCheckbox styleClass="imj_optionCheckbox" id="selUploadThumb" value="#{UploadSession.importImageToFile}" valueChangeListener="#{UploadSession.importImageToFileListener}">
 									<f:ajax event="click" render="@none"/>
 								</h:selectBooleanCheckbox>
 								<h:outputLabel styleClass="imj_optionLabel" value="#{lbl.upload_item_thumbnail}" for="selUploadThumb"/>
 							</div>
-							
-							<div class="imj_optionSet">
-								<h:selectBooleanCheckbox styleClass="imj_optionCheckbox" id="selUploadFile" value="#{UploadSession.uploadFileToItem}" valueChangeListener="#{UploadSession.uploadFileToItemListener}">
-									<f:ajax event="click" render="@none"/>
-								</h:selectBooleanCheckbox>
-								<h:outputLabel styleClass="imj_optionLabel" value="#{lbl.upload_item_file}" for="selUploadFile"/>
-							</div>
+
+                            <ui:fragment rendered="#{Auth.updateContent(UploadBean.collection)}">
+                                <div class="imj_optionSet">
+                                    <h:selectBooleanCheckbox styleClass="imj_optionCheckbox" id="selUploadFile" value="#{UploadSession.uploadFileToItem}" valueChangeListener="#{UploadSession.uploadFileToItemListener}">
+                                        <f:ajax event="click" render="@none"/>
+                                    </h:selectBooleanCheckbox>
+                                    <h:outputLabel styleClass="imj_optionLabel" value="#{lbl.upload_item_file}" for="selUploadFile"/>
+                                </div>
+                            </ui:fragment>
 							
 							<div class="imj_optionSet">
 								<h:selectBooleanCheckbox styleClass="imj_optionCheckbox" id="selUniqueNames" value="#{UploadSession.checkNameUnique}"  valueChangeListener="#{UploadSession.checkNameUniqueListener()}">
@@ -234,6 +236,12 @@
 									</li>
 								</ui:repeat>
 							</ol>
+						<!-- Edit selected -->
+						<ui:fragment rendered="#{UploadBean.getsFiles().size() > 0}">
+						<h:outputLink value="#{Navigation.collectionUrl}#{UploadBean.id}/upload?edituploaded=1" id="lnkSelectEdit">
+							<h:outputText value="#{lbl.edit_uploaded_images}"/>
+						</h:outputLink>
+						</ui:fragment>
 						</h:panelGroup>
 						<h:outputText id="resetMessages" value="#{UploadSession.resetUploads()}" />
 					</div>

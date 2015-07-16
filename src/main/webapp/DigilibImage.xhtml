@@ -44,9 +44,14 @@
 	            $(document).ready(function(){
 	                var opts = {
 	                    interactionMode : 'fullscreen',
-	                    showRegionNumbers : true
+	                    showRegionNumbers : true,
+	                    digilibBaseUrl : '#{Navigation.applicationUrl}resources/digilib/',
+	                    // path to digilib frontend page (inside digilibBaseUrl)
+	                    digilibFrontendPath : '#{Navigation.applicationUrl}/digilibImage',
+	                    // base URL to Scaler servlet (usually digilibBaseUrl+'/servlet/Scaler')
+	                    scalerBaseUrl : '#{Navigation.applicationUrl}/digilib',
 	                    };
-	                var $div = $('div#digilib');                
+	                var $div = $('div#digilib');
 	                $div.digilib(opts);
 	            });
 	

@@ -11,10 +11,10 @@ import org.apache.log4j.Logger;
  */
 public class ResourceHelper {
 
-	private static Logger LOGGER = Logger.getLogger(ResourceHelper.class);
+  private static Logger LOGGER = Logger.getLogger(ResourceHelper.class);
 
-	public static String getStringFromPath(String path) throws IOException {
-		return new String(Files.readAllBytes(Paths.get(path)), "UTF-8");
-	}
+  public static String getStringFromPath(String path) throws IOException {
+    return new String(Files.readAllBytes(Paths.get(path)), "UTF-8");
+  }
 
 }

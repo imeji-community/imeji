@@ -1,10 +1,8 @@
 <ui:composition template="templates/sub_template/template_bibliographicList.xhtml"
-	xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:menu="http://java.sun.com/jsf/composite/components/menu"
-	xmlns:imjc="http://java.sun.com/jsf/composite/components">
+				xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:menu="http://java.sun.com/jsf/composite/components/menu"
+				xmlns:imjc="http://java.sun.com/jsf/composite/components">
 	
 	<ui:param name="paginatorListSessionBean" value="#{AlbumsBean}"/>
 	<ui:param name="headline" value="#{msg.albums_headline}"/>
@@ -14,7 +12,7 @@
 	<ui:param name="deleteItemConfirmationText" value="#{msg.confirmation_delete_album}"/>
 	<ui:param name="deleteSelectedItemsConfirmationText" value="#{lbl.delete_selected_albums}?"/>
 	<ui:param name="withdrawItemConfirmationText" value="#{msg.confirmation_withdraw_album}"/>
-	<ui:param name="filterBeanHasQuery" value="no"/>
+	<ui:param name="filterBeanHasQuery" value="yes"/>
 	<ui:param name="isActivatable" value="yes"/>
 	<ui:param name="globalDisplayLinkText" value="#{lbl.all_on_page}"/>
 	<ui:param name="globalDeleteLinkText" value="#{lbl.delete_selected_albums}"/>

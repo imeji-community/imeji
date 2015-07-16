@@ -34,153 +34,143 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class TechnicalFacets extends Facets
-{
-    private SessionBean sb = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-    private FiltersSession fs = (FiltersSession)BeanHelper.getSessionBean(FiltersSession.class);
-    private List<List<Facet>> facets = new ArrayList<List<Facet>>();
-    private SearchQuery searchQuery;
-    private SearchResult allImages = ((ItemsBean)BeanHelper.getSessionBean(ItemsBean.class)).getSearchResult();
-    private String baseURI = ((Navigation)BeanHelper.getApplicationBean(Navigation.class)).getBrowseUrl() + "?q=";
+public class TechnicalFacets extends Facets {
+  private SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+  private FiltersSession fs = (FiltersSession) BeanHelper.getSessionBean(FiltersSession.class);
+  private List<List<Facet>> facets = new ArrayList<List<Facet>>();
+  private SearchQuery searchQuery;
+  private SearchResult allImages = ((ItemsBean) BeanHelper.getSessionBean(ItemsBean.class))
+      .getSearchResult();
+  private String baseURI = ((Navigation) BeanHelper.getApplicationBean(Navigation.class))
+      .getBrowseUrl() + "?q=";
 
-    /**
-     * Constructor
-     * 
-     * @param searchQuery
-     */
-    public TechnicalFacets(SearchQuery searchQuery)
-    {
-        this.searchQuery = searchQuery;
-    }
+  /**
+   * Constructor
+   * 
+   * @param searchQuery
+   */
+  public TechnicalFacets(SearchQuery searchQuery) {
+    this.searchQuery = searchQuery;
+  }
 
-    /*
-     * (non-Javadoc)
-     * @see de.mpg.imeji.presentation.facet.Facets#init()
-     * 
-     */
-    @Override
-    public void init()
-    {
-    	FacetURIFactory uriFactory = new FacetURIFactory(searchQuery);
-        List<Facet> techFacets = new ArrayList<Facet>();
-        try
-        {
-            int count = 0;
-            int sizeAllImages = allImages.getNumberOfRecords();
-            if (sizeAllImages > 0)
-            {
-                if (sb.getUser() != null)
-                {
-                	if (!fs.isFilter("my_images") && !fs.isNoResultFilter("my_images"))
-                    {
-                        SearchPair myImageSearchPair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.IndexNames.user),
-                                SearchOperators.EQUALS, sb.getUser().getEmail());
-                        count = getCount(searchQuery, myImageSearchPair, allImages.getResults());
-                        if (count > 0)
-                        {
-                            techFacets.add(new Facet(uriFactory.createFacetURI(baseURI, myImageSearchPair, "my_images",
-                                    FacetType.TECHNICAL), "my_images", count, FacetType.TECHNICAL, null));
-                        }
-                        else
-                        {
-                            fs.getNoResultsFilters().add(new Filter("My images", "", 0, FacetType.TECHNICAL, null));
-                        }
-                    }
-                    if (!fs.isFilter("pending_images") && !fs.isNoResultFilter("pending_images"))
-                    {
-                        SearchPair privatePair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.IndexNames.status),
-                                SearchOperators.EQUALS, Status.PENDING.getUriString());
-                        count = getCount(searchQuery, privatePair, allImages.getResults());
-                        if (count > 0)
-                        {
-                            techFacets.add(new Facet(uriFactory.createFacetURI(baseURI, privatePair, "pending_images",
-                                    FacetType.TECHNICAL), "pending_images", count, FacetType.TECHNICAL, null));
-                        }
-                    }
-                    if (!fs.isFilter("released_images") && !fs.isNoResultFilter("released_images"))
-                    {
-                        SearchPair publicPair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.IndexNames.status),
-                                SearchOperators.EQUALS, Status.RELEASED.getUriString().toString());
-                        count = getCount(searchQuery, publicPair, allImages.getResults());
-                        if (count > 0)
-                        {
-                            techFacets.add(new Facet(uriFactory.createFacetURI(baseURI, publicPair, "released_images",
-                                    FacetType.TECHNICAL), "released_images", count, FacetType.TECHNICAL, null));
-                        }
-                    }
-                }
-
-                boolean showFacet = false;
-                for (Metadata.Types t : Metadata.Types.values())
-                {
-                	showFacet = (  Metadata.Types.GEOLOCATION.name().equals(t.name()) || 
-                				 	Metadata.Types.LICENSE.name().equals(t.name()) ||
-                				 	Metadata.Types.PUBLICATION.name().equals(t.name()) );
-                    if (!fs.isFilter(t.name()) && !fs.isNoResultFilter(t.name()) && showFacet)
-                    {
-                    	
-                        SearchPair pair = new SearchPair(SPARQLSearch.getIndex(SearchIndex.IndexNames.type),
-                                SearchOperators.EQUALS, t.getClazzNamespace());
-                        count = getCount(searchQuery, pair, allImages.getResults());
-                        if (count > 0)
-                        {
-                            techFacets.add(new Facet(uriFactory.createFacetURI(baseURI, pair, t.name(),
-                                    FacetType.TECHNICAL), t.toString(), count, FacetType.TECHNICAL, null));
-                        }
-                        else
-                        {
-                            fs.getNoResultsFilters().add(new Filter(t.toString(), "", 0, FacetType.TECHNICAL, null));
-                        }
-                        count = 0;
-                    }
-                }
+  /*
+   * (non-Javadoc)
+   * 
+   * @see de.mpg.imeji.presentation.facet.Facets#init()
+   */
+  @Override
+  public void init() {
+    FacetURIFactory uriFactory = new FacetURIFactory(searchQuery);
+    List<Facet> techFacets = new ArrayList<Facet>();
+    try {
+      int count = 0;
+      int sizeAllImages = allImages.getNumberOfRecords();
+      if (sizeAllImages > 0) {
+        if (sb.getUser() != null) {
+          if (!fs.isFilter("my_images") && !fs.isNoResultFilter("my_images")) {
+            // NOT WORKING AND NOT USEFULL SO FAR
+            /*
+             * SearchPair myImageSearchPair = new
+             * SearchPair(SPARQLSearch.getIndex(SearchIndex.IndexNames.user),
+             * SearchOperators.EQUALS, sb.getUser().getEmail()); count = getCount(searchQuery,
+             * myImageSearchPair, allImages.getResults()); if (count > 0) { techFacets.add(new
+             * Facet(uriFactory.createFacetURI(baseURI, myImageSearchPair, "my_images",
+             * FacetType.TECHNICAL), "my_images", count, FacetType.TECHNICAL, null)); } else {
+             * fs.getNoResultsFilters().add(new Filter("My images", "", 0, FacetType.TECHNICAL,
+             * null)); }
+             */
+          }
+          if (!fs.isFilter("pending_images") && !fs.isNoResultFilter("pending_images")) {
+            SearchPair privatePair =
+                new SearchPair(SPARQLSearch.getIndex(SearchIndex.IndexNames.status),
+                    SearchOperators.EQUALS, Status.PENDING.getUriString());
+            count = getCount(searchQuery, privatePair, allImages.getResults());
+            if (count > 0) {
+              techFacets.add(new Facet(uriFactory.createFacetURI(baseURI, privatePair,
+                  "pending_images", FacetType.TECHNICAL), "pending_images", count,
+                  FacetType.TECHNICAL, null));
             }
-            facets.add(techFacets);
+          }
+          if (!fs.isFilter("released_images") && !fs.isNoResultFilter("released_images")) {
+            SearchPair publicPair =
+                new SearchPair(SPARQLSearch.getIndex(SearchIndex.IndexNames.status),
+                    SearchOperators.EQUALS, Status.RELEASED.getUriString().toString());
+            count = getCount(searchQuery, publicPair, allImages.getResults());
+            if (count > 0) {
+              techFacets.add(new Facet(uriFactory.createFacetURI(baseURI, publicPair,
+                  "released_images", FacetType.TECHNICAL), "released_images", count,
+                  FacetType.TECHNICAL, null));
+            }
+          }
         }
-        catch (UnsupportedEncodingException e)
-        {
-        	Logger.getLogger(TechnicalFacets.class).error("There had been some issues with the technical facets", e);
+
+        boolean showFacet = false;
+        for (Metadata.Types t : Metadata.Types.values()) {
+          showFacet =
+              (Metadata.Types.GEOLOCATION.name().equals(t.name())
+                  || Metadata.Types.LICENSE.name().equals(t.name()) || Metadata.Types.PUBLICATION
+                  .name().equals(t.name()));
+          if (!fs.isFilter(t.name()) && !fs.isNoResultFilter(t.name()) && showFacet) {
+
+            SearchPair pair =
+                new SearchPair(SPARQLSearch.getIndex(SearchIndex.IndexNames.type),
+                    SearchOperators.EQUALS, t.getClazzNamespace());
+            count = getCount(searchQuery, pair, allImages.getResults());
+            if (count > 0 && count < allImages.getNumberOfRecords()) {
+              techFacets.add(new Facet(uriFactory.createFacetURI(baseURI, pair, t.name(),
+                  FacetType.TECHNICAL), t.toString(), count, FacetType.TECHNICAL, null));
+            } else {
+              fs.getNoResultsFilters().add(
+                  new Filter(t.toString(), "", 0, FacetType.TECHNICAL, null));
+            }
+            count = 0;
+          }
         }
+      }
+      facets.add(techFacets);
+    } catch (UnsupportedEncodingException e) {
+      Logger.getLogger(TechnicalFacets.class).error(
+          "There had been some issues with the technical facets", e);
     }
+  }
 
-    /**
-     * Retrieve all {@link Item} currently browsed
-     * 
-     * @param searchQuery
-     * @return
-     */
-    public SearchResult retrieveAllImages(SearchQuery searchQuery)
-    {
-        return ((ItemsBean)BeanHelper.getSessionBean(ItemsBean.class)).getSearchResult();
-    }
+  /**
+   * Retrieve all {@link Item} currently browsed
+   * 
+   * @param searchQuery
+   * @return
+   */
+  public SearchResult retrieveAllImages(SearchQuery searchQuery) {
+    return ((ItemsBean) BeanHelper.getSessionBean(ItemsBean.class)).getSearchResult();
+  }
 
-    /**
-     * Count the number of item for a facet with one {@link SearchPair}
-     * 
-     * @param searchQuery
-     * @param pair
-     * @param allImages
-     * @return
-     */
-    public int getCount(SearchQuery searchQuery, SearchPair pair, List<String> allImages)
-    {
-        ItemController ic = new ItemController();
-        SearchQuery sq = new SearchQuery();
-        sq.addPair(pair);
-        return ic.search(null, sq, null, allImages, sb.getUser(),  sb.getSelectedSpaceString()).getNumberOfRecords();
-    }
+  /**
+   * Count the number of item for a facet with one {@link SearchPair}
+   * 
+   * @param searchQuery
+   * @param pair
+   * @param allImages
+   * @return
+   */
+  public int getCount(SearchQuery searchQuery, SearchPair pair, List<String> allImages) {
+    ItemController ic = new ItemController();
+    SearchQuery sq = new SearchQuery();
+    sq.addPair(pair);
+    return ic.search(null, sq, null, allImages, sb.getUser(), sb.getSelectedSpaceString())
+        .getNumberOfRecords();
+  }
 
-    /*
-     * (non-Javadoc)
-     * @see de.mpg.imeji.presentation.facet.Facets#getFacets()
-     */
-    public List<List<Facet>> getFacets()
-    {
-        return facets;
-    }
+  /*
+   * (non-Javadoc)
+   * 
+   * @see de.mpg.imeji.presentation.facet.Facets#getFacets()
+   */
+  @Override
+  public List<List<Facet>> getFacets() {
+    return facets;
+  }
 
-    public void setFacets(List<List<Facet>> facets)
-    {
-        this.facets = facets;
-    }
+  public void setFacets(List<List<Facet>> facets) {
+    this.facets = facets;
+  }
 }

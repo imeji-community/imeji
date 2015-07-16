@@ -14,7 +14,6 @@ import com.hp.hpl.jena.Jena;
  * @version $Revision$ $LastChangedDate$
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface j2jList
-{
-    String value();
+public @interface j2jList {
+  String value();
 }

@@ -1,11 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>imeji</artifactId>
 	<groupId>org.imeji</groupId>
 	<name>imeji</name>
 	<packaging>war</packaging>
-	<version>2.0.0.1-SNAPSHOT</version>
+	<version>3.0.0.1-SNAPSHOT</version>
 	<url>http://imeji.org</url>
 	<description>The imeji open source software offers a dedicated metadata management by supporting a non- restrictive metadata schema definition, as simple as liked or as complex as needed.</description>
 	<licenses>
@@ -21,8 +20,8 @@
 	</organization>
 	<scm>
 		<url>https://github.com/imeji-community/imeji</url>
-		<connection>scm:git:git://github.com/imeji-community/imeji.git</connection>
-		<developerConnection>scm:git:git@github.com:imeji-community/imeji.git</developerConnection>
+		<connection>scm:git:git@github.com:MPDL-Innovations/imeji.git</connection>
+		<developerConnection>scm:git:git@github.com:MPDL-Innovations/imeji.git</developerConnection>
 		<tag>develop</tag>
 	</scm>
 	<issueManagement>
@@ -96,17 +95,17 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.7</maven.compiler.source>
 		<maven.compiler.target>1.7</maven.compiler.target>
-		<!-- Setting this property so that generated project uses correct version
+		<!-- Setting this property so that generated project uses correct version 
 			of richfaces. -->
 		<org.richfaces.bom.version>4.3.7.Final</org.richfaces.bom.version>
 		<!-- Used by Tomcat to trip version Nr when deploy WAR package, e.g., imeji_1.0_screenshot->imeji -->
 		<project.warName>imeji</project.warName>
-		<!-- <sonar.host.url>http://localhost:9000</sonar.host.url>-->
-		<!-- <sonar.exclusions></sonar.exclusions>-->
+		<!-- <sonar.host.url>http://localhost:9000</sonar.host.url> -->
+		<!-- <sonar.exclusions></sonar.exclusions> -->
 	</properties>
 	<repositories>
-		<!-- <repository> <id>central</id> <url>http://central</url> <releases>
-			<enabled>true</enabled> </releases> <snapshots> <enabled>true</enabled> </snapshots>
+		<!-- <repository> <id>central</id> <url>http://central</url> <releases> 
+			<enabled>true</enabled> </releases> <snapshots> <enabled>true</enabled> </snapshots> 
 			</repository> -->
 		<repository>
 			<id>prime-repo</id>
@@ -200,7 +199,7 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.1.1</version>
 				<configuration>
-					<!-- Exclude imeji.properties from war file, because it should be copied
+					<!-- Exclude imeji.properties from war file, because it should be copied 
 						to application server conf directory -->
 					<packagingExcludes>**/imeji.properties</packagingExcludes>
 					<warName>${project.warName}</warName>
@@ -248,19 +247,14 @@
 						<phase>process-resources</phase>
 						<configuration>
 							<tasks>
-								<!-- copying the jaxb files into the build directories, because of
+								<!-- copying the jaxb files into the build directories, because of 
 									the xml schema handling issue (marshalling and unmarshalling) -->
-								<!-- those files will not be copied into the build directories, Maven
+								<!-- those files will not be copied into the build directories, Maven 
 									does not copy them automatically!!! -->
-								<copy file="src/main/java/de/mpg/j2j/misc/jaxb.index"
-									tofile="${project.build.directory}/classes/de/mpg/j2j/misc/jaxb.index" />
-								<copy file="src/main/java/de/mpg/imeji/logic/vo/jaxb.index"
-									tofile="${project.build.directory}/classes/de/mpg/imeji/logic/vo/jaxb.index" />
-								<copy file="src/main/java/de/mpg/imeji/logic/ingest/vo/jaxb.index"
-									tofile="${project.build.directory}/classes/de/mpg/imeji/logic/ingest/vo/jaxb.index" />
-								<copy
-									file="src/main/java/de/mpg/imeji/logic/vo/predefinedMetadata/jaxb.index"
-									tofile="${project.build.directory}/classes/de/mpg/imeji/logic/vo/predefinedMetadata/jaxb.index" />
+								<copy file="src/main/java/de/mpg/j2j/misc/jaxb.index" tofile="${project.build.directory}/classes/de/mpg/j2j/misc/jaxb.index" />
+								<copy file="src/main/java/de/mpg/imeji/logic/vo/jaxb.index" tofile="${project.build.directory}/classes/de/mpg/imeji/logic/vo/jaxb.index" />
+								<copy file="src/main/java/de/mpg/imeji/logic/ingest/vo/jaxb.index" tofile="${project.build.directory}/classes/de/mpg/imeji/logic/ingest/vo/jaxb.index" />
+								<copy file="src/main/java/de/mpg/imeji/logic/vo/predefinedMetadata/jaxb.index" tofile="${project.build.directory}/classes/de/mpg/imeji/logic/vo/predefinedMetadata/jaxb.index" />
 							</tasks>
 						</configuration>
 						<goals>
@@ -291,7 +285,7 @@
 		</plugins>
 		<pluginManagement>
 			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
 					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
@@ -320,8 +314,8 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-	<!-- <dependencyManagement> <dependencies> <dependency> <groupId>org.richfaces</groupId>
-		<artifactId>richfaces-bom</artifactId> <version>${org.richfaces.bom.version}</version>
+	<!-- <dependencyManagement> <dependencies> <dependency> <groupId>org.richfaces</groupId> 
+		<artifactId>richfaces-bom</artifactId> <version>${org.richfaces.bom.version}</version> 
 		<scope>import</scope> <type>pom</type> </dependency> </dependencies> </dependencyManagement> -->
 	<dependencies>
 		<dependency>
@@ -339,11 +333,11 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>3.3.2</version>
 		</dependency>
-		<!-- <dependency> <groupId>org.apache.jena</groupId> <artifactId>jena-tdb</artifactId>
-			<version>0.9.4-SNAPSHOT</version> </dependency> <dependency> <groupId>org.apache.jena</groupId>
-			<artifactId>apache-jena</artifactId> <version>2.10.1</version> <type>pom</type>
+		<!-- <dependency> <groupId>org.apache.jena</groupId> <artifactId>jena-tdb</artifactId> 
+			<version>0.9.4-SNAPSHOT</version> </dependency> <dependency> <groupId>org.apache.jena</groupId> 
+			<artifactId>apache-jena</artifactId> <version>2.10.1</version> <type>pom</type> 
 			</dependency> -->
-		<!-- <dependency> <groupId>org.apache.jena</groupId> <artifactId>jena-tdb</artifactId>
+		<!-- <dependency> <groupId>org.apache.jena</groupId> <artifactId>jena-tdb</artifactId> 
 			<version>0.10.1</version> </dependency> -->
 		<dependency>
 			<groupId>org.apache.jena</groupId>
@@ -387,6 +381,11 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5</version>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
@@ -397,14 +396,14 @@
 			<version>1.3</version>
 		</dependency>
 		<!-- START JSF 2 -->
-		<!-- <dependency> <groupId>javax.faces</groupId> <artifactId>javax.faces-api</artifactId>
-			<scope>provided</scope> </dependency> <dependency> <groupId>org.glassfish</groupId>
-			<artifactId>javax.faces</artifactId> <scope>compile</scope> </dependency>
-			<dependency> <groupId>javax.servlet</groupId> <artifactId>javax.servlet-api</artifactId>
-			<scope>provided</scope> </dependency> <dependency> <groupId>javax.servlet.jsp</groupId>
-			<artifactId>jsp-api</artifactId> <scope>provided</scope> </dependency> <dependency>
-			<groupId>javax.el</groupId> <artifactId>el-api</artifactId> <scope>provided</scope>
-			</dependency> <dependency> <groupId>javax.servlet.jsp.jstl</groupId> <artifactId>jstl-api</artifactId>
+		<!-- <dependency> <groupId>javax.faces</groupId> <artifactId>javax.faces-api</artifactId> 
+			<scope>provided</scope> </dependency> <dependency> <groupId>org.glassfish</groupId> 
+			<artifactId>javax.faces</artifactId> <scope>compile</scope> </dependency> 
+			<dependency> <groupId>javax.servlet</groupId> <artifactId>javax.servlet-api</artifactId> 
+			<scope>provided</scope> </dependency> <dependency> <groupId>javax.servlet.jsp</groupId> 
+			<artifactId>jsp-api</artifactId> <scope>provided</scope> </dependency> <dependency> 
+			<groupId>javax.el</groupId> <artifactId>el-api</artifactId> <scope>provided</scope> 
+			</dependency> <dependency> <groupId>javax.servlet.jsp.jstl</groupId> <artifactId>jstl-api</artifactId> 
 			</dependency> -->
 		<!-- test -->
 		<dependency>
@@ -435,7 +434,7 @@
 			<artifactId>jai-codec</artifactId>
 			<version>1.1.3</version>
 		</dependency>
-		<!-- User standalone jxb, instead of jdk embedded version, because of problem
+		<!-- User standalone jxb, instead of jdk embedded version, because of problem 
 			with prefix mapping -->
 		<dependency>
 			<groupId>com.sun.xml.bind</groupId>
@@ -455,13 +454,13 @@
 			<version>1.2.0</version>
 		</dependency>
 		<!-- Start: bio formats dependencies -->
-		<!-- <dependency> <groupId>openmicroscopy</groupId> <artifactId>bio-formats</artifactId>
-			<version>4.4.8</version> </dependency> <dependency> <groupId>openmicroscopy</groupId>
-			<artifactId>loci-common</artifactId> <version>4.4.8</version> </dependency>
-			<dependency> <groupId>openmicroscopy</groupId> <artifactId>ome-xml</artifactId>
-			<version>4.4.8</version> </dependency> <dependency> <groupId>openmicroscopy</groupId>
+		<!-- <dependency> <groupId>openmicroscopy</groupId> <artifactId>bio-formats</artifactId> 
+			<version>4.4.8</version> </dependency> <dependency> <groupId>openmicroscopy</groupId> 
+			<artifactId>loci-common</artifactId> <version>4.4.8</version> </dependency> 
+			<dependency> <groupId>openmicroscopy</groupId> <artifactId>ome-xml</artifactId> 
+			<version>4.4.8</version> </dependency> <dependency> <groupId>openmicroscopy</groupId> 
 			<artifactId>scifio</artifactId> <version>4.4.8</version> </dependency> -->
-		<!-- <dependency> <groupId>openmicroscopy</groupId> <artifactId>loci-tools</artifactId>
+		<!-- <dependency> <groupId>openmicroscopy</groupId> <artifactId>loci-tools</artifactId> 
 			<version>4.4.8</version> <type>pom</type> </dependency> -->
 		<!-- End: bio formats dependencies -->
 		<!-- pdf handling -->
@@ -525,22 +524,24 @@
 			<version>1.9</version>
 		</dependency>
 		<!-- END: Digilib integration -->
-		<!-- <dependency> <groupId>org.apache.tika</groupId> <artifactId>tika-server</artifactId>
+		<!-- <dependency> <groupId>org.apache.tika</groupId> <artifactId>tika-server</artifactId> 
 			<version>1.5</version> </dependency> -->
 		<dependency>
 			<groupId>org.apache.tika</groupId>
 			<artifactId>tika-parsers</artifactId>
-			<version>1.5</version>
+			<version>1.8</version>
 		</dependency>
 		<dependency>
-			<groupId>com.drewnoakes</groupId>
-			<artifactId>metadata-extractor</artifactId>
-			<version>2.6.2</version>
+			<groupId>xml-apis</groupId>
+			<artifactId>xml-apis</artifactId>
+			<version>1.4.01</version>
 		</dependency>
+		<!-- <dependency> <groupId>com.drewnoakes</groupId> <artifactId>metadata-extractor</artifactId> 
+			<version>2.8.0</version> </dependency> -->
 
 
 		<!-- REST -->
- 		<dependency>
+		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.0.1</version>
@@ -605,12 +606,12 @@
 			<version>2.13</version>
 		</dependency>
 
-		<!-- <dependency> <groupId>com.sun.jersey</groupId> <artifactId>jersey-json</artifactId>
+		<!-- <dependency> <groupId>com.sun.jersey</groupId> <artifactId>jersey-json</artifactId> 
 			<version>1.8</version> </dependency> -->
 
-		<!-- <dependency> <groupId>net.java.dev.jai-imageio</groupId> <artifactId>jai-imageio-core-standalone</artifactId>
-			<version>1.2-pre-dr-b04-2011-07-04</version> </dependency> <dependency> <groupId>org.devlib.schmidt</groupId>
-			<artifactId>imageinfo</artifactId> <version>1.9</version> <type>jar</type>
+		<!-- <dependency> <groupId>net.java.dev.jai-imageio</groupId> <artifactId>jai-imageio-core-standalone</artifactId> 
+			<version>1.2-pre-dr-b04-2011-07-04</version> </dependency> <dependency> <groupId>org.devlib.schmidt</groupId> 
+			<artifactId>imageinfo</artifactId> <version>1.9</version> <type>jar</type> 
 			<scope>compile</scope> </dependency> -->
 		<dependency>
 			<groupId>de.mpg.mpdl.service.connector</groupId>
@@ -632,7 +633,7 @@
 		<profile>
 			<id>env-development</id>
 			<properties>
-				<!-- TO avoid warning File encoding has not been set, using platform
+				<!-- TO avoid warning File encoding has not been set, using platform 
 					encoding Cp1252, i.e. build is platform dependent! -->
 				<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 				<!-- the jdk version to use -->
@@ -684,12 +685,9 @@
 								<phase>install</phase>
 								<configuration>
 									<tasks>
-										<delete quiet="true"
-											file="${tomcat.webapps}/${project.warName}.war" />
+										<delete quiet="true" file="${tomcat.webapps}/${project.warName}.war" />
 										<delete quiet="true" dir="${tomcat.webapps}/${project.warName}" />
-										<copy overwrite="true"
-											file="${project.build.directory}/${project.warName}.war"
-											tofile="${tomcat.webapps}/${project.warName}.war" />
+										<copy overwrite="true" file="${project.build.directory}/${project.warName}.war" tofile="${tomcat.webapps}/${project.warName}.war" />
 									</tasks>
 								</configuration>
 								<goals>
@@ -750,7 +748,7 @@
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<properties>
-				<!-- TO avoid warning File encoding has not been set, using platform
+				<!-- TO avoid warning File encoding has not been set, using platform 
 					encoding Cp1252, i.e. build is platform dependent! -->
 				<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 				<!-- the jdk version to use -->

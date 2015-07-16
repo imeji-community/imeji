@@ -1,6 +1,8 @@
 #!/bin/bash
 
 SERVICE_NAME=imeji
+#context path in webapps
+CONTEXT_PATH=___CONTEXT_PATH___
 BIN_DIR=$(dirname $(readlink -f $0))
 BACKUP_ROOT_DIR=___PATH_TO_BACKUP_ROOT_DIR___
 #see imeji.tdb.path in imeji.properties
@@ -156,7 +158,7 @@ case "$1" in
         TryToStopImejiGracefully
         rm -rf $BIN_DIR/../temp/*
         rm -rf $BIN_DIR/../work/*
-        rm -rf $BIN_DIR/../webapps/$SERVICE_NAME
+        rm -rf $BIN_DIR/../webapps/$CONTEXT_PATH
         echo "$SERVICE_NAME is cleaned up successfully"
     ;;
 

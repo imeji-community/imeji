@@ -40,106 +40,98 @@ import de.mpg.imeji.presentation.util.ObjectLoader;
  */
 public class DataViewerServlet extends HttpServlet {
 
-	private static final long serialVersionUID = -4602021617386831403L;
-	private static Logger logger = Logger.getLogger(DataViewerServlet.class);
+  private static final long serialVersionUID = -4602021617386831403L;
+  private static Logger logger = Logger.getLogger(DataViewerServlet.class);
 
-	@Override
-	public void init() throws ServletException {
-		super.init();
-		logger.info("Data Viewer Servlet initialized");
-	}
+  @Override
+  public void init() throws ServletException {
+    super.init();
+    logger.info("Data Viewer Servlet initialized");
+  }
 
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		try {
-			SessionBean sb = (SessionBean) req.getSession(false).getAttribute(
-					SessionBean.class.getSimpleName());
-			Item item = ObjectLoader.loadItem(
-					ObjectHelper.getURI(Item.class, req.getParameter("id")),
-					sb.getUser());
-			boolean isPublicItem = Status.RELEASED.equals(item.getStatus());
+  @Override
+  protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
+      IOException {
+    try {
+      SessionBean sb =
+          (SessionBean) req.getSession(false).getAttribute(SessionBean.class.getSimpleName());
+      Item item =
+          ObjectLoader.loadItem(ObjectHelper.getURI(Item.class, req.getParameter("id")),
+              sb.getUser());
+      boolean isPublicItem = Status.RELEASED.equals(item.getStatus());
 
-			String fileExtensionName = FilenameUtils.getExtension(item
-					.getFilename());
-			String dataViewerUrl = "api/view";
+      String fileExtensionName = FilenameUtils.getExtension(item.getFilename());
+      String dataViewerUrl = "api/view";
 
-			if (ConfigurationBean.getDataViewerUrlStatic().endsWith("/")) {
-				dataViewerUrl = ConfigurationBean.getDataViewerUrlStatic()
-						+ dataViewerUrl;
-			} else {
-				dataViewerUrl = ConfigurationBean.getDataViewerUrlStatic()
-						+ "/" + dataViewerUrl;
-			}
+      if (ConfigurationBean.getDataViewerUrlStatic().endsWith("/")) {
+        dataViewerUrl = ConfigurationBean.getDataViewerUrlStatic() + dataViewerUrl;
+      } else {
+        dataViewerUrl = ConfigurationBean.getDataViewerUrlStatic() + "/" + dataViewerUrl;
+      }
 
-			if (isPublicItem) {
-				// if item is public, simply send the URL to the Data Viewer,
-				// along with the fileExtensionName
-				resp.sendRedirect(viewGenericUrl(item.getFullImageUrl()
-						.toString(), fileExtensionName, dataViewerUrl));
-			} else
+      if (isPublicItem) {
+        // if item is public, simply send the URL to the Data Viewer,
+        // along with the fileExtensionName
+        resp.sendRedirect(viewGenericUrl(item.getFullImageUrl().toString(), fileExtensionName,
+            dataViewerUrl));
+      } else
 
-			{
-				// Assume always Data Viewer will return an HTML (as is in the
-				// Data Viewer Default definition)
-				resp.setContentType(MediaType.TEXT_HTML);
-				resp.getWriter()
-						.append(viewGenericFile(item, fileExtensionName,
-								dataViewerUrl));
-			}
+      {
+        // Assume always Data Viewer will return an HTML (as is in the
+        // Data Viewer Default definition)
+        resp.setContentType(MediaType.TEXT_HTML);
+        resp.getWriter().append(viewGenericFile(item, fileExtensionName, dataViewerUrl));
+      }
 
-			// resp.getWriter().append("id" + id);
-		} catch (HttpResponseException he) {
-			resp.sendError(he.getStatusCode(), he.getMessage());
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-			resp.sendError(HttpServletResponse.SC_BAD_REQUEST,
-					"Requested resource could not be visualized!");
-		}
-	}
+      // resp.getWriter().append("id" + id);
+    } catch (HttpResponseException he) {
+      resp.sendError(he.getStatusCode(), he.getMessage());
+    } catch (Exception e) {
+      logger.error(e.getMessage(), e);
+      resp.sendError(HttpServletResponse.SC_BAD_REQUEST,
+          "Requested resource could not be visualized!");
+    }
+  }
 
-	private String viewGenericFile(Item item, String fileType,
-			String dataViewerServiceTargetURL) throws FileNotFoundException,
-			IOException, URISyntaxException, ImejiException {
+  private String viewGenericFile(Item item, String fileType, String dataViewerServiceTargetURL)
+      throws FileNotFoundException, IOException, URISyntaxException, ImejiException {
 
-		// in any other case, download the temporary file and send it to the
-		// data viewer
-		InternalStorage ist = new InternalStorage();
-		File file = ist.readFile(item.getFullImageUrl().toString());
+    // in any other case, download the temporary file and send it to the
+    // data viewer
+    InternalStorage ist = new InternalStorage();
+    File file = ist.readFile(item.getFullImageUrl().toString());
 
-		// Data Viewer File Parameter is always named "file1" not filename
-		FileDataBodyPart filePart = new FileDataBodyPart("file1", file);
+    // Data Viewer File Parameter is always named "file1" not filename
+    FileDataBodyPart filePart = new FileDataBodyPart("file1", file);
 
-		FormDataMultiPart multiPart = new FormDataMultiPart();
-		multiPart.bodyPart(filePart);
-		multiPart.field("mimetype", fileType);
+    FormDataMultiPart multiPart = new FormDataMultiPart();
+    multiPart.bodyPart(filePart);
+    multiPart.field("mimetype", fileType);
 
-		Client client = ClientBuilder.newClient();
-		WebTarget target = client.target(dataViewerServiceTargetURL);
+    Client client = ClientBuilder.newClient();
+    WebTarget target = client.target(dataViewerServiceTargetURL);
 
-		Response response = target
-				.register(MultiPartFeature.class)
-				.request(MediaType.MULTIPART_FORM_DATA_TYPE,
-						MediaType.TEXT_HTML_TYPE)
-				.post(Entity.entity(multiPart, multiPart.getMediaType()));
+    Response response =
+        target.register(MultiPartFeature.class)
+            .request(MediaType.MULTIPART_FORM_DATA_TYPE, MediaType.TEXT_HTML_TYPE)
+            .post(Entity.entity(multiPart, multiPart.getMediaType()));
 
-		String theHTML = "";
-		if (response.bufferEntity()) {
-			theHTML = response.readEntity(String.class);
-		}
+    String theHTML = "";
+    if (response.bufferEntity()) {
+      theHTML = response.readEntity(String.class);
+    }
 
-		response.close();
-		client.close();
+    response.close();
+    client.close();
 
-		return theHTML;
-	}
+    return theHTML;
+  }
 
-	private String viewGenericUrl(String originalUrl, String fileType,
-			String dataViewerServiceTargetURL) throws FileNotFoundException,
-			IOException, URISyntaxException {
-		// System.out.println(dataViewerServiceTargetURL+"?"+"mimetype="+fileType+"&url="+originalUrl);
-		return dataViewerServiceTargetURL + "?" + "mimetype=" + fileType
-				+ "&url=" + originalUrl;
-	}
+  private String viewGenericUrl(String originalUrl, String fileType,
+      String dataViewerServiceTargetURL) throws FileNotFoundException, IOException,
+      URISyntaxException {
+    // System.out.println(dataViewerServiceTargetURL+"?"+"mimetype="+fileType+"&url="+originalUrl);
+    return dataViewerServiceTargetURL + "?" + "mimetype=" + fileType + "&url=" + originalUrl;
+  }
 
 }

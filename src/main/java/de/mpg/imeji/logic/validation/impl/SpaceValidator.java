@@ -4,6 +4,7 @@ import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
@@ -19,45 +20,59 @@ import de.mpg.imeji.logic.vo.Space;
  * @author saquet
  *
  */
-public class SpaceValidator implements Validator<Space> {
+public class SpaceValidator extends ObjectValidator implements Validator<Space> {
 
-	@Override
-	public void validate(Space space) throws UnprocessableError {
-		if (isNullOrEmptyTrim(space.getTitle())) {
-			throw new UnprocessableError("error_space_need_title");
-		}
+  public SpaceValidator(Validator.Method method) {
+    super(method);
+  }
 
-		if (isSpaceByLabel(space.getSlug())) {
-			throw new UnprocessableError(
-					"error_there_is_another_space_with_same_slug");
-		}
+  @Override
+  public void validate(Space space) throws UnprocessableError {
+    if (isDelete())
+      return;
 
-		if (isNullOrEmptyTrim(space.getSlug())) {
-			throw new UnprocessableError("error_space_needs_slug");
-		}
-		try {
-			new URI(space.getSlug());
-			// above creation of URI in order to check if it is a syntactically
-			// valid slug
-		} catch (URISyntaxException e) {
-			throw new UnprocessableError("error_space_invalid_slug");
-		}
+    if (isNullOrEmptyTrim(space.getTitle())) {
+      throw new UnprocessableError("error_space_need_title");
+    }
 
-	}
+    if (isSpaceByLabel(space.getSlug(), space.getId())) {
+      throw new UnprocessableError("error_there_is_another_space_with_same_slug");
+    }
 
-	private boolean isSpaceByLabel(String spaceId) {
-		if (isNullOrEmptyTrim(spaceId))
-			return false;
-		if (ImejiSPARQL.exec(SPARQLQueries.getSpaceByLabel(spaceId),
-				Imeji.spaceModel).size() > 0) {
-			return true;
-		}
-		return false;
-	}
+    if (isNullOrEmptyTrim(space.getSlug())) {
+      throw new UnprocessableError("error_space_needs_slug");
+    }
+    try {
+      new URI(space.getSlug());
+      // above creation of URI in order to check if it is a syntactically
+      // valid slug
+    } catch (URISyntaxException e) {
+      throw new UnprocessableError("error_space_invalid_slug");
+    }
 
-	@Override
-	public void validate(Space t, MetadataProfile p) throws UnprocessableError {
-		validate(t);
-	}
+  }
+
+  private boolean isSpaceByLabel(String spaceId, URI spaceUriId) {
+    if (isNullOrEmptyTrim(spaceId))
+      return false;
+
+    List<String> spaceUrisFound =
+        ImejiSPARQL.exec(SPARQLQueries.getSpaceByLabel(spaceId), Imeji.spaceModel);
+    if (spaceUrisFound.size() == 0) {
+      return false;
+    } else {
+      for (String spaceUri : spaceUrisFound) {
+        if (!spaceUri.equals(spaceUriId.toString())) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  @Override
+  public void validate(Space t, MetadataProfile p) throws UnprocessableError {
+    validate(t);
+  }
 
 }

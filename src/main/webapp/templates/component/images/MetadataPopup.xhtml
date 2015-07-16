@@ -7,18 +7,22 @@
 		<ui:param name="navigationPath" value="#{cc.attrs.picList.imageBaseUrl}#{Navigation.itemPath}/#{item.id}"/>
 		
 		<div class="imj_imageInfoLayer">
-			<h:outputText value="#{item.initPopup}"/>
-			
 			<h:panelGroup layout="block" class="imj_infoNavigation">			
 				<h:outputLink value="#{navigationPath}">
 					<h:panelGroup styleClass="imj_iconEyeOpen_16"/>
 					<h:outputText value=" #{lbl.view_detail}"/>
 				</h:outputLink>
-				<h:outputLink value="#{navigationPath}?edit=1" rendered="#{Auth.updateContent(item.collection) and item.statements.size() >0 }">
+				<h:outputLink value="#{navigationPath}?edit=1" rendered="#{Auth.updateContent(item.collectionUri) and item.profile.statements.size() >0 }">
 					<h:panelGroup styleClass="imj_buttonEdit_16"/>
 					<h:outputText value="#{lbl.metadata_edit}"/>
 				</h:outputLink>
 			</h:panelGroup>
+			
+			<ui:fragment rendered="#{item.isPrivate()}">
+				<span class="imj_iconStatusPrivate_16" title="#{lbl.privateContent}">
+					<h:outputText value="&#160;"/>
+				</span>
+			</ui:fragment>
 			
 			<div class="imj_metadataSet">
 				<div class="imj_metadataLabel" title="#{lbl.filename}">
@@ -28,6 +32,7 @@
 					<h:outputText value="#{item.filename}"/>
 				</div>
 			</div>
+
 			
 			<ui:repeat id="metadata" var="md" value="#{item.mds.tree.list}" rows="0" varStatus="indexMetadata">
 				<ui:fragment rendered="#{!md.isEmpty() and md.preview}">

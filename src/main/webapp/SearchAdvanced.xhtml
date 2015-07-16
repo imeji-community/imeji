@@ -12,7 +12,7 @@
 	
 	<ui:define name="searchQuery">
 		<h:panelGroup layout="block" id="imj_searchQueryMessageArea" styleClass="imj_searchQueryDisplay">
-			<h:outputText value="#{lbl.search_query}: "/>
+			<h:outputText value="#{lbl.search_query} #{lbl.for_type} #{lbl.type_items}: "/>
 			<span class="imj_searchQueryText">
 				<h:outputText value="#{AdvancedSearchBean.simpleQuery}" styleClass="#{AdvancedSearchBean.errorQuery ? 'imj_messageError' : ''}"/>
 			</span>
@@ -30,8 +30,9 @@
 				<div class="imj_searchUnit">
 					<div class="imj_searchDetails">
 						<h:outputText value="#{lbl.select_file_type}" />
-						<h:selectManyCheckbox value="#{AdvancedSearchBean.fileTypesSelected}">
+						<h:selectManyCheckbox value="#{AdvancedSearchBean.fileTypesSelected}" valueChangeListener="#{AdvancedSearchBean.fileTypeListener}">
 							<f:selectItems value="#{AdvancedSearchBean.fileTypesMenu}"></f:selectItems>
+							<f:ajax execute="@this" render=":imj_searchQueryMessageArea"/>
 						</h:selectManyCheckbox>
 					</div>
 					<div class="imj_logicalConnector">

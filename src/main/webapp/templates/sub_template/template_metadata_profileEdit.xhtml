@@ -117,9 +117,9 @@
 																<option value="#{wrapper.statement.type}" selected="selected">#{metadataBean.getTypeLabel(wrapper.statement.type)}</option>
 															</select>
 															<h:commandButton id="btnChangeStatement" action="#{wrapper.select()}" value="#{wrapper.statement.type}" type="submit" styleClass="imj_noDisplay imj_ajaxButton">
-																<f:ajax execute="@this inHiddenStatement" render="addConstraints addVocabulary"/>
+																<f:ajax execute="@this inHiddenStatement" render="vocabularyAndConstraintsArea"/>
 															</h:commandButton>
-															<h:inputHidden id="inHiddenStatement" value="#{wrapper.statement.type}" converter="URIConverter"/>
+															<h:inputHidden id="inHiddenStatement" value="#{wrapper.statement.type}" converter="URIConverter" valueChangeListener="#{wrapper.typeListener}"/>
 														</h:panelGroup>
 														
 														
@@ -161,91 +161,90 @@
 																	</ui:repeat>
 																</div>
 															</div> <!-- END Label - Language Paring -->
-															
-															<h:panelGroup styleClass="imj_metadataSet" id="addVocabulary" rendered="#{wrapper.constraintsSize == 0}">
-																<!-- START - add vocabulary constraints -->
-																<div class="imj_metadataLabel">
-																	<h:outputLabel value="#{lbl.vocabulary}" for="selectVocabulary" rendered="#{wrapper.statement.type !='http://imeji.org/terms/metadata#publication'
-																										and wrapper.statement.type !='http://imeji.org/terms/metadata#date'
-																										and wrapper.statement.type !='http://imeji.org/terms/metadata#number'}"/>
-																</div>
-																<div class="imj_metadataValue">
-																	<div class="imj_metadataSet">
-																		<ui:fragment rendered="#{wrapper.vocabularyString == null 
-																								and wrapper.statement.type !='http://imeji.org/terms/metadata#publication'
-																								and wrapper.statement.type !='http://imeji.org/terms/metadata#date'
-																								and wrapper.statement.type !='http://imeji.org/terms/metadata#number'}">
-																			<h:commandButton styleClass="imj_buttonAdd_16" type="submit" action="#{metadataBean.addVocabulary}">
-																				<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
-																				<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
-																			</h:commandButton>
-																			<h:outputLabel value="#{lbl.add_vocabulary}"/>
+															<h:panelGroup id="vocabularyAndConstraintsArea">
+																<h:panelGroup styleClass="imj_metadataSet" rendered="#{wrapper.constraintsSize == 0}">
+																	<!-- START - add vocabulary constraints -->
+																	<div class="imj_metadataLabel">
+																		<h:outputLabel value="#{lbl.vocabulary}" for="selectVocabulary" rendered="#{wrapper.statement.type !='http://imeji.org/terms/metadata#publication'
+																											and wrapper.statement.type !='http://imeji.org/terms/metadata#date'
+																											and wrapper.statement.type !='http://imeji.org/terms/metadata#number'}"/>
+																	</div>
+																	<div class="imj_metadataValue">
+																		<div class="imj_metadataSet">
+																			<ui:fragment rendered="#{wrapper.vocabularyString == null 
+																									and wrapper.statement.type !='http://imeji.org/terms/metadata#publication'
+																									and wrapper.statement.type !='http://imeji.org/terms/metadata#date'
+																									and wrapper.statement.type !='http://imeji.org/terms/metadata#number'}">
+																				<h:commandButton styleClass="imj_buttonAdd_16" type="submit" action="#{metadataBean.addVocabulary}">
+																					<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
+																					<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
+																				</h:commandButton>
+																				<h:outputLabel value="#{lbl.add_vocabulary}"/>
+																			</ui:fragment>
+																			
+																			<ui:fragment rendered="#{wrapper.vocabularyString != null}">
+																				<h:selectOneMenu id="selectVocabulary" value="#{wrapper.vocabularyString}">
+																					<f:selectItems value="#{metadataBean.vocabularyHelper.vocabularies}"/>
+																				</h:selectOneMenu>
+																				<h:commandButton id="btnRemoveVocabulary" type="submit" styleClass="imj_buttonRemove_16" action="#{metadataBean.removeVocabulary}">
+																					<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
+																					<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
+																				</h:commandButton>
+																			</ui:fragment>
+																		</div>
+																	</div><!-- END - add vocabulary constraints -->
+																</h:panelGroup>
+																<h:panelGroup styleClass="imj_metadataSet" rendered="#{wrapper.vocabularyString == null }">
+																	<!-- START - add constraints -->
+																	<div class="imj_metadataLabel">
+																		<h:outputLabel value="#{lbl.constraints}" for="constraints" rendered="#{
+																							  wrapper.statement.type != 'http://imeji.org/terms/metadata#conePerson'
+																							  and  wrapper.statement.type !='http://imeji.org/terms/metadata#publication' 
+																							  and wrapper.statement.type !='http://imeji.org/terms/metadata#geolocation' 
+																							  and wrapper.statement.type !='http://imeji.org/terms/metadata#license' 
+																							  and wrapper.vocabularyString == null}"/>
+																	</div>
+																	<div class="imj_metadataValue">
+																		<ui:fragment rendered="#{wrapper.constraintsSize == 0}">
+																			<ui:fragment rendered="#{wrapper.statement.type != 'http://imeji.org/terms/metadata#conePerson'
+																							  and  wrapper.statement.type !='http://imeji.org/terms/metadata#publication' 
+																							  and wrapper.statement.type !='http://imeji.org/terms/metadata#geolocation' 
+																							  and wrapper.statement.type !='http://imeji.org/terms/metadata#license'
+																							  and wrapper.vocabularyString == null}">
+																				<h:commandButton styleClass="imj_buttonAdd_16" type="submit" action="#{metadataBean.addConstraint}">
+																					<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
+																					<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
+																				</h:commandButton>
+																				<h:outputLabel value="#{lbl.add_constraint}"/>
+																			</ui:fragment>
 																		</ui:fragment>
 																		
-																		<ui:fragment rendered="#{wrapper.vocabularyString != null}">
-																			<h:selectOneMenu id="selectVocabulary" value="#{wrapper.vocabularyString}">
-																				<f:selectItems value="#{metadataBean.vocabularyHelper.vocabularies}"/>
-																			</h:selectOneMenu>
-																			<h:commandButton id="btnRemoveVocabulary" type="submit" styleClass="imj_buttonRemove_16" action="#{metadataBean.removeVocabulary}">
-																				<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
-																				<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
-																			</h:commandButton>
+																		<ui:fragment rendered="#{wrapper.constraintsSize > 0}">
+																			<ui:repeat id="constraints" var="constraint" value="#{wrapper.statement.literalConstraints}" varStatus="constraintPosition">
+																				<div class="imj_metadataSet">
+																					<h:inputText value="#{constraint}" valueChangeListener="#{wrapper.constraintListener}" styleClass="#{wrapper.statement.type == 'http://imeji.org/terms/metadata#date' ? 'datepicker' : ''}">
+																						<f:attribute name="position" value="#{constraintPosition.index}"/>
+																					</h:inputText>
+																				
+																					<span class="imj_inlineButtonGroup">
+																						<h:commandButton rendered="#{constraintPosition.index == wrapper.statement.literalConstraints.size()-1}" styleClass="imj_buttonAdd_16" type="submit" title="#{lbl.add_constraint}" action="#{metadataBean.addConstraint}">
+																							<f:setPropertyActionListener value="#{constraintPosition.index}" target="#{metadataBean.constraintPosition}"/>
+																							<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
+																							<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
+																						</h:commandButton>
+																						<h:commandButton styleClass="imj_buttonRemove_16" type="submit" title="#{lbl.remove_constraint}" action="#{metadataBean.removeConstraint}">
+																							<f:setPropertyActionListener value="#{constraintPosition.index}" target="#{metadataBean.constraintPosition}"/>
+																							<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
+																							<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
+																						</h:commandButton>
+																					</span>
+																				</div>
+																			</ui:repeat>
+																				<h:outputText value="#{lbl.sorted_alphabetically}"/>
 																		</ui:fragment>
 																	</div>
-																</div><!-- END - add vocabulary constraints -->
+																</h:panelGroup><!-- END - add constraints -->
 															</h:panelGroup>
-															
-															<h:panelGroup styleClass="imj_metadataSet" id="addConstraints" rendered="#{wrapper.vocabularyString == null }">
-																<!-- START - add constraints -->
-																<div class="imj_metadataLabel">
-																	<h:outputLabel value="#{lbl.constraints}" for="constraints" rendered="#{
-																						  wrapper.statement.type != 'http://imeji.org/terms/metadata#conePerson'
-																						  and  wrapper.statement.type !='http://imeji.org/terms/metadata#publication' 
-																						  and wrapper.statement.type !='http://imeji.org/terms/metadata#geolocation' 
-																						  and wrapper.statement.type !='http://imeji.org/terms/metadata#license' 
-																						  and wrapper.vocabularyString == null}"/>
-																</div>
-																<div class="imj_metadataValue">
-																	<ui:fragment rendered="#{wrapper.constraintsSize == 0}">
-																		<ui:fragment rendered="#{wrapper.statement.type != 'http://imeji.org/terms/metadata#conePerson'
-																						  and  wrapper.statement.type !='http://imeji.org/terms/metadata#publication' 
-																						  and wrapper.statement.type !='http://imeji.org/terms/metadata#geolocation' 
-																						  and wrapper.statement.type !='http://imeji.org/terms/metadata#license'
-																						  and wrapper.vocabularyString == null}">
-																			<h:commandButton styleClass="imj_buttonAdd_16" type="submit" action="#{metadataBean.addConstraint}">
-																				<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
-																				<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
-																			</h:commandButton>
-																			<h:outputLabel value="#{lbl.add_constraint}"/>
-																		</ui:fragment>
-																	</ui:fragment>
-																	
-																	<ui:fragment rendered="#{wrapper.constraintsSize > 0}">
-																		<ui:repeat id="constraints" var="constraint" value="#{wrapper.statement.literalConstraints}" varStatus="constraintPosition">
-																			<div class="imj_metadataSet">
-																				<h:inputText value="#{constraint}" valueChangeListener="#{wrapper.constraintListener}" styleClass="#{wrapper.statement.type == 'http://imeji.org/terms/metadata#date' ? 'datepicker' : ''}">
-																					<f:attribute name="position" value="#{constraintPosition.index}"/>
-																				</h:inputText>
-																			
-																				<span class="imj_inlineButtonGroup">
-																					<h:commandButton rendered="#{constraintPosition.index == wrapper.statement.literalConstraints.size()-1}" styleClass="imj_buttonAdd_16" type="submit" title="#{lbl.add_constraint}" action="#{metadataBean.addConstraint}">
-																						<f:setPropertyActionListener value="#{constraintPosition.index}" target="#{metadataBean.constraintPosition}"/>
-																						<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
-																						<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
-																					</h:commandButton>
-																					<h:commandButton styleClass="imj_buttonRemove_16" type="submit" title="#{lbl.remove_constraint}" action="#{metadataBean.removeConstraint}">
-																						<f:setPropertyActionListener value="#{constraintPosition.index}" target="#{metadataBean.constraintPosition}"/>
-																						<f:setPropertyActionListener value="#{position.index}" target="#{metadataBean.statementPosition}"/>
-																						<f:ajax execute="@form" render=":profileForm:ajaxArea"/>
-																					</h:commandButton>
-																				</span>
-																			</div>
-																		</ui:repeat>
-																			<h:outputText value="#{lbl.sorted_alphabetically}"/>
-																	</ui:fragment>
-																</div>
-															</h:panelGroup><!-- END - add constraints -->
-															
 															
 															<ui:fragment rendered="#{wrapper.showRemoveWarning}">
 																<div class="imj_contentMessageArea">

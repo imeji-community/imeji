@@ -8,25 +8,24 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 
 /**
- * Clean the {@link Metadata} which have a {@link Statement} which doesn't exist
- * anymore
+ * Clean the {@link Metadata} which have a {@link Statement} which doesn't exist anymore
  * 
  * @author saquet
  *
  */
 public class CleanMetadataJob implements Callable<Integer> {
 
-	private MetadataProfile p;
+  private MetadataProfile p;
 
-	public CleanMetadataJob(MetadataProfile p) {
-		this.p = p;
-	}
+  public CleanMetadataJob(MetadataProfile p) {
+    this.p = p;
+  }
 
-	@Override
-	public Integer call() throws Exception {
-		ProfileController pc = new ProfileController();
-		pc.removeMetadataWithoutStatement(p);
-		return 1;
-	}
+  @Override
+  public Integer call() throws Exception {
+    ProfileController pc = new ProfileController();
+    pc.removeMetadataWithoutStatement(p);
+    return 1;
+  }
 
 }

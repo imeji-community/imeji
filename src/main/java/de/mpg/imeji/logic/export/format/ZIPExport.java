@@ -1,45 +1,28 @@
 /*
- *
+ * 
  * CDDL HEADER START
- *
- * The contents of this file are subject to the terms of the
- * Common Development and Distribution License, Version 1.0 only
- * (the "License"). You may not use this file except in compliance
- * with the License.
- *
- * You can obtain a copy of the license at license/ESCIDOC.LICENSE
- * or http://www.escidoc.de/license.
- * See the License for the specific language governing permissions
- * and limitations under the License.
- *
- * When distributing Covered Code, include this CDDL HEADER in each
- * file and include the License file at license/ESCIDOC.LICENSE.
- * If applicable, add the following below this CDDL HEADER, with the
- * fields enclosed by brackets "[]" replaced with your own identifying
- * information: Portions Copyright [yyyy] [name of copyright owner]
- *
+ * 
+ * The contents of this file are subject to the terms of the Common Development and Distribution
+ * License, Version 1.0 only (the "License"). You may not use this file except in compliance with
+ * the License.
+ * 
+ * You can obtain a copy of the license at license/ESCIDOC.LICENSE or http://www.escidoc.de/license.
+ * See the License for the specific language governing permissions and limitations under the
+ * License.
+ * 
+ * When distributing Covered Code, include this CDDL HEADER in each file and include the License
+ * file at license/ESCIDOC.LICENSE. If applicable, add the following below this CDDL HEADER, with
+ * the fields enclosed by brackets "[]" replaced with your own identifying information: Portions
+ * Copyright [yyyy] [name of copyright owner]
+ * 
  * CDDL HEADER END
  */
 /*
- * Copyright 2006-2007 Fachinformationszentrum Karlsruhe Gesellschaft
- * für wissenschaftlich-technische Information mbH and Max-Planck-
- * Gesellschaft zur Förderung der Wissenschaft e.V.
- * All rights reserved. Use is subject to license terms.
+ * Copyright 2006-2007 Fachinformationszentrum Karlsruhe Gesellschaft für
+ * wissenschaftlich-technische Information mbH and Max-Planck- Gesellschaft zur Förderung der
+ * Wissenschaft e.V. All rights reserved. Use is subject to license terms.
  */
 package de.mpg.imeji.logic.export.format;
-
-import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.export.Export;
-import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.storage.StorageController;
-import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.session.SessionBean;
-import de.mpg.imeji.presentation.util.BeanHelper;
-import org.apache.http.client.HttpResponseException;
-import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -53,6 +36,20 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipOutputStream;
 
+import org.apache.http.client.HttpResponseException;
+import org.apache.log4j.Logger;
+
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.export.Export;
+import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.storage.StorageController;
+import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.session.SessionBean;
+import de.mpg.imeji.presentation.util.BeanHelper;
+
 /**
  * {@link Export} images in zip
  * 
@@ -60,149 +57,127 @@ import java.util.zip.ZipOutputStream;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class ZIPExport extends Export
-{
-    protected List<String> filteredResources = new ArrayList<String>();
-    protected String modelURI;
-    private static Logger logger = Logger.getLogger(ZIPExport.class);
+public class ZIPExport extends Export {
+  protected List<String> filteredResources = new ArrayList<String>();
+  protected String modelURI;
+  private static Logger logger = Logger.getLogger(ZIPExport.class);
 
 
 
-    private Map<URI, Integer> itemsPerCollection;
+  private Map<URI, Integer> itemsPerCollection;
 
 
-    /**
-     * @param type
-     * @return
-     * @throws HttpResponseException
-     */
-    public ZIPExport(String type) throws HttpResponseException
-    {
-        itemsPerCollection = new HashMap<URI, Integer>();
-        boolean supported = false;
-        if ("image".equalsIgnoreCase(type))
-        {
-            modelURI = Imeji.imageModel;
-            supported = true;
-        }
-        if (!supported)
-        {
-            throw new HttpResponseException(400, "Type " + type + " is not supported.");
-        }
+  /**
+   * @param type
+   * @return
+   * @throws HttpResponseException
+   */
+  public ZIPExport(String type) throws HttpResponseException {
+    itemsPerCollection = new HashMap<URI, Integer>();
+    boolean supported = false;
+    if ("image".equalsIgnoreCase(type)) {
+      modelURI = Imeji.imageModel;
+      supported = true;
     }
-
-    @Override
-    public void init()
-    {
+    if (!supported) {
+      throw new HttpResponseException(400, "Type " + type + " is not supported.");
     }
+  }
 
-    @Override
-    public void export(OutputStream out, SearchResult sr)
-    {
-        try
-        {
-            exportAllImages(sr, out);
-        }
-        catch (Exception e)
-        {
-            // TODO Auto-generated catch block
-            logger.info("Some problems with ZIP Export",  e);
-        }
+  @Override
+  public void init() {}
+
+  @Override
+  public void export(OutputStream out, SearchResult sr) {
+    try {
+      exportAllImages(sr, out);
+    } catch (Exception e) {
+      // TODO Auto-generated catch block
+      logger.info("Some problems with ZIP Export", e);
     }
+  }
 
-    /*
-     * (non-Javadoc)
-     * @see de.mpg.imeji.logic.export.Export#getContentType()
-     */
-    @Override
-    public String getContentType()
-    {
-        return "application/zip";
-    }
+  /*
+   * (non-Javadoc)
+   * 
+   * @see de.mpg.imeji.logic.export.Export#getContentType()
+   */
+  @Override
+  public String getContentType() {
+    return "application/zip";
+  }
 
-    protected void filterResources(SearchResult sr, User user)
-    {
-        // TODO Auto-generated method stub
-    }
+  protected void filterResources(SearchResult sr, User user) {
+    // TODO Auto-generated method stub
+  }
 
-    /**
-     * This method exports all images of the current browse page as a zip file
-     * @throws ImejiException 
-     * 
-     * @throws Exception
-     * @throws URISyntaxException
-     */
-    public void exportAllImages(SearchResult sr, OutputStream out) throws ImejiException 
-    {
-        List<String> source = sr.getResults();
-        ZipOutputStream zip = new ZipOutputStream(out);
-        try
-        {
-            // Create the ZIP file
-            for (int i = 0; i < source.size(); i++)
-            {
-                SessionBean session = (SessionBean)BeanHelper.getSessionBean(SessionBean.class);
-                ItemController ic = new ItemController();
-                Item item = null;
-                StorageController sc = null;
-                try
-                {
-                 item = ic.retrieve(new URI(source.get(i)), session.getUser());
-                 updateMetrics(item);
-                 sc = new StorageController();
-                    zip.putNextEntry(new ZipEntry(item.getFilename()));
-                    sc.read(item.getFullImageUrl().toString(), zip, false);
-                    // Complete the entry
-                    zip.closeEntry();
-                }
-                catch (ZipException ze)
-                {
-                    if (ze.getMessage().contains("duplicate entry"))
-                    {
-                        String name = i + "_" + item.getFilename();
-                        zip.putNextEntry(new ZipEntry(name));
-                        sc.read(item.getFullImageUrl().toString(), zip, false);
-                        // Complete the entry
-                        zip.closeEntry();
-                    }
-                 }
-                catch (ImejiException e) {
-                	logger.info("Could not retrieve Item for export!");
-                }
-                catch (URISyntaxException eui) {
-                	logger.info("Could not create URI during retrieval and export! ");
-                }
-            }
-        }
-        catch (IOException e)
-        {
-            logger.info("Some IO Exception when exporting all images!", e);
-        }
-       
+  /**
+   * This method exports all images of the current browse page as a zip file
+   * 
+   * @throws ImejiException
+   * 
+   * @throws Exception
+   * @throws URISyntaxException
+   */
+  public void exportAllImages(SearchResult sr, OutputStream out) throws ImejiException {
+    List<String> source = sr.getResults();
+    ZipOutputStream zip = new ZipOutputStream(out);
+    try {
+      // Create the ZIP file
+      for (int i = 0; i < source.size(); i++) {
+        SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
+        ItemController ic = new ItemController();
+        Item item = null;
+        StorageController sc = null;
         try {
-        // 	Complete the ZIP file
-        	zip.close();
+          item = ic.retrieve(new URI(source.get(i)), session.getUser());
+          updateMetrics(item);
+          sc = new StorageController();
+          zip.putNextEntry(new ZipEntry(item.getFilename()));
+          sc.read(item.getFullImageUrl().toString(), zip, false);
+          // Complete the entry
+          zip.closeEntry();
+        } catch (ZipException ze) {
+          if (ze.getMessage().contains("duplicate entry")) {
+            String name = i + "_" + item.getFilename();
+            zip.putNextEntry(new ZipEntry(name));
+            sc.read(item.getFullImageUrl().toString(), zip, false);
+            // Complete the entry
+            zip.closeEntry();
+          }
+        } catch (ImejiException e) {
+          logger.info("Could not retrieve Item for export!");
+        } catch (URISyntaxException eui) {
+          logger.info("Could not create URI during retrieval and export! ");
         }
-        catch (IOException ioe) {
-        	logger.info("Could not close the ZIP File!");
-        }
+      }
+    } catch (IOException e) {
+      logger.info("Some IO Exception when exporting all images!", e);
     }
 
-    private void updateMetrics(Item item) {
-        //only images for the moment!
-        if ( modelURI.equals(Imeji.imageModel) ) {
-            if (itemsPerCollection.containsKey(item.getCollection())) {
-                int newVal = itemsPerCollection.get(item.getCollection()).intValue() + 1;
-                itemsPerCollection.put(item.getCollection(), Integer.valueOf(newVal));
-            } else {
-                itemsPerCollection.put(item.getCollection(), new Integer(1));
-            }
-        }
+    try {
+      // Complete the ZIP file
+      zip.close();
+    } catch (IOException ioe) {
+      logger.info("Could not close the ZIP File!");
     }
+  }
 
-    public Map<URI, Integer> getItemsPerCollection() {
-        return itemsPerCollection;
+  private void updateMetrics(Item item) {
+    // only images for the moment!
+    if (modelURI.equals(Imeji.imageModel)) {
+      if (itemsPerCollection.containsKey(item.getCollection())) {
+        int newVal = itemsPerCollection.get(item.getCollection()).intValue() + 1;
+        itemsPerCollection.put(item.getCollection(), Integer.valueOf(newVal));
+      } else {
+        itemsPerCollection.put(item.getCollection(), new Integer(1));
+      }
     }
+  }
+
+  public Map<URI, Integer> getItemsPerCollection() {
+    return itemsPerCollection;
+  }
 
 
 }

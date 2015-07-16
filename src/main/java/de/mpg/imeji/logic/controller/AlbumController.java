@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.exceptions.AuthenticationError;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotAllowedError;
@@ -21,7 +23,6 @@ import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.ImejiTriple;
-import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
@@ -49,405 +50,407 @@ import de.mpg.j2j.helper.J2JHelper;
  * @version $Revision$ $LastChangedDate$
  */
 public class AlbumController extends ImejiController {
-	private static final ReaderFacade reader = new ReaderFacade(
-			Imeji.albumModel);
-	private static final WriterFacade writer = new WriterFacade(
-			Imeji.albumModel);
+  private static final ReaderFacade reader = new ReaderFacade(Imeji.albumModel);
+  private static final WriterFacade writer = new WriterFacade(Imeji.albumModel);
 
-	/**
-	 * Construct a new controller for {@link Album}
-	 */
-	public AlbumController() {
-		super();
-	}
+  private static Logger logger = Logger.getLogger(AlbumController.class);
 
-	/**
-	 * Creates a new album. - Add a unique id - Write user properties
-	 * 
-	 * @param album
-	 * @param user
-	 */
-	public URI create(Album album, User user) throws ImejiException {
-		writeCreateProperties(album, user);
-		GrantController gc = new GrantController();
-		gc.addGrants(user, AuthorizationPredefinedRoles.admin(album.getId()
-				.toString(), null), user);
-		writer.create(WriterFacade.toList(album), null, user);
-		return album.getId();
-	}
+  /**
+   * Construct a new controller for {@link Album}
+   */
+  public AlbumController() {
+    super();
+  }
 
-	/**
-	 * Updates an album -Logged in users: --User is album owner --OR user is
-	 * album editor, by choice checking the security
-	 * 
-	 * @param ic
-	 * @param user
-	 * @throws ImejiException
-	 */
-	public Album updateAlbumItems(Album ic, User user) throws ImejiException {
-		if (!AuthUtil.staticAuth().create(user, ic)) {
-			throw new NotAllowedError("album_not_allowed_to_add_item");
-		}
-		writeUpdateProperties(ic, user);
-		writer.update(WriterFacade.toList(ic), null, user, false);
-		return retrieve(ic.getId(), user);
-	}
+  /**
+   * Creates a new album. - Add a unique id - Write user properties
+   * 
+   * @param album
+   * @param user
+   */
+  public URI create(Album album, User user) throws ImejiException {
+    writeCreateProperties(album, user);
+    ShareController shareController = new ShareController();
+    shareController.shareToCreator(user, album.getId().toString());
+    writer.create(WriterFacade.toList(album), null, user);
+    return album.getId();
+  }
 
-	/**
-	 * Updates an album -Logged in users: --User is album owner --OR user is
-	 * album editor, always checking the security
-	 * 
-	 * @param ic
-	 * @param user
-	 * @throws ImejiException
-	 */
-	public Album update(Album ic, User user) throws ImejiException {
-		writeUpdateProperties(ic, user);
-		writer.update(WriterFacade.toList(ic), null, user, true);
-		return retrieve(ic.getId(), user);
-	}
+  /**
+   * Updates an album -Logged in users: --User is album owner --OR user is album editor, by choice
+   * checking the security
+   * 
+   * @param ic
+   * @param user
+   * @throws ImejiException
+   */
+  public Album updateAlbumItems(Album ic, User user) throws ImejiException {
+    if (!AuthUtil.staticAuth().create(user, ic)) {
+      throw new NotAllowedError("album_not_allowed_to_add_item");
+    }
+    writeUpdateProperties(ic, user);
+    writer.update(WriterFacade.toList(ic), null, user, false);
+    return retrieve(ic.getId(), user);
+  }
 
-	/**
-	 * Updates an album -Logged in users: --User is album owner --OR user is
-	 * album editor, by choice checking the security
-	 * 
-	 * @param ic
-	 * @param user
-	 * @throws ImejiException
-	 */
-	public Album update(Album ic, User user, boolean doCheckSecurity)
-			throws ImejiException {
-		writeUpdateProperties(ic, user);
-		writer.update(WriterFacade.toList(ic), null, user, doCheckSecurity);
-		return retrieve(ic.getId(), user);
-	}
+  /**
+   * Updates an album -Logged in users: --User is album owner --OR user is album editor, always
+   * checking the security
+   * 
+   * @param ic
+   * @param user
+   * @throws ImejiException
+   */
+  public Album update(Album ic, User user) throws ImejiException {
+    writeUpdateProperties(ic, user);
+    writer.update(WriterFacade.toList(ic), null, user, true);
+    return retrieve(ic.getId(), user);
+  }
 
-	/**
-	 * Updates an album -Logged in users: --User is album owner --OR user is
-	 * album editor
-	 * 
-	 * @param ic
-	 * @param user
-	 * @throws ImejiException
-	 */
-	public void updateLazy(Album ic, User user) throws ImejiException {
-		writeUpdateProperties(ic, user);
-		writer.updateLazy(WriterFacade.toList(ic), null, user);
-	}
+  /**
+   * Updates an album -Logged in users: --User is album owner --OR user is album editor, by choice
+   * checking the security
+   * 
+   * @param ic
+   * @param user
+   * @throws ImejiException
+   */
+  public Album update(Album ic, User user, boolean doCheckSecurity) throws ImejiException {
+    writeUpdateProperties(ic, user);
+    writer.update(WriterFacade.toList(ic), null, user, doCheckSecurity);
+    return retrieve(ic.getId(), user);
+  }
 
-	/**
-	 * Load {@link Album} and {@link Item}: can lead to performance issues
-	 * 
-	 * @param selectedAlbumId
-	 * @param user
-	 * @return
-	 * @throws ImejiException
-	 */
-	public Album retrieve(URI selectedAlbumId, User user) throws ImejiException {
-		return (Album) reader.read(selectedAlbumId.toString(), user,
-				new Album());
-	}
+  /**
+   * Updates an album -Logged in users: --User is album owner --OR user is album editor
+   * 
+   * @param ic
+   * @param user
+   * @throws ImejiException
+   */
+  public void updateLazy(Album ic, User user) throws ImejiException {
+    writeUpdateProperties(ic, user);
+    writer.updateLazy(WriterFacade.toList(ic), null, user);
+  }
 
-	/**
-	 * Retrieve albums filtered by query
-	 *
-	 * @param user
-	 * @param q
-	 * @return
-	 * @throws ImejiException
-	 */
-	public List<Album> retrieve(User user, String q, String spaceId)
-			throws ImejiException {
-		List<Album> aList = new ArrayList<>();
-		try {
-			for (String albId : search(
-					!isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q)
-							: null, user, null, 0, 0, spaceId).getResults()) {
-				aList.add(retrieve(URI.create(albId), user));
-			}
-		} catch (Exception e) {
-			throw new UnprocessableError("Cannot retrieve albums:", e);
+  /**
+   * Load {@link Album} and {@link Item}: can lead to performance issues
+   * 
+   * @param selectedAlbumId
+   * @param user
+   * @return
+   * @throws ImejiException
+   */
+  public Album retrieve(URI selectedAlbumId, User user) throws ImejiException {
+    return (Album) reader.read(selectedAlbumId.toString(), user, new Album());
+  }
 
-		}
-		return aList;
-	}
+  /**
+   * Retrieve albums filtered by query
+   * 
+   * @param user
+   * @param q
+   * @return
+   * @throws ImejiException
+   */
+  public List<Album> retrieve(User user, String q, String spaceId) throws ImejiException {
+    List<Album> aList = new ArrayList<>();
+    try {
+      List<String> results =
+          search(!isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q) : null, user,
+              null, 500, 0, spaceId).getResults();
+      aList = (List<Album>) loadAlbumsLazy(results, user, getMin(results.size(), 500), 0);
+    } catch (Exception e) {
+      throw new UnprocessableError("Cannot retrieve albums:", e);
 
-	/**
-	 * Retrieve an {@link Album} without its {@link Item}
-	 * 
-	 * @param uri
-	 * @param user
-	 * @return
-	 * @throws ImejiException
-	 */
-	public Album retrieveLazy(URI uri, User user) throws ImejiException {
-		return (Album) reader.readLazy(uri.toString(), user, new Album());
-	}
+    }
 
-	/**
-	 * Delete the {@link Album}
-	 * 
-	 * @param album
-	 * @param user
-	 * @throws ImejiException
-	 */
-	public void delete(Album album, User user) throws ImejiException {
-		writer.delete(WriterFacade.toList(album), user);
-	}
+    return aList;
+  }
 
-	/**
-	 * Release and {@link Album}. If one {@link Item} of the {@link Album} is
-	 * not released, then abort.
-	 * 
-	 * @param album
-	 * @throws ImejiException
-	 */
-	public void release(Album album, User user) throws ImejiException {
-		ItemController ic = new ItemController();
-		album = (Album) ic.searchAndSetContainerItems(album, user, -1, 0);
-		if (album.getImages().isEmpty()) {
-			throw new UnprocessableError("An empty album can not be released!");
-		} else if (album.getStatus().equals(Status.RELEASED)) {
-			throw new UnprocessableError("The status of album is "
-					+ album.getStatus() + " and can not be released again!");
-		} else {
-			writeReleaseProperty(album, user);
-			update(album, user);
-		}
-	}
+  /**
+   * Retrieve an {@link Album} without its {@link Item}
+   * 
+   * @param uri
+   * @param user
+   * @return
+   * @throws ImejiException
+   */
+  public Album retrieveLazy(URI uri, User user) throws ImejiException {
+    return (Album) reader.readLazy(uri.toString(), user, new Album());
+  }
 
-	/**
-	 * Add a list of {@link Item} (as a {@link List} of {@link URI}) to an
-	 * {@link Album}. Return {@link List} of {@link URI} {@link Item} of the
-	 * album.
-	 * 
-	 * @param album
-	 * @param uris
-	 * @param user
-	 * @return
-	 * @throws ImejiException
-	 */
-	public List<URI> addToAlbum(Album album, List<String> uris, User user)
-			throws ImejiException {
+  /**
+   * Delete the {@link Album}
+   * 
+   * @param album
+   * @param user
+   * @throws ImejiException
+   */
+  public void delete(Album album, User user) throws ImejiException {
+    writer.delete(WriterFacade.toList(album), user);
+  }
 
-		if (Status.WITHDRAWN.equals(album.getStatus())) {
-			throw new UnprocessableError(
-					"error_album_withdrawn_members_can_not_be_added");
-		}
-		if (!AuthUtil.staticAuth().create(user, album)) {
-			throw new NotAllowedError("album_not_allowed_to_add_item");
-		}
+  /**
+   * Release and {@link Album}. If one {@link Item} of the {@link Album} is not released, then
+   * abort.
+   * 
+   * @param album
+   * @throws ImejiException
+   */
+  public void release(Album album, User user) throws ImejiException {
+    ItemController ic = new ItemController();
+    album = (Album) ic.searchAndSetContainerItems(album, user, -1, 0);
+    if (album.getImages().isEmpty()) {
+      throw new UnprocessableError("An empty album can not be released!");
+    } else if (album.getStatus().equals(Status.RELEASED)) {
+      throw new UnprocessableError("The status of album is " + album.getStatus()
+          + " and can not be released again!");
+    } else {
+      writeReleaseProperty(album, user);
+      update(album, user);
+    }
+  }
 
-		ItemController ic = new ItemController();
-		List<String> inAlbums = ic.search(album.getId(), null, null, null,
-				user, null).getResults();
-		List<String> notAddedUris = new ArrayList<String>();
-		for (String uri : uris) {
-			try {
-				Item item = ic.retrieve(new URI(uri), user);
-				if (item != null) {
-					if (!inAlbums.contains(uri)) {
-						inAlbums.add(uri);
-					} else {
-						notAddedUris.add(uri);
-					}
-				}
-			} catch (URISyntaxException e) {
-				e.printStackTrace();
-			}
-		}
-		album.getImages().clear();
-		for (String uri : inAlbums) {
-			album.getImages().add(URI.create(uri));
-		}
-		// Force admin user since th user might not have right to edit the album
-		update(album, user, false);
-		return new ArrayList<URI>(album.getImages());
-	}
+  /**
+   * Add a list of {@link Item} (as a {@link List} of {@link URI}) to an {@link Album}. Return
+   * {@link List} of {@link URI} {@link Item} of the album.
+   * 
+   * @param album
+   * @param uris
+   * @param user
+   * @return
+   * @throws ImejiException
+   */
+  public List<URI> addToAlbum(Album album, List<String> uris, User user) throws ImejiException {
 
-	/**
-	 * Remove a list of {@link Item} (as a {@link List} of {@link URI}) to an
-	 * {@link Album}
-	 * 
-	 * @param album
-	 * @param toDelete
-	 * @param user
-	 * @return
-	 * @throws ImejiException
-	 */
-	public int removeFromAlbum(Album album, List<String> toDelete, User user)
-			throws ImejiException {
-		ItemController ic = new ItemController();
-		List<String> before = ic.seachContainerItemsFast(album, user, -1);
-		for (String uri : before) {
-			if (!toDelete.contains(uri)) {
-				album.getImages().add(URI.create(uri));
-			}
-		}
-		if (album.getImages().size() == 0
-				&& Status.RELEASED.equals(album.getStatus())) {
-			throw new UnprocessableError(
-					"Album is released! You are trying to remove all items from this album! Discard the album if necessary!");
-		}
-		Album after = update(album, user, false);
-		return before.size() - after.getImages().size();
-	}
+    if (Status.WITHDRAWN.equals(album.getStatus())) {
+      throw new UnprocessableError("error_album_withdrawn_members_can_not_be_added");
+    }
+    
+    if (!AuthUtil.staticAuth().create(user, album)) {
+      throw new NotAllowedError("album_not_allowed_to_add_item");
+    }
 
-	/**
-	 * Remove a list of {@link Item} (as a {@link List} of {@link URI}) to an
-	 * {@link Album}
-	 * 
-	 * @param album
-	 * @param toDelete
-	 * @param user
-	 * @return
-	 * @throws ImejiException
-	 */
-	public boolean clearAlbumItems(Album album, User user)
-			throws ImejiException {
-		if (Status.RELEASED.equals(album.getStatus())) {
-			throw new UnprocessableError(
-					"Album has been released! It is not possible to remove all items from this album! Discard the album if necessary!");
-		}
-		album.getImages().clear();
-		update(album, user);
-		return true;
-	}
+    ItemController ic = new ItemController();
+    // Search must be done with admin in oder to avoid to remove private
+    // items
+    List<String> inAlbums = ic.seachContainerItemsFast(album, Imeji.adminUser, -1);
+    List<String> notAddedUris = new ArrayList<String>();
+    for (String uri : uris) {
+      try {
+        Item item = ic.retrieve(new URI(uri), user);
+        if (item != null) {
+          if (!inAlbums.contains(uri) && !item.getStatus().equals(Status.WITHDRAWN)) {
+            inAlbums.add(uri);
+          } else {
+            notAddedUris.add(uri);
+          }
+        }
+      } catch (URISyntaxException e) {
+        logger.info(e.getMessage());
+      }
+    }
+    album.getImages().clear();
+    for (String uri : inAlbums) {
+      album.getImages().add(URI.create(uri));
+    }
+    // Force admin user since the user might not have right to edit the album
+    update(album, user, false);
+    return new ArrayList<URI>(album.getImages());
+  }
 
-	/**
-	 * Withdraw an {@link Album}: Set the {@link Status} as withdraw and remove
-	 * all {@link Item}
-	 * 
-	 * @param album
-	 * @throws ImejiException
-	 */
-	public void withdraw(Album album, User user) throws ImejiException {
-		if (user == null) {
-			throw new AuthenticationError("User must be signed-in");
-		}
-		if (album == null) {
-			throw new NotFoundException("Album does not exists");
-		}
-		if (!Status.RELEASED.equals(album.getStatus())) {
-			throw new UnprocessableError(
-					"Withdraw album: Album must be released");
-		}
-		album.setStatus(Status.WITHDRAWN);
-		album.setVersionDate(DateHelper.getCurrentDate());
-		album.getImages().clear();
-		update(album, user);
-	}
+  /**
+   * Remove a list of {@link Item} (as a {@link List} of {@link URI}) to an {@link Album}
+   * 
+   * @param album
+   * @param toDelete
+   * @param user
+   * @return
+   * @throws ImejiException
+   */
+  public int removeFromAlbum(Album album, List<String> toDelete, User user) throws ImejiException {
+    ItemController ic = new ItemController();
+    // Search must be done with admin in oder to avoid to remove private
+    // items
+    List<String> before = ic.seachContainerItemsFast(album, Imeji.adminUser, -1);
+    for (String uri : before) {
+      if (!toDelete.contains(uri)) {
+        album.getImages().add(URI.create(uri));
+      }
+    }
 
-	/**
-	 * Search for albums - Logged-out user: --Collection must be released
-	 * -Logged-in users --Collection is released --OR Collection is pending AND
-	 * user is owner --OR Collection is withdrawn AND user is owner --OR
-	 * Collection is pending AND user has grant "Container Editor" for it.
-	 * 
-	 * @param user
-	 * @param scList
-	 * @return
-	 */
-	public SearchResult search(SearchQuery searchQuery, User user,
-			SortCriterion sortCri, int limit, int offset, String spaceId) {
-		Search search = SearchFactory.create(SearchType.ALBUM);
-		return search.search(searchQuery, sortCri, user, spaceId);
-	}
+    if (album.getImages().size() == 0) {
+      validateReleasedAlbumImagesRemoval(album.getStatus());
+    }
+    Album after = update(album, user, false);
 
-	/**
-	 * Load the albums without the images
-	 * 
-	 * @param uris
-	 * @param limit
-	 * @param offset
-	 * @return
-	 * @throws ImejiException
-	 */
-	public Collection<Album> loadAlbumsLazy(List<String> uris, User user,
-			int limit, int offset) throws ImejiException {
-		List<Album> albs = new ArrayList<Album>();
-		int counter = 0;
-		for (String s : uris) {
-			if (offset <= counter
-					&& (counter < (limit + offset) || limit == -1)) {
-				albs.add((Album) J2JHelper.setId(new Album(), URI.create(s)));
-			}
-			counter++;
-		}
-		reader.readLazy(J2JHelper.cast2ObjectList(albs), user);
-		return albs;
-	}
+    return before.size() - after.getImages().size();
+  }
 
-	/**
-	 * Retrieve all imeji {@link Album}
-	 * 
-	 * @return
-	 * @throws ImejiException
-	 */
-	public List<Album> retrieveAll(User user) throws ImejiException {
-		List<String> uris = ImejiSPARQL.exec(SPARQLQueries.selectAlbumAll(),
-				Imeji.albumModel);
-		return (List<Album>) loadAlbumsLazy(uris, user, -1, 0);
-	}
+  /**
+   * Remove a list of {@link Item} (as a {@link List} of {@link URI}) to an {@link Album}
+   * 
+   * @param album
+   * @param user
+   * @return
+   * @throws ImejiException
+   */
+  public boolean clearAlbumItems(Album album, User user) throws ImejiException {
+    validateReleasedAlbumImagesRemoval(album.getStatus());
+    album.getImages().clear();
+    update(album, user);
+    return true;
+  }
 
-	/**
-	 * Retrieve Items of and album
-	 * 
-	 * @param id
-	 * @param user
-	 * @param q
-	 * @return
-	 * @throws ImejiException
-	 */
-	public List<Item> retrieveItems(String id, User user, String q)
-			throws ImejiException {
-		ItemController ic = new ItemController();
-		List<Item> itemList = new ArrayList<Item>();
-		try {
-			for (String itemId : ic
-					.search(ObjectHelper.getURI(Album.class, id),
-							!isNullOrEmptyTrim(q) ? URLQueryTransformer
-									.parseStringQuery(q) : null, null, null,
-							user, null).getResults()) {
-				itemList.add(ic.retrieve(URI.create(itemId), user));
-			}
-		} catch (Exception e) {
-			throw new UnprocessableError("Cannot retrieve items:", e);
+  /**
+   * Withdraw an {@link Album}: Set the {@link Status} as withdraw and remove all {@link Item}
+   * 
+   * @param album
+   * @throws ImejiException
+   */
+  public void withdraw(Album album, User user) throws ImejiException {
+    if (user == null) {
+      throw new AuthenticationError("User must be signed-in");
+    }
+    if (album == null) {
+      throw new NotFoundException("Album does not exists");
+    }
+    if (!Status.RELEASED.equals(album.getStatus())) {
+      throw new UnprocessableError("Withdraw album: Album must be released");
+    }
+    album.setStatus(Status.WITHDRAWN);
+    album.setVersionDate(DateHelper.getCurrentDate());
+    album.getImages().clear();
+    update(album, user);
+  }
 
-		}
-		return itemList;
-	}
+  /**
+   * Search for albums - Logged-out user: --Collection must be released -Logged-in users
+   * --Collection is released --OR Collection is pending AND user is owner --OR Collection is
+   * withdrawn AND user is owner --OR Collection is pending AND user has grant "Container Editor"
+   * for it.
+   * 
+   * @param user
+   * @param scList
+   * @return
+   */
+  public SearchResult search(SearchQuery searchQuery, User user, SortCriterion sortCri, int limit,
+      int offset, String spaceId) {
+    Search search = SearchFactory.create(SearchType.ALBUM);
+    return search.search(searchQuery, sortCri, user, spaceId);
+  }
 
-	/**
-	 * Patch an album. !!! Use with Care !!!
-	 * 
-	 * @param triples
-	 * @param user
-	 * @throws ImejiException
-	 */
-	public void patch(List<ImejiTriple> triples, User user,
-			boolean checkSecurity) throws ImejiException {
-		writer.patch(triples, user, checkSecurity);
-	}
+  /**
+   * Load the albums without the images
+   * 
+   * @param uris
+   * @param limit
+   * @param offset
+   * @return
+   * @throws ImejiException
+   */
+  public Collection<Album> loadAlbumsLazy(List<String> uris, User user, int limit, int offset)
+      throws ImejiException {
+    List<Album> albs = new ArrayList<Album>();
 
-	/**
-	 * Update a {@link Album} (with its Logo)
-	 * 
-	 * @param ic
-	 * @param user
-	 * @throws ImejiException
-	 */
-	public void updateAlbumLogo(Album ic, File f, User u)
-			throws ImejiException, IOException, URISyntaxException {
-		ic = (Album) updateFile(ic, f, u);
-		if (f != null && f.exists()) {
+    List<String> retrieveUris;
+    if (limit < 0) {
+      retrieveUris = uris;
+    } else {
+      retrieveUris =
+          uris.size() > 0 && limit > 0 ? uris.subList(offset, getMin(offset + limit, uris.size()))
+              : new ArrayList<String>();
+    }
 
-			// Update the collection as a patch only with collection Logo Triple
-			List<ImejiTriple> triples = getContainerLogoTriples(ic.getId()
-					.toString(), ic, ic.getLogoUrl().toString());
-			patch(triples, u, true);
+    for (String s : retrieveUris) {
+      albs.add((Album) J2JHelper.setId(new Album(), URI.create(s)));
+    }
 
-		}
-	}
+    try {
+      reader.readLazy(J2JHelper.cast2ObjectList(albs), user);
+      return albs;
+    } catch (ImejiException e) {
+      logger.error("Error loading albums: " + e.getMessage(), e);
+      return null;
+    }
+  }
+
+  /**
+   * Retrieve all imeji {@link Album}
+   * 
+   * @return
+   * @throws ImejiException
+   */
+  public List<Album> retrieveAll(User user) throws ImejiException {
+    List<String> uris = ImejiSPARQL.exec(SPARQLQueries.selectAlbumAll(), Imeji.albumModel);
+    return (List<Album>) loadAlbumsLazy(uris, user, -1, 0);
+  }
+
+  /**
+   * Retrieve Items of and album
+   * 
+   * @param id
+   * @param user
+   * @param q
+   * @return
+   * @throws ImejiException
+   */
+  public List<Item> retrieveItems(String id, User user, String q) throws ImejiException {
+    ItemController ic = new ItemController();
+    List<Item> itemList = new ArrayList<Item>();
+    //#223: retrieve an Album to check if it exists, if Album does not exists 404 NOT Found should be thrown 
+    retrieveLazy(ObjectHelper.getURI(Album.class, id), user);
+    try {
+      for (String itemId : ic.search(ObjectHelper.getURI(Album.class, id),
+          !isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q) : null, null, null, user,
+          null).getResults()) {
+        itemList.add(ic.retrieve(URI.create(itemId), user));
+      }
+    } catch (Exception e) {
+      throw new UnprocessableError("Cannot retrieve items:", e);
+
+    }
+    return itemList;
+  }
+
+  /**
+   * Patch an album. !!! Use with Care !!!
+   * 
+   * @param triples
+   * @param user
+   * @throws ImejiException
+   */
+  public void patch(List<ImejiTriple> triples, User user, boolean checkSecurity)
+      throws ImejiException {
+    writer.patch(triples, user, checkSecurity);
+  }
+
+  /**
+   * Update a {@link Album} (with its Logo)
+   * 
+   * @param ic
+   * @param user
+   * @throws ImejiException
+   */
+  public void updateAlbumLogo(Album ic, File f, User u) throws ImejiException, IOException,
+      URISyntaxException {
+    ic = (Album) updateFile(ic, f, u);
+    if (f != null && f.exists()) {
+
+      // Update the collection as a patch only with collection Logo Triple
+      List<ImejiTriple> triples =
+          getContainerLogoTriples(ic.getId().toString(), ic, ic.getLogoUrl().toString());
+      patch(triples, u, true);
+
+    }
+  }
+
+  public void validateReleasedAlbumImagesRemoval(Status status) throws UnprocessableError {
+    if (Status.RELEASED.equals(status)) {
+      throw new UnprocessableError(
+          "Album is released! You are trying to remove all items from this album! Discard the album if necessary!");
+    }
+  }
 
 }

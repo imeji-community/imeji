@@ -8,7 +8,7 @@
 	xmlns:list="http://java.sun.com/jsf/composite/components/list">
 
 	<!-- MediaDisplayContainer - START -->
-	<h:panelGroup layout="block" styleClass="imj_mediaDisplayContainer" rendered="#{itemBean.image.status != 'WITHDRAWN'}">
+	<h:panelGroup layout="block" styleClass="imj_mediaDisplayContainer" rendered="#{itemBean.image.status != 'WITHDRAWN'}" id="topPanel">
 		<ui:fragment rendered="#{!itemBean.videoFile and !itemBean.audioFile and !itemBean.swcFile}">
 			<h:outputLink id="lnkPicFullResolution" value="#{Navigation.fileUrl}#{itemBean.image.fullImageUrl}" target="_blank" rendered="#{!itemBean.viewInDigilib and !itemBean.viewInDataViewer}">
 				<h:graphicImage id="picWebResolution" title="#{itemBean.image.filename}" alt="#{itemBean.image.filename}" value="#{Navigation.fileUrl}#{itemBean.image.webImageUrl}" />
@@ -215,6 +215,17 @@
 										<h:outputText value="#{itemBean.image.fileSizeHumanReadable}"/>
 								</div>
 							</h:panelGroup>
+							
+							<!-- MetaDataList - image dimension Size -->
+							<h:panelGroup layout="block" styleClass="imj_metadataSet" rendered="#{itemBean.image.width &gt; 0 and itemBean.image.height &gt; 0}">
+								<div class="imj_metadataLabel">
+									<h:outputText value="#{lbl.width} x #{lbl.height}"/>
+									<span class="imj_invisible">: </span>
+								</div>
+								<div class="imj_metadataValue">
+										<h:outputText value="#{itemBean.image.width} x #{itemBean.image.height}"/>
+								</div>
+							</h:panelGroup>
 						</h:panelGroup>
 
 						<!-- MetaDataList - further metadata - single edit panel - Wrapper -->				
@@ -267,7 +278,7 @@
 											</div>
 										</div>
 									</ui:repeat>
-									<ui:fragment rendered="#{ empty item.mds.tree.list}">
+									<ui:fragment rendered="#{empty item.mds.tree.list and Auth.update(itemBean.profile)}">
 										<h3 class="imj_headline">#{msg.error_collection_profile_not_exist}
 											<h:outputLink value="#{Navigation.profileUrl}#{itemBean.profile.idString}/#{Navigation.editPath}?init=1&amp;col=#{itemBean.collection.idString}" title="#{lbl.create_now}">
 												<h:outputText value="#{lbl.create_now}"/>
@@ -302,8 +313,9 @@
 										<f:ajax execute="@this" render="@form"/>
 										<h:outputText value="#{lbl.cancel}"/>
 									</h:commandLink>
-									<h:commandButton type="submit" styleClass="imj_submitButton"  action="#{itemBean.edit.save}" value="#{lbl.save}">
-									</h:commandButton>
+									<h:commandLink type="submit" styleClass="imj_submitButton"  action="#{itemBean.edit.save}" value="#{lbl.save}">
+										<f:ajax execute="@form" render=":topPanel :imj_pageMessageArea"/>
+									</h:commandLink>
 								</h:panelGroup>
 							</ui:fragment> <!-- MetaDataList - EDIT MetaData - panel END -->
 						</h:panelGroup> <!-- MetaDataList - further metadata - single edit panel - Wrapper END -->
@@ -394,7 +406,7 @@
 						</div>
 					</div>				
 					
-					<!-- InfoDataList - Image Album Info -->
+					<!-- InfoDataList -  Image Album Info -->
 					<ui:fragment rendered="#{itemBean.relatedAlbums != null}">
 						<h:panelGroup styleClass="imj_infodataSet">
 							<span class="imj_infodataLabel">
@@ -467,7 +479,7 @@
 						</div>
 						<ui:fragment rendered="#{itemBean.image.status == 'PENDING'}">
 							<h:outputText value="#{ShareBean.initShareItem}" />
-							<imjc:share id="share" roles="#{SessionBean.shareItemGrantItems}" type="item"/>
+							<imjc:share id="share" roles="#{ShareBean.shareItemGrantItems}" type="item"/>
 						</ui:fragment>
 					</h:panelGroup>
 				</h:panelGroup>

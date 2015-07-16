@@ -7,7 +7,6 @@ package de.mpg.imeji.logic.search.vo;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public enum SearchOperators
-{
-    REGEX, EQUALS, GREATER, LESSER;
+public enum SearchOperators {
+  REGEX, EQUALS, GREATER, LESSER;
 }

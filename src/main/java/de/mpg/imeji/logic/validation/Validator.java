@@ -12,21 +12,25 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
  */
 public interface Validator<T> {
 
-	/**
-	 * Validate an object according the business rules
-	 * 
-	 * @param t
-	 * @throws UnprocessableError
-	 */
-	public void validate(T t) throws UnprocessableError;
-	
-	
-	/**
-	 * Validate an object according to its {@link MetadataProfile}
-	 * @param t
-	 * @param p
-	 * @throws UnprocessableError
-	 */
-	public void validate(T t, MetadataProfile p) throws UnprocessableError;
+  /**
+   * Validate an object according the business rules
+   * 
+   * @param t
+   * @throws UnprocessableError
+   */
+  public void validate(T t) throws UnprocessableError;
 
+
+  /**
+   * Validate an object according to its {@link MetadataProfile}
+   * 
+   * @param t
+   * @param p
+   * @throws UnprocessableError
+   */
+  public void validate(T t, MetadataProfile p) throws UnprocessableError;
+
+  public enum Method {
+    CREATE, UPDATE, DELETE, ALL;
+  }
 }

@@ -298,7 +298,7 @@
 						<div id="carousel">
 							<ui:repeat  var="item" value="#{StartPageBean.carousselImages}" rows="0">
 								<h:outputLink id="lnkPicDetailCaroussel" value="#{Navigation.itemUrl}#{item.id}">
-									<h:graphicImage styleClass="cloudcarousel" title="#{item.caption}" alt="#{lbl.collection} : #{item.collectionName}" id="picThumbResolutionCaroussel" url="#{item.link}" height="114"/>
+									<h:graphicImage styleClass="cloudcarousel" title="#{item.caption}" id="picThumbResolutionCaroussel" url="#{item.link}" height="114"/>
 								</h:outputLink>
 							</ui:repeat>
 						</div>

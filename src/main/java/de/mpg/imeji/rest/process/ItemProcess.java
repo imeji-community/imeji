@@ -134,7 +134,7 @@ public class ItemProcess {
   }
 
   public static JSONResponse createItem(HttpServletRequest req, InputStream file, String json,
-      String syntax, String origName) {
+      String origName) {
     // / write response
     JSONResponse resp;
 
@@ -142,6 +142,8 @@ public class ItemProcess {
     User u = BasicAuthentication.auth(req);
 
     // Parse json into to
+    String syntax = req.getParameter("syntax");
+
     ItemWithFileTO itemTO = null;
     ItemTO.SYNTAX SYNTAX_TYPE = guessType(syntax);
     try {
@@ -241,7 +243,7 @@ public class ItemProcess {
 
 
   public static JSONResponse updateItem(HttpServletRequest req, String id,
-      InputStream fileInputStream, String json, String filename, String syntax) {
+                                        InputStream fileInputStream, String json, String filename) {
     User u = BasicAuthentication.auth(req);
 
     ItemService service = new ItemService();
@@ -251,10 +253,11 @@ public class ItemProcess {
         !isNullOrEmpty(json)
             && (fileInputStream != null || json.indexOf("fetchUrl") > 0 || json
                 .indexOf("referenceUrl") > 0);
+
+    String syntax = req.getParameter("syntax");
+
     ItemTO.SYNTAX SYNTAX_TYPE = guessType(syntax);
-
     JSONResponse response;
-
     try {
       if (SYNTAX_TYPE == null) {
         throw new BadRequestException("Bad syntax type: " + syntax);

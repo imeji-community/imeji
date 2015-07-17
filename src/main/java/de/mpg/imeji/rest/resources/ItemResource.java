@@ -5,7 +5,6 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 
 import de.mpg.imeji.rest.process.RestProcessUtils;
-import de.mpg.imeji.rest.to.ItemTO;
 
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -92,7 +91,7 @@ public class ItemResource implements ImejiResource {
       @ApiParam(required = true) @FormDataParam("json") String json,
       @FormDataParam("file") FormDataContentDisposition fileDetail) {
     String origName = fileDetail != null ? fileDetail.getFileName() : null;
-    return RestProcessUtils.buildJSONResponse(createItem(req, file, json, ItemTO.SYNTAX.RAW.toString().toLowerCase(), origName));
+    return RestProcessUtils.buildJSONResponse(createItem(req, file, json, origName));
   }
 
   @PUT
@@ -270,7 +269,7 @@ public class ItemResource implements ImejiResource {
       @ApiParam(required = true) @FormDataParam("json") String json,
       @FormDataParam("file") FormDataContentDisposition fileDetail, @PathParam("id") String id) {
     String filename = fileDetail != null ? fileDetail.getFileName() : null;
-    return RestProcessUtils.buildJSONResponse(updateItem(req, id, file, json, filename, ItemTO.SYNTAX.RAW.toString().toLowerCase()));
+    return RestProcessUtils.buildJSONResponse(updateItem(req, id, file, json, filename));
   }
 
 /*

@@ -1,20 +1,5 @@
 package de.mpg.imeji.presentation.user;
 
-import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
-import static de.mpg.imeji.presentation.beans.ConfigurationBean.getContactEmailStatic;
-import static de.mpg.imeji.presentation.beans.ConfigurationBean.getEmailServerSenderStatic;
-
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.UserController;
@@ -27,6 +12,21 @@ import de.mpg.imeji.presentation.user.util.EmailClient;
 import de.mpg.imeji.presentation.user.util.EmailMessages;
 import de.mpg.imeji.presentation.user.util.PasswordGenerator;
 import de.mpg.imeji.presentation.util.BeanHelper;
+
+import org.apache.log4j.Logger;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+
+import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
+import static de.mpg.imeji.presentation.beans.ConfigurationBean.getContactEmailStatic;
+import static de.mpg.imeji.presentation.beans.ConfigurationBean.getEmailServerSenderStatic;
 
 /**
  * Bean for registration workflow
@@ -143,7 +143,7 @@ public class RegistrationBean {
     EmailMessages emailMessages = new EmailMessages();
     try {
       // send to support
-      emailClient.sendMail(getEmailServerSenderStatic(), null,
+      emailClient.sendMail(getContactEmailStatic(), null,
           emailMessages.getEmailOnAccountActivation_Subject(user, sb),
           emailMessages.getEmailOnAccountActivation_Body(user, sb));
     } catch (Exception e) {

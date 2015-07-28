@@ -285,13 +285,13 @@ public class ItemProcess {
 
           validateId(id, to);
           to.setId(id);
-
           // update metadata part
-          DefaultItemTO easyTO =
+          DefaultItemTO defaultTO =
               (DefaultItemTO) buildTOFromJSON("{\"" + METADATA_KEY + "\":"
                   + buildJSONFromObject(metadata) + "}", DefaultItemTO.class);
+
           ReverseTransferObjectFactory.transferDefaultItemTOtoItemTO(getMetadataProfileTO(to, u),
-              easyTO, to, true);
+              defaultTO, to, true);
           break;
       }
 

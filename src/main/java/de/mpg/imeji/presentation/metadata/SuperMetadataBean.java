@@ -623,6 +623,14 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>, Seriali
     return 0;
   }
 
+  @Override
+  public boolean equals(Object obj) {
+    if (obj instanceof SuperMetadataBean) {
+      return compareTo((SuperMetadataBean) obj) == 0;
+    }
+    return false;
+  }
+
   /**
    * Return the higher parent
    * 

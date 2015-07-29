@@ -105,6 +105,14 @@ public abstract class Metadata implements Comparable<Metadata>, Serializable {
       return 1;
   }
 
+  @Override
+  public boolean equals(Object obj) {
+    if (obj instanceof Metadata) {
+      return compareTo((Metadata) obj) == 0;
+    }
+    return false;
+  }
+
   public abstract void copy(Metadata metadata);
 
   public abstract URI getStatement();

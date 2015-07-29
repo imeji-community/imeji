@@ -47,8 +47,7 @@ public class SpacesBean implements Serializable {
     try {
       spaces = sc.retrieveAll();
     } catch (ImejiException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      logger.error("Error retrieving all spaces", e);
     }
   }
 

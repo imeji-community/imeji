@@ -152,6 +152,14 @@ public class Statement implements Comparable<Statement>, Serializable, Cloneable
       return 1;
   }
 
+  @Override
+  public boolean equals(Object obj) {
+    if (obj instanceof Statement) {
+      return compareTo((Statement) obj) == 0;
+    }
+    return false;
+  }
+
   @XmlElement(name = "isDescription", namespace = "http://imeji.org/terms/")
   public boolean isDescription() {
     return isDescription;

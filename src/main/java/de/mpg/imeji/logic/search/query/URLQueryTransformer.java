@@ -443,6 +443,7 @@ public class URLQueryTransformer {
           break;
         case METADATA:
           q += searchMetadata2PrettyQuery((SearchMetadata) el);
+          break;
         default:
           break;
       }

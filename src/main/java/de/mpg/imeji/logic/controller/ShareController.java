@@ -376,7 +376,7 @@ public class ShareController extends ImejiController {
     for (Grant g : toAdd) {
       if (!current.contains(g) && !newGrants.contains(g) && isAllowedToAddGrant(user, g)) {
         newGrants.add(g);
-      } else if (!current.contains(g) && !newGrants.contains(g) && isAllowedToAddGrant(user, g)) {
+      } else if (!current.contains(g) && !newGrants.contains(g) && !isAllowedToAddGrant(user, g)) {
         logger.error(user.getPerson().getCompleteName() + " NOT ALLOWED TO share "
             + g.getGrantFor());
       }

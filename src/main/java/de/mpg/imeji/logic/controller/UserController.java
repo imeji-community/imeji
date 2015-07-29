@@ -98,6 +98,7 @@ public class UserController {
         break;
       case DEFAULT:
         u.setGrants(AuthorizationPredefinedRoles.defaultUser(u.getId().toString()));
+        break;
       case COPY:
         // Don't change the grants of the user
         break;
@@ -105,6 +106,7 @@ public class UserController {
         // Don't change the grants of the user, but set the status to Inactive
         u.setUserStatus(User.UserStatus.INACTIVE);
         u.setRegistrationToken(IdentifierUtil.newUniversalUniqueId());
+        break;
     }
     u.setName(u.getPerson().getGivenName() + " " + u.getPerson().getFamilyName());
 
@@ -531,7 +533,7 @@ public class UserController {
 
   /**
    * Search for users to be notified by item download of the collection
-   *
+   * 
    * @param user
    * @param c
    * @return

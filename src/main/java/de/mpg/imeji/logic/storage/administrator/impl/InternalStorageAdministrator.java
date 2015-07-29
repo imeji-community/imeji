@@ -119,7 +119,6 @@ public class InternalStorageAdministrator implements StorageAdministrator {
   public int clean() {
     int deleted = 0;
     System.out.println("Start cleaning...");
-    System.gc();
     for (File f : FileUtils.listFiles(storageDir, null, true)) {
       if (f.isFile()) {
         InternalStorageManager m = new InternalStorageManager();

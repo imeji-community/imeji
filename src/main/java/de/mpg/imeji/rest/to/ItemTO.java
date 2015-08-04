@@ -14,7 +14,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 @XmlRootElement
@@ -50,10 +49,9 @@ public class ItemTO extends PropertiesTO implements Serializable {
   public static enum SYNTAX {
     DEFAULT, RAW;
     public static SYNTAX guessType(String type) {
-      // if null return DefaultItemTO
-      if (isNullOrEmptyTrim(type) || type.trim().equalsIgnoreCase(RAW.toString()))
+      if (type != null && type.trim().equalsIgnoreCase(RAW.toString()))
         return RAW;
-      else if (type.trim().equalsIgnoreCase(DEFAULT.toString()))
+      else if (isNullOrEmptyTrim(type) || type.trim().equalsIgnoreCase(DEFAULT.toString()))
         return DEFAULT;
       else
         return null;
@@ -166,13 +164,20 @@ public class ItemTO extends PropertiesTO implements Serializable {
         }));
   }
 
-  public MetadataSetTO findMetadata(final URI statement, final URI type) {
-    return Iterables.find(this.metadata, new Predicate<MetadataSetTO>() {
-      @Override
-      public boolean apply(MetadataSetTO md) {
-        return md.getTypeUri().equals(type) && md.getStatementUri().equals(statement);
-      }
-    }, null);
+  /**
+   * Remove all {@link MetadataSetTO} which are defined with this statement
+   * 
+   * @param statement
+   * @return
+   */
+  public List<MetadataSetTO> clearMetadata(final URI statement) {
+    return Lists.newArrayList(Collections2.filter(Lists.newArrayList(this.metadata),
+        new Predicate<MetadataSetTO>() {
+          @Override
+          public boolean apply(MetadataSetTO md) {
+            return !md.getStatementUri().equals(statement);
+          }
+        }));
   }
 
   public void setMetadata(List<MetadataSetTO> metadata) {

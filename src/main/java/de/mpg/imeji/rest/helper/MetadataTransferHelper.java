@@ -1,8 +1,12 @@
 package de.mpg.imeji.rest.helper;
 
+import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -12,11 +16,20 @@ import com.fasterxml.jackson.databind.node.JsonNodeType;
 
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.logic.vo.Metadata;
+import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.logic.vo.predefinedMetadata.ConePerson;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Geolocation;
+import de.mpg.imeji.logic.vo.predefinedMetadata.License;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
+import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
 import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultConePersonTO;
 import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultGeolocationTO;
 import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultLicenseTO;
 import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultLinkTO;
 import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultPublicationTO;
+import de.mpg.imeji.rest.process.RestProcessUtils;
 import de.mpg.imeji.rest.to.MetadataSetTO;
 import de.mpg.imeji.rest.to.MetadataTO;
 import de.mpg.imeji.rest.to.PersonTO;
@@ -65,6 +78,103 @@ public class MetadataTransferHelper {
       l.add(parseMetadataTO(json, statement));
     }
     return l;
+  }
+
+  /**
+   * Serialize a list of {@link Metadata} to one {@link JsonNode}
+   * 
+   * @param metadataSet
+   * @param profile
+   * @return
+   */
+  public static Map<String, JsonNode> serializeMetadataSet(Collection<Metadata> metadataSet,
+      MetadataProfile profile) {
+    Map<String, JsonNode> json = new HashMap<String, JsonNode>();
+    for (Statement statement : profile.getStatements()) {
+      List<Metadata> l = filterMetadataByStatement(metadataSet, statement);
+      if (l.size() == 1) {
+        json.put(statement.getLabel(), serializeMetadata(l.get(0), statement));
+      } else if (l.size() > 1) {
+        List<JsonNode> nodes = new ArrayList<JsonNode>();
+        for (Metadata md : l) {
+          nodes.add(serializeMetadata(md, statement));
+        }
+        json.put(statement.getLabel(), RestProcessUtils.buildJsonNode(nodes));
+      }
+    }
+    return json;
+  }
+
+  /**
+   * Return only the metadata defined by the statement
+   * 
+   * @param metadataSet
+   * @param statement
+   * @return
+   */
+  private static List<Metadata> filterMetadataByStatement(Collection<Metadata> metadataSet,
+      Statement statement) {
+    List<Metadata> l = new ArrayList<Metadata>();
+    for (Metadata md : metadataSet) {
+      if (md.getStatement().equals(statement.getId())) {
+        l.add(md);
+      }
+    }
+    return l;
+  }
+
+  /**
+   * Serialize a {@link Metadata} to one {@link JsonNode}
+   * 
+   * @param metadata
+   * @param statement
+   * @return
+   */
+  private static JsonNode serializeMetadata(Metadata metadata, Statement statement) {
+    switch (Metadata.Types.valueOfUri(statement.getType().toString())) {
+      case TEXT:
+        return RestProcessUtils.buildJsonNode(((Text) metadata).getText());
+      case NUMBER:
+        return RestProcessUtils
+            .buildJsonNode(((de.mpg.imeji.logic.vo.predefinedMetadata.Number) metadata).getNumber());
+      case CONE_PERSON:
+        ConePerson mdCP = (ConePerson) metadata;
+        DefaultConePersonTO dcpto = new DefaultConePersonTO();
+        dcpto.setFamilyName(mdCP.getPerson().getFamilyName());
+        dcpto.setGivenName(mdCP.getPerson().getGivenName());
+        return RestProcessUtils.buildJsonNode(dcpto);
+      case DATE:
+        return RestProcessUtils
+            .buildJsonNode(((de.mpg.imeji.logic.vo.predefinedMetadata.Date) metadata).getDate());
+      case GEOLOCATION:
+        Geolocation mdGeo = (Geolocation) metadata;
+        DefaultGeolocationTO dgto = new DefaultGeolocationTO();
+        dgto.setName(mdGeo.getName());
+        dgto.setLongitude(mdGeo.getLongitude());
+        dgto.setLatitude(mdGeo.getLatitude());
+        return RestProcessUtils.buildJsonNode(dgto);
+      case LICENSE:
+        License mdLicense = (License) metadata;
+        DefaultLicenseTO dlto = new DefaultLicenseTO();
+        dlto.setLicense(mdLicense.getLicense());
+        URI externalUri = mdLicense.getExternalUri();
+        dlto.setUrl(externalUri != null ? externalUri.toString() : "");
+        return RestProcessUtils.buildJsonNode(dlto);
+      case LINK:
+        Link mdLink = (Link) metadata;
+        DefaultLinkTO dllto = new DefaultLinkTO();
+        dllto.setLink(mdLink.getLabel());
+        dllto.setUrl(mdLink.getUri().toString());
+        return RestProcessUtils.buildJsonNode(dllto);
+      case PUBLICATION:
+        Publication mdP = (Publication) metadata;
+        DefaultPublicationTO dpto = new DefaultPublicationTO();
+        dpto.setPublication(mdP.getUri().toString());
+        dpto.setFormat(mdP.getExportFormat());
+        dpto.setCitation(mdP.getCitation());
+        return RestProcessUtils.buildJsonNode(dpto);
+    }
+    return null;
   }
 
   /**

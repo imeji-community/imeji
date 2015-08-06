@@ -67,7 +67,7 @@ public class MetadataSetTO implements Serializable {
   }
 
   public void setLabels(List<LabelTO> labels) {
-    labels = labels;
+    this.labels = labels;
   }
 
   public MetadataTO getValue() {

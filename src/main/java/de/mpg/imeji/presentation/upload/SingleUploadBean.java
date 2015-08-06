@@ -315,7 +315,7 @@ public class SingleUploadBean implements Serializable {
         methodColChangeListener();
       }
     } else {
-      if (collectionItems.size() == 0) {
+      if (results.getNumberOfRecords() == 0) {
         String errorMessage = "cannot_create_collection";
         if (user.isAllowedToCreateCollection()) {
           createDefaultCollection();

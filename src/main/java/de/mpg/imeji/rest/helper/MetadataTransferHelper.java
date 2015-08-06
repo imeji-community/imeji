@@ -24,6 +24,7 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.License;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
+import de.mpg.imeji.rest.defaultTO.DefaultOrganizationTO;
 import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultConePersonTO;
 import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultGeolocationTO;
 import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultLicenseTO;
@@ -33,6 +34,7 @@ import de.mpg.imeji.rest.process.RestProcessUtils;
 import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.to.MetadataSetTO;
 import de.mpg.imeji.rest.to.MetadataTO;
+import de.mpg.imeji.rest.to.OrganizationTO;
 import de.mpg.imeji.rest.to.PersonTO;
 import de.mpg.imeji.rest.to.StatementTO;
 import de.mpg.imeji.rest.to.predefinedMetadataTO.ConePersonTO;
@@ -218,6 +220,9 @@ public class MetadataTransferHelper {
         PersonTO newP = metadata.getValue() != null ? newCone.getPerson() : new PersonTO();
         newP.setFamilyName(easyCPTO.getFamilyName());
         newP.setGivenName(easyCPTO.getGivenName());
+        for (DefaultOrganizationTO dTO : easyCPTO.getOrganizations()) {
+          newP.getOrganizations().add(new OrganizationTO(dTO));
+        }
         newCone.setPerson(newP);
         metadata.setValue(newCone);
         break;
@@ -280,5 +285,4 @@ public class MetadataTransferHelper {
     }
     return metadata;
   }
-
 }

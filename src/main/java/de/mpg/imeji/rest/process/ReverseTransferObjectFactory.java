@@ -341,6 +341,7 @@ public class ReverseTransferObjectFactory {
 
   }
 
+
   public static void transferCollectionContributors(List<PersonTO> persons,
       ContainerMetadata metadata, User u, TRANSFER_MODE mode) {
     for (PersonTO pTO : persons) {

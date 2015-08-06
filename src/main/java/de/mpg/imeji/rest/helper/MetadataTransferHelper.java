@@ -30,6 +30,7 @@ import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultLicenseTO;
 import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultLinkTO;
 import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultPublicationTO;
 import de.mpg.imeji.rest.process.RestProcessUtils;
+import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.to.MetadataSetTO;
 import de.mpg.imeji.rest.to.MetadataTO;
 import de.mpg.imeji.rest.to.PersonTO;
@@ -138,11 +139,9 @@ public class MetadataTransferHelper {
         return RestProcessUtils
             .buildJsonNode(((de.mpg.imeji.logic.vo.predefinedMetadata.Number) metadata).getNumber());
       case CONE_PERSON:
-        ConePerson mdCP = (ConePerson) metadata;
-        DefaultConePersonTO dcpto = new DefaultConePersonTO();
-        dcpto.setFamilyName(mdCP.getPerson().getFamilyName());
-        dcpto.setGivenName(mdCP.getPerson().getGivenName());
-        return RestProcessUtils.buildJsonNode(dcpto);
+        DefaultConePersonTO pTO = new DefaultConePersonTO();
+        TransferObjectFactory.transferDefaultPerson(((ConePerson) metadata).getPerson(), pTO);
+        return RestProcessUtils.buildJsonNode(pTO);
       case DATE:
         return RestProcessUtils
             .buildJsonNode(((de.mpg.imeji.logic.vo.predefinedMetadata.Date) metadata).getDate());

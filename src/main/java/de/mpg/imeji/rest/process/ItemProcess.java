@@ -90,11 +90,20 @@ public class ItemProcess {
 
   public static JSONResponse readItem(HttpServletRequest req, String id) {
     User u = BasicAuthentication.auth(req);
-    JSONResponse resp;
+    JSONResponse resp = null;
 
     ItemService icrud = new ItemService();
+
     try {
-      resp = RestProcessUtils.buildResponse(Status.OK.getStatusCode(), icrud.read(id, u));
+      switch (guessType(req.getParameter("syntax"))) {
+        case RAW:
+          resp = RestProcessUtils.buildResponse(Status.OK.getStatusCode(), icrud.read(id, u));
+          break;
+        case DEFAULT:
+          resp =
+              RestProcessUtils.buildResponse(Status.OK.getStatusCode(), icrud.readDefault(id, u));
+          break;
+      }
     } catch (Exception e) {
       resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
     }
@@ -243,7 +252,7 @@ public class ItemProcess {
 
 
   public static JSONResponse updateItem(HttpServletRequest req, String id,
-                                        InputStream fileInputStream, String json, String filename) {
+      InputStream fileInputStream, String json, String filename) {
     User u = BasicAuthentication.auth(req);
 
     ItemService service = new ItemService();

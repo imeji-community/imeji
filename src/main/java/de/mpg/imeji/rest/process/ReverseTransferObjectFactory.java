@@ -315,6 +315,13 @@ public class ReverseTransferObjectFactory {
     });
   }
 
+  /**
+   * Transfer a {@link PersonTO} into a {@link Person}
+   * 
+   * @param pto
+   * @param p
+   * @param mode
+   */
   public static void transferPerson(PersonTO pto, Person p, TRANSFER_MODE mode) {
 
     if (mode == TRANSFER_MODE.CREATE) {

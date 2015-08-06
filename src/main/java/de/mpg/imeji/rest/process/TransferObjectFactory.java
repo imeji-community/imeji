@@ -29,6 +29,8 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
 import de.mpg.imeji.rest.api.ProfileService;
 import de.mpg.imeji.rest.api.UserService;
 import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
+import de.mpg.imeji.rest.defaultTO.DefaultOrganizationTO;
+import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultConePersonTO;
 import de.mpg.imeji.rest.helper.MetadataTransferHelper;
 import de.mpg.imeji.rest.to.AlbumTO;
 import de.mpg.imeji.rest.to.CollectionTO;
@@ -141,6 +143,12 @@ public class TransferObjectFactory {
 
   }
 
+  /**
+   * Transfer a {@link Person} into a {@link PersonTO}
+   * 
+   * @param p
+   * @param pto
+   */
   public static void transferPerson(Person p, PersonTO pto) {
 
     // pto.setPosition(p.getPos());
@@ -156,6 +164,35 @@ public class TransferObjectFactory {
     // set oganizations
     transferContributorOrganizations(p.getOrganizations(), pto);
 
+  }
+
+  /**
+   * Transfer a {@link Person} into a {@link DefaultConePersonTO}
+   * 
+   * @param p
+   * @param pTO
+   */
+  public static void transferDefaultPerson(Person p, DefaultConePersonTO pTO) {
+    pTO.setFamilyName(p.getFamilyName());
+    pTO.setGivenName(p.getGivenName());
+    for (Organization o : p.getOrganizations()) {
+      DefaultOrganizationTO oTO = new DefaultOrganizationTO();
+      transferDefaultOrganization(o, oTO);
+      pTO.getOrganizations().add(oTO);
+    }
+  }
+
+  /**
+   * Transfer an {@link Organization} into a {@link DefaultOrganizationTO}
+   * 
+   * @param o
+   * @param oTO
+   */
+  public static void transferDefaultOrganization(Organization o, DefaultOrganizationTO oTO) {
+    oTO.setName(o.getName());
+    oTO.setDescription(o.getDescription());
+    oTO.setCity(o.getCity());
+    oTO.setCountry(o.getCountry());
   }
 
   public static void transferContributorOrganizations(Collection<Organization> orgas, PersonTO pto) {

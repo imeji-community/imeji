@@ -126,7 +126,6 @@ public class ItemProcess {
           resp = RestProcessUtils.buildResponse(OK.getStatusCode(), is.readItems(u, q));
           break;
       }
-
     } catch (Exception e) {
       resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
     }
@@ -189,9 +188,8 @@ public class ItemProcess {
               SYNTAX_TYPE == RAW ? createdItem : is.readDefault(createdItem.getId(), u));
 
     } catch (Exception e) {
-      // System.out.println("MESSAGE= "+e.getLocalizedMessage());
       resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
-
+      LOGGER.error("Error creating item", e);
     }
 
     return resp;

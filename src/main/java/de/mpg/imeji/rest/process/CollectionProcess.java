@@ -1,15 +1,18 @@
 package de.mpg.imeji.rest.process;
 
 import static de.mpg.imeji.rest.process.CommonUtils.USER_MUST_BE_LOGGED_IN;
+import static de.mpg.imeji.rest.to.ItemTO.SYNTAX.guessType;
 import static javax.ws.rs.core.Response.Status.CREATED;
 import static javax.ws.rs.core.Response.Status.NO_CONTENT;
 import static javax.ws.rs.core.Response.Status.OK;
 import static javax.ws.rs.core.Response.Status.UNAUTHORIZED;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Response.Status;
 
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.to.CollectionTO;
@@ -32,20 +35,36 @@ public class CollectionProcess {
 
   }
 
+  /**
+   * Read the items of a {@link CollectionImeji} according to the search query
+   * 
+   * @param req
+   * @param id
+   * @param q
+   * @return
+   */
   public static JSONResponse readCollectionItems(HttpServletRequest req, String id, String q) {
-    JSONResponse resp;
+    JSONResponse resp = null;
 
     User u = BasicAuthentication.auth(req);
 
     CollectionService ccrud = new CollectionService();
     try {
-      resp = RestProcessUtils.buildResponse(OK.getStatusCode(), ccrud.readItems(id, u, q));
+      switch (guessType(req.getParameter("syntax"))) {
+        case DEFAULT:
+          resp =
+              RestProcessUtils.buildResponse(Status.OK.getStatusCode(),
+                  ccrud.readDefaultItems(id, u, q));
+          break;
+        case RAW:
+          resp = RestProcessUtils.buildResponse(OK.getStatusCode(), ccrud.readItems(id, u, q));
+          break;
+      }
     } catch (Exception e) {
       resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
     }
     return resp;
   }
-
 
   public static JSONResponse createCollection(HttpServletRequest req) {
     JSONResponse resp;

@@ -327,7 +327,7 @@ public class ReverseTransferObjectFactory {
     if (mode == TRANSFER_MODE.CREATE) {
       // p.setPos(pto.getPosition());
       IdentifierTO ito = new IdentifierTO();
-      ito.setValue(pto.getIdentifiers().get(0).getValue());
+      ito.setValue(pto.getIdentifiers().isEmpty() ? null : pto.getIdentifiers().get(0).getValue());
       p.setIdentifier(ito.getValue());
     }
     p.setRole(URI.create(pto.getRole()));

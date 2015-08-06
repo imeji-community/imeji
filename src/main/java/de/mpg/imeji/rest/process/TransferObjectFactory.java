@@ -419,13 +419,13 @@ public class TransferObjectFactory {
           Link mdLink = (Link) md;
           LinkTO llto = new LinkTO();
           llto.setLink(mdLink.getLabel());
-          llto.setUrl(mdLink.getUri().toString());
+          llto.setUrl(mdLink.getUri() != null ? mdLink.getUri().toString() : "");
           mdTO.setValue(llto);
           break;
         case "de.mpg.imeji.logic.vo.predefinedMetadata.Publication":
           Publication mdP = (Publication) md;
           PublicationTO pto = new PublicationTO();
-          pto.setPublication(mdP.getUri().toString());
+          pto.setPublication(mdP.getUri() != null ? mdP.getUri().toString() : "");
           pto.setFormat(mdP.getExportFormat());
           pto.setCitation(mdP.getCitation());
           mdTO.setValue(pto);

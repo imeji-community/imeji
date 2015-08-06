@@ -165,12 +165,12 @@ public class MetadataTransferHelper {
         Link mdLink = (Link) metadata;
         DefaultLinkTO dllto = new DefaultLinkTO();
         dllto.setLink(mdLink.getLabel());
-        dllto.setUrl(mdLink.getUri().toString());
+        dllto.setUrl(mdLink.getUri() != null ? mdLink.getUri().toString() : "");
         return RestProcessUtils.buildJsonNode(dllto);
       case PUBLICATION:
         Publication mdP = (Publication) metadata;
         DefaultPublicationTO dpto = new DefaultPublicationTO();
-        dpto.setPublication(mdP.getUri().toString());
+        dpto.setPublication(mdP.getUri() != null ? mdP.getUri().toString() : "");
         dpto.setFormat(mdP.getExportFormat());
         dpto.setCitation(mdP.getCitation());
         return RestProcessUtils.buildJsonNode(dpto);

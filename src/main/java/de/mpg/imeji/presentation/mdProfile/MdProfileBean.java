@@ -461,6 +461,7 @@ public class MdProfileBean {
     } else {
       Statement previousStatement = wrappers.get(getStatementPosition()).getStatement();
       Statement newStatement = ImejiFactory.newStatement(previousStatement.getParent());
+      newStatement.setPos(previousStatement.getPos() + 1);
       wrappers.add(findNextStatementWithSameLevel(previousStatement), new StatementWrapper(
           newStatement, profile.getId(), getLevel(newStatement)));
     }
@@ -508,9 +509,11 @@ public class MdProfileBean {
     List<StatementWrapper> toDelete = getChilds(parent, false);
     toDelete.add(wrappers.get(getStatementPosition()));
     List<StatementWrapper> l = new ArrayList<StatementWrapper>();
-    for (StatementWrapper sw : wrappers)
-      if (!toDelete.contains(sw))
+    for (StatementWrapper sw : wrappers) {
+      if (!(toDelete.contains(sw))){
         l.add(sw);
+      }
+    }
     wrappers = l;
   }
 

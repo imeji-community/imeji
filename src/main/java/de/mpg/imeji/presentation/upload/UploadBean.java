@@ -47,13 +47,11 @@ import de.mpg.imeji.logic.util.TempFileUtil;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
-import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.collection.CollectionBean;
 import de.mpg.imeji.presentation.history.HistoryUtil;
-import de.mpg.imeji.presentation.lang.MetadataLabels;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ObjectLoader;
@@ -627,8 +625,7 @@ public class UploadBean implements Serializable {
     resetItemsToEdit();
 
     Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
-    MetadataProfile profile = ObjectLoader.loadProfile(collection.getProfile(), session.getUser());
-    ((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class)).init(profile);
+
     FacesContext
         .getCurrentInstance()
         .getExternalContext()

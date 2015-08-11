@@ -4,14 +4,17 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:imjc="http://java.sun.com/jsf/composite/components">
+	
 
 	<ui:param name="headline" value="#{lbl.admin_user_new}" />
 	<ui:param name="currentMainMenu" value="admin" />
 
 
-	<!-- Breadcrumb - History -->
-	<ui:include src="include/History.xhtml"></ui:include>
 	<ui:define name="mainContent">
+	
+		<!-- Breadcrumb - History -->
+	    <ui:include src="include/History.xhtml"></ui:include>
+	    
 		<!-- Are You Admin? -->
 		<h:panelGroup layout="block" styleClass="imj_pageMessageArea"
 			rendered="#{!Auth.admin}">

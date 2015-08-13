@@ -1,27 +1,38 @@
 package de.mpg.imeji.logic.controller;
 
-import static org.junit.Assert.assertTrue;
-
-import java.util.Calendar;
+import de.mpg.imeji.exceptions.AlreadyExistsException;
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.exceptions.NotFoundException;
+import de.mpg.imeji.exceptions.QuotaExceededException;
+import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
+import de.mpg.imeji.logic.vo.Item;
+import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.beans.ConfigurationBean;
+import de.mpg.imeji.presentation.util.ImejiFactory;
+import de.mpg.j2j.helper.DateHelper;
 
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.File;
+import java.util.Calendar;
+
 import util.JenaUtil;
-import de.mpg.imeji.exceptions.AlreadyExistsException;
-import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.exceptions.NotFoundException;
-import de.mpg.imeji.exceptions.UnprocessableError;
-import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
-import de.mpg.imeji.logic.vo.User;
-import de.mpg.imeji.presentation.beans.ConfigurationBean;
-import de.mpg.j2j.helper.DateHelper;
+
+import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_STORAGE;
+import static junit.framework.TestCase.fail;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class UserControllerTest extends ControllerTest {
 
   private static final Logger LOGGER = Logger.getLogger(UserControllerTest.class);
+  private static File file1 = new File(STATIC_CONTEXT_STORAGE + "/test.jpg");
+  private static File file2 = new File(STATIC_CONTEXT_STORAGE + "/test2.jpg");
 
   @Test
   public void createAlreadyExistingUserTest() {
@@ -178,4 +189,41 @@ public class UserControllerTest extends ControllerTest {
     int numCleaned = c.cleanInactiveUsers();
     assertTrue(numCleaned == 6);
   }
+
+  @Test
+  public void testUserDiskSpaceQuota() throws ImejiException {
+    //create user
+    User user = new User();
+    user.setEmail("quotaUser@imeji.org");
+    user.getPerson().setFamilyName(JenaUtil.TEST_USER_NAME);
+    user.getPerson().setOrganizations(JenaUtil.testUser.getPerson().getOrganizations());
+
+    UserController c = new UserController(Imeji.adminUser);
+    User u = c.create(user, USER_TYPE.DEFAULT);
+    assertThat(u.getQuota(), equalTo(UserController.DISK_USAGE_QUOTA));
+
+    //update quota
+    long NEW_QUOTA = 25 * 1024;
+    user.setQuota(NEW_QUOTA);
+    user = c.update(user, Imeji.adminUser);
+    assertThat(u.getQuota(), equalTo(NEW_QUOTA));
+
+    //try to exceed quota
+    ItemController itemController = new ItemController();
+    if (collection == null)
+      createCollection();
+    item = ImejiFactory.newItem(collection);
+    JenaUtil.testUser.setQuota(file1.length());
+    item = itemController.createWithFile(item, file1, file1.getName(), collection, JenaUtil.testUser);
+    Item item2 = ImejiFactory.newItem(collection);
+
+    try {
+      item2 = itemController.createWithFile(item2, file2, file2.getName(), collection, JenaUtil.testUser);
+      fail("Disk Quota should be exceeded!");
+    } catch (QuotaExceededException e) {
+    }
+
+
+  }
+
 }

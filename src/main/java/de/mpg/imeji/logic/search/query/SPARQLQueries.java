@@ -24,12 +24,6 @@
  */
 package de.mpg.imeji.logic.search.query;
 
-import java.net.URI;
-
-import org.apache.commons.lang3.text.translate.CharSequenceTranslator;
-import org.apache.commons.lang3.text.translate.UnicodeEscaper;
-import org.opensaml.ws.wssecurity.Username;
-
 import com.hp.hpl.jena.sparql.pfunction.library.container;
 
 import de.mpg.imeji.logic.Imeji;
@@ -50,6 +44,11 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.j2j.helper.J2JHelper;
+
+import org.apache.commons.lang3.text.translate.CharSequenceTranslator;
+import org.opensaml.ws.wssecurity.Username;
+
+import java.net.URI;
 
 /**
  * SPARQL queries for imeji
@@ -781,6 +780,18 @@ public class SPARQLQueries {
         + "> ?user . ?user <http://xmlns.com/foaf/0.1/email> ?email .filter(regex(?email, '"
         + instituteName
         + "', 'i')) . ?c a <http://imeji.org/terms/collection> . ?item <http://imeji.org/terms/collection> ?c . ?item <http://imeji.org/terms/fileSize> ?size}";
+  }
+
+    /**
+   * Search for all {@link Item}s created by the {@link User}, and sum all fileSize
+   *
+   * @param user
+     * @return
+   */
+  public static String selectUserFileSize(String user) {
+    return "SELECT (str(SUM(?size)) AS ?s) WHERE {?item <"
+        + ImejiNamespaces.CREATOR
+        + "> <" +user + "> . ?item <http://imeji.org/terms/fileSize> ?size}";
   }
 
   public static String escapeWithUnicode(String s) {

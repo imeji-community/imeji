@@ -3,19 +3,10 @@
  */
 package de.mpg.imeji.logic.controller;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotFoundException;
+import de.mpg.imeji.exceptions.QuotaExceededException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
@@ -38,6 +29,17 @@ import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.j2j.helper.DateHelper;
 
+import org.apache.log4j.Logger;
+
+import java.io.File;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Controller for {@link User}
  * 
@@ -48,6 +50,9 @@ import de.mpg.j2j.helper.DateHelper;
 public class UserController {
   private static final ReaderFacade reader = new ReaderFacade(Imeji.userModel);
   private static final WriterFacade writer = new WriterFacade(Imeji.userModel);
+  //25GB is default quota
+  //TODO: put to properties
+  public static final long DISK_USAGE_QUOTA = 25 * 1024 * 1024 * 1024;
   private User user;
   static Logger logger = Logger.getLogger(UserController.class);
 
@@ -112,6 +117,8 @@ public class UserController {
 
     Calendar now = DateHelper.getCurrentDate();
     u.setCreated(now);
+
+    u.setQuota(DISK_USAGE_QUOTA);
 
     writer.create(WriterFacade.toList(u), null, user);
     return u;
@@ -286,6 +293,31 @@ public class UserController {
     } catch (NotFoundException e) {
       throw new NotFoundException("Invalid registration token!");
     }
+  }
+
+  /**
+   * Check user disk space qouta
+   * @param file
+   * @throws ImejiException
+   * @return remained disk space after successfully uploaded file
+   */
+  public long checkQuota(File file) throws ImejiException {
+    Search search = SearchFactory.create();
+    List<String> results = search.searchSimpleForQuery(
+            SPARQLQueries.selectUserFileSize(user.getId().toString()).toString()
+    ).getResults();
+    long currentDiskUsage = 0;
+    try {
+      currentDiskUsage = Long.parseLong(results.get(0).toString());
+    } catch (NumberFormatException e) {
+      throw new UnprocessableError("Cannot parse currentDiskSpace " + results.get(0).toString() + " for user: " + user.getEmail());
+    }
+    long needed = currentDiskUsage + file.length();
+    if (needed > user.getQuota()) {
+      throw new QuotaExceededException("Disk quota: " + user.getQuota() + "B has been exceeded by " + (needed - user.getQuota())
+              + "B for user: " + user.getEmail() );
+    }
+    return user.getQuota() - needed;
   }
 
   /**

@@ -3,25 +3,6 @@
  */
 package de.mpg.imeji.logic.controller;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
-import static de.mpg.imeji.logic.storage.util.StorageUtils.calculateChecksum;
-import static de.mpg.imeji.logic.storage.util.StorageUtils.getMimeType;
-import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.exceptions.AuthenticationError;
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
@@ -61,6 +42,25 @@ import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.imeji.rest.process.CommonUtils;
 import de.mpg.j2j.annotations.j2jResource;
 import de.mpg.j2j.helper.J2JHelper;
+
+import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static de.mpg.imeji.logic.storage.util.StorageUtils.calculateChecksum;
+import static de.mpg.imeji.logic.storage.util.StorageUtils.getMimeType;
+import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
 
 /**
  * Implements CRUD and Search methods for {@link Item}
@@ -120,6 +120,10 @@ public class ItemController extends ImejiController {
       throws ImejiException {
     if (!AuthUtil.staticAuth().createContent(user, c))
       throw new NotAllowedError("User not Allowed to upload files in collection " + c.getIdString());
+
+    UserController uc = new UserController(user);
+
+    uc.checkQuota(f);
 
     StorageController sc = new StorageController();
     UploadResult uploadResult = sc.upload(filename, f, c.getIdString());
@@ -436,6 +440,9 @@ public class ItemController extends ImejiController {
     if (!isNullOrEmpty(item.getStorageId())) {
       removeFileFromStorage(item.getStorageId());
     }
+
+    UserController uc = new UserController(user);
+    uc.checkQuota(f);
 
     CollectionController c = new CollectionController();
 

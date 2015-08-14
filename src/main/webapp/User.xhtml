@@ -1,13 +1,12 @@
-<ui:composition template="templates/template_site.xhtml" 
-	xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:menu="http://java.sun.com/jsf/composite/components/menu"
-	xmlns:composite="http://java.sun.com/jsf/composite"
-	xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs"
-	xmlns:imjc="http://java.sun.com/jsf/composite/components"
-	xmlns:c="http://java.sun.com/jsp/jstl/core">
+<ui:composition template="templates/template_site.xhtml"
+				xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:menu="http://java.sun.com/jsf/composite/components/menu"
+				xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs"
+				xmlns:imjc="http://java.sun.com/jsf/composite/components"
+		>
 	
 	<ui:param name="headline" value="User Page"/>
 	<ui:param name="currentMainMenu" value="admin"/>
@@ -73,8 +72,7 @@
 												</h:panelGroup>
 											</div>
 										</h:panelGroup>
-										
-										
+
 										<!-- User Edit - Username -->
 										<h:panelGroup layout="block" styleClass="imj_admindataSet" rendered="#{!UserBean.edit}">
 											<div class="imj_admindataLabel">
@@ -107,8 +105,23 @@
 										<!-- The user of the person -->
 										<imjc:person person="#{UserBean.user.person}"
 											bean="#{UserBean}" position="0" rendered="#{UserBean.edit}"/>
-										
-										
+
+										<!-- Disk space quota -->
+										<h:panelGroup layout="block" styleClass="imj_admindataSet">
+											<div class="imj_admindataLabel">
+												<h:outputText value="#{lbl.quota}"/>
+												<span class="imj_invisible">: </span>
+											</div>
+											<div class="imj_admindataValue">
+												<h:panelGroup class="imj_admindataValueEntry" rendered="#{!UserBean.edit}">
+													<h:outputText value="#{UserBean.user.quota}"/>
+												</h:panelGroup>
+												<h:panelGroup class="imj_admindataSetEdit" rendered="#{UserBean.edit}" >
+													<h:inputText value="#{UserBean.user.quota}"/>
+												</h:panelGroup>
+											</div>
+										</h:panelGroup>
+
 										<!-- submit panel -->
 										<div class="imj_submitPanel">
 											<h:commandLink id="lnkEditUserdata" action="#{UserBean.toggleEdit}" value="#{lbl.edit}" rendered="#{!UserBean.edit}" styleClass="imj_editButton" type="submit">

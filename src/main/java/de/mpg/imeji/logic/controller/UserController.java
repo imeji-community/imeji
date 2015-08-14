@@ -3,19 +3,10 @@
  */
 package de.mpg.imeji.logic.controller;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotFoundException;
+import de.mpg.imeji.exceptions.QuotaExceededException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
@@ -38,6 +29,17 @@ import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.j2j.helper.DateHelper;
 
+import org.apache.log4j.Logger;
+
+import java.io.File;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Controller for {@link User}
  * 
@@ -48,6 +50,9 @@ import de.mpg.j2j.helper.DateHelper;
 public class UserController {
   private static final ReaderFacade reader = new ReaderFacade(Imeji.userModel);
   private static final WriterFacade writer = new WriterFacade(Imeji.userModel);
+  //25GB is default quota
+  //TODO: put to properties
+  //public static final long DISK_USAGE_QUOTA = 25 * 1024 * 1024 * 1024;
   private User user;
   static Logger logger = Logger.getLogger(UserController.class);
 
@@ -112,6 +117,8 @@ public class UserController {
 
     Calendar now = DateHelper.getCurrentDate();
     u.setCreated(now);
+
+    u.setQuota(ConfigurationBean.getDefaultDiskSpaceQuotaStatic());
 
     writer.create(WriterFacade.toList(u), null, user);
     return u;
@@ -245,6 +252,11 @@ public class UserController {
     updatedUser.setName(updatedUser.getPerson().getGivenName() + " "
         + updatedUser.getPerson().getFamilyName());
 
+    //if quota is set to 0, set it to default disk space quota
+    if ( updatedUser.getQuota() == 0 ) {
+      updatedUser.setQuota(ConfigurationBean.getDefaultDiskSpaceQuotaStatic());
+    }
+
     writer.update(WriterFacade.toList(updatedUser), null, currentUser, true);
     return updatedUser;
   }
@@ -286,6 +298,48 @@ public class UserController {
     } catch (NotFoundException e) {
       throw new NotFoundException("Invalid registration token!");
     }
+  }
+
+  /**
+   * Check user disk space quota. Quota is calculated for user of target collection.
+   * @param file
+   * @param col
+   * @throws ImejiException
+   * @return remained disk space after successfully uploaded <code>file</code>;
+   * <code>-1</code> will be returned for unlimited quota
+   */
+  public long checkQuota(File file, CollectionImeji col) throws ImejiException {
+
+    // do not check quota for admin
+//    if (this.user.isAdmin())
+
+    //TODO: switch off feature!!!!
+    if (true)
+      return -1L;
+
+    User targetCollectionUser = this.user.getId().equals(col.getCreatedBy()) ? this.user :
+            retrieve(col.getCreatedBy());
+
+    Search search = SearchFactory.create();
+    List<String> results = search.searchSimpleForQuery(
+            //TODO: who is checked by quota?
+            // Current implementation: owner of target collection
+            SPARQLQueries.selectUserFileSize(col.getCreatedBy().toString())
+    ).getResults();
+    long currentDiskUsage = 0L;
+    try {
+      currentDiskUsage = Long.parseLong(results.get(0).toString());
+    } catch (NumberFormatException e) {
+      throw new UnprocessableError("Cannot parse currentDiskSpaceUsage " + results.get(0).toString() + "; requested by user: " + this.user.getEmail()
+      + "; targetCollectionUser: " + targetCollectionUser.getEmail());
+    }
+    long needed = currentDiskUsage + file.length();
+    if (needed > targetCollectionUser.getQuota()) {
+      throw new QuotaExceededException("Disk quota: " + targetCollectionUser.getQuota() + "B has been exceeded by " + (needed - targetCollectionUser.getQuota())
+              + "B; requested by user: " + this.user.getEmail()
+              + "; targetCollectionUser: " + targetCollectionUser.getEmail());
+    }
+    return targetCollectionUser.getQuota() - needed;
   }
 
   /**

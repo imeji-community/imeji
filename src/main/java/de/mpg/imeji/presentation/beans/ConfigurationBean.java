@@ -24,6 +24,21 @@
  */
 package de.mpg.imeji.presentation.beans;
 
+import de.mpg.imeji.logic.storage.util.MediaUtils;
+import de.mpg.imeji.presentation.lang.InternationalizationBean;
+import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.PropertyReader;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+import org.apache.log4j.Logger;
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -38,20 +53,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
-import org.apache.log4j.Logger;
-import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONException;
-
-import de.mpg.imeji.logic.storage.util.MediaUtils;
-import de.mpg.imeji.presentation.lang.InternationalizationBean;
-import de.mpg.imeji.presentation.util.BeanHelper;
-import de.mpg.imeji.presentation.util.PropertyReader;
+import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
 
 /**
  * JavaBean managing the imeji configuration which is made directly by the administrator from the
@@ -72,7 +74,7 @@ public class ConfigurationBean {
    * @version $Revision$ $LastChangedDate$
    */
   private enum CONFIGURATION {
-    SNIPPET, CSS_DEFAULT, CSS_ALT, MAX_FILE_SIZE, FILE_TYPES, STARTPAGE_HTML, DATA_VIEWER_FORMATS, DATA_VIEWER_URL, AUTOSUGGEST_USERS, AUTOSUGGEST_ORGAS, STARTPAGE_FOOTER_LOGOS, META_DESCRIPTION, INSTANCE_NAME, CONTACT_EMAIL, EMAIL_SERVER, EMAIL_SERVER_USER, EMAIL_SERVER_PASSWORD, EMAIL_SERVER_ENABLE_AUTHENTICATION, EMAIL_SERVER_SENDER, EMAIL_SERVER_PORT, STARTPAGE_CAROUSEL_QUERY, STARTPAGE_CAROUSEL_QUERY_ORDER, UPLOAD_WHITE_LIST, UPLOAD_BLACK_LIST, LANGUAGES, IMPRESSUM_URL, IMPRESSUM_TEXT, FAVICON_URL, LOGO, REGISTRATION_TOKEN_EXPIRY, REGISTRATION_ENABLED;
+    SNIPPET, CSS_DEFAULT, CSS_ALT, MAX_FILE_SIZE, FILE_TYPES, STARTPAGE_HTML, DATA_VIEWER_FORMATS, DATA_VIEWER_URL, AUTOSUGGEST_USERS, AUTOSUGGEST_ORGAS, STARTPAGE_FOOTER_LOGOS, META_DESCRIPTION, INSTANCE_NAME, CONTACT_EMAIL, EMAIL_SERVER, EMAIL_SERVER_USER, EMAIL_SERVER_PASSWORD, EMAIL_SERVER_ENABLE_AUTHENTICATION, EMAIL_SERVER_SENDER, EMAIL_SERVER_PORT, STARTPAGE_CAROUSEL_QUERY, STARTPAGE_CAROUSEL_QUERY_ORDER, UPLOAD_WHITE_LIST, UPLOAD_BLACK_LIST, LANGUAGES, IMPRESSUM_URL, IMPRESSUM_TEXT, FAVICON_URL, LOGO, REGISTRATION_TOKEN_EXPIRY, REGISTRATION_ENABLED, DEFAULT_DISK_SPACE_QUOTA;
   }
 
   private static Properties config;
@@ -87,6 +89,8 @@ public class ConfigurationBean {
       "386,aru,atm,aut,bat,bin,bkd,blf,bll,bmw,boo,bqf,buk,bxz,cc,ce0,ceo,cfxxe,chm,cih,cla,class,cmd,com,cpl,cxq,cyw,dbd,dev,dlb,dli,dll,dllx,dom,drv,dx,dxz,dyv,dyz,eml,exe,exe1,exe_renamed,ezt,fag,fjl,fnr,fuj,hlp,hlw,hsq,hts,ini,iva,iws,jar,js,kcd,let,lik,lkh,lnk,lok,mfu,mjz,nls,oar,ocx,osa,ozd,pcx,pgm,php2,php3,pid,pif,plc,pr,qit,rhk,rna,rsc_tmp,s7p,scr,scr,shs,ska,smm,smtmp,sop,spam,ssy,swf,sys,tko,tps,tsa,tti,txs,upa,uzy,vb,vba,vbe,vbs,vbx,vexe,vsd,vxd,vzr,wlpginstall,wmf,ws,wsc,wsf,wsh,wss,xdu,xir,xlm,xlv,xnt,zix,zvz";
   private final static String predefinedLanguages = "en,de,ja,es";
   private final static String predefinedRegistrationTokenExpirationDays = "1";
+  //default quota is 25GB
+  private final static String predefinedDefaultDiskSpaceQuota  = Long.toString(25l * 1024l * 1024l * 1024l);
   private String dataViewerUrl;
 
   /**
@@ -122,6 +126,11 @@ public class ConfigurationBean {
       fileTypes = new FileTypes(predefinedFileTypes);
     } else
       fileTypes = new FileTypes((String) ft);
+
+    Object o = config.get(CONFIGURATION.DEFAULT_DISK_SPACE_QUOTA.name());
+    if (o == null)
+      initPropertyWithDefaultValue(CONFIGURATION.DEFAULT_DISK_SPACE_QUOTA, predefinedDefaultDiskSpaceQuota);
+
     initPropertyWithDefaultValue(CONFIGURATION.UPLOAD_BLACK_LIST, predefinedUploadBlackList);
     initPropertyWithDefaultValue(CONFIGURATION.LANGUAGES, predefinedLanguages);
     saveConfig();
@@ -766,6 +775,30 @@ public class ConfigurationBean {
     config.setProperty(CONFIGURATION.REGISTRATION_ENABLED.name(), Boolean.toString(enabled));
   }
 
+  public void setDefaultDiskSpaceQuota(String s) {
+    try {
+      Long.parseLong(s);
+    } catch (NumberFormatException e) {
+      logger.info("Could not understand the Default Disk Space Quota property, setting it to default ("
+                      + predefinedDefaultDiskSpaceQuota + " bytes).");
+      s = predefinedDefaultDiskSpaceQuota;
+    }
+    setProperty(CONFIGURATION.DEFAULT_DISK_SPACE_QUOTA.name(), s);
+  }
+
+  public static long getDefaultDiskSpaceQuotaStatic() {
+    return  Long.valueOf(calculateDefaultDiskSpaceQuota());
+  }
+
+  public String getDefaultDiskSpaceQuota() {
+    return calculateDefaultDiskSpaceQuota() ;
+  }
+
+  public static String calculateDefaultDiskSpaceQuota() {
+    String quota = config !=null ? (String) config.get(CONFIGURATION.DEFAULT_DISK_SPACE_QUOTA.name()) : null;
+    return isNullOrEmptyTrim(quota) ? predefinedDefaultDiskSpaceQuota : quota;
+  }
+
   /**
    * Return the url of the favicon
    * 
@@ -796,11 +829,7 @@ public class ConfigurationBean {
 
   private static String registrationTokenCompute() {
     String myToken = (String) config.get(CONFIGURATION.REGISTRATION_TOKEN_EXPIRY.name());
-    if (myToken == null || "".equals(myToken)) {
-      return predefinedRegistrationTokenExpirationDays;
-    } else {
-      return (String) config.get(CONFIGURATION.REGISTRATION_TOKEN_EXPIRY.name());
-    }
+    return isNullOrEmptyTrim(myToken) ? predefinedRegistrationTokenExpirationDays : myToken;
   }
 
 }

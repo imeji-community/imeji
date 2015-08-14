@@ -7,6 +7,7 @@ import de.mpg.imeji.exceptions.QuotaExceededException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
+import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
@@ -18,6 +19,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
+import java.net.URI;
 import java.util.Calendar;
 
 import util.JenaUtil;
@@ -202,23 +204,26 @@ public class UserControllerTest extends ControllerTest {
     User u = c.create(user, USER_TYPE.DEFAULT);
     assertThat(u.getQuota(), equalTo(UserController.DISK_USAGE_QUOTA));
 
-    //update quota
+    //change quota
     long NEW_QUOTA = 25 * 1024;
     user.setQuota(NEW_QUOTA);
     user = c.update(user, Imeji.adminUser);
     assertThat(u.getQuota(), equalTo(NEW_QUOTA));
 
     //try to exceed quota
-    ItemController itemController = new ItemController();
-    if (collection == null)
-      createCollection();
-    item = ImejiFactory.newItem(collection);
-    JenaUtil.testUser.setQuota(file1.length());
-    item = itemController.createWithFile(item, file1, file1.getName(), collection, JenaUtil.testUser);
-    Item item2 = ImejiFactory.newItem(collection);
+    CollectionController cc = new CollectionController();
+    CollectionImeji col = ImejiFactory.newCollection("test", "Planck", "Max", "MPG");
+    URI uri = cc.create(col, profile, user, null);
+    col = cc.retrieve(uri, user);
 
+    item = ImejiFactory.newItem(col);
+    user.setQuota(file1.length());
+    ItemController itemController = new ItemController();
+    item = itemController.createWithFile(item, file1, file1.getName(), col, user);
+
+    Item item2 = ImejiFactory.newItem(col);
     try {
-      item2 = itemController.createWithFile(item2, file2, file2.getName(), collection, JenaUtil.testUser);
+      item2 = itemController.createWithFile(item2, file2, file2.getName(), col, user);
       fail("Disk Quota should be exceeded!");
     } catch (QuotaExceededException e) {
     }

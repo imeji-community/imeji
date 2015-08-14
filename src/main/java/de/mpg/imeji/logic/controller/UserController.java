@@ -302,6 +302,11 @@ public class UserController {
    * @return remained disk space after successfully uploaded file
    */
   public long checkQuota(File file) throws ImejiException {
+
+    // do not check for admin
+    if (this.user.isAdmin())
+      return -1;
+
     Search search = SearchFactory.create();
     List<String> results = search.searchSimpleForQuery(
             SPARQLQueries.selectUserFileSize(user.getId().toString()).toString()

@@ -123,7 +123,7 @@ public class ItemController extends ImejiController {
 
     UserController uc = new UserController(user);
 
-    uc.checkQuota(f);
+    uc.checkQuota(f, c);
 
     StorageController sc = new StorageController();
     UploadResult uploadResult = sc.upload(filename, f, c.getIdString());
@@ -441,14 +441,15 @@ public class ItemController extends ImejiController {
       removeFileFromStorage(item.getStorageId());
     }
 
-    UserController uc = new UserController(user);
-    uc.checkQuota(f);
+    CollectionController cc = new CollectionController();
+    CollectionImeji col =  cc.retrieveLazy(item.getCollection(), user);
 
-    CollectionController c = new CollectionController();
+    UserController uc = new UserController(user);
+    uc.checkQuota(f, col);
 
     StorageController sc = new StorageController();
     UploadResult uploadResult =
-        sc.upload(item.getFilename(), f, c.retrieveLazy(item.getCollection(), user).getIdString());
+        sc.upload(item.getFilename(), f, col.getIdString());
 
     item.setFiletype(getMimeType(f));
     item.setChecksum(calculateChecksum(f));

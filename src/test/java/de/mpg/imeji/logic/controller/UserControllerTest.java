@@ -16,6 +16,7 @@ import de.mpg.j2j.helper.DateHelper;
 
 import org.apache.log4j.Logger;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -192,6 +193,7 @@ public class UserControllerTest extends ControllerTest {
     assertTrue(numCleaned == 6);
   }
 
+  @Ignore
   @Test
   public void testUserDiskSpaceQuota() throws ImejiException {
     //create user
@@ -202,7 +204,7 @@ public class UserControllerTest extends ControllerTest {
 
     UserController c = new UserController(Imeji.adminUser);
     User u = c.create(user, USER_TYPE.DEFAULT);
-    assertThat(u.getQuota(), equalTo(UserController.DISK_USAGE_QUOTA));
+    assertThat(u.getQuota(), equalTo(ConfigurationBean.getDefaultDiskSpaceQuotaStatic()));
 
     //change quota
     long NEW_QUOTA = 25 * 1024;

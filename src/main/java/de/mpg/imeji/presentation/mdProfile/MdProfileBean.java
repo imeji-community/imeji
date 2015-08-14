@@ -488,6 +488,7 @@ public class MdProfileBean {
     if (!wrappers.isEmpty()) {
       URI parent = wrappers.get(getStatementPosition()).getStatement().getId();
       Statement newChild = ImejiFactory.newStatement(parent);
+      newChild.setPos(getStatementPosition() + 1);
       wrappers.add(getStatementPosition() + 1, new StatementWrapper(newChild, profile.getId(),
           getLevel(newChild)));
     }

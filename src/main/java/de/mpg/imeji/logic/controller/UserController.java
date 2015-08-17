@@ -311,10 +311,9 @@ public class UserController {
   public long checkQuota(File file, CollectionImeji col) throws ImejiException {
 
     // do not check quota for admin
-//    if (this.user.isAdmin())
-
-    //TODO: switch off feature!!!!
-    if (true)
+    if (this.user.isAdmin())
+    //switch off feature!!!!
+//    if (true)
       return -1L;
 
     User targetCollectionUser = this.user.getId().equals(col.getCreatedBy()) ? this.user :

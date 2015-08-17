@@ -16,7 +16,6 @@ import de.mpg.j2j.helper.DateHelper;
 
 import org.apache.log4j.Logger;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -193,7 +192,6 @@ public class UserControllerTest extends ControllerTest {
     assertTrue(numCleaned == 6);
   }
 
-  @Ignore
   @Test
   public void testUserDiskSpaceQuota() throws ImejiException {
     //create user

@@ -85,7 +85,7 @@ public class SingleUploadBean implements Serializable {
   private User user;
 
   private IngestImage ingestImage;
-
+  
   public SingleUploadBean() {}
 
   public void init() throws IOException {
@@ -93,10 +93,12 @@ public class SingleUploadBean implements Serializable {
       try {
         if (UrlHelper.getParameterBoolean("init")) {
           sus.reset();
-          loadCollections(true);
         } else if (UrlHelper.getParameterBoolean("start")) {
+          loadCollections(false);
           upload();
+          loadCollections(true);
         } else if (UrlHelper.getParameterBoolean("done")) {
+          loadCollections(false);
           prepareEditor();
         }
       } catch (Exception e) {
@@ -162,7 +164,6 @@ public class SingleUploadBean implements Serializable {
       sus.reset();
       throw new TypeNotAllowedException(sb.getMessage("single_upload_invalid_content_format"));
     }
-    loadCollections(false);
     sus.copyToTemp();
   }
 
@@ -303,6 +304,7 @@ public class SingleUploadBean implements Serializable {
     SearchResult results = cc.search(sq, sortCriterion, -1, 0, user, sb.getSelectedSpaceString());
     if (!checkSizeOnly) {
       collections = cc.retrieveLazy(results.getResults(), -1, 0, user);
+
       for (CollectionImeji c : collections) {
         if (AuthUtil.staticAuth().createContent(user, c))
           collectionItems.add(new SelectItem(c.getId(), c.getMetadata().getTitle()));
@@ -315,7 +317,7 @@ public class SingleUploadBean implements Serializable {
         methodColChangeListener();
       }
     } else {
-      if (results.getNumberOfRecords() == 0) {
+      if (collectionItems.size() == 0) {
         String errorMessage = "cannot_create_collection";
         if (user.isAllowedToCreateCollection()) {
           createDefaultCollection();
@@ -333,7 +335,6 @@ public class SingleUploadBean implements Serializable {
     CollectionImeji newC = ImejiFactory.newCollection();
     newC.getMetadata()
         .setTitle("Default first collection of " + user.getPerson().getCompleteName());
-
 
     Person creatorUser = getUser().getPerson();
 
@@ -355,7 +356,6 @@ public class SingleUploadBean implements Serializable {
     newC.setProfile(pc.retrieveDefaultProfile().getId());
     cc.create(newC, pc.retrieveDefaultProfile(), user, MetadataProfileCreationMethod.COPY,
         sb.getSelectedSpaceString());
-
   }
 
   public List<SelectItem> getCollectionItems() {

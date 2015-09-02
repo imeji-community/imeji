@@ -273,6 +273,20 @@ public class AlbumController extends ImejiController {
     ItemController ic = new ItemController();
     // Search must be done with admin in oder to avoid to remove private
     // items
+    //Retrieving Items to check if there will be some not existing item
+    
+    try {
+      ic.retrieve(toDelete, -1, 0, user);
+    }
+    catch (Exception e)
+    {
+      if (e.getCause() instanceof NotFoundException)
+        throw new NotFoundException (e.getLocalizedMessage());
+      else
+        throw e;
+    }
+   
+  
     List<String> before = ic.seachContainerItemsFast(album, Imeji.adminUser, -1);
     for (String uri : before) {
       if (!toDelete.contains(uri)) {
@@ -284,7 +298,6 @@ public class AlbumController extends ImejiController {
       validateReleasedAlbumImagesRemoval(album.getStatus());
     }
     Album after = update(album, user, false);
-
     return before.size() - after.getImages().size();
   }
 

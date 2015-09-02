@@ -102,7 +102,7 @@
 									<div class="imj_metadataValue">
 										<div id="uploader" class="imj_fileUploadContainer imj_singleUpload">
 											<div id="filelist">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
-							
+											<div class="imj_messageError" id="console"></div>
 											<div id="container">
 											    <a id="pickfiles" href="javascript:;">[#{lbl.uploadLogo}]</a>
 											</div>
@@ -130,6 +130,25 @@
 																
 																document.getElementById('filelist').innerHTML = '<div id="' + file.id + '">'+ file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
 															});
+															document.getElementById('console').innerHTML = "";
+															uploader.bind('Error', function(up, err) {
+															    document.getElementById('console').innerHTML = "\nError " + err.code + ": " + err.message;
+															    
+															});
+															uploader.bind('FileUploaded', function(up, file, response) {
+
+															    response = jQuery.parseJSON( response.response );
+
+															    if (response.error.code){
+															        uploader.trigger('Error', {
+															            code : response.error.code,
+															            message : response.error.message,
+															            details : response.details,
+															            file : file
+															        });
+															        }
+
+															});
 															uploader.start();
 															
 														},
@@ -145,10 +164,14 @@
 													}
 												});
 												
-												uploader.init();													
+												uploader.init();
+												
 
 												function report(){
 													//window.location.href = location.pathname ;
+													
+													//reset uploader 
+													uploader.splice();
 												}
 											</script>
 										</div>

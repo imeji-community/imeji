@@ -410,7 +410,7 @@ public class AlbumBean extends ContainerBean {
     findItems(sessionBean.getUser(), getSize());
     sessionBean.setActiveAlbum(this.album);
     this.setActive(true);
-    return "pretty:";
+    return "";
   }
 
   /**
@@ -421,7 +421,7 @@ public class AlbumBean extends ContainerBean {
   public String makeInactive() {
     sessionBean.setActiveAlbum(null);
     this.setActive(false);
-    return "pretty:";
+    return "";
   }
 
   /**

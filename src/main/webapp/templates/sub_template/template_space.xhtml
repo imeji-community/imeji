@@ -26,11 +26,14 @@
 				str = str.replace(/ö/g, "oe");
 				str = str.replace(/ü/g, "ue");
 				str = str.replace(/ß/g, "ss");
+				
+				str = str.replace(/[^A-Za-z 0-9]*/g, '') ; 
 				return str;
 			}
 			function updateSlug(str) {
 				var protocoll, tmp, spaceSlugString;
 				tmp = clearToSlug(str);
+				
 				protocoll = location.protocoll || 'http:';
 				spaceSlugString = location.href;
 				$('input[id$="spaceSlug"]').val(tmp);
@@ -41,6 +44,7 @@
 					updateSlug($(this).val());
 				});
 			}
+			
 			initSlugUpdate();
 		/*	]]> */
 		</script>

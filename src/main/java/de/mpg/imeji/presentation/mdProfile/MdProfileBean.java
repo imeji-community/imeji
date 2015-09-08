@@ -461,7 +461,6 @@ public class MdProfileBean {
     } else {
       Statement previousStatement = wrappers.get(getStatementPosition()).getStatement();
       Statement newStatement = ImejiFactory.newStatement(previousStatement.getParent());
-      newStatement.setPos(previousStatement.getPos() + 1);
       wrappers.add(findNextStatementWithSameLevel(previousStatement), new StatementWrapper(
           newStatement, profile.getId(), getLevel(newStatement)));
     }
@@ -488,7 +487,6 @@ public class MdProfileBean {
     if (!wrappers.isEmpty()) {
       URI parent = wrappers.get(getStatementPosition()).getStatement().getId();
       Statement newChild = ImejiFactory.newStatement(parent);
-      newChild.setPos(getStatementPosition() + 1);
       wrappers.add(getStatementPosition() + 1, new StatementWrapper(newChild, profile.getId(),
           getLevel(newChild)));
     }
@@ -511,7 +509,7 @@ public class MdProfileBean {
     toDelete.add(wrappers.get(getStatementPosition()));
     List<StatementWrapper> l = new ArrayList<StatementWrapper>();
     for (StatementWrapper sw : wrappers) {
-      if (!(toDelete.contains(sw))){
+      if (!toDelete.contains(sw)){
         l.add(sw);
       }
     }

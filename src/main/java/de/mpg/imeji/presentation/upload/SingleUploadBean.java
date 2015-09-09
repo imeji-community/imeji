@@ -42,6 +42,7 @@ import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
+import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.TempFileUtil;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -97,7 +98,7 @@ public class SingleUploadBean implements Serializable {
           loadCollections(false);
           upload();
           loadCollections(true);
-        } else if (UrlHelper.getParameterBoolean("done")) {
+        } else if (UrlHelper.getParameterBoolean("done") && !UrlHelper.hasParameter("h")) {
           loadCollections(false);
           prepareEditor();
         }
@@ -126,12 +127,13 @@ public class SingleUploadBean implements Serializable {
       edit.getEditor().getItems().get(0).setMds(newSet);
       edit.getEditor().validateAndFormatItemsForSaving();
       uploadFileToItem(item, getIngestImage().getFile(), getIngestImage().getName());
-      BeanHelper.cleanMessages();
       sus.uploaded();
-      reloadItemPage(item.getIdString());
+      BeanHelper.cleanMessages();
+      reloadItemPage(item.getIdString(), ObjectHelper.getId(item.getCollection()));
     } catch (Exception e) {
-      BeanHelper.error(e.getMessage());
+      BeanHelper.error("There has been an error during saving of the item!Message: "+e.getMessage());
     }
+    sus.reset();
     return "";
   }
 
@@ -140,12 +142,11 @@ public class SingleUploadBean implements Serializable {
    * 
    * @throws IOException
    */
-  private void reloadItemPage(String itemIdString) {
+  private void reloadItemPage(String itemIdString, String collectionIdString) {
     try {
       Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
 
-      String redirectUrl = navigation.getItemUrl() + itemIdString;
-
+      String redirectUrl = navigation.getCollectionUrl()+collectionIdString+"/"+navigation.getItemPath()+"/"+ itemIdString;
       FacesContext.getCurrentInstance().getExternalContext().redirect(redirectUrl);
     } catch (IOException e) {
       Logger.getLogger(UserBean.class).info("Error reloading the page", e);

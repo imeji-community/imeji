@@ -113,10 +113,10 @@
 												<span class="imj_invisible">: </span>
 											</div>
 											<div class="imj_admindataValue">
-												<h:panelGroup class="imj_admindataValueEntry" rendered="#{!UserBean.edit}">
+												<h:panelGroup class="imj_admindataValueEntry" rendered="#{!UserBean.edit or !SessionBean.user.admin}">
 													<h:outputText value="#{UserBean.user.quota}"/>
 												</h:panelGroup>
-												<h:panelGroup class="imj_admindataSetEdit" rendered="#{UserBean.edit}" >
+												<h:panelGroup class="imj_admindataSetEdit" rendered="#{UserBean.edit and SessionBean.user.admin}" >
 													<h:inputText value="#{UserBean.user.quota}"/>
 												</h:panelGroup>
 											</div>

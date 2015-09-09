@@ -3,6 +3,7 @@ package de.mpg.imeji.presentation.user;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.notification.NotificationUtils;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.User;
@@ -80,14 +81,14 @@ public class RegistrationBean {
   }
 
   public void register() {
+    String password = "";
     try {
       this.activation_submitted = false;
       this.registration_submitted = true;
       PasswordGenerator generator = new PasswordGenerator();
-      String password = generator.generatePassword();
+      password = generator.generatePassword();
       user.setEncryptedPassword(StringHelper.convertToMD5(password));
       user = uc.create(user, UserController.USER_TYPE.INACTIVE);
-      sendRegistrationNotification(password);
       this.registration_success = true;
     } catch (Exception e) {
       BeanHelper.cleanMessages();
@@ -97,6 +98,18 @@ public class RegistrationBean {
         BeanHelper.error(sb.getMessage(errorM));
       }
     }
+    
+    if (this.registration_success) {
+        
+        BeanHelper.cleanMessages();
+        BeanHelper.info("Sending registration email and new password.");
+        sendRegistrationNotification(password);
+        if (FacesContext.getCurrentInstance().getMessageList().size() > 1) {
+          BeanHelper.cleanMessages();
+          BeanHelper.info("User account has been registered, but verification email could not be sent! Please contact service administrators!");
+        }
+    }
+    
   }
 
   private void activate() {
@@ -112,7 +125,6 @@ public class RegistrationBean {
     } catch (ImejiException e) {
       this.activation_success = false;
       this.activation_message = e.getLocalizedMessage();
-
     }
   }
 
@@ -139,17 +151,9 @@ public class RegistrationBean {
    * Send account activation email
    */
   private void sendActivationNotification() {
-    EmailClient emailClient = new EmailClient();
-    EmailMessages emailMessages = new EmailMessages();
-    try {
-      // send to support
-      emailClient.sendMail(getContactEmailStatic(), null,
-          emailMessages.getEmailOnAccountActivation_Subject(user, sb),
-          emailMessages.getEmailOnAccountActivation_Body(user, sb));
-    } catch (Exception e) {
-      logger.error("Error sending email", e);
-      BeanHelper.error(sb.getMessage("error") + ": Email not sent");
-    }
+    
+    NotificationUtils.sendActivationNotification(user, sb);
+
   }
 
   public boolean isRegistration_submitted() {

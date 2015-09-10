@@ -148,7 +148,17 @@
 											<h:inputText value="#{Configuration.registrationTokenExpiry}" styleClass="imj_admindataEdit"/>
 										</div>
 										<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
-									</div>	
+									</div>
+									<div class="imj_admindataSet">
+										<div class="imj_admindataLabel">
+											<h:outputText value="#{lbl.default_disk_space_quota}"/>
+											<span class="imj_noDisplay">: </span>
+										</div>
+										<div class="imj_admindataValue">
+											<h:inputText value="#{Configuration.defaultDiskSpaceQuota}" styleClass="imj_admindataEdit"/>
+										</div>
+										<input type="button" data-target=".imj_admindataSet .imj_admindataValue textarea" class="imj_clearInput imj_iconErase_16" value=" " style="vertical-align: top;"/>
+									</div>
 									
 									
 								</div>

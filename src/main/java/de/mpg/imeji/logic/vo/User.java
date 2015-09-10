@@ -3,18 +3,6 @@
  */
 package de.mpg.imeji.logic.vo;
 
-import java.io.Serializable;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.List;
-
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlEnum;
-
-import org.apache.log4j.Logger;
-
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
@@ -26,6 +14,18 @@ import de.mpg.j2j.annotations.j2jList;
 import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jModel;
 import de.mpg.j2j.annotations.j2jResource;
+
+import org.apache.log4j.Logger;
+
+import java.io.Serializable;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlEnum;
 
 /**
  * imeji user
@@ -51,6 +51,9 @@ public class User implements Serializable {
   private Person person;
   @j2jList("http://imeji.org/terms/grant")
   private Collection<Grant> grants = new ArrayList<Grant>();
+  @j2jLiteral("http://imeji.org/terms/quota")
+  private long quota;
+
   private URI id = IdentifierUtil.newURI(User.class);
   private List<UserGroup> groups = new ArrayList<>();
 
@@ -89,6 +92,7 @@ public class User implements Serializable {
     User clone = new User();
     clone.setEmail(email);
     clone.encryptedPassword = encryptedPassword;
+    clone.setQuota(quota);
     clone.grants = new ArrayList<Grant>();
     for (Grant g : grants) {
       if (g.asGrantType() != null && g.getGrantFor() != null) {
@@ -250,6 +254,22 @@ public class User implements Serializable {
    */
   public void setObservedCollections(Collection<String> observedCollections) {
     this.observedCollections = observedCollections;
+  }
+
+  /**
+   *
+   * @return
+   */
+  public long getQuota() {
+    return quota;
+  }
+
+  /**
+   *
+   * @param quota
+   */
+  public void setQuota(long quota) {
+    this.quota = quota;
   }
 
   @XmlEnum(String.class)

@@ -59,6 +59,14 @@ public class AlbumItemsBean extends ItemsBean {
     loadAlbum();
     browseContext = getNavigationString() + id;
     browseInit();
+
+    if (sb.getActiveAlbumSize() != getTotalNumberOfRecords()) {
+      AlbumController ac = new AlbumController();
+      Album activeA = ac.retrieve(sb.getActiveAlbum().getId(), sb.getUser());
+      sb.setActiveAlbum(activeA);
+      setAlbum(activeA);
+    }
+
     return "";
   }
 

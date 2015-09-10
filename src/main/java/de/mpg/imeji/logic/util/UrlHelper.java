@@ -134,4 +134,16 @@ public class UrlHelper {
       return urlStr;
     }
   }
+  
+  /**
+   * Return true or false about the existence of parameter in the Url
+   * 
+   * @param parameterName
+   * @return
+   */
+  public static Boolean hasParameter(String parameterName) {
+    return FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
+        .get(parameterName) != null;
+  }
+
 }

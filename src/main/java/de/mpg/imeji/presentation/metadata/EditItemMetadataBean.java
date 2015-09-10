@@ -236,6 +236,7 @@ public class EditItemMetadataBean {
    * Initialize the select menu with the possible statement to edit (i.e. statement of the profiles)
    */
   private void initStatementsMenu() {
+    ((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class)).init(profile);
     statementMenu = new ArrayList<SelectItem>();
     for (Statement s : profile.getStatements()) {
       if (s.getParent() == null) {

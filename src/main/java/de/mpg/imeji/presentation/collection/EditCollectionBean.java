@@ -82,7 +82,12 @@ public class EditCollectionBean extends CollectionBean {
     }
 
     if (UrlHelper.getParameterBoolean("start")) {
-      upload();
+      try{
+        upload();
+      }catch(Exception e){
+        BeanHelper.error(sessionBean.getMessage("error_collection_logo_uri_save")); 
+      }
+
     }
 
   }

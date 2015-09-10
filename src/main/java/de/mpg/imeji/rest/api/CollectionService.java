@@ -24,6 +24,7 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
 import de.mpg.imeji.rest.process.CommonUtils;
 import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.to.CollectionProfileTO;
@@ -54,6 +55,16 @@ public class CollectionService implements API<CollectionTO> {
     return getCollectionTO(controller, id, u);
   }
 
+  /**
+   * Read all the items of a collection according to search query. Response is done with the raw
+   * format
+   * 
+   * @param id
+   * @param u
+   * @param q
+   * @return
+   * @throws ImejiException
+   */
   public List<ItemTO> readItems(String id, User u, String q) throws ImejiException {
     CollectionController cc = new CollectionController();
     return Lists.transform(cc.retrieveItems(id, u, q), new Function<Item, ItemTO>() {
@@ -61,6 +72,28 @@ public class CollectionService implements API<CollectionTO> {
       public ItemTO apply(Item vo) {
         ItemTO to = new ItemTO();
         TransferObjectFactory.transferItem(vo, to);
+        return to;
+      }
+    });
+  }
+
+  /**
+   * Read all the items of a collection according to search query. Response is done with the default
+   * format
+   * 
+   * @param id
+   * @param u
+   * @param q
+   * @return
+   * @throws ImejiException
+   */
+  public Object readDefaultItems(String id, User u, String q) throws ImejiException {
+    CollectionController cc = new CollectionController();
+    return Lists.transform(cc.retrieveItems(id, u, q), new Function<Item, DefaultItemTO>() {
+      @Override
+      public DefaultItemTO apply(Item vo) {
+        DefaultItemTO to = new DefaultItemTO();
+        TransferObjectFactory.transferDefaultItem(vo, to);
         return to;
       }
     });
@@ -215,6 +248,7 @@ public class CollectionService implements API<CollectionTO> {
     // TODO Auto-generated method stub
     return null;
   }
+
 
 
 }

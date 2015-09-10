@@ -3,14 +3,11 @@ package de.mpg.imeji.rest.process;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.fasterxml.jackson.databind.JsonNode;
 
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
@@ -32,11 +29,9 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
 import de.mpg.imeji.rest.api.ProfileService;
 import de.mpg.imeji.rest.api.UserService;
 import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
+import de.mpg.imeji.rest.defaultTO.DefaultOrganizationTO;
 import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultConePersonTO;
-import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultGeolocationTO;
-import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultLicenseTO;
-import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultLinkTO;
-import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultPublicationTO;
+import de.mpg.imeji.rest.helper.MetadataTransferHelper;
 import de.mpg.imeji.rest.to.AlbumTO;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.IdentifierTO;
@@ -148,6 +143,12 @@ public class TransferObjectFactory {
 
   }
 
+  /**
+   * Transfer a {@link Person} into a {@link PersonTO}
+   * 
+   * @param p
+   * @param pto
+   */
   public static void transferPerson(Person p, PersonTO pto) {
 
     // pto.setPosition(p.getPos());
@@ -163,6 +164,35 @@ public class TransferObjectFactory {
     // set oganizations
     transferContributorOrganizations(p.getOrganizations(), pto);
 
+  }
+
+  /**
+   * Transfer a {@link Person} into a {@link DefaultConePersonTO}
+   * 
+   * @param p
+   * @param pTO
+   */
+  public static void transferDefaultPerson(Person p, DefaultConePersonTO pTO) {
+    pTO.setFamilyName(p.getFamilyName());
+    pTO.setGivenName(p.getGivenName());
+    for (Organization o : p.getOrganizations()) {
+      DefaultOrganizationTO oTO = new DefaultOrganizationTO();
+      transferDefaultOrganization(o, oTO);
+      pTO.getOrganizations().add(oTO);
+    }
+  }
+
+  /**
+   * Transfer an {@link Organization} into a {@link DefaultOrganizationTO}
+   * 
+   * @param o
+   * @param oTO
+   */
+  public static void transferDefaultOrganization(Organization o, DefaultOrganizationTO oTO) {
+    oTO.setName(o.getName());
+    oTO.setDescription(o.getDescription());
+    oTO.setCity(o.getCity());
+    oTO.setCountry(o.getCountry());
   }
 
   public static void transferContributorOrganizations(Collection<Organization> orgas, PersonTO pto) {
@@ -291,82 +321,20 @@ public class TransferObjectFactory {
     }
   }
 
+  /**
+   * Transfer a {@link List} of {@link Metadata} into default Metadata json and set it to the
+   * {@link DefaultItemTO}
+   * 
+   * @param profile
+   * @param voMds
+   * @param to
+   */
   public static void transferItemMetadataDefault(MetadataProfile profile,
       Collection<Metadata> voMds, DefaultItemTO to) {
-    if (voMds.size() == 0)
+    if (voMds.size() == 0) {
       return;
-    Map<String, JsonNode> metadata = new HashMap<String, JsonNode>();
-    Map<Integer, String> pos = new HashMap<Integer, String>();
-    for (Metadata md : voMds) {
-      for (Statement s : profile.getStatements()) {
-        if (s.getId().equals(md.getStatement())) {
-          String label = "";
-          for (LocalizedString ls : s.getLabels()) {
-            if ("".equals(label)) {
-              label = ls.getValue();
-              if ("en".equals(ls.getLang()))
-                label = ls.getValue();
-            }
-          }
-          if ("unbounded".equals(s.getMaxOccurs())) {
-            label = getPosition(pos, md.getStatement().toString()) + 1 + "#" + label;
-          }
-          switch (md.getTypeNamespace()) {
-            case "http://imeji.org/terms/metadata#text":
-
-              metadata.put(label, RestProcessUtils.buildJsonNode(((Text) md).getText()));
-              break;
-            case "http://imeji.org/terms/metadata#number":
-              metadata.put(label, RestProcessUtils.buildJsonNode(((Number) md).getNumber()));
-              break;
-            case "http://imeji.org/terms/metadata#conePerson":
-              ConePerson mdCP = (ConePerson) md;
-              DefaultConePersonTO dcpto = new DefaultConePersonTO();
-              dcpto.setFamilyName(mdCP.getPerson().getFamilyName());
-              dcpto.setGivenName(mdCP.getPerson().getGivenName());
-              metadata.put(label, RestProcessUtils.buildJsonNode(dcpto));
-              break;
-            case "http://imeji.org/terms/metadata#date":
-              metadata.put(label, RestProcessUtils
-                  .buildJsonNode(((de.mpg.imeji.logic.vo.predefinedMetadata.Date) md).getDate()));
-              break;
-            case "http://imeji.org/terms/metadata#geolocation":
-              Geolocation mdGeo = (Geolocation) md;
-              DefaultGeolocationTO dgto = new DefaultGeolocationTO();
-              dgto.setName(mdGeo.getName());
-              dgto.setLongitude(mdGeo.getLongitude());
-              dgto.setLatitude(mdGeo.getLatitude());
-              metadata.put(label, RestProcessUtils.buildJsonNode(dgto));
-              break;
-            case "http://imeji.org/terms/metadata#license":
-              License mdLicense = (License) md;
-              DefaultLicenseTO dlto = new DefaultLicenseTO();
-              dlto.setLicense(mdLicense.getLicense());
-              final URI externalUri = mdLicense.getExternalUri();
-              dlto.setUrl(externalUri != null ? externalUri.toString() : "");
-              metadata.put(label, RestProcessUtils.buildJsonNode(dlto));
-              break;
-            case "http://imeji.org/terms/metadata#link":
-              Link mdLink = (Link) md;
-              DefaultLinkTO dllto = new DefaultLinkTO();
-              dllto.setLink(mdLink.getLabel());
-              dllto.setUrl(mdLink.getUri().toString());
-              metadata.put(label, RestProcessUtils.buildJsonNode(dllto));
-              break;
-            case "http://imeji.org/terms/metadata#publication":
-              Publication mdP = (Publication) md;
-              DefaultPublicationTO dpto = new DefaultPublicationTO();
-              dpto.setPublication(mdP.getUri().toString());
-              dpto.setFormat(mdP.getExportFormat());
-              dpto.setCitation(mdP.getCitation());
-              metadata.put(label, RestProcessUtils.buildJsonNode(dpto));
-              break;
-          }
-
-        }
-      }
     }
-    to.setMetadata(metadata);
+    to.setMetadata(MetadataTransferHelper.serializeMetadataSet(voMds, profile));
   }
 
   public static void transferItemMetadata(MetadataProfile profile, Collection<Metadata> voMds,
@@ -451,13 +419,13 @@ public class TransferObjectFactory {
           Link mdLink = (Link) md;
           LinkTO llto = new LinkTO();
           llto.setLink(mdLink.getLabel());
-          llto.setUrl(mdLink.getUri().toString());
+          llto.setUrl(mdLink.getUri() != null ? mdLink.getUri().toString() : "");
           mdTO.setValue(llto);
           break;
         case "de.mpg.imeji.logic.vo.predefinedMetadata.Publication":
           Publication mdP = (Publication) md;
           PublicationTO pto = new PublicationTO();
-          pto.setPublication(mdP.getUri().toString());
+          pto.setPublication(mdP.getUri() != null ? mdP.getUri().toString() : "");
           pto.setFormat(mdP.getExportFormat());
           pto.setCitation(mdP.getCitation());
           mdTO.setValue(pto);

@@ -20,8 +20,8 @@
 	</organization>
 	<scm>
 		<url>https://github.com/imeji-community/imeji</url>
-		<connection>scm:git:git@github.com:MPDL-Innovations/imeji.git</connection>
-		<developerConnection>scm:git:git@github.com:MPDL-Innovations/imeji.git</developerConnection>
+		<connection>scm:git@github.com:imeji-community/imeji.git</connection>
+		<developerConnection>scm:git@github.com:imeji-community/imeji.git</developerConnection>
 		<tag>develop</tag>
 	</scm>
 	<issueManagement>

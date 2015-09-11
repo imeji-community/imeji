@@ -177,23 +177,20 @@
 											<div class="imj_admindataValueEntry">
 												<ui:fragment rendered="#{Auth.admin}">
 													<div class="imj_admindataSet">
-														<h:selectBooleanCheckbox id="createcollectioncheck" value="#{UserBean.user.allowedToCreateCollection}" readonly="true" styleClass="imj_admindataCheckbox" onchange="document.getElementById('grantForm:toggleCreate').click()"/>
+														<h:selectBooleanCheckbox id="createcollectioncheck" value="#{UserBean.user.allowedToCreateCollection}" readonly="true" styleClass="imj_admindataCheckbox" onchange="document.getElementById('grantForm:toggleCreate').click()" disabled="#{UserBean.user.admin}"/>
 														<label for="grantForm:createcollectioncheck"><h:outputText value="#{lbl.allowedToCreateCollection}"/></label>
 														<span class="imj_invisible">: </span>
 													</div>
 													<div class="imj_admindataSet">
-														<h:selectBooleanCheckbox id="admincheck" title="#{UserBean.user.admin and UserBean.uniqueAdmin ? lbl.user_unique_admin : lbl.user_toggle_admin_role}" value="#{UserBean.user.admin}" styleClass="imj_admindataCheckbox"  onchange="document.getElementById('grantForm:toggleAdmin').click();" disabled="#{UserBean.user.admin and UserBean.uniqueAdmin}"/>
+														<h:selectBooleanCheckbox id="admincheck" title="#{UserBean.user.admin and UserBean.uniqueAdmin ? lbl.user_unique_admin : lbl.user_toggle_admin_role}" value="#{UserBean.user.admin}" styleClass="imj_admindataCheckbox"  onchange="openDialog('general');" disabled="#{UserBean.user.admin and UserBean.uniqueAdmin}"/>
 														<label for="grantForm:admincheck"><h:outputText value="#{lbl.isAdmin}"/></label>
 														<span class="imj_invisible">: </span>
-													</div>
+													<dialog:confirmationDialog submitAction="toggleAdmin" bean="#{UserBean}" confirmationText="#{msg.confirmation_general}" submitLabel="#{lbl.confirm}" dialogId="general"/></div>
 												</ui:fragment>
 											</div>
 										</div>
 									</h:panelGroup>
 									<h:commandButton id="toggleCreate" action="#{UserBean.toggleCreateCollection}" value="toggle create col" styleClass="imj_noDisplay" type="submit">
-										<f:ajax render="@form"/>
-									</h:commandButton>
-									<h:commandButton id="toggleAdmin" action="#{UserBean.toggleAdmin}" value="toggle admin" styleClass="imj_noDisplay" type="submit">
 										<f:ajax render="@form"/>
 									</h:commandButton>
 								</h:form>

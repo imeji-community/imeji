@@ -21,11 +21,11 @@
 		<ui:include src="include/History.xhtml"></ui:include>
 		
 		<!-- Are You Admin? -->	
-		<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!Auth.admin}">
+		<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!Auth.loggedIn}">
 			<h:outputText value="#{lbl.view_page_disallowed}" styleClass="imj_messageInfo"/>
 		</h:panelGroup>
 		
-		<ui:fragment rendered="#{Auth.admin}">
+		<ui:fragment rendered="#{Auth.loggedIn}">
 			<!-- AdminDataList - Back Button -->
 			<h:panelGroup layout="block" styleClass="imj_backPanel" rendered="#{Auth.admin and UserGroups.backContainerUrl == null}">
 				<h:outputLink value="#{Navigation.adminUrl}">

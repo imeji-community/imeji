@@ -155,4 +155,18 @@ public class UserGroupController {
     }
     return userGroups;
   }
+  
+  /**
+   * Removes single user from all user groups where he is a member Of
+   * @param userToRemove
+   * @param userRemover
+   * @throws ImejiException
+   */
+  public void removeUserFromAllGroups(User userToRemove, User userRemover) throws ImejiException {
+    for (UserGroup memberIn : searchByUser(userToRemove, userRemover)){
+        memberIn.getUsers().remove(userToRemove.getId());
+        update(memberIn, userRemover);
+        logger.info("User "+userToRemove.getId()+" ("+userToRemove.getEmail()+") has been removed from group "+memberIn.getName());
+    }
+  }
 }

@@ -166,6 +166,7 @@ public class UserGroupController {
     for (UserGroup memberIn : searchByUser(userToRemove, userRemover)){
         memberIn.getUsers().remove(userToRemove.getId());
         update(memberIn, userRemover);
+        //Write to log to inform
         logger.info("User "+userToRemove.getId()+" ("+userToRemove.getEmail()+") has been removed from group "+memberIn.getName());
     }
   }

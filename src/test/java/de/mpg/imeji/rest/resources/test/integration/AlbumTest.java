@@ -379,7 +379,7 @@ public class AlbumTest extends ImejiTestBase {
         target(pathPrefix).path("/" + albumId + "/members/link").register(authAsUser)
             .request(MediaType.APPLICATION_JSON_TYPE).put(Entity.json("[\"" + "adfgsh" + "\"]"));
 
-    assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
+    assertEquals(response.getStatus(), Status.NOT_FOUND.getStatusCode() );
   }
 
   @Test
@@ -716,7 +716,7 @@ public class AlbumTest extends ImejiTestBase {
         target(pathPrefix).path("/" + albumId + "/members/unlink").register(authAsUser)
             .request(MediaType.APPLICATION_JSON_TYPE).put(Entity.json("[\"" + "adfgsh" + "\"]"));
 
-    assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
+    assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
   }
 
   @Test

@@ -5,6 +5,7 @@ package de.mpg.imeji.presentation.user;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +19,8 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserGroupController;
+import de.mpg.imeji.logic.notification.NotificationUtils;
+import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.User;
@@ -124,7 +127,8 @@ public class UsersBean implements Serializable {
       userBean.updateUser();
       sendEmail(email, newPassword, userBean.getUser().getName());
     } catch (Exception e) {
-      logger.info("Could not send password", e);
+      BeanHelper.error("Could not update or send new password!");
+      logger.error("Could not update or send new password", e);
     }
     BeanHelper.info(session.getMessage("success_email"));
     return "";
@@ -136,6 +140,8 @@ public class UsersBean implements Serializable {
    * @param email
    * @param password
    * @param username
+   * @throws URISyntaxException 
+   * @throws IOException 
    */
   public void sendEmail(String email, String password, String username) {
     EmailClient emailClient = new EmailClient();
@@ -144,8 +150,8 @@ public class UsersBean implements Serializable {
       emailClient.sendMail(email, null, emailMessages.getEmailOnAccountAction_Subject(false),
           emailMessages.getNewPasswordMessage(password, email, username));
     } catch (Exception e) {
-      logger.error("Error sending email", e);
-      BeanHelper.error("Error: Email not sent");
+      BeanHelper.info("Error: Password Email not sent");
+      logger.error("Error sending password email", e);
     }
   }
 
@@ -169,6 +175,43 @@ public class UsersBean implements Serializable {
     return "";
   }
 
+  /**
+   * Delete a {@link User}
+   * 
+   * @return
+   */
+  public String activateUser() {
+    String email =
+        FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
+            .get("email");
+    UserController controller = new UserController(sessionUser);
+    User toActivateUser = null; 
+    String newPassword = "";
+    try {
+      //Activate first
+      toActivateUser = controller.retrieve(email, sessionUser);
+      toActivateUser=controller.activate(toActivateUser.getRegistrationToken());
+      PasswordGenerator generator = new PasswordGenerator();
+      newPassword = generator.generatePassword();
+      toActivateUser.setEncryptedPassword(StringHelper.convertToMD5(newPassword));
+      controller.update(toActivateUser, sessionUser);
+    } catch (Exception e) {
+        BeanHelper.error("Error during activation of the user ");
+        logger.error("Error during activation of the user", e);
+    }
+
+      BeanHelper.cleanMessages();
+      BeanHelper.info("Sending activation email and new password.");
+      NotificationUtils.sendActivationNotification(toActivateUser, (SessionBean) BeanHelper.getSessionBean(SessionBean.class));
+      sendEmail(email, newPassword, toActivateUser.getName());
+      if (FacesContext.getCurrentInstance().getMessageList().size() > 1) {
+        BeanHelper.cleanMessages();
+       BeanHelper.info("User account has been activated, but email notification about activation and/or new password could not be performed! Check the eMail Server settings!");
+      }
+    
+    doSearch();
+    return "";
+  }
   /**
    * Add a {@link User} to a {@link UserGroup} and then redirect to the {@link UserGroup} page
    * 

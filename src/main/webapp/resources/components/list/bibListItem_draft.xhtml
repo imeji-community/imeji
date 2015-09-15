@@ -136,14 +136,14 @@
 							<ui:fragment rendered="#{cc.attrs.isActivatable == 'yes'}">
 								<li>
 									<ui:fragment rendered="#{Auth.create(cc.attrs.item)}">
-										<h:form>
-											<h:commandButton id="btnActivate" value="#{lbl.make_active}" action="#{cc.attrs.item.makeActive}" styleClass="imj_submitButton" rendered="#{!cc.attrs.item.active and cc.attrs.item.status!='WITHDRAWN'}">
-												<f:ajax execute="@this" render="@form :imj_pageMessageArea"/>
-											</h:commandButton>
-											<h:commandButton id="btnDeactivate" value="#{lbl.make_inactive}" action="#{cc.attrs.item.makeInactive}" styleClass="imj_submitButton" rendered="#{cc.attrs.item.active}">
-												<f:ajax execute="@this" render="@form :imj_pageMessageArea"/>
-											</h:commandButton>
-										</h:form>
+										
+										<h:commandButton id="btnActivate" value="#{lbl.make_active}" action="#{cc.attrs.item.makeActive}" styleClass="imj_submitButton" rendered="#{!cc.attrs.item.active and cc.attrs.item.status!='WITHDRAWN'}">
+											<f:ajax execute="@this" render=":imj_pageMessageArea :ajaxWrapper"/>
+										</h:commandButton>
+										<h:commandButton id="btnDeactivate" value="#{lbl.make_inactive}" action="#{cc.attrs.item.makeInactive}" styleClass="imj_submitButton" rendered="#{cc.attrs.item.active}">
+											<f:ajax execute="@this" render=":imj_pageMessageArea :ajaxWrapper"/>
+										</h:commandButton>
+										
 									</ui:fragment>
 									<ui:fragment rendered="#{!Auth.create(cc.attrs.item) and !cc.attrs.item.active}">
 										<h:outputText value="#{lbl.only_view_allowed}"/>

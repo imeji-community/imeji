@@ -416,7 +416,20 @@ public class ItemBean {
    */
   public boolean getIsInActiveAlbum() {
     if (sessionBean.getActiveAlbum() != null && item != null) {
-      return sessionBean.getActiveAlbum().getImages().contains(item.getId());
+      //Must be checked from Persistence not from Session, if album has been changed in meantime via REST API
+      AlbumController ac = new AlbumController();
+      Album activeA;
+      try {
+        activeA = ac.retrieve(sessionBean.getActiveAlbum().getId(), sessionBean.getUser());
+      } catch (ImejiException e) {
+          return false;
+      }
+      
+      if ( sessionBean.getActiveAlbum().getImages().contains(item.getId()) != activeA.getImages().contains(item.getId())) {
+           sessionBean.setActiveAlbum(activeA);
+      }
+      
+      return activeA.getImages().contains(item.getId());
     }
     return false;
   }

@@ -348,6 +348,17 @@ public class JenaCustomQueries {
         + path + "', 'i') || REGEX(str(?url2), '" + path + "', 'i') || REGEX(str(?url3), '" + path
         + "', 'i'))} LIMIT 1 ";
   }
+  
+  /**
+   * @param fileUrl
+   * @return
+   */
+  public static String selectSpaceIdOfFileOrCollection(String fileUrl) {
+    String path = URI.create(fileUrl).getPath();
+    return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {"
+        + "?s <http://imeji.org/terms/logoUrl> <"+fileUrl+"> } LIMIT 1 ";
+  }
+
 
   /**
    * @param id

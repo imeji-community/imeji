@@ -132,6 +132,9 @@ public class UserController {
    * @throws ImejiException
    */
   public void delete(User user) throws ImejiException {
+    //remove User from User Groups
+    UserGroupController ugc = new UserGroupController();
+    ugc.removeUserFromAllGroups(user, this.user);
     // remove user grant
     writer.delete(new ArrayList<Object>(user.getGrants()), this.user);
     // remove user

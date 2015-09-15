@@ -18,8 +18,8 @@
  * CDDL HEADER END
  */
 /*
- * Copyright 2006-2007 Fachinformationszentrum Karlsruhe Gesellschaft für
- * wissenschaftlich-technische Information mbH and Max-Planck- Gesellschaft zur Förderung der
+ * Copyright 2006-2007 Fachinformationszentrum Karlsruhe Gesellschaft f��r
+ * wissenschaftlich-technische Information mbH and Max-Planck- Gesellschaft zur F��rderung der
  * Wissenschaft e.V. All rights reserved. Use is subject to license terms.
  */
 package de.mpg.imeji.logic.storage.administrator.impl;
@@ -123,7 +123,9 @@ public class InternalStorageAdministrator implements StorageAdministrator {
       if (f.isFile()) {
         InternalStorageManager m = new InternalStorageManager();
         String url = m.transformPathToUrl(f.getPath());
-        if (ImejiSPARQL.exec(JenaCustomQueries.selectItemIdOfFile(url), null).size() == 0) {
+        if (ImejiSPARQL.exec(JenaCustomQueries.selectItemIdOfFile(url), null).size() == 0
+            && ImejiSPARQL.exec(JenaCustomQueries.selectSpaceIdOfFileOrCollection(url), null)
+                .size() == 0) {
           // file doesn't exist, remove it
           m.removeFile(url);
           deleted++;

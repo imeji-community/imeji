@@ -35,6 +35,7 @@ import java.util.List;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
@@ -46,6 +47,8 @@ import org.apache.commons.io.IOUtils;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.exceptions.TypeNotAllowedException;
+import de.mpg.imeji.logic.storage.StorageController;
+import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.TempFileUtil;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -384,19 +387,17 @@ public abstract class ContainerBean implements Serializable {
     return getType().equals(CONTAINER_TYPE.ALBUM.toString());
   }
 
-  public void upload() {
+  public void upload() throws FileUploadException, TypeNotAllowedException {
     HttpServletRequest request =
         (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-    try {
-      setIngestImage(getUploadedIngestFile(request));
-    } catch (FileUploadException | TypeNotAllowedException e) {
-      BeanHelper.error("Could not upload the image " + e.getMessage());
-    }
+    HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+    setIngestImage(getUploadedIngestFile(request, response));
+
 
   }
 
 
-  private IngestImage getUploadedIngestFile(HttpServletRequest request) throws FileUploadException,
+  private IngestImage getUploadedIngestFile(HttpServletRequest request, HttpServletResponse response) throws FileUploadException,
       TypeNotAllowedException {
     File tmp = null;
     boolean isMultipart = ServletFileUpload.isMultipartContent(request);
@@ -408,19 +409,18 @@ public abstract class ContainerBean implements Serializable {
 
         while (iter.hasNext()) {
           FileItemStream fis = iter.next();
-          if (fis.getName() != null
-              && FilenameUtils.getExtension(fis.getName()).matches("ini|exe|sh|bin")) {
-
-
+          InputStream in = fis.openStream();
+       
+          tmp =
+              TempFileUtil.createTempFile("containerlogo",
+                  "." + FilenameUtils.getExtension(fis.getName()));
+          if (fis.getName() != null && extensionNotAllowed(tmp)) {  
+            response.getWriter().print("{\"jsonrpc\" : \"2.0\", \"error\" : {\"code\": 400, \"message\": \"Bad Filetype\"}, \"details\" : \"Error description\"}");
+            FacesContext.getCurrentInstance().responseComplete();
             throw new TypeNotAllowedException(
                 ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
                     .getMessage("Logo_single_upload_invalid_content_format"));
           }
-
-          InputStream in = fis.openStream();
-          tmp =
-              TempFileUtil.createTempFile("containerlogo",
-                  "." + FilenameUtils.getExtension(fis.getName()));
           FileOutputStream fos = new FileOutputStream(tmp);
           if (fis.getName() != null)
             ii.setName(fis.getName());
@@ -444,8 +444,13 @@ public abstract class ContainerBean implements Serializable {
     }
     return ii;
   }
-
-
+  
+  public boolean extensionNotAllowed(File file){
+    StorageController sc = new StorageController();
+    String guessedNotAllowedFormat = sc.guessNotAllowedFormat(file);
+    return StorageUtils.BAD_FORMAT.equals(guessedNotAllowedFormat);
+  }
+ 
   public void setIngestImage(IngestImage im) {
     this.ingestImage = im;
     ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).setSpaceLogoIngestImage(im);

@@ -1,6 +1,7 @@
 package de.mpg.imeji.logic.notification;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
+import static de.mpg.imeji.presentation.beans.ConfigurationBean.getContactEmailStatic;
 
 import java.io.IOException;
 import java.net.URI;
@@ -23,6 +24,7 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.user.util.EmailClient;
 import de.mpg.imeji.presentation.user.util.EmailMessages;
+import de.mpg.imeji.presentation.util.BeanHelper;
 
 /**
  * Created by vlad on 13.03.15.
@@ -126,6 +128,24 @@ public class NotificationUtils {
       path = "album/" + export.getParam("album") + "/" + path;
     }
     return session.getApplicationUrl() + path + q;
+  }
+  
+  
+  /**
+   * Send account activation email
+   */
+  public static void sendActivationNotification(User user, SessionBean sb) {
+//    EmailClient emailClient = new EmailClient();
+//    EmailMessages emailMessages = new EmailMessages();
+    try {
+      // send to support
+      emailClient.sendMail(getContactEmailStatic(), null,
+          msgs.getEmailOnAccountActivation_Subject(user, sb),
+          msgs.getEmailOnAccountActivation_Body(user, sb));
+    } catch (Exception e) {
+      BeanHelper.info(sb.getMessage("error") + ": Account activation email not sent");
+      LOGGER.info("Error sending account activation email", e);
+    }
   }
 
 

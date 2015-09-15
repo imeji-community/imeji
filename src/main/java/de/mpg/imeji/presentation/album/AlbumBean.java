@@ -13,12 +13,14 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
+import org.apache.commons.fileupload.FileUploadException;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.controller.exceptions.TypeNotAllowedException;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.Album;
@@ -190,7 +192,13 @@ public class AlbumBean extends ContainerBean {
     }
 
     if (UrlHelper.getParameterBoolean("start")) {
-      upload();
+      try {
+        upload();
+      } catch (FileUploadException e) {
+          BeanHelper.error("Could not upload the image " + e.getMessage());
+      } catch (TypeNotAllowedException e) {
+          BeanHelper.error("Could not upload the image " + e.getMessage());    
+      }
     }
 
   }
@@ -401,7 +409,7 @@ public class AlbumBean extends ContainerBean {
     findItems(sessionBean.getUser(), getSize());
     sessionBean.setActiveAlbum(this.album);
     this.setActive(true);
-    return "pretty:";
+    return "";
   }
 
   /**
@@ -412,7 +420,7 @@ public class AlbumBean extends ContainerBean {
   public String makeInactive() {
     sessionBean.setActiveAlbum(null);
     this.setActive(false);
-    return "pretty:";
+    return "";
   }
 
   /**

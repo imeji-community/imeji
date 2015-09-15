@@ -1,6 +1,7 @@
 package de.mpg.imeji.rest.resources.test.integration;
 
 
+import de.escidoc.core.client.interfaces.base.Releasable;
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
@@ -11,6 +12,7 @@ import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.IdentifierTO;
 import de.mpg.imeji.rest.to.OrganizationTO;
 import de.mpg.imeji.rest.to.PersonTO;
+
 import org.apache.commons.lang.StringUtils;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
@@ -20,6 +22,7 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import util.JenaUtil;
 
 import javax.ws.rs.client.Entity;
@@ -28,6 +31,7 @@ import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
@@ -126,7 +130,58 @@ public class CollectionTest extends ImejiTestBase {
     assertEquals(response.getStatus(), UNPROCESSABLE_ENTITY.getStatusCode());
 
   }
+  
+  @Test
+  public void test_1_CreateCollection_5_NotReleasedReferenceProfileByOtherUser() throws ImejiException,
+      UnsupportedEncodingException, IOException {
+    
+    String jsonString =
+        getStringFromPath(STATIC_CONTEXT_REST + "/createCollectionWithProfile.json");
+    jsonString =
+        jsonString.replace("___PROFILE_ID___", collectionTO.getProfile().getId())
+            .replace("___METHOD___", "reference");
+    Response response =
+        target(pathPrefix).register(authAsUser2).request(MediaType.APPLICATION_JSON_TYPE)
+            .post(Entity.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
 
+    assertEquals(UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
+
+  }
+  
+
+  @Test
+  public void test_1_CreateCollection_5_ReleasedReferenceProfileByOtherUser() throws ImejiException,
+      UnsupportedEncodingException, IOException {
+    
+    ItemService itemStatus = new ItemService();
+    initItem();
+    // assertEquals("PENDING",itemStatus.read(itemId, JenaUtil.testUser).getStatus());
+
+    Response response =
+        target(pathPrefix).path("/" + collectionId + "/release").register(authAsUser)
+            .request(MediaType.APPLICATION_JSON_TYPE).put(Entity.json("{}"));
+
+    assertEquals(OK.getStatusCode(), response.getStatus());
+
+    CollectionService s = new CollectionService();
+    assertEquals("RELEASED", s.read(collectionId, JenaUtil.testUser).getStatus());
+    String jsonString =
+        getStringFromPath(STATIC_CONTEXT_REST + "/createCollectionWithProfile.json");
+
+    jsonString =
+        jsonString.replace("___PROFILE_ID___", collectionTO.getProfile().getId())
+            .replace("___METHOD___", "reference");
+    
+    Response response2 =
+        target(pathPrefix).register(authAsUser2).request(MediaType.APPLICATION_JSON_TYPE)
+            .post(Entity.entity(jsonString, MediaType.APPLICATION_JSON_TYPE));
+
+    assertEquals(CREATED.getStatusCode(), response2.getStatus());
+
+  }
+  
+
+  
   @Test
   public void test_1_CreateCollection_5_NoAuth() throws IOException {
     String jsonString = getStringFromPath(STATIC_CONTEXT_REST + "/createCollection.json");

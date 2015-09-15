@@ -71,13 +71,13 @@ public class MetadataValidator extends ObjectValidator implements Validator<Meta
       // Date validation for format YYYY-MM-DD only, other dates will not be allowed
       String value = ((Date) md).getDate();
       SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-      java.util.Date valueDate;
+      java.util.Date valueDate = null;
       try {
         valueDate = sdf.parse(value);
         if (!value.equals(sdf.format(valueDate)))
           return false;
       } catch (ParseException e) {
-        //
+        return false;
       }
       return ((Date) md).getTime() != Long.MIN_VALUE && value != null
           && isAllowedValueString(value, s);

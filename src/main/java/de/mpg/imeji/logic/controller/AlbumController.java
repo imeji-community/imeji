@@ -270,6 +270,16 @@ public class AlbumController extends ImejiController {
         itemController.search(album.getId(), null, null, null, Imeji.adminUser, null).getResults();
     int beforeSize = albumItems.size();
     // Add Items which are not already in the album
+    // Retrieving Items to check if there will be some not existing item TODO: Do we need that? if
+    // not existing, then nothing...
+    try {
+      itemController.retrieve(toDelete, -1, 0, user);
+    } catch (Exception e) {
+      if (e.getCause() instanceof NotFoundException)
+        throw new NotFoundException(e.getLocalizedMessage());
+      else
+        throw e;
+    }
     for (String uri : toDelete) {
       albumItems.remove(uri);
     }

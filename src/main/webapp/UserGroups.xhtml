@@ -3,7 +3,8 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:menu="http://java.sun.com/jsf/composite/components/menu">
+	xmlns:menu="http://java.sun.com/jsf/composite/components/menu"
+	xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs">
 	
 	<ui:param name="headline" value="#{lbl.admin_userGroups_view}" />
 	<ui:param name="currentMainMenu" value="admin"/>
@@ -21,11 +22,11 @@
 		<ui:include src="include/History.xhtml"></ui:include>
 		
 		<!-- Are You Admin? -->	
-		<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!Auth.admin}">
+		<h:panelGroup layout="block" styleClass="imj_pageMessageArea" rendered="#{!Auth.loggedIn}">
 			<h:outputText value="#{lbl.view_page_disallowed}" styleClass="imj_messageInfo"/>
 		</h:panelGroup>
 		
-		<ui:fragment rendered="#{Auth.admin}">
+		<ui:fragment rendered="#{Auth.loggedIn}">
 			<!-- AdminDataList - Back Button -->
 			<h:panelGroup layout="block" styleClass="imj_backPanel" rendered="#{Auth.admin and UserGroups.backContainerUrl == null}">
 				<h:outputLink value="#{Navigation.adminUrl}">
@@ -73,9 +74,11 @@
 										<h:outputLink value="#{Navigation.applicationSpaceUrl}usergroup?id=#{group.id}" styleClass="imj_editButton" rendered="#{Auth.admin}">
 											<h:outputText value="#{lbl.view_detail}"/>
 										</h:outputLink>
-										<h:form>
-											<h:commandLink styleClass="imj_cancelButton" value="#{lbl.delete}" action="#{UserGroups.remove(group)}" rendered="#{Auth.admin}" onclick="if (confirm('Do you really want to delete this user group?')) return true; return false;"/>
-										</h:form>
+																					<!-- AdminDataList - Delete User -->
+										<h:outputLink value="#" styleClass="imj_cancelButton" title="#{lbl.user_admin_delete}" onclick="openDialog('deleteUserGroup');">
+											<h:outputText value="#{lbl.delete}"/>
+										</h:outputLink>
+										<dialog:confirmationDialog submitAction="remove" bean="#{UserGroups}" confirmationText="#{msg.confirmation_delete_user_group}" submitLabel="#{lbl.delete}" dialogId="deleteUserGroup" identifierName="group" identifierValue="#{group.id}"/>
 									</div>
 								</div>
 							</div>

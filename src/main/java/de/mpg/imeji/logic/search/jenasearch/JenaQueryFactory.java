@@ -1,7 +1,7 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-package de.mpg.imeji.logic.search.query;
+package de.mpg.imeji.logic.search.jenasearch;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -13,12 +13,11 @@ import java.util.regex.Pattern;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiNamespaces;
-import de.mpg.imeji.logic.search.SPARQLSearch;
-import de.mpg.imeji.logic.search.vo.SearchIndex;
-import de.mpg.imeji.logic.search.vo.SearchIndex.IndexNames;
-import de.mpg.imeji.logic.search.vo.SearchMetadata;
-import de.mpg.imeji.logic.search.vo.SearchPair;
-import de.mpg.imeji.logic.search.vo.SortCriterion;
+import de.mpg.imeji.logic.search.model.SearchIndex;
+import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
+import de.mpg.imeji.logic.search.model.SearchMetadata;
+import de.mpg.imeji.logic.search.model.SearchPair;
+import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.imeji.logic.util.DateFormatter;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
@@ -38,7 +37,7 @@ import de.mpg.j2j.helper.J2JHelper;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class SimpleQueryFactory {
+public class JenaQueryFactory {
   private static String PATTERN_SELECT = "";
 
   /**
@@ -51,6 +50,7 @@ public class SimpleQueryFactory {
    * @param isCollection
    * @param specificQuery
    * @return
+   * @deprecated
    */
   public static String getQuery(String modelName, String rdfType, SearchPair pair,
       SortCriterion sortCriterion, User user, boolean isCollection, String specificQuery,
@@ -70,7 +70,7 @@ public class SimpleQueryFactory {
         .replace("XXX_SPACE_FILTER_XXX", getSpaceRestriction(spaceId, modelName))
         .replace(
             "XXX_SECURITY_FILTER_XXX",
-            SimpleSecurityQuery.queryFactory(user, rdfType, getFilterStatus(pair),
+            JenaSecurityQuery.queryFactory(user, rdfType, getFilterStatus(pair),
                 isUserSearchPair(pair)))
         .replace("XXX_SEARCH_ELEMENT_XXX", getSearchElement(pair, rdfType, user))
         .replace("XXX_SEARCH_TYPE_ELEMENT_XXX", getRdfType(rdfType))
@@ -137,7 +137,7 @@ public class SimpleQueryFactory {
       names =
           "FROM <" + modelName + "> FROM <" + Imeji.userModel + "> FROM <" + Imeji.collectionModel
               + ">";
-      if (pair != null && SearchIndex.IndexNames.item.name().equals(pair.getIndex().getName())
+      if (pair != null && SearchIndex.SearchFields.member == pair.getField()
           && !Imeji.imageModel.equals(modelName)) {
         names += " FROM <" + Imeji.imageModel + ">";
       }
@@ -159,31 +159,29 @@ public class SimpleQueryFactory {
       return "";
     }
 
-    IndexNames index = IndexNames.valueOf(pair.getIndex().getName());
+    SearchFields index = pair.getField();
     switch (index) {
       case all:// Simple Search
       case created:// search for date created
       case filename:// Search for filename
       case modified: // search for date modified
       case checksum: // Search for checksum
-        searchQuery = "?s <" + pair.getIndex().getNamespace() + "> ?el";
+        searchQuery = "?s <" + ImejiNamespaces.CHECKSUM + "> ?el";
         break;
       case citation:
-        break;
-      case citation_style:
         break;
       case alb: // search for an album
       case col: // search for a collection
         // If not logged in, add the the path to collection/album
         if (user == null && J2JHelper.getResourceNamespace(new Item()).equals(rdfType))
-          searchQuery = " ?s <" + pair.getIndex().getNamespace() + "> ?c .";
+          searchQuery = " ?s <" + ImejiNamespaces.COLLECTION + "> ?c .";
         // Search for collection by id (uri)
         return " ?s <" + ImejiNamespaces.COLLECTION + "> ?c. FILTER("
-            + getSimpleFilter(pair, SimpleSecurityQuery.getVariableName(rdfType), pair.isNot())
+            + getSimpleFilter(pair, JenaSecurityQuery.getVariableName(rdfType), pair.isNot())
             + ") ." + searchQuery;
       case cone:
         break;
-      case cont_description:// Search for container description
+      case description:// Search for container description
         searchQuery =
             "?s <http://imeji.org/terms/container/metadata> ?cmd . OPTIONAL_FOR_NOT {?cmd <http://purl.org/dc/elements/1.1/description> ?el";
         break;
@@ -191,25 +189,25 @@ public class SimpleQueryFactory {
         break;
       case cont_person:
         break;
-      case cont_person_family:// Search for container creator family name
+      case author_familyname:// Search for container creator family name
         searchQuery =
             "?s <http://imeji.org/terms/container/metadata> ?cmd . OPTIONAL_FOR_NOT { ?cmd <http://xmlns.com/foaf/0.1/person> ?p . ?p <http://purl.org/escidoc/metadata/terms/0.1/family-name> ?el";
         break;
-      case cont_person_given:// Search for container creator given name
+      case author_givenname:// Search for container creator given name
         searchQuery =
             "?s <http://imeji.org/terms/container/metadata> ?cmd . OPTIONAL_FOR_NOT {?cmd <http://xmlns.com/foaf/0.1/person> ?p . ?p <http://purl.org/escidoc/metadata/terms/0.1/given-name> ?el";
         break;
-      case cont_person_name:// Search for container creator complete name
+      case author_name:// Search for container creator complete name
         searchQuery =
             "?s <http://imeji.org/terms/container/metadata> ?cmd . OPTIONAL_FOR_NOT {?cmd <http://xmlns.com/foaf/0.1/person> ?p . ?p <http://purl.org/escidoc/metadata/terms/0.1/complete-name> ?el";
         break;
       case cont_person_org:
         break;
-      case cont_person_org_name:// Search for container creator orga name
+      case author_org_name:// Search for container creator orga name
         searchQuery =
             "?s <http://imeji.org/terms/container/metadata> ?cmd . OPTIONAL_FOR_NOT { ?cmd <http://xmlns.com/foaf/0.1/person> ?p . ?p <http://purl.org/escidoc/metadata/profiles/0.1/organizationalunit> ?org . ?org <http://purl.org/dc/terms/title> ?el";
         break;
-      case cont_title:// Search for container title
+      case title:// Search for container title
         searchQuery =
             "?s <http://imeji.org/terms/container/metadata> ?cmd . OPTIONAL_FOR_NOT {?cmd <http://purl.org/dc/elements/1.1/title> ?el";
         break;
@@ -230,7 +228,7 @@ public class SimpleQueryFactory {
             regex += type.getAsRegexQuery();
           }
         }
-        pair = new SearchPair(pair.getIndex(), pair.getOperator(), regex);
+        pair = new SearchPair(pair.getField(), pair.getOperator(), regex, false);
         searchQuery = "?s <http://imeji.org/terms/filename> ?el";
         break;
       case grant:
@@ -239,10 +237,10 @@ public class SimpleQueryFactory {
         break;
       case grant_type:
         break;
-      case item: // search for an item
+      case member: // search for an item
         if (J2JHelper.getResourceNamespace(new CollectionImeji()).equals(rdfType)
             || J2JHelper.getResourceNamespace(new Album()).equals(rdfType)) {
-          searchQuery = "?s <" + pair.getIndex().getNamespace() + "> ?el";
+          searchQuery = "?s <" + ImejiNamespaces.ITEM + "> ?el";
         } else {
           // Search for and item by id (uri)
           pair.setValue(normalizeURI(Item.class, pair.getValue()));
@@ -251,11 +249,7 @@ public class SimpleQueryFactory {
         break;
       case label:
         break;
-      case latitude:
-        break;
       case license:
-        break;
-      case longitude:
         break;
       case md:
         break;
@@ -271,7 +265,7 @@ public class SimpleQueryFactory {
         break;
       case person_id:
         break;
-      case person_name:
+      case person_completename:
         break;
       case person_org:
         break;
@@ -283,7 +277,7 @@ public class SimpleQueryFactory {
         break;
       case person_org_id:
         break;
-      case person_org_title:
+      case person_org_name:
         break;
       case person_role:
         break;
@@ -291,7 +285,7 @@ public class SimpleQueryFactory {
         if (J2JHelper.getResourceNamespace(new MetadataProfile()).equals(rdfType)) {
           pair.setValue(normalizeURI(MetadataProfile.class, pair.getValue()));
           return "FILTER(" + getSimpleFilter(pair, "s", pair.isNot()) + ") . ?c <"
-              + SPARQLSearch.getIndex(SearchIndex.IndexNames.prof).getNamespace() + "> ?s .";
+              + JenaSearch.getIndex(SearchIndex.SearchFields.prof).getNamespace() + "> ?s .";
         } else if (J2JHelper.getResourceNamespace(new CollectionImeji()).equals(rdfType)) {
           searchQuery = "?s <http://imeji.org/terms/mdprofile> ?el";
         } else if (J2JHelper.getResourceNamespace(new Item()).equals(rdfType)) {
@@ -313,15 +307,15 @@ public class SimpleQueryFactory {
         break;
       case time:
         break;
-      case title:
+      case location:
         break;
-      case type:
+      case metadatatype:
         // Search for metadata type (Text, Date, Person...)
         return "OPTIONAL{ ?s <http://imeji.org/terms/metadataSet> ?mds . ?mds <"
             + ImejiNamespaces.METADATA + "> ?md  . ?md a <" + pair.getValue() + "> }  .";
       case url:
         break;
-      case user:
+      case hasgrant:
         // Search for all objects of rdfType for which the user
         // (pair.getValue) has a Grant
         // If user is same as searchpair value, then the security query will
@@ -332,7 +326,7 @@ public class SimpleQueryFactory {
         else
           return "<" + pair.getValue()
               + "> <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> ?"
-              + SimpleSecurityQuery.getVariableName(rdfType) + " .";
+              + JenaSecurityQuery.getVariableName(rdfType) + " .";
       case visibility:
         break;
     }
@@ -342,6 +336,7 @@ public class SimpleQueryFactory {
      */
     if ("".equals(searchQuery)) {
       // Search for a metadata value
+      // TODO: not working anymore. Is replaced by elasticsearch
       searchQuery =
           "?s <http://imeji.org/terms/metadataSet> ?mds . OPTIONAL_FOR_NOT { ?mds <"
               + ImejiNamespaces.METADATA + "> ?md  . ?md "
@@ -352,16 +347,6 @@ public class SimpleQueryFactory {
     if (pair instanceof SearchMetadata) {
       searchQuery = searchQuery + " . ?md <http://imeji.org/terms/statement> ?el1 ";
     }
-    // if (pair.isNot()) {
-    // // If the pair is a negation
-    // // return searchQuery.replace("OPTIONAL_FOR_NOT {", "OPTIONAL {")
-    // // + " . FILTER(" + getSimpleFilter(pair, variable)
-    // // + ")} . FILTER (!bound(?el) ) .";
-    // return searchQuery.replace("OPTIONAL_FOR_NOT {", "")
-    // + " . FILTER(!" + getSimpleFilter(pair, variable) + ") .";
-    // } else {
-    //
-    // }
     // If the pair is not a negation
     return searchQuery.replace("OPTIONAL_FOR_NOT {", "") + " . FILTER("
         + getSimpleFilter(pair, variable, pair.isNot()) + ") .";
@@ -407,7 +392,7 @@ public class SimpleQueryFactory {
    * @return
    */
   private static Status getFilterStatus(SearchPair pair) {
-    if (pair != null && SearchIndex.IndexNames.status.name().equals(pair.getIndex().getName())) {
+    if (pair != null && SearchIndex.SearchFields.status == pair.getField()) {
       if (Status.PENDING.getUriString().equals(pair.getValue())
           || Status.PENDING.name().equalsIgnoreCase(pair.getValue())) {
         return Status.PENDING;
@@ -429,7 +414,7 @@ public class SimpleQueryFactory {
    * @return
    */
   private static boolean isUserSearchPair(SearchPair pair) {
-    return pair != null && SearchIndex.IndexNames.user.name().equals(pair.getIndex().getName());
+    return pair != null && SearchFields.hasgrant == pair.getField();
   }
 
   /**
@@ -440,22 +425,21 @@ public class SimpleQueryFactory {
    */
   private static String getSortElement(SortCriterion sortCriterion, boolean item) {
     if (sortCriterion != null && sortCriterion.getIndex() != null) {
-      if (SearchIndex.IndexNames.created.name().equals(sortCriterion.getIndex().getName())) {
+      if (SearchFields.created == sortCriterion.getIndex().getField()) {
         return ". ?s <" + sortCriterion.getIndex().getNamespace() + "> ?sort0";
-      } else if (SearchIndex.IndexNames.modified.name().equals(sortCriterion.getIndex().getName())) {
+      } else if (SearchFields.modified == sortCriterion.getIndex().getField()) {
         return ". ?s <" + sortCriterion.getIndex().getNamespace() + "> ?sort0";
-      } else if (SearchIndex.IndexNames.status.name().equals(sortCriterion.getIndex().getName())) {
+      } else if (SearchFields.status == sortCriterion.getIndex().getField()) {
         return ". ?s <" + sortCriterion.getIndex().getNamespace() + "> ?sort0";
-      } else if (SearchIndex.IndexNames.creator.name().equals(sortCriterion.getIndex().getName())) {
+      } else if (SearchFields.creator == sortCriterion.getIndex().getField()) {
         return ". ?s <http://imeji.org/terms/container/metadata> ?contmd . ?contmd <http://xmlns.com/foaf/0.1/person> ?person . ?person <http://purl.org/escidoc/metadata/terms/0.1/complete-name> ?sort0";
-      } else if (SearchIndex.IndexNames.cont_title.name()
-          .equals(sortCriterion.getIndex().getName())) {
+      } else if (SearchFields.title == sortCriterion.getIndex().getField()) {
         return (item ? " . ?s <http://imeji.org/terms/collection> ?c . ?c" : " . ?s")
             + " <http://imeji.org/terms/container/metadata> ?title . ?title <"
             + sortCriterion.getIndex().getNamespace() + "> ?sort0";
-      } else if (SearchIndex.IndexNames.filename.name().equals(sortCriterion.getIndex().getName())) {
+      } else if (SearchFields.filename == sortCriterion.getIndex().getField()) {
         return ". ?s <" + sortCriterion.getIndex().getNamespace() + "> ?sort0";
-      } else if (SearchIndex.IndexNames.prof.name().equals(sortCriterion.getIndex().getName())) {
+      } else if (SearchFields.prof == sortCriterion.getIndex().getField()) {
         return (item ? " . ?c" : " . ?s") + " <http://purl.org/dc/elements/1.1/title> ?sort0 ";
       }
     }
@@ -470,7 +454,7 @@ public class SimpleQueryFactory {
    * @return
    */
   private static String getSimpleFilter(SearchPair pair, String variable, boolean not) {
-    if (pair.getIndex().equals(SPARQLSearch.getIndex(SearchIndex.IndexNames.all))) {
+    if (pair.getField() == SearchFields.all) {
       return getTextSearchFilter(pair, variable);
     }
     String filter = "";
@@ -624,7 +608,6 @@ public class SimpleQueryFactory {
    * @return
    */
   private static boolean isRDFDate(SearchPair pair) {
-    return !(SearchIndex.IndexNames.created.name().equals(pair.getIndex().getName()) || SearchIndex.IndexNames.modified
-        .name().equals(pair.getIndex().getName()));
+    return !(SearchFields.created == pair.getField() || SearchFields.modified == pair.getField());
   }
 }

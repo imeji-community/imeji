@@ -9,7 +9,7 @@ import java.util.Collection;
 
 import javax.xml.bind.annotation.XmlElement;
 
-import de.mpg.imeji.logic.search.FulltextIndex;
+import de.mpg.imeji.logic.search.model.FulltextIndex;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jResource;

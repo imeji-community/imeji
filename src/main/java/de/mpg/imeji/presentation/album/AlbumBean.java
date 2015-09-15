@@ -310,17 +310,16 @@ public class AlbumBean extends ContainerBean {
 
       Album icPre = ac.retrieveLazy(album.getId(), sessionBean.getUser());
       if (icPre.getLogoUrl() != null && album.getLogoUrl() == null) {
-        ac.updateAlbumLogo(icPre, null, sessionBean.getUser());
+        ac.updateLogo(icPre, null, sessionBean.getUser());
       }
-
-      ac.updateLazy(getAlbum(), sessionBean.getUser());
+      ac.update(getAlbum(), sessionBean.getUser());
       // here separate update for the Logo only, as it will only be
       // allowed by edited collection through the web application
       // not yet for REST
       // getIngestImage is inherited from Container!
 
       if (sessionBean.getSpaceLogoIngestImage() != null) {
-        ac.updateAlbumLogo(getAlbum(), sessionBean.getSpaceLogoIngestImage().getFile(),
+        ac.updateLogo(getAlbum(), sessionBean.getSpaceLogoIngestImage().getFile(),
             sessionBean.getUser());
         setIngestImage(null);
         sessionBean.setSpaceLogoIngestImage(null);

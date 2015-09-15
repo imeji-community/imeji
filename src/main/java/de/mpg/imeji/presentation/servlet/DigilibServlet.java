@@ -44,7 +44,7 @@ import de.mpg.imeji.logic.auth.Authorization;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchFactory;
-import de.mpg.imeji.logic.search.query.SPARQLQueries;
+import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.internal.InternalStorageManager;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -201,7 +201,7 @@ public class DigilibServlet extends Scaler {
 
   private Item loadItem(String url, SessionBean session) throws ImejiException {
     Search s = SearchFactory.create();
-    List<String> r = s.searchSimpleForQuery(SPARQLQueries.selectItemIdOfFile(url)).getResults();
+    List<String> r = s.searchString(JenaCustomQueries.selectItemIdOfFile(url), null, null, 0, -1).getResults();
     if (!r.isEmpty() && r.get(0) != null) {
       ItemController c = new ItemController();
       return c.retrieve(URI.create(r.get(0)), session.getUser());
@@ -223,7 +223,7 @@ public class DigilibServlet extends Scaler {
     } else {
       Search s = SearchFactory.create();
       List<String> r =
-          s.searchSimpleForQuery(SPARQLQueries.selectCollectionIdOfFile(url)).getResults();
+          s.searchString(JenaCustomQueries.selectCollectionIdOfFile(url), null, null, 0, -1).getResults();
       if (!r.isEmpty())
         return URI.create(r.get(0));
       else

@@ -1,11 +1,27 @@
 package de.mpg.imeji.logic.controller;
 
+import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_STORAGE;
+import static junit.framework.TestCase.fail;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+import java.net.URI;
+import java.util.Calendar;
+
+import org.apache.log4j.Logger;
+import org.junit.Assert;
+import org.junit.Test;
+
+import util.JenaUtil;
 import de.mpg.imeji.exceptions.AlreadyExistsException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.exceptions.QuotaExceededException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.controller.CollectionController.MetadataProfileCreationMethod;
 import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
@@ -13,22 +29,6 @@ import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.j2j.helper.DateHelper;
-
-import org.apache.log4j.Logger;
-import org.junit.Assert;
-import org.junit.Test;
-
-import java.io.File;
-import java.net.URI;
-import java.util.Calendar;
-
-import util.JenaUtil;
-
-import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_STORAGE;
-import static junit.framework.TestCase.fail;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 public class UserControllerTest extends ControllerTest {
 
@@ -194,7 +194,7 @@ public class UserControllerTest extends ControllerTest {
 
   @Test
   public void testUserDiskSpaceQuota() throws ImejiException {
-    //create user
+    // create user
     User user = new User();
     user.setEmail("quotaUser@imeji.org");
     user.getPerson().setFamilyName(JenaUtil.TEST_USER_NAME);
@@ -204,16 +204,16 @@ public class UserControllerTest extends ControllerTest {
     User u = c.create(user, USER_TYPE.DEFAULT);
     assertThat(u.getQuota(), equalTo(ConfigurationBean.getDefaultDiskSpaceQuotaStatic()));
 
-    //change quota
+    // change quota
     long NEW_QUOTA = 25 * 1024;
     user.setQuota(NEW_QUOTA);
     user = c.update(user, Imeji.adminUser);
     assertThat(u.getQuota(), equalTo(NEW_QUOTA));
 
-    //try to exceed quota
+    // try to exceed quota
     CollectionController cc = new CollectionController();
     CollectionImeji col = ImejiFactory.newCollection("test", "Planck", "Max", "MPG");
-    URI uri = cc.create(col, profile, user, null);
+    URI uri = cc.create(col, profile, user, MetadataProfileCreationMethod.COPY, null);
     col = cc.retrieve(uri, user);
 
     item = ImejiFactory.newItem(col);

@@ -24,20 +24,17 @@
  */
 package search;
 
-import de.mpg.imeji.logic.search.query.URLQueryTransformer;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.IsNot.not;
-
 import java.io.IOException;
 import java.net.URLEncoder;
 
 import org.junit.Assert;
 import org.junit.Test;
 
+import de.mpg.imeji.logic.search.SearchQueryParser;
+import de.mpg.imeji.logic.search.model.SearchQuery;
+
 /**
- * Tests for the methods in {@link URLQueryTransformer}
+ * Tests for the methods in {@link SearchQueryParser}
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
@@ -50,7 +47,7 @@ public class URLQueryTransformerTest {
   private static String specialsChar =
       "japanese:テスト  chinese:實驗 yiddish:פּראָבע arab:اختبار bengali: পরীক্ষা other:öäü@ß$&@*~!?{}[]-#'.,áò";
   private static String advancedQuery =
-      "(col==\"http://imeji.org/collection/86\" AND (e6537a19-86b6-47ca-bba7-c8cc4d6bd6bc:text=\"TEST\") OR (750c1b37-f766-4b74-9d83-ddc858ff4365:title=\"TEST\") OR (type==\"http://imeji.org/terms/metadata#number\"))";
+      "(col==\"http://imeji.org/collection/86\" AND (e6537a19-86b6-47ca-bba7-c8cc4d6bd6bc:text=\"TEST\") OR (750c1b37-f766-4b74-9d83-ddc858ff4365:title=\"TEST\") OR (metadatatype==\"http://imeji.org/terms/metadata#number\"))";
   private static String simpleQuery = "TEST";
 
 
@@ -103,9 +100,9 @@ public class URLQueryTransformerTest {
    */
   private void test(String query, boolean simple) throws IOException {
     String encodedQuery = URLEncoder.encode(query, "UTF-8");
-    SearchQuery sq = URLQueryTransformer.parseStringQuery(query);
-    String resultEncoded = URLQueryTransformer.transform2UTF8URL(sq);
-    String resultNotCoded = URLQueryTransformer.transform2URL(sq);
+    SearchQuery sq = SearchQueryParser.parseStringQuery(query);
+    String resultEncoded = SearchQueryParser.transform2UTF8URL(sq);
+    String resultNotCoded = SearchQueryParser.transform2URL(sq);
     // Prepare the query for comparison
     // remove non relevant spaces
     query = query.trim();

@@ -22,14 +22,16 @@ import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.jobs.CleanMetadataJob;
 import de.mpg.imeji.logic.jobs.CleanMetadataProfileJob;
+import de.mpg.imeji.logic.jobs.ElasticReIndexJob;
 import de.mpg.imeji.logic.jobs.ImportFileFromEscidocToInternalStorageJob;
 import de.mpg.imeji.logic.jobs.RefreshFileSizeJob;
 import de.mpg.imeji.logic.jobs.StorageUsageAnalyseJob;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
-import de.mpg.imeji.logic.search.Search.SearchType;
+import de.mpg.imeji.logic.search.Search.SearchObjectTypes;
 import de.mpg.imeji.logic.search.SearchFactory;
-import de.mpg.imeji.logic.search.query.SPARQLQueries;
+import de.mpg.imeji.logic.search.SearchFactory.SEARCH_IMPLEMENTATIONS;
+import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
@@ -172,6 +174,13 @@ public class AdminBean {
   }
 
   /**
+   * Reindex all data
+   */
+  public void reindex() {
+    Imeji.executor.submit(new ElasticReIndexJob());
+  }
+
+  /**
    * Import the files in an external storage (for instance escidoc) into the internal storage
    * 
    * @throws Exception
@@ -201,7 +210,8 @@ public class AdminBean {
       Search search = SearchFactory.create();
 
       List<String> uris =
-          search.searchSimpleForQuery(SPARQLQueries.selectMetadataUnbounded()).getResults();
+          search.searchString(JenaCustomQueries.selectMetadataUnbounded(), null, null, 0, -1)
+              .getResults();
       cleanDatabaseReport += "Metadata Without Statement: " + uris.size() + " found  <br/> ";
     } else {
       Imeji.executor.submit(new CleanMetadataJob(null));
@@ -217,7 +227,8 @@ public class AdminBean {
     logger.info("Searching for statement without profile...");
     Search search = SearchFactory.create();
     List<String> uris =
-        search.searchSimpleForQuery(SPARQLQueries.selectStatementUnbounded()).getResults();
+        search.searchString(JenaCustomQueries.selectStatementUnbounded(), null, null, 0, -1)
+            .getResults();
     logger.info("...found " + uris.size());
     cleanDatabaseReport += "Statement without any profile " + uris.size() + " found  <br/> ";
     removeResources(uris, Imeji.profileModel, new Statement());
@@ -231,18 +242,22 @@ public class AdminBean {
   private void cleanGrants() throws Exception {
     if (clean) {
 
-      ImejiSPARQL.execUpdate(SPARQLQueries.removeGrantWithoutObject());
-      ImejiSPARQL.execUpdate(SPARQLQueries.removeGrantWithoutUser());
-      ImejiSPARQL.execUpdate(SPARQLQueries.removeGrantEmtpy());
+      ImejiSPARQL.execUpdate(JenaCustomQueries.removeGrantWithoutObject());
+      ImejiSPARQL.execUpdate(JenaCustomQueries.removeGrantWithoutUser());
+      ImejiSPARQL.execUpdate(JenaCustomQueries.removeGrantEmtpy());
     }
     logger.info("Searching for problematic grants...");
     Search search = SearchFactory.create();
     List<String> uris =
-        search.searchSimpleForQuery(SPARQLQueries.selectGrantWithoutUser()).getResults();
+        search.searchString(JenaCustomQueries.selectGrantWithoutUser(), null, null, 0, -1)
+            .getResults();
     cleanDatabaseReport += "Grants without users: " + uris.size() + " found  <br/>";
-    uris = search.searchSimpleForQuery(SPARQLQueries.selectGrantWithoutObjects()).getResults();
+    uris =
+        search.searchString(JenaCustomQueries.selectGrantWithoutObjects(), null, null, 0, -1)
+            .getResults();
     cleanDatabaseReport += "Grants on non existing objects: " + uris.size() + " found <br/>";
-    uris = search.searchSimpleForQuery(SPARQLQueries.selectGrantEmtpy()).getResults();
+    uris =
+        search.searchString(JenaCustomQueries.selectGrantEmtpy(), null, null, 0, -1).getResults();
     cleanDatabaseReport += "Empty Grants: " + uris.size() + " found  <br/>";
     logger.info("...done");
   }
@@ -304,8 +319,9 @@ public class AdminBean {
    * @return
    */
   public int getAllAlbumsSize() {
-    Search search = SearchFactory.create(SearchType.ALBUM);
-    return search.searchSimpleForQuery(SPARQLQueries.selectAlbumAll()).getNumberOfRecords();
+    Search search = SearchFactory.create(SearchObjectTypes.ALBUM, SEARCH_IMPLEMENTATIONS.JENA);
+    return search.searchString(JenaCustomQueries.selectAlbumAll(), null, null, 0, -1)
+        .getNumberOfRecords();
   }
 
   /**
@@ -314,8 +330,9 @@ public class AdminBean {
    * @return
    */
   public int getAllCollectionsSize() {
-    Search search = SearchFactory.create(SearchType.COLLECTION);
-    return search.searchSimpleForQuery(SPARQLQueries.selectCollectionAll()).getNumberOfRecords();
+    Search search = SearchFactory.create(SearchObjectTypes.COLLECTION, SEARCH_IMPLEMENTATIONS.JENA);
+    return search.searchString(JenaCustomQueries.selectCollectionAll(), null, null, 0, -1)
+        .getNumberOfRecords();
   }
 
   /**
@@ -324,8 +341,9 @@ public class AdminBean {
    * @return
    */
   public int getAllImagesSize() {
-    Search search = SearchFactory.create(SearchType.ITEM);
-    return search.searchSimpleForQuery(SPARQLQueries.selectItemAll()).getNumberOfRecords();
+    Search search = SearchFactory.create(SearchObjectTypes.ITEM, SEARCH_IMPLEMENTATIONS.JENA);
+    return search.searchString(JenaCustomQueries.selectItemAll(), null, null, 0, -1)
+        .getNumberOfRecords();
   }
 
   /**

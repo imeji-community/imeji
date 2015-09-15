@@ -45,7 +45,7 @@ import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserGroupController;
-import de.mpg.imeji.logic.search.query.SPARQLQueries;
+import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.User;
@@ -169,7 +169,7 @@ public class UserGroupBean implements Serializable {
    * @return
    */
   public boolean groupNameAlreadyExists(UserGroup g) {
-    for (String id : ImejiSPARQL.exec(SPARQLQueries.selectUserGroupAll(g.getName()), null)) {
+    for (String id : ImejiSPARQL.exec(JenaCustomQueries.selectUserGroupAll(g.getName()), null)) {
       if (!id.equals(g.getId().toString()))
         return true;
     }

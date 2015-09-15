@@ -1,4 +1,4 @@
-package de.mpg.imeji.logic.search.vo;
+package de.mpg.imeji.logic.search.model;
 
 import java.util.List;
 

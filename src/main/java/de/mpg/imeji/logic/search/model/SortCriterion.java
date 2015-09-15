@@ -1,12 +1,12 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-package de.mpg.imeji.logic.search.vo;
+package de.mpg.imeji.logic.search.model;
 
-import de.mpg.imeji.logic.search.SPARQLSearch;
+import de.mpg.imeji.logic.search.jenasearch.JenaSearch;
 
 /**
- * A sort criterion for a {@link SPARQLSearch}
+ * A sort criterion for a {@link JenaSearch}
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
@@ -18,13 +18,13 @@ public class SortCriterion {
   }
 
   private SearchIndex index;
-  // private SearchIndexes sortingCriterion;
   private SortOrder sortOrder;
 
   public SortCriterion(SearchIndex index, SortOrder so) {
     this.index = index;
     this.sortOrder = so;
   }
+
 
   public SortCriterion() {
     this.sortOrder = SortOrder.ASCENDING;

@@ -10,8 +10,8 @@ import java.util.List;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
-import de.mpg.imeji.logic.search.vo.SortCriterion;
+import de.mpg.imeji.logic.search.model.SearchQuery;
+import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.presentation.beans.SuperContainerBean;
@@ -53,7 +53,7 @@ public class AlbumsBean extends SuperContainerBean<AlbumBean> {
     myOffset = prepareList(offset);
 
     setTotalNumberOfRecords(searchResult.getNumberOfRecords());
-    albums = controller.loadAlbumsLazy(searchResult.getResults(), sb.getUser(), limit, myOffset);
+    albums = controller.retrieveBatchLazy(searchResult.getResults(), sb.getUser(), limit, myOffset);
     return ImejiFactory.albumListToBeanList(albums);
   }
 

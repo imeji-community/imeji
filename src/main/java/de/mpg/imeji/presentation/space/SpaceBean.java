@@ -29,6 +29,7 @@ import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.SpaceController;
 import de.mpg.imeji.logic.controller.exceptions.TypeNotAllowedException;
+import de.mpg.imeji.logic.search.SearchQueryParser;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.util.TempFileUtil;
 import de.mpg.imeji.logic.util.UrlHelper;
@@ -129,7 +130,9 @@ public abstract class SpaceBean implements Serializable {
 
 
       if (!StringHelper.isNullOrEmptyTrim(space.getIdString())) {
-        collections = cc.retrieveCollections(user, q, space.getId().toString());
+        collections =
+            cc.searchAndRetrieve(SearchQueryParser.parseStringQuery(q), null, 0, -1, user, space
+                .getId().toString());
         for (CollectionImeji selC : collections) {
           selectedCollections.add(selC.getId().toString());
         }
@@ -143,7 +146,7 @@ public abstract class SpaceBean implements Serializable {
           return coll1.getMetadata().getTitle().compareToIgnoreCase(coll2.getMetadata().getTitle());
         }
       });
-    } catch (ImejiException e) {
+    } catch (ImejiException | IOException e) {
       BeanHelper.info(sessionBean.getMessage("could_not_load_collections_for_space"));
     }
     if (UrlHelper.getParameterBoolean("start")) {

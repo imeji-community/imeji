@@ -263,7 +263,7 @@ public class ConfigurationBean {
   /**
    * Set the url of the default CSS
    * 
-   * @param url
+   * @param md_url
    */
   public void setUploadMaxFileSize(String size) {
     try {
@@ -532,7 +532,7 @@ public class ConfigurationBean {
   /**
    * Set the meta description
    * 
-   * @param url
+   * @param md_url
    */
   public void setMetaDescription(String s) {
     setProperty(CONFIGURATION.META_DESCRIPTION.name(), s);
@@ -550,7 +550,7 @@ public class ConfigurationBean {
   /**
    * Set the name of the instance
    * 
-   * @param url
+   * @param md_url
    */
   public void setInstanceName(String s) {
     setProperty(CONFIGURATION.INSTANCE_NAME.name(), s);
@@ -568,7 +568,7 @@ public class ConfigurationBean {
   /**
    * Set the contact email
    * 
-   * @param url
+   * @param md_url
    */
   public void setContactEmail(String s) {
     setProperty(CONFIGURATION.CONTACT_EMAIL.name(), s);

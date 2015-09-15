@@ -1,4 +1,4 @@
-package de.mpg.imeji.logic.search;
+package de.mpg.imeji.logic.search.model;
 
 /**
  * Interface for object implementing fulltext search (i.e searchable via full text)

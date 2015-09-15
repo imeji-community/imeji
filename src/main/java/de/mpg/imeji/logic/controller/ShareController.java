@@ -15,7 +15,7 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
-import de.mpg.imeji.logic.search.query.SPARQLQueries;
+import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
@@ -259,7 +259,7 @@ public class ShareController extends ImejiController {
   /**
    * Clean all {@link Grant} for an object
    * 
-   * @param user
+   * @param hasgrant
    * @param uri
    * @param currentUser
    */
@@ -287,7 +287,7 @@ public class ShareController extends ImejiController {
   /**
    * Clean all {@link Grant} for an object
    * 
-   * @param user
+   * @param hasgrant
    * @param uri
    * @param currentUser
    */
@@ -397,7 +397,7 @@ public class ShareController extends ImejiController {
       // the user can administrate it
       List<String> c =
           ImejiSPARQL
-              .exec(SPARQLQueries.selectCollectionIdOfItem(g.getGrantFor().toString()), null);
+              .exec(JenaCustomQueries.selectCollectionIdOfItem(g.getGrantFor().toString()), null);
       if (!c.isEmpty())
         return AuthUtil.staticAuth().administrate(user, c.get(0));
 
@@ -459,7 +459,7 @@ public class ShareController extends ImejiController {
   private static String getProfileUri(String collectionUri) {
     if (collectionUri.contains("/collection/")) {
       List<String> r =
-          ImejiSPARQL.exec(SPARQLQueries.selectProfileIdOfCollection(collectionUri), null);
+          ImejiSPARQL.exec(JenaCustomQueries.selectProfileIdOfCollection(collectionUri), null);
       if (!r.isEmpty()) {
         return r.get(0);
       }

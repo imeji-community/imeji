@@ -35,7 +35,7 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchFactory;
-import de.mpg.imeji.logic.search.query.SPARQLQueries;
+import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.vo.Grant;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
@@ -115,7 +115,7 @@ public class UserGroupController {
    * @return
    */
   public Collection<UserGroup> searchByGrantFor(String grantFor, User user) {
-    return searchBySPARQLQuery(SPARQLQueries.selectUserGroupWithGrantFor(grantFor), user);
+    return searchBySPARQLQuery(JenaCustomQueries.selectUserGroupWithGrantFor(grantFor), user);
   }
 
   /**
@@ -124,7 +124,7 @@ public class UserGroupController {
    * @return
    */
   public Collection<UserGroup> searchByName(String q, User user) {
-    return searchBySPARQLQuery(SPARQLQueries.selectUserGroupAll(q), user);
+    return searchBySPARQLQuery(JenaCustomQueries.selectUserGroupAll(q), user);
   }
 
   /**
@@ -133,7 +133,7 @@ public class UserGroupController {
    * @return
    */
   public Collection<UserGroup> searchByUser(User member, User user) {
-    return searchBySPARQLQuery(SPARQLQueries.selectUserGroupOfUser(member), Imeji.adminUser);
+    return searchBySPARQLQuery(JenaCustomQueries.selectUserGroupOfUser(member), Imeji.adminUser);
   }
 
   /**
@@ -146,7 +146,7 @@ public class UserGroupController {
   private Collection<UserGroup> searchBySPARQLQuery(String q, User user) {
     Collection<UserGroup> userGroups = new ArrayList<UserGroup>();
     Search search = SearchFactory.create();
-    for (String uri : search.searchSimpleForQuery(q).getResults()) {
+    for (String uri : search.searchString(q, null, null, 0, -1).getResults()) {
       try {
         userGroups.add((UserGroup) reader.read(uri, user, new UserGroup()));
       } catch (ImejiException e) {

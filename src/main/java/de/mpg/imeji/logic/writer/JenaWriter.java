@@ -13,8 +13,8 @@ import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.ImejiTriple;
 import de.mpg.imeji.logic.reader.JenaReader;
-import de.mpg.imeji.logic.search.FulltextIndex;
-import de.mpg.imeji.logic.search.query.SPARQLQueries;
+import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
+import de.mpg.imeji.logic.search.model.FulltextIndex;
 import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.j2j.transaction.CRUDTransaction;
@@ -70,7 +70,7 @@ public class JenaWriter implements Writer {
     for (Object o : objects) {
       URI uri = WriterFacade.extractID(o);
       if (uri != null)
-        ImejiSPARQL.execUpdate(SPARQLQueries.updateRemoveGrantsFor(uri.toString()));
+        ImejiSPARQL.execUpdate(JenaCustomQueries.updateRemoveGrantsFor(uri.toString()));
     }
   }
 

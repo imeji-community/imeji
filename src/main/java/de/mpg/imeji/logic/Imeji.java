@@ -10,6 +10,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -35,6 +36,7 @@ import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
 import de.mpg.imeji.logic.jobs.executors.NightlyExecutor;
+import de.mpg.imeji.logic.search.elasticsearch.ElasticService;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -85,14 +87,14 @@ public class Imeji {
   /**
    * Initialize the {@link Jena} database according to imeji.properties<br/>
    * Called when the server (Tomcat of JBoss) is started
+   * 
+   * @throws URISyntaxException
+   * @throws IOException
    */
-  public static void init() {
-    try {
-      tdbPath = PropertyReader.getProperty("imeji.tdb.path");
-    } catch (Exception e) {
-      throw new RuntimeException("Error reading property imeji.tdb.path", e);
-    }
+  public static void init() throws IOException, URISyntaxException {
+    tdbPath = PropertyReader.getProperty("imeji.tdb.path");
     init(tdbPath);
+    ElasticService.start();
     nightlyExecutor.start();
   }
 
@@ -243,7 +245,7 @@ public class Imeji {
     Imeji.executor.shutdown();
     nightlyExecutor.stop();
     logger.info("executor shutdown shutdown? " + Imeji.executor.isShutdown());
-
+    ElasticService.shutdown();
     logger.info("Closing Jena! TDB...");
     TDB.sync(Imeji.dataset);
     logger.info("sync done");

@@ -34,10 +34,10 @@ import org.slf4j.LoggerFactory;
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
-import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.Search;
-import de.mpg.imeji.logic.search.Search.SearchType;
-import de.mpg.imeji.logic.search.query.SPARQLQueries;
+import de.mpg.imeji.logic.search.Search.SearchObjectTypes;
+import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
+import de.mpg.imeji.logic.search.jenasearch.JenaSearch;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -196,19 +196,19 @@ public class ItemProcess {
   }
 
   private static MetadataProfileTO getMetadataProfileTO(ItemTO to, User u) throws ImejiException {
-    Search s = new SPARQLSearch(SearchType.ALL, null);
+    Search s = new JenaSearch(SearchObjectTypes.ALL, null);
     String query = null;
     if (to.getId() != null) {
       query =
-          SPARQLQueries.selectProfileIdOfItem(ObjectHelper.getURI(Item.class, to.getId())
+          JenaCustomQueries.selectProfileIdOfItem(ObjectHelper.getURI(Item.class, to.getId())
               .toString());
     } else if (to.getCollectionId() != null) {
       query =
-          SPARQLQueries.selectProfileIdOfCollection(ObjectHelper.getURI(CollectionImeji.class,
+          JenaCustomQueries.selectProfileIdOfCollection(ObjectHelper.getURI(CollectionImeji.class,
               to.getCollectionId()).toString());
     }
     if (query != null) {
-      List<String> r = s.searchSimpleForQuery(query).getResults();
+      List<String> r = s.searchString(query, null, null, 0, -1).getResults();
       if (!r.isEmpty()) {
         return new ProfileService().read(ObjectHelper.getId(URI.create(r.get(0))), u);
       }

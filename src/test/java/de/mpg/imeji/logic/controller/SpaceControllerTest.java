@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 
 import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.ImejiSPARQL;
-import de.mpg.imeji.logic.search.query.SPARQLQueries;
+import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Space;
 import de.mpg.imeji.presentation.util.ImejiFactory;

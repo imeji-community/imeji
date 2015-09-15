@@ -40,7 +40,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.search.vo.SearchIndex;
+import de.mpg.imeji.logic.search.model.SearchIndex;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -128,19 +128,19 @@ public class ContentNegotiationFilter implements Filter {
   private String getQuery(HttpServletRequest request) throws UnsupportedEncodingException {
     String path = request.getServletPath();
     if (path.startsWith("/item/"))
-      return "q=" + SearchIndex.IndexNames.item.name() + "==\""
+      return "q=" + SearchIndex.SearchFields.member.name() + "==\""
           + URLEncoder.encode(ObjectHelper.getURI(Item.class, getID(path)).toString(), "UTF-8")
           + "\"";
     if (path.startsWith("/collection/"))
-      return "q=" + SearchIndex.IndexNames.col.name() + "==\""
+      return "q=" + SearchIndex.SearchFields.col.name() + "==\""
           + ObjectHelper.getURI(CollectionImeji.class, getID(path)) + "\"";
     if (path.startsWith("/album/"))
-      return "q=" + SearchIndex.IndexNames.alb.name() + "==\""
+      return "q=" + SearchIndex.SearchFields.alb.name() + "==\""
           + URLEncoder.encode(ObjectHelper.getURI(Album.class, getID(path)).toString(), "UTF-8")
           + "\"";
     if (path.startsWith("/profile/"))
       return "q="
-          + SearchIndex.IndexNames.prof.name()
+          + SearchIndex.SearchFields.prof.name()
           + "==\""
           + URLEncoder.encode(ObjectHelper.getURI(MetadataProfile.class, getID(path)).toString(),
               "UTF-8") + "\"";

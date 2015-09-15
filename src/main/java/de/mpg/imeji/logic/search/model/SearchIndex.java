@@ -1,9 +1,9 @@
-package de.mpg.imeji.logic.search.vo;
+package de.mpg.imeji.logic.search.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import de.mpg.imeji.logic.search.SPARQLSearch;
+import de.mpg.imeji.logic.search.jenasearch.JenaSearch;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.predefinedMetadata.util.MetadataTypesHelper;
@@ -23,15 +23,27 @@ public class SearchIndex {
    * @author $Author$ (last modification)
    * @version $Revision$ $LastChangedDate$
    */
-  public static enum IndexNames {
-    item, user, prop, creator, editor, created, modified, status, grant, grant_type, grant_for, filename, visibility, mds, col, alb, prof, type, cont_md, cont_title, cont_description, cont_person, cont_person_family, cont_person_given, cont_person_name, cont_person_org, cont_person_org_name, md, statement, all, text, number, date, time, title, longitude, latitude, license, url, label, citation, citation_style, cone, person, person_name, person_family, person_given, person_id, person_role, person_org, person_org_title, person_org_id, person_org_description, person_org_city, person_org_country, checksum, filetype;
+  public static enum SearchFields {
+    member, hasgrant, prop, creator, editor, created, modified, status, grant, grant_type, grant_for, filename, visibility, mds, col, alb, prof, metadatatype, cont_md, title, description, cont_person, author_familyname, author_givenname, author_name, cont_person_org, author_org_name, md, statement, all, text, number, date, time, location, coordinates, license, url, label, citation, cone, person, person_completename, person_family, person_given, person_id, person_role, person_org, person_org_name, person_org_id, person_org_description, person_org_city, person_org_country, checksum, filetype, ;
   }
 
   private String name;
   private String namespace;
+  private SearchFields field;
   private SearchIndex parent;
   private List<SearchIndex> children = new ArrayList<SearchIndex>();
   private boolean listType = false;
+
+  /**
+   * Simple {@link SearchIndex} without namespace.
+   * 
+   * @param name
+   * @param namespace
+   */
+  public SearchIndex(SearchFields field) {
+    this.name = field.name();
+    this.field = field;
+  }
 
   /**
    * Construct a new {@link SearchIndex} with a name and a namespace
@@ -42,6 +54,7 @@ public class SearchIndex {
   public SearchIndex(String name, String namespace) {
     this.name = name;
     this.namespace = namespace;
+    this.field = SearchFields.valueOf(name);
   }
 
   /**
@@ -60,23 +73,6 @@ public class SearchIndex {
   }
 
   /**
-   * Construct a new {@link SearchIndex} for a list element with a namespace and parent
-   * {@link SearchIndex}
-   * 
-   * @param namespace
-   * @param parent
-   * @param listType
-   */
-  public SearchIndex(String namespace, SearchIndex parent, boolean listType) {
-    this.setNamespace(namespace);
-    this.parent = parent;
-    this.setListType(listType);
-    if (parent != null && !parent.getChildren().contains(this)) {
-      parent.getChildren().add(this);
-    }
-  }
-
-  /**
    * Return all the necessary {@link SearchIndex} to search for a {@link Metadata} defined with a
    * {@link Statement}
    * 
@@ -87,31 +83,31 @@ public class SearchIndex {
     List<SearchIndex> list = new ArrayList<SearchIndex>();
     switch (MetadataTypesHelper.getTypesForNamespace(st.getType().toString())) {
       case DATE:
-        list.add(SPARQLSearch.getIndex(SearchIndex.IndexNames.time.name()));
+        list.add(JenaSearch.getIndex(SearchIndex.SearchFields.time.name()));
         break;
       case GEOLOCATION:
-        list.add(SPARQLSearch.getIndex(SearchIndex.IndexNames.title.name()));
+        list.add(JenaSearch.getIndex(SearchIndex.SearchFields.location.name()));
         break;
       case LICENSE:
-        list.add(SPARQLSearch.getIndex(SearchIndex.IndexNames.license.name()));
+        list.add(JenaSearch.getIndex(SearchIndex.SearchFields.license.name()));
         break;
       case NUMBER:
-        list.add(SPARQLSearch.getIndex(SearchIndex.IndexNames.number.name()));
+        list.add(JenaSearch.getIndex(SearchIndex.SearchFields.number.name()));
         break;
       case CONE_PERSON:
-        list.add(SPARQLSearch.getIndex(SearchIndex.IndexNames.person_family.name()));
-        list.add(SPARQLSearch.getIndex(SearchIndex.IndexNames.person_given.name()));
-        list.add(SPARQLSearch.getIndex(SearchIndex.IndexNames.person_org_title.name()));
+        list.add(JenaSearch.getIndex(SearchIndex.SearchFields.person_family.name()));
+        list.add(JenaSearch.getIndex(SearchIndex.SearchFields.person_given.name()));
+        list.add(JenaSearch.getIndex(SearchIndex.SearchFields.person_org_name.name()));
         break;
       case PUBLICATION:
-        list.add(SPARQLSearch.getIndex(SearchIndex.IndexNames.citation.name()));
+        list.add(JenaSearch.getIndex(SearchIndex.SearchFields.citation.name()));
         break;
       case TEXT:
-        list.add(SPARQLSearch.getIndex(SearchIndex.IndexNames.text.name()));
+        list.add(JenaSearch.getIndex(SearchIndex.SearchFields.text.name()));
         break;
       case LINK:
-        list.add(SPARQLSearch.getIndex(SearchIndex.IndexNames.url.name()));
-        list.add(SPARQLSearch.getIndex(SearchIndex.IndexNames.label.name()));
+        list.add(JenaSearch.getIndex(SearchIndex.SearchFields.url.name()));
+        list.add(JenaSearch.getIndex(SearchIndex.SearchFields.label.name()));
         break;
     }
     return list;
@@ -159,5 +155,19 @@ public class SearchIndex {
 
   public String getName() {
     return name;
+  }
+
+  /**
+   * @return the field
+   */
+  public SearchFields getField() {
+    return field;
+  }
+
+  /**
+   * @param field the field to set
+   */
+  public void setField(SearchFields field) {
+    this.field = field;
   }
 }

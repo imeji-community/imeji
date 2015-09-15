@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.commons.io.FileUtils;
 import org.joda.time.chrono.AssembledChronology.Fields;
 
-import de.mpg.imeji.logic.search.FulltextIndex;
+import de.mpg.imeji.logic.search.model.FulltextIndex;
 import de.mpg.j2j.annotations.j2jId;
 import de.mpg.j2j.annotations.j2jList;
 import de.mpg.j2j.annotations.j2jLiteral;
@@ -74,6 +74,8 @@ public class Item extends Properties implements FulltextIndex, Serializable {
   private long width;
   @j2jLiteral("http://www.w3.org/2003/12/exif/ns#height")
   private long height;
+  private List<String> albums = new ArrayList<>();
+
 
   public Item() {}
 
@@ -319,6 +321,20 @@ public class Item extends Properties implements FulltextIndex, Serializable {
 
   public String getWebImageLink() {
     return thumbnailImageUrl.toString();
+  }
+
+  /**
+   * @return the albums
+   */
+  public List<String> getAlbums() {
+    return albums;
+  }
+
+  /**
+   * @param albums the albums to set
+   */
+  public void setAlbums(List<String> albums) {
+    this.albums = albums;
   }
 
 }

@@ -4,6 +4,7 @@ import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.transferAlb
 import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE.CREATE;
 import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE.UPDATE;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,8 @@ import com.google.common.collect.Lists;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.AlbumController;
+import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.search.SearchQueryParser;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Item;
@@ -44,7 +47,7 @@ public class AlbumService implements API<AlbumTO> {
   }
 
   public List<AlbumTO> readAll(User u, String q) throws ImejiException {
-    return Lists.transform(new AlbumController().retrieve(u, q, null),
+    return Lists.transform(new AlbumController().searchAndretrieveLazy(u, q, null),
         new Function<Album, AlbumTO>() {
           @Override
           public AlbumTO apply(Album vo) {
@@ -55,16 +58,18 @@ public class AlbumService implements API<AlbumTO> {
         });
   }
 
-  public List<ItemTO> readItems(String id, User u, String q) throws ImejiException {
-    AlbumController cc = new AlbumController();
-    return Lists.transform(cc.retrieveItems(id, u, q), new Function<Item, ItemTO>() {
-      @Override
-      public ItemTO apply(Item vo) {
-        ItemTO to = new ItemTO();
-        TransferObjectFactory.transferItem(vo, to);
-        return to;
-      }
-    });
+  public List<ItemTO> readItems(String id, User u, String q) throws ImejiException, IOException {
+    ItemController itemController = new ItemController();
+    return Lists.transform(
+        itemController.searchAndRetrieve(ObjectHelper.getURI(Album.class, id),
+            SearchQueryParser.parseStringQuery(q), null, u, null), new Function<Item, ItemTO>() {
+          @Override
+          public ItemTO apply(Item vo) {
+            ItemTO to = new ItemTO();
+            TransferObjectFactory.transferItem(vo, to);
+            return to;
+          }
+        });
   }
 
   @Override
@@ -141,10 +146,7 @@ public class AlbumService implements API<AlbumTO> {
     for (String itemId : itemIds) {
       itemUris.add(ObjectHelper.getURI(Item.class, itemId).toASCIIString());
     }
-    List<String> ids = new ArrayList<String>();
-    for (URI itemURI : controller.addToAlbum(vo, itemUris, u))
-      ids.add(CommonUtils.extractIDFromURI(itemURI));
-    return ids;
+    return controller.addToAlbum(vo, itemUris, u);
   }
 
   public boolean removeItems(String id, User u, List<String> itemIds, boolean removeAll)
@@ -157,11 +159,12 @@ public class AlbumService implements API<AlbumTO> {
       for (String itemId : itemIds) {
         itemUris.add(ObjectHelper.getURI(Item.class, itemId).toASCIIString());
       }
-
-      controller.removeFromAlbum(vo, itemUris, u);
     } else {
-      controller.clearAlbumItems(vo, u);
+      for (URI uri : vo.getImages()) {
+        itemUris.add(uri.toString());
+      }
     }
+    controller.removeFromAlbum(vo, itemUris, u);
     return true;
   }
 

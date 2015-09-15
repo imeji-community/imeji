@@ -6,12 +6,12 @@ package de.mpg.imeji.presentation.search;
 import java.net.URI;
 import java.util.Collection;
 
-import de.mpg.imeji.logic.search.vo.SearchElement;
-import de.mpg.imeji.logic.search.vo.SearchElement.SEARCH_ELEMENTS;
-import de.mpg.imeji.logic.search.vo.SearchGroup;
-import de.mpg.imeji.logic.search.vo.SearchIndex;
-import de.mpg.imeji.logic.search.vo.SearchMetadata;
-import de.mpg.imeji.logic.search.vo.SearchPair;
+import de.mpg.imeji.logic.search.model.SearchElement;
+import de.mpg.imeji.logic.search.model.SearchElement.SEARCH_ELEMENTS;
+import de.mpg.imeji.logic.search.model.SearchGroup;
+import de.mpg.imeji.logic.search.model.SearchIndex;
+import de.mpg.imeji.logic.search.model.SearchMetadata;
+import de.mpg.imeji.logic.search.model.SearchPair;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 
@@ -20,7 +20,7 @@ public class SearchFormularHelper {
     String id = null;
     for (SearchElement se : searchGroup.getElements()) {
       if (se.getType().equals(SEARCH_ELEMENTS.PAIR)
-          && SearchIndex.IndexNames.col.name().equals(((SearchPair) se).getIndex().getName())) {
+          && SearchIndex.SearchFields.col == ((SearchPair) se).getField()) {
         return ((SearchPair) se).getValue();
       } else if (se.getType().equals(SEARCH_ELEMENTS.GROUP)) {
         id = getCollectionId((SearchGroup) se);

@@ -19,7 +19,7 @@ import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.ShareController;
 import de.mpg.imeji.logic.controller.ShareController.ShareRoles;
 import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.search.query.SPARQLQueries;
+import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.User;
@@ -150,7 +150,7 @@ public class UserBean {
   }
 
   public boolean isUniqueAdmin() {
-    return ImejiSPARQL.exec(SPARQLQueries.selectUserSysAdmin(), Imeji.userModel).size() == 1;
+    return ImejiSPARQL.exec(JenaCustomQueries.selectUserSysAdmin(), Imeji.userModel).size() == 1;
   }
 
   /**

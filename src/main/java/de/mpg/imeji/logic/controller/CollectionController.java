@@ -4,7 +4,6 @@
 package de.mpg.imeji.logic.controller;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
-import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,14 +28,13 @@ import de.mpg.imeji.logic.ImejiTriple;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
-import de.mpg.imeji.logic.search.Search.SearchType;
+import de.mpg.imeji.logic.search.Search.SearchObjectTypes;
 import de.mpg.imeji.logic.search.SearchFactory;
+import de.mpg.imeji.logic.search.SearchFactory.SEARCH_IMPLEMENTATIONS;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.query.SPARQLQueries;
-import de.mpg.imeji.logic.search.query.URLQueryTransformer;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
-import de.mpg.imeji.logic.search.vo.SortCriterion;
-import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
+import de.mpg.imeji.logic.search.model.SearchQuery;
+import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.imeji.logic.validation.Validator.Method;
 import de.mpg.imeji.logic.validation.impl.CollectionValidator;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -58,9 +56,11 @@ import de.mpg.j2j.helper.J2JHelper;
  * @version $Revision$ $LastChangedDate$
  */
 public class CollectionController extends ImejiController {
-  private static final ReaderFacade reader = new ReaderFacade(Imeji.collectionModel);
-  private static final WriterFacade writer = new WriterFacade(Imeji.collectionModel);
+  private static ReaderFacade reader = new ReaderFacade(Imeji.collectionModel);
+  private static WriterFacade writer = new WriterFacade(Imeji.collectionModel);
   private static Logger logger = Logger.getLogger(CollectionController.class);
+  private Search search = SearchFactory.create(SearchObjectTypes.COLLECTION,
+      SEARCH_IMPLEMENTATIONS.ELASTIC);
 
   public static enum MetadataProfileCreationMethod {
     COPY, REFERENCE, NEW;
@@ -71,20 +71,6 @@ public class CollectionController extends ImejiController {
    */
   public CollectionController() {
     super();
-  }
-
-  /**
-   * Creates a new collection. - Add a unique id - Write user properties
-   * 
-   * @param c
-   * @param p : if the profile is null, then create an empty one
-   * @param user
-   * @return
-   * @throws ImejiException
-   */
-  public URI create(CollectionImeji c, MetadataProfile p, User user, String spaceId)
-      throws ImejiException {
-    return create(c, p, user, MetadataProfileCreationMethod.COPY, spaceId);
   }
 
   /**
@@ -141,69 +127,10 @@ public class CollectionController extends ImejiController {
    * @throws ImejiException
    */
   public CollectionImeji retrieve(URI uri, User user) throws ImejiException {
-    return (CollectionImeji) reader.read(uri.toString(), user, new CollectionImeji());
-  }
-
-  /**
-   * Retrieve a complete {@link CollectionImeji} (inclusive its {@link Item}: slow for huge
-   * {@link CollectionImeji})
-   *
-   * @param id
-   * @param user
-   * @return
-   * @throws ImejiException
-   */
-  public CollectionImeji retrieve(String id, User user) throws ImejiException {
-    return retrieve(ObjectHelper.getURI(CollectionImeji.class, id), user);
-  }
-
-  /**
-   * Retrieve all items of the collection
-   *
-   * @param id
-   * @param user
-   * @param q
-   * @return
-   * @throws ImejiException
-   */
-  // TODO
-  public List<Item> retrieveItems(String id, User user, String q) throws ImejiException {
-    ItemController ic = new ItemController();
-    List<Item> itemList;
-    try {
-      List<String> results =
-          ic.search(ObjectHelper.getURI(CollectionImeji.class, id),
-              !isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q) : null, null, null,
-              user, null).getResults();
-      itemList = (List<Item>) ic.retrieve(results, getMin(results.size(), 500), 0, user);
-    } catch (Exception e) {
-      throw new UnprocessableError("Cannot retrieve items:", e);
-
-    }
-    return itemList;
-  }
-
-  /**
-   * Retrieve all collections user can see
-   *
-   * @param user
-   * @param q
-   * @return
-   * @throws ImejiException
-   */
-  public List<CollectionImeji> retrieveCollections(User user, String q, String spaceId)
-      throws ImejiException {
-
-    List<CollectionImeji> cList = new ArrayList<CollectionImeji>();
-    try {
-      List<String> results =
-          search(!isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q) : null, null, 500,
-              0, user, spaceId).getResults();
-      cList = (List<CollectionImeji>) retrieveLazy(results, getMin(results.size(), 500), 0, user);
-    } catch (Exception e) {
-      throw new UnprocessableError("Cannot retrieve collections:", e);
-    }
-    return cList;
+    CollectionImeji c = (CollectionImeji) reader.read(uri.toString(), user, new CollectionImeji());
+    return c;
+    // ItemController itemController = new ItemController();
+    // return (CollectionImeji) itemController.searchAndSetContainerItems(c, user, -1, 0);
   }
 
   /**
@@ -228,11 +155,9 @@ public class CollectionController extends ImejiController {
    * @return
    * @throws ImejiException
    */
-  public Collection<CollectionImeji> retrieveLazy(List<String> uris, int limit, int offset,
+  public Collection<CollectionImeji> retrieveBatchLazy(List<String> uris, int limit, int offset,
       User user) throws ImejiException {
-
     List<CollectionImeji> cols = new ArrayList<CollectionImeji>();
-
     List<String> retrieveUris;
     if (limit < 0) {
       retrieveUris = uris;
@@ -241,19 +166,24 @@ public class CollectionController extends ImejiController {
           uris.size() > 0 && limit > 0 ? uris.subList(offset, getMin(offset + limit, uris.size()))
               : new ArrayList<String>();
     }
-
     for (String s : retrieveUris) {
-
       cols.add((CollectionImeji) J2JHelper.setId(new CollectionImeji(), URI.create(s)));
     }
+    reader.readLazy(J2JHelper.cast2ObjectList(cols), user);
+    return cols;
 
-    try {
-      reader.readLazy(J2JHelper.cast2ObjectList(cols), user);
-      return cols;
-    } catch (ImejiException e) {
-      logger.error("Error loading collections: " + e.getMessage(), e);
-      return null;
-    }
+  }
+
+  /**
+   * Retrieve all {@link CollectionImeji} (all status, all users) in imeji
+   * 
+   * @return
+   * @throws ImejiException
+   */
+  public Collection<CollectionImeji> retrieveAll(User user) throws ImejiException {
+    List<String> uris =
+        ImejiSPARQL.exec(JenaCustomQueries.selectCollectionAll(), Imeji.collectionModel);
+    return retrieveBatchLazy(uris, -1, 0, user);
   }
 
   /**
@@ -272,7 +202,7 @@ public class CollectionController extends ImejiController {
 
   /**
    * Update a {@link CollectionImeji} (inclusive its {@link Item}: slow for huge
-   * {@link CollectionImeji})
+   * {@link CollectionImeji}) TODO remove if possible
    * 
    * @param ic
    * @param user
@@ -282,19 +212,18 @@ public class CollectionController extends ImejiController {
       MetadataProfileCreationMethod method) throws ImejiException {
     updateCollectionProfile(ic, mp, user, method);
     writeUpdateProperties(ic, user);
-    writer.update(WriterFacade.toList(ic), null, user, true);
-    return retrieve(ic.getId(), user);
+    return update(ic, user);
   }
 
   /**
    * Update a {@link CollectionImeji} (with its Logo)
    * 
    * @param ic
-   * @param user
+   * @param hasgrant
    * @throws ImejiException
    */
-  public void updateCollectionLogo(CollectionImeji ic, File f, User u) throws ImejiException,
-      IOException, URISyntaxException {
+  public void updateLogo(CollectionImeji ic, File f, User u) throws ImejiException, IOException,
+      URISyntaxException {
 
     ic = (CollectionImeji) updateFile(ic, f, u);
     if (f != null && f.exists()) {
@@ -305,31 +234,6 @@ public class CollectionController extends ImejiController {
       patch(triples, u, true);
 
     }
-  }
-
-  /**
-   * Update a {@link CollectionImeji} (with its Logo)
-   * 
-   * @param ic
-   * @param user
-   * @throws ImejiException
-   */
-  public void updateCollectionSpace(CollectionImeji ic, User u, URI spaceId) throws ImejiException,
-      IOException, URISyntaxException {
-    // Update the collection as a patch only with collection Logo Triple
-    // List<ImejiTriple> triples = getContainerSpaceTriples(ic.getId().toString(), ic, spaceId);
-    // System.out.println("Listing found triples ");
-    // for (ImejiTriple trip:triples){
-    //
-    // System.out.println(trip.getUri()+" - "+trip.getValue()+ " "+trip.getProperty());
-    // }
-    // System.out.println("before patch found triples ");
-    // patch(triples, u, true);
-    // System.out.println("After patch found triples ");
-
-    ic.setSpace(spaceId);
-    update(ic, u);
-
   }
 
 
@@ -346,6 +250,7 @@ public class CollectionController extends ImejiController {
     return retrieveLazy(ic.getId(), user);
   }
 
+  // TODO Move this method to profilecontroller
   public CollectionImeji updateCollectionProfile(CollectionImeji ic, MetadataProfile mp, User user,
       MetadataProfileCreationMethod method) throws ImejiException {
     if (mp == null)
@@ -385,7 +290,7 @@ public class CollectionController extends ImejiController {
   }
 
   /**
-   * Update the {@link CollectionImeji} but not iths {@link Item}
+   * Update the {@link CollectionImeji} but not iths {@link Item} TODO : remove if possible
    * 
    * @param ic
    * @param user
@@ -395,21 +300,9 @@ public class CollectionController extends ImejiController {
       MetadataProfileCreationMethod method) throws ImejiException {
     updateCollectionProfile(ic, mp, user, method);
     writeUpdateProperties(ic, user);
-    writer.updateLazy(WriterFacade.toList(ic), null, user);
-    return retrieveLazy(ic.getId(), user);
+    return updateLazy(ic, user);
   }
 
-  /**
-   * Patch an collection. !!! Use with Care !!!
-   * 
-   * @param triples
-   * @param user
-   * @throws ImejiException
-   */
-  public void patch(List<ImejiTriple> triples, User user, boolean checkSecurity)
-      throws ImejiException {
-    writer.patch(triples, user, checkSecurity);
-  }
 
   /**
    * Delete a {@link CollectionImeji} and all its {@link Item}
@@ -481,6 +374,7 @@ public class CollectionController extends ImejiController {
     List<String> itemUris =
         itemController.search(collection.getId(), null, null, null, user, null).getResults();
 
+
     if (hasImageLocked(itemUris, user)) {
       throw new UnprocessableError(
           ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
@@ -526,7 +420,6 @@ public class CollectionController extends ImejiController {
           ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
               .getMessage("collection_locked"));
     } else if (!Status.RELEASED.equals(coll.getStatus())) {
-
       throw new UnprocessableError("Withdraw collection: Collection must be released");
     } else {
       List<Item> items = (List<Item>) itemController.retrieve(itemUris, -1, 0, user);
@@ -554,8 +447,27 @@ public class CollectionController extends ImejiController {
    */
   public SearchResult search(SearchQuery searchQuery, SortCriterion sortCri, int limit, int offset,
       User user, String spaceId) {
-    Search search = SearchFactory.create(SearchType.COLLECTION);
-    return search.search(searchQuery, sortCri, user, spaceId);
+    // Search search = SearchFactory.create(SearchObjectTypes.COLLECTION,
+    // SEARCH_IMPLEMENTATIONS.JENA);
+    return search.search(searchQuery, sortCri, user, null, spaceId, 0, -1);
+  }
+
+  /**
+   * Search and Retrieve Collections
+   * 
+   * @param searchQuery
+   * @param sortCri
+   * @param limit
+   * @param offset
+   * @param user
+   * @param spaceId
+   * @return
+   * @throws ImejiException
+   */
+  public List<CollectionImeji> searchAndRetrieve(SearchQuery searchQuery, SortCriterion sortCri,
+      int limit, int offset, User user, String spaceId) throws ImejiException {
+    SearchResult result = search.search(searchQuery, sortCri, user, null, spaceId, 0, -1);
+    return (List<CollectionImeji>) retrieveBatchLazy(result.getResults(), limit, offset, user);
   }
 
   public MetadataProfileCreationMethod getProfileCreationMethod(String method) {
@@ -568,7 +480,7 @@ public class CollectionController extends ImejiController {
     }
   }
 
-  public void updateCollectionItemsProfile(CollectionImeji ic, URI newProfileUri, User user)
+  private void updateCollectionItemsProfile(CollectionImeji ic, URI newProfileUri, User user)
       throws ImejiException {
     ItemController itemController = new ItemController();
     List<String> itemUris =
@@ -578,9 +490,10 @@ public class CollectionController extends ImejiController {
     itemController.updateItemsProfile(items, user, newProfileUri.toString());
   }
 
+  // TODO Remove and replace with normal search method
   public List<CollectionImeji> retrieveCollectionsNotInSpace(final User u) {
     return Lists.transform(
-        ImejiSPARQL.exec(SPARQLQueries.selectCollectionsNotInSpace(), Imeji.collectionModel),
+        ImejiSPARQL.exec(JenaCustomQueries.selectCollectionsNotInSpace(), Imeji.collectionModel),
         new Function<String, CollectionImeji>() {
           @Override
           public CollectionImeji apply(String id) {
@@ -594,8 +507,22 @@ public class CollectionController extends ImejiController {
         });
   }
 
+  // TODO Remove and replace with normal search method
   public List<String> retrieveAllCollectionIdsInSpace(URI spaceId) {
-    return ImejiSPARQL.exec(SPARQLQueries.selectCollectionImejiOfSpace(spaceId.toString()),
+    return ImejiSPARQL.exec(JenaCustomQueries.selectCollectionImejiOfSpace(spaceId.toString()),
         Imeji.collectionModel);
   }
+
+  /**
+   * Patch a collection. !!! Use with Care !!! TODO make private
+   * 
+   * @param triples
+   * @param user
+   * @throws ImejiException
+   */
+  public void patch(List<ImejiTriple> triples, User user, boolean checkSecurity)
+      throws ImejiException {
+    writer.patch(triples, user, checkSecurity);
+  }
+
 }

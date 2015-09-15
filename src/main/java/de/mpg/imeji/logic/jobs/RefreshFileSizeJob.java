@@ -7,10 +7,11 @@ import java.util.concurrent.Callable;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.search.query.SPARQLQueries;
+import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.storage.internal.InternalStorageManager;
 import de.mpg.imeji.logic.storage.util.ImageUtils;
 import de.mpg.imeji.logic.vo.Item;
@@ -20,16 +21,16 @@ import de.mpg.imeji.logic.vo.Item;
  * items in Jena back with the file size;
  * 
  * @author saquet
- *
+ * 
  */
 public class RefreshFileSizeJob implements Callable<Integer> {
   private static Logger logger = Logger.getLogger(RefreshFileSizeJob.class);
 
   @Override
-  public Integer call() {
+  public Integer call() throws ImejiException {
     logger.info("Starting refreshing the file size of all Items");
     logger.info("Deleting all sizes...");
-    ImejiSPARQL.execUpdate(SPARQLQueries.deleteAllFileSize());
+    ImejiSPARQL.execUpdate(JenaCustomQueries.deleteAllFileSize());
     logger.info("...done!");
     logger.info("Retrieving all items...");
     ItemController itemController = new ItemController();
@@ -47,10 +48,11 @@ public class RefreshFileSizeJob implements Callable<Integer> {
         f = new File(path);
         Dimension d = ImageUtils.getImageDimension(f);
         if (d != null && d.width > 0 && d.height > 0) {
-          ImejiSPARQL.execUpdate(SPARQLQueries.insertFileSizeAndDimension(item.getId().toString(),
-              Long.toString(f.length()), Long.toString(d.width), Long.toString(d.height)));
+          ImejiSPARQL.execUpdate(JenaCustomQueries.insertFileSizeAndDimension(item.getId()
+              .toString(), Long.toString(f.length()), Long.toString(d.width), Long
+              .toString(d.height)));
         } else {
-          ImejiSPARQL.execUpdate(SPARQLQueries.insertFileSize(item.getId().toString(),
+          ImejiSPARQL.execUpdate(JenaCustomQueries.insertFileSize(item.getId().toString(),
               Long.toString(f.length())));
         }
 

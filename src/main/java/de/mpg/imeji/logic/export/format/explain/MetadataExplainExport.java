@@ -33,9 +33,9 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.export.format.ExplainExport;
+import de.mpg.imeji.logic.search.SearchQueryParser;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.query.URLQueryTransformer;
-import de.mpg.imeji.logic.search.vo.SearchIndex;
+import de.mpg.imeji.logic.search.model.SearchIndex;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.util.ObjectCachedLoader;
@@ -71,7 +71,7 @@ public class MetadataExplainExport extends ExplainExport {
               .getStatements()) {
             for (SearchIndex index : SearchIndex.getAllIndexForStatement(st)) {
               writer.append(getIndexTag(
-                  URLQueryTransformer.transformStatementToIndex(st.getId(), index),
+                  SearchQueryParser.transformStatementToIndex(st.getId(), index.getField()),
                   index.getNamespace()));
             }
           }

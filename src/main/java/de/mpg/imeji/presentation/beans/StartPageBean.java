@@ -14,15 +14,15 @@ import javax.faces.bean.ViewScoped;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.SpaceController;
-import de.mpg.imeji.logic.search.SPARQLSearch;
+import de.mpg.imeji.logic.search.SearchQueryParser;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.query.URLQueryTransformer;
-import de.mpg.imeji.logic.search.vo.SearchIndex;
-import de.mpg.imeji.logic.search.vo.SearchOperators;
-import de.mpg.imeji.logic.search.vo.SearchPair;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
-import de.mpg.imeji.logic.search.vo.SortCriterion;
-import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
+import de.mpg.imeji.logic.search.jenasearch.JenaSearch;
+import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
+import de.mpg.imeji.logic.search.model.SearchOperators;
+import de.mpg.imeji.logic.search.model.SearchPair;
+import de.mpg.imeji.logic.search.model.SearchQuery;
+import de.mpg.imeji.logic.search.model.SortCriterion;
+import de.mpg.imeji.logic.search.model.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.util.DateFormatter;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Space;
@@ -54,8 +54,9 @@ public class StartPageBean implements Serializable {
    * 
    * @throws IOException
    * @throws URISyntaxException
+   * @throws ImejiException
    */
-  public StartPageBean() throws IOException, URISyntaxException {
+  public StartPageBean() throws IOException, URISyntaxException, ImejiException {
     SearchQuery query = readSearchQueryInProperty();
     SortCriterion order = readSortCriterionInProperty();
     SearchResult result = searchItems(query, order);
@@ -75,9 +76,9 @@ public class StartPageBean implements Serializable {
         ((ConfigurationBean) BeanHelper.getApplicationBean(ConfigurationBean.class))
             .getStartPageCarouselQuery();
     if (prop != null) {
-      return URLQueryTransformer.parseStringQuery(prop);
+      return SearchQueryParser.parseStringQuery(prop);
     }
-    return URLQueryTransformer.parseStringQuery("");
+    return SearchQueryParser.parseStringQuery("");
   }
 
   /**
@@ -93,7 +94,7 @@ public class StartPageBean implements Serializable {
           ((ConfigurationBean) BeanHelper.getApplicationBean(ConfigurationBean.class))
               .getStartPageCarouselQueryOrder().split("-");
       if ("".equals(prop[0]) && "".equals(prop[1]))
-        return new SortCriterion(SPARQLSearch.getIndex(prop[0]), SortOrder.valueOf(prop[1]
+        return new SortCriterion(JenaSearch.getIndex(prop[0]), SortOrder.valueOf(prop[1]
             .toUpperCase()));
     } catch (Exception e) {
       // no sort order defined
@@ -112,8 +113,8 @@ public class StartPageBean implements Serializable {
     ItemController ic = new ItemController();
     if (sq.isEmpty() && searchforItemCreatedForLessThan > 0) {
       // Search for item which have been for less than n hours
-      sq.addPair(new SearchPair(SPARQLSearch.getIndex(SearchIndex.IndexNames.created),
-          SearchOperators.GREATER, getTimeforNDaybeforeNow(searchforItemCreatedForLessThan)));
+      sq.addPair(new SearchPair(SearchFields.created, SearchOperators.GREATER,
+          getTimeforNDaybeforeNow(searchforItemCreatedForLessThan), false));
       return new SearchResult(ic.search(null, sq, sc, null, session.getUser(),
           session.getSelectedSpaceString()).getResults(), null);
     }
@@ -138,8 +139,9 @@ public class StartPageBean implements Serializable {
    * 
    * @param sr
    * @param random
+   * @throws ImejiException
    */
-  private void loadItemInCaroussel(SearchResult sr, boolean random) {
+  private void loadItemInCaroussel(SearchResult sr, boolean random) throws ImejiException {
     if (sr == null) {
       return;
     }

@@ -14,14 +14,15 @@ import javax.faces.application.FacesMessage;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.search.SPARQLSearch;
+import de.mpg.imeji.logic.search.SearchQueryParser;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.query.URLQueryTransformer;
-import de.mpg.imeji.logic.search.vo.SearchIndex;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
-import de.mpg.imeji.logic.search.vo.SortCriterion;
-import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
+import de.mpg.imeji.logic.search.jenasearch.JenaSearch;
+import de.mpg.imeji.logic.search.model.SearchIndex;
+import de.mpg.imeji.logic.search.model.SearchQuery;
+import de.mpg.imeji.logic.search.model.SortCriterion;
+import de.mpg.imeji.logic.search.model.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Item;
@@ -96,7 +97,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
   public String getInitPage() throws Exception {
     browseContext = getNavigationString();
     browseInit();
-    isSimpleSearch = URLQueryTransformer.isSimpleSearch(searchQuery);
+    isSimpleSearch = SearchQueryParser.isSimpleSearch(searchQuery);
     return "";
   }
 
@@ -108,10 +109,10 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
       String q = UrlHelper.getParameterValue("q");
       if (q != null) {
         setQuery(URLEncoder.encode(q, "UTF-8"));
-        setSearchQuery(URLQueryTransformer.parseStringQuery(query));
+        setSearchQuery(SearchQueryParser.parseStringQuery(query));
       }
     } catch (Exception e) {
-      BeanHelper.error("Error parsing query");
+      BeanHelper.error("Error parsing query: " + e.getMessage());
       logger.error("Error parsing query", e);
     }
     SortCriterion sortCriterion = initSortCriterion();
@@ -133,13 +134,13 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
   public void initMenus() {
     sortMenu = new ArrayList<SelectItem>();
     sortMenu.add(new SelectItem(null, "--"));
-    sortMenu.add(new SelectItem(SearchIndex.IndexNames.created, session
+    sortMenu.add(new SelectItem(SearchIndex.SearchFields.created, session
         .getLabel("sort_img_date_created")));
-    sortMenu
-        .add(new SelectItem(SearchIndex.IndexNames.modified, session.getLabel("sort_date_mod")));
-    sortMenu.add(new SelectItem(SearchIndex.IndexNames.cont_title, session
+    sortMenu.add(new SelectItem(SearchIndex.SearchFields.modified, session
+        .getLabel("sort_date_mod")));
+    sortMenu.add(new SelectItem(SearchIndex.SearchFields.title, session
         .getLabel("sort_img_collection")));
-    sortMenu.add(new SelectItem(SearchIndex.IndexNames.filename, session
+    sortMenu.add(new SelectItem(SearchIndex.SearchFields.filename, session
         .getLabel("sort_img_filename")));
   }
 
@@ -147,18 +148,24 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
   public List<ThumbnailBean> retrieveList(int offset, int limit) {
     if (searchResult == null)
       browseInit();
-    // load the item
-    Collection<Item> items = loadImages(searchResult.getResults(), offset, limit);
-    // Init the labels for the item
-    if (!items.isEmpty()) {
-      ((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class)).init((List<Item>) items);
+    try {
+      // load the item
+      Collection<Item> items;
+      items = loadImages(searchResult.getResults(), offset, limit);
+      // Init the labels for the item
+      if (!items.isEmpty()) {
+        ((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class)).init((List<Item>) items);
+      }
+      // Return the item as thumbnailBean
+      return ImejiFactory.imageListToThumbList(items);
+    } catch (ImejiException e) {
+      BeanHelper.error(e.getMessage());
     }
-    // Return the item as thumbnailBean
-    return ImejiFactory.imageListToThumbList(items);
+    return new ArrayList<>();
   }
 
   /**
-   * Perform the {@link SPARQLSearch}
+   * Perform the {@link JenaSearch}
    * 
    * @param searchQuery
    * @param sortCriterion
@@ -175,8 +182,10 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
    * 
    * @param uris
    * @return
+   * @throws ImejiException
    */
-  public Collection<Item> loadImages(List<String> uris, int offset, int limit) {
+  public Collection<Item> loadImages(List<String> uris, int offset, int limit)
+      throws ImejiException {
     ItemController controller = new ItemController();
     return controller.retrieve(uris, limit, offset, session.getUser());
   }
@@ -213,7 +222,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
   public SortCriterion initSortCriterion() {
     SortCriterion sortCriterion = new SortCriterion();
     if (getSelectedSortCriterion() != null && !getSelectedSortCriterion().trim().equals("")) {
-      sortCriterion.setIndex(SPARQLSearch.getIndex(getSelectedSortCriterion()));
+      sortCriterion.setIndex(JenaSearch.getIndex(getSelectedSortCriterion()));
       sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
     } else {
       sortCriterion.setIndex(null);
@@ -228,7 +237,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
    */
   public String getSimpleQuery() {
     if (searchFilter != null && searchFilter.getSearchQuery() != null) {
-      return URLQueryTransformer.searchQuery2PrettyQuery(searchFilter.getSearchQuery());
+      return SearchQueryParser.searchQuery2PrettyQuery(searchFilter.getSearchQuery());
     }
     return "";
   }
@@ -254,7 +263,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
    */
   public void initFacets() {
     try {
-      this.setFacets(new FacetsBean(URLQueryTransformer.parseStringQuery(query)));
+      this.setFacets(new FacetsBean(SearchQueryParser.parseStringQuery(query)));
       ExecutorService executor = Executors.newSingleThreadScheduledExecutor();
       executor.submit(facets);
       executor.shutdown();

@@ -232,8 +232,10 @@ public class ImejiFactory {
   public static List<CollectionListItem> collectionListToListItem(
       Collection<CollectionImeji> collList, User user) {
     List<CollectionListItem> l = new ArrayList<CollectionListItem>();
-    for (CollectionImeji c : collList) {
-      l.add(new CollectionListItem(c, user));
+    if (collList != null) {
+      for (CollectionImeji c : collList) {
+        l.add(new CollectionListItem(c, user));
+      }
     }
     return l;
   }

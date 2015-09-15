@@ -32,9 +32,14 @@ import java.util.List;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotAllowedError;
 import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiTriple;
 import de.mpg.imeji.logic.auth.Authorization;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
+import de.mpg.imeji.logic.search.Search.SearchObjectTypes;
+import de.mpg.imeji.logic.search.SearchFactory;
+import de.mpg.imeji.logic.search.SearchFactory.SEARCH_IMPLEMENTATIONS;
+import de.mpg.imeji.logic.search.SearchIndexer;
 import de.mpg.imeji.logic.validation.Validator;
 import de.mpg.imeji.logic.validation.ValidatorFactory;
 import de.mpg.imeji.logic.vo.Container;
@@ -55,12 +60,29 @@ import de.mpg.imeji.logic.vo.UserGroup;
  */
 public class WriterFacade {
   private Writer writer;
+  private SearchIndexer indexer;
 
   /**
    * Constructor for one model
    */
   public WriterFacade(String modelURI) {
     this.writer = WriterFactory.create(modelURI);
+    if (modelURI.equals(Imeji.imageModel)) {
+      indexer =
+          SearchFactory.create(SearchObjectTypes.ITEM, SEARCH_IMPLEMENTATIONS.ELASTIC).getIndexer();
+    } else if (modelURI.equals(Imeji.collectionModel)) {
+      indexer =
+          SearchFactory.create(SearchObjectTypes.COLLECTION, SEARCH_IMPLEMENTATIONS.ELASTIC)
+              .getIndexer();
+
+    } else if (modelURI.equals(Imeji.albumModel)) {
+      indexer =
+          SearchFactory.create(SearchObjectTypes.ALBUM, SEARCH_IMPLEMENTATIONS.ELASTIC)
+              .getIndexer();
+
+    } else {
+      indexer = SearchFactory.create(SEARCH_IMPLEMENTATIONS.JENA).getIndexer();
+    }
   }
 
   /*
@@ -70,11 +92,13 @@ public class WriterFacade {
    */
   public void create(List<Object> objects, MetadataProfile profile, User user)
       throws ImejiException {
-    if (objects.isEmpty())
+    if (objects.isEmpty()) {
       return;
+    }
     checkSecurity(objects, user, GrantType.CREATE);
     validate(objects, profile, Validator.Method.CREATE);
     writer.create(objects, user);
+    indexer.indexBatch(objects);
   }
 
   /*
@@ -88,6 +112,7 @@ public class WriterFacade {
     checkSecurity(objects, user, GrantType.DELETE);
     validate(objects, null, Validator.Method.DELETE);
     writer.delete(objects, user);
+    indexer.deleteBatch(objects);
   }
 
   /*
@@ -98,12 +123,15 @@ public class WriterFacade {
    */
   public void update(List<Object> objects, MetadataProfile profile, User user,
       boolean doCheckSecurity) throws ImejiException {
-    if (objects.isEmpty())
+    if (objects.isEmpty()) {
       return;
-    if (doCheckSecurity)
+    }
+    if (doCheckSecurity) {
       checkSecurity(objects, user, GrantType.UPDATE);
+    }
     validate(objects, profile, Validator.Method.UPDATE);
     writer.update(objects, user);
+    indexer.indexBatch(objects);
   }
 
   /*
@@ -118,6 +146,7 @@ public class WriterFacade {
     checkSecurity(objects, user, GrantType.UPDATE);
     validate(objects, profile, Validator.Method.UPDATE);
     writer.updateLazy(objects, user);
+    indexer.indexBatch(objects);
   }
 
   /*
@@ -127,13 +156,16 @@ public class WriterFacade {
    */
   public void patch(List<ImejiTriple> triples, User user, boolean doCheckSecurity)
       throws ImejiException {
-    if (triples.isEmpty())
+    if (triples.isEmpty()) {
       return;
+    }
     List<Object> l = new ArrayList<Object>();
-    for (ImejiTriple t : triples)
+    for (ImejiTriple t : triples) {
       l.add(t.getObject());
-    if (doCheckSecurity)
+    }
+    if (doCheckSecurity) {
       checkSecurity(l, user, GrantType.UPDATE);
+    }
     writer.patch(triples, user, doCheckSecurity);
 
   }

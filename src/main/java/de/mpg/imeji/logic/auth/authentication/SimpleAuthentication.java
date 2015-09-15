@@ -59,8 +59,9 @@ public class SimpleAuthentication implements Authentication {
     UserController uc = new UserController(Imeji.adminUser);
     try {
       User user = uc.retrieve(login);
-      if (user.getEncryptedPassword().equals(StringHelper.convertToMD5(pwd)))
+      if (user.getEncryptedPassword().equals(StringHelper.convertToMD5(pwd))) {
         return user;
+      }
     } catch (Exception e) {
       logger.error("Error SimpleAuthentification", e);
     }

@@ -10,7 +10,7 @@ import de.mpg.imeji.exceptions.NotSupportedMethodException;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchFactory;
-import de.mpg.imeji.logic.search.query.SPARQLQueries;
+import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.vo.User;
 
 
@@ -86,7 +86,7 @@ public class UserService implements API<User> {
   public String getCompleteName(URI uri) throws ImejiException {
     Search search = SearchFactory.create();
     List<String> results =
-        search.searchSimpleForQuery(SPARQLQueries.selectUserCompleteName(uri)).getResults();
+        search.searchString(JenaCustomQueries.selectUserCompleteName(uri), null, null, 0, -1).getResults();
     return results.size() == 1 ? results.get(0) : null;
   }
 

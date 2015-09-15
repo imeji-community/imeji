@@ -20,11 +20,11 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.controller.ProfileController;
-import de.mpg.imeji.logic.search.query.SPARQLQueries;
-import de.mpg.imeji.logic.search.query.URLQueryTransformer;
-import de.mpg.imeji.logic.search.vo.SearchGroup;
-import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
+import de.mpg.imeji.logic.search.SearchQueryParser;
+import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
+import de.mpg.imeji.logic.search.model.SearchGroup;
+import de.mpg.imeji.logic.search.model.SearchQuery;
+import de.mpg.imeji.logic.search.model.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -79,7 +79,7 @@ public class AdvancedSearchBean {
           FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("q");
       if (!UrlHelper.getParameterBoolean("error")) {
         errorQuery = false;
-        initForm(URLQueryTransformer.parseStringQuery(query));
+        initForm(SearchQueryParser.parseStringQuery(query));
       }
     } catch (Exception e) {
       logger.error("Error initializing advanced search", e);
@@ -169,7 +169,7 @@ public class AdvancedSearchBean {
    * @return
    */
   private boolean isEmpty(CollectionImeji c) {
-    return ImejiSPARQL.exec(SPARQLQueries.selectCollectionItems(c.getId(), session.getUser(), 1),
+    return ImejiSPARQL.exec(JenaCustomQueries.selectCollectionItems(c.getId(), session.getUser(), 1),
         null).size() == 0;
   }
 
@@ -196,7 +196,7 @@ public class AdvancedSearchBean {
     Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
     try {
       errorQuery = false;
-      String q = URLQueryTransformer.transform2UTF8URL(formular.getFormularAsSearchQuery());
+      String q = SearchQueryParser.transform2UTF8URL(formular.getFormularAsSearchQuery());
       if (!"".equals(q)) {
         FacesContext.getCurrentInstance().getExternalContext()
             .redirect(navigation.getBrowseUrl() + "?q=" + q);
@@ -331,7 +331,7 @@ public class AdvancedSearchBean {
   public String getSimpleQuery() {
     try {
       errorQuery = false;
-      return URLQueryTransformer.searchQuery2PrettyQuery(formular.getFormularAsSearchQuery());
+      return SearchQueryParser.searchQuery2PrettyQuery(formular.getFormularAsSearchQuery());
     } catch (Exception e) {
       errorQuery = true;
       if ("Wrong date format".equals(e.getMessage()))

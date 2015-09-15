@@ -11,16 +11,17 @@ import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.search.SPARQLSearch;
+import de.mpg.imeji.logic.search.SearchQueryParser;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.query.URLQueryTransformer;
-import de.mpg.imeji.logic.search.vo.SearchIndex;
-import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
-import de.mpg.imeji.logic.search.vo.SearchOperators;
-import de.mpg.imeji.logic.search.vo.SearchPair;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
-import de.mpg.imeji.logic.search.vo.SortCriterion;
-import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
+import de.mpg.imeji.logic.search.jenasearch.JenaSearch;
+import de.mpg.imeji.logic.search.model.SearchIndex;
+import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
+import de.mpg.imeji.logic.search.model.SearchLogicalRelation.LOGICAL_RELATIONS;
+import de.mpg.imeji.logic.search.model.SearchOperators;
+import de.mpg.imeji.logic.search.model.SearchPair;
+import de.mpg.imeji.logic.search.model.SearchQuery;
+import de.mpg.imeji.logic.search.model.SortCriterion;
+import de.mpg.imeji.logic.search.model.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Properties.Status;
@@ -61,7 +62,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
     sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
 
     initMenus();
-    selectedSortCriterion = SearchIndex.IndexNames.modified.name();
+    selectedSortCriterion = SearchIndex.SearchFields.modified.name();
     selectedSortOrder = SortOrder.DESCENDING.name();
     setElementsPerPage(sb.getNumberOfContainersPerPage());
     try {
@@ -127,16 +128,16 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
    */
   protected void initMenus() {
     sortMenu = new ArrayList<SelectItem>();
-    sortMenu
-        .add(new SelectItem(SearchIndex.IndexNames.cont_title.name(), sb.getLabel("sort_title")));
-    sortMenu.add(new SelectItem(SearchIndex.IndexNames.modified.name(), sb
+    sortMenu.add(new SelectItem(SearchIndex.SearchFields.title.name(), sb.getLabel("sort_title")));
+    sortMenu.add(new SelectItem(SearchIndex.SearchFields.modified.name(), sb
         .getLabel("sort_date_mod")));
-    sortMenu.add(new SelectItem(SearchIndex.IndexNames.creator.name(), sb.getLabel("sort_author")));
+    sortMenu
+        .add(new SelectItem(SearchIndex.SearchFields.creator.name(), sb.getLabel("sort_author")));
     filterMenu = new ArrayList<SelectItem>();
     filterMenu.add(new SelectItem("all", sb.getLabel("all_except_withdrawn")));
     if (sb.getUser() != null) {
-      sortMenu
-          .add(new SelectItem(SearchIndex.IndexNames.status.name(), sb.getLabel("sort_status")));
+      sortMenu.add(new SelectItem(SearchIndex.SearchFields.status.name(), sb
+          .getLabel("sort_status")));
       filterMenu.add(new SelectItem("my", sb.getLabel("my_except_withdrawn")));
       filterMenu.add(new SelectItem("private", sb.getLabel("only_private")));
     }
@@ -162,20 +163,20 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
     SearchPair pair = null;
     if ("my".equals(selectedFilter)) {
       pair =
-          new SearchPair(SPARQLSearch.getIndex(SearchIndex.IndexNames.user),
-              SearchOperators.EQUALS, sb.getUser().getId().toString());
+          new SearchPair(SearchFields.hasgrant, SearchOperators.EQUALS, sb.getUser().getId()
+              .toString(), false);
     } else if ("private".equals(selectedFilter)) {
       pair =
-          new SearchPair(SPARQLSearch.getIndex(SearchIndex.IndexNames.status),
-              SearchOperators.EQUALS, Status.PENDING.getUriString());
+          new SearchPair(SearchFields.status, SearchOperators.EQUALS,
+              Status.PENDING.getUriString(), false);
     } else if ("public".equals(selectedFilter)) {
       pair =
-          new SearchPair(SPARQLSearch.getIndex(SearchIndex.IndexNames.status),
-              SearchOperators.EQUALS, Status.RELEASED.getUriString());
+          new SearchPair(SearchFields.status, SearchOperators.EQUALS,
+              Status.RELEASED.getUriString(), false);
     } else if ("withdrawn".equals(selectedFilter)) {
       pair =
-          new SearchPair(SPARQLSearch.getIndex(SearchIndex.IndexNames.status),
-              SearchOperators.EQUALS, Status.WITHDRAWN.getUriString());
+          new SearchPair(SearchIndex.SearchFields.status, SearchOperators.EQUALS,
+              Status.WITHDRAWN.getUriString(), false);
     }
     return pair;
   }
@@ -410,7 +411,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
     int myOffset = offset;
 
     if (!"".equals(getQuery())) {
-      searchQuery = URLQueryTransformer.parseStringQuery(getQuery());
+      searchQuery = SearchQueryParser.parseStringQuery(getQuery());
     }
     // get Filters for Collections
     SearchPair sp = getFilter();
@@ -423,7 +424,7 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
 
     if (getSearchQuery() == null || changedFilters(sp, getSelectedFilterSearch())) {
       SortCriterion sortCriterion = new SortCriterion();
-      sortCriterion.setIndex(SPARQLSearch.getIndex(getSelectedSortCriterion()));
+      sortCriterion.setIndex(JenaSearch.getIndex(getSelectedSortCriterion()));
       sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
 
       searchResult = search(searchQuery, sortCriterion);

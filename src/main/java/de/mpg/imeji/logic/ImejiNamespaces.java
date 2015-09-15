@@ -5,7 +5,7 @@ package de.mpg.imeji.logic;
  * All Namespaces used in imeji //TODO finish classes
  * 
  * @author saquet
- *
+ * 
  */
 public class ImejiNamespaces {
   /*
@@ -27,6 +27,7 @@ public class ImejiNamespaces {
   public static final String USER_STATUS = "http://imeji.org/terms/userStatus";
   public static final String REGISTRATION_TOKEN = "http://imeji.org/terms/registrationToken";
   public static final String SPACE = "http://imeji.org/terms/space";
+  public static final String CHECKSUM = "http://imeji.org/terms/checksum";
 
 
   /*

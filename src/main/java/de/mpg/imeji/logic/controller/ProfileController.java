@@ -28,17 +28,18 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.jobs.CleanMetadataJob;
 import de.mpg.imeji.logic.reader.ReaderFacade;
-import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.Search;
-import de.mpg.imeji.logic.search.Search.SearchType;
+import de.mpg.imeji.logic.search.Search.SearchObjectTypes;
 import de.mpg.imeji.logic.search.SearchFactory;
+import de.mpg.imeji.logic.search.SearchFactory.SEARCH_IMPLEMENTATIONS;
+import de.mpg.imeji.logic.search.SearchQueryParser;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.query.SPARQLQueries;
-import de.mpg.imeji.logic.search.query.URLQueryTransformer;
-import de.mpg.imeji.logic.search.vo.SearchIndex;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
-import de.mpg.imeji.logic.search.vo.SortCriterion;
-import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
+import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
+import de.mpg.imeji.logic.search.jenasearch.JenaSearch;
+import de.mpg.imeji.logic.search.model.SearchIndex;
+import de.mpg.imeji.logic.search.model.SearchQuery;
+import de.mpg.imeji.logic.search.model.SortCriterion;
+import de.mpg.imeji.logic.search.model.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Metadata;
@@ -235,12 +236,12 @@ public class ProfileController extends ImejiController {
    * @return
    */
   public SearchResult search(SearchQuery query, User user, String spaceId) {
-    Search search = SearchFactory.create(SearchType.PROFILE);
+    Search search = SearchFactory.create(SearchObjectTypes.PROFILE, SEARCH_IMPLEMENTATIONS.JENA);
     // Automatically sort by profile title
     SortCriterion sortCri =
-        new SortCriterion(SPARQLSearch.getIndex(SearchIndex.IndexNames.prof.name()),
+        new SortCriterion(JenaSearch.getIndex(SearchIndex.SearchFields.prof.name()),
             SortOrder.ASCENDING);
-    SearchResult result = search.search(query, sortCri, user, spaceId);
+    SearchResult result = search.search(query, sortCri, user, null, spaceId, 0, -1);
     return result;
   }
 
@@ -253,7 +254,7 @@ public class ProfileController extends ImejiController {
    */
   public List<MetadataProfile> search(User user, String q, String spaceId) throws ImejiException {
     try {
-      SearchResult result = search(URLQueryTransformer.parseStringQuery(q), user, spaceId);
+      SearchResult result = search(SearchQueryParser.parseStringQuery(q), user, spaceId);
       return (List<MetadataProfile>) retrieveLazy(result.getResults(),
           getMin(result.getResults().size(), 500), 0, user);
     } catch (Exception e) {
@@ -282,7 +283,8 @@ public class ProfileController extends ImejiController {
   public MetadataProfile retrieveDefaultProfile() throws ImejiException {
     Search search = SearchFactory.create();
     List<String> uris =
-        search.searchSimpleForQuery(SPARQLQueries.selectDefaultMetadataProfile()).getResults();
+        search.searchString(JenaCustomQueries.selectDefaultMetadataProfile(), null, null, 0, -1)
+            .getResults();
     if (uris.size() == 1) {
       return retrieve(URI.create(uris.get(0)), Imeji.adminUser);
     } else if (uris.size() > 1) {
@@ -348,15 +350,16 @@ public class ProfileController extends ImejiController {
    */
   public void removeMetadataWithoutStatement(MetadataProfile p) {
     String id = p != null ? p.getId().toString() : null;
-    ImejiSPARQL.execUpdate(SPARQLQueries.updateRemoveAllMetadataWithoutStatement(id));
-    ImejiSPARQL.execUpdate(SPARQLQueries.updateEmptyMetadata());
+    ImejiSPARQL.execUpdate(JenaCustomQueries.updateRemoveAllMetadataWithoutStatement(id));
+    ImejiSPARQL.execUpdate(JenaCustomQueries.updateEmptyMetadata());
   }
 
   public boolean isReferencedByOtherResources(String profileUri, String resourceUri) {
-    Search s = new SPARQLSearch(SearchType.ALL, null);
+    Search s = new JenaSearch(SearchObjectTypes.ALL, null);
     List<String> r =
-        s.searchSimpleForQuery(
-            SPARQLQueries.hasOtherMetadataProfileReferences(profileUri, resourceUri)).getResults();
+        s.searchString(
+            JenaCustomQueries.hasOtherMetadataProfileReferences(profileUri, resourceUri), null,
+            null, 0, -1).getResults();
     if (r.size() > 0) {
       return true;
     }
@@ -364,9 +367,10 @@ public class ProfileController extends ImejiController {
   }
 
   public boolean isReferencedByAnyResources(String profileUri) {
-    Search s = new SPARQLSearch(SearchType.ALL, null);
+    Search s = new JenaSearch(SearchObjectTypes.ALL, null);
     List<String> r =
-        s.searchSimpleForQuery(SPARQLQueries.hasMetadataProfileReferences(profileUri)).getResults();
+        s.searchString(JenaCustomQueries.hasMetadataProfileReferences(profileUri), null, null, 0,
+            -1).getResults();
     if (r.size() > 0) {
       return true;
     }

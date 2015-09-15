@@ -1,6 +1,5 @@
 package de.mpg.imeji.service.test;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -21,14 +20,11 @@ import org.junit.Test;
 import util.JenaUtil;
 import de.mpg.imeji.exceptions.NotAllowedError;
 import de.mpg.imeji.exceptions.NotFoundException;
-import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.rest.api.CollectionService;
 import de.mpg.imeji.rest.api.ItemService;
 import de.mpg.imeji.rest.process.RestProcessUtils;
 import de.mpg.imeji.rest.process.ReverseTransferObjectFactory;
-import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.ItemTO;
@@ -89,13 +85,6 @@ public class CollectionServiceTest {
 
   @Test
   public void test_releaseCollection() throws Exception {
-
-    try {
-      collService.release(collection.getIdString(), JenaUtil.testUser);
-      fail("should not be allowed to release collection");
-    } catch (Exception e) {
-
-    }
     File file = null;
     file = new File(TEST_IMAGE);
     ItemService crud = new ItemService();
@@ -109,14 +98,11 @@ public class CollectionServiceTest {
     } catch (Exception e1) {
       logger.error("test_releaseCollection, can not create item", e1);
     }
-
     try {
       collService.release(collection.getIdString(), JenaUtil.testUser);
     } catch (NotSupportedException | NotAllowedError | NotFoundException e) {
       logger.error("test_releaseCollection", e);
-
     }
-
   }
 
   @Test

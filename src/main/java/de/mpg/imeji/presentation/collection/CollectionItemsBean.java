@@ -17,10 +17,10 @@ import javax.faces.model.SelectItem;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.query.URLQueryTransformer;
-import de.mpg.imeji.logic.search.vo.SearchIndex;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
-import de.mpg.imeji.logic.search.vo.SortCriterion;
+import de.mpg.imeji.logic.search.SearchQueryParser;
+import de.mpg.imeji.logic.search.model.SearchIndex;
+import de.mpg.imeji.logic.search.model.SearchQuery;
+import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
@@ -90,10 +90,10 @@ public class CollectionItemsBean extends ItemsBean {
   public void initMenus() {
     List<SelectItem> sortMenu = new ArrayList<SelectItem>();
     sortMenu.add(new SelectItem(null, "--"));
-    sortMenu.add(new SelectItem(SearchIndex.IndexNames.created, sb
+    sortMenu.add(new SelectItem(SearchIndex.SearchFields.created, sb
         .getLabel("sort_img_date_created")));
-    sortMenu.add(new SelectItem(SearchIndex.IndexNames.modified, sb.getLabel("sort_date_mod")));
-    sortMenu.add(new SelectItem(SearchIndex.IndexNames.filename, sb.getLabel("sort_img_filename")));
+    sortMenu.add(new SelectItem(SearchIndex.SearchFields.modified, sb.getLabel("sort_date_mod")));
+    sortMenu.add(new SelectItem(SearchIndex.SearchFields.filename, sb.getLabel("sort_img_filename")));
     setSortMenu(sortMenu);
   }
 
@@ -105,7 +105,7 @@ public class CollectionItemsBean extends ItemsBean {
   @Override
   public void initFacets() {
     try {
-      searchQuery = URLQueryTransformer.parseStringQuery(getQuery());
+      searchQuery = SearchQueryParser.parseStringQuery(getQuery());
       setFacets(new FacetsBean(collection, searchQuery));
       ExecutorService executor = Executors.newSingleThreadScheduledExecutor();
       executor.submit(getFacets());

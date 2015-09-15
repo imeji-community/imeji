@@ -1,7 +1,7 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-package de.mpg.imeji.logic.search;
+package de.mpg.imeji.logic.search.jenasearch;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -13,20 +13,23 @@ import org.apache.log4j.Logger;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.vocabulary.RDF;
 
+import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
-import de.mpg.imeji.logic.search.query.SimpleQueryFactory;
+import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.SearchIndexer;
+import de.mpg.imeji.logic.search.SearchResult;
+import de.mpg.imeji.logic.search.model.SearchElement;
+import de.mpg.imeji.logic.search.model.SearchGroup;
+import de.mpg.imeji.logic.search.model.SearchIndex;
+import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
+import de.mpg.imeji.logic.search.model.SearchLogicalRelation;
+import de.mpg.imeji.logic.search.model.SearchLogicalRelation.LOGICAL_RELATIONS;
+import de.mpg.imeji.logic.search.model.SearchPair;
+import de.mpg.imeji.logic.search.model.SearchQuery;
+import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.imeji.logic.search.util.CollectionUtils;
 import de.mpg.imeji.logic.search.util.SearchIndexInitializer;
-import de.mpg.imeji.logic.search.vo.SearchElement;
-import de.mpg.imeji.logic.search.vo.SearchGroup;
-import de.mpg.imeji.logic.search.vo.SearchIndex;
-import de.mpg.imeji.logic.search.vo.SearchIndex.IndexNames;
-import de.mpg.imeji.logic.search.vo.SearchLogicalRelation;
-import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
-import de.mpg.imeji.logic.search.vo.SearchPair;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
-import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -43,10 +46,10 @@ import de.mpg.j2j.helper.SortHelper;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class SPARQLSearch implements Search {
+public class JenaSearch implements Search {
   private String containerURI = null;
-  private SearchType type = SearchType.ITEM;
-  private static Logger logger = Logger.getLogger(SPARQLSearch.class);
+  private SearchObjectTypes type = SearchObjectTypes.ITEM;
+  private static Logger logger = Logger.getLogger(JenaSearch.class);
   public static Map<String, SearchIndex> indexes = SearchIndexInitializer.init();
 
   /**
@@ -55,24 +58,32 @@ public class SPARQLSearch implements Search {
    * @param type
    * @param containerURI
    */
-  public SPARQLSearch(SearchType type, String containerURI) {
+  public JenaSearch(SearchObjectTypes type, String containerURI) {
     this.containerURI = containerURI;
     if (type != null) {
       this.type = type;
     }
   }
 
+  @Override
+  public SearchIndexer getIndexer() {
+    return new JenaIndexer();
+  }
+
   /**
    * Search for {@link SearchQuery} according to {@link User} permissions
    * 
-   * @param sq
    * @param sortCri
    * @param user
+   * @param sq
+   * 
    * @return
    */
   @Override
-  public SearchResult search(SearchQuery sq, SortCriterion sortCri, User user, String spaceId) {
-    return new SearchResult(advanced(sq, sortCri, user, spaceId), sortCri);
+  public SearchResult search(SearchQuery query, SortCriterion sortCri, User user, String folderUri,
+      String spaceId, int from, int size) {
+    this.containerURI = folderUri;
+    return new SearchResult(advanced(query, sortCri, user, spaceId), sortCri);
   }
 
   /**
@@ -99,7 +110,8 @@ public class SPARQLSearch implements Search {
    * @return
    */
   @Override
-  public SearchResult searchSimpleForQuery(String sparqlQuery) {
+  public SearchResult searchString(String sparqlQuery, SortCriterion sort, User user, int from,
+      int size) {
     return new SearchResult(ImejiSPARQL.exec(sparqlQuery, getModelName(type)), null);
   }
 
@@ -201,7 +213,7 @@ public class SPARQLSearch implements Search {
    */
   private List<String> simple(SearchPair pair, SortCriterion sortCri, User user, String spaceId) {
     String sparqlQuery =
-        SimpleQueryFactory.getQuery(getModelName(type), getRDFType(type), pair, sortCri, user,
+        JenaQueryFactory.getQuery(getModelName(type), getRDFType(type), pair, sortCri, user,
             (containerURI != null), getSpecificQuery(user), spaceId);
     return ImejiSPARQL.exec(sparqlQuery, null);
   }
@@ -240,17 +252,17 @@ public class SPARQLSearch implements Search {
         specificQuery = "?s <http://imeji.org/terms/collection> <" + containerURI + ">  .";
         // specificQuery = "FILTER (?c=<" + containerURI + ">) .";
       } else if (containerURI.equals(ObjectHelper.getURI(Album.class, id).toString())) {
-        type = SearchType.ALL;
+        type = SearchObjectTypes.ALL;
         specificQuery = "<" + containerURI + "> <http://imeji.org/terms/item> ?s .";
       }
     }
-    if (SearchType.ITEM.equals(type) || SearchType.ALL.equals(type)) {
+    if (SearchObjectTypes.ITEM.equals(type) || SearchObjectTypes.ALL.equals(type)) {
       // below is already included in the security query, no need to do it
       // again
       // if (containerURI == null && user != null)
       // specificQuery += "?s <http://imeji.org/terms/collection> ?c .";
     }
-    if (SearchType.PROFILE.equals(type)) {
+    if (SearchObjectTypes.PROFILE.equals(type)) {
       specificQuery = "";
     }
     return specificQuery;
@@ -258,12 +270,12 @@ public class SPARQLSearch implements Search {
 
   /**
    * Return the name of the {@link Model} as a {@link String} according to the current
-   * {@link SearchType}
+   * {@link SearchObjectTypes}
    * 
    * @param type
    * @return
    */
-  private String getModelName(SearchType type) {
+  private String getModelName(SearchObjectTypes type) {
     switch (type) {
       case ITEM:
         return Imeji.imageModel;
@@ -281,12 +293,12 @@ public class SPARQLSearch implements Search {
   }
 
   /**
-   * Return the {@link RDF}.type of object searched according to the {@link SearchType}
+   * Return the {@link RDF}.type of object searched according to the {@link SearchObjectTypes}
    * 
    * @param type
    * @return
    */
-  private String getRDFType(SearchType type) {
+  private String getRDFType(SearchObjectTypes type) {
     switch (type) {
       case COLLECTION:
         return J2JHelper.getResourceNamespace(new CollectionImeji());
@@ -304,23 +316,31 @@ public class SPARQLSearch implements Search {
    * 
    * @param indexName
    * @return
+   * @throws BadRequestException
    */
   public static SearchIndex getIndex(String indexName) {
-    SearchIndex index = indexes.get(indexName);
-    if (index == null) {
+    try {
+      SearchIndex index = indexes.get(indexName);
+      if (index == null) {
+        index = new SearchIndex(SearchFields.valueOf(indexName));
+      }
+      return index;
+    } catch (Exception e) {
       logger.error("Unknown index: " + indexName);
       throw new RuntimeException("Unknown index: " + indexName);
     }
-    return index;
   }
 
   /**
-   * Get {@link SearchIndex} from its {@link IndexNames}
+   * Get {@link SearchIndex} from its {@link SearchFields}
    * 
    * @param indexname
    * @return
+   * @throws BadRequestException
    */
-  public static SearchIndex getIndex(SearchIndex.IndexNames indexname) {
+  public static SearchIndex getIndex(SearchIndex.SearchFields indexname) {
     return getIndex(indexname.name());
   }
+
+
 }

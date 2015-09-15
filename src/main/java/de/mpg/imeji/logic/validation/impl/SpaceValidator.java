@@ -9,7 +9,7 @@ import java.util.List;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
-import de.mpg.imeji.logic.search.query.SPARQLQueries;
+import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.validation.Validator;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Space;
@@ -57,7 +57,7 @@ public class SpaceValidator extends ObjectValidator implements Validator<Space> 
       return false;
 
     List<String> spaceUrisFound =
-        ImejiSPARQL.exec(SPARQLQueries.getSpaceByLabel(spaceId), Imeji.spaceModel);
+        ImejiSPARQL.exec(JenaCustomQueries.getSpaceByLabel(spaceId), Imeji.spaceModel);
     if (spaceUrisFound.size() == 0) {
       return false;
     } else {

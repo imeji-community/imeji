@@ -153,7 +153,7 @@ public class ImejiAuthBean implements Serializable {
   /**
    * True if the current {@link User} in the session can read the object
    * 
-   * @param user
+   * @param hasgrant
    * @param url
    * @return
    */
@@ -164,7 +164,7 @@ public class ImejiAuthBean implements Serializable {
   /**
    * True if the current {@link User} in the session can create the object
    * 
-   * @param user
+   * @param hasgrant
    * @param url
    * @return
    */
@@ -175,7 +175,7 @@ public class ImejiAuthBean implements Serializable {
   /**
    * True if the {@link User} can update the object
    * 
-   * @param user
+   * @param hasgrant
    * @param url
    * @return
    */
@@ -186,7 +186,7 @@ public class ImejiAuthBean implements Serializable {
   /**
    * True if the current {@link User} in the session can delete the object
    * 
-   * @param user
+   * @param hasgrant
    * @param url
    * @return
    */
@@ -197,7 +197,7 @@ public class ImejiAuthBean implements Serializable {
   /**
    * True if the current {@link User} in the session can administrate the object
    * 
-   * @param user
+   * @param hasgrant
    * @param url
    * @return
    */
@@ -209,7 +209,7 @@ public class ImejiAuthBean implements Serializable {
    * Return true if the user can create content in the object. For instance, upload an item in a
    * collection, or add/remove an item to an album
    * 
-   * @param user
+   * @param hasgrant
    * @param url
    * @return
    */
@@ -220,7 +220,7 @@ public class ImejiAuthBean implements Serializable {
   /**
    * True if the {@link User} can update the content of the object
    * 
-   * @param user
+   * @param hasgrant
    * @param url
    * @return
    */
@@ -231,7 +231,7 @@ public class ImejiAuthBean implements Serializable {
   /**
    * True if the {@link User} can delete the content of the object
    * 
-   * @param user
+   * @param hasgrant
    * @param url
    * @return
    */
@@ -243,7 +243,7 @@ public class ImejiAuthBean implements Serializable {
    * True if the current {@link User} in the session can administrate imeji (i.e. is system
    * administrator)
    * 
-   * @param user
+   * @param hasgrant
    * @param url
    * @return
    */

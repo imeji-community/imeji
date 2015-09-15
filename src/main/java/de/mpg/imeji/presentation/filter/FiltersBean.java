@@ -12,8 +12,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.search.query.URLQueryTransformer;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
+import de.mpg.imeji.logic.search.SearchQueryParser;
+import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.Statement;
@@ -46,7 +46,7 @@ public class FiltersBean {
   public FiltersBean(SearchQuery sq, int count) {
     try {
       this.count = count;
-      String q = URLQueryTransformer.transform2URL(sq);
+      String q = SearchQueryParser.transform2URL(sq);
       String n = UrlHelper.getParameterValue("f");
       String t = UrlHelper.getParameterValue("t");
       URI metadataURI = null;

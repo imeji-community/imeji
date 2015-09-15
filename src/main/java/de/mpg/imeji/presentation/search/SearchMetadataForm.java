@@ -9,15 +9,14 @@ import java.util.List;
 
 import javax.faces.model.SelectItem;
 
-import de.mpg.imeji.logic.search.SPARQLSearch;
-import de.mpg.imeji.logic.search.vo.SearchElement;
-import de.mpg.imeji.logic.search.vo.SearchGroup;
-import de.mpg.imeji.logic.search.vo.SearchIndex;
-import de.mpg.imeji.logic.search.vo.SearchLogicalRelation;
-import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
-import de.mpg.imeji.logic.search.vo.SearchMetadata;
-import de.mpg.imeji.logic.search.vo.SearchOperators;
-import de.mpg.imeji.logic.search.vo.SearchPair;
+import de.mpg.imeji.logic.search.model.SearchElement;
+import de.mpg.imeji.logic.search.model.SearchGroup;
+import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
+import de.mpg.imeji.logic.search.model.SearchLogicalRelation;
+import de.mpg.imeji.logic.search.model.SearchLogicalRelation.LOGICAL_RELATIONS;
+import de.mpg.imeji.logic.search.model.SearchMetadata;
+import de.mpg.imeji.logic.search.model.SearchOperators;
+import de.mpg.imeji.logic.search.model.SearchPair;
 import de.mpg.imeji.logic.util.DateFormatter;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
@@ -41,6 +40,7 @@ public class SearchMetadataForm {
   private String number;
   private String longitude;
   private String latitude;
+  private String distance = "1km";
   private SearchOperators operator;
   private LOGICAL_RELATIONS logicalRelation;
   private boolean not = false;
@@ -89,26 +89,29 @@ public class SearchMetadataForm {
 
   private void parseMetadata(SearchMetadata md) {
     namespace = md.getStatement().toString();
-    switch (md.getIndex().getName()) {
-      case "latitude":
-        this.latitude = md.getValue();
+    switch (md.getField()) {
+      case coordinates:
+        String[] values = md.getValue().split(",");
+        this.distance = "1km";
+        this.latitude = values[0];
+        this.longitude = values[1];
+        if (values.length == 3) {
+          this.distance = values[2];
+        }
         break;
-      case "longitude":
-        this.longitude = md.getValue();
-        break;
-      case "person_family":
+      case person_family:
         this.familyName = md.getValue();
         break;
-      case "person_given":
+      case person_given:
         this.givenName = md.getValue();
         break;
-      case "person_id":
+      case person_id:
         this.uri = md.getValue();
         break;
-      case "person_org_title":
+      case person_org_name:
         this.orgName = md.getValue();
         break;
-      case "url":
+      case url:
         this.uri = md.getValue();
         break;
       default:
@@ -194,113 +197,99 @@ public class SearchMetadataForm {
       switch (MetadataTypesHelper.getTypesForNamespace(statement.getType().toString())) {
         case DATE:
           if (!isEmtpyValue(searchValue)) {
-            group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.IndexNames.time
-                .name()), operator, DateFormatter.format(searchValue), ns, not));
+            group.addPair(new SearchMetadata(SearchFields.time, operator, DateFormatter
+                .format(searchValue), ns, not));
           }
           break;
         case GEOLOCATION:
           if (!isEmtpyValue(searchValue + latitude + longitude)) {
             group.setNot(not);
             if (!isEmtpyValue(searchValue)) {
-              group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.IndexNames.title
-                  .name()), operator, searchValue, ns));
+              group.addPair(new SearchMetadata(SearchFields.location, operator, searchValue, ns,
+                  false));
             }
-            if (!isEmtpyValue(latitude)) {
-              if (!group.isEmpty())
+            if (!isEmtpyValue(latitude) && !isEmtpyValue(longitude)) {
+              if (!group.isEmpty()) {
                 group.addLogicalRelation(LOGICAL_RELATIONS.AND);
-              group.addPair(new SearchMetadata(SPARQLSearch
-                  .getIndex(SearchIndex.IndexNames.latitude.name()), SearchOperators.EQUALS,
-                  latitude, ns));
-            }
-            if (!isEmtpyValue(longitude)) {
-              if (!group.isEmpty())
-                group.addLogicalRelation(LOGICAL_RELATIONS.AND);
-              group.addPair(new SearchMetadata(SPARQLSearch
-                  .getIndex(SearchIndex.IndexNames.longitude.name()), SearchOperators.EQUALS,
-                  longitude, ns));
+              }
+              group.addPair(new SearchMetadata(SearchFields.coordinates, SearchOperators.EQUALS,
+                  Double.parseDouble(latitude) + "," + Double.parseDouble(longitude) + ","
+                      + distance, ns, false));
             }
           }
           break;
         case LICENSE:
           if (!isEmtpyValue(searchValue + uri)) {
             if (!isEmtpyValue(searchValue)) {
-              group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.IndexNames.license
-                  .name()), operator, searchValue, ns, not));
+              group.addPair(new SearchMetadata(SearchFields.license, operator, searchValue, ns,
+                  not));
             }
             if (!isEmtpyValue(uri)) {
               if (!group.isEmpty())
                 group.addLogicalRelation(LOGICAL_RELATIONS.AND);
-              group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.IndexNames.url),
-                  operator, uri, ns, not));
+              group.addPair(new SearchMetadata(SearchFields.url, operator, uri, ns, not));
             }
           }
           break;
         case NUMBER:
           if (!isEmtpyValue(searchValue)) {
-            group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.IndexNames.number
-                .name()), operator, searchValue, ns, not));
+            group
+                .addPair(new SearchMetadata(SearchFields.number, operator, searchValue, ns, not));
           }
           break;
         case CONE_PERSON:
           if (!isEmtpyValue(searchValue + familyName + givenName + uri + orgName)) {
             group.setNot(not);
             if (!isEmtpyValue(searchValue)) {
-              group.addPair(new SearchMetadata(SPARQLSearch
-                  .getIndex(SearchIndex.IndexNames.person_name.name()), operator, searchValue, ns));
+              group.addPair(new SearchMetadata(SearchFields.person_completename, operator, searchValue,
+                  ns, false));
             }
             if (!isEmtpyValue(familyName)) {
               if (!group.isEmpty())
                 group.addLogicalRelation(LOGICAL_RELATIONS.AND);
-              group
-                  .addPair(new SearchMetadata(SPARQLSearch
-                      .getIndex(SearchIndex.IndexNames.person_family.name()), operator, familyName,
-                      ns));
+              group.addPair(new SearchMetadata(SearchFields.person_family, operator, familyName,
+                  ns, false));
             }
             if (!isEmtpyValue(givenName)) {
               if (!group.isEmpty())
                 group.addLogicalRelation(LOGICAL_RELATIONS.AND);
-              group.addPair(new SearchMetadata(SPARQLSearch
-                  .getIndex(SearchIndex.IndexNames.person_given.name()), operator, givenName, ns));
+              group.addPair(new SearchMetadata(SearchFields.person_given, operator, givenName, ns,
+                  false));
             }
             if (!isEmtpyValue(uri)) {
               if (!group.isEmpty())
                 group.addLogicalRelation(LOGICAL_RELATIONS.AND);
-              group.addPair(new SearchMetadata(SPARQLSearch
-                  .getIndex(SearchIndex.IndexNames.person_id.name()), operator, uri, ns));
+              group.addPair(new SearchMetadata(SearchFields.person_id, operator, uri, ns, false));
             }
             if (!isEmtpyValue(orgName)) {
               if (!group.isEmpty())
                 group.addLogicalRelation(LOGICAL_RELATIONS.AND);
-              group
-                  .addPair(new SearchMetadata(SPARQLSearch
-                      .getIndex(SearchIndex.IndexNames.person_org_title.name()), operator, orgName,
-                      ns));
+              group.addPair(new SearchMetadata(SearchFields.person_org_name, operator, orgName, ns,
+                  false));
             }
           }
           break;
         case PUBLICATION:
           if (!isEmtpyValue(searchValue)) {
-            group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.IndexNames.citation
-                .name()), operator, searchValue, ns, not));
+            group.addPair(new SearchMetadata(SearchFields.citation, operator, searchValue, ns,
+                not));
           }
           break;
         case TEXT:
           if (!isEmtpyValue(searchValue)) {
-            group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.IndexNames.text
-                .name()), operator, searchValue, ns, not));
+            group.addPair(new SearchMetadata(SearchFields.text, operator, searchValue, ns, not));
           }
           break;
         case LINK:
           if (!isEmtpyValue(searchValue + uri)) {
             if (!isEmtpyValue(searchValue)) {
-              group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.IndexNames.label),
-                  operator, searchValue, ns, not));
+              group.addPair(new SearchMetadata(SearchFields.label, operator, searchValue, ns,
+                  not));
             }
             if (!isEmtpyValue(uri)) {
               if (!group.isEmpty())
                 group.addLogicalRelation(LOGICAL_RELATIONS.AND);
-              group.addPair(new SearchMetadata(SPARQLSearch.getIndex(SearchIndex.IndexNames.url),
-                  operator, uri, ns, not));
+              group.addPair(new SearchMetadata(SearchFields.url, operator, uri, ns, not));
             }
           }
           break;
@@ -481,4 +470,19 @@ public class SearchMetadataForm {
   public void setOrgName(String orgName) {
     this.orgName = orgName;
   }
+
+  /**
+   * @return the distance
+   */
+  public String getDistance() {
+    return distance;
+  }
+
+  /**
+   * @param distance the distance to set
+   */
+  public void setDistance(String distance) {
+    this.distance = distance;
+  }
+
 }

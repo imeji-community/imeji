@@ -13,12 +13,13 @@ import javax.faces.model.SelectItem;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.concurrency.locks.Lock;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.search.SearchQueryParser;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.query.URLQueryTransformer;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
+import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.util.MetadataFactory;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
@@ -279,8 +280,9 @@ public class EditItemMetadataBean {
    * 
    * @param uris
    * @return
+   * @throws ImejiException
    */
-  public List<Item> loaditems(List<String> uris) {
+  public List<Item> loaditems(List<String> uris) throws ImejiException {
     ItemController itemController = new ItemController();
     return (List<Item>) itemController.retrieve(uris, -1, 0, session.getUser());
   }
@@ -305,7 +307,7 @@ public class EditItemMetadataBean {
    * @throws IOException
    */
   public List<String> searchItems() throws IOException {
-    SearchQuery sq = URLQueryTransformer.parseStringQuery(query);
+    SearchQuery sq = SearchQueryParser.parseStringQuery(query);
     ItemController itemController = new ItemController();
     SearchResult sr =
         itemController.search(URI.create(collectionId), sq, null, null, session.getUser(), null);
@@ -317,8 +319,9 @@ public class EditItemMetadataBean {
    * 
    * @return
    * @throws IOException
+   * @throws ImejiException
    */
-  public String addToAllSaveAndRedirect() throws IOException {
+  public String addToAllSaveAndRedirect() throws IOException, ImejiException {
     // First, re-initialize the editor with all items (for batch, editor has
     // been initialized with only one item)
     initEditor(new ArrayList<Item>(loaditems(findItems())));

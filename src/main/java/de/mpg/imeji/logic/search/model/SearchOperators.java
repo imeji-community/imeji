@@ -1,4 +1,4 @@
-package de.mpg.imeji.logic.search.vo;
+package de.mpg.imeji.logic.search.model;
 
 /**
  * The possible operators for a {@link SearchQuery}
@@ -8,5 +8,5 @@ package de.mpg.imeji.logic.search.vo;
  * @version $Revision$ $LastChangedDate$
  */
 public enum SearchOperators {
-  REGEX, EQUALS, GREATER, LESSER;
+  REGEX, EQUALS, GREATER, LESSER, GEO;
 }

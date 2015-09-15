@@ -29,7 +29,7 @@ import org.apache.http.client.HttpResponseException;
 import de.mpg.imeji.logic.export.Export;
 import de.mpg.imeji.logic.export.format.explain.MetadataExplainExport;
 import de.mpg.imeji.logic.export.format.explain.SearchExplainExport;
-import de.mpg.imeji.logic.search.vo.SearchIndex;
+import de.mpg.imeji.logic.search.model.SearchIndex;
 
 /**
  * {@link Export} for explain

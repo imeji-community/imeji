@@ -1,8 +1,9 @@
-package de.mpg.imeji.logic.search.vo;
+package de.mpg.imeji.logic.search.model;
 
 import java.net.URI;
 import java.util.List;
 
+import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
 import de.mpg.imeji.logic.vo.Metadata;
 
 /**
@@ -22,13 +23,9 @@ public class SearchMetadata extends SearchPair {
     // TODO Auto-generated constructor stub
   }
 
-  public SearchMetadata(SearchIndex index, SearchOperators operator, String value, URI statement) {
-    this(index, operator, value, statement, false);
-  }
-
-  public SearchMetadata(SearchIndex index, SearchOperators operator, String value, URI statement,
+  public SearchMetadata(SearchFields field, SearchOperators operator, String value, URI statement,
       boolean not) {
-    super(index, operator, value, not);
+    super(field, operator, value, not);
     this.statement = statement;
   }
 

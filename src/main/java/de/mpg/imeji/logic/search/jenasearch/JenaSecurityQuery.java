@@ -1,7 +1,7 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-package de.mpg.imeji.logic.search.query;
+package de.mpg.imeji.logic.search.jenasearch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ import de.mpg.j2j.helper.J2JHelper;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class SimpleSecurityQuery {
+public class JenaSecurityQuery {
   /**
    * Static factory for the security query. A {@link String} is returned which sould be added to the
    * complete sparql query

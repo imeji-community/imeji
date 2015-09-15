@@ -1,6 +1,7 @@
 package de.mpg.imeji.presentation.mdProfile;
 
 import java.io.IOException;
+import java.util.Collection;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
@@ -11,6 +12,7 @@ import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ProfileController;
+import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Statement;
@@ -58,7 +60,8 @@ public class EditMdProfileBean extends MdProfileBean {
           if (colId != null) {
             // load the collection if provided in the url
             CollectionController cc = new CollectionController();
-            setCollection(cc.retrieve(colId, session.getUser()));
+            setCollection(cc.retrieve(ObjectHelper.getURI(Collection.class, colId),
+                session.getUser()));
           }
           // load the profile
           ProfileController pc = new ProfileController();

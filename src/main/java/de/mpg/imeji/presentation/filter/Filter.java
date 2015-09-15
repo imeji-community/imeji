@@ -7,8 +7,8 @@ import java.net.URI;
 
 import org.apache.log4j.Logger;
 
-import de.mpg.imeji.logic.search.query.URLQueryTransformer;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
+import de.mpg.imeji.logic.search.SearchQueryParser;
+import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.presentation.facet.Facet;
 
 /**
@@ -50,7 +50,7 @@ public class Filter extends Facet {
     }
     try {
       if (FacetType.SEARCH == getType()) {
-        searchQuery = URLQueryTransformer.parseStringQuery(query);
+        searchQuery = SearchQueryParser.parseStringQuery(query);
       }
     } catch (Exception e) {
       Logger.getLogger(Filter.class).error("Some issues during Filter initialization", e);

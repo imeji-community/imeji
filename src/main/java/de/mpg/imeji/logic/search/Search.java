@@ -26,8 +26,8 @@ package de.mpg.imeji.logic.search;
 
 import java.util.List;
 
-import de.mpg.imeji.logic.search.vo.SearchQuery;
-import de.mpg.imeji.logic.search.vo.SortCriterion;
+import de.mpg.imeji.logic.search.model.SearchQuery;
+import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.imeji.logic.vo.User;
 
 /**
@@ -45,7 +45,7 @@ public interface Search {
    * @author $Author$ (last modification)
    * @version $Revision$ $LastChangedDate$
    */
-  public static enum SearchType {
+  public static enum SearchObjectTypes {
     ITEM, COLLECTION, ALBUM, SPACE, PROFILE, USER, ALL;
   }
 
@@ -55,9 +55,20 @@ public interface Search {
    * @param query
    * @param sortCri
    * @param user
+   * @param folderUri TODO
+   * @param from
+   * @param size
    * @return
    */
-  public SearchResult search(SearchQuery query, SortCriterion sortCri, User user, String spaceId);
+  public SearchResult search(SearchQuery query, SortCriterion sortCri, User user, String folderUri,
+      String spaceId, int from, int size);
+
+  /**
+   * Get the {@link SearchIndexer} for this {@link Search} implementation
+   * 
+   * @return
+   */
+  public SearchIndexer getIndexer();
 
   /**
    * Search for imeji objects belonging to a predefined list of possible results
@@ -76,11 +87,11 @@ public interface Search {
    * Search with a Simple {@link String}
    * 
    * @param query
-   * @param sortCri
+   * @param sort
    * @param user
-   * @param uris
-   * @param spaceId
+   * @param from
+   * @param size
    * @return
    */
-  public SearchResult searchSimpleForQuery(String query);
+  public SearchResult searchString(String query, SortCriterion sort, User user, int from, int size);
 }

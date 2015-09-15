@@ -23,11 +23,10 @@ import de.mpg.imeji.logic.concurrency.locks.Locks;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.UserController;
-import de.mpg.imeji.logic.search.SPARQLSearch;
-import de.mpg.imeji.logic.search.vo.SearchIndex;
-import de.mpg.imeji.logic.search.vo.SearchOperators;
-import de.mpg.imeji.logic.search.vo.SearchPair;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
+import de.mpg.imeji.logic.search.model.SearchIndex;
+import de.mpg.imeji.logic.search.model.SearchOperators;
+import de.mpg.imeji.logic.search.model.SearchPair;
+import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -135,11 +134,11 @@ public class ItemBean {
     relatedAlbums = new ArrayList<Album>();
     AlbumController ac = new AlbumController();
     SearchQuery q = new SearchQuery();
-    q.addPair(new SearchPair(SPARQLSearch.getIndex(SearchIndex.IndexNames.item),
-        SearchOperators.EQUALS, getImage().getId().toString()));
+    q.addPair(new SearchPair(SearchIndex.SearchFields.member, SearchOperators.EQUALS, getImage()
+        .getId().toString(), false));
     // TODO NB: check if related albums should be space restricted?
     relatedAlbums =
-        (List<Album>) ac.loadAlbumsLazy(ac.search(q, sessionBean.getUser(), null, -1, 0, null)
+        (List<Album>) ac.retrieveBatchLazy(ac.search(q, sessionBean.getUser(), null, -1, 0, null)
             .getResults(), sessionBean.getUser(), -1, 0);
   }
 

@@ -154,6 +154,10 @@
 													<h:inputText id="inputlongitude" value="#{el.longitude}" onkeyup="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();"/>
 													<h:outputLabel value="#{lbl.geolocation_longitude}" for="inputlongitude"/>
 												</li>
+												<li class="imj_searchInputValue">
+													<h:inputText id="inputdistance" value="#{el.distance}" onkeyup="document.getElementById('advancedSearchForm:groups:' + #{gIndex.index} +':els:'+ #{elIndex.index} +':updateEl').click();"/>
+													<h:outputLabel value="#{lbl.geolocation_distance}" for="inputlongitude"/>
+												</li>
 											</ul>
 										</ui:fragment>
 										<ui:fragment rendered="#{el.type == 'LICENSE' or el.type == 'LINK'}">

@@ -172,7 +172,7 @@ public class UsersBean implements Serializable {
   /**
    * Add a {@link User} to a {@link UserGroup} and then redirect to the {@link UserGroup} page
    * 
-   * @param user
+   * @param hasgrant
    */
   public String addToGroup() {
     Navigation nav = (Navigation) BeanHelper.getApplicationBean(Navigation.class);

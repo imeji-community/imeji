@@ -117,7 +117,7 @@ public class EditCollectionBean extends CollectionBean {
         ic = collectionController.update(getCollection(), user);
       }
       if (icPre.getLogoUrl() != null && getCollection().getLogoUrl() == null) {
-        collectionController.updateCollectionLogo(icPre, null, user);
+        collectionController.updateLogo(icPre, null, user);
       }
       UserController uc = new UserController(user);
       uc.update(user, user);
@@ -128,7 +128,7 @@ public class EditCollectionBean extends CollectionBean {
       // getIngestImage is inherited from Container!
 
       if (getIngestImage() != null) {
-        collectionController.updateCollectionLogo(ic, getIngestImage().getFile(), user);
+        collectionController.updateLogo(ic, getIngestImage().getFile(), user);
         setIngestImage(null);
       }
       BeanHelper.info(sessionBean.getMessage("success_collection_save"));

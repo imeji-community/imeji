@@ -9,15 +9,14 @@ import java.util.List;
 import java.util.Map;
 
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.search.SPARQLSearch;
-import de.mpg.imeji.logic.search.vo.SearchElement;
-import de.mpg.imeji.logic.search.vo.SearchElement.SEARCH_ELEMENTS;
-import de.mpg.imeji.logic.search.vo.SearchGroup;
-import de.mpg.imeji.logic.search.vo.SearchIndex;
-import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
-import de.mpg.imeji.logic.search.vo.SearchOperators;
-import de.mpg.imeji.logic.search.vo.SearchPair;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
+import de.mpg.imeji.logic.search.model.SearchElement;
+import de.mpg.imeji.logic.search.model.SearchElement.SEARCH_ELEMENTS;
+import de.mpg.imeji.logic.search.model.SearchGroup;
+import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
+import de.mpg.imeji.logic.search.model.SearchLogicalRelation.LOGICAL_RELATIONS;
+import de.mpg.imeji.logic.search.model.SearchOperators;
+import de.mpg.imeji.logic.search.model.SearchPair;
+import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 
 /**
@@ -30,8 +29,8 @@ import de.mpg.imeji.logic.vo.MetadataProfile;
 public class SearchForm {
   private Map<String, MetadataProfile> profilesMap;
   private List<SearchGroupForm> groups;
-  private SearchPair fileTypeSearch = new SearchPair(
-      SPARQLSearch.getIndex(SearchIndex.IndexNames.filetype), SearchOperators.REGEX, "");
+  private SearchPair fileTypeSearch = new SearchPair(SearchFields.filetype, SearchOperators.REGEX,
+      "", false);
 
 
   /**
@@ -62,10 +61,10 @@ public class SearchForm {
           groups.add(new SearchGroupForm((SearchGroup) se, profilesMap.get(profileId)));
       }
       if (se.getType().equals(SEARCH_ELEMENTS.PAIR)) {
-        if (((SearchPair) se).getIndex().getName().equals(SearchIndex.IndexNames.filetype.name())) {
+        if (((SearchPair) se).getField() == SearchFields.filetype) {
           fileTypeSearch =
-              new SearchPair(SPARQLSearch.getIndex(SearchIndex.IndexNames.filetype),
-                  SearchOperators.REGEX, ((SearchPair) se).getValue());
+              new SearchPair(SearchFields.filetype, SearchOperators.REGEX,
+                  ((SearchPair) se).getValue(), false);
         }
       }
     }

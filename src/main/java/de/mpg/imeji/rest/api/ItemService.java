@@ -16,6 +16,7 @@ import com.google.common.collect.Lists;
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.search.SearchQueryParser;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
@@ -71,7 +72,8 @@ public class ItemService implements API<ItemTO> {
   }
 
   public List<ItemTO> readItems(User u, String q) throws ImejiException, IOException {
-    return Lists.transform(new ItemController().retrieve(u, q, null), new Function<Item, ItemTO>() {
+    return Lists.transform(new ItemController().searchAndRetrieve(null,
+        SearchQueryParser.parseStringQuery(q), null, u, null), new Function<Item, ItemTO>() {
       @Override
       public ItemTO apply(Item vo) {
         ItemTO to = new ItemTO();
@@ -83,14 +85,14 @@ public class ItemService implements API<ItemTO> {
 
   public List<DefaultItemTO> readDefaultItems(User u, String q) throws ImejiException, IOException {
 
-    return Lists.transform(new ItemController().retrieve(u, q, null),
-        new Function<Item, DefaultItemTO>() {
-          public DefaultItemTO apply(Item item) {
-            DefaultItemTO defaultTO = new DefaultItemTO();
-            TransferObjectFactory.transferDefaultItem(item, defaultTO);
-            return defaultTO;
-          }
-        });
+    return Lists.transform(new ItemController().searchAndRetrieve(null,
+        SearchQueryParser.parseStringQuery(q), null, u, null), new Function<Item, DefaultItemTO>() {
+      public DefaultItemTO apply(Item item) {
+        DefaultItemTO defaultTO = new DefaultItemTO();
+        TransferObjectFactory.transferDefaultItem(item, defaultTO);
+        return defaultTO;
+      }
+    });
   }
 
 

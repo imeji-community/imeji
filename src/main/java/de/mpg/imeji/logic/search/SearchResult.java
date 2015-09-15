@@ -8,12 +8,13 @@ import java.util.List;
 
 import com.hp.hpl.jena.Jena;
 
-import de.mpg.imeji.logic.search.vo.SearchIndex;
-import de.mpg.imeji.logic.search.vo.SortCriterion;
+import de.mpg.imeji.logic.search.jenasearch.JenaSearch;
+import de.mpg.imeji.logic.search.model.SearchIndex;
+import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.j2j.helper.SortHelper;
 
 /**
- * Result {@link Object} for {@link SPARQLSearch}
+ * Result {@link Object} for {@link JenaSearch}
  * 
  * @author saquet (initial creation)
  * @author $Author$ (last modification)
@@ -38,7 +39,7 @@ public class SearchResult {
     if (sort != null) {
       // ???
       if (sort.getIndex() != null
-          && sort.getIndex().getName().equals(SearchIndex.IndexNames.cont_title.name())) {
+          && sort.getIndex().getName().equals(SearchIndex.SearchFields.title.name())) {
         sort.toggle();
       }
       this.sort = sort;
@@ -46,6 +47,14 @@ public class SearchResult {
     } else {
       results = unsortedResults;
     }
+  }
+
+  /**
+   * Default constructor
+   */
+  public SearchResult(List<String> ids) {
+    numberOfRecords = ids.size();
+    results = ids;
   }
 
   public int getNumberOfRecords() {

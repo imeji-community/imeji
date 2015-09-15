@@ -28,7 +28,7 @@ import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.notification.NotificationUtils;
 import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchFactory;
-import de.mpg.imeji.logic.search.query.SPARQLQueries;
+import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.impl.ExternalStorage;
@@ -212,7 +212,7 @@ public class FileServlet extends HttpServlet {
    * @return
    */
   private CollectionImeji loadCollection(String url) {
-    List<String> l = ImejiSPARQL.exec(SPARQLQueries.selectCollectionIdOfFile(url), null);
+    List<String> l = ImejiSPARQL.exec(JenaCustomQueries.selectCollectionIdOfFile(url), null);
     if (l.size() == 0)
       throw new RuntimeException("File " + url + " couldn't be found");
     CollectionController c = new CollectionController();
@@ -237,7 +237,7 @@ public class FileServlet extends HttpServlet {
     } else {
       Search s = SearchFactory.create();
       List<String> r =
-          s.searchSimpleForQuery(SPARQLQueries.selectCollectionIdOfFile(url)).getResults();
+          s.searchString(JenaCustomQueries.selectCollectionIdOfFile(url), null, null, 0, -1).getResults();
       if (!r.isEmpty())
         return URI.create(r.get(0));
       else
@@ -254,7 +254,7 @@ public class FileServlet extends HttpServlet {
    */
   private Item getItem(String url, User user) throws Exception {
     Search s = SearchFactory.create();
-    List<String> r = s.searchSimpleForQuery(SPARQLQueries.selectItemIdOfFile(url)).getResults();
+    List<String> r = s.searchString(JenaCustomQueries.selectItemIdOfFile(url), null, null, 0, -1).getResults();
     if (!r.isEmpty() && r.get(0) != null) {
       ItemController c = new ItemController();
       return c.retrieve(URI.create(r.get(0)), user);

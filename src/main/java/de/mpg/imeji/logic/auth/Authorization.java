@@ -31,7 +31,7 @@ import de.mpg.imeji.exceptions.NotAllowedError;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
-import de.mpg.imeji.logic.search.query.SPARQLQueries;
+import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Grant;
@@ -295,7 +295,7 @@ public class Authorization {
    */
   private String getCollectionUri(String uri, boolean isReadGrant) {
     if (!isReadGrant && uri.contains("/item/")) {
-      List<String> c = ImejiSPARQL.exec(SPARQLQueries.selectCollectionIdOfItem(uri), null);
+      List<String> c = ImejiSPARQL.exec(JenaCustomQueries.selectCollectionIdOfItem(uri), null);
       if (!c.isEmpty()) {
         return c.get(0);
       }

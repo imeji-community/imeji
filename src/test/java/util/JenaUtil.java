@@ -2,7 +2,6 @@ package util;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -19,6 +18,7 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
+import de.mpg.imeji.logic.search.elasticsearch.ElasticService;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
@@ -88,6 +88,8 @@ public class JenaUtil {
       initTestUser();
       // init imeji configuration
       new ConfigurationBean();
+      // Start Elasticsearch
+      ElasticService.start();
     } catch (Exception e) {
       throw new RuntimeException("Error initialiting Jena for testing: ", e);
     }
@@ -105,6 +107,9 @@ public class JenaUtil {
     TDBMaker.releaseLocation(new Location(TDB_PATH));
     logger.info("TDB Location released!");
     deleteTDBDirectory();
+    // stop Elasticsearch
+    ElasticService.deleteAll();
+    ElasticService.shutdown();
   }
 
   private static void initTestUser() throws Exception {

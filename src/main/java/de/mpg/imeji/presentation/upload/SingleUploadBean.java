@@ -35,11 +35,12 @@ import de.mpg.imeji.logic.controller.CollectionController.MetadataProfileCreatio
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.controller.exceptions.TypeNotAllowedException;
-import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
-import de.mpg.imeji.logic.search.vo.SortCriterion;
-import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
+import de.mpg.imeji.logic.search.jenasearch.JenaSearch;
+import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
+import de.mpg.imeji.logic.search.model.SearchQuery;
+import de.mpg.imeji.logic.search.model.SortCriterion;
+import de.mpg.imeji.logic.search.model.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.TempFileUtil;
@@ -295,14 +296,14 @@ public class SingleUploadBean implements Serializable {
     // SearchOperators.EQUALS, user.getId().toString());
     // sq.addPair(sp);
     SortCriterion sortCriterion = new SortCriterion();
-    sortCriterion.setIndex(SPARQLSearch.getIndex("cont_title"));
+    sortCriterion.setIndex(JenaSearch.getIndex(SearchFields.title));
     // For some funny reasons this took me a while to debug, search results for cont_title are
     // toggled, if you need ascending, provide "DESCENDING"
-    sortCriterion.setSortOrder(SortOrder.valueOf("DESCENDING"));
+    sortCriterion.setSortOrder(SortOrder.DESCENDING);
     // TODO: check if here space restriction is needed
     SearchResult results = cc.search(sq, sortCriterion, -1, 0, user, sb.getSelectedSpaceString());
     if (!checkSizeOnly) {
-      collections = cc.retrieveLazy(results.getResults(), -1, 0, user);
+      collections = cc.retrieveBatchLazy(results.getResults(), -1, 0, user);
       for (CollectionImeji c : collections) {
         if (AuthUtil.staticAuth().createContent(user, c))
           collectionItems.add(new SelectItem(c.getId(), c.getMetadata().getTitle()));
@@ -310,7 +311,7 @@ public class SingleUploadBean implements Serializable {
       if (collectionItems.size() > 1) {
         collectionItems.add(0, new SelectItem("", "-- Select a collection to upload your file --"));
       } else if (collectionItems.size() > 0) {
-        
+
         setSelectedCollection(collectionItems.get(0).getValue().toString());
         methodColChangeListener();
       }

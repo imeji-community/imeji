@@ -3,6 +3,24 @@
  */
 package de.mpg.imeji.logic.controller;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+import static de.mpg.imeji.logic.storage.util.StorageUtils.calculateChecksum;
+import static de.mpg.imeji.logic.storage.util.StorageUtils.getMimeType;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.exceptions.AuthenticationError;
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
@@ -14,13 +32,13 @@ import de.mpg.imeji.logic.ImejiTriple;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
-import de.mpg.imeji.logic.search.Search.SearchType;
+import de.mpg.imeji.logic.search.Search.SearchObjectTypes;
 import de.mpg.imeji.logic.search.SearchFactory;
+import de.mpg.imeji.logic.search.SearchFactory.SEARCH_IMPLEMENTATIONS;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.query.SPARQLQueries;
-import de.mpg.imeji.logic.search.query.URLQueryTransformer;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
-import de.mpg.imeji.logic.search.vo.SortCriterion;
+import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
+import de.mpg.imeji.logic.search.model.SearchQuery;
+import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.imeji.logic.storage.Storage;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.UploadResult;
@@ -43,25 +61,6 @@ import de.mpg.imeji.rest.process.CommonUtils;
 import de.mpg.j2j.annotations.j2jResource;
 import de.mpg.j2j.helper.J2JHelper;
 
-import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Logger;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static com.google.common.base.Strings.isNullOrEmpty;
-import static de.mpg.imeji.logic.storage.util.StorageUtils.calculateChecksum;
-import static de.mpg.imeji.logic.storage.util.StorageUtils.getMimeType;
-import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
-
 /**
  * Implements CRUD and Search methods for {@link Item}
  * 
@@ -71,16 +70,17 @@ import static de.mpg.imeji.logic.util.StringHelper.isNullOrEmptyTrim;
  */
 public class ItemController extends ImejiController {
   private static Logger logger = Logger.getLogger(ItemController.class);
-  private static final ReaderFacade reader = new ReaderFacade(Imeji.imageModel);
-  private static final WriterFacade writer = new WriterFacade(Imeji.imageModel);
+  private static ReaderFacade reader = new ReaderFacade(Imeji.imageModel);
+  private static WriterFacade writer = new WriterFacade(Imeji.imageModel);
   public static final String NO_THUMBNAIL_FILE_NAME = "noThumbnail.png";
   private static String NO_THUMBNAIL_URL;
+  private Search search = SearchFactory.create(SearchObjectTypes.ITEM,
+      SEARCH_IMPLEMENTATIONS.ELASTIC);
 
   /**
    * Controller constructor
    */
   public ItemController() {
-    super();
     try {
       NO_THUMBNAIL_URL =
           PropertyReader.getProperty("imeji.instance.url") + "/resources/icon/"
@@ -330,9 +330,10 @@ public class ItemController extends ImejiController {
    * @param limit
    * @param offset
    * @return
+   * @throws ImejiException
    */
-  public Collection<Item> retrieve(List<String> uris, int limit, int offset, User user) {
-
+  public Collection<Item> retrieve(List<String> uris, int limit, int offset, User user)
+      throws ImejiException {
     List<String> retrieveUris;
     if (limit < 0) {
       retrieveUris = uris;
@@ -341,51 +342,24 @@ public class ItemController extends ImejiController {
           uris.size() > 0 && limit > 0 ? uris.subList(offset, getMin(offset + limit, uris.size()))
               : new ArrayList<String>();
     }
-
     List<Item> items = new ArrayList<Item>();
-
     for (String s : retrieveUris) {
       items.add((Item) J2JHelper.setId(new Item(), URI.create(s)));
     }
-
-    try {
-      reader.readLazy(J2JHelper.cast2ObjectList(items), user);
-      return items;
-    } catch (Exception e) {
-      throw new RuntimeException("Error loading items: " + e.getMessage(), e);
-    }
+    reader.readLazy(J2JHelper.cast2ObjectList(items), user);
+    return items;
   }
 
-  /**
-   * Retrieve all items filtered by query
-   * 
-   * @param user
-   * @param q
-   * @return
-   * @throws ImejiException
-   */
-  public List<Item> retrieve(final User user, String q, String spaceId) throws ImejiException,
-      IOException {
-    List<Item> itemList = new ArrayList<Item>();
-    try {
 
-      List<String> results =
-          search(null, !isNullOrEmptyTrim(q) ? URLQueryTransformer.parseStringQuery(q) : null,
-              null, null, user, spaceId).getResults();
-      itemList = (List<Item>) retrieve(results, getMin(results.size(), 500), 0, user);
-    } catch (Exception e) {
-      throw new UnprocessableError("Cannot retrieve items:", e);
-    }
-    return itemList;
-  }
 
   /**
    * Retrieve all {@link Item} (all status, all users) in imeji
    * 
    * @return
+   * @throws ImejiException
    */
-  public Collection<Item> retrieveAll(User user) {
-    List<String> uris = ImejiSPARQL.exec(SPARQLQueries.selectItemAll(), Imeji.imageModel);
+  public Collection<Item> retrieveAll(User user) throws ImejiException {
+    List<String> uris = ImejiSPARQL.exec(JenaCustomQueries.selectItemAll(), Imeji.imageModel);
     return retrieve(uris, -1, 0, user);
   }
 
@@ -442,14 +416,13 @@ public class ItemController extends ImejiController {
     }
 
     CollectionController cc = new CollectionController();
-    CollectionImeji col =  cc.retrieveLazy(item.getCollection(), user);
+    CollectionImeji col = cc.retrieveLazy(item.getCollection(), user);
 
     UserController uc = new UserController(user);
     uc.checkQuota(f, col);
 
     StorageController sc = new StorageController();
-    UploadResult uploadResult =
-        sc.upload(item.getFilename(), f, col.getIdString());
+    UploadResult uploadResult = sc.upload(item.getFilename(), f, col.getIdString());
 
     item.setFiletype(getMimeType(f));
     item.setChecksum(calculateChecksum(f));
@@ -600,9 +573,8 @@ public class ItemController extends ImejiController {
    */
   public SearchResult search(URI containerUri, SearchQuery searchQuery, SortCriterion sortCri,
       List<String> uris, User user, String spaceId) {
-    String uriString = containerUri != null ? containerUri.toString() : null;
-    Search search = SearchFactory.create(SearchType.ITEM, uriString);
-    return search.search(searchQuery, sortCri, user, uris, spaceId);
+    return search.search(searchQuery, sortCri, user, containerUri != null ? containerUri.toString()
+        : null, spaceId, 0, -1);
   }
 
   /**
@@ -613,13 +585,32 @@ public class ItemController extends ImejiController {
    * @param user
    */
   public Container searchAndSetContainerItems(Container c, User user, int limit, int offset) {
-    ItemController ic = new ItemController();
-    List<String> newUris = ic.search(c.getId(), null, null, null, user, "").getResults();
+    List<String> newUris = search(c.getId(), null, null, null, user, "").getResults();
     c.getImages().clear();
     for (String s : newUris) {
       c.getImages().add(URI.create(s));
     }
     return c;
+  }
+
+  /**
+   * Retrieve all items filtered by query
+   * 
+   * @param user
+   * @param q
+   * @return
+   * @throws ImejiException
+   */
+  public List<Item> searchAndRetrieve(URI containerUri, SearchQuery q, SortCriterion sort,
+      User user, String spaceId) throws ImejiException, IOException {
+    List<Item> itemList = new ArrayList<Item>();
+    try {
+      List<String> results = search(containerUri, q, sort, null, user, spaceId).getResults();
+      itemList = (List<Item>) retrieve(results, getMin(results.size(), 500), 0, user);
+    } catch (Exception e) {
+      throw new UnprocessableError("Cannot retrieve items:", e);
+    }
+    return itemList;
   }
 
   /**
@@ -638,7 +629,6 @@ public class ItemController extends ImejiController {
     return c;
   }
 
-
   /**
    * Search all items of {@link Container}
    * 
@@ -649,8 +639,8 @@ public class ItemController extends ImejiController {
    */
   public List<String> seachContainerItemsFast(Container c, User user, int size) {
     String q =
-        c instanceof CollectionImeji ? SPARQLQueries.selectCollectionItems(c.getId(), user, size)
-            : SPARQLQueries.selectAlbumItems(c.getId(), user, size);
+        c instanceof CollectionImeji ? JenaCustomQueries.selectCollectionItems(c.getId(), user,
+            size) : JenaCustomQueries.selectAlbumItems(c.getId(), user, size);
     c.getImages().clear();
     return ImejiSPARQL.exec(q, null);
   }
@@ -665,8 +655,8 @@ public class ItemController extends ImejiController {
    */
   public List<String> searchDiscardedContainerItemsFast(Container c, User user, int size) {
     String q =
-        c instanceof CollectionImeji ? SPARQLQueries.selectDiscardedCollectionItems(c.getId(),
-            user, size) : SPARQLQueries.selectDiscardedAlbumItems(c.getId(), user, size);
+        c instanceof CollectionImeji ? JenaCustomQueries.selectDiscardedCollectionItems(c.getId(),
+            user, size) : JenaCustomQueries.selectDiscardedAlbumItems(c.getId(), user, size);
     return ImejiSPARQL.exec(q, null);
   }
 
@@ -683,9 +673,11 @@ public class ItemController extends ImejiController {
       if (Status.PENDING.equals(item.getStatus())) {
         triples.addAll(getReleaseTriples(item.getId().toString(), item));
         triples.addAll(getUpdateTriples(item.getId().toString(), user, item));
+        writeReleaseProperty(item, user);
       }
     }
-    patch(triples, user);
+    // patch(triples, user); //TODO faster but doesnt work with indexer
+    update(l, user);
   }
 
   /**
@@ -719,16 +711,16 @@ public class ItemController extends ImejiController {
       } else {
         triples.addAll(getWithdrawTriples(item.getId().toString(), item, comment));
         triples.addAll(getUpdateTriples(item.getId().toString(), user, item));
-        // writeWithdrawProperties(item, comment);
-        // item.setVisibility(Visibility.PUBLIC);
-
+        writeWithdrawProperties(item, comment);
+        item.setVisibility(Visibility.PUBLIC);
         if (item.getEscidocId() != null) {
           removeFileFromStorage(item.getStorageId());
           item.setEscidocId(null);
         }
       }
     }
-    patch(triples, user);
+    // patch(triples, user);//TODO faster but doesnt work with indexer
+    update(items, user);
   }
 
   /**
@@ -739,8 +731,8 @@ public class ItemController extends ImejiController {
    */
   public int countContainerSize(Container c) {
     String q =
-        c instanceof CollectionImeji ? SPARQLQueries.countCollectionSize(c.getId()) : SPARQLQueries
-            .countAlbumSize(c.getId());
+        c instanceof CollectionImeji ? JenaCustomQueries.countCollectionSize(c.getId())
+            : JenaCustomQueries.countAlbumSize(c.getId());
     return ImejiSPARQL.execCount(q, null);
   }
 
@@ -863,9 +855,9 @@ public class ItemController extends ImejiController {
    * @return
    */
   private boolean checksumExistsInCollection(URI collectionId, String checksum) {
-    Search s = SearchFactory.create(SearchType.ITEM);
-    return s.searchSimpleForQuery(SPARQLQueries.selectItemByChecksum(collectionId, checksum))
-        .getNumberOfRecords() > 0;
+    Search s = SearchFactory.create(SearchObjectTypes.ITEM, SEARCH_IMPLEMENTATIONS.JENA);
+    return s.searchString(JenaCustomQueries.selectItemByChecksum(collectionId, checksum), null,
+        null, 0, -1).getNumberOfRecords() > 0;
   }
 
   private boolean isValidateChecksumInCollection() {

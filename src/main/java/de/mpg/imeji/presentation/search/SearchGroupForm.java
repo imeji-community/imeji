@@ -11,16 +11,15 @@ import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.CollectionController;
-import de.mpg.imeji.logic.search.SPARQLSearch;
-import de.mpg.imeji.logic.search.vo.SearchElement;
-import de.mpg.imeji.logic.search.vo.SearchElement.SEARCH_ELEMENTS;
-import de.mpg.imeji.logic.search.vo.SearchGroup;
-import de.mpg.imeji.logic.search.vo.SearchIndex;
-import de.mpg.imeji.logic.search.vo.SearchLogicalRelation;
-import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
-import de.mpg.imeji.logic.search.vo.SearchOperators;
-import de.mpg.imeji.logic.search.vo.SearchPair;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
+import de.mpg.imeji.logic.search.model.SearchElement;
+import de.mpg.imeji.logic.search.model.SearchElement.SEARCH_ELEMENTS;
+import de.mpg.imeji.logic.search.model.SearchGroup;
+import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
+import de.mpg.imeji.logic.search.model.SearchLogicalRelation;
+import de.mpg.imeji.logic.search.model.SearchLogicalRelation.LOGICAL_RELATIONS;
+import de.mpg.imeji.logic.search.model.SearchOperators;
+import de.mpg.imeji.logic.search.model.SearchPair;
+import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
@@ -106,8 +105,8 @@ public class SearchGroupForm {
     }
     if (collectionId != null && !"".equals(collectionId)) {
       SearchGroup searchGroup = new SearchGroup();
-      searchGroup.addPair(new SearchPair(SPARQLSearch.getIndex(SearchIndex.IndexNames.col),
-          SearchOperators.EQUALS, collectionId.toString()));
+      searchGroup.addPair(new SearchPair(SearchFields.col, SearchOperators.EQUALS, collectionId
+          .toString(), false));
       searchGroup.addLogicalRelation(LOGICAL_RELATIONS.AND);
       searchGroup.addGroup(groupWithAllMetadata);
       return searchGroup;
@@ -149,8 +148,7 @@ public class SearchGroupForm {
   private List<SelectItem> getCollectionsMenu(MetadataProfile p) throws ImejiException {
     CollectionController cc = new CollectionController();
     SearchQuery q = new SearchQuery();
-    q.addPair(new SearchPair(SPARQLSearch.getIndex(SearchIndex.IndexNames.prof),
-        SearchOperators.EQUALS, p.getId().toString()));
+    q.addPair(new SearchPair(SearchFields.prof, SearchOperators.EQUALS, p.getId().toString(), false));
     List<SelectItem> l = new ArrayList<SelectItem>();
     SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
     l.add(new SelectItem(null, session.getLabel("adv_search_collection_restrict")));

@@ -37,9 +37,10 @@ import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.Search;
-import de.mpg.imeji.logic.search.Search.SearchType;
+import de.mpg.imeji.logic.search.Search.SearchObjectTypes;
 import de.mpg.imeji.logic.search.SearchFactory;
-import de.mpg.imeji.logic.search.query.SPARQLQueries;
+import de.mpg.imeji.logic.search.SearchFactory.SEARCH_IMPLEMENTATIONS;
+import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -290,15 +291,19 @@ public class UploadBean implements Serializable {
       if (isCheckNameUnique()) {
         // if the checkNameUnique is checked, check that two files with
         // the same name is not possible
-        if (!((isImportImageToFile() || isUploadFileToItem())) && filenameExistsInCollection(title))
-          throw new RuntimeException("There is already at least one item with the filename "
+        if (!((isImportImageToFile() || isUploadFileToItem())) && filenameExistsInCollection(title)) {
+          logger.error("There is already at least one item with the filename "
               + FilenameUtils.getBaseName(title));
+        }
+        // throw new RuntimeException("There is already at least one item with the filename "
+        //
+        // + FilenameUtils.getBaseName(title));
       }
       StorageController sc = new StorageController();
       String guessedNotAllowedFormat = sc.guessNotAllowedFormat(file);
       if (StorageUtils.BAD_FORMAT.equals(guessedNotAllowedFormat)) {
         SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
-        throw new RuntimeException(sessionBean.getMessage("upload_format_not_allowed") + " ("
+        logger.error(sessionBean.getMessage("upload_format_not_allowed") + " ("
             + StorageUtils.guessExtension(file) + ")");
       }
     }
@@ -356,11 +361,11 @@ public class UploadBean implements Serializable {
    * @throws Exception
    */
   private Item findItemByFileName(String filename) throws Exception {
-    Search s = SearchFactory.create(SearchType.ITEM);
+    Search s = SearchFactory.create(SearchObjectTypes.ITEM, SEARCH_IMPLEMENTATIONS.JENA);
     List<String> sr =
-        s.searchSimpleForQuery(
-            SPARQLQueries.selectContainerItemByFilename(collection.getId(),
-                FilenameUtils.getBaseName(filename))).getResults();
+        s.searchString(
+            JenaCustomQueries.selectContainerItemByFilename(collection.getId(),
+                FilenameUtils.getBaseName(filename)), null, null, 0, -1).getResults();
     if (sr.size() == 0)
       throw new RuntimeException("No item found with the filename "
           + FilenameUtils.getBaseName(filename));
@@ -377,10 +382,10 @@ public class UploadBean implements Serializable {
    * @return
    */
   private boolean filenameExistsInCollection(String filename) {
-    Search s = SearchFactory.create(SearchType.ITEM);
-    return s.searchSimpleForQuery(
-        SPARQLQueries.selectContainerItemByFilename(collection.getId(),
-            FilenameUtils.getBaseName(filename))).getNumberOfRecords() > 0;
+    Search s = SearchFactory.create(SearchObjectTypes.ITEM, SEARCH_IMPLEMENTATIONS.JENA);
+    return s.searchString(
+        JenaCustomQueries.selectContainerItemByFilename(collection.getId(),
+            FilenameUtils.getBaseName(filename)), null, null, 0, -1).getNumberOfRecords() > 0;
   }
 
   /**

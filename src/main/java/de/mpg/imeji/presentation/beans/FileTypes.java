@@ -85,6 +85,10 @@ public class FileTypes {
       return regex;
     }
 
+    public String[] getExtensionArray() {
+      return extensions.split(",");
+    }
+
     /**
      * True if the type has the following (in whatever language)
      * 
@@ -116,7 +120,7 @@ public class FileTypes {
     }
 
     /**
-     * @param name the name to set
+     * @param md_name the name to set
      */
     public void setNames(String names) {
       this.names = names;
@@ -237,7 +241,7 @@ public class FileTypes {
   }
 
   /**
-   * @param type the type to set
+   * @param metadata_type the type to set
    */
   public void setTypes(List<Type> types) {
     this.types = types;

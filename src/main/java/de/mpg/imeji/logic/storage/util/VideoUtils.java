@@ -76,7 +76,7 @@ public class VideoUtils {
   /**
    * Gets byte array of an snapshot image from provided URL video
    * 
-   * @param url
+   * @param md_url
    * @return byte array of an image from video file
    * @throws FileNotFoundException
    * @throws IOException
@@ -102,7 +102,7 @@ public class VideoUtils {
   /**
    * Gets byte array of an snapshot image from provided url video
    * 
-   * @param url
+   * @param md_url
    * @param threshold
    * @param fileExtention
    * @return byte array of an image from video file
@@ -153,7 +153,7 @@ public class VideoUtils {
   /**
    * Gets byte array of an snapshot image from provided url video
    * 
-   * @param url
+   * @param md_url
    * @param threshold
    * @param fileExtention
    * @return byte array of an image from video file

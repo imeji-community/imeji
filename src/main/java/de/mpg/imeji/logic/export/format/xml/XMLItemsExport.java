@@ -6,8 +6,6 @@ package de.mpg.imeji.logic.export.format.xml;
 import java.io.OutputStream;
 import java.util.Collection;
 
-import javax.xml.bind.JAXBException;
-
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.export.format.XMLExport;
 import de.mpg.imeji.logic.ingest.jaxb.JaxbUtil;
@@ -32,11 +30,12 @@ public class XMLItemsExport extends XMLExport {
   public void export(OutputStream out, SearchResult sr) {
     SessionBean session = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
     ItemController ic = new ItemController();
-    Collection<Item> itemList = ic.retrieve(sr.getResults(), -1, 0, session.getUser());
-    Items items = new Items(itemList);
+
     try {
+      Collection<Item> itemList = ic.retrieve(sr.getResults(), -1, 0, session.getUser());
+      Items items = new Items(itemList);
       JaxbUtil.writeToOutputStream(items, out);
-    } catch (JAXBException e) {
+    } catch (Exception e) {
       throw new RuntimeException(e);
     }
   }

@@ -14,8 +14,8 @@ import com.hp.hpl.jena.sparql.pfunction.library.container;
 
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
-import de.mpg.imeji.logic.search.vo.SortCriterion;
+import de.mpg.imeji.logic.search.model.SearchQuery;
+import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.presentation.beans.SuperContainerBean;
@@ -57,7 +57,7 @@ public class CollectionsBean extends SuperContainerBean<CollectionListItem> {
     int myOffset = offset;
     myOffset = prepareList(offset);
     setTotalNumberOfRecords(searchResult.getNumberOfRecords());
-    collections = controller.retrieveLazy(searchResult.getResults(), limit, myOffset, sb.getUser());
+    collections = controller.retrieveBatchLazy(searchResult.getResults(), limit, myOffset, sb.getUser());
     return ImejiFactory.collectionListToListItem(collections, sb.getUser());
   }
 

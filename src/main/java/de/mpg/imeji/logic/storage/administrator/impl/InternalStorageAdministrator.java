@@ -31,7 +31,7 @@ import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 
 import de.mpg.imeji.logic.ImejiSPARQL;
-import de.mpg.imeji.logic.search.query.SPARQLQueries;
+import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.storage.administrator.StorageAdministrator;
 import de.mpg.imeji.logic.storage.impl.InternalStorage;
 import de.mpg.imeji.logic.storage.internal.InternalStorageManager;
@@ -123,7 +123,7 @@ public class InternalStorageAdministrator implements StorageAdministrator {
       if (f.isFile()) {
         InternalStorageManager m = new InternalStorageManager();
         String url = m.transformPathToUrl(f.getPath());
-        if (ImejiSPARQL.exec(SPARQLQueries.selectItemIdOfFile(url), null).size() == 0) {
+        if (ImejiSPARQL.exec(JenaCustomQueries.selectItemIdOfFile(url), null).size() == 0) {
           // file doesn't exist, remove it
           m.removeFile(url);
           deleted++;

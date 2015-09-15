@@ -3,6 +3,17 @@
  */
 package de.mpg.imeji.logic.controller;
 
+import java.io.File;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotFoundException;
@@ -12,10 +23,11 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
-import de.mpg.imeji.logic.search.Search.SearchType;
+import de.mpg.imeji.logic.search.Search.SearchObjectTypes;
 import de.mpg.imeji.logic.search.SearchFactory;
+import de.mpg.imeji.logic.search.SearchFactory.SEARCH_IMPLEMENTATIONS;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.query.SPARQLQueries;
+import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Metadata;
@@ -29,17 +41,6 @@ import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.j2j.helper.DateHelper;
 
-import org.apache.log4j.Logger;
-
-import java.io.File;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 /**
  * Controller for {@link User}
  * 
@@ -50,9 +51,9 @@ import java.util.Map;
 public class UserController {
   private static final ReaderFacade reader = new ReaderFacade(Imeji.userModel);
   private static final WriterFacade writer = new WriterFacade(Imeji.userModel);
-  //25GB is default quota
-  //TODO: put to properties
-  //public static final long DISK_USAGE_QUOTA = 25 * 1024 * 1024 * 1024;
+  // 25GB is default quota
+  // TODO: put to properties
+  // public static final long DISK_USAGE_QUOTA = 25 * 1024 * 1024 * 1024;
   private User user;
   static Logger logger = Logger.getLogger(UserController.class);
 
@@ -146,7 +147,8 @@ public class UserController {
    */
   public User retrieve(String email) throws ImejiException {
     Search search = SearchFactory.create();
-    SearchResult result = search.searchSimpleForQuery(SPARQLQueries.selectUserByEmail(email));
+    SearchResult result =
+        search.searchString(JenaCustomQueries.selectUserByEmail(email), null, null, 0, -1);
     if (result.getNumberOfRecords() == 1) {
       String id = result.getResults().get(0);
       User u = (User) reader.read(id, user, new User());
@@ -166,8 +168,9 @@ public class UserController {
    * @throws ImejiException
    */
   public boolean existsUserWitheMail(String email, String userUri, boolean newUser) {
-    Search search = SearchFactory.create(SearchType.USER);
-    SearchResult result = search.searchSimpleForQuery(SPARQLQueries.selectUserByEmail(email));
+    Search search = SearchFactory.create(SearchObjectTypes.USER, SEARCH_IMPLEMENTATIONS.JENA);
+    SearchResult result =
+        search.searchString(JenaCustomQueries.selectUserByEmail(email), null, null, 0, -1);
     if (result.getNumberOfRecords() == 0) {
       return false;
     } else {
@@ -196,7 +199,8 @@ public class UserController {
   public User retrieveRegisteredUser(String registrationToken) throws ImejiException {
     Search search = SearchFactory.create();
     SearchResult result =
-        search.searchSimpleForQuery(SPARQLQueries.selectUserByRegistrationToken(registrationToken));
+        search.searchString(JenaCustomQueries.selectUserByRegistrationToken(registrationToken),
+            null, null, 0, -1);
     if (result.getNumberOfRecords() == 1) {
       String id = result.getResults().get(0);
       User u = (User) reader.read(id, user, new User());
@@ -207,7 +211,8 @@ public class UserController {
 
   public User retrieve(String email, User currentUser) throws ImejiException {
     Search search = SearchFactory.create();
-    SearchResult result = search.searchSimpleForQuery(SPARQLQueries.selectUserByEmail(email));
+    SearchResult result =
+        search.searchString(JenaCustomQueries.selectUserByEmail(email), null, null, 0, -1);
     if (result.getNumberOfRecords() == 1) {
       String id = result.getResults().get(0);
       User u = (User) reader.read(id, currentUser, new User());
@@ -252,8 +257,8 @@ public class UserController {
     updatedUser.setName(updatedUser.getPerson().getGivenName() + " "
         + updatedUser.getPerson().getFamilyName());
 
-    //if quota is set to 0, set it to default disk space quota
-    if ( updatedUser.getQuota() == 0 ) {
+    // if quota is set to 0, set it to default disk space quota
+    if (updatedUser.getQuota() == 0) {
       updatedUser.setQuota(ConfigurationBean.getDefaultDiskSpaceQuotaStatic());
     }
 
@@ -302,41 +307,45 @@ public class UserController {
 
   /**
    * Check user disk space quota. Quota is calculated for user of target collection.
+   * 
    * @param file
    * @param col
    * @throws ImejiException
-   * @return remained disk space after successfully uploaded <code>file</code>;
-   * <code>-1</code> will be returned for unlimited quota
+   * @return remained disk space after successfully uploaded <code>file</code>; <code>-1</code> will
+   *         be returned for unlimited quota
    */
   public long checkQuota(File file, CollectionImeji col) throws ImejiException {
 
     // do not check quota for admin
     if (this.user.isAdmin())
-    //switch off feature!!!!
-//    if (true)
+      // switch off feature!!!!
+      // if (true)
       return -1L;
 
-    User targetCollectionUser = this.user.getId().equals(col.getCreatedBy()) ? this.user :
-            retrieve(col.getCreatedBy());
+    User targetCollectionUser =
+        this.user.getId().equals(col.getCreatedBy()) ? this.user : retrieve(col.getCreatedBy());
 
     Search search = SearchFactory.create();
-    List<String> results = search.searchSimpleForQuery(
-            //TODO: who is checked by quota?
-            // Current implementation: owner of target collection
-            SPARQLQueries.selectUserFileSize(col.getCreatedBy().toString())
-    ).getResults();
+    List<String> results =
+        search.searchString(
+        // TODO: who is checked by quota?
+        // Current implementation: owner of target collection
+            JenaCustomQueries.selectUserFileSize(col.getCreatedBy().toString()), null, null, 0, -1)
+            .getResults();
     long currentDiskUsage = 0L;
     try {
       currentDiskUsage = Long.parseLong(results.get(0).toString());
     } catch (NumberFormatException e) {
-      throw new UnprocessableError("Cannot parse currentDiskSpaceUsage " + results.get(0).toString() + "; requested by user: " + this.user.getEmail()
-      + "; targetCollectionUser: " + targetCollectionUser.getEmail());
+      throw new UnprocessableError("Cannot parse currentDiskSpaceUsage "
+          + results.get(0).toString() + "; requested by user: " + this.user.getEmail()
+          + "; targetCollectionUser: " + targetCollectionUser.getEmail());
     }
     long needed = currentDiskUsage + file.length();
     if (needed > targetCollectionUser.getQuota()) {
-      throw new QuotaExceededException("Disk quota: " + targetCollectionUser.getQuota() + "B has been exceeded by " + (needed - targetCollectionUser.getQuota())
-              + "B; requested by user: " + this.user.getEmail()
-              + "; targetCollectionUser: " + targetCollectionUser.getEmail());
+      throw new QuotaExceededException("Disk quota: " + targetCollectionUser.getQuota()
+          + "B has been exceeded by " + (needed - targetCollectionUser.getQuota())
+          + "B; requested by user: " + this.user.getEmail() + "; targetCollectionUser: "
+          + targetCollectionUser.getEmail());
     }
     return targetCollectionUser.getQuota() - needed;
   }
@@ -349,7 +358,8 @@ public class UserController {
    */
   public Collection<User> searchUserByName(String name) {
     Search search = SearchFactory.create();
-    return loadUsers(search.searchSimpleForQuery(SPARQLQueries.selectUserAll(name)).getResults());
+    return loadUsers(search.searchString(JenaCustomQueries.selectUserAll(name), null, null, 0, -1)
+        .getResults());
   }
 
   /**
@@ -360,8 +370,8 @@ public class UserController {
    */
   public Collection<User> searchByGrantFor(String grantFor) {
     Search search = SearchFactory.create();
-    return loadUsers(search.searchSimpleForQuery(SPARQLQueries.selectUserWithGrantFor(grantFor))
-        .getResults());
+    return loadUsers(search.searchString(JenaCustomQueries.selectUserWithGrantFor(grantFor), null,
+        null, 0, -1).getResults());
   }
 
   /**
@@ -444,9 +454,10 @@ public class UserController {
    * @return
    */
   private Collection<Person> searchPersonByNameInUsers(String name) {
-    Search search = SearchFactory.create(SearchType.USER);
-    return loadPersons(search.searchSimpleForQuery(SPARQLQueries.selectPersonByName(name))
-        .getResults(), Imeji.userModel);
+    Search search = SearchFactory.create(SearchObjectTypes.USER, SEARCH_IMPLEMENTATIONS.JENA);
+    return loadPersons(
+        search.searchString(JenaCustomQueries.selectPersonByName(name), null, null, 0, -1)
+            .getResults(), Imeji.userModel);
   }
 
   /**
@@ -456,9 +467,10 @@ public class UserController {
    * @return
    */
   private Collection<Person> searchPersonByNameInCollections(String name) {
-    Search search = SearchFactory.create(SearchType.COLLECTION);
-    return loadPersons(search.searchSimpleForQuery(SPARQLQueries.selectPersonByName(name))
-        .getResults(), Imeji.collectionModel);
+    Search search = SearchFactory.create(SearchObjectTypes.COLLECTION, SEARCH_IMPLEMENTATIONS.JENA);
+    return loadPersons(
+        search.searchString(JenaCustomQueries.selectPersonByName(name), null, null, 0, -1)
+            .getResults(), Imeji.collectionModel);
   }
 
   /**
@@ -468,10 +480,10 @@ public class UserController {
    * @return
    */
   private Collection<Organization> searchOrganizationByNameInUsers(String name) {
-    Search search = SearchFactory.create(SearchType.USER);
+    Search search = SearchFactory.create(SearchObjectTypes.USER, SEARCH_IMPLEMENTATIONS.JENA);
     return loadOrganizations(
-        search.searchSimpleForQuery(SPARQLQueries.selectOrganizationByName(name)).getResults(),
-        Imeji.userModel);
+        search.searchString(JenaCustomQueries.selectOrganizationByName(name), null, null, 0, -1)
+            .getResults(), Imeji.userModel);
   }
 
   /**
@@ -481,10 +493,10 @@ public class UserController {
    * @return
    */
   private Collection<Organization> searchOrganizationByNameInCollections(String name) {
-    Search search = SearchFactory.create(SearchType.COLLECTION);
+    Search search = SearchFactory.create(SearchObjectTypes.COLLECTION, SEARCH_IMPLEMENTATIONS.JENA);
     return loadOrganizations(
-        search.searchSimpleForQuery(SPARQLQueries.selectOrganizationByName(name)).getResults(),
-        Imeji.collectionModel);
+        search.searchString(JenaCustomQueries.selectOrganizationByName(name), null, null, 0, -1)
+            .getResults(), Imeji.collectionModel);
   }
 
   /**
@@ -556,7 +568,7 @@ public class UserController {
     boolean exist = false;
     Search search = SearchFactory.create();
     List<String> uris =
-        search.searchSimpleForQuery(SPARQLQueries.selectUserSysAdmin()).getResults();
+        search.searchString(JenaCustomQueries.selectUserSysAdmin(), null, null, 0, -1).getResults();
     if (uris != null && uris.size() > 0) {
       exist = true;
     }
@@ -572,7 +584,7 @@ public class UserController {
   public List<User> retrieveAllAdmins() {
     Search search = SearchFactory.create();
     List<String> uris =
-        search.searchSimpleForQuery(SPARQLQueries.selectUserSysAdmin()).getResults();
+        search.searchString(JenaCustomQueries.selectUserSysAdmin(), null, null, 0, -1).getResults();
     List<User> admins = new ArrayList<User>();
     for (String uri : uris) {
       try {
@@ -594,8 +606,8 @@ public class UserController {
   public List<User> searchUsersToBeNotified(User user, CollectionImeji c) {
     Search search = SearchFactory.create();
     List<String> uris =
-        search.searchSimpleForQuery(SPARQLQueries.selectUsersToBeNotifiedByFileDownload(user, c))
-            .getResults();
+        search.searchString(JenaCustomQueries.selectUsersToBeNotifiedByFileDownload(user, c), null,
+            null, 0, -1).getResults();
     return (List<User>) loadUsers(uris);
   }
 
@@ -613,7 +625,8 @@ public class UserController {
    */
   public int cleanInactiveUsers() {
     Search search = SearchFactory.create();
-    List<String> uris = search.searchSimpleForQuery(SPARQLQueries.getInactiveUsers()).getResults();
+    List<String> uris =
+        search.searchString(JenaCustomQueries.getInactiveUsers(), null, null, 0, -1).getResults();
     List<User> cleaningCandidates = (List<User>) loadUsers(uris);
     int i = 0;
     for (User u : cleaningCandidates) {

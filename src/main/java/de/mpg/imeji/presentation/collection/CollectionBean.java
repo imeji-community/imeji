@@ -284,9 +284,9 @@ public abstract class CollectionBean extends ContainerBean {
       cc.release(collection, sessionBean.getUser());
       BeanHelper.info(sessionBean.getMessage("success_collection_release"));
     } catch (Exception e) {
-      BeanHelper.error(sessionBean.getMessage("error_collection_release"));
-      BeanHelper.error(e.getMessage());
+      BeanHelper.error(sessionBean.getMessage("error_collection_release: " + e.getMessage()));
       logger.error("Error during collection release", e);
+      e.printStackTrace();
     }
     return "pretty:";
   }

@@ -12,13 +12,14 @@ import java.util.Map;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpResponseException;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.ProfileController;
+import de.mpg.imeji.logic.search.SearchQueryParser;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.query.URLQueryTransformer;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
+import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -80,8 +81,9 @@ public class ExportManager {
    * @param searchQuery
    * @return
    * @throws IOException
+   * @throws ImejiException
    */
-  public SearchResult search() throws IOException {
+  public SearchResult search() throws IOException, ImejiException {
     String collectionId = export.getParam("col");
     String albumId = export.getParam("album");
     String spaceId = export.getParam("space");
@@ -89,7 +91,7 @@ public class ExportManager {
     export.getParam("id");
     String searchType = export.getParam("type");
     int maximumNumberOfRecords = 100;
-    SearchQuery searchQuery = URLQueryTransformer.parseStringQuery(query);
+    SearchQuery searchQuery = SearchQueryParser.parseStringQuery(query);
     if (export.getParam("n") != null) {
       maximumNumberOfRecords = Integer.parseInt(export.getParam("n"));
     }

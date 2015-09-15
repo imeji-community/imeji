@@ -2,10 +2,10 @@ package de.mpg.imeji.logic.controller;
 
 import java.util.List;
 
-import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.Search;
-import de.mpg.imeji.logic.search.Search.SearchType;
-import de.mpg.imeji.logic.search.query.SPARQLQueries;
+import de.mpg.imeji.logic.search.Search.SearchObjectTypes;
+import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
+import de.mpg.imeji.logic.search.jenasearch.JenaSearch;
 
 /**
  * Controller for all actions which are related to statistics
@@ -21,8 +21,8 @@ public class StatisticsController extends ImejiController {
    * @return
    */
   public List<String> getAllInstitute() {
-    Search s = new SPARQLSearch(SearchType.USER, null);
-    return s.searchSimpleForQuery(SPARQLQueries.selectAllInstitutes()).getResults();
+    Search s = new JenaSearch(SearchObjectTypes.USER, null);
+    return s.searchString(JenaCustomQueries.selectAllInstitutes(), null, null, 0, -1).getResults();
   }
 
   /**
@@ -33,9 +33,9 @@ public class StatisticsController extends ImejiController {
    * @return
    */
   public long getUsedStorageSizeForInstitute(String instituteName) {
-    Search s = new SPARQLSearch(SearchType.ALL, null);
+    Search s = new JenaSearch(SearchObjectTypes.ALL, null);
     List<String> result =
-        s.searchSimpleForQuery(SPARQLQueries.selectInstituteFileSize(instituteName)).getResults();
+        s.searchString(JenaCustomQueries.selectInstituteFileSize(instituteName), null, null, 0, -1).getResults();
     if (result.size() == 1 && result.get(0) != null) {
       String size = result.get(0).replace("^^http://www.w3.org/2001/XMLSchema#integer", "");
       return Long.parseLong(size);

@@ -5,6 +5,7 @@ import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.transferCol
 import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE.CREATE;
 import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE.UPDATE;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 
@@ -18,7 +19,9 @@ import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.CollectionController;
+import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.ProfileController;
+import de.mpg.imeji.logic.search.SearchQueryParser;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
@@ -64,10 +67,13 @@ public class CollectionService implements API<CollectionTO> {
    * @param q
    * @return
    * @throws ImejiException
+   * @throws IOException
    */
-  public List<ItemTO> readItems(String id, User u, String q) throws ImejiException {
-    CollectionController cc = new CollectionController();
-    return Lists.transform(cc.retrieveItems(id, u, q), new Function<Item, ItemTO>() {
+  public List<ItemTO> readItems(String id, User u, String q) throws ImejiException, IOException {
+    ItemController itemController = new ItemController();
+    return Lists.transform(itemController.searchAndRetrieve(
+        ObjectHelper.getURI(CollectionImeji.class, id), SearchQueryParser.parseStringQuery(q),
+        null, u, null), new Function<Item, ItemTO>() {
       @Override
       public ItemTO apply(Item vo) {
         ItemTO to = new ItemTO();
@@ -86,10 +92,13 @@ public class CollectionService implements API<CollectionTO> {
    * @param q
    * @return
    * @throws ImejiException
+   * @throws IOException
    */
-  public Object readDefaultItems(String id, User u, String q) throws ImejiException {
-    CollectionController cc = new CollectionController();
-    return Lists.transform(cc.retrieveItems(id, u, q), new Function<Item, DefaultItemTO>() {
+  public Object readDefaultItems(String id, User u, String q) throws ImejiException, IOException {
+    ItemController itemController = new ItemController();
+    return Lists.transform(itemController.searchAndRetrieve(
+        ObjectHelper.getURI(CollectionImeji.class, id), SearchQueryParser.parseStringQuery(q),
+        null, u, null), new Function<Item, DefaultItemTO>() {
       @Override
       public DefaultItemTO apply(Item vo) {
         DefaultItemTO to = new DefaultItemTO();
@@ -99,9 +108,10 @@ public class CollectionService implements API<CollectionTO> {
     });
   }
 
-  public List<CollectionTO> readAll(User u, String q) throws ImejiException {
+  public List<CollectionTO> readAll(User u, String q) throws ImejiException, IOException {
     CollectionController cc = new CollectionController();
-    return Lists.transform(cc.retrieveCollections(u, q, null),
+    return Lists.transform(
+        cc.searchAndRetrieve(SearchQueryParser.parseStringQuery(q), null, 0, -1, u, null),
         new Function<CollectionImeji, CollectionTO>() {
           @Override
           public CollectionTO apply(CollectionImeji vo) {

@@ -43,6 +43,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.exceptions.TypeNotAllowedException;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -132,7 +133,7 @@ public abstract class ContainerBean implements Serializable {
   /**
    * Count the size the {@link Container}
    * 
-   * @param user
+   * @param hasgrant
    * @return
    */
   protected void countItems() {
@@ -142,8 +143,10 @@ public abstract class ContainerBean implements Serializable {
 
   /**
    * Load the {@link Item} of the {@link Container}
+   * 
+   * @throws ImejiException
    */
-  protected void loadItems(User user) {
+  protected void loadItems(User user) throws ImejiException {
     setItems(new ArrayList<Item>());
     if (getContainer() != null) {
       List<String> uris = new ArrayList<String>();
@@ -157,8 +160,10 @@ public abstract class ContainerBean implements Serializable {
 
   /**
    * Load the {@link Item} of the {@link Container}
+   * 
+   * @throws ImejiException
    */
-  protected void loadDiscardedItems(User user) {
+  protected void loadDiscardedItems(User user) throws ImejiException {
     setDiscardedItems(new ArrayList<Item>());
     if (getContainer() != null) {
       List<String> uris = new ArrayList<String>();

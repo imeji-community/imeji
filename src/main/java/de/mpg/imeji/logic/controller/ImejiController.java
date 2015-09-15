@@ -189,7 +189,7 @@ public abstract class ImejiController {
    * @param user
    * @return
    */
-  public boolean hasImageLocked(List<String> uris, User user) {
+  protected boolean hasImageLocked(List<String> uris, User user) {
     for (String uri : uris) {
       if (Locks.isLocked(uri.toString(), user.getEmail())) {
         return true;
@@ -212,7 +212,7 @@ public abstract class ImejiController {
 
   /**
    * Update logo of {@link Container}
-   *
+   * 
    * @param Container
    * @param f
    * @param user
@@ -220,7 +220,7 @@ public abstract class ImejiController {
    * @throws ImejiException
    * @throws URISyntaxException
    */
-  public Container updateFile(Container container, File f, User user) throws ImejiException,
+  protected Container updateFile(Container container, File f, User user) throws ImejiException,
       IOException, URISyntaxException {
     InternalStorageManager ism = new InternalStorageManager();
     if (f != null) {

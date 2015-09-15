@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import de.mpg.imeji.logic.search.vo.ComparableSearchResult;
-import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
+import de.mpg.imeji.logic.search.model.ComparableSearchResult;
+import de.mpg.imeji.logic.search.model.SortCriterion.SortOrder;
 
 /**
  * Helper for sort parameters in SPARQL queries

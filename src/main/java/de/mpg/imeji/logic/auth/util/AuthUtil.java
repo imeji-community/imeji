@@ -186,7 +186,7 @@ public class AuthUtil {
   /**
    * Return all {@link Grant} which have the passed grant for
    * 
-   * @param user
+   * @param hasgrant
    * @param grantForUri
    * @return
    */
@@ -219,7 +219,7 @@ public class AuthUtil {
   /**
    * Remove the grants which are not valid to avoid error in further methods
    * 
-   * @param user
+   * @param hasgrant
    * @return
    */
   private static Collection<Grant> filterUnvalidGrants(Collection<Grant> l) {

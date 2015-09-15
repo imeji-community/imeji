@@ -26,12 +26,13 @@ import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.reader.ReaderFacade;
 import de.mpg.imeji.logic.search.Search;
-import de.mpg.imeji.logic.search.Search.SearchType;
+import de.mpg.imeji.logic.search.Search.SearchObjectTypes;
 import de.mpg.imeji.logic.search.SearchFactory;
+import de.mpg.imeji.logic.search.SearchFactory.SEARCH_IMPLEMENTATIONS;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.query.SPARQLQueries;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
-import de.mpg.imeji.logic.search.vo.SortCriterion;
+import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
+import de.mpg.imeji.logic.search.model.SearchQuery;
+import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Album;
@@ -45,7 +46,7 @@ import de.mpg.imeji.presentation.util.PropertyReader;
 
 /**
  * CRUD methods for {@link Space}
- *
+ * 
  * @author vmakarenko (initial creation)
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
@@ -85,7 +86,7 @@ public class SpaceController extends ImejiController {
 
   /**
    * Creates a new space. - Add a unique id - Write user properties
-   *
+   * 
    * @param space
    * @param user
    */
@@ -158,7 +159,7 @@ public class SpaceController extends ImejiController {
 
   /**
    * Updates a space -Logged in users: --User is space owner --OR user is space editor
-   *
+   * 
    * @param space
    * @param user
    * @throws ImejiException
@@ -171,7 +172,7 @@ public class SpaceController extends ImejiController {
 
   /**
    * Update logo of {@link Space}
-   *
+   * 
    * @param space
    * @param f
    * @param user
@@ -188,7 +189,7 @@ public class SpaceController extends ImejiController {
 
   /**
    * Copy the file in the file system
-   *
+   * 
    * @param toCopy
    * @param path
    * @return
@@ -211,7 +212,7 @@ public class SpaceController extends ImejiController {
   /**
    * Create the URL of the file from its filename, its id, and its resolution. Important: the
    * filename is decoded, to avoid problems by reading this url
-   *
+   * 
    * @param id
    * @param filename
    * @return
@@ -224,7 +225,7 @@ public class SpaceController extends ImejiController {
 
   /**
    * Transform an url to a file system path
-   *
+   * 
    * @param url
    * @return
    */
@@ -235,7 +236,7 @@ public class SpaceController extends ImejiController {
 
   /**
    * Transform the path of the item into a path
-   *
+   * 
    * @param path
    * @return
    */
@@ -246,7 +247,7 @@ public class SpaceController extends ImejiController {
 
   /**
    * Remove space file storage
-   *
+   * 
    * @param space
    * @throws IOException
    */
@@ -263,7 +264,7 @@ public class SpaceController extends ImejiController {
 
   /**
    * Updates an space -Logged in users: --User is space owner --OR user is space editor
-   *
+   * 
    * @param space
    * @param user
    * @throws ImejiException
@@ -275,7 +276,7 @@ public class SpaceController extends ImejiController {
 
   /**
    * Retrieve {@link Space}
-   *
+   * 
    * @param spaceId
    * @param user
    * @return
@@ -289,7 +290,7 @@ public class SpaceController extends ImejiController {
 
   /**
    * Retrieve {@link Space}
-   *
+   * 
    * @param space
    * @param user
    * @return
@@ -301,12 +302,12 @@ public class SpaceController extends ImejiController {
 
   /**
    * Retrieve all imeji {@link Album}
-   *
+   * 
    * @return
    * @throws ImejiException
    */
   public List<Space> retrieveAll() throws ImejiException {
-    return Lists.transform(ImejiSPARQL.exec(SPARQLQueries.selectSpaceAll(), Imeji.spaceModel),
+    return Lists.transform(ImejiSPARQL.exec(JenaCustomQueries.selectSpaceAll(), Imeji.spaceModel),
         new Function<String, Space>() {
           @Override
           public Space apply(String id) {
@@ -322,7 +323,7 @@ public class SpaceController extends ImejiController {
 
   /**
    * Retrieve all {@link CollectionImeji}s of {@link Space}
-   *
+   * 
    * @param space
    * @return
    * @throws ImejiException
@@ -331,8 +332,8 @@ public class SpaceController extends ImejiController {
   public Collection<String> retrieveCollections(Space space, boolean force) throws ImejiException {
     List<String> currentSpaceCollections = new ArrayList<>();
     if (force || Iterables.isEmpty(space.getSpaceCollections())) {
-      for (String colUri : ImejiSPARQL.exec(SPARQLQueries.selectCollectionsOfSpace(space.getId()),
-          null)) {
+      for (String colUri : ImejiSPARQL.exec(
+          JenaCustomQueries.selectCollectionsOfSpace(space.getId()), null)) {
         currentSpaceCollections.add(colUri);
       }
       space.setSpaceCollections(currentSpaceCollections);
@@ -346,7 +347,7 @@ public class SpaceController extends ImejiController {
 
   /**
    * Add {@link CollectionImeji} to {@link Space}
-   *
+   * 
    * @param space
    * @param collId
    * @param user
@@ -363,7 +364,7 @@ public class SpaceController extends ImejiController {
 
   /**
    * Add {@link CollectionImeji} to {@link Space}
-   *
+   * 
    * @param space
    * @param toAdd
    * @param user
@@ -387,7 +388,7 @@ public class SpaceController extends ImejiController {
 
   /**
    * Add {@link CollectionImeji} to {@link Space}
-   *
+   * 
    * @param spaceId
    * @param collId
    * @param user
@@ -399,9 +400,9 @@ public class SpaceController extends ImejiController {
   }
 
   /**
-   *
+   * 
    * Remove {@link CollectionImeji} from the {@link Space}
-   *
+   * 
    * @param space
    * @param collId
    * @param user
@@ -414,9 +415,9 @@ public class SpaceController extends ImejiController {
   }
 
   /**
-   *
+   * 
    * Remove {@link CollectionImeji} from the {@link Space}
-   *
+   * 
    * @param space
    * @param collsToRemove
    * @param user
@@ -443,7 +444,7 @@ public class SpaceController extends ImejiController {
       CollectionImeji c = cc.retrieve(URI.create(collId), user);
       c.setSpace(remove ? null : space.getId());
       try {
-        cc.updateCollectionSpace(c, user, c.getSpace());
+        cc.update(c, user);
       } catch (Exception e) {
         throw new UnprocessableError("Error during patching collection " + c.getId()
             + " with space Id " + c.getSpace());
@@ -453,7 +454,7 @@ public class SpaceController extends ImejiController {
 
   /**
    * Retrieve an {@link Space} without its {@link Item}
-   *
+   * 
    * @param uri
    * @param user
    * @return
@@ -474,13 +475,14 @@ public class SpaceController extends ImejiController {
    */
   public SearchResult search(SearchQuery searchQuery, SortCriterion sortCri, int limit, int offset,
       User user, String spaceId) {
-    Search search = SearchFactory.create(SearchType.SPACE);
-    return search.search(searchQuery, sortCri, user, null);
+    Search search = SearchFactory.create(SearchObjectTypes.SPACE, SEARCH_IMPLEMENTATIONS.JENA);
+    return search.search(searchQuery, sortCri, user, null, null, 0, -1);
   }
 
   public Space retrieveSpaceByLabel(String spaceId, User user) throws ImejiException {
     Search s = SearchFactory.create();
-    List<String> r = s.searchSimpleForQuery(SPARQLQueries.getSpaceByLabel(spaceId)).getResults();
+    List<String> r =
+        s.searchString(JenaCustomQueries.getSpaceByLabel(spaceId), null, null, 0, -1).getResults();
     if (!r.isEmpty() && !isNullOrEmptyTrim(r.get(0))) {
       return retrieve(URI.create(r.get(0)), user);
     } else {
@@ -490,7 +492,7 @@ public class SpaceController extends ImejiController {
 
   /**
    * Delete the {@link Space}
-   *
+   * 
    * @param space
    * @param user
    * @throws ImejiException
@@ -504,7 +506,7 @@ public class SpaceController extends ImejiController {
   public boolean isSpaceByLabel(String spaceId) {
     if (isNullOrEmptyTrim(spaceId))
       return false;
-    if (ImejiSPARQL.exec(SPARQLQueries.getSpaceByLabel(spaceId), Imeji.spaceModel).size() > 0) {
+    if (ImejiSPARQL.exec(JenaCustomQueries.getSpaceByLabel(spaceId), Imeji.spaceModel).size() > 0) {
       return true;
     }
     return false;

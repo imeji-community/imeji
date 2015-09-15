@@ -22,7 +22,12 @@
  * wissenschaftlich-technische Information mbH and Max-Planck- Gesellschaft zur Förderung der
  * Wissenschaft e.V. All rights reserved. Use is subject to license terms.
  */
-package de.mpg.imeji.logic.search.query;
+package de.mpg.imeji.logic.search.jenasearch;
+
+import java.net.URI;
+
+import org.apache.commons.lang3.text.translate.CharSequenceTranslator;
+import org.opensaml.ws.wssecurity.Username;
 
 import com.hp.hpl.jena.sparql.pfunction.library.container;
 
@@ -45,11 +50,6 @@ import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.presentation.beans.PropertyBean;
 import de.mpg.j2j.helper.J2JHelper;
 
-import org.apache.commons.lang3.text.translate.CharSequenceTranslator;
-import org.opensaml.ws.wssecurity.Username;
-
-import java.net.URI;
-
 /**
  * SPARQL queries for imeji
  * 
@@ -57,7 +57,7 @@ import java.net.URI;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class SPARQLQueries {
+public class JenaCustomQueries {
   /**
    * Select all {@link Metadata} which are restricted, according to their {@link Statement}
    * 
@@ -532,6 +532,7 @@ public class SPARQLQueries {
     return "SELECT ?s WHERE { ?s a <http://imeji.org/terms/item>}";
   }
 
+
   /**
    * Clean the statement: <br/>
    * - Remove Statement which parent doesn't exist
@@ -699,7 +700,7 @@ public class SPARQLQueries {
     return "SELECT DISTINCT ?s WHERE {<"
         + uri.toString()
         + "> <http://imeji.org/terms/item> ?s . "
-        + SimpleSecurityQuery.queryFactory(user, J2JHelper.getResourceNamespace(new Item()), null,
+        + JenaSecurityQuery.queryFactory(user, J2JHelper.getResourceNamespace(new Item()), null,
             false) + " ?s <" + ImejiNamespaces.STATUS + "> ?status } "
         + ((limit > 0) ? (" LIMIT " + limit) : "");
 
@@ -782,16 +783,15 @@ public class SPARQLQueries {
         + "', 'i')) . ?c a <http://imeji.org/terms/collection> . ?item <http://imeji.org/terms/collection> ?c . ?item <http://imeji.org/terms/fileSize> ?size}";
   }
 
-    /**
+  /**
    * Search for all {@link Item}s created by the {@link User}, and sum all fileSize
-   *
+   * 
    * @param user
-     * @return
+   * @return
    */
   public static String selectUserFileSize(String user) {
-    return "SELECT (str(SUM(?size)) AS ?s) WHERE {?item <"
-        + ImejiNamespaces.CREATOR
-        + "> <" +user + "> . ?item <http://imeji.org/terms/fileSize> ?size}";
+    return "SELECT (str(SUM(?size)) AS ?s) WHERE {?item <" + ImejiNamespaces.CREATOR + "> <" + user
+        + "> . ?item <http://imeji.org/terms/fileSize> ?size}";
   }
 
   public static String escapeWithUnicode(String s) {

@@ -7,10 +7,10 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLEncoder;
 
-import de.mpg.imeji.logic.search.query.URLQueryTransformer;
-import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
-import de.mpg.imeji.logic.search.vo.SearchPair;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
+import de.mpg.imeji.logic.search.SearchQueryParser;
+import de.mpg.imeji.logic.search.model.SearchPair;
+import de.mpg.imeji.logic.search.model.SearchQuery;
+import de.mpg.imeji.logic.search.model.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.presentation.facet.Facet.FacetType;
 
 /**
@@ -63,7 +63,7 @@ public class FacetURIFactory {
    */
   private String getCommonURI(SearchQuery sq, String facetName, FacetType type)
       throws UnsupportedEncodingException {
-    return URLQueryTransformer.transform2UTF8URL(sq) + "&f="
+    return SearchQueryParser.transform2UTF8URL(sq) + "&f="
         + URLEncoder.encode(facetName, "UTF-8") + "&t="
         + URLEncoder.encode(type.name().toLowerCase(), "UTF-8") + "&page=1";
   }

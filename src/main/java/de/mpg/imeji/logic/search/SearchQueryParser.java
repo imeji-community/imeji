@@ -1,7 +1,7 @@
 /**
  * License: src/main/resources/license/escidoc.license
  */
-package de.mpg.imeji.logic.search.query;
+package de.mpg.imeji.logic.search;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -12,17 +12,17 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.mpg.imeji.logic.search.SPARQLSearch;
-import de.mpg.imeji.logic.search.vo.SearchElement;
-import de.mpg.imeji.logic.search.vo.SearchElement.SEARCH_ELEMENTS;
-import de.mpg.imeji.logic.search.vo.SearchGroup;
-import de.mpg.imeji.logic.search.vo.SearchIndex;
-import de.mpg.imeji.logic.search.vo.SearchLogicalRelation;
-import de.mpg.imeji.logic.search.vo.SearchLogicalRelation.LOGICAL_RELATIONS;
-import de.mpg.imeji.logic.search.vo.SearchMetadata;
-import de.mpg.imeji.logic.search.vo.SearchOperators;
-import de.mpg.imeji.logic.search.vo.SearchPair;
-import de.mpg.imeji.logic.search.vo.SearchQuery;
+import de.mpg.imeji.logic.search.model.SearchElement;
+import de.mpg.imeji.logic.search.model.SearchElement.SEARCH_ELEMENTS;
+import de.mpg.imeji.logic.search.model.SearchGroup;
+import de.mpg.imeji.logic.search.model.SearchIndex;
+import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
+import de.mpg.imeji.logic.search.model.SearchLogicalRelation;
+import de.mpg.imeji.logic.search.model.SearchLogicalRelation.LOGICAL_RELATIONS;
+import de.mpg.imeji.logic.search.model.SearchMetadata;
+import de.mpg.imeji.logic.search.model.SearchOperators;
+import de.mpg.imeji.logic.search.model.SearchPair;
+import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.lang.MetadataLabels;
@@ -36,7 +36,7 @@ import de.mpg.imeji.presentation.util.BeanHelper;
  * @author $Author$ (last modification)
  * @version $Revision$ $LastChangedDate$
  */
-public class URLQueryTransformer {
+public class SearchQueryParser {
   /**
    * The Pattern to match a metadata search
    */
@@ -121,10 +121,10 @@ public class URLQueryTransformer {
         if (value.startsWith("\"")) {
           value += "\"";
         }
-        SearchIndex index =
-            SPARQLSearch.getIndex(scString.substring(indexIndex + 1, indexOp).trim());
+        SearchFields field =
+            SearchFields.valueOf(scString.substring(indexIndex + 1, indexOp).trim());
         SearchOperators operator = stringOperator2SearchOperator(op);
-        searchQuery.addPair(new SearchMetadata(index, operator, value, ObjectHelper.getURI(
+        searchQuery.addPair(new SearchMetadata(field, operator, value, ObjectHelper.getURI(
             Statement.class, scString.substring(0, indexIndex).trim()), not));
         not = false;
         scString = "";
@@ -136,16 +136,16 @@ public class URLQueryTransformer {
         if (value.startsWith("\"")) {
           value += "\"";
         }
-        SearchIndex index = SPARQLSearch.getIndex(scString.substring(0, indexOp).trim());
+        SearchFields field = SearchFields.valueOf(scString.substring(0, indexOp).trim());
         SearchOperators operator = stringOperator2SearchOperator(op);
-        searchQuery.addPair(new SearchPair(index, operator, value, not));
+        searchQuery.addPair(new SearchPair(field, operator, value, not));
         scString = "";
         not = false;
       }
     }
     if (!"".equals(query) && searchQuery.isEmpty()) {
-      searchQuery.addPair(new SearchPair(SPARQLSearch.getIndex(SearchIndex.IndexNames.all),
-          SearchOperators.REGEX, query.trim()));
+      searchQuery.addPair(new SearchPair(SearchFields.all, SearchOperators.REGEX, query.trim(),
+          false));
     }
     return searchQuery;
   }
@@ -214,7 +214,7 @@ public class URLQueryTransformer {
   public static boolean isSimpleSearch(SearchQuery searchQuery) {
     for (SearchElement element : searchQuery.getElements()) {
       if (SEARCH_ELEMENTS.PAIR.equals(element.getType())
-          && ((SearchPair) element).getIndex().getName().equals(SearchIndex.IndexNames.all.name())) {
+          && ((SearchPair) element).getField() == SearchFields.all) {
         return true;
       }
     }
@@ -264,7 +264,7 @@ public class URLQueryTransformer {
             query += " NOT";
           }
           query +=
-              logical + ((SearchPair) se).getIndex().getName()
+              logical + ((SearchPair) se).getField()
                   + operator2URL(((SearchPair) se).getOperator())
                   + searchValue2URL(((SearchPair) se));
           break;
@@ -275,7 +275,7 @@ public class URLQueryTransformer {
           query +=
               logical
                   + transformStatementToIndex(((SearchMetadata) se).getStatement(),
-                      ((SearchPair) se).getIndex())
+                      ((SearchPair) se).getField())
                   + operator2URL(((SearchMetadata) se).getOperator())
                   + searchValue2URL(((SearchMetadata) se));
           break;
@@ -293,8 +293,8 @@ public class URLQueryTransformer {
    * @param index
    * @return
    */
-  public static String transformStatementToIndex(URI statement, SearchIndex index) {
-    return ObjectHelper.getId(statement) + ":" + index.getName();
+  public static String transformStatementToIndex(URI statement, SearchFields field) {
+    return ObjectHelper.getId(statement) + ":" + field;
   }
 
   /**
@@ -321,6 +321,8 @@ public class URLQueryTransformer {
         return "<=";
       case REGEX:
         return "=";
+      case GEO:
+        return "@";
       default:
         return "==";
     }
@@ -333,6 +335,9 @@ public class URLQueryTransformer {
    * @return
    */
   public static String searchQuery2PrettyQuery(SearchQuery sq) {
+    if (sq == null) {
+      return "";
+    }
     return searchElements2PrettyQuery(sq.getElements());
   }
 
@@ -343,9 +348,9 @@ public class URLQueryTransformer {
    * @return
    */
   private static String searchPair2PrettyQuery(SearchPair pair) {
-    if (pair.getValue() == null || pair.getValue() == "")
+    if (pair == null || pair.getField() == null || pair.getValue() == null || pair.getValue() == "")
       return "";
-    if (pair.getIndex().getName().equals(SearchIndex.IndexNames.all.name())) {
+    if (pair.getField() == SearchFields.all) {
       return pair.getValue();
     } else {
       return indexNamespace2PrettyQuery(pair.getIndex().getNamespace()) + " "
@@ -535,44 +540,38 @@ public class URLQueryTransformer {
     if (label == null) {
       label = "Metadata-" + indexNamespace2PrettyQuery(md.getStatement().toString());
     }
-    switch (md.getIndex().getName()) {
-      case "latitude":
+    switch (md.getField()) {
+      case coordinates:
         label +=
             "("
                 + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-                    .getLabel("geolocation_latitude") + ")";
+                    .getLabel("geolocation_location") + ")";
         break;
-      case "longitude":
-        label +=
-            "("
-                + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-                    .getLabel("geolocation_longitude") + ")";
-        break;
-      case "person_family":
+      case person_family:
         label +=
             "("
                 + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
                     .getLabel("family_name") + ")";
         break;
-      case "person_given":
+      case person_given:
         label +=
             "("
                 + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
                     .getLabel("first_name") + ")";
         break;
-      case "person_id":
+      case person_id:
         label +=
             "( "
                 + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
                     .getLabel("identifier") + ")";
         break;
-      case "person_org_title":
+      case person_org_name:
         label +=
             "("
                 + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
                     .getLabel("organization") + ")";
         break;
-      case "url":
+      case url:
         label +=
             "(" + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("url")
                 + ")";

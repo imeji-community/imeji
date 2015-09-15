@@ -28,9 +28,9 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 
 import de.mpg.imeji.logic.export.format.ExplainExport;
-import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.SearchResult;
-import de.mpg.imeji.logic.search.vo.SearchIndex;
+import de.mpg.imeji.logic.search.jenasearch.JenaSearch;
+import de.mpg.imeji.logic.search.model.SearchIndex;
 
 /**
  * Explain the index for the search
@@ -51,7 +51,7 @@ public class SearchExplainExport extends ExplainExport {
     PrintWriter writer = new PrintWriter(out);
     try {
       writer.append(getRDFTagOpen());
-      for (SearchIndex index : SPARQLSearch.indexes.values()) {
+      for (SearchIndex index : JenaSearch.indexes.values()) {
         writer.append(getIndexTag(index.getName(), index.getNamespace()));
       }
       writer.append(getRDFTagClose());

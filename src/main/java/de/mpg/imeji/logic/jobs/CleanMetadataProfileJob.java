@@ -7,10 +7,10 @@ import java.util.concurrent.Callable;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.ProfileController;
-import de.mpg.imeji.logic.search.SPARQLSearch;
 import de.mpg.imeji.logic.search.Search;
-import de.mpg.imeji.logic.search.Search.SearchType;
-import de.mpg.imeji.logic.search.query.SPARQLQueries;
+import de.mpg.imeji.logic.search.Search.SearchObjectTypes;
+import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
+import de.mpg.imeji.logic.search.jenasearch.JenaSearch;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 
 /**
@@ -30,9 +30,9 @@ public class CleanMetadataProfileJob implements Callable<Integer> {
 
   @Override
   public Integer call() throws Exception {
-    Search s = new SPARQLSearch(SearchType.ALL, null);
+    Search s = new JenaSearch(SearchObjectTypes.ALL, null);
     List<String> r =
-        s.searchSimpleForQuery(SPARQLQueries.selectUnusedMetadataProfiles()).getResults();
+        s.searchString(JenaCustomQueries.selectUnusedMetadataProfiles(), null, null, 0, -1).getResults();
     ProfileController pc = new ProfileController();
     for (String uri : r) {
       profiles.add(pc.retrieve(URI.create(uri), Imeji.adminUser));

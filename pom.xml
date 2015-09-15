@@ -627,6 +627,13 @@
 			<artifactId>swagger-jersey2-jaxrs_2.10</artifactId>
 			<version>1.3.8</version>
 		</dependency>
+		
+		<dependency>
+		    <groupId>org.elasticsearch</groupId>
+		    <artifactId>elasticsearch</artifactId>
+		    <version>1.7.1</version>
+		</dependency>
+		
 	</dependencies>
 	<profiles>
 		<!-- this profile is used by developers -->

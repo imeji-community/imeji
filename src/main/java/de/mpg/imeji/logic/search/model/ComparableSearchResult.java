@@ -1,8 +1,8 @@
-package de.mpg.imeji.logic.search.vo;
+package de.mpg.imeji.logic.search.model;
 
 import java.util.List;
 
-import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
+import de.mpg.imeji.logic.search.model.SortCriterion.SortOrder;
 import de.mpg.j2j.helper.SortHelper;
 
 /**

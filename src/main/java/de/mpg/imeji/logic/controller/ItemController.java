@@ -586,7 +586,7 @@ public class ItemController extends ImejiController {
    * @param user
    */
   public Container searchAndSetContainerItems(Container c, User user, int limit, int offset) {
-    List<String> newUris = search(c.getId(), null, null, user, "", -1, 0).getResults();
+    List<String> newUris = search(c.getId(), null, null, user, null, limit, 0).getResults();
     c.getImages().clear();
     for (String s : newUris) {
       c.getImages().add(URI.create(s));

@@ -29,8 +29,6 @@ import java.net.URI;
 import org.apache.commons.lang3.text.translate.CharSequenceTranslator;
 import org.opensaml.ws.wssecurity.Username;
 
-import com.hp.hpl.jena.sparql.pfunction.library.container;
-
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
@@ -48,7 +46,6 @@ import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.vo.UserGroup;
 import de.mpg.imeji.presentation.beans.PropertyBean;
-import de.mpg.j2j.helper.J2JHelper;
 
 /**
  * SPARQL queries for imeji
@@ -348,7 +345,7 @@ public class JenaCustomQueries {
         + path + "', 'i') || REGEX(str(?url2), '" + path + "', 'i') || REGEX(str(?url3), '" + path
         + "', 'i'))} LIMIT 1 ";
   }
-  
+
   /**
    * @param fileUrl
    * @return
@@ -356,7 +353,7 @@ public class JenaCustomQueries {
   public static String selectSpaceIdOfFileOrCollection(String fileUrl) {
     String path = URI.create(fileUrl).getPath();
     return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {"
-        + "?s <http://imeji.org/terms/logoUrl> <"+fileUrl+"> } LIMIT 1 ";
+        + "?s <http://imeji.org/terms/logoUrl> <" + fileUrl + "> } LIMIT 1 ";
   }
 
 
@@ -631,105 +628,6 @@ public class JenaCustomQueries {
     return "WITH <http://imeji.org/item> " + "DELETE {?mds <" + ImejiNamespaces.METADATA + "> ?s} "
         + "USING <http://imeji.org/item> " + "WHERE {?mds <" + ImejiNamespaces.METADATA
         + "> ?s . NOT EXISTS{?s ?p ?o}}";
-  }
-
-  /**
-   * Count all {@link Item} of a {@link container}
-   * 
-   * @param uri
-   * @return
-   */
-  public static String countCollectionSize(URI uri) {
-    return "SELECT count(DISTINCT ?s) WHERE {?s <http://imeji.org/terms/collection> <"
-        + uri.toString() + "> . ?s <" + ImejiNamespaces.STATUS + "> ?status . FILTER (?status!=<"
-        + Status.WITHDRAWN.getUriString() + ">)}";
-  }
-
-  /**
-   * Count all {@link Item} of a {@link Album}
-   * 
-   * @param uri
-   * @return
-   */
-  public static String countAlbumSize(URI uri) {
-    return "SELECT count(DISTINCT ?s) WHERE {<" + uri.toString()
-        + "> <http://imeji.org/terms/item> ?s . ?s <" + ImejiNamespaces.STATUS
-        + "> ?status . FILTER (?status!=<" + Status.WITHDRAWN.getUriString() + ">)}";
-  }
-
-  /**
-   * Return all the {@link Item} of a {@link container}
-   * 
-   * @param uri
-   * @param limit
-   * @return
-   */
-  public static String selectCollectionItems(URI uri, User user, int limit) {
-    if (user == null)
-      return "SELECT DISTINCT ?s WHERE {?s <http://imeji.org/terms/collection> <" + uri.toString()
-          + "> . ?s <" + ImejiNamespaces.STATUS + "> ?status .  filter(?status=<"
-          + Status.RELEASED.getUriString() + ">)} LIMIT " + limit;
-    return "SELECT DISTINCT ?s WHERE {?s <http://imeji.org/terms/collection> <"
-        + uri.toString()
-        + "> . ?s <"
-        + ImejiNamespaces.STATUS
-        + "> ?status . OPTIONAL{<"
-        + user.getId().toString()
-        + "> <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantFor> ?c} . filter(bound(?g) || ?status=<"
-        + Status.RELEASED.getUriString() + ">) . FILTER (?status!=<"
-        + Status.WITHDRAWN.getUriString() + ">)} LIMIT " + limit;
-  }
-
-  /**
-   * Return all discarded {@link Item} of a {@link container}
-   * 
-   * @param uri
-   * @param limit
-   * @return
-   */
-  public static String selectDiscardedCollectionItems(URI uri, User user, int limit) {
-    return "SELECT DISTINCT ?s WHERE {?s <http://imeji.org/terms/collection> <" + uri.toString()
-        + "> . ?s <" + ImejiNamespaces.STATUS + "> ?status .  filter(?status=<"
-        + Status.WITHDRAWN.getUriString() + ">)} LIMIT " + limit;
-  }
-
-  /**
-   * Return all the {@link Item} of a {@link Album}
-   * 
-   * @param uri
-   * @param user
-   * @param limit
-   * @return
-   */
-  public static String selectAlbumItems(URI uri, User user, int limit) {
-    if (user == null)
-      return "SELECT DISTINCT ?s WHERE {<" + uri.toString()
-          + "> <http://imeji.org/terms/item> ?s . ?s <" + ImejiNamespaces.STATUS
-          + "> ?status .  filter(?status=<" + Status.RELEASED.getUriString() + ">)}"
-          + ((limit > 0) ? (" LIMIT " + limit) : "");
-
-    return "SELECT DISTINCT ?s WHERE {<"
-        + uri.toString()
-        + "> <http://imeji.org/terms/item> ?s . "
-        + JenaSecurityQuery.queryFactory(user, J2JHelper.getResourceNamespace(new Item()), null,
-            false) + " ?s <" + ImejiNamespaces.STATUS + "> ?status } "
-        + ((limit > 0) ? (" LIMIT " + limit) : "");
-
-  }
-
-  /**
-   * Return all discarded {@link Item} of a {@link Album}
-   * 
-   * @param uri
-   * @param user
-   * @param limit
-   * @return
-   */
-  public static String selectDiscardedAlbumItems(URI uri, User user, int limit) {
-    return "SELECT DISTINCT ?s WHERE {<" + uri.toString()
-        + "> <http://imeji.org/terms/item> ?s . ?s <" + ImejiNamespaces.STATUS
-        + "> ?status .  filter(?status=<" + Status.WITHDRAWN.getUriString() + ">)}"
-        + ((limit > 0) ? (" LIMIT " + limit) : "");
   }
 
 

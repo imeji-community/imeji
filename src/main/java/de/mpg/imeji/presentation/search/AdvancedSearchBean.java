@@ -18,15 +18,12 @@ import javax.faces.model.SelectItem;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.search.SearchQueryParser;
-import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.search.model.SearchGroup;
-import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.search.model.SearchLogicalRelation.LOGICAL_RELATIONS;
+import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.util.UrlHelper;
-import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.beans.FileTypes.Type;
@@ -160,17 +157,6 @@ public class AdvancedSearchBean {
       }
     }
     return map;
-  }
-
-  /**
-   * True if the {@link CollectionImeji} is empty
-   * 
-   * @param c
-   * @return
-   */
-  private boolean isEmpty(CollectionImeji c) {
-    return ImejiSPARQL.exec(JenaCustomQueries.selectCollectionItems(c.getId(), session.getUser(), 1),
-        null).size() == 0;
   }
 
   /**

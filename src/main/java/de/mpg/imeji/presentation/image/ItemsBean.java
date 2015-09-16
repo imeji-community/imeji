@@ -173,8 +173,8 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
    */
   public SearchResult search(SearchQuery searchQuery, SortCriterion sortCriterion) {
     ItemController controller = new ItemController();
-    return controller.search(null, searchQuery, sortCriterion, null, session.getUser(),
-        session.getSelectedSpaceString());
+    return controller.search(null, searchQuery, sortCriterion, session.getUser(), session.getSelectedSpaceString(),
+        -1, 0);
   }
 
   /**

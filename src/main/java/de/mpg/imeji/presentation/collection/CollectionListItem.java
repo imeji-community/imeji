@@ -12,8 +12,13 @@ import javax.faces.event.ValueChangeEvent;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
+import de.mpg.imeji.logic.search.model.SearchOperators;
+import de.mpg.imeji.logic.search.model.SearchPair;
+import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Container;
@@ -94,7 +99,7 @@ public class CollectionListItem {
         thumbnail.setLink(collection.getLogoUrl().toString());
       } else {
         ItemController ic = new ItemController();
-        Container searchedContainer = ic.searchAndSetContainerItemsFast(collection, user, 1);
+        Container searchedContainer = ic.searchAndSetContainerItems(collection, user, 1, 0);
         if (searchedContainer.getImages().iterator().hasNext()) {
           URI uri = searchedContainer.getImages().iterator().next();
           if (uri != null) {
@@ -121,12 +126,16 @@ public class CollectionListItem {
    */
   private void initSize(CollectionImeji collection, User user) {
     ItemController ic = new ItemController();
-    size = ic.countContainerSize(collection);
+    size =
+        ic.search(collection.getId(), null, null, Imeji.adminUser, null, 0, 0).getNumberOfRecords();
   }
 
   private void initDiscardedSize(CollectionImeji collection, User user) {
     ItemController ic = new ItemController();
-    discardedSize = ic.searchDiscardedContainerItemsFast(collection, user, 0).size();
+    SearchQuery q = new SearchQuery();
+    q.addPair(new SearchPair(SearchFields.status, SearchOperators.EQUALS, Status.WITHDRAWN
+        .getUriString(), false));
+    discardedSize = ic.search(collection.getId(), q, null, user, null, -1, 0).getNumberOfRecords();
   }
 
   public int getSizeDiscarded() {

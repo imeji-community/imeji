@@ -323,7 +323,7 @@ public class CollectionController extends ImejiController {
   public void delete(CollectionImeji collection, User user) throws ImejiException {
     ItemController itemController = new ItemController();
     List<String> itemUris =
-        itemController.search(collection.getId(), null, null, null, user, null).getResults();
+        itemController.search(collection.getId(), null, null, user, null, -1, 0).getResults();
     if (hasImageLocked(itemUris, user)) {
       throw new RuntimeException(
           ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
@@ -381,7 +381,7 @@ public class CollectionController extends ImejiController {
     }
 
     List<String> itemUris =
-        itemController.search(collection.getId(), null, null, null, user, null).getResults();
+        itemController.search(collection.getId(), null, null, user, null, -1, 0).getResults();
 
 
     if (hasImageLocked(itemUris, user)) {
@@ -423,7 +423,7 @@ public class CollectionController extends ImejiController {
     }
 
     List<String> itemUris =
-        itemController.search(coll.getId(), null, null, null, user, null).getResults();
+        itemController.search(coll.getId(), null, null, user, null, -1, 0).getResults();
     if (hasImageLocked(itemUris, user)) {
       throw new UnprocessableError(
           ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
@@ -493,7 +493,7 @@ public class CollectionController extends ImejiController {
       throws ImejiException {
     ItemController itemController = new ItemController();
     List<String> itemUris =
-        itemController.search(ic.getId(), null, null, null, user, null).getResults();
+        itemController.search(ic.getId(), null, null, user, null, -1, 0).getResults();
 
     List<Item> items = (List<Item>) itemController.retrieve(itemUris, -1, 0, user);
     itemController.updateItemsProfile(items, user, newProfileUri.toString());

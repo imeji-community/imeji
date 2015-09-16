@@ -34,6 +34,7 @@ import org.apache.log4j.Logger;
 import com.ocpsoft.pretty.PrettyContext;
 
 import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.Search;
@@ -403,7 +404,9 @@ public class UploadBean implements Serializable {
       isDiscaded();
       if (collection != null && getCollection().getId() != null) {
         ItemController ic = new ItemController();
-        collectionSize = ic.countContainerSize(collection);
+        collectionSize =
+            ic.search(collection.getId(), null, null, Imeji.adminUser, null, 0, 0)
+                .getNumberOfRecords();
       }
     } else {
       BeanHelper.error(sessionBean.getLabel("error") + "No ID in URL");

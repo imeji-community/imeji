@@ -45,8 +45,13 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 
 import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.controller.exceptions.TypeNotAllowedException;
+import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
+import de.mpg.imeji.logic.search.model.SearchOperators;
+import de.mpg.imeji.logic.search.model.SearchPair;
+import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -56,6 +61,7 @@ import de.mpg.imeji.logic.vo.Container;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
+import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.album.AlbumBean;
 import de.mpg.imeji.presentation.collection.CollectionBean;
@@ -130,7 +136,7 @@ public abstract class ContainerBean implements Serializable {
    */
   protected void findItems(User user, int size) {
     ItemController ic = new ItemController();
-    ic.searchAndSetContainerItemsFast(getContainer(), user, size);
+    ic.searchAndSetContainerItems(getContainer(), user, size, 0);
   }
 
   /**
@@ -141,7 +147,9 @@ public abstract class ContainerBean implements Serializable {
    */
   protected void countItems() {
     ItemController ic = new ItemController();
-    size = ic.countContainerSize(getContainer());
+    size =
+        ic.search(getContainer().getId(), null, null, Imeji.adminUser, null, 0, 0)
+            .getNumberOfRecords();
   }
 
   /**
@@ -161,29 +169,18 @@ public abstract class ContainerBean implements Serializable {
     }
   }
 
-  /**
-   * Load the {@link Item} of the {@link Container}
-   * 
-   * @throws ImejiException
-   */
-  protected void loadDiscardedItems(User user) throws ImejiException {
-    setDiscardedItems(new ArrayList<Item>());
-    if (getContainer() != null) {
-      List<String> uris = new ArrayList<String>();
-      ItemController ic = new ItemController();
-      ic.searchDiscardedContainerItemsFast(getContainer(), user, 0);
-      setDiscardedItems((List<Item>) ic.retrieve(uris, -1, 0, user));
-    }
-  }
 
   /**
    * Load the {@link Item} of the {@link Container}
    */
   public void countDiscardedItems(User user) {
     if (getContainer() != null) {
-      List<String> uris = new ArrayList<String>();
       ItemController ic = new ItemController();
-      setSizeDiscarded(ic.searchDiscardedContainerItemsFast(getContainer(), user, 0).size());
+      SearchQuery q = new SearchQuery();
+      q.addPair(new SearchPair(SearchFields.status, SearchOperators.EQUALS, Status.WITHDRAWN
+          .getUriString(), false));
+      setSizeDiscarded(ic.search(getContainer().getId(), q, null, user, null, -1, 0)
+          .getNumberOfRecords());
     } else {
       setSizeDiscarded(0);
     }
@@ -390,15 +387,16 @@ public abstract class ContainerBean implements Serializable {
   public void upload() throws FileUploadException, TypeNotAllowedException {
     HttpServletRequest request =
         (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-    HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+    HttpServletResponse response =
+        (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
     setIngestImage(getUploadedIngestFile(request, response));
 
 
   }
 
 
-  private IngestImage getUploadedIngestFile(HttpServletRequest request, HttpServletResponse response) throws FileUploadException,
-      TypeNotAllowedException {
+  private IngestImage getUploadedIngestFile(HttpServletRequest request, HttpServletResponse response)
+      throws FileUploadException, TypeNotAllowedException {
     File tmp = null;
     boolean isMultipart = ServletFileUpload.isMultipartContent(request);
     IngestImage ii = new IngestImage();
@@ -410,12 +408,15 @@ public abstract class ContainerBean implements Serializable {
         while (iter.hasNext()) {
           FileItemStream fis = iter.next();
           InputStream in = fis.openStream();
-       
+
           tmp =
               TempFileUtil.createTempFile("containerlogo",
                   "." + FilenameUtils.getExtension(fis.getName()));
-          if (fis.getName() != null && extensionNotAllowed(tmp)) {  
-            response.getWriter().print("{\"jsonrpc\" : \"2.0\", \"error\" : {\"code\": 400, \"message\": \"Bad Filetype\"}, \"details\" : \"Error description\"}");
+          if (fis.getName() != null && extensionNotAllowed(tmp)) {
+            response
+                .getWriter()
+                .print(
+                    "{\"jsonrpc\" : \"2.0\", \"error\" : {\"code\": 400, \"message\": \"Bad Filetype\"}, \"details\" : \"Error description\"}");
             FacesContext.getCurrentInstance().responseComplete();
             throw new TypeNotAllowedException(
                 ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
@@ -444,13 +445,13 @@ public abstract class ContainerBean implements Serializable {
     }
     return ii;
   }
-  
-  public boolean extensionNotAllowed(File file){
+
+  public boolean extensionNotAllowed(File file) {
     StorageController sc = new StorageController();
     String guessedNotAllowedFormat = sc.guessNotAllowedFormat(file);
     return StorageUtils.BAD_FORMAT.equals(guessedNotAllowedFormat);
   }
- 
+
   public void setIngestImage(IngestImage im) {
     this.ingestImage = im;
     ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).setSpaceLogoIngestImage(im);

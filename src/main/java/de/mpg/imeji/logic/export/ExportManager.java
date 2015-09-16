@@ -123,13 +123,13 @@ public class ExportManager {
         if (collectionId != null) {
           result =
               itemController.search(ObjectHelper.getURI(CollectionImeji.class, collectionId),
-                  searchQuery, null, null, user, spaceId);
+                  searchQuery, null, user, spaceId, -1, 0);
         } else if (albumId != null) {
           result =
               itemController.search(ObjectHelper.getURI(Album.class, albumId), searchQuery, null,
-                  null, user, spaceId);
+                  user, spaceId, -1, 0);
         } else {
-          result = itemController.search(null, searchQuery, null, null, user, spaceId);
+          result = itemController.search(null, searchQuery, null, user, spaceId, -1, 0);
         }
       }
     }

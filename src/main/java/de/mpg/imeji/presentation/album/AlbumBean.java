@@ -195,9 +195,9 @@ public class AlbumBean extends ContainerBean {
       try {
         upload();
       } catch (FileUploadException e) {
-          BeanHelper.error("Could not upload the image " + e.getMessage());
+        BeanHelper.error("Could not upload the image " + e.getMessage());
       } catch (TypeNotAllowedException e) {
-          BeanHelper.error("Could not upload the image " + e.getMessage());    
+        BeanHelper.error("Could not upload the image " + e.getMessage());
       }
     }
 
@@ -656,7 +656,7 @@ public class AlbumBean extends ContainerBean {
   private void countAllowedItems() {
     ItemController ic = new ItemController();
     this.allowedItemsSize =
-        ic.seachContainerItemsFast(getContainer(), sessionBean.getUser(), -1).size();
+        ic.search(getContainer().getId(), null, null, sessionBean.getUser(), sessionBean.getSpaceId(),
+            -1, 0).getNumberOfRecords();
   }
-
 }

@@ -310,7 +310,7 @@ public class EditItemMetadataBean {
     SearchQuery sq = SearchQueryParser.parseStringQuery(query);
     ItemController itemController = new ItemController();
     SearchResult sr =
-        itemController.search(URI.create(collectionId), sq, null, null, session.getUser(), null);
+        itemController.search(URI.create(collectionId), sq, null, session.getUser(), null, -1, 0);
     return sr.getResults();
   }
 

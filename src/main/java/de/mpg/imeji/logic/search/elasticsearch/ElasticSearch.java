@@ -65,7 +65,9 @@ public class ElasticSearch implements Search {
       String spaceId, int from, int size) {
     FilterBuilder f = ElasticQueryFactory.build(query, folderUri, spaceId, user);
     // System.out.println(f.buildAsBytes().toUtf8());
-    size = Integer.MAX_VALUE;
+    if (size == -1) {
+      size = Integer.MAX_VALUE;
+    }
     SearchResponse resp =
         ElasticService.client.prepareSearch(ElasticIndex.data.name()).setNoFields()
             .setPostFilter(f).setTypes(getTypes()).setSize(size).setFrom(from)
@@ -113,7 +115,7 @@ public class ElasticSearch implements Search {
     for (SearchHit hit : resp.getHits()) {
       ids.add(hit.getId());
     }
-    return new SearchResult(ids);
+    return new SearchResult(ids, resp.getHits().getTotalHits());
   }
 
 

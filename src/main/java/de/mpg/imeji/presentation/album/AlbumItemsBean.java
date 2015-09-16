@@ -78,7 +78,7 @@ public class AlbumItemsBean extends ItemsBean {
   @Override
   public SearchResult search(SearchQuery searchQuery, SortCriterion sortCriterion) {
     ItemController controller = new ItemController();
-    return controller.search(uri, searchQuery, sortCriterion, null, sb.getUser(), null);
+    return controller.search(uri, searchQuery, sortCriterion, sb.getUser(), null, -1, 0);
   }
 
   /**
@@ -163,7 +163,9 @@ public class AlbumItemsBean extends ItemsBean {
     } else {
       AlbumController ac = new AlbumController();
       ItemController ic = new ItemController();
-      ac.removeFromAlbum(album, ic.seachContainerItemsFast(album, sb.getUser(), -1), sb.getUser());
+      ac.removeFromAlbum(album,
+          ic.search(album.getId(), null, null, sb.getUser(), sb.getSpaceId(), -1, 0).getResults(),
+          sb.getUser());
     }
   }
 

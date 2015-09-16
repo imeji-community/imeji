@@ -140,7 +140,7 @@ public class AlbumController extends ImejiController {
     List<Album> albums = (List<Album>) retrieveBatchLazy(uris, user, limit, offset);
     ItemController itemController = new ItemController();
     for (Album album : albums) {
-      itemController.searchAndSetContainerItemsFast(album, user, -1);
+      itemController.searchAndSetContainerItems(album, user, -1, 0);
     }
     return albums;
   }
@@ -235,11 +235,11 @@ public class AlbumController extends ImejiController {
     ItemController itemController = new ItemController();
     // Get the item of the album
     List<String> albumItems =
-        itemController.search(album.getId(), null, null, null, Imeji.adminUser, null).getResults();
+        itemController.search(album.getId(), null, null, Imeji.adminUser, null, -1, 0).getResults();
     // Add Items which are not already in the album
     Set<String> albumItemsSet = new HashSet<>(albumItems);
     // Retrieve the uris, to check that the items all exist
-    itemController.retrieve(uris, -1, 0, user);
+    List<Item> items = (List<Item>) itemController.retrieve(uris, -1, 0, user);
     for (String uri : uris) {
       albumItemsSet.add(uri);
     }
@@ -249,8 +249,10 @@ public class AlbumController extends ImejiController {
     }
     // save the album
     update(album, user);
+    // Update the new items, to add the relation item -> album in the index
+    itemController.updateBatch(items, Imeji.adminUser);
     // return all items of the album
-    return itemController.search(album.getId(), null, null, null, Imeji.adminUser, null)
+    return itemController.search(album.getId(), null, null, Imeji.adminUser, null, -1, 0)
         .getResults();
   }
 
@@ -267,19 +269,10 @@ public class AlbumController extends ImejiController {
     ItemController itemController = new ItemController();
     // Get the item of the album
     List<String> albumItems =
-        itemController.search(album.getId(), null, null, null, Imeji.adminUser, null).getResults();
+        itemController.search(album.getId(), null, null, Imeji.adminUser, null, -1, 0).getResults();
     int beforeSize = albumItems.size();
-    // Add Items which are not already in the album
-    // Retrieving Items to check if there will be some not existing item TODO: Do we need that? if
-    // not existing, then nothing...
-    try {
-      itemController.retrieve(toDelete, -1, 0, user);
-    } catch (Exception e) {
-      if (e.getCause() instanceof NotFoundException)
-        throw new NotFoundException(e.getLocalizedMessage());
-      else
-        throw e;
-    }
+    // Retrieving Items to check if there will be some not existing item
+    List<Item> items = (List<Item>) itemController.retrieve(toDelete, -1, 0, user);
     for (String uri : toDelete) {
       albumItems.remove(uri);
     }
@@ -292,9 +285,11 @@ public class AlbumController extends ImejiController {
     }
     // save the album
     update(album, user);
+    // Update the removed items, to remove the relation item -> album in the index
+    itemController.updateBatch(items, Imeji.adminUser);
     // Get the new size of the album
     int afterSize =
-        itemController.search(album.getId(), null, null, null, Imeji.adminUser, null)
+        itemController.search(album.getId(), null, null, Imeji.adminUser, null, -1, 0)
             .getNumberOfRecords();
     // Return how many items have been deleted
     return beforeSize - afterSize;

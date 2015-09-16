@@ -64,7 +64,7 @@ public class IngestItemController {
       ItemMapperTask im = new ItemMapperTask(itemList);
       im.execute();
       ItemController ic = new ItemController();
-      ic.update(im.get(), user);
+      ic.updateBatch(im.get(), user);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }

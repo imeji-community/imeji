@@ -57,6 +57,14 @@ public class SearchResult {
     results = ids;
   }
 
+  /**
+   * Constructor when the number of records is known
+   */
+  public SearchResult(List<String> ids, long numberOfRecords) {
+    this.numberOfRecords = (int) numberOfRecords;
+    results = ids;
+  }
+
   public int getNumberOfRecords() {
     return numberOfRecords;
   }

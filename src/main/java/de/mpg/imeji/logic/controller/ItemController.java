@@ -373,7 +373,7 @@ public class ItemController extends ImejiController {
   public Item update(Item item, User user) throws ImejiException {
     Collection<Item> l = new ArrayList<Item>();
     l.add(item);
-    update(l, user);
+    updateBatch(l, user);
     return retrieve(item.getId(), user);
   }
 
@@ -384,7 +384,7 @@ public class ItemController extends ImejiController {
    * @param user
    * @throws ImejiException
    */
-  public void update(Collection<Item> items, User user) throws ImejiException {
+  public void updateBatch(Collection<Item> items, User user) throws ImejiException {
     List<Object> imBeans = new ArrayList<Object>();
     for (Item item : items) {
       writeUpdateProperties(item, user);
@@ -567,14 +567,15 @@ public class ItemController extends ImejiController {
    * @param containerUri - if the search is done within a {@link Container}
    * @param searchQuery - the {@link SearchQuery}
    * @param sortCri - the {@link SortCriterion}
-   * @param uris - The {@link List} of uri to restrict the search
    * @param user
+   * @param size TODO
+   * @param offset TODO
    * @return
    */
   public SearchResult search(URI containerUri, SearchQuery searchQuery, SortCriterion sortCri,
-      List<String> uris, User user, String spaceId) {
+      User user, String spaceId, int size, int offset) {
     return search.search(searchQuery, sortCri, user, containerUri != null ? containerUri.toString()
-        : null, spaceId, 0, -1);
+        : null, spaceId, offset, size);
   }
 
   /**
@@ -585,7 +586,7 @@ public class ItemController extends ImejiController {
    * @param user
    */
   public Container searchAndSetContainerItems(Container c, User user, int limit, int offset) {
-    List<String> newUris = search(c.getId(), null, null, null, user, "").getResults();
+    List<String> newUris = search(c.getId(), null, null, user, "", -1, 0).getResults();
     c.getImages().clear();
     for (String s : newUris) {
       c.getImages().add(URI.create(s));
@@ -605,59 +606,12 @@ public class ItemController extends ImejiController {
       User user, String spaceId) throws ImejiException, IOException {
     List<Item> itemList = new ArrayList<Item>();
     try {
-      List<String> results = search(containerUri, q, sort, null, user, spaceId).getResults();
+      List<String> results = search(containerUri, q, sort, user, spaceId, -1, 0).getResults();
       itemList = (List<Item>) retrieve(results, getMin(results.size(), 500), 0, user);
     } catch (Exception e) {
       throw new UnprocessableError("Cannot retrieve items:", e);
     }
     return itemList;
-  }
-
-  /**
-   * Load items from a {@link Container} without any ordering. This is faster than
-   * searchAndSetContainerItems Method, but is working only with tdb
-   * 
-   * @param c
-   * @param size
-   * @return
-   */
-  public Container searchAndSetContainerItemsFast(Container c, User user, int size) {
-    c.getImages().clear();
-    for (String s : seachContainerItemsFast(c, user, size)) {
-      c.getImages().add(URI.create(s));
-    }
-    return c;
-  }
-
-  /**
-   * Search all items of {@link Container}
-   * 
-   * @param c
-   * @param user
-   * @param size
-   * @return
-   */
-  public List<String> seachContainerItemsFast(Container c, User user, int size) {
-    String q =
-        c instanceof CollectionImeji ? JenaCustomQueries.selectCollectionItems(c.getId(), user,
-            size) : JenaCustomQueries.selectAlbumItems(c.getId(), user, size);
-    c.getImages().clear();
-    return ImejiSPARQL.exec(q, null);
-  }
-
-  /**
-   * Search all items of {@link Container}
-   * 
-   * @param c
-   * @param user
-   * @param size
-   * @return
-   */
-  public List<String> searchDiscardedContainerItemsFast(Container c, User user, int size) {
-    String q =
-        c instanceof CollectionImeji ? JenaCustomQueries.selectDiscardedCollectionItems(c.getId(),
-            user, size) : JenaCustomQueries.selectDiscardedAlbumItems(c.getId(), user, size);
-    return ImejiSPARQL.exec(q, null);
   }
 
   /**
@@ -677,7 +631,7 @@ public class ItemController extends ImejiController {
       }
     }
     // patch(triples, user); //TODO faster but doesnt work with indexer
-    update(l, user);
+    updateBatch(l, user);
   }
 
   /**
@@ -691,7 +645,7 @@ public class ItemController extends ImejiController {
     for (Item item : l) {
       item.setStatus(Status.PENDING);
     }
-    update(l, user);
+    updateBatch(l, user);
   }
 
   /**
@@ -720,20 +674,7 @@ public class ItemController extends ImejiController {
       }
     }
     // patch(triples, user);//TODO faster but doesnt work with indexer
-    update(items, user);
-  }
-
-  /**
-   * Return the size of a {@link Container}
-   * 
-   * @param c
-   * @return
-   */
-  public int countContainerSize(Container c) {
-    String q =
-        c instanceof CollectionImeji ? JenaCustomQueries.countCollectionSize(c.getId())
-            : JenaCustomQueries.countAlbumSize(c.getId());
-    return ImejiSPARQL.execCount(q, null);
+    updateBatch(items, user);
   }
 
   /**

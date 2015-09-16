@@ -115,10 +115,10 @@ public class StartPageBean implements Serializable {
       // Search for item which have been for less than n hours
       sq.addPair(new SearchPair(SearchFields.created, SearchOperators.GREATER,
           getTimeforNDaybeforeNow(searchforItemCreatedForLessThan), false));
-      return new SearchResult(ic.search(null, sq, sc, null, session.getUser(),
-          session.getSelectedSpaceString()).getResults(), null);
+      return new SearchResult(ic.search(null, sq, sc, session.getUser(), session.getSelectedSpaceString(),
+          -1, 0).getResults(), null);
     }
-    return ic.search(null, sq, sc, null, session.getUser(), session.getSelectedSpaceString());
+    return ic.search(null, sq, sc, session.getUser(), session.getSelectedSpaceString(), -1, 0);
   }
 
   /**

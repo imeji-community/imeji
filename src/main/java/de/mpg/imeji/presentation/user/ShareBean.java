@@ -542,7 +542,7 @@ public class ShareBean implements Serializable {
    */
   private boolean hasContent(Container c) {
     ItemController ic = new ItemController();
-    return ic.searchAndSetContainerItemsFast(c, user, 1).getImages().size() > 0;
+    return ic.searchAndSetContainerItems(c, user, 1, 0).getImages().size() > 0;
   }
 
   public void clearError() {

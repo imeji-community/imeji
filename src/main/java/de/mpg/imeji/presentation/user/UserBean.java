@@ -39,7 +39,6 @@ public class UserBean {
   private String id;
   private List<SharedHistory> roles = new ArrayList<SharedHistory>();
   private boolean edit = false;
-  private String userEmailOrigin = "";
 
   public UserBean() {}
 
@@ -83,7 +82,6 @@ public class UserBean {
   public void retrieveUser() throws Exception {
     if (id != null && session.getUser() != null) {
       user = ObjectLoader.loadUser(id, session.getUser());
-      userEmailOrigin = user.getEmail();
     } else if (id != null && session.getUser() == null) {
       LoginBean loginBean = (LoginBean) BeanHelper.getRequestBean(LoginBean.class);
       loginBean.setLogin(id);
@@ -190,10 +188,9 @@ public class UserBean {
           BeanHelper.error(session.getMessage(errorM));
         }
       }
-    }
+    }  
   }
-
-
+  
   /**
    * Reload the page with the current user
    * 
@@ -215,7 +212,7 @@ public class UserBean {
   public String getUserPageUrl() {
     Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
 
-    return navigation.getUserUrl() + "?id=" + userEmailOrigin;
+    return navigation.getUserUrl() + "?id=" + user.getEmail();
   }
 
   public User getUser() {

@@ -353,7 +353,7 @@ public class SearchQueryParser {
     if (pair.getField() == SearchFields.all) {
       return pair.getValue();
     } else {
-      return indexNamespace2PrettyQuery(pair.getIndex().getNamespace()) + " "
+      return indexNamespace2PrettyQuery(pair.getField().name()) + " "
           + negation2PrettyQuery(pair.isNot()) + searchOperator2PrettyQuery(pair.getOperator())
           + " " + pair.getValue();
     }

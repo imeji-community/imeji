@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
+import de.mpg.imeji.logic.search.model.SearchLogicalRelation.LOGICAL_RELATIONS;
 import de.mpg.imeji.logic.search.model.SearchOperators;
 import de.mpg.imeji.logic.search.model.SearchPair;
 import de.mpg.imeji.logic.search.model.SearchQuery;
@@ -153,9 +154,10 @@ public class TechnicalFacets extends Facets {
    */
   public int getCount(SearchQuery searchQuery, SearchPair pair, List<String> allImages) {
     ItemController ic = new ItemController();
-    SearchQuery sq = new SearchQuery();
-    sq.addPair(pair);
-    return ic.search(null, sq, null, sb.getUser(), sb.getSelectedSpaceString(), -1, 0)
+    SearchQuery q = searchQuery.clone();
+    q.addLogicalRelation(LOGICAL_RELATIONS.AND);
+    q.addPair(pair);
+    return ic.search(null, q, null, sb.getUser(), sb.getSelectedSpaceString(), -1, 0)
         .getNumberOfRecords();
   }
 

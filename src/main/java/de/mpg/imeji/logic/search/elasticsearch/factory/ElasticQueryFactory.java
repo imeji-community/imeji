@@ -372,8 +372,7 @@ public class ElasticQueryFactory {
         // not indexed
         break;
       case prof:
-        // not indexed
-        break;
+        return fieldQuery(ElasticFields.PROFILE, pair.getValue(), pair.getOperator(), pair.isNot());
       case prop:
         // not indexed
         break;
@@ -413,7 +412,7 @@ public class ElasticQueryFactory {
       default:
         break;
     }
-    return null;
+    return matchNothing();
   }
 
   /**

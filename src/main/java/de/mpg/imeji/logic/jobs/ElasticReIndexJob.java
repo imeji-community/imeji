@@ -32,9 +32,10 @@ public class ElasticReIndexJob implements Callable<Integer> {
   public Integer call() throws Exception {
     logger.info("Reindex started!");
     ElasticService.deleteAll();
+    reindexAlbums();
     reindexItems();
     reindexFolders();
-    reindexAlbums(); // IMPORTANT: Albums must be reindex after Items
+    // IMPORTANT: Albums must be reindex after Items
     logger.info("Reindex done!");
     return null;
   }

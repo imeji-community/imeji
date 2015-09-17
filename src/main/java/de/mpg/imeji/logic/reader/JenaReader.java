@@ -53,8 +53,7 @@ public class JenaReader implements Reader {
    */
   @Override
   public Object readLazy(String uri, User user, Object o) throws ImejiException {
-    this.lazy = true;
-    return read(uri, user, o);
+    return read(uri, user, o, true);
   }
 
   /**
@@ -68,14 +67,7 @@ public class JenaReader implements Reader {
    */
   @Override
   public Object read(String uri, User user, Object o) throws ImejiException {
-    J2JHelper.setId(o, URI.create(uri));
-    List<Object> objects = new ArrayList<Object>();
-    objects.add(o);
-    List<Object> l = read(objects, user);
-    lazy = false;
-    if (l.size() > 0)
-      return l.get(0);
-    return null;
+    return read(uri, user, o, false);
   }
 
   /**
@@ -88,10 +80,7 @@ public class JenaReader implements Reader {
    */
   @Override
   public List<Object> read(List<Object> objects, User user) throws ImejiException {
-    Transaction t = new CRUDTransaction(objects, GrantType.READ, modelURI, lazy);
-    t.start();
-    t.throwException();
-    return objects;
+    return read(objects, user, false);
   }
 
   /**
@@ -105,7 +94,23 @@ public class JenaReader implements Reader {
    */
   @Override
   public List<Object> readLazy(List<Object> objects, User user) throws ImejiException {
-    this.lazy = true;
-    return read(objects, user);
+    return read(objects, user, true);
+  }
+
+  private Object read(String uri, User user, Object o, boolean lazy) throws ImejiException {
+    J2JHelper.setId(o, URI.create(uri));
+    List<Object> objects = new ArrayList<Object>();
+    objects.add(o);
+    List<Object> l = read(objects, user, lazy);
+    if (l.size() > 0)
+      return l.get(0);
+    return null;
+  }
+
+  private List<Object> read(List<Object> objects, User user, boolean lazy) throws ImejiException {
+    Transaction t = new CRUDTransaction(objects, GrantType.READ, modelURI, lazy);
+    t.start();
+    t.throwException();
+    return objects;
   }
 }

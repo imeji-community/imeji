@@ -19,7 +19,6 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
 import de.mpg.imeji.exceptions.AuthenticationError;
-import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.exceptions.UnprocessableError;
@@ -102,14 +101,16 @@ public class CollectionController extends ImejiController {
       }
       p = pc.create(p.clone(), user);
     }
-    
-    //Check in controller if Profile is released and is created by user
-    if ( method.equals(MetadataProfileCreationMethod.REFERENCE )) {
+
+    // Check in controller if Profile is released and is created by user
+    if (method.equals(MetadataProfileCreationMethod.REFERENCE)) {
       if (!(p.getCreatedBy().equals(user.getId()) || Status.RELEASED.equals(p.getStatus()))) {
-          throw new UnprocessableError("You can not reference the metadata profile with Id="+p.getIdString()+"The profile you reference must be released or must be created by you!");
+        throw new UnprocessableError("You can not reference the metadata profile with Id="
+            + p.getIdString()
+            + "The profile you reference must be released or must be created by you!");
       }
     }
-    
+
     c.setProfile(p.getId());
     writeCreateProperties(c, user);
     c.setProfile(p.getId());
@@ -138,8 +139,6 @@ public class CollectionController extends ImejiController {
   public CollectionImeji retrieve(URI uri, User user) throws ImejiException {
     CollectionImeji c = (CollectionImeji) reader.read(uri.toString(), user, new CollectionImeji());
     return c;
-    // ItemController itemController = new ItemController();
-    // return (CollectionImeji) itemController.searchAndSetContainerItems(c, user, -1, 0);
   }
 
   /**

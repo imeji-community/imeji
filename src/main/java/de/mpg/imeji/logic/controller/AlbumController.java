@@ -353,14 +353,16 @@ public class AlbumController extends ImejiController {
   }
 
   /**
-   * Retrieve all {@link Album}. Albums a fully loaded
+   * Retrieve all {@link Album}. Albums a fully loaded. Might last long
    * 
    * @return
    * @throws ImejiException
    */
   public List<Album> retrieveAll(User user) throws ImejiException {
     List<String> uris = ImejiSPARQL.exec(JenaCustomQueries.selectAlbumAll(), Imeji.albumModel);
-    return retrieveBatch(uris, user, -1, 0);
+    List<Album> albums = prepareBatchRetrieve(uris, -1, 0);
+    reader.read(J2JHelper.cast2ObjectList(albums), user);
+    return albums;
   }
 
 

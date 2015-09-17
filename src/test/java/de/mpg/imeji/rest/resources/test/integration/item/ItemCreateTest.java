@@ -1,11 +1,30 @@
 package de.mpg.imeji.rest.resources.test.integration.item;
 
-import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.rest.api.CollectionService;
-import de.mpg.imeji.rest.api.ItemService;
-import de.mpg.imeji.rest.to.ItemTO;
-import de.mpg.imeji.rest.to.ItemWithFileTO;
+import static de.mpg.imeji.logic.util.ResourceHelper.getStringFromPath;
+import static de.mpg.imeji.rest.process.RestProcessUtils.jsonToPOJO;
+import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_PATH;
+import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_STORAGE;
+import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+import static javax.ws.rs.core.Response.Status.CREATED;
+import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.endsWith;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsNot.not;
+import static org.junit.Assert.assertEquals;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Map;
+
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
 import net.java.dev.webdav.jaxrs.ResponseStatus;
+
 import org.apache.commons.httpclient.HttpStatus;
 import org.codehaus.jettison.json.JSONException;
 import org.glassfish.jersey.jackson.JacksonFeature;
@@ -16,27 +35,13 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import util.JenaUtil;
-
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.Invocation;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-import java.io.File;
-import java.io.IOException;
-import java.util.Map;
-
-import static de.mpg.imeji.logic.util.ResourceHelper.getStringFromPath;
-import static de.mpg.imeji.rest.process.RestProcessUtils.jsonToPOJO;
-import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_PATH;
-import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_STORAGE;
-import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
-import static javax.ws.rs.core.Response.Status.CREATED;
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.IsNot.not;
-import static org.junit.Assert.assertEquals;
+import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.rest.api.CollectionService;
+import de.mpg.imeji.rest.api.ItemService;
+import de.mpg.imeji.rest.to.ItemTO;
+import de.mpg.imeji.rest.to.ItemWithFileTO;
 
 /**
  * Created by vlad on 09.12.14.
@@ -342,14 +347,6 @@ public class ItemCreateTest extends ItemTestBase {
                 .replaceAll("\"fetchUrl\"\\s*:\\s*\"___FETCH_URL___\",", "")
 
         );
-
-    System.out
-        .println(itemJSON
-            .replace("___COLLECTION_ID___", collectionId)
-            .replace("___FILENAME___", "test.png")
-            .replace("___REFERENCE_URL___",
-                "http://th03.deviantart.net/fs71/PRE/i/2012/242/1/f/png_moon_by_paradise234-d5czhdo.png")
-            .replaceAll("\"fetchUrl\"\\s*:\\s*\"___FETCH_URL___\",", ""));
 
     Response response = getAuthTarget().post(Entity.entity(multiPart, multiPart.getMediaType()));
 

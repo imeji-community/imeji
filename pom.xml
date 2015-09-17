@@ -221,7 +221,7 @@
 					<!-- if there are no tests, don't bail out -->
 					<failIfNoTests>false</failIfNoTests>
 					<!-- avoid the out of memory exception thrown in some test scenarios -->
-					<argLine>-Xmx1000M</argLine>
+					<argLine>-Xmx1024m -XX:MaxPermSize=512m</argLine>
 					<systemPropertyVariables>
 						<catalina.base>${test.catalina.base}</catalina.base>
 					</systemPropertyVariables>

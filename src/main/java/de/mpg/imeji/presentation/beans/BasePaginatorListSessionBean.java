@@ -453,7 +453,7 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
    * @return
    * @throws Exception
    */
-  public abstract List<ListElementType> retrieveList(int offset, int limit) throws Exception;
+  public abstract List<ListElementType> retrieveList(int offset, int size) throws Exception;
 
   /**
    * Must return the total size of the retrieved list without limit and offset parameters. E.g. for

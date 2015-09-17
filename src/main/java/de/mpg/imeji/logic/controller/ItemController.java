@@ -568,8 +568,8 @@ public class ItemController extends ImejiController {
    * @param searchQuery - the {@link SearchQuery}
    * @param sortCri - the {@link SortCriterion}
    * @param user
-   * @param size TODO
-   * @param offset TODO
+   * @param size
+   * @param offset
    * @return
    */
   public SearchResult search(URI containerUri, SearchQuery searchQuery, SortCriterion sortCri,

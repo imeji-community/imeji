@@ -16,6 +16,7 @@ import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.logic.search.Search;
 import de.mpg.imeji.logic.search.SearchQueryParser;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.jenasearch.JenaSearch;
@@ -62,6 +63,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
   private String discardComment;
   private String selectedImagesContext;
   private SearchResult searchResult;
+  private SortCriterion sortCriterion;
 
   /**
    * The context of the browse page (browse, collection browse, album browse)
@@ -105,21 +107,8 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
    * Initialization for all browse pages for get queries (non ajax queries)
    */
   public void browseInit() {
-    try {
-      String q = UrlHelper.getParameterValue("q");
-      if (q != null) {
-        setQuery(URLEncoder.encode(q, "UTF-8"));
-        setSearchQuery(SearchQueryParser.parseStringQuery(query));
-      }
-    } catch (Exception e) {
-      BeanHelper.error("Error parsing query: " + e.getMessage());
-      logger.error("Error parsing query", e);
-    }
-    SortCriterion sortCriterion = initSortCriterion();
-    searchResult = search(searchQuery, sortCriterion);
-    searchResult.setQuery(getQuery());
-    searchResult.setSort(sortCriterion);
-    totalNumberOfRecords = searchResult.getNumberOfRecords();
+    parseSearchQuery();
+    parseSorting();
     initMenus();
     cleanSelectItems();
     initFilters();
@@ -145,13 +134,13 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
   }
 
   @Override
-  public List<ThumbnailBean> retrieveList(int offset, int limit) {
-    if (searchResult == null)
-      browseInit();
+  public List<ThumbnailBean> retrieveList(int offset, int size) {
     try {
+      // Search the items of the page
+      searchResult = search(searchQuery, sortCriterion, offset, size);
+      totalNumberOfRecords = searchResult.getNumberOfRecords();
       // load the item
-      Collection<Item> items;
-      items = loadImages(searchResult.getResults(), offset, limit);
+      Collection<Item> items = loadImages(searchResult.getResults());
       // Init the labels for the item
       if (!items.isEmpty()) {
         ((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class)).init((List<Item>) items);
@@ -165,16 +154,17 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
   }
 
   /**
-   * Perform the {@link JenaSearch}
+   * Perform the {@link Search}
    * 
    * @param searchQuery
    * @param sortCriterion
    * @return
    */
-  public SearchResult search(SearchQuery searchQuery, SortCriterion sortCriterion) {
+  public SearchResult search(SearchQuery searchQuery, SortCriterion sortCriterion, int offset,
+      int size) {
     ItemController controller = new ItemController();
-    return controller.search(null, searchQuery, sortCriterion, session.getUser(), session.getSelectedSpaceString(),
-        -1, 0);
+    return controller.search(null, searchQuery, sortCriterion, session.getUser(),
+        session.getSelectedSpaceString(), size, offset);
   }
 
   /**
@@ -184,13 +174,10 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
    * @return
    * @throws ImejiException
    */
-  public Collection<Item> loadImages(List<String> uris, int offset, int limit)
-      throws ImejiException {
+  public Collection<Item> loadImages(List<String> uris) throws ImejiException {
     ItemController controller = new ItemController();
-    return controller.retrieve(uris, limit, offset, session.getUser());
+    return controller.retrieve(uris, -1, 0, session.getUser());
   }
-
-
 
   /**
    * Clean the list of select {@link Item} in the session if the selected images context is not
@@ -215,19 +202,36 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
   }
 
   /**
-   * Initialize the {@link SortCriterion} according to the selected value in the sort menu.
+   * Parse the search query in the url, as defined by the parameter q
    * 
    * @return
    */
-  public SortCriterion initSortCriterion() {
-    SortCriterion sortCriterion = new SortCriterion();
+  private void parseSearchQuery() {
+    try {
+      String q = UrlHelper.getParameterValue("q");
+      if (q != null) {
+        setQuery(URLEncoder.encode(q, "UTF-8"));
+        setSearchQuery(SearchQueryParser.parseStringQuery(query));
+      }
+    } catch (Exception e) {
+      BeanHelper.error("Error parsing query: " + e.getMessage());
+      logger.error("Error parsing query", e);
+    }
+  }
+
+  /**
+   * Parse the {@link SortCriterion} according to the selected value in the sort menu.
+   * 
+   * @return
+   */
+  public void parseSorting() {
+    sortCriterion = new SortCriterion();
     if (getSelectedSortCriterion() != null && !getSelectedSortCriterion().trim().equals("")) {
       sortCriterion.setIndex(JenaSearch.getIndex(getSelectedSortCriterion()));
       sortCriterion.setSortOrder(SortOrder.valueOf(getSelectedSortOrder()));
     } else {
       sortCriterion.setIndex(null);
     }
-    return sortCriterion;
   }
 
   /**
@@ -301,7 +305,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
    * @throws Exception
    */
   public String addAllToActiveAlbum() throws Exception {
-    addToActiveAlbum(search(searchQuery, null).getResults());
+    addToActiveAlbum(search(searchQuery, null, 0, -1).getResults());
     return "pretty:";
   }
 
@@ -323,7 +327,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
    * @throws Exception
    */
   public String deleteAll() throws Exception {
-    delete(search(searchQuery, null).getResults());
+    delete(search(searchQuery, null, 0, -1).getResults());
     return "pretty:";
   }
 
@@ -334,7 +338,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
    * @throws Exception
    */
   public String withdrawAll() throws Exception {
-    withdraw(search(searchQuery, null).getResults());
+    withdraw(search(searchQuery, null, 0, -1).getResults());
     return "pretty:";
   }
 
@@ -357,7 +361,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
    */
   private void withdraw(List<String> uris) throws Exception {
 
-    Collection<Item> items = loadImages(uris, 0, -1);
+    Collection<Item> items = loadImages(uris);
     int count = items.size();
     if ("".equals(discardComment.trim())) {
       BeanHelper.error(session.getMessage("error_image_withdraw_discardComment"));
@@ -377,7 +381,7 @@ public class ItemsBean extends BasePaginatorListSessionBean<ThumbnailBean> {
    * @throws Exception
    */
   private void delete(List<String> uris) throws Exception {
-    Collection<Item> items = loadImages(uris, 0, -1);
+    Collection<Item> items = loadImages(uris);
     ItemController ic = new ItemController();
     int count = ic.delete((List<Item>) items, session.getUser());
     BeanHelper.info(count + " " + session.getLabel("images_deleted"));

@@ -59,14 +59,12 @@ public class AlbumItemsBean extends ItemsBean {
     loadAlbum();
     browseContext = getNavigationString() + id;
     browseInit();
-
     if (sb.getActiveAlbum() != null && sb.getActiveAlbumSize() != getTotalNumberOfRecords()) {
       AlbumController ac = new AlbumController();
       Album activeA = ac.retrieve(sb.getActiveAlbum().getId(), sb.getUser());
       sb.setActiveAlbum(activeA);
       setAlbum(activeA);
     }
-
     return "";
   }
 
@@ -76,9 +74,10 @@ public class AlbumItemsBean extends ItemsBean {
   }
 
   @Override
-  public SearchResult search(SearchQuery searchQuery, SortCriterion sortCriterion) {
+  public SearchResult search(SearchQuery searchQuery, SortCriterion sortCriterion, int offset,
+      int limit) {
     ItemController controller = new ItemController();
-    return controller.search(uri, searchQuery, sortCriterion, sb.getUser(), null, -1, 0);
+    return controller.search(uri, searchQuery, sortCriterion, sb.getUser(), null, limit, offset);
   }
 
   /**

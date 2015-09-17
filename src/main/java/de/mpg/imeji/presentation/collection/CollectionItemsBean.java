@@ -16,8 +16,8 @@ import javax.faces.model.SelectItem;
 
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.SearchQueryParser;
+import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.model.SearchIndex;
 import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.search.model.SortCriterion;
@@ -69,7 +69,6 @@ public class CollectionItemsBean extends ItemsBean {
     uri = ObjectHelper.getURI(CollectionImeji.class, id);
     collection = ObjectLoader.loadCollectionLazy(uri, sb.getUser());
     this.profile = ObjectLoader.loadProfile(collection.getProfile(), sb.getUser());
-
     // Initialize the metadata labels
     ((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class)).init(profile);
     // browse context must be initialized before browseinit(), since the browseinit() will check if
@@ -81,9 +80,10 @@ public class CollectionItemsBean extends ItemsBean {
   }
 
   @Override
-  public SearchResult search(SearchQuery searchQuery, SortCriterion sortCriterion) {
+  public SearchResult search(SearchQuery searchQuery, SortCriterion sortCriterion, int offset,
+      int limit) {
     ItemController controller = new ItemController();
-    return controller.search(uri, searchQuery, sortCriterion, sb.getUser(), null, -1, 0);
+    return controller.search(uri, searchQuery, sortCriterion, sb.getUser(), null, limit, offset);
   }
 
   @Override
@@ -93,7 +93,8 @@ public class CollectionItemsBean extends ItemsBean {
     sortMenu.add(new SelectItem(SearchIndex.SearchFields.created, sb
         .getLabel("sort_img_date_created")));
     sortMenu.add(new SelectItem(SearchIndex.SearchFields.modified, sb.getLabel("sort_date_mod")));
-    sortMenu.add(new SelectItem(SearchIndex.SearchFields.filename, sb.getLabel("sort_img_filename")));
+    sortMenu
+        .add(new SelectItem(SearchIndex.SearchFields.filename, sb.getLabel("sort_img_filename")));
     setSortMenu(sortMenu);
   }
 

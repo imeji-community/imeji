@@ -110,7 +110,7 @@ public class ItemProcess {
    * @param q
    * @return
    */
-  public static JSONResponse readItems(HttpServletRequest req, String q) {
+  public static JSONResponse readItems(HttpServletRequest req, String q, int offset, int size) {
     JSONResponse resp = null;
 
     User u = BasicAuthentication.auth(req);
@@ -120,10 +120,12 @@ public class ItemProcess {
       switch (guessType(req.getParameter("syntax"))) {
         case DEFAULT:
           resp =
-              RestProcessUtils.buildResponse(Status.OK.getStatusCode(), is.readDefaultItems(u, q));
+              RestProcessUtils.buildResponse(Status.OK.getStatusCode(),
+                  is.readDefaultItems(u, q, offset, size));
           break;
         case RAW:
-          resp = RestProcessUtils.buildResponse(OK.getStatusCode(), is.readItems(u, q));
+          resp =
+              RestProcessUtils.buildResponse(OK.getStatusCode(), is.readItems(u, q, offset, size));
           break;
       }
     } catch (Exception e) {

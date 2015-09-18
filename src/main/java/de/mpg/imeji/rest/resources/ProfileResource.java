@@ -5,6 +5,7 @@ import static de.mpg.imeji.rest.process.RestProcessUtils.buildJSONResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
@@ -31,7 +32,9 @@ public class ProfileResource implements ImejiResource {
   @GET
   @ApiOperation(value = "Get all profiles user has access to.")
   @Produces(MediaType.APPLICATION_JSON)
-  public Response readAll(@Context HttpServletRequest req, @QueryParam("q") String q) {
+  public Response readAll(@Context HttpServletRequest req, @QueryParam("q") String q,
+      @DefaultValue("0") @QueryParam("offset") int offset,
+      @DefaultValue(DEFAULT_LIST_SIZE) @QueryParam("size") int size) {
     JSONResponse resp = ProfileProcess.readAll(req, q);
     return buildJSONResponse(resp);
   }

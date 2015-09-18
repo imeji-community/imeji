@@ -11,6 +11,7 @@ import java.io.InputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -41,8 +42,10 @@ public class ItemResource implements ImejiResource {
   @GET
   @ApiOperation(value = "Get all items filtered by query (optional)")
   @Produces(MediaType.APPLICATION_JSON)
-  public Response readAll(@Context HttpServletRequest req, @QueryParam("q") String q) {
-    return buildJSONResponse(readItems(req, q));
+  public Response readAll(@Context HttpServletRequest req, @QueryParam("q") String q,
+      @DefaultValue("0") @QueryParam("offset") int offset,
+      @DefaultValue(DEFAULT_LIST_SIZE) @QueryParam("size") int size) {
+    return buildJSONResponse(readItems(req, q, offset, size));
   }
 
   @GET
@@ -289,6 +292,7 @@ public class ItemResource implements ImejiResource {
    * )
    * 
    * @Produces(MediaType.APPLICATION_JSON) public Response easyUpdate(@PathParam("id") String id,
+   * 
    * @Context HttpServletRequest req, InputStream json) throws Exception { JSONResponse resp =
    * ItemProcess.easyUpdateItem(req, id); return buildJSONResponse(resp); }
    */

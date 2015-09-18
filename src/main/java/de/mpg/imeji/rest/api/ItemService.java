@@ -71,28 +71,31 @@ public class ItemService implements API<ItemTO> {
 
   }
 
-  public List<ItemTO> readItems(User u, String q) throws ImejiException, IOException {
+  public List<ItemTO> readItems(User u, String q, int offset, int size) throws ImejiException,
+      IOException {
     return Lists.transform(new ItemController().searchAndRetrieve(null,
-        SearchQueryParser.parseStringQuery(q), null, u, null), new Function<Item, ItemTO>() {
-      @Override
-      public ItemTO apply(Item vo) {
-        ItemTO to = new ItemTO();
-        TransferObjectFactory.transferItem(vo, to);
-        return to;
-      }
-    });
+        SearchQueryParser.parseStringQuery(q), null, u, null, offset, size),
+        new Function<Item, ItemTO>() {
+          @Override
+          public ItemTO apply(Item vo) {
+            ItemTO to = new ItemTO();
+            TransferObjectFactory.transferItem(vo, to);
+            return to;
+          }
+        });
   }
 
-  public List<DefaultItemTO> readDefaultItems(User u, String q) throws ImejiException, IOException {
-
+  public List<DefaultItemTO> readDefaultItems(User u, String q, int offset, int size)
+      throws ImejiException, IOException {
     return Lists.transform(new ItemController().searchAndRetrieve(null,
-        SearchQueryParser.parseStringQuery(q), null, u, null), new Function<Item, DefaultItemTO>() {
-      public DefaultItemTO apply(Item item) {
-        DefaultItemTO defaultTO = new DefaultItemTO();
-        TransferObjectFactory.transferDefaultItem(item, defaultTO);
-        return defaultTO;
-      }
-    });
+        SearchQueryParser.parseStringQuery(q), null, u, null, offset, size),
+        new Function<Item, DefaultItemTO>() {
+          public DefaultItemTO apply(Item item) {
+            DefaultItemTO defaultTO = new DefaultItemTO();
+            TransferObjectFactory.transferDefaultItem(item, defaultTO);
+            return defaultTO;
+          }
+        });
   }
 
 

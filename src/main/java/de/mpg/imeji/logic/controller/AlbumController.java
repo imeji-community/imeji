@@ -305,9 +305,9 @@ public class AlbumController extends ImejiController {
    * @param scList
    * @return
    */
-  public SearchResult search(SearchQuery searchQuery, User user, SortCriterion sortCri, int limit,
+  public SearchResult search(SearchQuery searchQuery, User user, SortCriterion sortCri, int size,
       int offset, String spaceId) {
-    return search.search(searchQuery, sortCri, user, null, spaceId, 0, -1);
+    return search.search(searchQuery, sortCri, user, null, spaceId, offset, size);
   }
 
   /**
@@ -318,14 +318,14 @@ public class AlbumController extends ImejiController {
    * @return
    * @throws ImejiException
    */
-  public List<Album> searchAndretrieveLazy(User user, String q, String spaceId)
+  public List<Album> searchAndretrieveLazy(User user, String q, String spaceId, int offset, int size)
       throws ImejiException {
     List<Album> aList = new ArrayList<>();
     try {
       List<String> results =
           search(!isNullOrEmptyTrim(q) ? SearchQueryParser.parseStringQuery(q) : null, user, null,
-              500, 0, spaceId).getResults();
-      aList = (List<Album>) retrieveBatchLazy(results, user, getMin(results.size(), 500), 0);
+              size, offset, spaceId).getResults();
+      aList = (List<Album>) retrieveBatchLazy(results, user, -1, 0);
     } catch (Exception e) {
       throw new UnprocessableError("Cannot retrieve albums:", e);
     }

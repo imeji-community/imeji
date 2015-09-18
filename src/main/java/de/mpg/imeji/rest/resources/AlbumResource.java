@@ -8,6 +8,7 @@ import java.io.InputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -52,8 +53,10 @@ public class AlbumResource implements ImejiResource {
   @GET
   @ApiOperation(value = "Read all albums filtered by query")
   @Produces(MediaType.APPLICATION_JSON)
-  public Response readAll(@Context HttpServletRequest req, @QueryParam("q") String q) {
-    JSONResponse resp = readAllAlbums(req, q);
+  public Response readAll(@Context HttpServletRequest req, @QueryParam("q") String q,
+      @DefaultValue("0") @QueryParam("offset") int offset,
+      @DefaultValue(DEFAULT_LIST_SIZE) @QueryParam("size") int size) {
+    JSONResponse resp = readAllAlbums(req, q, offset, size);
     return buildJSONResponse(resp);
   }
 
@@ -82,8 +85,9 @@ public class AlbumResource implements ImejiResource {
   @ApiOperation(value = "Get album members")
   @Produces(MediaType.APPLICATION_JSON)
   public Response readAllMembers(@Context HttpServletRequest req, @PathParam("id") String id,
-      @QueryParam("q") String q) {
-    JSONResponse resp = AlbumProcess.readAlbumItems(req, id, q);
+      @QueryParam("q") String q, @DefaultValue("0") @QueryParam("offset") int offset,
+      @DefaultValue(DEFAULT_LIST_SIZE) @QueryParam("size") int size) {
+    JSONResponse resp = AlbumProcess.readAlbumItems(req, id, q, offset, size);
     return RestProcessUtils.buildJSONResponse(resp);
   }
 

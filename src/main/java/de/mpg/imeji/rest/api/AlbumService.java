@@ -46,8 +46,8 @@ public class AlbumService implements API<AlbumTO> {
     return getAlbumTO(controller, id, u);
   }
 
-  public List<AlbumTO> readAll(User u, String q) throws ImejiException {
-    return Lists.transform(new AlbumController().searchAndretrieveLazy(u, q, null),
+  public List<AlbumTO> readAll(User u, String q, int offset, int size) throws ImejiException {
+    return Lists.transform(new AlbumController().searchAndretrieveLazy(u, q, null, offset, size),
         new Function<Album, AlbumTO>() {
           @Override
           public AlbumTO apply(Album vo) {
@@ -58,11 +58,13 @@ public class AlbumService implements API<AlbumTO> {
         });
   }
 
-  public List<ItemTO> readItems(String id, User u, String q) throws ImejiException, IOException {
+  public List<ItemTO> readItems(String id, User u, String q, int offset, int size)
+      throws ImejiException, IOException {
     ItemController itemController = new ItemController();
     return Lists.transform(
         itemController.searchAndRetrieve(ObjectHelper.getURI(Album.class, id),
-            SearchQueryParser.parseStringQuery(q), null, u, null), new Function<Item, ItemTO>() {
+            SearchQueryParser.parseStringQuery(q), null, u, null, offset, size),
+        new Function<Item, ItemTO>() {
           @Override
           public ItemTO apply(Item vo) {
             ItemTO to = new ItemTO();

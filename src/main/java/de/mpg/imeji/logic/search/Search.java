@@ -61,7 +61,7 @@ public interface Search {
    * @return
    */
   public SearchResult search(SearchQuery query, SortCriterion sortCri, User user, String folderUri,
-      String spaceId, int from, int size);
+      String spaceId, int offset, int size);
 
   /**
    * Get the {@link SearchIndexer} for this {@link Search} implementation

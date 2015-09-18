@@ -69,11 +69,12 @@ public class CollectionService implements API<CollectionTO> {
    * @throws ImejiException
    * @throws IOException
    */
-  public List<ItemTO> readItems(String id, User u, String q) throws ImejiException, IOException {
+  public List<ItemTO> readItems(String id, User u, String q, int offset, int size)
+      throws ImejiException, IOException {
     ItemController itemController = new ItemController();
     return Lists.transform(itemController.searchAndRetrieve(
         ObjectHelper.getURI(CollectionImeji.class, id), SearchQueryParser.parseStringQuery(q),
-        null, u, null), new Function<Item, ItemTO>() {
+        null, u, null, offset, size), new Function<Item, ItemTO>() {
       @Override
       public ItemTO apply(Item vo) {
         ItemTO to = new ItemTO();
@@ -94,11 +95,12 @@ public class CollectionService implements API<CollectionTO> {
    * @throws ImejiException
    * @throws IOException
    */
-  public Object readDefaultItems(String id, User u, String q) throws ImejiException, IOException {
+  public Object readDefaultItems(String id, User u, String q, int offset, int size)
+      throws ImejiException, IOException {
     ItemController itemController = new ItemController();
     return Lists.transform(itemController.searchAndRetrieve(
         ObjectHelper.getURI(CollectionImeji.class, id), SearchQueryParser.parseStringQuery(q),
-        null, u, null), new Function<Item, DefaultItemTO>() {
+        null, u, null, offset, size), new Function<Item, DefaultItemTO>() {
       @Override
       public DefaultItemTO apply(Item vo) {
         DefaultItemTO to = new DefaultItemTO();
@@ -108,10 +110,11 @@ public class CollectionService implements API<CollectionTO> {
     });
   }
 
-  public List<CollectionTO> readAll(User u, String q) throws ImejiException, IOException {
+  public List<CollectionTO> readAll(User u, String q, int offset, int size) throws ImejiException,
+      IOException {
     CollectionController cc = new CollectionController();
     return Lists.transform(
-        cc.searchAndRetrieve(SearchQueryParser.parseStringQuery(q), null, 0, -1, u, null),
+        cc.searchAndRetrieve(SearchQueryParser.parseStringQuery(q), null, u, null, offset, size),
         new Function<CollectionImeji, CollectionTO>() {
           @Override
           public CollectionTO apply(CollectionImeji vo) {

@@ -473,9 +473,9 @@ public class CollectionController extends ImejiController {
    * @throws ImejiException
    */
   public List<CollectionImeji> searchAndRetrieve(SearchQuery searchQuery, SortCriterion sortCri,
-      int limit, int offset, User user, String spaceId) throws ImejiException {
-    SearchResult result = search.search(searchQuery, sortCri, user, null, spaceId, 0, -1);
-    return (List<CollectionImeji>) retrieveBatchLazy(result.getResults(), limit, offset, user);
+      User user, String spaceId, int offset, int size) throws ImejiException {
+    SearchResult result = search.search(searchQuery, sortCri, user, null, spaceId, offset, size);
+    return (List<CollectionImeji>) retrieveBatchLazy(result.getResults(), -1, 0, user);
   }
 
   public MetadataProfileCreationMethod getProfileCreationMethod(String method) {

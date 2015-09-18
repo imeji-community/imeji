@@ -134,8 +134,8 @@ public abstract class SpaceBean implements Serializable {
 
       if (!StringHelper.isNullOrEmptyTrim(space.getIdString())) {
         collections =
-            cc.searchAndRetrieve(SearchQueryParser.parseStringQuery(q), null, 0, -1, user, space
-                .getId().toString());
+            cc.searchAndRetrieve(SearchQueryParser.parseStringQuery(q), null, user, space.getId()
+                .toString(), 0, -1);
         for (CollectionImeji selC : collections) {
           selectedCollections.add(selC.getId().toString());
         }

@@ -15,6 +15,7 @@ import java.io.InputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -48,8 +49,9 @@ public class CollectionResource implements ImejiResource {
       notes = "The result set can be filtered by query (optional)")
   @Produces(MediaType.APPLICATION_JSON)
   public Response readItemsWithQuery(@Context HttpServletRequest req, @PathParam("id") String id,
-      @QueryParam("q") String q) {
-    JSONResponse resp = readCollectionItems(req, id, q);
+      @QueryParam("q") String q, @DefaultValue("0") @QueryParam("offset") int offset,
+      @DefaultValue(DEFAULT_LIST_SIZE) @QueryParam("size") int size) {
+    JSONResponse resp = readCollectionItems(req, id, q, offset, size);
     return buildJSONResponse(resp);
   }
 
@@ -59,8 +61,10 @@ public class CollectionResource implements ImejiResource {
   @ApiOperation(value = "Get all collections user has access to.",
       notes = "With provided query parameter you filter only some collections")
   @Produces(MediaType.APPLICATION_JSON)
-  public Response readAll(@Context HttpServletRequest req, @QueryParam("q") String q) {
-    JSONResponse resp = readAllCollections(req, q);
+  public Response readAll(@Context HttpServletRequest req, @QueryParam("q") String q,
+      @DefaultValue("0") @QueryParam("offset") int offset,
+      @DefaultValue(DEFAULT_LIST_SIZE) @QueryParam("size") int size) {
+    JSONResponse resp = readAllCollections(req, q, offset, size);
     return buildJSONResponse(resp);
   }
 

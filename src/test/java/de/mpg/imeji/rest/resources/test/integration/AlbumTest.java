@@ -379,7 +379,7 @@ public class AlbumTest extends ImejiTestBase {
         target(pathPrefix).path("/" + albumId + "/members/link").register(authAsUser)
             .request(MediaType.APPLICATION_JSON_TYPE).put(Entity.json("[\"" + "adfgsh" + "\"]"));
 
-    assertEquals(response.getStatus(), Status.NOT_FOUND.getStatusCode() );
+    assertEquals(response.getStatus(), Status.NOT_FOUND.getStatusCode());
   }
 
   @Test
@@ -398,7 +398,7 @@ public class AlbumTest extends ImejiTestBase {
     assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
     AlbumService as = new AlbumService();
-    assertEquals(as.readItems(albumId, JenaUtil.testUser, "").size(), 0);
+    assertEquals(as.readItems(albumId, JenaUtil.testUser, "", 0, -1).size(), 0);
   }
 
   @Test

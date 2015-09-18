@@ -39,26 +39,29 @@ public class AlbumProcess {
 
   }
 
-  public static JSONResponse readAllAlbums(HttpServletRequest req, String q) {
+  public static JSONResponse readAllAlbums(HttpServletRequest req, String q, int offset, int size) {
     JSONResponse resp;
     User u = BasicAuthentication.auth(req);
     AlbumService as = new AlbumService();
     try {
-      resp = RestProcessUtils.buildResponse(OK.getStatusCode(), as.readAll(u, q));
+      resp = RestProcessUtils.buildResponse(OK.getStatusCode(), as.readAll(u, q, offset, size));
     } catch (Exception e) {
       resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
     }
     return resp;
   }
 
-  public static JSONResponse readAlbumItems(HttpServletRequest req, String id, String q) {
+  public static JSONResponse readAlbumItems(HttpServletRequest req, String id, String q,
+      int offset, int size) {
     JSONResponse resp;
 
     User u = BasicAuthentication.auth(req);
 
     AlbumService ccrud = new AlbumService();
     try {
-      resp = RestProcessUtils.buildResponse(OK.getStatusCode(), ccrud.readItems(id, u, q));
+      resp =
+          RestProcessUtils.buildResponse(OK.getStatusCode(),
+              ccrud.readItems(id, u, q, offset, size));
     } catch (Exception e) {
       resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
     }

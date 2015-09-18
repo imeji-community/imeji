@@ -603,11 +603,12 @@ public class ItemController extends ImejiController {
    * @throws ImejiException
    */
   public List<Item> searchAndRetrieve(URI containerUri, SearchQuery q, SortCriterion sort,
-      User user, String spaceId) throws ImejiException, IOException {
+      User user, String spaceId, int offset, int size) throws ImejiException, IOException {
     List<Item> itemList = new ArrayList<Item>();
     try {
-      List<String> results = search(containerUri, q, sort, user, spaceId, -1, 0).getResults();
-      itemList = (List<Item>) retrieve(results, getMin(results.size(), 500), 0, user);
+      List<String> results =
+          search(containerUri, q, sort, user, spaceId, size, offset).getResults();
+      itemList = (List<Item>) retrieve(results, -1, 0, user);
     } catch (Exception e) {
       throw new UnprocessableError("Cannot retrieve items:", e);
     }

@@ -43,7 +43,8 @@ public class CollectionProcess {
    * @param q
    * @return
    */
-  public static JSONResponse readCollectionItems(HttpServletRequest req, String id, String q) {
+  public static JSONResponse readCollectionItems(HttpServletRequest req, String id, String q,
+      int offset, int size) {
     JSONResponse resp = null;
 
     User u = BasicAuthentication.auth(req);
@@ -54,10 +55,12 @@ public class CollectionProcess {
         case DEFAULT:
           resp =
               RestProcessUtils.buildResponse(Status.OK.getStatusCode(),
-                  ccrud.readDefaultItems(id, u, q));
+                  ccrud.readDefaultItems(id, u, q, offset, size));
           break;
         case RAW:
-          resp = RestProcessUtils.buildResponse(OK.getStatusCode(), ccrud.readItems(id, u, q));
+          resp =
+              RestProcessUtils.buildResponse(OK.getStatusCode(),
+                  ccrud.readItems(id, u, q, offset, size));
           break;
       }
     } catch (Exception e) {
@@ -157,14 +160,14 @@ public class CollectionProcess {
     return resp;
   }
 
-  public static JSONResponse readAllCollections(HttpServletRequest req, String q) {
+  public static JSONResponse readAllCollections(HttpServletRequest req, String q, int offset,
+      int size) {
     JSONResponse resp;
-
     User u = BasicAuthentication.auth(req);
 
     CollectionService ccrud = new CollectionService();
     try {
-      resp = RestProcessUtils.buildResponse(OK.getStatusCode(), ccrud.readAll(u, q));
+      resp = RestProcessUtils.buildResponse(OK.getStatusCode(), ccrud.readAll(u, q, offset, size));
     } catch (Exception e) {
       resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
     }

@@ -118,7 +118,7 @@ public class UserGroupsBean implements Serializable {
    * @return
    */
   public String remove() {
-    String id = (FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("group"));
+    String id = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("group");
     UserGroupController c = new UserGroupController();
     UserGroup group;
     try {

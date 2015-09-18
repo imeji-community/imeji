@@ -121,8 +121,8 @@ public class ItemController extends ImejiController {
     if (!AuthUtil.staticAuth().createContent(user, c))
       throw new NotAllowedError("User not Allowed to upload files in collection " + c.getIdString());
 
+    //To check the user Quota, it always has to be provided with the Admin User
     UserController uc = new UserController(user);
-
     uc.checkQuota(f, c);
 
     StorageController sc = new StorageController();

@@ -20,8 +20,8 @@
 	</organization>
 	<scm>
 		<url>https://github.com/imeji-community/imeji</url>
-		<connection>scm:git@github.com:imeji-community/imeji.git</connection>
-		<developerConnection>scm:git@github.com:imeji-community/imeji.git</developerConnection>
+		<connection>scm:git:git://github.com/imeji-community/imeji.git</connection>
+		<developerConnection>scm:git:git@github.com:imeji-community/imeji.git</developerConnection>
 		<tag>develop</tag>
 	</scm>
 	<issueManagement>
@@ -541,12 +541,14 @@
 
 
 		<!-- REST -->
+		<!--
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.0.1</version>
 			<scope>provided</scope>
 		</dependency>
+		-->
 		<dependency>
 			<groupId>javax.ws.rs</groupId>
 			<artifactId>javax.ws.rs-api</artifactId>

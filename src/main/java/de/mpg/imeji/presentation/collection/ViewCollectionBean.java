@@ -14,6 +14,8 @@ import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.Grant;
+import de.mpg.imeji.logic.vo.Grant.GrantType;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
 import de.mpg.imeji.logic.vo.User;
@@ -62,8 +64,13 @@ public class ViewCollectionBean extends CollectionBean {
 
       requestedCollection = ObjectLoader.loadCollectionLazy(uRIID, user);
       if (user != null) {
-        this.email = user.getEmail();
-        this.encryptedPassword = user.getEncryptedPassword();
+        for (Grant g : user.getGrants()) {
+          if (g.getGrantFor().equals(requestedCollection.getId())
+              && (g.asGrantType() == GrantType.ADMIN || g.asGrantType() == GrantType.CREATE))
+            this.email = user.getEmail();
+          this.encryptedPassword = user.getEncryptedPassword();
+        }
+
       }
 
       setCollection(requestedCollection);
@@ -100,8 +107,6 @@ public class ViewCollectionBean extends CollectionBean {
     }
 
   }
-
-
 
   public String getEmail() {
     return email;

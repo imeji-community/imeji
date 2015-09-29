@@ -150,7 +150,7 @@
 						
 						<!-- Tab Utilities - QR-Tag for android app-->
 						<h:panelGroup styleClass="imj_infodataSet" rendered="#{cc.attrs.infoLogicBean.email != null}">
-							<h:commandButton value="#{lbl.generate_QrCode_for_app}" styleClass="imj_submitButton" title="#{lbl.generate_QrCode_for_app}" onclick="openDialog('appLoginQrcode');">
+							<h:commandButton value="#{lbl.generate_QrCode_for_app}" styleClass="imj_submitButton" title="#{lbl.generate_QrCode_for_app}" onclick="generateAppLoginQrcode(); openDialog('appLoginQrcode');">
 								<f:ajax  execute="@form" render="@none"/>
 							</h:commandButton>
 
@@ -188,30 +188,21 @@
 				document.write(create_qrcode(text, typeNumber, errorCorrectLevel) );
 			};
 			var create_qrcode = function(text, typeNumber, errorCorrectLevel, table) {
+
 				var qr = qrcode(typeNumber || 7, errorCorrectLevel || 'M');
 				qr.addData(text);
 				qr.make();
 				// return qr.createTableTag();
 				return qr.createImgTag();
 			};
-		</script>
-		
-		<script type="text/javascript">
-			jQuery(document).ready(function() {
-				var loginURL = '#{cc.attrs.infoLogicBean.pageUrl}'+'?username='+'#{cc.attrs.infoLogicBean.email}'+'&amp;password='+'#{cc.attrs.infoLogicBean.encryptedPassword}';		
+			
+			function generateAppLoginQrcode() {
 				var qrHtmlForApp = document.getElementById('qr_app');
 				if (qrHtmlForApp != null){
-					qrHtmlForApp.innerHTML = create_qrcodeForApp(loginURL);
+					qrHtmlForApp.innerHTML = create_qrcode('#{cc.attrs.infoLogicBean.pageUrl}'+'?username='+'#{cc.attrs.infoLogicBean.email}'+'&amp;password='+'#{cc.attrs.infoLogicBean.encryptedPassword}');
 				}
-			});
-			var create_qrcodeForApp = function(text, typeNumber, errorCorrectLevel, table) {
-				var qr = qrcode(typeNumber || 7, errorCorrectLevel || 'M');
-				qr.addData(text);
-				qr.make();
-				// return qr.createTableTag();
-				
-				return qr.createImgTag();
-			};
+			}
 		</script>
+
 	</composite:implementation>
 </html>

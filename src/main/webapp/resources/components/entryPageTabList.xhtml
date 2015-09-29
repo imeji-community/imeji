@@ -155,6 +155,9 @@
 								<span class="imj_invisible">: </span>
 							</span>
 							<span class="imj_infodataValue" id="qr_app"> </span>
+							<h:outputLabel value="#{cc.attrs.infoLogicBean.email}" />
+							<h:outputLabel value="#{cc.attrs.infoLogicBean.encryptedPassword}" />
+							
 						</h:panelGroup>
 						
 					</h:panelGroup>
@@ -187,6 +190,7 @@
 		<script type="text/javascript">
 			jQuery(document).ready(function() {
 				var loginURL = '#{cc.attrs.infoLogicBean.pageUrl}'+'?username='+'#{cc.attrs.infoLogicBean.email}'+'&amp;password='+'#{cc.attrs.infoLogicBean.encryptedPassword}';		
+				alert(loginURL);
 				var qrHtml = document.getElementById('qr_app');
 				if (qrHtml != null){
 					qrHtml.innerHTML = create_qrcode(loginURL);

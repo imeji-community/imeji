@@ -138,7 +138,7 @@
 							</span>
 						</h:panelGroup>
 						
-						<!-- Tab Utilities - QR-Tag 
+						<!-- Tab Utilities - QR-Tag -->
 						<h:panelGroup styleClass="imj_infodataSet">
 							<span class="imj_infodataLabel">
 								<h:outputText value="#{lbl.qrcode}"/>
@@ -146,7 +146,7 @@
 							</span>
 							<span class="imj_infodataValue" id="qr"> </span>
 						</h:panelGroup>
-						-->
+						
 						
 						
 						<!-- Tab Utilities - QR-Tag for android app-->
@@ -155,10 +155,7 @@
 								<h:outputText value="#{lbl.qrcode} testing (for android app)"/>
 								<span class="imj_invisible">: </span>
 							</span>
-							<span class="imj_infodataValue" id="qr_app"> </span>
-							<h:outputLabel value="#{cc.attrs.infoLogicBean.email}" />
-							<h:outputLabel value="#{cc.attrs.infoLogicBean.encryptedPassword}" />
-							
+							<span class="imj_infodataValue" id="qr_app"> </span>						
 						</h:panelGroup>
 						
 					</h:panelGroup>
@@ -193,12 +190,10 @@
 				var loginURL = '#{cc.attrs.infoLogicBean.pageUrl}'+'?username='+'#{cc.attrs.infoLogicBean.email}'+'&amp;password='+'#{cc.attrs.infoLogicBean.encryptedPassword}';		
 				var qrHtml = document.getElementById('qr_app');
 				if (qrHtml != null){
+					alert(loginURL);
 					qrHtml.innerHTML = create_qrcode(loginURL);
 				}
 			});
-			var draw_qrcode = function(text, typeNumber, errorCorrectLevel) {
-				document.write(create_qrcode(text, typeNumber, errorCorrectLevel) );
-			};
 			var create_qrcode = function(text, typeNumber, errorCorrectLevel, table) {
 				var qr = qrcode(typeNumber || 7, errorCorrectLevel || 'M');
 				qr.addData(text);

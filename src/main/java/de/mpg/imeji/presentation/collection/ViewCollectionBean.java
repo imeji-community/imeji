@@ -65,9 +65,6 @@ public class ViewCollectionBean extends CollectionBean {
       requestedCollection = ObjectLoader.loadCollectionLazy(uRIID, user);
       if (user != null) {
         for (Grant g : user.getGrants()) {
-          System.err.println(requestedCollection.getId());
-          System.out.println(g.getGrantFor());
-          System.out.println(g.getGrantType());
           if (g.getGrantFor().equals(requestedCollection.getId())
               && (g.asGrantType() == GrantType.ADMIN || g.asGrantType() == GrantType.CREATE)) {
             this.email = user.getEmail();

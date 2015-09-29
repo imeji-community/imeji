@@ -2,7 +2,8 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:composite="http://java.sun.com/jsf/composite">
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs">
 	
 	<composite:interface>
 		<composite:attribute name="infoLogicBean" required="false"/>
@@ -147,16 +148,25 @@
 							<span class="imj_infodataValue" id="qr"> </span>
 						</h:panelGroup>
 						
-						
-						
 						<!-- Tab Utilities - QR-Tag for android app-->
 						<h:panelGroup styleClass="imj_infodataSet" rendered="#{cc.attrs.infoLogicBean.email != null}">
-							<span class="imj_infodataLabel">
-								<h:outputText value="#{lbl.qrcode} testing (for android app)"/>
-								<span class="imj_invisible">: </span>
-							</span>
-							<span class="imj_infodataValue" id="qr_app"> </span>	
-							<h:outputLabel value="#{cc.attrs.infoLogicBean.pageUrl}?username=#{cc.attrs.infoLogicBean.email}&amp;password=#{cc.attrs.infoLogicBean.encryptedPassword}" />					
+							<h:commandButton value="#{lbl.generate_QrCode_for_app}" styleClass="imj_submitButton" title="#{lbl.generate_QrCode_for_app}" onclick="openDialog('appLoginQrcode');">
+								<f:ajax  execute="@form" render="@none"/>
+							</h:commandButton>
+
+							<div id="appLoginQrcode" class="imj_dialogWait imj_modalDialogBox">
+						        <h2 class="imj_headline">
+						        	<span class="imj_infodataLabel">
+										<h:outputText value="#{lbl.qrcode} testing (for android app)"/>
+										<span class="imj_invisible">: </span>
+									</span>
+						        	<span class="imj_infodataValue" id="qr_app"> </span>	
+						        	<a href="#" class="imj_submitButton" onclick="closeDialog('appLoginQrcode');"> 
+										<h:outputText value="#{lbl.confirm}"/>
+									</a>
+						        </h2>
+							</div>
+
 						</h:panelGroup>
 						
 					</h:panelGroup>
@@ -199,6 +209,7 @@
 				qr.addData(text);
 				qr.make();
 				// return qr.createTableTag();
+				
 				return qr.createImgTag();
 			};
 		</script>

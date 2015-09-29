@@ -189,13 +189,12 @@
 		<script type="text/javascript">
 			jQuery(document).ready(function() {
 				var loginURL = '#{cc.attrs.infoLogicBean.pageUrl}'+'?username='+'#{cc.attrs.infoLogicBean.email}'+'&amp;password='+'#{cc.attrs.infoLogicBean.encryptedPassword}';		
-				var qrHtml = document.getElementById('qr_app');
-				if (qrHtml != null){
-					alert(loginURL);
-					qrHtml.innerHTML = create_qrcode(loginURL);
+				var qrHtmlForApp = document.getElementById('qr_app');
+				if (qrHtmlForApp != null){
+					qrHtmlForApp.innerHTML = create_qrcodeForApp(loginURL);
 				}
 			});
-			var create_qrcode = function(text, typeNumber, errorCorrectLevel, table) {
+			var create_qrcodeForApp = function(text, typeNumber, errorCorrectLevel, table) {
 				var qr = qrcode(typeNumber || 7, errorCorrectLevel || 'M');
 				qr.addData(text);
 				qr.make();

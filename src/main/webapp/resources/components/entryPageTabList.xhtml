@@ -155,7 +155,8 @@
 								<h:outputText value="#{lbl.qrcode} testing (for android app)"/>
 								<span class="imj_invisible">: </span>
 							</span>
-							<span class="imj_infodataValue" id="qr_app"> </span>						
+							<span class="imj_infodataValue" id="qr_app"> </span>	
+							<h:outputLabel value="#{cc.attrs.infoLogicBean.pageUrl}?username=#{cc.attrs.infoLogicBean.email}&amp;password=#{cc.attrs.infoLogicBean.encryptedPassword}" />					
 						</h:panelGroup>
 						
 					</h:panelGroup>

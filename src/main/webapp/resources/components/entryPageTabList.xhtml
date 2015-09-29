@@ -147,6 +147,16 @@
 							<span class="imj_infodataValue" id="qr"> </span>
 						</h:panelGroup>
 						
+						
+						<!-- Tab Utilities - QR-Tag for android app-->
+						<h:panelGroup styleClass="imj_infodataSet" rendered="#{cc.attrs.infoLogicBean.email != null}">
+							<span class="imj_infodataLabel">
+								<h:outputText value="#{lbl.qrcode} testing (for android app)"/>
+								<span class="imj_invisible">: </span>
+							</span>
+							<span class="imj_infodataValue" id="qr_app"> </span>
+						</h:panelGroup>
+						
 					</h:panelGroup>
 					
 				</h:panelGroup>
@@ -160,6 +170,26 @@
 				var qrHtml = document.getElementById('qr');
 				if (qrHtml != null){
 					qrHtml.innerHTML = create_qrcode('#{cc.attrs.infoLogicBean.pageUrl}');
+				}
+			});
+			var draw_qrcode = function(text, typeNumber, errorCorrectLevel) {
+				document.write(create_qrcode(text, typeNumber, errorCorrectLevel) );
+			};
+			var create_qrcode = function(text, typeNumber, errorCorrectLevel, table) {
+				var qr = qrcode(typeNumber || 7, errorCorrectLevel || 'M');
+				qr.addData(text);
+				qr.make();
+				// return qr.createTableTag();
+				return qr.createImgTag();
+			};
+		</script>
+		
+		<script type="text/javascript">
+			jQuery(document).ready(function() {
+				var loginURL = '#{cc.attrs.infoLogicBean.pageUrl}'+'?username='+'#{cc.attrs.infoLogicBean.email}'+'&amp;password='+'#{cc.attrs.infoLogicBean.encryptedPassword}';		
+				var qrHtml = document.getElementById('qr_app');
+				if (qrHtml != null){
+					qrHtml.innerHTML = create_qrcode(loginURL);
 				}
 			});
 			var draw_qrcode = function(text, typeNumber, errorCorrectLevel) {

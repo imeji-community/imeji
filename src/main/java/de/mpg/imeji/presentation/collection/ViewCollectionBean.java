@@ -32,6 +32,8 @@ public class ViewCollectionBean extends CollectionBean {
   private static final long serialVersionUID = 6473181109648137472L;
   private List<Person> persons = null;
   private static Logger logger = Logger.getLogger(ViewCollectionBean.class);
+  private String email;
+  private String encryptedPassword;
   /**
    * Maximum number of items displayed on collection start page
    */
@@ -54,10 +56,15 @@ public class ViewCollectionBean extends CollectionBean {
       User user = super.sessionBean.getUser();
       String id = getId();
 
+
       CollectionImeji requestedCollection = null;
       URI uRIID = ObjectHelper.getURI(CollectionImeji.class, id);
 
       requestedCollection = ObjectLoader.loadCollectionLazy(uRIID, user);
+      if (user != null) {
+        this.email = user.getEmail();
+        this.encryptedPassword = user.getEncryptedPassword();
+      }
 
       setCollection(requestedCollection);
 
@@ -92,6 +99,24 @@ public class ViewCollectionBean extends CollectionBean {
       // Here simply do nothing
     }
 
+  }
+
+
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public String getEncryptedPassword() {
+    return encryptedPassword;
+  }
+
+  public void setEncryptedPassword(String encryptedPassword) {
+    this.encryptedPassword = encryptedPassword;
   }
 
   public List<Person> getPersons() {

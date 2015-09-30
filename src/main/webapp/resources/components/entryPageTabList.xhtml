@@ -148,7 +148,7 @@
 							<span class="imj_infodataValue" id="qr"> </span>
 						</h:panelGroup>
 						
-						<!-- Tab Utilities - QR-Tag for android app-->
+						<!-- Tab Utilities - QR-Tag for android app
 						<h:panelGroup styleClass="imj_infodataSet" rendered="#{cc.attrs.infoLogicBean.email != null}">
 							<h:commandButton value="#{lbl.generate_QrCode_for_app}" styleClass="imj_submitButton" title="#{lbl.generate_QrCode_for_app}" onclick="generateAppLoginQrcode(); openDialog('appLoginQrcode');">
 								<f:ajax  execute="@form" render="@none"/>
@@ -168,6 +168,7 @@
 							</div>
 
 						</h:panelGroup>
+						-->
 						
 					</h:panelGroup>
 					
@@ -181,7 +182,10 @@
 			jQuery(document).ready(function() {
 				var qrHtml = document.getElementById('qr');
 				if (qrHtml != null){
-					qrHtml.innerHTML = create_qrcode('#{cc.attrs.infoLogicBean.pageUrl}');
+					if('#{cc.attrs.infoLogicBean.email}' != '')
+						qrHtml.innerHTML = create_qrcode('#{cc.attrs.infoLogicBean.pageUrl}'+'?username='+'#{cc.attrs.infoLogicBean.email}'+'&amp;password='+'#{cc.attrs.infoLogicBean.encryptedPassword}');
+					else
+						qrHtml.innerHTML = create_qrcode('#{cc.attrs.infoLogicBean.pageUrl}');
 				}
 			});
 			var draw_qrcode = function(text, typeNumber, errorCorrectLevel) {

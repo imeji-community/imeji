@@ -193,7 +193,7 @@
 			};
 			var create_qrcode = function(text, typeNumber, errorCorrectLevel, table) {
 
-				var qr = qrcode(typeNumber || 17, errorCorrectLevel || 'M');
+				var qr = qrcode(typeNumber || 9, errorCorrectLevel || 'M');
 				qr.addData(text);
 				qr.make();
 				// return qr.createTableTag();

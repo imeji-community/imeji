@@ -60,7 +60,7 @@ public class EditMdProfileBean extends MdProfileBean {
           if (colId != null) {
             // load the collection if provided in the url
             CollectionController cc = new CollectionController();
-            setCollection(cc.retrieve(ObjectHelper.getURI(Collection.class, colId),
+            setCollection(cc.retrieve(ObjectHelper.getURI(CollectionImeji.class, colId),
                 session.getUser()));
           }
           // load the profile

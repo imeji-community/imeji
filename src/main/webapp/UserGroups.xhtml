@@ -57,7 +57,7 @@
 					</div>
 					
 					<div class="imj_listBody">
-						<ui:repeat var="group" value="#{UserGroups.userGroups}">
+						<ui:repeat var="group" value="#{UserGroups.userGroups}" rows="0" varStatus="row">
 							<div class="imj_adminPanel imj_userConfig">
 								<!-- AdminDataList - Users List - Name -->
 								<div class="imj_admindataSet">									
@@ -75,10 +75,10 @@
 											<h:outputText value="#{lbl.view_detail}"/>
 										</h:outputLink>
 																					<!-- AdminDataList - Delete User -->
-										<h:outputLink value="#" styleClass="imj_cancelButton" title="#{lbl.user_admin_delete}" onclick="openDialog('deleteUserGroup');">
+										<h:outputLink value="#" styleClass="imj_cancelButton" title="#{lbl.user_admin_delete}" onclick="openDialog('deleteUserGroup#{row.index}');">
 											<h:outputText value="#{lbl.delete}"/>
 										</h:outputLink>
-										<dialog:confirmationDialog submitAction="remove" bean="#{UserGroups}" confirmationText="#{msg.confirmation_delete_user_group}" submitLabel="#{lbl.delete}" dialogId="deleteUserGroup" identifierName="group" identifierValue="#{group.id}"/>
+										<dialog:confirmationDialog submitAction="remove" bean="#{UserGroups}" confirmationText="#{msg.confirmation_delete_user_group}" submitLabel="#{lbl.delete}" dialogId="deleteUserGroup#{row.index}" identifierName="group" identifierValue="#{group.id}"/>
 									</div>
 								</div>
 							</div>

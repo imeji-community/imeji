@@ -430,7 +430,7 @@ public class EditItemMetadataBean {
     HistorySession hs = (HistorySession) BeanHelper.getSessionBean(HistorySession.class);
     
     //redirect to view when previous page was upload
-    if(hs.getPreviousPage().getCompleteUrl().contains("upload")){
+    if(hs.getPreviousPage().getUrl().contains("upload")){
       FacesContext.getCurrentInstance().getExternalContext()
       .redirect(hs.getPreviousPage().getCompleteUrl().replaceFirst("upload.*", "browse"));
    

@@ -428,8 +428,16 @@ public class EditItemMetadataBean {
     this.reset();
     unlockImages();
     HistorySession hs = (HistorySession) BeanHelper.getSessionBean(HistorySession.class);
-    FacesContext.getCurrentInstance().getExternalContext()
-        .redirect(hs.getPreviousPage().getCompleteUrl());
+    
+    //redirect to view when previous page was upload
+    if(hs.getPreviousPage().getCompleteUrl().contains("upload")){
+      FacesContext.getCurrentInstance().getExternalContext()
+      .redirect(hs.getPreviousPage().getCompleteUrl().replaceFirst("upload.*", "browse"));
+   
+    }else{
+      FacesContext.getCurrentInstance().getExternalContext()
+      .redirect(hs.getPreviousPage().getCompleteUrl());
+    }
   }
 
   /**

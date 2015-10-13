@@ -1,17 +1,17 @@
 package de.mpg.imeji.logic.validation.impl;
 
-import de.mpg.imeji.exceptions.UnprocessableError;
-import de.mpg.imeji.logic.validation.Validator;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.j2j.misc.LocalizedString;
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
+import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.validation.Validator;
+import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.j2j.misc.LocalizedString;
 
 /**
  * {@link Validator} for {@link MetadataProfile}
@@ -49,14 +49,8 @@ public class ProfileValidator extends ObjectValidator implements Validator<Metad
         if (ls.getLang() == null || "".equals(ls.getLang())) {
           throw new UnprocessableError("error_profile_label_no_lang");
         }
-        // Out-commented until the default format has been clearly defined
-        /*
-         * if (ls.getValue().matches("^\\d+#.*")) {
-         * 
-         * // throw new UnprocessableError("error_profile_label_not_allowed"); }
-         */
         // validate uniqueness of metadata labels
-        if (labels.containsKey(ls.getValue())) {
+        if (labels.containsKey(ls.getValue()) && !labels.get(ls.getValue()).equals(s.getId())) {
           throw new UnprocessableError("labels_have_to_be_unique");
         }
         if (langs.contains(ls.getLang())) {

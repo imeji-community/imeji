@@ -51,7 +51,7 @@ public class ProfileValidator extends ObjectValidator implements Validator<Metad
         }
         // validate uniqueness of metadata labels
         if (labels.containsKey(ls.getValue()) && !labels.get(ls.getValue()).equals(s.getId())) {
-          throw new UnprocessableError("labels_have_to_be_unique");
+          throw new UnprocessableError("labels_have_to_be_unique"); 
         }
         if (langs.contains(ls.getLang())) {
           throw new UnprocessableError("labels_duplicate_lang");

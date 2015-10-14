@@ -67,11 +67,11 @@ public class StatementWrapper implements Comparable<StatementWrapper> {
     statement = st;
     initMultiple();
     initVocabulary();
-    used =
-        ImejiSPARQL.exec(
-            "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s <"
-                + ImejiNamespaces.METADATA + "> ?md . ?md <http://imeji.org/terms/statement> <"
-                + statement.getId() + ">} LIMIT 1 ", null).size() > 0;
+    used = ImejiSPARQL
+        .exec("PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {?s <"
+            + ImejiNamespaces.METADATA + "> ?md . ?md <http://imeji.org/terms/statement> <"
+            + statement.getId() + ">} LIMIT 1 ", null)
+        .size() > 0;
     for (LocalizedString s : statement.getLabels())
       if (s.getLang() == null)
         s.setLang("en");
@@ -97,8 +97,8 @@ public class StatementWrapper implements Comparable<StatementWrapper> {
     if (statement.getVocabulary() != null) {
       vocabularyString = statement.getVocabulary().toString();
       if ("unknown".equals(vocabularyHelper.getVocabularyName(statement.getVocabulary()))) {
-        vocabularyHelper.getVocabularies().add(
-            new SelectItem(statement.getVocabulary().toString(), vocabularyString));
+        vocabularyHelper.getVocabularies()
+            .add(new SelectItem(statement.getVocabulary().toString(), vocabularyString));
       }
     } else {
       vocabularyString = null;
@@ -133,8 +133,9 @@ public class StatementWrapper implements Comparable<StatementWrapper> {
    * @return
    */
   public String getParentId() {
-    if (statement.getParent() != null)
+    if (statement.getParent() != null) {
       return ObjectHelper.getId(statement.getParent());
+    }
     return null;
   }
 

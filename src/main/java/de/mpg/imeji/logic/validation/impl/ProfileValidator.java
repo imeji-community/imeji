@@ -8,7 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.validation.Validator;
+import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.j2j.misc.LocalizedString;
@@ -51,7 +53,7 @@ public class ProfileValidator extends ObjectValidator implements Validator<Metad
         }
         // validate uniqueness of metadata labels
         if (labels.containsKey(ls.getValue()) && !labels.get(ls.getValue()).equals(s.getId())) {
-          throw new UnprocessableError("labels_have_to_be_unique"); 
+          throw new UnprocessableError("labels_have_to_be_unique");
         }
         if (langs.contains(ls.getLang())) {
           throw new UnprocessableError("labels_duplicate_lang");
@@ -66,8 +68,37 @@ public class ProfileValidator extends ObjectValidator implements Validator<Metad
           || "".equals(((List<LocalizedString>) s.getLabels()).get(0).getValue())) {
         throw new UnprocessableError("error_profile_labels_required");
       }
+      validateConstraints(s);
       s.setPos(i);
       i++;
+    }
+  }
+
+  /**
+   * Validate the constraints according to the type of the metadata
+   * 
+   * @param s
+   * @throws UnprocessableError
+   */
+  private void validateConstraints(Statement s) throws UnprocessableError {
+    for (String str : s.getLiteralConstraints()) {
+      Metadata.Types type = Metadata.Types.valueOfUri(s.getType().toString());
+      switch (type) {
+        case NUMBER:
+          try {
+            Double.parseDouble(str);
+          } catch (Exception e) {
+            throw new UnprocessableError("Unvalid number format: " + str + " (example: 12.34)");
+          }
+          break;
+        case LINK:
+          if (!UrlHelper.isValidURI(URI.create(str))) {
+            throw new UnprocessableError("Unvalid url format: " + str);
+          }
+          break;
+        default:
+          break;
+      }
     }
   }
 

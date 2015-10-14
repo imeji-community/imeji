@@ -257,7 +257,8 @@ public abstract class BasePaginatorListSessionBean<ListElementType> {
             .getMessage("error_page_not_exists"));
       }
     } catch (Exception e) {
-      // error(getMessage("paginator_errorGoToPage"));
+      BeanHelper.error(((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
+          .getMessage("error_integer_required"));
     }
     return "";
   }

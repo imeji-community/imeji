@@ -80,7 +80,7 @@
 							<h:outputText value="#{cc.attrs.item.description.trim()}"/>
 							
 							<ui:fragment rendered="#{cc.attrs.item.descriptionFull.trim().length() &gt; cc.attrs.item.description.trim().length()}">
-								<button class="imj_expand imj_iconExpand_16 imj_containerDescExpand" onclick="$(this).parent().hide(); $(this).parent().next().show();">
+								<button class="imj_expand imj_iconExpand_16 imj_containerDescExpand" onclick="event.preventDefault();$(this).parent().hide();$(this).parent().next().show();">
 									<h:outputText value="&#160;"/>
 								</button>
 							</ui:fragment>
@@ -90,7 +90,7 @@
 							<p class="imj_descriptionArea imj_additionalInfoArea">
 								<h:outputText value="#{cc.attrs.item.descriptionFull.trim()}"/>
 								
-								<button class="imj_collapse imj_iconCollapse_16" onclick="$(this).parent().hide(); $(this).parent().prev().show();" >
+								<button class="imj_collapse imj_iconCollapse_16" onclick="event.preventDefault();$(this).parent().hide();$(this).parent().prev().show();" >
 									<h:outputText value="&#160;"/>
 								</button>
 							</p>

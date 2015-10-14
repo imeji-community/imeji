@@ -59,7 +59,10 @@ public class ProfileValidatorTest {
         }
     }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> bug-fix-3.0.0.1
     @Test
     public void validateLabelSyntax_numberHash() {
         profile.setStatements(asList(

@@ -3,6 +3,17 @@
  */
 package de.mpg.imeji.logic.controller;
 
+import java.io.File;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotFoundException;
@@ -29,17 +40,6 @@ import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.j2j.helper.DateHelper;
 
-import org.apache.log4j.Logger;
-
-import java.io.File;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 /**
  * Controller for {@link User}
  * 
@@ -50,9 +50,9 @@ import java.util.Map;
 public class UserController {
   private static final ReaderFacade reader = new ReaderFacade(Imeji.userModel);
   private static final WriterFacade writer = new WriterFacade(Imeji.userModel);
-  //25GB is default quota
-  //TODO: put to properties
-  //public static final long DISK_USAGE_QUOTA = 25 * 1024 * 1024 * 1024;
+  // 25GB is default quota
+  // TODO: put to properties
+  // public static final long DISK_USAGE_QUOTA = 25 * 1024 * 1024 * 1024;
   private User user;
   static Logger logger = Logger.getLogger(UserController.class);
 
@@ -131,7 +131,7 @@ public class UserController {
    * @throws ImejiException
    */
   public void delete(User user) throws ImejiException {
-    //remove User from User Groups
+    // remove User from User Groups
     UserGroupController ugc = new UserGroupController();
     ugc.removeUserFromAllGroups(user, this.user);
     // remove user grant
@@ -252,11 +252,11 @@ public class UserController {
     } catch (NotFoundException e) {
       // fine, user can be updated
     }
-    updatedUser.setName(updatedUser.getPerson().getGivenName() + " "
-        + updatedUser.getPerson().getFamilyName());
+    updatedUser.setName(
+        updatedUser.getPerson().getGivenName() + " " + updatedUser.getPerson().getFamilyName());
 
-    //if quota is set to 0, set it to default disk space quota
-    if ( updatedUser.getQuota() == 0 ) {
+    // if quota is set to 0, set it to default disk space quota
+    if (updatedUser.getQuota() == 0) {
       updatedUser.setQuota(ConfigurationBean.getDefaultDiskSpaceQuotaStatic());
     }
 
@@ -293,8 +293,8 @@ public class UserController {
         throw new UnprocessableError("Activation period expired, user should be deleted!");
 
       activateUser.setUserStatus(User.UserStatus.ACTIVE);
-      activateUser.setGrants(AuthorizationPredefinedRoles.defaultUser(activateUser.getId()
-          .toString()));
+      activateUser
+          .setGrants(AuthorizationPredefinedRoles.defaultUser(activateUser.getId().toString()));
       writer.update(WriterFacade.toList(activateUser), null, activateUser, true);
       return activateUser;
 
@@ -305,41 +305,43 @@ public class UserController {
 
   /**
    * Check user disk space quota. Quota is calculated for user of target collection.
+   * 
    * @param file
    * @param col
    * @throws ImejiException
-   * @return remained disk space after successfully uploaded <code>file</code>;
-   * <code>-1</code> will be returned for unlimited quota
+   * @return remained disk space after successfully uploaded <code>file</code>; <code>-1</code> will
+   *         be returned for unlimited quota
    */
   public long checkQuota(File file, CollectionImeji col) throws ImejiException {
 
     // do not check quota for admin
     if (this.user.isAdmin())
-    //switch off feature!!!!
-//    if (true)
+      // switch off feature!!!!
+      // if (true)
       return -1L;
 
-    User targetCollectionUser = this.user.getId().equals(col.getCreatedBy()) ? this.user :
-            retrieve(col.getCreatedBy());
+    User targetCollectionUser =
+        this.user.getId().equals(col.getCreatedBy()) ? this.user : retrieve(col.getCreatedBy());
 
     Search search = SearchFactory.create();
     List<String> results = search.searchSimpleForQuery(
-            //TODO: who is checked by quota?
-            // Current implementation: owner of target collection
-            SPARQLQueries.selectUserFileSize(col.getCreatedBy().toString())
-    ).getResults();
+        // TODO: who is checked by quota?
+        // Current implementation: owner of target collection
+        SPARQLQueries.selectUserFileSize(col.getCreatedBy().toString())).getResults();
     long currentDiskUsage = 0L;
     try {
       currentDiskUsage = Long.parseLong(results.get(0).toString());
     } catch (NumberFormatException e) {
-      throw new UnprocessableError("Cannot parse currentDiskSpaceUsage " + results.get(0).toString() + "; requested by user: " + this.user.getEmail()
-      + "; targetCollectionUser: " + targetCollectionUser.getEmail());
+      throw new UnprocessableError("Cannot parse currentDiskSpaceUsage " + results.get(0).toString()
+          + "; requested by user: " + this.user.getEmail() + "; targetCollectionUser: "
+          + targetCollectionUser.getEmail());
     }
     long needed = currentDiskUsage + file.length();
     if (needed > targetCollectionUser.getQuota()) {
-      throw new QuotaExceededException("Disk quota: " + targetCollectionUser.getQuota() + "B has been exceeded by " + (needed - targetCollectionUser.getQuota())
-              + "B; requested by user: " + this.user.getEmail()
-              + "; targetCollectionUser: " + targetCollectionUser.getEmail());
+      throw new QuotaExceededException("Disk quota: " + targetCollectionUser.getQuota()
+          + "B has been exceeded by " + (needed - targetCollectionUser.getQuota())
+          + "B; requested by user: " + this.user.getEmail() + "; targetCollectionUser: "
+          + targetCollectionUser.getEmail());
     }
     return targetCollectionUser.getQuota() - needed;
   }
@@ -363,8 +365,8 @@ public class UserController {
    */
   public Collection<User> searchByGrantFor(String grantFor) {
     Search search = SearchFactory.create();
-    return loadUsers(search.searchSimpleForQuery(SPARQLQueries.selectUserWithGrantFor(grantFor))
-        .getResults());
+    return loadUsers(
+        search.searchSimpleForQuery(SPARQLQueries.selectUserWithGrantFor(grantFor)).getResults());
   }
 
   /**
@@ -423,13 +425,13 @@ public class UserController {
     return c.iterator().next();
   }
 
-/**
-	 * Search for all {@link Organization} in imeji, i.e. t The search looks within the
-	 * {@link User} and the {@link Collection} what {@link Organization are already
-	 * existing.
-	 * @param name
-	 * @return
-	 */
+  /**
+   * Search for all {@link Organization} in imeji, i.e. t The search looks within the {@link User}
+   * and the {@link Collection} what {@link Organization are already existing.
+   * 
+   * @param name
+   * @return
+   */
   public Collection<Organization> searchOrganizationByName(String name) {
     Collection<Organization> l = searchOrganizationByNameInUsers(name);
     Map<String, Organization> map = new HashMap<>();
@@ -448,8 +450,9 @@ public class UserController {
    */
   private Collection<Person> searchPersonByNameInUsers(String name) {
     Search search = SearchFactory.create(SearchType.USER);
-    return loadPersons(search.searchSimpleForQuery(SPARQLQueries.selectPersonByName(name))
-        .getResults(), Imeji.userModel);
+    return loadPersons(
+        search.searchSimpleForQuery(SPARQLQueries.selectPersonByName(name)).getResults(),
+        Imeji.userModel);
   }
 
   /**
@@ -460,8 +463,9 @@ public class UserController {
    */
   private Collection<Person> searchPersonByNameInCollections(String name) {
     Search search = SearchFactory.create(SearchType.COLLECTION);
-    return loadPersons(search.searchSimpleForQuery(SPARQLQueries.selectPersonByName(name))
-        .getResults(), Imeji.collectionModel);
+    return loadPersons(
+        search.searchSimpleForQuery(SPARQLQueries.selectPersonByName(name)).getResults(),
+        Imeji.collectionModel);
   }
 
   /**

@@ -195,7 +195,8 @@ public class TransferObjectFactory {
     oTO.setCountry(o.getCountry());
   }
 
-  public static void transferContributorOrganizations(Collection<Organization> orgas, PersonTO pto) {
+  public static void transferContributorOrganizations(Collection<Organization> orgas,
+      PersonTO pto) {
     for (Organization orga : orgas) {
       OrganizationTO oto = new OrganizationTO();
       oto.setId(CommonUtils.extractIDFromURI(orga.getId()));
@@ -238,8 +239,8 @@ public class TransferObjectFactory {
     // set createdDate, modifiedDate, versionDate
     to.setCreatedDate(CommonUtils.formatDate(vo.getCreated().getTime()));
     to.setModifiedDate(CommonUtils.formatDate(vo.getModified().getTime()));
-    to.setVersionDate((vo.getVersionDate() != null) ? CommonUtils.formatDate(vo.getVersionDate()
-        .getTime()) : "");
+    to.setVersionDate(
+        (vo.getVersionDate() != null) ? CommonUtils.formatDate(vo.getVersionDate().getTime()) : "");
     // set status
     to.setStatus(vo.getStatus().toString());
     // set version

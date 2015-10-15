@@ -39,17 +39,17 @@ public class SearchAndExportHelper {
       URI searchAndExportUri = URI.create("http://" + uri.getHost() + "/search/SearchAndExport");
       String itemId = null;
       Matcher matcher = ESCIDOC_ID_PATTERN.matcher(uri.toString());
-      if (matcher.find())
+      if (matcher.find()) {
         itemId = matcher.group();
-      if (UrlHelper.isValidURI(searchAndExportUri) && itemId != null) {
+      }
+      if (UrlHelper.isValidURL(searchAndExportUri.toString()) && itemId != null) {
         try {
           HttpClient client = new HttpClient();
-          String exportUri =
-              searchAndExportUri.toString()
-                  + "?cqlQuery="
-                  + URLEncoder.encode("escidoc.objid=" + itemId
-                      + " or escidoc.property.version.objid=" + itemId, "UTF-8") + "&exportFormat="
-                  + format + "&outputFormat=html_linked";
+          String exportUri = searchAndExportUri.toString() + "?cqlQuery="
+              + URLEncoder.encode(
+                  "escidoc.objid=" + itemId + " or escidoc.property.version.objid=" + itemId,
+                  "UTF-8")
+              + "&exportFormat=" + format + "&outputFormat=html_linked";
           GetMethod method = new GetMethod(exportUri);
           // client.executeMethod(method);
           ProxyHelper.executeMethod(client, method);

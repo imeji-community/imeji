@@ -47,16 +47,16 @@ public class IPUtils {
   public static InetAddress getMinIP(String ipRangeString) throws UnknownHostException {
     String ip = "";
     for (String s : ipRangeString.split("\\.")) {
-
-      if (!"".equals(ip))
+      if (!"".equals(ip)) {
         ip += ".";
-      if ("*".equals(s))
+      }
+      if ("*".equals(s)) {
         ip += "0";
-      else if (s.contains("-"))
+      } else if (s.contains("-")) {
         ip += s.split("-")[0];
-      else
+      } else {
         ip += s;
-
+      }
     }
     try {
       return InetAddress.getByName(ip);
@@ -76,14 +76,16 @@ public class IPUtils {
   public static InetAddress getMaxIP(String ipRangeString) throws UnknownHostException {
     String ip = "";
     for (String s : ipRangeString.split("\\.")) {
-      if (!"".equals(ip))
+      if (!"".equals(ip)) {
         ip += ".";
-      if ("*".equals(s))
+      }
+      if ("*".equals(s)) {
         ip += "255";
-      else if (s.contains("-"))
+      } else if (s.contains("-")) {
         ip += s.split("-")[1];
-      else
+      } else {
         ip += s;
+      }
     }
     try {
       return InetAddress.getByName(ip);

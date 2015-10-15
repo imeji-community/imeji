@@ -17,7 +17,6 @@ import com.sun.faces.application.view.ViewScopeManager;
 public class SetActiveViewMapsSizeSessionListener implements HttpSessionListener {
   @Override
   public void sessionCreated(HttpSessionEvent event) {
-    System.out.println("AAA");
     event.getSession().setAttribute(ViewScopeManager.ACTIVE_VIEW_MAPS_SIZE, 1);
   }
 

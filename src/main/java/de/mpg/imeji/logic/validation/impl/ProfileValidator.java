@@ -93,7 +93,8 @@ public class ProfileValidator extends ObjectValidator implements Validator<Metad
           break;
         case LINK:
           if (!UrlHelper.isValidURI(URI.create(str))) {
-            throw new UnprocessableError("Unvalid url format: " + str);
+            throw new UnprocessableError(
+                "Unvalid url format: " + str + " (example: http://example.org)");
           }
           break;
         default:

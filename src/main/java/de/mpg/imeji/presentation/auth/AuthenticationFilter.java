@@ -82,9 +82,7 @@ public class AuthenticationFilter implements Filter {
           session.setUser(httpAuthentification.doLogin());
         }
       } else if (session != null && session.getUser() != null) {
-        Matcher m = jsfPattern.matcher(request.getRequestURI());
-        if (m.matches()) {
-          // reload the user each time a jsf page is called
+        if (isReloadUser(request)) {
           session.reloadUser();
         }
       }
@@ -93,6 +91,48 @@ public class AuthenticationFilter implements Filter {
     } finally {
       chain.doFilter(serv, resp);
     }
+  }
+
+  /**
+   * True if it is necessary to reload the User. This method tried to reduce as much as possible
+   * reload of the user, to avoid too much database queries.
+   * 
+   * @param req
+   * @return
+   */
+  private boolean isReloadUser(HttpServletRequest req) {
+    return isXHTMLRequest(req) && isPostRequest(req) && !isAjaxRequest(req);
+  }
+
+  /**
+   * True if the request is done from an xhtml page
+   * 
+   * @param req
+   * @return
+   */
+  private boolean isXHTMLRequest(HttpServletRequest req) {
+    Matcher m = jsfPattern.matcher(req.getRequestURI());
+    return m.matches();
+  }
+
+  /**
+   * True of the request is an Ajax Request
+   * 
+   * @param req
+   * @return
+   */
+  private boolean isAjaxRequest(HttpServletRequest req) {
+    return "partial/ajax".equals(req.getHeader("Faces-Request"));
+  }
+
+  /**
+   * True if the method is a POST request
+   * 
+   * @param req
+   * @return
+   */
+  private boolean isPostRequest(HttpServletRequest req) {
+    return "POST".equals(req.getMethod());
   }
 
   /*
@@ -122,4 +162,6 @@ public class AuthenticationFilter implements Filter {
   private SessionBean getSession(HttpServletRequest req) {
     return (SessionBean) req.getSession(true).getAttribute(SessionBean.class.getSimpleName());
   }
+
+
 }

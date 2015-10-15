@@ -128,25 +128,19 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
    */
   protected void initMenus() {
     sortMenu = new ArrayList<SelectItem>();
-<<<<<<< HEAD
     sortMenu.add(new SelectItem(SearchIndex.SearchFields.title.name(), sb.getLabel("sort_title")));
-    sortMenu.add(new SelectItem(SearchIndex.SearchFields.modified.name(), sb
-=======
-    sortMenu
-        .add(new SelectItem(SearchIndex.IndexNames.cont_title.name(), sb.getLabel("sort_title")));
-    sortMenu.add(new SelectItem(SearchIndex.IndexNames.created, sb
-        .getLabel("sort_img_date_created")));
-    sortMenu.add(new SelectItem(SearchIndex.IndexNames.modified.name(), sb
->>>>>>> bug-fix-3.0.0.1
-        .getLabel("sort_date_mod")));
+    sortMenu.add(
+        new SelectItem(SearchIndex.SearchFields.modified.name(), sb.getLabel("sort_date_mod")));
+    sortMenu.add(
+        new SelectItem(SearchIndex.SearchFields.created, sb.getLabel("sort_img_date_created")));
     sortMenu
         .add(new SelectItem(SearchIndex.SearchFields.creator.name(), sb.getLabel("sort_author")));
     filterMenu = new ArrayList<SelectItem>();
     filterMenu.add(new SelectItem("all", sb.getLabel("all_except_withdrawn")));
 
     if (sb.getUser() != null) {
-      sortMenu.add(new SelectItem(SearchIndex.SearchFields.status.name(), sb
-          .getLabel("sort_status")));
+      sortMenu
+          .add(new SelectItem(SearchIndex.SearchFields.status.name(), sb.getLabel("sort_status")));
       filterMenu.add(new SelectItem("my", sb.getLabel("my_except_withdrawn")));
       filterMenu.add(new SelectItem("private", sb.getLabel("only_private")));
     }
@@ -171,21 +165,17 @@ public abstract class SuperContainerBean<T> extends BasePaginatorListSessionBean
   public SearchPair getFilter() {
     SearchPair pair = null;
     if ("my".equals(selectedFilter)) {
-      pair =
-          new SearchPair(SearchFields.hasgrant, SearchOperators.EQUALS, sb.getUser().getId()
-              .toString(), false);
+      pair = new SearchPair(SearchFields.hasgrant, SearchOperators.EQUALS,
+          sb.getUser().getId().toString(), false);
     } else if ("private".equals(selectedFilter)) {
-      pair =
-          new SearchPair(SearchFields.status, SearchOperators.EQUALS,
-              Status.PENDING.getUriString(), false);
+      pair = new SearchPair(SearchFields.status, SearchOperators.EQUALS,
+          Status.PENDING.getUriString(), false);
     } else if ("public".equals(selectedFilter)) {
-      pair =
-          new SearchPair(SearchFields.status, SearchOperators.EQUALS,
-              Status.RELEASED.getUriString(), false);
+      pair = new SearchPair(SearchFields.status, SearchOperators.EQUALS,
+          Status.RELEASED.getUriString(), false);
     } else if ("withdrawn".equals(selectedFilter)) {
-      pair =
-          new SearchPair(SearchIndex.SearchFields.status, SearchOperators.EQUALS,
-              Status.WITHDRAWN.getUriString(), false);
+      pair = new SearchPair(SearchIndex.SearchFields.status, SearchOperators.EQUALS,
+          Status.WITHDRAWN.getUriString(), false);
     }
     return pair;
   }

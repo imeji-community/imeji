@@ -36,7 +36,6 @@ import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.controller.exceptions.TypeNotAllowedException;
 import de.mpg.imeji.logic.search.SearchResult;
 import de.mpg.imeji.logic.search.jenasearch.JenaSearch;
-import de.mpg.imeji.logic.search.model.SearchIndex.SearchFields;
 import de.mpg.imeji.logic.search.model.SearchQuery;
 import de.mpg.imeji.logic.search.model.SortCriterion;
 import de.mpg.imeji.logic.search.model.SortCriterion.SortOrder;
@@ -130,13 +129,7 @@ public class SingleUploadBean implements Serializable {
       BeanHelper.cleanMessages();
       reloadItemPage(item.getIdString(), ObjectHelper.getId(item.getCollection()));
     } catch (Exception e) {
-<<<<<<< HEAD
-      BeanHelper.error("There has been an error during saving of the item!Message: "
-          + e.getMessage());
-=======
-      BeanHelper
-          .error("There has been an error during saving of the item!Message: " + e.getMessage());
->>>>>>> bug-fix-3.0.0.1
+      BeanHelper.error("There has been an error during saving of the item: " + e.getMessage());
     }
     sus.reset();
     return "";
@@ -151,14 +144,9 @@ public class SingleUploadBean implements Serializable {
     try {
       Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
 
-<<<<<<< HEAD
-      String redirectUrl =
-          navigation.getCollectionUrl() + collectionIdString + "/" + navigation.getItemPath() + "/"
-              + itemIdString;
-=======
       String redirectUrl = navigation.getCollectionUrl() + collectionIdString + "/"
           + navigation.getItemPath() + "/" + itemIdString;
->>>>>>> bug-fix-3.0.0.1
+
       FacesContext.getCurrentInstance().getExternalContext().redirect(redirectUrl);
     } catch (IOException e) {
       Logger.getLogger(UserBean.class).info("Error reloading the page", e);
@@ -349,44 +337,10 @@ public class SingleUploadBean implements Serializable {
     CollectionController cc = new CollectionController();
     SearchQuery sq = new SearchQuery();
     SortCriterion sortCriterion = new SortCriterion();
-<<<<<<< HEAD
-    sortCriterion.setIndex(JenaSearch.getIndex(SearchFields.title));
-    // For some funny reasons this took me a while to debug, search results for cont_title are
-    // toggled, if you need ascending, provide "DESCENDING"
-    sortCriterion.setSortOrder(SortOrder.DESCENDING);
-    // TODO: check if here space restriction is needed
-    SearchResult results = cc.search(sq, sortCriterion, -1, 0, user, sb.getSelectedSpaceString());
-    if (!checkSizeOnly) {
-      collections = cc.retrieveBatchLazy(results.getResults(), -1, 0, user);
-      for (CollectionImeji c : collections) {
-        if (AuthUtil.staticAuth().createContent(user, c))
-          collectionItems.add(new SelectItem(c.getId(), c.getMetadata().getTitle()));
-      }
-      if (collectionItems.size() > 1) {
-        collectionItems.add(0, new SelectItem("", "-- Select a collection to upload your file --"));
-      } else if (collectionItems.size() > 0) {
-
-        setSelectedCollection(collectionItems.get(0).getValue().toString());
-        methodColChangeListener();
-      }
-    } else {
-      if (collectionItems.size() == 0) {
-        String errorMessage = "cannot_create_collection";
-        if (user.isAllowedToCreateCollection()) {
-          createDefaultCollection();
-          sus.setCanUpload(true);
-        } else {
-          sus.setCanUpload(false);
-          throw new BadRequestException(sb.getMessage(errorMessage));
-        }
-      }
-    }
-=======
-    sortCriterion.setIndex(SPARQLSearch.getIndex("cont_title"));
+    sortCriterion.setIndex(JenaSearch.getIndex("cont_title"));
     sortCriterion.setSortOrder(SortOrder.valueOf("DESCENDING"));
     SearchResult results = cc.search(sq, sortCriterion, -1, 0, user, sb.getSelectedSpaceString());
-    return (List<CollectionImeji>) cc.retrieveLazy(results.getResults(), -1, 0, user);
->>>>>>> bug-fix-3.0.0.1
+    return (List<CollectionImeji>) cc.retrieveBatchLazy(results.getResults(), -1, 0, user);
   }
 
   /**

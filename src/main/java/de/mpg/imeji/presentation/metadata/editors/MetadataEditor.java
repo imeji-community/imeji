@@ -84,8 +84,9 @@ public abstract class MetadataEditor {
       List<Item> itemList = validateAndFormatItemsForSaving();
       ic.updateBatch(itemList, sb.getUser());
       String str = items.size() + " " + sb.getMessage("success_editor_images");
-      if (items.size() == 1)
+      if (items.size() == 1) {
         str = sb.getMessage("success_editor_image");
+      }
       BeanHelper.info(str);
       return true;
 

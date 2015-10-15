@@ -132,7 +132,7 @@ public class UserController {
    * @throws ImejiException
    */
   public void delete(User user) throws ImejiException {
-    //remove User from User Groups
+    // remove User from User Groups
     UserGroupController ugc = new UserGroupController();
     ugc.removeUserFromAllGroups(user, this.user);
     // remove user grant
@@ -201,9 +201,8 @@ public class UserController {
    */
   public User retrieveRegisteredUser(String registrationToken) throws ImejiException {
     Search search = SearchFactory.create();
-    SearchResult result =
-        search.searchString(JenaCustomQueries.selectUserByRegistrationToken(registrationToken),
-            null, null, 0, -1);
+    SearchResult result = search.searchString(
+        JenaCustomQueries.selectUserByRegistrationToken(registrationToken), null, null, 0, -1);
     if (result.getNumberOfRecords() == 1) {
       String id = result.getResults().get(0);
       User u = (User) reader.read(id, user, new User());
@@ -236,7 +235,7 @@ public class UserController {
   public User retrieve(URI uri) throws ImejiException {
     return retrieve(uri, user);
   }
-  
+
   /**
    * Retrieve a {@link User} according to its uri (id)
    * 
@@ -268,8 +267,8 @@ public class UserController {
     } catch (NotFoundException e) {
       // fine, user can be updated
     }
-    updatedUser.setName(updatedUser.getPerson().getGivenName() + " "
-        + updatedUser.getPerson().getFamilyName());
+    updatedUser.setName(
+        updatedUser.getPerson().getGivenName() + " " + updatedUser.getPerson().getFamilyName());
 
     // if quota is set to 0, set it to default disk space quota
     if (updatedUser.getQuota() == 0) {
@@ -309,8 +308,8 @@ public class UserController {
         throw new UnprocessableError("Activation period expired, user should be deleted!");
 
       activateUser.setUserStatus(User.UserStatus.ACTIVE);
-      activateUser.setGrants(AuthorizationPredefinedRoles.defaultUser(activateUser.getId()
-          .toString()));
+      activateUser
+          .setGrants(AuthorizationPredefinedRoles.defaultUser(activateUser.getId().toString()));
       writer.update(WriterFacade.toList(activateUser), null, activateUser, true);
       return activateUser;
 
@@ -336,23 +335,23 @@ public class UserController {
       // if (true)
       return -1L;
 
-    User targetCollectionUser =
-        this.user.getId().equals(col.getCreatedBy()) ? this.user : retrieve(col.getCreatedBy(), Imeji.adminUser);
+    User targetCollectionUser = this.user.getId().equals(col.getCreatedBy()) ? this.user
+        : retrieve(col.getCreatedBy(), Imeji.adminUser);
 
     Search search = SearchFactory.create();
-    List<String> results =
-        search.searchString(
-        // TODO: who is checked by quota?
-        // Current implementation: owner of target collection
+    List<String> results = search
+        .searchString(
+            // TODO: who is checked by quota?
+            // Current implementation: owner of target collection
             JenaCustomQueries.selectUserFileSize(col.getCreatedBy().toString()), null, null, 0, -1)
-            .getResults();
+        .getResults();
     long currentDiskUsage = 0L;
     try {
       currentDiskUsage = Long.parseLong(results.get(0).toString());
     } catch (NumberFormatException e) {
-      throw new UnprocessableError("Cannot parse currentDiskSpaceUsage "
-          + results.get(0).toString() + "; requested by user: " + this.user.getEmail()
-          + "; targetCollectionUser: " + targetCollectionUser.getEmail());
+      throw new UnprocessableError("Cannot parse currentDiskSpaceUsage " + results.get(0).toString()
+          + "; requested by user: " + this.user.getEmail() + "; targetCollectionUser: "
+          + targetCollectionUser.getEmail());
     }
     long needed = currentDiskUsage + file.length();
     if (needed > targetCollectionUser.getQuota()) {
@@ -372,8 +371,8 @@ public class UserController {
    */
   public Collection<User> searchUserByName(String name) {
     Search search = SearchFactory.create();
-    return loadUsers(search.searchString(JenaCustomQueries.selectUserAll(name), null, null, 0, -1)
-        .getResults());
+    return loadUsers(
+        search.searchString(JenaCustomQueries.selectUserAll(name), null, null, 0, -1).getResults());
   }
 
   /**
@@ -384,8 +383,9 @@ public class UserController {
    */
   public Collection<User> searchByGrantFor(String grantFor) {
     Search search = SearchFactory.create();
-    return loadUsers(search.searchString(JenaCustomQueries.selectUserWithGrantFor(grantFor), null,
-        null, 0, -1).getResults());
+    return loadUsers(
+        search.searchString(JenaCustomQueries.selectUserWithGrantFor(grantFor), null, null, 0, -1)
+            .getResults());
   }
 
   /**
@@ -444,13 +444,13 @@ public class UserController {
     return c.iterator().next();
   }
 
-/**
-	 * Search for all {@link Organization} in imeji, i.e. t The search looks within the
-	 * {@link User} and the {@link Collection} what {@link Organization are already
-	 * existing.
-	 * @param name
-	 * @return
-	 */
+  /**
+   * Search for all {@link Organization} in imeji, i.e. t The search looks within the {@link User}
+   * and the {@link Collection} what {@link Organization are already existing.
+   * 
+   * @param name
+   * @return
+   */
   public Collection<Organization> searchOrganizationByName(String name) {
     Collection<Organization> l = searchOrganizationByNameInUsers(name);
     Map<String, Organization> map = new HashMap<>();
@@ -469,9 +469,9 @@ public class UserController {
    */
   private Collection<Person> searchPersonByNameInUsers(String name) {
     Search search = SearchFactory.create(SearchObjectTypes.USER, SEARCH_IMPLEMENTATIONS.JENA);
-    return loadPersons(
-        search.searchString(JenaCustomQueries.selectPersonByName(name), null, null, 0, -1)
-            .getResults(), Imeji.userModel);
+    return loadPersons(search
+        .searchString(JenaCustomQueries.selectPersonByName(name), null, null, 0, -1).getResults(),
+        Imeji.userModel);
   }
 
   /**
@@ -482,9 +482,9 @@ public class UserController {
    */
   private Collection<Person> searchPersonByNameInCollections(String name) {
     Search search = SearchFactory.create(SearchObjectTypes.COLLECTION, SEARCH_IMPLEMENTATIONS.JENA);
-    return loadPersons(
-        search.searchString(JenaCustomQueries.selectPersonByName(name), null, null, 0, -1)
-            .getResults(), Imeji.collectionModel);
+    return loadPersons(search
+        .searchString(JenaCustomQueries.selectPersonByName(name), null, null, 0, -1).getResults(),
+        Imeji.collectionModel);
   }
 
   /**
@@ -497,7 +497,8 @@ public class UserController {
     Search search = SearchFactory.create(SearchObjectTypes.USER, SEARCH_IMPLEMENTATIONS.JENA);
     return loadOrganizations(
         search.searchString(JenaCustomQueries.selectOrganizationByName(name), null, null, 0, -1)
-            .getResults(), Imeji.userModel);
+            .getResults(),
+        Imeji.userModel);
   }
 
   /**
@@ -510,7 +511,8 @@ public class UserController {
     Search search = SearchFactory.create(SearchObjectTypes.COLLECTION, SEARCH_IMPLEMENTATIONS.JENA);
     return loadOrganizations(
         search.searchString(JenaCustomQueries.selectOrganizationByName(name), null, null, 0, -1)
-            .getResults(), Imeji.collectionModel);
+            .getResults(),
+        Imeji.collectionModel);
   }
 
   /**

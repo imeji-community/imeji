@@ -129,13 +129,6 @@
 		<managed-bean-scope>view</managed-bean-scope>
 	</managed-bean>
 
-    <!-- Registration bean -->
-    <managed-bean>
-        <managed-bean-name>RegistrationBean</managed-bean-name>
-        <managed-bean-class>de.mpg.imeji.presentation.user.RegistrationBean</managed-bean-class>
-        <managed-bean-scope>view</managed-bean-scope>
-    </managed-bean>
-
 	<managed-bean>
 		<managed-bean-name>MessagesBean</managed-bean-name>
 		<managed-bean-class>de.mpg.imeji.presentation.beans.MessagesBean</managed-bean-class>

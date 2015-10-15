@@ -107,8 +107,9 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>, Seriali
    * @return
    */
   public Metadata asMetadata() {
-    if (resetCitation)
+    if (resetCitation) {
       resetCitation();
+    }
     ObjectHelper.copyAllFields(this, metadata);
     MetadataHelper.setConeID(metadata);
     return metadata;

@@ -5,7 +5,9 @@
 
 	<!-- MetaDataOutput START -->
 	<h:outputText styleClass="imj_metadataValueEntry" value="#{md.text}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#text' and md.text != null}"/>
-	<h:outputText styleClass="imj_metadataValueEntry" value="#{md.number}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#number' and md.number != null}"/>
+	<h:outputText styleClass="imj_metadataValueEntry" value="#{md.number}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#number' and md.number != null}">
+		<f:converter converterId="DoubleConverter"/>
+	</h:outputText>
 	<h:outputText styleClass="imj_metadataValueEntry" value="#{md.date}" rendered="#{md.typeNamespace == 'http://imeji.org/terms/metadata#date' and md.date != null}"/>
 	
 	<!-- MetaDataOutput - Link -->

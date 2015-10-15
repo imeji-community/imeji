@@ -38,11 +38,10 @@ public class MaxPlanckInstitutUtils {
    * @return
    */
   public static String getInstituteNameForIP(String userIP) {
-    Map<String, String> mpiMap = getMPINameMap();
-    if (mpiMap != null) {
-      for (String ipRange : mpiMap.keySet()) {
+    if (MPINameMap != null) {
+      for (String ipRange : MPINameMap.keySet()) {
         if (IPUtils.isInRange(ipRange, userIP))
-          return mpiMap.get(ipRange);
+          return MPINameMap.get(ipRange);
       }
     }
     return null;
@@ -55,11 +54,10 @@ public class MaxPlanckInstitutUtils {
    * @return
    */
   public static String getInstituteIdForIP(String userIP) {
-    Map<String, String> mpiMap = getIdMap();
-    if (mpiMap != null) {
-      for (String ipRange : mpiMap.keySet()) {
+    if (IdMap != null) {
+      for (String ipRange : IdMap.keySet()) {
         if (IPUtils.isInRange(ipRange, userIP))
-          return mpiMap.get(ipRange);
+          return IdMap.get(ipRange);
       }
     }
     return null;
@@ -70,15 +68,12 @@ public class MaxPlanckInstitutUtils {
    * 
    * @return
    */
-  public static Map<String, String> getMPINameMap() {
-    if (MPINameMap == null)
-      try {
-        MPINameMap = getMPIMap(1, 4);
-      } catch (Exception e) {
-        LOGGER.error("There was a problem with finding the MPINameMap: " + e.getLocalizedMessage());
-        return null;
-      }
-    return MPINameMap;
+  public static void initMPINameMap() {
+    try {
+      MPINameMap = readMPIMap(1, 4);
+    } catch (Exception e) {
+      LOGGER.error("There was a problem with finding the MPINameMap: " + e.getLocalizedMessage());
+    }
   }
 
   /**
@@ -86,15 +81,12 @@ public class MaxPlanckInstitutUtils {
    * 
    * @return
    */
-  public static Map<String, String> getIdMap() {
-    if (IdMap == null)
-      try {
-        IdMap = getMPIMap(1, 2);
-      } catch (Exception e) {
-        LOGGER.error("There was a problem with finding the IdMap: " + e.getLocalizedMessage());
-        return null;
-      }
-    return IdMap;
+  public static void initIdMap() {
+    try {
+      IdMap = readMPIMap(1, 2);
+    } catch (Exception e) {
+      LOGGER.error("There was a problem with finding the IdMap: " + e.getLocalizedMessage());
+    }
   }
 
   /**
@@ -104,7 +96,7 @@ public class MaxPlanckInstitutUtils {
    * 
    * @return
    */
-  private static Map<String, String> getMPIMap(int keyPosition, int valuePosition) {
+  private static Map<String, String> readMPIMap(int keyPosition, int valuePosition) {
     try {
       URL mpiCSV = new URL(MAX_PLANCK_INSTITUTES_IP_URL);
 

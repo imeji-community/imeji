@@ -26,7 +26,6 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
-import de.mpg.imeji.rest.api.ProfileService;
 import de.mpg.imeji.rest.api.UserService;
 import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
 import de.mpg.imeji.rest.defaultTO.DefaultOrganizationTO;
@@ -255,7 +254,7 @@ public class TransferObjectFactory {
    * @param vo
    * @param to
    */
-  public static void transferItem(Item vo, ItemTO to) {
+  public static void transferItem(Item vo, ItemTO to, MetadataProfile profile) {
     transferProperties(vo, to);
     // set visibility
     to.setVisibility(vo.getVisibility().toString());
@@ -268,21 +267,11 @@ public class TransferObjectFactory {
     to.setWebResolutionUrlUrl(vo.getWebImageUrl());
     to.setThumbnailUrl(vo.getThumbnailImageUrl());
     to.setFileUrl(vo.getFullImageUrl());
-
-    // set Metadata
-    ProfileService pcrud = new ProfileService();
-    MetadataProfile profile = new MetadataProfile();
-    try {
-      profile = pcrud.read(vo.getMetadataSet().getProfile());
-    } catch (Exception e) {
-      // TODO Auto-generated catch block
-      LOGGER.info("Something nasty happend after reading the profile", e);
-    }
     transferItemMetadata(profile, vo.getMetadataSet().getMetadata(), to);
   }
 
 
-  public static void transferDefaultItem(Item vo, DefaultItemTO to) {
+  public static void transferDefaultItem(Item vo, DefaultItemTO to, MetadataProfile profile) {
     transferProperties(vo, to);
     // set visibility
     to.setVisibility(vo.getVisibility().toString());
@@ -295,16 +284,6 @@ public class TransferObjectFactory {
     to.setWebResolutionUrlUrl(vo.getWebImageUrl());
     to.setThumbnailUrl(vo.getThumbnailImageUrl());
     to.setFileUrl(vo.getFullImageUrl());
-
-    // set Metadata
-    ProfileService pcrud = new ProfileService();
-    MetadataProfile profile = new MetadataProfile();
-    try {
-      profile = pcrud.read(vo.getMetadataSet().getProfile());
-    } catch (Exception e) {
-      // TODO Auto-generated catch block
-      LOGGER.info("Something nasty happend after reading the profile", e);
-    }
     transferItemMetadataDefault(profile, vo.getMetadataSet().getMetadata(), to);
   }
 

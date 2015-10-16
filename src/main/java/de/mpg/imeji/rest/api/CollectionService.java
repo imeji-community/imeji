@@ -7,6 +7,7 @@ import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MO
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -28,6 +29,7 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
+import de.mpg.imeji.rest.helper.ProfileCache;
 import de.mpg.imeji.rest.process.CommonUtils;
 import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.to.CollectionProfileTO;
@@ -71,17 +73,18 @@ public class CollectionService implements API<CollectionTO> {
    */
   public List<ItemTO> readItems(String id, User u, String q, int offset, int size)
       throws ImejiException, IOException {
+
     ItemController itemController = new ItemController();
-    return Lists.transform(itemController.searchAndRetrieve(
-        ObjectHelper.getURI(CollectionImeji.class, id), SearchQueryParser.parseStringQuery(q),
-        null, u, null, offset, size), new Function<Item, ItemTO>() {
-      @Override
-      public ItemTO apply(Item vo) {
-        ItemTO to = new ItemTO();
-        TransferObjectFactory.transferItem(vo, to);
-        return to;
-      }
-    });
+    ProfileCache profileCache = new ProfileCache();
+    List<ItemTO> tos = new ArrayList<>();
+    for (Item vo : itemController.searchAndRetrieve(ObjectHelper.getURI(CollectionImeji.class, id),
+        SearchQueryParser.parseStringQuery(q), null, u, null, offset, size)) {
+      ItemTO to = new ItemTO();
+      TransferObjectFactory.transferItem(vo, to,
+          profileCache.read(vo.getMetadataSet().getProfile()));
+      tos.add(to);
+    }
+    return tos;
   }
 
   /**
@@ -98,20 +101,20 @@ public class CollectionService implements API<CollectionTO> {
   public Object readDefaultItems(String id, User u, String q, int offset, int size)
       throws ImejiException, IOException {
     ItemController itemController = new ItemController();
-    return Lists.transform(itemController.searchAndRetrieve(
-        ObjectHelper.getURI(CollectionImeji.class, id), SearchQueryParser.parseStringQuery(q),
-        null, u, null, offset, size), new Function<Item, DefaultItemTO>() {
-      @Override
-      public DefaultItemTO apply(Item vo) {
-        DefaultItemTO to = new DefaultItemTO();
-        TransferObjectFactory.transferDefaultItem(vo, to);
-        return to;
-      }
-    });
+    ProfileCache profileCache = new ProfileCache();
+    List<DefaultItemTO> tos = new ArrayList<>();
+    for (Item vo : itemController.searchAndRetrieve(ObjectHelper.getURI(CollectionImeji.class, id),
+        SearchQueryParser.parseStringQuery(q), null, u, null, offset, size)) {
+      DefaultItemTO to = new DefaultItemTO();
+      TransferObjectFactory.transferDefaultItem(vo, to,
+          profileCache.read(vo.getMetadataSet().getProfile()));
+      tos.add(to);
+    }
+    return tos;
   }
 
-  public List<CollectionTO> readAll(User u, String q, int offset, int size) throws ImejiException,
-      IOException {
+  public List<CollectionTO> readAll(User u, String q, int offset, int size)
+      throws ImejiException, IOException {
     CollectionController cc = new CollectionController();
     return Lists.transform(
         cc.searchAndRetrieve(SearchQueryParser.parseStringQuery(q), null, u, null, offset, size),
@@ -165,9 +168,9 @@ public class CollectionService implements API<CollectionTO> {
 
     CollectionImeji vo = getCollectionVO(cc, to.getId(), u);
     MetadataProfile originalMp = pc.retrieve(vo.getProfile(), u);
-    String hasStatements =
-        originalMp.getStatements().size() > 0 ? " Existing metadata profile has already defined metadata elements. It is not allowed to update it: remove the profileId from your input."
-            : "";
+    String hasStatements = originalMp.getStatements().size() > 0
+        ? " Existing metadata profile has already defined metadata elements. It is not allowed to update it: remove the profileId from your input."
+        : "";
 
     // profile is defined
     CollectionProfileTO profTO = to.getProfile();

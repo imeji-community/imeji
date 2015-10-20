@@ -4,7 +4,7 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:composite="http://java.sun.com/jsf/composite"
-	xmlns:mdprofile="http://java.sun.com/jsf/composite/components/mdProfile">
+	xmlns:dialog="http://java.sun.com/jsf/composite/components/dialogs">
 	
 	<ui:define name="init">
 		<h:outputText value="#{metadataBean.init}"/>
@@ -12,7 +12,7 @@
 	
 	<!-- Main Content - bibliographic grid list - START -->
 	<ui:define name="mainContent">
-		<ui:fragment rendered="#{Auth.update(metadataBean.profile)}">
+		<ui:fragment rendered="#{metadataBean.profile != null and Auth.update(metadataBean.profile)}">
 			<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/main.js"></script>
 			<!-- Breadcrumb - History -->
 			<ui:include src="../../include/History.xhtml"/>
@@ -20,7 +20,9 @@
 			<!-- AJAX Wrapper - START -->
 			<h:panelGroup layout="block" id="imj_ajaxWrapper" class="imj_editMetadataProfilePage">
 		  		<h:form id="profileForm" >
-		  			<h2 class="imj_headline">#{lbl.collection}: #{metadataBean.collection.metadata.title}</h2>
+		  			<h2 class="imj_headline">
+		  				#{lbl.collection}: #{metadataBean.collection.metadata.title}  			
+		  			</h2>
 					<div class="imj_metadataProfileList imj_edit">
 						<div class="imj_listHeader">
 							<h:panelGroup  id="profileName" layout="block" class="imj_metadataSet">

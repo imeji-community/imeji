@@ -105,15 +105,16 @@ public class MdProfileBean {
   private void initMenus() {
     mdTypesMenu = new ArrayList<SelectItem>();
     for (Metadata.Types t : Metadata.Types.values()) {
-      mdTypesMenu.add(new SelectItem(t.getClazzNamespace(), ((SessionBean) BeanHelper
-          .getSessionBean(SessionBean.class)).getLabel("facet_" + t.name().toLowerCase())));
+      mdTypesMenu.add(new SelectItem(t.getClazzNamespace(),
+          ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
+              .getLabel("facet_" + t.name().toLowerCase())));
     }
   }
 
   public void addFirstStatement() {
     Statement firstStatement = ImejiFactory.newStatement();
-    getWrappers().add(
-        new StatementWrapper(firstStatement, getProfile().getId(), getLevel(firstStatement)));
+    getWrappers()
+        .add(new StatementWrapper(firstStatement, getProfile().getId(), getLevel(firstStatement)));
   }
 
   /**
@@ -125,8 +126,8 @@ public class MdProfileBean {
   public String getTypeLabel(String uri) {
     for (Metadata.Types t : Metadata.Types.values()) {
       if (t.getClazzNamespace().equals(uri))
-        return ((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("facet_"
-            + t.name().toLowerCase());
+        return ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
+            .getLabel("facet_" + t.name().toLowerCase());
     }
     return uri;
   }
@@ -145,7 +146,7 @@ public class MdProfileBean {
    * 
    * @param mdp
    */
-  private void initStatementWrappers(MetadataProfile mdp) {
+  protected void initStatementWrappers(MetadataProfile mdp) {
     wrappers.clear();
     levels = new HashMap<URI, Integer>();
     for (Statement st : mdp.getStatements()) {
@@ -461,8 +462,8 @@ public class MdProfileBean {
     } else {
       Statement previousStatement = wrappers.get(getStatementPosition()).getStatement();
       Statement newStatement = ImejiFactory.newStatement(previousStatement.getParent());
-      wrappers.add(findNextStatementWithSameLevel(previousStatement), new StatementWrapper(
-          newStatement, profile.getId(), getLevel(newStatement)));
+      wrappers.add(findNextStatementWithSameLevel(previousStatement),
+          new StatementWrapper(newStatement, profile.getId(), getLevel(newStatement)));
     }
   }
 
@@ -487,8 +488,8 @@ public class MdProfileBean {
     if (!wrappers.isEmpty()) {
       URI parent = wrappers.get(getStatementPosition()).getStatement().getId();
       Statement newChild = ImejiFactory.newStatement(parent);
-      wrappers.add(getStatementPosition() + 1, new StatementWrapper(newChild, profile.getId(),
-          getLevel(newChild)));
+      wrappers.add(getStatementPosition() + 1,
+          new StatementWrapper(newChild, profile.getId(), getLevel(newChild)));
     }
   }
 
@@ -509,7 +510,7 @@ public class MdProfileBean {
     toDelete.add(wrappers.get(getStatementPosition()));
     List<StatementWrapper> l = new ArrayList<StatementWrapper>();
     for (StatementWrapper sw : wrappers) {
-      if (!toDelete.contains(sw)){
+      if (!toDelete.contains(sw)) {
         l.add(sw);
       }
     }

@@ -5,6 +5,9 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
+
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.validation.Validator;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -29,6 +32,10 @@ public class CollectionValidator extends ObjectValidator implements Validator<Co
     if (isDelete())
       return;
 
+    //clean untrusted HTML
+    String safeDescription = Jsoup.clean(collection.getMetadata().getDescription(), Whitelist.relaxed());
+    collection.getMetadata().setDescription(safeDescription);   
+    
     if (isNullOrEmpty(collection.getMetadata().getTitle().trim())) {
       throw new UnprocessableError("error_collection_need_title");
     }

@@ -87,7 +87,7 @@ public class SingleEditBean {
       HistorySession hs = (HistorySession) BeanHelper.getSessionBean(HistorySession.class);
       Navigation nav = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
       FacesContext.getCurrentInstance().getExternalContext()
-          .redirect(hs.getCurrentPage().getCompleteUrl());
+          .redirect(hs.getCurrentPage().getUrl());
     }
     return "";
   }

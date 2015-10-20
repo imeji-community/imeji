@@ -5,6 +5,9 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
+
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.validation.Validator;
 import de.mpg.imeji.logic.vo.Album;
@@ -28,6 +31,10 @@ public class AlbumValidator extends ObjectValidator implements Validator<Album> 
   public void validate(Album album) throws UnprocessableError {
     if (isDelete())
       return;
+    
+    //clean untrusted HTML
+    String safeDescription = Jsoup.clean(album.getMetadata().getDescription(), Whitelist.relaxed());
+    album.getMetadata().setDescription(safeDescription);   
 
     if (isNullOrEmpty(album.getMetadata().getTitle().trim())) {
       throw new UnprocessableError("error_album_need_title");

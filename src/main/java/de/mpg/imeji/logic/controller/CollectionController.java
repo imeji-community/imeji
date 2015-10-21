@@ -261,38 +261,33 @@ public class CollectionController extends ImejiController {
   // TODO Move this method to profilecontroller
   public CollectionImeji updateCollectionProfile(CollectionImeji ic, MetadataProfile mp, User user,
       MetadataProfileCreationMethod method) throws ImejiException {
-    if (mp == null)
+    if (mp == null) {
       return ic;
-    // check if there had been change in the metadata profile of this
-    // collection
-    // update of the profile will be performed only when the metadata
-    // profile is different from the metadata profile of the collection
-    // and only if the old profile does not have any statements
+    }
     ProfileController pc = new ProfileController();
-    MetadataProfile originalMP = pc.retrieve(ic.getProfile(), user);
-    if (!originalMP.getId().equals(mp.getId()) && originalMP.getStatements().size() == 0) {
-      if (method.equals(MetadataProfileCreationMethod.REFERENCE)) {
-        // if it is a reference, only change the reference to the new
-        // metadata profile, and do not forget to delete old metadata
-        // profile
-        ic.setProfile(mp.getId());
-        // delete the old profile of the Collection (procedure checks if
-        // there are no other relations, should not be if profile is
-        // empty)
-        pc.delete(originalMP, user, ic.getId().toString());
-        // here update of the newly referenced profile for all Items (if
-        // there are any, patch is applied)
-        updateCollectionItemsProfile(ic, mp.getId(), user);
-      } else {
-        // copy all statements from the template profile to the original
-        // metadata profile
-        MetadataProfile newMP = mp.clone();
-        // Title format as CollectionName (Metadata profile) (copy of
-        // <copied metadata profile name>))
-        // newMP.setTitle(ic.getMetadata().getTitle()+"(Metadata profile)"+newMP.getTitle());
-        originalMP.setStatements(newMP.getStatements());
-        pc.update(originalMP, user);
-      }
+    if (method.equals(MetadataProfileCreationMethod.REFERENCE)) {
+      // if it is a reference, only change the reference to the new
+      // metadata profile, and do not forget to delete old metadata
+      // profile
+      ic.setProfile(mp.getId());
+      // Update the collection with the new profile
+      ic = update(ic, user);
+      // here update of the newly referenced profile for all Items (if
+      // there are any, patch is applied)
+      updateCollectionItemsProfile(ic, mp.getId(), user);
+    } else {
+      // Clone the profile
+      MetadataProfile copy = mp.clone();
+      copy.setTitle(mp.getTitle() + " - COPY");
+      // Create the cloned profile
+      copy = pc.create(copy, user);
+      // Set the cloned profile to the collection
+      ic.setProfile(copy.getId());
+      // Update the collection with the cloned profile
+      ic = update(ic, user);
+      // here update of the newly referenced profile for all Items (if
+      // there are any, patch is applied)
+      updateCollectionItemsProfile(ic, copy.getId(), user);
     }
     return ic;
   }

@@ -15,11 +15,13 @@ import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
+import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.VocabularyHelper;
 
 /**
@@ -37,6 +39,7 @@ public class EditMdProfileBean extends MdProfileBean {
   private VocabularyHelper vocabularyHelper;
   private CollectionImeji collection;
 
+
   /**
    * Constructor
    */
@@ -48,7 +51,6 @@ public class EditMdProfileBean extends MdProfileBean {
 
   @Override
   public String getInit() {
-
     readUrl();
     vocabularyHelper = new VocabularyHelper();
     if (init) {
@@ -85,6 +87,31 @@ public class EditMdProfileBean extends MdProfileBean {
   }
 
   /**
+   * @throws ImejiException
+   * 
+   */
+  public void changeProfile() {
+    setProfile(null);
+  }
+
+  /**
+   * Start a new emtpy profile
+   * 
+   * @throws ImejiException
+   */
+  public void startNewProfile() throws ImejiException {
+    ProfileController profileController = new ProfileController();
+    MetadataProfile profile = ImejiFactory.newProfile();
+    profile.setTitle("Profile for " + getCollection().getMetadata().getTitle());
+    profile = profileController.create(profile, session.getUser());
+    setProfile(profile);
+    initStatementWrappers(getProfile());
+    if (getProfile().getStatements().isEmpty()) {
+      addFirstStatement();
+    }
+  }
+
+  /**
    * Method when cancel button is clicked
    * 
    * @return
@@ -93,11 +120,8 @@ public class EditMdProfileBean extends MdProfileBean {
   public String cancel() throws IOException {
     Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
     if (colId != null)
-      FacesContext
-          .getCurrentInstance()
-          .getExternalContext()
-          .redirect(
-              navigation.getCollectionUrl() + colId + "/" + navigation.getInfosPath() + "?init=1");
+      FacesContext.getCurrentInstance().getExternalContext().redirect(
+          navigation.getCollectionUrl() + colId + "/" + navigation.getInfosPath() + "?init=1");
     else {
       HistorySession history = (HistorySession) BeanHelper.getSessionBean(HistorySession.class);
       FacesContext.getCurrentInstance().getExternalContext()

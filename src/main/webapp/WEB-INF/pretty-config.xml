@@ -93,6 +93,10 @@
 		<pattern value="/profile/#{EditMdProfileBean.id}/edit" />
 		<view-id>/jsf/ProfileEdit.xhtml</view-id>
 	</url-mapping>
+	<url-mapping id="createProfile">
+		<pattern value="/createprofile" />
+		<view-id>/jsf/ProfileCreate.xhtml</view-id>
+	</url-mapping>
 	<!-- Album Pages -->
 	<url-mapping id="createalbum">
 		<pattern value="/createalbum" />

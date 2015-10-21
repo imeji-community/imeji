@@ -45,8 +45,8 @@ public class EditCollectionBean extends CollectionBean {
     if (id != null) {
       ((ViewCollectionBean) BeanHelper.getSessionBean(ViewCollectionBean.class)).setId(id);
       ((ViewCollectionBean) BeanHelper.getSessionBean(ViewCollectionBean.class)).init();
-      setProfile(((ViewCollectionBean) BeanHelper.getSessionBean(ViewCollectionBean.class))
-          .getProfile());
+      setProfile(
+          ((ViewCollectionBean) BeanHelper.getSessionBean(ViewCollectionBean.class)).getProfile());
       setCollection(((ViewCollectionBean) BeanHelper.getSessionBean(ViewCollectionBean.class))
           .getCollection());
       setSendEmailNotification(sessionBean.getUser().getObservedCollections().contains(id));
@@ -66,26 +66,15 @@ public class EditCollectionBean extends CollectionBean {
       // set the loaded collection in the session
       ((CollectionSessionBean) BeanHelper.getSessionBean(CollectionSessionBean.class))
           .setActive(getCollection());
-
-      // load Profiles When there is empty profile only
-      if (getProfile().getStatements().size() == 0) {
-        loadProfiles();
-        if (getProfileItems().size() == 0) {
-          setUseMDProfileTemplate(false);
-        }
-        setUseMDProfileTemplate(true);
-      } else {
-        setUseMDProfileTemplate(false);
-      }
     } else {
       BeanHelper.error(sessionBean.getLabel("error") + " : no ID in URL");
     }
 
     if (UrlHelper.getParameterBoolean("start")) {
-      try{
+      try {
         upload();
-      }catch(Exception e){
-        BeanHelper.error(sessionBean.getMessage("error_collection_logo_uri_save")); 
+      } catch (Exception e) {
+        BeanHelper.error(sessionBean.getMessage("error_collection_logo_uri_save"));
       }
 
     }
@@ -95,12 +84,9 @@ public class EditCollectionBean extends CollectionBean {
   public String save() throws Exception {
     if (saveEditedCollection()) {
       Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
-      FacesContext
-          .getCurrentInstance()
-          .getExternalContext()
-          .redirect(
-              navigation.getCollectionUrl() + ObjectHelper.getId(getCollection().getId()) + "/"
-                  + navigation.getInfosPath() + "?init=1");
+      FacesContext.getCurrentInstance().getExternalContext()
+          .redirect(navigation.getCollectionUrl() + ObjectHelper.getId(getCollection().getId())
+              + "/" + navigation.getInfosPath() + "?init=1");
     }
 
     return "";
@@ -111,16 +97,7 @@ public class EditCollectionBean extends CollectionBean {
       CollectionController collectionController = new CollectionController();
       User user = sessionBean.getUser();
       CollectionImeji icPre = collectionController.retrieve(getCollection().getId(), user);
-      CollectionImeji ic;
-
-      if (isUseMDProfileTemplate() && getProfileTemplate() != null) {
-        ic =
-            collectionController.updateLazyWithProfile(getCollection(), getProfileTemplate(), user,
-                collectionController.getProfileCreationMethod(getSelectedCreationMethod()));
-        setProfileId(ObjectHelper.getId(ic.getProfile()));
-      } else {
-        ic = collectionController.update(getCollection(), user);
-      }
+      CollectionImeji ic = collectionController.update(getCollection(), user);
       if (icPre.getLogoUrl() != null && getCollection().getLogoUrl() == null) {
         collectionController.updateLogo(icPre, null, user);
       }
@@ -189,12 +166,8 @@ public class EditCollectionBean extends CollectionBean {
    */
   public String saveAndEditProfile() throws Exception {
     if (saveEditedCollection()) {
-      FacesContext
-          .getCurrentInstance()
-          .getExternalContext()
-          .redirect(
-              navigation.getProfileUrl() + getProfileId() + "/edit?init=1&col="
-                  + getCollection().getIdString());
+      FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getProfileUrl()
+          + getProfileId() + "/edit?init=1&col=" + getCollection().getIdString());
     }
     return "";
   }

@@ -41,12 +41,12 @@ All rights reserved. Use is subject to license terms.
 	<title><h:outputText value="#{Configuration.instanceName} - #{HistorySession.currentPage.internationalizedName}"/></title>
 	<link rel="shortcut icon" type="image/png" href="#{Configuration.faviconUrl}"/>
 	
-	<ui:fragment rendered="#{Configuration.metaDescription != ''}">
+    <ui:fragment rendered="#{Configuration.metaDescription != ''}">
 		<meta name="description" content="#{Configuration.metaDescription}"/>
 	</ui:fragment>
-		
-	<h:inputHidden value="#{SessionBean.checkCss(Configuration.defaultCss, Configuration.alternativeCss)}" />
-	
+    
+    <h:outputText value="#{SessionBean.checkCss(Configuration.defaultCss, Configuration.alternativeCss)}" />
+    <h:outputStylesheet library="css/theme_default" name="app.css" id="themeDefault" rendered="#{SessionBean.selectedCss == 'NONE'}"/>
 	<ui:fragment rendered="#{SessionBean.selectedCss != 'NONE'}">
 		<ui:fragment rendered="#{SessionBean.selectedCss == 'DEFAULT'}">
 			<link type="text/css" rel="stylesheet" href="#{Configuration.defaultCss}" id="themeDefault"/>
@@ -55,13 +55,8 @@ All rights reserved. Use is subject to license terms.
 			<link type="text/css" rel="stylesheet" href="#{Configuration.alternativeCss}" id="themeDefault"/>
 		</ui:fragment>
 	</ui:fragment>
-	
-	
-	<h:outputStylesheet library="css/theme_default" name="app.css" id="themeDefault" rendered="#{SessionBean.selectedCss == 'NONE'}"/>
-	
-
-	<script type="text/javascript" src="#{Navigation.applicationUrl}resources/jquery/jquery-1.11.1.min.js"></script>
-	
+    
+    
 	<ui:fragment rendered="#{SessionBean.locale == 'en' or SessionBean.locale == 'es'}">
 		<script type="text/javascript">var placeholder_simpleSearch = 'search for ...';</script>
 	</ui:fragment>
@@ -72,9 +67,7 @@ All rights reserved. Use is subject to license terms.
 		<script type="text/javascript">var placeholder_simpleSearch = '検索キーワード...';</script>
 	</ui:fragment>
 	
-	
-	
-	<script type="text/javascript">
+    <script type="text/javascript">
 		var homeURL = '#{Navigation.applicationUrl}';
 		 
 		$(function(){
@@ -84,10 +77,14 @@ All rights reserved. Use is subject to license terms.
 			$(".imj_simpleSearchInput").attr("placeholder", placeholder_simpleSearch);
 		});
 	</script>
+    
+    
+    <h:outputScript library="jquery" name="jquery-1.11.1.min.js"></h:outputScript>
+    <h:outputScript library="jquery/ui" name="1.10.4/jquery-ui.min.js"></h:outputScript>
+    <h:outputScript library="js/" name="default.min.js"></h:outputScript>
 	
-	<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/eSciDoc_inc.js"></script>
 	
-	<script src="#{Navigation.applicationUrl}resources/jquery/ui/1.10.4/jquery-ui.min.js"></script>
+	
 	
 	<ui:insert name="additonalHeaderScripts"/>
 	

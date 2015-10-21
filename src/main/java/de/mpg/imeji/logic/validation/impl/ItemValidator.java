@@ -53,7 +53,12 @@ public class ItemValidator extends ObjectValidator implements Validator<Item> {
       }
 
 
-      if (s.getMaxOccurs() == null || s.getMaxOccurs().equals("1")) {
+      
+      
+      boolean isMultiple = isMultipleStatement(s, p);
+      if (!isMultiple) {
+      //if (s.getMaxOccurs() == null || s.getMaxOccurs().equals("1")) {
+          
         if (nonMultipleStatement.contains(s.getId().toString())) {
           validationMapMultipleStatements.put(md, "Multiple value not allowed for metadata "
               + s.getLabels().iterator().next().getValue() + "(ID: " + s.getId() + "");
@@ -70,7 +75,7 @@ public class ItemValidator extends ObjectValidator implements Validator<Item> {
 
     // checking Maps here
     if (!(validationMap.isEmpty() && validationMapMultipleStatements.isEmpty())) {
-      List<String> errorMessages = new ArrayList<String>();
+      //List<String> errorMessages = new ArrayList<String>();
 
       StringBuilder builder = new StringBuilder();
       for (Metadata md : item.getMetadataSet().getMetadata()) {
@@ -83,6 +88,26 @@ public class ItemValidator extends ObjectValidator implements Validator<Item> {
       throw new UnprocessableError(builder.toString());
     }
 
+  }
+  
+  /**
+   * @param s {@link Statement}
+   * @param p {@link MetadataProfile}
+   * @return boolean
+   * 
+   * method is pretty dummy, it only finds out if the metadata statement can be multiple at any place
+   * in general, method should find out if the metadata statement can be multiple in context with its parent
+   * however now it makes no troubles during saving of data as previously
+   */
+  private boolean isMultipleStatement (Statement s, MetadataProfile p) {
+          if (s.getParent() == null) {
+             return (!(s.getMaxOccurs() == null || s.getMaxOccurs().equals("1")));
+          }
+          else
+          {
+             return ( (s.getMaxOccurs()!= null && !s.getMaxOccurs().equals("1"))
+                      || isMultipleStatement(ProfileHelper.getStatement(s.getParent(), p), p) );
+          }
   }
 
 }

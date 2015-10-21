@@ -33,7 +33,7 @@ public class CollectionValidator extends ObjectValidator implements Validator<Co
       return;
 
     //clean untrusted HTML
-    String safeDescription = Jsoup.clean(collection.getMetadata().getDescription(), Whitelist.relaxed());
+    String safeDescription = collection.getMetadata().getDescription()!=null? Jsoup.clean(collection.getMetadata().getDescription(), Whitelist.relaxed()):collection.getMetadata().getDescription();
     collection.getMetadata().setDescription(safeDescription);   
     
     if (isNullOrEmpty(collection.getMetadata().getTitle().trim())) {

@@ -33,7 +33,7 @@ public class AlbumValidator extends ObjectValidator implements Validator<Album> 
       return;
     
     //clean untrusted HTML
-    String safeDescription = Jsoup.clean(album.getMetadata().getDescription(), Whitelist.relaxed());
+    String safeDescription = album.getMetadata().getDescription()!=null?Jsoup.clean(album.getMetadata().getDescription(), Whitelist.relaxed()):album.getMetadata().getDescription();
     album.getMetadata().setDescription(safeDescription);   
 
     if (isNullOrEmpty(album.getMetadata().getTitle().trim())) {

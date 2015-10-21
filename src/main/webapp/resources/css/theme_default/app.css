@@ -781,7 +781,8 @@ iframe#twitter-widget-0 div.root div.stream { height: 20em !important; }
 
 .imj_fileTypeConfig { width: 100%; }
 .imj_fileTypeConfig table.imj_fileTypeConfigList { width: 100%; margin-top: 0.5em; }
-.imj_fileTypeConfig table.imj_fileTypeConfigList td .imj_fileTypeInput, .imj_fileTypeConfig table.imj_fileTypeConfigList td .imj_fileTypeValueInput { width: 90%; padding: 1% 2%; }
+.imj_fileTypeConfig table.imj_fileTypeConfigList td .imj_fileTypeInput, .imj_fileTypeConfig table.imj_fileTypeConfigList td .imj_fileTypeValueInput { width: 94%; padding: 1% 2%; }
+.imj_fileTypeConfig .imj_inlineButtonGroup * + * { margin-left: 0.272727em; }
 
 .imj_tabList .imj_tabMenu { width: 100%; background-color: #292929; font-size: 120%; }
 .imj_tabList .imj_tabMenu li { display: inline-block; padding: 1em 0.5em; }

@@ -5,10 +5,8 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jsoup.Jsoup;
-import org.jsoup.safety.Whitelist;
-
 import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.validation.Validator;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -32,10 +30,15 @@ public class AlbumValidator extends ObjectValidator implements Validator<Album> 
     if (isDelete())
       return;
     
-    //clean untrusted HTML
-    String safeDescription = album.getMetadata().getDescription()!=null?Jsoup.clean(album.getMetadata().getDescription(), Whitelist.relaxed()):album.getMetadata().getDescription();
-    album.getMetadata().setDescription(safeDescription);   
 
+    if (StringHelper.hasInvalidTags(album.getMetadata().getDescription())){
+      throw new UnprocessableError("error_bad_format_description");
+    }
+    
+    if (StringHelper.hasInvalidTags(album.getMetadata().getTitle())){
+      throw new UnprocessableError("error_bad_format_title");
+    }
+    
     if (isNullOrEmpty(album.getMetadata().getTitle().trim())) {
       throw new UnprocessableError("error_album_need_title");
     }

@@ -5,10 +5,8 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jsoup.Jsoup;
-import org.jsoup.safety.Whitelist;
-
 import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.validation.Validator;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -32,11 +30,15 @@ public class CollectionValidator extends ObjectValidator implements Validator<Co
     if (isDelete())
       return;
 
-    //clean untrusted HTML
-    String safeDescription = collection.getMetadata().getDescription()!=null? Jsoup.clean(collection.getMetadata().getDescription(), Whitelist.relaxed()):collection.getMetadata().getDescription();
-    collection.getMetadata().setDescription(safeDescription);   
+    if (StringHelper.hasInvalidTags(collection.getMetadata().getDescription())){
+      throw new UnprocessableError("error_bad_format_description");
+    }
     
-    if (isNullOrEmpty(collection.getMetadata().getTitle().trim())) {
+    if (StringHelper.hasInvalidTags(collection.getMetadata().getTitle())){
+      throw new UnprocessableError("error_bad_format_title");
+    }
+
+   if (isNullOrEmpty(collection.getMetadata().getTitle().trim())) {
       throw new UnprocessableError("error_collection_need_title");
     }
     List<Person> pers = new ArrayList<Person>();

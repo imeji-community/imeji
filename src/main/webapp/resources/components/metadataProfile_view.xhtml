@@ -20,54 +20,73 @@
 	<composite:implementation>
 		
 		<div class="imj_metadataProfileList">
-			<div class="imj_listHeader">
-				<h3 class="imj_headline">
-					<h:outputText value="#{cc.attrs.headline}: #{cc.attrs.metadataProfile.title}"/>
-				</h3>
-				
-				<div class="imj_listHeaderMenu">
-					<!-- EDIT -->
-					<h:outputLink value="#{cc.attrs.editUrl.trim()}" title="#{lbl.edit}" rendered="#{cc.attrs.editable and cc.attrs.editUrl.trim().length() > 0}">
-						<h:outputText value="#{lbl.edit}"/>
-					</h:outputLink>
+			<ui:fragment rendered="#{cc.attrs.metadataProfile.statements.size() == 0}">
+				<div class="imj_listHeader">
+					<h3 class="imj_headline">
+						<h:outputText value="#{msg.error_collection_profile_not_exist}"/>
+					</h3>
 					
-					<!-- Related collections -->
-					<h:outputLink value="#{cc.attrs.relatedCollectionsUrl.trim()}" rendered="#{cc.attrs.relatedCollectionsUrl.trim().length() > 0}">
-						<h:outputText value="#{lbl.profile_related_collection}"/>
-					</h:outputLink>
-					
-					<!-- Export -->
-					<h:outputLink value="#{cc.attrs.exportUrl.trim()}" target="_blank" rendered="#{cc.attrs.exportUrl.trim().length() > 0 and cc.attrs.metadataProfile.status != 'WITHDRAWN' }">
-						<h:outputText value="#{lbl.metadata_profile_view}"/>
-					</h:outputLink>
+					<div class="imj_listHeaderMenu">
+						<h:outputLink value="#{Navigation.applicationUrl}createprofile?warn=0&amp;col=#{cc.attrs.metadataBean.collection.idString}&amp;redirect=view" title="#{lbl.edit}" rendered="#{Auth.admin(cc.attrs.metadataBean.collection)}">
+							<h:outputText value="#{lbl.add_profile}"/>
+						</h:outputLink>
+					</div>
 				</div>
-			</div>
-			<div class="imj_listHeader">
-				<!-- Metadata Profile -->
-				
-				<h:panelGroup layout="block" styleClass="imj_metadataSet" rendered="#{cc.attrs.profileUrl.trim().length() > 0}">
-					<label class="imj_metadataLabel">							
-						<h:outputText value="#{lbl.profile} URI"/>
-						<span class="imj_noDisplay">: </span>
-					</label>
-					<span class="imj_metadataValue">
-						<a href="#{cc.attrs.profileUrl.trim()}" title="#{cc.attrs.profileUrl.trim()}">
-							<h:outputText value="#{cc.attrs.profileUrl.trim()}"/>
-						</a>
-					</span>
-				</h:panelGroup>
-				
-				<h:panelGroup layout="block" styleClass="imj_metadataSet">
-					<label class="imj_metadataLabel">							
-						<h:outputText value="#{lbl.description}"/>
-						<span class="imj_noDisplay">: </span>
-					</label>
-					<span class="imj_metadataValue">
-						<h:outputText value="#{cc.attrs.metadataProfile.description}"/>
-					</span>
-				</h:panelGroup>
-             </div>
-
+			</ui:fragment>
+			<ui:fragment rendered="#{cc.attrs.metadataProfile.statements.size() != 0}">
+				<div class="imj_listHeader">
+					<h3 class="imj_headline">
+						<h:outputText value="#{cc.attrs.headline}: #{cc.attrs.metadataProfile.title}"/>
+					</h3>
+					
+					<div class="imj_listHeaderMenu">
+						<!-- EDIT -->
+						<h:outputLink value="#{cc.attrs.editUrl.trim()}" title="#{lbl.edit}"  disabled="#{!cc.attrs.editable}">
+							<h:outputText value="#{lbl.edit}"/>
+						</h:outputLink>
+						
+						<h:outputLink value="#{Navigation.applicationUrl}createprofile?warn=1&amp;col=#{cc.attrs.metadataBean.collection.idString}&amp;redirect=view" title="#{lbl.edit}" rendered="#{Auth.admin(cc.attrs.metadataBean.collection)}">
+							<h:outputText value="#{lbl.change}"/>
+						</h:outputLink>
+						
+						<!-- Related collections -->
+						<h:outputLink value="#{cc.attrs.relatedCollectionsUrl.trim()}" rendered="#{cc.attrs.relatedCollectionsUrl.trim().length() > 0}">
+							<h:outputText value="#{lbl.profile_related_collection}"/>
+						</h:outputLink>
+						
+						<!-- Export -->
+						<h:outputLink value="#{cc.attrs.exportUrl.trim()}" target="_blank" rendered="#{cc.attrs.exportUrl.trim().length() > 0 and cc.attrs.metadataProfile.status != 'WITHDRAWN' }">
+							<h:outputText value="#{lbl.metadata_profile_view}"/>
+						</h:outputLink>
+					</div>
+				</div>
+			
+				<div class="imj_listHeader">
+					<!-- Metadata Profile -->
+					
+					<h:panelGroup layout="block" styleClass="imj_metadataSet" rendered="#{cc.attrs.profileUrl.trim().length() > 0}">
+						<label class="imj_metadataLabel">							
+							<h:outputText value="#{lbl.profile} URI"/>
+							<span class="imj_noDisplay">: </span>
+						</label>
+						<span class="imj_metadataValue">
+							<a href="#{cc.attrs.profileUrl.trim()}" title="#{cc.attrs.profileUrl.trim()}">
+								<h:outputText value="#{cc.attrs.profileUrl.trim()}"/>
+							</a>
+						</span>
+					</h:panelGroup>
+					
+					<h:panelGroup layout="block" styleClass="imj_metadataSet">
+						<label class="imj_metadataLabel">							
+							<h:outputText value="#{lbl.description}"/>
+							<span class="imj_noDisplay">: </span>
+						</label>
+						<span class="imj_metadataValue">
+							<h:outputText value="#{cc.attrs.metadataProfile.description}"/>
+						</span>
+					</h:panelGroup>
+	             </div>
+			</ui:fragment>
 				<ui:repeat var="statement" value="#{cc.attrs.metadataProfile.statements}">
 				<h:panelGroup layout="block" styleClass="imj_listHeader">
 					<div class="imj_metadataProfileItem">

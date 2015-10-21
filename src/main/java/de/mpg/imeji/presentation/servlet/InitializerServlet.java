@@ -25,11 +25,11 @@ import com.hp.hpl.jena.tdb.sys.TDBMaker;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.concurrency.locks.LocksSurveyor;
+import de.mpg.imeji.logic.jobs.ReadMaxPlanckIPMappingJob;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
 import de.mpg.imeji.presentation.beans.PropertyBean;
-import de.mpg.imeji.presentation.util.MaxPlanckInstitutUtils;
 
 /**
  * Initialize application on server start
@@ -55,8 +55,7 @@ public class InitializerServlet extends HttpServlet {
     }
     startLocksSurveyor();
     initModel();
-    MaxPlanckInstitutUtils.initMPINameMap();
-    MaxPlanckInstitutUtils.initIdMap();
+    Imeji.executor.submit(new ReadMaxPlanckIPMappingJob());
   }
 
   /**

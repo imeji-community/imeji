@@ -280,27 +280,9 @@
 									</ui:repeat>
 									<ui:fragment rendered="#{empty item.mds.tree.list and Auth.update(itemBean.profile)}">
 										<h3 class="imj_headline">#{msg.error_collection_profile_not_exist}
-											<h:outputLink value="#{Navigation.profileUrl}#{itemBean.profile.idString}/#{Navigation.editPath}?init=1&amp;col=#{itemBean.collection.idString}" title="#{lbl.create_now}">
-												<h:outputText value="#{lbl.create_now}"/>
+											<h:outputLink value="#{Navigation.applicationUrl}createprofile?redirect=back&amp;col=#{itemBean.collection.idString}" title="#{lbl.add_profile}">
+												<h:outputText value="#{lbl.add_profile}"/>
 											</h:outputLink>
-											
-											<!-- CHANGE ME HERE  
-											
-												<h3 class="imj_headline imj_messageInfo">#{msg.error_collection_profile_not_exist}
-													<br/>
-													<h:outputLink value="#{Navigation.collectionUrl}#{itemBean.collectionId}/#{Navigation.editPath}?profileSelect=1" title="#{lbl.create_now_from_template}" rendered="#{logicBean.hasProfiles}">
-															<span class="imj_entryPagePreviewTiledListLinkArrow"> </span>
-															<h:outputText value="#{lbl.create_now_from_template}"/>
-													</h:outputLink>
-													<br/>
-													<h:outputLink value="#{Navigation.profileUrl}#{logicBean.profileId}/#{Navigation.editPath}?init=1&amp;col=#{logicBean.id}" title="#{lbl.create_now_new}">
-															<span class="imj_entryPagePreviewTiledListLinkArrow"> </span>
-															<h:outputText value="#{lbl.create_now}"/>
-													</h:outputLink>
-												</h3>
-												 -->
-											
-											
 										</h3>
 									</ui:fragment>
 								</ui:repeat>

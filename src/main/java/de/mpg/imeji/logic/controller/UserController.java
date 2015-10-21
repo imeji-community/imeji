@@ -229,10 +229,20 @@ public class UserController {
    * @throws ImejiException
    */
   public User retrieve(URI uri) throws ImejiException {
-    User u = (User) reader.read(uri.toString(), user, new User());
+    return retrieve(uri, user);
+  }
+  /**
+  * Retrieve a {@link User} according to its uri (id)
+  * 
+  * @param uri
+  * @return
+  * @throws ImejiException
+   */
+  public User retrieve(URI uri, User retrieveAsUser) throws ImejiException {
+    User u = (User) reader.read(uri.toString(), retrieveAsUser, new User());
     if (u.isActive()) {
       UserGroupController ugc = new UserGroupController();
-      u.setGroups((List<UserGroup>) ugc.searchByUser(u, user));
+      u.setGroups((List<UserGroup>) ugc.searchByUser(u, retrieveAsUser));
     }
     return u;
   }
@@ -321,7 +331,7 @@ public class UserController {
       return -1L;
 
     User targetCollectionUser =
-        this.user.getId().equals(col.getCreatedBy()) ? this.user : retrieve(col.getCreatedBy());
+        this.user.getId().equals(col.getCreatedBy()) ? this.user : retrieve(col.getCreatedBy(), Imeji.adminUser);
 
     Search search = SearchFactory.create();
     List<String> results = search.searchSimpleForQuery(

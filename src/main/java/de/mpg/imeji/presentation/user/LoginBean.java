@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 
 import de.mpg.imeji.logic.auth.Authentication;
 import de.mpg.imeji.logic.auth.AuthenticationFactory;
+import de.mpg.imeji.logic.concurrency.locks.Locks;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.ConfigurationBean;
@@ -127,6 +128,7 @@ public class LoginBean {
   public void logout() throws IOException {
     FacesContext fc = FacesContext.getCurrentInstance();
     String spaceId = sb.getSpaceId();
+    Locks.unlockAll(sb.getUser().getEmail());
     HttpSession session = (HttpSession) fc.getExternalContext().getSession(false);
     session.invalidate();
     sb.setUser(null);

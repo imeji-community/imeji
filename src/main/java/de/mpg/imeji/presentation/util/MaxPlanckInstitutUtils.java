@@ -3,6 +3,7 @@ package de.mpg.imeji.presentation.util;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +23,7 @@ public class MaxPlanckInstitutUtils {
    */
   private static String MAX_PLANCK_INSTITUTES_IP_URL =
       "http://www2.mpdl.mpg.de/seco-irmapubl/expoipra_mpi?style=expo01";
+  private static int TIME_OUT = 5000;
   /**
    * Map of the institute names with their IP range
    */
@@ -70,6 +72,7 @@ public class MaxPlanckInstitutUtils {
    */
   public static void initMPINameMap() {
     try {
+      LOGGER.info("Reading MPG Institute IP Mapping by name");
       MPINameMap = readMPIMap(1, 4);
     } catch (Exception e) {
       LOGGER.error("There was a problem with finding the MPINameMap: " + e.getLocalizedMessage());
@@ -83,6 +86,7 @@ public class MaxPlanckInstitutUtils {
    */
   public static void initIdMap() {
     try {
+      LOGGER.info("Reading MPG Institute IP Mapping by ID");
       IdMap = readMPIMap(1, 2);
     } catch (Exception e) {
       LOGGER.error("There was a problem with finding the IdMap: " + e.getLocalizedMessage());
@@ -99,8 +103,9 @@ public class MaxPlanckInstitutUtils {
   private static Map<String, String> readMPIMap(int keyPosition, int valuePosition) {
     try {
       URL mpiCSV = new URL(MAX_PLANCK_INSTITUTES_IP_URL);
-
-      BufferedReader br = new BufferedReader(new InputStreamReader(mpiCSV.openStream()));
+      URLConnection con = mpiCSV.openConnection();
+      con.setConnectTimeout(TIME_OUT);
+      BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
       String line = "";
       String cvsSplitBy = ";";
       Map<String, String> maps = new HashMap<String, String>();

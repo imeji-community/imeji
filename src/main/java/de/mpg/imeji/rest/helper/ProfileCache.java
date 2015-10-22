@@ -34,8 +34,6 @@ public class ProfileCache {
     MetadataProfile profile = readFromDatabase(uri);
     profiles.put(uri.toString(), profile);
     return profile;
-
-
   }
 
   /**

@@ -27,18 +27,15 @@ public class CollectionValidator extends ObjectValidator implements Validator<Co
 
   @Override
   public void validate(CollectionImeji collection) throws UnprocessableError {
-    if (isDelete())
+    if (isDelete()) {
       return;
+    }
 
-    if (StringHelper.hasInvalidTags(collection.getMetadata().getDescription())){
+    if (StringHelper.hasInvalidTags(collection.getMetadata().getDescription())) {
       throw new UnprocessableError("error_bad_format_description");
     }
-    
-    if (StringHelper.hasInvalidTags(collection.getMetadata().getTitle())){
-      throw new UnprocessableError("error_bad_format_title");
-    }
 
-   if (isNullOrEmpty(collection.getMetadata().getTitle().trim())) {
+    if (isNullOrEmpty(collection.getMetadata().getTitle().trim())) {
       throw new UnprocessableError("error_collection_need_title");
     }
     List<Person> pers = new ArrayList<Person>();

@@ -27,18 +27,14 @@ public class AlbumValidator extends ObjectValidator implements Validator<Album> 
 
   @Override
   public void validate(Album album) throws UnprocessableError {
-    if (isDelete())
+    if (isDelete()) {
       return;
-    
+    }
 
-    if (StringHelper.hasInvalidTags(album.getMetadata().getDescription())){
+    if (StringHelper.hasInvalidTags(album.getMetadata().getDescription())) {
       throw new UnprocessableError("error_bad_format_description");
     }
-    
-    if (StringHelper.hasInvalidTags(album.getMetadata().getTitle())){
-      throw new UnprocessableError("error_bad_format_title");
-    }
-    
+
     if (isNullOrEmpty(album.getMetadata().getTitle().trim())) {
       throw new UnprocessableError("error_album_need_title");
     }

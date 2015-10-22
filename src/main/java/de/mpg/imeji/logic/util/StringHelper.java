@@ -115,16 +115,16 @@ public class StringHelper {
   public static boolean isNullOrEmptyTrim(String str) {
     return isNullOrEmpty(str) || "".equals(str.trim());
   }
-  
- public static boolean hasInvalidTags(String s) {
-    
-    if (isNullOrEmpty(s))
-        return false;
+
+  public static boolean hasInvalidTags(String s) {
+    if (isNullOrEmpty(s)) {
+      return false;
+    }
     String safeString = Jsoup.clean(s, Whitelist.relaxed());
-    if (s!= safeString)
-       return true;
-    
+    if (!s.equals(safeString)) {
+      return true;
+    }
     return false;
   }
- 
+
 }

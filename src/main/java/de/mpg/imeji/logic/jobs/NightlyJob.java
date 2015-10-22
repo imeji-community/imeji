@@ -30,7 +30,7 @@ public class NightlyJob implements Runnable {
     Imeji.executor.submit(new CleanMetadataJob(null));
     Imeji.executor.submit(new CleanGrantsJob());
     Imeji.executor.submit(new CleanStatementsJob());
-
+    Imeji.executor.submit(new CleanUserGroupsJob());
   }
 
 }

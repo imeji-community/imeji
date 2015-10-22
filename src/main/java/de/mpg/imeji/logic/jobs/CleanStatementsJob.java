@@ -28,12 +28,16 @@ public class CleanStatementsJob implements Callable<Integer> {
   private static final Logger logger = Logger.getLogger(CleanStatementsJob.class);
 
   @Override
-  public Integer call() throws Exception {
-    logger.info("Cleaning statements...");
-    Search search = SearchFactory.create();
-    List<String> uris =
-        search.searchSimpleForQuery(SPARQLQueries.selectStatementUnbounded()).getResults();
-    removeResources(uris, Imeji.profileModel, new Statement());
+  public Integer call() {
+    try {
+      logger.info("Cleaning statements...");
+      Search search = SearchFactory.create();
+      List<String> uris =
+          search.searchSimpleForQuery(SPARQLQueries.selectStatementUnbounded()).getResults();
+      removeResources(uris, Imeji.profileModel, new Statement());
+    } catch (Exception e) {
+      logger.error("Error cleaning statements: " + e.getMessage());
+    }
     logger.info("...done!");
     return 1;
   }

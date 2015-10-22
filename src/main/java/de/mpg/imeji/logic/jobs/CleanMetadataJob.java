@@ -2,6 +2,8 @@ package de.mpg.imeji.logic.jobs;
 
 import java.util.concurrent.Callable;
 
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -14,6 +16,7 @@ import de.mpg.imeji.logic.vo.Statement;
  *
  */
 public class CleanMetadataJob implements Callable<Integer> {
+  private static final Logger logger = Logger.getLogger(CleanMetadataJob.class);
 
   private MetadataProfile p;
 
@@ -23,8 +26,10 @@ public class CleanMetadataJob implements Callable<Integer> {
 
   @Override
   public Integer call() throws Exception {
+    logger.info("Cleaning Metadata...");
     ProfileController pc = new ProfileController();
     pc.removeMetadataWithoutStatement(p);
+    logger.info("...done!");
     return 1;
   }
 

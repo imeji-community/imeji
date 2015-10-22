@@ -27,9 +27,13 @@ public class CleanUserGroupsJob implements Callable<Integer> {
   private static final Logger logger = Logger.getLogger(CleanUserGroupsJob.class);
 
   @Override
-  public Integer call() throws Exception {
+  public Integer call() {
     logger.info("Cleaning User Groups...");
-    cleanZombieMember();
+    try {
+      cleanZombieMember();
+    } catch (ImejiException e) {
+      logger.error("Error cleaning user groups: " + e.getMessage());
+    }
     logger.info("...done!");
     return 1;
   }
@@ -57,7 +61,7 @@ public class CleanUserGroupsJob implements Callable<Integer> {
     Set<URI> zombies = new HashSet<>();
     for (UserGroup group : getAllUserGroups()) {
       for (URI member : group.getUsers()) {
-        if (!userExists(member)) {
+        if (!userExists(member) && !zombies.contains(member)) {
           zombies.add(member);
         }
       }

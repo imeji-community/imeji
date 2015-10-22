@@ -41,6 +41,7 @@ import org.apache.log4j.Logger;
 
 import com.hp.hpl.jena.sparql.pfunction.library.container;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.ImejiSPARQL;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.UserController;
@@ -98,11 +99,15 @@ public class UserGroupBean implements Serializable {
    * @param position
    * @return
    */
-  public Collection<User> loadUsers(UserGroup group) throws Exception {
+  public Collection<User> loadUsers(UserGroup group) {
     Collection<User> users = new ArrayList<User>();
     UserController c = new UserController(sessionUser);
     for (URI uri : userGroup.getUsers()) {
-      users.add(c.retrieve(uri));
+      try {
+        users.add(c.retrieve(uri));
+      } catch (ImejiException e) {
+        logger.error("Error reading user: ", e);
+      }
     }
     return users;
   }

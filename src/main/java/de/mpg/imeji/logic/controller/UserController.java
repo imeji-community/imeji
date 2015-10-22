@@ -175,8 +175,9 @@ public class UserController {
       return false;
     } else {
       // New users always have assigned Id, thus we do not check if it is existing user here
-      if (newUser && result.getNumberOfRecords() > 0)
+      if (newUser && result.getNumberOfRecords() > 0) {
         return true;
+      }
 
       // Check if it is existing user here who has same email
       boolean thereIsOtherUser = false;
@@ -231,12 +232,13 @@ public class UserController {
   public User retrieve(URI uri) throws ImejiException {
     return retrieve(uri, user);
   }
+
   /**
-  * Retrieve a {@link User} according to its uri (id)
-  * 
-  * @param uri
-  * @return
-  * @throws ImejiException
+   * Retrieve a {@link User} according to its uri (id)
+   * 
+   * @param uri
+   * @return
+   * @throws ImejiException
    */
   public User retrieve(URI uri, User retrieveAsUser) throws ImejiException {
     User u = (User) reader.read(uri.toString(), retrieveAsUser, new User());
@@ -330,8 +332,8 @@ public class UserController {
       // if (true)
       return -1L;
 
-    User targetCollectionUser =
-        this.user.getId().equals(col.getCreatedBy()) ? this.user : retrieve(col.getCreatedBy(), Imeji.adminUser);
+    User targetCollectionUser = this.user.getId().equals(col.getCreatedBy()) ? this.user
+        : retrieve(col.getCreatedBy(), Imeji.adminUser);
 
     Search search = SearchFactory.create();
     List<String> results = search.searchSimpleForQuery(

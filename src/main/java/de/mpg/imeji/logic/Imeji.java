@@ -31,6 +31,7 @@ import com.hp.hpl.jena.tdb.sys.TDBMaker;
 import de.mpg.imeji.exceptions.AlreadyExistsException;
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
+import de.mpg.imeji.logic.concurrency.locks.LocksSurveyor;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
@@ -73,6 +74,7 @@ public class Imeji {
   public static MetadataProfile defaultMetadataProfile;
   private static final String ADMIN_EMAIL_INIT = "admin@imeji.org";
   private static final String ADMIN_PASSWORD_INIT = "admin";
+  public static LocksSurveyor locksSurveyor = new LocksSurveyor();
   /**
    * The {@link ExecutorService} which runs the thread in imeji
    */
@@ -189,8 +191,8 @@ public class Imeji {
       adminUser.setPerson(ImejiFactory.newPerson("Admin", "imeji", "imeji community"));
       adminUser.setEmail(ADMIN_EMAIL_INIT);
       adminUser.setEncryptedPassword(StringHelper.convertToMD5(ADMIN_PASSWORD_INIT));
-      adminUser.getGrants().addAll(
-          AuthorizationPredefinedRoles.imejiAdministrator(adminUser.getId().toString()));
+      adminUser.getGrants()
+          .addAll(AuthorizationPredefinedRoles.imejiAdministrator(adminUser.getId().toString()));
       // create
       UserController uc = new UserController(Imeji.adminUser);
       List<User> admins = uc.retrieveAllAdmins();
@@ -198,8 +200,8 @@ public class Imeji {
         try {
           uc.retrieve(Imeji.adminUser.getEmail());
         } catch (NotFoundException e) {
-          logger
-              .info("!!! IMPORTANT !!! Create admin@imeji.org as system administrator with password admin. !!! CHANGE PASSWORD !!!");
+          logger.info(
+              "!!! IMPORTANT !!! Create admin@imeji.org as system administrator with password admin. !!! CHANGE PASSWORD !!!");
           uc.create(Imeji.adminUser, USER_TYPE.ADMIN);
           logger.info("Created admin user successfully:" + Imeji.adminUser.getEmail());
         }
@@ -232,8 +234,8 @@ public class Imeji {
     if (defaultMetadataProfile != null) {
       logger.info("Default metadata profile is set-up to " + defaultMetadataProfile.getId());
     } else {
-      logger
-          .info("Checking for default metadata profile is finished: no default metadata profile has been set.");
+      logger.info(
+          "Checking for default metadata profile is finished: no default metadata profile has been set.");
 
     }
   }
@@ -242,8 +244,9 @@ public class Imeji {
     logger.info("Shutting down thread executor...");
     Imeji.executor.shutdown();
     nightlyExecutor.stop();
-    logger.info("executor shutdown shutdown? " + Imeji.executor.isShutdown());
-
+    logger.info("Ending LockSurveyor...");
+    locksSurveyor.terminate();
+    logger.info("...done");
     logger.info("Closing Jena! TDB...");
     TDB.sync(Imeji.dataset);
     logger.info("sync done");
@@ -254,12 +257,6 @@ public class Imeji {
     TDBMaker.releaseLocation(Location.create(Imeji.tdbPath));
     logger.info("location released");
     logger.info("...done!");
-
-    // This is a bug of com.hp.hpl.jena.sparql.engine.QueryExecutionBase
-    // implementation:
-    // AlarmClock is not correctly released, it leads to the memory leaks
-    // after tomcat stop
-    // see https://github.com/imeji-community/imeji/issues/966!
     logger.info("Release AlarmClock...");
     AlarmClock alarmClock = AlarmClock.get();
     alarmClock.release();

@@ -16,8 +16,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import net.java.dev.webdav.jaxrs.ResponseStatus;
-
 import org.apache.log4j.Logger;
 
 import com.fasterxml.jackson.core.JsonFactory;
@@ -39,6 +37,7 @@ import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
 import de.mpg.imeji.rest.to.HTTPError;
 import de.mpg.imeji.rest.to.JSONException;
 import de.mpg.imeji.rest.to.JSONResponse;
+import net.java.dev.webdav.jaxrs.ResponseStatus;
 
 public class RestProcessUtils {
 
@@ -106,9 +105,8 @@ public class RestProcessUtils {
 
   public static <T> List<T> buildTOListFromJSON(String jsonSting, final Class<T> type)
       throws BadRequestException {
-    ObjectReader reader =
-        new ObjectMapper().reader().withType(
-            TypeFactory.defaultInstance().constructCollectionType(List.class, type));
+    ObjectReader reader = new ObjectMapper().reader()
+        .withType(TypeFactory.defaultInstance().constructCollectionType(List.class, type));
     try {
       return reader.readValue(jsonSting);
     } catch (Exception e) {
@@ -212,38 +210,30 @@ public class RestProcessUtils {
     JSONResponse resp;
 
     if (eX instanceof AuthenticationError) {
-      resp =
-          RestProcessUtils.buildJSONAndExceptionResponse(Status.UNAUTHORIZED.getStatusCode(),
-              localMessage);
+      resp = RestProcessUtils.buildJSONAndExceptionResponse(Status.UNAUTHORIZED.getStatusCode(),
+          localMessage);
     } else if (eX instanceof NotAllowedError) {
-      resp =
-          RestProcessUtils.buildJSONAndExceptionResponse(Status.FORBIDDEN.getStatusCode(),
-              localMessage);
+      resp = RestProcessUtils.buildJSONAndExceptionResponse(Status.FORBIDDEN.getStatusCode(),
+          localMessage);
 
     } else if (eX instanceof NotFoundException) {
-      resp =
-          RestProcessUtils.buildJSONAndExceptionResponse(Status.NOT_FOUND.getStatusCode(),
-              localMessage);
+      resp = RestProcessUtils.buildJSONAndExceptionResponse(Status.NOT_FOUND.getStatusCode(),
+          localMessage);
     } else if (eX instanceof UnprocessableError) {
-      resp =
-          RestProcessUtils.buildJSONAndExceptionResponse(
-              ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), localMessage);
+      resp = RestProcessUtils.buildJSONAndExceptionResponse(
+          ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), localMessage);
     } else if (eX instanceof InternalServerErrorException) {
-      resp =
-          RestProcessUtils.buildJSONAndExceptionResponse(
-              Status.INTERNAL_SERVER_ERROR.getStatusCode(), localMessage);
+      resp = RestProcessUtils.buildJSONAndExceptionResponse(
+          Status.INTERNAL_SERVER_ERROR.getStatusCode(), localMessage);
     } else if (eX instanceof BadRequestException) {
-      resp =
-          RestProcessUtils.buildJSONAndExceptionResponse(Status.BAD_REQUEST.getStatusCode(),
-              localMessage);
+      resp = RestProcessUtils.buildJSONAndExceptionResponse(Status.BAD_REQUEST.getStatusCode(),
+          localMessage);
     } else if (eX instanceof ClassCastException) {
-      resp =
-          RestProcessUtils.buildJSONAndExceptionResponse(Status.BAD_REQUEST.getStatusCode(),
-              localMessage);
+      resp = RestProcessUtils.buildJSONAndExceptionResponse(Status.BAD_REQUEST.getStatusCode(),
+          localMessage);
     } else {
-      resp =
-          RestProcessUtils.buildJSONAndExceptionResponse(
-              Status.INTERNAL_SERVER_ERROR.getStatusCode(), localMessage);
+      resp = RestProcessUtils.buildJSONAndExceptionResponse(
+          Status.INTERNAL_SERVER_ERROR.getStatusCode(), localMessage);
     }
 
     return resp;

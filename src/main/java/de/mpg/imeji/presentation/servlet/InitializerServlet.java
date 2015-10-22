@@ -14,17 +14,11 @@ import java.util.regex.Pattern;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
-import org.apache.jena.atlas.lib.AlarmClock;
 import org.apache.log4j.Logger;
 import org.apache.log4j.lf5.util.StreamUtils;
 
-import com.hp.hpl.jena.tdb.TDB;
-import com.hp.hpl.jena.tdb.base.file.Location;
-import com.hp.hpl.jena.tdb.sys.TDBMaker;
-
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
-import de.mpg.imeji.logic.concurrency.locks.LocksSurveyor;
 import de.mpg.imeji.logic.jobs.ReadMaxPlanckIPMappingJob;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.StringHelper;
@@ -39,10 +33,7 @@ import de.mpg.imeji.presentation.beans.PropertyBean;
 public class InitializerServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
   private final static Logger logger = Logger.getLogger(InitializerServlet.class);
-  /**
-   * The {@link Thread} which controls the locking in imeji
-   */
-  private LocksSurveyor locksSurveyor = new LocksSurveyor();
+
 
   @Override
   public void init() throws ServletException {
@@ -53,7 +44,7 @@ public class InitializerServlet extends HttpServlet {
     } catch (IOException | URISyntaxException e) {
       logger.error("Error reading Configuration", e);
     }
-    startLocksSurveyor();
+    Imeji.locksSurveyor.start();
     initModel();
     Imeji.executor.submit(new ReadMaxPlanckIPMappingJob());
   }
@@ -68,13 +59,6 @@ public class InitializerServlet extends HttpServlet {
     } catch (Exception e) {
       throw new RuntimeException("Error Initializing model: ", e);
     }
-  }
-
-  /**
-   * Start thread {@link LocksSurveyor}
-   */
-  private void startLocksSurveyor() {
-    locksSurveyor.start();
   }
 
   /**
@@ -114,38 +98,8 @@ public class InitializerServlet extends HttpServlet {
 
   @Override
   public void destroy() {
-
-    logger.info("Shutting down imeji!");
-
-    logger.info("Shutting down thread executor...");
-    Imeji.executor.shutdown();
-    logger.info("executor shutdown status: " + Imeji.executor.isShutdown());
-
-    logger.info("Closing Jena! TDB...");
-    TDB.sync(Imeji.dataset);
-    Imeji.dataset.close();
-    TDB.closedown();
-    TDBMaker.releaseLocation(new Location(Imeji.tdbPath));
-    logger.info("...done");
-
-    // This is a bug of com.hp.hpl.jena.sparql.engine.QueryExecutionBase
-    // implementation:
-    // AlarmClock is not correctly released, it leads to the memory leaks
-    // after tomcat stop
-    // see https://github.com/imeji-community/imeji/issues/966!
-    logger.info("Release AlarmClock...");
-    AlarmClock alarmClock = AlarmClock.get();
-    alarmClock.release();
-    logger.info("done");
-
-    logger.info("Ending LockSurveyor...");
-    locksSurveyor.terminate();
-    logger.info("...done");
-
-    logger.info("imeji is down");
-
+    Imeji.shutdown();
     super.destroy();
-
   }
 
 }

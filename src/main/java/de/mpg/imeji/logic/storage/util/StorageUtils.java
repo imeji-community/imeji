@@ -65,8 +65,8 @@ public class StorageUtils {
    */
   public final static String DEFAULT_MIME_TYPE = "application/octet-stream";
   public final static String BAD_FORMAT = "bad-extension/other";
-  private static Tika tika = new Tika();
-  private static MimeTypes allTypes = MimeTypes.getDefaultMimeTypes();
+  // private static Tika tika = new Tika();
+  // private static MimeTypes allTypes = MimeTypes.getDefaultMimeTypes();
 
   /**
    * Transform an {@link InputStream} to a {@link Byte} array
@@ -159,6 +159,8 @@ public class StorageUtils {
    */
   public static String guessExtension(File file) {
     try {
+      Tika tika = new Tika();
+      MimeTypes allTypes = MimeTypes.getDefaultMimeTypes();
       MimeType type = allTypes.forName(tika.detect(file));
       if (!type.getExtensions().isEmpty()) {
         String ext = type.getExtensions().get(0).replace(".", "");
@@ -276,7 +278,7 @@ public class StorageUtils {
     } else if ("cmd".equals(extension)) {
       return "application/cmd";
     }
-
+    Tika tika = new Tika();
     String calculatedMimeType = tika.detect("name." + extension);
 
     if ("".equals(calculatedMimeType)) {

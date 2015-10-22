@@ -24,8 +24,8 @@ public class NightlyJob implements Runnable {
     } catch (Exception e) {
       logger.error("Error: " + e.getMessage());
     }
-
     Imeji.executor.submit(new CleanInactiveUsersJob());
+    Imeji.executor.submit(new ReadMaxPlanckIPMappingJob());
   }
 
 }

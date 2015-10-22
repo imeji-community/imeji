@@ -32,6 +32,7 @@ import com.hp.hpl.jena.tdb.sys.TDBMaker;
 import de.mpg.imeji.exceptions.AlreadyExistsException;
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
+import de.mpg.imeji.logic.concurrency.locks.LocksSurveyor;
 import de.mpg.imeji.logic.controller.ProfileController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
@@ -75,6 +76,7 @@ public class Imeji {
   public static MetadataProfile defaultMetadataProfile;
   private static final String ADMIN_EMAIL_INIT = "admin@imeji.org";
   private static final String ADMIN_PASSWORD_INIT = "admin";
+  public static LocksSurveyor locksSurveyor = new LocksSurveyor();
   /**
    * The {@link ExecutorService} which runs the thread in imeji
    */
@@ -246,6 +248,9 @@ public class Imeji {
     nightlyExecutor.stop();
     logger.info("executor shutdown shutdown? " + Imeji.executor.isShutdown());
     ElasticService.shutdown();
+    logger.info("Ending LockSurveyor...");
+    locksSurveyor.terminate();
+    logger.info("...done");
     logger.info("Closing Jena! TDB...");
     TDB.sync(Imeji.dataset);
     logger.info("sync done");

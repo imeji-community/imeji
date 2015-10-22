@@ -157,9 +157,9 @@ public class StorageUtils {
    */
   public static String guessExtension(File file) {
     try {
-      Tika t = new Tika();
+      Tika tika = new Tika();
       MimeTypes allTypes = MimeTypes.getDefaultMimeTypes();
-      MimeType type = allTypes.forName(t.detect(file));
+      MimeType type = allTypes.forName(tika.detect(file));
       if (!type.getExtensions().isEmpty()) {
         String ext = type.getExtensions().get(0).replace(".", "");
         if (FilenameUtils.getExtension(file.getName()).equals("smr") && "bin".equals(ext)) {
@@ -276,9 +276,8 @@ public class StorageUtils {
     } else if ("cmd".equals(extension)) {
       return "application/cmd";
     }
-
-    Tika t = new Tika();
-    String calculatedMimeType = t.detect("name." + extension);
+    Tika tika = new Tika();
+    String calculatedMimeType = tika.detect("name." + extension);
 
     if ("".equals(calculatedMimeType)) {
       return "application/octet-stream";

@@ -34,8 +34,6 @@ public class ProfileCache {
     MetadataProfile profile = readFromDatabase(uri);
     profiles.put(uri.toString(), profile);
     return profile;
-
-
   }
 
   /**
@@ -46,7 +44,6 @@ public class ProfileCache {
    */
   private MetadataProfile readFromDatabase(URI uri) {
     try {
-      System.out.println("read from db " + uri);
       return profileService.read(uri);
     } catch (Exception e) {
       logger.info("Something nasty happend after reading the profile", e);

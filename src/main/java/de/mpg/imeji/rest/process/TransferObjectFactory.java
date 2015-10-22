@@ -26,11 +26,11 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
-import de.mpg.imeji.rest.api.UserService;
 import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
 import de.mpg.imeji.rest.defaultTO.DefaultOrganizationTO;
 import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultConePersonTO;
 import de.mpg.imeji.rest.helper.MetadataTransferHelper;
+import de.mpg.imeji.rest.helper.UserNameCache;
 import de.mpg.imeji.rest.to.AlbumTO;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.IdentifierTO;
@@ -55,8 +55,7 @@ import de.mpg.imeji.rest.to.predefinedMetadataTO.TextTO;
 import de.mpg.j2j.misc.LocalizedString;
 
 public class TransferObjectFactory {
-
-
+  private static UserNameCache userNameCache = new UserNameCache();
   private static final Logger LOGGER = LoggerFactory.getLogger(TransferObjectFactory.class);
 
   /**
@@ -215,26 +214,11 @@ public class TransferObjectFactory {
     // set ID
     to.setId(vo.getIdString());
     // set createdBy
-    UserService ucrud = new UserService();
-    String completeName = null;
-    URI userId = vo.getCreatedBy();
-    try {
-      completeName = ucrud.getCompleteName(vo.getCreatedBy());
-    } catch (Exception e) {
-      LOGGER.info("Cannot read createdBy user: " + userId, e);
-    }
-    // set createdBy
-    to.setCreatedBy(new PersonTOBasic(completeName, ObjectHelper.getId(userId)));
-    if (!vo.getModifiedBy().equals(vo.getCreatedBy())) {
-      userId = vo.getModifiedBy();
-      try {
-        completeName = ucrud.getCompleteName(vo.getModifiedBy());
-      } catch (Exception e) {
-        LOGGER.info("Cannot read modifiedBy user: " + userId, e);
-      }
-    }
+    to.setCreatedBy(new PersonTOBasic(userNameCache.getUserName(vo.getCreatedBy()),
+        ObjectHelper.getId(vo.getCreatedBy())));
     // set modifiedBy
-    to.setModifiedBy(new PersonTOBasic(completeName, ObjectHelper.getId(userId)));
+    to.setModifiedBy(new PersonTOBasic(userNameCache.getUserName(vo.getModifiedBy()),
+        ObjectHelper.getId(vo.getCreatedBy())));
     // set createdDate, modifiedDate, versionDate
     to.setCreatedDate(CommonUtils.formatDate(vo.getCreated().getTime()));
     to.setModifiedDate(CommonUtils.formatDate(vo.getModified().getTime()));

@@ -108,6 +108,9 @@ public class CreateCollectionBean extends CollectionBean {
           pos2++;
         }
       }
+      if (!createProfile) {
+        profileSelector.setProfile(null);
+      }
       URI id = collectionController.create(getCollection(), profileSelector.getProfile(),
           sessionBean.getUser(), profileSelector.getSelectorMode(),
           sessionBean.getSelectedSpaceString());

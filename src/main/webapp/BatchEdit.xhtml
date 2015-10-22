@@ -7,13 +7,12 @@
 	
 	<ui:param name="headline" value="#{lbl.edit_images}"/>
 	
-	<ui:define name="additonalHeaderScripts">
+	<ui:define name="additonalFooterScripts">
 		<script type="text/javascript">
-			jQuery(document).ready(function() {
+			$(document).ready(function() {
 				document.getElementById('batchEditForm:editInitialized').click();
 			});
 		</script>
-			
 	</ui:define>
 	
 	<ui:define name="actionsMenu"></ui:define>
@@ -34,9 +33,7 @@
 				</h:selectBooleanCheckbox>
 				
 				<h:panelGroup layout="block" id="ajaxContent" styleClass="imj_batchEditList">
-					<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/datepicker.js"></script>
-					<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/main.js"></script>
-
+					<h:outputScript library="js" name="datepicker.js"></h:outputScript>
 					
 					<ui:fragment rendered="#{!EditItemMetadataBean.initialized and Auth.loggedIn}">
 						<h2 class="imj_headline"><h:outputText value="Preparing editor! Please wait a little ..."/></h2>

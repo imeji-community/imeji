@@ -366,10 +366,10 @@
 															</td>
 															<td>
 																<h:inputText value="#{type.extensions}" class="imj_fileTypeValueInput"/>
-																<input type="button" data-target="tr .imj_fileTypeValueInput" class="imj_clearInput imj_iconErase_16" value=" "/>
-															</td>
-															<td>
 																
+															</td>
+															<td class="imj_inlineButtonGroup">
+																<input type="button" data-target="tr .imj_fileTypeValueInput" class="imj_clearInput imj_iconErase_16" value=" "/>
 																<h:commandLink value=" " title="#{lbl.remove}" styleClass="imj_buttonRemove_16" action="#{Configuration.fileTypes.removeType(var.index)}" >
 																	<f:ajax execute="@this" render="@form"/>
 																</h:commandLink>

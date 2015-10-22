@@ -56,33 +56,4 @@
         </ui:fragment>
     </ui:fragment>
 
-
-    <ui:fragment rendered="#{SessionBean.locale == 'en' or SessionBean.locale == 'es'}">
-        <script type="text/javascript">var placeholder_simpleSearch = 'search for ...';</script>
-    </ui:fragment>
-    <ui:fragment rendered="#{SessionBean.locale == 'de'}">
-        <script type="text/javascript">var placeholder_simpleSearch = 'Suche nach ...';</script>
-    </ui:fragment>
-    <ui:fragment rendered="#{SessionBean.locale == 'jp' or SessionBean.locale == 'ja'}">
-        <script type="text/javascript">var placeholder_simpleSearch = '検索キーワード...';</script>
-    </ui:fragment>
-
-
-
-    <script type="text/javascript">var homeURL = '#{Navigation.applicationUrl}';</script>
-    <h:outputScript library="jquery" name="jquery-1.11.1.min.js"></h:outputScript>
-    <h:outputScript library="jquery/ui" name="1.10.4/jquery-ui.min.js"></h:outputScript>
-    <h:outputScript library="js/" name="default.min.js"></h:outputScript>
-
-    <script type="text/javascript">
-        $(function () {
-            //add placeholders for meta menu (username and password) and simple search
-            //$(".imj_metaMenuStandardSingleLine input[type='text']").attr("placeholder", placeholder_username);
-            //$(".imj_metaMenuStandardSingleLine input[type='password']").attr("placeholder", placeholder_password);
-            $(".imj_simpleSearchInput").attr("placeholder", placeholder_simpleSearch);
-        });
-    </script>
-
-    <ui:insert name="additonalHeaderScripts"/>
-
 </ui:composition>

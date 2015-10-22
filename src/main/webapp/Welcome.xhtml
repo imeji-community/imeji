@@ -18,7 +18,7 @@
 								 navBean="#{Navigation}"  />
 	</ui:define>
 	
-	<ui:define name="additonalHeaderScripts">
+	<ui:define name="additonalFooterScripts">
 		<ui:remove>
 			<!-- Do we need that? -->
 			<script src="https://www.google.com/jsapi" type="text/javascript"> </script>
@@ -77,7 +77,11 @@
 				jQuery( ".id_tabs" ).tabs();
 				createCarousel();
 			};
+            
+            //initialize the tab menu and carousel
+			initStartpage();
 		</script>
+        
 	</ui:define>
 	
 	<ui:define name="mainContent">
@@ -311,10 +315,7 @@
 			</div> <!-- end right content -->
 			
 			
-			<script type="text/javascript">
-				//initialize the tab menu and carousel
-				initStartpage();
-			</script>
+			
 			
 			<div class="imj_startpageFooter">
 			<!-- begin: footer section-->

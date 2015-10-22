@@ -159,7 +159,7 @@ function checkForChilds(id) {
  */
 function highlight(id, alter) {
     var items;
-    items = (alter) ? jQuery('.' + alter + id) : jQuery('.id_' + id);
+    items = (alter) ? $('.' + alter + id) : $('.id_' + id);
     items.addClass("imj_highlightDependencies");
 }
 ;
@@ -169,8 +169,7 @@ function highlight(id, alter) {
  * definitions
  */
 function reset_highlight() {
-    jQuery('.imj_highlightDependencies').removeClass(
-            "imj_highlightDependencies");
+    $('.imj_highlightDependencies').removeClass("imj_highlightDependencies");
 }
 ;
 /**
@@ -179,23 +178,28 @@ function reset_highlight() {
  * used in: templates/sub_template/template_metadata_profileEdit.xhtml
  */
 function highlighter() {
-    jQuery(function () {
-        jQuery(".highlight_area").mouseover(function () {
-            var itemId = parseId(jQuery(this).attr('class'));
-            var prntId = parseId(jQuery(this).attr('class'), 'parent_');
-            highlight(itemId); // highlight the current element
-            checkForChilds(itemId);// highlight the child elements - recursive
-            // - of the current item, if it's given
-            if (prntId) { // check if the current item is a child of another
-                highlight(prntId, 'id_'); // hightlight the next parent item,
-                // if the current item is a child
-            }
-        }).mouseout(function () {
-            reset_highlight();
-        });
+
+    var areas = $(".highlight_area");
+
+    // in case of ajax reloading and other dynamics
+    // remove the old mouseover/mouseout events and attach them new
+    areas.off("mouseover");
+    areas.off("mouseout");
+    areas.mouseover(function () {
+        var itemId = parseId(jQuery(this).attr('class'));
+        var prntId = parseId(jQuery(this).attr('class'), 'parent_');
+        highlight(itemId); // highlight the current element
+        checkForChilds(itemId);// highlight the child elements - recursive
+        // - of the current item, if it's given
+        if (prntId) { // check if the current item is a child of another
+            highlight(prntId, 'id_'); // hightlight the next parent item,
+            // if the current item is a child
+        }
+    }).mouseout(function () {
+        reset_highlight();
     });
-}
-;
+
+};
 
 /*******************************************************************************
  * START : Function for the Metadata Profile pages:
@@ -593,10 +597,8 @@ $(function () {
         }
     });
 });
-$(function () {
-    customSelectbox();
-});
 jQuery(document).ready(function () {
+    customSelectbox();
     /**
      * Trigger the highlight on page load
      */

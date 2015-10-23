@@ -41,15 +41,13 @@
 					
 					<div class="imj_listHeaderMenu">
 						<!-- EDIT -->
-						<h:outputLink value="#{cc.attrs.editUrl.trim()}" title="#{lbl.edit}"  diabled="#{!cc.attrs.editable}">
+						<h:outputLink value="#{cc.attrs.editUrl.trim()}" title="#{lbl.edit}"  disabled="#{!cc.attrs.editable}">
 							<h:outputText value="#{lbl.edit}"/>
 						</h:outputLink>
 						
-						<ui:fragment rendered="#{cc.attrs.editable}">
-						    <h:outputLink value="#{Navigation.applicationUrl}createprofile?warn=1&amp;col=#{cc.attrs.metadataBean.collection.idString}&amp;redirect=view" title="#{lbl.edit}" rendered="#{Auth.admin(cc.attrs.metadataBean.collection)}">
-								<h:outputText value="#{lbl.change}"/>
-							</h:outputLink>
-						</ui:fragment>
+						<h:outputLink value="#{Navigation.applicationUrl}createprofile?warn=1&amp;col=#{cc.attrs.metadataBean.collection.idString}&amp;redirect=view" title="#{lbl.edit}" rendered="#{Auth.admin(cc.attrs.metadataBean.collection)}">
+							<h:outputText value="#{lbl.change}"/>
+						</h:outputLink>
 						
 						<!-- Related collections -->
 						<h:outputLink value="#{cc.attrs.relatedCollectionsUrl.trim()}" rendered="#{cc.attrs.relatedCollectionsUrl.trim().length() > 0}">

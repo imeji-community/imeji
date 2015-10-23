@@ -12,9 +12,12 @@
 		<composite:attribute name="profileUrl" default="" type="java.lang.String" required="false"/>
 		<composite:attribute name="exportUrl" default="" type="java.lang.String" required="false"/>
 		<composite:attribute name="editable" default="false" type="java.lang.Boolean" required="false"/>
+		<composite:attribute name="adminable" default="false" type="java.lang.Boolean" required="false"/>
 		<composite:attribute name="editUrl" default="" type="java.lang.String" required="false"/>
 		<composite:attribute name="relatedCollectionsUrl" default="" type="java.lang.String" required="false"/>
 		<composite:attribute name="headline" required="true"/>
+		<composite:attribute name="collectionStatus" required="false"/>
+		
 	</composite:interface>
 	
 	<composite:implementation>
@@ -27,7 +30,7 @@
 					</h3>
 					
 					<div class="imj_listHeaderMenu">
-						<h:outputLink value="#{Navigation.applicationUrl}createprofile?warn=0&amp;col=#{cc.attrs.metadataBean.collection.idString}&amp;redirect=view" title="#{lbl.add_profile}" rendered="#{Auth.admin(cc.attrs.metadataBean.collection)}">
+						<h:outputLink value="#{Navigation.applicationUrl}createprofile?warn=0&amp;col=#{cc.attrs.metadataBean.collection.idString}&amp;redirect=view" title="#{lbl.add_profile}" rendered="#{cc.attrs.adminable}">
 							<h:outputText value="#{lbl.add_profile}"/>
 						</h:outputLink>
 					</div>
@@ -40,12 +43,13 @@
 					</h3>
 					
 					<div class="imj_listHeaderMenu">
+					
 						<!-- EDIT -->
-						<h:outputLink styleClass="imj_metadataValue" value="#{cc.attrs.editUrl.trim()}" title="#{lbl.edit}"  disabled="#{!cc.attrs.editable}" rendered="#{cc.attrs.metadataBean.collection.status != 'WITHDRAWN'}">
+						<h:outputLink styleClass="imj_metadataValue" value="#{cc.attrs.editUrl.trim()}" title="#{lbl.edit}"  disabled="#{!cc.attrs.editable}" rendered="#{cc.attrs.collectionStatus != 'WITHDRAWN'}">
 							<h:outputText value="#{lbl.edit}"/>
 						</h:outputLink>
 						
-						<h:outputLink styleClass="imj_metadataValue" value="#{Navigation.applicationUrl}createprofile?warn=1&amp;col=#{cc.attrs.metadataBean.collection.idString}&amp;redirect=view" title="#{lbl.add_profile}" rendered="#{Auth.admin(cc.attrs.metadataBean.collection)}">
+						<h:outputLink styleClass="imj_metadataValue" value="#{Navigation.applicationUrl}createprofile?warn=1&amp;col=#{cc.attrs.metadataBean.collection.idString}&amp;redirect=view" title="#{lbl.add_profile}" rendered="#{cc.attrs.adminable}">
 							<h:outputText value="#{lbl.change}"/>
 						</h:outputLink>
 						

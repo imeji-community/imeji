@@ -1,6 +1,7 @@
 package de.mpg.imeji.logic.jobs;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -57,7 +58,7 @@ public class CleanUserGroupsJob implements Callable<Integer> {
    * 
    * @return
    */
-  private URI[] findZombieMember() {
+  private List<URI> findZombieMember() {
     Set<URI> zombies = new HashSet<>();
     for (UserGroup group : getAllUserGroups()) {
       for (URI member : group.getUsers()) {
@@ -66,7 +67,7 @@ public class CleanUserGroupsJob implements Callable<Integer> {
         }
       }
     }
-    return (URI[]) zombies.toArray();
+    return new ArrayList<>(zombies);
   }
 
 

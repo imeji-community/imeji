@@ -27,7 +27,7 @@
 					</h3>
 					
 					<div class="imj_listHeaderMenu">
-						<h:outputLink value="#{Navigation.applicationUrl}createprofile?warn=0&amp;col=#{cc.attrs.metadataBean.collection.idString}&amp;redirect=view" title="#{lbl.edit}" rendered="#{Auth.admin(cc.attrs.metadataBean.collection)}">
+						<h:outputLink value="#{Navigation.applicationUrl}createprofile?warn=0&amp;col=#{cc.attrs.metadataBean.collection.idString}&amp;redirect=view" title="#{lbl.add_profile}" rendered="#{Auth.admin(cc.attrs.metadataBean.collection)}">
 							<h:outputText value="#{lbl.add_profile}"/>
 						</h:outputLink>
 					</div>
@@ -41,11 +41,11 @@
 					
 					<div class="imj_listHeaderMenu">
 						<!-- EDIT -->
-						<h:outputLink value="#{cc.attrs.editUrl.trim()}" title="#{lbl.edit}"  disabled="#{!cc.attrs.editable}">
+						<h:outputLink styleClass="imj_metadataValue" value="#{cc.attrs.editUrl.trim()}" title="#{lbl.edit}"  disabled="#{!cc.attrs.editable}" rendered="#{cc.attrs.metadataBean.collection.status != 'WITHDRAWN'}">
 							<h:outputText value="#{lbl.edit}"/>
 						</h:outputLink>
 						
-						<h:outputLink value="#{Navigation.applicationUrl}createprofile?warn=1&amp;col=#{cc.attrs.metadataBean.collection.idString}&amp;redirect=view" title="#{lbl.edit}" rendered="#{Auth.admin(cc.attrs.metadataBean.collection)}">
+						<h:outputLink styleClass="imj_metadataValue" value="#{Navigation.applicationUrl}createprofile?warn=1&amp;col=#{cc.attrs.metadataBean.collection.idString}&amp;redirect=view" title="#{lbl.add_profile}" rendered="#{Auth.admin(cc.attrs.metadataBean.collection)}">
 							<h:outputText value="#{lbl.change}"/>
 						</h:outputLink>
 						

@@ -85,15 +85,11 @@ public class Authorization {
   public boolean read(User user, Object obj) {
     if (isPublic(obj) || obj instanceof MetadataProfile)
       return true;
-    else if (hasGrant(
-        user,
-        toGrant(getRelevantURIForSecurity(obj, true, false, false),
-            getGrantTypeAccordingToObjectType(obj, GrantType.READ))))
+    else if (hasGrant(user, toGrant(getRelevantURIForSecurity(obj, true, false, false),
+        getGrantTypeAccordingToObjectType(obj, GrantType.READ))))
       return true;
-    else if (hasGrant(
-        user,
-        toGrant(getRelevantURIForSecurity(obj, false, false, false),
-            getGrantTypeAccordingToObjectType(obj, GrantType.READ))))
+    else if (hasGrant(user, toGrant(getRelevantURIForSecurity(obj, false, false, false),
+        getGrantTypeAccordingToObjectType(obj, GrantType.READ))))
       return true;
     return false;
   }
@@ -107,9 +103,8 @@ public class Authorization {
    * @throws NotAllowedError
    */
   public boolean update(User user, Object obj) {
-    if (hasGrant(
-        user,
-        toGrant(getRelevantURIForSecurity(obj, false, false, false),
+    if (!isDiscarded(obj)
+        && hasGrant(user, toGrant(getRelevantURIForSecurity(obj, false, false, false),
             getGrantTypeAccordingToObjectType(obj, GrantType.UPDATE))))
       return true;
     return false;
@@ -133,10 +128,8 @@ public class Authorization {
       return true;
 
     if (!isPublic(obj)
-        && hasGrant(
-            user,
-            toGrant(getRelevantURIForSecurity(obj, false, false, false),
-                getGrantTypeAccordingToObjectType(obj, GrantType.DELETE))))
+        && hasGrant(user, toGrant(getRelevantURIForSecurity(obj, false, false, false),
+            getGrantTypeAccordingToObjectType(obj, GrantType.DELETE))))
       return true;
 
     return false;
@@ -151,9 +144,8 @@ public class Authorization {
    * @throws NotAllowedError
    */
   public boolean administrate(User user, Object obj) {
-    if (hasGrant(
-        user,
-        toGrant(getRelevantURIForSecurity(obj, false, false, false),
+    if (!isDiscarded(obj)
+        && hasGrant(user, toGrant(getRelevantURIForSecurity(obj, false, false, false),
             getGrantTypeAccordingToObjectType(obj, GrantType.ADMIN))))
       return true;
     return false;
@@ -201,9 +193,8 @@ public class Authorization {
     if (AuthUtil.isSysAdmin(user))
       return true;
 
-    if (!isPublic(obj)
-        && hasGrant(user,
-            toGrant(getRelevantURIForSecurity(obj, false, false, false), GrantType.DELETE_CONTENT)))
+    if (!isPublic(obj) && hasGrant(user,
+        toGrant(getRelevantURIForSecurity(obj, false, false, false), GrantType.DELETE_CONTENT)))
       return true;
 
     return false;
@@ -265,18 +256,18 @@ public class Authorization {
   public String getRelevantURIForSecurity(Object obj, boolean hasItemGrant, boolean getContext,
       boolean isReadGrant) {
     if (obj instanceof Item)
-      return hasItemGrant ? ((Item) obj).getId().toString() : ((Item) obj).getCollection()
-          .toString();
+      return hasItemGrant ? ((Item) obj).getId().toString()
+          : ((Item) obj).getCollection().toString();
     else if (obj instanceof Container)
-      return getContext ? AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI : ((Container) obj).getId()
-          .toString();
+      return getContext ? AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI
+          : ((Container) obj).getId().toString();
     else if (obj instanceof CollectionListItem)
       return ((CollectionListItem) obj).getUri().toString();
     else if (obj instanceof AlbumBean)
       return ((AlbumBean) obj).getAlbum().getId().toString();
     else if (obj instanceof MetadataProfile)
-      return getContext ? AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI : ((MetadataProfile) obj)
-          .getId().toString();
+      return getContext ? AuthorizationPredefinedRoles.IMEJI_GLOBAL_URI
+          : ((MetadataProfile) obj).getId().toString();
     else if (obj instanceof User)
       return ((User) obj).getId().toString();
     else if (obj instanceof URI)

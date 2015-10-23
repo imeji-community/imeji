@@ -5,16 +5,14 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 
 import org.apache.log4j.Logger;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 import de.mpg.imeji.logic.vo.MetadataSet;
 
 public class PropertyDescriptorTest {
-  @BeforeClass
+  // @BeforeClass
   public static void setUpBeforeClass() throws Exception {}
 
-  @Test
+  // @Test
   public void anyPropertyDescriptorTest() {
     // Item item = new Item();
     // item.setCollection(URI.create("collectionURI"));

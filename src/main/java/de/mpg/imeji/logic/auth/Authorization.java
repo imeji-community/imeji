@@ -103,9 +103,8 @@ public class Authorization {
    * @throws NotAllowedError
    */
   public boolean update(User user, Object obj) {
-    if (!isDiscarded(obj)
-        && hasGrant(user, toGrant(getRelevantURIForSecurity(obj, false, false, false),
-            getGrantTypeAccordingToObjectType(obj, GrantType.UPDATE))))
+    if (hasGrant(user, toGrant(getRelevantURIForSecurity(obj, false, false, false),
+        getGrantTypeAccordingToObjectType(obj, GrantType.UPDATE))))
       return true;
     return false;
   }

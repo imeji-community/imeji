@@ -44,6 +44,27 @@ public class ItemValidator extends ObjectValidator implements Validator<Item> {
     List<String> nonMultipleStatement = new ArrayList<String>();
     Map<Metadata, String> validationMap = new HashMap<Metadata, String>();
     Map<Metadata, String> validationMapMultipleStatements = new HashMap<Metadata, String>();
+    Object[] itemMetadataList = item.getMetadataSet().getMetadata().toArray();
+    
+    //Validate that every child has its parent filled
+    for (int i=0; i<itemMetadataList.length; i++) {
+      Statement s = ProfileHelper.getStatement(((Metadata) itemMetadataList[i]).getStatement(), p);
+      if(s.getParent()!=null){
+        Statement parentStatement = ProfileHelper.getStatement(s.getParent(), p);
+        //First element can not have a parent
+        if(i==0){
+          throw new UnprocessableError(parentStatement.getLabel() + " has to be filled");
+        
+        }else{
+          Statement preStatement = ProfileHelper.getStatement(((Metadata) itemMetadataList[i-1]).getStatement(), p);
+          if(!(parentStatement.getId().equals(preStatement.getId()))){
+            throw new UnprocessableError(parentStatement.getLabel() + " has to be filled");
+          }
+        }
+
+      }
+    }
+    
     for (Metadata md : item.getMetadataSet().getMetadata()) {
       Statement s = ProfileHelper.getStatement(md.getStatement(), p);
       try {

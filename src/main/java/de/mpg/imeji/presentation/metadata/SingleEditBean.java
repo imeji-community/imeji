@@ -85,7 +85,6 @@ public class SingleEditBean {
   public String save() throws Exception {
     if (editor.save()) {
       HistorySession hs = (HistorySession) BeanHelper.getSessionBean(HistorySession.class);
-      Navigation nav = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
       FacesContext.getCurrentInstance().getExternalContext()
           .redirect(hs.getCurrentPage().getUrl());
     }

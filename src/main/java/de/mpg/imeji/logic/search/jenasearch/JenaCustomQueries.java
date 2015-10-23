@@ -164,7 +164,7 @@ public class JenaCustomQueries {
   }
 
   /**
-   * Select a User by its Email
+   * Select a User by its Email 
    * 
    * @param email
    * @return

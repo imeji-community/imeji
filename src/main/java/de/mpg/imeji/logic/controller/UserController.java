@@ -178,8 +178,9 @@ public class UserController {
       return false;
     } else {
       // New users always have assigned Id, thus we do not check if it is existing user here
-      if (newUser && result.getNumberOfRecords() > 0)
+      if (newUser && result.getNumberOfRecords() > 0) {
         return true;
+      }
 
       // Check if it is existing user here who has same email
       boolean thereIsOtherUser = false;

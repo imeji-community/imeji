@@ -119,7 +119,7 @@ public class StringHelper {
   public static boolean hasInvalidTags(String s) {
     if (isNullOrEmpty(s)) {
       return false;
-    }
+    } 
     String safeString = Jsoup.clean(s, Whitelist.relaxed());
     if (!s.equals(safeString)) {
       return true;

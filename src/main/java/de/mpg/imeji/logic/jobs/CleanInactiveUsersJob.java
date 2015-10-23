@@ -20,11 +20,10 @@ public class CleanInactiveUsersJob implements Callable<Integer> {
 
   @Override
   public Integer call() {
-    logger.info("Starting Cleaning of Inactive Users");
+    logger.info(" Cleaning of Inactive Users...");
     UserController userController = new UserController(Imeji.adminUser);
     int numCleaned = userController.cleanInactiveUsers();
-    logger.info("Cleaning of inactive users successfully finished !" + numCleaned
-        + " inactive users have been deleted!");
+    logger.info("...done ! " + numCleaned + " inactive users have been deleted!");
     return 1;
   }
 }

@@ -7,6 +7,9 @@ import java.security.MessageDigest;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Entities.EscapeMode;
+import org.jsoup.safety.Cleaner;
 import org.jsoup.safety.Whitelist;
 
 /**
@@ -120,7 +123,11 @@ public class StringHelper {
     if (isNullOrEmpty(s)) {
       return false;
     }
-    String safeString = Jsoup.clean(s, Whitelist.relaxed());
+    Document doc = Jsoup.parse(s);
+    doc = new Cleaner(Whitelist.relaxed()).clean(doc);
+    doc.outputSettings().escapeMode(EscapeMode.xhtml);
+    String safeString = doc.body().html();
+
     if (!s.equals(safeString)) {
       return true;
     }

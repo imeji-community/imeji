@@ -224,6 +224,10 @@
         <param-value>.xhtml</param-value>
     </context-param>
     <context-param>
+	    <param-name>com.sun.faces.defaultResourceMaxAge</param-name>
+	    <param-value>2592000000</param-value> <!-- 30 days -->  
+	</context-param>
+    <context-param>
         <param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name>
         <param-value>true</param-value>
     </context-param>

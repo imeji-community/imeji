@@ -5,12 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.validation.Validator;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.presentation.metadata.util.MetadataHelper;
 import de.mpg.imeji.presentation.util.ProfileHelper;
 
 /**
@@ -53,11 +55,12 @@ public class ItemValidator extends ObjectValidator implements Validator<Item> {
         Statement parentStatement = ProfileHelper.getStatement(s.getParent(), p);
         //First element can not have a parent
         if(i==0){
+          
           throw new UnprocessableError(parentStatement.getLabel() + " has to be filled");
         
         }else{
           Statement preStatement = ProfileHelper.getStatement(((Metadata) itemMetadataList[i-1]).getStatement(), p);
-          if(!(parentStatement.getId().equals(preStatement.getId()))){
+          if(parentStatement.getId().equals(preStatement.getId()) && MetadataHelper.isEmpty((Metadata)itemMetadataList[i-1])){
             throw new UnprocessableError(parentStatement.getLabel() + " has to be filled");
           }
         }

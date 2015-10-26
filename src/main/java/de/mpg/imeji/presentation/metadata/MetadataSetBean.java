@@ -82,8 +82,23 @@ public class MetadataSetBean implements Serializable {
    */
   public void trim() {
     for (SuperMetadataBean smb : metadataTree.getList()) {
-      if (smb.isEmpty())
+      if (isHierarchyEmpty(smb)){
         metadataTree.removeButKeepChilds(smb);
+      }        
+    }
+  }
+  
+  private boolean isHierarchyEmpty(SuperMetadataBean smb){
+    if(smb.isEmpty() && smb.getChilds().size()==0){
+      return true;
+    }else if(!smb.isEmpty()){
+      return false;
+    }else{
+      boolean empty = true;
+      for(SuperMetadataBean child : smb.getChilds()){
+        empty = isHierarchyEmpty(child);
+      }
+      return empty;
     }
   }
 

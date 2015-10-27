@@ -558,16 +558,13 @@ public class CollectionController extends ImejiController {
     return search.search(searchQuery, sortCri, user, spaceId);
   }
 
-  public MetadataProfileCreationMethod getProfileCreationMethod(String method) throws UnprocessableError {
+  public MetadataProfileCreationMethod getProfileCreationMethod(String method) {
     if ("reference".equalsIgnoreCase(method)) {
       return MetadataProfileCreationMethod.REFERENCE;
     } else if ("copy".equalsIgnoreCase(method)) {
       return MetadataProfileCreationMethod.COPY;
-    } else if("new".equalsIgnoreCase(method)){
+    } else {
       return MetadataProfileCreationMethod.NEW;
-    } else{
-      throw new UnprocessableError(
-          "You have to give a method for adding a profile!");
     }
   }
 

@@ -1,33 +1,5 @@
 package de.mpg.imeji.rest.resources.test.integration.item;
 
-import de.mpg.imeji.exceptions.ImejiException;
-import de.mpg.imeji.logic.Imeji;
-import de.mpg.imeji.rest.process.RestProcessUtils;
-import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
-import de.mpg.imeji.rest.to.ItemTO;
-import de.mpg.imeji.rest.to.ItemWithFileTO;
-
-import net.java.dev.webdav.jaxrs.ResponseStatus;
-
-import org.glassfish.jersey.jackson.JacksonFeature;
-import org.glassfish.jersey.media.multipart.FormDataMultiPart;
-import org.glassfish.jersey.media.multipart.MultiPartFeature;
-import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
-import org.junit.BeforeClass;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.File;
-import java.io.IOException;
-
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
-import static de.mpg.imeji.logic.controller.ItemController.NO_THUMBNAIL_FILE_NAME;
 import static de.mpg.imeji.logic.storage.util.StorageUtils.calculateChecksum;
 import static de.mpg.imeji.logic.util.ResourceHelper.getStringFromPath;
 import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_PATH;
@@ -41,6 +13,33 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNot.not;
 import static org.hamcrest.text.IsEmptyString.isEmptyOrNullString;
 import static org.junit.Assert.assertEquals;
+
+import java.io.File;
+import java.io.IOException;
+
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import org.glassfish.jersey.jackson.JacksonFeature;
+import org.glassfish.jersey.media.multipart.FormDataMultiPart;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
+import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
+import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runners.MethodSorters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import de.mpg.imeji.exceptions.ImejiException;
+import de.mpg.imeji.logic.Imeji;
+import de.mpg.imeji.logic.controller.ItemController;
+import de.mpg.imeji.rest.process.RestProcessUtils;
+import de.mpg.imeji.rest.resources.test.integration.ImejiTestBase;
+import de.mpg.imeji.rest.to.ItemTO;
+import de.mpg.imeji.rest.to.ItemWithFileTO;
+import net.java.dev.webdav.jaxrs.ResponseStatus;
 
 /**
  * Created by vlad on 09.12.14.
@@ -69,16 +68,15 @@ public class ItemUpdateFileTest extends ImejiTestBase {
     FormDataMultiPart multiPart = new FormDataMultiPart();
     multiPart.bodyPart(filePart);
     multiPart.field("json",
-        getStringFromPath(UPDATE_ITEM_FILE_JSON)
-            .replace("___FILE_NAME___", ATTACHED_FILE.getName()).replace("___FETCH_URL___", "")
-            .replaceAll("\"id\"\\s*:\\s*\"__ITEM_ID__\",", "").replace("___REFERENCE_URL___", ""));
+        getStringFromPath(UPDATE_ITEM_FILE_JSON).replace("___FILE_NAME___", ATTACHED_FILE.getName())
+            .replace("___FETCH_URL___", "").replaceAll("\"id\"\\s*:\\s*\"__ITEM_ID__\",", "")
+            .replace("___REFERENCE_URL___", ""));
 
-    Response response =
-        target(PATH_PREFIX).path("/" + itemId)
-            .queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase()).register(authAsUser)
-            .register(MultiPartFeature.class).register(JacksonFeature.class)
-            .request(MediaType.APPLICATION_JSON_TYPE)
-            .put(Entity.entity(multiPart, multiPart.getMediaType()));
+    Response response = target(PATH_PREFIX).path("/" + itemId)
+        .queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase()).register(authAsUser)
+        .register(MultiPartFeature.class).register(JacksonFeature.class)
+        .request(MediaType.APPLICATION_JSON_TYPE)
+        .put(Entity.entity(multiPart, multiPart.getMediaType()));
 
     assertEquals(OK.getStatusCode(), response.getStatus());
     ItemWithFileTO itemWithFileTO = response.readEntity(ItemWithFileTO.class);
@@ -105,12 +103,11 @@ public class ItemUpdateFileTest extends ImejiTestBase {
             .replace("___FETCH_URL___", fileURL).replaceAll("\"id\"\\s*:\\s*\"__ITEM_ID__\",", "")
             .replace("___REFERENCE_URL___", ""));
 
-    Response response =
-        target(PATH_PREFIX).path("/" + itemId)
-            .queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase()).register(authAsUser)
-            .register(MultiPartFeature.class).register(JacksonFeature.class)
-            .request(MediaType.APPLICATION_JSON_TYPE)
-            .put(Entity.entity(multiPart, multiPart.getMediaType()));
+    Response response = target(PATH_PREFIX).path("/" + itemId)
+        .queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase()).register(authAsUser)
+        .register(MultiPartFeature.class).register(JacksonFeature.class)
+        .request(MediaType.APPLICATION_JSON_TYPE)
+        .put(Entity.entity(multiPart, multiPart.getMediaType()));
 
     assertEquals(OK.getStatusCode(), response.getStatus());
     ItemWithFileTO itemWithFileTO = response.readEntity(ItemWithFileTO.class);
@@ -128,24 +125,24 @@ public class ItemUpdateFileTest extends ImejiTestBase {
             .replace("___FETCH_URL___", "").replaceAll("\"id\"\\s*:\\s*\"__ITEM_ID__\",", "")
             .replace("___REFERENCE_URL___", storedFileURL));
 
-    Response response =
-        target(PATH_PREFIX).path("/" + itemId)
-            .queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase()).register(authAsUser)
-            .register(MultiPartFeature.class).register(JacksonFeature.class)
-            .request(MediaType.APPLICATION_JSON_TYPE)
-            .put(Entity.entity(multiPart, multiPart.getMediaType()));
+    Response response = target(PATH_PREFIX).path("/" + itemId)
+        .queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase()).register(authAsUser)
+        .register(MultiPartFeature.class).register(JacksonFeature.class)
+        .request(MediaType.APPLICATION_JSON_TYPE)
+        .put(Entity.entity(multiPart, multiPart.getMediaType()));
 
     assertEquals(OK.getStatusCode(), response.getStatus());
     ItemWithFileTO itemWithFileTO = response.readEntity(ItemWithFileTO.class);
-    assertThat("Reference URL does not match", storedFileURL, equalTo(itemWithFileTO.getFileUrl()
-        .toString()));
+    assertThat("Reference URL does not match", storedFileURL,
+        equalTo(itemWithFileTO.getFileUrl().toString()));
 
     assertThat(itemWithFileTO.getFetchUrl(), isEmptyOrNullString());
 
-    assertThat("Should be link to NO_THUMBNAIL image:", itemWithFileTO.getWebResolutionUrlUrl()
-        .toString(), endsWith(NO_THUMBNAIL_FILE_NAME));
     assertThat("Should be link to NO_THUMBNAIL image:",
-        itemWithFileTO.getThumbnailUrl().toString(), endsWith(NO_THUMBNAIL_FILE_NAME));
+        itemWithFileTO.getWebResolutionUrlUrl().toString(),
+        endsWith(ItemController.NO_THUMBNAIL_URL));
+    assertThat("Should be link to NO_THUMBNAIL image:", itemWithFileTO.getThumbnailUrl().toString(),
+        endsWith(ItemController.NO_THUMBNAIL_URL));
   }
 
   @Test
@@ -164,25 +161,26 @@ public class ItemUpdateFileTest extends ImejiTestBase {
             .replace("___FETCH_URL___", fileURL).replaceAll("\"id\"\\s*:\\s*\"__ITEM_ID__\",", "")
             .replace("___REFERENCE_URL___", ""));
 
-    Response response =
-        target(PATH_PREFIX).path("/" + itemId)
-            .queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase()).register(authAsUser)
-            .register(MultiPartFeature.class).register(JacksonFeature.class)
-            .request(MediaType.APPLICATION_JSON_TYPE)
-            .put(Entity.entity(multiPart, multiPart.getMediaType()));
+    Response response = target(PATH_PREFIX).path("/" + itemId)
+        .queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase()).register(authAsUser)
+        .register(MultiPartFeature.class).register(JacksonFeature.class)
+        .request(MediaType.APPLICATION_JSON_TYPE)
+        .put(Entity.entity(multiPart, multiPart.getMediaType()));
 
     assertEquals(OK.getStatusCode(), response.getStatus());
     ItemWithFileTO itemWithFileTO = response.readEntity(ItemWithFileTO.class);
     // assertThat("Checksum of stored file does not match the source file",
     // itemWithFileTO.getChecksumMd5(), equalTo(calculateChecksum(newFile)));
-    assertThat(itemWithFileTO.getThumbnailUrl().toString(), not(endsWith(NO_THUMBNAIL_FILE_NAME)));
+    assertThat(itemWithFileTO.getThumbnailUrl().toString(),
+        not(endsWith(ItemController.NO_THUMBNAIL_URL)));
     assertThat(itemWithFileTO.getWebResolutionUrlUrl().toString(),
-        not(endsWith(NO_THUMBNAIL_FILE_NAME)));
+        not(endsWith(ItemController.NO_THUMBNAIL_URL)));
 
   }
 
   @Test
-  public void test_1_UpdateItem_5_WithFile_Attached_Referenced() throws IOException, ImejiException {
+  public void test_1_UpdateItem_5_WithFile_Attached_Referenced()
+      throws IOException, ImejiException {
     initCollection();
     initItem();
     File newFile = new File(STATIC_CONTEXT_STORAGE + "/test2.jpg");
@@ -196,20 +194,20 @@ public class ItemUpdateFileTest extends ImejiTestBase {
             .replace("___FETCH_URL___", "").replaceAll("\"id\"\\s*:\\s*\"__ITEM_ID__\",", "")
             .replace("___REFERENCE_URL___", storedFileURL));
 
-    Response response =
-        target(PATH_PREFIX).path("/" + itemId)
-            .queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase()).register(authAsUser)
-            .register(MultiPartFeature.class).register(JacksonFeature.class)
-            .request(MediaType.APPLICATION_JSON_TYPE)
-            .put(Entity.entity(multiPart, multiPart.getMediaType()));
+    Response response = target(PATH_PREFIX).path("/" + itemId)
+        .queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase()).register(authAsUser)
+        .register(MultiPartFeature.class).register(JacksonFeature.class)
+        .request(MediaType.APPLICATION_JSON_TYPE)
+        .put(Entity.entity(multiPart, multiPart.getMediaType()));
 
     assertEquals(OK.getStatusCode(), response.getStatus());
     ItemWithFileTO itemWithFileTO = response.readEntity(ItemWithFileTO.class);
     assertThat("Checksum of stored file does not match the source file",
         itemWithFileTO.getChecksumMd5(), equalTo(calculateChecksum(newFile)));
-    assertThat(itemWithFileTO.getThumbnailUrl().toString(), not(endsWith(NO_THUMBNAIL_FILE_NAME)));
+    assertThat(itemWithFileTO.getThumbnailUrl().toString(),
+        not(endsWith(ItemController.NO_THUMBNAIL_URL)));
     assertThat(itemWithFileTO.getWebResolutionUrlUrl().toString(),
-        not(endsWith(NO_THUMBNAIL_FILE_NAME)));
+        not(endsWith(ItemController.NO_THUMBNAIL_URL)));
   }
 
   @Test
@@ -223,29 +221,29 @@ public class ItemUpdateFileTest extends ImejiTestBase {
             .replace("___FETCH_URL___", fileURL).replaceAll("\"id\"\\s*:\\s*\"__ITEM_ID__\",", "")
             .replace("___REFERENCE_URL___", storedFileURL));
 
-    Response response =
-        target(PATH_PREFIX).path("/" + itemId)
-            .queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase()).register(authAsUser)
-            .register(MultiPartFeature.class).register(JacksonFeature.class)
-            .request(MediaType.APPLICATION_JSON_TYPE)
-            .put(Entity.entity(multiPart, multiPart.getMediaType()));
+    Response response = target(PATH_PREFIX).path("/" + itemId)
+        .queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase()).register(authAsUser)
+        .register(MultiPartFeature.class).register(JacksonFeature.class)
+        .request(MediaType.APPLICATION_JSON_TYPE)
+        .put(Entity.entity(multiPart, multiPart.getMediaType()));
 
     assertEquals(OK.getStatusCode(), response.getStatus());
     ItemWithFileTO itemWithFileTO = response.readEntity(ItemWithFileTO.class);
     assertThat("Checksum of stored file does not match the source file",
-        itemWithFileTO.getChecksumMd5(), equalTo(calculateChecksum(new File(STATIC_CONTEXT_STORAGE
-            + "/test.jpg"))));
+        itemWithFileTO.getChecksumMd5(),
+        equalTo(calculateChecksum(new File(STATIC_CONTEXT_STORAGE + "/test.jpg"))));
 
     assertThat(itemWithFileTO.getFileUrl().toString(), not(isEmptyOrNullString()));
     assertThat(itemWithFileTO.getReferenceUrl(), isEmptyOrNullString());
-    assertThat(itemWithFileTO.getThumbnailUrl().toString(), not(endsWith(NO_THUMBNAIL_FILE_NAME)));
+    assertThat(itemWithFileTO.getThumbnailUrl().toString(),
+        not(endsWith(ItemController.NO_THUMBNAIL_URL)));
     assertThat(itemWithFileTO.getWebResolutionUrlUrl().toString(),
-        not(endsWith(NO_THUMBNAIL_FILE_NAME)));
+        not(endsWith(ItemController.NO_THUMBNAIL_URL)));
   }
 
   @Test
-  public void test_1_UpdateItem_7_WithFile_Attached_Fetched_Referenced() throws IOException,
-      ImejiException {
+  public void test_1_UpdateItem_7_WithFile_Attached_Fetched_Referenced()
+      throws IOException, ImejiException {
     initCollection();
     initItem();
 
@@ -261,12 +259,11 @@ public class ItemUpdateFileTest extends ImejiTestBase {
             .replace("___FILE_NAME___", newFile.getName()).replace("___FETCH_URL___", fileURL)
             .replace("___REFERENCE_URL___", storedFileURL));
 
-    Response response =
-        target(PATH_PREFIX).path("/" + itemId)
-            .queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase()).register(authAsUser)
-            .register(MultiPartFeature.class).register(JacksonFeature.class)
-            .request(MediaType.APPLICATION_JSON_TYPE)
-            .put(Entity.entity(multiPart, multiPart.getMediaType()));
+    Response response = target(PATH_PREFIX).path("/" + itemId)
+        .queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase()).register(authAsUser)
+        .register(MultiPartFeature.class).register(JacksonFeature.class)
+        .request(MediaType.APPLICATION_JSON_TYPE)
+        .put(Entity.entity(multiPart, multiPart.getMediaType()));
 
     assertEquals(OK.getStatusCode(), response.getStatus());
     ItemWithFileTO itemWithFileTO = response.readEntity(ItemWithFileTO.class);
@@ -275,9 +272,9 @@ public class ItemUpdateFileTest extends ImejiTestBase {
     assertThat(itemWithFileTO.getFetchUrl(), isEmptyOrNullString());
     assertThat(itemWithFileTO.getReferenceUrl(), isEmptyOrNullString());
     assertThat(itemWithFileTO.getThumbnailUrl().toString(),
-        not(containsString(NO_THUMBNAIL_FILE_NAME)));
+        not(containsString(ItemController.NO_THUMBNAIL_URL)));
     assertThat(itemWithFileTO.getWebResolutionUrlUrl().toString(),
-        not(containsString(NO_THUMBNAIL_FILE_NAME)));
+        not(containsString(ItemController.NO_THUMBNAIL_URL)));
 
   }
 
@@ -286,18 +283,16 @@ public class ItemUpdateFileTest extends ImejiTestBase {
 
     FormDataMultiPart multiPart = new FormDataMultiPart();
 
-    multiPart.field("json",
-        getStringFromPath(UPDATE_ITEM_FILE_JSON).replaceAll("\"id\"\\s*:\\s*\"__ITEM_ID__\",", "")
-            .replace("___FETCH_URL___", "invalid url")
+    multiPart.field("json", getStringFromPath(UPDATE_ITEM_FILE_JSON)
+        .replaceAll("\"id\"\\s*:\\s*\"__ITEM_ID__\",", "").replace("___FETCH_URL___", "invalid url")
 
     );
 
-    Response response =
-        target(PATH_PREFIX).path("/" + itemId)
-            .queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase()).register(authAsUser)
-            .register(MultiPartFeature.class).register(JacksonFeature.class)
-            .request(MediaType.APPLICATION_JSON_TYPE)
-            .put(Entity.entity(multiPart, multiPart.getMediaType()));
+    Response response = target(PATH_PREFIX).path("/" + itemId)
+        .queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase()).register(authAsUser)
+        .register(MultiPartFeature.class).register(JacksonFeature.class)
+        .request(MediaType.APPLICATION_JSON_TYPE)
+        .put(Entity.entity(multiPart, multiPart.getMediaType()));
 
     assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
 
@@ -314,12 +309,11 @@ public class ItemUpdateFileTest extends ImejiTestBase {
 
     );
 
-    Response response =
-        target(PATH_PREFIX).path("/" + itemId)
-            .queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase()).register(authAsUser)
-            .register(MultiPartFeature.class).register(JacksonFeature.class)
-            .request(MediaType.APPLICATION_JSON_TYPE)
-            .put(Entity.entity(multiPart, multiPart.getMediaType()));
+    Response response = target(PATH_PREFIX).path("/" + itemId)
+        .queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase()).register(authAsUser)
+        .register(MultiPartFeature.class).register(JacksonFeature.class)
+        .request(MediaType.APPLICATION_JSON_TYPE)
+        .put(Entity.entity(multiPart, multiPart.getMediaType()));
 
     assertEquals(ResponseStatus.UNPROCESSABLE_ENTITY.getStatusCode(), response.getStatus());
 
@@ -332,16 +326,15 @@ public class ItemUpdateFileTest extends ImejiTestBase {
     FormDataMultiPart multiPart = new FormDataMultiPart();
     multiPart.bodyPart(filePart);
     multiPart.field("json",
-        getStringFromPath(UPDATE_ITEM_FILE_JSON)
-            .replace("___FILE_NAME___", ATTACHED_FILE.getName()).replace("___FETCH_URL___", "")
-            .replaceAll("\"id\"\\s*:\\s*\"__ITEM_ID__\",", "").replace("___REFERENCE_URL___", ""));
+        getStringFromPath(UPDATE_ITEM_FILE_JSON).replace("___FILE_NAME___", ATTACHED_FILE.getName())
+            .replace("___FETCH_URL___", "").replaceAll("\"id\"\\s*:\\s*\"__ITEM_ID__\",", "")
+            .replace("___REFERENCE_URL___", ""));
 
-    Response response =
-        target(PATH_PREFIX).path("/" + itemId)
-            .queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase()).register(authAsUser)
-            .register(MultiPartFeature.class).register(JacksonFeature.class)
-            .request(MediaType.APPLICATION_JSON_TYPE)
-            .put(Entity.entity(multiPart, multiPart.getMediaType()));
+    Response response = target(PATH_PREFIX).path("/" + itemId)
+        .queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase()).register(authAsUser)
+        .register(MultiPartFeature.class).register(JacksonFeature.class)
+        .request(MediaType.APPLICATION_JSON_TYPE)
+        .put(Entity.entity(multiPart, multiPart.getMediaType()));
 
     assertEquals(OK.getStatusCode(), response.getStatus());
     ItemWithFileTO itemWithFileTO = response.readEntity(ItemWithFileTO.class);
@@ -357,19 +350,17 @@ public class ItemUpdateFileTest extends ImejiTestBase {
     FileDataBodyPart filePart = new FileDataBodyPart("file", ATTACHED_FILE);
     FormDataMultiPart multiPart = new FormDataMultiPart();
     multiPart.bodyPart(filePart);
-    multiPart.field(
-        "json",
+    multiPart.field("json",
         getStringFromPath(UPDATE_ITEM_FILE_JSON)
             .replace("___FILE_NAME___", "checksum_" + ATTACHED_FILE.getName())
             .replace("___FETCH_URL___", "").replaceAll("\"id\"\\s*:\\s*\"__ITEM_ID__\",", "")
             .replace("___REFERENCE_URL___", ""));
 
-    Response response =
-        target(PATH_PREFIX).path("/" + itemId)
-            .queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase()).register(authAsUser)
-            .register(MultiPartFeature.class).register(JacksonFeature.class)
-            .request(MediaType.APPLICATION_JSON_TYPE)
-            .put(Entity.entity(multiPart, multiPart.getMediaType()));
+    Response response = target(PATH_PREFIX).path("/" + itemId)
+        .queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase()).register(authAsUser)
+        .register(MultiPartFeature.class).register(JacksonFeature.class)
+        .request(MediaType.APPLICATION_JSON_TYPE)
+        .put(Entity.entity(multiPart, multiPart.getMediaType()));
 
     if (!Imeji.isValidateChecksumInCollection()) {
       assertEquals(OK.getStatusCode(), response.getStatus());
@@ -394,19 +385,17 @@ public class ItemUpdateFileTest extends ImejiTestBase {
     FileDataBodyPart filePart = new FileDataBodyPart("file", ATTACHED_FILE);
     FormDataMultiPart multiPart = new FormDataMultiPart();
     multiPart.bodyPart(filePart);
-    multiPart.field(
-        "json",
+    multiPart.field("json",
         getStringFromPath(UPDATE_ITEM_FILE_JSON)
             .replace("___FILE_NAME___", "checksum_" + ATTACHED_FILE.getName())
             .replace("___FETCH_URL___", "").replaceAll("\"id\"\\s*:\\s*\"__ITEM_ID__\",", "")
             .replace("___REFERENCE_URL___", ""));
 
-    Response response =
-        target(PATH_PREFIX).path("/" + itemId)
-            .queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase()).register(authAsUser)
-            .register(MultiPartFeature.class).register(JacksonFeature.class)
-            .request(MediaType.APPLICATION_JSON_TYPE)
-            .put(Entity.entity(multiPart, multiPart.getMediaType()));
+    Response response = target(PATH_PREFIX).path("/" + itemId)
+        .queryParam("syntax", ItemTO.SYNTAX.RAW.toString().toLowerCase()).register(authAsUser)
+        .register(MultiPartFeature.class).register(JacksonFeature.class)
+        .request(MediaType.APPLICATION_JSON_TYPE)
+        .put(Entity.entity(multiPart, multiPart.getMediaType()));
 
     if (!Imeji.isValidateChecksumInCollection()) {
       assertEquals(OK.getStatusCode(), response.getStatus());

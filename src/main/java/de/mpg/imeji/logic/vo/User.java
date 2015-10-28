@@ -3,6 +3,18 @@
  */
 package de.mpg.imeji.logic.vo;
 
+import java.io.Serializable;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlEnum;
+
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiNamespaces;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
@@ -14,18 +26,6 @@ import de.mpg.j2j.annotations.j2jList;
 import de.mpg.j2j.annotations.j2jLiteral;
 import de.mpg.j2j.annotations.j2jModel;
 import de.mpg.j2j.annotations.j2jResource;
-
-import org.apache.log4j.Logger;
-
-import java.io.Serializable;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.List;
-
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlEnum;
 
 /**
  * imeji user
@@ -60,6 +60,10 @@ public class User implements Serializable {
   // User properties for registration
   @j2jLiteral(ImejiNamespaces.DATE_CREATED)
   private Calendar created;
+
+  // User properties for registration
+  @j2jLiteral(ImejiNamespaces.LAST_MODIFICATION_DATE)
+  private Calendar modified;;
 
   @j2jResource(ImejiNamespaces.USER_STATUS)
   private URI userStatus = URI.create(UserStatus.ACTIVE.getUriString());
@@ -274,8 +278,8 @@ public class User implements Serializable {
 
   @XmlEnum(String.class)
   public enum UserStatus {
-    ACTIVE(new String(ImejiNamespaces.USER_STATUS + "#ACTIVE")), INACTIVE(new String(
-        ImejiNamespaces.USER_STATUS + "#INACTIVE"));
+    ACTIVE(new String(ImejiNamespaces.USER_STATUS + "#ACTIVE")), INACTIVE(
+        new String(ImejiNamespaces.USER_STATUS + "#INACTIVE"));
 
     private String uri;
 
@@ -324,5 +328,12 @@ public class User implements Serializable {
     return userStatus.equals(UserStatus.ACTIVE.getURI());
   }
 
+  public Calendar getModified() {
+    return modified;
+  }
+
+  public void setModified(Calendar modified) {
+    this.modified = modified;
+  }
 
 }

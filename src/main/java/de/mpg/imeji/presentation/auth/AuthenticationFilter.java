@@ -40,6 +40,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.auth.authentication.HttpAuthentication;
+import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.session.SessionBean;
 
 /**
@@ -82,12 +84,12 @@ public class AuthenticationFilter implements Filter {
           session.setUser(httpAuthentification.doLogin());
         }
       } else if (session != null && session.getUser() != null) {
-        if (isReloadUser(request)) {
+        if (isReloadUser(request, session.getUser())) {
           session.reloadUser();
         }
       }
     } catch (Exception e) {
-      logger.info("We had some exception in Autnbentication filter", e);
+      logger.info("We had some exception in Authentication filter", e);
     } finally {
       chain.doFilter(serv, resp);
     }
@@ -100,8 +102,19 @@ public class AuthenticationFilter implements Filter {
    * @param req
    * @return
    */
-  private boolean isReloadUser(HttpServletRequest req) {
-    return isXHTMLRequest(req) && isPostRequest(req) && !isAjaxRequest(req);
+  private boolean isReloadUser(HttpServletRequest req, User user) {
+    return isXHTMLRequest(req) && !isAjaxRequest(req) && isModifiedUser(user);
+  }
+
+  /**
+   * True if the {@link User} has been modified in the database (for instance, a user has share
+   * something with him)
+   * 
+   * @param user
+   * @return
+   */
+  private boolean isModifiedUser(User user) {
+    return new UserController(user).isModified(user);
   }
 
   /**

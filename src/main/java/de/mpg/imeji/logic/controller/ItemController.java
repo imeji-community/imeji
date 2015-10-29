@@ -56,7 +56,6 @@ import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.logic.writer.WriterFacade;
 import de.mpg.imeji.presentation.util.ImejiFactory;
-import de.mpg.imeji.presentation.util.PropertyReader;
 import de.mpg.imeji.rest.process.CommonUtils;
 import de.mpg.j2j.annotations.j2jResource;
 import de.mpg.j2j.helper.J2JHelper;
@@ -72,8 +71,7 @@ public class ItemController extends ImejiController {
   private static Logger logger = Logger.getLogger(ItemController.class);
   private static ReaderFacade reader = new ReaderFacade(Imeji.imageModel);
   private static WriterFacade writer = new WriterFacade(Imeji.imageModel);
-  public static final String NO_THUMBNAIL_FILE_NAME = "noThumbnail.png";
-  private static String NO_THUMBNAIL_URL;
+  public static String NO_THUMBNAIL_URL = "NO_THUMBNAIL_URL";
   private Search search =
       SearchFactory.create(SearchObjectTypes.ITEM, SEARCH_IMPLEMENTATIONS.ELASTIC);
 
@@ -81,12 +79,7 @@ public class ItemController extends ImejiController {
    * Controller constructor
    */
   public ItemController() {
-    try {
-      NO_THUMBNAIL_URL = PropertyReader.getProperty("imeji.instance.url") + "/resources/icon/"
-          + NO_THUMBNAIL_FILE_NAME;
-    } catch (Exception e) {
-      throw new RuntimeException("Error reading property: ", e);
-    }
+    super();
   }
 
   /**

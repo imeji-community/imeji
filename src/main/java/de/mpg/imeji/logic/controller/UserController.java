@@ -287,7 +287,7 @@ public class UserController {
    */
   public boolean isModified(User u) {
     SearchResult result = SearchFactory.create()
-        .searchSimpleForQuery(SPARQLQueries.selectLastModifiedDate(u.getId()));
+        .searchString(JenaCustomQueries.selectLastModifiedDate(u.getId()), null, u, 0, 1);
     return result.getNumberOfRecords() > 0 && (u.getModified() == null
         || DateHelper.parseDate(result.getResults().get(0)).after(u.getModified()));
   }

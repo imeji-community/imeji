@@ -48,8 +48,8 @@ public class MetadataValidator extends ObjectValidator implements Validator<Meta
 
     Statement s = ProfileHelper.getStatement(md.getStatement(), p);
     if (!validataMetadata(md, s))
-      throw new UnprocessableError("Invalid value provided for metadata of type "
-          + getTypeLabel(md) + " (" + md.asFulltext() + "...)");
+      throw new UnprocessableError("Invalid value provided for metadata of type " + getTypeLabel(md)
+          + " (" + md.asFulltext() + "...)");
 
   }
 
@@ -88,9 +88,10 @@ public class MetadataValidator extends ObjectValidator implements Validator<Meta
       String value = ((Geolocation) md).getName();
       Double latitude = ((Geolocation) md).getLatitude();
       Double longitude = ((Geolocation) md).getLongitude();
-      if (!Double.isNaN(latitude) || !Double.isNaN(longitude))
+      if (!Double.isNaN(latitude) || !Double.isNaN(longitude)) {
         return value != null && latitude >= -90 && latitude <= 90 && longitude >= -180
             && longitude <= 180;
+      }
       return value != null;// No Predefined Value supported
     } else if (md instanceof ConePerson) {
       // no validation here for person only will be invoked, if family name is not
@@ -103,8 +104,8 @@ public class MetadataValidator extends ObjectValidator implements Validator<Meta
       for (Organization org : orgs) {
         if (StringHelper.isNullOrEmptyTrim(org.getName())
             && (!StringHelper.isNullOrEmptyTrim(org.getCountry())
-                || !StringHelper.isNullOrEmptyTrim(org.getDescription()) || !StringHelper
-                  .isNullOrEmptyTrim(org.getCity())))
+                || !StringHelper.isNullOrEmptyTrim(org.getDescription())
+                || !StringHelper.isNullOrEmptyTrim(org.getCity())))
           valueOrg = false;
       }
       return !StringHelper.isNullOrEmptyTrim(value) && valueOrg;

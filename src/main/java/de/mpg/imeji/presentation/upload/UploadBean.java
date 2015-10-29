@@ -50,6 +50,7 @@ import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.collection.CollectionBean;
+import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.history.HistoryUtil;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -185,7 +186,10 @@ public class UploadBean implements Serializable {
     } catch (Exception e) {
       BeanHelper.error(e.getMessage());
     }
-    return "pretty:";
+    HistorySession hs = (HistorySession) BeanHelper.getSessionBean(HistorySession.class);
+    FacesContext.getCurrentInstance().getExternalContext()
+              .redirect(hs.getCurrentPage().getUrl() + "?done=1");
+    return "";
   }
 
   /**
@@ -204,6 +208,7 @@ public class UploadBean implements Serializable {
         externalController.read(url.toString(), fos, true);
         uploadFile(tmp, findFileName(url));
         externalUrl = null;
+        
       } catch (Exception e) {
         getfFiles().add(e.getMessage() + ": " + findFileName(url));
         logger.error("Error uploading file from link: " + externalUrl, e);
@@ -214,6 +219,9 @@ public class UploadBean implements Serializable {
       logger.error("Error uploading file from link: " + externalUrl, e);
       BeanHelper.error(e.getMessage());
     }
+    HistorySession hs = (HistorySession) BeanHelper.getSessionBean(HistorySession.class);
+    FacesContext.getCurrentInstance().getExternalContext()
+              .redirect(hs.getCurrentPage().getUrl() + "?done=1");
     return "";
   }
 

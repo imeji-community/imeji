@@ -746,4 +746,15 @@ public class JenaCustomQueries {
     return "SELECT (str(count(?ss)) as ?s) WHERE {?ss ?p ?o}";
   }
 
+  /**
+   * SElect the last modication date of an object
+   * 
+   * @param id
+   * @return
+   */
+  public static String selectLastModifiedDate(URI id) {
+    return "SELECT (str(?date) AS ?s) WHERE {<" + id.toString() + "> <"
+        + ImejiNamespaces.LAST_MODIFICATION_DATE + "> ?date}";
+  }
+
 }

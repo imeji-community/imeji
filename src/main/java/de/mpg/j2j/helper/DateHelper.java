@@ -14,6 +14,9 @@ import java.util.Locale;
  * @version $Revision$ $LastChangedDate$
  */
 public class DateHelper {
+  private static SimpleDateFormat format =
+      new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX", Locale.getDefault());
+
   /**
    * Return the current {@link Calendar} from the system
    * 
@@ -32,15 +35,25 @@ public class DateHelper {
    */
   public static Calendar parseDate(String dateString) {
     try {
-      SimpleDateFormat format =
-          new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
       Date d = format.parse(dateString);
       Calendar cal = Calendar.getInstance();
+
       cal.setTime(d);
       return cal;
     } catch (ParseException e) {
       throw new RuntimeException(
-          "Error parsing date. Format should be yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", e);
+          "Error parsing date " + dateString + ": Format should be yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+          e);
     }
+  }
+
+  /**
+   * Print a Date into a String
+   * 
+   * @param c
+   * @return
+   */
+  public static String printDate(Calendar c) {
+    return format.format(c.getTime());
   }
 }

@@ -13,7 +13,6 @@ import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -53,6 +52,7 @@ import de.mpg.imeji.logic.vo.Properties.Status;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.beans.Navigation;
 import de.mpg.imeji.presentation.collection.CollectionBean;
+import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.history.HistoryUtil;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.util.BeanHelper;
@@ -199,7 +199,7 @@ public class UploadBean implements Serializable {
    */
   public String uploadFromLink() throws Exception {
     try {
-      URL url = new URL(URLDecoder.decode(externalUrl, "UTF-8"));
+      URL url = new URL(externalUrl);
       File tmp = createTmpFile(findFileName(url));
       try {
         StorageController externalController = new StorageController("external");
@@ -209,6 +209,7 @@ public class UploadBean implements Serializable {
         externalUrl = null;
       } catch (Exception e) {
         getfFiles().add(e.getMessage() + ": " + findFileName(url));
+        logger.error("Error uploading file from link: " + externalUrl, e);
       } finally {
         FileUtils.deleteQuietly(tmp);
       }
@@ -216,6 +217,9 @@ public class UploadBean implements Serializable {
       logger.error("Error uploading file from link: " + externalUrl, e);
       BeanHelper.error(e.getMessage());
     }
+    HistorySession hs = (HistorySession) BeanHelper.getSessionBean(HistorySession.class);
+    FacesContext.getCurrentInstance().getExternalContext()
+        .redirect(hs.getCurrentPage().getUrl() + "?done=1");
     return "";
   }
 
@@ -292,7 +296,8 @@ public class UploadBean implements Serializable {
       if (isCheckNameUnique()) {
         // if the checkNameUnique is checked, check that two files with
         // the same name is not possible
-        if (!((isImportImageToFile() || isUploadFileToItem())) && filenameExistsInCollection(title)) {
+        if (!((isImportImageToFile() || isUploadFileToItem()))
+            && filenameExistsInCollection(title)) {
           logger.error("There is already at least one item with the filename "
               + FilenameUtils.getBaseName(title));
         }
@@ -364,15 +369,14 @@ public class UploadBean implements Serializable {
   private Item findItemByFileName(String filename) throws Exception {
     Search s = SearchFactory.create(SearchObjectTypes.ITEM, SEARCH_IMPLEMENTATIONS.JENA);
     List<String> sr =
-        s.searchString(
-            JenaCustomQueries.selectContainerItemByFilename(collection.getId(),
-                FilenameUtils.getBaseName(filename)), null, null, 0, -1).getResults();
+        s.searchString(JenaCustomQueries.selectContainerItemByFilename(collection.getId(),
+            FilenameUtils.getBaseName(filename)), null, null, 0, -1).getResults();
     if (sr.size() == 0)
-      throw new RuntimeException("No item found with the filename "
-          + FilenameUtils.getBaseName(filename));
+      throw new RuntimeException(
+          "No item found with the filename " + FilenameUtils.getBaseName(filename));
     if (sr.size() > 1)
-      throw new RuntimeException("Filename " + FilenameUtils.getBaseName(filename)
-          + " not unique (" + sr.size() + " found).");
+      throw new RuntimeException("Filename " + FilenameUtils.getBaseName(filename) + " not unique ("
+          + sr.size() + " found).");
     return ObjectLoader.loadItem(URI.create(sr.get(0)), user);
   }
 
@@ -384,9 +388,8 @@ public class UploadBean implements Serializable {
    */
   private boolean filenameExistsInCollection(String filename) {
     Search s = SearchFactory.create(SearchObjectTypes.ITEM, SEARCH_IMPLEMENTATIONS.JENA);
-    return s.searchString(
-        JenaCustomQueries.selectContainerItemByFilename(collection.getId(),
-            FilenameUtils.getBaseName(filename)), null, null, 0, -1).getNumberOfRecords() > 0;
+    return s.searchString(JenaCustomQueries.selectContainerItemByFilename(collection.getId(),
+        FilenameUtils.getBaseName(filename)), null, null, 0, -1).getNumberOfRecords() > 0;
   }
 
   /**
@@ -404,9 +407,8 @@ public class UploadBean implements Serializable {
       isDiscaded();
       if (collection != null && getCollection().getId() != null) {
         ItemController ic = new ItemController();
-        collectionSize =
-            ic.search(collection.getId(), null, null, Imeji.adminUser, null, 0, 0)
-                .getNumberOfRecords();
+        collectionSize = ic.search(collection.getId(), null, null, Imeji.adminUser, null, 0, 0)
+            .getNumberOfRecords();
       }
     } else {
       BeanHelper.error(sessionBean.getLabel("error") + "No ID in URL");
@@ -447,12 +449,8 @@ public class UploadBean implements Serializable {
     }
 
     Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
-    FacesContext
-        .getCurrentInstance()
-        .getExternalContext()
-        .redirect(
-            navigation.getCollectionUrl() + ObjectHelper.getId(collection.getId()) + "/"
-                + navigation.getUploadPath() + "?init=1");
+    FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getCollectionUrl()
+        + ObjectHelper.getId(collection.getId()) + "/" + navigation.getUploadPath() + "?init=1");
 
     return "";
 
@@ -468,8 +466,8 @@ public class UploadBean implements Serializable {
     SessionBean sessionBean = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
     try {
       cc.delete(collection, sessionBean.getUser());
-      BeanHelper.info(getSuccessCollectionDeleteMessage(collection.getMetadata().getTitle(),
-          sessionBean));
+      BeanHelper.info(
+          getSuccessCollectionDeleteMessage(collection.getMetadata().getTitle(), sessionBean));
     } catch (Exception e) {
       BeanHelper.error(sessionBean.getMessage("error_collection_delete"));
       logger.error("Error delete collection", e);
@@ -634,12 +632,9 @@ public class UploadBean implements Serializable {
 
     Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
 
-    FacesContext
-        .getCurrentInstance()
-        .getExternalContext()
-        .redirect(
-            navigation.getApplicationSpaceUrl() + navigation.getEditPath() + "?type=selected&c="
-                + getCollection().getId().toString() + "&q=");
+    FacesContext.getCurrentInstance().getExternalContext()
+        .redirect(navigation.getApplicationSpaceUrl() + navigation.getEditPath()
+            + "?type=selected&c=" + getCollection().getId().toString() + "&q=");
   }
 
 

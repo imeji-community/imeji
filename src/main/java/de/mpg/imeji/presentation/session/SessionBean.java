@@ -165,8 +165,8 @@ public class SessionBean implements Serializable {
       // First read in the property
       value = PropertyReader.getProperty(propertyName);
     } catch (NumberFormatException | IOException | URISyntaxException e) {
-      Logger.getLogger(SessionBean.class).error(
-          "There had been some initWithCookieAndProperty issues.", e);
+      Logger.getLogger(SessionBean.class)
+          .error("There had been some initWithCookieAndProperty issues.", e);
     }
     // Second, Read the cookie and set a default value if null
     return CookieUtils.readNonNull(cookieName, value);
@@ -348,6 +348,7 @@ public class SessionBean implements Serializable {
 
   public void reloadUser() throws Exception {
     if (user != null) {
+      System.out.println("RELOAD USER");
       UserController c = new UserController(user);
       user = c.retrieve(user.getId());
     }
@@ -492,9 +493,8 @@ public class SessionBean implements Serializable {
    */
   public Album getActiveAlbum() {
     //
-    if (activeAlbum != null
-        && (!AuthUtil.staticAuth().read(getUser(), activeAlbum.getId()) || !AuthUtil.staticAuth()
-            .create(getUser(), activeAlbum.getId()))) {
+    if (activeAlbum != null && (!AuthUtil.staticAuth().read(getUser(), activeAlbum.getId())
+        || !AuthUtil.staticAuth().create(getUser(), activeAlbum.getId()))) {
       setActiveAlbum(null);
     }
     return activeAlbum;

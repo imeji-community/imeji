@@ -17,6 +17,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.exceptions.AuthenticationError;
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotAllowedError;
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.Imeji;
@@ -78,8 +79,9 @@ public class FileServlet extends HttpServlet {
       domain = StringHelper.normalizeURI(navivation.getDomain());
       domain = domain.substring(0, domain.length() - 1);
       digilibUrl = PropertyReader.getProperty("digilib.imeji.instance.url");
-      if (digilibUrl != null && !digilibUrl.isEmpty())
+      if (digilibUrl != null && !digilibUrl.isEmpty()) {
         digilibUrl = StringHelper.normalizeURI(digilibUrl);
+      }
       InternalStorageManager ism = new InternalStorageManager();
       internalStorageRoot =
           FilenameUtils.getBaseName(FilenameUtils.normalizeNoEndSeparator(ism.getStoragePath()));
@@ -92,13 +94,10 @@ public class FileServlet extends HttpServlet {
    * {@inheritDoc}
    */
   @Override
-  protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
-      IOException {
+  protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+      throws ServletException, IOException {
     String url = req.getParameter("id");
     boolean download = "1".equals(req.getParameter("download"));
-    // isSpaceLogo is used also for Collection or Album Logo i.e. for
-    // matching to Logo Files which are not items themselves
-    boolean isSpaceLogo = false;
     if (url == null) {
       // if the id parameter is null, interpret the whole url as a direct
       // to the file (can only work if the
@@ -106,36 +105,19 @@ public class FileServlet extends HttpServlet {
       url = domain + req.getRequestURI();
     }
     resp.setContentType(StorageUtils.getMimeType(StringHelper.getFileExtension(url)));
-
-    // If its Space Logo or Collection Logo or Album Logo, file servlet
-    // should not retrieve item
-    // Regex below assumes in case of collection/album logo, logo file must
-    // have extension!
-    if (url.contains("/file/spaces") || url.matches(".*/file/\\w*[^/]/thumbnail/.*\\..+")) {
-      isSpaceLogo = true;
-    }
-
     SessionBean session = getSession(req);
     User user = getUser(req, session);
-
     try {
       if ("NO_THUMBNAIL_URL".equals(url)) {
         ExternalStorage eStorage = new ExternalStorage();
         eStorage.read("http://localhost:8080/imeji/resources/icon/empty.png",
             resp.getOutputStream(), true);
-
       } else {
-
-        if (download)
-          resp.setHeader("Content-disposition", "attachment;");
-        storageController.read(url, resp.getOutputStream(), true);
-
-        // message to observer if item downloaded
-        if (download && !isSpaceLogo) {
-          Item fileItem = getItem(url, user);
-          NotificationUtils.notifyByItemDownload(user, fileItem, session);
+        if (download) {
+          downloadFile(resp, url, session, user);
+        } else {
+          readFile(url, resp, false);
         }
-
       }
     } catch (Exception e) {
       if (e instanceof NotAllowedError) {
@@ -158,8 +140,69 @@ public class FileServlet extends HttpServlet {
          * "/imeji/resources/icon/empty.png", resp.getOutputStream(), true);
          */}
     }
+  }
+
+  private void downloadFile(HttpServletResponse resp, String url, SessionBean session, User user)
+      throws Exception {
+    boolean iSpaceLogo =
+        url.contains("/file/spaces") || url.matches(".*/file/\\w*[^/]/thumbnail/.*\\..+");
+    resp.setHeader("Content-disposition", "attachment;");
+    boolean isExternalStorage = false;
+    if (!iSpaceLogo) {
+      Item fileItem = getItem(url, user);
+      NotificationUtils.notifyByItemDownload(user, fileItem, session);
+      isExternalStorage = StringHelper.isNullOrEmptyTrim(fileItem.getStorageId());
+    }
+    readFile(url, resp, isExternalStorage);
 
   }
+
+  /**
+   * Read a File and write it back in the response
+   * 
+   * @param url
+   * @param resp
+   * @param isExternalStorage
+   * @throws ImejiException
+   * @throws IOException
+   */
+  private void readFile(String url, HttpServletResponse resp, boolean isExternalStorage)
+      throws ImejiException, IOException {
+    if (isExternalStorage) {
+      readExternalFile(url, resp);
+    } else {
+      readStorageFile(url, resp);
+    }
+  }
+
+  /**
+   * Read a File from the current storage
+   * 
+   * @param url
+   * @param resp
+   * @throws ImejiException
+   * @throws IOException
+   */
+  private void readStorageFile(String url, HttpServletResponse resp)
+      throws ImejiException, IOException {
+    storageController.read(url, resp.getOutputStream(), true);
+  }
+
+
+  /**
+   * Read an external (i.e not in the current storage) file
+   * 
+   * @param url
+   * @param resp
+   * @throws ImejiException
+   * @throws IOException
+   */
+  private void readExternalFile(String url, HttpServletResponse resp)
+      throws ImejiException, IOException {
+    ExternalStorage eStorage = new ExternalStorage();
+    eStorage.read(url, resp.getOutputStream(), true);
+  }
+
 
   /**
    * Load a {@link CollectionImeji} from the session if possible, otherwise from jena
@@ -277,8 +320,8 @@ public class FileServlet extends HttpServlet {
    * {@inheritDoc}
    */
   @Override
-  protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
-      IOException {
+  protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+      throws ServletException, IOException {
     // No post action
     return;
   }

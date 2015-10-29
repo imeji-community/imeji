@@ -1,5 +1,25 @@
 package de.mpg.imeji.service.test;
 
+import static org.hamcrest.CoreMatchers.endsWith;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import org.apache.log4j.Logger;
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import de.mpg.imeji.exceptions.AuthenticationError;
 import de.mpg.imeji.exceptions.NotAllowedError;
 import de.mpg.imeji.exceptions.NotFoundException;
@@ -11,20 +31,7 @@ import de.mpg.imeji.rest.process.RestProcessUtils;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.ItemTO;
 import de.mpg.imeji.rest.to.ItemWithFileTO;
-import org.apache.log4j.Logger;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
 import util.JenaUtil;
-
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
 
 public class ItemServiceTest {
 
@@ -80,8 +87,8 @@ public class ItemServiceTest {
   }
 
   @Test
-  public void testItemCRUD() throws NotFoundException, NotAllowedError, AuthenticationError,
-      Exception {
+  public void testItemCRUD()
+      throws NotFoundException, NotAllowedError, AuthenticationError, Exception {
 
     ItemService crud = new ItemService();
     // create item
@@ -183,9 +190,9 @@ public class ItemServiceTest {
     itemTO.setReferenceUrl(url);
     itemTo = is.update(itemTO, JenaUtil.testUser);
     assertEquals(url, itemTo.getFileUrl().toString());
-    assertThat(itemTo.getThumbnailUrl().toString(), endsWith(ItemController.NO_THUMBNAIL_FILE_NAME));
+    assertThat(itemTo.getThumbnailUrl().toString(), endsWith(ItemController.NO_THUMBNAIL_URL));
     assertThat(itemTo.getWebResolutionUrlUrl().toString(),
-        endsWith(ItemController.NO_THUMBNAIL_FILE_NAME));
+        endsWith(ItemController.NO_THUMBNAIL_URL));
 
     // update item with new file and new fetch url, the new file should be updated, not though the
     // fetch url
@@ -198,10 +205,10 @@ public class ItemServiceTest {
     assertEquals(StorageUtils.calculateChecksum(uploadFile), itemTo.getChecksumMd5());
     assertEquals(is.read(itemTo.getId(), JenaUtil.testUser).getChecksumMd5(),
         StorageUtils.calculateChecksum(uploadFile));
-    // assertThat("the thumbnail url does not updated", itemTo.getThumbnailUrl().toString(),
-    // is(not("NO_THUMBNAIL_URL")));
-    // assertThat("the web image url does not updated", itemTo.getThumbnailUrl().toString(),
-    // is(not("NO_WEBIMAGE_URL")));
+        // assertThat("the thumbnail url does not updated", itemTo.getThumbnailUrl().toString(),
+        // is(not("NO_THUMBNAIL_URL")));
+        // assertThat("the web image url does not updated", itemTo.getThumbnailUrl().toString(),
+        // is(not("NO_WEBIMAGE_URL")));
 
     // update item with new file and new referenced url, the new file should be updated, not though
     // the referenced url

@@ -197,12 +197,6 @@ public class CollectionService implements API<CollectionTO> {
               + " ! Allowed values are {copy, reference}. ");
         }
 
-        // if the original profile already has statements, no profile
-        // update is allowed
-        if (originalMp.getStatements().size() > 0) {
-          throw new UnprocessableError(
-              "It is not allowed to update related metadata profile which has already defined metadata elements.");
-        }
       }
 
     }

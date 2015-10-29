@@ -51,9 +51,6 @@ import de.mpg.j2j.helper.DateHelper;
 public class UserController {
   private static final ReaderFacade reader = new ReaderFacade(Imeji.userModel);
   private static final WriterFacade writer = new WriterFacade(Imeji.userModel);
-  // 25GB is default quota
-  // TODO: put to properties
-  // public static final long DISK_USAGE_QUOTA = 25 * 1024 * 1024 * 1024;
   private User user;
   static Logger logger = Logger.getLogger(UserController.class);
 
@@ -118,7 +115,7 @@ public class UserController {
 
     Calendar now = DateHelper.getCurrentDate();
     u.setCreated(now);
-
+    u.setModified(now);
     u.setQuota(ConfigurationBean.getDefaultDiskSpaceQuotaStatic());
 
     writer.create(WriterFacade.toList(u), null, user);
@@ -264,7 +261,7 @@ public class UserController {
   public User update(User updatedUser, User currentUser) throws ImejiException {
     this.user = currentUser;
     try {
-      User u = retrieve(updatedUser.getEmail());
+      retrieve(updatedUser.getEmail());
     } catch (NotFoundException e) {
       // fine, user can be updated
     }
@@ -275,9 +272,24 @@ public class UserController {
     if (updatedUser.getQuota() == 0) {
       updatedUser.setQuota(ConfigurationBean.getDefaultDiskSpaceQuotaStatic());
     }
-
+    updatedUser.setModified(DateHelper.getCurrentDate());
     writer.update(WriterFacade.toList(updatedUser), null, currentUser, true);
     return updatedUser;
+  }
+
+  /**
+   * True if a user has been Modified, i.e the last modification of the user in the database is
+   * older than the last modification of the user in the session. (For instance when an object has
+   * been shared with the user)
+   * 
+   * @param u
+   * @return
+   */
+  public boolean isModified(User u) {
+    SearchResult result = SearchFactory.create()
+        .searchSimpleForQuery(SPARQLQueries.selectLastModifiedDate(u.getId()));
+    return result.getNumberOfRecords() > 0 && (u.getModified() == null
+        || DateHelper.parseDate(result.getResults().get(0)).after(u.getModified()));
   }
 
 
@@ -397,16 +409,7 @@ public class UserController {
    * @return
    */
   public Collection<Person> searchPersonByName(String name) {
-
     return searchPersonByNameInUsers(name);
-    // don't search (for now) for all persons, since it would get messy
-    // (many duplicates)
-    // l.addAll(searchPersonByNameInCollections(name));
-    // Map<String, Person> map = new HashMap<>();
-    // for (Person p : l) {
-    // map.put(p.getIdentifier(), p);
-    // }
-    // return map.values();
   }
 
   /**

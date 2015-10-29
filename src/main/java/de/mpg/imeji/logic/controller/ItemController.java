@@ -74,17 +74,16 @@ public class ItemController extends ImejiController {
   private static WriterFacade writer = new WriterFacade(Imeji.imageModel);
   public static final String NO_THUMBNAIL_FILE_NAME = "noThumbnail.png";
   private static String NO_THUMBNAIL_URL;
-  private Search search = SearchFactory.create(SearchObjectTypes.ITEM,
-      SEARCH_IMPLEMENTATIONS.ELASTIC);
+  private Search search =
+      SearchFactory.create(SearchObjectTypes.ITEM, SEARCH_IMPLEMENTATIONS.ELASTIC);
 
   /**
    * Controller constructor
    */
   public ItemController() {
     try {
-      NO_THUMBNAIL_URL =
-          PropertyReader.getProperty("imeji.instance.url") + "/resources/icon/"
-              + NO_THUMBNAIL_FILE_NAME;
+      NO_THUMBNAIL_URL = PropertyReader.getProperty("imeji.instance.url") + "/resources/icon/"
+          + NO_THUMBNAIL_FILE_NAME;
     } catch (Exception e) {
       throw new RuntimeException("Error reading property: ", e);
     }
@@ -119,9 +118,10 @@ public class ItemController extends ImejiController {
   public Item createWithFile(Item item, File f, String filename, CollectionImeji c, User user)
       throws ImejiException {
     if (!AuthUtil.staticAuth().createContent(user, c))
-      throw new NotAllowedError("User not Allowed to upload files in collection " + c.getIdString());
+      throw new NotAllowedError(
+          "User not Allowed to upload files in collection " + c.getIdString());
 
-    //To check the user Quota, it always has to be provided with the Admin User
+    // To check the user Quota, it always has to be provided with the Admin User
     UserController uc = new UserController(user);
     uc.checkQuota(f, c);
 
@@ -138,16 +138,15 @@ public class ItemController extends ImejiController {
 
     String guessedNotAllowedFormat = sc.guessNotAllowedFormat(f);
     if (StorageUtils.BAD_FORMAT.equals(guessedNotAllowedFormat)) {
-      throw new UnprocessableError("upload_format_not_allowed: " + " (" + guessedNotAllowedFormat
-          + ")");
+      throw new UnprocessableError(
+          "upload_format_not_allowed: " + " (" + guessedNotAllowedFormat + ")");
     }
 
     String mimeType = StorageUtils.getMimeType(guessedNotAllowedFormat);
 
-    item =
-        ImejiFactory.newItem(item, c, user, uploadResult.getId(), filename,
-            URI.create(uploadResult.getOrginal()), URI.create(uploadResult.getThumb()),
-            URI.create(uploadResult.getWeb()), mimeType);
+    item = ImejiFactory.newItem(item, c, user, uploadResult.getId(), filename,
+        URI.create(uploadResult.getOrginal()), URI.create(uploadResult.getThumb()),
+        URI.create(uploadResult.getWeb()), mimeType);
     item.setChecksum(uploadResult.getChecksum());
     item.setFileSize(uploadResult.getFileSize());
     if (uploadResult.getWidth() > 0 && uploadResult.getHeight() > 0) {
@@ -171,7 +170,6 @@ public class ItemController extends ImejiController {
    */
   public Item createWithExternalFile(Item item, CollectionImeji c, String externalFileUrl,
       String filename, boolean download, User user) throws ImejiException {
-    File tmp = null;
     String origName = FilenameUtils.getName(externalFileUrl);
     if ("".equals(filename) || filename == null)
       filename = origName;
@@ -186,19 +184,12 @@ public class ItemController extends ImejiController {
     if (externalFileUrl == null || externalFileUrl.equals("")) {
       throw new BadRequestException("Please provide fetchUrl or referenceUrl with the request!");
     }
-
-    StorageController sController = new StorageController("external");
-    if (item == null)
+    if (item == null) {
       item = ImejiFactory.newItem(c);
+    }
     if (download) {
       // download the file in storage
-      try {
-        tmp = TempFileUtil.createTempFile("createWithExternalFile", null);
-        sController.read(externalFileUrl, new FileOutputStream(tmp), true);
-      } catch (Exception e) {
-        throw new UnprocessableError(e.getLocalizedMessage());
-      }
-
+      File tmp = readFile(externalFileUrl);
       item = createWithFile(item, tmp, filename, c, user);
     } else {
       // Reference the file
@@ -283,17 +274,16 @@ public class ItemController extends ImejiController {
       // "Collection is withdrawn, you can not create an item.");
       // }
     } catch (Exception e) {
-      throw new UnprocessableError("There was a problem with specified collection: "
-          + e.getLocalizedMessage());
+      throw new UnprocessableError(
+          "There was a problem with specified collection: " + e.getLocalizedMessage());
     }
 
     if (uploadedFile != null) {
       newItem = createWithFile(item, uploadedFile, filename, collection, u);
     } else if (getExternalFileUrl(fetchUrl, referenceUrl) != null) {
       // If no file, but either a fetchUrl or a referenceUrl
-      newItem =
-          createWithExternalFile(item, collection, getExternalFileUrl(fetchUrl, referenceUrl),
-              filename, downloadFile(getExternalFileUrl(fetchUrl, referenceUrl)), u);
+      newItem = createWithExternalFile(item, collection, getExternalFileUrl(fetchUrl, referenceUrl),
+          filename, downloadFile(fetchUrl), u);
     } else {
       throw new BadRequestException("Filename or reference must not be empty!");
     }
@@ -338,9 +328,8 @@ public class ItemController extends ImejiController {
     if (limit < 0) {
       retrieveUris = uris;
     } else {
-      retrieveUris =
-          uris.size() > 0 && limit > 0 ? uris.subList(offset, getMin(offset + limit, uris.size()))
-              : new ArrayList<String>();
+      retrieveUris = uris.size() > 0 && limit > 0
+          ? uris.subList(offset, getMin(offset + limit, uris.size())) : new ArrayList<String>();
     }
     List<Item> items = new ArrayList<Item>();
     for (String s : retrieveUris) {
@@ -393,8 +382,8 @@ public class ItemController extends ImejiController {
     }
     cleanMetadata(items);
     ProfileController pc = new ProfileController();
-    writer.update(imBeans,
-        pc.retrieve(items.iterator().next().getMetadataSet().getProfile(), user), user, true);
+    writer.update(imBeans, pc.retrieve(items.iterator().next().getMetadataSet().getProfile(), user),
+        user, true);
   }
 
   /**
@@ -457,29 +446,12 @@ public class ItemController extends ImejiController {
     String origName = FilenameUtils.getName(externalFileUrl);
     filename =
         isNullOrEmpty(filename) ? origName : filename + "." + FilenameUtils.getExtension(origName);
-
     item.setFilename(filename);
-
-    StorageController sc = new StorageController("external");
-
     if (download) {
       // download the file in storage
-      try {
-        File tmp =
-            TempFileUtil.createTempFile("updateWithExternalFile",
-                "." + FilenameUtils.getExtension(origName));
-        sc.read(externalFileUrl, new FileOutputStream(tmp), true);
-
-        item = updateFile(item, tmp, filename, u);
-      } catch (IOException e) {
-        throw new UnprocessableError(
-            "There was a problem with saving this file to the temporary storage!");
-      } catch (Exception e) {
-        throw new UnprocessableError(
-            "There was a problem with fetching of provide fileURL to the temporary storage!");
-      }
+      File tmp = readFile(externalFileUrl);
+      item = updateFile(item, tmp, filename, u);
     } else {
-
       removeFileFromStorage(item.getStorageId());
       // Reference the file
       item.setFullImageUrl(URI.create(externalFileUrl));
@@ -487,8 +459,6 @@ public class ItemController extends ImejiController {
       item.setWebImageUrl(URI.create(NO_THUMBNAIL_URL));
       item.setChecksum("");
       item.setFiletype("");
-      item.setFilename("");
-
       item = update(item, u);
     }
     return item;
@@ -574,8 +544,8 @@ public class ItemController extends ImejiController {
    */
   public SearchResult search(URI containerUri, SearchQuery searchQuery, SortCriterion sortCri,
       User user, String spaceId, int size, int offset) {
-    return search.search(searchQuery, sortCri, user, containerUri != null ? containerUri.toString()
-        : null, spaceId, offset, size);
+    return search.search(searchQuery, sortCri, user,
+        containerUri != null ? containerUri.toString() : null, spaceId, offset, size);
   }
 
   /**
@@ -661,8 +631,8 @@ public class ItemController extends ImejiController {
     List<ImejiTriple> triples = new ArrayList<ImejiTriple>();
     for (Item item : items) {
       if (!item.getStatus().equals(Status.RELEASED)) {
-        throw new RuntimeException("Error discard " + item.getId() + " must be release (found: "
-            + item.getStatus() + ")");
+        throw new RuntimeException(
+            "Error discard " + item.getId() + " must be release (found: " + item.getStatus() + ")");
       } else {
         triples.addAll(getWithdrawTriples(item.getId().toString(), item, comment));
         triples.addAll(getUpdateTriples(item.getId().toString(), user, item));
@@ -762,7 +732,8 @@ public class ItemController extends ImejiController {
    * @param securityUri
    * @return
    */
-  protected ImejiTriple getProfileTriple(String itemUri, Object permissionObject, String profileUri) {
+  protected ImejiTriple getProfileTriple(String itemUri, Object permissionObject,
+      String profileUri) {
     String profileProperty = MetadataProfile.class.getAnnotation(j2jResource.class).value();
     try {
       return new ImejiTriple(itemUri, profileProperty, new URI(profileUri), permissionObject);
@@ -783,9 +754,9 @@ public class ItemController extends ImejiController {
       throws UnprocessableError, ImejiException {
     if (isValidateChecksumInCollection()) {
       if (checksumExistsInCollection(collectionURI, StorageUtils.calculateChecksum(file))) {
-        throw new UnprocessableError(
-            (!isUpdate) ? "Same file already exists in the collection (with same checksum). Please choose another file."
-                : "Same file already exists in the collection or you are trying to upload same file for the item (with same checksum). Please choose another file.");
+        throw new UnprocessableError((!isUpdate)
+            ? "Same file already exists in the collection (with same checksum). Please choose another file."
+            : "Same file already exists in the collection or you are trying to upload same file for the item (with same checksum). Please choose another file.");
       }
     }
   }
@@ -826,4 +797,22 @@ public class ItemController extends ImejiController {
     }
   }
 
+  /**
+   * Read a file from its url
+   * 
+   * @param tmp
+   * @param url
+   * @return
+   * @throws UnprocessableError
+   */
+  private File readFile(String url) throws UnprocessableError {
+    try {
+      StorageController sController = new StorageController("external");
+      File tmp = TempFileUtil.createTempFile("createOrUploadWithExternalFile", null);
+      sController.read(url, new FileOutputStream(tmp), true);
+      return tmp;
+    } catch (Exception e) {
+      throw new UnprocessableError(e.getLocalizedMessage());
+    }
+  }
 }

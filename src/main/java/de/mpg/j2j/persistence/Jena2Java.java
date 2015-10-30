@@ -283,8 +283,8 @@ public class Jena2Java {
    */
   private Statement getStatement(Resource subject, String predicateUri, int position) {
     int count = 0;
-    for (StmtIterator iterator = subject.listProperties(model.createProperty(predicateUri)); iterator
-        .hasNext();) {
+    for (StmtIterator iterator =
+        subject.listProperties(model.createProperty(predicateUri)); iterator.hasNext();) {
       Statement st = iterator.next();
       if (position == count) {
         return st;

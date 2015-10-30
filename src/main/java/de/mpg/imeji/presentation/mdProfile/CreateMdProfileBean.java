@@ -109,7 +109,6 @@ public class CreateMdProfileBean {
 
   private void redirect(MetadataProfile profile) throws Exception {
     Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
-    session.reloadUser();
     HistorySession history = (HistorySession) BeanHelper.getSessionBean(HistorySession.class);
     if ("view".equals(redirect) && collectionId != null) {
       FacesContext.getCurrentInstance().getExternalContext()

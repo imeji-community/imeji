@@ -22,7 +22,11 @@ import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.Search.SearchObjectTypes;
+import de.mpg.imeji.logic.search.SearchFactory;
+import de.mpg.imeji.logic.search.SearchFactory.SEARCH_IMPLEMENTATIONS;
+import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
 import de.mpg.imeji.logic.search.model.SearchIndex;
 import de.mpg.imeji.logic.search.model.SearchOperators;
 import de.mpg.imeji.logic.search.model.SearchPair;
@@ -77,6 +81,7 @@ public class ItemBean {
   private String dateCreated;
   private String newFilename;
   private String stringContent = null;
+  private String imageUploader;
 
   /**
    * Construct a default {@link ItemBean}
@@ -104,8 +109,8 @@ public class ItemBean {
     try {
       loadImage();
     } catch (Exception e) {
-      FacesContext.getCurrentInstance().getExternalContext()
-          .responseSendError(404, "404_NOT_FOUND");
+      FacesContext.getCurrentInstance().getExternalContext().responseSendError(404,
+          "404_NOT_FOUND");
 
     }
 
@@ -134,12 +139,17 @@ public class ItemBean {
     relatedAlbums = new ArrayList<Album>();
     AlbumController ac = new AlbumController();
     SearchQuery q = new SearchQuery();
-    q.addPair(new SearchPair(SearchIndex.SearchFields.member, SearchOperators.EQUALS, getImage()
-        .getId().toString(), false));
+    q.addPair(new SearchPair(SearchIndex.SearchFields.member, SearchOperators.EQUALS,
+        getImage().getId().toString(), false));
     // TODO NB: check if related albums should be space restricted?
-    relatedAlbums =
-        (List<Album>) ac.retrieveBatchLazy(ac.search(q, sessionBean.getUser(), null, -1, 0, null)
-            .getResults(), sessionBean.getUser(), -1, 0);
+    relatedAlbums = (List<Album>) ac.retrieveBatchLazy(
+        ac.search(q, sessionBean.getUser(), null, -1, 0, null).getResults(), sessionBean.getUser(),
+        -1, 0);
+    Search search = SearchFactory.create(SearchObjectTypes.USER, SEARCH_IMPLEMENTATIONS.JENA);
+    imageUploader =
+        search.searchString(JenaCustomQueries.selectUserCompleteName(item.getCreatedBy()), null,
+            Imeji.adminUser, 0, 1).getResults().get(0);
+
   }
 
   /**
@@ -353,19 +363,14 @@ public class ItemBean {
     int sizeAfterAdd = sessionBean.getActiveAlbumSize();
     boolean added = sizeAfterAdd > sizeBeforeAdd;
     if (!added) {
-      BeanHelper.error(((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-          .getLabel("image")
-          + " "
-          + item.getFilename()
-          + " "
-          + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-              .getMessage("already_in_active_album"));
+      BeanHelper
+          .error(((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("image")
+              + " " + item.getFilename() + " "
+              + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
+                  .getMessage("already_in_active_album"));
     } else {
-      BeanHelper.info(((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-          .getLabel("image")
-          + " "
-          + item.getFilename()
-          + " "
+      BeanHelper.info(((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("image")
+          + " " + item.getFilename() + " "
           + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
               .getMessage("added_to_active_album"));
     }
@@ -416,19 +421,21 @@ public class ItemBean {
    */
   public boolean getIsInActiveAlbum() {
     if (sessionBean.getActiveAlbum() != null && item != null) {
-      //Must be checked from Persistence not from Session, if album has been changed in meantime via REST API
+      // Must be checked from Persistence not from Session, if album has been changed in meantime
+      // via REST API
       AlbumController ac = new AlbumController();
       Album activeA;
       try {
         activeA = ac.retrieve(sessionBean.getActiveAlbum().getId(), sessionBean.getUser());
       } catch (ImejiException e) {
-          return false;
+        return false;
       }
-      
-      if ( sessionBean.getActiveAlbum().getImages().contains(item.getId()) != activeA.getImages().contains(item.getId())) {
-           sessionBean.setActiveAlbum(activeA);
+
+      if (sessionBean.getActiveAlbum().getImages().contains(item.getId()) != activeA.getImages()
+          .contains(item.getId())) {
+        sessionBean.setActiveAlbum(activeA);
       }
-      
+
       return activeA.getImages().contains(item.getId());
     }
     return false;
@@ -547,10 +554,8 @@ public class ItemBean {
    * @return
    * @throws Exception
    */
-  public User getImageUploader() throws Exception {
-    UserController uc = new UserController(Imeji.adminUser);
-    User user = uc.retrieve(item.getCreatedBy());
-    return user;
+  public String getImageUploader() throws Exception {
+    return imageUploader;
   }
 
   /**
@@ -586,8 +591,8 @@ public class ItemBean {
    * @return
    */
   public boolean isImageFile() {
-    return StorageUtils.getMimeType(FilenameUtils.getExtension(item.getFilename())).contains(
-        "image");
+    return StorageUtils.getMimeType(FilenameUtils.getExtension(item.getFilename()))
+        .contains("image");
   }
 
 
@@ -626,8 +631,8 @@ public class ItemBean {
    * @return
    */
   public boolean isVideoFile() {
-    return StorageUtils.getMimeType(FilenameUtils.getExtension(item.getFilename())).contains(
-        "video");
+    return StorageUtils.getMimeType(FilenameUtils.getExtension(item.getFilename()))
+        .contains("video");
   }
 
   /**
@@ -645,8 +650,8 @@ public class ItemBean {
    * @return
    */
   public boolean isPdfFile() {
-    return StorageUtils.getMimeType(FilenameUtils.getExtension(item.getFilename())).contains(
-        "application/pdf");
+    return StorageUtils.getMimeType(FilenameUtils.getExtension(item.getFilename()))
+        .contains("application/pdf");
   }
 
   /**
@@ -662,8 +667,8 @@ public class ItemBean {
    * @return
    */
   public boolean isAudioFile() {
-    return StorageUtils.getMimeType(FilenameUtils.getExtension(item.getFilename())).contains(
-        "audio");
+    return StorageUtils.getMimeType(FilenameUtils.getExtension(item.getFilename()))
+        .contains("audio");
   }
 
   /**

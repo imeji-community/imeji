@@ -114,7 +114,6 @@ public class CreateCollectionBean extends CollectionBean {
       URI id = collectionController.create(getCollection(), profileSelector.getProfile(),
           sessionBean.getUser(), profileSelector.getSelectorMode(),
           sessionBean.getSelectedSpaceString());
-      sessionBean.reloadUser();
       setCollection(collectionController.retrieve(id, sessionBean.getUser()));
       setId(ObjectHelper.getId(id));
       // TODO: Refactor; Setting user email notification for the collection downloads

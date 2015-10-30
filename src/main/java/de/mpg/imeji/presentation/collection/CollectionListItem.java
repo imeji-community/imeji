@@ -12,6 +12,7 @@ import javax.faces.event.ValueChangeEvent;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.ItemController;
 import de.mpg.imeji.logic.util.ObjectHelper;
@@ -73,8 +74,9 @@ public class CollectionListItem {
         description = description.substring(0, DESCRIPTION_MAX_SIZE) + "...";
       }
       for (Person p : collection.getMetadata().getPersons()) {
-        if (!"".equals(authors))
+        if (!"".equals(authors)) {
           authors += "; ";
+        }
         authors += p.getFamilyName() + ", " + p.getGivenName();
       }
       profileURI = collection.getProfile();
@@ -87,22 +89,8 @@ public class CollectionListItem {
       if (collection.getVersionDate() != null) {
         versionDate = collection.getVersionDate().getTime().toString();
       }
-      // Get first thumbnail of the collection and modify the image link
-      // if the collection has own explicit logo
-      if (collection.getLogoUrl() != null) {
-        thumbnail = new ThumbnailBean();
-        thumbnail.setLink(collection.getLogoUrl().toString());
-      } else {
-        ItemController ic = new ItemController();
-        Container searchedContainer = ic.searchAndSetContainerItemsFast(collection, user, 1);
-        if (searchedContainer.getImages().iterator().hasNext()) {
-          URI uri = searchedContainer.getImages().iterator().next();
-          if (uri != null) {
-            this.thumbnail = new ThumbnailBean(ic.retrieve(uri, user));
-          }
-        }
-      }
       // initializations
+      initThumbnail(collection, user);
       initSize(collection, user);
       initDiscardedSize(collection, user);
       initSelected();
@@ -111,6 +99,31 @@ public class CollectionListItem {
       }
     } catch (Exception e) {
       logger.error("Error creating collectionListItem", e);
+    }
+  }
+
+  /**
+   * Find the Logo of the collection. If no logo defined, use the first file of the collection
+   * 
+   * @param collection
+   * @param user
+   * @throws ImejiException
+   * @throws Exception
+   */
+  private void initThumbnail(CollectionImeji collection, User user)
+      throws ImejiException, Exception {
+    if (collection.getLogoUrl() != null) {
+      thumbnail = new ThumbnailBean();
+      thumbnail.setLink(collection.getLogoUrl().toString());
+    } else {
+      ItemController ic = new ItemController();
+      Container searchedContainer = ic.searchAndSetContainerItemsFast(collection, user, 1);
+      if (searchedContainer.getImages().iterator().hasNext()) {
+        URI uri = searchedContainer.getImages().iterator().next();
+        if (uri != null) {
+          this.thumbnail = new ThumbnailBean(ic.retrieve(uri, user));
+        }
+      }
     }
   }
 

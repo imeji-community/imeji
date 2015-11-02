@@ -8,7 +8,6 @@ import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -42,6 +41,7 @@ import de.mpg.imeji.logic.search.vo.SortCriterion;
 import de.mpg.imeji.logic.search.vo.SortCriterion.SortOrder;
 import de.mpg.imeji.logic.storage.StorageController;
 import de.mpg.imeji.logic.storage.util.StorageUtils;
+import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.util.TempFileUtil;
 import de.mpg.imeji.logic.util.UrlHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
@@ -70,7 +70,7 @@ public class SingleUploadBean implements Serializable {
   private static final long serialVersionUID = -2731118794797476328L;
   private static Logger logger = Logger.getLogger(SingleUploadBean.class);
 
-  private Collection<CollectionImeji> collections = new ArrayList<CollectionImeji>();
+  // private Collection<CollectionImeji> collections = new ArrayList<CollectionImeji>();
 
   private List<SelectItem> collectionItems = new ArrayList<SelectItem>();
   private String selectedCollectionItem;
@@ -93,10 +93,14 @@ public class SingleUploadBean implements Serializable {
       try {
         if (UrlHelper.getParameterBoolean("init")) {
           sus.reset();
-          loadCollections(true);
+          isAllowedToUpload();
         } else if (UrlHelper.getParameterBoolean("start")) {
+          // loadCollections(false);
           upload();
-        } else if (UrlHelper.getParameterBoolean("done")) {
+          // loadCollections(true);
+        } else if (UrlHelper.getParameterBoolean("done") && !UrlHelper.hasParameter("h")) {
+          // loadCollections(false);
+          loadCollections();
           prepareEditor();
         }
       } catch (Exception e) {
@@ -106,10 +110,7 @@ public class SingleUploadBean implements Serializable {
       if (user != null) {
         BeanHelper.cleanMessages();
         BeanHelper.info("You have no right to create collections, thus you can not upload items!");
-
         Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
-
-
         FacesContext.getCurrentInstance().getExternalContext().redirect(navigation.getHomeUrl());
 
       }
@@ -124,12 +125,14 @@ public class SingleUploadBean implements Serializable {
       edit.getEditor().getItems().get(0).setMds(newSet);
       edit.getEditor().validateAndFormatItemsForSaving();
       uploadFileToItem(item, getIngestImage().getFile(), getIngestImage().getName());
-      BeanHelper.cleanMessages();
       sus.uploaded();
-      reloadItemPage(item.getIdString());
+      BeanHelper.cleanMessages();
+      reloadItemPage(item.getIdString(), ObjectHelper.getId(item.getCollection()));
     } catch (Exception e) {
-      BeanHelper.error(e.getMessage());
+      BeanHelper
+          .error("There has been an error during saving of the item!Message: " + e.getMessage());
     }
+    sus.reset();
     return "";
   }
 
@@ -138,12 +141,12 @@ public class SingleUploadBean implements Serializable {
    * 
    * @throws IOException
    */
-  private void reloadItemPage(String itemIdString) {
+  private void reloadItemPage(String itemIdString, String collectionIdString) {
     try {
       Navigation navigation = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
 
-      String redirectUrl = navigation.getItemUrl() + itemIdString;
-
+      String redirectUrl = navigation.getCollectionUrl() + collectionIdString + "/"
+          + navigation.getItemPath() + "/" + itemIdString;
       FacesContext.getCurrentInstance().getExternalContext().redirect(redirectUrl);
     } catch (IOException e) {
       Logger.getLogger(UserBean.class).info("Error reloading the page", e);
@@ -162,7 +165,6 @@ public class SingleUploadBean implements Serializable {
       sus.reset();
       throw new TypeNotAllowedException(sb.getMessage("single_upload_invalid_content_format"));
     }
-    loadCollections(false);
     sus.copyToTemp();
   }
 
@@ -199,8 +201,8 @@ public class SingleUploadBean implements Serializable {
    * @throws FileUploadException
    * @throws TypeNotAllowedException
    */
-  private IngestImage getUploadedIngestFile(HttpServletRequest request) throws FileUploadException,
-      TypeNotAllowedException {
+  private IngestImage getUploadedIngestFile(HttpServletRequest request)
+      throws FileUploadException, TypeNotAllowedException {
     File tmp = null;
     boolean isMultipart = ServletFileUpload.isMultipartContent(request);
     IngestImage ii = new IngestImage();
@@ -212,9 +214,8 @@ public class SingleUploadBean implements Serializable {
           FileItemStream fis = iter.next();
           String filename = fis.getName();
           InputStream in = fis.openStream();
-          tmp =
-              TempFileUtil.createTempFile("singleupload",
-                  "." + FilenameUtils.getExtension(filename));
+          tmp = TempFileUtil.createTempFile("singleupload",
+              "." + FilenameUtils.getExtension(filename));
           FileOutputStream fos = new FileOutputStream(tmp);
           if (!fis.isFormField()) {
             try {
@@ -281,62 +282,79 @@ public class SingleUploadBean implements Serializable {
   }
 
   /**
-   * Load the collection
+   * Check if the user has at right to upload in at least one collection. If not, check if the user
+   * can create a collection
+   * 
+   * @throws ImejiException
    */
-  public void loadCollections(boolean checkSizeOnly) throws Exception {
-    /*
-     * NB 02.06.2015 method changed, it is called two times once to check the size of collection
-     * list, and eventually create a collection second time to populate the collection list
-     */
-    CollectionController cc = new CollectionController();
-    SearchQuery sq = new SearchQuery();
-    // SearchPair sp = new SearchPair(
-    // SPARQLSearch.getIndex(SearchIndex.IndexNames.user),
-    // SearchOperators.EQUALS, user.getId().toString());
-    // sq.addPair(sp);
-    SortCriterion sortCriterion = new SortCriterion();
-    sortCriterion.setIndex(SPARQLSearch.getIndex("cont_title"));
-    // For some funny reasons this took me a while to debug, search results for cont_title are
-    // toggled, if you need ascending, provide "DESCENDING"
-    sortCriterion.setSortOrder(SortOrder.valueOf("DESCENDING"));
-    // TODO: check if here space restriction is needed
-    SearchResult results = cc.search(sq, sortCriterion, -1, 0, user, sb.getSelectedSpaceString());
-    if (!checkSizeOnly) {
-      collections = cc.retrieveLazy(results.getResults(), -1, 0, user);
-      for (CollectionImeji c : collections) {
-        if (AuthUtil.staticAuth().createContent(user, c))
-          collectionItems.add(new SelectItem(c.getId(), c.getMetadata().getTitle()));
-      }
-      if (collectionItems.size() > 1) {
-        collectionItems.add(0, new SelectItem("", "-- Select a collection to upload your file --"));
-      } else if (collectionItems.size() > 0) {
-        
-        setSelectedCollection(collectionItems.get(0).getValue().toString());
-        methodColChangeListener();
-      }
-    } else {
-      if (collectionItems.size() == 0) {
-        String errorMessage = "cannot_create_collection";
-        if (user.isAllowedToCreateCollection()) {
-          createDefaultCollection();
-          sus.setCanUpload(true);
-        } else {
-          sus.setCanUpload(false);
-          throw new BadRequestException(sb.getMessage(errorMessage));
-        }
+  private void isAllowedToUpload() throws ImejiException {
+    for (CollectionImeji c : retrieveAllUserCollections()) {
+      if (AuthUtil.staticAuth().createContent(user, c)) {
+        collectionItems.add(new SelectItem(c.getId(), c.getMetadata().getTitle()));
       }
     }
+    if (collectionItems.isEmpty() && !user.isAllowedToCreateCollection()) {
+      sus.setCanUpload(false);
+      throw new BadRequestException(sb.getMessage("cannot_create_collection"));
+    }
+    sus.setCanUpload(true);
   }
 
-  private void createDefaultCollection() throws ImejiException {
+  /**
+   * Load the collections where the user can upload the file
+   * 
+   * @throws ImejiException
+   */
+  private void loadCollections() throws ImejiException {
+    for (CollectionImeji c : retrieveAllUserCollections()) {
+      if (AuthUtil.staticAuth().createContent(user, c)) {
+        collectionItems.add(new SelectItem(c.getId(), c.getMetadata().getTitle()));
+      }
+    }
+    // If the user hasn't any collection but is allowed to create one, create a default collection
+    if (collectionItems.isEmpty() && user.isAllowedToCreateCollection()) {
+      CollectionImeji defaultCollection = createDefaultCollection();
+      collectionItems.add(
+          new SelectItem(defaultCollection.getId(), defaultCollection.getMetadata().getTitle()));
+    }
+    // If there is no collection where the user can upload, send error
+    if (collectionItems.isEmpty()) {
+      throw new BadRequestException(sb.getMessage("cannot_create_collection"));
+    } else if (collectionItems.size() > 1) {
+      collectionItems.add(0, new SelectItem("", "-- Select a collection to upload your file --"));
+    }
+    setSelectedCollection(collectionItems.get(0).getValue().toString());
+  }
+
+
+  /**
+   * Retrieve all the collections which the current user can read
+   * 
+   * @return
+   * @throws ImejiException
+   */
+  private List<CollectionImeji> retrieveAllUserCollections() throws ImejiException {
+    CollectionController cc = new CollectionController();
+    SearchQuery sq = new SearchQuery();
+    SortCriterion sortCriterion = new SortCriterion();
+    sortCriterion.setIndex(SPARQLSearch.getIndex("cont_title"));
+    sortCriterion.setSortOrder(SortOrder.valueOf("DESCENDING"));
+    SearchResult results = cc.search(sq, sortCriterion, -1, 0, user, sb.getSelectedSpaceString());
+    return (List<CollectionImeji>) cc.retrieveLazy(results.getResults(), -1, 0, user);
+  }
+
+  /**
+   * Create a default collection where the user can upload his files
+   * 
+   * @throws ImejiException
+   */
+  private CollectionImeji createDefaultCollection() throws ImejiException {
     CollectionController cc = new CollectionController();
     CollectionImeji newC = ImejiFactory.newCollection();
     newC.getMetadata()
         .setTitle("Default first collection of " + user.getPerson().getCompleteName());
 
-
     Person creatorUser = getUser().getPerson();
-
 
     // If there are no organizations for Current User, add one
     if ("".equals(creatorUser.getOrganizationString())) {
@@ -353,9 +371,10 @@ public class SingleUploadBean implements Serializable {
 
     ProfileController pc = new ProfileController();
     newC.setProfile(pc.retrieveDefaultProfile().getId());
-    cc.create(newC, pc.retrieveDefaultProfile(), user, MetadataProfileCreationMethod.COPY,
-        sb.getSelectedSpaceString());
-
+    URI id = cc.create(newC, pc.retrieveDefaultProfile(), user,
+        MetadataProfileCreationMethod.REFERENCE, sb.getSelectedSpaceString());
+    newC.setId(id);
+    return newC;
   }
 
   public List<SelectItem> getCollectionItems() {
@@ -382,13 +401,13 @@ public class SingleUploadBean implements Serializable {
     this.user = user;
   }
 
-  public Collection<CollectionImeji> getCollections() {
-    return collections;
-  }
-
-  public void setCollections(Collection<CollectionImeji> collections) {
-    this.collections = collections;
-  }
+  // public Collection<CollectionImeji> getCollections() {
+  // return collections;
+  // }
+  //
+  // public void setCollections(Collection<CollectionImeji> collections) {
+  // this.collections = collections;
+  // }
 
   public void setSelectedCollectionItem(String selectedCollectionItem) {
     this.selectedCollectionItem = selectedCollectionItem;

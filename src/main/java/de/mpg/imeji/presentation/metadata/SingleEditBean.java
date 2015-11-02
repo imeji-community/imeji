@@ -17,6 +17,7 @@ import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.Metadata;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.presentation.beans.Navigation;
+import de.mpg.imeji.presentation.history.HistorySession;
 import de.mpg.imeji.presentation.metadata.editors.SimpleImageEditor;
 import de.mpg.imeji.presentation.metadata.util.SuggestBean;
 import de.mpg.imeji.presentation.session.SessionBean;
@@ -83,9 +84,10 @@ public class SingleEditBean {
    */
   public String save() throws Exception {
     if (editor.save()) {
+      HistorySession hs = (HistorySession) BeanHelper.getSessionBean(HistorySession.class);
       Navigation nav = (Navigation) BeanHelper.getApplicationBean(Navigation.class);
       FacesContext.getCurrentInstance().getExternalContext()
-          .redirect(nav.getItemUrl() + item.getIdString());
+          .redirect(hs.getCurrentPage().getUrl());
     }
     return "";
   }

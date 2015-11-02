@@ -35,19 +35,20 @@ public class SpaceValidator extends ObjectValidator implements Validator<Space> 
       throw new UnprocessableError("error_space_need_title");
     }
 
-    if (isSpaceByLabel(space.getSlug(), space.getId())) {
-      throw new UnprocessableError("error_there_is_another_space_with_same_slug");
-    }
-
-    if (isNullOrEmptyTrim(space.getSlug())) {
-      throw new UnprocessableError("error_space_needs_slug");
-    }
     try {
       new URI(space.getSlug());
       // above creation of URI in order to check if it is a syntactically
       // valid slug
     } catch (URISyntaxException e) {
       throw new UnprocessableError("error_space_invalid_slug");
+    }
+
+    if (isSpaceByLabel(space.getSlug(), space.getId())) {
+      throw new UnprocessableError("error_there_is_another_space_with_same_slug");
+    }
+
+    if (isNullOrEmptyTrim(space.getSlug())) {
+      throw new UnprocessableError("error_space_needs_slug");
     }
 
   }

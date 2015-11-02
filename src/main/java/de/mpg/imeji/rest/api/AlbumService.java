@@ -21,6 +21,7 @@ import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.rest.helper.ProfileCache;
 import de.mpg.imeji.rest.process.CommonUtils;
 import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.to.AlbumTO;
@@ -57,14 +58,15 @@ public class AlbumService implements API<AlbumTO> {
 
   public List<ItemTO> readItems(String id, User u, String q) throws ImejiException {
     AlbumController cc = new AlbumController();
-    return Lists.transform(cc.retrieveItems(id, u, q), new Function<Item, ItemTO>() {
-      @Override
-      public ItemTO apply(Item vo) {
-        ItemTO to = new ItemTO();
-        TransferObjectFactory.transferItem(vo, to);
-        return to;
-      }
-    });
+    ProfileCache profileCache = new ProfileCache();
+    List<ItemTO> tos = new ArrayList<>();
+    for (Item vo : cc.retrieveItems(id, u, q)) {
+      ItemTO to = new ItemTO();
+      TransferObjectFactory.transferItem(vo, to,
+          profileCache.read(vo.getMetadataSet().getProfile()));
+      tos.add(to);
+    }
+    return tos;
   }
 
   @Override

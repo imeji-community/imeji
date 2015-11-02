@@ -4,7 +4,6 @@
 package de.mpg.imeji.presentation.collection;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -12,16 +11,14 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
-import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.controller.CollectionController;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.CollectionImeji;
-import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.Person;
-import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.presentation.mdProfile.ProfileSelector;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
 import de.mpg.imeji.presentation.util.VocabularyHelper;
@@ -38,6 +35,8 @@ import de.mpg.imeji.presentation.util.VocabularyHelper;
 public class CreateCollectionBean extends CollectionBean {
   private static final long serialVersionUID = 1257698224590957642L;
   private VocabularyHelper vocabularyHelper;
+  private ProfileSelector profileSelector;
+  private boolean createProfile = false;
 
   /**
    * Bean Constructor
@@ -52,13 +51,11 @@ public class CreateCollectionBean extends CollectionBean {
   public void initialize() {
     setCollectionCreateMode(true);
     setCollection(ImejiFactory.newCollection());
-    ((List<Person>) getCollection().getMetadata().getPersons()).set(0, sessionBean.getUser()
-        .getPerson().clone());
+    ((List<Person>) getCollection().getMetadata().getPersons()).set(0,
+        sessionBean.getUser().getPerson().clone());
     vocabularyHelper = new VocabularyHelper();
-    loadProfiles();
-    if (getProfileItems().size() == 0) {
-      setUseMDProfileTemplate(false);
-    }
+    profileSelector =
+        new ProfileSelector(null, sessionBean.getUser(), sessionBean.getSelectedSpaceString());
 
   }
 
@@ -69,9 +66,10 @@ public class CreateCollectionBean extends CollectionBean {
    * @throws Exception
    */
   public String save() throws Exception {
-    if (createdCollection())
+    if (createCollection()) {
       FacesContext.getCurrentInstance().getExternalContext()
           .redirect(navigation.getCollectionUrl() + getCollection().getIdString());
+    }
     return "";
   }
 
@@ -82,17 +80,21 @@ public class CreateCollectionBean extends CollectionBean {
    * @throws Exception
    */
   public String saveAndEditProfile() throws Exception {
-    if (createdCollection())
-      FacesContext
-          .getCurrentInstance()
-          .getExternalContext()
-          .redirect(
-              navigation.getProfileUrl() + extractIDFromURI(getCollection().getProfile())
-                  + "/edit?init=1&col=" + getCollection().getIdString());
+    if (createCollection()) {
+      FacesContext.getCurrentInstance().getExternalContext()
+          .redirect(navigation.getProfileUrl() + extractIDFromURI(getCollection().getProfile())
+              + "/edit?init=1&col=" + getCollection().getIdString());
+    }
     return "";
   }
 
-  public boolean createdCollection() throws ImejiException, URISyntaxException {
+  /**
+   * Create the collection and its profile
+   * 
+   * @return
+   * @throws Exception
+   */
+  public boolean createCollection() throws Exception {
     try {
       CollectionController collectionController = new CollectionController();
       int pos = 0;
@@ -106,29 +108,19 @@ public class CreateCollectionBean extends CollectionBean {
           pos2++;
         }
       }
-      User user = sessionBean.getUser();
-
-      MetadataProfile whichProfile = isUseMDProfileTemplate() ? getProfileTemplate() : null;
-      // feature below will always create a collection with a new metadata
-      // profile copied (cloned)
-      // if there is no metadata profile template selected, then it will
-      // create a new metadata profile
-      URI id =
-          collectionController.create(getCollection(), whichProfile, user,
-              collectionController.getProfileCreationMethod(getSelectedCreationMethod()),
-              sessionBean.getSelectedSpaceString());
-      UserController userController = new UserController(user);
-      user = userController.retrieve(user.getEmail());
-      setCollection(collectionController.retrieve(id, user));
+      if (!createProfile) {
+        profileSelector.setProfile(null);
+      }
+      URI id = collectionController.create(getCollection(), profileSelector.getProfile(),
+          sessionBean.getUser(), profileSelector.getSelectorMode(),
+          sessionBean.getSelectedSpaceString());
+      setCollection(collectionController.retrieve(id, sessionBean.getUser()));
       setId(ObjectHelper.getId(id));
-
-      // Setting user email notification for the collection downloads
+      // TODO: Refactor; Setting user email notification for the collection downloads
       setSendEmailNotification(isSendEmailNotification());
-      UserController uc = new UserController(user);
-      uc.update(user, user);
-
+      UserController uc = new UserController(sessionBean.getUser());
+      uc.update(sessionBean.getUser(), sessionBean.getUser());
       BeanHelper.info(sessionBean.getMessage("success_collection_create"));
-
       return true;
     } catch (UnprocessableError e) {
       BeanHelper.error(sessionBean.getMessage(e.getMessage()));
@@ -163,6 +155,22 @@ public class CreateCollectionBean extends CollectionBean {
       }
     }
     return "";
+  }
+
+  public ProfileSelector getProfileSelector() {
+    return profileSelector;
+  }
+
+  public void setProfileSelector(ProfileSelector profileSelector) {
+    this.profileSelector = profileSelector;
+  }
+
+  public boolean isCreateProfile() {
+    return createProfile;
+  }
+
+  public void setCreateProfile(boolean createProfile) {
+    this.createProfile = createProfile;
   }
 
 }

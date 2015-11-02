@@ -19,9 +19,8 @@ public enum ImejiPages {
       ".*/collection/(\\w*).*"), ALBUMS("albums", "/albums"), ALBUM_ITEMS("history_images_album",
       ".*/album/(\\w+)/browse.*"), ALBUM_INFOS("history_album_info", ".*/album/(\\w+)/infos.*"), ALBUM_HOME(
       "history_album", ".*/album/(\\w*).*"), ADMINISTRATION("admin", "/admin"), USER("user",
-      ".*/user\\?id=(.*)&?"), USERS("admin_info_users", "/users"), USER_CREATE("admin_user_new",
-      "/createuser"), USER_GROUP_CREATE("admin_userGroup_new", "/createusergroup"), USER_GROUP(
-      "admin_userGroup", ".*/usergroup\\?id=(.*)&?"), USER_GROUPS("admin_userGroups_view",
+      ".*/user\\?id=(.*)&?"), USERS("admin_info_users", "/users"),  USER_GROUP_CREATE("admin_userGroup_new", "/createusergroup"),USER_CREATE("admin_user_new",
+      "/createuser"), USER_GROUP("admin_userGroup", ".*/usergroup\\?id=(.*)&?"), USER_GROUPS("admin_userGroups_view",
       "/usergroups"), HELP("help", "/help"), SEARCH("history_advanced_search", "/search"), BATCH_EDIT_ITEMS(
       "edit_images", ".*/edit\\?.*type=.*"), UPLOAD("upload", "/singleupload"), BROWSE(
       "history_images", "/browse"), CREATE_COLLECTION("collection_create", ".*/createcollection.*"), CREATE_ALBUM(

@@ -34,7 +34,20 @@ public class Iso639_1Helper {
    */
   public Iso639_1Helper() {
     list = new ArrayList<SelectItem>();
-    parseVocabularyString(getVocabularyString());
+    // parseVocabularyString(getVocabularyString());
+    initLanguageList();
+  }
+
+  /**
+   * Instead of reading the date in CoNE, give a static list. Improves a performance on the start
+   * page, by avoiding expensive http request .
+   */
+  private void initLanguageList() {
+    list = new ArrayList<SelectItem>();
+    list.add(new SelectItem("en", "en - English"));
+    list.add(new SelectItem("de", "de - German"));
+    list.add(new SelectItem("jp", "jp - Japanese"));
+    list.add(new SelectItem("es", "es - Spanish"));
   }
 
   /**
@@ -47,8 +60,8 @@ public class Iso639_1Helper {
       HttpClient client = new HttpClient();
       String coneVocabularyPath = PropertyReader.getProperty("cone.isos639_1.all");
       if (isNullOrEmpty(coneVocabularyPath)) {
-        logger
-            .info("CONE Service Property for Language Vocabularies has not been set-up. Will use default vocabulary for languages."
+        logger.info(
+            "CONE Service Property for Language Vocabularies has not been set-up. Will use default vocabulary for languages."
                 + "NOTE: This is not an error: for more information on setting cone, check http://imeji.org/?s=cone.isos639_1.all ");
         return null;
 

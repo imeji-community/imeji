@@ -6,6 +6,7 @@ import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MO
 import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE.UPDATE;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -24,6 +25,8 @@ import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.MetadataProfile;
 import de.mpg.imeji.logic.vo.User;
+import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
+import de.mpg.imeji.rest.helper.ProfileCache;
 import de.mpg.imeji.rest.process.CommonUtils;
 import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.to.CollectionProfileTO;
@@ -54,16 +57,50 @@ public class CollectionService implements API<CollectionTO> {
     return getCollectionTO(controller, id, u);
   }
 
+  /**
+   * Read all the items of a collection according to search query. Response is done with the raw
+   * format
+   * 
+   * @param id
+   * @param u
+   * @param q
+   * @return
+   * @throws ImejiException
+   */
   public List<ItemTO> readItems(String id, User u, String q) throws ImejiException {
     CollectionController cc = new CollectionController();
-    return Lists.transform(cc.retrieveItems(id, u, q), new Function<Item, ItemTO>() {
-      @Override
-      public ItemTO apply(Item vo) {
-        ItemTO to = new ItemTO();
-        TransferObjectFactory.transferItem(vo, to);
-        return to;
-      }
-    });
+    ProfileCache profileCache = new ProfileCache();
+    List<ItemTO> tos = new ArrayList<>();
+    for (Item vo : cc.retrieveItems(id, u, q)) {
+      ItemTO to = new ItemTO();
+      TransferObjectFactory.transferItem(vo, to,
+          profileCache.read(vo.getMetadataSet().getProfile()));
+      tos.add(to);
+    }
+    return tos;
+  }
+
+  /**
+   * Read all the items of a collection according to search query. Response is done with the default
+   * format
+   * 
+   * @param id
+   * @param u
+   * @param q
+   * @return
+   * @throws ImejiException
+   */
+  public Object readDefaultItems(String id, User u, String q) throws ImejiException {
+    CollectionController cc = new CollectionController();
+    ProfileCache profileCache = new ProfileCache();
+    List<DefaultItemTO> tos = new ArrayList<>();
+    for (Item vo : cc.retrieveItems(id, u, q)) {
+      DefaultItemTO to = new DefaultItemTO();
+      TransferObjectFactory.transferDefaultItem(vo, to,
+          profileCache.read(vo.getMetadataSet().getProfile()));
+      tos.add(to);
+    }
+    return tos;
   }
 
   public List<CollectionTO> readAll(User u, String q) throws ImejiException {
@@ -119,9 +156,9 @@ public class CollectionService implements API<CollectionTO> {
 
     CollectionImeji vo = getCollectionVO(cc, to.getId(), u);
     MetadataProfile originalMp = pc.retrieve(vo.getProfile(), u);
-    String hasStatements =
-        originalMp.getStatements().size() > 0 ? " Existing metadata profile has already defined metadata elements. It is not allowed to update it: remove the profileId from your input."
-            : "";
+    String hasStatements = originalMp.getStatements().size() > 0
+        ? " Existing metadata profile has already defined metadata elements. It is not allowed to update it: remove the profileId from your input."
+        : "";
 
     // profile is defined
     CollectionProfileTO profTO = to.getProfile();
@@ -148,12 +185,6 @@ public class CollectionService implements API<CollectionTO> {
               + " ! Allowed values are {copy, reference}. ");
         }
 
-        // if the original profile already has statements, no profile
-        // update is allowed
-        if (originalMp.getStatements().size() > 0) {
-          throw new UnprocessableError(
-              "It is not allowed to update related metadata profile which has already defined metadata elements.");
-        }
       }
 
     }
@@ -215,6 +246,7 @@ public class CollectionService implements API<CollectionTO> {
     // TODO Auto-generated method stub
     return null;
   }
+
 
 
 }

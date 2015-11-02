@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.validation.Validator;
 import de.mpg.imeji.logic.vo.Album;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -28,6 +29,10 @@ public class AlbumValidator extends ObjectValidator implements Validator<Album> 
   public void validate(Album album) throws UnprocessableError {
     if (isDelete())
       return;
+
+    if (StringHelper.hasInvalidTags(album.getMetadata().getDescription())) {
+      throw new UnprocessableError("error_bad_format_description");
+    }
 
     if (isNullOrEmpty(album.getMetadata().getTitle().trim())) {
       throw new UnprocessableError("error_album_need_title");

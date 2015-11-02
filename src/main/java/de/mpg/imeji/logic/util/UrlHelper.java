@@ -13,11 +13,8 @@ import java.net.URLEncoder;
 
 import javax.faces.context.FacesContext;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.validator.routines.UrlValidator;
 import org.apache.log4j.Logger;
-
-import de.mpg.imeji.presentation.util.ProxyHelper;
 
 /**
  * Some Method to read URLs
@@ -48,9 +45,8 @@ public class UrlHelper {
    * @return
    */
   public static boolean getParameterBoolean(String parameterName) {
-    String str =
-        FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
-            .get(parameterName);
+    String str = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
+        .get(parameterName);
     if ("1".equals(str)) {
       return true;
     }
@@ -58,21 +54,14 @@ public class UrlHelper {
   }
 
   /**
-   * Check if the uri is valid
+   * Check if the URL is valid, i.e. well formed
    * 
    * @param uri
    * @return
    */
-  public static boolean isValidURI(URI uri) {
-    try {
-      HttpClient client = new HttpClient();
-      GetMethod method = new GetMethod(uri.toString());
-      // client.executeMethod(method);
-      ProxyHelper.executeMethod(client, method);
-      return true;
-    } catch (Exception e) {
-      return false;
-    }
+  public static boolean isValidURL(String url) {
+    return UrlValidator.getInstance().isValid(url);
+
   }
 
   /**
@@ -134,4 +123,16 @@ public class UrlHelper {
       return urlStr;
     }
   }
+
+  /**
+   * Return true or false about the existence of parameter in the Url
+   * 
+   * @param parameterName
+   * @return
+   */
+  public static Boolean hasParameter(String parameterName) {
+    return FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
+        .get(parameterName) != null;
+  }
+
 }

@@ -12,7 +12,7 @@
 				</div>
 				<div class="imj_poweredby_software_image">
 					<h:outputLink target="_blank" value="http://imeji.org">
-						<img alt="imeji community logo" src="#{Navigation.applicationUrl}resources/icon/imeji_community_bright.png" height="50em" class="imj_community_logo"/>
+						<img alt="imeji community logo" src="#{Navigation.applicationUrl}resources/icon/imeji_community_bright.png" class="imj_community_logo"/>
 					</h:outputLink>
 				</div>
 			</div>
@@ -23,7 +23,7 @@
 	 		    <h:outputLink title="#{lbl.imprint}" target="_blank" value="#{Navigation.applicationSpaceUrl}imprint" rendered="#{Configuration.impressumText!=''}">
 	 		    	<h:outputText value="#{lbl.imprint}" />
 	 		    </h:outputLink>
-				<h:outputText value=" - #{SessionBean.version} " rendered="#{SessionBean.user.admin}"/>
+				<h:outputText value=" - #{SessionBean.version} "/>
 			</div>
 
 			<div class="imj_poweredby_institution">
@@ -32,7 +32,7 @@
 				</ui:fragment>
 				<ui:fragment rendered="#{Configuration.startPageFooterLogos == ''}">
 				  <h:outputLink title="Max Planck Digital Library" target="_blank" value="http://mpdl.mpg.de">
-				  		<img class="imj_community_logo" height="50em" src="https://spot.mpdl.mpg.de/style/mpdl.png" alt="MPDL logo"/>
+				  		<img class="imj_community_logo" src="https://spot.mpdl.mpg.de/static/style/mpdl.png" alt="MPDL logo"/>
 				  </h:outputLink>
 				</ui:fragment>
 
@@ -45,7 +45,5 @@
 	<h:inputHidden id="instituteNameForUser" value="#{SessionBean.instituteByUser}"/>
 	<h:outputText value="#{Configuration.snippet}" escape="false"/>
 	
-	<h:panelGroup id="additonalFooterScripts" styleClass="imj_noDisplay">
-		<ui:insert name="additonalFooterScripts"/>
-	</h:panelGroup>
+    
 </ui:composition>

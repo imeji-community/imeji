@@ -3,14 +3,11 @@ package de.mpg.imeji.rest.process;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.fasterxml.jackson.databind.JsonNode;
 
 import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Album;
@@ -29,14 +26,11 @@ import de.mpg.imeji.logic.vo.predefinedMetadata.Link;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Number;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Publication;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
-import de.mpg.imeji.rest.api.ProfileService;
-import de.mpg.imeji.rest.api.UserService;
 import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
+import de.mpg.imeji.rest.defaultTO.DefaultOrganizationTO;
 import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultConePersonTO;
-import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultGeolocationTO;
-import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultLicenseTO;
-import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultLinkTO;
-import de.mpg.imeji.rest.defaultTO.predefinedEasyMetadataTO.DefaultPublicationTO;
+import de.mpg.imeji.rest.helper.MetadataTransferHelper;
+import de.mpg.imeji.rest.helper.UserNameCache;
 import de.mpg.imeji.rest.to.AlbumTO;
 import de.mpg.imeji.rest.to.CollectionTO;
 import de.mpg.imeji.rest.to.IdentifierTO;
@@ -61,8 +55,7 @@ import de.mpg.imeji.rest.to.predefinedMetadataTO.TextTO;
 import de.mpg.j2j.misc.LocalizedString;
 
 public class TransferObjectFactory {
-
-
+  private static UserNameCache userNameCache = new UserNameCache();
   private static final Logger LOGGER = LoggerFactory.getLogger(TransferObjectFactory.class);
 
   /**
@@ -148,6 +141,12 @@ public class TransferObjectFactory {
 
   }
 
+  /**
+   * Transfer a {@link Person} into a {@link PersonTO}
+   * 
+   * @param p
+   * @param pto
+   */
   public static void transferPerson(Person p, PersonTO pto) {
 
     // pto.setPosition(p.getPos());
@@ -165,7 +164,37 @@ public class TransferObjectFactory {
 
   }
 
-  public static void transferContributorOrganizations(Collection<Organization> orgas, PersonTO pto) {
+  /**
+   * Transfer a {@link Person} into a {@link DefaultConePersonTO}
+   * 
+   * @param p
+   * @param pTO
+   */
+  public static void transferDefaultPerson(Person p, DefaultConePersonTO pTO) {
+    pTO.setFamilyName(p.getFamilyName());
+    pTO.setGivenName(p.getGivenName());
+    for (Organization o : p.getOrganizations()) {
+      DefaultOrganizationTO oTO = new DefaultOrganizationTO();
+      transferDefaultOrganization(o, oTO);
+      pTO.getOrganizations().add(oTO);
+    }
+  }
+
+  /**
+   * Transfer an {@link Organization} into a {@link DefaultOrganizationTO}
+   * 
+   * @param o
+   * @param oTO
+   */
+  public static void transferDefaultOrganization(Organization o, DefaultOrganizationTO oTO) {
+    oTO.setName(o.getName());
+    oTO.setDescription(o.getDescription());
+    oTO.setCity(o.getCity());
+    oTO.setCountry(o.getCountry());
+  }
+
+  public static void transferContributorOrganizations(Collection<Organization> orgas,
+      PersonTO pto) {
     for (Organization orga : orgas) {
       OrganizationTO oto = new OrganizationTO();
       oto.setId(CommonUtils.extractIDFromURI(orga.getId()));
@@ -185,31 +214,16 @@ public class TransferObjectFactory {
     // set ID
     to.setId(vo.getIdString());
     // set createdBy
-    UserService ucrud = new UserService();
-    String completeName = null;
-    URI userId = vo.getCreatedBy();
-    try {
-      completeName = ucrud.getCompleteName(vo.getCreatedBy());
-    } catch (Exception e) {
-      LOGGER.info("Cannot read createdBy user: " + userId, e);
-    }
-    // set createdBy
-    to.setCreatedBy(new PersonTOBasic(completeName, ObjectHelper.getId(userId)));
-    if (!vo.getModifiedBy().equals(vo.getCreatedBy())) {
-      userId = vo.getModifiedBy();
-      try {
-        completeName = ucrud.getCompleteName(vo.getModifiedBy());
-      } catch (Exception e) {
-        LOGGER.info("Cannot read modifiedBy user: " + userId, e);
-      }
-    }
+    to.setCreatedBy(new PersonTOBasic(userNameCache.getUserName(vo.getCreatedBy()),
+        ObjectHelper.getId(vo.getCreatedBy())));
     // set modifiedBy
-    to.setModifiedBy(new PersonTOBasic(completeName, ObjectHelper.getId(userId)));
+    to.setModifiedBy(new PersonTOBasic(userNameCache.getUserName(vo.getModifiedBy()),
+        ObjectHelper.getId(vo.getCreatedBy())));
     // set createdDate, modifiedDate, versionDate
     to.setCreatedDate(CommonUtils.formatDate(vo.getCreated().getTime()));
     to.setModifiedDate(CommonUtils.formatDate(vo.getModified().getTime()));
-    to.setVersionDate((vo.getVersionDate() != null) ? CommonUtils.formatDate(vo.getVersionDate()
-        .getTime()) : "");
+    to.setVersionDate(
+        (vo.getVersionDate() != null) ? CommonUtils.formatDate(vo.getVersionDate().getTime()) : "");
     // set status
     to.setStatus(vo.getStatus().toString());
     // set version
@@ -224,7 +238,7 @@ public class TransferObjectFactory {
    * @param vo
    * @param to
    */
-  public static void transferItem(Item vo, ItemTO to) {
+  public static void transferItem(Item vo, ItemTO to, MetadataProfile profile) {
     transferProperties(vo, to);
     // set visibility
     to.setVisibility(vo.getVisibility().toString());
@@ -237,21 +251,11 @@ public class TransferObjectFactory {
     to.setWebResolutionUrlUrl(vo.getWebImageUrl());
     to.setThumbnailUrl(vo.getThumbnailImageUrl());
     to.setFileUrl(vo.getFullImageUrl());
-
-    // set Metadata
-    ProfileService pcrud = new ProfileService();
-    MetadataProfile profile = new MetadataProfile();
-    try {
-      profile = pcrud.read(vo.getMetadataSet().getProfile());
-    } catch (Exception e) {
-      // TODO Auto-generated catch block
-      LOGGER.info("Something nasty happend after reading the profile", e);
-    }
     transferItemMetadata(profile, vo.getMetadataSet().getMetadata(), to);
   }
 
 
-  public static void transferDefaultItem(Item vo, DefaultItemTO to) {
+  public static void transferDefaultItem(Item vo, DefaultItemTO to, MetadataProfile profile) {
     transferProperties(vo, to);
     // set visibility
     to.setVisibility(vo.getVisibility().toString());
@@ -264,16 +268,6 @@ public class TransferObjectFactory {
     to.setWebResolutionUrlUrl(vo.getWebImageUrl());
     to.setThumbnailUrl(vo.getThumbnailImageUrl());
     to.setFileUrl(vo.getFullImageUrl());
-
-    // set Metadata
-    ProfileService pcrud = new ProfileService();
-    MetadataProfile profile = new MetadataProfile();
-    try {
-      profile = pcrud.read(vo.getMetadataSet().getProfile());
-    } catch (Exception e) {
-      // TODO Auto-generated catch block
-      LOGGER.info("Something nasty happend after reading the profile", e);
-    }
     transferItemMetadataDefault(profile, vo.getMetadataSet().getMetadata(), to);
   }
 
@@ -291,82 +285,20 @@ public class TransferObjectFactory {
     }
   }
 
+  /**
+   * Transfer a {@link List} of {@link Metadata} into default Metadata json and set it to the
+   * {@link DefaultItemTO}
+   * 
+   * @param profile
+   * @param voMds
+   * @param to
+   */
   public static void transferItemMetadataDefault(MetadataProfile profile,
       Collection<Metadata> voMds, DefaultItemTO to) {
-    if (voMds.size() == 0)
+    if (voMds.size() == 0) {
       return;
-    Map<String, JsonNode> metadata = new HashMap<String, JsonNode>();
-    Map<Integer, String> pos = new HashMap<Integer, String>();
-    for (Metadata md : voMds) {
-      for (Statement s : profile.getStatements()) {
-        if (s.getId().equals(md.getStatement())) {
-          String label = "";
-          for (LocalizedString ls : s.getLabels()) {
-            if ("".equals(label)) {
-              label = ls.getValue();
-              if ("en".equals(ls.getLang()))
-                label = ls.getValue();
-            }
-          }
-          if ("unbounded".equals(s.getMaxOccurs())) {
-            label = getPosition(pos, md.getStatement().toString()) + 1 + "#" + label;
-          }
-          switch (md.getTypeNamespace()) {
-            case "http://imeji.org/terms/metadata#text":
-
-              metadata.put(label, RestProcessUtils.buildJsonNode(((Text) md).getText()));
-              break;
-            case "http://imeji.org/terms/metadata#number":
-              metadata.put(label, RestProcessUtils.buildJsonNode(((Number) md).getNumber()));
-              break;
-            case "http://imeji.org/terms/metadata#conePerson":
-              ConePerson mdCP = (ConePerson) md;
-              DefaultConePersonTO dcpto = new DefaultConePersonTO();
-              dcpto.setFamilyName(mdCP.getPerson().getFamilyName());
-              dcpto.setGivenName(mdCP.getPerson().getGivenName());
-              metadata.put(label, RestProcessUtils.buildJsonNode(dcpto));
-              break;
-            case "http://imeji.org/terms/metadata#date":
-              metadata.put(label, RestProcessUtils
-                  .buildJsonNode(((de.mpg.imeji.logic.vo.predefinedMetadata.Date) md).getDate()));
-              break;
-            case "http://imeji.org/terms/metadata#geolocation":
-              Geolocation mdGeo = (Geolocation) md;
-              DefaultGeolocationTO dgto = new DefaultGeolocationTO();
-              dgto.setName(mdGeo.getName());
-              dgto.setLongitude(mdGeo.getLongitude());
-              dgto.setLatitude(mdGeo.getLatitude());
-              metadata.put(label, RestProcessUtils.buildJsonNode(dgto));
-              break;
-            case "http://imeji.org/terms/metadata#license":
-              License mdLicense = (License) md;
-              DefaultLicenseTO dlto = new DefaultLicenseTO();
-              dlto.setLicense(mdLicense.getLicense());
-              final URI externalUri = mdLicense.getExternalUri();
-              dlto.setUrl(externalUri != null ? externalUri.toString() : "");
-              metadata.put(label, RestProcessUtils.buildJsonNode(dlto));
-              break;
-            case "http://imeji.org/terms/metadata#link":
-              Link mdLink = (Link) md;
-              DefaultLinkTO dllto = new DefaultLinkTO();
-              dllto.setLink(mdLink.getLabel());
-              dllto.setUrl(mdLink.getUri().toString());
-              metadata.put(label, RestProcessUtils.buildJsonNode(dllto));
-              break;
-            case "http://imeji.org/terms/metadata#publication":
-              Publication mdP = (Publication) md;
-              DefaultPublicationTO dpto = new DefaultPublicationTO();
-              dpto.setPublication(mdP.getUri().toString());
-              dpto.setFormat(mdP.getExportFormat());
-              dpto.setCitation(mdP.getCitation());
-              metadata.put(label, RestProcessUtils.buildJsonNode(dpto));
-              break;
-          }
-
-        }
-      }
     }
-    to.setMetadata(metadata);
+    to.setMetadata(MetadataTransferHelper.serializeMetadataSet(voMds, profile));
   }
 
   public static void transferItemMetadata(MetadataProfile profile, Collection<Metadata> voMds,
@@ -451,13 +383,13 @@ public class TransferObjectFactory {
           Link mdLink = (Link) md;
           LinkTO llto = new LinkTO();
           llto.setLink(mdLink.getLabel());
-          llto.setUrl(mdLink.getUri().toString());
+          llto.setUrl(mdLink.getUri() != null ? mdLink.getUri().toString() : "");
           mdTO.setValue(llto);
           break;
         case "de.mpg.imeji.logic.vo.predefinedMetadata.Publication":
           Publication mdP = (Publication) md;
           PublicationTO pto = new PublicationTO();
-          pto.setPublication(mdP.getUri().toString());
+          pto.setPublication(mdP.getUri() != null ? mdP.getUri().toString() : "");
           pto.setFormat(mdP.getExportFormat());
           pto.setCitation(mdP.getCitation());
           mdTO.setValue(pto);

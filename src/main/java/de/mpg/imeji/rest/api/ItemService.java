@@ -5,13 +5,11 @@ import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MO
 import static de.mpg.imeji.rest.process.ReverseTransferObjectFactory.TRANSFER_MODE.UPDATE;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ObjectUtils;
-
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
 
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
@@ -20,6 +18,7 @@ import de.mpg.imeji.logic.util.ObjectHelper;
 import de.mpg.imeji.logic.vo.Item;
 import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.rest.defaultTO.DefaultItemTO;
+import de.mpg.imeji.rest.helper.ProfileCache;
 import de.mpg.imeji.rest.process.ReverseTransferObjectFactory;
 import de.mpg.imeji.rest.process.TransferObjectFactory;
 import de.mpg.imeji.rest.to.ItemTO;
@@ -40,12 +39,13 @@ public class ItemService implements API<ItemTO> {
 
       ReverseTransferObjectFactory.transferItem(to, item, u, CREATE);
 
-      item =
-          controller.create(item, ((ItemWithFileTO) to).getFile(), filename, u,
-              ((ItemWithFileTO) to).getFetchUrl(), ((ItemWithFileTO) to).getReferenceUrl());
+      item = controller.create(item, ((ItemWithFileTO) to).getFile(), filename, u,
+          ((ItemWithFileTO) to).getFetchUrl(), ((ItemWithFileTO) to).getReferenceUrl());
       // transfer item into ItemTO
       ItemTO itemTO = new ItemTO();
-      TransferObjectFactory.transferItem(item, itemTO);
+      ProfileCache profileCache = new ProfileCache();
+      TransferObjectFactory.transferItem(item, itemTO,
+          profileCache.read(item.getMetadataSet().getProfile()));
       return itemTO;
     } else {
       throw new BadRequestException(
@@ -56,41 +56,46 @@ public class ItemService implements API<ItemTO> {
   public DefaultItemTO readDefault(String id, User u) throws ImejiException {
     DefaultItemTO defaultTO = new DefaultItemTO();
     Item item = controller.retrieve(ObjectHelper.getURI(Item.class, id), u);
-    TransferObjectFactory.transferDefaultItem(item, defaultTO);
+    ProfileCache profileCache = new ProfileCache();
+    TransferObjectFactory.transferDefaultItem(item, defaultTO,
+        profileCache.read(item.getMetadataSet().getProfile()));
     return defaultTO;
   }
 
   @Override
   public ItemTO read(String id, User u) throws ImejiException {
     Item item = controller.retrieve(ObjectHelper.getURI(Item.class, id), u);
-
     ItemTO to = new ItemTO();
-    TransferObjectFactory.transferItem(item, to);
+    ProfileCache profileCache = new ProfileCache();
+    TransferObjectFactory.transferItem(item, to,
+        profileCache.read(item.getMetadataSet().getProfile()));
     return to;
 
   }
 
   public List<ItemTO> readItems(User u, String q) throws ImejiException, IOException {
-    return Lists.transform(new ItemController().retrieve(u, q, null), new Function<Item, ItemTO>() {
-      @Override
-      public ItemTO apply(Item vo) {
-        ItemTO to = new ItemTO();
-        TransferObjectFactory.transferItem(vo, to);
-        return to;
-      }
-    });
+    ProfileCache profileCache = new ProfileCache();
+    List<ItemTO> tos = new ArrayList<>();
+    for (Item vo : new ItemController().retrieve(u, q, null)) {
+      ItemTO to = new ItemTO();
+      TransferObjectFactory.transferItem(vo, to,
+          profileCache.read(vo.getMetadataSet().getProfile()));
+      tos.add(to);
+    }
+    return tos;
+
   }
 
   public List<DefaultItemTO> readDefaultItems(User u, String q) throws ImejiException, IOException {
-
-    return Lists.transform(new ItemController().retrieve(u, q, null),
-        new Function<Item, DefaultItemTO>() {
-          public DefaultItemTO apply(Item item) {
-            DefaultItemTO defaultTO = new DefaultItemTO();
-            TransferObjectFactory.transferDefaultItem(item, defaultTO);
-            return defaultTO;
-          }
-        });
+    ProfileCache profileCache = new ProfileCache();
+    List<DefaultItemTO> tos = new ArrayList<>();
+    for (Item vo : new ItemController().retrieve(u, q, null)) {
+      DefaultItemTO to = new DefaultItemTO();
+      TransferObjectFactory.transferDefaultItem(vo, to,
+          profileCache.read(vo.getMetadataSet().getProfile()));
+      tos.add(to);
+    }
+    return tos;
   }
 
 
@@ -103,15 +108,16 @@ public class ItemService implements API<ItemTO> {
       if (tof.getFile() != null) {
         item = controller.updateFile(item, tof.getFile(), to.getFilename(), u);
       } else if (!isNullOrEmpty(url)) {
-        item =
-            controller.updateWithExternalFile(item, getExternalFileUrl(tof), to.getFilename(),
-                downloadFile(tof), u);
+        item = controller.updateWithExternalFile(item, getExternalFileUrl(tof), to.getFilename(),
+            downloadFile(tof), u);
       }
     } else {
       item = controller.update(item, u);
     }
     to = new ItemTO();
-    TransferObjectFactory.transferItem(item, to);
+    ProfileCache profileCache = new ProfileCache();
+    TransferObjectFactory.transferItem(item, to,
+        profileCache.read(item.getMetadataSet().getProfile()));
     return to;
   }
 

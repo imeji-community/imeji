@@ -46,8 +46,9 @@ public class ObjectCachedLoader {
     MetadataProfile profile = sessionBean.getProfileCached().get(uri);
     if (profile == null) {
       profile = ObjectLoader.loadProfile(uri, Imeji.adminUser);
-      if (profile != null)
+      if (profile != null) {
         sessionBean.getProfileCached().put(profile.getId(), profile);
+      }
     }
     return profile;
   }

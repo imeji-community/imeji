@@ -48,7 +48,8 @@
 		profileUrl="#{Navigation.profileUrl}#{metadataBean.profile.idString}" 
 		exportUrl="#{Navigation.applicationSpaceUrl}export?format=xml&amp;type=profile&amp;q=prof==&quot;#{metadataContextBean.profile}&quot;" 
 		editable="#{Auth.update(metadataBean.profile) and metadataContextBean.status != 'WITHDRAWN'}" 
-		editUrl="#{Navigation.profileUrl}#{metadataBean.profileId}/#{Navigation.editPath}?init=1&amp;col=#{metadataBean.id}"/>
+		editUrl="#{Navigation.profileUrl}#{metadataBean.profileId}/#{Navigation.editPath}?init=1&amp;col=#{metadataBean.id}"
+		adminable="#{Auth.admin(metadataBean.collection)}" collectionStatus="#{metadataBean.collection.status}"/>
 	</ui:define>
 	
 	<ui:define name="modalDialogs_from_site">

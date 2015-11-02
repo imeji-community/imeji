@@ -73,28 +73,29 @@ public class ItemProcess {
     return resp;
   }
 
-
-  public static JSONResponse readDefaultItem(HttpServletRequest req, String id) {
-    User u = BasicAuthentication.auth(req);
-    JSONResponse resp;
-
-    ItemService icrud = new ItemService();
-    try {
-      resp = RestProcessUtils.buildResponse(Status.OK.getStatusCode(), icrud.readDefault(id, u));
-    } catch (Exception e) {
-      resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
-    }
-    return resp;
-
-  }
-
+  /**
+   * Read an Item according to its Id
+   * 
+   * @param req
+   * @param id
+   * @return
+   */
   public static JSONResponse readItem(HttpServletRequest req, String id) {
     User u = BasicAuthentication.auth(req);
-    JSONResponse resp;
+    JSONResponse resp = null;
 
     ItemService icrud = new ItemService();
+
     try {
-      resp = RestProcessUtils.buildResponse(Status.OK.getStatusCode(), icrud.read(id, u));
+      switch (guessType(req.getParameter("syntax"))) {
+        case RAW:
+          resp = RestProcessUtils.buildResponse(Status.OK.getStatusCode(), icrud.read(id, u));
+          break;
+        case DEFAULT:
+          resp =
+              RestProcessUtils.buildResponse(Status.OK.getStatusCode(), icrud.readDefault(id, u));
+          break;
+      }
     } catch (Exception e) {
       resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
     }
@@ -102,31 +103,29 @@ public class ItemProcess {
 
   }
 
+  /**
+   * Read Items according to the query
+   * 
+   * @param req
+   * @param q
+   * @return
+   */
   public static JSONResponse readItems(HttpServletRequest req, String q) {
-    JSONResponse resp;
+    JSONResponse resp = null;
 
     User u = BasicAuthentication.auth(req);
 
     ItemService is = new ItemService();
     try {
-      resp = RestProcessUtils.buildResponse(OK.getStatusCode(), is.readItems(u, q));
-    } catch (Exception e) {
-      resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
-    }
-    return resp;
-  }
-
-
-
-  public static JSONResponse readDefaultItems(HttpServletRequest req, String q) {
-    JSONResponse resp;
-
-    User u = BasicAuthentication.auth(req);
-
-    ItemService icrud = new ItemService();
-    try {
-      resp =
-          RestProcessUtils.buildResponse(Status.OK.getStatusCode(), icrud.readDefaultItems(u, q));
+      switch (guessType(req.getParameter("syntax"))) {
+        case DEFAULT:
+          resp =
+              RestProcessUtils.buildResponse(Status.OK.getStatusCode(), is.readDefaultItems(u, q));
+          break;
+        case RAW:
+          resp = RestProcessUtils.buildResponse(OK.getStatusCode(), is.readItems(u, q));
+          break;
+      }
     } catch (Exception e) {
       resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
     }
@@ -134,7 +133,7 @@ public class ItemProcess {
   }
 
   public static JSONResponse createItem(HttpServletRequest req, InputStream file, String json,
-      String syntax, String origName) {
+      String origName) {
     // / write response
     JSONResponse resp;
 
@@ -142,6 +141,8 @@ public class ItemProcess {
     User u = BasicAuthentication.auth(req);
 
     // Parse json into to
+    String syntax = req.getParameter("syntax");
+
     ItemWithFileTO itemTO = null;
     ItemTO.SYNTAX SYNTAX_TYPE = guessType(syntax);
     try {
@@ -187,9 +188,8 @@ public class ItemProcess {
               SYNTAX_TYPE == RAW ? createdItem : is.readDefault(createdItem.getId(), u));
 
     } catch (Exception e) {
-      // System.out.println("MESSAGE= "+e.getLocalizedMessage());
       resp = RestProcessUtils.localExceptionHandler(e, e.getLocalizedMessage());
-
+      LOGGER.error("Error creating item", e);
     }
 
     return resp;
@@ -241,7 +241,7 @@ public class ItemProcess {
 
 
   public static JSONResponse updateItem(HttpServletRequest req, String id,
-      InputStream fileInputStream, String json, String filename, String syntax) {
+      InputStream fileInputStream, String json, String filename) {
     User u = BasicAuthentication.auth(req);
 
     ItemService service = new ItemService();
@@ -251,10 +251,11 @@ public class ItemProcess {
         !isNullOrEmpty(json)
             && (fileInputStream != null || json.indexOf("fetchUrl") > 0 || json
                 .indexOf("referenceUrl") > 0);
+
+    String syntax = req.getParameter("syntax");
+
     ItemTO.SYNTAX SYNTAX_TYPE = guessType(syntax);
-
     JSONResponse response;
-
     try {
       if (SYNTAX_TYPE == null) {
         throw new BadRequestException("Bad syntax type: " + syntax);
@@ -282,13 +283,13 @@ public class ItemProcess {
 
           validateId(id, to);
           to.setId(id);
-
           // update metadata part
-          DefaultItemTO easyTO =
+          DefaultItemTO defaultTO =
               (DefaultItemTO) buildTOFromJSON("{\"" + METADATA_KEY + "\":"
                   + buildJSONFromObject(metadata) + "}", DefaultItemTO.class);
+
           ReverseTransferObjectFactory.transferDefaultItemTOtoItemTO(getMetadataProfileTO(to, u),
-              easyTO, to, true);
+              defaultTO, to, true);
           break;
       }
 

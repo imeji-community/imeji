@@ -38,6 +38,7 @@
 			</ui:fragment>
 			
 			<!-- List -->
+			<h:form>
 			<ui:fragment rendered="#{paginatorListSessionBean.totalNumberOfRecords > 0}">
 				<div id="imj_listBody">
 					<ui:fragment rendered="#{!Auth.loggedIn}">
@@ -53,6 +54,7 @@
 					</ui:fragment>
 				</div>
 			</ui:fragment>
+			</h:form>
 			
 			<!-- Page Browser GotoBox -->
 			<imjc:rangePageBrowserGotobox paginatorBean="#{paginatorListSessionBean}"/>

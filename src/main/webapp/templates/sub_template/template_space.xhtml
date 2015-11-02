@@ -26,11 +26,14 @@
 				str = str.replace(/ö/g, "oe");
 				str = str.replace(/ü/g, "ue");
 				str = str.replace(/ß/g, "ss");
+				
+				str = str.replace(/[^A-Za-z 0-9]*/g, '') ; 
 				return str;
 			}
 			function updateSlug(str) {
 				var protocoll, tmp, spaceSlugString;
 				tmp = clearToSlug(str);
+				
 				protocoll = location.protocoll || 'http:';
 				spaceSlugString = location.href;
 				$('input[id$="spaceSlug"]').val(tmp);
@@ -41,6 +44,7 @@
 					updateSlug($(this).val());
 				});
 			}
+			
 			initSlugUpdate();
 		/*	]]> */
 		</script>
@@ -89,7 +93,7 @@
 									<div class="imj_metadataValue">
 										<div id="uploader" class="imj_fileUploadContainer imj_singleUpload">
 											<div id="filelist">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
-							
+											<div class="imj_messageError" id="console"></div>
 											<div id="container">
 											    <a id="pickfiles" href="javascript:;">[#{lbl.uploadFile}]</a>
 											</div>
@@ -109,26 +113,57 @@
 														},
 														
 														FilesAdded: function(up, files) {
-															plupload.each(files, function(file) {
-																	document.getElementById('filelist').innerHTML = '<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
-																 });
-																uploader.start();
+															plupload.each(files, function(file) {																
+																if(up.files.length > 1)
+																{
+																	up.removeFile(file);
+																}
+																
+																document.getElementById('filelist').innerHTML = '<div id="' + file.id + '">'+ file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
+															});
+															document.getElementById('console').innerHTML = "";
+															uploader.bind('Error', function(up, err) {
+															    document.getElementById('console').innerHTML = "\nError " + err.code + ": " + err.message;
+															    
+															});
+															uploader.bind('FileUploaded', function(up, file, response) {
+
+															    response = (response.response).split("STOP");
+																response = jQuery.parseJSON( response[0] );
+
+															    if (response.error.code){
+															        uploader.trigger('Error', {
+															            code : response.error.code,
+															            message : response.error.message,
+															            details : response.details,
+															            file : file
+															        });
+															        }
+
+															});
+															uploader.start();
+															
 														},
 														
 														UploadProgress: function(up, file) {
 															document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
 														},
-														 StateChanged: function(up) {
+  													 StateChanged: function(up) {
 																// Called when the state of the queue is changed
-																if( up.state == plupload.STOPPED)
+																if( up.state == plupload.STOPPED) 
 																	report();
 														},
 													}
 												});
 												
 												uploader.init();
+												
+
 												function report(){
 													//window.location.href = location.pathname ;
+													
+													//reset uploader 
+													uploader.splice();
 												}
 											</script>
 										</div>
@@ -170,7 +205,9 @@
 						
 						
 						<h:panelGroup layout="block" id="submitButtonPanel" class="imj_submitPanel">
-							<h:commandButton action="#{metadataBean.cancel}" value="#{lbl.cancel}" styleClass="imj_cancelButton"/>
+							<h:outputLink value="#{HistorySession.previousPage.completeUrl}" styleClass="imj_cancelButton">
+									<h:outputText value="#{lbl.cancel}"/>
+							</h:outputLink>
 							<h:commandButton action="#{metadataBean.save}" value="#{lbl.save}" styleClass="imj_submitButton"/>
 						</h:panelGroup>
 					</h:form>

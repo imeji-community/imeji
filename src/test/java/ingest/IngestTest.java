@@ -15,8 +15,6 @@ import java.util.List;
 import javax.xml.bind.JAXBException;
 
 import org.apache.log4j.Logger;
-import org.junit.BeforeClass;
-import org.junit.Test;
 import org.xml.sax.SAXException;
 
 import de.mpg.imeji.logic.ingest.jaxb.JaxbUtil;
@@ -31,7 +29,7 @@ import de.mpg.imeji.logic.vo.MetadataSet;
 import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
 
 public class IngestTest {
-  @BeforeClass
+  // @BeforeClass
   public static void setUpBeforeClass() throws Exception {}
 
   // @Test
@@ -104,7 +102,7 @@ public class IngestTest {
     }
   }
 
-  @Test
+  // @Test
   public void itemsParsingWrite2FileTest() throws Exception {
     String xmlFilename = "src/test/resources/ingest/items.xml";
     String xmlOutputFilename = "src/test/resources/ingest/items-out.xml";

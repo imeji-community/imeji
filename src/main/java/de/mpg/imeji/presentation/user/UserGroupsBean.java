@@ -37,6 +37,7 @@ import javax.faces.context.FacesContext;
 
 import org.apache.log4j.Logger;
 
+import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.controller.UserGroupController;
 import de.mpg.imeji.logic.util.UrlHelper;
@@ -116,15 +117,19 @@ public class UserGroupsBean implements Serializable {
    * @param group
    * @return
    */
-  public String remove(UserGroup group) {
-    if (group != null) {
-      UserGroupController controller = new UserGroupController();
-      try {
-        controller.delete(group, sessionUser);
-      } catch (Exception e) {
-        BeanHelper.error("Error removing group");
-        logger.error(e);
+  public String remove() {
+    String id = (FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("group"));
+    UserGroupController c = new UserGroupController();
+    UserGroup group;
+    try {
+      group = c.read(id, sessionUser);
+      if (group != null) {
+        UserGroupController controller = new UserGroupController();
+          controller.delete(group, sessionUser);
       }
+    }catch(Exception e){
+      BeanHelper.error("Error removing group");
+      logger.error(e);
     }
     return "pretty:";
   }

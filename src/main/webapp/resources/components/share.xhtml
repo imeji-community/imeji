@@ -145,7 +145,7 @@
 							<h:outputLink value="#{Navigation.applicationUri}#{ShareBean.pageUrl}" styleClass="imj_cancelButton" title="#{lbl.reset}" rendered="#{cc.attrs.type != 'item'}">
 								<h:outputText value="#{lbl.reset}"/>
 							</h:outputLink>
-							<h:commandButton value="#{lbl.save}" action="#{ShareBean.update}" styleClass="imj_submitButton"/>
+							<h:commandButton value="#{lbl.save}" action="#{ShareBean.update}" styleClass="imj_submitButton" rendered="#{cc.attrs.type != 'item'}"/>
 						</div>
 					</h:form>
 				</div>

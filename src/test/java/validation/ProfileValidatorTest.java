@@ -60,19 +60,6 @@ public class ProfileValidatorTest {
     }
 
     @Test
-    public void validateUniqueness_sameLabelInOneStatement() {
-        profile.setStatements(asList(
-                newStatement(Types.TEXT, "text", "text")
-        ));
-        try {
-            validator.validate(profile);
-            fail("Validation of uniqueness... false positive");
-        } catch (UnprocessableError e) {
-            assertThat(e.getMessage(), equalTo("labels_have_to_be_unique"));
-        }
-    }
-
-    @Test
     public void validateLabelSyntax_numberHash() {
         profile.setStatements(asList(
                 newStatement(Types.TEXT, "12345#text", "text")

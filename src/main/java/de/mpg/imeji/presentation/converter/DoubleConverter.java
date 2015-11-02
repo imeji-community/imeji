@@ -25,10 +25,12 @@ public class DoubleConverter implements Converter {
 
   @Override
   public String getAsString(FacesContext arg0, UIComponent arg1, Object arg2) {
-
-    double d = Double.parseDouble(arg2.toString());
-    if (Double.compare(Double.NaN, d) == 0)
+    Double d = Double.parseDouble(arg2.toString());
+    if (Double.compare(Double.NaN, d) == 0) {
       return "";
+    } else if (d == d.intValue()) {
+      return Integer.toString(d.intValue());
+    }
     return Double.toString(d);
   }
 }

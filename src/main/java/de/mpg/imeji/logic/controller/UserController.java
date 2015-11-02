@@ -3,6 +3,7 @@
  */
 package de.mpg.imeji.logic.controller;
 
+import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -16,6 +17,7 @@ import org.apache.log4j.Logger;
 import de.mpg.imeji.exceptions.BadRequestException;
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.exceptions.NotFoundException;
+import de.mpg.imeji.exceptions.QuotaExceededException;
 import de.mpg.imeji.exceptions.UnprocessableError;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.auth.authorization.AuthorizationPredefinedRoles;
@@ -98,6 +100,7 @@ public class UserController {
         break;
       case DEFAULT:
         u.setGrants(AuthorizationPredefinedRoles.defaultUser(u.getId().toString()));
+        break;
       case COPY:
         // Don't change the grants of the user
         break;
@@ -105,11 +108,14 @@ public class UserController {
         // Don't change the grants of the user, but set the status to Inactive
         u.setUserStatus(User.UserStatus.INACTIVE);
         u.setRegistrationToken(IdentifierUtil.newUniversalUniqueId());
+        break;
     }
     u.setName(u.getPerson().getGivenName() + " " + u.getPerson().getFamilyName());
 
     Calendar now = DateHelper.getCurrentDate();
     u.setCreated(now);
+    u.setModified(now);
+    u.setQuota(ConfigurationBean.getDefaultDiskSpaceQuotaStatic());
 
     writer.create(WriterFacade.toList(u), null, user);
     return u;
@@ -122,6 +128,9 @@ public class UserController {
    * @throws ImejiException
    */
   public void delete(User user) throws ImejiException {
+    // remove User from User Groups
+    UserGroupController ugc = new UserGroupController();
+    ugc.removeUserFromAllGroups(user, this.user);
     // remove user grant
     writer.delete(new ArrayList<Object>(user.getGrants()), this.user);
     // remove user
@@ -163,8 +172,9 @@ public class UserController {
       return false;
     } else {
       // New users always have assigned Id, thus we do not check if it is existing user here
-      if (newUser && result.getNumberOfRecords() > 0)
+      if (newUser && result.getNumberOfRecords() > 0) {
         return true;
+      }
 
       // Check if it is existing user here who has same email
       boolean thereIsOtherUser = false;
@@ -217,10 +227,21 @@ public class UserController {
    * @throws ImejiException
    */
   public User retrieve(URI uri) throws ImejiException {
-    User u = (User) reader.read(uri.toString(), user, new User());
+    return retrieve(uri, user);
+  }
+
+  /**
+   * Retrieve a {@link User} according to its uri (id)
+   * 
+   * @param uri
+   * @return
+   * @throws ImejiException
+   */
+  public User retrieve(URI uri, User retrieveAsUser) throws ImejiException {
+    User u = (User) reader.read(uri.toString(), retrieveAsUser, new User());
     if (u.isActive()) {
       UserGroupController ugc = new UserGroupController();
-      u.setGroups((List<UserGroup>) ugc.searchByUser(u, user));
+      u.setGroups((List<UserGroup>) ugc.searchByUser(u, retrieveAsUser));
     }
     return u;
   }
@@ -236,15 +257,35 @@ public class UserController {
   public User update(User updatedUser, User currentUser) throws ImejiException {
     this.user = currentUser;
     try {
-      User u = retrieve(updatedUser.getEmail());
+      retrieve(updatedUser.getEmail());
     } catch (NotFoundException e) {
       // fine, user can be updated
     }
-    updatedUser.setName(updatedUser.getPerson().getGivenName() + " "
-        + updatedUser.getPerson().getFamilyName());
+    updatedUser.setName(
+        updatedUser.getPerson().getGivenName() + " " + updatedUser.getPerson().getFamilyName());
 
+    // if quota is set to 0, set it to default disk space quota
+    if (updatedUser.getQuota() == 0) {
+      updatedUser.setQuota(ConfigurationBean.getDefaultDiskSpaceQuotaStatic());
+    }
+    updatedUser.setModified(DateHelper.getCurrentDate());
     writer.update(WriterFacade.toList(updatedUser), null, currentUser, true);
     return updatedUser;
+  }
+
+  /**
+   * True if a user has been Modified, i.e the last modification of the user in the database is
+   * older than the last modification of the user in the session. (For instance when an object has
+   * been shared with the user)
+   * 
+   * @param u
+   * @return
+   */
+  public boolean isModified(User u) {
+    SearchResult result = SearchFactory.create()
+        .searchSimpleForQuery(SPARQLQueries.selectLastModifiedDate(u.getId()));
+    return result.getNumberOfRecords() > 0 && (u.getModified() == null
+        || DateHelper.parseDate(result.getResults().get(0)).after(u.getModified()));
   }
 
 
@@ -276,14 +317,57 @@ public class UserController {
         throw new UnprocessableError("Activation period expired, user should be deleted!");
 
       activateUser.setUserStatus(User.UserStatus.ACTIVE);
-      activateUser.setGrants(AuthorizationPredefinedRoles.defaultUser(activateUser.getId()
-          .toString()));
+      activateUser
+          .setGrants(AuthorizationPredefinedRoles.defaultUser(activateUser.getId().toString()));
       writer.update(WriterFacade.toList(activateUser), null, activateUser, true);
       return activateUser;
 
     } catch (NotFoundException e) {
       throw new NotFoundException("Invalid registration token!");
     }
+  }
+
+  /**
+   * Check user disk space quota. Quota is calculated for user of target collection.
+   * 
+   * @param file
+   * @param col
+   * @throws ImejiException
+   * @return remained disk space after successfully uploaded <code>file</code>; <code>-1</code> will
+   *         be returned for unlimited quota
+   */
+  public long checkQuota(File file, CollectionImeji col) throws ImejiException {
+
+    // do not check quota for admin
+    if (this.user.isAdmin())
+      // switch off feature!!!!
+      // if (true)
+      return -1L;
+
+    User targetCollectionUser = this.user.getId().equals(col.getCreatedBy()) ? this.user
+        : retrieve(col.getCreatedBy(), Imeji.adminUser);
+
+    Search search = SearchFactory.create();
+    List<String> results = search.searchSimpleForQuery(
+        // TODO: who is checked by quota?
+        // Current implementation: owner of target collection
+        SPARQLQueries.selectUserFileSize(col.getCreatedBy().toString())).getResults();
+    long currentDiskUsage = 0L;
+    try {
+      currentDiskUsage = Long.parseLong(results.get(0).toString());
+    } catch (NumberFormatException e) {
+      throw new UnprocessableError("Cannot parse currentDiskSpaceUsage " + results.get(0).toString()
+          + "; requested by user: " + this.user.getEmail() + "; targetCollectionUser: "
+          + targetCollectionUser.getEmail());
+    }
+    long needed = currentDiskUsage + file.length();
+    if (needed > targetCollectionUser.getQuota()) {
+      throw new QuotaExceededException("Disk quota: " + targetCollectionUser.getQuota()
+          + "B has been exceeded by " + (needed - targetCollectionUser.getQuota())
+          + "B; requested by user: " + this.user.getEmail() + "; targetCollectionUser: "
+          + targetCollectionUser.getEmail());
+    }
+    return targetCollectionUser.getQuota() - needed;
   }
 
   /**
@@ -305,8 +389,8 @@ public class UserController {
    */
   public Collection<User> searchByGrantFor(String grantFor) {
     Search search = SearchFactory.create();
-    return loadUsers(search.searchSimpleForQuery(SPARQLQueries.selectUserWithGrantFor(grantFor))
-        .getResults());
+    return loadUsers(
+        search.searchSimpleForQuery(SPARQLQueries.selectUserWithGrantFor(grantFor)).getResults());
   }
 
   /**
@@ -317,16 +401,7 @@ public class UserController {
    * @return
    */
   public Collection<Person> searchPersonByName(String name) {
-
     return searchPersonByNameInUsers(name);
-    // don't search (for now) for all persons, since it would get messy
-    // (many duplicates)
-    // l.addAll(searchPersonByNameInCollections(name));
-    // Map<String, Person> map = new HashMap<>();
-    // for (Person p : l) {
-    // map.put(p.getIdentifier(), p);
-    // }
-    // return map.values();
   }
 
   /**
@@ -365,13 +440,13 @@ public class UserController {
     return c.iterator().next();
   }
 
-/**
-	 * Search for all {@link Organization} in imeji, i.e. t The search looks within the
-	 * {@link User} and the {@link Collection} what {@link Organization are already
-	 * existing.
-	 * @param name
-	 * @return
-	 */
+  /**
+   * Search for all {@link Organization} in imeji, i.e. t The search looks within the {@link User}
+   * and the {@link Collection} what {@link Organization are already existing.
+   * 
+   * @param name
+   * @return
+   */
   public Collection<Organization> searchOrganizationByName(String name) {
     Collection<Organization> l = searchOrganizationByNameInUsers(name);
     Map<String, Organization> map = new HashMap<>();
@@ -390,8 +465,9 @@ public class UserController {
    */
   private Collection<Person> searchPersonByNameInUsers(String name) {
     Search search = SearchFactory.create(SearchType.USER);
-    return loadPersons(search.searchSimpleForQuery(SPARQLQueries.selectPersonByName(name))
-        .getResults(), Imeji.userModel);
+    return loadPersons(
+        search.searchSimpleForQuery(SPARQLQueries.selectPersonByName(name)).getResults(),
+        Imeji.userModel);
   }
 
   /**
@@ -402,8 +478,9 @@ public class UserController {
    */
   private Collection<Person> searchPersonByNameInCollections(String name) {
     Search search = SearchFactory.create(SearchType.COLLECTION);
-    return loadPersons(search.searchSimpleForQuery(SPARQLQueries.selectPersonByName(name))
-        .getResults(), Imeji.collectionModel);
+    return loadPersons(
+        search.searchSimpleForQuery(SPARQLQueries.selectPersonByName(name)).getResults(),
+        Imeji.collectionModel);
   }
 
   /**
@@ -531,7 +608,7 @@ public class UserController {
 
   /**
    * Search for users to be notified by item download of the collection
-   *
+   * 
    * @param user
    * @param c
    * @return

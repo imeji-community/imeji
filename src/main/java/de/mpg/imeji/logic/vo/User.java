@@ -51,12 +51,19 @@ public class User implements Serializable {
   private Person person;
   @j2jList("http://imeji.org/terms/grant")
   private Collection<Grant> grants = new ArrayList<Grant>();
+  @j2jLiteral("http://imeji.org/terms/quota")
+  private long quota;
+
   private URI id = IdentifierUtil.newURI(User.class);
   private List<UserGroup> groups = new ArrayList<>();
 
   // User properties for registration
   @j2jLiteral(ImejiNamespaces.DATE_CREATED)
   private Calendar created;
+
+  // User properties for registration
+  @j2jLiteral(ImejiNamespaces.LAST_MODIFICATION_DATE)
+  private Calendar modified;;
 
   @j2jResource(ImejiNamespaces.USER_STATUS)
   private URI userStatus = URI.create(UserStatus.ACTIVE.getUriString());
@@ -89,6 +96,7 @@ public class User implements Serializable {
     User clone = new User();
     clone.setEmail(email);
     clone.encryptedPassword = encryptedPassword;
+    clone.setQuota(quota);
     clone.grants = new ArrayList<Grant>();
     for (Grant g : grants) {
       if (g.asGrantType() != null && g.getGrantFor() != null) {
@@ -252,10 +260,26 @@ public class User implements Serializable {
     this.observedCollections = observedCollections;
   }
 
+  /**
+   *
+   * @return
+   */
+  public long getQuota() {
+    return quota;
+  }
+
+  /**
+   *
+   * @param quota
+   */
+  public void setQuota(long quota) {
+    this.quota = quota;
+  }
+
   @XmlEnum(String.class)
   public enum UserStatus {
-    ACTIVE(new String(ImejiNamespaces.USER_STATUS + "#ACTIVE")), INACTIVE(new String(
-        ImejiNamespaces.USER_STATUS + "#INACTIVE"));
+    ACTIVE(new String(ImejiNamespaces.USER_STATUS + "#ACTIVE")), INACTIVE(
+        new String(ImejiNamespaces.USER_STATUS + "#INACTIVE"));
 
     private String uri;
 
@@ -304,5 +328,12 @@ public class User implements Serializable {
     return userStatus.equals(UserStatus.ACTIVE.getURI());
   }
 
+  public Calendar getModified() {
+    return modified;
+  }
+
+  public void setModified(Calendar modified) {
+    this.modified = modified;
+  }
 
 }

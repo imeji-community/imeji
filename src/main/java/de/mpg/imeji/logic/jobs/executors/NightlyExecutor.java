@@ -27,20 +27,22 @@ public class NightlyExecutor {
    */
   private static final int JOB_MINUTE = 0;
   /**
-	 */
+   */
   private static Calendar NEXT_JOB_DATE = scheduleNextDate();
   private static ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
-
 
 
   /**
    * Start the nightly jobs
    */
   public void start() {
+    // Execute first job (by imeji start)
+    executor.execute(new NightlyJob());
+    // Schedule the next executions
     executor.scheduleAtFixedRate(new NightlyJob(), getDelay(),
         TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS), TimeUnit.MILLISECONDS);
-    logger.info("Nightly Executor started. First job planned at "
-        + NEXT_JOB_DATE.getTime().toString());
+    logger.info(
+        "Nightly Executor started. First job planned at " + NEXT_JOB_DATE.getTime().toString());
 
   }
 
@@ -48,8 +50,10 @@ public class NightlyExecutor {
    * Stop the nightly jobs
    */
   public void stop() {
+    logger.info("Shutting down nightly Job");
+    executor.purge();
     executor.shutdown();
-    logger.info("Nightly Executor stopped");
+    logger.info("Nightly Job stopped");
   }
 
   /**

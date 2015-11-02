@@ -89,6 +89,20 @@ public class Statement implements Comparable<Statement>, Serializable, Cloneable
     this.labels = labels;
   }
 
+  /**
+   * Return the default label (english if exists, otherwise the 1st one)
+   * 
+   * @return
+   */
+  public String getLabel() {
+    for (LocalizedString l : labels) {
+      if (l.getLang().equals("en")) {
+        return l.getValue();
+      }
+    }
+    return labels.iterator().next().getValue();
+  }
+
   @XmlElement(name = "VocabularyEncodingScheme", namespace = "http://purl.org/dc/dcam/")
   public URI getVocabulary() {
     return vocabulary;
@@ -150,6 +164,14 @@ public class Statement implements Comparable<Statement>, Serializable, Cloneable
       return 0;
     else
       return 1;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj instanceof Statement) {
+      return compareTo((Statement) obj) == 0;
+    }
+    return false;
   }
 
   @XmlElement(name = "isDescription", namespace = "http://imeji.org/terms/")

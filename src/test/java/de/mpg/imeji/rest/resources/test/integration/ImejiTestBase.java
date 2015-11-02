@@ -1,21 +1,16 @@
 package de.mpg.imeji.rest.resources.test.integration;
 
-import de.mpg.imeji.logic.controller.ProfileController;
-import de.mpg.imeji.logic.util.MetadataFactory;
-import de.mpg.imeji.logic.vo.Metadata.Types;
-import de.mpg.imeji.logic.vo.MetadataProfile;
-import de.mpg.imeji.logic.vo.Statement;
-import de.mpg.imeji.logic.vo.predefinedMetadata.Text;
-import de.mpg.imeji.logic.vo.predefinedMetadata.util.MetadataTypesHelper;
-import de.mpg.imeji.presentation.util.ImejiFactory;
-import de.mpg.imeji.rest.MyApplication;
-import de.mpg.imeji.rest.api.AlbumService;
-import de.mpg.imeji.rest.api.CollectionService;
-import de.mpg.imeji.rest.api.ItemService;
-import de.mpg.imeji.rest.api.ProfileService;
-import de.mpg.imeji.rest.process.RestProcessUtils;
-import de.mpg.imeji.rest.to.*;
-import de.mpg.j2j.misc.LocalizedString;
+import static de.mpg.imeji.logic.util.ResourceHelper.getStringFromPath;
+import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_REST;
+import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_STORAGE;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import javax.ws.rs.core.Application;
 
 import org.apache.log4j.Logger;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
@@ -25,29 +20,31 @@ import org.glassfish.jersey.test.spi.TestContainerFactory;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
+import de.mpg.imeji.logic.controller.ProfileController;
+import de.mpg.imeji.logic.vo.Metadata.Types;
+import de.mpg.imeji.logic.vo.MetadataProfile;
+import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.imeji.rest.MyApplication;
+import de.mpg.imeji.rest.api.AlbumService;
+import de.mpg.imeji.rest.api.CollectionService;
+import de.mpg.imeji.rest.api.ItemService;
+import de.mpg.imeji.rest.process.RestProcessUtils;
+import de.mpg.imeji.rest.to.AlbumTO;
+import de.mpg.imeji.rest.to.CollectionTO;
+import de.mpg.imeji.rest.to.ItemTO;
+import de.mpg.imeji.rest.to.ItemWithFileTO;
+import de.mpg.j2j.misc.LocalizedString;
 import util.JenaUtil;
-
-import javax.ws.rs.core.Application;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URISyntaxException;
-
-import static de.mpg.imeji.logic.util.ResourceHelper.getStringFromPath;
-import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_REST;
-import static de.mpg.imeji.rest.resources.test.integration.MyTestContainerFactory.STATIC_CONTEXT_STORAGE;
 
 /**
  * Created by vlad on 09.12.14.
  */
 public class ImejiTestBase extends JerseyTest {
 
-  protected static HttpAuthenticationFeature authAsUser = HttpAuthenticationFeature.basic(
-      JenaUtil.TEST_USER_EMAIL, JenaUtil.TEST_USER_PWD);
-  protected static HttpAuthenticationFeature authAsUser2 = HttpAuthenticationFeature.basic(
-      JenaUtil.TEST_USER_EMAIL_2, JenaUtil.TEST_USER_PWD);
+  protected static HttpAuthenticationFeature authAsUser =
+      HttpAuthenticationFeature.basic(JenaUtil.TEST_USER_EMAIL, JenaUtil.TEST_USER_PWD);
+  protected static HttpAuthenticationFeature authAsUser2 =
+      HttpAuthenticationFeature.basic(JenaUtil.TEST_USER_EMAIL_2, JenaUtil.TEST_USER_PWD);
 
   protected static String collectionId;
   protected static String albumId;
@@ -108,9 +105,8 @@ public class ImejiTestBase extends JerseyTest {
   public static String initCollection() {
     CollectionService s = new CollectionService();
     try {
-      collectionTO =
-          (CollectionTO) RestProcessUtils.buildTOFromJSON(getStringFromPath(STATIC_CONTEXT_REST
-              + "/createCollection.json"), CollectionTO.class);
+      collectionTO = (CollectionTO) RestProcessUtils.buildTOFromJSON(
+          getStringFromPath(STATIC_CONTEXT_REST + "/createCollection.json"), CollectionTO.class);
       collectionTO = s.create(collectionTO, JenaUtil.testUser);
       collectionId = collectionTO.getId();
     } catch (Exception e) {
@@ -130,9 +126,8 @@ public class ImejiTestBase extends JerseyTest {
   public static void initAlbum() {
     AlbumService s = new AlbumService();
     try {
-      albumTO =
-          (AlbumTO) RestProcessUtils.buildTOFromJSON(getStringFromPath(STATIC_CONTEXT_REST
-              + "/createAlbum.json"), AlbumTO.class);
+      albumTO = (AlbumTO) RestProcessUtils.buildTOFromJSON(
+          getStringFromPath(STATIC_CONTEXT_REST + "/createAlbum.json"), AlbumTO.class);
       albumTO = s.create(albumTO, JenaUtil.testUser);
       albumId = albumTO.getId();
 
@@ -157,7 +152,6 @@ public class ImejiTestBase extends JerseyTest {
       itemId = itemTO.getId();
     } catch (Exception e) {
       logger.error("Cannot init Item", e);
-
     }
   }
 

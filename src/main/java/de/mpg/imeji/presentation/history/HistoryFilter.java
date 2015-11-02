@@ -142,12 +142,11 @@ public class HistoryFilter implements Filter {
               + PrettyContext.getCurrentInstance(request).getRequestURL().toURL();
       Map<String, String[]> params =
           PrettyContext.getCurrentInstance(request).getRequestQueryString().getParameterMap();
-      HistoryPage p = new HistoryPage(url, params, session.getUser());
-      if (request.getParameter("h") == null) {
-        hs.addPage(p);
-      } else {
-        hs.remove(Integer.parseInt(h));
+      if(params.containsKey("h")){
+        params.remove("h");
       }
+      HistoryPage p = new HistoryPage(url, params, session.getUser());
+      hs.addPage(p);
     }
   }
 

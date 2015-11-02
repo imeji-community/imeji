@@ -11,6 +11,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import de.mpg.imeji.rest.defaultTO.DefaultOrganizationTO;
+
 @XmlRootElement
 @XmlType(propOrder = {
 // "position",
@@ -36,7 +38,22 @@ public class OrganizationTO implements Serializable {
 
   private String country;
 
+  /**
+   * Default constructor
+   */
+  public OrganizationTO() {}
 
+  /**
+   * Constructor with a {@link DefaultOrganizationTO}
+   * 
+   * @param dTO
+   */
+  public OrganizationTO(DefaultOrganizationTO dTO) {
+    this.name = dTO.getName();
+    this.description = dTO.getDescription();
+    this.city = dTO.getCity();
+    this.country = dTO.getCountry();
+  }
 
   public int getPosition() {
     return position;

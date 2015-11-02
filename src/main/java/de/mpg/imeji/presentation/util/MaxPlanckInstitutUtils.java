@@ -3,6 +3,7 @@ package de.mpg.imeji.presentation.util;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +23,7 @@ public class MaxPlanckInstitutUtils {
    */
   private static String MAX_PLANCK_INSTITUTES_IP_URL =
       "http://www2.mpdl.mpg.de/seco-irmapubl/expoipra_mpi?style=expo01";
+  private static int TIME_OUT = 5000;
   /**
    * Map of the institute names with their IP range
    */
@@ -38,11 +40,10 @@ public class MaxPlanckInstitutUtils {
    * @return
    */
   public static String getInstituteNameForIP(String userIP) {
-    Map<String, String> mpiMap = getMPINameMap();
-    if (mpiMap != null) {
-      for (String ipRange : mpiMap.keySet()) {
+    if (MPINameMap != null) {
+      for (String ipRange : MPINameMap.keySet()) {
         if (IPUtils.isInRange(ipRange, userIP))
-          return mpiMap.get(ipRange);
+          return MPINameMap.get(ipRange);
       }
     }
     return null;
@@ -55,11 +56,10 @@ public class MaxPlanckInstitutUtils {
    * @return
    */
   public static String getInstituteIdForIP(String userIP) {
-    Map<String, String> mpiMap = getIdMap();
-    if (mpiMap != null) {
-      for (String ipRange : mpiMap.keySet()) {
+    if (IdMap != null) {
+      for (String ipRange : IdMap.keySet()) {
         if (IPUtils.isInRange(ipRange, userIP))
-          return mpiMap.get(ipRange);
+          return IdMap.get(ipRange);
       }
     }
     return null;
@@ -70,15 +70,13 @@ public class MaxPlanckInstitutUtils {
    * 
    * @return
    */
-  public static Map<String, String> getMPINameMap() {
-    if (MPINameMap == null)
-      try {
-        MPINameMap = getMPIMap(1, 4);
-      } catch (Exception e) {
-        LOGGER.error("There was a problem with finding the MPINameMap: " + e.getLocalizedMessage());
-        return null;
-      }
-    return MPINameMap;
+  public static void initMPINameMap() {
+    try {
+      LOGGER.info("Reading MPG Institute IP Mapping by name");
+      MPINameMap = readMPIMap(1, 4);
+    } catch (Exception e) {
+      LOGGER.error("There was a problem with finding the MPINameMap: " + e.getLocalizedMessage());
+    }
   }
 
   /**
@@ -86,15 +84,13 @@ public class MaxPlanckInstitutUtils {
    * 
    * @return
    */
-  public static Map<String, String> getIdMap() {
-    if (IdMap == null)
-      try {
-        IdMap = getMPIMap(1, 2);
-      } catch (Exception e) {
-        LOGGER.error("There was a problem with finding the IdMap: " + e.getLocalizedMessage());
-        return null;
-      }
-    return IdMap;
+  public static void initIdMap() {
+    try {
+      LOGGER.info("Reading MPG Institute IP Mapping by ID");
+      IdMap = readMPIMap(1, 2);
+    } catch (Exception e) {
+      LOGGER.error("There was a problem with finding the IdMap: " + e.getLocalizedMessage());
+    }
   }
 
   /**
@@ -104,11 +100,12 @@ public class MaxPlanckInstitutUtils {
    * 
    * @return
    */
-  private static Map<String, String> getMPIMap(int keyPosition, int valuePosition) {
+  private static Map<String, String> readMPIMap(int keyPosition, int valuePosition) {
     try {
       URL mpiCSV = new URL(MAX_PLANCK_INSTITUTES_IP_URL);
-
-      BufferedReader br = new BufferedReader(new InputStreamReader(mpiCSV.openStream()));
+      URLConnection con = mpiCSV.openConnection();
+      con.setConnectTimeout(TIME_OUT);
+      BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
       String line = "";
       String cvsSplitBy = ";";
       Map<String, String> maps = new HashMap<String, String>();

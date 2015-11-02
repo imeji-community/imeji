@@ -63,6 +63,7 @@ public class RawFileImageGenerator implements ImageGenerator {
    * The Font size of the text
    */
   private static int TEXT_FONT_SIZE = 150;
+  private static final Font FONT = new Font("Serif", Font.BOLD, TEXT_FONT_SIZE);
 
   /*
    * (non-Javadoc)
@@ -70,11 +71,10 @@ public class RawFileImageGenerator implements ImageGenerator {
    * @see de.mpg.imeji.logic.storage.transform.ImageGenerator#generateJPG(byte[], java.lang.String)
    */
   @Override
-  public byte[] generateJPG(File file, String extension) throws FileNotFoundException, IOException,
-      URISyntaxException {
-    BufferedImage icon =
-        ImageIO.read(new FileImageInputStream(new File(RawFileImageGenerator.class.getClassLoader()
-            .getResource(PATH_TO_DEFAULT_IMAGE).toURI())));
+  public byte[] generateJPG(File file, String extension)
+      throws FileNotFoundException, IOException, URISyntaxException {
+    BufferedImage icon = ImageIO.read(new FileImageInputStream(new File(
+        RawFileImageGenerator.class.getClassLoader().getResource(PATH_TO_DEFAULT_IMAGE).toURI())));
     icon = writeTextOnImage(icon, extension, file.getName());
     return ImageUtils.toBytes(icon, StorageUtils.getMimeType("jpg"));
   }
@@ -93,7 +93,7 @@ public class RawFileImageGenerator implements ImageGenerator {
     Graphics2D g2d = img.createGraphics();
     g2d.drawImage(old, 0, 0, null);
     g2d.setPaint(Color.WHITE);
-    g2d.setFont(new Font("Serif", Font.BOLD, TEXT_FONT_SIZE));
+    g2d.setFont(FONT);
     FontMetrics fm = g2d.getFontMetrics();
 
     // display the filename extension.

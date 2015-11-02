@@ -22,8 +22,11 @@ import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.concurrency.locks.Locks;
 import de.mpg.imeji.logic.controller.AlbumController;
 import de.mpg.imeji.logic.controller.ItemController;
-import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.search.SPARQLSearch;
+import de.mpg.imeji.logic.search.Search;
+import de.mpg.imeji.logic.search.Search.SearchType;
+import de.mpg.imeji.logic.search.SearchFactory;
+import de.mpg.imeji.logic.search.query.SPARQLQueries;
 import de.mpg.imeji.logic.search.vo.SearchIndex;
 import de.mpg.imeji.logic.search.vo.SearchOperators;
 import de.mpg.imeji.logic.search.vo.SearchPair;
@@ -50,6 +53,7 @@ import de.mpg.imeji.presentation.metadata.extractors.TikaExtractor;
 import de.mpg.imeji.presentation.session.SessionBean;
 import de.mpg.imeji.presentation.session.SessionObjectsController;
 import de.mpg.imeji.presentation.util.BeanHelper;
+import de.mpg.imeji.presentation.util.ObjectCachedLoader;
 import de.mpg.imeji.presentation.util.ObjectLoader;
 
 /**
@@ -78,6 +82,7 @@ public class ItemBean {
   private String dateCreated;
   private String newFilename;
   private String stringContent = null;
+  private String imageUploader;
 
   /**
    * Construct a default {@link ItemBean}
@@ -105,9 +110,8 @@ public class ItemBean {
     try {
       loadImage();
     } catch (Exception e) {
-      FacesContext.getCurrentInstance().getExternalContext()
-          .responseSendError(404, "404_NOT_FOUND");
-
+      FacesContext.getCurrentInstance().getExternalContext().responseSendError(404,
+          "404_NOT_FOUND");
     }
 
     if (item != null) {
@@ -138,9 +142,14 @@ public class ItemBean {
     q.addPair(new SearchPair(SPARQLSearch.getIndex(SearchIndex.IndexNames.item),
         SearchOperators.EQUALS, getImage().getId().toString()));
     // TODO NB: check if related albums should be space restricted?
-    relatedAlbums =
-        (List<Album>) ac.loadAlbumsLazy(ac.search(q, sessionBean.getUser(), null, -1, 0, null)
-            .getResults(), sessionBean.getUser(), -1, 0);
+    relatedAlbums = (List<Album>) ac.loadAlbumsLazy(
+        ac.search(q, sessionBean.getUser(), null, -1, 0, null).getResults(), sessionBean.getUser(),
+        -1, 0);
+    Search search = SearchFactory.create(SearchType.USER);
+    imageUploader =
+        search.searchSimpleForQuery(SPARQLQueries.selectUserCompleteName(item.getCreatedBy()))
+            .getResults().get(0);
+
   }
 
   /**
@@ -226,7 +235,7 @@ public class ItemBean {
    * Load the {@link MetadataProfile} of the {@link Item}
    */
   public void loadProfile(User user) {
-    profile = ObjectLoader.loadProfile(item.getMetadataSet().getProfile(), user);
+    profile = ObjectCachedLoader.loadProfile(item.getMetadataSet().getProfile());
     if (profile == null) {
       profile = new MetadataProfile();
     }
@@ -354,19 +363,14 @@ public class ItemBean {
     int sizeAfterAdd = sessionBean.getActiveAlbumSize();
     boolean added = sizeAfterAdd > sizeBeforeAdd;
     if (!added) {
-      BeanHelper.error(((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-          .getLabel("image")
-          + " "
-          + item.getFilename()
-          + " "
-          + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-              .getMessage("already_in_active_album"));
+      BeanHelper
+          .error(((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("image")
+              + " " + item.getFilename() + " "
+              + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
+                  .getMessage("already_in_active_album"));
     } else {
-      BeanHelper.info(((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
-          .getLabel("image")
-          + " "
-          + item.getFilename()
-          + " "
+      BeanHelper.info(((SessionBean) BeanHelper.getSessionBean(SessionBean.class)).getLabel("image")
+          + " " + item.getFilename() + " "
           + ((SessionBean) BeanHelper.getSessionBean(SessionBean.class))
               .getMessage("added_to_active_album"));
     }
@@ -417,7 +421,22 @@ public class ItemBean {
    */
   public boolean getIsInActiveAlbum() {
     if (sessionBean.getActiveAlbum() != null && item != null) {
-      return sessionBean.getActiveAlbum().getImages().contains(item.getId());
+      // Must be checked from Persistence not from Session, if album has been changed in meantime
+      // via REST API
+      AlbumController ac = new AlbumController();
+      Album activeA;
+      try {
+        activeA = ac.retrieve(sessionBean.getActiveAlbum().getId(), sessionBean.getUser());
+      } catch (ImejiException e) {
+        return false;
+      }
+
+      if (sessionBean.getActiveAlbum().getImages().contains(item.getId()) != activeA.getImages()
+          .contains(item.getId())) {
+        sessionBean.setActiveAlbum(activeA);
+      }
+
+      return activeA.getImages().contains(item.getId());
     }
     return false;
   }
@@ -535,10 +554,8 @@ public class ItemBean {
    * @return
    * @throws Exception
    */
-  public User getImageUploader() throws Exception {
-    UserController uc = new UserController(Imeji.adminUser);
-    User user = uc.retrieve(item.getCreatedBy());
-    return user;
+  public String getImageUploader() throws Exception {
+    return imageUploader;
   }
 
   /**
@@ -574,8 +591,8 @@ public class ItemBean {
    * @return
    */
   public boolean isImageFile() {
-    return StorageUtils.getMimeType(FilenameUtils.getExtension(item.getFilename())).contains(
-        "image");
+    return StorageUtils.getMimeType(FilenameUtils.getExtension(item.getFilename()))
+        .contains("image");
   }
 
 
@@ -614,8 +631,8 @@ public class ItemBean {
    * @return
    */
   public boolean isVideoFile() {
-    return StorageUtils.getMimeType(FilenameUtils.getExtension(item.getFilename())).contains(
-        "video");
+    return StorageUtils.getMimeType(FilenameUtils.getExtension(item.getFilename()))
+        .contains("video");
   }
 
   /**
@@ -633,8 +650,8 @@ public class ItemBean {
    * @return
    */
   public boolean isPdfFile() {
-    return StorageUtils.getMimeType(FilenameUtils.getExtension(item.getFilename())).contains(
-        "application/pdf");
+    return StorageUtils.getMimeType(FilenameUtils.getExtension(item.getFilename()))
+        .contains("application/pdf");
   }
 
   /**
@@ -650,8 +667,8 @@ public class ItemBean {
    * @return
    */
   public boolean isAudioFile() {
-    return StorageUtils.getMimeType(FilenameUtils.getExtension(item.getFilename())).contains(
-        "audio");
+    return StorageUtils.getMimeType(FilenameUtils.getExtension(item.getFilename()))
+        .contains("audio");
   }
 
   /**

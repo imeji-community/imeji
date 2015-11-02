@@ -7,13 +7,12 @@
 	
 	<ui:param name="headline" value="#{lbl.edit_images}"/>
 	
-	<ui:define name="additonalHeaderScripts">
+	<ui:define name="additonalFooterScripts">
 		<script type="text/javascript">
-			jQuery(document).ready(function() {
+			$(document).ready(function() {
 				document.getElementById('batchEditForm:editInitialized').click();
 			});
 		</script>
-			
 	</ui:define>
 	
 	<ui:define name="actionsMenu"></ui:define>
@@ -34,9 +33,7 @@
 				</h:selectBooleanCheckbox>
 				
 				<h:panelGroup layout="block" id="ajaxContent" styleClass="imj_batchEditList">
-					<script type="text/javascript" src="#{Navigation.applicationUrl}resources/js/datepicker.js"></script>
-					<script type="text/javascript" src="#{Navigation.applicationUrl}resources/eSciDoc_JavaScript/main.js"></script>
-
+					<h:outputScript library="js" name="datepicker.js"></h:outputScript>
 					
 					<ui:fragment rendered="#{!EditItemMetadataBean.initialized and Auth.loggedIn}">
 						<h2 class="imj_headline"><h:outputText value="Preparing editor! Please wait a little ..."/></h2>
@@ -101,7 +98,7 @@
 								<h:commandButton styleClass="imj_submitButton" type="submit" action="#{EditItemMetadataBean.addToAllSave}" value="#{lbl.save}" onclick="openDialog('dialogWait');">
 									<f:ajax  execute="@form" render="@none"/>
 								</h:commandButton>
-								<h:commandButton styleClass="imj_submitButton" type="submit" action="#{EditItemMetadataBean.addToAllSaveAndRedirect}" value="#{lbl.save_and_return_to_view}" onclick="openDialog('dialogWait');">
+								<h:commandButton styleClass="imj_submitButton" type="submit" action="#{EditItemMetadataBean.addToAllSaveAndRedirect}" value="#{lbl.save_and_return}" onclick="openDialog('dialogWait');">
 									<f:ajax  execute="@form" render="@none"/>
 								</h:commandButton>
 							</h:panelGroup>
@@ -127,7 +124,7 @@
 									<h:commandButton styleClass="imj_submitButton" type="submit" action="#{EditItemMetadataBean.save}" value="#{lbl.save}" onclick="openDialog('dialogWait');">
 										<f:ajax  execute="@form" render="@none"/>
 									</h:commandButton>
-									<h:commandButton styleClass="imj_submitButton" type="submit" action="#{EditItemMetadataBean.saveAndRedirect}" value="#{lbl.save_and_return_to_view}" onclick="openDialog('dialogWait');">
+									<h:commandButton styleClass="imj_submitButton" type="submit" action="#{EditItemMetadataBean.saveAndRedirect}" value="#{lbl.save_and_return}" onclick="openDialog('dialogWait');">
 										<f:ajax  execute="@form" render="@none"/>
 									</h:commandButton>
 								</div>
@@ -170,7 +167,7 @@
 									<h:commandButton styleClass="imj_submitButton" type="submit" action="#{EditItemMetadataBean.save}" value="#{lbl.save}" onclick="openDialog('dialogWait');">
 										<f:ajax  execute="@form" render="@none"/>
 									</h:commandButton>
-									<h:commandButton styleClass="imj_submitButton" type="submit" action="#{EditItemMetadataBean.saveAndRedirect}" value="#{lbl.save_and_return_to_view}" onclick="openDialog('dialogWait');">
+									<h:commandButton styleClass="imj_submitButton" type="submit" action="#{EditItemMetadataBean.saveAndRedirect}" value="#{lbl.save_and_return}" onclick="openDialog('dialogWait');">
 										<f:ajax  execute="@form" render="@none"/>
 									</h:commandButton>
 								</div>

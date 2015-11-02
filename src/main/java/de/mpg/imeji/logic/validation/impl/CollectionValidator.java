@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.mpg.imeji.exceptions.UnprocessableError;
+import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.validation.Validator;
 import de.mpg.imeji.logic.vo.CollectionImeji;
 import de.mpg.imeji.logic.vo.MetadataProfile;
@@ -28,6 +29,10 @@ public class CollectionValidator extends ObjectValidator implements Validator<Co
   public void validate(CollectionImeji collection) throws UnprocessableError {
     if (isDelete())
       return;
+
+    if (StringHelper.hasInvalidTags(collection.getMetadata().getDescription())) {
+      throw new UnprocessableError("error_bad_format_description");
+    }
 
     if (isNullOrEmpty(collection.getMetadata().getTitle().trim())) {
       throw new UnprocessableError("error_collection_need_title");

@@ -2,9 +2,20 @@
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core">
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:menu="http://java.sun.com/jsf/composite/components/menu">
+
+
 	<ui:param name="headline" value="Administration" />
 	<ui:param name="currentMainMenu" value="admin"/>
+	
+	<ui:define name="actionsMenu">
+	<menu:context_actionMenu isUserLoggedIn="#{Auth.loggedIn}" 
+							 curMainMenu="#{currentMainMenu}" 
+							 downloadEnabled="false"
+							 actionEnabled="false"
+							 navBean="#{Navigation}"/>
+	</ui:define>
 
 	<ui:define name="mainContent">
 		

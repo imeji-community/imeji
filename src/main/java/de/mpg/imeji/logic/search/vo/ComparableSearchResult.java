@@ -44,6 +44,14 @@ public class ComparableSearchResult implements Comparable<ComparableSearchResult
     return o.getSortValue().compareToIgnoreCase(sortValue) * orderAsInteger();
   }
 
+  @Override
+  public boolean equals(Object obj) {
+    if (obj instanceof ComparableSearchResult) {
+      return compareTo((ComparableSearchResult) obj) == 0;
+    }
+    return false;
+  }
+
   private int orderAsInteger() {
     if (SortOrder.DESCENDING.equals(order)) {
       return 1;

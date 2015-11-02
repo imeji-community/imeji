@@ -236,6 +236,7 @@ public class EditItemMetadataBean {
    * Initialize the select menu with the possible statement to edit (i.e. statement of the profiles)
    */
   private void initStatementsMenu() {
+    ((MetadataLabels) BeanHelper.getSessionBean(MetadataLabels.class)).init(profile);
     statementMenu = new ArrayList<SelectItem>();
     for (Statement s : profile.getStatements()) {
       if (s.getParent() == null) {
@@ -427,8 +428,16 @@ public class EditItemMetadataBean {
     this.reset();
     unlockImages();
     HistorySession hs = (HistorySession) BeanHelper.getSessionBean(HistorySession.class);
-    FacesContext.getCurrentInstance().getExternalContext()
-        .redirect(hs.getPreviousPage().getCompleteUrl());
+    
+    //redirect to view when previous page was upload
+    if(hs.getPreviousPage().getUrl().contains("upload")){
+      FacesContext.getCurrentInstance().getExternalContext()
+      .redirect(hs.getPreviousPage().getCompleteUrl().replaceFirst("upload.*", "browse"));
+   
+    }else{
+      FacesContext.getCurrentInstance().getExternalContext()
+      .redirect(hs.getPreviousPage().getCompleteUrl());
+    }
   }
 
   /**

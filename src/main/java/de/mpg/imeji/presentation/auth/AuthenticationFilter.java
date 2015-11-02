@@ -40,6 +40,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import de.mpg.imeji.logic.auth.authentication.HttpAuthentication;
+import de.mpg.imeji.logic.controller.UserController;
+import de.mpg.imeji.logic.vo.User;
 import de.mpg.imeji.presentation.session.SessionBean;
 
 /**
@@ -82,17 +84,68 @@ public class AuthenticationFilter implements Filter {
           session.setUser(httpAuthentification.doLogin());
         }
       } else if (session != null && session.getUser() != null) {
-        Matcher m = jsfPattern.matcher(request.getRequestURI());
-        if (m.matches()) {
-          // reload the user each time a jsf page is called
+        if (isReloadUser(request, session.getUser())) {
           session.reloadUser();
         }
       }
     } catch (Exception e) {
-      logger.info("We had some exception in Autnbentication filter", e);
+      logger.info("We had some exception in Authentication filter", e);
     } finally {
       chain.doFilter(serv, resp);
     }
+  }
+
+  /**
+   * True if it is necessary to reload the User. This method tried to reduce as much as possible
+   * reload of the user, to avoid too much database queries.
+   * 
+   * @param req
+   * @return
+   */
+  private boolean isReloadUser(HttpServletRequest req, User user) {
+    return isXHTMLRequest(req) && !isAjaxRequest(req) && isModifiedUser(user);
+  }
+
+  /**
+   * True if the {@link User} has been modified in the database (for instance, a user has share
+   * something with him)
+   * 
+   * @param user
+   * @return
+   */
+  private boolean isModifiedUser(User user) {
+    return new UserController(user).isModified(user);
+  }
+
+  /**
+   * True if the request is done from an xhtml page
+   * 
+   * @param req
+   * @return
+   */
+  private boolean isXHTMLRequest(HttpServletRequest req) {
+    Matcher m = jsfPattern.matcher(req.getRequestURI());
+    return m.matches();
+  }
+
+  /**
+   * True of the request is an Ajax Request
+   * 
+   * @param req
+   * @return
+   */
+  private boolean isAjaxRequest(HttpServletRequest req) {
+    return "partial/ajax".equals(req.getHeader("Faces-Request"));
+  }
+
+  /**
+   * True if the method is a POST request
+   * 
+   * @param req
+   * @return
+   */
+  private boolean isPostRequest(HttpServletRequest req) {
+    return "POST".equals(req.getMethod());
   }
 
   /*
@@ -122,4 +175,6 @@ public class AuthenticationFilter implements Filter {
   private SessionBean getSession(HttpServletRequest req) {
     return (SessionBean) req.getSession(true).getAttribute(SessionBean.class.getSimpleName());
   }
+
+
 }

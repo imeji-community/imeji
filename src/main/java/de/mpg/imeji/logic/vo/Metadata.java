@@ -71,6 +71,15 @@ public abstract class Metadata implements Comparable<Metadata>, Serializable {
     public String getClazzNamespace() {
       return clazz.getAnnotation(j2jDataType.class).value();
     }
+
+    public static Types valueOfUri(String uri) {
+      for (Types type : Types.values()) {
+        if (type.getClazzNamespace().equals(uri)) {
+          return type;
+        }
+      }
+      return null;
+    }
   }
 
   public Metadata() {}
@@ -103,6 +112,14 @@ public abstract class Metadata implements Comparable<Metadata>, Serializable {
       return 0;
     else
       return 1;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj instanceof Metadata) {
+      return compareTo((Metadata) obj) == 0;
+    }
+    return false;
   }
 
   public abstract void copy(Metadata metadata);

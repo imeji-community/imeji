@@ -213,19 +213,20 @@
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
-    <!-- Parameters -->
-    <context-param>
+    <!-- Pretty Faces Parameters -->
+     <context-param>
         <param-name>com.ocpsoft.pretty.BASE_PACKAGES</param-name>
         <param-value>de.mpg.imeji</param-value>
     </context-param>
+    <!-- JSF Parameters --> 
     <context-param>
         <param-name>javax.faces.DEFAULT_SUFFIX</param-name>
         <param-value>.xhtml</param-value>
     </context-param>
     <context-param>
-        <param-name>javax.faces.PROJECT_STAGE</param-name>
-        <param-value>Production</param-value>
-    </context-param>
+	    <param-name>com.sun.faces.defaultResourceMaxAge</param-name>
+	    <param-value>2592000000</param-value> <!-- 30 days -->  
+	</context-param>
     <context-param>
         <param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name>
         <param-value>true</param-value>
@@ -235,25 +236,13 @@
         <param-value>true</param-value>
     </context-param>
     <context-param>
-        <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
-        <param-value>server</param-value>
-    </context-param>
-    <context-param>
         <param-name>javax.faces.CONFIG_FILES</param-name>
         <param-value>/WEB-INF/navigation.xml,/WEB-INF/managed-beans.xml
         </param-value>
     </context-param>
     <context-param>
-        <param-name>org.apache.myfaces.SERIALIZE_STATE_IN_SESSION</param-name>
-        <param-value>false</param-value>
-    </context-param>
-    <context-param>
         <param-name>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</param-name>
         <param-value>false</param-value>
-    </context-param>
-    <context-param>
-        <param-name>com.sun.faces.responseBufferSize</param-name>
-        <param-value>500000</param-value>
     </context-param>
     <context-param>
         <param-name>javax.faces.FACELETS_REFRESH_PERIOD</param-name>
@@ -263,8 +252,32 @@
         <param-name>javax.faces.PARTIAL_STATE_SAVING</param-name>
         <param-value>true</param-value>
     </context-param>
-
-
+    <context-param>
+        <param-name>javax.faces.FACELETS_BUFFER_SIZE</param-name>
+        <param-value>500000</param-value>
+    </context-param>
+     <context-param>
+        <param-name>javax.faces.SERIALIZE_SERVER_STATE</param-name>
+        <param-value>false</param-value>
+    </context-param> 
+    <context-param>
+        <param-name>org.apache.myfaces.SERIALIZE_STATE_IN_SESSION</param-name>
+        <param-value>false</param-value>
+    </context-param>
+	<context-param>
+		<param-name>facelets.DEVELOPMENT</param-name>
+		<param-value>false</param-value>
+	</context-param>
+    <!-- Mojarra specific parameters -->
+     <context-param>
+        <param-name>com.sun.faces.numberOfViewsInSession</param-name>
+        <param-value>1</param-value>
+    </context-param>
+ 	 <context-param>
+        <param-name>com.sun.faces.compressViewState</param-name>
+        <param-value>true</param-value>
+    </context-param>
+     
     <session-config>
         <session-timeout>180</session-timeout>
     </session-config>
@@ -291,12 +304,16 @@
         <error-code>500</error-code>
         <location>/jsf/errorPages/500.xhtml</location>
     </error-page>
+      
     <!-- Digilib staff -->
     <!-- The Intialisation Listener -->
-
     <listener>
         <listener-class>digilib.conf.DigilibServletConfiguration</listener-class>
     </listener>
+    <listener>
+        <listener-class>de.mpg.imeji.presentation.session.SetActiveViewMapsSizeSessionListener</listener-class>
+    </listener>
+	
     <!-- The Scaler servlet -->
     <servlet>
         <servlet-name>Scaler</servlet-name>

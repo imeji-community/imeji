@@ -258,8 +258,9 @@ public class AdminBean {
    */
   private synchronized void removeResources(List<String> uris, String modelName, Object obj)
       throws InstantiationException, IllegalAccessException, Exception {
-    if (clean)
+    if (clean) {
       removeObjects(loadResourcesAsObjects(uris, modelName, obj), modelName);
+    }
   }
 
   /**

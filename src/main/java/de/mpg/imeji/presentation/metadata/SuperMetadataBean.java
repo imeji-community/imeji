@@ -107,8 +107,9 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>, Seriali
    * @return
    */
   public Metadata asMetadata() {
-    if (resetCitation)
+    if (resetCitation) {
       resetCitation();
+    }
     ObjectHelper.copyAllFields(this, metadata);
     MetadataHelper.setConeID(metadata);
     return metadata;
@@ -195,10 +196,12 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>, Seriali
       this.name = nameString;
       this.license = nameString;
     }
-    if (longString != null)
+    if (longString != null) {
       this.longitude = Double.parseDouble(longString);
-    if (latString != null)
+    }
+    if (latString != null) {
       this.latitude = Double.parseDouble(latString);
+    }
     toNull = uriString != null || nameString != null || longString != null || latString != null;
     if (!toNull) {
       name = s;
@@ -258,8 +261,9 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>, Seriali
    * @param text
    */
   public void setText(String text) {
-    if (!toNull)
+    if (!toNull) {
       this.text = text;
+    }
   }
 
   /**
@@ -313,8 +317,9 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>, Seriali
    * @param uri
    */
   public void setUri(URI uri) {
-    if (!toNull)
+    if (!toNull) {
       this.uri = uri;
+    }
   }
 
   /**
@@ -410,8 +415,9 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>, Seriali
    * @param name
    */
   public void setName(String name) {
-    if (!toNull)
+    if (!toNull) {
       this.name = name;
+    }
   }
 
   /**
@@ -465,8 +471,9 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>, Seriali
    * @param number
    */
   public void setNumber(double number) {
-    if (!toNull)
+    if (!toNull) {
       this.number = number;
+    }
   }
 
   /**
@@ -484,8 +491,9 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>, Seriali
    * @param license
    */
   public void setLicense(String license) {
-    if (!toNull)
+    if (!toNull) {
       this.license = license;
+    }
   }
 
   /**
@@ -499,8 +507,9 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>, Seriali
    * @param externalUri the externalUri to set
    */
   public void setExternalUri(URI externalUri) {
-    if (!toNull)
+    if (!toNull) {
       this.externalUri = externalUri;
+    }
   }
 
   public void externalURIListener(ValueChangeEvent vce) {
@@ -621,6 +630,14 @@ public class SuperMetadataBean implements Comparable<SuperMetadataBean>, Seriali
     else if (getPos() < o.getPos())
       return -1;
     return 0;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj instanceof SuperMetadataBean) {
+      return compareTo((SuperMetadataBean) obj) == 0;
+    }
+    return false;
   }
 
   /**

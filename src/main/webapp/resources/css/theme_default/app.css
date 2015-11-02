@@ -57,7 +57,7 @@ p { display: block; margin: 1em 0; }
 
 /* ===[ ICONS - Buttons ]=== ================================================== */
 body .imj_logo { width: 13em; height: 5em; padding: 0; display: inline-block; background: transparent url("../../resources/imj_iconset/logo_imeji.gif") -1.90909em 0 no-repeat; }
-body .imj_logo_alt { width: 13em; height: 5em; padding: 0; display: inline-block;}
+body .imj_logo_alt { max-height: 154px; margin-top: -25px; margin-bottom: -25px; }
 body .imj_buttonStyleSwitcher { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; margin: 0 0.727272em; outline: none; background: transparent url("../../resources/imj_iconset/6CAE2F/imjButtonMonitorColor_16.png") 0 0 no-repeat; }
 body .imj_buttonStyleSwitcher:hover { border: 0 none; outline: none; background: transparent url("../../resources/imj_iconset/F0F0F0/imjButtonMonitorColor_16.png") 0 0 no-repeat; }
 body .imj_iconTriangleBottomRight_16 { display: inline-block; width: 16px; height: 16px; vertical-align: middle; border: 0 none; cursor: pointer; background: transparent url("../../resources/imj_iconset/6CAE2F/imjTriangleLargeBottomRight_16.png") 0 0 no-repeat; }
@@ -135,7 +135,7 @@ body a:hover .imj_entryPagePreviewTiledListLinkArrow { background: transparent u
 .imj_siteWrapper { overflow: hidden; width: 100%; max-width: 84.0909em; height: auto !important; min-height: 100%; margin: 0 auto; margin-bottom: -2.001em; border-left: 0.1em dotted #6CAE2F; border-right: 0.1em dotted #6CAE2F; }
 .imj_siteWrapper .imj_siteHeader { padding: 0 4%; }
 .imj_siteWrapper .imj_siteHeader:after { clear: both; content: ""; content: 0 none; }
-.imj_siteWrapper .imj_siteHeader .imj_simpleSearchButtonSubmit { color: #F0F0F0; background-color: #6CAE2F; border: solid #6CAE2F 0.1em; }
+.imj_siteWrapper .imj_siteHeader .imj_simpleSearchButtonSubmit { color: #F0F0F0; background-color: #6CAE2F; border: solid #6CAE2F 0.1em; cursor: pointer; }
 .imj_siteWrapper .imj_siteHeader .imj_simpleSearchButtonSubmit:hover { color: #000000; background-color: #4AFF00; border: solid #4AFF00 0.1em; }
 .imj_siteWrapper .imj_siteHeader .imj_simpleSearchButtonSubmit:focus { color: #000000; background-color: #4AFF00; border: solid #4AFF00 0.1em; }
 .imj_siteWrapper .imj_spaceLogo { max-height: 5em; margin-left: 3%; }
@@ -143,6 +143,7 @@ body a:hover .imj_entryPagePreviewTiledListLinkArrow { background: transparent u
 .imj_siteWrapper .imj_siteContentHeadline:after { content: ""; content: none; clear: right; }
 .imj_siteWrapper .imj_siteContentHeadline h1 { font-size: 160%; font-weight: bold; letter-spacing: 0.045em; line-height: normal; }
 .imj_siteWrapper .imj_siteFooter { clear: both; width: 100%; padding: 2em 0; text-align: center; }
+.imj_siteWrapper .imj_siteFooter img { max-height: 40px; }
 
 .imj_invisible { visibility: hidden; }
 
@@ -345,6 +346,7 @@ select.imj_metadataEditText { min-height: 0; }
 .imj_simpleSearch .imj_simpleSearchInput:hover { border: solid #6CAE2F 0.1em; }
 .imj_simpleSearch .imj_simpleSearchInput:active { border: solid #6CAE2F 0.1em; }
 .imj_simpleSearch .imj_simpleSearchInput:focus { width: 12em; border: solid #6CAE2F 0.1em; }
+.imj_simpleSearch:hover .imj_simpleSearchInput { width: 12em; }
 .imj_simpleSearch .imj_simpleSearchButtonSubmit { margin-left: 0; padding-left: 1em; padding-right: 1em; -moz-border-radius: 0 0.45455em 0.45455em 0; -webkit-border-radius: 0; border-radius: 0 0.45455em 0.45455em 0; vertical-align: top; }
 .imj_simpleSearch .imj_simpleSearchButtonSubmit:hover { color: #000000; background-color: #4AFF00; border: solid #4AFF00 0.1em; }
 .imj_simpleSearch .imj_simpleSearchButtonSubmit:active { color: #000000; background-color: #4AFF00; border: solid #4AFF00 0.1em; }
@@ -779,7 +781,8 @@ iframe#twitter-widget-0 div.root div.stream { height: 20em !important; }
 
 .imj_fileTypeConfig { width: 100%; }
 .imj_fileTypeConfig table.imj_fileTypeConfigList { width: 100%; margin-top: 0.5em; }
-.imj_fileTypeConfig table.imj_fileTypeConfigList td .imj_fileTypeInput, .imj_fileTypeConfig table.imj_fileTypeConfigList td .imj_fileTypeValueInput { width: 90%; padding: 1% 2%; }
+.imj_fileTypeConfig table.imj_fileTypeConfigList td .imj_fileTypeInput, .imj_fileTypeConfig table.imj_fileTypeConfigList td .imj_fileTypeValueInput { width: 94%; padding: 1% 2%; }
+.imj_fileTypeConfig .imj_inlineButtonGroup * + * { margin-left: 0.272727em; }
 
 .imj_tabList .imj_tabMenu { width: 100%; background-color: #292929; font-size: 120%; }
 .imj_tabList .imj_tabMenu li { display: inline-block; padding: 1em 0.5em; }
@@ -873,7 +876,7 @@ body .imj_siteWrapper .moxie-shim input { border-radius: 0; -webkit-border-radiu
 .imj_startpageFooterLogos .imj_poweredby_software { float: left; margin-left: 2%; display: table; }
 .imj_startpageFooterLogos .imj_poweredby_software .imj_poweredby_software_text { display: table-cell; vertical-align: middle; }
 .imj_startpageFooterLogos .imj_poweredby_software .imj_poweredby_software_image { display: table-cell; vertical-align: middle; padding-left: 0.5em; }
-.imj_startpageFooterLogos .imj_poweredby_institution { float: right; margin-right: 2%; }
+.imj_startpageFooterLogos .imj_poweredby_institution { float: right; margin-right: 2%; margin-top: -1.5em; }
 
 .imj_siteWrapper .imj_headline_text h1 { font-size: 160%; font-weight: bold; letter-spacing: 0.045em; line-height: normal; }
 .imj_siteWrapper .imj_headline_text h2 { font-size: 140%; font-weight: bold; letter-spacing: 0.045em; line-height: normal; }

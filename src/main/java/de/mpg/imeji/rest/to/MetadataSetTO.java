@@ -13,6 +13,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import de.mpg.imeji.logic.util.ObjectHelper;
+import de.mpg.imeji.logic.vo.Statement;
+import de.mpg.j2j.misc.LocalizedString;
+
 @XmlRootElement
 @XmlType(propOrder = {"position", "Labels", "value", "statementUri", "typeUri",})
 @JsonInclude(Include.NON_NULL)
@@ -21,10 +25,28 @@ public class MetadataSetTO implements Serializable {
 
   private static final long serialVersionUID = 5826924314949469841L;
 
+  public MetadataSetTO() {
+    // TODO Auto-generated constructor stub
+  }
+
+  /**
+   * Construct a {@link MetadataSetTO} from a {@link StatementTO}
+   * 
+   * @param statement
+   */
+  public MetadataSetTO(StatementTO statement) {
+    // TODO refactor statementTO with LocalizedStringTO
+    for (LocalizedString label : statement.getLabels()) {
+      labels.add(new LabelTO(label.getLang(), label.getValue()));
+    }
+    this.statementUri = ObjectHelper.getURI(Statement.class, statement.getId());
+    this.typeUri = statement.getType();
+  }
+
   @JsonIgnore
   private int position;
 
-  private List<LabelTO> Labels = new ArrayList<LabelTO>();
+  private List<LabelTO> labels = new ArrayList<LabelTO>();
 
   private MetadataTO value;
 
@@ -41,11 +63,11 @@ public class MetadataSetTO implements Serializable {
   }
 
   public List<LabelTO> getLabels() {
-    return Labels;
+    return labels;
   }
 
   public void setLabels(List<LabelTO> labels) {
-    Labels = labels;
+    this.labels = labels;
   }
 
   public MetadataTO getValue() {

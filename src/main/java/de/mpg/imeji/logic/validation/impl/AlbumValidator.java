@@ -31,13 +31,20 @@ public class AlbumValidator extends ObjectValidator implements Validator<Album> 
       return;
     }
 
+    boolean valid = true;
+    String errorMessage = "";
+    
     if (StringHelper.hasInvalidTags(album.getMetadata().getDescription())) {
-      throw new UnprocessableError("error_bad_format_description");
+      valid = false;
+      errorMessage += "error_bad_format_description;";
+      //throw new UnprocessableError("error_bad_format_description");
     }
 
     if (isNullOrEmpty(album.getMetadata().getTitle().trim())) {
-      throw new UnprocessableError("error_album_need_title");
+      valid = false;
+      errorMessage+="error_album_need_title;";
     }
+    
     List<Person> pers = new ArrayList<Person>();
 
     for (Person c : album.getMetadata().getPersons()) {
@@ -46,7 +53,8 @@ public class AlbumValidator extends ObjectValidator implements Validator<Album> 
         if (!isNullOrEmpty(o.getName().trim())) {
           orgs.add(o);
         } else {
-          throw new UnprocessableError("error_organization_need_name");
+          valid= false;
+          errorMessage+="error_organization_need_name;";
         }
       }
 
@@ -54,15 +62,22 @@ public class AlbumValidator extends ObjectValidator implements Validator<Album> 
         if (orgs.size() > 0) {
           pers.add(c);
         } else {
-          throw new UnprocessableError("error_author_need_one_organization");
+          valid=false;
+          errorMessage+="error_author_need_one_organization;";
         }
       } else {
-        throw new UnprocessableError("error_author_need_one_family_name");
+        valid=false;
+        errorMessage+="error_author_need_one_family_name;";
       }
     }
 
     if (pers.size() == 0 || pers == null || pers.isEmpty()) {
-      throw new UnprocessableError("error_album_need_one_author");
+      valid=false;
+      errorMessage+="error_album_need_one_author;";
+    }
+    
+    if (!valid) {
+      throw new UnprocessableError(errorMessage);
     }
 
   }

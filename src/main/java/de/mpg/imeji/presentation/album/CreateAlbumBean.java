@@ -24,6 +24,7 @@
  */
 package de.mpg.imeji.presentation.album;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
@@ -99,9 +100,14 @@ public class CreateAlbumBean extends AlbumBean {
       FacesContext.getCurrentInstance().getExternalContext()
           .redirect(nav.getAlbumUrl() + getAlbum().getIdString());
     } catch (UnprocessableError e) {
-      BeanHelper.error(sessionBean.getMessage(e.getMessage()));
-      getAlbum().setId(null);
-    }
+        BeanHelper.cleanMessages();
+        BeanHelper.error(sessionBean.getMessage("error_album_create"));
+        List<String> listOfErrors = Arrays.asList(e.getMessage().split(";"));
+        for (String errorM : listOfErrors) {
+          BeanHelper.error(sessionBean.getMessage(errorM));
+        }
+        getAlbum().setId(null);
+      }
     return "";
   }
 }

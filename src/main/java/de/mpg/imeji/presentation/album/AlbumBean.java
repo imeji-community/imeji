@@ -4,6 +4,7 @@
 package de.mpg.imeji.presentation.album;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -341,7 +342,12 @@ public class AlbumBean extends ContainerBean {
       BeanHelper.info(sessionBean.getMessage("success_album_update"));
       return true;
     } catch (UnprocessableError e) {
-      BeanHelper.error(sessionBean.getMessage(e.getMessage()));
+      BeanHelper.cleanMessages();
+      BeanHelper.error(sessionBean.getMessage("error_album_update"));
+      List<String> listOfErrors = Arrays.asList(e.getMessage().split(";"));
+      for (String errorM : listOfErrors) {
+        BeanHelper.error(sessionBean.getMessage(errorM));
+      }
       return false;
     }
 

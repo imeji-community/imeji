@@ -2,6 +2,8 @@ package de.mpg.imeji.presentation.space;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -48,9 +50,13 @@ public class CreateSpaceBean extends SpaceBean {
       BeanHelper.info(sessionBean.getMessage("success_space_create"));
       return true;
     } catch (UnprocessableError e) {
-      BeanHelper.error(sessionBean.getMessage(e.getMessage()));
+        BeanHelper.cleanMessages();
+        BeanHelper.error(sessionBean.getMessage("error_space_create"));
+        List<String> listOfErrors = Arrays.asList(e.getMessage().split(";"));
+        for (String errorM : listOfErrors) {
+          BeanHelper.error(sessionBean.getMessage(errorM));
+        }
+      return false;
     }
-    return false;
   }
-
 }

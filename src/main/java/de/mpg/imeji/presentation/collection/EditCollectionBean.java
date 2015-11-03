@@ -5,7 +5,9 @@ package de.mpg.imeji.presentation.collection;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -116,9 +118,15 @@ public class EditCollectionBean extends CollectionBean {
       BeanHelper.info(sessionBean.getMessage("success_collection_save"));
       return true;
     } catch (ImejiException e) {
-      BeanHelper.error(sessionBean.getMessage(e.getMessage()));
+      BeanHelper.cleanMessages();
+      BeanHelper.error(sessionBean.getMessage("error_collection_save"));
+      List<String> listOfErrors = Arrays.asList(e.getMessage().split(";"));
+      for (String errorM : listOfErrors) {
+        BeanHelper.error(sessionBean.getMessage(errorM));
+      }
       return false;
-    } catch (IOException e) {
+    }
+     catch (IOException e) {
       BeanHelper.error(sessionBean.getMessage("error_collection_logo_save"));
       return false;
     } catch (URISyntaxException e) {

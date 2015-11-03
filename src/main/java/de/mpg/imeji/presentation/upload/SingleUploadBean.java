@@ -337,7 +337,7 @@ public class SingleUploadBean implements Serializable {
     CollectionController cc = new CollectionController();
     SearchQuery sq = new SearchQuery();
     SortCriterion sortCriterion = new SortCriterion();
-    sortCriterion.setIndex(JenaSearch.getIndex("cont_title"));
+    sortCriterion.setIndex(JenaSearch.getIndex("title"));
     sortCriterion.setSortOrder(SortOrder.valueOf("DESCENDING"));
     SearchResult results = cc.search(sq, sortCriterion, -1, 0, user, sb.getSelectedSpaceString());
     return (List<CollectionImeji>) cc.retrieveBatchLazy(results.getResults(), -1, 0, user);

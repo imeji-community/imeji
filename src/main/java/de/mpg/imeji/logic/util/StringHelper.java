@@ -123,11 +123,12 @@ public class StringHelper {
     if (isNullOrEmpty(s)) {
       return false;
     } 
-    String safeString = Jsoup.clean(s, Whitelist.relaxed());
-    if (!s.equals(safeString)) {
+    
+    if (!Jsoup.isValid(s, Whitelist.relaxed())) {
       return true;
     }
-    return false;
+
+  return false;
   }
 
 }

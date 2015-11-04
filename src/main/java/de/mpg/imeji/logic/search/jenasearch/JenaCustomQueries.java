@@ -63,8 +63,7 @@ public class JenaCustomQueries {
   public static String selectMetadataRestricted() {
     return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 WHERE {  ?it a <http://imeji.org/terms/item>"
         + " . ?it <http://imeji.org/terms/collection> ?sort0"
-        + ". ?it <http://imeji.org/terms/metadataSet> ?mds . ?mds <"
-        + ImejiNamespaces.METADATA
+        + ". ?it <http://imeji.org/terms/metadataSet> ?mds . ?mds <" + ImejiNamespaces.METADATA
         + "> ?s . ?s <http://imeji.org/terms/statement> ?st"
         + " . ?st <http://imeji.org/terms/restricted> ?r  .FILTER(?r='true'^^<http://www.w3.org/2001/XMLSchema#boolean>) }";
   }
@@ -76,8 +75,7 @@ public class JenaCustomQueries {
    * @return
    */
   public static String selectMetadataNamespace(String uri) {
-    return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE { <"
-        + uri
+    return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE { <" + uri
         + "> <http://imeji.org/terms/statement> ?st . ?st <http://imeji.org/terms/namespace> ?s }";
   }
 
@@ -110,13 +108,12 @@ public class JenaCustomQueries {
    * @return
    */
   public static String hasOtherMetadataProfileReferences(String profileUri, String resourceUri) {
-    String q =
-        " SELECT ?s WHERE { ?s ?p ?o ." + "?s <http://imeji.org/terms/mdprofile> <" + profileUri
-            + ">." + " FILTER (?s != <" + resourceUri + ">  && ?s != <" + profileUri + ">) "
-            + " NOT EXISTS { " + "?item <http://imeji.org/terms/metadataSet> ?s. "
-            + "?s <http://imeji.org/terms/mdprofile> ?o. "
-            + "?item <http://imeji.org/terms/collection> ?collection." + "FILTER (?collection = <"
-            + resourceUri + ">) }" + "} LIMIT 1";
+    String q = " SELECT ?s WHERE { ?s ?p ?o ." + "?s <http://imeji.org/terms/mdprofile> <"
+        + profileUri + ">." + " FILTER (?s != <" + resourceUri + ">  && ?s != <" + profileUri
+        + ">) " + " NOT EXISTS { " + "?item <http://imeji.org/terms/metadataSet> ?s. "
+        + "?s <http://imeji.org/terms/mdprofile> ?o. "
+        + "?item <http://imeji.org/terms/collection> ?collection." + "FILTER (?collection = <"
+        + resourceUri + ">) }" + "} LIMIT 1";
     return q;
 
   }
@@ -164,15 +161,26 @@ public class JenaCustomQueries {
   }
 
   /**
-   * Select a User by its Email 
+   * Select a User by its Email
    * 
    * @param email
    * @return
    */
   public static String selectUserByEmail(String email) {
     return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE { ?s a  <http://imeji.org/terms/user>. "
-        + " ?s <http://xmlns.com/foaf/0.1/email> \""
-        + email
+        + " ?s <http://xmlns.com/foaf/0.1/email> \"" + email
+        + "\"^^<http://www.w3.org/2001/XMLSchema#string> }";
+  }
+
+  /**
+   * Select a User by its Email
+   * 
+   * @param email
+   * @return
+   */
+  public static String selectUserByApiKey(String key) {
+    return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE { ?s a  <http://imeji.org/terms/user>. "
+        + " ?s <http://imeji.org/terms/apiKey> \"" + key
         + "\"^^<http://www.w3.org/2001/XMLSchema#string> }";
   }
 
@@ -184,8 +192,7 @@ public class JenaCustomQueries {
    */
   public static String selectUserByEmailAndId(String email, URI userId) {
     return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE { ?s a  <http://imeji.org/terms/user>. "
-        + " ?s <http://xmlns.com/foaf/0.1/email> \""
-        + email
+        + " ?s <http://xmlns.com/foaf/0.1/email> \"" + email
         + "\"^^<http://www.w3.org/2001/XMLSchema#string> }";
   }
 
@@ -210,8 +217,7 @@ public class JenaCustomQueries {
   public static String selectUserSysAdmin() {
     return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s WHERE {OPTIONAL{ ?s <http://imeji.org/terms/grant> ?g . ?g <http://imeji.org/terms/grantType> <"
         + AuthUtil.toGrantTypeURI(GrantType.ADMIN).toString()
-        + ">. ?g <http://imeji.org/terms/grantFor> <"
-        + PropertyBean.baseURI()
+        + ">. ?g <http://imeji.org/terms/grantFor> <" + PropertyBean.baseURI()
         + ">} . filter(bound(?g)) . ?s a <http://imeji.org/terms/user>}";
   }
 
@@ -329,8 +335,7 @@ public class JenaCustomQueries {
   }
 
   public static String selectProfileIdOfItem(String itemUri) {
-    return " SELECT DISTINCT ?s WHERE {<"
-        + itemUri
+    return " SELECT DISTINCT ?s WHERE {<" + itemUri
         + "> <http://imeji.org/terms/metadataSet> ?mds . ?mds <http://imeji.org/terms/mdprofile> ?s} LIMIT 1 ";
   }
 
@@ -374,8 +379,7 @@ public class JenaCustomQueries {
    */
   public static String selectMetadataUnbounded() {
     return "PREFIX fn: <http://www.w3.org/2005/xpath-functions#> SELECT DISTINCT ?s ?sort0 WHERE {?mds <"
-        + ImejiNamespaces.METADATA
-        + "> ?s"
+        + ImejiNamespaces.METADATA + "> ?s"
         + " . ?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?sort0 . ?s <http://imeji.org/terms/statement> ?st"
         + " . not exists{?p a <http://imeji.org/terms/mdprofile> . ?p <http://imeji.org/terms/statement> ?st}}";
   }
@@ -548,13 +552,8 @@ public class JenaCustomQueries {
    * @return
    */
   public static String cleanStatement() {
-    return "WITH <"
-        + Imeji.profileModel
-        + "> "
-        + "DELETE {?s ?p ?o} "
-        + "USING <"
-        + Imeji.profileModel
-        + "> "
+    return "WITH <" + Imeji.profileModel + "> " + "DELETE {?s ?p ?o} " + "USING <"
+        + Imeji.profileModel + "> "
         + "WHERE { ?s <http://imeji.org/terms/parent> ?parent  . not exists{?parent ?pr ?ob} . ?s ?p ?o }";
   }
 
@@ -584,8 +583,8 @@ public class JenaCustomQueries {
    */
   public static String insertFileSize(String itemId, String fileSize) {
     return "WITH <http://imeji.org/item> " + "INSERT {<" + itemId
-        + "> <http://imeji.org/terms/fileSize> " + fileSize + "}"
-        + "USING <http://imeji.org/item> " + "WHERE{<" + itemId + "> ?p ?o}";
+        + "> <http://imeji.org/terms/fileSize> " + fileSize + "}" + "USING <http://imeji.org/item> "
+        + "WHERE{<" + itemId + "> ?p ?o}";
   }
 
   /**
@@ -634,11 +633,8 @@ public class JenaCustomQueries {
   public static String selectContainerItemByFilename(URI containerURI, String filename) {
     filename = removeforbiddenCharacters(filename);
     return "SELECT DISTINCT ?s WHERE {?s <http://imeji.org/terms/filename> ?el . FILTER(regex(?el, '^"
-        + filename
-        + "\\\\..+', 'i')) .?s <http://imeji.org/terms/collection> <"
-        + containerURI.toString()
-        + "> . ?s <"
-        + ImejiNamespaces.STATUS
+        + filename + "\\\\..+', 'i')) .?s <http://imeji.org/terms/collection> <"
+        + containerURI.toString() + "> . ?s <" + ImejiNamespaces.STATUS
         + "> ?status . FILTER (?status!=<" + Status.WITHDRAWN.getUriString() + ">)} LIMIT 2";
   }
 
@@ -685,8 +681,7 @@ public class JenaCustomQueries {
    * @return
    */
   public static String selectInstituteFileSize(String instituteName) {
-    return "SELECT (SUM(?size) AS ?s) WHERE {?c <"
-        + ImejiNamespaces.CREATOR
+    return "SELECT (SUM(?size) AS ?s) WHERE {?c <" + ImejiNamespaces.CREATOR
         + "> ?user . ?user <http://xmlns.com/foaf/0.1/email> ?email .filter(regex(?email, '"
         + instituteName
         + "', 'i')) . ?c a <http://imeji.org/terms/collection> . ?item <http://imeji.org/terms/collection> ?c . ?item <http://imeji.org/terms/fileSize> ?size}";

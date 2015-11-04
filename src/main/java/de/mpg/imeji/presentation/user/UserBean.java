@@ -4,6 +4,8 @@
 package de.mpg.imeji.presentation.user;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -112,8 +114,11 @@ public class UserBean {
    * Generate a new API Key, and update the user
    * 
    * @throws ImejiException
+   * @throws NoSuchAlgorithmException
+   * @throws UnsupportedEncodingException
    */
-  public void generateNewApiKey() throws ImejiException {
+  public void generateNewApiKey()
+      throws ImejiException, NoSuchAlgorithmException, UnsupportedEncodingException {
     user.setApiKey(IdentifierUtil.newUniversalUniqueId());
     if (user != null) {
       new UserController(session.getUser()).update(user, session.getUser());

@@ -49,7 +49,7 @@
 						<h:panelGroup layout="block" styleClass="imj_adminPanel imj_userConfig">
 						
 							<div class="imj_headline">
-								<h2><h:outputText value="#{headline} - #{UserBean.user.name}"/></h2>
+								<h2><h:outputText value="#{headline} - #{UserBean.user.person.completeName}"/></h2>
 							</div>
 							
 							<div class="imj_content">
@@ -81,7 +81,7 @@
 											</div>
 											<div class="imj_admindataValue">
 												<h:panelGroup class="imj_admindataValueEntry" >
-													<h:outputText value="#{UserBean.user.name}" />
+													<h:outputText value="#{UserBean.user.person.completeName}" />
 												</h:panelGroup>
 											</div>
 										</h:panelGroup>
@@ -107,7 +107,7 @@
 											bean="#{UserBean}" position="0" rendered="#{UserBean.edit}"/>
 
 										<!-- Disk space quota -->
-										<h:panelGroup layout="block" styleClass="imj_admindataSet">
+										<div class="imj_admindataSet">
 											<div class="imj_admindataLabel">
 												<h:outputText value="#{lbl.quota}"/>
 												<span class="imj_invisible">: </span>
@@ -120,7 +120,27 @@
 													<h:inputText value="#{UserBean.user.quota}"/>
 												</h:panelGroup>
 											</div>
-										</h:panelGroup>
+										</div>
+										
+										<!-- API Key -->
+										<ui:fragment rendered="#{!UserBean.edit}">
+											<div class="imj_admindataSet">
+												<div class="imj_admindataLabel">
+													<h:outputText value="#{lbl.api_key}"/>
+													<span class="imj_invisible">: </span>
+												</div>
+												<div class="imj_admindataValue">
+													<span class="imj_admindataValueEntry">
+														<h:outputText value="#{UserBean.user.apiKey}"/>
+													</span>
+													<span class="imj_admindataValueEntry">
+														<h:commandLink action="#{UserBean.generateNewApiKey}" value="#{lbl.api_key_generate}">
+															<f:ajax execute="@this" render=":userForm:userInfos"/>
+														</h:commandLink>
+													</span>
+												</div>
+											</div>
+										</ui:fragment>
 
 										<!-- submit panel -->
 										<div class="imj_submitPanel">
@@ -134,7 +154,7 @@
 												<f:ajax execute="@form"  render=":userForm:userInfos :imj_pageMessageArea"/>
 											</h:commandLink>
 										</div>
-									
+										
 									</h:panelGroup> <!-- END user infos -->
 									
 									<!-- User Edit - Password -->
@@ -171,7 +191,7 @@
 									<!-- User Grants -->
 									<h:panelGroup layout="block" styleClass="imj_admindataSetEdit imj_admindataSet">
 										<div class="imj_admindataLabel">
-											<h:outputText value="#{UserBean.user.name} #{lbl.grants_has_following}:"/>
+											<h:outputText value="#{UserBean.user.person.completeName} #{lbl.grants_has_following}:"/>
 										</div>
 										<div class="imj_admindataValue">
 											<div class="imj_admindataValueEntry">

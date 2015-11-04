@@ -51,11 +51,10 @@ public class EmailMessages {
   public String getNewPasswordMessage(String password, String email, String username) {
     String msg = "";
     try {
-      String name =
-          ((ConfigurationBean) BeanHelper.getApplicationBean(ConfigurationBean.class))
-              .getInstanceName();
-      return getEmailOnAccountAction_Body(password, email, username, "email_new_password").replace(
-          "XXX_INSTANCE_NAME_XXX", name);
+      String name = ((ConfigurationBean) BeanHelper.getApplicationBean(ConfigurationBean.class))
+          .getInstanceName();
+      return getEmailOnAccountAction_Body(password, email, username, "email_new_password")
+          .replace("XXX_INSTANCE_NAME_XXX", name);
     } catch (Exception e) {
       Logger.getLogger(EmailMessages.class).info("Will return empty message, due to some error", e);
       return msg;
@@ -74,9 +73,8 @@ public class EmailMessages {
   public String getSharedCollectionMessage(String sender, String dest, String collectionName,
       String collectionLink) {
     String message = getBundle("email_shared_collection");
-    message =
-        message.replace("XXX_USER_NAME_XXX,", dest).replace("XXX_NAME_XXX", collectionName)
-            .replace("XXX_LINK_XXX", collectionLink).replace("XXX_SENDER_NAME_XXX", sender);
+    message = message.replace("XXX_USER_NAME_XXX,", dest).replace("XXX_NAME_XXX", collectionName)
+        .replace("XXX_LINK_XXX", collectionLink).replace("XXX_SENDER_NAME_XXX", sender);
     return message;
   }
 
@@ -91,9 +89,8 @@ public class EmailMessages {
    */
   public String getSharedItemMessage(String sender, String dest, String itemName, String itemLink) {
     String message = getBundle("email_shared_item");
-    message =
-        message.replace("XXX_USER_NAME_XXX,", dest).replace("XXX_NAME_XXX", itemName)
-            .replace("XXX_LINK_XXX", itemLink).replace("XXX_SENDER_NAME_XXX", sender);
+    message = message.replace("XXX_USER_NAME_XXX,", dest).replace("XXX_NAME_XXX", itemName)
+        .replace("XXX_LINK_XXX", itemLink).replace("XXX_SENDER_NAME_XXX", sender);
     return message;
   }
 
@@ -109,9 +106,8 @@ public class EmailMessages {
   public String getSharedAlbumMessage(String sender, String dest, String collectionName,
       String collectionLink) {
     String message = getBundle("email_shared_album");
-    message =
-        message.replace("XXX_USER_NAME_XXX,", dest).replace("XXX_NAME_XXX", collectionName)
-            .replace("XXX_LINK_XXX", collectionLink).replace("XXX_SENDER_NAME_XXX", sender);
+    message = message.replace("XXX_USER_NAME_XXX,", dest).replace("XXX_NAME_XXX", collectionName)
+        .replace("XXX_LINK_XXX", collectionLink).replace("XXX_SENDER_NAME_XXX", sender);
     return message;
   }
 
@@ -175,8 +171,8 @@ public class EmailMessages {
    * @return
    */
   public String getEmailOnRegistrationRequest_Subject(SessionBean session) {
-    return session.getMessage("email_registration_request_subject").replaceAll(
-        "XXX_INSTANCE_NAME_XXX", session.getInstanceName());
+    return session.getMessage("email_registration_request_subject")
+        .replaceAll("XXX_INSTANCE_NAME_XXX", session.getInstanceName());
   }
 
 
@@ -191,14 +187,12 @@ public class EmailMessages {
    */
   public String getEmailOnRegistrationRequest_Body(User to, String password, String contactEmail,
       SessionBean session, String navigationUrl) {
-    return session
-        .getMessage("email_registration_request_body")
-        .replace("XXX_USER_NAME_XXX", to.getName())
+    return session.getMessage("email_registration_request_body")
+        .replace("XXX_USER_NAME_XXX", to.getPerson().getCompleteName())
         .replace("XXX_LOGIN_XXX", to.getEmail())
         .replace("XXX_USER_PLAIN_TEXT_PASSWORD_XXX", password)
         .replaceAll("XXX_INSTANCE_NAME_XXX", session.getInstanceName())
-        .replaceAll("XXX_CONTACT_EMAIL_XXX", contactEmail)
-        .replace("XXX_ACTIVATION_LINK_XXX",
+        .replaceAll("XXX_CONTACT_EMAIL_XXX", contactEmail).replace("XXX_ACTIVATION_LINK_XXX",
             navigationUrl + "?token=" + to.getRegistrationToken() + "&login=" + to.getEmail());
   }
 
@@ -210,13 +204,14 @@ public class EmailMessages {
    */
   public String getEmailOnAccountActivation_Subject(User u, SessionBean session) {
     return session.getMessage("email_account_activation_subject").replace("XXX_USER_NAME_XXX",
-        u.getName());
+        u.getPerson().getCompleteName());
   }
 
   public String getEmailOnAccountActivation_Body(User u, SessionBean session) {
     return session.getMessage("email_account_activation_body")
         .replaceAll("XXX_INSTANCE_NAME_XXX", session.getInstanceName())
-        .replace("XXX_USER_NAME_XXX", u.getName()).replace("XXX_USER_EMAIL_XXX", u.getEmail())
+        .replace("XXX_USER_NAME_XXX", u.getPerson().getCompleteName())
+        .replace("XXX_USER_EMAIL_XXX", u.getEmail())
         .replace("XXX_ORGANIZATION_XXX", u.getPerson().getOrganizationString())
         .replace("XXX_TIME_XXX", new Date().toString());
   }
@@ -235,12 +230,13 @@ public class EmailMessages {
   public String getEmailOnItemDownload_Body(User to, User actor, Item item, CollectionImeji c,
       SessionBean session) {
     return session.getMessage("email_item_downloaded_body")
-        .replace("XXX_USER_NAME_XXX", to.getName())
+        .replace("XXX_USER_NAME_XXX", to.getPerson().getCompleteName())
         .replace("XXX_ITEM_ID_XXX", ObjectHelper.getId(item.getId()))
         .replace("XXX_ITEM_LINK_XXX", item.getId().toString())
         .replace("XXX_COLLECTION_NAME_XXX", c.getMetadata().getTitle())
         .replace("XXX_COLLECTION_LINK_XXX", c.getId().toString())
-        .replace("XXX_ACTOR_NAME_XXX", (actor != null ? actor.getName() : "non_logged_in_user"))
+        .replace("XXX_ACTOR_NAME_XXX",
+            (actor != null ? actor.getPerson().getCompleteName() : "non_logged_in_user"))
         .replace("XXX_ACTOR_EMAIL_XXX", (actor != null ? actor.getEmail() : ""))
         .replace("XXX_TIME_XXX", new Date().toString());
   }
@@ -270,8 +266,9 @@ public class EmailMessages {
   public String getEmailOnZipDownload_Body(User to, User actor, String itemsDownloaded, String url,
       SessionBean session) {
     return session.getMessage("email_zip_images_downloaded_body")
-        .replace("XXX_USER_NAME_XXX", to.getName())
-        .replace("XXX_ACTOR_NAME_XXX", (actor != null ? actor.getName() : "non_logged_in_user"))
+        .replace("XXX_USER_NAME_XXX", to.getPerson().getCompleteName())
+        .replace("XXX_ACTOR_NAME_XXX",
+            (actor != null ? actor.getPerson().getCompleteName() : "non_logged_in_user"))
         .replace("XXX_ACTOR_EMAIL_XXX", (actor != null ? actor.getEmail() : ""))
         .replace("XXX_TIME_XXX", new Date().toString())
         .replace("XXX_ITEMS_DOWNLOADED_XXX", itemsDownloaded)

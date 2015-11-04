@@ -111,8 +111,6 @@ public class UserController {
         u.setRegistrationToken(IdentifierUtil.newUniversalUniqueId());
         break;
     }
-    u.setName(u.getPerson().getGivenName() + " " + u.getPerson().getFamilyName());
-
     Calendar now = DateHelper.getCurrentDate();
     u.setCreated(now);
     u.setModified(now);
@@ -149,7 +147,7 @@ public class UserController {
     Search search = SearchFactory.create();
     SearchResult result =
         search.searchString(JenaCustomQueries.selectUserByEmail(email), null, null, 0, -1);
-    if (result.getNumberOfRecords() == 1) {
+    if (result.getNumberOfRecords() > 0) {
       String id = result.getResults().get(0);
       User u = (User) reader.read(id, user, new User());
       UserGroupController ugc = new UserGroupController();
@@ -265,8 +263,6 @@ public class UserController {
     } catch (NotFoundException e) {
       // fine, user can be updated
     }
-    updatedUser.setName(
-        updatedUser.getPerson().getGivenName() + " " + updatedUser.getPerson().getFamilyName());
 
     // if quota is set to 0, set it to default disk space quota
     if (updatedUser.getQuota() == 0) {

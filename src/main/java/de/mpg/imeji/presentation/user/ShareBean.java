@@ -155,9 +155,8 @@ public class ShareBean implements Serializable {
     this.retrieveSharedUserWithGrants();
     this.emailInput = "";
     this.isAdmin = AuthUtil.staticAuth().administrate(this.user, shareTo);
-    this.pageUrl =
-        PrettyContext.getCurrentInstance().getRequestURL().toString()
-            + PrettyContext.getCurrentInstance().getRequestQueryString();
+    this.pageUrl = PrettyContext.getCurrentInstance().getRequestURL().toString()
+        + PrettyContext.getCurrentInstance().getRequestQueryString();
     this.pageUrl = this.pageUrl.split("[&\\?]group=")[0];
     this.initShareWithGroup();
   }
@@ -274,17 +273,17 @@ public class ShareBean implements Serializable {
             emailList.add(value);
 
           } catch (Exception e) {
-            this.errorList.add(sb.getMessage("error_share_invalid_user").replace("XXX_VALUE_XXX",
-                value));
-            BeanHelper.error(sb.getMessage("error_share_invalid_user").replace("XXX_VALUE_XXX",
-                value));
+            this.errorList
+                .add(sb.getMessage("error_share_invalid_user").replace("XXX_VALUE_XXX", value));
+            BeanHelper
+                .error(sb.getMessage("error_share_invalid_user").replace("XXX_VALUE_XXX", value));
             logger.error(sb.getMessage("error_share_invalid_user").replace("XXX_VALUE_XXX", value));
           }
         } else {
-          this.errorList.add(sb.getMessage("error_share_invalid_email").replace("XXX_VALUE_XXX",
-              value));
-          BeanHelper.error(sb.getMessage("error_share_invalid_email").replace("XXX_VALUE_XXX",
-              value));
+          this.errorList
+              .add(sb.getMessage("error_share_invalid_email").replace("XXX_VALUE_XXX", value));
+          BeanHelper
+              .error(sb.getMessage("error_share_invalid_email").replace("XXX_VALUE_XXX", value));
           logger.error(sb.getMessage("error_share_invalid_email").replace("XXX_VALUE_XXX", value));
         }
       }
@@ -324,7 +323,8 @@ public class ShareBean implements Serializable {
     SessionBean sb = (SessionBean) BeanHelper.getSessionBean(SessionBean.class);
     if (grants != null && grants.size() > 0) {
       try {
-        this.getEmailMessage(this.user.getName(), dest.getName(), title, getShareToUri());
+        this.getEmailMessage(this.user.getPerson().getCompleteName(),
+            dest.getPerson().getCompleteName(), title, getShareToUri());
       } catch (Exception e) {
         BeanHelper.error(sb.getMessage("error") + ": Email not sent\n" + "User: " + user
             + "\nDestination:" + dest);
@@ -492,7 +492,8 @@ public class ShareBean implements Serializable {
    * @param profileUri
    * @return
    */
-  public static List<String> initShareMenu(User user, UserGroup group, String uri, String profileUri) {
+  public static List<String> initShareMenu(User user, UserGroup group, String uri,
+      String profileUri) {
     Collection<Grant> grants = user != null ? user.getGrants() : group.getGrants();
     List<String> menu = ShareController.transformGrantsToRoles((List<Grant>) grants, uri);
     if (profileUri != null) {
@@ -767,12 +768,12 @@ public class ShareBean implements Serializable {
     itemList.add(new SelectItem(ShareRoles.READ, sb.getLabel("collection_share_read")));
     itemList.add(new SelectItem(ShareRoles.CREATE, sb.getLabel("collection_share_image_upload")));
     itemList.add(new SelectItem(ShareRoles.EDIT_ITEM, sb.getLabel("collection_share_image_edit")));
-    itemList.add(new SelectItem(ShareRoles.DELETE_ITEM, sb
-        .getLabel("collection_share_image_delete")));
+    itemList
+        .add(new SelectItem(ShareRoles.DELETE_ITEM, sb.getLabel("collection_share_image_delete")));
     itemList.add(new SelectItem(ShareRoles.EDIT, sb.getLabel("collection_share_collection_edit")));
     if (AuthUtil.staticAuth().administrate(sb.getUser(), profileUri)) {
-      itemList.add(new SelectItem(ShareRoles.EDIT_PROFILE, sb
-          .getLabel("collection_share_profile_edit")));
+      itemList.add(
+          new SelectItem(ShareRoles.EDIT_PROFILE, sb.getLabel("collection_share_profile_edit")));
     }
     itemList.add(new SelectItem(ShareRoles.ADMIN, sb.getLabel("collection_share_admin")));
     return itemList;

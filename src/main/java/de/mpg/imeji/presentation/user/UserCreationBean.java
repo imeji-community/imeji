@@ -3,6 +3,11 @@
  */
 package de.mpg.imeji.presentation.user;
 
+import java.util.Arrays;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+
 import de.mpg.imeji.exceptions.NotFoundException;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.controller.UserController.USER_TYPE;
@@ -16,11 +21,6 @@ import de.mpg.imeji.presentation.user.util.EmailMessages;
 import de.mpg.imeji.presentation.user.util.PasswordGenerator;
 import de.mpg.imeji.presentation.util.BeanHelper;
 import de.mpg.imeji.presentation.util.ImejiFactory;
-
-import org.apache.log4j.Logger;
-
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Java Bean for the Create new user page
@@ -115,8 +115,8 @@ public class UserCreationBean {
     EmailMessages emailMessages = new EmailMessages();
     try {
       emailClient.sendMail(user.getEmail(), null,
-          emailMessages.getEmailOnAccountAction_Subject(true),
-          emailMessages.getNewAccountMessage(password, user.getEmail(), user.getName()));
+          emailMessages.getEmailOnAccountAction_Subject(true), emailMessages
+              .getNewAccountMessage(password, user.getEmail(), user.getPerson().getCompleteName()));
     } catch (Exception e) {
       logger.error("Error sending email", e);
       BeanHelper.error(sb.getMessage("error") + ": Email not sent");

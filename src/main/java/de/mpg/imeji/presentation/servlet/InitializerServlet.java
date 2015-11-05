@@ -8,6 +8,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,9 +18,11 @@ import javax.servlet.http.HttpServlet;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.lf5.util.StreamUtils;
+import org.jose4j.lang.JoseException;
 
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
+import de.mpg.imeji.logic.auth.ImejiRsaKeys;
 import de.mpg.imeji.logic.jobs.ReadMaxPlanckIPMappingJob;
 import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.StringHelper;
@@ -33,20 +37,21 @@ import de.mpg.imeji.presentation.beans.PropertyBean;
 public class InitializerServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
   private final static Logger logger = Logger.getLogger(InitializerServlet.class);
-
+  private ConfigurationBean config;
 
   @Override
   public void init() throws ServletException {
     super.init();
     new PropertyBean();
     try {
-      new ConfigurationBean();
+      config = new ConfigurationBean();
     } catch (IOException | URISyntaxException e) {
       logger.error("Error reading Configuration", e);
     }
     Imeji.locksSurveyor.start();
     initModel();
     Imeji.executor.submit(new ReadMaxPlanckIPMappingJob());
+    initRsaPublicKey();
   }
 
   /**
@@ -59,6 +64,18 @@ public class InitializerServlet extends HttpServlet {
     } catch (Exception e) {
       throw new RuntimeException("Error Initializing model: ", e);
     }
+  }
+
+  private void initRsaPublicKey() {
+    try {
+      ImejiRsaKeys.init(ConfigurationBean.getRsaPublicKey(), ConfigurationBean.getRsaPrivateKey());
+      ConfigurationBean.setRsaPublicKey(ImejiRsaKeys.getPublicKeyJson());
+      ConfigurationBean.setRsaPrivateKey(ImejiRsaKeys.getPrivateKeyString());
+      config.saveConfig();
+    } catch (JoseException | NoSuchAlgorithmException | InvalidKeySpecException e) {
+      logger.error("!!! Error initalizing API Key !!!", e);
+    }
+
   }
 
   /**

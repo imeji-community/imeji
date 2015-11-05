@@ -13,16 +13,17 @@ import java.util.List;
 import javax.faces.context.FacesContext;
 
 import org.apache.log4j.Logger;
+import org.jose4j.lang.JoseException;
 
 import de.mpg.imeji.exceptions.ImejiException;
 import de.mpg.imeji.logic.Imeji;
 import de.mpg.imeji.logic.ImejiSPARQL;
+import de.mpg.imeji.logic.auth.authentication.APIKeyAuthentication;
 import de.mpg.imeji.logic.auth.util.AuthUtil;
 import de.mpg.imeji.logic.controller.ShareController;
 import de.mpg.imeji.logic.controller.ShareController.ShareRoles;
 import de.mpg.imeji.logic.controller.UserController;
 import de.mpg.imeji.logic.search.jenasearch.JenaCustomQueries;
-import de.mpg.imeji.logic.util.IdentifierUtil;
 import de.mpg.imeji.logic.util.StringHelper;
 import de.mpg.imeji.logic.vo.Organization;
 import de.mpg.imeji.logic.vo.User;
@@ -116,10 +117,12 @@ public class UserBean {
    * @throws ImejiException
    * @throws NoSuchAlgorithmException
    * @throws UnsupportedEncodingException
+   * @throws JoseException
    */
   public void generateNewApiKey()
-      throws ImejiException, NoSuchAlgorithmException, UnsupportedEncodingException {
-    user.setApiKey(IdentifierUtil.newUniversalUniqueId());
+      throws ImejiException, NoSuchAlgorithmException, UnsupportedEncodingException, JoseException {
+    user.setApiKey(APIKeyAuthentication.generateKey(user.getId(), Integer.MAX_VALUE));
+    // user.setApiKey(IdentifierUtil.newUniversalUniqueId());
     if (user != null) {
       new UserController(session.getUser()).update(user, session.getUser());
     }

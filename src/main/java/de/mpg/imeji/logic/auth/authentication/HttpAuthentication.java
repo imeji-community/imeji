@@ -97,8 +97,8 @@ public class HttpAuthentication implements Authentication {
    */
   private String getApiKey(HttpServletRequest request) {
     String authHeader = request.getHeader("Authorization");
-    if (authHeader != null && authHeader.contains("apiKey=")) {
-      return new String(Base64.decodeBase64(authHeader.replace("apiKey=", "").trim().getBytes()));
+    if (authHeader != null && authHeader.contains("Bearer ")) {
+      return new String(Base64.decodeBase64(authHeader.replace("Bearer ", "").trim().getBytes()));
     }
     return null;
   }

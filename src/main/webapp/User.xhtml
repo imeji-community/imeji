@@ -131,7 +131,7 @@
 												</div>
 												<div class="imj_admindataValue">
 													<span class="imj_admindataValueEntry">
-														<h:outputText value="#{UserBean.user.apiKey}"/>
+														<h:inputTextarea cols="60" rows="10" value="#{UserBean.user.apiKey}" onclick="this.select();"/>
 													</span>
 													<span class="imj_admindataValueEntry">
 														<h:commandLink action="#{UserBean.generateNewApiKey}" value="#{lbl.api_key_generate}">

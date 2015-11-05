@@ -54,7 +54,7 @@
      //Key Auth
 	var keyAuth = function() {
    	  var key = $('#input_apiKey')[0].value;
-   	  var auth = "apiKey=" + btoa(key);
+   	  var auth = "Bearer " + btoa(key);
       window.authorizations.add("key", new ApiKeyAuthorization("Authorization",auth, "header"));
     };
 
